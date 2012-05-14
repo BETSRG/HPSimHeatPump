@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{C2D57D14-B877-4C16-834B-72026772CD06}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" OutputDirectory="bin\windows\$(ConfigurationName)" IntermediateDirectory="bin\windows\$(ConfigurationName)">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" OutputFile="$(ProjectName)_debug.exe" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32" OutputDirectory="bin\windows\$(ConfigurationName)" IntermediateDirectory="bin\windows\$(ConfigurationName)">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" OutputFile="$(ProjectName)_release.exe" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath=".\src\Accumulator.f90"/>
+		<File RelativePath=".\src\AIRPR.FOR"/>
+		<File RelativePath=".\src\AirTempLoop.f90"/>
+		<File RelativePath=".\src\CapillaryTube.F90"/>
+		<File RelativePath=".\src\ChargeLoop.f90"/>
+		<File RelativePath=".\src\CoilCalc.f90"/>
+		<File RelativePath=".\src\Compressor.f90"/>
+		<File RelativePath=".\src\Condenser.f90"/>
+		<File RelativePath=".\src\DataErrorTracking.f90"/>
+		<File RelativePath=".\src\DataGlobals.f90"/>
+		<File RelativePath=".\src\DataHVACGlobals.f90"/>
+		<File RelativePath=".\src\DataModuleSim.F90"/>
+		<File RelativePath=".\src\DataSizing.f90"/>
+		<File RelativePath=".\src\DataStringGlobals.f90"/>
+		<File RelativePath=".\src\Distributor.f90"/>
+		<File RelativePath=".\src\DRIVER.F90"/>
+		<File RelativePath=".\src\DumpHPsimOutputs.f90"/>
+		<File RelativePath=".\src\EnergyPlus.f90"/>
+		<File RelativePath=".\src\Evaporator.f90"/>
+		<File RelativePath=".\src\FlowRateLoop.f90"/>
+		<File RelativePath=".\src\FrostModel.F90"/>
+		<File RelativePath=".\src\General.f90"/>
+		<File RelativePath=".\src\GeneralRoutines.f90"/>
+		<File RelativePath=".\src\GetHPsimInputs.f90"/>
+		<File RelativePath=".\src\GUESS1.FOR"/>
+		<File RelativePath=".\src\GUESS3.FOR"/>
+		<File RelativePath=".\src\HPdesignMod.f90"/>
+		<File RelativePath=".\src\InputProcessor.f90"/>
+		<File RelativePath=".\src\LiquidLineFilterDrier.f90"/>
+		<File RelativePath=".\src\MatrixCalc.f90"/>
+		<File RelativePath=".\src\OilMixtureCalc.f90"/>
+		<File RelativePath=".\src\ORNLsolver.f90"/>
+		<File RelativePath=".\src\PsyChart.f90"/>
+		<File RelativePath=".\src\Psychometric.f90"/>
+		<File RelativePath=".\src\RefName.f90"/>
+		<File RelativePath=".\src\Refprops.f90"/>
+		<File RelativePath=".\src\ReversingValve.F90"/>
+		<File RelativePath=".\src\ShortTube.f90"/>
+		<File RelativePath=".\src\TXV.F90"/>
+		<File RelativePath=".\src\UnitConvert.f90"/>
+		<File RelativePath=".\src\UtilityRoutines.f90"/>
+		<File RelativePath=".\src\WATPR.FOR"/>
+		<File RelativePath=".\src\ZERO3.FOR"/>
+		<File RelativePath=".\src\ZEROCH.FOR"/></Filter></Files>
+	<Globals/></VisualStudioProject>
