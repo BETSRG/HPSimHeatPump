@@ -11,7 +11,7 @@ PROGRAM SimulationCycle
 !          |       |___________________|       |
 !          |                                   |/|
 !          |                                  /  |
-!        |\ /| Expansion                     |   | Compressor
+!        |\ /| Expansion                     |   | Compressor!
 !        |/ \| Device                         \  |
 !          |                                   |\|
 !          |        ___________________        |
