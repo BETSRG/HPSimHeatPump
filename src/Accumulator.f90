@@ -8,7 +8,7 @@ PUBLIC CalcAccumulatorMass
 PUBLIC CalcAccumulatorDP
 
 PRIVATE
-
+ 
 CHARACTER*80:: RefName !Refrigerant name
 REAL :: RatedDP !Rating pressure drop, kPa
 REAL :: RatedDT !Rating temperature drop, K
