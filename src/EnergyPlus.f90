@@ -88,19 +88,13 @@
 
           ! USE STATEMENTS:
 USE InputProcessor
-!USE SimulationManager
-USE DataStringGlobals
-USE DataGlobals
-USE FluidProperties
 USE RefNameMod
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
 
           ! PROGRAM PARAMETER DEFINITIONS:
-          ! Note: General Parameters for the entire EnergyPlus program are contained
-          ! in "DataGlobals.f90"
-  CHARACTER(len=*), PARAMETER :: EPlusiniFormat="(/,'[',A,']',/,'dir=',A)"
+          ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -109,209 +103,11 @@ USE RefNameMod
           ! na
 
           ! PROGRAM LOCAL VARIABLE DECLARATIONS:
-    INTEGER LFN  ! Unit Number for reads
-    INTEGER, EXTERNAL :: GetNewUnitNumber
-    LOGICAL EPlusINI
-    REAL Time_Start
-    REAL Time_Finish
-    CHARACTER(len=80) ::  Refrigerant
-!
-!
-!                           INITIALIZE VARIABLES
-!
-      CALL CPU_TIME(Time_Start)
-      BigNumber=HUGE(BigNumber)
-      DBigNumber=HUGE(DBigNumber)
-
-      INQUIRE(File='Energy+.ini',EXIST=EPlusINI)
-      IF (EPlusINI) THEN
-        LFN=GetNewUnitNumber()
-        OPEN(UNIT=LFN,FILE='Energy+.ini')
-                              !       Get directories from ini file
-        CALL ReadINIFile(LFN,'program','dir',ProgramPath)
-        CALL ReadINIFile(LFN,'trnsys','dir',TRNSYSProgramPath)
-
-        CLOSE(LFN)
-      ELSE
-        ProgramPath='  '
-        LFN=GetNewUnitNumber()
-        OPEN(UNIT=LFN,File='Energy+.ini')
-        WRITE(LFN,EPlusiniFormat) 'program',ProgramPath
-        CLOSE(LFN)
-      ENDIF
-
-
-
-
-      OutputFileDebug=GetNewUnitNumber()
-      OPEN (OutputFileDebug,FILE='eplusout.dbg')
-
-	  
-        !Call ProcessInput to produce the IDF file which is read by all of the
-        ! Get input routines in the rest of the simulation
+      CHARACTER(len=80) ::  Refrigerant
 
       CALL ProcessInput
 	  CALL Refrig(Refrigerant)
 
- 999  CONTINUE
-
-      CALL CPU_TIME(Time_Finish)
-      Elapsed_Time=Time_Finish-Time_Start
-      !CALL EndEnergyPlus
-!
-
 END SUBROUTINE
 
-!CONTAINS
 
-SUBROUTINE ReadINIFile(UnitNumber,Heading,KindofParameter,DataOut)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This routine reads the .ini file and retrieves
-          ! the path names for the files from it.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Duplicate the kind of reading the Windows "GetINISetting" would
-          ! do.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-USE DataStringGlobals
-
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-
-  ! SUBROUTINE ARGUMENT DEFINITIONS:
-
-  INTEGER UnitNumber                 ! Unit number of the opened INI file
-  CHARACTER(len=*) KindofParameter   ! Kind of parameter to be found (String)
-  CHARACTER(len=*) Heading           ! Heading for the parameters ('[heading]')
-  CHARACTER(len=*) DataOut           ! Output from the retrieval
-
-  ! SUBROUTINE PARAMETER DEFINITIONS:
-  INTEGER, PARAMETER :: LineLength=PathLimit+10
-
-  ! INTERFACE BLOCK SPECIFICATIONS
-  ! na
-
-  ! DERIVED TYPE DEFINITIONS
-  ! na
-
-  ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      CHARACTER(len=LineLength) LINE
-      CHARACTER(len=20) Param
-      integer IHEAD,ILB,IRB,IEQ,IPAR,IPOS,ILEN
-      INTEGER ReadStat
-      LOGICAL EndofFile
-      LOGICAL Found
-      LOGICAL NewHeading
-
-      DataOut='           '
-
-
-            ! I tried ADJUSTL(TRIM(KindofParameter)) and got an internal compiler error
-
-      Param=TRIM(KindofParameter)
-      Param=ADJUSTL(Param)
-      ILEN=LEN_TRIM(Param)
-      REWIND(UnitNumber)
-      EndofFile=.false.
-      Found=.false.
-      NewHeading=.false.
-
- 700  FORMAT(A)
-
-      DO WHILE (.not. EndofFile .and. .not. Found)
-        READ(UnitNumber,700,IOSTAT=ReadStat) LINE
-        IF (ReadStat == -1) THEN
-          EndofFile=.true.
-          EXIT
-        ENDIF
-
-        IF (LEN_TRIM(LINE) == 0) CYCLE      ! Ignore Blank Lines
-
-        CALL ConvertCasetoLower(LINE,LINE)    ! Turn line into lower case
-
-        IHEAD=INDEX(LINE,Heading)
-        IF (IHEAD .EQ. 0) CYCLE
-
-!                                  See if [ and ] are on line
-        ILB=INDEX(LINE,'[')
-        IRB=INDEX(LINE,']')
-        IF (ILB == 0 .AND. IRB == 0) CYCLE
-        IF (INDEX(LINE,'['//TRIM(Heading)//']') == 0) CYCLE    ! Must be really correct heading line
-        ILB=0
-        IRB=0
-
-!                                  Heading line found, now looking for Kind
-        DO WHILE (.not. EndofFile .and. .not. NewHeading)
-          READ(UnitNumber,700,IOSTAT=ReadStat) LINE
-          IF (ReadStat == -1) THEN
-            EndofFile=.true.
-            EXIT
-          ENDIF
-
-          IF (LEN_TRIM(LINE) == 0) CYCLE      ! Ignore Blank Lines
-
-          CALL ConvertCasetoLower(LINE,LINE)    ! Turn line into lower case
-
-          ILB=INDEX(LINE,'[')
-          IRB=INDEX(LINE,']')
-          NewHeading=(ILB /= 0 .and. IRB /= 0)
-
-!                                  Should be a parameter line
-!                                  KindofParameter = string
-          IEQ=INDEX(LINE,'=')
-          IPAR=INDEX(LINE,TRIM(Param))
-          IF (IEQ == 0) CYCLE
-          IF (IPAR == 0) CYCLE
-          IF (INDEX(LINE,TRIM(Param)//'=') == 0) CYCLE      ! needs to be param=
-
-!                                  = found and parameter found.
-          IF (IPAR > IEQ) CYCLE
-
-!                                  parameter = found
-!                                  Set output string to start with non-blank character
-
-          DataOut=ADJUSTL(LINE(IEQ+1:))
-          Found=.true.
-          EXIT
-
-        END DO
-
-      END DO
-
-
-      SELECT CASE (Param)
-
-        CASE('dir')
-          IPOS=LEN_TRIM(DataOut)
-          IF (IPOS /= 0) THEN
-                             ! Non-blank make sure last position is valid path character
-                             !  (Set in DataStringGlobals)
-
-            IF (DataOut(IPOS:IPOS) /= PathChar) THEN
-              DataOut(IPOS+1:IPOS+1)=PathChar
-            ENDIF
-
-          ENDIF
-
-
-        CASE DEFAULT
-      END SELECT
-
-
-RETURN
-END SUBROUTINE ReadINIFile
-
-!End Program
-!END SUBROUTINE
