@@ -19,6 +19,11 @@ PUBLIC UnitConvert
 PUBLIC MicroChannelCoilUnitConvert
 PUBLIC FinTubeCoilUnitConvert
 
+PUBLIC Temperature_F2C  ! VL
+PUBLIC Temperature_C2F  ! VL
+
+
+
 CONTAINS
 
 !***********************************************************************************
@@ -492,4 +497,33 @@ END SUBROUTINE FinTubeCoilUnitConvert
 
 !***********************************************************************************
 
+REAL FUNCTION Temperature_F2C(tF) 
+	
+!   Description: Convert temperature from Fahrenheit to Centigrade
+!   Author: Venu Lolla
+
+    IMPLICIT NONE
+    REAL, INTENT(IN) :: tF
+
+    Temperature_F2C = (tF - 32.0) / 1.8
+
+END FUNCTION Temperature_F2C
+
+!***********************************************************************************
+
+REAL FUNCTION Temperature_C2F(tC) 
+	
+!   Description: Convert temperature from Centigrade to Fahrenheit
+!   Author: Venu Lolla
+
+    IMPLICIT NONE
+    REAL, INTENT(IN) :: tC
+
+    Temperature_C2F = tC * 1.8 + 32.0
+
+END FUNCTION Temperature_C2F
+
+
+
+!***********************************************************************************
 END MODULE UnitConvertMod
