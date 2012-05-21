@@ -52,12 +52,12 @@ INTEGER            :: RefrigIndex =0
 REAL Temperature,Quality,Pressure,Enthalpy
 
 INTEGER(2) RefPropOpt			!Ref prop calc. option
-INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-REAL RefProp(28)	!Refrigerant properties
+INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
+REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??
 
 INTEGER(2) AirPropOpt			!Air prop calc. option
-INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-REAL AirProp(8)		!Air properties
+INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
+REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
 
 REAL TimeStart, TimeStop, TimeSpent
 
@@ -77,7 +77,7 @@ REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
 REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
 REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
 REAL MassCoil,MassLiqCoil,MassVapCoil
-INTEGER(2) IsCoolingMode !1=yes; 0=no
+INTEGER(2) IsCoolingMode !1=yes; 0=no   
 REAL, EXTERNAL :: ZEROCH
 REAL, EXTERNAL :: CHARGM
 !INTEGER :: TimeStep !Added Sankar transient
@@ -91,14 +91,15 @@ REAL, SAVE :: IDCFlowConst
 REAL, SAVE :: ODCFlowConst
 INTEGER   :: Flag
 
+
 !Flow**:
 
-  CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.
-  FirstTimeAirTempLoop=.TRUE.
-  FirstTimeFlowRateLoop=.TRUE.
-  FirstTimeChargeLoop=.TRUE.
-  PrnLog=1
-  PrnCon=1
+  CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
+  FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
+  FirstTimeFlowRateLoop=.TRUE.                              ! VL Comment: default initialization for program or user setting?
+  FirstTimeChargeLoop=.TRUE.                                ! VL Comment: default initialization for program or user setting?
+  PrnLog=1                                                  ! VL Comment: User setting
+  PrnCon=1                                                  ! VL Comment: User setting
 
   !AMBCON=1 !air temperature, F
   !CNDCON=1 !subcooling, F
@@ -110,28 +111,28 @@ INTEGER   :: Flag
   !EVAPPAR(50)=7 !Pressure, kPa
   !CONDPAR(56)=7 !.05 !Pressure, kPa
 
-  WinTrans=0.9
-  CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2
-  CondPAR(36)=0.8
+  WinTrans=0.9  ! VL Comment: magic number -- explain or resolve
+  CondIN(7) = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2
+  CondPAR(36)=0.8   ! VL Comment: magic number -- explain or resolve
 
-  EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2
-  EvapPAR(29)=0.8
+  EvapIN(8)=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2
+  EvapPAR(29)=0.8   ! VL Comment: magic number -- explain or resolve
 
-  OPEN(5,FILE='YorkHP.out')
-  OPEN(6,FILE='YorkHP.log')
+  OPEN(5,FILE='YorkHP.out')     ! VL Comment: User setting -- file name
+  OPEN(6,FILE='YorkHP.log')     ! VL Comment: User setting -- file name
 
-  CALL GetInputs
+  CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
 
   !Oil fraction
-  CondPAR(59)=0.007
-  EvapPAR(51)=0.007
+  CondPAR(59)=0.007             ! VL Comment: magic number -- explain or resolve
+  EvapPAR(51)=0.007             ! VL Comment: magic number -- explain or resolve
 
   !IF (TsiCmp .GT. TaiE) THEN
-  IF (TaiE-TsiCmp .LT. 10) THEN
+  IF (TaiE-TsiCmp .LT. 10) THEN     ! VL Comment: magic number -- explain or resolve number 10 ....
       TsiCmp = TaiE - 10 !Correct initial guess
   END IF
 
-  IF (TsoCmp-TaiC .LT. 10) THEN
+  IF (TsoCmp-TaiC .LT. 10) THEN     ! VL Comment: magic number -- explain or resolve number 10 ....
       TsoCmp = TaiC + 10 !Correct initial guess
   END IF
 
@@ -140,9 +141,10 @@ INTEGER   :: Flag
 	  WRITE(*,*)'## ERROR ## Main: Wrong initial guess!'
       !WRITE(*,*)'Press return to terminate program.'
 	  !READ(*,*)
-	  CALL SLEEP(300) !Wait for 5 minutes and stop
+	  ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop ! Error handling mechanism ...
 	  STOP
   END IF
+  
   Punit = ' (kPa)'
   Hunit = ' (kJ/kg)'
   Tunit = ' (C)'
@@ -185,12 +187,12 @@ TsiCmpAct=TsiCmp
 TsoCmpAct=TsoCmp
 RHiCAct=RHiC
 RHiEAct=RHiE
-IsCoolingMode=CondPAR(27)
+IsCoolingMode=CondPAR(27)       ! VL Comment: magic number -- explain or resolve
 
   !Get simulation starting time
 TimeStart=SECNDS(0.0)
 CoolHeatModeFlag = IsCoolingMode
-TimeInterval = 25.0
+TimeInterval = 25.0                 ! VL Comment: magic number -- explain or resolve number
 PrevSimTime = 0.0
 Timestep=0
 LastDefrostInitTime = 0.0
@@ -224,38 +226,38 @@ CondOut=0.0
 		  WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperatuer is greater than dry bulb temperature.'
 		  !WRITE(*,*)'Press return to terminate program.'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
 	  END IF
-      AirPropOpt=3
-      AirProp(1)=(TaiC-32)/1.8
+      AirPropOpt=3                  ! VL Comment: magic number -- explain or resolve number
+      AirProp(1)=Temperature_F2C(TaiC)
       AirProp(5)=RHiC
       CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      RHiC=AirProp(3)
-	  RhoAiC=AirProp(7)
+      RHiC=AirProp(3)               ! VL Comment: use field name instead of index number ...
+	  RhoAiC=AirProp(7)             ! VL Comment: use field name instead of index number ...
 
-  CondIN(5)=(TaiC-32)/1.8  
+  CondIN(5)=Temperature_F2C(TaiC)
   CondIN(6)=RHiC           
   
       IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
 		  WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperatuer is greater than dry bulb temperature.'
 		  !WRITE(*,*)'Press return to terminate program.'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
 	  END IF
-      AirPropOpt=3
-      AirProp(1)=(TaiE-32)/1.8
+      AirPropOpt=3                  ! VL Comment: magic number -- explain or resolve number
+      AirProp(1)=Temperature_F2C(TaiE)
       AirProp(5)=RHiE
       CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-      RHiE=AirProp(3)
-	  RhoAiE=AirProp(7)
+      RHiE=AirProp(3)               ! VL Comment: use field name instead of index number ...
+	  RhoAiE=AirProp(7)             ! VL Comment: use field name instead of index number ...
 
-  EvapIN(5)=(TaiE-32)/1.8  !Air side inlet temp. C
+  EvapIN(5)=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C
   EvapIN(6)=RHiE            !Air side inlet relative humidity
 
   !Initialize
-  Temperature=(TSICMP-32)/1.8
+  Temperature=Temperature_F2C(TSICMP)
   Quality=1
   PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
   IF (RefPropErr .GT. 0) THEN
@@ -272,7 +274,7 @@ CondOut=0.0
   EvapOUT(1)=PiEvp
   EvapOUT(6)=PiEvp
 
-  Temperature=(TSOCMP-32)/1.8
+  Temperature=Temperature_F2C(TSOCMP)
   Quality=1
   PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
   IF (RefPropErr .GT. 0) THEN
@@ -287,7 +289,7 @@ CondOut=0.0
   !IF (SUPER .GT. 0) THEN
   IF (SUPER .GE. 0) THEN !ISI - 11/16/07
 	
-	  Temperature=(TSICMP+SUPER-32)/1.8
+	  Temperature=Temperature_F2C(TSICMP+SUPER)
 	  Pressure=PiCmp*1000
 	  HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
       IF (RefPropErr .GT. 0) THEN
@@ -335,7 +337,7 @@ CondOut=0.0
   END IF
   WRITE(*,*) 
   
-  EvapOUT(3)=(TSICMP-32)/1.8 !Initialize for reversing valve calculation
+  EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
   
   IsCoolingMode=CondPAR(27)
   WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)' 
@@ -472,19 +474,19 @@ CondOut=0.0
 	      HiExp=HiExp/1000
 	      HiEvp=HiExp
 
-	      Temperature=(TSICMP-32)*5/9
+	      Temperature=Temperature_F2C(TSICMP)
 	      Quality=1
 	      PiEvp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
 	      PiEvp=PiEvp/1000
 
 	      Pressure=PiEvp*1000
-	      Temperature=(TSICMP+SUPER-32)*5/9
+	      Temperature=Temperature_F2C(TSICMP+SUPER)
 	      HoEvp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
 	      HoEvp=HoEvp/1000
 
 	  ELSE
 
-	      Temperature=(TSOCMP-32)*5/9
+	      Temperature=Temperature_F2C(TSOCMP)
 	      Quality=1
 	      PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
 	      PoCmp=PoCmp/1000
@@ -497,13 +499,13 @@ CondOut=0.0
 	      HoCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
 	      HoCmp=HoCmp/1000
 
-	      Temperature=(TSOCMP-32)*5/9
+	      Temperature=Temperature_F2C(TSOCMP)
 	      Quality=0
 	      PiExp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
 	      PiExp=PiExp/1000
           
           Pressure=PiExp*1000
-	      Temperature=(TSOCMP-SUBCOOL-32)*5/9
+	      Temperature=Temperature_F2C(TSOCMP-SUBCOOL)
 	      HiExp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
 	      HiExp=HiExp/1000
 	      
@@ -529,7 +531,7 @@ CondOut=0.0
 	      EvapIN(2)=PiEvp			!Evap. inlet pressure, kPa
 	      EvapIN(3)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg
 	      EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
-	      EvapIN(5)=(TaiE-32)/1.8   !Air side inlet temp. C
+	      EvapIN(5)=Temperature_F2C(TaiE)   !Air side inlet temp. C     
 	      EvapIN(6)=RHiE            !Air side inlet relative humidity
 	      EvapIN(9)=0.0             !Discharge temperature, C, not used for this
 
@@ -557,7 +559,7 @@ CondOut=0.0
 	          EvapIN(2)=PiEvp			!Evap. inlet pressure, kPa
 	          EvapIN(3)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg
 	          EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
-	          EvapIN(5)=(TaiE-32)/1.8   !Air side inlet temp. C
+	          EvapIN(5)=Temperature_F2C(TaiE)   !Air side inlet temp. C     
 	          EvapIN(6)=RHiE            !Air side inlet relative humidity
 	          EvapIN(9)=0.0             !Discharge temperature, C, not used for this
             			  
@@ -618,10 +620,10 @@ CondOut=0.0
 	      CondIN(2)=PoCmp         
 	      CondIN(3)=HoCmp         
 	      CondIN(4)=XMaC           
-	      CondIN(5)=(TAIC-32)/1.8  
+	      CondIN(5)=Temperature_F2C(TAIC)
 	      CondIN(6)=RHIC           
 	      CondIN(8)=0 !Evaporator outlet temperature, C, not used for this
-	      CondIN(9)=(TAIE-32)/1.8
+	      CondIN(9)=Temperature_F2C(TAIE)
 
           !Determine if detailed model is needed, ISI - 02/07/08
 		  CondPAR(61)=1 !Simple version
@@ -647,10 +649,10 @@ CondOut=0.0
 	          CondIN(2)=PoCmp         
 	          CondIN(3)=HoCmp         
 	          CondIN(4)=XMaC           
-	          CondIN(5)=(TAIC-32)/1.8  
+	          CondIN(5)=Temperature_F2C(TAIC)
 	          CondIN(6)=RHIC           
 	          CondIN(8)=0 !Evaporator outlet temperature, C, not used for this
-	          CondIN(9)=(TAIE-32)/1.8
+	          CondIN(9)=Temperature_F2C(TAIE)
 	                  			  
 		      CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)			
               CondPAR(62)=0 !First time
