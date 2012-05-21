@@ -48,7 +48,6 @@ SUBROUTINE AbortEnergyPlus
   CHARACTER(len=20) NumSevere
 
 
-  CALL SummarizeErrors
   WRITE(NumWarnings,*) TotalWarningErrors
   NumWarnings=ADJUSTL(NumWarnings)
   WRITE(NumSevere,*) TotalSevereErrors
@@ -185,7 +184,6 @@ SUBROUTINE EndEnergyPlus
   INTEGER Minutes ! Elapsed Time Minute Reporting
   INTEGER Seconds ! Elapsed Time Second Reporting
 
-  CALL SummarizeErrors
   WRITE(NumWarnings,*) TotalWarningErrors
   NumWarnings=ADJUSTL(NumWarnings)
   WRITE(NumSevere,*) TotalSevereErrors
@@ -598,7 +596,6 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! USE STATEMENTS:
   USE DataStringGlobals
-  USE DataErrorTracking
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -623,11 +620,6 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Loop
-
-  DO Loop=1,SearchCounts
-    IF (INDEX(ErrorMessage,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
-  ENDDO
 
   TotalSevereErrors=TotalSevereErrors+1
   CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2)
@@ -760,7 +752,6 @@ SUBROUTINE ShowWarningError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! USE STATEMENTS:
   USE DataStringGlobals
-  USE DataErrorTracking
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -785,11 +776,6 @@ SUBROUTINE ShowWarningError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Loop
-
-  DO Loop=1,SearchCounts
-    IF (INDEX(ErrorMessage,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
-  ENDDO
 
   TotalWarningErrors=TotalWarningErrors+1
   CALL ShowErrorMessage(' ** Warning ** '//ErrorMessage,OutUnit1,OutUnit2)
@@ -863,59 +849,6 @@ SUBROUTINE ShowErrorMessage(ErrorMessage,OutUnit1,OutUnit2)
 
 END SUBROUTINE ShowErrorMessage
 
-SUBROUTINE SummarizeErrors
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   March 2003
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine provides a summary of certain errors that might
-          ! otherwise get lost in the shuffle of many similar messages.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-  USE DataErrorTracking
-  USE DataGlobals, ONLY: ShowMessage
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Loop
-
-  IF (Any(MatchCounts > 0)) THEN
-    CALL ShowMessage(' ')
-    CALL ShowMessage('===== Final Error Summary =====')
-    CALL ShowMessage('The following error categories occurred.  Consider correcting or noting.')
-    DO Loop=1,SearchCounts
-      IF (MatchCounts(Loop) > 0) CALL ShowMessage(TRIM(Summaries(Loop)))
-    ENDDO
-    CALL ShowMessage(' ')
-  ENDIF
-
-  RETURN
-
-END SUBROUTINE SummarizeErrors
-
 INTEGER FUNCTION FindNumberinList(WhichNumber,ListofItems,NumItems)
 
           ! FUNCTION INFORMATION:
@@ -969,181 +902,6 @@ INTEGER FUNCTION FindNumberinList(WhichNumber,ListofItems,NumItems)
   RETURN
 
 END FUNCTION FindNumberinList
-
-
-SUBROUTINE ReportSizingOutput(CompType,CompName,VarDesc,VarValue)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Fred Buhl
-          !       DATE WRITTEN   Decenber 2001
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine writes one item of sizing data to the "eio" file..
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-  USE DataGlobals, ONLY : OutputFileInits
-  USE DataStringGlobals, ONLY: VerString
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*) CompType  ! the type of the component
-  CHARACTER(len=*) CompName  ! the name of the component
-  CHARACTER(len=*) VarDesc   ! the description of the input variable
-  REAL          :: VarValue  ! the value from the sizing calculation
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  LOGICAL :: MyOneTimeFlag = .TRUE.
-  SAVE MyOneTimeFlag
-
-  IF (MyOneTimeFlag) THEN
-    WRITE(OutputFileInits, 990)
-    MyOneTimeFlag = .FALSE.
-  END IF
-
-  WRITE (OutputFileInits, 991) TRIM(CompType), TRIM(CompName), VarDesc, VarValue
-
-  990 FORMAT('! <Component Sizing Information>, Component Type, Component Name, ', &
-             'Input Field Description, Value')
-  991 FORMAT(' Component Sizing, ',A,', ',A,', ',A,', ',G12.5)
-
-  RETURN
-
-END SUBROUTINE ReportSizingOutput
-
-SUBROUTINE ReportZoneSizing(ZoneName,LoadType,DesLoad,CalcDesFlow,UserDesFlow,DesDayName,PeakHrMin,PeakTemp,PeakHumRat)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Fred Buhl
-          !       DATE WRITTEN   Decenber 2001
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine writes one item of zone sizing data to the "eio" file..
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-  USE DataGlobals, ONLY : OutputFileInits
-  USE DataStringGlobals, ONLY: VerString
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*) ZoneName     ! the name of the zone
-  CHARACTER(len=*) LoadType     ! the description of the input variable
-  REAL          :: DesLoad      ! the value from the sizing calculation
-  REAL          :: CalcDesFlow  ! calculated design air flow rate [m3/s]
-  REAL          :: UserDesFlow  ! user input or modified design air flow rate [m3/s]
-  CHARACTER(len=*) DesDayName   ! the name of the design day that produced the peak
-  CHARACTER(len=*) PeakHrMin    ! time stamp of the peak
-  REAL          :: PeakTemp     ! temperature at peak [C]
-  REAL          :: PeakHumRat   ! humidity ratio at peak [kg water/kg dry air]
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  LOGICAL :: MyOneTimeFlag = .TRUE.
-  SAVE MyOneTimeFlag
-
-  IF (MyOneTimeFlag) THEN
-    WRITE(OutputFileInits, 990)
-    MyOneTimeFlag = .FALSE.
-  END IF
-
-  WRITE (OutputFileInits, 991) TRIM(ZoneName), LoadType, DesLoad, CalcDesFlow, UserDesFlow, TRIM(DesDayName), &
-                               PeakHrMin, PeakTemp, PeakHumRat
-
-  990 FORMAT('! <Zone Sizing Information>, Zone Name, Load Type, DesLoad {W}, Calc Des Air Flow Rate {m3/s}, ', &
-             'UserDes Air Flow Rate {m3/s}, Design Day Name, Time of Peak, Temperature at Peak {C}, ', &
-             'Humidity Ratio at Peak {kgWater/kgAir}')
-  991 FORMAT(' Zone Sizing, ',A,', ',A,', ',G12.5,', ',G12.5,', ',G12.5,', ',A,', ',A,', ',G12.5,', ',G12.5)
-
-  RETURN
-
-END SUBROUTINE ReportZoneSizing
-
-SUBROUTINE ReportSysSizing(SysName,VarDesc,VarValue)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Fred Buhl
-          !       DATE WRITTEN   January 2003
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine writes one item of system sizing data to the "eio" file..
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-  USE DataGlobals, ONLY : OutputFileInits
-  USE DataStringGlobals, ONLY: VerString
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*) SysName  ! the name of the zone
-  CHARACTER(len=*) VarDesc   ! the description of the input variable
-  REAL          :: VarValue  ! the value from the sizing calculation
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  LOGICAL :: MyOneTimeFlag = .TRUE.
-  SAVE MyOneTimeFlag
-
-  IF (MyOneTimeFlag) THEN
-    WRITE(OutputFileInits, 990)
-    MyOneTimeFlag = .FALSE.
-  END IF
-
-  WRITE (OutputFileInits, 991) TRIM(SysName), VarDesc, VarValue
-
-  990 FORMAT('! <System Sizing Information>, System Name, ', &
-             'Field Description, Value')
-  991 FORMAT(' System Sizing, ',A,', ',A,', ',G12.5)
-
-  RETURN
-
-END SUBROUTINE ReportSysSizing
 
 !     NOTICE
 !

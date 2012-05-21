@@ -30,30 +30,30 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
 
           ! MODULE PARAMETER DEFINITIONS:
-  INTEGER, PARAMETER :: SearchCounts=6
-  CHARACTER(len=*), PARAMETER, DIMENSION(SearchCounts) ::  &
-               MessageSearch=(/'InterZone Surface Areas',  &
-                               'CAUTION -- Interzone   ',  &
-                               'Node Connection Error  ',  &
-                               'InterZone Surface Azimu',  &
-                               'InterZone Surface Tilts',  &
-                               'Suspected non-planar   '/)
-  CHARACTER(len=*), PARAMETER, DIMENSION(SearchCounts) ::  &
-               Summaries    =(/'InterZone Surface Areas -- mismatch   ',  &
-                               'Interzone surfaces - different zones  ',  &
-                               'Node Connection Errors                ',  &
-                               'InterZone Surface Azimuths -- mismatch',  &
-                               'InterZone Surface Tilts -- mismatch   ',  &
-                               'Possible non-planar surfaces          '/)
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! MODULE VARIABLE DECLARATIONS:
-  INTEGER, DIMENSION(SearchCounts) :: MatchCounts=0
+!  INTEGER, PARAMETER :: SearchCounts=6
+!  CHARACTER(len=*), PARAMETER, DIMENSION(SearchCounts) ::  &
+!               MessageSearch=(/'InterZone Surface Areas',  &
+!                               'CAUTION -- Interzone   ',  &
+!                               'Node Connection Error  ',  &
+!                               'InterZone Surface Azimu',  &
+!                               'InterZone Surface Tilts',  &
+!                               'Suspected non-planar   '/)
+!  CHARACTER(len=*), PARAMETER, DIMENSION(SearchCounts) ::  &
+!               Summaries    =(/'InterZone Surface Areas -- mismatch   ',  &
+!                               'Interzone surfaces - different zones  ',  &
+!                               'Node Connection Errors                ',  &
+!                               'InterZone Surface Azimuths -- mismatch',  &
+!                               'InterZone Surface Tilts -- mismatch   ',  &
+!                               'Possible non-planar surfaces          '/)
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! MODULE VARIABLE DECLARATIONS:
+!  INTEGER, DIMENSION(SearchCounts) :: MatchCounts=0
 
 
 !     NOTICE

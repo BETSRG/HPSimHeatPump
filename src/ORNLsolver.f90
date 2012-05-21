@@ -39,6 +39,8 @@ USE DataSimulation
 USE IFPORT
 USE FrostModel
 USE GeneralRoutines
+USE InputProcessor
+USE RefNameMod
 
 IMPLICIT NONE
 
@@ -174,7 +176,9 @@ INTEGER   :: Flag
 
   CALL InitAccumulator(AccumPAR,Ref$)
 
-  CALL EnergyPlus !Initialize EnergyPlus files, and functions for refprop calculations
+  !Initialize EnergyPlus files, and functions for refprop calculations
+  CALL ProcessInput
+  CALL Refrig(Refrigerant)
 
 SUPERAct=SUPER
 TsiCmpAct=TsiCmp
