@@ -91,6 +91,8 @@ USE InputProcessor
 !USE SimulationManager
 USE DataStringGlobals
 USE DataGlobals
+USE FluidProperties
+USE RefNameMod
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -112,7 +114,7 @@ USE DataGlobals
     LOGICAL EPlusINI
     REAL Time_Start
     REAL Time_Finish
-
+    CHARACTER(len=80) ::  Refrigerant
 !
 !
 !                           INITIALIZE VARIABLES
@@ -149,7 +151,7 @@ USE DataGlobals
         ! Get input routines in the rest of the simulation
 
       CALL ProcessInput
-	  CALL Refrigtest
+	  CALL Refrig(Refrigerant)
 
  999  CONTINUE
 
