@@ -4,7 +4,7 @@
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" OutputDirectory="bin\windows\$(ConfigurationName)" IntermediateDirectory="bin\windows\$(ConfigurationName)">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" WarnInterfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug" Interfaces="true"/>
 				<Tool Name="VFLinkerTool" OutputFile="$(ProjectName)_debug.exe" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -35,16 +35,13 @@
 		<File RelativePath=".\src\CoilCalc.f90"/>
 		<File RelativePath=".\src\Compressor.f90"/>
 		<File RelativePath=".\src\Condenser.f90"/>
-		<File RelativePath=".\src\DataErrorTracking.f90"/>
 		<File RelativePath=".\src\DataGlobals.f90"/>
 		<File RelativePath=".\src\DataHVACGlobals.f90"/>
 		<File RelativePath=".\src\DataModuleSim.F90"/>
 		<File RelativePath=".\src\DataSizing.f90"/>
 		<File RelativePath=".\src\DataStringGlobals.f90"/>
 		<File RelativePath=".\src\Distributor.f90"/>
-		<File RelativePath=".\src\DRIVER.F90"/>
 		<File RelativePath=".\src\DumpHPsimOutputs.f90"/>
-		<File RelativePath=".\src\EnergyPlus.f90"/>
 		<File RelativePath=".\src\Evaporator.f90"/>
 		<File RelativePath=".\src\FlowRateLoop.f90"/>
 		<File RelativePath=".\src\FrostModel.F90"/>
