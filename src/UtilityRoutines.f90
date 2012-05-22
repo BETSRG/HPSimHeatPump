@@ -19,7 +19,6 @@ SUBROUTINE AbortEnergyPlus
 
           ! USE STATEMENTS:
   USE DataStringGlobals
-  USE DataErrorTracking
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -151,7 +150,6 @@ SUBROUTINE EndEnergyPlus
 
           ! USE STATEMENTS:
   USE DataStringGlobals
-  USE DataErrorTracking
   USE InputProcessor
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
