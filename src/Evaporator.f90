@@ -1225,7 +1225,7 @@ REAL :: tSAvgCoil = 0.0
   OUT(20)=ErrorFlag
 
   106   FORMAT(I4,F18.9)
-  107   FORMAT(A67,F5.3)
+  107   FORMAT(A67,F5.6) !VL Comment: previously !107   FORMAT(A67,F5.3)
   
   IF(CoolHeatModeFlag == 1) THEN
    CoilParams(1)%CoilInletRefTemp=tRiCoil
