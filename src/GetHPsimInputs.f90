@@ -577,7 +577,7 @@ LOGICAL :: HPDataFileExists
   !IF (Unit .EQ. 1) ODC_Ltube=ODC_Ltube/1000 !ISI - 07/14/06
   IF (Unit .EQ. SI) ODC_Ltube=ODC_Ltube/1000
 
-  DO I=1,7; READ(200,*); END DO
+  DO I=1,8; READ(200,*); END DO !skip over Internal Volume of new file format
 
   !Ref side heat transfer multiplier
   READ(200,202)LineData
@@ -602,6 +602,8 @@ LOGICAL :: HPDataFileExists
   I=SCAN(LineData,',')
   BufferString=ADJUSTL(LineData(I+1:150))
   READ(BufferString,*)ODC_DPairMultiplier
+
+  READ(200,*) !skip over air leakage around the coil in new file format
 
   READ(200,*)
 
@@ -741,7 +743,7 @@ LOGICAL :: HPDataFileExists
   !IF (Unit .EQ. 1) IDC_Ltube=IDC_Ltube/1000 !ISI - 07/14/06
   IF (Unit .EQ. SI) IDC_Ltube=IDC_Ltube/1000
 
-  DO I=1,7; READ(200,*); END DO
+  DO I=1,8; READ(200,*); END DO !skip over internal volume in new file format
 
   !Ref side heat transfer multiplier
   READ(200,202)LineData
@@ -766,6 +768,8 @@ LOGICAL :: HPDataFileExists
   I=SCAN(LineData,',')
   BufferString=ADJUSTL(LineData(I+1:150))
   READ(BufferString,*)IDC_DPairMultiplier 
+
+  READ(200,*) !skip air leakage around coil entry in new file format
 
   READ(200,*)
 
