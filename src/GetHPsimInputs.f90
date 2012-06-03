@@ -187,12 +187,19 @@ INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
 REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
+LOGICAL :: HPDataFileExists
 
 !Flow:
 
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1
 
+  INQUIRE(FILE="HPdata.ydd", EXIST=HPDataFileExists)
+  IF (.NOT. HPDataFileExists) THEN
+    !don't just crash
+    WRITE(*,*) "HPdata.ydd was not found in the working directory...program aborting"
+    STOP exit_FileIO_Missing_HPData
+  END IF
   OPEN(200,FILE="HPdata.ydd")
   
   !***************** System data *****************
