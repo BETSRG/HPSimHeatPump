@@ -20,5 +20,6 @@ INTEGER, PARAMETER :: exit_Diagnostic_RefrigerantName = 52
 
 ! Other exit types
 INTEGER, PARAMETER :: exit_SimProblem_BadInitialization = 102
+INTEGER, PARAMETER :: exit_SimProblem_EnergyPlusProblem = 108
 
 END MODULE

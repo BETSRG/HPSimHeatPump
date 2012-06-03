@@ -1,3 +1,14 @@
+
+SUBROUTINE IssueHPFatalError(exitCode, errMessage)
+
+    INTEGER, INTENT(IN) :: exitCode
+    CHARACTER(len=*), INTENT(IN) :: errMessage
+
+    WRITE(*,*) errMessage
+    STOP 1 !exitCode STOP only takes string or integer literals, not variables ? ?
+
+END SUBROUTINE
+
 SUBROUTINE AbortEnergyPlus
 
           ! SUBROUTINE INFORMATION:
@@ -19,6 +30,7 @@ SUBROUTINE AbortEnergyPlus
 
           ! USE STATEMENTS:
   USE DataStringGlobals
+  USE DataStopCodes
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -61,15 +73,7 @@ SUBROUTINE AbortEnergyPlus
   close(tempfl)
   CALL CloseMiscOpenFiles
   
-  WRITE(*,*)'EnergyPlus Terminated--Error(s) Detected.' !ISI - 03-08-04
-  !WRITE(*,*)'Press return to end program.'              !ISI - 03-08-04
-  !READ(*,*)                                             !ISI - 03-08-04
-  CALL SLEEP(300) !Wait for 5 minutes and stop
-
-  !STOP 'EnergyPlus Terminated--Error(s) Detected.'     !ISI - 03-08-04
-  STOP                                                  !ISI - 03-08-04 
- 
-  RETURN
+  CALL IssueHPFatalError(exit_SimProblem_EnergyPlusProblem, 'EnergyPlus Terminated--Error(s) Detected.') !ISI - 03-08-04
 
 END SUBROUTINE AbortEnergyPlus
 
