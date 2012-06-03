@@ -95,16 +95,13 @@ Coil air outlet relative humidity [-],                        26.6
 Coil air face velocity [fpm],                                 242.5111
 Coil heat transfer rate [Btu/h],                              41576.867
 Mass in coil [lbm],                                           0
-Internal volume [in³],                                        0
 Ref side heat transfer multiplier [-],                        1
 Ref side pressure drop multiplier [-],                        1
 Air side heat transfer multiplier [-],                        1
 Air side pressure drop multiplier [-],                        1
-Air Leakage around the Coil [-],                              0
 ******************************** Outdoor Fan Data *****************************
 Fan power [W],                                                274
 Fan air flow rate [cfm],                                      3212
-Draw through (1) or blow through (2) [-],                     1
  ****************************** Indoor Coil Data ******************************
 Fin type,                                                     2
 Fin name,                                                     Wavy
@@ -130,19 +127,16 @@ Coil air outlet relative humidity [-],                        67.5
 Coil air face velocity [fpm],                                 246.8571
 Coil heat transfer rate [Btu/h],                              36598.777
 Mass in coil [lbm],                                           0
-Internal volume [in³],                                        0
 Ref side heat transfer multiplier [-],                        1
 Ref side pressure drop multiplier [-],                        1
 Air side heat transfer multiplier [-],                        0.848
 Air side pressure drop multiplier [-],                        0.836
-Air Leakage around the Coil [-],                              0
 ******************************** Indoor Fan Data ******************************
 Fan power [W],                                                438
 Fan air flow rate [cfm],                                      1200
 Draw through (1) or blow through (2) [-],                     1
  **************************** Expansion Device Data ***************************
 Expansion device type (cooling),                              TXV
-Expansion device type (heating),                              TXV
 --- Short Tube Orifice ---
 Short tube length (cooling) [in],                             0.5
 Short tube diameter (cooling) [in],                           0.041
@@ -150,18 +144,13 @@ Short tube chamfer depth (cooling) [in],                      0
 Short tube length (heating) [in],                             0.5
 Short tube diameter (heating) [in],                           0
 Short tube chamfer depth (heating) [in],                      0
---- Capillary Tube ---
-Capillary tube length (Cooling) [in],                         12
-Capillary tube diameter (Cooling) [in],                       0.052
-Capillary tube coil diameter (Cooling) [in],                  1.5
-Capillary tube length (Heating) [in],                         12
-Capillary tube diameter (Heating) [in],                       0
-Capillary tube coil diameter (Heating) [in],                  1.5
 --- TXV ---
 Model (cooling),                                              
 Rated Capacity [tons],                                        6.91
-Model (heating),                                              
-Rated Capacity [tons],                                        0
+Static superheat [R],                                         10
+Maximum effective operating superheat [R],                    20
+Superheat at rating conditions [R],                           15
+Bypass or bleed factor [-],                                   1
 --- Distibutor ---
 Distibutor Tube Length (cooling) [in],                        24
 Distibutor Tube Length (heating) [in],                        24
@@ -460,99 +449,4 @@ Polynomial Fit Coefficient C1 [-],                            0
 Polynomial Fit Coefficient C2 [-],                            0
 Polynomial Fit Coefficient C3 [-],                            0
 Polynomial Fit Coefficient C4 [-],                            0
- ***************************** Charge Tuning Curve ****************************
-Is charge tuning,                                             False
-Tuning point #1 Simulated Charge,                             0
-Tuning point #1 Liquid Length,                                0
-Tuning point #2 Simulated Charge,                             0
-Tuning point #2 Liquid Length,                                0
-Tuning Curve Intercept,                                       0
-Tuning Curve Slope,                                           0
- ******************************* Air Handler Data *****************************
-Use Air Handler Data,                                         False
-Tonnage,                                                      
-Coil Model,                                                   
-Air Handler Model,                                            
- ***************************** Condenser Curve Data ***************************
-A-Capacity [Btu/h],                                           0
-A-Power [W],                                                  0
-A-Suction Pressure [psig],                                    0
-B-Capacity [Btu/h],                                           0
-B-Power [W],                                                  0
-B-Suction Pressure [psig],                                    0
-A-Capacity Slope [-],                                         Infinity
-A-Power Slope [-],                                            NaN
-B-Capacity Slope [-],                                         Infinity
-B-Power Slope [-],                                            NaN
-A-Capacity Intercept [-],                                     -Infinity
-A-Power Intercept [-],                                        NaN
-B-Capacity Intercept [-],                                     -Infinity
-B-Power Intercept [-],                                        NaN
-A-Liquid Temperature [-],                                     0
- ***************************** Simulation Control *****************************
-Mass Flow Rate Specified,                                     0
- ****************************** Glycol Data ***********************************
-Glycol Concentration [%],                                     0
-Glycol Name,                                                  WATER
-Flow Rate [GPM],                                              0
-Entering Temperature [°F],                                    0
-Leaving Temperature [°F],                                     0
-Pressure Drop [psig],                                         0
-Total Charge [lbm],                                           0
- ****************************** Glycol Line Data ******************************
-Refrigerant line,                                             Glycol Entering
-Tube type,                                                    
-Refrigerant line length [ft],                                 0
-Refrigerant line elevation [ft],                              0
-Refrigerant line heat loss [Btu/h],                           0
-Refrigerant line temperature change [R],                      0
-Tube Conductivity [Btu.in/h.ft².F],                           0
-Tube inside diameter [in],                                    0
-Tube outside diameter [in],                                   0
-Additional Pressure Drop [psig],                              0
-Charge in line [lbm],                                         0
-Refrigerant line,                                             Glycol Leaveing
-Tube type,                                                    
-Refrigerant line length [ft],                                 0
-Refrigerant line elevation [ft],                              0
-Refrigerant line heat loss [Btu/h],                           0
-Refrigerant line temperature change [R],                      0
-Tube Conductivity [Btu.in/h.ft².F],                           0
-Tube inside diameter [in],                                    0
-Tube outside diameter [in],                                   0
-Additional Pressure Drop [psig],                              0
-Charge in line [lbm],                                         0
- ********************************** Pump Data *********************************
-Manufacturer,                                                 
-Model,                                                        
-Flow rate [GPM],                                              0
-Power [W],                                                    0
- *********************************** BPHX Data ********************************
-BPHX Coil, 
-Total Coil Weight [lbm],                                      0
-Hot Pass Capacity [Btu/h],                                    0
-Hot Pass Pressure Drop [psig],                                0
-Hot Pass Heat Transfer Multiplier [-],                        1
-Hot Pass Pressure Drop Multiplier [-],                        1
-Hot Pass Internal Volume [in³],                               0
-Hot Pass Charge [lbm],                                        0
-Cold Pass Capacity [Btu/h],                                   0
-Cold Pass Pressure Drop [psig],                               0
-Cold Pass Heat Transfer Multiplier [-],                       1
-Cold Pass Pressure Drop Multiplier [-],                       1
-Cold Pass Internal Volume [in³],                              0
-Cold Pass Charge [lbm],                                       0
- ****************************** Glycol Loop Data ******************************
-Cycle point,                                                  BPHX Inlet
-Pressure [psig],                                              0
-Temperature [°F],                                             0
-Cycle point,                                                  BPHX Outlet
-Pressure [psig],                                              0
-Temperature [°F],                                             0
-Cycle point,                                                  Indoor Coil Inlet
-Pressure [psig],                                              143.902
-Temperature [°F],                                             50.45
-Cycle point,                                                  Indoor Coil Outlet
-Pressure [psig],                                              142.921
-Temperature [°F],                                             136.65
  ********************************* End of File ********************************

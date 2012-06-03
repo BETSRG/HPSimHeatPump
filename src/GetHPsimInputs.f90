@@ -619,6 +619,8 @@ LOGICAL :: HPDataFileExists
 
   !READ(200,*)
 
+    !This is reading the ***INDOOR COIL DATA*** line, not the actual drawthrough/blowthrough line
+    !It only works because there is no assertion on the input quality
   READ(200,202)LineData
 
   ODdrawBlow=1 !Default
@@ -630,6 +632,8 @@ LOGICAL :: HPDataFileExists
       READ(BufferString,*)ODdrawBlow
       READ(200,*)
   END SELECT
+
+    !Then we don't end up reading the separator *** line here, we just start with the next line
 
   !***************** Indoor coil data *****************  
   !Fin type (1-smooth; 2-Wavy; 3-louvered)

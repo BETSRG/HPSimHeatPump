@@ -15,6 +15,9 @@ INTEGER, PARAMETER :: exit_Normal = 0
 ! File I/O type exits
 INTEGER, PARAMETER :: exit_FileIO_Missing_HPData = 2
 
+! Code diagnostics
+INTEGER, PARAMETER :: exit_Diagnostic_RefrigerantName = 52
+
 ! Other exit types
 INTEGER, PARAMETER :: exit_SimProblem_BadInitialization = 102
 

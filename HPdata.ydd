@@ -1,342 +1,342 @@
-# York UPG Design Tool
-# Design Data file
+# YORKAST
+# Design Data File
 #
-Model,                                                        York Champion 3.5 ton
+Model,                                                        TCGD036S41S1
  ****************************** Main Design Data ******************************
-SI units flag,                                                False
+SI units flag,                                                FALSE
 Calculation mode,                                             2
-System Type,                                                  2
+System Type,                                                  1
 Is in cooling mode,                                           True
-Selected cooling design condition,                            0
-Selected heating design condition,                            -1
-Design Subcooling [R],                                        15
-Design Superheat [R],                                         20
-Refrigerant name,                                             R22                                                                             
-No. of refrigerants in blend [-],                             1
-Nominal cooling capacity [Btu/h],                             0
-Nominal heating capacity [Btu/h],                             0
-Electric heating [W],                                         0
+Selected cooling design condition,                            1
+Selected heating design condition,                            1
+Design Subcooling [R],                                        10
+Design Superheat [R],                                         10
+Refrigerant Name,                                             R410A
+No. of refrigerants in blend [-],                              2
+Nominal cooling capacity [Btu/h],                             36598.8
+Nominal heating capacity [Btu/h],                             41576.9
+Electric heating [w],                                         0
 Design condition description,                                 Cooling: 'A' Rating Conditions
-Outdoor entering drybulb temperature [F],                     95
-Outdoor entering wetbulb temperature [F],                     75
-Indoor entering drybulb temperature [F],                      80
-Indoor entering wetbulb temperature [F],                      67
-Design refrigerant charge mass [lbm],                         0
-Refrigerant charge mass [lbm],                                9.5
-Refrigerant mass flow rate [lbm/h],                           554.7619
-System EER [-],                                               0
+Outdoor entering drybulb temperature [°F],                    95
+Outdoor entering wetbulb temperature [°F],                    75
+Indoor entering drybulb temperature [°F],                     80
+Indoor entering wetbulb temperature [°F],                     67
+Design refrigerant charge mass [lbm],                         1.68
+Refrigerant charge mass [lbm],                                1.68
+Refrigerant mass flow rate [lbm/h],                           368.196
+System EER [-],                                               11.394
 System SEER [-],                                              0
-System COP [-],                                               0
-Sensible/Total heat ratio [-],                                0
-Calculated Subcooling [R],                                    0
-Calculated Superheat [R],                                     0
-Calculated cooling capacity [Btu/h],                          0
+System COP [-],                                               3.335
+Sensible/Total heat ratio [-],                                .341
+Calculated Subcooling [R],                                    10
+Calculated Superheat [R],                                     10
+Calculated cooling capacity [Btu/h],                          36598.777
 Calculated heating capacity [Btu/h],                          0
 ******************************** Compressor Data ******************************
-Compressor model,                                             ZR34K3-PFV,60,230,1
-Compressor Manufacturer,                                      Copeland
-Compressor Type,                                              Scroll,Cooling,100,-
-Compressor refrigerant,                                       R22
-Compressor power [W],                                         2852.327
+Compressor model,                                             H82J273ABC,60,230,1
+Compressor Manufacturer,                                      Bristol
+Compressor Type,                                              Recip,Cooling,100,-
+Compressor refrigerant,                                       R410A
+Compressor power [W],                                         2938.115
 Compressor heat loss fraction [-],                            0
 Compressor heat loss [Btu/h],                                 0
-Compressor volume [in3],                                      43.98
-Compressor mass coeffiecient 1 [-],                           216.996707188835
-Compressor mass coeffiecient 2 [-],                           4.73519490337216
-Compressor mass coeffiecient 3 [-],                           0.277542231174443
-Compressor mass coeffiecient 4 [-],                           3.48078167565766E-02
-Compressor mass coeffiecient 5 [-],                           6.06619178001947E-03
-Compressor mass coeffiecient 6 [-],                           -4.00270260689934E-03
-Compressor mass coeffiecient 7 [-],                           2.70401137405502E-04
-Compressor mass coeffiecient 8 [-],                           -7.68910970951467E-05
-Compressor mass coeffiecient 9 [-],                           -1.1831739101783E-05
-Compressor mass coeffiecient 10 [-],                          1.72361465997044E-06
-Compressor power coeffiecient 1 [-],                          15.0444726627427
-Compressor power coeffiecient 2 [-],                          -2.17454032695042
-Compressor power coeffiecient 3 [-],                          30.125710304747
-Compressor power coeffiecient 4 [-],                          -5.01169253425532E-03
-Compressor power coeffiecient 5 [-],                          3.22411762193085E-02
-Compressor power coeffiecient 6 [-],                          -0.21003083424984
-Compressor power coeffiecient 7 [-],                          3.37830660212766E-04
-Compressor power coeffiecient 8 [-],                          -4.22026971170213E-04
-Compressor power coeffiecient 9 [-],                          -1.43211022446808E-04
-Compressor power coeffiecient 10 [-],                         1.26698887904255E-03
+Compressor volume [in³],                                      0
+Compressor mass coefficient 1[-],                             334.1972
+Compressor mass coefficient 2[-],                             7.186994
+Compressor mass coefficient 3[-],                             -3.807002
+Compressor mass coefficient 4[-],                             0.072211
+Compressor mass coefficient 5[-],                             -0.037339
+Compressor mass coefficient 6[-],                             0.031873
+Compressor mass coefficient 7[-],                             0.000121
+Compressor mass coefficient 8[-],                             -0.00027
+Compressor mass coefficient 9[-],                             0.000208
+Compressor mass coefficient 10[-],                            -0.000151
+Compressor power coefficient 1[-],                            960.2755
+Compressor power coefficient 2[-],                            4.58648
+Compressor power coefficient 3[-],                            -4.553715
+Compressor power coefficient 4[-],                            -0.092091
+Compressor power coefficient 5[-],                            -0.143861
+Compressor power coefficient 6[-],                            0.240418
+Compressor power coefficient 7[-],                            -0.001901
+Compressor power coefficient 8[-],                            -0.000688
+Compressor power coefficient 9[-],                            0.003575
+Compressor power coefficient 10[-],                           -0.001548
 Compressor coefficients unit flag,                            IP
-Power multiplier [-],                                         0.83
+Power multiplier [-],                                         1
 Mass flow rate multiplier [-],                                1
-User specified rating evap. temperature [F],                  50
-User specified rating cond. temperature [F],                  125
-User specified rating subcooling [R],                         15
-User specified rating superheat [R],                          20
-User specified rating (heating mode) subcooling [R],          0
-User specified rating (heating mode) superheat [R],           0
+User specified rating evap. temperature [°F],                 50
+User specified rating cond. temperature [°F],                 120
+User specified rating subcooling [R],                         10
+User specified rating superheat [R],                          10
+User specified rating (heating mode) subcooling [R],          14.99
+User specified rating (heating mode) superheat [R],           20
  **************************** Outdoor Coil Data *******************************
-Fin type,                                                     4
-Fin name,                                                     York 11-elmt
-Fin Pitch [FPI],                                              19.9898
-Fin conductivity [Btu.in/h.ft2.F],                            1539
-Fin thickness [thou],                                         3.9
-Fin Material,                                                 Aluminum
-Tube name,                                                    Coil tube: 3/8 0.012 thick Expanded,6
-Tube ID [in],                                                 0.37
-Tube OD [in],                                                 0.394
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube lateral spacing [in],                                    0.866
-Tube vertical spacing [in],                                   1
-Number of rows,                                               2
-Number of tubes per row,                                      30
-Number of circuits,                                           5
-Number of Segments,                                           1
-Single Tube length [in],                                      60
-Coil air pressure drop [in.wg],                               0
-Coil air outlet drybulb temperature [F],                      32
-Coil air outlet wetbulb temperature [F],                      32
-Coil air outlet relative humidity [-],                        0
-Coil air face velocity [fpm],                                 160
-Coil heat transfer rate [Btu/h],                              0
-Mass in Coil [lbm],                                           0
+Fin type,                                                     3
+Fin name,                                                     Louver
+Fin Pitch [FPI],                                              23
+Fin conductivity [Btu.in/h.ft².F],                            1539
+Fin thickness [thou],                                         3.5
+Fin material,                                                 Aluminum
+Tube name,                                                    Delphi 1.3 mm high 18 mm wide 23 ports,1
+Tube ID [in],                                                 0
+Tube OD [in],                                                 0
+Tube conductivity [Btu.in/h.ft².F],                           1539
+Tube lateral spacing [in],                                    0.709
+Tube vertical spacing [in],                                   0.5
+Number of rows,                                               1
+Number of tubes per row,                                      47
+Number of circuits,                                           1
+Number of segments,                                           5
+Single tube length [in],                                      79.3
+Coil air pressure drop [in.wg],                               0.074
+Coil air outlet drybulb temperature [°F],                     94.7
+Coil air outlet wetbulb temperature [°F],                     68.97
+Coil air outlet relative humidity [-],                        26.6
+Coil air face velocity [fpm],                                 242.5111
+Coil heat transfer rate [Btu/h],                              41576.867
+Mass in coil [lbm],                                           0
 Ref side heat transfer multiplier [-],                        1
 Ref side pressure drop multiplier [-],                        1
 Air side heat transfer multiplier [-],                        1
 Air side pressure drop multiplier [-],                        1
 ******************************** Outdoor Fan Data *****************************
-Fan power [W],                                                0
-Fan Air Flow Rate [cfm],                                      1750
+Fan power [W],                                                274
+Fan air flow rate [cfm],                                      3212
  ****************************** Indoor Coil Data ******************************
-Fin type,                                                     4
-Fin name,                                                     York 11-elmt
-Fin Pitch [FPI],                                              14.986
-Fin conductivity [Btu.in/h.ft2.F],                            1539
-Fin thickness [thou],                                         3.9
-Fin Material,                                                 Aluminum
-Tube name,                                                    Coil tube: 3/8 0.012 thick Expanded,6
+Fin type,                                                     2
+Fin name,                                                     Wavy
+Fin Pitch [FPI],                                              12
+Fin conductivity [Btu.in/h.ft².F],                            1539
+Fin thickness [thou],                                         4.5
+Fin material,                                                 Aluminum
+Tube name,                                                    Coil Tube: 3/8 0.012 thick Expanded,6
 Tube ID [in],                                                 0.37
 Tube OD [in],                                                 0.394
-Tube conductivity [Btu.in/h.ft2.F],                           2724
+Tube conductivity [Btu.in/h.ft².F],                           2724
 Tube lateral spacing [in],                                    0.866
 Tube vertical spacing [in],                                   1
 Number of rows,                                               3
-Number of tubes per row,                                      28
-Number of circuits,                                           5
-Number of Segments,                                           1
-Single Tube length [in],                                      24
-Coil air pressure drop [in.wg],                               0
-Coil air outlet drybulb temperature [F],                      32
-Coil air outlet wetbulb temperature [F],                      32
-Coil air outlet relative humidity [-],                        0
-Coil air face velocity [fpm],                                 257.1428
-Coil heat transfer rate [Btu/h],                              0
-Mass in Coil [lbm],                                           0
+Number of tubes per row,                                      40
+Number of circuits,                                           6
+Number of segments,                                           1
+Single tube length [in],                                      17.5
+Coil air pressure drop [in.wg],                               0.217
+Coil air outlet drybulb temperature [°F],                     124.73
+Coil air outlet wetbulb temperature [°F],                     112.33
+Coil air outlet relative humidity [-],                        67.5
+Coil air face velocity [fpm],                                 246.8571
+Coil heat transfer rate [Btu/h],                              36598.777
+Mass in coil [lbm],                                           0
 Ref side heat transfer multiplier [-],                        1
 Ref side pressure drop multiplier [-],                        1
-Air side heat transfer multiplier [-],                        1
-Air side pressure drop multiplier [-],                        1
+Air side heat transfer multiplier [-],                        0.848
+Air side pressure drop multiplier [-],                        0.836
 ******************************** Indoor Fan Data ******************************
-Fan power [W],                                                0
-Fan Air Flow Rate [cfm],                                      1200
+Fan power [W],                                                438
+Fan air flow rate [cfm],                                      1200
 Draw through (1) or blow through (2) [-],                     1
  **************************** Expansion Device Data ***************************
-Expansion device type,                                        Short tube
+Expansion device type (cooling),                              TXV
 --- Short Tube Orifice ---
 Short tube length (cooling) [in],                             0.5
-Short tube diameter (cooling) [in],                           0.079
+Short tube diameter (cooling) [in],                           0.041
 Short tube chamfer depth (cooling) [in],                      0
 Short tube length (heating) [in],                             0.5
-Short tube diameter (heating) [in],                           0.068
+Short tube diameter (heating) [in],                           0
 Short tube chamfer depth (heating) [in],                      0
 --- TXV ---
-Model, 											
-Rated Capacity [Tons],                                        3
+Model (cooling),                                              
+Rated Capacity [tons],                                        6.91
 Static superheat [R],                                         10
 Maximum effective operating superheat [R],                    20
 Superheat at rating conditions [R],                           15
 Bypass or bleed factor [-],                                   1
---- Distributor ---
-Distributor Tube Length (cooling) [in],                       20
-Distributor Tube Length (heating) [in],                       20
+--- Distibutor ---
+Distibutor Tube Length (cooling) [in],                        24
+Distibutor Tube Length (heating) [in],                        24
  **************************** Refrigerant Line Data ***************************
-Refrigerant line,                                             Compressor suction Line
-Tube type,                                                    Tube: 1/2 in
-Refrigerant line length [ft],                                 10.67
-Refrigerant line elevation [ft],                              1
-Refrigerant line Heat Loss [Btu/h],                           0
-Refrigerant line Temprature Change [R],                       -1
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube inside diameter [in],                                    0.476
-Tube outside diameter [in],                                   0.5
-Additional Pressure Drop [psig],                              1
-Charge In Line [lbm],                                         0
-Refrigerant line,                                             Compressor Discharge Line
-Tube type,                                                    Tube: 1/2 in
-Refrigerant line length [ft],                                 9
-Refrigerant line elevation [ft],                              2
-Refrigerant line Heat Loss [Btu/h],                           0
-Refrigerant line Temprature Change [R],                       -1
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube inside diameter [in],                                    0.476
-Tube outside diameter [in],                                   0.5
-Additional Pressure Drop [psig],                              1
-Charge In Line [lbm],                                         0
-Refrigerant line,                                             Liquid Line
-Tube type,                                                    Tube: 1/4 in
-Refrigerant line length [ft],                                 28.95
+Refrigerant line,                                             Compressor Suction
+Tube type,                                                    Copper: 3/4 in 0.035 thick
+Refrigerant line length [ft],                                 28
 Refrigerant line elevation [ft],                              0
-Refrigerant line Heat Loss [Btu/h],                           0
-Refrigerant line Temprature Change [R],                       -1
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube inside diameter [in],                                    0.226
-Tube outside diameter [in],                                   0.25
-Additional Pressure Drop [psig],                              20
-Charge In Line [lbm],                                         0
-Refrigerant line,                                             Reversing Valve to Indoor Coil
-Tube type,                                                    Tube: 1/2 in
-Refrigerant line length [ft],                                 5
-Refrigerant line elevation [ft],                              -1
-Refrigerant line Heat Loss [Btu/h],                           0
-Refrigerant line Temprature Change [R],                       2
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube inside diameter [in],                                    0.476
+Refrigerant line heat loss [Btu/h],                           0
+Refrigerant line temperature change [R],                      0
+Tube Conductivity [Btu.in/h.ft².F],                           2724
+Tube inside diameter [in],                                    0.68
+Tube outside diameter [in],                                   0.75
+Additional Pressure Drop [psig],                              0
+Charge in line [lbm],                                         0
+Refrigerant line,                                             Compressor Discharge
+Tube type,                                                    Copper: 1/2 in 0.028 thick
+Refrigerant line length [ft],                                 3
+Refrigerant line elevation [ft],                              0
+Refrigerant line heat loss [Btu/h],                           0
+Refrigerant line temperature change [R],                      0
+Tube Conductivity [Btu.in/h.ft².F],                           2724
+Tube inside diameter [in],                                    0.444
 Tube outside diameter [in],                                   0.5
-Additional Pressure Drop [psig],                              10
-Charge In Line [lbm],                                         0
-Refrigerant line,                                             Reversing Valve to Outdoor Coil
-Tube type,                                                    Tube: 1/2 in
-Refrigerant line length [ft],                                 5
-Refrigerant line elevation [ft],                              -1
-Refrigerant line Heat Loss [Btu/h],                           0
-Refrigerant line Temprature Change [R],                       -1
-Tube conductivity [Btu.in/h.ft2.F],                           2724
-Tube inside diameter [in],                                    0.476
-Tube outside diameter [in],                                   0.5
-Additional Pressure Drop [psig],                              10
-Charge In Line [lbm],                                         0
+Additional Pressure Drop [psig],                              0
+Charge in line [lbm],                                         0
+Refrigerant line,                                             Liquid Line
+Tube type,                                                    Copper: 3/8 in 0.031 thick
+Refrigerant line length [ft],                                 28
+Refrigerant line elevation [ft],                              0
+Refrigerant line heat loss [Btu/h],                           0
+Refrigerant line temperature change [R],                      0
+Tube Conductivity [Btu.in/h.ft².F],                           2724
+Tube inside diameter [in],                                    0.313
+Tube outside diameter [in],                                   0.375
+Additional Pressure Drop [psig],                              0
+Charge in line [lbm],                                         0
+Refrigerant line,                                             Reversing Valve to IDC
+Tube type,                                                    
+Refrigerant line length [ft],                                 0
+Refrigerant line elevation [ft],                              0
+Refrigerant line heat loss [Btu/h],                           0
+Refrigerant line temperature change [R],                      0
+Tube Conductivity [Btu.in/h.ft².F],                           0
+Tube inside diameter [in],                                    0
+Tube outside diameter [in],                                   0
+Additional Pressure Drop [psig],                              0
+Charge in line [lbm],                                         0
+Refrigerant line,                                             Reversing Valve to ODC
+Tube type,                                                    
+Refrigerant line length [ft],                                 0
+Refrigerant line elevation [ft],                              0
+Refrigerant line heat loss [Btu/h],                           0
+Refrigerant line temperature change [R],                      0
+Tube Conductivity [Btu.in/h.ft².F],                           0
+Tube inside diameter [in],                                    0
+Tube outside diameter [in],                                   0
+Additional Pressure Drop [psig],                              0
+Charge in line [lbm],                                         0
 No of Tubes Liq. [-],                                         0
  ********************** Refrigerant Cycle Data (Cooling) **********************
 Cycle point,                                                  Compressor Suction
-Pressure [psig],                                              98.7597
-Enthalpy [Btu/lbm],                                           179.3438
-Temperature [F],                                              32
+Pressure [psig],                                              142.224
+Enthalpy [Btu/lbm],                                           185.84
+Temperature [°F],                                             60
+Quality [-],                                                  100
+Superheat [R],                                                10
+Subcooling [R],                                               0
+Cycle point,                                                  Compressor Discharge
+Pressure [psig],                                              659.574
+Enthalpy [Btu/lbm],                                           213.07
+Temperature [°F],                                             238.52
+Quality [-],                                                  100
+Superheat [R],                                                82.52
+Subcooling [R],                                               0
+Cycle point,                                                  Outdoor Coil Inlet
+Pressure [psig],                                              613.512
+Enthalpy [Btu/lbm],                                           210.99
+Temperature [°F],                                             225.58
+Quality [-],                                                  100
+Superheat [R],                                                75.62
+Subcooling [R],                                               0
+Cycle point,                                                  Outdoor Coil Outlet
+Pressure [psig],                                              609.887
+Enthalpy [Btu/lbm],                                           105.4
+Temperature [°F],                                             82
+Quality [-],                                                  0
+Superheat [R],                                                0
+Subcooling [R],                                               67.4
+Cycle point,                                                  Expansion Device Inlet
+Pressure [psig],                                              608.446
+Enthalpy [Btu/lbm],                                           105.4
+Temperature [°F],                                             81.99
+Quality [-],                                                  0
+Superheat [R],                                                0
+Subcooling [R],                                               67.22
+Cycle point,                                                  Expansion Device Outlet
+Pressure [psig],                                              157.48
+Enthalpy [Btu/lbm],                                           105.4
+Temperature [°F],                                             55.52
+Quality [-],                                                  11.2
+Superheat [R],                                                0
+Subcooling [R],                                               0
+Cycle point,                                                  Indoor Coil Inlet
+Pressure [psig],                                              143.902
+Enthalpy [Btu/lbm],                                           105.4
+Temperature [°F],                                             50.45
+Quality [-],                                                  13.1
+Superheat [R],                                                0
+Subcooling [R],                                               0
+Cycle point,                                                  Indoor Coil Outlet
+Pressure [psig],                                              142.921
+Enthalpy [Btu/lbm],                                           204.67
+Temperature [°F],                                             136.65
+Quality [-],                                                  100
+Superheat [R],                                                86.38
+Subcooling [R],                                               0
+ ********************** Refrigerant Cycle Data (Heating) **********************
+Cycle point,                                                  Compressor Suction
+Pressure [psig],                                              0
+Enthalpy [Btu/lbm],                                           0
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Compressor Discharge
-Pressure [psig],                                              292.6751
+Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              190.133
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Outdoor Coil Inlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Outdoor Coil Outlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Expansion Device Inlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Expansion Device Outlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Indoor Coil Inlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
 Cycle point,                                                  Indoor Coil Outlet
 Pressure [psig],                                              0
 Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
+Temperature [°F],                                             32
 Quality [-],                                                  0
 Superheat [R],                                                0
 Subcooling [R],                                               0
- ********************** Refrigerant Cycle Data (Heating) **********************
-Cycle point,                                                  Compressor Suction
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Compressor Discharge
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Outdoor Coil Intlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Outdoor Coil Outlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Expansion Device Intlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Expansion Device Outlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Indoor Coil Intlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-Cycle point,                                                  Indoor Coil Outlet
-Pressure [psig],                                              0
-Enthalpy [Btu/lbm],                                           0
-Temperature [F],                                              32
-Quality [-],                                                  0
-Superheat [R],                                                0
-Subcooling [R],                                               0
-OutdoorCoil Ckt, C:\Documents and Settings\Owner\Desktop\IJR-HX paper\InputFiles\OSU_ODC_FT.dat
-IndoorCoil Ckt, C:\Documents and Settings\Owner\Desktop\IJR-HX paper\InputFiles\OSU_IDC_FT.dat
-Barometric Pressure [psig],                                   14
+OutdoorCoil Ckt, C:\Documents and Settings\cpadhms\Desktop\Edwin\3TonAC_410_ODC.dat
+IndoorCoil Ckt, C:\Documents and Settings\cpadhms\Desktop\Edwin\3TonAC_410_IDC.dat
+Barometric Pressure [psig],                                   14.696
 Charge in Compressor [lbm],                                   0
-Charge in distributor tube (Cooling) [lbm],                   0
-Charge in distributor tube (Heating) [lbm],                   0
+Charge in distributor tube (cooling) [lbm],                   0.25
+Charge in distributor tube (heating) [lbm],                   0
 Is compressor in air stream [-],                              0
  ***************************** Accumulator Data *******************************
 Manufacturer,                                                 
 Model,                                                        
 Charge Capacity [lbm],                                        0
-Max. Recommended System Capcity [Tons],                       0
+Max. Recommended System Capacity [Tons],                      0
 Charge [lbm],                                                 0
 Pressure Drop [psig],                                         0
 Height [in],                                                  0
@@ -355,17 +355,17 @@ Flow Capacity [Tons],                                         0
 Pressure Drop [psig],                                         0
 Rating Pressure Drop [psig],                                  0
  *************************** Material Weight Data *****************************
- --- Aluminum ---
-Indoor Coil [lbm],                                            0
-Outdoor Coil [lbm],                                           0
- --- Copper ---
-Indoor Coil [lbm],                                            0
-Outdoor Coil [lbm],                                           0
-Suction Line [lbm],                                           0
-Discharge Line [lbm],                                         0
+--- Fin ---
+Indoor Coil [lbm],                                            9.473
+Outdoor Coil [lbm],                                           9.454
+--- Tube ---
+Indoor Coil [lbm],                                            10.565
+Outdoor Coil [lbm],                                           9.589
+Suction Line [lbm],                                           8.512
+Discharge Line [lbm],                                         0.482
 Rev. Valve-Indoor Coil Line [lbm],                            0
 Rev. Valve-Outdoor Coil Line [lbm],                           0
-Liquid Line [lbm],                                            0
+Liquid Line [lbm],                                            3.627
  ***************************** System Cost Data *******************************
 System Cost [-],                                              0
  --- Unit Cost ---
@@ -375,29 +375,29 @@ Distributor [-],                                              0
 Filter Drier [-],                                             0
 Indoor Fan [-],                                               0
 Outdoor Fan [-],                                              0
-Interconnecting Piping [1/ft],                                0
+Interconnecting Piping [per ft],                              0
 Reversing Valve [-],                                          0
 Short Tube Orifice [-],                                       0
 TXV [-],                                                      0
-Indoor Coil Copper [1/ft],                                    0
-Indoor Coil Aluminum [1/lbm],                                 0
-Outdoor Coil Copper [1/ft],                                   0
-Outdoor Coil Aluminum [1/lbm],                                0
+Indoor Coil Copper [per ft],                                  0
+Indoor Coil Aluminum [per lbm],                               0
+Outdoor Coil Copper [per ft],                                 0
+Outdoor Coil Aluminum [per lbm],                              0
 Other [-],                                                    0
- --- Quanity ---
-Accumulator [-],                                              1
-Compressor [-],                                               1
-Distributor [-],                                              1
-Filter Drier [-],                                             1
-Indoor Fan [-],                                               1
-Outdoor Fan [-],                                              1
-Interconnecting Piping [ft],                                  3.2808
-Reversing Valve [-],                                          1
-Short Tube Orifice [-],                                       1
-TXV [-],                                                      1
-Indoor Coil [-],                                              1
-Outdoor Coil [-],                                             1
-Other [-],                                                    1
+ --- Quantity ---
+Accumulator [-],                                              0
+Compressor [-],                                               0
+Distributor [-],                                              0
+Filter Drier [-],                                             0
+Indoor Fan [-],                                               0
+Outdoor Fan [-],                                              0
+Interconnecting Piping [ft],                                  0
+Reversing Valve [-],                                          0
+Short Tube Orifice [-],                                       0
+TXV [-],                                                      0
+Indoor Coil [-],                                              0
+Outdoor Coil [-],                                             0
+Other [-],                                                    0
  --- Total Cost ---
 Accumulator [-],                                              0
 Compressor [-],                                               0
@@ -405,7 +405,7 @@ Distributor [-],                                              0
 Filter Drier [-],                                             0
 Indoor Fan [-],                                               0
 Outdoor Fan [-],                                              0
-Interconnecting Piping [-],                                   0
+Interconnecting Piping,                                       0
 Reversing Valve [-],                                          0
 Short Tube Orifice [-],                                       0
 TXV [-],                                                      0
@@ -418,33 +418,33 @@ Unit [-],                                                     2
  *** Heat Transfer Data ***
 Curve Type [-],                                               1
 Power Fit Coefficient A [-],                                  0
-Power Fit Coefficient B [-],                                  0
-Polynomial Fit Coefficient C1 [-],                            0
-Polynomial Fit Coefficient C2 [-],                            0
-Polynomial Fit Coefficient C3 [-],                            0
-Polynomial Fit Coefficient C4 [-],                            0
+Power Fit Coefficient b [-],                                  0
+Poloynomial Fit Coefficient C1 [-],                           0
+Poloynomial Fit Coefficient C2 [-],                           0
+Poloynomial Fit Coefficient C3 [-],                           0
+Poloynomial Fit Coefficient C4 [-],                           0
  *** Pressure Drop Data ***
 Curve Type [-],                                               1
 Power Fit Coefficient A [-],                                  0
-Power Fit Coefficient B [-],                                  0
-Polynomial Fit Coefficient C1 [-],                            0
-Polynomial Fit Coefficient C2 [-],                            0
-Polynomial Fit Coefficient C3 [-],                            0
-Polynomial Fit Coefficient C4 [-],                            0
+Power Fit Coefficient b [-],                                  0
+Poloynomial Fit Coefficient C1 [-],                           0
+Poloynomial Fit Coefficient C2 [-],                           0
+Poloynomial Fit Coefficient C3 [-],                           0
+Poloynomial Fit Coefficient C4 [-],                           0
  --- Outdoor Coil ---
 Unit [-],                                                     2
  *** Heat Transfer Data ***
 Curve Type [-],                                               1
 Power Fit Coefficient A [-],                                  0
-Power Fit Coefficient B [-],                                  0
-Polynomial Fit Coefficient C1 [-],                            0
-Polynomial Fit Coefficient C2 [-],                            0
-Polynomial Fit Coefficient C3 [-],                            0
-Polynomial Fit Coefficient C4 [-],                            0
- *** Pressure Drop ***
+Power Fit Coefficient b [-],                                  0
+Poloynomial Fit Coefficient C1 [-],                           0
+Poloynomial Fit Coefficient C2 [-],                           0
+Poloynomial Fit Coefficient C3 [-],                           0
+Poloynomial Fit Coefficient C4 [-],                           0
+ *** Pressure Drop Data ***
 Curve Type [-],                                               1
 Power Fit Coefficient A [-],                                  0
-Power Fit Coefficient B [-],                                  0
+Power Fit Coefficient b [-],                                  0
 Polynomial Fit Coefficient C1 [-],                            0
 Polynomial Fit Coefficient C2 [-],                            0
 Polynomial Fit Coefficient C3 [-],                            0
