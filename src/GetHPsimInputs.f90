@@ -50,6 +50,7 @@ SUBROUTINE GetInputs
 ! ----------------------------------------------------------------------
 
 USE RefNameMod
+USE DataStopCodes
 
 IMPLICIT NONE
 
