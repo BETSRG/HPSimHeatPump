@@ -1,0 +1,574 @@
+# YORKAST
+# Design Data File
+#
+Model,                                                        THGD36S41S1
+ ****************************** Main Design Data ******************************
+MainDesignData,
+False, !field SI Units Flag
+2, !field Calculation Mode
+2, !field System Type
+TRUE, !field Is in Cooling Mode
+1, !field Selected Cooling Design Condition
+1, !field Selected Heating Design Condition
+10, !field Design Subcooling [R]
+10, !field Design Superheat [R]
+R410A, !field Refrigerant Name
+2, !field No. of Refrigerants in Blend [-]
+37269.4, !field Nominal Cooling Capacity [Btu!h]
+28144.4, !field Nominal Heating Capacity [Btu!h]
+0, !field Electric Heating [W]
+Cooling: 'A' Rating Conditions, !field Design Condition Description
+95, !field Outdoor Entering Drybulb Temperature [°F]
+75, !field Outdoor Entering Wetbulb Temperature [°F]
+80, !field Indoor Entering Drybulb Temperature [°F]
+67, !field Indoor Entering Wetbulb Temperature [°F]
+9.53, !field Design Refrigerant Charge Mass [lbm]
+9.53, !field Refrigerant Charge Mass [lbm]
+350.479, !field Refrigerant Mass Flow Rate [lbm!h]
+11.406, !field System EER [-]
+0, !field System SEER [-]
+3.339, !field Sysetm COP [-]
+1, !field Sensible!Total Heat Ratio [-]
+10, !field Calculated Subcooling [R]
+10, !field Calculated Superheat [R]
+35173.6183, !field Calculated Cooling Capacity [Btu!h]
+38765.7957; !field Calculated Heating Capacity [Btu!h]
+******************************** Compressor Data ******************************
+CompressorData,
+H89B283ABC,60,230,1, !field Compressor Model
+Bristol, !field Compressor Manufacturer
+Recip,Cooling,100,-, !field Compressor Type
+R410A, !field Compressor Refrigerant
+2663.649, !field Compressor Power [W]
+0, !field Compressor Heat Loss Fraction [-]
+0, !field Compressor Heat Loss [Btu!h]
+0, !field Compressor Volume [in³]
+226.492462, !field Compressor Mass Coefficient 1[-]
+4.121732, !field Compressor Mass Coefficient 2[-]
+0.209093, !field Compressor Mass Coefficient 3[-]
+0.02422, !field Compressor Mass Coefficient 4[-]
+0.056577, !field Compressor Mass Coefficient 5[-]
+-0.020233, !field Compressor Mass Coefficient 6[-]
+5.4E-05, !field Compressor Mass Coefficient 7[-]
+0.000318, !field Compressor Mass Coefficient 8[-]
+-0.000433 !field Compressor Mass Coefficient 9[-]
+8.5E-05, !field Compressor Mass Coefficient 10[-]
+2146.201904, !field Compressor Power Coefficient 1[-]
+-5.666396, !field Compressor Power Coefficient 2[-]
+-27.102711, !field Compressor Power Coefficient 3[-]
+-0.349607, !field Compressor Power Coefficient 4[-]
+0.220594, !field Compressor Power Coefficient 5[-]
+0.369014, !field Compressor Power Coefficient 6[-]
+-0.001709, !field Compressor Power Coefficient 7[-]
+0.002143, !field Compressor Power Coefficient 8[-]
+0.000739, !field Compressor Power Coefficient 9[-]
+-0.001464, !field Compressor Power Coefficient 10[-]
+IP, !field Compressor Coefficients Unit Flag
+1, !field Power Multiplier [-]
+1, !field Mass Flow Rate Multiplier [-]
+30, !field User Specified Rating Evap. Temperature [°F]
+10, !field User Specified Ratingh Subcooling [R]
+10, !field User Specified Rating Superheat [R]
+10, !field User Specified Rating (Heating Mode) Subcooling [R]
+10; !field User Specified Rating (Heating Mode) Superheat [R]
+ **************************** Outdoor Coil Data *******************************
+OutdoorCoilData,
+4, !field Fin Type
+22, !field Fin Pitch [FPI]
+1539, !field Fin Conductivity [Btu.in!h.ft².F]
+3.9, !field Fin thickness [thou]
+Aluminum, !field Fin Material
+Coil Tube: 3/8 0.012 thick Expanded,4 !field Tube Name
+0.37, !field Tube ID [in]
+0.394, !field Tube OD [in]
+2724, !field Tube Conductivity [Btu.in!h.ft².F]
+0, !field Tube Lateral Spacing [in]
+1, !field Tube Vertical Spacing [in]
+1, !field Number of Rows
+36, !field Number of Tubes Per Row
+4, !field Number of Circuits
+1, !field Number of Segments
+96.45, !field Single Tube Length [in]
+0.05, !field Coil Air Pressure Drop [in.wg]
+41, !field Coil Air Outlet Drybulb Temperature [°F]
+39.65, !field Coil Air Outlet Wetbulb Temperature [°F]
+89.3, !field Coil Air Outlet Relative Humidity [-]
+152.9497, !field Coil Air Face Velocity [fpm]
+28144.441, !field Coil Heat Transfer Rate [Btu!h]
+2.411, !field Mass in Coil [lbm]
+0, !field Internal Volume [in³]
+1, !field Ref Side Heat Transfer Multiplier [-]
+1, !field Ref Side Pressure Drop Multiplier [-]
+1, !field Air Side Heat Transfer Multiplier [-]
+1, !field Air Side Pressure Drop Multiplier [-]
+0; !field Air Leakage Around the Coil [-]
+******************************** Outdoor Fan Data *****************************
+OutdoorFanData,
+297, !field Fan Power [W]
+3688, !field Fan Air Flow Rate [cfm]
+1; !field Draw Through (1) or Blow Through (2) [-]
+ ****************************** Indoor Coil Data ******************************
+IndoorCoilData,
+4, !field Fin Type
+York 11-elmt, !field Fin Name
+12, !field Fin Pitch [FPI]
+1359, !field Fin Conductivity [Btu.in!h.ft².F]
+3.9, !field Fin Thickness [thou]
+Aluminum, !field Fin Material
+Coil tube: 3/8 0.012 thick Expanded,6, !field Tube Name
+0.37, !field Tube ID [in]
+0.394, !field Tube OD [in]
+2724, !field Tube Conductivity [Btu.in!h.ft².F]
+0.866, !field Tube Lateral Spacing [in]
+1, !field Tube Vertical Spacing [in]
+3, !field Number of Rows
+40, !field Number of Tubes Per Row
+6, !field Number of Circuits
+17.5, !field Single Tube Length [in]
+0.117, !field Coil Air Pressure Drop [in.wg]
+100.28, !field Coil Air Outlet Drybulb Temperature [°F]
+69.86, !field Coil Air Outlet Wetbulb Temperature [°F]
+21, !field Coil Air Outlet Relative Humidity [-]
+246.8571, !field Coil Air Face Velocity [fpm]
+37269.383, !field Coil Heat Transfer Rate [Btu!h]
+5.327, !field Mass in Coil [lbm]
+0, !field Internal Volume [in³]
+1, !field Ref Side Heat Transfer Multiplier [-]
+1, !field Ref Side Pressure Drop Multiplier [-]
+1, !field Air Side Heat Transfer Multiplier [-]
+1, !field Air Side Pressure Drop Multiplier [-]
+0; !field Air Leakage Around the Coil [-]
+******************************** Indoor Fan Data ******************************
+IndoorFanData,
+438, !field Fan Power [W]
+1200, !field Fan Air Flow Rate [cfm]
+1; !field Draw Through (1) or Blow Through (2) [-]
+ **************************** Expansion Device Data ***************************
+ExpansionDeviceData,
+TXV, !field Expansion Device Type (Cooling)
+TXV, !field Expansion Device Type (Heating)
+--- Short Tube Orifice ---
+0.5, !field Short Tube Length (Cooling) [in]
+0.07, !field Short Tube Diameter (Cooling) [in]
+0, !field Short Tube Chamfer Depth (Cooling) [in]
+0.5, !field Short Tube Length (Heating) [in]
+0.046, !field Short Tube Diameter (Heating) [in]
+0, !field Short Tube Chamfer Depth (Heating) [in]
+--- Capillary Tube---
+12, !field Capillary Tube Length (Cooling) [in]
+0.078, !field Capillary Tube Diameter (Cooling) [in]
+1.5, !field Capillary Tube Coil Diameter (Cooling) [in]
+12, !field Capillary Tube Length (Heating) [in]
+0.059, !field Capillary Tube Diameter (Heating) [in]
+1.5, !field Capillary Tube Coil Diameter (Heating) [in]
+--- TXV ---
+4.68, !field Model (Cooling) Rated Capacity [tons]
+4.73, !field Model (Heating) Rated Capacity [tons]
+--- Distibutor ---
+24, !field Distibutor Tube Length (Cooling) [in]
+24; !field Distibutor Tube Length (Heating) [in]
+ **************************** Refrigerant Line Data ***************************
+RefrigerantLineData,
+Compressor Suction, !field Refrigerant Line
+Copper: 3/4 in 0.035 thick, !field Tube Type
+3, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Change [R]
+2724, !field Tube Conductivity [Btu.in!h.ft².F]
+0.68, !field Tube Inside Diameter [in]
+0.75, !field Tube Outside Diamater [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+Compressor Discharge, !field Refrigerant Line
+Copper: 1/2 in 0.027 thick, !field Tube Type
+1.5, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Charge [R]
+2724, !field Tube Conductivity [Btu.in!h.ft².F]
+0.446, !field Tube Inside Diameter [in]
+0.5, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+Liquid Line, !field Refrigerant Line
+Copper: 3/8 in 0.012 thick, !field Tube Type
+28, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Change [R]
+2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+0.351, !field Tube Inside Diameter [in]
+0.375, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+Reversing Valve to IDC, !field Refrigerant Line
+Copper: 3/4 in 0.035 thick, !field Tube Type
+25, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Change [R]
+2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+0.68, !field Tube Inside Diameter [in]
+0.75, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+Reversing Valve to ODC, !field Refrigerant Line
+Copper: 3/4 in 0.035 thick, !field Tube Type
+1.5, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+0.68, !field Tube Inside Diameter [in]
+0.75, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+0; !field No of Tubes Liq. [-]
+ ********************** Refrigerant Cycle Data (Cooling) **********************
+RefrigerantCycleData(Cooling),
+141.018, !field Pressure [psig]
+185.8, !field Enthalpy [Btu!lbm]
+59.52, !field Temperature [°F]
+100, !field Quality [-]
+10, !field Superheat [R]
+0, !field Subcooling [R]
+Compressor Discharge, !field Cycle Point
+386.087, !field Pressure [psig]
+202.75, !field Enthalpy [Btu!lbm]
+169.89, !field Temperature [°F]
+100, !field Quality [-]
+55.61, !field Superheat [R]
+0, !field Subcooling [R]
+Outdoor Coil Inlet, !field Cycle Point
+385.7, !field Pressure [psig]
+202.75, !field Enthalpy [Btu!lbm]
+169.83, !field Temperature [°F]
+100, !field Quality [-]
+55.62, !field Superheat [R]
+0, !field Subcooling [R]
+Outdoor Coil Outlet, !field Cycle Point
+381.529, !field Pressure [psig]
+113.38, !field Enthalpy [Btu!lbm]
+100.38, !field Temperature [°F]
+0, !field Quality [-]
+0, !field Superheat [R]
+12.82, !field Subcooling [R]
+Expansion Device Inlet, !field Cycle Point
+380.076, !field Pressure [psig]
+113.38, !field Enthalpy [Btu!lbm]
+100.37, !field Temperature [°F]
+0, !field Quality [-]
+0, !field Superheat [R]
+12.55, !field Subcooling [R]
+Expansion Device Outlet, !field Cycle Point
+173.64, !field Pressure [psig]
+113.38, !field Enthalpy [Btu!lbm]
+61.19, !field Temperature [°F]
+18.2, !field Quality [-]
+0, !field Superheat [R]
+0, !field Subcooling [R]
+Indoor Coil Inlet, !field Cycle Point
+147.795, !field Pressure [psig]
+113.38, !field Enthalpy [Btu!lbm]
+51.93, !field Temperature [°F]
+21.5, !field Quality [-]
+0, !field Superheat [R]
+0, !field Subcooling [R]
+Indoor Coil Outlet, !field Cycle Point
+145.971, !field Pressure [psig]
+182.16, !field Enthalpy [Btu!lbm]
+51.43, !field Temperature [°F]
+98.9, !field Quality [-]
+0, !field Superheat [R]
+0; !field Subcooling [R]
+ ********************** Refrigerant Cycle Data (Heating) **********************
+RefrigerantCycleData(Heating),
+107.137, !field Pressure [psig]
+184.69, !field Enthalpy [Btu!lbm]
+45.01, !field Temperature [°F]
+100, !field Quality [-]
+10, !field Superheat [R]
+1, !field Subcooling [R]
+Compressor Discharge, !field Cycle Point
+445.824, !field Pressure [psig]
+210.63, !field Enthalpy [Btu!lbm]
+204.6, !field Temperature [°F]
+100, !field Quality [-]
+79.54, !field Superheat [R]
+0, !field Subcooling [R]
+Outdoor Coil Inlet, !field Cycle Point
+110.91, !field Pressure [psig]
+104.42, !field Enthalpy [Btu!lbm]
+36.58, !field Temperature [°F]
+16.9, !field Quality [-]
+0, !field Superheat [R]
+0, !field Subcooling [R]
+Outdoor Coil Outlet, !field Cycle Point
+106.423, !field Pressure [psig]
+184.62, !field Enthalpy [Btu!lbm]
+44.51, !field Temperature [°F]
+100, !field Quality [-]
+9.84, !field Superheat [R]
+0, !field Subcooling [R]
+Expansion Device Inlet, !field Cycle Point
+444.258, !field Pressure [psig]
+104.42, !field Enthalpy [Btu!lbm]
+79.06, !field Temperature [°F]
+0, !field Quality [-]
+0, !field Superheat [R]
+45.54, !field Subcooling [R]
+Expansion Device Outlet, !field Cycle Point
+126.3, !field Pressure [psig]
+104.42, !field Enthalpy [Btu!lbm]
+43.36, !field Temperature [°F]
+14.6, !field Quality [-]
+0, !field Superheat [R]
+0, !field Subcooling [R]
+Indoor Coil Inlet, !field Cycle Point
+445.549, !field Pressure [psig]
+210.63, !field Enthalpy [Btu!lbm]
+204.57, !field Temperature [°F]
+100, !field Quality [-]
+79.56, !field Superheat [R]
+0, !field Subcooling [R]
+Indoor Coil Outlet, !field Cycle Point
+444.941, !field Pressure [psig]
+104.42, !field Enthalpy [Btu!lbm]
+79.06, !field Temperature [°F]
+0, !field Quality [-]
+0, !field Superheat [R]
+45.46, !field Subcooling [R]
+C:\Program Files\Johnson Controls\YORKAST 2005\CktFiles\THGD36S41S1.dat, !field OutdoorCoil Ckt
+C:\Program Files\Johnson Controls\YORKAST 2005\CktFiles\AHP36.dat, !field IndoorCoil Ckt
+14.696, !field Barometric Pressure [psig]
+0, !field Charge in Compressor [lbm]
+0.171, !field Charge in Distributor Tube (Cooling) [lbm]
+0.111, !field Charge in Distributor Tube (Heating [lbm]
+0; !field Is Compressor in Air Stream [-]
+ ***************************** Accumulator Data *******************************
+AccumulatorData,
+ , !field Manufacturer
+ , !field Model
+0, !field Charge Capacity [lbm]
+0, !field Max. Recommended System Capacity [Tons]
+0, !field Charge [lbm]
+0, !field Pressure Drop [psig]
+0, !field Height [in]
+0, !field Diameter [in]
+0.035, !field Upper Hole Diameter [in]
+0.035, !field Lower Hole Diameter [in]
+0, !field Rating Pressure Drop [psig]
+0, !field Hole Distance [in]
+0, !field Rating Temperature Drop [R]
+0, !field Coefficient-M [-]
+0; !field Coefficient-B [-]
+ **************************** Filter Drier Data *******************************
+FilterDrierData,
+ , !field Manufacturer
+ , !field Model
+0, !field Flow Capacity [tons]
+0, !field Pressure Drop [psig]
+0; !field Rating Pressure Drop [psig]
+ *************************** Material Weight Data *****************************
+MaterialWeightData,
+--- Fin ---
+8.214, !field Indoor Coil [lbm]
+23.49, !field Outdoor Coil [lbm]
+--- Tube ---
+10.565, !field Indoor Coil [lbm]
+16.329, !field Outdoor Coil [lbm]
+0.912, !field Suction Line [lbm]
+0.233, !field Discharge Line [lbm]
+7.6, !field Rev. Valve-Indoor Coil Line [lbm]
+0.456, !field Rev. Valve-Outdoor Coil Line [lbm]
+1.782; !field Liquid Line [lbm]
+ ***************************** System Cost Data *******************************
+SystemCostData,
+0, !field System Cost [-]
+ --- Unit Cost ---
+0, !field Accumulator
+0, !field Compressor
+0, !field Distributor
+0, !field Filter Drier
+0, !field Indoor Fan
+0, !field Outdoor Fan
+0, !field Interconnecting Piping [per ft]
+0, !field Reversing Valve [-]
+0, !field Short Tube Orifice [-]
+0, !field TXV
+0, !field Indoor Coil Copper [per ft]
+0, !field Indoor Coil Aluminum [per ft]
+0, !field Outdoor Coil Copper [per ft]
+0, !field Outdoor Coil Aluminum [per lbm]
+0, !field Other [-]
+ --- Quantity ---
+0, !field Accumulator
+0, !field Compressor [-]
+0, !field Distributor [-]
+0, !field Filter Drier [-]
+0, !field Indoor Fan [-]
+0, !field Outdoor Fan [-]
+0, !field Interconnecting Piping [ft]
+0, !field Reversing Valve [-]
+0, !field Short Tube Orifice [-]
+0, !field TXV [-]
+0, !field Indoor Coil [-]
+0, !field Outdoor Coil [-]
+0, !field Other [-]
+ --- Total Cost ---
+0, !field Accumulator
+0, !field Compressor [-]
+0, !field Distributor [-]
+0, !field Filter Drier [-]
+0, !field Indoor Fan [-]
+0, !field Outdoor Fan [-]
+0, !field Interconnecting Piping [ft]
+0, !field Reversing Valve [-]
+0, !field Short Tube Orifice [-]
+0, !field TXV [-]
+0, !field Indoor Coil [-]
+0, !field Outdoor Coil [-]
+0; !field Other [-]
+ ****************** Custom Air Side Heat Transfer Data ************************
+CustomAirSideHeatTransferData,
+ --- Indoor Coil ---
+2, !field Unit [-]
+ *** Heat Transfer Data ***
+1, !field Curve Type [-]
+0, !field Power Fit Coefficient A [-]
+0, !field Power Fit Coefficient B [-]
+0, !field Polynomial Fit Coefficient C1 [-]
+0, !field Polynomial Fit Coefficient C2 [-]
+0, !field Polynomial Fit Coefficient C3 [-]
+0, !field Polynomial Fit Coefficient C4 [-]
+ *** Pressure Drop Data ***
+1, !field Curve Type [-]
+0, !field Power Fit Coefficient A [-]
+0, !field Power Fit Coefficient B [-]
+0, !field Polynomial Fit Coefficient C1 [-]
+0, !field Polynomial Fit Coefficient C2 [-]
+0, !field Polynomial Fit Coefficient C3 [-]
+0, !field Polynomial Fit Coefficient C4 [-]
+ --- Outdoor Coil ---
+2, !field Unit [-]
+ *** Heat Transfer Data ***
+1, !field Curve Type [-]
+0, !field Power Fit Coefficient A [-]
+0, !field Power Fit Coefficient B [-]
+0, !field Polynomial Fit Coefficient C1 [-]
+0, !field Polynomial Fit Coefficient C2 [-]
+0, !field Polynomial Fit Coefficient C3 [-]
+0, !field Polynomial Fit Coefficient C4 [-]
+ *** Pressure Drop Data ***
+1, !field Curve Type [-]
+0, !field Power Fit Coefficient A [-]
+0, !field Power Fit Coefficient B [-]
+0, !field Polynomial Fit Coefficient C1 [-]
+0, !field Polynomial Fit Coefficient C2 [-]
+0, !field Polynomial Fit Coefficient C3 [-]
+0; !field Polynomial Fit Coefficient C4 [-]
+ ***************************** Charge Tuning Curve ****************************
+ChargeTuningCurve,
+FALSE, !field Is Charge Tuning
+0, !field Tuning Point #1 Simulated Charge
+0, !field Tuning Point #1 Liquid Length
+0, !field Tuning Point #2 Simulated Charge
+0, !field Tuning Point #2 Liquid Length
+0, !field Tuning Curve Intercept
+0; !field Tuning Curve Slope
+ ******************************* Air Handler Data *****************************
+AirHandlerData,
+FALSE, !field Use Air Handler Data
+ , !field Tonnage
+ , !field Coil Model
+ ; !field Air Handler Model
+ ***************************** Condenser Curve Data ***************************
+CondenserCurveData
+0, !field A-Capacity [Btu!h]
+0, !field A-Power [W]
+0, !field A-Suction Pressure [psig]
+0, !field B-Capacity [Btu!h]
+0, !field B-Power [W]
+0, !field B-Suction Pressure [psig]
+0, !field A-Capacity Slope [-]
+0, !field A-Power Slope [-]
+0, !field B-Capacity Slope [-]
+0, !field B-Power Slope [-]
+0, !field A-Capacity Intercept [-]
+0, !field A-Power Intercept [-]
+0, !field B-Capacity Intercept [-]
+0, !field B-Power Intercept [-]
+0; !field A-Liquid Temperature [-]
+ ***************************** Simulation Control *****************************
+SimulationControl,
+0; !field Mass Flow Rate Specified
+ ****************************** Glycol Data ***********************************
+GlycolData,
+0, !field Glycol Concentration [%]
+WATER, !field Glycol Name
+0, !field Flow Rate [GPM]
+0, !field Entering Temperature [°F]
+0, !field Leaving Temperature [°F]
+0, !field Pressure Drop [psig]
+0, !field Total Charge [lbm]
+ ****************************** Glycol Line Data ******************************
+GlycolLineData,
+Glycol Entering, !field Refrigerant Line
+ , !field Tube Type
+0, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Change [R]
+0, !field Tube Conductivity [Btu.in!h.ft².F]
+0, !field Tube Inside Diameter [in]
+0, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0, !field Charge in Line [lbm]
+Glycol Leaving, !field Refrigerant Line
+ , !field Tube Type
+0, !field Refrigerant Line Length [ft]
+0, !field Refrigerant Line Elevation [ft]
+0, !field Refrigerant Line Heat Loss [Btu!h]
+0, !field Refrigerant Line Temperature Change [R]
+0, !field Tube Conductivity [Btu.in!h.ft².F]
+0, !field Tube Inside Diameter [in]
+0, !field Tube Outside Diameter [in]
+0, !field Additional Pressure Drop [psig]
+0; !field Charge in Line [lbm]
+ ********************************** Pump Data *********************************
+PumpData,
+ , !field Manufacturer
+ , !field Model
+0, !field Flow Rate [GPM]
+0; !field Power [W]
+ *********************************** BPHX Data ********************************
+BPHXData,
+ , !field BPHX Coil
+0, !field Total Coil Weight [lbm]
+0, !field Hot Pass Capacity [Btu!h]
+0, !field Hot Pass Pressure Drop [psig]
+1, !field Hot Pass Heat Transfer Multiplier [-]
+1, !field Hot Pass Pressure Drop Multiplier [-]
+0, !field Hot Pass Internal Volume [in³]
+0, !field Hot Pass Charge [lbm]
+0, !field Cold Pass Capacity [Btu!h]
+0, !field Cold Pass Pressure Drop [psig]
+1, !field Cold Pass Heat Transfer Multiplier [-]
+1, !field Cold Pass Pressure Drop Multiplier [-]
+0, !field Cold Pass Internal Volume [in³]
+0; !field Cold Pass Charge [lbm]
+ ****************************** Glycol Loop Data ******************************
+GylcolLoopData,
+BPHX Inlet, !field Cycle Point
+0, !field Pressure [psig]
+0, !field Temperature [°F]
+BPHX Outlet, !field Cycle Point
+0, !field Pressure [psig]
+0, !field Temperature [°F]
+Indoor Coil Inlet, !field Cycle Point
+147.795, !field Pressure [psig]
+51.93, !field Temperature [°F]
+Indoor Coil Outlet, !field Cycle Point
+145.971, !field Pressure [psig]
+51.43, !field Temperature [°F]
+ ********************************* End of File ********************************
