@@ -146,24 +146,24 @@ IndoorFanData,
 ExpansionDeviceData,
     TXV, !field Expansion Device Type (Cooling)
     TXV, !field Expansion Device Type (Heating)
-    --- Short Tube Orifice ---
+    !--- Short Tube Orifice ---
     0.5, !field Short Tube Length (Cooling) [in]
     0.07, !field Short Tube Diameter (Cooling) [in]
     0, !field Short Tube Chamfer Depth (Cooling) [in]
     0.5, !field Short Tube Length (Heating) [in]
     0.046, !field Short Tube Diameter (Heating) [in]
     0, !field Short Tube Chamfer Depth (Heating) [in]
-    --- Capillary Tube---
+    !--- Capillary Tube---
     12, !field Capillary Tube Length (Cooling) [in]
     0.078, !field Capillary Tube Diameter (Cooling) [in]
     1.5, !field Capillary Tube Coil Diameter (Cooling) [in]
     12, !field Capillary Tube Length (Heating) [in]
     0.059, !field Capillary Tube Diameter (Heating) [in]
     1.5, !field Capillary Tube Coil Diameter (Heating) [in]
-    --- TXV ---
+    !--- TXV ---
     4.68, !field Model (Cooling) Rated Capacity [tons]
     4.73, !field Model (Heating) Rated Capacity [tons]
-    --- Distibutor ---
+    !--- Distibutor ---
     24, !field Distibutor Tube Length (Cooling) [in]
     24; !field Distibutor Tube Length (Heating) [in]
  
@@ -384,7 +384,7 @@ MaterialWeightData,
 
 SystemCostData,
     0, !field System Cost [-]
-     --- Unit Cost ---
+    ! --- Unit Cost ---
     0, !field Accumulator
     0, !field Compressor
     0, !field Distributor
@@ -400,7 +400,7 @@ SystemCostData,
     0, !field Outdoor Coil Copper [per ft]
     0, !field Outdoor Coil Aluminum [per lbm]
     0, !field Other [-]
-     --- Quantity ---
+    ! --- Quantity ---
     0, !field Accumulator
     0, !field Compressor [-]
     0, !field Distributor [-]
@@ -414,7 +414,7 @@ SystemCostData,
     0, !field Indoor Coil [-]
     0, !field Outdoor Coil [-]
     0, !field Other [-]
-     --- Total Cost ---
+   !  --- Total Cost ---
     0, !field Accumulator
     0, !field Compressor [-]
     0, !field Distributor [-]
@@ -430,9 +430,9 @@ SystemCostData,
     0; !field Other [-]
 
 CustomAirSideHeatTransferData,
-     --- Indoor Coil ---
+    ! --- Indoor Coil ---
     2, !field Unit [-]
-     *** Heat Transfer Data ***
+    ! *** Heat Transfer Data ***
     1, !field Curve Type [-]
     0, !field Power Fit Coefficient A [-]
     0, !field Power Fit Coefficient B [-]
@@ -440,7 +440,7 @@ CustomAirSideHeatTransferData,
     0, !field Polynomial Fit Coefficient C2 [-]
     0, !field Polynomial Fit Coefficient C3 [-]
     0, !field Polynomial Fit Coefficient C4 [-]
-     *** Pressure Drop Data ***
+    ! *** Pressure Drop Data ***
     1, !field Curve Type [-]
     0, !field Power Fit Coefficient A [-]
     0, !field Power Fit Coefficient B [-]
@@ -448,9 +448,9 @@ CustomAirSideHeatTransferData,
     0, !field Polynomial Fit Coefficient C2 [-]
     0, !field Polynomial Fit Coefficient C3 [-]
     0, !field Polynomial Fit Coefficient C4 [-]
-     --- Outdoor Coil ---
+    ! --- Outdoor Coil ---
     2, !field Unit [-]
-     *** Heat Transfer Data ***
+    ! *** Heat Transfer Data ***
     1, !field Curve Type [-]
     0, !field Power Fit Coefficient A [-]
     0, !field Power Fit Coefficient B [-]
@@ -458,7 +458,7 @@ CustomAirSideHeatTransferData,
     0, !field Polynomial Fit Coefficient C2 [-]
     0, !field Polynomial Fit Coefficient C3 [-]
     0, !field Polynomial Fit Coefficient C4 [-]
-     *** Pressure Drop Data ***
+    ! *** Pressure Drop Data ***
     1, !field Curve Type [-]
     0, !field Power Fit Coefficient A [-]
     0, !field Power Fit Coefficient B [-]
@@ -509,7 +509,7 @@ GlycolData,
     0, !field Entering Temperature [°F]
     0, !field Leaving Temperature [°F]
     0, !field Pressure Drop [psig]
-    0, !field Total Charge [lbm]
+    0; !field Total Charge [lbm]
 
 GlycolLineData,
     Glycol Entering, !field Refrigerant Line
