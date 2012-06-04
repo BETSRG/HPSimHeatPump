@@ -149,24 +149,24 @@ IndoorFanData,
 ExpansionDeviceData,
     A1, \field Expansion Device Type (Cooling)
     A2, \field Expansion Device Type (Heating)
-    --- Short Tube Orifice ---
+    !--- Short Tube Orifice ---
     N1, \field Short Tube Length (Cooling) [in]
     N2, \field Short Tube Diameter (Cooling) [in]
     N3, \field Short Tube Chamfer Depth (Cooling) [in]
     N4, \field Short Tube Length (Heating) [in]
     N5, \field Short Tube Diameter (Heating) [in]
     N6, \field Short Tube Chamfer Depth (Heating) [in]
-    --- Capillary Tube---
+    !--- Capillary Tube---
     N7, \field Capillary Tube Length (Cooling) [in]
     N8, \field Capillary Tube Diameter (Cooling) [in]
     N9, \field Capillary Tube Coil Diameter (Cooling) [in]
     N10, \field Capillary Tube Length (Heating) [in]
     N11, \field Capillary Tube Diameter (Heating) [in]
     N12, \field Capillary Tube Coil Diameter (Heating) [in]
-    --- TXV ---
+    !--- TXV ---
     N13, \field Model (Cooling) Rated Capacity [tons]
     N14, \field Model (Heating) Rated Capacity [tons]
-    --- Distibutor ---
+    !--- Distibutor ---
     N15, \field Distibutor Tube Length (Cooling) [in]
     N16; \field Distibutor Tube Length (Heating) [in]
  
@@ -376,10 +376,10 @@ FilterDrierData,
     N3; \field Rating Pressure Drop [psig]
  
 MaterialWeightData,
-    --- Fin ---
+    !--- Fin ---
     N1, \field Indoor Coil [lbm]
     N2, \field Outdoor Coil [lbm]
-    --- Tube ---
+    !--- Tube ---
     N3, \field Indoor Coil [lbm]
     N4, \field Outdoor Coil [lbm]
     N5, \field Suction Line [lbm]
@@ -390,7 +390,7 @@ MaterialWeightData,
  
 SystemCostData,
     N1, \field System Cost [-]
-     --- Unit Cost ---
+    ! --- Unit Cost ---
     N2, \field Accumulator
     N3, \field Compressor
     N4, \field Distributor
@@ -406,7 +406,7 @@ SystemCostData,
     N14, \field Outdoor Coil Copper [per ft]
     N15, \field Outdoor Coil Aluminum [per lbm]
     N16, \field Other [-]
-     --- Quantity ---
+    ! --- Quantity ---
     N17, \field Accumulator
     N18, \field Compressor [-]
     N19, \field Distributor [-]
@@ -420,7 +420,7 @@ SystemCostData,
     N27, \field Indoor Coil [-]
     N28, \field Outdoor Coil [-]
     N29, \field Other [-]
-     --- Total Cost ---
+    ! --- Total Cost ---
     N30, \field Accumulator
     N31, \field Compressor [-]
     N32, \field Distributor [-]
@@ -436,9 +436,9 @@ SystemCostData,
     N42; \field Other [-]
  
 CustomAirSideHeatTransferData,
-     --- Indoor Coil ---
+    ! --- Indoor Coil ---
     N1, \field Unit [-]
-     *** Heat Transfer Data ***
+    ! *** Heat Transfer Data ***
     N2, \field Curve Type [-]
     N3, \field Power Fit Coefficient A [-]
     N4, \field Power Fit Coefficient B [-]
@@ -446,7 +446,7 @@ CustomAirSideHeatTransferData,
     N6, \field Polynomial Fit Coefficient C2 [-]
     N7, \field Polynomial Fit Coefficient C3 [-]
     N8, \field Polynomial Fit Coefficient C4 [-]
-     *** Pressure Drop Data ***
+    ! *** Pressure Drop Data ***
     N9, \field Curve Type [-]
     N10, \field Power Fit Coefficient A [-]
     N11, \field Power Fit Coefficient B [-]
@@ -454,9 +454,9 @@ CustomAirSideHeatTransferData,
     N13, \field Polynomial Fit Coefficient C2 [-]
     N14, \field Polynomial Fit Coefficient C3 [-]
     N15, \field Polynomial Fit Coefficient C4 [-]
-     --- Outdoor Coil ---
+    ! --- Outdoor Coil ---
     N16, \field Unit [-]
-     *** Heat Transfer Data ***
+    ! *** Heat Transfer Data ***
     N17, \field Curve Type [-]
     N18, \field Power Fit Coefficient A [-]
     N19, \field Power Fit Coefficient B [-]
@@ -464,7 +464,7 @@ CustomAirSideHeatTransferData,
     N21, \field Polynomial Fit Coefficient C2 [-]
     N22, \field Polynomial Fit Coefficient C3 [-]
     N23, \field Polynomial Fit Coefficient C4 [-]
-     *** Pressure Drop Data ***
+    ! *** Pressure Drop Data ***
     N24, \field Curve Type [-]
     N25, \field Power Fit Coefficient A [-]
     N26, \field Power Fit Coefficient B [-]
@@ -515,7 +515,7 @@ GlycolData,
     N3, \field Entering Temperature [°F]
     N4, \field Leaving Temperature [°F]
     N5, \field Pressure Drop [psig]
-    N6, \field Total Charge [lbm]
+    N6; \field Total Charge [lbm]
  
 GlycolLineData,
     A1, \field Refrigerant Line
