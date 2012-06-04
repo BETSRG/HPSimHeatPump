@@ -4,568 +4,568 @@
 Model,                                                        THGD36S41S1
  ****************************** Main Design Data ******************************
 MainDesignData,
-A1, /field SI Units Flag
-N1, /field Calculation Mode
-N2, /field System Type
-A2, /field Is in Cooling Mode
-N3, /field Selected Cooling Design Condition
-N4, /field Selected Heating Design Condition
-N5, /field Design Subcooling [R]
-N6, /field Design Superheat [R]
-A3, /field Refrigerant Name
-N7, /field No. of Refrigerants in Blend [-]
-N8, /field Nominal Cooling Capacity [Btu/h]
-N9, /field Nominal Heating Capacity [Btu/h]
-N10, /field Electric Heating [W]
-A4, /field Design Condition Description
-N11, /field Outdoor Entering Drybulb Temperature [°F]
-N12, /field Outdoor Entering Wetbulb Temperature [°F]
-N13, /field Indoor Entering Drybulb Temperature [°F]
-N14, /field Indoor Entering Wetbulb Temperature [°F]
-N15, /field Design Refrigerant Charge Mass [lbm]
-N16, /field Refrigerant Charge Mass [lbm]
-N17, /field Refrigerant Mass Flow Rate [lbm/h]
-N18, /field System EER [-]
-N19, /field System SEER [-]
-N20, /field Sysetm COP [-]
-N21, /field Sensible/Total Heat Ratio [-]
-N22, /field Calculated Subcooling [R]
-N23, /field Calculated Superheat [R]
-N24, /field Calculated Cooling Capacity [Btu/h]
-N25; /field Calculated Heating Capacity [Btu/h]
+A1, \field SI Units Flag
+N1, \field Calculation Mode
+N2, \field System Type
+A2, \field Is in Cooling Mode
+N3, \field Selected Cooling Design Condition
+N4, \field Selected Heating Design Condition
+N5, \field Design Subcooling [R]
+N6, \field Design Superheat [R]
+A3, \field Refrigerant Name
+N7, \field No. of Refrigerants in Blend [-]
+N8, \field Nominal Cooling Capacity [Btu\h]
+N9, \field Nominal Heating Capacity [Btu\h]
+N10, \field Electric Heating [W]
+A4, \field Design Condition Description
+N11, \field Outdoor Entering Drybulb Temperature [°F]
+N12, \field Outdoor Entering Wetbulb Temperature [°F]
+N13, \field Indoor Entering Drybulb Temperature [°F]
+N14, \field Indoor Entering Wetbulb Temperature [°F]
+N15, \field Design Refrigerant Charge Mass [lbm]
+N16, \field Refrigerant Charge Mass [lbm]
+N17, \field Refrigerant Mass Flow Rate [lbm\h]
+N18, \field System EER [-]
+N19, \field System SEER [-]
+N20, \field Sysetm COP [-]
+N21, \field Sensible\Total Heat Ratio [-]
+N22, \field Calculated Subcooling [R]
+N23, \field Calculated Superheat [R]
+N24, \field Calculated Cooling Capacity [Btu\h]
+N25; \field Calculated Heating Capacity [Btu\h]
 ******************************** Compressor Data ******************************
 CompressorData,
-A1, /field Compressor Model
-A2, /field Compressor Manufacturer
-A3, /field Compressor Type
-A4, /field Compressor Refrigerant
-N1, /field Compressor Power [W]
-N2, /field Compressor Heat Loss Fraction [-]
-N3, /field Compressor Heat Loss [Btu/h]
-N4, /field Compressor Volume [in³]
-N5, /field Compressor Mass Coefficient 1[-]
-N6, /field Compressor Mass Coefficient 2[-]
-N7, /field Compressor Mass Coefficient 3[-]
-N8, /field Compressor Mass Coefficient 4[-]
-N9, /field Compressor Mass Coefficient 5[-]
-N10, /field Compressor Mass Coefficient 6[-]
-N11, /field Compressor Mass Coefficient 7[-]
-N12, /field Compressor Mass Coefficient 8[-]
-N13 /field Compressor Mass Coefficient 9[-]
-N14, /field Compressor Mass Coefficient 10[-]
-N15, /field Compressor Power Coefficient 1[-]
-N16, /field Compressor Power Coefficient 2[-]
-N17, /field Compressor Power Coefficient 3[-]
-N18, /field Compressor Power Coefficient 4[-]
-N19, /field Compressor Power Coefficient 5[-]
-N20, /field Compressor Power Coefficient 6[-]
-N21, /field Compressor Power Coefficient 7[-]
-N22, /field Compressor Power Coefficient 8[-]
-N23, /field Compressor Power Coefficient 9[-]
-N24, /field Compressor Power Coefficient 10[-]
-A5, /field Compressor Coefficients Unit Flag
-N25, /field Power Multiplier [-]
-N26, /field Mass Flow Rate Multiplier [-]
-N27, /field User Specified Rating Evap. Temperature [°F]
-N28, /field User Specified Rating Cond. Temperature [°F]
-N29, /field User Specified Ratingh Subcooling [R]
-N30, /field User Specified Rating Superheat [R]
-N31, /field User Specified Rating (Heating Mode) Subcooling [R]
-N32; /field User Specified Rating (Heating Mode) Superheat [R]
+A1, \field Compressor Model
+A2, \field Compressor Manufacturer
+A3, \field Compressor Type
+A4, \field Compressor Refrigerant
+N1, \field Compressor Power [W]
+N2, \field Compressor Heat Loss Fraction [-]
+N3, \field Compressor Heat Loss [Btu\h]
+N4, \field Compressor Volume [in³]
+N5, \field Compressor Mass Coefficient 1[-]
+N6, \field Compressor Mass Coefficient 2[-]
+N7, \field Compressor Mass Coefficient 3[-]
+N8, \field Compressor Mass Coefficient 4[-]
+N9, \field Compressor Mass Coefficient 5[-]
+N10, \field Compressor Mass Coefficient 6[-]
+N11, \field Compressor Mass Coefficient 7[-]
+N12, \field Compressor Mass Coefficient 8[-]
+N13 \field Compressor Mass Coefficient 9[-]
+N14, \field Compressor Mass Coefficient 10[-]
+N15, \field Compressor Power Coefficient 1[-]
+N16, \field Compressor Power Coefficient 2[-]
+N17, \field Compressor Power Coefficient 3[-]
+N18, \field Compressor Power Coefficient 4[-]
+N19, \field Compressor Power Coefficient 5[-]
+N20, \field Compressor Power Coefficient 6[-]
+N21, \field Compressor Power Coefficient 7[-]
+N22, \field Compressor Power Coefficient 8[-]
+N23, \field Compressor Power Coefficient 9[-]
+N24, \field Compressor Power Coefficient 10[-]
+A5, \field Compressor Coefficients Unit Flag
+N25, \field Power Multiplier [-]
+N26, \field Mass Flow Rate Multiplier [-]
+N27, \field User Specified Rating Evap. Temperature [°F]
+N28, \field User Specified Rating Cond. Temperature [°F]
+N29, \field User Specified Ratingh Subcooling [R]
+N30, \field User Specified Rating Superheat [R]
+N31, \field User Specified Rating (Heating Mode) Subcooling [R]
+N32; \field User Specified Rating (Heating Mode) Superheat [R]
  **************************** Outdoor Coil Data *******************************
 OutdoorCoilData,
-N1, /field Fin Type
-A1, /field Fin Name
-N2, /field Fin Pitch [FPI]
-N3, /field Fin Conductivity [Btu.in/h.ft².F]
-N4, /field Fin thickness [thou]
-A2, /field Fin Material
-A3, /field Tube Name
-N5, /field Tube ID [in]
-N6, /field Tube OD [in]
-N7, /field Tube Conductivity [Btu.in/h.ft².F]
-N8, /field Tube Lateral Spacing [in]
-N9, /field Tube Vertical Spacing [in]
-N10, /field Number of Rows
-N11, /field Number of Tubes Per Row
-N12, /field Number of Circuits
-N13, /field Number of Segments
-N14, /field Single Tube Length [in]
-N15, /field Coil Air Pressure Drop [in.wg]
-N16, /field Coil Air Outlet Drybulb Temperature [°F]
-N17, /field Coil Air Outlet Wetbulb Temperature [°F]
-N18, /field Coil Air Outlet Relative Humidity [-]
-N19, /field Coil Air Face Velocity [fpm]
-N20, /field Coil Heat Transfer Rate [Btu/h]
-N21, /field Mass in Coil [lbm]
-N22, /field Internal Volume [in³]
-N23, /field Ref Side Heat Transfer Multiplier [-]
-N24, /field Ref Side Pressure Drop Multiplier [-]
-N25, /field Air Side Heat Transfer Multiplier [-]
-N26, /field Air Side Pressure Drop Multiplier [-]
-N27; /field Air Leakage Around the Coil [-]
+N1, \field Fin Type
+A1, \field Fin Name
+N2, \field Fin Pitch [FPI]
+N3, \field Fin Conductivity [Btu.in\h.ft².F]
+N4, \field Fin thickness [thou]
+A2, \field Fin Material
+A3, \field Tube Name
+N5, \field Tube ID [in]
+N6, \field Tube OD [in]
+N7, \field Tube Conductivity [Btu.in\h.ft².F]
+N8, \field Tube Lateral Spacing [in]
+N9, \field Tube Vertical Spacing [in]
+N10, \field Number of Rows
+N11, \field Number of Tubes Per Row
+N12, \field Number of Circuits
+N13, \field Number of Segments
+N14, \field Single Tube Length [in]
+N15, \field Coil Air Pressure Drop [in.wg]
+N16, \field Coil Air Outlet Drybulb Temperature [°F]
+N17, \field Coil Air Outlet Wetbulb Temperature [°F]
+N18, \field Coil Air Outlet Relative Humidity [-]
+N19, \field Coil Air Face Velocity [fpm]
+N20, \field Coil Heat Transfer Rate [Btu\h]
+N21, \field Mass in Coil [lbm]
+N22, \field Internal Volume [in³]
+N23, \field Ref Side Heat Transfer Multiplier [-]
+N24, \field Ref Side Pressure Drop Multiplier [-]
+N25, \field Air Side Heat Transfer Multiplier [-]
+N26, \field Air Side Pressure Drop Multiplier [-]
+N27; \field Air Leakage Around the Coil [-]
 ******************************** Outdoor Fan Data *****************************
 OutdoorFanData,
-N1, /field Fan Power [W]
-N2, /field Fan Air Flow Rate [cfm]
-N3; /field Draw Through (1) or Blow Through (2) [-]
+N1, \field Fan Power [W]
+N2, \field Fan Air Flow Rate [cfm]
+N3; \field Draw Through (1) or Blow Through (2) [-]
  ****************************** Indoor Coil Data ******************************
 IndoorCoilData,
-N1, /field Fin Type
-A1, /field Fin Name
-N2, /field Fin Pitch [FPI]
-N3, /field Fin Conductivity [Btu.in/h.ft².F]
-N4, /field Fin Thickness [thou]
-A2, /field Fin Material
-A3, /field Tube Name
-N5, /field Tube ID [in]
-N6, /field Tube OD [in]
-N7, /field Tube Conductivity [Btu.in/h.ft².F]
-N8, /field Tube Lateral Spacing [in]
-N9, /field Tube Vertical Spacing [in]
-N10, /field Number of Rows
-N11, /field Number of Tubes Per Row
-N12, /field Number of Circuits
-N13, /field Number of Segments
-N14, /field Single Tube Length [in]
-N15, /field Coil Air Pressure Drop [in.wg]
-N16, /field Coil Air Outlet Drybulb Temperature [°F]
-N17, /field Coil Air Outlet Wetbulb Temperature [°F]
-N18, /field Coil Air Outlet Relative Humidity [-]
-N19, /field Coil Air Face Velocity [fpm]
-N20, /field Coil Heat Transfer Rate [Btu/h]
-N21, /field Mass in Coil [lbm]
-N22, /field Internal Volume [in³]
-N23, /field Ref Side Heat Transfer Multiplier [-]
-N24, /field Ref Side Pressure Drop Multiplier [-]
-N25, /field Air Side Heat Transfer Multiplier [-]
-N26, /field Air Side Pressure Drop Multiplier [-]
-N27; /field Air Leakage Around the Coil [-]
+N1, \field Fin Type
+A1, \field Fin Name
+N2, \field Fin Pitch [FPI]
+N3, \field Fin Conductivity [Btu.in\h.ft².F]
+N4, \field Fin Thickness [thou]
+A2, \field Fin Material
+A3, \field Tube Name
+N5, \field Tube ID [in]
+N6, \field Tube OD [in]
+N7, \field Tube Conductivity [Btu.in\h.ft².F]
+N8, \field Tube Lateral Spacing [in]
+N9, \field Tube Vertical Spacing [in]
+N10, \field Number of Rows
+N11, \field Number of Tubes Per Row
+N12, \field Number of Circuits
+N13, \field Number of Segments
+N14, \field Single Tube Length [in]
+N15, \field Coil Air Pressure Drop [in.wg]
+N16, \field Coil Air Outlet Drybulb Temperature [°F]
+N17, \field Coil Air Outlet Wetbulb Temperature [°F]
+N18, \field Coil Air Outlet Relative Humidity [-]
+N19, \field Coil Air Face Velocity [fpm]
+N20, \field Coil Heat Transfer Rate [Btu\h]
+N21, \field Mass in Coil [lbm]
+N22, \field Internal Volume [in³]
+N23, \field Ref Side Heat Transfer Multiplier [-]
+N24, \field Ref Side Pressure Drop Multiplier [-]
+N25, \field Air Side Heat Transfer Multiplier [-]
+N26, \field Air Side Pressure Drop Multiplier [-]
+N27; \field Air Leakage Around the Coil [-]
 ******************************** Indoor Fan Data ******************************
 IndoorFanData,
-N1, /field Fan Power [W]
-N2, /field Fan Air Flow Rate [cfm]
-N3; /field Draw Through (1) or Blow Through (2) [-]
+N1, \field Fan Power [W]
+N2, \field Fan Air Flow Rate [cfm]
+N3; \field Draw Through (1) or Blow Through (2) [-]
  **************************** Expansion Device Data ***************************
 ExpansionDeviceData,
-A1, /field Expansion Device Type (Cooling)
-A2, /field Expansion Device Type (Heating)
+A1, \field Expansion Device Type (Cooling)
+A2, \field Expansion Device Type (Heating)
 --- Short Tube Orifice ---
-N1, /field Short Tube Length (Cooling) [in]
-N2, /field Short Tube Diameter (Cooling) [in]
-N3, /field Short Tube Chamfer Depth (Cooling) [in]
-N4, /field Short Tube Length (Heating) [in]
-N5, /field Short Tube Diameter (Heating) [in]
-N6, /field Short Tube Chamfer Depth (Heating) [in]
+N1, \field Short Tube Length (Cooling) [in]
+N2, \field Short Tube Diameter (Cooling) [in]
+N3, \field Short Tube Chamfer Depth (Cooling) [in]
+N4, \field Short Tube Length (Heating) [in]
+N5, \field Short Tube Diameter (Heating) [in]
+N6, \field Short Tube Chamfer Depth (Heating) [in]
 --- Capillary Tube---
-N7, /field Capillary Tube Length (Cooling) [in]
-N8, /field Capillary Tube Diameter (Cooling) [in]
-N9, /field Capillary Tube Coil Diameter (Cooling) [in]
-N10, /field Capillary Tube Length (Heating) [in]
-N11, /field Capillary Tube Diameter (Heating) [in]
-N12, /field Capillary Tube Coil Diameter (Heating) [in]
+N7, \field Capillary Tube Length (Cooling) [in]
+N8, \field Capillary Tube Diameter (Cooling) [in]
+N9, \field Capillary Tube Coil Diameter (Cooling) [in]
+N10, \field Capillary Tube Length (Heating) [in]
+N11, \field Capillary Tube Diameter (Heating) [in]
+N12, \field Capillary Tube Coil Diameter (Heating) [in]
 --- TXV ---
-N13, /field Model (Cooling) Rated Capacity [tons]
-N14, /field Model (Heating) Rated Capacity [tons]
+N13, \field Model (Cooling) Rated Capacity [tons]
+N14, \field Model (Heating) Rated Capacity [tons]
 --- Distibutor ---
-N15, /field Distibutor Tube Length (Cooling) [in]
-N16; /field Distibutor Tube Length (Heating) [in]
+N15, \field Distibutor Tube Length (Cooling) [in]
+N16; \field Distibutor Tube Length (Heating) [in]
  **************************** Refrigerant Line Data ***************************
 RefrigerantLineData,
-A1, /field Refrigerant Line
-A2, /field Tube Type
-N1, /field Refrigerant Line Length [ft]
-N2, /field Refrigerant Line Elevation [ft]
-N3, /field Refrigerant Line Heat Loss [Btu/h]
-N4, /field Refrigerant Line Temperature Change [R]
-N5, /field Tube Conductivity [Btu.in/h.ft².F]
-N6, /field Tube Inside Diameter [in]
-N7, /field Tube Outside Diamater [in]
-N8, /field Additional Pressure Drop [psig]
-N9, /field Charge in Line [lbm]
-A3, /field Refrigerant Line
-A4, /field Tube Type
-N10, /field Refrigerant Line Length [ft]
-N11, /field Refrigerant Line Elevation [ft]
-N12, /field Refrigerant Line Heat Loss [Btu/h]
-N13, /field Tube Conductivity [Btu.in/h.ft².F]
-N14, /field Tube Inside Diameter [in]
-N15, /field Tube Outside Diameter [in]
-N16, /field Additional Pressure Drop [psig]
-N17, /field Charge in Line [lbm]
-A5, /field Refrigerant Line
-A6, /field Tube Type
-N18, /field Refrigerant Line Length [ft]
-N19, /field Refrigerant Line Elevation [ft]
-N20, /field Refrigerant Line Heat Loss [Btu/h]
-N21, /field Refrigerant Line Temperature Change [R]
-N22, /field Tube Condcutivity [Btu.in/h.ft².F]
-N23, /field Tube Inside Diameter [in]
-N24, /field Tube Outside Diameter [in]
-N25, /field Additional Pressure Drop [psig]
-N26, /field Charge in Line [lbm]
-A7, /field Refrigerant Line
-A8, /field Tube Type
-N27, /field Refrigerant Line Length [ft]
-N28, /field Refrigerant Line Elevation [ft]
-N29, /field Refrigerant Line Heat Loss [Btu/h]
-N30, /field Refrigerant Line Temperature Change [R]
-N31, /field Tube Condcutivity [Btu.in/h.ft².F]
-N32, /field Tube Inside Diameter [in]
-N33, /field Tube Outside Diameter [in]
-N34, /field Additional Pressure Drop [psig]
-N35, /field Charge in Line [lbm]
-A9, /field Refrigerant Line
-A10, /field Tube Type
-N36, /field Refrigerant Line Length [ft]
-N37, /field Refrigerant Line Elevation [ft]
-N38, /field Refrigerant Line Heat Loss [Btu/h]
-N39, /field Refrigerant Line Temperature Change [R]
-N40, /field Tube Condcutivity [Btu.in/h.ft².F]
-N41, /field Tube Inside Diameter [in]
-N42, /field Tube Outside Diameter [in]
-N43, /field Additional Pressure Drop [psig]
-N44, /field Charge in Line [lbm]
-N45; /field No of Tubes Liq. [-]
+A1, \field Refrigerant Line
+A2, \field Tube Type
+N1, \field Refrigerant Line Length [ft]
+N2, \field Refrigerant Line Elevation [ft]
+N3, \field Refrigerant Line Heat Loss [Btu\h]
+N4, \field Refrigerant Line Temperature Change [R]
+N5, \field Tube Conductivity [Btu.in\h.ft².F]
+N6, \field Tube Inside Diameter [in]
+N7, \field Tube Outside Diamater [in]
+N8, \field Additional Pressure Drop [psig]
+N9, \field Charge in Line [lbm]
+A3, \field Refrigerant Line
+A4, \field Tube Type
+N10, \field Refrigerant Line Length [ft]
+N11, \field Refrigerant Line Elevation [ft]
+N12, \field Refrigerant Line Heat Loss [Btu\h]
+N13, \field Tube Conductivity [Btu.in\h.ft².F]
+N14, \field Tube Inside Diameter [in]
+N15, \field Tube Outside Diameter [in]
+N16, \field Additional Pressure Drop [psig]
+N17, \field Charge in Line [lbm]
+A5, \field Refrigerant Line
+A6, \field Tube Type
+N18, \field Refrigerant Line Length [ft]
+N19, \field Refrigerant Line Elevation [ft]
+N20, \field Refrigerant Line Heat Loss [Btu\h]
+N21, \field Refrigerant Line Temperature Change [R]
+N22, \field Tube Condcutivity [Btu.in\h.ft².F]
+N23, \field Tube Inside Diameter [in]
+N24, \field Tube Outside Diameter [in]
+N25, \field Additional Pressure Drop [psig]
+N26, \field Charge in Line [lbm]
+A7, \field Refrigerant Line
+A8, \field Tube Type
+N27, \field Refrigerant Line Length [ft]
+N28, \field Refrigerant Line Elevation [ft]
+N29, \field Refrigerant Line Heat Loss [Btu\h]
+N30, \field Refrigerant Line Temperature Change [R]
+N31, \field Tube Condcutivity [Btu.in\h.ft².F]
+N32, \field Tube Inside Diameter [in]
+N33, \field Tube Outside Diameter [in]
+N34, \field Additional Pressure Drop [psig]
+N35, \field Charge in Line [lbm]
+A9, \field Refrigerant Line
+A10, \field Tube Type
+N36, \field Refrigerant Line Length [ft]
+N37, \field Refrigerant Line Elevation [ft]
+N38, \field Refrigerant Line Heat Loss [Btu\h]
+N39, \field Refrigerant Line Temperature Change [R]
+N40, \field Tube Condcutivity [Btu.in\h.ft².F]
+N41, \field Tube Inside Diameter [in]
+N42, \field Tube Outside Diameter [in]
+N43, \field Additional Pressure Drop [psig]
+N44, \field Charge in Line [lbm]
+N45; \field No of Tubes Liq. [-]
  ********************** Refrigerant Cycle Data (Cooling) **********************
 RefrigerantCycleData(Cooling),
-A1, /field Cycle Point
-N1, /field Pressure [psig]
-N2, /field Enthalpy [Btu/lbm]
-N3, /field Temperature [°F]
-N4, /field Quality [-]
-N5, /field Superheat [R]
-N6, /field Subcooling [R]
-A2, /field Cycle Point
-N7, /field Pressure [psig]
-N8, /field Enthalpy [Btu/lbm]
-N9, /field Temperature [°F]
-N10, /field Quality [-]
-N11, /field Superheat [R]
-N12, /field Subcooling [R]
-A3, /field Cycle Point
-N13, /field Pressure [psig]
-N14, /field Enthalpy [Btu/lbm]
-N15, /field Temperature [°F]
-N16, /field Quality [-]
-N17, /field Superheat [R]
-N18, /field Subcooling [R]
-A4, /field Cycle Point
-N19, /field Pressure [psig]
-N20, /field Enthalpy [Btu/lbm]
-N21, /field Temperature [°F]
-N22, /field Quality [-]
-N23, /field Superheat [R]
-N24, /field Subcooling [R]
-A5, /field Cycle Point
-N25, /field Pressure [psig]
-N26, /field Enthalpy [Btu/lbm]
-N27, /field Temperature [°F]
-N28, /field Quality [-]
-N29, /field Superheat [R]
-N30, /field Subcooling [R]
-A6, /field Cycle Point
-N31, /field Pressure [psig]
-N32, /field Enthalpy [Btu/lbm]
-N33, /field Temperature [°F]
-N34, /field Quality [-]
-N35, /field Superheat [R]
-N36, /field Subcooling [R]
-A7, /field Cycle Point
-N37, /field Pressure [psig]
-N38, /field Enthalpy [Btu/lbm]
-N39, /field Temperature [°F]
-N40, /field Quality [-]
-N41, /field Superheat [R]
-N42, /field Subcooling [R]
-A8, /field Cycle Point
-N43, /field Pressure [psig]
-N44, /field Enthalpy [Btu/lbm]
-N45, /field Temperature [°F]
-N46, /field Quality [-]
-N47, /field Superheat [R]
-N48; /field Subcooling [R]
+A1, \field Cycle Point
+N1, \field Pressure [psig]
+N2, \field Enthalpy [Btu\lbm]
+N3, \field Temperature [°F]
+N4, \field Quality [-]
+N5, \field Superheat [R]
+N6, \field Subcooling [R]
+A2, \field Cycle Point
+N7, \field Pressure [psig]
+N8, \field Enthalpy [Btu\lbm]
+N9, \field Temperature [°F]
+N10, \field Quality [-]
+N11, \field Superheat [R]
+N12, \field Subcooling [R]
+A3, \field Cycle Point
+N13, \field Pressure [psig]
+N14, \field Enthalpy [Btu\lbm]
+N15, \field Temperature [°F]
+N16, \field Quality [-]
+N17, \field Superheat [R]
+N18, \field Subcooling [R]
+A4, \field Cycle Point
+N19, \field Pressure [psig]
+N20, \field Enthalpy [Btu\lbm]
+N21, \field Temperature [°F]
+N22, \field Quality [-]
+N23, \field Superheat [R]
+N24, \field Subcooling [R]
+A5, \field Cycle Point
+N25, \field Pressure [psig]
+N26, \field Enthalpy [Btu\lbm]
+N27, \field Temperature [°F]
+N28, \field Quality [-]
+N29, \field Superheat [R]
+N30, \field Subcooling [R]
+A6, \field Cycle Point
+N31, \field Pressure [psig]
+N32, \field Enthalpy [Btu\lbm]
+N33, \field Temperature [°F]
+N34, \field Quality [-]
+N35, \field Superheat [R]
+N36, \field Subcooling [R]
+A7, \field Cycle Point
+N37, \field Pressure [psig]
+N38, \field Enthalpy [Btu\lbm]
+N39, \field Temperature [°F]
+N40, \field Quality [-]
+N41, \field Superheat [R]
+N42, \field Subcooling [R]
+A8, \field Cycle Point
+N43, \field Pressure [psig]
+N44, \field Enthalpy [Btu\lbm]
+N45, \field Temperature [°F]
+N46, \field Quality [-]
+N47, \field Superheat [R]
+N48; \field Subcooling [R]
  ********************** Refrigerant Cycle Data (Heating) **********************
 RefrigerantCycleData(Heating),
-A1, /field Cycle Point
-N1, /field Pressure [psig]
-N2, /field Enthalpy [Btu/lbm]
-N3, /field Temperature [°F]
-N4, /field Quality [-]
-N5, /field Superheat [R]
-N6, /field Subcooling [R]
-A2, /field Cycle Point
-N7, /field Pressure [psig]
-N8, /field Enthalpy [Btu/lbm]
-N9, /field Temperature [°F]
-N10, /field Quality [-]
-N11, /field Superheat [R]
-N12, /field Subcooling [R]
-A3, /field Cycle Point
-N13, /field Pressure [psig]
-N14, /field Enthalpy [Btu/lbm]
-N15, /field Temperature [°F]
-N16, /field Quality [-]
-N17, /field Superheat [R]
-N18, /field Subcooling [R]
-A4, /field Cycle Point
-N19, /field Pressure [psig]
-N20, /field Enthalpy [Btu/lbm]
-N21, /field Temperature [°F]
-N22, /field Quality [-]
-N23, /field Superheat [R]
-N24, /field Subcooling [R]
-A5, /field Cycle Point
-N25, /field Pressure [psig]
-N26, /field Enthalpy [Btu/lbm]
-N27, /field Temperature [°F]
-N28, /field Quality [-]
-N29, /field Superheat [R]
-N30, /field Subcooling [R]
-A6, /field Cycle Point
-N31, /field Pressure [psig]
-N32, /field Enthalpy [Btu/lbm]
-N33, /field Temperature [°F]
-N34, /field Quality [-]
-N35, /field Superheat [R]
-N36, /field Subcooling [R]
-A7, /field Cycle Point
-N37, /field Pressure [psig]
-N38, /field Enthalpy [Btu/lbm]
-N39, /field Temperature [°F]
-N40, /field Quality [-]
-N41, /field Superheat [R]
-N42, /field Subcooling [R]
-A8, /field Cycle Point
-N43, /field Pressure [psig]
-N44, /field Enthalpy [Btu/lbm]
-N45, /field Temperature [°F]
-N46, /field Quality [-]
-N47, /field Superheat [R]
-N48, /field Subcooling [R]
-A9, /field OutdoorCoil Ckt
-A10, /field IndoorCoil Ckt
-N49, /field Barometric Pressure [psig]
-N50, /field Charge in Compressor [lbm]
-N51, /field Charge in Distributor Tube (Cooling) [lbm]
-N52, /field Charge in Distributor Tube (Heating [lbm]
-N53; /field Is Compressor in Air Stream [-]
+A1, \field Cycle Point
+N1, \field Pressure [psig]
+N2, \field Enthalpy [Btu\lbm]
+N3, \field Temperature [°F]
+N4, \field Quality [-]
+N5, \field Superheat [R]
+N6, \field Subcooling [R]
+A2, \field Cycle Point
+N7, \field Pressure [psig]
+N8, \field Enthalpy [Btu\lbm]
+N9, \field Temperature [°F]
+N10, \field Quality [-]
+N11, \field Superheat [R]
+N12, \field Subcooling [R]
+A3, \field Cycle Point
+N13, \field Pressure [psig]
+N14, \field Enthalpy [Btu\lbm]
+N15, \field Temperature [°F]
+N16, \field Quality [-]
+N17, \field Superheat [R]
+N18, \field Subcooling [R]
+A4, \field Cycle Point
+N19, \field Pressure [psig]
+N20, \field Enthalpy [Btu\lbm]
+N21, \field Temperature [°F]
+N22, \field Quality [-]
+N23, \field Superheat [R]
+N24, \field Subcooling [R]
+A5, \field Cycle Point
+N25, \field Pressure [psig]
+N26, \field Enthalpy [Btu\lbm]
+N27, \field Temperature [°F]
+N28, \field Quality [-]
+N29, \field Superheat [R]
+N30, \field Subcooling [R]
+A6, \field Cycle Point
+N31, \field Pressure [psig]
+N32, \field Enthalpy [Btu\lbm]
+N33, \field Temperature [°F]
+N34, \field Quality [-]
+N35, \field Superheat [R]
+N36, \field Subcooling [R]
+A7, \field Cycle Point
+N37, \field Pressure [psig]
+N38, \field Enthalpy [Btu\lbm]
+N39, \field Temperature [°F]
+N40, \field Quality [-]
+N41, \field Superheat [R]
+N42, \field Subcooling [R]
+A8, \field Cycle Point
+N43, \field Pressure [psig]
+N44, \field Enthalpy [Btu\lbm]
+N45, \field Temperature [°F]
+N46, \field Quality [-]
+N47, \field Superheat [R]
+N48, \field Subcooling [R]
+A9, \field OutdoorCoil Ckt
+A10, \field IndoorCoil Ckt
+N49, \field Barometric Pressure [psig]
+N50, \field Charge in Compressor [lbm]
+N51, \field Charge in Distributor Tube (Cooling) [lbm]
+N52, \field Charge in Distributor Tube (Heating [lbm]
+N53; \field Is Compressor in Air Stream [-]
  ***************************** Accumulator Data *******************************
 AccumulatorData,
-A1, /field Manufacturer
-A2, /field Model
-N1, /field Charge Capacity [lbm]
-N2, /field Max. Recommended System Capacity [Tons]
-N3, /field Charge [lbm]
-N4, /field Pressure Drop [psig]
-N5, /field Height [in]
-N6, /field Diameter [in]
-N7, /field Upper Hole Diameter [in]
-N8, /field Lower Hole Diameter [in]
-N9, /field Rating Pressure Drop [psig]
-N10, /field Rating Temperature Drop [R]
-N11, /field Coefficient-M [-]
-N12; /field Coefficient-B [-]
+A1, \field Manufacturer
+A2, \field Model
+N1, \field Charge Capacity [lbm]
+N2, \field Max. Recommended System Capacity [Tons]
+N3, \field Charge [lbm]
+N4, \field Pressure Drop [psig]
+N5, \field Height [in]
+N6, \field Diameter [in]
+N7, \field Upper Hole Diameter [in]
+N8, \field Lower Hole Diameter [in]
+N9, \field Rating Pressure Drop [psig]
+N10, \field Rating Temperature Drop [R]
+N11, \field Coefficient-M [-]
+N12; \field Coefficient-B [-]
  **************************** Filter Drier Data *******************************
 FilterDrierData,
-A1, /field Manufacturer
-A2, /field Model
-N1, /field Flow Capacity [tons]
-N2, /field Pressure Drop [psig]
-N3; /field Rating Pressure Drop [psig]
+A1, \field Manufacturer
+A2, \field Model
+N1, \field Flow Capacity [tons]
+N2, \field Pressure Drop [psig]
+N3; \field Rating Pressure Drop [psig]
  *************************** Material Weight Data *****************************
 MaterialWeightData,
 --- Fin ---
-N1, /field Indoor Coil [lbm]
-N2, /field Outdoor Coil [lbm]
+N1, \field Indoor Coil [lbm]
+N2, \field Outdoor Coil [lbm]
 --- Tube ---
-N3, /field Indoor Coil [lbm]
-N4, /field Outdoor Coil [lbm]
-N5, /field Suction Line [lbm]
-N6, /field Discharge Line [lbm]
-N7, /field Rev. Valve-Indoor Coil Line [lbm]
-N8, /field Rev. Valve-Outdoor Coil Line [lbm]
-N9; /field Liquid Line [lbm]
+N3, \field Indoor Coil [lbm]
+N4, \field Outdoor Coil [lbm]
+N5, \field Suction Line [lbm]
+N6, \field Discharge Line [lbm]
+N7, \field Rev. Valve-Indoor Coil Line [lbm]
+N8, \field Rev. Valve-Outdoor Coil Line [lbm]
+N9; \field Liquid Line [lbm]
  ***************************** System Cost Data *******************************
 SystemCostData,
-N1, /field System Cost [-]
+N1, \field System Cost [-]
  --- Unit Cost ---
-N2, /field Accumulator
-N3, /field Compressor
-N4, /field Distributor
-N5, /field Filter Drier
-N6, /field Indoor Fan
-N7, /field Outdoor Fan
-N8, /field Interconnecting Piping [per ft]
-N9, /field Reversing Valve [-]
-N10, /field Short Tube Orifice [-]
-N11, /field TXV
-N12, /field Indoor Coil Copper [per ft]
-N13, /field Indoor Coil Aluminum [per ft]
-N14, /field Outdoor Coil Copper [per ft]
-N15, /field Outdoor Coil Aluminum [per lbm]
-N16, /field Other [-]
+N2, \field Accumulator
+N3, \field Compressor
+N4, \field Distributor
+N5, \field Filter Drier
+N6, \field Indoor Fan
+N7, \field Outdoor Fan
+N8, \field Interconnecting Piping [per ft]
+N9, \field Reversing Valve [-]
+N10, \field Short Tube Orifice [-]
+N11, \field TXV
+N12, \field Indoor Coil Copper [per ft]
+N13, \field Indoor Coil Aluminum [per ft]
+N14, \field Outdoor Coil Copper [per ft]
+N15, \field Outdoor Coil Aluminum [per lbm]
+N16, \field Other [-]
  --- Quantity ---
-N17, /field Accumulator
-N18, /field Compressor [-]
-N19, /field Distributor [-]
-N20, /field Filter Drier [-]
-N21, /field Indoor Fan [-]
-N22, /field Outdoor Fan [-]
-N23, /field Interconnecting Piping [ft]
-N24, /field Reversing Valve [-]
-N25, /field Short Tube Orifice [-]
-N26, /field TXV [-]
-N27, /field Indoor Coil [-]
-N28, /field Outdoor Coil [-]
-N29, /field Other [-]
+N17, \field Accumulator
+N18, \field Compressor [-]
+N19, \field Distributor [-]
+N20, \field Filter Drier [-]
+N21, \field Indoor Fan [-]
+N22, \field Outdoor Fan [-]
+N23, \field Interconnecting Piping [ft]
+N24, \field Reversing Valve [-]
+N25, \field Short Tube Orifice [-]
+N26, \field TXV [-]
+N27, \field Indoor Coil [-]
+N28, \field Outdoor Coil [-]
+N29, \field Other [-]
  --- Total Cost ---
-N30, /field Accumulator
-N31, /field Compressor [-]
-N32, /field Distributor [-]
-N33, /field Filter Drier [-]
-N34, /field Indoor Fan [-]
-N35, /field Outdoor Fan [-]
-N36, /field Interconnecting Piping [ft]
-N37, /field Reversing Valve [-]
-N38, /field Short Tube Orifice [-]
-N39, /field TXV [-]
-N40, /field Indoor Coil [-]
-N41, /field Outdoor Coil [-]
-N42; /field Other [-]
+N30, \field Accumulator
+N31, \field Compressor [-]
+N32, \field Distributor [-]
+N33, \field Filter Drier [-]
+N34, \field Indoor Fan [-]
+N35, \field Outdoor Fan [-]
+N36, \field Interconnecting Piping [ft]
+N37, \field Reversing Valve [-]
+N38, \field Short Tube Orifice [-]
+N39, \field TXV [-]
+N40, \field Indoor Coil [-]
+N41, \field Outdoor Coil [-]
+N42; \field Other [-]
  ****************** Custom Air Side Heat Transfer Data ************************
 CustomAirSideHeatTransferData,
  --- Indoor Coil ---
-N1, /field Unit [-]
+N1, \field Unit [-]
  *** Heat Transfer Data ***
-N2, /field Curve Type [-]
-N3, /field Power Fit Coefficient A [-]
-N4, /field Power Fit Coefficient B [-]
-N5, /field Polynomial Fit Coefficient C1 [-]
-N6, /field Polynomial Fit Coefficient C2 [-]
-N7, /field Polynomial Fit Coefficient C3 [-]
-N8, /field Polynomial Fit Coefficient C4 [-]
+N2, \field Curve Type [-]
+N3, \field Power Fit Coefficient A [-]
+N4, \field Power Fit Coefficient B [-]
+N5, \field Polynomial Fit Coefficient C1 [-]
+N6, \field Polynomial Fit Coefficient C2 [-]
+N7, \field Polynomial Fit Coefficient C3 [-]
+N8, \field Polynomial Fit Coefficient C4 [-]
  *** Pressure Drop Data ***
-N9, /field Curve Type [-]
-N10, /field Power Fit Coefficient A [-]
-N11, /field Power Fit Coefficient B [-]
-N12, /field Polynomial Fit Coefficient C1 [-]
-N13, /field Polynomial Fit Coefficient C2 [-]
-N14, /field Polynomial Fit Coefficient C3 [-]
-N15, /field Polynomial Fit Coefficient C4 [-]
+N9, \field Curve Type [-]
+N10, \field Power Fit Coefficient A [-]
+N11, \field Power Fit Coefficient B [-]
+N12, \field Polynomial Fit Coefficient C1 [-]
+N13, \field Polynomial Fit Coefficient C2 [-]
+N14, \field Polynomial Fit Coefficient C3 [-]
+N15, \field Polynomial Fit Coefficient C4 [-]
  --- Outdoor Coil ---
-N16, /field Unit [-]
+N16, \field Unit [-]
  *** Heat Transfer Data ***
-N17, /field Curve Type [-]
-N18, /field Power Fit Coefficient A [-]
-N19, /field Power Fit Coefficient B [-]
-N20, /field Polynomial Fit Coefficient C1 [-]
-N21, /field Polynomial Fit Coefficient C2 [-]
-N22, /field Polynomial Fit Coefficient C3 [-]
-N23, /field Polynomial Fit Coefficient C4 [-]
+N17, \field Curve Type [-]
+N18, \field Power Fit Coefficient A [-]
+N19, \field Power Fit Coefficient B [-]
+N20, \field Polynomial Fit Coefficient C1 [-]
+N21, \field Polynomial Fit Coefficient C2 [-]
+N22, \field Polynomial Fit Coefficient C3 [-]
+N23, \field Polynomial Fit Coefficient C4 [-]
  *** Pressure Drop Data ***
-N24, /field Curve Type [-]
-N25, /field Power Fit Coefficient A [-]
-N26, /field Power Fit Coefficient B [-]
-N27, /field Polynomial Fit Coefficient C1 [-]
-N28, /field Polynomial Fit Coefficient C2 [-]
-N29, /field Polynomial Fit Coefficient C3 [-]
-N30; /field Polynomial Fit Coefficient C4 [-]
+N24, \field Curve Type [-]
+N25, \field Power Fit Coefficient A [-]
+N26, \field Power Fit Coefficient B [-]
+N27, \field Polynomial Fit Coefficient C1 [-]
+N28, \field Polynomial Fit Coefficient C2 [-]
+N29, \field Polynomial Fit Coefficient C3 [-]
+N30; \field Polynomial Fit Coefficient C4 [-]
  ***************************** Charge Tuning Curve ****************************
 ChargeTuningCurve,
-A1, /field Is Charge Tuning
-N1, /field Tuning Point #1 Simulated Charge
-N2, /field Tuning Point #1 Liquid Length
-N3, /field Tuning Point #2 Simulated Charge
-N4, /field Tuning Point #2 Liquid Length
-N5, /field Tuning Curve Intercept
-N6; /field Tuning Curve Slope
+A1, \field Is Charge Tuning
+N1, \field Tuning Point #1 Simulated Charge
+N2, \field Tuning Point #1 Liquid Length
+N3, \field Tuning Point #2 Simulated Charge
+N4, \field Tuning Point #2 Liquid Length
+N5, \field Tuning Curve Intercept
+N6; \field Tuning Curve Slope
  ******************************* Air Handler Data *****************************
 AirHandlerData,
-A1, /field Use Air Handler Data
-N1, /field Tonnage
-A2, /field Coil Model
-A3; /field Air Handler Model
+A1, \field Use Air Handler Data
+N1, \field Tonnage
+A2, \field Coil Model
+A3; \field Air Handler Model
  ***************************** Condenser Curve Data ***************************
 CondenserCurveData
-N1, /field A-Capacity [Btu/h]
-N2, /field A-Power [W]
-N3, /field A-Suction Pressure [psig]
-N4, /field B-Capacity [Btu/h]
-N5, /field B-Power [W]
-N6, /field B-Suction Pressure [psig]
-N7, /field A-Capacity Slope [-]
-N8, /field A-Power Slope [-]
-N9, /field B-Capacity Slope [-]
-N10, /field B-Power Slope [-]
-N11, /field A-Capacity Intercept [-]
-N12, /field A-Power Intercept [-]
-N13, /field B-Capacity Intercept [-]
-N14, /field B-Power Intercept [-]
-N15; /field A-Liquid Temperature [-]
+N1, \field A-Capacity [Btu\h]
+N2, \field A-Power [W]
+N3, \field A-Suction Pressure [psig]
+N4, \field B-Capacity [Btu\h]
+N5, \field B-Power [W]
+N6, \field B-Suction Pressure [psig]
+N7, \field A-Capacity Slope [-]
+N8, \field A-Power Slope [-]
+N9, \field B-Capacity Slope [-]
+N10, \field B-Power Slope [-]
+N11, \field A-Capacity Intercept [-]
+N12, \field A-Power Intercept [-]
+N13, \field B-Capacity Intercept [-]
+N14, \field B-Power Intercept [-]
+N15; \field A-Liquid Temperature [-]
  ***************************** Simulation Control *****************************
 SimulationControl,
-N1; /field Mass Flow Rate Specified
+N1; \field Mass Flow Rate Specified
  ****************************** Glycol Data ***********************************
 GlycolData,
-A1, /field Refrigerant Line
-N1, /field Tube Type
-N2, /field Refrigerant Line Length [ft]
-N3, /field Refrigerant Line Elevation [ft]
-N4, /field Refrigerant Line Heat Loss [Btu/h]
-N5, /field Refrigerant Line Temperature Change [R]
-N6, /field Tube Conductivity [Btu.in/h.ft².F]
-N7, /field Tube Inside Diameter [in]
-N8, /field Tube Outside Diameter [in]
-N9, /field Additional Pressure Drop [psig]
-N10, /field Charge in Line [lbm]
-A2, /field Refrigerant Line
-N11, /field Tube Type
-N12, /field Refrigerant Line Length [ft]
-N13, /field Refrigerant Line Elevation [ft]
-N14, /field Refrigerant Line Heat Loss [Btu/h]
-N15, /field Refrigerant Line Temperature Change [R]
-N16, /field Tube Conductivity [Btu.in/h.ft².F]
-N17, /field Tube Inside Diameter [in]
-N18, /field Tube Outside Diameter [in]
-N19, /field Additional Pressure Drop [psig]
-N20; /field Charge in Line [lbm]
+A1, \field Refrigerant Line
+N1, \field Tube Type
+N2, \field Refrigerant Line Length [ft]
+N3, \field Refrigerant Line Elevation [ft]
+N4, \field Refrigerant Line Heat Loss [Btu\h]
+N5, \field Refrigerant Line Temperature Change [R]
+N6, \field Tube Conductivity [Btu.in\h.ft².F]
+N7, \field Tube Inside Diameter [in]
+N8, \field Tube Outside Diameter [in]
+N9, \field Additional Pressure Drop [psig]
+N10, \field Charge in Line [lbm]
+A2, \field Refrigerant Line
+N11, \field Tube Type
+N12, \field Refrigerant Line Length [ft]
+N13, \field Refrigerant Line Elevation [ft]
+N14, \field Refrigerant Line Heat Loss [Btu\h]
+N15, \field Refrigerant Line Temperature Change [R]
+N16, \field Tube Conductivity [Btu.in\h.ft².F]
+N17, \field Tube Inside Diameter [in]
+N18, \field Tube Outside Diameter [in]
+N19, \field Additional Pressure Drop [psig]
+N20; \field Charge in Line [lbm]
  ********************************** Pump Data *********************************
 PumpData,
-A1, /field Manufacturer
-A2, /field Model
-N1, /field Flow Rate [GPM]
-N2; /field Power [W]
+A1, \field Manufacturer
+A2, \field Model
+N1, \field Flow Rate [GPM]
+N2; \field Power [W]
  *********************************** BPHX Data ********************************
 BPHXData,
-A1, /field BPHX Coil
-N1, /field Total Coil Weight [lbm]
-N2, /field Hot Pass Capacity [Btu/h]
-N3, /field Hot Pass Pressure Drop [psig]
-N4, /field Hot Pass Heat Transfer Multiplier [-]
-N5, /field Hot Pass Pressure Drop Multiplier [-]
-N6, /field Hot Pass Internal Volume [in³]
-N7, /field Hot Pass Charge [lbm]
-N8, /field Cold Pass Capacity [Btu/h]
-N9, /field Cold Pass Pressure Drop [psig]
-N10, /field Cold Pass Heat Transfer Multiplier [-]
-N11, /field Cold Pass Pressure Drop Multiplier [-]
-N12, /field Cold Pass Internal Volume [in³]
-N13; /field Cold Pass Charge [lbm]
+A1, \field BPHX Coil
+N1, \field Total Coil Weight [lbm]
+N2, \field Hot Pass Capacity [Btu\h]
+N3, \field Hot Pass Pressure Drop [psig]
+N4, \field Hot Pass Heat Transfer Multiplier [-]
+N5, \field Hot Pass Pressure Drop Multiplier [-]
+N6, \field Hot Pass Internal Volume [in³]
+N7, \field Hot Pass Charge [lbm]
+N8, \field Cold Pass Capacity [Btu\h]
+N9, \field Cold Pass Pressure Drop [psig]
+N10, \field Cold Pass Heat Transfer Multiplier [-]
+N11, \field Cold Pass Pressure Drop Multiplier [-]
+N12, \field Cold Pass Internal Volume [in³]
+N13; \field Cold Pass Charge [lbm]
  ****************************** Glycol Loop Data ******************************
 GylcolLoopData,
-A1, /field Cycle Point
-N1, /field Pressure [psig]
-N2, /field Temperature [°F]
-A2, /field Cycle Point
-N3, /field Pressure [psig]
-N4, /field Temperature [°F]
-A3, /field Cycle Point
-N5, /field Pressure [psig]
-N6, /field Temperature [°F]
-A4, /field Cycle Point
-N7, /field Pressure [psig]
-N8, /field Temperature [°F]
+A1, \field Cycle Point
+N1, \field Pressure [psig]
+N2, \field Temperature [°F]
+A2, \field Cycle Point
+N3, \field Pressure [psig]
+N4, \field Temperature [°F]
+A3, \field Cycle Point
+N5, \field Pressure [psig]
+N6, \field Temperature [°F]
+A4, \field Cycle Point
+N7, \field Pressure [psig]
+N8, \field Temperature [°F]
 
 
 Lead Input;
@@ -576,7 +576,7 @@ Simulation Data;
 
 FluidNames,
        \unique-object
-       \memo list of potential fluid names/types in the input file, maximum of ten
+       \memo list of potential fluid names\types in the input file, maximum of ten
   A1,  \field fluid name 1
        \type alpha
   A2,  \field type of fluid for fluid name 1
@@ -1402,14 +1402,14 @@ FluidPropertySaturated,
   A1, \field fluid name (R11, R12, etc.)
       \reference FluidNames
   A2, \field fluid property type
-      \note ENTHALPY Units are J/kg
-      \note DENSITY Units are kg/m3
-      \note SPECIFICHEAT Units are J/kg-K
+      \note ENTHALPY Units are J\kg
+      \note DENSITY Units are kg\m3
+      \note SPECIFICHEAT Units are J\kg-K
       \note PRESSURE Units are Pa
       \type choice
-      \key ENTHALPY     ! Units are J/kg
-      \key DENSITY      ! Units are kg/m3
-      \key SPECIFICHEAT ! Units are J/kg-K
+      \key ENTHALPY     ! Units are J\kg
+      \key DENSITY      ! Units are kg\m3
+      \key SPECIFICHEAT ! Units are J\kg-K
       \key PRESSURE     ! Units are Pa
   A3, \field fluid phase
       \note FLUID=saturated fluid
@@ -1927,13 +1927,13 @@ FluidPropertySuperheated,
   A1, \field fluid name (R11, R12, etc.)
       \reference FluidNames
   A2, \field fluid property type
-      \note ENTHALPY Units are J/kg
-      \note DENSITY Units are kg/m3
-      \note SPECIFICHEAT Units are J/kg-K (Currently this data is not used, entered, or expected)
+      \note ENTHALPY Units are J\kg
+      \note DENSITY Units are kg\m3
+      \note SPECIFICHEAT Units are J\kg-K (Currently this data is not used, entered, or expected)
       \type choice
-      \key ENTHALPY     ! Units are J/kg
-      \key DENSITY      ! Units are kg/m3
-      \key SPECIFICHEAT ! Units are J/kg-K (Currently this data is not used, entered, or expected)
+      \key ENTHALPY     ! Units are J\kg
+      \key DENSITY      ! Units are kg\m3
+      \key SPECIFICHEAT ! Units are J\kg-K (Currently this data is not used, entered, or expected)
   A3, \field temperatures list name
       \reference FluidPropertyTemperatures
   N1, \field pressure
@@ -2447,13 +2447,13 @@ FluidPropertySubcooled,
   A1, \field fluid name (R11, R12, etc.)
       \reference FluidNames
   A2, \field fluid property type
-      \note ENTHALPY Units are J/kg
-      \note DENSITY Units are kg/m3
-      \note SPECIFICHEAT Units are J/kg-K (Currently this data is not used, entered, or expected)
+      \note ENTHALPY Units are J\kg
+      \note DENSITY Units are kg\m3
+      \note SPECIFICHEAT Units are J\kg-K (Currently this data is not used, entered, or expected)
       \type choice
-      \key ENTHALPY     ! Units are J/kg
-      \key DENSITY      ! Units are kg/m3
-      \key SPECIFICHEAT ! Units are J/kg-K (Currently this data is not used, entered, or expected)
+      \key ENTHALPY     ! Units are J\kg
+      \key DENSITY      ! Units are kg\m3
+      \key SPECIFICHEAT ! Units are J\kg-K (Currently this data is not used, entered, or expected)
   A3, \field temperatures list name
       \reference FluidPropertyTemperatures
   N1, \field pressure
@@ -2963,17 +2963,17 @@ FluidPropertySubcooled,
         \type real
 
 FluidPropertyConcentration,
-      \memo fluid properties for water/other fluid mixtures
+      \memo fluid properties for water\other fluid mixtures
   A1, \field fluid name (ethylene glycol, etc.)
       \reference FluidNames
   A2, \field fluid property type
-      \note ENTHALPY Units are J/kg (Currently this data is not used, entered, or expected)
-      \note DENSITY Units are kg/m3 (Currently this data is not used, entered, or expected)
-      \note SPECIFICHEAT Units are J/kg-K
+      \note ENTHALPY Units are J\kg (Currently this data is not used, entered, or expected)
+      \note DENSITY Units are kg\m3 (Currently this data is not used, entered, or expected)
+      \note SPECIFICHEAT Units are J\kg-K
       \type choice
-      \key ENTHALPY     ! Units are J/kg  (Currently this data is not used, entered, or expected)
-      \key DENSITY      ! Units are kg/m3 (Currently this data is not used, entered, or expected)
-      \key SPECIFICHEAT ! Units are J/kg-K
+      \key ENTHALPY     ! Units are J\kg  (Currently this data is not used, entered, or expected)
+      \key DENSITY      ! Units are kg\m3 (Currently this data is not used, entered, or expected)
+      \key SPECIFICHEAT ! Units are J\kg-K
   A3, \field temperatures list name
       \reference FluidPropertyTemperatures
   N1, \field concentration
