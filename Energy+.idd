@@ -188,45 +188,46 @@ A4, \field Tube Type
 N10, \field Refrigerant Line Length [ft]
 N11, \field Refrigerant Line Elevation [ft]
 N12, \field Refrigerant Line Heat Loss [Btu\h]
-N13, \field Tube Conductivity [Btu.in\h.ft².F]
-N14, \field Tube Inside Diameter [in]
-N15, \field Tube Outside Diameter [in]
-N16, \field Additional Pressure Drop [psig]
-N17, \field Charge in Line [lbm]
+N13, \field Refrigerant Line Temperature Change
+N14, \field Tube Conductivity [Btu.in\h.ft².F]
+N15, \field Tube Inside Diameter [in]
+N16, \field Tube Outside Diameter [in]
+N17, \field Additional Pressure Drop [psig]
+N18, \field Charge in Line [lbm]
 A5, \field Refrigerant Line
 A6, \field Tube Type
-N18, \field Refrigerant Line Length [ft]
-N19, \field Refrigerant Line Elevation [ft]
-N20, \field Refrigerant Line Heat Loss [Btu\h]
-N21, \field Refrigerant Line Temperature Change [R]
-N22, \field Tube Condcutivity [Btu.in\h.ft².F]
-N23, \field Tube Inside Diameter [in]
-N24, \field Tube Outside Diameter [in]
-N25, \field Additional Pressure Drop [psig]
-N26, \field Charge in Line [lbm]
+N19, \field Refrigerant Line Length [ft]
+N20, \field Refrigerant Line Elevation [ft]
+N21, \field Refrigerant Line Heat Loss [Btu\h]
+N22, \field Refrigerant Line Temperature Change [R]
+N23, \field Tube Condcutivity [Btu.in\h.ft².F]
+N24, \field Tube Inside Diameter [in]
+N25, \field Tube Outside Diameter [in]
+N26, \field Additional Pressure Drop [psig]
+N27, \field Charge in Line [lbm]
 A7, \field Refrigerant Line
 A8, \field Tube Type
-N27, \field Refrigerant Line Length [ft]
-N28, \field Refrigerant Line Elevation [ft]
-N29, \field Refrigerant Line Heat Loss [Btu\h]
-N30, \field Refrigerant Line Temperature Change [R]
-N31, \field Tube Condcutivity [Btu.in\h.ft².F]
-N32, \field Tube Inside Diameter [in]
-N33, \field Tube Outside Diameter [in]
-N34, \field Additional Pressure Drop [psig]
-N35, \field Charge in Line [lbm]
+N28, \field Refrigerant Line Length [ft]
+N29, \field Refrigerant Line Elevation [ft]
+N30, \field Refrigerant Line Heat Loss [Btu\h]
+N31, \field Refrigerant Line Temperature Change [R]
+N32, \field Tube Condcutivity [Btu.in\h.ft².F]
+N33, \field Tube Inside Diameter [in]
+N34, \field Tube Outside Diameter [in]
+N35, \field Additional Pressure Drop [psig]
+N36, \field Charge in Line [lbm]
 A9, \field Refrigerant Line
 A10, \field Tube Type
-N36, \field Refrigerant Line Length [ft]
-N37, \field Refrigerant Line Elevation [ft]
-N38, \field Refrigerant Line Heat Loss [Btu\h]
-N39, \field Refrigerant Line Temperature Change [R]
-N40, \field Tube Condcutivity [Btu.in\h.ft².F]
-N41, \field Tube Inside Diameter [in]
-N42, \field Tube Outside Diameter [in]
-N43, \field Additional Pressure Drop [psig]
-N44, \field Charge in Line [lbm]
-N45; \field No of Tubes Liq. [-]
+N37, \field Refrigerant Line Length [ft]
+N38, \field Refrigerant Line Elevation [ft]
+N39, \field Refrigerant Line Heat Loss [Btu\h]
+N40, \field Refrigerant Line Temperature Change [R]
+N41, \field Tube Condcutivity [Btu.in\h.ft².F]
+N42, \field Tube Inside Diameter [in]
+N43, \field Tube Outside Diameter [in]
+N44, \field Additional Pressure Drop [psig]
+N45, \field Charge in Line [lbm]
+N46; \field No of Tubes Liq. [-]
  ********************** Refrigerant Cycle Data (Cooling) **********************
 RefrigerantCycleData(Cooling),
 A1, \field Cycle Point
@@ -363,9 +364,10 @@ N6, \field Diameter [in]
 N7, \field Upper Hole Diameter [in]
 N8, \field Lower Hole Diameter [in]
 N9, \field Rating Pressure Drop [psig]
-N10, \field Rating Temperature Drop [R]
-N11, \field Coefficient-M [-]
-N12; \field Coefficient-B [-]
+N10, \field Hole Distance [in]
+N11, \field Rating Temperature Drop [R]
+N12, \field Coefficient-M [-]
+N13; \field Coefficient-B [-]
  **************************** Filter Drier Data *******************************
 FilterDrierData,
 A1, \field Manufacturer
@@ -508,6 +510,15 @@ SimulationControl,
 N1; \field Mass Flow Rate Specified
  ****************************** Glycol Data ***********************************
 GlycolData,
+N1, \field Glycol Concentration [%]
+A1, \field Glycol Name
+N2, \field Flow Rate [GPM]
+N3, \field Entering Temperature [°F]
+N4, \field Leaving Temperature [°F]
+N5, \field Pressure Drop [psig]
+N6, \field Total Charge [lbm]
+ ****************************** Glycol Line Data ******************************
+GlycolLineData,
 A1, \field Refrigerant Line
 N1, \field Tube Type
 N2, \field Refrigerant Line Length [ft]
