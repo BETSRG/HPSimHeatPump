@@ -1,3 +1,6 @@
+!IDD_Version 0.1.0.0
+
+\group OverallSimData
 
 Model,                                                        
     A1, \field Model Name (probably for reporting only...)
@@ -50,7 +53,7 @@ CompressorData,
     N10, \field Compressor Mass Coefficient 6[-]
     N11, \field Compressor Mass Coefficient 7[-]
     N12, \field Compressor Mass Coefficient 8[-]
-    N13 \field Compressor Mass Coefficient 9[-]
+    N13, \field Compressor Mass Coefficient 9[-]
     N14, \field Compressor Mass Coefficient 10[-]
     N15, \field Compressor Power Coefficient 1[-]
     N16, \field Compressor Power Coefficient 2[-]
@@ -488,7 +491,7 @@ AirHandlerData,
     A2, \field Coil Model
     A3; \field Air Handler Model
  
-CondenserCurveData
+CondenserCurveData,
     N1, \field A-Capacity [Btu\h]
     N2, \field A-Power [W]
     N3, \field A-Suction Pressure [psig]
@@ -576,6 +579,8 @@ GylcolLoopData,
     A4, \field Cycle Point
     N7, \field Pressure [psig]
     N8; \field Temperature [°F]
+
+\group Fluid Properties
 
 FluidNames,
        \unique-object
