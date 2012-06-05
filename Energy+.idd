@@ -3,7 +3,7 @@
 \group OverallSimData
 
 Model,                                                        
-    A1, \field Model Name (probably for reporting only...)
+    A1; \field Model Name (probably for reporting only...)
 
 MainDesignData,
     A1, \field SI Units Flag
@@ -566,7 +566,7 @@ BPHXData,
     N12, \field Cold Pass Internal Volume [in³]
     N13; \field Cold Pass Charge [lbm]
  
-GylcolLoopData,
+GlycolLoopData,
     A1, \field Cycle Point
     N1, \field Pressure [psig]
     N2, \field Temperature [°F]

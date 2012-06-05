@@ -1,4 +1,11 @@
 \group Fluid Properties
+
+
+MainDesignData,
+ FALSE, ! Units
+ 2; ! Calculation Type
+
+
 !-   ===========  ALL OBJECTS IN CLASS: FLUIDNAMES ===========
 
 FluidNames,

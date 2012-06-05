@@ -51,8 +51,11 @@ SUBROUTINE GetInputs
 
 USE RefNameMod
 USE DataStopCodes
+USE InputProcessor
 
 IMPLICIT NONE
+
+INTEGER, PARAMETER :: MaxNameLength = 200
 
 !Local variables
 REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
@@ -195,16 +198,16 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
-INTEGER CoolingDesignCondition  !Selected Cooling Design Condition
-Integer HeatingDesignCondition  !Selected Heating Design Condition
+!INTEGER CoolingDesignCondition  !Selected Cooling Design Condition
+!Integer HeatingDesignCondition  !Selected Heating Design Condition
 REAL Subcooling   !Design Subcooling
 REAL Superheat    !Design Superheat
-CHARACTER RefrigerantName
+CHARACTER(len=MaxNameLength)RefrigerantName
 REAL NumofRefrigerants    !Number of Refrigerants in Blend
 REAL NominalCoolingCapacity
 REAL NominalHeatingCapacity
 REAL ElectricHeating
-CHARACTER DesignConditionDescription
+CHARACTER(len=MaxNameLength)DesignConditionDescription
 REAL OutdoorEnteringDrybulbTemperature
 REAL OutdoorEnteringWetbulbTemperature
 REAL IndoorEnteringDrybulbTemperature
@@ -221,9 +224,9 @@ REAL CalculatedSuperheat
 REAL CalculatedCoolingCapacity
 REAL CalculatedHeatingCapacity
 
-CHARACTER CompressorModel
-CHARACTER CompressorType
-CHARACTER Rref    !Compressor Refrigerant
+CHARACTER(len=MaxNameLength)CompressorModel
+CHARACTER(len=MaxNameLength)CompressorType
+CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant
 REAL CompressorPower
 REAL CompressorHeatLossFraction
 REAL CompressorHeatLoss
@@ -248,7 +251,7 @@ REAL CompressorPowerCoefficient7
 REAL CompressorPowerCoefficient8
 REAL CompressorPowerCoefficient9
 REAL CompressorPowerCoefficient10
-CHARACTER CompressorCoefficientsUnitFlag
+CHARACTER(len=MaxNameLength)CompressorCoefficientsUnitFlag
 REAL PowerMultiplier
 REAL MassFlowRateMultiplier
 REAL UserSpecifiedRatingEvapTemperature
@@ -269,8 +272,8 @@ REAL ODC_InternalVolume
 REAL ODC_CoilAirLeakage  !Air Leakage Around the Coil
 
 REAL PwrODfan !Outdoor Fan Power
-REAL VdotODfan    !Outdoor Fan Air Flow Rate
-REAL ODdrawBlow   !Outdoor Fan Draw Through (1) or Blow Through (2)
+!REAL VdotODfan    !Outdoor Fan Air Flow Rate
+!REAL ODdrawBlow   !Outdoor Fan Draw Through (1) or Blow Through (2)
 
 REAL IDC_CoilAirPressureDrop
 REAL IDC_CoilAirOutletDrybulbTemperature
@@ -283,85 +286,85 @@ REAL IDC_InternalVolume
 REAL IDC_CoilAirLeakage  !Air Leakage Around the Coil
 
 REAL PwrIDfan !Fan Power
-REAL VdotIDfan    !Fan Air Flow Rate
-REAL IDdrawBlow   !Draw Through or Blow Through
+!REAL VdotIDfan    !Fan Air Flow Rate
+!REAL IDdrawBlow   !Draw Through or Blow Through
 
-CHARACTER SucLn_RefrigerantLine
-CHARACTER SucLn_TubeType
+CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
+CHARACTER(len=MaxNameLength)SucLn_TubeType
 REAL SucLn_KTube    !Conductivity of Suction Line Tube
 REAL SucLn_TubeID   !Inner Diameter of Suction Line Tube
 REAL SucLn_Charge
-CHARACTER DisLn_RefrigerantLine
-CHARACTER DisLn_TubeType
+CHARACTER(len=MaxNameLength)DisLn_RefrigerantLine
+CHARACTER(len=MaxNameLength)DisLn_TubeType
 REAL DisLn_KTube    !Conductivity of Discharge Line Tube
 REAL DisLn_TubeID   !Inner Diameter of Discharge Line Tube
 REAL DisLn_Charge
-CHARACTER LiqLn_RefrigerantLine
-CHARACTER LiqLn_TubeType
+CHARACTER(len=MaxNameLength)LiqLn_RefrigerantLine
+CHARACTER(len=MaxNameLength)LiqLn_TubeType
 REAL LiqLn_KTube    !Conductivity of Liquid Line Tube
 REAL LiqLn_TubeID   !Inner Diameter of Liquid Line Tube
 REAL LiqLn_Charge
-CHARACTER ValveIDCLn_RefrigerantLine
-CHARACTER ValveIDCLn_TubeType
+CHARACTER(len=MaxNameLength)ValveIDCLn_RefrigerantLine
+CHARACTER(len=MaxNameLength)ValveIDCLn_TubeType
 REAL ValveIDCLn_KTube    !Conductivity of Valce to IDC Line Tube
 REAL ValveIDCLn_TubeID   !Inner Diameter of Valce to IDC Line Tube
 REAL ValveIDCLn_Charge
-CHARACTER ValveODCLn_RefrigerantLine
-CHARACTER ValveODCLn_TubeType
+CHARACTER(len=MaxNameLength)ValveODCLn_RefrigerantLine
+CHARACTER(len=MaxNameLength)ValveODCLn_TubeType
 REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
 REAL ValveODCLn_Charge
 
-CHARACTER RCDC_ComSuc_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_ComSuc_CyclePoint
 REAL RCDC_ComSuc_Pressure
 REAL RCDC_ComSuc_Enthalpy
 REAL RCDC_ComSuc_Temperature 
 REAL RCDC_ComSuc_Quality
 REAL RCDC_ComSuc_Superheat
 REAL RCDC_ComSuc_Subcooling 
-CHARACTER RCDC_ComDis_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_ComDis_CyclePoint
 REAL RCDC_ComDis_Pressure
 REAL RCDC_ComDis_Enthalpy
 REAL RCDC_ComDis_Temperature
 REAL RCDC_ComDis_Quality
 REAL RCDC_ComDis_Superheat
 REAL RCDC_ComDis_Subcooling
-CHARACTER RCDC_OCI_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_OCI_CyclePoint
 REAL RCDC_OCI_Pressure
 REAL RCDC_OCI_Enthalpy
 REAL RCDC_OCI_Temperature
 REAL RCDC_OCI_Quality
 REAL RCDC_OCI_Superheat
 REAL RCDC_OCI_Subcooling
-CHARACTER RCDC_OCO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_OCO_CyclePoint
 REAL RCDC_OCO_Pressure
 REAL RCDC_OCO_Enthalpy
 REAL RCDC_OCO_Temperature
 REAL RCDC_OCO_Quality
 REAL RCDC_OCO_Superheat
 REAL RCDC_OCO_Subcooling
-CHARACTER RCDC_EDI_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_EDI_CyclePoint
 REAL RCDC_EDI_Pressure
 REAL RCDC_EDI_Enthalpy
 REAL RCDC_EDI_Temperature
 REAL RCDC_EDI_Quality
 REAL RCDC_EDI_Superheat
 REAL RCDC_EDI_Subcooling
-CHARACTER RCDC_EDO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_EDO_CyclePoint
 REAL RCDC_EDO_Pressure
 REAL RCDC_EDO_Enthalpy
 REAL RCDC_EDO_Temperature
 REAL RCDC_EDO_Quality
 REAL RCDC_EDO_Superheat
 REAL RCDC_EDO_Subcooling
-CHARACTER RCDC_ICI_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_ICI_CyclePoint
 REAL RCDC_ICI_Pressure
 REAL RCDC_ICI_Enthalpy
 REAL RCDC_ICI_Temperature
 REAL RCDC_ICI_Quality
 REAL RCDC_ICI_Superheat
 REAL RCDC_ICI_Subcooling
-CHARACTER RCDC_ICO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDC_ICO_CyclePoint
 REAL RCDC_ICO_Pressure
 REAL RCDC_ICO_Enthalpy
 REAL RCDC_ICO_Temperature
@@ -369,79 +372,79 @@ REAL RCDC_ICO_Quality
 REAL RCDC_ICO_Superheat
 REAL RCDC_ICO_Subcooling
 
-CHARACTER RCDH_ComSuc_CyclePoint  
+CHARACTER(len=MaxNameLength)RCDH_ComSuc_CyclePoint
 REAL RCDH_ComSuc_Pressure
 REAL RCDH_ComSuc_Enthalpy
 REAL RCDH_ComSuc_Temperature
 REAL RCDH_ComSuc_Quality
 REAL RCDH_ComSuc_Superheat
 REAL RCDH_ComSuc_Subcooling
-CHARACTER RCDH_ComDis_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_ComDis_CyclePoint
 REAL RCDH_ComDis_Pressure
 REAL RCDH_ComDis_Enthalpy
 REAL RCDH_ComDis_Temperature
 REAL RCDH_ComDis_Quality
 REAL RCDH_ComDis_Superheat
 REAL RCDH_ComDis_Subcooling
-CHARACTER RCDH_OCI_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_OCI_CyclePoint
 REAL RCDH_OCI_Pressure
 REAL RCDH_OCI_Enthalpy
 REAL RCDH_OCI_Temperature
 REAL RCDH_OCI_Quality
 REAL RCDH_OCI_Superheat
 REAL RCDH_OCI_Subcooling
-CHARACTER RCDH_OCO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_OCO_CyclePoint
 REAL RCDH_OCO_Pressure
 REAL RCDH_OCO_Enthalpy
 REAL RCDH_OCO_Temperature
 REAL RCDH_OCO_Quality
 REAL RCDH_OCO_Superheat
 REAL RCDH_OCO_Subcooling
-CHARACTER RCDH_EDI_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_EDI_CyclePoint
 REAL RCDH_EDI_Pressure
 REAL RCDH_EDI_Enthalpy
 REAL RCDH_EDI_Temperature
 REAL RCDH_EDI_Quality
 REAL RCDH_EDI_Superheat
 REAL RCDH_EDI_Subcooling
-CHARACTER RCDH_EDO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_EDO_CyclePoint
 REAL RCDH_EDO_Pressure
 REAL RCDH_EDO_Enthalpy
 REAL RCDH_EDO_Temperature
 REAL RCDH_EDO_Quality
 REAL RCDH_EDO_Superheat
 REAL RCDH_EDO_Subcooling
-CHARACTER RCDH_ICI_CyclePoint  
+CHARACTER(len=MaxNameLength)RCDH_ICI_CyclePoint
 REAL RCDH_ICI_Pressure
 REAL RCDH_ICI_Enthalpy
 REAL RCDH_ICI_Temperature
 REAL RCDH_ICI_Quality
 REAL RCDH_ICI_Superheat
 REAL RCDH_ICI_Subcooling
-CHARACTER RCDH_ICO_CyclePoint
+CHARACTER(len=MaxNameLength)RCDH_ICO_CyclePoint
 REAL RCDH_ICO_Pressure
 REAL RCDH_ICO_Enthalpy
 REAL RCDH_ICO_Temperature
 REAL RCDH_ICO_Quality
 REAL RCDH_ICO_Superheat
 REAL RCDH_ICO_Subcooling
-CHARACTER RCDH_OCckt    !Outdoor Coil Ckt
-CHARACTER RCDH_ICckt   !Indoor Coil Ckt
+CHARACTER(len=MaxNameLength)RCDH_OCckt    !Outdoor Coil Ckt
+CHARACTER(len=MaxNameLength)RCDH_ICckt   !Indoor Coil Ckt
 REAL RCDH_Bar_Press  !Barometric Pressure
 REAL RCDH_Com_Chg    !Charge in Compressor
 REAL RCDH_DistC_Chg  !Charge in Distributor Tube (Cooling)
 REAL RCDH_DistH_Chg  !Charge in Distributor Tube (Heating)
 REAL RCDH_Com_AS !Is Compressor in Air Stream
 
-CHARACTER Acc_Manufacturer
-CHARACTER Acc_Model
+CHARACTER(len=MaxNameLength)Acc_Manufacturer
+CHARACTER(len=MaxNameLength)Acc_Model
 REAL Acc_ChgCap  !Accumulator Charge Capacity
 REAL Acc_SysCap  !Accumulator Max. Recommended System Capacity
 REAL Acc_Chg  !Accumulator Charge
 REAL Acc_DP   !Accumulator Pressure Drop
 
-CHARACTER Filter_Manufacturer
-CHARACTER Filter_Model
+CHARACTER(len=MaxNameLength)Filter_Manufacturer
+CHARACTER(len=MaxNameLength)Filter_Model
 REAL Filter_DP    !Filter Pressure Drop
 
 REAL MWD_FinIC    !Indoor Coil Fin
@@ -499,10 +502,10 @@ REAL TC_Other    !Total Cost of "Other"
 REAL TuningCurveIntercept
 REAL TuningCurveSlope
 
-INTEGER(2) : : UseAirHandlerData    !0 is FALSE, 1 is TRUE
+INTEGER(2) :: UseAirHandlerData    !0 is FALSE, 1 is TRUE
 REAL AHD_Ton !Tonnage
-CHARACTER AHD_CM    !Coil Model
-CHARACTER AHD_AHM   !Air Handler Model
+CHARACTER(len=MaxNameLength)AHD_CM    !Coil Model
+CHARACTER(len=MaxNameLength)AHD_AHM   !Air Handler Model
 
 REAL CCD_AC !A-Capacity
 REAL CCD_AP   !A-Power
@@ -523,14 +526,14 @@ REAL CCD_ALT !A-Liquid Temperature
 REAL SC_mdot  !Mass Flow Rate Specified
 
 REAL GlycolCon    !Glycol Concentration
-CHARACTER GlycolNa  !Glycol Name
+CHARACTER(len=MaxNameLength)GlycolNa  !Glycol Name
 REAL GlycolFR !Flow Rate
 REAL GlycolET !Entering Temperature
 REAL GlycolLT !Leaving Temperature
 REAL GlycolDP !Pressure Drop
 REAL GlycolTC !Total Charge
 
-CHARACTER GLE_RefrigerantLinE
+CHARACTER(len=MaxNameLength)GLE_RefrigerantLinE
 REAL GLE_TubeType
 REAL GLE_Length   !Refrigerant Line Length
 REAL GLE_Elev !Refrigerant Line Elevation
@@ -541,7 +544,7 @@ REAL GLE_TubeID   !Tube Inside Diameter
 REAL GLE_TubeOD   !Tube Outside Diameter
 REAL GLE_ADP  !Additional Pressure Drop
 REAL GLE_Charge  !Charge in Line
-CHARACTER GLL_RefrigerantLine
+CHARACTER(len=MaxNameLength)GLL_RefrigerantLine
 REAL GLL_TubeType
 REAL GLL_Length  !Refrigerant Line Length
 REAL GLL_Elev    !Refrigerant Line Elevation
@@ -553,12 +556,12 @@ REAL GLL_TubeOD  !Tube Outside Diameter
 REAL GLL_ADP !Additional Pressure Drop
 REAL GLL_Charge  !Charge in Line
 
-CHARACTER PumpManufacturer
-CHARACTER PumpModel
+CHARACTER(len=MaxNameLength)PumpManufacturer
+CHARACTER(len=MaxNameLength)PumpModel
 REAL PumpFlowRate
 REAL PumpPower
 
-CHARACTER BPHXCoil
+CHARACTER(len=MaxNameLength)BPHXCoil
 REAL BPHX_TCW !Total Coil Weight
 REAL BPHX_HPC !Hot Pass Capacity
 REAL BPHX_HPDP    !Hot Pass Pressure Drop
@@ -571,35 +574,37 @@ REAL BPHX_CPDPM   !Cold Pass Pressure Drop Multiplier
 REAL BPHX_CPIV   !Cold Pass Internal Volume
 REAL BPHX_CPCh   !Cold Pass Charge
 
-CHARACTER GLD_BPHXI_CyclePoint
+CHARACTER(len=MaxNameLength)GLD_BPHXI_CyclePoint
 REAL GLD_BPHXI_Pressure
 REAL GLD_BPHXI_Temperature
-CHARACTER GLD_BPHXO_CyclePoint
+CHARACTER(len=MaxNameLength)GLD_BPHXO_CyclePoint
 REAL GLD_BPHXO_Pressure
 REAL GLD_BPHXO_Temperature
-CHARACTER GLD_ICI_CyclePoint
+CHARACTER(len=MaxNameLength)GLD_ICI_CyclePoint
 REAL GLD_ICI_Pressure
 REAL GLD_ICI_Temperature
-CHARACTER GLD_ICO_CyclePoint
+CHARACTER(len=MaxNameLength)GLD_ICO_CyclePoint
 REAL GLD_ICO_Pressure
 REAL GLD_ICO_Temperature
 
+CHARACTER(len=MaxNameLength)ODC_FinName
+CHARACTER(len=MaxNameLength)ODC_FinMaterial
+CHARACTER(len=MaxNameLength)ODC_TubeName
+REAL :: ODC_TubeID
+CHARACTER(len=MaxNameLength)IDC_FinName
+CHARACTER(len=MaxNameLength)IDC_FinMaterial
+CHARACTER(len=MaxNameLength)IDC_TubeName
+REAL :: IDC_TubeID
+REAL :: TubeNumber
+REAL :: SystemCost
 !Flow:
 
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1
 
-  INQUIRE(FILE="HPdata.ydd", EXIST=HPDataFileExists)
-  IF (.NOT. HPDataFileExists) THEN
-    !don't just crash
-    WRITE(*,*) "HPdata.ydd was not found in the working directory...program aborting"
-    STOP exit_FileIO_Missing_HPData
-  END IF
-  OPEN(200,FILE="HPdata.ydd")
   
   !***************** System data *****************
-  DO I=1, 5; READ(200,*); END DO
-  
+
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
 
@@ -656,9 +661,6 @@ REAL GLD_ICO_Temperature
 
   !***************** Compressor data *****************
 
-
-  DO I=1,10; READ(200,*); END DO
-      
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)   
 
@@ -718,13 +720,11 @@ REAL GLD_ICO_Temperature
 
   
   !***************** Outdoor coil data *****************
-  !DO I=1,3; READ(200,*); END DO
   
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)   
 
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
-  READ(200,202)LineData
 
   ODC_FinType = Numbers(1)
   
@@ -830,7 +830,6 @@ REAL GLD_ICO_Temperature
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
   
-  READ(200,202)LineData
 
   SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
@@ -841,7 +840,6 @@ REAL GLD_ICO_Temperature
     CoolingExpDevice=1 !Short tube orifice
   END SELECT
 
-  READ(200,202)LineData
   
       SELECT CASE (Alphas(2)(1:1))
       CASE ('C','c')
@@ -852,12 +850,10 @@ REAL GLD_ICO_Temperature
         HeatingExpDevice=1 !Short tube orifice
       END SELECT
   
-      READ(200,*)
       
   !Short tube orifice
 
   !Cooling mode
-  !READ(200,*)
 
   CoolingShTbPAR(1) = Numbers(1)    !Length
   CoolingShTbPAR(2) = Numbers(2)    !Diameter
@@ -869,7 +865,6 @@ REAL GLD_ICO_Temperature
   HeatingShTbPAR(2) = Numbers(5)    !Diameter
   HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
 
-  READ(200,202)LineData
   
   !Capillary Tube
   
@@ -885,10 +880,9 @@ REAL GLD_ICO_Temperature
   HeatingCapTubePAR(1) = Numbers(11)    !Diameter
   HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
     
-      READ(200,202)LineData
+
 
   !TXV data
-  READ(200,202)LineData !TXV Model
 
   !Rated TXV capacity, ton
 
@@ -896,7 +890,6 @@ REAL GLD_ICO_Temperature
   HeatingTXVcapacity = Numbers(14)
 
   !Distributor tubes
-  READ(200,*)
 
   CoolingDistubeLength = Numbers(15)
   
@@ -925,9 +918,7 @@ REAL GLD_ICO_Temperature
   END IF
 
   !*****************Refrigerant line data******************
-  
-  DO I=1,3; READ(200,*); END DO
-      
+
       
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
@@ -952,8 +943,6 @@ REAL GLD_ICO_Temperature
   !IF (Unit .EQ. 2) SucLnPAR(3)=SucLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP) SucLnPAR(3)=SucLnPAR(3)*1000 
 
-  DO I=1,3; READ(200,*); END DO
-
   !Discharge Line
   
   DisLn_RefrigerantLine = Alphas(3)
@@ -974,9 +963,7 @@ REAL GLD_ICO_Temperature
   !IF (Unit .EQ. 2) DisLnPAR(3)=DisLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP) DisLnPAR(3)=DisLnPAR(3)*1000 
 
-  DO I=1,3; READ(200,*); END DO
-
-  !Liquid Line
+   !Liquid Line
   
   LiqLn_RefrigerantLine = Alphas(5)
   LiqLn_TubeType = Alphas(6)
@@ -995,8 +982,6 @@ REAL GLD_ICO_Temperature
   LiqLnPAR(3)=(LiqLnPAR(2)-LiqLn_TubeID)/2
   !IF (Unit .EQ. 2)LiqLnPAR(3)=LiqLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP)LiqLnPAR(3)=LiqLnPAR(3)*1000  
-
-  DO I=1,3; READ(200,*); END DO
 
   !Reversing Valve to IDC
   
@@ -1018,9 +1003,7 @@ REAL GLD_ICO_Temperature
   !IF (Unit .EQ. 2)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000 !ISI - 07/14/06
   IF (Unit .EQ. IP)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000
 
-  DO I=1,3; READ(200,*); END DO
-
-  !Valve to ODC Line
+    !Valve to ODC Line
   
   ValveODCLn_RefrigerantLine = Alphas(9)
   ValveODCLn_TubeType = Alphas(10)
@@ -1046,8 +1029,7 @@ REAL GLD_ICO_Temperature
 
   !********************Refrigerant Cycle Data (Cooling)***********************
 
-  DO I=1,34; READ(200,*); END DO  
-  
+
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
@@ -1143,8 +1125,6 @@ REAL GLD_ICO_Temperature
   
   !********************Refrigerant Cycle Data (Heating)***********************
 
-  DO I=1,34; READ(200,*); END DO  
-  
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
@@ -1247,38 +1227,38 @@ REAL GLD_ICO_Temperature
   
 
   !Liquid temperature, ISI - 02/08/08
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Tliq
-
-  DO I=1,35; READ(200,*); END DO
-  
-  !Discharge temperature, ISI - 02/08/08
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Tdis
-  
-  !DO I=1,118; READ(200,*); END DO
-  DO I=1,47; READ(200,*); END DO
-
-  !Barometric pressure	
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)BaroPressure
-
-  DO I=1,3; READ(200,*); END DO
-    
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IsCmpInAirStream
+  !TODO: WHATS THIS
+!  READ(200,202)LineData
+!  I=SCAN(LineData,',')
+!  BufferString=ADJUSTL(LineData(I+1:150))
+!  READ(BufferString,*)Tliq
+!
+!  DO I=1,35; READ(200,*); END DO
+!
+!  !Discharge temperature, ISI - 02/08/08
+!  READ(200,202)LineData
+!  I=SCAN(LineData,',')
+!  BufferString=ADJUSTL(LineData(I+1:150))
+!  READ(BufferString,*)Tdis
+!
+!  !DO I=1,118; READ(200,*); END DO
+!  DO I=1,47; READ(200,*); END DO
+!
+!  !Barometric pressure
+!  READ(200,202)LineData
+!  I=SCAN(LineData,',')
+!  BufferString=ADJUSTL(LineData(I+1:150))
+!  READ(BufferString,*)BaroPressure
+!
+!  DO I=1,3; READ(200,*); END DO
+!
+!  READ(200,202)LineData
+!  I=SCAN(LineData,',')
+!  BufferString=ADJUSTL(LineData(I+1:150))
+!  READ(BufferString,*)IsCmpInAirStream
 
   !*************** Accumulator ****************
-  DO I=1,7; READ(200,*); END DO
-      
+
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
@@ -1303,7 +1283,6 @@ REAL GLD_ICO_Temperature
 
 
   !*************** Filter Drier ****************
-  DO I=1,3; READ(200,*); END DO
 
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
@@ -1395,7 +1374,6 @@ REAL GLD_ICO_Temperature
   
   
   !*************** Custom Air Side Heat Transfer Data **************
-  DO I=1,60; READ(200,*); END DO
 
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)        
@@ -1414,7 +1392,6 @@ REAL GLD_ICO_Temperature
   IDC_Poly3HTC = Numbers(7) !Polynomial Fit Coefficient C3
   IDC_Poly4HTC = Numbers(8) !Polynomial Fit Coefficent C4
 
-  READ(200,*) 
   
   !Pressure drop data
 
@@ -1426,13 +1403,11 @@ REAL GLD_ICO_Temperature
   IDC_Poly3DP = Numbers(14) !Polynomial Fit Coefficient C3
   IDC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
   
-  READ(200,*) 
   
   !---Outdoor Coil---
   
   ODC_CurveUnit = Numbers(16)
 
-  READ(200,*)
   
   !Heat Transfer data
   
@@ -1444,7 +1419,6 @@ REAL GLD_ICO_Temperature
   ODC_Poly3HTC = Numbers(22) !Polynomial Fit Coefficient C3
   ODC_Poly4HTC = Numbers(23) !Polynomial Fit Coefficent C4
 
-  READ(200,*) 
   
   !Pressure drop data
   
@@ -1457,10 +1431,8 @@ REAL GLD_ICO_Temperature
   ODC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
 
 
-  READ(200,202)LineData
  
   !*************** Charge Tuning Curve ***************
-  DO I=1,60; READ(200,*); END DO
   
   CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
@@ -1468,7 +1440,7 @@ REAL GLD_ICO_Temperature
   SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
   CASE ('F','f')
       IsChargeTuning=0
-  CASE DEFAULT ('T','t')
+  CASE ('T','t')
       IsChargeTuning=1
   END SELECT
   
@@ -1480,7 +1452,6 @@ REAL GLD_ICO_Temperature
   TuningCurveSlope = Numbers(6)
   
   !*************** Air Handler Data **************
-  DO I=1,60; READ(200,*); END DO
 
   CALL GetObjectItem('AirHandlerData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1488,7 +1459,7 @@ REAL GLD_ICO_Temperature
   SELECT CASE (Alphas(1)(1:1))  !Use Air Handler Data
   CASE ('F','f')
       UseAirHandlerData=0
-  CASE DEFAULT ('T','t')
+  CASE ('T','t')
       UseAirHandlerData=1
   END SELECT
   
@@ -1498,9 +1469,8 @@ REAL GLD_ICO_Temperature
   AHD_AHM = Alphas(3)   !Air Handler Model
   
   !*************** Condensor Curve Data **************
-  DO I=1,60; READ(200,*); END DO
 
-  CALL GetObjectItem('CondensorCurveData',1,Alphas,NumAlphas, &
+  CALL GetObjectItem('CondenserCurveData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
 
   CCD_AC = Numbers(1)   !A-Capacity
@@ -1520,7 +1490,6 @@ REAL GLD_ICO_Temperature
   CCD_ALT = Numbers(15) !A-Liquid Temperature
   
   !*************** Simulation Control **************
-  DO I=1,60; READ(200,*); END DO
 
   CALL GetObjectItem('SimulationControl',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1529,7 +1498,6 @@ REAL GLD_ICO_Temperature
   
   
   !*************** Glycol Data **************
-  DO I=1,60; READ(200,*); END DO
 
   CALL GetObjectItem('GlycolData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1545,7 +1513,6 @@ REAL GLD_ICO_Temperature
   GlycolTC = Numbers(6) !Total Charge
   
   !*************** Glycol Line Data **************
-  DO I=1,60; READ(200,*); END DO
 
   CALL GetObjectItem('GlycolLineData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1581,7 +1548,6 @@ REAL GLD_ICO_Temperature
   GLL_Charge = Numbers(20)  !Charge in Line
   
   !*************** Pump Data **************
-  DO I=1,5; READ(200,*); END DO
 
   CALL GetObjectItem('PumpData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1593,7 +1559,6 @@ REAL GLD_ICO_Temperature
   PumpPower = Numbers(2)
   
   !*************** BPHX Data **************
-  DO I=1,5; READ(200,*); END DO
 
   CALL GetObjectItem('BPHXData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1613,7 +1578,6 @@ REAL GLD_ICO_Temperature
   BPHX_CPCh = Numbers(11)   !Cold Pass Charge
   
   !*************** Glycol Loop Data **************
-  DO I=1,5; READ(200,*); END DO
 
   CALL GetObjectItem('GlycolLoopData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -1673,7 +1637,6 @@ REAL GLD_ICO_Temperature
 !
 !  END IF
 
-  CLOSE(200)
   
   CALL RefrigIn(Ref$)
 

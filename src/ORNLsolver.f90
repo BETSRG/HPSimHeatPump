@@ -175,7 +175,7 @@
     CALL InitAccumulator(AccumPAR,Ref$)
 
     !Initialize EnergyPlus files, and functions for refprop calculations
-    CALL ProcessInput
+  !  CALL ProcessInput ! this may need to go above HP input routine
     CALL Refrig(Refrigerant)
 
     SUPERAct=SUPER
