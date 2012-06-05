@@ -189,6 +189,11 @@ INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3
 REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
 REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
 LOGICAL :: HPDataFileExists
+CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+  INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+  REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+  INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+  INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
 !Flow:
 
@@ -206,151 +211,71 @@ LOGICAL :: HPDataFileExists
   !***************** System data *****************
   DO I=1, 5; READ(200,*); END DO
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  SELECT CASE (BufferString(1:1))
+  CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
+                        Numbers,NumNumbers,Status)      
+
+  SELECT CASE (Alphas(1)(1:1))
   CASE ('F','f')
-    !Unit=2
-	Unit=IP !ISI - 07/14/06
+      Unit = IP
+  CASE ('T','t')
+      Unit = SI
   CASE DEFAULT
-    !Unit=1
-	Unit=SI !ISI - 07/14/06
+      !FAIL
   END SELECT
-
+    
   !Calculation mode
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)MODE
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SystemType
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  SELECT CASE (BufferString(1:1))
+  MODE = Numbers(1)
+  SystemType = Numbers(2)
+    
+  SELECT CASE (Alphas(2)(1:1))
   CASE ('F','f')
     IsCoolingMode=0
   CASE DEFAULT
     IsCoolingMode=1
   END SELECT
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingDesignCondition
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)HeatingDesignCondition
-
-!  READ(200,202)LineData
-!  I=SCAN(LineData,',')
-!  BufferString=ADJUSTL(LineData(I+1:150))
-!  READ(BufferString,*)Subcooling
-
-!  READ(200,202)LineData
-!  I=SCAN(LineData,',')
-!  BufferString=ADJUSTL(LineData(I+1:150))
-!  READ(BufferString,*)Superheat
-
-  DO I=1,2; READ(200,*); END DO
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Ref$
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  SELECT CASE (BufferString(1:1))
-  CASE ('1')
-    PureRef=1
-  CASE DEFAULT
-    PureRef=0
-  END SELECT
-
-  DO I=1,4; READ(200,*); END DO
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Temp
-  IF (IsCoolingMode .GT. 0) THEN
-    TAic=Temp
-  ELSE
-    TAie=Temp
-  END IF
+  CoolingDesignCondition = Numbers(3)
+  HeatingDesignCondition = Numbers(4)
+  Subcooling = Numbers(5)
+  Superheat = Numbers(6)
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Temp
-  IF (IsCoolingMode .GT. 0) THEN
-    RHiC=Temp
-  ELSE
-    RHiE=Temp
-  END IF
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Temp
-  IF (IsCoolingMode .GT. 0) THEN
-    TAie=Temp
-  ELSE
-    TAic=Temp
-  END IF
+  RefrigerantName = Alphas(3)
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Temp
-  IF (IsCoolingMode .GT. 0) THEN
-    RHiE=Temp
-  ELSE
-    RHiC=Temp
-  END IF
+  NumofRefrigerants = Numbers(7)
+  NominalCoolingCapacity = Numbers(8)
+  NominalHeatingCapacity = Numbers(9)
+  ElectricHeating = Numbers(10)
+  
+  DesignConditionDescription = Alphas(4)
+  
+  OutdoorEnteringDrybulbTemperature = Numbers(11)
+  OutdoorEnteringWetbulbTemperature = Numbers(12)
+  IndoorEnteringDrybulbTemperature = Numbers(13)
+  IndoorEnteringWetbulbTemperature = Numbers(14)
+  DesignRefChg = Numbers(15)
+  RefChg = Numbers(16)
+  RefMassFlowRate = Numbers(17)
+  SystemEER = Numbers(18)
+  SystemSEER = Numbers(19)
+  SystemCOP = Numbers(20)
+  SensibleTotalHeatRatio = Numbers(21)
+  CalculatedSubcooling = Numbers(22)
+  CalculatedSuperheat = Numbers(23)
+  CalculatedCoolingCapacity = Numbers(24)
+  CalculatedHeatingCapacity = Numbers(25)
 
-  !READ(200,*)
-
-  !READ(200,202)LineData
-  !I=SCAN(LineData,',')
-  !BufferString=ADJUSTL(LineData(I+1:150))
-  !READ(BufferString,*)RefCharge
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)RefChg
-
-  READ(200,*)
 
   !***************** Compressor data *****************
 
-  DO I=1,10; READ(200,*); END DO
 
-  !Voltage source
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  LineData=ADJUSTL(LineData(I+1:150))
-  I=SCAN(LineData,',')
-  LineData=ADJUSTL(LineData(I+1:150))
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(24)
+  DO I=1,10; READ(200,*); END DO
+      
+  CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)   
+
+  CompressorModel = Alphas(1)
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  
-  SELECT CASE (BufferString(1:1))
+  SELECT CASE (Alphas(2)(1:1))
   CASE ('C','c')
 	CompressorManufacturer=COPELAND
   CASE ('B','b')
@@ -363,441 +288,165 @@ LOGICAL :: HPDataFileExists
 	CompressorManufacturer=BRISTOL
   END SELECT
 
-  READ(200,*)
-  !DO I=1,2; READ(200,*); END DO
-
-!  READ(200,202)LineData
-!  I=SCAN(LineData,',')
-!  BufferString=ADJUSTL(LineData(I+1:150))
-!  READ(BufferString,*)RrefName
-  READ(200,*)
-
-  Rref=RefName
+  CompressorType = Alphas(3)
+  Rref=Alphas(4)    !Compressor Refrigerant
+  
   PureRref=PureRef
-
-  READ(200,*)
-
-  !Compressor shell heat loss fraction of input power
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(21)
-
-  !Compressor shell heat loss W or Btu/hr
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(22)
-
-  !Compressor internal volume, cm^3 or in^3
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(23)            
-
-  !10 coefficients for mass flow rate, kg/hr or lbm/hr
-  DO I=11,20
-    READ(200,202)LineData
-    J=SCAN(LineData,',')
-    BufferString=ADJUSTL(LineData(J+1:150))
-    READ(BufferString,*)CompPAR(I)
-  END DO
   
-  !10 coefficients for power, W
-  DO I=1,10
-    READ(200,202)LineData
-    J=SCAN(LineData,',')
-    BufferString=ADJUSTL(LineData(J+1:150))
-    READ(BufferString,*)CompPAR(I)
-  END DO
-
-  READ(200,*)
-
-  !Power multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(25)            
-
-  !mdot mulitplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CompPAR(26)            
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)TsiCmp
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)TsoCmp
-
-  !Old format
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Subcool
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)Super
+  CompressorPower = Numbers(1)
+  CompressorHeatLossFraction = Numbers(2)
+  CompressorHeatLoss = Numbers(3)
+  CompressorVolume = Numbers(4)
+  CompressorMassCoefficient1 = Numbers(5)
+  CompressorMassCoefficient2 = Numbers(6)
+  CompressorMassCoefficient3 = Numbers(7)
+  CompressorMassCoefficient4 = Numbers(8)
+  CompressorMassCoefficient5 = Numbers(9)
+  CompressorMassCoefficient6 = Numbers(10)
+  CompressorMassCoefficient7 = Numbers(11)
+  CompressorMassCoefficient8 = Numbers(12)
+  CompressorMassCoefficient9 = Numbers(13)
+  CompressorMassCoefficient10 = Numbers(14)
+  CompressorPowerCoefficient1 = Numbers(15)
+  CompressorPowerCoefficient2 = Numbers(16)
+  CompressorPowerCoefficient3 = Numbers(17)
+  CompressorPowerCoefficient4 = Numbers(18)
+  CompressorPowerCoefficient5 = Numbers(19)
+  CompressorPowerCoefficient6 = Numbers(20)
+  CompressorPowerCoefficient7 = Numbers(21)
+  CompressorPowerCoefficient8 = Numbers(22)
+  CompressorPowerCoefficient9 = Numbers(23)
+  CompressorPowerCoefficient10 = Numbers(24)
   
-  READ(200,202)LineData
-  IF (LineData(1:1) .EQ. 'U' .OR. LineData(1:1) .EQ. 'u') THEN !New format 06/12/06
+  CompressorCoefficientsUnitFlag = Alphas(5)
+  
+  PowerMultiplier = Numbers(25)
+  MassFlowRateMultiplier = Numbers(26)
+  UserSpecifiedRatingEvapTemperature = Numbers(27)
+  UserSpecifiedRatingCondTemperature = Numbers(28)
+  UserSpecifiedRatingSubcooling = Numbers(29)
+  UserSpecifiedRatingSuperheat = Numbers(30)
+  UserSpecifiedRatingHeatingModeSubcooling = Numbers(31)
+  UserSpecifiedRatingHeatingModeSuperheat = Numbers(32)
 
-    IF (IsCoolingMode .GT. 0) THEN  
-		DO I=1,2; READ(200,*); END DO
-	ELSE
-
-	    !READ(200,202)LineData
-	    I=SCAN(LineData,',')
-	    BufferString=ADJUSTL(LineData(I+1:150))
-	    READ(BufferString,*)Subcool
-
-	    READ(200,202)LineData
-	    I=SCAN(LineData,',')
-	    BufferString=ADJUSTL(LineData(I+1:150))
-	    READ(BufferString,*)Super
-	  
-	    READ(200,*)
-
-	END IF
-
-  END IF
+  
 
   !***************** Outdoor coil data *****************
   !DO I=1,3; READ(200,*); END DO
+  
+  CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
+                        Numbers,NumNumbers,Status)   
 
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
   READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_FinType !ODC_PAR(29) 
 
-  READ(200,*)
-    
-  !Fin pitch, fin/m or fin/in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_FinPitch !ODC_PAR(22) 
+  ODC_FinType = Numbers(1)
+  
+  ODC_FinName = Alphas(1)
+  
+  ODC_FinPitch = Numbers(2)
+  ODC_Kfin = Numbers(3)
+  ODC_FinThk = Numbers(4)
+  
+  ODC_FinMaterial = Alphas(2)
+  ODC_TubeName = Alphas(3)
+  
+  ODC_TubeID = Numbers(5)
+  ODC_TubeOD = Numbers(6)
+  ODC_Ktube = Numbers(7)
+  ODC_Pl = Numbers(8)
+  ODC_Pt = Numbers(9)
+  ODC_Nl = Numbers(10)
+  ODC_Nt = Numbers(11)
+  ODC_Nckt = Numbers(12)
+  ODC_Nmod = Numbers(13)
+  ODC_Ltube = Numbers(14)
+  ODC_CoilAirPressureDrop = Numbers(15)
+  ODC_CoilAirOutletDrybulbTemp = Numbers(16)
+  ODC_CoilAirOutletWetbulbTemp = Numbers(17)
+  ODC_CoilAirOutletRelativeHumidity = Numbers(18)
+  ODC_CoilAirFaceVelocity = Numbers(19)
+  ODC_CoilHeatTransferRate = Numbers(20)
+  ODC_MassinCoil = Numbers(21)
+  ODC_InternalVolume = Numbers(22)
+  ODC_hciMultiplier = Numbers(23)
+  ODC_DPrefMultiplier = Numbers(24)
+  ODC_hcoMultiplier = Numbers(25)
+  ODC_DPairMultiplier = Numbers(26)
+  ODC_CoilAirLeakage = Numbers(27)
 
-  !Fin thermal conductivity, kW/m-K or Btu-in/hr-ft2-F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Kfin !ODC_PAR(23)
-  !IF (Unit .EQ. 1) ODC_Kfin=ODC_Kfin/1000 !ISI - 07/14/06
-  IF (Unit .EQ. SI) ODC_Kfin=ODC_Kfin/1000 
-
-  !Fin thickness, mm or mil  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_FinThk !ODC_PAR(21)
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  LineData=ADJUSTL(LineData(I+1:150))
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_TubeType
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Tube outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_TubeOD !ODC_PAR(15) 
-
-  !Tube wall thickness, mm or mil
-  ODC_TubeThk=(ODC_TubeOD-InsideDiameter)/2
-  !IF (Unit .EQ. 2) ODC_TubeThk=ODC_TubeThk*1000 !ISI - 07/14/06
-  IF (Unit .EQ. IP) ODC_TubeThk=ODC_TubeThk*1000 
-
-  !Tube thermal conductivity, kW/m-K or Btu-in/hr-ft^2-F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Ktube !ODC_PAR(18) 
-  !IF (Unit .EQ. 1) ODC_Ktube=ODC_Ktube/1000 !ISI - 07/14/06 
-  IF (Unit .EQ. SI) ODC_Ktube=ODC_Ktube/1000 
-
-  !Lateral tube spacing, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Pl 
-
-  !Vertical tube spacing, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Pt 
-
-  !Number of rows
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Nl 
-
-  !Number of tubes per row
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Nt 
-
-  !Number of circuits
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Nckt 
-
-  !Number of modules per tube   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Nmod 
-
-  !Tube length, m or in 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Ltube 
-  !IF (Unit .EQ. 1) ODC_Ltube=ODC_Ltube/1000 !ISI - 07/14/06
-  IF (Unit .EQ. SI) ODC_Ltube=ODC_Ltube/1000
-
-  DO I=1,8; READ(200,*); END DO !skip over Internal Volume of new file format
-
-  !Ref side heat transfer multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_hciMultiplier 
-
-  !Ref side pressure drop multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_DPrefMultiplier 
-
-  !Air side heat transfer multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_hcoMultiplier 
-
-  !Air side pressure drop multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_DPairMultiplier
-
-  READ(200,*) !skip over air leakage around the coil in new file format
-
-  READ(200,*)
 
   !***************** Outdoor fan data *****************
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)PwrODfan 
+  
+  CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)   
+  
+  PwrODfan = Numbers(1)
+  VdotODfan = Numbers(2)
+  ODdrawBlow = Numbers(3)
 
-  !Outdoor fan inlet air flow rate, m3/s or CFM
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)VdotODfan 
-
-  !READ(200,*)
-
-    !This is reading the ***INDOOR COIL DATA*** line, not the actual drawthrough/blowthrough line
-    !It only works because there is no assertion on the input quality
-  READ(200,202)LineData
-
-  ODdrawBlow=1 !Default
-  SELECT CASE (LineData(1:1))
-  CASE ('D','d') !To include fan location for outdoor fan, ISI - 12/07/07
-      !Fan location, 1=draw through, 2=blow through
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)ODdrawBlow
-      READ(200,*)
-  END SELECT
 
     !Then we don't end up reading the separator *** line here, we just start with the next line
 
-  !***************** Indoor coil data *****************  
-  !Fin type (1-smooth; 2-Wavy; 3-louvered)
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_FinType 
+  !***************** Indoor coil data *****************
   
-  READ(200,*)
+  CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
   
-  !Fin pitch, fin/m or fin/in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_FinPitch
+  IDC_FinType = Numbers(1)
+  
+  IDC_FinName = Alphas(1)
+  
+  IDC_FinPitch = Numbers(2)
+  IDC_Kfin = Numbers(3)
+  IDC_FinThk = Numbers(4)
+  
+  IDC_FinMaterial = Alphas(2)
+  IDC_TubeName = Alphas(3)
+  
+  IDC_TubeID = Numbers(5)
+  IDC_TubeOD = Numbers(6)
+  IDC_Ktube = Numbers(7)
+  IDC_Pl = Numbers(8)
+  IDC_Pt = Numbers(9)
+  IDC_Nl = Numbers(10)
+  IDC_Nt = Numbers(11)
+  IDC_Nckt = Numbers(12)
+  IDC_Nmod = Numbers(13)
+  IDC_Ltube = Numbers(14)
+  IDC_CoilAirPressureDrop = Numbers(15)
+  IDC_CoilAirOutletDrybulbTemperature = Numbers(16)
+  IDC_CoilAirOutletWetbulbTemperature = Numbers(17)
+  IDC_CoilAirOutletRelativeHumidity = Numbers(18)
+  IDC_CoilAirFaceVelocity = Numbers(19)
+  IDC_CoilHeatTransferRate = Numbers(20)
+  IDC_MassinCoil = Numbers(21)
+  IDC_InternalVolume = Numbers(22)
+  IDC_hciMultiplier = Numbers(23)
+  IDC_DPrefMultiplier = Numbers(24)
+  IDC_hcoMultiplier = Numbers(25)
+  IDC_DPairMultiplier = Numbers(26)
+  IDC_CoilAirLeakage = Numbers(27)
 
-  !Fin thermal conductivity, kW/m-K or Btu-in/hr-ft2-F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Kfin 
-  !IF (Unit .EQ. 1) IDC_Kfin=IDC_Kfin/1000 !ISI - 07/14/06
-  IF (Unit .EQ. SI) IDC_Kfin=IDC_Kfin/1000
-
-  !Fin thickness, mm or mil
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_FinThk
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  LineData=ADJUSTL(LineData(I+1:150))
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_TubeType
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Tube outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_TubeOD 
-
-  !Tube wall thickness, mm or mil
-  IDC_TubeThk=(IDC_TubeOD-InsideDiameter)/2
-  !IF (Unit .EQ. 2) IDC_TubeThk=IDC_TubeThk*1000  !ISI - 07/14/06
-  IF (Unit .EQ. IP) IDC_TubeThk=IDC_TubeThk*1000 
-
-  !Tube thermal conductivity, kW/m-K or Btu-in/hr-ft^2-F  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Ktube 
-  !IF (Unit .EQ. 1) IDC_Ktube=IDC_Ktube/1000 !ISI - 07/14/06 
-  IF (Unit .EQ. SI) IDC_Ktube=IDC_Ktube/1000 
-
-  !Lateral tube spacing, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Pl 
-
-  !Vertical tube spacing, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Pt 
-
-  !Number of rows
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Nl 
-
-  !Number of tubes per row
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Nt 
-
-  !Number of circuits
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Nckt 
-
-  !Number of modules per tube
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Nmod 
-
-  !Tube length, m or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Ltube 
-  !IF (Unit .EQ. 1) IDC_Ltube=IDC_Ltube/1000 !ISI - 07/14/06
-  IF (Unit .EQ. SI) IDC_Ltube=IDC_Ltube/1000
-
-  DO I=1,8; READ(200,*); END DO !skip over internal volume in new file format
-
-  !Ref side heat transfer multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_hciMultiplier 
-
-  !Ref side pressure drop multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_DPrefMultiplier 
-
-  !Air side heat transfer multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_hcoMultiplier 
-
-  !Air side pressure drop multiplier
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_DPairMultiplier 
-
-  READ(200,*) !skip air leakage around coil entry in new file format
-
-  READ(200,*)
 
   !***************** Indoor fan data *****************
-  !Indoor Fan power
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)PwrIDfan
+  
+  CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+  
+  PwrIDfan = Numbers(1)
+  VdotIDfan = Numbers(2)
+  IDdrawBlow = Numbers(3)
 
-  !Indoor coil inlet air flow rate, m3/s or CFM
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)VdotIDfan 
-
-  !Fan location, 1=draw through, 2=blow through
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDdrawBlow
-  READ(200,*)
 
   !***************** Expansion device data *****************
+  
+  CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+  
   READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  SELECT CASE (BufferString(1:1))
+
+  SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
     CoolingExpDevice=3 !Cap. tube
   CASE ('T','t')
@@ -808,11 +457,7 @@ LOGICAL :: HPDataFileExists
 
   READ(200,202)LineData
   
-  IF (LineData(1:31) .EQ. 'Expansion device type (heating)') THEN !New format 12/10/2008
-      
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      SELECT CASE (BufferString(1:1))
+      SELECT CASE (Alphas(2)(1:1))
       CASE ('C','c')
         HeatingExpDevice=3 !Cap. tube
       CASE ('T','t')
@@ -823,147 +468,52 @@ LOGICAL :: HPDataFileExists
   
       READ(200,*)
       
-  END IF
-  
   !Short tube orifice
 
   !Cooling mode
   !READ(200,*)
 
-  !Length, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingShTbPAR(1) 
-
-  !Diameter, mm or mil
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingShTbPAR(2) 
-
-  !45 deg chamfer depth, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingShTbPAR(3) 
+  CoolingShTbPAR(1) = Numbers(1)    !Length
+  CoolingShTbPAR(2) = Numbers(2)    !Diameter
+  CoolingShTbPAR(3) = Numbers(3)    !Chamfer Depth
 
   !Heating mode
 
-  !Length, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)HeatingShTbPAR(1) 
-
-  !Diameter, mm or mil
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)HeatingShTbPAR(2) 
-
-  !45 deg chamfer depth, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)HeatingShTbPAR(3) 
+  HeatingShTbPAR(1) = Numbers(4)    !Length
+  HeatingShTbPAR(2) = Numbers(5)    !Diameter
+  HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
 
   READ(200,202)LineData
-  IF (LineData(1:22) .EQ. '--- Capillary Tube ---') THEN !New format for capillary tube, 04/13/2009 - ISI
-
-      !Length, mm or in
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)CoolingCapTubePAR(2)
-
-      !Diameter, mm or mil
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)CoolingCapTubePAR(1)
-
-      !Coil length, mm or in
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)CoolingCapTubePAR(3)
-
-      !Length, mm or in
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)HeatingCapTubePAR(2)
-
-      !Diameter, mm or mil
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)HeatingCapTubePAR(1)
-
-      !Coil length, mm or in
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)HeatingCapTubePAR(3)
+  
+  !Capillary Tube
+  
+  !Cooling Mode
+  
+  CoolingCapTubePAR(2) = Numbers(7) !Length
+  CoolingCapTubePAR(1) = Numbers(8) !Diameter
+  CoolingCapTubePAR(3) = Numbers(9) !Coil Diameter
+  
+  !Heating Mode
+  
+  HeatingCapTubePAR(2) = Numbers(10)    !Length
+  HeatingCapTubePAR(1) = Numbers(11)    !Diameter
+  HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
     
       READ(200,202)LineData
-  END IF
 
   !TXV data
-  !DO I=1,2; READ(200,*); END DO
   READ(200,202)LineData !TXV Model
 
   !Rated TXV capacity, ton
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingTXVcapacity !TxvPAR(1) 
-  
-  READ(200,202)LineData
-  
-  IF (LineData(1:15) .EQ. 'Model (heating)') THEN !New format 12/10/2008
-      READ(200,202)LineData
-      I=SCAN(LineData,',')
-      BufferString=ADJUSTL(LineData(I+1:150))
-      READ(BufferString,*)HeatingTXVcapacity 
-  ELSE
 
-      !Static superheat, C or F
-    !  READ(200,202) !LineData
-    !  I=SCAN(LineData,',')
-    !  BufferString=ADJUSTL(LineData(I+1:150))
-    !  READ(BufferString,*)TxvPAR(3) 
-
-      !Maximum effective superheat, C or F
-      !READ(200,*)
-      READ(200,202) !LineData
-    !  I=SCAN(LineData,',')
-    !  BufferString=ADJUSTL(LineData(I+1:150))
-    !  READ(BufferString,*)TxvPAR(7) 
-
-      !Rated superheat, C or F
-      READ(200,202) !LineData
-    !  I=SCAN(LineData,',')
-    !  BufferString=ADJUSTL(LineData(I+1:150))
-    !  READ(BufferString,*)TxvPAR(2) 
-     
-      !Bleed factor
-      READ(200,202) !LineData
-    !  I=SCAN(LineData,',')
-    !  BufferString=ADJUSTL(LineData(I+1:150))
-    !  READ(BufferString,*)TxvPAR(4) 
-  
-  END IF
+  CoolingTXVcapacity = Numbers(13)
+  HeatingTXVcapacity = Numbers(14)
 
   !Distributor tubes
   READ(200,*)
 
-  !Distributor tube length, mm or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)CoolingDistubeLength
+  CoolingDistubeLength = Numbers(15)
+  
   !IF (Unit .EQ. 1) THEN
   !  CoolingDistubeLength=CoolingDistubeLength/1000
   !ELSEIF (Unit .EQ. 2) THEN
@@ -975,11 +525,7 @@ LOGICAL :: HPDataFileExists
     CoolingDistubeLength=CoolingDistubeLength/12
   END IF
 
-  !Distributor tube length, mm or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)HeatingDistubeLength  
+  HeatingDistubeLength = Numbers(16)
   !IF (Unit .EQ. 1) THEN
   !  HeatingDistubeLength=HeatingDistubeLength/1000
   !ELSEIF (Unit .EQ. 2) THEN
@@ -991,258 +537,327 @@ LOGICAL :: HPDataFileExists
     HeatingDistubeLength=HeatingDistubeLength/12
   END IF
 
-  !Refrigerant line data
+  !*****************Refrigerant line data******************
+  
   DO I=1,3; READ(200,*); END DO
-
-  !Suction line length, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(1) 
-
-  !Suction line elevation, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(4) 
-
-  !Suction line heat gain, W or Btu/hr  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(5) 
-
-  !Suction line temperature rise, C or F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(6) 
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Suction line outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(2) 
+      
+      
+  CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+  
+  !Suction Line
+  
+  SucLn_RefrigerantLine = Alphas(1)
+  SucLn_TubeType = Alphas(2)
+  
+  SucLnPAR(1) = Numbers(1)  !Refrigerant Line Length
+  SucLnPAR(4) = Numbers(2)  !Refrigerant Line Elevation
+  SucLnPAR(5) = Numbers(3)  !Refrigerant Line Heat Loss
+  SucLnPAR(6) = Numbers(4)  !Refrigerant Line Temperature Change
+  SucLn_KTube = Numbers(5)
+  SucLn_TubeID = Numbers(6)
+  SucLnPAR(2) = Numbers(7)  !Tube Outside Diameter
+  SucLnPAR(7) = Numbers(8)  !Additional Pressure Drop
+  SucLn_Charge = Numbers(9) !Charge in Line
 
   !Suction line tube wall thickness, mm or mil
-  SucLnPAR(3)=(SucLnPAR(2)-InsideDiameter)/2
+  SucLnPAR(3)=(SucLnPAR(2)-SucLn_TubeID)/2
   !IF (Unit .EQ. 2) SucLnPAR(3)=SucLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP) SucLnPAR(3)=SucLnPAR(3)*1000 
 
-  !Suction line additional pressure drop
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)SucLnPAR(7) 
-
   DO I=1,3; READ(200,*); END DO
 
-  !Discharge line length, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(1) 
-
-  !Discharge line elevation, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(4) 
-
-  !Discharge line heat loss, W or Btu/hr  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(5) 
-
-  !Discharge line temperature change, C or F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(6) 
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Discharge line outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(2) 
+  !Discharge Line
+  
+  DisLn_RefrigerantLine = Alphas(3)
+  DisLn_TubeType = Alphas(4)
+  
+  DisLnPAR(1) = Numbers(10) !Refrigerant Line Length
+  DisLnPAR(4) = Numbers(11) !Refrigerant Line Elevation
+  DisLnPAR(5) = Numbers(12) !Refrigerant Line Heat Loss
+  DisLnPAR(6) = Numbers(13) !Refrigerant Line Temperature Change
+  DisLn_Ktube = Numbers(14)
+  DisLn_TubeID = Numbers(15)
+  DisLnPAR(2) = Numbers(16) !Tube Outside Diameter
+  DisLnPAR(7) = Numbers(17) !Additional Pressure Drop
+  DisLn_Charge = Numbers(18)    !Charge in Line
 
   !Discharge line tube wall thickness, mm or mil
-  DisLnPAR(3)=(DisLnPAR(2)-InsideDiameter)/2
+  DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2
   !IF (Unit .EQ. 2) DisLnPAR(3)=DisLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP) DisLnPAR(3)=DisLnPAR(3)*1000 
 
-  !Discharge line additional pressure drop
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)DisLnPAR(7) 
-
   DO I=1,3; READ(200,*); END DO
 
-  !Liquid line length, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(1) 
-
-  !Liquid line elevation, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(4) 
-
-  !Liquid line heat loss, W or Btu/hr  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(5) 
-
-  !Liquid line temperature change, C or F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(6) 
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Liquid line outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(2) 
+  !Liquid Line
+  
+  LiqLn_RefrigerantLine = Alphas(5)
+  LiqLn_TubeType = Alphas(6)
+  
+  LiqLnPAR(1) = Numbers(19) !Refrigerant Line Length
+  LiqLnPAR(4) = Numbers(20) !Refrigerant Line Elevation
+  LiqLnPAR(5) = Numbers(21) !Refrigerant Line Heat Loss
+  LiqLnPAR(6) = Numbers(22) !Refrigerant Line Temperature Change
+  LiqLn_Ktube = Numbers(23) !Tube Conductivity
+  LiqLn_TubeID = Numbers(24)
+  LiqLnPAR(2) = Numbers(25) !Tube Outside Diameter
+  LiqLnPAR(7) = Numbers(26) !Additional Pressure Drop
+  LiqLn_Charge = Numbers(27)    !Charge in Line
 
   !Liquid line tube wall thickness, mm or mil
-  LiqLnPAR(3)=(LiqLnPAR(2)-InsideDiameter)/2
+  LiqLnPAR(3)=(LiqLnPAR(2)-LiqLn_TubeID)/2
   !IF (Unit .EQ. 2)LiqLnPAR(3)=LiqLnPAR(3)*1000 !ISI - 07/14/06 
   IF (Unit .EQ. IP)LiqLnPAR(3)=LiqLnPAR(3)*1000  
 
-  !Liquid line additional pressure drop
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)LiqLnPAR(7) 
-
   DO I=1,3; READ(200,*); END DO
 
-  !Valve to IDC line length, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(1)
-
-  !Valve to IDC line elevation, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(4)
-
-  !Valve to IDC line heat loss, W or Btu/hr  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(5)
-
-  !Valve to IDC line temperature change, C or F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(6)
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Valve to IDC line outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(2)
+  !Reversing Valve to IDC
+  
+  ValveIDCLn_RefrigerantLine = Alphas(7)
+  ValveIDCLn_TubeType = Alphas(8)
+  
+  ValveIDCLnPAR(1) = Numbers(28)    !Refrigerant Line Length
+  ValveIDCLnPAR(4) = Numbers(29)    !Refrigerant Line Elevation
+  ValveIDCLnPAR(5) = Numbers(30)    !Refrigerant Line Heat Loss
+  ValveIDCLnPAR(6) = Numbers(31)    !Refrigerant Line Temperature Change
+  ValveIDCLn_Ktube = Numbers(32)
+  ValveIDCLn_TubeID = Numbers(33)
+  ValveIDCLnPAR(2) = Numbers(34)    !Tube Outside Diameter
+  ValveIDCLnPAR(7) = Numbers(35)    !Additional Pressure Drop
+  ValveIDCLn_Charge = Numbers(36)   !Charge in Line
 
   !Valve to IDC line tube wall thickness, mm or mil
-  ValveIDCLnPAR(3)=(ValveIDCLnPAR(2)-InsideDiameter)/2
+  ValveIDCLnPAR(3)=(ValveIDCLnPAR(2)-ValveIDCLn_TubeID)/2
   !IF (Unit .EQ. 2)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000 !ISI - 07/14/06
   IF (Unit .EQ. IP)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000
 
-  !Valve to IDC line additional pressure drop
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveIDCLnPAR(7) 
-
   DO I=1,3; READ(200,*); END DO
 
-  !Valve to ODC line length, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(1)
-
-  !Valve to ODC line elevation, m or ft
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(4)
-
-  !Valve to ODC line heat loss, W or Btu/hr  
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(5)
-
-  !Valve to ODC line temperature change, C or F
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(6)
-
-  READ(200,*)
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)InsideDiameter
-
-  !Valve to ODC line outside diameter, mm or in
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(2)
+  !Valve to ODC Line
+  
+  ValveODCLn_RefrigerantLine = Alphas(9)
+  ValveODCLn_TubeType = Alphas(10)
+  
+  ValveODCLnPAR(1) = Numbers(37)    !Refrigerant Line Length
+  ValveODCLnPAR(4) = Numbers(38)    !Refrigerant Line Elevation
+  ValveODCLnPAR(5) = Numbers(39)    !Refrigerant Line Heat Loss
+  ValveODCLnPAR(6) = Numbers(40)    !Refrigerant Line Temperature Change
+  ValveODCLn_Ktube = Numbers(41)
+  ValveODCLn_TubeID = Numbers(42)
+  ValveODCLnPAR(2) = Numbers(43)    !Tube Outside Diameter
+  ValveODCLnPAR(7) = Numbers(44)    !Additional Pressure Drop
+  ValveODCLn_Charge = Numbers(45)   !Charge in Line
+  
+  TubeNumber = Numbers(46)  !Number of Tubes Liq.
 
   !Valve to ODC line tube wall thickness, mm or mil
-  ValveODCLnPAR(3)=(ValveODCLnPAR(2)-InsideDiameter)/2
+  ValveODCLnPAR(3)=(ValveODCLnPAR(2)-ValveODCLn_TubeID)/2
   !IF (Unit .EQ. 2)ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000 !ISI - 07/14/06
   IF (Unit .EQ. IP)ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000
 
-  !Valve to ODC line additional pressure drop
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ValveODCLnPAR(7) 
 
-  DO I=1,34; READ(200,*); END DO
+
+  !********************Refrigerant Cycle Data (Cooling)***********************
+
+  DO I=1,34; READ(200,*); END DO  
+  
+  CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+
+  !Compressor Suction
+  
+  RCDC_ComSuc_CyclePoint = Alphas(1)
+  
+  RCDC_ComSuc_Pressure = Numbers(1)
+  RCDC_ComSuc_Enthalpy = Numbers(2)
+  RCDC_ComSuc_Temperature = Numbers(3)
+  RCDC_ComSuc_Quality - Numbers(4)
+  RCDC_ComSuc_Superheat = Numbers(5)
+  RCDC_ComSuc_Subcooling = Numbers(6)
+  
+  !Compressor Discharge
+  
+  RCDC_ComDis_CyclePoint = Alphas(2)
+  
+  RCDC_ComDis_Pressure = Numbers(7)
+  RCDC_ComDis_Enthalpy = Numbers(8)
+  RCDC_ComDis_Temperature = Numbers(9)
+  RCDC_ComDis_Quality - Numbers(10)
+  RCDC_ComDis_Superheat = Numbers(11)
+  RCDC_ComDis_Subcooling = Numbers(12)
+  
+  !Outdoor Coil Inlet
+  
+  RCDC_OCI_CyclePoint = Alphas(3)
+  
+  RCDC_OCI_Pressure = Numbers(13)
+  RCDC_OCI_Enthalpy = Numbers(14)
+  RCDC_OCI_Temperature = Numbers(15)
+  RCDC_OCI_Quality - Numbers(16)
+  RCDC_OCI_Superheat = Numbers(17)
+  RCDC_OCI_Subcooling = Numbers(18)
+  
+  !Outdoor Coil Outlet
+  
+  RCDC_OCO_CyclePoint = Alphas(4)
+  
+  RCDC_OCO_Pressure = Numbers(19)
+  RCDC_OCO_Enthalpy = Numbers(20)
+  RCDC_OCO_Temperature = Numbers(21)
+  RCDC_OCO_Quality - Numbers(22)
+  RCDC_OCO_Superheat = Numbers(23)
+  RCDC_OCO_Subcooling = Numbers(24)
+  
+  !Expansion Device Inlet
+  
+  RCDC_EDI_CyclePoint = Alphas(5)
+  
+  RCDC_EDI_Pressure = Numbers(25)
+  RCDC_EDI_Enthalpy = Numbers(26)
+  RCDC_EDI_Temperature = Numbers(27)
+  RCDC_EDI_Quality - Numbers(28)
+  RCDC_EDI_Superheat = Numbers(29)
+  RCDC_EDI_Subcooling = Numbers(30)
+  
+  !Expansion Device Outlet
+  
+  RCDC_EDO_CyclePoint = Alphas(6)
+  
+  RCDC_EDO_Pressure = Numbers(31)
+  RCDC_EDO_Enthalpy = Numbers(32)
+  RCDC_EDO_Temperature = Numbers(33)
+  RCDC_EDO_Quality - Numbers(34)
+  RCDC_EDO_Superheat = Numbers(35)
+  RCDC_EDO_Subcooling = Numbers(36)
+  
+  !Indoor Coil Inlet
+  
+  RCDC_ICI_CyclePoint = Alphas(7)
+  
+  RCDC_ICI_Pressure = Numbers(37)
+  RCDC_ICI_Enthalpy = Numbers(38)
+  RCDC_ICI_Temperature = Numbers(39)
+  RCDC_ICI_Quality - Numbers(40)
+  RCDC_ICI_Superheat = Numbers(41)
+  RCDC_ICI_Subcooling = Numbers(42)
+  
+  !Indoor Coil Outlet
+  
+  RCDC_ICO_CyclePoint = Alphas(8)
+  
+  RCDC_ICO_Pressure = Numbers(43)
+  RCDC_ICO_Enthalpy = Numbers(44)
+  RCDC_ICO_Temperature = Numbers(45)
+  RCDC_ICO_Quality - Numbers(46)
+  RCDC_ICO_Superheat = Numbers(47)
+  RCDC_ICO_Subcooling = Numbers(48)
+  
+  
+  
+  !********************Refrigerant Cycle Data (Heating)***********************
+
+  DO I=1,34; READ(200,*); END DO  
+  
+  CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+
+  !Compressor Suction
+  
+  RCDH_ComSuc_CyclePoint = Alphas(1)
+  
+  RCDH_ComSuc_Pressure = Numbers(1)
+  RCDH_ComSuc_Enthalpy = Numbers(2)
+  RCDH_ComSuc_Temperature = Numbers(3)
+  RCDH_ComSuc_Quality - Numbers(4)
+  RCDH_ComSuc_Superheat = Numbers(5)
+  RCDH_ComSuc_Subcooling = Numbers(6)
+  
+  !Compressor Discharge
+  
+  RCDH_ComDis_CyclePoint = Alphas(2)
+  
+  RCDH_ComDis_Pressure = Numbers(7)
+  RCDH_ComDis_Enthalpy = Numbers(8)
+  RCDH_ComDis_Temperature = Numbers(9)
+  RCDH_ComDis_Quality - Numbers(10)
+  RCDH_ComDis_Superheat = Numbers(11)
+  RCDH_ComDis_Subcooling = Numbers(12)
+  
+  !Outdoor Coil Inlet
+  
+  RCDH_OCI_CyclePoint = Alphas(3)
+  
+  RCDH_OCI_Pressure = Numbers(13)
+  RCDH_OCI_Enthalpy = Numbers(14)
+  RCDH_OCI_Temperature = Numbers(15)
+  RCDH_OCI_Quality - Numbers(16)
+  RCDH_OCI_Superheat = Numbers(17)
+  RCDH_OCI_Subcooling = Numbers(18)
+  
+  !Outdoor Coil Outlet
+  
+  RCDH_OCO_CyclePoint = Alphas(4)
+  
+  RCDH_OCO_Pressure = Numbers(19)
+  RCDH_OCO_Enthalpy = Numbers(20)
+  RCDH_OCO_Temperature = Numbers(21)
+  RCDH_OCO_Quality - Numbers(22)
+  RCDH_OCO_Superheat = Numbers(23)
+  RCDH_OCO_Subcooling = Numbers(24)
+  
+  !Expansion Device Inlet
+  
+  RCDH_EDI_CyclePoint = Alphas(5)
+  
+  RCDH_EDI_Pressure = Numbers(25)
+  RCDH_EDI_Enthalpy = Numbers(26)
+  RCDH_EDI_Temperature = Numbers(27)
+  RCDH_EDI_Quality - Numbers(28)
+  RCDH_EDI_Superheat = Numbers(29)
+  RCDH_EDI_Subcooling = Numbers(30)
+  
+  !Expansion Device Outlet
+  
+  RCDH_EDO_CyclePoint = Alphas(6)
+  
+  RCDH_EDO_Pressure = Numbers(31)
+  RCDH_EDO_Enthalpy = Numbers(32)
+  RCDH_EDO_Temperature = Numbers(33)
+  RCDH_EDO_Quality - Numbers(34)
+  RCDH_EDO_Superheat = Numbers(35)
+  RCDH_EDO_Subcooling = Numbers(36)
+  
+  !Indoor Coil Inlet
+  
+  RCDH_ICI_CyclePoint = Alphas(7)
+  
+  RCDH_ICI_Pressure = Numbers(37)
+  RCDH_ICI_Enthalpy = Numbers(38)
+  RCDH_ICI_Temperature = Numbers(39)
+  RCDH_ICI_Quality - Numbers(40)
+  RCDH_ICI_Superheat = Numbers(41)
+  RCDH_ICI_Subcooling = Numbers(42)
+  
+  !Indoor Coil Outlet
+  
+  RCDH_ICO_CyclePoint = Alphas(8)
+  
+  RCDH_ICO_Pressure = Numbers(43)
+  RCDH_ICO_Enthalpy = Numbers(44)
+  RCDH_ICO_Temperature = Numbers(45)
+  RCDH_ICO_Quality - Numbers(46)
+  RCDH_ICO_Superheat = Numbers(47)
+  RCDH_ICO_Subcooling = Numbers(48)
+  
+  RCDH_OCckt = Alphas(9)    !Outdoor Coil Ckt
+  RCDH_ICckt = Alphas(10)   !Indoor Coil Ckt
+  
+  RCDH_Bar_Press = Numbers(49)  !Barometric Pressure
+  RCDH_Com_Chg = Numbers(50)    !Charge in Compressor
+  RCDH_DistC_Chg = Numbers(51)  !Charge in Distributor Tube (Cooling)
+  RCDH_DistH_Chg = Numbers(52)  !Charge in Distributor Tube (Heating)
+  RCDH_Com_AS = Numbers(53) !Is Compressor in Air Stream
+  
 
   !Liquid temperature, ISI - 02/08/08
   READ(200,202)LineData
@@ -1274,273 +889,249 @@ LOGICAL :: HPDataFileExists
   BufferString=ADJUSTL(LineData(I+1:150))
   READ(BufferString,*)IsCmpInAirStream
 
-  !***** Accumulator *****
+  !*************** Accumulator ****************
   DO I=1,7; READ(200,*); END DO
+      
+  CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(2) !Height, mm or in
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(1) !Diameter, mm or in
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(4) !Upper hole diameter, mm or in
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(3) !Lower hole diameter, mm or in
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(5) !Hole distance, mm or in
+  Acc_Manufacturer = Alphas(1)
+  Acc_Model = Alphas(2)
+  
+  Acc_ChgCap = Numbers(1)  !Charge Capacity
+  Acc_SysCap = Numbers(2)  !Max. Recommended System Capacity
+  Acc_Chg = Numbers(3)  !Charge
+  Acc_DP = Numbers(4)   !Pressure Drop
+  AccumPAR(2) = Numbers(5)  !Height
+  AccumPAR(1) = Numbers(6)  !Diameter
+  AccumPAR(4) = Numbers(7)  !Upper hole diameter
+  AccumPAR(3) = Numbers(8)  !Lower hole diameter
+  AccumPAR(7) = Numbers(9)  !Rating Pressure Drop
+  AccumPAR(5) = Numbers(10) !Hole distance
+  AccumPAR(8) = Numbers(11) !Rating Temperature Drop
+  AccumPAR(9) = Numbers(12) !Coefficient M
+  AccumPAR(10) = Numbers(13)    !Coefficient B
 
   AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
-  	
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(7) !Rating DP, kPa or psi
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(8) !Rating DT, C or F
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(9) !Coefficient M
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)AccumPAR(10) !Coefficient B
-
-  !***** Filter Drier *****
+  !*************** Filter Drier ****************
   DO I=1,3; READ(200,*); END DO
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)FilterPAR(1) !Flow capacity, ton
+  CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
 
-  READ(200,*)
+  Filter_Manufacturer = Alphas(1)
+  Filter_Model = Alphas(2)
+  
+  FilterPAR(1) = Numbers(1) !Flow capacity
+  Filter_DP = Numbers(2)    !Pressure Drop
+  FilterPAR(2) = Numbers(3) !Rating DP
+  
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)FilterPAR(2) !Rating DP, kPa or psi
-
-  !***** Custom air side data *****
+  !****************** Material Weight Data ******************
+  
+  CALL GetObjectItem('MaterialWeightData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  !---Fin---
+  
+  MWD_FinIC = Numbers(1)
+  MWD_FinOC = Numbers(2)
+  
+  !---Tube---
+  
+  MWD_TubeIC = Numbers(3)
+  MWD_TubeOC = Numbers(4)
+  MWD_SucLn = Numbers(5)
+  MWD_DisLn = Numbers(6)
+  MWD_RV_ICL = Numbers(7)   !Rev. Valve Indoor Coil Line
+  MWD_RV_OCL = Numbers(8)   !Rev. Valve Outdoor Coil Line
+  MWD_LiqLn = Numbers(9)
+  
+  !*************** System Cost Data ***************
+  
+  CALL GetObjectItem('SystemCostData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)  
+  
+  SystemCost = Numbers(1)
+  
+  !---Unit Cost---
+  
+  UC_Acc = Numbers(2)   !Unit Cost for Accumulator
+  UC_Com = Numbers(3)   !Unit Cost for Compressor
+  UC_Dis = Numbers(4)   !Unit Cost for Distributor
+  UC_FD = Numbers(5)    !Unit Cost for Filter Drier
+  UC_IF = Numbers(6)    !Unit Cost for Indoor Fan
+  UC_OF = Numbers(7)    !Unit Cost for Outdoor Fan
+  UC_IP = Numbers(8)    !Unit Cost for Interconnecting Piping
+  UC_RV = Numbers(9)    !Unit Cost for Reversing Valve
+  UC_STO = Numbers(10)  !Unit Cost for Short Tube Orifice
+  UC_TXV = Numbers(11)  !Unit Cost for TXV
+  UC_ICC = Numbers(12)  !Unit Cost for Indoor Coil Copper
+  UC_ICA = Numbers(13)  !Unit Cost for Indoor Coil Aluminum
+  UC_OCC = Numbers(14)  !Unit Cost for Outdoor Coil Copper
+  UC_OCA = Numbers(15)  !Unit Cost for Outdoor Coil Aluminum
+  UC_Other = Numbers(16)    !Unit Cost for "Other"
+  
+  !---Quantity---
+  
+  Qu_Acc = Numbers(17)  !Accumulator Quantity
+  Qu_Com = Numbers(18)   !Compressor Quantity
+  Qu_Dis = Numbers(19)   !Distributor Quantity
+  Qu_FD = Numbers(20)    !Filter Drier Quantity
+  Qu_IF = Numbers(21)    !Indoor Fan Quantity
+  Qu_OF = Numbers(22)    !Outdoor Fan Quantity
+  Qu_IP = Numbers(23)    !Interconnecting Piping Quantity
+  Qu_RV = Numbers(24)    !Reversing Valve Quantity
+  Qu_STO = Numbers(25)  !Short Tube Orifice Quantity
+  Qu_TXV = Numbers(26)  !TXV Quantity
+  Qu_IC = Numbers(27)  !Indoor Coil Quantity
+  Qu_OC = Numbers(28)  !Outdoor Coil Quantity
+  Qu_Other = Numbers(29)    !Quantity of "Other"
+  
+  !---Total Cost---
+  
+  TC_Acc = Numbers(30)  !Accumulator Total Cost
+  TC_Com = Numbers(31)   !Compressor Total Cost
+  TC_Dis = Numbers(32)   !Distributor Total Cost
+  TC_FD = Numbers(33)    !Filter Drier Total Cost
+  TC_IF = Numbers(34)    !Indoor Fan Total Cost
+  TC_OF = Numbers(35)    !Outdoor Fan Total Cost
+  TC_IP = Numbers(36)    !Interconnecting Piping Total Cost
+  TC_RV = Numbers(37)    !Reversing Valve Total Cost
+  TC_STO = Numbers(38)  !Short Tube Orifice Total Cost
+  TC_TXV = Numbers(39)  !TXV Total Cost
+  TC_IC = Numbers(40)  !Indoor Coil Total Cost
+  TC_OC = Numbers(41)  !Outdoor Coil Total Cost
+  TC_Other = Numbers(42)    !Total Cost of "Other"
+  
+  
+  !*************** Custom Air Side Heat Transfer Data **************
   DO I=1,60; READ(200,*); END DO
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_CurveUnit
+  CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)        
 
-  READ(200,*) !Heat Transfer data
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_CurveTypeHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_PowerAHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_PowerBHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly1HTC
+  !---Indoor Coil---
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly2HTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly3HTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly4HTC
-
-  READ(200,*) !Pressure drop data
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_CurveTypeDP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_PowerADP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_PowerBDP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly1DP
+  IDC_CurveUnit = Numbers(1)
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly2DP
+  !Heat Transfer data
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly3DP
+  IDC_CurveTypeHTC = Numbers(2) !Curve Type
+  IDC_PowerAHTC = Numbers(3)    !Power Fit Coefficient A
+  IDC_PowerBHTC = Numbers(4)    !Power Fit Coefficient B
+  IDC_Poly1HTC = Numbers(5) !Polynomial Fit Coefficient C1
+  IDC_Poly2HTC = Numbers(6) !Polynomial Fit Coefficient C2
+  IDC_Poly3HTC = Numbers(7) !Polynomial Fit Coefficient C3
+  IDC_Poly4HTC = Numbers(8) !Polynomial Fit Coefficent C4
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)IDC_Poly4DP
-
-  READ(200,*) !Outdoor Coil
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_CurveUnit
-
-  READ(200,*) !Heat Transfer data
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_CurveTypeHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_PowerAHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_PowerBHTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly1HTC
+  READ(200,*) 
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly2HTC
+  !Pressure drop data
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly3HTC
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly4HTC
-
-  READ(200,*) !Pressure drop data
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_CurveTypeDP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_PowerADP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_PowerBDP
-
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly1DP
+  IDC_CurveTypeDP = Numbers(9) !Curve Type
+  IDC_PowerADP = Numbers(10)    !Power Fit Coefficient A
+  IDC_PowerBDP = Numbers(11)    !Power Fit Coefficient B
+  IDC_Poly1DP = Numbers(12) !Polynomial Fit Coefficient C1
+  IDC_Poly2DP = Numbers(13) !Polynomial Fit Coefficient C2
+  IDC_Poly3DP = Numbers(14) !Polynomial Fit Coefficient C3
+  IDC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
   
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly2DP
+  READ(200,*) 
+  
+  !---Outdoor Coil---
+  
+  ODC_CurveUnit = Numbers(16)
+
+  READ(200,*)
+  
+  !Heat Transfer data
+  
+  ODC_CurveTypeHTC = Numbers(17) !Curve Type
+  ODC_PowerAHTC = Numbers(18)    !Power Fit Coefficient A
+  ODC_PowerBHTC = Numbers(19)    !Power Fit Coefficient B
+  ODC_Poly1HTC = Numbers(20) !Polynomial Fit Coefficient C1
+  ODC_Poly2HTC = Numbers(21) !Polynomial Fit Coefficient C2
+  ODC_Poly3HTC = Numbers(22) !Polynomial Fit Coefficient C3
+  ODC_Poly4HTC = Numbers(23) !Polynomial Fit Coefficent C4
+
+  READ(200,*) 
+  
+  !Pressure drop data
+  
+  ODC_CurveTypeDP = Numbers(9) !Curve Type
+  ODC_PowerADP = Numbers(10)    !Power Fit Coefficient A
+  ODC_PowerBDP = Numbers(11)    !Power Fit Coefficient B
+  ODC_Poly1DP = Numbers(12) !Polynomial Fit Coefficient C1
+  ODC_Poly2DP = Numbers(13) !Polynomial Fit Coefficient C2
+  ODC_Poly3DP = Numbers(14) !Polynomial Fit Coefficient C3
+  ODC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
+
 
   READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly3DP
+ 
+  !*************** Charge Tuning Curve ***************
+  DO I=1,60; READ(200,*); END DO
+  
+  CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
+                        Numbers,NumNumbers,Status)      
 
-  READ(200,202)LineData
-  I=SCAN(LineData,',')
-  BufferString=ADJUSTL(LineData(I+1:150))
-  READ(BufferString,*)ODC_Poly4DP
+  SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
+  CASE ('F','f')
+      IsChargeTuning=0
+  CASE DEFAULT ('T','t')
+      IsChargeTuning=1
+  END SELECT
+  
+  RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
+  RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
+  SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
+  LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
+  TuningCurveIntercept = Numbers(5)
+  TuningCurveSlope = Numbers(6)
+  
+  !*************** Air Handler Data **************
+  DO I=1,60; READ(200,*); END DO
 
-  READ(200,202)LineData
-  IF (LineData(1:37) .EQ. ' ***************************** Charge') THEN !New format 02/07/07
+  CALL GetObjectItem('AirHandlerData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  SELECT CASE (Alphas(1)(1:1))  !Use Air Handler Data
+  CASE ('F','f')
+      UseAirHandlerData=0
+  CASE DEFAULT ('T','t')
+      UseAirHandlerData=1
+  END SELECT
+  
+  AHD_Ton = Numbers(1)  !Tonnage
+  
+  AHD_CM = Alphas(2)    !Coil Model
+  AHD_AHM = Alphas(3)   !Air Handler Model
+  
+  !*************** Condensor Curve Data **************
+  DO I=1,60; READ(200,*); END DO
 
-    IsChargeTuning=0
-	IF (MODE .NE. 2) THEN
+  CALL GetObjectItem('CondensorCurveData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
 
-	    READ(200,202)LineData
-	    I=SCAN(LineData,',')
-	    BufferString=ADJUSTL(LineData(I+1:150))
-	    SELECT CASE (BufferString(1:1))
-	    CASE ('F','f')
-		  IsChargeTuning=0
-	    CASE DEFAULT
-		  IsChargeTuning=1
-	    END SELECT
-
-		READ(200,202)LineData
-		I=SCAN(LineData,',')
-		BufferString=ADJUSTL(LineData(I+1:150))
-		READ(BufferString,*)RefSimulatedCharge
-		  
-		READ(200,202)LineData
-		I=SCAN(LineData,',')
-		BufferString=ADJUSTL(LineData(I+1:150))
-		READ(BufferString,*)RefLiquidLength
-
-		READ(200,202)LineData
-		I=SCAN(LineData,',')
-		BufferString=ADJUSTL(LineData(I+1:150))
-		READ(BufferString,*)SimulatedCharge2
-
-		READ(200,202)LineData
-		I=SCAN(LineData,',')
-		BufferString=ADJUSTL(LineData(I+1:150))
-		READ(BufferString,*)LiquidLength2
-	END IF
-
-  END IF
-
+  CCD_AC = Numbers(1)   !A-Capacity
+  CCD_AP = Numbers(2)   !A-Power
+  CCD_ASP = Numbers(3)  !A-Suction Pressure
+  CCD_BC = Numbers(4)   !B-Capacity
+  CCD_BP = Numbers(5)   !B-Power
+  CCD_BSP = Numbers(6)  !B-Suction Pressure
+  CCD_ACS = Numbers(7)  !A-Capacity Slope
+  CCD_APS = Numbers(8)   !A-Power Slope
+  CCD_BCS = Numbers(9)  !B-Capacity Slope
+  CCD_BPS = Numbers(10) !B-Power Slope
+  CCD_ACI = Numbers(11) !A-Capacity Intercept
+  CCD_API = Numbers(12) !A-Power Intercept
+  CCD_BCI = Numbers(13) !B-Capacity Intercept
+  CCD_BPI = Numbers(14) !B-Power Intercept
+  CCD_ALT = Numbers(15) !A-Liquid Temperature
+  
 !  DO I=1,23; READ(200,*); END DO
 !  READ(200,202)LineData
 !
