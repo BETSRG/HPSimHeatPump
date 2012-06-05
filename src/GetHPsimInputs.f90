@@ -195,6 +195,395 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
+INTEGER CoolingDesignCondition  !Selected Cooling Design Condition
+Integer HeatingDesignCondition  !Selected Heating Design Condition
+REAL Subcooling   !Design Subcooling
+REAL Superheat    !Design Superheat
+CHARACTER RefrigerantName
+REAL NumofRefrigerants    !Number of Refrigerants in Blend
+REAL NominalCoolingCapacity
+REAL NominalHeatingCapacity
+REAL ElectricHeating
+CHARACTER DesignConditionDescription
+REAL OutdoorEnteringDrybulbTemperature
+REAL OutdoorEnteringWetbulbTemperature
+REAL IndoorEnteringDrybulbTemperature
+REAL IndoorEnteringWetbulbTemperature
+REAL DesignRefChg    !Design Refrigerant Charge Mass
+REAL RefChg  !Refrigerant Charge Mass
+REAL RefMassFlowRate !Refrigerant Mass Flow Rate
+REAL SystemEER
+REAL SystemSEER
+REAL SystemCOP
+REAL SensibleTotalHeatRatio
+REAL CalculatedSubcooling
+REAL CalculatedSuperheat
+REAL CalculatedCoolingCapacity
+REAL CalculatedHeatingCapacity
+
+CHARACTER CompressorModel
+CHARACTER CompressorType
+CHARACTER Rref    !Compressor Refrigerant
+REAL CompressorPower
+REAL CompressorHeatLossFraction
+REAL CompressorHeatLoss
+REAL CompressorVolume
+REAL CompressorMassCoefficient1
+REAL CompressorMassCoefficient2
+REAL CompressorMassCoefficient3
+REAL CompressorMassCoefficient4
+REAL CompressorMassCoefficient5
+REAL CompressorMassCoefficient6
+REAL CompressorMassCoefficient7
+REAL CompressorMassCoefficient8
+REAL CompressorMassCoefficient9
+REAL CompressorMassCoefficient10
+REAL CompressorPowerCoefficient1
+REAL CompressorPowerCoefficient2
+REAL CompressorPowerCoefficient3
+REAL CompressorPowerCoefficient4
+REAL CompressorPowerCoefficient5
+REAL CompressorPowerCoefficient6
+REAL CompressorPowerCoefficient7
+REAL CompressorPowerCoefficient8
+REAL CompressorPowerCoefficient9
+REAL CompressorPowerCoefficient10
+CHARACTER CompressorCoefficientsUnitFlag
+REAL PowerMultiplier
+REAL MassFlowRateMultiplier
+REAL UserSpecifiedRatingEvapTemperature
+REAL UserSpecifiedRatingCondTemperature
+REAL UserSpecifiedRatingSubcooling
+REAL UserSpecifiedRatingSuperheat
+REAL UserSpecifiedRatingHeatingModeSubcooling
+REAL UserSpecifiedRatingHeatingModeSuperheat
+ 
+REAL ODC_CoilAirPressureDrop
+REAL ODC_CoilAirOutletDrybulbTemp
+REAL ODC_CoilAirOutletWetbulbTemp
+REAL ODC_CoilAirOutletRelativeHumidity
+REAL ODC_CoilAirFaceVelocity
+REAL ODC_CoilHeatTransferRate
+REAL ODC_MassinCoil
+REAL ODC_InternalVolume
+REAL ODC_CoilAirLeakage  !Air Leakage Around the Coil
+
+REAL PwrODfan !Outdoor Fan Power
+REAL VdotODfan    !Outdoor Fan Air Flow Rate
+REAL ODdrawBlow   !Outdoor Fan Draw Through (1) or Blow Through (2)
+
+REAL IDC_CoilAirPressureDrop
+REAL IDC_CoilAirOutletDrybulbTemperature
+REAL IDC_CoilAirOutletWetbulbTemperature
+REAL IDC_CoilAirOutletRelativeHumidity
+REAL IDC_CoilAirFaceVelocity
+REAL IDC_CoilHeatTransferRate 
+REAL IDC_MassinCoil
+REAL IDC_InternalVolume
+REAL IDC_CoilAirLeakage  !Air Leakage Around the Coil
+
+REAL PwrIDfan !Fan Power
+REAL VdotIDfan    !Fan Air Flow Rate
+REAL IDdrawBlow   !Draw Through or Blow Through
+
+CHARACTER SucLn_RefrigerantLine
+CHARACTER SucLn_TubeType
+REAL SucLn_KTube    !Conductivity of Suction Line Tube
+REAL SucLn_TubeID   !Inner Diameter of Suction Line Tube
+REAL SucLn_Charge
+CHARACTER DisLn_RefrigerantLine
+CHARACTER DisLn_TubeType
+REAL DisLn_KTube    !Conductivity of Discharge Line Tube
+REAL DisLn_TubeID   !Inner Diameter of Discharge Line Tube
+REAL DisLn_Charge
+CHARACTER LiqLn_RefrigerantLine
+CHARACTER LiqLn_TubeType
+REAL LiqLn_KTube    !Conductivity of Liquid Line Tube
+REAL LiqLn_TubeID   !Inner Diameter of Liquid Line Tube
+REAL LiqLn_Charge
+CHARACTER ValveIDCLn_RefrigerantLine
+CHARACTER ValveIDCLn_TubeType
+REAL ValveIDCLn_KTube    !Conductivity of Valce to IDC Line Tube
+REAL ValveIDCLn_TubeID   !Inner Diameter of Valce to IDC Line Tube
+REAL ValveIDCLn_Charge
+CHARACTER ValveODCLn_RefrigerantLine
+CHARACTER ValveODCLn_TubeType
+REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
+REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
+REAL ValveODCLn_Charge
+
+CHARACTER RCDC_ComSuc_CyclePoint
+REAL RCDC_ComSuc_Pressure
+REAL RCDC_ComSuc_Enthalpy
+REAL RCDC_ComSuc_Temperature 
+REAL RCDC_ComSuc_Quality
+REAL RCDC_ComSuc_Superheat
+REAL RCDC_ComSuc_Subcooling 
+CHARACTER RCDC_ComDis_CyclePoint
+REAL RCDC_ComDis_Pressure
+REAL RCDC_ComDis_Enthalpy
+REAL RCDC_ComDis_Temperature
+REAL RCDC_ComDis_Quality
+REAL RCDC_ComDis_Superheat
+REAL RCDC_ComDis_Subcooling
+CHARACTER RCDC_OCI_CyclePoint
+REAL RCDC_OCI_Pressure
+REAL RCDC_OCI_Enthalpy
+REAL RCDC_OCI_Temperature
+REAL RCDC_OCI_Quality
+REAL RCDC_OCI_Superheat
+REAL RCDC_OCI_Subcooling
+CHARACTER RCDC_OCO_CyclePoint
+REAL RCDC_OCO_Pressure
+REAL RCDC_OCO_Enthalpy
+REAL RCDC_OCO_Temperature
+REAL RCDC_OCO_Quality
+REAL RCDC_OCO_Superheat
+REAL RCDC_OCO_Subcooling
+CHARACTER RCDC_EDI_CyclePoint
+REAL RCDC_EDI_Pressure
+REAL RCDC_EDI_Enthalpy
+REAL RCDC_EDI_Temperature
+REAL RCDC_EDI_Quality
+REAL RCDC_EDI_Superheat
+REAL RCDC_EDI_Subcooling
+CHARACTER RCDC_EDO_CyclePoint
+REAL RCDC_EDO_Pressure
+REAL RCDC_EDO_Enthalpy
+REAL RCDC_EDO_Temperature
+REAL RCDC_EDO_Quality
+REAL RCDC_EDO_Superheat
+REAL RCDC_EDO_Subcooling
+CHARACTER RCDC_ICI_CyclePoint
+REAL RCDC_ICI_Pressure
+REAL RCDC_ICI_Enthalpy
+REAL RCDC_ICI_Temperature
+REAL RCDC_ICI_Quality
+REAL RCDC_ICI_Superheat
+REAL RCDC_ICI_Subcooling
+CHARACTER RCDC_ICO_CyclePoint
+REAL RCDC_ICO_Pressure
+REAL RCDC_ICO_Enthalpy
+REAL RCDC_ICO_Temperature
+REAL RCDC_ICO_Quality
+REAL RCDC_ICO_Superheat
+REAL RCDC_ICO_Subcooling
+
+CHARACTER RCDH_ComSuc_CyclePoint  
+REAL RCDH_ComSuc_Pressure
+REAL RCDH_ComSuc_Enthalpy
+REAL RCDH_ComSuc_Temperature
+REAL RCDH_ComSuc_Quality
+REAL RCDH_ComSuc_Superheat
+REAL RCDH_ComSuc_Subcooling
+CHARACTER RCDH_ComDis_CyclePoint
+REAL RCDH_ComDis_Pressure
+REAL RCDH_ComDis_Enthalpy
+REAL RCDH_ComDis_Temperature
+REAL RCDH_ComDis_Quality
+REAL RCDH_ComDis_Superheat
+REAL RCDH_ComDis_Subcooling
+CHARACTER RCDH_OCI_CyclePoint
+REAL RCDH_OCI_Pressure
+REAL RCDH_OCI_Enthalpy
+REAL RCDH_OCI_Temperature
+REAL RCDH_OCI_Quality
+REAL RCDH_OCI_Superheat
+REAL RCDH_OCI_Subcooling
+CHARACTER RCDH_OCO_CyclePoint
+REAL RCDH_OCO_Pressure
+REAL RCDH_OCO_Enthalpy
+REAL RCDH_OCO_Temperature
+REAL RCDH_OCO_Quality
+REAL RCDH_OCO_Superheat
+REAL RCDH_OCO_Subcooling
+CHARACTER RCDH_EDI_CyclePoint
+REAL RCDH_EDI_Pressure
+REAL RCDH_EDI_Enthalpy
+REAL RCDH_EDI_Temperature
+REAL RCDH_EDI_Quality
+REAL RCDH_EDI_Superheat
+REAL RCDH_EDI_Subcooling
+CHARACTER RCDH_EDO_CyclePoint
+REAL RCDH_EDO_Pressure
+REAL RCDH_EDO_Enthalpy
+REAL RCDH_EDO_Temperature
+REAL RCDH_EDO_Quality
+REAL RCDH_EDO_Superheat
+REAL RCDH_EDO_Subcooling
+CHARACTER RCDH_ICI_CyclePoint  
+REAL RCDH_ICI_Pressure
+REAL RCDH_ICI_Enthalpy
+REAL RCDH_ICI_Temperature
+REAL RCDH_ICI_Quality
+REAL RCDH_ICI_Superheat
+REAL RCDH_ICI_Subcooling
+CHARACTER RCDH_ICO_CyclePoint
+REAL RCDH_ICO_Pressure
+REAL RCDH_ICO_Enthalpy
+REAL RCDH_ICO_Temperature
+REAL RCDH_ICO_Quality
+REAL RCDH_ICO_Superheat
+REAL RCDH_ICO_Subcooling
+CHARACTER RCDH_OCckt    !Outdoor Coil Ckt
+CHARACTER RCDH_ICckt   !Indoor Coil Ckt
+REAL RCDH_Bar_Press  !Barometric Pressure
+REAL RCDH_Com_Chg    !Charge in Compressor
+REAL RCDH_DistC_Chg  !Charge in Distributor Tube (Cooling)
+REAL RCDH_DistH_Chg  !Charge in Distributor Tube (Heating)
+REAL RCDH_Com_AS !Is Compressor in Air Stream
+
+CHARACTER Acc_Manufacturer
+CHARACTER Acc_Model
+REAL Acc_ChgCap  !Accumulator Charge Capacity
+REAL Acc_SysCap  !Accumulator Max. Recommended System Capacity
+REAL Acc_Chg  !Accumulator Charge
+REAL Acc_DP   !Accumulator Pressure Drop
+
+CHARACTER Filter_Manufacturer
+CHARACTER Filter_Model
+REAL Filter_DP    !Filter Pressure Drop
+
+REAL MWD_FinIC    !Indoor Coil Fin
+REAL MWD_FinOC    !Outdoor Coil Fin
+REAL MWD_TubeIC   !Indoor Coil Tube
+REAL MWD_TubeOC   !Outdoor Coil Tunbe
+REAL MWD_SucLn    !Suction Line
+REAL MWD_DisLn    !Discharge Line
+REAL MWD_RV_ICL   !Rev. Valve Indoor Coil Line
+REAL MWD_RV_OCL   !Rev. Valve Outdoor Coil Line
+REAL MWD_LiqLn
+
+REAL UC_Acc   !Unit Cost for Accumulator
+REAL UC_Com   !Unit Cost for Compressor
+REAL UC_Dis   !Unit Cost for Distributor
+REAL UC_FD    !Unit Cost for Filter Drier
+REAL UC_IF   !Unit Cost for Indoor Fan
+REAL UC_OF   !Unit Cost for Outdoor Fan
+REAL UC_IP    !Unit Cost for Interconnecting Piping
+REAL UC_RV    !Unit Cost for Reversing Valve
+REAL UC_STO  !Unit Cost for Short Tube Orifice
+REAL UC_TXV  !Unit Cost for TXV
+REAL UC_ICC  !Unit Cost for Indoor Coil Copper
+REAL UC_ICA  !Unit Cost for Indoor Coil Aluminum
+REAL UC_OCC  !Unit Cost for Outdoor Coil Copper
+REAL UC_OCA  !Unit Cost for Outdoor Coil Aluminum
+REAL UC_Other    !Unit Cost for "Other"
+REAL Qu_Acc  !Accumulator Quantity
+REAL Qu_Com   !Compressor Quantity
+REAL Qu_Dis   !Distributor Quantity
+REAL Qu_FD    !Filter Drier Quantity
+REAL Qu_IF    !Indoor Fan Quantity
+REAL Qu_OF   !Outdoor Fan Quantity
+REAL Qu_IP    !Interconnecting Piping Quantity
+REAL Qu_RV    !Reversing Valve Quantity
+REAL Qu_STO  !Short Tube Orifice Quantity
+REAL Qu_TXV  !TXV Quantity
+REAL Qu_IC  !Indoor Coil Quantity
+REAL Qu_OC  !Outdoor Coil Quantity
+REAL Qu_Other    !Quantity of "Other"
+REAL TC_Acc  !Accumulator Total Cost
+REAL TC_Com   !Compressor Total Cost
+REAL TC_Dis  !Distributor Total Cost
+REAL TC_FD    !Filter Drier Total Cost
+REAL TC_IF    !Indoor Fan Total Cost
+REAL TC_OF    !Outdoor Fan Total Cost
+REAL TC_IP    !Interconnecting Piping Total Cost
+REAL TC_RV    !Reversing Valve Total Cost
+REAL TC_STO  !Short Tube Orifice Total Cost
+REAL TC_TXV  !TXV Total Cost
+REAL TC_IC  !Indoor Coil Total Cost
+REAL TC_OC  !Outdoor Coil Total Cost
+REAL TC_Other    !Total Cost of "Other"
+
+REAL TuningCurveIntercept
+REAL TuningCurveSlope
+
+INTEGER(2) : : UseAirHandlerData    !0 is FALSE, 1 is TRUE
+REAL AHD_Ton !Tonnage
+CHARACTER AHD_CM    !Coil Model
+CHARACTER AHD_AHM   !Air Handler Model
+
+REAL CCD_AC !A-Capacity
+REAL CCD_AP   !A-Power
+REAL CCD_ASP  !A-Suction Pressure
+REAL CCD_BC   !B-Capacity
+REAL CCD_BP   !B-Power
+REAL CCD_BSP  !B-Suction Pressure
+REAL CCD_ACS  !A-Capacity Slope
+REAL CCD_APS   !A-Power Slope
+REAL CCD_BCS  !B-Capacity Slope
+REAL CCD_BPS !B-Power Slope
+REAL CCD_ACI !A-Capacity Intercept
+REAL CCD_API !A-Power Intercept
+REAL CCD_BCI !B-Capacity Intercept
+REAL CCD_BPI !B-Power Intercept
+REAL CCD_ALT !A-Liquid Temperature
+
+REAL SC_mdot  !Mass Flow Rate Specified
+
+REAL GlycolCon    !Glycol Concentration
+CHARACTER GlycolNa  !Glycol Name
+REAL GlycolFR !Flow Rate
+REAL GlycolET !Entering Temperature
+REAL GlycolLT !Leaving Temperature
+REAL GlycolDP !Pressure Drop
+REAL GlycolTC !Total Charge
+
+CHARACTER GLE_RefrigerantLinE
+REAL GLE_TubeType
+REAL GLE_Length   !Refrigerant Line Length
+REAL GLE_Elev !Refrigerant Line Elevation
+REAL GLE_HeatLoss !Refrigerant Line Heat Loss
+REAL GLE_TempChange   !Refrigerant Line Temperature Change
+REAL GLE_Ktube    !Tube Conductivity
+REAL GLE_TubeID   !Tube Inside Diameter
+REAL GLE_TubeOD   !Tube Outside Diameter
+REAL GLE_ADP  !Additional Pressure Drop
+REAL GLE_Charge  !Charge in Line
+CHARACTER GLL_RefrigerantLine
+REAL GLL_TubeType
+REAL GLL_Length  !Refrigerant Line Length
+REAL GLL_Elev    !Refrigerant Line Elevation
+REAL GLL_HeatLoss    !Refrigerant Line Heat Loss
+REAL GLL_TempChange  !Refrigerant Line Temperature Change
+REAL GLL_Ktube   !Tube Conductivity
+REAL GLL_TubeID  !Tube Inside Diameter
+REAL GLL_TubeOD  !Tube Outside Diameter
+REAL GLL_ADP !Additional Pressure Drop
+REAL GLL_Charge  !Charge in Line
+
+CHARACTER PumpManufacturer
+CHARACTER PumpModel
+REAL PumpFlowRate
+REAL PumpPower
+
+CHARACTER BPHXCoil
+REAL BPHX_TCW !Total Coil Weight
+REAL BPHX_HPC !Hot Pass Capacity
+REAL BPHX_HPDP    !Hot Pass Pressure Drop
+REAL BPHX_HPDPM   !Hot Pass Pressure Drop Multiplier
+REAL BPHX_HPIV    !Hot Pass Internal Volume
+REAL BPHX_HPCh    !Hot Pass Charge
+REAL BPHX_CPC !Cold Pass Capacity
+REAL BPHX_CPDP    !Cold Pass Pressure Drop
+REAL BPHX_CPDPM   !Cold Pass Pressure Drop Multiplier
+REAL BPHX_CPIV   !Cold Pass Internal Volume
+REAL BPHX_CPCh   !Cold Pass Charge
+
+CHARACTER GLD_BPHXI_CyclePoint
+REAL GLD_BPHXI_Pressure
+REAL GLD_BPHXI_Temperature
+CHARACTER GLD_BPHXO_CyclePoint
+REAL GLD_BPHXO_Pressure
+REAL GLD_BPHXO_Temperature
+CHARACTER GLD_ICI_CyclePoint
+REAL GLD_ICI_Pressure
+REAL GLD_ICI_Temperature
+CHARACTER GLD_ICO_CyclePoint
+REAL GLD_ICO_Pressure
+REAL GLD_ICO_Temperature
+
 !Flow:
 
   ODC_SurfAbsorptivity=1
@@ -234,14 +623,14 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
     IsCoolingMode=1
   END SELECT
 
-  CoolingDesignCondition = Numbers(3)
-  HeatingDesignCondition = Numbers(4)
-  Subcooling = Numbers(5)
-  Superheat = Numbers(6)
+  CoolingDesignCondition = Numbers(3)   !Selected Cooling Design Condition
+  HeatingDesignCondition = Numbers(4)   !Selected Heating Design Condition
+  Subcooling = Numbers(5)   !Design Subcooling
+  Superheat = Numbers(6)    !Design Superheat
   
   RefrigerantName = Alphas(3)
   
-  NumofRefrigerants = Numbers(7)
+  NumofRefrigerants = Numbers(7)    !Number of Refrigerants in Blend
   NominalCoolingCapacity = Numbers(8)
   NominalHeatingCapacity = Numbers(9)
   ElectricHeating = Numbers(10)
@@ -252,9 +641,9 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   OutdoorEnteringWetbulbTemperature = Numbers(12)
   IndoorEnteringDrybulbTemperature = Numbers(13)
   IndoorEnteringWetbulbTemperature = Numbers(14)
-  DesignRefChg = Numbers(15)
-  RefChg = Numbers(16)
-  RefMassFlowRate = Numbers(17)
+  DesignRefChg = Numbers(15)    !Design Refrigerant Charge Mass
+  RefChg = Numbers(16)  !Refrigerant Charge Mass
+  RefMassFlowRate = Numbers(17) !Refrigerant Mass Flow Rate
   SystemEER = Numbers(18)
   SystemSEER = Numbers(19)
   SystemCOP = Numbers(20)
@@ -290,8 +679,6 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
 
   CompressorType = Alphas(3)
   Rref=Alphas(4)    !Compressor Refrigerant
-  
-  PureRref=PureRef
   
   CompressorPower = Numbers(1)
   CompressorHeatLossFraction = Numbers(2)
@@ -330,7 +717,6 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   UserSpecifiedRatingHeatingModeSuperheat = Numbers(32)
 
   
-
   !***************** Outdoor coil data *****************
   !DO I=1,3; READ(200,*); END DO
   
@@ -345,22 +731,22 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   ODC_FinName = Alphas(1)
   
   ODC_FinPitch = Numbers(2)
-  ODC_Kfin = Numbers(3)
-  ODC_FinThk = Numbers(4)
+  ODC_Kfin = Numbers(3) !Conductivity of Fin
+  ODC_FinThk = Numbers(4)   !Fin Thickness
   
   ODC_FinMaterial = Alphas(2)
   ODC_TubeName = Alphas(3)
   
-  ODC_TubeID = Numbers(5)
-  ODC_TubeOD = Numbers(6)
-  ODC_Ktube = Numbers(7)
-  ODC_Pl = Numbers(8)
-  ODC_Pt = Numbers(9)
-  ODC_Nl = Numbers(10)
-  ODC_Nt = Numbers(11)
-  ODC_Nckt = Numbers(12)
-  ODC_Nmod = Numbers(13)
-  ODC_Ltube = Numbers(14)
+  ODC_TubeID = Numbers(5)   !Tube Inner Diameter
+  ODC_TubeOD = Numbers(6)   !Tube Outer Diameter
+  ODC_Ktube = Numbers(7)    !Tube Conductivity
+  ODC_Pl = Numbers(8)   !Tube Lateral Spacing
+  ODC_Pt = Numbers(9)   !Tube Vertical Spacing
+  ODC_Nl = Numbers(10)  !Number of Rows
+  ODC_Nt = Numbers(11)  !Number of Tubes per Row
+  ODC_Nckt = Numbers(12)    !Number of Circuits
+  ODC_Nmod = Numbers(13)    !Number of Segments
+  ODC_Ltube = Numbers(14)   !Single Tube Length
   ODC_CoilAirPressureDrop = Numbers(15)
   ODC_CoilAirOutletDrybulbTemp = Numbers(16)
   ODC_CoilAirOutletWetbulbTemp = Numbers(17)
@@ -369,11 +755,11 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   ODC_CoilHeatTransferRate = Numbers(20)
   ODC_MassinCoil = Numbers(21)
   ODC_InternalVolume = Numbers(22)
-  ODC_hciMultiplier = Numbers(23)
-  ODC_DPrefMultiplier = Numbers(24)
-  ODC_hcoMultiplier = Numbers(25)
-  ODC_DPairMultiplier = Numbers(26)
-  ODC_CoilAirLeakage = Numbers(27)
+  ODC_hciMultiplier = Numbers(23)   !Ref Side Heat Transfer Multiplier
+  ODC_DPrefMultiplier = Numbers(24) !Ref Side Pressure Drop Multiplier
+  ODC_hcoMultiplier = Numbers(25)   !Air Side Heat Transfer Multiplier
+  ODC_DPairMultiplier = Numbers(26) !Air Side Pressure Drop Multiplier
+  ODC_CoilAirLeakage = Numbers(27)  !Air Leakage Around the Coil
 
 
   !***************** Outdoor fan data *****************
@@ -381,9 +767,9 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)   
   
-  PwrODfan = Numbers(1)
-  VdotODfan = Numbers(2)
-  ODdrawBlow = Numbers(3)
+  PwrODfan = Numbers(1) !Fan Power
+  VdotODfan = Numbers(2)    !Fan Air Flow Rate
+  ODdrawBlow = Numbers(3)   !Draw Through (1) or Blow Through (2)
 
 
     !Then we don't end up reading the separator *** line here, we just start with the next line
@@ -398,22 +784,22 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   IDC_FinName = Alphas(1)
   
   IDC_FinPitch = Numbers(2)
-  IDC_Kfin = Numbers(3)
-  IDC_FinThk = Numbers(4)
+  IDC_Kfin = Numbers(3) !Fin Conductivity
+  IDC_FinThk = Numbers(4)   !Fin Thickness
   
   IDC_FinMaterial = Alphas(2)
   IDC_TubeName = Alphas(3)
   
-  IDC_TubeID = Numbers(5)
-  IDC_TubeOD = Numbers(6)
-  IDC_Ktube = Numbers(7)
-  IDC_Pl = Numbers(8)
-  IDC_Pt = Numbers(9)
-  IDC_Nl = Numbers(10)
-  IDC_Nt = Numbers(11)
-  IDC_Nckt = Numbers(12)
-  IDC_Nmod = Numbers(13)
-  IDC_Ltube = Numbers(14)
+  IDC_TubeID = Numbers(5)   !Tube Inner Diameter
+  IDC_TubeOD = Numbers(6)   !Tube Outer Diameter
+  IDC_Ktube = Numbers(7)    !Tube Conductivity
+  IDC_Pl = Numbers(8)   !Tube Lateral Spacing
+  IDC_Pt = Numbers(9)   !Tube Vertical Spacing
+  IDC_Nl = Numbers(10)  !Number of Rows
+  IDC_Nt = Numbers(11)  !Number of Tubes Per Row
+  IDC_Nckt = Numbers(12)    !Number of Circuits
+  IDC_Nmod = Numbers(13)    !Number of Segments
+  IDC_Ltube = Numbers(14)   !Length of Tube
   IDC_CoilAirPressureDrop = Numbers(15)
   IDC_CoilAirOutletDrybulbTemperature = Numbers(16)
   IDC_CoilAirOutletWetbulbTemperature = Numbers(17)
@@ -422,11 +808,11 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   IDC_CoilHeatTransferRate = Numbers(20)
   IDC_MassinCoil = Numbers(21)
   IDC_InternalVolume = Numbers(22)
-  IDC_hciMultiplier = Numbers(23)
-  IDC_DPrefMultiplier = Numbers(24)
-  IDC_hcoMultiplier = Numbers(25)
-  IDC_DPairMultiplier = Numbers(26)
-  IDC_CoilAirLeakage = Numbers(27)
+  IDC_hciMultiplier = Numbers(23)   !Ref Side Heat Transfer Multiplier
+  IDC_DPrefMultiplier = Numbers(24) !Ref Side Pressure Drop Multiplier
+  IDC_hcoMultiplier = Numbers(25)   !Air Side Heat Transfer Multiplier
+  IDC_DPairMultiplier = Numbers(26) !Air Side Pressure Drop Multiplier
+  IDC_CoilAirLeakage = Numbers(27)  !Air Leakage Around the Coil
 
 
   !***************** Indoor fan data *****************
@@ -434,9 +820,9 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
   
-  PwrIDfan = Numbers(1)
-  VdotIDfan = Numbers(2)
-  IDdrawBlow = Numbers(3)
+  PwrIDfan = Numbers(1) !Fan Power
+  VdotIDfan = Numbers(2)    !Fan Air Flow Rate
+  IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
 
 
   !***************** Expansion device data *****************
@@ -526,6 +912,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   END IF
 
   HeatingDistubeLength = Numbers(16)
+  
   !IF (Unit .EQ. 1) THEN
   !  HeatingDistubeLength=HeatingDistubeLength/1000
   !ELSEIF (Unit .EQ. 2) THEN
@@ -671,7 +1058,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_ComSuc_Pressure = Numbers(1)
   RCDC_ComSuc_Enthalpy = Numbers(2)
   RCDC_ComSuc_Temperature = Numbers(3)
-  RCDC_ComSuc_Quality - Numbers(4)
+  RCDC_ComSuc_Quality = Numbers(4)
   RCDC_ComSuc_Superheat = Numbers(5)
   RCDC_ComSuc_Subcooling = Numbers(6)
   
@@ -682,7 +1069,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_ComDis_Pressure = Numbers(7)
   RCDC_ComDis_Enthalpy = Numbers(8)
   RCDC_ComDis_Temperature = Numbers(9)
-  RCDC_ComDis_Quality - Numbers(10)
+  RCDC_ComDis_Quality = Numbers(10)
   RCDC_ComDis_Superheat = Numbers(11)
   RCDC_ComDis_Subcooling = Numbers(12)
   
@@ -693,7 +1080,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_OCI_Pressure = Numbers(13)
   RCDC_OCI_Enthalpy = Numbers(14)
   RCDC_OCI_Temperature = Numbers(15)
-  RCDC_OCI_Quality - Numbers(16)
+  RCDC_OCI_Quality = Numbers(16)
   RCDC_OCI_Superheat = Numbers(17)
   RCDC_OCI_Subcooling = Numbers(18)
   
@@ -704,7 +1091,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_OCO_Pressure = Numbers(19)
   RCDC_OCO_Enthalpy = Numbers(20)
   RCDC_OCO_Temperature = Numbers(21)
-  RCDC_OCO_Quality - Numbers(22)
+  RCDC_OCO_Quality = Numbers(22)
   RCDC_OCO_Superheat = Numbers(23)
   RCDC_OCO_Subcooling = Numbers(24)
   
@@ -715,7 +1102,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_EDI_Pressure = Numbers(25)
   RCDC_EDI_Enthalpy = Numbers(26)
   RCDC_EDI_Temperature = Numbers(27)
-  RCDC_EDI_Quality - Numbers(28)
+  RCDC_EDI_Quality = Numbers(28)
   RCDC_EDI_Superheat = Numbers(29)
   RCDC_EDI_Subcooling = Numbers(30)
   
@@ -726,7 +1113,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_EDO_Pressure = Numbers(31)
   RCDC_EDO_Enthalpy = Numbers(32)
   RCDC_EDO_Temperature = Numbers(33)
-  RCDC_EDO_Quality - Numbers(34)
+  RCDC_EDO_Quality = Numbers(34)
   RCDC_EDO_Superheat = Numbers(35)
   RCDC_EDO_Subcooling = Numbers(36)
   
@@ -737,7 +1124,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_ICI_Pressure = Numbers(37)
   RCDC_ICI_Enthalpy = Numbers(38)
   RCDC_ICI_Temperature = Numbers(39)
-  RCDC_ICI_Quality - Numbers(40)
+  RCDC_ICI_Quality = Numbers(40)
   RCDC_ICI_Superheat = Numbers(41)
   RCDC_ICI_Subcooling = Numbers(42)
   
@@ -748,7 +1135,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDC_ICO_Pressure = Numbers(43)
   RCDC_ICO_Enthalpy = Numbers(44)
   RCDC_ICO_Temperature = Numbers(45)
-  RCDC_ICO_Quality - Numbers(46)
+  RCDC_ICO_Quality = Numbers(46)
   RCDC_ICO_Superheat = Numbers(47)
   RCDC_ICO_Subcooling = Numbers(48)
   
@@ -768,7 +1155,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_ComSuc_Pressure = Numbers(1)
   RCDH_ComSuc_Enthalpy = Numbers(2)
   RCDH_ComSuc_Temperature = Numbers(3)
-  RCDH_ComSuc_Quality - Numbers(4)
+  RCDH_ComSuc_Quality = Numbers(4)
   RCDH_ComSuc_Superheat = Numbers(5)
   RCDH_ComSuc_Subcooling = Numbers(6)
   
@@ -779,7 +1166,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_ComDis_Pressure = Numbers(7)
   RCDH_ComDis_Enthalpy = Numbers(8)
   RCDH_ComDis_Temperature = Numbers(9)
-  RCDH_ComDis_Quality - Numbers(10)
+  RCDH_ComDis_Quality = Numbers(10)
   RCDH_ComDis_Superheat = Numbers(11)
   RCDH_ComDis_Subcooling = Numbers(12)
   
@@ -790,7 +1177,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_OCI_Pressure = Numbers(13)
   RCDH_OCI_Enthalpy = Numbers(14)
   RCDH_OCI_Temperature = Numbers(15)
-  RCDH_OCI_Quality - Numbers(16)
+  RCDH_OCI_Quality = Numbers(16)
   RCDH_OCI_Superheat = Numbers(17)
   RCDH_OCI_Subcooling = Numbers(18)
   
@@ -801,7 +1188,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_OCO_Pressure = Numbers(19)
   RCDH_OCO_Enthalpy = Numbers(20)
   RCDH_OCO_Temperature = Numbers(21)
-  RCDH_OCO_Quality - Numbers(22)
+  RCDH_OCO_Quality = Numbers(22)
   RCDH_OCO_Superheat = Numbers(23)
   RCDH_OCO_Subcooling = Numbers(24)
   
@@ -812,7 +1199,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_EDI_Pressure = Numbers(25)
   RCDH_EDI_Enthalpy = Numbers(26)
   RCDH_EDI_Temperature = Numbers(27)
-  RCDH_EDI_Quality - Numbers(28)
+  RCDH_EDI_Quality = Numbers(28)
   RCDH_EDI_Superheat = Numbers(29)
   RCDH_EDI_Subcooling = Numbers(30)
   
@@ -823,7 +1210,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_EDO_Pressure = Numbers(31)
   RCDH_EDO_Enthalpy = Numbers(32)
   RCDH_EDO_Temperature = Numbers(33)
-  RCDH_EDO_Quality - Numbers(34)
+  RCDH_EDO_Quality = Numbers(34)
   RCDH_EDO_Superheat = Numbers(35)
   RCDH_EDO_Subcooling = Numbers(36)
   
@@ -834,7 +1221,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_ICI_Pressure = Numbers(37)
   RCDH_ICI_Enthalpy = Numbers(38)
   RCDH_ICI_Temperature = Numbers(39)
-  RCDH_ICI_Quality - Numbers(40)
+  RCDH_ICI_Quality = Numbers(40)
   RCDH_ICI_Superheat = Numbers(41)
   RCDH_ICI_Subcooling = Numbers(42)
   
@@ -845,7 +1232,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   RCDH_ICO_Pressure = Numbers(43)
   RCDH_ICO_Enthalpy = Numbers(44)
   RCDH_ICO_Temperature = Numbers(45)
-  RCDH_ICO_Quality - Numbers(46)
+  RCDH_ICO_Quality = Numbers(46)
   RCDH_ICO_Superheat = Numbers(47)
   RCDH_ICO_Subcooling = Numbers(48)
   
@@ -936,15 +1323,15 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   
   !---Fin---
   
-  MWD_FinIC = Numbers(1)
-  MWD_FinOC = Numbers(2)
+  MWD_FinIC = Numbers(1)    !Indoor Coil Fin
+  MWD_FinOC = Numbers(2)    !Outdoor Coil Fin
   
   !---Tube---
   
-  MWD_TubeIC = Numbers(3)
-  MWD_TubeOC = Numbers(4)
-  MWD_SucLn = Numbers(5)
-  MWD_DisLn = Numbers(6)
+  MWD_TubeIC = Numbers(3)   !Indoor Coil Tube
+  MWD_TubeOC = Numbers(4)   !Outdoor Coil Tunbe
+  MWD_SucLn = Numbers(5)    !Suction Line
+  MWD_DisLn = Numbers(6)    !Discharge Line
   MWD_RV_ICL = Numbers(7)   !Rev. Valve Indoor Coil Line
   MWD_RV_OCL = Numbers(8)   !Rev. Valve Outdoor Coil Line
   MWD_LiqLn = Numbers(9)
@@ -1131,6 +1518,134 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   CCD_BCI = Numbers(13) !B-Capacity Intercept
   CCD_BPI = Numbers(14) !B-Power Intercept
   CCD_ALT = Numbers(15) !A-Liquid Temperature
+  
+  !*************** Simulation Control **************
+  DO I=1,60; READ(200,*); END DO
+
+  CALL GetObjectItem('SimulationControl',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  SC_mdot = Numbers(1)  !Mass Flow Rate Specified
+  
+  
+  !*************** Glycol Data **************
+  DO I=1,60; READ(200,*); END DO
+
+  CALL GetObjectItem('GlycolData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  GlycolCon = Numbers(1)    !Glycol Concentration
+  
+  GlycolNa = Alphas(1)  !Glycol Name
+  
+  GlycolFR = Numbers(2) !Flow Rate
+  GlycolET = Numbers(3) !Entering Temperature
+  GlycolLT = Numbers(4) !Leaving Temperature
+  GlycolDP = Numbers(5) !Pressure Drop
+  GlycolTC = Numbers(6) !Total Charge
+  
+  !*************** Glycol Line Data **************
+  DO I=1,60; READ(200,*); END DO
+
+  CALL GetObjectItem('GlycolLineData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  !Entering Line
+  
+  GLE_RefrigerantLine = Alphas(1)
+  
+  GLE_TubeType = Numbers(1)
+  GLE_Length = Numbers(2)   !Refrigerant Line Length
+  GLE_Elev = Numbers(3) !Refrigerant Line Elevation
+  GLE_HeatLoss = Numbers(4) !Refrigerant Line Heat Loss
+  GLE_TempChange = Numbers(5)   !Refrigerant Line Temperature Change
+  GLE_Ktube = Numbers(6)    !Tube Conductivity
+  GLE_TubeID = Numbers(7)   !Tube Inside Diameter
+  GLE_TubeOD = Numbers(8)   !Tube Outside Diameter
+  GLE_ADP = Numbers(9)  !Additional Pressure Drop
+  GLE_Charge = Numbers(10)  !Charge in Line
+  
+  !Leaving Line
+  
+  GLL_RefrigerantLine = Alphas(2)
+  
+  GLL_TubeType = Numbers(11)
+  GLL_Length = Numbers(12)  !Refrigerant Line Length
+  GLL_Elev = Numbers(13)    !Refrigerant Line Elevation
+  GLL_HeatLoss = Numbers(14)    !Refrigerant Line Heat Loss
+  GLL_TempChange = Numbers(15)  !Refrigerant Line Temperature Change
+  GLL_Ktube = Numbers(16)   !Tube Conductivity
+  GLL_TubeID = Numbers(17)  !Tube Inside Diameter
+  GLL_TubeOD = Numbers(18)  !Tube Outside Diameter
+  GLL_ADP = Numbers(19) !Additional Pressure Drop
+  GLL_Charge = Numbers(20)  !Charge in Line
+  
+  !*************** Pump Data **************
+  DO I=1,5; READ(200,*); END DO
+
+  CALL GetObjectItem('PumpData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  PumpManufacturer = Alphas(1)
+  PumpModel = Alphas(2)
+  
+  PumpFlowRate = Numbers(1)
+  PumpPower = Numbers(2)
+  
+  !*************** BPHX Data **************
+  DO I=1,5; READ(200,*); END DO
+
+  CALL GetObjectItem('BPHXData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  BPHXCoil = Alphas(1)
+  
+  BPHX_TCW = Numbers(1) !Total Coil Weight
+  BPHX_HPC = Numbers(2) !Hot Pass Capacity
+  BPHX_HPDP = Numbers(3)    !Hot Pass Pressure Drop
+  BPHX_HPDPM = Numbers(4)   !Hot Pass Pressure Drop Multiplier
+  BPHX_HPIV = Numbers(5)    !Hot Pass Internal Volume
+  BPHX_HPCh = Numbers(6)    !Hot Pass Charge
+  BPHX_CPC = Numbers(7) !Cold Pass Capacity
+  BPHX_CPDP = Numbers(8)    !Cold Pass Pressure Drop
+  BPHX_CPDPM = Numbers(9)   !Cold Pass Pressure Drop Multiplier
+  BPHX_CPIV = Numbers(10)   !Cold Pass Internal Volume
+  BPHX_CPCh = Numbers(11)   !Cold Pass Charge
+  
+  !*************** Glycol Loop Data **************
+  DO I=1,5; READ(200,*); END DO
+
+  CALL GetObjectItem('GlycolLoopData',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+  
+  !BPHX Inlet
+  
+  GLD_BPHXI_CyclePoint = Alphas(1)
+  
+  GLD_BPHXI_Pressure = Numbers(1)
+  GLD_BPHXI_Temperature = Numbers(2)
+  
+  !BPHX Outlet
+  
+  GLD_BPHXO_CyclePoint = Alphas(2)
+  
+  GLD_BPHXO_Pressure = Numbers(3)
+  GLD_BPHXO_Temperature = Numbers(4)
+  
+  !Indoor Coil Inlet
+  
+  GLD_ICI_CyclePoint = Alphas(3)
+  
+  GLD_ICI_Pressure = Numbers(5)
+  GLD_ICI_Temperature = Numbers(6)
+  
+  !Indoor Coil Outlet
+  
+  GLD_ICO_CyclePoint = Alphas(4)
+  
+  GLD_ICO_Pressure = Numbers(7)
+  GLD_ICO_Temperature = Numbers(8)
+  
   
 !  DO I=1,23; READ(200,*); END DO
 !  READ(200,202)LineData
