@@ -345,7 +345,6 @@ SUBROUTINE ProcessInput
 
    INQUIRE(file=FileName,EXIST=FileExists)
    IF (.not. FileExists) THEN
-
       CALL ShowFatalError('Refrigerant Input file missing. Program terminates.')
    ENDIF
 

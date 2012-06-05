@@ -634,6 +634,7 @@ REAL :: SystemCost
   Superheat = Numbers(6)    !Design Superheat
   
   RefrigerantName = Alphas(3)
+  Ref$=RefrigerantName
   
   NumofRefrigerants = Numbers(7)    !Number of Refrigerants in Blend
   NominalCoolingCapacity = Numbers(8)

@@ -98,6 +98,8 @@
 
 
     !Flow**:
+    
+    CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
     FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
@@ -219,7 +221,7 @@
         CondOut=0.0
 
         IF (RHiC .GT. TaiC) THEN
-            WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperatuer is greater than dry bulb temperature.'
+            WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.'
             !WRITE(*,*)'Press return to terminate program.'
             !READ(*,*)
             ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -236,7 +238,7 @@
         CondIN(6)=RHiC                    ! VL_Index_Replace
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
-            WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperatuer is greater than dry bulb temperature.'
+            WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.'
             !WRITE(*,*)'Press return to terminate program.'
             !READ(*,*)
             ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -257,7 +259,7 @@
         Quality=1	! VL_User_Setting
         PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'## ERROR ## Main: Refrigernat property is out of bound!'
+            WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
             !WRITE(*,*)'Press return to terminate program.'
             !READ(*,*)
             ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -274,7 +276,7 @@
         Quality=1	! VL_User_Setting
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'## ERROR ## Main: Refrigernat property is out of bound!'
+            WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
             !WRITE(*,*)'Press return to terminate program.'
             !READ(*,*)
             ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -289,7 +291,7 @@
             Pressure=PiCmp*1000
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
             IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## Main: Refrigernat property is out of bound!'
+                WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
                 !WRITE(*,*)'Press return to terminate program.'
                 !READ(*,*)
                 ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -302,7 +304,7 @@
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
             IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## Main: Refrigernat property is out of bound!'
+                WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
                 !WRITE(*,*)'Press return to terminate program.'
                 !READ(*,*)
                 ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
