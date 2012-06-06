@@ -118,7 +118,7 @@ INTEGER   :: Flag
       WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
       !WRITE(*,*)'Press return to terminate program'
       !READ(*,*)
-      CALL SLEEP(300) !Wait for 5 minutes and stop
+      !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 	  STOP
   END IF
   PiCmp=PiCmp/1000
@@ -131,7 +131,7 @@ INTEGER   :: Flag
 		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 		  !WRITE(*,*)'Press return to terminate program'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
       END IF
 	  HiCmp=HiCmp/1000
@@ -144,7 +144,7 @@ INTEGER   :: Flag
 		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 		  !WRITE(*,*)'Press return to terminate program'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
       END IF
 	  HiCmp=HiCmp/1000
@@ -153,7 +153,7 @@ INTEGER   :: Flag
 		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 		  !WRITE(*,*)'Press return to terminate program'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
       END IF
   END IF
@@ -177,7 +177,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 
@@ -186,7 +186,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 
@@ -196,7 +196,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
     
@@ -215,7 +215,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
  			  STOP
 		  END IF
 		  HoEvp=HoEvp/1000
@@ -227,7 +227,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 
@@ -237,7 +237,7 @@ INTEGER   :: Flag
 			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 
@@ -353,7 +353,7 @@ INTEGER   :: Flag
 		  WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
 		  !WRITE(*,*)'Press return to terminate program'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
       END IF
 	  FirstTimeFlowRateLoop=.FALSE.
@@ -454,7 +454,7 @@ INTEGER   :: Flag
 		  CASE (3,4,5)
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END SELECT
 		END IF
@@ -599,7 +599,7 @@ INTEGER   :: Flag
 		  IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
 		  !WRITE(*,*)'Press return to terminate program'
 		  !READ(*,*)
-		  CALL SLEEP(300) !Wait for 5 minutes and stop
+		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 		  STOP
 	  END IF
 
@@ -690,7 +690,7 @@ INTEGER   :: Flag
 			  IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 

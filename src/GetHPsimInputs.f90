@@ -2238,7 +2238,7 @@ REAL :: SystemCost
 	  WRITE(*,*)'Outdoor coil file missing.'
       !WRITE(*,*)'Press return to terminate program.'
 	  !READ(*,*)
-	  CALL SLEEP(300) !Wait for 5 minutes and stop
+	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 	  STOP
   END IF
 
@@ -2247,7 +2247,7 @@ REAL :: SystemCost
 	  WRITE(*,*)'Outdoor coil file error.'
       !WRITE(*,*)'Press return to terminate program.'
 	  !READ(*,*)
-	  CALL SLEEP(300) !Wait for 5 minutes and stop
+	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 	  STOP
   END IF
 
@@ -2274,7 +2274,7 @@ REAL :: SystemCost
 	  WRITE(*,*)'Indoor coil file missing.'
       !WRITE(*,*)'Press return to terminate program.'
 	  !READ(*,*)
-	  CALL SLEEP(300) !Wait for 5 minutes and stop
+	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 	  STOP
   END IF
 
@@ -2283,7 +2283,7 @@ REAL :: SystemCost
 	  WRITE(*,*)'Indoor coil file error.'
       !WRITE(*,*)'Press return to terminate program.'
 	  !READ(*,*)
-	  CALL SLEEP(300) !Wait for 5 minutes and stop
+	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 	  STOP
   END IF
 

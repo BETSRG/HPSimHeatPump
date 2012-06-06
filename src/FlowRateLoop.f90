@@ -261,13 +261,13 @@ REAL, SAVE:: PrevTime = 0.0
           CASE (3)
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
           CASE (4,5)
 			  WRITE(*,*)'## ERROR ## Highside: Coil geometry misdefined.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  CASE (8) !Too much pressure drop
 			  WRITE(*,*)'Trying another iterating value....'
@@ -352,7 +352,7 @@ REAL, SAVE:: PrevTime = 0.0
 			  IF (PrnLog .EQ. 1) WRITE(6,*)'Try another condenser or compressor.'
 			  !WRITE(*,*)'Press return to terminate program'
 			  !READ(*,*)
-			  CALL SLEEP(300) !Wait for 5 minutes and stop
+			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			  STOP
 		  END IF
 	  	  IERR=2
@@ -453,7 +453,7 @@ REAL, SAVE:: PrevTime = 0.0
 			      IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
 			      !WRITE(*,*)'Press return to terminate program'
 			      !READ(*,*)
-			      CALL SLEEP(300) !Wait for 5 minutes and stop
+			      !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
 			      STOP
 		      CASE (2)
 			      WRITE(*,*)'Trying another iterating value....'
