@@ -346,7 +346,6 @@ REAL RCDC_OCO_Subcooling
 CHARACTER(len=MaxNameLength)RCDC_EDI_CyclePoint
 REAL RCDC_EDI_Pressure
 REAL RCDC_EDI_Enthalpy
-REAL RCDC_EDI_Temperature
 REAL RCDC_EDI_Quality
 REAL RCDC_EDI_Superheat
 REAL RCDC_EDI_Subcooling
@@ -382,7 +381,6 @@ REAL RCDH_ComSuc_Subcooling
 CHARACTER(len=MaxNameLength)RCDH_ComDis_CyclePoint
 REAL RCDH_ComDis_Pressure
 REAL RCDH_ComDis_Enthalpy
-REAL RCDH_ComDis_Temperature
 REAL RCDH_ComDis_Quality
 REAL RCDH_ComDis_Superheat
 REAL RCDH_ComDis_Subcooling
@@ -430,11 +428,9 @@ REAL RCDH_ICO_Superheat
 REAL RCDH_ICO_Subcooling
 CHARACTER(len=MaxNameLength)RCDH_OCckt    !Outdoor Coil Ckt
 CHARACTER(len=MaxNameLength)RCDH_ICckt   !Indoor Coil Ckt
-REAL RCDH_Bar_Press  !Barometric Pressure
 REAL RCDH_Com_Chg    !Charge in Compressor
 REAL RCDH_DistC_Chg  !Charge in Distributor Tube (Cooling)
 REAL RCDH_DistH_Chg  !Charge in Distributor Tube (Heating)
-REAL RCDH_Com_AS !Is Compressor in Air Stream
 
 CHARACTER(len=MaxNameLength)Acc_Manufacturer
 CHARACTER(len=MaxNameLength)Acc_Model
@@ -737,30 +733,31 @@ REAL :: SystemCost
   
   ODC_FinMaterial = Alphas(2)
   ODC_TubeName = Alphas(3)
-  
-  ODC_TubeID = Numbers(5)   !Tube Inner Diameter
-  ODC_TubeOD = Numbers(6)   !Tube Outer Diameter
-  ODC_Ktube = Numbers(7)    !Tube Conductivity
-  ODC_Pl = Numbers(8)   !Tube Lateral Spacing
-  ODC_Pt = Numbers(9)   !Tube Vertical Spacing
-  ODC_Nl = Numbers(10)  !Number of Rows
-  ODC_Nt = Numbers(11)  !Number of Tubes per Row
-  ODC_Nckt = Numbers(12)    !Number of Circuits
-  ODC_Nmod = Numbers(13)    !Number of Segments
-  ODC_Ltube = Numbers(14)   !Single Tube Length
-  ODC_CoilAirPressureDrop = Numbers(15)
-  ODC_CoilAirOutletDrybulbTemp = Numbers(16)
-  ODC_CoilAirOutletWetbulbTemp = Numbers(17)
-  ODC_CoilAirOutletRelativeHumidity = Numbers(18)
-  ODC_CoilAirFaceVelocity = Numbers(19)
-  ODC_CoilHeatTransferRate = Numbers(20)
-  ODC_MassinCoil = Numbers(21)
-  ODC_InternalVolume = Numbers(22)
-  ODC_hciMultiplier = Numbers(23)   !Ref Side Heat Transfer Multiplier
-  ODC_DPrefMultiplier = Numbers(24) !Ref Side Pressure Drop Multiplier
-  ODC_hcoMultiplier = Numbers(25)   !Air Side Heat Transfer Multiplier
-  ODC_DPairMultiplier = Numbers(26) !Air Side Pressure Drop Multiplier
-  ODC_CoilAirLeakage = Numbers(27)  !Air Leakage Around the Coil
+
+  ODC_TubeType = Numbers(5) !Numerical Denotion of Tube Type
+  ODC_TubeID = Numbers(6)   !Tube Inner Diameter
+  ODC_TubeOD = Numbers(7)   !Tube Outer Diameter
+  ODC_Ktube = Numbers(8)    !Tube Conductivity
+  ODC_Pl = Numbers(9)   !Tube Lateral Spacing
+  ODC_Pt = Numbers(10)   !Tube Vertical Spacing
+  ODC_Nl = Numbers(11)  !Number of Rows
+  ODC_Nt = Numbers(12)  !Number of Tubes per Row
+  ODC_Nckt = Numbers(13)    !Number of Circuits
+  ODC_Nmod = Numbers(14)    !Number of Segments
+  ODC_Ltube = Numbers(15)   !Single Tube Length
+  ODC_CoilAirPressureDrop = Numbers(16)
+  ODC_CoilAirOutletDrybulbTemp = Numbers(17)
+  ODC_CoilAirOutletWetbulbTemp = Numbers(18)
+  ODC_CoilAirOutletRelativeHumidity = Numbers(19)
+  ODC_CoilAirFaceVelocity = Numbers(20)
+  ODC_CoilHeatTransferRate = Numbers(21)
+  ODC_MassinCoil = Numbers(22)
+  ODC_InternalVolume = Numbers(23)
+  ODC_hciMultiplier = Numbers(24)   !Ref Side Heat Transfer Multiplier
+  ODC_DPrefMultiplier = Numbers(25) !Ref Side Pressure Drop Multiplier
+  ODC_hcoMultiplier = Numbers(26)   !Air Side Heat Transfer Multiplier
+  ODC_DPairMultiplier = Numbers(27) !Air Side Pressure Drop Multiplier
+  ODC_CoilAirLeakage = Numbers(28)  !Air Leakage Around the Coil
 
 
   !***************** Outdoor fan data *****************
@@ -791,29 +788,35 @@ REAL :: SystemCost
   IDC_FinMaterial = Alphas(2)
   IDC_TubeName = Alphas(3)
   
-  IDC_TubeID = Numbers(5)   !Tube Inner Diameter
-  IDC_TubeOD = Numbers(6)   !Tube Outer Diameter
-  IDC_Ktube = Numbers(7)    !Tube Conductivity
-  IDC_Pl = Numbers(8)   !Tube Lateral Spacing
-  IDC_Pt = Numbers(9)   !Tube Vertical Spacing
-  IDC_Nl = Numbers(10)  !Number of Rows
-  IDC_Nt = Numbers(11)  !Number of Tubes Per Row
-  IDC_Nckt = Numbers(12)    !Number of Circuits
-  IDC_Nmod = Numbers(13)    !Number of Segments
-  IDC_Ltube = Numbers(14)   !Length of Tube
-  IDC_CoilAirPressureDrop = Numbers(15)
-  IDC_CoilAirOutletDrybulbTemperature = Numbers(16)
-  IDC_CoilAirOutletWetbulbTemperature = Numbers(17)
-  IDC_CoilAirOutletRelativeHumidity = Numbers(18)
-  IDC_CoilAirFaceVelocity = Numbers(19)
-  IDC_CoilHeatTransferRate = Numbers(20)
-  IDC_MassinCoil = Numbers(21)
-  IDC_InternalVolume = Numbers(22)
-  IDC_hciMultiplier = Numbers(23)   !Ref Side Heat Transfer Multiplier
-  IDC_DPrefMultiplier = Numbers(24) !Ref Side Pressure Drop Multiplier
-  IDC_hcoMultiplier = Numbers(25)   !Air Side Heat Transfer Multiplier
-  IDC_DPairMultiplier = Numbers(26) !Air Side Pressure Drop Multiplier
-  IDC_CoilAirLeakage = Numbers(27)  !Air Leakage Around the Coil
+  IDC_TubeType = Numbers(5) !Numerical Denotion of the tube type
+  IDC_TubeID = Numbers(6)   !Tube Inner Diameter
+  IDC_TubeOD = Numbers(7)   !Tube Outer Diameter
+  IDC_Ktube = Numbers(8)    !Tube Conductivity
+  IDC_Pl = Numbers(9)   !Tube Lateral Spacing
+  IDC_Pt = Numbers(10)   !Tube Vertical Spacing
+  IDC_Nl = Numbers(11)  !Number of Rows
+  IDC_Nt = Numbers(12)  !Number of Tubes Per Row
+  IDC_Nckt = Numbers(13)    !Number of Circuits
+  IDC_Nmod = Numbers(14)    !Number of Segments
+  IDC_Ltube = Numbers(15)   !Length of Tube
+  IDC_CoilAirPressureDrop = Numbers(16)
+  IDC_CoilAirOutletDrybulbTemperature = Numbers(17)
+  IDC_CoilAirOutletWetbulbTemperature = Numbers(18)
+  IDC_CoilAirOutletRelativeHumidity = Numbers(19)
+  IDC_CoilAirFaceVelocity = Numbers(20)
+  IDC_CoilHeatTransferRate = Numbers(21)
+  IDC_MassinCoil = Numbers(22)
+  IDC_InternalVolume = Numbers(23)
+  IDC_hciMultiplier = Numbers(24)   !Ref Side Heat Transfer Multiplier
+  IDC_DPrefMultiplier = Numbers(25) !Ref Side Pressure Drop Multiplier
+  IDC_hcoMultiplier = Numbers(26)   !Air Side Heat Transfer Multiplier
+  IDC_DPairMultiplier = Numbers(27) !Air Side Pressure Drop Multiplier
+  IDC_CoilAirLeakage = Numbers(28)  !Air Leakage Around the Coil
+
+  !Tube wall thickness, mm or mil
+  IDC_TubeThk=(IDC_TubeOD-IDC_TubeID)/2
+  !IF (Unit .EQ. 2) IDC_TubeThk=IDC_TubeThk*1000  !ISI - 07/14/06
+  IF (Unit .EQ. IP) IDC_TubeThk=IDC_TubeThk*1000 
 
 
   !***************** Indoor fan data *****************
@@ -1084,7 +1087,7 @@ REAL :: SystemCost
   
   RCDC_EDI_Pressure = Numbers(25)
   RCDC_EDI_Enthalpy = Numbers(26)
-  RCDC_EDI_Temperature = Numbers(27)
+  Tliq = Numbers(27)    !Inlet Temperature
   RCDC_EDI_Quality = Numbers(28)
   RCDC_EDI_Superheat = Numbers(29)
   RCDC_EDI_Subcooling = Numbers(30)
@@ -1146,7 +1149,7 @@ REAL :: SystemCost
   
   RCDH_ComDis_Pressure = Numbers(7)
   RCDH_ComDis_Enthalpy = Numbers(8)
-  RCDH_ComDis_Temperature = Numbers(9)
+  Tdis = Numbers(9)  !Discharge Temperature
   RCDH_ComDis_Quality = Numbers(10)
   RCDH_ComDis_Superheat = Numbers(11)
   RCDH_ComDis_Subcooling = Numbers(12)
@@ -1220,11 +1223,11 @@ REAL :: SystemCost
   RCDH_OCckt = Alphas(9)    !Outdoor Coil Ckt
   RCDH_ICckt = Alphas(10)   !Indoor Coil Ckt
   
-  RCDH_Bar_Press = Numbers(49)  !Barometric Pressure
+  BaroPressure = Numbers(49)  !Barometric Pressure
   RCDH_Com_Chg = Numbers(50)    !Charge in Compressor
   RCDH_DistC_Chg = Numbers(51)  !Charge in Distributor Tube (Cooling)
   RCDH_DistH_Chg = Numbers(52)  !Charge in Distributor Tube (Heating)
-  RCDH_Com_AS = Numbers(53) !Is Compressor in Air Stream
+  IsCmpInAirStream = Numbers(53) !Is Compressor in Air Stream
   
 
   !Liquid temperature, ISI - 02/08/08

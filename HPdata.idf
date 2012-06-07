@@ -66,7 +66,8 @@ CompressorData,
     1, !field Power Multiplier [-]
     1, !field Mass Flow Rate Multiplier [-]
     30, !field User Specified Rating Evap. Temperature [°F]
-    10, !field User Specified Ratingh Subcooling [R]
+    120, !field User Specified Rating Cond. Temperature [°F]
+    10, !field User Specified Rating Subcooling [R]
     10, !field User Specified Rating Superheat [R]
     10, !field User Specified Rating (Heating Mode) Subcooling [R]
     10; !field User Specified Rating (Heating Mode) Superheat [R]
@@ -78,7 +79,8 @@ OutdoorCoilData,
     1539, !field Fin Conductivity [Btu.in!h.ft².F]
     3.9, !field Fin thickness [thou]
     Aluminum, !field Fin Material
-    Coil Tube: 3/8 0.012 thick Expanded:4, !field Tube Name
+    Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
+    4, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
@@ -115,7 +117,8 @@ IndoorCoilData,
     1539, !field Fin Conductivity [Btu.in!h.ft².F]
     3.9, !field Fin Thickness [thou]
     Aluminum, !field Fin Material
-    Coil tube: 3/8 0.012 thick Expanded: 6, !field Tube Name
+    Coil tube: 3/8 0.012 thick Expanded, !field Tube Name
+    6, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
     2724, !field Tube Conductivity [Btu.in!h.ft².F]

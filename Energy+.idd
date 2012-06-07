@@ -83,29 +83,30 @@ OutdoorCoilData,
     N4, \field Fin thickness [thou]
     A2, \field Fin Material
     A3, \field Tube Name
-    N5, \field Tube ID [in]
-    N6, \field Tube OD [in]
-    N7, \field Tube Conductivity [Btu.in\h.ft².F]
-    N8, \field Tube Lateral Spacing [in]
-    N9, \field Tube Vertical Spacing [in]
-    N10, \field Number of Rows
-    N11, \field Number of Tubes Per Row
-    N12, \field Number of Circuits
-    N13, \field Number of Segments
-    N14, \field Single Tube Length [in]
-    N15, \field Coil Air Pressure Drop [in.wg]
-    N16, \field Coil Air Outlet Drybulb Temperature [°F]
-    N17, \field Coil Air Outlet Wetbulb Temperature [°F]
-    N18, \field Coil Air Outlet Relative Humidity [-]
-    N19, \field Coil Air Face Velocity [fpm]
-    N20, \field Coil Heat Transfer Rate [Btu\h]
-    N21, \field Mass in Coil [lbm]
-    N22, \field Internal Volume [in³]
-    N23, \field Ref Side Heat Transfer Multiplier [-]
-    N24, \field Ref Side Pressure Drop Multiplier [-]
-    N25, \field Air Side Heat Transfer Multiplier [-]
-    N26, \field Air Side Pressure Drop Multiplier [-]
-    N27; \field Air Leakage Around the Coil [-]
+    N5, \field Tube Type
+    N6, \field Tube ID [in]
+    N7, \field Tube OD [in]
+    N8, \field Tube Conductivity [Btu.in\h.ft².F]
+    N9, \field Tube Lateral Spacing [in]
+    N10, \field Tube Vertical Spacing [in]
+    N11, \field Number of Rows
+    N12, \field Number of Tubes Per Row
+    N13, \field Number of Circuits
+    N14, \field Number of Segments
+    N15, \field Single Tube Length [in]
+    N16, \field Coil Air Pressure Drop [in.wg]
+    N17, \field Coil Air Outlet Drybulb Temperature [°F]
+    N18, \field Coil Air Outlet Wetbulb Temperature [°F]
+    N19, \field Coil Air Outlet Relative Humidity [-]
+    N20, \field Coil Air Face Velocity [fpm]
+    N21, \field Coil Heat Transfer Rate [Btu\h]
+    N22, \field Mass in Coil [lbm]
+    N23, \field Internal Volume [in³]
+    N24, \field Ref Side Heat Transfer Multiplier [-]
+    N25, \field Ref Side Pressure Drop Multiplier [-]
+    N26, \field Air Side Heat Transfer Multiplier [-]
+    N27, \field Air Side Pressure Drop Multiplier [-]
+    N28; \field Air Leakage Around the Coil [-]
 
 OutdoorFanData,
     N1, \field Fan Power [W]
@@ -120,29 +121,30 @@ IndoorCoilData,
     N4, \field Fin Thickness [thou]
     A2, \field Fin Material
     A3, \field Tube Name
-    N5, \field Tube ID [in]
-    N6, \field Tube OD [in]
-    N7, \field Tube Conductivity [Btu.in\h.ft².F]
-    N8, \field Tube Lateral Spacing [in]
-    N9, \field Tube Vertical Spacing [in]
-    N10, \field Number of Rows
-    N11, \field Number of Tubes Per Row
-    N12, \field Number of Circuits
-    N13, \field Number of Segments
-    N14, \field Single Tube Length [in]
-    N15, \field Coil Air Pressure Drop [in.wg]
-    N16, \field Coil Air Outlet Drybulb Temperature [°F]
-    N17, \field Coil Air Outlet Wetbulb Temperature [°F]
-    N18, \field Coil Air Outlet Relative Humidity [-]
-    N19, \field Coil Air Face Velocity [fpm]
-    N20, \field Coil Heat Transfer Rate [Btu\h]
-    N21, \field Mass in Coil [lbm]
-    N22, \field Internal Volume [in³]
-    N23, \field Ref Side Heat Transfer Multiplier [-]
-    N24, \field Ref Side Pressure Drop Multiplier [-]
-    N25, \field Air Side Heat Transfer Multiplier [-]
-    N26, \field Air Side Pressure Drop Multiplier [-]
-    N27; \field Air Leakage Around the Coil [-]
+    N5, \field Tube Type
+    N6, \field Tube ID [in]
+    N7, \field Tube OD [in]
+    N8, \field Tube Conductivity [Btu.in\h.ft².F]
+    N9, \field Tube Lateral Spacing [in]
+    N10, \field Tube Vertical Spacing [in]
+    N11, \field Number of Rows
+    N12, \field Number of Tubes Per Row
+    N13, \field Number of Circuits
+    N14, \field Number of Segments
+    N15, \field Single Tube Length [in]
+    N16, \field Coil Air Pressure Drop [in.wg]
+    N17, \field Coil Air Outlet Drybulb Temperature [°F]
+    N18, \field Coil Air Outlet Wetbulb Temperature [°F]
+    N19, \field Coil Air Outlet Relative Humidity [-]
+    N20, \field Coil Air Face Velocity [fpm]
+    N21, \field Coil Heat Transfer Rate [Btu\h]
+    N22, \field Mass in Coil [lbm]
+    N23, \field Internal Volume [in³]
+    N24, \field Ref Side Heat Transfer Multiplier [-]
+    N25, \field Ref Side Pressure Drop Multiplier [-]
+    N26, \field Air Side Heat Transfer Multiplier [-]
+    N27, \field Air Side Pressure Drop Multiplier [-]
+    N28; \field Air Leakage Around the Coil [-]
 
 IndoorFanData,
     N1, \field Fan Power [W]
