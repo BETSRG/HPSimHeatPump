@@ -112,10 +112,10 @@ IndoorCoilData,
     4, !field Fin Type
     York 11-elmt, !field Fin Name
     12, !field Fin Pitch [FPI]
-    1359, !field Fin Conductivity [Btu.in!h.ft².F]
+    1539, !field Fin Conductivity [Btu.in!h.ft².F]
     3.9, !field Fin Thickness [thou]
     Aluminum, !field Fin Material
-    Coil tube: 3/8 0.012 thick Expanded,6, !field Tube Name
+    Coil tube: 3/8 0.012 thick Expanded: 6, !field Tube Name
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
@@ -124,6 +124,7 @@ IndoorCoilData,
     3, !field Number of Rows
     40, !field Number of Tubes Per Row
     6, !field Number of Circuits
+    1, !field Number of Segments
     17.5, !field Single Tube Length [in]
     0.117, !field Coil Air Pressure Drop [in.wg]
     100.28, !field Coil Air Outlet Drybulb Temperature [°F]
@@ -218,6 +219,7 @@ RefrigerantLineData,
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Temperature Change [R]
     2724, !field Tube Condcutivity [Btu.in!h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
