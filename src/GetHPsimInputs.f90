@@ -212,8 +212,8 @@ REAL OutdoorEnteringDrybulbTemperature
 REAL OutdoorEnteringWetbulbTemperature
 REAL IndoorEnteringDrybulbTemperature
 REAL IndoorEnteringWetbulbTemperature
-REAL DesignRefChg    !Design Refrigerant Charge Mass
-REAL RefChg  !Refrigerant Charge Mass
+REAL RefChg    !Design Refrigerant Charge Mass
+REAL RefChgMass  !Refrigerant Charge Mass
 REAL RefMassFlowRate !Refrigerant Mass Flow Rate
 REAL SystemEER
 REAL SystemSEER
@@ -639,12 +639,12 @@ REAL :: SystemCost
   
   DesignConditionDescription = Alphas(4)
   
-  OutdoorEnteringDrybulbTemperature = Numbers(11)
-  OutdoorEnteringWetbulbTemperature = Numbers(12)
-  IndoorEnteringDrybulbTemperature = Numbers(13)
-  IndoorEnteringWetbulbTemperature = Numbers(14)
-  DesignRefChg = Numbers(15)    !Design Refrigerant Charge Mass
-  RefChg = Numbers(16)  !Refrigerant Charge Mass
+  TAic = Numbers(11) !OutdoorEnteringDrybulbTemperature
+  RHiC = Numbers(12) !OutdoorEnteringWetbulbTemperature
+  TAie = Numbers(13) !IndoorEnteringDrybulbTemperature
+  RHiE = Numbers(14) !IndoorEnteringWetbulbTemperature
+  RefChg = Numbers(15)    !Design Refrigerant Charge Mass
+  RefChgMass = Numbers(16)  !Refrigerant Charge Mass
   RefMassFlowRate = Numbers(17) !Refrigerant Mass Flow Rate
   SystemEER = Numbers(18)
   SystemSEER = Numbers(19)
@@ -680,38 +680,38 @@ REAL :: SystemCost
   Rref=Alphas(4)    !Compressor Refrigerant
   
   CompressorPower = Numbers(1)
-  CompressorHeatLossFraction = Numbers(2)
-  CompressorHeatLoss = Numbers(3)
-  CompressorVolume = Numbers(4)
-  CompressorMassCoefficient1 = Numbers(5)
-  CompressorMassCoefficient2 = Numbers(6)
-  CompressorMassCoefficient3 = Numbers(7)
-  CompressorMassCoefficient4 = Numbers(8)
-  CompressorMassCoefficient5 = Numbers(9)
-  CompressorMassCoefficient6 = Numbers(10)
-  CompressorMassCoefficient7 = Numbers(11)
-  CompressorMassCoefficient8 = Numbers(12)
-  CompressorMassCoefficient9 = Numbers(13)
-  CompressorMassCoefficient10 = Numbers(14)
-  CompressorPowerCoefficient1 = Numbers(15)
-  CompressorPowerCoefficient2 = Numbers(16)
-  CompressorPowerCoefficient3 = Numbers(17)
-  CompressorPowerCoefficient4 = Numbers(18)
-  CompressorPowerCoefficient5 = Numbers(19)
-  CompressorPowerCoefficient6 = Numbers(20)
-  CompressorPowerCoefficient7 = Numbers(21)
-  CompressorPowerCoefficient8 = Numbers(22)
-  CompressorPowerCoefficient9 = Numbers(23)
-  CompressorPowerCoefficient10 = Numbers(24)
+  CompPAR(21) = Numbers(2) !CompressorHeatLossFraction
+  CompPAR(22) = Numbers(3) !CompressorHeatLoss
+  CompPAR(23) = Numbers(4) !CompressorVolume
+  CompPAR(11) = Numbers(5) !CompressorMassCoefficient1
+  CompPAR(12) = Numbers(6) !CompressorMassCoefficient2
+  CompPAR(13) = Numbers(7) !CompressorMassCoefficient3
+  CompPAR(14) = Numbers(8) !CompressorMassCoefficient4
+  CompPAR(15) = Numbers(9) !CompressorMassCoefficient5
+  CompPAR(16) = Numbers(10) !CompressorMassCoefficient6
+  CompPAR(17) = Numbers(11) !CompressorMassCoefficient7
+  CompPAR(18) = Numbers(12) !CompressorMassCoefficient8
+  CompPAR(19) = Numbers(13) !CompressorMassCoefficient9
+  CompPAR(20) = Numbers(14) !CompressorMassCoefficient10
+  CompPAR(1) = Numbers(15) !CompressorPowerCoefficient1
+  CompPAR(2) = Numbers(16) !CompressorPowerCoefficient2
+  CompPAR(3) = Numbers(17) !CompressorPowerCoefficient3
+  CompPAR(4) = Numbers(18) !CompressorPowerCoefficient4
+  CompPAR(5) = Numbers(19) !CompressorPowerCoefficient5
+  CompPAR(6) = Numbers(20) !CompressorPowerCoefficient6
+  CompPAR(7) = Numbers(21) !CompressorPowerCoefficient7
+  CompPAR(8) = Numbers(22) !CompressorPowerCoefficient8
+  CompPAR(9) = Numbers(23) !CompressorPowerCoefficient9
+  CompPAR(10) = Numbers(24) !CompressorPowerCoefficient10
   
   CompressorCoefficientsUnitFlag = Alphas(5)
   
-  PowerMultiplier = Numbers(25)
-  MassFlowRateMultiplier = Numbers(26)
-  UserSpecifiedRatingEvapTemperature = Numbers(27)
-  UserSpecifiedRatingCondTemperature = Numbers(28)
-  UserSpecifiedRatingSubcooling = Numbers(29)
-  UserSpecifiedRatingSuperheat = Numbers(30)
+  CompPAR(25) = Numbers(25) !PowerMultiplier
+  CompPAR(26) = Numbers(26) !MassFlowRateMultiplier
+  TsiCmp = Numbers(27) !UserSpecifiedRatingEvapTemperature
+  TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
+  Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
+  Super = Numbers(30) !UserSpecifiedRatingSuperheat
   UserSpecifiedRatingHeatingModeSubcooling = Numbers(31)
   UserSpecifiedRatingHeatingModeSuperheat = Numbers(32)
 
@@ -759,6 +759,10 @@ REAL :: SystemCost
   ODC_DPairMultiplier = Numbers(27) !Air Side Pressure Drop Multiplier
   ODC_CoilAirLeakage = Numbers(28)  !Air Leakage Around the Coil
 
+    !Tube wall thickness, mm or mil
+  ODC_TubeThk=(ODC_TubeOD-ODC_TubeID)/2
+  !IF (Unit .EQ. 2) ODC_TubeThk=ODC_TubeThk*1000 !ISI - 07/14/06
+  IF (Unit .EQ. IP) ODC_TubeThk=ODC_TubeThk*1000 
 
   !***************** Outdoor fan data *****************
   
@@ -1452,8 +1456,8 @@ REAL :: SystemCost
   RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
   SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
   LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
-  TuningCurveIntercept = Numbers(5)
-  TuningCurveSlope = Numbers(6)
+  ChargeCurveIntercept = Numbers(5)
+  ChargeCurveSlope = Numbers(6)
   
   !*************** Air Handler Data **************
 
@@ -2234,6 +2238,12 @@ REAL :: SystemCost
   SuperStc=TxvPAR(3)
   SuperRtd=TxvPAR(2)
 
+  OPEN(48, FILE='NewEvap.txt')
+  Do I=1, 54
+    WRITE (48,*) EvapPAR(I)
+  End Do
+  CLOSE(48)
+  
   !Get coil type - ISI - 12/25/06
   OPEN (11,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
 
