@@ -20,8 +20,10 @@ MainDesignData,
 	\default True
     N1, \field Calculation Mode
 	\type integer
+	\required-field
     N2, \field System Type
 	\type integer
+	\required-field
     A2, \field Is in Cooling Mode
 	\note If False, cooling mode is off
 	\note If True, cooling mode is on
@@ -38,9 +40,11 @@ MainDesignData,
     N5, \field Design Subcooling
 	\type real
 	\units R
+	\required-field
     N6, \field Design Superheat
 	\type real
 	\units R
+	\required-field
     A3, \field Refrigerant Name
 	\type choice
 	\key R410a
@@ -48,8 +52,10 @@ MainDesignData,
 	\key R417a
 	\key 407c
 	\key R134a
+	\required-field
     N7, \field No. of Refrigerants in Blend
 	\type integer
+	\required-field
     N8, \field Nominal Cooling Capacity
 	\type real
 	\units Btu/h
@@ -68,18 +74,22 @@ MainDesignData,
     N11, \field Outdoor Entering Drybulb Temperature
 	 \type real
 	 \units F
+	 \required-field
     N12, \field Outdoor Entering Wetbulb Temperature
 	 \type real
 	 \units F
     N13, \field Indoor Entering Drybulb Temperature
 	 \type real
 	 \units F
+	 \required-field
     N14, \field Indoor Entering Wetbulb Temperature
 	 \type real
 	 \units F
+	 \required-field
     N15, \field Design Refrigerant Charge Mass
 	 \type real
 	 \units lb
+	 \required-field
     N16, \field Refrigerant Charge
 	 \type real
 	 \units lb
@@ -142,65 +152,89 @@ CompressorData,
 	\key R417a
 	\key 407c
 	\key R134a
+	\required-field
     N1, \field Compressor Power
 	\type real
 	\units W
 	\deprecated
     N2, \field Compressor Heat Loss Fraction
-	\notes Must be a decimal, not a percentage
+	\note Must be a decimal, not a percentage
 	\type real
 	\minimum 0
 	\maximum 1
+	\required-field
     N3, \field Compressor Heat Loss
 	\type real
 	\units Btu/h
+	\required-field
     N4, \field Compressor Volume
 	\type real
 	\units in3
-	\notes Cubic inches is not an Energy+
-	\notes standard unit.
+	\note Cubic inches is not an Energy+
+	\note standard unit.
+	\required-field
     N5, \field Compressor Mass Coefficient 1
 	\type real
+	\required-field
     N6, \field Compressor Mass Coefficient 2
 	\type real
+	\required-field
     N7, \field Compressor Mass Coefficient 3
 	\type real
+	\required-field
     N8, \field Compressor Mass Coefficient 4
 	\type real
+	\required-field
     N9, \field Compressor Mass Coefficient 5
 	\type real
+	\required-field
     N10, \field Compressor Mass Coefficient 6
 	 \type real
+	 \required-field
     N11, \field Compressor Mass Coefficient 7
 	 \type real
+	 \required-field
     N12, \field Compressor Mass Coefficient 8
 	 \type real
+	 \required-field
     N13, \field Compressor Mass Coefficient 9
 	 \type real
+	 \required-field
     N14, \field Compressor Mass Coefficient 10
 	 \type real
+	 \required-field
     N15, \field Compressor Power Coefficient 1
 	 \type real
+	 \required-field
     N16, \field Compressor Power Coefficient 2
 	 \type real
+	 \required-field
     N17, \field Compressor Power Coefficient 3
 	 \type real
+	 \required-field
     N18, \field Compressor Power Coefficient 4
 	 \type real
+	 \required-field
     N19, \field Compressor Power Coefficient 5
 	 \type real
+	 \required-field
     N20, \field Compressor Power Coefficient 6
 	 \type real
+	 \required-field
     N21, \field Compressor Power Coefficient 7
 	 \type real
+	 \required-field
     N22, \field Compressor Power Coefficient 8
 	 \type real
+	 \required-field
     N23, \field Compressor Power Coefficient 9
 	 \type real
+	 \required-field
     N24, \field Compressor Power Coefficient 10
 	 \type real
+	 \required-field
     A5, \field Compressor Coefficients Unit Flag
-	\notes Choice between SI or IP units
+	\note Choice between SI or IP units
 	\type choice
 	\key SI
 	\key IP
@@ -208,20 +242,26 @@ CompressorData,
 	\deprecated
     N25, \field Power Multiplier
 	 \type real
+	 \required-field
     N26, \field Mass Flow Rate Multiplier
 	 \type real
+	 \required-field
     N27, \field User Specified Rating Evap. Temperature
 	 \type real
 	 \units F
+	 \required-field
     N28, \field User Specified Rating Cond. Temperature
 	 \type real
 	 \units F
+	 \required-field
     N29, \field User Specified Rating Subcooling
 	 \type real
 	 \units R
+	 \required-field
     N30, \field User Specified Rating Superheat
 	 \type real
 	 \units R
+	 \required-field
     N31, \field User Specified Rating (Heating Mode) Subcooling
 	 \type real
 	 \units R
@@ -238,16 +278,22 @@ OutdoorCoilData,
 	\memo and pressure drop and heat transfer multipliers.
     N1, \field Fin Type
 	\type integer
+	\required-field
     A1, \field Fin Name
 	\type alpha
 	\deprecated
     N2, \field Fin Pitch [FPI]
 	\type real
+	\required-field
     N3, \field Fin Conductivity
 	\type real
 	\units Btu-in/h-ft2-F
-    N4, \field Fin thickness [thou] {Thousandths of an inch?}
+	\required-field
+    N4, \field Fin thickness
 	\type real
+	\units in/1000
+	\note Assuming [thou] = thousandths of an inch
+	\required-field
     A2, \field Fin Material
 	\type alpha
 	\deprecated
@@ -256,32 +302,43 @@ OutdoorCoilData,
 	\deprecated
     N5, \field Tube Type
 	\type integer
+	\required-field
     N6, \field Tube ID
 	\type real
 	\ip-units in
+	\required-field
     N7, \field Tube OD
 	\type real
 	\ip-units in
+	\required-field
     N8, \field Tube Conductivity
 	\type real
 	\units Btu-in/h-ft2-F
+	\required-field
     N9, \field Tube Lateral Spacing
 	\type real
 	\ip-units in
+	\required-field
     N10, \field Tube Vertical Spacing
 	 \type real
 	 \ip-units in
+	 \required-field
     N11, \field Number of Rows
 	 \type integer
+	 \required-field
     N12, \field Number of Tubes Per Row
 	 \type integer
+	 \required-field
     N13, \field Number of Circuits
 	 \type integer
+	 \required-field
     N14, \field Number of Segments
 	 \type integer
+	 \required-field
     N15, \field Single Tube Length
 	 \type real
 	 \ip-units in
+	 \required-field
     N16, \field Coil Air Pressure Drop
 	 \type real
 	 \ip-units inH2O
@@ -313,16 +370,19 @@ OutdoorCoilData,
 	 \type real
 	 \units in3
 	 \deprecated
-	 \notes Cubic inches is not an Energy+
-	 \notes standard unit.
+	 \note Cubic inches is not an Energy+ standard unit.
     N24, \field Ref Side Heat Transfer Multiplier
 	 \type real
+	 \required-field
     N25, \field Ref Side Pressure Drop Multiplier
 	 \type real
+	 \required-field
     N26, \field Air Side Heat Transfer Multiplier
 	 \type real
+	 \required-field
     N27, \field Air Side Pressure Drop Multiplier
 	 \type real
+	 \required-field
     N28; \field Air Leakage Around the Coil
 	 \type real
 	 \deprecated
@@ -334,14 +394,17 @@ OutdoorFanData,
     N1, \field Fan Power
 	\type real
 	\units W
+	\required-field
     N2, \field Fan Air Flow Rate
 	\type real
 	\units ft3/min
+	\required-field
     N3; \field Draw Through (1) or Blow Through (2)
 	\type integer
 	\minimum 1
 	\maximum 2
-	\notes 1=Draw Through, 2=Blow Through
+	\note 1=Draw Through, 2=Blow Through
+	\required-field
 
 IndoorCoilData,
 	\unique-object
@@ -350,16 +413,22 @@ IndoorCoilData,
 	\memo and pressure drop and heat transfer multipliers.
     N1, \field Fin Type
 	\type integer
+	\required-field
     A1, \field Fin Name
 	\type alpha
 	\deprecated
     N2, \field Fin Pitch [FPI]
 	\type real
+	\required-field
     N3, \field Fin Conductivity
 	\type real
 	\units Btu-in/h-ft2-F
-    N4, \field Fin Thickness [thou]
+	\required-field
+    N4, \field Fin Thickness
 	\type real
+	\units in/1000
+	\note Assuming [thou] = thousandths of an inch
+	\required-field
     A2, \field Fin Material
 	\type alpha
 	\deprecating
@@ -368,32 +437,43 @@ IndoorCoilData,
 	\deprecating
     N5, \field Tube Type
 	\type integer
+	\required-field
     N6, \field Tube ID
 	\type real
 	\ip-units in
+	\required-field
     N7, \field Tube OD
 	\type real
 	\ip-units in
+	\required-field
     N8, \field Tube Conductivity
 	\type real
 	\units Btu-in/h-ft2-F
+	\required-field
     N9, \field Tube Lateral Spacing
 	\type real
 	\ip-units in
+	\required-field
     N10, \field Tube Vertical Spacing
 	 \type real
 	 \ip-units in
+	 \required-field
     N11, \field Number of Rows
 	 \type integer
+	 \required-field
     N12, \field Number of Tubes Per Row
 	 \type integer
+	 \required-field
     N13, \field Number of Circuits
 	 \type integer
+	 \required-field
     N14, \field Number of Segments
 	 \type integer
+	 \required-field
     N15, \field Single Tube Length
 	 \type real
 	 \ip-units in
+	 \required-field
     N16, \field Coil Air Pressure Drop
 	 \type real
 	 \ip-units inH2O
@@ -424,17 +504,20 @@ IndoorCoilData,
     N23, \field Internal Volume
 	 \type real
 	 \units in3
-	 \notes Cubic inches is not an Energy+
-	 \notes standard unit.
+	 \note Cubic inches is not an Energy+ standard unit.
 	 \deprecated
     N24, \field Ref Side Heat Transfer Multiplier
 	 \type real
+	 \required-field
     N25, \field Ref Side Pressure Drop Multiplier
 	 \type real
+	 \required-field
     N26, \field Air Side Heat Transfer Multiplier
 	 \type real
+	 \required-field
     N27, \field Air Side Pressure Drop Multiplier
 	 \type real
+	 \required-field
     N28; \field Air Leakage Around the Coil
 	 \type real
 	 \deprecated
@@ -446,19 +529,25 @@ IndoorFanData,
     N1, \field Fan Power
 	\type real
 	\units W
+	\required-field
     N2, \field Fan Air Flow Rate
 	\type real
 	\units ft3/min
+	\required-field
     N3; \field Draw Through (1) or Blow Through (2)
 	\type integer
 	\minimum 1
 	\maximum 2
-	\notes 1=Draw Through, 2=Blow Through
+	\note 1=Draw Through, 2=Blow Through
+	\required-field
 
 ExpansionDeviceData,
 	\unique-object
 	\required-object
 	\memo Expansion Device physical dimensions for both heating and cooling.
+	\memo Although none of the following values are listed as required, all
+	\memo the values in an Expansion Device type are required (i.e. if a TXV
+	\memo is used, all the values denoted under TXV must be given).
     A1, \field Expansion Device Type (Cooling)
 	\type choice
 	\key Capillary Tube
@@ -537,15 +626,19 @@ RefrigerantLineData,
     N1, \field Refrigerant Line Length
 	\type real
 	\units ft
+	\required-field
     N2, \field Refrigerant Line Elevation
 	\type real
 	\units ft
+	\required-field
     N3, \field Refrigerant Line Heat Loss
 	\type real
 	\units Btu/h
+	\required-field
     N4, \field Refrigerant Line Temperature Change
 	\type real
 	\units R
+	\required-field
     N5, \field Tube Conductivity
 	\type real
 	\units Btu-in/h-ft2-F
@@ -553,12 +646,15 @@ RefrigerantLineData,
     N6, \field Tube Inside Diameter
 	\type real
 	\ip-units in
+	\required-field
     N7, \field Tube Outside Diameter
 	\type real
 	\ip-units in
+	\required-field
     N8, \field Additional Pressure Drop
 	\type real
 	\ip-units inH2O
+	\required-field
     N9, \field Charge in Line
 	\type real
 	\units lb
@@ -572,15 +668,19 @@ RefrigerantLineData,
     N10, \field Refrigerant Line Length
 	 \type real
 	 \units ft
+	 \required-field
     N11, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
+	 \required-field
     N12, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
+	 \required-field
     N13, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
+	 \required-field
     N14, \field Tube Conductivity
 	 \type real
 	 \units Btu-in/h-ft2-F
@@ -588,12 +688,15 @@ RefrigerantLineData,
     N15, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N16, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N17, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
+	 \required-field
     N18, \field Charge in Line
 	 \type real
 	 \units lb
@@ -607,15 +710,19 @@ RefrigerantLineData,
     N19, \field Refrigerant Line Length
 	 \type real
 	 \units ft
+	 \required-field
     N20, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
+	 \required-field
     N21, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
+	 \required-field
     N22, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
+	 \required-field
     N23, \field Tube Conductivity
 	 \type real
 	 \units Btu-in/h-ft2-F
@@ -623,12 +730,15 @@ RefrigerantLineData,
     N24, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N25, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N26, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
+	 \required-field
     N27, \field Charge in Line
 	 \type real
 	 \units lb
@@ -642,15 +752,19 @@ RefrigerantLineData,
     N28, \field Refrigerant Line Length
 	 \type real
 	 \units ft
+	 \required-field
     N29, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
+	 \required-field
     N30, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
+	 \required-field
     N31, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
+	 \required-field
     N32, \field Tube Conductivity
 	 \type real
 	 \units Btu-in/h-ft2-F
@@ -658,12 +772,15 @@ RefrigerantLineData,
     N33, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N34, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N35, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
+	 \required-field
     N36, \field Charge in Line
 	 \type real
 	 \units lb
@@ -677,15 +794,19 @@ RefrigerantLineData,
     N37, \field Refrigerant Line Length
 	 \type real
 	 \units ft
+	 \required-field
     N38, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
+	 \required-field
     N39, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
+	 \required-field
     N40, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
+	 \required-field
     N41, \field Tube Conductivity
 	 \type real
 	 \units Btu-in/h-ft2-F
@@ -693,12 +814,15 @@ RefrigerantLineData,
     N42, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N43, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
+	 \required-field
     N44, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
+	 \required-field
     N45, \field Charge in Line
 	 \type real
 	 \units lb
@@ -731,7 +855,7 @@ RefrigerantCycleData(Cooling),
 	\type real
 	\minimum 0
 	\maximum 100
-	\notes Quality as a percentage
+	\note Quality as a percentage
 	\deprecated
     N5, \field Superheat
 	\type real
@@ -760,7 +884,7 @@ RefrigerantCycleData(Cooling),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N11, \field Superheat
 	 \type real
@@ -789,7 +913,7 @@ RefrigerantCycleData(Cooling),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N17, \field Superheat
 	 \type real
@@ -842,11 +966,12 @@ RefrigerantCycleData(Cooling),
     N27, \field Temperature
 	 \type real
 	 \units F
+	 \required-field
     N28, \field Quality
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N29, \field Superheat
 	 \type real
@@ -875,7 +1000,7 @@ RefrigerantCycleData(Cooling),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N35, \field Superheat
 	 \type real
@@ -904,7 +1029,7 @@ RefrigerantCycleData(Cooling),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N41, \field Superheat
 	 \type real
@@ -933,7 +1058,7 @@ RefrigerantCycleData(Cooling),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N47, \field Superheat
 	 \type real
@@ -969,7 +1094,7 @@ RefrigerantCycleData(Heating),
 	\type real
 	\minimum 0
 	\maximum 100
-	\notes Quality as a percentage
+	\note Quality as a percentage
 	\deprecated
     N5, \field Superheat
 	\type real
@@ -993,11 +1118,12 @@ RefrigerantCycleData(Heating),
     N9, \field Temperature
 	\type real
 	\units F
+	\required-field
     N10, \field Quality
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N11, \field Superheat
 	 \type real
@@ -1026,7 +1152,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N17, \field Superheat
 	 \type real
@@ -1055,7 +1181,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N23, \field Superheat
 	 \type real
@@ -1084,7 +1210,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N29, \field Superheat
 	 \type real
@@ -1113,7 +1239,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N35, \field Superheat
 	 \type real
@@ -1142,7 +1268,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N41, \field Superheat
 	 \type real
@@ -1171,7 +1297,7 @@ RefrigerantCycleData(Heating),
 	 \type real
 	 \minimum 0
 	 \maximum 100
-	 \notes Quality as a percentage
+	 \note Quality as a percentage
 	 \deprecated
     N47, \field Superheat
 	 \type real
@@ -1190,6 +1316,7 @@ RefrigerantCycleData(Heating),
     N49, \field Barometric Pressure
 	 \type real
 	 \units psi
+	 \required-field
     N50, \field Charge in Compressor
 	 \type real
 	 \units lb
@@ -1203,10 +1330,11 @@ RefrigerantCycleData(Heating),
 	 \units lb
 	 \deprecated
     N53; \field Is Compressor in Air Stream
-	 \notes 1=yes, 0=no
+	 \note 1=yes, 0=no
 	 \type integer
 	 \minimum 0
 	 \maximum 1
+	 \required-field
  
 AccumulatorData,
 	\unique-object
@@ -1225,7 +1353,7 @@ AccumulatorData,
     N2, \field Max. Recommended System Capacity [Tons]
 	\type real
 	\units tons
-	\notes Tons is not an Energy+ standard unit.
+	\note Tons is not an Energy+ standard unit.
 	\deprecated
     N3, \field Charge
 	\type real
@@ -1238,28 +1366,37 @@ AccumulatorData,
     N5, \field Height
 	\type real
 	\ip-units in
+	\required-field
     N6, \field Diameter
 	\type real
 	\ip-units in
+	\required-field
     N7, \field Upper Hole Diameter
 	\type real
 	\ip-units in
+	\required-field
     N8, \field Lower Hole Diameter
 	\type real
 	\ip-units in
+	\required-field
     N9, \field Rating Pressure Drop
 	\type real
 	\units psi
+	\required-field
     N10, \field Hole Distance
 	 \type real
 	 \ip-units in
+	 \required-field
     N11, \field Rating Temperature Drop
 	 \type real
 	 \units R
+	 \required-field
     N12, \field Coefficient-M
 	 \type real
+	 \required-field
     N13; \field Coefficient-B
 	 \type real
+	 \required-field
  
 FilterDrierData,
 	\unique-object
@@ -1274,7 +1411,8 @@ FilterDrierData,
     N1, \field Flow Capacity
 	\type real
 	\units tons
-	\notes Tons is not an Energy+ standard unit.
+	\note Tons is not an Energy+ standard unit.
+	\required-field
     N2, \field Pressure Drop
 	\type real
 	\units psi
@@ -1282,6 +1420,7 @@ FilterDrierData,
     N3; \field Rating Pressure Drop
 	\type real
 	\units psi
+	\required-field
  
 MaterialWeightData,
 	\unique-object
@@ -1493,84 +1632,114 @@ CustomAirSideHeatTransferData,
 	\minimum 1
 	\maximum 2
 	\notes 1=SI, 2=IP
+	\required-field
     ! *** Heat Transfer Data ***
     N2, \field Curve Type
 	\type integer
 	\minimum 1
 	\maximum 2
-	\notes 1=Power Fit, 2=Polynomial Fit
+	\note 1=Power Fit, 2=Polynomial Fit
+	\required-field
     N3, \field Power Fit Coefficient A
 	\type real
+	\required-field
     N4, \field Power Fit Coefficient B
 	\type real
+	\required-field
     N5, \field Polynomial Fit Coefficient C1
 	\type real
+	\required-field
     N6, \field Polynomial Fit Coefficient C2
 	\type real
+	\required-field
     N7, \field Polynomial Fit Coefficient C3
 	\type real
+	\required-field
     N8, \field Polynomial Fit Coefficient C4
 	\type real
+	\required-field
     ! *** Pressure Drop Data ***
     N9, \field Curve Type
 	\type integer
 	\minimum 1
 	\maximum 2
 	\notes 1=Power Fit, 2=Polynomial Fit
+	\required-field
     N10, \field Power Fit Coefficient A
 	 \type real
+	 \required-field
     N11, \field Power Fit Coefficient B
-	\type real
+	 \type real
+	 \required-field
     N12, \field Polynomial Fit Coefficient C1
 	 \type real
+	 \required-field
     N13, \field Polynomial Fit Coefficient C2
 	 \type real
+	 \required-field
     N14, \field Polynomial Fit Coefficient C3
 	 \type real
+	 \required-field
     N15, \field Polynomial Fit Coefficient C4
 	 \type real
+	 \required-field
     ! --- Outdoor Coil ---
     N16, \field Unit
 	 \type integer
 	 \minimum 1
 	 \maximum 2
 	 \notes 1=SI, 2=IP
+	 \required-field
     ! *** Heat Transfer Data ***
     N17, \field Curve Type
-	\type integer
+	 \type integer
 	 \minimum 1
 	 \maximum 2
-	 \notes 1=Power Fit, 2=Polynomial Fit	
+	 \note 1=Power Fit, 2=Polynomial Fit
+	 \required-field
     N18, \field Power Fit Coefficient A
 	 \type real
+	 \required-field
     N19, \field Power Fit Coefficient B
 	 \type real
+	 \required-field
     N20, \field Polynomial Fit Coefficient C1
 	 \type real
+	 \required-field
     N21, \field Polynomial Fit Coefficient C2
 	 \type real
+	 \required-field
     N22, \field Polynomial Fit Coefficient C3
 	 \type real
+	 \required-field
     N23, \field Polynomial Fit Coefficient C4
 	 \type real
+	 \required-field
     ! *** Pressure Drop Data ***
     N24, \field Curve Type
 	 \type integer
 	 \minimum 1
 	 \maximum 2
-	 \notes 1=Power Fit, 2=Polynomial Fit
+	 \note 1=Power Fit, 2=Polynomial Fit
+	 \required-field
     N25, \field Power Fit Coefficient A
 	 \type real
+	 \required-field
     N26, \field Power Fit Coefficient B
 	 \type real
+	 \required-field
     N27, \field Polynomial Fit Coefficient C1
 	 \type real
+	 \required-field
     N28, \field Polynomial Fit Coefficient C2
 	 \type real
+	 \required-field
     N29, \field Polynomial Fit Coefficient C3
 	 \type real
+	 \required-field
     N30; \field Polynomial Fit Coefficient C4
 	 \type real
+	 \required-field
  
 ChargeTuningCurve,
 	\unique-object
@@ -1580,14 +1749,19 @@ ChargeTuningCurve,
 	\type choice
 	\key TRUE
 	\key FALSE
+	\required-field
     N1, \field Tuning Point #1 Simulated Charge
 	\type real
+	\required-field
     N2, \field Tuning Point #1 Liquid Length
 	\type real
+	\required-field
     N3, \field Tuning Point #2 Simulated Charge
 	\type real
+	\required-field
     N4, \field Tuning Point #2 Liquid Length
 	\type real
+	\required-field
     N5, \field Tuning Curve Intercept
 	\type real
 	\deprecated
@@ -1682,7 +1856,7 @@ GlycolData,
 	\type real
 	\minimum 0
 	\maximum 100
-	\notes % concentration
+	\note % concentration
 	\deprecated
     A1, \field Glycol Name
 	\type alpha
@@ -1841,8 +2015,8 @@ BPHXData,
     N6, \field Hot Pass Internal Volume
 	\type real
 	\units in3
-	\notes Cubic inches is not an Energy+
-	\notes standard unit.
+	\note Cubic inches is not an Energy+
+	\note standard unit.
 	\deprecated
     N7, \field Hot Pass Charge
 	\type real
@@ -1865,8 +2039,8 @@ BPHXData,
     N12, \field Cold Pass Internal Volume
 	 \type real
 	 \units in3
-	 \notes Cubic inches is not an Energy+
-	 \notes standard unit.
+	 \note Cubic inches is not an Energy+
+	 \note standard unit.
 	 \deprecated
     N13; \field Cold Pass Charge
 	 \type real

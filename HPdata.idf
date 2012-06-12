@@ -26,7 +26,7 @@ MainDesignData,
     350.479, !field Refrigerant Mass Flow Rate [lbm!h]
     11.406, !field System EER [-]
     0, !field System SEER [-]
-    3.339, !field Sysetm COP [-]
+    3.339, !field System COP [-]
     1, !field Sensible!Total Heat Ratio [-]
     10, !field Calculated Subcooling [R]
     10, !field Calculated Superheat [R]
