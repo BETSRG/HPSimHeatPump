@@ -55,7 +55,8 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
-	  GOTO 200
+	  !VL: Previously: GOTO 200
+      RETURN
   END IF
 
   ToEvpRtd=TsoEvp+SuperRtd !Rated evaporator outlet temp.
@@ -66,7 +67,8 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
-	  GOTO 200
+	  !VL: Previously: GOTO 200
+      RETURN
   END IF
   HoEvpRtd=HoEvpRtd/1000
 
@@ -102,7 +104,7 @@ REAL DPtube   !Pressure drop through tube, kPa
 
   IF (DPtot .LT. 0) ErrorFlag = 3
 
-  200 CONTINUE
+  !VL: Previously: 200 CONTINUE
 
   RETURN
 

@@ -464,788 +464,859 @@ CONTAINS
 
 !***********************************************************************************
 
-SUBROUTINE Evaporator(Ref$,PureRef,XIN,PAR,OUT)
-      
-!-----------------------------------------------------------------------------------
-!
-!  Description:	
-!  Ragazzi's modular coil model (Fixed length version)
-!  To predict coil air side and refrigerant side properties, heat transfer, 
-!  and prssure drop
-!
-!  HVACSIM+ Airprop subroutine requied
-!  EnergyPlus REFPROP subroutines required 	
-!
-!  Inputs:
-!  Ref$=Refrigerant name
-!  PureRef=Refrigerant flag: 1=pure refrigerant
-!                            0=refrigerant mixture
-!  XIN(1)=Refrigerant side mass flow rate, kg/s
-!  XIN(2)=Refrigerant side inlet (distributor tube outlet) pressure, kPa
-!  XIN(3)=Refrigerant side inlet (distributor tube outlet) enthalpy, kJ/kg
-!  XIN(4)=Air side mass flow rate, kg/s
-!  XIN(5)=Air side inlet temp. C
-!  XIN(6)=Air side inlet relative humidity
-!  XIN(7)=Distributor tube heat load, kW
-!  XIN(8)=Solar heat flux, kW/m^2
-!  XIN(9)=Compressor Discharge Temp. C
-!
-!  Parameters:
-!  PAR(1)=Suction line length, m
-!  PAR(2)=Suction line outside diameter, m
-!  PAR(3)=Suction line tube wall thickness, m 
-!  PAR(4)=Suction line elevation, m
-!  PAR(5)=Suction line heat loss, kW
-!  PAR(6)=Suction line temperature change, C
-!  PAR(7)=Suction line additional pressure drop, kPa
-!  PAR(8)=Coil tube outside diameter, m
-!  PAR(9)=Coil tube wall thickness, m
-!  PAR(10)=Coil single tube length, m
-!  PAR(11)=Coil tube thermal conductivity, kW/m-C
-!  PAR(12)=Tube spacing in transverse direction, m (normal to air flow)
-!  PAR(13)=Row spacing in longitudinal direction, m (parallel to air flow)
-!  PAR(14)=Fin thickness, m
-!  PAR(15)=Fin pitch, fin/m
-!  PAR(16)=Fin thermal conductivity, kW/m-C
-!  PAR(17)=Number of tubes in transverse direction (normal to air flow)
-!  PAR(18)=Number of rows in longitudinal direction (parallel to air flow)
-!  PAR(19)=Number of circuits
-!  PAR(20)=Cooling mode? 1=yes; 0=no
-!  PAR(21)=Number of modules per tube
-!  PAR(22)=Fin type: 1=Plain; 2=Wavy; 3=Louver
-!  PAR(23)=Multiplier for ref. side heat transfer correlation
-!  PAR(24)=Multiplier for ref. side pressure drop correlation
-!  PAR(25)=Multiplier for air side heat transfer correlation
-!  PAR(26)=Multiplier for air side pressure drop correlation
-!  PAR(27)=Fan power, kW
-!  PAR(28)=Fan location, 1=draw through; 2=blow through
-!  PAR(29)=Surface absorptivity
-!  PAR(30)=Tube tube: 1=Smooth; 2-Microfin; 3=Herringbone; 4=Crosshatch; 
-!                     5=Herringbone w/crosshatch; 6-Turbo-A
-!  PAR(31)=Barometric pressure, kPa
-!  PAR(32)=Compressor heat loss, kW
-!  PAR(33)=Is compressor in air stream, 1=yes, 0=no
-!  PAR(34)=System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
-!  PAR(35)=Custom air side data unit, 1=SI; 2=IP
-!  PAR(36)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-!  PAR(37)=Power coefficient for air heat transfer curve
-!  PAR(38)=Power coefficient for air heat transfer curve
-!  PAR(39)=Polynomial coefficient for air heat transfer curve
-!  PAR(40)=Polynomial coefficient for air heat transfer curve
-!  PAR(41)=Polynomial coefficient for air heat transfer curve
-!  PAR(42)=Polynomial coefficient for air heat transfer curve
-!  PAR(43)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-!  PAR(44)=Power coefficient for air heat transfer curve
-!  PAR(45)=Power coefficient for air heat transfer curve
-!  PAR(46)=Polynomial coefficient for air heat transfer curve
-!  PAR(47)=Polynomial coefficient for air heat transfer curve
-!  PAR(48)=Polynomial coefficient for air heat transfer curve
-!  PAR(49)=Polynomial coefficient for air heat transfer curve
-!  PAR(50)=Pressure tolerance convergence Criteria, kPa
-!  PAR(51)=Oil mass fraction
-!  PAR(52)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
-!                                   3=Danfoss;  4=Panasonic
-!  PAR(53)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
-!  PAR(54)=First time to run this model flag: 1=yes, otherwise=no
-!          for component validation, set it to 1
-!          for system validation, set it to 1 first, then zero
-!
-!  Outputs:
-!  OUT(1)=Coil outlet pressure, kPa
-!  OUT(2)=Coil outlet enthalpy, kJ/kg
-!  OUT(3)=Coil outlet temperature, C
-!  OUT(4)=Coil outlet quality
-!  OUT(5)=Coil outlet superheat, C
-!  OUT(6)=Suction line outlet pressure, kPa
-!  OUT(7)=Suction line outlet enthalpy, kJ/kg
-!  OUT(8)=Suction line outlet temperature, C
-!  OUT(9)=Suction line outlet quality
-!  OUT(10)=Suction line outlet superheat, C
-!  OUT(11)=Coil capacity, kW
-!  OUT(12)=Sensible coil capacity, kW
-!  OUT(13)=Mass in suction line, kg
-!  OUT(14)=Mass in coil, kg
-!  OUT(15)=Liquid mass in coil, kg
-!  OUT(16)=Vapor mass in coil, kg
-!  OUT(17)=Air side outlet temperature, C
-!  OUT(18)=Air side outlet relative humidity
-!  OUT(19)=Air side pressure drop, kPa
-!  OUT(20)=Error flag: 0-No error
-!                      1-Evaporator solution not converge
-!                      2-Refprop error
-!					   3-Circuit file error
-!  OUT(21)=Air side heat transfer coefficients, kW/m^2-K
-!  OUT(22)=Inlet coil surface temperature, C
-!  OUT(23)=Outlet coil surface temperature, C
-!  OUT(24)=Aluminum weight, kg
-!  OUT(25)=Copper weight, kg
-!
-!  References: 
-!  Ding, X., Eppe, J.P., Lebrun, J. and Wasacz, M. (1990). Cooling coil
-!    models to be used in transient and/or wet regimes. Theoretical analysis
-!    and experimental validation. In Proceedings of System Simulation in
-!    Buildings '90, Liege, Belgium, December 1990.
-!
-!  Ragazzi, F. and Pedersen, C.O. (1991). Modular-based computer simulation
-!    of an air-cooled condenser. ACRC technical report 07.
-!    University of Illinois, Urbana,IL.
-!
-!  Author:
-!  Ipseng Iu
-!  Mechanical and Aerospace Engineering
-!  Oklahoma State University, Stillwater	
-!
-!  Date: June 2002
-!
-!-----------------------------------------------------------------------------------
-
-USE FluidProperties
-USE CoilCalcMod
-USE AirPropMod
-USE OilMixtureMod
-USE ReversingValveMod
-
-IMPLICIT NONE
-
-!Subroutine argument declarations
-CHARACTER*80,     INTENT(IN)  :: Ref$
-INTEGER(2),       INTENT(IN)  :: PureRef
-REAL, INTENT(IN)  :: XIN(9)
-!REAL, INTENT(IN)  :: PAR(52)
-REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
-REAL, INTENT(OUT) :: OUT(25)
-
-!Subroutine lcoal variables
-REAL :: MCXIN(7)  !Microchannel coil input data
-REAL :: MCPAR(33) !Microchannel coil input parameters
-REAL :: MCOUT(21) !Microchannel coil output data
-
-INTEGER,SAVE :: CoilType  !1=Condenser; 2=Evaporator; 
-                          !3=High side interconnecting pipes; 
-				          !4=Low side interconnecting pipes
-				          !5=Microchannel condenser
-						  !6=Microchannel evaporator
-
-REAL tSiSUM    !Sum of inlet surface temperature, C
-REAL tSoSUM    !Sum of outlet surface temperature, C
-REAL QcktSens !Sensible Circuit heat transfer, kW
-REAL DPreturnbend !Pressure drop at return bend, kPa
-REAL DPair        !Air side pressure drop, kPa
-REAL DPckt        !Refrigerant pressure drop in circuit, kPa
-REAL Gckt         !Mass flux in circuit, kg/m^2
-REAL DiffpRoMod !Difference in pRoMod
-REAL PrevpRoMod !Previous value of pRoMod
-LOGICAL Converged          !Solution convergence flag
-REAL MaxResidual !Maximum residual in iteration
-Real PTol !Evaporator Outlet Pressure convergence criteria,kPa
-REAL Wlocal           !Local oil mass fraction
-REAL tRdis !Compressor discharge temperature, C
-REAL DPvalve !Reversing valve pressure drop, kPa
-REAL hRsuc !Suction enthalpy, kPa
-INTEGER NumSection !Section number, ISI - 09/10/07
-
-REAL :: tSAvgCoil = 0.0
-
-!Flow:
-
-  mRefTot =XIN(1)
-  pRiCoil =XIN(2)
-  hRiCoil =XIN(3)
-  mAiCoil =XIN(4)
-  tAiCoil =XIN(5)
-  rhAiCoil=XIN(6)
-  QdisTube=XIN(7)
-  SolarFlux=XIN(8)
-  tRdis=XIN(9)
-    
-  IF (QdisTube .EQ. 0) QdisTube=SMALL 
-
-  LsucLn    = PAR(1)
-  ODsucLn   = PAR(2)
-  SucLnThk  = PAR(3)
-  ElevSucLn = PAR(4)
-  QsucLn    = PAR(5)
-  DTsucLn   = PAR(6)
-  AddDPSucLn = PAR(7)
-
-  IsCoolingMode   = PAR(20)
-
-  IsSimpleCoil=PAR(53) !ISI - 12/21/06
-  FirstTime=PAR(54)    !ISI - 12/21/06
-
-  IF (FirstTime .EQ. 1) THEN
-
-	  ODtube      = PAR(8)
-	  TubeThk     = PAR(9)
-	  Ltube       = PAR(10)
-	  Ktube       = PAR(11)
-	  Pt          = PAR(12)
-	  Pl          = PAR(13)
-	  FinThk      = PAR(14)
-	  FinPitch    = PAR(15)
-	  Kfin        = PAR(16)
-	  Nt          = PAR(17)
-	  Nl          = PAR(18)
-	  NumOfCkts   = PAR(19)  
-	  NumOfMods   = PAR(21)
-	  FinType     = PAR(22)
-	  TubeType    = PAR(30)
-	  CALL InitEvaporatorCoil(CoilType)
-	  CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
-	                          Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
-                              FinThk,FinPitch,WeightAluminum,WeightCopper)
-	  IF (ErrorFlag .GT. CONVERGEERROR) GOTO 200
-	  CALL RefrigerantParameters(Ref$)
-      CALL GetRefID(Ref$,RefID)
-	  !FirstTime=.FALSE. !ISI - 12/21/06
-  END IF
-
-  hciMultiplier   = PAR(23)
-  !hcoMultiplier   = PAR(24) !ISI - 09/23/2008 
-  !DPrefMultiplier = PAR(25) !ISI - 09/23/2008
-  DPrefMultiplier = PAR(24)
-  hcoMultiplier   = PAR(25)
-  DPairMultiplier = PAR(26)
-
-  PwrFan           = PAR(27)
-  DrawBlow         = PAR(28)
-  SurfAbsorptivity = PAR(29)
-
-  BaroPressure     = PAR(31)
-  QlossCmp         = PAR(32)
-  IsCmpInAirStream = PAR(33)
-  SystemType       = PAR(34)
-
-  CurveUnit		   = PAR(35)
-  CurveTypeHTC     = PAR(36)
-  PowerAHTC		   = PAR(37)
-  PowerBHTC		   = PAR(38)
-  Poly1HTC		   = PAR(39)
-  Poly2HTC 		   = PAR(40)
-  Poly3HTC  	   = PAR(41)
-  Poly4HTC 		   = PAR(42)
-  CurveTypeDP 	   = PAR(43)
-  PowerADP  	   = PAR(44)
-  PowerBDP 		   = PAR(45)
-  Poly1DP   	   = PAR(46)
-  Poly2DP   	   = PAR(47)
-  Poly3DP   	   = PAR(48)
-  Poly4DP 		   = PAR(49)
-  PTol			   = PAR(50)
-  Wabsolute        = PAR(51)
-  CompManufacturer = PAR(52)  	
-
-  IF (CoilType .EQ. MCEVAPORATOR) THEN
-	  CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
-	  CALL MicrochannelEvaporator(Ref$,MCXIN,MCPAR,MCOUT)
-	  CALL LoadMicrochannelOutputs(MCOUT,OUT)
-	  RETURN
-  END IF
-
-  EqCircuits=0 !Equivalent circuit flag
-
-  ErrorFlag=NOERROR !Initilaize
-
-  !Tube inside diameter
-  IDsucLn=ODsucLn-SucLnThk*2
-
-  !Fin spacing
-  FinSpg = 1/FinPitch-FinThk
-
-  !Return bend length
-  Dreturnbend=Pt
-  Lreturnbend=Dreturnbend*PI/2 
-
-  !Total number of modules in the last row
-  NmodLast=Nt*NumOfMods
-
-  !Coil height
-  HtCoil=Nt*Pt
-
-  !Coil length
-  Lcoil=Nl*Nt*Ltube
-
-  !Face area
-  Aface=Ltube*Nt*Pt
-
-  !Tube information
-  LmodTube=Ltube/NumOfMods
-
-  CALL InitBoundaryConditions(CoilType)
-  IF (ErrorFlag .GT. CONVERGEERROR) GOTO 200
-
-  !****** Start coil calculation ******
-  Qcoil=0.0; QcoilSens=0 !ISI - 09/10/07
-  DO NumSection=1, NumOfSections !ISI - 09/10/07
-
-      !ISI - 09/10/07
-      Converged=.TRUE. 
-      pRoCoilPrev=pRiCoil
-      MaxResidual=0
-		  		      
-      DO Iter=1, MdotMaxIter
-
-	      !Initialize
-	      mRefJoin=0; PrevQcoil=BIG; 
-
-	      DO AirBCiter=1, AirBCmaxIter
-
-		      !ISI - 09/10/07
-		      CoilSection(NumSection)%Qsection=0.0
-		      CoilSection(NumSection)%QsectionSens=0.0
-		      tSiSUM=0.0; tSoSUM=0.0
-		      	      
-		      DO I=1,CoilSection(NumSection)%NumOfCkts
-
-			      Qckt=0.0; QcktSens=0
-
-			      CALL CalcCircuitRefInletConditions(NumSection,I,I,CoilType) !ISI - 09/10/07
-
-			      !Find first and last simulation tubes
-	              IF (IsSimpleCoil .EQ. 1) THEN
-				      FirstTube=1
-				      LastTube=1
-			      ELSE !ISI - 09/10/07
-				      FirstTube=1
-				      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube 
-				      IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
-					      FirstTube=2 !Skip first tube
-				      END IF 
-				      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
-					      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
-				      END IF
-			      END IF
-
-              !****************** Hard code refrigerant distribution ****************** 
-!              CoilSection(NumSection)%Ckt(1)%mRef=mRefTot*1.5/8
-!              CoilSection(NumSection)%Ckt(2)%mRef=mRefTot*1/8
-!              CoilSection(NumSection)%Ckt(3)%mRef=mRefTot*1.5/8
-!              CoilSection(NumSection)%Ckt(4)%mRef=mRefTot*1.5/8
-!              CoilSection(NumSection)%Ckt(5)%mRef=mRefTot*1/8
-!              CoilSection(NumSection)%Ckt(6)%mRef=mRefTot*1.5/8
-              !************************************************************************
-
-			      mRefMod=CoilSection(NumSection)%Ckt(I)%mRef !ISI - 09/10/07
-
-			      DO J=FirstTube,LastTube
-
-                      IF (IsSimpleCoil .EQ. 1) THEN
-					    TubeNum=1
-				      ELSE
-					    TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
-				      END IF
-
-				      DO K=1,NumOfMods
-
-					      IF (IsSimpleCoil .EQ. 1) THEN
-						      SELECT CASE(K)
-						      CASE (1)
-					  		      LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts !Start with guessing the whole length
-						      CASE (2)
-							      LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len
-						      END SELECT
-					      END IF
-		                  CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
-					      IF (ErrorFlag .GT. CONVERGEERROR) GOTO 200
-
-					      !Calc. circuit heat transfer
-					      Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
-					      QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
-
-					      !Calc. sum of outlet air surface temperature
-					      IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Back .EQ. 0) THEN 
-						      tSoSUM=tSoSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSo
-					      END IF
-
-					      IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Fup .EQ. 0 .AND. &
-					          CoilSection(NumSection)%Ckt(I)%Tube(J)%Fdown .EQ. 0) THEN
-						      tSiSUM=tSiSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSi
-					      END IF
-
-				      END DO !End mod
-
-			      END DO !End tube
-
-			      pRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%pRo !Circuit outlet pressure
-			      hRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
-    		  
-			      Pressure=pRoCkt*1000
-			      Enthalpy=hRoCkt*1000
-			      tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-			      IF (RefPropErr .GT. 0) THEN
-				      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
-				      ErrorFlag=REFPROPERROR
-				      GOTO 200
-			      END IF
-			      xRoCkt=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-			      IF (RefPropErr .GT. 0) THEN
-				      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
-				      ErrorFlag=REFPROPERROR
-				      GOTO 200
-			      END IF
-
-			      Pressure=pRoCkt*1000
-			      Quality=1
-			      tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-			      IF (RefPropErr .GT. 0) THEN
-				      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
-				      ErrorFlag=REFPROPERROR
-				      GOTO 200
-			      END IF
-
-			      IF (xRoCkt .GE. 1) THEN 
-				      CoilSection(NumSection)%Ckt(I)%tSH=tRoCkt-tSat !Superheat
-			      ELSE
-				      CoilSection(NumSection)%Ckt(I)%tSH=0.0
-			      END IF
-        
-			      CoilSection(NumSection)%Ckt(I)%tRo=tRoCkt
-			      CoilSection(NumSection)%Ckt(I)%pRo=pRoCkt
-			      CoilSection(NumSection)%Ckt(I)%hRo=hRoCkt
-			      CoilSection(NumSection)%Ckt(I)%Qckt=Qckt          !Circuit capcity
-			      CoilSection(NumSection)%Ckt(I)%QcktSens=QcktSens  !Sensible Circuit capcity
-			      CoilSection(NumSection)%Qsection=CoilSection(NumSection)%Qsection+CoilSection(NumSection)%Ckt(I)%Qckt !Total coil capacity
-			      CoilSection(NumSection)%QsectionSens=CoilSection(NumSection)%QsectionSens+CoilSection(NumSection)%Ckt(I)%QcktSens !Total sensible coil capacity
-
-			      IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile .OR. IsSimpleCoil .EQ. 1) THEN  !Equivalent circuit and Uniform velocity profile
-				      Qcoil=CoilSection(NumSection)%Qsection*CoilSection(NumSection)%NumOfCkts
-				      QcoilSens=CoilSection(NumSection)%QsectionSens*CoilSection(NumSection)%NumOfCkts
-				      pRoCoil=pRoCkt
-				      hRoCoil=hRoCkt
-				      CoilSection(NumOfSections)%pRo=pRoCkt
-				      CoilSection(NumOfSections)%hRo=hRoCkt
-				      EXIT
-			      END IF
-
-			      IF (CoilSection(NumSection)%Ckt(I)%OutSplit .LE. 1 .AND. CoilSection(NumSection)%Ckt(I)%OutJoin .LE. 1) THEN
-				      mRefJoin=mRefJoin+CoilSection(NumSection)%Ckt(I)%mRef 
-			      END IF
-
-	          END DO !End circuit
-		  
-		      IF (IsSimpleCoil .EQ. 1) EXIT
-
-		      CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)
-		      CPair=CPA(REAL(tAmod))
-		      Cair=mAiCoil*CPAir
-      
-		      tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair
-
-		      DiffQcoil=ABS((CoilSection(NumSection)%Qsection-PrevQcoil)/PrevQcoil) 
-		      IF (DiffQcoil .GT. SMALL) THEN 
-			      !WRITE(*,*)AirBCiter,Qcoil,PrevQcoil
-			      PrevQcoil=CoilSection(NumSection)%Qsection
-		      ELSE 
-			      EXIT
-		      END IF
-    	
-	      END DO !end AirBCiter
-
-	      IF (IsSimpleCoil .EQ. 1) EXIT
-
-          IF (AirBCiter .GT. AirBCmaxIter) THEN
-	          !WRITE(*,*)'-- WARNING -- Evaporator: AirBCiter not converged.'
-              ErrorFlag=CONVERGEERROR
-          END IF
-
-	      IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) EXIT !for equivalent circuit, no need to update mdot ref.
-
-          !Synchronize from circuits to tubes
-	      DO I=1, CoilSection(NumSection)%NumOfCkts
-          
-		      FirstTube=1
-		      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
-		      IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
-			      FirstTube=2 !Skip first tube
-		      END IF 
-		      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
-			      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
-		      END IF
-		      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
-
-		      DO J=FirstTube, LastTube
-			      TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
-			      Tube(TubeNum)=CoilSection(NumSection)%Ckt(I)%Tube(J)
-		      END DO
-          
-		      IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
-			      CoilSection(NumSection)%Ckt(I)%Tube(1)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(1))
-		      END IF 
-		      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
-			      CoilSection(NumSection)%Ckt(I)%Tube(CoilSection(NumSection)%Ckt(I)%Ntube)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-		      END IF
-
-	      END DO !End circuit
-
-	      pRoCkt=0
-	      SumpRoCkt=0
-	      DO I=1, CoilSection(NumSection)%NumOfCkts
-		      IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) THEN !outlet circuit
-			      SumpRoCkt=SumpRoCkt+CoilSection(NumSection)%Ckt(I)%pRo
-		      END IF
-	      END DO !End Circuit
-	      CoilSection(NumSection)%pRo=SumpRoCkt/CoilSection(NumSection)%NcktLast
-	      IF (SumpRoCkt .EQ. 0) SumpRoCkt=CoilSection(NumSection)%Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
-
-	      IF (ABS(CoilSection(NumSection)%pRo-pRoCoilPrev) .GT. Ptol) THEN
-  	          MaxResidual=ABS(pRoCoilPrev-CoilSection(NumSection)%pRo)
-		      pRoCoilPrev=CoilSection(NumSection)%pRo
-		      Converged=.FALSE.
-	      END IF
-    	  
-	      IF (IsSameNumOfTubes .AND. IsUniformVelProfile) EXIT	
-
-	      IF (NOT(Converged) .OR. Iter .LE. 2) THEN 
-		      Converged=.TRUE. ! Reinitialize
-
-		      !Moved this subroutine to CoilCalc and share with condenser ISI - 06/05/07
-		      CALL UpdateRefMassFlowRate(Iter,CoilSection(NumSection)%Ckt, &
-		                                 CoilSection(NumSection)%NumOfCkts, &
-		                                 CoilSection(NumSection)%pRi,mRefTot, &
-		                                 CoilSection(NumSection)%Nnode,CoilSection(NumSection)%Node)
-	      ELSE
-	          EXIT
-	      END IF
-
-      END DO !End iter
-
-      IF (Iter .GT. MdotMaxIter) THEN
-          IF (MaxResidual .GT. Ptol) THEN
-              WRITE(*,107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
-              ErrorFlag=CONVERGEERROR
-!          ELSE !Less severe, to speed up simulation, ISI - 05/06/2009
-!              WRITE(*,107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
-!              ErrorFlag=CONVERGEERRORMINOR
-          END IF
-      END IF
-      
-      IF (IsSimpleCoil .EQ. 1) EXIT
-      
-      !ISI - 09/10/07
-      CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
-                                  CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
-  
-      Qcoil=Qcoil+CoilSection(NumSection)%Qsection
-      Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens  
-
-  END DO !Number of sections, !ISI - 09/10/07
-  
-  pRoCoil=CoilSection(NumOfSections)%pRo
-          
-  !Surface temperature
-  tSiCoil=tSiSUM/NmodLast
-  tSoCoil=tSoSUM/NmodLast
-
-  tSAvgCoil = (tSiCoil+tSoCoil)/2
-  CoilParams(2)%TSurfCoil=tSAvgCoil
-  !CoilParams(2)%TSurfoCoil = tSoCoil
-  !Coil air side outlet condition
-  !CALL CPCVA(REAL(tAiCoil),CPAir,CVAir,GAMMA,SONIC)
-  !CPair=CPA(REAL(tAiCoil))
-  CPair=CPA(REAL(tAmod))
-  Cair=mAiCoil*CPAir
-  
-  IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
-    QcoilSens=Qcoil
-  END IF
-
-  tAoCoil=tAiCoil+QcoilSens/Cair
-  hAoCoil=hAiCoil+Qcoil/mAiCoil
-
-  !Fan air side inlet condition
-  !CPair=CPA(REAL(tAiCoil))
-  CPair=CPA(REAL(tAoCoil))
-  Cair=mAiCoil*CPAir
-
-  !IF (SystemType .NE. 4) THEN !For reheat system, skip this
-  IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
-	  !IF (IsCoolingMode .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-	  IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-		  tAoCoil=tAoCoil+PwrFan/Cair
-		  hAoCoil=hAoCoil+PwrFan/mAiCoil
-	  END IF
-  END IF
-
-  AirPropOpt=1
-  AirProp(1)=tAiCoil
-  AirProp(4)=hAiCoil
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  DensityIn=AirProp(7)
-
-  AirPropOpt=1
-  AirProp(1)=tAoCoil
-  AirProp(4)=hAoCoil
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  rhAoCoil=AirProp(3)
-  DensityOut=AirProp(7)
-
-  WetFlag=0
-  RowNum=0
-  CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-                   IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-				   Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-				   Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
-  
-  !hco=hco*hcoMultiplier
-  DPair=DPair*DPairMultiplier
-
-  hRoCoil=hRiCoil-Qcoil/mRefTot
-
-  Pressure=pRoCoil*1000
-  Enthalpy=hRoCoil*1000
-  tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
-  xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-       WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
-       ErrorFlag=REFPROPERROR
-	   GOTO 200
-  END IF
-
-  Pressure=pRoCoil*1000
-  Quality=1
-  tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
-
-  !IF (Wabsolute .GT. 0) THEN
-  !  Wlocal=LocalOilMassFraction(Wabsolute,xRoCoil)
-  !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-  !END IF
-
-  IF (xRoCoil .GE. 1) THEN
-    tSHoCoil=tRoCoil-tSat
-  ELSE
-	tSHoCoil=0
-  END IF
-
-  !****** Suction line calculation ******
-  IF (LsucLn .GT. 0) THEN
-      CALL SuctionLine
-!	  IF (ErrorFlag .GT. CONVERGEERROR) THEN
-!		  WRITE(*,*)'-- WARNING -- SuctionLine: Refprop error. Line 2683'
-!		  GOTO 200
-!	  END IF
-  ELSE
-      pRiCmp=pRoCoil
-	  hRiCmp=hRoCoil
-  END IF
-
-  IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
-    !Calculate reversing valve heat transfer and pressure drop
+    SUBROUTINE Evaporator(Ref$,PureRef,XIN,PAR,OUT)
+
+    !-----------------------------------------------------------------------------------
+    !
+    !  Description:	
+    !  Ragazzi's modular coil model (Fixed length version)
+    !  To predict coil air side and refrigerant side properties, heat transfer, 
+    !  and prssure drop
+    !
+    !  HVACSIM+ Airprop subroutine requied
+    !  EnergyPlus REFPROP subroutines required 	
+    !
+    !  Inputs:
+    !  Ref$=Refrigerant name
+    !  PureRef=Refrigerant flag: 1=pure refrigerant
+    !                            0=refrigerant mixture
+    !  XIN(1)=Refrigerant side mass flow rate, kg/s
+    !  XIN(2)=Refrigerant side inlet (distributor tube outlet) pressure, kPa
+    !  XIN(3)=Refrigerant side inlet (distributor tube outlet) enthalpy, kJ/kg
+    !  XIN(4)=Air side mass flow rate, kg/s
+    !  XIN(5)=Air side inlet temp. C
+    !  XIN(6)=Air side inlet relative humidity
+    !  XIN(7)=Distributor tube heat load, kW
+    !  XIN(8)=Solar heat flux, kW/m^2
+    !  XIN(9)=Compressor Discharge Temp. C
+    !
+    !  Parameters:
+    !  PAR(1)=Suction line length, m
+    !  PAR(2)=Suction line outside diameter, m
+    !  PAR(3)=Suction line tube wall thickness, m 
+    !  PAR(4)=Suction line elevation, m
+    !  PAR(5)=Suction line heat loss, kW
+    !  PAR(6)=Suction line temperature change, C
+    !  PAR(7)=Suction line additional pressure drop, kPa
+    !  PAR(8)=Coil tube outside diameter, m
+    !  PAR(9)=Coil tube wall thickness, m
+    !  PAR(10)=Coil single tube length, m
+    !  PAR(11)=Coil tube thermal conductivity, kW/m-C
+    !  PAR(12)=Tube spacing in transverse direction, m (normal to air flow)
+    !  PAR(13)=Row spacing in longitudinal direction, m (parallel to air flow)
+    !  PAR(14)=Fin thickness, m
+    !  PAR(15)=Fin pitch, fin/m
+    !  PAR(16)=Fin thermal conductivity, kW/m-C
+    !  PAR(17)=Number of tubes in transverse direction (normal to air flow)
+    !  PAR(18)=Number of rows in longitudinal direction (parallel to air flow)
+    !  PAR(19)=Number of circuits
+    !  PAR(20)=Cooling mode? 1=yes; 0=no
+    !  PAR(21)=Number of modules per tube
+    !  PAR(22)=Fin type: 1=Plain; 2=Wavy; 3=Louver
+    !  PAR(23)=Multiplier for ref. side heat transfer correlation
+    !  PAR(24)=Multiplier for ref. side pressure drop correlation
+    !  PAR(25)=Multiplier for air side heat transfer correlation
+    !  PAR(26)=Multiplier for air side pressure drop correlation
+    !  PAR(27)=Fan power, kW
+    !  PAR(28)=Fan location, 1=draw through; 2=blow through
+    !  PAR(29)=Surface absorptivity
+    !  PAR(30)=Tube tube: 1=Smooth; 2-Microfin; 3=Herringbone; 4=Crosshatch; 
+    !                     5=Herringbone w/crosshatch; 6-Turbo-A
+    !  PAR(31)=Barometric pressure, kPa
+    !  PAR(32)=Compressor heat loss, kW
+    !  PAR(33)=Is compressor in air stream, 1=yes, 0=no
+    !  PAR(34)=System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
+    !  PAR(35)=Custom air side data unit, 1=SI; 2=IP
+    !  PAR(36)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !  PAR(37)=Power coefficient for air heat transfer curve
+    !  PAR(38)=Power coefficient for air heat transfer curve
+    !  PAR(39)=Polynomial coefficient for air heat transfer curve
+    !  PAR(40)=Polynomial coefficient for air heat transfer curve
+    !  PAR(41)=Polynomial coefficient for air heat transfer curve
+    !  PAR(42)=Polynomial coefficient for air heat transfer curve
+    !  PAR(43)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !  PAR(44)=Power coefficient for air heat transfer curve
+    !  PAR(45)=Power coefficient for air heat transfer curve
+    !  PAR(46)=Polynomial coefficient for air heat transfer curve
+    !  PAR(47)=Polynomial coefficient for air heat transfer curve
+    !  PAR(48)=Polynomial coefficient for air heat transfer curve
+    !  PAR(49)=Polynomial coefficient for air heat transfer curve
+    !  PAR(50)=Pressure tolerance convergence Criteria, kPa
+    !  PAR(51)=Oil mass fraction
+    !  PAR(52)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
+    !                                   3=Danfoss;  4=Panasonic
+    !  PAR(53)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
+    !  PAR(54)=First time to run this model flag: 1=yes, otherwise=no
+    !          for component validation, set it to 1
+    !          for system validation, set it to 1 first, then zero
+    !
+    !  Outputs:
+    !  OUT(1)=Coil outlet pressure, kPa
+    !  OUT(2)=Coil outlet enthalpy, kJ/kg
+    !  OUT(3)=Coil outlet temperature, C
+    !  OUT(4)=Coil outlet quality
+    !  OUT(5)=Coil outlet superheat, C
+    !  OUT(6)=Suction line outlet pressure, kPa
+    !  OUT(7)=Suction line outlet enthalpy, kJ/kg
+    !  OUT(8)=Suction line outlet temperature, C
+    !  OUT(9)=Suction line outlet quality
+    !  OUT(10)=Suction line outlet superheat, C
+    !  OUT(11)=Coil capacity, kW
+    !  OUT(12)=Sensible coil capacity, kW
+    !  OUT(13)=Mass in suction line, kg
+    !  OUT(14)=Mass in coil, kg
+    !  OUT(15)=Liquid mass in coil, kg
+    !  OUT(16)=Vapor mass in coil, kg
+    !  OUT(17)=Air side outlet temperature, C
+    !  OUT(18)=Air side outlet relative humidity
+    !  OUT(19)=Air side pressure drop, kPa
+    !  OUT(20)=Error flag: 0-No error
+    !                      1-Evaporator solution not converge
+    !                      2-Refprop error
+    !					   3-Circuit file error
+    !  OUT(21)=Air side heat transfer coefficients, kW/m^2-K
+    !  OUT(22)=Inlet coil surface temperature, C
+    !  OUT(23)=Outlet coil surface temperature, C
+    !  OUT(24)=Aluminum weight, kg
+    !  OUT(25)=Copper weight, kg
+    !
+    !  References: 
+    !  Ding, X., Eppe, J.P., Lebrun, J. and Wasacz, M. (1990). Cooling coil
+    !    models to be used in transient and/or wet regimes. Theoretical analysis
+    !    and experimental validation. In Proceedings of System Simulation in
+    !    Buildings '90, Liege, Belgium, December 1990.
+    !
+    !  Ragazzi, F. and Pedersen, C.O. (1991). Modular-based computer simulation
+    !    of an air-cooled condenser. ACRC technical report 07.
+    !    University of Illinois, Urbana,IL.
+    !
+    !  Author:
+    !  Ipseng Iu
+    !  Mechanical and Aerospace Engineering
+    !  Oklahoma State University, Stillwater	
+    !
+    !  Date: June 2002
+    !
+    !-----------------------------------------------------------------------------------
+
+    USE FluidProperties
+    USE CoilCalcMod
+    USE AirPropMod
+    USE OilMixtureMod
+    USE ReversingValveMod
+
+    IMPLICIT NONE
+
+    !Subroutine argument declarations
+    CHARACTER*80,     INTENT(IN)  :: Ref$
+    INTEGER(2),       INTENT(IN)  :: PureRef
+    REAL, INTENT(IN)  :: XIN(9)
+    !REAL, INTENT(IN)  :: PAR(52)
+    REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
+    REAL, INTENT(OUT) :: OUT(25)
+
+    !Subroutine lcoal variables
+    REAL :: MCXIN(7)  !Microchannel coil input data
+    REAL :: MCPAR(33) !Microchannel coil input parameters
+    REAL :: MCOUT(21) !Microchannel coil output data
+
+    INTEGER,SAVE :: CoilType  !1=Condenser; 2=Evaporator; 
+    !3=High side interconnecting pipes; 
+    !4=Low side interconnecting pipes
+    !5=Microchannel condenser
+    !6=Microchannel evaporator
+
+    REAL tSiSUM    !Sum of inlet surface temperature, C
+    REAL tSoSUM    !Sum of outlet surface temperature, C
+    REAL QcktSens !Sensible Circuit heat transfer, kW
+    REAL DPreturnbend !Pressure drop at return bend, kPa
+    REAL DPair        !Air side pressure drop, kPa
+    REAL DPckt        !Refrigerant pressure drop in circuit, kPa
+    REAL Gckt         !Mass flux in circuit, kg/m^2
+    REAL DiffpRoMod !Difference in pRoMod
+    REAL PrevpRoMod !Previous value of pRoMod
+    LOGICAL Converged          !Solution convergence flag
+    REAL MaxResidual !Maximum residual in iteration
+    Real PTol !Evaporator Outlet Pressure convergence criteria,kPa
+    REAL Wlocal           !Local oil mass fraction
+    REAL tRdis !Compressor discharge temperature, C
+    REAL DPvalve !Reversing valve pressure drop, kPa
+    REAL hRsuc !Suction enthalpy, kPa
+    INTEGER NumSection !Section number, ISI - 09/10/07
+
+    REAL :: tSAvgCoil = 0.0
+
+    !Flow:
+
+    mRefTot =XIN(1)
+    pRiCoil =XIN(2)
+    hRiCoil =XIN(3)
+    mAiCoil =XIN(4)
+    tAiCoil =XIN(5)
+    rhAiCoil=XIN(6)
+    QdisTube=XIN(7)
+    SolarFlux=XIN(8)
+    tRdis=XIN(9)
+
+    IF (QdisTube .EQ. 0) QdisTube=SMALL 
+
+    LsucLn    = PAR(1)
+    ODsucLn   = PAR(2)
+    SucLnThk  = PAR(3)
+    ElevSucLn = PAR(4)
+    QsucLn    = PAR(5)
+    DTsucLn   = PAR(6)
+    AddDPSucLn = PAR(7)
+
+    IsCoolingMode   = PAR(20)
+
+    IsSimpleCoil=PAR(53) !ISI - 12/21/06
+    FirstTime=PAR(54)    !ISI - 12/21/06
+
+    IF (FirstTime .EQ. 1) THEN
+
+        ODtube      = PAR(8)
+        TubeThk     = PAR(9)
+        Ltube       = PAR(10)
+        Ktube       = PAR(11)
+        Pt          = PAR(12)
+        Pl          = PAR(13)
+        FinThk      = PAR(14)
+        FinPitch    = PAR(15)
+        Kfin        = PAR(16)
+        Nt          = PAR(17)
+        Nl          = PAR(18)
+        NumOfCkts   = PAR(19)  
+        NumOfMods   = PAR(21)
+        FinType     = PAR(22)
+        TubeType    = PAR(30)
+        CALL InitEvaporatorCoil(CoilType)
+        CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
+        Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
+        FinThk,FinPitch,WeightAluminum,WeightCopper)
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            !VL: Previously: GOTO 200
+            OUT(20)=ErrorFlag
+            CALL Evaporator_Helper_1
+            RETURN
+        END IF
+        CALL RefrigerantParameters(Ref$)
+        CALL GetRefID(Ref$,RefID)
+        !FirstTime=.FALSE. !ISI - 12/21/06
+    END IF
+
+    hciMultiplier   = PAR(23)
+    !hcoMultiplier   = PAR(24) !ISI - 09/23/2008 
+    !DPrefMultiplier = PAR(25) !ISI - 09/23/2008
+    DPrefMultiplier = PAR(24)
+    hcoMultiplier   = PAR(25)
+    DPairMultiplier = PAR(26)
+
+    PwrFan           = PAR(27)
+    DrawBlow         = PAR(28)
+    SurfAbsorptivity = PAR(29)
+
+    BaroPressure     = PAR(31)
+    QlossCmp         = PAR(32)
+    IsCmpInAirStream = PAR(33)
+    SystemType       = PAR(34)
+
+    CurveUnit		   = PAR(35)
+    CurveTypeHTC     = PAR(36)
+    PowerAHTC		   = PAR(37)
+    PowerBHTC		   = PAR(38)
+    Poly1HTC		   = PAR(39)
+    Poly2HTC 		   = PAR(40)
+    Poly3HTC  	   = PAR(41)
+    Poly4HTC 		   = PAR(42)
+    CurveTypeDP 	   = PAR(43)
+    PowerADP  	   = PAR(44)
+    PowerBDP 		   = PAR(45)
+    Poly1DP   	   = PAR(46)
+    Poly2DP   	   = PAR(47)
+    Poly3DP   	   = PAR(48)
+    Poly4DP 		   = PAR(49)
+    PTol			   = PAR(50)
+    Wabsolute        = PAR(51)
+    CompManufacturer = PAR(52)  	
+
+    IF (CoilType .EQ. MCEVAPORATOR) THEN
+        CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
+        CALL MicrochannelEvaporator(Ref$,MCXIN,MCPAR,MCOUT)
+        CALL LoadMicrochannelOutputs(MCOUT,OUT)
+        RETURN
+    END IF
+
+    EqCircuits=0 !Equivalent circuit flag
+
+    ErrorFlag=NOERROR !Initilaize
+
+    !Tube inside diameter
+    IDsucLn=ODsucLn-SucLnThk*2
+
+    !Fin spacing
+    FinSpg = 1/FinPitch-FinThk
+
+    !Return bend length
+    Dreturnbend=Pt
+    Lreturnbend=Dreturnbend*PI/2 
+
+    !Total number of modules in the last row
+    NmodLast=Nt*NumOfMods
+
+    !Coil height
+    HtCoil=Nt*Pt
+
+    !Coil length
+    Lcoil=Nl*Nt*Ltube
+
+    !Face area
+    Aface=Ltube*Nt*Pt
+
+    !Tube information
+    LmodTube=Ltube/NumOfMods
+
+    CALL InitBoundaryConditions(CoilType)
+    IF (ErrorFlag .GT. CONVERGEERROR) THEN
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
+
+    !****** Start coil calculation ******
+    Qcoil=0.0; QcoilSens=0 !ISI - 09/10/07
+    DO NumSection=1, NumOfSections !ISI - 09/10/07
+
+        !ISI - 09/10/07
+        Converged=.TRUE. 
+        pRoCoilPrev=pRiCoil
+        MaxResidual=0
+
+        DO Iter=1, MdotMaxIter
+
+            !Initialize
+            mRefJoin=0; PrevQcoil=BIG; 
+
+            DO AirBCiter=1, AirBCmaxIter
+
+                !ISI - 09/10/07
+                CoilSection(NumSection)%Qsection=0.0
+                CoilSection(NumSection)%QsectionSens=0.0
+                tSiSUM=0.0; tSoSUM=0.0
+
+                DO I=1,CoilSection(NumSection)%NumOfCkts
+
+                    Qckt=0.0; QcktSens=0
+
+                    CALL CalcCircuitRefInletConditions(NumSection,I,I,CoilType) !ISI - 09/10/07
+
+                    !Find first and last simulation tubes
+                    IF (IsSimpleCoil .EQ. 1) THEN
+                        FirstTube=1
+                        LastTube=1
+                    ELSE !ISI - 09/10/07
+                        FirstTube=1
+                        LastTube=CoilSection(NumSection)%Ckt(I)%Ntube 
+                        IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
+                            FirstTube=2 !Skip first tube
+                        END IF 
+                        IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
+                            LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
+                        END IF
+                    END IF
+
+                    !****************** Hard code refrigerant distribution ****************** 
+                    !              CoilSection(NumSection)%Ckt(1)%mRef=mRefTot*1.5/8
+                    !              CoilSection(NumSection)%Ckt(2)%mRef=mRefTot*1/8
+                    !              CoilSection(NumSection)%Ckt(3)%mRef=mRefTot*1.5/8
+                    !              CoilSection(NumSection)%Ckt(4)%mRef=mRefTot*1.5/8
+                    !              CoilSection(NumSection)%Ckt(5)%mRef=mRefTot*1/8
+                    !              CoilSection(NumSection)%Ckt(6)%mRef=mRefTot*1.5/8
+                    !************************************************************************
+
+                    mRefMod=CoilSection(NumSection)%Ckt(I)%mRef !ISI - 09/10/07
+
+                    DO J=FirstTube,LastTube
+
+                        IF (IsSimpleCoil .EQ. 1) THEN
+                            TubeNum=1
+                        ELSE
+                            TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                        END IF
+
+                        DO K=1,NumOfMods
+
+                            IF (IsSimpleCoil .EQ. 1) THEN
+                                SELECT CASE(K)
+                                CASE (1)
+                                    LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts !Start with guessing the whole length
+                                CASE (2)
+                                    LmodTube=Lcoil/CoilSection(NumSection)%NumOfCkts-CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(1)%Len
+                                END SELECT
+                            END IF
+                            CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
+                            IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                                !VL: Previously: GOTO 200
+                                OUT(20)=ErrorFlag
+                                CALL Evaporator_Helper_1
+                                RETURN
+                            END IF
+
+                            !Calc. circuit heat transfer
+                            Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
+                            QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
+
+                            !Calc. sum of outlet air surface temperature
+                            IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Back .EQ. 0) THEN 
+                                tSoSUM=tSoSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSo
+                            END IF
+
+                            IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Fup .EQ. 0 .AND. &
+                            CoilSection(NumSection)%Ckt(I)%Tube(J)%Fdown .EQ. 0) THEN
+                                tSiSUM=tSiSUM+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%tSi
+                            END IF
+
+                        END DO !End mod
+
+                    END DO !End tube
+
+                    pRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%pRo !Circuit outlet pressure
+                    hRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
+
+                    Pressure=pRoCkt*1000
+                    Enthalpy=hRoCkt*1000
+                    tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
+                        ErrorFlag=REFPROPERROR
+                        !VL: Previously: GOTO 200
+                        OUT(20)=ErrorFlag
+                        CALL Evaporator_Helper_1
+                        RETURN
+                    END IF
+                    xRoCkt=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
+                        ErrorFlag=REFPROPERROR
+                        !VL: Previously: GOTO 200
+                        OUT(20)=ErrorFlag
+                        CALL Evaporator_Helper_1
+                        RETURN
+                    END IF
+
+                    Pressure=pRoCkt*1000
+                    Quality=1
+                    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
+                        ErrorFlag=REFPROPERROR
+                        !VL: Previously: GOTO 200
+                        OUT(20)=ErrorFlag
+                        CALL Evaporator_Helper_1
+                        RETURN
+                    END IF
+
+                    IF (xRoCkt .GE. 1) THEN 
+                        CoilSection(NumSection)%Ckt(I)%tSH=tRoCkt-tSat !Superheat
+                    ELSE
+                        CoilSection(NumSection)%Ckt(I)%tSH=0.0
+                    END IF
+
+                    CoilSection(NumSection)%Ckt(I)%tRo=tRoCkt
+                    CoilSection(NumSection)%Ckt(I)%pRo=pRoCkt
+                    CoilSection(NumSection)%Ckt(I)%hRo=hRoCkt
+                    CoilSection(NumSection)%Ckt(I)%Qckt=Qckt          !Circuit capcity
+                    CoilSection(NumSection)%Ckt(I)%QcktSens=QcktSens  !Sensible Circuit capcity
+                    CoilSection(NumSection)%Qsection=CoilSection(NumSection)%Qsection+CoilSection(NumSection)%Ckt(I)%Qckt !Total coil capacity
+                    CoilSection(NumSection)%QsectionSens=CoilSection(NumSection)%QsectionSens+CoilSection(NumSection)%Ckt(I)%QcktSens !Total sensible coil capacity
+
+                    IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile .OR. IsSimpleCoil .EQ. 1) THEN  !Equivalent circuit and Uniform velocity profile
+                        Qcoil=CoilSection(NumSection)%Qsection*CoilSection(NumSection)%NumOfCkts
+                        QcoilSens=CoilSection(NumSection)%QsectionSens*CoilSection(NumSection)%NumOfCkts
+                        pRoCoil=pRoCkt
+                        hRoCoil=hRoCkt
+                        CoilSection(NumOfSections)%pRo=pRoCkt
+                        CoilSection(NumOfSections)%hRo=hRoCkt
+                        EXIT
+                    END IF
+
+                    IF (CoilSection(NumSection)%Ckt(I)%OutSplit .LE. 1 .AND. CoilSection(NumSection)%Ckt(I)%OutJoin .LE. 1) THEN
+                        mRefJoin=mRefJoin+CoilSection(NumSection)%Ckt(I)%mRef 
+                    END IF
+
+                END DO !End circuit
+
+                IF (IsSimpleCoil .EQ. 1) EXIT
+
+                CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)
+                CPair=CPA(REAL(tAmod))
+                Cair=mAiCoil*CPAir
+
+                tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair
+
+                DiffQcoil=ABS((CoilSection(NumSection)%Qsection-PrevQcoil)/PrevQcoil) 
+                IF (DiffQcoil .GT. SMALL) THEN 
+                    !WRITE(*,*)AirBCiter,Qcoil,PrevQcoil
+                    PrevQcoil=CoilSection(NumSection)%Qsection
+                ELSE 
+                    EXIT
+                END IF
+
+            END DO !end AirBCiter
+
+            IF (IsSimpleCoil .EQ. 1) EXIT
+
+            IF (AirBCiter .GT. AirBCmaxIter) THEN
+                !WRITE(*,*)'-- WARNING -- Evaporator: AirBCiter not converged.'
+                ErrorFlag=CONVERGEERROR
+            END IF
+
+            IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) EXIT !for equivalent circuit, no need to update mdot ref.
+
+            !Synchronize from circuits to tubes
+            DO I=1, CoilSection(NumSection)%NumOfCkts
+
+                FirstTube=1
+                LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
+                IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
+                    FirstTube=2 !Skip first tube
+                END IF 
+                IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
+                    LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
+                END IF
+                IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+
+                DO J=FirstTube, LastTube
+                    TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                    Tube(TubeNum)=CoilSection(NumSection)%Ckt(I)%Tube(J)
+                END DO
+
+                IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
+                    CoilSection(NumSection)%Ckt(I)%Tube(1)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(1))
+                END IF 
+                IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
+                    CoilSection(NumSection)%Ckt(I)%Tube(CoilSection(NumSection)%Ckt(I)%Ntube)=Tube(CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                END IF
+
+            END DO !End circuit
+
+            pRoCkt=0
+            SumpRoCkt=0
+            DO I=1, CoilSection(NumSection)%NumOfCkts
+                IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) THEN !outlet circuit
+                    SumpRoCkt=SumpRoCkt+CoilSection(NumSection)%Ckt(I)%pRo
+                END IF
+            END DO !End Circuit
+            CoilSection(NumSection)%pRo=SumpRoCkt/CoilSection(NumSection)%NcktLast
+            IF (SumpRoCkt .EQ. 0) SumpRoCkt=CoilSection(NumSection)%Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
+
+            IF (ABS(CoilSection(NumSection)%pRo-pRoCoilPrev) .GT. Ptol) THEN
+                MaxResidual=ABS(pRoCoilPrev-CoilSection(NumSection)%pRo)
+                pRoCoilPrev=CoilSection(NumSection)%pRo
+                Converged=.FALSE.
+            END IF
+
+            IF (IsSameNumOfTubes .AND. IsUniformVelProfile) EXIT	
+
+            IF (NOT(Converged) .OR. Iter .LE. 2) THEN 
+                Converged=.TRUE. ! Reinitialize
+
+                !Moved this subroutine to CoilCalc and share with condenser ISI - 06/05/07
+                CALL UpdateRefMassFlowRate(Iter,CoilSection(NumSection)%Ckt, &
+                CoilSection(NumSection)%NumOfCkts, &
+                CoilSection(NumSection)%pRi,mRefTot, &
+                CoilSection(NumSection)%Nnode,CoilSection(NumSection)%Node)
+            ELSE
+                EXIT
+            END IF
+
+        END DO !End iter
+
+        IF (Iter .GT. MdotMaxIter) THEN
+            IF (MaxResidual .GT. Ptol) THEN
+                WRITE(*,107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
+                ErrorFlag=CONVERGEERROR
+                !          ELSE !Less severe, to speed up simulation, ISI - 05/06/2009
+                !              WRITE(*,107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
+                !              ErrorFlag=CONVERGEERRORMINOR
+            END IF
+        END IF
+
+        IF (IsSimpleCoil .EQ. 1) EXIT
+
+        !ISI - 09/10/07
+        CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
+        CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
+
+        Qcoil=Qcoil+CoilSection(NumSection)%Qsection
+        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens  
+
+    END DO !Number of sections, !ISI - 09/10/07
+
+    pRoCoil=CoilSection(NumOfSections)%pRo
+
+    !Surface temperature
+    tSiCoil=tSiSUM/NmodLast
+    tSoCoil=tSoSUM/NmodLast
+
+    tSAvgCoil = (tSiCoil+tSoCoil)/2
+    CoilParams(2)%TSurfCoil=tSAvgCoil
+    !CoilParams(2)%TSurfoCoil = tSoCoil
+    !Coil air side outlet condition
+    !CALL CPCVA(REAL(tAiCoil),CPAir,CVAir,GAMMA,SONIC)
+    !CPair=CPA(REAL(tAiCoil))
+    CPair=CPA(REAL(tAmod))
+    Cair=mAiCoil*CPAir
+
+    IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
+        QcoilSens=Qcoil
+    END IF
+
+    tAoCoil=tAiCoil+QcoilSens/Cair
+    hAoCoil=hAiCoil+Qcoil/mAiCoil
+
+    !Fan air side inlet condition
+    !CPair=CPA(REAL(tAiCoil))
+    CPair=CPA(REAL(tAoCoil))
+    Cair=mAiCoil*CPAir
+
+    !IF (SystemType .NE. 4) THEN !For reheat system, skip this
+    IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
+        !IF (IsCoolingMode .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
+        IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
+            tAoCoil=tAoCoil+PwrFan/Cair
+            hAoCoil=hAoCoil+PwrFan/mAiCoil
+        END IF
+    END IF
+
+    AirPropOpt=1
+    AirProp(1)=tAiCoil
+    AirProp(4)=hAiCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    DensityIn=AirProp(7)
+
+    AirPropOpt=1
+    AirProp(1)=tAoCoil
+    AirProp(4)=hAoCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    rhAoCoil=AirProp(3)
+    DensityOut=AirProp(7)
+
+    WetFlag=0
+    RowNum=0
+    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+
+    !hco=hco*hcoMultiplier
+    DPair=DPair*DPairMultiplier
+
+    hRoCoil=hRiCoil-Qcoil/mRefTot
+
+    Pressure=pRoCoil*1000
+    Enthalpy=hRoCoil*1000
+    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
+    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
+
+    Pressure=pRoCoil*1000
+    Quality=1
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
+
+    !IF (Wabsolute .GT. 0) THEN
+    !  Wlocal=LocalOilMassFraction(Wabsolute,xRoCoil)
+    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
+    !END IF
+
+    IF (xRoCoil .GE. 1) THEN
+        tSHoCoil=tRoCoil-tSat
+    ELSE
+        tSHoCoil=0
+    END IF
+
+    !****** Suction line calculation ******
+    IF (LsucLn .GT. 0) THEN
+        CALL SuctionLine
+        !	  IF (ErrorFlag .GT. CONVERGEERROR) THEN
+        !		  WRITE(*,*)'-- WARNING -- SuctionLine: Refprop error. Line 2683'
+        !		  GOTO 200x
+        !	  END IF
+    ELSE
+        pRiCmp=pRoCoil
+        hRiCmp=hRoCoil
+    END IF
+
+    IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
+        !Calculate reversing valve heat transfer and pressure drop
+        Pressure=pRiCmp*1000
+        Enthalpy=hRiCmp*1000
+        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+        IF (RefPropErr .GT. 0) THEN
+            WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
+            ErrorFlag=REFPROPERROR
+            !VL: Previously: GOTO 200
+            OUT(20)=ErrorFlag
+            CALL Evaporator_Helper_1
+            RETURN
+        END IF
+
+        hRsuc=hRiCmp
+        IF (IsCoolingMode .GT. 0) THEN
+            !Correlatino good for cooling only
+            CALL SuctionHeatTransfer(mRefTot,tRdis,tRiCmp,hRsuc,hRiCmp)
+            CALL SuctionPressureDrop(mRefTot,DPvalve)    	
+            pRiCmp=pRiCmp-DPvalve
+        END IF
+
+    END IF
+
     Pressure=pRiCmp*1000
     Enthalpy=hRiCmp*1000
     tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
         ErrorFlag=REFPROPERROR
-	    GOTO 200
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
+    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
     END IF
 
-	hRsuc=hRiCmp
-	IF (IsCoolingMode .GT. 0) THEN
-	    !Correlatino good for cooling only
-	    CALL SuctionHeatTransfer(mRefTot,tRdis,tRiCmp,hRsuc,hRiCmp)
-        CALL SuctionPressureDrop(mRefTot,DPvalve)    	
-	    pRiCmp=pRiCmp-DPvalve
-	END IF
+    Pressure=pRiCmp*1000
+    Quality=1
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(20)=ErrorFlag
+        CALL Evaporator_Helper_1
+        RETURN
+    END IF
 
-  END IF
+    !IF (Wabsolute .GT. 0) THEN
+    !  Wlocal=LocalOilMassFraction(Wabsolute,xRiCmp)
+    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
+    !END IF
 
-  Pressure=pRiCmp*1000
-  Enthalpy=hRiCmp*1000
-  tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
-  xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
+    IF (xRiCmp .GE. 1) THEN
+        tSHiCmp=tRiCmp-tSat
+    ELSE
+        tSHiCmp=0
+    END IF
 
-  Pressure=pRiCmp*1000
-  Quality=1
-  tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
+    OUT(1)=pRoCoil
+    OUT(2)=hRoCoil
+    OUT(3)=tRoCoil
+    OUT(4)=xRoCoil
+    OUT(5)=tSHoCoil
+    OUT(6)=pRiCmp
+    OUT(7)=hRiCmp
+    OUT(8)=tRiCmp
+    OUT(9)=xRiCmp
+    OUT(10)=tSHiCmp
+    OUT(11)=Qcoil
+    OUT(12)=QcoilSens
+    OUT(13)=MassSucLn
+    OUT(14)=0
+    OUT(15)=0
+    OUT(16)=0
+    OUT(17)=tAoCoil
+    OUT(18)=rhAoCoil
+    OUT(19)=DPair
 
-  !IF (Wabsolute .GT. 0) THEN
-  !  Wlocal=LocalOilMassFraction(Wabsolute,xRiCmp)
-  !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-  !END IF
+    OUT(21)=hco
+    OUT(22)=tSiCoil
+    OUT(23)=tSoCoil
+    OUT(24)=WeightAluminum
+    OUT(25)=WeightCopper
 
-  IF (xRiCmp .GE. 1) THEN
-	  tSHiCmp=tRiCmp-tSat
-  ELSE
-      tSHiCmp=0
-  END IF
+!VL: Previously: 200 CONTINUE
 
-  OUT(1)=pRoCoil
-  OUT(2)=hRoCoil
-  OUT(3)=tRoCoil
-  OUT(4)=xRoCoil
-  OUT(5)=tSHoCoil
-  OUT(6)=pRiCmp
-  OUT(7)=hRiCmp
-  OUT(8)=tRiCmp
-  OUT(9)=xRiCmp
-  OUT(10)=tSHiCmp
-  OUT(11)=Qcoil
-  OUT(12)=QcoilSens
-  OUT(13)=MassSucLn
-  OUT(14)=0
-  OUT(15)=0
-  OUT(16)=0
-  OUT(17)=tAoCoil
-  OUT(18)=rhAoCoil
-  OUT(19)=DPair
+    OUT(20)=ErrorFlag
 
-  OUT(21)=hco
-  OUT(22)=tSiCoil
-  OUT(23)=tSoCoil
-  OUT(24)=WeightAluminum
-  OUT(25)=WeightCopper
+106 FORMAT(I4,F18.9)
+107 FORMAT(A67,F5.6) !VL Comment: previously !107   FORMAT(A67,F5.3)
 
-  200 CONTINUE
-  
-  OUT(20)=ErrorFlag
+    ! Code chunk moved to Evaporator_Helper_1   
+    ! ---------------------------------------       
+    ! IF(CoolHeatModeFlag == 1) THEN
+    !  CoilParams(1)%CoilInletRefTemp=tRiCoil
+    !  CoilParams(1)%CoilOutletRefTemp=tRoCoil
+    !  CoilParams(1)%CoilInletAirTemp=tAiCoil
+    !  CoilParams(1)%CoilOutletAirTemp=tAoCoil
+    !  CoilParams(1)%DPAir=DPair
+    !  CoilParams(1)%DPRef=pRicoil-pRocoil
+    !ELSE IF(CoolHeatModeFlag == 0) THEN
+    !  CoilParams(2)%CoilInletRefTemp=tRiCoil
+    !  CoilParams(2)%CoilOutletRefTemp=tRoCoil
+    !  CoilParams(2)%CoilInletAirTemp=tAiCoil
+    !  CoilParams(2)%CoilOutletAirTemp=tAoCoil
+    !  CoilParams(2)%DPAir=DPair
+    !  CoilParams(2)%DPRef=pRicoil-pRocoil
+    ! END IF
+    ! ---------------------------------------
+    CALL Evaporator_Helper_1
 
-  106   FORMAT(I4,F18.9)
-  107   FORMAT(A67,F5.6) !VL Comment: previously !107   FORMAT(A67,F5.3)
-  
-  IF(CoolHeatModeFlag == 1) THEN
-   CoilParams(1)%CoilInletRefTemp=tRiCoil
-   CoilParams(1)%CoilOutletRefTemp=tRoCoil
-   CoilParams(1)%CoilInletAirTemp=tAiCoil
-   CoilParams(1)%CoilOutletAirTemp=tAoCoil
-   CoilParams(1)%DPAir=DPair
-   CoilParams(1)%DPRef=pRicoil-pRocoil
- ELSE IF(CoolHeatModeFlag == 0) THEN
-   CoilParams(2)%CoilInletRefTemp=tRiCoil
-   CoilParams(2)%CoilOutletRefTemp=tRoCoil
-   CoilParams(2)%CoilInletAirTemp=tAiCoil
-   CoilParams(2)%CoilOutletAirTemp=tAoCoil
-   CoilParams(2)%DPAir=DPair
-   CoilParams(2)%DPRef=pRicoil-pRocoil
-  END IF
+    RETURN
 
-  RETURN
+    END SUBROUTINE Evaporator
 
-END SUBROUTINE Evaporator
+    SUBROUTINE Evaporator_Helper_1
+
+    IF(CoolHeatModeFlag == 1) THEN
+        CoilParams(1)%CoilInletRefTemp=tRiCoil
+        CoilParams(1)%CoilOutletRefTemp=tRoCoil
+        CoilParams(1)%CoilInletAirTemp=tAiCoil
+        CoilParams(1)%CoilOutletAirTemp=tAoCoil
+        CoilParams(1)%DPAir=DPair
+        CoilParams(1)%DPRef=pRicoil-pRocoil
+    ELSE IF(CoolHeatModeFlag == 0) THEN
+        CoilParams(2)%CoilInletRefTemp=tRiCoil
+        CoilParams(2)%CoilOutletRefTemp=tRoCoil
+        CoilParams(2)%CoilInletAirTemp=tAiCoil
+        CoilParams(2)%CoilOutletAirTemp=tAoCoil
+        CoilParams(2)%DPAir=DPair
+        CoilParams(2)%DPRef=pRicoil-pRocoil
+    END IF
+
+    END SUBROUTINE Evaporator_Helper_1
+
+
 
 !************************************************************************
 
@@ -2130,921 +2201,983 @@ END SUBROUTINE PrintEvaporatorResult
 
 !************************************************************************
 
-SUBROUTINE InitEvaporatorCoil(CoilType)
-
-!------------------------------------------------------------------------
-!Purpose:
-!To initialize evaporator geometry and circuiting
-!
-!Author
-!Ipseng Iu
-!Oklahoma State Univerity, Stillwater
-!
-!Date
-!March 2005
-!
-!Reference:
-!none
-!
-!------------------------------------------------------------------------
-
-USE UnitConvertMod
-
-IMPLICIT NONE
-
-INTEGER,INTENT(OUT) :: CoilType !1=Condenser; 2=Evaporator; 
-                                !3=High side interconnecting pipes; 
-							    !4=Low side interconnecting pipes
-							    !5=Microchannel condenser
-								!6=Microchannel Evaporator
-
-INTEGER I,J,II,III,IV !Loop counter
-CHARACTER*150 LineData
-INTEGER NumRow !Row number
-INTEGER NumOfPasses !Number of passes
-INTEGER NumPass !Pass number
-INTEGER Ntubes !Number of tubes
-INTEGER NumOfInlets !Number of inlets
-LOGICAL IsSIunit !SI unit input flag
-LOGICAL IsNewFormat !New format input flag
-LOGICAL IsShift !Is shift tube flag (for staggered tubes)
-INTEGER NumSection !Loop counter, ISI - 09/10/07
-  
-  !***** Get circuit info *****
-  IF (IsCoolingMode .GT. 0) THEN
-	  OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-  ELSE
-	  OPEN (12,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-  END IF
-  IF (ErrorFlag .NE. NOERROR) THEN 
-	  ErrorFlag=CKTFILEERROR
-	  GOTO 100
-  END IF
-  READ (12,202,IOSTAT=ErrorFlag)LineData
-  IF (ErrorFlag .NE. NOERROR) THEN 
-	  ErrorFlag=CKTFILEERROR
-	  GOTO 100
-  END IF
-
-  IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
-	  CoilType = MCEVAPORATOR
-  ELSE
-	  CoilType = EVAPORATORCOIL
-	  IF (LineData(1:13) .EQ. 'Fin-Tube Coil') THEN
-		  IsNewFormat=.TRUE.
-	  ELSE
-		  IsNewFormat=.FALSE.
-	  END IF
-  END IF
-
-  IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
-
-	  IF (IsNewFormat) THEN
-
-		  READ(12,*) !**************************** Geometry *************************************
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  SELECT CASE (LineData(1:1))
-		  CASE ('F','f')
-			IsSIunit=.FALSE.
-		  CASE DEFAULT
-			IsSIunit=.TRUE.
-		  END SELECT
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)FinType
-
-		  READ(12,*) !Fin name
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)FinPitch
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Kfin
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)FinThk
-			  
-		  READ(12,*) !Fin material
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)TubeType
-
-		  READ(12,*) !Tube name
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)ODtube
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)IDtube
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Ktube
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Pt
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Pl
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Nl
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Nt
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)Ltube
-
-		  IF (Ltube .LE. 1e-3) THEN
-		     ErrorFlag=ZEROLENCOILERROR
-		    GOTO 100
-		  END IF
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)NumOfMods
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)NumOfCkts
-
-		  READ(12,202)LineData
-		  I=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(I+1:150))
-		  READ(LineData,*)IsShift
-
-		  READ(12,202)LineData
-		  IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
-		      I=SCAN(LineData,',')
-		      LineData=ADJUSTL(LineData(I+1:150))
-		      READ(LineData,*)NumOfSections	    
-		      READ(12,202)LineData !*************************** Circuiting ************************************
-		  ELSE
-		      NumOfSections=1
-		  END IF
-		  !READ(12,*) !*************************** Circuiting ************************************
-
-		  CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
-									  ODtube,IDtube,Ktube,Pt,Pl,Ltube)
-
-		  TubeThk=(ODtube-IDtube)/2
-
-		  IF (IsShift) THEN
-			  ShiftTube = 1
-		  ELSE
-			  ShiftTube = 0
-		  END IF
-
-	  ELSE !Old format
-
-		  I=SCAN(LineData,',')
-		  DO J=1, 8
-			  LineData=ADJUSTL(LineData(I+1:150))
-			  I=SCAN(LineData,',')
-		  END DO
-		  READ(LineData,*)ShiftTube
-		  IF (ShiftTube .GT. 0) ShiftTube = 1
-
-		  IDtube = ODtube-TubeThk*2
-  
-	  END IF
-
-	  IF (Pl .EQ. 0) Pl = Pt
-
-	  READ (12,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
-	  IF (ErrorFlag .NE. NOERROR) THEN 
-		  ErrorFlag=CKTFILEERROR
-		  GOTO 100
-	  END IF
-
-	  NumOfTubes=Nl*Nt  
-
-	  !Fin spacing
-	  FinSpg = 1/FinPitch-FinThk
-
-	  !For plate finned tube
-	  FinHeight=0 !No use for plate finned tube
-	  TubeDepth=ODtube
-	  TubeHeight=ODtube
-	  Dchannel=IDtube
-	  NumOfChannels=1
-
-	  IF (FinSpg .LT. FinThk) THEN
-		  ErrorFlag=COILFINERROR
-		  GOTO 100
-	  END IF
-
-	  IF (Pt .LT. ODtube+2*FinThk) THEN
-		  ErrorFlag=COILTUBEERROR
-		  GOTO 100
-	  END IF
-
-	  IF (IsSimpleCoil .EQ. 1) THEN
-		  NumOfMods=2
-		  ALLOCATE(CoilSection(NumOfSections)) 
-		  ALLOCATE(Ckt(NumOfCkts))
-		  ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
-		  CoilSection(1)%NumOfCkts=NumOfCkts
-		  DO I=1, NumOfCkts
-			Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-			ALLOCATE(Ckt(I)%Tube(1))
-			ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-            CoilSection(1)%Ckt(I)=Ckt(I)
-		  END DO
-	  ELSE
-
-		  !ISI - 09/10/07
-		  ALLOCATE(CoilSection(NumOfSections)) 
-
-		  ALLOCATE(Tube(NumOfTubes))
-		  ALLOCATE(Tube2D(Nl,Nt))
-		  ALLOCATE(JoinTubes(NumOfTubes))
-
-		  DO I=1, NumOfTubes
-			  ALLOCATE(Tube(I)%Seg(NumOfMods))
-		  END DO
-
-		  DO I=1, Nl
-			  DO J=1, Nt
-				  ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
-			  END DO
-		  END DO
-
-		  ALLOCATE(Ckt(NumOfCkts))
-		  !ALLOCATE(mRefIter(NumOfCkts)) !Moved to Coil Section, ISI - 09/10/07
-		  DO I=1, NumOfCkts
-			  READ(12,*,IOSTAT=ErrorFlag)Nckt,Ckt(I)%Ntube
-			  IF (ErrorFlag .NE. NOERROR) THEN 
-				  ErrorFlag=CKTFILEERROR
-				  GOTO 100
-			  END IF
-			  !IF (I .GT. 1) THEN
-			  !	  IF (Ckt(I)%Ntube .NE. Ckt(I-1)%Ntube) THEN
-			  !		  IsSameNumOfTubes=.FALSE.	
-			  !	  END IF
-			  !END IF
-			  ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
-			  ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
-		  END DO
-
-		  !Check if all circuit have the same number of tubes !ISI - 09/12/06
-		  IsSameNumOfTubes=.TRUE.	
-		  Ntubes=Ckt(1)%Ntube
-		  DO I=2, NumOfCkts
-			IF (Ntubes .NE. Ckt(I)%Ntube) THEN
-			  IsSameNumOfTubes=.FALSE.
-			  EXIT	
-			END IF
-		  END DO
-
-		  READ(12,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
-		  IF (ErrorFlag .NE. NOERROR) THEN 
-			  ErrorFlag=CKTFILEERROR
-			  GOTO 100
-		  END IF
-
-		  DO I=1, NumOfCkts   
-			  IF (IsCoolingMode .EQ. 1) THEN 
-				  READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)   
-			  ELSE
-			  	  READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)  
-			  END IF
-			  IF (ErrorFlag .NE. NOERROR) THEN 
-				  ErrorFlag=CKTFILEERROR
-				  GOTO 100
-			  END IF
-		  END DO
-
-		  DO I=1,2
-			  READ(12,202)LineData !For section data, ISI - 09/10/07
-			  !READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
-			  IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
-				  ErrorFlag=CKTFILEERROR
-				  GOTO 100
-			  END IF
-		  END DO
-
-		  !Section data, ISI - 09/10/07
-		  !Initialize
-		  CoilSection%IsInlet = .TRUE.
-		  IF (LineData(1:1) .EQ. 'S') THEN
-		      DO I=1, NumOfSections
-		          READ(12,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
-		          ALLOCATE(CoilSection(I)%CktNum(CoilSection(I)%NumOfCkts))
-		          ALLOCATE(CoilSection(I)%mRefIter(CoilSection(I)%NumOfCkts))
-		      END DO
-		      READ(12,*) !Section#,Branch#
-		      DO I=1, NumOfSections
-		          READ(12,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)
-		      END DO		  
-		      READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
-		      READ(12,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
-		  ELSE
-		      CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
-		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
-		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-		      DO J=1, NumOfCkts
-		          CoilSection(NumOfSections)%CktNum(J)=J
-		      END DO
-		  END IF
-
-		  IsUniformVelProfile=.TRUE.
-		  DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-			  READ(12,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
-			  IF (ErrorFlag .NE. NOERROR) THEN 
-				  ErrorFlag=CKTFILEERROR
-				  GOTO 100
-			  END IF
-			  IF (IsUniformVelProfile) THEN
-				  DO J=1,NumOfMods
-					IF (Tube(I)%Seg(J)%VelDev .NE. 1) THEN
-					  IsUniformVelProfile=.FALSE.
-					  EXIT
-					END IF
-				  END DO
-			  END IF
-		  END DO
-
-		  !Synchronize 1-D and 2-D arrays
-		  DO I=1, Nl
-			  DO J=1, Nt
-  				  Tube2D(I,J)=Tube((I-1)*Nt+J)
-   			  END DO
-		  END DO
-
-		  !Propagate velocity profile to suceeding rows
-		  DO I=Nl-1,1,-1
-			DO J=1, Nt
-			  DO k=1, NumOfMods
-				Tube2D(I,J)%Seg(k)%VelDev=Tube2D(I+1,J)%Seg(k)%VelDev
-			  END DO
-			END DO
-		  END DO
-
-		  IF (ErrorFlag .NE. NOERROR) THEN 
-			  ErrorFlag=CKTFILEERROR
-			  GOTO 100
-		  END IF
-	  	  
-		  !Propagate circuit info to coil section, ISI - 09/10/07
-          NumInletSections=0
-          DO I=1, NumOfSections
-             IF (CoilSection(I)%IsInlet) NumInletSections=NumInletSections+1
-             
-             ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
-                  
-		     DO J=1, CoilSection(I)%NumOfCkts
-			     CoilSection(I)%Ckt(J)=Ckt(CoilSection(I)%CktNum(J))
-		     END DO
-          END DO
-
-		  !Determine inlet and outlet flags, split, joint or nothing, ISI - 09/10/07
-		  DO NumSection=1, NumOfSections
-		      CoilSection(NumSection)%Nnode=1
-		          
-		      Nnode=1
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-			      !Initialize
-			      CoilSection(NumSection)%Ckt(I)%InJoin=0
-			      CoilSection(NumSection)%Ckt(I)%InSplit=0
-			      CoilSection(NumSection)%Ckt(I)%OutJoin=0
-			      CoilSection(NumSection)%Ckt(I)%OutSplit=0
-			      DO J=1, CoilSection(NumSection)%NumOfCkts
-				      IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
-				          CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
-		  			      CoilSection(NumSection)%Ckt(I)%InJoin=CoilSection(NumSection)%Ckt(I)%InJoin+1
-				      END IF
-				      IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
-				          CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
-					      CoilSection(NumSection)%Ckt(I)%InSplit=CoilSection(NumSection)%Ckt(I)%InSplit+1
-				      END IF
-				      IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
-				          CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
-					      CoilSection(NumSection)%Ckt(I)%OutJoin=CoilSection(NumSection)%Ckt(I)%OutJoin+1
-				      END IF
-				      IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
-				          CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
-					      CoilSection(NumSection)%Ckt(I)%OutSplit=CoilSection(NumSection)%Ckt(I)%OutSplit+1
-				      END IF
-			      END DO
-			      IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1
-		      END DO !End NumOfCkts
-          
-		      CoilSection(NumSection)%Nnode=Nnode
-		      ALLOCATE(CoilSection(NumSection)%Node(Nnode))
-
-		      !Find split and joint tube numbers
-		      J=0
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-		          IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 ) THEN
-			          J=J+1
-			          CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(1)
-			      ELSEIF (CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) THEN
-			          J=J+1
-			          CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube)
-			      END IF
-			      IF (J .GT. Nnode) EXIT
-		      END DO
-		      CoilSection(NumSection)%Node(Nnode)%Num=0 !section outlet 
-
-		  END DO !End NumOfSections
-
-!		      !Determine inlet and outlet flags, split, joint or nothing
-!		      Nnode=1
-!		      DO I=1, NumOfCkts
-!			      !Initialize
-!			      Ckt(I)%InJoin=0
-!			      Ckt(I)%InSplit=0
-!			      Ckt(I)%OutJoin=0
-!			      Ckt(I)%OutSplit=0
-!			      DO J=1, NumOfCkts
-!				    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
-!		  			    Ckt(I)%InJoin=Ckt(I)%InJoin+1
-!				    END IF
-!				    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(1)) THEN
-!					    Ckt(I)%InSplit=Ckt(I)%InSplit+1
-!				    END IF
-!				    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
-!					    Ckt(I)%OutJoin=Ckt(I)%OutJoin+1
-!				    END IF
-!				    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(1)) THEN
-!					    Ckt(I)%OutSplit=Ckt(I)%OutSplit+1
-!				    END IF
-!			      END DO
-!			      IF (Ckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1
-!		      END DO
-!      
-!		      ALLOCATE(Node(Nnode))
-!
-!		      !Find split and joint tube numbers
-!		      J=0
-!		      DO I=1, NumOfCkts
-!			      IF (Ckt(I)%InJoin .GT. 1 ) THEN
-!				      J=J+1
-!				      Node(J)%Num=Ckt(I)%TubeSequence(1)
-!			      ELSEIF (Ckt(I)%OutSplit .GT. 1) THEN
-!				      J=J+1
-!				      Node(J)%Num=Ckt(I)%TubeSequence(Ckt(I)%Ntube)
-!			      END IF
-!			      IF (J .GT. Nnode) EXIT
-!		      END DO
-!		      Node(Nnode)%Num=0 !coil outlet
-
-		  !Find surrounding tubes
-		  DO I=1, Nl
-			  DO J=1, Nt
-				  IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
-					 !Tube2D(I,J)%RowNum=I
-					 Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
-				  ELSE
-					 Tube2D(I,J)%RowNum=0
-				  END IF
-				  IF (ShiftTube .EQ. 0) THEN
-					  IF (MOD(I,2) .EQ. 1) THEN
-						  Tube2D(I,J)%Fup=I*Nt+(J-1)
-						  Tube2D(I,J)%Fdown=I*Nt+J
-						  Tube2D(I,J)%Back=1
-						  IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !Odd row, first tube
-					  ELSE
-						  Tube2D(I,J)%Fup=I*Nt+J
-						  Tube2D(I,J)%Fdown=I*Nt+(J+1)
-						  Tube2D(I,J)%Back=1
-						  IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !even row, first tube
-					  END IF
-				  ELSE
-	  				  IF (MOD(I,2) .EQ. 1) THEN
-						  Tube2D(I,J)%Fup=I*Nt+J
-						  Tube2D(I,J)%Fdown=I*Nt+(J+1)
-						  Tube2D(I,J)%Back=1
-						  IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !Odd row, first tube
-					  ELSE
-						  Tube2D(I,J)%Fup=I*Nt+(J-1)
-						  Tube2D(I,J)%Fdown=I*Nt+J
-						  Tube2D(I,J)%Back=1
-						  IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !even row, first tube
-					  END IF
-				  END IF
-
-				  IF (I .EQ. Nl) THEN
-					  Tube2D(I,J)%Fup=0
-					  Tube2D(I,J)%Fdown=0
-				  END IF
-				  IF (I .EQ. 1) Tube2D(I,J)%Back=0
-			  END DO !End of J
-		  END DO !End of I
-
-		  !Synchronize 1-D and 2-D arrays
-		  DO I=1, Nl
-			  DO J=1, Nt
-				  Tube((I-1)*Nt+J)=Tube2D(I,J)
-  			  END DO
-		  END DO
-
-		  !ISI - 09/10/07
-		  Tube%Empty = 1 !Initialize 
-		  DO NumSection=1, NumOfSections
-		      
-		      !Find even tubes
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-
-  		          !Find first and last simulation tubes
-			      FirstTube=1
-			      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
-			      IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
-				      FirstTube=2 !Skip first tube
-			      END IF 
-			      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
-				      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
-			      END IF
-			      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
-
-			      DO J=FirstTube, LastTube
-				      TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
-				      Tube(TubeNum)%Even=0
-				      IF (FirstTube .EQ. 2 ) THEN
-				          IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
-				      ELSE
-					      IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
-				      END IF
-			      END DO !End of J
-		      END DO !End of I
-
-		      !Find empty tubes
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-			      DO J=1, CoilSection(NumSection)%Ckt(I)%Ntube
-	  		          TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
-  				      Tube(TubeNum)%Empty=0
-  			      END DO
-		      END DO
-
-		      !Number of inlet circuits
-		      CoilSection(NumSection)%NcktFirst=0
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-			      IF (CoilSection(NumSection)%Ckt(I)%InJoin .LT. 1) CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
-		      END DO
-		      IF (CoilSection(NumSection)%NcktFirst .EQ. 0) CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
-
-		      !Number of outlet circuits
-		      CoilSection(NumSection)%NcktLast=0
-		      DO I=1, CoilSection(NumSection)%NumOfCkts
-			      IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) CoilSection(NumSection)%NcktLast=CoilSection(NumSection)%NcktLast+1
-		      END DO
-		      IF (CoilSection(NumSection)%NcktLast .EQ. 0) CoilSection(NumSection)%NcktLast = 1 !At least one circuit, ISI - 07/28/06	  
-              
-          END DO !End NumOfSections
-              
-!		      !Find even tubes
-!		      DO I=1, NumOfCkts
-!
-!  			      !Find first and last simulation tubes
-!			      FirstTube=1
-!			      LastTube=Ckt(I)%Ntube
-!			      IF (Ckt(I)%InSplit .GT. 1) THEN
-!				      FirstTube=2 !Skip first tube
-!			      END IF 
-!			      IF (Ckt(I)%OutJoin .GT. 1) THEN
-!				      LastTube=Ckt(I)%Ntube-1 !Ignore last tube
-!			      END IF
-!			      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
-!
-!			      DO J=FirstTube, LastTube
-!				      TubeNum=Ckt(I)%TubeSequence(J)
-!				      Tube(TubeNum)%Even=0
-!				      IF (FirstTube .EQ. 2 ) THEN
-!					      IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
-!				      ELSE
-!					      IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
-!				      END IF
-!			      END DO !End of J
-!		      END DO !End of I
-!
-!		      !Find empty tubes
-!		      Tube%Empty = 1 !Initialize 
-!		      DO I=1, NumOfCkts
-!			      DO J=1, Ckt(I)%Ntube
-!	  			      TubeNum=Ckt(I)%TubeSequence(J)
-!  				      Tube(TubeNum)%Empty=0
-!  			      END DO
-!		      END DO
-!
-!		      !Number of inlet circuits
-!		      NcktFirst=0
-!		      DO I=1, NumOfCkts
-!			      IF (Ckt(I)%InJoin .LT. 1) NcktFirst=NcktFirst+1
-!		      END DO
-!		      IF (NcktFirst .EQ. 0) NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
-!
-!		      !Number of outlet circuits
-!		      NcktLast=0
-!		      DO I=1, NumOfCkts
-!			      IF (Ckt(I)%OutSplit .EQ. 0) NcktLast=NcktLast+1
-!		      END DO
-!		      IF (NcktLast .EQ. 0) NcktLast = 1 !At least one circuit, ISI - 07/28/06	  
-	  
-	  END IF
-		  	  
-  ELSE !Microchannel coil
-
-	  READ(12,*) !**************************** Geometry *************************************
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  SELECT CASE (LineData(1:1))
-	  CASE ('F','f')
-		IsSIunit=.FALSE.
-	  CASE DEFAULT
-		IsSIunit=.TRUE.
-	  END SELECT
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)FinType
-
-	  READ(12,*) !Fin name
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)FinPitch
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Kfin
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)FinThk
-	  
-	  READ(12,*) !Fin material
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)TubeType
-
-	  READ(12,*) !Tube name
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)TubeHeight
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)TubeDepth
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)TubeThk
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Ktube
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Pt
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Nl
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Nt
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Ltube
-
-	  IF (Ltube .LE. 1e-3) THEN
-	    ErrorFlag=ZEROLENCOILERROR
-	    GOTO 100
-	  END IF
-
-	  TubeOrientation=HORIZONTAL !Default
-	  READ(12,202)LineData
-	  IF (LineData(1:1) .EQ. 'T' .OR. LineData(1:1) .EQ. 't') THEN !Tube Orientation, new format - 06/06/06
-
-	      I=SCAN(LineData,',')
-	      LineData=ADJUSTL(LineData(I+1:150))
-	      SELECT CASE (LineData(1:1))
-	      CASE ('V','v')
-		      TubeOrientation=VERTICAL
-	      CASE DEFAULT
-			  TubeOrientation=HORIZONTAL
-	      END SELECT
-
-		  READ(12,202)LineData
-	  END IF
-
-	  !READ(12,202)LineData
-	  I=SCAN(LineData,',') !Number of segments or modules
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)NumOfMods
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)NumOfChannels
-
-	  READ(12,202)LineData
-	  I=SCAN(LineData,',')
-	  LineData=ADJUSTL(LineData(I+1:150))
-	  READ(LineData,*)Dchannel
-
-	  READ(12,*) !*************************** Circuiting ************************************
-
-	  ALLOCATE(Slab(Nl))
-	  READ(12,*) !Slab#,#Passes,Tubes per Pass
-	  DO I=1, Nl
-
-		  READ(12,202)LineData
-	  	  J=SCAN(LineData,',')
-		  LineData=ADJUSTL(LineData(J+1:150))
-	  	  READ(LineData,*)NumOfPasses
-	      ALLOCATE(Slab(I)%Pass(NumOfPasses))
-		  Slab(I)%Npass=NumOfPasses
-
-		  DO II=1, NumOfPasses
-
-			  J=SCAN(LineData,',')
-			  LineData=ADJUSTL(LineData(J+1:150))
-			  READ(LineData,*)Ntubes
-
-			  !cooling and heating are different flow direction - ISI 02/06/2009
-			  IF (IsCoolingMode .GT. 0) THEN
-			    ALLOCATE(Slab(I)%Pass(II)%Tube(Ntubes))
-			    Slab(I)%Pass(II)%Ntube=Ntubes
-
-			    DO III=1, Ntubes
-				  ALLOCATE(Slab(I)%Pass(II)%Tube(III)%Seg(NumOfMods))
-			    END DO
-
-			  ELSE
-			    ALLOCATE(Slab(I)%Pass(NumOfPasses-II+1)%Tube(Ntubes))
-			    Slab(I)%Pass(NumOfPasses-II+1)%Ntube=Ntubes
-
-			    DO III=1, Ntubes
-				  ALLOCATE(Slab(I)%Pass(NumOfPasses-II+1)%Tube(III)%Seg(NumOfMods))
-			    END DO
-
-			  END IF
-
-		  END DO
-
-	  END DO
-
-	  !Inlet pass
-	  READ(12,202)LineData !Slab#,#Inlets,Tubes per Inlet
-	  IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
-
-		  DO I=1, Nl
-
-			  READ(12,202)LineData
-	  		  J=SCAN(LineData,',')
-			  LineData=ADJUSTL(LineData(J+1:150))
-	  		  READ(LineData,*)NumOfInlets
-			  ALLOCATE(Slab(I)%InletPass(NumOfInlets))
-			  Slab(I)%Ninlet=NumOfInlets
-
-			  DO II=1, NumOfInlets
-
-				  J=SCAN(LineData,',')
-				  LineData=ADJUSTL(LineData(J+1:150))
-				  READ(LineData,*)Ntubes
-				  
-				  IF (IsCoolingMode .GT. 0) THEN
-				    Slab(I)%InletPass(II)%Ntube=Ntubes
-				  ELSE !For heating, set it to equal number of inlet tubes, at least for now - ISI - 02/06/2009
-				    Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(1)%Ntube
-				  END IF
-
-			  END DO
-
-		  END DO
-
-	      READ(12,*) !************************* Velocity Profile ********************************
-
-	  ELSE
-
-		  NumOfInlets=1
-		  DO I=1, Nl
-
-			  ALLOCATE(Slab(I)%InletPass(NumOfInlets))
-			  Slab(I)%Ninlet=NumOfInlets
-
-			  DO II=1, NumOfInlets
-
-				  Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
-
-			  END DO
-
-		  END DO
-	  END IF
-	  
-	  
-	  READ(12,*) !Tube# ,velocity Deviation from mean value
-
-	  IsUniformVelProfile=.TRUE.
-	  DO II=1,Slab(Nl)%Npass
-		  DO III=1,Slab(Nl)%Pass(II)%Ntube
-		      READ(12,*,IOSTAT=ErrorFlag)Ntube,(Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev,IV=1,NumOfMods)
-		      IF (IsUniformVelProfile) THEN
-                DO IV=1,NumOfMods
-				  IF (Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev .NE. 1) THEN
-				    IsUniformVelProfile=.FALSE.
-					EXIT
-				  END IF
-			    END DO
-			  END IF
-		  END DO
-	  END DO
-
-	  CALL MicroChannelCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
-									   TubeHeight,TubeDepth,TubeThk,Ktube, &
-									   Pt,Ltube,Dchannel)
-
-	  ODtube=TubeHeight
-	  IDtube=Dchannel
-
-	  FinHeight=Pt-TubeHeight
-	  FinSpg=1/FinPitch-FinThk
-
-  END IF
-
-  CLOSE(12) !Circuit file
-
-  !Suction line info
-  IDsucLn=ODsucLn-SucLnThk*2
-  LmodSuc=Lsucln
-  AiModSuc=PI*IDsucLn*LmodSuc
-
-  !***** Allocate pointer for suction line *****
-  ALLOCATE(SucLnSeg(NumOfMods))
-
-  100 CONTINUE
-
-  IF (ErrorFlag .NE. NOERROR) THEN
-      IF (ErrorFlag .EQ. CKTFILEERROR) THEN
-          WRITE(*,*)'## ERROR ## Evaporator: Circuit file error.'
-      ELSEIF (ErrorFlag .EQ. COILTUBEERROR) THEN
-          WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
-	      WRITE(*,*)'Tube spacing is less than tube diameter.'
-      ELSEIF (ErrorFlag .EQ. COILFINERROR) THEN
-          WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
-	      WRITE(*,*)'Fin spacing is less than fin thickness.'
-      END IF
-  END IF
-
-  RETURN
-
-  110 FORMAT(A150)
-  202 FORMAT(A150)
-
-END SUBROUTINE InitEvaporatorCoil
+    SUBROUTINE InitEvaporatorCoil(CoilType)
+
+    !------------------------------------------------------------------------
+    !Purpose:
+    !To initialize evaporator geometry and circuiting
+    !
+    !Author
+    !Ipseng Iu
+    !Oklahoma State Univerity, Stillwater
+    !
+    !Date
+    !March 2005
+    !
+    !Reference:
+    !none
+    !
+    !------------------------------------------------------------------------
+
+    USE UnitConvertMod
+
+    IMPLICIT NONE
+
+    INTEGER,INTENT(OUT) :: CoilType !1=Condenser; 2=Evaporator; 
+    !3=High side interconnecting pipes; 
+    !4=Low side interconnecting pipes
+    !5=Microchannel condenser
+    !6=Microchannel Evaporator
+
+    INTEGER I,J,II,III,IV !Loop counter
+    CHARACTER*150 LineData
+    INTEGER NumRow !Row number
+    INTEGER NumOfPasses !Number of passes
+    INTEGER NumPass !Pass number
+    INTEGER Ntubes !Number of tubes
+    INTEGER NumOfInlets !Number of inlets
+    LOGICAL IsSIunit !SI unit input flag
+    LOGICAL IsNewFormat !New format input flag
+    LOGICAL IsShift !Is shift tube flag (for staggered tubes)
+    INTEGER NumSection !Loop counter, ISI - 09/10/07
+
+    !***** Get circuit info *****
+    IF (IsCoolingMode .GT. 0) THEN
+        OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+    ELSE
+        OPEN (12,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+    END IF
+    IF (ErrorFlag .NE. NOERROR) THEN 
+        ErrorFlag=CKTFILEERROR
+        !VL: Previously: GOTO 100
+        CALL InitEvaporatorCoil_Helper_1
+        RETURN
+
+    END IF
+    READ (12,202,IOSTAT=ErrorFlag)LineData
+    IF (ErrorFlag .NE. NOERROR) THEN 
+        ErrorFlag=CKTFILEERROR
+        !VL: Previously: GOTO 100
+        CALL InitEvaporatorCoil_Helper_1
+        RETURN
+
+    END IF
+
+    IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
+        CoilType = MCEVAPORATOR
+    ELSE
+        CoilType = EVAPORATORCOIL
+        IF (LineData(1:13) .EQ. 'Fin-Tube Coil') THEN
+            IsNewFormat=.TRUE.
+        ELSE
+            IsNewFormat=.FALSE.
+        END IF
+    END IF
+
+    IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
+
+        IF (IsNewFormat) THEN
+
+            READ(12,*) !**************************** Geometry *************************************
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            SELECT CASE (LineData(1:1))
+            CASE ('F','f')
+                IsSIunit=.FALSE.
+            CASE DEFAULT
+                IsSIunit=.TRUE.
+            END SELECT
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)FinType
+
+            READ(12,*) !Fin name
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)FinPitch
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Kfin
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)FinThk
+
+            READ(12,*) !Fin material
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)TubeType
+
+            READ(12,*) !Tube name
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)ODtube
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)IDtube
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Ktube
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Pt
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Pl
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Nl
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Nt
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)Ltube
+
+            IF (Ltube .LE. 1e-3) THEN
+                ErrorFlag=ZEROLENCOILERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+
+            END IF
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)NumOfMods
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)NumOfCkts
+
+            READ(12,202)LineData
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            READ(LineData,*)IsShift
+
+            READ(12,202)LineData
+            IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
+                I=SCAN(LineData,',')
+                LineData=ADJUSTL(LineData(I+1:150))
+                READ(LineData,*)NumOfSections	    
+                READ(12,202)LineData !*************************** Circuiting ************************************
+            ELSE
+                NumOfSections=1
+            END IF
+            !READ(12,*) !*************************** Circuiting ************************************
+
+            CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
+            ODtube,IDtube,Ktube,Pt,Pl,Ltube)
+
+            TubeThk=(ODtube-IDtube)/2
+
+            IF (IsShift) THEN
+                ShiftTube = 1
+            ELSE
+                ShiftTube = 0
+            END IF
+
+        ELSE !Old format
+
+            I=SCAN(LineData,',')
+            DO J=1, 8
+                LineData=ADJUSTL(LineData(I+1:150))
+                I=SCAN(LineData,',')
+            END DO
+            READ(LineData,*)ShiftTube
+            IF (ShiftTube .GT. 0) ShiftTube = 1
+
+            IDtube = ODtube-TubeThk*2
+
+        END IF
+
+        IF (Pl .EQ. 0) Pl = Pt
+
+        READ (12,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
+        IF (ErrorFlag .NE. NOERROR) THEN 
+            ErrorFlag=CKTFILEERROR
+            !VL: Previously: GOTO 100
+            CALL InitEvaporatorCoil_Helper_1
+            RETURN
+
+        END IF
+
+        NumOfTubes=Nl*Nt  
+
+        !Fin spacing
+        FinSpg = 1/FinPitch-FinThk
+
+        !For plate finned tube
+        FinHeight=0 !No use for plate finned tube
+        TubeDepth=ODtube
+        TubeHeight=ODtube
+        Dchannel=IDtube
+        NumOfChannels=1
+
+        IF (FinSpg .LT. FinThk) THEN
+            ErrorFlag=COILFINERROR
+            !VL: Previously: GOTO 100
+            CALL InitEvaporatorCoil_Helper_1
+            RETURN
+
+        END IF
+
+        IF (Pt .LT. ODtube+2*FinThk) THEN
+            ErrorFlag=COILTUBEERROR
+            !VL: Previously: GOTO 100
+            CALL InitEvaporatorCoil_Helper_1
+            RETURN
+
+        END IF
+
+        IF (IsSimpleCoil .EQ. 1) THEN
+            NumOfMods=2
+            ALLOCATE(CoilSection(NumOfSections)) 
+            ALLOCATE(Ckt(NumOfCkts))
+            ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
+            CoilSection(1)%NumOfCkts=NumOfCkts
+            DO I=1, NumOfCkts
+                Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                ALLOCATE(Ckt(I)%Tube(1))
+                ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+                CoilSection(1)%Ckt(I)=Ckt(I)
+            END DO
+        ELSE
+
+            !ISI - 09/10/07
+            ALLOCATE(CoilSection(NumOfSections)) 
+
+            ALLOCATE(Tube(NumOfTubes))
+            ALLOCATE(Tube2D(Nl,Nt))
+            ALLOCATE(JoinTubes(NumOfTubes))
+
+            DO I=1, NumOfTubes
+                ALLOCATE(Tube(I)%Seg(NumOfMods))
+            END DO
+
+            DO I=1, Nl
+                DO J=1, Nt
+                    ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                END DO
+            END DO
+
+            ALLOCATE(Ckt(NumOfCkts))
+            !ALLOCATE(mRefIter(NumOfCkts)) !Moved to Coil Section, ISI - 09/10/07
+            DO I=1, NumOfCkts
+                READ(12,*,IOSTAT=ErrorFlag)Nckt,Ckt(I)%Ntube
+                IF (ErrorFlag .NE. NOERROR) THEN 
+                    ErrorFlag=CKTFILEERROR
+                    !VL: Previously: GOTO 100
+                    CALL InitEvaporatorCoil_Helper_1
+                    RETURN
+
+                END IF
+                !IF (I .GT. 1) THEN
+                !	  IF (Ckt(I)%Ntube .NE. Ckt(I-1)%Ntube) THEN
+                !		  IsSameNumOfTubes=.FALSE.	
+                !	  END IF
+                !END IF
+                ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
+                ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
+            END DO
+
+            !Check if all circuit have the same number of tubes !ISI - 09/12/06
+            IsSameNumOfTubes=.TRUE.	
+            Ntubes=Ckt(1)%Ntube
+            DO I=2, NumOfCkts
+                IF (Ntubes .NE. Ckt(I)%Ntube) THEN
+                    IsSameNumOfTubes=.FALSE.
+                    EXIT	
+                END IF
+            END DO
+
+            READ(12,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+
+            END IF
+
+            DO I=1, NumOfCkts   
+                IF (IsCoolingMode .EQ. 1) THEN 
+                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)   
+                ELSE
+                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)  
+                END IF
+                IF (ErrorFlag .NE. NOERROR) THEN 
+                    ErrorFlag=CKTFILEERROR
+                    !VL: Previously: GOTO 100
+                    CALL InitEvaporatorCoil_Helper_1
+                    RETURN
+
+                END IF
+            END DO
+
+            DO I=1,2
+                READ(12,202)LineData !For section data, ISI - 09/10/07
+                !READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
+                IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
+                    ErrorFlag=CKTFILEERROR
+                    !VL: Previously: GOTO 100
+                    CALL InitEvaporatorCoil_Helper_1
+                    RETURN
+
+                END IF
+            END DO
+
+            !Section data, ISI - 09/10/07
+            !Initialize
+            CoilSection%IsInlet = .TRUE.
+            IF (LineData(1:1) .EQ. 'S') THEN
+                DO I=1, NumOfSections
+                    READ(12,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
+                    ALLOCATE(CoilSection(I)%CktNum(CoilSection(I)%NumOfCkts))
+                    ALLOCATE(CoilSection(I)%mRefIter(CoilSection(I)%NumOfCkts))
+                END DO
+                READ(12,*) !Section#,Branch#
+                DO I=1, NumOfSections
+                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)
+                END DO		  
+                READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
+                READ(12,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
+            ELSE
+                CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+                ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+                ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+                DO J=1, NumOfCkts
+                    CoilSection(NumOfSections)%CktNum(J)=J
+                END DO
+            END IF
+
+            IsUniformVelProfile=.TRUE.
+            DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
+                READ(12,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
+                IF (ErrorFlag .NE. NOERROR) THEN 
+                    ErrorFlag=CKTFILEERROR
+                    !VL: Previously: GOTO 100
+                    CALL InitEvaporatorCoil_Helper_1
+                    RETURN
+
+                END IF
+                IF (IsUniformVelProfile) THEN
+                    DO J=1,NumOfMods
+                        IF (Tube(I)%Seg(J)%VelDev .NE. 1) THEN
+                            IsUniformVelProfile=.FALSE.
+                            EXIT
+                        END IF
+                    END DO
+                END IF
+            END DO
+
+            !Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube2D(I,J)=Tube((I-1)*Nt+J)
+                END DO
+            END DO
+
+            !Propagate velocity profile to suceeding rows
+            DO I=Nl-1,1,-1
+                DO J=1, Nt
+                    DO k=1, NumOfMods
+                        Tube2D(I,J)%Seg(k)%VelDev=Tube2D(I+1,J)%Seg(k)%VelDev
+                    END DO
+                END DO
+            END DO
+
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+
+            END IF
+
+            !Propagate circuit info to coil section, ISI - 09/10/07
+            NumInletSections=0
+            DO I=1, NumOfSections
+                IF (CoilSection(I)%IsInlet) NumInletSections=NumInletSections+1
+
+                ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
+
+                DO J=1, CoilSection(I)%NumOfCkts
+                    CoilSection(I)%Ckt(J)=Ckt(CoilSection(I)%CktNum(J))
+                END DO
+            END DO
+
+            !Determine inlet and outlet flags, split, joint or nothing, ISI - 09/10/07
+            DO NumSection=1, NumOfSections
+                CoilSection(NumSection)%Nnode=1
+
+                Nnode=1
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    !Initialize
+                    CoilSection(NumSection)%Ckt(I)%InJoin=0
+                    CoilSection(NumSection)%Ckt(I)%InSplit=0
+                    CoilSection(NumSection)%Ckt(I)%OutJoin=0
+                    CoilSection(NumSection)%Ckt(I)%OutSplit=0
+                    DO J=1, CoilSection(NumSection)%NumOfCkts
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
+                            CoilSection(NumSection)%Ckt(I)%InJoin=CoilSection(NumSection)%Ckt(I)%InJoin+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
+                            CoilSection(NumSection)%Ckt(I)%InSplit=CoilSection(NumSection)%Ckt(I)%InSplit+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
+                            CoilSection(NumSection)%Ckt(I)%OutJoin=CoilSection(NumSection)%Ckt(I)%OutJoin+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
+                            CoilSection(NumSection)%Ckt(I)%OutSplit=CoilSection(NumSection)%Ckt(I)%OutSplit+1
+                        END IF
+                    END DO
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1
+                END DO !End NumOfCkts
+
+                CoilSection(NumSection)%Nnode=Nnode
+                ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+
+                !Find split and joint tube numbers
+                J=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 ) THEN
+                        J=J+1
+                        CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(1)
+                    ELSEIF (CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) THEN
+                        J=J+1
+                        CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube)
+                    END IF
+                    IF (J .GT. Nnode) EXIT
+                END DO
+                CoilSection(NumSection)%Node(Nnode)%Num=0 !section outlet 
+
+            END DO !End NumOfSections
+
+            !		      !Determine inlet and outlet flags, split, joint or nothing
+            !		      Nnode=1
+            !		      DO I=1, NumOfCkts
+            !			      !Initialize
+            !			      Ckt(I)%InJoin=0
+            !			      Ckt(I)%InSplit=0
+            !			      Ckt(I)%OutJoin=0
+            !			      Ckt(I)%OutSplit=0
+            !			      DO J=1, NumOfCkts
+            !				    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
+            !		  			    Ckt(I)%InJoin=Ckt(I)%InJoin+1
+            !				    END IF
+            !				    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(1)) THEN
+            !					    Ckt(I)%InSplit=Ckt(I)%InSplit+1
+            !				    END IF
+            !				    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
+            !					    Ckt(I)%OutJoin=Ckt(I)%OutJoin+1
+            !				    END IF
+            !				    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(1)) THEN
+            !					    Ckt(I)%OutSplit=Ckt(I)%OutSplit+1
+            !				    END IF
+            !			      END DO
+            !			      IF (Ckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1
+            !		      END DO
+            !      
+            !		      ALLOCATE(Node(Nnode))
+            !
+            !		      !Find split and joint tube numbers
+            !		      J=0
+            !		      DO I=1, NumOfCkts
+            !			      IF (Ckt(I)%InJoin .GT. 1 ) THEN
+            !				      J=J+1
+            !				      Node(J)%Num=Ckt(I)%TubeSequence(1)
+            !			      ELSEIF (Ckt(I)%OutSplit .GT. 1) THEN
+            !				      J=J+1
+            !				      Node(J)%Num=Ckt(I)%TubeSequence(Ckt(I)%Ntube)
+            !			      END IF
+            !			      IF (J .GT. Nnode) EXIT
+            !		      END DO
+            !		      Node(Nnode)%Num=0 !coil outlet
+
+            !Find surrounding tubes
+            DO I=1, Nl
+                DO J=1, Nt
+                    IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
+                        !Tube2D(I,J)%RowNum=I
+                        Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
+                    ELSE
+                        Tube2D(I,J)%RowNum=0
+                    END IF
+                    IF (ShiftTube .EQ. 0) THEN
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !Odd row, first tube
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !even row, first tube
+                        END IF
+                    ELSE
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !even row, first tube
+                        END IF
+                    END IF
+
+                    IF (I .EQ. Nl) THEN
+                        Tube2D(I,J)%Fup=0
+                        Tube2D(I,J)%Fdown=0
+                    END IF
+                    IF (I .EQ. 1) Tube2D(I,J)%Back=0
+                END DO !End of J
+            END DO !End of I
+
+            !Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube((I-1)*Nt+J)=Tube2D(I,J)
+                END DO
+            END DO
+
+            !ISI - 09/10/07
+            Tube%Empty = 1 !Initialize 
+            DO NumSection=1, NumOfSections
+
+                !Find even tubes
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+
+                    !Find first and last simulation tubes
+                    FirstTube=1
+                    LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
+                    IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
+                        FirstTube=2 !Skip first tube
+                    END IF 
+                    IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
+                        LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
+                    END IF
+                    IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+
+                    DO J=FirstTube, LastTube
+                        TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                        Tube(TubeNum)%Even=0
+                        IF (FirstTube .EQ. 2 ) THEN
+                            IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+                        ELSE
+                            IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+                        END IF
+                    END DO !End of J
+                END DO !End of I
+
+                !Find empty tubes
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    DO J=1, CoilSection(NumSection)%Ckt(I)%Ntube
+                        TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                        Tube(TubeNum)%Empty=0
+                    END DO
+                END DO
+
+                !Number of inlet circuits
+                CoilSection(NumSection)%NcktFirst=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .LT. 1) CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
+                END DO
+                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+
+                !Number of outlet circuits
+                CoilSection(NumSection)%NcktLast=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) CoilSection(NumSection)%NcktLast=CoilSection(NumSection)%NcktLast+1
+                END DO
+                IF (CoilSection(NumSection)%NcktLast .EQ. 0) CoilSection(NumSection)%NcktLast = 1 !At least one circuit, ISI - 07/28/06	  
+
+            END DO !End NumOfSections
+
+            !		      !Find even tubes
+            !		      DO I=1, NumOfCkts
+            !
+            !  			      !Find first and last simulation tubes
+            !			      FirstTube=1
+            !			      LastTube=Ckt(I)%Ntube
+            !			      IF (Ckt(I)%InSplit .GT. 1) THEN
+            !				      FirstTube=2 !Skip first tube
+            !			      END IF 
+            !			      IF (Ckt(I)%OutJoin .GT. 1) THEN
+            !				      LastTube=Ckt(I)%Ntube-1 !Ignore last tube
+            !			      END IF
+            !			      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+            !
+            !			      DO J=FirstTube, LastTube
+            !				      TubeNum=Ckt(I)%TubeSequence(J)
+            !				      Tube(TubeNum)%Even=0
+            !				      IF (FirstTube .EQ. 2 ) THEN
+            !					      IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+            !				      ELSE
+            !					      IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+            !				      END IF
+            !			      END DO !End of J
+            !		      END DO !End of I
+            !
+            !		      !Find empty tubes
+            !		      Tube%Empty = 1 !Initialize 
+            !		      DO I=1, NumOfCkts
+            !			      DO J=1, Ckt(I)%Ntube
+            !	  			      TubeNum=Ckt(I)%TubeSequence(J)
+            !  				      Tube(TubeNum)%Empty=0
+            !  			      END DO
+            !		      END DO
+            !
+            !		      !Number of inlet circuits
+            !		      NcktFirst=0
+            !		      DO I=1, NumOfCkts
+            !			      IF (Ckt(I)%InJoin .LT. 1) NcktFirst=NcktFirst+1
+            !		      END DO
+            !		      IF (NcktFirst .EQ. 0) NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+            !
+            !		      !Number of outlet circuits
+            !		      NcktLast=0
+            !		      DO I=1, NumOfCkts
+            !			      IF (Ckt(I)%OutSplit .EQ. 0) NcktLast=NcktLast+1
+            !		      END DO
+            !		      IF (NcktLast .EQ. 0) NcktLast = 1 !At least one circuit, ISI - 07/28/06	  
+
+        END IF
+
+    ELSE !Microchannel coil
+
+        READ(12,*) !**************************** Geometry *************************************
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        SELECT CASE (LineData(1:1))
+        CASE ('F','f')
+            IsSIunit=.FALSE.
+        CASE DEFAULT
+            IsSIunit=.TRUE.
+        END SELECT
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)FinType
+
+        READ(12,*) !Fin name
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)FinPitch
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Kfin
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)FinThk
+
+        READ(12,*) !Fin material
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)TubeType
+
+        READ(12,*) !Tube name
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)TubeHeight
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)TubeDepth
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)TubeThk
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Ktube
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Pt
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Nl
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Nt
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Ltube
+
+        IF (Ltube .LE. 1e-3) THEN
+            ErrorFlag=ZEROLENCOILERROR
+            !VL: Previously: GOTO 100
+            CALL InitEvaporatorCoil_Helper_1
+            RETURN
+
+        END IF
+
+        TubeOrientation=HORIZONTAL !Default
+        READ(12,202)LineData
+        IF (LineData(1:1) .EQ. 'T' .OR. LineData(1:1) .EQ. 't') THEN !Tube Orientation, new format - 06/06/06
+
+            I=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(I+1:150))
+            SELECT CASE (LineData(1:1))
+            CASE ('V','v')
+                TubeOrientation=VERTICAL
+            CASE DEFAULT
+                TubeOrientation=HORIZONTAL
+            END SELECT
+
+            READ(12,202)LineData
+        END IF
+
+        !READ(12,202)LineData
+        I=SCAN(LineData,',') !Number of segments or modules
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)NumOfMods
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)NumOfChannels
+
+        READ(12,202)LineData
+        I=SCAN(LineData,',')
+        LineData=ADJUSTL(LineData(I+1:150))
+        READ(LineData,*)Dchannel
+
+        READ(12,*) !*************************** Circuiting ************************************
+
+        ALLOCATE(Slab(Nl))
+        READ(12,*) !Slab#,#Passes,Tubes per Pass
+        DO I=1, Nl
+
+            READ(12,202)LineData
+            J=SCAN(LineData,',')
+            LineData=ADJUSTL(LineData(J+1:150))
+            READ(LineData,*)NumOfPasses
+            ALLOCATE(Slab(I)%Pass(NumOfPasses))
+            Slab(I)%Npass=NumOfPasses
+
+            DO II=1, NumOfPasses
+
+                J=SCAN(LineData,',')
+                LineData=ADJUSTL(LineData(J+1:150))
+                READ(LineData,*)Ntubes
+
+                !cooling and heating are different flow direction - ISI 02/06/2009
+                IF (IsCoolingMode .GT. 0) THEN
+                    ALLOCATE(Slab(I)%Pass(II)%Tube(Ntubes))
+                    Slab(I)%Pass(II)%Ntube=Ntubes
+
+                    DO III=1, Ntubes
+                        ALLOCATE(Slab(I)%Pass(II)%Tube(III)%Seg(NumOfMods))
+                    END DO
+
+                ELSE
+                    ALLOCATE(Slab(I)%Pass(NumOfPasses-II+1)%Tube(Ntubes))
+                    Slab(I)%Pass(NumOfPasses-II+1)%Ntube=Ntubes
+
+                    DO III=1, Ntubes
+                        ALLOCATE(Slab(I)%Pass(NumOfPasses-II+1)%Tube(III)%Seg(NumOfMods))
+                    END DO
+
+                END IF
+
+            END DO
+
+        END DO
+
+        !Inlet pass
+        READ(12,202)LineData !Slab#,#Inlets,Tubes per Inlet
+        IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
+
+            DO I=1, Nl
+
+                READ(12,202)LineData
+                J=SCAN(LineData,',')
+                LineData=ADJUSTL(LineData(J+1:150))
+                READ(LineData,*)NumOfInlets
+                ALLOCATE(Slab(I)%InletPass(NumOfInlets))
+                Slab(I)%Ninlet=NumOfInlets
+
+                DO II=1, NumOfInlets
+
+                    J=SCAN(LineData,',')
+                    LineData=ADJUSTL(LineData(J+1:150))
+                    READ(LineData,*)Ntubes
+
+                    IF (IsCoolingMode .GT. 0) THEN
+                        Slab(I)%InletPass(II)%Ntube=Ntubes
+                    ELSE !For heating, set it to equal number of inlet tubes, at least for now - ISI - 02/06/2009
+                        Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(1)%Ntube
+                    END IF
+
+                END DO
+
+            END DO
+
+            READ(12,*) !************************* Velocity Profile ********************************
+
+        ELSE
+
+            NumOfInlets=1
+            DO I=1, Nl
+
+                ALLOCATE(Slab(I)%InletPass(NumOfInlets))
+                Slab(I)%Ninlet=NumOfInlets
+
+                DO II=1, NumOfInlets
+
+                    Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
+
+                END DO
+
+            END DO
+        END IF
+
+
+        READ(12,*) !Tube# ,velocity Deviation from mean value
+
+        IsUniformVelProfile=.TRUE.
+        DO II=1,Slab(Nl)%Npass
+            DO III=1,Slab(Nl)%Pass(II)%Ntube
+                READ(12,*,IOSTAT=ErrorFlag)Ntube,(Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev,IV=1,NumOfMods)
+                IF (IsUniformVelProfile) THEN
+                    DO IV=1,NumOfMods
+                        IF (Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev .NE. 1) THEN
+                            IsUniformVelProfile=.FALSE.
+                            EXIT
+                        END IF
+                    END DO
+                END IF
+            END DO
+        END DO
+
+        CALL MicroChannelCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
+        TubeHeight,TubeDepth,TubeThk,Ktube, &
+        Pt,Ltube,Dchannel)
+
+        ODtube=TubeHeight
+        IDtube=Dchannel
+
+        FinHeight=Pt-TubeHeight
+        FinSpg=1/FinPitch-FinThk
+
+    END IF
+
+    CLOSE(12) !Circuit file
+
+    !Suction line info
+    IDsucLn=ODsucLn-SucLnThk*2
+    LmodSuc=Lsucln
+    AiModSuc=PI*IDsucLn*LmodSuc
+
+    !***** Allocate pointer for suction line *****
+    ALLOCATE(SucLnSeg(NumOfMods))
+
+    !VL: Previously: 100 CONTINUE
+
+    ! VL: Code chunk moved to InitEvaporatorCoil_Helper_1
+    ! -----------------------------------------------------
+    !IF (ErrorFlag .NE. NOERROR) THEN
+    !    IF (ErrorFlag .EQ. CKTFILEERROR) THEN
+    !        WRITE(*,*)'## ERROR ## Evaporator: Circuit file error.'
+    !    ELSEIF (ErrorFlag .EQ. COILTUBEERROR) THEN
+    !        WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
+    !        WRITE(*,*)'Tube spacing is less than tube diameter.'
+    !    ELSEIF (ErrorFlag .EQ. COILFINERROR) THEN
+    !        WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
+    !        WRITE(*,*)'Fin spacing is less than fin thickness.'
+    !    END IF
+    !END IF
+    ! -----------------------------------------------------
+
+    CALL InitEvaporatorCoil_Helper_1
+
+    RETURN
+
+110 FORMAT(A150)
+202 FORMAT(A150)
+
+    END SUBROUTINE InitEvaporatorCoil
+
+    SUBROUTINE InitEvaporatorCoil_Helper_1
+
+    IF (ErrorFlag .NE. NOERROR) THEN
+        IF (ErrorFlag .EQ. CKTFILEERROR) THEN
+            WRITE(*,*)'## ERROR ## Evaporator: Circuit file error.'
+        ELSEIF (ErrorFlag .EQ. COILTUBEERROR) THEN
+            WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
+            WRITE(*,*)'Tube spacing is less than tube diameter.'
+        ELSEIF (ErrorFlag .EQ. COILFINERROR) THEN
+            WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
+            WRITE(*,*)'Fin spacing is less than fin thickness.'
+        END IF
+    END IF    
+
+
+    END SUBROUTINE InitEvaporatorCoil_Helper_1
+
 
 !************************************************************************
 
@@ -6011,683 +6144,723 @@ END SUBROUTINE CalcWetSurfaceMcQuiston
 
 SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
-!-----------------------------------------------------------------------------------
-!
-!  Description:	
-!  A segment-by-segment microchannel evaporator model
-!  To predict coil air side and refrigerant side properties, heat transfer, 
-!  and pressure drop
-!
-!  Inputs:
-!  Ref$=Refrigerant name
-!  XIN(1)=Refrigerant side mass flow rate, kg/s
-!  XIN(2)=Refrigerant side inlet pressure, kPa
-!  XIN(3)=Refrigerant side inlet enthalpy, kJ/kg
-!  XIN(4)=Air side mass flow rate, kg/s
-!  XIN(5)=Air side inlet temp. C
-!  XIN(6)=Air side inlet relative humidity
-!  XIN(7)=Compressor discharge temperature, C
-!
-!  Parameters:
-!  PAR(1)=Barometric pressure, kPa
-!  PAR(2)=Cooling mode? 1=yes; 0=no  
-!  PAR(3)=Suction line length, m
-!  PAR(4)=Suction line outside diameter, m
-!  PAR(5)=Suction line tube wall thickness, m 
-!  PAR(6)=Suction line elevation, m
-!  PAR(7)=Suction line heat loss, kW
-!  PAR(8)=Suction line temperature change, C
-!  PAR(9)=Suction line additional pressure drop, kPa
-!  PAR(10)=Multiplier for ref. side heat transfer correlation
-!  PAR(11)=Multiplier for ref. side pressure drop correlation
-!  PAR(12)=Multiplier for air side heat transfer correlation
-!  PAR(13)=Multiplier for air side pressure drop correlation
-!  PAR(14)=Fan power, kW
-!  PAR(15)=Fan location, 1=draw through; 2=blow through
-!  PAR(16)=Compressor heat loss, kW
-!  PAR(17)=Is compressor in air stream, 1=yes, 0=no
-!  PAR(18)=System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
-!  PAR(19)=Custom air side data unit, 1=SI; 2=IP
-!  PAR(20)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-!  PAR(21)=Power coefficient for air heat transfer curve
-!  PAR(22)=Power coefficient for air heat transfer curve
-!  PAR(23)=Polynomial coefficient for air heat transfer curve
-!  PAR(24)=Polynomial coefficient for air heat transfer curve
-!  PAR(25)=Polynomial coefficient for air heat transfer curve
-!  PAR(26)=Polynomial coefficient for air heat transfer curve
-!  PAR(27)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-!  PAR(28)=Power coefficient for air heat transfer curve
-!  PAR(29)=Power coefficient for air heat transfer curve
-!  PAR(30)=Polynomial coefficient for air heat transfer curve
-!  PAR(31)=Polynomial coefficient for air heat transfer curve
-!  PAR(32)=Polynomial coefficient for air heat transfer curve
-!  PAR(33)=Polynomial coefficient for air heat transfer curve
-!
-!  Outputs:
-!  OUT(1)=Coil capacity, kW
-!  OUT(2)=Sensible coil capacity, kW
-!  OUT(3)=Coil outlet pressure, kPa
-!  OUT(4)=Coil outlet enthalpy, kJ/kg
-!  OUT(5)=Coil outlet temperature, C
-!  OUT(6)=Coil outlet quality
-!  OUT(7)=Coil outlet superheat, C
-!  OUT(8)=Suction line outlet pressure, kPa
-!  OUT(9)=Suction line outlet enthalpy, kJ/kg
-!  OUT(10)=Suction line outlet temperature, C
-!  OUT(11)=Suction line outlet quality
-!  OUT(12)=Suction line outlet superheat, C
-!  OUT(13)=Air side outlet temperature, C
-!  OUT(14)=Air side outlet relative humidity
-!  OUT(15)=Air side pressure drop, kPa
-!  OUT(16)=Mass in suction line, kg
-!  OUT(17)=Mass in coil, kg
-!  OUT(18)=Liquid mass in coil, kg
-!  OUT(19)=Vapor mass in coil, kg
-!  OUT(20)=Aluminum weight, kg 
-!  OUT(21)=Error flag: 0-No error
-!                      1-Evaporator solution not converge
-!                      2-Refprop error
-!					   3-Circuit file error
-!
-!  Reference: 
-!  none
-!
-!  Author:
-!  Ipseng Iu
-!  Mechanical and Aerospace Engineering
-!  Oklahoma State University, Stillwater	
-!
-!  Date: November 2005
-!
-!-----------------------------------------------------------------------------------
-
-USE FluidProperties
-USE CoilCalcMod
-USE AirPropMod
-USE OilMixtureMod
-USE ReversingValveMod
-
-IMPLICIT NONE
-
-!Subroutine argument declarations
-CHARACTER*80, INTENT(IN)  :: Ref$
-REAL,         INTENT(IN)  :: XIN(7)
-REAL,         INTENT(IN)  :: PAR(33)
-REAL,         INTENT(OUT) :: OUT(21)
-
-!Subroutine local variables
-INTEGER,PARAMETER :: CoilType = MCEVAPORATOR 
-
-INTEGER I,II,III,IV,V !Loop counters
-LOGICAL Converged     !Convergence flag
-INTEGER AirBCiter     !Air bounadary condition iteration counter
-INTEGER RefBCiter     !Refrigerant bounadary condition iteration counter
-REAL Qslab			  !Coil slab capacity, kW 
-REAL Qtube			  !Coil tube capacity, kW
-REAL Qpass			  !Coil pass capacity, kW
-REAL QpassSens		  !Coil pass sensible capacity, kW
-REAL QinletPass		  !Inlet pass capacity, kW
-REAL QinletPassSens   !Inlet pass sensible capacity, kW
-REAL PrevpRoMod		  !Previous refrigerant outlet pressure, kPa
-REAL DiffpRoMod		  !Difference in outlet pressure, kPa
-REAL pRoSlab		  !Outlet Refrigerant pressure for a coil slab, kPa
-REAL hRoSlab		  !Outlet Refrigerant enthalpy for a coil slab, kJ/kg
-REAL tRoSlab		  !Outlet Refrigerant temperature for a coil slab, C  
-REAL xRoSlab		  !Outlet Refrigerant quality for a coil slab  
-REAL Aface			  !Coil face area, m^2
-REAL tAoSlab		  !Outlet air temperature for a coil slab, C
-REAL rhAoSlab		  !Outlet air relative humidity for a coil slab
-REAL hAoSlab		  !Outlet air enthalpy for a coil slab, kJ/kg
-REAL SumPro			  !Sum of outlet pressures, kPa
-REAL SumMrefHro		  !Sum of mdot*H (mass flow rate * enthalpy)
-REAL mRefInletPass    !Inlet pass mass flow rate, kg/s
-REAL Wlocal           !Local oil mass fraction
-REAL tRdis            !Compressor discharge temperature, C
-REAL DPvalve          !Reversing valve pressure drop
-REAL hRsuc            !Suction enthalpy, kJ/kg
-REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
-REAL mdothRo !mdot x outlet enthalpy
-
-!FLOW:
-
-  mRefTot          =XIN(1)
-  pRiCoil          =XIN(2)
-  hRiCoil          =XIN(3)
-  mAiCoil          =XIN(4)
-  tAiCoil          =XIN(5)
-  rhAiCoil         =XIN(6)
-  tRdis            =XIN(7)
-
-  BaroPressure     =PAR(1)
-  IsCoolingMode    =PAR(2)
-  LsucLn           =PAR(3)
-  ODsucLn          =PAR(4)
-  SucLnThk         =PAR(5)
-  ElevSucLn        =PAR(6)
-  QsucLn           =PAR(7)
-  DTsucLn          =PAR(8)
-  AddDPsucLn       =PAR(9)
-  hciMultiplier    =PAR(10)
-  DPrefMultiplier  =PAR(11)
-  hcoMultiplier    =PAR(12)
-  DPairMultiplier  =PAR(13)
-  PwrFan           =PAR(14)
-  DrawBlow         =PAR(15)
-  QlossCmp         =PAR(16)
-  IsCmpInAirStream =PAR(17)
-  SystemType       =PAR(18)
-  CurveUnit        =PAR(19)
-  CurveTypeHTC     =PAR(20)
-  PowerAHTC        =PAR(21)
-  PowerBHTC        =PAR(22)
-  Poly1HTC         =PAR(23)
-  Poly2HTC         =PAR(24)
-  Poly3HTC         =PAR(25)
-  Poly4HTC         =PAR(26)
-  CurveTypeDP      =PAR(27)
-  PowerADP         =PAR(28)
-  PowerBDP         =PAR(29)
-  Poly1DP          =PAR(30)
-  Poly2DP          =PAR(31)
-  Poly3DP          =PAR(32)
-  Poly4DP          =PAR(33)
-
-  IsParallelSlabs = 1
-  
-  ErrorFlag=NOERROR !Initilaize
-
-  !Coil height
-  HtCoil=Nt*Pt
-
-  !Coil length
-  Lcoil=Nl*Nt*Ltube
-
-  !Face area
-  Aface=Ltube*Nt*Pt
-
-  !Tube information
-  LmodTube=Ltube/NumOfMods
-
-  CPair=CPA(REAL(tAiCoil))
-  Cair=mAiCoil*CPAir
-
-  AirPropOpt=2
-  AirProp(1)=tAiCoil
-  AirProp(3)=rhAiCoil
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  hAiCoil=AirProp(4)
-  wbAiCoil=AirProp(5)
-
-  !IF (IsCoolingMode .LT. 1) THEN
-  IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
-    tAiCoil=tAiCoil+PwrFan/Cair
-  	hAiCoil=hAiCoil+PwrFan/mAiCoil
-  END IF
-  IF (IsCmpInAirStream .NE. 0) THEN !Compressor in air stream
-  	tAiCoil=tAiCoil+QlossCmp/Cair
-  	hAiCoil=hAiCoil+QlossCmp/mAiCoil
-  END IF
-  !END IF
-
-  AirPropOpt=1
-  AirProp(1)=tAiCoil
-  AirProp(4)=hAiCoil
-  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  DensityIn=AirProp(7)
-  
-  !Area calculations
-  CALL CalcCoilArea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
-                    Ltube,IDtube,TubeHeight,Dchannel,NumOfChannels, &
-				    FinThk,FinSpg,Lcoil,AfCoil, &
-				    AoCoil,AiCoil,AmCoil)
-
-  Pressure=pRiCoil*1000
-  Enthalpy=hRiCoil*1000
-  tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3904'
-      ErrorFlag=REFPROPERROR
-	  RETURN
-  END IF
-  xRiCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3910'
-      ErrorFlag=REFPROPERROR
-	  RETURN
-  END IF
-
-  !Initialize boundary conditions
-  DO I=1, Nl
-	  IF (IsParallelSlabs .GT. 0) THEN
-	    Slab(I)%mdot=mRefTot/Nl !ISI - 07/14/07
-	  ELSE
-	    Slab(I)%mdot=mRefTot
-	  END IF
-	  DO II=1, Slab(I)%Npass
-		  DO III=1, Slab(I)%Pass(II)%Ntube
-			  Slab(I)%Pass(II)%Tube(III)%Seg%mAi=mAiCoil*LmodTube/(Ltube*Nt)
-			  !Slab(I)%Pass(II)%Tube(III)%Seg%VelDev=1
-			  Slab(I)%Pass(II)%Tube(III)%Seg%tAi=tAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%wbAi=wbAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%rhAi=rhAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%tAo=tAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%wbAo=wbAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%rhAo=rhAiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%pRi=pRiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%hRi=hRiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%pRo=pRiCoil
-			  Slab(I)%Pass(II)%Tube(III)%Seg%hRo=hRiCoil
-
-			  !Slab(I)%Pass(II)%mRef=mRefTotal/Slab(I)%Npass
-		  END DO
-	  END DO
-  END DO
-
-  !Calc. air side mass flow rate at the front row
-  VelAvg=(mAiCoil/DensityIn)/Aface
-  DO I=1, Nl
-      DO II=1, Slab(I)%Npass
-		  DO III=1, Slab(I)%Pass(II)%Ntube
-		      DO IV=1, NumOfMods
-				  Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Aface=LmodTube/(Ltube*Nt)*Aface
-				  IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
-				  Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi=mAiCoil*LmodTube/(Ltube*Nt)* &
-				                                         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev 
-			  END DO
-		  END DO
-	  END DO
-  END DO
-
-  !****** Start coil calculation ******
-  Converged=.TRUE.  
-
-  !Initialize
-  QmodPrev=1e20
-  DPcoilPrev=1e20
-  Qcoil=0.0; QcoilSens=0;
-
-  DO RefBCiter=1, MdotMaxIter
-
-	  DO I=1, Nl !Number of slabs
-
-		  DO II=1,Slab(I)%Npass !Number of passes
-
-	          Qpass=0.0; QpassSens=0
-
-			  CALL CalcCircuitRefInletConditions(I,I,II,CoilType) !ISI - 09/10/07
-
-			  IF (II .EQ. 1 .AND. Slab(I)%Ninlet .GT. 1) THEN !Multi-inlet
-
-				  SumPro=0; SumMrefHro=0;
-
-				  DO V=1, Slab(I)%Ninlet
-				      
-					  QinletPass=0; QinletPassSens=0;
-					  
-					  Slab(I)%InletPass(V)%pRi=pRiCoil
-					  Slab(I)%InletPass(V)%hRi=hRiCoil
-
-					  DO III=1,1 !Slab(I)%Pass(II)%NumOfTubes !Number of tubes
-						  DO IV=1,NumOfMods !Number of segments
-							  
-							  !ref. mass flow rate for each channel
-							  !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
-							  mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
-
-							  AoMod=AoCoil*LmodTube/Lcoil 
-							  AfMod=AfCoil*LmodTube/Lcoil 
-							  AiMod=AiCoil*LmodTube/Lcoil 
-							  AmMod=AmCoil*LmodTube/Lcoil 
-
-							  CALL CalcCoilSegment(I,I,II,III,IV,CoilType)
-							  IF (ErrorFlag .GT. CONVERGEERROR) GOTO 200
-
-							  QinletPass=QinletPass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
-							  QinletPassSens=QinletPassSens+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%QmodSens
-						  
-						  END DO !End mod
-					  END DO !End tube
-
-					  Slab(I)%InletPass(V)%Qpass=QinletPass*Slab(I)%InletPass(V)%Ntube
-				      Slab(I)%InletPass(V)%QpassSens=QinletPassSens*Slab(I)%InletPass(V)%Ntube
-
-					  Slab(I)%InletPass(V)%pRo=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%pRo
-					  Slab(I)%InletPass(V)%hRo=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%hRo
-					  Slab(I)%InletPass(V)%mRef=mRefTot*Slab(I)%InletPass(V)%Ntube/Slab(I)%Pass(II)%Ntube
-
-					  Qpass=Qpass+Slab(I)%InletPass(V)%Qpass
-					  QpassSens=QpassSens+Slab(I)%InletPass(V)%QpassSens
-
-					  SumPro=SumPro+Slab(I)%InletPass(V)%pRo !Sum of outlet pressures
-					  SumMrefHro=SumMrefHro+Slab(I)%InletPass(V)%mRef*Slab(I)%InletPass(V)%hRo !Sum of outlet mdot*hro
-
-				  END DO !End inlet pass
-
-				  pRoCkt=SumPro/Slab(I)%Ninlet
-				  hRoCkt=SumMrefHro/mRefTot
-
-			  ELSE !Single inlet
-
-
-				  DO III=1,1 !Slab(I)%Pass(II)%NumOfTubes !Number of tubes
-
-					  DO IV=1,NumOfMods !Number of segments
-
-						  !ref. mass flow rate for each channel
-						  !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
-						  mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
-
-						  AoMod=AoCoil*LmodTube/Lcoil
-						  AfMod=AfCoil*LmodTube/Lcoil
-						  AiMod=AiCoil*LmodTube/Lcoil
-						  AmMod=AmCoil*LmodTube/Lcoil
-
-						  CALL CalcCoilSegment(I,I,II,III,IV,CoilType)
-						  IF (ErrorFlag .GT. CONVERGEERROR) GOTO 200
-
-						  Qpass=Qpass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
-						  QpassSens=QpassSens+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%QmodSens
-
-					  END DO !End mod
-
-				  END DO !End tube
-
-				  Qpass=Qpass*Slab(I)%Pass(II)%Ntube
-				  QpassSens=QpassSens*Slab(I)%Pass(II)%Ntube
-
-				  pRoCkt=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%pRo !Circuit outlet pressure
-				  hRoCkt=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
-				  
-			  END IF
-
-			  Slab(I)%Pass(II)%pRo=pRoCkt
-			  Slab(I)%Pass(II)%hRo=hRoCkt
-
-			  Qcoil=Qcoil+Qpass
-			  QcoilSens=QcoilSens+QpassSens
-
-		  END DO !End pass
-
-		  Slab(I)%pRi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%pRi
-		  Slab(I)%hRi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%hRi
-
-		  Slab(I)%tAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%tAi
-		  Slab(I)%rhAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%rhAi
-		  
-		  AirPropOpt=2
-		  AirProp(1)=Slab(I)%tAi
-		  AirProp(3)=Slab(I)%rhAi
-		  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		  Slab(I)%hAi=AirProp(4)
-
-		  SHR=QcoilSens/Qcoil
-		  		  
-		  IF (Slab(1)%Npass .EQ. 1 .AND. Slab(1)%Ninlet .GT. 1) THEN !1-pass, multi-inlet
-		    pRoSlab=pRoCkt
-		    hRoSlab=hRoCkt
-		  ELSE !Single inlet
-		    pRoSlab=Slab(I)%Pass(Slab(I)%Npass)%pRo
-		    hRoSlab=Slab(I)%Pass(Slab(I)%Npass)%hRo
-		  END IF
-
-		  Pressure=pRoSlab*1000
-		  Enthalpy=hRoSlab*1000
-		  tRoSlab=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-			  ErrorFlag=REFPROPERROR
-			  GOTO 200
-		  END IF
-		  xRoSlab=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-		      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-			  ErrorFlag=REFPROPERROR
-			  GOTO 200
-		  END IF
-		  
-		  Slab(I)%pRo=pRoSlab
-		  Slab(I)%hRo=hRoSlab
-		  Slab(I)%tRo=tRoSlab
-		  Slab(I)%xRo=xRoSlab
-
-		  Slab(I)%Qslab=mRefTot*(Slab(I)%hRi-Slab(I)%hRo)
-
-		  CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)
-		  
-		  !Coil air side outlet conditions
-		  !CPair=CPA(REAL(Slab(I)%tAi))
-		  CPair=CPA(REAL(tAmod))
-		  Cair=mAicoil*CPAir
-
-		  Slab(I)%tAo=Slab(I)%tAi+Slab(I)%Qslab/Cair
-		  Slab(I)%hAo=Slab(I)%hAi+Slab(I)%Qslab/mAiCoil
-
-		  AirPropOpt=1
-		  AirProp(1)=Slab(I)%tAo
-		  AirProp(4)=Slab(I)%hAo
-		  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		  Slab(I)%rhAo=AirProp(3)
-
-	  END DO !End Slabs
-
-      !ISI - 07/14/07
-      IF (Nl .GT. 1) THEN
-          IF (IsParallelSlabs .GT. 0) THEN
-              CALL UpdateMCrefMassFlowRate(Slab,Nl,mRefTot,DPcoil)
-              
-              IF (ABS(DPcoil-DPcoilPrev)/DPcoilPrev .GT. SMALL) THEN
-                DPcoilPrev=DPcoil
-              ELSE
-                
-                !Calculate outlet pressure and enthalpy
-                pRoCoil=pRiCoil-DPcoil
-                mdothRo=0
-                DO V=1, Nl
-                    mdothRo=mdothRo+Slab(V)%mdot*Slab(V)%hRo
+    !-----------------------------------------------------------------------------------
+    !
+    !  Description:	
+    !  A segment-by-segment microchannel evaporator model
+    !  To predict coil air side and refrigerant side properties, heat transfer, 
+    !  and pressure drop
+    !
+    !  Inputs:
+    !  Ref$=Refrigerant name
+    !  XIN(1)=Refrigerant side mass flow rate, kg/s
+    !  XIN(2)=Refrigerant side inlet pressure, kPa
+    !  XIN(3)=Refrigerant side inlet enthalpy, kJ/kg
+    !  XIN(4)=Air side mass flow rate, kg/s
+    !  XIN(5)=Air side inlet temp. C
+    !  XIN(6)=Air side inlet relative humidity
+    !  XIN(7)=Compressor discharge temperature, C
+    !
+    !  Parameters:
+    !  PAR(1)=Barometric pressure, kPa
+    !  PAR(2)=Cooling mode? 1=yes; 0=no  
+    !  PAR(3)=Suction line length, m
+    !  PAR(4)=Suction line outside diameter, m
+    !  PAR(5)=Suction line tube wall thickness, m 
+    !  PAR(6)=Suction line elevation, m
+    !  PAR(7)=Suction line heat loss, kW
+    !  PAR(8)=Suction line temperature change, C
+    !  PAR(9)=Suction line additional pressure drop, kPa
+    !  PAR(10)=Multiplier for ref. side heat transfer correlation
+    !  PAR(11)=Multiplier for ref. side pressure drop correlation
+    !  PAR(12)=Multiplier for air side heat transfer correlation
+    !  PAR(13)=Multiplier for air side pressure drop correlation
+    !  PAR(14)=Fan power, kW
+    !  PAR(15)=Fan location, 1=draw through; 2=blow through
+    !  PAR(16)=Compressor heat loss, kW
+    !  PAR(17)=Is compressor in air stream, 1=yes, 0=no
+    !  PAR(18)=System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
+    !  PAR(19)=Custom air side data unit, 1=SI; 2=IP
+    !  PAR(20)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !  PAR(21)=Power coefficient for air heat transfer curve
+    !  PAR(22)=Power coefficient for air heat transfer curve
+    !  PAR(23)=Polynomial coefficient for air heat transfer curve
+    !  PAR(24)=Polynomial coefficient for air heat transfer curve
+    !  PAR(25)=Polynomial coefficient for air heat transfer curve
+    !  PAR(26)=Polynomial coefficient for air heat transfer curve
+    !  PAR(27)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !  PAR(28)=Power coefficient for air heat transfer curve
+    !  PAR(29)=Power coefficient for air heat transfer curve
+    !  PAR(30)=Polynomial coefficient for air heat transfer curve
+    !  PAR(31)=Polynomial coefficient for air heat transfer curve
+    !  PAR(32)=Polynomial coefficient for air heat transfer curve
+    !  PAR(33)=Polynomial coefficient for air heat transfer curve
+    !
+    !  Outputs:
+    !  OUT(1)=Coil capacity, kW
+    !  OUT(2)=Sensible coil capacity, kW
+    !  OUT(3)=Coil outlet pressure, kPa
+    !  OUT(4)=Coil outlet enthalpy, kJ/kg
+    !  OUT(5)=Coil outlet temperature, C
+    !  OUT(6)=Coil outlet quality
+    !  OUT(7)=Coil outlet superheat, C
+    !  OUT(8)=Suction line outlet pressure, kPa
+    !  OUT(9)=Suction line outlet enthalpy, kJ/kg
+    !  OUT(10)=Suction line outlet temperature, C
+    !  OUT(11)=Suction line outlet quality
+    !  OUT(12)=Suction line outlet superheat, C
+    !  OUT(13)=Air side outlet temperature, C
+    !  OUT(14)=Air side outlet relative humidity
+    !  OUT(15)=Air side pressure drop, kPa
+    !  OUT(16)=Mass in suction line, kg
+    !  OUT(17)=Mass in coil, kg
+    !  OUT(18)=Liquid mass in coil, kg
+    !  OUT(19)=Vapor mass in coil, kg
+    !  OUT(20)=Aluminum weight, kg 
+    !  OUT(21)=Error flag: 0-No error
+    !                      1-Evaporator solution not converge
+    !                      2-Refprop error
+    !					   3-Circuit file error
+    !
+    !  Reference: 
+    !  none
+    !
+    !  Author:
+    !  Ipseng Iu
+    !  Mechanical and Aerospace Engineering
+    !  Oklahoma State University, Stillwater	
+    !
+    !  Date: November 2005
+    !
+    !-----------------------------------------------------------------------------------
+
+    USE FluidProperties
+    USE CoilCalcMod
+    USE AirPropMod
+    USE OilMixtureMod
+    USE ReversingValveMod
+
+    IMPLICIT NONE
+
+    !Subroutine argument declarations
+    CHARACTER*80, INTENT(IN)  :: Ref$
+    REAL,         INTENT(IN)  :: XIN(7)
+    REAL,         INTENT(IN)  :: PAR(33)
+    REAL,         INTENT(OUT) :: OUT(21)
+
+    !Subroutine local variables
+    INTEGER,PARAMETER :: CoilType = MCEVAPORATOR 
+
+    INTEGER I,II,III,IV,V !Loop counters
+    LOGICAL Converged     !Convergence flag
+    INTEGER AirBCiter     !Air bounadary condition iteration counter
+    INTEGER RefBCiter     !Refrigerant bounadary condition iteration counter
+    REAL Qslab			  !Coil slab capacity, kW 
+    REAL Qtube			  !Coil tube capacity, kW
+    REAL Qpass			  !Coil pass capacity, kW
+    REAL QpassSens		  !Coil pass sensible capacity, kW
+    REAL QinletPass		  !Inlet pass capacity, kW
+    REAL QinletPassSens   !Inlet pass sensible capacity, kW
+    REAL PrevpRoMod		  !Previous refrigerant outlet pressure, kPa
+    REAL DiffpRoMod		  !Difference in outlet pressure, kPa
+    REAL pRoSlab		  !Outlet Refrigerant pressure for a coil slab, kPa
+    REAL hRoSlab		  !Outlet Refrigerant enthalpy for a coil slab, kJ/kg
+    REAL tRoSlab		  !Outlet Refrigerant temperature for a coil slab, C  
+    REAL xRoSlab		  !Outlet Refrigerant quality for a coil slab  
+    REAL Aface			  !Coil face area, m^2
+    REAL tAoSlab		  !Outlet air temperature for a coil slab, C
+    REAL rhAoSlab		  !Outlet air relative humidity for a coil slab
+    REAL hAoSlab		  !Outlet air enthalpy for a coil slab, kJ/kg
+    REAL SumPro			  !Sum of outlet pressures, kPa
+    REAL SumMrefHro		  !Sum of mdot*H (mass flow rate * enthalpy)
+    REAL mRefInletPass    !Inlet pass mass flow rate, kg/s
+    REAL Wlocal           !Local oil mass fraction
+    REAL tRdis            !Compressor discharge temperature, C
+    REAL DPvalve          !Reversing valve pressure drop
+    REAL hRsuc            !Suction enthalpy, kJ/kg
+    REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
+    REAL mdothRo !mdot x outlet enthalpy
+
+    !FLOW:
+
+    mRefTot          =XIN(1)
+    pRiCoil          =XIN(2)
+    hRiCoil          =XIN(3)
+    mAiCoil          =XIN(4)
+    tAiCoil          =XIN(5)
+    rhAiCoil         =XIN(6)
+    tRdis            =XIN(7)
+
+    BaroPressure     =PAR(1)
+    IsCoolingMode    =PAR(2)
+    LsucLn           =PAR(3)
+    ODsucLn          =PAR(4)
+    SucLnThk         =PAR(5)
+    ElevSucLn        =PAR(6)
+    QsucLn           =PAR(7)
+    DTsucLn          =PAR(8)
+    AddDPsucLn       =PAR(9)
+    hciMultiplier    =PAR(10)
+    DPrefMultiplier  =PAR(11)
+    hcoMultiplier    =PAR(12)
+    DPairMultiplier  =PAR(13)
+    PwrFan           =PAR(14)
+    DrawBlow         =PAR(15)
+    QlossCmp         =PAR(16)
+    IsCmpInAirStream =PAR(17)
+    SystemType       =PAR(18)
+    CurveUnit        =PAR(19)
+    CurveTypeHTC     =PAR(20)
+    PowerAHTC        =PAR(21)
+    PowerBHTC        =PAR(22)
+    Poly1HTC         =PAR(23)
+    Poly2HTC         =PAR(24)
+    Poly3HTC         =PAR(25)
+    Poly4HTC         =PAR(26)
+    CurveTypeDP      =PAR(27)
+    PowerADP         =PAR(28)
+    PowerBDP         =PAR(29)
+    Poly1DP          =PAR(30)
+    Poly2DP          =PAR(31)
+    Poly3DP          =PAR(32)
+    Poly4DP          =PAR(33)
+
+    IsParallelSlabs = 1
+
+    ErrorFlag=NOERROR !Initilaize
+
+    !Coil height
+    HtCoil=Nt*Pt
+
+    !Coil length
+    Lcoil=Nl*Nt*Ltube
+
+    !Face area
+    Aface=Ltube*Nt*Pt
+
+    !Tube information
+    LmodTube=Ltube/NumOfMods
+
+    CPair=CPA(REAL(tAiCoil))
+    Cair=mAiCoil*CPAir
+
+    AirPropOpt=2
+    AirProp(1)=tAiCoil
+    AirProp(3)=rhAiCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    hAiCoil=AirProp(4)
+    wbAiCoil=AirProp(5)
+
+    !IF (IsCoolingMode .LT. 1) THEN
+    IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
+        tAiCoil=tAiCoil+PwrFan/Cair
+        hAiCoil=hAiCoil+PwrFan/mAiCoil
+    END IF
+    IF (IsCmpInAirStream .NE. 0) THEN !Compressor in air stream
+        tAiCoil=tAiCoil+QlossCmp/Cair
+        hAiCoil=hAiCoil+QlossCmp/mAiCoil
+    END IF
+    !END IF
+
+    AirPropOpt=1
+    AirProp(1)=tAiCoil
+    AirProp(4)=hAiCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    DensityIn=AirProp(7)
+
+    !Area calculations
+    CALL CalcCoilArea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
+    Ltube,IDtube,TubeHeight,Dchannel,NumOfChannels, &
+    FinThk,FinSpg,Lcoil,AfCoil, &
+    AoCoil,AiCoil,AmCoil)
+
+    Pressure=pRiCoil*1000
+    Enthalpy=hRiCoil*1000
+    tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3904'
+        ErrorFlag=REFPROPERROR
+        RETURN
+    END IF
+    xRiCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3910'
+        ErrorFlag=REFPROPERROR
+        RETURN
+    END IF
+
+    !Initialize boundary conditions
+    DO I=1, Nl
+        IF (IsParallelSlabs .GT. 0) THEN
+            Slab(I)%mdot=mRefTot/Nl !ISI - 07/14/07
+        ELSE
+            Slab(I)%mdot=mRefTot
+        END IF
+        DO II=1, Slab(I)%Npass
+            DO III=1, Slab(I)%Pass(II)%Ntube
+                Slab(I)%Pass(II)%Tube(III)%Seg%mAi=mAiCoil*LmodTube/(Ltube*Nt)
+                !Slab(I)%Pass(II)%Tube(III)%Seg%VelDev=1
+                Slab(I)%Pass(II)%Tube(III)%Seg%tAi=tAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%wbAi=wbAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%rhAi=rhAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%tAo=tAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%wbAo=wbAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%rhAo=rhAiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%pRi=pRiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%hRi=hRiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%pRo=pRiCoil
+                Slab(I)%Pass(II)%Tube(III)%Seg%hRo=hRiCoil
+
+                !Slab(I)%Pass(II)%mRef=mRefTotal/Slab(I)%Npass
+            END DO
+        END DO
+    END DO
+
+    !Calc. air side mass flow rate at the front row
+    VelAvg=(mAiCoil/DensityIn)/Aface
+    DO I=1, Nl
+        DO II=1, Slab(I)%Npass
+            DO III=1, Slab(I)%Pass(II)%Ntube
+                DO IV=1, NumOfMods
+                    Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Aface=LmodTube/(Ltube*Nt)*Aface
+                    IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
+                    Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi=mAiCoil*LmodTube/(Ltube*Nt)* &
+                    Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev 
                 END DO
-                hRoCoil=mdothRo/mRefTot
-                
+            END DO
+        END DO
+    END DO
+
+    !****** Start coil calculation ******
+    Converged=.TRUE.  
+
+    !Initialize
+    QmodPrev=1e20
+    DPcoilPrev=1e20
+    Qcoil=0.0; QcoilSens=0;
+
+    DO RefBCiter=1, MdotMaxIter
+
+        DO I=1, Nl !Number of slabs
+
+            DO II=1,Slab(I)%Npass !Number of passes
+
+                Qpass=0.0; QpassSens=0
+
+                CALL CalcCircuitRefInletConditions(I,I,II,CoilType) !ISI - 09/10/07
+
+                IF (II .EQ. 1 .AND. Slab(I)%Ninlet .GT. 1) THEN !Multi-inlet
+
+                    SumPro=0; SumMrefHro=0;
+
+                    DO V=1, Slab(I)%Ninlet
+
+                        QinletPass=0; QinletPassSens=0;
+
+                        Slab(I)%InletPass(V)%pRi=pRiCoil
+                        Slab(I)%InletPass(V)%hRi=hRiCoil
+
+                        DO III=1,1 !Slab(I)%Pass(II)%NumOfTubes !Number of tubes
+                            DO IV=1,NumOfMods !Number of segments
+
+                                !ref. mass flow rate for each channel
+                                !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
+                                mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
+
+                                AoMod=AoCoil*LmodTube/Lcoil 
+                                AfMod=AfCoil*LmodTube/Lcoil 
+                                AiMod=AiCoil*LmodTube/Lcoil 
+                                AmMod=AmCoil*LmodTube/Lcoil 
+
+                                CALL CalcCoilSegment(I,I,II,III,IV,CoilType)
+                                IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                                    !VL: Previously: GOTO 200
+                                    OUT(21)=ErrorFlag
+                                    RETURN
+
+                                END IF
+
+                                QinletPass=QinletPass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
+                                QinletPassSens=QinletPassSens+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%QmodSens
+
+                            END DO !End mod
+                        END DO !End tube
+
+                        Slab(I)%InletPass(V)%Qpass=QinletPass*Slab(I)%InletPass(V)%Ntube
+                        Slab(I)%InletPass(V)%QpassSens=QinletPassSens*Slab(I)%InletPass(V)%Ntube
+
+                        Slab(I)%InletPass(V)%pRo=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%pRo
+                        Slab(I)%InletPass(V)%hRo=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%hRo
+                        Slab(I)%InletPass(V)%mRef=mRefTot*Slab(I)%InletPass(V)%Ntube/Slab(I)%Pass(II)%Ntube
+
+                        Qpass=Qpass+Slab(I)%InletPass(V)%Qpass
+                        QpassSens=QpassSens+Slab(I)%InletPass(V)%QpassSens
+
+                        SumPro=SumPro+Slab(I)%InletPass(V)%pRo !Sum of outlet pressures
+                        SumMrefHro=SumMrefHro+Slab(I)%InletPass(V)%mRef*Slab(I)%InletPass(V)%hRo !Sum of outlet mdot*hro
+
+                    END DO !End inlet pass
+
+                    pRoCkt=SumPro/Slab(I)%Ninlet
+                    hRoCkt=SumMrefHro/mRefTot
+
+                ELSE !Single inlet
+
+
+                    DO III=1,1 !Slab(I)%Pass(II)%NumOfTubes !Number of tubes
+
+                        DO IV=1,NumOfMods !Number of segments
+
+                            !ref. mass flow rate for each channel
+                            !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
+                            mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
+
+                            AoMod=AoCoil*LmodTube/Lcoil
+                            AfMod=AfCoil*LmodTube/Lcoil
+                            AiMod=AiCoil*LmodTube/Lcoil
+                            AmMod=AmCoil*LmodTube/Lcoil
+
+                            CALL CalcCoilSegment(I,I,II,III,IV,CoilType)
+                            IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                                !VL: Previously: GOTO 200
+                                OUT(21)=ErrorFlag
+                                RETURN
+
+                            END IF
+
+                            Qpass=Qpass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
+                            QpassSens=QpassSens+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%QmodSens
+
+                        END DO !End mod
+
+                    END DO !End tube
+
+                    Qpass=Qpass*Slab(I)%Pass(II)%Ntube
+                    QpassSens=QpassSens*Slab(I)%Pass(II)%Ntube
+
+                    pRoCkt=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%pRo !Circuit outlet pressure
+                    hRoCkt=Slab(I)%Pass(II)%Tube(1)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
+
+                END IF
+
+                Slab(I)%Pass(II)%pRo=pRoCkt
+                Slab(I)%Pass(II)%hRo=hRoCkt
+
+                Qcoil=Qcoil+Qpass
+                QcoilSens=QcoilSens+QpassSens
+
+            END DO !End pass
+
+            Slab(I)%pRi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%pRi
+            Slab(I)%hRi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%hRi
+
+            Slab(I)%tAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%tAi
+            Slab(I)%rhAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%rhAi
+
+            AirPropOpt=2
+            AirProp(1)=Slab(I)%tAi
+            AirProp(3)=Slab(I)%rhAi
+            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+            Slab(I)%hAi=AirProp(4)
+
+            SHR=QcoilSens/Qcoil
+
+            IF (Slab(1)%Npass .EQ. 1 .AND. Slab(1)%Ninlet .GT. 1) THEN !1-pass, multi-inlet
+                pRoSlab=pRoCkt
+                hRoSlab=hRoCkt
+            ELSE !Single inlet
+                pRoSlab=Slab(I)%Pass(Slab(I)%Npass)%pRo
+                hRoSlab=Slab(I)%Pass(Slab(I)%Npass)%hRo
+            END IF
+
+            Pressure=pRoSlab*1000
+            Enthalpy=hRoSlab*1000
+            tRoSlab=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+            IF (RefPropErr .GT. 0) THEN
+                WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+                ErrorFlag=REFPROPERROR
+                !VL: Previously: GOTO 200
+                OUT(21)=ErrorFlag
+                RETURN
+
+            END IF
+            xRoSlab=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+            IF (RefPropErr .GT. 0) THEN
+                WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+                ErrorFlag=REFPROPERROR
+                !VL: Previously: GOTO 200
+                OUT(21)=ErrorFlag
+                RETURN
+
+            END IF
+
+            Slab(I)%pRo=pRoSlab
+            Slab(I)%hRo=hRoSlab
+            Slab(I)%tRo=tRoSlab
+            Slab(I)%xRo=xRoSlab
+
+            Slab(I)%Qslab=mRefTot*(Slab(I)%hRi-Slab(I)%hRo)
+
+            CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)
+
+            !Coil air side outlet conditions
+            !CPair=CPA(REAL(Slab(I)%tAi))
+            CPair=CPA(REAL(tAmod))
+            Cair=mAicoil*CPAir
+
+            Slab(I)%tAo=Slab(I)%tAi+Slab(I)%Qslab/Cair
+            Slab(I)%hAo=Slab(I)%hAi+Slab(I)%Qslab/mAiCoil
+
+            AirPropOpt=1
+            AirProp(1)=Slab(I)%tAo
+            AirProp(4)=Slab(I)%hAo
+            CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+            Slab(I)%rhAo=AirProp(3)
+
+        END DO !End Slabs
+
+        !ISI - 07/14/07
+        IF (Nl .GT. 1) THEN
+            IF (IsParallelSlabs .GT. 0) THEN
+                CALL UpdateMCrefMassFlowRate(Slab,Nl,mRefTot,DPcoil)
+
+                IF (ABS(DPcoil-DPcoilPrev)/DPcoilPrev .GT. SMALL) THEN
+                    DPcoilPrev=DPcoil
+                ELSE
+
+                    !Calculate outlet pressure and enthalpy
+                    pRoCoil=pRiCoil-DPcoil
+                    mdothRo=0
+                    DO V=1, Nl
+                        mdothRo=mdothRo+Slab(V)%mdot*Slab(V)%hRo
+                    END DO
+                    hRoCoil=mdothRo/mRefTot
+
+                    EXIT
+                END IF
+            ELSE !Series
+                !Calculate outlet pressure and enthalpy
+                DPcoil=Slab(1)%pRi-Slab(Nl)%pRo
+                pRoCoil=Slab(Nl)%pRo
+                hRoCoil=Slab(Nl)%hRo
                 EXIT
-              END IF
-          ELSE !Series
-              !Calculate outlet pressure and enthalpy
-              DPcoil=Slab(1)%pRi-Slab(Nl)%pRo
-              pRoCoil=Slab(Nl)%pRo
-              hRoCoil=Slab(Nl)%hRo
-              EXIT
-          
-          END IF
-      ELSE
-          !Calculate outlet pressure and enthalpy
-          DPcoil=Slab(1)%pRi-Slab(1)%pRo
-          pRoCoil=Slab(1)%pRo
-          hRoCoil=Slab(1)%hRo
-          EXIT
-      END IF        
-      
-  END DO !End iter
-    
-	  !pRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%pRo
-	  !hRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%hRo
 
-	  Qcoil=mRefTot*(hRiCoil-hRoCoil)
-	  
-	  IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
-	    QcoilSens=Qcoil
-	  END IF
+            END IF
+        ELSE
+            !Calculate outlet pressure and enthalpy
+            DPcoil=Slab(1)%pRi-Slab(1)%pRo
+            pRoCoil=Slab(1)%pRo
+            hRoCoil=Slab(1)%hRo
+            EXIT
+        END IF        
 
-	  !Coil air side outlet conditions
-      !CPair=CPA(REAL(tAiCoil))
-	  CPair=CPA(REAL(tAmod))
-      Cair=mAicoil*CPAir
+    END DO !End iter
 
-      tAoCoil=tAiCoil+QcoilSens/Cair
-      hAoCoil=hAiCoil+Qcoil/mAiCoil
+    !pRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%pRo
+    !hRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%hRo
 
-	  !Fan air side inlet conditions
-	  CPair=CPA(REAL(tAoCoil))
-	  Cair=mAiCoil*CPAir
+    Qcoil=mRefTot*(hRiCoil-hRoCoil)
 
-	  !IF (IsCoolingMode .LT. 1 .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-	  IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
-		  tAoCoil=tAoCoil+PwrFan/Cair
-		  hAoCoil=hAoCoil+PwrFan/mAiCoil
-	  END IF
-    
-	  AirPropOpt=1
-	  AirProp(1)=tAiCoil
-	  AirProp(4)=hAiCoil
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	  rhAiCoil=AirProp(3)
-	  DensityIn=AirProp(7)
+    IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
+        QcoilSens=Qcoil
+    END IF
 
-	  AirPropOpt=1
-	  AirProp(1)=tAoCoil
-	  AirProp(4)=hAoCoil
-	  CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	  rhAoCoil=AirProp(3)
-	  DensityOut=AirProp(7)  
+    !Coil air side outlet conditions
+    !CPair=CPA(REAL(tAiCoil))
+    CPair=CPA(REAL(tAmod))
+    Cair=mAicoil*CPAir
 
-	  WetFlag=0
-	  RowNum=0   
-	  CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-	  				   IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-	  				   Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-	  				   Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
-	  
-	  DPair=DPair*DPairMultiplier
+    tAoCoil=tAiCoil+QcoilSens/Cair
+    hAoCoil=hAiCoil+Qcoil/mAiCoil
 
-	  Pressure=pRoCoil*1000
-	  Enthalpy=hRoCoil*1000
-	  tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-	  IF (RefPropErr .GT. 0) THEN
-		  WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-		  ErrorFlag=REFPROPERROR
-		  GOTO 200
-	  END IF
-	  xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-	  IF (RefPropErr .GT. 0) THEN
-	      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-		  ErrorFlag=REFPROPERROR
-		  GOTO 200
-	  END IF
-	  
-	  Pressure=pRoCoil*1000
-	  Quality=0
-	  tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-	  IF (RefPropErr .GT. 0) THEN
-	      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-		  ErrorFlag=REFPROPERROR
-		  GOTO 200
-	  END IF
+    !Fan air side inlet conditions
+    CPair=CPA(REAL(tAoCoil))
+    Cair=mAiCoil*CPAir
 
-  !IF (Wabsolute .GT. 0) THEN
-  !  Wlocal=LocalOilMassFraction(Wabsolute,xRoCoil)
-  !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-  !END IF
+    !IF (IsCoolingMode .LT. 1 .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
+    IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
+        tAoCoil=tAoCoil+PwrFan/Cair
+        hAoCoil=hAoCoil+PwrFan/mAiCoil
+    END IF
 
-  IF (xRoCoil .LE. 0.0) THEN 
-      tSHoCoil=tRoCoil-tSat !Superheat
-  ELSE
-	  tSHoCoil=0.0
-  END IF
+    AirPropOpt=1
+    AirProp(1)=tAiCoil
+    AirProp(4)=hAiCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    rhAiCoil=AirProp(3)
+    DensityIn=AirProp(7)
 
-  !****** Suction line calculation ******
-  IF (LsucLn .GT. 0) THEN 
-      CALL SuctionLine
-	  IF (ErrorFlag .GT. CONVERGEERROR) THEN
-	      WRITE(*,*)'SuctionLine: Refprop error.'
-	      GOTO 200
-	  END IF
-  ELSE
-      pRiCmp=pRoCoil
-	  hRiCmp=hRoCoil
-  END IF
+    AirPropOpt=1
+    AirProp(1)=tAoCoil
+    AirProp(4)=hAoCoil
+    CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
+    rhAoCoil=AirProp(3)
+    DensityOut=AirProp(7)  
 
-  IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
-    !Calculate reversing valve heat transfer and pressure drop
+    WetFlag=0
+    RowNum=0   
+    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+
+    DPair=DPair*DPairMultiplier
+
+    Pressure=pRoCoil*1000
+    Enthalpy=hRoCoil*1000
+    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
+
+    END IF
+    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
+
+    END IF
+
+    Pressure=pRoCoil*1000
+    Quality=0
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
+
+    END IF
+
+    !IF (Wabsolute .GT. 0) THEN
+    !  Wlocal=LocalOilMassFraction(Wabsolute,xRoCoil)
+    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
+    !END IF
+
+    IF (xRoCoil .LE. 0.0) THEN 
+        tSHoCoil=tRoCoil-tSat !Superheat
+    ELSE
+        tSHoCoil=0.0
+    END IF
+
+    !****** Suction line calculation ******
+    IF (LsucLn .GT. 0) THEN 
+        CALL SuctionLine
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            WRITE(*,*)'SuctionLine: Refprop error.'
+            !VL: Previously: GOTO 200
+            OUT(21)=ErrorFlag
+            RETURN
+
+        END IF
+    ELSE
+        pRiCmp=pRoCoil
+        hRiCmp=hRoCoil
+    END IF
+
+    IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
+        !Calculate reversing valve heat transfer and pressure drop
+        Pressure=pRiCmp*1000
+        Enthalpy=hRiCmp*1000
+        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+        IF (RefPropErr .GT. 0) THEN
+            WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
+            ErrorFlag=REFPROPERROR
+            !VL: Previously: GOTO 200
+            OUT(21)=ErrorFlag
+            RETURN
+
+        END IF
+
+        hRsuc=hRiCmp
+        IF (IsCoolingMode .GT. 0) THEN
+            !Correlation good for cooling only
+            CALL SuctionHeatTransfer(mRefTot,tRdis,tRiCmp,hRsuc,hRiCmp)
+            CALL SuctionPressureDrop(mRefTot,DPvalve)
+            pRiCmp=pRiCmp-DPvalve
+        END IF
+
+    END IF
+
     Pressure=pRiCmp*1000
     Enthalpy=hRiCmp*1000
     tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
-	    GOTO 200
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
+
+    END IF
+    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
+
     END IF
 
-	hRsuc=hRiCmp
-	IF (IsCoolingMode .GT. 0) THEN
-	    !Correlation good for cooling only
-	    CALL SuctionHeatTransfer(mRefTot,tRdis,tRiCmp,hRsuc,hRiCmp)
-	    CALL SuctionPressureDrop(mRefTot,DPvalve)
-	    pRiCmp=pRiCmp-DPvalve
-	END IF
+    Pressure=pRiCmp*1000
+    Quality=0
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    IF (RefPropErr .GT. 0) THEN
+        WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
+        ErrorFlag=REFPROPERROR
+        !VL: Previously: GOTO 200
+        OUT(21)=ErrorFlag
+        RETURN
 
-  END IF
+    END IF
 
-  Pressure=pRiCmp*1000
-  Enthalpy=hRiCmp*1000
-  tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
-  xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-      ErrorFlag=REFPROPERROR
-	  GOTO 200
-  END IF
+    !IF (Wabsolute .GT. 0) THEN
+    !  Wlocal=LocalOilMassFraction(Wabsolute,xRiCmp)
+    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
+    !END IF
 
-  Pressure=pRiCmp*1000
-  Quality=0
-  tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
-      ErrorFlag=REFPROPERROR
-  	  GOTO 200
-  END IF
+    IF (xRiCmp .GE. 1) THEN
+        tSHiCmp=tRiCmp-tSat
+    ELSE
+        tSHiCmp=0
+    END IF
 
-  !IF (Wabsolute .GT. 0) THEN
-  !  Wlocal=LocalOilMassFraction(Wabsolute,xRiCmp)
-  !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-  !END IF
-  
-  IF (xRiCmp .GE. 1) THEN
-	  tSHiCmp=tRiCmp-tSat
-  ELSE
-      tSHiCmp=0
-  END IF
+    OUT(1)=Qcoil
+    OUT(2)=QcoilSens
+    OUT(3)=pRoCoil
+    OUT(4)=hRoCoil
+    OUT(5)=tRoCoil
+    OUT(6)=xRoCoil
+    OUT(7)=tSHoCoil
+    OUT(8)=pRiCmp
+    OUT(9)=hRiCmp
+    OUT(10)=tRiCmp
+    OUT(11)=xRiCmp
+    OUT(12)=tSHiCmp
+    OUT(13)=tAoCoil
+    OUT(14)=rhAoCoil
+    OUT(15)=DPair
+    OUT(16)=MassSucLn
+    OUT(17)=0
+    OUT(18)=0
+    OUT(19)=0
+    OUT(20)=WeightAluminum
 
-  OUT(1)=Qcoil
-  OUT(2)=QcoilSens
-  OUT(3)=pRoCoil
-  OUT(4)=hRoCoil
-  OUT(5)=tRoCoil
-  OUT(6)=xRoCoil
-  OUT(7)=tSHoCoil
-  OUT(8)=pRiCmp
-  OUT(9)=hRiCmp
-  OUT(10)=tRiCmp
-  OUT(11)=xRiCmp
-  OUT(12)=tSHiCmp
-  OUT(13)=tAoCoil
-  OUT(14)=rhAoCoil
-  OUT(15)=DPair
-  OUT(16)=MassSucLn
-  OUT(17)=0
-  OUT(18)=0
-  OUT(19)=0
-  OUT(20)=WeightAluminum
+!VL: Previously: 200 CONTINUE
 
-  200 CONTINUE
+    OUT(21)=ErrorFlag
 
-  OUT(21)=ErrorFlag
+    RETURN
 
-  RETURN
-
-END SUBROUTINE MicrochannelEvaporator
+    END SUBROUTINE MicrochannelEvaporator
 
 !************************************************************************
 
