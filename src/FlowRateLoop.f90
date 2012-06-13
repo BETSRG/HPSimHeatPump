@@ -68,6 +68,7 @@
     REAL, SAVE:: PrevTime = 0.0                                               
 
     !VL: Previously: 300 CONTINUE <-- SEE GOTO 300 in if statement at end of function ...
+    IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
     DO WHILE (.NOT. IsCondenserAllocated)
 
         PRINT=.TRUE.
