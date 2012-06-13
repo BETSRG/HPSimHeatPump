@@ -110,12 +110,15 @@ C
               X2 = X1 - DDX
               !VL: Previously: GO TO 100
               CYCLE
+
+          END IF
+
 C
 C	IF THERE IS A NEGATIVE SLOPE AND "Y" IS GREATER THAN 0. OR
 C	THERE IS A POSITIVE SLOPE AND "Y" IS LESS THAN 0. THEN
 C	MOVE THE RIGHT-HAND POINT FURTHER TO THE RIGHT
 C
-          END IF
+
 !VL: Previously: 300       IF (X1 .GT. X2) GO TO 400
           IF (X1 .LE. X2) THEN
 C
@@ -128,7 +131,7 @@ C
 !VL: Previously: 400       X2 = X1 + DDX
           X2 = X1 + DDX
           !VL: Previously: GO TO 100
-          CYCLE
+          CYCLE   !VL: Not needed ...
 
       END DO
 
