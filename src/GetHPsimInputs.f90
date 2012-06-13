@@ -213,16 +213,6 @@ REAL OutdoorEnteringWetbulbTemperature
 REAL IndoorEnteringDrybulbTemperature
 REAL IndoorEnteringWetbulbTemperature
 REAL RefChg    !Design Refrigerant Charge Mass
-REAL RefChgMass  !Refrigerant Charge Mass
-REAL RefMassFlowRate !Refrigerant Mass Flow Rate
-REAL SystemEER
-REAL SystemSEER
-REAL SystemCOP
-REAL SensibleTotalHeatRatio
-REAL CalculatedSubcooling
-REAL CalculatedSuperheat
-REAL CalculatedCoolingCapacity
-REAL CalculatedHeatingCapacity
 
 CHARACTER(len=MaxNameLength)CompressorModel
 CHARACTER(len=MaxNameLength)CompressorType
@@ -258,36 +248,10 @@ REAL UserSpecifiedRatingEvapTemperature
 REAL UserSpecifiedRatingCondTemperature
 REAL UserSpecifiedRatingSubcooling
 REAL UserSpecifiedRatingSuperheat
-REAL UserSpecifiedRatingHeatingModeSubcooling
-REAL UserSpecifiedRatingHeatingModeSuperheat
- 
-REAL ODC_CoilAirPressureDrop
-REAL ODC_CoilAirOutletDrybulbTemp
-REAL ODC_CoilAirOutletWetbulbTemp
-REAL ODC_CoilAirOutletRelativeHumidity
-REAL ODC_CoilAirFaceVelocity
-REAL ODC_CoilHeatTransferRate
-REAL ODC_MassinCoil
-REAL ODC_InternalVolume
-REAL ODC_CoilAirLeakage  !Air Leakage Around the Coil
 
 REAL PwrODfan !Outdoor Fan Power
-!REAL VdotODfan    !Outdoor Fan Air Flow Rate
-!REAL ODdrawBlow   !Outdoor Fan Draw Through (1) or Blow Through (2)
-
-REAL IDC_CoilAirPressureDrop
-REAL IDC_CoilAirOutletDrybulbTemperature
-REAL IDC_CoilAirOutletWetbulbTemperature
-REAL IDC_CoilAirOutletRelativeHumidity
-REAL IDC_CoilAirFaceVelocity
-REAL IDC_CoilHeatTransferRate 
-REAL IDC_MassinCoil
-REAL IDC_InternalVolume
-REAL IDC_CoilAirLeakage  !Air Leakage Around the Coil
 
 REAL PwrIDfan !Fan Power
-!REAL VdotIDfan    !Fan Air Flow Rate
-!REAL IDdrawBlow   !Draw Through or Blow Through
 
 CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)SucLn_TubeType
@@ -315,123 +279,6 @@ REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
 REAL ValveODCLn_Charge
 
-CHARACTER(len=MaxNameLength)RCDC_ComSuc_CyclePoint
-REAL RCDC_ComSuc_Pressure
-REAL RCDC_ComSuc_Enthalpy
-REAL RCDC_ComSuc_Temperature 
-REAL RCDC_ComSuc_Quality
-REAL RCDC_ComSuc_Superheat
-REAL RCDC_ComSuc_Subcooling 
-CHARACTER(len=MaxNameLength)RCDC_ComDis_CyclePoint
-REAL RCDC_ComDis_Pressure
-REAL RCDC_ComDis_Enthalpy
-REAL RCDC_ComDis_Temperature
-REAL RCDC_ComDis_Quality
-REAL RCDC_ComDis_Superheat
-REAL RCDC_ComDis_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_OCI_CyclePoint
-REAL RCDC_OCI_Pressure
-REAL RCDC_OCI_Enthalpy
-REAL RCDC_OCI_Temperature
-REAL RCDC_OCI_Quality
-REAL RCDC_OCI_Superheat
-REAL RCDC_OCI_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_OCO_CyclePoint
-REAL RCDC_OCO_Pressure
-REAL RCDC_OCO_Enthalpy
-REAL RCDC_OCO_Temperature
-REAL RCDC_OCO_Quality
-REAL RCDC_OCO_Superheat
-REAL RCDC_OCO_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_EDI_CyclePoint
-REAL RCDC_EDI_Pressure
-REAL RCDC_EDI_Enthalpy
-REAL RCDC_EDI_Quality
-REAL RCDC_EDI_Superheat
-REAL RCDC_EDI_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_EDO_CyclePoint
-REAL RCDC_EDO_Pressure
-REAL RCDC_EDO_Enthalpy
-REAL RCDC_EDO_Temperature
-REAL RCDC_EDO_Quality
-REAL RCDC_EDO_Superheat
-REAL RCDC_EDO_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_ICI_CyclePoint
-REAL RCDC_ICI_Pressure
-REAL RCDC_ICI_Enthalpy
-REAL RCDC_ICI_Temperature
-REAL RCDC_ICI_Quality
-REAL RCDC_ICI_Superheat
-REAL RCDC_ICI_Subcooling
-CHARACTER(len=MaxNameLength)RCDC_ICO_CyclePoint
-REAL RCDC_ICO_Pressure
-REAL RCDC_ICO_Enthalpy
-REAL RCDC_ICO_Temperature
-REAL RCDC_ICO_Quality
-REAL RCDC_ICO_Superheat
-REAL RCDC_ICO_Subcooling
-
-CHARACTER(len=MaxNameLength)RCDH_ComSuc_CyclePoint
-REAL RCDH_ComSuc_Pressure
-REAL RCDH_ComSuc_Enthalpy
-REAL RCDH_ComSuc_Temperature
-REAL RCDH_ComSuc_Quality
-REAL RCDH_ComSuc_Superheat
-REAL RCDH_ComSuc_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_ComDis_CyclePoint
-REAL RCDH_ComDis_Pressure
-REAL RCDH_ComDis_Enthalpy
-REAL RCDH_ComDis_Quality
-REAL RCDH_ComDis_Superheat
-REAL RCDH_ComDis_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_OCI_CyclePoint
-REAL RCDH_OCI_Pressure
-REAL RCDH_OCI_Enthalpy
-REAL RCDH_OCI_Temperature
-REAL RCDH_OCI_Quality
-REAL RCDH_OCI_Superheat
-REAL RCDH_OCI_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_OCO_CyclePoint
-REAL RCDH_OCO_Pressure
-REAL RCDH_OCO_Enthalpy
-REAL RCDH_OCO_Temperature
-REAL RCDH_OCO_Quality
-REAL RCDH_OCO_Superheat
-REAL RCDH_OCO_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_EDI_CyclePoint
-REAL RCDH_EDI_Pressure
-REAL RCDH_EDI_Enthalpy
-REAL RCDH_EDI_Temperature
-REAL RCDH_EDI_Quality
-REAL RCDH_EDI_Superheat
-REAL RCDH_EDI_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_EDO_CyclePoint
-REAL RCDH_EDO_Pressure
-REAL RCDH_EDO_Enthalpy
-REAL RCDH_EDO_Temperature
-REAL RCDH_EDO_Quality
-REAL RCDH_EDO_Superheat
-REAL RCDH_EDO_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_ICI_CyclePoint
-REAL RCDH_ICI_Pressure
-REAL RCDH_ICI_Enthalpy
-REAL RCDH_ICI_Temperature
-REAL RCDH_ICI_Quality
-REAL RCDH_ICI_Superheat
-REAL RCDH_ICI_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_ICO_CyclePoint
-REAL RCDH_ICO_Pressure
-REAL RCDH_ICO_Enthalpy
-REAL RCDH_ICO_Temperature
-REAL RCDH_ICO_Quality
-REAL RCDH_ICO_Superheat
-REAL RCDH_ICO_Subcooling
-CHARACTER(len=MaxNameLength)RCDH_OCckt    !Outdoor Coil Ckt
-CHARACTER(len=MaxNameLength)RCDH_ICckt   !Indoor Coil Ckt
-REAL RCDH_Com_Chg    !Charge in Compressor
-REAL RCDH_DistC_Chg  !Charge in Distributor Tube (Cooling)
-REAL RCDH_DistH_Chg  !Charge in Distributor Tube (Heating)
-
 CHARACTER(len=MaxNameLength)Acc_Manufacturer
 CHARACTER(len=MaxNameLength)Acc_Model
 REAL Acc_ChgCap  !Accumulator Charge Capacity
@@ -442,61 +289,6 @@ REAL Acc_DP   !Accumulator Pressure Drop
 CHARACTER(len=MaxNameLength)Filter_Manufacturer
 CHARACTER(len=MaxNameLength)Filter_Model
 REAL Filter_DP    !Filter Pressure Drop
-
-REAL MWD_FinIC    !Indoor Coil Fin
-REAL MWD_FinOC    !Outdoor Coil Fin
-REAL MWD_TubeIC   !Indoor Coil Tube
-REAL MWD_TubeOC   !Outdoor Coil Tunbe
-REAL MWD_SucLn    !Suction Line
-REAL MWD_DisLn    !Discharge Line
-REAL MWD_RV_ICL   !Rev. Valve Indoor Coil Line
-REAL MWD_RV_OCL   !Rev. Valve Outdoor Coil Line
-REAL MWD_LiqLn
-
-REAL UC_Acc   !Unit Cost for Accumulator
-REAL UC_Com   !Unit Cost for Compressor
-REAL UC_Dis   !Unit Cost for Distributor
-REAL UC_FD    !Unit Cost for Filter Drier
-REAL UC_IF   !Unit Cost for Indoor Fan
-REAL UC_OF   !Unit Cost for Outdoor Fan
-REAL UC_IP    !Unit Cost for Interconnecting Piping
-REAL UC_RV    !Unit Cost for Reversing Valve
-REAL UC_STO  !Unit Cost for Short Tube Orifice
-REAL UC_TXV  !Unit Cost for TXV
-REAL UC_ICC  !Unit Cost for Indoor Coil Copper
-REAL UC_ICA  !Unit Cost for Indoor Coil Aluminum
-REAL UC_OCC  !Unit Cost for Outdoor Coil Copper
-REAL UC_OCA  !Unit Cost for Outdoor Coil Aluminum
-REAL UC_Other    !Unit Cost for "Other"
-REAL Qu_Acc  !Accumulator Quantity
-REAL Qu_Com   !Compressor Quantity
-REAL Qu_Dis   !Distributor Quantity
-REAL Qu_FD    !Filter Drier Quantity
-REAL Qu_IF    !Indoor Fan Quantity
-REAL Qu_OF   !Outdoor Fan Quantity
-REAL Qu_IP    !Interconnecting Piping Quantity
-REAL Qu_RV    !Reversing Valve Quantity
-REAL Qu_STO  !Short Tube Orifice Quantity
-REAL Qu_TXV  !TXV Quantity
-REAL Qu_IC  !Indoor Coil Quantity
-REAL Qu_OC  !Outdoor Coil Quantity
-REAL Qu_Other    !Quantity of "Other"
-REAL TC_Acc  !Accumulator Total Cost
-REAL TC_Com   !Compressor Total Cost
-REAL TC_Dis  !Distributor Total Cost
-REAL TC_FD    !Filter Drier Total Cost
-REAL TC_IF    !Indoor Fan Total Cost
-REAL TC_OF    !Outdoor Fan Total Cost
-REAL TC_IP    !Interconnecting Piping Total Cost
-REAL TC_RV    !Reversing Valve Total Cost
-REAL TC_STO  !Short Tube Orifice Total Cost
-REAL TC_TXV  !TXV Total Cost
-REAL TC_IC  !Indoor Coil Total Cost
-REAL TC_OC  !Outdoor Coil Total Cost
-REAL TC_Other    !Total Cost of "Other"
-
-REAL TuningCurveIntercept
-REAL TuningCurveSlope
 
 INTEGER(2) :: UseAirHandlerData    !0 is FALSE, 1 is TRUE
 REAL AHD_Ton !Tonnage
@@ -518,70 +310,6 @@ REAL CCD_API !A-Power Intercept
 REAL CCD_BCI !B-Capacity Intercept
 REAL CCD_BPI !B-Power Intercept
 REAL CCD_ALT !A-Liquid Temperature
-
-REAL SC_mdot  !Mass Flow Rate Specified
-
-REAL GlycolCon    !Glycol Concentration
-CHARACTER(len=MaxNameLength)GlycolNa  !Glycol Name
-REAL GlycolFR !Flow Rate
-REAL GlycolET !Entering Temperature
-REAL GlycolLT !Leaving Temperature
-REAL GlycolDP !Pressure Drop
-REAL GlycolTC !Total Charge
-
-CHARACTER(len=MaxNameLength)GLE_RefrigerantLinE
-REAL GLE_TubeType
-REAL GLE_Length   !Refrigerant Line Length
-REAL GLE_Elev !Refrigerant Line Elevation
-REAL GLE_HeatLoss !Refrigerant Line Heat Loss
-REAL GLE_TempChange   !Refrigerant Line Temperature Change
-REAL GLE_Ktube    !Tube Conductivity
-REAL GLE_TubeID   !Tube Inside Diameter
-REAL GLE_TubeOD   !Tube Outside Diameter
-REAL GLE_ADP  !Additional Pressure Drop
-REAL GLE_Charge  !Charge in Line
-CHARACTER(len=MaxNameLength)GLL_RefrigerantLine
-REAL GLL_TubeType
-REAL GLL_Length  !Refrigerant Line Length
-REAL GLL_Elev    !Refrigerant Line Elevation
-REAL GLL_HeatLoss    !Refrigerant Line Heat Loss
-REAL GLL_TempChange  !Refrigerant Line Temperature Change
-REAL GLL_Ktube   !Tube Conductivity
-REAL GLL_TubeID  !Tube Inside Diameter
-REAL GLL_TubeOD  !Tube Outside Diameter
-REAL GLL_ADP !Additional Pressure Drop
-REAL GLL_Charge  !Charge in Line
-
-CHARACTER(len=MaxNameLength)PumpManufacturer
-CHARACTER(len=MaxNameLength)PumpModel
-REAL PumpFlowRate
-REAL PumpPower
-
-CHARACTER(len=MaxNameLength)BPHXCoil
-REAL BPHX_TCW !Total Coil Weight
-REAL BPHX_HPC !Hot Pass Capacity
-REAL BPHX_HPDP    !Hot Pass Pressure Drop
-REAL BPHX_HPDPM   !Hot Pass Pressure Drop Multiplier
-REAL BPHX_HPIV    !Hot Pass Internal Volume
-REAL BPHX_HPCh    !Hot Pass Charge
-REAL BPHX_CPC !Cold Pass Capacity
-REAL BPHX_CPDP    !Cold Pass Pressure Drop
-REAL BPHX_CPDPM   !Cold Pass Pressure Drop Multiplier
-REAL BPHX_CPIV   !Cold Pass Internal Volume
-REAL BPHX_CPCh   !Cold Pass Charge
-
-CHARACTER(len=MaxNameLength)GLD_BPHXI_CyclePoint
-REAL GLD_BPHXI_Pressure
-REAL GLD_BPHXI_Temperature
-CHARACTER(len=MaxNameLength)GLD_BPHXO_CyclePoint
-REAL GLD_BPHXO_Pressure
-REAL GLD_BPHXO_Temperature
-CHARACTER(len=MaxNameLength)GLD_ICI_CyclePoint
-REAL GLD_ICI_Pressure
-REAL GLD_ICI_Temperature
-CHARACTER(len=MaxNameLength)GLD_ICO_CyclePoint
-REAL GLD_ICO_Pressure
-REAL GLD_ICO_Temperature
 
 CHARACTER(len=MaxNameLength)ODC_FinName
 CHARACTER(len=MaxNameLength)ODC_FinMaterial
@@ -624,36 +352,21 @@ REAL :: SystemCost
     IsCoolingMode=1
   END SELECT
 
-  CoolingDesignCondition = Numbers(3)   !Selected Cooling Design Condition
-  HeatingDesignCondition = Numbers(4)   !Selected Heating Design Condition
-  Subcooling = Numbers(5)   !Design Subcooling
-  Superheat = Numbers(6)    !Design Superheat
+  Subcooling = Numbers(3)   !Design Subcooling
+  Superheat = Numbers(4)    !Design Superheat
   
   RefrigerantName = Alphas(3)
   Ref$=RefrigerantName
   
-  NumofRefrigerants = Numbers(7)    !Number of Refrigerants in Blend
-  NominalCoolingCapacity = Numbers(8)
-  NominalHeatingCapacity = Numbers(9)
-  ElectricHeating = Numbers(10)
+  NumofRefrigerants = Numbers(5)    !Number of Refrigerants in Blend
   
   DesignConditionDescription = Alphas(4)
   
-  TAic = Numbers(11) !OutdoorEnteringDrybulbTemperature
-  RHiC = Numbers(12) !OutdoorEnteringWetbulbTemperature
-  TAie = Numbers(13) !IndoorEnteringDrybulbTemperature
-  RHiE = Numbers(14) !IndoorEnteringWetbulbTemperature
-  RefChg = Numbers(15)    !Design Refrigerant Charge Mass
-  RefChgMass = Numbers(16)  !Refrigerant Charge Mass
-  RefMassFlowRate = Numbers(17) !Refrigerant Mass Flow Rate
-  SystemEER = Numbers(18)
-  SystemSEER = Numbers(19)
-  SystemCOP = Numbers(20)
-  SensibleTotalHeatRatio = Numbers(21)
-  CalculatedSubcooling = Numbers(22)
-  CalculatedSuperheat = Numbers(23)
-  CalculatedCoolingCapacity = Numbers(24)
-  CalculatedHeatingCapacity = Numbers(25)
+  TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature
+  RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
+  TAie = Numbers(8) !IndoorEnteringDrybulbTemperature
+  RHiE = Numbers(9) !IndoorEnteringWetbulbTemperature
+  RefChg = Numbers(10)    !Design Refrigerant Charge Mass
 
 
   !***************** Compressor data *****************
@@ -712,8 +425,6 @@ REAL :: SystemCost
   TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
   Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
   Super = Numbers(30) !UserSpecifiedRatingSuperheat
-  UserSpecifiedRatingHeatingModeSubcooling = Numbers(31)
-  UserSpecifiedRatingHeatingModeSuperheat = Numbers(32)
 
   
   !***************** Outdoor coil data *****************
@@ -745,19 +456,10 @@ REAL :: SystemCost
   ODC_Nckt = Numbers(13)    !Number of Circuits
   ODC_Nmod = Numbers(14)    !Number of Segments
   ODC_Ltube = Numbers(15)   !Single Tube Length
-  ODC_CoilAirPressureDrop = Numbers(16)
-  ODC_CoilAirOutletDrybulbTemp = Numbers(17)
-  ODC_CoilAirOutletWetbulbTemp = Numbers(18)
-  ODC_CoilAirOutletRelativeHumidity = Numbers(19)
-  ODC_CoilAirFaceVelocity = Numbers(20)
-  ODC_CoilHeatTransferRate = Numbers(21)
-  ODC_MassinCoil = Numbers(22)
-  ODC_InternalVolume = Numbers(23)
-  ODC_hciMultiplier = Numbers(24)   !Ref Side Heat Transfer Multiplier
-  ODC_DPrefMultiplier = Numbers(25) !Ref Side Pressure Drop Multiplier
-  ODC_hcoMultiplier = Numbers(26)   !Air Side Heat Transfer Multiplier
-  ODC_DPairMultiplier = Numbers(27) !Air Side Pressure Drop Multiplier
-  ODC_CoilAirLeakage = Numbers(28)  !Air Leakage Around the Coil
+  ODC_hciMultiplier = Numbers(16)   !Ref Side Heat Transfer Multiplier
+  ODC_DPrefMultiplier = Numbers(17) !Ref Side Pressure Drop Multiplier
+  ODC_hcoMultiplier = Numbers(18)   !Air Side Heat Transfer Multiplier
+  ODC_DPairMultiplier = Numbers(19) !Air Side Pressure Drop Multiplier
 
     !Tube wall thickness, mm or mil
   ODC_TubeThk=(ODC_TubeOD-ODC_TubeID)/2
@@ -803,19 +505,10 @@ REAL :: SystemCost
   IDC_Nckt = Numbers(13)    !Number of Circuits
   IDC_Nmod = Numbers(14)    !Number of Segments
   IDC_Ltube = Numbers(15)   !Length of Tube
-  IDC_CoilAirPressureDrop = Numbers(16)
-  IDC_CoilAirOutletDrybulbTemperature = Numbers(17)
-  IDC_CoilAirOutletWetbulbTemperature = Numbers(18)
-  IDC_CoilAirOutletRelativeHumidity = Numbers(19)
-  IDC_CoilAirFaceVelocity = Numbers(20)
-  IDC_CoilHeatTransferRate = Numbers(21)
-  IDC_MassinCoil = Numbers(22)
-  IDC_InternalVolume = Numbers(23)
-  IDC_hciMultiplier = Numbers(24)   !Ref Side Heat Transfer Multiplier
-  IDC_DPrefMultiplier = Numbers(25) !Ref Side Pressure Drop Multiplier
-  IDC_hcoMultiplier = Numbers(26)   !Air Side Heat Transfer Multiplier
-  IDC_DPairMultiplier = Numbers(27) !Air Side Pressure Drop Multiplier
-  IDC_CoilAirLeakage = Numbers(28)  !Air Leakage Around the Coil
+  IDC_hciMultiplier = Numbers(16)   !Ref Side Heat Transfer Multiplier
+  IDC_DPrefMultiplier = Numbers(17) !Ref Side Pressure Drop Multiplier
+  IDC_hcoMultiplier = Numbers(18)   !Air Side Heat Transfer Multiplier
+  IDC_DPairMultiplier = Numbers(19) !Air Side Pressure Drop Multiplier
 
   !Tube wall thickness, mm or mil
   IDC_TubeThk=(IDC_TubeOD-IDC_TubeID)/2
@@ -1024,15 +717,11 @@ REAL :: SystemCost
   ValveODCLn_TubeID = Numbers(42)
   ValveODCLnPAR(2) = Numbers(43)    !Tube Outside Diameter
   ValveODCLnPAR(7) = Numbers(44)    !Additional Pressure Drop
-  ValveODCLn_Charge = Numbers(45)   !Charge in Line
-  
-  TubeNumber = Numbers(46)  !Number of Tubes Liq.
 
   !Valve to ODC line tube wall thickness, mm or mil
   ValveODCLnPAR(3)=(ValveODCLnPAR(2)-ValveODCLn_TubeID)/2
   !IF (Unit .EQ. 2)ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000 !ISI - 07/14/06
   IF (Unit .EQ. IP)ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000
-
 
 
   !********************Refrigerant Cycle Data (Cooling)***********************
@@ -1041,94 +730,9 @@ REAL :: SystemCost
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
-  !Compressor Suction
-  
-  RCDC_ComSuc_CyclePoint = Alphas(1)
-  
-  RCDC_ComSuc_Pressure = Numbers(1)
-  RCDC_ComSuc_Enthalpy = Numbers(2)
-  RCDC_ComSuc_Temperature = Numbers(3)
-  RCDC_ComSuc_Quality = Numbers(4)
-  RCDC_ComSuc_Superheat = Numbers(5)
-  RCDC_ComSuc_Subcooling = Numbers(6)
-  
-  !Compressor Discharge
-  
-  RCDC_ComDis_CyclePoint = Alphas(2)
-  
-  RCDC_ComDis_Pressure = Numbers(7)
-  RCDC_ComDis_Enthalpy = Numbers(8)
-  RCDC_ComDis_Temperature = Numbers(9)
-  RCDC_ComDis_Quality = Numbers(10)
-  RCDC_ComDis_Superheat = Numbers(11)
-  RCDC_ComDis_Subcooling = Numbers(12)
-  
-  !Outdoor Coil Inlet
-  
-  RCDC_OCI_CyclePoint = Alphas(3)
-  
-  RCDC_OCI_Pressure = Numbers(13)
-  RCDC_OCI_Enthalpy = Numbers(14)
-  RCDC_OCI_Temperature = Numbers(15)
-  RCDC_OCI_Quality = Numbers(16)
-  RCDC_OCI_Superheat = Numbers(17)
-  RCDC_OCI_Subcooling = Numbers(18)
-  
-  !Outdoor Coil Outlet
-  
-  RCDC_OCO_CyclePoint = Alphas(4)
-  
-  RCDC_OCO_Pressure = Numbers(19)
-  RCDC_OCO_Enthalpy = Numbers(20)
-  RCDC_OCO_Temperature = Numbers(21)
-  RCDC_OCO_Quality = Numbers(22)
-  RCDC_OCO_Superheat = Numbers(23)
-  RCDC_OCO_Subcooling = Numbers(24)
-  
   !Expansion Device Inlet
   
-  RCDC_EDI_CyclePoint = Alphas(5)
-  
-  RCDC_EDI_Pressure = Numbers(25)
-  RCDC_EDI_Enthalpy = Numbers(26)
-  Tliq = Numbers(27)    !Inlet Temperature
-  RCDC_EDI_Quality = Numbers(28)
-  RCDC_EDI_Superheat = Numbers(29)
-  RCDC_EDI_Subcooling = Numbers(30)
-  
-  !Expansion Device Outlet
-  
-  RCDC_EDO_CyclePoint = Alphas(6)
-  
-  RCDC_EDO_Pressure = Numbers(31)
-  RCDC_EDO_Enthalpy = Numbers(32)
-  RCDC_EDO_Temperature = Numbers(33)
-  RCDC_EDO_Quality = Numbers(34)
-  RCDC_EDO_Superheat = Numbers(35)
-  RCDC_EDO_Subcooling = Numbers(36)
-  
-  !Indoor Coil Inlet
-  
-  RCDC_ICI_CyclePoint = Alphas(7)
-  
-  RCDC_ICI_Pressure = Numbers(37)
-  RCDC_ICI_Enthalpy = Numbers(38)
-  RCDC_ICI_Temperature = Numbers(39)
-  RCDC_ICI_Quality = Numbers(40)
-  RCDC_ICI_Superheat = Numbers(41)
-  RCDC_ICI_Subcooling = Numbers(42)
-  
-  !Indoor Coil Outlet
-  
-  RCDC_ICO_CyclePoint = Alphas(8)
-  
-  RCDC_ICO_Pressure = Numbers(43)
-  RCDC_ICO_Enthalpy = Numbers(44)
-  RCDC_ICO_Temperature = Numbers(45)
-  RCDC_ICO_Quality = Numbers(46)
-  RCDC_ICO_Superheat = Numbers(47)
-  RCDC_ICO_Subcooling = Numbers(48)
-  
+  Tliq = Numbers(1)    !Inlet Temperature
   
   
   !********************Refrigerant Cycle Data (Heating)***********************
@@ -1136,102 +740,14 @@ REAL :: SystemCost
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
-  !Compressor Suction
-  
-  RCDH_ComSuc_CyclePoint = Alphas(1)
-  
-  RCDH_ComSuc_Pressure = Numbers(1)
-  RCDH_ComSuc_Enthalpy = Numbers(2)
-  RCDH_ComSuc_Temperature = Numbers(3)
-  RCDH_ComSuc_Quality = Numbers(4)
-  RCDH_ComSuc_Superheat = Numbers(5)
-  RCDH_ComSuc_Subcooling = Numbers(6)
-  
   !Compressor Discharge
   
-  RCDH_ComDis_CyclePoint = Alphas(2)
-  
-  RCDH_ComDis_Pressure = Numbers(7)
-  RCDH_ComDis_Enthalpy = Numbers(8)
-  Tdis = Numbers(9)  !Discharge Temperature
-  RCDH_ComDis_Quality = Numbers(10)
-  RCDH_ComDis_Superheat = Numbers(11)
-  RCDH_ComDis_Subcooling = Numbers(12)
-  
-  !Outdoor Coil Inlet
-  
-  RCDH_OCI_CyclePoint = Alphas(3)
-  
-  RCDH_OCI_Pressure = Numbers(13)
-  RCDH_OCI_Enthalpy = Numbers(14)
-  RCDH_OCI_Temperature = Numbers(15)
-  RCDH_OCI_Quality = Numbers(16)
-  RCDH_OCI_Superheat = Numbers(17)
-  RCDH_OCI_Subcooling = Numbers(18)
-  
-  !Outdoor Coil Outlet
-  
-  RCDH_OCO_CyclePoint = Alphas(4)
-  
-  RCDH_OCO_Pressure = Numbers(19)
-  RCDH_OCO_Enthalpy = Numbers(20)
-  RCDH_OCO_Temperature = Numbers(21)
-  RCDH_OCO_Quality = Numbers(22)
-  RCDH_OCO_Superheat = Numbers(23)
-  RCDH_OCO_Subcooling = Numbers(24)
-  
-  !Expansion Device Inlet
-  
-  RCDH_EDI_CyclePoint = Alphas(5)
-  
-  RCDH_EDI_Pressure = Numbers(25)
-  RCDH_EDI_Enthalpy = Numbers(26)
-  RCDH_EDI_Temperature = Numbers(27)
-  RCDH_EDI_Quality = Numbers(28)
-  RCDH_EDI_Superheat = Numbers(29)
-  RCDH_EDI_Subcooling = Numbers(30)
-  
-  !Expansion Device Outlet
-  
-  RCDH_EDO_CyclePoint = Alphas(6)
-  
-  RCDH_EDO_Pressure = Numbers(31)
-  RCDH_EDO_Enthalpy = Numbers(32)
-  RCDH_EDO_Temperature = Numbers(33)
-  RCDH_EDO_Quality = Numbers(34)
-  RCDH_EDO_Superheat = Numbers(35)
-  RCDH_EDO_Subcooling = Numbers(36)
-  
-  !Indoor Coil Inlet
-  
-  RCDH_ICI_CyclePoint = Alphas(7)
-  
-  RCDH_ICI_Pressure = Numbers(37)
-  RCDH_ICI_Enthalpy = Numbers(38)
-  RCDH_ICI_Temperature = Numbers(39)
-  RCDH_ICI_Quality = Numbers(40)
-  RCDH_ICI_Superheat = Numbers(41)
-  RCDH_ICI_Subcooling = Numbers(42)
-  
+  Tdis = Numbers(1)  !Discharge Temperature
+
   !Indoor Coil Outlet
   
-  RCDH_ICO_CyclePoint = Alphas(8)
-  
-  RCDH_ICO_Pressure = Numbers(43)
-  RCDH_ICO_Enthalpy = Numbers(44)
-  RCDH_ICO_Temperature = Numbers(45)
-  RCDH_ICO_Quality = Numbers(46)
-  RCDH_ICO_Superheat = Numbers(47)
-  RCDH_ICO_Subcooling = Numbers(48)
-  
-  RCDH_OCckt = Alphas(9)    !Outdoor Coil Ckt
-  RCDH_ICckt = Alphas(10)   !Indoor Coil Ckt
-  
-  BaroPressure = Numbers(49)  !Barometric Pressure
-  RCDH_Com_Chg = Numbers(50)    !Charge in Compressor
-  RCDH_DistC_Chg = Numbers(51)  !Charge in Distributor Tube (Cooling)
-  RCDH_DistH_Chg = Numbers(52)  !Charge in Distributor Tube (Heating)
-  IsCmpInAirStream = Numbers(53) !Is Compressor in Air Stream
+  BaroPressure = Numbers(2)  !Barometric Pressure
+  IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
   
 
   !Liquid temperature, ISI - 02/08/08
@@ -1273,19 +789,15 @@ REAL :: SystemCost
   Acc_Manufacturer = Alphas(1)
   Acc_Model = Alphas(2)
   
-  Acc_ChgCap = Numbers(1)  !Charge Capacity
-  Acc_SysCap = Numbers(2)  !Max. Recommended System Capacity
-  Acc_Chg = Numbers(3)  !Charge
-  Acc_DP = Numbers(4)   !Pressure Drop
-  AccumPAR(2) = Numbers(5)  !Height
-  AccumPAR(1) = Numbers(6)  !Diameter
-  AccumPAR(4) = Numbers(7)  !Upper hole diameter
-  AccumPAR(3) = Numbers(8)  !Lower hole diameter
-  AccumPAR(7) = Numbers(9)  !Rating Pressure Drop
-  AccumPAR(5) = Numbers(10) !Hole distance
-  AccumPAR(8) = Numbers(11) !Rating Temperature Drop
-  AccumPAR(9) = Numbers(12) !Coefficient M
-  AccumPAR(10) = Numbers(13)    !Coefficient B
+  AccumPAR(2) = Numbers(1)  !Height
+  AccumPAR(1) = Numbers(2)  !Diameter
+  AccumPAR(4) = Numbers(3)  !Upper hole diameter
+  AccumPAR(3) = Numbers(4)  !Lower hole diameter
+  AccumPAR(7) = Numbers(5)  !Rating Pressure Drop
+  AccumPAR(5) = Numbers(6) !Hole distance
+  AccumPAR(8) = Numbers(7) !Rating Temperature Drop
+  AccumPAR(9) = Numbers(8) !Coefficient M
+  AccumPAR(10) = Numbers(9)    !Coefficient B
 
   AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
@@ -1299,86 +811,7 @@ REAL :: SystemCost
   Filter_Model = Alphas(2)
   
   FilterPAR(1) = Numbers(1) !Flow capacity
-  Filter_DP = Numbers(2)    !Pressure Drop
-  FilterPAR(2) = Numbers(3) !Rating DP
-  
-
-  !****************** Material Weight Data ******************
-  
-  CALL GetObjectItem('MaterialWeightData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  !---Fin---
-  
-  MWD_FinIC = Numbers(1)    !Indoor Coil Fin
-  MWD_FinOC = Numbers(2)    !Outdoor Coil Fin
-  
-  !---Tube---
-  
-  MWD_TubeIC = Numbers(3)   !Indoor Coil Tube
-  MWD_TubeOC = Numbers(4)   !Outdoor Coil Tunbe
-  MWD_SucLn = Numbers(5)    !Suction Line
-  MWD_DisLn = Numbers(6)    !Discharge Line
-  MWD_RV_ICL = Numbers(7)   !Rev. Valve Indoor Coil Line
-  MWD_RV_OCL = Numbers(8)   !Rev. Valve Outdoor Coil Line
-  MWD_LiqLn = Numbers(9)
-  
-  !*************** System Cost Data ***************
-  
-  CALL GetObjectItem('SystemCostData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)  
-  
-  SystemCost = Numbers(1)
-  
-  !---Unit Cost---
-  
-  UC_Acc = Numbers(2)   !Unit Cost for Accumulator
-  UC_Com = Numbers(3)   !Unit Cost for Compressor
-  UC_Dis = Numbers(4)   !Unit Cost for Distributor
-  UC_FD = Numbers(5)    !Unit Cost for Filter Drier
-  UC_IF = Numbers(6)    !Unit Cost for Indoor Fan
-  UC_OF = Numbers(7)    !Unit Cost for Outdoor Fan
-  UC_IP = Numbers(8)    !Unit Cost for Interconnecting Piping
-  UC_RV = Numbers(9)    !Unit Cost for Reversing Valve
-  UC_STO = Numbers(10)  !Unit Cost for Short Tube Orifice
-  UC_TXV = Numbers(11)  !Unit Cost for TXV
-  UC_ICC = Numbers(12)  !Unit Cost for Indoor Coil Copper
-  UC_ICA = Numbers(13)  !Unit Cost for Indoor Coil Aluminum
-  UC_OCC = Numbers(14)  !Unit Cost for Outdoor Coil Copper
-  UC_OCA = Numbers(15)  !Unit Cost for Outdoor Coil Aluminum
-  UC_Other = Numbers(16)    !Unit Cost for "Other"
-  
-  !---Quantity---
-  
-  Qu_Acc = Numbers(17)  !Accumulator Quantity
-  Qu_Com = Numbers(18)   !Compressor Quantity
-  Qu_Dis = Numbers(19)   !Distributor Quantity
-  Qu_FD = Numbers(20)    !Filter Drier Quantity
-  Qu_IF = Numbers(21)    !Indoor Fan Quantity
-  Qu_OF = Numbers(22)    !Outdoor Fan Quantity
-  Qu_IP = Numbers(23)    !Interconnecting Piping Quantity
-  Qu_RV = Numbers(24)    !Reversing Valve Quantity
-  Qu_STO = Numbers(25)  !Short Tube Orifice Quantity
-  Qu_TXV = Numbers(26)  !TXV Quantity
-  Qu_IC = Numbers(27)  !Indoor Coil Quantity
-  Qu_OC = Numbers(28)  !Outdoor Coil Quantity
-  Qu_Other = Numbers(29)    !Quantity of "Other"
-  
-  !---Total Cost---
-  
-  TC_Acc = Numbers(30)  !Accumulator Total Cost
-  TC_Com = Numbers(31)   !Compressor Total Cost
-  TC_Dis = Numbers(32)   !Distributor Total Cost
-  TC_FD = Numbers(33)    !Filter Drier Total Cost
-  TC_IF = Numbers(34)    !Indoor Fan Total Cost
-  TC_OF = Numbers(35)    !Outdoor Fan Total Cost
-  TC_IP = Numbers(36)    !Interconnecting Piping Total Cost
-  TC_RV = Numbers(37)    !Reversing Valve Total Cost
-  TC_STO = Numbers(38)  !Short Tube Orifice Total Cost
-  TC_TXV = Numbers(39)  !TXV Total Cost
-  TC_IC = Numbers(40)  !Indoor Coil Total Cost
-  TC_OC = Numbers(41)  !Outdoor Coil Total Cost
-  TC_Other = Numbers(42)    !Total Cost of "Other"
+  FilterPAR(2) = Numbers(2) !Rating DP
   
   
   !*************** Custom Air Side Heat Transfer Data **************
@@ -1456,168 +889,7 @@ REAL :: SystemCost
   RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
   SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
   LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
-  ChargeCurveIntercept = Numbers(5)
-  ChargeCurveSlope = Numbers(6)
-  
-  !*************** Air Handler Data **************
 
-  CALL GetObjectItem('AirHandlerData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  SELECT CASE (Alphas(1)(1:1))  !Use Air Handler Data
-  CASE ('F','f')
-      UseAirHandlerData=0
-  CASE ('T','t')
-      UseAirHandlerData=1
-  END SELECT
-  
-  AHD_Ton = Numbers(1)  !Tonnage
-  
-  AHD_CM = Alphas(2)    !Coil Model
-  AHD_AHM = Alphas(3)   !Air Handler Model
-  
-  !*************** Condensor Curve Data **************
-
-  CALL GetObjectItem('CondenserCurveData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-
-  CCD_AC = Numbers(1)   !A-Capacity
-  CCD_AP = Numbers(2)   !A-Power
-  CCD_ASP = Numbers(3)  !A-Suction Pressure
-  CCD_BC = Numbers(4)   !B-Capacity
-  CCD_BP = Numbers(5)   !B-Power
-  CCD_BSP = Numbers(6)  !B-Suction Pressure
-  CCD_ACS = Numbers(7)  !A-Capacity Slope
-  CCD_APS = Numbers(8)   !A-Power Slope
-  CCD_BCS = Numbers(9)  !B-Capacity Slope
-  CCD_BPS = Numbers(10) !B-Power Slope
-  CCD_ACI = Numbers(11) !A-Capacity Intercept
-  CCD_API = Numbers(12) !A-Power Intercept
-  CCD_BCI = Numbers(13) !B-Capacity Intercept
-  CCD_BPI = Numbers(14) !B-Power Intercept
-  CCD_ALT = Numbers(15) !A-Liquid Temperature
-  
-  !*************** Simulation Control **************
-
-  CALL GetObjectItem('SimulationControl',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  SC_mdot = Numbers(1)  !Mass Flow Rate Specified
-  
-  
-  !*************** Glycol Data **************
-
-  CALL GetObjectItem('GlycolData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  GlycolCon = Numbers(1)    !Glycol Concentration
-  
-  GlycolNa = Alphas(1)  !Glycol Name
-  
-  GlycolFR = Numbers(2) !Flow Rate
-  GlycolET = Numbers(3) !Entering Temperature
-  GlycolLT = Numbers(4) !Leaving Temperature
-  GlycolDP = Numbers(5) !Pressure Drop
-  GlycolTC = Numbers(6) !Total Charge
-  
-  !*************** Glycol Line Data **************
-
-  CALL GetObjectItem('GlycolLineData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  !Entering Line
-  
-  GLE_RefrigerantLine = Alphas(1)
-  
-  GLE_TubeType = Numbers(1)
-  GLE_Length = Numbers(2)   !Refrigerant Line Length
-  GLE_Elev = Numbers(3) !Refrigerant Line Elevation
-  GLE_HeatLoss = Numbers(4) !Refrigerant Line Heat Loss
-  GLE_TempChange = Numbers(5)   !Refrigerant Line Temperature Change
-  GLE_Ktube = Numbers(6)    !Tube Conductivity
-  GLE_TubeID = Numbers(7)   !Tube Inside Diameter
-  GLE_TubeOD = Numbers(8)   !Tube Outside Diameter
-  GLE_ADP = Numbers(9)  !Additional Pressure Drop
-  GLE_Charge = Numbers(10)  !Charge in Line
-  
-  !Leaving Line
-  
-  GLL_RefrigerantLine = Alphas(2)
-  
-  GLL_TubeType = Numbers(11)
-  GLL_Length = Numbers(12)  !Refrigerant Line Length
-  GLL_Elev = Numbers(13)    !Refrigerant Line Elevation
-  GLL_HeatLoss = Numbers(14)    !Refrigerant Line Heat Loss
-  GLL_TempChange = Numbers(15)  !Refrigerant Line Temperature Change
-  GLL_Ktube = Numbers(16)   !Tube Conductivity
-  GLL_TubeID = Numbers(17)  !Tube Inside Diameter
-  GLL_TubeOD = Numbers(18)  !Tube Outside Diameter
-  GLL_ADP = Numbers(19) !Additional Pressure Drop
-  GLL_Charge = Numbers(20)  !Charge in Line
-  
-  !*************** Pump Data **************
-
-  CALL GetObjectItem('PumpData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  PumpManufacturer = Alphas(1)
-  PumpModel = Alphas(2)
-  
-  PumpFlowRate = Numbers(1)
-  PumpPower = Numbers(2)
-  
-  !*************** BPHX Data **************
-
-  CALL GetObjectItem('BPHXData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  BPHXCoil = Alphas(1)
-  
-  BPHX_TCW = Numbers(1) !Total Coil Weight
-  BPHX_HPC = Numbers(2) !Hot Pass Capacity
-  BPHX_HPDP = Numbers(3)    !Hot Pass Pressure Drop
-  BPHX_HPDPM = Numbers(4)   !Hot Pass Pressure Drop Multiplier
-  BPHX_HPIV = Numbers(5)    !Hot Pass Internal Volume
-  BPHX_HPCh = Numbers(6)    !Hot Pass Charge
-  BPHX_CPC = Numbers(7) !Cold Pass Capacity
-  BPHX_CPDP = Numbers(8)    !Cold Pass Pressure Drop
-  BPHX_CPDPM = Numbers(9)   !Cold Pass Pressure Drop Multiplier
-  BPHX_CPIV = Numbers(10)   !Cold Pass Internal Volume
-  BPHX_CPCh = Numbers(11)   !Cold Pass Charge
-  
-  !*************** Glycol Loop Data **************
-
-  CALL GetObjectItem('GlycolLoopData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
-  
-  !BPHX Inlet
-  
-  GLD_BPHXI_CyclePoint = Alphas(1)
-  
-  GLD_BPHXI_Pressure = Numbers(1)
-  GLD_BPHXI_Temperature = Numbers(2)
-  
-  !BPHX Outlet
-  
-  GLD_BPHXO_CyclePoint = Alphas(2)
-  
-  GLD_BPHXO_Pressure = Numbers(3)
-  GLD_BPHXO_Temperature = Numbers(4)
-  
-  !Indoor Coil Inlet
-  
-  GLD_ICI_CyclePoint = Alphas(3)
-  
-  GLD_ICI_Pressure = Numbers(5)
-  GLD_ICI_Temperature = Numbers(6)
-  
-  !Indoor Coil Outlet
-  
-  GLD_ICO_CyclePoint = Alphas(4)
-  
-  GLD_ICO_Pressure = Numbers(7)
-  GLD_ICO_Temperature = Numbers(8)
-  
   
 !  DO I=1,23; READ(200,*); END DO
 !  READ(200,202)LineData

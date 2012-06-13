@@ -31,17 +31,11 @@ MainDesignData,
 	\key False
 	\key True
 	\default True
-    N3, \field Selected Cooling Design Condition
-	\type real
-	\deprecated
-    N4, \field Selected Heating Design Condition
-	\type real
-	\deprecated
-    N5, \field Design Subcooling
+    N3, \field Design Subcooling
 	\type real
 	\units R
 	\required-field
-    N6, \field Design Superheat
+    N4, \field Design Superheat
 	\type real
 	\units R
 	\required-field
@@ -53,79 +47,31 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N7, \field No. of Refrigerants in Blend
+    N5, \field No. of Refrigerants in Blend
 	\type integer
 	\required-field
-    N8, \field Nominal Cooling Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N9, \field Nominal Heating Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N10, \field Electric Heating
-	 \type real
-	 \units W
-	 \deprecated
     A4, \field Design Condition Description
 	\type alpha
 	\deprecated
-    N11, \field Outdoor Entering Drybulb Temperature
-	 \type real
-	 \units F
-	 \required-field
-    N12, \field Outdoor Entering Wetbulb Temperature
-	 \type real
-	 \units F
-    N13, \field Indoor Entering Drybulb Temperature
-	 \type real
-	 \units F
-	 \required-field
-    N14, \field Indoor Entering Wetbulb Temperature
-	 \type real
-	 \units F
-	 \required-field
-    N15, \field Design Refrigerant Charge Mass
-	 \type real
-	 \units lb
-	 \required-field
-    N16, \field Refrigerant Charge
+    N6, \field Outdoor Entering Drybulb Temperature
+	\type real
+	\units F
+	\required-field
+    N7, \field Outdoor Entering Wetbulb Temperature
+	\type real
+	\units F
+    N8, \field Indoor Entering Drybulb Temperature
+	\type real
+	\units F
+	\required-field
+    N9, \field Indoor Entering Wetbulb Temperature
+	\type real
+	\units F
+	\required-field
+    N10; \field Design Refrigerant Charge Mass
 	 \type real
 	 \units lb
-	 \deprecated
-    N17, \field Refrigerant Mass Flow Rate
-	 \type real
-	 \units lb/h
-	 \deprecated
-    N18, \field System EER
-	 \type real
-	 \deprecated
-    N19, \field System SEER
-	 \type real
-	 \deprecated
-    N20, \field System COP
-	 \type real
-	 \deprecated
-    N21, \field Sensible/Total Heat Ratio
-	 \type real
-	 \deprecated
-    N22, \field Calculated Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    N23, \field Calculated Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N24, \field Calculated Cooling Capacity
-	 \type real
-	 \units Btu/h
-	 \deprecated
-    N25; \field Calculated Heating Capacity
-	 \type real
-	 \units Btu/h
-	 \deprecated
+	 \required-field
 
 CompressorData,
 	\unique-object
@@ -258,18 +204,10 @@ CompressorData,
 	 \type real
 	 \units R
 	 \required-field
-    N30, \field User Specified Rating Superheat
+    N30; \field User Specified Rating Superheat
 	 \type real
 	 \units R
 	 \required-field
-    N31, \field User Specified Rating (Heating Mode) Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    N32; \field User Specified Rating (Heating Mode) Superheat
-	 \type real
-	 \units R
-	 \deprecated
  
 OutdoorCoilData,
 	\unique-object
@@ -339,53 +277,18 @@ OutdoorCoilData,
 	 \type real
 	 \ip-units in
 	 \required-field
-    N16, \field Coil Air Pressure Drop
-	 \type real
-	 \ip-units inH2O
-	 \deprecated
-    N17, \field Coil Air Outlet Drybulb Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N18, \field Coil Air Outlet Wetbulb Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N19, \field Coil Air Outlet Relative Humidity
-	 \type real
-	 \deprecated
-    N20, \field Coil Air Face Velocity
-	 \type real
-	 \units ft/min
-	 \deprecated
-    N21, \field Coil Heat Transfer Rate
-	 \type real
-	 \units Btu/h
-	 \deprecated
-    N22, \field Mass in Coil
-	 \type real
-	 \units lb
-	 \deprecated
-    N23, \field Internal Volume
-	 \type real
-	 \units in3
-	 \deprecated
-	 \note Cubic inches is not an Energy+ standard unit.
-    N24, \field Ref Side Heat Transfer Multiplier
+    N16, \field Ref Side Heat Transfer Multiplier
 	 \type real
 	 \required-field
-    N25, \field Ref Side Pressure Drop Multiplier
+    N17, \field Ref Side Pressure Drop Multiplier
 	 \type real
 	 \required-field
-    N26, \field Air Side Heat Transfer Multiplier
+    N18, \field Air Side Heat Transfer Multiplier
 	 \type real
 	 \required-field
-    N27, \field Air Side Pressure Drop Multiplier
+    N19; \field Air Side Pressure Drop Multiplier
 	 \type real
 	 \required-field
-    N28; \field Air Leakage Around the Coil
-	 \type real
-	 \deprecated
 
 OutdoorFanData,
 	\unique-object
@@ -474,53 +377,18 @@ IndoorCoilData,
 	 \type real
 	 \ip-units in
 	 \required-field
-    N16, \field Coil Air Pressure Drop
-	 \type real
-	 \ip-units inH2O
-	 \deprecated
-    N17, \field Coil Air Outlet Drybulb Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N18, \field Coil Air Outlet Wetbulb Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N19, \field Coil Air Outlet Relative Humidity
-	 \type real
-	 \deprecated
-    N20, \field Coil Air Face Velocity
-	 \type real
-	 \units ft/min
-	 \deprecated
-    N21, \field Coil Heat Transfer Rate
-	 \type real
-	 \units Btu/h
-	 \deprecated
-    N22, \field Mass in Coil
-	 \type real
-	 \units lb
-	 \deprecated
-    N23, \field Internal Volume
-	 \type real
-	 \units in3
-	 \note Cubic inches is not an Energy+ standard unit.
-	 \deprecated
-    N24, \field Ref Side Heat Transfer Multiplier
+    N16, \field Ref Side Heat Transfer Multiplier
 	 \type real
 	 \required-field
-    N25, \field Ref Side Pressure Drop Multiplier
+    N17, \field Ref Side Pressure Drop Multiplier
 	 \type real
 	 \required-field
-    N26, \field Air Side Heat Transfer Multiplier
+    N18, \field Air Side Heat Transfer Multiplier
 	 \type real
 	 \required-field
-    N27, \field Air Side Pressure Drop Multiplier
+    N19; \field Air Side Pressure Drop Multiplier
 	 \type real
 	 \required-field
-    N28; \field Air Leakage Around the Coil
-	 \type real
-	 \deprecated
 
 IndoorFanData,
 	\unique-object
@@ -819,517 +687,36 @@ RefrigerantLineData,
 	 \type real
 	 \ip-units in
 	 \required-field
-    N44, \field Additional Pressure Drop
+    N44; \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
 	 \required-field
-    N45, \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
-    N46; \field No of Tubes Liq.
-	 \type integer
-	 \deprecated
  
 RefrigerantCycleData(Cooling),
 	\unique-object
 	\required-object
-	\memo Cooling Data on the Refrigerant Cycle, almost all deprecated
+	\memo Cooling Data on the Refrigerant Cycle.
 	\memo Contains the Expansion Device Inlet liquid temperature.
-    A1, \field Cycle Point
-	\type alpha
-	\deprecated
-    N1, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N2, \field Enthalpy
-	\type real
-	\units Btu/lb
-	\deprecated
-    N3, \field Temperature
-	\type real
-	\units F
-	\deprecated
-    N4, \field Quality
-	\type real
-	\minimum 0
-	\maximum 100
-	\note Quality as a percentage
-	\deprecated
-    N5, \field Superheat
-	\type real
-	\units R
-	\deprecated
-    N6, \field Subcooling
-	\type real
-	\units R
-	\deprecated
-    A2, \field Cycle Point
-	\type alpha
-	\deprecated
-    N7, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N8, \field Enthalpy
-	\type real
-	\units Btu/lb
-	\deprecated
-    N9, \field Temperature
-	\type real
-	\units F
-	\deprecated
-    N10, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N11, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N12, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A3, \field Cycle Point
-	\type alpha
-	\deprecated
-    N13, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N14, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N15, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N16, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N17, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N18, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A4, \field Cycle Point
-	\type alpha
-	\deprecated
-    N19, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N20, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N21, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N22, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \notes Quality as a percentage
-	 \deprecated
-    N23, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N24, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A5, \field Cycle Point
-	\type alpha
-	\deprecated
-    N25, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N26, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N27, \field Temperature
+    N1; \field Temperature
 	 \type real
 	 \units F
 	 \required-field
-    N28, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N29, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N30, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A6, \field Cycle Point
-	\type alpha
-	\deprecated
-    N31, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N32, \field Enthalpy
-	 \type real
- 	 \units Btu/lb
-	 \deprecated
-    N33, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N34, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N35, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N36, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A7, \field Cycle Point
-	\type alpha
-	\deprecated
-    N37, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N38, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N39, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N40, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N41, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N42, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A8, \field Cycle Point
-	\type alpha
-	\deprecated
-    N43, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N44, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N45, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N46, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N47, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N48; \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
  
 RefrigerantCycleData(Heating),
 	\unique-object
 	\required-object
-	\memo Heating Data on the Refrigerant Cycle, almost all deprecated
+	\memo Heating Data on the Refrigerant Cycle.
 	\memo Contains the Compressor discharge temperature, barometric pressure,
 	\memo and whether or not the compressor is in the air stream.
-    A1, \field Cycle Point
-	\type alpha
-	\deprecated
-    N1, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N2, \field Enthalpy
-	\type real
-	\units Btu/lb
-	\deprecated
-    N3, \field Temperature
-	\type real
-	\units F
-	\deprecated
-    N4, \field Quality
-	\type real
-	\minimum 0
-	\maximum 100
-	\note Quality as a percentage
-	\deprecated
-    N5, \field Superheat
-	\type real
-	\units R
-	\deprecated
-    N6, \field Subcooling
-	\type real
-	\units R
-	\deprecated
-    A2, \field Cycle Point
-	\type alpha
-	\deprecated
-    N7, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N8, \field Enthalpy
-	\type real
-	\units Btu/lb
-	\deprecated
-    N9, \field Temperature
+    N1, \field Temperature
 	\type real
 	\units F
 	\required-field
-    N10, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N11, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N12, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A3, \field Cycle Point
-	\type alpha
-	\deprecated
-    N13, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N14, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N15, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N16, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N17, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N18, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A4, \field Cycle Point
-	\type alpha
-	\deprecated
-    N19, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N20, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N21, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N22, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N23, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N24, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A5, \field Cycle Point
-	\type alpha
-	\deprecated
-    N25, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N26, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N27, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N28, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N29, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N30, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A6, \field Cycle Point
-	\type alpha
-	\deprecated
-    N31, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N32, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N33, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N34, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N35, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N36, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A7, \field Cycle Point
-	\type alpha
-	\deprecated
-    N37, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N38, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N39, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N40, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N41, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N42, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A8, \field Cycle Point
-	\type alpha
-	\deprecated
-    N43, \field Pressure
-	 \type real
-	 \units psi
-	 \deprecated
-    N44, \field Enthalpy
-	 \type real
-	 \units Btu/lb
-	 \deprecated
-    N45, \field Temperature
-	 \type real
-	 \units F
-	 \deprecated
-    N46, \field Quality
-	 \type real
-	 \minimum 0
-	 \maximum 100
-	 \note Quality as a percentage
-	 \deprecated
-    N47, \field Superheat
-	 \type real
-	 \units R
-	 \deprecated
-    N48, \field Subcooling
-	 \type real
-	 \units R
-	 \deprecated
-    A9, \field OutdoorCoil Ckt
-	\type alpha
-	\deprecated
-    A10, \field IndoorCoil Ckt
-	 \type alpha
-	 \deprecated
-    N49, \field Barometric Pressure
+    N2, \field Barometric Pressure
 	 \type real
 	 \units psi
 	 \required-field
-    N50, \field Charge in Compressor
-	 \type real
-	 \units lb
-	 \deprecated
-    N51, \field Charge in Distributor Tube (Cooling)
-	 \type real
-	 \units lb
-	 \deprecated
-    N52, \field Charge in Distributor Tube (Heating)
-	 \type real
-	 \units lb
-	 \deprecated
-    N53; \field Is Compressor in Air Stream
+    N3; \field Is Compressor in Air Stream
 	 \note 1=yes, 0=no
 	 \type integer
 	 \minimum 0
@@ -1346,55 +733,38 @@ AccumulatorData,
     A2, \field Model
 	\type alpha
 	\deprecated
-    N1, \field Charge Capacity
-	\type real
-	\units lb
-	\deprecated
-    N2, \field Max. Recommended System Capacity [Tons]
-	\type real
-	\units tons
-	\note Tons is not an Energy+ standard unit.
-	\deprecated
-    N3, \field Charge
-	\type real
-	\units lb
-	\deprecated
-    N4, \field Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N5, \field Height
+    N1, \field Height
 	\type real
 	\ip-units in
 	\required-field
-    N6, \field Diameter
+    N2, \field Diameter
 	\type real
 	\ip-units in
 	\required-field
-    N7, \field Upper Hole Diameter
+    N3, \field Upper Hole Diameter
 	\type real
 	\ip-units in
 	\required-field
-    N8, \field Lower Hole Diameter
+    N4, \field Lower Hole Diameter
 	\type real
 	\ip-units in
 	\required-field
-    N9, \field Rating Pressure Drop
+    N5, \field Rating Pressure Drop
 	\type real
 	\units psi
 	\required-field
-    N10, \field Hole Distance
-	 \type real
-	 \ip-units in
-	 \required-field
-    N11, \field Rating Temperature Drop
-	 \type real
-	 \units R
-	 \required-field
-    N12, \field Coefficient-M
-	 \type real
-	 \required-field
-    N13; \field Coefficient-B
+    N6, \field Hole Distance
+	\type real
+	\ip-units in
+	\required-field
+    N8, \field Rating Temperature Drop
+	\type real
+	\units R
+	\required-field
+    N9, \field Coefficient-M
+	\type real
+	\required-field
+    N10; \field Coefficient-B
 	 \type real
 	 \required-field
  
@@ -1413,215 +783,12 @@ FilterDrierData,
 	\units tons
 	\note Tons is not an Energy+ standard unit.
 	\required-field
-    N2, \field Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N3; \field Rating Pressure Drop
+    N2; \field Rating Pressure Drop
 	\type real
 	\units psi
 	\required-field
- 
-MaterialWeightData,
-	\unique-object
-	\memo Contains Data about the Material Weight: All deprecated.
-    !--- Fin ---
-    N1, \field Indoor Coil
-	\type real
-	\units lb
-	\deprecated
-    N2, \field Outdoor Coil
-	\type real
-	\units lb
-	\deprecated
-    !--- Tube ---
-    N3, \field Indoor Coil
-	\type real
-	\units lb
-	\deprecated
-    N4, \field Outdoor Coil
-	\type real
-	\units lb
-	\deprecated
-    N5, \field Suction Line
-	\type real
-	\units lb
-	\deprecated
-    N6, \field Discharge Line
-	\type real
-	\units lb
-	\deprecated
-    N7, \field Rev. Valve-Indoor Coil Line
-	\type real
-	\units lb
-	\deprecated
-    N8, \field Rev. Valve-Outdoor Coil Line
-	\type real
-	\units lb
-	\deprecated
-    N9; \field Liquid Line
-	\type real
-	\units lb
-	\deprecated
- 
-SystemCostData,
-	\unique-object
-	\memo Contains cost data: All deprecated
-    N1, \field System Cost
-	\type real
-	\units $
-	\deprecated
-    ! --- Unit Cost ---
-    N2, \field Accumulator
-	\type real
-	\units $
-	\deprecated
-    N3, \field Compressor
-	\type real
-	\units $
-	\deprecated
-    N4, \field Distributor
-	\type real
-	\units $
-	\deprecated
-    N5, \field Filter Drier
-	\type real
-	\units $
-	\deprecated
-    N6, \field Indoor Fan
-	\type real
-	\units $
-	\deprecated
-    N7, \field Outdoor Fan
-	\type real
-	\units $
-	\deprecated
-    N8, \field Interconnecting Piping [per ft]
-	\type real
-	\deprecated
-    N9, \field Reversing Valve
-	\type real
-	\units $
-	\deprecated
-    N10, \field Short Tube Orifice
-	 \type real
-	 \units $
-	 \deprecated
-    N11, \field TXV
-	 \type real
-	 \units $
-	 \deprecated
-    N12, \field Indoor Coil Copper [per ft]
-	 \type real
-	 \deprecated
-    N13, \field Indoor Coil Aluminum [per ft]
-	 \type real
-	 \deprecated
-    N14, \field Outdoor Coil Copper [per ft]
-	 \type real
-	 \deprecated
-    N15, \field Outdoor Coil Aluminum [per lbm]
-	 \type real
-	 \deprecated
-    N16, \field Other
-	 \type real
-	 \units $
-	 \deprecated
-    ! --- Quantity ---
-    N17, \field Accumulator
-	 \type integer
-	 \deprecated
-    N18, \field Compressor
-	 \type integer
-	 \deprecated
-    N19, \field Distributor
-	 \type integer
-	 \deprecated
-    N20, \field Filter Drier
-	 \type integer
-	 \deprecated
-    N21, \field Indoor Fan
-	 \type integer
-	 \deprecated
-    N22, \field Outdoor Fan
-	 \type integer
-	 \deprecated
-    N23, \field Interconnecting Piping
-	 \type real
-	 \units ft
-	 \deprecated
-    N24, \field Reversing Valve
-	 \type integer
-	 \deprecated
-    N25, \field Short Tube Orifice
-	 \type integer
-	 \deprecated
-    N26, \field TXV
-	 \type integer
-	 \deprecated
-    N27, \field Indoor Coil
-	 \type real
-	 \deprecated
-    N28, \field Outdoor Coil
-	 \type real
-	 \deprecated
-    N29, \field Other
-	 \type integer
-	 \deprecated
-    ! --- Total Cost ---
-    N30, \field Accumulator
-	 \type real
-	 \units $
-	 \deprecated
-    N31, \field Compressor
-	 \type real
-	 \units $
-	 \deprecated
-    N32, \field Distributor
-	 \type real
-	 \units $
-	 \deprecated
-    N33, \field Filter Drier
-	 \type real
-	 \units $
-	 \deprecated
-    N34, \field Indoor Fan
-	 \type real
-	 \units $
-	 \deprecated
-    N35, \field Outdoor Fan
-	 \type real
-	 \units $
-	 \deprecated
-    N36, \field Interconnecting Piping
-	 \type real
-	 \units $
-	 \deprecated
-    N37, \field Reversing Valve
-	 \type real
-	 \units $
-	 \deprecated
-    N38, \field Short Tube Orifice
-	 \type real
-	 \units $
-	 \deprecated
-    N39, \field TXV
-	 \type real
-	 \units $
-	 \deprecated
-    N40, \field Indoor Coil
-	 \type real
-	 \units $
-	 \deprecated
-    N41, \field Outdoor Coil
-	 \type real
-	 \units $
-	 \deprecated
-    N42; \field Other
-	 \type real
-	 \units $
-	 \deprecated
- 
+
+
 CustomAirSideHeatTransferData,
 	\unique-object
 	\required-object
@@ -1759,340 +926,10 @@ ChargeTuningCurve,
     N3, \field Tuning Point #2 Simulated Charge
 	\type real
 	\required-field
-    N4, \field Tuning Point #2 Liquid Length
+    N4; \field Tuning Point #2 Liquid Length
 	\type real
 	\required-field
-    N5, \field Tuning Curve Intercept
-	\type real
-	\deprecated
-    N6; \field Tuning Curve Slope
-	\type real
-	\deprecated
- 
-AirHandlerData,
-	\unique-object
-	\memo Contains Air Handler data: All deprecated.
-    A1, \field Use Air Handler Data
-	\type choice
-	\key TRUE
-	\key FALSE
-	\deprecated
-    N1, \field Tonnage
-	\type real
-	\deprecated
-    A2, \field Coil Model
-	\type alpha
-	\deprecated
-    A3; \field Air Handler Model
-	\type alpha
-	\deprecated
- 
-CondenserCurveData,
-	\unique-object
-	\memo Contains Condenser curve modeling data: All deprecated.
-    N1, \field A-Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N2, \field A-Power
-	\type real
-	\units W
-	\deprecated
-    N3, \field A-Suction Pressure
-	\type real
-	\units psi
-	\deprecated
-    N4, \field B-Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N5, \field B-Power
-	\type real
-	\units W
-	\deprecated
-    N6, \field B-Suction Pressure
-	\type real
-	\units psi
-	\deprecated
-    N7, \field A-Capacity Slope
-	\type real
-	\deprecated
-    N8, \field A-Power Slope
-	\type real
-	\deprecated
-    N9, \field B-Capacity Slope
-	\type real
-	\deprecated
-    N10, \field B-Power Slope
-	 \type real
-	 \deprecated
-    N11, \field A-Capacity Intercept
-	 \type real
-	 \deprecated
-    N12, \field A-Power Intercept
-	 \type real
-	 \deprecated
-    N13, \field B-Capacity Intercept
-	 \type real
-	 \deprecated
-    N14, \field B-Power Intercept
-	 \type real
-	 \deprecated
-    N15; \field A-Liquid Temperature
-	 \type real
-	 \deprecated
- 
-SimulationControl,
-	\unique-object
-	\memo Contains spec'd mass flow for the simulation: Deprecated.
-    N1; \field Mass Flow Rate Specified
-	\type real
-	\deprecated
- 
-GlycolData,
-	\unique-object
-	\memo Contains physical data for glyocal: All deprecated.
-    N1, \field Glycol Concentration
-	\type real
-	\minimum 0
-	\maximum 100
-	\note % concentration
-	\deprecated
-    A1, \field Glycol Name
-	\type alpha
-	\deprecated
-    N2, \field Flow Rate
-	\type real
-	\ip-units gal/min
-	\deprecated
-    N3, \field Entering Temperature
-	\type real
-	\units F
-	\deprecated
-    N4, \field Leaving Temperature
-	\type real
-	\units F
-	\deprecated
-    N5, \field Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N6; \field Total Charge
-	\type real
-	\units lb
-	\deprecated
- 
-GlycolLineData,
-	\unique-object
-	\Contains physical data for glycol line: All deprecated.
-    A1, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    N1, \field Tube Type
-	\type real
-	\deprecated
-    N2, \field Refrigerant Line Length
-	\type real
-	\units ft
-	\deprecated
-    N3, \field Refrigerant Line Elevation
-	\type real
-	\units ft
-	\deprecated
-    N4, \field Refrigerant Line Heat Loss
-	\type real
-	\units Btu/h
-	\deprecated
-    N5, \field Refrigerant Line Temperature Change
-	\type real
-	\units R
-	\deprecated
-    N6, \field Tube Conductivity
-	\type real
-	\units Btu-in/h-ft2-F
-	\deprecated
-    N7, \field Tube Inside Diameter
-	\type real
-	\ip-units in
-	\deprecated
-    N8, \field Tube Outside Diameter
-	\type real
-	\ip-units in
-	\deprecated
-    N9, \field Additional Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N10, \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
-    A2, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    N11, \field Tube Type
-	 \type real
-	 \deprecated
-    N12, \field Refrigerant Line Length
-	 \type real
-	 \units ft
-	 \deprecated
-    N13, \field Refrigerant Line Elevation
-	 \type real
-	 \units ft
-	 \deprecated
-    N14, \field Refrigerant Line Heat Loss
-	 \type real
-	 \units Btu/h
-	 \deprecated
-    N15, \field Refrigerant Line Temperature Change
-	 \type real
-	 \units R
-	 \deprecated
-    N16, \field Tube Conductivity
-	 \type real
-	 \units Btu-in/h-ft2-F
-	 \deprecated
-    N17, \field Tube Inside Diameter
-	 \type real
-	 \ip-units in
-	 \deprecated
-    N18, \field Tube Outside Diameter
-	 \type real
-	 \ip-units in
-	 \deprecated
-    N19, \field Additional Pressure Drop
-	 \type real
-	 \units psi
-	 \deprecated
-    N20; \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
- 
-PumpData,
-	\unique-object
-	\memo Contains physical pump data: All deprecated
-    A1, \field Manufacturer
-	\type alpha
-	\deprecated
-    A2, \field Model
-	\type alpha
-	\deprecated
-    N1, \field Flow Rate
-	\type real
-	\units gal/min
-	\deprecated
-    N2; \field Power
-	\type real
-	\units W
-	\deprecated
- 
-BPHXData,
-	\unique-object
-	\memo Contains data on BPHX: All deprecated
-    A1, \field BPHX Coil
-	\type alpha
-	\deprecated
-    N1, \field Total Coil Weight
-	\type real
-	\units lb
-	\deprecated
-    N2, \field Hot Pass Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N3, \field Hot Pass Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N4, \field Hot Pass Heat Transfer Multiplier
-	\type real
-	\deprecated
-    N5, \field Hot Pass Pressure Drop Multiplier
-	\type real
-	\deprecated
-    N6, \field Hot Pass Internal Volume
-	\type real
-	\units in3
-	\note Cubic inches is not an Energy+
-	\note standard unit.
-	\deprecated
-    N7, \field Hot Pass Charge
-	\type real
-	\units lb
-	\deprecated
-    N8, \field Cold Pass Capacity
-	\type real
-	\units Btu/h
-	\deprecated
-    N9, \field Cold Pass Pressure Drop
-	\type real
-	\units psi
-	\deprecated
-    N10, \field Cold Pass Heat Transfer Multiplier
-	 \type real
-	 \deprecated
-    N11, \field Cold Pass Pressure Drop Multiplier
-	 \type real
-	 \deprecated
-    N12, \field Cold Pass Internal Volume
-	 \type real
-	 \units in3
-	 \note Cubic inches is not an Energy+
-	 \note standard unit.
-	 \deprecated
-    N13; \field Cold Pass Charge
-	 \type real
-	 \units lb
-	 \deprecated
- 
-GlycolLoopData,
-	\unique-object
-	\memo Contains data on the glycol loop: All deprecated
-    A1, \field Cycle Point
-	\type alpha
-	\deprecated
-    N1, \field Pressure
-	\type real
-	\units psi	
-	\deprecated
-    N2, \field Temperature
-	\units F
-	\deprecated
-    A2, \field Cycle Point
-	\type alpha
-	\deprecated
-    N3, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N4, \field Temperature
-	\type real
-	\units F
-	\deprecated
-    A3, \field Cycle Point
-	\type alpha
-	\deprecated
-    N5, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N6, \field Temperature
-	\type real
-	\units F
-	\deprecated
-    A4, \field Cycle Point
-	\type alpha
-	\deprecated
-    N7, \field Pressure
-	\type real
-	\units psi
-	\deprecated
-    N8; \field Temperature
-	\type real
-	\units F
-	\deprecated
+
 
 \group Fluid Properties
 
