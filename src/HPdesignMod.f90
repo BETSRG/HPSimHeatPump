@@ -70,6 +70,7 @@ INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
 REAL, SAVE:: PrevTime = 0.0                                               
 INTEGER   :: Flag
 
+    LOGICAL :: FLAG_GOTO_950
   MaxIteration=30
   ICHRGE=1
   IMASS=1
@@ -101,171 +102,180 @@ INTEGER   :: Flag
 
   IF(DTVALU.LT.DTVLMN) DTVALU = DTVLMN
 
-  IF(ICHRGE.EQ.0) GO TO 50
-  IF(ICHRGE.EQ.2) GO TO 25
-  IF (MODE .EQ. 4) THEN
-	  DTROC = DTVALU
-	  IF(DTROC.LT.0.0) DTROC = DTROC/200.
-  ELSE
-	  SUPER = DTVALU
-	  IF(SUPER.LE.0.0) SUPER = -(1.0+SUPER/500.)
-  END IF
 
-  Temperature=(TSICMP-32)/1.8
-  Quality=1
-  PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-      !WRITE(*,*)'Press return to terminate program'
-      !READ(*,*)
-      !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-	  STOP
-  END IF
-  PiCmp=PiCmp/1000
+    IF(ICHRGE.NE.0) THEN
+        IF(ICHRGE.NE.2) THEN
+            IF (MODE .EQ. 4) THEN
+                DTROC = DTVALU
+                IF(DTROC.LT.0.0) DTROC = DTROC/200.
+            ELSE
+                SUPER = DTVALU
+                IF(SUPER.LE.0.0) SUPER = -(1.0+SUPER/500.)
+            END IF
 
-  IF (SUPER .GT. 0) THEN
-      Temperature=(TSICMP+SUPER-32)/1.8
-	  Pressure=PiCmp*1000
-	  HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-      IF (RefPropErr .GT. 0) THEN
-		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-		  !WRITE(*,*)'Press return to terminate program'
-		  !READ(*,*)
-		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-		  STOP
-      END IF
-	  HiCmp=HiCmp/1000
-	  TiCmp=((TSICMP+SUPER)-32)/1.8
-  ELSE
-      Pressure=PiCmp*1000
-	  Quality=-SUPER
-	  HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-      IF (RefPropErr .GT. 0) THEN
-		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-		  !WRITE(*,*)'Press return to terminate program'
-		  !READ(*,*)
-		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-		  STOP
-      END IF
-	  HiCmp=HiCmp/1000
-	  TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-      IF (RefPropErr .GT. 0) THEN
-		  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-		  !WRITE(*,*)'Press return to terminate program'
-		  !READ(*,*)
-		  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-		  STOP
-      END IF
-  END IF
+            Temperature=(TSICMP-32)/1.8
+            Quality=1
+            PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+            IF (RefPropErr .GT. 0) THEN
+                WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                !WRITE(*,*)'Press return to terminate program'
+                !READ(*,*)
+                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                STOP
+            END IF
+            PiCmp=PiCmp/1000
 
-  Xmr=CompOUT(2)
+            IF (SUPER .GT. 0) THEN
+                Temperature=(TSICMP+SUPER-32)/1.8
+                Pressure=PiCmp*1000
+                HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+                IF (RefPropErr .GT. 0) THEN
+                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    !WRITE(*,*)'Press return to terminate program'
+                    !READ(*,*)
+                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                    STOP
+                END IF
+                HiCmp=HiCmp/1000
+                TiCmp=((TSICMP+SUPER)-32)/1.8
+            ELSE
+                Pressure=PiCmp*1000
+                Quality=-SUPER
+                HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+                IF (RefPropErr .GT. 0) THEN
+                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    !WRITE(*,*)'Press return to terminate program'
+                    !READ(*,*)
+                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                    STOP
+                END IF
+                HiCmp=HiCmp/1000
+                TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                IF (RefPropErr .GT. 0) THEN
+                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    !WRITE(*,*)'Press return to terminate program'
+                    !READ(*,*)
+                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                    STOP
+                END IF
+            END IF
 
-  PoEvp=EvapOUT(1)
+            Xmr=CompOUT(2)
 
-  QsucLn=EvapPAR(5) 
-  DTsucLn=EvapPAR(6)
-  LsucLn=EvapPAR(1) 
+            PoEvp=EvapOUT(1)
 
-  IF (LsucLn .GT. 0) THEN
-      IF (QsucLn .NE. 0) THEN
-		  HoEvp=HiCmp-QsucLn/Xmr
+            QsucLn=EvapPAR(5) 
+            DTsucLn=EvapPAR(6)
+            LsucLn=EvapPAR(1) 
 
-		  Pressure=PoEvp*1000
-		  Enthalpy=HoEvp*1000
-		  ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-			  STOP
-		  END IF
+            IF (LsucLn .GT. 0) THEN
+                IF (QsucLn .NE. 0) THEN
+                    HoEvp=HiCmp-QsucLn/Xmr
 
-		  XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-			  STOP
-		  END IF
+                    Pressure=PoEvp*1000
+                    Enthalpy=HoEvp*1000
+                    ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
 
-		  Quality=1
-		  TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-			  STOP
-		  END IF
-    
-		  SUPERE=(ToEvp-TsoEvp)*1.8
+                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
 
-		  IF (XoEvp .LT. 1.) SUPERE = -XoEvp
+                    Quality=1
+                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
 
-      ELSEIF (DTsucLn .NE. 0) THEN
+                    SUPERE=(ToEvp-TsoEvp)*1.8
 
-		  ToEvp=TiCmp-DTsucLn
+                    IF (XoEvp .LT. 1.) SUPERE = -XoEvp
 
-		  Temperature=ToEvp
-		  Pressure=PoEvp*1000
-		  HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
- 			  STOP
-		  END IF
-		  HoEvp=HoEvp/1000
+                ELSEIF (DTsucLn .NE. 0) THEN
 
-		  Pressure=PoEvp*1000
-		  Enthalpy=HoEvp*1000
-		  XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-			  STOP
-		  END IF
+                    ToEvp=TiCmp-DTsucLn
 
-		  Quality=1
-		  TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-		  IF (RefPropErr .GT. 0) THEN
-			  WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-			  !WRITE(*,*)'Press return to terminate program'
-			  !READ(*,*)
-			  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-			  STOP
-		  END IF
+                    Temperature=ToEvp
+                    Pressure=PoEvp*1000
+                    HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
+                    HoEvp=HoEvp/1000
 
-		  SUPERE=(ToEvp-TsoEvp)*1.8
-		  
-		  IF (XoEvp .LT. 1.) SUPERE = -XoEvp
+                    Pressure=PoEvp*1000
+                    Enthalpy=HoEvp*1000
+                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
 
-	  ELSE
-	      SUPERE=SUPER
-      END IF
+                    Quality=1
+                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                    IF (RefPropErr .GT. 0) THEN
+                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                        !WRITE(*,*)'Press return to terminate program'
+                        !READ(*,*)
+                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
+                        STOP
+                    END IF
 
-  ELSE
-      SUPERE=SUPER
-  END IF
+                    SUPERE=(ToEvp-TsoEvp)*1.8
 
-  GO TO 50
-25	CONTINUE
-  DTROC = DTVALU
-  IF(DTROC.LT.0.0) DTROC = DTROC/200.
-50	CONTINUE
+                    IF (XoEvp .LT. 1.) SUPERE = -XoEvp
 
-100 CONTINUE
+                ELSE
+                    SUPERE=SUPER
+                END IF
 
-150 CONTINUE
+            ELSE
+                SUPERE=SUPER
+            END IF
+            !VL: Previously: GO TO 50
+        ELSE
+            !VL: Previously: 25      CONTINUE
+            DTROC = DTVALU
+            IF(DTROC.LT.0.0) DTROC = DTROC/200.
+        END IF
 
-  DO 200 I=1,2
+    END IF
+
+    !VL Previously: 50  CONTINUE
+
+    FLAG_GOTO_950 = .FALSE.
+    !VL: Previously: 100 CONTINUE
+    DO WHILE (.TRUE.)
+
+        !VL: Previously: 150 CONTINUE   ! No GOTO 150 statements found.
+
+        !VL: Previously: DO 200 I=1,2
+        DO I=1,2
   ERRMSG(I) = 0.0
-200 CONTINUE
+            !VL: Previously: 200 CONTINUE
+        END DO
 
 !   FIND DESIRED CONDENSER SUBCOOLING
 !        OR REFRIGERANT MASS FLOW RATE BALANCE
@@ -357,13 +367,20 @@ INTEGER   :: Flag
 		  STOP
       END IF
 	  FirstTimeFlowRateLoop=.FALSE.
-      IF (MODE .EQ. 5) GO TO 950 !Skip the rest of the calculation for Condenser Unit
+        !VL: Previously: IF (MODE .EQ. 5) GO TO 950 !Skip the rest of the calculation for Condenser Unit
 								 !ISI 05-25-05
+        IF (MODE .EQ. 5) THEN !Peform the rest of the calculation for Condenser Unit
+            FLAG_GOTO_950 = .TRUE.
+            EXIT
+        END IF
 
-	  IF (LPRINT.NE.2) GO TO 400
+        !VL: Previously: IF (LPRINT.NE.2) GO TO 400
+        IF (LPRINT.EQ.2) THEN 
       PRINT = .TRUE.
       DIFFER = CNDNSR(TSOCMP,IER)
-400 IF (ABS(DIFFER) .LE. CONV) GO TO 500
+        END IF
+        !VL: Previously: 400     IF (ABS(DIFFER) .LE. CONV) GO TO 500
+        IF (ABS(DIFFER) .GT. CONV) THEN
       IF (LPRINT .GT. 1) THEN
 		  IF (Unit .EQ. 1) THEN
 			  IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
@@ -379,7 +396,8 @@ INTEGER   :: Flag
 	  END IF
 
       ERRMSG(1) = DIFFER
-500 CONTINUE
+        END IF
+        !VL: Previously : 500     CONTINUE
  
 
 	  EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
@@ -496,11 +514,14 @@ INTEGER   :: Flag
 		  !STOP
       END IF
 
-      IF (LPRINT .NE. 2) GO TO 550
+        !VL: Previously: IF (LPRINT .NE. 2) GO TO 550
+        IF (LPRINT .GT. 2) THEN
       PRINT = .TRUE.
       DIFFER = EVPTR(TAIIE,IER)
       PRINT = .FALSE.
-550   IF (ABS(DIFFER) .LE. EVPCON) GO TO 560
+        END IF
+        !VL: Previously: 550     IF (ABS(DIFFER) .LE. EVPCON) GO TO 560
+        IF (ABS(DIFFER) .GT. EVPCON) THEN !GO TO 560
       IF (LPRINT .GT. 1) THEN
 		  IF (Unit .EQ. 1) THEN
 			  IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
@@ -515,9 +536,10 @@ INTEGER   :: Flag
 		  END IF  
 	  END IF
       ERRMSG(2) = DIFFER
+        END IF
 
-560 CONTINUE
-570 CONTINUE
+        !VL: Previously: 560     CONTINUE
+        !VL: Previously : 570     CONTINUE ! No GOTO 570 statements found.
 
       IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
 		  IF (AccumPAR(2) .GT. 0) THEN !Height
@@ -547,7 +569,8 @@ INTEGER   :: Flag
 !   BY ADJUSTING COMPRESSOR INLET SATURATION TEMPERATURE
 
       DIFF = TAIIE-TAIIEI
-      IF(ABS(DIFF).LE.AMBCON) GO TO 900
+        !VL: Previously: IF(ABS(DIFF).LE.AMBCON) GO TO 900
+        IF(ABS(DIFF).LE.AMBCON) EXIT
       IF(NTAMB.NE.0) GO TO 810
       DIFSGN = DIFF
 810 CONTINUE
@@ -564,7 +587,8 @@ INTEGER   :: Flag
 	  TSICMP = TSICMP-(TSATSV-TSICMP)/(TAISV-TAIIE)*DIFF
       !IF (ABS(TSICMPprev-TSICMP)/TSICMPprev .LE. 1E-4) GO TO 900
 	  IF (ABS(TSICMPprev-TSICMP) .LE. 0.01) THEN
-	    GO TO 900 !0.05 F !ISI - 08/02/06
+            !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
+            EXIT
 	  END IF
 	  DIFSGN = DIFF
 	  IF (TSICMP .GT. TAIIEI) TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
@@ -574,7 +598,8 @@ INTEGER   :: Flag
 	  !IF (DELT2 .EQ. 0) GO TO 900
 	  !IF (ABS(DELT2) .LE. 0.01) THEN
 	  IF (ABS(DELT2) .LE. 0.05) THEN !ISI - 06/13/07
-	    GO TO 900 !0.05 F !ISI - 08/02/06
+            !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
+            EXIT
 	  END IF
         
 	  TSATDM = TSICMP
@@ -585,7 +610,12 @@ INTEGER   :: Flag
 840 CONTINUE
 
       NTAMB = NTAMB + 1
-      IF(NTAMB.GT.15) GO TO 850
+        !VL: Previously: IF(NTAMB.GT.15) GO TO 850
+        IF(NTAMB.GT.15) THEN
+            IF (PrnLog .EQ. 1) WRITE(6,1014) DIFF
+            !VL: Previously: GOTO 900
+            EXIT
+        END IF
       IF (LPRINT .GT. 1) THEN
 		  IF (PrnLog .EQ. 1) WRITE(6,1013)TSICMP
 	  END IF
@@ -603,11 +633,14 @@ INTEGER   :: Flag
 		  STOP
 	  END IF
 
-	  GO TO 100
+        !VL: Previously : GO TO 100 ! modified into DO-WHILE loop
+    END DO
 
-850 IF (PrnLog .EQ. 1) WRITE(6,1014) DIFF
+
+    !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,1014) DIFF
 
 900 CONTINUE
+    IF (FLAG_GOTO_950 .EQ. .FALSE.) THEN 
 
       IF (IREFC .EQ. 0) THEN
 		  !**************Size short tube orifice**************
@@ -871,7 +904,9 @@ INTEGER   :: Flag
 
 	  RETURN
 
-950   CONTINUE
+
+    END IF
+        !VL Previously: 950   CONTINUE
 	  CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
 	  CondOUT(18)=MassCoil
 	  
