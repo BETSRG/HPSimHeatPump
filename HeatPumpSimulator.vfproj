@@ -28,16 +28,16 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath=".\src\Accumulator.f90"/>
-		<File RelativePath=".\src\AIRPR.FOR"/>
+		<File RelativePath=".\src\AIRPR.f90"/>
 		<File RelativePath=".\src\AirTempLoop.f90"/>
-		<File RelativePath=".\src\CapillaryTube.F90"/>
+		<File RelativePath=".\src\CapillaryTube.f90"/>
 		<File RelativePath=".\src\ChargeLoop.f90"/>
 		<File RelativePath=".\src\CoilCalc.f90"/>
 		<File RelativePath=".\src\Compressor.f90"/>
 		<File RelativePath=".\src\Condenser.f90"/>
 		<File RelativePath=".\src\DataGlobals.f90"/>
 		<File RelativePath=".\src\DataHVACGlobals.f90"/>
-		<File RelativePath=".\src\DataModuleSim.F90"/>
+		<File RelativePath=".\src\DataModuleSim.f90"/>
 		<File RelativePath=".\src\DataSizing.f90"/>
 		<File RelativePath=".\src\DataStopCodes.f90"/>
 		<File RelativePath=".\src\DataStringGlobals.f90"/>
@@ -45,12 +45,12 @@
 		<File RelativePath=".\src\DumpHPsimOutputs.f90"/>
 		<File RelativePath=".\src\Evaporator.f90"/>
 		<File RelativePath=".\src\FlowRateLoop.f90"/>
-		<File RelativePath=".\src\FrostModel.F90"/>
+		<File RelativePath=".\src\FrostModel.f90"/>
 		<File RelativePath=".\src\General.f90"/>
 		<File RelativePath=".\src\GeneralRoutines.f90"/>
 		<File RelativePath=".\src\GetHPsimInputs.f90"/>
-		<File RelativePath=".\src\GUESS1.FOR"/>
-		<File RelativePath=".\src\GUESS3.FOR"/>
+		<File RelativePath=".\src\GUESS1.f90"/>
+		<File RelativePath=".\src\GUESS3.f90"/>
 		<File RelativePath=".\src\HPdesignMod.f90"/>
 		<File RelativePath=".\src\InputProcessor.f90"/>
 		<File RelativePath=".\src\LiquidLineFilterDrier.f90"/>
@@ -61,12 +61,12 @@
 		<File RelativePath=".\src\Psychometric.f90"/>
 		<File RelativePath=".\src\RefName.f90"/>
 		<File RelativePath=".\src\Refprops.f90"/>
-		<File RelativePath=".\src\ReversingValve.F90"/>
+		<File RelativePath=".\src\ReversingValve.f90"/>
 		<File RelativePath=".\src\ShortTube.f90"/>
-		<File RelativePath=".\src\TXV.F90"/>
+		<File RelativePath=".\src\TXV.f90"/>
 		<File RelativePath=".\src\UnitConvert.f90"/>
 		<File RelativePath=".\src\UtilityRoutines.f90"/>
-		<File RelativePath=".\src\WATPR.FOR"/>
-		<File RelativePath=".\src\ZERO3.FOR"/>
-		<File RelativePath=".\src\ZEROCH.FOR"/></Filter></Files>
+		<File RelativePath=".\src\WATPR.f90"/>
+		<File RelativePath=".\src\ZERO3.f90"/>
+		<File RelativePath=".\src\ZEROCH.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
