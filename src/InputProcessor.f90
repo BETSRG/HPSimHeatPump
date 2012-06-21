@@ -266,7 +266,7 @@ SUBROUTINE ProcessInput
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 	!CHARACTER(LEN=32) :: FileBase = '1.idf'
-	CHARACTER(LEN=32) :: FileName
+	CHARACTER(LEN=40) :: FileName   !LEN=32
 	!CHARACTER(LEN=32) :: Refrigerant
 	CHARACTER(LEN=80) :: Refrigerant
 

@@ -229,6 +229,7 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=25) :: String2
   CHARACTER(len=25) :: String3
   CHARACTER(len=25) :: String4
+  
 
           ! FLOW:
   NumOfFluidTempArrays    = GetNumObjectsFound('FluidPropertyTemperatures')
@@ -387,7 +388,7 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
-
+      
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Enthalpy) )              .AND. &
            (SameString(Alphas(3),Fluid ) )                ) THEN
@@ -985,6 +986,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         IF (FirstSHMatch) THEN
@@ -1018,6 +1020,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         RefrigData(Loop)%SHPress(NumOfPressPts) = Numbers(1)
@@ -1044,6 +1047,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Density))) THEN
         NumOfPressPts = NumOfPressPts + 1       
         
@@ -1070,6 +1074,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Entropy))) THEN
         NumOfPressPts = NumOfPressPts + 1
        
@@ -1097,6 +1102,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Conductivity))) THEN
         NumOfPressPts = NumOfPressPts + 1
        IF ((NumNumbers-1) == RefrigData(Loop)%NumSuperTempPts) THEN
@@ -1123,6 +1129,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Viscosity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1150,6 +1157,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),SpecificHeat))) THEN
         NumOfPressPts = NumOfPressPts + 1
    
@@ -1177,6 +1185,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         IF (FirstSHMatch) THEN
@@ -1216,6 +1225,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         RefrigData(Loop)%SCPress(NumOfPressPts) = Numbers(1)
@@ -1250,6 +1260,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Density))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1276,6 +1287,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Entropy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1302,6 +1314,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Conductivity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1327,6 +1340,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Viscosity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1353,6 +1367,7 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),SpecificHeat))) THEN
         NumOfPressPts = NumOfPressPts + 1
        
@@ -3705,4 +3720,3 @@ END FUNCTION CheckFluidPropertyName
 !
 
 END MODULE FluidProperties
-

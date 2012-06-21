@@ -1813,7 +1813,7 @@ REAL :: MassVapCoil !Total vapor refrigerant inventory in coil, kg
 
 INTEGER NumSection,I,J,K,II,III,IV !Loop Counter
 
-  OPEN (17,FILE='Evaporator.csv')
+  OPEN (17,FILE='Evaporator_ComHeatLoss500.csv')
 
   MassCoil=0
   MassLiqCoil=0
@@ -2220,6 +2220,10 @@ END SUBROUTINE PrintEvaporatorResult
     !------------------------------------------------------------------------
 
     USE UnitConvertMod
+    USE DataSimulation
+    USE RefNameMod
+    USE DataStopCodes
+    USE InputProcessor
 
     IMPLICIT NONE
 
@@ -2241,11 +2245,21 @@ END SUBROUTINE PrintEvaporatorResult
     LOGICAL IsShift !Is shift tube flag (for staggered tubes)
     INTEGER NumSection !Loop counter, ISI - 09/10/07
 
+        INTEGER, PARAMETER :: MaxNameLength = 200
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+        INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+        REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+        INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+        INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+        CHARACTER(len=MaxNameLength)FinName
+        CHARACTER(len=MaxNameLength)FinMaterial
+        CHARACTER(len=MaxNameLength)TubeName
+        
     !***** Get circuit info *****
     IF (IsCoolingMode .GT. 0) THEN
-        OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        OPEN (12,FILE='IDCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')   !Using idd files now instead of IDCckt.dat
     ELSE
-        OPEN (12,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        OPEN (12,FILE='ODCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')   !Using idd files now instead of ODCckt.dat
     END IF
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
@@ -2276,90 +2290,121 @@ END SUBROUTINE PrintEvaporatorResult
 
     IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
-        IF (IsNewFormat) THEN
+        !IF (IsNewFormat) THEN
 
-            READ(12,*) !**************************** Geometry *************************************
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            SELECT CASE (LineData(1:1))
+            !READ(12,*) !**************************** Geometry *************************************
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !SELECT CASE (LineData(1:1))
+            !CASE ('F','f')
+            !    IsSIunit=.FALSE.
+            !CASE DEFAULT
+            !    IsSIunit=.TRUE.
+            !END SELECT
+              CALL GetObjectItem('Geometry',1,Alphas,NumAlphas, &
+                        Numbers,NumNumbers,Status)   
+            
+            SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
                 IsSIunit=.FALSE.
-            CASE DEFAULT
+            CASE ('T','t')
                 IsSIunit=.TRUE.
+            CASE DEFAULT
+                !FAIL
             END SELECT
+            
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)FinType
+            FinType = Numbers(1)
+            
+            !READ(12,*) !Fin name
+            FinName = Alphas(1)
 
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)FinType
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)FinPitch
+            FinPitch = Numbers(2)
+            Kfin = Numbers(3)
+            FinThk = Numbers(4)
+            
+            FinMaterial = Alphas(3)
+            
+            TubeType = Numbers(5)
+            
+            TubeName = Alphas(4)
+            
+            ODTube = Numbers(6)
+            IDTube = Numbers(7)
+            KTube = Numbers(8)
+            Pt = Numbers(9)
+            Pl = Numbers(10)
+            Nl = Numbers(11)
+            Nt = Numbers(12)
+            Ltube = Numbers(13)
 
-            READ(12,*) !Fin name
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)FinPitch
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Kfin
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)FinThk
-
-            READ(12,*) !Fin material
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)TubeType
-
-            READ(12,*) !Tube name
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)ODtube
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)IDtube
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Ktube
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Pt
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Pl
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Nl
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Nt
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)Ltube
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Kfin
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)FinThk
+            !
+            !READ(12,*) !Fin material
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)TubeType
+            !
+            !READ(12,*) !Tube name
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)ODtube
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)IDtube
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Ktube
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Pt
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Pl
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Nl
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Nt
+            !
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)Ltube
 
             IF (Ltube .LE. 1e-3) THEN
                 ErrorFlag=ZEROLENCOILERROR
@@ -2369,30 +2414,39 @@ END SUBROUTINE PrintEvaporatorResult
 
             END IF
 
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)NumOfMods
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)NumOfMods
+            
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)NumOfCkts
+            
+            !READ(12,202)LineData
+            !I=SCAN(LineData,',')
+            !LineData=ADJUSTL(LineData(I+1:150))
+            !READ(LineData,*)IsShift
+            NumOfMods = Numbers(14)
+            NumOfCkts = Numbers(15)
+            
+            SELECT CASE (Alphas(5)(1:1))
+            CASE ('F','f')
+                IsShift=.FALSE.
+            CASE ('T','t')
+                IsShift=.TRUE.
+            END SELECT
 
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)NumOfCkts
-
-            READ(12,202)LineData
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            READ(LineData,*)IsShift
-
-            READ(12,202)LineData
-            IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
-                I=SCAN(LineData,',')
-                LineData=ADJUSTL(LineData(I+1:150))
-                READ(LineData,*)NumOfSections	    
-                READ(12,202)LineData !*************************** Circuiting ************************************
-            ELSE
-                NumOfSections=1
-            END IF
+            !READ(12,202)LineData
+            !IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
+            !    I=SCAN(LineData,',')
+            !    LineData=ADJUSTL(LineData(I+1:150))
+            !    READ(LineData,*)NumOfSections	    
+            !    READ(12,202)LineData !*************************** Circuiting ************************************
+            !ELSE
+            !    NumOfSections=1
+            !END IF
             !READ(12,*) !*************************** Circuiting ************************************
 
             CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
@@ -2406,20 +2460,20 @@ END SUBROUTINE PrintEvaporatorResult
                 ShiftTube = 0
             END IF
 
-        ELSE !Old format
-
-            I=SCAN(LineData,',')
-            DO J=1, 8
-                LineData=ADJUSTL(LineData(I+1:150))
-                I=SCAN(LineData,',')
-            END DO
-            READ(LineData,*)ShiftTube
-            IF (ShiftTube .GT. 0) ShiftTube = 1
-
-            IDtube = ODtube-TubeThk*2
-
-        END IF
-
+        !ELSE !Old format
+        !
+        !    I=SCAN(LineData,',')
+        !    DO J=1, 8
+        !        LineData=ADJUSTL(LineData(I+1:150))
+        !        I=SCAN(LineData,',')
+        !    END DO
+        !    READ(LineData,*)ShiftTube
+        !    IF (ShiftTube .GT. 0) ShiftTube = 1
+        !
+        !    IDtube = ODtube-TubeThk*2
+        !
+        !END IF
+        !
         IF (Pl .EQ. 0) Pl = Pt
 
         READ (12,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
@@ -2489,11 +2543,15 @@ END SUBROUTINE PrintEvaporatorResult
                     ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
                 END DO
             END DO
+            
+            CALL GetObjectItem('Circuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                        Numbers,NumNumbers,Status)
 
             ALLOCATE(Ckt(NumOfCkts))
             !ALLOCATE(mRefIter(NumOfCkts)) !Moved to Coil Section, ISI - 09/10/07
             DO I=1, NumOfCkts
-                READ(12,*,IOSTAT=ErrorFlag)Nckt,Ckt(I)%Ntube
+                !READ(12,*,IOSTAT=ErrorFlag)Nckt,Ckt(I)%Ntube
+                Ckt(I)%Ntube =Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2520,7 +2578,7 @@ END SUBROUTINE PrintEvaporatorResult
                 END IF
             END DO
 
-            READ(12,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
+            !READ(12,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2530,10 +2588,55 @@ END SUBROUTINE PrintEvaporatorResult
             END IF
 
             DO I=1, NumOfCkts   
-                IF (IsCoolingMode .EQ. 1) THEN 
-                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)   
-                ELSE
-                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)  
+                IF (IsCoolingMode .EQ. 1) THEN
+                    
+                DO J=1, Ckt(1)%Ntube
+                    CALL GetObjectItem('Circuit1_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(1)%TubeSequence(J) = Numbers(J)
+                END DO
+                
+                DO J=1, Ckt(2)%Ntube
+                    CALL GetObjectItem('Circuit2_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(2)%TubeSequence(J) = Numbers(J)
+                END DO
+                
+                DO J= 1, Ckt(3)%Ntube
+                    CALL GetObjectItem('Circuit3_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(3)%TubeSequence(J) = Numbers(J)
+                END DO
+                
+                DO J=1, Ckt(4)%Ntube
+                    CALL GetObjectItem('Circuit4_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(4)%TubeSequence(J) = Numbers(J)
+                END DO
+                
+                IF (NumofCkts .EQ. 6) THEN
+                    
+                DO J= 1, Ckt(5)%Ntube
+                    CALL GetObjectItem('Circuit5_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(5)%TubeSequence(J) = Numbers(J)
+                END DO
+                
+                DO J=1, Ckt(6)%Ntube
+                    CALL GetObjectItem('Circuit6_TubeSequence',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+                
+                        Ckt(6)%TubeSequence(J) = Numbers(J)
+                END DO  
+                END IF 
+                    !READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)   
+                !ELSE
+                    !READ(12,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)  
                 END IF
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2545,7 +2648,7 @@ END SUBROUTINE PrintEvaporatorResult
             END DO
 
             DO I=1,2
-                READ(12,202)LineData !For section data, ISI - 09/10/07
+                !READ(12,202)LineData !For section data, ISI - 09/10/07
                 !READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
@@ -2559,30 +2662,39 @@ END SUBROUTINE PrintEvaporatorResult
             !Section data, ISI - 09/10/07
             !Initialize
             CoilSection%IsInlet = .TRUE.
-            IF (LineData(1:1) .EQ. 'S') THEN
+            !IF (LineData(1:1) .EQ. 'S') THEN
                 DO I=1, NumOfSections
-                    READ(12,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
+                    !READ(12,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
                     ALLOCATE(CoilSection(I)%CktNum(CoilSection(I)%NumOfCkts))
                     ALLOCATE(CoilSection(I)%mRefIter(CoilSection(I)%NumOfCkts))
                 END DO
-                READ(12,*) !Section#,Branch#
+               ! READ(12,*) !Section#,Branch#
+                CALL GetObjectItem('VelocityProfile',1,Alphas,NumAlphas, &
+                            Numbers,NumNumbers,Status)
+
                 DO I=1, NumOfSections
-                    READ(12,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)
+                    DO J=1, CoilSection(I)%NumofCkts
+                        CoilSection(I)%CktNum(J)=Numbers(J)
+                    END DO
+                    !READ(12,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)
                 END DO		  
-                READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
-                READ(12,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
-            ELSE
-                CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
-                ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
-                ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-                DO J=1, NumOfCkts
-                    CoilSection(NumOfSections)%CktNum(J)=J
-                END DO
-            END IF
+                !READ(12,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
+                !READ(12,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
+            !ELSE
+                !CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+                !ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+                !ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+                !DO J=1, NumOfCkts
+                    !CoilSection(NumOfSections)%CktNum(J)=J
+                !END DO
+            !END IF
 
             IsUniformVelProfile=.TRUE.
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                READ(12,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
+                !READ(12,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
+                    DO J=1, NumOfMods
+                        Tube(I)%Seg(J)%VelDev=Numbers(J)
+                    END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100

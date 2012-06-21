@@ -321,6 +321,7 @@ CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
 REAL :: TubeNumber
 REAL :: SystemCost
+
 !Flow:
 
   ODC_SurfAbsorptivity=1
@@ -331,7 +332,7 @@ REAL :: SystemCost
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
-
+  
   SELECT CASE (Alphas(1)(1:1))
   CASE ('F','f')
       Unit = IP
@@ -469,7 +470,7 @@ REAL :: SystemCost
   !***************** Outdoor fan data *****************
   
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)   
+                      Numbers,NumNumbers,Status)
   
   PwrODfan = Numbers(1) !Fan Power
   VdotODfan = Numbers(2)    !Fan Air Flow Rate
@@ -482,7 +483,7 @@ REAL :: SystemCost
   
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
-  
+
   IDC_FinType = Numbers(1)
   
   IDC_FinName = Alphas(1)
@@ -530,7 +531,6 @@ REAL :: SystemCost
   
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
-  
 
   SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
@@ -582,7 +582,6 @@ REAL :: SystemCost
   HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
     
 
-
   !TXV data
 
   !Rated TXV capacity, ton
@@ -623,7 +622,7 @@ REAL :: SystemCost
       
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
-  
+
   !Suction Line
   
   SucLn_RefrigerantLine = Alphas(1)
@@ -729,7 +728,7 @@ REAL :: SystemCost
 
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
-
+  
   !Expansion Device Inlet
   
   Tliq = Numbers(1)    !Inlet Temperature
@@ -1517,7 +1516,7 @@ REAL :: SystemCost
   CLOSE(48)
   
   !Get coil type - ISI - 12/25/06
-  OPEN (11,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+  OPEN (11,FILE='ODCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')
 
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Outdoor coil file missing.'
@@ -1553,7 +1552,7 @@ REAL :: SystemCost
   CLOSE(11)
 
 
-  OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+  OPEN (12,FILE='IDCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')
 
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Indoor coil file missing.'
