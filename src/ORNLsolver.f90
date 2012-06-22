@@ -28,6 +28,7 @@
     !
     !
 
+    USE InputPreProcessor
     USE FluidProperties
     USE HeatPumpInput
     USE CompressorMod
@@ -96,9 +97,8 @@
     ! GOTO 30 means "skip refined simulation" according to rpevious comments ....
     INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
 
-
     !Flow**:
-    
+    CALL PreProcessInput !run EPMacro to get fluid properties in the idf
     CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
