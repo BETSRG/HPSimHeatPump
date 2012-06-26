@@ -321,7 +321,6 @@ CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
 REAL :: TubeNumber
 REAL :: SystemCost
-
 !Flow:
 
 CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
@@ -336,7 +335,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
-  
+
   SELECT CASE (Alphas(1)(1:1))
   CASE ('F','f')
       Unit = IP
@@ -474,7 +473,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Outdoor fan data *****************
   
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      Numbers,NumNumbers,Status)   
   
   PwrODfan = Numbers(1) !Fan Power
   VdotODfan = Numbers(2)    !Fan Air Flow Rate
@@ -487,7 +486,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
-
+  
   IDC_FinType = Numbers(1)
   
   IDC_FinName = Alphas(1)
@@ -535,6 +534,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
+  
 
   SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
@@ -586,6 +586,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
     
 
+
   !TXV data
 
   !Rated TXV capacity, ton
@@ -626,7 +627,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
-
+  
   !Suction Line
   
   SucLn_RefrigerantLine = Alphas(1)
@@ -732,7 +733,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
-  
+
   !Expansion Device Inlet
   
   Tliq = Numbers(1)    !Inlet Temperature
@@ -1520,7 +1521,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CLOSE(48)
   
   !Get coil type - ISI - 12/25/06
-  OPEN (11,FILE='ODCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')
+  OPEN (11,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
 
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Outdoor coil file missing.'
@@ -1556,7 +1557,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CLOSE(11)
 
 
-  OPEN (12,FILE='IDCckt.idd',IOSTAT=ErrorFlag,STATUS='OLD')
+  OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
 
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Indoor coil file missing.'
