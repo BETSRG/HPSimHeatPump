@@ -367,6 +367,7 @@
 
       DATA E1,E2,E3,PCNV/42.6776,-3892.70,-9.48654,0.001/
       DATA E4,E5,E6,TABS/-387.592,-12587.5,-15.2578,273.15/
+      CHARACTER(LEN=45),PARAMETER :: FMT_1 = "(' WARNING: FUNCTION TPSS FAILS TO CONVERGE')"
 
 !  compare input entropy with saturation value
 
@@ -399,8 +400,10 @@
           !VL: Previously: 100    CONTINUE
       END DO
 
-      WRITE(1,1)
-   1  FORMAT(' WARNING: FUNCTION TPSS FAILS TO CONVERGE')
+      WRITE(1,FMT_1)
+      
+      !!VL: Previously:
+   !!1  FORMAT(' WARNING: FUNCTION TPSS FAILS TO CONVERGE')
       !VL: Previously: 900    TPSS=T
       TPSS=T
 
@@ -423,12 +426,16 @@
 !***********************************************************************
 
       DATA C1,C2,C3,C4,E1,E2/143.05,-183.54,82.751,-3.6989,.25,.5/
+      
+      CHARACTER(LEN=46),PARAMETER :: FMT_13 = "(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')"
 
       TK=T+273.15
       T1=TK/100.
       CPS=(C1+C2*T1**E1+C3*T1**E2+C4*T1)/18.015
-      IF(TK.LT.300..OR.TK.GT.3500.)WRITE(1,13)
-  13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
+      IF(TK.LT.300..OR.TK.GT.3500.)WRITE(1,FMT_13)
+      
+      !!VL: Previously:
+  !!13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
 
       RETURN
       END

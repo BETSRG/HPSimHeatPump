@@ -1182,6 +1182,8 @@
     REAL tSat,error,P,pSat,X1,F1,X2,F2
     REAL SATPRESS,XITERATE
     DATA itmax/50/
+    
+    CHARACTER(LEN=117),PARAMETER :: FMT_1001 = "(/1X,'*** ERROR IN FUNCTION SatTemp ***'/ 1X,'    Saturation temperature has not converged after ',I2,' iterations'/)"
 
     !!*** Use an iterative process to determine the saturation temperature
     !!*** at a given pressure using a correlation of saturated water vapor
@@ -1227,10 +1229,10 @@
     !!*** Saturation temperature has not converged after maximum specified
     !!*** iterations. Print error message, set return error flag, and RETURN
 
-    WRITE(77,1001) itmax
-1001 FORMAT(/1X,'*** ERROR IN FUNCTION SatTemp ***'/                   &
-1   X,'    Saturation temperature has not '                  &
-    'converged after ',I2,' iterations'/)
+    WRITE(77,FMT_1001) itmax
+    
+    !!VL: Previously: 
+!!1001 FORMAT(/1X,'*** ERROR IN FUNCTION SatTemp ***'/ 1X,'    Saturation temperature has not converged after ',I2,' iterations'/)
 
     !VL: Previously: 110 SatTemp = tSat
     SatTemp = tSat
@@ -1291,6 +1293,8 @@
     REAL tSat,error,HSat,X1,F1,X2,F2,BaroPressure
     REAL ENTHSAT,XITERATE
     DATA itmax/20/,tSat/50./
+    
+    CHARACTER(LEN=105),PARAMETER :: FMT_1001 = "(/1X,'*** ERROR IN FUNCTION TAIRSAT ***'/1X,'    Temperature has not converged after ',I2,' iterations'/)"
 
     !!*** Estimate saturation temperature if reasonable value not available
 
@@ -1323,10 +1327,9 @@
     !!*** Temperature has not converged after maximum specified
     !!*** iterations. Print error message and RETURN
 
-    WRITE(77,1001) itmax
-1001 FORMAT(/1X,'*** ERROR IN FUNCTION TAIRSAT ***'/                    &
-1   X,'    Temperature has not '                                &
-    'converged after ',I2,' iterations'/)
+    WRITE(77,FMT_1001) itmax
+    !!VL: Previously: 
+!!1001 FORMAT(/1X,'*** ERROR IN FUNCTION TAIRSAT ***'/1X,'    Temperature has not converged after ',I2,' iterations'/)
 
     !VL: Previously: 110 CONTINUE
 
@@ -1406,6 +1409,8 @@
     REAL SATTEMP,SATPRESS,HUMRATIO,XITERATE
     LOGICAL IsCvg !Check if solution converged. Edited by ISI 01/20/04
     DATA itmax/20/
+    
+    CHARACTER(LEN=114),PARAMETER :: FMT_1009 = "(/1X,'*** ERROR IN FUNCTION WetBulb ***'/1X,'    Wet bulb temperature has not converged after ',I2,' iterations'/)"
 
     !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
@@ -1469,11 +1474,11 @@
     !*** Wet bulb temperature has not converged after maximum specified
     !*** iterations. Print error message, set return error flag, and RETURN
 
-    WRITE(77,1009) itmax
+    WRITE(77,FMT_1009) itmax
     IsCvg=.FALSE.
-1009 FORMAT(/1X,'*** ERROR IN FUNCTION WetBulb ***'/                    &
-1   X,'    Wet bulb temperature has not '                     &
-    'converged after ',I2,' iterations'/)
+    
+    !!VL: Previously:
+!!1009 FORMAT(/1X,'*** ERROR IN FUNCTION WetBulb ***'/1X,'    Wet bulb temperature has not converged after ',I2,' iterations'/)
 
     !VL: Previously: 900 IF (WetBulb .GT. TDB) WetBulb = TDB
     IF (WetBulb .GT. TDB) WetBulb = TDB

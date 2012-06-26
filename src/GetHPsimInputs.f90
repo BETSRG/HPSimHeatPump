@@ -324,6 +324,10 @@ REAL :: SystemCost
 
 !Flow:
 
+CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
+CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
+CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
+
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1
 
@@ -751,7 +755,7 @@ REAL :: SystemCost
 
   !Liquid temperature, ISI - 02/08/08
   !TODO: WHATS THIS
-!  READ(200,202)LineData
+!  READ(200,FMT_202)LineData
 !  I=SCAN(LineData,',')
 !  BufferString=ADJUSTL(LineData(I+1:150))
 !  READ(BufferString,*)Tliq
@@ -759,7 +763,7 @@ REAL :: SystemCost
 !  DO I=1,35; READ(200,*); END DO
 !
 !  !Discharge temperature, ISI - 02/08/08
-!  READ(200,202)LineData
+!  READ(200,FMT_202)LineData
 !  I=SCAN(LineData,',')
 !  BufferString=ADJUSTL(LineData(I+1:150))
 !  READ(BufferString,*)Tdis
@@ -768,14 +772,14 @@ REAL :: SystemCost
 !  DO I=1,47; READ(200,*); END DO
 !
 !  !Barometric pressure
-!  READ(200,202)LineData
+!  READ(200,FMT_202)LineData
 !  I=SCAN(LineData,',')
 !  BufferString=ADJUSTL(LineData(I+1:150))
 !  READ(BufferString,*)BaroPressure
 !
 !  DO I=1,3; READ(200,*); END DO
 !
-!  READ(200,202)LineData
+!  READ(200,FMT_202)LineData
 !  I=SCAN(LineData,',')
 !  BufferString=ADJUSTL(LineData(I+1:150))
 !  READ(BufferString,*)IsCmpInAirStream
@@ -891,25 +895,25 @@ REAL :: SystemCost
 
   
 !  DO I=1,23; READ(200,*); END DO
-!  READ(200,202)LineData
+!  READ(200,FMT_202)LineData
 !
 !  IF(LineData(1:38) .EQ. ' ***************************** Defrost') THEN
-!		READ(200,202)LineData
+!		READ(200,FMT_202)LineData
 !		I=SCAN(LineData,',')
 !		BufferString=ADJUSTL(LineData(I+1:150))
 !		READ(BufferString,*)AmbTemp(1)
 !
-!		READ(200,202)LineData
+!		READ(200,FMT_202)LineData
 !		I=SCAN(LineData,',')
 !		BufferString=ADJUSTL(LineData(I+1:150))
 !		READ(BufferString,*)InitiateTemp(1)
 !
-!		READ(200,202)LineData
+!		READ(200,FMT_202)LineData
 !		I=SCAN(LineData,',')
 !		BufferString=ADJUSTL(LineData(I+1:150))
 !		READ(BufferString,*)AmbTemp(2)
 !
-!		READ(200,202)LineData
+!		READ(200,FMT_202)LineData
 !		I=SCAN(LineData,',')
 !		BufferString=ADJUSTL(LineData(I+1:150))
 !		READ(BufferString,*)InitiateTemp(2)
@@ -1526,7 +1530,7 @@ REAL :: SystemCost
 	  STOP
   END IF
 
-  READ (11,202,IOSTAT=ErrorFlag)LineData
+  READ (11,FMT_202,IOSTAT=ErrorFlag)LineData
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Outdoor coil file error.'
       !WRITE(*,*)'Press return to terminate program.'
@@ -1562,7 +1566,7 @@ REAL :: SystemCost
 	  STOP
   END IF
 
-  READ (12,202,IOSTAT=ErrorFlag)LineData
+  READ (12,FMT_202,IOSTAT=ErrorFlag)LineData
   IF (ErrorFlag .NE. NOERROR) THEN 
 	  WRITE(*,*)'Indoor coil file error.'
       !WRITE(*,*)'Press return to terminate program.'
@@ -1587,9 +1591,10 @@ REAL :: SystemCost
 
   CLOSE(12)
 
-  201 FORMAT(10(E))
-  202 FORMAT(A150)
-  203 FORMAT(I1)
+  !!VL: Previously ...
+  !!201 FORMAT(10(E))
+  !!202 FORMAT(A150)
+  !!203 FORMAT(I1)
 
   RETURN
 

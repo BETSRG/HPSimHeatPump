@@ -28,7 +28,6 @@
     !
     !
 
-    USE InputPreProcessor
     USE FluidProperties
     USE HeatPumpInput
     USE CompressorMod
@@ -97,8 +96,18 @@
     ! GOTO 30 means "skip refined simulation" according to rpevious comments ....
     INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
 
+    CHARACTER(LEN=11),PARAMETER :: FMT_103 = "(A20,F30.2)"
+    CHARACTER(LEN=15),PARAMETER :: FMT_1005 = "(I20,10(F20.2))"
+    CHARACTER(LEN=9),PARAMETER :: FMT_1006 = "(10(A20))"
+    CHARACTER(LEN=9),PARAMETER :: FMT_1007 = "(A17,A42)"
+    CHARACTER(LEN=33),PARAMETER :: FMT_1008 = "(A13,F10.3,A10,A10,A13,F10.3,A10)"
+    CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
+    CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
+    CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
+    
+    
     !Flow**:
-    CALL PreProcessInput !run EPMacro to get fluid properties in the idf
+    
     CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
@@ -453,11 +462,11 @@
             IF (PrnCon .EQ. 1) WRITE(*,*)
 
             IF (Unit .EQ. 1) THEN !SI Unit
-                IF (PrnLog .EQ. 1) WRITE(6,1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
-                IF (PrnCon .EQ. 1) WRITE(*,1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
+                IF (PrnLog .EQ. 1) WRITE(6,FMT_1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
+                IF (PrnCon .EQ. 1) WRITE(*,FMT_1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
             ELSE !IP Unit
-                IF (PrnLog .EQ. 1) WRITE(6,1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'
-                IF (PrnCon .EQ. 1) WRITE(*,1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'     
+                IF (PrnLog .EQ. 1) WRITE(6,FMT_1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'
+                IF (PrnCon .EQ. 1) WRITE(*,FMT_1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'     
             END IF
 
 
@@ -571,11 +580,11 @@
                     Qevp=-EvapOUT(11) 	! VL_Index_Replace
 
                     IF (Unit .EQ. 1) THEN !SI Unit
-                        IF (PrnLog .EQ. 1) WRITE(6,1005)I,MdotR*3600,Qevp
-                        IF (PrnCon .EQ. 1) WRITE(*,1005)I,MdotR*3600,Qevp
+                        IF (PrnLog .EQ. 1) WRITE(6,FMT_1005)I,MdotR*3600,Qevp
+                        IF (PrnCon .EQ. 1) WRITE(*,FMT_1005)I,MdotR*3600,Qevp
                     ELSE
-                        IF (PrnLog .EQ. 1) WRITE(6,1005)I,MdotR/Umass*3600,Qevp/UnitPwr
-                        IF (PrnCon .EQ. 1) WRITE(*,1005)I,MdotR/Umass*3600,Qevp/UnitPwr
+                        IF (PrnLog .EQ. 1) WRITE(6,FMT_1005)I,MdotR/Umass*3600,Qevp/UnitPwr
+                        IF (PrnCon .EQ. 1) WRITE(*,FMT_1005)I,MdotR/Umass*3600,Qevp/UnitPwr
                     END IF
 
                     IF (ABS(EvapOUT(2)-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number
@@ -662,11 +671,11 @@
                     Qcnd=CondOUT(15) 	! VL_Index_Replace
 
                     IF (Unit .EQ. 1) THEN !SI Unit
-                        IF (PrnLog .EQ. 1) WRITE(6,1005)I,MdotR*3600,Qcnd
-                        IF (PrnCon .EQ. 1) WRITE(*,1005)I,MdotR*3600,Qcnd
+                        IF (PrnLog .EQ. 1) WRITE(6,FMT_1005)I,MdotR*3600,Qcnd
+                        IF (PrnCon .EQ. 1) WRITE(*,FMT_1005)I,MdotR*3600,Qcnd
                     ELSE
-                        IF (PrnLog .EQ. 1) WRITE(6,1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
-                        IF (PrnCon .EQ. 1) WRITE(*,1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
+                        IF (PrnLog .EQ. 1) WRITE(6,FMT_1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
+                        IF (PrnCon .EQ. 1) WRITE(*,FMT_1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
                     END IF
 
                     IF (ABS(CondOUT(6)-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number
@@ -873,9 +882,9 @@
         TimeSpent=SECNDS(TimeStart)
         WRITE(*,*)
         WRITE(*,*)'Calculation completed successfully.'
-        WRITE(*,103)'Time Spent (Min):',TimeSpent/60
+        WRITE(*,FMT_103)'Time Spent (Min):',TimeSpent/60
         WRITE(5,*) 
-        WRITE(5,103)'Time Spent (Min):',TimeSpent/60  
+        WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60  
         WRITE(*,*)'Press return to end program.'      
         !READ(*,*)                                     !For parametric run, comment this line
 
@@ -920,15 +929,16 @@
 
     STOP
 
-103 FORMAT(A20,F30.2) 
-1005 FORMAT(I20,10(F20.2))
-1006 FORMAT(10(A20))
-1007 FORMAT(A17,A42)
-1008 FORMAT(A13,F10.3,A10,A10,A13,F10.3,A10)
-2001 FORMAT(A13,F10.3,A10)
-2004 FORMAT(A56,F10.3,A10)
-2007 FORMAT(A16,F10.3,A9)
-
+    !!VL: Previously: 
+!!103 FORMAT(A20,F30.2) 
+!!1005 FORMAT(I20,10(F20.2))
+!!1006 FORMAT(10(A20))
+!!1007 FORMAT(A17,A42)
+!!1008 FORMAT(A13,F10.3,A10,A10,A13,F10.3,A10)
+!!2001 FORMAT(A13,F10.3,A10)
+!!2004 FORMAT(A56,F10.3,A10)
+!!2007 FORMAT(A16,F10.3,A9)
+!!
     END PROGRAM
 
     ! Comment Index

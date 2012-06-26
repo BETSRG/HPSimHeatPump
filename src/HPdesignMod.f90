@@ -71,6 +71,15 @@
     INTEGER   :: Flag
 
     LOGICAL :: FLAG_GOTO_950
+    
+    CHARACTER(LEN=93),PARAMETER :: FMT_1002 = "('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')"
+    CHARACTER(LEN=93),PARAMETER :: FMT_1006 = "('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')"
+    CHARACTER(LEN=213),PARAMETER :: FMT_1013 = "('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')"
+    CHARACTER(LEN=128),PARAMETER :: FMT_1014 = "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')"
+    CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
+    CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
+
+    
     MaxIteration=30
     ICHRGE=1
     IMASS=1
@@ -493,11 +502,11 @@
         IF (PrnLog .EQ. 1) WRITE(6,*)
         IF (PrnLog .EQ. 1) WRITE(6,*)'|-------------------- Lowside Iteration ---------------------|'
         IF (Unit .EQ. 1) THEN
-            WRITE(*,700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            IF (PrnLog .EQ. 1) WRITE(6,700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
+            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
         ELSE
-            WRITE(*,700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            IF (PrnLog .EQ. 1) WRITE(6,700)'Compressor suction saturation temperature: ',TSICMP,Tunit
+            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
         END IF
 
         TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
@@ -661,12 +670,12 @@
         NTAMB = NTAMB + 1
         !VL: Previously: IF(NTAMB.GT.15) GO TO 850
         IF(NTAMB.GT.15) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,1014) DIFF
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
             !VL: Previously: GOTO 900
             EXIT
         END IF
         IF (LPRINT .GT. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,1013)TSICMP
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_1013)TSICMP
         END IF
 
         FirstTimeAirTempLoop=.TRUE.
@@ -686,7 +695,7 @@
     END DO
 
 
-    !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,1014) DIFF
+    !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
 
     !VL: Previously :900 CONTINUE
     IF (FLAG_GOTO_950 .EQ. .FALSE.) THEN 
@@ -927,10 +936,10 @@
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) WRITE(6,1002) ERRMSG(1)
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_1002) ERRMSG(1)
         END IF 
         IF(ICHRGE.EQ.0.AND.ERRMSG(2).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) WRITE(6,1006) ERRMSG(2)
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_1006) ERRMSG(2)
         END IF
 
         IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
@@ -982,21 +991,15 @@
     RETURN
 
 
-1002 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  &
-    '         DIFFERENCE  =',F8.3,' F')
-1006 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   &
-    '         DIFFERENCE  =',F8.3,' F')
-1013 FORMAT('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',          &
-    'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' &
-    ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  &
-    F8.3,' F AND GO BACK TO CONDENSER ITERATION.')
-1014 FORMAT('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  &
-    'INLET AIR TEMPERATURE *****',/,            &
-    '               DIFFERENCE  =',F8.3,' F')
-
-
-700 FORMAT(A44,F7.2,A5)
-704 FORMAT(A13,F7.2,A5)
+    !!VL: Previously: 
+!!1002 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')
+!!1006 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')
+!!1013 FORMAT('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')
+!!1014 FORMAT('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')
+!!
+!!
+!!700 FORMAT(A44,F7.2,A5)
+!!704 FORMAT(A13,F7.2,A5)
 
     END SUBROUTINE
 

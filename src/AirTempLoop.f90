@@ -38,6 +38,10 @@
     rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
     INTEGER I
+    
+    CHARACTER(LEN=13),PARAMETER :: FMT_800 = "(A41,F7.2,A5)"
+    CHARACTER(LEN=13),PARAMETER :: FMT_804 = "(A32,F7.2,A5)"
+
 
     !REAL, PARAMETER :: Tboiling=212 !Boiling temperature of air, 212 F
 
@@ -55,16 +59,16 @@
     IF (Unit .EQ. 1) THEN
 
         IF (PrnLog .EQ. 1) WRITE(6,*)
-        IF (PrnLog .EQ. 1) WRITE(6,800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit		
+        IF (PrnLog .EQ. 1) WRITE(6,FMT_800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit		
         IF (PrnCon .EQ. 1) WRITE(*,*)
-        IF (PrnCon .EQ. 1) WRITE(*,800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit
+        IF (PrnCon .EQ. 1) WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit
 
     ELSE
 
         IF (PrnLog .EQ. 1) WRITE(6,*)
-        IF (PrnLog .EQ. 1) WRITE(6,800)'>> Evaporator entering air temperature: ',TAIIE,Tunit		
+        IF (PrnLog .EQ. 1) WRITE(6,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit		
         IF (PrnCon .EQ. 1) WRITE(*,*)
-        IF (PrnCon .EQ. 1) WRITE(*,800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
+        IF (PrnCon .EQ. 1) WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
 
     END IF      
 
@@ -201,32 +205,32 @@
     ! VL: Previously :
     !    IF(SUPER.LT.0.0) GO TO 1
     !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired superheat = ',SUPER/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired superheat = ',SUPER/1.8,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
     !    ELSE
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired superheat = ',SUPER,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired superheat = ',SUPER,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER,DTunit
     !    END IF
     !    GO TO 2
     !1   CONTINUE
     !    SXIC = -SUPER
-    !    IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired quality = ',SXIC*100,Xunit
-    !    IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired quality = ',SXIC*100,Xunit
+    !    IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired quality = ',SXIC*100,Xunit
+    !    IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired quality = ',SXIC*100,Xunit
     !2   CONTINUE
 
     IF(SUPER.LT.0.0) THEN
 
         SXIC = -SUPER
-        IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired quality = ',SXIC*100,Xunit
-        IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired quality = ',SXIC*100,Xunit
+        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired quality = ',SXIC*100,Xunit
+        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired quality = ',SXIC*100,Xunit
 
     ELSE
         IF (Unit .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired superheat = ',SUPER/1.8,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired superheat = ',SUPER/1.8,DTunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
         ELSE
-            IF (PrnLog .EQ. 1) WRITE(6,804)'           Desired superheat = ',SUPER,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,804)'           Desired superheat = ',SUPER,DTunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER,DTunit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER,DTunit
         END IF
 
     END IF
@@ -235,25 +239,25 @@
     ! VL: Previously:
     !    IF(XICMP.LT.1.0) GO TO 3
     !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
     !    ELSE  
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated superheat = ',SUPCAL,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated superheat = ',SUPCAL,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
     !    END IF
     !    GO TO 4
     !3   CONTINUE
     !    IF (XICMP .LT. 0.0) GO TO 33
-    !    IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated quality = ',XICMP*100,Xunit
-    !    IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated quality = ',XICMP*100,Xunit
+    !    IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
+    !    IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
     !    GO TO 4
     !33  CONTINUE
     !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
     !    ELSE  
-    !        IF (PrnLog .EQ. 1) WRITE(6,804)'       Calculated subcooling = ',-SUPCAL,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,804)'       Calculated subcooling = ',-SUPCAL,DTunit
+    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
+    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
     !    END IF
     !4   CONTINUE
 
@@ -262,17 +266,17 @@
         IF (XICMP .LT. 0.0) THEN
 
             IF (Unit .EQ. 1) THEN
-                IF (PrnLog .EQ. 1) WRITE(6,804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-                IF (PrnCon .EQ. 1) WRITE(*,804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+                IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+                IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
             ELSE  
-                IF (PrnLog .EQ. 1) WRITE(6,804)'       Calculated subcooling = ',-SUPCAL,DTunit
-                IF (PrnCon .EQ. 1) WRITE(*,804)'       Calculated subcooling = ',-SUPCAL,DTunit
+                IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
+                IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
             END IF            
 
         ELSE
             
-            IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated quality = ',XICMP*100,Xunit
-            IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated quality = ',XICMP*100,Xunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
            
         END IF
 
@@ -280,11 +284,11 @@
     ELSE
 
         IF (Unit .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
         ELSE  
-            IF (PrnLog .EQ. 1) WRITE(6,804)'        Calculated superheat = ',SUPCAL,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,804)'        Calculated superheat = ',SUPCAL,DTunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
         END IF
 
     END IF
@@ -295,8 +299,8 @@
 
     RETURN
 
-800 FORMAT(A41,F7.2,A5)
-804 FORMAT(A32,F7.2,A5)
+!!VL: Previously: 800 FORMAT(A41,F7.2,A5)
+!!VL: Previously: 804 FORMAT(A32,F7.2,A5)
 
     END FUNCTION
 

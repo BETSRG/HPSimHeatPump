@@ -3,6 +3,8 @@
 !	COMMON / EXPAND / IPRINT, JPRINT
 !
       INTEGER IERR
+      CHARACTER(LEN=111),PARAMETER :: FMT_1001 = "(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)"
+      
 
       ICOUNT = 0
       IERROR = 0
@@ -149,5 +151,6 @@
       !WRITE(6,1001) X1,Y1,X2,Y2                                 !ISI - 03/26/04
       !RETURN
 
- 1001 FORMAT(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)
+!!VL: Previously :         
+ !!1001 FORMAT(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)
       END

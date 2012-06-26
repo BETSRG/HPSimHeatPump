@@ -65,7 +65,10 @@
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     LOGICAL,SAVE :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the
     !condenser model are allocated
-    REAL, SAVE:: PrevTime = 0.0                                               
+    REAL, SAVE:: PrevTime = 0.0 
+    
+    CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
+    CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
 
     !VL: Previously: 300 CONTINUE <-- SEE GOTO 300 in if statement at end of function ...
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
@@ -91,16 +94,16 @@
         IF (Unit .EQ. 1) THEN
 
             IF (PrnLog .EQ. 1) WRITE(6,*)
-            IF (PrnLog .EQ. 1) WRITE(6,900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
             WRITE(*,*)
-            WRITE(*,900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
+            WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
 
         ELSE
 
             IF (PrnLog .EQ. 1) WRITE(6,*)
-            IF (PrnLog .EQ. 1) WRITE(6,900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
             WRITE(*,*)
-            WRITE(*,900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
+            WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
 
         END IF
 
@@ -406,67 +409,67 @@
             ! VL: Previously: 
             !      IF(DTRIE.LT.0.0) GO TO 1
             !      IF (Unit .EQ. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired subcooling = ',DTRIE/1.8,DTunit
+            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
             !	  ELSE
-            !	      IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired subcooling = ',DTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired subcooling = ',DTRIE,DTunit
+            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
             !	  END IF
             !      GO TO 2
             !1 CONTINUE
             !      SXIE = -DTRIE
-            !      IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired quality = ',SXIE*100,Xunit
-            !      IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired quality = ',SXIE*100,Xunit
+            !      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit
+            !      IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired quality = ',SXIE*100,Xunit
             !2     CONTINUE
             !      IF(XIEXP.GT.0.0) GO TO 3
             !      IF (Unit .EQ. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
+            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
             !	  ELSE  
-            !		  IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated subcooling = ',CDTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated subcooling = ',CDTRIE,DTunit
+            !		  IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
             !	  END IF
             !      GO TO 4
             !3 CONTINUE
             !	  IF (XIEXP .LT. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated quality = ',XIEXP*100,Xunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated quality = ',XIEXP*100,Xunit
+            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
             !	  ELSE
-            !          IF (PrnLog .EQ. 1) WRITE(6,904)'      Calculated superheat = ',-CDTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,904)'      Calculated superheat = ',-CDTRIE,DTunit
+            !          IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
+            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
             !	  END IF
             !4     CONTINUE
 
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE
-                IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired quality = ',SXIE*100,Xunit
-                IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired quality = ',SXIE*100,Xunit
+                IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit
+                IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired quality = ',SXIE*100,Xunit
             ELSE
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired subcooling = ',DTRIE/1.8,DTunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
                 ELSE
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'           Desired subcooling = ',DTRIE,DTunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'           Desired subcooling = ',DTRIE,DTunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
                 END IF
             END IF
 
 
             IF(XIEXP.GT.0.0) THEN
                 IF (XIEXP .LT. 1) THEN
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated quality = ',XIEXP*100,Xunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated quality = ',XIEXP*100,Xunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
                 ELSE
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'      Calculated superheat = ',-CDTRIE,DTunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'      Calculated superheat = ',-CDTRIE,DTunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
                 END IF
             ELSE
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
                 ELSE  
-                    IF (PrnLog .EQ. 1) WRITE(6,904)'        Calculated subcooling = ',CDTRIE,DTunit
-                    IF (PrnCon .EQ. 1) WRITE(*,904)'        Calculated subcooling = ',CDTRIE,DTunit
+                    IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
+                    IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
                 END IF
             END IF
 
@@ -542,15 +545,15 @@
         END IF
 
         IF (Unit .EQ. 1) THEN
-            IF (PrnCon .EQ. 1) WRITE(*,904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
-            IF (PrnLog .EQ. 1) WRITE(6,904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
-            IF (PrnCon .EQ. 1) WRITE(*,904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
-            IF (PrnLog .EQ. 1) WRITE(6,904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
         ELSE
-            IF (PrnCon .EQ. 1) WRITE(*,904)'     Compressor flow rate = ',XMR,MdotUnit
-            IF (PrnLog .EQ. 1) WRITE(6,904)'     Compressor flow rate = ',XMR,MdotUnit
-            IF (PrnCon .EQ. 1) WRITE(*,904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
-            IF (PrnLog .EQ. 1) WRITE(6,904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
+            IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
+            IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
         END IF
 
         !VL: Previously: 200     CONTINUE
@@ -561,7 +564,8 @@
 
     RETURN
 
-900 FORMAT (A50,F7.2,A5)
-904 FORMAT (A32,F7.2,A9)
+    !!VL: Previously:
+!!900 FORMAT (A50,F7.2,A5)
+!!904 FORMAT (A32,F7.2,A9)
 
     END FUNCTION
