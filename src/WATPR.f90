@@ -435,7 +435,7 @@
       IF(TK.LT.300..OR.TK.GT.3500.)WRITE(1,FMT_13)
       
       !!VL: Previously:
-  !13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
+  !!13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
 
       RETURN
       END
