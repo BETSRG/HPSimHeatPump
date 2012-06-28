@@ -1,17 +1,3 @@
-\group Fluid Properties
-
-
-MainDesignData,
- FALSE, ! Units
- 2; ! Calculation Type
-
-
-!-   ===========  ALL OBJECTS IN CLASS: FLUIDNAMES ===========
-
-FluidNames,
-    R410a,                    !- fluid name 1
-    REFRIGERANT;             !- type of fluid for fluid name 1
-
 ! =============================================================================
 !
 !                Saturated Property Data for Refrigerant   R410a
