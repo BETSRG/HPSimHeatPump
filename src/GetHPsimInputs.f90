@@ -323,6 +323,9 @@ REAL :: TubeNumber
 REAL :: SystemCost
 !Flow:
 
+!INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+!REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
 CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
 CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
 CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
@@ -335,6 +338,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
+
+  !CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
+  !                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   SELECT CASE (Alphas(1)(1:1))
   CASE ('F','f')
@@ -378,6 +386,12 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)   
 
+  
+  !CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   CompressorModel = Alphas(1)
   
   SELECT CASE (Alphas(2)(1:1))
@@ -436,6 +450,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)   
 
+  !CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
+  !                     TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
   ODC_FinType = Numbers(1)
@@ -474,6 +493,10 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)   
+  !CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   PwrODfan = Numbers(1) !Fan Power
   VdotODfan = Numbers(2)    !Fan Air Flow Rate
@@ -486,6 +509,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
+
+  !CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   IDC_FinType = Numbers(1)
   
@@ -523,7 +551,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Indoor fan data *****************
   
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)  
+                      Numbers,NumNumbers,Status) 
+  
+  !CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   
   PwrIDfan = Numbers(1) !Fan Power
   VdotIDfan = Numbers(2)    !Fan Air Flow Rate
@@ -535,7 +569,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
   
-
+  !CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+ 
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
     CoolingExpDevice=3 !Cap. tube
@@ -544,7 +582,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CASE DEFAULT
     CoolingExpDevice=1 !Short tube orifice
   END SELECT
-
   
       SELECT CASE (Alphas(2)(1:1))
       CASE ('C','c')
@@ -584,7 +621,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   HeatingCapTubePAR(2) = Numbers(10)    !Length
   HeatingCapTubePAR(1) = Numbers(11)    !Diameter
   HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
-    
 
 
   !TXV data
@@ -624,9 +660,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !*****************Refrigerant line data******************
 
-      
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
+ 
+  !CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Suction Line
   
@@ -730,10 +770,14 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !********************Refrigerant Cycle Data (Cooling)***********************
 
-
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
+  !CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   !Expansion Device Inlet
   
   Tliq = Numbers(1)    !Inlet Temperature
@@ -742,7 +786,12 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !********************Refrigerant Cycle Data (Heating)***********************
 
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)  
+                      Numbers,NumNumbers,Status)
+  
+  !CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   !Compressor Discharge
   
@@ -753,7 +802,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   BaroPressure = Numbers(2)  !Barometric Pressure
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
   
-
   !Liquid temperature, ISI - 02/08/08
   !TODO: WHATS THIS
 !  READ(200,FMT_202)LineData
@@ -790,6 +838,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
+  !CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   Acc_Manufacturer = Alphas(1)
   Acc_Model = Alphas(2)
   
@@ -811,6 +864,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)  
 
+  !CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   Filter_Manufacturer = Alphas(1)
   Filter_Model = Alphas(2)
   
@@ -823,6 +881,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)        
 
+  !CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
+  !                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)       
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
   !---Indoor Coil---
   
   IDC_CurveUnit = Numbers(1)
@@ -837,7 +900,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   IDC_Poly3HTC = Numbers(7) !Polynomial Fit Coefficient C3
   IDC_Poly4HTC = Numbers(8) !Polynomial Fit Coefficent C4
 
-  
   !Pressure drop data
 
   IDC_CurveTypeDP = Numbers(9) !Curve Type
@@ -853,7 +915,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   ODC_CurveUnit = Numbers(16)
 
-  
   !Heat Transfer data
   
   ODC_CurveTypeHTC = Numbers(17) !Curve Type
@@ -864,7 +925,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODC_Poly3HTC = Numbers(22) !Polynomial Fit Coefficient C3
   ODC_Poly4HTC = Numbers(23) !Polynomial Fit Coefficent C4
 
-  
   !Pressure drop data
   
   ODC_CurveTypeDP = Numbers(9) !Curve Type
@@ -875,13 +935,18 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODC_Poly3DP = Numbers(14) !Polynomial Fit Coefficient C3
   ODC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
 
-
  
   !*************** Charge Tuning Curve ***************
   
   CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)      
 
+  !CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
+  !                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  
   SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
   CASE ('F','f')
       IsChargeTuning=0
