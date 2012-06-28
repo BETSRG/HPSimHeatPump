@@ -221,7 +221,6 @@ FilterDrierData,
     0, !field Flow Capacity [tons]
     0; !field Rating Pressure Drop [psig]
 
-
 CustomAirSideHeatTransferData,
     ! --- Indoor Coil ---
     2, !field Unit [-]
@@ -282,10 +281,10 @@ FluidNames,
 
 !group IDCckt
 
-Model,
+IDCcktModel,
     Fin-Tube Coil;
 
-Geometry,
+IDCcktGeometry,
     False, !SI Units Flag
     2, !Fin Type
     Wavy, !Fin Name
@@ -307,7 +306,7 @@ Geometry,
     6, !Number of Circuits
     True; !Tube Shift Flag
 
-Circuiting_TubeNumbers,
+IDCcktCircuiting_TubeNumbers,
     20, !Number of Tubes in Circuit 1
     20, !Number of Tubes in Circuit 2
     20, !Number of Tubes in Circuit 3
@@ -315,7 +314,7 @@ Circuiting_TubeNumbers,
     20, !Number of Tubes in Circuit 5
     20; !Number of Tubes in Circuit 6
 
-Circuit1_TubeSequence,
+IDCcktCircuit1_TubeSequence,
     81, !Tube Number
     82, !Tube Number
     83, !Tube Number
@@ -337,7 +336,7 @@ Circuit1_TubeSequence,
     19, !Tube Number
     20; !Tube Number
 
-Circuit2_TubeSequence,
+IDCcktCircuit2_TubeSequence,
     41, !Tube Number
     42, !Tube Number
     43, !Tube Number
@@ -359,7 +358,7 @@ Circuit2_TubeSequence,
     59, !Tube Number
     60; !Tube Number
 
-Circuit3_TubeSequence,
+IDCcktCircuit3_TubeSequence,
     1, !Tube Number
     2, !Tube Number
     3, !Tube Number
@@ -381,7 +380,7 @@ Circuit3_TubeSequence,
     99, !Tube Number
     100; !Tube Number
 
-Circuit4_TubeSequence,
+IDCcktCircuit4_TubeSequence,
     120, !Tube Number
     119, !Tube Number
     118, !Tube Number
@@ -403,7 +402,7 @@ Circuit4_TubeSequence,
     22, !Tube Number
     21; !Tube Number
 
-Circuit5_TubeSequence,
+IDCcktCircuit5_TubeSequence,
     80, !Tube Number
     79, !Tube Number
     78, !Tube Number
@@ -425,7 +424,7 @@ Circuit5_TubeSequence,
     62, !Tube Number
     61; !Tube Number
 
-Circuit6_TubeSequence,
+IDCcktCircuit6_TubeSequence,
     40, !Tube Number
     39, !Tube Number
     38, !Tube Number
@@ -447,7 +446,7 @@ Circuit6_TubeSequence,
     102, !Tube Number
     101, !Tube Number
 
-VelocityProfile,
+IDCcktVelocityProfile,
     1, !Velocity Deviation from Mean Value for Tube 1
     1, !Velocity Deviation from Mean Value for Tube 2
     1, !Velocity Deviation from Mean Value for Tube 3
@@ -489,14 +488,14 @@ VelocityProfile,
     1, !Velocity Deviation from Mean Value for Tube 39
     1; !Velocity Deviation from Mean Value for Tube 40
 
-Coefficients,
+IDCcktCoefficients,
     !V=C0+C1*H+C2*H^2+C3*H^3 for segment 1
     1, !field C0
     0, !field C1
     0, !field C2
     0; !field C3
 
-VelocityProfileRawData,
+IDCcktVelocityProfileRawData,
     !All for segment 1
     6, !field No. of Data
     0, !field Coil Height Data Entry #1
@@ -514,10 +513,10 @@ VelocityProfileRawData,
 
 !group ODCckt
 
-ModelType,
+ODCcktModelType,
     Fin-Tube Coil;
 
-Geometry,
+ODCcktGeometry,
     False, !SI Units Flag
     2, !Fin Type
     Wavy, !Fin Name
@@ -539,13 +538,13 @@ Geometry,
     4, !Number of Circuits
     False; !Tube Shift Flag
 
-Circuiting_TubeNumbers,
+ODCcktCircuiting_TubeNumbers,
     10, !Number of Tubes in Circuit 1
     8, !Number of Tubes in Circuit 2
     8, !Number of Tubes in Circuit 3
     10; !Number of Tubes in Circuit 4
 
-Circuit1_TubeSequence,
+ODCcktCircuit1_TubeSequence,
     35, !Tube Number
     36, !Tube Number
     21, !Tube Number
@@ -557,7 +556,7 @@ Circuit1_TubeSequence,
     27, !Tube Number
     28; !Tube Number
 
-Circuit2_TubeSequence,
+ODCcktCircuit2_TubeSequence,
     33, !Tube Number
     34, !Tube Number
     15, !Tube Number
@@ -567,7 +566,7 @@ Circuit2_TubeSequence,
     19, !Tube Number
     20; !Tube Number
 
-Circuit3_TubeSequence,
+ODCcktCircuit3_TubeSequence,
     31, !Tube Number
     32, !Tube Number
     9, !Tube Number
@@ -577,7 +576,7 @@ Circuit3_TubeSequence,
     13, !Tube Number
     14; !Tube Number
 
-Circuit4_TubeSequence,
+ODCcktCircuit4_TubeSequence,
     29, !Tube Number
     30, !Tube Number
     1, !Tube Number
@@ -589,7 +588,7 @@ Circuit4_TubeSequence,
     7, !Tube Number
     8; !Tube Number
 
-VelocityProfile,
+ODCcktVelocityProfile,
     1, !Velocity Deviation from Mean Value for Tube 1
     1, !Velocity Deviation from Mean Value for Tube 2
     1, !Velocity Deviation from Mean Value for Tube 3
@@ -627,14 +626,14 @@ VelocityProfile,
     1, !Velocity Deviation from Mean Value for Tube 35
     1; !Velocity Deviation from Mean Value for Tube 36
 
-Coefficients,
+ODCcktCoefficients,
     !V=C0+C1*H+C2*H^2+C3*H^3 for segment 1
     1, !C0
     0, !C1
     0, !C2
     0; !C3
 
-VelocityProfileRawData,
+ODCcktVelocityProfileRawData,
     !All for segment 1
     6, !No. of Data
     0, !Coil Height Data Entry #1
