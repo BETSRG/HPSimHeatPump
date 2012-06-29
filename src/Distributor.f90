@@ -4,6 +4,7 @@ SUBROUTINE Distributor(Ref$,LTUBE,Nckts,mdotRef,TiExp,HiExp,PoEvp, &
 !To calculate total pressure drop in distributor
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 

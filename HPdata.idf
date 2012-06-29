@@ -1,6 +1,6 @@
 !group OverallSimData
 
-Model,                                                        
+Model,
     THGD36S41S1;
 
 MainDesignData,
@@ -135,8 +135,8 @@ ExpansionDeviceData,
     4.68, !field Model (Cooling) Rated Capacity [tons]
     4.73, !field Model (Heating) Rated Capacity [tons]
     !--- Distibutor ---
-    24, !field Distibutor Tube Length (Cooling) [in]
-    24; !field Distibutor Tube Length (Heating) [in]
+    24, !Distibutor Tube Length (Cooling) [in]
+    24; !Distibutor Tube Length (Heating) [in]
  
 RefrigerantLineData,
     Compressor Suction, !field Refrigerant Line
@@ -155,7 +155,7 @@ RefrigerantLineData,
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu!h]
-    0, !field Refrigerant Line Temperature Charge [R]
+    0, !field Refrigerant Line Temperature Change [R]
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.446, !field Tube Inside Diameter [in]
     0.5, !field Tube Outside Diameter [in]
@@ -167,7 +167,7 @@ RefrigerantLineData,
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu!h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.351, !field Tube Inside Diameter [in]
     0.375, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
@@ -178,7 +178,7 @@ RefrigerantLineData,
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu!h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
@@ -189,7 +189,7 @@ RefrigerantLineData,
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu!h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Condcutivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0; !field Additional Pressure Drop [psig]
@@ -265,19 +265,6 @@ ChargeTuningCurve,
     0, !field Tuning Point #1 Liquid Length
     0, !field Tuning Point #2 Simulated Charge
     0; !field Tuning Point #2 Liquid Length
-
-FluidNames,
-    R22, REFRIGERANT, !- name and type for fluid 1
-    R134a, REFRIGERANT, !- name and type for fluid 2
-    R407a, REFRIGERANT, !- name and type for fluid 2
-    R410a, REFRIGERANT, !- name and type for fluid 2
-    R417a, REFRIGERANT; !- name and type for fluid 2
-    
-##include fluidDataFiles/R22.idf
-##include fluidDataFiles/R134a.idf
-##include fluidDataFiles/R407c.idf
-##include fluidDataFiles/R410a.idf
-##include fluidDataFiles/R417a.idf
 
 !group IDCckt
 
@@ -444,7 +431,7 @@ IDCcktCircuit6_TubeSequence,
     104, !Tube Number
     103, !Tube Number
     102, !Tube Number
-    101, !Tube Number
+    101; !Tube Number
 
 IDCcktVelocityProfile,
     1, !Velocity Deviation from Mean Value for Tube 1
@@ -648,3 +635,18 @@ ODCcktVelocityProfileRawData,
     1, !Velocity Data Entry #4
     1, !Velocity Data Entry #5
     1; !Velocity Data Entry #6
+
+!Group Fluid Properties
+
+FluidNames,
+    R22, REFRIGERANT, !- name and type for fluid 1
+    R134a, REFRIGERANT, !- name and type for fluid 2
+    R407c, REFRIGERANT, !- name and type for fluid 2
+    R410a, REFRIGERANT, !- name and type for fluid 2
+    R417a, REFRIGERANT; !- name and type for fluid 2
+    
+##include fluidDataFiles\R22.idf
+##include fluidDataFiles\R134a.idf
+##include fluidDataFiles\R407c.idf
+##include fluidDataFiles\R410a.idf
+##include fluidDataFiles\R417a.idf

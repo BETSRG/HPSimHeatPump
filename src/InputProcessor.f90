@@ -315,7 +315,7 @@ SUBROUTINE ProcessInput
    ENDIF
  	
   !Ken- added to read different idf for respective refrigerant
-   Call Refrig(Refrigerant)
+   !Call Refrig(Refrigerant)
 
    !hmmm mixed case: Refrigerant will be all caps, string literal ".idf" is lower case
    !files packaged with source are like R410a.idf...will correct file name here, maybe improve later
@@ -341,11 +341,11 @@ SUBROUTINE ProcessInput
    !WRITE(EchoInputFile,*) ' Processing Input Data File  -- Start'
    !
 
-   FileName = "HPdata.idf"
+   FileName = "in.idf"
 
    INQUIRE(file=FileName,EXIST=FileExists)
    IF (.not. FileExists) THEN
-      CALL ShowFatalError('Refrigerant Input file missing. Program terminates.')
+      CALL ShowFatalError('Input file missing. Program terminates.')
    ENDIF
 
    IDFFile=GetNewUnitNumber()
@@ -1384,7 +1384,8 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   !  Keep context buffer in case of errors
   LineBuf=Blank
   IF (.not. ALLOCATED(LineBufLen)) THEN
-    ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound))
+    !ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound))
+    ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound+1))   !RS Comment: Refrigerant line needs an extra spot for the title
   ENDIF
   LineBufLen=0
   NumConxLines=0

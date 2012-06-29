@@ -57,6 +57,7 @@
 		<File RelativePath=".\src\MatrixCalc.f90"/>
 		<File RelativePath=".\src\OilMixtureCalc.f90"/>
 		<File RelativePath=".\src\ORNLsolver.f90"/>
+		<File RelativePath=".\src\PreprocessInput.f90"/>
 		<File RelativePath=".\src\PsyChart.f90"/>
 		<File RelativePath=".\src\Psychometric.f90"/>
 		<File RelativePath=".\src\RefName.f90"/>

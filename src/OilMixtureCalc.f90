@@ -106,6 +106,7 @@ END FUNCTION LocalOilMassFraction
 REAL FUNCTION OilMixtureTsat(RefName,Wlocal,Psat)
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 

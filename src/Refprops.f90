@@ -1,5 +1,6 @@
  
 MODULE FluidProperties
+!MODULE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
         ! MODULE INFORMATION:
         !       AUTHOR         Mike Turner
@@ -230,6 +231,9 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=25) :: String3
   CHARACTER(len=25) :: String4
 
+  !INTEGER, PARAMETER :: r64=KIND(1.0D0) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  !REAL(r64), DIMENSION(251) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
           ! FLOW:
   NumOfFluidTempArrays    = GetNumObjectsFound('FluidPropertyTemperatures')
   NumOfSatFluidPropArrays = GetNumObjectsFound('FluidPropertySaturated')
@@ -239,6 +243,10 @@ SUBROUTINE GetFluidPropertiesData
 
   CALL GetObjectItem('FLUIDNAMES',1,Alphas,NumAlphas,Numbers,NumNumbers,Status)
 
+  !CALL GetObjectItem('FLUIDNAMES',1,Alphas,NumAlphas,TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
           ! Get a count on the number of refrigerants and the number of glycols entered
           ! so that the main derived types can be allocated
   DO Loop = 2, NumAlphas, 2
@@ -272,7 +280,12 @@ SUBROUTINE GetFluidPropertiesData
 
     CALL GetObjectItem('FluidPropertyTemperatures',Loop,Alphas,NumAlphas, &
                         Numbers,NumNumbers,Status)
+    
+    !CALL GetObjectItem('FluidPropertyTemperatures',Loop,Alphas,NumAlphas, &
+    !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
     FluidTemps(Loop)%Name       = Alphas(1)
     FluidTemps(Loop)%NumOfTemps = NumNumbers
 
@@ -300,6 +313,11 @@ SUBROUTINE GetFluidPropertiesData
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
 
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Pressure) )              .AND. &
            (SameString(Alphas(3),GasFluid ) )           ) THEN
@@ -345,6 +363,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Pressure) )              .AND. &
@@ -387,6 +410,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Enthalpy) )              .AND. &
@@ -423,6 +451,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Enthalpy) )              .AND. &
@@ -454,6 +487,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),SpecificHeat) )          .AND. &
@@ -490,6 +528,10 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),SpecificHeat) )          .AND. &
@@ -531,6 +573,10 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Density) )               .AND. &
@@ -574,6 +620,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Density) )               .AND. &
@@ -618,6 +669,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertSaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Entropy) )               .AND. &
@@ -666,6 +722,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Entropy) )               .AND. &
@@ -712,6 +773,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Viscosity) )               .AND. &
@@ -754,6 +820,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Viscosity) )               .AND. &
@@ -796,6 +867,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Conductivity) )               .AND. &
@@ -840,6 +916,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),Conductivity) )               .AND. &
@@ -883,6 +964,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+    !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),SurfaceTension) )               .AND. &
@@ -934,6 +1020,11 @@ SUBROUTINE GetFluidPropertiesData
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
       IF ( (SameString(Alphas(1),RefrigData(Loop)%Name) ) .AND. &
            (SameString(Alphas(2),SurfaceTension) )               .AND. &
@@ -985,6 +1076,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         IF (FirstSHMatch) THEN
@@ -1018,6 +1115,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         RefrigData(Loop)%SHPress(NumOfPressPts) = Numbers(1)
@@ -1044,6 +1147,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Density))) THEN
         NumOfPressPts = NumOfPressPts + 1       
         
@@ -1070,6 +1179,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+    !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Entropy))) THEN
         NumOfPressPts = NumOfPressPts + 1
        
@@ -1097,6 +1212,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Conductivity))) THEN
         NumOfPressPts = NumOfPressPts + 1
        IF ((NumNumbers-1) == RefrigData(Loop)%NumSuperTempPts) THEN
@@ -1123,6 +1244,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Viscosity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1150,6 +1277,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSHFluidPropArrays
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),SpecificHeat))) THEN
         NumOfPressPts = NumOfPressPts + 1
    
@@ -1177,6 +1310,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         IF (FirstSHMatch) THEN
@@ -1216,6 +1355,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Enthalpy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         RefrigData(Loop)%SCPress(NumOfPressPts) = Numbers(1)
@@ -1250,6 +1395,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Density))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1276,6 +1427,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Entropy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1302,6 +1459,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Conductivity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1327,6 +1490,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Viscosity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
@@ -1353,6 +1522,12 @@ SUBROUTINE GetFluidPropertiesData
     DO InData = 1, NumOfSCFluidPropArrays
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           Numbers,NumNumbers,Status)
+      
+      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
+      !                    Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+      !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+      
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),SpecificHeat))) THEN
         NumOfPressPts = NumOfPressPts + 1
        

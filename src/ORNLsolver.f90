@@ -27,8 +27,9 @@
     !
     !
     !
-
+    USE InputPreProcessor
     USE FluidProperties
+    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE HeatPumpInput
     USE CompressorMod
     USE CondenserMod
@@ -107,7 +108,7 @@
     
     
     !Flow**:
-    
+    CALL PreProcessInput
     CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?

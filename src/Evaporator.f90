@@ -600,6 +600,7 @@ CONTAINS
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties
+    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
@@ -1344,6 +1345,7 @@ SUBROUTINE CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,LiqTubeLengt
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -1802,6 +1804,7 @@ SUBROUTINE PrintEvaporatorResult
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -2254,9 +2257,11 @@ END SUBROUTINE PrintEvaporatorResult
 
     !***** Get circuit info *****
     IF (IsCoolingMode .GT. 0) THEN
-        OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        !OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        !RS Comment: IDCckt.dat no longer used now. (6/28/12)
     ELSE
-        OPEN (12,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        !OPEN (12,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
+        !RS Comment: ODCckt.dat no longer used now. (6/28/12)
     END IF
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
@@ -3292,6 +3297,7 @@ END SUBROUTINE EndEvaporatorCoil
 SUBROUTINE SuctionLine
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -3426,6 +3432,7 @@ END SUBROUTINE SuctionLine
 SUBROUTINE RefrigerantParameters(Ref$)
 
 USE FluidProperties
+!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 
@@ -3462,6 +3469,7 @@ SUBROUTINE InitBoundaryConditions(CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE AirPropMod
 USE CoilCalcMod
 
@@ -3803,6 +3811,7 @@ SUBROUTINE CalcCoilSegment(NumSection,I,II,III,IV,CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -4396,6 +4405,7 @@ SUBROUTINE CalcRefProperty(pRef,hRef,hfRef,hgRef,hfgRef,Psat,Tsat,tRef,xRef, &
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE OilMixtureMod
 
 IMPLICIT NONE
@@ -4747,6 +4757,7 @@ SUBROUTINE CalcSegmentOutletConditions(NumSection,I,II,III,IV,CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 USE OilMixtureMod
@@ -5147,6 +5158,7 @@ SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -5289,6 +5301,7 @@ SUBROUTINE CalcTransitionSegment(CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 USE OilMixtureMod
@@ -5401,6 +5414,7 @@ SUBROUTINE FindTransitionBoundary(CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -5516,6 +5530,7 @@ SUBROUTINE CalcWetSurfaceDing(I,II,III,IV,CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -5724,6 +5739,7 @@ SUBROUTINE CalcWetSurfaceBraun(NumSection,I,II,III,IV,CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -5949,6 +5965,7 @@ SUBROUTINE CalcWetSurfaceMcQuiston(I,II,III,IV,CoilType)
 !------------------------------------------------------------------------
 
 USE FluidProperties
+!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -6247,6 +6264,7 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties
+    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
