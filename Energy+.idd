@@ -1378,7 +1378,7 @@ IDCcktVelocityProfileRawData,
 
 \group ODCckt
 
-ODCcktModelType,
+ODCcktModel,
 	A1; \field Model Name
 	    \type alpha
 

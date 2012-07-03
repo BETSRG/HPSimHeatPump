@@ -2166,6 +2166,7 @@
     !------------------------------------------------------------------------
 
     USE UnitConvertMod
+    USE InputProcessor
 
     IMPLICIT NONE
 
@@ -2193,57 +2194,52 @@
   REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+  CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
 
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
-
+    
     !FLOW:
 
     NumOfSections=1 !ISI - 09/10/07
 
     !***** Get circuit info *****
-    !IF (IsCoolingMode .GT. 0) THEN
-        !OPEN (11,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-        !RS Comment: ODCckt.dat no longer used now. (6/28/12)
-    !ELSE
-        !OPEN (11,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-        !RS Comment: IDCckt.dat no longer used now. (6/28/12)
-    !END IF
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
         !VL: Previously: GOTO 100
         CALL InitCondenserCoil_Helper_1
         RETURN
     END IF
-    READ (11,FMT_202,IOSTAT=ErrorFlag)LineData
+    
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
         !VL: Previously: GOTO 100
         CALL InitCondenserCoil_Helper_1
         RETURN
     END IF
-
-    IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
-        CoilType = MCCONDENSER
-    ELSE
-        CoilType = CONDENSERCOIL
-        IF (LineData(1:13) .EQ. 'Fin-Tube Coil') THEN
-            IsNewFormat=.TRUE.
+    
+    !**************************** Model *************************************
+            
+        CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
+                      Numbers,NumNumbers,Status)
+        
+        ModelName = Alphas(1)
+            
+        IF (ModelName .EQ. 'MICROCHANNEL COIL') THEN
+            CoilType = MCCONDENSER
         ELSE
-            IsNewFormat=.FALSE.
+            CoilType = CONDENSERCOIL
         END IF
-    END IF
+        
+IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
-    IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
+    IF (IsCoolingMode .GT. 0) THEN  !ODC or IDC circuits?
+        !ODC circuit here
 
-        IF (IsNewFormat) THEN
-
-        IF (IsCoolingMode .GT. 0) THEN  !ODC or IDC circuits?
-            !ODC circuit here
-            !**************************** Geometry *************************************
+        !**************************** Geometry *************************************
 
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                                Numbers,NumNumbers,Status)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2276,20 +2272,6 @@
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
 
-            !IF (LineData(1:1) .EQ. 'N' .OR. LineData(1:1) .EQ. 'n') THEN !New format 06/06/07
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)NumOfSCckts
-            !
-            !    READ(11,FMT_202)LineData
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)IsShift
-            !ELSE
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)IsShift
-            !END IF
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
@@ -2297,14 +2279,7 @@
                 IsShift=.TRUE.
             END SELECT
 
-            !READ(11,FMT_202)LineData
-            !IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)NumOfSections	    
-            !    READ(11,FMT_202)LineData !*************************** Circuiting ************************************
-            !END IF
-            !READ(11,*) !*************************** Circuiting ************************************
+            !*************************** Circuiting ************************************
 
             CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
             ODtube,IDtube,Ktube,Pt,Pl,Ltube)
@@ -2317,88 +2292,76 @@
                 ShiftTube = 0
             END IF
 
-        ELSE !Old format
+            IF (Pl .EQ. 0) THEN
+                Pl = Pt
+            END IF
 
-            I=SCAN(LineData,',')
-            DO J=1, 8
-                LineData=ADJUSTL(LineData(I+1:150))
-                I=SCAN(LineData,',')
-            END DO
-            READ(LineData,*)ShiftTube
-            IF (ShiftTube .GT. 0) ShiftTube = 1
+            !READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-            IDtube = ODtube-TubeThk*2
+            NumOfTubes=Nl*Nt
 
-        END IF
+            !Fin spacing
+            FinSpg = 1/FinPitch-FinThk
 
-        IF (Pl .EQ. 0) Pl = Pt
+            !For plate finned tube
+            FinHeight=0 !No use for plate finned tube
+            TubeDepth=ODtube
+            TubeHeight=ODtube
+            NumOfChannels=1
+            Dchannel=IDtube
 
-        READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
-        IF (ErrorFlag .NE. NOERROR) THEN 
-            ErrorFlag=CKTFILEERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
+            IF (FinSpg .LT. FinThk) THEN
+                ErrorFlag=COILFINERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-        NumOfTubes=Nl*Nt
+            IF (Pt .LT. ODtube+2*FinThk) THEN
+                ErrorFlag=COILTUBEERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-        !Fin spacing
-        FinSpg = 1/FinPitch-FinThk
-
-        !For plate finned tube
-        FinHeight=0 !No use for plate finned tube
-        TubeDepth=ODtube
-        TubeHeight=ODtube
-        NumOfChannels=1
-        Dchannel=IDtube
-
-        IF (FinSpg .LT. FinThk) THEN
-            ErrorFlag=COILFINERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
-
-        IF (Pt .LT. ODtube+2*FinThk) THEN
-            ErrorFlag=COILTUBEERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
-
-        IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
-            NumOfMods=3
-            ALLOCATE(Ckt(NumOfCkts))	  
-            DO I=1, NumOfCkts
-                Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                ALLOCATE(Ckt(I)%Tube(1))
-                ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-            END DO
-        ELSE
-
-            !ISI - 09/10/07
-            ALLOCATE(CoilSection(NumOfSections)) 
-
-            ALLOCATE(Tube(NumOfTubes))
-            ALLOCATE(Tube2D(Nl,Nt))
-            ALLOCATE(JoinTubes(NumOfTubes))
-
-            DO I=1, NumOfTubes
-                ALLOCATE(Tube(I)%Seg(NumOfMods))
-            END DO
-
-            DO I=1, Nl
-                DO J=1, Nt
-                    ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
+                NumOfMods=3
+                ALLOCATE(Ckt(NumOfCkts))	  
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
                 END DO
-            END DO
+            ELSE
 
-            ALLOCATE(Ckt(NumOfCkts))
-            ALLOCATE(mRefIter(NumOfCkts))
-            DO I=1, NumOfCkts
+                !ISI - 09/10/07
+                ALLOCATE(CoilSection(NumOfSections)) 
+
+                ALLOCATE(Tube(NumOfTubes))
+                ALLOCATE(Tube2D(Nl,Nt))
+                ALLOCATE(JoinTubes(NumOfTubes))
+
+                DO I=1, NumOfTubes
+                    ALLOCATE(Tube(I)%Seg(NumOfMods))
+                END DO
+
+                DO I=1, Nl
+                    DO J=1, Nt
+                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                    END DO
+                END DO
+
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(mRefIter(NumOfCkts))
                 CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
                                     Numbers,NumNumbers,Status)
+                DO I=1, NumOfCkts
                 Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2408,7 +2371,8 @@
                 END IF
                 ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                 ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-            END DO
+                END DO
+            END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2420,7 +2384,6 @@
                 END IF
             END DO
 
-            !READ(11,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2429,11 +2392,6 @@
             END IF
 
             DO I=1, NumOfCkts
-                !IF (IsCoolingMode .EQ. 1) THEN 
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)
-                !ELSE
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)
-                !END IF
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
                                         Numbers,NumNumbers,Status)
@@ -2460,8 +2418,7 @@
             END DO
 
             DO I=1,2
-                !READ(11,FMT_202)LineData !For section data, ISI - 09/10/07
-                !READ(11,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
+                !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2470,26 +2427,13 @@
                 END IF
             END DO
 
-            !Section data, ISI - 09/10/07
-            IF (LineData(1:1) .EQ. 'S') THEN
-                DO I=1, NumOfSections
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
-                    ALLOCATE(CoilSection(I)%CktNum(CoilSection(I)%NumOfCkts))
-                END DO
-                !READ(11,*) !Section#,Branch#
-                DO I=1, NumOfSections
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)   
-                END DO		  
-                !READ(11,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
-                !READ(11,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
-            END IF
-
             IsUniformVelProfile=.TRUE.
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                !READ(11,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
                 CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
                                         Numbers,NumNumbers,Status)
+                DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
+                END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2506,8 +2450,9 @@
                 END IF
             END DO
             
-        ELSE    !IDC ckt
-            !READ(11,*) !**************************** Geometry *************************************
+    ELSE !IDC ckt
+
+            !**************************** Geometry *************************************
 
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
                       Numbers,NumNumbers,Status)
@@ -2543,20 +2488,6 @@
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
 
-            !IF (LineData(1:1) .EQ. 'N' .OR. LineData(1:1) .EQ. 'n') THEN !New format 06/06/07
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)NumOfSCckts
-            !
-            !    READ(11,FMT_202)LineData
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)IsShift
-            !ELSE
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)IsShift
-            !END IF
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
@@ -2564,14 +2495,7 @@
                 IsShift=.TRUE.
             END SELECT
 
-            !READ(11,FMT_202)LineData
-            !IF (LineData(1:1) .EQ. 'N') THEN !Number of Sections, ISI - 09/10/07
-            !    I=SCAN(LineData,',')
-            !    LineData=ADJUSTL(LineData(I+1:150))
-            !    READ(LineData,*)NumOfSections	    
-            !    READ(11,FMT_202)LineData !*************************** Circuiting ************************************
-            !END IF
-            !READ(11,*) !*************************** Circuiting ************************************
+            !*************************** Circuiting ************************************
 
             CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
             ODtube,IDtube,Ktube,Pt,Pl,Ltube)
@@ -2584,88 +2508,76 @@
                 ShiftTube = 0
             END IF
 
-        ELSE !Old format
+            IF (Pl .EQ. 0) THEN
+                Pl = Pt
+            END IF
 
-            I=SCAN(LineData,',')
-            DO J=1, 8
-                LineData=ADJUSTL(LineData(I+1:150))
-                I=SCAN(LineData,',')
-            END DO
-            READ(LineData,*)ShiftTube
-            IF (ShiftTube .GT. 0) ShiftTube = 1
+            READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-            IDtube = ODtube-TubeThk*2
+            NumOfTubes=Nl*Nt
 
-        END IF
+            !Fin spacing
+            FinSpg = 1/FinPitch-FinThk
 
-        IF (Pl .EQ. 0) Pl = Pt
+            !For plate finned tube
+            FinHeight=0 !No use for plate finned tube
+            TubeDepth=ODtube
+            TubeHeight=ODtube
+            NumOfChannels=1
+            Dchannel=IDtube
 
-        READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
-        IF (ErrorFlag .NE. NOERROR) THEN 
-            ErrorFlag=CKTFILEERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
+            IF (FinSpg .LT. FinThk) THEN
+                ErrorFlag=COILFINERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-        NumOfTubes=Nl*Nt
+            IF (Pt .LT. ODtube+2*FinThk) THEN
+                ErrorFlag=COILTUBEERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
 
-        !Fin spacing
-        FinSpg = 1/FinPitch-FinThk
-
-        !For plate finned tube
-        FinHeight=0 !No use for plate finned tube
-        TubeDepth=ODtube
-        TubeHeight=ODtube
-        NumOfChannels=1
-        Dchannel=IDtube
-
-        IF (FinSpg .LT. FinThk) THEN
-            ErrorFlag=COILFINERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
-
-        IF (Pt .LT. ODtube+2*FinThk) THEN
-            ErrorFlag=COILTUBEERROR
-            !VL: Previously: GOTO 100
-            CALL InitCondenserCoil_Helper_1
-            RETURN
-        END IF
-
-        IF (IsSimpleCoil .EQ. 1) THEN
-            NumOfMods=3
-            ALLOCATE(Ckt(NumOfCkts))	  
-            DO I=1, NumOfCkts
-                Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                ALLOCATE(Ckt(I)%Tube(1))
-                ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-            END DO
-        ELSE
-
-            !ISI - 09/10/07
-            ALLOCATE(CoilSection(NumOfSections)) 
-
-            ALLOCATE(Tube(NumOfTubes))
-            ALLOCATE(Tube2D(Nl,Nt))
-            ALLOCATE(JoinTubes(NumOfTubes))
-
-            DO I=1, NumOfTubes
-                ALLOCATE(Tube(I)%Seg(NumOfMods))
-            END DO
-
-            DO I=1, Nl
-                DO J=1, Nt
-                    ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            IF (IsSimpleCoil .EQ. 1) THEN
+                NumOfMods=3
+                ALLOCATE(Ckt(NumOfCkts))	  
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
                 END DO
-            END DO
+            ELSE
 
-            ALLOCATE(Ckt(NumOfCkts))
-            ALLOCATE(mRefIter(NumOfCkts))
-            DO I=1, NumOfCkts
+                !ISI - 09/10/07
+                ALLOCATE(CoilSection(NumOfSections)) 
+
+                ALLOCATE(Tube(NumOfTubes))
+                ALLOCATE(Tube2D(Nl,Nt))
+                ALLOCATE(JoinTubes(NumOfTubes))
+
+                DO I=1, NumOfTubes
+                    ALLOCATE(Tube(I)%Seg(NumOfMods))
+                END DO
+
+                DO I=1, Nl
+                    DO J=1, Nt
+                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                    END DO
+                END DO
+
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(mRefIter(NumOfCkts))
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
                                     Numbers,NumNumbers,Status)
+                DO I=1, NumOfCkts
                 Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2675,7 +2587,8 @@
                 END IF
                 ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                 ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-            END DO
+                END DO
+            END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2696,11 +2609,6 @@
             END IF
 
             DO I=1, NumOfCkts
-                !IF (IsCoolingMode .EQ. 1) THEN 
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=1,Ckt(I)%Ntube)
-                !ELSE
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(Ckt(I)%TubeSequence(J),J=Ckt(I)%Ntube,1,-1)
-                !END IF
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
                                         Numbers,NumNumbers,Status)
@@ -2733,8 +2641,7 @@
             END DO
 
             DO I=1,2
-                !READ(11,FMT_202)LineData !For section data, ISI - 09/10/07
-                !READ(11,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
+                !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2743,23 +2650,8 @@
                 END IF
             END DO
 
-            !Section data, ISI - 09/10/07
-            IF (LineData(1:1) .EQ. 'S') THEN
-                DO I=1, NumOfSections
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,CoilSection(I)%NumOfCkts,CoilSection(I)%IsInlet
-                    ALLOCATE(CoilSection(I)%CktNum(CoilSection(I)%NumOfCkts))
-                END DO
-                !READ(11,*) !Section#,Branch#
-                DO I=1, NumOfSections
-                    !READ(11,*,IOSTAT=ErrorFlag)Nckt,(CoilSection(I)%CktNum(J),J=1,CoilSection(I)%NumOfCkts)   
-                END DO		  
-                !READ(11,*,IOSTAT=ErrorFlag) !************************* Velocity Profile ********************************
-                !READ(11,*,IOSTAT=ErrorFlag) !Tube# ,velocity Deviation from mean value
-            END IF
-
             IsUniformVelProfile=.TRUE.
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                !READ(11,*,IOSTAT=ErrorFlag)Ntube,(Tube(I)%Seg(J)%VelDev,J=1,NumOfMods)
                 CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
                                         Numbers,NumNumbers,Status)
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
@@ -2780,6 +2672,7 @@
             END DO
 
     END IF  !End of the IDC or ODC if-statement
+    
             !Synchronize 1-D and 2-D arrays
             DO I=1, Nl
                 DO J=1, Nt
@@ -2826,62 +2719,20 @@
                         Ckt(I)%OutSplit=Ckt(I)%OutSplit+1
                     END IF
                 END DO
-                !IF (Ckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1 !To accout for split subcooling circuit, ISI - 06//05/07
 
                 IF (Ckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) THEN
-                    !			  	IF ((Ckt(I)%InJoin .GT. 1 .AND. Ckt(I)%InSplit .EQ. 1) .OR. &
-                    !			  	    (Ckt(I)%InJoin .EQ. 1 .AND. Ckt(I)%InSplit .GT. 1)) THEN
-
                     Nnode=Nnode+1 
-
-                    !			    END IF
                 END IF
             END DO
 
-            !NnodeSC=1
-            !DO I=1, NumOfSCckts
-            !Initialize
-            !	  SCckt(I)%InJoin=0
-            !	  SCckt(I)%InSplit=0
-            !	  SCckt(I)%OutJoin=0
-            !	  SCckt(I)%OutSplit=0
-            !	  DO J=1, NumOfSCckts
-            !		  IF (SCckt(I)%TubeSequence(1) .EQ. SCckt(J)%TubeSequence(SCckt(J)%Ntube)) THEN
-            ! 				  SCckt(I)%InJoin=SCckt(I)%InJoin+1
-            !		  END IF
-            !		  IF (SCckt(I)%TubeSequence(1) .EQ. SCckt(J)%TubeSequence(1)) THEN
-            !				  SCckt(I)%InSplit=SCckt(I)%InSplit+1
-            !		  END IF
-            !		  IF (SCckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. SCckt(J)%TubeSequence(SCckt(J)%Ntube)) THEN
-            !				  SCckt(I)%OutJoin=Ckt(I)%OutJoin+1
-            !		  END IF
-            !		  IF (SCckt(I)%TubeSequence(SCckt(I)%Ntube) .EQ. SCckt(J)%TubeSequence(1)) THEN
-            !				  SCckt(I)%OutSplit=SCckt(I)%OutSplit+1
-            !		  END IF
-            !	  END DO
-
-            !	  IF (SCckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) THEN
-            !	  	IF ((SCckt(I)%InJoin .GT. 1 .AND. SCckt(I)%InSplit .EQ. 1) .OR. &
-            !	  	    (SCckt(I)%InJoin .EQ. 1 .AND. SCckt(I)%InSplit .GT. 1)) THEN
-
-            !	  		NnodeSC=NnodeSC+1 
-
-            !		    END IF
-            !	  END IF
-            !END DO
-
-
             ALLOCATE(Node(Nnode))
-            !ALLOCATE(NodeSC(NnodeSC))
 
             !Find split and joint tube numbers
             J=0
             DO I=1, NumOfCkts
-                !IF (Ckt(I)%InJoin .GT. 1 ) THEN !Not including subcooling part, ISI - 06//05/07
                 IF (Ckt(I)%InJoin .GT. 1 .AND. Ckt(I)%TubeSequence(1) .NE. SubcoolingTube) THEN 
                     J=J+1
                     Node(J)%Num=Ckt(I)%TubeSequence(1)
-                    !ELSEIF (Ckt(I)%OutSplit .GT. 1) THEN !Not including subcooling part, ISI - 06//05/07
                 ELSEIF (Ckt(I)%OutSplit .GT. 1 .AND. Ckt(I)%TubeSequence(Ckt(I)%Ntube) .NE. SubcoolingTube) THEN 
                     J=J+1
                     Node(J)%Num=Ckt(I)%TubeSequence(Ckt(I)%Ntube)
@@ -2890,13 +2741,11 @@
             END DO
 
             Node(Nnode)%Num=0 !coil outlet
-            !Node(Nnode)%Num=0=SubcoolingTube !ISI - 06//05/07
 
             !Find surrounding tubes
             DO I=1, Nl
                 DO J=1, Nt
                     IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
-                        !Tube2D(I,J)%RowNum=I
                         Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
                     ELSE
                         Tube2D(I,J)%RowNum=0
@@ -2989,9 +2838,7 @@
             END DO
             IF (NcktLast .EQ. 0) NcktLast = 1 !At least one circuit, ISI - 07/28/06
 
-        END IF
-
-    ELSE !Microchannel coil
+ELSE !Microchannel coil
 
         READ(11,*) !**************************** Geometry *************************************
 
@@ -3231,7 +3078,7 @@
         FinHeight=Pt-TubeHeight
         FinSpg=1/FinPitch-FinThk
 
-    END IF
+END IF
 
     CLOSE(11) !Circuit file
 
@@ -3254,7 +3101,7 @@
     !VL: Previously: 100 CONTINUE
 
 
-    ! VL: Code Chunck moved to subroutine InitCondenserCoil_Helper_1
+    ! VL: Code Chunk moved to subroutine InitCondenserCoil_Helper_1
     ! -----------------------------------------------------
     !IF (ErrorFlag .NE. NOERROR) THEN
     ! IF (ErrorFlag .EQ. CKTFILEERROR) THEN

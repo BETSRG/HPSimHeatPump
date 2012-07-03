@@ -500,7 +500,7 @@ IDCcktVelocityProfileRawData,
 
 !group ODCckt
 
-ODCcktModelType,
+ODCcktModel,
     Fin-Tube Coil;
 
 ODCcktGeometry,
