@@ -952,7 +952,9 @@ CONTAINS
 
                 END DO !End circuit
 
-                IF (IsSimpleCoil .EQ. 1) EXIT
+                IF (IsSimpleCoil .EQ. 1) THEN
+                    EXIT
+                END IF
 
                 CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)
                 CPair=CPA(REAL(tAmod))
@@ -961,8 +963,7 @@ CONTAINS
                 tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair
 
                 DiffQcoil=ABS((CoilSection(NumSection)%Qsection-PrevQcoil)/PrevQcoil) 
-                IF (DiffQcoil .GT. SMALL) THEN 
-                    !WRITE(*,*)AirBCiter,Qcoil,PrevQcoil
+                IF (DiffQcoil .GT. SMALL) THEN
                     PrevQcoil=CoilSection(NumSection)%Qsection
                 ELSE 
                     EXIT
@@ -970,14 +971,18 @@ CONTAINS
 
             END DO !end AirBCiter
 
-            IF (IsSimpleCoil .EQ. 1) EXIT
+            IF (IsSimpleCoil .EQ. 1) THEN
+                EXIT
+            END IF
 
             IF (AirBCiter .GT. AirBCmaxIter) THEN
                 !WRITE(*,*)'-- WARNING -- Evaporator: AirBCiter not converged.'
                 ErrorFlag=CONVERGEERROR
             END IF
 
-            IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) EXIT !for equivalent circuit, no need to update mdot ref.
+            IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) THEN
+                EXIT !for equivalent circuit, no need to update mdot ref.
+            END IF
 
             !Synchronize from circuits to tubes
             DO I=1, CoilSection(NumSection)%NumOfCkts
@@ -990,7 +995,9 @@ CONTAINS
                 IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
                     LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
                 END IF
-                IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+                IF (FirstTube .GT. LastTube) THEN
+                    LastTube=FirstTube !Dummy tube
+                END IF
 
                 DO J=FirstTube, LastTube
                     TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
@@ -1014,7 +1021,9 @@ CONTAINS
                 END IF
             END DO !End Circuit
             CoilSection(NumSection)%pRo=SumpRoCkt/CoilSection(NumSection)%NcktLast
-            IF (SumpRoCkt .EQ. 0) SumpRoCkt=CoilSection(NumSection)%Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
+            IF (SumpRoCkt .EQ. 0) THEN
+                SumpRoCkt=CoilSection(NumSection)%Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
+            END IF
 
             IF (ABS(CoilSection(NumSection)%pRo-pRoCoilPrev) .GT. Ptol) THEN
                 MaxResidual=ABS(pRoCoilPrev-CoilSection(NumSection)%pRo)
@@ -1022,7 +1031,9 @@ CONTAINS
                 Converged=.FALSE.
             END IF
 
-            IF (IsSameNumOfTubes .AND. IsUniformVelProfile) EXIT	
+            IF (IsSameNumOfTubes .AND. IsUniformVelProfile) THEN
+                EXIT
+            END IF
 
             IF (NOT(Converged) .OR. Iter .LE. 2) THEN 
                 Converged=.TRUE. ! Reinitialize
@@ -1048,7 +1059,9 @@ CONTAINS
             END IF
         END IF
 
-        IF (IsSimpleCoil .EQ. 1) EXIT
+        IF (IsSimpleCoil .EQ. 1) THEN
+            EXIT
+        END IF
 
         !ISI - 09/10/07
         CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
@@ -2013,10 +2026,18 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
 				      mRefCkt=CoilSection(NumSection)%Ckt(I)%mRef
 
-				      IF (xRiMod .EQ. -100) xRiMod=0.0
-				      IF (xRiMod .EQ. 100) xRiMod=1.0
-				      IF (xRoMod .EQ. -100) xRoMod=0.0
-				      IF (xRoMod .EQ. 100) xRoMod=1.0
+				      IF (xRiMod .EQ. -100) THEN
+                          xRiMod=0.0
+                      END IF
+				      IF (xRiMod .EQ. 100) THEN
+                          xRiMod=1.0
+                      END IF
+				      IF (xRoMod .EQ. -100) THEN
+                          xRoMod=0.0
+                      END IF
+				      IF (xRoMod .EQ. 100) THEN
+                          xRoMod=1.0
+                      END IF
 
 				      WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
 							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
@@ -2028,7 +2049,9 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
 		      END DO !end Ntube
         
-		      IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) EXIT 
+		      IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) THEN
+                  EXIT
+              END IF
 
 	      END DO !end circuit
 
@@ -2178,10 +2201,18 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 						  MassVapCoil=MassVapCoil+MassVapMod*Slab(I)%Pass(II)%Ntube
 					  END IF
 				
-					  IF (xRiMod .EQ. -100) xRiMod=0.0
-					  IF (xRiMod .EQ. 100) xRiMod=1.0
-					  IF (xRoMod .EQ. -100) xRoMod=0.0
-					  IF (xRoMod .EQ. 100) xRoMod=1.0
+					  IF (xRiMod .EQ. -100) THEN
+                          xRiMod=0.0
+                      END IF
+					  IF (xRiMod .EQ. 100) THEN
+                          xRiMod=1.0
+                      END IF
+					  IF (xRoMod .EQ. -100) THEN
+                          xRoMod=0.0
+                      END IF
+					  IF (xRoMod .EQ. 100) THEN
+                          xRoMod=1.0
+                      END IF
 
 					  MassMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass
 					  WRITE(16,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
@@ -2273,7 +2304,7 @@ END SUBROUTINE PrintEvaporatorResult
         RETURN
 
     END IF
-    READ (12,FMT_202,IOSTAT=ErrorFlag)LineData
+
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
         !VL: Previously: GOTO 100
@@ -2289,10 +2320,10 @@ END SUBROUTINE PrintEvaporatorResult
         
         ModelName = Alphas(1)
             
-        IF (ModelName .EQ. 'Microchannel Coil') THEN
+        IF (ModelName .EQ. 'MICROCHANNEL COIL') THEN
             CoilType = MCCONDENSER
         ELSE
-            CoilType = CONDENSERCOIL
+            CoilType = EVAPORATORCOIL
         END IF
 
 IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
@@ -2336,6 +2367,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
+            NumofSections = 1   !RS Comment: Not in the input file, but needed for the code to run properly. Set to 1 as there is only one coil section here.
 
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
             CASE ('F','f')
@@ -2361,7 +2393,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 Pl = Pt
             END IF
 
-            READ (12,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2426,20 +2457,19 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END DO
 
                 ALLOCATE(Ckt(NumOfCkts))
+                CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                    Numbers,NumNumbers,Status)
                 DO I=1, NumOfCkts
-                    CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                    Ckt(I)%Ntube = Numbers(I)
                     IF (ErrorFlag .NE. NOERROR) THEN 
                         ErrorFlag=CKTFILEERROR
                         !VL: Previously: GOTO 100
                         CALL InitEvaporatorCoil_Helper_1
                         RETURN
                     END IF
-
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
                     ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
                 END DO
-        END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2451,13 +2481,11 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-            !READ(12,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
-
             END IF
 
             DO I=1, NumOfCkts   
@@ -2491,6 +2519,15 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                     RETURN
                 END IF
             END DO
+        
+        !************************* Velocity Profile ********************************
+
+            CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      DO J=1, NumOfCkts
+		          CoilSection(NumOfSections)%CktNum(J)=J
+		      END DO
 
             DO I=1,2
                 IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
@@ -2505,16 +2542,17 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !Initialize
             CoilSection%IsInlet = .TRUE.
             IsUniformVelProfile=.TRUE.
+            CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
+                                Numbers,NumNumbers,Status) 
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
-                Tube(I)%Seg(J)%VelDev = Numbers(J)
+                DO J=1, NumOfMods
+                    Tube(I)%Seg(J)%VelDev = Numbers(J)
+                END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
                     CALL InitEvaporatorCoil_Helper_1
                     RETURN
-
                 END IF
                 IF (IsUniformVelProfile) THEN
                     DO J=1,NumOfMods
@@ -2526,12 +2564,226 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
+            !Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube2D(I,J)=Tube((I-1)*Nt+J)
+                END DO
+            END DO
+
+            !Propagate velocity profile to suceeding rows
+            DO I=Nl-1,1,-1
+                DO J=1, Nt
+                    DO k=1, NumOfMods
+                        Tube2D(I,J)%Seg(k)%VelDev=Tube2D(I+1,J)%Seg(k)%VelDev
+                    END DO
+                END DO
+            END DO
+
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+
+            END IF
+
+            !Propagate circuit info to coil section, ISI - 09/10/07
+            NumInletSections=0
+            DO I=1, NumOfSections
+                IF (CoilSection(I)%IsInlet) THEN
+                    NumInletSections=NumInletSections+1
+                END IF
+                ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
+
+                DO J=1, CoilSection(I)%NumOfCkts
+                    CoilSection(I)%Ckt(J)=Ckt(CoilSection(I)%CktNum(J))
+                END DO
+            END DO
+
+            !Determine inlet and outlet flags, split, joint or nothing, ISI - 09/10/07
+            DO NumSection=1, NumOfSections
+                CoilSection(NumSection)%Nnode=1
+
+                Nnode=1
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    !Initialize
+                    CoilSection(NumSection)%Ckt(I)%InJoin=0
+                    CoilSection(NumSection)%Ckt(I)%InSplit=0
+                    CoilSection(NumSection)%Ckt(I)%OutJoin=0
+                    CoilSection(NumSection)%Ckt(I)%OutSplit=0
+                    DO J=1, CoilSection(NumSection)%NumOfCkts
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
+                            CoilSection(NumSection)%Ckt(I)%InJoin=CoilSection(NumSection)%Ckt(I)%InJoin+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(1) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
+                            CoilSection(NumSection)%Ckt(I)%InSplit=CoilSection(NumSection)%Ckt(I)%InSplit+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(CoilSection(NumSection)%Ckt(J)%Ntube)) THEN
+                            CoilSection(NumSection)%Ckt(I)%OutJoin=CoilSection(NumSection)%Ckt(I)%OutJoin+1
+                        END IF
+                        IF (CoilSection(NumSection)%Ckt(I)%TubeSequence(CoilSection(NumSection)%Ckt(I)%Ntube) .EQ. &
+                        CoilSection(NumSection)%Ckt(J)%TubeSequence(1)) THEN
+                            CoilSection(NumSection)%Ckt(I)%OutSplit=CoilSection(NumSection)%Ckt(I)%OutSplit+1
+                        END IF
+                    END DO
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) THEN
+                        Nnode=Nnode+1
+                    END IF
+                END DO !End NumOfCkts
+
+                CoilSection(NumSection)%Nnode=Nnode
+                ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+
+                !Find split and joint tube numbers
+                J=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 ) THEN
+                        J=J+1
+                        CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(1)
+                    ELSEIF (CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) THEN
+                        J=J+1
+                        CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube)
+                    END IF
+                    IF (J .GT. Nnode) THEN
+                        EXIT
+                    END IF
+                END DO
+                CoilSection(NumSection)%Node(Nnode)%Num=0 !section outlet 
+
+            END DO !End NumOfSections
+
+            !Find surrounding tubes
+            DO I=1, Nl
+                DO J=1, Nt
+                    IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
+                        !Tube2D(I,J)%RowNum=I
+                        Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
+                    ELSE
+                        Tube2D(I,J)%RowNum=0
+                    END IF
+                    IF (ShiftTube .EQ. 0) THEN
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            END IF
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !even row, first tube
+                            END IF
+                        END IF
+                    ELSE
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            END IF
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !even row, first tube
+                            END IF
+                        END IF
+                    END IF
+
+                    IF (I .EQ. Nl) THEN
+                        Tube2D(I,J)%Fup=0
+                        Tube2D(I,J)%Fdown=0
+                    END IF
+                    IF (I .EQ. 1) THEN
+                        Tube2D(I,J)%Back=0
+                    END IF
+                END DO !End of J
+            END DO !End of I
+
+            !Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube((I-1)*Nt+J)=Tube2D(I,J)
+                END DO
+            END DO
+
+            !ISI - 09/10/07
+            Tube%Empty = 1 !Initialize 
+            DO NumSection=1, NumOfSections
+
+                !Find even tubes
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+
+                    !Find first and last simulation tubes
+                    FirstTube=1
+                    LastTube=CoilSection(NumSection)%Ckt(I)%Ntube
+                    IF (CoilSection(NumSection)%Ckt(I)%InSplit .GT. 1) THEN
+                        FirstTube=2 !Skip first tube
+                    END IF 
+                    IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
+                        LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
+                    END IF
+                    IF (FirstTube .GT. LastTube) THEN
+                        LastTube=FirstTube !Dummy tube
+                    END IF
+
+                    DO J=FirstTube, LastTube
+                        TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                        Tube(TubeNum)%Even=0
+                        IF (FirstTube .EQ. 2 ) THEN
+                            IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+                        ELSE
+                            IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+                        END IF
+                    END DO !End of J
+                END DO !End of I
+
+                !Find empty tubes
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    DO J=1, CoilSection(NumSection)%Ckt(I)%Ntube
+                        TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
+                        Tube(TubeNum)%Empty=0
+                    END DO
+                END DO
+
+                !Number of inlet circuits
+                CoilSection(NumSection)%NcktFirst=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .LT. 1) THEN
+                        CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
+                    END IF
+                END DO
+                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+
+                !Number of outlet circuits
+                CoilSection(NumSection)%NcktLast=0
+                DO I=1, CoilSection(NumSection)%NumOfCkts
+                    IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) THEN
+                        CoilSection(NumSection)%NcktLast=CoilSection(NumSection)%NcktLast+1
+                    END IF
+                END DO
+                IF (CoilSection(NumSection)%NcktLast .EQ. 0) THEN
+                    CoilSection(NumSection)%NcktLast = 1 !At least one circuit, ISI - 07/28/06
+                END IF
+            END DO !End NumOfSections
+            
+            END IF !RS Comment: Adding in an END IF to close the above open block (Simple Condenser or not)
+            
     ELSE  !ODC or IDC circuits?
             !ODC circuit here
-            !**************************** Geometry *************************************
+        !**************************** Geometry *************************************
 
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                                Numbers,NumNumbers,Status)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2584,87 +2836,86 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 ShiftTube = 0
             END IF
 
-        IF (Pl .EQ. 0) THEN
-            Pl = Pt
-        END IF
+            IF (Pl .EQ. 0) THEN
+                Pl = Pt
+            END IF
 
-        READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
-        IF (ErrorFlag .NE. NOERROR) THEN 
-            ErrorFlag=CKTFILEERROR
-            !VL: Previously: GOTO 100
-            CALL InitEvaporatorCoil_Helper_1
-            RETURN
-        END IF
+            !READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+            END IF
 
-        NumOfTubes=Nl*Nt
+            NumOfTubes=Nl*Nt
 
-        !Fin spacing
-        FinSpg = 1/FinPitch-FinThk
+            !Fin spacing
+            FinSpg = 1/FinPitch-FinThk
 
-        !For plate finned tube
-        FinHeight=0 !No use for plate finned tube
-        TubeDepth=ODtube
-        TubeHeight=ODtube
-        NumOfChannels=1
-        Dchannel=IDtube
+            !For plate finned tube
+            FinHeight=0 !No use for plate finned tube
+            TubeDepth=ODtube
+            TubeHeight=ODtube
+            NumOfChannels=1
+            Dchannel=IDtube
 
-        IF (FinSpg .LT. FinThk) THEN
-            ErrorFlag=COILFINERROR
-            !VL: Previously: GOTO 100
-            CALL InitEvaporatorCoil_Helper_1
-            RETURN
-        END IF
+            IF (FinSpg .LT. FinThk) THEN
+                ErrorFlag=COILFINERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+            END IF
 
-        IF (Pt .LT. ODtube+2*FinThk) THEN
-            ErrorFlag=COILTUBEERROR
-            !VL: Previously: GOTO 100
-            CALL InitEvaporatorCoil_Helper_1
-            RETURN
-        END IF
+            IF (Pt .LT. ODtube+2*FinThk) THEN
+                ErrorFlag=COILTUBEERROR
+                !VL: Previously: GOTO 100
+                CALL InitEvaporatorCoil_Helper_1
+                RETURN
+            END IF
 
-        IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
-            NumOfMods=3
-            ALLOCATE(Ckt(NumOfCkts))	  
-            DO I=1, NumOfCkts
-                Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                ALLOCATE(Ckt(I)%Tube(1))
-                ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-            END DO
-        ELSE
-
-            !ISI - 09/10/07
-            ALLOCATE(CoilSection(NumOfSections)) 
-
-            ALLOCATE(Tube(NumOfTubes))
-            ALLOCATE(Tube2D(Nl,Nt))
-            ALLOCATE(JoinTubes(NumOfTubes))
-
-            DO I=1, NumOfTubes
-                ALLOCATE(Tube(I)%Seg(NumOfMods))
-            END DO
-
-            DO I=1, Nl
-                DO J=1, Nt
-                    ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
+                NumOfMods=3
+                ALLOCATE(Ckt(NumOfCkts))	  
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+                    ALLOCATE(Ckt(I)%Tube(1))
+                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
                 END DO
-            END DO
+            ELSE
 
-            ALLOCATE(Ckt(NumOfCkts))
-            ALLOCATE(mRefIter(NumOfCkts))
-            DO I=1, NumOfCkts
-                CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)
-                Ckt(I)%Ntube=Numbers(I)
+                !ISI - 09/10/07
+                ALLOCATE(CoilSection(NumOfSections)) 
+
+                ALLOCATE(Tube(NumOfTubes))
+                ALLOCATE(Tube2D(Nl,Nt))
+                ALLOCATE(JoinTubes(NumOfTubes))
+
+                DO I=1, NumOfTubes
+                    ALLOCATE(Tube(I)%Seg(NumOfMods))
+                END DO
+
+                DO I=1, Nl
+                    DO J=1, Nt
+                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                    END DO
+                END DO
+
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(mRefIter(NumOfCkts))
+                DO I=1, NumOfCkts
+                    CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                        Numbers,NumNumbers,Status)
+                    Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
                     CALL InitEvaporatorCoil_Helper_1
                     RETURN
                 END IF
-                ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
-                ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-            END DO
-        END IF !RS Comment: Adding in an END IF to close the above open block
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                END DO
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2708,8 +2959,16 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
+            !************************* Velocity Profile ********************************
+
+            CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      DO J=1, NumOfCkts
+		          CoilSection(NumOfSections)%CktNum(J)=J
+              END DO
+              
             DO I=1,2
-                !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2719,9 +2978,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
+            CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+                                Numbers,NumNumbers,Status)
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2739,7 +2998,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END IF
             END DO
             
-    END IF  !End of the IDC or ODC if-statement
             !Synchronize 1-D and 2-D arrays
             DO I=1, Nl
                 DO J=1, Nt
@@ -2767,8 +3025,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !Propagate circuit info to coil section, ISI - 09/10/07
             NumInletSections=0
             DO I=1, NumOfSections
-                IF (CoilSection(I)%IsInlet) NumInletSections=NumInletSections+1
-
+                IF (CoilSection(I)%IsInlet) THEN
+                    NumInletSections=NumInletSections+1
+                END IF
                 ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
 
                 DO J=1, CoilSection(I)%NumOfCkts
@@ -2805,7 +3064,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                             CoilSection(NumSection)%Ckt(I)%OutSplit=CoilSection(NumSection)%Ckt(I)%OutSplit+1
                         END IF
                     END DO
-                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) Nnode=Nnode+1
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1) THEN
+                        Nnode=Nnode+1
+                    END IF
                 END DO !End NumOfCkts
 
                 CoilSection(NumSection)%Nnode=Nnode
@@ -2821,7 +3082,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                         J=J+1
                         CoilSection(NumSection)%Node(J)%Num=CoilSection(NumSection)%Ckt(I)%TubeSequence(Ckt(I)%Ntube)
                     END IF
-                    IF (J .GT. Nnode) EXIT
+                    IF (J .GT. Nnode) THEN
+                        EXIT
+                    END IF
                 END DO
                 CoilSection(NumSection)%Node(Nnode)%Num=0 !section outlet 
 
@@ -2831,7 +3094,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             DO I=1, Nl
                 DO J=1, Nt
                     IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
-                        !Tube2D(I,J)%RowNum=I
                         Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
                     ELSE
                         Tube2D(I,J)%RowNum=0
@@ -2841,24 +3103,32 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                             Tube2D(I,J)%Fup=I*Nt+(J-1)
                             Tube2D(I,J)%Fdown=I*Nt+J
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            END IF
                         ELSE
                             Tube2D(I,J)%Fup=I*Nt+J
                             Tube2D(I,J)%Fdown=I*Nt+(J+1)
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !even row, first tube
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !even row, first tube
+                            END IF
                         END IF
                     ELSE
                         IF (MOD(I,2) .EQ. 1) THEN
                             Tube2D(I,J)%Fup=I*Nt+J
                             Tube2D(I,J)%Fdown=I*Nt+(J+1)
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            END IF
                         ELSE
                             Tube2D(I,J)%Fup=I*Nt+(J-1)
                             Tube2D(I,J)%Fdown=I*Nt+J
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !even row, first tube
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !even row, first tube
+                            END IF
                         END IF
                     END IF
 
@@ -2866,7 +3136,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                         Tube2D(I,J)%Fup=0
                         Tube2D(I,J)%Fdown=0
                     END IF
-                    IF (I .EQ. 1) Tube2D(I,J)%Back=0
+                    IF (I .EQ. 1) THEN
+                        Tube2D(I,J)%Back=0
+                    END IF
                 END DO !End of J
             END DO !End of I
 
@@ -2893,15 +3165,21 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                     IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
                         LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 !Ignore last tube
                     END IF
-                    IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+                    IF (FirstTube .GT. LastTube) THEN
+                        LastTube=FirstTube !Dummy tube
+                    END IF
 
                     DO J=FirstTube, LastTube
                         TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
                         Tube(TubeNum)%Even=0
                         IF (FirstTube .EQ. 2 ) THEN
-                            IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+                            IF (MOD(J,2) .EQ. 1) THEN
+                                Tube(TubeNum)%Even=1
+                            END IF
                         ELSE
-                            IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+                            IF (MOD(J,2) .EQ. 0) THEN
+                                Tube(TubeNum)%Even=1
+                            END IF
                         END IF
                     END DO !End of J
                 END DO !End of I
@@ -2917,19 +3195,30 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 !Number of inlet circuits
                 CoilSection(NumSection)%NcktFirst=0
                 DO I=1, CoilSection(NumSection)%NumOfCkts
-                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .LT. 1) CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
+                    IF (CoilSection(NumSection)%Ckt(I)%InJoin .LT. 1) THEN
+                        CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
+                    END IF
                 END DO
-                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) THEN
+                    CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06
+                END IF
 
                 !Number of outlet circuits
                 CoilSection(NumSection)%NcktLast=0
                 DO I=1, CoilSection(NumSection)%NumOfCkts
-                    IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) CoilSection(NumSection)%NcktLast=CoilSection(NumSection)%NcktLast+1
+                    IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) THEN
+                        CoilSection(NumSection)%NcktLast=CoilSection(NumSection)%NcktLast+1
+                    END IF
                 END DO
-                IF (CoilSection(NumSection)%NcktLast .EQ. 0) CoilSection(NumSection)%NcktLast = 1 !At least one circuit, ISI - 07/28/06	  
+                IF (CoilSection(NumSection)%NcktLast .EQ. 0) THEN
+                    CoilSection(NumSection)%NcktLast = 1 !At least one circuit, ISI - 07/28/06
+                END IF
 
             END DO !End NumOfSections
-
+            
+            END IF !RS Comment: Adding in an END IF to close the above open block (Simple Condenser or not)
+    END IF  !End of the IDC or ODC if-statement
+    
     ELSE !Microchannel coil
 
         READ(12,*) !**************************** Geometry *************************************

@@ -1221,8 +1221,12 @@ REAL Nu         !Nusselt number
 !Flow:
 
   CALL Reynolds(ID,mRef,xRef,muRef,mug,muf,ReVap,ReLiq)
-  IF (xRef .LE. 0.0) Re=ReLiq
-  IF (xRef .GE. 1.0) Re=ReVap
+  IF (xRef .LE. 0.0) THEN
+      Re=ReLiq
+  ENDIF
+  IF (xRef .GE. 1.0) THEN
+      Re=ReVap
+  ENDIF
   Pr=muRef*CpRef/kRef
 
   IF (CoilType .EQ. CONDENSERCOIL .OR. &
@@ -1288,8 +1292,12 @@ REAL ff			!Intermediate variable
 !Flow:
 
   CALL Reynolds(ID,mRef,xRef,muRef,mug,muf,ReVap,ReLiq)
-  IF (xRef .LT. 0.0) Re=ReLiq
-  IF (xRef .GT. 1.0) Re=ReVap
+  IF (xRef .LT. 0.0) THEN
+      Re=ReLiq
+  END IF
+  IF (xRef .GT. 1.0) THEN
+      Re=ReVap
+  END IF
   Pr=muRef*CpRef/kRef
   IF (Re .LT. 0) THEN
 	  WRITE(*,*)'CoilCalc: 1201'
@@ -1352,10 +1360,16 @@ REAL ff			!Intermediate variable
 !Flow:
 
   CALL Reynolds(ID,mRef,xRef,muRef,mug,muf,ReVap,ReLiq)
-  IF (xRef .LE. 0.0) Re=ReLiq
-  IF (xRef .GE. 1.0) Re=ReVap
+  IF (xRef .LE. 0.0) THEN
+      Re=ReLiq
+  END IF
+  IF (xRef .GE. 1.0) THEN
+      Re=ReVap
+  END IF
   Pr=muRef*CpRef/kRef
-  IF (Re .LT. 0) Re=1e-6
+  IF (Re .LT. 0) THEN
+      Re=1e-6
+  END IF
   IF (Re .LT. 0) THEN
 	  WRITE(*,*)'CoilCalc: 1266'
   END IF
@@ -2423,10 +2437,18 @@ REAL PF        !Pressure enhancement factor
   dPgravSP=0
   dPgravTP=0
 
-  IF (xRi .GT. 1) xRi=1
-  IF (xRo .GT. 1) xRo=1
-  IF (xRi .LT. 0) xRi=0
-  IF (xRo .LT. 0) xRo=0
+  IF (xRi .GT. 1) THEN
+      xRi=1
+  END IF
+  IF (xRo .GT. 1) THEN
+      xRo=1
+  ENDIF
+  IF (xRi .LT. 0) THEN
+      xRi=0
+  ENDIF
+  IF (xRo .LT. 0) THEN
+      xRo=0
+  END IF
 
   IF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. (xRo .LT. 1 .AND. xRo .GT. 0)) THEN
     !CALL TWOPhasedPLM(tRi,pRi,xRi,xRo,vRi,vgi,vfi,Lmod, &
@@ -2699,8 +2721,12 @@ REAL dPdZfrict !Fritional pressure drop gradient, [kPa/m]
 
   CALL FanningdP(CoilType,tRi,pRi,xRi,vRi,vgi,vfi,dPdZfLiq,dPdZfVap,mRef,ID,muRef,mug,muf)
 
-  IF (xRi .LE. 0.0) dPdZfrict=dPdZfLiq
-  IF (xRi .GE. 1.0) dPdZfrict=dPdZfVap
+  IF (xRi .LE. 0.0) THEN
+      dPdZfrict=dPdZfLiq
+  END IF
+  IF (xRi .GE. 1.0) THEN
+      dPdZfrict=dPdZfVap
+  END IF
 
   !Momentum change
   Acs=(PI*ID*ID)/4.0
@@ -2789,8 +2815,12 @@ REAL viVap    !Vapor specific volume, [m^3/kg]
   Acs=(PI*ID*ID)/4.0
   Gref=mRef/Acs
 
-  IF (xRef .LE. 0.0) viLiq=vRef
-  IF (xRef .GE. 1.0) viVap=vRef
+  IF (xRef .LE. 0.0) THEN
+      viLiq=vRef
+  END IF
+  IF (xRef .GE. 1.0) THEN
+      viVap=vRef
+  END IF
   IF (xRef .GT. 0.0 .AND. xRef .LT. 1.0) THEN
     viLiq=vf
     viVap=vg
@@ -2857,13 +2887,21 @@ REAL ReTransit !Reynolds number transition from laminar to turbulent
 
   ReTransit=1500 !2300.
   IF (CoilType .EQ. MCCONDENSER .OR. &
-      CoilType .EQ. MCEVAPORATOR) ReTransit=1500 !Harms et al. 1999
+      CoilType .EQ. MCEVAPORATOR) THEN
+      ReTransit=1500 !Harms et al. 1999
+  END IF
 
-  IF (Re .EQ. 0.0) ff=0.0
+  IF (Re .EQ. 0.0) THEN
+      ff=0.0
+  END IF
   !IF (Re .GT. ReTransit .AND. Re .LT. 1E5) THEN
   IF (Re .GT. ReTransit) THEN
-    IF (xRef .GE. 1.0) ff=0.046/(Re**(0.20))
-    IF (xRef .LE. 0.0) ff=0.079/(Re**(0.25))
+    IF (xRef .GE. 1.0) THEN
+        ff=0.046/(Re**(0.20))
+    END IF
+    IF (xRef .LE. 0.0) THEN
+        ff=0.079/(Re**(0.25))
+    END IF
   !ELSEIF (Re .GT. 1E5 .AND. Re .LT. 3E6) THEN
   !  ff=(0.0032+0.221*Re**(-0.237))/4
   ELSE !IF (Re .LE. 2300. .AND. Re .NE. 0.0) THEN
@@ -2953,7 +2991,9 @@ REAL phig2      !Square of vapor phase multiplier
 
 !Flow:
 
-  IF (xRo .LE. 0.0) xRo=0.00000001
+  IF (xRo .LE. 0.0) THEN
+      xRo=0.00000001
+  END IF
 
   !Two-phase friction pressure change
   CALL FanningdP(CoilType,tRi,pRi,xRi,vRi,vgi,vfi,dPdZfLiq,dPdZfVap,mRef,ID,muRef,mug,muf)
@@ -2991,7 +3031,9 @@ REAL phig2      !Square of vapor phase multiplier
   dPmom=dPdZmom*Lmod*1E-3
   dPgrav=dPdZgrav*Lmod*1E-3
   
-  IF (xRo .LE. 0.00000001) xRo=0.0
+  IF (xRo .LE. 0.00000001) THEN
+      xRo=0.0
+  END IF
                   
   RETURN
 
@@ -3701,8 +3743,13 @@ REAL dZdL    !Pressure gradient, [kPa/m]
 
 !Flow:
 
-  IF (xR .LE. 0.0 .OR. xR .GE. 1.0) vRef1=vRef
-  IF (xR .GT. 0.0 .AND. xR .LT. 1.0) vRef1=vf+xR*(vg-vf)
+  IF (xR .LE. 0.0 .OR. xR .GE. 1.0) THEN
+      vRef1=vRef
+  END IF
+  
+  IF (xR .GT. 0.0 .AND. xR .LT. 1.0) THEN
+      vRef1=vf+xR*(vg-vf)
+  END IF
 
   dZdL=HtCoil/Lcoil
 
@@ -4291,10 +4338,18 @@ REAL VoidFrac   !Void fraction
   c2=1.0-c1
   xo=xRo
   xi=xRi
-  IF (xo .GT. 1.) xo=1.0
-  IF (xi .GT. 1.) xi=1.0
-  IF (xo .LT. 0.) xo=0.
-  IF (xi .LT. 0.) xi=0.
+  IF (xo .GT. 1.) THEN
+      xo=1.0
+  END IF
+  IF (xi .GT. 1.) THEN
+      xi=1.0
+  END IF
+  IF (xo .LT. 0.) THEN
+      xo=0.
+  END IF
+  IF (xi .LT. 0.) THEN
+      xi=0.
+  END IF
   
   IF (c1+c2*xo .LT. 0) THEN
 	  WRITE(*,*)'CoilCalc: 3371'
@@ -4571,7 +4626,9 @@ INTEGER Iter                 !Iteration loop counter
         KH=0.6363*ZZ**0.0887
 	END IF
     alpha=KH*beta
-	IF (alpha .GT. 1) alpha=1
+	IF (alpha .GT. 1) THEN
+        alpha=1
+    END IF
   
 	Error=(alphaPrev-alpha)/alphaPrev
 	IF (ABS(Error) .GT. alphaTol) THEN
@@ -5261,7 +5318,9 @@ REAL FrostThk
 	ELSE !plate finned tube coil
 		!Dry fin Schimdt
 		XM=Pt/2
-		IF (XM .GT. Pl .AND. Pl .NE. 0) XM = Pl
+		IF (XM .GT. Pl .AND. Pl .NE. 0) THEN
+            XM = Pl
+        END IF
 		XL=0.5*((Pt/2)**2+Pl**2)**0.5
 		Req=1.27*XM*(XL/XM-0.3)**(0.5)
 
@@ -6274,7 +6333,9 @@ REAL EF      !Enhancement factor
 			EF=1
 		END SELECT
 	END IF
-	IF (EF .LE. 0) EF=1
+	IF (EF .LE. 0) THEN
+        EF=1
+    END IF
 
 RETURN
 
@@ -6324,7 +6385,6 @@ REAL,ALLOCATABLE,DIMENSION(:,:) :: Gmat    !matrix stores conductance
 REAL,ALLOCATABLE,DIMENSION(:,:) :: GmatInv !Inverse of Gmat
 REAL,ALLOCATABLE,DIMENSION(:) :: Mmat      !matrix stores mass flow rate
 REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
-
 
 !FLOW:
 
@@ -6485,10 +6545,18 @@ REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
 		Ckt%mRef=(Ckt%mRef*(Relax)+Ckt%mRefPrev*(1-Relax))
 	END IF
 
-	IF (ALLOCATED(Gmat)) DEALLOCATE(Gmat)
-	IF (ALLOCATED(GmatInv)) DEALLOCATE(GmatInv)
-	IF (ALLOCATED(Mmat)) DEALLOCATE(Mmat)
-	IF (ALLOCATED(Pmat)) DEALLOCATE(Pmat)
+	IF (ALLOCATED(Gmat)) THEN
+        DEALLOCATE(Gmat)
+    END IF
+	IF (ALLOCATED(GmatInv)) THEN
+        DEALLOCATE(GmatInv)
+    END IF
+	IF (ALLOCATED(Mmat)) THEN
+        DEALLOCATE(Mmat)
+    END IF
+	IF (ALLOCATED(Pmat)) THEN
+        DEALLOCATE(Pmat)
+    END IF
 
 RETURN
 
@@ -6523,7 +6591,9 @@ INTEGER :: I !Loop counter
 REAL :: TotCond !Total refrigerant flow conductance, kg/s-Pa
 REAL,ALLOCATABLE,DIMENSION(:) :: mdot !kg/s
 
-  IF (.NOT. ALLOCATED(mdot)) ALLOCATE(mdot(Nl))
+  IF (.NOT. ALLOCATED(mdot)) THEN
+      ALLOCATE(mdot(Nl))
+  ENDIF
 
   TotCond=0
   DO I=1, Nl    

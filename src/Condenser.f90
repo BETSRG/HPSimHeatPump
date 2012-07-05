@@ -925,7 +925,9 @@
 
             END DO !End circuit
 
-            IF (IsSimpleCoil .EQ. 1) EXIT
+            IF (IsSimpleCoil .EQ. 1) THEN
+                EXIT
+            END IF
 
             CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)
 
@@ -943,14 +945,18 @@
 
         END DO !end AirBCiter
 
-        IF (IsSimpleCoil .EQ. 1) EXIT
+        IF (IsSimpleCoil .EQ. 1) THEN
+            EXIT
+        END IF
 
         IF (AirBCiter .GT. AirBCmaxIter) THEN
             !WRITE(*,*)'-- WARNING -- Condenser: AirBCiter not converged.'
             ErrorFlag=CONVERGEERROR
         END IF
 
-        IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) EXIT !for equivalent circuit and uniform velocity profile no need to update mdot ref.
+        IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile) THEN
+            EXIT !for equivalent circuit and uniform velocity profile no need to update mdot ref.
+        END IF
 
         !Synchronize from circuit array to tube array
         DO I=1, NumOfCkts
@@ -992,7 +998,9 @@
                 !	  END IF
             END IF
         END DO !End Circuit
-        IF (SumpRoCkt .EQ. 0) SumpRoCkt=Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
+        IF (SumpRoCkt .EQ. 0) THEN
+            SumpRoCkt=Ckt(1)%pRo !At least 1 circuit, ISI - 07/28/06
+        END IF
         pRoCoil=SumpRoCkt/NcktLast
 
         IF (ABS(pRoCoil-pRoCoilPrev) .GT. Ptol) THEN
@@ -1001,7 +1009,9 @@
             Converged=.FALSE.
         END IF
 
-        IF (IsSameNumOfTubes .AND. IsUniformVelProfile) EXIT	
+        IF (IsSameNumOfTubes .AND. IsUniformVelProfile) THEN
+            EXIT
+        END IF
 
         IF (NOT(Converged) .OR. Iter .LE. 2) THEN 
             Converged=.TRUE. ! Reinitialize
@@ -1108,25 +1118,8 @@
         tSCoCoil=0.0
     END IF
 
-
     !Distributor pressure drop - ISI - 07/14/06
     IF (SystemType .EQ. HEATPUMP) THEN !Heat Pump
-
-        !IF (DisTubeLength .NE. 0) THEN
-
-        !	Pressure=pRoCoil*1000
-        !	Enthalpy=hRoCoil*1000
-        !	tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-        !	IF (RefPropErr .GT. 0) THEN
-        !		WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
-        !		ErrorFlag=REFPROPERROR
-        !		GOTOx 200
-        !	END IF
-
-        !	CALL Distributor(Ref$,DisTubeLength/0.0254,NumOfCkts,mRefTot,tRoCoil,hRoCoil,pRiCoil, &
-        !					 hRiCoilRtd,QdisTube,DPdisTube,ErrorFlag)
-        !	pRoCoil=pRoCoil-DPdisTube
-        !END IF
 
         !****** Liquid line calculation ******
         IF (LliqLn .GT. 0) THEN 
@@ -2330,7 +2323,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 RETURN
             END IF
 
-            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
+        IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
                 NumOfMods=3
                 ALLOCATE(Ckt(NumOfCkts))	  
                 DO I=1, NumOfCkts
@@ -2338,11 +2331,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     ALLOCATE(Ckt(I)%Tube(1))
                     ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
                 END DO
-            ELSE
-
+        ELSE
                 !ISI - 09/10/07
                 ALLOCATE(CoilSection(NumOfSections)) 
-
                 ALLOCATE(Tube(NumOfTubes))
                 ALLOCATE(Tube2D(Nl,Nt))
                 ALLOCATE(JoinTubes(NumOfTubes))
@@ -2372,7 +2363,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                 ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                 END DO
-            END IF !RS Comment: Adding in an END IF to close the above open block
+            !END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2416,9 +2407,17 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     RETURN
                 END IF
             END DO
-
+            
+        !************************* Velocity Profile ********************************
+                
+            CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      DO J=1, NumOfCkts
+		          CoilSection(NumOfSections)%CktNum(J)=J
+              END DO
+              
             DO I=1,2
-                !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2428,9 +2427,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
-            DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+            CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
                                         Numbers,NumNumbers,Status)
+            DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
                 END DO
@@ -2449,7 +2448,198 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     END DO
                 END IF
             END DO
+
+!Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube2D(I,J)=Tube((I-1)*Nt+J)
+                END DO
+            END DO
+
+            !Propagate velocity profile to suceeding rows
+            DO I=Nl-1,1,-1
+                DO J=1, Nt
+                    DO k=1, NumOfMods
+                        Tube2D(I,J)%Seg(k)%VelDev=Tube2D(I+1,J)%Seg(k)%VelDev
+                    END DO
+                END DO
+            END DO
+
+            IF (ErrorFlag .NE. NOERROR) THEN 
+                ErrorFlag=CKTFILEERROR
+                !VL: Previously: GOTO 100
+                CALL InitCondenserCoil_Helper_1
+                RETURN
+            END IF
+
+            !Determine inlet and outlet flags, split, joint or nothing
+            !SubcoolingTube=0 !Subcooling node number
+            Nnode=1
+            DO I=1, NumOfCkts
+                !Initialize
+                Ckt(I)%InJoin=0
+                Ckt(I)%InSplit=0
+                Ckt(I)%OutJoin=0
+                Ckt(I)%OutSplit=0
+                DO J=1, NumOfCkts
+                    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
+                        Ckt(I)%InJoin=Ckt(I)%InJoin+1
+                    END IF
+                    IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(1)) THEN
+                        Ckt(I)%InSplit=Ckt(I)%InSplit+1
+                    END IF
+                    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
+                        Ckt(I)%OutJoin=Ckt(I)%OutJoin+1
+                    END IF
+                    IF (Ckt(I)%TubeSequence(Ckt(I)%Ntube) .EQ. Ckt(J)%TubeSequence(1)) THEN
+                        Ckt(I)%OutSplit=Ckt(I)%OutSplit+1
+                    END IF
+                END DO
+
+                IF (Ckt(I)%InJoin .GT. 1 .OR. Ckt(I)%OutSplit .GT. 1) THEN
+                    Nnode=Nnode+1 
+                END IF
+            END DO
+
+            ALLOCATE(Node(Nnode))
+
+            !Find split and joint tube numbers
+            J=0
+            DO I=1, NumOfCkts
+                IF (Ckt(I)%InJoin .GT. 1 .AND. Ckt(I)%TubeSequence(1) .NE. SubcoolingTube) THEN 
+                    J=J+1
+                    Node(J)%Num=Ckt(I)%TubeSequence(1)
+                ELSEIF (Ckt(I)%OutSplit .GT. 1 .AND. Ckt(I)%TubeSequence(Ckt(I)%Ntube) .NE. SubcoolingTube) THEN 
+                    J=J+1
+                    Node(J)%Num=Ckt(I)%TubeSequence(Ckt(I)%Ntube)
+                END IF
+                IF (J .GT. Nnode) THEN
+                    EXIT
+                END IF
+            END DO
+
+            Node(Nnode)%Num=0 !coil outlet
+
+            !Find surrounding tubes
+            DO I=1, Nl
+                DO J=1, Nt
+                    IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
+                        Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
+                    ELSE
+                        Tube2D(I,J)%RowNum=0
+                    END IF
+                    IF (ShiftTube .EQ. 0) THEN
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            END IF
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !even row, first tube
+                            END IF
+                        END IF
+                    ELSE
+                        IF (MOD(I,2) .EQ. 1) THEN
+                            Tube2D(I,J)%Fup=I*Nt+J
+                            Tube2D(I,J)%Fdown=I*Nt+(J+1)
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            END IF
+                        ELSE
+                            Tube2D(I,J)%Fup=I*Nt+(J-1)
+                            Tube2D(I,J)%Fdown=I*Nt+J
+                            Tube2D(I,J)%Back=1
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !even row, first tube
+                            END IF
+                        END IF
+                    END IF
+
+                    IF (I .EQ. Nl) THEN
+                        Tube2D(I,J)%Fup=0
+                        Tube2D(I,J)%Fdown=0
+                    END IF
+                    IF (I .EQ. 1) THEN
+                        Tube2D(I,J)%Back=0
+                    END IF
+                END DO !End of J
+            END DO !End of I
+
+            !Synchronize 1-D and 2-D arrays
+            DO I=1, Nl
+                DO J=1, Nt
+                    Tube((I-1)*Nt+J)=Tube2D(I,J)
+                END DO
+            END DO
+
+            !Find even tubes
+            DO I=1, NumOfCkts
+
+                !Find first and last simulation tubes
+                FirstTube=1
+                LastTube=Ckt(I)%Ntube
+                IF (Ckt(I)%InSplit .GT. 1) THEN
+                    FirstTube=2 !Skip first tube
+                END IF 
+                IF (Ckt(I)%OutJoin .GT. 1) THEN
+                    LastTube=Ckt(I)%Ntube-1 !Ignore last tube
+                END IF
+
+                DO J=FirstTube, LastTube
+                    TubeNum=Ckt(I)%TubeSequence(J)
+                    Tube(TubeNum)%Even=0
+                    IF (FirstTube .EQ. 2 ) THEN
+                        IF (MOD(J,2) .EQ. 1) THEN
+                            Tube(TubeNum)%Even=1
+                        END IF
+                    ELSE
+                        IF (MOD(J,2) .EQ. 0) THEN
+                            Tube(TubeNum)%Even=1
+                        END IF
+                    END IF
+                END DO !End of J
+            END DO !End of I
+
+            !Find empty tubes
+            Tube%Empty = 1 !Initialize 
+            DO I=1, NumOfCkts
+                DO J=1, Ckt(I)%Ntube
+                    TubeNum=Ckt(I)%TubeSequence(J)
+                    Tube(TubeNum)%Empty=0
+                END DO
+            END DO
+
+            !Number of inlet circuits
+            NcktFirst=0
+            DO I=1, NumOfCkts
+                IF (Ckt(I)%InJoin .LT. 1) THEN
+                    NcktFirst=NcktFirst+1
+                END IF
+            END DO
+            IF (NcktFirst .EQ. 0) THEN
+                NcktFirst = 1 !At least one circuit, ISI - 07/28/06
+            END IF
+
+            !Number of outlet circuits
+            NcktLast=0
+            DO I=1, NumOfCkts
+                IF (Ckt(I)%OutSplit .EQ. 0) THEN
+                    NcktLast=NcktLast+1
+                END IF
+            END DO
+            IF (NcktLast .EQ. 0) THEN
+                NcktLast = 1 !At least one circuit, ISI - 07/28/06
+            END IF
             
+        END IF !RS Comment: Adding in an END IF to close the above open block (Simple Condenser or not)
+        
     ELSE !IDC ckt
 
             !**************************** Geometry *************************************
@@ -2512,7 +2702,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 Pl = Pt
             END IF
 
-            READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
+            !READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2588,7 +2778,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                 ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                 END DO
-            END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2600,7 +2789,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-            !READ(11,*,IOSTAT=ErrorFlag) !Branch#,Tube sequence...
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2639,9 +2827,17 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     RETURN
                 END IF
             END DO
-
+            
+        !************************* Velocity Profile ********************************
+        
+              CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      DO J=1, NumOfCkts
+		          CoilSection(NumOfSections)%CktNum(J)=J
+              END DO
+              
             DO I=1,2
-                !************************* Velocity Profile ********************************
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -2671,8 +2867,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-    END IF  !End of the IDC or ODC if-statement
-    
             !Synchronize 1-D and 2-D arrays
             DO I=1, Nl
                 DO J=1, Nt
@@ -2780,7 +2974,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                         Tube2D(I,J)%Fup=0
                         Tube2D(I,J)%Fdown=0
                     END IF
-                    IF (I .EQ. 1) Tube2D(I,J)%Back=0
+                    IF (I .EQ. 1) THEN
+                        Tube2D(I,J)%Back=0
+                    END IF
                 END DO !End of J
             END DO !End of I
 
@@ -2808,9 +3004,13 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     TubeNum=Ckt(I)%TubeSequence(J)
                     Tube(TubeNum)%Even=0
                     IF (FirstTube .EQ. 2 ) THEN
-                        IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+                        IF (MOD(J,2) .EQ. 1) THEN
+                            Tube(TubeNum)%Even=1
+                        END IF
                     ELSE
-                        IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+                        IF (MOD(J,2) .EQ. 0) THEN
+                            Tube(TubeNum)%Even=1
+                        END IF
                     END IF
                 END DO !End of J
             END DO !End of I
@@ -2827,17 +3027,28 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             !Number of inlet circuits
             NcktFirst=0
             DO I=1, NumOfCkts
-                IF (Ckt(I)%InJoin .LT. 1) NcktFirst=NcktFirst+1
+                IF (Ckt(I)%InJoin .LT. 1) THEN
+                    NcktFirst=NcktFirst+1
+                END IF
             END DO
-            IF (NcktFirst .EQ. 0) NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+            IF (NcktFirst .EQ. 0) THEN
+                NcktFirst = 1 !At least one circuit, ISI - 07/28/06
+            END IF
 
             !Number of outlet circuits
             NcktLast=0
             DO I=1, NumOfCkts
-                IF (Ckt(I)%OutSplit .EQ. 0) NcktLast=NcktLast+1
+                IF (Ckt(I)%OutSplit .EQ. 0) THEN
+                    NcktLast=NcktLast+1
+                END IF
             END DO
-            IF (NcktLast .EQ. 0) NcktLast = 1 !At least one circuit, ISI - 07/28/06
+            IF (NcktLast .EQ. 0) THEN
+                NcktLast = 1 !At least one circuit, ISI - 07/28/06
+            END IF
 
+            END IF !RS Comment: Adding in an END IF to close the above open block (Simple Condenser or not)
+    END IF  !End of the IDC or ODC if-statement
+    
 ELSE !Microchannel coil
 
         READ(11,*) !**************************** Geometry *************************************
@@ -3224,22 +3435,42 @@ END IF
         !ISI - 09/10/07
         IF (ALLOCATED(CoilSection)) THEN
             DO I=1, NumOfSections
-                IF (ALLOCATED(CoilSection(I)%CktNum)) DEALLOCATE(CoilSection(I)%CktNum)
+                IF (ALLOCATED(CoilSection(I)%CktNum)) THEN
+                    DEALLOCATE(CoilSection(I)%CktNum)
+                END IF
             END DO
             DEALLOCATE(CoilSection)
         END IF
 
-        IF (ALLOCATED(Tube)) DEALLOCATE(Tube)
-        IF (ALLOCATED(Tube2D)) DEALLOCATE(Tube2D)
-        IF (ALLOCATED(JoinTubes)) DEALLOCATE(JoinTubes)
-        IF (ALLOCATED(mRefIter)) DEALLOCATE(mRefIter)
+        IF (ALLOCATED(Tube)) THEN
+            DEALLOCATE(Tube)
+        END IF
+        
+        IF (ALLOCATED(Tube2D)) THEN
+            DEALLOCATE(Tube2D)
+        END IF
+        
+        IF (ALLOCATED(JoinTubes)) THEN
+            DEALLOCATE(JoinTubes)
+        END IF
+        
+        IF (ALLOCATED(mRefIter)) THEN
+            DEALLOCATE(mRefIter)
+        END IF
 
-        IF (ALLOCATED(Node)) DEALLOCATE(Node)
+        IF (ALLOCATED(Node)) THEN
+            DEALLOCATE(Node)
+        END IF
 
     END IF
 
-    IF (ALLOCATED(DisLnSeg)) DEALLOCATE(DisLnSeg) !Discharge line
-    IF (ALLOCATED(LiqLnSeg)) DEALLOCATE(LiqLnSeg) !Line line
+    IF (ALLOCATED(DisLnSeg)) THEN
+        DEALLOCATE(DisLnSeg) !Discharge line
+    END IF
+    
+    IF (ALLOCATED(LiqLnSeg)) THEN
+        DEALLOCATE(LiqLnSeg) !Line line
+    END IF
 
     !FirstTime=.TRUE.
 
@@ -3329,7 +3560,9 @@ END IF
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         !Discharge line heat loss
         !        Tloss = PI*LmodDis*ODdisLn*Hout*(tRiMod-tAoCoil)/(mRefTot*cpgRiMod)
@@ -3350,7 +3583,9 @@ END IF
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
         muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodDis,LmodTPratio, &
         IDdisLn,ElevDisLn,LmodDis,DPrefMultiplier,pRoMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         pRoMod=pRoMod-AddDPdisLn
         !pRoMod=pRoMod-AddDPdisLn/NumOfMods !ISI - 08/25/06
@@ -3358,7 +3593,9 @@ END IF
         CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
         vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
         muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         mu=(muRiMod+muRoMod)/2
 
@@ -3455,17 +3692,9 @@ END IF
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
-
-        !Liquid line heat loss
-        !        IF (IsCoolingMode .GE. 1) THEN
-        !            Tambient=tAiEvp
-        !        ELSE
-        !            Tambient=tAiCoil
-        !        END IF
-        !        Tloss = PI*LmodLiq*ODliqLn*Hout*(tRiMod-Tambient)/(mRefTot*cpgRiMod)
-        !        Qloss = mRefTot*cpgRiMod*Tloss 
-        !        QliqLn = QliqLn+Qloss
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         hRoMod=-QliqLn/mRefTot+hRiMod
         !hRoMod=-(QliqLn/NumOfMods)/mRefTot+hRiMod !ISI - 08/25/06 
@@ -3481,7 +3710,9 @@ END IF
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
         muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodLiq,LmodTPratio, &
         IDliqLn,ElevLiqLn,LmodLiq,DPrefMultiplier,pRoMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         pRoMod=pRoMod-AddDPLiqLn
         !pRoMod=pRoMod-AddDPLiqLn/NumOfMods !ISI - 08/25/06
@@ -3490,7 +3721,9 @@ END IF
         CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
         vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
         muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         mu=(muRiMod+muRoMod)/2
         muf=(mufRiMod+mufRoMod)/2
@@ -3606,17 +3839,6 @@ END IF
     hAiCoil=AirProp(4)
     wbAiCoil=AirProp(5)
 
-    !  IF (IsCoolingMode .LT. 1) THEN
-    !      IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
-    !		  tAiCoil=tAiCoil+PwrFan/Cair
-    !		  hAiCoil=hAiCoil+PwrFan/mAiCoil
-    !	  END IF
-    !	  IF (IsCmpInAirStream .NE. 0) THEN !Compressor in air stream
-    !		  tAiCoil=tAiCoil+QlossCmp/Cair
-    !		  hAiCoil=hAiCoil+QlossCmp/mAiCoil
-    !	  END IF
-    !  END IF
-
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
         hAiCoil=hAiCoil+PwrFan/mAiCoil
@@ -3655,20 +3877,6 @@ END IF
         pRiCoil=pRoCmp
         hRiCoil=hRoCmp
     END IF
-
-    !  IF (SystemType .EQ. HEATPUMPUNIT) THEN !Heat pump
-    !    !Calculate reversing valve heat transfer and pressure drop
-    !    Pressure=pRoCmp*1000
-    !    Enthalpy=hRoCmp*1000
-    !    tRoCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-    !    IF (RefPropErr .GT. 0) THEN
-    !        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
-    !        ErrorFlag=REFPROPERROR
-    !	    RETURN
-    !    END IF
-    !
-    !	CALL DischargeHeatTransfer(mRefTot,tRoCmp,tRoEvp,hRoCmp,hRiCoil)
-    !  END IF
 
     Pressure=pRiCoil*1000
     Enthalpy=hRiCoil*1000
@@ -3781,35 +3989,6 @@ END IF
 
         END DO
 
-        !END IF !ISI - 03/13/07
-
-        !else
-        !	  DO I=1, NumOfCkts
-
-        !		IF (Ckt(I)%OutSplit .EQ. 0) THEN !Outlet circuit
-        !			Ckt(I)%mRef=Ckt(I)%mRef*mRefTot/mRefTotPrev
-        !		ELSEIF (Ckt(I)%InJoin .EQ. 0) THEN !Inlet circuit
-        !		   Ckt(I)%mRef=Ckt(I)%mRef*mRefTot/mRefTotPrev
-        !		ELSEIF (Ckt(I)%InSplit .GT. 1) THEN !Split inlet
-        !			DO J=1, NumOfCkts
-        !				IF (Ckt(I)%TubeSequence(1) .EQ. Ckt(J)%TubeSequence(Ckt(J)%Ntube)) THEN
-        !					Ckt(I)%mRef=Ckt(J)%mRef/Ckt(I)%InSplit
-        !					EXIT !Found the split tube
-        !				END IF
-        !			END DO
-        !		ELSE IF (Ckt(I)%InJoin .GT. 1) THEN !Joint inlet
-        !			DO J=1, NumOfCkts
-        !				IF (Ckt(J)%TubeSequence(Ckt(J)%Ntube) .EQ. Ckt(I)%TubeSequence(1)) THEN
-        !					Ckt(I)%mRef=Ckt(J)%mRef*Ckt(I)%InJoin
-        !					EXIT !Found the joined tube
-        !				END IF
-        !			END DO
-        !		ELSE
-        !			Ckt(I)%mRef=mRefTot/NumOfCkts !to take care of one tube case, ISI - 07/28/06
-        !		END IF
-
-        !	  END DO
-        !endif
         mRefTotPrev = MRefTot
 
     END IF
@@ -4027,7 +4206,9 @@ END IF
         CALL CalcSegmentRefInletConditions(II,II,III,IV,CoilType)
 
         CALL CalcSegmentAirInletConditions(II,II,III,IV,CoilType)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         mAiMod=Ckt(II)%Tube(III)%Seg(IV)%mAi
         tAiMod=Ckt(II)%Tube(III)%Seg(IV)%tAi
@@ -4077,7 +4258,9 @@ END IF
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         IF (IsSimpleCoil .EQ. 1) THEN
             IF (IV .EQ. 2) THEN
@@ -4098,7 +4281,9 @@ END IF
         CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
 
         CALL CalcSegmentOutletConditions(II,II,III,IV,CoilType)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         QmodPrev=Qmod
         Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiMod !ISI - 12/05/06
@@ -4133,7 +4318,9 @@ END IF
         Ckt(II)%Tube(III)%Seg(IV)%tSi=tAiMod+ABS(Qmod)*Rair
         Ckt(II)%Tube(III)%Seg(IV)%tSo=tAoMod+ABS(Qmod)*Rair
 
-        IF (IsSimpleCoil .NE. 1) CALL UpdateTubeDataFromCircuitData(II,III)
+        IF (IsSimpleCoil .NE. 1) THEN
+            CALL UpdateTubeDataFromCircuitData(II,III)
+        END IF
 
     ELSE
 
@@ -4142,7 +4329,9 @@ END IF
         CALL CalcSegmentRefInletConditions(I,II,III,IV,CoilType)
 
         CALL CalcSegmentAirInletConditions(I,II,III,IV,CoilType)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         mAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi !*Slab(I)%Pass(II)%Ntube
         tAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi
@@ -4175,13 +4364,17 @@ END IF
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         tAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAo
         CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
 
         CALL CalcSegmentOutletConditions(I,II,III,IV,CoilType)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         QmodPrev=Qmod
         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod=Qmod
@@ -4736,20 +4929,32 @@ END IF
         !Correct specific heat
         !IF (cpRmod .LT. 0) THEN
         IF (cpRmod .LE. 0) THEN !ISI - 08/03/06
-            IF (xRmod .LE. 0) cpRmod = cpfRmod
-            IF (xRmod .GE. 1) cpRmod = cpgRmod 
+            IF (xRmod .LE. 0) THEN
+                cpRmod = cpfRmod
+            END IF
+            IF (xRmod .GE. 1) THEN
+                cpRmod = cpgRmod
+            END IF
         END IF
 
         !Correct thermal conductivity
         !IF (kRmod .LT. 0) THEN 
         IF (kRmod .LE. 0) THEN !ISI - 08/03/06
-            IF (xRmod .LE. 0) kRmod = kfRmod
-            IF (xRmod .GE. 1) kRmod = kgRmod 
+            IF (xRmod .LE. 0) THEN
+                kRmod = kfRmod
+            END IF
+            IF (xRmod .GE. 1) THEN
+                kRmod = kgRmod
+            END IF
         END IF
 
         IF (muRmod .LE. 0) THEN !ISI - 08/03/06
-            IF (xRmod .LE. 0) muRmod = mufRmod
-            IF (xRmod .GE. 1) muRmod = mugRmod 
+            IF (xRmod .LE. 0) THEN
+                muRmod = mufRmod
+            END IF
+            IF (xRmod .GE. 1) THEN
+                muRmod = mugRmod
+            END IF
         END IF
 
         LmodTPratio=0 
@@ -4763,13 +4968,21 @@ END IF
         (xRiMod .GE. 1 .AND. xRoMod .LT. 1 .AND. xRoMod .GT. 0))) THEN  !Condenser inlet
 
             CALL CalcTransitionSegment(CoilType) 
-            IF (ErrorFlag .GT. CONVERGEERROR) RETURN
-            IF (IsSimpleCoil .EQ. 1) IsTransitionSegment=.TRUE.
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                RETURN
+            END IF
+            IF (IsSimpleCoil .EQ. 1) THEN
+                IsTransitionSegment=.TRUE.
+            END IF
 
             !Update properties ISI - 08/03/06 
             IF (cpRmod .LE. 0) THEN 
-                IF (xRmod .LE. 0) cpRmod = cpfRmod
-                IF (xRmod .GE. 1) cpRmod = cpgRmod 
+                IF (xRmod .LE. 0) THEN
+                    cpRmod = cpfRmod
+                END IF
+                IF (xRmod .GE. 1) THEN
+                    cpRmod = cpgRmod
+                END IF
             END IF
 
             IF (kRmod .LE. 0) THEN !ISI - 08/03/06
@@ -4785,7 +4998,9 @@ END IF
         END IF 
 
         !Condenser inlet
-        IF (DTmod .EQ. 0) DTmod=(tAiMod+tRiMod)/2 !First estimate
+        IF (DTmod .EQ. 0) THEN
+            DTmod=(tAiMod+tRiMod)/2 !First estimate
+        END IF
         CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod, &
         xRmod,xRmod,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
         MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
@@ -4812,11 +5027,11 @@ END IF
         ELSE
             cRef=mRefMod*cpRmod*NumOfChannels !mRefTot*cpRmod
         END IF
-        IF (xRmod .LT. 1. .AND. xRmod .GT. 0.) cRef=BIG !Phase change
-        !IF (xRiMod .LT. 1. .AND. xRiMod .GT. 0.) cRef=BIG !Phase change
+        IF (xRmod .LT. 1. .AND. xRmod .GT. 0.) THEN
+            cRef=BIG !Phase change
+        END IF
 
         !Calc. Cair
-        !CPair=CPA(REAL(tAiMod))
         CPair=CPA(REAL(tAmod))
         cAir=mAiMod*cpAir
 
@@ -4875,18 +5090,8 @@ END IF
         !Calc. Outside air enthalpy
         IF (CoilType .NE. MCCONDENSER) THEN
             hRoMod=-Qmod/mRefMod+hRiMod
-            !IF (Wabsolute .GT. 0) THEN
-            !  CALL OilMixtureOutletEnthalpy(CompManufacturer,CoilType,RefName,Psat*1e-3,mRefMod,Qmod*1e3, &
-            !                                xRiMod,hfgRmod*1e3,cpfRmod*1e3,cpgRmod*1e3,Wabsolute,hRiMod*1e3,hRoMod,xRoMod) 
-            !  hRoMod=hRoMod/1000
-            !END IF
         ELSE
             hRoMod=-(Qmod/NumOfChannels)/mRefMod+hRiMod  !-Qmod/mRefTot+hRiMod 
-            !IF (Wabsolute .GT. 0) THEN
-            !  CALL OilMixtureOutletEnthalpy(CompManufacturer,CoilType,RefName,Psat*1e-3,mRefMod,Qmod/NumOfChannels*1e3, &
-            !                                xRiMod,hfgRmod*1e3,cpfRmod*1e3,cpgRmod*1e3,Wabsolute,hRiMod*1e3,hRoMod,xRoMod) 
-            !  hRoMod=hRoMod/1000
-            !END IF
         END IF
 
         CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
@@ -4898,12 +5103,16 @@ END IF
         muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &
         Dchannel,HtCoil,Lcoil,DPrefMultiplier,pRoMod)
 
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
         vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
         muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-        IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+        IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         IF (CoilType .NE. MCCONDENSER .AND. IsSimpleCoil .NE. 1) THEN
             !Return bend pressure drop
@@ -4921,19 +5130,21 @@ END IF
                 CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
                 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
                 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-                IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                    RETURN
+                END IF
 
             END IF
         END IF
 
         IF (IsSimpleCoil .EQ. 1) THEN
-            IF (IsTransitionSegment) EXIT
+            IF (IsTransitionSegment) THEN
+                EXIT
+            END IF
         END IF
 
         !Correct the equation, Sankar 2/19/2009 - 9:30pm
-        !DTmod=Qmod*(1/(hciMod*AiMod)+LOG(ODtube/IDtube/(2*PI*Ktube*LmodTube)))
         DTmod=Qmod*(1/(hciMod*AiMod)+LOG(ODtube/IDtube)/(2*PI*Ktube*LmodTube))
-        !WRITE(*,*)Qmod,DTmod
         DiffpRoMod=ABS((pRoMod-PrevpRoMod)/PrevpRoMod)
         DiffhRoMod=ABS((hRoMod-PrevhRoMod)/PrevhRoMod)
         IF (DiffpRoMod .GT. SMALL .OR. DiffhRoMod .GT. SMALL) THEN 
@@ -4948,8 +5159,6 @@ END IF
     IF (RefBCiter .GT. RefBCmaxIter) THEN
         ErrorFlag=CONVERGEERROR
     END IF
-    !WRITE(*,*)xRiMod,hciMod
-    !pause
 
     !Outside air temp
     tAoMod=Qmod/cAir+tAiMod
@@ -4957,7 +5166,6 @@ END IF
     !Calc. Outside air enthalpy
     hAoMod=Qmod/mAiMod+hAiMod
 
-    !WRITE(*,*)tAiMod,tAoMod,hAiMod,hAoMod,mAiMod,cAir,Qmod
     AirPropOpt=1
     AirProp(1)=tAoMod
     AirProp(4)=hAoMod
@@ -5061,18 +5269,8 @@ END IF
             !IF (CoilType .NE. 5) THEN
             IF (CoilType .NE. MCCONDENSER) THEN
                 hRoMod=-QmodTP/mRefMod+hRiMod !ISI - 06/18/05
-                !IF (Wabsolute .GT. 0) THEN
-                !  CALL OilMixtureOutletEnthalpy(CompManufacturer,CoilType,RefName,Psat*1e-3,mRefMod,QmodTP*1e3, &
-                !							    xRiMod,hfgRmod*1e3,cpfRmod*1e3,cpgRmod*1e3,Wabsolute,hRiMod*1e3,hRoMod,xRoMod) 
-                !  hRoMod=hRoMod/1000
-                !END IF
             ELSE
                 hRoMod=-(QmodTP/NumOfChannels)/mRefMod+hRiMod 
-                !IF (Wabsolute .GT. 0) THEN
-                !  CALL OilMixtureOutletEnthalpy(CompManufacturer,CoilType,RefName,Psat*1e-3,mRefMod,QmodTP/NumOfChannels*1e3, &
-                !							    xRiMod,hfgRmod*1e3,cpfRmod*1e3,cpgRmod*1e3,Wabsolute,hRiMod*1e3,hRoMod,xRoMod) 
-                !  hRoMod=hRoMod/1000
-                !END IF
             END IF
             Pressure=pRiMod*1000
             Enthalpy=hRoMod*1000
@@ -5161,7 +5359,9 @@ END IF
             TsurfMod=0
 
             !ISI - 09/11/06
-            IF (DTmod .EQ. 0) DTmod=(tAiMod+tRiMod)/2 !First estimate
+            IF (DTmod .EQ. 0) THEN
+                DTmod=(tAiMod+tRiMod)/2 !First estimate
+            END IF
             CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,0.0, &
             vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
             kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
@@ -5172,10 +5372,11 @@ END IF
             hcoMod,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio, &
             UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
 
-            IF (IsSimpleCoil .EQ. 1) mAiMod=mAiCoil*LmodTP/Lcoil !ISI - 12/05/06
+            IF (IsSimpleCoil .EQ. 1) THEN
+                mAiMod=mAiCoil*LmodTP/Lcoil !ISI - 12/05/06
+            END IF
 
             !Calc. Cair !ISI - 12/05/06
-            !CPair=CPA(REAL(tAiMod))
             CPair=CPA(REAL(tAmod))
             Cair=mAiMod*CPair
 
@@ -5218,7 +5419,9 @@ END IF
             TsurfMod=0
 
             !ISI - 09/11/06
-            IF (DTmod .EQ. 0) DTmod=(tAiMod+tRiMod)/2 !First estimate
+            IF (DTmod .EQ. 0) THEN
+                DTmod=(tAiMod+tRiMod)/2 !First estimate
+            END IF
             CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &
             vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
             kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
@@ -5229,10 +5432,11 @@ END IF
             hcoMod,hciMod,AfMod*LmodSHratio,AoMod*LmodSHratio,AiMod*LmodSHratio,AmMod*LmodSHratio, &
             UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
 
-            IF (IsSimpleCoil .EQ. 1) mAiMod=mAiCoil*LmodSH/Lcoil !ISI - 12/05/06
+            IF (IsSimpleCoil .EQ. 1) THEN
+                mAiMod=mAiCoil*LmodSH/Lcoil !ISI - 12/05/06
+            END IF
 
             !Calc. Cair !ISI - 12/05/06
-            !CPair=CPA(REAL(tAiMod))
             CPair=CPA(REAL(tAmod))
             Cair=mAiMod*CPair
 
@@ -5627,20 +5831,20 @@ END IF
             RETURN
         END IF
 
-        !CALL MODdP(RefName,CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
-        !	  	   hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
-        !		   SigmaMod,Lsegment,LmodTPratio,IDtube,ODtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
-
         CALL MODdP(RefName,CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
         hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
         SigmaMod,Lsegment,LmodTPratio,IDtube,ODtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
 
-        IF (ABS(dPfric) .LT. ABS(dPmom)) dPmom=0
+        IF (ABS(dPfric) .LT. ABS(dPmom)) THEN
+            dPmom=0
+        END IF
 
         dPmod=ABS(dPfric)+ABS(dPmom)+dPgrav
         dPmod=dPmod*DPrefMultiplier
 
-        IF (pRi-dPmod .LT. 0) dPmod=0
+        IF (pRi-dPmod .LT. 0) THEN
+            dPmod=0
+        END IF
 
         pRo=pRi-dPmod
         IF (ABS(pRo-pRoPrev)/pRoPrev .LT. SMALL .OR. Counter .GT. PressureMaxIter) THEN
@@ -5914,21 +6118,6 @@ END IF
         hRiCoil=hRoCmp
     END IF
 
-    !* This needs some work probably - Sankar!!
-    !  IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
-    !    !Calculate reversing valve heat transfer and pressure drop
-    !    Pressure=pRoCmp*1000
-    !    Enthalpy=hRoCmp*1000
-    !    tRoCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-    !    IF (RefPropErr .GT. 0) THEN
-    !        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
-    !        ErrorFlag=REFPROPERROR
-    !        GOTO 200x
-    !    END IF
-    !
-    !	CALL DischargeHeatTransfer(mRefTot,tRoCmp,tRoEvp,hRoCmp,hRiCoil)
-    !  END IF
-
     Pressure=pRiCoil*1000
     Enthalpy=hRiCoil*1000
     tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
@@ -6065,7 +6254,6 @@ END IF
                         DO IV=1,NumOfMods !Number of segments
 
                             !ref. mass flow rate for each channel
-                            !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
                             mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
 
                             AoMod=AoCoil*LmodTube/Lcoil
@@ -6082,7 +6270,6 @@ END IF
 
 
                             !Calc. circuit heat transfer
-                            !Qtube=Qtube+Slab(I)%Pass(II)%Tube(1)%Seg(IV)%Qmod
 
                         END DO !End mod
 
@@ -6142,13 +6329,11 @@ END IF
             Slab(I)%tRo=tRoSlab
             Slab(I)%xRo=xRoSlab
 
-            !Slab(I)%Qslab=mRefTot*(Slab(I)%hRi-Slab(I)%hRo)
             Slab(I)%Qslab=Slab(I)%mdot*(Slab(I)%hRi-Slab(I)%hRo) !ISI - 01/06/08
 
             CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)
 
             !Coil air side outlet conditions
-            !CPair=CPA(REAL(Slab(I)%tAi))
             CPair=CPA(REAL(tAmod))
             Cair=mAicoil*CPAir
 
@@ -6203,13 +6388,9 @@ END IF
 
     END DO !End iter
 
-    !pRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%pRo
-    !hRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%hRo
-
     Qcoil=mRefTot*(hRiCoil-hRoCoil)
 
     !Coil air side outlet conditions
-    !CPair=CPA(REAL(tAiCoil))
     CPair=CPA(REAL(tAmod))
     Cair=mAicoil*CPAir
 
@@ -6328,11 +6509,6 @@ END IF
         OUT(20)=ErrorFlag
         RETURN
     END IF
-
-    !IF (Wabsolute .GT. 0) THEN
-    !  Wlocal=LocalOilMassFraction(Wabsolute,xRiExp)
-    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-    !END IF
 
     IF (xRiExp .LE. 0) THEN
         tSCiExp=tSat-tRiExp

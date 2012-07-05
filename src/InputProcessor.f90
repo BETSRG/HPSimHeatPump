@@ -458,7 +458,9 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
 
    DO WHILE (.not. EndofFile)
      CALL ReadInputLine(IDDFile,Pos,BlankLine,InputLineLength,EndofFile)
-     IF (BlankLine .or. EndofFile) CYCLE
+     IF (BlankLine .or. EndofFile) THEN
+         CYCLE
+     END IF
      Pos=SCAN(InputLine(1:InputLineLength),',;')
      If (Pos /= 0) then
 
@@ -789,14 +791,20 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         IF (TargetChar == 'A' .or. TargetChar == 'a') THEN
           AlphaorNumeric(Count)=.true.
           ObjectDef(NumObjectDefs)%NumAlpha=ObjectDef(NumObjectDefs)%NumAlpha+1
-          IF (FieldSet) AlphFieldChecks(ObjectDef(NumObjectDefs)%NumAlpha)=CurrentFieldName
+          IF (FieldSet) THEN
+              AlphFieldChecks(ObjectDef(NumObjectDefs)%NumAlpha)=CurrentFieldName
+          END IF
           IF (ObjectDef(NumObjectDefs)%NumAlpha == 1) THEN
-            IF (INDEX(MakeUpperCase(CurrentFieldName),'NAME') /= 0) ObjectDef(NumObjectDefs)%NameAlpha1=.true.
+            IF (INDEX(MakeUpperCase(CurrentFieldName),'NAME') /= 0) THEN
+                ObjectDef(NumObjectDefs)%NameAlpha1=.true.
+            END IF
           ENDIF
         ELSE
           AlphaorNumeric(Count)=.false.
           ObjectDef(NumObjectDefs)%NumNumeric=ObjectDef(NumObjectDefs)%NumNumeric+1
-          IF (FieldSet) NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%FieldName=CurrentFieldName
+          IF (FieldSet) THEN
+              NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%FieldName=CurrentFieldName
+          END IF
         ENDIF
 
       ELSE
@@ -840,11 +848,6 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         IF (RequiredField) THEN
           RequiredFields(Count)=.true.
           MinimumNumberOfFields=MAX(Count,MinimumNumberOfFields)
-!          IF (Count > MinimumNumberOfFields) THEN
-!            MinimumNumberOfFields=Count
-!            CALL ShowWarningError('Setting Minimum number of fields for this object',EchoInputFile)
-!            ErrFlag=.true.
-!          ENDIF
         ENDIF
         CYCLE
       ENDIF
@@ -855,7 +858,9 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
       ELSE
         CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
-        IF (BlankLine .or. EndofFile) CYCLE
+        IF (BlankLine .or. EndofFile) THEN
+            CYCLE
+        END IF
         Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
       ENDIF
     ELSE
@@ -866,7 +871,9 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
     IF (Pos <= 0) THEN
                    ! must be time to read another line
       CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile)
-      IF (BlankLine .or. EndofFile) CYCLE
+      IF (BlankLine .or. EndofFile) THEN
+          CYCLE
+      END IF
     ELSE
       IF (InputLine(CurPos+Pos-1:CurPos+Pos-1) == ';') THEN
         EndofObjectDef=.true.
@@ -924,11 +931,6 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   IF (RequiredField) THEN
     RequiredFields(Count)=.true.
     MinimumNumberOfFields=MAX(Count,MinimumNumberOfFields)
-!    IF (Count > MinimumNumberOfFields) THEN
-!      MinimumNumberOfFields=Count
-!      CALL ShowWarningError('Setting Minimum number of fields for this object',EchoInputFile)
-!     ErrFlag=.true.
-!    ENDIF
   ENDIF
 
   ObjectDef(NumObjectDefs)%NumParams=Count  ! Also the total of ObjectDef(..)%NumAlpha+ObjectDef(..)%NumNumeric
@@ -974,17 +976,25 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         ! min
         Value=ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)
         IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
-          IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+          IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
         ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
-          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
         ENDIF
       ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
         ! min>
         Value=ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1) + TINY(Value)  ! infintesimally bigger than min
         IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
-          IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+          IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
         ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
-          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+              MinMaxError=.true.
+          END IF
         ENDIF
       ENDIF
       ! check max against min
@@ -993,17 +1003,25 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         Value=ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)
         ! Check max value against min
         IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
-          IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+          IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
         ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
-          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
         ENDIF
       ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
         ! max<
         Value=ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2) - TINY(Value)  ! infintesimally bigger than min
         IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
-          IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+          IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
         ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
-          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+          IF (Value == ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+              MinMaxError=.true.
+          END IF
         ENDIF
       ENDIF
       ! check if error condition
@@ -1021,14 +1039,22 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
       MinMaxError=.false.
       Value=ObjectDef(NumObjectDefs)%NumRangeChks(Count)%Default
       IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 1) THEN
-        IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+        IF (Value < ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+            MinMaxError=.true.
+        END IF
       ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(1) == 2) THEN
-        IF (Value <= ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) MinMaxError=.true.
+        IF (Value <= ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(1)) THEN
+            MinMaxError=.true.
+        END IF
       ENDIF
       IF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 3) THEN
-        IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+        IF (Value > ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+            MinMaxError=.true.
+        END IF
       ELSEIF (ObjectDef(NumObjectDefs)%NumRangeChks(Count)%WhichMinMax(2) == 4) THEN
-        IF (Value >= ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) MinMaxError=.true.
+        IF (Value >= ObjectDef(NumObjectDefs)%NumRangeChks(Count)%MinMaxValue(2)) THEN
+            MinMaxError=.true.
+        END IF
       ENDIF
       IF (MinMaxError) THEN
         !  Error stated default is not in min/max range
@@ -1115,7 +1141,9 @@ SUBROUTINE ProcessInputDataFile
 
    DO WHILE (.not. EndofFile)
      CALL ReadInputLine(IDFFile,Pos,BlankLine,InputLineLength,EndofFile)
-     IF (BlankLine .or. EndofFile) CYCLE
+     IF (BlankLine .or. EndofFile) THEN
+         CYCLE
+     END IF
      Pos=SCAN(InputLine,',;')
      If (Pos /= 0) then
        If (InputLine(Pos:Pos) == ';') then
@@ -1322,7 +1350,9 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
     Found=FindIteminList(SqueezedObject,ListofObjects,NumObjectDefs)
     IF (Found /= 0 .and. ObjectDef(Found)%ObsPtr > 0) THEN
       TFound=FindItemInList(SqueezedObject,RepObjects%OldName,NumSecretObjects)
-      IF (TFound /= 0) Found=0    ! being handled differently for this obsolete object
+      IF (TFound /= 0) THEN
+          Found=0    ! being handled differently for this obsolete object
+      END IF
     ENDIF
 
     TestingObject=.false.
@@ -1614,7 +1644,9 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
           ENDIF
         ELSE
           NumNumeric=NumNumeric+1
-          IF (NumNumeric <= LineItem%NumNumbers) CYCLE
+          IF (NumNumeric <= LineItem%NumNumbers) THEN
+              CYCLE
+          END IF
           LineItem%NumNumbers=LineItem%NumNumbers+1
           IF (ObjectDef(Found)%NumRangeChks(NumNumeric)%Defaultchk) THEN
             IF (.not. ObjectDef(Found)%NumRangeChks(NumNumeric)%DefAutoSize) THEN
@@ -1940,13 +1972,7 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
   IF (Found /= 0) THEN
     GetNumObjectsFound=ObjectDef(Found)%NumFound
-!    IF (TrackCalls(Found)) THEN
-!      CALL ShowWarningError('Multiple GetNumObjects for object='//TRIM(ObjectWord))
-!    ELSE
-!      TrackCalls(Found)=.true.
-!    ENDIF
   ELSE
-!    CALL ShowFatalError('Requested Object not found in Definitions: '//TRIM(ObjectWord))
     CALL ShowSevereError('Requested Object not found in Definitions: '//TRIM(ObjectWord))
   ENDIF
 
@@ -2172,7 +2198,9 @@ IF (Found /= 0) THEN
   ItemNum=0
 
   DO ObjNum=1,NumIDFRecords
-    IF (IDFRecords(ObjNum)%Name /= UCObjType) CYCLE
+    IF (IDFRecords(ObjNum)%Name /= UCObjType) THEN
+        CYCLE
+    END IF
     ItemNum=ItemNum+1
     IF (IDFRecords(ObjNum)%Alphas(1) == ObjName) THEN
       ItemFound=.true.
@@ -2400,7 +2428,9 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
         IF (EchoInputLine) THEN
           NumLines=NumLines+1
           WRITE(EchoInputFile,'(1X,I5,1X,A)') NumLines,TRIM(InputLine)
-          IF (TabsInLine) WRITE(EchoInputFile,"(6X,'***** Tabs eliminated from above line')")
+          IF (TabsInLine) THEN
+              WRITE(EchoInputFile,"(6X,'***** Tabs eliminated from above line')")
+          END IF
         ENDIF
         EchoInputLine=.true.
         InputLineLength=LEN_TRIM(InputLine)
@@ -2714,7 +2744,9 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
       NSpace=SCAN(UCInputLine(Pos:),' !')
       MinMaxString=TRIM(MinMaxString)//TRIM(UCInputLine(Pos:Pos+NSpace-1))
       Value=ProcessNumber(UCInputLine(Pos:Pos+NSpace-1),ErrFlag)
-      IF (ErrFlag) ErrLevel=1
+      IF (ErrFlag) THEN
+          ErrLevel=1
+      END IF
       NSpace=Scan(UCInputLine(Pos:),'!')
       IF (NSpace > 0) THEN
         DefaultString=UCInputLine(Pos:Pos+NSpace-2)
@@ -3088,16 +3120,22 @@ SUBROUTINE RangeCheck(ErrorsFound,WhatFieldString,WhatObjectString,ErrorLevel,  
 
   Error=.false.
   IF (PRESENT(UpperBoundCond)) THEN
-    IF (.not. UpperBoundCond) Error=.true.
+    IF (.not. UpperBoundCond) THEN
+        Error=.true.
+    END IF
   ENDIF
   IF (PRESENT(LowerBoundCond)) THEN
-    IF (.not. LowerBoundCond) Error=.true.
+    IF (.not. LowerBoundCond) THEN
+        Error=.true.
+    ENDIF
   ENDIF
 
   IF (Error) THEN
     CALL ConvertCasetoUPPER(ErrorLevel,ErrorString)
     Message='Out of range value field='//TRIM(WhatFieldString)//', range={'
-    IF (PRESENT(LowerBoundString)) Message=TRIM(Message)//TRIM(LowerBoundString)
+    IF (PRESENT(LowerBoundString)) THEN
+        Message=TRIM(Message)//TRIM(LowerBoundString)
+    END IF
     IF (PRESENT(LowerBoundString) .and. PRESENT(UpperBoundString)) THEN
       Message=TRIM(Message)//' and '//TRIM(UpperBoundString)
     ELSEIF (PRESENT(UpperBoundString)) THEN
@@ -3177,14 +3215,22 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
 
   Error=.false.
   IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) == 1) THEN
-    IF (Value < ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(1)) Error=.true.
+    IF (Value < ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(1)) THEN
+        Error=.true.
+    ENDIF
   ELSEIF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) == 2) THEN
-    IF (Value <= ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(1)) Error=.true.
+    IF (Value <= ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(1)) THEN
+        Error=.true.
+    END IF
   ENDIF
   IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(2) == 3) THEN
-    IF (Value > ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(2)) Error=.true.
+    IF (Value > ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(2)) THEN
+        Error=.true.
+    END IF
   ELSEIF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(2) == 4) THEN
-    IF (Value >= ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(2)) Error=.true.
+    IF (Value >= ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxValue(2)) THEN
+        Error=.true.
+    END IF
   ENDIF
 
   IF (Error) THEN
@@ -3618,7 +3664,9 @@ SUBROUTINE ReportOrphanRecordObjects
     Found=FindIteminList(IDFRecords(Count)%Name,OrphanObjectNames,NumOrphObjNames)
     IF (Found == 0) THEN
       ObjFound=FindItemInList(IDFRecords(Count)%Name,ObjectDef%Name,NumObjectDefs)
-      IF (ObjectDef(ObjFound)%ObsPtr > 0) CYCLE   ! Obsolete object, don't report "orphan"
+      IF (ObjectDef(ObjFound)%ObsPtr > 0) THEN
+          CYCLE   ! Obsolete object, don't report "orphan"
+      END IF
       NumOrphObjNames=NumOrphObjNames+1
       OrphanObjectNames(NumOrphObjNames)=IDFRecords(Count)%Name
       IF (ObjectDef(ObjFound)%NameAlpha1) THEN

@@ -1584,29 +1584,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     WRITE (48,*) EvapPAR(I)
   End Do
   CLOSE(48)
-  
-  !Get coil type - ISI - 12/25/06
-  !OPEN (11,FILE='ODCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-  !OPEN (11,FILE='HPData.idf',IOSTAT=ErrorFlag,STATUS='OLD')
-  !RS Comment: ODCckt.dat no longer used now. 6/28/12
-
-  !IF (ErrorFlag .NE. NOERROR) THEN 
-	  !WRITE(*,*)'Outdoor coil file missing.'
-      !WRITE(*,*)'Press return to terminate program.'
-	  !READ(*,*)
-	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-	  !STOP
-  !END IF
-
-  !RS Comment: No need to check for files at this stage since it's all in one file.
-  !READ (11,FMT_202,IOSTAT=ErrorFlag)LineData
-  !IF (ErrorFlag .NE. NOERROR) THEN 
-	  !WRITE(*,*)'Outdoor coil file error.'
-      !WRITE(*,*)'Press return to terminate program.'
-	  !READ(*,*)
-	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-	  !STOP
-  !END IF
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN
@@ -1623,27 +1600,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   END IF
 
   CLOSE(11)
-
-  !RS Comment: Since the IDC and ODC data are in one file, there's no need to check for it twice.
-  !OPEN (12,FILE='IDCckt.dat',IOSTAT=ErrorFlag,STATUS='OLD')
-  !RS Comment: IDCckt.dat no longer used now. (6/28/12)
-  
-  !IF (ErrorFlag .NE. NOERROR) THEN 
-	  !WRITE(*,*)'Indoor coil file missing.'
-      !WRITE(*,*)'Press return to terminate program.'
-	  !READ(*,*)
-	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-	  !STOP
-  !END IF
-
-  !READ (12,FMT_202,IOSTAT=ErrorFlag)LineData
-  !IF (ErrorFlag .NE. NOERROR) THEN 
-	  !WRITE(*,*)'Indoor coil file error.'
-      !WRITE(*,*)'Press return to terminate program.'
-	  !READ(*,*)
-	  !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
-	  !STOP
-  !END IF
 
  ! IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  !IF (IsCoolingMode .GT. 0) THEN

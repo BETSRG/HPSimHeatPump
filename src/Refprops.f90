@@ -261,8 +261,9 @@ SUBROUTINE GetFluidPropertiesData
     END IF
   END DO
 
-  IF (NumOfRefrigerants > 0) ALLOCATE(RefrigData(NumOfRefrigerants))
-
+  IF (NumOfRefrigerants > 0) THEN
+      ALLOCATE(RefrigData(NumOfRefrigerants))
+  END IF
 
           ! Take the fluid names and assign them to the appropriate derived type
   NumOfRefrigerants = 0
@@ -507,8 +508,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%CpTemps(RefrigData(Loop)%NumCpPoints))
             ALLOCATE(RefrigData(Loop)%CpfValues(RefrigData(Loop)%NumCpPoints))
 
-           
-
             ! Same number of points so assign the values
             RefrigData(Loop)%CpTemps  = FluidTemps(TempLoop)%Temps
             RefrigData(Loop)%CpfValues = Numbers(1:NumNumbers)
@@ -520,7 +519,6 @@ SUBROUTINE GetFluidPropertiesData
         EXIT ! the InData DO loop
       END IF
       
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid Cp for this refrigerant
 
           ! Get: ***** SPECIFIC HEAT of SATURATED LIQUID/VAPOR ***** (difference between Cpf and Cpg, i.e. Cpfg)
@@ -546,7 +544,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%CpfgValues(RefrigData(Loop)%NumCpPoints))
 
             ! Make sure the number of points in the two arrays (temps and values) are the same
-            
 
             ! Same number of points so assign the values
             RefrigData(Loop)%CpfgValues = Numbers(1:NumNumbers)
@@ -555,15 +552,11 @@ SUBROUTINE GetFluidPropertiesData
 
           END IF
 
-          
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
 
       END IF
-
-     
 
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated gas/fluid Cp for this refrigerant
 
@@ -592,8 +585,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%RhoTemps(RefrigData(Loop)%NumRhoPoints))
             ALLOCATE(RefrigData(Loop)%RhofValues(RefrigData(Loop)%NumRhoPoints))
 
-           
-
             ! Same number of points so assign the values
             RefrigData(Loop)%RhoTemps  = FluidTemps(TempLoop)%Temps
             RefrigData(Loop)%RhofValues = Numbers(1:NumNumbers)
@@ -602,8 +593,6 @@ SUBROUTINE GetFluidPropertiesData
 
           END IF
 
-         
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -611,7 +600,6 @@ SUBROUTINE GetFluidPropertiesData
       END IF
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
-      
 
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid enthalpy for this refrigerant
 
@@ -639,7 +627,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%RhofgValues(RefrigData(Loop)%NumRhoPoints))
 
             ! Make sure the number of points in the two arrays (temps and values) are the same
-           
 
             ! Same number of points so assign the values
             RefrigData(Loop)%RhofgValues = Numbers(1:NumNumbers)
@@ -649,7 +636,6 @@ SUBROUTINE GetFluidPropertiesData
           END IF
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
-          
 
         END DO  ! ...end of FluidTemps DO loop
 
@@ -659,9 +645,7 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat f/g density data found
       
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated gas/fluid density for this refrigerant
-
 
           ! Get: ***** ENTROPY of SATURATED LIQUID *****
     TempsName     = " "
@@ -690,7 +674,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%SfValues(RefrigData(Loop)%NumSPoints))
 
             ! Make sure the number of points in the two arrays (temps and values) are the same
-            
 
             ! Same number of points so assign the values
             RefrigData(Loop)%STemps  = FluidTemps(TempLoop)%Temps
@@ -700,8 +683,6 @@ SUBROUTINE GetFluidPropertiesData
 
           END IF
 
-         
-        
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -740,8 +721,6 @@ SUBROUTINE GetFluidPropertiesData
             ! for the temperature array.  It's time to load up the local derived type.
             ALLOCATE(RefrigData(Loop)%SfgValues(RefrigData(Loop)%NumSPoints))
 
-           
-
             ! Same number of points so assign the values
             RefrigData(Loop)%SfgValues = Numbers(1:NumNumbers)
 
@@ -751,7 +730,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
           
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -793,7 +771,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%DVTemps(RefrigData(Loop)%NumDVPoints))
             ALLOCATE(RefrigData(Loop)%DVfValues(RefrigData(Loop)%NumDVPoints))
 
-       
             ! Same number of points so assign the values
             RefrigData(Loop)%DVTemps  = FluidTemps(TempLoop)%Temps
             RefrigData(Loop)%DVfValues = Numbers(1:NumNumbers)
@@ -802,8 +779,6 @@ SUBROUTINE GetFluidPropertiesData
 
           END IF
 
-          
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -811,7 +786,6 @@ SUBROUTINE GetFluidPropertiesData
       END IF
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
-     
 
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid enthalpy for this refrigerant
 
@@ -839,7 +813,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%DVfgValues(RefrigData(Loop)%NumDVPoints))
 
             ! Make sure the number of points in the two arrays (temps and values) are the same
-           
 
             ! Same number of points so assign the values
             RefrigData(Loop)%DVfgValues = Numbers(1:NumNumbers)
@@ -850,14 +823,11 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
        
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
 
       END IF
-
-     
 
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated gas/fluid density for this refrigerant
 
@@ -887,8 +857,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%CTemps(RefrigData(Loop)%NumCPoints))
             ALLOCATE(RefrigData(Loop)%CfValues(RefrigData(Loop)%NumCPoints))
 
-            
-
             ! Same number of points so assign the values
             RefrigData(Loop)%CTemps  = FluidTemps(TempLoop)%Temps
             RefrigData(Loop)%CfValues = Numbers(1:NumNumbers)
@@ -899,7 +867,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
          
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -908,7 +875,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
      
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid enthalpy for this refrigerant
 
           ! Get: ***** CONDUCTIVITY of SATURATED LIQUID/VAPOR ***** (difference between Cf and Cg, i.e. Cfg)
@@ -934,8 +900,6 @@ SUBROUTINE GetFluidPropertiesData
             ! for the temperature array.  It's time to load up the local derived type.
             ALLOCATE(RefrigData(Loop)%CfgValues(RefrigData(Loop)%NumCPoints))
 
-           
-
             ! Same number of points so assign the values
             RefrigData(Loop)%CfgValues = Numbers(1:NumNumbers)
 
@@ -945,7 +909,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
         
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -954,7 +917,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat f/g density data found
     
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated gas/fluid density for this refrigerant
 
     
@@ -989,7 +951,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%STTemps(RefrigData(Loop)%NumSTPoints))
             ALLOCATE(RefrigData(Loop)%STfValues(RefrigData(Loop)%NumSTPoints))
             
-
             ! Same number of points so assign the values
             !RefrigData(Loop)%STemps  = FluidTemps(TempLoop)%Temps
 			RefrigData(Loop)%STTemps  = FluidTemps(TempLoop)%Temps !ISI - 11/07/06
@@ -1001,7 +962,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
          
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -1010,7 +970,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
      
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid enthalpy for this refrigerant
 
 
@@ -1039,13 +998,9 @@ SUBROUTINE GetFluidPropertiesData
 
             !ISI - 11/07/06
 			RefrigData(Loop)%NumSTPoints = FluidTemps(TempLoop)%NumOfTemps
-            !ALLOCATE(RefrigData(Loop)%STTemps(RefrigData(Loop)%NumSTPoints))
             ALLOCATE(RefrigData(Loop)%STgValues(RefrigData(Loop)%NumSTPoints))
             
-
             ! Same number of points so assign the values
-            !RefrigData(Loop)%STemps  = FluidTemps(TempLoop)%Temps
-	    !RefrigData(Loop)%STTemps  = FluidTemps(TempLoop)%Temps !ISI - 11/07/06
             RefrigData(Loop)%STgValues = Numbers(1:NumNumbers)
 
             EXIT ! the TempLoop DO loop
@@ -1054,7 +1009,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last temperature array and didn't find a match, then no match was found
          
-
         END DO  ! ...end of FluidTemps DO loop
 
         EXIT ! the InData DO loop
@@ -1063,7 +1017,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
      
-
     END DO  ! ...end of DO loop through all of the input syntax trying to find saturated fluid enthalpy for this refrigerant
 
 !*************************   SUPERHEATED DATA SECTION   **************************************
@@ -2069,7 +2022,9 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
 	Error=1
   END IF
   
-  IF (Error .GT. 0) RETURN
+  IF (Error .GT. 0) THEN
+      RETURN
+  END IF
 
   IF(.NOT. ErrorFlag)THEN
     ! find interpolation ratio w.r.t temperature
@@ -2622,9 +2577,6 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   END IF
 
   IF(.NOT. ErrorFlag)THEN
-  !PressInterpRatio = (Pressure - RefrigData(RefrigNum)%PsValues(LoPressIndex)) / &
-  !                    (RefrigData(RefrigNum)%PsValues(HiPressIndex) &
-  !                     - RefrigData(RefrigNum)%PsValues(LoPressIndex))
 
   PressInterpRatioLiq = (Pressure - RefrigData(RefrigNum)%PsfValues(LoPressIndexLiq)) / &
                       (RefrigData(RefrigNum)%PsfValues(HiPressIndexLiq) &
@@ -2634,17 +2586,9 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
                       (RefrigData(RefrigNum)%PsgValues(HiPressIndexVap) &
                        - RefrigData(RefrigNum)%PsgValues(LoPressIndexVap))
 
-  !SatVapEnthalpy = RefrigData(RefrigNum)%HfgValues(LoPressIndex) &
-  !               + PressInterpRatio*(RefrigData(RefrigNum)%HfgValues(HiPressIndex) &
-  !				    - RefrigData(RefrigNum)%HfgValues(LoPressIndex))
-
   SatVapEnthalpy = RefrigData(RefrigNum)%HfgValues(LoPressIndexVap) &
                  + PressInterpRatioVap*(RefrigData(RefrigNum)%HfgValues(HiPressIndexVap) &
 				    - RefrigData(RefrigNum)%HfgValues(LoPressIndexVap))
-
-  !SatLiqEnthalpy = RefrigData(RefrigNum)%HfValues(LoPressIndex) &
-  !               + PressInterpRatio*(RefrigData(RefrigNum)%HfValues(HiPressIndex) &
-  !				    - RefrigData(RefrigNum)%HfValues(LoPressIndex))
  
   SatLiqEnthalpy = RefrigData(RefrigNum)%HfValues(LoPressIndexLiq) &
                  + PressInterpRatioLiq*(RefrigData(RefrigNum)%HfValues(HiPressIndexLiq) &
@@ -3168,8 +3112,6 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
   ENDIF
 
   ! get the array indices
-  !LoPressIndex = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsValues)
-  !HiPressIndex = LoPressIndex + 1
 
   LoPressIndexLiq = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsfValues)
   HiPressIndexLiq = LoPressIndexLiq + 1
@@ -3215,9 +3157,6 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
   END IF
 
   IF(.NOT. ErrorFlag)THEN
-  !PressInterpRatio = (Pressure - RefrigData(RefrigNum)%PsValues(LoPressIndex)) / &
-  !                    (RefrigData(RefrigNum)%PsValues(HiPressIndex) &
-  !                     - RefrigData(RefrigNum)%PsValues(LoPressIndex))
 
   PressInterpRatioLiq = (Pressure - RefrigData(RefrigNum)%PsfValues(LoPressIndexLiq)) / &
                       (RefrigData(RefrigNum)%PsfValues(HiPressIndexLiq) &
@@ -3227,17 +3166,9 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
                       (RefrigData(RefrigNum)%PsgValues(HiPressIndexVap) &
                        - RefrigData(RefrigNum)%PsgValues(LoPressIndexVap))
 
-  !SatVapEntropy = RefrigData(RefrigNum)%SfgValues(LoPressIndex) &
-  !               + PressInterpRatio*(RefrigData(RefrigNum)%SfgValues(HiPressIndex) &
-  !				    - RefrigData(RefrigNum)%SfgValues(LoPressIndex))
-
   SatVapEntropy = RefrigData(RefrigNum)%SfgValues(LoPressIndexVap) &
                  + PressInterpRatioVap*(RefrigData(RefrigNum)%SfgValues(HiPressIndexVap) &
 				    - RefrigData(RefrigNum)%SfgValues(LoPressIndexVap))
-
-  !SatLiqEntropy = RefrigData(RefrigNum)%SfValues(LoPressIndex) &
-  !               + PressInterpRatio*(RefrigData(RefrigNum)%SfValues(HiPressIndex) &
-  !				    - RefrigData(RefrigNum)%SfValues(LoPressIndex))
 
   SatLiqEntropy = RefrigData(RefrigNum)%SfValues(LoPressIndexLiq) &
                  + PressInterpRatioLiq*(RefrigData(RefrigNum)%SfValues(HiPressIndexLiq) &
