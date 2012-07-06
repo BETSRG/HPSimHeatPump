@@ -30,27 +30,16 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
 
           ! MODULE PARAMETER DEFINITIONS:
-          CHARACTER(len=55), PARAMETER :: UpperCase='ABCDEFGHIJKLMNOPQRSTUVWXYZ¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€‹›'
-          CHARACTER(len=55), PARAMETER :: LowerCase='abcdefghijklmnopqrstuvwxyz‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝'
-          CHARACTER(len=1),  PARAMETER :: PathChar='\'
-          INTEGER,           PARAMETER :: PathLimit=255
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! MODULE VARIABLE DECLARATIONS:
-          CHARACTER(len=255) :: ProgramPath=' '     ! Path for Program, Energy+.ini
-          CHARACTER(len=270) :: FullName=' '        ! Full name of file to open, including path
-          CHARACTER(len=120) :: VerString='EnergyPlus, Version 1.1.1'      ! String that represents version information
-          CHARACTER(len=5)   :: MatchVersion='1.1.1' ! String to be matched by Version object
-          INTEGER :: TotalSevereErrors = 0 ! Counter
-          INTEGER :: TotalWarningErrors = 0 ! Counter
-          CHARACTER(len=255) :: TRNSYSProgramPath=' '     ! Path for TRNSYS link files
-          CHARACTER(len=40)  :: CurrentDateTime=' '       ! For printing current date and time at start of run
-          DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed tiem at end of run
+!          CHARACTER(len=1),  PARAMETER :: PathChar='\'
+!          INTEGER,           PARAMETER :: PathLimit=255
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! MODULE VARIABLE DECLARATIONS:
 
 
 !     NOTICE

@@ -28,7 +28,6 @@ PUBLIC          ! By definition, all variables which are placed in this data
                 ! Thus, all variables in this module must be PUBLIC.
 
           ! MODULE PARAMETER DEFINITIONS:
-REAL, PARAMETER    :: AutoSize = -99999.
 
 !     NOTICE
 !

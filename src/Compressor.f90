@@ -119,6 +119,7 @@
     INTEGER(2) RefPropOpt  !Ref prop calc. option
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
     REAL RefProp(28)
+    LOGICAL, EXTERNAL :: IssueRefPropError
 
     !Flow:
 
@@ -144,24 +145,12 @@
     Pressure=Psuc*1000
     Quality=1
     TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
 
     Pressure=Pdis*1000
     Quality=1
     TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
 
     TDPsucF=TDPsuc*1.8+32
     TDPdisF=TDPdis*1.8+32
@@ -174,82 +163,38 @@
     Temperature=TsucMap
     Pressure=Psuc*1000
     HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     HsucMap=HsucMap/1000
     rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
     SsucMap=SsucMap/1000
 
     Pressure=Pdis*1000
     Entropy=SsucMap*1000
     HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
     HdisIsenMap=HdisIsenMap/1000
 
     Pressure=Psuc*1000
     Enthalpy=Hsuc*1000
     Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
     Ssuc=Ssuc/1000
 
     Pressure=Pdis*1000
     Entropy=Ssuc*1000
     HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
     HdisIsen=HdisIsen/1000
 
     !mdot=mdotMap*(1+Fv*(rhosuc/rhoMap-1))
@@ -277,29 +222,13 @@
     Pressure=Pdis*1000
     Enthalpy=Hdis*1000
     Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0 .OR. (Tdis+273.15) .LT. 0) THEN !ISI - 06/06/07
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+
     rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Compressor: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
 
     MassCmp=VolCmp*(rhoDis+rhoSuc)/2
 

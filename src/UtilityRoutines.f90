@@ -88,7 +88,7 @@ SUBROUTINE AbortEnergyPlus
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals
+  USE DataGlobals
   USE DataStopCodes
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -209,7 +209,7 @@ SUBROUTINE EndEnergyPlus
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals
+  USE DataGlobals
   USE InputProcessor
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -418,7 +418,7 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals
+  USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -574,7 +574,7 @@ SUBROUTINE ShowWarningError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals
+  USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -628,7 +628,7 @@ SUBROUTINE ShowErrorMessage(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals, ONLY: VerString
+  USE DataGlobals, ONLY: VerString
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

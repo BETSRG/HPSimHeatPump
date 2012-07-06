@@ -31,10 +31,9 @@ MODULE InputProcessor
 
           ! USE STATEMENTS:
           ! Use statements for data only modules
- USE DataStringGlobals
- USE DataGlobals, ONLY: MaxNameLength, ShowFatalError, ShowSevereError, ShowWarningError, ShowContinueError, ShowMessage
- USE DataSizing, ONLY: AutoSize
-          ! Use statements for access to subroutines in other modules
+  USE DataGlobals
+
+           ! Use statements for access to subroutines in other modules
 
  IMPLICIT NONE         ! Enforce explicit typing of all variables
  PRIVATE
@@ -3853,7 +3852,6 @@ SUBROUTINE ShowAuditErrorMessage(Severity,ErrorMessage)
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals, ONLY: VerString
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

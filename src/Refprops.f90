@@ -46,8 +46,7 @@ MODULE FluidProperties
 
         ! USE STATEMENTS
 
-USE DataGlobals, ONLY: ShowFatalError, ShowWarningError, ShowSevereError, &
-                       MaxNameLength, ShowContinueError
+USE DataGlobals, ONLY: MaxNameLength
 
 IMPLICIT NONE                           ! Enforce explicit typing of all variables
 PRIVATE
