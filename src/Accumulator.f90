@@ -1,8 +1,10 @@
     MODULE AccumulatorMod
 
     USE DataSimulation
-    USE GeneralRoutines, ONLY: IssueRefPropError
+    !USE GeneralRoutines, ONLY: IssueRefPropError
     !IMPLICIT NONE
+
+    LOGICAL, EXTERNAL :: IssueRefPropError
 
     PUBLIC InitAccumulator
     PUBLIC CalcAccumulatorMass

@@ -42,28 +42,28 @@ PRIVATE ! Everything private unless explicitly made public
   ! na
 
   !SUBROUTINE SPECIFICATIONS FOR MODULE General
-PUBLIC IssueRefPropError
+!PUBLIC IssueRefPropError
 
-CONTAINS
+!CONTAINS
 
-LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfErrorFound, VariableToSet1, VariableToSet2) RESULT (ErrorFound)
-
-    INTEGER(2), INTENT(IN) :: RefPropErrValue ! the value that was returned from the RefProp call
-    CHARACTER(len=*), INTENT(IN) :: CallingRoutine ! an identifier to the routine calling me, for reporting
-    INTEGER, INTENT(IN) :: ValueIfErrorFound ! if RefProp was erroneous, this is the signaling value to be used
-    INTEGER, INTENT(INOUT), OPTIONAL :: VariableToSet1 ! if RefProp was erroneous, this will be set to the signal value
-    REAL, INTENT(INOUT), OPTIONAL :: VariableToSet2 ! another variable to set...optionally
-
-    IF (RefPropErrValue .GT. 0) THEN
-        CALL ShowWarningError(CallingRoutine//': RefProp lookup error')
-        IF ( PRESENT ( VariableToSet1 ) ) VariableToSet1 = ValueIfErrorFound
-        IF ( PRESENT ( VariableToSet2 ) ) VariableToSet2 = ValueIfErrorFound
-        ErrorFound = .TRUE.
-    END IF
-
-    RETURN
-
-END FUNCTION
+!LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfErrorFound, VariableToSet1, VariableToSet2) RESULT (ErrorFound)
+!
+!    INTEGER(2), INTENT(IN) :: RefPropErrValue ! the value that was returned from the RefProp call
+!    CHARACTER(len=*), INTENT(IN) :: CallingRoutine ! an identifier to the routine calling me, for reporting
+!    INTEGER, INTENT(IN) :: ValueIfErrorFound ! if RefProp was erroneous, this is the signaling value to be used
+!    INTEGER, INTENT(INOUT), OPTIONAL :: VariableToSet1 ! if RefProp was erroneous, this will be set to the signal value
+!    REAL, INTENT(INOUT), OPTIONAL :: VariableToSet2 ! another variable to set...optionally
+!
+!    IF (RefPropErrValue .GT. 0) THEN
+!        CALL ShowWarningError(CallingRoutine//': RefProp lookup error')
+!        IF ( PRESENT ( VariableToSet1 ) ) VariableToSet1 = ValueIfErrorFound
+!        IF ( PRESENT ( VariableToSet2 ) ) VariableToSet2 = ValueIfErrorFound
+!        ErrorFound = .TRUE.
+!    END IF
+!
+!    RETURN
+!
+!END FUNCTION
 
 
 !     NOTICE
