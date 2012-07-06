@@ -52,10 +52,9 @@ SUBROUTINE GetInputs
 USE RefNameMod
 USE DataStopCodes
 USE InputProcessor
+USE DataGlobals, ONLY: MaxNameLength
 
 IMPLICIT NONE
-
-INTEGER, PARAMETER :: MaxNameLength = 200
 
 !Local variables
 REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm

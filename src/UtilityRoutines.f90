@@ -1,15 +1,28 @@
 
-SUBROUTINE IssueHPFatalError(exitCode, errMessage)
+SUBROUTINE IssueHPFatalError(exitCode)
 
 ! the fortran keyword STOP cannot accept a variable, only a literal or a parameter
-! thus we have to have a ridiculous case statement for all possibilities found in DataStopCodes.f90
+! thus we need a ridiculous case statement for all possibilities found in DataStopCodes.f90
 
+    USE DataGlobals, ONLY: MaxNameLength
     USE DataStopCodes
 
     INTEGER, INTENT(IN) :: exitCode
-    CHARACTER(len=*), INTENT(IN) :: errMessage
 
-    WRITE(*,*) errMessage
+    INTEGER :: Counter
+    CHARACTER(LEN=MaxNameLength) :: CodeMessage
+
+    DO Counter = 1, SIZE(StopCodes)
+        IF (exitCode == StopCodes(Counter)%ExitCode) THEN
+            CodeMessage = StopCodes(Counter)%Message
+            EXIT
+        END IF
+    END DO
+
+    WRITE(*,*) '-+-+-+-+-+-+-+-'
+    WRITE(*,*) 'Heat pump simulation fatal error!'
+    WRITE(*,*) 'Error explanation: '//TRIM(CodeMessage)
+    WRITE(*,*) 'Exit code follows:'
     SELECT CASE (exitCode)
     CASE (exit_FileIO_Missing_HPData)
         STOP exit_FileIO_Missing_HPData
@@ -44,6 +57,16 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
     RETURN
 
 END FUNCTION
+
+SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
+
+    INTEGER, INTENT(IN) :: PrnCon, PrnLog
+    CHARACTER(LEN=*), INTENT(IN) :: Message
+
+    IF (PrnLog .EQ. 1) WRITE(6,*) Message
+    IF (PrnCon .EQ. 1) WRITE(*,*) Message
+
+END SUBROUTINE
 
 SUBROUTINE AbortEnergyPlus
 
@@ -109,7 +132,7 @@ SUBROUTINE AbortEnergyPlus
   close(tempfl)
   CALL CloseMiscOpenFiles
   
-  CALL IssueHPFatalError(exit_SimProblem_EnergyPlusProblem, 'EnergyPlus Terminated--Error(s) Detected.') !ISI - 03-08-04
+  CALL IssueHPFatalError(exit_SimProblem_EnergyPlusProblem)
 
 END SUBROUTINE AbortEnergyPlus
 

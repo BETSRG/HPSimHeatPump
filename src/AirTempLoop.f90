@@ -1,4 +1,4 @@
-    REAL FUNCTION EVPTR(TINPUT,IERR)
+REAL FUNCTION EVPTR(TINPUT,IERR)
     !
     !       EVPTR(TEMPERATURE) = SUPCAL(TEMPERATURE) - SUPERE
     !       EVPTR IS USED WITH THE ROOT SOLVER 'ZERO' TO FIND TAIIE SO
@@ -11,6 +11,8 @@
     USE EvaporatorMod
     USE AccumulatorMod
     USE DataSimulation
+    USE DataGlobals, ONLY: MaxNameLength
+    USE UnitConvertMod, ONLY: Temperature_F2C
 
     IMPLICIT NONE
 
@@ -20,8 +22,6 @@
 
     REAL TINPUT
     INTEGER IERR
-
-    LOGICAL PRINT
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
@@ -35,19 +35,17 @@
 
     REAL TAIIE,XMR,TSATEI,TROE,TSATEO,SUPCAL,SUPCL,SXOE,TSATCI
     REAL SUPR,DIFFER,TSAVG,TRIC,SXIC,Hsuc
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &
-    rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve
+    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap
+    REAL rhoiLiq,rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
     INTEGER I
     
     CHARACTER(LEN=13),PARAMETER :: FMT_800 = "(A41,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_804 = "(A32,F7.2,A5)"
 
+    CHARACTER(LEN=MaxNameLength) :: PrintString ! placeholder for formatted output strings
 
-    !REAL, PARAMETER :: Tboiling=212 !Boiling temperature of air, 212 F
-
-    PRINT=.TRUE.
-
+    ! initialize some parameters
     EVPTR = 1.0E+10
     IERR = 0
     TAIIE = TINPUT
@@ -58,25 +56,12 @@
     END IF
 
     IF (Unit .EQ. 1) THEN
-
-        IF (PrnLog .EQ. 1) WRITE(6,*)
-        IF (PrnLog .EQ. 1) WRITE(6,FMT_800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit		
-        IF (PrnCon .EQ. 1) WRITE(*,*)
-        IF (PrnCon .EQ. 1) WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',(TAIIE-32)*5/9,Tunit
-
+        WRITE (PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
     ELSE
-
-        IF (PrnLog .EQ. 1) WRITE(6,*)
-        IF (PrnLog .EQ. 1) WRITE(6,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit		
-        IF (PrnCon .EQ. 1) WRITE(*,*)
-        IF (PrnCon .EQ. 1) WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
-
-    END IF      
-
-    !IF (TAIIE .GT. TSOCMP) THEN
-    !	  IERR=2
-    !	  RETURN
-    !END IF
+        WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
+    END IF
+    CALL IssueOutputMessage(PrnLog, PrnCon, '')
+    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))
 
     XMR=CompOUT(2)*3600/UnitM
 
@@ -93,10 +78,9 @@
     Quality=0
     TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        IF (PrnCon .EQ. 1) WRITE(*,*)'-- WARNING -- LowSide: Refprop error.'
-        IF (PrnLog .EQ. 1) WRITE(6,*)'-- WARNING -- LowSide: Refprop error.'
+        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
         IERR=1
-        RETURN !GO TO 200
+        RETURN
     END IF
     TSATEI=TSATEI*1.8+32
 
@@ -122,7 +106,7 @@
         SELECT CASE (INT(EvapOUT(20)))
         CASE (2)
             IERR=1
-            RETURN !GO TO 200
+            RETURN
         CASE (3,4,5)
             WRITE(*,*)'Press return to terminate program.'
             STOP
@@ -145,8 +129,6 @@
         Superheat=EvapOUT(10)
         Xliq=CondOUT(13)
         Xvap=XiCmp
-        !CALL CalcAccumulatorDP(DBLE(MdotR),TsatEvp,TsatCnd,Subcooling,Superheat, &
-        !                       Xliq,Xvap,AccumDP)
         CALL CalcAccumulatorDP(MdotR,TsatEvp,TsatCnd,Subcooling,Superheat, &
         Xliq,Xvap,AccumDP)
 
@@ -157,39 +139,31 @@
         Enthalpy=HiCmp*1000
         XiCmp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'-- WARNING -- LowSide: Refprop error.'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
             IERR=1
             RETURN
         END IF
     END IF	
 
-    !TROE=ToEvp*1.8+32
     TRIC=TiCmp*1.8+32
 
-    !Pressure=PoEvp*1000
     Pressure=PiCmp*1000
     Quality=1
-    !TSATEO=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        IF (PrnCon .EQ. 1) WRITE(*,*)'-- WARNING -- LowSide: Refprop error.'
-        IF (PrnLog .EQ. 1) WRITE(6,*)'-- WARNING -- LowSide: Refprop error.'
+        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
         IERR=1
-        RETURN !GO TO 200
+        RETURN
     END IF
-    !TSATEO=TSATEO*1.8+32
     TSATCI=TSATCI*1.8+32
 
-    !TSAVG=(TSATEI+TSATEO)/2
     TSAVG=(TSATEI+TSATCI)/2
     IF(TSAVG.GT.TAIIE) THEN
         IERR=2
     END IF
 
-    IF (IERR .GE. 1) RETURN !GO TO 200
-    !SUPCAL = TRIC - TSATCI
+    IF (IERR .GE. 1) RETURN
     SUPCAL=EvapOUT(10)*1.8 !ISI - 10/07/06
-    !SUPCAL=EvapOUT(5)*1.8 !ISI - 05/28/08	  
     SUPCL = SUPCAL
 
     IF (XICMP .LT. 0.) THEN !Edited for refprop table 01-15-04 - ISI
@@ -201,107 +175,37 @@
     SUPR = SUPER
     IF (SUPER .LT. 0.0) SUPR = -500.*(1.0 + SUPER)
     EVPTR = SUPCL - SUPR
-    IF (.NOT. PRINT) RETURN !GO TO 200
-
-    ! VL: Previously :
-    !    IF(SUPER.LT.0.0) GO TO 1
-    !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
-    !    ELSE
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER,DTunit
-    !    END IF
-    !    GO TO 2
-    !1   CONTINUE
-    !    SXIC = -SUPER
-    !    IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired quality = ',SXIC*100,Xunit
-    !    IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired quality = ',SXIC*100,Xunit
-    !2   CONTINUE
 
     IF(SUPER.LT.0.0) THEN
-
         SXIC = -SUPER
-        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired quality = ',SXIC*100,Xunit
-        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired quality = ',SXIC*100,Xunit
-
+        WRITE(PrintString,FMT_804) '           Desired quality = ',SXIC*100,Xunit
     ELSE
         IF (Unit .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER/1.8,DTunit
+            WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER/1.8,DTunit
         ELSE
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'           Desired superheat = ',SUPER,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'           Desired superheat = ',SUPER,DTunit
+            WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER,DTunit
         END IF
-
     END IF
+    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
 
-
-    ! VL: Previously:
-    !    IF(XICMP.LT.1.0) GO TO 3
-    !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
-    !    ELSE  
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
-    !    END IF
-    !    GO TO 4
-    !3   CONTINUE
-    !    IF (XICMP .LT. 0.0) GO TO 33
-    !    IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
-    !    IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
-    !    GO TO 4
-    !33  CONTINUE
-    !    IF (Unit .EQ. 1) THEN
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-    !    ELSE  
-    !        IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
-    !        IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
-    !    END IF
-    !4   CONTINUE
-
-    IF (XICMP.LT.1.0) THEN
-
-        IF (XICMP .LT. 0.0) THEN
-
-            IF (Unit .EQ. 1) THEN
-                IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-                IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL/1.8,DTunit
-            ELSE  
-                IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
-                IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'       Calculated subcooling = ',-SUPCAL,DTunit
-            END IF            
-
-        ELSE
-            
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
-            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
-           
-        END IF
-
-
-    ELSE
-
+    !This IF block will always report one and only one message based on calculated "quality"
+    IF (XICMP .LT. 0.0) THEN
         IF (Unit .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
+            WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL/1.8,DTunit
+        ELSE
+            WRITE(PrintString,FMT_804) '       Calculated subcooling = ',-SUPCAL,DTunit
+        END IF
+    ELSEIF (XICMP.LT.1.0) THEN
+        WRITE(PrintString,FMT_804)'        Calculated quality = ',XICMP*100,Xunit
+    ELSE
+        IF (Unit .EQ. 1) THEN
+            WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL/1.8,DTunit
         ELSE  
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
-            IF (PrnCon .EQ. 1) WRITE(*,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
+            WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
         END IF
-
     END IF
-
-
-!VL: Previously: 200 CONTINUE
-    !DIFFER = EVPTR
+    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
 
     RETURN
 
-!!VL: Previously: 800 FORMAT(A41,F7.2,A5)
-!!VL: Previously: 804 FORMAT(A32,F7.2,A5)
-
-    END FUNCTION
-
+END FUNCTION

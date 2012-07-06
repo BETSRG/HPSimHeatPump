@@ -33,7 +33,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
 
           ! MODULE PARAMETER DEFINITIONS:
-INTEGER, PARAMETER :: MaxNameLength = 60      ! Maximum Name Length in Characters -- should be the same
+INTEGER, PARAMETER :: MaxNameLength = 200      ! Maximum Name Length in Characters -- should be the same
                                               ! as MaxAlphaArgLength in InputProcessor module
           ! MODULE VARAIBLES:
 INTEGER :: OutputFileInits      ! Unit number for the standard Initialization output file
