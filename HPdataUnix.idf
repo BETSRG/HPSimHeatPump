@@ -646,9 +646,9 @@ FluidNames,
     R417a, REFRIGERANT,   !- name and type for fluid 5
     PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-##include fluidDataFiles\R22.idf
-##include fluidDataFiles\R134a.idf
-##include fluidDataFiles\R407c.idf
-##include fluidDataFiles\R410a.idf
-##include fluidDataFiles\R417a.idf
-##include fluidDataFiles\Propane.idf
+##include fluidDataFiles/R22.idf
+##include fluidDataFiles/R134a.idf
+##include fluidDataFiles/R407c.idf
+##include fluidDataFiles/R410a.idf
+##include fluidDataFiles/R417a.idf
+##include fluidDataFiles/Propane.idf
