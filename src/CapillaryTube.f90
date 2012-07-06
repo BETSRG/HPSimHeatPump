@@ -182,47 +182,24 @@
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) RETURN
 
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     HiEvp=HiExp
 
     Pressure=PiEvp*1000
     Enthalpy=HiEvp*1000
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     IF (LdisTube .GT. 0) THEN
         LDISTUBE=LdisTube*12/UnitL !Distributor tube length, in
@@ -248,19 +225,10 @@
     Pressure=PoExp*1000
     Enthalpy=HoExp*1000
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     Subcooling=TsiExp-TiExp
 
@@ -495,81 +463,38 @@
     Pressure=PiExp*1000
     Enthalpy=HiExp*1000
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     sigmaExp=PH(Ref$,Pressure,Enthalpy,'surfacetension',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
     sigmaExp=sigmaExp/1000
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     hfiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
     hfiExp=hfiExp/1000
 
     Quality=1
     rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     hgiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
     hgiExp=hgiExp/1000
 
     HiEvp=HiExp
@@ -577,26 +502,13 @@
     Pressure=PiEvp*1000
     Enthalpy=HiEvp*1000
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     IF (LdisTube .GT. 0) THEN
         LDISTUBE=LdisTube*12/UnitL !Distributor tube length, in
@@ -622,27 +534,15 @@
     Pressure=PoExp*1000
     Enthalpy=HoExp*1000
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
 
     Temperature=TiExp
     Quality=0
     Psat=TQ(Ref$, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Short Tube', ErrorFlag)) RETURN
     Psat=Psat/1000
 
     hfgExp=hgiExp-hfiExp
