@@ -83,39 +83,23 @@ REAL HiLiq !Liquid line enthalpy, kJ/kg
   Pressure=PiCmp*1000
   Quality=1
   TsatSuc=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- TXV: Refprop error.'
-      ErrorFlag=2
-	  RETURN
-  END IF
-    
+  CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
+
   Temperature=TsatSuc+DTsup
   Pressure=PiCmp*1000
   HiCmp=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-	  WRITE(*,*)'-- WARNING -- TXV: Refprop error.'
-	  ErrorFlag=2
-	  RETURN
-  END IF
+  CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
   HiCmp=HiCmp/1000
 
   Pressure=PoCmp*1000
   Quality=0
   TsatDis=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- TXV: Refprop error.'
-      ErrorFlag=2
-	  RETURN
-  END IF
+  CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
     
   Temperature=TsatDis-DTsub
   Pressure=PoCmp*1000
   HiLiq=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
-  IF (RefPropErr .GT. 0) THEN
-	  WRITE(*,*)'-- WARNING -- TXV: Refprop error.'
-	  ErrorFlag=2
-	  RETURN
-  END IF
+  CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
   HiLiq=HiLiq/1000
 
   Qcmp=mdot*(HiCmp-HiLiq)
