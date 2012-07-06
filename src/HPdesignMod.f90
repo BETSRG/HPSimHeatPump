@@ -899,8 +899,7 @@
                 DPtxv=CondOUT(10)-EvapIN(2)
             END IF
 
-            !CALL TXV(Ref$,DBLE(mdotr),DBLE(PiCmp),DBLE(PoCmp),Subcooling,Superheat,DPtxv,Qtxv)
-            CALL TXV(Ref$,mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
+            CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
             TxvPAR(1)=Qtxv
 
             !**************Size Capillary Tube**************

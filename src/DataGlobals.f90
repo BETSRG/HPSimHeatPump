@@ -43,6 +43,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
           INTEGER :: TotalSevereErrors = 0 ! Counter
           INTEGER :: TotalWarningErrors = 0 ! Counter
           DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed tiem at end of run
+          CHARACTER*80 :: RefName
 
           ! MODULE VARAIBLES:
 !INTEGER :: OutputFileInits      ! Unit number for the standard Initialization output file

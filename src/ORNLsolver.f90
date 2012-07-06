@@ -41,7 +41,7 @@
     USE FrostModel
     USE GeneralRoutines
     USE InputProcessor
-    USE RefNameMod
+    USE DataGlobals, ONLY: RefName
 
     IMPLICIT NONE
 
@@ -184,11 +184,10 @@
     Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
     ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
 
-    CALL InitAccumulator(AccumPAR,Ref$)
+    CALL InitAccumulator(AccumPAR)
 
-    !Initialize EnergyPlus files, and functions for refprop calculations
-  !  CALL ProcessInput ! this may need to go above HP input routine
-    CALL Refrig(Refrigerant)
+    !set up Refrigerant variable...why?
+    Refrigerant = RefName
 
     SUPERAct=SUPER
     TsiCmpAct=TsiCmp

@@ -1,4 +1,4 @@
-SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT,RefName)
+SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT)
 
 ! ----------------------------------------------------------------------
 !
@@ -25,10 +25,10 @@ SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT,RefName)
 !   Date: July 2005
 !
 ! ----------------------------------------------------------------------
+USE DataGlobals, ONLY: RefName
 
 !Flow:
 
-CHARACTER*80,     INTENT(IN) :: RefName !Refrigerant name
 REAL, INTENT(IN) :: XIN(1)
 REAL, INTENT(IN) :: PAR(2)
 REAL, INTENT(OUT) :: OUT(1)

@@ -2,6 +2,8 @@ MODULE OilMixtureMod
 
 !Contains refrigerant-oil mixture property calculation
 
+USE DataGlobals, ONLY: RefName
+
 IMPLICIT NONE
 
 PUBLIC LocalOilMassFraction
@@ -109,7 +111,7 @@ END FUNCTION LocalOilMassFraction
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureTsat(RefName,Wlocal,Psat)
+REAL FUNCTION OilMixtureTsat(Wlocal,Psat)
 
 !USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -130,7 +132,6 @@ IMPLICIT NONE
 !------------------------------------------------------------------------------
 
 !INPUTS:
-CHARACTER*80, INTENT(IN) :: RefName !Refrigerant name
 REAL,         INTENT(IN) :: Psat    !Saturation pressure for refrigerant, MPa
 REAL,         INTENT(IN) :: Wlocal  !Local oil mass fraction
 
@@ -192,7 +193,7 @@ END FUNCTION OilMixtureTsat
 
 !******************************************************************************
 
-SUBROUTINE OilMixtureOutletEnthalpy(CompManufacturer,CoilType,RefName,Psat,mdot,Qmod, &
+SUBROUTINE OilMixtureOutletEnthalpy(CompManufacturer,CoilType,Psat,mdot,Qmod, &
                                     Xin,hfg,Cpf,Cpg,Wabsolute,hin,hout,Xout)
 
 IMPLICIT NONE
@@ -219,7 +220,6 @@ INTEGER,INTENT(IN) :: CoilType !1=Condenser; 2=Evaporator;
 				               !4=Low side interconnecting pipes
 				               !5=Microchannel condenser
 				               !6=Microchannel evaporator
-CHARACTER*80, INTENT(IN)  :: RefName !Refrigerant name
 REAL, INTENT(IN) :: Psat !Saturation pressure for refrigerant, MPa
 REAL, INTENT(IN) :: mdot !Mass flow rate, kg/s
 REAL, INTENT(IN) :: Qmod !Segment capacity, W
@@ -269,7 +269,7 @@ IF (Wlocal .LE. 0 .OR. Xin .GE. 1 .OR. Xin .LE. 0) THEN
 	RETURN
 END IF
 
-TsatIn=OilMixtureTsat(RefName,Wlocal,Psat)
+TsatIn=OilMixtureTsat(Wlocal,Psat)
 
 SELECT CASE (CoilType)
 CASE(1,3,5)  !High pressure side
@@ -285,7 +285,7 @@ Xout=(Xmin+Xmax)/2 !Initial guess
 DO I=1, MaxIter
 
 	Wlocal=LocalOilMassFraction(Wabsolute,Xout)
-	TsatOut=OilMixtureTsat(RefName,Wlocal,Psat)
+	TsatOut=OilMixtureTsat(Wlocal,Psat)
 
 	DTsat=ABS(TsatIn-TsatOut)
 	DXmix=ABS(Xin-Xout)
@@ -293,7 +293,7 @@ DO I=1, MaxIter
 	Xmix=(Xin+Xout)/2
 	Tsat=(TsatIn+TsatOut)/2
 
-	CpMix=OilMixtureSpecificHeat(CompManufacturer,RefName,Wlocal,Cpf,Tsat)
+	CpMix=OilMixtureSpecificHeat(CompManufacturer,Wlocal,Cpf,Tsat)
 
 	DH=hfg*DXmix+(1-Xmix)*CpMix*DTsat+Xmix*Cpg*DTsat
 
@@ -351,7 +351,7 @@ END SUBROUTINE OilMixtureOutletEnthalpy
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureSpecificHeat(CompManufacturer,RefName,Wlocal,Cpf,Tref)
+REAL FUNCTION OilMixtureSpecificHeat(CompManufacturer,Wlocal,Cpf,Tref)
 
 IMPLICIT NONE
 
@@ -372,7 +372,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Wlocal !Local oil mass fraction
 REAL, INTENT(IN) :: Cpf    !Specific heat of liquid refrigerant, J/kg-K
 REAL, INTENT(IN) :: Tref   !Refrigerant temperature, C
@@ -389,7 +388,7 @@ REAL, EXTERNAL :: WRHO !HVACSIM+ Water property routine
 
 !FLOW:
 
-rhoOil=OilDensity(CompManufacturer,RefName,Tref)
+rhoOil=OilDensity(CompManufacturer,Tref)
 
 rhoWater=WRHO(Treference)
 
@@ -403,7 +402,7 @@ END FUNCTION OilMixtureSpecificHeat
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureDensity(CompManufacturer,RefName,Wlocal,rhof,Tref)
+REAL FUNCTION OilMixtureDensity(CompManufacturer,Wlocal,rhof,Tref)
 
 IMPLICIT NONE
 
@@ -424,7 +423,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Wlocal !Local oil mass fraction
 REAL, INTENT(IN) :: rhof   !Density of liquid refrigerant, kg/m3
 REAL, INTENT(IN) :: Tref   !Refrigerant temperature, C
@@ -434,7 +432,7 @@ REAL rhoOil   !Oil denstiy, kg/m3
 
 !FLOW:
 
-rhoOil=OilDensity(CompManufacturer,RefName,Tref)
+rhoOil=OilDensity(CompManufacturer,Tref)
 
 OilMixtureDensity=1/(wlocal/rhoOil+(1-wlocal)/rhof)
 
@@ -444,7 +442,7 @@ END FUNCTION OilMixtureDensity
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureViscosity(CompManufacturer,RefName,Wlocal,muf,MoleMassRef,Tref)
+REAL FUNCTION OilMixtureViscosity(CompManufacturer,Wlocal,muf,MoleMassRef,Tref)
 
 IMPLICIT NONE
 
@@ -465,7 +463,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Wlocal      !Local oil mass fraction
 REAL, INTENT(IN) :: muf         !Viscosity of liquid refrigerant, kg/s-m
 REAL, INTENT(IN) :: MoleMassRef !Molecular mass of refrigerant, kg/mol
@@ -484,8 +481,8 @@ REAL XiOil       !Oil Yokozeki factor
 
 !FLOW:
 
-muOil=OilDensity(CompManufacturer,RefName,Tref)* &
-      OilViscosity(CompManufacturer,RefName,Tref)*1e-6
+muOil=OilDensity(CompManufacturer,Tref)* &
+      OilViscosity(CompManufacturer,Tref)*1e-6
 
 IF (muOil .LE. 0) muOil=muf
 
@@ -529,7 +526,7 @@ END FUNCTION OilMixtureViscosity
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureSurfaceTension(CompManufacturer,RefName,Wlocal,sigmaLiq)
+REAL FUNCTION OilMixtureSurfaceTension(CompManufacturer,Wlocal,sigmaLiq)
 
 IMPLICIT NONE
 
@@ -550,7 +547,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Wlocal   !Local oil mass fraction
 REAL, INTENT(IN) :: sigmaLiq !Surface tension of liquid refrigerant, N/m
 
@@ -588,7 +584,7 @@ END FUNCTION OilMixtureSurfaceTension
 
 !******************************************************************************
 
-REAL FUNCTION OilMixtureThermalConductivity(CompManufacturer,RefName,Wlocal,kLiq)
+REAL FUNCTION OilMixtureThermalConductivity(CompManufacturer,Wlocal,kLiq)
 
 IMPLICIT NONE
 
@@ -609,7 +605,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Wlocal !Local oil mass fraction
 REAL, INTENT(IN) :: kLiq   !Thermal conductivity of liquid refrigerant, W/m-K
 
@@ -829,7 +824,7 @@ END FUNCTION OilMixtureXtt
 
 !******************************************************************************
 
-REAL FUNCTION OilViscosity(CompManufacturer,RefName,Temperature)
+REAL FUNCTION OilViscosity(CompManufacturer,Temperature)
 
 IMPLICIT NONE
 
@@ -849,7 +844,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Temperature !Temperature, C
 
 !FLOW:
@@ -888,7 +882,7 @@ END FUNCTION OilViscosity
 
 !******************************************************************************
 
-REAL FUNCTION OilDensity(CompManufacturer,RefName,Temperature)
+REAL FUNCTION OilDensity(CompManufacturer,Temperature)
 
 IMPLICIT NONE
 
@@ -908,7 +902,6 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: CompManufacturer !Compressor manufacturer
                                         !1=Copland; 2=Bristol
 									    !3=Danfoss; 4=Panasonic
-CHARACTER*80,INTENT(IN) :: RefName	!Refrigerant name
 REAL, INTENT(IN) :: Temperature !Temperature, C
 
 !FLOW:

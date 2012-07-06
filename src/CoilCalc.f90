@@ -349,16 +349,7 @@ END SUBROUTINE UAcalc
 
 !************************************************************************
 
-!ISI - 09/11/06
-!SUBROUTINE hcRefside(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,AoMod,AiMod,hfg, &
-!                     xRef,vg,vf,muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV, &
-!					 MolWeight,Psat,Pcrit,Tsat,Const,EF,hcRef)
-
-!SUBROUTINE hcRefside(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,AoMod,AiMod,hfg, &
-!                     xRi,xRo,vg,vf,muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV, &
-!					 MolWeight,Psat,Pcrit,Tsat,Const,EF,hcRef)
-
-SUBROUTINE hcRefside(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,AoMod,AiMod,hfg, &
+SUBROUTINE hcRefside(CoilType,TubeType,ID,ktube,mRef,Qout,AoMod,AiMod,hfg, &
                      xRi,xRo,vg,vf,muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV, &
 					 MolWeight,Psat,Pcrit,Tsat,sigma,DT,Wabsolute,EF,hcRef)
 
@@ -398,7 +389,6 @@ IMPLICIT NONE
 
 !Subroutine passing variables:
 !Inputs:
-CHARACTER*80     RefName	!Refrigerant name
 INTEGER          CoilType	!1-condenser; 
 							!2-evaporator;
 							!3-High side interconnecting pipes;
@@ -2343,7 +2333,7 @@ END SUBROUTINE hTPconst
 !                 vRi,vRo,vgi,vfi,vgo,vfo,mRef,muRef,mug,muf,Sigma, &
 !				 Lmod,LmodTPratio,ID,OD,HtCoil,Lcoil,dPfric,dPmom,dPgrav)
 
-SUBROUTINE MODdP(RefName,CoilType,TubeType,tRi,tRo,pRi,hg,hf,hRi,hRo,xRi,xRo, &
+SUBROUTINE MODdP(CoilType,TubeType,tRi,tRo,pRi,hg,hf,hRi,hRo,xRi,xRo, &
                  vRi,vRo,vgi,vfi,vgo,vfo,mRef,muRef,mug,muf,Sigma, &
 				 Lmod,LmodTPratio,ID,OD,HtCoil,Lcoil,dPfric,dPmom,dPgrav)
 
@@ -2377,7 +2367,6 @@ IMPLICIT NONE
 
 !Subroutine passing variables:
 !Inputs:
-CHARACTER*80     RefName    !Refrigerant name
 INTEGER          CoilType	!1-condenser; 
 							!2-evaporator;
 							!3-High side interconnecting pipes;
@@ -4075,7 +4064,7 @@ END SUBROUTINE
 
 !************************************************************************
 
-SUBROUTINE Inventory(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+SUBROUTINE Inventory(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
                      muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
@@ -4100,7 +4089,6 @@ IMPLICIT NONE
 
 !Subroutine passing variables:
 !Inputs:
-CHARACTER*80     RefName	!Refrigerant name
 INTEGER          CoilType	!1-condenser; 
 							!2-evaporator;
 							!3-High side interconnecting pipes;
@@ -4174,25 +4162,16 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
 
   IF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. (xRo .LT. 1 .AND. xRo .GT. 0)) THEN
 
-    CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
+    CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,Lmod, &
                      MassLiq,MassVap,MassMod)
 
   ELSEIF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. xRo .GE. 1) THEN !Evporator outlet
-	!FracTP=(hg-hRi)/(hRo-hRi)
+
 	FracTP=LmodTP/Lmod
 
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,0.9999D0,vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,Lmod, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
-
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,0.9999D0,vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
-    CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,0.9999,vgi,vfi,vgo,vfo,muRef,mug,muf, &
+    CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,0.9999,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
                      MassLiqTP,MassVapTP,MassModTP)
@@ -4218,7 +4197,7 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
     !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 	!				 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
     !                 MassLiqTP,MassVapTP,MassModTP)
-    CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,1.0E-6,vgi,vfi,vgo,vfo,muRef,mug,muf, &
+    CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,1.0E-6,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
                      MassLiqTP,MassVapTP,MassModTP)
@@ -4232,19 +4211,10 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
 	MassMod=MassModSP+MassModTP
 
   ELSEIF ((xRo .LT. 1 .AND. xRo .GT. 0) .AND. xRi .GE. 1) THEN !Condenser inlet
-	!FracTP=(hg-hRo)/(hRi-hRo)
+
 	FracTP=(Lmod-LmodSP)/Lmod
 
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,0.9999D0,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,Lmod, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
-
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,0.9999D0,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,Lmod-LmodSP, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
-    CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,0.9999,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
+    CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,0.9999,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,Lmod-LmodSP, &
                      MassLiqTP,MassVapTP,MassModTP)
@@ -4423,7 +4393,7 @@ END SUBROUTINE
 
 !************************************************************************
 
-SUBROUTINE CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg, &
+SUBROUTINE CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg, &
                       xRi,xRo,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                       kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit, &
 					  Tsat,Cair,Const,Rair,Rtube,AiMod,Lmod, &
@@ -4452,7 +4422,6 @@ IMPLICIT NONE
 
 !Subroutine passing variables:
 !Inputs:
-CHARACTER*80     RefName	!Refrigerant name
 INTEGER          CoilType	!1-condenser; 
 							!2-evaporator;
 							!3-High side interconnecting pipes;

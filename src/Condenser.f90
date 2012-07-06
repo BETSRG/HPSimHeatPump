@@ -1,5 +1,6 @@
     MODULE CondenserMod
 
+    USE DataGlobals, ONLY: RefName
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -71,7 +72,6 @@
     !Refprop Table variable
     !CHARACTER (len=15) :: Property           
     INTEGER            :: RefrigIndex =0
-    CHARACTER*80 :: RefName
     INTEGER :: RefID !1-R22; 2-R410A; 3-R407C; 4-R134a; 5-Propane; 6-R417A; 7-R509A
     REAL Temperature,Quality,Pressure,Enthalpy
 
@@ -1469,14 +1469,14 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
 
                     ELSE
-                        CALL Inventory(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1669,7 +1669,7 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(RefName,CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1925,13 +1925,13 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
                     ELSE
-                        CALL Inventory(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -2092,7 +2092,7 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(RefName,CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -3645,7 +3645,7 @@ END IF
 
         mu=(muRiMod+muRoMod)/2
 
-        CALL Inventory(RefName,CoilType,TubeType,IDdisLn,ktube,mRefTot,QdisLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+        CALL Inventory(CoilType,TubeType,IDdisLn,ktube,mRefTot,QdisLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
         MolWeight,pRoMod,Psat,Pcr,Tsat,Cair,Const,Rair,Rtube,AiModDis, &
@@ -3776,7 +3776,7 @@ END IF
         muf=(mufRiMod+mufRoMod)/2
         mug=(mugRiMod+mugRoMod)/2
 
-        CALL Inventory(RefName,CoilType,TubeType,IDliqLn,ktube,mRefTot,QliqLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+        CALL Inventory(CoilType,TubeType,IDliqLn,ktube,mRefTot,QliqLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
         mu,mug,muf,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiModLiq, &
@@ -5050,7 +5050,7 @@ END IF
         IF (DTmod .EQ. 0) THEN
             DTmod=(tAiMod+tRiMod)/2 !First estimate
         END IF
-        CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod, &
+        CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod, &
         xRmod,xRmod,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
         MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
 
@@ -5271,13 +5271,6 @@ END IF
         xRmod=xRiMod
     END IF
 
-    !Calc. ref side resistance
-    !ISI - 09/11/06
-    !CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRmod, &
-    !			   vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
-    !	  		   kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
-    !			   MolWeight,Psat,Pcr,Tsat,Const,EFref,hciMod)
-
     hciMod=hciMod*hciMultiplier
 
     !Condenser outlet
@@ -5412,7 +5405,7 @@ END IF
             IF (DTmod .EQ. 0) THEN
                 DTmod=(tAiMod+tRiMod)/2 !First estimate
             END IF
-            CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,0.0, &
+            CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,0.0, &
             vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
             kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
             MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
@@ -5472,7 +5465,7 @@ END IF
             IF (DTmod .EQ. 0) THEN
                 DTmod=(tAiMod+tRiMod)/2 !First estimate
             END IF
-            CALL hcRefside(RefName,CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &
+            CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &
             vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
             kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
             MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
@@ -5750,12 +5743,12 @@ END IF
     !Account for oil effect !ISI - 09/27/06
     IF (xRef .LT. 1 .AND. xRef .GT. 0 .AND. Wabsolute .GT. 0 .AND. LmodTPratio .EQ. 0) THEN
         Wlocal=LocalOilMassFraction(Wabsolute,xRef)
-        Tsat=OilMixtureTsat(RefName,Wlocal,Pref*1e-3)
-        cpfRef=OilMixtureSpecificHeat(CompManufacturer,RefName,Wlocal,cpfRef*1000,Tsat)*1e-3
-        vfRef=1/OilMixtureDensity(CompManufacturer,RefName,Wlocal,1/vfRef,tRef)
-        mufRef=OilMixtureViscosity(CompManufacturer,RefName,Wlocal,mufRef,MolWeight,tRef)
-        SigmaRef=OilMixtureSurfaceTension(CompManufacturer,RefName,Wlocal,SigmaRef)
-        kfRef=OilMixtureThermalConductivity(CompManufacturer,RefName,Wlocal,kfRef*1000)*1e-3
+        Tsat=OilMixtureTsat(Wlocal,Pref*1e-3)
+        cpfRef=OilMixtureSpecificHeat(CompManufacturer,Wlocal,cpfRef*1000,Tsat)*1e-3
+        vfRef=1/OilMixtureDensity(CompManufacturer,Wlocal,1/vfRef,tRef)
+        mufRef=OilMixtureViscosity(CompManufacturer,Wlocal,mufRef,MolWeight,tRef)
+        SigmaRef=OilMixtureSurfaceTension(CompManufacturer,Wlocal,SigmaRef)
+        kfRef=OilMixtureThermalConductivity(CompManufacturer,Wlocal,kfRef*1000)*1e-3
     END IF
 
     RETURN
@@ -5881,7 +5874,7 @@ END IF
             RETURN
         END IF
 
-        CALL MODdP(RefName,CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
+        CALL MODdP(CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
         hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
         SigmaMod,Lsegment,LmodTPratio,IDtube,ODtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
 

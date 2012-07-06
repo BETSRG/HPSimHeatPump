@@ -6,8 +6,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !       'ZERO' CONTAINS ALL OF THE LOGIC NECESSARY TO ITERATE TO
     !       A ROOT, TAIIE.
     !
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE EvaporatorMod
     USE AccumulatorMod
     USE DataSimulation

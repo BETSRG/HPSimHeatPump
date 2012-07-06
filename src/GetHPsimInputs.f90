@@ -3,9 +3,9 @@
 MODULE HeatPumpInput
 
 USE DataSimulation
+USE DataGlobals, ONLY: RefName
 
 PRIVATE
-CHARACTER*80 :: RefName             !Refrigerant name
 
 !Error Flags
 INTEGER,PARAMETER :: NOERROR       = 0
@@ -913,8 +913,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
   LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
   
-  CALL RefrigIn(Ref$)
-
+  !store the refrigerant name in data globals
+  RefName = Ref$
+  
   !Calculate charge tuning curve
   IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
 	  IF (RefChg .GT. 0) THEN

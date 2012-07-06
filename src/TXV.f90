@@ -1,5 +1,7 @@
 MODULE TXVMOD
 
+USE DataGlobals, ONLY: RefName
+
 PUBLIC TXV
 PRIVATE CalcQtxv
 PRIVATE InterpolateQtxv
@@ -8,7 +10,7 @@ PRIVATE InterpolateCF_DP
 CONTAINS
 !***********************************************************************************
 
-SUBROUTINE TXV(RefName,mdot,PiCmp,PoCmp,DTsub,DTsup,DP,Qtxv)
+SUBROUTINE TXV(mdot,PiCmp,PoCmp,DTsub,DTsup,DP,Qtxv)
 	                                                                             
 !-----------------------------------------------------------------------------------
 !
@@ -49,7 +51,6 @@ USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integratio
 IMPLICIT NONE
 
 !Subroutine argument declarations
-CHARACTER*80,     INTENT(IN)  :: RefName !Refrigerant name
 REAL, INTENT(IN)  :: mdot    !Refrigerant mass flow rate, kg/s
 REAL, INTENT(IN)  :: PiCmp   !Compressor suction pressure, kPa
 REAL, INTENT(IN)  :: PoCmp   !Compressor discharge pressure, kPa
@@ -123,7 +124,7 @@ REAL HiLiq !Liquid line enthalpy, kJ/kg
   Tevp=TsatSuc
   Tliq=TsatDis-DTsub
 
-  CALL CalcQtxv(RefName,Qcmp,Tevp,Tliq,DP,Qtxv)
+  CALL CalcQtxv(Qcmp,Tevp,Tliq,DP,Qtxv)
 
   IF (Qtxv .LT. 0) THEN
      ErrorFlag=1
@@ -136,14 +137,13 @@ END SUBROUTINE TXV
 
 !***********************************************************************************
 
-SUBROUTINE CalcQtxv(RefName,Qcmp,Tevp,Tliq,DP,Qtxv)
+SUBROUTINE CalcQtxv(Qcmp,Tevp,Tliq,DP,Qtxv)
 
 !To calculate TXV capacity
 
 IMPLICIT NONE
 
 !Subroutine passing variables:
-CHARACTER*80,     INTENT(IN)  :: RefName !Refrigerant name
 REAL, INTENT(IN)  :: Qcmp    !Compressor rated capacity, ton
 REAL, INTENT(IN)  :: Tevp    !Evaporating temperature, C
 REAL, INTENT(IN)  :: Tliq    !Liquid temperature, C

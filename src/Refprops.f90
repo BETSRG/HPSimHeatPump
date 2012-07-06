@@ -182,7 +182,7 @@ SUBROUTINE GetFluidPropertiesData
 
           ! USE STATEMENTS:
   USE InputProcessor
-  USE General, ONLY: TrimSigDigits
+  !USE General, ONLY: TrimSigDigits
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

@@ -248,7 +248,6 @@ SUBROUTINE ProcessInput
           ! USE STATEMENTS:
           ! na
 
-  USE RefNameMod
   USE DataStopCodes
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -313,33 +312,6 @@ SUBROUTINE ProcessInput
    IF (.not. ErrorsInIDD) THEN
      REWIND(Unit=EchoInputFile)
    ENDIF
- 	
-  !Ken- added to read different idf for respective refrigerant
-   !Call Refrig(Refrigerant)
-
-   !hmmm mixed case: Refrigerant will be all caps, string literal ".idf" is lower case
-   !files packaged with source are like R410a.idf...will correct file name here, maybe improve later
-   !SELECT CASE (TRIM(Refrigerant))
-   !CASE ("R22")
-   ! !nothing
-   !CASE ("R134A")
-   ! Refrigerant = "R134a"
-   !CASE ("R407C")
-   ! Refrigerant = "R470c"
-   !CASE ("R410A")
-   ! Refrigerant = "R410a"
-   !CASE ("R417A")
-   ! Refrigerant = "R417a"
-   !CASE DEFAULT
-   ! WRITE(*,*) "Refigerant name manipulation not implemented for:",Refrigerant
-   ! STOP exit_Diagnostic_RefrigerantName
-   !END SELECT
-   !
-   ! FileName = TRIM(TRIM(Refrigerant)//".idf")
-
-   !WRITE(*,*) "Attempting to open refrigerant file:", TRIM(FileName)
-   !WRITE(EchoInputFile,*) ' Processing Input Data File  -- Start'
-   !
 
    FileName = "in.idf"
 

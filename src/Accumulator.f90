@@ -1,5 +1,6 @@
 MODULE AccumulatorMod
 
+    USE DataGlobals, ONLY: RefName
     USE DataSimulation
 
     IMPLICIT NONE
@@ -8,7 +9,6 @@ MODULE AccumulatorMod
 
 PRIVATE
 
-    CHARACTER*80:: RefName !Refrigerant name
     REAL :: RatedDP !Rating pressure drop, kPa
     REAL :: RatedDT !Rating temperature drop, K
     REAL :: CoeffM !Curve fit coefficient
@@ -507,7 +507,7 @@ CONTAINS
 
     !******************************************************************************
 
-    SUBROUTINE InitAccumulator(PAR,Ref$)
+    SUBROUTINE InitAccumulator(PAR)
 
     ! ----------------------------------------------------------------------
     !
@@ -540,12 +540,9 @@ CONTAINS
 
     IMPLICIT NONE
 
-    CHARACTER*80, INTENT(IN) :: Ref$ !Refrigerant name
     REAL, INTENT(IN) :: PAR(10)
 
     !Flow:
-
-    Refname=Ref$
 
     !Convert from m to ft
     DACC = PAR(1)/0.3048 !ACCDIA
