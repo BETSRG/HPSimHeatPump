@@ -182,7 +182,9 @@ SUBROUTINE CloseMiscOpenFiles
 
       DO UnitNumber = 1, MaxUnitNumber
          INQUIRE (UNIT = UnitNumber, EXIST = exists,  OPENED = opened, IOSTAT = ios)
-         IF (exists .and. opened .and. ios == 0) CLOSE(UnitNumber)
+         IF (exists .and. opened .and. ios == 0) THEN
+             CLOSE(UnitNumber)
+         END IF
       END DO
 
   RETURN
@@ -333,17 +335,21 @@ FUNCTION GetNewUnitNumber ()  RESULT (UnitNumber)
 
   DO UnitNumber = 1, MaxUnitNumber
     IF (UnitNumber == DEFAULT_INPUT_UNIT .or. &
-        UnitNumber == DEFAULT_OUTPUT_UNIT) CYCLE
-    IF (ANY (UnitNumber == PRECONNECTED_UNITS)) CYCLE
+        UnitNumber == DEFAULT_OUTPUT_UNIT) THEN
+        CYCLE
+    END IF
+    IF (ANY (UnitNumber == PRECONNECTED_UNITS)) THEN
+        CYCLE
+    END IF
     INQUIRE (UNIT = UnitNumber, EXIST = exists,  OPENED = opened, IOSTAT = ios)
-    IF (exists .and. .not. opened .and. ios == 0) RETURN      ! result is set in UnitNumber
+    IF (exists .and. .not. opened .and. ios == 0) THEN
+        RETURN      ! result is set in UnitNumber
+    END IF
   END DO
 
   UnitNumber = -1
 
 END FUNCTION GetNewUnitNumber
-
-
 
 SUBROUTINE ShowFatalError(ErrorMessage,OutUnit1,OutUnit2)
 

@@ -25,14 +25,18 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
 
     CALL HPDM(DTVALU)
 
-    IF (FirstTimeChargeLoop) FirstTimeChargeLoop=.FALSE.
+    IF (FirstTimeChargeLoop) THEN
+        FirstTimeChargeLoop=.FALSE.
+    END IF
 
     IF (MODE .EQ. 4) THEN
         CHARGM = ( CALCHG - REFCHG ) !More subcooling, more charge
     ELSE
         CHARGM = ( REFCHG - CALCHG ) !Less superheat, more charge
     END IF
-    IF(ICHRGE.EQ.2) CHARGM = -CHARGM
+    IF(ICHRGE.EQ.2) THEN
+        CHARGM = -CHARGM
+    END IF
 
     DTVAL = DTVALU
 
@@ -43,6 +47,7 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
         ELSE
             WRITE(sPrint,FMT_1003) DTVAL
         END IF
+        
     ELSE
         IF(DTVALU.LT.0.0) THEN
             Xunit=' (%)'
@@ -52,7 +57,9 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
             ELSE
                 DTVAL = 1.0 + DTVALU/500.
                 DTVAL = -DTVALU/200.
+
                 WRITE(sPrint,FMT_1000)'Condenser quality: ',DTVAL*100,Xunit
+
             END IF
         ELSE
             IF (MODE .EQ. 1) THEN

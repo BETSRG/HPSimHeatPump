@@ -6,7 +6,12 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !       'ZERO' CONTAINS ALL OF THE LOGIC NECESSARY TO ITERATE TO
     !       A ROOT, TAIIE.
     !
+<<<<<<< .mine
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+=======
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+>>>>>>> .r98
     USE EvaporatorMod
     USE AccumulatorMod
     USE DataSimulation
@@ -60,7 +65,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
     END IF
     CALL IssueOutputMessage(PrnLog, PrnCon, '')
-    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))
+    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
 
     XMR=CompOUT(2)*3600/UnitM
 
@@ -172,7 +177,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
 
     SUPR = SUPER
-    IF (SUPER .LT. 0.0) SUPR = -500.*(1.0 + SUPER)
+    IF (SUPER .LT. 0.0) THEN
+        SUPR = -500.*(1.0 + SUPER)
+    END IF
     EVPTR = SUPCL - SUPR
 
     IF(SUPER.LT.0.0) THEN
