@@ -1,6 +1,7 @@
     MODULE AccumulatorMod
 
     USE DataSimulation
+    USE GeneralRoutines, ONLY: IssueRefPropError
     !IMPLICIT NONE
 
     PUBLIC InitAccumulator
@@ -148,59 +149,23 @@
     Pressure=pRo*1000
     Enthalpy=hRo*1000
     tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(6)=ErrorFlag
-        RETURN
-    END IF
-
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
 
     xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(6)=ErrorFlag
-        RETURN
-    END IF
-
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
 
     Pressure=pRo*1000
     Quality=1
     Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(6)=ErrorFlag
-        RETURN
-    END IF
-
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
 
     rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(6)=ErrorFlag
-        RETURN
-    END IF
-
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
 
     V=1/(rhoVap*0.0625) !Convert from kg/m3 to lbm/ft3
     Quality=0
     rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        !VL: Previously: GOTO 200
-        OUT(6)=ErrorFlag
-        RETURN
-    END IF
-
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
 
     VSATLQ=1/(rhoLiq*0.0625) !Convert from kg/m3 to lbm/ft3
 
@@ -455,42 +420,26 @@
     Temperature=TsatEvp
     Quality=1
     Psuc=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
     Psuc=Psuc/1000
 
     Temperature=TsatCnd
     Quality=1
     Pdis=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-        ErrorFlag=2
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
     Pdis=Pdis/1000
 
     IF (Superheat .GT. 0) THEN
         Pressure=Psuc*1000
         Temperature=TsatEvp+Superheat
         Hvap=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-            ErrorFlag=2
-            RETURN
-        END IF
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
         Hvap=Hvap/1000
     ELSE
         Pressure=Psuc*1000
         Quality=Xvap
         Hvap=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-            ErrorFlag=2
-            RETURN
-        END IF
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
         Hvap=Hvap/1000
     END IF
 
@@ -498,21 +447,13 @@
         Pressure=Pdis*1000
         Temperature=TsatCnd-Subcooling
         Hliq=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-            ErrorFlag=2
-            RETURN
-        END IF
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
         Hliq=Hliq/1000
     ELSE
         Pressure=Pdis*1000
         Quality=Xliq
         Hliq=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-            ErrorFlag=2
-            RETURN
-        END IF
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
         Hliq=Hliq/1000
     END IF
 
@@ -530,11 +471,7 @@
             Temperature=TsatEvp-EstDT
             Quality=1
             Psat2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-            IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'-- WARNING -- Accumulator: Refprop error.'
-                ErrorFlag=2
-                RETURN
-            END IF
+            IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
             Psat2=Psat2/1000
 
             RatedDP = Psat1 - Psat2

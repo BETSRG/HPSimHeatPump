@@ -1,13 +1,32 @@
 
 SUBROUTINE IssueHPFatalError(exitCode, errMessage)
 
+! the fortran keyword STOP cannot accept a variable, only a literal or a parameter
+! thus we have to have a ridiculous case statement for all possibilities found in DataStopCodes.f90
+
+    USE DataStopCodes
+
     INTEGER, INTENT(IN) :: exitCode
     CHARACTER(len=*), INTENT(IN) :: errMessage
 
     WRITE(*,*) errMessage
-    STOP 1 !exitCode STOP only takes string or integer literals, not variables ? ?
+    SELECT CASE (exitCode)
+    CASE (exit_FileIO_Missing_HPData)
+        STOP exit_FileIO_Missing_HPData
+    CASE (exit_Diagnostic_RefrigerantName)
+        STOP exit_Diagnostic_RefrigerantName
+    CASE (exit_SimProblem_BadInitialization)
+        STOP exit_SimProblem_BadInitialization
+    CASE (exit_SimProblem_EnergyPlusProblem)
+        STOP exit_SimProblem_EnergyPlusProblem
+    CASE DEFAULT
+        WRITE(*,*) '-+-Diagnostic-+- Unimplemented stop code in UtilityRoutines::IssueHPFatalError'
+        STOP 1
+    END SELECT
 
 END SUBROUTINE
+
+
 
 SUBROUTINE AbortEnergyPlus
 
