@@ -28,8 +28,8 @@
     !
     !
     USE InputPreProcessor
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE HeatPumpInput
     USE CompressorMod
     USE CondenserMod

@@ -1,7 +1,7 @@
     MODULE CapillaryTubeMod
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
     LOGICAL, EXTERNAL :: IssueRefPropError
 
@@ -206,8 +206,12 @@
         CALL Distributor(Ref$,LDISTUBE,Nckts,mdotCmp,TiExp,HiExp,PoEvp, &
         HoEvpRtd,QdisTube,DPdisTot,ErrorFlag)
 
-        IF (DPdisTot .LT. 0) DPdisTot = 0
-        IF (DPdisTot .GT. PiEvp) DPdisTot = 0
+        IF (DPdisTot .LT. 0) THEN
+            DPdisTot = 0
+        END IF
+        IF (DPdisTot .GT. PiEvp) THEN
+            DPdisTot = 0
+        END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
         VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3
@@ -232,7 +236,9 @@
 
     Subcooling=TsiExp-TiExp
 
-    IF (XiExp .LT. 0.0) XiExp = 0.0
+    IF (XiExp .LT. 0.0) THEN
+        XiExp = 0.0
+    END IF
 
     Acs=PI*(DcapTube**2)/4
 
@@ -515,8 +521,12 @@
         CALL Distributor(Ref$,LDISTUBE,Nckts,mdotCmp,TiExp,HiExp,PoEvp, &
         HoEvpRtd,QdisTube,DPdisTot,ErrorFlag)
 
-        IF (DPdisTot .LT. 0) DPdisTot = 0
-        IF (DPdisTot .GT. PiEvp) DPdisTot = 0
+        IF (DPdisTot .LT. 0) THEN
+            DPdisTot = 0
+        END IF
+        IF (DPdisTot .GT. PiEvp) THEN
+            DPdisTot = 0
+        END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
         VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3

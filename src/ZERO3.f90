@@ -7,7 +7,9 @@
     DATA FIRST / .TRUE. /
     !
     CALL GUESS3(AX,FAX,BX,FBX,F,DX,TOL2,IERROR)
-    IF (IERROR .NE. 0) RETURN
+    IF (IERROR .NE. 0) THEN
+        RETURN
+    END IF
     !VL: Previously: IF (FIRST) GO TO 100
     IF (FIRST) THEN
         !VL: Previously: 100     EPS = 1.0
@@ -72,8 +74,12 @@
         !VL: Previously: 
         !IF (ABS(XM) .LE. TOLX) GO TO 90
         !IF (ABS(FB) .LE. TOLF) GO TO 90
-        IF (ABS(XM) .LE. TOLX) EXIT
-        IF (ABS(FB) .LE. TOLF) EXIT
+        IF (ABS(XM) .LE. TOLX) THEN
+            EXIT
+        END IF
+        IF (ABS(FB) .LE. TOLF) THEN
+            EXIT
+        END IF
 
         !VL: Previously: 
         !IF (ABS(E) .LT. TOLX) GO TO 70
@@ -119,7 +125,9 @@
 
             !
             !VL: Previously: 60      IF (P .GT. 0.0) Q = -Q ! all GOTO 60 statements eliminated ....
-            IF (P .GT. 0.0) Q = -Q
+            IF (P .GT. 0.0) THEN
+                Q = -Q
+            END IF
             P = ABS(P)
 
             !VL: Previously:
@@ -143,8 +151,12 @@
         !VL: Previously:80      A = B   ! all GOTO 80 statements eliminated ....
         A = B
         FA = FB
-        IF (ABS(D) .GT. TOLX) B = B + D
-        IF (ABS(D) .LE. TOLX) B = B + SIGN(TOLX,XM)
+        IF (ABS(D) .GT. TOLX) THEN
+            B = B + D
+        END IF
+        IF (ABS(D) .LE. TOLX) THEN
+            B = B + SIGN(TOLX,XM)
+        END IF
         FB = F(B,IERR)
         !VL: Previously: IF ((FB*(FC/ABS(FC))) .GT. 0.) GO TO 20
         IF ((FB*(FC/ABS(FC))) .GT. 0.) THEN
@@ -169,8 +181,12 @@
     !VL: Previously: 90  ZERO3 = B ! all GOTO 90 statements eliminated ....
     ZERO3 = B
     IERROR = 0
-    IF (ABS(XM) .GT. TOLX) IERROR = 1
-    IF (ABS(FB).GT.TOLF) IERROR = IERROR + 2
+    IF (ABS(XM) .GT. TOLX) THEN
+        IERROR = 1
+    END IF
+    IF (ABS(FB).GT.TOLF) THEN
+        IERROR = IERROR + 2
+    END IF
     RETURN
     !
     !	COMPUTE MACHINE PRECISION "EPS"

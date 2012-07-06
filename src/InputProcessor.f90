@@ -286,7 +286,6 @@ SUBROUTINE ProcessInput
    ENDIF
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
-
      CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))
    ENDIF
    IDDFile=GetNewUnitNumber()
@@ -2211,7 +2210,9 @@ IF (Found /= 0) THEN
 ENDIF
 
 IF (ObjectFound) THEN
-  IF (.not. ItemFound) ItemNum=0
+  IF (.not. ItemFound) THEN
+      ItemNum=0
+  END IF
 ELSE
   ItemNum=-1  ! if object not found, then flag it
 ENDIF
@@ -2455,7 +2456,9 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
               CurrentFieldName=InputLine(Slash+6:)
               CurrentFieldName=ADJUSTL(CurrentFieldName)
               P1=SCAN(CurrentFieldName,'!')
-              IF (P1 /= 0) CurrentFieldName(P1:)=Blank
+              IF (P1 /= 0) THEN
+                  CurrentFieldName(P1:)=Blank
+              END IF
               FieldSet=.true.
             ELSE
               FieldSet=.false.
@@ -2611,7 +2614,9 @@ REAL FUNCTION ProcessNumber(String,ErrorFlag)
   PString=ADJUSTL(String)
   StringLen=LEN_TRIM(PString)
   ErrorFlag=.false.
-  IF (StringLen == 0) RETURN
+  IF (StringLen == 0) THEN
+      RETURN
+  END IF
   VerNumber=VERIFY(PString(1:StringLen),ValidNumerics)
   IF (VerNumber == 0) THEN
     Read(PString,*,IOSTAT=IoStatus) Temp
@@ -3658,7 +3663,9 @@ SUBROUTINE ReportOrphanRecordObjects
   NumOrphObjNames=0
 
   DO Count=1,NumIDFRecords
-    IF (IDFRecordsGotten(Count)) CYCLE
+    IF (IDFRecordsGotten(Count)) THEN
+        CYCLE
+    END IF
     !  This one not gotten
     Found=FindIteminList(IDFRecords(Count)%Name,OrphanObjectNames,NumOrphObjNames)
     IF (Found == 0) THEN
@@ -3885,15 +3892,33 @@ END SUBROUTINE ShowAuditErrorMessage
 
 SUBROUTINE DeallocateArrays
 
-IF (ALLOCATED(ObjectDef)) DEALLOCATE(ObjectDef)
-IF (ALLOCATED(SectionDef)) DEALLOCATE(SectionDef)
-IF (ALLOCATED(SectionsonFile )) DEALLOCATE(SectionsonFile )
-IF (ALLOCATED(IDFRecords)) DEALLOCATE(IDFRecords)
-IF (ALLOCATED(RepObjects)) DEALLOCATE(RepObjects)
-IF (ALLOCATED(ListofSections)) DEALLOCATE(ListofSections)
-IF (ALLOCATED(ListofObjects)) DEALLOCATE(ListofObjects)
-IF (ALLOCATED(ObsoleteObjectsRepNames)) DEALLOCATE(ObsoleteObjectsRepNames)
-IF (ALLOCATED(IDFRecordsGotten)) DEALLOCATE(IDFRecordsGotten)
+IF (ALLOCATED(ObjectDef)) THEN
+    DEALLOCATE(ObjectDef)
+END IF
+IF (ALLOCATED(SectionDef)) THEN
+    DEALLOCATE(SectionDef)
+END IF
+IF (ALLOCATED(SectionsonFile )) THEN
+    DEALLOCATE(SectionsonFile )
+END IF
+IF (ALLOCATED(IDFRecords)) THEN
+    DEALLOCATE(IDFRecords)
+END IF
+IF (ALLOCATED(RepObjects)) THEN
+    DEALLOCATE(RepObjects)
+END IF
+IF (ALLOCATED(ListofSections)) THEN
+    DEALLOCATE(ListofSections)
+END IF
+IF (ALLOCATED(ListofObjects)) THEN
+    DEALLOCATE(ListofObjects)
+END IF
+IF (ALLOCATED(ObsoleteObjectsRepNames)) THEN
+    DEALLOCATE(ObsoleteObjectsRepNames)
+END IF
+IF (ALLOCATED(IDFRecordsGotten)) THEN
+    DEALLOCATE(IDFRecordsGotten)
+END IF
 
 RETURN
 

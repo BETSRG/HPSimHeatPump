@@ -1298,7 +1298,9 @@
 
     !!*** Estimate saturation temperature if reasonable value not available
 
-    IF(tSat .LT. -200. .OR. tSat .GT. 1000.) tSat = 50.
+    IF(tSat .LT. -200. .OR. tSat .GT. 1000.) THEN
+        tSat = 50.
+    END IF
 
     !!*** Calculate saturation temperature by iteration using function to
     !!*** calculate saturation enthalpy from temperature
@@ -1432,7 +1434,9 @@
     !VL: Previously: DO 100 iter = 1,itmax
     DO  iter = 1,itmax
 
-        IF (WetBulb .GE. (tBoil-0.09) ) WETBULB = tBoil-0.1
+        IF (WetBulb .GE. (tBoil-0.09) ) THEN
+            WETBULB = tBoil-0.1
+        END IF
 
         !*** Determine the saturation pressure for wet bulb temperature
 
@@ -1669,7 +1673,9 @@
 
                 XIterate=(-coef(2)+SQRT(check))/coef(3)/2
                 xOther=-XIterate-coef(2)/coef(3)
-                IF (ABS(XIterate-X0) .GT. ABS(xOther-X0)) XIterate=xOther
+                IF (ABS(XIterate-X0) .GT. ABS(xOther-X0)) THEN
+                    XIterate=xOther
+                END IF
             ELSE
 
                 !*** Real Equal Roots -- one solution

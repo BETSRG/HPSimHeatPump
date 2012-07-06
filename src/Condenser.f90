@@ -574,8 +574,8 @@
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
@@ -1294,8 +1294,8 @@
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -1753,7 +1753,8 @@
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -2188,6 +2189,8 @@
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+  
+  REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
@@ -2213,8 +2216,11 @@
     
     !**************************** Model *************************************
             
+        !CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
+        !              Numbers,NumNumbers,Status)
         CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                            TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
         
         ModelName = Alphas(1)
             
@@ -2231,8 +2237,11 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
         !**************************** Geometry *************************************
 
+            !CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
+            !                    Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2350,8 +2359,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
+                !CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                !                    Numbers,NumNumbers,Status)
                 CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)
+                                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+            
                 DO I=1, NumOfCkts
                 Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
@@ -2363,7 +2376,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                 ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                 END DO
-            !END IF !RS Comment: Adding in an END IF to close the above open block
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2384,19 +2396,27 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
+                    !CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 2) THEN
+                    !CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 3) THEN
+                    !CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSE
+                    !CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
-                
+                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)
                     END DO 
@@ -2427,8 +2447,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
+            !CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+            !                            Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
@@ -2644,8 +2668,11 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             !**************************** Geometry *************************************
 
+            !CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
+            !          Numbers,NumNumbers,Status)
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2765,8 +2792,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
+                !CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                !                    Numbers,NumNumbers,Status)
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)
+                                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                
                 DO I=1, NumOfCkts
                 Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
@@ -2798,25 +2829,37 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
+                    !CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 2) THEN
+                    !CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 3) THEN
+                    !CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 4) THEN
+                    !CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 5) THEN
+                    !CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSE
+                    !CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
-                
+                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)
                     END DO 
@@ -2848,8 +2891,11 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             IsUniformVelProfile=.TRUE.
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
+                !CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
+                !                        Numbers,NumNumbers,Status)
                 CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -3500,8 +3546,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -3646,7 +3692,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -3773,8 +3820,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
 
@@ -3809,8 +3856,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE AirPropMod
     USE CoilCalcMod
     !USE ReversingValveMod
@@ -4147,7 +4194,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
 
@@ -4855,7 +4903,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
@@ -5198,8 +5247,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
@@ -5327,7 +5376,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
 
@@ -5498,8 +5548,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE OilMixtureMod
 
     IMPLICIT NONE
@@ -5735,8 +5785,8 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -5964,8 +6014,8 @@ END IF
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod

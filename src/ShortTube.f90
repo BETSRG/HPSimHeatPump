@@ -85,8 +85,8 @@
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
 
@@ -247,8 +247,12 @@
         CALL Distributor(Ref$,LDISTUBE,Nckts,mdotCmp,TiExp,HiExp,PoEvp, &
         HoEvpRtd,QdisTube,DPdisTot,ErrorFlag)
 
-        IF (DPdisTot .LT. 0) DPdisTot = 0
-        IF (DPdisTot .GT. PiEvp) DPdisTot = 0
+        IF (DPdisTot .LT. 0) THEN
+            DPdisTot = 0
+        END IF
+        IF (DPdisTot .GT. PiEvp) THEN
+            DPdisTot = 0
+        END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
         VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3
@@ -276,7 +280,9 @@
         RETURN
     END IF
 
-    IF (XiExp .LT. 0.0) XiExp = 0.0
+    IF (XiExp .LT. 0.0) THEN
+        XiExp = 0.0
+    END IF
 
     Temperature=TiExp
     Quality=0
@@ -297,7 +303,9 @@
     !END IF
 
     SUBC=(TsiExp-TiExp)/Tcr
-    IF ((TsiExp-TiExp) .LT. 0) SUBC=0
+    IF ((TsiExp-TiExp) .LT. 0) THEN
+        SUBC=0
+    END IF
 
     EVAP=(Pcr-PoExp)/Pcr
 
@@ -480,8 +488,8 @@
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
 
@@ -673,8 +681,12 @@
         CALL Distributor(Ref$,LDISTUBE,Nckts,mdotCmp,TiExp,HiExp,PoEvp, &
         HoEvpRtd,QdisTube,DPdisTot,ErrorFlag)
 
-        IF (DPdisTot .LT. 0) DPdisTot = 0
-        IF (DPdisTot .GT. PiEvp) DPdisTot = 0
+        IF (DPdisTot .LT. 0) THEN
+            DPdisTot = 0
+        END IF
+        IF (DPdisTot .GT. PiEvp) THEN
+            DPdisTot = 0
+        END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
         VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3
@@ -833,8 +845,8 @@
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim
+    !USE FluidProperties
+    USE FluidProperties_HPSim
 
     IMPLICIT NONE
 
@@ -948,7 +960,9 @@
         WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
         RETURN
     END IF
-    IF (XiExp .LT. 0.0) XiExp = 0.0
+    IF (XiExp .LT. 0.0) THEN
+        XiExp = 0.0
+    END IF
     rhoiExp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- ShortTube: Refprop error.'
@@ -1027,8 +1041,12 @@
         CALL Distributor(Ref$,LDISTUBE,Nckts,mdotCmp,TiExp,HiExp,PoEvp, &
         HoEvpRtd,QdisTube,DPdisTot,ErrorFlag)
 
-        IF (DPdisTot .LT. 0) DPdisTot = 0
-        IF (DPdisTot .GT. PiEvp) DPdisTot = 0
+        IF (DPdisTot .LT. 0) THEN
+            DPdisTot = 0
+        END IF
+        IF (DPdisTot .GT. PiEvp) THEN
+            DPdisTot = 0
+        END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
         VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3

@@ -80,8 +80,12 @@ REAL xMax !Maximum oil-mixture quality
 
 !FLOW:
 
-IF (MixtureQuality .LE. 0) MixtureQuality=0
-IF (MixtureQuality .GE. 1) MixtureQuality=1
+IF (MixtureQuality .LE. 0) THEN
+    MixtureQuality=0
+END IF
+IF (MixtureQuality .GE. 1)THEN
+    MixtureQuality=1
+END IF
 
 xMax=1-AsoluteOilMassFraction
 !IF (MixtureQuality .GT. xMax) THEN
@@ -95,7 +99,9 @@ xMax=1-AsoluteOilMassFraction
 	  LocalOilMassFraction=AsoluteOilMassFraction/(1-MixtureQuality)
 	END IF
 !END IF
-IF (LocalOilMassFraction .GT. 1) LocalOilMassFraction=1
+IF (LocalOilMassFraction .GT. 1) THEN
+    LocalOilMassFraction=1
+END IF
 
 RETURN
 
@@ -105,8 +111,8 @@ END FUNCTION LocalOilMassFraction
 
 REAL FUNCTION OilMixtureTsat(RefName,Wlocal,Psat)
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 
@@ -676,8 +682,12 @@ REAL Quality
 !FLOW:
 
 Quality=Xmix
-IF (Xmix .GT. 1) Quality=1
-IF (Xmix .LT. 0) Quality=0
+IF (Xmix .GT. 1) THEN
+    Quality=1
+END IF
+IF (Xmix .LT. 0) THEN
+    Quality=0
+END IF
 
 ReLiq=Gtot*(1-Quality)*ID/muMix
 

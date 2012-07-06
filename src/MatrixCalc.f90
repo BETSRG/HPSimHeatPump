@@ -127,7 +127,9 @@ SUBROUTINE LUD(a, n, IPVT, det)
 !         FIND PIVOT ROW
 !
           DO j = IPLUS1, n
-              If (Abs(a(IPVTMT, i)) < Abs(a(j, i))) IPVTMT = j
+              If (Abs(a(IPVTMT, i)) < Abs(a(j, i))) THEN
+                  IPVTMT = j
+              END IF
           END DO
 !
 !  ------------------------------------------------------------------

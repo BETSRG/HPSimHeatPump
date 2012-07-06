@@ -1,9 +1,10 @@
 SUBROUTINE DumpOutputs
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE AirPropMod
 USE DataSimulation
+!USE HeatPumpInput
 
 IMPLICIT NONE
 
@@ -128,15 +129,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatiCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupiCmp=TiCmp-TsatiCmp
-      IF (TsupiCmp .LT. 0 ) TsupiCmp=0
+      IF (TsupiCmp .LT. 0 ) THEN
+          TsupiCmp=0
+      END IF
 
       Quality=0
       TsatiCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsubiCmp=TsatiCmp-TiCmp
-      IF (TsubiCmp .LT. 0 ) TsubiCmp=0
+      IF (TsubiCmp .LT. 0 ) THEN
+          TsubiCmp=0
+      END IF
 
-      IF (XiCmp .GE. 1) XiCmp=1
-      IF (XiCmp .LE. 0) XiCmp=0
+      IF (XiCmp .GE. 1) THEN
+          XiCmp=1
+      END IF
+      IF (XiCmp .LE. 0) THEN
+          XiCmp=0
+      END IF
   
       PoCmp=CompIN(2)
       HoCmp=CompOUT(3)
@@ -150,15 +159,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatoCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupoCmp=ToCmp-TsatoCmp
-      IF (TsupoCmp .LT. 0 ) TsupoCmp=0
+      IF (TsupoCmp .LT. 0 ) THEN
+          TsupoCmp=0
+      END IF
 
       Quality=0
       TsatoCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsuboCmp=TsatoCmp-ToCmp
-      IF (TsuboCmp .LT. 0 ) TsuboCmp=0
+      IF (TsuboCmp .LT. 0 ) THEN
+          TsuboCmp=0
+      END IF
 
-      IF (XoCmp .GE. 1) XoCmp=1
-      IF (XoCmp .LE. 0) XoCmp=0
+      IF (XoCmp .GE. 1) THEN
+          XoCmp=1
+      END IF
+      IF (XoCmp .LE. 0) THEN
+          XoCmp=0
+      END IF
 
       PwrCmp=CompOUT(1)*1000
       MassCmp=CompOUT(6)
@@ -176,15 +193,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupiCnd=TiCnd-TsatiCnd
-      IF (TsupiCnd .LT. 0 ) TsupiCnd=0
+      IF (TsupiCnd .LT. 0 ) THEN
+          TsupiCnd=0
+      END IF
 
       Quality=0
       TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsubiCnd=TsatiCnd-TiCnd
-      IF (TsubiCnd .LT. 0 ) TsubiCnd=0
+      IF (TsubiCnd .LT. 0 ) THEN
+          TsubiCnd=0
+      END IF
 
-      IF (XiCnd .GE. 1) XiCnd=1
-      IF (XiCnd .LE. 0) XiCnd=0
+      IF (XiCnd .GE. 1) THEN
+          XiCnd=1
+      END IF
+      IF (XiCnd .LE. 0) THEN
+          XiCnd=0
+      END IF
 
       TdbiCnd=CondIN(5)
       RHiCnd=CondIN(6)
@@ -211,15 +236,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupoCnd=ToCnd-TsatoCnd
-      IF (TsupoCnd .LT. 0 ) TsupoCnd=0
+      IF (TsupoCnd .LT. 0 ) THEN
+          TsupoCnd=0
+      END IF
 
       Quality=0
       TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsuboCnd=TsatoCnd-ToCnd
-      IF (TsuboCnd .LT. 0 ) TsuboCnd=0
+      IF (TsuboCnd .LT. 0 ) THEN
+          TsuboCnd=0
+      END IF
 
-      IF (XoCnd .GE. 1) XoCnd=1
-      IF (XoCnd .LE. 0) XoCnd=0
+      IF (XoCnd .GE. 1) THEN
+          XoCnd=1
+      END IF
+      IF (XoCnd .LE. 0) THEN
+          XoCnd=0
+      END IF
 
       !CFMcnd=SCFMcnd
       Qcnd =CondOUT(15)*1000
@@ -386,15 +419,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      TsatiEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	      TsupiEvp=TiEvp-TsatiEvp
-	      IF (TsupiEvp .LT. 0 ) TsupiEvp=0
+	      IF (TsupiEvp .LT. 0 ) THEN
+              TsupiEvp=0
+          END IF
 
 	      Quality=0
 	      TsatiEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 	      TsubiEvp=TsatiEvp-TiEvp
-	      IF (TsubiEvp .LT. 0 ) TsubiEvp=0
+	      IF (TsubiEvp .LT. 0 ) THEN
+              TsubiEvp=0
+          END IF
 
-	      IF (XiEvp .GE. 1) XiEvp=1
-	      IF (XiEvp .LE. 0) XiEvp=0
+	      IF (XiEvp .GE. 1) THEN
+              XiEvp=1
+          END IF
+	      IF (XiEvp .LE. 0) THEN
+              XiEvp=0
+          END IF
 
 	      TdbiEvp=EvapIN(5)
 	      RHiEvp=EvapIN(6)
@@ -421,15 +462,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      TsatoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	      TsupoEvp=ToEvp-TsatoEvp
-	      IF (TsupoEvp .LT. 0 ) TsupoEvp=0
+	      IF (TsupoEvp .LT. 0 ) THEN
+              TsupoEvp=0
+          END IF
 
 	      Quality=0
 	      TsatoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 	      TsuboEvp=TsatoEvp-ToEvp
-	      IF (TsuboEvp .LT. 0 ) TsuboEvp=0
+	      IF (TsuboEvp .LT. 0 ) THEN
+              TsuboEvp=0
+          END IF
 
-	      IF (XoEvp .GE. 1) XoEvp=1
-	      IF (XoEvp .LE. 0) XoEvp=0
+	      IF (XoEvp .GE. 1) THEN
+              XoEvp=1
+          END IF
+	      IF (XoEvp .LE. 0) THEN
+              XoEvp=0
+          END IF
 
 	      !CFMevp=StdCFMevp
 
@@ -439,8 +488,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      QevpSens=-EvapOUT(12)*1000
 	      IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	          QevpSens = Qevp
-	          !hAoEvp=-Qevp/1000/(StdCFMevp*StandardDensity)+hAiEvp
-	          !TdboEvp=-QevpSens/1000/(StdCFMevp*StandardDensity*StandardSpecHeat)+TdbiEvp
 	          hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
 	          SpecHeat=CPA(TdbiEvp)
 	          TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp
@@ -489,8 +536,12 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 
           TsubiExp=0
 
-	      IF (XiExp .GE. 1) XiExp=1
-	      IF (XiExp .LE. 0) XiExp=0
+	      IF (XiExp .GE. 1) THEN
+              XiExp=1
+          END IF
+	      IF (XiExp .LE. 0) THEN
+              XiExp=0
+          END IF
 
 	      PoExp=0
 	      HoExp=0
@@ -544,15 +595,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
           TsupiCnd=TiCnd-TsatiCnd
-          IF (TsupiCnd .LT. 0 ) TsupiCnd=0
+          IF (TsupiCnd .LT. 0 ) THEN
+              TsupiCnd=0
+          END IF
 
           Quality=0
           TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
           TsubiCnd=TsatiCnd-TiCnd
-          IF (TsubiCnd .LT. 0 ) TsubiCnd=0
+          IF (TsubiCnd .LT. 0 ) THEN
+              TsubiCnd=0
+          END IF
 
-          IF (XiCnd .GE. 1) XiCnd=1
-          IF (XiCnd .LE. 0) XiCnd=0
+          IF (XiCnd .GE. 1) THEN
+              XiCnd=1
+          END IF
+          IF (XiCnd .LE. 0) THEN
+              XiCnd=0
+          END IF
 
           TdbiCnd=CondIN(5)
           RHiCnd=CondIN(6)
@@ -579,15 +638,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
           TsupoCnd=ToCnd-TsatoCnd
-          IF (TsupoCnd .LT. 0 ) TsupoCnd=0
+          IF (TsupoCnd .LT. 0 ) THEN
+              TsupoCnd=0
+          END IF
 
           Quality=0
           TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
           TsuboCnd=TsatoCnd-ToCnd
-          IF (TsuboCnd .LT. 0 ) TsuboCnd=0
+          IF (TsuboCnd .LT. 0 ) THEN
+              TsuboCnd=0
+          END IF
 
-          IF (XoCnd .GE. 1) XoCnd=1
-          IF (XoCnd .LE. 0) XoCnd=0
+          IF (XoCnd .GE. 1) THEN
+              XoCnd=1
+          END IF
+          IF (XoCnd .LE. 0) THEN
+              XoCnd=0
+          END IF
 
           !CFMcnd=StdCFMcnd
           Qcnd =CondOUT(15)*1000
@@ -696,8 +763,12 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TsupoCmp=TsupiCnd
           TsuboCmp=TsubiCnd
 
-          IF (XoCmp .GE. 1) XoCmp=1
-          IF (XoCmp .LE. 0) XoCmp=0
+          IF (XoCmp .GE. 1) THEN
+              XoCmp=1
+          END IF
+          IF (XoCmp .LE. 0) THEN
+              XoCmp=0
+          END IF
 
           PiCmp=0
           HiCmp=0
@@ -736,15 +807,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatiCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupiCmp=TiCmp-TsatiCmp
-      IF (TsupiCmp .LT. 0 ) TsupiCmp=0
+      IF (TsupiCmp .LT. 0 ) THEN
+          TsupiCmp=0
+      END IF
 
       Quality=0
       TsatiCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsubiCmp=TsatiCmp-TiCmp
-      IF (TsubiCmp .LT. 0 ) TsubiCmp=0
+      IF (TsubiCmp .LT. 0 ) THEN
+          TsubiCmp=0
+      END IF
 
-      IF (XiCmp .GE. 1) XiCmp=1
-      IF (XiCmp .LE. 0) XiCmp=0
+      IF (XiCmp .GE. 1) THEN
+          XiCmp=1
+      END IF
+      IF (XiCmp .LE. 0) THEN
+          XiCmp=0
+      END IF
   
       PoCmp=CompIN(2)
       HoCmp=CompOUT(3)
@@ -758,15 +837,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatoCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupoCmp=ToCmp-TsatoCmp
-      IF (TsupoCmp .LT. 0 ) TsupoCmp=0
+      IF (TsupoCmp .LT. 0 ) THEN
+          TsupoCmp=0
+      END IF
 
       Quality=0
       TsatoCmp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsuboCmp=TsatoCmp-ToCmp
-      IF (TsuboCmp .LT. 0 ) TsuboCmp=0
+      IF (TsuboCmp .LT. 0 ) THEN
+          TsuboCmp=0
+      END IF
 
-      IF (XoCmp .GE. 1) XoCmp=1
-      IF (XoCmp .LE. 0) XoCmp=0
+      IF (XoCmp .GE. 1) THEN
+          XoCmp=1
+      END IF
+      IF (XoCmp .LE. 0) THEN
+          XoCmp=0
+      END IF
 
       PwrCmp=CompOUT(1)*1000
       MassCmp=CompOUT(6)
@@ -784,15 +871,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupiCnd=TiCnd-TsatiCnd
-      IF (TsupiCnd .LT. 0 ) TsupiCnd=0
+      IF (TsupiCnd .LT. 0 ) THEN
+          TsupiCnd=0
+      END IF
 
       Quality=0
       TsatiCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsubiCnd=TsatiCnd-TiCnd
-      IF (TsubiCnd .LT. 0 ) TsubiCnd=0
+      IF (TsubiCnd .LT. 0 ) THEN
+          TsubiCnd=0
+      END IF
 
-      IF (XiCnd .GE. 1) XiCnd=1
-      IF (XiCnd .LE. 0) XiCnd=0
+      IF (XiCnd .GE. 1) THEN
+          XiCnd=1
+      END IF
+      IF (XiCnd .LE. 0) THEN
+          XiCnd=0
+      END IF
 
       TdbiCnd=CondIN(5)
       RHiCnd=CondIN(6)
@@ -819,15 +914,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
       TsupoCnd=ToCnd-TsatoCnd
-      IF (TsupoCnd .LT. 0 ) TsupoCnd=0
+      IF (TsupoCnd .LT. 0 ) THEN
+          TsupoCnd=0
+      END IF
 
       Quality=0
       TsatoCnd=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
       TsuboCnd=TsatoCnd-ToCnd
-      IF (TsuboCnd .LT. 0 ) TsuboCnd=0
+      IF (TsuboCnd .LT. 0 ) THEN
+          TsuboCnd=0
+      END IF
 
-      IF (XoCnd .GE. 1) XoCnd=1
-      IF (XoCnd .LE. 0) XoCnd=0
+      IF (XoCnd .GE. 1) THEN
+          XoCnd=1
+      END IF
+      IF (XoCnd .LE. 0) THEN
+          XoCnd=0
+      END IF
 
       !CFMcnd=StdCFMcnd
       Qcnd =CondOUT(15)*1000
@@ -878,15 +981,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TsatiExp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	  TsupiExp=TiExp-TsatiExp
-	  IF (TsupiExp .LT. 0 ) TsupiExp=0
+	  IF (TsupiExp .LT. 0 ) THEN
+          TsupiExp=0
+      END IF
 
 	  Quality=0
 	  TsatiExp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 	  TsubiExp=TsatiExp-TiExp
-	  IF (TsubiExp .LT. 0 ) TsubiExp=0
+	  IF (TsubiExp .LT. 0 ) THEN
+          TsubiExp=0
+      END IF
 
-	  IF (XiExp .GE. 1) XiExp=1
-	  IF (XiExp .LE. 0) XiExp=0
+	  IF (XiExp .GE. 1) THEN
+          XiExp=1
+      END IF
+	  IF (XiExp .LE. 0) THEN
+          XiExp=0
+      END IF
 
       IF (ExpDevice .EQ. 3) THEN
 	      PoExp=CapTubeOUT(2)
@@ -905,20 +1016,31 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TsatoExp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	  TsupoExp=ToExp-TsatoExp
-	  IF (TsupoExp .LT. 0 ) TsupoExp=0
+	  IF (TsupoExp .LT. 0 ) THEN
+          TsupoExp=0
+      END IF
 
 	  Quality=0
 	  TsatoExp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	  TsuboExp=TsatoExp-ToExp
-	  IF (TsuboExp .LT. 0 ) TsuboExp=0
+	  IF (TsuboExp .LT. 0 ) THEN
+          TsuboExp=0
+      END IF
 
-	  IF (XoExp .GE. 1) XoExp=1
-	  IF (XoExp .LE. 0) XoExp=0
+	  IF (XoExp .GE. 1) THEN
+          XoExp=1
+      END IF
+	  IF (XoExp .LE. 0) THEN
+          XoExp=0
+      END IF
 
 	  !*******Evaporator*******
 	  PiEvp=EvapIN(2)
 	  HiEvp=EvapIN(3)
+      
+      PwrIDfan=CondPAR(34)*1000 !RS Comment: PwrIDfan is empty unless repopulated; 1000 accounts for CondPAR conversion
+      PwrODfan=EvapPAR(27)*1000 !RS Comment: PwrODfan is empty unless repopulated; 1000 accounts for EvapPAR conversion
 
 	  Pressure=PiEvp*1000
 	  Enthalpy=HiEvp*1000
@@ -929,15 +1051,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TsatiEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	  TsupiEvp=TiEvp-TsatiEvp
-	  IF (TsupiEvp .LT. 0 ) TsupiEvp=0
+	  IF (TsupiEvp .LT. 0 ) THEN
+          TsupiEvp=0
+      END IF
 
 	  Quality=0
 	  TsatiEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 	  TsubiEvp=TsatiEvp-TiEvp
-	  IF (TsubiEvp .LT. 0 ) TsubiEvp=0
+	  IF (TsubiEvp .LT. 0 ) THEN
+          TsubiEvp=0
+      END IF
 
-	  IF (XiEvp .GE. 1) XiEvp=1
-	  IF (XiEvp .LE. 0) XiEvp=0
+	  IF (XiEvp .GE. 1) THEN
+          XiEvp=1
+      END IF
+	  IF (XiEvp .LE. 0) THEN
+          XiEvp=0
+      END IF
 
 	  TdbiEvp=EvapIN(5)
 	  RHiEvp=EvapIN(6)
@@ -964,15 +1094,23 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TsatoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 
 	  TsupoEvp=ToEvp-TsatoEvp
-	  IF (TsupoEvp .LT. 0 ) TsupoEvp=0
+	  IF (TsupoEvp .LT. 0 ) THEN
+          TsupoEvp=0
+      END IF
 
 	  Quality=0
 	  TsatoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
 	  TsuboEvp=TsatoEvp-ToEvp
-	  IF (TsuboEvp .LT. 0 ) TsuboEvp=0
+	  IF (TsuboEvp .LT. 0 ) THEN
+          TsuboEvp=0
+      END IF
 
-	  IF (XoEvp .GE. 1) XoEvp=1
-	  IF (XoEvp .LE. 0) XoEvp=0
+	  IF (XoEvp .GE. 1) THEN
+          XoEvp=1
+      END IF
+	  IF (XoEvp .LE. 0) THEN
+          XoEvp=0
+      END IF
 
 	  !CFMevp=StdCFMevp
 
@@ -982,8 +1120,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  QevpSens=-EvapOUT(12)*1000
 	  IF (ABS(QevpSens) .GT. ABS(Qevp)) THEN !Make sure sensible heat is never higher than total heat. ISI - 08/02/07
 	      QevpSens = Qevp
-	      !hAoEvp=-Qevp/1000/(StdCFMevp*StandardDensity)+hAiEvp
-	      !TdboEvp=-QevpSens/1000/(StdCFMevp*StandardDensity*StandardSpecHeat)+TdbiEvp
 	      hAoEvp=-Qevp/1000/(CFMevp*RhoAiE)+hAiEvp
 	      SpecHeat=CPA(TdbiEvp)
 	      TdboEvp=-QevpSens/1000/(CFMevp*RhoAiE*SpecHeat)+TdbiEvp

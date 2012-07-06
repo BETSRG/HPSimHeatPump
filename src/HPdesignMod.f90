@@ -1,7 +1,7 @@
     SUBROUTINE HPDM(DTVALU)
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CondenserMod
     USE EvaporatorMod
     USE ShortTubeMod
@@ -110,17 +110,22 @@
 
     DTVLMN = -150.0
 
-    IF(DTVALU.LT.DTVLMN) DTVALU = DTVLMN
-
+    IF(DTVALU.LT.DTVLMN) THEN
+        DTVALU = DTVLMN
+    END IF
 
     IF(ICHRGE.NE.0) THEN
         IF(ICHRGE.NE.2) THEN
             IF (MODE .EQ. 4) THEN
                 DTROC = DTVALU
-                IF(DTROC.LT.0.0) DTROC = DTROC/200.
+                IF(DTROC.LT.0.0) THEN
+                    DTROC = DTROC/200.
+                END IF
             ELSE
                 SUPER = DTVALU
-                IF(SUPER.LE.0.0) SUPER = -(1.0+SUPER/500.)
+                IF(SUPER.LE.0.0) THEN
+                    SUPER = -(1.0+SUPER/500.)
+                END IF
             END IF
 
             Temperature=(TSICMP-32)/1.8
@@ -214,7 +219,9 @@
 
                     SUPERE=(ToEvp-TsoEvp)*1.8
 
-                    IF (XoEvp .LT. 1.) SUPERE = -XoEvp
+                    IF (XoEvp .LT. 1.) THEN
+                        SUPERE = -XoEvp
+                    END IF
 
                 ELSEIF (DTsucLn .NE. 0) THEN
 
@@ -255,7 +262,9 @@
 
                     SUPERE=(ToEvp-TsoEvp)*1.8
 
-                    IF (XoEvp .LT. 1.) SUPERE = -XoEvp
+                    IF (XoEvp .LT. 1.) THEN
+                        SUPERE = -XoEvp
+                    END IF
 
                 ELSE
                     SUPERE=SUPER
@@ -268,7 +277,9 @@
         ELSE
             !VL: Previously: 25      CONTINUE
             DTROC = DTVALU
-            IF(DTROC.LT.0.0) DTROC = DTROC/200.
+            IF(DTROC.LT.0.0) THEN
+                DTROC = DTROC/200.
+            END IF
         END IF
 
     END IF
@@ -298,7 +309,9 @@
         TSAT1 = TSOCMP
 
         CONV = CNDCON
-        IF(IREFC .NE. 0) CONV = FLOCON !/20.
+        IF(IREFC .NE. 0) THEN
+            CONV = FLOCON !/20.
+        END IF
         STEP = 3
 
         IF (PrnLog .EQ. 1) THEN 
@@ -366,10 +379,18 @@
         !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) WRITE(*,*)
-            IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Highside: Failed to find a solution.'
-            IF (PrnLog .EQ. 1) WRITE(6,*)
-            IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)
+            END IF
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)'## ERROR ## Highside: Failed to find a solution.'
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
+            END IF
             WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
             !WRITE(*,*)'Press return to terminate program'
             !READ(*,*)
@@ -393,15 +414,31 @@
         IF (ABS(DIFFER) .GT. CONV) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
+                    END IF
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
+                    END IF
                 ELSE
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'Difference: ',DIFFER,DTunit
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
+                    END IF
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
+                    END IF
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'Difference: ',DIFFER,DTunit
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'Difference: ',DIFFER,DTunit
+                    END IF
                 END IF  
             END IF
 
@@ -490,7 +527,9 @@
 
         END IF
 
-        IF (LPRINT .EQ. 2) PRINT = .FALSE.
+        IF (LPRINT .EQ. 2) THEN
+            PRINT = .FALSE.
+        END IF
 
         !   FIND DESIRED EVAPORATOR EXIT SUPERHEAT OR QUALITY
         !   BY ADJUSTING EVAPORATOR INLET AIR TEMPERATURE
@@ -498,30 +537,46 @@
         TAIE1 = TAIIEI
 
         STEP = 2
-        IF (PrnCon .EQ. 1) WRITE(*,*)
-        IF (PrnCon .EQ. 1) WRITE(*,*)'|-------------------- Lowside Iteration ---------------------|'
-        IF (PrnLog .EQ. 1) WRITE(6,*)
-        IF (PrnLog .EQ. 1) WRITE(6,*)'|-------------------- Lowside Iteration ---------------------|'
+        IF (PrnCon .EQ. 1) THEN
+            WRITE(*,*)
+        END IF
+        IF (PrnCon .EQ. 1) THEN
+            WRITE(*,*)'|-------------------- Lowside Iteration ---------------------|'
+        END IF
+        IF (PrnLog .EQ. 1) THEN
+            WRITE(6,*)
+        END IF
+        IF (PrnLog .EQ. 1) THEN
+            WRITE(6,*)'|-------------------- Lowside Iteration ---------------------|'
+        END IF
         IF (Unit .EQ. 1) THEN
             WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
+            IF (PrnLog .EQ. 1)THEN
+                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
+            END IF
         ELSE
             WRITE(*,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
+            END IF
         END IF
 
         TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
         !CALL SolveRegulaFalsi(EVPCON, MaxIter, Flag, TAIIE, EVPTR, TAIE1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) WRITE(*,*)
-            IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Lowside: Failed to find a solution.'
-            IF (PrnLog .EQ. 1) WRITE(6,*)
-            IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Lowside: Failed to find a solution.'
-            !WRITE(*,*)'Try to increase the guess of evap. temperature.'
-            !WRITE(*,*)'Press return to terminate program'
-            !READ(*,*)
-            !STOP
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)
+            END IF
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)'## ERROR ## Lowside: Failed to find a solution.'
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)'## ERROR ## Lowside: Failed to find a solution.'
+            END IF
         END IF
 
         !VL: Previously: IF (LPRINT .NE. 2) GO TO 550
@@ -534,15 +589,31 @@
         IF (ABS(DIFFER) .GT. EVPCON) THEN !GO TO 560
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
+                    END IF
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
+                    END IF
                 ELSE
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    IF (PrnCon .EQ. 1) WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    IF (PrnLog .EQ. 1) WRITE(6,*)'Difference: ',DIFFER,DTunit
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
+                    END IF
+                    IF (PrnCon .EQ. 1) THEN
+                        WRITE(*,*)'Difference: ',DIFFER,DTunit
+                    END IF
+                    IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)'Difference: ',DIFFER,DTunit
+                    END IF
                 END IF  
             END IF
             ERRMSG(2) = DIFFER
@@ -580,10 +651,14 @@
 
         DIFF = TAIIE-TAIIEI
         !VL: Previously: IF(ABS(DIFF).LE.AMBCON) GO TO 900
-        IF(ABS(DIFF).LE.AMBCON) EXIT
+        IF(ABS(DIFF).LE.AMBCON) THEN
+            EXIT
+        END IF
 
         !VL: Previously: IF(NTAMB.NE.0) GO TO 810
-        IF(NTAMB.EQ.0) DIFSGN = DIFF
+        IF(NTAMB.EQ.0) THEN
+            DIFSGN = DIFF
+        END IF
 
         !VL: Previously:810 CONTINUE
         PROD = DIFF*DIFSGN
@@ -628,7 +703,9 @@
 
         IF(PROD.GT.0.0.AND.NCROSS.EQ.0) THEN
 
-            IF(NTAMB.GT.0) DELT2 = (TAIIE-TAIDM)/(TSICMP-TSATDM)
+            IF(NTAMB.GT.0) THEN
+                DELT2 = (TAIIE-TAIDM)/(TSICMP-TSATDM)
+            END IF
             !IF (DELT2 .EQ. 0) GO TO 900
             !IF (ABS(DELT2) .LE. 0.01) THEN
             IF (ABS(DELT2) .LE. 0.05) THEN !ISI - 06/13/07
@@ -640,7 +717,9 @@
             TAIDM = TAIIE
             TSICMPprev=TSICMP
             TSICMP = TSICMP-DIFF/DELT2
-            IF (TSICMP .GT. TAIIEI) TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
+            IF (TSICMP .GT. TAIIEI) THEN
+                TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
+            END IF
 
         ELSE
 
@@ -662,7 +741,9 @@
                 EXIT
             END IF
             DIFSGN = DIFF
-            IF (TSICMP .GT. TAIIEI) TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
+            IF (TSICMP .GT. TAIIEI) THEN
+                TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
+            END IF
 
         END IF
 
@@ -671,21 +752,33 @@
         NTAMB = NTAMB + 1
         !VL: Previously: IF(NTAMB.GT.15) GO TO 850
         IF(NTAMB.GT.15) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,FMT_1014) DIFF
+            END IF
             !VL: Previously: GOTO 900
             EXIT
         END IF
         IF (LPRINT .GT. 1) THEN
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_1013)TSICMP
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,FMT_1013)TSICMP
+            END IF
         END IF
 
         FirstTimeAirTempLoop=.TRUE.
 
         IF (TSICMP .GE. TSOCMP) THEN
-            IF (PrnCon .EQ. 1) WRITE(*,*)
-            IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## HPdesign: Failed to find a solution.'
-            IF (PrnLog .EQ. 1) WRITE(6,*)
-            IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)
+            END IF
+            IF (PrnCon .EQ. 1) THEN
+                WRITE(*,*)'## ERROR ## HPdesign: Failed to find a solution.'
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)
+            END IF
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
+            END IF
             !WRITE(*,*)'Press return to terminate program'
             !READ(*,*)
             !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -776,10 +869,18 @@
             END IF
 
             IF (INT(ShTbOUT(7)) .EQ. 1) THEN
-                IF (PrnCon .EQ. 1) WRITE(*,*)
-                IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## HPdesign: Short tube solution error.'
-                IF (PrnLog .EQ. 1) WRITE(6,*)
-                IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
+                IF (PrnCon .EQ. 1) THEN
+                    WRITE(*,*)
+                END IF
+                IF (PrnCon .EQ. 1) THEN
+                    WRITE(*,*)'## ERROR ## HPdesign: Short tube solution error.'
+                END IF
+                IF (PrnLog .EQ. 1) THEN
+                    WRITE(6,*)
+                END IF
+                IF (PrnLog .EQ. 1) THEN
+                    WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
+                END IF
                 !WRITE(*,*)'Press return to terminate program'
                 !READ(*,*)
                 !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
@@ -901,10 +1002,18 @@
             END DO
 
             IF (NumIter .GT. MaxIter) THEN
-                IF (PrnCon .EQ. 1) WRITE(*,*)
-                IF (PrnCon .EQ. 1) WRITE(*,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
-                IF (PrnLog .EQ. 1) WRITE(6,*)
-                IF (PrnLog .EQ. 1) WRITE(6,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
+                IF (PrnCon .EQ. 1) THEN
+                    WRITE(*,*)
+                END IF
+                IF (PrnCon .EQ. 1) THEN
+                    WRITE(*,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
+                END IF
+                IF (PrnLog .EQ. 1) THEN
+                    WRITE(6,*)
+                END IF
+                IF (PrnLog .EQ. 1) THEN
+                    WRITE(6,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
+                END IF
                 CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
@@ -926,14 +1035,8 @@
             CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
             EvapOUT(14)=MassCoil
 
-            !IF (ExpDevice .EQ. 1) THEN
             CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
             EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
-            !ELSE  
-            !	  CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-            !			  EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
-            !END IF
-            !CALL DumpOutputs
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 

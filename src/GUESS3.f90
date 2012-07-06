@@ -17,7 +17,9 @@
           X2 = X1                                !Initilize ISI - 03/26/04
           ICOUNT = ICOUNT + 1
           !VL: Previously : IF (IERR .EQ. 0) GO TO 75 
-          IF (IERR .EQ. 0) EXIT
+          IF (IERR .EQ. 0) THEN
+              EXIT
+          END IF
           IF (IERR .EQ. 1) THEN                  !ISI - 03/26/04
               !X1 = X1 - 5.0                       !ISI - 03/26/04
               X1 = X1 - DX                         !ISI - 03/26/04
@@ -38,8 +40,12 @@
       YMIN = ABS(Y1)
       !IF (YMIN .LE. TOL/2.) GO TO 500       !ISI - 03/26/04
 !      IF (YMIN .LE. TOL) GO TO 500           !ISI - 03/26/04
-      IF (YMIN .LE. TOL) RETURN              !ISI - 02/12/06
-      IF(Y1.GT.0.0) SIGN = -1.0
+      IF (YMIN .LE. TOL) THEN
+          RETURN              !ISI - 02/12/06
+      END IF
+      IF(Y1.GT.0.0) THEN
+          SIGN = -1.0
+      END IF
       DDX = ABS(DX)
 !	IF (YMIN .LT.  1.0) DDX = ABS(DX)/2.   !ISI - 03/26/04
 !	IF (YMIN .GT. 2.5) DDX = 1.5*ABS(DX)   !ISI - 03/26/04
@@ -72,7 +78,9 @@
           !VL: Previously :125       YMIN = AMIN1(YMIN,ABS(Y2))
           YMIN = AMIN1(YMIN,ABS(Y2))
 !      IF (YMIN .LE. TOL) GO TO 500           !ISI - 03/26/04
-          IF (YMIN .LE. TOL) RETURN              !ISI - 02/12/06
+          IF (YMIN .LE. TOL) THEN
+              RETURN              !ISI - 02/12/06
+          END IF
           DDX = ABS(DX)
 !	IF (YMIN .LT.  1.0) DDX = DX/2.			!ISI - 05/10/04
 !	IF (YMIN .GT. 2.5) DDX = 1.5*ABS(DX)	!ISI - 05/10/04
@@ -82,7 +90,9 @@
 !	IF (YMIN .GT. 40.0) DDX = 15.*ABS(DX)	!ISI - 05/10/04
           DDX=2.0**(ICOUNT-1)*ABS(DX)				!ISI - 05/10/04
 !
-          IF (Y1*Y2 .LE. 0.) RETURN
+          IF (Y1*Y2 .LE. 0.) THEN
+              RETURN
+          END IF
           !VL: Previously: IF (ICOUNT .GT. 15) GO TO 999
           IF (ICOUNT .GT. 15) THEN
               IERROR = 4

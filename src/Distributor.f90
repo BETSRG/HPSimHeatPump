@@ -3,8 +3,8 @@ SUBROUTINE Distributor(Ref$,LTUBE,Nckts,mdotRef,TiExp,HiExp,PoEvp, &
 
 !To calculate total pressure drop in distributor
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 
@@ -75,7 +75,9 @@ REAL DPtube   !Pressure drop through tube, kPa
 
   !Capacities
   Qnoz=mdotRef*(HoEvpRtd-HiExp) !Nozzle
-  IF (Qnoz .LT. 0) Qnoz=0.
+  IF (Qnoz .LT. 0) THEN
+      Qnoz=0.
+  END IF
   Qtube=Qnoz/Nckts              !Tube
 
   TiExpF=TiExp*1.8+32
@@ -91,8 +93,12 @@ REAL DPtube   !Pressure drop through tube, kPa
   LoadNoz=Qnoz/QnozRtd    !Nozzle
   LoadTube=Qtube/QtubeRtd !Tube
 
-  IF (LoadNoz .GT. 1) LoadNoz=1
-  IF (LoadTube .GT. 1) LoadTube=1
+  IF (LoadNoz .GT. 1) THEN
+      LoadNoz=1
+  END IF
+  IF (LoadTube .GT. 1) THEN
+      LoadTube=1
+  END IF
 
   !Pressure drops
   CALL CalcDPnoz(LoadNoz,Ref$,DPNOZ)    !Nozzle pressure drop
@@ -103,7 +109,9 @@ REAL DPtube   !Pressure drop through tube, kPa
 
   DPtot=DPnoz+DPtube
 
-  IF (DPtot .LT. 0) ErrorFlag = 3
+  IF (DPtot .LT. 0) THEN
+      ErrorFlag = 3
+  END IF
 
   !VL: Previously: 200 CONTINUE
 
@@ -326,7 +334,9 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
     !  CFnoz=10**((100-TITXV)/140.19)
   !END IF
 
-  IF (TITXV .GT. 40) CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+  IF (TITXV .GT. 40) THEN
+      CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+  END IF
 
   CFtube=(30/LTUBE)**0.333
 

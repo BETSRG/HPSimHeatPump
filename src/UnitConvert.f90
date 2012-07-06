@@ -340,10 +340,14 @@ INTEGER I !Loop counter
     !Air side boundary conditions
 	XMaC=XMaC*UnitArFlw                 !Condenser inlet air flow rate, m^3/s
     !TaiC                               !Condenser inlet DB temperature F,  ORNL solver uses IP unit
-    IF (RHiC .GT. 1) RHiC=(RHiC-32)/1.8 !Condenser inlet RH or WB temp 
+    IF (RHiC .GT. 1) THEN
+        RHiC=(RHiC-32)/1.8 !Condenser inlet RH or WB temp
+    END IF
     XMaE=XMaE*UnitArFlw                 !Evaporator inlet air flow rate, m^3/s
     !TaiE                               !Evaporator inlet DB temperature F,  ORNL solver uses IP unit
-    IF (RHiE .GT. 1) RHiE=(RHiE-32)/1.8 !Evaporator inlet RH or WB temp
+    IF (RHiE .GT. 1) THEN
+        RHiE=(RHiE-32)/1.8 !Evaporator inlet RH or WB temp
+    END IF
 
     !Initial guesses
     !TsoCmp    !Condenser temp. F,  ORNL solver uses IP unit

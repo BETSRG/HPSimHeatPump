@@ -71,8 +71,8 @@ CONTAINS
     !
     ! ----------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
 
@@ -187,7 +187,9 @@ CONTAINS
     XLEVEL = 0.0
 
     ! VL: Previously: IF(AHGT.LE.0.001) GO TO 201
-    IF(AHGT.LE.0.001) FLAG_GOTO_201 = .TRUE. 
+    IF(AHGT.LE.0.001) THEN
+        FLAG_GOTO_201 = .TRUE.
+    END IF
     IF (FLAG_GOTO_201 .EQ. .FALSE.) THEN 
         !
         AACC = PI*DACC*DACC/4.
@@ -228,7 +230,9 @@ CONTAINS
             !PD=0.5*(RMSL/AHOLE(1))**2./RO
             PDYN = 0.5*(X*RMS/ATUBE)**2.*V
             HL(1) = (PD-PDYN)/(RO*32.2)
-            IF(HL(1).LT.0.) HL(1) = 0.
+            IF(HL(1).LT.0.) THEN
+                HL(1) = 0.
+            END IF
             VHGT = AHGT-HL(1)
             VHGT = AMAX1(0.,VHGT)
             AMASS2 = AACC*(HL(1)*RO+VHGT/V)
@@ -236,7 +240,9 @@ CONTAINS
             !       CHECK IF BELOW SECOND HOLE
             !
             !VL: Previously: IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) GO TO 40
-            IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) FLAG_GOTO_40 = .TRUE.
+            IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) THEN
+                FLAG_GOTO_40 = .TRUE.
+            END IF
             IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
 
                 AHOLE(2) = PI*DHOLE(2)*DHOLE(2)/4.
@@ -249,7 +255,9 @@ CONTAINS
 
 
                 ! VL: Previously: IF(RMSL.LT.RMMAX) GO TO 15
-                IF(RMSL.LT.RMMAX) FLAG_GOTO_15 = .TRUE.
+                IF(RMSL.LT.RMMAX) THEN
+                    FLAG_GOTO_15 = .TRUE.
+                END IF
                 IF (FLAG_GOTO_15 .EQ. .FALSE.) THEN
                     VHGT = 0.0
                     HL(1) = AHGT
@@ -291,7 +299,9 @@ CONTAINS
 
                     !
                     DIFF2 = RMT-RMSL
-                    IF(J.EQ.1.AND.DIFF2.GT.0.0) IHOLE = 1
+                    IF(J.EQ.1.AND.DIFF2.GT.0.0) THEN
+                        IHOLE = 1
+                    END IF
                     VHGT = AHGT - HL(1)
                     VHGT = AMAX1(0.,VHGT)
                     AMASS2 = AACC* (HL(1)*RO + VHGT/V)
@@ -390,7 +400,8 @@ CONTAINS
     !
     ! ----------------------------------------------------------------------
 
-    USE FluidProperties
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
 

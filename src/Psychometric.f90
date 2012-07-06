@@ -123,7 +123,9 @@ REAL TWBsetpt !Set point wet bulb temp. C
     WRITE(77,*)'AirProp error: Invalid input data'
   END SELECT
 
-  IF (TWB .GE. TDB) RH = 1
+  IF (TWB .GE. TDB) THEN
+      RH = 1
+  END IF
 
   AirProp(1)=TDB
   AirProp(2)=W    

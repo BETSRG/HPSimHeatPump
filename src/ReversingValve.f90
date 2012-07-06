@@ -40,7 +40,9 @@ REAL, INTENT(OUT) :: hso !Suction outlet enthalpy, kJ/kg
 REAL :: UA !Overall heat transfer coefficient, kW/K
 
 UA = 0.1541*mdot - 0.002
-IF (UA .LT. 0) UA=0
+IF (UA .LT. 0) THEN
+    UA=0
+END IF
 
 hso=UA*(Tdis-Tsuc)/mdot+hsi
 
@@ -81,7 +83,9 @@ REAL, INTENT(OUT) :: DP !Pressure drop kPa
 
 DP = 327.69*mdot + 3.9633
 
-IF (DP .LT. 0) DP = 0
+IF (DP .LT. 0) THEN
+    DP = 0
+END IF
 
 END SUBROUTINE SuctionPressureDrop
 

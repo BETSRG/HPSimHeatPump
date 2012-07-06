@@ -185,7 +185,9 @@
       DATA B,C,D,HFGTP,TCR/0.779221,4.62668,-1.07931,2500.9,647.3/
       DATA TCNV/273.15/
 
-      IF(TC.LT.0.) TC=0.
+      IF(TC.LT.0.) THEN
+          TC=0.
+      END IF
       TR=(TCR-TC-TCNV)/TCR
       IF(TR.LT.0.) THEN
           HFG=0.
@@ -292,7 +294,9 @@
       P=PKPA*PCNV
       T=TC+TCNV
       TS=C1+C2/(ALOG(P)+C3)
-      IF(P .GE. 12.33) TS=C4+C5/(ALOG(P)+C6)
+      IF(P .GE. 12.33) THEN
+          TS=C4+C5/(ALOG(P)+C6)
+      END IF
 
       VS=R*T/P-B1*EXP(-B2*T)+(B3-EXP(A0+TS*(A1+TS*A2)))/(A3*P) * EXP((TS-T)/EM)
 
@@ -318,7 +322,9 @@
       P=PKPA*PCNV
       T=TC+TCNV
       TS=C1+C2/(ALOG(P)+C3)
-      IF(P .GE. 12.33) TS=C4+C5/(ALOG(P)+C6)
+      IF(P .GE. 12.33) THEN
+          TS=C4+C5/(ALOG(P)+C6)
+      END IF
 
       A0=B11+P*(B12+P*B13)
       A1=B21+P*(B22+P*B23)
@@ -348,7 +354,9 @@
       P=PKPA*B2
       T=TC+TCNV
       TS=E1+E2/(ALOG(P)+E3)
-      IF(P .GE. 12.33) TS=E4+E5/(ALOG(P)+E6)
+      IF(P .GE. 12.33) THEN
+          TS=E4+E5/(ALOG(P)+E6)
+      END IF
 
       SS=A0+T*(A1+T*(A2+T*(A3+T*A4)))+B1*ALOG(B2+P*B3)-EXP((TS-T)/EM)* (C0+TS*(C1+TS*(C2+TS*(C3+TS*C4))))
 
@@ -372,7 +380,9 @@
 !  compare input entropy with saturation value
 
       TO=E1-TABS+E2/(ALOG(P*PCNV)+E3)
-      IF(P .GE. 12330.) TO=E4-TABS+E5/(ALOG(P*PCNV)+E6)
+      IF(P .GE. 12330.) THEN
+          TO=E4-TABS+E5/(ALOG(P*PCNV)+E6)
+      END IF
       SO=SSATS(TO)
       IF(SO.GE.S)THEN
           TPSS=TO
@@ -432,7 +442,9 @@
       TK=T+273.15
       T1=TK/100.
       CPS=(C1+C2*T1**E1+C3*T1**E2+C4*T1)/18.015
-      IF(TK.LT.300..OR.TK.GT.3500.)WRITE(1,FMT_13)
+      IF(TK.LT.300..OR.TK.GT.3500.) THEN
+          WRITE(1,FMT_13)
+      END IF
       
       !!VL: Previously:
   !!13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
@@ -575,8 +587,12 @@
       DATA A10,A11,A12,A13/.68714,-.0059231,2.1249E-05,-2.69575E-08/
 
       WMU=AM5*10.**((TW-20.)*(AM6+(TW-20.)*AM7)/(TW+AM8))
-      IF(TW.LT.20.) WMU=10.**(AM0+AM1/(AM2+(TW-20.)*(AM3+AM4*(TW-20.))))*100.
-      IF(TW.GT.100.) WMU=A10+TW*(A11+TW*(A12+TW*A13))
+      IF(TW.LT.20.) THEN
+          WMU=10.**(AM0+AM1/(AM2+(TW-20.)*(AM3+AM4*(TW-20.))))*100.
+      END IF
+      IF(TW.GT.100.) THEN
+          WMU=A10+TW*(A11+TW*(A12+TW*A13))
+      END IF
       WMU=0.001*WMU
 
       RETURN
@@ -619,7 +635,9 @@
       DATA ACP5,ACP6,ACP7,ACP8/2.9735,.023049,-.00013953,3.092474E-07/
 
       WCP=ACP0+TW*(ACP1+TW*(ACP2+TW*(ACP3+TW*ACP4)))
-      IF(TW.GT.100.)WCP=ACP5+TW*(ACP6+TW*(ACP7+TW*ACP8))
+      IF(TW.GT.100.) THEN
+          WCP=ACP5+TW*(ACP6+TW*(ACP7+TW*ACP8))
+      END IF
 
       RETURN
       END

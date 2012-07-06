@@ -599,8 +599,8 @@ CONTAINS
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
@@ -1053,9 +1053,6 @@ CONTAINS
             IF (MaxResidual .GT. Ptol) THEN
                 WRITE(*,FMT_107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
                 ErrorFlag=CONVERGEERROR
-                !          ELSE !Less severe, to speed up simulation, ISI - 05/06/2009
-                !              WRITE(*,FMT_107)'-- WARNING -- Evaporator: Solution not converged. Max. Residual = ',MaxResidual
-                !              ErrorFlag=CONVERGEERRORMINOR
             END IF
         END IF
 
@@ -1166,11 +1163,6 @@ CONTAINS
         RETURN
     END IF
 
-    !IF (Wabsolute .GT. 0) THEN
-    !  Wlocal=LocalOilMassFraction(Wabsolute,xRoCoil)
-    !  tSat=OilMixtureTsat(RefName,Wlocal,Psat/1000)
-    !END IF
-
     IF (xRoCoil .GE. 1) THEN
         tSHoCoil=tRoCoil-tSat
     ELSE
@@ -1180,10 +1172,6 @@ CONTAINS
     !****** Suction line calculation ******
     IF (LsucLn .GT. 0) THEN
         CALL SuctionLine
-        !	  IF (ErrorFlag .GT. CONVERGEERROR) THEN
-        !		  WRITE(*,*)'-- WARNING -- SuctionLine: Refprop error. Line 2683'
-        !		  GOTO 200x
-        !	  END IF
     ELSE
         pRiCmp=pRoCoil
         hRiCmp=hRoCoil
@@ -1357,8 +1345,8 @@ SUBROUTINE CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,LiqTubeLengt
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -1529,7 +1517,6 @@ REAL Lregion !Region length, m
 				      Rair=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Rair 
 				      Rtube=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Rtube
 
-				      !IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
 				      IF ((K .EQ. NumOfMods .AND. J .NE. LastTube) .OR. &
 				          (J .EQ. LastTube .AND. (CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1))) THEN !ISI - 02/05/07
 					      !Include return bend length
@@ -1816,8 +1803,8 @@ SUBROUTINE PrintEvaporatorResult
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -2292,6 +2279,8 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+  
+  REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
@@ -2315,8 +2304,13 @@ END SUBROUTINE PrintEvaporatorResult
 
     !**************************** Model *************************************
             
-        CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+        !CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
+        !              Numbers,NumNumbers,Status)
+        
+          CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
         ModelName = Alphas(1)
             
@@ -2333,8 +2327,13 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
         !**************************** Geometry *************************************
 
+            !CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
+            !          Numbers,NumNumbers,Status)
+            
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2457,8 +2456,15 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END DO
 
                 ALLOCATE(Ckt(NumOfCkts))
+                
+                !CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                !                    Numbers,NumNumbers,Status)
+                
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+        
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
                     IF (ErrorFlag .NE. NOERROR) THEN 
@@ -2490,25 +2496,39 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts   
                 IF (I .EQ. 1) THEN
+                    !CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
                 ELSEIF (I .EQ. 2) THEN
+                    !CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 3) THEN
+                    !CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 4) THEN
+                    !CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 5) THEN
+                    !CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSE
+                    !CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
                 
+                        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)
                     END DO 
@@ -2542,8 +2562,14 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !Initialize
             CoilSection%IsInlet = .TRUE.
             IsUniformVelProfile=.TRUE.
+            !CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
+            !                    Numbers,NumNumbers,Status)
+            
             CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status) 
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            
+                        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
@@ -2782,8 +2808,13 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !ODC circuit here
         !**************************** Geometry *************************************
 
+            !CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
+            !                    Numbers,NumNumbers,Status)
+            
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2904,8 +2935,13 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
                 DO I=1, NumOfCkts
+                    !CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            
+                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        
                     Ckt(I)%Ntube=Numbers(I)
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2936,18 +2972,27 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
+                    !CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 2) THEN
+                    !CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 3) THEN
+                    !CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSE
+                    !CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
+                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
+                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)                
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)
                     END DO 
@@ -2978,8 +3023,12 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
+            !CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+            !                    Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+            
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                     Tube(I)%Seg(J)%VelDev = Numbers(J)
                 IF (ErrorFlag .NE. NOERROR) THEN 
@@ -3618,8 +3667,8 @@ END SUBROUTINE EndEvaporatorCoil
 
 SUBROUTINE SuctionLine
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -3753,8 +3802,8 @@ END SUBROUTINE SuctionLine
 
 SUBROUTINE RefrigerantParameters(Ref$)
 
-USE FluidProperties
-!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
 
@@ -3790,8 +3839,8 @@ SUBROUTINE InitBoundaryConditions(CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE AirPropMod
 USE CoilCalcMod
 
@@ -4132,8 +4181,8 @@ SUBROUTINE CalcCoilSegment(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -4726,8 +4775,8 @@ SUBROUTINE CalcRefProperty(pRef,hRef,hfRef,hgRef,hfgRef,Psat,Tsat,tRef,xRef, &
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE OilMixtureMod
 
 IMPLICIT NONE
@@ -5078,8 +5127,8 @@ SUBROUTINE CalcSegmentOutletConditions(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 USE OilMixtureMod
@@ -5479,8 +5528,8 @@ SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
 IMPLICIT NONE
@@ -5622,8 +5671,8 @@ SUBROUTINE CalcTransitionSegment(CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 USE OilMixtureMod
@@ -5735,8 +5784,8 @@ SUBROUTINE FindTransitionBoundary(CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -5851,8 +5900,8 @@ SUBROUTINE CalcWetSurfaceDing(I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -6060,8 +6109,8 @@ SUBROUTINE CalcWetSurfaceBraun(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -6286,8 +6335,8 @@ SUBROUTINE CalcWetSurfaceMcQuiston(I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-USE FluidProperties
-!USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+!USE FluidProperties
+USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
 
@@ -6585,8 +6634,8 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     !
     !-----------------------------------------------------------------------------------
 
-    USE FluidProperties
-    !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    !USE FluidProperties
+    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
