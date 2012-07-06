@@ -645,8 +645,8 @@ FluidNames,
     R410a, REFRIGERANT, !- name and type for fluid 2
     R417a, REFRIGERANT; !- name and type for fluid 2
     
-##include fluidDataFiles\R22.idf
-##include fluidDataFiles\R134a.idf
-##include fluidDataFiles\R407c.idf
-##include fluidDataFiles\R410a.idf
-##include fluidDataFiles\R417a.idf
+##include fluidDataFiles/R22.idf
+##include fluidDataFiles/R134a.idf
+##include fluidDataFiles/R407c.idf
+##include fluidDataFiles/R410a.idf
+##include fluidDataFiles/R417a.idf
