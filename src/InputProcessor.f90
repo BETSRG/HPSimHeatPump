@@ -218,6 +218,8 @@ PUBLIC  GetObjectDefMaxArgs
 PUBLIC  ReportOrphanRecordObjects
 PUBLIC  DeallocateArrays
 
+PRIVATE FindNonSpace
+
 CONTAINS
 
 ! MODULE SUBROUTINES:
@@ -2408,7 +2410,6 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
           LOGICAL TabsInLine
           INTEGER NSpace
           LOGICAL ErrFlag
-          INTEGER, EXTERNAL :: FindNonSpace
           INTEGER ErrLevel
 
       ErrFlag=.false.
@@ -2683,7 +2684,6 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Pos
   INTEGER NSpace
-  INTEGER, EXTERNAL :: FindNonSpace
   LOGICAL ErrFlag
 
   ErrLevel=0
@@ -3900,6 +3900,112 @@ IF (ALLOCATED(IDFRecordsGotten)) DEALLOCATE(IDFRecordsGotten)
 RETURN
 
 END SUBROUTINE DeallocateArrays
+
+SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! Convert a string to upper case
+
+          ! METHODOLOGY EMPLOYED:
+          ! This routine is not dependant upon the ASCII
+          ! code.  It works by storing the upper and lower case alphabet.  It
+          ! scans the whole input string.  If it finds a character in the lower
+          ! case alphabet, it makes an appropriate substitution.
+
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataStringGlobals
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: InputString    ! Input string
+  CHARACTER(len=*), INTENT(OUT) :: OutputString  ! Output string (in UpperCase)
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+      INTEGER A,B
+
+      DO A=1,LEN_TRIM(InputString)
+          B=INDEX(LowerCase,InputString(A:A))
+          IF (B .NE. 0) THEN
+              OutputString(A:A)=UpperCase(B:B)
+          ELSE
+              OutputString(A:A)=InputString(A:A)
+          ENDIF
+      END DO
+
+      RETURN
+
+END SUBROUTINE ConvertCasetoUpper
+
+INTEGER FUNCTION FindNonSpace(String)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function finds the first non-space character in the passed string
+          ! and returns that position as the result to the calling program.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Scan string for character not equal to blank.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: String  ! String to be scanned
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      INTEGER I,ILEN
+
+      FindNonSpace=0
+      ILEN=LEN_TRIM(String)
+      DO I=1,ILEN
+        IF (String(I:I) .NE. ' ') THEN
+          FindNonSpace=I
+          EXIT
+        END IF
+      END DO
+
+      RETURN
+
+END FUNCTION FindNonSpace
 
 !     NOTICE
 !
