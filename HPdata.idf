@@ -639,14 +639,16 @@ ODCcktVelocityProfileRawData,
 !Group Fluid Properties
 
 FluidNames,
-    R22, REFRIGERANT, !- name and type for fluid 1
-    R134a, REFRIGERANT, !- name and type for fluid 2
-    R407c, REFRIGERANT, !- name and type for fluid 2
-    R410a, REFRIGERANT, !- name and type for fluid 2
-    R417a, REFRIGERANT; !- name and type for fluid 2
+    R22, REFRIGERANT,     !- name and type for fluid 1
+    R134a, REFRIGERANT,   !- name and type for fluid 2
+    R407c, REFRIGERANT,   !- name and type for fluid 3
+    R410a, REFRIGERANT,   !- name and type for fluid 4
+    R417a, REFRIGERANT,   !- name and type for fluid 5
+    PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-##include fluidDataFiles/R22.idf
-##include fluidDataFiles/R134a.idf
-##include fluidDataFiles/R407c.idf
-##include fluidDataFiles/R410a.idf
-##include fluidDataFiles/R417a.idf
+##include fluidDataFiles\R22.idf
+##include fluidDataFiles\R134a.idf
+##include fluidDataFiles\R407c.idf
+##include fluidDataFiles\R410a.idf
+##include fluidDataFiles\R417a.idf
+##include fluidDataFiles\Propane.idf
