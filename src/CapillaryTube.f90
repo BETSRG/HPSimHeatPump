@@ -3,6 +3,8 @@
     USE FluidProperties
     !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
+    LOGICAL, EXTERNAL :: IssueRefPropError
+
     PUBLIC  CapillaryTubeORNL
     PUBLIC  CapillaryTubeChoi
 
@@ -177,12 +179,8 @@
     Pressure=PiExp*1000
     Enthalpy=HiExp*1000
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'
-        !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        RETURN
-    END IF
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) RETURN
+
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Capillary Tube: Refprop error.'

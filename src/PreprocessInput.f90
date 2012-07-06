@@ -29,7 +29,7 @@ CONTAINS
         ! backup the last input file
         call system('mv in.idf inBackup.idf > /dev/null')
         ! rename the heat pump input file in preparation for epmacro
-        call system('cp HPdata.idf in.imf > /dev/null')
+        call system('cp HPdataUnix.idf in.imf > /dev/null')
         ! call epmacro on it
         call system('./epmacro')
         ! now rename the file to be read by the E+ input processor

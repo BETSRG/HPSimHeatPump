@@ -1,16 +1,12 @@
-    MODULE AccumulatorMod
+MODULE AccumulatorMod
 
     USE DataSimulation
-    !USE GeneralRoutines, ONLY: IssueRefPropError
-    !IMPLICIT NONE
+
+    IMPLICIT NONE
 
     LOGICAL, EXTERNAL :: IssueRefPropError
 
-    PUBLIC InitAccumulator
-    PUBLIC CalcAccumulatorMass
-    PUBLIC CalcAccumulatorDP
-
-    PRIVATE
+PRIVATE
 
     CHARACTER*80:: RefName !Refrigerant name
     REAL :: RatedDP !Rating pressure drop, kPa
@@ -28,7 +24,12 @@
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
-    CONTAINS
+    PUBLIC InitAccumulator
+    PUBLIC CalcAccumulatorMass
+    PUBLIC CalcAccumulatorDP
+
+
+CONTAINS
 
     SUBROUTINE CalcAccumulatorMass(XIN,OUT)
 
@@ -73,7 +74,7 @@
     USE FluidProperties
     !USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-    !IMPLICIT NONE
+    IMPLICIT NONE
 
     !Subroutine argument declarations
     REAL, INTENT(IN) :: XIN(3)
@@ -89,6 +90,10 @@
     REAL tRo       !Outlet refrigerant temperature, C
     REAL Tsat      !Saturated temperature, C
     REAL xRo       !Outlet refrigerant quality, -
+    REAL :: RMASS, rhoVap, V, rhoLiq, VsatLQ, Tsup, CNVAcc, VolAcc, &
+            AccMas, Xlevel, AACC, VHGT, X, RMS, RMSL, RO, ATUBE, WL, &
+            PD, PDYN, AMASS2, DP1MAX, DP2MAX, RMMAX, DP, RM, DIFF1, AMASS1, Z1, Z2, &
+            IHOLE, J, RMT, I, DIFF2, SLOPE, ERROR
 
 
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
@@ -129,6 +134,7 @@
     !
     !        COMMON / ACCDIM / ACCHGT,ACCDIA,DHOLE(2),ATBDIA,HOLDIS
     !
+    REAL HL, AHOLE
     DIMENSION HL(2), AHOLE(2)  !, DHOLE(2)
     !
     REAL,PARAMETER :: PI=3.14159265
@@ -199,7 +205,7 @@
             FLAG_GOTO_100 = .TRUE.
         END IF
 
-        IF (FLAG_GOTO_100 .EQ. FALSE) THEN
+        IF (FLAG_GOTO_100 .EQ. .FALSE.) THEN
 
             !
             !       LIQUID IN ACCUMULATOR
@@ -231,7 +237,7 @@
             !
             !VL: Previously: IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) GO TO 40
             IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) FLAG_GOTO_40 = .TRUE.
-            IF (FLAG_GOTO_40 .EQ. FALSE) THEN
+            IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
 
                 AHOLE(2) = PI*DHOLE(2)*DHOLE(2)/4.
                 !
@@ -257,7 +263,7 @@
                 END IF        
             END IF
 
-            IF (FLAG_GOTO_40 .EQ. FALSE) THEN
+            IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
                 ! VL : Previously 15  CONTINUE
                 HL(2) = HL(1)-HDIS
                 DP = HL(2)*RO*32.2 + PDYN
@@ -322,7 +328,7 @@
                     !VL: Previously:30          CONTINUE
                 END DO
 
-                IF (FLAG_GOTO_40 .EQ. FALSE) THEN
+                IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
                     !
                     !       PRINT RESULTS
                     !
