@@ -52,14 +52,14 @@ PUBLIC          ! By definition, all variables which are placed in this data
           ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS:
-!  INTERFACE
-!    SUBROUTINE ShowMessage(Message,Unit1,Unit2)
-!    !  Use when you want to create your own message for the error file.
-!    CHARACTER(len=*) Message    ! Message automatically written to "error file"
-!    INTEGER, OPTIONAL :: Unit1  ! Unit number of open formatted file for message
-!    INTEGER, OPTIONAL :: Unit2  ! Unit number of open formatted file for message
-!    END SUBROUTINE
-!  END INTERFACE
+  !INTERFACE
+  !  SUBROUTINE IssueRefPropError(Message,Unit1,Unit2)
+  !  !  Use when you want to create your own message for the error file.
+  !  CHARACTER(len=*) Message    ! Message automatically written to "error file"
+  !  INTEGER, OPTIONAL :: Unit1  ! Unit number of open formatted file for message
+  !  INTEGER, OPTIONAL :: Unit2  ! Unit number of open formatted file for message
+  !  END SUBROUTINE
+  !END INTERFACE
 !  INTERFACE
 !    SUBROUTINE ShowContinueError(Message,Unit1,Unit2)
 !    !  Use when you are "continuing" an error message over several lines.

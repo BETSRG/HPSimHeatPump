@@ -6,12 +6,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     !       'ZERO' CONTAINS ALL OF THE LOGIC NECESSARY TO ITERATE TO
     !       A ROOT, TAIIE.
     !
-<<<<<<< .mine
-    !USE FluidProperties
-    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-=======
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
->>>>>>> .r98
     USE EvaporatorMod
     USE AccumulatorMod
     USE DataSimulation
@@ -166,7 +161,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         IERR=2
     END IF
 
-    IF (IERR .GE. 1) RETURN
+    IF (IERR .GE. 1) THEN
+        RETURN
+    END IF
     SUPCAL=EvapOUT(10)*1.8 !ISI - 10/07/06
     SUPCL = SUPCAL
 

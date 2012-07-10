@@ -1,6 +1,5 @@
     SUBROUTINE HPDM(DTVALU)
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CondenserMod
     USE EvaporatorMod
@@ -9,7 +8,6 @@
     USE TXVMOD
     USE AccumulatorMod
     USE DataSimulation
-    USE GeneralRoutines
     USE IFPORT
 
     IMPLICIT NONE
@@ -446,7 +444,6 @@
         END IF
         !VL: Previously : 500     CONTINUE
 
-
         EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
         !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
         EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
@@ -551,7 +548,7 @@
         END IF
         IF (Unit .EQ. 1) THEN
             WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            IF (PrnLog .EQ. 1)THEN
+            IF (PrnLog .EQ. 1) THEN
                 WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
             END IF
         ELSE
@@ -707,7 +704,6 @@
                 DELT2 = (TAIIE-TAIDM)/(TSICMP-TSATDM)
             END IF
             !IF (DELT2 .EQ. 0) GO TO 900
-            !IF (ABS(DELT2) .LE. 0.01) THEN
             IF (ABS(DELT2) .LE. 0.05) THEN !ISI - 06/13/07
                 !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
                 EXIT
@@ -735,7 +731,6 @@
             TAIDM = TAIIE
             TSICMPprev=TSICMP
             TSICMP = TSICMP-(TSATSV-TSICMP)/(TAISV-TAIIE)*DIFF
-            !IF (ABS(TSICMPprev-TSICMP)/TSICMPprev .LE. 1E-4) GO TO 900
             IF (ABS(TSICMPprev-TSICMP) .LE. 0.01) THEN
                 !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
                 EXIT
@@ -918,11 +913,7 @@
             MaxLen=0
             MinLen=0
 
-            !IF (CapTubePAR(2) .GT. 0) THEN
             IsSizeDiameter=.TRUE. !Always size diameter
-            !ELSE
-            !  IsSizeDiameter=.FALSE.
-            !END IF
 
             CapTubeDimension=1e-4 !1E-3 !Initial guess of capillary tube diameter
             IF (IsSizeDiameter .EQ. .TRUE.) THEN
@@ -1039,10 +1030,14 @@
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_1002) ERRMSG(1)
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,FMT_1002) ERRMSG(1)
+            END IF
         END IF 
         IF(ICHRGE.EQ.0.AND.ERRMSG(2).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) WRITE(6,FMT_1006) ERRMSG(2)
+            IF (PrnLog .EQ. 1) THEN
+                WRITE(6,FMT_1006) ERRMSG(2)
+            END IF
         END IF
 
         IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
@@ -1092,7 +1087,6 @@
     END IF
 
     RETURN
-
 
     !!VL: Previously: 
 !!1002 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')

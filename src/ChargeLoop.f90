@@ -57,9 +57,7 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
             ELSE
                 DTVAL = 1.0 + DTVALU/500.
                 DTVAL = -DTVALU/200.
-
                 WRITE(sPrint,FMT_1000)'Condenser quality: ',DTVAL*100,Xunit
-
             END IF
         ELSE
             IF (MODE .EQ. 1) THEN

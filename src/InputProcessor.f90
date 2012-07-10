@@ -153,7 +153,6 @@ INTEGER :: NumObsoleteObjects=0  ! Number of \obsolete objects
 INTEGER :: TotalAuditErrors=0   ! Counting some warnings that go onto only the audit file
 INTEGER :: NumSecretObjects  ! Number of objects in "Secret Mode"
 
-
 !Real Variables for Module
 !na
 
@@ -265,9 +264,7 @@ SUBROUTINE ProcessInput
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-	!CHARACTER(LEN=32) :: FileBase = '1.idf'
 	CHARACTER(LEN=32) :: FileName
-	!CHARACTER(LEN=32) :: Refrigerant
 	CHARACTER(LEN=80) :: Refrigerant
 
    LOGICAL FileExists ! Check variable for .idd/.idf files
@@ -403,7 +400,6 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
    TYPE (ObjectsDefinition), ALLOCATABLE :: TempObjectDef(:)    ! Like ObjectDef, used during Re-allocation
    LOGICAL BlankLine
 
-
    MaxSectionDefs=SectionDefAllocInc
    MaxObjectDefs=ObjectDefAllocInc
 
@@ -419,7 +415,6 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
    ObjectDef%MinNumFields=0          ! Minimum number of fields
    ObjectDef%NameAlpha1=.false.      ! by default, not the "name"
    ObjectDef%ObsPtr=0.               ! by default, not obsolete
-   !ObjectDef%VersionNum=0           ! Version number for this Definition
    ObjectDef%NumFound=0              ! Number of this object found in IDF
    ObjectDef%UniqueObject=.false.    ! by default, not Unique
    ObjectDef%RequiredObject=.false.  ! by default, not Required
@@ -460,7 +455,6 @@ SUBROUTINE ProcessDataDicFile(ErrorsFound)
            TempObjectDef%MinNumFields=0   ! Minimum number of fields
            TempObjectDef%NameAlpha1=.false.  ! by default, not the "name"
            TempObjectDef%ObsPtr=0.        ! by default, not obsolete
-           !TempObjectDef%VersionNum=0    ! Version number for this Definition
            TempObjectDef%NumFound=0       ! Number of this object found in IDF
            TempObjectDef%UniqueObject=.false.    ! by default, not Unique
            TempObjectDef%RequiredObject=.false.  ! by default, not Required
@@ -675,8 +669,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   ObjectDef(NumObjectDefs)%ObsPtr=0
   ObjectDef(NumObjectDefs)%UniqueObject=.false.
   ObjectDef(NumObjectDefs)%RequiredObject=.false.
-  !ObjectDef(NumObjectDefs)%VersionNum=0
-
+  
   AlphaorNumeric=.true.
   RequiredFields=.false.
   AlphFieldChecks=Blank
@@ -858,7 +851,6 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   ! Reached end of object def but there may still be more \ lines to parse....
   ! Goes until next object is encountered ("not blankline") or end of IDDFile
   ! If last object is not numeric, then exit immediately....
-!  IF (.not. AlphaorNumeric(Count)) THEN
     BlankLine=.true.
     DO WHILE (BlankLine .and. .not.EndofFile)
     ! It's a numeric object as last one...
@@ -899,7 +891,6 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
       BACKSPACE(Unit=IDDFile)
       EchoInputLine=.false.
     ENDIF
-!  ENDIF
   IF (RequiredField) THEN
     RequiredFields(Count)=.true.
     MinimumNumberOfFields=MAX(Count,MinimumNumberOfFields)
@@ -1308,7 +1299,6 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   LOGICAL TestingObject
   INTEGER TFound
 
-
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
     CALL ShowWarningError('Object name length exceeds maximum, will be truncated='//TRIM(ProposedObject),EchoInputFile)
@@ -1354,7 +1344,6 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   
     ! Start Parsing the Object according to definition
   
-  
       ErrFlag=.false.
       LineItem%Name=SqueezedObject
       LineItem%Alphas=' '
@@ -1386,7 +1375,6 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   !  Keep context buffer in case of errors
   LineBuf=Blank
   IF (.not. ALLOCATED(LineBufLen)) THEN
-    !ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound))
     ALLOCATE(LineBufLen(MaxNumericArgsFound+MaxAlphaArgsFound+1))   !RS Comment: Refrigerant line needs an extra spot for the title
   ENDIF
   LineBufLen=0
@@ -1408,7 +1396,6 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
     ENDIF
     IF (CurPos <= InputLineLength) THEN
       Pos=SCAN(InputLine(CurPos:InputLineLength),',;')
-!      If (Pos == 0) CurPos=InputLineLength+1
       IF (Pos == 0) THEN
         IF (InputLine(InputLineLength:InputLineLength) == '!' .or.  &
             InputLine(InputLineLength:InputLineLength) == '\') THEN
@@ -1535,8 +1522,6 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                   ENDIF
                   LineItem%Numbers(NumNumeric)=0.0
                   LineItem%NumBlank(NumNumeric)=.true.
-                  !LineItem%Numbers(NumNumeric)=-999999.  !0.0
-                  !CALL ShowWarningError('Default number in Input, in object='//TRIM(ObjectDef(Found)%Name))
                 ENDIF
                 ErrFlag=.false.
               ENDIF
@@ -2031,7 +2016,6 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
   INTEGER, INTENT(OUT) :: NumNumbers
   INTEGER, INTENT(OUT) :: Status
 
-
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -2107,7 +2091,6 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
       ENDIF
     ENDIF
   END DO
-
 
   RETURN
 
@@ -2254,7 +2237,6 @@ SUBROUTINE TellMeHowManyObjectItemArgs(Object,Number,NumAlpha,NumNumbers,Status)
       ENDIF
     ENDIF
   END DO
-
 
   RETURN
 
@@ -2580,7 +2562,6 @@ REAL FUNCTION ProcessNumber(String,ErrorFlag)
   INTEGER StringLen
   CHARACTER(len=MaxNameLength) :: PString
 
-
   ProcessNumber=0.0
   !  Make sure the string has all what we think numerics should have
   PString=ADJUSTL(String)
@@ -2889,7 +2870,6 @@ FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
                                                   ! MaxInputLineLength because of PowerStation Compiler
                                                   ! otherwise could say (CHARACTER(len=LEN(InputString))
 
-
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -2952,7 +2932,6 @@ LOGICAL FUNCTION SameString(TestString1,TestString2)
           ! FUNCTION ARGUMENT DEFINITIONS:
    CHARACTER(len=*), INTENT(IN) :: TestString1  ! First String to Test
    CHARACTER(len=*), INTENT(IN) :: TestString2  ! Second String to Test
-
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3224,8 +3203,9 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
         ELSE ! Field Name not recorded
           Message='Out of range value Numeric Field#'//TRIM(FieldString)//', value='//TRIM(ValueString)//', range={'
         ENDIF
-        IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) /= 0) &
+        IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) /= 0) THEN
                    Message=TRIM(Message)//ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxString(1)
+        END IF
         IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) /= 0 .and. &
             ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(2) /= 0) THEN
           Message=TRIM(Message)//' and '//ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%MinMaxString(2)
@@ -3240,7 +3220,6 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
       ENDIF
     ENDIF
   ENDIF
-
 
   RETURN
 
@@ -3421,7 +3400,6 @@ INTEGER FUNCTION GetNumObjectsInIDD()
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
-
 
   GetNumObjectsInIDD=NumObjectDefs
 
@@ -3857,7 +3835,6 @@ SUBROUTINE ShowAuditErrorMessage(Severity,ErrorMessage)
     WRITE(EchoInputFile,ErrorFormat) ' ************* '//TRIM(ErrorMessage)
   ENDIF
 
-
   RETURN
 
 END SUBROUTINE ShowAuditErrorMessage
@@ -3918,7 +3895,7 @@ SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
           ! na
 
           ! USE STATEMENTS:
-  USE DataStringGlobals
+  USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

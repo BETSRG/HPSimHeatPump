@@ -181,8 +181,6 @@ PUBLIC hcRefside
 PUBLIC AirSideCalc 
 PUBLIC CalcCoilArea
 PUBLIC CalcUA
-!PUBLIC CalcYorkhco
-!PUBLIC CalcYorkDP
 PUBLIC MODdP
 PUBLIC Reynolds 
 PUBLIC Prandtl
@@ -462,7 +460,9 @@ REAL hcRefVap !Refrigerant heat transfer coefficient at
 				CALL hTPShahCond(ID,xRef,mRef,vg,vf,muRef,mug,muf,kL,kV,CpL,CpV,Psat,Pcrit,hcRef)
 				!CALL hTPDobson(CoilType,ID,xRef,mRef,vg,vf,mug,muf,kL,kV,CpL,CpV,hcRef)		
 		ELSE
-			IF (Qout .LT. 0) Qout=0
+			IF (Qout .LT. 0) THEN
+                Qout=0
+            END IF
 			!IF (xRef .LT. xMax) THEN !ISI - 09/11/06
 			!IF (xRo .LT. xMax) THEN
 				!CALL hTPevapWattelet(ID,mRef,muf,mug,vf,vg,kL*1e3,kV*1e3,CpL*1e3,CpV*1e3,xRef, &
@@ -631,8 +631,6 @@ REAL sigma    !Ratio of Amin to AfrCoil, [-]
 REAL Ki       !Contraction coefficient, [-]
 REAL Ke       !Expansion coefficient, [-]
 REAL h1,h2,h3 !Empirical coefficient for the York correlation
-!REAL Dchannel       !Channel diameter, [m]
-!INTEGER NumOfChannels  !Number of channels
 INTEGER I
 
 !Flow:
@@ -1049,7 +1047,6 @@ RETURN
 END SUBROUTINE CalcCustomAirDP
 
 
-
 !************************************************************************
 
 SUBROUTINE CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,OD,TubeThk,TubeDepth, &
@@ -1322,7 +1319,6 @@ SUBROUTINE hSPGnielinski(ID,mRef,xRef,muRef,mug,muf,kRef,CpRef,hSP)
 !
 !------------------------------------------------------------------------
 
-
 IMPLICIT NONE
 
 !Subroutine passing variables:
@@ -1437,7 +1433,6 @@ REAL hTPmin !Minimum two-phase heat transfer coefficient, [kW/m^2-K]
 REAL hTPmax !Maximum two-phase heat transfer coefficient, [kW/m^2-K]
 REAL VelGas !Wallis dimensionless gas velocity, [-]
 
-
 !Flow:
 
   Acs=(PI*ID*ID)/4.0
@@ -1448,7 +1443,6 @@ REAL VelGas !Wallis dimensionless gas velocity, [-]
   VelGas=Gref*xRef/SQRT(9.8*ID*rhog*(rhof-rhog))
 
   IF (xRef .GE. xMin .AND. xRef .LE. xMax) THEN !ISI - 09/27/06
-  !IF (xRef .GE. xMin) THEN
     Xtt=(rhog/rhof)**0.5*(muf/mug)**0.125*((1-xRef)/xRef)**0.875
     PrL=CpL*muf/kL
     ReL=Gref*ID*(1.0-xRef)/muf
@@ -2083,7 +2077,6 @@ REAL phi     !Intermediate variable
 
 !Flow:
 
-  !CALL hSPDittus(CoilType,ID,mRef,0.0D0,muf,mug,muf,kL,CpL,hliq)
   CALL hSPDittus(CoilType,ID,mRef,0.00,muf,mug,muf,kL,CpL,hliq)
   
   IF (Qout .EQ. 0) THEN
@@ -2242,7 +2235,6 @@ REAL hwet	  !Wet surface heat transfer coefficient, [kW/m^2-K]
 	Pred=Psat/Pcrit
 
 	hnb=55.0*MolWeight**(-0.5)*(Qout/AoMod)**0.67*Pred**0.12*(-LOG10(Pred))**(-0.55)
-
 
     IF (xRef .LT. xMax) THEN
 		Xtt=(rhog/rhof)**0.5*(muf/mug)**0.125*((1-xRef)/xRef)**0.875
@@ -2891,9 +2883,7 @@ REAL ReTransit !Reynolds number transition from laminar to turbulent
     IF (xRef .LE. 0.0) THEN
         ff=0.079/(Re**(0.25))
     END IF
-  !ELSEIF (Re .GT. 1E5 .AND. Re .LT. 3E6) THEN
-  !  ff=(0.0032+0.221*Re**(-0.237))/4
-  ELSE !IF (Re .LE. 2300. .AND. Re .NE. 0.0) THEN
+  ELSE
     ff=16./Re
   END IF
 
@@ -3568,7 +3558,6 @@ END SUBROUTINE
 
 !************************************************************************
 
-!SUBROUTINE PmomTWOphase(tRi,pRi,vgi,vfi,xRi,vgo,vfo,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 !SUBROUTINE PmomTWOphase(tRi,tRo,vgi,vfi,xRi,vgo,vfo,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 SUBROUTINE  PmomTWOphase(tRi,tRo,vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 
@@ -3688,7 +3677,6 @@ END SUBROUTINE
 
 !************************************************************************
 
-!SUBROUTINE ElevdP(xR,tR,pR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil)
 SUBROUTINE ElevdP(xR,tR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
@@ -3716,7 +3704,6 @@ IMPLICIT NONE
 !Inputs:
 REAL xR       !Refrigerant quality
 REAL tR       !Refrigerant temperature, [C]
-!REAL pR       !Refrigerant pressure, [kPa]
 REAL vRef     !Refrigerant specific volume, [m^3/kg]
 REAL vg       !Vapor specific volume, [m^3/kg]
 REAL vf       !Liquid specific volume, [m^3/kg]
@@ -4193,10 +4180,6 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
 	!				 Cair,Const,Rair,Rtube,AiMod,Lmod, &
     !                 MassLiqTP,MassVapTP,MassModTP)
 
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,DBLE(1.0E-6),vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
     CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,1.0E-6,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,LmodTP, &
@@ -4492,7 +4475,6 @@ REAL alpha      !Void fraction
   xo=xRo
   xi=xRi
 
-  !IF (CoilType .GT. 2) THEN !for interconnecting pipes
   IF (CoilType .EQ. HIGHSIDETUBE .OR. &
       CoilType .EQ. LOWSIDETUBE) THEN !for interconnecting pipes
 
@@ -4588,7 +4570,6 @@ INTEGER Iter                 !Iteration loop counter
     ReAlpha=ID*Gref/(muf+alphaPrev*(mug-muf))
 	ZZ=(ID*Gref/(muf+alphaPrev*(mug-muf)))**0.167* &
 	   (1/(9.8*ID)*(Gref*xRef/(rhog*beta*(1-beta)))**2)**0.125
-    !KH=0.9772*EXP(-2.1535*1/ZZ) !Exponential fit
 	IF (ZZ .LT. 8) THEN
 		KH=0.0017*ZZ**3-0.0393*ZZ**2+0.3258*ZZ-0.1792    
 	ELSE
@@ -4660,8 +4641,6 @@ REAL Ft    !Intermediate variable
   !Xtt=((1-xRef)/xRef)**0.9*(rhog/rhof)**0.5*(mug/muf)**0.1
 
   Ft=(xRef**3*Gref**2/(rhog**2*9.8*ID*(1-xRef)))**0.5
-
-  !alpha=(1+Xtt+1/Ft)**(-0.321)
   
   IF (Ft .GT. 0.01031) THEN
     alpha=1-EXP(-1-0.3*LOG(Ft)-0.0328*(LOG(Ft))**2)
@@ -4722,7 +4701,6 @@ REAL Ref   !Intermediate variable
   
   alpha = (1 - 10.06 * Ref**(-0.875) * (1.74 + 0.104 * Ref**0.5)**2 * &
           (1.376 + 7.242 / (Xtt**1.655))**(-0.5))**2
-
 
   RETURN
 
@@ -4924,7 +4902,6 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
     !CASE (1) !Dry plain fin
     CASE (PLAINFIN)
       !McQuiston
-	  !Dh=4*HXdep*Amin/AoCoil
 	  !JP=ReDc**(-0.4)*(4*Pl*Pt*Amin/(PI*Dh*Dc*Aface))**(-0.15)
 	  !j4=0.0014+0.2618*JP
 	  !j=j4*(1-Nl*1280*RePl**(-1.2))/(1-4*1280*RePl**(-1.2))
@@ -4982,7 +4959,6 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	  !Pd=0.3-1.8mm
 
 	  beta=PI*Dc**2/(4*Pt*Pl)
-	  !Dh=2*FinSpg*(1-beta)/((1-beta)*(1/COSD(theta))+2*FinSpg*beta/Dc)
 	  Dh=4*Amin*HXdep/AoCoil
 	  FinPitch=1/(FinSpg+FinThk)
 	  IF (ReDc .LT. 1000) THEN
@@ -5008,7 +4984,6 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	  !j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
 	  !j4=0.502*(LOG(ReDc)-2.54)
 	  !jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
-
                             
 	END SELECT
 
@@ -5275,7 +5250,6 @@ REAL KFrost
 REAL FrostThk
 
 !Flow:
-
 
 	IF (CoilType .EQ. MCCONDENSER .OR. &
 	    CoilType .EQ. MCEVAPORATOR) THEN !Microchannel coil
@@ -5551,7 +5525,6 @@ REAL Lcoil			  !Coil length, m
 
 	ELSE
 
-		!FinPitch=1/(FinSpg+FinThk)
 		FinSpg=1/FinPitch-FinThk
 
 		!Copper weight
@@ -5689,7 +5662,9 @@ REAL Smin !Minimum of s1 and s2, m
 		!Amin=(CoilHeight/Pt-1)*Smin*CoilWidth-((1-FinThk*FinPitch)*(Pt-Dcollar))*CoilWidth
 
 	END IF
-    IF(CoilType==EVAPORATORCOIL) EvapMinArea = Amin
+    IF(CoilType==EVAPORATORCOIL) THEN
+        EvapMinArea = Amin
+    END IF
 
 RETURN
 
@@ -5734,8 +5709,6 @@ INTEGER          CoilType	!1-condenser;
 							!6-Microchannel evaporator
 REAL tRi     !Refrigerant inlet temperature, [C]
 REAL tRo     !Refrigerant Outlet temperature, [C]
-!REAL hg      !Vapor refrigerant enthalpy, [kJ/kg]
-!REAL hf      !Liquid refrigerant enthalpy, [kJ/kg]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
 REAL vRi     !Refrigerant specific volume, [m^3/kg]
@@ -5745,7 +5718,6 @@ REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfo     !Liquid refrigerant specific volume, [m^3/kg]
 REAL Lmod    !Module length, [m]
 REAL mRef    !Refrigerant mass flow rate, [kg/s]
-!REAL OD      !Tube outside diameter, [m]
 REAL Dh		 !Hydraulic diameter, [m]
 REAL muRef   !Refrigerant dynamic viscosity, [Pa-s]
 REAL mug     !Vapor refrigerant dynamic viscosity, [Pa-s]
@@ -5858,7 +5830,6 @@ REAL Xlow		!High Quality Value for smoothing
 
   DPDZfric=(DPDZfrici+DPDZfrico)/2.0
 
-
   xRef=(xRi+xRo)/2
   IF (xRi .LT. xInter) THEN !Intermittent flow
 	rho=1/(xRi/rhog+(1-xRi)/rhof)
@@ -5904,7 +5875,6 @@ REAL Xlow		!High Quality Value for smoothing
   dPfric=dPdZfric*Lmod*1E-3
   dPmom=dPdZmom*Lmod*1E-3
   dPgrav=dPdZgrav*Lmod*1E-3
-
 
 RETURN
 
@@ -6134,7 +6104,6 @@ REAL PF      !Penalty factor
 	  ELSE
 	    PF = 1E-06*Gref**2 - 0.0023*Gref + 2.6281
 	  END IF
-	  !PF= 8.9533*Gref**(-0.2542)
 	  PF=PF*1 !Modified by ISI 07/09/06
 	CASE (HERRINGBONEWITHCROSSHATCH)
 	  IF (Gref .GT. 800) THEN
@@ -6152,11 +6121,8 @@ REAL PF      !Penalty factor
 	CASE (SMOOTH)
 	  PF=1
 	CASE (MICROFIN)
-      !PF=0.0001*Gref + 1.2415
 	  PF=1
 	CASE (HERRINGBONE)
-	  !PF=2.2603*Gref**(-0.0223)
-	  !PF=1
 	  IF (Gref .GT. 350) THEN
 	    PF=2.0675
 	  ELSE
@@ -6164,9 +6130,6 @@ REAL PF      !Penalty factor
 	  END IF
 	  PF=PF*1 !Modified by ISI 07/13/06
 	CASE (CROSSHATCH)
-	  !PF=3.3598*Gref**(-0.1465)*2 
-	  !PF=3.3598*Gref**(-0.1465) !1-ton
-	  !PF=1 !0.5*(Gref/250)
 	  IF (Gref .GT. 280) THEN ! ISI - 07/13/06
 		PF=1.479996
 	  ELSE
@@ -6174,8 +6137,6 @@ REAL PF      !Penalty factor
 	  END IF
 	  PF=PF*1
 	CASE (HERRINGBONEWITHCROSSHATCH)
-	  !PF=0.0004*Gref + 1.7064
-	  !PF=1
 	  IF (Gref .GT. 350) THEN
 		PF=2.54705
 	  ELSE
@@ -6239,7 +6200,6 @@ REAL EF      !Enhancement factor
 		CASE (MICROFIN) !General micro fin, Eckels et al. (1998) ASHRAE RP-630
 			EF=-1E-06*Gref + 2.323
 		CASE (HERRINGBONE) !Herringbone, !Outokumpu data
-			!EF=6.5288*EXP(-0.0007*Gref)
 			IF (Gref .GT. 1200) THEN
 			  EF = 3.1255
 			ELSE
@@ -6247,16 +6207,13 @@ REAL EF      !Enhancement factor
 			END IF
 			EF=EF*1 !ISI - 07/13/06
 		CASE (CROSSHATCH) !Crosshatch, !Outokumpu data
-			!EF=-0.0007*Gref + 2.5511
 			IF (Gref .GT. 2100) THEN
 			  EF = 1
 			ELSE
 			  EF = 4E-08*Gref**2 - 0.0008*Gref + 2.5461
 			END IF
-			!EF=4.9721*Gref**(-0.1326)
 			EF=EF*1 !2 !Modified by ISI 07/09/06
 		CASE (HERRINGBONEWITHCROSSHATCH) !Herringbone w/crosshatch, !Outokumpu data
-			!EF=7.0139*EXP(-0.0007*Gref)
 			IF (Gref .GT. 1000) THEN
 			  EF = 3.561
 			ELSE
@@ -6275,7 +6232,6 @@ REAL EF      !Enhancement factor
 			EF=-0.0018*Gref + 2.0332
 			EF=EF*1
 		CASE (HERRINGBONE)
-			!EF=0.3217*Gref**0.3778
 			IF (Gref .GT. 350) THEN
 			  EF=2.936117829
 			ELSE
@@ -6283,7 +6239,6 @@ REAL EF      !Enhancement factor
 			END IF
 			EF=EF*1 !ISI - 07/13/06
 		CASE (CROSSHATCH)
-			!EF=4.6628*Gref**(-0.1438)
 			IF (Gref .GT. 250) THEN
 			  EF=2.027555284
 			ELSE
@@ -6291,7 +6246,6 @@ REAL EF      !Enhancement factor
 			END IF
 			EF=EF*1 !2 !ISI - 07/13/06
 		CASE (HERRINGBONEWITHCROSSHATCH)
-			!EF=0.3312*Gref**0.3813
 			IF (Gref .GT. 350) THEN
 			  EF=3.09902775
 			ELSE
@@ -6412,8 +6366,9 @@ REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
 					END DO !End NumOfCkts
 				ELSE !Node at circuit outlet
 					DO K=1, NumOfCkts 
-						IF (Ckt(K)%OutSplit .LE. 1 .AND. Ckt(K)%OutJoin .LE. 1) &
-							Gmat(I,J)=Gmat(I,J)+Ckt(k)%Conduct
+						IF (Ckt(K)%OutSplit .LE. 1 .AND. Ckt(K)%OutJoin .LE. 1) THEN
+                            Gmat(I,J)=Gmat(I,J)+Ckt(k)%Conduct
+                        END IF
 					END DO !End NumOfCkts
 				END IF
 	  
@@ -6443,8 +6398,9 @@ REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
 				ELSE !Node at circuit outlet
 					DO K=1, NumOfCkts 
 						IF (Ckt(K)%OutSplit .LE. 1 .AND. Ckt(K)%OutJoin .LE. 1 .AND. &
-						    Ckt(K)%TubeSequence(1) .EQ. Node(J)%Num) &
-							Gmat(I,J)=Gmat(I,J)-Ckt(k)%Conduct
+						    Ckt(K)%TubeSequence(1) .EQ. Node(J)%Num) THEN
+                            Gmat(I,J)=Gmat(I,J)-Ckt(k)%Conduct
+                        END IF
 					END DO !End NumOfCkts
 				END IF
 			END IF
@@ -6455,12 +6411,14 @@ REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
 		DO J=1, NumOfCkts
 			IF (Node(I)%Num .GT. 0) THEN !Node at circuit outlet
 				IF (((Ckt(J)%InSplit .LE. 1) .AND. (Ckt(J)%InJoin .LE. 1)) .AND. &
-					 ((Ckt(J)%TubeSequence(Ckt(J)%Ntube) .EQ. Node(I)%Num))) &
-					Mmat(I)=Mmat(I)+pRiCoil*Ckt(J)%Conduct
+					 ((Ckt(J)%TubeSequence(Ckt(J)%Ntube) .EQ. Node(I)%Num))) THEN
+                    Mmat(I)=Mmat(I)+pRiCoil*Ckt(J)%Conduct
+                END IF
 				ELSE
 					IF (((Ckt(J)%InSplit .LE. 1) .AND. (Ckt(J)%InJoin .LE. 1)) .AND. &
-						 ((Ckt(J)%OutSplit .LE. 1) .AND. (Ckt(J)%OutJoin .LE. 1))) &
-						Mmat(I)=Mmat(I)+pRiCoil*Ckt(J)%Conduct
+						 ((Ckt(J)%OutSplit .LE. 1) .AND. (Ckt(J)%OutJoin .LE. 1))) THEN
+                        Mmat(I)=Mmat(I)+pRiCoil*Ckt(J)%Conduct
+                    END IF
 			END IF
 		END DO
 	END DO !End Node I
@@ -6490,8 +6448,9 @@ REAL,ALLOCATABLE,DIMENSION(:) :: Pmat      !matrix stores pressure
 				    Ckt(I)%mRef=(pRiCoil-Node(J)%Pressure)*Ckt(I)%Conduct
 				ELSEIF (Ckt(I)%OutSplit .LE. 1 .AND. Ckt(I)%OutJoin .LE. 1) THEN !Connected to coil outlet
 					
-					IF (Ckt(I)%TubeSequence(1) .EQ. Node(J)%Num) &
-						Ckt(I)%mRef=(Node(J)%Pressure-Node(Nnode)%Pressure)*Ckt(I)%Conduct
+					IF (Ckt(I)%TubeSequence(1) .EQ. Node(J)%Num) THEN
+                        Ckt(I)%mRef=(Node(J)%Pressure-Node(Nnode)%Pressure)*Ckt(I)%Conduct
+                    END IF
 					ELSE !Connected between circuits
 						
 						DO K=1, Nnode

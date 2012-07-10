@@ -85,7 +85,6 @@
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
@@ -295,13 +294,6 @@
 
     Acs=DshTube**2*PI/4 
 
-    !IF (XiExp .GT. 0.0) THEN
-    !    SUBC=0.0 ! no subcooling for saturated liquid
-    !ELSE
-    !    SUBC=(TsiExp-TiExp)/Tcr
-    !	  IF (TsiExp-TiExp .LT. 0.1) SUBC=0
-    !END IF
-
     SUBC=(TsiExp-TiExp)/Tcr
     IF ((TsiExp-TiExp) .LT. 0) THEN
         SUBC=0
@@ -363,11 +355,9 @@
 
     Cc=1.0+c(1)*LD**c(2)*(Depth/DshTube)**c(3)
 
-    !IF (XiExp .GT. 0.0 .AND. XiExp .LT. 1) THEN
     IF (SUBC .LE. 0 .AND. XiExp .GE. 0.02) THEN
         Y=XiExp/(1-XiExp)*(rhofiExp/rhogiExp)**0.5
         Ctp=1/(1+a(1)*XiExp)*(1+a(2)*LD**a(3)*Y**(a(4)*LOG(LD)))
-        !IF (Ctp .GE. 1 .OR. Ctp .LE. 0) Ctp=1
     ELSE
         Ctp=1.0  !Inlet liquid is subcooled, no correction needed
     END IF
@@ -488,7 +478,6 @@
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
@@ -501,8 +490,7 @@
     REAL, INTENT(IN)  :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
 
-    !Subroutine local variables
-    !CHARACTER (len=15) :: Property           
+    !Subroutine local variables         
     INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
@@ -845,7 +833,6 @@
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim
 
     IMPLICIT NONE
@@ -1152,7 +1139,6 @@
         OUT(6)=QdisTube    
 
     END IF
-
 
     !VL: Previously:200 CONTINUE
     OUT(7)=ErrorFlag

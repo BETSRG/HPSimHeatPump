@@ -49,10 +49,9 @@ SUBROUTINE GetInputs
 !
 ! ----------------------------------------------------------------------
 
-USE RefNameMod
 USE DataStopCodes
 USE InputProcessor
-USE DataGlobals, ONLY: MaxNameLength
+USE DataGlobals, ONLY: MaxNameLength, RefName
 
 IMPLICIT NONE
 
@@ -197,8 +196,6 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
-!INTEGER CoolingDesignCondition  !Selected Cooling Design Condition
-!Integer HeatingDesignCondition  !Selected Heating Design Condition
 REAL Subcooling   !Design Subcooling
 REAL Superheat    !Design Superheat
 CHARACTER(len=MaxNameLength)RefrigerantName
@@ -331,12 +328,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1
-
   
   !***************** System data *****************
-
-  !CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
-                        !Numbers,NumNumbers,Status)      
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
@@ -382,9 +375,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !***************** Compressor data *****************
 
-  !CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)   
-  
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
@@ -441,12 +431,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
   Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
   Super = Numbers(30) !UserSpecifiedRatingSuperheat
-
   
   !***************** Outdoor coil data *****************
-  
-  !CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
-  !                      Numbers,NumNumbers,Status)   
 
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
@@ -484,12 +470,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
     !Tube wall thickness, mm or mil
   ODC_TubeThk=(ODC_TubeOD-ODC_TubeID)/2
-  IF (Unit .EQ. IP) ODC_TubeThk=ODC_TubeThk*1000 
+  IF (Unit .EQ. IP) THEN
+      ODC_TubeThk=ODC_TubeThk*1000
+  END IF
 
   !***************** Outdoor fan data *****************
-  
-  !CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)
 
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
@@ -504,9 +489,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     !Then we don't end up reading the separator *** line here, we just start with the next line
 
   !***************** Indoor coil data *****************
-  
-  !CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -542,13 +524,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Tube wall thickness, mm or mil
   IDC_TubeThk=(IDC_TubeOD-IDC_TubeID)/2
-  !IF (Unit .EQ. 2) IDC_TubeThk=IDC_TubeThk*1000  !ISI - 07/14/06
-  IF (Unit .EQ. IP) IDC_TubeThk=IDC_TubeThk*1000 
+  IF (Unit .EQ. IP) THEN
+      IDC_TubeThk=IDC_TubeThk*1000
+  END IF
 
   !***************** Indoor fan data *****************
-  
-  !CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status) 
   
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
@@ -561,10 +541,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 
   !***************** Expansion device data *****************
-  
-  !CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)  
-  
+
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
  
@@ -602,7 +579,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   HeatingShTbPAR(2) = Numbers(5)    !Diameter
   HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
 
-  
   !Capillary Tube
   
   !Cooling Mode
@@ -616,7 +592,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   HeatingCapTubePAR(2) = Numbers(10)    !Length
   HeatingCapTubePAR(1) = Numbers(11)    !Diameter
   HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
-
 
   !TXV data
 
@@ -645,9 +620,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !*****************Refrigerant line data******************
 
-  !CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)  
-  
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
@@ -670,8 +642,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Suction line tube wall thickness, mm or mil
   SucLnPAR(3)=(SucLnPAR(2)-SucLn_TubeID)/2
-  !IF (Unit .EQ. 2) SucLnPAR(3)=SucLnPAR(3)*1000 !ISI - 07/14/06 
-  IF (Unit .EQ. IP) SucLnPAR(3)=SucLnPAR(3)*1000 
+  IF (Unit .EQ. IP) THEN
+      SucLnPAR(3)=SucLnPAR(3)*1000
+  END IF
 
   !Discharge Line
   
@@ -690,8 +663,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Discharge line tube wall thickness, mm or mil
   DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2
-  !IF (Unit .EQ. 2) DisLnPAR(3)=DisLnPAR(3)*1000 !ISI - 07/14/06 
-  IF (Unit .EQ. IP) DisLnPAR(3)=DisLnPAR(3)*1000 
+  IF (Unit .EQ. IP) THEN
+      DisLnPAR(3)=DisLnPAR(3)*1000
+  END IF
 
    !Liquid Line
   
@@ -710,8 +684,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Liquid line tube wall thickness, mm or mil
   LiqLnPAR(3)=(LiqLnPAR(2)-LiqLn_TubeID)/2
-  !IF (Unit .EQ. 2)LiqLnPAR(3)=LiqLnPAR(3)*1000 !ISI - 07/14/06 
-  IF (Unit .EQ. IP)LiqLnPAR(3)=LiqLnPAR(3)*1000  
+  IF (Unit .EQ. IP) THEN
+      LiqLnPAR(3)=LiqLnPAR(3)*1000
+  END IF
 
   !Reversing Valve to IDC
   
@@ -730,8 +705,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Valve to IDC line tube wall thickness, mm or mil
   ValveIDCLnPAR(3)=(ValveIDCLnPAR(2)-ValveIDCLn_TubeID)/2
-  !IF (Unit .EQ. 2)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000 !ISI - 07/14/06
-  IF (Unit .EQ. IP)ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000
+  IF (Unit .EQ. IP) THEN
+      ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000
+  END IF
 
     !Valve to ODC Line
   
@@ -755,9 +731,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !********************Refrigerant Cycle Data (Cooling)***********************
 
-  !CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)  
-
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   
@@ -767,12 +740,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   Tliq = Numbers(1)    !Inlet Temperature
   
-  
   !********************Refrigerant Cycle Data (Heating)***********************
 
-  !CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)
-  
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
@@ -788,9 +757,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
 
   !*************** Accumulator ****************
-
-  !CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)  
 
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
@@ -812,11 +778,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
-
   !*************** Filter Drier ****************
-
-  !CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)  
 
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
@@ -828,12 +790,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   FilterPAR(1) = Numbers(1) !Flow capacity
   FilterPAR(2) = Numbers(2) !Rating DP
-  
+
   
   !*************** Custom Air Side Heat Transfer Data **************
-
-  !CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
-  !                    Numbers,NumNumbers,Status)        
 
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)       
@@ -891,15 +850,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
  
   !*************** Charge Tuning Curve ***************
-  
-  !CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
-  !                      Numbers,NumNumbers,Status)      
 
   CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
 
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
   
   SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
   CASE ('F','f')
@@ -929,7 +884,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   END IF
 
   !***** Calculate weight of interconnecting pipes ****
-  !IF (Unit .EQ. 1) THEN !SI unit !ISI - 07/14/06
+
   IF (Unit .EQ. SI) THEN
 	  CopperVol=PI*(DisLnPAR(2)**2-(DisLnPAR(2)-2*DisLnPAR(3))**2)/4/1000*DisLnPAR(1)
 	  WeightDisLn=CopperVol*CopperDensity
@@ -968,14 +923,12 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   END IF
 
-  
   IF (SystemType .EQ. HEATPUMP) THEN
 
 	CondPAR(58)=HeatingDistubeLength
 
     IF (IsCoolingMode .GT. 0) THEN
-	
-	  !IF (Unit .EQ. 1) THEN !SI unit !ISI - 07/14/06
+
 	  IF (Unit .EQ. SI) THEN !SI unit
 
 	    !Equilibruim Discharge line, combines compressor discharge line and valve to ODC line
@@ -991,7 +944,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)
 			TotAddDP=DisLnPAR(7)
 		ELSE
-			!EqDiameter=(DisLnPAR(2)+ValveODCLnPAR(2))/2
 			EqLength=DisLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(DisLnPAR(3)+ValveODCLnPAR(3))/2
 			TotElevation=DisLnPAR(4)+ValveODCLnPAR(4)
@@ -999,7 +951,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveODCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness)*1e-3)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
 
         DisLnPAR(1)=EqLength
@@ -1023,7 +974,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)
 			TotAddDP=SucLnPAR(7)
 		ELSE
-			!EqDiameter=(SucLnPAR(2)+ValveIDCLnPAR(2))/2
 			EqLength=SucLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(SucLnPAR(3)+ValveIDCLnPAR(3))/2
 			TotElevation=SucLnPAR(4)+ValveIDCLnPAR(4)
@@ -1031,7 +981,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveIDCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness)*1e-3)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
 	
         SucLnPAR(1)=EqLength
@@ -1057,7 +1006,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)
 			TotAddDP=DisLnPAR(7)
 		ELSE
-			!EqDiameter=(DisLnPAR(2)+ValveODCLnPAR(2))/2
 			EqLength=DisLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(DisLnPAR(3)+ValveODCLnPAR(3))/2
 			TotElevation=DisLnPAR(4)+ValveODCLnPAR(4)
@@ -1065,7 +1013,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveODCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness*1e-3)/12)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
 
         DisLnPAR(1)=EqLength
@@ -1076,7 +1023,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to IDC line
+        !Equilibrium suction line, combines compressor suction line and valve to IDC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveIDCLn
@@ -1089,7 +1036,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)
 			TotAddDP=SucLnPAR(7)
 		ELSE
-			!EqDiameter=(SucLnPAR(2)+ValveIDCLnPAR(2))/2
 			EqLength=SucLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(SucLnPAR(3)+ValveIDCLnPAR(3))/2
 			TotElevation=SucLnPAR(4)+ValveIDCLnPAR(4)
@@ -1097,7 +1043,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveIDCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness*1e-3)/12)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
 
         SucLnPAR(1)=EqLength
@@ -1112,7 +1057,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
     ELSE !Heating mode
 
-	  !IF (Unit .EQ. 1) THEN !SI unit !ISI - 07/14/06
 	  IF (Unit .EQ. SI) THEN !SI unit
 
 	    !Equilibruim Discharge line, combines compressor discharge line and valve to IDC line
@@ -1128,7 +1072,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)
 			TotAddDP=DisLnPAR(7)
 		ELSE
-			!EqDiameter=(DisLnPAR(2)+ValveIDCLnPAR(2))/2
 			EqLength=DisLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(DisLnPAR(3)+ValveIDCLnPAR(3))/2
 			TotElevation=DisLnPAR(4)+ValveIDCLnPAR(4)
@@ -1136,7 +1079,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveIDCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness)*1e-3)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
 
         DisLnPAR(1)=EqLength
@@ -1160,7 +1102,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)
 			TotAddDP=SucLnPAR(7)
 		ELSE
-			!EqDiameter=(SucLnPAR(2)+ValveODCLnPAR(2))/2
 			EqLength=SucLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(SucLnPAR(3)+ValveODCLnPAR(3))/2
 			TotElevation=SucLnPAR(4)+ValveODCLnPAR(4)
@@ -1168,7 +1109,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveODCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness)*1e-3)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
 
         SucLnPAR(1)=EqLength
@@ -1194,7 +1134,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)
 			TotAddDP=DisLnPAR(7)
 		ELSE
-			!EqDiameter=(DisLnPAR(2)+ValveIDCLnPAR(2))/2
 			EqLength=DisLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(DisLnPAR(3)+ValveIDCLnPAR(3))/2
 			TotElevation=DisLnPAR(4)+ValveIDCLnPAR(4)
@@ -1202,7 +1141,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=DisLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveIDCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness*1e-3)/12)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
 
         DisLnPAR(1)=EqLength
@@ -1226,7 +1164,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)
 			TotAddDP=SucLnPAR(7)
 		ELSE
-			!EqDiameter=(SucLnPAR(2)+ValveODCLnPAR(2))/2
 			EqLength=SucLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
 			EqThickness=(SucLnPAR(3)+ValveODCLnPAR(3))/2
 			TotElevation=SucLnPAR(4)+ValveODCLnPAR(4)
@@ -1234,7 +1171,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotTempChange=SucLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveODCLnPAR(7)
 		END IF
-		!EqLength=4*TotVolume/(PI*((EqDiameter-2*EqThickness*1e-3)/12)**2)
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
 
         SucLnPAR(1)=EqLength
@@ -1274,7 +1210,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   EvapPAR(5)=SucLnPAR(5) !Suction line heat loss, W or Btu/hr  
   EvapPAR(6)=SucLnPAR(6) !Suction line temperature change, C or F
   EvapPAR(7)=SucLnPAR(7) !Suction line additional pressure drop
-
 
   IF (IsCoolingMode .GT. 0) THEN
 
@@ -1527,22 +1462,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   END IF
 
   CLOSE(11)
-
- ! IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
-	  !IF (IsCoolingMode .GT. 0) THEN
-	    !IDCcoilType = MCEVAPORATOR
-	  !ELSE
-		!IDCcoilType = MCCONDENSER
-	  !END IF
- ! ELSE
-	  !IF (IsCoolingMode .GT. 0) THEN
-	    !IDCcoilType = EVAPORATORCOIL
-	  !ELSE
-		!IDCcoilType = CONDENSERCOIL
-	  !END IF
-  !END IF
-
-  !CLOSE(12)
 
   !!VL: Previously ...
   !!201 FORMAT(10(E))

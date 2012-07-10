@@ -71,7 +71,6 @@ CONTAINS
     !
     ! ----------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
@@ -214,8 +213,6 @@ CONTAINS
             !
             !10      X = -TSUP
             !VL: Previously: 10  X = xRo
-
-
             X = xRo
             RMS = RMASS/3600.
             RMSL = (1.-X)*RMS
@@ -264,7 +261,6 @@ CONTAINS
                     AMASS2 = AACC*AHGT*RO
                     !VL: Previously:GO TO 40
                     FLAG_GOTO_40 = .TRUE.
-
                     !
                     !       FIND LEVEL ABOVE SECOND HOLE
                     !
@@ -296,7 +292,6 @@ CONTAINS
                         !VL: Previously:16                  RMT = RMT + RM
                         RMT = RMT + RM
                     END DO
-
                     !
                     DIFF2 = RMT-RMSL
                     IF(J.EQ.1.AND.DIFF2.GT.0.0) THEN
@@ -315,7 +310,6 @@ CONTAINS
                         FLAG_GOTO_40 = .TRUE.
                         EXIT
                     END IF
-
                     !
                     !       CHECK FOR CONVERGENCE ON LEVEL ABOVE SECOND HOLE
                     !
@@ -331,7 +325,6 @@ CONTAINS
                         DIFF1 = DIFF2
                         Z1 = Z2
                     END IF
-
                     !VL: Previously: 20                  Z2 = Z1 - DIFF1*SLOPE
                     Z2 = Z1 - DIFF1*SLOPE
                     Z2 = AMAX1(Z2,HDIS)
@@ -372,8 +365,6 @@ CONTAINS
     OUT(4)=XLEVEL*0.0254    !Liquid level, convert from in to m
     OUT(5)=AccumDP
 
-
-
     !VL: Previously: 200 CONTINUE
     OUT(6)=ErrorFlag
 
@@ -400,7 +391,6 @@ CONTAINS
     !
     ! ----------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
@@ -429,36 +419,52 @@ CONTAINS
 
     !Flow:
 
-    IF (Xliq .GT. 1) Xliq=1
-    IF (Xliq .LT. 0) Xliq=0
-    IF (Xvap .GT. 1) Xvap=1
-    IF (Xvap .LT. 0) Xvap=0
+    IF (Xliq .GT. 1) THEN
+        Xliq=1
+    END IF
+    IF (Xliq .LT. 0) THEN
+        Xliq=0
+    END IF
+    IF (Xvap .GT. 1) THEN
+        Xvap=1
+    END IF
+    IF (Xvap .LT. 0) THEN
+        Xvap=0
+    END IF
 
     ErrorFlag=0
 
     Temperature=TsatEvp
     Quality=1
     Psuc=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+        RETURN
+    END IF
     Psuc=Psuc/1000
 
     Temperature=TsatCnd
     Quality=1
     Pdis=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+        RETURN
+    END IF
     Pdis=Pdis/1000
 
     IF (Superheat .GT. 0) THEN
         Pressure=Psuc*1000
         Temperature=TsatEvp+Superheat
         Hvap=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+            RETURN
+        END IF
         Hvap=Hvap/1000
     ELSE
         Pressure=Psuc*1000
         Quality=Xvap
         Hvap=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+            RETURN
+        END IF
         Hvap=Hvap/1000
     END IF
 
@@ -466,13 +472,17 @@ CONTAINS
         Pressure=Pdis*1000
         Temperature=TsatCnd-Subcooling
         Hliq=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+            RETURN
+        END IF
         Hliq=Hliq/1000
     ELSE
         Pressure=Pdis*1000
         Quality=Xliq
         Hliq=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+        IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+            RETURN
+        END IF
         Hliq=Hliq/1000
     END IF
 
@@ -490,7 +500,9 @@ CONTAINS
             Temperature=TsatEvp-EstDT
             Quality=1
             Psat2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-            IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) RETURN
+            IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
+                RETURN
+            END IF
             Psat2=Psat2/1000
 
             RatedDP = Psat1 - Psat2

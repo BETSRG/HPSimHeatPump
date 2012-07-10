@@ -28,7 +28,6 @@
     !
     !
     USE InputPreProcessor
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE HeatPumpInput
     USE CompressorMod
@@ -39,7 +38,6 @@
     USE DataSimulation
     USE IFPORT
     USE FrostModel
-    USE GeneralRoutines
     USE InputProcessor
     USE DataGlobals, ONLY: RefName
 
@@ -106,7 +104,6 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     
-    
     !Flow**:
     CALL PreProcessInput
     CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
@@ -135,7 +132,6 @@
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
 
-    !IF (TsiCmp .GT. TaiE) THEN
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
     END IF
@@ -293,7 +289,6 @@
         END IF  
         PoCmp=PoCmp/1000.0
 
-        !IF (SUPER .GT. 0) THEN
         IF (SUPER .GE. 0) THEN !ISI - 11/16/07
 
             Temperature=Temperature_F2C(TSICMP+SUPER)
@@ -322,7 +317,6 @@
             HiCmp=HiCmp/1000
 
         END IF
-
 
         CompIN(1)=PiCmp   ! VL_Index_Replace
         CompIN(2)=PoCmp	! VL_Index_Replace
@@ -500,7 +494,6 @@
                 END IF
             END IF
 
-
             IF (IsCoolingMode .GT. 0) THEN
                 CondOUT(7)=Tliq
                 Temperature=Tliq
@@ -585,7 +578,6 @@
                 CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)	
                 SimpleQevp=-EvapOUT(11)	! VL_Index_Replace
                 CALL EndEvaporatorCoil
-
 
                 IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.005) THEN	! VL_Magic_Number
                     EvapPAR(53)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting
@@ -843,16 +835,6 @@
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
 
-                    !  IF (PrnLog .EQ. 1)  THEN 
-                    !	WRITE(6,*)	
-                    !   WRITE(6,*)'~~~~ Start refined simulation ~~~~'
-                    !  END IF
-                    !  
-                    !  IF (PrnCon .EQ. 1) THEN
-                    !    WRITE(*,*)
-                    !    WRITE(*,*)'~~~~ Start refined simulation ~~~~'
-                    !  END IF
-
                     !~Refine convergence criteria and run simulation again
                     CoarseConvergenceCriteriaMet=.TRUE.
 
@@ -896,16 +878,6 @@
                 !GO TO 30 !Skip refined simulation
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
-
-                    !  IF (PrnLog .EQ. 1)  THEN 
-                    !	WRITE(6,*)	
-                    !    WRITE(6,*)'~~~~ Start refined simulation ~~~~'
-                    !  END IF
-                    !  
-                    !  IF (PrnCon .EQ. 1) THEN
-                    !    WRITE(*,*)
-                    !    WRITE(*,*)'~~~~ Start refined simulation ~~~~'
-                    !  END IF
 
                     !~Refine convergence criteria and run simulation again
                     CoarseConvergenceCriteriaMet=.TRUE.
@@ -978,7 +950,6 @@
 
     CLOSE(5)
     CLOSE(6)
-    !CLOSE(7)
     CLOSE(9)
 
     CALL PrintCondenserResult 

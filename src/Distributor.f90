@@ -3,7 +3,6 @@ SUBROUTINE Distributor(Ref$,LTUBE,Nckts,mdotRef,TiExp,HiExp,PoEvp, &
 
 !To calculate total pressure drop in distributor
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
@@ -139,7 +138,6 @@ REAL, INTENT(OUT) :: DPNOZ !Pressure drop through nozzle, psi
       ELSE
         DPNOZ=15.81*Load**1.265
       END IF
-	  !DPNOZ = 0.0175*Load**2 + 22.942*Load - 7.8955 !ISI - 07/14/06
   CASE ("R134A")
       DPNOZ = 0.0175*Load**2 + 22.942*Load - 7.8955
   CASE ("R22")
@@ -148,25 +146,20 @@ REAL, INTENT(OUT) :: DPNOZ !Pressure drop through nozzle, psi
       Else
         DPNOZ=29.4*Load**0.9547
       END IF
-	  !DPNOZ = -6.5301*Load**2 + 50.928*Load - 18.632 !ISI - 07/14/06
   CASE ("R407C")
 	  DPNOZ = -6.5301*Load**2 + 50.928*Load - 18.632  
   CASE ("R410A")
       IF (Load .EQ. 1.0) THEN
-          !DPNOZ=35
 	      DPNOZ=25*Load**1.838 !ISI - 07/14/06
       ELSE
-          !DPNOZ=(-0.6127*Load**2+46.958*Load-11.298) !ISI - 07/14/06
 	      DPNOZ=29.4*Load**0.9547
       END IF
-	  !DPNOZ = -0.6127*Load**2 + 46.958*Load - 11.298 !ISI - 07/14/06
   CASE DEFAULT !R22
       IF (Load .NE. 1.1) THEN
         DPNOZ=15*Load**1.817
       ELSE
         DPNOZ=15.81*Load**1.265
       END IF
-	  !DPNOZ = -6.5301*Load**2 + 50.928*Load - 18.632 !ISI - 07/14/06
   END SELECT
 
   RETURN
@@ -193,24 +186,20 @@ REAL, INTENT(OUT) :: DPTUBE !Tube pressure drop, psi
       ELSE
           DPTUBE=12.265*Load**1.3377
       END IF
-	  !DPTUBE = 3.4314*Load**2 + 11.098*Load - 4.2132 !ISI - 07/14/06
   CASE ("R134A")
       DPTUBE = 3.4314*Load**2 + 11.098*Load - 4.2132
   CASE ("R22")
       DPTUBE=10*Load**1.8122
-	  !DPTUBE = 6.6527*Load**2 + 5.1331*Load - 1.7248 !ISI - 07/14/06 
   CASE ("R407C")
 	  DPTUBE = 6.6527*Load**2 + 5.1331*Load - 1.7248  
   CASE ("R410A")
-	  DPTUBE=10*Load**1.8122  
-	  !DPTUBE = 0.9804*Load**2 + 13.167*Load - 3.9485 !ISI - 07/14/06
+	  DPTUBE=10*Load**1.8122
   CASE DEFAULT !R22
       IF (Load .NE. 1.6) THEN
           DPTUBE=10*Load**1.772
       ELSE
           DPTUBE=12.265*Load**1.3377
       END IF
-	  !DPTUBE = 6.6527*Load**2 + 5.1331*Load - 1.7248 !ISI - 07/14/06 
   END SELECT
 
   RETURN
@@ -268,15 +257,10 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
       QNOZRTD = 0.0002*TSOEVP**2 + 0.025*TSOEVP + 2.3157
   END SELECT
 
-  !IF (TITXV .LE. 100) THEN
-    !  CFnoz=10**((100-TITXV)/155.18)
-  !ELSE
-    !  CFnoz=10**((100-TITXV)/140.19)
-  !END IF
-  
-  IF (TITXV .GT. 40) CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+  IF (TITXV .GT. 40) THEN
+      CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
+  END IF
 
-  !QNOZRTD = a*CFnoz*10**((TSOEVP - 40) / b)
   QNOZRTD = CFnoz*QNOZRTD
 
   RETURN
@@ -328,19 +312,12 @@ REAL CFnoz !Correction factor for liquid temp. other then 100 F
 	  QTUBERTD = 7E-05*TSOEVP**2 + 0.0092*TSOEVP + 0.6574
   END SELECT
 
-  !IF (TITXV .LE. 100) THEN
-    !  CFnoz=10**((100-TITXV)/155.18)
-  !ELSE
-    !  CFnoz=10**((100-TITXV)/140.19)
-  !END IF
-
   IF (TITXV .GT. 40) THEN
       CFnoz=0.0001*TITXV**2 - 0.0394*TITXV + 3.7791
   END IF
 
   CFtube=(30/LTUBE)**0.333
 
-  !QTUBERTD = a*CFtube*CFnoz*10**((TSOEVP - 40) / b)
   QTUBERTD = CFtube*CFnoz*QTUBERTD
 
   RETURN

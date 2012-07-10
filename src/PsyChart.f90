@@ -59,7 +59,6 @@
     REAL RELHUM,WETBULB,DEWPOINT,RHODRY,RHOMOIST,SATPRESS
     LOGICAL IsCvg
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
     Hfg=2501000.
     CpVap=1805.
@@ -170,7 +169,6 @@
     REAL DEWPOINT,RHODRY,RHOMOIST
     LOGICAL IsCvg
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     ErrStat = 0
@@ -408,7 +406,6 @@
     REAL RHODRY,RHOMOIST
     LOGICAL IsCvg
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     ErrStat = 0
@@ -501,7 +498,6 @@
     REAL SATTEMP
     DATA small/1.E-9/
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     !*** Test for "dry" air
@@ -713,7 +709,6 @@
     REAL Patms,psat,TDB,w,BaroPressure
     REAL SATPRESS, HUMRATIO, ENTHALPY
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     !!*** Calculate the saturation pressure at the given temperature.
@@ -779,7 +774,6 @@
     IMPLICIT NONE
     REAL Patms,Pw,BaroPressure
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     HumRatio = 0.62198*Pw/(Patms-Pw)
@@ -904,7 +898,6 @@
     IMPLICIT NONE
     REAL Patms,pw,HumRatio,Psat,BaroPressure
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     pw = Patms*HumRatio/(.62198+HumRatio)
@@ -971,7 +964,6 @@
     IMPLICIT NONE
     REAL Patms,RAir,pAir,W,TDB,BaroPressure
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     RAir=287.055
@@ -1218,13 +1210,11 @@
             RETURN
         END IF
 
-
         !!*** Water temperature not converged, repeat calculations with new
         !!*** estimate of water temperature
 
         !VL: Previously:100 CONTINUE
     END DO
-
 
     !!*** Saturation temperature has not converged after maximum specified
     !!*** iterations. Print error message, set return error flag, and RETURN
@@ -1325,7 +1315,6 @@
         !VL: Previously:100 CONTINUE
     END DO
 
-
     !!*** Temperature has not converged after maximum specified
     !!*** iterations. Print error message and RETURN
 
@@ -1414,7 +1403,6 @@
     
     CHARACTER(LEN=114),PARAMETER :: FMT_1009 = "(/1X,'*** ERROR IN FUNCTION WetBulb ***'/1X,'    Wet bulb temperature has not converged after ',I2,' iterations'/)"
 
-    !Patms=101325.
     Patms=BaroPressure*1000 !ISI 05-23-05
 
     CpWat=4186.
@@ -1466,14 +1454,11 @@
             RETURN
         END IF
 
-
-
         !*** Wet bulb temperature not converged, repeat calculation with new
         !*** estimate of wet bulb temperature.
 
         !VL: Previously: 100 CONTINUE
     END DO
-
 
     !*** Wet bulb temperature has not converged after maximum specified
     !*** iterations. Print error message, set return error flag, and RETURN
@@ -1489,8 +1474,6 @@
 
     !VL: Previously: 999 RETURN
     RETURN
-
-
 
     !***************************
     !   EVOLUTIONARY HISTORY:
@@ -1688,7 +1671,6 @@
         EXIT
 
     END DO
-
 
     !*** Set previous variable values for the next iteration
 

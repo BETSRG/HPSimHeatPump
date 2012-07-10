@@ -4,7 +4,6 @@
 !
       INTEGER IERR
       CHARACTER(LEN=111),PARAMETER :: FMT_1001 = "(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)"
-      
 
       ICOUNT = 0
       IERROR = 0
@@ -73,7 +72,6 @@
               !VL: Previously : GO TO 100
               CYCLE
           END IF
-
 !
           !VL: Previously :125       YMIN = AMIN1(YMIN,ABS(Y2))
           YMIN = AMIN1(YMIN,ABS(Y2))
@@ -98,7 +96,6 @@
               IERROR = 4
               RETURN
           END IF
-
 !
 !	IF SLOPE IS POSITIVE AND "Y" IS GREATER THAN 0. OR
 !	IF SLOPE IS NEGATIVE AND "Y" IS LESS THAN 0. MOVE THE LOWER
@@ -115,7 +112,6 @@
                   X1 = X2
                   Y1 = Y2
               END IF
-
 !
 !VL: Previously :200           X2 = X1 - DDX
               X2 = X1 - DDX
@@ -127,7 +123,6 @@
 !	IF THERE IS A NEGATIVE SLOPE AND "Y" IS GREATER THAN 0. OR
 !	THERE IS A POSITIVE SLOPE AND "Y" IS LESS THAN 0. THEN
 !	MOVE THE RIGHT-HAND POINT FURTHER TO THE RIGHT
-
 
 !
 !VL: Previously :300       IF (X1 .GT. X2) GO TO 400
@@ -152,8 +147,6 @@
 !500   X2 = X1
 !      Y2 = Y1
 !      RETURN
-
-
 
 !VL: All instances of GO TO 999 have been replaced with equivalent return statements      
 !999   IERROR = 4

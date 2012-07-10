@@ -49,8 +49,12 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
 
     IF (RefPropErrValue .GT. 0) THEN
         CALL ShowWarningError(CallingRoutine//': RefProp lookup error')
-        IF ( PRESENT ( VariableToSet1 ) ) VariableToSet1 = ValueIfErrorFound
-        IF ( PRESENT ( VariableToSet2 ) ) VariableToSet2 = ValueIfErrorFound
+        IF ( PRESENT ( VariableToSet1 ) ) THEN
+            VariableToSet1 = ValueIfErrorFound
+        END IF
+        IF ( PRESENT ( VariableToSet2 ) ) THEN
+            VariableToSet2 = REAL(ValueIfErrorFound)
+        END IF
         ErrorFound = .TRUE.
     END IF
 
@@ -60,11 +64,15 @@ END FUNCTION
 
 SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
 
-    INTEGER, INTENT(IN) :: PrnCon, PrnLog
+    REAL, INTENT(IN) :: PrnCon, PrnLog
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
-    IF (PrnLog .EQ. 1) WRITE(6,*) Message
-    IF (PrnCon .EQ. 1) WRITE(*,*) Message
+    IF (PrnLog .EQ. 1) THEN
+        WRITE(6,*) Message
+    END IF
+    IF (PrnCon .EQ. 1) THEN
+        WRITE(*,*) Message
+    END IF
 
 END SUBROUTINE
 
@@ -172,7 +180,6 @@ SUBROUTINE CloseMiscOpenFiles
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-
 
       LOGICAL :: exists, opened
       INTEGER :: UnitNumber
@@ -672,7 +679,6 @@ SUBROUTINE ShowErrorMessage(ErrorMessage,OutUnit1,OutUnit2)
   IF (PRESENT(OutUnit2)) THEN
     WRITE(OutUnit2,ErrorFormat) TRIM(ErrorMessage)
   ENDIF
-
 
   RETURN
 

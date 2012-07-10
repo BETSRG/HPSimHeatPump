@@ -1,10 +1,8 @@
 SUBROUTINE DumpOutputs
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE AirPropMod
 USE DataSimulation
-!USE HeatPumpInput
 
 IMPLICIT NONE
 
@@ -63,7 +61,6 @@ CHARACTER(LEN=69),PARAMETER :: FMT_2212 = "(A24,',',A18,',',A18,',',A21,',',A29,
 CHARACTER(LEN=83),PARAMETER :: FMT_2216 = "(A24,',',F18.3,',',F18.3,',',F21.3,',',F29.3,',',F14.1,',',F17.3,',',F16.3,',',A26)"
 CHARACTER(LEN=53),PARAMETER :: FMT_2220 = "(A18,',',A27,',',A27,',',A24,',',A33,',',A25,',',A20)"
 CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',',F33.3,',',F25.3,',',A20)"
-
 
   IsCoolingMode=EvapPAR(20)
   SELECT CASE(MODE)
@@ -480,8 +477,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XoEvp=0
           END IF
 
-	      !CFMevp=StdCFMevp
-
 	      DPaEvp=EvapOUT(19)*1000
 
 	      Qevp =-EvapOUT(11)*1000
@@ -656,7 +651,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XoCnd=0
           END IF
 
-          !CFMcnd=StdCFMcnd
           Qcnd =CondOUT(15)*1000
 
           TdboCnd=CondOUT(21)
@@ -1039,8 +1033,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  PiEvp=EvapIN(2)
 	  HiEvp=EvapIN(3)
       
-      PwrIDfan=CondPAR(34)*1000 !RS Comment: PwrIDfan is empty unless repopulated; 1000 accounts for CondPAR conversion
-      PwrODfan=EvapPAR(27)*1000 !RS Comment: PwrODfan is empty unless repopulated; 1000 accounts for EvapPAR conversion
+      PwrODfan=CondPAR(34)*1000 !RS Comment: PwrIDfan is empty unless repopulated; 1000 accounts for CondPAR conversion
+      PwrIDfan=EvapPAR(27)*1000 !RS Comment: PwrODfan is empty unless repopulated; 1000 accounts for EvapPAR conversion
 
 	  Pressure=PiEvp*1000
 	  Enthalpy=HiEvp*1000
@@ -1111,8 +1105,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  IF (XoEvp .LE. 0) THEN
           XoEvp=0
       END IF
-
-	  !CFMevp=StdCFMevp
 
 	  DPaEvp=EvapOUT(19)*1000
 
@@ -1249,7 +1241,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  TDBOCND=TdboCnd*1.8+32
 	  TWBICND=TwbiCnd*1.8+32
 	  TWBOCND=TwboCnd*1.8+32
-	  !CFMCND=CFMcnd/UnitL**3
 	  CFMCND=CFMcnd/UnitArFlw
 	  DPACND=DPaCnd/UairPres
 

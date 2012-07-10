@@ -1,6 +1,7 @@
- 
-!MODULE FluidProperties
+
 MODULE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+        !RS Comment: Renamed FluidProperties_HPSim from FluidProperties as Energy+ already has a different refrigerant file
+        !            called FluidProperties with different refrigerant data/modules. Renaming this module makes it easier for integration.
 
         ! MODULE INFORMATION:
         !       AUTHOR         Mike Turner
@@ -182,7 +183,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! USE STATEMENTS:
   USE InputProcessor
-  !USE General, ONLY: TrimSigDigits
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -239,8 +239,6 @@ SUBROUTINE GetFluidPropertiesData
   NumOfSCFluidPropArrays  = GetNumObjectsFound('FluidPropertySubcooled')
   NumOfGlyFluidPropArrays = GetNumObjectsFound('FluidPropertyConcentration')
 
-  !CALL GetObjectItem('FLUIDNAMES',1,Alphas,NumAlphas,Numbers,NumNumbers,Status)
-
   CALL GetObjectItem('FLUIDNAMES',1,Alphas,NumAlphas,TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -276,9 +274,6 @@ SUBROUTINE GetFluidPropertiesData
   ALLOCATE(FluidTemps(NumOfFluidTempArrays))
 
   DO Loop = 1, NumOfFluidTempArrays
-
-    !CALL GetObjectItem('FluidPropertyTemperatures',Loop,Alphas,NumAlphas, &
-                        !Numbers,NumNumbers,Status)
     
     CALL GetObjectItem('FluidPropertyTemperatures',Loop,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -308,9 +303,6 @@ SUBROUTINE GetFluidPropertiesData
 
        TempsName     = ' '
     DO InData = 1, NumOfSatFluidPropArrays
-
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
 
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -360,9 +352,6 @@ SUBROUTINE GetFluidPropertiesData
        TempsName     = ' '
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -406,9 +395,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** ENTHALPY of SATURATED LIQUID *****
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
-
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
       
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -447,9 +433,6 @@ SUBROUTINE GetFluidPropertiesData
 
           ! Get: ***** ENTHALPY of SATURATED LIQUID/VAPOR ***** (difference between Hf and Hg, i.e. Hfg)
     DO InData = 1, NumOfSatFluidPropArrays
-
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
       
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -484,9 +467,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -522,9 +502,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** SPECIFIC HEAT of SATURATED LIQUID/VAPOR ***** (difference between Cpf and Cpg, i.e. Cpfg)
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -563,9 +540,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -606,9 +580,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** DENSITY of SATURATED LIQUID/VAPOR ***** (difference between Rhof and Rhog, i.e. Rhofg)
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -651,9 +622,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -701,9 +669,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** ENTROPY of SATURATED LIQUID/VAPOR ***** (difference between Rhof and Rhog, i.e. Rhofg)
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -749,9 +714,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -792,9 +754,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** VISCOSITY of SATURATED LIQUID/VAPOR ***** (difference between DVf and DVg, i.e. DVfg)
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -835,9 +794,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -880,9 +836,6 @@ SUBROUTINE GetFluidPropertiesData
           ! Get: ***** CONDUCTIVITY of SATURATED LIQUID/VAPOR ***** (difference between Cf and Cg, i.e. Cfg)
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -924,9 +877,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -974,9 +924,6 @@ SUBROUTINE GetFluidPropertiesData
     TempsName     = " "
     DO InData = 1, NumOfSatFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySaturated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1024,10 +971,7 @@ SUBROUTINE GetFluidPropertiesData
     FirstSHMatch  = .TRUE.
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
-        
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
+
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1065,9 +1009,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1098,9 +1039,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1131,9 +1069,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1165,9 +1100,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1198,9 +1130,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1232,9 +1161,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSHFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySuperheated',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1266,9 +1192,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1312,9 +1235,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1353,9 +1273,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1386,9 +1303,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1419,9 +1333,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1451,9 +1362,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1484,9 +1392,6 @@ SUBROUTINE GetFluidPropertiesData
     NumOfPressPts = 0
     DO InData = 1, NumOfSCFluidPropArrays
 
-      !CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
-      !                    Numbers,NumNumbers,Status)
-      
       CALL GetObjectItem('FluidPropertySubcooled',InData,Alphas,NumAlphas, &
                           TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -1755,8 +1660,7 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
   ENDIF
 
 ! get the array indices
-  !LoPressIndex = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsValues)
-  !HiPressIndex = LoPressIndex + 1
+
 
   !To account for temperature glide - ISI 11/06/06
   IF (Quality < 0.5) THEN
@@ -1768,17 +1672,6 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
   END IF
 
   ! check for out of data bounds problems
-  !IF (LoPressIndex == 0) THEN
-  !  LoPressIndex = MAX(1, LoPressIndex)
-  !  WRITE(*,*)'Pressure out of range for saturated region' !- Commented by ISI 01/19/04
-  !	Error=1
-  !  ErrorFlag = .True.
-  !ELSE IF(HiPressIndex > Size(RefrigData(RefrigNum)%PsValues))THEN
-  !  LoPressIndex = MAX(1, LoPressIndex)
-  !  WRITE(*,*)'Pressure out of range for saturated region' !- Commented by ISI 01/19/04
-  !  Error=1
-  !	ErrorFlag = .True.
-  !END IF
 
   IF (LoPressIndex == 0) THEN
     LoPressIndex = MAX(1, LoPressIndex)
@@ -1804,9 +1697,6 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
 
   IF(.NOT. ErrorFlag)THEN
     ! find interpolation ratio w.r.t temperature
-    !PressInterpRatio = (Pressure - RefrigData(RefrigNum)%PsValues(LoPressIndex)) / &
-    !                  (RefrigData(RefrigNum)%PsValues(HiPressIndex) &
-    !                   - RefrigData(RefrigNum)%PsValues(LoPressIndex))
 
     IF (Quality < 0.5) THEN
 		PressInterpRatio = (Pressure - RefrigData(RefrigNum)%PsfValues(LoPressIndex)) / &
@@ -1826,10 +1716,6 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
   ! Apply linear interpolation function
   	SELECT CASE (Property)
 	CASE ('surfacetension')
-    
-	!PQ = RefrigData(RefrigNum)%STValues(LoPressIndex) + PressInterpRatio * &
-	!						  (RefrigData(RefrigNum)%STValues(HiPressIndex) - &
-	!						   RefrigData(RefrigNum)%STValues(LoPressIndex))
 
 	IF (Quality < 0.5) THEN
 		PQ = RefrigData(RefrigNum)%STfValues(LoPressIndex) + PressInterpRatio * &
@@ -2048,9 +1934,6 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
   SELECT CASE (Property)
   CASE ('surfacetension')
   
-  !TQ = RefrigData(RefrigNum)%STValues(LoTempIndex) + TempInterpRatio * &
-  !                            (RefrigData(RefrigNum)%STValues(HiTempIndex) - &
-  !                             RefrigData(RefrigNum)%STValues(LoTempIndex))
   IF (Quality < 0.5) THEN
 	  TQ = RefrigData(RefrigNum)%STfValues(LoTempIndex) + TempInterpRatio * &
 								  (RefrigData(RefrigNum)%STfValues(HiTempIndex) - &
@@ -2075,9 +1958,6 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
   CASE ('pressure') 
   !CALCULATE PRESSURE OF SATURATED REGION 
   ! apply final linear interpolation
-
-  !TQ = RefrigData(RefrigNum)%PsValues(LoTempIndex) + TempInterpRatio * &
-  !                            (RefrigData(RefrigNum)%PsValues(HiTempIndex) - RefrigData(RefrigNum)%PsValues(LoTempIndex))
 
   IF (Quality < 0.5) THEN
 	TQ = RefrigData(RefrigNum)%PsfValues(LoTempIndex) + TempInterpRatio * &
@@ -2194,8 +2074,6 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
   ! get the array indices
   LoTempIndex = FindArrayIndex(Temperature, RefrigData(RefrigNum)%PsTemps)
   HiTempIndex = LoTempIndex + 1
-  !LoPressIndex = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsValues)
-  !HiPressIndex = LoPressIndex + 1
 
   LoPressIndexLiq = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsfValues)
   HiPressIndexLiq = LoPressIndexLiq + 1
@@ -2204,17 +2082,6 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
   HiPressIndexVap = LoPressIndexVap + 1
 
    ! check for out of data bounds problems
-  !IF (LoPressIndex == 0) THEN
-  !  LoPressIndex = MAX(1, LoPressIndex)
-  !  ErrorFlag = .True. 
-  !	WRITE(*,*) 'Pressure out of range' !- Commented by ISI 01/19/04
-  !	Error=2
-  !ELSE IF(HiPressIndex > Size(RefrigData(RefrigNum)%PsValues))THEN
-  !  LoPressIndex = MAX(1, LoPressIndex)
-  !  ErrorFlag = .True.
-  !	WRITE(*,*) 'Pressure out of range' !- Commented by ISI 01/19/04
-  !	Error=2
-  !END IF
 
   IF (LoPressIndexLiq == 0) THEN
     LoPressIndexLiq = MAX(1, LoPressIndexLiq)
@@ -2260,7 +2127,6 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
                               (RefrigData(RefrigNum)%PsTemps(HiPressIndexVap) - RefrigData(RefrigNum)%PsTemps(LoPressIndexVap))
 
    !Check for superheated and subcooled region and calculate states
-   !IF (Temperature > SatTemperature) THEN
    IF (Temperature >= SatTemperatureVap) THEN !ISI - 11/16/07
    !CALCULATE PROPERTY FOR SUPERHEATED REGION
       
@@ -2333,7 +2199,6 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
         TP= TempInterpRatio*PropertyHigh + (1.0-TempInterpRatio)*PropertyLow
         END IF
 		                    		
-   !ELSE IF (Temperature < SatTemperature) THEN
    ELSE IF (Temperature <= SatTemperatureLiq) THEN !ISI - 11/16/07
    !CALCULATE PROPERTY FOR SUBCOOLED REGION
 
@@ -2390,16 +2255,16 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
         HiTempHiProperty = RefrigData(RefrigNum)%RhoscValues(HiTempIndex,HiPressIndex)
 		END SELECT
 		
-		IF (LoTempHiProperty.EQ.0) THEN !Estimate the point at saturated region
-		LoTempHiProperty= PQ(Refrigerant,RefrigData(RefrigNum)%SCPress(HiPressIndex),0.0,Property,RefrigIndex,Error)
-		TSATLoTempHiProperty= PQ(Refrigerant,RefrigData(RefrigNum)%SCPress(HiPressIndex),0.0,'temperature',RefrigIndex,Error)
-		!use pressure interpolation to calculate for the low and high temperature
-		TemperatureLow=RefrigData(RefrigNum)%SCTemps(TempIndex)+PressInterpRatio*(TSATLoTempHiProperty-RefrigData(RefrigNum)%SCTemps(TempIndex))
-		TemperatureHigh=RefrigData(RefrigNum)%SCTemps(HiTempIndex)
+		    IF (LoTempHiProperty.EQ.0) THEN !Estimate the point at saturated region
+		    LoTempHiProperty= PQ(Refrigerant,RefrigData(RefrigNum)%SCPress(HiPressIndex),0.0,Property,RefrigIndex,Error)
+		    TSATLoTempHiProperty= PQ(Refrigerant,RefrigData(RefrigNum)%SCPress(HiPressIndex),0.0,'temperature',RefrigIndex,Error)
+		    !use pressure interpolation to calculate for the low and high temperature
+		    TemperatureLow=RefrigData(RefrigNum)%SCTemps(TempIndex)+PressInterpRatio*(TSATLoTempHiProperty-RefrigData(RefrigNum)%SCTemps(TempIndex))
+		    TemperatureHigh=RefrigData(RefrigNum)%SCTemps(HiTempIndex)
 
-		!calculate the new temperature interpolation ratio
-		TempInterpRatio=(Temperature-TemperatureLow)/(TemperatureHigh-TemperatureLow)
-		END IF
+		    !calculate the new temperature interpolation ratio
+		    TempInterpRatio=(Temperature-TemperatureLow)/(TemperatureHigh-TemperatureLow)
+		    END IF
 
 		PropertyLow = PressInterpRatio*LoTempHiProperty + &
                 (1.0-PressInterpRatio)*LoTempLoProperty
@@ -2522,8 +2387,9 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
     GetInput = .FALSE.
   END IF
 
-  IF (NumOfRefrigerants == 0) &
+  IF (NumOfRefrigerants == 0) THEN
     CALL ShowFatalError('GetSatTemperatureRefrig: No refrigerants found--cannot evaluate saturation temperature')
+  END IF
 
   ErrorFlag = .False.
 

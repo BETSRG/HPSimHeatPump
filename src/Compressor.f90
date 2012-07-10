@@ -52,7 +52,6 @@
     !
     ! ----------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
     IMPLICIT NONE
@@ -145,12 +144,16 @@
     Pressure=Psuc*1000
     Quality=1
     TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Pressure=Pdis*1000
     Quality=1
     TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     TDPsucF=TDPsuc*1.8+32
     TDPdisF=TDPdis*1.8+32
@@ -163,14 +166,20 @@
     Temperature=TsucMap
     Pressure=Psuc*1000
     HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     HsucMap=HsucMap/1000
     rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     SsucMap=SsucMap/1000
 
     Pressure=Pdis*1000
@@ -182,30 +191,35 @@
     Pressure=Psuc*1000
     Enthalpy=Hsuc*1000
     Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     Ssuc=Ssuc/1000
 
     Pressure=Pdis*1000
     Entropy=Ssuc*1000
     HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     HdisIsen=HdisIsen/1000
 
-    !mdot=mdotMap*(1+Fv*(rhosuc/rhoMap-1))
     mdot=mdotMap*(rhosuc/rhoMap)
-    !mdot=mdotMap
 
     Mcorrect=1 !0.95
     mdot=mdot*Mcorrect
 
     Power=PowerMap*(mdot/mdotMap)*(HdisIsen-Hsuc)/(HdisIsenMap-HsucMap)
-    !Power=PowerMap
 
     Power=Power/Wcorrect
 
@@ -222,13 +236,19 @@
     Pressure=Pdis*1000
     Enthalpy=Hdis*1000
     Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     MassCmp=VolCmp*(rhoDis+rhoSuc)/2
 

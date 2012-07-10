@@ -90,17 +90,13 @@ IF (MixtureQuality .GE. 1)THEN
 END IF
 
 xMax=1-AsoluteOilMassFraction
-!IF (MixtureQuality .GT. xMax) THEN
-!	MixtureQuality = xMax
-!	LocalOilMassFraction=AsoluteOilMassFraction/(1-xMax)
-!ELSE
-	!IF (MixtureQuality .EQ. 1) THEN
+
 	IF (MixtureQuality .GT. xMax) THEN
 	  LocalOilMassFraction=0
 	ELSE
 	  LocalOilMassFraction=AsoluteOilMassFraction/(1-MixtureQuality)
 	END IF
-!END IF
+
 IF (LocalOilMassFraction .GT. 1) THEN
     LocalOilMassFraction=1
 END IF
@@ -113,7 +109,6 @@ END FUNCTION LocalOilMassFraction
 
 REAL FUNCTION OilMixtureTsat(Wlocal,Psat)
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
@@ -484,7 +479,9 @@ REAL XiOil       !Oil Yokozeki factor
 muOil=OilDensity(CompManufacturer,Tref)* &
       OilViscosity(CompManufacturer,Tref)*1e-6
 
-IF (muOil .LE. 0) muOil=muf
+IF (muOil .LE. 0) THEN
+    muOil=muf
+END IF
 
 SELECT CASE(CompManufacturer)
 CASE (COPELAND)
@@ -694,9 +691,6 @@ END SUBROUTINE OilMixtureReynoldsNumber
 
 !******************************************************************************
 
-!REAL FUNCTION OilMixtureHTCevap(Gtot,Xmix,ID,Lmod,muMix,muVap,rhoMix,rhog, &
-!                                kLiq,Cpf,OMF)
-
 REAL FUNCTION OilMixtureHTCevap(Gtot,Xmix,ID,muMix,muVap,rhoMix,rhog, &
                                 kLiq,Cpf,OMF)
 
@@ -720,7 +714,6 @@ IMPLICIT NONE
 REAL, INTENT(IN) :: Gtot   !Total mass flux, kg/m2-s
 REAL, INTENT(IN) :: Xmix   !Mixutre quality
 REAL, INTENT(IN) :: ID     !Tube inside diameter, m
-!REAL, INTENT(IN) :: Lmod   !Tube length, m
 REAL, INTENT(IN) :: muMix  !Mixture viscosity, kg/s-m
 REAL, INTENT(IN) :: muVap  !Vapor viscosity, kg/s-m
 REAL, INTENT(IN) :: rhoMix !Mixture density, kg/m3
@@ -739,10 +732,7 @@ REAL hLiq !Mixture heat transfer coefficient, W/m2-K
 
 CC = 0.1385*(OMF*100) + 4.155
 nn= -0.0036*(OMF*100) + 0.6085
-!CC = 0.1385*(OMF) + 4.155
-!nn= -0.0036*(OMF) + 0.6085
 
-!Xtt=OilMixtureXtt(Gtot,Xmix,ID,Lmod,muMix,muVap,rhoMix,rhog)
 Xtt=OilMixtureXtt(Gtot,Xmix,ID,muMix,muVap,rhoMix,rhog)
 
 hLiq=0.023*(kLiq/ID)*(Gtot*(1-Xmix)*ID/muMix)**0.8*(Cpf*muMix/kLiq)**0.4
@@ -755,7 +745,6 @@ END FUNCTION OilMixtureHTCevap
 
 !******************************************************************************
 
-!REAL FUNCTION OilMixtureXtt(Gtot,Xmix,ID,Lmod,muMix,muVap,rhoMix,rhog)
 REAL FUNCTION OilMixtureXtt(Gtot,Xmix,ID,muMix,muVap,rhoMix,rhog)
 
 IMPLICIT NONE
@@ -777,7 +766,6 @@ IMPLICIT NONE
 REAL, INTENT(IN) :: Gtot   !Total mass flux, kg/m2-s
 REAL, INTENT(IN) :: Xmix   !Mixutre quality
 REAL, INTENT(IN) :: ID     !Tube inside diameter, m
-!REAL, INTENT(IN) :: Lmod   !Tube length, m
 REAL, INTENT(IN) :: muMix  !Mixture viscosity, kg/s-m
 REAL, INTENT(IN) :: muVap  !Vapor viscosity, kg/s-m
 REAL, INTENT(IN) :: rhoMix !Mixture density, kg/m3
@@ -797,7 +785,6 @@ REAL DPvapDZ !Vapor mixture pressure drop gradient, Pa/m
 
 CALL OilMixtureReynoldsNumber(Gtot,Xmix,ID,muMix,muVap,ReLiq,ReVap)
 
-!IF (ReLiq .LT. 2000) THEN
 IF (ReLiq .LT. 1500) THEN !The two equations below intercept at Re=1500
 	fmix=16/ReLiq
 ELSE
@@ -809,9 +796,6 @@ IF (ReVap .LT. 2000) THEN
 ELSE
 	fvap=0.046/ReVap**0.2
 END IF
-
-!DPmix=fmix*Lmod*Gtot**2*(1-Xmix)**2/(2*ID*rhoMix)
-!DPvap=fvap*Lmod*Gtot**2*Xmix**2/(2*ID*rhog)
 
 DPmixDZ=fmix*Gtot**2*(1-Xmix)**2/(2*ID*rhoMix)
 DPvapDZ=fvap*Gtot**2*Xmix**2/(2*ID*rhog)

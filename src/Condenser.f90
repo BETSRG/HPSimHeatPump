@@ -574,7 +574,6 @@
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -764,12 +763,10 @@
 
     !Discharge line info
     LmodDis=Ldisln
-    !LmodDis=Ldisln/NumOfMods !ISI - 08/25/06
     AiModDis=PI*IDdisLn*LmodDis
 
     !liquid line info
     LmodLiq=Lliqln
-    !LmodLiq=Lliqln/NumOfMods !ISI - 08/25/06
     AiModLiq=PI*IDliqLn*LmodLiq
 
     CALL InitBoundaryConditions(CoilType)
@@ -1294,7 +1291,6 @@
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
@@ -1486,7 +1482,6 @@
 
                     Ckt(I)%Tube(J)%Seg(K)%Mass=MassMod
 
-                    !IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                     IF ((K .EQ. NumOfMods .AND. J .NE. LastTube) .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN !ISI - 02/05/07
                         Lregion=LmodTube+Lreturnbend
                     ELSE
@@ -1724,7 +1719,6 @@
 
         END DO !end slab
 
-        !NumLiqTubes=LiqTubeLength/Lcoil
         NumLiqTubes=LiqTubeLength/(LiqTubeLength+TwoPhaseTubeLength+VapTubeLength) !ISI - 02/05/07
 
     END IF
@@ -1753,7 +1747,6 @@
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
@@ -1947,10 +1940,18 @@
                         MassVapCoil=MassVapCoil+MassVapMod
                     END IF
 
-                    IF (xRiMod .EQ. -100) xRiMod=0.0
-                    IF (xRiMod .EQ. 100) xRiMod=1.0
-                    IF (xRoMod .EQ. -100) xRoMod=0.0
-                    IF (xRoMod .EQ. 100) xRoMod=1.0
+                    IF (xRiMod .EQ. -100) THEN
+                        xRiMod=0.0
+                    END IF
+                    IF (xRiMod .EQ. 100) THEN
+                        xRiMod=1.0
+                    END IF
+                    IF (xRoMod .EQ. -100) THEN
+                        xRoMod=0.0
+                    END IF
+                    IF (xRoMod .EQ. 100) THEN
+                        xRoMod=1.0
+                    END IF
 
                     MassMod=Ckt(I)%Tube(J)%Seg(K)%Mass
                     WRITE(16,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
@@ -2108,10 +2109,18 @@
                             MassVapCoil=MassVapCoil+MassVapMod*Slab(I)%Pass(II)%Ntube
                         END IF
 
-                        IF (xRiMod .EQ. -100) xRiMod=0.0
-                        IF (xRiMod .EQ. 100) xRiMod=1.0
-                        IF (xRoMod .EQ. -100) xRoMod=0.0
-                        IF (xRoMod .EQ. 100) xRoMod=1.0
+                        IF (xRiMod .EQ. -100) THEN
+                            xRiMod=0.0
+                        END IF
+                        IF (xRiMod .EQ. 100) THEN
+                            xRiMod=1.0
+                        END IF
+                        IF (xRoMod .EQ. -100) THEN
+                            xRoMod=0.0
+                        END IF
+                        IF (xRoMod .EQ. 100) THEN
+                            xRoMod=1.0
+                        END IF
 
                         MassMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass
                         WRITE(16,FMT_104)I,II,IV,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
@@ -2215,9 +2224,7 @@
     END IF
     
     !**************************** Model *************************************
-            
-        !CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
-        !              Numbers,NumNumbers,Status)
+
         CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
                             TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2237,8 +2244,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
         !**************************** Geometry *************************************
 
-            !CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-            !                    Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
                                 TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2359,8 +2364,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
-                !CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                !                    Numbers,NumNumbers,Status)
                 CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2396,23 +2399,15 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
-                    !CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 2) THEN
-                    !CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 3) THEN
-                    !CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSE
-                    !CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
@@ -2447,8 +2442,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
-            !CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-            !                            Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2668,8 +2661,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             !**************************** Geometry *************************************
 
-            !CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-            !          Numbers,NumNumbers,Status)
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
                                 TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2792,8 +2783,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
-                !CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                !                    Numbers,NumNumbers,Status)
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -2829,33 +2818,21 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
-                    !CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 2) THEN
-                    !CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 3) THEN
-                    !CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 4) THEN
-                    !CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 5) THEN
-                    !CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSE
-                    !CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
@@ -2891,8 +2868,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             IsUniformVelProfile=.TRUE.
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                !CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                !                        Numbers,NumNumbers,Status)
                 CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -3430,8 +3405,12 @@ END IF
             DEALLOCATE(Ckt(I)%Tube)
         END DO
         DEALLOCATE(Ckt)
-        IF (ALLOCATED(DisLnSeg)) DEALLOCATE(DisLnSeg) !Discharge line
-        IF (ALLOCATED(LiqLnSeg)) DEALLOCATE(LiqLnSeg) !Line line
+        IF (ALLOCATED(DisLnSeg)) THEN
+            DEALLOCATE(DisLnSeg) !Discharge line
+        END IF
+        IF (ALLOCATED(LiqLnSeg)) THEN
+            DEALLOCATE(LiqLnSeg) !Line line
+        END IF
 
         RETURN
     END IF
@@ -3546,7 +3525,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
@@ -3616,7 +3594,6 @@ END IF
         !        QdisLn = QdisLn+Qloss
 
         hRoMod=-QdisLn/mRefTot+hRiMod 
-        !hRoMod=-(QdisLn/NumOfMods)/mRefTot+hRiMod  !ISI - 08/25/06
 
         IF (xRiMod .GT. 1) THEN
             LmodTPratio=0
@@ -3634,7 +3611,6 @@ END IF
         END IF
 
         pRoMod=pRoMod-AddDPdisLn
-        !pRoMod=pRoMod-AddDPdisLn/NumOfMods !ISI - 08/25/06
 
         CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
         vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
@@ -3660,8 +3636,6 @@ END IF
     END DO !End Nmod
 
     CALL manifold(CoilType,IDdisLn,mRefTot,xRiMod,vRiMod,vgRimod,vfRimod,mugRiMod,mufRiMod,dPman)
-    !pRiCoil=DisLnSeg(NumOfMods)%pRo-DPman  !ISI - 08/25/06 
-    !hRiCoil=DisLnSeg(NumOfMods)%hRo  !ISI - 08/25/06
 
     pRiCoil=DisLnSeg(1)%pRo-DPman
     hRiCoil=DisLnSeg(1)%hRo
@@ -3692,7 +3666,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
@@ -3720,7 +3693,6 @@ END IF
         QliqLn=mRefTot*CpfRoMod*(-DTliqLn)
     END IF
 
-    !DO K=1,NumOfMods !ISI - 08/25/06 
     DO K=1,1 !ISI - 12/17/2009
 
         IF (K .EQ. 1) THEN
@@ -3744,7 +3716,6 @@ END IF
         END IF
 
         hRoMod=-QliqLn/mRefTot+hRiMod
-        !hRoMod=-(QliqLn/NumOfMods)/mRefTot+hRiMod !ISI - 08/25/06 
 
         IF (xRiMod .GT. 0) THEN
             LmodTPratio=1
@@ -3762,7 +3733,6 @@ END IF
         END IF
 
         pRoMod=pRoMod-AddDPLiqLn
-        !pRoMod=pRoMod-AddDPLiqLn/NumOfMods !ISI - 08/25/06
 
         !Calculate outlet ref. property
         CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
@@ -3789,9 +3759,6 @@ END IF
         MassLiqLn=MassLiqLn+MassMod
 
     END DO !End Nmod
-
-    !pRiExp=LiqLnSeg(NumOfMods)%pRo !ISI - 12/17/2009
-    !hRiExp=LiqLnSeg(NumOfMods)%hRo !ISI - 12/17/2009
 
     pRiExp=LiqLnSeg(1)%pRo !ISI - 08/25/06 
     hRiExp=LiqLnSeg(1)%hRo !ISI - 08/25/06 
@@ -3820,7 +3787,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     IMPLICIT NONE
@@ -3856,11 +3822,9 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE AirPropMod
     USE CoilCalcMod
-    !USE ReversingValveMod
 
     IMPLICIT NONE
 
@@ -4121,7 +4085,9 @@ END IF
                     JoinTubes(K)=J
                     SumMref=SumMref+Ckt(J)%mRef
                     SumMrefHri=SumMrefHri+Ckt(J)%mRef*Ckt(J)%hRo
-                    IF (K .EQ. Ckt(II)%InJoin) EXIT !Found all joined tubes
+                    IF (K .EQ. Ckt(II)%InJoin) THEN
+                        EXIT !Found all joined tubes
+                    END IF
                 END IF
             END DO
             !Calculate according to energy balance
@@ -4194,7 +4160,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -4321,7 +4286,9 @@ END IF
                 CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
                 vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
                 muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-                IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                    RETURN
+                END IF
             END IF
         END IF
 
@@ -4396,7 +4363,6 @@ END IF
         DPair=DPair*DPairMultiplier
 
         hcoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev*hco
-        !hcoMod=hco
 
         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
@@ -4755,8 +4721,6 @@ END IF
         ELSE
             Slab(I)%Pass(II)%Tube(1)%Seg(IV)%tAi=Slab(I-1)%tAo
             Slab(I)%Pass(II)%Tube(1)%Seg(IV)%rhAi=Slab(I-1)%rhAo
-            !Slab(I)%Pass(II)%Tube(1)%Seg(IV)%tAi=Slab(I-1)%Pass(II)%Tube(1)%Seg(IV)%tAo !ISI - 01/06/08
-            !Slab(I)%Pass(II)%Tube(1)%Seg(IV)%rhAi=Slab(I-1)%Pass(II)%Tube(1)%Seg(IV)%rhAo
         END IF
     END IF
 
@@ -4903,7 +4867,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -4976,7 +4939,6 @@ END IF
         CALL CalcMeanProp(cpgRiMod,cpgRoMod,cpgRmod)
 
         !Correct specific heat
-        !IF (cpRmod .LT. 0) THEN
         IF (cpRmod .LE. 0) THEN !ISI - 08/03/06
             IF (xRmod .LE. 0) THEN
                 cpRmod = cpfRmod
@@ -4986,8 +4948,7 @@ END IF
             END IF
         END IF
 
-        !Correct thermal conductivity
-        !IF (kRmod .LT. 0) THEN 
+        !Correct thermal conductivity 
         IF (kRmod .LE. 0) THEN !ISI - 08/03/06
             IF (xRmod .LE. 0) THEN
                 kRmod = kfRmod
@@ -5035,13 +4996,21 @@ END IF
             END IF
 
             IF (kRmod .LE. 0) THEN !ISI - 08/03/06
-                IF (xRmod .LE. 0) kRmod = kfRmod
-                IF (xRmod .GE. 1) kRmod = kgRmod 
+                IF (xRmod .LE. 0) THEN
+                    kRmod = kfRmod
+                END IF
+                IF (xRmod .GE. 1) THEN
+                    kRmod = kgRmod
+                END IF
             END IF
 
             IF (muRmod .LE. 0) THEN !ISI - 08/03/06
-                IF (xRmod .LE. 0) muRmod = mufRmod
-                IF (xRmod .GE. 1) muRmod = mugRmod 
+                IF (xRmod .LE. 0) THEN
+                    muRmod = mufRmod
+                END IF
+                IF (xRmod .GE. 1) THEN
+                    muRmod = mugRmod
+                END IF
             END IF
 
         END IF 
@@ -5103,10 +5072,14 @@ END IF
         !Condenser outlet
         IF (xRiMod .GT. 0 .AND. xRoMod .LE. 0) THEN
             IF (IsSimpleCoil .EQ. 1) THEN
-                IF (QmodTP .NE. 0) Qmod = QmodTP
+                IF (QmodTP .NE. 0) THEN
+                    Qmod = QmodTP
+                END IF
             ELSE
                 IF (LmodTP .EQ. LmodTube) THEN
-                    IF (Qmod .GT. QmodTP) Qmod = QmodTP
+                    IF (Qmod .GT. QmodTP) THEN
+                        Qmod = QmodTP
+                    END IF
                 ELSE
                     Qmod=Qmod+QmodTP
                 END IF
@@ -5116,10 +5089,14 @@ END IF
         !Condenser inlet
         IF (xRiMod .GE. 1 .AND. xRoMod .LT. 1) THEN
             IF (IsSimpleCoil .EQ. 1) THEN
-                IF (QmodSH .NE. 0) Qmod = QmodSH
+                IF (QmodSH .NE. 0) THEN
+                    Qmod = QmodSH
+                END IF
             ELSE
                 IF (LmodSH .EQ. LmodTube) THEN
-                    IF (Qmod .GT. QmodSH) Qmod = QmodSH
+                    IF (Qmod .GT. QmodSH) THEN
+                        Qmod = QmodSH
+                    END IF
                 ELSE
                     Qmod=Qmod+QmodSH
                 END IF
@@ -5247,7 +5224,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -5265,7 +5241,6 @@ END IF
 
     !FLOW:
 
-
     !Condenser inlet
     IF (xRiMod .GE. 1 .AND. xRoMod .LT. 1)  THEN	
         xRmod=xRiMod
@@ -5275,7 +5250,6 @@ END IF
 
     !Condenser outlet
     IF (xRiMod .GT. 0 .AND. xRoMod .LE. 0)  THEN
-        !IF (CoilType .NE. 5) THEN
         IF (CoilType .NE. MCCONDENSER) THEN
             QmodTP=mRefMod*(hRiMod-hfRiMod)
         ELSE
@@ -5286,7 +5260,6 @@ END IF
 
     !Condenser inlet
     IF (xRiMod .GE. 1 .AND. xRoMod .LT. 1)  THEN
-        !IF (CoilType .NE. 5) THEN
         IF (CoilType .NE. MCCONDENSER) THEN
             QmodSH=mRefMod*(hRiMod-hgRiMod)
             cRef=mRefMod*cpRmod
@@ -5308,7 +5281,6 @@ END IF
         IF (LmodTP .NE. LmodTube) THEN
             xRmod=0
         ELSE
-            !IF (CoilType .NE. 5) THEN
             IF (CoilType .NE. MCCONDENSER) THEN
                 hRoMod=-QmodTP/mRefMod+hRiMod !ISI - 06/18/05
             ELSE
@@ -5322,8 +5294,12 @@ END IF
                 ErrorFlag=REFPROPERROR
                 RETURN
             END IF
-            IF (xRmod .GT. 1) xRmod=1
-            IF (xRmod .LT. 0) xRmod=0
+            IF (xRmod .GT. 1) THEN
+                xRmod=1
+            END IF
+            IF (xRmod .LT. 0) THEN
+                xRmod=0
+            END IF
         END IF
 
         !ISI - 07/21/06 to update the refrigerant temperature at the transition boundary
@@ -5369,7 +5345,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -5541,7 +5516,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE OilMixtureMod
 
@@ -5778,7 +5752,6 @@ END IF
     !
     !------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
 
@@ -6007,7 +5980,6 @@ END IF
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -6126,7 +6098,6 @@ END IF
     hAiCoil=AirProp(4)
     wbAiCoil=AirProp(5)
 
-    !IF (IsCoolingMode .LT. 1) THEN
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
         hAiCoil=hAiCoil+PwrFan/mAiCoil
@@ -6135,7 +6106,6 @@ END IF
         tAiCoil=tAiCoil+QlossCmp/Cair
         hAiCoil=hAiCoil+QlossCmp/mAiCoil
     END IF
-    !END IF
 
     AirPropOpt=1
     AirProp(1)=tAiCoil
@@ -6186,7 +6156,6 @@ END IF
         DO II=1, Slab(I)%Npass
             DO III=1, Slab(I)%Pass(II)%Ntube
                 Slab(I)%Pass(II)%Tube(III)%Seg%mAi=mAiCoil*LmodTube/(Ltube*Nt)
-                !Slab(I)%Pass(II)%Tube(III)%Seg%VelDev=1
                 Slab(I)%Pass(II)%Tube(III)%Seg%tAi=tAiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%wbAi=wbAiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%rhAi=rhAiCoil
@@ -6198,7 +6167,6 @@ END IF
                 Slab(I)%Pass(II)%Tube(III)%Seg%pRo=pRiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%hRo=hRiCoil
 
-                !Slab(I)%Pass(II)%mRef=mRefTotal/Slab(I)%Npass
             END DO
         END DO
     END DO
@@ -6210,7 +6178,9 @@ END IF
             DO III=1, Slab(I)%Pass(II)%Ntube
                 DO IV=1, NumOfMods
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Aface=LmodTube/(Ltube*Nt)*Aface
-                    IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
+                    IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) THEN
+                        Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
+                    END IF
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi=mAiCoil*LmodTube/(Ltube*Nt)* &
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev 
                 END DO
@@ -6253,7 +6223,6 @@ END IF
                             DO IV=1,NumOfMods !Number of segments
 
                                 !ref. mass flow rate for each channel
-                                !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
                                 mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
 
                                 AoMod=AoCoil*LmodTube/Lcoil 
@@ -6267,7 +6236,6 @@ END IF
                                     OUT(20)=ErrorFlag
                                     RETURN
                                 END IF
-
 
                                 QinletPass=QinletPass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
 
@@ -6310,7 +6278,6 @@ END IF
                                 OUT(20)=ErrorFlag
                                 RETURN
                             END IF
-
 
                             !Calc. circuit heat transfer
 
@@ -6768,4 +6735,3 @@ END IF
     !************************************************************************
 
     END MODULE CondenserMod
-

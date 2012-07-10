@@ -244,7 +244,6 @@ TYPE CoilParameters
  REAL FinPitch
  REAL FinThickness
  REAL TSurfCoil
- !REAL TSurfoCoil
 END TYPE CoilParameters
 
 TYPE(FrostParameters) :: FrostParam

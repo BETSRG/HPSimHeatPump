@@ -21,7 +21,6 @@
     !      = 1:TINPUT is too high
     !      = 2:TINPUT is too low 
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CondenserMod
     USE CompressorMod
@@ -153,7 +152,6 @@
             END IF
             HiCmp=HiCmp/1000
         ELSE
-
             Pressure=PiCmp*1000
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
@@ -164,7 +162,6 @@
                 CYCLE
             END IF
             HiCmp=HiCmp/1000
-
         END IF
 
         CompIN(1)=PiCmp
@@ -203,9 +200,7 @@
                 CondIN(4)=XMaE
                 CondIN(5)=EvapOUT(17)
                 CondIN(6)=EvapOUT(18)
-
             END IF
-
         END IF
 
         !Take compressor shell loss into account
@@ -240,14 +235,12 @@
 
                 CondPAR(61)=0 !Detailed version
                 CALL Condenser(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)
-                !CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
                 CALL EndCondenserCoil
 
                 CondPAR(61)=1 !Simple version
                 CALL Condenser(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)
-                !CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
                 CALL EndCondenserCoil
@@ -412,10 +405,8 @@
             CYCLE
         END IF
 
-
         CDTRIE = TSATEI - TRIE
         CDTRIE=CondOUT(14)*1.8 !ISI - 10/07/06
-        !CDTRIE=CondOUT(9)*1.8 !ISI - 05/28/08
 
         !VL: Previously: IF(IREFC.NE.0) GO TO 100
         IF(IREFC.EQ.0) THEN
@@ -497,7 +488,6 @@
                 END IF
             END IF
 
-
             IF(XIEXP.GT.0.0) THEN
                 IF (XIEXP .LT. 1) THEN
                     IF (PrnLog .EQ. 1) THEN
@@ -532,12 +522,10 @@
                 END IF
             END IF
 
-
             !VL: Previously: GO TO 200
             CYCLE            
         END IF
         !VL: Previously: 100     CONTINUE
-
 
         PiEvp=EvapIN(2)
         PoExp=PiEvp
@@ -601,7 +589,6 @@
         HoExp=HiExp
         EvapIN(3)=HoExp
 
-        !CNDNSR = ( XMRFLD - XMR ) / 20
         CNDNSR = ( XMRFLD - XMR )
 
         MdotR=XMR*UnitM/3600

@@ -1,6 +1,5 @@
     MODULE CapillaryTubeMod
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
     LOGICAL, EXTERNAL :: IssueRefPropError
@@ -174,32 +173,42 @@
 
     ErrorFlag = 0 !Initialize
 
-    !OPEN (111,FILE='CapTube.csv')
-
     Pressure=PiExp*1000
     Enthalpy=HiExp*1000
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     HiEvp=HiExp
 
     Pressure=PiEvp*1000
     Enthalpy=HiEvp*1000
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     IF (LdisTube .GT. 0) THEN
         LDISTUBE=LdisTube*12/UnitL !Distributor tube length, in
@@ -229,10 +238,14 @@
     Pressure=PoExp*1000
     Enthalpy=HoExp*1000
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Subcooling=TsiExp-TiExp
 
@@ -308,8 +321,6 @@
 
 !VL: Previously: 200 CONTINUE
     OUT(7)=ErrorFlag
-
-    !CLOSE(111)
 
     RETURN
 
@@ -464,43 +475,61 @@
 
     ErrorFlag = 0 !Initialize
 
-    !OPEN (111,FILE='CapTube.csv')
-
     Pressure=PiExp*1000
     Enthalpy=HiExp*1000
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     sigmaExp=PH(Ref$,Pressure,Enthalpy,'surfacetension',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     sigmaExp=sigmaExp/1000
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     hfiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     hfiExp=hfiExp/1000
 
     Quality=1
     rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     hgiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     hgiExp=hgiExp/1000
 
     HiEvp=HiExp
@@ -508,13 +537,19 @@
     Pressure=PiEvp*1000
     Enthalpy=HiEvp*1000
     TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     IF (LdisTube .GT. 0) THEN
         LDISTUBE=LdisTube*12/UnitL !Distributor tube length, in
@@ -544,15 +579,21 @@
     Pressure=PoExp*1000
     Enthalpy=HoExp*1000
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
 
     Temperature=TiExp
     Quality=0
     Psat=TQ(Ref$, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Short Tube', ErrorFlag)) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Short Tube', ErrorFlag)) THEN
+        RETURN
+    END IF
     Psat=Psat/1000
 
     hfgExp=hgiExp-hfiExp
@@ -586,8 +627,6 @@
 
 !200 CONTINUE
     OUT(7)=ErrorFlag
-
-    !CLOSE(111)
 
     RETURN
 

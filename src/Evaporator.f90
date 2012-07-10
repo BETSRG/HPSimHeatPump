@@ -271,8 +271,6 @@ REAL hcof    !Fictitious air side heat tranfer coefficient, kW/m2-K
 REAL SHR !Sensible heat ratio
 REAL Rtot      !Total resistance, K-m^2/W
 REAL Qsolar    !Solar radiation, kW
-!REAL SurfAbsorptivity !Surface absorptivity
-!REAL SolarFlux !Solar heat flux, kW/m2
 
 !Variables for coil
 REAL mRiCoil
@@ -599,7 +597,6 @@ CONTAINS
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -650,7 +647,6 @@ CONTAINS
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
-
     !Flow:
 
     mRefTot =XIN(1)
@@ -663,7 +659,9 @@ CONTAINS
     SolarFlux=XIN(8)
     tRdis=XIN(9)
 
-    IF (QdisTube .EQ. 0) QdisTube=SMALL 
+    IF (QdisTube .EQ. 0) THEN
+        QdisTube=SMALL
+    END IF
 
     LsucLn    = PAR(1)
     ODsucLn   = PAR(2)
@@ -707,12 +705,9 @@ CONTAINS
         END IF
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
-        !FirstTime=.FALSE. !ISI - 12/21/06
     END IF
 
     hciMultiplier   = PAR(23)
-    !hcoMultiplier   = PAR(24) !ISI - 09/23/2008 
-    !DPrefMultiplier = PAR(25) !ISI - 09/23/2008
     DPrefMultiplier = PAR(24)
     hcoMultiplier   = PAR(25)
     DPairMultiplier = PAR(26)
@@ -1077,10 +1072,8 @@ CONTAINS
 
     tSAvgCoil = (tSiCoil+tSoCoil)/2
     CoilParams(2)%TSurfCoil=tSAvgCoil
-    !CoilParams(2)%TSurfoCoil = tSoCoil
     !Coil air side outlet condition
     !CALL CPCVA(REAL(tAiCoil),CPAir,CVAir,GAMMA,SONIC)
-    !CPair=CPA(REAL(tAiCoil))
     CPair=CPA(REAL(tAmod))
     Cair=mAiCoil*CPAir
 
@@ -1092,13 +1085,10 @@ CONTAINS
     hAoCoil=hAiCoil+Qcoil/mAiCoil
 
     !Fan air side inlet condition
-    !CPair=CPA(REAL(tAiCoil))
     CPair=CPA(REAL(tAoCoil))
     Cair=mAiCoil*CPAir
 
-    !IF (SystemType .NE. 4) THEN !For reheat system, skip this
     IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
-        !IF (IsCoolingMode .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
         IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
             tAoCoil=tAoCoil+PwrFan/Cair
             hAoCoil=hAoCoil+PwrFan/mAiCoil
@@ -1340,7 +1330,6 @@ SUBROUTINE CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,LiqTubeLengt
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
@@ -1399,7 +1388,9 @@ REAL Lregion !Region length, m
 			      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
 				      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 
 			      END IF
-			      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+			      IF (FirstTube .GT. LastTube) THEN
+                      LastTube=FirstTube !Dummy tube
+                  END IF
 		      END IF
 
 		      DO J=1,LastTube !Ckt(I)%Ntube !ISI - 10/30/06
@@ -1798,7 +1789,6 @@ SUBROUTINE PrintEvaporatorResult
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
@@ -1824,7 +1814,6 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
   MassLiqCoil=0
   MassVapCoil=0
 
-  !CoilType=EVAPORATORCOIL
   IF (NumOfChannels .GT. 1) THEN
 	  CoilType = MCEVAPORATOR
   ELSE
@@ -1856,7 +1845,9 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 		      IF (CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1) THEN
 			      LastTube=CoilSection(NumSection)%Ckt(I)%Ntube-1 
 		      END IF
-		      IF (FirstTube .GT. LastTube) LastTube=FirstTube !Dummy tube
+		      IF (FirstTube .GT. LastTube) THEN
+                  LastTube=FirstTube !Dummy tube
+              END IF
 
 		      DO J=1,CoilSection(NumSection)%Ckt(I)%Ntube
 			      DO K=1,NumOfMods
@@ -2298,10 +2289,7 @@ END SUBROUTINE PrintEvaporatorResult
     END IF
 
     !**************************** Model *************************************
-            
-        !CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
-        !              Numbers,NumNumbers,Status)
-        
+
           CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
 
@@ -2322,9 +2310,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
         !**************************** Geometry *************************************
 
-            !CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-            !          Numbers,NumNumbers,Status)
-            
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
 
@@ -2451,12 +2436,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END DO
 
                 ALLOCATE(Ckt(NumOfCkts))
-                
-                !CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                !                    Numbers,NumNumbers,Status)
-                
+
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+                                    TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
 
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
@@ -2491,35 +2473,23 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts   
                 IF (I .EQ. 1) THEN
-                    !CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
                 ELSEIF (I .EQ. 2) THEN
-                    !CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 3) THEN
-                    !CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 4) THEN
-                    !CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSEIF (I .EQ. 5) THEN
-                    !CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 ELSE
-                    !CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
                 
                         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -2557,11 +2527,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !Initialize
             CoilSection%IsInlet = .TRUE.
             IsUniformVelProfile=.TRUE.
-            !CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-            !                    Numbers,NumNumbers,Status)
-            
+
             CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
                         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
@@ -2803,9 +2771,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !ODC circuit here
         !**************************** Geometry *************************************
 
-            !CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-            !                    Numbers,NumNumbers,Status)
-            
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
                                 TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
@@ -2866,7 +2831,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 Pl = Pt
             END IF
 
-            !READ (11,*,IOSTAT=ErrorFlag) !Branch#,#Tubes
             IF (ErrorFlag .NE. NOERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !VL: Previously: GOTO 100
@@ -2930,8 +2894,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
                 DO I=1, NumOfCkts
-                    !CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
@@ -2967,25 +2929,17 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
 
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
-                    !CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 2) THEN
-                    !CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSEIF (I .EQ. 3) THEN
-                    !CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 ELSE
-                    !CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                    !                    Numbers,NumNumbers,Status)
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)                
                     DO J=1, Ckt(I)%Ntube
@@ -3018,8 +2972,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             END DO
 
             IsUniformVelProfile=.TRUE.
-            !CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-            !                    Numbers,NumNumbers,Status)
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
                                 TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
@@ -3589,10 +3541,18 @@ INTEGER I,II,III,IV,J,K !Loop counters
 	  !ISI - 09/10/07
   IF (ALLOCATED(CoilSection)) THEN
       DO I=1, NumOfSections
-          IF (ALLOCATED(CoilSection(I)%CktNum)) DEALLOCATE(CoilSection(I)%CktNum)
-          IF (ALLOCATED(CoilSection(I)%Node)) DEALLOCATE(CoilSection(I)%Node)
-          IF (ALLOCATED(CoilSection(I)%mRefIter)) DEALLOCATE(CoilSection(I)%mRefIter)
-          IF (ALLOCATED(CoilSection(I)%Ckt)) DEALLOCATE(CoilSection(I)%Ckt)
+          IF (ALLOCATED(CoilSection(I)%CktNum)) THEN
+              DEALLOCATE(CoilSection(I)%CktNum)
+          END IF
+          IF (ALLOCATED(CoilSection(I)%Node)) THEN
+              DEALLOCATE(CoilSection(I)%Node)
+          END IF
+          IF (ALLOCATED(CoilSection(I)%mRefIter)) THEN
+              DEALLOCATE(CoilSection(I)%mRefIter)
+          END IF
+          IF (ALLOCATED(CoilSection(I)%Ckt)) THEN
+              DEALLOCATE(CoilSection(I)%Ckt)
+          END IF
       END DO
       DEALLOCATE(CoilSection)
   END IF
@@ -3603,7 +3563,9 @@ INTEGER I,II,III,IV,J,K !Loop counters
 		DEALLOCATE(Ckt(I)%Tube)
 	  END DO
 	  DEALLOCATE(Ckt)
-	  IF (ALLOCATED(SucLnSeg)) DEALLOCATE(SucLnSeg) !Suction line
+	  IF (ALLOCATED(SucLnSeg)) THEN
+          DEALLOCATE(SucLnSeg) !Suction line
+      END IF
 	  RETURN
   END IF
 
@@ -3629,28 +3591,46 @@ INTEGER I,II,III,IV,J,K !Loop counters
 
 	  IF (ErrorFlag .EQ. CKTFILEERROR) THEN
 		  DO I=1, NumOfTubes
-			  IF (ALLOCATED(Tube(I)%Seg)) DEALLOCATE(Tube(I)%Seg)
+			  IF (ALLOCATED(Tube(I)%Seg)) THEN
+                  DEALLOCATE(Tube(I)%Seg)
+              END IF
 		  END DO
 	  END IF
   
 	  IF (ALLOCATED(Ckt)) THEN
 		  DO I=1, NumOfCkts
-			  IF (ALLOCATED(Ckt(I)%Tube)) DEALLOCATE(Ckt(I)%Tube)
-			  IF (ALLOCATED(Ckt(I)%TubeSequence)) DEALLOCATE(Ckt(I)%TubeSequence)
+			  IF (ALLOCATED(Ckt(I)%Tube)) THEN
+                  DEALLOCATE(Ckt(I)%Tube)
+              END IF
+			  IF (ALLOCATED(Ckt(I)%TubeSequence)) THEN
+                  DEALLOCATE(Ckt(I)%TubeSequence)
+              END IF
 		  END DO
 		  DEALLOCATE(Ckt)
 	  END IF
 
-	  IF (ALLOCATED(Tube)) DEALLOCATE(Tube)
-	  IF (ALLOCATED(Tube2D)) DEALLOCATE(Tube2D)
-	  IF (ALLOCATED(JoinTubes)) DEALLOCATE(JoinTubes)
-	  IF (ALLOCATED(mRefIter)) DEALLOCATE(mRefIter)
+	  IF (ALLOCATED(Tube)) THEN
+          DEALLOCATE(Tube)
+      END IF
+	  IF (ALLOCATED(Tube2D)) THEN
+          DEALLOCATE(Tube2D)
+      END IF
+	  IF (ALLOCATED(JoinTubes)) THEN
+          DEALLOCATE(JoinTubes)
+      END IF
+	  IF (ALLOCATED(mRefIter)) THEN
+          DEALLOCATE(mRefIter)
+      END IF
 
-	  IF (ALLOCATED(Node)) DEALLOCATE(Node)
+	  IF (ALLOCATED(Node)) THEN
+          DEALLOCATE(Node)
+      END IF
 
   END IF
 
-  IF (ALLOCATED(SucLnSeg)) DEALLOCATE(SucLnSeg) !Suction line
+  IF (ALLOCATED(SucLnSeg)) THEN
+      DEALLOCATE(SucLnSeg) !Suction line
+  END IF
 
   !FirstTime=.TRUE.
 
@@ -3662,7 +3642,6 @@ END SUBROUTINE EndEvaporatorCoil
 
 SUBROUTINE SuctionLine
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
@@ -3701,7 +3680,6 @@ REAL Tloss !Discharge line temperature loss, C
 	!CALL manifold(CoilType,IDtube,mRefTot,xRiMod,vRiMod,vgRiMod,vfRiMod,mugRiMod,mufRiMod,DPman)
 	!pRoCoil=pRoCoil-DPman
 
-    !DO K=1,NumOfMods !ISI - 12/17/2009
     DO K=1,1
 
 		IF (K .EQ. 1) THEN
@@ -3719,7 +3697,9 @@ REAL Tloss !Discharge line temperature loss, C
 		CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
 							 vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
 							 muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
         !Suction line heat loss
 !        Tloss = 2*PI*LmodSuc*(tRiMod-tAiCoil)/(mRefTot*cpgRiMod)/ &
@@ -3751,7 +3731,9 @@ REAL Tloss !Discharge line temperature loss, C
 		CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
 							 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
 							 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 			cpRiMod=0
@@ -3783,9 +3765,6 @@ REAL Tloss !Discharge line temperature loss, C
 
     END DO !End Nmod
 
-    !pRiCmp=SucLnSeg(NumOfMods)%pRo !ISI - 12/17/2009
-    !hRiCmp=SucLnSeg(NumOfMods)%hRo !ISI - 12/17/2009
-
     pRiCmp=SucLnSeg(1)%pRo
     hRiCmp=SucLnSeg(1)%hRo
 
@@ -3797,7 +3776,6 @@ END SUBROUTINE SuctionLine
 
 SUBROUTINE RefrigerantParameters(Ref$)
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 IMPLICIT NONE
@@ -3810,7 +3788,6 @@ IMPLICIT NONE
 
   Tcr=Tcrit(RefName)+273.15
   Pcr=Pcrit(RefName)/1000
-
 
 END SUBROUTINE RefrigerantParameters
 
@@ -3834,7 +3811,6 @@ SUBROUTINE InitBoundaryConditions(CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE AirPropMod
 USE CoilCalcMod
@@ -3863,7 +3839,6 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   tAoCoil=tAiCoil
   wAoCoil=wAiCoil
 
-  !IF (IsCoolingMode .GT. 0) THEN
   IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
       tAiCoil=tAiCoil+PwrFan/Cair
 	  hAiCoil=hAiCoil+PwrFan/mAiCoil
@@ -3872,7 +3847,6 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
 	  tAiCoil=tAiCoil+QlossCmp/Cair
 	  hAiCoil=hAiCoil+QlossCmp/mAiCoil
   END IF
-  !END IF
 
   AirPropOpt=1
   AirProp(1)=tAiCoil
@@ -4176,7 +4150,6 @@ SUBROUTINE CalcCoilSegment(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -4235,7 +4208,9 @@ REAL :: tAi
 		CALL CalcSegmentRefInletConditions(NumSection,II,II,III,IV,CoilType)
 							  
 		CALL CalcSegmentAirInletConditions(NumSection,II,II,III,IV,CoilType)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		mAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 		tAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi
@@ -4269,7 +4244,6 @@ REAL :: tAi
 		DPair=DPair*DPairMultiplier
 
 		hcoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev*hco !*LmodTube/Lcoil
-		!hcoMod=hco
 
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
@@ -4289,7 +4263,9 @@ REAL :: tAi
 		CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
 							 vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
 							 muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		tAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAo
 		wAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%wAo 
@@ -4307,7 +4283,9 @@ REAL :: tAi
 		END IF
 
 		CALL CalcSegmentOutletConditions(NumSection,II,II,III,IV,CoilType)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		QmodPrev=Qmod
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiMod !ISI - 12/05/06
@@ -4344,7 +4322,9 @@ REAL :: tAi
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tSi=tAiMod-ABS(Qmod)*(Rair+CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost)
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tSo=tAoMod-ABS(Qmod)*(Rair+CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%Rfrost)
 
-		IF (IsSimpleCoil .NE. 1) CALL UpdateTubeDataFromCircuitData(NumSection,II,III)
+		IF (IsSimpleCoil .NE. 1) THEN
+            CALL UpdateTubeDataFromCircuitData(NumSection,II,III)
+        END IF
 
 	ELSE !Microchannel coil
 
@@ -4353,7 +4333,9 @@ REAL :: tAi
 		CALL CalcSegmentRefInletConditions(NumSection,I,II,III,IV,CoilType)
 					  
 		CALL CalcSegmentAirInletConditions(NumSection,I,II,III,IV,CoilType)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		mAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi !*Slab(I)%Pass(II)%Ntube
 		tAiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi
@@ -4389,7 +4371,9 @@ REAL :: tAi
 		CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
 						   vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
 						   muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		tAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAo !ISI - 12/25/06
 		wAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%wAo !ISI - 12/25/06
@@ -4397,7 +4381,9 @@ REAL :: tAi
 		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)
 
 		CALL CalcSegmentOutletConditions(I,I,II,III,IV,CoilType)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 	
 		QmodPrev=Qmod
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod=Qmod
@@ -4426,7 +4412,6 @@ REAL :: tAi
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
 	END IF
-
 
 RETURN
 
@@ -4490,7 +4475,6 @@ REAL VelDevFup    !Upper front tube Velocity deviation
 REAL VelDevFdown  !Lower front tube Velocity deviation
 
 !FLOW:
-
 
     IF (IsSimpleCoil .EQ. 1) THEN
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi=tAiCoil
@@ -4724,7 +4708,9 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi=tAiFavg-1*(tAiFavg-tAoFavg)
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi=rhAiFavg-1*(rhAiFavg-rhAoFavg)
 
-		IF (CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev=1
+		IF (CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) THEN
+            CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev=1
+        END IF
 
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi=(mAiFup+mAiFdown)/2
 		mAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
@@ -4770,7 +4756,6 @@ SUBROUTINE CalcRefProperty(pRef,hRef,hfRef,hgRef,hfgRef,Psat,Tsat,tRef,xRef, &
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE OilMixtureMod
 
@@ -5021,7 +5006,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRi=CoilSection(NumSection)%Ckt(II)%pRi
 			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hRi=CoilSection(NumSection)%Ckt(II)%hRi
 
-		!ELSE IF (K .EQ. 1) THEN !Equal to outlet of previous tube Changed it to IV from K
 		ELSE IF (IV .EQ. 1) THEN !Equal to outlet of previous tube Changed it to IV from K
 			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRi=CoilSection(NumSection)%Ckt(II)%Tube(III-1)%Seg(NumOfMods)%pRo
 			CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hRi=CoilSection(NumSection)%Ckt(II)%Tube(III-1)%Seg(NumOfMods)%hRo
@@ -5122,7 +5106,6 @@ SUBROUTINE CalcSegmentOutletConditions(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -5173,7 +5156,6 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 	
 	xRoMod=xRiMod
 
-	!hgRoMod=hRiMod !ISI - 12/27/06
 	hRoMod=hRiMod
 
 	DO RefBCiter=1, RefBCmaxIter
@@ -5206,55 +5188,82 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 		CALL CalcMeanProp(cpgRiMod,cpgRoMod,cpgRmod)
 
 		!Correct specific heat
-		!IF (cpRmod .LT. 0) THEN 
 		IF (cpRmod .LE. 0) THEN !ISI - 08/03/06 
-		    IF (xRmod .LE. 0) cpRmod = cpfRmod
-		    IF (xRmod .GE. 1) cpRmod = cpgRmod 
+		    IF (xRmod .LE. 0) THEN
+                cpRmod = cpfRmod
+            END IF
+		    IF (xRmod .GE. 1) THEN
+                cpRmod = cpgRmod
+            END IF
 		END IF
 
 		!Correct thermal conductivity
-		!IF (kRmod .LT. 0) THEN 
 		IF (kRmod .LE. 0) THEN !ISI - 08/03/06
-		    IF (xRmod .LE. 0) kRmod = kfRmod
-			IF (xRmod .GE. 1) kRmod = kgRmod 
+		    IF (xRmod .LE. 0) THEN
+                kRmod = kfRmod
+            END IF
+			IF (xRmod .GE. 1) THEN
+                kRmod = kgRmod
+            END IF
 		END IF
 
 		IF (muRmod .LE. 0) THEN !ISI - 08/03/06
-		    IF (xRmod .LE. 0) muRmod = mufRmod
-			IF (xRmod .GE. 1) muRmod = mugRmod 
+		    IF (xRmod .LE. 0) THEN
+                muRmod = mufRmod
+            END IF
+			IF (xRmod .GE. 1) THEN
+                muRmod = mugRmod
+            END IF
 		END IF
 
 		!For tube cover both two phase and single phase region
 		LmodTPratio=0 !Initialize
 		QmodTP=0 !Initialize
-		!IF (RefBCiter .GT. 1 .AND. xRiMod .LT. 1 .AND. xRoMod .GE. 1) THEN 
 		IF (RefBCiter .GT. 1 .AND. hRiMod .LT. hgRoMod .AND. hRoMod .GE. hgRoMod) THEN 
 		
 			CALL CalcTransitionSegment(CoilType)
-			IF (IsSimpleCoil .EQ. 1) IsTransitionSegment=.TRUE.
+			IF (IsSimpleCoil .EQ. 1) THEN
+                IsTransitionSegment=.TRUE.
+            END IF
 			IsTransitSegmentCalled=.TRUE.
-			IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+			IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                RETURN
+            END IF
 
 			!Update properties ISI - 08/03/06 
 			IF (cpRmod .LE. 0) THEN 
-				IF (xRmod .LE. 0) cpRmod = cpfRmod
-				IF (xRmod .GE. 1) cpRmod = cpgRmod 
+				IF (xRmod .LE. 0) THEN
+                    cpRmod = cpfRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    cpRmod = cpgRmod
+                END IF
 			END IF
 
 			IF (kRmod .LE. 0) THEN !ISI - 08/03/06
-				IF (xRmod .LE. 0) kRmod = kfRmod
-				IF (xRmod .GE. 1) kRmod = kgRmod 
+				IF (xRmod .LE. 0) THEN
+                    kRmod = kfRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    kRmod = kgRmod
+                END IF
 			END IF
 
 			IF (muRmod .LE. 0) THEN !ISI - 08/03/06
-				IF (xRmod .LE. 0) muRmod = mufRmod
-				IF (xRmod .GE. 1) muRmod = mugRmod 
+				IF (xRmod .LE. 0) THEN
+                    muRmod = mufRmod
+                END IF
+				IF (xRmod .GE. 1) THEN
+                    muRmod = mugRmod
+                END IF
 			END IF
 
 		END IF 
 
 		IF (.NOT. IsTransitionSegment) THEN
-			IF (DTmod .EQ. 0) DTmod=(tAiMod+tRiMod)/2 !First estimate
+			IF (DTmod .EQ. 0) THEN
+                DTmod=(tAiMod+tRiMod)/2 !First estimate
+            END IF
 			CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,-Qmod,AoMod,AiMod,hfgRmod,xRmod,xRmod, &
 						   vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
 		  				   kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
@@ -5282,10 +5291,11 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			ELSE !Microchannel coil
 				cRef=mRefMod*cpRmod*NumOfChannels 
 			END IF
-			IF (xRmod .LT. 1. .AND. xRmod .GT. 0.) cRef=BIG !Phase change
+			IF (xRmod .LT. 1. .AND. xRmod .GT. 0.) THEN
+                cRef=BIG !Phase change
+            END IF
 
 			!Calc. Cair
-			!CPair=CPA(REAL(tAiCoil))
 			CPair=CPA(REAL(tAmod))
 			cAir=mAiMod*cpAir
 
@@ -5310,7 +5320,9 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 					IF (QmodTP .NE. 0) Qmod = QmodTP
 				ELSE
 					IF (LmodTP .EQ. LmodTube) THEN
-						IF (QmodDry .GT. QmodTP) QmodDry = QmodTP
+						IF (QmodDry .GT. QmodTP) THEN
+                            QmodDry = QmodTP
+                        END IF
 					ELSE
 						QmodDry=QmodDry+QmodTP
 					END IF
@@ -5365,17 +5377,12 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 
 		IF (xRiMod .LT. 1 .AND. xRoMod .GE. 1) THEN
 			IF (IsSimpleCoil .EQ. 1) THEN
-				IF (QmodTP .NE. 0) Qmod = QmodTP
-			!ELSE
-			!	IF (LmodTP .EQ. LmodTube) THEN
-			!		IF (QmodDry .GT. QmodTP) QmodDry = QmodTP
-			!	ELSE
-			!		QmodDry=QmodDry+QmodTP
-			!	END IF
+				IF (QmodTP .NE. 0) THEN
+                    Qmod = QmodTP
+                END IF
 			END IF
 		END IF
 
-		!IF (xRmod .LT. 1 .AND. xRmod .GT. 0 .AND. LmodTPratio .EQ. 0) THEN 
 		IF (xRmod .LT. 1 .AND. xRmod .GT. 0 .AND. NOT(IsTransitSegmentCalled)) THEN 
 							  						
 			!********************* Ding starts ******************************
@@ -5407,21 +5414,26 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			hRoMod=-(Qmod/NumOfChannels)/mRefMod+hRiMod  
 		END IF
 
-		
 		!To prevent enthalpy is out of range - ISI - 12/27/06
-		IF (IsSimpleCoil .EQ. 1 .AND. RefBCiter .EQ. 1 .AND. hRiMod .LT. hgRoMod .AND. hRoMod .GE. hgRoMod) CYCLE 
+		IF (IsSimpleCoil .EQ. 1 .AND. RefBCiter .EQ. 1 .AND. hRiMod .LT. hgRoMod .AND. hRoMod .GE. hgRoMod) THEN
+            CYCLE
+        END IF
 
 		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
 				  	                      hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
 										  muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &
 										  IDtube,HtCoil,Lcoil,pRoMod)
 
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
 							 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
 							 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-		IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+		IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            RETURN
+        END IF
 
 		IF (CoilType .NE. MCEVAPORATOR .AND. IsSimpleCoil .NE. 1) THEN
 			!Return bend pressure drop
@@ -5440,14 +5452,18 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 				CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
 									 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
 									 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
-				IF (ErrorFlag .GT. CONVERGEERROR) RETURN
+				IF (ErrorFlag .GT. CONVERGEERROR) THEN
+                    RETURN
+                END IF
 
 			END IF
 		END IF
 
 		
 		IF (IsSimpleCoil .EQ. 1) THEN
-		    IF (IsTransitionSegment) EXIT
+		    IF (IsTransitionSegment) THEN
+                EXIT
+            END IF
 		END IF
 
 		IF (xRmod .GT. 0.9 .AND. RefBCiter .GE. 2) THEN
@@ -5513,7 +5529,6 @@ SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 
@@ -5610,12 +5625,16 @@ REAL pRoPrev !Previous value of pRo, for iteration
 			  	   hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
 				   Sigma,Lsegment,LmodTPratio,IDtube,ODtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
 
-		IF (ABS(dPfric) .LT. ABS(dPmom)) dPmom=0
+		IF (ABS(dPfric) .LT. ABS(dPmom)) THEN
+            dPmom=0
+        END IF
   
 		dPmod=ABS(dPfric)+ABS(dPmom)+dPgrav
 		dPmod=dPmod*DPrefMultiplier
   
-		IF (pRi-dPmod .LT. 0) dPmod=0
+		IF (pRi-dPmod .LT. 0) THEN
+            dPmod=0
+        END IF
   
 		pRo=pRi-dPmod
 		IF (ABS(pRo-pRoPrev)/pRoPrev .LT. SMALL .OR. Counter .GT. PressureMaxIter) THEN
@@ -5652,7 +5671,6 @@ SUBROUTINE CalcTransitionSegment(CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -5739,7 +5757,6 @@ SUBROUTINE FindTransitionBoundary(CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -5756,7 +5773,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 	!Find module length in two-phase 
 	!Initialize
-	!LmodTPmin=0 
 	LmodTPmin=1e-6 !ISI - 13/25/06
 	LmodTPmax=LmodTube
 	LmodTP=LmodTube/2
@@ -5769,7 +5785,9 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		Tsurf=0
 
 		!ISI - 09/11/06
-		IF (DTmod .EQ. 0) DTmod=(tAiMod+tRiMod)/2 !First estimate
+		IF (DTmod .EQ. 0) THEN
+            DTmod=(tAiMod+tRiMod)/2 !First estimate
+        END IF
 		CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,-Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &
 					   vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
 			  		   kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
@@ -5780,10 +5798,11 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 				    hcoMod,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio, &
 					UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
           
-		IF (IsSimpleCoil .EQ. 1) mAiMod=mAiCoil*LmodTP/Lcoil !ISI - 12/05/06
+		IF (IsSimpleCoil .EQ. 1) THEN
+            mAiMod=mAiCoil*LmodTP/Lcoil !ISI - 12/05/06
+        END IF
 
 		!Calc. Cair !ISI - 12/05/06
-		!CPair=CPA(REAL(tAiMod))
 		CPair=CPA(REAL(tAmod))
 		Cair=mAiMod*CPair
 
@@ -5855,7 +5874,6 @@ SUBROUTINE CalcWetSurfaceDing(I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -5890,9 +5908,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		    !Fictitious convection resistance
 			hcof=(hcoMod*cf)/cPAir
 			WetFlag=1
-
-			!IF (Fintype .GT. 3) CALL CalcYorkhco(WetFlag,FaceVel,Nl,hcof) !ISI - 07/25/06
-			
+            
 			IF (LmodTPratio .NE. 0 .AND. IsSimpleCoil .EQ. 1) THEN
 				CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
 						    hcof,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio,UAf,Rairf,Rrefrig,Rtube,FinEff,SurfEff)
@@ -6008,7 +6024,9 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		END IF
 	END DO !End of cfIter
 
-	IF (cfIter .GT. WetSurfaceMaxIter) WRITE(*,*)'-- WARNING -- Evaporator: Fictitious air specific heat not converged'
+	IF (cfIter .GT. WetSurfaceMaxIter) THEN
+        WRITE(*,*)'-- WARNING -- Evaporator: Fictitious air specific heat not converged'
+    END IF
 
 		!********************* Ding ends ******************************
 
@@ -6034,7 +6052,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
 	!	END IF
 	!END IF
-
 
 RETURN
 
@@ -6064,7 +6081,6 @@ SUBROUTINE CalcWetSurfaceBraun(NumSection,I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -6134,7 +6150,9 @@ REAL FrostThk
     END IF
 
 	XM=Pt/2
-	IF (XM .GT. Pl .AND. Pl .NE. 0) XM = Pl
+	IF (XM .GT. Pl .AND. Pl .NE. 0) THEN
+        XM = Pl
+    END IF
 	XL=0.5*((Pt/2)**2+Pl**2)**0.5
 	Req=1.27*XM*(XL/XM-0.3)**(0.5)
 
@@ -6290,7 +6308,6 @@ SUBROUTINE CalcWetSurfaceMcQuiston(I,II,III,IV,CoilType)
 !
 !------------------------------------------------------------------------
 
-!USE FluidProperties
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 USE CoilCalcMod
 USE AirPropMod
@@ -6490,7 +6507,6 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 	!	END IF
 	!END IF
 
-
 RETURN
 
 END SUBROUTINE CalcWetSurfaceMcQuiston
@@ -6589,7 +6605,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     !
     !-----------------------------------------------------------------------------------
 
-    !USE FluidProperties
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE CoilCalcMod
     USE AirPropMod
@@ -6707,7 +6722,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     hAiCoil=AirProp(4)
     wbAiCoil=AirProp(5)
 
-    !IF (IsCoolingMode .LT. 1) THEN
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
         hAiCoil=hAiCoil+PwrFan/mAiCoil
@@ -6716,7 +6730,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
         tAiCoil=tAiCoil+QlossCmp/Cair
         hAiCoil=hAiCoil+QlossCmp/mAiCoil
     END IF
-    !END IF
 
     AirPropOpt=1
     AirProp(1)=tAiCoil
@@ -6755,7 +6768,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
         DO II=1, Slab(I)%Npass
             DO III=1, Slab(I)%Pass(II)%Ntube
                 Slab(I)%Pass(II)%Tube(III)%Seg%mAi=mAiCoil*LmodTube/(Ltube*Nt)
-                !Slab(I)%Pass(II)%Tube(III)%Seg%VelDev=1
                 Slab(I)%Pass(II)%Tube(III)%Seg%tAi=tAiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%wbAi=wbAiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%rhAi=rhAiCoil
@@ -6779,7 +6791,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
             DO III=1, Slab(I)%Pass(II)%Ntube
                 DO IV=1, NumOfMods
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Aface=LmodTube/(Ltube*Nt)*Aface
-                    IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
+                    IF (Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev .LE. 0) THEN
+                        Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev=1
+                    END IF
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%mAi=mAiCoil*LmodTube/(Ltube*Nt)* &
                     Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev 
                 END DO
@@ -6881,7 +6895,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                                 !VL: Previously: GOTO 200
                                 OUT(21)=ErrorFlag
                                 RETURN
-
                             END IF
 
                             Qpass=Qpass+Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Qmod
@@ -7000,7 +7013,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                 pRoCoil=Slab(Nl)%pRo
                 hRoCoil=Slab(Nl)%hRo
                 EXIT
-
             END IF
         ELSE
             !Calculate outlet pressure and enthalpy
@@ -7022,7 +7034,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     END IF
 
     !Coil air side outlet conditions
-    !CPair=CPA(REAL(tAiCoil))
     CPair=CPA(REAL(tAmod))
     Cair=mAicoil*CPAir
 
@@ -7033,7 +7044,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     CPair=CPA(REAL(tAoCoil))
     Cair=mAiCoil*CPAir
 
-    !IF (IsCoolingMode .LT. 1 .AND. DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
     IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
         tAoCoil=tAoCoil+PwrFan/Cair
         hAoCoil=hAoCoil+PwrFan/mAiCoil

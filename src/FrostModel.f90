@@ -88,8 +88,12 @@ END IF
 DefrostSetPoint = SlopeInitCurve*TAIE + InterceptInitCurve
 TimeFromLastDefrost = CurSimTime-LastDefrostInitTime
 IF(DefrostControlTemp .LE. DefrostSetPoint) THEN
- IF(DefrostTrigger) TimeFromInitTrigger = TimeFromInitTrigger + TimeInterval
- IF(.NOT. DefrostTrigger) DefrostTrigger = .TRUE.
+ IF(DefrostTrigger) THEN
+     TimeFromInitTrigger = TimeFromInitTrigger + TimeInterval
+ END IF
+ IF(.NOT. DefrostTrigger) THEN
+     DefrostTrigger = .TRUE.
+ END IF
 ELSE
  DefrostTrigger = .FALSE. 
 END IF
@@ -110,7 +114,6 @@ RETURN
 END SUBROUTINE DetermineDefrostInitiate
 
 SUBROUTINE EvaluateDefrostModel
-
 
  RETURN
 
