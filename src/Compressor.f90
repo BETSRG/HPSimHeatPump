@@ -237,7 +237,7 @@
     Enthalpy=Hdis*1000
     Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
-        RETURN
+            RETURN
     END IF
 
     Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)

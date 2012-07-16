@@ -47,6 +47,7 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
     INTEGER, INTENT(INOUT), OPTIONAL :: VariableToSet1 ! if RefProp was erroneous, this will be set to the signal value
     REAL, INTENT(INOUT), OPTIONAL :: VariableToSet2 ! another variable to set...optionally
 
+    ErrorFound = .FALSE.
     IF (RefPropErrValue .GT. 0) THEN
         CALL ShowWarningError(CallingRoutine//': RefProp lookup error')
         IF ( PRESENT ( VariableToSet1 ) ) THEN

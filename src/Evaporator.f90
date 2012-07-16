@@ -2649,7 +2649,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             DO I=1, Nl
                 DO J=1, Nt
                     IF (FinType .EQ. 4 .OR. FinType .EQ. 7 .OR. FinType .EQ. 6) THEN
-                        !Tube2D(I,J)%RowNum=I
                         Tube2D(I,J)%RowNum=Nl+1-I !Corrected by ISI 07/11/06
                     ELSE
                         Tube2D(I,J)%RowNum=0
@@ -2729,9 +2728,13 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                         TubeNum=CoilSection(NumSection)%Ckt(I)%TubeSequence(J)
                         Tube(TubeNum)%Even=0
                         IF (FirstTube .EQ. 2 ) THEN
-                            IF (MOD(J,2) .EQ. 1) Tube(TubeNum)%Even=1
+                            IF (MOD(J,2) .EQ. 1) THEN
+                                Tube(TubeNum)%Even=1
+                            END IF
                         ELSE
-                            IF (MOD(J,2) .EQ. 0) Tube(TubeNum)%Even=1
+                            IF (MOD(J,2) .EQ. 0) THEN
+                                Tube(TubeNum)%Even=1
+                            END IF
                         END IF
                     END DO !End of J
                 END DO !End of I
@@ -2751,7 +2754,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                         CoilSection(NumSection)%NcktFirst=CoilSection(NumSection)%NcktFirst+1
                     END IF
                 END DO
-                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06	  
+                IF (CoilSection(NumSection)%NcktFirst .EQ. 0) THEN
+                    CoilSection(NumSection)%NcktFirst = 1 !At least one circuit, ISI - 07/28/06
+                END IF
 
                 !Number of outlet circuits
                 CoilSection(NumSection)%NcktLast=0

@@ -1072,7 +1072,6 @@
 
     DPair=DPair*DPairMultiplier
 
-
     hRoCoil=hRiCoil-Qcoil/mRefTot
 
     Pressure=pRoCoil*1000
@@ -2369,15 +2368,15 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
                 DO I=1, NumOfCkts
-                Ckt(I)%Ntube=Numbers(I)
-                IF (ErrorFlag .NE. NOERROR) THEN 
-                    ErrorFlag=CKTFILEERROR
-                    !VL: Previously: GOTO 100
-                    CALL InitCondenserCoil_Helper_1
-                    RETURN
-                END IF
-                ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
-                ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                    Ckt(I)%Ntube=Numbers(I)
+                    IF (ErrorFlag .NE. NOERROR) THEN 
+                        ErrorFlag=CKTFILEERROR
+                        !VL: Previously: GOTO 100
+                        CALL InitCondenserCoil_Helper_1
+                        RETURN
+                    END IF
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                 END DO
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
@@ -2426,11 +2425,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
         !************************* Velocity Profile ********************************
                 
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
-		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
-		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-		      DO J=1, NumOfCkts
-		          CoilSection(NumOfSections)%CktNum(J)=J
-              END DO
+            !RS Comment: The following is unnecessary as long as there is only 1 section (7/16/12)
+		      !ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      !ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      !DO J=1, NumOfCkts
+		      !    CoilSection(NumOfSections)%CktNum(J)=J
+              !END DO
               
             DO I=1,2
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
@@ -2851,11 +2851,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
         !************************* Velocity Profile ********************************
         
               CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
-		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
-		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-		      DO J=1, NumOfCkts
-		          CoilSection(NumOfSections)%CktNum(J)=J
-              END DO
+              !RS Comment: The following is unnecessary as long as there is only 1 section (7/16/12)
+		      !ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
+		      !ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+		      !DO J=1, NumOfCkts
+		          !CoilSection(NumOfSections)%CktNum(J)=J
+              !END DO
               
             DO I=1,2
                 IF (ErrorFlag .NE. NOERROR) THEN  !Tube# ,velocity Deviation from mean value
@@ -2952,7 +2953,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     J=J+1
                     Node(J)%Num=Ckt(I)%TubeSequence(Ckt(I)%Ntube)
                 END IF
-                IF (J .GT. Nnode) EXIT
+                IF (J .GT. Nnode) THEN
+                    EXIT
+                END IF
             END DO
 
             Node(Nnode)%Num=0 !coil outlet
@@ -2970,24 +2973,32 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                             Tube2D(I,J)%Fup=I*Nt+(J-1)
                             Tube2D(I,J)%Fdown=I*Nt+J
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !Odd row, first tube
+                            END IF
                         ELSE
                             Tube2D(I,J)%Fup=I*Nt+J
                             Tube2D(I,J)%Fdown=I*Nt+(J+1)
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !even row, first tube
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !even row, first tube
+                            END IF
                         END IF
                     ELSE
                         IF (MOD(I,2) .EQ. 1) THEN
                             Tube2D(I,J)%Fup=I*Nt+J
                             Tube2D(I,J)%Fdown=I*Nt+(J+1)
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            IF (MOD(I,2) .EQ. 1 .AND. J .EQ. Nt) THEN
+                                Tube2D(I,J)%Fdown=0 !Odd row, first tube
+                            END IF
                         ELSE
                             Tube2D(I,J)%Fup=I*Nt+(J-1)
                             Tube2D(I,J)%Fdown=I*Nt+J
                             Tube2D(I,J)%Back=1
-                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) Tube2D(I,J)%Fup=0 !even row, first tube
+                            IF (MOD(I,2) .EQ. 0 .AND. J .EQ. 1) THEN
+                                Tube2D(I,J)%Fup=0 !even row, first tube
+                            END IF
                         END IF
                     END IF
 
@@ -4184,14 +4195,12 @@ END IF
         Ckt(II)%Tube(III)%Seg(IV)%Len=LmodTube
 
         IF (IsSimpleCoil .EQ. 1) THEN
-            !		    IF ((LmodTube .LT. SMALL) .OR. & !For zero length
-            !			    (IV .EQ. 1 .AND. xRoMod .LT. 1)) THEN !For two-phase inlet condition
-
+           
             IF (LmodTube .LT. SMALL) THEN !For zero length, ISI - 02/08/08
 
                 Ckt(II)%Tube(III)%Seg(IV)%Len=0
                 Ckt(II)%Tube(III)%Seg(IV)%Qmod=0
-                Ckt(II)%Tube(III)%Seg(IV)%pRo=pRoMod
+                Ckt(II)%Tube(III)%Seg(IV)%pRo=pRoMod    !1
                 Ckt(II)%Tube(III)%Seg(IV)%hRo=hRoMod
                 Ckt(II)%Tube(III)%Seg(IV)%tAo=tAoMod
                 Ckt(II)%Tube(III)%Seg(IV)%rhAo=rhAoMod
@@ -4304,7 +4313,7 @@ END IF
         Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiMod !ISI - 12/05/06
         Ckt(II)%Tube(III)%Seg(IV)%Len=LmodTube
         Ckt(II)%Tube(III)%Seg(IV)%Qmod=Qmod
-        Ckt(II)%Tube(III)%Seg(IV)%pRo=pRoMod
+        Ckt(II)%Tube(III)%Seg(IV)%pRo=pRoMod    !2
         Ckt(II)%Tube(III)%Seg(IV)%hRo=hRoMod
         Ckt(II)%Tube(III)%Seg(IV)%tAo=tAoMod
         Ckt(II)%Tube(III)%Seg(IV)%rhAo=rhAoMod

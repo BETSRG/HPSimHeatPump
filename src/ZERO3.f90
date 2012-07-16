@@ -91,7 +91,6 @@
             E = D
         ELSE
 
-
             !VL: Previously: 
             !        IF (A .NE. C) GO TO 50
             !        S = FB/FA
@@ -121,8 +120,6 @@
 
             END IF
             !
-
-
             !
             !VL: Previously: 60      IF (P .GT. 0.0) Q = -Q ! all GOTO 60 statements eliminated ....
             IF (P .GT. 0.0) THEN

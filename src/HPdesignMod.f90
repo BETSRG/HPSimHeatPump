@@ -361,18 +361,10 @@
         !XMaC=StandardDensity/RhoAoC*StdCFMcnd
         !XMaE=StandardDensity/RhoAoE*StdCFMevp
 
-        !Now XM is mass flow rate
-        !XMaC=XMaC*RhoAoC
-        !XMaE=XMaE*RhoAoE
-        !XMaC=StdCFMcnd*StandardDensity
-        !XMaE=StdCFMevp*StandardDensity
-
         !Actual mass flow rate
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
-        !TSOCMP = ZERO3(TSAT1,CNDNSR,CNDCON,CNDCON,STEP,DIFFER,IERROR)
-        !TSOCMP = ZERO3(TSAT1,CNDNSR,CNDCON,1E-3,STEP,DIFFER,IERROR)
         TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
         !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
 
@@ -1059,7 +1051,6 @@
         END IF
 
         RETURN
-
 
     END IF
     !VL Previously: 950   CONTINUE
