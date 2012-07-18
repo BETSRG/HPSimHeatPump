@@ -569,7 +569,6 @@
     !     REFERENCE:              1989 ASHRAE Handbook - Fundamentals
     !***********************************************************************
 
-
     !*** Calculate the dry bulb temperature as a function of enthalpy and
     !*** humidity ratio.
     !*** hDryAir = CpAir*TDB

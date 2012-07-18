@@ -107,8 +107,7 @@
     REAL Wcorrect    !Correction factor for power calc. with different input voltage
     REAL Mcorrect    !Correction factor for mass flow rate
     REAL PwrMultiplier    !Power multiplier
-    REAL mdotMultiplier   !Mass flow rate multiplier
-    !REAL X           !Polynomial function
+    REAL mdotMultiplier   !Mass flow rate multipliern
     INTEGER I !Loop control
     INTEGER ErrorFlag          !0-No error
     !1-Compressor solution error
@@ -185,7 +184,9 @@
     Pressure=Pdis*1000
     Entropy=SsucMap*1000
     HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) RETURN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
     HdisIsenMap=HdisIsenMap/1000
 
     Pressure=Psuc*1000

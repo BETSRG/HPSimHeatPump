@@ -8,7 +8,6 @@ USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integratio
 IMPLICIT NONE
 
 CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-!INTEGER(2),       INTENT(IN) :: PureRef !Flag: 1=Pure refrigerant; 0=mixture
 REAL, INTENT(IN) :: LTUBE   !Distributor tube length, in
 INTEGER(2),       INTENT(IN) :: Nckts   !Number of circuits in evaporator
 REAL, INTENT(IN) :: mdotRef !Refrigerant mass flow rate, kg/s
@@ -23,8 +22,7 @@ INTEGER, INTENT(OUT) ::ErrorFlag !Error flag: 0 = no error
 
 REAL, PARAMETER :: SuperRtd = 6.11 !11 F  !Rated superheat, C
 REAL, PARAMETER :: UnitP = 6.895 !(psi X UnitP = kPa)
-
-!CHARACTER (len=15) :: Property           
+           
 INTEGER            :: RefrigIndex =0
 REAL Temperature,Quality,Pressure,Enthalpy
 
@@ -49,9 +47,9 @@ REAL DPtube   !Pressure drop through tube, kPa
 
   ErrorFlag = 0
 
-  Pressure=PoEvp*1000
+  Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   Quality=1
-  TsoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+  TsoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Evaporator Outlet Saturation Temperature
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
@@ -62,15 +60,15 @@ REAL DPtube   !Pressure drop through tube, kPa
   ToEvpRtd=TsoEvp+SuperRtd !Rated evaporator outlet temp.
 
   Temperature=ToEvpRtd
-  Pressure=PoEvp*1000
-  HoEvpRtd=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
+  Pressure=PoEvp*1000   !RS Comment: Unit Conversion
+  HoEvpRtd=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Rated Evaporator Outlet Enthalpy
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
 	  !VL: Previously: GOTO 200
       RETURN
   END IF
-  HoEvpRtd=HoEvpRtd/1000
+  HoEvpRtd=HoEvpRtd/1000    !RS Comment: Unit Conversion
 
   !Capacities
   Qnoz=mdotRef*(HoEvpRtd-HiExp) !Nozzle
@@ -79,8 +77,8 @@ REAL DPtube   !Pressure drop through tube, kPa
   END IF
   Qtube=Qnoz/Nckts              !Tube
 
-  TiExpF=TiExp*1.8+32
-  TsoEvpF=TsoEvp*1.8+32
+  TiExpF=TiExp*1.8+32   !RS Comment: Unit Conversion, from C to F
+  TsoEvpF=TsoEvp*1.8+32 !RS Comment: Unit Conversion, from C to F
   
   !Rated capacities
   CALL CalcQnozRated(TiExpF,TsoEvpF,Ref$,QNOZRTD)         !Rated nozzle capacity
@@ -102,11 +100,10 @@ REAL DPtube   !Pressure drop through tube, kPa
   !Pressure drops
   CALL CalcDPnoz(LoadNoz,Ref$,DPNOZ)    !Nozzle pressure drop
   CALL CalcDPtube(LoadTube,Ref$,DPTUBE) !Tube pressure
-  !WRITE(*,*)LoadNoz,LoadTube,DPnoz,DPtube
   DPnoz=DPNOZ*UnitP
   DPtube=DPTUBE*UnitP
 
-  DPtot=DPnoz+DPtube
+  DPtot=DPnoz+DPtube    !Total Distributor Pressure Drop
 
   IF (DPtot .LT. 0) THEN
       ErrorFlag = 3

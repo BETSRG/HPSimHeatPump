@@ -5,8 +5,7 @@ USE DataSimulation
 IMPLICIT NONE
 
 PUBLIC EvaluateFrostModel
-!PUBLIC CheckDefrostStrategy
-!PRIVATE DetermineFrostParameters
+
 CONTAINS
 
 SUBROUTINE EvaluateFrostModel

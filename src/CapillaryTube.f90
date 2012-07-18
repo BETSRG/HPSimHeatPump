@@ -175,37 +175,37 @@
 
     Pressure=PiExp*1000
     Enthalpy=HiExp*1000
-    TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
         RETURN
     END IF
 
-    XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+    XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
     Quality=0
-    TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+    TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Liquid Saturation Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
     HiEvp=HiExp
 
-    Pressure=PiEvp*1000
-    Enthalpy=HiEvp*1000
-    TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=PiEvp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
+    TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+    XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
+    rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
@@ -235,14 +235,14 @@
 
     HoExp=HiExp
 
-    Pressure=PoExp*1000
-    Enthalpy=HoExp*1000
-    ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=PoExp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
+    ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
@@ -475,78 +475,78 @@
 
     ErrorFlag = 0 !Initialize
 
-    Pressure=PiExp*1000
-    Enthalpy=HiExp*1000
-    TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=PiExp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
+    TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+    XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    sigmaExp=PH(Ref$,Pressure,Enthalpy,'surfacetension',RefrigIndex,RefPropErr)
+    sigmaExp=PH(Ref$,Pressure,Enthalpy,'surfacetension',RefrigIndex,RefPropErr) !Expansion Device Surface Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    sigmaExp=sigmaExp/1000
+    sigmaExp=sigmaExp/1000  !RS Comment: Unit Conversion
 
     Quality=0
-    TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+    TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Liquid Saturation Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
+    rhofiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Liquid Density
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
+    mufiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Liquid Dynamic Viscosity
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    hfiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+    hfiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)  !Expansion Device Liquid Enthalpy
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    hfiExp=hfiExp/1000
+    hfiExp=hfiExp/1000  !RS Comment: Unit Conversion
 
     Quality=1
-    rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr)
+    rhogiExp=PQ(Ref$,Pressure,Quality,'density',RefrigIndex,RefPropErr) !Expansion Device Vapor Density
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)
+    mugiExp=PQ(Ref$,Pressure,Quality,'viscosity',RefrigIndex,RefPropErr)    !Expansion Device Vapor Dynamic Viscosity
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    hgiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+    hgiExp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)  !Expansion Device Vapor Enthalpy
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    hgiExp=hgiExp/1000
+    hgiExp=hgiExp/1000  !RS Comment: Unit Conversion
 
     HiEvp=HiExp
 
-    Pressure=PiEvp*1000
-    Enthalpy=HiEvp*1000
-    TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=PiEvp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
+    TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+    XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
+    rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
@@ -576,31 +576,31 @@
 
     HoExp=HiExp
 
-    Pressure=PoExp*1000
-    Enthalpy=HoExp*1000
-    ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=PoExp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
+    ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
     Temperature=TiExp
     Quality=0
-    Psat=TQ(Ref$, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
+    Psat=TQ(Ref$, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr) !Saturation Temperature
     IF (IssueRefPropError(RefPropErr, 'Short Tube', ErrorFlag)) THEN
         RETURN
     END IF
-    Psat=Psat/1000
+    Psat=Psat/1000  !RS Comment: Unit Conversion
 
     hfgExp=hgiExp-hfiExp
     Subcooling=TsiExp-TiExp
 
     Tcr=Tcrit(Ref$) 
-    Pcr=Pcrit(Ref$)/1000
+    Pcr=Pcrit(Ref$)/1000    !RS Comment: Unit Conversion
 
     Pi2=(PiExp-Psat)/Pcr
     Pi3=Subcooling/Tcr

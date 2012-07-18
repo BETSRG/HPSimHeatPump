@@ -68,10 +68,6 @@ CHARACTER(len=8)  :: GasFluid     = "FLUIDGAS"
         ! DERIVED TYPE DEFINITIONS
 TYPE FluidPropsRefrigerantData
   CHARACTER(len=MaxNameLength) :: Name = ' '    ! Name of the refrigerant
-  !To account for temperature glide - ISI 11/06/06
-  !INTEGER :: NumPsPoints       = 0              ! Number of saturation pressure
-  !REAL, POINTER, DIMENSION(:)  :: PsTemps       ! Temperatures for saturation pressures
-  !REAL, POINTER, DIMENSION(:)  :: PsValues      ! Saturation pressures at PsTemps
   INTEGER :: NumPsPoints       = 0              ! Number of saturation pressure
   REAL, POINTER, DIMENSION(:)  :: PsTemps       ! Temperatures for saturation pressures
   REAL, POINTER, DIMENSION(:)  :: PsfValues     ! Saturation liquid pressures at PsTemps
@@ -321,12 +317,10 @@ SUBROUTINE GetFluidPropertiesData
             ! for the temperature array.  It's time to load up the local derived type.
             RefrigData(Loop)%NumPsPoints = FluidTemps(TempLoop)%NumOfTemps
             ALLOCATE(RefrigData(Loop)%PsTemps(RefrigData(Loop)%NumPsPoints))
-            !ALLOCATE(RefrigData(Loop)%PsValues(RefrigData(Loop)%NumPsPoints)) !ISI - 11/06/06
 			ALLOCATE(RefrigData(Loop)%PsgValues(RefrigData(Loop)%NumPsPoints))
 
             ! Same number of points so assign the values
             RefrigData(Loop)%PsTemps  = FluidTemps(TempLoop)%Temps
-            !RefrigData(Loop)%PsValues = Numbers(1:NumNumbers) !ISI - 11/06/06
 			RefrigData(Loop)%PsgValues = Numbers(1:NumNumbers)
             EXIT ! the TempLoop DO loop
           END IF
@@ -368,11 +362,9 @@ SUBROUTINE GetFluidPropertiesData
             ! At this point, we have found the correct input line and found a match
             ! for the temperature array.  It's time to load up the local derived type.
             !RefrigData(Loop)%NumPsPoints = FluidTemps(TempLoop)%NumOfTemps
-            !ALLOCATE(RefrigData(Loop)%PsTemps(RefrigData(Loop)%NumPsPoints))
 			ALLOCATE(RefrigData(Loop)%PsfValues(RefrigData(Loop)%NumPsPoints))
 
             ! Same number of points so assign the values
-            !RefrigData(Loop)%PsTemps  = FluidTemps(TempLoop)%Temps
 			RefrigData(Loop)%PsfValues = Numbers(1:NumNumbers)
             EXIT ! the TempLoop DO loop
           END IF
@@ -899,7 +891,6 @@ SUBROUTINE GetFluidPropertiesData
             ALLOCATE(RefrigData(Loop)%STfValues(RefrigData(Loop)%NumSTPoints))
             
             ! Same number of points so assign the values
-            !RefrigData(Loop)%STemps  = FluidTemps(TempLoop)%Temps
 			RefrigData(Loop)%STTemps  = FluidTemps(TempLoop)%Temps !ISI - 11/07/06
             RefrigData(Loop)%STfValues = Numbers(1:NumNumbers)
 
@@ -1058,8 +1049,6 @@ SUBROUTINE GetFluidPropertiesData
       END IF
     END DO
    
-   
-   
    ! Get: ***** ENTROPY of SUPERHEATED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
           ! make sure that all of the pressure input is linked to the same temperature list
@@ -1088,8 +1077,6 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-   
-    
 
 	! Get: ***** CONDUCTIVITY of SUPERHEATED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1118,8 +1105,6 @@ SUBROUTINE GetFluidPropertiesData
         
       END IF
     END DO
-    
-    
 
 	! Get: ***** DYNAMIC VISCOSITY of SUPERHEATED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1138,7 +1123,6 @@ SUBROUTINE GetFluidPropertiesData
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Viscosity))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
-        
         IF ((NumNumbers-1) == RefrigData(Loop)%NumSuperTempPts) THEN
           RefrigData(Loop)%DVshValues(1:RefrigData(Loop)%NumSuperTempPts,NumOfPressPts) = Numbers(2:NumNumbers)
         ELSE
@@ -1149,8 +1133,6 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-    
-   
 
 	! Get: ***** SPECIFIC HEAT of SUPERHEATED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1179,10 +1161,7 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-    
- !END DO    ! ...end of DO loop through all of the refrigerants
 
-  
   !*****************************   SUBCOOLED DATA SECTION   ***********************************
           ! Get: ***** ENTHALPY of SUBCOOLED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1213,7 +1192,6 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-    
 
           ! Now allocate the arrays and read the data into the proper place
           ! First, allocate the temperature array and transfer the data from the FluidTemp array
@@ -1291,8 +1269,7 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-    
-   
+
    
    ! Get: ***** ENTROPY of SUBCOOLED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1311,7 +1288,6 @@ SUBROUTINE GetFluidPropertiesData
       IF ((SameString(Alphas(1),RefrigData(Loop)%Name)).AND.(SameString(Alphas(2),Entropy))) THEN
         NumOfPressPts = NumOfPressPts + 1
         
-        
         IF ((NumNumbers-1) == RefrigData(Loop)%NumSubcoolTempPts) THEN
           RefrigData(Loop)%SscValues(1:RefrigData(Loop)%NumSubcoolTempPts,NumOfPressPts) = Numbers(2:NumNumbers)
         ELSE
@@ -1322,7 +1298,6 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-    
 
 	! Get: ***** CONDUCTIVITY of SUBCOOLED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1351,7 +1326,6 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-   
 
 	! Get: ***** DYNAMIC VISCOSITY of SUBCOOLED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
@@ -1381,8 +1355,7 @@ SUBROUTINE GetFluidPropertiesData
         END IF
       END IF
     END DO
-   
-
+    
 	! Get: ***** SPECIFIC HEAT of SUBCOOLED GAS  *****
           ! First find the number of pressure value syntax lines have been entered and
           ! make sure that all of the pressure input is linked to the same temperature list
@@ -1661,7 +1634,6 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
 
 ! get the array indices
 
-
   !To account for temperature glide - ISI 11/06/06
   IF (Quality < 0.5) THEN
 	LoPressIndex = FindArrayIndex(Pressure, RefrigData(RefrigNum)%PsfValues)
@@ -1758,57 +1730,47 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
 
     CASE ('viscosity') 	 
 	!CALCULATE VISCOSITY OF SATURATED REGION
-	!IF (Quality==1) THEN
 	IF (Quality > 0.5) THEN
     PQ= RefrigData(RefrigNum)%DVfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%DVfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%DVfgValues(LoPressIndex))
-	!ELSE IF (Quality==0) THEN
 	ELSEIF (Quality <= 0.5) THEN
 	PQ= RefrigData(RefrigNum)%DVfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%DVfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%DVfValues(LoPressIndex))
 	ELSE
 	PQ=0
-    !WRITE(*,*) "Viscosity undefined for (Quality.NE.0 or 1)" !- Commented by ISI 01/19/04
 	END IF
 
 	CASE ('conductivity') 	 
 	!CALCULATE CONDUCTIVITY OF SATURATED REGION
-    !IF (Quality==1) THEN
 	IF (Quality > 0.5) THEN
 	PQ= RefrigData(RefrigNum)%CfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CfgValues(LoPressIndex))
     
-	!ELSE IF (Quality==0) THEN
 	ELSEIF (Quality <= 0.5) THEN
     PQ= RefrigData(RefrigNum)%CfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CfValues(LoPressIndex))
 	ELSE
 	PQ=0
-    !WRITE(*,*) "Conductivity undefined for (Quality.NE.0 or 1)" !- Commented by ISI 01/19/04
 	END IF
 
 	CASE ('specificheat') 	 
 	!CALCULATE SPECIFIC HEAT OF SATURATED REGION
-    !IF (Quality==1) THEN
 	IF (Quality > 0.5) THEN
 	PQ= RefrigData(RefrigNum)%CpfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CpfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CpfgValues(LoPressIndex))
-    
-	!ELSE IF (Quality==0) THEN
+
 	ELSEIF (Quality <= 0.5) THEN
     PQ= RefrigData(RefrigNum)%CpfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CpfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CpfValues(LoPressIndex))
 	ELSE
 	PQ=0
-    !WRITE(*,*) "Specific heat undefined for (Quality.NE.0 or 1)" !- Commented by ISI 01/19/04
 	END IF
-
 
 	END SELECT
   END IF
@@ -1880,7 +1842,6 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
 
   IF ((Quality < 0.0) .OR. (Quality > 1.0)) &
     CALL ShowFatalError('GetSatEnthalpyRefrig: Saturated refrigerant quality must be between 0 and 1')
-   
 
   IF (RefrigIndex > 0) THEN
     RefrigNum=RefrigIndex
@@ -1896,7 +1857,6 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
   ! check for out of data bounds problems
   IF (LoTempIndex == 0) THEN
     LoTempIndex = MAX(1, LoTempIndex)
-    !TQ = RefrigData(RefrigNum)%PsValues(LoTempIndex)
 	IF (Quality < 0.5) THEN
 		TQ = RefrigData(RefrigNum)%PsfValues(LoTempIndex)
 	ELSE
@@ -1908,7 +1868,6 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
 
   ELSE IF(HiTempIndex > Size(RefrigData(RefrigNum)%PsTemps))THEN
     LoTempIndex = MAX(1, LoTempIndex)
-    !TQ = RefrigData(RefrigNum)%PsValues(LoTempIndex)
 	IF (Quality < 0.5) THEN
 		TQ = RefrigData(RefrigNum)%PsfValues(LoTempIndex)
 	ELSE
@@ -1966,8 +1925,7 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
 	TQ = RefrigData(RefrigNum)%PsgValues(LoTempIndex) + TempInterpRatio * &
 		                          (RefrigData(RefrigNum)%PsgValues(HiTempIndex) - RefrigData(RefrigNum)%PsgValues(LoTempIndex))
   END IF
-   
-!  END IF
+
   END SELECT
 
   RETURN
@@ -2003,8 +1961,7 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
  IMPLICIT NONE           ! Enforce explicit typing of all variables in this routine
 
 
-        ! FUNCTION ARGUMENT DEFINITIONS:
-  !CHARACTER(len=*), INTENT(INOUT)  :: Refrigerant ! carries in substance name
+    ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL,				INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL,             INTENT(IN)  :: Pressure    ! pressure(Pa)
@@ -2509,55 +2466,47 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
 
     CASE ('viscosity') 	 
 	!CALCULATE VISCOSITY OF SATURATED REGION
-	!IF (Quality==1) THEN
 	IF (Quality > 0.5) THEN
     PH= RefrigData(RefrigNum)%DVfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%DVfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%DVfgValues(LoPressIndex))
-	!ELSE IF (Quality==0) THEN
+
 	ELSEIF (Quality <= 0.5) THEN
 	PH= RefrigData(RefrigNum)%DVfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%DVfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%DVfValues(LoPressIndex))
 	ELSE
 	PH=0
-    !WRITE(*,*) "Viscosity undefined for (Quality.NE.0 or 1)"  !- Commented by ISI 01/19/04
 	END IF
 
 	CASE ('conductivity') 	 
 	!CALCULATE CONDUCTIVITY OF SATURATED REGION
-    !IF (Quality==1) THEN
 	IF (Quality > 0.5) THEN
 	PH= RefrigData(RefrigNum)%CfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CfgValues(LoPressIndex))
-    
-	!ELSE IF (Quality==0) THEN
+
 	ELSEIF (Quality <= 0.5) THEN
     PH= RefrigData(RefrigNum)%CfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CfValues(LoPressIndex))
 	ELSE
 	PH=0
-    !WRITE(*,*) "Conductivity undefined for (Quality.NE.0 or 1)" !- Commented by ISI 01/19/04
 	END IF
 
 	CASE ('specificheat') 	 
 	!CALCULATE SPECIFIC HEAT OF SATURATED REGION
-    !IF (Quality==1) THEN
-	IF (Quality > 0.5) THEN
+   IF (Quality > 0.5) THEN
 	PH= RefrigData(RefrigNum)%CpfgValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CpfgValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CpfgValues(LoPressIndex))
     
-	!ELSE IF (Quality==0) THEN
 	ELSEIF (Quality <= 0.5) THEN
     PH= RefrigData(RefrigNum)%CpfValues(LoPressIndex) + PressInterpRatio * &
                               (RefrigData(RefrigNum)%CpfValues(HiPressIndex) - &
                               RefrigData(RefrigNum)%CpfValues(LoPressIndex))
 	ELSE
 	PH=0
-    !WRITE(*,*) "Specific heat undefined for (Quality.NE.0 or 1)" !- Commented by ISI 01/19/04
 	END IF
 	END SELECT
   END IF
@@ -2649,8 +2598,6 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
     IF (property.EQ.'quality') THEN
 		!QUALITY FOR SUPERHEATED REGION =100
 		PH = 100
-		!WRITE(*,*) 'In superheated region, Quality (undefined) = 100' !- Commented by ISI 01/19/04
-
 	ELSE
 		SELECT CASE (property)
 		CASE ('temperature')
@@ -2795,7 +2742,6 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
 	IF (property.EQ.'quality') THEN
 		!QUALITY FOR SUBCOOLED REGION =-100
 		PH = -100
-		!WRITE(*,*) 'In subcooled region, Quality (undefined) = -100' !- Commented by ISI 01/19/04
 	ELSE
 		SELECT CASE (property)
 		CASE ('temperature')

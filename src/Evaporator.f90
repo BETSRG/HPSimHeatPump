@@ -13,10 +13,8 @@ INTEGER,PARAMETER  :: MdotMaxIter=10      !Max. number of iterations
 INTEGER,PARAMETER  :: RefBCmaxIter=20     !Max. number of iterations
 INTEGER,PARAMETER  :: AirBCmaxIter=20     !Max. number of iterations
 INTEGER,PARAMETER  :: TsurfMaxIter=20     !Max. number of iterations
-!INTEGER,PARAMETER  :: MaxIter=20          !Max. number of iterations
 INTEGER,PARAMETER  :: PressureMaxIter=20          !Max. number of iterations
 INTEGER,PARAMETER  :: WetSurfaceMaxIter=20          !Max. number of iterations
-!REAL,PARAMETER :: Ptol=0.05 !0.1 !1.0E-3 !0.01 !Pressure tolerance, kPa
 REAL,PARAMETER :: SMALL=1.0E-4  !Small number 
 REAL,PARAMETER :: BIG=1.0E6     !Big number 
 REAL, PARAMETER :: Hout=0.013628621 !Insulated tube outside film heat transfer coefficient, kW/(m2-K)
@@ -75,8 +73,7 @@ INTEGER LastTube           !Last simulation tube
 INTEGER EqCircuits         !1=Equivalent circuits; otherwise=no
 LOGICAL,SAVE :: IsUniformVelProfile !Is velocity profile uniform?
 
-!Refprop Table variable
-!CHARACTER (len=15) :: Property           
+!Refprop Table variable          
 INTEGER            :: RefrigIndex =0
 INTEGER :: RefID !1-R22; 2-R410A; 3-R407C; 4-R134a; 5-Propane; 6-R417A; 7-R509A
 REAL Temperature,Quality,Pressure,Enthalpy
@@ -85,7 +82,7 @@ REAL Temperature,Quality,Pressure,Enthalpy
 !R-Refrigerant;          A-Air;
 !i-Inlet;                o-Outlet;
 !f-Liquid phase;         g-Vapor phase;
-!t-Temperature(C);       p-Pressure(kPa);      x-Quaility; h-Enthalpy(kJ/kg);
+!t-Temperature(C);       p-Pressure(kPa);      x-Quality; h-Enthalpy(kJ/kg);
 !m-Mass flow rate(kg/s); rh-Relative humidity; v-Specific volume, m^3/kg;
 !sat-saturation;		 prev-previous iteration value
 
@@ -198,9 +195,7 @@ REAL Const    !A constant
 REAL MolWeight !Molecular weight, kg/kmol
 REAL tSat     !Saturation temp., C
 REAL QmodTP   !Heat transfer in two-phase region, kW 
-!REAL QsucLn   !Suction line heat loss, kW
 REAL QdisTube !Distributor tube heat load, kW
-!REAL DTsucLn  !Suction line temp. change, C
 REAL QmodSens !Sensible Module heat transfer, kW
 REAL QmodLat  !Latent Module heat transfer, kW
 REAL hciMultiplier  !Multiplier for hci
@@ -215,7 +210,6 @@ REAL FaceVel    !Face velocity, m/s
 REAL DPair      !Air side pressure drop, kPa
 REAL SurfAbsorptivity !Surface absorptivity
 REAL SolarFlux  !Solar heat flux, kW/m2
-!REAL BaroPressure !BaroPressure, kPa
 REAL QlossCmp   !Compressor heat loss, kW
 REAL IsCmpInAirStream !Is compressor in air stream, 1=yes, 0=no
 !INTEGER(2) SystemType !1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
@@ -228,12 +222,10 @@ REAL mu       !Bulk viscosity, Pa-s
 REAL muf      !Liquid viscosity, Pa-s
 REAL mug      !Vapor viscosity, Pa-s
 REAL kRef     !Refrigerant bulk conductivity, kW/m-C
-!REAL cpA      !Air specific heat, kJ/(kg-C)
 REAL cpRef    !Ref. specific heat, kJ/(kg-C)
 REAL Kfilm    !Water film thermal conductivity, kW/m-C
 REAL rhoRef   !Ref. density, kg/m3
 REAL CPAir                !Specific heat of air, kJ/kg-K
-!REAL Dmoist   !Moist air density, kg/m3
 INTEGER(2) AirPropOpt     !Air prop calc. option
 INTEGER(2) AirPropErr     !Error flag:1-error; 0-no error
 REAL AirProp(8)
@@ -257,7 +249,6 @@ REAL QmodDry  !Dry module heat transfer, kW
 REAL QmodWet  !Wet module heat transfer, kW
 REAL NTUsWet  !Number of transfer unit for wet surface
 REAL NTUsDry  !Number of transfer unit for dry surface
-!REAL VelAvg   !Average velocity, m/s
 REAL TsDry    !Dry coil surface temperature, C
 REAL TsWet    !Wet coil surface temperature, C
 REAL HsWet    !Wet coil surface enthalpy, kJ/kg
@@ -267,7 +258,6 @@ REAL cAirf   !Fictitious capcity rate of air, kW/C
 REAL UAf     !Fictitous overall heat transfer coefficient, kW/C
 REAL Rairf   !Fictitous module air film resistance, K/W
 REAL hcof    !Fictitious air side heat tranfer coefficient, kW/m2-K
-!REAL FaceVel !Face velocity, m/s
 REAL SHR !Sensible heat ratio
 REAL Rtot      !Total resistance, K-m^2/W
 REAL Qsolar    !Solar radiation, kW
@@ -413,12 +403,9 @@ REAL Poly2DP   !Polynomial fit coefficient for air pressure drop
 REAL Poly3DP   !Polynomial fit coefficient for air pressure drop
 REAL Poly4DP   !Polynomial fit coefficient for air pressure drop
 
-!LOGICAL, SAVE :: FirstTime=.TRUE. !Flag to indicate the first time of execution
 INTEGER FirstTime !Flag to indicate the first time of execution
                   !1=yes, otherwise=no
 INTEGER Counter                   !Iteration loop counter
-
-!LOGICAL,PARAMETER :: IsSimpleCoil=.FALSE. !Flag to indicate if it is simple coil, i.e. ignoring circuiting
 INTEGER IsSimpleCoil !Flag to indicate if it is simple coil, i.e. ignoring circuiting
                      !1=Simple coil
 				     !otherwise=detailed
@@ -609,7 +596,6 @@ CONTAINS
     CHARACTER*80,     INTENT(IN)  :: Ref$
     INTEGER(2),       INTENT(IN)  :: PureRef
     REAL, INTENT(IN)  :: XIN(9)
-    !REAL, INTENT(IN)  :: PAR(52)
     REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
     REAL, INTENT(OUT) :: OUT(25)
 
@@ -884,9 +870,9 @@ CONTAINS
                     pRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%pRo !Circuit outlet pressure
                     hRoCkt=CoilSection(NumSection)%Ckt(I)%Tube(LastTube)%Seg(NumOfMods)%hRo !Circuit outlet enthalpy
 
-                    Pressure=pRoCkt*1000
-                    Enthalpy=hRoCkt*1000
-                    tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+                    Pressure=pRoCkt*1000    !RS Comment: Unit Conversion
+                    Enthalpy=hRoCkt*1000    !RS Comment: Unit Conversion
+                    tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !RS Comment: Circuit Outlet Refrigerant Temperature
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
                         ErrorFlag=REFPROPERROR
@@ -895,7 +881,7 @@ CONTAINS
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
-                    xRoCkt=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+                    xRoCkt=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !RS Comment: Circuit Outlet Refrigerant Quality
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
                         ErrorFlag=REFPROPERROR
@@ -905,9 +891,9 @@ CONTAINS
                         RETURN
                     END IF
 
-                    Pressure=pRoCkt*1000
+                    Pressure=pRoCkt*1000    !RS Comment: Unit Conversion
                     Quality=1
-                    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+                    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Saturation Temperature
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
                         ErrorFlag=REFPROPERROR
@@ -926,8 +912,8 @@ CONTAINS
                     CoilSection(NumSection)%Ckt(I)%tRo=tRoCkt
                     CoilSection(NumSection)%Ckt(I)%pRo=pRoCkt
                     CoilSection(NumSection)%Ckt(I)%hRo=hRoCkt
-                    CoilSection(NumSection)%Ckt(I)%Qckt=Qckt          !Circuit capcity
-                    CoilSection(NumSection)%Ckt(I)%QcktSens=QcktSens  !Sensible Circuit capcity
+                    CoilSection(NumSection)%Ckt(I)%Qckt=Qckt          !Circuit capacity
+                    CoilSection(NumSection)%Ckt(I)%QcktSens=QcktSens  !Sensible Circuit capacity
                     CoilSection(NumSection)%Qsection=CoilSection(NumSection)%Qsection+CoilSection(NumSection)%Ckt(I)%Qckt !Total coil capacity
                     CoilSection(NumSection)%QsectionSens=CoilSection(NumSection)%QsectionSens+CoilSection(NumSection)%Ckt(I)%QcktSens !Total sensible coil capacity
 
@@ -951,11 +937,11 @@ CONTAINS
                     EXIT
                 END IF
 
-                CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)
-                CPair=CPA(REAL(tAmod))
-                Cair=mAiCoil*CPAir
+                CALL CalcMeanProp(tAiCoil,tAoCoil,tAmod)    !RS Comment: Mean Air Coil Temperature
+                CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
+                Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
-                tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair
+                tAoCoil=tAiCoil+CoilSection(NumSection)%QsectionSens/Cair   !RS Comment: Air Coil Outlet Temperature
 
                 DiffQcoil=ABS((CoilSection(NumSection)%Qsection-PrevQcoil)/PrevQcoil) 
                 IF (DiffQcoil .GT. SMALL) THEN
@@ -971,7 +957,7 @@ CONTAINS
             END IF
 
             IF (AirBCiter .GT. AirBCmaxIter) THEN
-                !WRITE(*,*)'-- WARNING -- Evaporator: AirBCiter not converged.'
+                !AirBCiter not converged.
                 ErrorFlag=CONVERGEERROR
             END IF
 
@@ -1012,7 +998,7 @@ CONTAINS
             SumpRoCkt=0
             DO I=1, CoilSection(NumSection)%NumOfCkts
                 IF (CoilSection(NumSection)%Ckt(I)%OutSplit .EQ. 0) THEN !outlet circuit
-                    SumpRoCkt=SumpRoCkt+CoilSection(NumSection)%Ckt(I)%pRo
+                    SumpRoCkt=SumpRoCkt+CoilSection(NumSection)%Ckt(I)%pRo  !RS Comment: Summing the outlet circuit refrigerant pressure
                 END IF
             END DO !End Circuit
             CoilSection(NumSection)%pRo=SumpRoCkt/CoilSection(NumSection)%NcktLast
@@ -1023,7 +1009,7 @@ CONTAINS
             IF (ABS(CoilSection(NumSection)%pRo-pRoCoilPrev) .GT. Ptol) THEN
                 MaxResidual=ABS(pRoCoilPrev-CoilSection(NumSection)%pRo)
                 pRoCoilPrev=CoilSection(NumSection)%pRo
-                Converged=.FALSE.
+                Converged=.FALSE.   !No convergence
             END IF
 
             IF (IsSameNumOfTubes .AND. IsUniformVelProfile) THEN
@@ -1059,8 +1045,8 @@ CONTAINS
         CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
         CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
 
-        Qcoil=Qcoil+CoilSection(NumSection)%Qsection
-        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens  
+        Qcoil=Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer
+        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determing the total sensible coil heat transfer
 
     END DO !Number of sections, !ISI - 09/10/07
 
@@ -1073,20 +1059,19 @@ CONTAINS
     tSAvgCoil = (tSiCoil+tSoCoil)/2
     CoilParams(2)%TSurfCoil=tSAvgCoil
     !Coil air side outlet condition
-    !CALL CPCVA(REAL(tAiCoil),CPAir,CVAir,GAMMA,SONIC)
-    CPair=CPA(REAL(tAmod))
-    Cair=mAiCoil*CPAir
+    CPair=CPA(REAL(tAmod))  !RS Comment: Finding the specific heat of air
+    Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
         QcoilSens=Qcoil
     END IF
 
-    tAoCoil=tAiCoil+QcoilSens/Cair
-    hAoCoil=hAiCoil+Qcoil/mAiCoil
+    tAoCoil=tAiCoil+QcoilSens/Cair  !RS Comment: Finding the Coil Outlet Air Temperature
+    hAoCoil=hAiCoil+Qcoil/mAiCoil   !RS Comment: Finding the Coil Outlet Air Enthalpy
 
     !Fan air side inlet condition
-    CPair=CPA(REAL(tAoCoil))
-    Cair=mAiCoil*CPAir
+    CPair=CPA(REAL(tAoCoil))    !RS Comment: Finding the specific heat of air
+    Cair=mAiCoil*CPAir  !RS Comment: Finding the capacity rate of air
 
     IF (SystemType .NE. REHEAT) THEN !For reheat system, skip this
         IF (DrawBlow .EQ. DRAWTHROUGH) THEN !Draw through
@@ -1095,6 +1080,7 @@ CONTAINS
         END IF
     END IF
 
+    !Determining inlet and outlet air properties
     AirPropOpt=1
     AirProp(1)=tAiCoil
     AirProp(4)=hAiCoil
@@ -1115,14 +1101,13 @@ CONTAINS
     Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
     Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
 
-    !hco=hco*hcoMultiplier
     DPair=DPair*DPairMultiplier
 
-    hRoCoil=hRiCoil-Qcoil/mRefTot
+    hRoCoil=hRiCoil-Qcoil/mRefTot   !RS Comment: Determining the Coil Outlet Refrigerant Enthalpy
 
-    Pressure=pRoCoil*1000
-    Enthalpy=hRoCoil*1000
-    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    Pressure=pRoCoil*1000   !RS Comment: Unit Conversion
+    Enthalpy=hRoCoil*1000   !RS Comment: Unit Conversion
+    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Coil Outlet Refrigerant Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
         ErrorFlag=REFPROPERROR
@@ -1131,7 +1116,7 @@ CONTAINS
         CALL Evaporator_Helper_1
         RETURN
     END IF
-    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !RS Comment: Coil Outlet Refrigerant Quality
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
         ErrorFlag=REFPROPERROR
@@ -1141,9 +1126,9 @@ CONTAINS
         RETURN
     END IF
 
-    Pressure=pRoCoil*1000
+    Pressure=pRoCoil*1000   !RS Comment: Unit Conversion
     Quality=1
-    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Saturation Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
         ErrorFlag=REFPROPERROR
@@ -1169,9 +1154,9 @@ CONTAINS
 
     IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
         !Calculate reversing valve heat transfer and pressure drop
-        Pressure=pRiCmp*1000
-        Enthalpy=hRiCmp*1000
-        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+        Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
+        Enthalpy=hRiCmp*1000    !RS Comment: Unit Conversion
+        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !RS Comment: Compressor Refrigerant Inlet Temperature
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
             ErrorFlag=REFPROPERROR
@@ -1183,17 +1168,17 @@ CONTAINS
 
         hRsuc=hRiCmp
         IF (IsCoolingMode .GT. 0) THEN
-            !Correlatino good for cooling only
+            !Correlation good for cooling only
             CALL SuctionHeatTransfer(mRefTot,tRdis,tRiCmp,hRsuc,hRiCmp)
             CALL SuctionPressureDrop(mRefTot,DPvalve)    	
-            pRiCmp=pRiCmp-DPvalve
+            pRiCmp=pRiCmp-DPvalve   !Compressor Inlet Refrigerant Pressure
         END IF
 
     END IF
 
-    Pressure=pRiCmp*1000
-    Enthalpy=hRiCmp*1000
-    tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
+    Enthalpy=hRiCmp*1000    !RS Comment: Unit Conversion
+    tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !RS Comment: Compressor Refrigerant Inlet Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
         ErrorFlag=REFPROPERROR
@@ -1202,7 +1187,7 @@ CONTAINS
         CALL Evaporator_Helper_1
         RETURN
     END IF
-    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !RS Comment: Compressor Refrigerant Inlet Quality
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
         ErrorFlag=REFPROPERROR
@@ -1212,9 +1197,9 @@ CONTAINS
         RETURN
     END IF
 
-    Pressure=pRiCmp*1000
+    Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
     Quality=1
-    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Saturation Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
         ErrorFlag=REFPROPERROR
@@ -1265,23 +1250,6 @@ CONTAINS
 !!107 FORMAT(A67,F5.6) !VL Comment: previously !107   FORMAT(A67,F5.3)
 
     ! Code chunk moved to Evaporator_Helper_1   
-    ! ---------------------------------------       
-    ! IF(CoolHeatModeFlag == 1) THEN
-    !  CoilParams(1)%CoilInletRefTemp=tRiCoil
-    !  CoilParams(1)%CoilOutletRefTemp=tRoCoil
-    !  CoilParams(1)%CoilInletAirTemp=tAiCoil
-    !  CoilParams(1)%CoilOutletAirTemp=tAoCoil
-    !  CoilParams(1)%DPAir=DPair
-    !  CoilParams(1)%DPRef=pRicoil-pRocoil
-    !ELSE IF(CoolHeatModeFlag == 0) THEN
-    !  CoilParams(2)%CoilInletRefTemp=tRiCoil
-    !  CoilParams(2)%CoilOutletRefTemp=tRoCoil
-    !  CoilParams(2)%CoilInletAirTemp=tAiCoil
-    !  CoilParams(2)%CoilOutletAirTemp=tAoCoil
-    !  CoilParams(2)%DPAir=DPair
-    !  CoilParams(2)%DPRef=pRicoil-pRocoil
-    ! END IF
-    ! ---------------------------------------
     CALL Evaporator_Helper_1
 
     RETURN
@@ -1307,8 +1275,6 @@ CONTAINS
     END IF
 
     END SUBROUTINE Evaporator_Helper_1
-
-
 
 !************************************************************************
 
@@ -1396,33 +1362,33 @@ REAL Lregion !Region length, m
 		      DO J=1,LastTube !Ckt(I)%Ntube !ISI - 10/30/06
 			      DO K=1,NumOfMods
             
-				      pRiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%pRi
-				      hRiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hRi
-				      pRoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%pRo
-				      hRoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hRo
+				      pRiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%pRi  !Module Inlet Refrigerant Pressure
+				      hRiMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hRi  !Module Inlet Refrigerant Enthalpy
+				      pRoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%pRo  !Module Outlet Refrigerant Pressure
+				      hRoMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%hRo  !Module Outlet Refrigerant Enthalpy
 
 				      LmodTube=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Len
 				      AiMod=AiCoil*LmodTube/Lcoil
 
-				      Pressure=pRiMod*1000
-				      Enthalpy=hRiMod*1000
-				      tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-				      xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+				      Pressure=pRiMod*1000  !RS Comment: Unit Conversion
+				      Enthalpy=hRiMod*1000  !RS Comment: Unit Conversion
+				      tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Inlet Refrigerant Temperature
+				      xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Inlet Refrigerant Quality
 				      vRiMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-				      vRiMod=1/vRiMod
-				      cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-				      cpRiMod=cpRiMod/1000
-				      muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-				      kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-				      kRiMod=kRiMod/1000
+				      vRiMod=1/vRiMod   !Module Inlet Refrigerant Specific Volume
+				      cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Inlet Refrigerant Specific Heat
+				      cpRiMod=cpRiMod/1000  !RS Comment: Unit Conversion
+				      muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Inlet Refrigerant Dynamic Viscosity
+				      kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Inlet Refrigerant Thermal Conductivity
+				      kRiMod=kRiMod/1000    !RS Comment: Unit Conversion
 
 				      Quality=1
 				      vgRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vgRiMod=1/vgRiMod
+				      vgRiMod=1/vgRiMod !Module Inlet Refrigerant Vapor Specific Volume
 
 				      Quality=0
 				      vfRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vfRiMod=1/vfRiMod
+				      vfRiMod=1/vfRiMod !Module Inlet Refrigerant Liquid Specific Volume
 
 				      IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 					      cpRiMod=0
@@ -1430,57 +1396,58 @@ REAL Lregion !Region length, m
 					      kRiMod=0
 				      END IF
 
-				      Pressure=pRoMod*1000
-				      Enthalpy=hRoMod*1000
-				      tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-				      xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
+				      Enthalpy=hRoMod*1000  !RS Comment: Unit Conversion
+				      tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Temperature
+				      xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Quality
 				      vRoMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-				      vRoMod=1/vRoMod
-				      cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-				      cpRoMod=cpRoMod/1000
-				      muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-				      kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-				      kRoMod=kRoMod/1000
+				      vRoMod=1/vRoMod   !Module Outlet Refrigerant Specific Volume
+				      cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Outlet Refrigerant Specific Heat
+				      cpRoMod=cpRoMod/1000  !RS Comment: Unit Conversion
+				      muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Outlet Refrigerant Dynamic Viscosity
+				      kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Thermal Conductivity
+				      kRoMod=kRoMod/1000    !RS Comment: Unit Conversion
 
 				      Quality=1
 				      vgRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vgRoMod=1/vgRoMod
+				      vgRoMod=1/vgRoMod !Module Outlet Refrigerant Vapor Specific Volume
 
 				      Quality=0
 				      vfRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vfRoMod=1/vfRoMod
+				      vfRoMod=1/vfRoMod !Module Outlet Refrigerant Liquid Specific Volume
 
 				      Temperature=tRoMod
 				      Quality=1
-				      Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
-				      Psat=Psat/1000
+				      Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)    !Saturation Pressure
+				      Psat=Psat/1000    !RS Comment: Unit Conversion
     		  
-				      Pressure=pRoMod*1000
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 				      Quality=0
-				      hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-				      hfRoMod=hfRoMod/1000
-				      CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-				      CpfRoMod=CpfRoMod/1000
-				      mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
-				      kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-				      kfRoMod=kfRoMod/1000
+				      hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Liquid Enthalpy
+				      hfRoMod=hfRoMod/1000  !RS Comment: Unit Conversion
+				      CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Module Outlet Refrigerant Liquid Specific Heat
+				      CpfRoMod=CpfRoMod/1000    !RS Comment: Unit Conversion
+				      mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Module Outlet Refrigerant Liquid Dynamic Viscosity
+				      kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Module Outlet Refrigerant Liquid Thermal Conductivity
+				      kfRoMod=kfRoMod/1000  !RS Comment: Unit Conversion
 
-				      Pressure=pRoMod*1000
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 				      Quality=1
-				      hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-				      hgRoMod=hgRoMod/1000
-				      CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-				      CpgRoMod=CpgRoMod/1000
-				      mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
-				      kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-				      kgRoMod=kgRoMod/1000
+				      hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Module Outlet Refrigerant Vapor Enthalpy
+				      hgRoMod=hgRoMod/1000  !RS Comment: Unit Conversion
+				      CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Module Outlet Refrigerant Vapor Specific Heat
+				      CpgRoMod=CpgRoMod/1000    !RS Comment: Unit Conversion
+				      mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Module Outlet Refrigerant Vapor Dynamic Viscosity
+				      kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Module Outlet Refrigerant Vapor Thermal Conductivity
+				      kgRoMod=kgRoMod/1000  !RS Comment: Unit Conversion
 
 				      IF (xRoMod .LT. 1 .AND. xRoMod .GT. 0) THEN
 					      cpRoMod=0
 					      muRoMod=0
 					      kRoMod=0
-				      END IF
+                      END IF
 
+                      !Average values
 				      mu=(muRiMod+muRoMod)/2
 				      kRef=(kRiMod+kRoMod)/2
 				      cpRef=(cpRiMod+cpRoMod)/2
@@ -1587,7 +1554,7 @@ REAL Lregion !Region length, m
 
   ELSE
 
-	  DO I=1, Nl
+	  DO I=1, Nl    !Number of Rows
 
 		  DO II=1,Slab(I)%Npass
 
@@ -1603,25 +1570,25 @@ REAL Lregion !Region length, m
 					  LmodTube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Len
 					  AiMod=AiCoil*LmodTube/Lcoil
 
-					  Pressure=pRiMod*1000
-					  Enthalpy=hRiMod*1000
-					  tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-					  xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+					  Pressure=pRiMod*1000  !RS Comment: Unit Conversion
+					  Enthalpy=hRiMod*1000  !RS Comment: Unit Conversion
+					  tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Refrigerant Inlet Temperature
+					  xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Refrigerant Inlet Quality
 					  vRiMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-					  vRiMod=1/vRiMod
-					  cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-					  cpRiMod=cpRiMod/1000
-					  muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-					  kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-					  kRiMod=kRiMod/1000
+					  vRiMod=1/vRiMod   !Module Refrigerant Inlet Specific Volume
+					  cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Refrigerant Inlet Specific Heat
+					  cpRiMod=cpRiMod/1000  !RS Comment: Unit Conversion
+					  muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Refrigerant Inlet Dynamic Viscosity
+					  kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Inlet Thermal Conductivity
+					  kRiMod=kRiMod/1000    !RS Comment: Unit Conversion
 
 					  Quality=1
 					  vgRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vgRiMod=1/vgRiMod
+					  vgRiMod=1/vgRiMod !Module Refrigerant Inlet Vapor Specific Heat
 
 					  Quality=0
 					  vfRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vfRiMod=1/vfRiMod
+					  vfRiMod=1/vfRiMod !Module Refrigerant Inlet Liquid Specific Heat
 
 					  IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 						  cpRiMod=0
@@ -1629,61 +1596,64 @@ REAL Lregion !Region length, m
 						  kRiMod=0
 					  END IF
 
-					  Pressure=pRoMod*1000
-					  Enthalpy=hRoMod*1000
-					  tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-					  xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
+					  Enthalpy=hRoMod*1000  !RS Comment: Unit Conversion
+					  tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Temperature
+					  xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Quality
 					  vRoMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-					  vRoMod=1/vRoMod
-					  cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-					  cpRoMod=cpRoMod/1000
-					  muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-					  kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-					  kRoMod=kRoMod/1000
+					  vRoMod=1/vRoMod   !Module Outlet Refrigerant Specific Volume
+					  cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Outlet Refrigerant Specific Heat
+					  cpRoMod=cpRoMod/1000  !RS Comment: Unit Conversion
+					  muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Outlet Refrigerant Dynamic Viscosity
+					  kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Outlet Refrigerant Thermal Conductivity
+					  kRoMod=kRoMod/1000    !RS Comment: Unit Conversion
 
 					  Quality=1
 					  vgRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vgRoMod=1/vgRoMod
+					  vgRoMod=1/vgRoMod !Module Outlet Refrigerant Vapor Specific Heat
 
 					  Quality=0
 					  vfRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vfRoMod=1/vfRoMod
+					  vfRoMod=1/vfRoMod !Module Outlet Refrigerant Liquid Specific Heat
 
 					  Temperature=tRoMod
 					  Quality=1
 					  IF (tRoMod+273.15 .GT. Tcr) THEN
 						  Psat=pRoMod
 					  ELSE 
-						  Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
-						  Psat=Psat/1000
-					  END IF
+						  Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)    !Saturation Pressure
+						  Psat=Psat/1000    !RS Comment: Unit Conversion
+                      END IF
 			  
-					  Pressure=pRoMod*1000
+                      !RS Comment: Module Outlet Refrigerant Liquid Properties
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 					  Quality=0
 					  hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-					  hfRoMod=hfRoMod/1000
+					  hfRoMod=hfRoMod/1000  !RS Comment: Unit Conversion
 					  CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-					  CpfRoMod=CpfRoMod/1000
+					  CpfRoMod=CpfRoMod/1000    !RS Comment: Unit Conversion
 					  mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
 					  kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-					  kfRoMod=kfRoMod/1000
+					  kfRoMod=kfRoMod/1000  !RS Comment: Unit Conversion
 
-					  Pressure=pRoMod*1000
+                      !RS Comment: Module Outlet Refrigerant Vapor Vapor Properties
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 					  Quality=1
 					  hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-					  hgRoMod=hgRoMod/1000
+					  hgRoMod=hgRoMod/1000  !RS Comment: Unit Conversion
 					  CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-					  CpgRoMod=CpgRoMod/1000
+					  CpgRoMod=CpgRoMod/1000    !RS Comment: Unit Conversion
 					  mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
 					  kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-					  kgRoMod=kgRoMod/1000
+					  kgRoMod=kgRoMod/1000  !RS Comment: Unit Conversion
 
 					  IF (xRoMod .LT. 1 .AND. xRoMod .GT. 0) THEN
 						  cpRoMod=0
 						  muRoMod=0
 						  kRoMod=0
-					  END IF
+                      END IF
 
+                      !Average Values
 					  mu=(muRiMod+muRoMod)/2
 					  kRef=(kRiMod+kRoMod)/2
 					  cpRef=(cpRiMod+cpRoMod)/2
@@ -1809,6 +1779,7 @@ CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(50(A12,','))"
 CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   OPEN (17,FILE='Evaporator.csv')
+  !OPEN (17,FILE='Evaporator_longtubes.csv')
 
   MassCoil=0
   MassLiqCoil=0
@@ -1860,25 +1831,25 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				      LmodTube=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Len
 				      AiMod=AiCoil*LmodTube/Lcoil
 
-				      Pressure=pRiMod*1000
-				      Enthalpy=hRiMod*1000
-				      tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-				      xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+				      Pressure=pRiMod*1000  !RS Comment: Unit Conversion
+				      Enthalpy=hRiMod*1000  !RS Comment: Unit Conversion
+				      tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Refrigerant Inlet Temperature
+				      xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Refrigerant Inlet Quality
 				      vRiMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-				      vRiMod=1/vRiMod
-				      cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-				      cpRiMod=cpRiMod/1000
-				      muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-				      kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-				      kRiMod=kRiMod/1000
+				      vRiMod=1/vRiMod   !Module Refrigerant Inlet Specific Volume
+				      cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Refrigerant Inlet Specific Heat
+				      cpRiMod=cpRiMod/1000  !RS Comment: Unit Conversion
+				      muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Refrigerant Inlet Dynamic Viscosity
+				      kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Inlet Thermal Conductivity
+				      kRiMod=kRiMod/1000    !RS Comment: Unit Conversion
 
 				      Quality=1
 				      vgRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vgRiMod=1/vgRiMod
+				      vgRiMod=1/vgRiMod !Module Refrigerant Inlet Vapor Specific Volume
 
 				      Quality=0
 				      vfRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vfRiMod=1/vfRiMod
+				      vfRiMod=1/vfRiMod !Module Refrigerant Inlet Liquid Specific Volume
 
 				      IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 					      cpRiMod=0
@@ -1886,57 +1857,58 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 					      kRiMod=0
 				      END IF
 
-				      Pressure=pRoMod*1000
-				      Enthalpy=hRoMod*1000
-				      tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-				      xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
+				      Enthalpy=hRoMod*1000  !RS Comment: Unit Conversion
+				      tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Refrigerant Outlet Temperature
+				      xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Refrigerant Outlet Quality
 				      vRoMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-				      vRoMod=1/vRoMod
-				      cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-				      cpRoMod=cpRoMod/1000
-				      muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-				      kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-				      kRoMod=kRoMod/1000
+				      vRoMod=1/vRoMod   !Module Refrigerant Outlet Specific Volume
+				      cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Refrigerant Outlet Specific Heat
+				      cpRoMod=cpRoMod/1000  !RS Comment: Unit Conversion
+				      muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Refrigerant Outlet Dynamic Viscosity
+				      kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Thermal Conductivity
+				      kRoMod=kRoMod/1000    !RS Comment: Unit Conversion
 
 				      Quality=1
 				      vgRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vgRoMod=1/vgRoMod
+				      vgRoMod=1/vgRoMod !Module Refrigerant Outlet Vapor Specific Volume
 
 				      Quality=0
 				      vfRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-				      vfRoMod=1/vfRoMod
+				      vfRoMod=1/vfRoMod !Module Refrigerant Outlet Liquid Specific Volume
 
 				      Temperature=tRoMod
 				      Quality=1
-				      Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
-				      Psat=Psat/1000
+				      Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)    !Saturation Pressure
+				      Psat=Psat/1000    !RS Comment: Unit Conversion
 
-				      Pressure=pRoMod*1000
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 				      Quality=0
-				      hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-				      hfRoMod=hfRoMod/1000
-				      CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-				      CpfRoMod=CpfRoMod/1000
-				      mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
-				      kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-				      kfRoMod=kfRoMod/1000
+				      hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Liquid Enthalpy
+				      hfRoMod=hfRoMod/1000  !RS Comment: Unit Conversion
+				      CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Module Refrigerant Outlet Liquid Specific Heat
+				      CpfRoMod=CpfRoMod/1000    !RS Comment: Unit Conversion
+				      mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Module Refrigerant Outlet Liquid Specific Heat
+				      kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Thermal Conductivity
+				      kfRoMod=kfRoMod/1000  !RS Comment: Unit Conversion
 
-				      Pressure=pRoMod*1000
+				      Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 				      Quality=1
-				      hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-				      hgRoMod=hgRoMod/1000
-				      CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-				      CpgRoMod=CpgRoMod/1000
-				      mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
-				      kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-				      kgRoMod=kgRoMod/1000
+				      hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Vapor Enthalpy
+				      hgRoMod=hgRoMod/1000  !RS Comment: Unit Conversion
+				      CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Module Refrigerant Outlet Vapor Specific Heat
+				      CpgRoMod=CpgRoMod/1000    !RS Comment: Unit Conversion
+				      mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Module Refrigerant Outlet Vapor Dynamic Viscosity
+				      kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Module Refrigerant Outlet Vapor Thermal Conductivity
+				      kgRoMod=kgRoMod/1000  !RS Comment: Unit Conversion
 
 				      IF (xRoMod .LT. 1 .AND. xRoMod .GT. 0) THEN
 					      cpRoMod=0
 					      muRoMod=0
 					      kRoMod=0
-				      END IF
+                      END IF
 
+                      !Average values
 				      mu=(muRiMod+muRoMod)/2
 				      kRef=(kRiMod+kRoMod)/2
 				      cpRef=(cpRiMod+cpRoMod)/2
@@ -2038,7 +2010,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
 				   'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdotR(kg/h)','mdotA(kg/s)' 
 
-	  DO I=1, Nl
+	  DO I=1, Nl    !Number of Rows
 
 		  DO II=1,Slab(I)%Npass
 
@@ -2054,25 +2026,25 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 					  LmodTube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Len
 					  AiMod=AiCoil*LmodTube/Lcoil
 
-					  Pressure=pRiMod*1000
-					  Enthalpy=hRiMod*1000
-					  tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-					  xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+					  Pressure=pRiMod*1000  !RS Comment: Unit Conversion
+					  Enthalpy=hRiMod*1000  !RS Comment: Unit Conversion
+					  tRiMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Inlet Refrigerant Temperature
+					  xRiMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Inlet Refrigerant Quality
 					  vRiMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-					  vRiMod=1/vRiMod
-					  cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-					  cpRiMod=cpRiMod/1000
-					  muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-					  kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-					  kRiMod=kRiMod/1000
+					  vRiMod=1/vRiMod   !Module Inlet Refrigerant Specific Volume
+					  cpRiMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Inlet Refrigerant Specific Heat
+					  cpRiMod=cpRiMod/1000  !RS Comment: Unit Conversion
+					  muRiMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Inlet Refrigerant Dynamic Viscosity
+					  kRiMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Inlet Refrigerant Thermal Conductivity
+					  kRiMod=kRiMod/1000    !RS Comment: Unit Conversion
 
 					  Quality=1
 					  vgRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vgRiMod=1/vgRiMod
+					  vgRiMod=1/vgRiMod !Module Inlet Refrigerant Vapor Specific Volume
 
 					  Quality=0
 					  vfRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vfRiMod=1/vfRiMod
+					  vfRiMod=1/vfRiMod !Module Inlet Refrigerant Liquid Specific Volune
 
 					  IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 						  cpRiMod=0
@@ -2080,61 +2052,64 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 						  kRiMod=0
 					  END IF
 
-					  Pressure=pRoMod*1000
-					  Enthalpy=hRoMod*1000
-					  tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
-					  xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
+					  Enthalpy=hRoMod*1000  !RS Comment: Unit Conversion
+					  tRoMod=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Temperature
+					  xRoMod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Module Outlet Refrigerant Quality
 					  vRoMod=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
-					  vRoMod=1/vRoMod
-					  cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
-					  cpRoMod=cpRoMod/1000
-					  muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
-					  kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
-					  kRoMod=kRoMod/1000
+					  vRoMod=1/vRoMod   !Module Outlet Refrigerant Specific Volume
+					  cpRoMod=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Module Outlet Refrigerant Specific Heat
+					  cpRoMod=cpRoMod/1000  !RS Comment: Unit Conversion
+					  muRoMod=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Module Outlet Refrigerant Dynamic Viscosity
+					  kRoMod=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Module Outlet Refrigerant Thermal Conductivity
+					  kRoMod=kRoMod/1000    !RS Comment: Unit Conversion
 
 					  Quality=1
 					  vgRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vgRoMod=1/vgRoMod
+					  vgRoMod=1/vgRoMod !Module Outlet Refrigerant Vapor Specific Volume
 
 					  Quality=0
 					  vfRoMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vfRoMod=1/vfRoMod
+					  vfRoMod=1/vfRoMod !Module Outlet Refrigerant Liquid Specific Volume
 
 					  Temperature=tRoMod
 					  Quality=1
-					  IF (tRoMod+273.15 .GT. Tcr) THEN
+					  IF (tRoMod+273.15 .GT. Tcr) THEN  !Finding the saturation pressure
 						  Psat=pRoMod
 					  ELSE 
 						  Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
 						  Psat=Psat/1000
-					  END IF
+                      END IF
 			  
-					  Pressure=pRoMod*1000
+                      !RS Comment: Module Outlet Refrigerant Liquid Properties
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 					  Quality=0
 					  hfRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-					  hfRoMod=hfRoMod/1000
+					  hfRoMod=hfRoMod/1000  !RS Comment: Unit Conversion
 					  CpfRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-					  CpfRoMod=CpfRoMod/1000
+					  CpfRoMod=CpfRoMod/1000    !RS Comment: Unit Conversion
 					  mufRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
 					  kfRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-					  kfRoMod=kfRoMod/1000
+					  kfRoMod=kfRoMod/1000  !RS Comment: Unit Conversion
 
-					  Pressure=pRoMod*1000
+                      !RS Comment: Module Outlet Refrigerant Vapor Properties
+					  Pressure=pRoMod*1000  !RS Comment: Unit Conversion
 					  Quality=1
 					  hgRoMod=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
-					  hgRoMod=hgRoMod/1000
+					  hgRoMod=hgRoMod/1000  !RS Comment: Unit Conversion
 					  CpgRoMod=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
-					  CpgRoMod=CpgRoMod/1000
+					  CpgRoMod=CpgRoMod/1000    !RS Comment: Unit Conversion
 					  mugRoMod=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
 					  kgRoMod=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
-					  kgRoMod=kgRoMod/1000
+					  kgRoMod=kgRoMod/1000  !RS Comment: Unit Conversion
 
 					  IF (xRoMod .LT. 1 .AND. xRoMod .GT. 0) THEN
 						  cpRoMod=0
 						  muRoMod=0
 						  kRoMod=0
-					  END IF
+                      END IF
 
+                      !Average values
 					  mu=(muRiMod+muRoMod)/2
 					  kRef=(kRiMod+kRoMod)/2
 					  cpRef=(cpRiMod+cpRoMod)/2
@@ -2491,11 +2466,10 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
                                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
                 END IF
-                
                         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
                     DO J=1, Ckt(I)%Ntube
-                        Ckt(I)%TubeSequence(J)=Numbers(J)
+                        Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2535,7 +2509,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                         
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
-                    Tube(I)%Seg(J)%VelDev = Numbers(J)
+                    Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in velocity deviation data
                 END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2869,7 +2843,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 RETURN
             END IF
 
-            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing.
+            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: It's closed now.
                 NumOfMods=3
                 ALLOCATE(Ckt(NumOfCkts))	  
                 DO I=1, NumOfCkts
@@ -2948,7 +2922,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
                 END IF
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)                
                     DO J=1, Ckt(I)%Ntube
-                        Ckt(I)%TubeSequence(J)=Numbers(J)
+                        Ckt(I)%TubeSequence(J)=Numbers(J)   !Populating the tube sequence array
                     END DO 
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
@@ -2982,7 +2956,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                    Tube(I)%Seg(J)%VelDev = Numbers(J)
+                    Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in the velocity deviation data
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !VL: Previously: GOTO 100
@@ -3221,6 +3195,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
     END IF  !End of the IDC or ODC if-statement
     
     ELSE !Microchannel coil
+    !The microchannel section has not had its inputs updated.
 
         READ(12,*) !**************************** Geometry *************************************
 
@@ -3310,13 +3285,11 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
             !VL: Previously: GOTO 100
             CALL InitEvaporatorCoil_Helper_1
             RETURN
-
         END IF
 
         TubeOrientation=HORIZONTAL !Default
         READ(12,FMT_202)LineData
         IF (LineData(1:1) .EQ. 'T' .OR. LineData(1:1) .EQ. 't') THEN !Tube Orientation, new format - 06/06/06
-
             I=SCAN(LineData,',')
             LineData=ADJUSTL(LineData(I+1:150))
             SELECT CASE (LineData(1:1))
@@ -3477,19 +3450,6 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil
     !VL: Previously: 100 CONTINUE
 
     ! VL: Code chunk moved to InitEvaporatorCoil_Helper_1
-    ! -----------------------------------------------------
-    !IF (ErrorFlag .NE. NOERROR) THEN
-    !    IF (ErrorFlag .EQ. CKTFILEERROR) THEN
-    !        WRITE(*,*)'## ERROR ## Evaporator: Circuit file error.'
-    !    ELSEIF (ErrorFlag .EQ. COILTUBEERROR) THEN
-    !        WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
-    !        WRITE(*,*)'Tube spacing is less than tube diameter.'
-    !    ELSEIF (ErrorFlag .EQ. COILFINERROR) THEN
-    !        WRITE(*,*)'## ERROR ## Evaporator: Coil geometry misdefined.'
-    !        WRITE(*,*)'Fin spacing is less than fin thickness.'
-    !    END IF
-    !END IF
-    ! -----------------------------------------------------
 
     CALL InitEvaporatorCoil_Helper_1
 
@@ -3652,8 +3612,6 @@ USE CoilCalcMod
 
 IMPLICIT NONE
 
-!REAL AiModSuc    !Module inside surface area for suction line
-!REAL LmodSuc     !Module length of suction line, m
 INTEGER CoilType !1=Condenser; 2=Evaporator; 
                  !3=High side interconnecting pipes; 4=Low side interconnecting pipes
 INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
@@ -3673,17 +3631,6 @@ REAL Tloss !Discharge line temperature loss, C
     IF (DTsucLn .NE. 0) THEN !Given suction line temperature changes
 		QsucLn=mRefTot*CpgRoMod*(-DTsucLn)
 	END IF
-
-	!pRiMod=pRoCoil
-	!hRiMod=hRoCoil
-
-	!CALL CalcRefProperty(pRiMod,hRiMod,hfRiMod,hgRiMod,hfgRiMod,Psat,Tsat,tRiMod,xRiMod, &
-	!					 vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
-	!					 muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
-	!IF (ErrorFlag .GT. CONVERGEERROR) RETURN
-
-	!CALL manifold(CoilType,IDtube,mRefTot,xRiMod,vRiMod,vgRiMod,vfRiMod,mugRiMod,mufRiMod,DPman)
-	!pRoCoil=pRoCoil-DPman
 
     DO K=1,1
 
@@ -3717,7 +3664,7 @@ REAL Tloss !Discharge line temperature loss, C
 		  vRiMod=xRiMod*vgRiMod+(1-xRiMod)*vfRiMod
 		END IF
 		
-		hRoMod=-QsucLn/mRefTot+hRiMod 
+		hRoMod=-QsucLn/mRefTot+hRiMod   !Module Refrigerant Outlet Enthalpy
 
 		IF (xRiMod .LT. 1) THEN
 			LmodTPratio=1
@@ -3731,7 +3678,7 @@ REAL Tloss !Discharge line temperature loss, C
 										  muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodSuc,LmodTPratio, &
 										  IDsucLn,ElevSucLn,LmodSuc,pRoMod)
 
-		pRoMod=pRoMod-AddDPSucLn
+		pRoMod=pRoMod-AddDPSucLn    !Module Refrigerant Outlet Pressure
 
 		CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
 							 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
@@ -3750,8 +3697,9 @@ REAL Tloss !Discharge line temperature loss, C
 			cpRoMod=0
 			muRoMod=0
 			kRoMod=0
-		END IF
+        END IF
 
+        !Average viscosities
 		mu=(muRiMod+muRoMod)/2
 		muf=(mufRiMod+mufRoMod)/2
 		mug=(mugRiMod+mugRoMod)/2
@@ -3770,8 +3718,8 @@ REAL Tloss !Discharge line temperature loss, C
 
     END DO !End Nmod
 
-    pRiCmp=SucLnSeg(1)%pRo
-    hRiCmp=SucLnSeg(1)%hRo
+    pRiCmp=SucLnSeg(1)%pRo  !RS Comment: Compressor Refrigerant Inlet Pressure
+    hRiCmp=SucLnSeg(1)%hRo  !RS Comment: Compressor Refrigerant Inlet Enthalpy
 
     RETURN
 
@@ -3789,10 +3737,10 @@ IMPLICIT NONE
 
   RefName=Ref$
 
-  MolWeight=MW(RefName)*1000
+  MolWeight=MW(RefName)*1000    !RS Comment: Unit Conversion
 
-  Tcr=Tcrit(RefName)+273.15
-  Pcr=Pcrit(RefName)/1000
+  Tcr=Tcrit(RefName)+273.15     !RS Comment: Unit Conversion
+  Pcr=Pcrit(RefName)/1000       !RS Comment: Unit Conversion
 
 END SUBROUTINE RefrigerantParameters
 
@@ -3831,8 +3779,8 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
 !FLOW:
 
   !air side inlet conditions
-  CPair=CPA(REAL(tAiCoil))
-  Cair=mAiCoil*CPAir
+  CPair=CPA(REAL(tAiCoil))  !RS Comment: Finding the specific heat of air
+  Cair=mAiCoil*CPAir    !RS Comment: Finding the capacity rate of air
 
   AirPropOpt=2
   AirProp(1)=tAiCoil
@@ -3881,9 +3829,9 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
 				    FinThk,FinSpg,Lcoil,AfCoil, &
 				    AoCoil,AiCoil,AmCoil)
 
-  Pressure=pRiCoil*1000
-  Enthalpy=hRiCoil*1000
-  tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+  Pressure=pRiCoil*1000 !RS Comment: Unit Conversion
+  Enthalpy=hRiCoil*1000 !RS Comment: Unit Conversion
+  tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)    !Coil Refrigerant Inlet Temperature
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 757'
       ErrorFlag=REFPROPERROR
@@ -4020,7 +3968,7 @@ IMPLICIT NONE
 
 INTEGER,INTENT(IN) :: I   !Slab number
 INTEGER,INTENT(IN) :: II  !Circuit,pass number
-INTEGER,INTENT(IN) :: NumSection !Sectin number, ISI - 09/10/07
+INTEGER,INTENT(IN) :: NumSection !Section number, ISI - 09/10/07
 !INTEGER,INTENT(IN) :: III !Tube number
 !INTEGER,INTENT(IN) :: IV  !Segment number
 
@@ -4239,7 +4187,8 @@ REAL :: tAi
 							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
 							 Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
 							 Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
-		END IF
+        END IF
+        !Module surface areas
 	    AoMod=AoCoil*LmodTube/Lcoil
 		AfMod=AfCoil*LmodTube/Lcoil
 		AiMod=AiCoil*LmodTube/Lcoil
@@ -4274,8 +4223,8 @@ REAL :: tAi
 
 		tAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAo
 		wAoMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%wAo 
-		CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
-		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)
+		CALL CalcMeanProp(tAiMod,tAoMod,tAmod)  !Module Mean Air Temperature
+		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)  !Module Mean Air Wet Bulb Temperature
 
 		IF (IsSimpleCoil .EQ. 1) THEN
 			IF (IV .EQ. 2) THEN
@@ -4357,7 +4306,6 @@ REAL :: tAi
 	    DPair=DPair*DPairMultiplier
 
 		hcoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%VelDev*hco
-        !hcoMod=hco
 
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
@@ -4382,8 +4330,8 @@ REAL :: tAi
 
 		tAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAo !ISI - 12/25/06
 		wAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%wAo !ISI - 12/25/06
-		CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
-		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)
+		CALL CalcMeanProp(tAiMod,tAoMod,tAmod)  !Module Mean Air Temperature
+		CALL CalcMeanProp(wAiMod,wAoMod,wAmod)  !Module Mean Air Wet Bulb Temperature
 
 		CALL CalcSegmentOutletConditions(I,I,II,III,IV,CoilType)
 		IF (ErrorFlag .GT. CONVERGEERROR) THEN
@@ -4485,7 +4433,6 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi=tAiCoil
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi=rhAiCoil
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev=1
-		!Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiCoil/NumOfCkts
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi=mAiCoil*Lmodtube/Lcoil !ISI - 12/05/06
 		mAiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 
@@ -4531,8 +4478,6 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 						tAiFup=tAiCoil
 						rhAiFup=rhAiCoil
 						!wbAiFup=wbAiCoil
-						!mAiFup=Ckt(II)%Tube(III)%Seg(IV)%mAi
-						!VelDevFup=Ckt(II)%Tube(III)%Seg(IV)%VelDev
                         mAiFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			            VelDevFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev						
 						
@@ -4584,8 +4529,6 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 						tAiFup=tAiCoil
 						rhAiFup=rhAiCoil
 						!wbAiFup=wbAiCoil
-						!mAiFup=Ckt(II)%Tube(III)%Seg(IV)%mAi
-						!VelDevFup=Ckt(II)%Tube(III)%Seg(IV)%VelDev
                         mAiFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			            VelDevFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev						
 					END IF
@@ -4732,9 +4675,6 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 	    END IF
 	END IF
 
-	!Ckt(II)%Tube(III)%Seg(IV)%tAi=tAiCoil
-	!Ckt(II)%Tube(III)%Seg(IV)%rhAi=rhAiCoil
-
 RETURN
 
 END SUBROUTINE CalcSegmentAirInletConditions
@@ -4794,24 +4734,24 @@ REAL Wlocal !Local oil mass fraction
 
 !FLOW:
 
-	Pressure=pRef*1000
-	Enthalpy=hRef*1000
+	Pressure=pRef*1000  !RS Comment: Unit Conversion
+	Enthalpy=hRef*1000  !RS Comment: Unit Conversion
 
-	tRef=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+	tRef=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr) !Refrigerant Temperature
     IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3144'
 	    ErrorFlag=REFPROPERROR
 		RETURN
     END IF
 	
-	xRef=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+	xRef=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr) !Refrigerant Quality
     IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3151'
 	    ErrorFlag=REFPROPERROR
 		RETURN
     END IF
 	
-	vRef=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
+	vRef=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr) !Refrigerant Specific Volume
     IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3158'
 	    ErrorFlag=REFPROPERROR
@@ -4819,82 +4759,82 @@ REAL Wlocal !Local oil mass fraction
     END IF	
 	vRef=1/vRef
 
-	cpRef=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)
+	cpRef=PH(RefName, Pressure, Enthalpy, 'specificheat', RefrigIndex,RefPropErr)   !Refrigerant Specific Volume
     IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3166'
 	    ErrorFlag=REFPROPERROR
 		RETURN
     END IF
-	cpRef=cpRef/1000
+	cpRef=cpRef/1000    !RS Comment: Unit Conversion
 	
-	muRef=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)
+	muRef=PH(RefName, Pressure, Enthalpy, 'viscosity', RefrigIndex,RefPropErr)  !Refrigerant Dynamic Viscosity
     IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3174'
 	    ErrorFlag=REFPROPERROR
 		RETURN
     END IF
 	
-	kRef=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)
+	kRef=PH(RefName, Pressure, Enthalpy, 'conductivity', RefrigIndex,RefPropErr)    !Refrigerant Thermal Conductivity
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3181'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	kRef=kRef/1000
+	kRef=kRef/1000  !RS Comment: Unit Conversion
 
 	Temperature=tRef
 	Quality=1
 	IF (tRef+273.15 .GT. Tcr .OR. tRef+273.15 .LT. 0) THEN
 		Psat=pRef
 	ELSE 
-		Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)
+		Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)  !Saturation Pressure
 		IF (RefPropErr .GT. 0) THEN
 			WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3194'
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
-		Psat=Psat/1000
+		Psat=Psat/1000  !RS Comment: Unit Conversion
 	END IF
 
-	SigmaRef=PQ(RefName, Pressure, Quality, 'surfacetension', RefrigIndex,RefPropErr)
+	SigmaRef=PQ(RefName, Pressure, Quality, 'surfacetension', RefrigIndex,RefPropErr)   !Refrigerant Surface Tension
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3820'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
 
-	Pressure=pRef*1000
+	Pressure=pRef*1000  !RS Comment: Unit Conversion
 	Quality=0
-	hfRef=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
+	hfRef=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Refrigerant Liquid Enthalpy
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3205'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	hfRef=hfRef/1000
+	hfRef=hfRef/1000    !RS Comment: Unit Conversion
 	
-	cpfRef=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
+	cpfRef=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Refrigerant Liquid Specific Heat
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3213'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	cpfRef=cpfRef/1000
+	cpfRef=cpfRef/1000  !RS Comment: Unit Conversion
 
-	mufRef=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
+	mufRef=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Refrigerant Liquid Dynamic Viscosity
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3221'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
 	
-	kfRef=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
+	kfRef=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Refrigerant Liquid Thermal Conductivity
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3228'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	kfRef=kfRef/1000
+	kfRef=kfRef/1000    !RS Comment: Unit Conversion
 
 	vfRef=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
 	IF (RefPropErr .GT. 0) THEN
@@ -4902,40 +4842,40 @@ REAL Wlocal !Local oil mass fraction
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	vfRef=1/vfRef
+	vfRef=1/vfRef   !Refrigerant Liquid Specific Volume
 
-	Pressure=pRef*1000
+	Pressure=pRef*1000  !RS Comment: Unit Conversion
 	Quality=1
-	hgRef=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)
+	hgRef=PQ(RefName, Pressure, Quality, 'enthalpy', RefrigIndex,RefPropErr)    !Refrigerant Vapor Enthalpy
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3246'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	hgRef=hgRef/1000
+	hgRef=hgRef/1000    !RS Comment: Unit Conversion
 	
-	cpgRef=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)
+	cpgRef=PQ(RefName, Pressure, Quality, 'specificheat', RefrigIndex,RefPropErr)   !Refrigerant Vapor Specific Heat
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3254'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	cpgRef=cpgRef/1000
+	cpgRef=cpgRef/1000  !RS Comment: Unit Conversion
 	
-	mugRef=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)
+	mugRef=PQ(RefName, Pressure, Quality, 'viscosity', RefrigIndex,RefPropErr)  !Refrigerant Vapor Dynamic Viscosity
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3262'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
 	
-	kgRef=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)
+	kgRef=PQ(RefName, Pressure, Quality, 'conductivity', RefrigIndex,RefPropErr)    !Refrigerant Vapor Thermal Conductivity
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3269'
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	kgRef=kgRef/1000
+	kgRef=kgRef/1000    !RS Comment: Unit Conversion
 
 	vgRef=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
 	IF (RefPropErr .GT. 0) THEN
@@ -4943,9 +4883,9 @@ REAL Wlocal !Local oil mass fraction
 		ErrorFlag=REFPROPERROR
 		RETURN
 	END IF
-	vgRef=1/vgRef
+	vgRef=1/vgRef   !Refrigerant Vapor Specific Volume
 
-	Tsat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+	Tsat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !Saturation Pressure
 	IF (RefPropErr .GT. 0) THEN
 		WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3051'
 		ErrorFlag=REFPROPERROR
@@ -5137,7 +5077,7 @@ REAL DiffpRoMod   !Difference in pRoMod
 REAL DiffhRoMod   !Difference in hRoMod
 REAL PrevpRoMod   !Previous value of pRoMod
 REAL PrevhRoMod   !Previous value of hRoMod
-INTEGER RefBCiter             !Iteration loop counter
+INTEGER RefBCiter   !Iteration loop counter
 REAL Tair         !Air temperature, C
 LOGICAL IsTransitSegmentCalled !Flag to indicate if 'CalcTransitSegment' is called
 LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
@@ -5210,8 +5150,9 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			IF (xRmod .GE. 1) THEN
                 kRmod = kgRmod
             END IF
-		END IF
+        END IF
 
+        !Correct dynamic viscosity
 		IF (muRmod .LE. 0) THEN !ISI - 08/03/06
 		    IF (xRmod .LE. 0) THEN
                 muRmod = mufRmod
@@ -5309,7 +5250,7 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 
 			!Calc. Epsilon
 			CALL EPScalc(cAir,cRef,UA,Cratio,NTU,EPS)
-            !EPS=EPS*0.75  !Remove sankar
+            
 			!Calc. DT
 			IF (LmodTPratio .GT. 0) THEN !ISI - 07/21/06
 				DT=(tRmod-tAiMod)
@@ -5365,10 +5306,7 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			NTUsDry=1/(cAir*Rair) 
 			EPSsDry=1-EXP(-NTUsDry)
 
-			!Tair=(tAiMod+TdbAoDry)/2
 			TsDry=QmodDry/(EPSsDry*cAir)+tAiMod
-			!TsDry=QmodDry/(EPSsDry*cAir)+Tair
-			!TsDry=QmodDry*(Rrefrig+Rtube)+tRiMod
 
 			DryWet=3
 			Qmod=QmodDry
@@ -5436,6 +5374,7 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 		CALL CalcRefProperty(pRoMod,hRoMod,hfRoMod,hgRoMod,hfgRoMod,Psat,Tsat,tRoMod,xRoMod, &
 							 vRoMod,vfRoMod,vgRoMod,cpRoMod,cpfRoMod,cpgRoMod, &
 							 muRoMod,mufRoMod,mugRoMod,kRoMod,kfRoMod,kgRoMod,SigmaMod)
+        
 		IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
         END IF
@@ -5488,7 +5427,7 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 	END DO !end of RefBCiter
 
 	IF (RefBCiter .GT. RefBCmaxIter) THEN
-		!WRITE(*,*)'-- WARNING -- Evaporator: RefBCiter not converged.'
+		!RefBCiter not converged.
 		ErrorFlag=CONVERGEERROR
 	END IF
 
@@ -5583,16 +5522,16 @@ REAL pRoPrev !Previous value of pRo, for iteration
 	Counter=0
 	DO
 
-		Pressure=pRo*1000
-		Enthalpy=hRo*1000
-		xRo=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+		Pressure=pRo*1000   !RS Comment: Unit Conversion
+		Enthalpy=hRo*1000   !RS Comment: Unit Conversion
+		xRo=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !Refrigerant Outlet Quality
 		IF (RefPropErr .GT. 0) THEN
 			WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3391'
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
 
-	    tRo=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+	    tRo=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !Refrigerant Outlet Temperature
 		IF (RefPropErr .GT. 0) THEN
 			WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 3398'
 			ErrorFlag=REFPROPERROR
@@ -5605,9 +5544,9 @@ REAL pRoPrev !Previous value of pRo, for iteration
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
-		vRo=1/vRo
+		vRo=1/vRo   !Refrigerant Outlet Specific Volume
 
-		Pressure=pRo*1000
+		Pressure=pRo*1000   !RS Comment: Unit Conversion
 		Quality=1
 		vgRo=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
 		IF (RefPropErr .GT. 0) THEN
@@ -5615,7 +5554,7 @@ REAL pRoPrev !Previous value of pRo, for iteration
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
-		vgRo=1/vgRo
+		vgRo=1/vgRo !Refrigerant Outlet Vapor Specific Volume
 
 		Quality=0
 		vfRo=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
@@ -5624,7 +5563,7 @@ REAL pRoPrev !Previous value of pRo, for iteration
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
-		vfRo=1/vfRo
+		vfRo=1/vfRo !Refrigerant Outlet Liquid Specific Volume
   
 		CALL MODdP(CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
 			  	   hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
@@ -5695,7 +5634,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
     hciMod=hciMod*hciMultiplier
 
-    !QmodTP=mRefMod*(hRiMod-hgRiMod)
 	IF (CoilType .NE. MCEVAPORATOR) THEN
 		QmodTP=mRefMod*(hRiMod-hgRiMod)
 	ELSE
@@ -5720,23 +5658,27 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			hRoMod=-(QmodTP/NumOfChannels)/mRefMod+hRiMod 
 		END IF
 		 
-		Pressure=pRiMod*1000 
-		Enthalpy=hRoMod*1000 
+		Pressure=pRiMod*1000    !RS Comment: Unit Conversion
+		Enthalpy=hRoMod*1000    !RS Comment: Unit Conversion
 
-	    xRmod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+	    xRmod=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)    !Module Refrigerant Quality
 		IF (RefPropErr .GT. 0) THEN
 		    WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 1291'
 			ErrorFlag=REFPROPERROR
 			RETURN
 		END IF
-		IF (xRmod .GT. 1) xRmod=1
-		IF (xRmod .LT. 0) xRmod=0
+		IF (xRmod .GT. 1) THEN
+            xRmod=1
+        END IF
+		IF (xRmod .LT. 0) THEN
+            xRmod=0
+        END IF
 	END IF
 
 	!ISI - 07/21/06 to update the refrigerant temperature at the transition boundary
-	Pressure=pRiMod*1000
+	Pressure=pRiMod*1000    !RS Comment: Unit Conversion
 	Quality=xRmod
-	tRmod=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+	tRmod=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Module Refrigerant Temperature
 
 RETURN
 
@@ -5828,7 +5770,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		DTmod=-Qmod*(1/(hciMod*AiMod*LmodTP/LmodTube)+LOG(ODtube/IDtube/(2*PI*Ktube*LmodTP)))
 		IF (ABS(LmodTPratio-1) .LT. SMALL) THEN
 			QmodTP=Qmod
-			!*LmodTP=1
 			LmodTP=LmodTube
 			LmodTPratio=0
 			EXIT
@@ -5924,8 +5865,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 							 
 			cAirf=mAiMod*cf
 										 
-			CALL EPScalc(cAirf,cRef,UAf,Cratio,NTU,EPSf)
-			!EPS=EPS*0.75   !Remove Sankar							 
+			CALL EPScalc(cAirf,cRef,UAf,Cratio,NTU,EPSf)						 
 			Cminf=MIN(cAirf,cRef)
 										 
 			DT=(tRiMod-TwbAiMod)
@@ -5957,7 +5897,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 			!Outlet air wet bulb temp
 			TwbAoWet=QmodWet/cAirf+TwbAiMod
-			!hAoWet=QmodWet/cAir+hAiMod
 
 			!Outlet air enthalpy
 			AirPropOpt=3
@@ -5965,12 +5904,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			AirProp(5)=TwbAoWet
 			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
 			hAoWet=AirProp(4)
-
-			!AirPropOpt=1
-			!AirProp(1)=TdbAoWet
-			!AirProp(4)=hAoWet
-			!CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			!TwbAoWet=AirProp(5)
 
 			!Update fictitious air specific heat
 			cfprev=cf
@@ -5989,7 +5922,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			TdbAoWet=EPSsWet*(TsWet-tAiMod)+tAiMod
 
 			TwbAoWet=QmodWet/cAirf+TwbAiMod
-			!hAoWet=QmodWet/mAiMod+hAiMod
 
 			!Outlet air enthalpy
 			AirPropOpt=3
@@ -5997,12 +5929,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			AirProp(5)=TwbAoWet
 			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
 			hAoWet=AirProp(4)
-
-			!AirPropOpt=1
-			!AirProp(1)=TdbAoWet
-			!AirProp(4)=hAoWet
-			!CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			!TwbAoWet=AirProp(5)
 
 			DryWet=1
 			Qmod=QmodWet
@@ -6034,29 +5960,6 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
     END IF
 
 		!********************* Ding ends ******************************
-
-	!IF (ABS(QmodDry) .GT. ABS(QmodWet)) THEN !Take the higher capacity
-	!    DryWet=3
-	!	Qmod=QmodDry
-	!	QmodSens=QmodDry
-	!	SHR=1
-	!	hAoMod=hAoDry
-	!	tAoMod=TdbAoDry
-
-	!	IF (CoilType .NE. MCEVAPORATOR) THEN
-	!		Ckt(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Ckt(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Ckt(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	ELSE
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	END IF
-	!END IF
 
 RETURN
 
@@ -6186,10 +6089,6 @@ REAL FrostThk
 	END IF
 
 	cAir=mAiMod*CpSat
-	!Cmin=MIN(cAir,cRef)
-
-	!Cmax=MAX(cAir,cRef)
-	!Cratio=Cmin/Cmax
 	
 	NTUwet=UAwet/mAiMod
 	EPSwet=1.-EXP(-NTUwet)
@@ -6252,34 +6151,6 @@ REAL FrostThk
 		END IF
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
 	END IF
-
-	!IF (QmodTP .NE. 0) THEN !Correct over prediction
-	!	IF (ABS(QmodWet) .GT. ABS(QmodTP)) QmodWet=-ABS(QmodTP)
-	!END IF
-
-	!IF (ABS(QmodDry) .GT. ABS(QmodWet)) THEN !Take the higher capacity
-	!    DryWet=3
-	!	Qmod=QmodDry
-	!	QmodSens=QmodDry
-	!	SHR=1
-	!	hAoMod=hAoDry
-	!	tAoMod=TdbAoDry
-
-	!	IF (CoilType .NE. MCEVAPORATOR) THEN
-	!		Ckt(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Ckt(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Ckt(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	ELSE
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	END IF
-	!END IF
-
 
 RETURN
 
@@ -6410,7 +6281,6 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 						hcoWet,hciMod,AfMod,AoMod,AiMod,AmMod,UA,RairWet,Rrefrig,Rtube,FinEffwet,SurfEffWet)
 		END IF
 
-		!CpSat=(0.89*CpMoist+hfgSat*CC)/0.89
 		CpSat=(Le*CpMoist+hfgSat*CC)/Le
 
 		cAir=mAiMod*CpSat
@@ -6484,33 +6354,6 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 		END IF
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
 	END IF
-
-	!IF (QmodTP .NE. 0) THEN !Correct over prediction
-	!	IF (ABS(QmodWet) .GT. ABS(QmodTP)) QmodWet=-ABS(QmodTP)
-	!END IF
-
-	!IF (ABS(QmodDry) .GT. ABS(QmodWet)) THEN !Take the higher capacity
-	!    DryWet=3
-	!	Qmod=QmodDry
-	!	QmodSens=QmodDry
-	!	SHR=1
-	!	hAoMod=hAoDry
-	!	tAoMod=TdbAoDry
-
-	!	IF (CoilType .NE. MCEVAPORATOR) THEN
-	!		Ckt(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Ckt(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Ckt(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Ckt(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	ELSE
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco = hco
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%cAir=cAir
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair=Rair
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube=Rtube
-	!		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%SHR=SHR
-	!	END IF
-	!END IF
 
 RETURN
 
@@ -6748,15 +6591,15 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     FinThk,FinSpg,Lcoil,AfCoil, &
     AoCoil,AiCoil,AmCoil)
 
-    Pressure=pRiCoil*1000
-    Enthalpy=hRiCoil*1000
-    tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    Pressure=pRiCoil*1000   !RS Comment: Unit Conversion
+    Enthalpy=hRiCoil*1000   !RS Comment: Unit Conversion
+    tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !Coil Refrigerant Inlet Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3904'
         ErrorFlag=REFPROPERROR
         RETURN
     END IF
-    xRiCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    xRiCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !Coil Refrigerant Inlet Quality
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error. Line 3910'
         ErrorFlag=REFPROPERROR
@@ -6784,7 +6627,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                 Slab(I)%Pass(II)%Tube(III)%Seg%pRo=pRiCoil
                 Slab(I)%Pass(II)%Tube(III)%Seg%hRo=hRiCoil
 
-                !Slab(I)%Pass(II)%mRef=mRefTotal/Slab(I)%Npass
             END DO
         END DO
     END DO
@@ -6839,7 +6681,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                             DO IV=1,NumOfMods !Number of segments
 
                                 !ref. mass flow rate for each channel
-                                !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
                                 mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
 
                                 AoMod=AoCoil*LmodTube/Lcoil 
@@ -6887,9 +6728,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                         DO IV=1,NumOfMods !Number of segments
 
                             !ref. mass flow rate for each channel
-                            !mRefMod=mRefTot/Slab(I)%Pass(II)%Ntube/NumOfChannels
                             mRefMod=Slab(I)%mdot/Slab(I)%Pass(II)%Ntube/NumOfChannels !ISI - 07/13/07
 
+                            !Surface areas
                             AoMod=AoCoil*LmodTube/Lcoil
                             AfMod=AfCoil*LmodTube/Lcoil
                             AiMod=AiCoil*LmodTube/Lcoil
@@ -6947,25 +6788,23 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
                 hRoSlab=Slab(I)%Pass(Slab(I)%Npass)%hRo
             END IF
 
-            Pressure=pRoSlab*1000
-            Enthalpy=hRoSlab*1000
-            tRoSlab=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+            Pressure=pRoSlab*1000   !RS Comment: Unit Conversion
+            Enthalpy=hRoSlab*1000   !RS Comment: Unit Conversion
+            tRoSlab=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !Slab Refrigerant Outlet Temperature
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
                 ErrorFlag=REFPROPERROR
                 !VL: Previously: GOTO 200
                 OUT(21)=ErrorFlag
                 RETURN
-
             END IF
-            xRoSlab=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+            xRoSlab=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !Slab Refrigerant Outlet Quality
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
                 ErrorFlag=REFPROPERROR
                 !VL: Previously: GOTO 200
                 OUT(21)=ErrorFlag
                 RETURN
-
             END IF
 
             Slab(I)%pRo=pRoSlab
@@ -6978,7 +6817,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
             CALL CalcMeanProp(Slab(I)%tAi,Slab(I)%tAo,tAmod)
 
             !Coil air side outlet conditions
-            !CPair=CPA(REAL(Slab(I)%tAi))
             CPair=CPA(REAL(tAmod))
             Cair=mAicoil*CPAir
 
@@ -7029,9 +6867,6 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     END DO !End iter
 
-    !pRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%pRo
-    !hRoCoil=Slab(Nl)%Pass(Slab(Nl)%Npass)%hRo
-
     Qcoil=mRefTot*(hRiCoil-hRoCoil)
 
     IF (ABS(QcoilSens) .GT. ABS(Qcoil)) THEN !Make sure sensible heat no larger than total heat, ISI - 12/07/07
@@ -7079,7 +6914,7 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     Pressure=pRoCoil*1000
     Enthalpy=hRoCoil*1000
-    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    tRoCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !Coil Refrigerant Outlet Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7088,7 +6923,7 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
         RETURN
 
     END IF
-    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    xRoCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !Coil Refrigerant Outlet Quality
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7098,9 +6933,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     END IF
 
-    Pressure=pRoCoil*1000
+    Pressure=pRoCoil*1000   !RS Comment: Unit Conversion
     Quality=0
-    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !Saturation Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7138,9 +6973,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     IF (SystemType .EQ. HEATPUMP) THEN !Heat pump
         !Calculate reversing valve heat transfer and pressure drop
-        Pressure=pRiCmp*1000
-        Enthalpy=hRiCmp*1000
-        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+        Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
+        Enthalpy=hRiCmp*1000    !RS Comment: Unit Conversion
+        tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Compressor Inlet Refrigerant Temperature
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
             ErrorFlag=REFPROPERROR
@@ -7160,9 +6995,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     END IF
 
-    Pressure=pRiCmp*1000
-    Enthalpy=hRiCmp*1000
-    tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)
+    Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
+    Enthalpy=hRiCmp*1000    !RS Comment: Unit Conversion
+    tRiCmp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Compressor Inlet Refrigerant Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7171,7 +7006,7 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
         RETURN
 
     END IF
-    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+    xRiCmp=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Compressor Inlet Refrigerant Quality
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7181,9 +7016,9 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     END IF
 
-    Pressure=pRiCmp*1000
+    Pressure=pRiCmp*1000    !RS Comment: Unit Conversion
     Quality=0
-    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+    tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !Saturation Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- MCEvaporator: Refprop error.'
         ErrorFlag=REFPROPERROR
@@ -7257,7 +7092,6 @@ REAL, INTENT(IN)  :: FTXIN(9)  !Fin-tube coil input data
 REAL, INTENT(IN)  :: FTPAR(49) !Fin-tube coil input parameters
 REAL, INTENT(OUT) :: MCXIN(7)  !Microchannel coil input data
 REAL, INTENT(OUT) :: MCPAR(33) !Microchannel coil input parameters
-
 
 !FLOW:
 

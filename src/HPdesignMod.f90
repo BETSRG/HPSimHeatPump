@@ -84,12 +84,6 @@
     IMASS=1
     LPRINT=1
 
-    !Moved to ORNLsolver - ISI 02/06/2009
-    !if (.not.CoarseConvergenceCriteriaMet) then
-    !	FirstTimeHPdesignMode=.TRUE.
-    !	FirstTimeFlowRateLoop=.TRUE.
-    !  endif
-
     !for specified subcooiling, set IREFC to zero
     !for specifed flow control, set IREFC to 3 
     IF (MODE .EQ. 1 .OR. MODE .EQ. 3) THEN
@@ -126,49 +120,37 @@
                 END IF
             END IF
 
-            Temperature=(TSICMP-32)/1.8
+            Temperature=(TSICMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
             Quality=1
-            PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+            PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                !WRITE(*,*)'Press return to terminate program'
-                !READ(*,*)
-                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
-            PiCmp=PiCmp/1000
+            PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
 
             IF (SUPER .GT. 0) THEN
                 Temperature=(TSICMP+SUPER-32)/1.8
-                Pressure=PiCmp*1000
-                HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+                Pressure=PiCmp*1000 !RS Comment: Unit Conversion
+                HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                    !WRITE(*,*)'Press return to terminate program'
-                    !READ(*,*)
-                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 END IF
-                HiCmp=HiCmp/1000
+                HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
                 TiCmp=((TSICMP+SUPER)-32)/1.8
             ELSE
-                Pressure=PiCmp*1000
+                Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 Quality=-SUPER
-                HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+                HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                    !WRITE(*,*)'Press return to terminate program'
-                    !READ(*,*)
-                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 END IF
-                HiCmp=HiCmp/1000
-                TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
+                TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)    !Compressor Inlet Temperature
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                    !WRITE(*,*)'Press return to terminate program'
-                    !READ(*,*)
-                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 END IF
             END IF
@@ -185,33 +167,24 @@
                 IF (QsucLn .NE. 0) THEN
                     HoEvp=HiCmp-QsucLn/Xmr
 
-                    Pressure=PoEvp*1000
-                    Enthalpy=HoEvp*1000
-                    ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+                    Pressure=PoEvp*1000 !RS Comment: Unit Conversion
+                    Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
+                    ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Temperature
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
 
-                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
 
                     Quality=1
-                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
 
@@ -226,35 +199,26 @@
                     ToEvp=TiCmp-DTsucLn
 
                     Temperature=ToEvp
-                    Pressure=PoEvp*1000
-                    HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
+                    Pressure=PoEvp*1000 !RS Comment: Unit Conversion
+                    HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)   !Evaporator Outlet Enthalpy
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
-                    HoEvp=HoEvp/1000
+                    HoEvp=HoEvp/1000    !RS Comment: Unit Conversion
 
-                    Pressure=PoEvp*1000
-                    Enthalpy=HoEvp*1000
-                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+                    Pressure=PoEvp*1000 !RS Comment: Unit Conversion
+                    Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
+                    XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
 
                     Quality=1
-                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+                    TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
-                        !WRITE(*,*)'Press return to terminate program'
-                        !READ(*,*)
-                        !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                         STOP
                     END IF
 
@@ -333,18 +297,6 @@
             RHoE=EvapOUT(18)
         END IF
 
-        !AirPropOpt=2
-        !AirProp(1)=TaoC
-        !AirProp(3)=RHoC
-        !CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        !RhoAoC=AirProp(7)
-
-        !AirPropOpt=2
-        !AirProp(1)=TaoE
-        !AirProp(3)=RHoE
-        !CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        !RhoAoE=AirProp(7)
-
         AirPropOpt=2
         AirProp(1)=(TaiC-32)*5/9
         AirProp(3)=RHiC
@@ -382,9 +334,6 @@
                 WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
             END IF
             WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
-            !WRITE(*,*)'Press return to terminate program'
-            !READ(*,*)
-            !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF
         FirstTimeFlowRateLoop=.FALSE.
@@ -451,11 +400,7 @@
             EvapPAR(32)=CompPAR(22)/1000
         END IF
 
-        IsCoolingMode=EvapPAR(20) 
-        !IF(PrevTime .NE. CurSimTime)THEN
-        ! IsFirstTimeEvaporator = .TRUE.
-        ! PrevTime=CurSimTime
-        !END IF 
+        IsCoolingMode=EvapPAR(20)
         IF (FirstTimeHPdesignMode) THEN
 
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &
@@ -506,9 +451,6 @@
             IF (EvapOUT(20) .NE. 0) THEN
                 SELECT CASE (INT(EvapOUT(20)))
                 CASE (3,4,5)
-                    !WRITE(*,*)'Press return to terminate program'
-                    !READ(*,*)
-                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 END SELECT
             END IF
@@ -695,7 +637,6 @@
             IF(NTAMB.GT.0) THEN
                 DELT2 = (TAIIE-TAIDM)/(TSICMP-TSATDM)
             END IF
-            !IF (DELT2 .EQ. 0) GO TO 900
             IF (ABS(DELT2) .LE. 0.05) THEN !ISI - 06/13/07
                 !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
                 EXIT
@@ -766,9 +707,6 @@
             IF (PrnLog .EQ. 1) THEN
                 WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
             END IF
-            !WRITE(*,*)'Press return to terminate program'
-            !READ(*,*)
-            !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF
 
@@ -794,10 +732,7 @@
 
             IF (ShTbPAR(1) .LE. 0) THEN
                 ShTbPAR(1)=0.0127
-                !WRITE(*,*)	
-                !WRITE(*,*)'-- WARNING -- Short Tube: Parameters not defined.' 
-                !WRITE(*,*)'Short Tube calculation was skipped.'
-                !ShTbPAR(2)=0
+                !Short Tube: Parameters not defined.
             ELSE
 
                 !Initial guess
@@ -868,9 +803,6 @@
                 IF (PrnLog .EQ. 1) THEN
                     WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
                 END IF
-                !WRITE(*,*)'Press return to terminate program'
-                !READ(*,*)
-                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
 
@@ -933,7 +865,6 @@
 
                 ErrXMR=ABS((XMRFLD-XMR))
 
-                !WRITE(*,*)NumIter,CapTubeDimension,XMRFLD,XMR
                 IF (MaxLen .NE. 0 .AND. MinLen .NE. 0 .AND. ErrXMR .GT. 1E-2) THEN
                     IF (XMRFLD .GT. XMR) THEN
                         IF (IsSizeDiameter .EQ. .TRUE.) THEN

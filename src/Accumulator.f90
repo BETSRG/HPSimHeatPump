@@ -155,24 +155,34 @@ CONTAINS
 
     Pressure=pRo*1000
     Enthalpy=hRo*1000
-    tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
+    tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
-    xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
+    xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)  !Outlet Refrigerant Quality
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
-    Pressure=pRo*1000
+    Pressure=pRo*1000   !RS Comment: Unit Conversion
     Quality=1
-    Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
+    Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)  !Saturated Temperature
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
-    rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
+    rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Vapor Density
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
     V=1/(rhoVap*0.0625) !Convert from kg/m3 to lbm/ft3
     Quality=0
-    rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) RETURN
+    rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Liquid Density
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+        RETURN
+    END IF
 
     VSATLQ=1/(rhoLiq*0.0625) !Convert from kg/m3 to lbm/ft3
 
@@ -196,7 +206,6 @@ CONTAINS
         !
         !       ONLY VAPOR IN ACCUMULATOR
         !
-        !IF(TSUP.LT.0.) GO TO 10
         !VL: Previously: IF(xRo.LT.1.) GO TO 10
         IF(.NOT. xRo.LT.1.) THEN
             HL(1) = 0.0
@@ -211,7 +220,6 @@ CONTAINS
             !
             !       LIQUID IN ACCUMULATOR
             !
-            !10      X = -TSUP
             !VL: Previously: 10  X = xRo
             X = xRo
             RMS = RMASS/3600.
@@ -224,7 +232,6 @@ CONTAINS
             ATUBE = PI*DTUBE*DTUBE/4.
             WL = RMSL/AHOLE(1)
             PD = WL*WL/(.585*.585*2.*RO)
-            !PD=0.5*(RMSL/AHOLE(1))**2./RO
             PDYN = 0.5*(X*RMS/ATUBE)**2.*V
             HL(1) = (PD-PDYN)/(RO*32.2)
             IF(HL(1).LT.0.) THEN
@@ -249,7 +256,6 @@ CONTAINS
                 DP1MAX = AHGT*RO*32.2 + PDYN
                 DP2MAX = (AHGT-HDIS)*RO*32.2 + PDYN
                 RMMAX = 0.585*AHOLE(1)*SQRT(2.*RO*DP1MAX) +0.585*AHOLE(2)*SQRT(2.*RO*DP2MAX)
-
 
                 ! VL: Previously: IF(RMSL.LT.RMMAX) GO TO 15
                 IF(RMSL.LT.RMMAX) THEN
@@ -287,7 +293,6 @@ CONTAINS
                     !VL: Previously:DO 16 I=1,2
                     DO I=1,2
                         DP = HL(I)*RO*32.2 + PDYN
-                        !       IF(HL(I).EQ.0.) DP=0.
                         RM = 0.585*AHOLE(I)*SQRT(2.*RO*DP)
                         !VL: Previously:16                  RMT = RMT + RM
                         RMT = RMT + RM
@@ -300,7 +305,6 @@ CONTAINS
                     VHGT = AHGT - HL(1)
                     VHGT = AMAX1(0.,VHGT)
                     AMASS2 = AACC* (HL(1)*RO + VHGT/V)
-                    !       WRITE(6,FMT_1234) Z1,Z2,DIFF1,DIFF2,AMASS1,AMASS2,RMT,RMSL
                     !!VL: Previously: 1234   FORMAT(8(1PE12.3))
                     !
                     !       SKIP OUT IF LEVEL WILL NOT RISE ABOVE SECOND HOLE
@@ -341,7 +345,6 @@ CONTAINS
 
             END IF
             !VL: Previously: 40          CONTINUE
-            !        IF(VHGT.EQ.0.) WRITE(6,FMT_600)
             ACCMAS = AMASS2
         END IF
         !VL: Previously:100 XLEVEL = HL(1)*12.
@@ -349,7 +352,6 @@ CONTAINS
     END IF
 
     !VL: Previously:201 CONTINUE
-    !       WRITE(6,FMT_604) ACCMAS,XLEVEL
     !
     !!VL: Previously: 600 FORMAT(' ACCUMULATOR IS FULL')
     !!VL: Previously: 602 FORMAT(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')
@@ -436,54 +438,54 @@ CONTAINS
 
     Temperature=TsatEvp
     Quality=1
-    Psuc=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+    Psuc=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Suction Pressure
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
         RETURN
     END IF
-    Psuc=Psuc/1000
+    Psuc=Psuc/1000  !RS Comment: Unit Conversion
 
     Temperature=TsatCnd
     Quality=1
-    Pdis=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+    Pdis=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)  !Discharge Pressure
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
         RETURN
     END IF
-    Pdis=Pdis/1000
+    Pdis=Pdis/1000  !RS Comment: Unit Conversion
 
     IF (Superheat .GT. 0) THEN
-        Pressure=Psuc*1000
+        Pressure=Psuc*1000  !RS Comment: Unit Conversion
         Temperature=TsatEvp+Superheat
-        Hvap=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+        Hvap=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hvap=Hvap/1000
+        Hvap=Hvap/1000  !RS Comment: Unit Conversion
     ELSE
-        Pressure=Psuc*1000
+        Pressure=Psuc*1000  !RS Comment: Unit Conversion
         Quality=Xvap
-        Hvap=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+        Hvap=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Vapor Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hvap=Hvap/1000
+        Hvap=Hvap/1000  !RS Comment: Unit Conversion
     END IF
 
     IF (Subcooling .GT. 0) THEN
-        Pressure=Pdis*1000
+        Pressure=Pdis*1000  !RS Comment: Unit Conversion
         Temperature=TsatCnd-Subcooling
-        Hliq=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+        Hliq=TP(RefName,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hliq=Hliq/1000
+        Hliq=Hliq/1000  !RS Comment: Unit Conversion
     ELSE
-        Pressure=Pdis*1000
+        Pressure=Pdis*1000  !RS Comment: Unit Conversion
         Quality=Xliq
-        Hliq=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+        Hliq=PQ(RefName,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr) !Liquid Enthalpy
         IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
             RETURN
         END IF
-        Hliq=Hliq/1000
+        Hliq=Hliq/1000  !RS Comment: Unit Conversion
     END IF
 
     QsysTon=mdot*(Hvap-Hliq)*0.28435 !Convert from kW to ton
@@ -499,11 +501,11 @@ CONTAINS
 
             Temperature=TsatEvp-EstDT
             Quality=1
-            Psat2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+            Psat2=TQ(RefName,Temperature,Quality,'pressure',RefrigIndex,RefPropErr) !Saturation Pressure 2
             IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN
                 RETURN
             END IF
-            Psat2=Psat2/1000
+            Psat2=Psat2/1000    !RS Comment: Unit Conversion
 
             RatedDP = Psat1 - Psat2
             EstDP = QsysTon / MaxCapacity * RatedDP

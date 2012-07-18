@@ -73,7 +73,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     PiEvp=EvapIN(2)
 
-    Pressure=PiEvp*1000
+    Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Quality=0
     TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
@@ -81,7 +81,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         IERR=1
         RETURN
     END IF
-    TSATEI=TSATEI*1.8+32
+    TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion
 
     EvapIN(1)=MdotR			!Refrigerant side mass flow rate, kg/s
     EvapIN(2)=PiEvp			!Evap. inlet pressure, kPa
@@ -134,9 +134,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         PiCmp=PiCmp-AccumDP
         EvapOUT(6)=PiCmp
 
-        Pressure=PiCmp*1000
-        Enthalpy=HiCmp*1000
-        XiCmp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+        Pressure=PiCmp*1000 !RS Comment: Unit Conversion
+        Enthalpy=HiCmp*1000 !RS Comment: Unit Conversion
+        XiCmp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Compressor Inlet Quality
         IF (RefPropErr .GT. 0) THEN
             CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
             IERR=1
@@ -144,9 +144,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         END IF
     END IF	
 
-    TRIC=TiCmp*1.8+32
+    TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion
 
-    Pressure=PiCmp*1000
+    Pressure=PiCmp*1000 !RS Comment: Unit Conversion
     Quality=1
     TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
@@ -154,7 +154,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         IERR=1
         RETURN
     END IF
-    TSATCI=TSATCI*1.8+32
+    TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion
 
     TSAVG=(TSATEI+TSATCI)/2
     IF(TSAVG.GT.TAIIE) THEN

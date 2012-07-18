@@ -68,7 +68,6 @@ REAL TDBmax !Maximum dry bulb temp. C
 REAL TDBmin !Minimum dry bulb temp. C
 REAL TWBsetpt !Set point wet bulb temp. C
 
-
 !Flow**
   
   OPEN (77,FILE='AirProp.err')

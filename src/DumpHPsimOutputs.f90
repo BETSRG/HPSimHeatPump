@@ -926,7 +926,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCnd=0
       END IF
 
-      !CFMcnd=StdCFMcnd
       Qcnd =CondOUT(15)*1000
 
       TdboCnd=CondOUT(21)

@@ -486,8 +486,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODdrawBlow = Numbers(3)   !Draw Through (1) or Blow Through (2)
 
 
-    !Then we don't end up reading the separator *** line here, we just start with the next line
-
   !***************** Indoor coil data *****************
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
@@ -538,7 +536,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   PwrIDfan = Numbers(1) !Fan Power
   VdotIDfan = Numbers(2)    !Fan Air Flow Rate
   IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
-
 
   !***************** Expansion device data *****************
 
@@ -790,7 +787,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   FilterPAR(1) = Numbers(1) !Flow capacity
   FilterPAR(2) = Numbers(2) !Rating DP
-
   
   !*************** Custom Air Side Heat Transfer Data **************
 
@@ -1211,8 +1207,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   EvapPAR(6)=SucLnPAR(6) !Suction line temperature change, C or F
   EvapPAR(7)=SucLnPAR(7) !Suction line additional pressure drop
 
-  IF (IsCoolingMode .GT. 0) THEN
-
+  IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
+    
 	CFMcnd=VdotODfan
     CFMevp=VdotIDfan
     CoilParams(1)%AirFlowRate=CFMevp

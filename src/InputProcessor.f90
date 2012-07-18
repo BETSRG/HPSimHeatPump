@@ -305,12 +305,13 @@ SUBROUTINE ProcessInput
    WRITE(EchoInputFile,*) ' Number of Object Definitions=',NumObjectDefs
    WRITE(EchoInputFile,*) ' Number of Section Definitions=',NumSectionDefs
 
-   !  If no fatal to here, rewind EchoInputFile -- only keep processing data...
+   !If no fatal to here, rewind EchoInputFile -- only keep processing data...
    IF (.not. ErrorsInIDD) THEN
      REWIND(Unit=EchoInputFile)
    ENDIF
 
    FileName = "in.idf"
+   !FileName = "in_longtubes.idf"
 
    INQUIRE(file=FileName,EXIST=FileExists)
    IF (.not. FileExists) THEN
@@ -1915,15 +1916,6 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Found
-!  LOGICAL, SAVE, DIMENSION(:), ALLOCATABLE :: TrackCalls
-!
-!  IF (.not. ALLOCATED(TrackCalls)) THEN
-!    ALLOCATE (TrackCalls(NumObjectDefs))
-!    TrackCalls=.false.
-!    IF (NumObjectDefs == 0) THEN
-!      CALL ProcessInput
-!    ENDIF
-!  ENDIF
 
   Found=FindIteminList(MakeUPPERCase(ObjectWord),ListofObjects,NumObjectDefs)
 

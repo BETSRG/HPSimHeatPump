@@ -23,7 +23,6 @@ PUBLIC Temperature_F2C  ! VL
 PUBLIC Temperature_C2F  ! VL
 
 
-
 CONTAINS
 
 !***********************************************************************************
@@ -56,10 +55,7 @@ IMPLICIT NONE
 !Subroutine arguments
 INTEGER(2), INTENT(IN) :: Unit !Unit flag: 1=SI; 2=IP
 REAL, INTENT(INOUT) :: CompPAR(26) !Compressor model input data
-!REAL, INTENT(INOUT) :: CondPAR(56) !Condenser model real number input data !ISI - 07/14/06
-!REAL, INTENT(INOUT) :: CondPAR(58) !Condenser model real number input data
 REAL, INTENT(INOUT) :: CondPAR(61) !Condenser model real number input data
-!REAL, INTENT(INOUT) :: EvapPAR(50) !Evaporator model real number input data
 REAL, INTENT(INOUT) :: EvapPAR(53) !Evaporator model real number input data
 REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
 REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
@@ -88,16 +84,6 @@ REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 INTEGER I !Loop counter
 
   IF (Unit .EQ. SI)THEN !SI unit inputs
-  
-    !****Compressor input data****
-    !CompPAR(1-10) !10 coefficients for power 
-  
-    !10 coefficients for mass flow rate
-    !DO I=11,20
-    !  CompPAR(I)=CompPAR(I)/UnitPwr !lbm/hr, Compressor model uses IP unit parameters
-    !END DO
-  
-    !CompPAR(22)=CompPAR(22)   !Compressor shell heat loss W
     
 	CompPAR(23)=CompPAR(23)/(100**3) !Compressor internal volume, m^3
 
@@ -431,7 +417,6 @@ REAL,   INTENT(INOUT) :: Dchannel    !Channel diameter, m
 	  Dchannel   =Dchannel/12*UnitL     !in to m
   END IF
 
-
 RETURN
 
 END SUBROUTINE MicroChannelCoilUnitConvert
@@ -494,7 +479,6 @@ REAL,   INTENT(INOUT) :: Ltube       !Single tube length, m
 	  Ltube      =Ltube/12*UnitL        !in to m 
   END IF
 
-
 RETURN
 
 END SUBROUTINE FinTubeCoilUnitConvert
@@ -526,7 +510,6 @@ REAL FUNCTION Temperature_C2F(tC)
     Temperature_C2F = tC * 1.8 + 32.0
 
 END FUNCTION Temperature_C2F
-
 
 
 !***********************************************************************************

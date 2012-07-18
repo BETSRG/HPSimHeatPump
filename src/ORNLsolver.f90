@@ -115,7 +115,6 @@
     PrnLog=1                                                  ! VL_User_Setting
     PrnCon=1                                                  ! VL_User_Setting
 
-
     WinTrans=0.9  ! VL_Magic_Number
     CondIN(7) = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting
     CondPAR(36)=0.8   ! VL_Magic_Number    ! VL_Index_Replace
@@ -143,9 +142,6 @@
     IF (TsoCmp .LE. TsiCmp) THEN
         WRITE(*,*)'Compressor suction temperature is greater than discharge temperature.'
         WRITE(*,*)'## ERROR ## Main: Wrong initial guess!'
-        !WRITE(*,*)'Press return to terminate program.'
-        !READ(*,*)
-        ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop ! Error handling mechanism ...
         STOP
     END IF
 
@@ -227,9 +223,6 @@
 
         IF (RHiC .GT. TaiC) THEN
             WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.'
-            !WRITE(*,*)'Press return to terminate program.'
-            !READ(*,*)
-            ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -244,9 +237,6 @@
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
             WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.'
-            !WRITE(*,*)'Press return to terminate program.'
-            !READ(*,*)
-            ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -262,12 +252,9 @@
         !Initialize
         Temperature=Temperature_F2C(TSICMP)
         Quality=1	! VL_User_Setting
-        PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+        PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
-            !WRITE(*,*)'Press return to terminate program.'
-            !READ(*,*)
-            ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
@@ -279,42 +266,33 @@
 
         Temperature=Temperature_F2C(TSOCMP)
         Quality=1	! VL_User_Setting
-        PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+        PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
-            !WRITE(*,*)'Press return to terminate program.'
-            !READ(*,*)
-            ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
             STOP
         END IF  
-        PoCmp=PoCmp/1000.0
+        PoCmp=PoCmp/1000.0  !RS Comment: Unit Conversion
 
         IF (SUPER .GE. 0) THEN !ISI - 11/16/07
 
             Temperature=Temperature_F2C(TSICMP+SUPER)
             Pressure=PiCmp*1000
-            HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+            HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
-                !WRITE(*,*)'Press return to terminate program.'
-                !READ(*,*)
-                ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
-            HiCmp=HiCmp/1000
+            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
 
         ELSE
-            Pressure=PiCmp*1000
+            Pressure=PiCmp*1000 !RS Comment: Unit Conversion
             Quality=-SUPER
-            HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+            HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
-                !WRITE(*,*)'Press return to terminate program.'
-                !READ(*,*)
-                ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
-            HiCmp=HiCmp/1000
+            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
 
         END IF
 
@@ -327,9 +305,6 @@
                 SELECT CASE (INT(CompOUT(7)))	! VL_Index_Replace
                 CASE (1)
                     WRITE(*,*)'## ERROR ## Highside: Compressor solution error!'
-                    !WRITE(*,*)'Press return to terminate program.'
-                    !READ(*,*)
-                    ! VL Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 CASE (2)
                     WRITE(*,*)'-- WARNING -- Highside: Refprop out of range in compressor model.'
@@ -500,49 +475,49 @@
 
                 Temperature=Tliq+SUBCOOL*5/9
                 Quality=0	! VL_User_Setting
-                PiExp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-                PiExp=PiExp/1000
+                PiExp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Expansion Device Inlet Pressure
+                PiExp=PiExp/1000    !RS Comment: Unit Conversion
 
-                Pressure=PiExp*1000
+                Pressure=PiExp*1000 !RS Comment: Unit Conversion
                 Temperature=Tliq
-                HiExp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-                HiExp=HiExp/1000
+                HiExp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Expansion Device Inlet Enthalpy
+                HiExp=HiExp/1000    !RS Comment: Unit Conversion
                 HiEvp=HiExp
 
                 Temperature=Temperature_F2C(TSICMP)
                 Quality=1	! VL_User_Setting
-                PiEvp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-                PiEvp=PiEvp/1000
+                PiEvp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Evaporator Inlet Pressure
+                PiEvp=PiEvp/1000    !RS Comment: Unit Conversion
 
-                Pressure=PiEvp*1000
+                Pressure=PiEvp*1000 !RS Comment: Unit Conversion
                 Temperature=Temperature_F2C(TSICMP+SUPER)
-                HoEvp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-                HoEvp=HoEvp/1000
+                HoEvp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Evaporator Outlet Enthalpy
+                HoEvp=HoEvp/1000    !RS Comment: Unit Conversion
 
             ELSE
 
                 Temperature=Temperature_F2C(TSOCMP)
                 Quality=1	! VL_User_Setting
-                PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-                PoCmp=PoCmp/1000
+                PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
+                PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
 
                 CompOUT(5)=Tdis
                 Tocmp=Tdis
 
-                Pressure=PoCmp*1000
+                Pressure=PoCmp*1000 !RS Comment: Unit Conversion
                 Temperature=ToCmp
-                HoCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-                HoCmp=HoCmp/1000
+                HoCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Outelt Enthalpy
+                HoCmp=HoCmp/1000    !RS Comment: Unit Conversion
 
                 Temperature=Temperature_F2C(TSOCMP)
                 Quality=0	! VL_User_Setting
-                PiExp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
-                PiExp=PiExp/1000
+                PiExp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Expansion Device Inlet Pressure
+                PiExp=PiExp/1000    !RS Comment: Unit Conversion
 
-                Pressure=PiExp*1000
+                Pressure=PiExp*1000 !RS Comment: Unit Conversion
                 Temperature=Temperature_F2C(TSOCMP-SUBCOOL)
-                HiExp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
-                HiExp=HiExp/1000
+                HiExp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Expansion Device Inlet Enthalpy
+                HiExp=HiExp/1000    !RS Comment: Unit Conversion
 
             END IF
 
@@ -839,7 +814,7 @@
                     CoarseConvergenceCriteriaMet=.TRUE.
 
                     IF (MODE .EQ. CONDENSERUNITSIM) THEN
-                        DTVAL=DTROC !Use previouse iterated value, ISI - 07/26/07
+                        DTVAL=DTROC !Use previous iterated value, ISI - 07/26/07
                     END IF
                     AMBCON=1E-3 !0.01 !0.05 !0.3 !0.01 !1E-3 !Air temp. F	! VL_Magic_Number
                     CNDCON=0.1 !0.3 !Subcooling, F	! VL_Magic_Number

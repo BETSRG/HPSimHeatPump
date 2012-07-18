@@ -66,7 +66,7 @@ REAL DP !Pressure drop, kPa
 			FlowRatePerTon = FlowRatePerTonR22
 		END SELECT
 
-		DP = RatedDP / (FlowCapacity * FlowRatePerTon) * mdot
+		DP = RatedDP / (FlowCapacity * FlowRatePerTon) * mdot   !Determining Pressure Drop
 	ELSE
 		DP=0
 	END IF

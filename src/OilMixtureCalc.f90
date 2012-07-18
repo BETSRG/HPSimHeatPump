@@ -51,7 +51,6 @@ INTEGER,PARAMETER :: BRISTOL   = 2
 INTEGER,PARAMETER :: DANFOSS   = 3
 INTEGER,PARAMETER :: PANASONIC = 4
 
-
 CONTAINS
 
 !******************************************************************************
@@ -166,12 +165,12 @@ Psat2=Psat-DP
 
 Pressure=Psat1*1e6 !from MPa to Pa
 Quality=1
-Tsat1=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+Tsat1=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Saturation Temperature at Psat1
 Tsat1=Tsat1+273.15 !from C to K
 
 Pressure=Psat2*1e6 !from MPa to Pa
 Quality=1
-Tsat2=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+Tsat2=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Saturation Temperature at Psat2
 Tsat2=Tsat2+273.15 !from C to K
 
 b0=(LOG(Psat1)*(Tsat1/Tsat2)-LOG(Psat2))/((Tsat1/Tsat2)-1)
@@ -288,9 +287,9 @@ DO I=1, MaxIter
 	Xmix=(Xin+Xout)/2
 	Tsat=(TsatIn+TsatOut)/2
 
-	CpMix=OilMixtureSpecificHeat(CompManufacturer,Wlocal,Cpf,Tsat)
+	CpMix=OilMixtureSpecificHeat(CompManufacturer,Wlocal,Cpf,Tsat)  !Specific heat of the mixture
 
-	DH=hfg*DXmix+(1-Xmix)*CpMix*DTsat+Xmix*Cpg*DTsat
+	DH=hfg*DXmix+(1-Xmix)*CpMix*DTsat+Xmix*Cpg*DTsat    !Change in enthalpy
 
 	Qguess=mdot*DH
 
@@ -737,7 +736,7 @@ Xtt=OilMixtureXtt(Gtot,Xmix,ID,muMix,muVap,rhoMix,rhog)
 
 hLiq=0.023*(kLiq/ID)*(Gtot*(1-Xmix)*ID/muMix)**0.8*(Cpf*muMix/kLiq)**0.4
 
-OilMixtureHTCevap=CC*(1/Xtt)**nn*hLiq
+OilMixtureHTCevap=CC*(1/Xtt)**nn*hLiq   !Evaporation Heat Transfer Coefficient of the Mixture
 
 RETURN
 
@@ -800,7 +799,7 @@ END IF
 DPmixDZ=fmix*Gtot**2*(1-Xmix)**2/(2*ID*rhoMix)
 DPvapDZ=fvap*Gtot**2*Xmix**2/(2*ID*rhog)
 
-OilMixtureXtt=(DPmixDZ/DPvapDZ)**0.5
+OilMixtureXtt=(DPmixDZ/DPvapDZ)**0.5    !Thermal conductivity of the oil mixture
 
 RETURN
 

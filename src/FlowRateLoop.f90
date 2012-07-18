@@ -118,50 +118,50 @@
         !     CALL SUBROUTINE COMP TO DETERMINE THE COMPRESSOR
         !     PERFORMANCE AND REFRIGERANT FLOW RATE 'XMR'
 
-        Temperature=(TSOCMP-32)/1.8
+        Temperature=(TSOCMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
         Quality=1
-        PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+        PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
             !VL: Previously: GO TO 200
             CYCLE
         END IF
-        PoCmp=PoCmp/1000
+        PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
 
-        Temperature=(TSICMP-32)/1.8
+        Temperature=(TSICMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
         Quality=1
-        PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)
+        PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
             !VL: Previously: GO TO 200
             CYCLE
         END IF
-        PiCmp=PiCmp/1000
+        PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
 
         IF (SUPER .GT. 0) THEN
-            Temperature=(TSICMP+SUPER-32)/1.8
+            Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
             Pressure=PiCmp*1000
-            HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+            HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
                 !VL: Previously: GO TO 200
                 CYCLE
             END IF
-            HiCmp=HiCmp/1000
+            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
         ELSE
-            Pressure=PiCmp*1000
+            Pressure=PiCmp*1000 !RS Comment: Unit Conversion
             Quality=-SUPER
-            HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)
+            HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
                 !VL: Previously: GO TO 200
                 CYCLE
             END IF
-            HiCmp=HiCmp/1000
+            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
         END IF
 
         CompIN(1)=PiCmp
@@ -186,10 +186,10 @@
         CondIN(2)=PoCmp         
         CondIN(3)=HoCmp         
         CondIN(4)=XMaC           
-        CondIN(5)=(TAIC-32)/1.8  
+        CondIN(5)=(TAIC-32)/1.8 !RS Comment: Unit Conversion, from F to C
         CondIN(6)=RHIC           
         CondIN(8)=EvapOUT(3)
-        CondIN(9)=(TAIE-32)/1.8
+        CondIN(9)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C
 
         IF (SystemType .EQ. 4) THEN !Reheat system
             IF (FirstTimeFlowRateLoop) THEN
@@ -211,11 +211,6 @@
         END IF
 
         IsCoolingMode=CondPAR(27)
-        !Change the logic to reset IsFirstTimeCondenser
-        !IF(PrevTime .NE. CurSimTime)THEN
-        ! IsFirstTimeCondenser = .TRUE.
-        ! PrevTime=CurSimTime
-        !END IF 
         IF ((IsCoolingMode .GT. 0 .AND. ODCcoilType .EQ. MCCONDENSER) .OR. &
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil
@@ -276,15 +271,9 @@
                 !VL: Previously: GO TO 200
                 CYCLE
             CASE (3)
-                !WRITE(*,*)'Press return to terminate program'
-                !READ(*,*)
-                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             CASE (4,5)
                 WRITE(*,*)'## ERROR ## Highside: Coil geometry misdefined.'
-                !WRITE(*,*)'Press return to terminate program'
-                !READ(*,*)
-                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             CASE (8) !Too much pressure drop
                 WRITE(*,*)'Trying another iterating value....'
@@ -314,7 +303,7 @@
             CYCLE
         END IF
 
-        Pressure=PiCnd*1000
+        Pressure=PiCnd*1000 !RS Comment: Unit Conversion
         Quality=1
         TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
@@ -329,7 +318,7 @@
             !VL: Previously: GO TO 200
             CYCLE
         END IF
-        TSATCI=TSATCI*1.8+32
+        TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
         IF (FilterPAR(1) .GT. 0) THEN !Filter drier exits
             FilterIN(1)=CondIN(1) !Mass flow rate, kg/s
@@ -339,9 +328,9 @@
             PiExp=PiExp-FilterDP
             CondOUT(10)=PiExp
 
-            Pressure=PiExp*1000
-            Enthalpy=HiExp*1000
-            XiExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)
+            Pressure=PiExp*1000 !RS Comment: Unit Conversion
+            Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
+            XiExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
                 IERR=1
@@ -350,9 +339,9 @@
             END IF
         END IF 
 
-        TRIE=TiExp*1.8+32
+        TRIE=TiExp*1.8+32   !RS Comment: Unit Conversion, from C to F
 
-        Pressure=PiExp*1000
+        Pressure=PiExp*1000 !RS Comment: Unit Conversion
         Quality=0
         TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
@@ -368,7 +357,7 @@
             CYCLE
         END IF
 
-        TSATEI=TSATEI*1.8+32
+        TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
         TSAVG=(TSATCI+TSATEI)/2
         IF(TSAVG.LT.TAIC) THEN
@@ -392,9 +381,6 @@
                 IF (PrnLog .EQ. 1) THEN
                     WRITE(6,*)'Try another condenser or compressor.'
                 END IF
-                !WRITE(*,*)'Press return to terminate program'
-                !READ(*,*)
-                !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
             IERR=2
@@ -569,9 +555,6 @@
                     IF (PrnLog .EQ. 1) THEN
                         WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
-                    !WRITE(*,*)'Press return to terminate program'
-                    !READ(*,*)
-                    !RS Comment: Previously: CALL SLEEP(300) !Wait for 5 minutes and stop
                     STOP
                 CASE (2)
                     WRITE(*,*)'Trying another iterating value....'

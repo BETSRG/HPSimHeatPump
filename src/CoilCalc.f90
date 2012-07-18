@@ -429,10 +429,6 @@ REAL Wabsolute  !Absolute oil mass fraction
 REAL hcRef !Refrigerant side heat transfer coefficient, [kW/m^2-K]
 REAL EF    !Heat transfer enhancement factor, [-]
 
-!Subroutine local parameters:
-!REAL,PARAMETER :: Gref=250.0    !Reference mass flux, [kg/s-m^2]
-!REAL,PARAMETER :: OilFrac=0.025 !Oil fraction, [-]
-
 !Subroutine local variables:
 REAL xRef	  !Quality of refrigerant, [-]
 REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
@@ -463,24 +459,8 @@ REAL hcRefVap !Refrigerant heat transfer coefficient at
 			IF (Qout .LT. 0) THEN
                 Qout=0
             END IF
-			!IF (xRef .LT. xMax) THEN !ISI - 09/11/06
-			!IF (xRo .LT. xMax) THEN
-				!CALL hTPevapWattelet(ID,mRef,muf,mug,vf,vg,kL*1e3,kV*1e3,CpL*1e3,CpV*1e3,xRef, &
-				!					 Psat,Pcrit,MolWeight,Qout*1e3,AoMod,AiMod,hcRef)
-				hcRef=OilMixtureHTCevap(Gref,xRef,ID,muf,mug,1/vf,1/vg,kL*1e3,CpL*1e3,Wabsolute)*1e-3
-				!CALL hTPShahEvap(ID,xRef,mRef,Qout,hfg,vg,vf,muRef,mug,muf,kL,CpL,Psat,Pcrit,hcRef)
-			!ELSE 
-				!ISI - 09/11/06
-				!xAvg=(xRi+xMax)/2 
-			!	CALL hTPevapWattelet(ID,mRef,muf,mug,vf,vg,kL*1e3,kV*1e3,CpL*1e3,CpV*1e3,xMax, &
-			!					     Psat,Pcrit,MolWeight,Qout*1e3,AoMod,AiMod,hcRefMax)
-				!CALL hTPShahEvap(ID,xRef,mRef,Qout,hfg,vg,vf,muRef,mug,muf,kL,CpL,Psat,Pcrit,hcRef)
-				!CALL hSPGnielinski(ID,mRef,xVap,mug,mug,muf,kV,CpV,hcRefVap)
-				!CALL hSPDittus(CoilType,ID,mRef,xVap,mug,mug,muf,kV,CpV,hcRefVap)
 
-				!hcRef=(xRef-xMax)/(xVap-xMax)*(hcRefVap-hcRefMax)+hcRefMax
-				!hcRef=(xRef-xAvg)/(xVap-xAvg)*(hcRefVap-hcRefAvg)+hcRefAvg
-			!END IF
+				hcRef=OilMixtureHTCevap(Gref,xRef,ID,muf,mug,1/vf,1/vg,kL*1e3,CpL*1e3,Wabsolute)*1e-3
 	    
 		END IF
 
@@ -607,10 +587,8 @@ REAL kA       !Thermal conductivity, [kW/m-K]
 REAL CPair    !Specific heat of air, [kJ/kg-K]
 REAL PrAir    !Prandtl number of air, [-]
 REAL rhoAvg   !Average air density, [kg/m^3]
-!REAL Pd       !Diagonal pitch, [m]
 REAL Dc       !Tube outside diameter including fin collar, [m]
 REAL Dh       !Hydraulic diameter, [m]
-!REAL Deq      !Equivalent fin diameter, [m]
 REAL Rc       !Tube outside radius including fin collar, [m]
 REAL HXdep    !Heat exchanger depth, [m]
 REAL HXheight !Heat exchanger height, [m]
@@ -622,7 +600,6 @@ REAL AbrCoil  !Bared tube coil surface area, [m^2]
 REAL AmCoil   !Mean coil surface area, [m^2] 
 REAL Acs      !Cross-sectional area, [m^2]
 REAL AfrCoil  !Frontal area, [m^2]
-!REAL HXvol    !Heat exchanger volume, [m^3]
 REAL Gmax     !Maximum mass flux, [kg/s-m^2]
 REAL ReDc     !Reynold number based on Dc, [-]
 REAL RePl     !Reynold number based on Pl, [-]
@@ -695,29 +672,16 @@ INTEGER I
 
   !Reynolds # based on longitudinal pitch
   RePl=Gmax*Pl/muA
-  
-  !Volume
-  !HXvol=Pt*Nt*Pl*Nl*Ltube
       
   SELECT CASE (FinType)
   !CASE (1,2,3,4,6,7,8,9,10)
   CASE (PLAINFIN,WAVYFIN)
-  !IF (FinType .LE. 3) THEN !Pulbished correlations
-
-!    OPEN (321,FILE='FinType.csv')
-!	WRITE(321,*)'Face,hco,DP'
-!	mAiCoil=1.0
-!    
-!	DO I=1, 20
 
 	FaceVel=mAiCoil/(rhoIn*AfrCoil)
 	Gmax=mAiCoil/Amin
 	ReDc=Gmax*Dc/muA
 	
 	RePl=Gmax*Pl/muA
-
-	!Vmax=FaceVel*AfrCoil/Amin
-	!ReLp=rhoIn*Vmax*LouverPitch/muA
 
 	!J-factors
 	CALL CalcJfactor(CoilType,FinType,WetFlag,FinSpg,FinThk,Ltube,HXdep,Nl,Nt,RowNum, &
@@ -742,13 +706,6 @@ INTEGER I
 	Ke=-1.272*sigma+0.8726 !McQuiston
 	DP=(Gmax**2)/(2*rhoIn)*((Ki+1-sigma**2)+2*(rhoIn/rhoOut-1)+Ffactor*(AoCoil/Amin)*(rhoIn/rhoAvg) &
 	                        -(1-sigma**2-Ke)*rhoIn/rhoOut)*1E-3
-
-!	WRITE(321,*)FaceVel,',',hco*1000,',',DP*1000
-!	mAiCoil=mAiCoil+0.08
-!
-!	END DO
-
-!	CLOSE(321); STOP
 
 END SELECT
   RETURN
@@ -811,12 +768,8 @@ REAL AmCoil   !Mean coil surface area, [m^2]
 !Subroutine local variables
 REAL Dc       !Tube outside diameter including fin collar, [m]
 REAL Rc       !Tube outside radius including fin collar, [m]
-!REAL HXdep    !Heat exchanger depth, [m]
-!REAL HXheight !Heat exchanger height, [m]
-!REAL Amin     !Minimum free flow area, [m^2]
 REAL AbsCoil  !Coil base surface area, [m^2]
 REAL AbrCoil  !Bared tube coil surface area, [m^2]
-!REAL Acs      !Cross-sectional area, [m^2]
 REAL AfrCoil  !Frontal area, [m^2]
 REAL FinPitch !Fin pitch, [fins/m]
 REAL FinHeight !Fin height, [m]
@@ -1077,8 +1030,6 @@ INTEGER CoilType !1=Condenser; 2=Evaporator;
 				 !4=Low side interconnecting pipes
 				 !5=Microchannel condenser
 				 !6=Microchannel evaporator
-
-
 INTEGER          WetFlag  !Wet flag: 1-wet; Otherwise-dry
 REAL Kfin     !Fin conductivity, [kW/m-K]
 REAL FinThk   !Fin thickness, [m]
@@ -1087,7 +1038,6 @@ REAL Ktube    !Tube conductivity, [kW/m-K]
 REAL TubeThk  !Tube thickness, [m]
 REAL OD       !Outside diameter of tube, [m]
 REAL TubeDepth !Tube depth, [m]
-!REAL ID       !Inside diameter of tube, [m]
 INTEGER RowNum   !Row number
 REAL Pt       !Tube spacing, [m]
 REAL Pl       !Row spacing, [m]
@@ -1612,10 +1562,6 @@ REAL hVap
 	CALL hSPDittus(CoilType,ID,mRef,1.00,mug,mug,muf,kV,CpV,hVap)
 	hTP=(xRef-1)/(xMax-1)*(hTPmax-hVap)+hVap
   END IF
-
-  !Gref=mRef/(PI*ID**2/4)
-  !hliq=0.023*(kL/ID)*(Gref*(1-xRef)*ID/muf)**0.8*(CpL*muf/kL)**0.3
-  !hTP=hliq*(1+3.8/Pred**0.38*(xRef/(1-xRef))**0.76)
 
   RETURN
 
@@ -2321,10 +2267,6 @@ END SUBROUTINE hTPconst
 
 !*************************************************************************************
 
-!SUBROUTINE MODdP(RefName,CoilType,TubeType,tRi,tRo,pRi,hg,hf,hRi,hRo,xRi,xRo, &
-!                 vRi,vRo,vgi,vfi,vgo,vfo,mRef,muRef,mug,muf,Sigma, &
-!				 Lmod,LmodTPratio,ID,OD,HtCoil,Lcoil,dPfric,dPmom,dPgrav)
-
 SUBROUTINE MODdP(CoilType,TubeType,tRi,tRo,pRi,hg,hf,hRi,hRo,xRi,xRo, &
                  vRi,vRo,vgi,vfi,vgo,vfo,mRef,muRef,mug,muf,Sigma, &
 				 Lmod,LmodTPratio,ID,OD,HtCoil,Lcoil,dPfric,dPmom,dPgrav)
@@ -2397,7 +2339,7 @@ REAL dPfric    !Frictional pressure drop, [kPa]
 REAL dPmom     !Momentum pressure drop, [kPa] 
 REAL dPgrav    !Gravitational pressure drop, [kPa]
 
-!Subroutie local variables:
+!Subroutine local variables:
 REAL dPfricSP  !Single phase frictional pressure drop, [kPa]
 REAL dPmomSP   !Single phase momentum pressure drop, [kPa]
 REAL dPgravSP  !Single phase gravitational pressure drop, [kPa]
@@ -2432,8 +2374,6 @@ REAL PF        !Pressure enhancement factor
   END IF
 
   IF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. (xRo .LT. 1 .AND. xRo .GT. 0)) THEN
-    !CALL TWOPhasedPLM(tRi,pRi,xRi,xRo,vRi,vgi,vfi,Lmod, &
-    !                  dPfric,dPmom,dPgrav,mRef,ID,mu,mug,muf,HtCoil,Lcoil)
 	IF (CoilType .EQ. MCCONDENSER .OR. &
 	    CoilType .EQ. MCEVAPORATOR) THEN
 		
@@ -2612,16 +2552,8 @@ REAL PF        !Pressure enhancement factor
 	dPgrav=dPgravSP+dPgravTP
 
   ELSE
-    !PF=1
-	!IF (TubeType .NE. 1) PF=1.7
 	CALL ONEPhasedP(CoilType,tRi,pRi,xRi,vRi,vRo,vgi,vfi,Lmod, &
                     dPfric,dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
-	!dPfric=PF*dPfric
-	!dPmom=PF*dPmom
-	!dPgrav=PF*dPgrav
-
-    !RETURN
-
   END IF
 
   Gref=mRef/(PI*ID**2/4)
@@ -2789,7 +2721,6 @@ REAL viVap    !Vapor specific volume, [m^3/kg]
 
   CALL Reynolds(ID,mRef,xRef,muRef,mug,muf,ReVap,ReLiq)
 
-
   CALL FannFact(0.00,ReLiq,CoilType,fLiq)
   CALL FannFact(1.00,ReVap,CoilType,fVap)
 
@@ -2875,7 +2806,6 @@ REAL ReTransit !Reynolds number transition from laminar to turbulent
   IF (Re .EQ. 0.0) THEN
       ff=0.0
   END IF
-  !IF (Re .GT. ReTransit .AND. Re .LT. 1E5) THEN
   IF (Re .GT. ReTransit) THEN
     IF (xRef .GE. 1.0) THEN
         ff=0.046/(Re**(0.20))
@@ -2892,9 +2822,6 @@ REAL ReTransit !Reynolds number transition from laminar to turbulent
 END SUBROUTINE FannFact
 
 !************************************************************************
-
-!SUBROUTINE TWOPhasedPLM(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
-!                        dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
 
 SUBROUTINE TWOPhasedPLM(tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
                         dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
@@ -3048,7 +2975,6 @@ IMPLICIT NONE
 !Inputs:
 REAL tRi     !Refrigerant inlet temperature, [C]
 REAL tRo     !Refrigerant Outlet temperature, [C]
-!REAL pRi     !Refrigerant inlet pressure, [kPa]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
 REAL vRi     !Refrigerant specific volume, [m^3/kg]
@@ -3071,15 +2997,11 @@ REAL dPmom   !Momentum pressure drop, [kPa]
 REAL dPgrav  !Gravitational pressure drop, [kPa]
 
 !Subroutine local variables:
-!REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
-!REAL dPdZfVap   !Vapor frictional pressure gradient, [kPa/m]
 REAL dPdZfric   !Frictional pressure gradient, [kPa/m]
 REAL dPdZmom    !Momentum pressure gradient, [kPa/m]
 REAL dPdZgrav   !Gravitational pressure gradient, [kPa/m]
-!REAL PHIg       !Intermediate variable
 REAL alphai     !Intermediate variable
 REAL alphao     !Intermediate variable
-!REAL Xi         !Martinelli parameter
 REAL Gref       !Refrigerant mass flux, [kg/s-m^2]
 REAL Acs        !Cross sectional area, [m^2]
 REAL DPDZliq    !Liquid only pressure graident, Pa/m
@@ -3205,7 +3127,6 @@ IMPLICIT NONE
 !Inputs:
 REAL tRi     !Refrigerant inlet temperature, [C]
 REAL tRo     !Refrigerant Outlet temperature, [C]
-!REAL pRi     !Refrigerant inlet pressure, [kPa]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
 REAL vRi     !Refrigerant specific volume, [m^3/kg]
@@ -3230,16 +3151,11 @@ REAL dPgrav  !Gravitational pressure drop, [kPa]
 !Subroutine local variables:
 REAL,PARAMETER :: IDReference = 0.01 !reference diameter, m
 REAL,PARAMETER :: muReference = 121.33e-6 !reference viscosity, Pa-s at 25 °C, R410A
-
-!REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
-!REAL dPdZfVap   !Vapor frictional pressure gradient, [kPa/m]
 REAL dPdZfric   !Frictional pressure gradient, [kPa/m]
 REAL dPdZmom    !Momentum pressure gradient, [kPa/m]
 REAL dPdZgrav   !Gravitational pressure gradient, [kPa/m]
-!REAL PHIg       !Intermediate variable
 REAL alphai     !Intermediate variable
 REAL alphao     !Intermediate variable
-!REAL Xi         !Martinelli parameter
 REAL Gref       !Refrigerant mass flux, [kg/s-m^2]
 REAL Acs        !Cross sectional area, [m^2]
 REAL DPDZliq    !Liquid only pressure graident, Pa/m
@@ -3277,7 +3193,6 @@ REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
   rhof=1/vfi
   
   rhoRef = 1/(xRef/rhog+(1-xRef)/rhof)
-!  muRef=xRef*mug+(1-xRef)*muf
 
   ReLiq=Gref*ID/muf*(1-xRef)
   fLiq=0.079/ReLiq**0.25
@@ -3285,20 +3200,6 @@ REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
   DPDZfric=DPDZliq
 
   IF (xRef .GE. 0.05) THEN
-!  	  FrLiq=Gref**2/(rhof**2*9.8*ID)
-!  	  
-!  	  IF (FrLiq .GT. 0 .AND. FrLiq .LT. 0.7) THEN
-!  		C1=4.172+5.48*FrLiq-1.564*FrLiq**2
-!  		C2=1.773-0.169*FrLiq
-!  	  ELSE
-!  		C1=7.242
-!  		C2=1.655
-!  	  END IF
-!  	  
-!  	  Xtt=((rhog/rhof)**0.5)*((muf/mug)**0.125)*(((1-xRef)/xRef)**0.875)
-!  	  
-!  	  phiLiq=(1.376+C1/Xtt**C2)**0.5
-  	  
   	  ReVap=Gref*ID/mug*xRef
   	  fvap=0.079/ReVap**0.25
   	    
@@ -3311,8 +3212,6 @@ REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
   	  omega=EXP(-(IDreference/ID)**1.7)*LOG(350/(We*(ReLiq/ReLiqReference)**1.3))
 
   	  phiLiq=(A1+3.24*A2*A3/(Fr**0.045*We**0.035+omega))**0.5
-
-  	  !phiLiq=(1+5/Xtt+1/Xtt**2)**0.5 !Chisholm 1973
   	  
   	  DPDZfric=DPDZliq*phiLiq**2
   END IF
@@ -3421,27 +3320,8 @@ REAL, PARAMETER :: AcsturboA = 60.8e-6  !Turbo-A tube cross sectional area, [m^2
 
 !Flow:
 
-  !Turbo-A
-  !Nfin=60
-  !Sp=0.707e-3
-  !beta=18.0
-  !Afin=0.255e-6
-  !Acs=PI*ID**2/4-Nfin*Afin
-  !Dh=2*Acs*COSD(beta)/(Nfin*Sp)
-
-  !IF (TubeType .NE. 1) THEN
-  !IF (TubeType .NE. SMOOTH) THEN
-  !	IF ((TubeType .EQ. OUTOHELICAL) .OR. (TubeType .EQ. OUTO42FHXH)) THEN
-  !	  Dh=ID
-  !	  Acs=PI*ID**2/4
-  !	ELSE  	
-  ! 	  Dh=OD/ODturboA*DhturboA !Proportion
-  !	  Acs=(OD/ODturboA)**2*AcsturboA !Square proportion
-  !	END IF
-  !ELSE
 	  Dh=ID
 	  Acs=PI*ID**2/4
-  !END IF
 
   !Two-phase friction and momentum pressure change
   hfg=hg-hf
@@ -3558,7 +3438,6 @@ END SUBROUTINE
 
 !************************************************************************
 
-!SUBROUTINE PmomTWOphase(tRi,tRo,vgi,vfi,xRi,vgo,vfo,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 SUBROUTINE  PmomTWOphase(tRi,tRo,vgi,vfi,vgo,vfo,xRi,xRo,alphai,alphao,Lmod,dPdZmom,mRef,ID)
 
 !------------------------------------------------------------------------
@@ -3585,7 +3464,6 @@ IMPLICIT NONE
 !Inputs:
 REAL tRi      !Refrigerant temperature, [C]
 REAL tRo      !Refrigerant temperature, [C]
-!REAL pRi      !Refrigerant  pressure, [kPa]
 REAL vgi      !Vapor specific volume, [m^3/kg]
 REAL vfi      !Liquid specific volume, [m^3/kg]
 REAL vgo      !Vapor specific volume, [m^3/kg]
@@ -3605,8 +3483,6 @@ REAL dPdZmom  !Momentum pressure gradient, [kPa/m]
 REAL dPdZmomI !Inlet pressure gradient, [kPa/m] 
 REAL dPdZmomO !Outlet pressure gradient, [kPa/m]
 REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
-!REAL Pout     !Outlet pressure, [kPa]
-!REAL Pin      !Inlet pressure, [kPa]
 
 !Flow:
 
@@ -3795,7 +3671,7 @@ REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
 		ReLiq=(Gref*ID/muRliq)
 	END IF
     ReVap=0.0
-  ELSE !IF (x .LE. 1. .AND. x .GE. 0.) THEN
+  ELSE
     ReLiq=(Gref*ID/muRliq)*(1.0-xRef)
     ReVap=(Gref*ID/muRvap)*xRef
   END IF
@@ -3911,19 +3787,9 @@ REAL Kfactor  !K factor
   Acs=(PI*ID*ID)/4.0
   Gref=mRef/Acs
       
-  rhog=1./vgi
-  rhof=1./vfi
-      
-  !IF (xRef .GT. 0.0 .AND. xRef .LT. 1.0) THEN !Two-phase
-  !  phi=rhog/rhof*(muf/mug)**0.25
-  !  betac=(phi+0.58*xRef*(1-phi))*(1-xRef)**0.333+xRef*2.276
-  !  dPman=Gref**2.0*xi*betac/(2*rhog)
-  !ELSE
-  !  Kfactor=0.5
-  !	VelRef=Gref*vRef
-  !  dPman=Kfactor*VelRef**2/(2*vRef)
-  !END IF
-
+  rhog=1./vgi   !Vapor Density
+  rhof=1./vfi   !Liquid Density
+  
   IF (CoilType .EQ. HIGHSIDETUBE) THEN
 	Kfactor=Kcond
   ELSEIF (CoilType .EQ. LOWSIDETUBE) THEN
@@ -3938,7 +3804,7 @@ REAL Kfactor  !K factor
 	DPman=DPman*betac
   END IF
 
-  DPman=DPman/1000.
+  DPman=DPman/1000. !RS Comment: Unit Conversion
 
   RETURN
       
@@ -4014,20 +3880,10 @@ REAL Kfactor !K factor
 
   Acs=(PI*ID*ID)/4.0
   Gref=mRef/Acs
-  rhog=1./vgi 
-  rhof=1./vfi
-  rho=1./vRef
-	      
-  !IF (xRef .LE. 0.0 .OR. xRef .GE. 1.0) THEN
-  !  Kfactor=0.33
-  !  VelRef=Gref/rho
-  !  DPret=Kfactor*rho*VelRef**2/2
-  !ELSE
-  !  phi=rhog/rhof*(muf/mug)**0.25
-  !  betac=(phi+3.0*xRef*(1-phi))*(1-xRef)**0.333+xRef*2.276
-  !  DPret=Gref**2.0*xi*betac/(2*rhog)
-  !END IF
-
+  rhog=1./vgi   !Vapor Density
+  rhof=1./vfi   !Liquid Density
+  rho=1./vRef   !Refrigerant Density
+  
   !ISI - 09/12/06
   Kfactor=1/(3.426*LOG(Pt/2/ID)+3.8289) !Curve fit from table data
 
@@ -4172,13 +4028,7 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
 	MassMod=MassModSP+MassModTP
 
   ELSEIF ((xRi .LT. 1 .AND. xRi .GT. 0) .AND. xRo .LE. 0) THEN !Condenser outlet
-	!FracTP=(hRi-hf)/(hRi-hRo)
 	FracTP=LmodTP/Lmod
-
-    !CALL CalcMassTP(RefName,CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,DBLE(1.0E-6),vgi,vfi,vgo,vfo,muRef,mug,muf, &
-    !                 kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
-	!				 Cair,Const,Rair,Rtube,AiMod,Lmod, &
-    !                 MassLiqTP,MassVapTP,MassModTP)
 
     CALL CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg,xRi,1.0E-6,vgi,vfi,vgo,vfo,muRef,mug,muf, &
                      kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
@@ -4212,7 +4062,6 @@ REAL MassModSP  !Mass in single-phase portion, [kg]
 
   ELSE
 	!Single-phase region
-    !rhoRef=(1/vRo+1/vRi)/2 !ISI - 07/26/07
     IF (xri .GE. 1) THEN
         rhoRef=1/vgi
     ELSE
@@ -4313,9 +4162,9 @@ REAL VoidFrac   !Void fraction
   
   VoidFrac=ABS(VoidFrac)
 
-  MassLiq=Vol*rhof*(1-VoidFrac)
-  MassVap=Vol*rhog*VoidFrac
-  MassTot=MassLiq+MassVap
+  MassLiq=Vol*rhof*(1-VoidFrac) !Liquid Mass
+  MassVap=Vol*rhog*VoidFrac     !Vapor Mass
+  MassTot=MassLiq+MassVap       !Total Mass
   
   RETURN
 
@@ -4467,10 +4316,10 @@ REAL alpha      !Void fraction
   Vol=Acs*Lmod
   Gref=mRef/Acs
 
-  CALL CalcMeanProp(vgo,vgi,vg)
-  CALL CalcMeanProp(vfo,vfi,vf)
-  rhog=1/vg
-  rhof=1/vf
+  CALL CalcMeanProp(vgo,vgi,vg) !Determining the mean vapor specific volume
+  CALL CalcMeanProp(vfo,vfi,vf) !Determining the mean liquid specific volume
+  rhog=1/vg     !Vapor Density
+  rhof=1/vf     !Liquid Density
 
   xo=xRo
   xi=xRi
@@ -4497,9 +4346,9 @@ REAL alpha      !Void fraction
 
   alpha=ABS(alpha)
 
-  MassLiq=Vol*rhof*(1-alpha)
-  MassVap=Vol*rhog*alpha
-  MassTot=MassLiq+MassVap
+  MassLiq=Vol*rhof*(1-alpha)    !Liquid Mass
+  MassVap=Vol*rhog*alpha        !Vapor Mass
+  MassTot=MassLiq+MassVap       !Total Mass
 
   RETURN
 
@@ -4633,12 +4482,9 @@ REAL Muf   !Dynamic visocity of refrigerant liquid, [Pa-s]
 REAL alpha !Void fraction
 
 !Subroutine local variables:
-REAL Xtt   !Lockhart-Martinelli parameter
 REAL Ft    !Intermediate variable
 
 !Flow:
-
-  !Xtt=((1-xRef)/xRef)**0.9*(rhog/rhof)**0.5*(mug/muf)**0.1
 
   Ft=(xRef**3*Gref**2/(rhog**2*9.8*ID*(1-xRef)))**0.5
   
@@ -4949,7 +4795,6 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	  !  jfactor = 1.9015 * RePl ** (-0.5918) !1-row
 	  !END IF
 
- 
     !CASE (2) !Dry wavy fin
     CASE (WAVYFIN)
 	  !Nl=1-6
@@ -4990,7 +4835,6 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
   ELSE 
 
     SELECT CASE (FinType)
-    !CASE (1) !Wet plain fin
     CASE (PLAINFIN)
       j1=0.3745-1.554*(FinSpg/Dc)**0.24*(Pl/Pt)**0.12*Nl**(-0.19)
       jfactor=19.36*ReDc**j1*(FinSpg/Dc)**1.352*(Pl/Pt)**0.6795*Nl**(-1.291)
@@ -5120,7 +4964,6 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
   IF (WetFlag .EQ. 0) THEN
 
     SELECT CASE (FinType)
-    !CASE (1) !Dry plain fin
 
 	!insert correlations  here!
 
@@ -5149,8 +4992,7 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  F2=-15.689+64.021/LOG(ReDc)
 	  F3=1.696-15.695/LOG(ReDc)
 	  Fricfactor=0.0267*ReDc**F1*(Pt/Pl)**F2*((1/FinPitch)/Dc)**F3
-      
-	!CASE (2) !Dry wavy fin
+
 	CASE (WAVYFIN)
 	  beta=PI*Dc**2/(4*Pt*Pl)
 	  Dh=2*FinSpg*(1-beta)/((1-beta)*(1/COSD(theta))+2*FinSpg*beta/Dc)
@@ -5166,7 +5008,7 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  	F3=-0.192*Nl
 	  	F4=-0.646*TAND(theta)
 	  	Fricfactor=4.37*ReDc**F1*(FinSpg/Dh)**F2*(Pl/Pt)**F3*(Dc/Dh)**0.2054*Nl**F4
-	  ELSE !(ReDc .GE. 1000)
+	  ELSE
 	    F1=-0.141*(FinSpg/Pl)**0.0512*(TAND(theta))**(-0.472)*(Pl/Pt)**0.35 &
 	  	   *(Pt/Dh)**(0.449*TAND(theta))*Nl**(-0.049+0.237*TAND(theta))
 	  	F2=-0.562*(LOG(ReDc))**(-0.0923)*Nl**0.013
@@ -5174,17 +5016,10 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  	F4=-0.306+3.63*TAND(theta)
 	  	Fricfactor=0.228*ReDc**F1*TAND(theta)**F2*(FinSpg/Pl)**F3*(Pl/Dc)**F4*(Dc/Dh)**0.383*(Pl/Pt)**(-0.247)
 	  END IF
-
-	  !f1=0.4604-0.01336*((1/FinPitch)/Pl)**0.58*LOG(AoCoil/AbrCoil)*(TAND(theta))**(-1.5)
-	  !f2=3.247*((1/FinPitch)/Pt)**1.4*LOG(AoCoil/AbrCoil)
-	  !f3=-20.113/(LOG(ReDc))
-	  !FricFactor=0.01915*ReDc**f1*TAND(theta)**f2*((1/FinPitch)/Pl)**f3*(LOG(AoCoil/AbrCoil))**(-5.35)*(Dh/Dc)**1.3796*Nl**(-0.0916)
-
     END SELECT
   ELSE 
     SELECT CASE (FinType)
     CASE (1) !Wet plain fin
-
 
     CASE DEFAULT !Wet louvered fin
   	END SELECT
@@ -6088,8 +5923,7 @@ REAL PF      !Penalty factor
     SELECT CASE (TubeType) !Outokumpu data
 	CASE (SMOOTH)
       PF=1
-	CASE (MICROFIN) !General micro fin, Eckels et al. (1998) ASHRAE RP-630   
-	  !PF=-2E-17*Gref + 1.2958
+	CASE (MICROFIN) !General micro fin, Eckels et al. (1998) ASHRAE RP-630
 	  PF=1
 	CASE (HERRINGBONE)
 	  IF (Gref .GT. 800) THEN

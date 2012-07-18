@@ -79,27 +79,27 @@ REAL HiLiq !Liquid line enthalpy, kJ/kg
   ErrorFlag=0
 
   !Calc. compressor capacity
-  Pressure=PiCmp*1000
+  Pressure=PiCmp*1000   !RS Comment: Unit Conversion
   Quality=1
-  TsatSuc=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+  TsatSuc=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Compressor Suction Saturation Temperature
   CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
 
   Temperature=TsatSuc+DTsup
-  Pressure=PiCmp*1000
-  HiCmp=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
+  Pressure=PiCmp*1000   !RS Comment: Unit Conversion
+  HiCmp=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Compressor Suction Enthalpy
   CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
-  HiCmp=HiCmp/1000
+  HiCmp=HiCmp/1000  !RS Comment: Unit Conversion
 
-  Pressure=PoCmp*1000
+  Pressure=PoCmp*1000   !RS Comment: Unit Conversion
   Quality=0
-  TsatDis=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)
+  TsatDis=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Compressor Discharge Saturation Temperature
   CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
     
   Temperature=TsatDis-DTsub
-  Pressure=PoCmp*1000
-  HiLiq=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)
+  Pressure=PoCmp*1000   !RS Comment: Unit Conversion
+  HiLiq=TP(RefName, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Liquid Line Enthalpy
   CALL IssueRefPropError(RefPropErr, 'TXV', 2, ErrorFlag)
-  HiLiq=HiLiq/1000
+  HiLiq=HiLiq/1000  !RS Comment: Unit Conversion
 
   Qcmp=mdot*(HiCmp-HiLiq)
   Qcmp=Qcmp*0.2843
@@ -362,7 +362,6 @@ REAL CFmax !Maximum correction factor
 	CFmax=aMax*DP**bMax !Power fit
 
 	CF=(Tevp-Tmin)/(Tmax-Tmin)*(CFmax-CFmin)+CFmin		  
-
 
 RETURN
 

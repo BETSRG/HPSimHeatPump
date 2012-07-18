@@ -232,11 +232,13 @@ SUBROUTINE EndEnergyPlus
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
+  
     SUBROUTINE ShowMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
+    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -271,7 +273,6 @@ SUBROUTINE EndEnergyPlus
   close(tempfl)
   CALL CloseMiscOpenFiles
   CALL DeallocateArrays !-ISI 02/23/04
-  !STOP 'EnergyPlus Completed Successfully.' -ISI 02/19/04
 
   RETURN
 
@@ -393,11 +394,13 @@ SUBROUTINE ShowFatalError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
+  
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
+    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -446,11 +449,13 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
+  
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
+    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -499,11 +504,13 @@ SUBROUTINE ShowContinueError(Message,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
+  
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
+    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -550,11 +557,13 @@ SUBROUTINE ShowMessage(Message,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
-    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
+    
+  SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
-    END SUBROUTINE
+  END SUBROUTINE
+  
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -602,11 +611,13 @@ SUBROUTINE ShowWarningError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
-    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
+    
+  SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
     CHARACTER(len=*) Message
     INTEGER, OPTIONAL :: Unit1
     INTEGER, OPTIONAL :: Unit2
-    END SUBROUTINE
+  END SUBROUTINE
+  
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS

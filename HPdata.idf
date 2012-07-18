@@ -624,7 +624,7 @@ ODCcktVelocityProfileRawData,
     !All for segment 1
     6, !No. of Data
     0, !Coil Height Data Entry #1
-    0.5, !Coil Height Data Entry #2
+    0.2, !Coil Height Data Entry #2
     0.4, !Coil Height Data Entry #3
     0.6, !Coil Height Data Entry #4
     0.8, !Coil Height Data Entry #5
