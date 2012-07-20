@@ -28,7 +28,7 @@
     !
     !
     USE InputPreProcessor
-    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    USE FluidProperties_HPSim
     USE HeatPumpInput
     USE CompressorMod
     USE CondenserMod
@@ -124,6 +124,8 @@
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
+    !OPEN(5,FILE='YorkHP_longtubes.out')     ! VL_User_Setting -- file name
+    !OPEN(6,FILE='YorkHP_longtubes.log')     ! VL_User_Setting -- file name
 
     CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
 
@@ -725,8 +727,6 @@
                 CondOUT(18)=MassCoil      	! VL_Index_Replace
             END IF
 
-            ! VL : Previously ...
-            !GOTO 30
             FLAG_GOTO_30 = .TRUE.
 
         CASE DEFAULT
@@ -774,14 +774,6 @@
             END IF
             DTCONV = EVPCON
 
-            !10      CONTINUE   ! VL: No "GO TO" statement refers to this label .... so just commenting out should affect now change to the control branching behavior ...
-
-            !IERROR = 0
-        
-            !VL : Previously : 
-            !IF(ICHRGE.EQ.0) GO TO 20
-            !IF (Refchg .EQ. 0) GO TO 20
-        
             IF(ICHRGE.EQ.0) THEN
                 FLAG_GOTO_20 = .TRUE.
             END IF
@@ -805,8 +797,6 @@
                 !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP, IError)
                 !      SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
             
-                !VL : Previously 
-                !GO TO 30 !Skip refined simulation <--- which means the block of code-underneath is never executed !!
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
 
@@ -829,17 +819,11 @@
                     DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                     !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP,IError)
 
-                    ! VL : Previously
-                    !GO TO 30
                     FLAG_GOTO_30 = .TRUE.   ! VL : This will not get executed either !!
                 
                 ENDIF
         
-                ! ----------
             ENDIF
-
-            !VL : Previously 
-            !20      CONTINUE
 
             ! VL : Check if a GOTO 30 was intended previously ... and skip code block accordingly ....
         
@@ -849,8 +833,6 @@
                 !1st run is for coarse convergence criteria
                 CALL HPDM(DTVALU)
 
-                ! VL : Previously ...
-                !GO TO 30 !Skip refined simulation
                 FLAG_GOTO_30 = .TRUE.
                 IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN
 
@@ -875,14 +857,6 @@
             ENDIF
             
         ENDIF
-
-        ! VL : Previously    
-        !30      CONTINUE
-        ! --------------------------------
-        
-        !Comment block ends here
-        !CLOSE(5)
-        !CLOSE(6)
 
         CALL DumpOutputs
 
@@ -941,16 +915,6 @@
 
     STOP
 
-    !!VL: Previously: 
-!!103 FORMAT(A20,F30.2) 
-!!1005 FORMAT(I20,10(F20.2))
-!!1006 FORMAT(10(A20))
-!!1007 FORMAT(A17,A42)
-!!1008 FORMAT(A13,F10.3,A10,A10,A13,F10.3,A10)
-!!2001 FORMAT(A13,F10.3,A10)
-!!2004 FORMAT(A56,F10.3,A10)
-!!2007 FORMAT(A16,F10.3,A9)
-!!
     END PROGRAM
 
     ! Comment Index

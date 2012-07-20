@@ -67,7 +67,6 @@ MODULE InputProcessor
    LOGICAL RequiredObject ! True if this object has been designated \required-object
    INTEGER ObsPtr         ! If > 0, object is obsolete and this is the
                           ! Pointer to ObsoleteObjectRepNames Array for replacement object
-   !INTEGER VersionNum     ! Version number for this Definition
    LOGICAL(1), POINTER, DIMENSION(:) :: AlphaorNumeric ! Positionally, whether the argument
                           ! is alpha (true) or numeric (false)
    LOGICAL(1), POINTER, DIMENSION(:) :: ReqField ! True for required fields
@@ -2201,7 +2200,6 @@ SUBROUTINE TellMeHowManyObjectItemArgs(Object,Number,NumAlpha,NumNumbers,Status)
   INTEGER, INTENT(OUT) :: NumNumbers
   INTEGER, INTENT(OUT) :: Status
 
-
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -2854,7 +2852,6 @@ FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
           ! na
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
 
           ! FUNCTION ARGUMENT DEFINITIONS:
    CHARACTER(len=*), INTENT(IN) :: InputString    ! Input String

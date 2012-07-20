@@ -796,7 +796,6 @@ REAL CoilHeight   !Coil height, m
 	  AbsCoil=AbrCoil-FinThk*TubeDepth*FinPitch*Lcoil
 	  AoCoil=AbsCoil+AfCoil
 	  AiCoil=PI*Dchannel*NumOfChannels*Lcoil
-	  !AbrCoil=(PI*TubeHeight+2*TubeDepth)*Lcoil
 	  AmCoil=(AiCoil+AbrCoil)/2      !Module tube mean surface area    
   ELSE
 	  !Outside radius, including collar
@@ -1893,7 +1892,7 @@ SUBROUTINE hTPCavalliniStrat_Slug(CoilType,ID,xRef,Gref,rhog,rhof,mug,muf, &
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !Sept 2006
@@ -1965,7 +1964,7 @@ SUBROUTINE hTPShahEvap(ID,xRef,mRef,Qout,hfg,vgi,vfi,muRef,mug,muf,kL,CpL,Psat,P
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -2096,7 +2095,7 @@ SUBROUTINE hTPevapWattelet(ID,mRef,muf,mug,vf,vg,kL,kV,CpL,CpV,xRef,Psat,Pcrit,M
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -2578,7 +2577,7 @@ SUBROUTINE ONEPhasedP(CoilType,tRi,pRi,xRi,vRi,vRo,vgi,vfi,Lmod,dPfric, &
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -3216,7 +3215,6 @@ REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
   	  DPDZfric=DPDZliq*phiLiq**2
   END IF
 
-
   !Two-phase momentum Pchange
   CALL alphaCALC(xRi,vgi,vfi,alphai)
   CALL alphaCALC(xRo,vgo,vfo,alphao)
@@ -3365,7 +3363,7 @@ SUBROUTINE alphaCALC(xR,vg,vf,alpha)
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -3896,7 +3894,7 @@ REAL Kfactor !K factor
 	DPret=Kfactor*Gref**2/(2*rho)
   END IF
 
-  DPret=DPret/1000.0
+  DPret=DPret/1000.0    !RS Comment: Unit Conversion
 
   CALL CalcDPpenaltyFactor(CoilType,TubeType,Gref,PF)
   DPret=DPret*PF
@@ -3918,7 +3916,7 @@ SUBROUTINE Inventory(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -4093,7 +4091,7 @@ SUBROUTINE Homo(xRi,xRo,vgo,vfo,Lmod,ID,MassLiq,MassVap,MassTot)
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -4238,7 +4236,7 @@ SUBROUTINE CalcMassTP(CoilType,TubeType,ID,ktube,mRef,Qout,hfg, &
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !March 2005
@@ -5516,7 +5514,7 @@ SUBROUTINE TWOPhasedPNino(CoilType,mRef,tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !May 2006
@@ -6334,7 +6332,7 @@ SUBROUTINE UpdateMCrefMassFlowRate(Slab,Nl,mRefTot,DPcoil)
 !
 !Author
 !Ipseng Iu
-!Oklahoma State Univerity, Stillwater
+!Oklahoma State University, Stillwater
 !
 !Date
 !July 2007

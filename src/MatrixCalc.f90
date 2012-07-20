@@ -171,8 +171,7 @@ SUBROUTINE LUD(a, n, IPVT, det)
                 End If
             END DO
 !
-       END DO
-             
+       END DO  
 !
        If (Abs(a(n, n)) < 0.00001) Then
            !Print '(//)'
@@ -248,7 +247,6 @@ SUBROUTINE matrix_inverse(a, ainv, n)
 
 INTEGER n
 REAL,DIMENSION(n,n) :: a,ainv
-
 
 INTEGER pivot(n)
 REAL det 

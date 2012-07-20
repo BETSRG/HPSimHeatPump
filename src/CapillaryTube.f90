@@ -173,8 +173,8 @@
 
     ErrorFlag = 0 !Initialize
 
-    Pressure=PiExp*1000
-    Enthalpy=HiExp*1000
+    Pressure=PiExp*1000 !RS Comment: Unit Conversion
+    Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
         RETURN
@@ -223,7 +223,7 @@
         END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
-        VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3
+        VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3  !Distributor tube volume, m^3
         MassDisTube=rhoiEvp*VolDisTube
 
         PoExp=PiEvp+DPdisTot
@@ -564,7 +564,7 @@
         END IF
 
         IDDISTUBE=1./4.-12.0E-3 !1/4 in OD, 12 mil-think
-        VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3
+        VolDisTube=((IDDISTUBE/12**2)*PI/4*LDISTUBE/12*Nckts)*UnitL**3  !Distributor tube volume, m^3
         MassDisTube=rhoiEvp*VolDisTube
 
         PoExp=PiEvp+DPdisTot

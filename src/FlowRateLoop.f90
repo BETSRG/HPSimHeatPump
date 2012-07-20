@@ -142,7 +142,7 @@
 
         IF (SUPER .GT. 0) THEN
             Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
-            Pressure=PiCmp*1000
+            Pressure=PiCmp*1000 !RS Comment: Unit Conversion
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
@@ -178,11 +178,11 @@
             END SELECT
         END IF
 
-        XMR=CompOUT(2)*3600/UnitM
+        XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??
         HoCmp=CompOUT(3)
         ToCmp=CompOUT(5)
 
-        CondIN(1)=XMR*UnitM/3600
+        CondIN(1)=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???
         CondIN(2)=PoCmp         
         CondIN(3)=HoCmp         
         CondIN(4)=XMaC           
@@ -194,7 +194,7 @@
         IF (SystemType .EQ. 4) THEN !Reheat system
             IF (FirstTimeFlowRateLoop) THEN
                 CondIN(4)=XMaE
-                CondIN(5)=(TAIE-32)/1.8
+                CondIN(5)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C
                 CondIN(6)=RHIE
             ELSE
                 CondIN(4)=XMaE
@@ -207,7 +207,7 @@
         IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
             CondPAR(39)=CompPAR(21)*CompOUT(1)
         ELSE !Shell loss in W
-            CondPAR(39)=CompPAR(22)/1000
+            CondPAR(39)=CompPAR(22)/1000    !RS Comment: Unit Conversion, from kW to W?
         END IF
 
         IsCoolingMode=CondPAR(27)
@@ -261,7 +261,6 @@
             END IF
 
         END IF
-        !CALL PrintCondenserResult 
 
         IF (CondOUT(24) .NE. 0) THEN
             SELECT CASE (INT(CondOUT(24))) 
@@ -412,41 +411,7 @@
 
             CNDNSR = CDTRE - DTRE
 
-            MdotR=XMR*UnitM/3600
-
-            ! VL: Previously: 
-            !      IF(DTRIE.LT.0.0) GO TO 1
-            !      IF (Unit .EQ. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-            !	  ELSE
-            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
-            !	  END IF
-            !      GO TO 2
-            !1 CONTINUE
-            !      SXIE = -DTRIE
-            !      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit
-            !      IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'           Desired quality = ',SXIE*100,Xunit
-            !2     CONTINUE
-            !      IF(XIEXP.GT.0.0) GO TO 3
-            !      IF (Unit .EQ. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-            !	  ELSE  
-            !		  IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
-            !	  END IF
-            !      GO TO 4
-            !3 CONTINUE
-            !	  IF (XIEXP .LT. 1) THEN
-            !	      IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
-            !	  ELSE
-            !          IF (PrnLog .EQ. 1) WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
-            !          IF (PrnCon .EQ. 1) WRITE(*,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
-            !	  END IF
-            !4     CONTINUE
+            MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
 
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE
@@ -527,7 +492,7 @@
             !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
             CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
 
-            XMRFLD=CapTubeOUT(1)*3600/UnitM
+            XMRFLD=CapTubeOUT(1)*3600/UnitM !RS Comment: Unit Conversion, lbm/s???
             ToExp=CapTubeOUT(3)
             XoExp=CapTubeOUT(4)
 
@@ -564,7 +529,7 @@
                 END SELECT
             END IF
 
-            XMRFLD=ShTbOUT(1)*3600/UnitM
+            XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s?
             ToExp=ShTbOUT(3)
             XoExp=ShTbOUT(4)
         END IF
@@ -574,7 +539,7 @@
 
         CNDNSR = ( XMRFLD - XMR )
 
-        MdotR=XMR*UnitM/3600
+        MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
 
         IF(.NOT. PRINT) THEN
             !VL: Previously: GO TO 200
@@ -613,7 +578,6 @@
 
         !VL: Previously: IF (.NOT. IsCondenserAllocated) GO TO 300 !ISI - 12/27/06 <-- conditional moved to while at beginning of function definition
     END DO
-
 
     RETURN
 

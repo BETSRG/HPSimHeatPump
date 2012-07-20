@@ -1739,7 +1739,6 @@
     REAL FUNCTION FTWB(TDB,W,BaroPressure)
     !
     DATA CPW/4.187/
-    !DATA PATM/101325./
 
     REAL TDB,W,BaroPressure
     REAL PATM,TWB1,PWS1,PWS2,WS1,WS2,CPW,H1,H,TWB2
@@ -1785,12 +1784,7 @@
         H1=H2
         DELTH1=DELTH2
         TWB2=TWB
-        ! Error message if convergence fails
-        !IF (I.EQ.50) WRITE(8,*)'FUNCTION FTWB: CONVERGENCE FAILURE'
-        !VL: Previously: 10  CONTINUE
     END DO
-    !
-    !VL: Previously: 20  FTWB=TWB2
     FTWB=TWB2
     RETURN
     END
@@ -1883,7 +1877,6 @@
         !
         !  Outside range of correlations
         !
-        !WRITE(8,*) 'FUNCTION FTSAT: ENTHALPY OUT OF RANGE, HS =',HS
         FTSAT = 0.
     ELSE
         !
@@ -1909,29 +1902,22 @@
             ! * STARTING OF THE ITERATIONS *
             ! ******************************
             !
-            !VL: Previously: DO 10 I=1,50
             DO I=1,50
                 HS2=FHSAT(TS2,PATM)
                 DELTH2=HS2-HS
                 !
-                !VL: Previously: IF (ABS(DELTH2).LT.1.E-3) GOTO 20
                 IF (ABS(DELTH2).LT.1.E-3) THEN
                     FTSAT=TS2
                     RETURN
                 END IF
-
                 !
                 TS=TS1-DELTH1*(TS2-TS1)/(DELTH2-DELTH1)
                 TS1=TS2
                 HS1=HS2
                 DELTH1=DELTH2
                 TS2=TS
-                ! Error message if convergence fails
-                !IF (I.EQ.50) WRITE(8,*) 'FUNCTION FTSAT: CONVERGENCE FAILURE'
-                !VL: Previously: 10          CONTINUE
             END DO
-
-            !VL: Previously: 20          FTSAT=TS2
+            
             FTSAT=TS2
 
         ENDIF
@@ -1974,7 +1960,6 @@
     ELSE
         !  T > 200 , out of range, use T=200 value and write warning
         FPWS=1555074.
-        !WRITE(8,*) "FUNCTION FPWS: TEMPERATURE OUT OF RANGE, T=",TDB
     ENDIF
     RETURN
     END

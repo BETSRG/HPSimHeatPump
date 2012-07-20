@@ -130,7 +130,7 @@
             PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
 
             IF (SUPER .GT. 0) THEN
-                Temperature=(TSICMP+SUPER-32)/1.8
+                Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
                 IF (RefPropErr .GT. 0) THEN
@@ -138,7 +138,7 @@
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
-                TiCmp=((TSICMP+SUPER)-32)/1.8
+                TiCmp=((TSICMP+SUPER)-32)/1.8   !RS Comment: Unit Conversion, from F to C
             ELSE
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 Quality=-SUPER
@@ -298,13 +298,13 @@
         END IF
 
         AirPropOpt=2
-        AirProp(1)=(TaiC-32)*5/9
+        AirProp(1)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C
         AirProp(3)=RHiC
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RhoAiC=AirProp(7)
 
         AirPropOpt=2
-        AirProp(1)=(TaiE-32)*5/9
+        AirProp(1)=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C
         AirProp(3)=RHiE
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RhoAiE=AirProp(7)
@@ -594,44 +594,6 @@
         !VL: Previously:810 CONTINUE
         PROD = DIFF*DIFSGN
 
-        !VL: Previously: 
-        !        IF(PROD.GT.0.0.AND.NCROSS.EQ.0) GO TO 830
-        !        
-        !        NCROSS = 1
-        !        !VL: Previously:IF(PROD.GT.0.0) GO TO 820
-        !        IF(PROD.LE.0.0) THEN
-        !            TSATSV = TSATDM
-        !            TAISV = TAIDM
-        !        END IF
-        !
-        !        !VL: Previously:820     CONTINUE
-        !        TSATDM = TSICMP
-        !        TAIDM = TAIIE
-        !        TSICMPprev=TSICMP
-        !        TSICMP = TSICMP-(TSATSV-TSICMP)/(TAISV-TAIIE)*DIFF
-        !        !IF (ABS(TSICMPprev-TSICMP)/TSICMPprev .LE. 1E-4) GO TO 900
-        !        IF (ABS(TSICMPprev-TSICMP) .LE. 0.01) THEN
-        !            !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
-        !            EXIT
-        !        END IF
-        !        DIFSGN = DIFF
-        !        IF (TSICMP .GT. TAIIEI) TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
-        !        GO TO 840
-        !830     CONTINUE
-        !        IF(NTAMB.GT.0) DELT2 = (TAIIE-TAIDM)/(TSICMP-TSATDM)
-        !        !IF (DELT2 .EQ. 0) GO TO 900
-        !        !IF (ABS(DELT2) .LE. 0.01) THEN
-        !        IF (ABS(DELT2) .LE. 0.05) THEN !ISI - 06/13/07
-        !            !VL: Previously: GO TO 900 !0.05 F !ISI - 08/02/06
-        !            EXIT
-        !        END IF
-        !
-        !        TSATDM = TSICMP
-        !        TAIDM = TAIIE
-        !        TSICMPprev=TSICMP
-        !        TSICMP = TSICMP-DIFF/DELT2
-        !        IF (TSICMP .GT. TAIIEI) TSICMP=(TSICMPprev+TAIIEI)/2 !Make sure TSICMP < TAIIEI
-
         IF(PROD.GT.0.0.AND.NCROSS.EQ.0) THEN
 
             IF(NTAMB.GT.0) THEN
@@ -713,7 +675,6 @@
         !VL: Previously : GO TO 100 ! modified into DO-WHILE loop
     END DO
 
-
     !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
 
     !VL: Previously :900 CONTINUE
@@ -745,7 +706,7 @@
                 MinDshTb=0
 
                 Dshtb=2.0 !1.0 !Initial guess !Short tube diameter, mm
-                ShTbPAR(2)=Dshtb/1000
+                ShTbPAR(2)=Dshtb/1000   !RS Comment: Unit Conversion
 
                 DO NumIter=1, MaxIteration
 
@@ -759,7 +720,7 @@
                         END SELECT
                     END IF
 
-                    XMRFLD=ShTbOUT(1)*3600/UnitM
+                    XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??
                     ToExp=ShTbOUT(3)
                     XoExp=ShTbOUT(4)
 
@@ -859,7 +820,7 @@
                     END SELECT
                 END IF
 
-                XMRFLD=CapTubeOUT(1)*3600/UnitM
+                XMRFLD=CapTubeOUT(1)*3600/UnitM !RS Comment: Unit Conversion, lbm/s??
                 ToExp=CapTubeOUT(3)
                 XoExp=CapTubeOUT(4)
 
@@ -1021,4 +982,3 @@
 !!704 FORMAT(A13,F7.2,A5)
 
     END SUBROUTINE
-

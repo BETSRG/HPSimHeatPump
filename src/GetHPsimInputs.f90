@@ -210,6 +210,7 @@ REAL IndoorEnteringDrybulbTemperature
 REAL IndoorEnteringWetbulbTemperature
 REAL RefChg    !Design Refrigerant Charge Mass
 
+!Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
 CHARACTER(len=MaxNameLength)CompressorType
 CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant
@@ -252,27 +253,27 @@ CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)SucLn_TubeType
 REAL SucLn_KTube    !Conductivity of Suction Line Tube
 REAL SucLn_TubeID   !Inner Diameter of Suction Line Tube
-REAL SucLn_Charge
+REAL SucLn_Charge   !Suction Line Charge
 CHARACTER(len=MaxNameLength)DisLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)DisLn_TubeType
 REAL DisLn_KTube    !Conductivity of Discharge Line Tube
 REAL DisLn_TubeID   !Inner Diameter of Discharge Line Tube
-REAL DisLn_Charge
+REAL DisLn_Charge   !Discharge Line Charge
 CHARACTER(len=MaxNameLength)LiqLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)LiqLn_TubeType
 REAL LiqLn_KTube    !Conductivity of Liquid Line Tube
 REAL LiqLn_TubeID   !Inner Diameter of Liquid Line Tube
-REAL LiqLn_Charge
+REAL LiqLn_Charge   !Liquide Line Charge
 CHARACTER(len=MaxNameLength)ValveIDCLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)ValveIDCLn_TubeType
-REAL ValveIDCLn_KTube    !Conductivity of Valce to IDC Line Tube
-REAL ValveIDCLn_TubeID   !Inner Diameter of Valce to IDC Line Tube
-REAL ValveIDCLn_Charge
+REAL ValveIDCLn_KTube    !Conductivity of Valve to IDC Line Tube
+REAL ValveIDCLn_TubeID   !Inner Diameter of Valve to IDC Line Tube
+REAL ValveIDCLn_Charge   !Charge of Valve to IDC Line Tube
 CHARACTER(len=MaxNameLength)ValveODCLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)ValveODCLn_TubeType
 REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
-REAL ValveODCLn_Charge
+REAL ValveODCLn_Charge   !Charge of Valve to ODC Line Tube
 
 CHARACTER(len=MaxNameLength)Acc_Manufacturer
 CHARACTER(len=MaxNameLength)Acc_Model
@@ -332,8 +333,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** System data *****************
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
-
+                        TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   SELECT CASE (Alphas(1)(1:1))
@@ -376,8 +376,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Compressor data *****************
 
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   CompressorModel = Alphas(1)
@@ -435,8 +434,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Outdoor coil data *****************
 
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
-                       TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
-
+                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
@@ -477,8 +475,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Outdoor fan data *****************
 
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)  
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   PwrODfan = Numbers(1) !Fan Power
@@ -489,8 +486,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Indoor coil data *****************
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   IDC_FinType = Numbers(1)
@@ -529,8 +525,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Indoor fan data *****************
   
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   PwrIDfan = Numbers(1) !Fan Power
@@ -540,8 +535,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !***************** Expansion device data *****************
 
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
- 
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   SELECT CASE (Alphas(1)(1:1))
@@ -602,24 +596,23 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CoolingDistubeLength = Numbers(15)
   
   IF (Unit .EQ. SI) THEN
-    CoolingDistubeLength=CoolingDistubeLength/1000
+    CoolingDistubeLength=CoolingDistubeLength/1000  !RS Comment: Unit Conversion
   ELSEIF (Unit .EQ. IP) THEN
-    CoolingDistubeLength=CoolingDistubeLength/12
+    CoolingDistubeLength=CoolingDistubeLength/12    !RS Comment: Unit Conversion, from in to ft?
   END IF
 
   HeatingDistubeLength = Numbers(16)
   
   IF (Unit .EQ. SI) THEN
-    HeatingDistubeLength=HeatingDistubeLength/1000
+    HeatingDistubeLength=HeatingDistubeLength/1000  !RS Comment: Unit Conversion
   ELSEIF (Unit .EQ. IP) THEN
-    HeatingDistubeLength=HeatingDistubeLength/12
+    HeatingDistubeLength=HeatingDistubeLength/12    !RS Comment: Unit Conversion, from in to ft?
   END IF
 
   !*****************Refrigerant line data******************
 
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Suction Line
@@ -640,7 +633,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !Suction line tube wall thickness, mm or mil
   SucLnPAR(3)=(SucLnPAR(2)-SucLn_TubeID)/2
   IF (Unit .EQ. IP) THEN
-      SucLnPAR(3)=SucLnPAR(3)*1000
+      SucLnPAR(3)=SucLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
 
   !Discharge Line
@@ -661,7 +654,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !Discharge line tube wall thickness, mm or mil
   DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2
   IF (Unit .EQ. IP) THEN
-      DisLnPAR(3)=DisLnPAR(3)*1000
+      DisLnPAR(3)=DisLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
 
    !Liquid Line
@@ -682,7 +675,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !Liquid line tube wall thickness, mm or mil
   LiqLnPAR(3)=(LiqLnPAR(2)-LiqLn_TubeID)/2
   IF (Unit .EQ. IP) THEN
-      LiqLnPAR(3)=LiqLnPAR(3)*1000
+      LiqLnPAR(3)=LiqLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
 
   !Reversing Valve to IDC
@@ -703,7 +696,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !Valve to IDC line tube wall thickness, mm or mil
   ValveIDCLnPAR(3)=(ValveIDCLnPAR(2)-ValveIDCLn_TubeID)/2
   IF (Unit .EQ. IP) THEN
-      ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000
+      ValveIDCLnPAR(3)=ValveIDCLnPAR(3)*1000    !RS Comment: Unit Conversion
   END IF
 
     !Valve to ODC Line
@@ -723,14 +716,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !Valve to ODC line tube wall thickness, mm or mil
   ValveODCLnPAR(3)=(ValveODCLnPAR(2)-ValveODCLn_TubeID)/2
   IF (Unit .EQ. IP) THEN
-      ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000
+      ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000    !RS Comment: Unit Conversion
   END IF
 
   !********************Refrigerant Cycle Data (Cooling)***********************
 
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  
+                      TmpNumbers,NumNumbers,Status) 
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Expansion Device Inlet
@@ -740,8 +732,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !********************Refrigerant Cycle Data (Heating)***********************
 
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   !Compressor Discharge
@@ -756,8 +747,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !*************** Accumulator ****************
 
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   Acc_Manufacturer = Alphas(1)
@@ -778,8 +768,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !*************** Filter Drier ****************
 
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-
+                      TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   Filter_Manufacturer = Alphas(1)
@@ -791,8 +780,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   !*************** Custom Air Side Heat Transfer Data **************
 
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)       
-
+                      TmpNumbers,NumNumbers,Status) 
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !---Indoor Coil---

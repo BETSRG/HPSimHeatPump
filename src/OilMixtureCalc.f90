@@ -160,8 +160,8 @@ REAL Enthalpy !J/kg
 
 !FLOW:
 
-Psat1=Psat+DP
-Psat2=Psat-DP
+Psat1=Psat+DP   !MPa
+Psat2=Psat-DP   !MPa
 
 Pressure=Psat1*1e6 !from MPa to Pa
 Quality=1
@@ -252,7 +252,7 @@ REAL Qguess !Guessed heat capacity, W
 Wlocal=LocalOilMassFraction(Wabsolute,Xin)
 
 IF (Wlocal .LE. 0 .OR. Xin .GE. 1 .OR. Xin .LE. 0) THEN
-	hout=-Qmod/mdot+hin
+	hout=-Qmod/mdot+hin     !Outlet Enthalpy, J/kg
 	DXmix=ABS(hin-hout)/hfg
 	SELECT CASE (CoilType)
 	CASE(1,3,5)  !High pressure side
@@ -263,7 +263,7 @@ IF (Wlocal .LE. 0 .OR. Xin .GE. 1 .OR. Xin .LE. 0) THEN
 	RETURN
 END IF
 
-TsatIn=OilMixtureTsat(Wlocal,Psat)
+TsatIn=OilMixtureTsat(Wlocal,Psat)  !Inlet Saturation Temperature, K
 
 SELECT CASE (CoilType)
 CASE(1,3,5)  !High pressure side
@@ -278,8 +278,8 @@ Xout=(Xmin+Xmax)/2 !Initial guess
 
 DO I=1, MaxIter
 
-	Wlocal=LocalOilMassFraction(Wabsolute,Xout)
-	TsatOut=OilMixtureTsat(Wlocal,Psat)
+	Wlocal=LocalOilMassFraction(Wabsolute,Xout) !Local Oil Mass Fraction
+	TsatOut=OilMixtureTsat(Wlocal,Psat)         !Outlet Saturation Temperature, K
 
 	DTsat=ABS(TsatIn-TsatOut)
 	DXmix=ABS(Xin-Xout)
@@ -321,7 +321,7 @@ DO I=1, MaxIter
 END DO
 
 IF (I .GT. MaxIter) THEN
-	hout=-Qmod/mdot+hin
+	hout=-Qmod/mdot+hin         !Outlet Enthalpy, J/kg
 	DXmix=ABS(hin-hout)/hfg
 	SELECT CASE (CoilType)
 	CASE(1,3,5)  !High pressure side
@@ -509,10 +509,10 @@ MoleFracOil=Wlocal*(MoleMassRef/MoleMassOil)/ &
 MoleFracRef=1-MoleFracOil
 
 XiLiq=MoleMassRef**KK*MoleFracRef/ &
-      (MoleMassRef**KK*MoleFracRef+MoleMassOil**KK*MoleFracOil)
+      (MoleMassRef**KK*MoleFracRef+MoleMassOil**KK*MoleFracOil)     !Liquid Refrigerant Yokozeki Factor
 
 XiOil=MoleMassOil**KK*MoleFracOil/ &
-      (MoleMassRef**KK*MoleFracRef+MoleMassOil**KK*MoleFracOil)
+      (MoleMassRef**KK*MoleFracRef+MoleMassOil**KK*MoleFracOil)     !Oil Yokozeki Factor
 
 OilMixtureViscosity=EXP(XiLiq*LOG(muf)+XiOil*LOG(muOil))
 

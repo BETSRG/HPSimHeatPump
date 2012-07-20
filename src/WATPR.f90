@@ -394,10 +394,8 @@
 
       TA=(TO+TABS)*(1.+(S-SO)/CPS(TO))-TABS
       SA=SS(P,TA)
-      !VL: Previously: DO 100 I=1,10
       DO I=1,10
           T=TA+(TO-TA)*(S-SA)/(SO-SA)
-          !VL: Previously: IF(ABS(T-TA).LT.0.05)GOTO 900
           IF(ABS(T-TA).LT.0.05) THEN
               TPSS=T
               RETURN
@@ -407,14 +405,10 @@
           SO=SA
           TA=T
           SA=SS(P,TA)
-          !VL: Previously: 100    CONTINUE
       END DO
 
       WRITE(1,FMT_1)
       
-      !!VL: Previously:
-   !!1  FORMAT(' WARNING: FUNCTION TPSS FAILS TO CONVERGE')
-      !VL: Previously: 900    TPSS=T
       TPSS=T
 
       RETURN
@@ -446,9 +440,6 @@
           WRITE(1,FMT_13)
       END IF
       
-      !!VL: Previously:
-  !!13  FORMAT(' ',' WARNING: FUNCTION CPS: T OUT OF RANGE')
-
       RETURN
       END
 !***********************************************************************

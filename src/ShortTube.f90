@@ -178,7 +178,7 @@
 
     ErrorFlag=0 !Initialize
 
-    Tcr=Tcrit(Ref$)+273.15  !RS Comment: Unit Conversion
+    Tcr=Tcrit(Ref$)+273.15  !RS Comment: Unit Conversion, from C to K?
     Pcr=Pcrit(Ref$)/1000    !RS Comment: Unit Conversion
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
@@ -392,7 +392,6 @@
     IF (mdotExp .LT. 0) THEN
 
         ErrorFlag=1
-        !VL: Previously: GOTO 200
         OUT(7)=ErrorFlag
         PiExpDev = XIN(2)
         HiExpDev = XIN(3)
@@ -410,7 +409,6 @@
     OUT(5)=MassDisTube
     OUT(6)=QdisTube
 
-    !VL: Previously: 200 CONTINUE
     OUT(7)=ErrorFlag
 
     PiExpDev = XIN(2)
@@ -741,23 +739,9 @@
         RETURN
     END IF
 
-    !VL: Previously:
-    !IF (mdotExp .LT. 0) THEN
-    !    ErrorFlag=1
-    !    GOTO 200
-    !END IF
-    !
-    !OUT(1)=mdotExp
-    !OUT(2)=PoExp
-    !OUT(3)=ToExp
-    !OUT(4)=XoExp
-    !OUT(5)=MassDisTube
-    !OUT(6)=QdisTube
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
-        !VL: Previously: GOTO 200
     ELSE
-
         OUT(1)=mdotExp
         OUT(2)=PoExp
         OUT(3)=ToExp
@@ -766,7 +750,6 @@
         OUT(6)=QdisTube
     END IF
 
-    !VL: Previously: 200 CONTINUE
     OUT(7)=ErrorFlag
 
     PiExpDev = XIN(2)
@@ -1111,34 +1094,17 @@
         RETURN
     END IF
 
-    !VL: Previously: 
-    !IF (mdotExp .LT. 0) THEN
-    !    ErrorFlag=1
-    !    GOTO 200
-    !END IF
-    !
-    !OUT(1)=mdotExp
-    !OUT(2)=PoExp
-    !OUT(3)=ToExp
-    !OUT(4)=XoExp
-    !OUT(5)=MassDisTube
-    !OUT(6)=QdisTube
-
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
-        !VL: Previously:GOTO 200
     ELSE
-
         OUT(1)=mdotExp
         OUT(2)=PoExp
         OUT(3)=ToExp
         OUT(4)=XoExp
         OUT(5)=MassDisTube
         OUT(6)=QdisTube    
-
     END IF
 
-    !VL: Previously:200 CONTINUE
     OUT(7)=ErrorFlag
 
     PiExpDev = XIN(2)

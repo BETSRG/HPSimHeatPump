@@ -22,7 +22,6 @@ PUBLIC FinTubeCoilUnitConvert
 PUBLIC Temperature_F2C  ! VL
 PUBLIC Temperature_C2F  ! VL
 
-
 CONTAINS
 
 !***********************************************************************************
@@ -510,7 +509,6 @@ REAL FUNCTION Temperature_C2F(tC)
     Temperature_C2F = tC * 1.8 + 32.0
 
 END FUNCTION Temperature_C2F
-
 
 !***********************************************************************************
 END MODULE UnitConvertMod

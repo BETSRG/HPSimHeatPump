@@ -30,14 +30,14 @@ SUBROUTINE SuctionHeatTransfer(mdot,Tdis,Tsuc,hsi,hso)
 IMPLICIT NONE
 
 REAL, INTENT(IN) :: mdot !refrigerant mass flow rate, kg/s
-REAL, INTENT(IN) :: Tdis !Discharge temperatuer, C
-REAL, INTENT(IN) :: Tsuc !Suction temperatuer, C
+REAL, INTENT(IN) :: Tdis !Discharge temperature, C
+REAL, INTENT(IN) :: Tsuc !Suction temperature, C
 REAL, INTENT(IN) :: hsi !Suction inlet enthalpy, kJ/kg
 REAL, INTENT(OUT) :: hso !Suction outlet enthalpy, kJ/kg
 
 REAL :: UA !Overall heat transfer coefficient, kW/K
 
-UA = 0.1541*mdot - 0.002
+UA = 0.1541*mdot - 0.002    !RS Comment: What are the values from?
 IF (UA .LT. 0) THEN
     UA=0
 END IF
@@ -57,7 +57,7 @@ IMPLICIT NONE
 REAL, INTENT(IN) :: mdot !Refrigerant mass flow rate, kg/s
 REAL, INTENT(OUT) :: DP !Pressure drop kPa
 
-DP = 327.69*mdot + 3.9633
+DP = 327.69*mdot + 3.9633   !RS Comment: What are the values from?
 
 IF (DP .LT. 0) THEN
     DP = 0

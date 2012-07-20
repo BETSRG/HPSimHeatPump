@@ -110,11 +110,13 @@ SUBROUTINE AbortEnergyPlus
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
+  
     SUBROUTINE ShowMessage(Message,Unit1,Unit2)
-    CHARACTER(len=*) Message
-    INTEGER, OPTIONAL :: Unit1
-    INTEGER, OPTIONAL :: Unit2
+        CHARACTER(len=*) Message
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
+    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -125,7 +127,6 @@ SUBROUTINE AbortEnergyPlus
   INTEGER, EXTERNAL :: GetNewUnitNumber
   CHARACTER(len=20) NumWarnings
   CHARACTER(len=20) NumSevere
-
 
   WRITE(NumWarnings,*) TotalWarningErrors
   NumWarnings=ADJUSTL(NumWarnings)
@@ -234,9 +235,9 @@ SUBROUTINE EndEnergyPlus
   INTERFACE
   
     SUBROUTINE ShowMessage(Message,Unit1,Unit2)
-    CHARACTER(len=*) Message
-    INTEGER, OPTIONAL :: Unit1
-    INTEGER, OPTIONAL :: Unit2
+        CHARACTER(len=*) Message
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
     
   END INTERFACE
@@ -396,9 +397,9 @@ SUBROUTINE ShowFatalError(ErrorMessage,OutUnit1,OutUnit2)
   INTERFACE
   
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
-    CHARACTER(len=*) Message
-    INTEGER, OPTIONAL :: Unit1
-    INTEGER, OPTIONAL :: Unit2
+        CHARACTER(len=*) Message
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
     
   END INTERFACE
@@ -451,9 +452,9 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
   INTERFACE
   
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
-    CHARACTER(len=*) Message
-    INTEGER, OPTIONAL :: Unit1
-    INTEGER, OPTIONAL :: Unit2
+        CHARACTER(len=*) Message
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
     
   END INTERFACE
@@ -506,9 +507,9 @@ SUBROUTINE ShowContinueError(Message,OutUnit1,OutUnit2)
   INTERFACE
   
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
-    CHARACTER(len=*) Message
-    INTEGER, OPTIONAL :: Unit1
-    INTEGER, OPTIONAL :: Unit2
+        CHARACTER(len=*) Message
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
     
   END INTERFACE

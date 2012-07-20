@@ -94,7 +94,6 @@ CONTAINS
             PD, PDYN, AMASS2, DP1MAX, DP2MAX, RMMAX, DP, RM, DIFF1, AMASS1, Z1, Z2, &
             IHOLE, J, RMT, I, DIFF2, SLOPE, ERROR
 
-
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ... 
     INTEGER   :: FLAG_GOTO_15, FLAG_GOTO_40
@@ -145,7 +144,6 @@ CONTAINS
     FLAG_GOTO_100 = .FALSE.
     FLAG_GOTO_201 = .FALSE.
 
-
     mdot=XIN(1)
     pRo=XIN(2)
     hRo=XIN(3)
@@ -153,8 +151,8 @@ CONTAINS
 
     ErrorFlag=0
 
-    Pressure=pRo*1000
-    Enthalpy=hRo*1000
+    Pressure=pRo*1000   !RS Comment: Unit Conversion
+    Enthalpy=hRo*1000   !RS Comment: Unit Conversion
     tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
     IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
         RETURN
@@ -220,7 +218,6 @@ CONTAINS
             !
             !       LIQUID IN ACCUMULATOR
             !
-            !VL: Previously: 10  X = xRo
             X = xRo
             RMS = RMASS/3600.
             RMSL = (1.-X)*RMS
@@ -257,7 +254,6 @@ CONTAINS
                 DP2MAX = (AHGT-HDIS)*RO*32.2 + PDYN
                 RMMAX = 0.585*AHOLE(1)*SQRT(2.*RO*DP1MAX) +0.585*AHOLE(2)*SQRT(2.*RO*DP2MAX)
 
-                ! VL: Previously: IF(RMSL.LT.RMMAX) GO TO 15
                 IF(RMSL.LT.RMMAX) THEN
                     FLAG_GOTO_15 = .TRUE.
                 END IF
@@ -265,7 +261,6 @@ CONTAINS
                     VHGT = 0.0
                     HL(1) = AHGT
                     AMASS2 = AACC*AHGT*RO
-                    !VL: Previously:GO TO 40
                     FLAG_GOTO_40 = .TRUE.
                     !
                     !       FIND LEVEL ABOVE SECOND HOLE
@@ -284,17 +279,14 @@ CONTAINS
                 Z2 = HDIS
                 IHOLE = 0
                 !
-                !VL: Previously:DO 30 J=1,12
                 DO J=1,12
                     HL(1) = Z2
                     HL(2) = Z2-HDIS
                     RMT = 0.
                     !
-                    !VL: Previously:DO 16 I=1,2
                     DO I=1,2
                         DP = HL(I)*RO*32.2 + PDYN
                         RM = 0.585*AHOLE(I)*SQRT(2.*RO*DP)
-                        !VL: Previously:16                  RMT = RMT + RM
                         RMT = RMT + RM
                     END DO
                     !
@@ -317,7 +309,6 @@ CONTAINS
                     !
                     !       CHECK FOR CONVERGENCE ON LEVEL ABOVE SECOND HOLE
                     !
-                    !VL: Previously: IF(ABS(AMASS1-AMASS2).LT.CNVACC) GO TO 40
                     IF(ABS(AMASS1-AMASS2).LT.CNVACC) THEN
                         FLAG_GOTO_40 = .TRUE.
                         EXIT
@@ -332,7 +323,6 @@ CONTAINS
                     !VL: Previously: 20                  Z2 = Z1 - DIFF1*SLOPE
                     Z2 = Z1 - DIFF1*SLOPE
                     Z2 = AMAX1(Z2,HDIS)
-                    !VL: Previously:30          CONTINUE
                 END DO
 
                 IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
@@ -344,7 +334,6 @@ CONTAINS
                 END IF
 
             END IF
-            !VL: Previously: 40          CONTINUE
             ACCMAS = AMASS2
         END IF
         !VL: Previously:100 XLEVEL = HL(1)*12.
@@ -366,8 +355,6 @@ CONTAINS
     OUT(2)=OUT(1)-OUT(3)    !Vapor mass
     OUT(4)=XLEVEL*0.0254    !Liquid level, convert from in to m
     OUT(5)=AccumDP
-
-    !VL: Previously: 200 CONTINUE
     OUT(6)=ErrorFlag
 
     RETURN
@@ -507,7 +494,7 @@ CONTAINS
             END IF
             Psat2=Psat2/1000    !RS Comment: Unit Conversion
 
-            RatedDP = Psat1 - Psat2
+            RatedDP = Psat1 - Psat2 !Rated Pressure Drop
             EstDP = QsysTon / MaxCapacity * RatedDP
         END IF
 

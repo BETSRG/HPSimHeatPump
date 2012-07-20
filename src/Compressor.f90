@@ -52,7 +52,7 @@
     !
     ! ----------------------------------------------------------------------
 
-    USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+    USE FluidProperties_HPSim
 
     IMPLICIT NONE
 
@@ -67,8 +67,7 @@
 
     REAL, PARAMETER :: Fv=0.75
 
-    !Subroutine local variables
-    !CHARACTER (len=15) :: Property           
+    !Subroutine local variables          
     INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
@@ -129,6 +128,7 @@
         A(I)=PAR(I)
         B(I)=PAR(I+10) 
     END DO
+    
     Qshellfrac = PAR(21)
     Qshell = PAR(22)
     VolCmp = PAR(23)
@@ -140,80 +140,80 @@
 
     ErrorFlag=0 !Initialize
 
-    Pressure=Psuc*1000
+    Pressure=Psuc*1000  !RS Comment: Unit Conversion
     Quality=1
-    TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+    TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Suction Dew Point Temperature, C
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    Pressure=Pdis*1000
+    Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Quality=1
-    TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
+    TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Discharge Dew Point Temperature, C
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    TDPsucF=TDPsuc*1.8+32
-    TDPdisF=TDPdis*1.8+32
+    TDPsucF=TDPsuc*1.8+32   !Suction Dew Point Temperature, F
+    TDPdisF=TDPdis*1.8+32   !Discharge Dew Point Temperature, F
 
-    PowerMap=X(A,TDPdisF,TDPsucF)/1000
-    mdotMap=X(B,TDPdisF,TDPsucF)*0.454/3600
+    PowerMap=X(A,TDPdisF,TDPsucF)/1000      !RS Comment: Unit Conversion
+    mdotMap=X(B,TDPdisF,TDPsucF)*0.454/3600 !RS Comment: Unit Conversion?
 
     TsucMap=((TDPsucF+20)-32)*5/9 !20-rated superheat
 
     Temperature=TsucMap
-    Pressure=Psuc*1000
-    HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)
+    Pressure=Psuc*1000  !RS Comment: Unit Conversion
+    HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Suction Enthalpy
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    HsucMap=HsucMap/1000
-    rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)
+    HsucMap=HsucMap/1000    !RS Comment: Unit Conversion
+    rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)   !Map-Based Density
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)
+    SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)  !Map-Based Suction Entropy
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    SsucMap=SsucMap/1000
+    SsucMap=SsucMap/1000    !RS Comment: Unit Conversion
 
-    Pressure=Pdis*1000
-    Entropy=SsucMap*1000
-    HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
+    Pressure=Pdis*1000      !RS Comment: Unit Conversion
+    Entropy=SsucMap*1000    !RS Comment: Unit Conversion
+    HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Isentropic Discharge Enthalpy
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    HdisIsenMap=HdisIsenMap/1000
+    HdisIsenMap=HdisIsenMap/1000    !RS Comment: Unit Conversion
 
-    Pressure=Psuc*1000
-    Enthalpy=Hsuc*1000
-    Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
-        RETURN
-    END IF
-
-    rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
+    Pressure=Psuc*1000  !RS Comment: Unit Conversion
+    Enthalpy=Hsuc*1000  !RS Comment: Unit Conversion
+    Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Suction Temperature
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)
+    rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Suction Density
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    Ssuc=Ssuc/1000
 
-    Pressure=Pdis*1000
-    Entropy=Ssuc*1000
-    HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)
+    Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)    !Suction Entropy
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
-    HdisIsen=HdisIsen/1000
+    Ssuc=Ssuc/1000  !RS Comment: Unit Conversion
+
+    Pressure=Pdis*1000  !RS Comment: Unit Conversion
+    Entropy=Ssuc*1000   !RS Comment: Unit Conversion
+    HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)    !Isentropic Discharge Enthalpy
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+        RETURN
+    END IF
+    HdisIsen=HdisIsen/1000  !RS Comment: Unit Conversion
 
     mdot=mdotMap*(rhosuc/rhoMap)
 
@@ -234,19 +234,19 @@
     END IF
     Hdis=(Power-Qshell)/mdot+Hsuc
 
-    Pressure=Pdis*1000
-    Enthalpy=Hdis*1000
-    Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)
+    Pressure=Pdis*1000  !RS Comment: Unit Conversion
+    Enthalpy=Hdis*1000  !RS Comment: Unit Conversion
+    Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Discharge Temperature
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
             RETURN
     END IF
 
-    Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)
+    Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)    !Discharge Quality
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
 
-    rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)
+    rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Discharge Density
     IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
         RETURN
     END IF
@@ -255,7 +255,6 @@
 
     IF (Power .LT. 0 .OR. MassCmp .LT. 0) THEN
         ErrorFlag=1
-        !VL: Previously: GOTO 200
         OUT(7)=ErrorFlag
         RETURN
     END IF
@@ -266,8 +265,6 @@
     OUT(4)=Xdis
     OUT(5)=Tdis
     OUT(6)=MassCmp
-
-!VL: Previously: 200 CONTINUE
     OUT(7)=ErrorFlag
 
     RETURN

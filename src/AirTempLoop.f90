@@ -62,7 +62,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     CALL IssueOutputMessage(PrnLog, PrnCon, '')
     CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
 
-    XMR=CompOUT(2)*3600/UnitM
+    XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s???
 
     HiEvp=EvapIN(3)
 
@@ -81,7 +81,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         IERR=1
         RETURN
     END IF
-    TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion
+    TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
     EvapIN(1)=MdotR			!Refrigerant side mass flow rate, kg/s
     EvapIN(2)=PiEvp			!Evap. inlet pressure, kPa
@@ -95,7 +95,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
         EvapPAR(32)=CompPAR(21)*CompOUT(1)
     ELSE !Shell loss in W
-        EvapPAR(32)=CompPAR(22)/1000
+        EvapPAR(32)=CompPAR(22)/1000    !RS Comment: Unit Conversion
     END IF
 
     CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
@@ -122,8 +122,8 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     XiCmp=EvapOUT(9)
 
     IF (AccumPAR(2) .GT. 0) THEN !Accumulator exists
-        TsatEvp=(TSICMP-32)*5/9
-        TsatCnd=(TSOCMP-32)*5/9
+        TsatEvp=(TSICMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
+        TsatCnd=(TSOCMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
         Subcooling=CondOUT(14)
         Superheat=EvapOUT(10)
         Xliq=CondOUT(13)
@@ -144,7 +144,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         END IF
     END IF	
 
-    TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion
+    TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion, from C to F
 
     Pressure=PiCmp*1000 !RS Comment: Unit Conversion
     Quality=1
@@ -154,7 +154,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         IERR=1
         RETURN
     END IF
-    TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion
+    TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
     TSAVG=(TSATEI+TSATCI)/2
     IF(TSAVG.GT.TAIIE) THEN
