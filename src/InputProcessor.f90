@@ -279,6 +279,11 @@ SUBROUTINE ProcessInput
    ELSE
      FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
    ENDIF
+   ! IF (LEN_TRIM(ProgramPath) == 0) THEN
+   !  FullName='Energy+_3TonAC_410.idd'
+   !ELSE
+   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   !ENDIF
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
      CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))

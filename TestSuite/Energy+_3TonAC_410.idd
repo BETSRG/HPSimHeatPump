@@ -1407,30 +1407,35 @@ ODCcktGeometry,
 	    \type integer
 	A4, \field Tube Name
 	    \type alpha
-	N6, \field Tube OD
+	N6, \field Tube Height
 	    \type real
 	    \ip-units in
-	N7, \field Tube ID
+	N7, \field Tube Depth
 	    \type real
 	    \ip-units in
-	N8, \field Tube Conductivity
+	N8, \field Tube Thickness
+	    \type real
+	    \ip-units in
+	N9, \field Tube Conductivity
 	    \type real
 	    \units Btu-in/h-ft2-F
-	N9, \field Tube Vertical Spacing
+	N10, \field Tube Vertical Spacing
 	    \type real
 	    \ip-units in
-	N10, \field Number of Rows
+	N11, \field Number of Rows
 	     \type real
-	N11, \field Number of Tubes per Row
+	N12, \field Number of Tubes per Row
 	     \type real
-	N12, \field Single Tube Length
+	N13, \field Single Tube Length
 	     \type real
 	     \ip-units in
-	N13, \field Number of Segments
+	A5, \field Tube Orientation
+	    \type alpha
+	N14, \field Number of Segments
 	     \type integer
-	N14, \field Number of Circuits
+	N15, \field Number of Circuits
 	     \type integer
-	N15; \field Channel Diameter
+	N16; \field Channel Diameter
 	     \type real
 	     \ip-units in
 

@@ -70,7 +70,6 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
 
-    !VL: Previously: 300 CONTINUE <-- SEE GOTO 300 in if statement at end of function ...
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
     DO WHILE (.NOT. IsCondenserAllocated)
 
@@ -87,7 +86,6 @@
         IERR = 0
 
         IF (.NOT. PRINT) THEN
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
 
@@ -124,7 +122,6 @@
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
         PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
@@ -135,7 +132,6 @@
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
         PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
@@ -147,7 +143,6 @@
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !VL: Previously: GO TO 200
                 CYCLE
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -158,7 +153,6 @@
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !VL: Previously: GO TO 200
                 CYCLE
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -173,7 +167,6 @@
             CASE (1,2)
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !VL: Previously: GO TO 200
                 CYCLE
             END SELECT
         END IF
@@ -267,7 +260,6 @@
             CASE (2) !Refprop error
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
-                !VL: Previously: GO TO 200
                 CYCLE
             CASE (3)
                 STOP
@@ -277,7 +269,6 @@
             CASE (8) !Too much pressure drop
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=2
-                !VL: Previously: GO TO 200
                 CYCLE
             END SELECT
         END IF
@@ -298,7 +289,6 @@
         IF (XiExp .GT. 1) THEN !Condenser outlet is still in superheated region, ISI - 06/06/07
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
 
@@ -314,7 +304,6 @@
             END IF
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
         TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion, from C to F
@@ -333,7 +322,6 @@
             IF (RefPropErr .GT. 0) THEN
                 WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
                 IERR=1
-                !VL: Previously: GO TO 200
                 CYCLE
             END IF
         END IF 
@@ -352,7 +340,6 @@
             END IF
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
 
@@ -386,14 +373,12 @@
         END IF
 
         IF (IERR .GE. 1) THEN
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
 
         CDTRIE = TSATEI - TRIE
         CDTRIE=CondOUT(14)*1.8 !ISI - 10/07/06
 
-        !VL: Previously: IF(IREFC.NE.0) GO TO 100
         IF(IREFC.EQ.0) THEN
 
             CDTRE = CDTRIE
@@ -473,10 +458,8 @@
                 END IF
             END IF
 
-            !VL: Previously: GO TO 200
             CYCLE            
         END IF
-        !VL: Previously: 100     CONTINUE
 
         PiEvp=EvapIN(2)
         PoExp=PiEvp
@@ -573,8 +556,6 @@
                 WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
             END IF
         END IF
-
-        !VL: Previously: 200     CONTINUE
 
         !VL: Previously: IF (.NOT. IsCondenserAllocated) GO TO 300 !ISI - 12/27/06 <-- conditional moved to while at beginning of function definition
     END DO

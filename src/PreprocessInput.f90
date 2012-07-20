@@ -20,6 +20,7 @@ CONTAINS
         ! rename the heat pump input file in preparation for epmacro
         call system('rename hpdata.idf in.imf')
         !call system('rename hpdata_longtubes.idf in.imf')
+        !call system('rename HPdata_3TonAC_410.idf in.imf')
         ! call epmacro on it
         call system('EPMacro.exe')
         ! now rename the file to be read by the E+ input processor

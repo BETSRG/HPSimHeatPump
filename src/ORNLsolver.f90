@@ -89,6 +89,7 @@
     REAL, SAVE :: IDCFlowConst
     REAL, SAVE :: ODCFlowConst
     INTEGER   :: Flag
+    INTEGER :: LastTime !Aids in the event of a microchannel device
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -901,7 +902,7 @@
     CLOSE(6)
     CLOSE(9)
 
-    CALL PrintCondenserResult 
+    CALL PrintCondenserResult
     CALL EndCondenserCoil
 
     IF (MODE .NE. CONDENSERUNITSIM) THEN

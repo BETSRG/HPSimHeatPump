@@ -2253,7 +2253,7 @@ END SUBROUTINE PrintEvaporatorResult
 
     !**************************** Model *************************************
 
-          CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
+          CALL GetObjectItem('IDCcktModel',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status)
         Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
@@ -3161,90 +3161,38 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
     END IF  !End of the IDC or ODC if-statement
     
     ELSE !Microchannel coil
-    !The microchannel section has not had its inputs updated.
 
-        READ(12,*) !**************************** Geometry *************************************
+        !**************************** Geometry *************************************
+        
+        !RS Comment: Updating input data for the microchannel option
+        !Reading in the values for the variables
+            CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
+                                TmpNumbers,NumNumbers,Status)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+            
+            SELECT CASE (Alphas(1)(1:1))
+            CASE ('F','f')
+                IsSIunit=.FALSE.
+            CASE DEFAULT
+                IsSIunit=.TRUE.
+            END SELECT
 
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        SELECT CASE (LineData(1:1))
-        CASE ('F','f')
-            IsSIunit=.FALSE.
-        CASE DEFAULT
-            IsSIunit=.TRUE.
-        END SELECT
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)FinType
-
-        READ(12,*) !Fin name
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)FinPitch
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Kfin
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)FinThk
-
-        READ(12,*) !Fin material
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeType
-
-        READ(12,*) !Tube name
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeHeight
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeDepth
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeThk
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Ktube
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Pt
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Nl
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Nt
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Ltube
+            !Defining variables
+            FinType = Numbers(1)
+            FinPitch = Numbers(2)
+            Kfin = Numbers(3)
+            FinThk = Numbers(4)
+            TubeType = Numbers(5)
+            TubeHeight = Numbers(6)     
+            TubeDepth = Numbers(7)
+            Tubethk = Numbers(8)
+            Ktube = Numbers(9)
+            Pt = Numbers(10)
+            Nl = Numbers(11)
+            Nt = Numbers(12)
+            Ltube = Numbers(13)
+            
+            TubeThk=TubeHeight-TubeDepth    !Or, Tube OD - Tube ID
 
         IF (Ltube .LE. 1e-3) THEN
             ErrorFlag=ZEROLENCOILERROR
@@ -3252,54 +3200,37 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             RETURN
         END IF
 
-        TubeOrientation=HORIZONTAL !Default
-        READ(12,FMT_202)LineData
-        IF (LineData(1:1) .EQ. 'T' .OR. LineData(1:1) .EQ. 't') THEN !Tube Orientation, new format - 06/06/06
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            SELECT CASE (LineData(1:1))
+            SELECT CASE (Alphas(5)(1:1))
             CASE ('V','v')
                 TubeOrientation=VERTICAL
+            CASE ('H','h')
+                TubeOrientation=HORIZONTAL
             CASE DEFAULT
                 TubeOrientation=HORIZONTAL
             END SELECT
+            
+        NumOfMods = Numbers(14) !Number of segments or modules
+        NumOfChannels = Numbers(15) !Number of circuits
+        Dchannel = Numbers(16)
 
-            READ(12,FMT_202)LineData
-        END IF
-
-        !READ(12,FMT_202)LineData
-        I=SCAN(LineData,',') !Number of segments or modules
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)NumOfMods
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)NumOfChannels
-
-        READ(12,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Dchannel
-
-        READ(12,*) !*************************** Circuiting ************************************
-
+        !*************************** Circuiting ************************************
+        
+        CALL GetObjectItem('ODCcktCircuiting_Slab1',1,Alphas,NumAlphas, &
+                                TmpNumbers,NumNumbers,Status)
+        Numbers=DBLE(TmpNumbers)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+        
         ALLOCATE(Slab(Nl))
-        READ(12,*) !Slab#,#Passes,Tubes per Pass
+        !Slab#,#Passes,Tubes per Pass
         DO I=1, Nl
 
-            READ(12,FMT_202)LineData
-            J=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(J+1:150))
-            READ(LineData,*)NumOfPasses
+            NumOfPasses = Numbers(2)
             ALLOCATE(Slab(I)%Pass(NumOfPasses))
             Slab(I)%Npass=NumOfPasses
-
+            
             DO II=1, NumOfPasses
 
-                J=SCAN(LineData,',')
-                LineData=ADJUSTL(LineData(J+1:150))
-                READ(LineData,*)Ntubes
+                J=2+II
+                Ntubes=Numbers(J)   !Allows for Ntubes to vary for the different passes
 
                 !cooling and heating are different flow direction - ISI 02/06/2009
                 IF (IsCoolingMode .GT. 0) THEN
@@ -3325,23 +3256,18 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         END DO
 
         !Inlet pass
-        READ(12,FMT_202)LineData !Slab#,#Inlets,Tubes per Inlet
-        IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
+        !Slab#,#Inlets,Tubes per Inlet
+        !IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
 
             DO I=1, Nl
 
-                READ(12,FMT_202)LineData
-                J=SCAN(LineData,',')
-                LineData=ADJUSTL(LineData(J+1:150))
-                READ(LineData,*)NumOfInlets
+                NumOfInlets = Numbers(5)
                 ALLOCATE(Slab(I)%InletPass(NumOfInlets))
                 Slab(I)%Ninlet=NumOfInlets
 
                 DO II=1, NumOfInlets
 
-                    J=SCAN(LineData,',')
-                    LineData=ADJUSTL(LineData(J+1:150))
-                    READ(LineData,*)Ntubes
+                    Ntubes = Numbers(6)
 
                     IF (IsCoolingMode .GT. 0) THEN
                         Slab(I)%InletPass(II)%Ntube=Ntubes
@@ -3353,31 +3279,37 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
 
             END DO
 
-            READ(12,*) !************************* Velocity Profile ********************************
+        !ELSE
+        !
+        !    NumOfInlets=1
+        !    DO I=1, Nl
+        !
+        !        ALLOCATE(Slab(I)%InletPass(NumOfInlets))
+        !        Slab(I)%Ninlet=NumOfInlets
+        !
+        !        DO II=1, NumOfInlets
+        !
+        !            Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
+        !
+        !        END DO
+        !
+        !    END DO
+        !END IF
 
-        ELSE
+        !************************* Velocity Profile ********************************
 
-            NumOfInlets=1
-            DO I=1, Nl
+        !Tube# ,velocity Deviation from mean value
 
-                ALLOCATE(Slab(I)%InletPass(NumOfInlets))
-                Slab(I)%Ninlet=NumOfInlets
-
-                DO II=1, NumOfInlets
-
-                    Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
-
-                END DO
-
-            END DO
-        END IF
-
-        READ(12,*) !Tube# ,velocity Deviation from mean value
-
+        CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+                                TmpNumbers,NumNumbers,Status)
+        Numbers=DBLE(TmpNumbers)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+        
         IsUniformVelProfile=.TRUE.
         DO II=1,Slab(Nl)%Npass
             DO III=1,Slab(Nl)%Pass(II)%Ntube
-                READ(12,*,IOSTAT=ErrorFlag)Ntube,(Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev,IV=1,NumOfMods)
+                DO IV=1, NumOfMods
+                    Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev=Numbers(IV)
+                END DO
                 IF (IsUniformVelProfile) THEN
                     DO IV=1,NumOfMods
                         IF (Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev .NE. 1) THEN
@@ -3416,7 +3348,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
     RETURN
 
     END SUBROUTINE InitEvaporatorCoil
-
+    
+!************************************************************************
+    
     SUBROUTINE InitEvaporatorCoil_Helper_1
 
     IF (ErrorFlag .NE. NOERROR) THEN

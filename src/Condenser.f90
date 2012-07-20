@@ -384,6 +384,12 @@
                          !1=Simple coil
                          !otherwise=detailed
     INTEGER NumOfSections !Number of sections, ISI - 09/10/07
+    
+    INTEGER,SAVE :: CoilType  !1=Condenser; 2=Evaporator;           !Indicates what kind of set-up it is
+                              !3=High side interconnecting pipes; 
+                              !4=Low side interconnecting pipes
+                              !5=Microchannel condenser
+                              !6=Microchannel evaporator
 
     TYPE (SlabInfo),ALLOCATABLE,DIMENSION(:),SAVE :: Slab      !Coil slab pointer
     TYPE (CktInfo),ALLOCATABLE,DIMENSION(:),SAVE :: Ckt        !Circuit pointer
@@ -581,11 +587,11 @@
     REAL :: MCPAR(39) !Microchannel coil input parameters
     REAL :: MCOUT(22) !Microchannel coil output data
 
-    INTEGER,SAVE :: CoilType  !1=Condenser; 2=Evaporator; 
-                              !3=High side interconnecting pipes; 
-                              !4=Low side interconnecting pipes
-                              !5=Microchannel condenser
-                              !6=Microchannel evaporator
+    !INTEGER,SAVE :: CoilType  !1=Condenser; 2=Evaporator; 
+    !                          !3=High side interconnecting pipes; 
+    !                          !4=Low side interconnecting pipes
+    !                          !5=Microchannel condenser
+    !                          !6=Microchannel evaporator
 
     INTEGER Iter                  !Iteration loop counter
     INTEGER AirBCiter             !Iteration loop counter
@@ -2165,14 +2171,12 @@
     !***** Get circuit info *****
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
-        !VL: Previously: GOTO 100
         CALL InitCondenserCoil_Helper_1
         RETURN
     END IF
     
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR
-        !VL: Previously: GOTO 100
         CALL InitCondenserCoil_Helper_1
         RETURN
     END IF
@@ -3008,12 +3012,12 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
     END IF  !End of the IDC or ODC if-statement
     
 ELSE !Microchannel coil
-    !RS Comment: The microchannel section has not had its inputs updated.
-        !READ(11,*) !**************************** Geometry *************************************
+
+        !**************************** Geometry *************************************
 
         !RS Comment: Updating input data for the microchannel option
             !Reading in the values for the variables
-            CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
+            CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
                                 TmpNumbers,NumNumbers,Status)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
@@ -3030,32 +3034,14 @@ ELSE !Microchannel coil
             Kfin = Numbers(3)
             FinThk = Numbers(4)
             TubeType = Numbers(5)
-            ODtube = Numbers(6)
-            IDtube = Numbers(7)
-            Ktube = Numbers(8)
-            Pt = Numbers(9)
-            Nl = Numbers(10)
-            Nt = Numbers(11)
-            Ltube = Numbers(12)
-
-        READ(11,*) !Tube name
-
-        READ(11,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeHeight
-
-        READ(11,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeDepth
-
-        READ(11,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)TubeThk
-
-!Ktube
+            TubeHeight = Numbers(6)     
+            TubeDepth = Numbers(7)
+            Tubethk = Numbers(8)
+            Ktube = Numbers(9)
+            Pt = Numbers(10)
+            Nl = Numbers(11)
+            Nt = Numbers(12)
+            Ltube = Numbers(13)
 
         IF (Ltube .LE. 1e-3) THEN
             ErrorFlag=ZEROLENCOILERROR
@@ -3063,55 +3049,37 @@ ELSE !Microchannel coil
             RETURN
         END IF
 
-        TubeOrientation=HORIZONTAL !Default
-        READ(11,FMT_202)LineData
-        IF (LineData(1:1) .EQ. 'T' .OR. LineData(1:1) .EQ. 't') THEN !Tube Orientation, new format - 06/06/06
-
-            I=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(I+1:150))
-            SELECT CASE (LineData(1:1))
+            SELECT CASE (Alphas(5)(1:1))
             CASE ('V','v')
                 TubeOrientation=VERTICAL
+            CASE ('H','h')
+                TubeOrientation=HORIZONTAL
             CASE DEFAULT
                 TubeOrientation=HORIZONTAL
             END SELECT
+            
+        NumOfMods = Numbers(14) !Number of segments or modules
+        NumOfChannels = Numbers(15) !Number of channels
+        Dchannel = Numbers(16)
 
-            READ(11,FMT_202)LineData
-        END IF
+        !*************************** Circuiting ************************************
 
-        !READ(12,FMT_202)LineData
-        I=SCAN(LineData,',') !Number of segments or modules
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)NumOfMods
-
-        READ(11,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)NumOfChannels
-
-        READ(11,FMT_202)LineData
-        I=SCAN(LineData,',')
-        LineData=ADJUSTL(LineData(I+1:150))
-        READ(LineData,*)Dchannel
-
-        READ(11,*) !*************************** Circuiting ************************************
-
+        CALL GetObjectItem('ODCcktCircuiting_Slab1',1,Alphas,NumAlphas, &
+                                TmpNumbers,NumNumbers,Status)
+        Numbers=DBLE(TmpNumbers)    !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+        
         ALLOCATE(Slab(Nl))
-        READ(11,*) !Slab#,#Passes,Tubes per Pass
+        !Slab#,#Passes,Tubes per Pass
         DO I=1, Nl
 
-            READ(11,FMT_202)LineData
-            J=SCAN(LineData,',')
-            LineData=ADJUSTL(LineData(J+1:150))
-            READ(LineData,*)NumOfPasses
+            NumOfPasses = Numbers(2)
             ALLOCATE(Slab(I)%Pass(NumOfPasses))
             Slab(I)%Npass=NumOfPasses
 
             DO II=1, NumOfPasses
 
-                J=SCAN(LineData,',')
-                LineData=ADJUSTL(LineData(J+1:150))
-                READ(LineData,*)Ntubes
+                J=2+II
+                Ntubes=Numbers(J)   !Allows for Ntubes to vary for the different passes
 
                 !cooling and heating are different flow direction - ISI 02/06/2009
                 IF (IsCoolingMode .GT. 0) THEN
@@ -3137,23 +3105,18 @@ ELSE !Microchannel coil
         END DO
 
         !Inlet pass
-        READ(11,FMT_202)LineData !Slab#,#Inlets,Tubes per Inlet
-        IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
+        !Slab#,#Inlets,Tubes per Inlet
+        !IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
 
             DO I=1, Nl
 
-                READ(11,FMT_202)LineData
-                J=SCAN(LineData,',')
-                LineData=ADJUSTL(LineData(J+1:150))
-                READ(LineData,*)NumOfInlets
+                NumOfInlets = Numbers(5)
                 ALLOCATE(Slab(I)%InletPass(NumOfInlets))
                 Slab(I)%Ninlet=NumOfInlets
 
                 DO II=1, NumOfInlets
 
-                    J=SCAN(LineData,',')
-                    LineData=ADJUSTL(LineData(J+1:150))
-                    READ(LineData,*)Ntubes
+                    Ntubes = Numbers(6)
 
                     IF (IsCoolingMode .GT. 0) THEN
                         Slab(I)%InletPass(II)%Ntube=Ntubes
@@ -3165,31 +3128,37 @@ ELSE !Microchannel coil
 
             END DO
 
-            READ(11,*) !************************* Velocity Profile ********************************
+        !ELSE
+        !
+        !    NumOfInlets=1
+        !    DO I=1, Nl
+        !
+        !        ALLOCATE(Slab(I)%InletPass(NumOfInlets))
+        !        Slab(I)%Ninlet=NumOfInlets
+        !
+        !        DO II=1, NumOfInlets
+        !
+        !            Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
+        !
+        !        END DO
+        !
+        !    END DO
+        !END IF
 
-        ELSE
-
-            NumOfInlets=1
-            DO I=1, Nl
-
-                ALLOCATE(Slab(I)%InletPass(NumOfInlets))
-                Slab(I)%Ninlet=NumOfInlets
-
-                DO II=1, NumOfInlets
-
-                    Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
-
-                END DO
-
-            END DO
-        END IF
-
-        READ(11,*) !Tube# ,velocity Deviation from mean value
+        !************************* Velocity Profile ********************************
+            
+        !Tube# ,velocity Deviation from mean value
+        
+        CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
+                                TmpNumbers,NumNumbers,Status)
+        Numbers=DBLE(TmpNumbers)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
 
         IsUniformVelProfile=.TRUE.
         DO II=1,Slab(Nl)%Npass
             DO III=1,Slab(Nl)%Pass(II)%Ntube
-                READ(11,*,IOSTAT=ErrorFlag)Ntube,(Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev,IV=1,NumOfMods)
+                DO IV=1, NumOfMods
+                    Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev=Numbers(IV)  !Will need to rewritten for the passes---is reading the same five numbers in again and again
+                END DO
                 IF (IsUniformVelProfile) THEN
                     DO IV=1,NumOfMods
                         IF (Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev .NE. 1) THEN
@@ -3280,6 +3249,12 @@ END IF
     IMPLICIT NONE
 
     INTEGER I,II,III,IV,J,K !Loop counters
+
+            IF (CoilType .EQ. MCCONDENSER) THEN
+                IF (IsSimpleCoil .EQ. 1) THEN   !IsSimpleCoil doesn't seem to really simplify for the microchannel case so much as cause errors
+                    IsSimpleCoil=2
+                END IF
+            END IF
 
     IF (IsSimpleCoil .EQ. 1) THEN
         DO I=1, NumOfCkts
@@ -3378,6 +3353,12 @@ END IF
         DEALLOCATE(LiqLnSeg) !Line line
     END IF
 
+    IF (CoilType .EQ. MCCONDENSER) THEN
+        IF (IsSimpleCoil .EQ. 2) THEN   !IsSimpleCoil doesn't seem to really simplify for the microchannel case so much as cause errors
+            IsSimpleCoil=1
+        END IF
+    END IF
+    
     RETURN
 
     END SUBROUTINE EndCondenserCoil
@@ -4206,13 +4187,20 @@ END IF
             CALL UpdateTubeDataFromCircuitData(II,III)
         END IF
 
-    ELSE
+    ELSE    !For the case of the microchannel condenser
 
         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Len=LmodTube
 
-        CALL CalcSegmentRefInletConditions(I,II,III,IV,CoilType)
-
-        CALL CalcSegmentAirInletConditions(I,II,III,IV,CoilType)
+        IF (IsSimpleCoil .EQ. 1) THEN
+            IsSimpleCoil=2  !RS Comment: Prevents tripping of the following calls due to the simple case not being applicable for the microchannel case
+            CALL CalcSegmentRefInletConditions(I,II,III,IV,CoilType)
+            CALL CalcSegmentAirInletConditions(I,II,III,IV,CoilType)
+            IsSimpleCoil=1
+        ELSE
+            CALL CalcSegmentRefInletConditions(I,II,III,IV,CoilType)
+            CALL CalcSegmentAirInletConditions(I,II,III,IV,CoilType)
+        END IF
+        
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
         END IF
@@ -6071,7 +6059,13 @@ END IF
 
                 Qpass=0.0
 
-                CALL CalcCircuitRefInletConditions(I,II,CoilType)
+                IF (IsSimpleCoil .EQ. 1) THEN
+                    IsSimpleCoil=2  !If IsSimpleCoil equals 1 then the following subroutine can't handle the microchannel
+                    CALL CalcCircuitRefInletConditions(I,II,CoilType)
+                    IsSimpleCoil=1
+                ELSE
+                    CALL CalcCircuitRefInletConditions(I,II,CoilType)
+                END IF
 
                 IF (II .EQ. 1 .AND. Slab(I)%Ninlet .GT. 1) THEN !Multi-inlet
 

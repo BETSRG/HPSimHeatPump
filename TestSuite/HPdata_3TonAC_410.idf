@@ -513,18 +513,20 @@ ODCcktGeometry,
     Aluminum, !Fin Material
     1, !Tube Type
     MC tube, !Tube Name
-    0.051, !Tube OD [in]
-    0.709, !Tube ID [in]
+    0.051, !Tube Height [in]
+    0.709, !Tube Depth [in]
+    0.0125, !Tube Thickness [in]
     1539, !Tube Conductivity [Btu.in/h.ft².F]
     0.5, !Tube Vertical Spacing [in]
     1, !Number of Rows
     47, !Number of Tubes per Row
     79.3, !Single Tube Length [in]
+    Horizontal, !Tube Orientation
     5, !Number of Segments
     23, !Number of Circuits
     0.026; !Channel Diameter
 
-Circuiting_Slab1,
+ODCcktCircuiting_Slab1,
 	1, !Slab #
 	2, !# of Passes
 	36, !Tubes per Pass 1?
