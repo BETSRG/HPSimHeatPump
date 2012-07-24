@@ -1,4 +1,4 @@
-MODULE InputProcessor
+MODULE InputProcessor_HPSim
           ! Module containing the input processor routines
 
           ! MODULE INFORMATION:
@@ -31,7 +31,7 @@ MODULE InputProcessor
 
           ! USE STATEMENTS:
           ! Use statements for data only modules
-  USE DataGlobals
+  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
            ! Use statements for access to subroutines in other modules
 
@@ -274,16 +274,16 @@ SUBROUTINE ProcessInput
    EchoInputFile=GetNewUnitNumber()
    OPEN(unit=EchoInputFile,file='eplusout.audit')
    !               FullName from StringGlobals is used to build file name with Path
-   IF (LEN_TRIM(ProgramPath) == 0) THEN
-     FullName='Energy+.idd'
-   ELSE
-     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
-   ENDIF
-   ! IF (LEN_TRIM(ProgramPath) == 0) THEN
-   !  FullName='Energy+_3TonAC_410.idd'
+   !IF (LEN_TRIM(ProgramPath) == 0) THEN
+   !  FullName='Energy+.idd'
    !ELSE
-   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
    !ENDIF
+    IF (LEN_TRIM(ProgramPath) == 0) THEN
+     FullName='Energy+_3TonAC_410.idd'
+   ELSE
+     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   ENDIF
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
      CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))
@@ -3889,7 +3889,7 @@ SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
           ! na
 
           ! USE STATEMENTS:
-  USE DataGlobals
+  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -3997,5 +3997,5 @@ END FUNCTION FindNonSpace
 !     TRADEMARKS: EnergyPlus is a trademark of the US Department of Energy.
 !
 
-END MODULE InputProcessor
+END MODULE InputProcessor_HPSim
 

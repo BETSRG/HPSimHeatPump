@@ -235,9 +235,7 @@
             ELSE
                 SUPERE=SUPER
             END IF
-            !VL: Previously: GO TO 50
         ELSE
-            !VL: Previously: 25      CONTINUE
             DTROC = DTVALU
             IF(DTROC.LT.0.0) THEN
                 DTROC = DTROC/200.
@@ -246,18 +244,11 @@
 
     END IF
 
-    !VL Previously: 50  CONTINUE
-
     FLAG_GOTO_950 = .FALSE.
-    !VL: Previously: 100 CONTINUE
     DO WHILE (.TRUE.)
-
-        !VL: Previously: 150 CONTINUE   ! No GOTO 150 statements found.
-
-        !VL: Previously: DO 200 I=1,2
+        
         DO I=1,2
             ERRMSG(I) = 0.0
-            !VL: Previously: 200 CONTINUE
         END DO
 
         !   FIND DESIRED CONDENSER SUBCOOLING
@@ -344,12 +335,10 @@
             EXIT
         END IF
 
-        !VL: Previously: IF (LPRINT.NE.2) GO TO 400
         IF (LPRINT.EQ.2) THEN 
             PRINT = .TRUE.
             DIFFER = CNDNSR(TSOCMP,IER)
         END IF
-        !VL: Previously: 400     IF (ABS(DIFFER) .LE. CONV) GO TO 500
         IF (ABS(DIFFER) .GT. CONV) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
@@ -383,8 +372,7 @@
 
             ERRMSG(1) = DIFFER
         END IF
-        !VL: Previously : 500     CONTINUE
-
+        
         EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
         !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
         EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
@@ -510,14 +498,13 @@
             END IF
         END IF
 
-        !VL: Previously: IF (LPRINT .NE. 2) GO TO 550
         IF (LPRINT .GT. 2) THEN
             PRINT = .TRUE.
             DIFFER = EVPTR(TAIIE,IER)
             PRINT = .FALSE.
         END IF
-        !VL: Previously: 550     IF (ABS(DIFFER) .LE. EVPCON) GO TO 560
-        IF (ABS(DIFFER) .GT. EVPCON) THEN !GO TO 560
+        
+        IF (ABS(DIFFER) .GT. EVPCON) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
                     IF (PrnCon .EQ. 1) THEN
@@ -549,9 +536,6 @@
             END IF
             ERRMSG(2) = DIFFER
         END IF
-
-        !VL: Previously: 560     CONTINUE
-        !VL: Previously : 570     CONTINUE ! No GOTO 570 statements found.
 
         IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
             IF (AccumPAR(2) .GT. 0) THEN !Height
@@ -637,15 +621,11 @@
 
         END IF
 
-        !VL: Previously:840     CONTINUE
-
         NTAMB = NTAMB + 1
-        !VL: Previously: IF(NTAMB.GT.15) GO TO 850
         IF(NTAMB.GT.15) THEN
             IF (PrnLog .EQ. 1) THEN
                 WRITE(6,FMT_1014) DIFF
             END IF
-            !VL: Previously: GOTO 900
             EXIT
         END IF
         IF (LPRINT .GT. 1) THEN
@@ -677,7 +657,6 @@
 
     !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
 
-    !VL: Previously :900 CONTINUE
     IF (FLAG_GOTO_950 .EQ. .FALSE.) THEN 
 
         IF (IREFC .EQ. 0) THEN
@@ -945,7 +924,7 @@
         RETURN
 
     END IF
-    !VL Previously: 950   CONTINUE
+
     CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
     CondOUT(18)=MassCoil
 

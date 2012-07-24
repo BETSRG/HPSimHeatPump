@@ -1,6 +1,6 @@
 MODULE AccumulatorMod
 
-    USE DataGlobals, ONLY: RefName
+    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataSimulation
 
     IMPLICIT NONE
@@ -193,7 +193,6 @@ CONTAINS
     ACCMAS = 0.0
     XLEVEL = 0.0
 
-    ! VL: Previously: IF(AHGT.LE.0.001) GO TO 201
     IF(AHGT.LE.0.001) THEN
         FLAG_GOTO_201 = .TRUE.
     END IF
@@ -209,7 +208,6 @@ CONTAINS
             HL(1) = 0.0
             ACCMAS = VOLACC/V
             VHGT=AHGT
-            !VL: Previously: GO TO 100
             FLAG_GOTO_100 = .TRUE.
         END IF
 
@@ -240,7 +238,6 @@ CONTAINS
             !
             !       CHECK IF BELOW SECOND HOLE
             !
-            !VL: Previously: IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) GO TO 40
             IF(HL(1).LT.HDIS.OR.HDIS.EQ.0.) THEN
                 FLAG_GOTO_40 = .TRUE.
             END IF
@@ -269,7 +266,6 @@ CONTAINS
             END IF
 
             IF (FLAG_GOTO_40 .EQ. .FALSE.) THEN
-                ! VL : Previously 15  CONTINUE
                 HL(2) = HL(1)-HDIS
                 DP = HL(2)*RO*32.2 + PDYN
                 RM = 0.585*AHOLE(2)*SQRT(2.*RO*DP)
@@ -301,7 +297,6 @@ CONTAINS
                     !
                     !       SKIP OUT IF LEVEL WILL NOT RISE ABOVE SECOND HOLE
                     !
-                    !VL: Previously: IF(IHOLE.EQ.1) GO TO 40
                     IF(IHOLE.EQ.1) THEN
                         FLAG_GOTO_40 = .TRUE.
                         EXIT
@@ -320,7 +315,6 @@ CONTAINS
                         DIFF1 = DIFF2
                         Z1 = Z2
                     END IF
-                    !VL: Previously: 20                  Z2 = Z1 - DIFF1*SLOPE
                     Z2 = Z1 - DIFF1*SLOPE
                     Z2 = AMAX1(Z2,HDIS)
                 END DO
@@ -336,11 +330,8 @@ CONTAINS
             END IF
             ACCMAS = AMASS2
         END IF
-        !VL: Previously:100 XLEVEL = HL(1)*12.
         XLEVEL = HL(1)*12.
     END IF
-
-    !VL: Previously:201 CONTINUE
     !
     !!VL: Previously: 600 FORMAT(' ACCUMULATOR IS FULL')
     !!VL: Previously: 602 FORMAT(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')

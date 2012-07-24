@@ -47,7 +47,7 @@ MODULE FluidProperties_HPSim
 
         ! USE STATEMENTS
 
-USE DataGlobals, ONLY: MaxNameLength
+USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE                           ! Enforce explicit typing of all variables
 PRIVATE
@@ -176,7 +176,7 @@ SUBROUTINE GetFluidPropertiesData
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor
+  USE InputProcessor_HPSim
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -3165,7 +3165,7 @@ INTEGER FUNCTION FindRefrigerant(Refrigerant)
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor, ONLY: FindItemInList, MakeUPPERCase
+  USE InputProcessor_HPSim, ONLY: FindItemInList, MakeUPPERCase
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -3481,7 +3481,7 @@ INTEGER FUNCTION CheckFluidPropertyName(NameToCheck)
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor, ONLY: FindItemInList
+  USE InputProcessor_HPSim, ONLY: FindItemInList
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

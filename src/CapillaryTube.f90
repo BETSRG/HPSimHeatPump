@@ -99,6 +99,7 @@
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
+    !INTEGER, INTENT(INOUT) :: OUT(7)
 
     INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
@@ -176,7 +177,8 @@
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
+    !IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
+     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN       
         RETURN
     END IF
 
@@ -319,7 +321,6 @@
     OUT(5)=MassDisTube
     OUT(6)=QdisTube
 
-!VL: Previously: 200 CONTINUE
     OUT(7)=ErrorFlag
 
     RETURN
@@ -389,6 +390,7 @@
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
+    !INTEGER, INTENT(INOUT) :: OUT(7)
 
     INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
@@ -625,7 +627,6 @@
     OUT(5)=MassDisTube
     OUT(6)=QdisTube
 
-!200 CONTINUE
     OUT(7)=ErrorFlag
 
     RETURN

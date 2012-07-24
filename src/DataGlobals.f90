@@ -1,10 +1,10 @@
-MODULE DataGlobals      ! EnergyPlus Data-Only Module
+MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)      ! EnergyPlus Data-Only Module
 
           ! MODULE INFORMATION:
           !       AUTHOR         Rick Strand
           !       DATE WRITTEN   January 1997
           !       MODIFIED       May 1997 (RKS) Added Weather Variables
-          !       MODIFIED       December 1997 (RKS,DF,LKL) Split into DataGlobals and DataEnvironment
+          !       MODIFIED       December 1997 (RKS,DF,LKL) Split into DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12) and DataEnvironment
           !       MODIFIED       February 1999 (FW) Added NextHour, WGTNEXT, WGTNOW
           !       MODIFIED       September 1999 (LKL) Rename WGTNEXT,WGTNOW for clarity
           !       RE-ENGINEERED  na
@@ -42,7 +42,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
           CHARACTER(len=120) :: VerString='EnergyPlus, Version 1.1.1'      ! String that represents version information
           INTEGER :: TotalSevereErrors = 0 ! Counter
           INTEGER :: TotalWarningErrors = 0 ! Counter
-          DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed tiem at end of run
+          DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed time at end of run
           CHARACTER*80 :: RefName
 
           ! MODULE VARAIBLES:
@@ -75,4 +75,4 @@ PUBLIC          ! By definition, all variables which are placed in this data
 !     TRADEMARKS: EnergyPlus is a trademark of the US Department of Energy.
 !
 
-END MODULE DataGlobals
+END MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)

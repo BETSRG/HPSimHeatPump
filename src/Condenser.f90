@@ -1,6 +1,6 @@
     MODULE CondenserMod
 
-    USE DataGlobals, ONLY: RefName
+    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -2127,7 +2127,7 @@
     !------------------------------------------------------------------------
 
     USE UnitConvertMod
-    USE InputProcessor
+    USE InputProcessor_HPSim
 
     IMPLICIT NONE
 
@@ -3157,7 +3157,7 @@ ELSE !Microchannel coil
         DO II=1,Slab(Nl)%Npass
             DO III=1,Slab(Nl)%Pass(II)%Ntube
                 DO IV=1, NumOfMods
-                    Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev=Numbers(IV)  !Will need to rewritten for the passes---is reading the same five numbers in again and again
+                    Slab(Nl)%Pass(II)%Tube(III)%Seg(IV)%VelDev=Numbers(IV)  !Will need to be rewritten for the passes---is reading the same five numbers every time
                 END DO
                 IF (IsUniformVelProfile) THEN
                     DO IV=1,NumOfMods

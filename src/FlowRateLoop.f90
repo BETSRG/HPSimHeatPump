@@ -63,8 +63,8 @@
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
-    LOGICAL,SAVE :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the
-    !condenser model are allocated
+    !LOGICAL,SAVE :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated
+    LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
     REAL, SAVE:: PrevTime = 0.0 
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
