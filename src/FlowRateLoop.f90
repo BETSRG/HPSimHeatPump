@@ -507,7 +507,6 @@
                 CASE (2)
                     WRITE(*,*)'Trying another iterating value....'
                     IERR=1
-                    !VL: Previously: GO TO 200
                     CYCLE
                 END SELECT
             END IF
@@ -525,7 +524,6 @@
         MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
 
         IF(.NOT. PRINT) THEN
-            !VL: Previously: GO TO 200
             CYCLE
         END IF
 

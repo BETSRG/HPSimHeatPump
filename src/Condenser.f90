@@ -212,7 +212,7 @@
     REAL kRef     !Refrigerant bulk conductivity, kW/m-K
     REAL cpRef    !Ref. specific heat, kJ/(kg-K)
     REAL rhoRef   !Ref. density, kg/m3
-    REAL CPAir                !Specific heat of air, kJ/kg-K
+    REAL CPAir    !Specific heat of air, kJ/kg-K
     REAL DensityIn   !Inlet air density, kg/m3
     REAL DensityOut  !Outlet air density, kg/m3
     REAL Wabsolute   !Asolute oil mass fraction  
@@ -3078,7 +3078,7 @@ ELSE !Microchannel coil
 
             DO II=1, NumOfPasses
 
-                J=2+II
+                J=2+II      !+2 because the first two Numbers() are Slab# and # of Passes
                 Ntubes=Numbers(J)   !Allows for Ntubes to vary for the different passes
 
                 !cooling and heating are different flow direction - ISI 02/06/2009
@@ -5927,7 +5927,7 @@ END IF
 
     IsParallelSlabs = 1
 
-    ErrorFlag=NOERROR !Initilaize
+    ErrorFlag=NOERROR !Initialize
 
     !Coil height What is this? Is this right for a microchannel? Yes - ISI - 12/24/2009
     HtCoil=Nt*Pt

@@ -1865,7 +1865,7 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
   END IF
 
   CASE ('enthalpy') 
-  !CALCULATE ENTHAPY OF SATURATED REGION GIVEN QUALITY
+  !CALCULATE ENTHALPY OF SATURATED REGION GIVEN QUALITY
   TQ = GetInterpolatedSatProp(Temperature, RefrigData(RefrigNum)%HTemps, &
                                              RefrigData(RefrigNum)%HfValues, &
                        RefrigData(RefrigNum)%HfgValues, Quality)

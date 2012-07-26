@@ -675,7 +675,9 @@ INTEGER I
       
   SELECT CASE (FinType)
   !CASE (1,2,3,4,6,7,8,9,10)
-  CASE (PLAINFIN,WAVYFIN)
+  !CASE (PLAINFIN,WAVYFIN)
+  CASE (PLAINFIN,WAVYFIN, 3)    !RS Comment: 3 is the Louver fin type, such as is used in the MC condenser case
+  !RS Comment: Trying to implement the MC case(s), but it's unclear what's actually useful.
 
 	FaceVel=mAiCoil/(rhoIn*AfrCoil)
 	Gmax=mAiCoil/Amin
