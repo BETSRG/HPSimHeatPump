@@ -8,7 +8,7 @@
     USE TXVMOD
     USE AccumulatorMod
     USE DataSimulation
-    USE IFPORT
+    !USE IFPORT !RS: This seems to be an obsolete module
 
     IMPLICIT NONE
 
@@ -78,7 +78,6 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
 
-    
     MaxIteration=30
     ICHRGE=1
     IMASS=1
@@ -328,7 +327,6 @@
             STOP
         END IF
         FirstTimeFlowRateLoop=.FALSE.
-        !VL: Previously: IF (MODE .EQ. 5) GO TO 950 !Skip the rest of the calculation for Condenser Unit
         !ISI 05-25-05
         IF (MODE .EQ. 5) THEN !Peform the rest of the calculation for Condenser Unit
             FLAG_GOTO_950 = .TRUE.
@@ -652,7 +650,6 @@
             STOP
         END IF
 
-        !VL: Previously : GO TO 100 ! modified into DO-WHILE loop
     END DO
 
     !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF

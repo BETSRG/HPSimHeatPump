@@ -134,18 +134,18 @@ REAL, INTENT(IN)  :: DP      !Pressure drop across TXV, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, ton
 
 !Subroutine local variables:
-REAL TevpMax  !Maximum referance evaporating temperature, C
-REAL TevpMin  !Minimum referance evaporating temperature, C
-REAL M_Qmax   !M-Coefficient for maximum referance capacity
-REAL M_Qmin   !M-Coefficient for minimum referance capacity
-REAL B_Qmax   !B-Coefficient for maximum referance capacity
-REAL B_Qmin   !B-Coefficient for minimum referance capacity
-REAL M_Tliq   !M-Coefficient for referance liquid temperature
-REAL B_Tliq   !B-Coefficient for referance liquid temperature
-REAL a_DPmax  !a-Coefficient for maximum referance pressure drop
-REAL a_DPmin  !a-Coefficient for minimum referance pressure drop
-REAL b_DPmax  !b-Coefficient for maximum referance pressure drop
-REAL b_DPmin  !b-Coefficient for minimum referance pressure drop
+REAL TevpMax  !Maximum reference evaporating temperature, C
+REAL TevpMin  !Minimum reference evaporating temperature, C
+REAL M_Qmax   !M-Coefficient for maximum reference capacity
+REAL M_Qmin   !M-Coefficient for minimum reference capacity
+REAL B_Qmax   !B-Coefficient for maximum reference capacity
+REAL B_Qmin   !B-Coefficient for minimum reference capacity
+REAL M_Tliq   !M-Coefficient for reference liquid temperature
+REAL B_Tliq   !B-Coefficient for reference liquid temperature
+REAL a_DPmax  !a-Coefficient for maximum reference pressure drop
+REAL a_DPmin  !a-Coefficient for minimum reference pressure drop
+REAL b_DPmax  !b-Coefficient for maximum reference pressure drop
+REAL b_DPmin  !b-Coefficient for minimum reference pressure drop
 REAL CF_Tliq  !Correction factor for liquid temperature
 REAL CF_DP    !Correction factor for pressure drop
   
@@ -313,7 +313,7 @@ REAL, INTENT(IN)  :: Bmin    !B-coefficient for minimum reference point
 REAL, INTENT(IN)  :: Tmin    !Minimum reference temperature, C
 REAL, INTENT(IN)  :: Mmax    !M-coefficient for maximum reference point
 REAL, INTENT(IN)  :: Bmax    !B-coefficient for maximum reference point
-REAL, INTENT(IN)  :: Tmax    !Maximum referenece temperature, C
+REAL, INTENT(IN)  :: Tmax    !Maximum reference temperature, C
 REAL, INTENT(IN)  :: Qcmp    !Compressor rated capacity, ton
 REAL, INTENT(IN)  :: Tevp    !Evaporating temperature, C
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, ton

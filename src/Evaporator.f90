@@ -734,7 +734,7 @@ CONTAINS
 
     EqCircuits=0 !Equivalent circuit flag
 
-    ErrorFlag=NOERROR !Initilaize
+    ErrorFlag=NOERROR !Initialize
 
     !Tube inside diameter
     IDsucLn=ODsucLn-SucLnThk*2
@@ -4040,7 +4040,9 @@ REAL :: tAi
 		WetFlag=0
 		IF (IsSimpleCoil .EQ. 1) THEN
 		    RowNum=0
-			IF (FinType .EQ. 4) FinType=3 !Use regular louver fin correlation, ISI - 02/12/08
+			IF (FinType .EQ. 4) THEN
+                FinType=3 !Use regular louver fin correlation, ISI - 02/12/08
+            END IF
 		ELSE
 			RowNum=CoilSection(NumSection)%Ckt(II)%Tube(III)%RowNum
 		END IF

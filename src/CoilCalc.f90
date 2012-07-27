@@ -619,12 +619,20 @@ INTEGER I
   PrAir = muA*CPair/kA !Prandtl #
 
   !Outside radius, including collar  Sankar adjusted frost thickness
- IF(CoilType .EQ. CONDENSERCOIL) THEN 
+ !IF(CoilType .EQ. CONDENSERCOIL) THEN      !RS: No place for the MC coil type
+ ! Rc=OD/2+FinThk
+ !ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
+ ! Rc=OD/2+FinThk+FrostParam%Thickness
+ !END IF
+ !RS: Adding the "ELSE" statement to allow for the MC coil type; not sure if it's actually correct, though!
+  IF(CoilType .EQ. CONDENSERCOIL) THEN 
   Rc=OD/2+FinThk
  ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
   Rc=OD/2+FinThk+FrostParam%Thickness
- END IF 
-
+ ELSE
+  Rc=OD/2+FinThk
+ END IF
+ 
   !Outside diameter, including collar
   Dc=Rc*2
 
@@ -633,7 +641,7 @@ INTEGER I
 
   !Coil frontal area
   AfrCoil=HtCoil*Ltube
-  IF(CoolHeatModeFlag == 1) THEN
+  IF(CoolHeatModeFlag == 1) THEN            !Need to allow the option of a MicroChannel case
    IF(CoilType .EQ. CONDENSERCOIL) THEN
     CoilParams(2)%CoilFaceArea=AfrCoil
    ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
@@ -675,7 +683,7 @@ INTEGER I
       
   SELECT CASE (FinType)
   !CASE (1,2,3,4,6,7,8,9,10)
-  !CASE (PLAINFIN,WAVYFIN)
+  !CASE (PLAINFIN,WAVYFIN)  !RS: No allowance for louver fins
   CASE (PLAINFIN,WAVYFIN, 3)    !RS Comment: 3 is the Louver fin type, such as is used in the MC condenser case
   !RS Comment: Trying to implement the MC case(s), but it's unclear what's actually useful.
 
@@ -4821,19 +4829,25 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	       Nl**(-0.166-1.08*TAND(theta))*(FinSpg/Pt)**(-0.174*LOG(0.5*Nl))
 	    jfactor=0.0646*ReDc**j1*(Dc/Dh)**j2*(FinSpg/Pt)**(-1.03)*(Pl/Dc)**0.432 * &
 	      (TAND(theta))**(-0.692)*Nl**(-0.737)
-	  END IF
+      END IF
 
+    CASE(3)   !3 means a louver
+      Dh=4*Amin*HXdep/AoCoil    !The other cases take these into account, so maybe this one does too
+	  FinPitch=1/(FinSpg+FinThk)
+
+      !RS: Assuming that this is indeed a correlation for a louvered fin        
 	  !Wang et. al (1999), IJ Heat and Mass Transfer
-	  !j1=-0.229+0.115*((1/FinPitch)/Dc)**0.6*(Pl/Dh)**0.54*Nl**(-0.284)*LOG(0.5*TAND(theta))
-	  !j2=-0.251+0.232*Nl**1.37/(LOG(ReDc)-2.303)
-	  !j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
-	  !j4=0.502*(LOG(ReDc)-2.54)
-	  !jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
+	  j1=-0.229+0.115*((1/FinPitch)/Dc)**0.6*(Pl/Dh)**0.54*Nl**(-0.284)*LOG(0.5*TAND(theta))
+	  j2=-0.251+0.232*Nl**1.37/(LOG(ReDc)-2.303)
+	  j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
+	  j4=0.502*(LOG(ReDc)-2.54)
+	  jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
                             
 	END SELECT
 
   ELSE 
 
+      !RS Comment: Need a case for louvers!
     SELECT CASE (FinType)
     CASE (PLAINFIN)
       j1=0.3745-1.554*(FinSpg/Dc)**0.24*(Pl/Pt)**0.12*Nl**(-0.19)
@@ -4975,6 +4989,7 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
              !Pl = 12.4 - 27.5 mm
 
 	  !McQuiston
+
 	  !Dh=Dc*(AoCoil/AbrCoil)/(1+(Pt-Dc)/FinSpg)
 	  !FP=ReDc**(-0.25)*(Dc/Dh)**0.25*((Pt-Dc)/(4*(FinSpg-FinThk)))**(-0.4)*ABS(Pt/Dh-1)**(-0.5)
       !f=0.004904+1.382*FP**2
@@ -5015,13 +5030,20 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  	F3=0.302*ReDc**0.03*(Pt/Dc)**0.026
 	  	F4=-0.306+3.63*TAND(theta)
 	  	Fricfactor=0.228*ReDc**F1*TAND(theta)**F2*(FinSpg/Pl)**F3*(Pl/Dc)**F4*(Dc/Dh)**0.383*(Pl/Pt)**(-0.247)
-	  END IF
+      END IF
+      
+      CASE (3)   !RS: Dry Louver Case
+      !RS: Need Dry Louvered Fin case correlations and equations
+      Fricfactor=0  !Just seeing if the case works; Yep, it does
+      
     END SELECT
   ELSE 
     SELECT CASE (FinType)
     CASE (1) !Wet plain fin
 
     CASE DEFAULT !Wet louvered fin
+        !RS Comment: Louvered fin may be case default, but what does that case actually involve? Looks like nothing currently.
+        !RS: Also, this is under the ELSE, so it's totally skipped if the above IF is true.
   	END SELECT
   END IF
 

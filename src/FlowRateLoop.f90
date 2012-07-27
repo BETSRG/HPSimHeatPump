@@ -27,7 +27,7 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE DataSimulation
-    USE IFPORT
+    !USE IFPORT !RS: This seems to be an obsolete module
 
     IMPLICIT NONE
 
@@ -559,9 +559,5 @@
     END DO
 
     RETURN
-
-    !!VL: Previously:
-!!900 FORMAT (A50,F7.2,A5)
-!!904 FORMAT (A32,F7.2,A9)
 
     END FUNCTION

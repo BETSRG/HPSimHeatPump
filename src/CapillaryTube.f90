@@ -111,7 +111,7 @@
     REAL :: DCAP        !Cap tube diameter, in
     REAL :: Dcoil       !Cap tube coil diameter, m
     REAL :: IDDISTUBE   !Distributor inside diameter, in
-    REAL :: VolDisTube  !Distributor tube volumn, m^3
+    REAL :: VolDisTube  !Distributor tube volume, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa or psi
     REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
@@ -177,7 +177,7 @@
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    !IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN
+    !IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN   !RS: OUT(6) is the wrong location---OUT(7) is the error location
      IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN       
         RETURN
     END IF
@@ -390,7 +390,6 @@
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
-    !INTEGER, INTENT(INOUT) :: OUT(7)
 
     INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
