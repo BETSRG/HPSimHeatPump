@@ -1,0 +1,29 @@
+all inputs are in kW,kPa,m, CU
+Unit convert changes CondPAR() etc to these units, from their inputs, typically mm or watts
+
+
+Unit Conversions in Unit Convert (SI Only)
+CondPAR(2) = CondPAR(2)/1000 mm -> m
+CondPAR(3) = CondPAR(3)/1000 mm -> m
+CondPAR(5) = CondPAR(5)/1000 mm -> m
+CondPAR(9) = CondPAR(9)/1000 mm -> m
+CondPAR(10) = CondPAR(10)/1000 mm -> m
+CondPAR(12) = CondPAR(12)/1000 mm -> m
+CondPAR(15) = CondPAR(15)/1000 mm -> m
+CondPAR(16) = CondPAR(16)/1000 mm -> m
+CondPAR(19) = CondPAR(19)/1000 mm -> m
+CondPAR(20) = CondPAR(20)/1000 mm -> m
+CondPAR(21) = CondPAR(21)/1000 mm -> m
+CondPAR(34) = CondPAR(34)/1000 W -> kW
+
+EvapPAR(2)=EvapPAR(2)/1000
+EvapPAR(3)=EvapPAR(3)/1000
+EvapPAR(5)=EvapPAR(5)/1000 W -> kW
+EvapPAR(8)=EvapPAR(8)/1000
+EvapPAR(9)=EvapPAR(9)/1000
+EvapPAR(12)=EvapPAR(12)/1000
+EvapPAR(13)=EvapPAR(13)/1000
+EvapPAR(14)=EvapPAR(14)/1000
+EvapPAR(27)=EvapPAR(27)/1000 W -> kW
+
+
