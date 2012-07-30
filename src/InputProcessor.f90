@@ -188,31 +188,18 @@ TYPE (SecretObjects), ALLOCATABLE, DIMENSION(:)          :: RepObjects         !
 PUBLIC  ProcessInput
 
 PUBLIC  GetNumSectionsFound
-PUBLIC  GetNumSectionsinInput
-PUBLIC  GetListofSectionsinInput
 PUBLIC  FindIteminList
-PUBLIC  FindItem
 PUBLIC  SameString
 PUBLIC  MakeUPPERCase
 PUBLIC  ProcessNumber
-PUBLIC  RangeCheck
-PUBLIC  VerifyName
 
 PUBLIC  GetNumObjectsFound
 PUBLIC  GetObjectItem
 PUBLIC  GetObjectItemNum
 PUBLIC  GetObjectItemfromFile
-PUBLIC  GetRecordLocations
 PUBLIC  TellMeHowManyObjectItemArgs
-PUBLIC  TurnOnReportRangeCheckErrors
-PUBLIC  TurnOffReportRangeCheckErrors
 PUBLIC  GetNumRangeCheckErrorsFound
 
-PUBLIC  GetNumObjectsInIDD
-PUBLIC  GetListOfObjectsInIDD
-PUBLIC  GetObjectDefInIDD
-PUBLIC  GetObjectDefMaxArgs
-PUBLIC  ReportOrphanRecordObjects
 PUBLIC  DeallocateArrays
 
 PRIVATE FindNonSpace
@@ -1784,101 +1771,101 @@ INTEGER FUNCTION GetNumSectionsFound(SectionWord)
 
 END FUNCTION GetNumSectionsFound
 
-INTEGER FUNCTION GetNumSectionsinInput()
+!INTEGER FUNCTION GetNumSectionsinInput()   !RS: This subroutine doesn't appear to be ever called.
+!
+!          ! FUNCTION INFORMATION:
+!          !       AUTHOR         Linda K. Lawrie
+!          !       DATE WRITTEN   September 1997
+!          !       MODIFIED       na
+!          !       RE-ENGINEERED  na
+!
+!          ! PURPOSE OF THIS SUBROUTINE:
+!          ! This function returns the number of sections in the entire input data file
+!          ! of the current run.
+!
+!          ! METHODOLOGY EMPLOYED:
+!          ! Return value of NumIDFSections.
+!
+!          ! REFERENCES:
+!          ! na
+!
+!          ! USE STATEMENTS:
+!          ! na
+!
+!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+!
+!          ! SUBROUTINE ARGUMENT DEFINITIONS:
+!          ! na
+!
+!          ! SUBROUTINE PARAMETER DEFINITIONS:
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+!          ! na
+!
+!  GetNumSectionsinInput=NumIDFSections
+!
+!  RETURN
+!
+!END FUNCTION GetNumSectionsinInput
 
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This function returns the number of sections in the entire input data file
-          ! of the current run.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Return value of NumIDFSections.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  GetNumSectionsinInput=NumIDFSections
-
-  RETURN
-
-END FUNCTION GetNumSectionsinInput
-
-SUBROUTINE GetListofSectionsinInput(SectionList,NuminList)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns the list of sections as they occurred
-          ! in the Input Data File (IDF).
-
-          ! METHODOLOGY EMPLOYED:
-          ! Look up object in list of objects.  If there, return the
-          ! number of objects found in the current input.  If not, return
-          ! -1.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), DIMENSION(:), INTENT(OUT) :: SectionList
-  INTEGER, INTENT(OUT) :: NuminList
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER MaxAllowedOut
-
-  MaxAllowedOut=MIN(NumIDFSections,SIZE(SectionList))
-  IF (MaxAllowedOut /= NumIDFSections) THEN
-    CALL ShowWarningError('More in list than allowed in passed array - (GetListofSectionsinInput)')
-  ENDIF
-  NuminList=MaxAllowedOut
-  SectionList(1:MaxAllowedOut)=SectionsonFile(1:MaxAllowedOut)%Name
-
-  RETURN
-
-END SUBROUTINE GetListofSectionsinInput
+!SUBROUTINE GetListofSectionsinInput(SectionList,NuminList)     !RS: This subroutine doesn't appear to ever be called
+!
+!          ! SUBROUTINE INFORMATION:
+!          !       AUTHOR         Linda K. Lawrie
+!          !       DATE WRITTEN   September 1997
+!          !       MODIFIED       na
+!          !       RE-ENGINEERED  na
+!
+!          ! PURPOSE OF THIS SUBROUTINE:
+!          ! This subroutine returns the list of sections as they occurred
+!          ! in the Input Data File (IDF).
+!
+!          ! METHODOLOGY EMPLOYED:
+!          ! Look up object in list of objects.  If there, return the
+!          ! number of objects found in the current input.  If not, return
+!          ! -1.
+!
+!          ! REFERENCES:
+!          ! na
+!
+!          ! USE STATEMENTS:
+!          ! na
+!
+!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+!
+!          ! SUBROUTINE ARGUMENT DEFINITIONS:
+!  CHARACTER(len=*), DIMENSION(:), INTENT(OUT) :: SectionList
+!  INTEGER, INTENT(OUT) :: NuminList
+!
+!          ! SUBROUTINE PARAMETER DEFINITIONS:
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+!  INTEGER MaxAllowedOut
+!
+!  MaxAllowedOut=MIN(NumIDFSections,SIZE(SectionList))
+!  IF (MaxAllowedOut /= NumIDFSections) THEN
+!    CALL ShowWarningError('More in list than allowed in passed array - (GetListofSectionsinInput)')
+!  ENDIF
+!  NuminList=MaxAllowedOut
+!  SectionList(1:MaxAllowedOut)=SectionsonFile(1:MaxAllowedOut)%Name
+!
+!  RETURN
+!
+!END SUBROUTINE GetListofSectionsinInput
 
 INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
@@ -1933,53 +1920,53 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
 END FUNCTION GetNumObjectsFound
 
-SUBROUTINE GetRecordLocations(Which,FirstRecord,LastRecord)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns the record location values (which will be
-          ! passed to 'GetObjectItem') for a section from the list of inputted
-          ! sections (sequential).
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  INTEGER, INTENT(IN) :: Which
-  INTEGER, INTENT(OUT) :: FirstRecord
-  INTEGER, INTENT(OUT) :: LastRecord
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  FirstRecord=SectionsonFile(Which)%FirstRecord
-  LastRecord=SectionsonFile(Which)%LastRecord
-
-  RETURN
-
-END SUBROUTINE GetRecordLocations
+!SUBROUTINE GetRecordLocations(Which,FirstRecord,LastRecord)    !RS: This sub is never called in the current program
+!
+!          ! SUBROUTINE INFORMATION:
+!          !       AUTHOR         Linda K. Lawrie
+!          !       DATE WRITTEN   September 1997
+!          !       MODIFIED       na
+!          !       RE-ENGINEERED  na
+!
+!          ! PURPOSE OF THIS SUBROUTINE:
+!          ! This subroutine returns the record location values (which will be
+!          ! passed to 'GetObjectItem') for a section from the list of inputted
+!          ! sections (sequential).
+!
+!          ! METHODOLOGY EMPLOYED:
+!          ! na
+!
+!          ! REFERENCES:
+!          ! na
+!
+!          ! USE STATEMENTS:
+!          ! na
+!
+!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+!
+!          ! SUBROUTINE ARGUMENT DEFINITIONS:
+!  INTEGER, INTENT(IN) :: Which
+!  INTEGER, INTENT(OUT) :: FirstRecord
+!  INTEGER, INTENT(OUT) :: LastRecord
+!
+!          ! SUBROUTINE PARAMETER DEFINITIONS:
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+!          ! na
+!
+!  FirstRecord=SectionsonFile(Which)%FirstRecord
+!  LastRecord=SectionsonFile(Which)%LastRecord
+!
+!  RETURN
+!
+!END SUBROUTINE GetRecordLocations
 
 SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Status)
 
@@ -2777,64 +2764,6 @@ INTEGER FUNCTION FindIteminList(String,ListofItems,NumItems)
 
 END FUNCTION FindIteminList
 
-INTEGER FUNCTION FindItem(String,ListofItems,NumItems)
-
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   April 1999
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS FUNCTION:
-          ! This function looks up a string in a similar list of
-          ! items and returns the index of the item in the list, if
-          ! found.  This routine is case insensitive -- it uses the
-          ! SameString function to assure that both strings are in
-          ! all upper case.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: String
-  CHARACTER(len=*), INTENT(IN), DIMENSION(:) :: ListofItems
-  INTEGER, INTENT(IN) :: NumItems
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Count
-  CHARACTER(len=MaxInputLineLength) StringUC
-
-  FindItem=0
-  StringUC=MakeUPPERCase(String)
-
-  DO Count=1,NumItems
-    IF (StringUC == MakeUPPERCase(ListofItems(Count))) THEN
-      FindItem=Count
-      EXIT
-    ENDIF
-  END DO
-
-  RETURN
-
-END FUNCTION FindItem
-
 FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
 
           ! FUNCTION INFORMATION:
@@ -2953,169 +2882,6 @@ LOGICAL FUNCTION SameString(TestString1,TestString2)
 
 END FUNCTION SameString
 
-SUBROUTINE VerifyName(NameToVerify,NamesList,NumOfNames,ErrorFound,IsBlank,StringToDisplay)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda Lawrie
-          !       DATE WRITTEN   February 2000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine verifys that a new name can be added to the
-          ! list of names for this item (i.e., that there isn't one of that
-          ! name already and that this name is not blank).
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN)               :: NameToVerify
-  CHARACTER(len=*), DIMENSION(:), INTENT(IN) :: NamesList
-  INTEGER, INTENT(IN)                        :: NumOfNames
-  LOGICAL, INTENT(INOUT)                     :: ErrorFound
-  LOGICAL, INTENT(OUT)                       :: IsBlank
-  CHARACTER(len=*), INTENT(IN)               :: StringToDisplay
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Found
-
-  IF (NumOfNames > 0) THEN
-    Found=FindItemInList(NameToVerify,NamesList,NumOfNames)
-    IF (Found /= 0) THEN
-      CALL ShowSevereError(TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify))
-      ErrorFound=.true.
-    ENDIF
-  ENDIF
-
-  IF (NameToVerify == '     ') THEN
-    CALL ShowSevereError(TRIM(StringToDisplay)//', cannot be blank')
-    ErrorFound=.true.
-    IsBlank=.true.
-  ELSE
-    IsBlank=.false.
-  ENDIF
-
-  RETURN
-
-END SUBROUTINE VerifyName
-
-SUBROUTINE RangeCheck(ErrorsFound,WhatFieldString,WhatObjectString,ErrorLevel,  &
-                      LowerBoundString,LowerBoundCond,UpperBoundString,UpperBoundCond)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda Lawrie
-          !       DATE WRITTEN   July 2000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine is a general purpose "range check" routine for GetInput routines.
-          ! Using the standard "ErrorsFound" logical, this routine can produce a reasonable
-          ! error message to describe the situation in addition to setting the ErrorsFound variable
-          ! to true.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  LOGICAL, INTENT(OUT)                   :: ErrorsFound  ! Set to true if error detected
-  CHARACTER(len=*), INTENT(IN)           :: WhatFieldString  ! Descriptive field for string
-  CHARACTER(len=*), INTENT(IN)           :: WhatObjectString ! Descriptive field for object, Zone Name, etc.
-  CHARACTER(len=*), INTENT(IN)           :: ErrorLevel  ! 'Warning','Severe','Fatal')
-  CHARACTER(len=*), INTENT(IN), OPTIONAL :: LowerBoundString  ! String for error message, if applicable
-  LOGICAL, INTENT(IN), OPTIONAL          :: LowerBoundCond  ! Condition for error condition, if applicable
-  CHARACTER(len=*), INTENT(IN), OPTIONAL :: UpperBoundString  ! String for error message, if applicable
-  LOGICAL, INTENT(IN), OPTIONAL          :: UpperBoundCond  ! Condition for error condition, if applicable
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  CHARACTER(len=7) ErrorString  ! Uppercase representation of ErrorLevel
-  LOGICAL Error
-  CHARACTER(len=120) Message
-
-  Error=.false.
-  IF (PRESENT(UpperBoundCond)) THEN
-    IF (.not. UpperBoundCond) THEN
-        Error=.true.
-    END IF
-  ENDIF
-  IF (PRESENT(LowerBoundCond)) THEN
-    IF (.not. LowerBoundCond) THEN
-        Error=.true.
-    ENDIF
-  ENDIF
-
-  IF (Error) THEN
-    CALL ConvertCasetoUPPER(ErrorLevel,ErrorString)
-    Message='Out of range value field='//TRIM(WhatFieldString)//', range={'
-    IF (PRESENT(LowerBoundString)) THEN
-        Message=TRIM(Message)//TRIM(LowerBoundString)
-    END IF
-    IF (PRESENT(LowerBoundString) .and. PRESENT(UpperBoundString)) THEN
-      Message=TRIM(Message)//' and '//TRIM(UpperBoundString)
-    ELSEIF (PRESENT(UpperBoundString)) THEN
-      Message=TRIM(Message)//TRIM(UpperBoundString)
-    ENDIF
-    Message=TRIM(Message)//'}, for item='//TRIM(WhatObjectString)
-
-    SELECT CASE(ErrorString(1:1))
-
-    CASE('W')
-      CALL ShowWarningError(TRIM(Message))
-
-    CASE('S')
-      CALL ShowSevereError(TRIM(Message))
-      ErrorsFound=.true.
-
-    CASE('F')
-      CALL ShowFatalError(TRIM(Message))
-
-    CASE DEFAULT
-      CALL ShowSevereError(TRIM(Message))
-      ErrorsFound=.true.
-
-    END SELECT
-
-  ENDIF
-
-  RETURN
-
-END SUBROUTINE RangeCheck
-
 SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSizable)
 
           ! SUBROUTINE INFORMATION:
@@ -3219,94 +2985,6 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
 
 END SUBROUTINE InternalRangeCheck
 
-SUBROUTINE TurnOnReportRangeCheckErrors
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda Lawrie
-          !       DATE WRITTEN   July 2000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine turns on the logical to report range check errors
-          ! directly out of the InputProcessor.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  ReportRangeCheckErrors=.true.
-
-  RETURN
-
-END SUBROUTINE TurnOnReportRangeCheckErrors
-
-SUBROUTINE TurnOffReportRangeCheckErrors
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda Lawrie
-          !       DATE WRITTEN   July 20000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine turns off the logical to report range check errors
-          ! directly out of the InputProcessor.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  ReportRangeCheckErrors=.false.
-
-  RETURN
-
-END SUBROUTINE TurnOffReportRangeCheckErrors
-
 INTEGER FUNCTION GetNumRangeCheckErrorsFound()
 
           ! FUNCTION INFORMATION:
@@ -3350,313 +3028,6 @@ INTEGER FUNCTION GetNumRangeCheckErrorsFound()
   RETURN
 
 END FUNCTION GetNumRangeCheckErrorsFound
-
-!==============================================================================
-! The following routines allow access to the definition lines of the IDD and
-! thus can be used to "report" on expected arguments for the Input Processor.
-
-INTEGER FUNCTION GetNumObjectsInIDD()
-
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   May 1998
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns the number of objects found in the IDD and
-          ! can be used to allocate the array for determining the definitions.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Essentially allows outside access to an internal variable of the InputProcessor.
-          ! Used primarily by utility programs that use the InputProcessor outside of the
-          ! "true" EnergyPlus code.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  GetNumObjectsInIDD=NumObjectDefs
-
-  RETURN
-
-END FUNCTION GetNumObjectsInIDD
-
-SUBROUTINE GetListOfObjectsInIDD(ObjectNames,Number)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   May 1998
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns the list of Object names that occur in the IDD.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Essentially allows outside access to an internal variable of the InputProcessor.
-          ! Used primarily by utility programs that use the InputProcessor outside of the
-          ! "true" EnergyPlus code.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*),  &
-              DIMENSION(:), INTENT(OUT) :: ObjectNames  ! List of Object Names (from IDD)
-  INTEGER, INTENT(OUT)                  :: Number       ! Number in List
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  ObjectNames(1:NumObjectDefs)=ObjectDef(1:NumObjectDefs)%Name
-  Number=NumObjectDefs
-  RETURN
-
-END SUBROUTINE GetListOfObjectsInIDD
-
-
-SUBROUTINE GetObjectDefInIDD(ObjectWord,NumArgs,AlphaorNumeric,RequiredFields,MinNumFields)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   May 1998
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns the "definition" of an Object from the IDD.  This is
-          ! the "maximum" definition with total number of arguments, and whether each argument
-          ! is "alpha" or "numeric".
-
-          ! METHODOLOGY EMPLOYED:
-          ! Essentially allows outside access to an internal variable of the InputProcessor.
-          ! Used primarily by utility programs that use the InputProcessor outside of the
-          ! "true" EnergyPlus code.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: ObjectWord ! Object for definition
-  INTEGER, INTENT(OUT) :: NumArgs                              ! How many arguments (max) this Object can have
-  LOGICAL, INTENT(OUT), DIMENSION(:) :: AlphaorNumeric         ! Array designating Alpha (true) or Numeric (false) for each
-                                                               ! argument
-  LOGICAL, INTENT(OUT), DIMENSION(:) :: RequiredFields         ! Array designating RequiredFields (true) for each argument
-  INTEGER, INTENT(OUT) :: MinNumFields                         ! Minimum Number of Fields to be returned to Get routines
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Which  ! to determine which object definition to use
-
-  Which=FindItemInList(ObjectWord,ObjectDef(1:NumObjectDefs)%Name,NumObjectDefs)
-  NumArgs=ObjectDef(Which)%NumParams
-  AlphaorNumeric(1:NumArgs)=ObjectDef(Which)%AlphaorNumeric(1:NumArgs)
-  RequiredFields(1:NumArgs)=ObjectDef(Which)%ReqField(1:NumArgs)
-  MinNumFields=ObjectDef(Which)%MinNumFields
-
-  RETURN
-
-END SUBROUTINE GetObjectDefInIDD
-
-SUBROUTINE GetObjectDefMaxArgs(ObjectWord,NumArgs,NumAlpha,NumNumeric)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   October 2001
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine returns maximum argument limits (total, alphas, numerics) of an Object from the IDD.
-          ! These dimensions (not sure what one can use the total for) can be used to dynamically dimension the
-          ! arrays in the GetInput routines.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Essentially allows outside access to internal variables of the InputProcessor.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: ObjectWord ! Object for definition
-  INTEGER, INTENT(OUT) :: NumArgs                              ! How many arguments (max) this Object can have
-  INTEGER, INTENT(OUT) :: NumAlpha                             ! How many Alpha arguments (max) this Object can have
-  INTEGER, INTENT(OUT) :: NumNumeric                           ! How many Numeric arguments (max) this Object can have
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Which  ! to determine which object definition to use
-
-  Which=FindItemInList(ObjectWord,ObjectDef(1:NumObjectDefs)%Name,NumObjectDefs)
-  NumArgs=ObjectDef(Which)%NumParams
-  NumAlpha=ObjectDef(Which)%NumAlpha
-  NumNumeric=ObjectDef(Which)%NumNumeric
-
-  RETURN
-
-END SUBROUTINE GetObjectDefMaxArgs
-
-SUBROUTINE ReportOrphanRecordObjects
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda Lawrie
-          !       DATE WRITTEN   August 2002
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine reports "orphan" objects that are in the IDF but were
-          ! not "gotten" during the simulation.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Uses internal (to InputProcessor) IDFRecordsGotten array, cross-matched with Object
-          ! names -- puts those into array to be printed (not adding dups).
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-          ! na
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          ! na
-  CHARACTER(len=MaxAlphaArgLength), ALLOCATABLE, DIMENSION(:) :: OrphanObjectNames
-  CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: OrphanNames
-  INTEGER Count
-  INTEGER Found
-  INTEGER ObjFound
-  INTEGER NumOrphObjNames
-
-  ALLOCATE(OrphanObjectNames(NumIDFRecords),OrphanNames(NumIDFRecords))
-  OrphanObjectNames=Blank
-  OrphanNames=Blank
-  NumOrphObjNames=0
-
-  DO Count=1,NumIDFRecords
-    IF (IDFRecordsGotten(Count)) THEN
-        CYCLE
-    END IF
-    !  This one not gotten
-    Found=FindIteminList(IDFRecords(Count)%Name,OrphanObjectNames,NumOrphObjNames)
-    IF (Found == 0) THEN
-      ObjFound=FindItemInList(IDFRecords(Count)%Name,ObjectDef%Name,NumObjectDefs)
-      IF (ObjectDef(ObjFound)%ObsPtr > 0) THEN
-          CYCLE   ! Obsolete object, don't report "orphan"
-      END IF
-      NumOrphObjNames=NumOrphObjNames+1
-      OrphanObjectNames(NumOrphObjNames)=IDFRecords(Count)%Name
-      IF (ObjectDef(ObjFound)%NameAlpha1) THEN
-        OrphanNames(NumOrphObjNames)=IDFRecords(Count)%Alphas(1)
-      ENDIF
-    ENDIF
-  ENDDO
-
-  IF (NumOrphObjNames > 0) THEN
-    WRITE(EchoInputFile,*) 'Orphan Objects -- Objects in IDF that were never "gotten"'
-    DO Count=1,NumOrphObjNames
-      IF (OrphanNames(Count) /= Blank) THEN
-        WRITE(EchoInputFile,'(A)') ' '//TRIM(OrphanObjectNames(Count))//'='//TRIM(OrphanNames(Count))
-      ELSE
-        WRITE(EchoInputFile,*) TRIM(OrphanObjectNames(Count))
-      ENDIF
-    ENDDO
-    CALL ShowWarningError('The following lines are "Orphan Objects".  These objects are in the idf')
-    CALL ShowContinueError(' file but are never obtained by the simulation and therefore are NOT used.')
-    CALL ShowContinueError(' See InputOutputReference document for more details.')
-    IF (OrphanNames(1) /= Blank) THEN
-      CALL ShowMessage('Object='//TRIM(OrphanObjectNames(1))//'='//TRIM(OrphanNames(1)))
-    ELSE
-      CALL ShowMessage('Object='//TRIM(OrphanObjectNames(1)))
-    ENDIF
-    DO Count=2,NumOrphObjNames
-      IF (OrphanNames(Count) /= Blank) THEN
-        CALL ShowMessage('Object='//TRIM(OrphanObjectNames(Count))//'='//TRIM(OrphanNames(Count)))
-      ELSE
-        CALL ShowContinueError('Object='//TRIM(OrphanObjectNames(Count)))
-      ENDIF
-    ENDDO
-  ENDIF
-
-  DEALLOCATE(OrphanObjectNames)
-  DEALLOCATE(OrphanNames)
-
-  RETURN
-
-END SUBROUTINE ReportOrphanRecordObjects
 
 SUBROUTINE InitSecretObjects
 
