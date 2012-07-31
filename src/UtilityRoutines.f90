@@ -1,4 +1,4 @@
-
+ 
 SUBROUTINE IssueHPFatalError(exitCode)
 
 ! the fortran keyword STOP cannot accept a variable, only a literal or a parameter
@@ -65,7 +65,10 @@ END FUNCTION
 
 SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
 
-    REAL, INTENT(IN) :: PrnCon, PrnLog
+!USE DataSimulation
+
+    INTEGER, INTENT(IN) :: PrnCon, PrnLog
+    !REAL, INTENT(IN) :: PrnCon, PrnLog
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
     IF (PrnLog .EQ. 1) THEN
@@ -696,6 +699,802 @@ SUBROUTINE ShowErrorMessage(ErrorMessage,OutUnit1,OutUnit2)
   RETURN
 
 END SUBROUTINE ShowErrorMessage
+
+!RS: The following subroutines are being added in for the Energy+ side
+
+SUBROUTINE ConvertCasetoLower(InputString,OutputString)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! Convert a string to lower case
+
+          ! METHODOLOGY EMPLOYED:
+          ! This routine is not dependant upon the ASCII
+          ! code.  It works by storing the upper and lower case alphabet.  It
+          ! scans the whole input string.  If it finds a character in the lower
+          ! case alphabet, it makes an appropriate substitution.
+
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataStringGLobals
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: InputString    ! Input string
+  CHARACTER(len=*), INTENT(OUT) :: OutputString  ! Output string (in LowerCase)
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+      INTEGER A,B
+
+      OutputString=' '
+
+      DO A=1,LEN_TRIM(InputString)
+          B=INDEX(UpperCase,InputString(A:A))
+          IF (B .NE. 0) THEN
+              OutputString(A:A)=LowerCase(B:B)
+          ELSE
+              OutputString(A:A)=InputString(A:A)
+          ENDIF
+      END DO
+
+      RETURN
+
+END SUBROUTINE ConvertCasetoLower
+
+SUBROUTINE ShowContinueErrorTimeStamp(Message,OutUnit1,OutUnit2)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   February 2004
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine displays a 'continued error' timestamp message on designated output files.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls ShowErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE General,                         ONLY : CreateSysTimeIntervalString
+  USE DataEnvironment,                 ONLY : EnvironmentName,CurMnDy
+  USE DataGlobals,                     ONLY : WarmupFlag,DoingSizing
+  USE DataInterfaces, ONLY: ShowErrorMessage
+  USE SQLiteProcedures, ONLY: UpdateSQLiteErrorRecord, WriteOutputToSQLite
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) Message
+  INTEGER, OPTIONAL :: OutUnit1
+  INTEGER, OPTIONAL :: OutUnit2
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  ! see DataInterfaces
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  CHARACTER(len=100) :: cEnvHeader
+
+  IF (WarmupFlag) THEN
+    IF (.not. DoingSizing) THEN
+      cEnvHeader=' During Warmup, Environment='
+    ELSE
+      cEnvHeader=' During Warmup & Sizing, Environment='
+    ENDIF
+  ELSE
+    IF (.not. DoingSizing) THEN
+      cEnvHeader=' Environment='
+    ELSE
+      cEnvHeader=' During Sizing, Environment='
+    ENDIF
+  ENDIF
+
+  IF (Len_Trim(Message) < 50) THEN
+    CALL ShowErrorMessage(' **   ~~~   ** '//TRIM(Message)//TRIM(cEnvHeader)//TRIM(EnvironmentName)//', at Simulation time='//  &
+                                             TRIM(CurMnDy)//' '//TRIM(CreateSysTimeIntervalString()),  &
+                                                OutUnit1,OutUnit2)
+    IF(WriteOutputToSQLite) THEN
+      CALL UpdateSQLiteErrorRecord(TRIM(Message)//TRIM(cEnvHeader)//TRIM(EnvironmentName)//', at Simulation time='//  &
+                                TRIM(CurMnDy)//' '//TRIM(CreateSysTimeIntervalString()))
+    ENDIF
+
+  ELSE
+    CALL ShowErrorMessage(' **   ~~~   ** '//TRIM(Message))
+    CALL ShowErrorMessage(' **   ~~~   ** '//TRIM(cEnvHeader)//TRIM(EnvironmentName)//', at Simulation time='//  &
+                                             TRIM(CurMnDy)//' '//TRIM(CreateSysTimeIntervalString()),  &
+                                                OutUnit1,OutUnit2)
+    IF(WriteOutputToSQLite) THEN
+      CALL UpdateSQLiteErrorRecord(TRIM(Message)// &
+                                 TRIM(cEnvHeader)//TRIM(EnvironmentName)//', at Simulation time='//  &
+                                 TRIM(CurMnDy)//' '//TRIM(CreateSysTimeIntervalString()))
+    ENDIF
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE ShowContinueErrorTimeStamp
+
+SUBROUTINE ShowRecurringSevereErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                          ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Michael J. Witte
+          !       DATE WRITTEN   August 2004
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine stores a recurring ErrorMessage with a Severe designation
+          ! for output at the end of the simulation with automatic tracking of number
+          ! of occurences and optional tracking of associated min, max, and sum values
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls StoreRecurringErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataPrecisionGlobals
+  USE DataStringGlobals
+  USE DataErrorTracking
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
+  INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  INTERFACE
+    SUBROUTINE StoreRecurringErrorMessage(ErrorMessage,ErrorMsgIndex,ErrorReportMaxOf,ErrorReportMinOf,ErrorReportSumOf,  &
+                                                                     ErrorReportMaxUnits,ErrorReportMinUnits,ErrorReportSumUnits)
+    USE DataPrecisionGlobals
+    !  Use for recurring "warning" error messages shown once at end of simulation
+    !  with count of occurences and optional max, min, sum
+    CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
+    INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
+    END SUBROUTINE
+  END INTERFACE
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Loop
+
+  DO Loop=1,SearchCounts
+    IF (INDEX(Message,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
+  ENDDO
+
+  TotalSevereErrors=TotalSevereErrors+1
+  CALL StoreRecurringErrorMessage(' ** Severe  ** '//Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                                      ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+  RETURN
+
+END SUBROUTINE ShowRecurringSevereErrorAtEnd
+
+SUBROUTINE ShowRecurringWarningErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                           ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Michael J. Witte
+          !       DATE WRITTEN   August 2004
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine stores a recurring ErrorMessage with a Warning designation
+          ! for output at the end of the simulation with automatic tracking of number
+          ! of occurences and optional tracking of associated min, max, and sum values
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls StoreRecurringErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataPrecisionGlobals
+  USE DataStringGlobals
+  USE DataErrorTracking
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
+  INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  INTERFACE
+    SUBROUTINE StoreRecurringErrorMessage(ErrorMessage,ErrorMsgIndex,ErrorReportMaxOf,ErrorReportMinOf,ErrorReportSumOf,  &
+                                                                     ErrorReportMaxUnits,ErrorReportMinUnits,ErrorReportSumUnits)
+    USE DataPrecisionGlobals
+    !  Use for recurring "warning" error messages shown once at end of simulation
+    !  with count of occurences and optional max, min, sum
+    CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
+    INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
+    END SUBROUTINE
+  END INTERFACE
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Loop
+
+  DO Loop=1,SearchCounts
+    IF (INDEX(Message,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
+  ENDDO
+
+  TotalWarningErrors=TotalWarningErrors+1
+  CALL StoreRecurringErrorMessage(' ** Warning ** '//Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                                      ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+  RETURN
+
+ END SUBROUTINE ShowRecurringWarningErrorAtEnd
+
+SUBROUTINE ShowSevereMessage(ErrorMessage,OutUnit1,OutUnit2)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 2009
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine puts ErrorMessage with a Severe designation on
+          ! designated output files.
+          ! But does not bump the error count so can be used in conjunction with recurring
+          ! error calls.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls ShowErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataStringGlobals
+  USE DataErrorTracking
+  USE DataInterfaces, ONLY: ShowErrorMessage
+  USE SQLiteProcedures, ONLY: CreateSQLiteErrorRecord, WriteOutputToSQLite
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) ErrorMessage
+  INTEGER, OPTIONAL :: OutUnit1
+  INTEGER, OPTIONAL :: OutUnit2
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  ! see DataInterfaces
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Loop
+
+  DO Loop=1,SearchCounts
+    IF (INDEX(ErrorMessage,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
+  ENDDO
+
+  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2)
+  LastSevereError=ErrorMessage
+
+  !  Could set a variable here that gets checked at some point?
+
+  IF(WriteOutputToSQLite) THEN
+    CALL CreateSQLiteErrorRecord(1,1,ErrorMessage,0)
+  ENDIF
+  RETURN
+
+END SUBROUTINE ShowSevereMessage                                                       
+
+SUBROUTINE ShowWarningMessage(ErrorMessage,OutUnit1,OutUnit2)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 2009
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine puts ErrorMessage with a Warning designation on
+          ! designated output files.
+          ! But does not bump the error count so can be used in conjunction with recurring
+          ! error calls.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls ShowErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataStringGlobals
+  USE DataErrorTracking
+  USE DataInterfaces, ONLY: ShowErrorMessage
+  USE SQLiteProcedures, ONLY: CreateSQLiteErrorRecord, WriteOutputToSQLite
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) ErrorMessage
+  INTEGER, OPTIONAL :: OutUnit1
+  INTEGER, OPTIONAL :: OutUnit2
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  ! see DataInterfaces
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Loop
+
+  DO Loop=1,SearchCounts
+    IF (INDEX(ErrorMessage,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
+  ENDDO
+
+  CALL ShowErrorMessage(' ** Warning ** '//ErrorMessage,OutUnit1,OutUnit2)
+  IF(WriteOutputToSQLite) THEN
+    CALL CreateSQLiteErrorRecord(1,0,ErrorMessage,0)
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE ShowWarningMessage
+
+SUBROUTINE ShowRecurringContinueErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                            ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Michael J. Witte
+          !       DATE WRITTEN   August 2004
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine stores a recurring ErrorMessage with a continue designation
+          ! for output at the end of the simulation with automatic tracking of number
+          ! of occurences and optional tracking of associated min, max, and sum values
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls StoreRecurringErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataPrecisionGlobals
+  USE DataStringGlobals
+  USE DataErrorTracking
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
+  INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  INTERFACE
+    SUBROUTINE StoreRecurringErrorMessage(ErrorMessage,ErrorMsgIndex,ErrorReportMaxOf,ErrorReportMinOf,ErrorReportSumOf,  &
+                                                                     ErrorReportMaxUnits,ErrorReportMinUnits,ErrorReportSumUnits)
+    USE DataPrecisionGlobals
+    !  Use for recurring "warning" error messages shown once at end of simulation
+    !  with count of occurences and optional max, min, sum
+    CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
+    INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
+    CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
+    END SUBROUTINE
+  END INTERFACE
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  INTEGER Loop
+
+  DO Loop=1,SearchCounts
+    IF (INDEX(Message,TRIM(MessageSearch(Loop))) > 0) MatchCounts(Loop)=MatchCounts(Loop)+1
+  ENDDO
+
+  CALL StoreRecurringErrorMessage(' **   ~~~   ** '//Message,MsgIndex,ReportMaxOf,ReportMinOf,ReportSumOf,  &
+                                                                      ReportMaxUnits,ReportMinUnits,ReportSumUnits)
+
+  RETURN
+
+END SUBROUTINE ShowRecurringContinueErrorAtEnd
+
+SUBROUTINE StoreRecurringErrorMessage(ErrorMessage,ErrorMsgIndex,ErrorReportMaxOf,ErrorReportMinOf,ErrorReportSumOf,  &
+                                                                 ErrorReportMaxUnits,ErrorReportMinUnits,ErrorReportSumUnits)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Michael J. Witte
+          !       DATE WRITTEN   August 2004
+          !       MODIFIED       September 2005;LKL;Added Units
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine stores a recurring ErrorMessage with
+          ! for output at the end of the simulation with automatic tracking of number
+          ! of occurences and optional tracking of associated min, max, and sum values
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataPrecisionGlobals
+  USE DataStringGlobals
+  USE DataErrorTracking
+  USE DataGlobals,         ONLY : WarmupFlag,DoingSizing
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
+  INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  TYPE (RecurringErrorData),   ALLOCATABLE, DIMENSION(:) :: TempRecurringErrors
+
+  ! If Index is zero, then assign next available index and reallocate array
+  IF (ErrorMsgIndex == 0) THEN
+    NumRecurringErrors = NumRecurringErrors + 1
+    ErrorMsgIndex = NumRecurringErrors
+    IF (NumRecurringErrors == 1) THEN
+      ALLOCATE(RecurringErrors(NumRecurringErrors))
+    ELSEIF (NumRecurringErrors > 1) THEN
+      ALLOCATE(TempRecurringErrors(NumRecurringErrors))
+      TempRecurringErrors(1:NumRecurringErrors-1)=RecurringErrors(1:NumRecurringErrors-1)
+      DEALLOCATE(RecurringErrors)
+      ALLOCATE(RecurringErrors(NumRecurringErrors))
+      RecurringErrors = TempRecurringErrors
+      DEALLOCATE(TempRecurringErrors)
+    ENDIF
+  ! The message string only needs to be stored once when a new recurring message is created
+    RecurringErrors(ErrorMsgIndex)%Message = TRIM(ErrorMessage)
+    RecurringErrors(ErrorMsgIndex)%Count   = 1
+    IF (WarmupFlag) RecurringErrors(ErrorMsgIndex)%WarmupCount   = 1
+    IF (DoingSizing) RecurringErrors(ErrorMsgIndex)%SizingCount   = 1
+
+
+  ! For max, min, and sum values, store the current value when a new recurring message is created
+    IF (PRESENT(ErrorReportMaxOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%MaxValue = ErrorReportMaxOf
+      RecurringErrors(ErrorMsgIndex)%ReportMax = .TRUE.
+      IF (PRESENT(ErrorReportMaxUnits)) THEN
+        RecurringErrors(ErrorMsgIndex)%MaxUnits=ErrorReportMaxUnits
+      ENDIF
+    ENDIF
+    IF (PRESENT(ErrorReportMinOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%MinValue = ErrorReportMinOf
+      RecurringErrors(ErrorMsgIndex)%ReportMin = .TRUE.
+      IF (PRESENT(ErrorReportMinUnits)) THEN
+        RecurringErrors(ErrorMsgIndex)%MinUnits=ErrorReportMinUnits
+      ENDIF
+    ENDIF
+    IF (PRESENT(ErrorReportSumOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%SumValue = ErrorReportSumOf
+      RecurringErrors(ErrorMsgIndex)%ReportSum = .TRUE.
+      IF (PRESENT(ErrorReportSumUnits)) THEN
+        RecurringErrors(ErrorMsgIndex)%SumUnits=ErrorReportSumUnits
+      ENDIF
+    ENDIF
+
+  ELSEIF (ErrorMsgIndex > 0) THEN
+    ! Do stats and store
+    RecurringErrors(ErrorMsgIndex)%Count = RecurringErrors(ErrorMsgIndex)%Count + 1
+    IF (WarmupFlag) RecurringErrors(ErrorMsgIndex)%WarmupCount = RecurringErrors(ErrorMsgIndex)%WarmupCount + 1
+    IF (DoingSizing) RecurringErrors(ErrorMsgIndex)%SizingCount = RecurringErrors(ErrorMsgIndex)%SizingCount + 1
+
+    IF (PRESENT(ErrorReportMaxOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%MaxValue = MAX(ErrorReportMaxOf,RecurringErrors(ErrorMsgIndex)%MaxValue)
+      RecurringErrors(ErrorMsgIndex)%ReportMax = .TRUE.
+    ENDIF
+    IF (PRESENT(ErrorReportMinOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%MinValue = MIN(ErrorReportMinOf,RecurringErrors(ErrorMsgIndex)%MinValue)
+      RecurringErrors(ErrorMsgIndex)%ReportMin = .TRUE.
+    ENDIF
+    IF (PRESENT(ErrorReportSumOf)) THEN
+      RecurringErrors(ErrorMsgIndex)%SumValue = ErrorReportSumOf + RecurringErrors(ErrorMsgIndex)%SumValue
+      RecurringErrors(ErrorMsgIndex)%ReportSum = .TRUE.
+    ENDIF
+  ELSE
+    ! If ErrorMsgIndex < 0, then do nothing
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE StoreRecurringErrorMessage
+
+SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! Convert a string to upper case
+
+          ! METHODOLOGY EMPLOYED:
+          ! This routine is not dependant upon the ASCII
+          ! code.  It works by storing the upper and lower case alphabet.  It
+          ! scans the whole input string.  If it finds a character in the lower
+          ! case alphabet, it makes an appropriate substitution.
+
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataStringGlobals
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: InputString    ! Input string
+  CHARACTER(len=*), INTENT(OUT) :: OutputString  ! Output string (in UpperCase)
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+      INTEGER A,B
+
+      OutputString=' '
+
+      DO A=1,LEN_TRIM(InputString)
+          B=INDEX(LowerCase,InputString(A:A))
+          IF (B .NE. 0) THEN
+              OutputString(A:A)=UpperCase(B:B)
+          ELSE
+              OutputString(A:A)=InputString(A:A)
+          ENDIF
+      END DO
+
+      RETURN
+
+END SUBROUTINE ConvertCasetoUpper
+
+INTEGER FUNCTION FindNonSpace(String)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function finds the first non-space character in the passed string
+          ! and returns that position as the result to the calling program.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Scan string for character not equal to blank.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+  CHARACTER(len=*), INTENT(IN) :: String  ! String to be scanned
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      INTEGER I,ILEN
+
+      FindNonSpace=0
+      ILEN=LEN_TRIM(String)
+      DO I=1,ILEN
+        IF (String(I:I) .NE. ' ') THEN
+          FindNonSpace=I
+          EXIT
+        END IF
+      END DO
+
+      RETURN
+
+END FUNCTION FindNonSpace
+
+FUNCTION FindUnitNumber (FileName) RESULT (UnitNumber)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997, adapted from reference
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! Returns a unit number for the file name that is either opened or exists.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Use Inquire function to find out if proposed unit: exists or is opened.
+          ! If not, can be used for a new unit number.
+
+          ! REFERENCES:
+          ! Copyright (c) 1994 Unicomp, Inc.  All rights reserved.
+          !
+          ! Developed at Unicomp, Inc.
+          !
+          ! Permission to use, copy, modify, and distribute this
+          ! software is freely granted, provided that this notice
+          ! is preserved.
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) FileName  ! File name to be searched.
+  INTEGER UnitNumber         ! Unit number that should be used
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+!  Largest allowed unit number (or a large number, if none)
+  INTEGER, PARAMETER :: MaxUnitNumber = 1000
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+  CHARACTER(Len=255) TestFileName       ! File name returned from opened file
+  INTEGER TestFileLength                ! Length from INQUIRE intrinsic
+  INTEGER,EXTERNAL :: GetNewUnitNumber  ! Function to call if file not opened
+  LOGICAL :: exists                     ! True if file already exists
+  LOGICAL :: opened                     ! True if file is open
+  INTEGER Pos                           ! Position pointer
+  INTEGER FileNameLength                ! Length of requested file
+  INTEGER :: ios                        ! Status indicator from INQUIRE intrinsic
+
+  INQUIRE (FILE=FileName, EXIST = exists,  OPENED = opened, IOSTAT = ios)
+  IF (.not. OPENED) THEN
+    UnitNumber=GetNewUnitNumber()
+    OPEN(UNIT=UnitNumber,FILE=FileName,POSITION='APPEND',iostat=ios)
+    IF (ios /= 0) THEN
+      CALL DisplayString('FindUnitNumber: Could not open file "'//trim(FileName)//'" for append.')
+    ENDIF
+  ELSE
+    FileNameLength=LEN_TRIM(FileName)
+    DO UnitNumber=1,MaxUnitNumber
+      INQUIRE(UNIT=UnitNumber,NAME=TestFileName,OPENED=opened)
+      !  Powerstation returns just file name
+      !  DVF (Digital Fortran) returns whole path
+      TestFileLength=LEN_TRIM(TestFileName)
+      Pos=INDEX(TestFileName,FileName)
+      IF (Pos .ne. 0) THEN
+        !  Must be the last part of the file
+        IF (Pos+FileNameLength-1 .eq. TestFileLength) EXIT
+      ENDIF
+    END DO
+  ENDIF
+
+  RETURN
+
+END FUNCTION FindUnitNumber
+
 
 !     NOTICE
 !

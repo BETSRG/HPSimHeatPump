@@ -1,4 +1,4 @@
-    PROGRAM SimulationCycle
+    SUBROUTINE SimulationCycle
 
     !
     !
@@ -916,7 +916,7 @@
 
     STOP
 
-    END PROGRAM
+    END SUBROUTINE
 
     ! Comment Index
     ! --------------------------------------------------------

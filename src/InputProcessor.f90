@@ -187,7 +187,6 @@ TYPE (SecretObjects), ALLOCATABLE, DIMENSION(:)          :: RepObjects         !
 
 PUBLIC  ProcessInput
 
-PUBLIC  GetNumSectionsFound
 PUBLIC  FindIteminList
 PUBLIC  SameString
 PUBLIC  MakeUPPERCase
@@ -198,7 +197,6 @@ PUBLIC  GetObjectItem
 PUBLIC  GetObjectItemNum
 PUBLIC  GetObjectItemfromFile
 PUBLIC  TellMeHowManyObjectItemArgs
-PUBLIC  GetNumRangeCheckErrorsFound
 
 PUBLIC  DeallocateArrays
 
@@ -266,11 +264,7 @@ SUBROUTINE ProcessInput
    ELSE
      FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
    ENDIF
-   ! IF (LEN_TRIM(ProgramPath) == 0) THEN
-   !  FullName='Energy+_3TonAC_410.idd'
-   !ELSE
-   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
-   !ENDIF
+
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
      CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))
@@ -302,7 +296,6 @@ SUBROUTINE ProcessInput
    ENDIF
 
    FileName = "in.idf"
-   !FileName = "in_longtubes.idf"
 
    INQUIRE(file=FileName,EXIST=FileExists)
    IF (.not. FileExists) THEN
@@ -1719,59 +1712,59 @@ SUBROUTINE ValidateSectionsInput
 
 END SUBROUTINE ValidateSectionsInput
 
-INTEGER FUNCTION GetNumSectionsFound(SectionWord)
+!INTEGER FUNCTION GetNumSectionsFound(SectionWord)
+!
+!          ! FUNCTION INFORMATION:
+!          !       AUTHOR         Linda K. Lawrie
+!          !       DATE WRITTEN   September 1997
+!          !       MODIFIED       na
+!          !       RE-ENGINEERED  na
+!
+!          ! PURPOSE OF THIS SUBROUTINE:
+!          ! This function returns the number of a particular section (in input data file)
+!          ! found in the current run.  If it can't find the section in list
+!          ! of sections, a -1 will be returned.
+!
+!          ! METHODOLOGY EMPLOYED:
+!          ! Look up section in list of sections.  If there, return the
+!          ! number of sections of that kind found in the current input.  If not, return
+!          ! -1.
+!
+!          ! REFERENCES:
+!          ! na
+!
+!          ! USE STATEMENTS:
+!          ! na
+!
+!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+!
+!          ! SUBROUTINE ARGUMENT DEFINITIONS:
+!  CHARACTER(len=*), INTENT(IN) :: SectionWord
+!
+!          ! SUBROUTINE PARAMETER DEFINITIONS:
+!          ! na
+!
+!          ! INTERFACE BLOCK SPECIFICATIONS
+!          ! na
+!
+!          ! DERIVED TYPE DEFINITIONS
+!          ! na
+!
+!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+!  INTEGER Found
+!
+!  Found=FindIteminList(MakeUPPERCase(SectionWord),ListofSections,NumSectionDefs)
+!  IF (Found == 0) THEN
+!    CALL ShowFatalError('Requested Section not found in Definitions: '//TRIM(SectionWord))
+!  ELSE
+!    GetNumSectionsFound=SectionDef(Found)%NumFound
+!  ENDIF
+!
+!  RETURN
+!
+!END FUNCTION GetNumSectionsFound
 
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This function returns the number of a particular section (in input data file)
-          ! found in the current run.  If it can't find the section in list
-          ! of sections, a -1 will be returned.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Look up section in list of sections.  If there, return the
-          ! number of sections of that kind found in the current input.  If not, return
-          ! -1.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: SectionWord
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Found
-
-  Found=FindIteminList(MakeUPPERCase(SectionWord),ListofSections,NumSectionDefs)
-  IF (Found == 0) THEN
-    CALL ShowFatalError('Requested Section not found in Definitions: '//TRIM(SectionWord))
-  ELSE
-    GetNumSectionsFound=SectionDef(Found)%NumFound
-  ENDIF
-
-  RETURN
-
-END FUNCTION GetNumSectionsFound
-
-!INTEGER FUNCTION GetNumSectionsinInput()   !RS: This subroutine doesn't appear to be ever called.
+!INTEGER FUNCTION GetNumSectionsinInput()
 !
 !          ! FUNCTION INFORMATION:
 !          !       AUTHOR         Linda K. Lawrie
@@ -1814,58 +1807,6 @@ END FUNCTION GetNumSectionsFound
 !  RETURN
 !
 !END FUNCTION GetNumSectionsinInput
-
-!SUBROUTINE GetListofSectionsinInput(SectionList,NuminList)     !RS: This subroutine doesn't appear to ever be called
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the list of sections as they occurred
-!          ! in the Input Data File (IDF).
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Look up object in list of objects.  If there, return the
-!          ! number of objects found in the current input.  If not, return
-!          ! -1.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  CHARACTER(len=*), DIMENSION(:), INTENT(OUT) :: SectionList
-!  INTEGER, INTENT(OUT) :: NuminList
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  INTEGER MaxAllowedOut
-!
-!  MaxAllowedOut=MIN(NumIDFSections,SIZE(SectionList))
-!  IF (MaxAllowedOut /= NumIDFSections) THEN
-!    CALL ShowWarningError('More in list than allowed in passed array - (GetListofSectionsinInput)')
-!  ENDIF
-!  NuminList=MaxAllowedOut
-!  SectionList(1:MaxAllowedOut)=SectionsonFile(1:MaxAllowedOut)%Name
-!
-!  RETURN
-!
-!END SUBROUTINE GetListofSectionsinInput
 
 INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
@@ -1920,53 +1861,6 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
 END FUNCTION GetNumObjectsFound
 
-!SUBROUTINE GetRecordLocations(Which,FirstRecord,LastRecord)    !RS: This sub is never called in the current program
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the record location values (which will be
-!          ! passed to 'GetObjectItem') for a section from the list of inputted
-!          ! sections (sequential).
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! na
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  INTEGER, INTENT(IN) :: Which
-!  INTEGER, INTENT(OUT) :: FirstRecord
-!  INTEGER, INTENT(OUT) :: LastRecord
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  FirstRecord=SectionsonFile(Which)%FirstRecord
-!  LastRecord=SectionsonFile(Which)%LastRecord
-!
-!  RETURN
-!
-!END SUBROUTINE GetRecordLocations
 
 SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Status)
 
@@ -2764,6 +2658,7 @@ INTEGER FUNCTION FindIteminList(String,ListofItems,NumItems)
 
 END FUNCTION FindIteminList
 
+
 FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
 
           ! FUNCTION INFORMATION:
@@ -2829,6 +2724,7 @@ FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
 
 END FUNCTION MakeUPPERCase
 
+!Commented out since it's a duplicate of the code in InputProcessor
 LOGICAL FUNCTION SameString(TestString1,TestString2)
 
           ! FUNCTION INFORMATION:
@@ -2881,6 +2777,106 @@ LOGICAL FUNCTION SameString(TestString1,TestString2)
   RETURN
 
 END FUNCTION SameString
+
+
+SUBROUTINE RangeCheck(ErrorsFound,WhatFieldString,WhatObjectString,ErrorLevel,  &
+                      LowerBoundString,LowerBoundCond,UpperBoundString,UpperBoundCond)
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda Lawrie
+          !       DATE WRITTEN   July 2000
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine is a general purpose "range check" routine for GetInput routines.
+          ! Using the standard "ErrorsFound" logical, this routine can produce a reasonable
+          ! error message to describe the situation in addition to setting the ErrorsFound variable
+          ! to true.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  LOGICAL, INTENT(OUT)                   :: ErrorsFound  ! Set to true if error detected
+  CHARACTER(len=*), INTENT(IN)           :: WhatFieldString  ! Descriptive field for string
+  CHARACTER(len=*), INTENT(IN)           :: WhatObjectString ! Descriptive field for object, Zone Name, etc.
+  CHARACTER(len=*), INTENT(IN)           :: ErrorLevel  ! 'Warning','Severe','Fatal')
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: LowerBoundString  ! String for error message, if applicable
+  LOGICAL, INTENT(IN), OPTIONAL          :: LowerBoundCond  ! Condition for error condition, if applicable
+  CHARACTER(len=*), INTENT(IN), OPTIONAL :: UpperBoundString  ! String for error message, if applicable
+  LOGICAL, INTENT(IN), OPTIONAL          :: UpperBoundCond  ! Condition for error condition, if applicable
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+  CHARACTER(len=7) ErrorString  ! Uppercase representation of ErrorLevel
+  LOGICAL Error
+  CHARACTER(len=120) Message
+
+  Error=.false.
+  IF (PRESENT(UpperBoundCond)) THEN
+    IF (.not. UpperBoundCond) THEN
+        Error=.true.
+    END IF
+  ENDIF
+  IF (PRESENT(LowerBoundCond)) THEN
+    IF (.not. LowerBoundCond) THEN
+        Error=.true.
+    ENDIF
+  ENDIF
+
+  IF (Error) THEN
+    CALL ConvertCasetoUPPER(ErrorLevel,ErrorString)
+    Message='Out of range value field='//TRIM(WhatFieldString)//', range={'
+    IF (PRESENT(LowerBoundString)) THEN
+        Message=TRIM(Message)//TRIM(LowerBoundString)
+    END IF
+    IF (PRESENT(LowerBoundString) .and. PRESENT(UpperBoundString)) THEN
+      Message=TRIM(Message)//' and '//TRIM(UpperBoundString)
+    ELSEIF (PRESENT(UpperBoundString)) THEN
+      Message=TRIM(Message)//TRIM(UpperBoundString)
+    ENDIF
+    Message=TRIM(Message)//'}, for item='//TRIM(WhatObjectString)
+
+    SELECT CASE(ErrorString(1:1))
+
+    CASE('W')
+      CALL ShowWarningError(TRIM(Message))
+
+    CASE('S')
+      CALL ShowSevereError(TRIM(Message))
+      ErrorsFound=.true.
+
+    CASE('F')
+      CALL ShowFatalError(TRIM(Message))
+
+    CASE DEFAULT
+      CALL ShowSevereError(TRIM(Message))
+      ErrorsFound=.true.
+
+    END SELECT
+
+  ENDIF
+
+  RETURN
+
+END SUBROUTINE RangeCheck
 
 SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSizable)
 
@@ -2985,49 +2981,10 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
 
 END SUBROUTINE InternalRangeCheck
 
-INTEGER FUNCTION GetNumRangeCheckErrorsFound()
 
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   July 2000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS FUNCTION:
-          ! This function returns the number of OutOfRange errors found during
-          ! input processing.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! FUNCTION ARGUMENT DEFINITIONS:
-          ! na
-
-          ! FUNCTION PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  GetNumRangeCheckErrorsFound=NumOutOfRangeErrorsFound
-
-  RETURN
-
-END FUNCTION GetNumRangeCheckErrorsFound
+!==============================================================================
+! The following routines allow access to the definition lines of the IDD and
+! thus can be used to "report" on expected arguments for the Input Processor.
 
 SUBROUTINE InitSecretObjects
 
@@ -3238,60 +3195,6 @@ RETURN
 
 END SUBROUTINE DeallocateArrays
 
-SUBROUTINE ConvertCasetoUpper(InputString,OutputString)
-
-          ! SUBROUTINE INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! Convert a string to upper case
-
-          ! METHODOLOGY EMPLOYED:
-          ! This routine is not dependant upon the ASCII
-          ! code.  It works by storing the upper and lower case alphabet.  It
-          ! scans the whole input string.  If it finds a character in the lower
-          ! case alphabet, it makes an appropriate substitution.
-
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: InputString    ! Input string
-  CHARACTER(len=*), INTENT(OUT) :: OutputString  ! Output string (in UpperCase)
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      INTEGER A,B
-
-      DO A=1,LEN_TRIM(InputString)
-          B=INDEX(LowerCase,InputString(A:A))
-          IF (B .NE. 0) THEN
-              OutputString(A:A)=UpperCase(B:B)
-          ELSE
-              OutputString(A:A)=InputString(A:A)
-          ENDIF
-      END DO
-
-      RETURN
-
-END SUBROUTINE ConvertCasetoUpper
 
 INTEGER FUNCTION FindNonSpace(String)
 

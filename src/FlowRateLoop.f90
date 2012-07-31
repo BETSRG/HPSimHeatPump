@@ -310,7 +310,8 @@
 
         IF (FilterPAR(1) .GT. 0) THEN !Filter drier exits
             FilterIN(1)=CondIN(1) !Mass flow rate, kg/s
-            CALL CalcFilterDrierDP(FilterIN(1),FilterPAR,FilterOUT,Ref$)
+            !CALL CalcFilterDrierDP(FilterIN(1),FilterPAR,FilterOUT,Ref$)
+            CALL CalcFilterDrierDP(FilterIN(1),FilterPAR,FilterOUT)
             FilterDP=FilterOUT(1)
 
             PiExp=PiExp-FilterDP

@@ -43,10 +43,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
           INTEGER :: TotalSevereErrors = 0 ! Counter
           INTEGER :: TotalWarningErrors = 0 ! Counter
           DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed time at end of run
-          CHARACTER*80 :: RefName
-
-          ! MODULE VARIABLES:
-!INTEGER :: OutputFileInits      ! Unit number for the standard Initialization output file
+          CHARACTER*80 :: RefName   !Refrigerant Name
 
           ! DERIVED TYPE DEFINITIONS:
           ! na
@@ -75,4 +72,4 @@ PUBLIC          ! By definition, all variables which are placed in this data
 !     TRADEMARKS: EnergyPlus is a trademark of the US Department of Energy.
 !
 
-END MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+END MODULE DataGlobals_HPSim
