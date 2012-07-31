@@ -1,0 +1,135 @@
+﻿ModelType,
+	Fin-Tube Coil;
+
+Geometry,
+	False, !SI Units Flag
+	2, !Fin Type
+	Wavy, !Fin Name
+	22, !Fin Pitch [FPI]
+	1539, !Fin Conductivity [Btu.in/h.ft².F]
+	3.9, !Fin Thickness [thou]
+	Aluminum, !Fin Material
+	4, !Tube Type
+	Coil tube: 3/8 0.012 thick Expanded, !Tube Name
+	0.394, !Tube OD [in]
+	0.37, !Tube ID [in]
+	2724, !Tube Conductivity [Btu.in/h.ft².F]
+	1, !Tube Vertical Spacing [in]
+	0, !Tube Horizontal Spacing [in]
+	1, !Number of Rows
+	36, !Number of Tubes per Row
+	96.45, !Single Tube Length [in]
+	1, !Number of Segments
+	4, !Number of Circuits
+	False; !Tube Shift Flag
+
+Circuiting_TubeNumbers,
+	10, !Number of Tubes in Circuit 1
+	8, !Number of Tubes in Circuit 2
+	8, !Number of Tubes in Circuit 3
+	10; !Number of Tubes in Circuit 4
+
+Circuit1_TubeSequence,
+	35, !Tube Number
+	36, !Tube Number
+	21, !Tube Number
+	22, !Tube Number
+	23, !Tube Number
+	24, !Tube Number
+	25, !Tube Number
+	26, !Tube Number
+	27, !Tube Number
+	28; !Tube Number
+
+Circuit2_TubeSequence,
+	33, !Tube Number
+	34, !Tube Number
+	15, !Tube Number
+	16, !Tube Number
+	17, !Tube Number
+	18, !Tube Number
+	19, !Tube Number
+	20; !Tube Number
+
+Circuit3_TubeSequence,
+	31, !Tube Number
+	32, !Tube Number
+	9, !Tube Number
+	10, !Tube Number
+	11, !Tube Number
+	12, !Tube Number
+	13, !Tube Number
+	14; !Tube Number
+
+Circuit4_TubeSequence,
+	29, !Tube Number
+	30, !Tube Number
+	1, !Tube Number
+	2, !Tube Number
+	3, !Tube Number
+	4, !Tube Number
+	5, !Tube Number
+	6, !Tube Number
+	7, !Tube Number
+	8; !Tube Number
+
+VelocityProfile,
+	1, !Velocity Deviation from Mean Value for Tube 1
+	1, !Velocity Deviation from Mean Value for Tube 2
+	1, !Velocity Deviation from Mean Value for Tube 3
+	1, !Velocity Deviation from Mean Value for Tube 4
+	1, !Velocity Deviation from Mean Value for Tube 5
+	1, !Velocity Deviation from Mean Value for Tube 6
+	1, !Velocity Deviation from Mean Value for Tube 7
+	1, !Velocity Deviation from Mean Value for Tube 8
+	1, !Velocity Deviation from Mean Value for Tube 9
+	1, !Velocity Deviation from Mean Value for Tube 10
+	1, !Velocity Deviation from Mean Value for Tube 11
+	1, !Velocity Deviation from Mean Value for Tube 12
+	1, !Velocity Deviation from Mean Value for Tube 13
+	1, !Velocity Deviation from Mean Value for Tube 14
+	1, !Velocity Deviation from Mean Value for Tube 15
+	1, !Velocity Deviation from Mean Value for Tube 16
+	1, !Velocity Deviation from Mean Value for Tube 17
+	1, !Velocity Deviation from Mean Value for Tube 18
+	1, !Velocity Deviation from Mean Value for Tube 19
+	1, !Velocity Deviation from Mean Value for Tube 20
+	1, !Velocity Deviation from Mean Value for Tube 21
+	1, !Velocity Deviation from Mean Value for Tube 22
+	1, !Velocity Deviation from Mean Value for Tube 23
+	1, !Velocity Deviation from Mean Value for Tube 24
+	1, !Velocity Deviation from Mean Value for Tube 25
+	1, !Velocity Deviation from Mean Value for Tube 26
+	1, !Velocity Deviation from Mean Value for Tube 27
+	1, !Velocity Deviation from Mean Value for Tube 28
+	1, !Velocity Deviation from Mean Value for Tube 29
+	1, !Velocity Deviation from Mean Value for Tube 30
+	1, !Velocity Deviation from Mean Value for Tube 31
+	1, !Velocity Deviation from Mean Value for Tube 32
+	1, !Velocity Deviation from Mean Value for Tube 33
+	1, !Velocity Deviation from Mean Value for Tube 34
+	1, !Velocity Deviation from Mean Value for Tube 35
+	1; !Velocity Deviation from Mean Value for Tube 36
+
+Coefficients,
+	!V=C0+C1*H+C2*H^2+C3*H^3 for segment 1
+	1, !C0
+	0, !C1
+	0, !C2
+	0; !C3
+
+VelocityProfileRawData,
+	!All for segment 1
+	6, !No. of Data
+	0, !Coil Height Data Entry #1
+	0.2, !Coil Height Data Entry #2
+	0.4, !Coil Height Data Entry #3
+	0.6, !Coil Height Data Entry #4
+	0.8, !Coil Height Data Entry #5
+	1, !Coil Height Data Entry #6
+	1, !Velocity Data Entry #1
+	1, !Velocity Data Entry #2
+	1, !Velocity Data Entry #3
+	1, !Velocity Data Entry #4
+	1, !Velocity Data Entry #5
+	1; !Velocity Data Entry #6

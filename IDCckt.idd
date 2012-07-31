@@ -1,0 +1,445 @@
+Model,
+	A1; \field Model Name
+	    \type alpha
+Geometry,
+	A1, \field SI Units Flag
+	    \type choice
+	    \type choice
+	    \key False
+	    \key True
+	    \default True
+	N1, \field Fin Type
+	    \type integer
+	A2, \field Fin Name
+	    \type alpha
+	N2, \field Fin Pitch [FPI]
+	    \type real
+	N3, \field Fin Conductivity
+	    \type real
+	    \units Btu-in/h-ft2-F
+	N4, \field Fin Thickness
+	    \type real
+	    \units in/1000
+	    \note Assuming [thou] = thousandths of an inch
+	A3, \field Fin Material
+	    \type alpha
+	N5, \field Tube Type
+	    \type integer
+	A4, \field Tube Name
+	    \type alpha
+	N6, \field Tube OD
+	    \type real
+	    \ip-units in
+	N7, \field Tube ID
+	    \type real
+	    \ip-units in
+	N8, \field Tube Conductivity
+	    \type real
+	    \units Btu-in/h-ft2-F
+	N9, \field Tube Vertical Spacing
+	    \type real
+	    \ip-units in
+	N10, \field Tube Horizontal Spacing
+	     \type real
+	     \ip-units in
+	N11, \field Number of Rows
+	     \type real
+	N12, \field Number of Tubes per Row
+	     \type real
+	N13, \field Single Tube Length
+	     \type real
+	     \ip-units in
+	N14, \field Number of Segments
+	     \type integer
+	N15, \field Number of Circuits
+	     \type integer
+	A5; \field Tube Shift Flag
+	    \type alpha
+
+Circuiting_TubeNumbers,
+	N1, \field Number of Tubes in Circuit 1
+	    \type real
+	N2, \field Number of Tubes in Circuit 2
+	    \type real
+	N3, \field Number of Tubes in Circuit 3
+	    \type real
+	N4, \field Number of Tubes in Circuit 4
+	    \type real
+	N5, \field Number of Tubes in Circuit 5
+	    \type real
+	N6; \field Number of Tubes in Circuit 6
+	    \type real
+
+Circuit1_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	     \type real
+	N20; \field Tube Number
+	     \type real
+
+Circuit2_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	     \type real
+	N20; \field Tube Number
+	     \type real
+
+Circuit3_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	     \type real
+	N20; \field Tube Number
+	     \type real
+
+Circuit4_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	N20; \field Tube Number
+	     \type real
+
+Circuit5_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	     \type real
+	N20; \field Tube Number
+	     \type real
+
+Circuit6_TubeSequence,
+	N1, \field Tube Number
+	    \type real
+	N2, \field Tube Number
+	    \type real
+	N3, \field Tube Number
+	    \type real
+	N4, \field Tube Number
+	    \type real
+	N5, \field Tube Number
+	    \type real
+	N6, \field Tube Number
+	    \type real
+	N7, \field Tube Number
+	    \type real
+	N8, \field Tube Number
+	    \type real
+	N9, \field Tube Number
+	    \type real
+	N10, \field Tube Number
+	     \type real
+	N11, \field Tube Number
+	     \type real
+	N12, \field Tube Number
+	     \type real
+	N13, \field Tube Number
+	     \type real
+	N14, \field Tube Number
+	     \type real
+	N15, \field Tube Number
+	     \type real
+	N16, \field Tube Number
+	     \type real
+	N17, \field Tube Number
+	     \type real
+	N18, \field Tube Number
+	     \type real
+	N19, \field Tube Number
+	     \type real
+	N20, \field Tube Number
+	     \type real
+
+VelocityProfile,
+	N1, \field Velocity Deviation from Mean Value for Tube 1
+	    \type real
+	N2, \field Velocity Deviation from Mean Value for Tube 2
+	    \type real
+	N3, \field Velocity Deviation from Mean Value for Tube 3
+	    \type real
+	N4, \field Velocity Deviation from Mean Value for Tube 4
+	    \type real
+	N5, \field Velocity Deviation from Mean Value for Tube 5
+	    \type real
+	N6, \field Velocity Deviation from Mean Value for Tube 6
+	    \type real
+	N7, \field Velocity Deviation from Mean Value for Tube 7
+	    \type real
+	N8, \field Velocity Deviation from Mean Value for Tube 8
+	    \type real
+	N9, \field Velocity Deviation from Mean Value for Tube 9
+	    \type real
+	N10, \field Velocity Deviation from Mean Value for Tube 10
+	     \type real
+	N11, \field Velocity Deviation from Mean Value for Tube 11
+	     \type real
+	N12, \field Velocity Deviation from Mean Value for Tube 12
+	     \type real
+	N13, \field Velocity Deviation from Mean Value for Tube 13
+	     \type real
+	N14, \field Velocity Deviation from Mean Value for Tube 14
+	     \type real
+	N15, \field Velocity Deviation from Mean Value for Tube 15
+	     \type real
+	N16, \field Velocity Deviation from Mean Value for Tube 16
+	     \type real
+	N17, \field Velocity Deviation from Mean Value for Tube 17
+	     \type real
+	N18, \field Velocity Deviation from Mean Value for Tube 18
+	     \type real
+	N19, \field Velocity Deviation from Mean Value for Tube 19
+	     \type real
+	N20, \field Velocity Deviation from Mean Value for Tube 20
+	     \type real
+	N21, \field Velocity Deviation from Mean Value for Tube 21
+	     \type real
+	N22, \field Velocity Deviation from Mean Value for Tube 22
+	     \type real
+	N23, \field Velocity Deviation from Mean Value for Tube 23
+	     \type real
+	N24, \field Velocity Deviation from Mean Value for Tube 24
+	     \type real
+	N25, \field Velocity Deviation from Mean Value for Tube 25
+	     \type real
+	N26, \field Velocity Deviation from Mean Value for Tube 26
+	     \type real
+	N27, \field Velocity Deviation from Mean Value for Tube 27
+	     \type real
+	N28, \field Velocity Deviation from Mean Value for Tube 28
+	     \type real
+	N29, \field Velocity Deviation from Mean Value for Tube 29
+	     \type real
+	N30, \field Velocity Deviation from Mean Value for Tube 30
+	     \type real
+	N31, \field Velocity Deviation from Mean Value for Tube 31
+	     \type real
+	N32, \field Velocity Deviation from Mean Value for Tube 32
+	     \type real
+	N33, \field Velocity Deviation from Mean Value for Tube 33
+	     \type real
+	N34, \field Velocity Deviation from Mean Value for Tube 34
+	     \type real
+	N35, \field Velocity Deviation from Mean Value for Tube 35
+	     \type real
+	N36, \field Velocity Deviation from Mean Value for Tube 36
+	     \type real
+	N37, \field Velocity Deviation from Mean Value for Tube 37
+	     \type real
+	N38, \field Velocity Deviation from Mean Value for Tube 38
+	     \type real
+	N39, \field Velocity Deviation from Mean Value for Tube 39
+	     \type real
+	N40; \field Velocity Deviation from Mean Value for Tube 40
+	     \type real
+
+Coefficients,
+	\memo V=C0+C1*H+C2*H^2+C3*H^3
+	\memo for segment 1
+	N1, \field C0
+	    \type real
+	N2, \field C1
+	    \type real
+	N3, \field C2
+	    \type real
+	N4; \field C3
+	    \type real
+
+VelocityProfileRawData,
+	\memo All for segment 1
+	N1, \field No. of Data
+	    \type integer
+	N2, \field Coil Height Data Entry #1
+	    \type real
+	N3, \field Coil Height Data Entry #2
+	    \type real
+	N4, \field Coil Height Data Entry #3
+	    \type real
+	N5, \field Coil Height Data Entry #4
+	    \type real
+	N6, \field Coil Height Data Entry #5
+	    \type real
+	N7, \field Coil Height Data Entry #6
+	    \type real
+	N8, \field Velocity Data Entry #1
+	    \type real
+	N9, \field Velocity Data Entry #2
+	    \type real
+	N10, \field Velocity Data Entry #3
+	     \type real
+	N11, \field Velocity Data Entry #4
+	     \type real
+	N12, \field Velocity Data Entry #5
+	     \type real
+	N13; \field Velocity Data Entry #6
+	     \type real
