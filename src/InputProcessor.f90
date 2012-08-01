@@ -187,7 +187,6 @@ TYPE (SecretObjects), ALLOCATABLE, DIMENSION(:)          :: RepObjects         !
 
 PUBLIC  ProcessInput
 
-PUBLIC  GetNumSectionsFound
 PUBLIC  FindIteminList
 PUBLIC  SameString
 PUBLIC  MakeUPPERCase
@@ -198,7 +197,6 @@ PUBLIC  GetObjectItem
 PUBLIC  GetObjectItemNum
 PUBLIC  GetObjectItemfromFile
 PUBLIC  TellMeHowManyObjectItemArgs
-PUBLIC  GetNumRangeCheckErrorsFound
 
 PUBLIC  DeallocateArrays
 
@@ -1719,154 +1717,6 @@ SUBROUTINE ValidateSectionsInput
 
 END SUBROUTINE ValidateSectionsInput
 
-INTEGER FUNCTION GetNumSectionsFound(SectionWord)
-
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   September 1997
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS SUBROUTINE:
-          ! This function returns the number of a particular section (in input data file)
-          ! found in the current run.  If it can't find the section in list
-          ! of sections, a -1 will be returned.
-
-          ! METHODOLOGY EMPLOYED:
-          ! Look up section in list of sections.  If there, return the
-          ! number of sections of that kind found in the current input.  If not, return
-          ! -1.
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: SectionWord
-
-          ! SUBROUTINE PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER Found
-
-  Found=FindIteminList(MakeUPPERCase(SectionWord),ListofSections,NumSectionDefs)
-  IF (Found == 0) THEN
-    CALL ShowFatalError('Requested Section not found in Definitions: '//TRIM(SectionWord))
-  ELSE
-    GetNumSectionsFound=SectionDef(Found)%NumFound
-  ENDIF
-
-  RETURN
-
-END FUNCTION GetNumSectionsFound
-
-!INTEGER FUNCTION GetNumSectionsinInput()   !RS: This subroutine doesn't appear to be ever called.
-!
-!          ! FUNCTION INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This function returns the number of sections in the entire input data file
-!          ! of the current run.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Return value of NumIDFSections.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  GetNumSectionsinInput=NumIDFSections
-!
-!  RETURN
-!
-!END FUNCTION GetNumSectionsinInput
-
-!SUBROUTINE GetListofSectionsinInput(SectionList,NuminList)     !RS: This subroutine doesn't appear to ever be called
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the list of sections as they occurred
-!          ! in the Input Data File (IDF).
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Look up object in list of objects.  If there, return the
-!          ! number of objects found in the current input.  If not, return
-!          ! -1.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  CHARACTER(len=*), DIMENSION(:), INTENT(OUT) :: SectionList
-!  INTEGER, INTENT(OUT) :: NuminList
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  INTEGER MaxAllowedOut
-!
-!  MaxAllowedOut=MIN(NumIDFSections,SIZE(SectionList))
-!  IF (MaxAllowedOut /= NumIDFSections) THEN
-!    CALL ShowWarningError('More in list than allowed in passed array - (GetListofSectionsinInput)')
-!  ENDIF
-!  NuminList=MaxAllowedOut
-!  SectionList(1:MaxAllowedOut)=SectionsonFile(1:MaxAllowedOut)%Name
-!
-!  RETURN
-!
-!END SUBROUTINE GetListofSectionsinInput
-
 INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
           ! FUNCTION INFORMATION:
@@ -1919,54 +1769,6 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
   RETURN
 
 END FUNCTION GetNumObjectsFound
-
-!SUBROUTINE GetRecordLocations(Which,FirstRecord,LastRecord)    !RS: This sub is never called in the current program
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the record location values (which will be
-!          ! passed to 'GetObjectItem') for a section from the list of inputted
-!          ! sections (sequential).
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! na
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  INTEGER, INTENT(IN) :: Which
-!  INTEGER, INTENT(OUT) :: FirstRecord
-!  INTEGER, INTENT(OUT) :: LastRecord
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  FirstRecord=SectionsonFile(Which)%FirstRecord
-!  LastRecord=SectionsonFile(Which)%LastRecord
-!
-!  RETURN
-!
-!END SUBROUTINE GetRecordLocations
 
 SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Status)
 
@@ -2985,49 +2787,6 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
 
 END SUBROUTINE InternalRangeCheck
 
-INTEGER FUNCTION GetNumRangeCheckErrorsFound()
-
-          ! FUNCTION INFORMATION:
-          !       AUTHOR         Linda K. Lawrie
-          !       DATE WRITTEN   July 2000
-          !       MODIFIED       na
-          !       RE-ENGINEERED  na
-
-          ! PURPOSE OF THIS FUNCTION:
-          ! This function returns the number of OutOfRange errors found during
-          ! input processing.
-
-          ! METHODOLOGY EMPLOYED:
-          ! na
-
-          ! REFERENCES:
-          ! na
-
-          ! USE STATEMENTS:
-          ! na
-
-  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-
-          ! FUNCTION ARGUMENT DEFINITIONS:
-          ! na
-
-          ! FUNCTION PARAMETER DEFINITIONS:
-          ! na
-
-          ! INTERFACE BLOCK SPECIFICATIONS
-          ! na
-
-          ! DERIVED TYPE DEFINITIONS
-          ! na
-
-          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-          ! na
-
-  GetNumRangeCheckErrorsFound=NumOutOfRangeErrorsFound
-
-  RETURN
-
-END FUNCTION GetNumRangeCheckErrorsFound
 
 SUBROUTINE InitSecretObjects
 
