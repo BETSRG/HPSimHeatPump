@@ -53,7 +53,6 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
-	  !VL: Previously: GOTO 200
       RETURN
   END IF
 
@@ -65,7 +64,6 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (RefPropErr .GT. 0) THEN
       WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
       ErrorFlag=2
-	  !VL: Previously: GOTO 200
       RETURN
   END IF
   HoEvpRtd=HoEvpRtd/1000    !RS Comment: Unit Conversion
@@ -108,8 +106,6 @@ REAL DPtube   !Pressure drop through tube, kPa
   IF (DPtot .LT. 0) THEN
       ErrorFlag = 3
   END IF
-
-  !VL: Previously: 200 CONTINUE
 
   RETURN
 

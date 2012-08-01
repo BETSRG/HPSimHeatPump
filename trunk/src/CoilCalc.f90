@@ -4831,6 +4831,7 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	      (TAND(theta))**(-0.692)*Nl**(-0.737)
       END IF
 
+      !RS: Code below all written by RS for testing
     CASE(3)   !3 means a louver
       Dh=4*Amin*HXdep/AoCoil    !The other cases take these into account, so maybe this one does too
 	  FinPitch=1/(FinSpg+FinThk)
@@ -4842,7 +4843,8 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
 	  j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
 	  j4=0.502*(LOG(ReDc)-2.54)
 	  jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
-                            
+      !RS: End of test code by RS
+      
 	END SELECT
 
   ELSE 
@@ -5032,9 +5034,11 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  	Fricfactor=0.228*ReDc**F1*TAND(theta)**F2*(FinSpg/Pl)**F3*(Pl/Dc)**F4*(Dc/Dh)**0.383*(Pl/Pt)**(-0.247)
       END IF
       
+      !RS: Code below written by RS for testing
       CASE (3)   !RS: Dry Louver Case
       !RS: Need Dry Louvered Fin case correlations and equations
-      Fricfactor=0  !Just seeing if the case works; Yep, it does
+      Fricfactor=0.1  !Just seeing if the case works; Yep, it does
+      !RS: End of test code by RS
       
     END SELECT
   ELSE 
