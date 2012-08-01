@@ -3106,8 +3106,7 @@ ELSE !Microchannel coil
 
         !Inlet pass
         !Slab#,#Inlets,Tubes per Inlet
-        !IF (LineData(1:1) .EQ. 'S' .OR. LineData(1:1) .EQ. 's') THEN !Inlet pass info
-
+        
             DO I=1, Nl
 
                 NumOfInlets = Numbers(5)
@@ -3127,23 +3126,6 @@ ELSE !Microchannel coil
                 END DO
 
             END DO
-
-        !ELSE
-        !
-        !    NumOfInlets=1
-        !    DO I=1, Nl
-        !
-        !        ALLOCATE(Slab(I)%InletPass(NumOfInlets))
-        !        Slab(I)%Ninlet=NumOfInlets
-        !
-        !        DO II=1, NumOfInlets
-        !
-        !            Slab(I)%InletPass(II)%Ntube=Slab(I)%Pass(II)%Ntube
-        !
-        !        END DO
-        !
-        !    END DO
-        !END IF
 
         !************************* Velocity Profile ********************************
             
