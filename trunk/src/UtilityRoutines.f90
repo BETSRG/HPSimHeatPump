@@ -442,7 +442,6 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*) ErrorMessage
-  !CHARACTER(len=250) :: ErrorMessage
   INTEGER, OPTIONAL :: OutUnit1
   INTEGER, OPTIONAL :: OutUnit2
 
