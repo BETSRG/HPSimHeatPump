@@ -345,7 +345,7 @@ SUBROUTINE ProcessInput
    ENDIF
 
    !               FullName from StringGlobals is used to build file name with Path
-   IF (LEN_TRIM(ProgramPath) == 0) THEN     !RS: Line 76244 starts the HPSim part of the IDD
+   IF (LEN_TRIM(ProgramPath) == 0) THEN     !RS: Line 76244 of the file starts the HPSim part of the IDD
      FullName='Energy+.idd'
    ELSE
      FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
