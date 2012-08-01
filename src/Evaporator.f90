@@ -1764,7 +1764,7 @@ CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(50(A12,','))"
 CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   OPEN (17,FILE='Evaporator.csv')
-  !OPEN (17,FILE='Evaporator_longtubes.csv')
+  !OPEN (17,FILE='Evaporator_PlainFin.csv')    !RS: Test case evaporator output file
 
   MassCoil=0
   MassLiqCoil=0
@@ -2034,7 +2034,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
 					  Quality=0
 					  vfRiMod=PQ(RefName, Pressure, Quality, 'density', RefrigIndex,RefPropErr)
-					  vfRiMod=1/vfRiMod !Module Inlet Refrigerant Liquid Specific Volune
+					  vfRiMod=1/vfRiMod !Module Inlet Refrigerant Liquid Specific Volume
 
 					  IF (xRiMod .LT. 1 .AND. xRiMod .GT. 0) THEN
 						  cpRiMod=0

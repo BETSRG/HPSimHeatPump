@@ -259,16 +259,16 @@ SUBROUTINE ProcessInput
    EchoInputFile=GetNewUnitNumber()
    OPEN(unit=EchoInputFile,file='eplusout.audit')
    !               FullName from StringGlobals is used to build file name with Path
-   IF (LEN_TRIM(ProgramPath) == 0) THEN
-     FullName='Energy+.idd'
-   ELSE
-     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
-   ENDIF
-   ! IF (LEN_TRIM(ProgramPath) == 0) THEN
-   !  FullName='Energy+_3TonAC_410.idd'
+   !IF (LEN_TRIM(ProgramPath) == 0) THEN
+   !  FullName='Energy+.idd'
    !ELSE
-   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   !  FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
    !ENDIF
+    IF (LEN_TRIM(ProgramPath) == 0) THEN   !RS: Test case input file
+     FullName='Energy+_3TonAC_410.idd'
+   ELSE
+     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+_3TonAC_410.idd'
+   ENDIF
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
      CALL ShowFatalError('Energy+.idd missing. Program terminates. Fullname='//TRIM(FullName))

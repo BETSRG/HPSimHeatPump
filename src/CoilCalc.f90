@@ -619,19 +619,19 @@ INTEGER I
   PrAir = muA*CPair/kA !Prandtl #
 
   !Outside radius, including collar  Sankar adjusted frost thickness
- !IF(CoilType .EQ. CONDENSERCOIL) THEN      !RS: No place for the MC coil type
- ! Rc=OD/2+FinThk
- !ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
- ! Rc=OD/2+FinThk+FrostParam%Thickness
- !END IF
- !RS: Adding the "ELSE" statement to allow for the MC coil type; not sure if it's actually correct, though!
-  IF(CoilType .EQ. CONDENSERCOIL) THEN 
+ IF(CoilType .EQ. CONDENSERCOIL) THEN      !RS: No place for the MC coil type
   Rc=OD/2+FinThk
  ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
   Rc=OD/2+FinThk+FrostParam%Thickness
- ELSE
-  Rc=OD/2+FinThk
  END IF
+ !RS: Adding the "ELSE" statement to allow for the MC coil type; not sure if it's actually correct, though!
+ ! IF(CoilType .EQ. CONDENSERCOIL) THEN 
+ ! Rc=OD/2+FinThk
+ !ELSE IF(CoilType .EQ. EVAPORATORCOIL) THEN
+ ! Rc=OD/2+FinThk+FrostParam%Thickness
+ !ELSE
+ ! Rc=OD/2+FinThk
+ !END IF
  
   !Outside diameter, including collar
   Dc=Rc*2
@@ -683,8 +683,8 @@ INTEGER I
       
   SELECT CASE (FinType)
   !CASE (1,2,3,4,6,7,8,9,10)
-  !CASE (PLAINFIN,WAVYFIN)  !RS: No allowance for louver fins
-  CASE (PLAINFIN,WAVYFIN, 3)    !RS Comment: 3 is the Louver fin type, such as is used in the MC condenser case
+  CASE (PLAINFIN,WAVYFIN)  !RS: No allowance for louver fins
+  !CASE (PLAINFIN,WAVYFIN, 3)    !RS Comment: 3 is the Louver fin type, such as is used in the MC condenser case
   !RS Comment: Trying to implement the MC case(s), but it's unclear what's actually useful.
 
 	FaceVel=mAiCoil/(rhoIn*AfrCoil)
@@ -717,7 +717,13 @@ INTEGER I
 	DP=(Gmax**2)/(2*rhoIn)*((Ki+1-sigma**2)+2*(rhoIn/rhoOut-1)+Ffactor*(AoCoil/Amin)*(rhoIn/rhoAvg) &
 	                        -(1-sigma**2-Ke)*rhoIn/rhoOut)*1E-3
 
-END SELECT
+  END SELECT
+  
+  !RS: Attempt at error handling (8/1/12)
+  !IF (FINTYPE .NE. PLAINFIN .AND. FINTYPE .NE. WAVYFIN) THEN
+  !    CALL ShowSevereError('The fin type selected cannot be handled by the program')
+  !END IF
+  
   RETURN
 
 END SUBROUTINE AirSideCalc
@@ -4832,18 +4838,18 @@ REAL Gair      !Air mass flux, [kg/s-m^2]
       END IF
 
       !RS: Code below all written by RS for testing
-    CASE(3)   !3 means a louver
-      Dh=4*Amin*HXdep/AoCoil    !The other cases take these into account, so maybe this one does too
-	  FinPitch=1/(FinSpg+FinThk)
-
-      !RS: Assuming that this is indeed a correlation for a louvered fin        
-	  !Wang et. al (1999), IJ Heat and Mass Transfer
-	  j1=-0.229+0.115*((1/FinPitch)/Dc)**0.6*(Pl/Dh)**0.54*Nl**(-0.284)*LOG(0.5*TAND(theta))
-	  j2=-0.251+0.232*Nl**1.37/(LOG(ReDc)-2.303)
-	  j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
-	  j4=0.502*(LOG(ReDc)-2.54)
-	  jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
-      !RS: End of test code by RS
+   ! CASE(3)   !3 means a louver
+   !   Dh=4*Amin*HXdep/AoCoil    !The other cases take these into account, so maybe this one does too
+	  !FinPitch=1/(FinSpg+FinThk)
+   !
+   !   !RS: Assuming that this is indeed a correlation for a louvered fin        
+	  !!Wang et. al (1999), IJ Heat and Mass Transfer
+	  !j1=-0.229+0.115*((1/FinPitch)/Dc)**0.6*(Pl/Dh)**0.54*Nl**(-0.284)*LOG(0.5*TAND(theta))
+	  !j2=-0.251+0.232*Nl**1.37/(LOG(ReDc)-2.303)
+	  !j3=-0.439*(FinSpg/Dh)**0.09*(Pl/Pt)**(-1.75)*Nl**(-0.93)
+	  !j4=0.502*(LOG(ReDc)-2.54)
+	  !jfactor=0.324*ReDc**j1*((1/FinPitch)/Pl)**j2*TAND(theta)**j3*(Pl/Pt)**j4*Nl**0.428
+   !   !RS: End of test code by RS
       
 	END SELECT
 
@@ -5035,9 +5041,9 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
       END IF
       
       !RS: Code below written by RS for testing
-      CASE (3)   !RS: Dry Louver Case
+      !CASE (3)   !RS: Dry Louver Case
       !RS: Need Dry Louvered Fin case correlations and equations
-      Fricfactor=0.1  !Just seeing if the case works; Yep, it does
+      !Fricfactor=0.1  !Just seeing if the case works; Yep, it does
       !RS: End of test code by RS
       
     END SELECT
@@ -5050,6 +5056,11 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
         !RS: Also, this is under the ELSE, so it's totally skipped if the above IF is true.
   	END SELECT
   END IF
+  
+  !RS: Attempt at error handling (8/1/12)  
+  !IF (FINTYPE .NE. PLAINFIN .AND. FINTYPE .NE. WAVYFIN) THEN
+  !    CALL ShowFatalError('The fin type selected cannot be handled by the program.')
+  !END IF
 
 END SUBROUTINE
 
