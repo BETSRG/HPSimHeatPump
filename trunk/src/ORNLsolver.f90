@@ -125,8 +125,8 @@
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
-    !OPEN(5,FILE='YorkHP_longtubes.out')     ! VL_User_Setting -- file name
-    !OPEN(6,FILE='YorkHP_longtubes.log')     ! VL_User_Setting -- file name
+    !OPEN(5,FILE='YorkHP_PlainFin.out')     ! VL_User_Setting -- file name !RS: Test case output file
+    !OPEN(6,FILE='YorkHP_PlainFin.log')     ! VL_User_Setting -- file name !RS: Test case output file
 
     CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
 

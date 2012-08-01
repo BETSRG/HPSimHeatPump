@@ -1722,7 +1722,7 @@
     CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
     OPEN (16,FILE='Condenser.csv')
-    !OPEN (16,FILE='Condenser_longtubes.csv')
+    !OPEN (16,FILE='Condenser_PlainFin.csv')   !RS: Test case output file
 
     MassCoil=0
     MassLiqCoil=0
