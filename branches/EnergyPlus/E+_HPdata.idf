@@ -9327,2128 +9327,1482 @@ Shading:Site:Detailed,
        !type real
   N149, !Vertex 50 X-coordinate
        !units m
-       !type real
-  N150, !field Vertex 50 Y-coordinate	!RS: This is where I left off
+  N150, !Vertex 50 Y-coordinate
        !units m
-       !type real
-  N151, !field Vertex 50 Z-coordinate
+  N151, !Vertex 50 Z-coordinate
        !units m
-       !type real
-  N152, !field Vertex 51 X-coordinate
+  N152, !Vertex 51 X-coordinate
        !units m
-       !type real
-  N153, !field Vertex 51 Y-coordinate
+  N153, !Vertex 51 Y-coordinate
        !units m
-       !type real
-  N154, !field Vertex 51 Z-coordinate
+  N154, !Vertex 51 Z-coordinate
        !units m
-       !type real
-  N155, !field Vertex 52 X-coordinate
+  N155, !Vertex 52 X-coordinate
        !units m
-       !type real
-  N156, !field Vertex 52 Y-coordinate
+  N156, !Vertex 52 Y-coordinate
        !units m
-       !type real
-  N157, !field Vertex 52 Z-coordinate
+  N157, !Vertex 52 Z-coordinate
        !units m
-       !type real
-  N158, !field Vertex 53 X-coordinate
+  N158, !Vertex 53 X-coordinate
        !units m
-       !type real
-  N159, !field Vertex 53 Y-coordinate
+  N159, !Vertex 53 Y-coordinate
        !units m
-       !type real
-  N160, !field Vertex 53 Z-coordinate
+  N160, !Vertex 53 Z-coordinate
        !units m
-       !type real
-  N161, !field Vertex 54 X-coordinate
+  N161, !Vertex 54 X-coordinate
        !units m
-       !type real
-  N162, !field Vertex 54 Y-coordinate
+  N162, !Vertex 54 Y-coordinate
        !units m
-       !type real
-  N163, !field Vertex 54 Z-coordinate
+  N163, !Vertex 54 Z-coordinate
        !units m
-       !type real
-  N164, !field Vertex 55 X-coordinate
+  N164, !Vertex 55 X-coordinate
        !units m
-       !type real
-  N165, !field Vertex 55 Y-coordinate
+  N165, !Vertex 55 Y-coordinate
        !units m
-       !type real
-  N166, !field Vertex 55 Z-coordinate
+  N166, !Vertex 55 Z-coordinate
        !units m
-       !type real
-  N167, !field Vertex 56 X-coordinate
+  N167, !Vertex 56 X-coordinate
        !units m
-       !type real
-  N168, !field Vertex 56 Y-coordinate
+  N168, !Vertex 56 Y-coordinate
        !units m
-       !type real
-  N169, !field Vertex 56 Z-coordinate
+  N169, !Vertex 56 Z-coordinate
        !units m
-       !type real
-  N170, !field Vertex 57 X-coordinate
+  N170, !Vertex 57 X-coordinate
        !units m
-       !type real
-  N171, !field Vertex 57 Y-coordinate
+  N171, !Vertex 57 Y-coordinate
        !units m
-       !type real
-  N172, !field Vertex 57 Z-coordinate
+  N172, !Vertex 57 Z-coordinate
        !units m
-       !type real
-  N173, !field Vertex 58 X-coordinate
+  N173, !Vertex 58 X-coordinate
        !units m
-       !type real
-  N174, !field Vertex 58 Y-coordinate
+  N174, !Vertex 58 Y-coordinate
        !units m
-       !type real
-  N175, !field Vertex 58 Z-coordinate
+  N175, !Vertex 58 Z-coordinate
        !units m
-       !type real
-  N176, !field Vertex 59 X-coordinate
+  N176, !Vertex 59 X-coordinate
        !units m
-       !type real
-  N177, !field Vertex 59 Y-coordinate
+  N177, !Vertex 59 Y-coordinate
        !units m
-       !type real
-  N178, !field Vertex 59 Z-coordinate
+  N178, !Vertex 59 Z-coordinate
        !units m
-       !type real
-  N179, !field Vertex 60 X-coordinate
+  N179, !Vertex 60 X-coordinate
        !units m
-       !type real
-  N180, !field Vertex 60 Y-coordinate
+  N180, !Vertex 60 Y-coordinate
        !units m
-       !type real
-  N181, !field Vertex 60 Z-coordinate
+  N181, !Vertex 60 Z-coordinate
        !units m
-       !type real
-  N182, !field Vertex 61 X-coordinate
+  N182, !Vertex 61 X-coordinate
        !units m
-       !type real
-  N183, !field Vertex 61 Y-coordinate
+  N183, !Vertex 61 Y-coordinate
        !units m
-       !type real
-  N184, !field Vertex 61 Z-coordinate
+  N184, !Vertex 61 Z-coordinate
        !units m
-       !type real
-  N185, !field Vertex 62 X-coordinate
+  N185, !Vertex 62 X-coordinate
        !units m
-       !type real
-  N186, !field Vertex 62 Y-coordinate
+  N186, !Vertex 62 Y-coordinate
        !units m
-       !type real
-  N187, !field Vertex 62 Z-coordinate
+  N187, !Vertex 62 Z-coordinate
        !units m
-       !type real
-  N188, !field Vertex 63 X-coordinate
+  N188, !Vertex 63 X-coordinate
        !units m
-       !type real
-  N189, !field Vertex 63 Y-coordinate
+  N189, !Vertex 63 Y-coordinate
        !units m
-       !type real
-  N190, !field Vertex 63 Z-coordinate
+  N190, !Vertex 63 Z-coordinate
        !units m
-       !type real
-  N191, !field Vertex 64 X-coordinate
+  N191, !Vertex 64 X-coordinate
        !units m
-       !type real
-  N192, !field Vertex 64 Y-coordinate
+  N192, !Vertex 64 Y-coordinate
        !units m
-       !type real
-  N193, !field Vertex 64 Z-coordinate
+  N193, !Vertex 64 Z-coordinate
        !units m
-       !type real
-  N194, !field Vertex 65 X-coordinate
+  N194, !Vertex 65 X-coordinate
        !units m
-       !type real
-  N195, !field Vertex 65 Y-coordinate
+  N195, !Vertex 65 Y-coordinate
        !units m
-       !type real
-  N196, !field Vertex 65 Z-coordinate
+  N196, !Vertex 65 Z-coordinate
        !units m
-       !type real
-  N197, !field Vertex 66 X-coordinate
+  N197, !Vertex 66 X-coordinate
        !units m
-       !type real
-  N198, !field Vertex 66 Y-coordinate
+  N198, !Vertex 66 Y-coordinate
        !units m
-       !type real
-  N199, !field Vertex 66 Z-coordinate
+  N199, !Vertex 66 Z-coordinate
        !units m
-       !type real
-  N200, !field Vertex 67 X-coordinate
+  N200, !Vertex 67 X-coordinate
        !units m
-       !type real
-  N201, !field Vertex 67 Y-coordinate
+  N201, !Vertex 67 Y-coordinate
        !units m
-       !type real
-  N202, !field Vertex 67 Z-coordinate
+  N202, !Vertex 67 Z-coordinate
        !units m
-       !type real
-  N203, !field Vertex 68 X-coordinate
+  N203, !Vertex 68 X-coordinate
        !units m
-       !type real
-  N204, !field Vertex 68 Y-coordinate
+  N204, !Vertex 68 Y-coordinate
        !units m
-       !type real
-  N205, !field Vertex 68 Z-coordinate
+  N205, !Vertex 68 Z-coordinate
        !units m
-       !type real
-  N206, !field Vertex 69 X-coordinate
+  N206, !Vertex 69 X-coordinate
        !units m
-       !type real
-  N207, !field Vertex 69 Y-coordinate
+  N207, !Vertex 69 Y-coordinate
        !units m
-       !type real
-  N208, !field Vertex 69 Z-coordinate
+  N208, !Vertex 69 Z-coordinate
        !units m
-       !type real
-  N209, !field Vertex 70 X-coordinate
+  N209, !Vertex 70 X-coordinate
        !units m
-       !type real
-  N210, !field Vertex 70 Y-coordinate
+  N210, !Vertex 70 Y-coordinate
        !units m
-       !type real
-  N211, !field Vertex 70 Z-coordinate
+  N211, !Vertex 70 Z-coordinate
        !units m
-       !type real
-  N212, !field Vertex 71 X-coordinate
+  N212, !Vertex 71 X-coordinate
        !units m
-       !type real
-  N213, !field Vertex 71 Y-coordinate
+  N213, !Vertex 71 Y-coordinate
        !units m
-       !type real
-  N214, !field Vertex 71 Z-coordinate
+  N214, !Vertex 71 Z-coordinate
        !units m
-       !type real
-  N215, !field Vertex 72 X-coordinate
+  N215, !Vertex 72 X-coordinate
        !units m
-       !type real
-  N216, !field Vertex 72 Y-coordinate
+  N216, !Vertex 72 Y-coordinate
        !units m
-       !type real
-  N217, !field Vertex 72 Z-coordinate
+  N217, !Vertex 72 Z-coordinate
        !units m
-       !type real
-  N218, !field Vertex 73 X-coordinate
+  N218, !Vertex 73 X-coordinate
        !units m
-       !type real
-  N219, !field Vertex 73 Y-coordinate
+  N219, !Vertex 73 Y-coordinate
        !units m
-       !type real
-  N220, !field Vertex 73 Z-coordinate
+  N220, !Vertex 73 Z-coordinate
        !units m
-       !type real
-  N221, !field Vertex 74 X-coordinate
+  N221, !Vertex 74 X-coordinate
        !units m
-       !type real
-  N222, !field Vertex 74 Y-coordinate
+  N222, !Vertex 74 Y-coordinate
        !units m
-       !type real
-  N223, !field Vertex 74 Z-coordinate
+  N223, !Vertex 74 Z-coordinate
        !units m
-       !type real
-  N224, !field Vertex 75 X-coordinate
+  N224, !Vertex 75 X-coordinate
        !units m
-       !type real
-  N225, !field Vertex 75 Y-coordinate
+  N225, !Vertex 75 Y-coordinate
        !units m
-       !type real
-  N226, !field Vertex 75 Z-coordinate
+  N226, !Vertex 75 Z-coordinate
        !units m
-       !type real
-  N227, !field Vertex 76 X-coordinate
+  N227, !Vertex 76 X-coordinate
        !units m
-       !type real
-  N228, !field Vertex 76 Y-coordinate
+  N228, !Vertex 76 Y-coordinate
        !units m
-       !type real
-  N229, !field Vertex 76 Z-coordinate
+  N229, !Vertex 76 Z-coordinate
        !units m
-       !type real
-  N230, !field Vertex 77 X-coordinate
+  N230, !Vertex 77 X-coordinate
        !units m
-       !type real
-  N231, !field Vertex 77 Y-coordinate
+  N231, !Vertex 77 Y-coordinate
        !units m
-       !type real
-  N232, !field Vertex 77 Z-coordinate
+  N232, !Vertex 77 Z-coordinate
        !units m
-       !type real
-  N233, !field Vertex 78 X-coordinate
+  N233, !Vertex 78 X-coordinate
        !units m
-       !type real
-  N234, !field Vertex 78 Y-coordinate
+  N234, !Vertex 78 Y-coordinate
        !units m
-       !type real
-  N235, !field Vertex 78 Z-coordinate
+  N235, !Vertex 78 Z-coordinate
        !units m
-       !type real
-  N236, !field Vertex 79 X-coordinate
+  N236, !Vertex 79 X-coordinate
        !units m
-       !type real
-  N237, !field Vertex 79 Y-coordinate
+  N237, !Vertex 79 Y-coordinate
        !units m
-       !type real
-  N238, !field Vertex 79 Z-coordinate
+  N238, !Vertex 79 Z-coordinate
        !units m
-       !type real
-  N239, !field Vertex 80 X-coordinate
+  N239, !Vertex 80 X-coordinate
        !units m
-       !type real
-  N240, !field Vertex 80 Y-coordinate
+  N240, !Vertex 80 Y-coordinate
        !units m
-       !type real
-  N241, !field Vertex 80 Z-coordinate
+  N241, !Vertex 80 Z-coordinate
        !units m
-       !type real
-  N242, !field Vertex 81 X-coordinate
+  N242, !Vertex 81 X-coordinate
        !units m
-       !type real
-  N243, !field Vertex 81 Y-coordinate
+  N243, !Vertex 81 Y-coordinate
        !units m
-       !type real
-  N244, !field Vertex 81 Z-coordinate
+  N244, !Vertex 81 Z-coordinate
        !units m
-       !type real
-  N245, !field Vertex 82 X-coordinate
+  N245, !Vertex 82 X-coordinate
        !units m
-       !type real
-  N246, !field Vertex 82 Y-coordinate
+  N246, !Vertex 82 Y-coordinate
        !units m
-       !type real
-  N247, !field Vertex 82 Z-coordinate
+  N247, !Vertex 82 Z-coordinate
        !units m
-       !type real
-  N248, !field Vertex 83 X-coordinate
+  N248, !Vertex 83 X-coordinate
        !units m
-       !type real
-  N249, !field Vertex 83 Y-coordinate
+  N249, !Vertex 83 Y-coordinate
        !units m
-       !type real
-  N250, !field Vertex 83 Z-coordinate
+  N250, !Vertex 83 Z-coordinate
        !units m
-       !type real
-  N251, !field Vertex 84 X-coordinate
+  N251, !Vertex 84 X-coordinate
        !units m
-       !type real
-  N252, !field Vertex 84 Y-coordinate
+  N252, !Vertex 84 Y-coordinate
        !units m
-       !type real
-  N253, !field Vertex 84 Z-coordinate
+  N253, !Vertex 84 Z-coordinate
        !units m
-       !type real
-  N254, !field Vertex 85 X-coordinate
+  N254, !Vertex 85 X-coordinate
        !units m
-       !type real
-  N255, !field Vertex 85 Y-coordinate
+  N255, !Vertex 85 Y-coordinate
        !units m
-       !type real
-  N256, !field Vertex 85 Z-coordinate
+  N256, !Vertex 85 Z-coordinate
        !units m
-       !type real
-  N257, !field Vertex 86 X-coordinate
+  N257, !tVertex 86 X-coordinate
        !units m
-       !type real
-  N258, !field Vertex 86 Y-coordinate
+  N258, !Vertex 86 Y-coordinate
        !units m
-       !type real
-  N259, !field Vertex 86 Z-coordinate
+  N259, !Vertex 86 Z-coordinate
        !units m
-       !type real
-  N260, !field Vertex 87 X-coordinate
+  N260, !Vertex 87 X-coordinate
        !units m
-       !type real
-  N261, !field Vertex 87 Y-coordinate
+  N261, !Vertex 87 Y-coordinate
        !units m
-       !type real
-  N262, !field Vertex 87 Z-coordinate
+  N262, !Vertex 87 Z-coordinate
        !units m
-       !type real
-  N263, !field Vertex 88 X-coordinate
+  N263, !Vertex 88 X-coordinate
        !units m
-       !type real
-  N264, !field Vertex 88 Y-coordinate
+  N264, !Vertex 88 Y-coordinate
        !units m
-       !type real
-  N265, !field Vertex 88 Z-coordinate
+  N265, !Vertex 88 Z-coordinate
        !units m
-       !type real
-  N266, !field Vertex 89 X-coordinate
+  N266, !Vertex 89 X-coordinate
        !units m
-       !type real
-  N267, !field Vertex 89 Y-coordinate
+  N267, !Vertex 89 Y-coordinate
        !units m
-       !type real
-  N268, !field Vertex 89 Z-coordinate
+  N268, !Vertex 89 Z-coordinate
        !units m
-       !type real
-  N269, !field Vertex 90 X-coordinate
+  N269, !Vertex 90 X-coordinate
        !units m
-       !type real
-  N270, !field Vertex 90 Y-coordinate
+  N270, !Vertex 90 Y-coordinate
        !units m
-       !type real
-  N271, !field Vertex 90 Z-coordinate
+  N271, !Vertex 90 Z-coordinate
        !units m
-       !type real
-  N272, !field Vertex 91 X-coordinate
+  N272, !Vertex 91 X-coordinate
        !units m
-       !type real
-  N273, !field Vertex 91 Y-coordinate
+  N273, !Vertex 91 Y-coordinate
        !units m
-       !type real
-  N274, !field Vertex 91 Z-coordinate
+  N274, !Vertex 91 Z-coordinate
        !units m
-       !type real
-  N275, !field Vertex 92 X-coordinate
+  N275, !Vertex 92 X-coordinate
        !units m
-       !type real
-  N276, !field Vertex 92 Y-coordinate
+  N276, !Vertex 92 Y-coordinate
        !units m
-       !type real
-  N277, !field Vertex 92 Z-coordinate
+  N277, !Vertex 92 Z-coordinate
        !units m
-       !type real
-  N278, !field Vertex 93 X-coordinate
+  N278, !Vertex 93 X-coordinate
        !units m
-       !type real
-  N279, !field Vertex 93 Y-coordinate
+  N279, !Vertex 93 Y-coordinate
        !units m
-       !type real
-  N280, !field Vertex 93 Z-coordinate
+  N280, !Vertex 93 Z-coordinate
        !units m
-       !type real
-  N281, !field Vertex 94 X-coordinate
+  N281, !Vertex 94 X-coordinate
        !units m
-       !type real
-  N282, !field Vertex 94 Y-coordinate
+  N282, !Vertex 94 Y-coordinate
        !units m
-       !type real
-  N283, !field Vertex 94 Z-coordinate
+  N283, !Vertex 94 Z-coordinate
        !units m
-       !type real
-  N284, !field Vertex 95 X-coordinate
+  N284, !Vertex 95 X-coordinate
        !units m
-       !type real
-  N285, !field Vertex 95 Y-coordinate
+  N285, !Vertex 95 Y-coordinate
        !units m
-       !type real
-  N286, !field Vertex 95 Z-coordinate
+  N286, !Vertex 95 Z-coordinate
        !units m
-       !type real
-  N287, !field Vertex 96 X-coordinate
+  N287, !Vertex 96 X-coordinate
        !units m
-       !type real
-  N288, !field Vertex 96 Y-coordinate
+  N288, !Vertex 96 Y-coordinate
        !units m
-       !type real
-  N289, !field Vertex 96 Z-coordinate
+  N289, !Vertex 96 Z-coordinate
        !units m
-       !type real
-  N290, !field Vertex 97 X-coordinate
+  N290, !Vertex 97 X-coordinate
        !units m
-       !type real
-  N291, !field Vertex 97 Y-coordinate
+  N291, !Vertex 97 Y-coordinate
        !units m
-       !type real
-  N292, !field Vertex 97 Z-coordinate
+  N292, !Vertex 97 Z-coordinate
        !units m
-       !type real
-  N293, !field Vertex 98 X-coordinate
+  N293, !Vertex 98 X-coordinate
        !units m
-       !type real
-  N294, !field Vertex 98 Y-coordinate
+  N294, !Vertex 98 Y-coordinate
        !units m
-       !type real
-  N295, !field Vertex 98 Z-coordinate
+  N295, !Vertex 98 Z-coordinate
        !units m
-       !type real
-  N296, !field Vertex 99 X-coordinate
+  N296, !Vertex 99 X-coordinate
        !units m
-       !type real
-  N297, !field Vertex 99 Y-coordinate
+  N297, !Vertex 99 Y-coordinate
        !units m
-       !type real
-  N298, !field Vertex 99 Z-coordinate
+  N298, !Vertex 99 Z-coordinate
        !units m
-       !type real
-  N299, !field Vertex 100 X-coordinate
+  N299, !Vertex 100 X-coordinate
        !units m
-       !type real
-  N300, !field Vertex 100 Y-coordinate
+  N300, !Vertex 100 Y-coordinate
        !units m
-       !type real
-  N301, !field Vertex 100 Z-coordinate
+  N301, !Vertex 100 Z-coordinate
        !units m
-       !type real
-  N302, !field Vertex 101 X-coordinate
+  N302, !Vertex 101 X-coordinate
        !units m
-       !type real
-  N303, !field Vertex 101 Y-coordinate
+  N303, !Vertex 101 Y-coordinate
        !units m
-       !type real
-  N304, !field Vertex 101 Z-coordinate
+  N304, !Vertex 101 Z-coordinate
        !units m
-       !type real
-  N305, !field Vertex 102 X-coordinate
+  N305, !Vertex 102 X-coordinate
        !units m
-       !type real
-  N306, !field Vertex 102 Y-coordinate
+  N306, !Vertex 102 Y-coordinate
        !units m
-       !type real
-  N307, !field Vertex 102 Z-coordinate
+  N307, !Vertex 102 Z-coordinate
        !units m
-       !type real
-  N308, !field Vertex 103 X-coordinate
+  N308, !Vertex 103 X-coordinate
        !units m
-       !type real
-  N309, !field Vertex 103 Y-coordinate
+  N309, !Vertex 103 Y-coordinate
        !units m
-       !type real
-  N310, !field Vertex 103 Z-coordinate
+  N310, !Vertex 103 Z-coordinate
        !units m
-       !type real
-  N311, !field Vertex 104 X-coordinate
+  N311, !Vertex 104 X-coordinate
        !units m
-       !type real
-  N312, !field Vertex 104 Y-coordinate
+  N312, !Vertex 104 Y-coordinate
        !units m
-       !type real
-  N313, !field Vertex 104 Z-coordinate
+  N313, !Vertex 104 Z-coordinate
        !units m
-       !type real
-  N314, !field Vertex 105 X-coordinate
+  N314, !Vertex 105 X-coordinate
        !units m
-       !type real
-  N315, !field Vertex 105 Y-coordinate
+  N315, !Vertex 105 Y-coordinate
        !units m
-       !type real
-  N316, !field Vertex 105 Z-coordinate
+  N316, !Vertex 105 Z-coordinate
        !units m
-       !type real
-  N317, !field Vertex 106 X-coordinate
+  N317, !Vertex 106 X-coordinate
        !units m
-       !type real
-  N318, !field Vertex 106 Y-coordinate
+  N318, !Vertex 106 Y-coordinate
        !units m
-       !type real
-  N319, !field Vertex 106 Z-coordinate
+  N319, !Vertex 106 Z-coordinate
        !units m
-       !type real
-  N320, !field Vertex 107 X-coordinate
+  N320, !Vertex 107 X-coordinate
        !units m
-       !type real
-  N321, !field Vertex 107 Y-coordinate
+  N321, !Vertex 107 Y-coordinate
        !units m
-       !type real
-  N322, !field Vertex 107 Z-coordinate
+  N322, !Vertex 107 Z-coordinate
        !units m
-       !type real
-  N323, !field Vertex 108 X-coordinate
+  N323, !Vertex 108 X-coordinate
        !units m
-       !type real
-  N324, !field Vertex 108 Y-coordinate
+  N324, !Vertex 108 Y-coordinate
        !units m
-       !type real
-  N325, !field Vertex 108 Z-coordinate
+  N325, !Vertex 108 Z-coordinate
        !units m
-       !type real
-  N326, !field Vertex 109 X-coordinate
+  N326, !Vertex 109 X-coordinate
        !units m
-       !type real
-  N327, !field Vertex 109 Y-coordinate
+  N327, !Vertex 109 Y-coordinate
        !units m
-       !type real
-  N328, !field Vertex 109 Z-coordinate
+  N328, !Vertex 109 Z-coordinate
        !units m
-       !type real
-  N329, !field Vertex 110 X-coordinate
+  N329, !Vertex 110 X-coordinate
        !units m
-       !type real
-  N330, !field Vertex 110 Y-coordinate
+  N330, !Vertex 110 Y-coordinate
        !units m
-       !type real
-  N331, !field Vertex 110 Z-coordinate
+  N331, !Vertex 110 Z-coordinate
        !units m
-       !type real
-  N332, !field Vertex 111 X-coordinate
+  N332, !Vertex 111 X-coordinate
        !units m
-       !type real
-  N333, !field Vertex 111 Y-coordinate
+  N333, !Vertex 111 Y-coordinate
        !units m
-       !type real
-  N334, !field Vertex 111 Z-coordinate
+  N334, !Vertex 111 Z-coordinate
        !units m
-       !type real
-  N335, !field Vertex 112 X-coordinate
+  N335, !Vertex 112 X-coordinate
        !units m
-       !type real
-  N336, !field Vertex 112 Y-coordinate
+  N336, !Vertex 112 Y-coordinate
        !units m
-       !type real
-  N337, !field Vertex 112 Z-coordinate
+  N337, !Vertex 112 Z-coordinate
        !units m
-       !type real
-  N338, !field Vertex 113 X-coordinate
+  N338, !Vertex 113 X-coordinate
        !units m
-       !type real
-  N339, !field Vertex 113 Y-coordinate
+  N339, !Vertex 113 Y-coordinate
        !units m
-       !type real
-  N340, !field Vertex 113 Z-coordinate
+  N340, !Vertex 113 Z-coordinate
        !units m
-       !type real
-  N341, !field Vertex 114 X-coordinate
+  N341, !Vertex 114 X-coordinate
        !units m
-       !type real
-  N342, !field Vertex 114 Y-coordinate
+  N342, !Vertex 114 Y-coordinate
        !units m
-       !type real
-  N343, !field Vertex 114 Z-coordinate
+  N343, !Vertex 114 Z-coordinate
        !units m
-       !type real
-  N344, !field Vertex 115 X-coordinate
+  N344, !Vertex 115 X-coordinate
        !units m
-       !type real
-  N345, !field Vertex 115 Y-coordinate
+  N345, !Vertex 115 Y-coordinate
        !units m
-       !type real
-  N346, !field Vertex 115 Z-coordinate
+  N346, !Vertex 115 Z-coordinate
        !units m
-       !type real
-  N347, !field Vertex 116 X-coordinate
+  N347, !Vertex 116 X-coordinate
        !units m
-       !type real
-  N348, !field Vertex 116 Y-coordinate
+  N348, !Vertex 116 Y-coordinate
        !units m
-       !type real
-  N349, !field Vertex 116 Z-coordinate
+  N349, !Vertex 116 Z-coordinate
        !units m
-       !type real
-  N350, !field Vertex 117 X-coordinate
+  N350, !Vertex 117 X-coordinate
        !units m
-       !type real
-  N351, !field Vertex 117 Y-coordinate
+  N351, !Vertex 117 Y-coordinate
        !units m
-       !type real
-  N352, !field Vertex 117 Z-coordinate
+  N352, !Vertex 117 Z-coordinate
        !units m
-       !type real
-  N353, !field Vertex 118 X-coordinate
+  N353, !Vertex 118 X-coordinate
        !units m
-       !type real
-  N354, !field Vertex 118 Y-coordinate
+  N354, !Vertex 118 Y-coordinate
        !units m
-       !type real
-  N355, !field Vertex 118 Z-coordinate
+  N355, !Vertex 118 Z-coordinate
        !units m
-       !type real
-  N356, !field Vertex 119 X-coordinate
+  N356, !Vertex 119 X-coordinate
        !units m
-       !type real
-  N357, !field Vertex 119 Y-coordinate
+  N357, !Vertex 119 Y-coordinate
        !units m
-       !type real
-  N358, !field Vertex 119 Z-coordinate
+  N358, !Vertex 119 Z-coordinate
        !units m
-       !type real
-  N359, !field Vertex 120 X-coordinate
+  N359, !Vertex 120 X-coordinate
        !units m
-       !type real
-  N360, !field Vertex 120 Y-coordinate
+  N360, !Vertex 120 Y-coordinate
        !units m
-       !type real
-  N361; !field Vertex 120 Z-coordinate
+  N361; !Vertex 120 Z-coordinate
        !units m
-       !type real
 
 Shading:Building:Detailed,
   !extensible:3 -- duplicate last set of x,y,z coordinates, renumbering please (and changing z terminator to , for all but last)
-       !memo used for shading elements such as trees, other buildings, parts of this building not being modeled
-       !memo these items are relative to the current building and would move with relative geometry
+       !used for shading elements such as trees, other buildings, parts of this building not being modeled
+       !these items are relative to the current building and would move with relative geometry
        !format vertices
-  A1 , !field Name
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2,  !field Transmittance Schedule Name
-       !note Transmittance schedule for the shading device, defaults to zero (always opaque)
+  A2,  !Transmittance Schedule Name
+       !Transmittance schedule for the shading device, defaults to zero (always opaque)
        !type object-list
        !object-list ScheduleNames
-  N1 , !field Number of Vertices
+  N1 , !Number of Vertices
        !required-field
        !note shown with 6 vertex coordinates -- extensible object
        !autocalculatable
        !default autocalculate
        !minimum 3
-       !note Rules for vertices are given in GlobalGeometryRules coordinates --
-       !note For this object all surface coordinates are relative to the building origin (0,0,0)
-       !note and will rotate with the BUILDING north axis.
-  N2,  !field Vertex 1 X-coordinate
+       !Rules for vertices are given in GlobalGeometryRules coordinates --
+       !For this object all surface coordinates are relative to the building origin (0,0,0)
+       !and will rotate with the BUILDING north axis.
+  N2,  !Vertex 1 X-coordinate
        !begin-extensible
        !units m
-       !type real
-  N3 , !field Vertex 1 Y-coordinate
+  N3 , !Vertex 1 Y-coordinate
        !units m
-       !type real
-  N4 , !field Vertex 1 Z-coordinate
+  N4 , !Vertex 1 Z-coordinate
        !units m
-       !type real
-  N5,  !field Vertex 2 X-coordinate
+  N5,  !Vertex 2 X-coordinate
        !units m
-       !type real
-  N6,  !field Vertex 2 Y-coordinate
+  N6,  !Vertex 2 Y-coordinate
        !units m
-       !type real
-  N7, !field Vertex 2 Z-coordinate
+  N7, !Vertex 2 Z-coordinate
        !units m
-       !type real
-  N8, !field Vertex 3 X-coordinate
+  N8, !Vertex 3 X-coordinate
        !units m
-       !type real
-  N9,  !field Vertex 3 Y-coordinate
+  N9,  !Vertex 3 Y-coordinate
        !units m
-       !type real
-  N10, !field Vertex 3 Z-coordinate
+  N10, !Vertex 3 Z-coordinate
        !units m
-       !type real
-  N11, !field Vertex 4 X-coordinate
+  N11, !Vertex 4 X-coordinate
        !units m
-       !type real
-  N12, !field Vertex 4 Y-coordinate
-       !type real
+  N12, !Vertex 4 Y-coordinate
        !units m
-  N13, !field Vertex 4 Z-coordinate
+  N13, !Vertex 4 Z-coordinate
        !units m
-       !type real
-  N14, !field Vertex 5 X-coordinate
+  N14, !Vertex 5 X-coordinate
        !units m
-       !type real
-  N15, !field Vertex 5 Y-coordinate
+  N15, !Vertex 5 Y-coordinate
        !units m
-       !type real
-  N16, !field Vertex 5 Z-coordinate
+  N16, !Vertex 5 Z-coordinate
        !units m
-       !type real
-  N17, !field Vertex 6 X-coordinate
+  N17, !Vertex 6 X-coordinate
        !units m
-       !type real
-  N18, !field Vertex 6 Y-coordinate
+  N18, !Vertex 6 Y-coordinate
        !units m
-       !type real
-  N19, !field Vertex 6 Z-coordinate
+  N19, !Vertex 6 Z-coordinate
        !units m
-       !type real
-  N20, !field Vertex 7 X-coordinate
+  N20, !Vertex 7 X-coordinate
        !units m
-       !type real
-  N21, !field Vertex 7 Y-coordinate
+  N21, !Vertex 7 Y-coordinate
        !units m
-       !type real
-  N22, !field Vertex 7 Z-coordinate
+  N22, !Vertex 7 Z-coordinate
        !units m
-       !type real
-  N23, !field Vertex 8 X-coordinate
+  N23, !Vertex 8 X-coordinate
        !units m
-       !type real
-  N24, !field Vertex 8 Y-coordinate
+  N24, !Vertex 8 Y-coordinate
        !units m
-       !type real
-  N25, !field Vertex 8 Z-coordinate
+  N25, !Vertex 8 Z-coordinate
        !units m
-       !type real
-  N26, !field Vertex 9 X-coordinate
+  N26, !Vertex 9 X-coordinate
        !units m
-       !type real
-  N27, !field Vertex 9 Y-coordinate
+  N27, !Vertex 9 Y-coordinate
        !units m
-       !type real
-  N28, !field Vertex 9 Z-coordinate
+  N28, !Vertex 9 Z-coordinate
        !units m
-       !type real
-  N29, !field Vertex 10 X-coordinate
+  N29, !Vertex 10 X-coordinate
        !units m
-       !type real
-  N30, !field Vertex 10 Y-coordinate
+  N30, !Vertex 10 Y-coordinate
        !units m
-       !type real
-  N31, !field Vertex 10 Z-coordinate
+  N31, !Vertex 10 Z-coordinate
        !units m
-       !type real
-  N32, !field Vertex 11 X-coordinate
+  N32, !Vertex 11 X-coordinate
        !units m
-       !type real
-  N33, !field Vertex 11 Y-coordinate
+  N33, !Vertex 11 Y-coordinate
        !units m
-       !type real
-  N34, !field Vertex 11 Z-coordinate
+  N34, !Vertex 11 Z-coordinate
        !units m
-       !type real
-  N35, !field Vertex 12 X-coordinate
+  N35, !Vertex 12 X-coordinate
        !units m
-       !type real
-  N36, !field Vertex 12 Y-coordinate
+  N36, !Vertex 12 Y-coordinate
        !units m
-       !type real
-  N37, !field Vertex 12 Z-coordinate
+  N37, !Vertex 12 Z-coordinate
        !units m
-       !type real
-  N38, !field Vertex 13 X-coordinate
+  N38, !Vertex 13 X-coordinate
        !units m
-       !type real
-  N39, !field Vertex 13 Y-coordinate
+  N39, !Vertex 13 Y-coordinate
        !units m
-       !type real
-  N40, !field Vertex 13 Z-coordinate
+  N40, !Vertex 13 Z-coordinate
        !units m
-       !type real
-  N41, !field Vertex 14 X-coordinate
+  N41, !Vertex 14 X-coordinate
        !units m
-       !type real
-  N42, !field Vertex 14 Y-coordinate
+  N42, !Vertex 14 Y-coordinate
        !units m
-       !type real
-  N43, !field Vertex 14 Z-coordinate
+  N43, !Vertex 14 Z-coordinate
        !units m
-       !type real
-  N44, !field Vertex 15 X-coordinate
+  N44, !Vertex 15 X-coordinate
        !units m
-       !type real
-  N45, !field Vertex 15 Y-coordinate
+  N45, !Vertex 15 Y-coordinate
        !units m
-       !type real
-  N46, !field Vertex 15 Z-coordinate
+  N46, !Vertex 15 Z-coordinate
        !units m
-       !type real
-  N47, !field Vertex 16 X-coordinate
+  N47, !Vertex 16 X-coordinate
        !units m
-       !type real
-  N48, !field Vertex 16 Y-coordinate
+  N48, !Vertex 16 Y-coordinate
        !units m
-       !type real
-  N49, !field Vertex 16 Z-coordinate
+  N49, !Vertex 16 Z-coordinate
        !units m
-       !type real
-  N50, !field Vertex 17 X-coordinate
+  N50, !Vertex 17 X-coordinate
        !units m
-       !type real
-  N51, !field Vertex 17 Y-coordinate
+  N51, !Vertex 17 Y-coordinate
        !units m
-       !type real
-  N52, !field Vertex 17 Z-coordinate
+  N52, !Vertex 17 Z-coordinate
        !units m
-       !type real
-  N53, !field Vertex 18 X-coordinate
+  N53, !Vertex 18 X-coordinate
        !units m
-       !type real
-  N54, !field Vertex 18 Y-coordinate
+  N54, !Vertex 18 Y-coordinate
        !units m
-       !type real
-  N55, !field Vertex 18 Z-coordinate
+  N55, !Vertex 18 Z-coordinate
        !units m
-       !type real
-  N56, !field Vertex 19 X-coordinate
+  N56, !Vertex 19 X-coordinate
        !units m
-       !type real
-  N57, !field Vertex 19 Y-coordinate
+  N57, !Vertex 19 Y-coordinate
        !units m
-       !type real
-  N58, !field Vertex 19 Z-coordinate
+  N58, !Vertex 19 Z-coordinate
        !units m
-       !type real
-  N59, !field Vertex 20 X-coordinate
+  N59, !Vertex 20 X-coordinate
        !units m
-       !type real
-  N60, !field Vertex 20 Y-coordinate
+  N60, !Vertex 20 Y-coordinate
        !units m
-       !type real
-  N61, !field Vertex 20 Z-coordinate
+  N61, !Vertex 20 Z-coordinate
        !units m
-       !type real
-  N62, !field Vertex 21 X-coordinate
+  N62, !Vertex 21 X-coordinate
        !units m
-       !type real
-  N63, !field Vertex 21 Y-coordinate
+  N63, !Vertex 21 Y-coordinate
        !units m
-       !type real
-  N64, !field Vertex 21 Z-coordinate
+  N64, !Vertex 21 Z-coordinate
        !units m
-       !type real
-  N65, !field Vertex 22 X-coordinate
+  N65, !Vertex 22 X-coordinate
        !units m
-       !type real
-  N66, !field Vertex 22 Y-coordinate
+  N66, !Vertex 22 Y-coordinate
        !units m
-       !type real
-  N67, !field Vertex 22 Z-coordinate
+  N67, !Vertex 22 Z-coordinate
        !units m
-       !type real
-  N68, !field Vertex 23 X-coordinate
+  N68, !Vertex 23 X-coordinate
        !units m
-       !type real
   N69, !field Vertex 23 Y-coordinate
        !units m
-       !type real
-  N70, !field Vertex 23 Z-coordinate
+  N70, !Vertex 23 Z-coordinate
        !units m
-       !type real
-  N71, !field Vertex 24 X-coordinate
+  N71, !Vertex 24 X-coordinate
        !units m
-       !type real
-  N72, !field Vertex 24 Y-coordinate
+  N72, !Vertex 24 Y-coordinate
        !units m
-       !type real
-  N73, !field Vertex 24 Z-coordinate
+  N73, !Vertex 24 Z-coordinate
        !units m
-       !type real
-  N74, !field Vertex 25 X-coordinate
+  N74, !Vertex 25 X-coordinate
        !units m
-       !type real
-  N75, !field Vertex 25 Y-coordinate
+  N75, !Vertex 25 Y-coordinate
        !units m
-       !type real
-  N76, !field Vertex 25 Z-coordinate
+  N76, !Vertex 25 Z-coordinate
        !units m
-       !type real
-  N77, !field Vertex 26 X-coordinate
+  N77, !Vertex 26 X-coordinate
        !units m
-       !type real
-  N78, !field Vertex 26 Y-coordinate
+  N78, !Vertex 26 Y-coordinate
        !units m
-       !type real
-  N79, !field Vertex 26 Z-coordinate
+  N79, !Vertex 26 Z-coordinate
        !units m
-       !type real
-  N80, !field Vertex 27 X-coordinate
+  N80, !Vertex 27 X-coordinate
        !units m
-       !type real
-  N81, !field Vertex 27 Y-coordinate
+  N81, !Vertex 27 Y-coordinate
        !units m
-       !type real
-  N82, !field Vertex 27 Z-coordinate
+  N82, !Vertex 27 Z-coordinate
        !units m
-       !type real
-  N83, !field Vertex 28 X-coordinate
+  N83, !Vertex 28 X-coordinate
        !units m
-       !type real
-  N84, !field Vertex 28 Y-coordinate
+  N84, !Vertex 28 Y-coordinate
        !units m
-       !type real
-  N85, !field Vertex 28 Z-coordinate
+  N85, !Vertex 28 Z-coordinate
        !units m
-       !type real
-  N86, !field Vertex 29 X-coordinate
+  N86, !Vertex 29 X-coordinate
        !units m
-       !type real
-  N87, !field Vertex 29 Y-coordinate
+  N87, !Vertex 29 Y-coordinate
        !units m
-       !type real
-  N88, !field Vertex 29 Z-coordinate
+  N88, !Vertex 29 Z-coordinate
        !units m
-       !type real
-  N89, !field Vertex 30 X-coordinate
+  N89, !Vertex 30 X-coordinate
        !units m
-       !type real
-  N90, !field Vertex 30 Y-coordinate
+  N90, !Vertex 30 Y-coordinate
        !units m
-       !type real
-  N91, !field Vertex 30 Z-coordinate
+  N91, !Vertex 30 Z-coordinate
        !units m
-       !type real
-  N92, !field Vertex 31 X-coordinate
+  N92, !Vertex 31 X-coordinate
        !units m
-       !type real
-  N93, !field Vertex 31 Y-coordinate
+  N93, !Vertex 31 Y-coordinate
        !units m
-       !type real
-  N94, !field Vertex 31 Z-coordinate
+  N94, !Vertex 31 Z-coordinate
        !units m
-       !type real
-  N95, !field Vertex 32 X-coordinate
+  N95, !Vertex 32 X-coordinate
        !units m
-       !type real
-  N96, !field Vertex 32 Y-coordinate
+  N96, !Vertex 32 Y-coordinate
        !units m
-       !type real
-  N97, !field Vertex 32 Z-coordinate
+  N97, !Vertex 32 Z-coordinate
        !units m
-       !type real
-  N98, !field Vertex 33 X-coordinate
+  N98, !Vertex 33 X-coordinate
        !units m
-       !type real
-  N99, !field Vertex 33 Y-coordinate
+  N99, !Vertex 33 Y-coordinate
        !units m
-       !type real
-  N100, !field Vertex 33 Z-coordinate
+  N100, !Vertex 33 Z-coordinate
        !units m
-       !type real
-  N101, !field Vertex 34 X-coordinate
+  N101, !Vertex 34 X-coordinate
        !units m
-       !type real
-  N102, !field Vertex 34 Y-coordinate
+  N102, !Vertex 34 Y-coordinate
        !units m
-       !type real
-  N103, !field Vertex 34 Z-coordinate
+  N103, !Vertex 34 Z-coordinate
        !units m
-       !type real
-  N104, !field Vertex 35 X-coordinate
+  N104, !Vertex 35 X-coordinate
        !units m
-       !type real
-  N105, !field Vertex 35 Y-coordinate
+  N105, !Vertex 35 Y-coordinate
        !units m
-       !type real
-  N106, !field Vertex 35 Z-coordinate
+  N106, !Vertex 35 Z-coordinate
        !units m
-       !type real
-  N107, !field Vertex 36 X-coordinate
+  N107, !Vertex 36 X-coordinate
        !units m
-       !type real
-  N108, !field Vertex 36 Y-coordinate
+  N108, !Vertex 36 Y-coordinate
        !units m
-       !type real
-  N109, !field Vertex 36 Z-coordinate
+  N109, !Vertex 36 Z-coordinate
        !units m
-       !type real
-  N110, !field Vertex 37 X-coordinate
+  N110, !Vertex 37 X-coordinate
        !units m
-       !type real
-  N111, !field Vertex 37 Y-coordinate
+  N111, !Vertex 37 Y-coordinate
        !units m
-       !type real
-  N112, !field Vertex 37 Z-coordinate
+  N112, !Vertex 37 Z-coordinate
        !units m
-       !type real
-  N113, !field Vertex 38 X-coordinate
+  N113, !Vertex 38 X-coordinate
        !units m
-       !type real
-  N114, !field Vertex 38 Y-coordinate
+  N114, !Vertex 38 Y-coordinate
        !units m
-       !type real
-  N115, !field Vertex 38 Z-coordinate
+  N115, !Vertex 38 Z-coordinate
        !units m
-       !type real
-  N116, !field Vertex 39 X-coordinate
+  N116, !Vertex 39 X-coordinate
        !units m
-       !type real
-  N117, !field Vertex 39 Y-coordinate
+  N117, !Vertex 39 Y-coordinate
        !units m
-       !type real
-  N118, !field Vertex 39 Z-coordinate
+  N118, !Vertex 39 Z-coordinate
        !units m
-       !type real
-  N119, !field Vertex 40 X-coordinate
+  N119, !Vertex 40 X-coordinate
        !units m
-       !type real
-  N120, !field Vertex 40 Y-coordinate
+  N120, !Vertex 40 Y-coordinate
        !units m
-       !type real
-  N121, !field Vertex 40 Z-coordinate
+  N121, !Vertex 40 Z-coordinate
        !units m
-       !type real
-  N122, !field Vertex 41 X-coordinate
+  N122, !Vertex 41 X-coordinate
        !units m
-       !type real
-  N123, !field Vertex 41 Y-coordinate
+  N123, !Vertex 41 Y-coordinate
        !units m
-       !type real
-  N124, !field Vertex 41 Z-coordinate
+  N124, !Vertex 41 Z-coordinate
        !units m
-       !type real
-  N125, !field Vertex 42 X-coordinate
+  N125, !Vertex 42 X-coordinate
        !units m
-       !type real
-  N126, !field Vertex 42 Y-coordinate
+  N126, !Vertex 42 Y-coordinate
        !units m
-       !type real
-  N127, !field Vertex 42 Z-coordinate
+  N127, !Vertex 42 Z-coordinate
        !units m
-       !type real
-  N128, !field Vertex 43 X-coordinate
+  N128, !Vertex 43 X-coordinate
        !units m
-       !type real
-  N129, !field Vertex 43 Y-coordinate
+  N129, !Vertex 43 Y-coordinate
        !units m
-       !type real
-  N130, !field Vertex 43 Z-coordinate
+  N130, !Vertex 43 Z-coordinate
        !units m
-       !type real
-  N131, !field Vertex 44 X-coordinate
+  N131, !Vertex 44 X-coordinate
        !units m
-       !type real
-  N132, !field Vertex 44 Y-coordinate
+  N132, !Vertex 44 Y-coordinate
        !units m
-       !type real
-  N133, !field Vertex 44 Z-coordinate
+  N133, !Vertex 44 Z-coordinate
        !units m
-       !type real
-  N134, !field Vertex 45 X-coordinate
+  N134, !Vertex 45 X-coordinate
        !units m
-       !type real
-  N135, !field Vertex 45 Y-coordinate
+  N135, !Vertex 45 Y-coordinate
        !units m
-       !type real
-  N136, !field Vertex 45 Z-coordinate
+  N136, Vertex 45 Z-coordinate
        !units m
-       !type real
-  N137, !field Vertex 46 X-coordinate
+  N137, !Vertex 46 X-coordinate
        !units m
-       !type real
-  N138, !field Vertex 46 Y-coordinate
+  N138, !Vertex 46 Y-coordinate
        !units m
-       !type real
-  N139, !field Vertex 46 Z-coordinate
+  N139, !Vertex 46 Z-coordinate
        !units m
-       !type real
-  N140, !field Vertex 47 X-coordinate
+  N140, !Vertex 47 X-coordinate
        !units m
-       !type real
-  N141, !field Vertex 47 Y-coordinate
+  N141, !Vertex 47 Y-coordinate
        !units m
-       !type real
-  N142, !field Vertex 47 Z-coordinate
+  N142, !Vertex 47 Z-coordinate
        !units m
-       !type real
-  N143, !field Vertex 48 X-coordinate
+  N143, !Vertex 48 X-coordinate
        !units m
-       !type real
-  N144, !field Vertex 48 Y-coordinate
+  N144, !Vertex 48 Y-coordinate
        !units m
-       !type real
-  N145, !field Vertex 48 Z-coordinate
+  N145, !Vertex 48 Z-coordinate
        !units m
-       !type real
-  N146, !field Vertex 49 X-coordinate
+  N146, !Vertex 49 X-coordinate
        !units m
-       !type real
-  N147, !field Vertex 49 Y-coordinate
+  N147, !Vertex 49 Y-coordinate
        !units m
-       !type real
-  N148, !field Vertex 49 Z-coordinate
+  N148, !Vertex 49 Z-coordinate
        !units m
-       !type real
-  N149, !field Vertex 50 X-coordinate
+  N149, Vertex 50 X-coordinate
        !units m
-       !type real
-  N150, !field Vertex 50 Y-coordinate
+  N150, !Vertex 50 Y-coordinate
        !units m
-       !type real
-  N151, !field Vertex 50 Z-coordinate
+  N151, !Vertex 50 Z-coordinate
        !units m
-       !type real
-  N152, !field Vertex 51 X-coordinate
+  N152, !Vertex 51 X-coordinate
        !units m
-       !type real
-  N153, !field Vertex 51 Y-coordinate
+  N153, !Vertex 51 Y-coordinate
        !units m
-       !type real
-  N154, !field Vertex 51 Z-coordinate
+  N154, !Vertex 51 Z-coordinate
        !units m
-       !type real
-  N155, !field Vertex 52 X-coordinate
+  N155, !Vertex 52 X-coordinate
        !units m
-       !type real
-  N156, !field Vertex 52 Y-coordinate
+  N156, !Vertex 52 Y-coordinate
        !units m
-       !type real
-  N157, !field Vertex 52 Z-coordinate
+  N157, !Vertex 52 Z-coordinate
        !units m
-       !type real
-  N158, !field Vertex 53 X-coordinate
+  N158, !Vertex 53 X-coordinate
        !units m
-       !type real
-  N159, !field Vertex 53 Y-coordinate
+  N159, !Vertex 53 Y-coordinate
        !units m
-       !type real
-  N160, !field Vertex 53 Z-coordinate
+  N160, !Vertex 53 Z-coordinate
        !units m
-       !type real
-  N161, !field Vertex 54 X-coordinate
+  N161, !Vertex 54 X-coordinate
        !units m
-       !type real
-  N162, !field Vertex 54 Y-coordinate
+  N162, !Vertex 54 Y-coordinate
        !units m
-       !type real
-  N163, !field Vertex 54 Z-coordinate
+  N163, !Vertex 54 Z-coordinate
        !units m
-       !type real
-  N164, !field Vertex 55 X-coordinate
+  N164, !Vertex 55 X-coordinate
        !units m
-       !type real
-  N165, !field Vertex 55 Y-coordinate
+  N165, !Vertex 55 Y-coordinate
        !units m
-       !type real
-  N166, !field Vertex 55 Z-coordinate
+  N166, !Vertex 55 Z-coordinate
        !units m
-       !type real
-  N167, !field Vertex 56 X-coordinate
+  N167, !Vertex 56 X-coordinate
        !units m
-       !type real
-  N168, !field Vertex 56 Y-coordinate
+  N168, !Vertex 56 Y-coordinate
        !units m
-       !type real
-  N169, !field Vertex 56 Z-coordinate
+  N169, !Vertex 56 Z-coordinate
        !units m
-       !type real
-  N170, !field Vertex 57 X-coordinate
+  N170, !Vertex 57 X-coordinate
        !units m
-       !type real
-  N171, !field Vertex 57 Y-coordinate
+  N171, !Vertex 57 Y-coordinate
        !units m
-       !type real
-  N172, !field Vertex 57 Z-coordinate
+  N172, !Vertex 57 Z-coordinate
        !units m
-       !type real
-  N173, !field Vertex 58 X-coordinate
+  N173, !Vertex 58 X-coordinate
        !units m
-       !type real
-  N174, !field Vertex 58 Y-coordinate
+  N174, !Vertex 58 Y-coordinate
        !units m
-       !type real
-  N175, !field Vertex 58 Z-coordinate
+  N175, !Vertex 58 Z-coordinate
        !units m
-       !type real
-  N176, !field Vertex 59 X-coordinate
+  N176, !Vertex 59 X-coordinate
        !units m
-       !type real
-  N177, !field Vertex 59 Y-coordinate
+  N177, !Vertex 59 Y-coordinate
        !units m
-       !type real
-  N178, !field Vertex 59 Z-coordinate
+  N178, !Vertex 59 Z-coordinate
        !units m
-       !type real
-  N179, !field Vertex 60 X-coordinate
+  N179, !Vertex 60 X-coordinate
        !units m
-       !type real
-  N180, !field Vertex 60 Y-coordinate
+  N180, !Vertex 60 Y-coordinate
        !units m
-       !type real
-  N181, !field Vertex 60 Z-coordinate
+  N181, !Vertex 60 Z-coordinate
        !units m
-       !type real
-  N182, !field Vertex 61 X-coordinate
+  N182, !Vertex 61 X-coordinate
        !units m
-       !type real
-  N183, !field Vertex 61 Y-coordinate
+  N183, !Vertex 61 Y-coordinate
        !units m
-       !type real
-  N184, !field Vertex 61 Z-coordinate
+  N184, !Vertex 61 Z-coordinate
        !units m
-       !type real
-  N185, !field Vertex 62 X-coordinate
+  N185, !Vertex 62 X-coordinate
        !units m
-       !type real
-  N186, !field Vertex 62 Y-coordinate
+  N186, !Vertex 62 Y-coordinate
        !units m
-       !type real
-  N187, !field Vertex 62 Z-coordinate
+  N187, !Vertex 62 Z-coordinate
        !units m
-       !type real
-  N188, !field Vertex 63 X-coordinate
+  N188, !Vertex 63 X-coordinate
        !units m
-       !type real
-  N189, !field Vertex 63 Y-coordinate
+  N189, !Vertex 63 Y-coordinate
        !units m
-       !type real
-  N190, !field Vertex 63 Z-coordinate
+  N190, !Vertex 63 Z-coordinate
        !units m
-       !type real
-  N191, !field Vertex 64 X-coordinate
+  N191, !Vertex 64 X-coordinate
        !units m
-       !type real
-  N192, !field Vertex 64 Y-coordinate
+  N192, !Vertex 64 Y-coordinate
        !units m
-       !type real
-  N193, !field Vertex 64 Z-coordinate
+  N193, !Vertex 64 Z-coordinate
        !units m
-       !type real
-  N194, !field Vertex 65 X-coordinate
+  N194, !Vertex 65 X-coordinate
        !units m
-       !type real
-  N195, !field Vertex 65 Y-coordinate
+  N195, !Vertex 65 Y-coordinate
        !units m
-       !type real
-  N196, !field Vertex 65 Z-coordinate
+  N196, !Vertex 65 Z-coordinate
        !units m
-       !type real
-  N197, !field Vertex 66 X-coordinate
+  N197, !Vertex 66 X-coordinate
        !units m
-       !type real
-  N198, !field Vertex 66 Y-coordinate
+  N198, !Vertex 66 Y-coordinate
        !units m
-       !type real
-  N199, !field Vertex 66 Z-coordinate
+  N199, !Vertex 66 Z-coordinate
        !units m
-       !type real
-  N200, !field Vertex 67 X-coordinate
+  N200, !Vertex 67 X-coordinate
        !units m
-       !type real
-  N201, !field Vertex 67 Y-coordinate
+  N201, !Vertex 67 Y-coordinate
        !units m
-       !type real
-  N202, !field Vertex 67 Z-coordinate
+  N202, !Vertex 67 Z-coordinate
        !units m
-       !type real
-  N203, !field Vertex 68 X-coordinate
+  N203, !Vertex 68 X-coordinate
        !units m
-       !type real
-  N204, !field Vertex 68 Y-coordinate
+  N204, !Vertex 68 Y-coordinate
        !units m
-       !type real
-  N205, !field Vertex 68 Z-coordinate
+  N205, !Vertex 68 Z-coordinate
        !units m
-       !type real
-  N206, !field Vertex 69 X-coordinate
+  N206, !Vertex 69 X-coordinate
        !units m
-       !type real
-  N207, !field Vertex 69 Y-coordinate
+  N207, !Vertex 69 Y-coordinate
        !units m
-       !type real
-  N208, !field Vertex 69 Z-coordinate
+  N208, !Vertex 69 Z-coordinate
        !units m
-       !type real
-  N209, !field Vertex 70 X-coordinate
+  N209, !Vertex 70 X-coordinate
        !units m
-       !type real
-  N210, !field Vertex 70 Y-coordinate
+  N210, !Vertex 70 Y-coordinate
        !units m
-       !type real
-  N211, !field Vertex 70 Z-coordinate
+  N211, !Vertex 70 Z-coordinate
        !units m
-       !type real
-  N212, !field Vertex 71 X-coordinate
+  N212, !Vertex 71 X-coordinate
        !units m
-       !type real
-  N213, !field Vertex 71 Y-coordinate
+  N213, !Vertex 71 Y-coordinate
        !units m
-       !type real
-  N214, !field Vertex 71 Z-coordinate
+  N214, !Vertex 71 Z-coordinate
        !units m
-       !type real
-  N215, !field Vertex 72 X-coordinate
+  N215, !Vertex 72 X-coordinate
        !units m
-       !type real
-  N216, !field Vertex 72 Y-coordinate
+  N216, !Vertex 72 Y-coordinate
        !units m
-       !type real
-  N217, !field Vertex 72 Z-coordinate
+  N217, !Vertex 72 Z-coordinate
        !units m
-       !type real
-  N218, !field Vertex 73 X-coordinate
+  N218, !Vertex 73 X-coordinate
        !units m
-       !type real
-  N219, !field Vertex 73 Y-coordinate
+  N219, !Vertex 73 Y-coordinate
        !units m
-       !type real
-  N220, !field Vertex 73 Z-coordinate
+  N220, !Vertex 73 Z-coordinate
        !units m
-       !type real
-  N221, !field Vertex 74 X-coordinate
+  N221, !Vertex 74 X-coordinate
        !units m
-       !type real
-  N222, !field Vertex 74 Y-coordinate
+  N222, !Vertex 74 Y-coordinate
        !units m
-       !type real
-  N223, !field Vertex 74 Z-coordinate
+  N223, !Vertex 74 Z-coordinate
        !units m
-       !type real
-  N224, !field Vertex 75 X-coordinate
+  N224, !Vertex 75 X-coordinate
        !units m
-       !type real
-  N225, !field Vertex 75 Y-coordinate
+  N225, !Vertex 75 Y-coordinate
        !units m
-       !type real
-  N226, !field Vertex 75 Z-coordinate
+  N226, !Vertex 75 Z-coordinate
        !units m
-       !type real
-  N227, !field Vertex 76 X-coordinate
+  N227, !Vertex 76 X-coordinate
        !units m
-       !type real
-  N228, !field Vertex 76 Y-coordinate
+  N228, !Vertex 76 Y-coordinate
        !units m
-       !type real
-  N229, !field Vertex 76 Z-coordinate
+  N229, !Vertex 76 Z-coordinate
        !units m
-       !type real
-  N230, !field Vertex 77 X-coordinate
+  N230, !Vertex 77 X-coordinate
        !units m
-       !type real
-  N231, !field Vertex 77 Y-coordinate
+  N231, !Vertex 77 Y-coordinate
        !units m
-       !type real
-  N232, !field Vertex 77 Z-coordinate
+  N232, !Vertex 77 Z-coordinate
        !units m
-       !type real
-  N233, !field Vertex 78 X-coordinate
+  N233, !Vertex 78 X-coordinate
        !units m
-       !type real
-  N234, !field Vertex 78 Y-coordinate
+  N234, !Vertex 78 Y-coordinate
        !units m
-       !type real
-  N235, !field Vertex 78 Z-coordinate
+  N235, !Vertex 78 Z-coordinate
        !units m
-       !type real
-  N236, !field Vertex 79 X-coordinate
+  N236, !Vertex 79 X-coordinate
        !units m
-       !type real
-  N237, !field Vertex 79 Y-coordinate
+  N237, !Vertex 79 Y-coordinate
        !units m
-       !type real
-  N238, !field Vertex 79 Z-coordinate
+  N238, !Vertex 79 Z-coordinate
        !units m
-       !type real
-  N239, !field Vertex 80 X-coordinate
+  N239, !Vertex 80 X-coordinate
        !units m
-       !type real
-  N240, !field Vertex 80 Y-coordinate
+  N240, !Vertex 80 Y-coordinate
        !units m
-       !type real
-  N241, !field Vertex 80 Z-coordinate
+  N241, !Vertex 80 Z-coordinate
        !units m
-       !type real
-  N242, !field Vertex 81 X-coordinate
+  N242, !Vertex 81 X-coordinate
        !units m
-       !type real
-  N243, !field Vertex 81 Y-coordinate
+  N243, !Vertex 81 Y-coordinate
        !units m
-       !type real
-  N244, !field Vertex 81 Z-coordinate
+  N244, !Vertex 81 Z-coordinate
        !units m
-       !type real
-  N245, !field Vertex 82 X-coordinate
+  N245, !Vertex 82 X-coordinate
        !units m
-       !type real
-  N246, !field Vertex 82 Y-coordinate
+  N246, !Vertex 82 Y-coordinate
        !units m
-       !type real
-  N247, !field Vertex 82 Z-coordinate
+  N247, !Vertex 82 Z-coordinate
        !units m
-       !type real
-  N248, !field Vertex 83 X-coordinate
+  N248, !Vertex 83 X-coordinate
        !units m
-       !type real
-  N249, !field Vertex 83 Y-coordinate
+  N249, !Vertex 83 Y-coordinate
        !units m
-       !type real
-  N250, !field Vertex 83 Z-coordinate
+  N250, !Vertex 83 Z-coordinate
        !units m
-       !type real
-  N251, !field Vertex 84 X-coordinate
+  N251, !Vertex 84 X-coordinate
        !units m
-       !type real
-  N252, !field Vertex 84 Y-coordinate
+  N252, !Vertex 84 Y-coordinate
        !units m
-       !type real
-  N253, !field Vertex 84 Z-coordinate
+  N253, !Vertex 84 Z-coordinate
        !units m
-       !type real
-  N254, !field Vertex 85 X-coordinate
+  N254, !Vertex 85 X-coordinate
        !units m
-       !type real
-  N255, !field Vertex 85 Y-coordinate
+  N255, !Vertex 85 Y-coordinate
        !units m
-       !type real
-  N256, !field Vertex 85 Z-coordinate
+  N256, !Vertex 85 Z-coordinate
        !units m
-       !type real
-  N257, !field Vertex 86 X-coordinate
+  N257, !Vertex 86 X-coordinate
        !units m
-       !type real
-  N258, !field Vertex 86 Y-coordinate
+  N258, !Vertex 86 Y-coordinate
        !units m
-       !type real
-  N259, !field Vertex 86 Z-coordinate
+  N259, !Vertex 86 Z-coordinate
        !units m
-       !type real
-  N260, !field Vertex 87 X-coordinate
+  N260, !Vertex 87 X-coordinate
        !units m
-       !type real
-  N261, !field Vertex 87 Y-coordinate
+  N261, !Vertex 87 Y-coordinate
        !units m
-       !type real
-  N262, !field Vertex 87 Z-coordinate
+  N262, !Vertex 87 Z-coordinate
        !units m
-       !type real
-  N263, !field Vertex 88 X-coordinate
+  N263, !Vertex 88 X-coordinate
        !units m
-       !type real
-  N264, !field Vertex 88 Y-coordinate
+  N264, !Vertex 88 Y-coordinate
        !units m
-       !type real
-  N265, !field Vertex 88 Z-coordinate
+  N265, !Vertex 88 Z-coordinate
        !units m
-       !type real
-  N266, !field Vertex 89 X-coordinate
+  N266, !Vertex 89 X-coordinate
        !units m
-       !type real
-  N267, !field Vertex 89 Y-coordinate
+  N267, !Vertex 89 Y-coordinate
        !units m
-       !type real
-  N268, !field Vertex 89 Z-coordinate
+  N268, !Vertex 89 Z-coordinate
        !units m
-       !type real
-  N269, !field Vertex 90 X-coordinate
+  N269, !Vertex 90 X-coordinate
        !units m
-       !type real
-  N270, !field Vertex 90 Y-coordinate
+  N270, !Vertex 90 Y-coordinate
        !units m
-       !type real
-  N271, !field Vertex 90 Z-coordinate
+  N271, !Vertex 90 Z-coordinate
        !units m
-       !type real
-  N272, !field Vertex 91 X-coordinate
+  N272, !Vertex 91 X-coordinate
        !units m
-       !type real
-  N273, !field Vertex 91 Y-coordinate
+  N273, !Vertex 91 Y-coordinate
        !units m
-       !type real
-  N274, !field Vertex 91 Z-coordinate
+  N274, !Vertex 91 Z-coordinate
        !units m
-       !type real
-  N275, !field Vertex 92 X-coordinate
+  N275, !Vertex 92 X-coordinate
        !units m
-       !type real
-  N276, !field Vertex 92 Y-coordinate
+  N276, !Vertex 92 Y-coordinate
        !units m
-       !type real
-  N277, !field Vertex 92 Z-coordinate
+  N277, !Vertex 92 Z-coordinate
        !units m
-       !type real
-  N278, !field Vertex 93 X-coordinate
+  N278, !Vertex 93 X-coordinate
        !units m
-       !type real
-  N279, !field Vertex 93 Y-coordinate
+  N279, !Vertex 93 Y-coordinate
        !units m
-       !type real
-  N280, !field Vertex 93 Z-coordinate
+  N280, !Vertex 93 Z-coordinate
        !units m
-       !type real
-  N281, !field Vertex 94 X-coordinate
+  N281, !Vertex 94 X-coordinate
        !units m
-       !type real
-  N282, !field Vertex 94 Y-coordinate
+  N282, !Vertex 94 Y-coordinate
        !units m
-       !type real
-  N283, !field Vertex 94 Z-coordinate
+  N283, !Vertex 94 Z-coordinate
        !units m
-       !type real
-  N284, !field Vertex 95 X-coordinate
+  N284, !Vertex 95 X-coordinate
        !units m
-       !type real
-  N285, !field Vertex 95 Y-coordinate
+  N285, !Vertex 95 Y-coordinate
        !units m
-       !type real
-  N286, !field Vertex 95 Z-coordinate
+  N286, !Vertex 95 Z-coordinate
        !units m
-       !type real
-  N287, !field Vertex 96 X-coordinate
+  N287, !Vertex 96 X-coordinate
        !units m
-       !type real
-  N288, !field Vertex 96 Y-coordinate
+  N288, !Vertex 96 Y-coordinate
        !units m
-       !type real
-  N289, !field Vertex 96 Z-coordinate
+  N289, !Vertex 96 Z-coordinate
        !units m
-       !type real
-  N290, !field Vertex 97 X-coordinate
+  N290, !Vertex 97 X-coordinate
        !units m
-       !type real
-  N291, !field Vertex 97 Y-coordinate
+  N291, !Vertex 97 Y-coordinate
        !units m
-       !type real
-  N292, !field Vertex 97 Z-coordinate
+  N292, !Vertex 97 Z-coordinate
        !units m
-       !type real
-  N293, !field Vertex 98 X-coordinate
+  N293, !Vertex 98 X-coordinate
        !units m
-       !type real
-  N294, !field Vertex 98 Y-coordinate
+  N294, !Vertex 98 Y-coordinate
        !units m
-       !type real
-  N295, !field Vertex 98 Z-coordinate
+  N295, !Vertex 98 Z-coordinate
        !units m
-       !type real
-  N296, !field Vertex 99 X-coordinate
+  N296, !Vertex 99 X-coordinate
        !units m
-       !type real
-  N297, !field Vertex 99 Y-coordinate
+  N297, !Vertex 99 Y-coordinate
        !units m
-       !type real
-  N298, !field Vertex 99 Z-coordinate
+  N298, !Vertex 99 Z-coordinate
        !units m
-       !type real
-  N299, !field Vertex 100 X-coordinate
+  N299, !Vertex 100 X-coordinate
        !units m
-       !type real
-  N300, !field Vertex 100 Y-coordinate
+  N300, !Vertex 100 Y-coordinate
        !units m
-       !type real
-  N301, !field Vertex 100 Z-coordinate
+  N301, !Vertex 100 Z-coordinate
        !units m
-       !type real
-  N302, !field Vertex 101 X-coordinate
+  N302, !Vertex 101 X-coordinate
        !units m
-       !type real
-  N303, !field Vertex 101 Y-coordinate
+  N303, !Vertex 101 Y-coordinate
        !units m
-       !type real
-  N304, !field Vertex 101 Z-coordinate
+  N304, !Vertex 101 Z-coordinate
        !units m
-       !type real
-  N305, !field Vertex 102 X-coordinate
+  N305, !Vertex 102 X-coordinate
        !units m
-       !type real
-  N306, !field Vertex 102 Y-coordinate
+  N306, !Vertex 102 Y-coordinate
        !units m
-       !type real
-  N307, !field Vertex 102 Z-coordinate
+  N307, !Vertex 102 Z-coordinate
        !units m
-       !type real
-  N308, !field Vertex 103 X-coordinate
+  N308, !Vertex 103 X-coordinate
        !units m
-       !type real
-  N309, !field Vertex 103 Y-coordinate
+  N309, !Vertex 103 Y-coordinate
        !units m
-       !type real
-  N310, !field Vertex 103 Z-coordinate
+  N310, !Vertex 103 Z-coordinate
        !units m
-       !type real
-  N311, !field Vertex 104 X-coordinate
+  N311, !Vertex 104 X-coordinate
        !units m
-       !type real
-  N312, !field Vertex 104 Y-coordinate
+  N312, !Vertex 104 Y-coordinate
        !units m
-       !type real
-  N313, !field Vertex 104 Z-coordinate
+  N313, !Vertex 104 Z-coordinate
        !units m
-       !type real
-  N314, !field Vertex 105 X-coordinate
+  N314, !Vertex 105 X-coordinate
        !units m
-       !type real
-  N315, !field Vertex 105 Y-coordinate
+  N315, !Vertex 105 Y-coordinate
        !units m
-       !type real
-  N316, !field Vertex 105 Z-coordinate
+  N316, !Vertex 105 Z-coordinate
        !units m
-       !type real
-  N317, !field Vertex 106 X-coordinate
+  N317, !Vertex 106 X-coordinate
        !units m
-       !type real
-  N318, !field Vertex 106 Y-coordinate
+  N318, !Vertex 106 Y-coordinate
        !units m
-       !type real
-  N319, !field Vertex 106 Z-coordinate
+  N319, !Vertex 106 Z-coordinate
        !units m
-       !type real
-  N320, !field Vertex 107 X-coordinate
+  N320, !Vertex 107 X-coordinate
        !units m
-       !type real
-  N321, !field Vertex 107 Y-coordinate
+  N321, !Vertex 107 Y-coordinate
        !units m
-       !type real
-  N322, !field Vertex 107 Z-coordinate
+  N322, !Vertex 107 Z-coordinate
        !units m
-       !type real
-  N323, !field Vertex 108 X-coordinate
+  N323, !Vertex 108 X-coordinate
        !units m
-       !type real
-  N324, !field Vertex 108 Y-coordinate
+  N324, !Vertex 108 Y-coordinate
        !units m
-       !type real
-  N325, !field Vertex 108 Z-coordinate
+  N325, !Vertex 108 Z-coordinate
        !units m
-       !type real
-  N326, !field Vertex 109 X-coordinate
+  N326, !Vertex 109 X-coordinate
        !units m
-       !type real
-  N327, !field Vertex 109 Y-coordinate
+  N327, !Vertex 109 Y-coordinate
        !units m
-       !type real
-  N328, !field Vertex 109 Z-coordinate
+  N328, !Vertex 109 Z-coordinate
        !units m
-       !type real
-  N329, !field Vertex 110 X-coordinate
+  N329, !Vertex 110 X-coordinate
        !units m
-       !type real
-  N330, !field Vertex 110 Y-coordinate
+  N330, !Vertex 110 Y-coordinate
        !units m
-       !type real
-  N331, !field Vertex 110 Z-coordinate
+  N331, !Vertex 110 Z-coordinate
        !units m
-       !type real
-  N332, !field Vertex 111 X-coordinate
+  N332, !Vertex 111 X-coordinate
        !units m
-       !type real
-  N333, !field Vertex 111 Y-coordinate
+  N333, !Vertex 111 Y-coordinate
        !units m
-       !type real
-  N334, !field Vertex 111 Z-coordinate
+  N334, !Vertex 111 Z-coordinate
        !units m
-       !type real
-  N335, !field Vertex 112 X-coordinate
+  N335, !Vertex 112 X-coordinate
        !units m
-       !type real
-  N336, !field Vertex 112 Y-coordinate
+  N336, !Vertex 112 Y-coordinate
        !units m
-       !type real
-  N337, !field Vertex 112 Z-coordinate
+  N337, !Vertex 112 Z-coordinate
        !units m
-       !type real
-  N338, !field Vertex 113 X-coordinate
+  N338, !Vertex 113 X-coordinate
        !units m
-       !type real
-  N339, !field Vertex 113 Y-coordinate
+  N339, !Vertex 113 Y-coordinate
        !units m
-       !type real
-  N340, !field Vertex 113 Z-coordinate
+  N340, !Vertex 113 Z-coordinate
        !units m
-       !type real
-  N341, !field Vertex 114 X-coordinate
+  N341, !Vertex 114 X-coordinate
        !units m
-       !type real
-  N342, !field Vertex 114 Y-coordinate
+  N342, !Vertex 114 Y-coordinate
        !units m
-       !type real
-  N343, !field Vertex 114 Z-coordinate
+  N343, !Vertex 114 Z-coordinate
        !units m
-       !type real
-  N344, !field Vertex 115 X-coordinate
+  N344, !Vertex 115 X-coordinate
        !units m
-       !type real
-  N345, !field Vertex 115 Y-coordinate
+  N345, !Vertex 115 Y-coordinate
        !units m
-       !type real
-  N346, !field Vertex 115 Z-coordinate
+  N346, !Vertex 115 Z-coordinate
        !units m
-       !type real
-  N347, !field Vertex 116 X-coordinate
+  N347, !Vertex 116 X-coordinate
        !units m
-       !type real
-  N348, !field Vertex 116 Y-coordinate
+  N348, !Vertex 116 Y-coordinate
        !units m
-       !type real
-  N349, !field Vertex 116 Z-coordinate
+  N349, !Vertex 116 Z-coordinate
        !units m
-       !type real
-  N350, !field Vertex 117 X-coordinate
+  N350, !Vertex 117 X-coordinate
        !units m
-       !type real
-  N351, !field Vertex 117 Y-coordinate
+  N351, !Vertex 117 Y-coordinate
        !units m
-       !type real
-  N352, !field Vertex 117 Z-coordinate
+  N352, !Vertex 117 Z-coordinate
        !units m
-       !type real
-  N353, !field Vertex 118 X-coordinate
+  N353, !Vertex 118 X-coordinate
        !units m
-       !type real
-  N354, !field Vertex 118 Y-coordinate
+  N354, !Vertex 118 Y-coordinate
        !units m
-       !type real
-  N355, !field Vertex 118 Z-coordinate
+  N355, !Vertex 118 Z-coordinate
        !units m
-       !type real
-  N356, !field Vertex 119 X-coordinate
+  N356, !Vertex 119 X-coordinate
        !units m
-       !type real
-  N357, !field Vertex 119 Y-coordinate
+  N357, !Vertex 119 Y-coordinate
        !units m
-       !type real
-  N358, !field Vertex 119 Z-coordinate
+  N358, !Vertex 119 Z-coordinate
        !units m
-       !type real
-  N359, !field Vertex 120 X-coordinate
+  N359, !Vertex 120 X-coordinate
        !units m
-       !type real
-  N360, !field Vertex 120 Y-coordinate
+  N360, !Vertex 120 Y-coordinate
        !units m
-       !type real
-  N361; !field Vertex 120 Z-coordinate
+  N361; !Vertex 120 Z-coordinate
        !units m
-       !type real
 
 Shading:Overhang,
-      !memo Overhangs are usually flat shading surfaces that reference a window or door.
-  A1 , !field Name
+      !Overhangs are usually flat shading surfaces that reference a window or door.
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AttachedShadingSurfNames
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2 , !field Window or Door Name
+  A2 , !Window or Door Name
        !required-field
        !type object-list
        !object-list SubSurfNames
-  N1,  !field Height above Window or Door
+  N1,  !Height above Window or Door
        !units m
-  N2,  !field Tilt Angle from Window/Door
+  N2,  !Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N3,  !field Left extension from Window/Door Width
+  N3,  !Left extension from Window/Door Width
        !units m
-  N4,  !field Right extension from Window/Door Width
-       !note N3 + N4 + Window/Door Width is Overhang Length
+  N4,  !Right extension from Window/Door Width
+       !N3 + N4 + Window/Door Width is Overhang Length
        !units m
-  N5;  !field Depth
+  N5;  !Depth
        !units m
        !minimum 0
 
 Shading:Overhang:Projection,
-      !memo Overhangs are typically flat shading surfaces that reference a window or door.
-  A1 , !field Name
+      !Overhangs are typically flat shading surfaces that reference a window or door.
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AttachedShadingSurfNames
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2 , !field Window or Door Name
+  A2 , !Window or Door Name
        !required-field
        !type object-list
        !object-list SubSurfNames
-  N1,  !field Height above Window or Door
+  N1,  !Height above Window or Door
        !units m
-  N2,  !field Tilt Angle from Window/Door
+  N2,  !Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N3,  !field Left extension from Window/Door Width
+  N3,  !Left extension from Window/Door Width
        !units m
-  N4,  !field Right extension from Window/Door Width
+  N4,  !Right extension from Window/Door Width
        !units m
-       !note N3 + N4 + Window/Door Width is Overhang Length
-  N5;  !field Depth as Fraction of Window/Door Height
+       !N3 + N4 + Window/Door Width is Overhang Length
+  N5;  !Depth as Fraction of Window/Door Height
        !units m
        !minimum 0
 
 Shading:Fin,
-      !memo Fins are usually shading surfaces that are perpendicular to a window or door.
-  A1 , !field Name
+      !Fins are usually shading surfaces that are perpendicular to a window or door.
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AttachedShadingSurfNames
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2 , !field Window or Door Name
+  A2 , !Window or Door Name
        !required-field
        !type object-list
        !object-list SubSurfNames
-  N1,  !field Left Extension from Window/Door
+  N1,  !Left Extension from Window/Door
        !units m
-  N2,  !field Left Distance Above Top of Window
+  N2,  !Left Distance Above Top of Window
        !units m
-  N3,  !field Left Distance Below Bottom of Window
+  N3,  !Left Distance Below Bottom of Window
        !units m
        !note N2 + N3 + height of Window/Door is height of Fin
-  N4,  !field Left Tilt Angle from Window/Door
+  N4,  !Left Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N5,  !field Left Depth
+  N5,  !Left Depth
        !units m
        !minimum 0
-  N6,  !field Right Extension from Window/Door
+  N6,  !Right Extension from Window/Door
        !units m
-  N7,  !field Right Distance Above Top of Window
+  N7,  !Right Distance Above Top of Window
        !units m
-  N8,  !field Right Distance Below Bottom of Window
-       !note N7 + N8 + height of Window/Door is height of Fin
+  N8,  !Right Distance Below Bottom of Window
+       !N7 + N8 + height of Window/Door is height of Fin
        !units m
-  N9,  !field Right Tilt Angle from Window/Door
+  N9,  !Right Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N10; !field Right Depth
+  N10; !Right Depth
        !units m
        !minimum 0
 
 Shading:Fin:Projection,
-      !memo Fins are usually shading surfaces that are perpendicular to a window or door.
-  A1 , !field Name
+      !Fins are usually shading surfaces that are perpendicular to a window or door.
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AttachedShadingSurfNames
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2 , !field Window or Door Name
+  A2 , !Window or Door Name
        !required-field
        !type object-list
        !object-list SubSurfNames
-  N1,  !field Left Extension from Window/Door
+  N1,  !Left Extension from Window/Door
        !units m
-  N2,  !field Left Distance Above Top of Window
+  N2,  !Left Distance Above Top of Window
        !units m
-  N3,  !field Left Distance Below Bottom of Window
+  N3,  !Left Distance Below Bottom of Window
        !units m
-       !note N2 + N3 + height of Window/Door is height of Fin
-  N4,  !field Left Tilt Angle from Window/Door
+       !N2 + N3 + height of Window/Door is height of Fin
+  N4,  !Left Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N5,  !field Left Depth as Fraction of Window/Door Width
+  N5,  !Left Depth as Fraction of Window/Door Width
        !units m
        !minimum 0
-  N6,  !field Right Extension from Window/Door
+  N6,  !Right Extension from Window/Door
        !units m
-  N7,  !field Right Distance Above Top of Window
+  N7,  !Right Distance Above Top of Window
        !units m
-  N8,  !field Right Distance Below Bottom of Window
+  N8,  !Right Distance Below Bottom of Window
        !note N7 + N8 + height of Window/Door is height of Fin
        !units m
-  N9,  !field Right Tilt Angle from Window/Door
+  N9,  !Right Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
        !maximum 180
-  N10; !field Right Depth as Fraction of Window/Door Width
+  N10; !Right Depth as Fraction of Window/Door Width
        !units m
        !minimum 0
 
 Shading:Zone:Detailed,
   !extensible:3 -- duplicate last set of x,y,z coordinates, renumbering please (and changing z terminator to , for all but last)
-       !memo used For fins, overhangs, elements that shade the building, are attached to the building
-       !memo but are not part of the heat transfer calculations
+       !used For fins, overhangs, elements that shade the building, are attached to the building
+       !but are not part of the heat transfer calculations
        !format vertices
-  A1 , !field Name
+  A1 , !Name
        !required-field
-       !type alpha
        !reference AttachedShadingSurfNames
        !reference AllShadingAndHTSurfNames
        !reference AllShadingSurfNames
-  A2 , !field Base Surface Name
+  A2 , !Base Surface Name
        !required-field
        !type object-list
        !object-list SurfaceNames
-  A3,  !field Transmittance Schedule Name
+  A3,  !Transmittance Schedule Name
        !note Transmittance schedule for the shading device, defaults to zero (always opaque)
        !type object-list
        !object-list ScheduleNames
-  N1 , !field Number of Vertices
+  N1 , !Number of Vertices
        !required-field
        !note shown with 6 vertex coordinates -- extensible object
        !autocalculatable
        !default autocalculate
        !minimum 3
-       !note vertices are given in GlobalGeometryRules coordinates -- if relative, all surface coordinates
-       !note are "relative" to the Zone Origin.  if world, then building and zone origins are used
-       !note for some internal calculations, but all coordinates are given in an "absolute" system.
-  N2,  !field Vertex 1 X-coordinate
+       !vertices are given in GlobalGeometryRules coordinates -- if relative, all surface coordinates
+       !are "relative" to the Zone Origin.  if world, then building and zone origins are used
+       !for some internal calculations, but all coordinates are given in an "absolute" system.
+  N2,  !Vertex 1 X-coordinate
        !begin-extensible
        !units m
-       !type real
-  N3 , !field Vertex 1 Y-coordinate
+  N3 , !Vertex 1 Y-coordinate
        !units m
-       !type real
-  N4 , !field Vertex 1 Z-coordinate
+  N4 , !Vertex 1 Z-coordinate
        !units m
-       !type real
-  N5,  !field Vertex 2 X-coordinate
+  N5,  !Vertex 2 X-coordinate
        !units m
-       !type real
-  N6,  !field Vertex 2 Y-coordinate
+  N6,  !Vertex 2 Y-coordinate
        !units m
-       !type real
-  N7, !field Vertex 2 Z-coordinate
+  N7, !Vertex 2 Z-coordinate
        !units m
-       !type real
-  N8, !field Vertex 3 X-coordinate
+  N8, !Vertex 3 X-coordinate
        !units m
-       !type real
-  N9,  !field Vertex 3 Y-coordinate
+  N9,  !Vertex 3 Y-coordinate
        !units m
-       !type real
-  N10, !field Vertex 3 Z-coordinate
+  N10, !Vertex 3 Z-coordinate
        !units m
-       !type real
-  N11, !field Vertex 4 X-coordinate
+  N11, !Vertex 4 X-coordinate
        !units m
-       !type real
-  N12, !field Vertex 4 Y-coordinate
-       !type real
+  N12, !Vertex 4 Y-coordinate
        !units m
-  N13, !field Vertex 4 Z-coordinate
+  N13, !Vertex 4 Z-coordinate
        !units m
-       !type real
-  N14, !field Vertex 5 X-coordinate
+  N14, !Vertex 5 X-coordinate
        !units m
-       !type real
-  N15, !field Vertex 5 Y-coordinate
-       !type real
+  N15, Vertex 5 Y-coordinate
        !units m
-  N16, !field Vertex 5 Z-coordinate
+  N16, !Vertex 5 Z-coordinate
        !units m
-       !type real
-  N17, !field Vertex 6 X-coordinate
+  N17, !Vertex 6 X-coordinate
        !units m
-       !type real
-  N18, !field Vertex 6 Y-coordinate
+  N18, !Vertex 6 Y-coordinate
        !units m
-       !type real
-  N19, !field Vertex 6 Z-coordinate
+  N19, !Vertex 6 Z-coordinate
        !units m
-       !type real
-  N20, !field Vertex 7 X-coordinate
+  N20, !Vertex 7 X-coordinate
        !units m
-       !type real
-  N21, !field Vertex 7 Y-coordinate
+  N21, !Vertex 7 Y-coordinate
        !units m
-       !type real
-  N22, !field Vertex 7 Z-coordinate
+  N22, !Vertex 7 Z-coordinate
        !units m
-       !type real
-  N23, !field Vertex 8 X-coordinate
+  N23, !Vertex 8 X-coordinate
        !units m
-       !type real
-  N24, !field Vertex 8 Y-coordinate
+  N24, !Vertex 8 Y-coordinate
        !units m
-       !type real
-  N25, !field Vertex 8 Z-coordinate
+  N25, !Vertex 8 Z-coordinate
        !units m
-       !type real
-  N26, !field Vertex 9 X-coordinate
+  N26, !Vertex 9 X-coordinate
        !units m
-       !type real
-  N27, !field Vertex 9 Y-coordinate
+  N27, !Vertex 9 Y-coordinate
        !units m
-       !type real
-  N28, !field Vertex 9 Z-coordinate
+  N28, !Vertex 9 Z-coordinate
        !units m
-       !type real
-  N29, !field Vertex 10 X-coordinate
+  N29, !Vertex 10 X-coordinate
        !units m
-       !type real
-  N30, !field Vertex 10 Y-coordinate
+  N30, !Vertex 10 Y-coordinate
        !units m
-       !type real
-  N31, !field Vertex 10 Z-coordinate
+  N31, !Vertex 10 Z-coordinate
        !units m
-       !type real
-  N32, !field Vertex 11 X-coordinate
+  N32, !Vertex 11 X-coordinate
        !units m
-       !type real
-  N33, !field Vertex 11 Y-coordinate
+  N33, !Vertex 11 Y-coordinate
        !units m
-       !type real
-  N34, !field Vertex 11 Z-coordinate
+  N34, !Vertex 11 Z-coordinate
        !units m
-       !type real
-  N35, !field Vertex 12 X-coordinate
+  N35, !Vertex 12 X-coordinate
        !units m
-       !type real
-  N36, !field Vertex 12 Y-coordinate
+  N36, !Vertex 12 Y-coordinate
        !units m
-       !type real
-  N37, !field Vertex 12 Z-coordinate
+  N37, !Vertex 12 Z-coordinate
        !units m
-       !type real
-  N38, !field Vertex 13 X-coordinate
+  N38, !Vertex 13 X-coordinate
        !units m
-       !type real
-  N39, !field Vertex 13 Y-coordinate
+  N39, !Vertex 13 Y-coordinate
        !units m
-       !type real
-  N40, !field Vertex 13 Z-coordinate
+  N40, !Vertex 13 Z-coordinate
        !units m
-       !type real
-  N41, !field Vertex 14 X-coordinate
+  N41, !Vertex 14 X-coordinate
        !units m
-       !type real
-  N42, !field Vertex 14 Y-coordinate
+  N42, !Vertex 14 Y-coordinate
        !units m
-       !type real
-  N43, !field Vertex 14 Z-coordinate
+  N43, !Vertex 14 Z-coordinate
        !units m
-       !type real
-  N44, !field Vertex 15 X-coordinate
+  N44, !Vertex 15 X-coordinate
        !units m
-       !type real
-  N45, !field Vertex 15 Y-coordinate
+  N45, !Vertex 15 Y-coordinate
        !units m
-       !type real
-  N46, !field Vertex 15 Z-coordinate
+  N46, !Vertex 15 Z-coordinate
        !units m
-       !type real
   N47, !field Vertex 16 X-coordinate
        !units m
        !type real
-  N48, !field Vertex 16 Y-coordinate
+  N48, !Vertex 16 Y-coordinate
+       !units m
+  N49, !Vertex 16 Z-coordinate
+       !units m
+  N50, !Vertex 17 X-coordinate
+       !units m
+  N51, !Vertex 17 Y-coordinate
+       !units m
+  N52, !Vertex 17 Z-coordinate
+       !units m
+  N53, !Vertex 18 X-coordinate
+       !units m
+  N54, !Vertex 18 Y-coordinate
+       !units m
+  N55, !Vertex 18 Z-coordinate
+       !units m
+  N56, !Vertex 19 X-coordinate
+       !units m
+  N57, !Vertex 19 Y-coordinate
+       !units m
+  N58, !Vertex 19 Z-coordinate
+       !units m
+  N59, !Vertex 20 X-coordinate
+       !units m
+  N60, !Vertex 20 Y-coordinate
+       !units m
+  N61, !Vertex 20 Z-coordinate
+       !units m
+  N62, !Vertex 21 X-coordinate
+       !units m
+  N63, !Vertex 21 Y-coordinate
+       !units m
+  N64, !Vertex 21 Z-coordinate
+       !units m
+  N65, !Vertex 22 X-coordinate
+       !units m
+  N66, !Vertex 22 Y-coordinate
        !units m
        !type real
-  N49, !field Vertex 16 Z-coordinate
+  N67, !Vertex 22 Z-coordinate
        !units m
-       !type real
-  N50, !field Vertex 17 X-coordinate
+  N68, !Vertex 23 X-coordinate
        !units m
-       !type real
-  N51, !field Vertex 17 Y-coordinate
+  N69, !Vertex 23 Y-coordinate
        !units m
-       !type real
-  N52, !field Vertex 17 Z-coordinate
+  N70, !Vertex 23 Z-coordinate
        !units m
-       !type real
-  N53, !field Vertex 18 X-coordinate
-       !units m
-       !type real
-  N54, !field Vertex 18 Y-coordinate
-       !units m
-       !type real
-  N55, !field Vertex 18 Z-coordinate
-       !units m
-       !type real
-  N56, !field Vertex 19 X-coordinate
-       !units m
-       !type real
-  N57, !field Vertex 19 Y-coordinate
-       !units m
-       !type real
-  N58, !field Vertex 19 Z-coordinate
-       !units m
-       !type real
-  N59, !field Vertex 20 X-coordinate
-       !units m
-       !type real
-  N60, !field Vertex 20 Y-coordinate
-       !units m
-       !type real
-  N61, !field Vertex 20 Z-coordinate
-       !units m
-       !type real
-  N62, !field Vertex 21 X-coordinate
-       !units m
-       !type real
-  N63, !field Vertex 21 Y-coordinate
-       !units m
-       !type real
-  N64, !field Vertex 21 Z-coordinate
-       !units m
-       !type real
-  N65, !field Vertex 22 X-coordinate
-       !units m
-       !type real
-  N66, !field Vertex 22 Y-coordinate
-       !units m
-       !type real
-  N67, !field Vertex 22 Z-coordinate
-       !units m
-       !type real
-  N68, !field Vertex 23 X-coordinate
-       !units m
-       !type real
-  N69, !field Vertex 23 Y-coordinate
-       !units m
-       !type real
-  N70, !field Vertex 23 Z-coordinate
-       !units m
-       !type real
-  N71, !field Vertex 24 X-coordinate
+  N71, !field Vertex 24 X-coordinate	!RS: This is where I left off
        !units m
        !type real
   N72, !field Vertex 24 Y-coordinate
