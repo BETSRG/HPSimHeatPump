@@ -55,9 +55,9 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
 
     IF (Unit .EQ. 1) THEN
-        WRITE (PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
+        WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',Temperature_F2C(TAIIE),Tunit
     ELSE
-        WRITE(*,FMT_800)'>> Evaporator entering air temperature: ',TAIIE,Tunit
+        WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',TAIIE,Tunit
     END IF
     CALL IssueOutputMessage(PrnLog, PrnCon, '')
     CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
@@ -107,7 +107,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             IERR=1
             RETURN
         CASE (3,4,5)
-            WRITE(*,*)'Press return to terminate program.'
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Press return to terminate program.')
             STOP
         END SELECT
     END IF

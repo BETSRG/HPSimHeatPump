@@ -29,7 +29,7 @@ CONTAINS
         ! delete the previously backed up version of the input file
         call system('rm -f inBackup.idf > /dev/null')
         ! backup the last input file
-        call system('mv in.idf inBackup.idf > /dev/null')
+        call system('mv in.idf inBackup.idf > /dev/null 2>&1')
         ! rename the heat pump input file in preparation for epmacro
         call system('cp HPdataUnix.idf in.imf > /dev/null')
         ! call epmacro on it
@@ -37,7 +37,7 @@ CONTAINS
         ! now rename the file to be read by the E+ input processor
         call system('mv out.idf in.idf > /dev/null')
 !DEC$ ELSE
-        !write(*,*) 'Get off your mac!! :)'
+        !Get off your mac!! :-D
 !DEC$ ENDIF
     
     END SUBROUTINE

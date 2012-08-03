@@ -90,33 +90,6 @@ REAL TWBsetpt !Set point wet bulb temp. C
     CALL TDB_TWB (TDB,W,RH,H,TWB,TDP,RhoD,RhoM,BaroPressure,ErrStat)
   CASE (4)
     CALL TDB_W (TDB,W,RH,H,TWB,TDP,RhoD,RhoM,BaroPressure,ErrStat)
-  !CASE (5)
-  !	TWBsetpt=TWB !Assign setpoint wet bulb temperature
-	
-	!Initialize
-!	TDBmax=100.0
-!	TDBmin=0.0
-!    TDB=TWBsetpt 
-!	DO I=1, MaxIter
-!	  CALL TDB_H (TDB,W,RH,H,TWB,TDP,RhoD,RhoM,ErrStat) 
-!	  Diff=(TWB-TWBsetpt)/TWBsetpt
-!	  IF (ABS(Diff) .LT. Small) THEN
-!	    EXIT
-!      ELSE
-!        IF (DIFF .GT. 0) THEN
-!		  TDBmax=TDB
-!        ELSE
-!		  TDBmin=TDB
-!		END IF
-!		TDB=(TDBmax+TDBmin)/2
-!	  END IF
-!	END DO
-!	IF (I .GT. MaxIter) THEN
-!	  WRITE(*,*)'Cannot find dry bulb temperature for'
-!      WRITE(*,*)'Wet bulb =',TWBsetpt
-!	  WRITE(*,*)'Enthalpy =',H
-!	  TDB=TWBsetpt
-!    END IF
   CASE DEFAULT
     ErrStat=1
     WRITE(77,*)'AirProp error: Invalid input data'

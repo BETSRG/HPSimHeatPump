@@ -71,6 +71,8 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
     CHARACTER(LEN=14) :: tmpString
 
+    LOGICAL, EXTERNAL :: IssueRefPropError
+
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
     DO WHILE (.NOT. IsCondenserAllocated)
 
@@ -90,29 +92,13 @@
             CYCLE
         END IF
 
+        CALL IssueOutputMessage(PrnLog, PrnCon, '')
         IF (Unit .EQ. 1) THEN
-
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
-            END IF
-            WRITE(*,*)
-            WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',(TSOCMP-32)*5/9,Tunit
-
+            WRITE(tmpString,'(F10.4)') (TSOCMP-32)*5/9
         ELSE
-
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
-            END IF
-            WRITE(*,*)
-            WRITE(*,FMT_900)'>> Compressor discharge saturation temperature: ',TSOCMP,Tunit
-
+            WRITE(tmpString,'(F10.4)') TSOCMP
         END IF
+        CALL IssueOutputMessage(PrnLog, PrnCon, '>> Compressor discharge saturation temperature: '//TRIM(tmpString)//Tunit)
 
         !     CALL SUBROUTINE COMP TO DETERMINE THE COMPRESSOR
         !     PERFORMANCE AND REFRIGERANT FLOW RATE 'XMR'
@@ -120,18 +106,19 @@
         Temperature=(TSOCMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
         Quality=1
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'Trying another iterating value....'
+        IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
             IERR=1
             CYCLE
         END IF
+
         PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
 
         Temperature=(TSICMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
         Quality=1
         PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
-        IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'Trying another iterating value....'
+        IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
             IERR=1
             CYCLE
         END IF
@@ -141,8 +128,8 @@
             Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
             Pressure=PiCmp*1000 !RS Comment: Unit Conversion
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-            IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'Trying another iterating value....'
+            IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                 IERR=1
                 CYCLE
             END IF
@@ -151,8 +138,8 @@
             Pressure=PiCmp*1000 !RS Comment: Unit Conversion
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-            IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'Trying another iterating value....'
+            IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                 IERR=1
                 CYCLE
             END IF
@@ -166,7 +153,7 @@
         IF (CompOUT(7) .NE. 0) THEN
             SELECT CASE (INT(CompOUT(7)))
             CASE (1,2)
-                WRITE(*,*)'Trying another iterating value....'
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                 IERR=1
                 CYCLE
             END SELECT
@@ -259,16 +246,16 @@
         IF (CondOUT(24) .NE. 0) THEN
             SELECT CASE (INT(CondOUT(24))) 
             CASE (2) !Refprop error
-                WRITE(*,*)'Trying another iterating value....'
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                 IERR=1
                 CYCLE
             CASE (3)
                 STOP
             CASE (4,5)
-                WRITE(*,*)'## ERROR ## Highside: Coil geometry misdefined.'
+                CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Coil geometry misdefined.')
                 STOP
             CASE (8) !Too much pressure drop
-                WRITE(*,*)'Trying another iterating value....'
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                 IERR=2
                 CYCLE
             END SELECT
@@ -288,7 +275,7 @@
         XiExp=CondOUT(13)
 
         IF (XiExp .GT. 1) THEN !Condenser outlet is still in superheated region, ISI - 06/06/07
-            WRITE(*,*)'Trying another iterating value....'
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
             IERR=1
             CYCLE
         END IF
@@ -443,7 +430,7 @@
                     CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Short tube solution error.')
                     STOP
                 CASE (2)
-                    WRITE(*,*)'Trying another iterating value....'
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
                     IERR=1
                     CYCLE
                 END SELECT

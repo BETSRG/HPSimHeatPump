@@ -140,10 +140,6 @@ SUBROUTINE LUD(a, n, IPVT, det)
 !
           If (Abs(a(IPVTMT, i)) < 0.00001) Then
               det = 0.0
-           !   Print '(//)'
-           !   PRINT *, '   MATRIX IS SINGULAR OR NEAR SINGULAR  '
-           !  Print '(//)'
-           !   WRITE(*,*)'   MATRIX IS SINGULAR OR NEAR SINGULAR  '
           End If
 !
 !         INTERCHANGE ROWS IF NECESSARY
@@ -174,11 +170,7 @@ SUBROUTINE LUD(a, n, IPVT, det)
        END DO  
 !
        If (Abs(a(n, n)) < 0.00001) Then
-           !Print '(//)'
-           !PRINT *, '  MATRIX IS SINGULAR OR NEAR SINGULAR '
-           !Print '(//)'
-           !DET = 0#
-           !WRITE(*,*)'   MATRIX IS SINGULAR OR NEAR SINGULAR  '
+            ! error...
        End If
 !
 !  -----------------------------------------------------------------

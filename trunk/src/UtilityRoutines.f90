@@ -43,9 +43,14 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
 
     INTEGER(2), INTENT(IN) :: RefPropErrValue ! the value that was returned from the RefProp call
     CHARACTER(len=*), INTENT(IN) :: CallingRoutine ! an identifier to the routine calling me, for reporting
-    INTEGER, INTENT(IN) :: ValueIfErrorFound ! if RefProp was erroneous, this is the signaling value to be used
+    INTEGER, INTENT(IN), OPTIONAL :: ValueIfErrorFound ! if RefProp was erroneous, this is the signaling value to be used
     INTEGER, INTENT(INOUT), OPTIONAL :: VariableToSet1 ! if RefProp was erroneous, this will be set to the signal value
     REAL, INTENT(INOUT), OPTIONAL :: VariableToSet2 ! another variable to set...optionally
+
+    IF ( (PRESENT(VariableToSet1) .OR. PRESENT(VariableToSet2)) .AND.  .NOT. PRESENT(ValueIfErrorFound) ) THEN
+        !malformed, how are we going to assign variables if we don't have a value to assign with
+        WRITE(*,*) '-+-Diagnostic-+- Improper call to IssueRefPropError, callingroutine = '//CallingRoutine
+    END IF
 
     ErrorFound = .FALSE.
     IF (RefPropErrValue .GT. 0) THEN
