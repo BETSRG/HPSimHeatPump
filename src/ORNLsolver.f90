@@ -144,8 +144,8 @@
     END IF
 
     IF (TsoCmp .LE. TsiCmp) THEN
-        WRITE(*,*)'Compressor suction temperature is greater than discharge temperature.'
-        WRITE(*,*)'## ERROR ## Main: Wrong initial guess!'
+        CALL IssueOutputMessage(PrnLog, PrnCon, 'Compressor suction temperature is greater than discharge temperature.')
+        CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Wrong initial guess!')
         STOP
     END IF
 
@@ -226,7 +226,7 @@
         CondOut=0.0
 
         IF (RHiC .GT. TaiC) THEN
-            WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.')
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -240,7 +240,7 @@
         CondIN(6)=RHiC                    ! VL_Index_Replace
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
-            WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.')
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -258,7 +258,7 @@
         Quality=1	! VL_User_Setting
         PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
         IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
             STOP
         END IF
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
@@ -272,7 +272,7 @@
         Quality=1	! VL_User_Setting
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
-            WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
             STOP
         END IF  
         PoCmp=PoCmp/1000.0  !RS Comment: Unit Conversion
@@ -283,7 +283,7 @@
             Pressure=PiCmp*1000
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
+                CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -293,7 +293,7 @@
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## Main: Refrigerant property is out of bound!'
+                CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -308,20 +308,19 @@
             IF (CompOUT(7) .NE. 0) THEN	! VL_Index_Replace
                 SELECT CASE (INT(CompOUT(7)))	! VL_Index_Replace
                 CASE (1)
-                    WRITE(*,*)'## ERROR ## Highside: Compressor solution error!'
+                    CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Highside: Compressor solution error!')
                     STOP
                 CASE (2)
-                    WRITE(*,*)'-- WARNING -- Highside: Refprop out of range in compressor model.'
+                    CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- Highside: Refprop out of range in compressor model.')
                 END SELECT
             END IF 
         END IF
-        WRITE(*,*) 
+        CALL IssueOutputMessage(PrnLog, PrnCon, '')
 
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
         IsCoolingMode=CondPAR(27)	! VL_Index_Replace
-        WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)' 
-        WRITE(*,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'
+        CALL IssueOutputMessage(PrnLog, PrnCon, 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
             CALL IssueOutputMessage(PrnLog, PrnCon,'***** Cooling Mode *****')
         ELSE
@@ -784,13 +783,10 @@
         CALL DumpOutputs
 
         TimeSpent=SECNDS(TimeStart)
-        WRITE(*,*)
-        WRITE(*,*)'Calculation completed successfully.'
-        WRITE(*,FMT_103)'Time Spent (Min):',TimeSpent/60
-        WRITE(5,*) 
-        WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60  
-        WRITE(*,*)'Press return to end program.'      
-        !READ(*,*)                                     !For parametric run, comment this line
+        CALL IssueOutputMessage(PrnLog, PrnCon, '')
+        CALL IssueOutputMessage(PrnLog, PrnCon, 'Calculation completed successfully.')
+        WRITE(tmpString,'(F10.4)') TimeSpent/60
+        CALL IssueOutputMessage(PrnLog, PrnCon, 'Time Spent (Min):'//TRIM(tmpString))
 
         IF (TaiE .GT. 32) THEN !only update time step above freezing temp.  - ISI 12/22/2009
             IF (MODE .NE. FIXEDORIFICESIM .OR. MODE .NE. TXVSIMULATION) THEN

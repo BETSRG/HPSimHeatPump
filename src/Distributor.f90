@@ -43,6 +43,8 @@ REAL LoadTube !Tube loading
 REAL DPnoz    !Pressure drop through nozzle, kPa
 REAL DPtube   !Pressure drop through tube, kPa
 
+LOGICAL, EXTERNAL :: IssueRefPropError
+
 !Flow:
 
   ErrorFlag = 0
@@ -50,9 +52,7 @@ REAL DPtube   !Pressure drop through tube, kPa
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   Quality=1
   TsoEvp=PQ(Ref$, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr) !Evaporator Outlet Saturation Temperature
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
-      ErrorFlag=2
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag)) THEN
       RETURN
   END IF
 
@@ -61,9 +61,7 @@ REAL DPtube   !Pressure drop through tube, kPa
   Temperature=ToEvpRtd
   Pressure=PoEvp*1000   !RS Comment: Unit Conversion
   HoEvpRtd=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)  !Rated Evaporator Outlet Enthalpy
-  IF (RefPropErr .GT. 0) THEN
-      WRITE(*,*)'-- WARNING -- Distributor: Refprop error.'
-      ErrorFlag=2
+  IF (IssueRefPropError(RefPropErr, 'Distributor', 2, ErrorFlag)) THEN
       RETURN
   END IF
   HoEvpRtd=HoEvpRtd/1000    !RS Comment: Unit Conversion

@@ -79,6 +79,8 @@
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
     CHARACTER(LEN=20) :: tmpString
 
+    LOGICAL, EXTERNAL :: IssueRefPropError
+
     MaxIteration=30
     ICHRGE=1
     IMASS=1
@@ -123,8 +125,7 @@
             Temperature=(TSICMP-32)/1.8 !RS Comment: Unit Conversion, from F to C
             Quality=1
             PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
-            IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+            IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                 STOP
             END IF
             PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
@@ -133,8 +134,7 @@
                 Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -143,14 +143,12 @@
                 Pressure=PiCmp*1000 !RS Comment: Unit Conversion
                 Quality=-SUPER
                 HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
                 HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
                 TiCmp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)    !Compressor Inlet Temperature
-                IF (RefPropErr .GT. 0) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                     STOP
                 END IF
             END IF
@@ -170,21 +168,18 @@
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     ToEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
@@ -201,8 +196,7 @@
                     Temperature=ToEvp
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     HoEvp=TP(Ref$, Temperature, Pressure, 'enthalpy', RefrigIndex,RefPropErr)   !Evaporator Outlet Enthalpy
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
                     HoEvp=HoEvp/1000    !RS Comment: Unit Conversion
@@ -210,15 +204,13 @@
                     Pressure=PoEvp*1000 !RS Comment: Unit Conversion
                     Enthalpy=HoEvp*1000 !RS Comment: Unit Conversion
                     XoEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Outlet Quality
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
                     Quality=1
                     TsoEvp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Evaporator Outlet Saturation Temperature
-                    IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'## ERROR ## HPdesign: Refprop error.'
+                    IF (IssueRefPropError(RefPropErr, 'HPdesign')) THEN
                         STOP
                     END IF
 
@@ -424,19 +416,13 @@
         CALL IssueOutputMessage(PrnLog, PrnCon,'')
         CALL IssueOutputMessage(PrnLog, PrnCon,'|-------------------- Lowside Iteration ---------------------|')
         IF (Unit .EQ. 1) THEN
-            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
-            END IF
+            WRITE(tmpString, '(F10.4)') (TSICMP-32)*5/9
         ELSE
-            WRITE(*,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_700)'Compressor suction saturation temperature: ',TSICMP,Tunit
-            END IF
+            WRITE(tmpString, '(F10.4)') TSICMP
         END IF
+        CALL IssueOutputMessage(PrnLog, PrnCon, 'Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
 
         TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
-        !CALL SolveRegulaFalsi(EVPCON, MaxIter, Flag, TAIIE, EVPTR, TAIE1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
             CALL IssueOutputMessage(PrnLog, PrnCon,'')

@@ -1251,9 +1251,6 @@ REAL ff			!Intermediate variable
       Re=ReVap
   END IF
   Pr=muRef*CpRef/kRef
-  IF (Re .LT. 0) THEN
-	  WRITE(*,*)'CoilCalc: 1201'
-  END IF
   ff=(1.82*LOG10(Re)-1.64)**(-2)
   Nu=ff/8*Re*Pr/(1.07+12.7*(ff/8)**0.5*(Pr**0.67-1))
   hSP=Nu*kRef/ID
@@ -1320,9 +1317,6 @@ REAL ff			!Intermediate variable
   Pr=muRef*CpRef/kRef
   IF (Re .LT. 0) THEN
       Re=1e-6
-  END IF
-  IF (Re .LT. 0) THEN
-	  WRITE(*,*)'CoilCalc: 1266'
   END IF
   ff=(1.58*LOG(Re)-3.28)**(-2)
   Nu=(Re-1000)*Pr*(ff/2)/(1+12.7*SQRT(ff/2)*(Pr**(0.67)-1))
@@ -4166,10 +4160,6 @@ REAL VoidFrac   !Void fraction
   IF (xi .LT. 0.) THEN
       xi=0.
   END IF
-  
-  IF (c1+c2*xo .LT. 0) THEN
-	  WRITE(*,*)'CoilCalc: 3371'
-  END IF
 
   VoidFrac=(((xo/c2)-((c1/c2**2.)*LOG(c1+c2*xo)))- &
            ((xi/c2)-((c1/c2**2.)*LOG(c1+c2*xi))))/(xo-xi)
@@ -4227,9 +4217,6 @@ REAL Xtt   !Lockhart-Martinelli parameter
   IF (Xtt .LE. 10) THEN
     alpha=(1+Xtt**0.8)**(-0.378)
   ELSE
-	IF (Xtt .LT. 0) THEN
-	    WRITE(*,*)'CoilCalc: 3431'
-	END IF    
 	alpha=0.823-0.157*LOG(Xtt)
   END IF
   
@@ -5006,10 +4993,7 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
       !FinPitch=1/(FinSpg+FinThk)
 	  !f=1.039*ReDc**(-0.418)*(FinThk/Dc)**(-0.104)*Nl**(-0.0935)*(FinPitch/Dc)**(-0.197)
 
-	  IF (ReDc .LT. 0) THEN
-		  WRITE(*,*)'CoilCalc: 4208'
-	  END IF
-  	  Dh=4*Amin*HXdep/AoCoil
+	  Dh=4*Amin*HXdep/AoCoil
 	  FinPitch=1/(FinSpg+FinThk)
       F1=-0.764+0.739*Pt/Pl+0.177*(1/FinPitch)/Dc-0.00758/Nl
 	  F2=-15.689+64.021/LOG(ReDc)
@@ -5021,9 +5005,6 @@ REAL Sn        !Number of slit in an enhanced zone, [-]
 	  Dh=2*FinSpg*(1-beta)/((1-beta)*(1/COSD(theta))+2*FinSpg*beta/Dc)
 	  Dh=4*Amin*HXdep/AoCoil
 	  FinPitch=1/(FinSpg+FinThk)
-	  IF (ReDc .LT. 0) THEN
-		  WRITE(*,*)'CoilCalc: 4223'
-	  END IF
 	  IF (ReDc .LT. 1000) THEN
 	    F1=-0.574-0.137*(LOG(ReDc)-5.26)**0.245*(Pt/Dc)**(-0.765)*(Dc/Dh)**(-0.243) &
 	  	   *(FinSpg/Dh)**(-0.474)*(TAND(theta))**(-0.217)*Nl**0.035
