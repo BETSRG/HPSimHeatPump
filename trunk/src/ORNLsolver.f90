@@ -104,6 +104,7 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
+    CHARACTER(LEN=14) :: tmpString
     
     !Flow**:
     CALL PreProcessInput
@@ -322,19 +323,9 @@
         WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)' 
         WRITE(*,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'
         IF (IsCoolingMode .EQ. 1) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Cooling Mode *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Cooling Mode *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Cooling Mode *****')
         ELSE
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Heating Mode *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Heating Mode *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Heating Mode *****')
         END IF
         
         ! VL: No GOTO statements before this line in this file ..... so this is a nice place to set default values for the flags
@@ -344,12 +335,7 @@
         SELECT CASE(MODE)
 
         CASE(FIXEDORIFICESIM)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** System Simulation (Fixed Orifice) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** System Simulation (Fixed Orifice) *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** System Simulation (Fixed Orifice) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -364,12 +350,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
 
         CASE(ORIFICEANDTXVDESIGN)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Design Calculation (Orifice and TXV) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Design Calculation (Orifice and TXV) *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -383,12 +364,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(FIXEDSUPERHEATSIM)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Design Calculation (Fixed Orifice) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Design Calculation (Fixed Orifice) *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Design Calculation (Fixed Orifice) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -402,12 +378,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(TXVSIMULATION)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** System Simulation (TXV) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** System Simulation (TXV) *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** System Simulation (TXV) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -422,12 +393,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(CONDENSERUNITSIM)
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Condenser Unit Simulation *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Condenser Unit Simulation *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Condenser Unit Simulation *****')
             ICHRGE=0	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -442,34 +408,13 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Coil Only Simulation *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Coil Only Simulation *****'
-            END IF
-
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Coil Only Simulation *****')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'')
 
             IF (Unit .EQ. 1) THEN !SI Unit
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,FMT_1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,FMT_1006)'Iteration','mdot(kg/hr)','Capacity(kW)'
-                END IF
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Iteration    mdot(kg/hr)    Capacity(kW)')
             ELSE !IP Unit
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,FMT_1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,FMT_1006)'Iteration','mdot(lbm/hr)','Capacity(MBtu/hr)'
-                END IF
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Iteration    mdot(lbm/hr)   Capacity(MBtu/hr)')
             END IF
 
             IF (IsCoolingMode .GT. 0) THEN
@@ -580,20 +525,11 @@
                     Qevp=-EvapOUT(11) 	! VL_Index_Replace
 
                     IF (Unit .EQ. 1) THEN !SI Unit
-                        IF (PrnLog .EQ. 1) THEN
-                            WRITE(6,FMT_1005)I,MdotR*3600,Qevp
-                        END IF
-                        IF (PrnCon .EQ. 1) THEN
-                            WRITE(*,FMT_1005)I,MdotR*3600,Qevp
-                        END IF
+                        WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR*3600,Qevp
                     ELSE
-                        IF (PrnLog .EQ. 1) THEN
-                            WRITE(6,FMT_1005)I,MdotR/Umass*3600,Qevp/UnitPwr
-                        END IF
-                        IF (PrnCon .EQ. 1) THEN
-                            WRITE(*,FMT_1005)I,MdotR/Umass*3600,Qevp/UnitPwr
-                        END IF
+                        WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qevp/UnitPwr
                     END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon, tmpString)
 
                     IF (ABS(EvapOUT(2)-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number
 
@@ -679,20 +615,11 @@
                     Qcnd=CondOUT(15) 	! VL_Index_Replace
 
                     IF (Unit .EQ. 1) THEN !SI Unit
-                        IF (PrnLog .EQ. 1) THEN
-                            WRITE(6,FMT_1005)I,MdotR*3600,Qcnd
-                        END IF
-                        IF (PrnCon .EQ. 1) THEN
-                            WRITE(*,FMT_1005)I,MdotR*3600,Qcnd
-                        END IF
+                        WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR*3600,Qcnd
                     ELSE
-                        IF (PrnLog .EQ. 1) THEN
-                            WRITE(6,FMT_1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
-                        END IF
-                        IF (PrnCon .EQ. 1) THEN
-                            WRITE(*,FMT_1005)I,MdotR/Umass*3600,Qcnd/UnitPwr
-                        END IF
+                        WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qcnd/UnitPwr
                     END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon, tmpString)
 
                     IF (ABS(CondOUT(6)-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number
 
@@ -731,12 +658,7 @@
             FLAG_GOTO_30 = .TRUE.
 
         CASE DEFAULT
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'***** Design Calculation (Orifice and TXV) *****'
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'***** Design Calculation (Orifice and TXV) *****'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon, '***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0
 
             !ISI - 08/07/06
