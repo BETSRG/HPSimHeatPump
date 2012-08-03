@@ -69,6 +69,7 @@
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
+    CHARACTER(LEN=14) :: tmpString
 
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
     DO WHILE (.NOT. IsCondenserAllocated)
@@ -296,13 +297,8 @@
         Quality=1
         TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'-- WARNING -- Highside: Refprop error.'
-            END IF
-            WRITE(*,*)'Trying another iterating value....'
+            CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- Highside: Refprop error.')
+            CALL IssueOutputMessage(PrnLog, PrnCon, 'Trying another iterating value....')
             IERR=1
             CYCLE
         END IF
@@ -320,7 +316,7 @@
             Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
             XiExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
             IF (RefPropErr .GT. 0) THEN
-                WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
+                CALL IssueOutputMessage(PrnLog, PrnCon,'-- WARNING -- Highside: Refprop error.')
                 IERR=1
                 CYCLE
             END IF
@@ -332,13 +328,8 @@
         Quality=0
         TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
         IF (RefPropErr .GT. 0) THEN
-            IF (PrnCon .EQ. 1) THEN 
-                WRITE(*,*)'-- WARNING -- Highside: Refprop error.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'-- WARNING -- Highside: Refprop error.'
-            END IF
-            WRITE(*,*)'Trying another iterating value....'
+            CALL IssueOutputMessage(PrnLog, PrnCon,'-- WARNING -- Highside: Refprop error.')
+            CALL IssueOutputMessage(PrnLog, PrnCon, 'Trying another iterating value....')
             IERR=1
             CYCLE
         END IF
@@ -347,26 +338,11 @@
 
         TSAVG=(TSATCI+TSATEI)/2
         IF(TSAVG.LT.TAIC) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.'
-            END IF
-            WRITE(*,*)'Trying another iterating value....'
+            CALL IssueOutputMessage(PrnLog, PrnCon,'-- WARNING -- Highside: Ref. temperature lower than inlet air temperature.')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Trying another iterating value....')
             IF (TSOCMP .LE. TSICMP) THEN
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'## ERROR ## Highside: No solution for this configuration.'
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'Try another condenser or compressor.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'## ERROR ## Highside: No solution for this configuration.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'Try another condenser or compressor.'
-                END IF
+                CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: No solution for this configuration.')
+                CALL IssueOutputMessage(PrnLog, PrnCon,'Try another condenser or compressor.')
                 STOP
             END IF
             IERR=2
@@ -400,61 +376,33 @@
 
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,FMT_904)'           Desired quality = ',SXIE*100,Xunit
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,FMT_904)'           Desired quality = ',SXIE*100,Xunit
-                END IF
+                WRITE(tmpString, '(F10.4)') SXIE*100
+                CALL IssueOutputMessage(PrnLog, PrnCon,'           Desired quality = '//TRIM(tmpString)//Xunit)
             ELSE
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE/1.8,DTunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)') DTRIE/1.8
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'           Desired subcooling = '//TRIM(tmpString)//DTunit)
                 ELSE
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'           Desired subcooling = ',DTRIE,DTunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)') DTRIE
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'           Desired subcooling = '//TRIM(tmpString)//DTunit)
                 END IF
             END IF
 
             IF(XIEXP.GT.0.0) THEN
                 IF (XIEXP .LT. 1) THEN
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'        Calculated quality = ',XIEXP*100,Xunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)')XIEXP*100
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'        Calculated quality = '//TRIM(tmpString)//Xunit)
                 ELSE
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'      Calculated superheat = ',-CDTRIE,DTunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)')-CDTRIE
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'      Calculated superheat = '//TRIM(tmpString)//DTunit)
                 END IF
             ELSE
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE/1.8,DTunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)')CDTRIE/1.8
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'        Calculated subcooling = '//TRIM(tmpString)//DTunit)
                 ELSE  
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,FMT_904)'        Calculated subcooling = ',CDTRIE,DTunit
-                    END IF
+                    WRITE(tmpString, '(F10.4)')CDTRIE
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'        Calculated subcooling = '//TRIM(tmpString)//DTunit)
                 END IF
             END IF
 
@@ -491,18 +439,8 @@
             IF (ShTbOUT(7) .NE. 0) THEN
                 SELECT CASE (INT(ShTbOUT(7)))
                 CASE (1)
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Highside: Short tube solution error.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
-                    END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'')
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Short tube solution error.')
                     STOP
                 CASE (2)
                     WRITE(*,*)'Trying another iterating value....'
@@ -528,31 +466,15 @@
         END IF
 
         IF (Unit .EQ. 1) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_904)'     Compressor flow rate = ',XMR*UnitM,MdotUnit
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD*UnitM,MdotUnit
-            END IF
+            WRITE(tmpString, '(F10.4)')XMR*UnitM
+            CALL IssueOutputMessage(PrnLog, PrnCon,'     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
+            WRITE(tmpString, '(F10.4)')XMRFLD*UnitM
+            CALL IssueOutputMessage(PrnLog, PrnCon,'    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
         ELSE
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_904)'     Compressor flow rate = ',XMR,MdotUnit
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_904)'    Exp. device flow rate = ',XMRFLD,MdotUnit
-            END IF
+            WRITE(tmpString, '(F10.4)')XMR
+            CALL IssueOutputMessage(PrnLog, PrnCon,'     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
+            WRITE(tmpString, '(F10.4)')XMRFLD
+            CALL IssueOutputMessage(PrnLog, PrnCon,'    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
         END IF
 
         !VL: Previously: IF (.NOT. IsCondenserAllocated) GO TO 300 !ISI - 12/27/06 <-- conditional moved to while at beginning of function definition

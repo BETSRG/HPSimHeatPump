@@ -77,6 +77,7 @@
     CHARACTER(LEN=128),PARAMETER :: FMT_1014 = "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')"
     CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
+    CHARACTER(LEN=20) :: tmpString
 
     MaxIteration=30
     ICHRGE=1
@@ -266,14 +267,7 @@
         END IF
         STEP = 3
 
-        IF (PrnLog .EQ. 1) THEN 
-            WRITE(6,*)
-            WRITE(6,*)'|-------------------- Highside Iteration --------------------|'
-        END IF
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)
-            WRITE(*,*)'|-------------------- Highside Iteration --------------------|'
-        END IF
+        CALL IssueOutputMessage(PrnLog, PrnCon,'|-------------------- Highside Iteration --------------------|')
 
         IF (FirstTimeHPdesignMode) THEN
             TaoC=CondIN(5)
@@ -311,19 +305,9 @@
         !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'## ERROR ## Highside: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
-            END IF
-            WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
+            CALL IssueOutputMessage(PrnLog, PrnCon,'')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Failed to find a solution.')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'Try another condenser, compressor, or change boundary conditions.')
             STOP
         END IF
         FirstTimeFlowRateLoop=.FALSE.
@@ -340,31 +324,13 @@
         IF (ABS(DIFFER) .GT. CONV) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Solution not converged on subcooling.')
+                    WRITE(tmpString,'(F10.3)') DIFFER/1.8
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'Difference: '//TRIM(tmpString)//DTunit)
                 ELSE
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Highside: Solution not converged on subcooling.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER,DTunit
-                    END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Highside: Solution not converged on subcooling.')
+                    WRITE(tmpString,'(F10.3)') DIFFER
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'Difference: '//TRIM(tmpString)//DTunit)
                 END IF  
             END IF
 
@@ -454,18 +420,9 @@
         TAIE1 = TAIIEI
 
         STEP = 2
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)
-        END IF
-        IF (PrnCon .EQ. 1) THEN
-            WRITE(*,*)'|-------------------- Lowside Iteration ---------------------|'
-        END IF
-        IF (PrnLog .EQ. 1) THEN
-            WRITE(6,*)
-        END IF
-        IF (PrnLog .EQ. 1) THEN
-            WRITE(6,*)'|-------------------- Lowside Iteration ---------------------|'
-        END IF
+
+        CALL IssueOutputMessage(PrnLog, PrnCon,'')
+        CALL IssueOutputMessage(PrnLog, PrnCon,'|-------------------- Lowside Iteration ---------------------|')
         IF (Unit .EQ. 1) THEN
             WRITE(*,FMT_700)'Compressor suction saturation temperature: ',(TSICMP-32)*5/9,Tunit
             IF (PrnLog .EQ. 1) THEN
@@ -482,18 +439,8 @@
         !CALL SolveRegulaFalsi(EVPCON, MaxIter, Flag, TAIIE, EVPTR, TAIE1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'## ERROR ## Lowside: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'## ERROR ## Lowside: Failed to find a solution.'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Lowside: Failed to find a solution.')
         END IF
 
         IF (LPRINT .GT. 2) THEN
@@ -505,31 +452,13 @@
         IF (ABS(DIFFER) .GT. EVPCON) THEN
             IF (LPRINT .GT. 1) THEN
                 IF (Unit .EQ. 1) THEN
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER/1.8,DTunit
-                    END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Lowside: Solution not converged on superheat.')
+                    WRITE(tmpString,'(F10.4)') DIFFER/1.8
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'Difference: '//tmpString//DTunit)
                 ELSE
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'## ERROR ## Lowside: Solution not converged on superheat.'
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
-                        WRITE(*,*)'Difference: ',DIFFER,DTunit
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)'Difference: ',DIFFER,DTunit
-                    END IF
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## Lowside: Solution not converged on superheat.')
+                    WRITE(tmpString,'(F10.4)') DIFFER
+                    CALL IssueOutputMessage(PrnLog, PrnCon,'Difference: '//tmpString//DTunit)
                 END IF  
             END IF
             ERRMSG(2) = DIFFER
@@ -635,18 +564,8 @@
         FirstTimeAirTempLoop=.TRUE.
 
         IF (TSICMP .GE. TSOCMP) THEN
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
-                WRITE(*,*)'## ERROR ## HPdesign: Failed to find a solution.'
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
-            END IF
+            CALL IssueOutputMessage(PrnLog, PrnCon,'')
+            CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## HPdesign: Failed to find a solution.')
             STOP
         END IF
 
@@ -728,18 +647,8 @@
             END IF
 
             IF (INT(ShTbOUT(7)) .EQ. 1) THEN
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Short tube solution error.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'## ERROR ## HPdesign: Short tube solution error.'
-                END IF
+                CALL IssueOutputMessage(PrnLog, PrnCon, '')
+                CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## HPdesign: Short tube solution error.')
                 STOP
             END IF
 
@@ -852,19 +761,8 @@
             END DO
 
             IF (NumIter .GT. MaxIter) THEN
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)
-                END IF
-                IF (PrnCon .EQ. 1) THEN
-                    WRITE(*,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)
-                END IF
-                IF (PrnLog .EQ. 1) THEN
-                    WRITE(6,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
-                END IF
-                CALL SLEEP(300) !Wait for 5 minutes and stop
+                CALL IssueOutputMessage(PrnLog, PrnCon, '')
+                CALL IssueOutputMessage(PrnLog, PrnCon,'## ERROR ## HPdesign: Capillary tube solution not converged.')
                 STOP
             END IF
 
