@@ -49741,7 +49741,7 @@ GroundHeatExchanger:Vertical,
         \type real
   N188, \field G-Function G Value 86
         \type real
-  N89, \field G-Function Ln(T/Ts) Value 87
+  N189, \field G-Function Ln(T/Ts) Value 87
         \type real
   N190, \field G-Function G Value 87
         \type real
