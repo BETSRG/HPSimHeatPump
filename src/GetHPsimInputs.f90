@@ -652,7 +652,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   DisLn_Charge = Numbers(18)    !Charge in Line
 
   !Discharge line tube wall thickness, mm or mil
-  DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2
+  DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2 !JH Need to look at this
   IF (Unit .EQ. IP) THEN
       DisLnPAR(3)=DisLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
