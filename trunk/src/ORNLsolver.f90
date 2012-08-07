@@ -144,8 +144,8 @@
     END IF
 
     IF (TsoCmp .LE. TsiCmp) THEN
-        CALL IssueOutputMessage(PrnLog, PrnCon, 'Compressor suction temperature is greater than discharge temperature.')
-        CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Wrong initial guess!')
+        CALL IssueOutputMessage( 'Compressor suction temperature is greater than discharge temperature.')
+        CALL IssueOutputMessage( '## ERROR ## Main: Wrong initial guess!')
         STOP
     END IF
 
@@ -226,7 +226,7 @@
         CondOut=0.0
 
         IF (RHiC .GT. TaiC) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.')
+            CALL IssueOutputMessage( '## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.')
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -240,7 +240,7 @@
         CondIN(6)=RHiC                    ! VL_Index_Replace
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
-            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.')
+            CALL IssueOutputMessage( '## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.')
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
@@ -258,7 +258,7 @@
         Quality=1	! VL_User_Setting
         PiCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Inlet Pressure
         IF (RefPropErr .GT. 0) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
+            CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
             STOP
         END IF
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
@@ -272,7 +272,7 @@
         Quality=1	! VL_User_Setting
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
+            CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
             STOP
         END IF  
         PoCmp=PoCmp/1000.0  !RS Comment: Unit Conversion
@@ -283,7 +283,7 @@
             Pressure=PiCmp*1000
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
-                CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
+                CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -293,7 +293,7 @@
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (RefPropErr .GT. 0) THEN
-                CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Main: Refrigerant property is out of bound!')
+                CALL IssueOutputMessage( '## ERROR ## Main: Refrigerant property is out of bound!')
                 STOP
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
@@ -308,23 +308,23 @@
             IF (CompOUT(7) .NE. 0) THEN	! VL_Index_Replace
                 SELECT CASE (INT(CompOUT(7)))	! VL_Index_Replace
                 CASE (1)
-                    CALL IssueOutputMessage(PrnLog, PrnCon, '## ERROR ## Highside: Compressor solution error!')
+                    CALL IssueOutputMessage( '## ERROR ## Highside: Compressor solution error!')
                     STOP
                 CASE (2)
-                    CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- Highside: Refprop out of range in compressor model.')
+                    CALL IssueOutputMessage( '-- WARNING -- Highside: Refprop out of range in compressor model.')
                 END SELECT
             END IF 
         END IF
-        CALL IssueOutputMessage(PrnLog, PrnCon, '')
+        CALL IssueOutputMessage( '')
 
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
         IsCoolingMode=CondPAR(27)	! VL_Index_Replace
-        CALL IssueOutputMessage(PrnLog, PrnCon, 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
+        CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Cooling Mode *****')
+            CALL IssueOutputMessage('***** Cooling Mode *****')
         ELSE
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Heating Mode *****')
+            CALL IssueOutputMessage('***** Heating Mode *****')
         END IF
         
         ! VL: No GOTO statements before this line in this file ..... so this is a nice place to set default values for the flags
@@ -334,7 +334,7 @@
         SELECT CASE(MODE)
 
         CASE(FIXEDORIFICESIM)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** System Simulation (Fixed Orifice) *****')
+            CALL IssueOutputMessage('***** System Simulation (Fixed Orifice) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -349,7 +349,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
 
         CASE(ORIFICEANDTXVDESIGN)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Design Calculation (Orifice and TXV) *****')
+            CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -363,7 +363,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(FIXEDSUPERHEATSIM)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Design Calculation (Fixed Orifice) *****')
+            CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
             ICHRGE=0	! VL_User_Setting
 
             AMBCON=1E-3 !1 !air temperature, F
@@ -377,7 +377,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(TXVSIMULATION)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** System Simulation (TXV) *****')
+            CALL IssueOutputMessage('***** System Simulation (TXV) *****')
             ICHRGE=2	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -392,7 +392,7 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(CONDENSERUNITSIM)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Condenser Unit Simulation *****')
+            CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
             ICHRGE=0	! VL_User_Setting
 
             !ISI - 08/07/06
@@ -407,13 +407,13 @@
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07
-            CALL IssueOutputMessage(PrnLog, PrnCon,'***** Coil Only Simulation *****')
-            CALL IssueOutputMessage(PrnLog, PrnCon,'')
+            CALL IssueOutputMessage('***** Coil Only Simulation *****')
+            CALL IssueOutputMessage('')
 
             IF (Unit .EQ. 1) THEN !SI Unit
-                CALL IssueOutputMessage(PrnLog, PrnCon,'Iteration    mdot(kg/hr)    Capacity(kW)')
+                CALL IssueOutputMessage('Iteration    mdot(kg/hr)    Capacity(kW)')
             ELSE !IP Unit
-                CALL IssueOutputMessage(PrnLog, PrnCon,'Iteration    mdot(lbm/hr)   Capacity(MBtu/hr)')
+                CALL IssueOutputMessage('Iteration    mdot(lbm/hr)   Capacity(MBtu/hr)')
             END IF
 
             IF (IsCoolingMode .GT. 0) THEN
@@ -528,7 +528,7 @@
                     ELSE
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qevp/UnitPwr
                     END IF
-                    CALL IssueOutputMessage(PrnLog, PrnCon, tmpString)
+                    CALL IssueOutputMessage( tmpString)
 
                     IF (ABS(EvapOUT(2)-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number
 
@@ -618,7 +618,7 @@
                     ELSE
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qcnd/UnitPwr
                     END IF
-                    CALL IssueOutputMessage(PrnLog, PrnCon, tmpString)
+                    CALL IssueOutputMessage( tmpString)
 
                     IF (ABS(CondOUT(6)-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number
 
@@ -657,7 +657,7 @@
             FLAG_GOTO_30 = .TRUE.
 
         CASE DEFAULT
-            CALL IssueOutputMessage(PrnLog, PrnCon, '***** Design Calculation (Orifice and TXV) *****')
+            CALL IssueOutputMessage( '***** Design Calculation (Orifice and TXV) *****')
             ICHRGE=0
 
             !ISI - 08/07/06
@@ -783,11 +783,11 @@
         CALL DumpOutputs
 
         TimeSpent=SECNDS(TimeStart)
-        CALL IssueOutputMessage(PrnLog, PrnCon, '')
+        CALL IssueOutputMessage( '')
         WRITE(*,*) 'Success'
-        CALL IssueOutputMessage(PrnLog, PrnCon, 'Calculation completed successfully.')
+        CALL IssueOutputMessage( 'Calculation completed successfully.')
         WRITE(tmpString,'(F10.4)') TimeSpent/60
-        CALL IssueOutputMessage(PrnLog, PrnCon, 'Time Spent (Min):'//TRIM(tmpString))
+        CALL IssueOutputMessage( 'Time Spent (Min):'//TRIM(tmpString))
 
         IF (TaiE .GT. 32) THEN !only update time step above freezing temp.  - ISI 12/22/2009
             IF (MODE .NE. FIXEDORIFICESIM .OR. MODE .NE. TXVSIMULATION) THEN
