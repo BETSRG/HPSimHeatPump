@@ -192,9 +192,6 @@ LOGICAL FirstTimeHPdesignMode	!First time to run HPdesignMode?
 LOGICAL FirstTimeChargeLoop     !First time to run ChargeLoop?
 INTEGER(2) :: SystemType !1=A/C; 2=Heat Pump; 3=Condenser Unit; 4=Reheat; 5=Evaporator Only
 
-INTEGER(2) PrnLog	!Print to log file flag
-INTEGER(2) PrnCon	!Print to console flag
-
 REAL RhoAiE  
 REAL RhoAiC
 REAL RhoAoC
