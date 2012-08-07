@@ -114,8 +114,6 @@
     FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
     FirstTimeFlowRateLoop=.TRUE.                              ! VL Comment: default initialization for program or user setting?
     FirstTimeChargeLoop=.TRUE.                                ! VL Comment: default initialization for program or user setting?
-    PrnLog=1                                                  ! VL_User_Setting
-    PrnCon=1                                                  ! VL_User_Setting
 
     WinTrans=0.9  ! VL_Magic_Number
     CondIN(7) = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting

@@ -71,13 +71,9 @@
 
     LOGICAL :: FLAG_GOTO_950
     
-    CHARACTER(LEN=93),PARAMETER :: FMT_1002 = "('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')"
-    CHARACTER(LEN=93),PARAMETER :: FMT_1006 = "('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')"
-    CHARACTER(LEN=213),PARAMETER :: FMT_1013 = "('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')"
-    CHARACTER(LEN=128),PARAMETER :: FMT_1014 = "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')"
     CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
-    CHARACTER(LEN=20) :: tmpString
+    CHARACTER(LEN=200) :: tmpString
 
     LOGICAL, EXTERNAL :: IssueRefPropError
 
@@ -536,15 +532,13 @@
 
         NTAMB = NTAMB + 1
         IF(NTAMB.GT.15) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1014) DIFF
-            END IF
+            WRITE(tmpString,"('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')") DIFF
+            CALL IssueOutputMessage(TRIM(tmpString))
             EXIT
         END IF
         IF (LPRINT .GT. 1) THEN
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1013)TSICMP
-            END IF
+            WRITE(tmpString,"('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')")TSICMP
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF
 
         FirstTimeAirTempLoop=.TRUE.
@@ -556,8 +550,6 @@
         END IF
 
     END DO
-
-    !VL: Functionality moved near GOTO Call ... previously: 850     IF (PrnLog .EQ. 1) WRITE(6,FMT_1014) DIFF
 
     IF (FLAG_GOTO_950 .EQ. .FALSE.) THEN 
 
@@ -774,14 +766,12 @@
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1002) ERRMSG(1)
-            END IF
+            WRITE(tmpString,"('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')") ERRMSG(1)
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF 
         IF(ICHRGE.EQ.0.AND.ERRMSG(2).NE.0.) THEN 
-            IF (PrnLog .EQ. 1) THEN
-                WRITE(6,FMT_1006) ERRMSG(2)
-            END IF
+            WRITE(tmpString,"('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')") ERRMSG(2)
+            CALL IssueOutputMessage(TRIM(tmpString))
         END IF
 
         IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
