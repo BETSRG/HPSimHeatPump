@@ -26,8 +26,8 @@ CompressorData,
     R410A, !field Compressor Refrigerant
     2663.649, !field Compressor Power [W]
     0, !field Compressor Heat Loss Fraction [-]
-    0, !field Compressor Heat Loss [Btu!h]
-    0, !field Compressor Volume [in³]
+    0, !field Compressor Heat Loss [W]
+    0, !field Compressor Volume [m³]
     226.492462, !field Compressor Mass Coefficient 1[-]
     4.121732, !field Compressor Mass Coefficient 2[-]
     0.209093, !field Compressor Mass Coefficient 3[-]
@@ -141,10 +141,10 @@ ExpansionDeviceData,
 RefrigerantLineData,
     Compressor Suction, !field Refrigerant Line
     Copper: 3/4 in 0.035 thick, !field Tube Type
-    3, !field Refrigerant Line Length [ft]
-    0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
-    0, !field Refrigerant Line Temperature Change [R]
+    0.9144, !field Refrigerant Line Length [m] !JH
+    0, !field Refrigerant Line Elevation [m] !JH
+    0, !field Refrigerant Line Heat Loss [W] !JH
+    0, !field Refrigerant Line Temperature Change [C] !JH
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diamater [in]
