@@ -6,6 +6,7 @@ SUBROUTINE IssueHPFatalError(exitCode)
 
     USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataStopCodes
+    implicit none
 
     INTEGER, INTENT(IN) :: exitCode
 
@@ -40,6 +41,7 @@ SUBROUTINE IssueHPFatalError(exitCode)
 END SUBROUTINE
 
 LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfErrorFound, VariableToSet1, VariableToSet2) RESULT (ErrorFound)
+    implicit none
 
     INTEGER(2), INTENT(IN) :: RefPropErrValue ! the value that was returned from the RefProp call
     CHARACTER(len=*), INTENT(IN) :: CallingRoutine ! an identifier to the routine calling me, for reporting
@@ -69,6 +71,7 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
 END FUNCTION
 
 SUBROUTINE IssueOutputMessage(Message)
+    implicit none
 
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
