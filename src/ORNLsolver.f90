@@ -784,6 +784,7 @@
 
         TimeSpent=SECNDS(TimeStart)
         CALL IssueOutputMessage(PrnLog, PrnCon, '')
+        WRITE(*,*) 'Success'
         CALL IssueOutputMessage(PrnLog, PrnCon, 'Calculation completed successfully.')
         WRITE(tmpString,'(F10.4)') TimeSpent/60
         CALL IssueOutputMessage(PrnLog, PrnCon, 'Time Spent (Min):'//TRIM(tmpString))

@@ -73,12 +73,8 @@ SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
     REAL, INTENT(IN) :: PrnCon, PrnLog
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
-    IF (PrnLog .EQ. 1) THEN
-        WRITE(6,*) Message
-    END IF
-    IF (PrnCon .EQ. 1) THEN
-        WRITE(*,*) Message
-    END IF
+    WRITE(6,*) Message
+    WRITE(*,*) Message
 
 END SUBROUTINE
 
