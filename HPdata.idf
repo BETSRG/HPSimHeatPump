@@ -68,8 +68,8 @@ OutdoorCoilData,
     0.37, !field Tube ID [in]
     0.0100076, !field Tube OD [m] !JH
     0.393, !field Tube Conductivity [kW!m2.K] !JH
-    0, !field Tube Lateral Spacing [in]
-    1, !field Tube Vertical Spacing [in]
+    0, !field Tube Lateral Spacing [m] !JH
+    0254, !field Tube Vertical Spacing [m] !JH
     1, !field Number of Rows
     36, !field Number of Tubes Per Row
     4, !field Number of Circuits
