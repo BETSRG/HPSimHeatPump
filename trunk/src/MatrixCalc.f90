@@ -194,7 +194,7 @@ End SUBROUTINE
 
 SUBROUTINE matrix_invert_step_2(a, ainv, pivot, n)
 
-INTEGER n
+INTEGER n, i
 REAL, DIMENSION(n,n) :: a, ainv
 INTEGER, DIMENSION(n) :: pivot
 
@@ -263,8 +263,8 @@ SUBROUTINE CalcMatrixMultVector(M1, Nrow, M2, M3)
     !Output variable:
         !M3 - Product of matrices M1 and M2
 
-REAL M1(Nrow,Nrow),M2(Nrow),M3(Nrow)
 INTEGER Nrow
+REAL M1(Nrow,Nrow),M2(Nrow),M3(Nrow)
     
 !SUBROUTINE INTERNAL VARIABLE DECLARATIONS:
 INTEGER i !Loop counter for matrix M1 row element
@@ -298,8 +298,8 @@ SUBROUTINE CalcMatrixMultMatrix(M1, NrowM1, NcolM1, M2, NcolM2, M3)
     !Output variable:
         !M3 - Product of matrices M1 and M2
 
-REAL M1(NrowM1,NcolM1), M2(NcolM1,NcolM2), M3(NrowM1,NcolM2)
 INTEGER NrowM1,NcolM1,NcolM2
+REAL M1(NrowM1,NcolM1), M2(NcolM1,NcolM2), M3(NrowM1,NcolM2)
     
 !SUBROUTINE INTERNAL VARIABLE DECLARATIONS:
     INTEGER i !Loop counter for matrix M1 row element

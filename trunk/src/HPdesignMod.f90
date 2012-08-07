@@ -281,16 +281,11 @@
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RhoAiE=AirProp(7)
 
-        !Correct standard CFM to actual CFM first
-        !XMaC=StandardDensity/RhoAoC*StdCFMcnd
-        !XMaE=StandardDensity/RhoAoE*StdCFMevp
-
         !Actual mass flow rate
         XMaC=CFMcnd*RhoAiC
         XMaE=CFMevp*RhoAiE
 
         TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
-        !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
 
         IF (IERROR .GE. 3) THEN
             CALL IssueOutputMessage('')
