@@ -1,0 +1,574 @@
+all inputs are in kW,kPa,m, CU
+Unit convert changes CondPAR() etc to these units, from their inputs, typically mm or watts
+
+
+Unit Conversions in Unit Convert (SI Only)
+CondPAR(2) = CondPAR(2)/1000 mm -> m
+CondPAR(3) = CondPAR(3)/1000 mm -> m
+CondPAR(5) = CondPAR(5)/1000 mm -> m
+CondPAR(9) = CondPAR(9)/1000 mm -> m
+CondPAR(10) = CondPAR(10)/1000 mm -> m
+CondPAR(12) = CondPAR(12)/1000 mm -> m
+CondPAR(15) = CondPAR(15)/1000 mm -> m
+CondPAR(16) = CondPAR(16)/1000 mm -> m
+CondPAR(19) = CondPAR(19)/1000 mm -> m
+CondPAR(20) = CondPAR(20)/1000 mm -> m
+CondPAR(21) = CondPAR(21)/1000 mm -> m
+CondPAR(34) = CondPAR(34)/1000 W -> kW
+
+EvapPAR(2)=EvapPAR(2)/1000
+EvapPAR(3)=EvapPAR(3)/1000
+EvapPAR(5)=EvapPAR(5)/1000 W -> kW
+EvapPAR(8)=EvapPAR(8)/1000
+EvapPAR(9)=EvapPAR(9)/1000
+EvapPAR(12)=EvapPAR(12)/1000
+EvapPAR(13)=EvapPAR(13)/1000
+EvapPAR(14)=EvapPAR(14)/1000
+EvapPAR(27)=EvapPAR(27)/1000 W -> kW
+
+
+Accumulator Module
+SUbroutine - CalcAccumulatorMass
+line 150 kg/s -> lbmn/hr
+line 154
+line 155
+line 166
+line 178 kg/m3 -> lbm/ft3
+line 185 kg/m3 -> lbm/ft3
+line 220 (maybe)
+
+Subroutine - CalcAccumulatorDP
+line 423
+line 431
+line 434
+line 440
+line 442
+line 448
+line 452
+line 458
+line 460
+line 466
+line 469
+line 486
+
+subroutine InitAccumulator
+lines 540-545
+
+AirTempLoopModule
+EVPTR Function
+line 65
+line 76
+line 84
+line 125
+line 126
+line 137
+line 138
+line 147
+line 149
+line 157
+
+
+Capillary Tube Module
+Cappilary Tube ORNL
+line 177
+line 178
+line 198
+line 199
+line 240
+line 241
+
+Capillary Tube Choi
+line 480
+line 481
+line 535
+line 539
+line 540
+line 581
+line 582
+line 599
+line 605
+
+ChargeLoop.f90
+
+CoilCalc.f90
+
+CalcCustomAirHco
+line 937
+line 939
+
+CalcCustomAirDP
+line 994
+line 996
+
+manifold
+line 3807
+
+Compressor.f90
+line 143
+line 150
+line 166
+line 172
+line 182
+line 184
+line 185
+line 190
+line 192
+line 193
+line 208
+line 210
+line 211
+line 216
+line 237
+line 238
+
+Condenser.f90
+line 853
+line 854
+line 872
+line 1051
+line 1052
+line 1071
+line 1123
+line 1124
+line 1142
+line 1314
+line 1315
+line 1340
+line 1341
+line 1369
+line 1372
+line 1374
+line 1377
+line 1379
+line 1382
+line 1384
+line 1387
+line 1516
+line 1517
+line 1523
+line 1526
+line 1542
+line 1543
+line 1549
+line 1552
+line 1571
+line 1574
+line 1576
+line 1579
+line 1581
+line 1584
+line 1586
+line 1589
+line 1771
+line 1772
+line 1778
+line 1781
+line 1797
+line 1798
+line 1804
+line 1807
+line 1826
+line 1829
+line 1831
+line 1834
+line 1836
+line 1839
+line 1841
+line 1844
+line 1915-1919
+line 1952
+line 1953
+line 1959
+line 1962
+line 1978
+line 1979
+line 1985
+line 1988
+line 2004
+line 2007
+line 2010
+line 2012
+line 2015
+line 2017
+2020
+2022
+2025
+2088 - 2092
+3415
+3416
+3418
+3658
+3660 (C->K)
+3661
+3750
+3751
+5160
+5172
+5437
+5452
+5456
+5475
+5483
+5506
+5516
+5524
+5532
+5547
+5660
+5661
+5684
+5694
+5987
+5988
+6177
+6178
+6299
+6300
+6316
+6345
+6346
+6362
+
+Distributor.f90
+50
+63
+71
+
+DumpHPSimOutputs.f90
+120
+121
+150
+151
+184
+185
+227
+228
+269
+302
+410
+411
+453
+454
+480
+482
+483
+486
+488
+563
+564
+582
+583
+625
+626
+652
+666
+793
+794
+823
+824
+850
+857
+858
+900
+901
+927
+941
+966
+967
+1001
+1002
+1033
+1034
+1036
+1037
+1079
+1080
+1106
+1108
+1109
+1112
+1114
+1170
+1171
+1189
+1190
+
+Evaporator.f90
+870
+871
+889
+1102
+1103
+1121
+1148
+1149
+1169
+1170
+1188
+1355
+1356
+1362
+1365
+1381
+1382
+1388
+1391
+1404
+1406
+1409
+1411
+1414
+1416
+1419
+1421
+1424
+1557
+1558
+1564
+1567
+1583
+1584
+1590
+1593
+1609
+1613
+1616
+1618
+1621
+1624
+1627
+1629
+1632
+1820
+1821
+1827
+1830
+1846
+1847
+1853
+1856
+1869
+1871
+1874
+1876
+1879
+1881
+1884
+1886
+1889
+1979
+0219
+2020
+2026
+2029
+2045
+2046
+2052
+2055
+2071
+2075
+2078
+2080
+2083
+2086
+2089
+2091
+2094
+3621
+3624
+3700
+3701
+4607
+4608
+4638
+4653
+4666
+4676
+4684
+4707
+4717
+4725
+4733
+4748
+4771
+4775
+5394
+5395
+5418
+5530
+5531
+5548
+6458
+6459
+6652
+6653
+6774
+6775
+6793
+6831
+6832
+6851
+6852
+6868
+
+FlowRateLoop.f90
+127
+137
+141
+148
+150
+158
+174
+178
+203
+295
+319
+320
+329
+331
+399
+514
+524
+
+FrostModel.f90
+
+GetHPSimInputs.f90
+522
+599
+601
+607
+609
+636
+657
+678
+699
+719
+766
+
+HPDesignMod.f90
+122
+129
+132
+133
+139
+142
+149
+169
+170
+201
+207
+209
+210
+291
+297
+685
+711
+723
+
+ORNLSolver.f90
+263
+282
+288
+291
+298
+482
+484
+487
+493
+495
+498
+505
+510
+513
+518
+520
+523
+584
+587
+597
+594
+683
+686
+690
+693
+
+Psychometric.f90
+78
+132
+
+ShortTube.f90
+181
+182
+184
+185
+215
+225
+226
+268
+269
+292
+379
+380
+578
+579
+621
+636
+646
+647
+688
+716
+717
+729
+730
+919
+920
+964
+979
+989
+990
+1030
+1031
+1071
+1072
+1084
+1085
+
+TXV.f90
+82
+88
+93
+99
+102
+
+UtiltyRoutines.f90
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
