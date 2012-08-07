@@ -559,11 +559,11 @@ RefrigerantLineData,
 	 \required-field
     N16, \field Tube Outside Diameter
 	 \type real
-	 \ip-units in
+	 \units m
 	 \required-field
     N17, \field Additional Pressure Drop
 	 \type real
-	 \ip-units inH2O
+	 \units kPa
 	 \required-field
     N18, \field Charge in Line
 	 \type real
