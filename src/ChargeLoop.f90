@@ -81,21 +81,21 @@ REAL FUNCTION CHARGM(DTVALU,IERR)
         END IF
 
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, '')
-    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+    CALL IssueOutputMessage( '')
+    CALL IssueOutputMessage( TRIM(sPrint))
 
     IF (Unit .EQ. 1) THEN
         MassUnit = ' (kg)'
         WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG*0.4536,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
         WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG*0.4536,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
     ELSE
         MassUnit = ' (lbm)'
         WRITE(sPrint,FMT_1000)'           Desired charge = ',REFCHG,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
         WRITE(sPrint,FMT_1000)'        Calculated charge = ',CALCHG,MassUnit
-        CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(sPrint))
+        CALL IssueOutputMessage( TRIM(sPrint))
     END IF
 
     RETURN 

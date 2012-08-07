@@ -68,9 +68,8 @@ LOGICAL FUNCTION IssueRefPropError(RefPropErrValue, CallingRoutine, ValueIfError
 
 END FUNCTION
 
-SUBROUTINE IssueOutputMessage(PrnLog, PrnCon, Message)
+SUBROUTINE IssueOutputMessage(Message)
 
-    REAL, INTENT(IN) :: PrnCon, PrnLog
     CHARACTER(LEN=*), INTENT(IN) :: Message
 
     WRITE(6,*) Message

@@ -59,8 +59,8 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     ELSE
         WRITE(PrintString, FMT_800) '>> Evaporator entering air temperature: ',TAIIE,Tunit
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, '')
-    CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
+    CALL IssueOutputMessage( '')
+    CALL IssueOutputMessage( TRIM(PrintString))    
 
     XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s???
 
@@ -77,7 +77,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     Quality=0
     TSATEI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+        CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
         IERR=1
         RETURN
     END IF
@@ -107,7 +107,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             IERR=1
             RETURN
         CASE (3,4,5)
-            CALL IssueOutputMessage(PrnLog, PrnCon,'Press return to terminate program.')
+            CALL IssueOutputMessage('Press return to terminate program.')
             STOP
         END SELECT
     END IF
@@ -138,7 +138,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         Enthalpy=HiCmp*1000 !RS Comment: Unit Conversion
         XiCmp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Compressor Inlet Quality
         IF (RefPropErr .GT. 0) THEN
-            CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+            CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
             IERR=1
             RETURN
         END IF
@@ -150,7 +150,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     Quality=1
     TSATCI=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
-        CALL IssueOutputMessage(PrnLog, PrnCon, '-- WARNING -- LowSide: Refprop error.')
+        CALL IssueOutputMessage( '-- WARNING -- LowSide: Refprop error.')
         IERR=1
         RETURN
     END IF
@@ -189,7 +189,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             WRITE(PrintString,FMT_804) '           Desired superheat = ',SUPER,DTunit
         END IF
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
+    CALL IssueOutputMessage( PrintString)
 
     !This IF block will always report one and only one message based on calculated "quality"
     IF (XICMP .LT. 0.0) THEN
@@ -207,7 +207,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             WRITE(PrintString,FMT_804)'        Calculated superheat = ',SUPCAL,DTunit
         END IF
     END IF
-    CALL IssueOutputMessage(PrnLog, PrnCon, PrintString)
+    CALL IssueOutputMessage( PrintString)
 
     RETURN
 
