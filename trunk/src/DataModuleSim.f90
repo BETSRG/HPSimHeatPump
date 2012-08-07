@@ -1,4 +1,5 @@
 MODULE DataSimulation
+implicit none
 
 !Conversion factors
 REAL, PARAMETER :: UnitPwr = 0.2927     !(Btu/hr X Upower = KW)

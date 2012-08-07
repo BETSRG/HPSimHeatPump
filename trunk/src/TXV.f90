@@ -1,6 +1,7 @@
 MODULE TXVMOD
 
 USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+implicit none
 
 PUBLIC TXV
 PRIVATE CalcQtxv

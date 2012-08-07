@@ -1,6 +1,7 @@
     MODULE CompressorMod
 
     USE DataSimulation
+    implicit none
 
     PUBLIC  Compressor
     PRIVATE X
@@ -274,6 +275,7 @@
     !***********************************************************************
 
     REAL FUNCTION X(C,D,S)
+    implicit none
 
     REAL C(10) !Coefficients
     REAL D !Discharge dew point temperature

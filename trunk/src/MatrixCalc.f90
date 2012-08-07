@@ -193,6 +193,7 @@ End SUBROUTINE
 !routine finds the matrix inverse by back substitution
 
 SUBROUTINE matrix_invert_step_2(a, ainv, pivot, n)
+implicit none
 
 INTEGER n, i
 REAL, DIMENSION(n,n) :: a, ainv
@@ -221,6 +222,7 @@ End SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE matrix_inverse(a, ainv, n)
+implicit none
 
 !
 !
@@ -251,6 +253,7 @@ End SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE CalcMatrixMultVector(M1, Nrow, M2, M3)
+implicit none
 
 !PURPOSE OF THIS SUBROUTINE:
     !To calculate the product of two matrices, M3=M1*M2
@@ -284,6 +287,7 @@ END SUBROUTINE
 !*******************************************************************************
 
 SUBROUTINE CalcMatrixMultMatrix(M1, NrowM1, NcolM1, M2, NcolM2, M3)
+implicit none
 
 !PURPOSE OF THIS SUBROUTINE:
     !To calculate the product of two matrices, M3=M1*M2
