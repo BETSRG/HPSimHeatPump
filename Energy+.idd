@@ -111,11 +111,11 @@ CompressorData,
 	\required-field
     N3, \field Compressor Heat Loss
 	\type real
-	\units Btu/h
+	\units W !changed - JH
 	\required-field
     N4, \field Compressor Volume
 	\type real
-	\units in3
+	\units m3 !changed - JH
 	\note Cubic inches is not an Energy+
 	\note standard unit.
 	\required-field
@@ -493,19 +493,19 @@ RefrigerantLineData,
 	\deprecated
     N1, \field Refrigerant Line Length
 	\type real
-	\units ft
+	\units m
 	\required-field
     N2, \field Refrigerant Line Elevation
 	\type real
-	\units ft
+	\units m
 	\required-field
     N3, \field Refrigerant Line Heat Loss
 	\type real
-	\units Btu/h
+	\units W
 	\required-field
     N4, \field Refrigerant Line Temperature Change
 	\type real
-	\units R
+	\units C
 	\required-field
     N5, \field Tube Conductivity
 	\type real
