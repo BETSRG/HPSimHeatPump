@@ -220,23 +220,23 @@ INTEGER I !Loop counter
 
 	!****Condenser input data****
 	!CondPAR(1)=CondPAR(1)*UnitL            !Discharge line length, m !JH - changed in .idf
-	CondPAR(2)=CondPAR(2)/12*UnitL         !Discharge line outside diameter, m
+	!CondPAR(2)=CondPAR(2)/12*UnitL         !Discharge line outside diameter, m !JH - changed in .idf
 	CondPAR(3)=CondPAR(3)*0.001/12*UnitL   !Discharge line tube wall thickness, m
 	!CondPAR(4)=CondPAR(4)*UnitL            !Discharge line elevation, m !JH - Changed in .idf
 	!CondPAR(5)=CondPAR(5)*UnitPwr          !Discharge line heat loss, kW !JH - Changed in .idf
 	!CondPAR(6)=CondPAR(6)/1.8              !Discharge line temperature drop, C !JH - Changed in .idf
-	CondPAR(7)=CondPAR(7)*UnitP            !Discharge line additional pressure drop, kPa
-	CondPAR(8)=CondPAR(8)*UnitL          !Liquid line length, m
-	CondPAR(9)=CondPAR(9)/12*UnitL       !Liquid line outside diameter, m
-	CondPAR(10)=CondPAR(10)*0.001/12*UnitL !Liquid line tube wall thickness, m
-	CondPAR(11)=CondPAR(11)*UnitL          !Liquid line elevation, m
-	CondPAR(12)=CondPAR(12)*UnitPwr        !Liquid line heat loss, kW
-	CondPAR(13)=CondPAR(13)/1.8            !Liquid line temperature drop, C
-    CondPAR(14)=CondPAR(14)*UnitP          !Liquid line additional pressure drop, kPa
-	CondPAR(15)=CondPAR(15)/12*UnitL       !Tube outside diameter, m
+	!CondPAR(7)=CondPAR(7)*UnitP            !Discharge line additional pressure drop, kPa
+	!CondPAR(8)=CondPAR(8)*UnitL          !Liquid line length, m
+	!CondPAR(9)=CondPAR(9)/12*UnitL       !Liquid line outside diameter, m
+	!CondPAR(10)=CondPAR(10)*0.001/12*UnitL !Liquid line tube wall thickness, m !JH - will work itself out through the calculation of its value
+	!CondPAR(11)=CondPAR(11)*UnitL          !Liquid line elevation, m !JH - Changed in .idf
+	!CondPAR(12)=CondPAR(12)*UnitPwr        !Liquid line heat loss, kW
+	!CondPAR(13)=CondPAR(13)/1.8            !Liquid line temperature drop, C !JH - Changed in .idf
+    !CondPAR(14)=CondPAR(14)*UnitP          !Liquid line additional pressure drop, kPa !JH - changed in .idf
+	!CondPAR(15)=CondPAR(15)/12*UnitL       !Tube outside diameter, m !JH - changed in .idf
     CondPAR(16)=CondPAR(16)*0.001/12*UnitL !Tube wall thickness, m
-    CondPAR(17)=CondPAR(17)/12*UnitL       !Tube length, m
-    CondPAR(18)=CondPAR(18)*UnitK          !Tube thermal conductivity, kW/m-C
+    !CondPAR(17)=CondPAR(17)/12*UnitL       !Tube length, m !JH - Updated in .idf
+    !CondPAR(18)=CondPAR(18)*UnitK          !Tube thermal conductivity, kW/m-C
     CondPAR(19)=CondPAR(19)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m
     CondPAR(20)=CondPAR(20)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m
     CondPAR(21)=CondPAR(21)*0.001/12*UnitL !Fin thickness, m
