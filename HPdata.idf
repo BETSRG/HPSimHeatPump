@@ -66,15 +66,15 @@ OutdoorCoilData,
     Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
     4, !field Tube Type
     0.37, !field Tube ID [in]
-    0.394, !field Tube OD [in]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    0.0100076, !field Tube OD [m] !JH
+    0.393, !field Tube Conductivity [kW!m2.K] !JH
     0, !field Tube Lateral Spacing [in]
     1, !field Tube Vertical Spacing [in]
     1, !field Number of Rows
     36, !field Number of Tubes Per Row
     4, !field Number of Circuits
     1, !field Number of Segments
-    96.45, !field Single Tube Length [in]
+    2.450, !field Single Tube Length [m] !JH
     1, !field Ref Side Heat Transfer Multiplier [-]
     1, !field Ref Side Pressure Drop Multiplier [-]
     1, !field Air Side Heat Transfer Multiplier [-]
@@ -158,19 +158,19 @@ RefrigerantLineData,
     0, !field Refrigerant Line Temperature Change [R]
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.446, !field Tube Inside Diameter [in]
-    0.5, !field Tube Outside Diameter [in]
-    0, !field Additional Pressure Drop [psig]
+    0.0127, !field Tube Outside Diameter [m] !JH
+    0, !field Additional Pressure Drop [kPa] !JH
     0, !field Charge in Line [lbm]
     Liquid Line, !field Refrigerant Line
     Copper: 3/8 in 0.012 thick, !field Tube Type
     28, !field Refrigerant Line Length [ft]
-    0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
-    0, !field Refrigerant Line Temperature Change [R]
+    0, !field Refrigerant Line Elevation [m] !JH
+    0, !field Refrigerant Line Heat Loss [kW] !JH
+    0, !field Refrigerant Line Temperature Change [K] !JH
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.351, !field Tube Inside Diameter [in]
-    0.375, !field Tube Outside Diameter [in]
-    0, !field Additional Pressure Drop [psig]
+    0.09525, !field Tube Outside Diameter [m] !JH
+    0, !field Additional Pressure Drop [kPa] !JH
     0, !field Charge in Line [lbm]
     Reversing Valve to IDC, !field Refrigerant Line
     Copper: 3/4 in 0.035 thick, !field Tube Type
