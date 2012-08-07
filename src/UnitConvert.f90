@@ -237,8 +237,8 @@ INTEGER I !Loop counter
     CondPAR(16)=CondPAR(16)*0.001/12*UnitL !Tube wall thickness, m
     !CondPAR(17)=CondPAR(17)/12*UnitL       !Tube length, m !JH - Updated in .idf
     !CondPAR(18)=CondPAR(18)*UnitK          !Tube thermal conductivity, kW/m-C
-    CondPAR(19)=CondPAR(19)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m
-    CondPAR(20)=CondPAR(20)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m
+    !CondPAR(19)=CondPAR(19)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m !JH - updated in .idf
+    !CondPAR(20)=CondPAR(20)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m !JH - updated in .idf
     CondPAR(21)=CondPAR(21)*0.001/12*UnitL !Fin thickness, m
     CondPAR(22)=CondPAR(22)*12/UnitL       !Fin pitch, fin/m
     CondPAR(23)=CondPAR(23)*UnitK          !Fin thermal conductivity, kW/m-C 
