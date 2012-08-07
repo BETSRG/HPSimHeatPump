@@ -413,14 +413,14 @@
 
         STEP = 2
 
-        CALL IssueOutputMessage(PrnLog, PrnCon,'')
+        CALL IssueOutputMessage(PrnLog, PrnCon,' ')
         CALL IssueOutputMessage(PrnLog, PrnCon,'|-------------------- Lowside Iteration ---------------------|')
         IF (Unit .EQ. 1) THEN
             WRITE(tmpString, '(F10.4)') (TSICMP-32)*5/9
         ELSE
             WRITE(tmpString, '(F10.4)') TSICMP
         END IF
-        CALL IssueOutputMessage(PrnLog, PrnCon, 'Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
+        CALL IssueOutputMessage(PrnLog, PrnCon, '>> Compressor suction saturation temperature: '//TRIM(tmpString)//Tunit)
 
         TAIIE = ZERO3(TAIE1,EVPTR,AMBCON,EVPCON,STEP,DIFFER,IERROR)
 
