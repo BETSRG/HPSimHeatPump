@@ -214,17 +214,17 @@ INTEGER I !Loop counter
     !CompPAR(11-20) !DO - nothing
       
     !Compressor shell heat loss
-	CompPAR(22)=CompPAR(22)*UnitPwr*1000 !Compressor shell heat loss W
+	!CompPAR(22)=CompPAR(22)*UnitPwr*1000 !Compressor shell heat loss W !JH - Units changed in .idf
    
-	CompPAR(23)=CompPAR(23)/(12**3)*(UnitL**3) !Compressor internal volume, m^3
+	!CompPAR(23)=CompPAR(23)/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !JH - Units changed in .idf
 
 	!****Condenser input data****
-	CondPAR(1)=CondPAR(1)*UnitL            !Discharge line length, m
+	!CondPAR(1)=CondPAR(1)*UnitL            !Discharge line length, m !JH - changed in .idf
 	CondPAR(2)=CondPAR(2)/12*UnitL         !Discharge line outside diameter, m
 	CondPAR(3)=CondPAR(3)*0.001/12*UnitL   !Discharge line tube wall thickness, m
-	CondPAR(4)=CondPAR(4)*UnitL            !Discharge line elevation, m
-	CondPAR(5)=CondPAR(5)*UnitPwr          !Discharge line heat loss, kW
-	CondPAR(6)=CondPAR(6)/1.8              !Discharge line temperature drop, C
+	!CondPAR(4)=CondPAR(4)*UnitL            !Discharge line elevation, m !JH - Changed in .idf
+	!CondPAR(5)=CondPAR(5)*UnitPwr          !Discharge line heat loss, kW !JH - Changed in .idf
+	!CondPAR(6)=CondPAR(6)/1.8              !Discharge line temperature drop, C !JH - Changed in .idf
 	CondPAR(7)=CondPAR(7)*UnitP            !Discharge line additional pressure drop, kPa
 	CondPAR(8)=CondPAR(8)*UnitL          !Liquid line length, m
 	CondPAR(9)=CondPAR(9)/12*UnitL       !Liquid line outside diameter, m
