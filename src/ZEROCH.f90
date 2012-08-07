@@ -1,4 +1,4 @@
-    REAL FUNCTION ZEROCH(AX,F,TOL1,TOL2,DX,FB,IERROR)
+REAL FUNCTION ZEROCH(AX,F,TOL1,TOL2,DX,FB,IERROR)
     !
     LOGICAL FIRST
     REAL AX,FAX,BX,FBX,F,TOL1,TOL2
@@ -44,11 +44,6 @@
             FC = FA        
         END IF
 
-        !40	TOLX = 2.0*EPS*ABS(B) + 0.5*TOL1	!ISI - 05/31/05
-        !	TOLF = 2.0*EPS*ABS(FB) + 0.5*TOL2	!ISI - 05/31/05
-        !	XM = 0.5*(C - B)				    !ISI - 05/31/05
-
-        !VL: Previously: 40      TOLX = TOL1		 !ISI - 05/31/05 ! all GOTO 40 statements eliminated ....
         TOLX = TOL1		 !ISI - 05/31/05
         TOLF = TOL2		 !ISI - 05/31/05
         XM = 0.5*(C - B) !ISI - 05/31/05 
@@ -134,4 +129,4 @@
     !
     !	COMPUTE MACHINE PRECISION "EPS"
     !
-    END
+    END FUNCTION

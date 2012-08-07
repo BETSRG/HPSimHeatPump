@@ -1,7 +1,5 @@
-      SUBROUTINE GUESS3(X1,Y1,X2,Y2,SUBA,DX,TOL,IERROR)
-!
-!	COMMON / EXPAND / IPRINT, JPRINT
-!
+ SUBROUTINE GUESS3(X1,Y1,X2,Y2,SUBA,DX,TOL,IERROR)
+
       INTEGER IERR
       CHARACTER(LEN=111),PARAMETER :: FMT_1001 = "(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)"
 
@@ -18,10 +16,8 @@
               EXIT
           END IF
           IF (IERR .EQ. 1) THEN                  !ISI - 03/26/04
-              !X1 = X1 - 5.0                       !ISI - 03/26/04
               X1 = X1 - DX                         !ISI - 03/26/04
           ELSE                                   !ISI - 03/26/04
-              !X1 = X1 + 5.0                       !ISI - 03/26/04
               X1 = X1 + DX                         !ISI - 03/26/04
           END IF                                 !ISI - 03/26/04
           
@@ -33,8 +29,6 @@
       END DO
 
       YMIN = ABS(Y1)
-      !IF (YMIN .LE. TOL/2.) GO TO 500       !ISI - 03/26/04
-!      IF (YMIN .LE. TOL) GO TO 500           !ISI - 03/26/04
       IF (YMIN .LE. TOL) THEN
           RETURN              !ISI - 02/12/06
       END IF
@@ -42,13 +36,6 @@
           SIGN = -1.0
       END IF
       DDX = ABS(DX)
-!	IF (YMIN .LT.  1.0) DDX = ABS(DX)/2.   !ISI - 03/26/04
-!	IF (YMIN .GT. 2.5) DDX = 1.5*ABS(DX)   !ISI - 03/26/04
-!	IF (YMIN .GT. 5.0) DDX = 3.0*ABS(DX)   !ISI - 03/26/04
-!	IF (YMIN .GT. 10.0) DDX = 6.0*ABS(DX)  !ISI - 03/26/04
-!	IF (YMIN .GT. 20.0) DDX = 12.0*ABS(DX) !ISI - 03/26/04
-!	IF (YMIN .GT. 40.0) DDX = 15.*ABS(DX)  !ISI - 03/26/04
-!	X2 = X1 + DDX*SIGN                     !ISI - 03/26/04
       X2 = X2 + 2.0**(ICOUNT-1)*DX*SIGN      !To bracket root ISI - 03/26/04
       
       DO WHILE (.TRUE.)
@@ -67,17 +54,10 @@
           END IF
 
           YMIN = AMIN1(YMIN,ABS(Y2))
-!      IF (YMIN .LE. TOL) GO TO 500           !ISI - 03/26/04
           IF (YMIN .LE. TOL) THEN
               RETURN              !ISI - 02/12/06
           END IF
           DDX = ABS(DX)
-!	IF (YMIN .LT.  1.0) DDX = DX/2.			!ISI - 05/10/04
-!	IF (YMIN .GT. 2.5) DDX = 1.5*ABS(DX)	!ISI - 05/10/04
-!	IF (YMIN .GT. 5.0) DDX = 3.0*ABS(DX)	!ISI - 05/10/04
-!	IF (YMIN .GT. 10.0) DDX = 6.0*ABS(DX)	!ISI - 05/10/04
-!	IF (YMIN .GT. 20.0) DDX = 12.0*ABS(DX)	!ISI - 05/10/04
-!	IF (YMIN .GT. 40.0) DDX = 15.*ABS(DX)	!ISI - 05/10/04
           DDX=2.0**(ICOUNT-1)*ABS(DX)				!ISI - 05/10/04
 !
           IF (Y1*Y2 .LE. 0.) THEN
@@ -123,20 +103,5 @@
           CYCLE   !VL: Not needed ...
 
       END DO
-!
-!	FIRST POINT TRIED WAS WITHIN THE DESIRED TOLERANCE
-!
-!VL:  All instances of GO TO 500 have been commented out ...
-!500   X2 = X1
-!      Y2 = Y1
-!      RETURN
 
-!VL: All instances of GO TO 999 have been replaced with equivalent return statements      
-!999   IERROR = 4
-!	IF (JPRINT .NE. 0) WRITE(6,1001) X1,Y1,X2,Y2
-      !WRITE(6,1001) X1,Y1,X2,Y2                                 !ISI - 03/26/04
-      !RETURN
-
-!!VL: Previously :         
- !!1001 FORMAT(' GUESS3: ** FAILED TO BRACKET A SOLUTION **',/,9X,'F(',1PE12.4,') = ',1PE13.5,5X,'F(',1PE12.4,') = ',1PE13.5)
-      END
+ END SUBROUTINE

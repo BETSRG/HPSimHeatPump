@@ -75,7 +75,7 @@
       ENDIF
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION PSATS(TC)
@@ -96,7 +96,7 @@
       PSATS=PCONV*EXP(PLOG)
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION VSATS(PKPA,TC)
@@ -117,7 +117,7 @@
       VSATS=Y*PCR*VCR/(PKPA*PCNV)
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION VSATW(TC)
@@ -138,7 +138,7 @@
       VSATW=Y*VCR
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION HSATW(TC)
@@ -170,7 +170,7 @@
       HSATW=Y*HFCR
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION HFG(TC)
@@ -198,7 +198,7 @@
       HFG=Y*HFGTP
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION HSATS(TC)
@@ -219,7 +219,7 @@
       HSATS=Y*HCR
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -252,7 +252,7 @@
       SSATW=Y*SCR
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -274,7 +274,7 @@
       SSATS=Y*SCR
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -301,7 +301,7 @@
       VS=R*T/P-B1*EXP(-B2*T)+(B3-EXP(A0+TS*(A1+TS*A2)))/(A3*P) * EXP((TS-T)/EM)
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION HS(PKPA,TC)
@@ -334,7 +334,7 @@
       HS=A0+T*(A1+T*A2)-A3*EXP((TS-T)/EM)
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION SS(PKPA,TC)
@@ -361,7 +361,7 @@
       SS=A0+T*(A1+T*(A2+T*(A3+T*A4)))+B1*ALOG(B2+P*B3)-EXP((TS-T)/EM)* (C0+TS*(C1+TS*(C2+TS*(C3+TS*C4))))
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -412,7 +412,7 @@
       TPSS=T
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION CPS(T)
@@ -441,7 +441,7 @@
       END IF
       
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION CVS(V,T)
@@ -463,7 +463,7 @@
       CVS=CVS*4.1868
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -489,7 +489,7 @@
       VISSV=VISSV*4.1338E-04
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION VISSPH(T)
@@ -516,7 +516,7 @@
       VISSPH=VISSPH*4.1338E-04
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION STEAMK(T)
@@ -541,7 +541,7 @@
       STEAMK=STEAMK*0.0017308
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION WRHO(TW)
@@ -559,7 +559,7 @@
       WRHO=(AR0+TW*(AR1+TW*(AR2+TW*(AR3+TW*(AR4+TW*AR5)))))/(1.+AR6*TW)
 
       RETURN
-      END
+      END FUNCTION
 
 !***********************************************************************
 
@@ -587,7 +587,7 @@
       WMU=0.001*WMU
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION WK(TW)
@@ -607,7 +607,7 @@
       WK=0.001*(AK0+TW*(AK1+TW*(AK2+TW*(AK3+TW*AK4))))
 
       RETURN
-      END
+      END FUNCTION
 !***********************************************************************
 
       FUNCTION WCP(TW)
@@ -631,4 +631,4 @@
       END IF
 
       RETURN
-      END
+      END FUNCTION
