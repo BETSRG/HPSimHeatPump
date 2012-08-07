@@ -32,7 +32,12 @@
 !     SONIC: Speed of sound in air (M/S)
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TCA
+        REAL, INTENT(OUT):: CPA, CVA, GAMMA, SONIC
+        REAL A0,A1,A2,A3,A4
+        REAL TCONV
+        REAL R
+        REAL T
         DATA A0,A1,A2/1.03409,-0.284887E-3,0.7816818E-6/
         DATA A3,A4,TCONV,R/-0.4970786E-9,0.1077024E-12,273.15,0.287040/
         T=TCA+TCONV
@@ -45,7 +50,7 @@
 
 !***********************************************************************
 
-        FUNCTION CPA(TC)
+        REAL FUNCTION CPA(TC)
 
 ! ----------------------------------------------------------------------
 !
@@ -53,7 +58,11 @@
 !     CP: Specific heat of air at constant pressure [KJ/(kg K)]
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TC
+        REAL A0,A1,A2,A3,A4
+        REAL TCONV
+        REAL R
+        REAL T
         DATA A0,A1,A2/1.03409,-0.284887E-3,0.7816818E-6/
         DATA A3,A4,TCONV,R/-0.4970786E-9,0.1077024E-12,273.15,0.287040/
         T=TC+TCONV
@@ -63,14 +72,17 @@
 
 !***********************************************************************
 
-        FUNCTION HA(TC)
+        REAL FUNCTION HA(TC)
 
 ! ----------------------------------------------------------------------
 !
 !   Enthalpy of air [KJ/kg] as a function of temperature [C]
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TC
+        REAL A0,A1,A2,A3
+        REAL TCONV
+        REAL T
         DATA A0,A1,A2,A3/12.0740,0.924502,0.115984E-3,-0.563568E-8/
         DATA TCONV/273.15/
         T=TC+TCONV
@@ -83,7 +95,7 @@
         END FUNCTION
 !***********************************************************************
 
-        FUNCTION PHIA(TCA)
+        REAL FUNCTION PHIA(TCA)
 
 ! ----------------------------------------------------------------------
 !
@@ -97,7 +109,10 @@
 !      Isentropic volume function, LOG(V/V0) = LOG(R*T) - LOG(P/P0)
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TCA
+        REAL A0,A1,A2
+        REAL TCONV
+        REAL T
         DATA A0,A1,A2,TCONV/1.386989,0.184930E-3,0.95,273.15/
         T=TCA+TCONV
         PHIA=A0+A1*T+A2*ALOG(T)
@@ -105,14 +120,18 @@
         END FUNCTION
 !***********************************************************************
 
-        FUNCTION TPHIA(PHIA)
+        REAL FUNCTION TPHIA(PHIA)
 
 ! ----------------------------------------------------------------------
 !
 !  Temperature [C] of air as a function of the entropy function, PHIA
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: PHIA
+        REAL A0,A1,A2,A3
+        REAL TCONV
+        REAL R
+        REAL PR
         DATA A0,A1,A2,A3/-8800.92,1269.74,-61.9391,1.03530/
         DATA R,TCONV/0.287040,273.15/
         PR=PHIA/R
@@ -121,14 +140,18 @@
         END FUNCTION
 !***********************************************************************
 
-        FUNCTION VISCA(TC)
+        REAL FUNCTION VISCA(TC)
 
 ! ----------------------------------------------------------------------
 !
 !   Dynamic viscosity [(N S)/(M*M)] of air, from celsius temperature
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TC
+        REAL A0,A1,A2,A3,A4
+        REAL B0,B1,B2,B3,B4
+        REAL TCONV
+        REAL T
         DATA A0,A1,A2/-0.98601,9.080125E-2,-1.17635575E-4/
         DATA A3,A4/1.2349703E-7,-5.7971299E-11/
         DATA B0,B1,B2/4.8856745,5.43232E-2,-2.4261775E-5/
@@ -141,14 +164,17 @@
         END FUNCTION
 !***********************************************************************
 
-        FUNCTION AKA(TC)
+        REAL FUNCTION AKA(TC)
 
 ! ----------------------------------------------------------------------
 !
 ! Thermal conductivity of air [KW/(M K)], given Celsius temperature
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: TC
+        REAL C0,C1,C2,C3,C4,C5
+        REAL TCONV
+        REAL T
         DATA C0,C1,C2/-2.276501E-3,1.2598485E-4,-1.4815235E-7/
         DATA C3,C4,C5/1.73550646E-10,-1.066657E-13,2.47663035E-17/
         DATA TCONV/273.15/
@@ -158,18 +184,19 @@
         END FUNCTION
 !***********************************************************************	
 
-        FUNCTION TS(HS)
+        REAL FUNCTION TS(HS)
 
 ! ----------------------------------------------------------------------
 !
 !  Saturation temperature [C], given saturation enthalpy [kJ/kg]
 !
 !***********************************************************************
-
+        REAL, INTENT(IN) :: HS
+        REAL C0,C1,C2,C3
         DATA C0,C1/1.050415E-05,-3.801049E-03/
-	  DATA C2,C3/6.297500E-01,-5.549214/
+	    DATA C2,C3/6.297500E-01,-5.549214/
 
-	  TS=C0*HS**3+C1*HS**2+C2*HS+C3
+	    TS=C0*HS**3+C1*HS**2+C2*HS+C3
 
         RETURN
         END FUNCTION

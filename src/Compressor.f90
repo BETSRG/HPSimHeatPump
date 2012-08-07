@@ -273,7 +273,7 @@
 
     !***********************************************************************
 
-    FUNCTION X(C,D,S)
+    REAL FUNCTION X(C,D,S)
 
     REAL C(10) !Coefficients
     REAL D !Discharge dew point temperature
