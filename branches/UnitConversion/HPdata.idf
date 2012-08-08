@@ -59,9 +59,9 @@ CompressorData,
 OutdoorCoilData,
     4, !field Fin Type
     FinName, !field Fin Name
-    22, !field Fin Pitch [FPI]
-    1539, !field Fin Conductivity [Btu.in!h.ft².F]
-    3.9, !field Fin thickness [thou]
+    866, !field Fin Pitch [Fins/m] !JH
+    0.221818277, !field Fin Conductivity [kW/m2.K] !JH
+    0.0000991, !field Fin thickness [m] !JH
     Aluminum, !field Fin Material
     Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
     4, !field Tube Type
@@ -81,7 +81,7 @@ OutdoorCoilData,
     1; !field Air Side Pressure Drop Multiplier [-]
 
 OutdoorFanData,
-    297, !field Fan Power [W]
+    0.297, !field Fan Power [kW] !JH
     3688, !field Fan Air Flow Rate [cfm]
     1; !field Draw Through (1) or Blow Through (2) [-]
 
@@ -135,8 +135,8 @@ ExpansionDeviceData,
     4.68, !field Model (Cooling) Rated Capacity [tons]
     4.73, !field Model (Heating) Rated Capacity [tons]
     !--- Distibutor ---
-    24, !Distibutor Tube Length (Cooling) [in]
-    24; !Distibutor Tube Length (Heating) [in]
+    0.6096, !Distibutor Tube Length (Cooling) [in] !JH
+    0.6096; !Distibutor Tube Length (Heating) [in] !JH
  
 RefrigerantLineData,
     Compressor Suction, !field Refrigerant Line
@@ -199,7 +199,7 @@ RefrigerantCycleData(Cooling),
 
 RefrigerantCycleData(Heating),
     204.6, !field Temperature [°F]
-    14.696, !field Barometric Pressure [psig]
+    202.6, !field Barometric Pressure [kPa] !JH
     0; !field Is Compressor in Air Stream [-]
 
 AccumulatorData,
