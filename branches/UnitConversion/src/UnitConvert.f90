@@ -116,7 +116,7 @@ INTEGER I !Loop counter
     !CondPAR(27)                   !Equivalent circuits (1=yes; 2=no) 
     !CondPAR(28)                   !Number of modules per tube 
     !CondPAR(29)                   !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-	CondPAR(34)=CondPAR(34)/1000   !Fan power, kW
+	!CondPAR(34)=CondPAR(34)/1000   !Fan power, kW
 
 	!CondPAR(38)                   !Barometric pressure, kPa
     !CondPAR(58)                   !Distributor tube length, m
@@ -221,7 +221,7 @@ INTEGER I !Loop counter
 	!****Condenser input data****
 	!CondPAR(1)=CondPAR(1)*UnitL            !Discharge line length, m !JH - changed in .idf
 	!CondPAR(2)=CondPAR(2)/12*UnitL         !Discharge line outside diameter, m !JH - changed in .idf
-	CondPAR(3)=CondPAR(3)*0.001/12*UnitL   !Discharge line tube wall thickness, m
+	!CondPAR(3)=CondPAR(3)*0.001/12*UnitL   !Discharge line tube wall thickness, m !JH - changed units of ID and OD will make this meters
 	!CondPAR(4)=CondPAR(4)*UnitL            !Discharge line elevation, m !JH - Changed in .idf
 	!CondPAR(5)=CondPAR(5)*UnitPwr          !Discharge line heat loss, kW !JH - Changed in .idf
 	!CondPAR(6)=CondPAR(6)/1.8              !Discharge line temperature drop, C !JH - Changed in .idf
@@ -234,24 +234,24 @@ INTEGER I !Loop counter
 	!CondPAR(13)=CondPAR(13)/1.8            !Liquid line temperature drop, C !JH - Changed in .idf
     !CondPAR(14)=CondPAR(14)*UnitP          !Liquid line additional pressure drop, kPa !JH - changed in .idf
 	!CondPAR(15)=CondPAR(15)/12*UnitL       !Tube outside diameter, m !JH - changed in .idf
-    CondPAR(16)=CondPAR(16)*0.001/12*UnitL !Tube wall thickness, m
+    !CondPAR(16)=CondPAR(16)*0.001/12*UnitL !Tube wall thickness, m !JH - changed values of ID and OD will make this m
     !CondPAR(17)=CondPAR(17)/12*UnitL       !Tube length, m !JH - Updated in .idf
     !CondPAR(18)=CondPAR(18)*UnitK          !Tube thermal conductivity, kW/m-C
     !CondPAR(19)=CondPAR(19)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m !JH - updated in .idf
     !CondPAR(20)=CondPAR(20)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m !JH - updated in .idf
-    CondPAR(21)=CondPAR(21)*0.001/12*UnitL !Fin thickness, m
-    CondPAR(22)=CondPAR(22)*12/UnitL       !Fin pitch, fin/m
-    CondPAR(23)=CondPAR(23)*UnitK          !Fin thermal conductivity, kW/m-C 
+    !CondPAR(21)=CondPAR(21)*0.001/12*UnitL !Fin thickness, m !JH - Changed in .idf
+    !CondPAR(22)=CondPAR(22)*12/UnitL       !Fin pitch, fin/m !JH - changed in .idf
+    !CondPAR(23)=CondPAR(23)*UnitK          !Fin thermal conductivity, kW/m-C !JH - Changed in .idf
     !CondPAR(24)                           !Number of tubes in transverse direction (normal to air flow) 
     !CondPAR(25)                           !Number of tubes in longitudinal direction (parallel to air flow) 
     !CondPAR(26)                           !Number of circuits 
     !CondPAR(27)                           !Equivalent circuits (1=yes; 2=no) 
     !CondPAR(28)                           !Number of modules per tube 
     !CondPAR(29)                           !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-	CondPAR(34)=CondPAR(34)*1E-3           !Fan power, kW
+	!CondPAR(34)=CondPAR(34)*1E-3           !Fan power, kW
 
-	CondPAR(38)=CondPAR(38)*UnitP          !Barometric pressure, kPa
-	CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m
+	!CondPAR(38)=CondPAR(38)*UnitP          !Barometric pressure, kPa !JH - COnverted in .idf
+	!CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m !JH - Converted in .idf
 
 	!****Evaporator input data****
 	EvapPAR(1)=EvapPAR(1)*UnitL            !Suction line length, m
@@ -285,14 +285,14 @@ INTEGER I !Loop counter
     ShTbPAR(2)=ShTbPAR(2)/12*UnitL !Diameter, m
     ShTbPAR(3)=ShTbPAR(3)/12*UnitL !45 deg chamfer depth, m
     !ShTbPAR(4) !Number of circuits
-	ShTbPAR(5)=ShTbPAR(5)*UnitL !Distributor tube length, m
+	!ShTbPAR(5)=ShTbPAR(5)*UnitL !Distributor tube length, m !JH - Converted in .idf
 
     !****Cap. tube input data****
     CapTubePAR(1)=CapTubePAR(1)/12*UnitL !Length, m 
     CapTubePAR(2)=CapTubePAR(2)/12*UnitL !Diameter, m
     CapTubePAR(3)=CapTubePAR(3)/12*UnitL !Coil diameter, m
     !CapTubePAR(4) !Number of circuits
-	CapTubePAR(5)=CapTubePAR(5)*UnitL !Distributor tube length, m
+	!CapTubePAR(5)=CapTubePAR(5)*UnitL !Distributor tube length, m !JH - Converted in .idf
 
     !****TXV input data****
     !TxvPAR(1)                !Rated TXV capacity, ton
@@ -300,7 +300,7 @@ INTEGER I !Loop counter
     TxvPAR(3)=TxvPAR(3)/1.8   !Static superheat, C
     !TxvPAR(4)                !Bleed factor
     !TxvPAR(5)                !Number of circuits in evaporator
-	TxvPAR(6)=TxvPAR(6)*UnitL !Distributor tube length, m
+	!TxvPAR(6)=TxvPAR(6)*UnitL !Distributor tube length, m !JH - Converted in .idf
 	TxvPAR(7)=TxvPAR(7)/1.8   !Maximum effective superheat, C
 
 	!***** Accumulator input data *****
