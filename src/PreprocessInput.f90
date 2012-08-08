@@ -18,7 +18,8 @@ CONTAINS
         ! backup the last input file
         call system('if exist in.idf rename in.idf inBackup.idf')
         ! rename the heat pump input file in preparation for epmacro
-        call system('rename hpdata.idf in.imf')
+        call system('if exist in.imf del in.imf')
+        call system('copy hpdata.idf in.imf')
         !call system('rename hpdata_longtubes.idf in.imf')  !RS: Test case input file
         !call system('rename HPdata_3TonAC_410.idf in.imf') !RS: Test case input file
         ! call epmacro on it
