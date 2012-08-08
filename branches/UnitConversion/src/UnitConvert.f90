@@ -254,16 +254,16 @@ INTEGER I !Loop counter
 	!CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m !JH - Converted in .idf
 
 	!****Evaporator input data****
-	EvapPAR(1)=EvapPAR(1)*UnitL            !Suction line length, m
-	EvapPAR(2)=EvapPAR(2)/12*UnitL         !Suction line outside diameter, m
+	!EvapPAR(1)=EvapPAR(1)*UnitL            !Suction line length, m !JH - Converted in .idf
+	!EvapPAR(2)=EvapPAR(2)/12*UnitL         !Suction line outside diameter, m !JH - Converted in .idf
 	EvapPAR(3)=EvapPAR(3)*0.001/12*UnitL   !Suction line tube wall thickness, m
-    EvapPAR(4)=EvapPAR(4)*UnitL            !Suction line elevation, m
-	EvapPAR(5)=EvapPAR(5)*UnitPwr          !Suction line heat gain, kW
-	EvapPAR(6)=EvapPAR(6)/1.8              !Suction line temperature rise, C
-	EvapPAR(7)=EvapPAR(7)*UnitP            !Suction line additional pressure drop, kPa
-    EvapPAR(8)=EvapPAR(8)/12*UnitL         !Tube outside diameter, m
+    !EvapPAR(4)=EvapPAR(4)*UnitL            !Suction line elevation, m !JH - Converted in .idf
+	!EvapPAR(5)=EvapPAR(5)*UnitPwr          !Suction line heat gain, kW !JH - Converted in .idf
+	!EvapPAR(6)=EvapPAR(6)/1.8              !Suction line temperature rise, C !JH - Converted in .idf
+	!EvapPAR(7)=EvapPAR(7)*UnitP            !Suction line additional pressure drop, kPa !JH - Converted in .idf
+    !EvapPAR(8)=EvapPAR(8)/12*UnitL         !Tube outside diameter, m
     EvapPAR(9)=EvapPAR(9)*0.001/12*UnitL   !Tube wall thickness, m
-    EvapPAR(10)=EvapPAR(10)/12*UnitL       !Tube length, m
+    !EvapPAR(10)=EvapPAR(10)/12*UnitL       !Tube length, m !JH - Converted in .idf
     EvapPAR(11)=EvapPAR(11)*UnitK          !Tube thermal conductivity, kW/m-C
     EvapPAR(12)=EvapPAR(12)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m
     EvapPAR(13)=EvapPAR(13)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m
@@ -278,7 +278,7 @@ INTEGER I !Loop counter
     !EvapPAR(22)                           !Fin type (1-smooth; 2-Wavy; 3-louvered) 
     EvapPAR(27)=EvapPAR(27)*1E-3           !Fan power, kW
 
-	EvapPAR(31)=EvapPAR(31)*UnitP          !Barometric pressure, kPa
+	!EvapPAR(31)=EvapPAR(31)*UnitP          !Barometric pressure, kPa !JH - Updated in .idf
 
     !****Short tube input data****
     ShTbPAR(1)=ShTbPAR(1)/12*UnitL !Length, m 
@@ -339,7 +339,7 @@ INTEGER I !Loop counter
     !TsiCmp    !Evaparator temp. F,  ORNL solver uses IP unit
     !Super !Superheat, F,  ORNL solver uses IP unit
 	!Subcool !Subcooling, F,  ORNL solver uses IP unit
-	BaroPressure=BaroPressure*UnitP !barometric pressure kPa
+	!BaroPressure=BaroPressure*UnitP !barometric pressure kPa
 
 	ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
 	ChargeCurveIntercept=ChargeCurveIntercept*UnitM

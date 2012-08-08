@@ -95,7 +95,7 @@ IndoorCoilData,
     Coil tube: 3/8 0.012 thick Expanded, !field Tube Name
     6, !field Tube Type
     0.37, !field Tube ID [in]
-    0.394, !field Tube OD [in]
+    0.0100, !field Tube OD [m] !JH
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.866, !field Tube Lateral Spacing [in]
     1, !field Tube Vertical Spacing [in]
@@ -103,7 +103,7 @@ IndoorCoilData,
     40, !field Number of Tubes Per Row
     6, !field Number of Circuits
     1, !field Number of Segments
-    17.5, !field Single Tube Length [in]
+    0.445, !field Single Tube Length [m]!JH
     1, !field Ref Side Heat Transfer Multiplier [-]
     1, !field Ref Side Pressure Drop Multiplier [-]
     1, !field Air Side Heat Transfer Multiplier [-]
@@ -143,12 +143,12 @@ RefrigerantLineData,
     Copper: 3/4 in 0.035 thick, !field Tube Type
     0.9144, !field Refrigerant Line Length [m] !JH
     0, !field Refrigerant Line Elevation [m] !JH
-    0, !field Refrigerant Line Heat Loss [W] !JH
+    0, !field Refrigerant Line Heat Loss [kW] !JH
     0, !field Refrigerant Line Temperature Change [C] !JH
     2724, !field Tube Conductivity [Btu.in!h.ft².F]
     0.68, !field Tube Inside Diameter [in]
-    0.75, !field Tube Outside Diamater [in]
-    0, !field Additional Pressure Drop [psig]
+    0.019, !field Tube Outside Diamater [m] !JH
+    0, !field Additional Pressure Drop [kPa]
     0, !field Charge in Line [lbm]
     Compressor Discharge, !field Refrigerant Line
     Copper: 1/2 in 0.027 thick, !field Tube Type
