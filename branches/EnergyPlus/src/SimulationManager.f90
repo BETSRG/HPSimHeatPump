@@ -419,7 +419,7 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
 #endif
   CALL CloseOutputFiles
 
-  CALL CreateZoneExtendedOutput
+  CALL CreateZoneExtendedOutput !RS: This subroutine is completely empty!
 
   IF (ErrorsFound) THEN
     CALL ShowFatalError('Error condition occurred.  Previous Severe Errors cause termination.')
