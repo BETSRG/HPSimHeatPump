@@ -244,12 +244,12 @@ SUBROUTINE ManageHVAC
   If (Contaminant%SimulateContaminants) &
     CALL ManageZoneContaminanUpdates(iPredictStep,ShortenTimeStepSys,UseZoneTimeStepHistory,PriorTimeStep)
 
-  CALL SimHVAC
+  CALL SimHVAC  !RS: Bring in HPSim here?
   
   IF (AnyIdealCondEntSetPointInModel .and. MetersHaveBeenInitialized .and. .NOT. WarmUpFlag) THEN
     RunOptCondEntTemp = .TRUE.
     DO WHILE (RunOptCondEntTemp)
-      CALL SimHVAC
+      CALL SimHVAC  !RS: If so re:above, then also replace this with HPSim
     END DO  
   END IF
   
@@ -499,6 +499,8 @@ SUBROUTINE SimHVAC
   USE PlantUtilities,                  ONLY : CheckPlantMixerSplitterConsistency, &
                                               CheckForRunawayPlantTemps, AnyPlantSplitterMixerLacksContinuity
   USE DataGlobals,                     ONLY : AnyPlantInModel
+  
+  !USE ORNLsolver !RS Comment: Trying to connect the two programs.
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
@@ -587,24 +589,20 @@ SUBROUTINE SimHVAC
   ENDIF
 
 
-  IF (ZoneSizingCalc) THEN
-    CALL ManageZoneEquipment(FirstHVACIteration,SimZoneEquipmentFlag,SimAirLoopsFlag)
-    ! need to call non zone equipment so water use zone gains can be included in sizing calcs
-    CALL ManageNonZoneEquipment(FirstHVACIteration,SimNonZoneEquipmentFlag)
-    CALL ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuitsFlag, .FALSE.)
-    RETURN
-  END IF
+  !IF (ZoneSizingCalc) THEN
+  !  CALL ManageZoneEquipment(FirstHVACIteration,SimZoneEquipmentFlag,SimAirLoopsFlag)   !RS: This is also a possible integration point (stronger candidate)
+  !  ! need to call non zone equipment so water use zone gains can be included in sizing calcs
+  !  CALL ManageNonZoneEquipment(FirstHVACIteration,SimNonZoneEquipmentFlag)             !RS: Integrating here would also get rid of this line
+  !  CALL ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuitsFlag, .FALSE.)
+  !  RETURN
+  !END IF
 
           ! Before the HVAC simulation, reset control flags and specified flow
-          ! rates that might have been set by the set point and availability
-          ! managers.
+          ! rates that might have been set by the set point and availability managers.
 
   CALL ResetHVACControl
 
-
-
-          ! Before the HVAC simulation, call ManageSetPoints to set all the HVAC
-          ! node setpoints
+          ! Before the HVAC simulation, call ManageSetPoints to set all the HVAC node setpoints
 
   CAll ManageEMS(emsCallFromBeforeHVACManagers) ! calling point
 
@@ -619,85 +617,87 @@ SUBROUTINE SimHVAC
 
   CAll ManageEMS(emsCallFromAfterHVACManagers)! calling point
 
-! first explicitly call each system type with FirstHVACIteration,
-
-
-          ! Manages the various component simulations
-  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                              SimElecCircuitsFlag,     FirstHVACIteration, SimWithPlantFlowUnlocked)
-
-          ! Eventually, when all of the flags are set to false, the
-          ! simulation has converged for this system time step.
-
-  SimPlantLoopsFlag = .TRUE.
-  CALL SetAllPlantSimFlagsToValue(.TRUE.) !set so loop to simulate at least once on non-first hvac
-
-  FirstHVACIteration = .FALSE.
-
-
-! then iterate among all systems after first HVAC iteration is over
-
-          ! Main iteration loop for HVAC.  If any of the simulation flags are
-          ! true, then specific components must be resimulated.
-  DO WHILE ( (SimAirLoopsFlag .OR. SimZoneEquipmentFlag .OR. SimNonZoneEquipmentFlag .OR. SimPlantLoopsFlag .OR. &
-              SimElecCircuitsFlag )  .AND. (HVACManageIteration.LE.MaxIter) )
-
-    CAll ManageEMS(emsCallFromHVACIterationLoop) ! calling point id
-
-          ! Manages the various component simulations
-    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                              SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
-
-          ! Eventually, when all of the flags are set to false, the
-          ! simulation has converged for this system time step.
-
-    HVACManageIteration = HVACManageIteration + 1   ! Increment the iteration counter
-
-  END DO
-  IF (AnyPlantInModel) THEN
-    If (AnyPlantSplitterMixerLacksContinuity()) THEN
-      ! now call for one second to last plant simulation
-      SimAirLoopsFlag = .FALSE. 
-      SimZoneEquipmentFlag = .FALSE.
-      SimNonZoneEquipmentFlag = .FALSE.
-      SimPlantLoopsFlag = .TRUE.
-      SimElecCircuitsFlag = .FALSE.
-      CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                                  SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
-      ! now call for all non-plant simulation, but with plant flow lock on
-      SimAirLoopsFlag = .TRUE.
-      SimZoneEquipmentFlag = .TRUE.
-      SimNonZoneEquipmentFlag = .TRUE.
-      SimPlantLoopsFlag = .FALSE.
-      SimElecCircuitsFlag = .TRUE.
-      CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                                  SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowLocked)
-      ! now call for a last plant simulation
-      SimAirLoopsFlag = .FALSE. 
-      SimZoneEquipmentFlag = .FALSE.
-      SimNonZoneEquipmentFlag = .FALSE.
-      SimPlantLoopsFlag = .TRUE.
-      SimElecCircuitsFlag = .FALSE.
-      CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                                  SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
-      ! now call for a last all non-plant simulation, but with plant flow lock on
-      SimAirLoopsFlag = .TRUE.
-      SimZoneEquipmentFlag = .TRUE.
-      SimNonZoneEquipmentFlag = .TRUE.
-      SimPlantLoopsFlag = .FALSE.
-      SimElecCircuitsFlag = .TRUE.
-      CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
-                                  SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowLocked)
-    ENDIF
-  ENDIF
-
-  !DSU  Test plant loop for errors
-  DO LoopNum = 1, TotNumLoops
-    DO LoopSide = DemandSide,SupplySide
-      CALL CheckPlantMixerSplitterConsistency(LoopNum,LoopSide,1, 1,FirstHVACIteration)
-      Call CheckForRunawayPlantTemps(LoopNum,LoopSide)
-    ENDDO
-  ENDDO
+  CALL SimulationCycle  !RS: First try at connecting the two programs
+  
+!! first explicitly call each system type with FirstHVACIteration,
+!
+!
+!          ! Manages the various component simulations
+!  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&    !RS: If intergrating this sub, then this should probably be removed/replaced
+!                              SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
+!
+!          ! Eventually, when all of the flags are set to false, the
+!          ! simulation has converged for this system time step.
+!
+!  SimPlantLoopsFlag = .TRUE.
+!  CALL SetAllPlantSimFlagsToValue(.TRUE.) !set so loop to simulate at least once on non-first hvac
+!
+!  FirstHVACIteration = .FALSE.
+!
+!
+!! then iterate among all systems after first HVAC iteration is over
+!
+!          ! Main iteration loop for HVAC.  If any of the simulation flags are
+!          ! true, then specific components must be resimulated.
+!  DO WHILE ( (SimAirLoopsFlag .OR. SimZoneEquipmentFlag .OR. SimNonZoneEquipmentFlag .OR. SimPlantLoopsFlag .OR. &
+!              SimElecCircuitsFlag )  .AND. (HVACManageIteration.LE.MaxIter) )   !RS: If integrating above, this DO all should be gone
+!
+!    CAll ManageEMS(emsCallFromHVACIterationLoop) ! calling point id
+!
+!          ! Manages the various component simulations
+!    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
+!                              SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
+!
+!          ! Eventually, when all of the flags are set to false, the
+!          ! simulation has converged for this system time step.
+!
+  !  HVACManageIteration = HVACManageIteration + 1   ! Increment the iteration counter
+  !
+  !END DO
+  !IF (AnyPlantInModel) THEN     !RS: These IFs should also be removed, I think
+  !  If (AnyPlantSplitterMixerLacksContinuity()) THEN
+  !    ! now call for one second to last plant simulation
+  !    SimAirLoopsFlag = .FALSE. 
+  !    SimZoneEquipmentFlag = .FALSE.
+  !    SimNonZoneEquipmentFlag = .FALSE.
+  !    SimPlantLoopsFlag = .TRUE.
+  !    SimElecCircuitsFlag = .FALSE.
+  !    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
+  !                                SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
+  !    ! now call for all non-plant simulation, but with plant flow lock on
+  !    SimAirLoopsFlag = .TRUE.
+  !    SimZoneEquipmentFlag = .TRUE.
+  !    SimNonZoneEquipmentFlag = .TRUE.
+  !    SimPlantLoopsFlag = .FALSE.
+  !    SimElecCircuitsFlag = .TRUE.
+  !    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
+  !                                SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowLocked)
+  !    ! now call for a last plant simulation
+  !    SimAirLoopsFlag = .FALSE. 
+  !    SimZoneEquipmentFlag = .FALSE.
+  !    SimNonZoneEquipmentFlag = .FALSE.
+  !    SimPlantLoopsFlag = .TRUE.
+  !    SimElecCircuitsFlag = .FALSE.
+  !    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
+  !                                SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
+  !    ! now call for a last all non-plant simulation, but with plant flow lock on
+  !    SimAirLoopsFlag = .TRUE.
+  !    SimZoneEquipmentFlag = .TRUE.
+  !    SimNonZoneEquipmentFlag = .TRUE.
+  !    SimPlantLoopsFlag = .FALSE.
+  !    SimElecCircuitsFlag = .TRUE.
+  !    CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
+  !                                SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowLocked)
+  !  ENDIF
+  !ENDIF
+  !
+  !!DSU  Test plant loop for errors
+  !DO LoopNum = 1, TotNumLoops
+  !  DO LoopSide = DemandSide,SupplySide
+  !    CALL CheckPlantMixerSplitterConsistency(LoopNum,LoopSide,1, 1,FirstHVACIteration)
+  !    Call CheckForRunawayPlantTemps(LoopNum,LoopSide)
+  !  ENDDO
+  !ENDDO
 
 
   ! possible to finally rerun systems in a "Final flow lock/last iteration" mode?
