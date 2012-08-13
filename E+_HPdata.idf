@@ -52,12 +52,11 @@ Building,
        !required-object
        !min-fields 8
   A1 , !Name
-  N1 , !North Axis
+  0 ,  !North Axis
        !degrees from true North
        !units deg
-       !type real
        !default 0.0
-  A2 , !Terrain
+ Suburbs, !Terrain
        !Country=FlatOpenCountry | Suburbs=CountryTownsSuburbs | City=CityCenter | Ocean=body of water (5km) | Urban=Urban-Industrial-Forest
        !type choice
        !key Country
@@ -66,17 +65,17 @@ Building,
        !key Ocean
        !key Urban
        !default Suburbs
-  N2 , !Loads Convergence Tolerance Value
+  .04, !Loads Convergence Tolerance Value
        !Loads Convergence Tolerance Value is a fraction of load
        !minimum> 0.0
        !maximum .5
        !default .04
-  N3 , !Temperature Convergence Tolerance Value
+  .4, !Temperature Convergence Tolerance Value
        !units deltaC
        !minimum> 0.0
        !maximum .5
        !default .4
-  A3 , !Solar Distribution
+  FullExterior, !Solar Distribution
        !MinimalShadowing | FullExterior | FullInteriorAndExterior | FullExteriorWithReflections | FullInteriorAndExteriorWithReflections
        !type choice
        !key MinimalShadowing
@@ -85,12 +84,12 @@ Building,
        !key FullExteriorWithReflections
        !key FullInteriorAndExteriorWithReflections
        !default FullExterior
-  N4 , !Maximum Number of Warmup Days
+  25 , !Maximum Number of Warmup Days
        !EnergyPlus will only use as many warmup days as needed to reach convergence tolerance.
        !This field's value should NOT be set less than 25.
        !minimum> 0
        !default 25
-  N5 ; !Minimum Number of Warmup Days
+  6; !Minimum Number of Warmup Days
        !The minimum number of warmup days that produce enough temperature and flux history
        !to start EnergyPlus simulation for all reference buildings was suggested to be 6.
        !When this field is greater than the maximum warmup days defined previous field
@@ -101,7 +100,7 @@ Building,
 
 ShadowCalculation,
        !unique-object
-  N1 , !Calculation Frequency
+  20 , !Calculation Frequency
        !required-field
        !type integer
        !minimum 1
@@ -109,18 +108,18 @@ ShadowCalculation,
        !0=Use Default Periodic Calculation|<else> calculate every <value> day
        !only really applicable to RunPeriods
        !warning issued if >31
-  N2 , !Maximum Figures in Shadow Overlap Calculations
+ 15000, !Maximum Figures in Shadow Overlap Calculations
        !Number of allowable figures in shadow overlap calculations
        !minimum 200
        !default 15000
-  A1 , !Polygon Clipping Algorithm
-       !Advanced Feature.  Internal default is SutherlandHodgman
+  SutherlandHodgman, !Polygon Clipping Algorithm
+       !Advanced Feature. Internal default is SutherlandHodgman
        !Refer to InputOutput Reference and Engineering Reference for more information
        !type choice
        !key ConvexWeilerAtherton
        !key SutherlandHodgman
-  A2 ; !Sky Diffuse Modeling Algorithm
-       !Advanced Feature.  Internal default is SimpleSkyDiffuseModeling
+ SimpleSkyDiffuseModeling; !Sky Diffuse Modeling Algorithm
+       !Advanced Feature. Internal default is SimpleSkyDiffuseModeling
        !If you have shading elements that change transmittance over the
        !year, you may wish to choose the detailed method.
        !Refer to InputOutput Reference and Engineering Reference for more information
@@ -131,7 +130,7 @@ ShadowCalculation,
 SurfaceConvectionAlgorithm:Inside,
        !Default indoor surface heat transfer convection algorithm to be used for all zones
        !unique-object
-  A1 ; !Algorithm
+  TARP; !Algorithm
        !required-field
        !type choice
        !key Simple
@@ -148,7 +147,7 @@ SurfaceConvectionAlgorithm:Inside,
 SurfaceConvectionAlgorithm:Outside,
        !Default outside surface heat transfer convection algorithm to be used for all zones
        !unique-object
-  A1 ; !Algorithm
+  DOE-2; !Algorithm
        !required-field
        !type choice
        !key SimpleCombined
@@ -173,7 +172,7 @@ HeatBalanceAlgorithm,
        !Advanced/Research Usage: HAMT (Combined Heat And Moisture Finite Element)
        !unique-object
        !format singleLine
-  A1 , !Algorithm
+  ConductionTransferFuction, !Algorithm
        !required-field
        !type choice
        !key ConductionTransferFunction
@@ -182,15 +181,15 @@ HeatBalanceAlgorithm,
        !key ConductionFiniteDifferenceSimplified
        !key CombinedHeatAndMoistureFiniteElement
        !default ConductionTransferFunction
-  N1 , !Surface Temperature Upper Limit
+  200, !Surface Temperature Upper Limit
        !minimum 200
        !default 200
        !units C
-  N2 , !Minimum Surface Convection Heat Transfer Coefficient Value
+  0.1, !Minimum Surface Convection Heat Transfer Coefficient Value
        !units W/m2-K
        !default 0.1
        !minimum> 0.0
-  N3 ; !Maximum Surface Convection Heat Transfer Coefficient Value
+  1.0; !Maximum Surface Convection Heat Transfer Coefficient Value
        !units W/m2-K
        !default 1000
        !minimum 1.0
@@ -198,26 +197,26 @@ HeatBalanceAlgorithm,
 HeatBalanceSettings:ConductionFiniteDifference,
        !Determines settings for the Conduction Finite Difference
        !algorithm for surface heat transfer modeling.
-  A1 , !Difference Scheme
+  CrankNicholsonSecondOrder, !Difference Scheme
        !type choice
        !key CrankNicholsonSecondOrder
        !key FullyImplicitFirstOrder
        !default CrankNicholsonSecondOrder
-  N1 , !Space Discretization Constant
+  3, !Space Discretization Constant
        !increase or decrease number of nodes
        !default 3
-  N2 , !Relaxation Factor
+  1.0, !Relaxation Factor
        !default 1.0
        !minimum 0.01
        !maximum 1.0
-  N3 ; !Inside Face Surface Temperature Convergence Criteria
+  0.002; !Inside Face Surface Temperature Convergence Criteria
        !default 0.002
        !minimum 1.0E-7
        !maximum 0.01
 
 ZoneAirHeatBalanceAlgorithm,
        !Determines which algorithm will be used to solve the zone air heat balance.
-  A1 ; !Algorithm
+ ThirdOrderBackwardDifference; !Algorithm
        !type choice
        !key ThirdOrderBackwardDifference
        !key AnalyticalSolution
@@ -226,7 +225,7 @@ ZoneAirHeatBalanceAlgorithm,
 
 ZoneAirContaminantBalance,
        !Determines which contaminant concentration will be simulates.
-  A1 , !Carbon Dioxide Concentration
+  No , !Carbon Dioxide Concentration
        !If Yes, CO2 simulation will be performed.
        !type choice
        !key Yes
@@ -236,7 +235,7 @@ ZoneAirContaminantBalance,
        !Schedule values should be in parts per million (ppm)
        !type object-list
        !object-list ScheduleNames
-  A3 , !Generic Contaminant Concentration
+  No , !Generic Contaminant Concentration
        !If Yes, generic contaminant simulation will be performed.
        !type choice
        !key Yes
@@ -250,25 +249,25 @@ ZoneAirContaminantBalance,
 ZoneCapacitanceMultiplier:ResearchSpecial,
        !Multiplier altering the relative capacitance of the air compared to an empty zone
        !min-fields 4
-  N1 , !Temperature Capacity Multiplier
+  1.0, !Temperature Capacity Multiplier
        !default 1.0
        !minimum> 0.0
        !Used to alter the capacitance of zone air with respect to heat or temperature
-  N2 , !Humidity Capacity Multiplier
+  1.0, !Humidity Capacity Multiplier
        !default 1.0
        !minimum> 0.0
        !Used to alter the capacitance of zone air with respect to moisture or humidity ratio
-  N3 , !Carbon Dioxide Capacity Multiplier
+  1.0, !Carbon Dioxide Capacity Multiplier
        !default 1.0
        !minimum> 0.0
        !Used to alter the capacitance of zone air with respect to zone air carbob dioxide concentration
-  N4 ; !Generic Contaminant Capacity Multiplier
+  1.0; !Generic Contaminant Capacity Multiplier
        !default 1.0
        !minimum> 0.0
        !Used to alter the capacitance of zone air with respect to zone air generic contaminant concentration
 
 Timestep,
-  N1 ; !Number of Timesteps per Hour
+  6 ; !Number of Timesteps per Hour
        !required-field
        !Number in hour: normal validity 4 to 60: 6 suggested
        !Must be evenly divisible into 60
@@ -282,23 +281,23 @@ Timestep,
        !maximum 60
 
 ConvergenceLimits,
-  N1 , !Minimum System Timestep
+  1 , !Minimum System Timestep
        !units minutes
        !0 sets the minimum to the zone timestep (ref: Timestep)
        !1 is normal (ratchet down to 1 minute)
        !setting greater than zone timestep (in minutes) will effectively set to zone timestep
        !minimum 0
        !maximum 60
-  N2 , !Maximum HVAC Iterations
+  20 , !Maximum HVAC Iterations
        !default 20
        !minimum 1
-  N3 , !Minimum Plant Iterations
+  2 , !Minimum Plant Iterations
        !Controls the minimum number of plant system solver iterations within a single HVAC iteration
        !Larger values will increase runtime but might improve solution accuracy for complicated plant systems
        !Complex plants include: several interconnected loops, heat recovery, thermal load following generators, etc.
        !default 2
        !minimum 1
-  N4 ; !Maximum Plant Iterations
+  8 ; !Maximum Plant Iterations
        !Controls the maximum number of plant system solver iterations within a single HVAC iteration
        !Smaller values might decrease runtime but could decrease solution accuracy for complicated plant systems
        !default 8
@@ -317,7 +316,7 @@ ProgramControl,
 Compliance:Building,
        !Building level inputs related to compliance to building standards, building codes, and beyond energy code programs.
        !min-fields 1
-  N1;  !Building Rotation for Appendix G
+  0.0;  !Building Rotation for Appendix G
        !Additional degrees of rotation to be used with the requirement in ASHRAE Standard 90.1 Appendix G
        !that states that the baseline building should be rotated in four directions.
        !units deg
@@ -329,26 +328,26 @@ Site:Location,
        !min-fields 5
   A1 , !Name
        !required-field
-  N1 , !Latitude
+  35.0, !Latitude
        !units deg
        !minimum -90.0
        !maximum +90.0
        !default 0.0
        !+ is North, - is South, degree minutes represented in decimal (i.e. 30 minutes is .5)
-  N2 , !Longitude
+  33.0, !Longitude
        !units deg
        !minimum -180.0
        !maximum +180.0
        !default 0.0
        !- is West, + is East, degree minutes represented in decimal (i.e. 30 minutes is .5)
-  N3 , !Time Zone
+  6.0, !Time Zone
        !basic these limits on the WorldTimeZone Map (2003)
        !units hr
        !minimum -12.0
        !maximum +14.0
        !default 0.0
        !Time relative to GMT. Decimal hours.
-  N4 ; !Elevation
+  30; !Elevation
        !units m
        !minimum -300.0
        !maximum< 8900.0
@@ -365,16 +364,16 @@ SizingPeriod:DesignDay,
        !required-field
        !reference DesignDays
        !reference RunPeriodsAndDesignDays
-  N1,  !Month
+  1,  !Month
        !required-field
        !minimum 1
        !maximum 12
-  N2,  !Day of Month
+  1,  !Day of Month
        !required-field
        !minimum 1
        !maximum 31
        !must be valid for Month field
-  A2,  !Day Type
+  Tuesday,  !Day Type
        !required-field
        !Day Type selects the schedules appropriate for this design day
        !type choice
@@ -394,7 +393,7 @@ SizingPeriod:DesignDay,
        !required-field
        !units C
        !minimum -70
-  N4,  !Daily Dry-Bulb Temperature Range
+  0,  !Daily Dry-Bulb Temperature Range
        !Must still produce appropriate maximum dry bulb (within range)
        !This field is not needed if Dry-Bulb Temperature Range Modifier Type is "delta".
        !units deltaC
@@ -418,7 +417,7 @@ SizingPeriod:DesignDay,
        !   from the maximum dry-bulb temperature for each timestep in the day.
        !Note that numbers in the difference schedule cannot be negative as that
        !   would result in a higher maximum than the maximum previously specified.
-  A5,  !Humidity Condition Type
+  Wetbulb,  !Humidity Condition Type
        !values/schedules indicated here and in subsequent fields create the humidity
        !values in the 24 hour design day conditions profile.
        !type choice
@@ -468,39 +467,39 @@ SizingPeriod:DesignDay,
        !minimum 31000
        !maximum 120000
        !ip-units inHg
-  N10, !Wind Speed
+  10, !Wind Speed
        !required-field
        !units m/s
        !minimum 0
        !maximum 40
        !ip-units miles/hr
-  N11, !Wind Direction
+  90, !Wind Direction
        !required-field
        !units deg
        !minimum 0
        !maximum 360
        !North=0.0 East=90.0
        !0 and 360 are the same direction.
-  A7,  !Rain Indicator
+  No,  !Rain Indicator
        !Yes is raining (all day), No is not raining
        !type choice
        !key Yes
        !key No
        !default No
-  A8,  !Snow Indicator
+  No,  !Snow Indicator
        !type choice
        !key Yes
        !key No
        !default No
        !Yes is Snow on Ground, No is no Snow on Ground
-  A9,  !Daylight Saving Time Indicator
+  No,  !Daylight Saving Time Indicator
        !Yes -- use schedules modified for Daylight Saving Time Schedules.
        !No - do not use schedules modified for Daylight Saving Time Schedules
        !type choice
        !key Yes
        !key No
        !default No
-  A10, !Solar Model Indicator
+  ASHRAEClearSky, !Solar Model Indicator
        !type choice
        !key ASHRAEClearSky
        !key ZhangHuang
@@ -515,19 +514,19 @@ SizingPeriod:DesignDay,
        !if Solar Model Indicator = Schedule, then diffuse schedule name (for day)
        !type object-list
        !object-list DayScheduleNames
-  N12, !ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
+  0, !ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub)
        !units dimensionless
        !Required if Solar Model Indicator = ASHRAETau
        !minimum 0
        !maximum 1
        !default 0
-  N13, !ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
+  0, !ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud)
        !units dimensionless
        !Required if Solar Model Indicator = ASHRAETau
        !minimum 0
        !maximum 3
        !default 0
-  N14; !Sky Clearness
+  0.0; !Sky Clearness
        !Used if Sky Model Indicator = ASHRAEClearSky or ZhangHuang
        !minimum 0.0
        !maximum 1.2
@@ -541,23 +540,23 @@ SizingPeriod:WeatherFileDays,
        !reference RunPeriodsAndDesignDays
        !required-field
        !user supplied name for reporting
-  N1 , !Begin Month
+  1, !Begin Month
        !required-field
        !minimum 1
        !maximum 12
-  N2 , !Begin Day of Month
+  1 , !Begin Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  N3 , !End Month
+  12 , !End Month
        !required-field
        !minimum 1
        !maximum 12
-  N4 , !End Day of Month
+  31 , !End Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  A2 , !Day of Week for Start Day
+  Tuesday , !Day of Week for Start Day
        ! =[|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|SummerDesignDay|WinterDesignDay|
        !   |CustomDay1|CustomDay2];
        !if you use SummerDesignDay or WinterDesignDay or the CustomDays then this will apply to the whole
@@ -575,14 +574,14 @@ SizingPeriod:WeatherFileDays,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
-  A3,  !Use Weather File Daylight Saving Period
+  Yes,  !Use Weather File Daylight Saving Period
        !If yes or blank, use daylight saving period as specified on Weatherfile.
        !If no, do not use the daylight saving period as specified on the Weatherfile.
        !type choice
        !default Yes
        !key Yes
        !key No
-  A4;  !Use Weather File Rain and Snow Indicators
+  Yes;  !Use Weather File Rain and Snow Indicators
        !type choice
        !key Yes
        !key No
@@ -598,7 +597,7 @@ SizingPeriod:WeatherFileConditionType,
        !reference DesignDays
        !reference RunPeriodsAndDesignDays
        !user supplied name for reporting
-  A2 , !Period Selection
+  SummerExtreme, !Period Selection
        !required-field
        !Following is a list of all possible types of Extreme and Typical periods that
        !might be identified in the Weather File. Not all possible types are available
@@ -620,7 +619,7 @@ SizingPeriod:WeatherFileConditionType,
        !key NoDrySeasonMin
        !key NoWetSeasonMax
        !key NoWetSeasonMin
-  A3 , !Day of Week for Start Day
+  Tuesday, !Day of Week for Start Day
        ! =[|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|SummerDesignDay|WinterDesignDay|
        !   |CustomDay1|CustomDay2];
        !if you use SummerDesignDay or WinterDesignDay or the CustomDays then this will apply to the whole
@@ -638,14 +637,14 @@ SizingPeriod:WeatherFileConditionType,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
-  A4,  !Use Weather File Daylight Saving Period
+  Yes,  !Use Weather File Daylight Saving Period
        !If yes or blank, use daylight saving period as specified on Weatherfile.
        !If no, do not use the daylight saving period as specified on the Weatherfile.
        !type choice
        !default Yes
        !key Yes
        !key No
-  A5;  !Use Weather File Rain and Snow Indicators
+  Yes;  !Use Weather File Rain and Snow Indicators
        !type choice
        !key Yes
        !key No
@@ -658,23 +657,23 @@ RunPeriod,
        !reference RunPeriodsAndDesignDays
        !descriptive name (used in reporting mainly)
        !if blank, weather file title is used. if not blank, must be unique
-  N1 , !Begin Month
+  1, !Begin Month
        !required-field
        !minimum 1
        !maximum 12
-  N2 , !Begin Day of Month
+  1, !Begin Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  N3 , !End Month
+  12, !End Month
        !required-field
        !minimum 1
        !maximum 12
-  N4 , !End Day of Month
+  N31, !End Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  A2 , !Day of Week for Start Day
+  Tuesday, !Day of Week for Start Day
        ! =<blank - use WeatherFile>|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday];
        !default UseWeatherFile
        !type choice
@@ -686,7 +685,7 @@ RunPeriod,
        !key Friday
        !key Saturday
        !key UseWeatherFile
-  A3,  !Use Weather File Holidays and Special Days
+  Yes,  !Use Weather File Holidays and Special Days
        !If yes or blank, use holidays as specified on Weatherfile.
        !If no, do not use the holidays specified on the Weatherfile.
        !Note: You can still specify holidays/special days using the RunPeriodControl:SpecialDays object(s).
@@ -694,40 +693,40 @@ RunPeriod,
        !default Yes
        !key Yes
        !key No
-  A4,  !Use Weather File Daylight Saving Period
+  Yes,  !Use Weather File Daylight Saving Period
        !If yes or blank, use daylight saving period as specified on Weatherfile.
        !If no, do not use the daylight saving period as specified on the Weatherfile.
        !type choice
        !default Yes
        !key Yes
        !key No
-  A5,  !Apply Weekend Holiday Rule
+  Yes,  !Apply Weekend Holiday Rule
        !if yes and single day holiday falls on weekend, "holiday" occurs on following Monday
        !type choice
        !key Yes
        !key No
        !default No
-  A6,  !Use Weather File Rain Indicators
+  Yes,  !Use Weather File Rain Indicators
        !type choice
        !key Yes
        !key No
        !default Yes
-  A7,  !Use Weather File Snow Indicators
+  Yes,  !Use Weather File Snow Indicators
        !type choice
        !key Yes
        !key No
        !default Yes
-  N5,  !Number of Times Runperiod to be Repeated
+  1,  !Number of Times Runperiod to be Repeated
        !type integer
        !minimum 1
        !default 1
-  A8,  !Increment Day of Week on repeat
+ Yes,  !Increment Day of Week on repeat
        !type choice
        !key Yes
        !key No
        !default Yes
-  N6;  !Start Year
-       !this is the start year for the start date.  If the leap year is "Yes" in the weather file header
+  2008;  !Start Year
+       !this is the start year for the start date. If the leap year is "Yes" in the weather file header
        !(that is HOLIDAYS/SPECIAL DAYS header first field), then any year which is a leap year will assume
        !there will be a Feb 29. A repeat of this runperiod will automatically increment the year.
 
@@ -739,29 +738,29 @@ RunPeriod:CustomRange,
        !reference RunPeriodsAndDesignDays
        !descriptive name (used in reporting mainly)
        !if blank, weather file title is used.  if not blank, must be unique
-  N1 , !Begin Month
+  1, !Begin Month
        !required-field
        !minimum 1
        !maximum 12
-  N2 , !Begin Day of Month
+  1, !Begin Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  N3,  !Begin Year
+  2008,  !Begin Year
        !required-field
        !must be start year of this date on weather file
-  N4 , !End Month
+  12, !End Month
        !required-field
        !minimum 1
        !maximum 12
-  N5 , !End Day of Month
+  12, !End Day of Month
        !required-field
        !minimum 1
        !maximum 31
-  N6,  !End Year
+  2008,  !End Year
        !required-field
        !must be end year of this date on weather file
-  A2 , !Day of Week for Start Day
+  Tuesday, !Day of Week for Start Day
        ! =<blank - use WeatherFile>|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday];
        !default UseWeatherFile
        !type choice
@@ -773,7 +772,7 @@ RunPeriod:CustomRange,
        !key Friday
        !key Saturday
        !key UseWeatherFile
-  A3,  !Use Weather File Holidays and Special Days
+  Yes,  !Use Weather File Holidays and Special Days
        !If yes or blank, use holidays as specified on Weatherfile.
        !If no, do not use the holidays specified on the Weatherfile.
        !Note: You can still specify holidays/special days using the RunPeriodControl:SpecialDays object(s).
@@ -781,25 +780,25 @@ RunPeriod:CustomRange,
        !default Yes
        !key Yes
        !key No
-  A4,  !Use Weather File Daylight Saving Period
+  Yes,  !Use Weather File Daylight Saving Period
        !If yes or blank, use daylight saving period as specified on Weatherfile.
        !If no, do not use the daylight saving period as specified on the Weatherfile.
        !type choice
        !default Yes
        !key Yes
        !key No
-  A5,  !Apply Weekend Holiday Rule
+  Yes,  !Apply Weekend Holiday Rule
        !if yes and single day holiday falls on weekend, "holiday" occurs on following Monday
        !type choice
        !key Yes
        !key No
        !default No
-  A6,  !Use Weather File Rain Indicators
+  Yes,  !Use Weather File Rain Indicators
        !type choice
        !key Yes
        !key No
        !default Yes
-  A7;  !Use Weather File Snow Indicators
+  Yes;  !Use Weather File Snow Indicators
        !type choice
        !key Yes
        !key No
@@ -814,7 +813,7 @@ RunPeriodControl:SpecialDays,
      !any specification shown here. (No error message on duplicate days or overlapping days).
  A1, !Name
      !required-field
- A2, !Start Date
+ 1/1, !Start Date
      !required-field
      !Dates can be several formats:
      !<number>/<number>  (month/day)
@@ -826,12 +825,12 @@ RunPeriodControl:SpecialDays,
      !Months can be the first 3 letters of the month
      !<Weekday> can be Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
      !<Nth> can be 1 or 1st, 2 or 2nd, etc. up to 5(?)
- N1, !Duration
+ 365, !Duration
      !units days
      !minimum 1
      !maximum 366
      !default 1
- A3; !Special Day Type
+ Holiday; !Special Day Type
        !required-field
        !Special Day Type selects the schedules appropriate for each day so labeled
        !type choice
@@ -848,9 +847,9 @@ RunPeriodControl:DaylightSavingTime,
      !Ignores any daylight saving time period on the weather file and uses this definition.
      !These are not used with SizingPeriod:DesignDay objects.
      !Use with SizingPeriod:WeatherFileDays object can be controlled in that object.
- A1, !Start Date
+ 3/23, !Start Date
      !required-field
- A2; !End Date
+ 10/26; !End Date
      !required-field
      !Dates can be several formats:
      !<number>/<number>  (month/day)
@@ -871,7 +870,7 @@ WeatherProperty:SkyTemperature,
        !otherwise, this name must match one of the environment object names.
        !type object-list
        !object-list RunPeriodsAndDesignDays
-  A2,  !Calculation Type
+  ScheduleValue,  !Calculation Type
        !required-field
        !type choice
        !key ScheduleValue
@@ -889,18 +888,18 @@ Site:WeatherStation,
        !This object should only be used for non-standard weather data. Standard weather data
        !such as TMY2, IWEC, and ASHRAE design day data are all measured at the
        !default conditions and do not require this object.
-  N1 , !Wind Sensor Height Above Ground
+ 10.0, !Wind Sensor Height Above Ground
        !units m
        !default 10.0
        !minimum> 0.0
-  N2 , !Wind Speed Profile Exponent
+  0.14, !Wind Speed Profile Exponent
        !default 0.14
        !minimum 0.0
-  N3 , !Wind Speed Profile Boundary Layer Thickness
+ 270.0, !Wind Speed Profile Boundary Layer Thickness
        !units m
        !default 270.0
        !minimum 0.0
-  N4 ; !Air Temperature Sensor Height Above Ground
+  1.5; !Air Temperature Sensor Height Above Ground
        !units m
        !default 1.5
        !minimum 0.0
@@ -910,15 +909,15 @@ Site:HeightVariation,
        !variations in wind speed and temperature. When this object is not present, the default model
        !for temperature dependence on height is used, and the wind speed is modeled according
        !to the Terrain field of the BUILDING object.
-  N1 , !Wind Speed Profile Exponent
+ 0.22, !Wind Speed Profile Exponent
        !Set to zero for no wind speed dependence on height.
        !default 0.22
        !minimum 0.0
-  N2 , !Wind Speed Profile Boundary Layer Thickness
+ 370.0, !Wind Speed Profile Boundary Layer Thickness
        !units m
        !default 370.0
        !minimum> 0.0
-  N3 ; !Air Temperature Gradient Coefficient
+ 0.0065; !Air Temperature Gradient Coefficient
        !Set to zero for no air temperature dependence on height.
        !units K/m
        !default 0.0065
@@ -934,51 +933,51 @@ Site:GroundTemperature:BuildingSurface,
        !average ground temperatures (see Auxiliary Programs). For typical commercial buildings
        !in the USA, a reasonable default value is 2C less than the average indoor space temperature.
        !min-fields 12
-  N1 , !January Ground Temperature
+  18,  !January Ground Temperature
        !required-field
        !units C
        !default 18
-  N2 , !February Ground Temperature
+  18 , !February Ground Temperature
        !required-field
        !units C
        !default 18
-  N3 , !March Ground Temperature
+  18 , !March Ground Temperature
        !required-field
        !units C
        !default 18
-  N4 , !April Ground Temperature
+  18 , !April Ground Temperature
        !required-field
        !units C
        !default 18
-  N5 , !May Ground Temperature
+  18 , !May Ground Temperature
        !required-field
        !units C
        !default 18
-  N6 , !June Ground Temperature
+  18 , !June Ground Temperature
        !required-field
        !units C
        !default 18
-  N7 , !July Ground Temperature
+  18 , !July Ground Temperature
        !required-field
        !units C
        !default 18
-  N8 , !August Ground Temperature
+  18 , !August Ground Temperature
        !required-field
        !units C
        !default 18
-  N9 , !September Ground Temperature
+  18 , !September Ground Temperature
        !required-field
        !units C
        !default 18
-  N10, !October Ground Temperature
+  18 , !October Ground Temperature
        !required-field
        !units C
        !default 18
-  N11, !November Ground Temperature
+  18 , !November Ground Temperature
        !required-field
        !units C
        !default 18
-  N12; !December Ground Temperature
+  18 ; !December Ground Temperature
        !required-field
        !units C
        !default 18
@@ -988,51 +987,51 @@ Site:GroundTemperature:FCfactorMethod,
        !defined with the C-factor and F-factor methods, and should be close to the
        !monthly average outdoor air temperature delayed by 3 months for the location.
        !min-fields 12
-  N1 , !January Ground Temperature
+  13 , !January Ground Temperature
        !required-field
        !units C
        !default 13
-  N2 , !February Ground Temperature
+  13 , !February Ground Temperature
        !required-field
        !units C
        !default 13
-  N3 , !March Ground Temperature
+  13 , !March Ground Temperature
        !required-field
        !units C
        !default 13
-  N4 , !April Ground Temperature
+  13 , !April Ground Temperature
        !required-field
        !units C
        !default 13
-  N5 , !May Ground Temperature
+  13 , !May Ground Temperature
        !required-field
        !units C
        !default 13
-  N6 , !June Ground Temperature
+  13 , !June Ground Temperature
        !required-field
        !units C
        !default 13
-  N7 , !July Ground Temperature
+  13 , !July Ground Temperature
        !required-field
        !units C
        !default 13
-  N8 , !August Ground Temperature
+  13 , !August Ground Temperature
        !required-field
        !units C
        !default 13
-  N9 , !September Ground Temperature
+  13 , !September Ground Temperature
        !required-field
        !units C
        !default 13
-  N10, !October Ground Temperature
+  13 , !October Ground Temperature
        !required-field
        !units C
        !default 13
-  N11, !November Ground Temperature
+  13 , !November Ground Temperature
        !required-field
        !units C
        !default 13
-  N12; !December Ground Temperature
+  13 ; !December Ground Temperature
        !required-field
        !units C
        !default 13
@@ -1043,51 +1042,51 @@ Site:GroundTemperature:Shallow,
        !They are not used in other models.
        !min-fields 12
        !format singleLine
-  N1 , !January Surface Ground Temperature
+  13 , !January Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N2 , !February Surface Ground Temperature
+  13 , !February Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N3 , !March Surface Ground Temperature
+  13 , !March Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N4 , !April Surface Ground Temperature
+  13 , !April Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N5 , !May Surface Ground Temperature
+  13 , !May Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N6 , !June Surface Ground Temperature
+  13 , !June Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N7 , !July Surface Ground Temperature
+  13 , !July Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N8 , !August Surface Ground Temperature
+  13 , !August Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N9 , !September Surface Ground Temperature
+  13 , !September Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N10, !October Surface Ground Temperature
+  13 , !October Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N11, !November Surface Ground Temperature
+  13 , !November Surface Ground Temperature
        !required-field
        !units C
        !default 13
-  N12; !December Surface Ground Temperature
+  13 ; !December Surface Ground Temperature
        !required-field
        !units C
        !default 13
@@ -1097,122 +1096,122 @@ Site:GroundTemperature:Deep,
        !"deep" (3-4 m depth) ground temperatures for their heat source.
        !They are not used in other models.
        !min-fields 12
-  N1 , !January Deep Ground Temperature
+  16 , !January Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N2 , !February Deep Ground Temperature
+  16 , !February Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N3 , !March Deep Ground Temperature
+  16 , !March Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N4 , !April Deep Ground Temperature
+  16 , !April Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N5 , !May Deep Ground Temperature
+  16 , !May Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N6 , !June Deep Ground Temperature
+  16 , !June Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N7 , !July Deep Ground Temperature
+  16 , !July Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N8 , !August Deep Ground Temperature
+  16 , !August Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N9 , !September Deep Ground Temperature
+  16 , !September Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N10, !October Deep Ground Temperature
+  16 , !October Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N11, !November Deep Ground Temperature
+  16 , !November Deep Ground Temperature
        !required-field
        !units C
        !default 16
-  N12; !December Deep Ground Temperature
+  16 ; !December Deep Ground Temperature
        !required-field
        !units C
        !default 16
 
 Site:GroundReflectance,
   !min-fields 12
-  N1 , !January Ground Reflectance
+   0.2, !January Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N2 , !February Ground Reflectance
+   0.2, !February Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N3 , !March Ground Reflectance
+   0.2, !March Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N4 , !April Ground Reflectance
+   0.2, !April Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N5 , !May Ground Reflectance
+   0.2, !May Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N6 , !June Ground Reflectance
+   0.2, !June Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N7 , !July Ground Reflectance
+   0.2, !July Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N8 , !August Ground Reflectance
+   0.2, !August Ground Reflectance
         !default 0.2
         !minimum 0.0
         !maximum 1.0
         !units dimensionless
-   N9 , !September Ground Reflectance
+   0.2, !September Ground Reflectance
          !default 0.2
          !minimum 0.0
          !maximum 1.0
          !units dimensionless
-   N10 , !October Ground Reflectance
+   0.2,  !October Ground Reflectance
          !default 0.2
          !minimum 0.0
          !maximum 1.0
          !units dimensionless
-   N11 , !November Ground Reflectance
+   0.2,  !November Ground Reflectance
          !default 0.2
          !minimum 0.0
          !maximum 1.0
          !units dimensionless
-   N12 ; !December Ground Reflectance
+   0.2 ; !December Ground Reflectance
          !default 0.2
          !minimum 0.0
          !maximum 1.0
          !units dimensionless
 
 Site:GroundReflectance:SnowModifier,
-  N1, !Ground Reflected Solar Modifier
-  !minimum 0.0
-  !default 1.0
+ 1.0, !Ground Reflected Solar Modifier
+    !minimum 0.0
+    !default 1.0
     !Value for modifying the "normal" ground reflectance when Snow is on ground
     !when calculating the "Ground Reflected Solar Radiation Value"
     !a value of 1.0 here uses the "normal" ground reflectance
@@ -1220,9 +1219,9 @@ Site:GroundReflectance:SnowModifier,
     !This would be further modified by the Snow Ground Reflectance Modifier when Snow was on the ground
     !When Snow on ground, effective GroundReflectance is normal GroundReflectance*"Ground Reflectance Snow Modifier"
     !Ground Reflectance achieved in this manner will be restricted to [0.0,1.0]
-  N2; !Daylighting Ground Reflected Solar Modifier
-  !minimum 0.0
-  !default 1.0
+  1.0; !Daylighting Ground Reflected Solar Modifier
+    !minimum 0.0
+    !default 1.0
     !Value for modifying the "normal" daylighting ground reflectance when Snow is on ground
     ! when calculating the "Ground Reflected Solar Radiation Value"
     ! a value of 1.0 here uses the "normal" ground reflectance
@@ -1232,7 +1231,7 @@ Site:GroundReflectance:SnowModifier,
     !Ground Reflectance achieved in this manner will be restricted to [0.0,1.0]
 
 Site:WaterMainsTemperature,
-  A1 , !Calculation Method
+  Schedule, !Calculation Method
        !required-field
        !type choice
        !key Schedule
@@ -1247,7 +1246,7 @@ Site:WaterMainsTemperature,
        !minimum 0
 
 Site:Precipitation,
-  A1, !Precipitation Model Type
+ ScheduleAndDesignLevel, !Precipitation Model Type
       !type choice
       !key ScheduleAndDesignLevel
   N1, !Design Level for Total Annual Precipitation
@@ -1275,7 +1274,7 @@ RoofIrrigation,
       !object-list ScheduleNames
       !Schedule values in meters of water per hour
       !values should be non-negative
-  N1; !Irrigation Maximum Saturation Threshold
+ 40.0; !Irrigation Maximum Saturation Threshold
       !Used with SmartSchedule to set the saturation level at which no irrigation is allowed.
       !units percent
       !minimum 0.0
@@ -1340,53 +1339,53 @@ Schedule:Day:Hourly,
   A2 , !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
-  N1 , !Hour 1
+  0 , !Hour 1
        !default 0
-  N2 , !Hour 2
+  0 , !Hour 2
        !default 0
-  N3 , !Hour 3
+  0 , !Hour 3
        !default 0
-  N4 , !Hour 4
+  0 , !Hour 4
        !default 0
-  N5 , !Hour 5
+  0 , !Hour 5
        !default 0
-  N6 , !Hour 6
+  0 , !Hour 6
        !default 0
-  N7 , !Hour 7
+  0 , !Hour 7
        !default 0
-  N8 , !Hour 8
+  0 , !Hour 8
        !default 0
-  N9 , !Hour 9
+  0 , !Hour 9
        !default 0
-  N10, !Hour 10
+  0 , !Hour 10
        !default 0
-  N11, !Hour 11
+  0 , !Hour 11
        !default 0
-  N12, !Hour 12
+  0 , !Hour 12
        !default 0
-  N13, !Hour 13
+  0 , !Hour 13
        !default 0
-  N14, !Hour 14
+  0 , !Hour 14
        !default 0
-  N15, !Hour 15
+  0 , !Hour 15
        !default 0
-  N16, !Hour 16
+  0 , !Hour 16
        !default 0
-  N17, !Hour 17
+  0 , !Hour 17
        !default 0
-  N18, !Hour 18
+  0 , !Hour 18
        !default 0
-  N19, !Hour 19
+  0 , !Hour 19
        !default 0
-  N20, !Hour 20
+  0 , !Hour 20
        !default 0
-  N21, !Hour 21
+  0 , !Hour 21
        !default 0
-  N22, !Hour 22
+  0 , !Hour 22
        !default 0
-  N23, !Hour 23
+  0 , !Hour 23
        !default 0
-  N24; !Hour 24
+  0 ; !Hour 24
        !default 0
 
 Schedule:Day:Interval,
@@ -1401,15 +1400,15 @@ Schedule:Day:Interval,
   A2 , !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
-  A3 , !Interpolate to Timestep
+  No, !Interpolate to Timestep
        !when the interval does not match the user specified timestep a Yes choice will average between the 
        !intervals request (to timestep resolution. a No choice will use the interval value at the simulation 
-       !timestep without regard to if it matehes the boundary or not.
+       !timestep without regard to if it matches the boundary or not.
        !type choice
        !key Yes
        !key No
        !default No
- A4  , !Time 1
+  A4 , !Time 1
        !begin-extensible
        !"until" includes the time entered.
        !units hh:mm
@@ -1714,7 +1713,7 @@ Schedule:Day:List,
   A2 , !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
-  A3 , !Interpolate to Timestep
+  No , !Interpolate to Timestep
        !when the interval does not match the user specified timestep a "Yes" choice will average between the 
        !intervals request (to timestep resolution. a "No" choice will use the interval value at the 
        !simulation timestep without regard to if it matches the boundary or not.
@@ -1726,7 +1725,7 @@ Schedule:Day:List,
        !Must be evenly divisible into 60
        !minimum 1
        !maximum 60
-  N2,  !field Value 1
+  0.0,  !field Value 1
        !default 0.0
         N3,N4,         N5,N6,N7,N8,         N9,N10,N11,N12,      N13,N14,N15,N16,     N17,N18,N19,N20, !fields as indicated
   N21,N22,N23,N24,     N25,N26,N27,N28,     N29,N30,N31,N32,     N33,N34,N35,N36,     N37,N38,N39,N40, ! fields as indicated
@@ -2886,7 +2885,7 @@ Schedule:Constant,
   A2 , !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
-  N1 ; !Hourly Value
+  0 ; !Hourly Value
        !default 0
 
 Schedule:File,
@@ -2906,13 +2905,13 @@ Schedule:File,
   N2 , !Rows to Skip at Top
        !required-field
        !minimum 0
-  N3 , !Number of Hours of Data
+  8784, !Number of Hours of Data
        !8760 hours does not account for leap years, 8784 does.
        !should be either 8760 or 8784
        !default 8760
        !minimum 8760
        !maximum 8784
-  A4 ; !Column Separator
+  comma; !Column Separator
        !type choice
        !key Comma
        !key Tab
@@ -2988,15 +2987,15 @@ Material:NoMass,
        !required-field
        !units m2-K/W
        !minimum .001
-  N2 , !Thermal Absorptance
+  .9 , !Thermal Absorptance
        !minimum> 0
        !default .9
        !maximum 0.99999
-  N3 , !Solar Absorptance
+  .7 , !Solar Absorptance
        !minimum 0
        !default .7
        !maximum 1
-  N4 ; !Visible Absorptance
+  .7 ; !Visible Absorptance
        !minimum 0
        !default .7
        !maximum 1
@@ -3034,40 +3033,40 @@ Material:RoofVegetation,
   A1 ,!Name
       !required-field
       !reference MaterialName
-  N1 ,!Height of Plants
+  .2 ,!Height of Plants
       !The ecoroof module is designed for short plants and shrubs.
       !minimum> 0.005
       !maximum  1.0
       !units m
       !default .2
-  N2 ,!Leaf Area Index
+  1.0,!Leaf Area Index
       !required-field
       !units dimensionless
       !Entire surface is assumed covered, so decrease LAI accordingly.
       !minimum> 0.001
       !maximum 5.0
       !default 1.0
-  N3 ,!Leaf Reflectivity
+ 0.22,!Leaf Reflectivity
       !required-field
       !units dimensionless
       !Leaf reflectivity (albedo) is typically 0.18-0.25
       !maximum 0.5
       !minimum 0.05
       !default 0.22
-  N4 ,!Leaf Emissivity
+ 0.95,!Leaf Emissivity
       !required-field
       !minimum 0.8
       !maximum 1.0
       !default 0.95
-  N5 ,!Minimum Stomatal Resistance
+ 180.0,!Minimum Stomatal Resistance
       !units s/m
       !default 180.0
       !This depends upon plant type
       !minimum 50.0
       !maximum 300.
-  A2 ,!Soil Layer Name
+ Green Roof Soil,!Soil Layer Name
       !default Green Roof Soil
-  A3 ,!Roughness
+ MediumRough,!Roughness
       !required-field
       !type choice
       !key VeryRough
@@ -3077,7 +3076,7 @@ Material:RoofVegetation,
       !key MediumSmooth
       !key VerySmooth
       !default MediumRough
-  N6 ,!Thickness
+  0.1,!Thickness
       !thickness of the soil layer of the EcoRoof
       !required-field
       !units m
@@ -3086,7 +3085,7 @@ Material:RoofVegetation,
       !minimum> 0.05
       !maximum 0.7
       !ip-units in
-  N7 ,!Conductivity of Dry Soil
+ 0.35,!Conductivity of Dry Soil
       !required-field
       !units W/m-K
       !Thermal conductivity of dry soil.
@@ -3094,7 +3093,7 @@ Material:RoofVegetation,
       !default 0.35
       !minimum  0.2
       !maximum 1.5
-  N8 ,!Density of Dry Soil
+ 1100,!Density of Dry Soil
       !required-field
       !units kg/m3
       !Density of dry soil (the code modifies this as the soil becomes moist)
@@ -3102,42 +3101,42 @@ Material:RoofVegetation,
       !minimum 300
       !maximum 2000
       !default 1100
-  N9 ,!Specific Heat of Dry Soil
+ 1200,!Specific Heat of Dry Soil
       !required-field
       !units J/kg-K
       !Specific heat of dry soil
       !minimum> 500
       !maximum 2000
       !default 1200
-  N10,!Thermal Absorptance
+  .9 ,!Thermal Absorptance
       !Soil emissivity is typically in range of 0.90 to 0.98
       !minimum> 0.8
       !default .9
       !maximum 1.0
-  N11,!Solar Absorptance
+  .70,!Solar Absorptance
       !Solar absorptance of dry soil (1-albedo) is typically 0.60 to 0.85
       !corresponding to a dry albedo of 0.15 to 0.40
       !default .70
       !minimum 0.40
       !maximum 0.9
-  N12,!Visible Absorptance
+  .75,!Visible Absorptance
       !minimum> 0.5
       !default .75
       !maximum 1.0
-  N13,!Saturation Volumetric Moisture Content of the Soil Layer
+  0.3,!Saturation Volumetric Moisture Content of the Soil Layer
       !Maximum moisture content is typically less than 0.5
       !minimum> 0.1
       !maximum 0.5
       !default 0.3
-  N14,!Residual Volumetric Moisture Content of the Soil Layer
+ 0.01,!Residual Volumetric Moisture Content of the Soil Layer
       !minimum  0.01
       !maximum  0.1
       !default 0.01
-  N15,!Initial Volumetric Moisture Content of the Soil Layer
+  0.1,!Initial Volumetric Moisture Content of the Soil Layer
       !minimum> 0.05
       !maximum  0.5
       !default 0.1
-  A4; !Moisture Diffusion Calculation Method
+ Advanced; !Moisture Diffusion Calculation Method
       !Advanced calculation requires increased number of timesteps (recommended >20).
       !type choice
       !key Simple
@@ -3217,27 +3216,27 @@ WindowMaterial:Glazing,
        !Used only when Optical Data Type = SpectralAverage
        !minimum 0.0
        !maximum 1.0
-  N8 , !Infrared Transmittance at Normal Incidence
+  0.0, !Infrared Transmittance at Normal Incidence
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N9 , !Front Side Infrared Hemispherical Emissivity
+ 0.84, !Front Side Infrared Hemispherical Emissivity
        !minimum> 0.0
        !maximum< 1.0
        !default 0.84
-  N10, !Back Side Infrared Hemispherical Emissivity
+ 0.84, !Back Side Infrared Hemispherical Emissivity
        !minimum> 0.0
        !maximum< 1.0
        !default 0.84
-  N11, !Conductivity
+  0.9, !Conductivity
        !units W/m-K
        !minimum> 0.0
        !default 0.9
-  N12, !Dirt Correction Factor for Solar and Visible Transmittance
+  1.0, !Dirt Correction Factor for Solar and Visible Transmittance
        !minimum> 0.0
        !maximum 1.0
        !default 1.0
-  A4;  !Solar Diffusing
+  No;  !Solar Diffusing
        !type choice
        !key No
        !key Yes
@@ -3380,24 +3379,24 @@ WindowMaterial:Glazing:RefractionExtinctionMethod,
        !required-field
        !units 1/m
        !minimum> 0.0
-  N6 , !Infrared Transmittance at Normal Incidence
+  0.0, !Infrared Transmittance at Normal Incidence
        !maximum< 1.0
        !minimum 0.0
        !default 0.0
-  N7 , !Infrared Hemispherical Emissivity
+ 0.84, !Infrared Hemispherical Emissivity
        !Emissivity of front and back side assumed equal
        !maximum< 1.0
        !minimum> 0.0
        !default 0.84
-  N8 , !Conductivity
+  0.9, !Conductivity
        !units W/m-K
        !minimum> 0.0
        !default 0.9
-  N9 , !Dirt Correction Factor for Solar and Visible Transmittance
+  1.0, !Dirt Correction Factor for Solar and Visible Transmittance
        !minimum> 0.0
        !maximum 1.0
        !default 1.0
-  A2 ; !Solar Diffusing
+  No ; !Solar Diffusing
        !type choice
        !key No
        !key Yes
@@ -3554,29 +3553,29 @@ WindowMaterial:Shade,
        !required-field
        !units W/m-K
        !minimum> 0
-  N9 , !Shade to Glass Distance
+ 0.050, !Shade to Glass Distance
        !units m
        !minimum 0.001
        !maximum 1.0
        !default 0.050
        !ip-units in
-  N10, !Top Opening Multiplier
+  0.5, !Top Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N11, !Bottom Opening Multiplier
+  0.5, !Bottom Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N12, !Left-Side Opening Multiplier
+  0.5, !Left-Side Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N13, !Right-Side Opening Multiplier
+  0.5, !Right-Side Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N14; !Airflow Permeability
+  0.0; !Airflow Permeability
        !units dimensionless
        !minimum 0.0
        !maximum 0.8
@@ -3607,7 +3606,7 @@ WindowMaterial:Blind,
        !minimum> 0
        !maximum 1
        !ip-units in
-  N3 , !Slat Thickness
+ 0.00025, !Slat Thickness
        !Distance between top and bottom surfaces of slat
        !Slat is assumed to be rectangular in cross section and flat
        !units m
@@ -3615,7 +3614,7 @@ WindowMaterial:Blind,
        !maximum 0.1
        !default 0.00025
        !ip-units in
-  N4 , !Slat Angle
+  45 , !Slat Angle
        !If WindowProperty:ShadingControl for the window that incorporates this blind
        !has Type of Slat Angle Control for Blinds = FixedSlatAngle,
        !then this is the fixed value of the slat angle;
@@ -3629,24 +3628,24 @@ WindowMaterial:Blind,
        !default 45
        !minimum 0
        !maximum 180
-  N5 , !Slat Conductivity
+ 221.0, !Slat Conductivity
        !units W/m-K
        !minimum> 0
        !default 221.0
        !default is for aluminum
-  N6 , !Slat Beam Solar Transmittance
+  0 , !Slat Beam Solar Transmittance
        !maximum< 1
        !minimum 0
        !default 0
-  N7 , !Front Side Slat Beam Solar Reflectance
+  0 , !Front Side Slat Beam Solar Reflectance
        !required-field
        !maximum< 1
        !minimum 0
-  N8 , !Back Side Slat Beam Solar Reflectance
+  0 , !Back Side Slat Beam Solar Reflectance
        !required-field
        !maximum< 1
        !minimum 0
-  N9 , !Slat Diffuse Solar Transmittance
+  0 , !Slat Diffuse Solar Transmittance
        !Must equal "Slat beam solar transmittance"
        !maximum< 1
        !minimum 0
@@ -3690,41 +3689,41 @@ WindowMaterial:Blind,
        !Must equal "Back Side Slat Beam Visible Reflectance"
        !maximum< 1
        !minimum 0
-  N18, !Slat Infrared Hemispherical Transmittance
+  0, !Slat Infrared Hemispherical Transmittance
        !maximum< 1
        !minimum 0
        !default 0
-  N19, !Front Side Slat Infrared Hemispherical Emissivity
+  0.9, !Front Side Slat Infrared Hemispherical Emissivity
        !maximum< 1
        !minimum 0
        !default 0.9
-  N20, !Back Side Slat Infrared Hemispherical Emissivity
+  0.9, !Back Side Slat Infrared Hemispherical Emissivity
        !maximum< 1
        !minimum 0
        !default 0.9
-  N21, !Blind to Glass Distance
+ 0.050, !Blind to Glass Distance
        !units m
        !minimum 0.01
        !maximum 1.0
        !default 0.050
        !ip-units in
-  N22, !Blind Top Opening Multiplier
+  0.5, !Blind Top Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N23, !Blind Bottom Opening Multiplier
+  0.0, !Blind Bottom Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N24, !Blind Left Side Opening Multiplier
+  0.5, !Blind Left Side Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N25, !Blind Right Side Opening Multiplier
+  0.5, !Blind Right Side Opening Multiplier
        !minimum 0.0
        !maximum 1.0
        !default 0.5
-  N26, !Minimum Slat Angle
+  0, !Minimum Slat Angle
        !Used only if WindowProperty:ShadingControl for the window that incorporates
        !this blind varies the slat angle (i.e., WindowProperty:ShadingControl with
        !Type of Slat Angle Control for Blinds = ScheduledSlatAngle or BlockBeamSolar)
@@ -3732,7 +3731,7 @@ WindowMaterial:Blind,
        !default 0
        !minimum 0
        !maximum 180
-  N27; !Maximum Slat Angle
+  180; !Maximum Slat Angle
        !Used only if WindowProperty:ShadingControl for the window that incorporates
        !this blind varies the slat angle (i.e., WindowProperty:ShadingControl with
        !Type of Slat Angle Control for Blinds = ScheduledSlatAngle or BlockBeamSolar)
@@ -3749,7 +3748,7 @@ WindowMaterial:Screen,
        !required-field
        !reference MaterialName
        !reference WindowShadesScreensAndBlinds
-  A2 , !Reflected Beam Transmittance Accounting Method
+ ModelAsDiffuse, !Reflected Beam Transmittance Accounting Method
        !Select the method used to account for the beam solar reflected off the material surface.
        !type choice
        !key DoNotModel
@@ -3771,14 +3770,14 @@ WindowMaterial:Screen,
        !units dimensionless
        !minimum 0
        !maximum< 1
-  N3 , !Thermal Hemispherical Emissivity
+  0.9, !Thermal Hemispherical Emissivity
        !Long-wave emissivity of the screen material.
        !Assumed to be the same for both sides of the screen.
        !units dimensionless
        !maximum< 1
        !minimum> 0
        !default 0.9
-  N4 , !Conductivity
+ 221.0, !Conductivity
        !Thermal conductivity of the screen material.
        !units W/m-K
        !minimum> 0
@@ -3796,38 +3795,38 @@ WindowMaterial:Screen,
        !units m
        !minimum> 0
        !ip-units in
-  N7 , !Screen to Glass Distance
+ 0.025, !Screen to Glass Distance
        !Distance from the window screen to the adjacent glass surface.
        !units m
        !minimum 0.001
        !maximum 1.0
        !default 0.025
        !ip-units in
-  N8 , !Top Opening Multiplier
+  0.0, !Top Opening Multiplier
        !Effective area for air flow at the top of the screen divided by the perpendicular
        !area between the glass and the top of the screen.
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N9 , !Bottom Opening Multiplier
+  0.0, !Bottom Opening Multiplier
        !Effective area for air flow at the bottom of the screen divided by the perpendicular
        !area between the glass and the bottom of the screen.
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N10, !Left Side Opening Multiplier
+  0.0, !Left Side Opening Multiplier
        !Effective area for air flow at the left side of the screen divided by the perpendicular
        !area between the glass and the left side of the screen.
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N11, !Right Side Opening Multiplier
+  0.0, !Right Side Opening Multiplier
        !Effective area for air flow at the right side of the screen divided by the perpendicular
        !area between the glass and the right side of the screen.
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N12; !Angle of Resolution for Screen Transmittance Output Map
+  0; !Angle of Resolution for Screen Transmittance Output Map
        !Select the resolution of azimuth and altitude angles for the screen transmittance map.
        !A value of 0 means no transmittance map will be generated.
        !Valid values for this field are 0, 1, 2, 3 and 5.
@@ -3881,143 +3880,143 @@ MaterialProperty:PhaseChange,
        !object-list MaterialName
        !Regular Material Name to which the additional properties will be added.
        !this the material name for the basic material properties.
-  N1 , !Temperature Coefficient for Thermal Conductivity
+  0.0, !Temperature Coefficient for Thermal Conductivity
        !The base temperature is 20C.
        !This is the thermal conductivity change per degree excursion from 20C.
        !This variable conductivity function is overridden by the VariableThermalConductivity object, if present.
        !units W/m-K2
        !default 0.0
-  N2 , !Temperature 1
+  0.0, !Temperature 1
        !required-field
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N3,  !Enthalpy 1
+  0.0, !Enthalpy 1
        !required-field
        !for Temperature-enthalpy function corresponding to temperature 1
        !units J/kg
        !default 0.0
-  N4 , !Temperature 2
+  0.0, !Temperature 2
        !required-field
-       !note for Temperature-enthalpy function
+       !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N5,  !Enthalpy 2
+  0.0, !Enthalpy 2
        !required-field
        !for Temperature-enthalpy function corresponding to temperature 2
        !units J/kg
        !default 0.0
-  N6 , !Temperature 3
+  0.0, !Temperature 3
        !required-field
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N7,  !Enthalpy 3
+  0.0, !Enthalpy 3
        !required-field
        !for Temperature-enthalpy function corresponding to temperature 3
        !units J/kg
        !default 0.0
-  N8 , !Temperature 4
+  0.0, !Temperature 4
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N9,  !Enthalpy 4
+  0.0, !Enthalpy 4
        !for Temperature-enthalpy function corresponding to temperature 4
        !units J/kg
        !default 0.0
-  N10, !Temperature 5
+  0.0, !Temperature 5
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N11, !Enthalpy 5
+  0.0, !Enthalpy 5
        !for Temperature-enthalpy function corresponding to temperature 5
        !units J/kg
        !default 0.0
-  N12, !Temperature 6
+  0.0, !Temperature 6
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N13, !Enthalpy 6
+  0.0, !Enthalpy 6
        !for Temperature-enthalpy function corresponding to temperature 6
        !units J/kg
        !default 0.0
-  N14, !Temperature 7
+  0.0, !Temperature 7
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N15, !Enthalpy 7
+  0.0, !Enthalpy 7
        !for Temperature-enthalpy function corresponding to temperature 7
        !units J/kg
        !default 0.0
-  N16, !Temperature 8
+  0.0, !Temperature 8
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N17, !Enthalpy 8
+  0.0, !Enthalpy 8
        !for Temperature-enthalpy function corresponding to temperature 8
        !units J/kg
        !default 0.0
-  N18 , !Temperature 9
+  0.0, !Temperature 9
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N19, !Enthalpy 9
+  0.0, !Enthalpy 9
        !for Temperature-enthalpy function corresponding to temperature 1
        !units J/kg
        !default 0.0
-  N20, !Temperature 10
+  0.0, !Temperature 10
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N21, !Enthalpy 10
+  0.0, !Enthalpy 10
        !for Temperature-enthalpy function corresponding to temperature 2
        !units J/kg
        !default 0.0
-  N22, !Temperature 11
+  0.0, !Temperature 11
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N23, !Enthalpy 11
+  0.0, !Enthalpy 11
        !for Temperature-enthalpy function corresponding to temperature 3
        !units J/kg
        !default 0.0
-  N24, !Temperature 12
+  0.0, !Temperature 12
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N25, !Enthalpy 12
+  0.0, !Enthalpy 12
        !for Temperature-enthalpy function corresponding to temperature 14
        !units J/kg
        !default 0.0
-  N26, !Temperature 13
+  0.0, !Temperature 13
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N27, !Enthalpy 13
+  0.0, !Enthalpy 13
        !for Temperature-enthalpy function corresponding to temperature 15
        !units J/kg
        !default 0.0
-  N28, !Temperature 14
+  0.0, !Temperature 14
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N29, !Enthalpy 14
+  0.0, !Enthalpy 14
        !for Temperature-enthalpy function corresponding to temperature 16
        !units J/kg
        !default 0.0
-  N30, !Temperature 15
+  0.0, !Temperature 15
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N31, !Enthalpy 15
+  0.0, !Enthalpy 15
        !for Temperature-enthalpy function corresponding to temperature 17
        !units J/kg
        !default 0.0
-  N32, !Temperature 16
+  0.0, !Temperature 16
        !for Temperature-enthalpy function
        !units C
        !default 0.0
-  N33; !Enthalpy 16
+  0.0; !Enthalpy 16
        !for Temperature-enthalpy function corresponding to temperature 16
        !units J/kg
        !default 0.0
@@ -4033,89 +4032,89 @@ MaterialProperty:VariableThermalConductivity,
        !object-list MaterialName
        !Regular Material Name to which the additional properties will be added.
        !this the material name for the basic material properties.
-  N1 , !Temperature 1
+  0.0, !Temperature 1
        !required-field
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N2,  !Thermal Conductivity 1
+  0.0, !Thermal Conductivity 1
        !required-field
        !for Temperature-Thermal Conductivity function corresponding to temperature 1
        !units W/m-K
        !default 0.0
-  N3 , !Temperature 2
+  0.0, !Temperature 2
        !required-field
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N4,  !Thermal Conductivity 2
+  0.0, !Thermal Conductivity 2
        !required-field
        !for Temperature-Thermal Conductivity function corresponding to temperature 2
        !units W/m-K
        !default 0.0
-  N5 , !Temperature 3
+  0.0, !Temperature 3
        !required-field
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N6,  !Thermal Conductivity 3
+  0.0, !Thermal Conductivity 3
        !required-field
        !for Temperature-Thermal Conductivity function corresponding to temperature 3
        !units W/m-K
        !default 0.0
-  N7 , !Temperature 4
+  0.0, !Temperature 4
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N8,  !Thermal Conductivity 4
+  0.0, !Thermal Conductivity 4
        !for Temperature-Thermal Conductivity function corresponding to temperature 4
        !units W/m-K
        !default 0.0
-  N9, !Temperature 5
+  0.0, !Temperature 5
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N10, !Thermal Conductivity 5
+  0.0, !Thermal Conductivity 5
        !Temperature-Thermal Conductivity function corresponding to temperature 5
        !units W/m-K
        !default 0.0
-  N11, !Temperature 6
+  0.0, !Temperature 6
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N12, !Thermal Conductivity 6
+  0.0, !Thermal Conductivity 6
        !for Temperature-Thermal Conductivity function corresponding to temperature 6
        !units W/m-K
        !default 0.0
-  N13, !Temperature 7
+  0.0, !Temperature 7
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N14, !Thermal Conductivity 7
+  0.0, !Thermal Conductivity 7
        !for Temperature-Thermal Conductivity function corresponding to temperature 7
        !units W/m-K
        !default 0.0
-  N15, !Temperature 8
+  0.0, !Temperature 8
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N16, !Thermal Conductivity 8
+  0.0, !Thermal Conductivity 8
        !for Temperature-Thermal Conductivity function corresponding to temperature 8
        !units W/m-K
        !default 0.0
-  N17 , !Temperature 9
+  0.0, !Temperature 9
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N18,  !Thermal Conductivity 9
+  0.0, !Thermal Conductivity 9
        !for Temperature-Thermal Conductivity function corresponding to temperature 9
        !units W/m-K
        !default 0.0
-  N19 , !Temperature 10
+  0.0, !Temperature 10
        !for Temperature-Thermal Conductivity function
        !units C
        !default 0.0
-  N20;  !Thermal Conductivity 10
+  0.0; !Thermal Conductivity 10
        !for Temperature-Thermal Conductivity function corresponding to temperature 10
        !units W/m-K
        !default 0.0
@@ -4135,7 +4134,7 @@ MaterialProperty:HeatAndMoistureTransfer:Settings,
       !units m3/m3
       !minimum 0.0
       !maximum 1.0
-  N2; !Initial Water Content Ratio
+ 0.2; !Initial Water Content Ratio
       !units are the water/material density ratio at the begining of each run period.
       !required-field
       !units kg/kg
@@ -4156,12 +4155,12 @@ MaterialProperty:HeatAndMoistureTransfer:SorptionIsotherm,
        !Number of data Coordinates
        !minimum 1
        !maximum 25
-       !type integer
   N2, !Relative Humidity Fraction 1
       !required-field
       !The relative humidity is entered as a fraction.
       !minimum 0.0
       !maximum 1.0
+  N3, !Moisture Content 1
       !required-field
       !minimum 0.0
       !units kg/m3
@@ -5321,7 +5320,7 @@ Construction:InternalSource,
        !minimum 1
        !maximum 2
        !1 = 1-dimensional calculation, 2 = 2-dimensional calculation
-  N4 , !field Tube Spacing
+  N4 , !Tube Spacing
        !required-field
        !units m
        !uniform spacing between tubes or resistance wires in direction
@@ -5376,7 +5375,7 @@ GlobalGeometryRules,
       !required-field
       !Specified as entry for a 4 sided surface/rectangle
       !Surfaces are specified as viewed from outside the surface
-      !Shading surfaces as viewed from behind.  (towards what they are shading)
+      !Shading surfaces as viewed from behind. (towards what they are shading)
       !type choice
       !key UpperLeftCorner
       !key LowerLeftCorner
@@ -5439,23 +5438,23 @@ Zone,
        !reference OutFaceEnvNames
        !reference ZoneAndZoneListNames
        !reference AirflowNetworkNodeAndZoneNames
-  N1 , !Direction of Relative North
+  0 , !Direction of Relative North
        !units deg
        !default 0
-  N2 , !X Origin
+  0 , !X Origin
        !units m
        !default 0
-  N3 , !Y Origin
+  0 , !Y Origin
        !units m
        !default 0
-  N4 , !Z Origin
+  0 , !Z Origin
        !units m
        !default 0
-  N5 , !Type
+  1 , !Type
        !maximum 1
        !minimum 1
        !default 1
-  N6 , !Multiplier
+  1 , !Multiplier
        !minimum 1
        !default 1
   N7 , !Ceiling Height
@@ -5510,7 +5509,7 @@ Zone,
        !MoWiTT = correlation from measurements by Klems and Yazdanian for smooth surfaces
        !DOE-2 = correlation from measurements by Klems and Yazdanian for rough surfaces
        !AdaptiveConvectionAlgorithm = dynamic selection of correlations based on conditions
-  A4;  !Part of Total Floor Area
+ Yes;  !Part of Total Floor Area
        !type choice
        !key Yes
        !key No
@@ -6309,13 +6308,13 @@ RoofCeiling:Detailed,
        !the program will generate the corresponding interzone surface
        !If OtherSideCoefficients, specify name of SurfaceProperty:OtherSideCoefficients
        !If OtherSideConditionsModel, specify name of SurfaceProperty:OtherSideConditionsModel
-  A6 , !Sun Exposure
+ SunExposed, !Sun Exposure
        !required-field
        !type choice
        !key SunExposed
        !key NoSun
        !default SunExposed
-  A7,  !Wind Exposure
+WindExposed,  !Wind Exposure
        !required-field
        !type choice
        !key WindExposed
@@ -6426,13 +6425,13 @@ Floor:Detailed,
        !the program will generate the corresponding interzone surface
        !If OtherSideCoefficients, specify name of SurfaceProperty:OtherSideCoefficients
        !If OtherSideConditionsModel, specify name of SurfaceProperty:OtherSideConditionsModel
-  A6 , !Sun Exposure
+ SunExposed, !Sun Exposure
        !required-field
        !type choice
        !key SunExposed
        !key NoSun
        !default SunExposed
-  A7,  !Wind Exposure
+ WindExposed,  !Wind Exposure
        !required-field
        !type choice
        !key WindExposed
@@ -6518,7 +6517,7 @@ Wall:Exterior,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !Walls are usually tilted 90 degrees
        !default 90
        !minimum 0
@@ -6563,7 +6562,7 @@ Wall:Adiabatic,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !Walls are usually tilted 90 degrees
        !default 90
        !minimum 0
@@ -6610,7 +6609,7 @@ Wall:Underground,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !Walls are usually tilted 90 degrees
        !default 90
        !minimum 0
@@ -6663,7 +6662,7 @@ Wall:Interzone,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !Walls are usually tilted 90 degrees
        !default 90
        !minimum 0
@@ -6709,7 +6708,7 @@ Roof,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  0,  !Tilt Angle
        !Flat Roofs are tilted 0 degrees
        !minimum 0
        !maximum 180
@@ -6756,7 +6755,7 @@ Ceiling:Adiabatic,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  0,  !Tilt Angle
        !Ceilings are usually tilted 0 degrees
        !minimum 0
        !maximum 180
@@ -6812,7 +6811,7 @@ Ceiling:Interzone,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  0,  !Tilt Angle
        !Ceilings are usually tilted 0 degrees
        !minimum 0
        !maximum 180
@@ -6861,7 +6860,7 @@ Floor:GroundContact,
        !units deg
        !minimum 0
        !maximum 360
-  N2,  !Tilt Angle
+  180,  !Tilt Angle
        !Floors are usually tilted 180 degrees
        !units deg
        !minimum 0
@@ -6908,7 +6907,7 @@ Floor:Adiabatic,
        !units deg
        !minimum 0
        !maximum 360
-  N2,  !Tilt Angle
+  180,  !Tilt Angle
        !Floors are usually tilted 180 degrees
        !units deg
        !minimum 0
@@ -6963,7 +6962,7 @@ Floor:Interzone,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  180,  !Tilt Angle
        !Floors are usually tilted 180 degrees
        !minimum 0
        !maximum 180
@@ -7046,7 +7045,7 @@ FenestrationSurface:Detailed,
        !Unused for triangular windows.
        !If not specified (blank), window or glass door has no frame or divider
        !and no beam solar reflection from reveal surfaces.
-  N2 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7109,7 +7108,7 @@ Window,
        !Unused for triangular windows.
        !If not specified (blank), window or glass door has no frame or divider
        !and no beam solar reflection from reveal surfaces.
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7148,7 +7147,7 @@ Door,
        !required-field
        !type object-list
        !object-list SurfaceNames
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7201,7 +7200,7 @@ GlazedDoor,
        !Unused for triangular windows.
        !If not specified (blank), window or glass door has no frame or divider
        !and no beam solar reflection from reveal surfaces.
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7248,7 +7247,7 @@ Window:Interzone,
        !the interior window in the adjacent zone.
        !a blank field will set up a Window in an adjacent zone
        !(same zone as adjacent to base surface)
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7295,7 +7294,7 @@ Door:Interzone,
        !the interior door in the adjacent zone.
        !a blank field will set up a Window in an adjacent zone
        !(same zone as adjacent to base surface)
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7342,7 +7341,7 @@ GlazedDoor:Interzone,
        !the interior door in the adjacent zone.
        !a blank field will set up a Window in an adjacent zone
        !(same zone as adjacent to base surface)
-  N1 , !Multiplier
+  1.0, !Multiplier
        !Used only for Surface Type = WINDOW, GLASSDOOR or DOOR
        !Non-integer values will be truncated to integer
        !default 1.0
@@ -7441,14 +7440,14 @@ WindowProperty:ShadingControl,
        !deg C for temperature-based controls.
        !Unused for Shading Control Type = AlwaysOn, AlwaysOff, OnIfScheduleAllows,
        !OnIfHighGlare, Glare, and DaylightIlluminance
-  A6 , !Shading Control Is Scheduled
+  No , !Shading Control Is Scheduled
        !type choice
        !key No
        !key Yes
        !default No
        !If Yes, Schedule Name is required; if No, Schedule Name is not used.
        !Shading Control Is Scheduled = Yes is required if Shading Control Type = OnIfScheduleAllows.
-  A7 , !Glare Control Is Active
+  No , !Glare Control Is Active
        !type choice
        !key No
        !key Yes
@@ -7465,7 +7464,7 @@ WindowProperty:ShadingControl,
        !Not used if Shading Control Type = SwitchableGlazing, BetweenGlassShade, or BetweenGlassBlind.
        !If both "Construction with Shading Name" and "Shading Device Material Name" are entered,
        !the former takes precedence.
-  A9 , !Type of Slat Angle Control for Blinds
+ FixedSlatAngle, !Type of Slat Angle Control for Blinds
        !type choice
        !key FixedSlatAngle
        !key ScheduledSlatAngle
@@ -7494,20 +7493,20 @@ WindowProperty:FrameAndDivider,
          !reference WindowFrameAndDividerNames
          !Referenced by surfaces that are exterior windows
          !Not used by interzone windows
-    N1 , !Frame Width
+    0.0, !Frame Width
          !units m
          !minimum 0.0
          !maximum 1.0
          !default 0.0
          !Width of frame in plane of window
          !Frame width assumed the same on all sides of window
-    N2 , !Frame Outside Projection
+    0.0, !Frame Outside Projection
          !units m
          !minimum 0.0
          !maximum 0.5
          !default 0.0
          !Amount that frame projects outward from the outside face of the glazing
-    N3 , !Frame Inside Projection
+    0.0, !Frame Inside Projection
          !units m
          !minimum 0.0
          !maximum 0.5
@@ -7519,104 +7518,104 @@ WindowProperty:FrameAndDivider,
          !Effective conductance of frame
          !Excludes air films
          !Obtained from WINDOW 5 or other 2-D calculation
-    N5 , !Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance
+    1.0 , !Ratio of Frame-Edge Glass Conductance to Center-Of-Glass Conductance
          !minimum 1.0
          !maximum 4.0
          !default 1.0
          !Excludes air films; applies only to multipane windows
          !Obtained from WINDOW 5 or other 2-D calculation
-    N6 , !Frame Solar Absorptance
+    0.7, !Frame Solar Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.7
          !Assumed same on outside and inside of frame
-    N7 , !Frame Visible Absorptance
+    0.7, !Frame Visible Absorptance
          !type real
          !minimum 0.0
          !maximum 1.0
          !default 0.7
          !Assumed same on outside and inside of frame
-    N8 , !Frame Thermal Hemispherical Emissivity
+    0.9, !Frame Thermal Hemispherical Emissivity
          !minimum> 0.0
          !default 0.9
          !Assumed same on outside and inside of frame
-    A2 , !Divider Type
+ DividedLite, !Divider Type
          !required-field
          !type choice
          !key DividedLite
          !key Suspended
          !default DividedLite
-    N9 , !Divider Width
+    0.0, !Divider Width
          !units m
          !minimum 0.0
          !maximum 0.5
          !default 0.0
          !Width of dividers in plane of window
          !Width assumed the same for all dividers
-    N10, !Number of Horizontal Dividers
+    0, !Number of Horizontal Dividers
          !minimum 0
          !default 0
          !"Horizontal" means parallel to local window X-axis
-    N11, !Number of Vertical Dividers
+    0, !Number of Vertical Dividers
          !minimum 0
          !default 0
          !"Vertical" means parallel to local window Y-axis
-    N12, !Divider Outside Projection
+    0.0, !Divider Outside Projection
          !units m
          !minimum 0.0
          !maximum 0.5
          !default 0.0
          !Amount that divider projects outward from the outside face of the glazing
          !Outside projection assumed the same for all divider elements
-    N13, !Divider Inside Projection
+    0.0, !Divider Inside Projection
          !units m
          !minimum 0.0
          !maximum 0.5
          !default 0.0
          !Amount that divider projects inward from the inside face of the glazing
          !Inside projection assumed the same for all divider elements
-    N14, !Divider Conductance
+    0.0, !Divider Conductance
          !units W/m2-K
          !minimum 0.0
          !default 0.0
          !Effective conductance of divider
          !Excludes air films
          !Obtained from WINDOW 5 or other 2-D calculation
-    N15, !Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance
+    1.0, !Ratio of Divider-Edge Glass Conductance to Center-Of-Glass Conductance
          !minimum 1.0
          !maximum 4.0
          !default 1.0
          !Excludes air films
          !Obtained from WINDOW 5 or other 2-D calculation
-    N16, !Divider Solar Absorptance
+    0.0, !Divider Solar Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.0
          !Assumed same on outside and inside of divider
-    N17, !Divider Visible Absorptance
+    0.0, !Divider Visible Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.0
          !Assumed same on outside and inside of divider
-    N18, !Divider Thermal Hemispherical Emissivity
+    0.9, !Divider Thermal Hemispherical Emissivity
          !minimum> 0.0
          !maximum< 1.0
          !default 0.9
          !Assumed same on outside and inside of divider
-    N19, !Outside Reveal Solar Absorptance
+    0.0, !Outside Reveal Solar Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.0
-    N20, !Inside Sill Depth
+    0.0, !Inside Sill Depth
          !units m
          !minimum 0.0
          !maximum 2.0
          !default 0.0
-    N21, !Inside Sill Solar Absorptance
+    0.0, !Inside Sill Solar Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.0
-    N22, !Inside Reveal Depth
+    0.0, !Inside Reveal Depth
          !Distance from plane of inside surface of glazing to plane of inside surface of wall.
          !Outside reveal depth is determined from the geometry of the window and the wall
          !it is on; it is non-zero if the plane of the outside surface of the glazing
@@ -7625,7 +7624,7 @@ WindowProperty:FrameAndDivider,
          !minimum 0.0
          !maximum 2.0
          !default 0.0
-    N23; !Inside Reveal Solar Absorptance
+    0.0; !Inside Reveal Solar Absorptance
          !minimum 0.0
          !maximum 1.0
          !default 0.0
@@ -7649,13 +7648,13 @@ WindowProperty:AirflowControl,
        !key OutdoorAir
        !key ReturnAir
        !default OutdoorAir
-  N1 , !Maximum Flow Rate
+  0.0, !Maximum Flow Rate
        !units m3/s-m
        !Above is m3/s per m of glazing width
        !ip-units ft3/min-ft
        !default 0.0
        !minimum 0.0
-  A4 , !Airflow Control Type
+ AlwaysOnAtMaximumFlow, !Airflow Control Type
        !type choice
        !key AlwaysOnAtMaximumFlow
        !key AlwaysOff
@@ -7663,13 +7662,13 @@ WindowProperty:AirflowControl,
        !ScheduledOnly requires that Airflow Has Multiplier Schedule Name = Yes
        !and that Airflow Multiplier Schedule Name is specified.
        !default AlwaysOnAtMaximumFlow
-  A5 , !Airflow Is Scheduled
+  No, !Airflow Is Scheduled
        !type choice
        !key Yes
        !key No
        !default No
        !If Yes, then Airflow Multiplier Schedule Name must be specified
-  A6 ; !Airflow Multiplier Schedule Name
+     ; !Airflow Multiplier Schedule Name
        !type object-list
        !object-list ScheduleNames
        !Required if Airflow Is Scheduled = Yes.
@@ -7689,7 +7688,7 @@ WindowProperty:StormWindow,
        !required-field
        !type object-list
        !object-list GlazingMaterialName
-  N1,  !Distance Between Storm Glass Layer and Adjacent Glass
+ 0.050, !Distance Between Storm Glass Layer and Adjacent Glass
        !units m
        !minimum> 0.0
        !maximum 0.5
@@ -7747,7 +7746,7 @@ Shading:Site,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !default 90
        !minimum 0
        !maximum 180
@@ -7776,7 +7775,7 @@ Shading:Building,
        !minimum 0
        !maximum 360
        !units deg
-  N2,  !Tilt Angle
+  90,  !Tilt Angle
        !default 90
        !minimum 0
        !maximum 180
@@ -8575,7 +8574,7 @@ Shading:Overhang,
        !object-list SubSurfNames
   N1,  !Height above Window or Door
        !units m
-  N2,  !Tilt Angle from Window/Door
+  90,  !Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -8602,7 +8601,7 @@ Shading:Overhang:Projection,
        !object-list SubSurfNames
   N1,  !Height above Window or Door
        !units m
-  N2,  !Tilt Angle from Window/Door
+  90,  !Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -8634,7 +8633,7 @@ Shading:Fin,
   N3,  !Left Distance Below Bottom of Window
        !units m
        !N2 + N3 + height of Window/Door is height of Fin
-  N4,  !Left Tilt Angle from Window/Door
+  90,  !Left Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -8649,7 +8648,7 @@ Shading:Fin,
   N8,  !Right Distance Below Bottom of Window
        !N7 + N8 + height of Window/Door is height of Fin
        !units m
-  N9,  !Right Tilt Angle from Window/Door
+  90,  !Right Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -8676,7 +8675,7 @@ Shading:Fin:Projection,
   N3,  !Left Distance Below Bottom of Window
        !units m
        !N2 + N3 + height of Window/Door is height of Fin
-  N4,  !Left Tilt Angle from Window/Door
+  90,  !Left Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -8691,7 +8690,7 @@ Shading:Fin:Projection,
   N8,  !Right Distance Below Bottom of Window
        !N7 + N8 + height of Window/Door is height of Fin
        !units m
-  N9,  !Right Tilt Angle from Window/Door
+  90,  !Right Tilt Angle from Window/Door
        !units deg
        !default 90
        !minimum 0
@@ -9098,15 +9097,15 @@ ShadingProperty:Reflectance,
        !required-field
        !type object-list
        !object-list AllShadingSurfNames
-  N1,  !Diffuse Solar Reflectance of Unglazed Part of Shading Surface
+ 0.2,  !Diffuse Solar Reflectance of Unglazed Part of Shading Surface
        !minimum 0.0
        !maximum 1.0
        !default 0.2
-  N2,  !Diffuse Visible Reflectance of Unglazed Part of Shading Surface
+ 0.2,  !Diffuse Visible Reflectance of Unglazed Part of Shading Surface
        !minimum 0.0
        !maximum 1.0
        !default 0.2
-  N3,  !Fraction of Shading Surface That Is Glazed
+ 0.0,  !Fraction of Shading Surface That Is Glazed
        !minimum 0.0
        !maximum 1.0
        !default 0.0
@@ -9178,7 +9177,7 @@ SurfaceProperty:OtherSideCoefficients,
       !Schedule values replace any value specified in the field Constant Temperature.
       !type object-list
       !object-list ScheduleNames
-  A3, !Sinusoidal Variation of Constant Temperature Coefficient
+  No, !Sinusoidal Variation of Constant Temperature Coefficient
       !Optionally used to vary Constant Temperature Coefficient with unitary sine wave
       !type choice
       !key Yes
@@ -9225,7 +9224,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !This object is only needed to make changes to the default model selections for any or all of the surface categories.
        !This object is for the inside face, the side of the surface facing a thermal zone.
   A1 , !Name
-  A2 , !Simple Bouyancy Vertical Wall Equation Source
+ FohannoPolidoriVerticalWall, !Simple Bouyancy Vertical Wall Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for vertical walls
        !type choice
@@ -9241,7 +9240,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A4 , !Simple Bouyancy Stable Horizontal Equation Source
+ AlamdariHammondStableHorizontal, !Simple Bouyancy Stable Horizontal Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for horizontal surfaces with heat flow directed for stable thermal stratification
        !type choice
@@ -9253,7 +9252,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A6 , !Simple Bouyancy Unstable Horizontal Equation Source
+ AlamdariHammondUnstableHorizontal, !Simple Bouyancy Unstable Horizontal Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for passive horizontal surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9265,7 +9264,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A8 , !Simple Bouyancy Stable Tilted Equation Source
+ WaltonStableHorizontalOrTilt, !Simple Bouyancy Stable Tilted Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for tilted surfaces with heat flow for stable thermal stratification
        !type choice
@@ -9277,7 +9276,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A10, !Simple Bouyancy Unstable Tilted Equation Source
+ WaltonUnstableHorizontalOrTilt, !Simple Bouyancy Unstable Tilted Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for tilted surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9289,7 +9288,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A12, !Simple Bouyancy Windows Equation Source
+ ISO15099Windows, !Simple Bouyancy Windows Equation Source
        !Applies to zone with no HVAC or when HVAC is off
        !This is for all window surfaces
        !type choice
@@ -9304,7 +9303,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A14, !Floor Heat Ceiling Cool Vertical Wall Equation Source
+ KhalifaEq3WallAwayFromHeat, !Floor Heat Ceiling Cool Vertical Wall Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for vertical walls
        !type choice
@@ -9319,7 +9318,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A16, !Floor Heat Ceiling Cool Stable Horizontal Equation Source
+ AlamdariHammondStableHorizontal, !Floor Heat Ceiling Cool Stable Horizontal Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for passive horizontal surfaces with heat flow for stable thermal stratification
        !type choice
@@ -9331,7 +9330,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A18, !Floor Heat Ceiling Cool Unstable Horizontal Equation Source
+ KhalifaEq4CeilingAwayFromHeat, !Floor Heat Ceiling Cool Unstable Horizontal Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for passive horizontal surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9344,7 +9343,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A20, !Floor Heat Ceiling Cool Heated Floor Equation Source
+ AwbiHattonHeatedFloor, !Floor Heat Ceiling Cool Heated Floor Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for a floor with active heating elements
        !type choice
@@ -9357,7 +9356,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A22, !Floor Heat Ceiling Cool Chilled Ceiling Equation Source
+ KaradagChilledCeiling, !Floor Heat Ceiling Cool Chilled Ceiling Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for a ceiling with active cooling elements
        !type choice
@@ -9370,7 +9369,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A24, !Floor Heat Ceiling Cool Stable Tilted Equation Source
+ WaltonStableHorizontalOrTilt, !Floor Heat Ceiling Cool Stable Tilted Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for tilted surfaces with heat flow for stable thermal stratification
        !type choice
@@ -9383,7 +9382,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A26, !Floor Heat Ceiling Cool Unstable Tilted Equation Source
+ WaltonUnstableHorizontalOrTilt, !Floor Heat Ceiling Cool Unstable Tilted Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for tilted surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9396,7 +9395,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A28, !Floor Heat Ceiling Cool Window Equation Source
+ ISO15099Windows, !Floor Heat Ceiling Cool Window Equation Source
        !Applies to zone with in-floor heating and/or in-ceiling cooling
        !This is for all window surfaces
        !type choice
@@ -9409,7 +9408,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A30, !Wall Panel Heating Vertical Wall Equation Source
+ KhalifaEq6NonHeatedWalls, !Wall Panel Heating Vertical Wall Equation Source
        !Applies to zone with in-wall panel heating
        !This is for vertical walls that are not actively heated
        !type choice
@@ -9424,7 +9423,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A32, !Wall Panel Heating Heated Wall Equation Source
+ AwbiHattonHeatedWall, !Wall Panel Heating Heated Wall Equation Source
        !Applies to zone with in-wall panel heating
        !This is for vertical walls that are being actively heated
        !type choice
@@ -9440,7 +9439,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A34, !Wall Panel Heating Stable Horizontal Equation Source
+ AlamdariHammondStableHorizontal, !Wall Panel Heating Stable Horizontal Equation Source
        !Applies to zone with in-wall panel heating
        !This is for horizontal surfaces with heat flow directed for stable thermal stratification
        !type choice
@@ -9452,7 +9451,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A36, !Wall Panel Heating Unstable Horizontal Equation Source
+ KhalifaEq7Ceiling, !Wall Panel Heating Unstable Horizontal Equation Source
        !Applies to zone with in-wall panel heating
        !This is for horizontal surfaces with heat flow directed for unstable thermal stratification
        !type choice
@@ -9467,7 +9466,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A38, !Wall Panel Heating Stable Tilted Equation Source
+ WaltonStableHorizontalOrTilt, !Wall Panel Heating Stable Tilted Equation Source
        !Applies to zone with in-wall panel heating
        !This is for tilted surfaces with heat flow for stable thermal stratification
        !type choice
@@ -9480,7 +9479,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A40, !Wall Panel Heating Unstable Tilted Equation Source
+ WaltonUnstableHorizontalOrTilt, !Wall Panel Heating Unstable Tilted Equation Source
        !Applies to zone with in-wall panel heating
        !This is for tilted surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9493,7 +9492,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A42, !field Wall Panel Heating Window Equation Source
+ ISO15099Windows, !field Wall Panel Heating Window Equation Source
        !Applies to zone with in-wall panel heating
        !This is for all window surfaces
        !type choice
@@ -9507,7 +9506,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A44, !Convective Zone Heater Vertical Wall Equation Source
+ FohannoPolidorVerticalWall, !Convective Zone Heater Vertical Wall Equation Source
        !Applies to zone with convective heater
        !This is for vertical walls not directly affected by heater
        !type choice
@@ -9523,7 +9522,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A46, !Convective Zone Heater Vertical Walls Near Heater Equation Source
+ KhalifaEq5WallNearHeat, !Convective Zone Heater Vertical Walls Near Heater Equation Source
        !Applies to zone with convective heater
        !This is for vertical walls that are directly affected by heater
        !Walls are considered "near" when listed in field set for Fraction of Radiant Energy to Surface
@@ -9540,7 +9539,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A48, !Convective Zone Heater Stable Horizontal Equation Source
+ AlamdariHammondStableHorizontal, !Convective Zone Heater Stable Horizontal Equation Source
        !Applies to zone with convective heater
        !This is for horizontal surfaces with heat flow directed for stable thermal stratification
        !type choice
@@ -9552,7 +9551,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A50, !Convective Zone Heater Unstable Horizontal Equation Source
+ KhalifaEq7Ceiling, !Convective Zone Heater Unstable Horizontal Equation Source
        !Applies to zone with convective heater
        !This is for horizontal surfaces with heat flow directed for unstable thermal stratification
        !type choice
@@ -9566,7 +9565,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A52, !Convective Zone Heater Stable Tilted Equation Source
+ WaltonStableHorizontalOrTilt, !Convective Zone Heater Stable Tilted Equation Source
        !Applies to zone with convective heater
        !This is for tilted surfaces with heat flow for stable thermal stratification
        !type choice
@@ -9578,7 +9577,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A54, !Convective Zone Heater Unstable Tilted Equation Source
+ WaltonUnstableHorizontalOrTilt, !Convective Zone Heater Unstable Tilted Equation Source
        !Applies to zone with convective heater
        !This is for tilted surfaces with heat flow for unstable thermal stratification
        !type choice
@@ -9590,7 +9589,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A56, !Convective Zone Heater Windows Equation Source
+ ISO15099Windows, !Convective Zone Heater Windows Equation Source
        !Applies to zone with convective heater
        !This is for all window surfaces
        !type choice
@@ -9605,7 +9604,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A58, !Central Air Diffuser Wall Equation Source
+ GoldsteinNovoselacCeilingDiffuserWalls, !Central Air Diffuser Wall Equation Source
        !Applies to zone with mechanical forced central air with diffusers
        !This is for all wall surfaces
        !type choice
@@ -9623,7 +9622,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A60, !Central Air Diffuser Ceiling Equation Source
+ FisherPedersenCeilingDiffuserCeiling, !Central Air Diffuser Ceiling Equation Source
        !Applies to zone with mechanical forced central air with diffusers
        !This is for all ceiling surfaces
        !type choice
@@ -9636,7 +9635,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A62, !Central Air Diffuser Floor Equation Source
+ GoldsteinNovoselacCeilingDiffuserFloor, !Central Air Diffuser Floor Equation Source
        !Applies to zone with mechanical forced central air with diffusers
        !This is for all floor surfaces
        !type choice
@@ -9650,7 +9649,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A64, !Central Air Diffuser Window Equation Source
+ GoldsteinNovoselacCeilingDiffuserWindow, !Central Air Diffuser Window Equation Source
        !Applies to zone with mechanical forced central air with diffusers
        !This is for all window surfaces
        !type choice
@@ -9668,7 +9667,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A66, !Mechanical Zone Fan Circulation Vertical Wall Equation Source
+ KhalifaEq3WallAwayFromHeat, !Mechanical Zone Fan Circulation Vertical Wall Equation Source
        !type choice
        !default KhalifaEq3WallAwayFromHeat
        !key KhalifaEq3WallAwayFromHeat
@@ -9685,7 +9684,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A68, !Mechanical Zone Fan Circulation Stable Horizontal Equation Source
+ AlamdariHammondStableHorizontal, !Mechanical Zone Fan Circulation Stable Horizontal Equation Source
        !type choice
        !default AlamdariHammondStableHorizontal
        !key WaltonStableHorizontalOrTilt
@@ -9695,7 +9694,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A70, !Mechanical Zone Fan Circulation Unstable Horizontal Equation Source
+ KhalifaEq4CeilingAwayFromHeat, !Mechanical Zone Fan Circulation Unstable Horizontal Equation Source
        !type choice
        !default KhalifaEq4CeilingAwayFromHeat
        !key KhalifaEq4CeilingAwayFromHeat
@@ -9706,7 +9705,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A72, !Mechanical Zone Fan Circulation Stable Tilted Equation Source
+ WaltonStableHorizontalOrTilt, !Mechanical Zone Fan Circulation Stable Tilted Equation Source
        !type choice
        !default WaltonStableHorizontalOrTilt
        !key WaltonStableHorizontalOrTilt
@@ -9715,7 +9714,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A74, !Mechanical Zone Fan Circulation Unstable Tilted Equation Source
+ WaltonUnstableHorizontalOrTilt, !Mechanical Zone Fan Circulation Unstable Tilted Equation Source
        !type choice
        !default WaltonUnstableHorizontalOrTilt
        !key WaltonUnstableHorizontalOrTilt
@@ -9725,7 +9724,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A76, !Mechanical Zone Fan Circulation Window Equation Source
+ ISO15099Windows, !Mechanical Zone Fan Circulation Window Equation Source
        !type choice
        !default ISO15099Windows
        !key ASHRAEVerticalWall
@@ -9738,7 +9737,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A78, !Mixed Regime Bouyancy Assisting Flow on Walls Equation Source
+ BeausoleilMorrisonMixedAssistedWall, !Mixed Regime Bouyancy Assisting Flow on Walls Equation Source
        !type choice
        !default BeausoleilMorrisonMixedAssistedWall
        !key BeausoleilMorrisonMixedAssistedWall
@@ -9752,7 +9751,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A80, !Mixed Regime Bouyancy Oppossing Flow on Walls Equation Source
+ BeausoleilMorrisonMixedOpposingWall, !Mixed Regime Bouyancy Oppossing Flow on Walls Equation Source
        !type choice
        !default BeausoleilMorrisonMixedOpposingWall
        !key BeausoleilMorrisonMixedOpposingWall
@@ -9766,7 +9765,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A82, !Mixed Regime Stable Floor Equation Source
+ BeausoleilMorrisonMixedStableFloor, !Mixed Regime Stable Floor Equation Source
        !type choice
        !default BeausoleilMorrisonMixedStableFloor
        !key BeausoleilMorrisonMixedStableFloor
@@ -9777,7 +9776,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A84, !Mixed Regime Unstable Floor Equation Source
+ BeausoleilMorrisonMixedUnstableFloor, !Mixed Regime Unstable Floor Equation Source
        !type choice
        !default BeausoleilMorrisonMixedUnstableFloor
        !key BeausoleilMorrisonMixedUnstableFloor
@@ -9788,7 +9787,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A86, !Mixed Regime Stable Ceiling Equation Source
+ BeausoleilMorrisonMixedStableCeiling, !Mixed Regime Stable Ceiling Equation Source
        !type choice
        !default BeausoleilMorrisonMixedStableCeiling
        !key BeausoleilMorrisonMixedStableCeiling
@@ -9799,7 +9798,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A88, !Mixed Regime Unstable Ceiling Equation Source
+ BeausoleilMorrisonMixedUnstableCeiling, !Mixed Regime Unstable Ceiling Equation Source
        !type choice
        !default BeausoleilMorrisonMixedUnstableCeiling
        !key BeausoleilMorrisonMixedUnstableCeiling
@@ -9810,7 +9809,7 @@ SurfaceConvectionAlgorithm:Inside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Inside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionInsideModels
-  A90, !Mixed Regime Window Equation Source
+ GoldsteinNovoselacCeilingDiffuserWindow, !Mixed Regime Window Equation Source
        !type choice
        !default GoldsteinNovoselacCeilingDiffuserWindow
        !key GoldsteinNovoselacCeilingDiffuserWindow
@@ -9826,7 +9825,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !This object is only needed to make changes to the default model selections for any or all of the surface categories.
        !This object is for the outside face, the side of the surface facing away from the thermal zone.
   A1 , !Name
-  A2 , !Wind Convection Windward Vertical Wall Equation Source
+ TARPWindward, !Wind Convection Windward Vertical Wall Equation Source
        !type choice
        !default TARPWindward
        !key SimpleCombined
@@ -9843,7 +9842,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Outside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionOutsideModels
-  A4 , !Wind Convection Leeward Vertical Wall Equation Source
+ TARPLeeward, !Wind Convection Leeward Vertical Wall Equation Source
        !type choice
        !default TARPLeeward
        !key SimpleCombined
@@ -9859,7 +9858,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Outside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionOutsideModels
-  A6 , !Wind Convection Horizontal Roof Equation Source
+ ClearRoof, !Wind Convection Horizontal Roof Equation Source
        !type choice
        !default ClearRoof
        !key SimpleCombined
@@ -9877,7 +9876,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Outside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionOutsideModels
-  A8 , !Natural Convection Vertical Wall Equation Source
+ ASHRAEVerticalWall, !Natural Convection Vertical Wall Equation Source
        !This is for vertical walls
        !type choice
        !default ASHRAEVerticalWall
@@ -9891,7 +9890,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Outside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionOutsideModels
-  A10, !Natural Convection Stable Horizontal Equation Source
+ WaltonStableHorizontalOrTilt, !Natural Convection Stable Horizontal Equation Source
        !This is for horizontal surfaces with heat flow directed for stable thermal stratification
        !type choice
        !default WaltonStableHorizontalOrTilt
@@ -9903,7 +9902,7 @@ SurfaceConvectionAlgorithm:Outside:AdaptiveModelSelections,
        !The SurfaceConvectionAlgorithm:Outside:UserCurve named in this field is used when the previous field is set to UserCurve
        !type object-list
        !object-list UserConvectionOutsideModels
-  A12, !Natural Convection Unstable Horizontal Equation Source
+ WaltonUnstableHorizontalOrTilt, !Natural Convection Unstable Horizontal Equation Source
        !type choice
        !default WaltonUnstableHorizontalOrTilt
        !key WaltonUnstableHorizontalOrTilt
@@ -10237,7 +10236,7 @@ SurfaceProperty:ConvectionCoefficients:MultipleSurface,
       !key EmmelRoof
       !key ClearRoof
       !key UserCurve
-  N2, !Convection Coefficient 2
+  .1, !Convection Coefficient 2
       !used if Convection Type=Value, min and max limits are set in HeatBalanceAlgorithm object.
       !Default limits are Minimum >= 0.1 and Maximum <= 1000
       !default .1
@@ -10263,23 +10262,23 @@ SurfaceProperties:VaporCoefficients,
       !required-field
       !type object-list
       !object-list SurfaceNames
-  A2, !Constant External Vapor Transfer Coefficient
+  No, !Constant External Vapor Transfer Coefficient
       !required-field
       !type choice
       !key Yes
       !key No
       !default No
-  N1, !External Vapor Coefficient Value
+  0, !External Vapor Coefficient Value
       !units kg/Pa-s-m2
       !default 0
       !minimum 0.0
-  A3, !Constant Internal vapor Transfer Coefficient
+  No, !Constant Internal vapor Transfer Coefficient
       !required-field
       !type choice
       !key Yes
       !key No
       !default No
-  N2; !Internal Vapor Coefficient Value
+  0; !Internal Vapor Coefficient Value
       !units kg/Pa-s-m2
       !default 0
       !minimum 0.0
@@ -10296,7 +10295,6 @@ SurfaceProperty:ExteriorNaturalVentedCavity,
        !object-list OSCMNames
   N1,  !Area Fraction of Openings
        !minimum> 0
-       !units dimensionless
   N2,  !Thermal Emissivity of Exterior Baffle Material
        !minimum 0
        !maximum 1
@@ -10311,7 +10309,7 @@ SurfaceProperty:ExteriorNaturalVentedCavity,
        !minimum> 0.
        !units m
        !if corrugated, use average depth
-  N6,  !Ratio of Actual Surface Area to Projected Surface Area
+ 1.0,  !Ratio of Actual Surface Area to Projected Surface Area
        !this parameter is used to help account for corrugations in the collector
        !default 1.0
        !minimum 0.8
@@ -10325,8 +10323,7 @@ SurfaceProperty:ExteriorNaturalVentedCavity,
        !key MediumSmooth
        !key Smooth
        !key VerySmooth
-  N7,  !Effectiveness for Perforations with Respect to Wind
-       !units dimensionless
+ 0.25,  !Effectiveness for Perforations with Respect to Wind
        !default 0.25
        !minimum> 0
        !maximum 1.5
@@ -10679,64 +10676,64 @@ GroundHeatTransfer:Slab:Materials,
             !typical 2
             !minimum> 0
           !required-field
-        N2, !ALBEDO: Surface Albedo: No Snow
+      0.16, !ALBEDO: Surface Albedo: No Snow
             !minimum 0.0
             !maximum 1.0
           !default 0.16
-        N3, !ALBEDO: Surface Albedo: Snow
+      0.40, !ALBEDO: Surface Albedo: Snow
             !minimum 0.0
             !maximum 1.0
           !default 0.40
-        N4, !EPSLW: Surface Emissivity: No Snow
+      0.94, !EPSLW: Surface Emissivity: No Snow
             !minimum> 0.0
           !default 0.94
-        N5, !EPSLW: Surface Emissivity: Snow
+      0.86, !EPSLW: Surface Emissivity: Snow
             !minimum> 0.0
           !default 0.86
-        N6, !Z0: Surface Roughness: No Snow
+       6.0, !Z0: Surface Roughness: No Snow
             !typical value= 0-10 cm
           !default 6.0
-        N7, !Z0: Surface Roughness: Snow
+      0.25, !Z0: Surface Roughness: Snow
             !typical value= 0-10
           !default 0.25
-        N8, !HIN: Indoor HConv: Downward Flow
+      6.13, !HIN: Indoor HConv: Downward Flow
             !typical value= 4-10
             !units W/m2-K
             !minimum> 0.0
           !default 6.13
-        N9; !HIN: Indoor HConv: Upward
+      9.26; !HIN: Indoor HConv: Upward
             !minimum> 0.0
             !typical value= 4-10
             !units W/m2-K
           !default 9.26
 
 GroundHeatTransfer:Slab:MatlProps,
-        N1, !RHO: Slab Material density
+    2300.0, !RHO: Slab Material density
             !typical value= 2300.0
             !units kg/m3
             !minimum> 0.0
             !default 2300
-        N2, !RHO: Soil Density
+    1200.0, !RHO: Soil Density
             !typical value= 1200.0
             !minimum> 0.0
             !default 1200
             !units kg/m3
-        N3, !CP: Slab CP
+     650.0, !CP: Slab CP
             !typical value=650.0
             !units J/kg-K
             !minimum> 0.0
             !default 650
-        N4, !CP: Soil CP
+    1200.0, !CP: Soil CP
             !typical value= 1200.0
             !minimum> 0.0
             !default 1200
             !units J/kg-K
-        N5, !TCON: Slab k
+       0.9, !TCON: Slab k
             !typical value= .9
             !minimum> 0.0
             !units W/m-K
           !default 0.9
-        N6; !TCON: Soil k
+       1.0; !TCON: Soil k
             !typical value= 1.0
             !minimum> 0.0
             !units W/m-K
@@ -10757,7 +10754,7 @@ GroundHeatTransfer:Slab:BoundConds,
         N1, !TDEEPin
             !User input lower boundary temperature if FIXBC is TRUE
             !units C
-            !note Blank for FIXBC FALSE or to use the calculated 1-D deep ground temperature.
+            !Blank for FIXBC FALSE or to use the calculated 1-D deep ground temperature.
         A3, !USRHflag: Is the ground surface h specified by the user?
             !type choice
             !key TRUE
@@ -10768,76 +10765,76 @@ GroundHeatTransfer:Slab:BoundConds,
             !Used only if USRHflag is TRUE
 
 GroundHeatTransfer:Slab:BldgProps,
-      N1, !IYRS: Number of years to iterate
+      10, !IYRS: Number of years to iterate
           !default 10
           !minimum 1
-      N2, !Shape: Slab shape
+      0, !Shape: Slab shape
           !minimum 0
           !maximum 0
-      N3, !HBLDG: Building height
+      10, !HBLDG: Building height
           !minimum 0
           !typical value= 0-20
           !units m
-      N4, !TIN1: January Indoor Average temperature set point
+      22, !TIN1: January Indoor Average temperature set point
           !default 22
           !units C
-      N5, !TIN2: February Indoor Average temperature set point
+      22, !TIN2: February Indoor Average temperature set point
           !default 22
           !units C
-      N6, !TIN3: March Indoor Average temperature set point
+      22, !TIN3: March Indoor Average temperature set point
           !default 22
           !units C
-      N7, !TIN4: April Indoor Average temperature set point
+      22, !TIN4: April Indoor Average temperature set point
           !default 22
           !units C
-      N8, !TIN5: May Indoor Average temperature set point
+      22, !TIN5: May Indoor Average temperature set point
           !default 22
           !units C
-      N9, !TIN6: June Indoor Average temperature set point
+      22, !TIN6: June Indoor Average temperature set point
           !default 22
           !units C
-      N10,!TIN7: July Indoor Average temperature set point
+      22, !TIN7: July Indoor Average temperature set point
           !default 22
           !units C
-      N11,!TIN8: August Indoor Average temperature set point
+      22, !TIN8: August Indoor Average temperature set point
           !default 22
           !units C
-      N12,!TIN9: September Indoor Average temperature set point
+      22, !TIN9: September Indoor Average temperature set point
           !default 22
           !units C
-      N13,!TIN10: October Indoor Average temperature set point
+      22, !TIN10: October Indoor Average temperature set point
           !default 22
           !units C
-      N14,!TIN11: November Indoor Average temperature set point
+      22, !TIN11: November Indoor Average temperature set point
           !default 22
           !units C
-      N15,!TIN12: December Indoor Average temperature set point
+      22, !TIN12: December Indoor Average temperature set point
           !default 22
           !units C
-      N16,!TINAmp: Daily Indoor sine wave variation amplitude
+      22, !TINAmp: Daily Indoor sine wave variation amplitude
           !default 0
           !units deltaC
-      N17;!ConvTol: Convergence Tolerance
+      22; !ConvTol: Convergence Tolerance
           !default 0.1
 
 GroundHeatTransfer:Slab:Insulation,
-        N1, !RINS: R value of under slab insulation
+       0.0, !RINS: R value of under slab insulation
             !typical value= 0-2.0
             !units m2-K/W
           !default 0.0
-        N2, !DINS: Width of strip of under slab insulation
+       0.0, !DINS: Width of strip of under slab insulation
             !typical value= 0-2.0
             !units m
           !default 0.0
-        N3, !RVINS: R value of vertical insulation
+       0.0, !RVINS: R value of vertical insulation
             !typical value= 0-3.0
             !units m2-K/W
           !default 0.0
-        N4, !ZVINS: Depth of vertical insulation
+        0, !ZVINS: Depth of vertical insulation
             !only use values= .2 .4 .6 .8 1.0 1.5 2.0 2.5 3.0
             !units m
           !default 0
-        N5; !IVINS: Flag: Is there vertical insulation
+        0; !IVINS: Flag: Is there vertical insulation
             !values: 1=yes 0=no
           !required-field
           !type choice
@@ -10855,13 +10852,13 @@ GroundHeatTransfer:Slab:EquivalentSlab,
             !maximum 22
             !Equivalent square slab is simulated, side is 4*APRatio.
           !required-field
-        N2, !SLABDEPTH: Thickness of slab on grade
+       0.1, !SLABDEPTH: Thickness of slab on grade
             !default 0.1
             !units m
-        N3, !CLEARANCE: Distance from edge of slab to domain edge
+      15.0, !CLEARANCE: Distance from edge of slab to domain edge
             !default 15.0
             !units m
-        N4; !ZCLEARANCE: Distance from bottom of slab to domain bottom
+      15.0; !ZCLEARANCE: Distance from bottom of slab to domain bottom
             !default 15.0
             !units m
 
@@ -10880,13 +10877,13 @@ GroundHeatTransfer:Slab:AutoGrid,
             !typical values= 6 to 60.0
             !units m
           !required-field
-        N3, !SLABDEPTH: Thickness of slab on grade
+       0.1, !SLABDEPTH: Thickness of slab on grade
             !default 0.1
             !units m
-        N4, !CLEARANCE: Distance from edge of slab to domain edge
+      15.0, !CLEARANCE: Distance from edge of slab to domain edge
             !default 15.0
             !units m
-        N5; !ZCLEARANCE: Distance from bottom of slab to domain bottom
+      15.0; !ZCLEARANCE: Distance from bottom of slab to domain bottom
             !default 15.0
             !units m
 
@@ -10931,12 +10928,12 @@ GroundHeatTransfer:Slab:ZFACE,
         N15, N16, N17, N18, N19, N20, N21, N22, N23, N24, N25;                        !fields as indicated
 
 GroundHeatTransfer:Basement:SimParameters,
-     N1,  !F: Multiplier for the ADI solution
-         !0<F<1.0,
+    0.1,  !F: Multiplier for the ADI solution
+          !0<F<1.0,
           !typically 0.1 (0.3 for high k soil - saturated sand is about 2.6 w/m-K)
           !minimum> 0.0
           !maximum 1.0
-      N2; !fIYRS: Maximum number of yearly iterations:
+      15; !fIYRS: Maximum number of yearly iterations:
           !typically 15-30]
           !minimum 0
           !default 15
@@ -10945,75 +10942,75 @@ GroundHeatTransfer:Basement:MatlProps,
      N1, !NMAT: Number of materials in this domain
          !maximum 6
           !required-field
-     N2, !Density for Foundation Wall
+   2243, !Density for Foundation Wall
          !minimum> 0.0
          !default 2243
          !units kg/m3
-     N3, !density for Floor Slab
+   2243, !density for Floor Slab
          !minimum> 0.0
          !default 2243
          !units kg/m3
-     N4, !density for Ceiling
+    311, !density for Ceiling
          !minimum> 0.0
          !default 311
          !units kg/m3
-     N5, !density for Soil
+   1500, !density for Soil
          !minimum> 0.0
          !default 1500
          !units kg/m3
-     N6, !density for Gravel
+   2000, !density for Gravel
          !minimum> 0.0
          !default 2000
          !units kg/m3
-     N7, !density for Wood
+    449, !density for Wood
          !minimum> 0.0
          !default 449
          !units kg/m3
-     N8,  !Specific heat for foundation wall
+    880,  !Specific heat for foundation wall
           !minimum> 0.0
           !default 880
           !units J/kg-K
-     N9,  !Specific heat for floor slab
+    880,  !Specific heat for floor slab
           !minimum> 0.0
           !default 880
           !units J/kg-K
-     N10, !Specific heat for ceiling
+    1530, !Specific heat for ceiling
           !minimum> 0.0
           !default 1530
           !units J/kg-K
-     N11, !Specific heat for soil
+     840, !Specific heat for soil
           !minimum> 0.0
           !default 840
           !units J/kg-K
-     N12, !Specific heat for gravel
+     720, !Specific heat for gravel
           !minimum> 0.0
           !default 720
           !units J/kg-K
-     N13, !Specific heat for wood
+    1530, !Specific heat for wood
           !minimum> 0.0
           !default 1530
           !units J/kg-K
-     N14, !Thermal conductivity for foundation wall
+     1.4, !Thermal conductivity for foundation wall
           !minimum> 0.0
           !default 1.4
           !units W/m-K
-     N15, !Thermal conductivity for floor slab
+     1.4, !Thermal conductivity for floor slab
           !minimum> 0.0
           !default 1.4
           !units W/m-K
-     N16, !Thermal conductivity for ceiling
+    0.09, !Thermal conductivity for ceiling
           !minimum> 0.0
           !default 0.09
           !units W/m-K
-     N17, !thermal conductivity for soil
+     1.1, !thermal conductivity for soil
           !minimum> 0.0
           !default 1.1
           !units W/m-K
-     N18, !thermal conductivity for gravel
+     1.9, !thermal conductivity for gravel
           !minimum> 0.0
           !default 1.9
           !units W/m-K
-     N19; !thermal conductivity for wood
+    0.12; !thermal conductivity for wood
           !minimum> 0.0
           !default 0.12
           !units W/m-K
@@ -11031,31 +11028,31 @@ GroundHeatTransfer:Basement:Insulation,
          ! False for insulation half way down side wall from grade line
 
 GroundHeatTransfer:Basement:SurfaceProps,
-     N1, !ALBEDO: Surface albedo for No snow conditions
+    0.16, !ALBEDO: Surface albedo for No snow conditions
          !minimum 0.0
           !maximum 1.0
          !default 0.16
-     N2, !ALBEDO: Surface albedo for snow conditions
+    0.40, !ALBEDO: Surface albedo for snow conditions
          !minimum 0.0
           !maximum 1.0
          !default 0.40
-     N3, !EPSLN: Surface emissivity No Snow
+    0.94, !EPSLN: Surface emissivity No Snow
           !minimum 0.0
           !maximum 1.0
          !default 0.94
-     N4, !EPSLN: Surface emissivity with Snow
+    0.86, !EPSLN: Surface emissivity with Snow
           !minimum 0.0
           !maximum 1.0
          !default 0.86
-     N5, !VEGHT: Surface roughness No snow conditions
+    6.0, !VEGHT: Surface roughness No snow conditions
           !minimum 0.0
          !default 6.0
          !units cm
-     N6, !VEGHT: Surface roughness Snow conditions
+    0.25, !VEGHT: Surface roughness Snow conditions
           !minimum 0.0
          !default 0.25
          !units cm
-     A1; !PET: Flag, Potential evapotranspiration on?
+  FALSE; !PET: Flag, Potential evapotranspiration on?
           ! Typically, PET is False
           !required-field
          !type choice
@@ -11064,100 +11061,100 @@ GroundHeatTransfer:Basement:SurfaceProps,
           !default FALSE
 
 GroundHeatTransfer:Basement:BldgData,
-     N1, !DWALL: Wall thickness
+    0.2, !DWALL: Wall thickness
          !units m
          !minimum 0.2
           !default 0.2
-     N2, !DSLAB: Floor slab thickness
+    0.1, !DSLAB: Floor slab thickness
          !units m
          !minimum> 0.0
          !maximum 0.25
           !default 0.1
-     N3, !DGRAVXY: Width of gravel pit beside basement wall
+    0.3, !DGRAVXY: Width of gravel pit beside basement wall
          !minimum> 0.0
          !units  m
           !default 0.3
-     N4, !DGRAVZN: Gravel depth extending above the floor slab
+    0.2, !DGRAVZN: Gravel depth extending above the floor slab
          !minimum> 0.0
          !units m
           !default 0.2
-     N5; !DGRAVZP: Gravel depth below the floor slab
+    0.1; !DGRAVZP: Gravel depth below the floor slab
          !minimum> 0.0
          !units m
          !default 0.1
 
 GroundHeatTransfer:Basement:Interior,
-   A1, !COND: Flag: Is the basement conditioned?
+ TRUE, !COND: Flag: Is the basement conditioned?
           !required-field
        !type choice
           !key TRUE
           !key FALSE
           !default TRUE
        !for EnergyPlus this should be TRUE
-   N1, !HIN: Downward convection only heat transfer coefficient
+  0.92, !HIN: Downward convection only heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 0.92
-   N2, !HIN: Upward convection only heat transfer coefficient
+ 4.04, !HIN: Upward convection only heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 4.04
-   N3, !HIN: Horizontal convection only heat transfer coefficient
+ 3.08, !HIN: Horizontal convection only heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 3.08
-   N4, !HIN: Downward combined (convection and radiation) heat transfer coefficient
+ 6.13, !HIN: Downward combined (convection and radiation) heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 6.13
-   N5, !HIN: Upward combined (convection and radiation) heat transfer coefficient
+ 9.26, !HIN: Upward combined (convection and radiation) heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 9.26
-   N6; !HIN: Horizontal combined (convection and radiation) heat transfer coefficient
+ 8.29; !HIN: Horizontal combined (convection and radiation) heat transfer coefficient
        !units W/m2-K
           !minimum> 0.0
           !default 8.29
 
 GroundHeatTransfer:Basement:ComBldg,
    !ComBldg contains the monthly average temperatures (C) and possibility of daily variation amplitude
-   N1,  !January average temperature
+   22,  !January average temperature
         !units C
           !default 22
-   N2,  !February average temperature
+   22,  !February average temperature
         !units C
           !default 22
-   N3,  !March average temperature
+   22,  !March average temperature
         !units C
           !default 22
-   N4,  !April average temperature
+   22,  !April average temperature
         !units C
           !default 22
-   N5,  !May average temperature
+   22,  !May average temperature
         !units C
           !default 22
-   N6,  !June average temperature
+   22,  !June average temperature
         !units C
           !default 22
-   N7,  !July average temperature
+   22,  !July average temperature
         !units C
           !default 22
-   N8,  !August average temperature
+   22,  !August average temperature
         !units C
           !default 22
-   N9,  !September average temperature
+   22,  !September average temperature
         !units C
           !default 22
-   N10, !October average temperature
+   22, !October average temperature
         !units C
           !default 22
-   N11, !November average temperature
+   22, !November average temperature
         !units C
           !default 22
-   N12, !December average temperature
+   22, !December average temperature
         !units C
           !default 22
-   N13; !Daily variation sine wave amplitude
+   0; !Daily variation sine wave amplitude
           !units deltaC
           !default 0
         !(Normally zero, just for checking)
@@ -11180,15 +11177,15 @@ GroundHeatTransfer:Basement:EquivSlab,  !  Supplies the EquivSizing Flag
 
 GroundHeatTransfer:Basement:EquivAutoGrid,
     !EquivAutoGrid necessary when EquivSizing=TRUE, TRUE is is the normal case.
-   N1, !CLEARANCE: Distance from outside of wall to edge of 3-D ground domain
+   15, !CLEARANCE: Distance from outside of wall to edge of 3-D ground domain
           !minimum 0.0
        !units m
        !default 15
-   N2, !SlabDepth: Thickness of the floor slab
+  0.1, !SlabDepth: Thickness of the floor slab
           !minimum 0.0
        !units m
        !default  0.1
-   N3; !BaseDepth: Depth of the basement wall below grade
+   2; !BaseDepth: Depth of the basement wall below grade
           !minimum 0.0
        !units  m
           !default 2
@@ -11197,7 +11194,7 @@ GroundHeatTransfer:Basement:AutoGrid,
    !AutoGrid only necessary when EquivSizing is false
    !If the modelled building is not a rectangle or square, Equivalent
    !sizing MUST be used to get accurate results
-   N1, !CLEARANCE: Distance from outside of wall to edge,
+   15, !CLEARANCE: Distance from outside of wall to edge,
           !minimum 0
        !units m
        !default 15
@@ -11211,14 +11208,14 @@ GroundHeatTransfer:Basement:AutoGrid,
        !units m
        !minimum 0
        !maximum 60
-   N4, !ConcAGHeight: Height of the foundation wall above grade
+   0, !ConcAGHeight: Height of the foundation wall above grade
        !units m
           !minimum 0
           !default 0
-   N5, !SlabDepth: Thickness of the floor slab
+  0.1, !SlabDepth: Thickness of the floor slab
        !units m
        !default 0.1
-   N6; !BaseDepth: Depth of the basement wall below grade
+   2; !BaseDepth: Depth of the basement wall below grade
        !units m
           !minimum 0
           !default 2
@@ -11696,24 +11693,24 @@ RoomAirSettings:ThreeNodeDisplacementVentilation,
        !required-field
        !type object-list
        !object-list ScheduleNames
-  N1 , !Number of Plumes per Occupant
+  1.0, !Number of Plumes per Occupant
        !Used only in the UCSD displacement ventilation model.
        !Effective number of separate plumes per occupant in the occupied zone.
        !Plumes that merge together in the occupied zone count as one.
        !required-field
        !minimum> 0.0
        !default 1.0
-  N2 , !Thermostat Height
+ 1.1, !Thermostat Height
        !Height of thermostat/temperature control sensor above floor
        !units m
        !minimum> 0.0
        !default 1.1
-  N3 , !Comfort Height
+  1.1, !Comfort Height
        !Height at which air temperature is calculated for comfort purposes
        !units m
        !minimum> 0.0
        !default 1.1
-  N4 ; !Temperature Difference Threshold for Reporting
+  0.4; !Temperature Difference Threshold for Reporting
        !Minimum temperature difference between predicted upper and lower layer
        !temperatures above which DV auxilliary outputs are calculated.
        !These outputs are 'DV Transition Height', 'DV Fraction Min Recommended Flow Rate'
@@ -11770,20 +11767,20 @@ RoomAirSettings:UnderFloorAirDistributionInterior,
   N4 , !Diffuser Slot Angle from Vertical
        !units deg
        !minimum 0.0
-       !maximum 90.
+       !maximum 90.0
        !autocalculatable
        !default Autocalculate
-  N5 , !Thermostat Height
+  1.2, !Thermostat Height
        !Height of thermostat/temperature control sensor above floor
        !units m
        !minimum> 0.0
        !default 1.2
-  N6 , !Comfort Height
+  1.1, !Comfort Height
        !Height at which air temperature is calculated for comfort purposes
        !units m
        !minimum> 0.0
        !default 1.1
-  N7 , !Temperature Difference Threshold for Reporting
+  0.4, !Temperature Difference Threshold for Reporting
        !Minimum temperature difference between predicted upper and lower layer
        !temperatures above which UFAD auxilliary outputs are calculated.
        !These outputs are 'UF Transition Height'and 'UF Average Temp Gradient'.
@@ -11793,7 +11790,7 @@ RoomAirSettings:UnderFloorAirDistributionInterior,
        !required-field
        !minimum 0.0
        !default 0.4
-  A2 , !Floor Diffuser Type
+ Swirl, !Floor Diffuser Type
        !required-field
        !type choice
        !key Custom
@@ -11802,7 +11799,7 @@ RoomAirSettings:UnderFloorAirDistributionInterior,
        !key HorizontalSwirl
        !key LinearBarGrille
        !default Swirl
-  N8 , !Transition Height
+  1.7, !Transition Height
        !user-specified height above floor of boundary between occupied and upper subzones
        !units m
        !minimum> 0.0
@@ -11861,17 +11858,17 @@ RoomAirSettings:UnderFloorAirDistributionExterior,
        !maximum 90.
        !autocalculatable
        !default autocalculate
-  N5 , !Thermostat Height
+  1.2, !Thermostat Height
        !Height of thermostat/temperature control sensor above floor
        !units m
        !minimum> 0.0
        !default 1.2
-  N6 , !Comfort Height
+  1.1, !Comfort Height
        !Height at which Air temperature is calculated for comfort purposes
        !units m
        !minimum> 0.0
        !default 1.1
-  N7 , !Temperature Difference Threshold for Reporting
+  0.4, !Temperature Difference Threshold for Reporting
        !Minimum temperature difference between upper and lower layer temperatures above
        !which UFAD auxilliary outputs are calculated. These outputs are 'UF Transition Height'
        !and 'UF Average Temp Gradient'. They are set to zero values when the temperature
@@ -11880,7 +11877,7 @@ RoomAirSettings:UnderFloorAirDistributionExterior,
        !required-field
        !minimum 0.0
        !default 0.4
-  A2 , !Floor Diffuser Type
+ Swirl, !Floor Diffuser Type
        !required-field
        !type choice
        !key Custom
@@ -11889,7 +11886,7 @@ RoomAirSettings:UnderFloorAirDistributionExterior,
        !key HorizontalSwirl
        !key LinearBarGrille
        !default Swirl
-  N8 , !Transition Height
+  1.7, !Transition Height
        !User-specified height above floor of boundary between occupied and upper subzones
        !units m
        !minimum> 0.0
@@ -11934,7 +11931,7 @@ People,
        !type object-list
        !units in schedule should be fraction applied to number of people (0.0 - 1.0)
        !object-list ScheduleNames
-  A4 , !Number of People Calculation Method
+ People, !Number of People Calculation Method
        !The entered calculation method is used to create the maximum number of people
        !for this set of attributes (i.e. sensible fraction, schedule, etc)
        !Choices: People -- simply enter number of occupants.
@@ -11970,7 +11967,7 @@ People,
        !type object-list
        !units in schedule are W/person
        !object-list ScheduleNames
-  N6 , !Carbon Dioxide Generation Rate
+ 3.82E-8, !Carbon Dioxide Generation Rate
        !CO2 generation rate per unit of activity level.
        !units m3/s-W
        !default 3.82E-8
@@ -11978,12 +11975,12 @@ People,
        !maximum 3.82E-7
        !The default value is obtained from ASHRAE Std 62.1 at 0.0084 cfm/met/person over
        !the general adult population.
-  A6 , !Enable ASHRAE 55 Comfort Warnings
+  No , !Enable ASHRAE 55 Comfort Warnings
        !type choice
        !key Yes
        !key No
        !default No
-  A7 , !Mean Radiant Temperature Calculation Type
+ ZoneAveraged, !Mean Radiant Temperature Calculation Type
        !optional (only required for thermal comfort runs)
        !type choice
        !key ZoneAveraged
@@ -12083,7 +12080,7 @@ ComfortViewFactorAngles,
   A13, !Surface 11 Name
   N11, !Angle Factor 11
   A14, !Surface 12 Name
-  N12, !field Angle Factor 12
+  N12, !Angle Factor 12
   A15, !Surface 13 Name
   N13, !Angle Factor 13
   A16, !Surface 14 Name
@@ -12118,7 +12115,7 @@ Lights,
        !type object-list
        !object-list ScheduleNames
        !units in schedule should be fraction applied to design level of lights, generally (0.0 - 1.0)
-  A4 , !Design Level Calculation Method
+ LightingLevel, !Design Level Calculation Method
        !The entered calculation method is used to create the maximum amount of lights
        !for this set of attributes
        !Choices: LightingLevel => Lighting Level -- simply enter watts of lights
@@ -12139,24 +12136,24 @@ Lights,
   N3 , !Watts per Person
        !minimum 0
        !units W/person
-  N4 , !Return Air Fraction
+  0 , !Return Air Fraction
        !required-field
        !Used only for sizing calculation if return-air-fraction
        !coefficients are specified.
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 , !Fraction Visible
+  0 , !Fraction Visible
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N7 , !Fraction Replaceable
+  1.0, !Fraction Replaceable
        !required-field
        !For Daylighting:Controls and Daylighting:DElight:Controls,
        !must be 0 or 1:  0 = no dimming control, 1 = full dimming control
@@ -12166,17 +12163,17 @@ Lights,
   A5 , !End-Use Subcategory
        !retaincase
        !default General
-  A6 , !Return Air Fraction Calculated from Plenum Temperature
+  No , !Return Air Fraction Calculated from Plenum Temperature
        !type choice
        !key Yes
        !key No
        !default No
-  N8 , !Return Air Fraction Function of Plenum Temperature Coefficient 1
+  0.0, !Return Air Fraction Function of Plenum Temperature Coefficient 1
        !Used only if Return Air Fraction Is Calculated from Plenum Temperature = Yes
        !Equation is Return Air Fraction = Coefficient#1 - Coefficient#2 X PlenumTemp(degC)
        !minimum 0.0
        !default 0.0
-  N9 ; !Return Air Fraction Function of Plenum Temperature Coefficient 2
+  0.0; !Return Air Fraction Function of Plenum Temperature Coefficient 2
        !Used only if Return Air Fraction Is Calculated from Plenum Temperature = Yes
        !Equation is Return Air Fraction = Coefficient#1 - Coefficient#2 X PlenumTemp(degC)
        !units 1/K
@@ -12221,17 +12218,17 @@ ElectricEquipment,
   N3 , !Watts per Person
        !minimum 0
        !units W/person
-  N4 , !Fraction Latent
+  0 , !Fraction Latent
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 , !Fraction Lost
+  0 , !Fraction Lost
        !required-field
        !minimum 0.0
        !maximum 1.0
@@ -12254,7 +12251,7 @@ GasEquipment,
        !type object-list
        !object-list ScheduleNames
        !units in Schedule should be fraction applied to design level of gas equipment, generally (0.0 - 1.0)
-  A4 , !Design Level Calculation Method
+ EquipmentLevel, !Design Level Calculation Method
        !The entered calculation method is used to create the maximum amount of gas equipment
        !for this set of attributes
        !Choices: EquipmentLevel => Equipment Level -- simply enter watts of equipment
@@ -12272,25 +12269,25 @@ GasEquipment,
   N2 , !Watts per Zone Floor Area
        !minimum 0
        !units W/m2
-  N3 , !field Watts per Person
+  N3 , !Watts per Person
        !minimum 0
        !units W/Person
-  N4 , !Fraction Latent
+  0 , !Fraction Latent
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 , !Fraction Lost
+  0 , !Fraction Lost
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N7 , !Carbon Dioxide Generation Rate
+ 0.0, !Carbon Dioxide Generation Rate
        !CO2 generation rate per unit of power input
        !units m3/s-W
        !default 0.0
@@ -12300,7 +12297,7 @@ GasEquipment,
        !For unvented equipment, a suggested value is 3.45E-8 m3/s-W. This value is
        !converted from a natural gas CO2 emission rate of 117 lbs CO2 per million Btu.
        !The maximum value assumes to be 10 times of the recommended value.
-  A5 ; !End-Use Subcategory
+ General; !End-Use Subcategory
        !default General
 
 HotWaterEquipment,
@@ -12318,7 +12315,7 @@ HotWaterEquipment,
        !type object-list
        !object-list ScheduleNames
        !units in Schedule should be fraction applied to design level of hot water equipment, generally (0.0 - 1.0)
-  A4 , !Design Level Calculation Method
+ EquipmentLevel, !Design Level Calculation Method
        !The entered calculation method is used to create the maximum amount of hot water equipment
        !for this set of attributes
        !Choices: Equipment Level -- simply enter watts of equipment
@@ -12339,22 +12336,22 @@ HotWaterEquipment,
   N3 , !Watts per Person
        !minimum 0
        !units W/Person
-  N4 , !Fraction Latent
+  0 , !Fraction Latent
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 , !Fraction Lost
+  0 , !Fraction Lost
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  A5 ; !End-Use Subcategory
+ General; !End-Use Subcategory
        !default General
 
 SteamEquipment,
@@ -12371,7 +12368,7 @@ SteamEquipment,
        !type object-list
        !object-list ScheduleNames
        !units in Schedule should be fraction applied to design level of steam equipment, generally (0.0 -1.0)
-  A4 , !Design Level Calculation Method
+ EquipmentLevel, !Design Level Calculation Method
        !The entered calculation method is used to create the maximum amount of steam equipment
        !for this set of attributes
        !Choices: Equipment Level -- simply enter watts of equipment
@@ -12392,22 +12389,22 @@ SteamEquipment,
   N3 , !Watts per Person
        !minimum 0
        !units W/Person
-  N4 , !Fraction Latent
+  0 , !Fraction Latent
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 , !Fraction Lost
+  0 , !Fraction Lost
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  A5 ; !End-Use Subcategory
+ General; !End-Use Subcategory
        !default General
 
 OtherEquipment,
@@ -12424,7 +12421,7 @@ OtherEquipment,
        !type object-list
        !object-list ScheduleNames
        !units in Schedule should be fraction applied to design level of other equipment, generally (0.0 - 1.0)
-  A4 , !Design Level Calculation Method
+ EquipmentLevel, !Design Level Calculation Method
        !The entered calculation method is used to create the maximum amount of other equipment.
        !to set a loss, use a negative value in the following fields.
        !for this set of attributes
@@ -12443,17 +12440,17 @@ OtherEquipment,
        !units W/m2
   N3 , !Watts per Person
        !units W/Person
-  N4 , !Fraction Latent
+  0 , !Fraction Latent
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  N6 ; !Fraction Lost
+  0 ; !Fraction Lost
        !required-field
        !minimum 0.0
        !maximum 1.0
@@ -12486,12 +12483,12 @@ ZoneBaseboard:OutdoorTemperatureControlled,
   N4 , !High Temperature
        !required-field
        !units C
-  N5 , !Fraction Radiant
+  0 , !Fraction Radiant
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 0
-  A4 ; !End-Use Subcategory
+ General; !End-Use Subcategory
        !default General
 
 ZoneContaminantSourceAndSink:CarbonDioxide,
@@ -12683,7 +12680,7 @@ Daylighting:Controls,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N1 , !Total Daylighting Reference Points
+  1 , !Total Daylighting Reference Points
        !minimum 1
        !maximum 2
        !default 1
@@ -12693,7 +12690,7 @@ Daylighting:Controls,
   N3 , !Y-Coordinate of First Reference Point
        !units m
        !required-field
-  N4 , !Z-Coordinate of First Reference Point
+  0.8, !Z-Coordinate of First Reference Point
        !units m
        !default 0.8
   N5 , !X-Coordinate of Second Reference Point
@@ -12702,27 +12699,27 @@ Daylighting:Controls,
   N6 , !Y-Coordinate of Second Reference Point
        !units m
        !Required if Total Daylighting Reference Points = 2
-  N7 , !Z-Coordinate of Second Reference Point
+  0.8, !Z-Coordinate of Second Reference Point
        !units m
        !minimum 0.0
        !default 0.8
-  N8 , !Fraction of Zone Controlled by First Reference Point
+  1.0, !Fraction of Zone Controlled by First Reference Point
        !minimum 0.0
        !maximum 1.0
        !default 1.0
-  N9 , !Fraction of Zone Controlled by Second Reference Point
+  0.0, !Fraction of Zone Controlled by Second Reference Point
        !minimum 0.0
        !maximum 1.0
        !default 0.0
-  N10, !Illuminance Setpoint at First Reference Point
+  500, !Illuminance Setpoint at First Reference Point
        !units lux
        !minimum 0.0
        !default 500
-  N11, !Illuminance Setpoint at Second Reference Point
+  500, !Illuminance Setpoint at Second Reference Point
        !units lux
        !minimum 0.0
        !default 500
-  N12, !Lighting Control Type
+  1, !Lighting Control Type
        !minimum 1
        !maximum 3
        !1=continuous,2=stepped,3=continuous/off
@@ -12732,22 +12729,22 @@ Daylighting:Controls,
        !units deg
        !minimum 0
        !maximum 360
-  N14, !Maximum Allowable Discomfort Glare Index
+  22, !Maximum Allowable Discomfort Glare Index
        !minimum 1
        !The default is for general office work
        !default 22
-  N15, !Minimum Input Power Fraction for Continuous Dimming Control
+  0.3, !Minimum Input Power Fraction for Continuous Dimming Control
        !minimum 0.0
        !maximum 0.6
        !default 0.3
-  N16, !Minimum Light Output Fraction for Continuous Dimming Control
+  0.2, !Minimum Light Output Fraction for Continuous Dimming Control
        !minimum 0.0
        !maximum 0.6
        !default 0.2
-  N17, !Number of Stepped Control Steps
+  1, !Number of Stepped Control Steps
        !for Lighting Control Type=2, this field cannot be zero.
        !default 1
-  N18; !Probability Lighting will be Reset When Needed in Manual Stepped Control
+  1.0; !Probability Lighting will be Reset When Needed in Manual Stepped Control
        !minimum 0.0
        !maximum 1.0
        !default 1.0
@@ -12764,23 +12761,23 @@ Daylighting:DELight:Controls,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N1 , !Lighting Control Type
+  1 , !Lighting Control Type
        !minimum 1
        !maximum 3
        !1=continuous,2=stepped,3=continuous/off
        !default 1
-  N2 , !Minimum Input Power Fraction for Continuous Dimming Control
+  0.3, !Minimum Input Power Fraction for Continuous Dimming Control
        !minimum 0.0
        !maximum 0.6
        !default 0.3
-  N3 , !Minimum Light Output Fraction for Continuous Dimming Control
+  0.2, !Minimum Light Output Fraction for Continuous Dimming Control
        !minimum 0.0
        !maximum 0.6
        !default 0.2
-  N4 , !Number of Stepped Control Steps
+  1 , !Number of Stepped Control Steps
        !for Lighting Control Type=2, this field cannot be zero.
        !default 1
-  N5 , !Probability Lighting will be Reset When Needed in Manual Stepped Control
+  0.0, !Probability Lighting will be Reset When Needed in Manual Stepped Control
        !minimum 0.0
        !maximum 1.0
        !default 0.0
@@ -12813,12 +12810,12 @@ Daylighting:DELight:ReferencePoint,
   N3,  !Z-coordinate of Reference Point
        !required-field
        !units m
-  N4 , !Fraction of Zone Controlled by Reference Point
+  1.0, !Fraction of Zone Controlled by Reference Point
        !required-field
        !minimum 0.0
        !maximum 1.0
        !default 1.0
-  N5;  !Illuminance Setpoint at Reference Point
+ 500;  !Illuminance Setpoint at Reference Point
        !required-field
        !units lux
        !minimum 0.0
@@ -12845,7 +12842,7 @@ Daylighting:DELight:ComplexFenestration,
        !to account for the geometry, and the solar and thermal gains/losses, of the Complex Fenestration
        !type object-list
        !object-list SubSurfNames
-  N1;  !Fenestration Rotation
+  0.0;  !Fenestration Rotation
        !units deg
        !In-plane counter-clockwise rotation angle of the Complex Fenestration
        !optical reference direction and the base edge of the Complex Fenestration.
@@ -12881,7 +12878,7 @@ DaylightingDevice:Tubular,
        !required-field
        !units m
        !minimum> 0
-  N3 , !Effective Thermal Resistance
+  0.28, !Effective Thermal Resistance
        !R value between TubularDaylightDome and TubularDaylightDiffuser
        !required-field
        !units m2-K/W
@@ -12891,25 +12888,25 @@ DaylightingDevice:Tubular,
        !begin-extensible
        !type object-list
        !object-list ZoneNames
-  N4 , !Transition Zone 1 Length
+  0.0, !Transition Zone 1 Length
        !units m
        !minimum 0.0
   A6 , !Transition Zone 2 Name
        !type object-list
        !object-list ZoneNames
-  N5 , !Transition Zone 2 Length
+  0.0, !Transition Zone 2 Length
        !units m
        !minimum 0.0
   A7 , !Transition Zone 3 Name
        !type object-list
        !object-list ZoneNames
-  N6 , !Transition Zone 3 Length
+  0.0, !Transition Zone 3 Length
        !units m
        !minimum 0.0
   A8 , !Transition Zone 4 Name
        !type object-list
        !object-list ZoneNames
-  N7; !Transition Zone 4 Length
+ 0.0; !Transition Zone 4 Length
        !units m
        !minimum 0.0
 
@@ -12979,26 +12976,26 @@ Output:IlluminanceMap,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N1 , !Z height
+ 0.0, !Z height
        !units m
        !default 0.0
-  N2 , !X Minimum Coordinate
+  0.0, !X Minimum Coordinate
        !units m
        !default 0.0
-  N3 , !X Maximum Coordinate
+  1.0, !X Maximum Coordinate
        !units m
        !default 1.0
-  N4 , !Number of X Grid Points
+  2, !Number of X Grid Points
        !Maximum number of total grid points must be <= 2500 (X*Y)
        !minimum> 0
        !default 2
-  N5 , !Y Minimum Coordinate
+  0.0, !Y Minimum Coordinate
        !units m
        !default 0.0
-  N6 , !Y Maximum Coordinate
+  1.0, !Y Maximum Coordinate
        !units m
        !default 1.0
-  N7 ; !Number of Y Grid Points
+  2; !Number of Y Grid Points
        !Maximum number of total grid points must be <= 2500 (X*Y)
        !minimum> 0
        !default 2
@@ -13008,7 +13005,7 @@ OutputControl:IlluminanceMap:Style,
        !importing into spreadsheet programs such as Excel(tm) but not so well for word
        !processing progams -- there tab may be a better choice. fixed puts spaces between the "columns"
        !unique-object
-   A1; !Column Separator
+   comma; !Column Separator
        !type choice
        !key Comma
        !key Tab
@@ -13033,7 +13030,7 @@ ZoneInfiltration:DesignFlowRate,
        !required-field
        !type object-list
        !object-list ScheduleNames
-  A4 , !Design Flow Rate Calculation Method
+ Flow/Zone, !Design Flow Rate Calculation Method
        !The entered calculation method is used to create the maximum amount of infiltration
        !for this set of attributes
        !Choices: Flow/Zone => Design Flow Rate -- simply enter Design Flow Rate
@@ -13065,22 +13062,22 @@ ZoneInfiltration:DesignFlowRate,
   N4 , !Air Changes per Hour
        !units 1/hr
        !minimum 0
-  N5 , !Constant Term Coefficient
+  1 , !Constant Term Coefficient
        !required-field
        ! "A" in Equation
        !minimum 0
        !default 1
-  N6 , !Temperature Term Coefficient
+  0 , !Temperature Term Coefficient
        !required-field
        ! "B" in Equation
        !minimum 0
        !default 0
-  N7 , !Velocity Term Coefficient
+  0 , !Velocity Term Coefficient
        !required-field
        ! "C" in Equation
        !minimum 0
        !default 0
-  N8 ; !Velocity Squared Term Coefficient
+  0 ; !Velocity Squared Term Coefficient
        !required-field
        ! "D" in Equation
        !minimum 0
@@ -13139,7 +13136,7 @@ ZoneInfiltration:FlowCoefficient,
        !"Cs" in Equation
        !minimum> 0
        !required-field
-  N3 , !Pressure Exponent
+  0.67, !Pressure Exponent
        !"n" in Equation
        !minimum> 0
        !required-field
@@ -13178,7 +13175,7 @@ ZoneVentilation:DesignFlowRate,
        !Flow/Area => Flow Rate per Zone Floor Area - Value * Floor Area (zone) = Design Flow Rate
        !Flow/Person => Flow Rate per Person - Value * #people = Design Flow Rate
        !AirChanges/Hour => Air Changes per Hour - Value * Floor Volume (zone) adjusted for m3/s = Design Volume Flow Rate
-       ! "Vdesign" in Equation is the result.
+       !"Vdesign" in Equation is the result.
        !required-field
        !type choice
        !key Flow/Zone
@@ -13198,7 +13195,7 @@ ZoneVentilation:DesignFlowRate,
   N4 , !Air Changes per Hour
        !units 1/hr
        !minimum 0
-  A5 , !Ventilation Type
+ Natural, !Ventilation Type
        !required-field
        !type choice
        !key Natural
@@ -13206,37 +13203,37 @@ ZoneVentilation:DesignFlowRate,
        !key Exhaust
        !key Balanced
        !default Natural
-  N5 , !Fan Pressure Rise
+  0 , !Fan Pressure Rise
        !required-field
        !pressure rise across the fan
        !units Pa
        !minimum 0
        !default 0
-  N6 , !Fan Total Efficiency
+  1 , !Fan Total Efficiency
        !required-field
        !minimum> 0
        !default 1
-  N7 , !Constant Term Coefficient
+  1 , !Constant Term Coefficient
        !required-field
        !"A" in Equation
        !default 1
        !minimum 0
-  N8 , !Temperature Term Coefficient
+  0 , !Temperature Term Coefficient
        !required-field
        ! "B" in Equation
        !default 0
        !minimum 0
-  N9 , !Velocity Term Coefficient
+  0 , !Velocity Term Coefficient
        !required-field
        !"C" in Equation
        !default 0
        !minimum 0
-  N10, !Velocity Squared Term Coefficient
+  0, !Velocity Squared Term Coefficient
        !required-field
        ! "D" in Equation
        !default 0
        !minimum 0
-  N11, !Minimum Indoor Temperature
+ -100, !Minimum Indoor Temperature
        !this is the indoor temperature below which ventilation is shutoff
        !units C
        !minimum -100
@@ -13246,7 +13243,7 @@ ZoneVentilation:DesignFlowRate,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the indoor temperature versus time below which ventilation is shutoff.
-  N12, !Maximum Indoor Temperature
+  100, !Maximum Indoor Temperature
        !this is the indoor temperature above which ventilation is shutoff
        !units C
        !minimum -100
@@ -13256,7 +13253,7 @@ ZoneVentilation:DesignFlowRate,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the indoor temperature versus time above which ventilation is shutoff.
-  N13, !Delta Temperature
+ -100, !Delta Temperature
        !This is the temperature differential between indoor and outdoor below which ventilation is shutoff.
        !If ((IndoorTemp - OutdoorTemp) < DeltaTemperature) then ventilation is not allowed.
        !For example, if delta temperature is 2C, ventilation is assumed to be available if the outside air 
@@ -13270,7 +13267,7 @@ ZoneVentilation:DesignFlowRate,
        !object-list ScheduleNames
        !This schedule contains the temperature differential between indoor and outdoor
        !versus time below which ventilation is shutoff.
-  N14, !Minimum Outdoor Temperature
+ -100, !Minimum Outdoor Temperature
        !this is the outdoor temperature below which ventilation is shutoff
        !units C
        !minimum -100
@@ -13280,7 +13277,7 @@ ZoneVentilation:DesignFlowRate,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the outdoor temperature versus time below which ventilation is shutoff.
-  N15, !Maximum Outdoor Temperature
+  100, !Maximum Outdoor Temperature
        !this is the outdoor temperature above which ventilation is shutoff
        !units C
        !minimum -100
@@ -13290,7 +13287,7 @@ ZoneVentilation:DesignFlowRate,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the outdoor temperature versus time above which ventilation is shutoff.
-  N16; !Maximum Wind Speed
+  40; !Maximum Wind Speed
        !this is the outdoor wind speed above which ventilation is shutoff
        !units m/s
        !minimum 0
@@ -13310,7 +13307,7 @@ ZoneVentilation:WindandStackOpenArea,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N1 , !Opening Area
+  0 , !Opening Area
        !This is the opening area used to calculate stack effect and wind driven ventilation.
        !units m2
        !minimum 0
@@ -13327,19 +13324,18 @@ ZoneVentilation:WindandStackOpenArea,
        !wind direction and effective angle
        !Cw = 0.55 at angle = 0, and Cw = 0.3 at angle=180
        !Linear interpolation is used to calculate Cw based on the above two values.
-       !units dimensionless
        !autocalculatable
        !minimum 0
        !maximum 1
        !default Autocalculate
-  N3 , !Effective Angle
+  0 , !Effective Angle
        !This field is defined as normal angle of the opening area and is used when input
        !field Opening Effectiveness = Autocalculate.
        !units deg
        !minimum 0.0
        !maximum< 360.0
        !default 0
-  N4 , !Height Difference
+  0 , !Height Difference
        !This is the height difference between the midpoint of an opening and the neutral pressure level.
        !units m
        !minimum 0
@@ -13354,7 +13350,7 @@ ZoneVentilation:WindandStackOpenArea,
        !minimum 0.0
        !maximum 1.0
        !default Autocalculate
-  N6 , !Minimum Indoor Temperature
+ -100, !Minimum Indoor Temperature
        !This is the indoor temperature below which ventilation is shutoff.
        !units C
        !minimum -100
@@ -13364,7 +13360,7 @@ ZoneVentilation:WindandStackOpenArea,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the indoor temperature versus time below which ventilation is shutoff.
-  N7 , !Maximum Indoor Temperature
+  100, !Maximum Indoor Temperature
        !This is the indoor temperature above which ventilation is shutoff.
        !units C
        !minimum -100
@@ -13374,7 +13370,7 @@ ZoneVentilation:WindandStackOpenArea,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the indoor temperature versus time above which ventilation is shutoff.
-  N8 , !Delta Temperature
+ -100, !Delta Temperature
        !This is the temperature differential between indoor and outdoor below which ventilation is shutoff.
        !units deltaC
        !minimum -100
@@ -13384,7 +13380,7 @@ ZoneVentilation:WindandStackOpenArea,
        !object-list ScheduleNames
        !This schedule contains the temperature differential between indoor and outdoor
        !versus time below which ventilation is shutoff.
-  N9 , !Minimum Outdoor Temperature
+ -100, !Minimum Outdoor Temperature
        !This is the outdoor temperature below which ventilation is shutoff.
        !units C
        !minimum -100
@@ -13394,7 +13390,7 @@ ZoneVentilation:WindandStackOpenArea,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the outdoor temperature versus time below which ventilation is shutoff.
-  N10, !field Maximum Outdoor Temperature
+  100, !field Maximum Outdoor Temperature
        !This is the outdoor temperature above which ventilation is shutoff.
        !units C
        !minimum -100
@@ -13404,7 +13400,7 @@ ZoneVentilation:WindandStackOpenArea,
        !type object-list
        !object-list ScheduleNames
        !This schedule contains the outdoor temperature versus time above which ventilation is shutoff.
-  N11; !Maximum Wind Speed
+  40; !Maximum Wind Speed
        !This is the outdoor wind speed above which ventilation is shutoff.
        !units m/s
        !minimum 0
@@ -13422,14 +13418,14 @@ ZoneAirBalance:OutdoorAir,
        !required-field
        !type object-list
        !object-list ZoneNames
-  A3 , !Air Balance Method
+ Quadrature, !Air Balance Method
        !type choice
        !key Quadrature
        !key None
        !default Quadrature
        !None: Only perform simple calculations without using a combined zone outdoor air.
        !Quadrature: A combined outdoor air is used in the quadrature sum.
-  N1 , !Induced Outdoor Air Due to Unbalanced Duct Leakage
+  0 , !Induced Outdoor Air Due to Unbalanced Duct Leakage
        !units m3/s
        !minimum 0
        !default 0
@@ -13451,7 +13447,7 @@ ZoneMixing,
        !required-field
        !type object-list
        !object-list ScheduleNames
-  A4 , !Design Flow Rate Calculation Method
+ Flow/Zone, !Design Flow Rate Calculation Method
        !The entered calculation method is used to create the maximum amount of ventilation
        !for this set of attributes
        !Choices: Flow/Zone => Design Flow Rate -- simply enter Design Flow Rate
@@ -13482,7 +13478,7 @@ ZoneMixing,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N5 , !Delta Temperature
+  0 , !Delta Temperature
        !units deltaC
        !default 0
        !This field contains the constant temperature differential between source and
@@ -13531,7 +13527,7 @@ ZoneCrossMixing,
        !required-field
        !type object-list
        !object-list ScheduleNames
-  A4 , !Design Flow Rate Calculation Method
+ Flow/Zone, !Design Flow Rate Calculation Method
        !The entered calculation method is used to create the maximum amount of ventilation
        !for this set of attributes
        !Choices: Flow/Zone => Design Flow Rate -- simply enter Design Flow Rate
@@ -13562,7 +13558,7 @@ ZoneCrossMixing,
        !required-field
        !type object-list
        !object-list ZoneNames
-  N5 , !Delta Temperature
+  0 , !Delta Temperature
        !units deltaC
        !minimum 0.0
        !default 0
@@ -13628,17 +13624,17 @@ ZoneRefrigerationDoorMixing,
        !required-field
        !type object-list
        !object-list ScheduleNames
-  N1 , !Door Height
+  3.0, !Door Height
        !units m
        !minimum 0
        !maximum 50.
        !default 3.0
-  N2 , !Door Area
+  9. , !Door Area
        !minimum 0
        !maximum 400.
        !default 9.
        !units m2
-  A5;  !Door Protection Type
+ None;  !Door Protection Type
        !Door protection can reduce the air flow through a refrigeration door
        !The default value is "None"
        !Choices: "None", "AirCurtain", and "StripCurtain"
@@ -13683,49 +13679,49 @@ ZoneEarthtube,
       !This is the temperature difference between indoor and outdoor below which the earth tube is shut off
       !units deltaC
       !minimum 0
-  A3, !Earthtube Type
+ Natural, !Earthtube Type
       !required-field
       !type choice
       !key Natural
       !key Intake
       !key Exhaust
       !default Natural
-  N5, !Fan Pressure Rise
+  0, !Fan Pressure Rise
       !required-field
       !pressure rise across the fan
       !units Pa
       !minimum 0
       !default 0
-  N6, !Fan Total Efficiency
+  1, !Fan Total Efficiency
       !required-field
       !minimum> 0
       !default 1
-  N7, !Pipe Radius
+  1, !Pipe Radius
       !required-field
       !units m
       !minimum> 0
       !default 1
-  N8, !Pipe Thickness
+  0.2, !Pipe Thickness
       !required-field
       !units m
       !minimum> 0
       !default 0.2
-  N9, !Pipe Length
+  15, !Pipe Length
       !required-field
       !units m
       !minimum> 0
       !default 15
- N10, !Pipe Thermal Conductivity
+ 200, !Pipe Thermal Conductivity
       !required-field
       !units W/m-K
       !minimum> 0
       !default 200
- N11, !Pipe Depth Under Ground Surface
+ 3, !Pipe Depth Under Ground Surface
       !required-field
       !units m
       !minimum> 0
       !default 3
-  A4, !Soil Condition
+ HeavyAndDamp, !Soil Condition
       !required-field
       !type choice
       !key HeavyAndSaturated
@@ -13733,33 +13729,33 @@ ZoneEarthtube,
       !key HeavyAndDry
       !key LightAndDry
       !default HeavyAndDamp
- N12, !Average Soil Surface Temperature
+ 0, !Average Soil Surface Temperature
       !required-field
       !units C
       !default 0
- N13, !Amplitude of Soil Surface Temperature
+ 0, !Amplitude of Soil Surface Temperature
       !required-field
       !units C
       !minimum 0
       !default 0
- N14, !Phase Constant of Soil Surface Temperature
+ 0, !Phase Constant of Soil Surface Temperature
       !required-field
       !units days
       !minimum 0
       !default 0
- N15, !Constant Term Flow Coefficient
+ 1, !Constant Term Flow Coefficient
       !required-field
       !"A" in Equation
       !default 1
- N16, !Temperature Term Flow Coefficient
+ 0, !Temperature Term Flow Coefficient
       !required-field
       ! "B" in Equation
       !default 0
- N17, !Velocity Term Flow Coefficient
+ 0, !Velocity Term Flow Coefficient
       !required-field
       ! "C" in Equation
       !default 0
- N18; !Velocity Squared Term Flow Coefficient
+ 0; !Velocity Squared Term Flow Coefficient
       !required-field
       ! "D" in Equation
       !default 0
@@ -13779,7 +13775,7 @@ ZoneCoolTower:Shower,
      !In case of stand alone tank or underground water, leave this input blank
      !type object-list
      !object-list WaterStorageTankNames
- A5, !Flow Control Type
+ WindDrivenFlow, !Flow Control Type
      !Water flow schedule should be selected when the water flow rate is known.
      !Wind-driven flow should be selected when the water flow rate is unknown.
      !type choice
@@ -13842,7 +13838,7 @@ ZoneThermalChimney,
         !required-field
         !units m2
         !minimum 0
-   N3, !Discharge Coefficient
+  0.8, !Discharge Coefficient
         !required-field
         !minimum 0
         !maximum 1
@@ -13855,7 +13851,7 @@ ZoneThermalChimney,
         !required-field
         !units m
         !minimum 0
-   N5, !Relative Ratios of Air Flow Rates Passing through Zone 1
+  1.0, !Relative Ratios of Air Flow Rates Passing through Zone 1
         !required-field
         !minimum 0
         !maximum 1
@@ -14121,7 +14117,7 @@ AirflowNetwork:SimulationControl,
       !calculations during system fan on time and Simple calculations during system Fan off time;
       !MultizoneWithDistribution: Perform distribution system calculations during system
       !fan on time and multizone Airflow driven by wind during system fan off time.
- A3 , !Wind Pressure Coefficient Type
+ SurfaceAverageCalculation, !Wind Pressure Coefficient Type
       !type choice
       !key Input
       !key SurfaceAverageCalculation
@@ -14137,7 +14133,7 @@ AirflowNetwork:SimulationControl,
       !type object-list
       !object-list WPCSetNames
       !Used only if Wind Pressure Coefficient Type = Input, otherwise this field may be left blank.
- A5 , !Height Selection for Local Wind Speed Calculation
+ OpeningHeight, !Height Selection for Local Wind Speed Calculation
       !type choice
       !key ExternalNode
       !key OpeningHeight
@@ -14148,25 +14144,25 @@ AirflowNetwork:SimulationControl,
       !calculate local wind speed
       !This field is ignored when the choice of the Wind Pressure Coefficient Type field is
       !SurfaceAverageCalculation.
- A6 , !Building Type
+ LowRise, !Building Type
       !Used only if Wind Pressure Coefficient Type = SurfaceAverageCalculation,
       !otherwise this field may be left blank.
       !type choice
       !key LowRise
       !key HighRise
       !default LowRise
- N1 , !Maximum Number of Iterations
+ 500, !Maximum Number of Iterations
       !default 500
       !minimum> 10
       !maximum 30000
       !Determines the maximum number of iterations used to converge on a solution. If this limit
       !is exceeded, the program terminates.
- A7 , !Initialization Type
+ ZeroNodePressures, !Initialization Type
       !type choice
       !key LinearInitializationMethod
       !key ZeroNodePressures
       !default ZeroNodePressures
- N2 , !Relative Airflow Convergence Tolerance
+ 1.E-4, !Relative Airflow Convergence Tolerance
       !default 1.E-4
       !minimum> 0
       !This tolerance is defined as the absolute value of the sum of the mass Flow Rates
@@ -14174,7 +14170,7 @@ AirflowNetwork:SimulationControl,
       !described here refer to the mass Flow Rates at all Nodes in the AirflowNetwork model.
       !The solution converges when both this tolerance and the tolerance in the next field
       !(Absolute Airflow Convergence Tolerance) are satisfied.
- N3 , !Absolute Airflow Convergence Tolerance
+ 1.E-6, !Absolute Airflow Convergence Tolerance
       !units kg/s
       !default 1.E-6
       !minimum> 0
@@ -14182,25 +14178,25 @@ AirflowNetwork:SimulationControl,
       !flow rates described here refer to the mass flow rates at all nodes in the AirflowNetwork
       !model. The solution converges when both this tolerance and the tolerance in the previous
       !field (Relative Airflow Convergence Tolerance) are satisfied.
- N4 , !Convergence Acceleration Limit
+ -0.5, !Convergence Acceleration Limit
       !Used only for AirflowNetwork:SimulationControl
       !minimum -1
       !maximum 1
       !default -0.5
- N5 , !Azimuth Angle of Long Axis of Building
+ 0.0, !Azimuth Angle of Long Axis of Building
       !units deg
       !minimum 0.0
       !maximum 180.0
       !default 0.0
       !Degrees clockwise from true North.
       !Used only if Wind Pressure Coefficient Type = SurfaceAverageCalculation.
- N6 ; !Ratio of Building Width Along Short Axis to Width Along Long Axis
+ 1.0; !Ratio of Building Width Along Short Axis to Width Along Long Axis
       !minimum> 0.0
       !maximum 1.0
       !default 1.0
       !Used only if Wind Pressure Coefficient Type = SurfaceAverageCalculation.
 
-AirflowNetwork:MultiZone:Zone,
+AirflowNetwork:MultiZone:Zone,		!RS: Left off here!
       !min-fields 8
       !This object is used to simultaneously control a thermal zone's window and door openings,
       !both exterior and interior.
