@@ -23697,7 +23697,7 @@ Fan:ComponentModel,
        !default 1.0
        !autosizable
        !Ratio of motor pulley diameter to fan pulley diameter
-    , !Belt Maximum Torque
+  70, !Belt Maximum Torque
         !required-field
         !units N-m
         !minimum> 0.0
@@ -23717,7 +23717,7 @@ Fan:ComponentModel,
         !units rev/min
         !minimum> 0.0
         !Maximum rotational speed of fan motor shaft
-    , !Maximum Motor Output Power
+ 500, !Maximum Motor Output Power
         !required-field
         !units W
         !minimum> 0.0
@@ -23740,7 +23740,7 @@ Fan:ComponentModel,
        !Efficiency depends on fraction of full-load motor speed
        !Efficiency depends on  fraction of full-load motor input power
        !If field blank, then assumes constant VFD efficiency (0.97)
-    , !Maximum VFD Output Power
+  400, !Maximum VFD Output Power
         !required-field
         !units W
         !minimum> 0.0
@@ -24028,7 +24028,7 @@ Coil:Cooling:DX:SingleSpeed,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Rated Total Cooling Capacity
+  950, !Rated Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -24036,7 +24036,7 @@ Coil:Cooling:DX:SingleSpeed,
        !gross capacity excluding supply air fan heat
        !rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
-    , !Rated Sensible Heat Ratio
+  0.8, !Rated Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -24049,7 +24049,7 @@ Coil:Cooling:DX:SingleSpeed,
        !units W/W
        !minimum> 0.0
        !default 3.0
-    , !Rated Air Flow Rate
+  0.001, !Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -24213,7 +24213,7 @@ Coil:Cooling:DX:TwoSpeed,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Rated High Speed Total Cooling Capacity
+  950, !Rated High Speed Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -24221,7 +24221,7 @@ Coil:Cooling:DX:TwoSpeed,
        !gross capacity excluding supply air fan heat
        !rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
-    , !Rated High Speed Sensible Heat Ratio
+   0.8, !Rated High Speed Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -24234,7 +24234,7 @@ Coil:Cooling:DX:TwoSpeed,
        !units W/W
        !minimum> 0.0
        !default 3.0
-    , !Rated High Speed Air Flow Rate
+  0.001, !Rated High Speed Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -24283,7 +24283,7 @@ Coil:Cooling:DX:TwoSpeed,
        !quadratic curve = a + b*PLR + c*PLR**2
        !cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
        !PLR = part load ratio (cooling load/steady state capacity)
-    , !Rated Low Speed Total Cooling Capacity
+  850, !Rated Low Speed Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -24291,7 +24291,7 @@ Coil:Cooling:DX:TwoSpeed,
        !gross capacity excluding supply air fan heat
        !rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
-    , !Rated Low Speed Sensible Heat Ratio
+  0.8, !Rated Low Speed Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -24304,7 +24304,7 @@ Coil:Cooling:DX:TwoSpeed,
        !units W/W
        !minimum> 0.0
        !default 3.0
-    , !Rated Low Speed Air Flow Rate
+  0.001, !Rated Low Speed Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -24481,7 +24481,7 @@ Coil:Cooling:DX:MultiSpeed,
        !maximum 4
        !Enter the number of the following sets of data for coil capacity, SHR, COP,
        !flow rate, and associated curves.
-    , !Speed 1 Rated Total Cooling Capacity
+  950, !Speed 1 Rated Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -24490,7 +24490,7 @@ Coil:Cooling:DX:MultiSpeed,
        !Rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
        !Speed 1 is defined as low speed
-    , !Speed 1 Rated Sensible Heat Ratio
+  0.8, !Speed 1 Rated Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -24503,7 +24503,7 @@ Coil:Cooling:DX:MultiSpeed,
        !units W/W
        !minimum> 0.0
        !default 3.0
-    , !Speed 1 Rated Air Flow Rate
+  0.001, !Speed 1 Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -24603,7 +24603,7 @@ Coil:Cooling:DX:MultiSpeed,
        !minimum 0.0
        !autosizable
        !Rated power consumed by the evaporative condenser's water pump at high speed
-   , !Speed 2 Rated Total Cooling Capacity
+ 900, !Speed 2 Rated Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -24611,7 +24611,7 @@ Coil:Cooling:DX:MultiSpeed,
        !Gross capacity excluding supply air fan heat
        !Rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
-   , !Speed 2 Rated Sensible Heat Ratio
+  0.7, !Speed 2 Rated Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -24624,7 +24624,7 @@ Coil:Cooling:DX:MultiSpeed,
        !units W/W
        !minimum> 0.0
        !default 3.0
-   , !Speed 2 Rated Air Flow Rate
+  0.0005, !Speed 2 Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
