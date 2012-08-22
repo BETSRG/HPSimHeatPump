@@ -21182,7 +21182,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Electric,
   A99, !Surface 97 Name
   , !Fraction of Radiant Energy to Surface 97
  A100, !Surface 98 Name
-  , Fraction of Radiant Energy to Surface 98
+  , !Fraction of Radiant Energy to Surface 98
  A101, !Surface 99 Name
   , !Fraction of Radiant Energy to Surface 99
  A102, !Surface 100 Name
