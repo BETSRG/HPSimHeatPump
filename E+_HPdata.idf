@@ -14930,7 +14930,7 @@ AirflowNetwork:Distribution:Component:Leak,
       !Defined at 1 Pa pressure difference across this component.
       !Enter the coefficient used in the following equation:
       !Mass Flow Rate = Air Mass Flow Coefficient * (dP)^Air Mass Flow Exponent
- 0.65, !minimum 0.5
+ 0.65; !minimum 0.5
       !maximum 1.0
       !default 0.65
       !Enter the exponent used in the following equation:
