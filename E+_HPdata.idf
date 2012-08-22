@@ -19143,7 +19143,7 @@ ZoneHVAC:FourPipeFanCoil,
         !key CyclingFan
         !key VariableFanVariableFlow
         !key VariableFanConstantFlow
-     , !Maximum Supply Air Flow Rate
+   10.0, !Maximum Supply Air Flow Rate
         !required-field
         !autosizable
         !units m3/s
@@ -19154,7 +19154,7 @@ ZoneHVAC:FourPipeFanCoil,
         !Medium Speed Supply Air Flow Ratio should be greater than Low Speed Supply Air Flow Ratio
         !minimum> 0.0
         !default 0.66
-     , !Maximum Outdoor Air Flow Rate
+   10.0, !Maximum Outdoor Air Flow Rate
         !required-field
         !autosizable
         !units m3/s
@@ -19205,7 +19205,7 @@ ZoneHVAC:FourPipeFanCoil,
         !required-field
         !type object-list
         !object-list CoolingCoilsWater
-     , !Maximum Cold Water Flow Rate
+   10.0, !Maximum Cold Water Flow Rate
         !required-field
         !autosizable
         !units m3/s
@@ -19225,7 +19225,7 @@ ZoneHVAC:FourPipeFanCoil,
         !required-field
         !type object-list
         !object-list HeatingCoilsWater
-     , !Maximum Hot Water Flow Rate
+   10.0, !Maximum Hot Water Flow Rate
         !required-field
         !autosizable
         !units m3/s
@@ -19246,11 +19246,11 @@ ZoneHVAC:WindowAirConditioner,
         !required-field
         !type object-list
         !object-list ScheduleNames
-     , !Maximum Supply Air Flow Rate
+    10.0, !Maximum Supply Air Flow Rate
         !required-field
         !units m3/s
         !autosizable
-     , !Maximum Outdoor Air Flow Rate
+    10.0, !Maximum Outdoor Air Flow Rate
         !required-field
         !units m3/s
         !autosizable
@@ -19340,13 +19340,13 @@ ZoneHVAC:PackagedTerminalAirConditioner,
         !type object-list
         !object-list OutdoorAirMixers
         !Needs to match the name of the PTAC outdoor air mixer object.
-     , !Supply Air Flow Rate During Cooling Operation
+   2.5, !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to fan size.
-     , !Supply Air Flow Rate During Heating Operation
+   2.5, !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
@@ -19362,13 +19362,13 @@ ZoneHVAC:PackagedTerminalAirConditioner,
         !This air flow rate is used when no heating or cooling is required and the cooling or
         !heating coil is off. If this field is left blank or zero, the supply air flow rate
         !from the previous on cycle (either cooling or heating) is used.
-     , !Outdoor Air Flow Rate During Cooling Operation
+    2.5, !Outdoor Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum 0
         !autosizable
         !Must be less than or equal to supply air flow rate during cooling operation.
-     , !Outdoor Air Flow Rate During Heating Operation
+    2.5, !Outdoor Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum 0
@@ -19466,13 +19466,13 @@ ZoneHVAC:PackagedTerminalHeatPump,
         !type object-list
         !object-list OutdoorAirMixers
         !Needs to match name of outdoor air mixer object.
-     , !Supply Air Flow Rate During Cooling Operation
+    2.5, !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to fan size.
-     , !Supply Air Flow Rate During Heating Operation
+    2.5, !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
@@ -19487,13 +19487,13 @@ ZoneHVAC:PackagedTerminalHeatPump,
         !is used when no heating or cooling is required and the DX coil compressor is off.
         !If this field is left blank or zero, the supply air flow rate from the previous on cycle
         !(either cooling or heating) is used.
-     , !Outdoor Air Flow Rate During Cooling Operation
+    2.5, !Outdoor Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum 0
         !autosizable
         !Must be less than or equal to supply air flow rate during cooling operation.
-     , !Outdoor Air Flow Rate During Heating Operation
+    2.5, !Outdoor Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum 0
@@ -19566,7 +19566,7 @@ ZoneHVAC:PackagedTerminalHeatPump,
         !type object-list
         !object-list HeatingCoilName
         !Needs to match in the supplemental heating coil object.
-    , !Maximum Supply Air Temperature from Supplemental Heater
+  70, !Maximum Supply Air Temperature from Supplemental Heater
         !required-field
         !units C
         !autosizable
@@ -19618,13 +19618,13 @@ ZoneHVAC:WaterToAirHeatPump,
         !object-list OutdoorAirMixers
         !This optional field specifies the name of the outdoor air mixer object.
         !When used, this name needs to match name of outdoor air mixer object.
-     , !Supply Air Flow Rate During Cooling Operation
+   2.5, !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to fan size.
-     , !Supply Air Flow Rate During Heating Operation
+   2.5, !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
@@ -19639,13 +19639,13 @@ ZoneHVAC:WaterToAirHeatPump,
         !is used when no heating or cooling is required and the DX coil compressor is off.
         !If this field is left blank or zero, the supply air flow rate from the previous on cycle
         !(either cooling or heating) is used.
-     , !Outdoor Air Flow Rate During Cooling Operation
+    2.5, !Outdoor Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum 0
         !autosizable
         !Must be less than or equal to supply air flow rate during cooling operation.
-     , !Outdoor Air Flow Rate During Heating Operation
+    2.5, !Outdoor Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum 0
@@ -19730,7 +19730,7 @@ ZoneHVAC:WaterToAirHeatPump,
         !type object-list
         !object-list HeatingCoilName
         !Needs to match in the supplemental heating coil object
-    , !Maximum Supply Air Temperature from Supplemental Heater
+   70, !Maximum Supply Air Temperature from Supplemental Heater
         !required-field
         !units C
         !autosizable
@@ -19991,7 +19991,7 @@ ZoneHVAC:UnitVentilator,
         !key FixedAmount
         !key VariablePercent
         !key FixedTemperature
-     , !Minimum Outdoor Air Flow Rate
+   0.0, !Minimum Outdoor Air Flow Rate
         !required-field
         !units m3/s
         !autosizable
@@ -20001,7 +20001,7 @@ ZoneHVAC:UnitVentilator,
         !type object-list
         !object-list ScheduleNames
         !schedule values multiply the minimum outdoor air flow rate
-   , !Maximum Outdoor Air Flow Rate
+  10.0, !Maximum Outdoor Air Flow Rate
         !required-field
         !units m3/s
         !minimum 0
@@ -20093,7 +20093,7 @@ ZoneHVAC:UnitHeater,
  SupAirFan, !Supply Air Fan Name
         !type object-list
         !object-list FansCVandVAV
-     , !Maximum Supply Air Flow Rate
+  10.0, !Maximum Supply Air Flow Rate
         !required-field
         !units m3/s
         !minimum> 0
@@ -20148,7 +20148,7 @@ ZoneHVAC:OutdoorAirUnit,
        !(name of zone system is serving)
        !type object-list
        !object-list ZoneNames
-    , !Outdoor Air Flow Rate
+ 10.0, !Outdoor Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0
@@ -20484,7 +20484,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Water,
        !autosizable
        !units W
        !default autosize
-   ,  !Maximum Water Flow Rate
+ 10.0,  !Maximum Water Flow Rate
        !required-field
        !autosizable
        !units m3/s
@@ -20728,7 +20728,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Steam,
        !minimum 1.0
        !default 5.0
        !units C
-   ,  !Maximum Steam Flow Rate
+ 10.0,  !Maximum Steam Flow Rate
        !required-field
        !autosizable
        !minimum> 0.0
@@ -20963,7 +20963,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Electric,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Nominal Capacity
+  950, !Nominal Capacity
        !required-field
        !units W
        !autosizable
@@ -21201,11 +21201,11 @@ ZoneHVAC:Baseboard:Convective:Water,
  OutNode, !Outlet Node Name
         !required-field
         !type node
-    , !U-Factor Times Area Value
+  20, !U-Factor Times Area Value
        !required-field
        !autosizable
        !units W/K
-    , !Maximum Water Flow Rate
+ 10.0, !Maximum Water Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -21221,7 +21221,7 @@ ZoneHVAC:Baseboard:Convective:Electric,
         !required-field
         !type object-list
         !object-list ScheduleNames
-    , !Nominal Capacity
+  950, !Nominal Capacity
         !required-field
         !units W
         !autosizable
@@ -21689,7 +21689,7 @@ ZoneHVAC:HighTemperatureRadiant,
         !required-field
         !type object-list
         !object-list ZoneNames
-     , !Maximum Power Input
+  975, !Maximum Power Input
         !required-field
         !units W
         !minimum 0
@@ -21972,7 +21972,7 @@ ZoneHVAC:VentilatedSlab,
        !(name of surface system is embedded in) or list of surfaces
        !type object-list
        !object-list RadGroupAndSurfNames
-    , !Maximum Air Flow Rate
+ 10.0, !Maximum Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0
@@ -21983,7 +21983,7 @@ ZoneHVAC:VentilatedSlab,
        !key VariablePercent
        !key FixedTemperature
        !key FixedAmount
-    , !Minimum Outdoor Air Flow Rate
+  0.0, !Minimum Outdoor Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -21992,7 +21992,7 @@ ZoneHVAC:VentilatedSlab,
        !required-field
        !type object-list
        !object-list ScheduleNames
-     , !Maximum Outdoor Air Flow Rate
+ 10.0, !Maximum Outdoor Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -22354,7 +22354,7 @@ AirTerminal:SingleDuct:Uncontrolled,
  ZoneSupAirNode, !Zone Supply Air Node Name
        !required-field
        !type node
-    ; !Maximum Air Flow Rate
+ 10.0; !Maximum Air Flow Rate
        !required-field
        !units m3/s
        !minimum 0.0
@@ -22441,7 +22441,7 @@ AirTerminal:SingleDuct:VAV:NoReheat,
        !If the field Zone Minimum Air Flow Input Method is Scheduled, then this field
        !is optional; if a value is entered, then it is used for sizing normal-action reheat coils.
        !If both this field and the following field are entered, the larger result is used.
-  N  , !Fixed Minimum Air Flow Rate
+    , !Fixed Minimum Air Flow Rate
        !units m3/s
        !This field is used if the field Zone Minimum Air Flow Input Method is FixedFlowRate.
        !If the field Zone Minimum Air Flow Input Method is Scheduled, then this field
@@ -22582,12 +22582,12 @@ AirTerminal:SingleDuct:VAV:Reheat:VariableSpeedFan,
        !required-field
        !type object-list
        !object-list ScheduleNames
-   ,  !Maximum Cooling Air Flow Rate
+ 10.0,  !Maximum Cooling Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
        !minimum 0.0
-   ,  !Maximum Heating Air Flow Rate
+ 10.0,  !Maximum Heating Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -22686,7 +22686,7 @@ AirTerminal:SingleDuct:VAV:HeatAndCool:Reheat,
        !units m3/s
        !minimum> 0.0
        !autosizable
-   ,  !Zone Minimum Air Flow Fraction
+ 0.3,  !Zone Minimum Air Flow Fraction
        !required-field
        !minimum 0.0
        !maximum 1.0
@@ -22736,15 +22736,15 @@ AirTerminal:SingleDuct:SeriesPIU:Reheat,
        !required-field
        !type object-list
        !object-list ScheduleNames
-   ,  !Maximum Air Flow Rate
+ 10.0,  !Maximum Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
-   ,  !Maximum Primary Air Flow Rate
+ 10.0,  !Maximum Primary Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
-   ,  !Minimum Primary Air Flow Fraction
+ 0.0,  !Minimum Primary Air Flow Fraction
        !required-field
        !autosizable
  SupAirInNode,  !Supply Air Inlet Node Name
@@ -22796,18 +22796,18 @@ AirTerminal:SingleDuct:ParallelPIU:Reheat,
        !required-field
        !type object-list
        !object-list ScheduleNames
-   ,  !Maximum Primary Air Flow Rate
+ 10.0,  !Maximum Primary Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
-   ,  !Maximum Secondary Air Flow Rate
+ 10.0,  !Maximum Secondary Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
-   ,  !Minimum Primary Air Flow Fraction
+ 0.0,  !Minimum Primary Air Flow Fraction
        !required-field
        !autosizable
-   ,  !Fan On Flow Fraction
+ 0.5,  !Fan On Flow Fraction
        !required-field
        !autosizable
        !the fraction of the primary air flow at which fan turns on
@@ -22861,7 +22861,7 @@ AirTerminal:SingleDuct:ConstantVolume:FourPipeInduction,
        !required-field
        !type object-list
        !object-list ScheduleNames
-   ,  !Maximum Total Air Flow Rate
+ 10.0, !Maximum Total Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -23042,7 +23042,7 @@ AirTerminal:DualDuct:ConstantVolume,
  ColdAirInNode, !Cold Air Inlet Node Name
        !required-field
        !type node
-    ; !Maximum Air Flow Rate
+ 10.0; !Maximum Air Flow Rate
        !required-field
        !units m3/s
        !minimum 0.0
@@ -23067,7 +23067,7 @@ AirTerminal:DualDuct:VAV,
  ColdAirInNode, !Cold Air Inlet Node Name
        !required-field
        !type node
-    , !Maximum Damper Air Flow Rate
+ 10.0, !Maximum Damper Air Flow Rate
        !required-field
        !units m3/s
        !minimum 0.0
@@ -23506,7 +23506,7 @@ Fan:VariableVolume,
        !maximum 1.0
        !minimum 0.0
        !default 0.25
-  N5 , !Fan Power Minimum Air Flow Rate
+   , !Fan Power Minimum Air Flow Rate
        !units m3/s
        !minimum 0.0
   0.9, !Motor Efficiency
