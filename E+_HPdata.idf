@@ -19391,7 +19391,7 @@ ZoneHVAC:PackagedTerminalAirConditioner,
         !Fan:ConstantVolume only works when continuous fan operation is used the entire
         !simulation (all supply air fan operating mode schedule values are greater than 0).
         !If any fan operating mode schedule values are 0 a Fan:OnOff object must be used.
- SupAirFan, Supply Air Fan Name
+ SupAirFan, !Supply Air Fan Name
         !required-field
         !type object-list
         !object-list FansCVandOnOff
