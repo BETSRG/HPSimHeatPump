@@ -6438,7 +6438,7 @@ Floor:Detailed,
        !key WindExposed
        !key NoWind
        !default WindExposed
-  N1,  !View Factor to Ground
+   ,  !View Factor to Ground
        !From the exterior of the surface
        !Unused if one uses the "reflections" options in Solar Distribution in Building input
        !unless a DaylightingDevice:Shelf or DaylightingDevice:Tubular object has been specified.
