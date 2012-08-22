@@ -21573,7 +21573,7 @@ ZoneHVAC:LowTemperatureRadiant:SurfaceGroup,
     , !Flow Fraction for Surface 49
   A51 , !Surface 50 Name
     , !Flow Fraction for Surface 50
-  A52 , Surface 51 Name
+  A52 , !Surface 51 Name
     , !Flow Fraction for Surface 51
   A53 , !Surface 52 Name
     , !Flow Fraction for Surface 52
