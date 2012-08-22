@@ -2879,7 +2879,7 @@ Schedule:Compact,
 Schedule:Constant,
    !Constant hourly value for entire year.
    !format singleLine
- Schedule:ConstatA1, Name
+ Schedule:ConstatA1, !Name
        !required-field
        !reference ScheduleNames
  ScheduleTypeLimitsNames, !Schedule Type Limits Name
