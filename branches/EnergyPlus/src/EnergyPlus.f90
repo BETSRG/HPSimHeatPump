@@ -176,6 +176,7 @@ USE SimulationManager
 USE ScheduleManager, ONLY: ReportOrphanSchedules
 USE FluidProperties, ONLY: ReportOrphanFluids
 USE Psychrometrics, ONLY: ShowPsychrometricSummary
+USE InputPreProcessor, ONLY: PreProcessInput    !RS: Adding this in so that the IDF will be built before it's called
 
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -415,6 +416,8 @@ USE Psychrometrics, ONLY: ShowPsychrometricSummary
         !Call ProcessInput to produce the IDF file which is read by all of the
         ! Get input routines in the rest of the simulation
 
+      CALL PreProcessInput    !RS: Creating the IDF file that will be read in by the rest of the code
+        
       CALL ProcessInput
 
       CALL ManageSimulation
