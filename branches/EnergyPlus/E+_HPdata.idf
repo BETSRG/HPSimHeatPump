@@ -22361,7 +22361,7 @@ AirTerminal:SingleDuct:Uncontrolled,
        !autosizable
 
 AirTerminal:SingleDuct:ConstantVolume:Reheat,
-    , !Name
+ AirTerminal:SingleDuct:ConstantVolume:ReheatA1, !Name
        !required-field
        !reference AFNTerminalUnitNames
  AvailSched, !Availability Schedule Name
