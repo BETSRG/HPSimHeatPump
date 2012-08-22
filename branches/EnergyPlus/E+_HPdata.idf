@@ -18107,7 +18107,7 @@ HVACTemplate:Plant:HotWaterLoop,
       !The temperature difference used in sizing the loop flow rate.
       !units deltaC
       !default 11.0
-  N8, !Maximum Outdoor Dry Bulb Temperature
+   , !Maximum Outdoor Dry Bulb Temperature
       !The maximum outdoor dry bulb temperature that the hot water loops operate.
       !Leave blank for no limit.
       !units C
