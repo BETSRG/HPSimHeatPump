@@ -669,7 +669,7 @@ RunPeriod,
        !required-field
        !minimum 1
        !maximum 12
-  N31, !End Day of Month
+  31, !End Day of Month
        !required-field
        !minimum 1
        !maximum 31
@@ -753,7 +753,7 @@ RunPeriod:CustomRange,
        !required-field
        !minimum 1
        !maximum 12
-  12, !End Day of Month
+  31, !End Day of Month
        !required-field
        !minimum 1
        !maximum 31

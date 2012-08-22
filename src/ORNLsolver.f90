@@ -106,8 +106,8 @@
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     
     !Flow**:
-    CALL PreProcessInput
-    CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"
+    !CALL PreProcessInput   !RS: Commenting out since it'll already have been called in E+ module
+    !CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"    !RS: Commenting out since it'll already have been called in E+ module
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
     FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
