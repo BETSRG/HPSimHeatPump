@@ -21075,7 +21075,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Electric,
    , !Fraction of Radiant Energy to Surface 43
   A46, !Surface 44 Name
    , !Fraction of Radiant Energy to Surface 44
-  A47, Surface 45 Name
+  A47, !Surface 45 Name
    , !Fraction of Radiant Energy to Surface 45
   A48, !Surface 46 Name
    , !Fraction of Radiant Energy to Surface 46
@@ -21097,7 +21097,7 @@ ZoneHVAC:Baseboard:RadiantConvective:Electric,
    , !Fraction of Radiant Energy to Surface 54
   A57, !Surface 55 Name
    , !Fraction of Radiant Energy to Surface 55
-  A58, Surface 56 Name
+  A58, !Surface 56 Name
    , !Fraction of Radiant Energy to Surface 56
   A59, !Surface 57 Name
    , !Fraction of Radiant Energy to Surface 57
