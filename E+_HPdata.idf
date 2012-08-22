@@ -10939,7 +10939,7 @@ GroundHeatTransfer:Basement:SimParameters,
           !default 15
 
 GroundHeatTransfer:Basement:MatlProps,
-     N1, !NMAT: Number of materials in this domain
+     3, !NMAT: Number of materials in this domain
          !maximum 6
           !required-field
    2243, !Density for Foundation Wall
@@ -11222,23 +11222,23 @@ GroundHeatTransfer:Basement:AutoGrid,
 
 GroundHeatTransfer:Basement:ManualGrid,
     !Manual Grid only necessary using manual gridding (not recommended)
-        , !NX: Number of cells in the X direction: 20]
+       1, !NX: Number of cells in the X direction: 20]
           !minimum 1
           !required-field
-        , !NY: Number of cells in the Y direction: 20]
+       1, !NY: Number of cells in the Y direction: 20]
           !minimum 1
           !required-field
-        , !NZAG: Number of cells in the Z direction. above grade: 4 Always]
+       1, !NZAG: Number of cells in the Z direction. above grade: 4 Always]
           !minimum 1
           !required-field
-        , !NZBG: Number of cells in Z direction. below grade: 10-35]
+       1, !NZBG: Number of cells in Z direction. below grade: 10-35]
           !minimum 1
           !required-field
-        , !IBASE: X direction cell indicator of slab edge: 5-20]
+       5, !IBASE: X direction cell indicator of slab edge: 5-20]
           !required-field
-        , !JBASE: Y direction cell indicator of slab edge: 5-20]
+       5, !JBASE: Y direction cell indicator of slab edge: 5-20]
           !required-field
-        ; !KBASE: Z direction cell indicator of the top of the floor slab: 5-20]
+       5; !KBASE: Z direction cell indicator of the top of the floor slab: 5-20]
           !required-field
 
 GroundHeatTransfer:Basement:XFACE,
