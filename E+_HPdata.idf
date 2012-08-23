@@ -23850,7 +23850,7 @@ Coil:Cooling:Water,
        !default autosize
        !minimum 0
        !ip-units gal/min
-    , Design Air Flow Rate
+    , !Design Air Flow Rate
        !units m3/s
        !autosizable
        !default autosize
@@ -23991,7 +23991,7 @@ Coil:Cooling:Water:DetailedGeometry,
        !ip-units in
        !default .026
        !minimum> 0.0
-  4, Number of Tube Rows
+  4, !Number of Tube Rows
        !default 4
        !minimum> 0.0
    , !Number of Tubes per Row
@@ -24578,7 +24578,7 @@ Coil:Cooling:DX:MultiSpeed,
        !default 0.0
        !Time constant for the cooling coil's latent capacity to reach steady state after
        !startup. Suggested value is 45; zero value means latent degradation model is disabled.
- Speed1RatWasHeatFracPwrIn, !Speed 1 Rated Waste Heat Fraction of Power Input
+ 0.1, !Speed 1 Rated Waste Heat Fraction of Power Input
        !required-field
        !minimum> 0.0
        !maximum 1.0
@@ -25046,7 +25046,7 @@ CoilPerformance:DX:Cooling,
  CoilPerformance:DX:CoolingA1, !Name
        !required-field
        !reference CoilPerformanceDX
-    , !Rated Total Cooling Capacity
+  950, !Rated Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -25054,7 +25054,7 @@ CoilPerformance:DX:Cooling,
        !gross capacity excluding supply air fan heat
        !rating point: air entering the cooling coil at 26.7 C dry-bulb/19.4 C wet-bulb, and
        !air entering the outdoor condenser coil at 35 C dry-bulb/23.9 C wet-bulb
-    , !Rated Sensible Heat Ratio
+  0.7, !Rated Sensible Heat Ratio
        !required-field
        !minimum 0.5
        !maximum 1.0
@@ -25067,7 +25067,7 @@ CoilPerformance:DX:Cooling,
        !units W/W
        !minimum> 0.0
        !default 3.0
-    , !Rated Air Flow Rate
+  2.5, !Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25183,18 +25183,18 @@ Coil:Cooling:DX:VariableRefrigerantFlow,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Rated Total Cooling Capacity
+  950, !Rated Total Cooling Capacity
        !required-field
        !units W
        !minimum> 0.0
        !autosizable
        !Cooling capacity excluding supply air fan heat
-    , !Rated Sensible Heat Ratio
+  0.6, !Rated Sensible Heat Ratio
        !required-field
        !minimum> 0.0
        !autosizable
        !Sensible heat ratio excluding supply air fan heat
-    , !Rated Air Flow Rate
+  2.0, !Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25236,7 +25236,7 @@ Coil:Heating:DX:VariableRefrigerantFlow,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Rated Total Heating Capacity
+  950, !Rated Total Heating Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -25244,7 +25244,7 @@ Coil:Heating:DX:VariableRefrigerantFlow,
        !capacity excluding supply air fan heat
        !rating point outside dry-bulb temp 8.33 C, outside wet-bulb temp 6.11 C
        !rating point heating coil entering air dry-bulb 21.11 C, coil entering wetbulb 15.55 C
-    , !Rated Air Flow Rate
+  1.5, !Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25497,7 +25497,7 @@ Coil:Heating:DX:SingleSpeed,
        !required-field
        !type object-list
        !object-list ScheduleNames
-    , !Rated Total Heating Capacity
+  950, !Rated Total Heating Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -25512,7 +25512,7 @@ Coil:Heating:DX:SingleSpeed,
        !units W/W
        !minimum> 0.0
        !does not include supply air fan heat or supply air fan electrical energy
-    , !Rated Air Flow Rate
+  0.1, !Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25722,7 +25722,7 @@ Coil:Heating:DX:MultiSpeed,
        !maximum 4
        !Enter the number of the following sets of data for coil capacity, COP,
        !flow rate, and associated curves.
-    , !Speed 1 Rated Total Heating Capacity
+  975, !Speed 1 Rated Total Heating Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -25736,7 +25736,7 @@ Coil:Heating:DX:MultiSpeed,
        !required-field
        !units W/W
        !minimum> 0.0
-   , !Speed 1 Rated Air Flow Rate
+ 0.01, !Speed 1 Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25799,7 +25799,7 @@ Coil:Heating:DX:MultiSpeed,
        !curve = a + b*odb + c*odb**2 + d*db + e*db**2 + f*odb*db
        !odb = Outdoor air dry-bulb temperature (C)
        !db = entering coil dry-bulb temperature (C)
-   , !Speed 2 Rated Total Heating Capacity
+ 950, !Speed 2 Rated Total Heating Capacity
        !required-field
        !units W
        !minimum> 0.0
@@ -25813,7 +25813,7 @@ Coil:Heating:DX:MultiSpeed,
        !required-field
        !units W/W
        !minimum> 0.0
-   , !Speed 2 Rated Air Flow Rate
+ 0.005, !Speed 2 Rated Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -25941,7 +25941,7 @@ Coil:Heating:DX:MultiSpeed,
        !curve = a + b*odb + c*odb**2 + d*db + e*db**2 + f*odb*db
        !odb = Outdoor air dry-bulb temperature (C)
        !db = entering coil dry-bulb temperature (C)
-  N20, !Speed 4 Rated Total Heating Capacity
+   , !Speed 4 Rated Total Heating Capacity
        !units W
        !minimum> 0.0
        !autosizable
@@ -26031,7 +26031,7 @@ Coil:Cooling:WaterToAirHeatPump:ParameterEstimation,
         !required-field
         !minimum> 0.0
         !units m3/s
-    ,  !Nominal Cooling Coil Capacity
+  900,  !Nominal Cooling Coil Capacity
         !required-field
         !minimum> 0.0
         !autosizable
@@ -26174,7 +26174,7 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         !required-field
         !minimum> 0.0
         !units m3/s
-    ,  !Nominal Heating Coil Capacity
+  900,  !Nominal Heating Coil Capacity
         !required-field
         !minimum> 0.0
         !autosizable
@@ -26286,22 +26286,22 @@ Coil:Cooling:WaterToAirHeatPump:EquationFit,
  AirOutNode,  !Air Outlet Node Name
         !required-field
         !type node
-    ,  !Rated Air Flow Rate
+  1.5,  !Rated Air Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !autosizable
-    ,  !Rated Water Flow Rate
+  1.0,  !Rated Water Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !autosizable
-    ,  !Rated Total Cooling Capacity
+  950,  !Rated Total Cooling Capacity
         !required-field
         !minimum> 0.0
         !units W
         !autosizable
-    ,  !Rated Sensible Cooling Capacity
+  250,  !Rated Sensible Cooling Capacity
         !required-field
         !minimum> 0.0
         !units W
@@ -26386,17 +26386,17 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         !default 2
         !required-field
         !must be lower than or equal to the highest speed number
-    ,  !Rated Total Cooling Capacity At Selected Nominal Speed Level
+  975,  !Rated Total Cooling Capacity At Selected Nominal Speed Level
         !units w
         !autosizable
         !default autosize
         !required-field
-    ,  !Rated Volumetric Air Flow Rate At Selected Nominal Speed Level
+  .01,  !Rated Volumetric Air Flow Rate At Selected Nominal Speed Level
         !units m3/s
         !autosizable
         !default autosize
         !required-field
-    ,  !Rated Volumetric Water Flow Rate At Selected Nominal Speed Level
+  .01,  !Rated Volumetric Water Flow Rate At Selected Nominal Speed Level
         !units m3/s
         !autosizable
         !default autosize
@@ -26477,7 +26477,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         !quadratic curve = a + b*ffa + c*ffa**2
         !cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         !ffa = Fraction of the full load Air Flow
- Speed2EneInRatFunWatFlowFracCurve, !Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
+ Speed1EneInRatFunWatFlowFracCurve, !Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
         !required-field
         !type object-list
         !object-list QuadraticCubicCurves
@@ -26494,11 +26494,11 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         !curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         !wb = entering wet-bulb temperature (C)
         !ewt = water entering temperature seen by the condenser (C)
-  5000, !Speed 2 Reference Unit Total Cooling Capacity At Rated Conditions
+  1000, !Speed 2 Reference Unit Total Cooling Capacity At Rated Conditions
         !units w
         !minimum 0
         !required-field
-  10.5, !Speed 2 Reference Unit Sensible Heat Ratio At Rated Conditions
+  0.75, !Speed 2 Reference Unit Sensible Heat Ratio At Rated Conditions
         !minimum 0
         !Maximum 1.0
         !required-field
@@ -26981,7 +26981,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         !type object-list
         !object-list QuadraticCubicCurves
         !quadratic curve = a + b*ffa + c*ffa**2
-        !note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
+        !cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         !ffa = Fraction of the full load Air Flow
    A65, !Speed 9 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         !optional
@@ -27102,17 +27102,17 @@ Coil:Heating:WaterToAirHeatPump:EquationFit,
  AirOutNode,  !Air Outlet Node Name
         !required-field
         !type node
-    ,  !Rated Air Flow Rate
+  1.0,  !Rated Air Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !autosizable
-    ,  !Rated Water Flow Rate
+ 0.75,  !Rated Water Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !autosizable
-    ,  !Rated Heating Capacity
+  950,  !Rated Heating Capacity
         !required-field
         !minimum> 0.0
         !units W
@@ -27167,17 +27167,17 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         !default 2
         !required-field
         !must be lower than or equal to the highest speed number
-    ,  !Rated Heating Capacity At Selected Nominal Speed Level
+  900,  !Rated Heating Capacity At Selected Nominal Speed Level
         !units w
         !autosizable
         !default autosize
         !required-field
-    ,  !Rated Volumetric Air Flow Rate At Selected Nominal Speed Level
+ 0.01,  !Rated Volumetric Air Flow Rate At Selected Nominal Speed Level
         !units m3/s
         !autosizable
         !default autosize
         !required-field
-    ,  !Rated Volumetric Water Flow Rate At Selected Nominal Speed Level
+ 0.005,  !Rated Volumetric Water Flow Rate At Selected Nominal Speed Level
         !units m3/s
         !autosizable
         !default autosize
@@ -27189,18 +27189,18 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         !quadratic curve = a + b*PLR + c*PLR**2
         !cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         !PLR = part load ratio (heating load/steady state capacity)
- Speed1RefUnitTotHeatCapRatCon,  !Speed 1 Reference Unit Total Heating Capacity At Rated Conditions
+ 950,  !Speed 1 Reference Unit Total Heating Capacity At Rated Conditions
         !units w
         !minimum 0
         !required-field
- Speed1RefUnitCOPRatCon,  !Speed 1 Reference Unit COP At Rated Conditions
+ 6.5,  !Speed 1 Reference Unit COP At Rated Conditions
         !minimum 0
         !required-field
- Speed1RefUnitAirFlowRateRatCon,  !Speed 1 Reference Unit Air Flow Rate At Rated Conditions
+ 0.001,  !Speed 1 Reference Unit Air Flow Rate At Rated Conditions
         !units m3/s
         !minimum 0
         !required-field
- Speed1RefUnitWatFlowRateRatCon,  !Speed 1 Reference Unit Water Flow Rate At Rated Conditions
+ 0.005,  !Speed 1 Reference Unit Water Flow Rate At Rated Conditions
         !units m3/s
         !minimum 0
         !required-field
@@ -27257,18 +27257,18 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         !curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         !db = entering air dry bulb temperature (C)
         !ewt = water entering temperature seen by the evaporator (C)
- Speed2RefUnitTotHeatCapRatCon, !Speed 2 Reference Unit Total Heating Capacity At Rated Conditions
+ 950, !Speed 2 Reference Unit Total Heating Capacity At Rated Conditions
         !units w
         !minimum 0
         !required-field
    6.5, !Speed 2 Reference Unit COP At Rated Conditions
         !minimum 0
         !required-field
-   6.0, !Speed 2 Reference Unit Air Flow Rate At Rated Conditions
+   0.5, !Speed 2 Reference Unit Air Flow Rate At Rated Conditions
         !units m3/s
         !minimum 0
         !required-field
-   5.5, !Speed 2 Reference Unit Water Flow Rate At Rated Conditions
+   0.3, !Speed 2 Reference Unit Water Flow Rate At Rated Conditions
         !units m3/s
         !minimum 0
         !required-field
@@ -27315,7 +27315,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         !quadratic curve = a + b*ffw + c*ffw**2
         !cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         !ffw = Fraction of the full load Water Flow
- Speed2RefUnitWasHeatFrac, !Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions
+  0.1, !Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions
         !minimum 0
         !required-field
  Speed2WasHeatFunTempCurve, !Speed 2 Waste Heat Function of Temperature Curve Name
@@ -28800,7 +28800,7 @@ HeatExchanger:AirToAir:SensibleAndLatent,
       !required-field
       !type object-list
       !object-list ScheduleNames
-   , !Nominal Supply Air Flow Rate
+ .01, !Nominal Supply Air Flow Rate
       !required-field
       !autosizable
       !minimum> 0.0
@@ -29168,7 +29168,7 @@ AirLoopHVAC:Unitary:Furnace:HeatOnly,
         !units C
         !autosizable
         !default 80.0
-    ,  !Supply Air Flow Rate
+ 0.01,  !Supply Air Flow Rate
         !required-field
         !This value should be > 0 and <= than the fan air flow rate.
         !units m3/s
@@ -29238,13 +29238,13 @@ AirLoopHVAC:Unitary:Furnace:HeatCool,
         !units C
         !autosizable
         !default 80.0
-    ,  !Supply Air Flow Rate During Cooling Operation
+  0.1,  !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to the fan's maximum flow rate.
-    ,  !Supply Air Flow Rate During Heating Operation
+  0.1,  !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
@@ -29359,7 +29359,7 @@ AirLoopHVAC:UnitaryHeatOnly,
         !units C
         !autosizable
         !default 80.0
-    ,  !Supply Air Flow Rate
+ 0.05,  !Supply Air Flow Rate
         !required-field
         !This value should be > 0 and <= than the fan air flow rate.
         !units m3/s
@@ -29425,13 +29425,13 @@ AirLoopHVAC:UnitaryHeatCool,
         !units C
         !autosizable
         !default 80.0
-    ,  !Supply Air Flow Rate During Cooling Operation
+ 0.05,  !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to the fan's maximum flow rate.
-    ,  !Supply Air Flow Rate During Heating Operation
+ 0.05,  !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
@@ -29537,19 +29537,19 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
  AirOutNode,  !Air Outlet Node Name
         !required-field
         !type node
-    ,  !Supply Air Flow Rate During Cooling Operation
+ 0.01,  !Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to the fan's maximum flow rate.
-    ,  !Supply Air Flow Rate During Heating Operation
+ 0.01,  !Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !minimum> 0.0
         !autosizable
         !Must be less than or equal to the fan's maximum flow rate.
-    ,  !Supply Air Flow Rate When No Cooling or Heating is Needed
+ .005,  !Supply Air Flow Rate When No Cooling or Heating is Needed
         !units m3/s
         !minimum 0.0
         !autosizable
@@ -29575,7 +29575,7 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
         !type object-list
         !object-list FansCVandOnOff
         !Needs to match in the fan object
- Coil:Heating:DX:SingleSpee,  !Heating Coil Object Type
+ Coil:Heating:DX:SingleSpeed,  !Heating Coil Object Type
         !required-field
         !type choice
         !key Coil:Heating:DX:SingleSpeed
@@ -29610,7 +29610,7 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
         !type object-list
         !object-list HeatingCoilName
         !Needs to match in the supplemental heating coil object
-     , !Maximum Supply Air Temperature from Supplemental Heater
+  55, !Maximum Supply Air Temperature from Supplemental Heater
         !required-field
         !units C
         !autosizable
@@ -29662,7 +29662,7 @@ AirLoopHVAC:UnitaryHeatPump:WaterToAir,
  AirOutNode,  !Air Outlet Node Name
         !required-field
         !type node
-    ,  !Supply Air Flow Rate
+ 0.01,  !Supply Air Flow Rate
         !required-field
         !This value should be > 0 and <= than the fan air flow rate.
         !units m3/s
@@ -29753,7 +29753,7 @@ AirLoopHVAC:UnitaryHeatPump:WaterToAir,
         !type object-list
         !object-list HeatingCoilName
         !Needs to match in the supplemental heating coil object
-    ,  !Maximum Supply Air Temperature from Supplemental Heater
+   55,  !Maximum Supply Air Temperature from Supplemental Heater
         !required-field
         !units C
         !autosizable
@@ -29797,19 +29797,19 @@ AirLoopHVAC:UnitaryHeatCool:VAVChangeoverBypass,
         !object-list ScheduleNames
         !Enter the availability schedule name. Schedule values of zero denote system
         !is Off. Non-zero schedule values denote system is available to operate.
-     , !System Air Flow Rate During Cooling Operation
+  0.01, !System Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum> 0.0
         !Enter the system air flow rate during cooling operation or specify autosize.
-     , !System Air Flow Rate During Heating Operation
+  0.01, !System Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum> 0.0
         !Enter the system air flow rate during heating operation or specify autosize.
-     , !System Air Flow Rate When No Cooling or Heating is Needed
+  .005, !System Air Flow Rate When No Cooling or Heating is Needed
         !units m3/s
         !minimum 0.0
         !autosizable
@@ -29818,19 +29818,19 @@ AirLoopHVAC:UnitaryHeatCool:VAVChangeoverBypass,
         !is used when no heating or cooling is required and the coils are off.
         !If this field is left blank or zero, the system air flow rate from the
         !previous on cycle (either cooling or heating) is used.
-     , !Outdoor Air Flow Rate During Cooling Operation
+  .002, !Outdoor Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum 0.0
         !Enter the outdoor air flow rate during cooling operation or specify autosize.
-     , !Outdoor Air Flow Rate During Heating Operation
+  .002, !Outdoor Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum 0.0
         !Enter the outdoor air flow rate during heating operation or specify autosize.
-     , !Outdoor Air Flow Rate When No Cooling or Heating is Needed
+  .003, !Outdoor Air Flow Rate When No Cooling or Heating is Needed
         !units m3/s
         !minimum 0.0
         !autosizable
@@ -30107,13 +30107,13 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed,
         !minimum 2
         !maximum 4
         !Enter the number of the following sets of data for air flow rates.
-    , !Speed 1 Supply Air Flow Rate During Heating Operation
+  0.05, !Speed 1 Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum> 0
         !Enter the operating supply air flow rate during heating operation or specify autosize.
-    , !Speed 2 Supply Air Flow Rate During Heating Operation
+  0.05, !Speed 2 Supply Air Flow Rate During Heating Operation
         !required-field
         !units m3/s
         !autosizable
@@ -30129,13 +30129,13 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed,
         !autosizable
         !minimum> 0
         !Enter the operating supply air flow rate during heating operation or specify autosize.
-    , !Speed 1 Supply Air Flow Rate During Cooling Operation
+  0.05, !Speed 1 Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !autosizable
         !minimum> 0
         !Enter the operating supply air flow rate during cooling operation or specify autosize.
-    , !Speed 2 Supply Air Flow Rate During Cooling Operation
+  0.05, !Speed 2 Supply Air Flow Rate During Cooling Operation
         !required-field
         !units m3/s
         !autosizable
@@ -30490,7 +30490,7 @@ AirConditioner:VariableRefrigerantFlow,
        !default 0.9
        !Enter the effectiveness of the evaporatively cooled condenser. This field is only
        !used when the condenser type = EvaporativelyCooled.
-  N23, !Evaporative Condenser Air Flow Rate
+   , !Evaporative Condenser Air Flow Rate
        !units m3/s
        !minimum> 0.0
        !autosizable
@@ -30650,11 +30650,11 @@ Controller:OutdoorAir,
        !type node
        !required-field
        !Outdoor air inlet node entering the first pre-treat component if any
-    , !Minimum Outdoor Air Flow Rate
+ 0.005, !Minimum Outdoor Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
-    , !Maximum Outdoor Air Flow Rate
+  2.5, !Maximum Outdoor Air Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -33029,7 +33029,7 @@ Pipe:Outdoor,
 Pipe:Underground,
         !Buried Pipe model: For pipes buried at a depth less
         !than one meter, this is an alternative object to: HeatExchanger:Surface
- Pipe:UndergroundA1,  Name
+ Pipe:UndergroundA1,  !Name
         !required-field
  Construction,  !Construction Name
         !required-field
@@ -33075,7 +33075,7 @@ PipingSystem:Underground:Domain,
         !The ground domain object for underground piping system simulation.
         !min-fields 31
         !extensible:1
- PipingSystem:Underground:DomanA1,  !Name
+ PipingSystem:Underground:DomainA1,  !Name
         !required-field
         !reference PipingSystemUndergroundDomainNames
    15,  !Xmax
@@ -33928,7 +33928,7 @@ SolarCollector:IntegralCollectorStorage,
        !Key OtherSideConditionsModel
        !Key AmbientAir
        !Default AmbientAir
- BoundCondModel, !Boundary Condition Model Name
+  , !Boundary Condition Model Name
        !Enter the name of a SurfaceProperty:OtherSideConditionsModel
        !object. Specified only if the boundary condition type is
        !OtherSideConditionsModel, otherwise leave it blank
@@ -33938,7 +33938,7 @@ SolarCollector:IntegralCollectorStorage,
  OutNode, !Outlet Node Name
        !required-field
        !type node
- MaxFlow; !Maximum Flow Rate
+ 5.5; !Maximum Flow Rate
        !minimum> 0
        !units m3/s
 
@@ -34112,11 +34112,11 @@ SolarCollector:UnglazedTranspired,
        !units dimensionless
   3, !Effective Overall Height of Collector
        !minimum> 0.0
-  0,  !Effective Gap Thickness of Plenum Behind Collector
+ .0001,  !Effective Gap Thickness of Plenum Behind Collector
        !minimum> 0.
        !units m
        !if corrugated, use average depth
-  0,  !Effective Cross Section Area of Plenum Behind Collector
+ .0001,  !Effective Cross Section Area of Plenum Behind Collector
        !minimum> 0
        !units m2
        !if corrugated, use average depth
@@ -34355,7 +34355,7 @@ Chiller:Electric:EIR,
    !using three polynomial equations. Three curves objects are required.
  Chiller:Electric:EIRA1, !Name
        !required-field
-    , !Reference Capacity
+  900, !Reference Capacity
        !units W
        !required-field
        !minimum> 0.0
@@ -34515,12 +34515,12 @@ Chiller:Electric:ReformulatedEIR,
    !modeled using three polynomial equations. Three curve objects are required.
  Chiller:Electric:ReformulatedEIRA1, !Name
        !required-field
-    , !Reference Capacity
+ 900, !Reference Capacity
        !units W
        !required-field
        !minimum> 0.0
        !autosizable
-    , !Reference COP
+  5.0, !Reference COP
        !Efficiency of the chiller compressor (cooling output/compressor energy input).
        !Condenser fan power should not be included here.
        !units W/W
@@ -34647,7 +34647,7 @@ Chiller:Electric,
        !key WaterCooled
        !key EvaporativelyCooled
        !default AirCooled
-    , !Nominal Capacity
+ 900, !Nominal Capacity
        !units W
        !required-field
        !autosizable
@@ -34674,7 +34674,7 @@ Chiller:Electric,
        !minimum 0.0
   15, !Design Condenser Inlet Temperature
        !units C
-  0.0, !Temperature Rise Coefficient
+ 0.01, !Temperature Rise Coefficient
        !required-field
        !minimum> 0.0
   5, !Design Chilled Water Outlet Temperature
@@ -34757,12 +34757,12 @@ Chiller:Absorption:Indirect,
        !of part-load ratio, condenser temperature, and chilled water temperature.
  Chiller:Absorption:IndirectA1, !Name
        !required-field
-    , !Nominal Capacity
+  750, !Nominal Capacity
        !required-field
        !units W
        !minimum> 0.0
        !autosizable
-    , !Nominal Pumping Power
+  500, !Nominal Pumping Power
        !required-field
        !units W
        !minimum 0.0
@@ -34897,12 +34897,12 @@ Chiller:Absorption,
        !polynomial equations. Two sets of coefficients are required.
  Chiller:AbsortionA1, !Name
        !required-field
-    , !Nominal Capacity
+  750, !Nominal Capacity
        !units W
        !required-field
        !minimum> 0.0
        !autosizable
-    , !Nominal Pumping Power
+  500, !Nominal Pumping Power
        !units W
        !required-field
        !minimum 0.0
@@ -34987,7 +34987,7 @@ Chiller:ConstantCOP,
        !Chiller where performance data is not available.
  Chiller:ConstantCOPA1, !Name
        !required-field
-    , !Nominal Capacity
+  500, !Nominal Capacity
        !autosizable
        !units W
        !required-field
@@ -35073,7 +35073,7 @@ Chiller:EngineDriven,
        !key WaterCooled
        !key EvaporativelyCooled
        !default AirCooled
-    , !Nominal Capacity
+  500, !Nominal Capacity
        !units W
        !required-field
        !autosizable
@@ -35243,7 +35243,7 @@ Chiller:CombustionTurbine,
        !key WaterCooled
        !key EvaporativelyCooled
        !default AirCooled
-    , !Nominal Capacity
+  500, !Nominal Capacity
        !units W
        !required-field
        !autosizable
@@ -35393,7 +35393,7 @@ ChillerHeater:Absorption:DirectFired,
   !Direct fired gas absorption chiller-heater using performance curves similar to DOE-2
  ChillerHeater:Absorption:DirectFiredA1,  !Name
        !required-field
-    , !Nominal Cooling Capacity
+  500, !Nominal Cooling Capacity
        !required-field
        !autosizable
        !default autosize
@@ -35583,7 +35583,7 @@ ChillerHeater:Absorption:DoubleEffect,
   !Exhaust fired absorption chiller-heater using performance curves similar to DOE-2
  ChillerHeater:Absorption:DoubleEffectA1,  !Name
        !required-field
-    , !Nominal Cooling Capacity
+  500, !Nominal Cooling Capacity
        !required-field
        !autosizable
        !default autosize
@@ -36075,12 +36075,12 @@ CoolingTower:SingleSpeed,
        !autosizable
        !Leave field blank if tower performance input method is NominalCapacity
        !ip-units gal/min
-    , !Design Air Flow Rate
+  0.5, !Design Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
-    , !Fan Power at Design Air Flow Rate
+  250, !Fan Power at Design Air Flow Rate
        !required-field
        !units W
        !minimum> 0.0
@@ -36237,12 +36237,12 @@ CoolingTower:TwoSpeed,
        !autosizable
        !Leave field blank if Tower Performance Input Method is NominalCapacity
        !ip-units gal/min
-    , !Air Flow Rate at High Fan Speed
+  0.5, !Air Flow Rate at High Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
-    , !Fan Power at High Fan Speed
+  250, !Fan Power at High Fan Speed
        !required-field
        !units W
        !minimum> 0.0
@@ -36254,14 +36254,14 @@ CoolingTower:TwoSpeed,
        !maximum 2100000.0
        !autosizable
        !Leave field blank if Tower Performance Input Method is NominalCapacity
-    , !Air Flow Rate at Low Fan Speed
+ 0.35, !Air Flow Rate at Low Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !Low speed air flow rate must be less than high speed air flow rate
        !Low speed air flow rate must be greater than free convection air flow rate
-    , !Fan Power at Low Fan Speed
+  175, !Fan Power at Low Fan Speed
        !required-field
        !units W
        !minimum> 0.0
@@ -36452,20 +36452,20 @@ CoolingTower:VariableSpeed,
        !Enter the range temperature corresponding to the design inlet air
        !wet-bulb temperature and design approach temperature.
        !Design range = inlet water temperature minus outlet water temperature at design conditions.
-    , !Design Water Flow Rate
+ 0.4, !Design Water Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !ip-units gal/min
        !Water flow rate through the tower at design conditions
-    , !Design Air Flow Rate
+  0.5, !Design Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !Design (maximum) air flow rate through the tower
-    , !Design Fan Power
+  250, !Design Fan Power
        !required-field
        !units W
        !minimum> 0.0
@@ -36610,35 +36610,35 @@ CoolingTowerPerformance:CoolTools,
   2, !Coefficient 4
   3, !Coefficient 5
   4, !Coefficient 6
-   , !Coefficient 7
-   , !Coefficient 8
-   , !Coefficient 9
-   , !Coefficient 10
-   , !Coefficient 11
-   , !Coefficient 12
-   , !Coefficient 13
-   , !Coefficient 14
-   , !Coefficient 15
-   , !Coefficient 16
-   , !Coefficient 17
-   , !Coefficient 18
-   , !Coefficient 19
-   , !Coefficient 20
-   , !Coefficient 21
-   , !Coefficient 22
-   , !Coefficient 23
-   , !Coefficient 24
-   , !Coefficient 25
-   , !Coefficient 26
-   , !Coefficient 27
-   , !Coefficient 28
-   , !Coefficient 29
-   , !Coefficient 30
-   , !Coefficient 31
-   , !Coefficient 32
-   , !Coefficient 33
-   , !Coefficient 34
-   ; !Coefficient 35
+  .5, !Coefficient 7
+  -1, !Coefficient 8
+  .1, !Coefficient 9
+  0, !Coefficient 10
+  12, !Coefficient 11
+  .33, !Coefficient 12
+  5.1, !Coefficient 13
+  -3, !Coefficient 14
+  .65, !Coefficient 15
+  1, !Coefficient 16
+  .12, !Coefficient 17
+   1.3, !Coefficient 18
+  -.33, !Coefficient 19
+  2.5, !Coefficient 20
+  0.1, !Coefficient 21
+  1, !Coefficient 22
+  1.1, !Coefficient 23
+  -1, !Coefficient 24
+  -.03, !Coefficient 25
+  .05, !Coefficient 26
+  9, !Coefficient 27
+  5.5, !Coefficient 28
+  7.2, !Coefficient 29
+  -.01, !Coefficient 30
+  1.8, !Coefficient 31
+  2, !Coefficient 32
+  .15, !Coefficient 33
+  3.3, !Coefficient 34
+  0; !Coefficient 35
 
 CoolingTowerPerformance:YorkCalc,
        !min-fields 37
@@ -36678,27 +36678,27 @@ CoolingTowerPerformance:YorkCalc,
   3, !Coefficient 4
   4, !Coefficient 5
   5, !Coefficient 6
-   , !Coefficient 7
-   , !Coefficient 8
-   , !Coefficient 9
-   , !Coefficient 10
-   , !Coefficient 11
-   , !Coefficient 12
-   , !Coefficient 13
-   , !Coefficient 14
-   , !Coefficient 15
-   , !Coefficient 16
-   , !Coefficient 17
-   , !Coefficient 18
-   , !Coefficient 19
-   , !Coefficient 20
-   , !Coefficient 21
-   , !Coefficient 22
-   , !Coefficient 23
-   , !Coefficient 24
-   , !Coefficient 25
-   , !Coefficient 26
-   ; !Coefficient 27
+  .6, !Coefficient 7
+  7.7, !Coefficient 8
+  -.8, !Coefficient 9
+  0, !Coefficient 10
+  .9, !Coefficient 11
+  .1, !Coefficient 12
+  -.2, !Coefficient 13
+  5.5, !Coefficient 14
+  3, !Coefficient 15
+  .09, !Coefficient 16
+  -2, !Coefficient 17
+  .5, !Coefficient 18
+  1.5, !Coefficient 19
+  6, !Coefficient 20
+  -.01, !Coefficient 21
+  0, !Coefficient 22
+  .15, !Coefficient 23
+  .23, !Coefficient 24
+  .31, !Coefficient 25
+  0, !Coefficient 26
+  .75; !Coefficient 27
 
 EvaporativeFluidCooler:SingleSpeed,
        !min-fields 9
@@ -36715,12 +36715,12 @@ EvaporativeFluidCooler:SingleSpeed,
        !required-field
        !type node
        !Name of Fluid Cooler water outlet node
-    , !Design Air Flow Rate
+  0.5, !Design Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
-    , !Fan Power at Design Air Flow Rate
+  250, !Fan Power at Design Air Flow Rate
        !required-field
        !units W
        !minimum> 0.0
@@ -36860,23 +36860,23 @@ EvaporativeFluidCooler:TwoSpeed,
        !required-field
        !type node
        !Name of fluid cooler water outlet node
-    , !Air Flow Rate at High Fan Speed
+  0.6, !Air Flow Rate at High Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
-    , !Fan Power at High Fan Speed
+  275, !Fan Power at High Fan Speed
        !required-field
        !units W
        !minimum> 0.0
        !autosizable
-    , !Air Flow Rate at Low Fan Speed
+  0.3, !Air Flow Rate at Low Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !Low speed air flow rate must be less than high speed air flow rate
-    , !Fan Power at Low Fan Speed
+  150, !Fan Power at Low Fan Speed
        !required-field
        !units W
        !minimum> 0.0
@@ -37075,18 +37075,18 @@ FluidCooler:SingleSpeed,
        !ip-units F
        !Design Entering Air Wet-bulb Temperature must be specified for both the performance input methods
        !and its value must be less than Design Entering Air Temperature.
-    , !Design Water Flow Rate
+ 0.4, !Design Water Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !ip-units gal/min
-    , !Design Air Flow Rate
+  0.5, !Design Air Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
-    , !Fan Power at Design Air Flow Rate
+  250, !Fan Power at Design Air Flow Rate
        !required-field
        !units W
        !minimum> 0.0
@@ -37160,13 +37160,13 @@ FluidCooler:TwoSpeed,
        !ip-units F
        !Design Entering Air Wet-bulb Temperature must be specified for both the performance input methods
        !and its value must be less than Design Entering Air Temperature.
-    , !Design Water Flow Rate
+  0.4, !Design Water Flow Rate
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !ip-units gal/min
-    , !Air Flow Rate at High Fan Speed
+  0.7, !Air Flow Rate at High Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
@@ -37177,13 +37177,13 @@ FluidCooler:TwoSpeed,
        !units W
        !minimum> 0.0
        !autosizable
-   , !Air Flow Rate at Low Fan Speed
+  0.5, !Air Flow Rate at Low Fan Speed
        !required-field
        !units m3/s
        !minimum> 0.0
        !autosizable
        !Air Flow Rate at Low Fan Speed must be less than Air Flow Rate at High Fan Speed
-   , !Fan Power at Low Fan Speed
+  250, !Fan Power at Low Fan Speed
        !required-field
        !units W
        !minimum> 0.0
@@ -37674,19 +37674,19 @@ HeatExchanger:WatersideEconomizer,
  CondOut, !Condenser Outlet Node Name
         !type node
         !required-field
-     , !Chilled Water Side Maximum Flow Rate
+   1.5, !Chilled Water Side Maximum Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !ip-units gal/min
         !autosizable
-     , !Condenser Side Maximum Flow Rate
+   1.5, !Condenser Side Maximum Flow Rate
         !required-field
         !minimum> 0.0
         !units m3/s
         !ip-units gal/min
         !autosizable
-    ,  !Heat Exchanger U-Factor Times Area Value
+  0.8,  !Heat Exchanger U-Factor Times Area Value
         !required-field
         !units W/k
         !minimum> 0.0
@@ -37711,7 +37711,7 @@ WaterHeater:Mixed,
        !minimum 0.0
        !default 0.0
        !ip-units gal
- SetTempShed, !Setpoint Temperature Schedule Name
+ SetTempSched, !Setpoint Temperature Schedule Name
        !type object-list
        !object-list ScheduleNames
   0.0, !Deadband Temperature Difference
@@ -37835,7 +37835,7 @@ WaterHeater:Mixed,
        !ip-units gal/min
        !minimum 0.0
        !Only used if Use Side Node connections are blank
- UseFlowRatFracSched, !Use Flow Rate Fraction Schedule Name
+ UseFlowRatFracSched, !Use Flow Rate Fraction Schedule Name	!RS:Stuck here, I think.
        !type object-list
        !object-list ScheduleNames
        !Only used if Use Side Node connections are blank
@@ -37885,13 +37885,13 @@ WaterHeater:Stratified,
        !reference WaterHeaterNames
  General, !End-Use Subcategory
        !default General
-    , !Tank Volume
+   70, !Tank Volume
        !autosizable
        !required-field
        !units m3
        !minimum> 0.0
        !ip-units gal
-    , !Tank Height
+   5, !Tank Height
        !autosizable
        !required-field
        !units m
