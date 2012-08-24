@@ -37831,11 +37831,12 @@ WaterHeater:Mixed,
        !minimum 0.0
        !maximum 1.0
        !default 1.0
+  5.5, !Peak Use Flow Rate
        !units m3/s
        !ip-units gal/min
        !minimum 0.0
        !Only used if Use Side Node connections are blank
- UseFlowRatFracSched, !Use Flow Rate Fraction Schedule Name	!RS:Stuck here, I think.
+ UseFlowRatFracSched, !Use Flow Rate Fraction Schedule Name
        !type object-list
        !object-list ScheduleNames
        !Only used if Use Side Node connections are blank
@@ -38539,7 +38540,7 @@ ThermalStorage:ChilledWater:Mixed,
  AmbTempOutAir, !Ambient Temperature Outdoor Air Node Name
        !type node
        !required when field Ambient Temperature Indicator=Outdoors
- HeatGainCoeffAmbTemp, !Heat Gain Coefficient from Ambient Temperature
+ 0.2, !Heat Gain Coefficient from Ambient Temperature
        !units W/K
        !minimum 0.0
  UseSideIn, !Use Side Inlet Node Name
@@ -38779,7 +38780,7 @@ PlantLoop,
   1.0, !Minimum Loop Temperature
         !required-field
         !units C
-    , !Maximum Loop Flow Rate
+  5.5, !Maximum Loop Flow Rate
         !required-field
         !units m3/s
         !autosizable
@@ -38883,7 +38884,7 @@ CondenserLoop,
   0.0, !Minimum Loop Temperature
         !required-field
         !units C
-    , !Maximum Loop Flow Rate
+   5.5, !Maximum Loop Flow Rate
         !required-field
         !units m3/s
         !autosizable
@@ -39704,7 +39705,7 @@ PlantEquipmentOperation:ComponentSetpoint,
  Set1, !Setpoint 1 Node Name
        !required-field
        !type node
-    , !Component 1 Flow Rate
+  2.5, !Component 1 Flow Rate
        !required-field
        !units m3/s
        !autosizable
@@ -41441,12 +41442,12 @@ AvailabilityManager:HybridVentilation,
        !minimum -100
        !maximum 100
        !default 100
-  0.0, !Minimum Outdoor Enthalpy
+  5.0, !Minimum Outdoor Enthalpy
        !this is the outdoor Enthalpy below which ventilation is shutoff
        !units J/kg
        !minimum> 0.0
        !maximum< 300000.0
- 300000.0, !Maximum Outdoor Enthalpy
+ 299995.0, !Maximum Outdoor Enthalpy
        !this is the outdoor Enthalpy above which ventilation is shutoff
        !units J/kg
        !minimum> 0
@@ -44593,7 +44594,7 @@ Generator:MicroTurbine,
       !required-field
       !reference GeneratorNames
       !reference MicroTurbineGeneratorNames
- 900 !Reference Electrical Power Output
+ 900, !Reference Electrical Power Output
       !required-field
       !units W
       !minimum> 0.0
@@ -46289,7 +46290,7 @@ ElectricLoadCenter:Inverter:LookUpTable,
         !units W
    45 , !Night Tare Loss Power
         !units W
-   N4 , !Nominal Voltage Input
+  200, !Nominal Voltage Input
         !units V
    0.5, !Efficiency at 10% Power and Nominal Voltage
         !minimum 0
@@ -46402,7 +46403,7 @@ ElectricLoadCenter:Storage:Battery,
         !type object-list
         !object-list RectangularHyperbola2Curves
         !Determines how the open circuit voltage change with state of charge relative to the fully charged state.
-   N10, !Module Internal Electrical Resistance
+  15, !Module Internal Electrical Resistance
         !units ohms
         !minimum 0
         !A model parameter from manufacture or derived from test data.
@@ -52426,9 +52427,9 @@ FluidNames,
     R417a, REFRIGERANT,   !- name and type for fluid 5
     PROPANE, REFRIGERANT; !- name and type for fluid 6
     
-##include fluidDataFiles!R22.idf
-##include fluidDataFiles!R134a.idf
-##include fluidDataFiles!R407c.idf
-##include fluidDataFiles!R410a.idf
-##include fluidDataFiles!R417a.idf
-##include fluidDataFiles!Propane.idf
+##include fluidDataFiles\R22.idf
+##include fluidDataFiles\R134a.idf
+##include fluidDataFiles\R407c.idf
+##include fluidDataFiles\R410a.idf
+##include fluidDataFiles\R417a.idf
+##include fluidDataFiles\Propane.idf
