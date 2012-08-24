@@ -1391,9 +1391,9 @@ SUBROUTINE ProcessInputDataFile
 
    END DO
 
-!   IF (NumIDFSections > 0) THEN
-!     SectionsonFile(NumIDFSections)%LastRecord=NumIDFRecords
-!   ENDIF
+   !IF (NumIDFSections > 0) THEN
+   !  SectionsonFile(NumIDFSections)%LastRecord=NumIDFRecords
+   !ENDIF
 
    IF (NumIDFRecords > 0) THEN
      DO Pos=1,NumObjectDefs

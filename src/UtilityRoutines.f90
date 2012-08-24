@@ -453,13 +453,11 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
-  
     SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
         CHARACTER(len=*) Message
         INTEGER, OPTIONAL :: Unit1
         INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
-    
   END INTERFACE
 
           ! DERIVED TYPE DEFINITIONS
@@ -468,7 +466,9 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   TotalSevereErrors=TotalSevereErrors+1
-  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2)
+
+  !CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2) !RS:The optional integers weren't being defined properly, so I took them out for now.
+  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage)
 
   !  Could set a variable here that gets checked at some point?
 
