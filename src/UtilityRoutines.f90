@@ -420,7 +420,8 @@ SUBROUTINE ShowFatalError(ErrorMessage,OutUnit1,OutUnit2)
 
 END SUBROUTINE ShowFatalError
 
-SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
+SUBROUTINE ShowSevereError(ErrorMessage)
+!SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -445,18 +446,19 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*) ErrorMessage
-  INTEGER, OPTIONAL :: OutUnit1
-  INTEGER, OPTIONAL :: OutUnit2
+  !INTEGER, OPTIONAL :: OutUnit1
+  !INTEGER, OPTIONAL :: OutUnit2
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
-    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)
+    SUBROUTINE ShowErrorMessage(Message)  
+!    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)   !RS: Just commenting out to see what will happen.
         CHARACTER(len=*) Message
-        INTEGER, OPTIONAL :: Unit1
-        INTEGER, OPTIONAL :: Unit2
+        !INTEGER, OPTIONAL :: Unit1
+        !INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
   END INTERFACE
 
@@ -475,6 +477,117 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
   RETURN
 
 END SUBROUTINE ShowSevereError
+
+SUBROUTINE ShowSevereError1(ErrorMessage,OutUnit1)  !RS: Trying this to debug since the Optional values don't seem to be working.
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine puts ErrorMessage with a Severe designation on
+          ! designated output files.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls ShowErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) ErrorMessage
+  INTEGER:: OutUnit1
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  INTERFACE
+    SUBROUTINE ShowErrorMessage(Message,Unit1)   !RS: Just commenting out to see what will happen.
+        CHARACTER(len=*) Message
+        INTEGER:: Unit1
+    END SUBROUTINE
+  END INTERFACE
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+
+  TotalSevereErrors=TotalSevereErrors+1
+
+  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1) !RS:The optional integers weren't being defined properly, so I took them out for now.
+  !CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage)
+
+  !  Could set a variable here that gets checked at some point?
+
+  RETURN
+
+END SUBROUTINE ShowSevereError1
+
+SUBROUTINE ShowSevereError2(ErrorMessage,OutUnit1,OutUnit2)  !RS: Trying this to debug since the Optional values don't seem to be working.
+
+          ! SUBROUTINE INFORMATION:
+          !       AUTHOR         Linda K. Lawrie
+          !       DATE WRITTEN   September 1997
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS SUBROUTINE:
+          ! This subroutine puts ErrorMessage with a Severe designation on
+          ! designated output files.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Calls ShowErrorMessage utility routine.
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+  USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! SUBROUTINE ARGUMENT DEFINITIONS:
+  CHARACTER(len=*) ErrorMessage
+  INTEGER :: OutUnit1
+  INTEGER :: OutUnit2
+
+          ! SUBROUTINE PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+  INTERFACE
+    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)   !RS: Just commenting out to see what will happen.
+        CHARACTER(len=*) Message
+        INTEGER :: Unit1
+        INTEGER :: Unit2
+    END SUBROUTINE
+  END INTERFACE
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+
+  TotalSevereErrors=TotalSevereErrors+1
+
+  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2) !RS:The optional integers weren't being defined properly, so I took them out for now.
+  !CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage)
+
+  !  Could set a variable here that gets checked at some point?
+
+  RETURN
+
+END SUBROUTINE ShowSevereError2
+
 
 SUBROUTINE ShowContinueError(Message,OutUnit1,OutUnit2)
 
@@ -523,7 +636,8 @@ SUBROUTINE ShowContinueError(Message,OutUnit1,OutUnit2)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  CALL ShowErrorMessage(' **   ~~~   ** '//Message,OutUnit1,OutUnit2)
+  !CALL ShowErrorMessage(' **   ~~~   ** '//Message,OutUnit1,OutUnit2)
+  CALL ShowErrorMessage(' **   ~~~   ** '//Message) !RS: The OutUnits aren't being defined properly and are causing errors for some reason.
 
   RETURN
 
