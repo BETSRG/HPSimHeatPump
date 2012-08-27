@@ -8,7 +8,6 @@
     USE TXVMOD
     USE AccumulatorMod
     USE DataSimulation
-    !USE IFPORT !RS: This seems to be an obsolete module
 
     IMPLICIT NONE
 

@@ -27,7 +27,6 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE DataSimulation
-    !USE IFPORT !RS: This seems to be an obsolete module
 
     IMPLICIT NONE
 

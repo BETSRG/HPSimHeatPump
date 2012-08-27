@@ -420,8 +420,8 @@ SUBROUTINE ShowFatalError(ErrorMessage,OutUnit1,OutUnit2)
 
 END SUBROUTINE ShowFatalError
 
-SUBROUTINE ShowSevereError(ErrorMessage)
-!SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
+!SUBROUTINE ShowSevereError(ErrorMessage)
+SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -446,19 +446,19 @@ SUBROUTINE ShowSevereError(ErrorMessage)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*) ErrorMessage
-  !INTEGER, OPTIONAL :: OutUnit1
-  !INTEGER, OPTIONAL :: OutUnit2
+  INTEGER, OPTIONAL :: OutUnit1
+  INTEGER, OPTIONAL :: OutUnit2
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE
-    SUBROUTINE ShowErrorMessage(Message)  
-!    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)   !RS: Just commenting out to see what will happen.
+    !SUBROUTINE ShowErrorMessage(Message)  
+    SUBROUTINE ShowErrorMessage(Message,Unit1,Unit2)   !RS: Just commenting out to see what will happen.
         CHARACTER(len=*) Message
-        !INTEGER, OPTIONAL :: Unit1
-        !INTEGER, OPTIONAL :: Unit2
+        INTEGER, OPTIONAL :: Unit1
+        INTEGER, OPTIONAL :: Unit2
     END SUBROUTINE
   END INTERFACE
 
@@ -469,8 +469,8 @@ SUBROUTINE ShowSevereError(ErrorMessage)
 
   TotalSevereErrors=TotalSevereErrors+1
 
-  !CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2) !RS:The optional integers weren't being defined properly, so I took them out for now.
-  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage)
+  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage,OutUnit1,OutUnit2) !RS:The optional integers weren't being defined properly, so I took them out for now.
+!  CALL ShowErrorMessage(' ** Severe  ** '//ErrorMessage)
 
   !  Could set a variable here that gets checked at some point?
 

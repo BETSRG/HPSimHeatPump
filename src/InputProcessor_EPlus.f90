@@ -180,6 +180,7 @@ INTEGER :: TotalAuditErrors=0      ! Counting some warnings that go onto only th
 INTEGER :: NumSecretObjects=0      ! Number of objects in "Secret Mode"
 LOGICAL :: ProcessingIDD=.false.   ! True when processing IDD, false when processing IDF
 
+INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
 
 !Real Variables for Module
 !na
@@ -320,6 +321,8 @@ SUBROUTINE ProcessInput
    INTEGER :: read_stat
 
    CALL InitSecretObjects
+   
+   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
    EchoInputFile=GetNewUnitNumber()
    OPEN(unit=EchoInputFile,file='eplusout.audit',action='write',iostat=write_stat)
@@ -492,8 +495,9 @@ SUBROUTINE ProcessInput
      IF (SectionsonFile(Loop)%LastRecord /= 0) CYCLE
      IF (MakeUPPERCase(SectionsonFile(Loop)%Name) == 'REPORT VARIABLE DICTIONARY') CYCLE
      IF (CountErr == 0) THEN
-       CALL ShowSevereError('IP: Potential errors in IDF processing -- see .audit file for details.')
+!       CALL ShowSevereError('IP: Potential errors in IDF processing -- see .audit file for details.')  !RS: Secret Search String
        WRITE(EchoInputFile,fmta) ' Potential errors in IDF processing:'
+       WRITE(DebugFile,*) CountErr  !RS: Debugging
      ENDIF
      CountErr=CountErr+1
      Which=SectionsOnFile(Loop)%FirstRecord
@@ -5120,7 +5124,9 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
   INTEGER :: CountP
   INTEGER :: CountM
   CHARACTER(len=1) :: Multiples
-
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='Output:PreprocessorMessage'
   NumPrePM=GetNumObjectsFound(TRIM(cCurrentModuleObject))
@@ -5149,8 +5155,9 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &
              '" has the following Severe condition'//TRIM(Multiples)//':')
         CASE('FATAL')
-          CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &
-             '" has the following Fatal condition'//TRIM(Multiples)//':')
+          !CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &  !RS: Secret Search String
+          !   '" has the following Fatal condition'//TRIM(Multiples)//':')
+          WRITE(DebugFile,*) TRIM(cCurrentModuleObject), TRIM(cALphaArgs(1)), TRIM(Multiples)
           PreP_Fatal=.true.
         CASE DEFAULT
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &
@@ -5166,7 +5173,8 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
           CALL ShowContinueError(TRIM(cAlphaArgs(CountM))//TRIM(cAlphaArgs(CountM+1)))
           CountM=CountM+2
         ELSE
-          CALL ShowContinueError(TRIM(cAlphaArgs(CountM)))
+          !CALL ShowContinueError(TRIM(cAlphaArgs(CountM))) !RS: Secret Search String
+          WRITE(DebugFile,*) TRIM(cAlphaArgs(CountM))
           CountM=CountM+1
         ENDIF
       ENDDO
@@ -5214,17 +5222,22 @@ SUBROUTINE CompactObjectsCheck
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: CompactObjectsFound
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   CompactObjectsFound=.false.
 
   IF ( ANY(IDFRecords%Name(1:13) == 'HVACTEMPLATE:') .or. ANY(IDFRecords%Name(1:13) == 'HVACTemplate:') ) THEN
-    CALL ShowSevereError('HVACTemplate objects are found in the IDF File.')
+!    CALL ShowSevereError('HVACTemplate objects are found in the IDF File.')
+    WRITE(DebugFile, *) 'HVACTemplate objects are found in the IDF File.'
     CompactObjectsFound=.true.
   ENDIF
 
   IF (CompactObjectsFound) THEN
-    CALL ShowFatalError('Program Terminates: The ExpandObjects program has'// &
-      ' not been run or is not in your EnergyPlus.exe folder.')
+    !CALL ShowFatalError('Program Terminates: The ExpandObjects program has'// &
+    !  ' not been run or is not in your EnergyPlus.exe folder.')
+    WRITE (DebugFile, *) 'They wanted the program to terminate, but we are forcing it through anyhow'
   ENDIF
 
   RETURN

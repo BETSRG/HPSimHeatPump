@@ -617,7 +617,7 @@ SUBROUTINE SimHVAC
 
   CAll ManageEMS(emsCallFromAfterHVACManagers)! calling point
 
-  CALL SimulationCycle  !RS: First try at connecting the two programs
+  CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
   
 !! first explicitly call each system type with FirstHVACIteration,
 !

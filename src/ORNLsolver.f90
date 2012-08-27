@@ -36,7 +36,6 @@
     USE AccumulatorMod
     USE UnitConvertMod
     USE DataSimulation
-    !USE IFPORT !RS: This seems to be an obsolete module
     USE FrostModel
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
@@ -910,11 +909,13 @@
         CALL EndEvaporatorCoil
     END IF
 
-    CALL EndEnergyPlus
+    !CALL EndEnergyPlus !RS: This will be called later by the E+ main routine
 
     CLOSE(666)
 
-    STOP
+    !STOP   !RS: This also will be called by the E+ main routine later
+    
+    RETURN  !RS: Returning back to the previous location in E+
 
     END SUBROUTINE
 
