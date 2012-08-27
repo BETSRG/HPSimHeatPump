@@ -2357,6 +2357,10 @@ SUBROUTINE PostIPProcessing
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    LOGICAL :: PreP_Fatal=.false.  ! True if a preprocessor flags a fatal error
+   
+       INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
    DoingInputProcessing=.false.
 
@@ -2367,7 +2371,8 @@ SUBROUTINE PostIPProcessing
    Call CheckCachedIPErrors
 
    IF (PreP_Fatal) THEN
-     CALL ShowFatalError('Preprocessor condition(s) cause termination.')
+     !CALL ShowFatalError('Preprocessor condition(s) cause termination.')   !RS: Secret Search String
+     WRITE(DebugFile, *) PreP_Fatal
    ENDIF
 
    IF (OverallErrorFlag) THEN

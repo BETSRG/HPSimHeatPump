@@ -35,7 +35,7 @@ SUBROUTINE CreateSQLiteDatabase
     ! REFERENCES:
     ! na
 
-    USE InputProcessor, ONLY: GetNumObjectsFound
+    USE InputProcessor !, ONLY: GetNumObjectsFound  !RS: Debugging
     USE DataGlobals, ONLY: MaxNameLength !, ShowSevereError, ShowContinueError
    ! USE DataInterfaces, ONLY: ShowSevereError, ShowContinueError
 
@@ -46,9 +46,14 @@ SUBROUTINE CreateSQLiteDatabase
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     ! na
-
+    
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+   
     IF (GetNumObjectsFound('Output:SQLite') > 0) THEN
-      CALL ShowSevereError('SQLite is not available in this version')
+      !CALL ShowSevereError('SQLite is not available in this version')  !RS: Secret Search String
+      WRITE (DebugFile,*) GetNumObjectsFound('Output:SQLite')
       CALL ShowContinueError('Request for SQLite output will be ignored')
       WriteOutputToSQLite = .FALSE.
     ELSE
