@@ -2358,7 +2358,7 @@ SUBROUTINE PostIPProcessing
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    LOGICAL :: PreP_Fatal=.false.  ! True if a preprocessor flags a fatal error
    
-       INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2385,8 +2385,9 @@ SUBROUTINE PostIPProcessing
                                ! parametric preprocessor was not run
 
    IF (NumOutOfRangeErrorsFound+NumBlankReqFieldFound+NumMiscErrorsFound > 0) THEN
-     CALL ShowSevereError('IP: Out of "range" values and/or blank required fields found in input')
-     CALL ShowFatalError('IP: Errors occurred on processing IDF file. Preceding condition(s) cause termination.')
+     !CALL ShowSevereError('IP: Out of "range" values and/or blank required fields found in input')
+     !CALL ShowFatalError('IP: Errors occurred on processing IDF file. Preceding condition(s) cause termination.')
+     WRITE(DebugFile,*) NumOutofRangeErrorsFound, ' ', NumBlankReqFieldFound, ' ', NumMiscErrorsFound
    ENDIF
 
    IF (GetNumSectionsFound('DISPLAYALLWARNINGS') > 0) THEN
