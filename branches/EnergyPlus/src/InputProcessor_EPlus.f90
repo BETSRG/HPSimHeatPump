@@ -5157,7 +5157,7 @@ SUBROUTINE PreProcessorCheck(PreP_Fatal)
         CASE('FATAL')
           !CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &  !RS: Secret Search String
           !   '" has the following Fatal condition'//TRIM(Multiples)//':')
-          WRITE(DebugFile,*) TRIM(cCurrentModuleObject), TRIM(cALphaArgs(1)), TRIM(Multiples)
+          WRITE(DebugFile,*) TRIM(cCurrentModuleObject), ', ', TRIM(cALphaArgs(1)), ', ', TRIM(Multiples)
           PreP_Fatal=.true.
         CASE DEFAULT
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &

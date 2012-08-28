@@ -489,6 +489,10 @@ SUBROUTINE GetProjectData
   CHARACTER(len=20) :: VersionID=' '
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject
   LOGICAL :: CondFDAlgo
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   ErrorsFound=.false.
 
@@ -505,8 +509,10 @@ SUBROUTINE GetProjectData
       Which=INDEX(Alphas(1),MatchVersion)
     ENDIF
     IF (Which /= 1) THEN
-      CALL ShowWarningError(TRIM(CurrentModuleObject)//': in IDF="'//TRIM(Alphas(1))//  &
-         '" not the same as expected="'//TRIM(MatchVersion)//'"')
+      !CALL ShowWarningError(TRIM(CurrentModuleObject)//': in IDF="'//TRIM(Alphas(1))//  &
+      !   '" not the same as expected="'//TRIM(MatchVersion)//'"')  !RS: Secret Search String
+      WRITE(DebugFile,*) TRIM(CurrentModuleObject)//': in IDF="'//TRIM(Alphas(1))// &
+        '" not the same as expected="'//TRIM(MatchVersion)//'"'
     ENDIF
     VersionID=Alphas(1)
   ELSEIF (Num == 0) THEN
@@ -871,6 +877,10 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
   LOGICAL :: WeatherFileAttached
   LOGICAL :: ErrorsFound
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
   ErrorsFound=.false.
   NumZoneSizing=GetNumObjectsFound('Sizing:Zone')
   NumSystemSizing=GetNumObjectsFound('Sizing:System')
@@ -928,16 +938,20 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
     ENDIF
     IF (DoDesDaySim .and. NumRunPeriodDesign > 0 .and. .not. WeatherFileAttached) THEN
       ErrorsFound=.true.
-      CALL ShowSevereError('CheckEnvironmentSpecifications: SimulationControl specified doing design day simulations; weather '//  &
-       'file design environments specified; but no weather file specified.')
+      !CALL ShowSevereError('CheckEnvironmentSpecifications: SimulationControl specified doing design day simulations; weather '//  &
+      ! 'file design environments specified; but no weather file specified.')   !RS: Secret Search String
+      WRITE(DebugFile,*) 'CheckEnvironmentSpecifications: Simulation Control specified doing design day simulations; weather '// &
+        'file design environments specified; but no weather file specified.'
     ENDIF
     IF (DoWeathSim .and. .not. RunPeriodsInInput) THEN
       CALL ShowWarningError('CheckEnvironmentSpecifications: SimulationControl specified doing weather simulations, but '//  &
        'no run periods for weather file specified.  No annual results produced.')
     ENDIF
     IF (DoWeathSim .and. RunPeriodsInInput .and. .not. WeatherFileAttached) THEN
-      CALL ShowWarningError('CheckEnvironmentSpecifications: SimulationControl specified doing weather simulations; '//  &
-       'run periods for weather file specified; but no weather file specified.')
+      !CALL ShowWarningError('CheckEnvironmentSpecifications: SimulationControl specified doing weather simulations; '//  &
+      ! 'run periods for weather file specified; but no weather file specified.')   !RS: Secret Search String
+      WRITE(DebugFile,*) 'CheckEnvironmentSpecifications: SimulationControl specified doing weather simulations, but '// &
+        'run periods for weather file specified; but no weather file specified.'
     ENDIF
   ENDIF
   IF (.not. DoDesDaySim .and. .not. DoWeathSim) THEN
@@ -951,7 +965,8 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
   ENDIF
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError('Program terminates due to preceding conditions.')
+    !CALL ShowFatalError('Program terminates due to preceding conditions.')
+    WRITE(DebugFile,*) 'Program wants to terminate due to preceding conditions.'
   ENDIF
 
   RETURN
@@ -2643,10 +2658,15 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
     IF (lIDFSetThreadsInput) NumberIntRadThreads=iIDFSetThreadsInput
   ENDIF
 #else
+INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
   Threading=.false.
   cCurrentModuleObject='ProgramControl'
   IF (GetNumObjectsFound(cCurrentModuleObject) > 0) THEN
-    CALL ShowWarningError('CheckThreading: '//trim(cCurrentModuleObject)//' is not available in this version.')
+    !CALL ShowWarningError('CheckThreading: '//trim(cCurrentModuleObject)//' is not available in this version.')    !RS: Secret Search String
+    WRITE(DebugFile,*) 'CheckThreading: '//TRIM(cCurrentModuleObject)//' is not available in this version.'
   ENDIF
   MaxNumberOfThreads=1
 #endif

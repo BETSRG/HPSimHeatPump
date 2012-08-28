@@ -3472,11 +3472,14 @@ SUBROUTINE GetFluidPropertiesData
           ! If it made it all the way to the last input occurrence and didn't find a match,
           ! then no sat press data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Gas/Fluid Saturation Pressure found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Pressure" and '//trim(cAlphaFieldNames(3))//  &
-           '="FluidGas".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Gas/Fluid Saturation Pressure found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Pressure" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="FluidGas".') !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Gas/Fluid Saturation Pressure found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="Pressure" and '//TRIM(cAlphaFieldNames(3))//'="FluidGas".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3542,11 +3545,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid enthalpy data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Enthalpy found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object:')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
-           '="Fluid".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Enthalpy found')  !RS: Secret Search String
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object:')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="Fluid".')
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Enthalpy found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object:'
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="Enthalpy" and '//TRIM(cAlphaFieldNames(3))//'="Fluid".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3614,11 +3621,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat f/g enthalpy data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Enthalpy found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
-           '="FluidGas".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Enthalpy found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Enthalpy" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="FluidGas".') !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Enthalpy found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="Enthalpy" and'//TRIM(cAlphaFieldNames(3))//'="FluidGas".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3683,11 +3694,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid Cp data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Specific Heat found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
-           '="Fluid".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Specific Heat found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="Fluid".')    !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Specific Heat found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="SpecificHeat" and '//TRIM(cAlphaFieldNames(3))//'="Fluid".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3755,11 +3770,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat f/g Cp data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Specific Heat found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
-           '="FluidGas".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Specific Heat found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="SpecificHeat" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="FluidGas".') !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Specific Heat found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="SpecificHeat" amd '//TRIM(cAlphaFieldNames(3))//'="FluidGas".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3824,11 +3843,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat fluid density data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Density found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
-           '="Fluid".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Fluid Density found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="Fluid".')    !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Fluid Density found'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
+        WRITE(DebugFile,*) 'with '//TRIM(cAlphaFieldNames(2))//'="Density" and '//TRIM(cAlphaFieldNames(3))//'="Fluid".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3898,11 +3921,15 @@ SUBROUTINE GetFluidPropertiesData
 
           ! If it made it all the way to the last input occurrence and didn't find a match, then no sat f/g density data found
       IF (InData == NumOfSatFluidPropArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Density found')
-        CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
-        CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
-        CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
-           '="FluidGas".')
+        !CALL ShowSevereError('GetFluidPropertiesData: No Saturated Gas/Fluid Density found')
+        !CALL ShowContinueError('Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowContinueError('Need properties to be entered for '//trim(CurrentModuleObject)//' object.')
+        !CALL ShowContinueError('with '//trim(cAlphaFieldNames(2))//'="Density" and '//trim(cAlphaFieldNames(3))//  &
+        !   '="FluidGas".') !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No Saturated Gas/Fluid Density found.'
+        WRITE(DebugFile,*) 'Was looking for properties for Refrigerant='//TRIM(RefrigData(Loop)%Name)
+        WRITE(DebugFile,*) 'Need properties to be entered for '//TRIM(CurrentModuleObject)//' object.'
+        WRITE(DebugFile,*) 'With '//TRIM(cAlphaFieldNames(2))//'="Density" and '//TRIM(cAlphaFieldNames(3))//'="FluidGas".'
         ErrorsFound=.true.
       ENDIF
 
@@ -3962,8 +3989,10 @@ SUBROUTINE GetFluidPropertiesData
       END IF
     END DO
     IF (NumOfPressPts == 0) THEN
-      CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated enthalpy')
-      CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name))
+      !CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated enthalpy')
+      !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)) !RS: Secret Search String
+      WRITE(DebugFile,*) 'GetFluidPropertiesData: No pressure data found for superheated enthalpy'
+      WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
       ErrorsFound=.true.
     ENDIF
 
@@ -3977,9 +4006,11 @@ SUBROUTINE GetFluidPropertiesData
         EXIT ! the TempLoop DO loop
       END IF
       IF (TempLoop == NumOfFluidTempArrays) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: No match for temperature array name found with '// &
-                             'superheated enthalpy data')
-        CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name))
+        !CALL ShowSevereError('GetFluidPropertiesData: No match for temperature array name found with '// &
+        !                     'superheated enthalpy data')
+        !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name))   !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: No match for temperature array name found with superheated enthalpy data'
+        WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
         ErrorsFound=.true.
       ENDIF
     END DO
@@ -4130,8 +4161,10 @@ SUBROUTINE GetFluidPropertiesData
     DEALLOCATE(PressurePtr)
 
     IF (NumOfPressPts == 0) THEN
-      CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated density')
-      CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name))
+      !CALL ShowSevereError('GetFluidPropertiesData: No pressure data found for superheated density')
+      !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)) !RS: Secret Search String
+      WRITE(DebugFile,*) 'GetFluidPropertiesData: No pressure data found for superheated density'
+      WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' Name='//TRIM(RefrigData(Loop)%Name)
       ErrorsFound=.true.
     END IF
     IF (NumOfPressPts /= RefrigData(Loop)%NumSuperPressPts) THEN
@@ -4784,7 +4817,8 @@ SUBROUTINE GetFluidPropertiesData
   DEALLOCATE(lNumericFieldBlanks)
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError('GetFluidPropertiesData: Previous errors in input cause program termination.')
+    !CALL ShowFatalError('GetFluidPropertiesData: Previous errors in input cause program termination.') !RS: Secret String Search
+    WRITE(DebugFile,*) 'GetFluidPropertiesData: Previous errors in input cause program termination. Or, at least, they should. We are currently still ignoring them.'
   ENDIF
 
   IF (GetNumSectionsFound(MakeUPPERCase('ReportGlycols')) > 0) DebugReportGlycols=.true.
