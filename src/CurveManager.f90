@@ -2554,6 +2554,10 @@ CHARACTER(len=1000) :: CharTableData      ! used to echo each line of table data
 LOGICAL            :: EchoTableDataToEio  ! logical set equal to global and used to report to eio file
 LOGICAL            :: FileExists
 
+INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
   EchoTableDataToEio = DisplayAdvancedReportVariables
   TableNum = PerfCurve(CurveNum)%TableIndex
 
@@ -3319,11 +3323,15 @@ END IF
 
 RETURN
 
-999   CALL ShowSevereError('CurveManager: SearchTableDataFile: '//   &
-       'Could not open Table Data File, expecting it as file name = '//TRIM(FileName))
-  CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
-  CALL ShowContinueError('Try again with putting full path and file name in the field.')
-  CALL ShowFatalError('Program terminates due to these conditions.')
+!999   CALL ShowSevereError('CurveManager: SearchTableDataFile: '//   &
+  !     'Could not open Table Data File, expecting it as file name = '//TRIM(FileName))
+  !CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
+  !CALL ShowContinueError('Try again with putting full path and file name in the field.')
+  !CALL ShowFatalError('Program terminates due to these conditions.')   !RS: Secret Search String
+999  WRITE(DebugFile,*) 'CurveManager: SearchTableDataFile: Could not open Table Data File, expecting it as file name = '//TRIM(FileName)
+  WRITE(DebugFile,*) 'Certain run environments require a full path to be included with the file name in the input field.'
+  WRITE(DebugFile,*) 'Try again with putting full path and file name in the field.'
+  WRITE(DebugFile,*) 'Program would like to terminated due to these conditions.'
 
 END SUBROUTINE ReadTableData
 

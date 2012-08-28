@@ -1305,6 +1305,11 @@ SUBROUTINE GetBranchInput
   INTEGER ConnectionType  ! Used to pass variable node connection type to GetNodeNums
   INTEGER PressureCurveType
   INTEGER PressureCurveIndex
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
     IF (GetInputFlag) THEN
       CurrentModuleObject='Branch'
@@ -1350,11 +1355,17 @@ SUBROUTINE GetBranchInput
           Branch(BCount)%MaxFlowRate=Numbers(1)
           CALL GetPressureCurveTypeAndIndex(Alphas(2), PressureCurveType, PressureCurveIndex)
           IF (PressureCurveType == PressureCurve_Error) THEN
-            CALL ShowSevereError('GetBranchInput: Invalid '//TRIM(cAlphaFields(2))//'='//TRIM(Alphas(2)))
-            CALL ShowContinueError(' found on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))
-            CALL ShowContinueError('This curve could not be found in the input deck.  Ensure that this curve has been entered')
-            CALL ShowContinueError(' as either a Curve:Functional:PressureDrop or one of Curve:{Linear,Quadratic,Cubic,Exponent}')
-            CALL ShowContinueError('This error could be caused by a misspelled curve name')
+            !CALL ShowSevereError('GetBranchInput: Invalid '//TRIM(cAlphaFields(2))//'='//TRIM(Alphas(2)))
+            !CALL ShowContinueError(' found on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))
+            !CALL ShowContinueError('This curve could not be found in the input deck.  Ensure that this curve has been entered')
+            !CALL ShowContinueError(' as either a Curve:Functional:PressureDrop or one of Curve:{Linear,Quadratic,Cubic,Exponent}')
+            !CALL ShowContinueError('This error could be caused by a misspelled curve name')    !RS: Secret Search String
+            WRITE(DebugFile,*) 'GetBranchInput: Invalid '//TRIM(cAlphaFields(2))//'='//TRIM(Alphas(2))
+            WRITE(DebugFile,*) ' found on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1))
+            WRITE(DebugFile,*) 'This curve could not be found in the input deck. Ensure that this curve has been entered'
+            WRITE(DebugFile,*) ' as either a Curve:Functional:PressureDrop or one of Curve:{Linear,Quadratic,Cubic,Exponent}'
+            WRITE(DebugFile,*) 'This error could be caused by a misspelled curve name'
+            WRITE(DebugFile,*) PressureCurveType, ', ', PressureCurveIndex
             ErrFound = .TRUE.
           END IF
           Branch(BCount)%PressureCurveType = PressureCurveType
@@ -1379,7 +1390,8 @@ SUBROUTINE GetBranchInput
             Branch(BCount)%Component(Comp)%Name=Alphas(Loop+1)
             CALL ValidateComponent(Alphas(Loop),Alphas(Loop+1),IsNotOK,TRIM(CurrentModuleObject))
             IF (IsNotOK) THEN
-              CALL ShowContinueError('Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))
+              !CALL ShowContinueError('Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))    !RS: Secret Search String
+              WRITE(DebugFile,*) 'Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1))
               ErrFound=.true.
             ENDIF
             Branch(BCount)%Component(Comp)%InletNodeName=Alphas(Loop+2)
@@ -1432,11 +1444,15 @@ SUBROUTINE GetBranchInput
               CASE ('BYPASS')
                 Branch(BCount)%Component(Comp)%CtrlType=ControlType_Bypass
               CASE DEFAULT
-                CALL ShowSevereError('GetBranchInput: Invalid '//TRIM(cAlphaFields(Loop+4))//', Value='//  &
-                   TRIM(Alphas(Loop+4)))
-                CALL ShowContinueError('Occurs for '//TRIM(cAlphaFields(Loop))//'='//TRIM(Alphas(Loop))//', '//  &
-                   TRIM(cAlphaFields(Loop+1))//'='//TRIM(Alphas(Loop+1)))
-                CALL ShowContinueError('Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))
+                !CALL ShowSevereError('GetBranchInput: Invalid '//TRIM(cAlphaFields(Loop+4))//', Value='//  &
+                !   TRIM(Alphas(Loop+4)))
+                !CALL ShowContinueError('Occurs for '//TRIM(cAlphaFields(Loop))//'='//TRIM(Alphas(Loop))//', '//  &
+                !   TRIM(cAlphaFields(Loop+1))//'='//TRIM(Alphas(Loop+1)))
+                !CALL ShowContinueError('Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1)))  !RS: Secret Search String
+                WRITE(DebugFile,*) 'GetBranchInput: Invalid '//TRIM(cAlphaFields(Loop+4))//', Value='//TRIM(Alphas(Loop+4))
+                WRITE(DebugFile,*) 'Occurs for '//TRIM(cAlphaFields(Loop))//'='//TRIM(Alphas(Loop))//', '// &
+                    TRIM(cAlphaFields(Loop+1))//'='//TRIM(Alphas(Loop+1))
+                WRITE(DebugFile,*) 'Occurs on '//TRIM(CurrentModuleObject)//'='//TRIM(Alphas(1))
                   ErrFound=.true.
             END SELECT
             Comp=Comp+1
@@ -1454,8 +1470,9 @@ SUBROUTINE GetBranchInput
         CALL TestInletOutletNodes(ErrFound)
         GetInputFlag=.false.
         IF (ErrFound) THEN
-          CALL ShowFatalError('GetBranchInput: Invalid '//TRIM(CurrentModuleObject)//  &
-             ' Input, preceding condition(s) cause termination.')
+          !CALL ShowFatalError('GetBranchInput: Invalid '//TRIM(CurrentModuleObject)//  &
+          !   ' Input, preceding condition(s) cause termination.')  !RS: Secret Search String
+          WRITE(DebugFile,*) 'GetBranchInput: Invalid '//TRIM(CurrentModuleObject)//' Input, preceding condition(s) would like to cause termination.'
         ENDIF
       END IF
     ENDIF
@@ -1537,6 +1554,10 @@ SUBROUTINE GetBranchListInput
   INTEGER                         :: IOStat  ! Could be used in the Get Routines, not currently checked
   INTEGER :: NumParams
   CHARACTER(len=MaxNameLength) :: TestName
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   ErrFound=.false.
   CurrentModuleObject='BranchList'
@@ -1594,9 +1615,11 @@ SUBROUTINE GetBranchListInput
         IF (BranchList(BCount)%BranchNames(Loop) /= Blank) THEN
            Found=FindItemInList(BranchList(BCount)%BranchNames(Loop),Branch%Name,NumOfBranches)
            IF (Found == 0) THEN
-             CALL ShowSevereError('GetBranchListInput: Branch Name not found='//  &
-                 TRIM(BranchList(BCount)%BranchNames(Loop))//  &
-                 ' in '//TRIM(CurrentModuleObject)//'='//TRIM(BranchList(BCount)%Name))
+             !CALL ShowSevereError('GetBranchListInput: Branch Name not found='//  &
+             !    TRIM(BranchList(BCount)%BranchNames(Loop))//  &
+             !    ' in '//TRIM(CurrentModuleObject)//'='//TRIM(BranchList(BCount)%Name))    !RS: Secret Search String
+             WRITE(DebugFile,*) 'GetBranchListInput: Branch Name not found='//TRIM(BranchList(BCount)%BranchNames(Loop))// &
+                ' in '//TRIM(CurrentModuleObject)//'='//TRIM(BranchList(BCount)%Name)
              ErrFound=.true.
            ENDIF
         ENDIF
@@ -1620,7 +1643,8 @@ SUBROUTINE GetBranchListInput
   ENDDO
 
   IF (ErrFound) THEN
-    CALL ShowSevereError('GetBranchListInput: Invalid Input -- preceding condition(s) will likely cause termination.')
+    !CALL ShowSevereError('GetBranchListInput: Invalid Input -- preceding condition(s) will likely cause termination.') !RS: Secret Search String
+    WRITE(DebugFile,*) 'GetBranchListInput: Invalid Input -- preceding condition(s) will likely cause termination.'
   ENDIF
   NumOfBranchLists=BCount
   DEALLOCATE(Alphas)
