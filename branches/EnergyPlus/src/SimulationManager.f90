@@ -965,7 +965,7 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
   ENDIF
 
   IF (ErrorsFound) THEN
-    !CALL ShowFatalError('Program terminates due to preceding conditions.')
+    !CALL ShowFatalError('Program terminates due to preceding conditions.') !RS: Secret Search String
     WRITE(DebugFile,*) 'Program wants to terminate due to preceding conditions.'
   ENDIF
 

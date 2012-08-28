@@ -621,13 +621,20 @@ SUBROUTINE ValidateComponent(CompType,CompName,IsNotOK,CallString)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ItemNum
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
   IsNotOK=.false.
 
   ItemNum=GetObjectItemNum(CompType,CompName)
 
   IF (ItemNum < 0) THEN
-    CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType))
-    CALL ShowContinueError('Component name='//TRIM(CompName))
+    !CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType))
+    !CALL ShowContinueError('Component name='//TRIM(CompName))
+    WRITE(DebugFile,*) 'During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType)
+    WRITE(DebugFile,*) 'Component name='//TRIM(CompName)
+    WRITE(DebugFile,*) ItemNum
     IsNotOK=.true.
   ELSEIF (ItemNum == 0) THEN
     CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Name input='//TRIM(CompName))
