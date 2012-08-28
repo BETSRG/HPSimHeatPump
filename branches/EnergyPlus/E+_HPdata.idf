@@ -48236,17 +48236,17 @@ FluidProperties:Temperatures,
       !format FluidProperty
  FluidProperties:TemperaturesA1, !Name
       !reference FluidPropertyTemperatures
-   , !Temperature 1
+   0, !Temperature 1
       !units C		!All following temperatures are in units C
-   , !Temperature 2
-   , !Temperature 3
-   , !Temperature 4
-   , !Temperature 5
-   , !Temperature 6
-   , !Temperature 7
-   , !Temperature 8
-   , !Temperature 9
-   , !Temperature 10
+   10, !Temperature 2
+   20, !Temperature 3
+   30, !Temperature 4
+   40, !Temperature 5
+   50, !Temperature 6
+   60, !Temperature 7
+   70, !Temperature 8
+   80, !Temperature 9
+   90, !Temperature 10
    , !Temperature 11
    , !Temperature 12
    , !Temperature 13
@@ -48362,7 +48362,7 @@ FluidProperties:Temperatures,
    , !Temperature 123
    , !Temperature 124
    , !Temperature 125
-    , !Temperature 126
+   , !Temperature 126
    , !Temperature 127
    , !Temperature 128
    , !Temperature 129
@@ -48514,17 +48514,17 @@ FluidProperties:Saturated,
       !Enter the name of a FluidProperties:Temperatures object.
       !type object-list
       !object-list FluidPropertyTemperatures
-  , !Property Value 1
+  0.1, !Property Value 1
       !unitsBasedOnField A2	!All Property Values have the same note
-  , !Property Value 2
-  , !Property Value 3
-  , !Property Value 4
-  , !Property Value 5
-  , !Property Value 6
-  , !Property Value 7
-  , !Property Value 8
-  , !Property Value 9
-  , !Property Value 10
+  0.5, !Property Value 2
+  1.5, !Property Value 3
+  2.5, !Property Value 4
+  3.7, !Property Value 5
+  5.0, !Property Value 6
+  6.5, !Property Value 7
+  8.0, !Property Value 8
+  9.7, !Property Value 9
+  11.5, !Property Value 10
   , !Property Value 11
   , !Property Value 12
   , !Property Value 13
@@ -48787,17 +48787,17 @@ FluidProperties:Superheated,
       !pressure for this list of properties
       !units Pa
       !minimum> 0.0
-  , !Property Value 1
+  0.0, !Property Value 1
       !unitsBasedOnField A2	!All following property values have the same note
-  , !Property Value 2
-  , !Property Value 3
-  , !Property Value 4
-  , !Property Value 5
-  , !Property Value 6
-  , !Property Value 7
-  , !Property Value 8
-  , !Property Value 9
-  , !Property Value 10
+  0.5, !Property Value 2
+  1.5, !Property Value 3
+  2.5, !Property Value 4
+  3.5, !Property Value 5
+  5.0, !Property Value 6
+  6.5, !Property Value 7
+  7.7, !Property Value 8
+  9.0, !Property Value 9
+  10.5, !Property Value 10
   , !Property Value 11
   , !Property Value 12
   , !Property Value 13
@@ -49064,17 +49064,17 @@ FluidProperties:Concentration,
       !Glycol concentration for this list of properties entered as a fraction
       !minimum 0.0
       !maximum 1.0
-  , !Property Value 1
+  0.0, !Property Value 1
       !unitsBasedOnField A2	!All following property values have the same note
-  , !Property Value 2
-  , !Property Value 3
-  , !Property Value 4
-  , !Property Value 5
-  , !Property Value 6
-  , !Property Value 7
-  , !Property Value 8
-  , !Property Value 9
-  , !Property Value 10
+  0.5, !Property Value 2
+  1.0, !Property Value 3
+  1.5, !Property Value 4
+  2.2, !Property Value 5
+  3.0, !Property Value 6
+  3.9, !Property Value 7
+  5.0, !Property Value 8
+  6.3, !Property Value 9
+  7.7, !Property Value 10
   , !Property Value 11
   , !Property Value 12
   , !Property Value 13

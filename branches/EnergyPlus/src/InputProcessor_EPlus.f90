@@ -5229,14 +5229,14 @@ SUBROUTINE CompactObjectsCheck
   CompactObjectsFound=.false.
 
   IF ( ANY(IDFRecords%Name(1:13) == 'HVACTEMPLATE:') .or. ANY(IDFRecords%Name(1:13) == 'HVACTemplate:') ) THEN
-!    CALL ShowSevereError('HVACTemplate objects are found in the IDF File.')
+!    CALL ShowSevereError('HVACTemplate objects are found in the IDF File.')    !RS: Secret Search String
     WRITE(DebugFile, *) 'HVACTemplate objects are found in the IDF File.'
     CompactObjectsFound=.true.
   ENDIF
 
   IF (CompactObjectsFound) THEN
     !CALL ShowFatalError('Program Terminates: The ExpandObjects program has'// &
-    !  ' not been run or is not in your EnergyPlus.exe folder.')
+    !  ' not been run or is not in your EnergyPlus.exe folder.')    !RS: Secret Search String
     WRITE (DebugFile, *) 'They wanted the program to terminate, but we are forcing it through anyhow'
   ENDIF
 
@@ -5279,12 +5279,17 @@ SUBROUTINE ParametricObjectsCheck
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
   IF ( ANY(IDFRecords%Name(1:11) == 'PARAMETRIC:') .or. ANY(IDFRecords%Name(1:11) == 'Parametric:') .or.   &
        ANY(IDFRecords%Name(1:11) == 'parametric:') ) THEN
-    CALL ShowSevereError('Parametric objects are found in the IDF File.')
-    CALL ShowFatalError('Program Terminates: The ParametricPreprocessor program has'// &
-      ' not been run.')
+    !CALL ShowSevereError('Parametric objects are found in the IDF File.')
+    !CALL ShowFatalError('Program Terminates: The ParametricPreprocessor program has'// &
+    !  ' not been run.')    !RS: Secret Search String
+    WRITE(DebugFile,*) 'Parametric objects are found in the IDF file. The ParametricPreprocessor program has not been run.'
   ENDIF
 
   RETURN

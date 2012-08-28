@@ -375,6 +375,11 @@ SUBROUTINE GetFluidPropertiesData
   LOGICAL ::  ErrorInName
   LOGICAL ::  IsBlank
   INTEGER :: FluidNum
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
           ! SUBROUTINE LOCAL DATA:
           ! For default "glycol" fluids of Water, Ethylene Glycol, and Propylene Glycol
@@ -3379,11 +3384,16 @@ SUBROUTINE GetFluidPropertiesData
 
     DO TempLoop = 2, FluidTemps(Loop)%NumOfTemps
       IF (FluidTemps(Loop)%Temps(TempLoop) <= FluidTemps(Loop)%Temps(TempLoop-1)) THEN
-        CALL ShowSevereError('GetFluidPropertiesData: '//TRIM(CurrentModuleObject)//' lists must have data in ascending order')
-        CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' name='//TRIM(FluidTemps(Loop)%Name))
-        CALL ShowContinueError('First Occurance at Temp('//TRIM(RoundSigDigits(TempLoop-1))//  &
-                 ') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop-1),3))//'} >= Temp('//  &
-                 TRIM(RoundSigDigits(TempLoop))//') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop),3))//'}')
+        !CALL ShowSevereError('GetFluidPropertiesData: '//TRIM(CurrentModuleObject)//' lists must have data in ascending order')
+        !CALL ShowContinueError('Error occurs in '//TRIM(CurrentModuleObject)//' name='//TRIM(FluidTemps(Loop)%Name))
+        !CALL ShowContinueError('First Occurance at Temp('//TRIM(RoundSigDigits(TempLoop-1))//  &
+        !         ') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop-1),3))//'} >= Temp('//  &
+        !         TRIM(RoundSigDigits(TempLoop))//') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop),3))//'}') !RS: Secret Search String
+        WRITE(DebugFile,*) 'GetFluidPropertiesData: '//TRIM(CurrentModuleObject)//' lists must have data in ascending order'
+        WRITE(DebugFile,*) 'Error occurs in '//TRIM(CurrentModuleObject)//' name='//TRIM(FluidTemps(Loop)%Name)
+        WRITE(DebugFile,*) 'First Occurance at Temp('//TRIM(RoundSigDigits(TempLoop-1))// &
+                ') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop-1),3))//'} >= Temp('// &
+                TRIM(RoundSigDigits(TempLoop))//') {'//TRIM(RoundSigDigits(FluidTemps(Loop)%Temps(TempLoop),3))//'}'
         ErrorsFound=.true.
         EXIT
       ENDIF
