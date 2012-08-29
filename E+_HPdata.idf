@@ -8,7 +8,7 @@ Simulation Data;
 
 Version,
       
-  A1; !Version Identifier
+ 7.1.0; !Version Identifier
 
 SimulationControl,
       !Note that the following 3 fields are related to the Sizing:Zone, Sizing:System,
@@ -31097,25 +31097,25 @@ AirLoopHVAC:OutdoorAirSystem:EquipmentList,
  AirLoopHVAC:OutdoorAirSystem:EquipmentListA1, !Name
        !required-field
        !reference AirLoopOAEquipmentLists
- Comp1Obj, !Component 1 Object Type
+ Real, !Component 1 Object Type
        !required-field
- Comp1, !Component 1 Name
+ Branch1, !Component 1 Name
        !required-field
-  A4 , !Component 2 Object Type
+    , !Component 2 Object Type
   A5 , !Component 2 Name
-  A6 , !Component 3 Object Type
+    , !Component 3 Object Type
   A7 , !Component 3 Name
-  A8 , !Component 4 Object Type
+    , !Component 4 Object Type
   A9 , !Component 4 Name
-  A10, !Component 5 Object Type
+   , !Component 5 Object Type
   A11, !Component 5 Name
-  A12, !Component 6 Object Type
+   , !Component 6 Object Type
   A13, !Component 6 Name
-  A14, !Component 7 Object Type
+   , !Component 7 Object Type
   A15, !Component 7 Name
-  A16, !Component 8 Object Type
+   , !Component 8 Object Type
   A17, !Component 8 Name
-  A18, !Component 9 Object Type
+   , !Component 9 Object Type
   A19; !Component 9 Name
 
 AirLoopHVAC:OutdoorAirSystem,
@@ -31947,7 +31947,7 @@ Branch,
         !units m3/s
         !minimum 0
         !autosizable
- PressDropCurve, !Pressure Drop Curve Name
+ PressDropCurves, !Pressure Drop Curve Name
         !type object-list
         !object-list PressureDropCurves
         !object-list ExponentCurves
@@ -31958,7 +31958,7 @@ Branch,
         !Air loops do not account for pressure drop using this field
         !Valid curve types are: Curve:Functional:PressureDrop or
         !one of Curve:{Linear,Quadratic,Cubic,Exponent}')
- Comp1Obj, !Component 1 Object Type
+ Real, !Component 1 Object Type
         !begin-extensible
         !required-field
  Comp1, !Component 1 Name
@@ -31980,7 +31980,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A8, !Component 2 Object Type
+    , !Component 2 Object Type
    A9, !Component 2 Name
    A10,!Component 2 Inlet Node Name
         !type node
@@ -31996,7 +31996,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A13, !Component 3 Object Type
+    , !Component 3 Object Type
    A14, !Component 3 Name
    A15, !Component 3 Inlet Node Name
         !type node
@@ -32012,7 +32012,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A18, !Component 4 Object Type
+    , !Component 4 Object Type
    A19, !Component 4 Name
    A20, !Component 4 Inlet Node Name
         !type node
@@ -32028,7 +32028,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A23, !Component 5 Object Type
+    , !Component 5 Object Type
    A24, !Component 5 Name
    A25, !Component 5 Inlet Node Name
         !type node
@@ -32044,7 +32044,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A28, !Component 6 Object Type
+    , !Component 6 Object Type
    A29, !Component 6 Name
    A30, !Component 6 Inlet Node Name
         !type node
@@ -32060,7 +32060,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A33, !Component 7 Object Type
+    , !Component 7 Object Type
    A34, !Component 7 Name
    A35, !Component 7 Inlet Node Name
         !type node
@@ -32076,7 +32076,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A38, !Component 8 Object Type
+    , !Component 8 Object Type
    A39, !Component 8 Name
    A40, !Component 8 Inlet Node Name
         !type node
@@ -32092,7 +32092,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A43, !Component 9 Object Type
+    , !Component 9 Object Type
    A44, !Component 9 Name
    A45, !Component 9 Inlet Node Name
         !type node
@@ -32108,7 +32108,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A48, !Component 10 Object Type
+    , !Component 10 Object Type
    A49, !Component 10 Name
    A50, !Component 10 Inlet Node Name
         !type node
@@ -32124,7 +32124,7 @@ Branch,
        !for PASSIVE, Component does not try to set branch flow
        !for SERIESACTIVE, component is active but does not turn off branch when the component is off
        !for BYPASS,  Component designates a loop bypass
-   A53, !Component 11 Object Type
+    , !Component 11 Object Type
    A54, !Component 11 Name
    A55, !Component 11 Inlet Node Name
         !type node
@@ -32148,7 +32148,7 @@ BranchList,
  BranchListA1,  !Name
        !required-field
        !reference BranchLists
- Branch1, !Branch 1 Name		!All branches share the same type and object-list
+ A2, !Branch 1 Name		!All branches share the same type and object-list
        !begin-extensible
        !required-field
        !type object-list
