@@ -3899,7 +3899,8 @@ SUBROUTINE VerifyName(NameToVerify,NamesList,NumOfNames,ErrorFound,IsBlank,Strin
   IF (NumOfNames > 0) THEN
     Found=FindItem(NameToVerify,NamesList,NumOfNames)
     IF (Found /= 0) THEN
-      CALL ShowSevereError(TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify))
+      !CALL ShowSevereError(TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify))  !RS: Secret Search String
+      WRITE(DebugFile,*) TRIM(StringToDisplay)//', duplicate name='//TRIM(NameToVerify)
       ErrorFound=.true.
     ENDIF
   ENDIF

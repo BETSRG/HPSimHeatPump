@@ -3331,7 +3331,7 @@ RETURN
 999  WRITE(DebugFile,*) 'CurveManager: SearchTableDataFile: Could not open Table Data File, expecting it as file name = '//TRIM(FileName)
   WRITE(DebugFile,*) 'Certain run environments require a full path to be included with the file name in the input field.'
   WRITE(DebugFile,*) 'Try again with putting full path and file name in the field.'
-  WRITE(DebugFile,*) 'Program would like to terminated due to these conditions.'
+  WRITE(DebugFile,*) 'Program would like to terminate due to these conditions.'
 
 END SUBROUTINE ReadTableData
 

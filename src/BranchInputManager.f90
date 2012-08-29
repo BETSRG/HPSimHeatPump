@@ -2819,7 +2819,11 @@ SUBROUTINE AuditBranches(mustprint,CompType,CompName)
   INTEGER :: Found   ! non-zero when found
   CHARACTER(len=MaxNameLength) :: FoundBranchName  ! Branch matching compname/type
   LOGICAL :: NeverFound
-
+  
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+    
   NumDanglingCount=0
   NeverFound=.true.
   DO BrN=1,NumOfBranches
@@ -2847,7 +2851,8 @@ SUBROUTINE AuditBranches(mustprint,CompType,CompName)
              trim(CompName)//'"')
         ENDIF
       ELSE
-        CALL ShowSevereMessage('AuditBranches: Branch="'//trim(Branch(BrN)%Name)//'" not found on any BranchLists.')
+        !CALL ShowSevereMessage('AuditBranches: Branch="'//trim(Branch(BrN)%Name)//'" not found on any BranchLists.')   !RS: Secret Search String
+        WRITE(DebugFile,*) 'AuditBranches: Branch="'//TRIM(Branch(BrN)%Name)//'" not found on any BranchLists.'
         TotalSevereErrors=TotalSevereErrors+1
       ENDIF
     ENDIF
@@ -2857,10 +2862,13 @@ SUBROUTINE AuditBranches(mustprint,CompType,CompName)
     CALL ShowContinueError('Look for mistyped branch or component names/types.')
   ENDIF
   IF (.not. mustprint .and. NumDanglingCount > 0) THEN
-    CALL ShowSevereMessage('AuditBranches: There are '//trim(RoundSigDigits(NumDanglingCount))//  &
-       ' branch(es) that do not appear on any BranchList.')
+    !CALL ShowSevereMessage('AuditBranches: There are '//trim(RoundSigDigits(NumDanglingCount))//  &
+    !   ' branch(es) that do not appear on any BranchList.')
+    WRITE(DebugFile,*) 'AuditBranches: There are '//TRIM(RoundSigDigits(NumDanglingCount))// &
+        ' branch(es) that do not appear on any BranchList.'
     TotalSevereErrors=TotalSevereErrors+NumDanglingCount
-    CALL ShowContinueError('Use Output:Diagnostics,DisplayExtraWarnings; for detail of each branch not on a branch list.')
+    !CALL ShowContinueError('Use Output:Diagnostics,DisplayExtraWarnings; for detail of each branch not on a branch list.')
+    WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayExtraWarnings; for detail of each branch not on a branch list.'
   ENDIF
 
   RETURN

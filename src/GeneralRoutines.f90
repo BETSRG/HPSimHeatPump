@@ -631,14 +631,16 @@ SUBROUTINE ValidateComponent(CompType,CompName,IsNotOK,CallString)
 
   IF (ItemNum < 0) THEN
     !CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType))
-    !CALL ShowContinueError('Component name='//TRIM(CompName))
+    !CALL ShowContinueError('Component name='//TRIM(CompName))  !RS: Secret Search String
     WRITE(DebugFile,*) 'During '//TRIM(CallString)//' Input, Invalid Component Type input='//TRIM(CompType)
     WRITE(DebugFile,*) 'Component name='//TRIM(CompName)
     WRITE(DebugFile,*) ItemNum
     IsNotOK=.true.
   ELSEIF (ItemNum == 0) THEN
-    CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Name input='//TRIM(CompName))
-    CALL ShowContinueError('Component type='//TRIM(CompType))
+    !CALL ShowSevereError('During '//TRIM(CallString)//' Input, Invalid Component Name input='//TRIM(CompName))
+    !CALL ShowContinueError('Component type='//TRIM(CompType))  !RS: Secret Search String
+    WRITE(DebugFile,*) 'During '//TRIM(CallString)//' Input, Invalid Component Name input='//TRIM(CompName)
+    WRITE(DebugFile,*) 'Component type='//TRIM(CompType)
     IsNotOK=.true.
   ENDIF
 

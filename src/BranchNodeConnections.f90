@@ -1366,6 +1366,10 @@ SUBROUTINE SetUpCompSets(ParentType,ParentName,CompType,CompName,InletNode,Outle
   CHARACTER(len=MaxNameLength)  :: ParentTypeUC  ! Parent component type in upper case
   INTEGER Count, Count2
   INTEGER Found, Found2
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   ParentTypeUC = MakeUPPERCase(ParentType)
   CompTypeUC   = MakeUPPERCase(CompType)
@@ -1430,12 +1434,17 @@ SUBROUTINE SetUpCompSets(ParentType,ParentName,CompType,CompName,InletNode,Outle
                 (TRIM(CompName) == TRIM(CompSets(Count2)%ParentCName))) Found2=1
           ENDDO
           IF (Found2 == 0) THEN
-            CALL ShowWarningError  ('Node used as an inlet more than once: '//TRIM(InletNode))
-            CALL ShowContinueError ('  Used by     : '//TRIM(CompSets(Count)%ParentCType)//', name='//  &
-                                    TRIM(CompSets(Count)%ParentCName))
-            CALL ShowContinueError ('  as inlet for: '//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName))
-            CALL ShowContinueError ('  and  by     : '//TRIM(ParentTypeUC)//', name='//TRIM(ParentName))
-            CALL ShowContinueError ('  as inlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName))
+            !CALL ShowWarningError  ('Node used as an inlet more than once: '//TRIM(InletNode))
+            !CALL ShowContinueError ('  Used by     : '//TRIM(CompSets(Count)%ParentCType)//', name='//  &
+            !                        TRIM(CompSets(Count)%ParentCName))
+            !CALL ShowContinueError ('  as inlet for: '//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName))
+            !CALL ShowContinueError ('  and  by     : '//TRIM(ParentTypeUC)//', name='//TRIM(ParentName))
+            !CALL ShowContinueError ('  as inlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName))   !RS: Secret Search String
+            WRITE(DebugFile,*) 'Node used as an inlet more than once: '//TRIM(InletNode)
+            WRITE(DebugFile,*) '    Used by     : '//TRIM(CompSets(Count)%ParentCType)//', name='//TRIM(CompSets(Count)%ParentCName)
+            WRITE(DebugFile,*) '    as inlet for: '//TRIM(CompSets(Count)%CType)//', name='//TRIM(ParentName)
+            WRITE(DebugFile,*) '    and by  : '//TRIM(ParentTypeUC)//', name='//TRIM(ParentName)
+            WRITE(DebugFile,*) '    as inlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName)
           ENDIF
         ENDIF
       ENDIF
@@ -1466,12 +1475,17 @@ SUBROUTINE SetUpCompSets(ParentType,ParentName,CompType,CompName,InletNode,Outle
           ! This rule is violated by dual duct units, so let it pass
           IF ((Found2 == 0) .AND. (.not. SameString(CompSets(Count)%CType(1:21),'AirTerminal:DualDuct:')) &
                             .AND. (.not. SameString(CompTypeUC(1:21),'AirTerminal:DualDuct:')) ) THEN
-            CALL ShowWarningError  ('Node used as an outlet more than once: '//TRIM(OutletNode))
-            CALL ShowContinueError ('  Used by     : '//TRIM(CompSets(Count)%ParentCType)//', name='//   &
-                                    TRIM(CompSets(Count)%ParentCName))
-            CALL ShowContinueError ('  as outlet for: '//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName))
-            CALL ShowContinueError ('  and  by     : '//TRIM(ParentTypeUC)//', name='//TRIM(ParentName))
-            CALL ShowContinueError ('  as outlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName))
+            !CALL ShowWarningError  ('Node used as an outlet more than once: '//TRIM(OutletNode))
+            !CALL ShowContinueError ('  Used by     : '//TRIM(CompSets(Count)%ParentCType)//', name='//   &
+            !                        TRIM(CompSets(Count)%ParentCName))
+            !CALL ShowContinueError ('  as outlet for: '//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName))
+            !CALL ShowContinueError ('  and  by     : '//TRIM(ParentTypeUC)//', name='//TRIM(ParentName))
+            !CALL ShowContinueError ('  as outlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName))  !RS: Secret Search String
+            WRITE(DebugFile,*) 'Node used as an outlet more than once: '//TRIM(OutletNode)
+            WRITE(DebugFile,*) '    Used by : '//TRIM(CompSets(Count)%ParentCType)//', name='//TRIM(CompSets(Count)%ParentCName)
+            WRITE(DebugFile,*) '    as outlet for:'//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName)
+            WRITE(DebugFile,*) '    and by :'//TRIM(ParentTypeUC)//', name='//TRIM(ParentName)
+            WRITE(DebugFile,*) '    as outlet for: '//TRIM(CompTypeUC)//', name='//TRIM(CompName)
           ENDIF
         ENDIF
       ENDIF
