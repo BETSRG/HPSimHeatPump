@@ -954,8 +954,9 @@ SUBROUTINE ProcessScheduleInput
     END DO
     !  Have processed all named days, check to make sure all given
     IF (.not. ALL(AllDays)) THEN
-      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-         '", Missing some day assignments')
+      !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+      !   '", Missing some day assignments')    !RS: Secret Search String
+      WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'", Missing some day assignments'
       ErrorsFound=.true.
     ENDIF
   END DO
@@ -983,9 +984,11 @@ SUBROUTINE ProcessScheduleInput
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
