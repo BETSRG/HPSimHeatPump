@@ -1412,301 +1412,301 @@ Schedule:Day:Interval,
        !begin-extensible
        !"until" includes the time entered.
        !units hh:mm
-    10, !Value Until Time 1
+    1, !Value Until Time 1
  00:10, !Time 2		!All time entries following share the same note and units
        !"until" includes the time entered.
        !units hh:mm
-   10, !Value Until Time 2
+   1, !Value Until Time 2
  00:20, !Time 3
-   10, !Value Until Time 3
+   1, !Value Until Time 3
  00:30, !Time 4
-   10, !Value Until Time 4
+   1, !Value Until Time 4
  00:40, !Time 5
-   10, !Value Until Time 5
+   1, !Value Until Time 5
  00:50, !Time 6
-   10, !Value Until Time 6
+   1, !Value Until Time 6
  01:00, !Time 7
-   10, !Value Until Time 7
+   1, !Value Until Time 7
  01:10, !Time 8
-   10, !Value Until Time 8
+   1, !Value Until Time 8
  01:20, !Time 9
-   10, !Value Until Time 9
+   1, !Value Until Time 9
  01:30, !Time 10
-   10, !Value Until Time 10
+   1, !Value Until Time 10
  01:40, !Time 11
-   10, !Value Until Time 11
+   1, !Value Until Time 11
  01:50, !Time 12
-   10, !Value Until Time 12
+   1, !Value Until Time 12
  02:00, !Time 13
-   10, !Value Until Time 13
+   1, !Value Until Time 13
  02:10, !Time 14
-   10, !Value Until Time 14
+   1, !Value Until Time 14
  02:20, !Time 15
-   10, !Value Until Time 15
+   1, !Value Until Time 15
  02:30, !Time 16
-   10, !Value Until Time 16
+   1, !Value Until Time 16
  02:40, !Time 17
-   10, !Value Until Time 17
+   1, !Value Until Time 17
  02:50, !Time 18
-   10, !Value Until Time 18
+   1, !Value Until Time 18
  03:00, !Time 19
-   10, !Value Until Time 19
+   1, !Value Until Time 19
  03:10, !Time 20
-   10, !Value Until Time 20
+   1, !Value Until Time 20
  03:20, !Time 21
-   10, !Value Until Time 21
+   1, !Value Until Time 21
  03:30, !Time 22
-   10, !Value Until Time 22
+   1, !Value Until Time 22
  03:40, !Time 23
-   10, !Value Until Time 23
+   1, !Value Until Time 23
  03:50, !Time 24
-   10, !Value Until Time 24
+   1, !Value Until Time 24
  04:00, !Time 25
-   10, !Value Until Time 25
+   1, !Value Until Time 25
  04:10, !Time 26
-   10, !Value Until Time 26
+   1, !Value Until Time 26
  04:20, !Time 27
-   10, !Value Until Time 27
+   1, !Value Until Time 27
  04:30, !Time 28
-   10, !Value Until Time 28
+   1, !Value Until Time 28
  04:40, !Time 29
-   10, !Value Until Time 29
+   1, !Value Until Time 29
  04:50, !Time 30
-   10, !Value Until Time 30
+   1, !Value Until Time 30
  05:00, !Time 31
-   10, !Value Until Time 31
+   1, !Value Until Time 31
  05:10, !Time 32
-   10, !Value Until Time 32
+   1, !Value Until Time 32
  05:20, !Time 33
-   10, !Value Until Time 33
+   1, !Value Until Time 33
  05:30, !Time 34
-   10, !Value Until Time 34
+   1, !Value Until Time 34
  05:40, !Time 35
-   10, !Value Until Time 35
+   1, !Value Until Time 35
  05:50, !Time 36
-   10, !Value Until Time 36
+   1, !Value Until Time 36
  06:00, !Time 37
-   10, !Value Until Time 37
+   1, !Value Until Time 37
  06:10, !Time 38
-   10, !Value Until Time 38
+   1, !Value Until Time 38
  06:20, !Time 39
-   10, !Value Until Time 39
+   1, !Value Until Time 39
  06:30, !Time 40
-   10, !Value Until Time 40
+   1, !Value Until Time 40
  06:40, !Time 41
-   10, !Value Until Time 41
+   1, !Value Until Time 41
  06:50, !Time 42
-   10, !Value Until Time 42
+   1, !Value Until Time 42
  07:00, !Time 43
-   10, !Value Until Time 43
+   1, !Value Until Time 43
  07:10, !Time 44
-   10, !Value Until Time 44
+   1, !Value Until Time 44
  07:20, !Time 45
-   10, !Value Until Time 45
+   1, !Value Until Time 45
  07:30, !Time 46
-   10, !Value Until Time 46
+   1, !Value Until Time 46
  07:40, !Time 47
-   10, !Value Until Time 47
+   1, !Value Until Time 47
  07:50, !Time 48
-   10, !Value Until Time 48
+   1, !Value Until Time 48
  08:00, !Time 49
-   10, !Value Until Time 49
+   1, !Value Until Time 49
  08:10, !Time 50
-   10, !Value Until Time 50
+   1, !Value Until Time 50
  08:20, !Time 51
-   10, !Value Until Time 51
+   1, !Value Until Time 51
  08:30, !Time 52
-   10, !Value Until Time 52
+   1, !Value Until Time 52
  08:40, !Time 53
-   10, !Value Until Time 53
+   1, !Value Until Time 53
  08:50, !Time 54
-   10, !Value Until Time 54
+   1, !Value Until Time 54
  09:00, !Time 55
-   10, !Value Until Time 55
+   1, !Value Until Time 55
  09:10, !Time 56
-   10, !Value Until Time 56
+   1, !Value Until Time 56
  09:20, !Time 57
-   10, !Value Until Time 57
+   1, !Value Until Time 57
  09:30, !Time 58
-   10, !Value Until Time 58
+   1, !Value Until Time 58
  09:40, !Time 59
-   10, !Value Until Time 59
+   1, !Value Until Time 59
  09:50, !Time 60
-   10, !Value Until Time 60
+   1, !Value Until Time 60
  10:00, !Time 61
-   10, !Value Until Time 61
+   1, !Value Until Time 61
  10:10, !Time 62
-   10, !Value Until Time 62
+   1, !Value Until Time 62
  10:20, !Time 63
-   10, !Value Until Time 63
+   1, !Value Until Time 63
  10:30, !Time 64
-   10, !Value Until Time 64
+   1, !Value Until Time 64
  10:40, !Time 65
-   10, !Value Until Time 65
+   1, !Value Until Time 65
  10:50, !Time 66
-   10, !Value Until Time 66
+   1, !Value Until Time 66
  11:00, !Time 67
-   10, !Value Until Time 67
+   1, !Value Until Time 67
  11:10, !Time 68
-   10, !Value Until Time 68
+   1, !Value Until Time 68
  11:20, !Time 69
-   10, !Value Until Time 69
+   1, !Value Until Time 69
  11:30, !Time 70
-   10, !Value Until Time 70
+   1, !Value Until Time 70
  11:40, !Time 71
-   10, !Value Until Time 71
+   1, !Value Until Time 71
  11:50, !Time 72
-   10, !Value Until Time 72
+   1, !Value Until Time 72
  12:00, !Time 73
-   10, !Value Until Time 73
+   1, !Value Until Time 73
  12:10, !Time 74
-   10, !Value Until Time 74
+   1, !Value Until Time 74
  12:20, !Time 75
-   10, !Value Until Time 75
+   1, !Value Until Time 75
  12:30, !Time 76
-   10, !Value Until Time 76
+   1, !Value Until Time 76
  12:40, !Time 77
-   10, !Value Until Time 77
+   1, !Value Until Time 77
  12:50, !Time 78
-   10, !Value Until Time 78
+   1, !Value Until Time 78
  13:00, !Time 79
-   10, !Value Until Time 79
+   1, !Value Until Time 79
  13:10, !Time 80
-   10, !Value Until Time 80
+   1, !Value Until Time 80
  13:20, !Time 81
-   10, !Value Until Time 81
+   1, !Value Until Time 81
  13:30, !Time 82
-   10, !Value Until Time 82
+   1, !Value Until Time 82
  13:40, !Time 83
-   10, !Value Until Time 83
+   1, !Value Until Time 83
  13:50, !Time 84
-   10, !Value Until Time 84
+   1, !Value Until Time 84
  14:00, !Time 85
-   10, !Value Until Time 85
+   1, !Value Until Time 85
  14:10, !Time 86
-   10, !Value Until Time 86
+   1, !Value Until Time 86
  14:20, !Time 87
-   10, !Value Until Time 87
+   1, !Value Until Time 87
  14:30, !Time 88
-   10, !Value Until Time 88
+   1, !Value Until Time 88
  14:40, !Time 89
-   10, !Value Until Time 89
+   1, !Value Until Time 89
  14:50, !Time 90
-   10, !Value Until Time 90
+   1, !Value Until Time 90
  15:00, !Time 91
-   10, !Value Until Time 91
+   1, !Value Until Time 91
  15:10, !Time 92
-   10, !Value Until Time 92
+   1, !Value Until Time 92
  15:20, !Time 93
-   10, !Value Until Time 93
+   1, !Value Until Time 93
  15:30, !Time 94
-   10, !Value Until Time 94
+   1, !Value Until Time 94
  15:40, !Time 95
-   10, !Value Until Time 95
+   1, !Value Until Time 95
  15:50, !Time 96
-   10, !Value Until Time 96
+   1, !Value Until Time 96
  16:00, !field Time 97
-   10, !Value Until Time 97
+   1, !Value Until Time 97
  16:10, !Time 98
-   10, !Value Until Time 98
+   1, !Value Until Time 98
  16:20, !Time 99
-   10, !Value Until Time 99
- 16:30, !Time 100
-  10, !Value Until Time 100
+   1, !Value Until Time 99
+ 16:30, !Time 10
+  1, !Value Until Time 100
  16:40, !Time 101
-  10, !Value Until Time 101
+  1, !Value Until Time 101
  16:50, !Time 102
-  10, !Value Until Time 102
+  1, !Value Until Time 102
  17:00, !Time 103
-  10, !Value Until Time 103
+  1, !Value Until Time 103
  17:10, !Time 104
-  10, !Value Until Time 104
+  1, !Value Until Time 104
  17:20, !Time 105
-  10, !Value Until Time 105
+  1, !Value Until Time 105
  17:30, !Time 106
-  10, !Value Until Time 106
+  1, !Value Until Time 106
  17:40, !Time 107
-  10, !Value Until Time 107
+  1, !Value Until Time 107
  17:50, !Time 108
-  10, !Value Until Time 108
+  1, !Value Until Time 108
  18:00, !Time 109
-  10, !Value Until Time 109
+  1, !Value Until Time 109
  18:10, !Time 110
-  10, !Value Until Time 110
+  1, !Value Until Time 110
  18:20, !Time 111
-  10, !Value Until Time 111
+  1, !Value Until Time 111
  18:30, !Time 112
-  10, !Value Until Time 112
+  1, !Value Until Time 112
  18:40, !Time 113
-  10, !Value Until Time 113
+  1, !Value Until Time 113
  18:50, !Time 114
-  10, !Value Until Time 114
+  1, !Value Until Time 114
  19:00, !Time 115
-  10, !Value Until Time 115
+  1, !Value Until Time 115
  19:10, !Time 116
-  10, !Value Until Time 116
+  1, !Value Until Time 116
  19:20, !Time 117
-  10, !Value Until Time 117
+  1, !Value Until Time 117
  19:30, !Time 118
-  10, !Value Until Time 118
+  1, !Value Until Time 118
  19:40, !Time 119
-  10, !Value Until Time 119
+  1, !Value Until Time 119
  19:50, !Time 120
-  10, !Value Until Time 120
+  1, !Value Until Time 120
  20:00, !Time 121
-  10, !Value Until Time 121
+  1, !Value Until Time 121
  20:10, !Time 122
-  10, !Value Until Time 122
+  1, !Value Until Time 122
  20:20, !Time 123
-  10, !Value Until Time 123
+  1, !Value Until Time 123
  20:30, !Time 124
-  10, !Value Until Time 124
+  1, !Value Until Time 124
  20:40, !Time 125
-  10, !Value Until Time 125
+  1, !Value Until Time 125
  20:50, !Time 126
-  10, !Value Until Time 126
+  1, !Value Until Time 126
  21:00, !Time 127
-  10, !Value Until Time 127
+  1, !Value Until Time 127
  21:10, !Time 128
-  10, !Value Until Time 128
+  1, !Value Until Time 128
  21:20, !Time 129
-  10, !Value Until Time 129
+  1, !Value Until Time 129
  21:30, !Time 130
-  10, !Value Until Time 130
+  1, !Value Until Time 130
  21:40, !Time 131
- 10, !Value Until Time 131
+ 1, !Value Until Time 131
  21:50, !Time 132
-  10, !Value Until Time 132
+  1, !Value Until Time 132
  22:00, !Time 133
-  10, !Value Until Time 133
+  1, !Value Until Time 133
  22:10, !Time 134
-  10, !Value Until Time 134
+  1, !Value Until Time 134
  22:20, !Time 135
-  10, !Value Until Time 135
+  1, !Value Until Time 135
  22:30, !Time 136
-  10, !Value Until Time 136
+  1, !Value Until Time 136
  22:40, !Time 137
-  10, !Value Until Time 137
+  1, !Value Until Time 137
  22:50, !Time 138
-  10, !Value Until Time 138
+  1, !Value Until Time 138
  23:00, !Time 139
-  10, !Value Until Time 139
+  1, !Value Until Time 139
  23:10, !Time 140
-  10, !Value Until Time 140
+  1, !Value Until Time 140
  23:20, !Time 141
-  10, !Value Until Time 141
+  1, !Value Until Time 141
  23:30, !Time 142
-  10, !Value Until Time 142
+  1, !Value Until Time 142
  23:40, !Time 143
-  10, !Value Until Time 143
+  1, !Value Until Time 143
  23:50, !Time 144
-  10; !Value Until Time 144
+  1; !Value Until Time 144
 
 
 Schedule:Day:List,
       !Schedule:Day:List will allow the user to list 24 hours worth of values, which can be sub-hourly in nature.
       !min-fields 5
- ScheduleTypeLimitsName, !Name
+ Schedule:Day:List, !Name
        !required-field
        !reference DayScheduleNames
        !reference ScheduleAndDayScheduleNames
@@ -1818,7 +1818,7 @@ Schedule:Day:List,
 Schedule:Week:Daily,
   !min-fields 13
        !A Schedule:Week:Daily contains 12 Schedule:Day:Hourly objects, one for each day type.
- Schedule:Week:DailyA1 , !Name
+ Schedule:Week:Daily, !Name
        !required-field
        !reference WeekScheduleNames
  SundaySchedule, !Sunday Schedule:Day Name
@@ -1874,10 +1874,10 @@ Schedule:Week:Compact,
   !extensible:2 - repeat last two fields, remembering to remove ; from "inner" fields.
   !Compact definition for Schedule:Day:List
   !min-fields 3
- Schedule:Week:CompactA1, !Name
+ Schedule:Week:Compact, !Name
        !required-field
        !reference WeekScheduleNames
- Weekdays, !DayType List 1
+ Monday, !DayType List 1
        !begin-extensible
        !"For" is an optional prefix/start of the For fields. Choices can be combined on single line
        !if separated by spaces. i.e. "Holiday Weekends"
@@ -1899,11 +1899,11 @@ Schedule:Week:Compact,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
- Day1Schedule, !Schedule:Day Name 1
+ MondaySchedule, !Schedule:Day Name 1
        !required-field
        !type object-list
        !object-list DayScheduleNames
- Weekends, !DayType List 2
+ Tuesday, !DayType List 2
        !type choice
        !key AllOtherDays
        !key Weekdays
@@ -1920,10 +1920,10 @@ Schedule:Week:Compact,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
- Day2Schedule, !Schedule:Day Name 2
+ TuedaySchedule, !Schedule:Day Name 2
        !type object-list
        !object-list DayScheduleNames
-   , !DayType List 3
+ Wednesday, !DayType List 3
        !type choice
        !key AllOtherDays
        !key Weekdays
@@ -1940,10 +1940,10 @@ Schedule:Week:Compact,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
-   , !Schedule:Day Name 3
+ WednesdaySchedule, !Schedule:Day Name 3
        !type object-list
        !object-list DayScheduleNames
-   , !DayType List 4
+ Thursday, !DayType List 4
        !type choice
        !key AllOtherDays
        !key Weekdays
@@ -1960,10 +1960,10 @@ Schedule:Week:Compact,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
-   , !Schedule:Day Name 4
+ ThursdaySchedule, !Schedule:Day Name 4
        !type object-list
        !object-list DayScheduleNames
-   , !DayType List 5
+ Friday, !DayType List 5
        !type choice
        !key AllOtherDays
        !key Weekdays
@@ -1980,7 +1980,7 @@ Schedule:Week:Compact,
        !key WinterDesignDay
        !key CustomDay1
        !key CustomDay2
-   ; !Schedule:Day Name 5
+ FridaySchedule; !Schedule:Day Name 5
        !type object-list
        !object-list DayScheduleNames
 

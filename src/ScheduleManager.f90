@@ -791,10 +791,14 @@ SUBROUTINE ProcessScheduleInput
     MinutesPerItem=INT(Numbers(1))
     NumExpectedItems=1440/MinutesPerItem
     IF ((NumNumbers-1) /= NumExpectedItems) THEN
-      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-         ', Number of Entered Items='//TRIM(RoundSigDigits(NumNumbers-1))//  &
-         ' not equal number of expected items='//TRIM(RoundSigDigits(NumExpectedItems)))
-      CALL ShowContinueError('based on '//TRIM(cNumericFields(1))//' field value='//TRIM(RoundSigDigits(MinutesPerItem)))
+      !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+      !   ', Number of Entered Items='//TRIM(RoundSigDigits(NumNumbers-1))//  &
+      !   ' not equal number of expected items='//TRIM(RoundSigDigits(NumExpectedItems)))
+      !CALL ShowContinueError('based on '//TRIM(cNumericFields(1))//' field value='//TRIM(RoundSigDigits(MinutesPerItem)))   !RS: Secret Search String
+      WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+        ', Number of Entered Items='//TRIM(RoundSigDigits(NumNumbers-1))// &
+        ' not equal number of expected items='//TRIM(RoundSigDigits(NumExpectedItems))
+      WRITE(DebugFile,*) 'based on '//TRIM(cNumericFields(1))//' field value='//TRIM(RoundSigDigits(MinutesPerItem))
       ErrorsFound=.true.
       CYCLE
     ENDIF
@@ -891,8 +895,10 @@ SUBROUTINE ProcessScheduleInput
     DO InLoopIndex=1,MaxDayTypes
       DayIndex=FindIteminList(Alphas(InLoopIndex+1),DaySchedule(1:NumRegDaySchedules)%Name,NumRegDaySchedules)
       IF (DayIndex == 0) THEN
-        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-           '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber)
+        !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+        !   '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber)   !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber
         ErrorsFound=.true.
       ELSE
         WeekSchedule(LoopIndex)%DaySchedulePointer(InLoopIndex)=DayIndex
@@ -923,9 +929,12 @@ SUBROUTINE ProcessScheduleInput
     DO InLoopIndex=2,NumAlphas,2
       DayIndex=FindIteminList(Alphas(InLoopIndex+1),DaySchedule(1:NumRegDaySchedules)%Name,NumRegDaySchedules)
       IF (DayIndex == 0) THEN
-        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-           '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber)
-        CALL ShowContinueError('ref: '//TRIM(cAlphaFields(InLoopIndex))//' "'//TRIM(Alphas(InLoopIndex))//'"')
+        !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+        !   '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber)
+        !CALL ShowContinueError('ref: '//TRIM(cAlphaFields(InLoopIndex))//' "'//TRIM(Alphas(InLoopIndex))//'"')  !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(InLoopIndex+1))//' "'//TRIM(Alphas(InLoopIndex+1))//'" not Found',UnitNumber
+        WRITE(DebugFile,*) 'ref: '//TRIM(cAlphaFields(InLoopIndex))//' "'//TRIM(Alphas(InLoopIndex))//'"'
         ErrorsFound=.true.
       ELSE
         TheseDays=.false.
