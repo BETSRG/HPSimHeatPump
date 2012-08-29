@@ -308,7 +308,9 @@ SUBROUTINE ProcessScheduleInput
   CHARACTER(len=1) :: ColumnSep
   LOGICAL :: firstLine
 
-
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   MaxNums=1 ! Need at least 1 number because it's used as a local variable in the Schedule Types loop
   MaxAlps=0
@@ -582,9 +584,11 @@ SUBROUTINE ProcessScheduleInput
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')   !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+                '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -646,9 +650,11 @@ SUBROUTINE ProcessScheduleInput
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')   !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//Trim(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -741,9 +747,11 @@ SUBROUTINE ProcessScheduleInput
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')    !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found --- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -2847,6 +2855,10 @@ SUBROUTINE ProcessIntervalFields(Untils,Numbers,NumUntils,NumNumbers,MinuteValue
   INTEGER EHr
   INTEGER EMin
   INTEGER sFld
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   MinuteValue=0.0
   SetMinuteValue=.false.
@@ -2886,9 +2898,12 @@ UntilLoop:  DO Count=1,NumUntils
     ENDIF
     ! Field decoded
     IF (HHField < 0 .or. HHField > 24 .or. MMField < 0 .or. MMField > 60) THEN
-      CALL ShowSevereError('ProcessScheduleInput: ProcessIntervalFields, '//  &
-                 'Invalid "Until" field encountered='//TRIM(Untils(Count)))
-      CALL ShowContinueError('Occurred in Day Schedule='//TRIM(DayScheduleName))
+      !CALL ShowSevereError('ProcessScheduleInput: ProcessIntervalFields, '//  &
+      !           'Invalid "Until" field encountered='//TRIM(Untils(Count)))
+      !CALL ShowContinueError('Occurred in Day Schedule='//TRIM(DayScheduleName))   !RS: Secret Search String
+      WRITE(DebugFile,*) 'ProcessScheduleInput: ProcessIntervalFields, '// &
+        'Invalid "Until" field encountered='//TRIM(Untils(Count))
+      WRITE(DebugFile,*) 'Occurred in Day Schedule='//TRIM(DayScheduleName)
       ErrorsFound=.true.
       CYCLE
     ENDIF
@@ -2956,9 +2971,11 @@ UntilLoop:  DO Count=1,NumUntils
   ENDDO UntilLoop
 
   IF (.not. ALL(SetMinuteValue)) THEN
-    CALL ShowSevereError('ProcessScheduleInput: ProcessIntervalFields, '//  &
-                     'Processing time fields, incomplete day detected, '// &
-                         TRIM(ErrContext)//'='//TRIM(DayScheduleName))
+    !CALL ShowSevereError('ProcessScheduleInput: ProcessIntervalFields, '//  &
+    !                 'Processing time fields, incomplete day detected, '// &
+    !                     TRIM(ErrContext)//'='//TRIM(DayScheduleName)) !RS: Secret Search String
+    WRITE(DebugFile,*) 'ProcessScheduleInput: ProcessIntervalFields, Processing '// &
+        'time fields, incomplete day detected, '//TRIM(ErrContext)//'='//TRIM(DayScheduleName)
     ErrorsFound=.true.
   ENDIF
 
@@ -3009,13 +3026,20 @@ SUBROUTINE DecodeHHMMField(FieldValue,RetHH,RetMM,ErrorsFound,DayScheduleName)
   INTEGER Pos  ! Position value for scanning the Field
   CHARACTER(len=LEN(FieldValue)) String
   INTEGER IOS
+  
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   String=ADJUSTL(FieldValue)
   Pos=INDEX(String,':')
   IF (Pos == 0) THEN
-    CALL ShowSevereError('ProcessScheduleInput: DecodeHHMMField, '//  &
-          'Invalid "until" field submitted (no : separator in hh:mm)='//TRIM(String))
-    CALL ShowContinueError('Occurred in Day Schedule='//TRIM(DayScheduleName))
+    !CALL ShowSevereError('ProcessScheduleInput: DecodeHHMMField, '//  &
+    !      'Invalid "until" field submitted (no : separator in hh:mm)='//TRIM(String))
+    !CALL ShowContinueError('Occurred in Day Schedule='//TRIM(DayScheduleName)) !RS: Secret Search String
+    WRITE(DebugFile,*) 'ProcessScheduleInput: DecodeHHMMField, '// &
+        'Invalid "until" field submitted (no : separator in hh:mm=)'//TRIM(String)
+    WRITE(DebugFile,*) 'Occurred in Day Schedule='//TRIM(DayScheduleName)
     ErrorsFound=.true.
     RETURN
   ELSEIF (Pos == 1) THEN
