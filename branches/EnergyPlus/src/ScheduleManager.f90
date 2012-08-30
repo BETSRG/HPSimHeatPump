@@ -986,7 +986,7 @@ SUBROUTINE ProcessScheduleInput
         IF (.not. lAlphaBlanks(2)) THEN
           !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
           !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-          !   '" not found -- will not be validated')
+          !   '" not found -- will not be validated')   !RS: Secret Search String
           WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
@@ -1003,9 +1003,11 @@ SUBROUTINE ProcessScheduleInput
     DO InLoopIndex=3,NumAlphas
       WeekIndex=FindIteminList(Alphas(InLoopIndex),WeekSchedule(1:NumRegWeekSchedules)%Name,NumRegWeekSchedules)
       IF (WeekIndex == 0) THEN
-        CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(InLoopIndex))//'="'//TRIM(Alphas(InLoopIndex))//  &
-             '" not found.',UnitNumber)
+        !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+        !     '", '//TRIM(cAlphaFields(InLoopIndex))//'="'//TRIM(Alphas(InLoopIndex))//  &
+        !     '" not found.',UnitNumber)    !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(InLoopIndex))//'="'//TRIM(Alphas(InLoopIndex))//'" not found.',UnitNumber
         ErrorsFound=.true.
       ELSE
         ! Process for month, day
@@ -1099,9 +1101,11 @@ SUBROUTINE ProcessScheduleInput
     CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
     IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')    !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'", ' &
+            //TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -1192,8 +1196,10 @@ For:  DO WHILE (NumField < NumAlphas) ! Continues until next "Through"
           LastFor=Alphas(NumField)
           CALL ProcessForDayTypes(Alphas(NumField),TheseDays,AllDays,ErrorHere)
           IF (ErrorHere) THEN
-            CALL ShowContinueError('ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
-            CALL ShowContinueError('ref Through field='//TRIM(Alphas(ThruField)))
+            !CALL ShowContinueError('ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
+            !CALL ShowContinueError('ref Through field='//TRIM(Alphas(ThruField)))   !RS: Secret Search String
+            WRITE(DebugFile,*) 'ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"'
+            WRITE(DebugFile,*) 'ref Through field='//TRIM(Alphas(ThruField))
             ErrorsFound=.true.
           ELSE
             DO Hr=1,MaxDayTypes
@@ -1219,8 +1225,10 @@ For:  DO WHILE (NumField < NumAlphas) ! Continues until next "Through"
             ELSEIF (INDEX(Alphas(NumField),'NO') > 0) THEN
               DaySchedule(AddDaySch)%IntervalInterpolated=.false.
             ELSE
-              CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-                  '", Illegal Field entered ='//TRIM(Alphas(NumField)))
+              !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+              !    '", Illegal Field entered ='//TRIM(Alphas(NumField))) !RS: Secret Search String
+              WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+                '", Illegal Field entered ='//TRIM(Alphas(NumField))
               ErrorsFound=.true.
             ENDIF
             NumField=NumField+1
@@ -1239,16 +1247,20 @@ Until:  DO
           NumNumbers=NumNumbers+1
           Numbers(NumNumbers)=ProcessNumber(Alphas(NumField),ErrorHere)
           IF (ErrorHere) THEN
-            CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
-            CALL ShowContinueError('Until field=['//trim(Alphas(NumField-1))//'] has illegal value field=['//  &
-                      trim(Alphas(NumField))//'].')
+            !CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
+            !CALL ShowContinueError('Until field=['//trim(Alphas(NumField-1))//'] has illegal value field=['//  &
+            !          trim(Alphas(NumField))//'].')    !RS: Secret Search String
+            WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"'
+            WRITE(DebugFile,*) 'Until field=['//TRIM(Alphas(NumField-1))//'] has illegal value field=['//TRIM(Alphas(NumField))//'].'
             ErrorsFound=.true.
           ENDIF
           NumField=NumField+1
           Alphas(UntilFld+xxcount)=Alphas(NumField)  ! Incase next is "until"
         ELSE
-          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-               '", Looking for "Until" field, found='//TRIM(Alphas(NumField)))
+          !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !     '", Looking for "Until" field, found='//TRIM(Alphas(NumField))) !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", Looking for "Until" field, found='//TRIM(Alphas(NumField))
           ErrorsFound=.true.
           EXIT Through
         ENDIF
@@ -1262,7 +1274,8 @@ Until:  DO
                                      ErrorHere,DaySchedule(AddDaySch)%Name,TRIM(CurrentModuleObject)//' DaySchedule Fields')
           ! Depending on value of "Interpolate" field, the value for each time step in each hour gets processed:
           IF (ErrorHere) THEN
-            CALL ShowContinueError('ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')
+            !CALL ShowContinueError('ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"')   !RS: Secret Search String
+            WRITE(DebugFile,*) 'ref '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//'"'
             ErrorsFound=.true.
           ENDIF
           IF (.not. DaySchedule(AddDaySch)%IntervalInterpolated) THEN  ! No validation done on the value of the interpolation field
@@ -1288,17 +1301,22 @@ Until:  DO
         ENDIF
       ENDDO For
       IF (Any(.not. AllDays)) THEN
-        CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
-                   '" has missing day types in Through='//TRIM(CurrentThrough))
-        CALL ShowContinueError('Last "For" field='//TRIM(LastFor))
+        !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
+        !           '" has missing day types in Through='//TRIM(CurrentThrough))
+        !CALL ShowContinueError('Last "For" field='//TRIM(LastFor)) !RS: Secret String Search
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
+            '" has missing day types in Through='//TRIM(CurrentThrough)
+        WRITE(DebugFile,*) 'Last "For" field='//TRIM(LastFor)
         errmsg='Missing day types=,'
         DO kdy=1,MaxDayTypes
           IF (AllDays(kdy)) CYCLE
           errmsg=errmsg(1:len_trim(errmsg)-1)//'"'//trim(ValidDayTypes(kdy))//'",-'
         ENDDO
         errmsg=errmsg(1:len_trim(errmsg)-2)
-        CALL ShowContinueError(trim(errmsg))
-        CALL ShowContinueError('Missing day types will have 0.0 as Schedule Values')
+        !CALL ShowContinueError(trim(errmsg))
+        !CALL ShowContinueError('Missing day types will have 0.0 as Schedule Values')   !RS: Secret String Search
+        WRITE(DebugFile,*) TRIM(errmsg)
+        WRITE(DebugFile,*) 'Missing day types will have 0.0 as Schedule Values'
       ENDIF
     ENDDO Through
     IF (DaysinYear(60) == 0) THEN
@@ -1306,8 +1324,10 @@ Until:  DO
       Schedule(LoopIndex)%WeekSchedulePointer(60)=Schedule(LoopIndex)%WeekSchedulePointer(59)
     ENDIF
     IF (ANY(DaysinYear == 0)) THEN
-      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)//  &
-                 '" has missing days in its schedule pointers',UnitNumber)
+      !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)//  &
+      !           '" has missing days in its schedule pointers',UnitNumber)  !RS: Secret Search String
+      WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
+        '" has missing days in its schedule pointers',UnitNumber
       ErrorsFound=.true.
     ENDIF
     IF (ANY(DaysinYear > 1)) THEN
@@ -1385,9 +1405,11 @@ Until:  DO
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError('ProcessScheduleInput: For '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError('ProcessScheduleInput: For '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')    !RS: Secret Search String
+          WRITE(DebugFile,*) 'ProcessScheduleInput: For '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError('For '//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -3123,6 +3145,10 @@ SUBROUTINE ProcessForDayTypes(ForDayField,TheseDays,AlReady,ErrorsFound)
   INTEGER :: DayT
   LOGICAL :: OneValid
   LOGICAL :: DupAssignment
+  
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   OneValid=.false.
   DupAssignment=.false.
@@ -3278,8 +3304,10 @@ SUBROUTINE ProcessForDayTypes(ForDayField,TheseDays,AlReady,ErrorsFound)
   ENDIF
 
   IF (DupAssignment) THEN
-    CALL ShowSevereError('ProcessScheduleInput: ProcessForDayTypes, '//  &
-      'Duplicate assignment attempted in "for" days field='//TRIM(ForDayField))
+    !CALL ShowSevereError('ProcessScheduleInput: ProcessForDayTypes, '//  &
+    !  'Duplicate assignment attempted in "for" days field='//TRIM(ForDayField))
+    WRITE(DebugFile,*) 'ProcessScheduleInput: ProcessForDayTypes, '// &
+        'Duplicate assignment attemped in "for" days field='//TRIM(ForDayField)
     ErrorsFound=.true.
   ENDIF
   IF (.not. OneValid) THEN
