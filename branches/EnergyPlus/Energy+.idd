@@ -3397,42 +3397,7 @@ Schedule:Compact,
   A44, \field Field 42
   A45, \field Field 43
   A46, \field Field 44
-  A44, \field Field 45
-  A48, \field Field 46
-  A49, \field Field 47
-  A50, \field Field 48
-  A51, \field Field 49
-  A52, \field Field 50
-  A53, \field Field 51
-  A54, \field Field 52
-  A55, \field Field 53
-  A56, \field Field 54
-  A57, \field Field 55
-  A58, \field Field 56
-  A59, \field Field 57
-  A60, \field Field 58
-  A61, \field Field 59
-  A62, \field Field 60
-  A63, \field Field 61
-  A64, \field Field 62
-  A65, \field Field 63
-  A66, \field Field 64
-  A67, \field Field 65
-  A68, \field Field 66
-  A69, \field Field 67
-  A70, \field Field 68
-  A71, \field Field 69
-  A72, \field Field 30
-  A73, \field Field 71
-  A74, \field Field 72
-  A75, \field Field 73
-  A76, \field Field 74
-  A77, \field Field 75
-  A78, \field Field 76
-  A79, \field Field 77
-  A80, \field Field 78
-  A81, \field Field 79
-  A82; \field Field 80
+  A47; \field Field 45
 
 Schedule:Constant,
    \memo Constant hourly value for entire year.

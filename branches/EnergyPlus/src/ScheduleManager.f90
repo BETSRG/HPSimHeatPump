@@ -1158,9 +1158,12 @@ Through:    DO WHILE (NumField < NumAlphas)
         EndPointer=JulianDay(EndMonth,EndDay,1)
         IF (EndPointer == 366) THEN
           IF (FullYearSet) THEN
-            CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)//  &
-                '", New "Through" entry when "full year" already set')
-            CALL ShowContinueError('"Through" field='//TRIM(CurrentThrough))
+            !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)//  &
+            !    '", New "Through" entry when "full year" already set')
+            !CALL ShowContinueError('"Through" field='//TRIM(CurrentThrough))   !RS: Secret Search String
+            WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
+                '", New "Through" entry when "full year" already set'
+            WRITE(DebugFile,*) '"Through" field='//TRIM(CurrentThrough)
             ErrorsFound=.true.
           ENDIF
           FullYearSet=.true.
@@ -1450,11 +1453,16 @@ Until:  DO
 !    INQUIRE(file=Alphas(3),EXIST=FileExists)
     StripCR=.false.
     IF (.not. FileExists) THEN
-      CALL DisplayString('Missing '//TRIM(Alphas(3)))
-      CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-         '", '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'" not found.')
-      CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
-      CALL ShowContinueError('Try again with putting full path and file name in the field.')
+      !CALL DisplayString('Missing '//TRIM(Alphas(3)))
+      !CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+      !   '", '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'" not found.')
+      !CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
+      !CALL ShowContinueError('Try again with putting full path and file name in the field.')    !RS: Secret String Search
+      WRITE(DebugFile,*) 'Missing '//TRIM(Alphas(3))
+      WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+        '", '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'" not found.'
+      WRITE(DebugFile,*) 'Certain run environments require a full path to be included with the file name in the input field.'
+      WRITE(DebugFile,*) 'Try again with putting full path and file name in the field.'
       ErrorsFound=.true.
     ELSE
       SchdFile = GetNewUnitNumber()
@@ -1636,9 +1644,11 @@ Until:  DO
       CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
       IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')   !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
