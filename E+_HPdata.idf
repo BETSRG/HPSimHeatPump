@@ -2466,55 +2466,20 @@ Schedule:Compact,
  Until: 23:50, !Field 29
 	0, !Field 30
  Through: 12/31, !Field 31
- For: Sunday, !Field 32
+ For: Sunday Monday Tuesday Wednesday Thursday Friday Saturday, !Field 32
 	, !Field 33
  Until: 23:50, !Field 34
 	0, !Field 35
  Through: 12/31, !Field 36
- For: Monday, !Field 37
+ For: CustomDay1, !Field 37
 	, !Field 38
  Until: 23:50, !Field 39
 	0, !Field 40
  Through: 12/31, !Field 41
- For: Tuesday, !Field 42
+ For: CustomDay2, !Field 42
 	, !Field 43
  Until: 23:50, !Field 44
-	0, !Field 45
- Through: 12/31, !Field 46
- For: Wednesday, !Field 47
-	, !Field 48
- Until: 23:50, !Field 49
-	0, !Field 50
- Through: 12/31, !Field 51
- For: Thursday, !Field 52
-	, !Field 53
- Until: 23:50, !Field 54
-	0, !Field 55
- Through: 12/31, !Field 56
- For: Friday, !Field 57
-	, !Field 58
- Until: 23:50, !Field 59
-	0, !Field 60
- Through: 12/31, !Field 61
- For: Saturday, !Field 62
-	, !Field 63
- Until: 23:50, !Field 64
-	0, !Field 65
- Through: 12/31, !Field 66
- For: Holiday, !Field 67
-	, !Field 68
- Until: 23:50, !Field 69
-	0, !Field 70
- Through: 12/31, !Field 71
- For: CustomDay1, !Field 72
-	, !Field 73
- Until: 23:50, !Field 74
-	0, !Field 75
- Through: 12/31, !Field 76
- For: CustomDay2, !Field 77
-	, !Field 78
- Until: 23:50, !Field 79
-	0; !Field 80
+	0; !Field 45
 
 Schedule:Constant,
    !Constant hourly value for entire year.
