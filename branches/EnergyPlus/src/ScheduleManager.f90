@@ -1702,9 +1702,11 @@ Until:  DO
     CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
     IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')    !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found --- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -1765,9 +1767,11 @@ Until:  DO
     CheckIndex=FindIteminList(Alphas(2),ScheduleType(1:NumScheduleTypes)%Name,NumScheduleTypes)
     IF (CheckIndex == 0) THEN
         IF (.not. lAlphaBlanks(2)) THEN
-          CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
-             '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
-             '" not found -- will not be validated')
+          !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
+          !   '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//  &
+          !   '" not found -- will not be validated')    !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))// &
+            '", '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'" not found -- will not be validated'
         ELSE
           CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Alphas(1))//  &
              '", Blank '//TRIM(cAlphaFields(2))//' input -- will not be validated.')
@@ -1813,7 +1817,8 @@ Until:  DO
   ENDDO
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError(RoutineName//'Preceding Errors cause termination.')
+    !CALL ShowFatalError(RoutineName//'Preceding Errors cause termination.') !RS: Secret Search String
+    WRITE(DebugFile,*) RoutineName//'Preceding Errors would like to cause termination.'
   ENDIF
 
   IF (NumScheduleTypes+NumDaySchedules+NumWeekSchedules+NumSchedules > 0) THEN  ! Report to EIO file

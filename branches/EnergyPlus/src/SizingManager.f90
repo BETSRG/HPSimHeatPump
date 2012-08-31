@@ -654,6 +654,10 @@ SUBROUTINE GetOARequirements
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
   CurrentModuleObject='DesignSpecification:OutdoorAir'
   NumOARequirements = GetNumObjectsFound(TRIM(CurrentModuleObject))
   CALL GetObjectDefMaxArgs(CurrentModuleObject,TotalArgs,NumAlphas,NumNumbers)
@@ -741,8 +745,10 @@ SUBROUTINE GetOARequirements
               OARequirements(OAIndex)%MaxOAFractionSchValue = GetScheduleMaxValue(OARequirements(OAIndex)%OAFlowFracSchPtr)
             END IF
           ELSE
-            CAll ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(OARequirements(OAIndex)%Name)//'",')
-            CALL ShowContinueError('...Not Found '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'".')
+            !CAll ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(OARequirements(OAIndex)%Name)//'",')
+            !CALL ShowContinueError('...Not Found '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'".') !RS: Secret Search String
+            WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(OARequirements(OAIndex)%Name)//'",'
+            WRITE(DebugFile,*) '...Not Found '//TRIM(cAlphaFields(3))//'="'//TRIM(Alphas(3))//'".'
             ErrorsFound=.TRUE.
           END IF
         END IF
@@ -758,7 +764,8 @@ SUBROUTINE GetOARequirements
     DEALLOCATE(lNumericBlanks)
 
     IF (ErrorsFound) THEN
-      CALL ShowFatalError(RoutineName//'Errors found in input.  Preceding condition(s) cause termination.')
+      !CALL ShowFatalError(RoutineName//'Errors found in input.  Preceding condition(s) cause termination.')    !RS: Secret Search String
+      WRITE(DebugFile,*) RoutineName//'Errors found in input. Preceding conditions(s) would like to cause termination.'
     ENDIF
 
   ENDIF
@@ -825,6 +832,10 @@ SUBROUTINE GetZoneAirDistribution
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+    
   CurrentModuleObject='DesignSpecification:ZoneAirDistribution'
   NumZoneAirDistribution = GetNumObjectsFound(TRIM(CurrentModuleObject))
   CALL GetObjectDefMaxArgs(CurrentModuleObject,TotalArgs,NumAlphas,NumNumbers)
@@ -896,8 +907,10 @@ SUBROUTINE GetZoneAirDistribution
               ErrorsFound=.true.
             END IF
           ELSE
-            CAll ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(ZoneAirDistribution(ZADIndex)%Name)//'",')
-            CALL ShowContinueError('...Not Found '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'".')
+            !CAll ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(ZoneAirDistribution(ZADIndex)%Name)//'",')
+            !CALL ShowContinueError('...Not Found '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'".') !RS: Secret String Search
+            WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(ZoneAirDistribution(ZADIndex)%Name)//'",'
+            WRITE(DebugFile,*) '...Not Found '//TRIM(cAlphaFields(2))//'="'//TRIM(Alphas(2))//'".'
             ErrorsFound=.TRUE.
           END IF
         END IF
@@ -913,7 +926,8 @@ SUBROUTINE GetZoneAirDistribution
     DEALLOCATE(lNumericBlanks)
 
     IF (ErrorsFound) THEN
-      CALL ShowFatalError(RoutineName//'Errors found in input.  Preceding condition(s) cause termination.')
+      !CALL ShowFatalError(RoutineName//'Errors found in input.  Preceding condition(s) cause termination.') !RS: Secret String Search
+      WRITE(DebugFile,*) RoutineName//'Errors found in input. Preceding condition(s) would like to cause termination.'
     ENDIF
 
   ENDIF
@@ -965,6 +979,10 @@ SUBROUTINE GetSizingParams
   INTEGER :: IOStatus         ! Used in GetObjectItem
   INTEGER :: NumSizParams
   INTEGER :: Temp
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='Sizing:Parameters'
   NumSizParams = GetNumObjectsFound(TRIM(cCurrentModuleObject))
@@ -997,9 +1015,11 @@ SUBROUTINE GetSizingParams
   END IF
 
   IF (NumTimeStepsInAvg < NumOfTimeStepInHour) THEN
-    CALL ShowWarningError(TRIM(cCurrentModuleObject)//': note '//TRIM(cNumericFieldNames(3))//' entered value=['//  &
-       TRIM(RoundSigDigits(NumTimeStepsInAvg))//'] is less than 1 hour (i.e., '//trim(RoundSigDigits(NumOfTimeStepInHour))//  &
-       ' timesteps).')
+    !CALL ShowWarningError(TRIM(cCurrentModuleObject)//': note '//TRIM(cNumericFieldNames(3))//' entered value=['//  &
+    !   TRIM(RoundSigDigits(NumTimeStepsInAvg))//'] is less than 1 hour (i.e., '//trim(RoundSigDigits(NumOfTimeStepInHour))//  &
+    !   ' timesteps).')  !RS: Secret Search String
+    WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//': note '//TRIM(cNumericFieldNames(3))//'entered value=['//TRIM(RoundSigDigits(NumTimeStepsInAvg)) &
+        //'] is less than 1 hour (i.e., '//TRIM(RoundSigDigits(NumOfTimeStepInHour))//' timesteps).'
   ENDIF
 
   cCurrentModuleObject='OutputControl:Sizing:Style'
@@ -1099,6 +1119,10 @@ SUBROUTINE GetZoneSizingInput
   TYPE (GlobalMiscObject), ALLOCATABLE, DIMENSION(:) :: SizingZoneObjects
   INTEGER OAIndex ! Index of design specification object
   INTEGER ObjIndex ! Index of zone air distribution effectiveness object name
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='Sizing:Zone'
   NumSizingZoneStatements=GetNumObjectsFound(TRIM(cCurrentModuleObject))
@@ -1143,17 +1167,21 @@ SUBROUTINE GetZoneSizingInput
       SizingZoneObjects(Item)%ZoneListActive=.true.
       SizingZoneObjects(Item)%ZoneOrZoneListPtr=ZLItem
     ELSE
-      CALL ShowSevereError(trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" invalid '//  &
-           trim(cAlphaFieldNames(1))//' not found.')
+      !CALL ShowSevereError(trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" invalid '//  &
+      !     trim(cAlphaFieldNames(1))//' not found.')    !RS: Secret Search String
+      WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'" invalid '// &
+        TRIM(cAlphaFieldNames(1))//' not found.'
       ErrorsFound=.true.
       ErrFlag=.true.
     ENDIF
   ENDDO
 
   IF (ErrFlag) THEN
-    CALL ShowSevereError('GetZoneSizingInput: Errors with invalid names in '//trim(cCurrentModuleObject)//  &
-       ' objects.')
-    CALL ShowContinueError('...These will not be read in.  Other errors may occur.')
+    !CALL ShowSevereError('GetZoneSizingInput: Errors with invalid names in '//trim(cCurrentModuleObject)//  &
+    !   ' objects.')
+    !CALL ShowContinueError('...These will not be read in.  Other errors may occur.')    !RS: Secret Search String
+    WRITE(DebugFile,*) 'Get ZoneSizingInput: Errors with invalid names in '//TRIM(cCurrentModuleObject)//' objects.'
+    WRITE(DebugFile,*) '...These will not be read in. Other Errors may occur.'
     NumZoneSizingInput=0
   ENDIF
 
@@ -1492,7 +1520,8 @@ SUBROUTINE GetZoneSizingInput
   ENDIF
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError(TRIM(cCurrentModuleObject)//': Errors found in getting input. Program terminates.')
+    !CALL ShowFatalError(TRIM(cCurrentModuleObject)//': Errors found in getting input. Program terminates.') !RS: Secret Search String
+    WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//': Errors found in getting input. Program terminates (at least wishes to!).'
   END IF
 
 

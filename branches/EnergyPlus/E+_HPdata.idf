@@ -2005,418 +2005,14 @@ Schedule:Year,
        !required-field
        !minimum 1
        !maximum 31
-  12, !End Month 1
+  12 , !End Month 1
        !required-field
        !minimum 1
        !maximum 12
-  31 , !End Day 1
+  31 ; !End Day 1
        !required-field
        !minimum 1
        !maximum 31
-    , !Schedule:Week Name 2
-       !type object-list
-       !object-list WeekScheduleNames
-    , !Start Month 2
-       !minimum 1
-       !maximum 12
-    , !Start Day 2
-       !minimum 1
-       !maximum 31
-    , !End Month 2
-       !minimum 1
-       !maximum 12
-    , !End Day 2
-       !minimum 1
-       !maximum 31
-    , !Schedule:Week Name 3
-       !type object-list
-       !object-list WeekScheduleNames
-    , !Start Month 3
-       !minimum 1
-       !maximum 12
-   , !Start Day 3
-       !minimum 1
-       !maximum 31
-   , !End Month 3
-       !minimum 1
-       !maximum 12
-   , !End Day 3
-       !minimum 1
-       !maximum 31
-    , !Schedule:Week Name 4
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 4
-       !minimum 1
-       !maximum 12
-   , !Start Day 4
-       !minimum 1
-       !maximum 31
-   , !End Month 4
-       !minimum 1
-       !maximum 12
-   , !End Day 4
-       !minimum 1
-       !maximum 31
-    , !Schedule:Week Name 5
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 5
-       !minimum 1
-       !maximum 12
-   , !Start Day 5
-       !minimum 1
-       !maximum 31
-   , !End Month 5
-       !minimum 1
-       !maximum 12
-   , !End Day 5
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 6
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 6
-       !minimum 1
-       !maximum 12
-   , !Start Day 6
-       !minimum 1
-       !maximum 31
-   , !End Month 6
-       !minimum 1
-       !maximum 12
-   , !End Day 6
-       !minimum 1
-       !maximum 31
-    , !Schedule:Week Name 7
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 7
-       !minimum 1
-       !maximum 12
-   , !Start Day 7
-       !minimum 1
-       !maximum 31
-   , !End Month 7
-       !minimum 1
-       !maximum 12
-   , !End Day 7
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 8
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 8
-       !minimum 1
-       !maximum 12
-   , !Start Day 8
-       !minimum 1
-       !maximum 31
-   , !End Month 8
-       !minimum 1
-       !maximum 12
-   , !End Day 8
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 9
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 9
-       !minimum 1
-       !maximum 12
-   , !Start Day 9
-       !minimum 1
-       !maximum 31
-   , !End Month 9
-       !minimum 1
-       !maximum 12
-   , !End Day 9
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 10
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 10
-       !minimum 1
-       !maximum 12
-   , !Start Day 10
-       !minimum 1
-       !maximum 31
-   , !End Month 10
-       !minimum 1
-       !maximum 12
-   , !End Day 10
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 11
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 11
-       !minimum 1
-       !maximum 12
-   , !Start Day 11
-       !minimum 1
-       !maximum 31
-   , !End Month 11
-       !minimum 1
-       !maximum 12
-   , !End Day 11
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 12
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 12
-       !minimum 1
-       !maximum 12
-   , !Start Day 12
-       !minimum 1
-       !maximum 31
-   , !End Month 12
-       !minimum 1
-       !maximum 12
-   , !End Day 12
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 13
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 13
-       !minimum 1
-       !maximum 12
-   , !Start Day 13
-       !minimum 1
-       !maximum 31
-   , !End Month 13
-       !minimum 1
-       !maximum 12
-   , !End Day 13
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 14
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 14
-       !minimum 1
-       !maximum 12
-   , !Start Day 14
-       !minimum 1
-       !maximum 31
-   , !End Month 14
-       !minimum 1
-       !maximum 12
-   , !End Day 14
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 15
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 15
-       !minimum 1
-       !maximum 12
-   , !Start Day 15
-       !minimum 1
-       !maximum 31
-   , !End Month 15
-       !minimum 1
-       !maximum 12
-   , !End Day 15
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 16
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 16
-       !minimum 1
-       !maximum 12
-   , !Start Day 16
-       !minimum 1
-       !maximum 31
-   , !End Month 16
-       !minimum 1
-       !maximum 12
-   , !End Day 16
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 17
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 17
-       !minimum 1
-       !maximum 12
-   , !Start Day 17
-       !minimum 1
-       !maximum 31
-   , !End Month 17
-       !minimum 1
-       !maximum 12
-   , !End Day 17
-       !type integer
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 18
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 18
-       !minimum 1
-       !maximum 12
-   , !Start Day 18
-       !minimum 1
-       !maximum 31
-   , !End Month 18
-       !minimum 1
-       !maximum 12
-   , !End Day 18
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 19
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 19
-       !minimum 1
-       !maximum 12
-   , !Start Day 19
-       !minimum 1
-       !maximum 31
-   , !End Month 19
-       !minimum 1
-       !maximum 12
-   , !End Day 19
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 20
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 20
-       !minimum 1
-       !maximum 12
-   , !Start Day 20
-       !minimum 1
-       !maximum 31
-   , !End Month 20
-       !minimum 1
-       !maximum 12
-   , !End Day 20
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 21
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 21
-       !minimum 1
-       !maximum 12
-   , !Start Day 21
-       !minimum 1
-       !maximum 31
-   , !End Month 21
-       !minimum 1
-       !maximum 12
-   , !End Day 21
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 22
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 22
-       !minimum 1
-       !maximum 12
-   , !Start Day 22
-       !minimum 1
-       !maximum 31
-   , !End Month 22
-       !minimum 1
-       !maximum 12
-   , !End Day 22
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 23
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 23
-       !minimum 1
-       !maximum 12
-   , !Start Day 23
-       !minimum 1
-       !maximum 31
-   , !End Month 23
-       !minimum 1
-       !maximum 12
-   , !End Day 23
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 24
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 24
-       !minimum 1
-       !maximum 12
-   , !Start Day 24
-       !minimum 1
-       !maximum 31
-   , !End Month 24
-       !minimum 1
-       !maximum 12
-   , !End Day 24
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 25
-       !type object-list
-       !object-list WeekScheduleNames
-   , !Start Month 25
-       !minimum 1
-       !maximum 12
-   , !Start Day 25
-       !minimum 1
-       !maximum 31
-   , !End Month 25
-       !minimum 1
-       !maximum 12
-  , !End Day 25
-       !minimum 1
-       !maximum 31
-   , !Schedule:Week Name 26
-       !type object-list
-       !object-list WeekScheduleNames
-  , !Start Month 26
-       !minimum 1
-       !maximum 12
-  , !Start Day 26
-       !minimum 1
-       !maximum 31
-  , !End Month 26
-       !minimum 1
-       !maximum 12
-  , !End Day 26
-       !minimum 1
-       !maximum 31
- !Schedule:Week for Weeks 27-53 are condensed
-  , , , , , !For Week  27
-  , , , , , !For Week  28
-  , , , , , !For Week  29
-  , , , , , !For Week  30
-  , , , , , !For Week  31
-  , , , , , !For Week  32
-  , , , , , !For Week  33
-  , , , , , !For Week  34
-  , , , , , !For Week  35
-  , , , , , !For Week  36
-  , , , , , !For Week  37
-  , , , , , !For Week  38
-  , , , , , !For Week  39
-  , , , , , !For Week  40
-  , , , , , !For Week  41
-  , , , , , !For Week  42
-  , , , , , !For Week  43
-  , , , , , !For Week  44
-  , , , , , !For Week  45
-  , , , , , !For Week  46
-  , , , , , !For Week  47
-  , , , , , !For Week  48
-  , , , , , !For Week  49
-  , , , , , !For Week  50
-  , , , , , !For Week  51
-  , , , , , !For Week  52
-  , , , , ; !For Week  53
 
 Schedule:Compact,
    !extensible:1 - repeat last field, remembering to remove ; from "inner" fields.
@@ -2437,49 +2033,39 @@ Schedule:Compact,
  Through: 3/1, !Field 1
        !begin-extensible
  For: WinterDesignDay, !Field 2
-	, !Field 3
+ Interpolate: No, !Field 3
  Until: 23:50, !Field 4
 	0,	!Field 5
  Through: 6/1, !Field 6
  For: Weekdays, !Field 7
-	, !Field 8
+ Interpolate: No, !Field 8
  Until: 23:50, !Field 9
 	0, !Field 10
  Through: 6/1, !Field 11
  For: Weekends, !Field 12
-	, !Field 13
+ Interpolate: No, !Field 13
  Until: 23:50, !Field 14
 	0, !Field 15
  Through: 9/1, !Field 16
  For: SummerDesignDay, !Field 17
-	, !Field 18
+ Interpolate: No, !Field 18
  Until: 23:50, !Field 19
 	0, !Field 20
  Through: 11/1, !Field 21
  For: Weekdays, !Field 22
-	, !Field 23
+ Interpolate: No, !Field 23
  Until: 23:50, !Field 24
 	0, !Field 25
  Through: 11/1, !Field 26
  For: Weekends, !Field 27
-	, !Field 28
+ Interpolate: No, !Field 28
  Until: 23:50, !Field 29
 	0, !Field 30
  Through: 12/31, !Field 31
- For: Sunday Monday Tuesday Wednesday Thursday Friday Saturday, !Field 32
-	, !Field 33
+ For: Sunday Monday Tuesday Wednesday Thursday Friday Saturday CustomDay1 CustomDay2, !Field 32
+ Interpolate: No, !Field 33
  Until: 23:50, !Field 34
-	0, !Field 35
- Through: 12/31, !Field 36
- For: CustomDay1, !Field 37
-	, !Field 38
- Until: 23:50, !Field 39
-	0, !Field 40
- Through: 12/31, !Field 41
- For: CustomDay2, !Field 42
-	, !Field 43
- Until: 23:50, !Field 44
-	0; !Field 45
+	0; !Field 35
 
 Schedule:Constant,
    !Constant hourly value for entire year.
@@ -2487,7 +2073,7 @@ Schedule:Constant,
  Schedule:Constant, !Name
        !required-field
        !reference ScheduleNames
- ScheduleTypeLimitsNames, !Schedule Type Limits Name
+ ScheduleTypeLimitsName, !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
   0 ; !Hourly Value
@@ -2496,7 +2082,7 @@ Schedule:Constant,
 Schedule:File,
  !min-fields 5
        !A Schedule:File points to a text computer file that has 8760-8784 hours of data.
- Schedule:FileA1, !Name
+ Schedule:File, !Name
        !required-field
        !reference ScheduleNames
  ScheduleTypeLimitsName, !Schedule Type Limits Name
@@ -17097,7 +16683,7 @@ HVACTemplate:System:DedicatedOutdoorAir,
       !type choice
       !key  FixedSetpoint
       !key  Scheduled
-      !key  OutdoorAirTemperatureReset
+      !key  TemperatureReset
       !key  None
       !default FixedSetpoint
  12.8, !Cooling Coil Design Setpoint
@@ -17964,7 +17550,7 @@ Sizing:Parameters,
  1.0, !Cooling Sizing Factor
       !minimum> 0.0
       !default 1.0
-  1; !Timesteps in Averaging Window
+  6; !Timesteps in Averaging Window
       !blank => set the timesteps in averaging window to
       !Number of Timesteps per Hour resulting in a 1 hour averaging window
       !default is number of timesteps for 1 hour averaging window
@@ -40385,7 +39971,7 @@ ExternalInterface:Schedule,
  ExternalInterface:ScheduleA1, !Name
        !required-field
        !reference ExternalInterfaceScheduleNames
- SchedTypeLim, !Schedule Type Limits Name
+ ScheduleTypeLimitsName, !Schedule Type Limits Name
        !type object-list
        !object-list ScheduleTypeLimitsNames
   1 ; !Initial Value
@@ -51361,7 +50947,7 @@ Output:DebuggingData,
 Output:PreprocessorMessage,
    !This object does not come from a user input. This is generated by a pre-processor
    !so that various conditions can be gracefully passed on by the InputProcessor.
- Output:PreprocessorMessageA1,  !Preprocessor Name
+ InputPreprocessor,  !Preprocessor Name
  Fatal,  !Error Severity
         !Depending on type, InputProcessor may terminate the program.
         !type choice
@@ -51369,11 +50955,11 @@ Output:PreprocessorMessage,
         !key Warning
         !key Severe
         !key Fatal
-   ,  !Message Line 1
-   ,  !Message Line 2
-   ,  !Message Line 3
-   ,  !Message Line 4
-   ,  !Message Line 5
+ This is just to let you know that there were fatal errors,  !Message Line 1
+ in your IDF (too bad) and thus the program has terminated.,  !Message Line 2
+ Or it at least wishes to terminate. Unles some of these bugs,  !Message Line 3
+ have been solved it won't actually terminate so we can keep,  !Message Line 4
+ debugging.,  !Message Line 5
    ,  !Message Line 6
    ,  !Message Line 7
    , !Message Line 8
