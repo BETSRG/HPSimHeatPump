@@ -5934,6 +5934,10 @@ SUBROUTINE GetRunPeriodDesignData(ErrorsFound)
   INTEGER :: WhichPeriod
 !unused1208  CHARACTER(len=MaxNameLength) :: ThisObject
 
+INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
 
          ! FLOW:
    !Call Input Get routine to retrieve annual run data
@@ -6106,8 +6110,10 @@ SUBROUTINE GetRunPeriodDesignData(ErrorsFound)
                  ' '//TRIM(cAlphaFieldnames(2))//'='//TRIM(cAlphaArgs(2))//' matched to '//  &
                  trim(TypicalExtremePeriods(WhichPeriod)%MatchValue))
           ELSE
-            CALL ShowSevereError(TRIM(cCurrentModuleObject)//': object='//TRIM(RunPeriodDesignInput(Count)%Title)//  &
-                 ' '//TRIM(cAlphaFieldnames(2))//' invalid (not on Weather File)='//TRIM(cAlphaArgs(2)))
+            !CALL ShowSevereError(TRIM(cCurrentModuleObject)//': object='//TRIM(RunPeriodDesignInput(Count)%Title)//  &
+            !     ' '//TRIM(cAlphaFieldnames(2))//' invalid (not on Weather File)='//TRIM(cAlphaArgs(2)))   !RS: Secret Search String
+            WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//': object='//TRIM(RunPeriodDesignInput(Count)%Title)// &
+                ' '//TRIM(cAlphaFieldNames(2))//' invalid (not on Weather File)='//TRIM(cAlphaArgs(2))
             ErrorsFound=.true.
           ENDIF
         ENDIF
@@ -7249,8 +7255,10 @@ SUBROUTINE GetWeatherProperties(ErrorsFound)
       CASE DEFAULT ! really a name
         Found=FindItemInList(cAlphaArgs(1),Environment%Title,NumOfEnvrn)
         IF (Found == 0) THEN
-          CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//  &
-             '", invalid Environment Name referenced.')
+          !CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//  &
+          !   '", invalid Environment Name referenced.') !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))// &
+            '", invalide Environment Name referenced.'
           ErrorsFound=.true.
         ELSE
           IF (Environment(Found)%WP_Type1 /= 0) THEN
@@ -7720,6 +7728,10 @@ SUBROUTINE GetWaterMainsTemperatures(ErrorsFound)
   INTEGER                                   :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(2) :: AlphArray ! Character string data
   REAL(r64), DIMENSION(2)                        :: NumArray  ! Numeric data
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
      ! FLOW:
   cCurrentModuleObject='Site:WaterMainsTemperature'
@@ -7735,8 +7747,9 @@ SUBROUTINE GetWaterMainsTemperatures(ErrorsFound)
 
       WaterMainsTempsSchedule = GetScheduleIndex(AlphArray(2))
       IF (WaterMainsTempsSchedule .EQ. 0) THEN
-        CALL ShowSevereError(TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))//  &
-           '='//TRIM(AlphArray(2)))
+        !CALL ShowSevereError(TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))//  &
+        !   '='//TRIM(AlphArray(2))) !RS: Secret Search String
+        WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))//'='//TRIM(AlphArray(2))
         ErrorsFound = .TRUE.
       END IF
 
