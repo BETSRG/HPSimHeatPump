@@ -923,6 +923,10 @@ SUBROUTINE GetReportVariableInput
   INTEGER IOStat
   INTEGER Item
   LOGICAL :: ErrorsFound = .false.   ! If errors detected in input
+  
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   ! First check environment variable to see of possible override for minimum reporting frequency
   IF (cMinReportFrequency /= ' ') THEN
@@ -965,10 +969,13 @@ SUBROUTINE GetReportVariableInput
     IF (ReqRepVars(Loop)%SchedName /= '   ') THEN
         ReqRepVars(Loop)%SchedPtr=GetScheduleIndex(ReqRepVars(Loop)%SchedName)
         IF (ReqRepVars(Loop)%SchedPtr == 0) THEN
-          CALL ShowSevereError('GetReportVariableInput: '//TRIM(cCurrentModuleObject)//'="'//  &
-             TRIM(cAlphaArgs(1))//':'//TRIM(ReqRepVars(Loop)%VarName)//'" invalid '//  &
-             TRIM(cAlphaFieldNames(4))//'="'//TRIM(ReqRepVars(Loop)%SchedName)//  &
-                                  '" - not found.')
+          !CALL ShowSevereError('GetReportVariableInput: '//TRIM(cCurrentModuleObject)//'="'//  &
+          !   TRIM(cAlphaArgs(1))//':'//TRIM(ReqRepVars(Loop)%VarName)//'" invalid '//  &
+          !   TRIM(cAlphaFieldNames(4))//'="'//TRIM(ReqRepVars(Loop)%SchedName)//  &
+          !                        '" - not found.')    !RS: Secret Search String
+          WRITE(DebugFile,*) 'GetReportVariableInput: '//TRIM(cCurrentModuleObject)//'="'// &
+            TRIM(cAlphaArgs(1))//':'//TRIM(ReqRepVars(Loop)%VarName)//'" invalid '// &
+            TRIM(cAlphaFieldNames(4))//'="'//TRIM(ReqRepVars(Loop)%SchedName)//'" - not found.'
           ErrorsFound=.true.
         ENDIF
     ELSE
@@ -980,7 +987,8 @@ SUBROUTINE GetReportVariableInput
   ENDDO
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError('GetReportVariableInput:'//TRIM(cCurrentModuleObject)//': errors in input.')
+    !CALL ShowFatalError('GetReportVariableInput:'//TRIM(cCurrentModuleObject)//': errors in input.')   !RS: Secret Search String
+    WRITE(DebugFile,*) 'GetReportVariableInput:'//TRIM(cCurrentModuleObject)//': errors in input.'
   ENDIF
 
   RETURN

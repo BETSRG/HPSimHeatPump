@@ -542,6 +542,10 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
     INTEGER :: NumHAMTMat6
     INTEGER :: SumHAMTMat
     LOGICAL :: msgneeded
+    
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+    OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
    !Assign the values to the building data
 
@@ -916,8 +920,10 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
 
    IF (SolutionAlgo == UseCTF) THEN
      IF (NumEMPDMat > 0) THEN
-       CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
-          trim(RoundSigDigits(NumEMPDMat))//' MaterialProperty:MoisturePenetrationDepth:Settings objects.')
+       !CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
+       !   trim(RoundSigDigits(NumEMPDMat))//' MaterialProperty:MoisturePenetrationDepth:Settings objects.') !RS: Secret Search String
+       WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//'" but input file includes '// &
+        TRIM(RoundSigDigits(NumEMPDMat))//' MaterialProperty:MoisturePenetrationDepth:Settings objects.'
        msgneeded=.true.
      ENDIF
      IF (NumPCMat > 0 .or. NumVTCMat > 0) THEN

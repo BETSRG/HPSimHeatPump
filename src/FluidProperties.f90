@@ -4817,7 +4817,7 @@ SUBROUTINE GetFluidPropertiesData
   DEALLOCATE(lNumericFieldBlanks)
 
   IF (ErrorsFound) THEN
-    !CALL ShowFatalError('GetFluidPropertiesData: Previous errors in input cause program termination.') !RS: Secret String Search
+    !CALL ShowFatalError('GetFluidPropertiesData: Previous errors in input cause program termination.') !RS: Secret Search String
     WRITE(DebugFile,*) 'GetFluidPropertiesData: Previous errors in input cause program termination. Or, at least, they should. We are currently still ignoring them.'
   ENDIF
 
