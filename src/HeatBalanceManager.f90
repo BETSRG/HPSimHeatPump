@@ -928,19 +928,25 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      ENDIF
      IF (NumPCMat > 0 .or. NumVTCMat > 0) THEN
        IF (NumPCMat > 0) THEN
-         CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
-            trim(RoundSigDigits(NumPCMat))//' MaterialProperty:PhaseChange objects.')
+         !CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
+         !   trim(RoundSigDigits(NumPCMat))//' MaterialProperty:PhaseChange objects.')   !RS: Secret Search String
+         WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//'" but input file includes '// &
+            TRIM(RoundSigDigits(NumPCMat))//' MaterialProperty:PhaseChange objects.'
          msgneeded=.true.
        ENDIF
        IF (NumVTCMat > 0) THEN
-         CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
-            trim(RoundSigDigits(NumVTCMat))//' MaterialProperty:VariableThermalConductivity objects.')
+         !CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
+         !   trim(RoundSigDigits(NumVTCMat))//' MaterialProperty:VariableThermalConductivity objects.')  !RS: Secret Search String
+         WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//'" but input file includes '// &
+            TRIM(RoundSigDigits(NumVTCMat))//' MaterialProperty:VariableThermalConductivity objects.'
          msgneeded=.true.
        ENDIF
      ENDIF
      IF (SumHAMTMat > 0) THEN
-       CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
-          trim(RoundSigDigits(SumHAMTMat))//' MaterialProperty:HeatAndMoistureTransfer:* objects.')
+       !CALL ShowWarningError(trim(CurrentModuleObject)//'="'//trim(AlphaName(1))//'" but input file includes '// &
+       !   trim(RoundSigDigits(SumHAMTMat))//' MaterialProperty:HeatAndMoistureTransfer:* objects.') !RS: Secret Search String
+       WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//'" but input file includes '// &
+        TRIM(RoundSigDigits(SumHAMTMat))//' MaterialProperty:HeatAndMoistureTransfer:* objects.'
        msgneeded=.true.
      ENDIF
    ELSEIF (SolutionAlgo == UseEMPD) THEN
@@ -987,7 +993,8 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      ENDIF
    ENDIF
    IF (msgneeded) THEN
-     CALL ShowContinueError('Previous materials will be ignored due to HeatBalanceAlgorithm choice.')
+     !CALL ShowContinueError('Previous materials will be ignored due to HeatBalanceAlgorithm choice.')   !RS: Secret Search String
+     WRITE(DebugFile,*) 'Previous materials will be ignored due to HeatBalanceAlgorithm choice.'
    ENDIF
 
    IF (SolutionAlgo == UseEMPD) THEN
@@ -1004,7 +1011,8 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      ENDIF
    ENDIF
    IF (msgneeded) THEN
-     CALL ShowContinueError('Certain materials are necessary to achieve proper results with the HeatBalanceAlgorithm choice.')
+     !CALL ShowContinueError('Certain materials are necessary to achieve proper results with the HeatBalanceAlgorithm choice.')  !RS: Secret Search String
+     WRITE(DebugFile,*) 'Certain materials are necessary to achieve proper results with the HeatBalanceAlgorithm choice.'
    ENDIF
 
      ! Write Solution Algorithm to the initialization output file for User Verification
@@ -1320,7 +1328,10 @@ SUBROUTINE GetMaterialData(ErrorsFound)
   INTEGER :: TotFfactorConstructs  ! Number of slabs-on-grade or underground floor constructions defined with F factors
   INTEGER :: TotCfactorConstructs  ! Number of underground wall constructions defined with C factors
 
-
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
         ! FLOW:
 
   RegMat=GetNumObjectsFound('Material')
@@ -2100,8 +2111,10 @@ SUBROUTINE GetMaterialData(ErrorsFound)
 
     IF(MaterialProps(3)+MaterialProps(4) >= 1.0) THEN
       ErrorsFound = .true.
-      CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
-      CALL ShowContinueError(TRIM(cNumericFieldNames(3))//' + '//TRIM(cNumericFieldNames(4))//' not < 1.0')
+      !CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
+      !CALL ShowContinueError(TRIM(cNumericFieldNames(3))//' + '//TRIM(cNumericFieldNames(4))//' not < 1.0') !RS: Secret Search String
+      WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(MaterialNames(1))//'", Illegal value combination.'
+      WRITE(DebugFile,*) TRIM(cNumericFieldNames(3))//' + '//TRIM(cNumericFieldNames(4))//' not < 1.0'
     END IF
 
     IF(MaterialProps(5)+MaterialProps(6) >= 1.0) THEN
@@ -2687,8 +2700,10 @@ SUBROUTINE GetMaterialData(ErrorsFound)
           ENDIF
 
         ELSE ! thow error because not found
-          CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" is not defined correctly.')
-          CALL ShowContinueError('Material named: '//Trim(cAlphaArgs(1+iTC))//' was not found ')
+          !CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" is not defined correctly.')
+          !CALL ShowContinueError('Material named: '//Trim(cAlphaArgs(1+iTC))//' was not found ')    !RS: Secret Search String
+          WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'" is not defined correctly.'
+          WRITE(DebugFile,*) 'Material name: '//TRIM(cAlphaArgs(1+iTC))//' was not found '
           ErrorsFound=.true.
         ENDIF
       ENDDO
@@ -2708,7 +2723,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     CALL VerifyName(cAlphaArgs(1), Material%Name,MaterNum,ErrorInName,IsBlank,TRIM(cCurrentModuleObject)//' Name')
     IF (ErrorInName) THEN
       CALL ShowContinueError('...All Material names must be unique regardless of subtype.')
-      ErrorsFound=.true.
+      ErrorsFound=.true. 
       CYCLE
     ENDIF
     MaterNum=MaterNum+1
@@ -2853,6 +2868,10 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
   REAL(r64)    :: Lam               ! Wavelength (microns)
   REAL(r64)    :: Tau,RhoF,RhoB     ! Transmittance, front reflectance, back reflectance
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+
   CurrentModuleObject='MaterialProperty:GlazingSpectralData'
   TotSpectralData=GetNumObjectsFound(TRIM(CurrentModuleObject))
   ALLOCATE (SpectralData(TotSpectralData))
@@ -2920,19 +2939,25 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
       IF(LamNum < TotLam) THEN
         IF (SpectralData(Loop)%WaveLength(LamNum+1) <= Lam) THEN
           ErrorsFound = .true.
-          CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid set.')
-          CALL ShowContinueError('... Wavelengths not in increasing order. '//  &
-                        'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(Lam,4))//  &
-                        '], next is ['//trim(TrimSigDigits(SpectralData(Loop)%WaveLength(LamNum+1),4))//'].')
+          !CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid set.')
+          !CALL ShowContinueError('... Wavelengths not in increasing order. '//  &
+          !              'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(Lam,4))//  &
+          !              '], next is ['//trim(TrimSigDigits(SpectralData(Loop)%WaveLength(LamNum+1),4))//'].')  !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(SpecDataNames(1))//'" invalid set.'
+          WRITE(DebugFile,*) '... Wavelengths not in increasing order. At wavelength#='//TRIM(TrimSigDigits(LamNum))// &
+            ', value=['//TRIM(TrimSigDigits(Lam,4))//'], next is ['//TRIM(TrimSigDigits(SpectralData(Loop)%WaveLength(LamNum+1),4))//'].'
         END IF
       END IF
 
       IF(Lam < 0.1d0 .OR. Lam > 4.0d0) THEN
         ErrorsFound = .true.
-        CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
-        CALL ShowContinueError('... A wavelength is not in the range 0.1 to 4.0 microns; '//  &
-                          'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(Lam,4))//  &
-                 '].')
+        !CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
+        !CALL ShowContinueError('... A wavelength is not in the range 0.1 to 4.0 microns; '//  &
+        !                  'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(Lam,4))//  &
+        !         '].')  !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(SpecDataNames(1))//'" invalid value.'
+        WRITE(DebugFile,*) '... A wavelength is not in the range 0.1 to 4.0 microns; at wavelength#='// &
+            TRIM(TrimSigDigits(LamNum))//', value=['//TRIM(TrimSigDigits(Lam,4))//'].'
       END IF
 
     ! TH 2/15/2011. CR 8343
@@ -3190,8 +3215,10 @@ SUBROUTINE GetConstructData(ErrorsFound)
       ENDIF
 
       IF (Construct(ConstrNum)%LayerPoint(Layer) == 0) THEN
-        CALL ShowSevereError('Did not find matching material for '//TRIM(CurrentModuleObject)//' '//  &
-           TRIM(Construct(ConstrNum)%Name)//', missing material = '//TRIM(ConstructAlphas(Layer)))
+        !CALL ShowSevereError('Did not find matching material for '//TRIM(CurrentModuleObject)//' '//  &
+        !   TRIM(Construct(ConstrNum)%Name)//', missing material = '//TRIM(ConstructAlphas(Layer)))  !RS: Secret Search String
+        WRITE(DebugFile,*) 'Did not find matching material for '//TRIM(CurrentModuleObject)//' '// &
+            TRIM(Construct(ConstrNum)%Name)//', missing material for '//TRIM(CurrentModuleObject(Layer))
         ErrorsFound=.true.
       ELSE
         NominalU(ConstrNum)=NominalU(ConstrNum)+NominalR(Construct(ConstrNum)%LayerPoint(Layer))
