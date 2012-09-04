@@ -334,13 +334,13 @@ Site:Location,
        !maximum +90.0
        !default 0.0
        !+ is North, - is South, degree minutes represented in decimal (i.e. 30 minutes is .5)
- 33.0, !Longitude
+ -75.0, !Longitude
        !units deg
        !minimum -180.0
        !maximum +180.0
        !default 0.0
        !- is West, + is East, degree minutes represented in decimal (i.e. 30 minutes is .5)
-  6.0, !Time Zone
+  -6.0, !Time Zone
        !basic these limits on the WorldTimeZone Map (2003)
        !units hr
        !minimum -12.0
@@ -360,7 +360,7 @@ SizingPeriod:DesignDay,
       !include a date (month and day), a day type (which uses the appropriate
       !schedules for either sizing or simple tests), min/max temperatures,
       !wind speeds, and solar radiation values.
- SizingPeriod:DesignDayA1, !Name
+ SizingPeriod:DesignDay, !Name
        !required-field
        !reference DesignDays
        !reference RunPeriodsAndDesignDays
@@ -406,7 +406,7 @@ SizingPeriod:DesignDay,
        !key DifferenceSchedule
        !key DefaultMultipliers
        !default DefaultMultipliers
-  A4,  !Dry-Bulb Temperature Range Modifier Schedule Name
+   ,  !Dry-Bulb Temperature Range Modifier Schedule Name
        !type object-list
        !object-list DayScheduleNames
        !Only used when previous field is "MultiplierSchedule" or "DifferenceSchedule".
@@ -460,7 +460,7 @@ SizingPeriod:DesignDay,
        !units deltaC
        !Required only if Humidity Condition Type = "WetbulbProfileMultiplierSchedule" or
        !"WetBulbProfileDefaultMultipliers"
-   ,  !Barometric Pressure
+ 100965,  !Barometric Pressure
        !This field's value is also checked against the calculated "standard barometric pressure"
        !for the location.  If out of range (>10%) or blank, then is replaced by standard value.
        !units Pa
@@ -506,11 +506,11 @@ SizingPeriod:DesignDay,
        !key Schedule
        !key ASHRAETau
        !default ASHRAEClearSky
-  A11, !Beam Solar Day Schedule Name
+   , !Beam Solar Day Schedule Name
        !if Solar Model Indicator = Schedule, then beam schedule name (for day)
        !type object-list
        !object-list DayScheduleNames
-  A12, !Diffuse Solar Day Schedule Name
+   , !Diffuse Solar Day Schedule Name
        !if Solar Model Indicator = Schedule, then diffuse schedule name (for day)
        !type object-list
        !object-list DayScheduleNames
@@ -560,7 +560,7 @@ SizingPeriod:WeatherFileDays,
        ! =[|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|SummerDesignDay|WinterDesignDay|
        !   |CustomDay1|CustomDay2];
        !if you use SummerDesignDay or WinterDesignDay or the CustomDays then this will apply to the whole
-       !period; other days (i.e., Monday) will signify a start day and normal sequence ofsubsequent days
+       !period; other days (i.e., Monday) will signify a start day and normal sequence of subsequent days
        !default Monday
        !type choice
        !key Sunday
@@ -652,7 +652,7 @@ SizingPeriod:WeatherFileConditionType,
 
 RunPeriod,
        !min-fields 11
-  RunPeriodA1 , !Name
+  RunPeriod, !Name
        !reference RunPeriods
        !reference RunPeriodsAndDesignDays
        !descriptive name (used in reporting mainly)
@@ -737,7 +737,7 @@ RunPeriod:CustomRange,
        !reference RunPeriods
        !reference RunPeriodsAndDesignDays
        !descriptive name (used in reporting mainly)
-       !if blank, weather file title is used.  if not blank, must be unique
+       !if blank, weather file title is used. if not blank, must be unique
   1, !Begin Month
        !required-field
        !minimum 1
@@ -825,7 +825,7 @@ RunPeriodControl:SpecialDays,
      !Months can be the first 3 letters of the month
      !<Weekday> can be Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
      !<Nth> can be 1 or 1st, 2 or 2nd, etc. up to 5(?)
- 365, !Duration
+ 366, !Duration
      !units days
      !minimum 1
      !maximum 366
@@ -864,7 +864,7 @@ RunPeriodControl:DaylightSavingTime,
 
 WeatherProperty:SkyTemperature,
        !This object is used to override internal sky temperature calculations.
- WeatherProperty:SkyTemperatureA1,  !Name
+  ,  !Name
        !blank in this field will apply to all run periods (that is, all objects=
        !SizingPeriod:WeatherFileDays, SizingPeriod:WeatherFileConditionType or RunPeriod
        !otherwise, this name must match one of the environment object names.
@@ -876,7 +876,7 @@ WeatherProperty:SkyTemperature,
        !key ScheduleValue
        !key DifferenceScheduleDryBulbValue
        !key DifferenceScheduleDewPointValue
-  A3;  !Schedule Name
+ RunPeriod:CustomRange;  !Schedule Name
        !required-field
        !if name matches a SizingPeriod:DesignDay, put in a day schedule of this name
        !if name is for a SizingPeriod:WeatherFileDays, SizingPeriod:WeatherFileConditionType or
@@ -14378,7 +14378,7 @@ Exterior:Lights,
 
 Exterior:FuelEquipment,
        !only used for Meter type reporting, does not affect building loads
- Exterior:FuelEquipmentA1, !Name
+ ExteriorFuelEquipment, !Name
        !required-field
        !reference ExteriorFuelEquipmentNames
  Electricity, !Fuel Use Type
@@ -14395,7 +14395,7 @@ Exterior:FuelEquipment,
        !key Steam
        !key DistrictHeating
        !key DistrictCooling
- FuelUseSched, !Schedule Name
+ ExteriorFuelEquipment, !Schedule Name
        !required-field
        !type object-list
        !object-list ScheduleNames
@@ -14409,14 +14409,14 @@ Exterior:FuelEquipment,
 
 Exterior:WaterEquipment,
        !only used for Meter type reporting, does not affect building loads
- Exterior:WaterEquipmentA1, !Name
+ ExteriorWaterEquipment, !Name
        !required-field
        !reference ExteriorWaterEquipmentNames
  Water, !Fuel Use Type
        !type choice
        !key Water
        !default Water
- WatEqSched, !Schedule Name
+ ExteriorWaterEquipment, !Schedule Name
        !required-field
        !type object-list
        !object-list ScheduleNames
@@ -29030,7 +29030,7 @@ AirLoopHVAC:UnitaryHeatCool:VAVChangeoverBypass,
         !is used when no heating or cooling is required and the coils are off.
         !If this field is left blank or zero, the outdoor air flow rate from the previous on cycle
         !(either cooling or heating) is used.
- OutAirFlowRateMultiSched, !Outdoor Air Flow Rate Multiplier Schedule Name
+  , !Outdoor Air Flow Rate Multiplier Schedule Name
         !Enter the name of a schedule that contains multipliers for the outdoor air
         !flow rates. Schedule values must be from 0 to 1.
         !If field is left blank, model assumes multiplier is 1 for the entire simulation period.
@@ -50957,7 +50957,7 @@ Output:PreprocessorMessage,
         !key Fatal
  This is just to let you know that there were fatal errors,  !Message Line 1
  in your IDF (too bad) and thus the program has terminated.,  !Message Line 2
- Or it at least wishes to terminate. Unles some of these bugs,  !Message Line 3
+ Or it at least wishes to terminate. Unless some of these bugs,  !Message Line 3
  have been solved it won't actually terminate so we can keep,  !Message Line 4
  debugging.,  !Message Line 5
    ,  !Message Line 6

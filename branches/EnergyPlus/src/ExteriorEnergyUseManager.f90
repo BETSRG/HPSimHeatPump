@@ -202,6 +202,10 @@ SUBROUTINE GetExteriorEnergyUseInput
   REAL(r64)    :: SchMax           ! Max value of schedule for item
   REAL(r64)    :: SchMin           ! Min value of schedule for item
   REAL(r64)    :: sumDesignLevel = 0 !for predefined report of design level total
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging      
 
 
   NumExteriorLights=GetNumObjectsFound('Exterior:Lights')
@@ -234,9 +238,11 @@ SUBROUTINE GetExteriorEnergyUseInput
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaFieldNames(2))//  &
            ' is required, missing for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
       ELSE
-        CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))//  &
-           ' entered='//TRIM(cAlphaArgs(2))// &
-           ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
+        !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))//  &
+        !   ' entered='//TRIM(cAlphaArgs(2))// &
+        !   ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))   !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(2))// &
+            'entered='//TRIM(cAlphaArgs(2))//' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1))
       ENDIF
       ErrorsFound=.true.
     ELSE  ! check min/max on schedule
@@ -368,9 +374,11 @@ SUBROUTINE GetExteriorEnergyUseInput
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaFieldNames(3))//  &
            ' is required, missing for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
       ELSE
-        CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))//  &
-           ' entered='//TRIM(cAlphaArgs(3))// &
-           ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
+        !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))//  &
+        !   ' entered='//TRIM(cAlphaArgs(3))// &
+        !   ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))   !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))// &
+            ' entered='//TRIM(cAlphaArgs(3))//' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1))
       ENDIF
       ErrorsFound=.true.
     ELSE  ! check min/max on schedule
@@ -419,9 +427,11 @@ SUBROUTINE GetExteriorEnergyUseInput
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaFieldNames(3))//  &
            ' is required, missing for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
       ELSE
-        CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))//  &
-           ' entered='//TRIM(cAlphaArgs(3))// &
-           ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))
+        !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))//  &
+        !   ' entered='//TRIM(cAlphaArgs(3))// &
+        !   ' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1)))    !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(3))// &
+            ' entered='//TRIM(cAlphaArgs(3))//' for '//TRIM(cAlphaFieldNames(1))//'='//TRIM(cAlphaArgs(1))
       ENDIF
       ErrorsFound=.true.
     ELSE  ! check min/max on schedule
@@ -467,7 +477,8 @@ SUBROUTINE GetExteriorEnergyUseInput
   ENDDO
 
   IF (ErrorsFound) THEN
-    CALL ShowFatalError(RoutineName//'Errors found in input.  Program terminates.')
+    !CALL ShowFatalError(RoutineName//'Errors found in input.  Program terminates.')    !RS: Secret Search String
+    WRITE(DebugFile,*) RoutineName//'Errors found in input. Program terminates. Or, rather, would like to terminate.'
   ENDIF
 
   RETURN

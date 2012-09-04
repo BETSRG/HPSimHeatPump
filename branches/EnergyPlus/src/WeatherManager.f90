@@ -3667,6 +3667,11 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   INTEGER :: Hour1Ago,Hour3Ago
   REAL(r64) :: BeamRad, DiffRad     ! working calculated beam and diffuse rad, W/m2
 !     For reporting purposes, set year to current system year
+
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
    SaveWarmupFlag=WarmupFlag
    WarmupFlag=.true.
 
@@ -3689,12 +3694,17 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
 
    ! Check that barometric pressure is within range
    IF (ABS((DesDayInput(EnvrnNum)%PressBarom-StdBaroPress)/StdBaroPress) > .1d0) THEN  ! 10% off
-     CALL ShowWarningError('SetUpDesignDay: Entered DesignDay Barometric Pressure='//  &
-                           TRIM(RoundSigDigits(DesDayInput(EnvrnNum)%PressBarom,0))//   &
-                           ' differs by more than 10% from Standard Barometric Pressure='//  &
-                           TRIM(RoundSigDigits(StdBaroPress,0))//'.')
-     CALL ShowContinueError('...occurs in DesignDay='//TRIM(EnvironmentName)//  &
-                            ', Standard Pressure (based on elevation) will be used.')
+     !CALL ShowWarningError('SetUpDesignDay: Entered DesignDay Barometric Pressure='//  &
+     !                      TRIM(RoundSigDigits(DesDayInput(EnvrnNum)%PressBarom,0))//   &
+     !                      ' differs by more than 10% from Standard Barometric Pressure='//  &
+     !                      TRIM(RoundSigDigits(StdBaroPress,0))//'.')
+     !CALL ShowContinueError('...occurs in DesignDay='//TRIM(EnvironmentName)//  &
+     !                       ', Standard Pressure (based on elevation) will be used.')  !RS: Secret Search String
+     WRITE(DebugFile,*) 'SetUpDesignDay: Entered DesignDay Parometric Pressure='// &
+        TRIM(RoundSigDigits(DesDayInput(EnvrnNum)%PressBarom,0))//' differs by more than 10%'// &
+        'from Standard Barometric Pressure='//TRIM(RoundSigDigits(StdBaroPress,0))//'.'
+     WRITE(DebugFile,*) '...occurs in DesignDay='//TRIM(EnvironmentName)// &
+        ', Standard Pressure (based on elevation) will be used.'
      DesDayInput(EnvrnNum)%PressBarom=StdBaroPress
    ENDIF
 
@@ -4944,6 +4954,10 @@ SUBROUTINE CheckLocationValidity
   LOGICAL :: LocationError  ! Set to true if there is a problem detected
   REAL(r64)    :: StdTimeMerid   ! Standard time meridian
   REAL(r64)    :: Diffcalc       ! Difference between Standard Time Meridian and TimeZone
+  
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
           ! FLOW:
 
@@ -4992,9 +5006,12 @@ SUBROUTINE CheckLocationValidity
              'Difference="'//TRIM(RoundSigDigits(DiffCalc,1))//'"')
           CALL ShowContinueError('Solar Positions may be incorrect')
         ELSE
-          CALL ShowSevereError('Standard Time Meridian and Time Zone differ by more than 2, '// &
-             'Difference="'//TRIM(RoundSigDigits(DiffCalc,1))//'"')
-          CALL ShowContinueError('Solar Positions will be incorrect')
+          !CALL ShowSevereError('Standard Time Meridian and Time Zone differ by more than 2, '// &
+          !   'Difference="'//TRIM(RoundSigDigits(DiffCalc,1))//'"')
+          !CALL ShowContinueError('Solar Positions will be incorrect')  !RS: Secret Search String
+          WRITE(DebugFile,*) 'Standard Time Meridian and Time Zone differ by more than 2, '// &
+            'Difference"'//TRIM(RoundSigDigits(DiffCalc,1))//'"'
+          WRITE(DebugFile,*) 'Solar Positions will be incorrect'
 !          LocationError=.true.
         ENDIF
       ENDIF
@@ -5072,11 +5089,16 @@ SUBROUTINE CheckWeatherFileValidity
 
           ! FLOW:
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
   ErrorInWeatherFile=.FALSE.
   IF (.not. WeatherFileExists) THEN ! No weather file exists but the user requested one--print error message
 
     IF (DoWeathSim) THEN
-      CALL ShowWarningError('Weather Environment(s) requested, but no weather file found')
+      !CALL ShowWarningError('Weather Environment(s) requested, but no weather file found') !RS: Secret Search String
+      WRITE(DebugFile,*) 'Weather Environment(s) requested, but no weather file found'
       ErrorInWeatherFile=.TRUE.
     ENDIF
 
@@ -5309,6 +5331,10 @@ SUBROUTINE ReadUserWeatherInput
    Integer :: RPD2
    Integer :: RP    ! number of run periods
    Integer :: RPAW  ! number of run periods, actual weather
+   
+     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
 
           ! FLOW:
@@ -5388,7 +5414,8 @@ SUBROUTINE ReadUserWeatherInput
       CALL GetWeatherProperties(ErrorsFound)
 
      IF (ErrorsFound) THEN
-       CALL ShowFatalError('GetWeatherInput: Above errors cause termination')
+       !CALL ShowFatalError('GetWeatherInput: Above errors cause termination')  !RS: Secret Search String
+       WRITE(DebugFile,*) 'GetWeatherInput: Above errors would like to cause termination'
      ENDIF
 
   RETURN
@@ -7211,6 +7238,10 @@ SUBROUTINE GetWeatherProperties(ErrorsFound)
   INTEGER :: Found
   INTEGER :: Count
   LOGICAL :: MultipleEnvironments
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='WeatherProperty:SkyTemperature'
   NumWPSkyTemperatures=GetNumObjectsFound(trim(cCurrentModuleObject))
@@ -7258,7 +7289,7 @@ SUBROUTINE GetWeatherProperties(ErrorsFound)
           !CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//  &
           !   '", invalid Environment Name referenced.') !RS: Secret Search String
           WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))// &
-            '", invalide Environment Name referenced.'
+            '", invalid Environment Name referenced.'
           ErrorsFound=.true.
         ELSE
           IF (Environment(Found)%WP_Type1 /= 0) THEN
@@ -7311,11 +7342,16 @@ SUBROUTINE GetWeatherProperties(ErrorsFound)
       ! See if it's a schedule.
       Found=GetScheduleIndex(cAlphaArgs(3))
       IF (Found == 0) THEN
-        CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//  &
-          '", invalid '//trim(cAlphaFieldNames(3))//'.')
-        CALL ShowContinueError('...Entered name="'//trim(cAlphaArgs(3))//'".')
-        CALL ShowContinueError('...Should be a full year schedule ("Schedule:Year", "Schedule:Compact",'//  &
-           ' "Schedule:File", or "Schedule:Constant" objects.')
+        !CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//  &
+        !  '", invalid '//trim(cAlphaFieldNames(3))//'.')
+        !CALL ShowContinueError('...Entered name="'//trim(cAlphaArgs(3))//'".')
+        !CALL ShowContinueError('...Should be a full year schedule ("Schedule:Year", "Schedule:Compact",'//  &
+        !   ' "Schedule:File", or "Schedule:Constant" objects.')    !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))// &
+            '", invalid '//TRIM(cAlphaFieldNames(3))//'.'
+        WRITE(DebugFile,*) '...Entered name="'//TRIM(cAlphaArgs(3))//'".'
+        WRITE(DebugFile,*) '...Should be a full year schedule ("Schedule:Year", "Schedule Compact",'// &
+            ' "Schedule:File", or "Schedule:Constant" objects.'
         ErrorsFound=.true.
       ELSE
         WPSkyTemperature(Item)%IsSchedule=.true.

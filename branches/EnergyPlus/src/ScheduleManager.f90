@@ -1306,7 +1306,7 @@ Until:  DO
       IF (Any(.not. AllDays)) THEN
         !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
         !           '" has missing day types in Through='//TRIM(CurrentThrough))
-        !CALL ShowContinueError('Last "For" field='//TRIM(LastFor)) !RS: Secret String Search
+        !CALL ShowContinueError('Last "For" field='//TRIM(LastFor)) !RS: Secret Search String
         WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(Schedule(SchNum)%Name)// &
             '" has missing day types in Through='//TRIM(CurrentThrough)
         WRITE(DebugFile,*) 'Last "For" field='//TRIM(LastFor)
@@ -1317,7 +1317,7 @@ Until:  DO
         ENDDO
         errmsg=errmsg(1:len_trim(errmsg)-2)
         !CALL ShowContinueError(trim(errmsg))
-        !CALL ShowContinueError('Missing day types will have 0.0 as Schedule Values')   !RS: Secret String Search
+        !CALL ShowContinueError('Missing day types will have 0.0 as Schedule Values')   !RS: Secret Search String
         WRITE(DebugFile,*) TRIM(errmsg)
         WRITE(DebugFile,*) 'Missing day types will have 0.0 as Schedule Values'
       ENDIF
