@@ -6377,7 +6377,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
           WRITE(DebugFile,*) RoutineName//'Distance between two vertices < .01, possibly coincident.'// &
             ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName)// &
             ', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName)
-          WRITE(DebugFile,*) 'Vertex ['//TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Sides)//']=('// &
+          WRITE(DebugFile,*) 'Vertex ['//TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//']=('// &
             TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%x,2))//','// &
             TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%y,2))//','// &
             TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%z,2))//')'
@@ -6389,7 +6389,8 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
         TotalCoincidentVertices=TotalCoincidentVertices+1
         IF (SurfaceTmp(SurfNum)%Sides > 3) THEN
           IF (DisplayExtraWarnings) THEN
-            CALL ShowContinueError('Dropping Vertex ['//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//'].')
+!            CALL ShowContinueError('Dropping Vertex ['//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//'].') !RS: Secret Search String
+            WRITE(DebugFile,*) 'Dropping Vertex ['//TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//'].'
           ENDIF
           SurfaceTmp(SurfNum)%Sides=SurfaceTmp(SurfNum)%Sides-1
         ELSE

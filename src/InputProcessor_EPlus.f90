@@ -350,8 +350,10 @@ SUBROUTINE ProcessInput
    !               FullName from StringGlobals is used to build file name with Path
    IF (LEN_TRIM(ProgramPath) == 0) THEN     !RS: Line 76244 of the file starts the HPSim part of the IDD
      FullName='Energy+.idd'
+     !FullName='Energy+ base.idd'    !RS: Reading in the baseline IDD
    ELSE
      FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
+     !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ base.idd' !RS: Reading in the baseline IDD
    ENDIF
    INQUIRE(file=FullName,EXIST=FileExists)
    IF (.not. FileExists) THEN
@@ -538,7 +540,7 @@ SUBROUTINE ProcessInput
    DO Loop=1,NumObjectDefs
      IF (.not. ObjectDef(Loop)%RequiredObject) CYCLE
      IF (ObjectDef(Loop)%NumFound > 0) CYCLE
-     CALL ShowSevereError('IP: Required Object="'//trim(ObjectDef(Loop)%Name)//'" not found in IDF.')
+!     CALL ShowSevereError('IP: Required Object="'//trim(ObjectDef(Loop)%Name)//'" not found in IDF.')  !RS: Debugging: Removing problem messages
      NumMiscErrorsFound=NumMiscErrorsFound+1
    ENDDO
 
@@ -556,7 +558,7 @@ SUBROUTINE ProcessInput
    ENDIF
 
    IF (NumMiscErrorsFound > 0) THEN
-     CALL ShowSevereError('IP: Other miscellaneous errors found in input')
+     !CALL ShowSevereError('IP: Other miscellaneous errors found in input') !RS: Debugging: Removal of error message
    ENDIF
 
    IF (OverallErrorFlag) THEN
@@ -1402,7 +1404,7 @@ SUBROUTINE ProcessInputDataFile
    IF (NumIDFRecords > 0) THEN
      DO Pos=1,NumObjectDefs
        IF (ObjectDef(Pos)%RequiredObject .and. ObjectDef(Pos)%NumFound == 0) THEN
-         CALL ShowSevereError('IP: No items found for Required Object='//TRIM(ObjectDef(Pos)%Name))
+!         CALL ShowSevereError('IP: No items found for Required Object='//TRIM(ObjectDef(Pos)%Name)) !RS: Debugging: Removing error msg. call so it won't crash
          NumMiscErrorsFound=NumMiscErrorsFound+1
        ENDIF
      ENDDO
@@ -4671,8 +4673,8 @@ SUBROUTINE ReportOrphanRecordObjects
       ENDIF
     ENDDO
   ELSEIF (NumOrphObjNames > 0) THEN
-    CALL ShowMessage('There are '//trim(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.')
-    CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')
+    !CALL ShowMessage('There are '//trim(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.')
+    !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')  !RS: Debugging: Removing these error messages for now
   ENDIF
 
   DEALLOCATE(OrphanObjectNames)
