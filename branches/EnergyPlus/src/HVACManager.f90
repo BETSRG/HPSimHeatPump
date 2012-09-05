@@ -531,6 +531,7 @@ SUBROUTINE SimHVAC
   CHARACTER(len=MaxNameLength*2),SAVE :: ErrEnvironmentName=' '
   INTEGER  :: LoopNum
   INTEGER  :: LoopSide
+  LOGICAL, SAVE :: ONETIME= .TRUE. !RS: Testing: Phase 4!
 
           ! Initialize all of the simulation flags to true for the first iteration
   SimZoneEquipmentFlag     = .TRUE.
@@ -617,7 +618,10 @@ SUBROUTINE SimHVAC
 
   CAll ManageEMS(emsCallFromAfterHVACManagers)! calling point
 
-  CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
+  IF (ONETIME) THEN !RS: Testing: Phase 4!
+      CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
+      ONETIME = .FALSE.
+  END IF
   
 !! first explicitly call each system type with FirstHVACIteration,
 !

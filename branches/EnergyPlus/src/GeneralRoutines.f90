@@ -1245,7 +1245,7 @@ SUBROUTINE TestSupplyAirPathIntegrity(ErrFound)
 
 
   ! Do by Paths
-  CALL ShowMessage('Testing Individual Supply Air Path Integrity')
+  !CALL ShowMessage('Testing Individual Supply Air Path Integrity') !RS: Debugging: Messages aren't working now
   ErrFound=.false.
 
   WRITE(OutputFileBNDetails,701) '! ==============================================================='
@@ -1472,7 +1472,7 @@ SUBROUTINE TestSupplyAirPathIntegrity(ErrFound)
   IF (ErrFound) THEN
     CALL ShowSevereError('Supply Air Path(s) did not pass integrity testing')
   ELSE
-    CALL ShowMessage('All Supply Air Paths passed integrity testing')
+    !CALL ShowMessage('All Supply Air Paths passed integrity testing')  !RS: Debugging: Messages are creating errors currently
   ENDIF
 
   RETURN
@@ -1577,7 +1577,7 @@ SUBROUTINE TestReturnAirPathIntegrity(ErrFound,ValRetAPaths)
   INTEGER WAirLoop
 
   ! Do by Paths
-  CALL ShowMessage('Testing Individual Return Air Path Integrity')
+  !CALL ShowMessage('Testing Individual Return Air Path Integrity') !RS: Debugging: Message call removed for now
   ErrFound=.false.
   NumErr=0
 
@@ -1893,7 +1893,7 @@ SUBROUTINE TestReturnAirPathIntegrity(ErrFound,ValRetAPaths)
   IF (ErrFound) THEN
     CALL ShowSevereError('Return Air Path(s) did not pass integrity testing')
   ELSE
-    CALL ShowMessage('All Return Air Paths passed integrity testing')
+    !CALL ShowMessage('All Return Air Paths passed integrity testing')   !RS: Debugging: Message call removed currently
   ENDIF
 
   RETURN

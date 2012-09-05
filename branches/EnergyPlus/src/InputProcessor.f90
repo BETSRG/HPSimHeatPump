@@ -257,7 +257,8 @@ SUBROUTINE ProcessInput
    CALL InitSecretObjects
 
    EchoInputFile=GetNewUnitNumber()
-   OPEN(unit=EchoInputFile,file='eplusout.audit')
+   !OPEN(unit=EchoInputFile,file='eplusout.audit')
+   OPEN(unit=EchoInputFile,file='audittest.txt')
    !               FullName from StringGlobals is used to build file name with Path
    IF (LEN_TRIM(ProgramPath) == 0) THEN
      FullName='Energy+.idd'
@@ -1008,16 +1009,16 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         !  Error stated default is not in min/max range
         WRITE(MinMaxString,*) ObjectDef(NumObjectDefs)%NumRangeChks(Count)%FieldNumber
         MinMaxString=ADJUSTL(MinMaxString)
-        CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
-                             TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile)
+        !CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
+        !                     TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile) !RS: Debugging: Removing error message due to related crashes.
         ErrFlag=.true.
       ENDIF
     ENDIF
   ENDDO
 
   IF (ErrFlag) THEN
-    CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
-                           ', Object not available for IDF processing.',EchoInputFile)
+    !CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
+    !                       ', Object not available for IDF processing.',EchoInputFile) !RS: Debugging: Removing error message due to related crashes.
     DEALLOCATE(ObjectDef(NumObjectDefs)%AlphaorNumeric)
     NumObjectDefs=NumObjectDefs-1
     ErrorsFound=.true.

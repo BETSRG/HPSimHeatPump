@@ -258,7 +258,7 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
   END IF
 
   IF (WriteOutputToSQLite) CALL CreateSQLiteSimulationsRecord(1)
-  CALL ShowMessage('Beginning Simulation')
+  !CALL ShowMessage('Beginning Simulation') !RS: Debugging: Messages are currently crashing the program
   CALL ResetEnvironmentCounter
 
 
@@ -2091,7 +2091,7 @@ SUBROUTINE ReportLoopConnections
   CALL ReportDualDuctConnections
 
   IF (NumNodeConnectionErrors == 0) THEN
-    CALL ShowMessage('No node connection errors were found.')
+    !CALL ShowMessage('No node connection errors were found.')   !RS: Debugging: Messages causing errors currently, so call removed
   ELSE
     WRITE(ChrOut,*) NumNodeConnectionErrors
     ChrOut=ADJUSTL(ChrOut)

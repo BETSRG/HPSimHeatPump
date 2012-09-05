@@ -2955,7 +2955,7 @@ SUBROUTINE TestBranchIntegrity(ErrFound)
   BranchReported=.false.
 
   ! Do by Branch Lists
-  CALL ShowMessage('Testing Individual Branch Integrity')
+!  CALL ShowMessage('Testing Individual Branch Integrity')  !RS: Debugging: Removing for now
   ErrFound=.false.
 
   ALLOCATE(BranchNodes(NumOfBranches))
@@ -3220,7 +3220,7 @@ SUBROUTINE TestBranchIntegrity(ErrFound)
   IF (ErrFound) THEN
     CALL ShowSevereError('Branch(es) did not pass integrity testing')
   ELSE
-    CALL ShowMessage('All Branches passed integrity testing')
+!    CALL ShowMessage('All Branches passed integrity testing')  !RS: Debugging: Another message that's removed for now
   ENDIF
 
   RETURN

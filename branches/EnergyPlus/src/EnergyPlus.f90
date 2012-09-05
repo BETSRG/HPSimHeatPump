@@ -179,6 +179,7 @@ USE FluidProperties, ONLY: ReportOrphanFluids
 USE Psychrometrics, ONLY: ShowPsychrometricSummary
 USE InputPreProcessor, ONLY: PreProcessInput    !RS: Adding this in so that the IDF will be built before it's called
 
+USE HeatPumpInput, ONLY: GetInputs  !RS: Testing: Phase 3
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -423,7 +424,7 @@ USE InputPreProcessor, ONLY: PreProcessInput    !RS: Adding this in so that the 
 
       CALL ManageSimulation
 
-      CALL ShowMessage('Simulation Error Summary *************')
+!      CALL ShowMessage('Simulation Error Summary *************')   !RS: Debugging: Messages are causing the program to crash
 
       CALL GenOutputVariablesAuditReport
 
@@ -433,8 +434,9 @@ USE InputPreProcessor, ONLY: PreProcessInput    !RS: Adding this in so that the 
       CALL ReportOrphanFluids
       CALL ReportOrphanSchedules
 
+      !CALL GetInputs    !RS: Testing: Phase 3
+      
       CALL EndEnergyPlus
-!
 
 
 
