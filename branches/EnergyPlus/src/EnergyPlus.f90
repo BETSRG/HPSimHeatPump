@@ -212,7 +212,7 @@ USE InputPreProcessor, ONLY: PreProcessInput    !RS: Adding this in so that the 
 #ifdef EP_Detailed_Timings
                              CALL epStartTime('EntireRun=')
 #endif
-      CALL CreateCurrentDateTimeString(CurrentDateTime)
+       CALL CreateCurrentDateTimeString(CurrentDateTime)
       VerString=TRIM(VerString)//','//TRIM(CurrentDateTime)
       cEnvValue=' '
       CALL Get_Environment_Variable(DDOnlyEnvVar,cEnvValue)

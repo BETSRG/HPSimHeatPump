@@ -2474,6 +2474,10 @@ SUBROUTINE GetDetShdSurfaceData(ErrorsFound,SurfNum,TotDetachedFixed,TotDetached
   INTEGER :: numSides
   REAL(r64) :: SchedMinValue
   REAL(r64) :: SchedMaxValue
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   IF ((TotDetachedFixed+TotDetachedBldg) > 0 .and. SolarDistribution == MinimalShadowing) THEN
     CALL ShowWarningError('Detached shading effects are ignored when Solar Distribution = MinimalShadowing')
@@ -2523,8 +2527,10 @@ SUBROUTINE GetDetShdSurfaceData(ErrorsFound,SurfNum,TotDetachedFixed,TotDetached
          ! Schedule for a shadowing (sub)surface
         SurfaceTmp(SurfNum)%SchedShadowSurfIndex = GetScheduleIndex(cAlphaArgs(2))
         IF (SurfaceTmp(SurfNum)%SchedShadowSurfIndex == 0) THEN
-          CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
-                               '", '//TRIM(cAlphaFieldNames(2))//' not found='//TRIM(cAlphaArgs(2)))
+          !CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
+          !                     '", '//TRIM(cAlphaFieldNames(2))//' not found='//TRIM(cAlphaArgs(2)))    !RS: Secret Search String
+          WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)// &
+            '", '//TRIM(cAlphaFieldNames(2))//' not found='//TRIM(cAlphaArgs(2))
           ErrorsFound=.true.
         ENDIF
       ELSE
@@ -6254,6 +6260,10 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
 !unused    REAL(r64) :: ccwtest
 !unused    LOGICAL   :: SurfaceCCW
     REAL(r64) :: dotp
+    
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
     IF (NSides > MaxVerticesPerSurface) MaxVerticesPerSurface=NSides
     Ptr=1
@@ -6353,17 +6363,28 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
       DistanceCheck=Distance(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides),SurfaceTmp(SurfNum)%Vertex(1))
       IF (DistanceCheck < .01d0) THEN
         IF (DisplayExtraWarnings) THEN
-          CALL ShowWarningError(RoutineName//'Distance between two vertices < .01, possibly coincident.'//  &
-                                ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//  &
-                                ', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName))
-          CALL ShowContinueError('Vertex ['//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//  &
-             ']=('//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%x,2))//','//          &
-             trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%y,2))//','//                 &
-             trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%z,2))//')')
-          CALL ShowContinueError('Vertex ['//trim(RoundSigDigits(1))//  &
-             ']=('//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%x,2))//','//          &
-             trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%y,2))//','//                 &
-             trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%z,2))//')')
+          !CALL ShowWarningError(RoutineName//'Distance between two vertices < .01, possibly coincident.'//  &
+          !                      ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//  &
+          !                      ', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName))
+          !CALL ShowContinueError('Vertex ['//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Sides))//  &
+          !   ']=('//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%x,2))//','//          &
+          !   trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%y,2))//','//                 &
+          !   trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%z,2))//')')
+          !CALL ShowContinueError('Vertex ['//trim(RoundSigDigits(1))//  &
+          !   ']=('//trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%x,2))//','//          &
+             !trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%y,2))//','//                 &
+             !trim(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%z,2))//')')  !RS: Secret Search String
+          WRITE(DebugFile,*) RoutineName//'Distance between two vertices < .01, possibly coincident.'// &
+            ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName)// &
+            ', in Zone='//TRIM(SurfaceTmp(SurfNum)%ZoneName)
+          WRITE(DebugFile,*) 'Vertex ['//TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Sides)//']=('// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%x,2))//','// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%y,2))//','// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides)%z,2))//')'
+          WRITE(DebugFile,*) 'Vertex ['//TRIM(RoundSigDigits(1))//']=)'// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%x,2))//','// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%y,2))//','// &
+            TRIM(RoundSigDigits(SurfaceTmp(SurfNum)%Vertex(1)%z,2))//')'
         ENDIF
         TotalCoincidentVertices=TotalCoincidentVertices+1
         IF (SurfaceTmp(SurfNum)%Sides > 3) THEN

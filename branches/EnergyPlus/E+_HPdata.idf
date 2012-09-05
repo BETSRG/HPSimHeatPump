@@ -2437,7 +2437,7 @@ WindowMaterial:GlazingGroup:Thermochromic,
     !min-fields 3
     !extensible:2 - repeat last two fields remembering to remove ; from "inner" fields.
     !thermochromic glass at different temperatures
- WindowMaterial:GlazingGroup:ThermochromicA1, !Name
+ WindowMaterialGlazingGroupThermochromic, !Name
        !required-field
        !reference MaterialName
        !reference GlazingMaterialName
@@ -2446,102 +2446,18 @@ WindowMaterial:GlazingGroup:Thermochromic,
        !required-field
        !units C
        !ip-units F
- GlazingNameA2, !Window Material Glazing Name 1
+ SingleGlaze, !Window Material Glazing Name 1
        !required-field
        !type object-list
        !object-list GlazingMaterialName
-    , !Optical Data Temperature 2	!All following temperatures share the same units
+  23, !Optical Data Temperature 2	!All following temperatures share the same units
        !units C
        !ip-units F
-  A3 , !Window Material Glazing Name 2	!All following glazing names share the same type and object-list
+ DoubleGlaze, !Window Material Glazing Name 2	!All following glazing names share the same type and object-list
        !type object-list
        !object-list GlazingMaterialName
-    , !Optical Data Temperature 3
-  A4 , !Window Material Glazing Name 3
-    , !Optical Data Temperature 4
-  A5 , !Window Material Glazing Name 4
-    , !Optical Data Temperature 5
-  A6 , !Window Material Glazing Name 5
-    , !Optical Data Temperature 6
-  A7 , !Window Material Glazing Name 6
-    , !Optical Data Temperature 7
-  A8 , !Window Material Glazing Name 7
-    , !Optical Data Temperature 8
-  A9 , !Window Material Glazing Name 8
-    , !Optical Data Temperature 9
-  A10, !Window Material Glazing Name 9
-   , !Optical Data Temperature 10
-  A11, !Window Material Glazing Name 10
-   , !Optical Data Temperature 11
-  A12, !Window Material Glazing Name 11
-   , !Optical Data Temperature 12
-  A13, !Window Material Glazing Name 12
-   , !Optical Data Temperature 13
-  A14, !Window Material Glazing Name 13
-   , !Optical Data Temperature 14
-  A15, !Window Material Glazing Name 14
-   , !Optical Data Temperature 15
-  A16, !Window Material Glazing Name 15
-   , !Optical Data Temperature 16
-  A17, !Window Material Glazing Name 16
-   , !Optical Data Temperature 17
-  A18, !Window Material Glazing Name 17
-   , !Optical Data Temperature 18
-  A19, !Window Material Glazing Name 18
-   , !Optical Data Temperature 19
-  A20, !Window Material Glazing Name 19
-   , !Optical Data Temperature 20
-  A21, !Window Material Glazing Name 20
-   , !Optical Data Temperature 21
-  A22, !Window Material Glazing Name 21
-   , !Optical Data Temperature 22
-  A23, !Window Material Glazing Name 22
-   , !Optical Data Temperature 23
-  A24, !Window Material Glazing Name 23
-   , !Optical Data Temperature 24
-  A25, !Window Material Glazing Name 24
-   , !Optical Data Temperature 25
-  A26, !Window Material Glazing Name 25
-   , !Optical Data Temperature 26
-  A27, !Window Material Glazing Name 26
-   , !Optical Data Temperature 27
-  A28, !Window Material Glazing Name 27
-   , !Optical Data Temperature 28
-  A29, !Window Material Glazing Name 28
-   , !Optical Data Temperature 29
-  A30, !Window Material Glazing Name 29
-   , !Optical Data Temperature 30
-  A31, !Window Material Glazing Name 30
-   , !Optical Data Temperature 31
-  A32, !Window Material Glazing Name 31
-   , !Optical Data Temperature 32
-  A33, !Window Material Glazing Name 32
-   , !Optical Data Temperature 33
-  A34, !Window Material Glazing Name 33
-   , !Optical Data Temperature 34
-  A35, !Window Material Glazing Name 34
-   , !Optical Data Temperature 35
-  A36, !Window Material Glazing Name 35
-   , !Optical Data Temperature 36
-  A37, !Window Material Glazing Name 36
-   , !Optical Data Temperature 37
-  A38, !Window Material Glazing Name 37
-   , !Optical Data Temperature 38
-  A39, !Window Material Glazing Name 38
-   , !Optical Data Temperature 39
-  A40, !Window Material Glazing Name 39
-   , !Optical Data Temperature 40
-  A41, !Window Material Glazing Name 40
-   , !Optical Data Temperature 41
-  A42, !Window Material Glazing Name 41
-   , !Optical Data Temperature 42
-  A43, !Window Material Glazing Name 42
-   , !Optical Data Temperature 43
-  A44, !Window Material Glazing Name 43
-   , !Optical Data Temperature 44
-  A45, !Window Material Glazing Name 44
-   , !Optical Data Temperature 45
-  A46; !Window Material Glazing Name 45
+  22, !Optical Data Temperature 3
+ TripleGlaze; !Window Material Glazing Name 3
 
 WindowMaterial:Glazing:RefractionExtinctionMethod,
     !Glass material properties for Windows or Glass Doors
@@ -2695,7 +2611,7 @@ WindowMaterial:GasMixture,
 WindowMaterial:Shade,
     !Window shade thermal properties
   !min-fields 15
- WindowMaterial:ShadeA1, !Name
+ WindowMaterialShade, !Name
        !required-field
        !reference MaterialName
        !reference WindowShadesScreensAndBlinds
@@ -4317,104 +4233,7 @@ MaterialProperty:GlazingSpectralData,
 3.85, , , ,      3.86, , , ,       3.87, , , ,    3.88, , , ,   3.89, , , , !fields as indicated
 3.90, , , ,      3.91, , , ,       3.92, , , ,    3.93, , , ,   3.94, , , , !fields as indicated
 3.95, , , ,      3.96, , , ,       3.97, , , ,    3.98, , , ,   3.99, , , , !fields as indicated
-4.00, , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , , !fields as indicated
-   , , , ,          , , , ,          , , , ,       , , , ,      , , , ; !fields as indicated
+4.00, , , ;      !fields as indicated
 
 
 Construction,
@@ -4424,35 +4243,35 @@ Construction,
  ConstructionA1, !Name
        !required-field
        !reference ConstructionNames
- MaterialNameA2, !Outside Layer
+ Brick, !Outside Layer
        !required-field
        !type object-list
        !object-list MaterialName
-  A3 , !Layer 2
+ Plywood, !Layer 2
        !type object-list
        !object-list MaterialName
-  A4 , !Layer 3
+ Insulation, !Layer 3
        !type object-list
        !object-list MaterialName
-  A5 , !Layer 4
+ Gypsum, !Layer 4
        !type object-list
        !object-list MaterialName
-  A6 , !Layer 5
+    , !Layer 5
        !type object-list
        !object-list MaterialName
-  A7 , !Layer 6
+    , !Layer 6
        !type object-list
        !object-list MaterialName
-  A8 , !Layer 7
+    , !Layer 7
        !type object-list
        !object-list MaterialName
-  A9 , !Layer 8
+    , !Layer 8
        !type object-list
        !object-list MaterialName
-  A10, !Layer 9
+   , !Layer 9
        !type object-list
        !object-list MaterialName
-  A11; !Layer 10
+   ; !Layer 10
        !type object-list
        !object-list MaterialName
 
@@ -4497,7 +4316,7 @@ Construction:InternalSource,
        !Start with outside layer and work your way to the inside Layer
        !Up to 10 layers total, 8 for windows
        !Enter the material name for each layer
- Construction:InternalSourceA1, !Name
+ ConstructionInternal, !Name
        !required-field
        !reference ConstructionNames
   3, !Source Present After Layer Number
@@ -4517,41 +4336,23 @@ Construction:InternalSource,
        !units m
        !uniform spacing between tubes or resistance wires in direction
        !perpendicular to main intended direction of heat transfer
- Layer1, !Outside Layer
+ Brick, !Outside Layer
        !required-field
        !type object-list
        !object-list MaterialName
- Layer2, !Layer 2
+ Plywood, !Layer 2
        !type object-list
        !object-list MaterialName
- Layer3, !Layer 3
+ Insulation, !Layer 3
        !type object-list
        !object-list MaterialName
-  A5 , !Layer 4
-       !type object-list
-       !object-list MaterialName
-  A6 , !Layer 5
-       !type object-list
-       !object-list MaterialName
-  A7 , !Layer 6
-       !type object-list
-       !object-list MaterialName
-  A8 , !Layer 7
-       !type object-list
-       !object-list MaterialName
-  A9 , !Layer 8
-       !type object-list
-       !object-list MaterialName
-  A10, !Layer 9
-       !type object-list
-       !object-list MaterialName
-  A11; !Layer 10
+ Gypsum; !Layer 4
        !type object-list
        !object-list MaterialName
 
 Construction:WindowDataFile,
        !Initiates search of the Window5 data file for a window called Name.
- Construction:WindowDataFileA1, !Name
+ ConstructionWindow, !Name
        !required-field
        !reference ConstructionNames
  Window5DataFile.dat; !File Name
@@ -4715,152 +4516,14 @@ ZoneList,
        !required-field
        !reference ZoneListNames
        !reference ZoneAndZoneListNames
- Zone1Name, !Zone 1 Name
+ Zone1, !Zone 1 Name
        !begin-extensible
        !required-field
        !type object-list
        !object-list ZoneNames
-  A3 , !Zone 2 Name		!All zones share the same type and object-list
+  A3 ; !Zone 2 Name		!All zones share the same type and object-list
        !type object-list
        !object-list ZoneNames
-  A4 , !Zone 3 Name
-  A5 , !Zone 4 Name
-  A6 , !Zone 5 Name
-  A7 , !Zone 6 Name
-  A8 , !Zone 7 Name
-  A9 , !Zone 8 Name
-  A10, !Zone 9 Name
-  A11, !Zone 10 Name
-  A12, !Zone 11 Name
-  A13, !Zone 12 Name
-  A14, !Zone 13 Name
-  A15, !Zone 14 Name
-  A16, !Zone 15 Name
-  A17, !Zone 16 Name
-  A18, !Zone 17 Name
-  A19, !Zone 18 Name
-  A20, !Zone 19 Name
-  A21, !Zone 20 Name
-  A22, !Zone 21 Name
-  A23, !Zone 22 Name
-  A24, !Zone 23 Name
-  A25, !Zone 24 Name
-  A26, !Zone 25 Name
-  A27, !Zone 26 Name
-  A28, !Zone 27 Name
-  A29, !Zone 28 Name
-  A30, !Zone 29 Name
-  A31, !Zone 30 Name
-  A32, !Zone 31 Name
-  A33, !Zone 32 Name
-  A34, !Zone 33 Name
-  A35, !Zone 34 Name
-  A36, !Zone 35 Name
-  A37, !Zone 36 Name
-  A38, !Zone 37 Name
-  A39, !Zone 38 Name
-  A40, !Zone 39 Name
-  A41, !Zone 40 Name
-  A42, !Zone 41 Name
-  A43, !Zone 42 Name
-  A44, !Zone 43 Name
-  A45, !Zone 44 Name
-  A46, !Zone 45 Name
-  A47, !Zone 46 Name
-  A48, !Zone 47 Name
-  A49, !Zone 48 Name
-  A50, !Zone 49 Name
-  A51, !Zone 50 Name
-  A52, !Zone 51 Name
-  A53, !Zone 52 Name
-  A54, !Zone 53 Name
-  A55, !Zone 54 Name
-  A56, !Zone 55 Name
-  A57, !Zone 56 Name
-  A58, !Zone 57 Name
-  A59, !Zone 58 Name
-  A60, !Zone 59 Name
-  A61, !Zone 60 Name
-  A62, !Zone 61 Name
-  A63, !Zone 62 Name
-  A64, !Zone 63 Name
-  A65, !Zone 64 Name
-  A66, !Zone 65 Name
-  A67, !Zone 66 Name
-  A68, !Zone 67 Name
-  A69, !Zone 68 Name
-  A70, !Zone 69 Name
-  A71, !Zone 70 Name
-  A72, !Zone 71 Name
-  A73, !Zone 72 Name
-  A74, !Zone 73 Name
-  A75, !Zone 74 Name
-  A76, !Zone 75 Name
-  A77, !Zone 76 Name
-  A78, !Zone 77 Name
-  A79, !Zone 78 Name
-  A80, !Zone 79 Name
-  A81, !Zone 80 Name
-  A82, !Zone 81 Name
-  A83, !Zone 82 Name
-  A84, !Zone 83 Name
-  A85, !Zone 84 Name
-  A86, !Zone 85 Name
-  A87, !Zone 86 Name
-  A88, !Zone 87 Name
-  A89, !Zone 88 Name
-  A90, !Zone 89 Name
-  A91, !Zone 90 Name
-  A92, !Zone 91 Name
-  A93, !Zone 92 Name
-  A94, !Zone 93 Name
-  A95, !Zone 94 Name
-  A96, !Zone 95 Name
-  A97, !Zone 96 Name
-  A98, !Zone 97 Name
-  A99, !Zone 98 Name
-  A100, !Zone 99 Name
-  A101, !Zone 100 Name
-  A102,A103,A104,A105,A106,A107,A108,A109,A110,A111, !fields as indicated
-  A112,A113,A114,A115,A116,A117,A118,A119,A120,A121, !fields as indicated
-  A122,A123,A124,A125,A126,A127,A128,A129,A130,A131, !fields as indicated
-  A132,A133,A134,A135,A136,A137,A138,A139,A140,A141, !fields as indicated
-  A142,A143,A144,A145,A146,A147,A148,A149,A150,A151, !fields as indicated
-  A152,A153,A154,A155,A156,A157,A158,A159,A160,A161, !fields as indicated
-  A162,A163,A164,A165,A166,A167,A168,A169,A170,A171, !fields as indicated
-  A172,A173,A174,A175,A176,A177,A178,A179,A180,A181, !fields as indicated
-  A182,A183,A184,A185,A186,A187,A188,A189,A190,A191, !fields as indicated
-  A192,A193,A194,A195,A196,A197,A198,A199,A200,A201, !fields as indicated
-  A202,A203,A204,A205,A206,A207,A208,A209,A210,A211, !fields as indicated
-  A212,A213,A214,A215,A216,A217,A218,A219,A220,A221, !fields as indicated
-  A222,A223,A224,A225,A226,A227,A228,A229,A230,A231, !fields as indicated
-  A232,A233,A234,A235,A236,A237,A238,A239,A240,A241, !fields as indicated
-  A242,A243,A244,A245,A246,A247,A248,A249,A250,A251, !fields as indicated
-  A252,A253,A254,A255,A256,A257,A258,A259,A260,A261, !fields as indicated
-  A262,A263,A264,A265,A266,A267,A268,A269,A270,A271, !fields as indicated
-  A272,A273,A274,A275,A276,A277,A278,A279,A280,A281, !fields as indicated
-  A282,A283,A284,A285,A286,A287,A288,A289,A290,A291, !fields as indicated
-  A292,A293,A294,A295,A296,A297,A298,A299,A300,A301, !fields as indicated
-  A302,A303,A304,A305,A306,A307,A308,A309,A310,A311, !fields as indicated
-  A312,A313,A314,A315,A316,A317,A318,A319,A320,A321, !fields as indicated
-  A322,A323,A324,A325,A326,A327,A328,A329,A330,A331, !fields as indicated
-  A332,A333,A334,A335,A336,A337,A338,A339,A340,A341, !fields as indicated
-  A342,A343,A344,A345,A346,A347,A348,A349,A350,A351, !fields as indicated
-  A352,A353,A354,A355,A356,A357,A358,A359,A360,A361, !fields as indicated
-  A362,A363,A364,A365,A366,A367,A368,A369,A370,A371, !fields as indicated
-  A372,A373,A374,A375,A376,A377,A378,A379,A380,A381, !fields as indicated
-  A382,A383,A384,A385,A386,A387,A388,A389,A390,A391, !fields as indicated
-  A392,A393,A394,A395,A396,A397,A398,A399,A400,A401, !fields as indicated
-  A402,A403,A404,A405,A406,A407,A408,A409,A410,A411, !fields as indicated
-  A412,A413,A414,A415,A416,A417,A418,A419,A420,A421, !fields as indicated
-  A422,A423,A424,A425,A426,A427,A428,A429,A430,A431, !fields as indicated
-  A432,A433,A434,A435,A436,A437,A438,A439,A440,A441, !fields as indicated
-  A442,A443,A444,A445,A446,A447,A448,A449,A450,A451, !fields as indicated
-  A452,A453,A454,A455,A456,A457,A458,A459,A460,A461, !fields as indicated
-  A462,A463,A464,A465,A466,A467,A468,A469,A470,A471, !fields as indicated
-  A472,A473,A474,A475,A476,A477,A478,A479,A480,A481, !fields as indicated
-  A482,A483,A484,A485,A486,A487,A488,A489,A490,A491, !fields as indicated
-  A492,A493,A494,A495,A496,A497,A498,A499,A500,A501; !fields as indicated
 
 ZoneGroup,
        !min-fields 2

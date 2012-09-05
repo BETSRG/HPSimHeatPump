@@ -2694,8 +2694,10 @@ SUBROUTINE GetMaterialData(ErrorsFound)
 
           !test that named material is of the right type
           IF( Material(iMat)%Group /= WindowGlass) THEN
-            CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" is not defined correctly.')
-            CALL ShowContinueError('Material named: '//Trim(cAlphaArgs(1+iTC))//' is not a window glazing ')
+            !CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'" is not defined correctly.')
+            !CALL ShowContinueError('Material named: '//Trim(cAlphaArgs(1+iTC))//' is not a window glazing ')    !RS: Secret Search String
+            WRITE(DebugFile,*) TRIM(CurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'" is not defined correctly.'
+            WRITE(DebugFile,*) 'Material named: '//TRIM(cAlphaArgs(1+iTC))//' is not a window glazing '
             ErrorsFound=.true.
           ENDIF
 
@@ -3120,6 +3122,9 @@ SUBROUTINE GetConstructData(ErrorsFound)
   INTEGER :: iMatGlass         ! number of glass layers
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: WConstructNames
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
        ! FLOW:
 
@@ -3218,7 +3223,7 @@ SUBROUTINE GetConstructData(ErrorsFound)
         !CALL ShowSevereError('Did not find matching material for '//TRIM(CurrentModuleObject)//' '//  &
         !   TRIM(Construct(ConstrNum)%Name)//', missing material = '//TRIM(ConstructAlphas(Layer)))  !RS: Secret Search String
         WRITE(DebugFile,*) 'Did not find matching material for '//TRIM(CurrentModuleObject)//' '// &
-            TRIM(Construct(ConstrNum)%Name)//', missing material for '//TRIM(CurrentModuleObject(Layer))
+            TRIM(Construct(ConstrNum)%Name)//', missing material for '//TRIM(ConstructAlphas(Layer))
         ErrorsFound=.true.
       ELSE
         NominalU(ConstrNum)=NominalU(ConstrNum)+NominalR(Construct(ConstrNum)%LayerPoint(Layer))
@@ -3239,7 +3244,8 @@ SUBROUTINE GetConstructData(ErrorsFound)
   IF (TotFfactorConstructs + TotCfactorConstructs >= 1) THEN
     CALL CreateFCfactorConstructions(ConstrNum,ErrorsFound)
     IF (ErrorsFound) THEN
-        CALL ShowSevereError('Errors found in creating the constructions defined with Ffactor or Cfactor method')
+        !CALL ShowSevereError('Errors found in creating the constructions defined with Ffactor or Cfactor method')   !RS: Secret Search String
+        WRITE(DebugFile,*) 'Errors found in creating the constructions defined with Ffactor or Cfactor method'
     ENDIF
     TotRegConstructs = TotRegConstructs + TotFfactorConstructs + TotCfactorConstructs
   ENDIF
@@ -3316,9 +3322,11 @@ SUBROUTINE GetConstructData(ErrorsFound)
       Construct(TotRegConstructs+ConstrNum)%LayerPoint(Layer) = FindIteminList(ConstructAlphas(Layer),Material%Name,TotMaterials)
 
       IF (Construct(TotRegConstructs+ConstrNum)%LayerPoint(Layer) == 0) THEN
-        CALL ShowSevereError('Did not find matching material for '//TRIM(CurrentModuleObject)//' '//  &
-           TRIM(Construct(ConstrNum)%Name)// &
-           ', missing material = '//TRIM(ConstructAlphas(Layer)))
+        !CALL ShowSevereError('Did not find matching material for '//TRIM(CurrentModuleObject)//' '//  &
+        !   TRIM(Construct(ConstrNum)%Name)// &
+        !   ', missing material = '//TRIM(ConstructAlphas(Layer)))   !RS: Secret Search String
+        WRITE(DebugFile,*) 'Did not find matching material for '//TRIM(CurrentModuleObject)//' '// &
+            TRIM(Construct(ConstrNum)%Name)//', missing material = '//TRIM(ConstructAlphas(Layer))
         ErrorsFound=.true.
       ELSE
         NominalU(TotRegConstructs+ConstrNum)=NominalU(TotRegConstructs+ConstrNum)+ &
@@ -3337,8 +3345,10 @@ SUBROUTINE GetConstructData(ErrorsFound)
   TotConstructs       = TotRegConstructs + TotSourceConstructs
 
   IF (TotConstructs > 0 .and. NoRegularMaterialsUsed) THEN
-    CALL ShowSevereError('This building has no thermal mass which can cause an unstable solution.')
-    CALL ShowContinueError('Use Material object for all opaque material definitions except very light insulation layers.')
+    !CALL ShowSevereError('This building has no thermal mass which can cause an unstable solution.')
+    !CALL ShowContinueError('Use Material object for all opaque material definitions except very light insulation layers.')  !RS: Secret Search String
+    WRITE(DebugFile,*) 'This building has no thermal mass which can cause an unstable solution.'
+    WRITE(DebugFile,*) 'Use Material object for all opaque material definitions except very light insulation layers.'
   ENDIF
 
 !-------------------------------------------------------------------------------
@@ -3399,9 +3409,12 @@ SUBROUTINE GetConstructData(ErrorsFound)
     IF(EOFonW5File.OR..NOT.ConstructionFound) THEN
       CALL DisplayString('--Construction not found')
       ErrorsFound = .true.
-      CALL ShowSevereError('No match on WINDOW5 data file for Construction=' &
-       //Trim(ConstructAlphas(0))//', or error in data file.')
-      CALL ShowContinueError('...Looking on file='//TRIM(FullName))
+      !CALL ShowSevereError('No match on WINDOW5 data file for Construction=' &
+      ! //Trim(ConstructAlphas(0))//', or error in data file.')
+      !CALL ShowContinueError('...Looking on file='//TRIM(FullName)) !RS: Secret Search String
+      WRITE(DebugFile,*) 'No match on WINDOW5 data file for Construction=' &
+        //TRIM(ConstructAlphas(0))//', or error in data file.'
+      WRITE(DebugFile,*) '...Looking on file='//TRIM(FullName)
       CYCLE
     END IF
 
@@ -3415,7 +3428,8 @@ SUBROUTINE GetConstructData(ErrorsFound)
     IF (NominalU(ConstrNum) /= 0.0) THEN
       NominalU(ConstrNum)=1.0/NominalU(ConstrNum)
     ELSE
-      CALL ShowSevereError('Nominal U is zero, for construction='//TRIM(Construct(ConstrNum)%Name))
+      !CALL ShowSevereError('Nominal U is zero, for construction='//TRIM(Construct(ConstrNum)%Name)) !RS: Secret Search String
+      WRITE(DebugFile,*) 'Nominal U is zero, for construction='//TRIM(Construct(ConstrNum)%Name)
       ErrorsFound=.true.
     ENDIF
 
@@ -3526,6 +3540,10 @@ SUBROUTINE GetZoneData(ErrorsFound)
   INTEGER                         :: GroupNum
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   cCurrentModuleObject='Zone'
   NumOfZones=GetNumObjectsFound(TRIM(cCurrentModuleObject))
@@ -3737,17 +3755,21 @@ SUBROUTINE GetZoneData(ErrorsFound)
           ZoneName = cAlphaArgs(ZoneNum + 1)
           ZoneList(ListNum)%Zone(ZoneNum) = FindItemInList(ZoneName,Zone%Name,NumOfZones)
           IF (ZoneList(ListNum)%Zone(ZoneNum) == 0) THEN
-            CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
-               TRIM(cAlphaFieldNames(ZoneNum+1))//' '//TRIM(ZoneName)//' not found.')
+            !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
+            !   TRIM(cAlphaFieldNames(ZoneNum+1))//' '//TRIM(ZoneName)//' not found.')   !RS: Secret String Search
+            WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'": '// &
+                TRIM(cAlphaFieldNames(ZoneNum+1))//' '//TRIM(ZoneName)//' not found.'
             ErrorsFound = .TRUE.
           END IF
 
           ! Check for duplicate zones
           DO Loop = 1, ZoneNum - 1
             IF (ZoneList(ListNum)%Zone(ZoneNum) == ZoneList(ListNum)%Zone(Loop)) THEN
-              CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
-                 TRIM(cAlphaFieldNames(ZoneNum+1))//  &
-                 ' '//TRIM(ZoneName)//' appears more than once in list.')
+              !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
+              !   TRIM(cAlphaFieldNames(ZoneNum+1))//  &
+              !   ' '//TRIM(ZoneName)//' appears more than once in list.')   !RS: Secret Search String
+              WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'": '// &
+                TRIM(cAlphaFieldNames(ZoneNum+1))//' '//TRIM(ZoneName)//' appears more than once in list.'
               ErrorsFound = .TRUE.
             END IF
           END DO ! Loop
@@ -3788,8 +3810,10 @@ SUBROUTINE GetZoneData(ErrorsFound)
       ZoneGroup(GroupNum)%ZoneList = ListNum
 
       IF (ListNum == 0) THEN
-        CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
-           TRIM(cAlphaFieldNames(2))//' named '//TRIM(cAlphaArgs(2))//' not found.')
+        !CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'":  '//  &
+        !   TRIM(cAlphaFieldNames(2))//' named '//TRIM(cAlphaArgs(2))//' not found.')    !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'": '// &
+            TRIM(cAlphaFieldNames(2))//' named '//TRIM(cAlphaArgs(2))//' not found.'
         ErrorsFound = .TRUE.
       ELSE
         ! Check to make sure list is not in use by another ZONE GROUP
@@ -4964,6 +4988,10 @@ SUBROUTINE SearchWindow5DataFile(DesiredFileName,DesiredConstructionName,Constru
   INTEGER :: endcol
   LOGICAL :: StripCR
   TYPE (FrameDividerProperties), ALLOCATABLE, DIMENSION(:) :: FrameDividerSave
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
                                             ! In the following four gas-related data sets, the first
                                             !  index is gas type (1=air, 2=Argon, 3=Krypton, 4=Xenon)
@@ -4978,11 +5006,16 @@ EOFonFile = .FALSE.
 CALL CheckForActualFileName(DesiredFileName,exists,TempFullFileName)
 !INQUIRE(FILE=TRIM(DesiredFileName), EXIST=exists)
 IF(.NOT.exists) THEN
-  CALL ShowSevereError('HeatBalanceManager: SearchWindow5DataFile: '//   &
-        'Could not locate Window5 Data File, expecting it as file name='//TRIM(DesiredFileName))
-  CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
-  CALL ShowContinueError('Try again with putting full path and file name in the field.')
-  CALL ShowFatalError('Program terminates due to these conditions.')
+  !CALL ShowSevereError('HeatBalanceManager: SearchWindow5DataFile: '//   &
+  !      'Could not locate Window5 Data File, expecting it as file name='//TRIM(DesiredFileName))
+  !CALL ShowContinueError('Certain run environments require a full path to be included with the file name in the input field.')
+  !CALL ShowContinueError('Try again with putting full path and file name in the field.')
+  !CALL ShowFatalError('Program terminates due to these conditions.')    !RS: Secret Search String
+  WRITE(DebugFile,*) 'HeatBalanceManager: SearchWindow5DataFile: Could not locate Window5 Data File,'// &
+    ' expecting it as file name='//TRIM(DesiredFileName)
+  WRITE(DebugFile,*) 'Certain run environments require a full path to be included with the file name in the input field.'
+  WRITE(DebugFile,*) 'Try again with putting full path and file name in the field.'
+  WRITE(DebugFile,*) 'Program terminates due to these conditions. (Wishful thinking!)'
 ENDIF
 
 W5DataFileNum = GetNewUnitNumber()
@@ -4996,7 +5029,7 @@ IF (endcol > 0) THEN
   ENDIF
   IF (ICHAR(NextLine(endcol:endcol)) == iUnicode_end) THEN
     CALL ShowSevereError('SearchWindow5DataFile: For "'//TRIM(DesiredConstructionName)//'" in '//TRIM(DesiredFileName)//  &
-     ' fiile, appears to be a Unicode file.')
+     ' file, appears to be a Unicode file.')
     CALL ShowContinueError('...This file cannot be read by this program. Please save as PC or Unix file and try again')
     CALL ShowFatalError('Program terminates due to previous condition.')
   ENDIF
@@ -5839,8 +5872,10 @@ END IF
  CLOSE (W5DataFileNum)
  RETURN
 
- 999   CALL ShowFatalError('HeatBalanceManager: SearchWindow5DataFile: '//   &
-        'Could not open Window5 Data File, expecting it as file name='//TRIM(DesiredFileName))
+ !999   CALL ShowFatalError('HeatBalanceManager: SearchWindow5DataFile: '//   &
+ !       'Could not open Window5 Data File, expecting it as file name='//TRIM(DesiredFileName))  !RS: Secret Search String
+999       WRITE(DebugFile,*) 'HeatBalanceManager: Search Window5DataFile: '// &
+        'Could not open Window5 Data File, expecting it as file name='//TRIM(DesiredFileName)
  RETURN
 
  1000 EOFonFile = .TRUE.
