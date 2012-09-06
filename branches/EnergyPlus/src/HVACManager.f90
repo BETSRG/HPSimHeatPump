@@ -500,7 +500,6 @@ SUBROUTINE SimHVAC
                                               CheckForRunawayPlantTemps, AnyPlantSplitterMixerLacksContinuity
   USE DataGlobals,                     ONLY : AnyPlantInModel
   
-  !USE ORNLsolver !RS Comment: Trying to connect the two programs.
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
@@ -589,7 +588,8 @@ SUBROUTINE SimHVAC
     IterSetup=.true.
   ENDIF
 
-
+  !RS: Integration: The following code section is commented out to try coupling the HPSim and E+ code.
+  
   !IF (ZoneSizingCalc) THEN
   !  CALL ManageZoneEquipment(FirstHVACIteration,SimZoneEquipmentFlag,SimAirLoopsFlag)   !RS: This is also a possible integration point (stronger candidate)
   !  ! need to call non zone equipment so water use zone gains can be included in sizing calcs
@@ -622,6 +622,8 @@ SUBROUTINE SimHVAC
       CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
       ONETIME = .FALSE.
   END IF
+  
+  !RS: Integration: The following code section is commented out to try coupling the HPSim and E+ code.
   
 !! first explicitly call each system type with FirstHVACIteration,
 !

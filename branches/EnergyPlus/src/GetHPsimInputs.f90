@@ -1425,12 +1425,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   SuperStc=TxvPAR(3)
   SuperRtd=TxvPAR(2)
 
-  OPEN(48, FILE='NewEvap.txt')
-  Do I=1, 54
-    WRITE (48,*) EvapPAR(I)
-  End Do
-  CLOSE(48)
-
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN
 	    ODCcoilType = MCCONDENSER
