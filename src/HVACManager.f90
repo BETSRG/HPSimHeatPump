@@ -620,7 +620,7 @@ SUBROUTINE SimHVAC
 
   IF (ONETIME) THEN !RS: Testing: Phase 4!
       CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
-      ONETIME = .FALSE.
+     ONETIME = .FALSE.
   END IF
   
   !RS: Integration: The following code section is commented out to try coupling the HPSim and E+ code.
@@ -629,7 +629,7 @@ SUBROUTINE SimHVAC
 !
 !
 !          ! Manages the various component simulations
-!  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&    !RS: If intergrating this sub, then this should probably be removed/replaced
+!  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&    !RS: If intergrating in SimHVAC sub, then this should probably be removed/replaced
 !                              SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
 !
 !          ! Eventually, when all of the flags are set to false, the

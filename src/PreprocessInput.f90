@@ -21,8 +21,6 @@ CONTAINS
         !call system('copy E+_hpdata.idf in.imf')
         !call system('rename E+_hpdata.idf in.imf')
         call system('copy Minimal_HPSim.idf in.imf')
-        !call system('rename hpdata_longtubes.idf in.imf')
-        !call system('rename HPdata_3TonAC_410.idf in.imf')
         ! call epmacro on it
         call system('EPMacro.exe')
         ! now rename the file to be read by the E+ input processor
