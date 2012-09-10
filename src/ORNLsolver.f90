@@ -124,14 +124,15 @@
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
-    !OPEN(5,FILE='YorkHP_longtubes.out')     ! VL_User_Setting -- file name
-    !OPEN(6,FILE='YorkHP_longtubes.log')     ! VL_User_Setting -- file name
 
     CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
 
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
+    
+    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
