@@ -131,7 +131,7 @@ SUBROUTINE ManageZoneEquipment(FirstHVACIteration,SimZone,SimAir)
 
   CALL UpdateZoneEquipment(SimAir)
 
-  CALL ReportZoneEquipment
+  CALL ReportZoneEquipment  !RS: This subroutine is empty!
 
   SimZone = .False.
 
