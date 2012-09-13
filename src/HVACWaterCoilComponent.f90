@@ -1137,7 +1137,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
             ! set the lower and upper limits on the UA
             UA0 = .001d0 * WaterCoil(CoilNum)%DesTotWaterCoilLoad
             UA1 = WaterCoil(CoilNum)%DesTotWaterCoilLoad
-            ! Invert the simple heating coil model: given the design inlet conditions and the design load, fins the design UA
+            ! Invert the simple heating coil model: given the design inlet conditions and the design load, find the design UA
             CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, UA, SimpleHeatingCoilUAResidual, UA0, UA1, Par)
             ! if the numerical inversion failed, issue error messages.
             IF (SolFla == -1) THEN
@@ -1249,8 +1249,8 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
        ! the cooling coil.
        ! Basic Idea for UA:  Heat Transfer= UAenthalpybased*(Delta enthalpy), this is a necessity since the
        ! coil may be Wet or Dry or Partially Wet-Dry, so latent effects are accounted for in this model while
-       ! calculating the UA. A fictitious specific heat is also defined to caculate the conventional UA.
-       ! On the air side, enthalpy capacity rate is the air mass flow rate,while on water side it is
+       ! calculating the UA. A fictitious specific heat is also defined to calculate the conventional UA.
+       ! On the air side, enthalpy capacity rate is the air mass flow rate, while on water side it is
        ! enthalpy of saturated air at water temperature.
        !@@@ DESIGN CONDITION BEGIN HERE @@@
 
@@ -2931,7 +2931,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
       END IF ! end zone coil ELSE - IF
 
     ELSE
-      ! if there is no heating Plant Sizing object and autosizng was requested, issue an error message
+      ! if there is no heating Plant Sizing object and autosizing was requested, issue an error message
       IF (WaterCoil(CoilNum)%RequestingAutosize) THEN
         CALL ShowContinueError('Autosizing of water coil requires a heating loop Sizing:Plant object')
         CALL ShowContinueError('Occurs in water coil object= '//TRIM(WaterCoil(CoilNum)%Name))

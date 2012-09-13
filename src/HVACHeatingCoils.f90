@@ -605,7 +605,7 @@ SUBROUTINE GetHeatingCoilInput
 
         !HeatingCoil(CoilNum)%Efficiency       = Numbers(1)
         !(Numbers(1)) error limits checked and defaults applied on efficiency after
-        !       identifying souce type.
+        !       identifying source type.
 
         HeatingCoil(CoilNum)%AirInletNodeNum     = &
                GetOnlySingleNode(Alphas(3),ErrorsFound,TRIM(CurrentModuleObject),Alphas(1),  &
@@ -713,7 +713,7 @@ SUBROUTINE GetHeatingCoilInput
 
 ! perform error check to make sure duplicate heating sources are not used (i.e. 2 desuperheating coils cannot
 ! use the same heat source). This error check will be expanded in the future to check for duplicates in
-! desuperheaters used for water heating purposed.
+! desuperheaters used for water heating purposes.
     DO CoilNum = NumElecCoil + NumGasCoil + 1, NumHeatingCoils
       DO RemainingCoils = CoilNum + 1, NumHeatingCoils
           IF(HeatingCoil(CoilNum)%ReclaimHeatingSource.EQ.HeatingCoil(RemainingCoils)%ReclaimHeatingSource .AND. &
@@ -998,7 +998,7 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
           !       RE-ENGINEERED  na
 
           ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine is for sizing Heating Coil Components for which nominal cpacities have not been
+          ! This subroutine is for sizing Heating Coil Components for which nominal capacities have not been
           ! specified in the input.
 
           ! METHODOLOGY EMPLOYED:
@@ -1288,7 +1288,7 @@ Subroutine CalcElectricHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLo
      (ABS(TempSetPoint-TempAirIn) .gt. TempControlTol) ) THEN
 
       QCoilCap = CapacitanceAir*(TempSetPoint - TempAirIn)
-      ! check to see if setpoint above enetering temperature. If not, set
+      ! check to see if setpoint above entering temperature. If not, set
       ! output to zero.
       IF(QCoilCap .LE. 0.0) THEN
         QCoilCap = 0.0
@@ -1436,7 +1436,7 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
      (ABS(TempSetPoint-TempAirIn) .gt. TempControlTol) ) THEN
 
       QCoilCap = CapacitanceAir*(TempSetPoint - TempAirIn)
-      ! check to see if setpoint above enetering temperature. If not, set
+      ! check to see if setpoint above entering temperature. If not, set
       ! output to zero.
       IF(QCoilCap .LE. 0.0) THEN
         QCoilCap = 0.0

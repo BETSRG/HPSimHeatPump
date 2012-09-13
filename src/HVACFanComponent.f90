@@ -1306,7 +1306,7 @@ SUBROUTINE SizeFan(FanNum)
     FanOutletVelPress = MIN(FanOutletVelPress, DeltaPressTot)
     Fan(FanNum)%DeltaPress = DeltaPressTot - FanOutletVelPress !Max fan static pressure rise [Pa]
 
-    ! Calculate max fan air power using volumetric flow abd corresponding fan static pressure rise
+    ! Calculate max fan air power using volumetric flow and corresponding fan static pressure rise
     Fan(FanNum)%FanAirPower = FanVolFlow * Fan(FanNum)%DeltaPress ![W]
 
     ! Calculate fan wheel efficiency at max fan volumetric flow and corresponding fan static pressure rise,

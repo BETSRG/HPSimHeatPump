@@ -1303,7 +1303,7 @@ SUBROUTINE GetPTUnit
         TempNodeNum  = GetOnlySingleNode(NodeID(PTUnit(PTUnitNum)%HotWaterControlNode),ErrorsFound,PTUnit(PTUnitNum)%UnitType, &
                               PTUnit(PTUnitNum)%Name,NodeType_Water,NodeConnectionType_Actuator,1,ObjectIsParent)
       ELSEIF (PTUnit(PTUnitNum)%SuppHeatCoilType_Num == Coil_HeatingSteam) THEN
-        ! Add heating coil steam inlet node as actualtor node for coil
+        ! Add heating coil steam inlet node as actuator node for coil
         TempNodeNum  = GetOnlySingleNode(NodeID(PTUnit(PTUnitNum)%HWCoilSteamInletNode),ErrorsFound,PTUnit(PTUnitNum)%UnitType, &
                              PTUnit(PTUnitNum)%Name, NodeType_Steam,NodeConnectionType_Actuator,1,ObjectIsParent)
       END IF
@@ -2508,7 +2508,7 @@ SUBROUTINE GetPTUnit
         TempNodeNum  = GetOnlySingleNode(NodeID(PTUnit(PTUnitNum)%HotWaterControlNode),ErrorsFound,PTUnit(PTUnitNum)%UnitType, &
                               PTUnit(PTUnitNum)%Name,NodeType_Water,NodeConnectionType_Actuator,1,ObjectIsParent)
       ELSEIF (PTUnit(PTUnitNum)%SuppHeatCoilType_Num == Coil_HeatingSteam) THEN
-        ! Add heating coil steam inlet node as actualtor node for coil
+        ! Add heating coil steam inlet node as actuator node for coil
         TempNodeNum  = GetOnlySingleNode(NodeID(PTUnit(PTUnitNum)%HWCoilSteamInletNode),ErrorsFound,PTUnit(PTUnitNum)%UnitType, &
                              PTUnit(PTUnitNum)%Name, NodeType_Steam,NodeConnectionType_Actuator,1,ObjectIsParent)
       END IF
@@ -3461,7 +3461,7 @@ SUBROUTINE InitPTUnit(PTUnitNum,ZoneNum,FirstHVACIteration,OnOffAirFlowRatio,Zon
           END IF
         END IF
       ELSE IF(NoCompOutput .LT. QZnReq)THEN
-!       If the net cooling capacity meets the zone cooling load but does not overshoot heating set piont, turn off coil
+!       If the net cooling capacity meets the zone cooling load but does not overshoot heating set point, turn off coil
         QZnReq       = 0.0d0
         CoolingLoad  = .FALSE.
         PartLoadFrac = 0.0d0
@@ -4178,7 +4178,7 @@ SUBROUTINE ControlPTUnitOutput(PTUnitNum,FirstHVACIteration,OpMode,QZnReq,ZoneNu
   IF(PTUnit(PTUnitNum)%SuppHeatCoilIndex .GT. 0)THEN
     IF (Node(PTUnit(PTUnitNum)%AirOutNode)%Temp .GT. PTUnit(PTUnitNum)%MaxSATSupHeat .AND. SupHeaterLoad .GT. 0.0) THEN
 
-       ! If supply air temperature is to high, turn off the supplemental heater to recalculate the outlet temperature
+       ! If supply air temperature is too high, turn off the supplemental heater to recalculate the outlet temperature
        SupHeaterLoad = 0.0d0
        Select Case (PTUnit(PTUnitNum)%SuppHeatCoilType_Num)
          Case (Coil_HeatingGas,Coil_HeatingElectric )
@@ -5819,7 +5819,7 @@ SUBROUTINE ControlMSWSHPOutput(PTUnitNum, FirstHVACIteration,CompOp,OpMode,&
   IF(PTUnit(PTUnitNum)%SuppHeatCoilIndex .GT. 0)THEN
     IF (Node(PTUnit(PTUnitNum)%AirOutNode)%Temp .GT. PTUnit(PTUnitNum)%MaxSATSupHeat .AND. SupHeaterLoad .GT. 0.0) THEN
 
-       ! If supply air temperature is to high, turn off the supplemental heater to recalculate the outlet temperature
+       ! If supply air temperature is too high, turn off the supplemental heater to recalculate the outlet temperature
        SupHeaterLoad = 0.0d0
        Select Case (PTUnit(PTUnitNum)%SuppHeatCoilType_Num)
          Case (Coil_HeatingGas,Coil_HeatingElectric )

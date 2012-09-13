@@ -1835,7 +1835,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
             FinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow > 0.0) THEN
           TotCoolSizMult = (FinalZoneSizing(CtrlZoneNum)%InpDesCoolAirFlow / &
             FinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow) * FinalZoneSizing(CtrlZoneNum)%CoolSizingFactor
-        ! If no user specified cooling design air flow rate input, use the user specified szing factor
+        ! If no user specified cooling design air flow rate input, use the user specified sizing factor
         ELSE
           TotCoolSizMult = FinalZoneSizing(CtrlZoneNum)%CoolSizingFactor
         END IF
