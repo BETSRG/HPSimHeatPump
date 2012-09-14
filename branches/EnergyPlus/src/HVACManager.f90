@@ -530,7 +530,9 @@ SUBROUTINE SimHVAC
   CHARACTER(len=MaxNameLength*2),SAVE :: ErrEnvironmentName=' '
   INTEGER  :: LoopNum
   INTEGER  :: LoopSide
-  LOGICAL, SAVE :: ONETIME= .TRUE. !RS: Testing: Phase 4!
+  !LOGICAL, SAVE :: ONETIME= .TRUE. !RS: Testing: Phase 4!
+  REAL :: SysOutputProvided ! sensible output delivered by zone equipment (W)
+  REAL :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
 
           ! Initialize all of the simulation flags to true for the first iteration
   SimZoneEquipmentFlag     = .TRUE.
@@ -587,13 +589,11 @@ SUBROUTINE SimHVAC
     ENDIF
     IterSetup=.true.
   ENDIF
-
-  !RS: Integration: The following code section is commented out to try coupling the HPSim and E+ code.
   
-  IF (ZoneSizingCalc) THEN  !RS: This code section isn't currently being activated
-    CALL ManageZoneEquipment(FirstHVACIteration,SimZoneEquipmentFlag,SimAirLoopsFlag)   !RS: This is also a possible integration point (stronger candidate)
+  IF (ZoneSizingCalc) THEN
+    CALL ManageZoneEquipment(FirstHVACIteration,SimZoneEquipmentFlag,SimAirLoopsFlag)
     ! need to call non zone equipment so water use zone gains can be included in sizing calcs
-    CALL ManageNonZoneEquipment(FirstHVACIteration,SimNonZoneEquipmentFlag)             !RS: Integrating here would also get rid of this line
+    CALL ManageNonZoneEquipment(FirstHVACIteration,SimNonZoneEquipmentFlag)
     CALL ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuitsFlag, .FALSE.)
     RETURN
   END IF
@@ -618,18 +618,19 @@ SUBROUTINE SimHVAC
 
   CAll ManageEMS(emsCallFromAfterHVACManagers)! calling point
 
-  IF (ONETIME) THEN !RS: Testing: Phase 4!
-      CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
-     ONETIME = .FALSE.  !RS: Testing: Comment this line out to have ORNL called every time
-  END IF
+  !RS: Testing: This is an old version, and will be removed later.
+  !IF (ONETIME) THEN !RS: Testing: Phase 4!
+  !    CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
+                 CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
+  !   ONETIME = .FALSE.  !RS: Testing: Comment this line out to have ORNL called every time
+  !END IF
   
-  !RS: Integration: The following code section is commented out to try coupling the HPSim and E+ code.
   
 ! first explicitly call each system type with FirstHVACIteration,
 
 
           ! Manages the various component simulations
-  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&    !RS: If intergrating in SimHVAC sub, then this should probably be removed/replaced
+  CALL SimSelectedEquipment(SimAirLoopsFlag,SimZoneEquipmentFlag,SimNonZoneEquipmentFlag,SimPlantLoopsFlag,&
                               SimElecCircuitsFlag, FirstHVACIteration, SimWithPlantFlowUnlocked)
 
           ! Eventually, when all of the flags are set to false, the
@@ -646,7 +647,7 @@ SUBROUTINE SimHVAC
           ! Main iteration loop for HVAC.  If any of the simulation flags are
           ! true, then specific components must be resimulated.
   DO WHILE ( (SimAirLoopsFlag .OR. SimZoneEquipmentFlag .OR. SimNonZoneEquipmentFlag .OR. SimPlantLoopsFlag .OR. &
-              SimElecCircuitsFlag )  .AND. (HVACManageIteration.LE.MaxIter) )   !RS: If integrating above, this DO all should be gone
+              SimElecCircuitsFlag )  .AND. (HVACManageIteration.LE.MaxIter) ) 
 
     CAll ManageEMS(emsCallFromHVACIterationLoop) ! calling point id
 

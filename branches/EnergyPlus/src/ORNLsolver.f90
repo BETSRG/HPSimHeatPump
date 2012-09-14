@@ -1,4 +1,4 @@
-    SUBROUTINE SimulationCycle
+    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !RS: Testing: Attempting to pass variables out
 
     !
     !
@@ -89,6 +89,9 @@
     REAL, SAVE :: ODCFlowConst
     INTEGER   :: Flag
     INTEGER :: LastTime !Aids in the event of a microchannel device
+    
+    REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+    REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -904,6 +907,8 @@
 
     CALL PrintCondenserResult
     CALL EndCondenserCoil
+    
+    CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
 
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 
