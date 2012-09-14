@@ -60,8 +60,10 @@ PUBLIC          ! By definition, all variables which are placed in this data
   INTEGER, PARAMETER :: VRFTerminalUnit_Num = 24
   INTEGER, PARAMETER :: RefrigerationAirChillerSet_Num = 25
   INTEGER, PARAMETER :: UserDefinedZoneHVACForcedAir_Num = 26
+  
+  INTEGER, PARAMETER :: HPSim = 27  !RS: Testing: Continued integration work
 !
-  INTEGER, PARAMETER :: TotalNumZoneEquipType = 26
+  INTEGER, PARAMETER :: TotalNumZoneEquipType = 27  !RS: Testing: Increased from 26 to 27
   ! **NOTE**... if you add another zone equipment object, then increment
   ! TotalNumZoneEquipType above to match the total number of zone equipment types
 ! End zone equip objects

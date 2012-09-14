@@ -444,6 +444,7 @@ PRIVATE CalcWetSurfaceDing
 PRIVATE CalcWetSurfaceBraun
 PRIVATE CalcWetSurfaceMcQuiston
 PRIVATE UpdateTubeDataFromCircuitData
+PUBLIC GetQOut  !RS: Testing: Trying to integrate HPSim and EPlus
 
 CONTAINS
 
@@ -7079,5 +7080,15 @@ INTEGER TubeNum !Tube number in circuit diagram
 END SUBROUTINE UpdateTubeDataFromCircuitData
 
 !************************************************************************
+
+SUBROUTINE GetQOut(Out1, Out2)
+
+REAL Out1
+REAL Out2
+
+    Out1=QModSens !Sensible Module heat transfer, kW
+    Out2=QModLat  !Latent Module heat transfer, kW
+    
+END SUBROUTINE
 
 END MODULE EvaporatorMod

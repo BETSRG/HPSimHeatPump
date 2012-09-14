@@ -2317,6 +2317,9 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              CALL SimPackagedTerminalUnit(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
                                  FirstHVACIteration, SysOutputProvided, LatOutputProvided, &
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
+             
+           CASE (HPSim)
+               CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
 
            CASE (ZoneDXDehumidifier_Num) ! 'ZoneHVAC:Dehumidifier:DX'
              CALL SimZoneDehumidifier(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
