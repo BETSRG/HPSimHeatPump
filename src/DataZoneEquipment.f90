@@ -678,6 +678,9 @@ DO ControlledZoneLoop = 1,NumOfControlledZones
 
         CASE ('ZONEHVAC:PACKAGEDTERMINALHEATPUMP') ! Packaged Terminal Heat Pump
           ZoneEquipList(ControlledZoneNum)%EquipType_Num(ZoneEquipTypeNum)=PkgTermHPAirToAir_Num
+          
+        CASE ('ZONEHVAC:HPSIM') !RS: Integration: Calling in the HPSim program
+            ZoneEquipList(ControlledZoneNum)%EquipType_Num(ZoneEquipTypeNum)=HPSim
 
         CASE ('ZONEHVAC:PACKAGEDTERMINALAIRCONDITIONER') ! Packaged Terminal Air Conditioner
           ZoneEquipList(ControlledZoneNum)%EquipType_Num(ZoneEquipTypeNum)=PkgTermHPAirToAir_Num

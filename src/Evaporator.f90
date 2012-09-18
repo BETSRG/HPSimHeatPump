@@ -2261,7 +2261,7 @@ END SUBROUTINE PrintEvaporatorResult
         ModelName = Alphas(1)
             
         IF (ModelName .EQ. 'MICROCHANNEL COIL') THEN    !Checking whether MicroChannel or Evaporator Coil
-            CoilType = MCCONDENSER
+            CoilType = MCEVAPORATOR
         ELSE
             CoilType = EVAPORATORCOIL
         END IF

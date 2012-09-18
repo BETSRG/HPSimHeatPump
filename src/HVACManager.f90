@@ -621,7 +621,7 @@ SUBROUTINE SimHVAC
   !RS: Testing: This is an old version, and will be removed later.
   !IF (ONETIME) THEN !RS: Testing: Phase 4!
   !    CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
-                 CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
+  !               CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
   !   ONETIME = .FALSE.  !RS: Testing: Comment this line out to have ORNL called every time
   !END IF
   
