@@ -20,7 +20,8 @@ CONTAINS
         ! rename the heat pump input file in preparation for epmacro
         !call system('copy E+_hpdata.idf in.imf')
         !call system('rename E+_hpdata.idf in.imf')
-        call system('copy Minimal_HPSim.idf in.imf')
+        !call system('copy Minimal_HPSim.idf in.imf')
+        call system('copy ZoneWSHP_wDOAS_HPSim.idf in.imf')
         ! call epmacro on it
         call system('EPMacro.exe')
         ! now rename the file to be read by the E+ input processor

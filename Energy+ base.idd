@@ -25121,11 +25121,11 @@ ZoneHVAC:IdealLoadsAirSystem,
        \note an OutdoorAir:Node or OutdoorAir:NodeList object.
   A13, \field Demand Controlled Ventilation Type
        \note This field controls how the minimum outdoor air flow rate is calculated.
-       \note None means that design occupancy will be uased to compute the minimum outdoor air flow rate
+       \note None means that design occupancy will be used to compute the minimum outdoor air flow rate
        \note OccupancySchedule means that current occupancy level will be used.
        \note CO2Setpoint means that the design occupancy will be used to compute the minimum outdoor air flow
-       \note reate and the outdoor air flow rate may be increased if necessary to maintain the indoor air carbon
-       \note dioxide setpoint defined in a ZoneControl:ContaminantController object.
+       \note rate and the outdoor air flow rate may be increased if necessary to maintain the indoor air 
+       \note carbon dioxide setpoint defined in a ZoneControl:ContaminantController object.
        \type choice
        \key None
        \key OccupancySchedule
@@ -76240,5 +76240,3 @@ Output:PreprocessorMessage,
         \retaincase
    A12; \field Message Line 10
         \retaincase
-
-

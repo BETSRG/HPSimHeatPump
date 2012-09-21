@@ -184,7 +184,7 @@ SUBROUTINE  ManageSizing
       ENDIF
     ENDIF
 
-    CALL ShowMessage('Beginning Zone Sizing Calculations')
+    !CALL ShowMessage('Beginning Zone Sizing Calculations') !RS: Debugging: Removing the message call
 
     CALL ResetEnvironmentCounter
     KickOffSizing=.true.

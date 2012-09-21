@@ -419,6 +419,9 @@ INTEGER :: found = 0
 INTEGER :: maxEquipCount
 INTEGER :: numEquipCount
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
 ExhaustNodeListName = ' '
 InletNodeListName = ' '
@@ -634,8 +637,9 @@ DO ControlledZoneLoop = 1,NumOfControlledZones
                              ZoneEquipList(ControlledZoneNum)%EquipName(ZoneEquipTypeNum),  &
                              IsNotOK,TRIM(CurrentModuleObject))
       IF (IsNotOK) THEN
-        CALL ShowContinueError('In '//TRIM(CurrentModuleObject)//'='//TRIM(ZoneEquipList(ControlledZoneNum)%Name))
-        ErrorsFound=.true.
+        !CALL ShowContinueError('In '//TRIM(CurrentModuleObject)//'='//TRIM(ZoneEquipList(ControlledZoneNum)%Name))!RS: Secret Search String
+        WRITE(DebugFile, *) 'In '//TRIM(CurrentModuleObject)//'='//TRIM(ZoneEquipList(ControlledZoneNum)%Name)
+        !ErrorsFound=.true. 
       ENDIF
       ZoneEquipList(ControlledZoneNum)%CoolingPriority(ZoneEquipTypeNum) = &
                     NINT(NumArray(2*ZoneEquipTypeNum-1))

@@ -341,6 +341,9 @@ INTEGER :: WaterCoilNodeNum               ! numeric equivalent for water coil no
 !INTEGER :: ComponentType_Num
 CHARACTER(len=MaxNameLength), DIMENSION(3) :: MatchNodeName
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
 CALL GetObjectDefMaxArgs('AirLoopHVAC',NumParams,MaxAlphas,MaxNumbers)
 CALL GetObjectDefMaxArgs('ConnectorList',NumParams,NumAlphas,NumNumbers)
@@ -990,8 +993,10 @@ DO AirSysNum=1,NumPrimaryAirSys
     END IF
     IF (NumControllers+NumOASysSimpControllers .EQ. 0) THEN
       IF (.NOT. PackagedUnit(AirSysNum)) THEN
-        CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PrimaryAirSystem(AirSysNum)%Name)//  &
-                         '" has no Controllers.')
+        !CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PrimaryAirSystem(AirSysNum)%Name)//  &
+        !                 '" has no Controllers.')  !RS: Secret Search String
+        WRITE(DebugFile,*) RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(PrimaryAirSystem(AirSysNum)%Name)// &
+            '"has no Controllers.'
       END IF
       PrimaryAirSystem(AirSysNum)%NumControllers = 0
       Allocate(PrimaryAirSystem(AirSysNum)%ControllerName(0))
