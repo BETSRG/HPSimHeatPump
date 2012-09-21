@@ -1347,6 +1347,10 @@ SUBROUTINE ProcessInputDataFile
    LOGICAL :: EndofFile = .false.
    LOGICAL BlankLine
    INTEGER Pos
+   
+     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
    MaxIDFRecords=ObjectsIDFAllocInc
    NumIDFRecords=0
@@ -1405,6 +1409,7 @@ SUBROUTINE ProcessInputDataFile
      DO Pos=1,NumObjectDefs
        IF (ObjectDef(Pos)%RequiredObject .and. ObjectDef(Pos)%NumFound == 0) THEN
 !         CALL ShowSevereError('IP: No items found for Required Object='//TRIM(ObjectDef(Pos)%Name)) !RS: Debugging: Removing error msg. call so it won't crash
+         WRITE(DebugFile,*) 'IP: No items found for Required Object=' //TRIM(ObjectDef(Pos)%Name)   !RS: Secret Search String
          NumMiscErrorsFound=NumMiscErrorsFound+1
        ENDIF
      ENDDO
