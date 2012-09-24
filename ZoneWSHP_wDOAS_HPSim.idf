@@ -649,8 +649,8 @@
 
   ZoneHVAC:EquipmentList,
     Zone1Equipment,          !- Name
-    !AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
-    ZoneHVAC:HPSim,	     !- Zone Equipment 1 Object Type
+    AirTerminal:SingleDuct:Uncontrolled,  !- Zone Equipment 1 Object Type
+    !ZoneHVAC:HPSim,	     !- Zone Equipment 1 Object Type
     Zone1DirectAir,          !- Zone Equipment 1 Name
     1,                       !- Zone Equipment 1 Cooling Sequence
     1,                       !- Zone Equipment 1 Heating or No-Load Sequence

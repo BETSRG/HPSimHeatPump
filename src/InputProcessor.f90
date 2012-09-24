@@ -262,8 +262,12 @@ SUBROUTINE ProcessInput
    !               FullName from StringGlobals is used to build file name with Path
    IF (LEN_TRIM(ProgramPath) == 0) THEN
      FullName='Energy+.idd'
+     !FullName='Energy+ HPSim.idd'
+     !FullName='Energy+ base.idd'
    ELSE
      FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
+     !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ HPSim.idd'
+     !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ base.idd'
    ENDIF
 
    INQUIRE(file=FullName,EXIST=FileExists)
@@ -606,6 +610,10 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   LOGICAL MinMaxError  ! Used to see if min, max, defaults have been set appropriately (True if error)
   INTEGER,SAVE   :: MaxANArgs=100  ! Current count of Max args to object
   LOGICAL ErrorsFoundFlag
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   IF (.not. ALLOCATED(AlphaorNumeric)) THEN
     ALLOCATE (AlphaorNumeric(0:MaxANArgs))
@@ -1010,7 +1018,9 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         WRITE(MinMaxString,*) ObjectDef(NumObjectDefs)%NumRangeChks(Count)%FieldNumber
         MinMaxString=ADJUSTL(MinMaxString)
         !CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
-        !                     TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile) !RS: Debugging: Removing error message due to related crashes.
+        !                     TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile) !RS: Secret Search String
+        WRITE(DebugFile,*) 'Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='// &
+            TRIM(ObjectDef(NumObjectDefs)%Name) !//EchoInputFile
         ErrFlag=.true.
       ENDIF
     ENDIF
@@ -1018,7 +1028,9 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
 
   IF (ErrFlag) THEN
     !CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
-    !                       ', Object not available for IDF processing.',EchoInputFile) !RS: Debugging: Removing error message due to related crashes.
+    !                       ', Object not available for IDF processing.',EchoInputFile) !RS: Secret Search String
+    WRITE(DebugFile,*) 'Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
+        ', Object not available for IDF processing.'    !//EchoInputFile
     DEALLOCATE(ObjectDef(NumObjectDefs)%AlphaorNumeric)
     NumObjectDefs=NumObjectDefs-1
     ErrorsFound=.true.
@@ -1786,6 +1798,7 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
 
           ! USE STATEMENTS:
           ! na
+          !USE InputProcessor, ONLY: ProcessInput
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

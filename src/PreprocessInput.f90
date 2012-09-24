@@ -19,8 +19,8 @@ CONTAINS
         call system('if exist in.idf rename in.idf inBackup.idf')
         ! rename the heat pump input file in preparation for epmacro
         !call system('copy E+_hpdata.idf in.imf')
-        !call system('rename E+_hpdata.idf in.imf')
         !call system('copy Minimal_HPSim.idf in.imf')
+        !call system('copy ZoneWSHP_wDOAS.idf in.imf')
         call system('copy ZoneWSHP_wDOAS_HPSim.idf in.imf')
         ! call epmacro on it
         call system('EPMacro.exe')
