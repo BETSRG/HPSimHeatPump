@@ -51,6 +51,7 @@ SUBROUTINE GetInputs
 
 USE DataStopCodes
 USE InputProcessor_HPSim
+!USE InputProcessor
 USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE
