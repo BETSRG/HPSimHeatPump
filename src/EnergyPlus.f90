@@ -421,6 +421,8 @@ USE HeatPumpInput, ONLY: GetInputs  !RS: Testing: Phase 3
       CALL PreProcessInput    !RS: Creating the IDF file that will be read in by the rest of the code
         
       CALL ProcessInput
+      
+      !CALL GetInputs  !RS: Debugging: Testing to see if HPSim can be called without it calling this sub in it.
 
       CALL ManageSimulation
 
