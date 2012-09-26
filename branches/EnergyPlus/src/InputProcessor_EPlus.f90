@@ -542,7 +542,8 @@ SUBROUTINE ProcessInput
    DO Loop=1,NumObjectDefs
      IF (.not. ObjectDef(Loop)%RequiredObject) CYCLE
      IF (ObjectDef(Loop)%NumFound > 0) CYCLE
-!     CALL ShowSevereError('IP: Required Object="'//trim(ObjectDef(Loop)%Name)//'" not found in IDF.')  !RS: Debugging: Removing problem messages
+!     CALL ShowSevereError('IP: Required Object="'//trim(ObjectDef(Loop)%Name)//'" not found in IDF.')  !RS: Secret Search String
+    WRITE(DebugFile,*) 'Required Object="'//TRIM(ObjectDef(Loop)%Name)//'" not found in IDF.'
      NumMiscErrorsFound=NumMiscErrorsFound+1
    ENDDO
 
@@ -560,7 +561,8 @@ SUBROUTINE ProcessInput
    ENDIF
 
    IF (NumMiscErrorsFound > 0) THEN
-     !CALL ShowSevereError('IP: Other miscellaneous errors found in input') !RS: Debugging: Removal of error message
+     !CALL ShowSevereError('IP: Other miscellaneous errors found in input') !RS: Secret Search String
+     WRITE(DebugFile,*) 'Other miscellaneous errors found in input'
    ENDIF
 
    IF (OverallErrorFlag) THEN
@@ -4119,94 +4121,6 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
 
 END SUBROUTINE InternalRangeCheck
 
-!SUBROUTINE TurnOnReportRangeCheckErrors    !RS: This subroutine is never used
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda Lawrie
-!          !       DATE WRITTEN   July 2000
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine turns on the logical to report range check errors
-!          ! directly out of the InputProcessor.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! na
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  ReportRangeCheckErrors=.true.
-!
-!  RETURN
-!
-!END SUBROUTINE TurnOnReportRangeCheckErrors
-!
-!SUBROUTINE TurnOffReportRangeCheckErrors   !RS: This subroutine is never used
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda Lawrie
-!          !       DATE WRITTEN   July 20000
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine turns off the logical to report range check errors
-!          ! directly out of the InputProcessor.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! na
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  ReportRangeCheckErrors=.false.
-!
-!  RETURN
-!
-!END SUBROUTINE TurnOffReportRangeCheckErrors
-
 INTEGER FUNCTION GetNumRangeCheckErrorsFound()
 
           ! FUNCTION INFORMATION:
@@ -4254,162 +4168,6 @@ END FUNCTION GetNumRangeCheckErrorsFound
 !==============================================================================
 ! The following routines allow access to the definition lines of the IDD and
 ! thus can be used to "report" on expected arguments for the Input Processor.
-
-!INTEGER FUNCTION GetNumObjectsInIDD()  !RS: This function is never used
-!
-!          ! FUNCTION INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   May 1998
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the number of objects found in the IDD and
-!          ! can be used to allocate the array for determining the definitions.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Essentially allows outside access to an internal variable of the InputProcessor.
-!          ! Used primarily by utility programs that use the InputProcessor outside of the
-!          ! "true" EnergyPlus code.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!
-!  GetNumObjectsInIDD=NumObjectDefs
-!
-!  RETURN
-!
-!END FUNCTION GetNumObjectsInIDD
-!
-!SUBROUTINE GetListOfObjectsInIDD(ObjectNames,Number)   !RS: This function is never used
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   May 1998
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the list of Object names that occur in the IDD.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Essentially allows outside access to an internal variable of the InputProcessor.
-!          ! Used primarily by utility programs that use the InputProcessor outside of the
-!          ! "true" EnergyPlus code.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  CHARACTER(len=*),  &
-!              DIMENSION(:), INTENT(OUT) :: ObjectNames  ! List of Object Names (from IDD)
-!  INTEGER, INTENT(OUT)                  :: Number       ! Number in List
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!          ! na
-!
-!  ObjectNames(1:NumObjectDefs)=ObjectDef(1:NumObjectDefs)%Name
-!  Number=NumObjectDefs
-!  RETURN
-!
-!END SUBROUTINE GetListOfObjectsInIDD
-!
-!
-!SUBROUTINE GetObjectDefInIDD(ObjectWord,NumArgs,AlphaorNumeric,RequiredFields,MinNumFields)    !RS: This function is never used
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   May 1998
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the "definition" of an Object from the IDD.  This is
-!          ! the "maximum" definition with total number of arguments, and whether each argument
-!          ! is "alpha" or "numeric".
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Essentially allows outside access to an internal variable of the InputProcessor.
-!          ! Used primarily by utility programs that use the InputProcessor outside of the
-!          ! "true" EnergyPlus code.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  CHARACTER(len=*), INTENT(IN) :: ObjectWord ! Object for definition
-!  INTEGER, INTENT(OUT) :: NumArgs                              ! How many arguments (max) this Object can have
-!  LOGICAL, INTENT(OUT), DIMENSION(:) :: AlphaorNumeric         ! Array designating Alpha (true) or Numeric (false) for each
-!                                                               ! argument
-!  LOGICAL, INTENT(OUT), DIMENSION(:) :: RequiredFields         ! Array designating RequiredFields (true) for each argument
-!  INTEGER, INTENT(OUT) :: MinNumFields                         ! Minimum Number of Fields to be returned to Get routines
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  INTEGER Which  ! to determine which object definition to use
-!
-!  IF (SortedIDD) THEN
-!    Which=FindItemInSortedList(ObjectWord,ListOfObjects,NumObjectDefs)
-!    IF (Which /= 0) Which=iListofObjects(Which)
-!  ELSE
-!    Which=FindItemInList(ObjectWord,ListOfObjects,NumObjectDefs)
-!  ENDIF
-!  NumArgs=ObjectDef(Which)%NumParams
-!  AlphaorNumeric(1:NumArgs)=ObjectDef(Which)%AlphaorNumeric(1:NumArgs)
-!  RequiredFields(1:NumArgs)=ObjectDef(Which)%ReqField(1:NumArgs)
-!  MinNumFields=ObjectDef(Which)%MinNumFields
-!
-!  RETURN
-!
-!END SUBROUTINE GetObjectDefInIDD
 
 SUBROUTINE GetObjectDefMaxArgs(ObjectWord,NumArgs,NumAlpha,NumNumeric)
 
@@ -4602,7 +4360,12 @@ SUBROUTINE ReportOrphanRecordObjects
   INTEGER Found
   INTEGER ObjFound
   INTEGER NumOrphObjNames
-
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
+  
   ALLOCATE(OrphanObjectNames(NumIDFRecords),OrphanNames(NumIDFRecords))
   OrphanObjectNames=Blank
   OrphanNames=Blank
@@ -4681,7 +4444,9 @@ SUBROUTINE ReportOrphanRecordObjects
     ENDDO
   ELSEIF (NumOrphObjNames > 0) THEN
     !CALL ShowMessage('There are '//trim(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.')
-    !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')  !RS: Debugging: Removing these error messages for now
+    !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')  !RS: Secret Search String
+    WRITE(DebugFile,*) 'There are'//TRIM(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.'
+    WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayUnusedObjects; to see them.'
   ENDIF
 
   DEALLOCATE(OrphanObjectNames)

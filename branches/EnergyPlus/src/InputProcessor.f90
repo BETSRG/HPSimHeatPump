@@ -54,6 +54,7 @@ MODULE InputProcessor_HPSim
  CHARACTER(len=1), PARAMETER :: Blank=' '
  CHARACTER(len=*), PARAMETER :: AlphaNum='ANan'     ! Valid indicators for Alpha or Numeric fields (A or N)
  REAL, PARAMETER :: DefAutoSizeValue=AutoSize
+ REAL, PARAMETER :: DefAutoCalculateValue=AutoCalculate !RS: Debugging
 
           ! DERIVED TYPE DEFINITIONS
  TYPE ObjectsDefinition
@@ -90,6 +91,9 @@ MODULE InputProcessor_HPSim
    LOGICAL DefAutoSize                             ! Default value is "autosize"
    LOGICAL AutoSizable                             ! True if this field can be autosized
    REAL  AutoSizeValue                             ! Value to return for autosize field
+   LOGICAL :: DefAutoCalculate                     =.false.   ! Default value is "autocalculate"    !RS: Debugging
+   LOGICAL :: AutoCalculatable                     =.false.   ! True if this field can be autocalculated    !RS: Debugging
+   REAL  :: AutoCalculateValue                =0.0       ! Value to return for autocalculate field  !RS: Debugging
  END TYPE
 
  TYPE SectionsDefinition
@@ -603,12 +607,13 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   LOGICAL MinMax   ! Set to true when MinMax field has been found by ReadInputLine
   LOGICAL Default  ! Set to true when Default field has been found by ReadInputLine
   LOGICAL AutoSize ! Set to true when Autosizable field has been found by ReadInputLine
+  LOGICAL AutoCalculate !RS: Debugging
   CHARACTER(len=20) MinMaxString ! Set from ReadInputLine
   CHARACTER(len=MaxObjectNameLength) AlphDefaultString
   INTEGER WhichMinMax   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
   REAL Value  ! Value returned by ReadInputLine (either min, max, default or autosize)
   LOGICAL MinMaxError  ! Used to see if min, max, defaults have been set appropriately (True if error)
-  INTEGER,SAVE   :: MaxANArgs=100  ! Current count of Max args to object
+  INTEGER,SAVE   :: MaxANArgs=700  ! Current count of Max args to object
   LOGICAL ErrorsFoundFlag
   
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
@@ -637,6 +642,8 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   ObsoleteObject=.false.
   UniqueObject=.false.
   RequiredObject=.false.
+  Autocalculate=.false.  !RS: Debugging
+  Default=.false.
 
   IF (SqueezedObject /= Blank) THEN
     IF (FindItemInList(SqueezedObject,ObjectDef%Name,NumObjectDefs) > 0) THEN
@@ -682,6 +689,9 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   NumRangeChecks%FieldName=Blank
   NumRangeChecks%AutoSizable=.false.
   NumRangeChecks%AutoSizeValue=DefAutoSizeValue
+  NumRangeChecks%DefAutoCalculate=.false.   !RS: Debugging
+  NumRangeChecks%Autocalculatable=.false.   !RS: Debugging
+  NumRangeChecks%AutoCalculateValue=DefAutoCalculateValue   !RS: Debugging
 
   Count=0
   EndofObjectDef=.false.
@@ -770,7 +780,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         CALL ReadInputLine(IDDFile,CurPos,BlankLine,InputLineLength,EndofFile,  &
                            MinMax=MinMax,WhichMinMax=WhichMinMax,MinMaxString=MinMaxString,  &
                            Value=Value,Default=Default,DefString=AlphDefaultString,AutoSizable=AutoSize, &
-                           ErrorsFound=ErrorsFoundFlag)
+                           Autocalculatable=Autocalculate,ErrorsFound=ErrorsFoundFlag)
         IF (.not. AlphaorNumeric(Count)) THEN
           ! only record for numeric fields
           IF (MinMax) THEN
@@ -790,10 +800,15 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
             NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefaultChk=.true.
             NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%Default=Value
             IF (AlphDefaultString == 'AUTOSIZE') NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefAutoSize=.true.
+            IF (AlphDefaultString == 'AUTOCALCULATE') NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefAutoCalculate=.true.   !RS: Debugging
           ENDIF
           IF (AutoSize) THEN
             NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoSizable=.true.
             NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoSizeValue=Value
+          ENDIF
+          IF (AutoCalculate) THEN   !RS: Debugging
+            NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoCalculatable=.true.
+            NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoCalculateValue=Value
           ENDIF
         ELSE  ! Alpha Field
           IF (Default) THEN
@@ -869,12 +884,17 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefaultChk=.true.
         NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%Default=Value
         IF (AlphDefaultString == 'AUTOSIZE') NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefAutoSize=.true.
+        IF (AlphDefaultString == 'AUTOCALCULATE') NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%DefAutoCalculate=.true.   !RS: Debugging
       ELSEIF (Default .and. AlphaorNumeric(Count)) THEN
         AlphFieldDefaults(ObjectDef(NumObjectDefs)%NumAlpha)=AlphDefaultString
       ENDIF
       IF (AutoSize) THEN
         NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoSizable=.true.
         NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoSizeValue=Value
+      ENDIF
+      IF (AutoCalculate) THEN   !RS: Debugging
+        NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoCalculatable=.true.
+        NumRangeChecks(ObjectDef(NumObjectDefs)%NumNumeric)%AutoCalculateValue=Value
       ENDIF
       IF (ErrorsFoundFlag) THEN
         ErrFlag=.true.
@@ -1020,8 +1040,8 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
         !CALL ShowSevereError('Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='//  &
         !                     TRIM(ObjectDef(NumObjectDefs)%Name),EchoInputFile) !RS: Secret Search String
         WRITE(DebugFile,*) 'Field #'//TRIM(MinMaxString)//' default is invalid for Min/Max values, in class='// &
-            TRIM(ObjectDef(NumObjectDefs)%Name) !//EchoInputFile
-        ErrFlag=.true.
+            TRIM(ObjectDef(NumObjectDefs)%Name)
+        !ErrFlag=.true.
       ENDIF
     ENDIF
   ENDDO
@@ -1030,7 +1050,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
     !CALL ShowContinueError('Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
     !                       ', Object not available for IDF processing.',EchoInputFile) !RS: Secret Search String
     WRITE(DebugFile,*) 'Errors occured in ObjectDefinition for Class='//TRIM(ObjectDef(NumObjectDefs)%Name)// &
-        ', Object not available for IDF processing.'    !//EchoInputFile
+        ', Object not available for IDF processing.'
     DEALLOCATE(ObjectDef(NumObjectDefs)%AlphaorNumeric)
     NumObjectDefs=NumObjectDefs-1
     ErrorsFound=.true.
@@ -1080,6 +1100,10 @@ SUBROUTINE ProcessInputDataFile
    LOGICAL BlankLine
    INTEGER Pos
    CHARACTER(len=25) LineNum
+   
+   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
    MaxIDFRecords=ObjectsIDFAllocInc
    NumIDFRecords=0
@@ -1151,9 +1175,11 @@ SUBROUTINE ProcessInputDataFile
    ENDIF
 
    IF (OverallErrorFlag) THEN
-     CALL ShowSevereError('Possible incorrect IDD File')
-     CALL ShowContinueError('Possible Invalid Numerics or other problems')
-     CALL ShowFatalError('Errors occurred on processing IDF file. Preceding condition(s) cause termination.')
+     !CALL ShowSevereError('Possible incorrect IDD File')
+     !CALL ShowContinueError('Possible Invalid Numerics or other problems')
+     !CALL ShowFatalError('Errors occurred on processing IDF file. Preceding condition(s) cause termination.')  !RS: Secret Search String
+     WRITE(DebugFile,*) 'Possible incorrect IDD File. Possible Invalid Numerics or other problems. '//&
+        'Errors occurred on processing IDF file. Preceding condition(s) cause termination.'
    ENDIF
 
    IF (NumIDFRecords > 0) THEN
@@ -1296,6 +1322,10 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   LOGICAL IDidntMeanIt
   LOGICAL TestingObject
   INTEGER TFound
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
@@ -1538,7 +1568,8 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
                   Message=TRIM(Message)//'='//TRIM(LineItem%Alphas(1))
                 ENDIF
                 CALL DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
-                CALL ShowSevereError(TRIM(Message),EchoInputFile)
+                !CALL ShowSevereError(TRIM(Message),EchoInputFile)  !RS: Secret Search String
+                WRITE(DebugFile,*) TRIM(Message)
               ENDIF
             ENDIF
           ENDIF
@@ -2103,7 +2134,7 @@ END SUBROUTINE GetObjectItemfromFile
 ! Utility Functions/Routines for Module
 
 SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, &
-           MinMax,WhichMinMax,MinMaxString,Value,Default,DefString,AutoSizable,ErrorsFound)
+           MinMax,WhichMinMax,MinMaxString,Value,Default,DefString,AutoSizable,AutoCalculatable,ErrorsFound)   !RS: Debugging: Added in AutoCalculate
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -2139,6 +2170,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
   CHARACTER(len=*), INTENT(OUT), OPTIONAL :: DefString
   LOGICAL, INTENT(OUT), OPTIONAL :: AutoSizable
   LOGICAL, INTENT(OUT), OPTIONAL :: ErrorsFound
+  LOGICAL, INTENT(OUT), OPTIONAL :: Autocalculatable   !RS: Debugging
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=1), PARAMETER :: TabChar=CHAR(9)
@@ -2280,7 +2312,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
               ENDIF
             ENDIF  ! Default Arg
             IF (PRESENT(AutoSizable)) THEN
-              IF (UCInputLine(Pos:Pos+4)=='\AUTO') THEN
+              IF (UCInputLine(Pos:Pos+5)=='\AUTOS') THEN
                 AutoSizable=.true.
                 CALL ProcessMinMaxDefLine(UCInputLine(Pos:),WhichMinMax,MinMaxString,Value,DefString,ErrLevel)
                 IF (ErrLevel > 0) THEN
@@ -2290,7 +2322,19 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
               ELSE
                 AutoSizable=.false.
               ENDIF
-            ENDIF  ! AutoSizable Arg
+            ENDIF
+              IF (PRESENT(Autocalculatable)) THEN  !RS: Debugging
+                IF (UCInputLine(Pos:Pos+5)=='\AUTOC') THEN
+                    Autocalculatable=.true.
+                    CALL ProcessMinMaxDefLine(UCInputLine(Pos:),WhichMinMax,MinMaxString,Value,DefString,ErrLevel)
+                    IF (ErrLevel > 0) THEN
+                        CALL ShowSevereError('Error in Autosize designation -- invalid number='//TRIM(UCInputLine(Pos:)),EchoInputFile)
+                        ErrFlag=.true.
+                    ENDIF
+              ELSE
+                Autocalculatable=.false.
+              ENDIF
+            ENDIF  ! Autocalculatable Arg
           ENDIF
         ENDIF
       ENDIF
@@ -2841,6 +2885,10 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
   CHARACTER(len=MaxObjectNameLength) FieldNameString
   CHARACTER(len=25) ValueString
   CHARACTER(len=300) Message
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging  
 
   Error=.false.
   IF (ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%WhichMinMax(1) == 1) THEN
@@ -2870,6 +2918,7 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
         FieldString=ADJUSTL(FieldString)
         FieldNameString=ObjectDef(WhichObject)%NumRangeChks(FieldNumber)%FieldName
         WRITE(ValueString,'(F20.5)') Value
+        !IF (WhichObject .EQ. 17 .AND. FieldNumber .EQ. 12 .OR. 13) ValueString='0.0'    !RS: Debugging
         ValueString=ADJUSTL(ValueString)
         IF (FieldNameString /= Blank) THEN
           Message='Out of range value Numeric Field#'//TRIM(FieldString)//' ('//TRIM(FieldNameString)//  &
@@ -2890,7 +2939,8 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
         IF (ObjectDef(WhichObject)%NameAlpha1) THEN
           Message=TRIM(Message)//'='//PossibleAlpha
         ENDIF
-        CALL ShowSevereError(TRIM(Message),EchoInputFile)
+        !CALL ShowSevereError(TRIM(Message),EchoInputFile)  !RS: Secret Search String
+        WRITE(DebugFile,*) TRIM(Message)
       ENDIF
     ENDIF
   ENDIF
@@ -3001,12 +3051,19 @@ SUBROUTINE DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
   INTEGER SLine
   INTEGER CurPos
   CHARACTER(len=300) TextLine
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
-  CALL ShowMessage('IDF Context for following error/warning message:')
+  !CALL ShowMessage('IDF Context for following error/warning message:') !RS: Secret Search String
+  WRITE(DebugFile,*) 'IDF Context for following error/warning message:'
   WRITE(TextLine,'(1X,I5,1X,A)') StartLine,LineBuf(1:LineBufLen(1))
-  CALL ShowMessage(TRIM(TextLine))
+  !CALL ShowMessage(TRIM(TextLine)) !RS: Secret Search String
+  WRITE(DebugFile,*) TRIM(TextLine)
   IF (NumConxLines > 10) THEN
-    CALL ShowMessage('Only last 10 lines before error line shown.....')
+    !CALL ShowMessage('Only last 10 lines before error line shown.....')    !RS: Secret Search String
+    WRITE(DebugFile,*) 'Only last 10 lines before error line shown...'
     PLine=NumConxLines-10
   ELSE
     PLine=2
@@ -3020,7 +3077,8 @@ SUBROUTINE DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
   CurPos=CurPos+1
   DO Line=PLine,NumConxLines
     WRITE(TextLine,'(1X,I5,1X,A)') SLine,TRIM(LineBuf(CurPos:CurPos+LineBufLen(Line)))
-    CALL ShowMessage(TRIM(TextLine))
+    !CALL ShowMessage(TRIM(TextLine))    !RS: Secret Search String
+    WRITE(DebugFile,*) TRIM(TextLine)
     CurPos=CurPos+LineBufLen(Line)
     SLine=SLine+1
   ENDDO
