@@ -422,7 +422,7 @@ USE HeatPumpInput, ONLY: GetInputs  !RS: Testing: Phase 3
         
       CALL ProcessInput
       
-      !CALL GetInputs  !RS: Debugging: Testing to see if HPSim can be called without it calling this sub in it.
+      CALL GetInputs  !RS: Debugging: Testing to see if HPSim can be called without it calling this sub in it.
 
       CALL ManageSimulation
 
@@ -436,7 +436,7 @@ USE HeatPumpInput, ONLY: GetInputs  !RS: Testing: Phase 3
       CALL ReportOrphanFluids
       CALL ReportOrphanSchedules
 
-      CALL GetInputs    !RS: Testing: Phase 3
+      !CALL GetInputs    !RS: Testing: Phase 3
       
       CALL EndEnergyPlus
 

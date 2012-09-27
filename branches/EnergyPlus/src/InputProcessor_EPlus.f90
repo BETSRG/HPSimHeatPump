@@ -1599,6 +1599,10 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
   INTEGER NextChr
   CHARACTER(len=32) :: String1
 
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
   SqueezedObject=MakeUPPERCase(ADJUSTL(ProposedObject))
   IF (LEN_TRIM(ADJUSTL(ProposedObject)) > MaxObjectNameLength) THEN
     CALL ShowWarningError('IP: Object name length exceeds maximum, will be truncated='//TRIM(ProposedObject),EchoInputFile)
@@ -1658,8 +1662,10 @@ SUBROUTINE ValidateObjectandParse(ProposedObject,CurPos,EndofFile)
       ! Check to see if it's a "secret" object
       Found=FindItemInList(SqueezedObject,RepObjects%OldName,NumSecretObjects)
       IF (Found == 0) THEN
-        CALL ShowSevereError('IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//  &
-           ' Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects',EchoInputFile)
+        !CALL ShowSevereError('IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//  &
+        !   ' Did not find "'//TRIM(ADJUSTL(ProposedObject))//'" in list of Objects',EchoInputFile) !RS: Secret Search String
+        WRITE(DebugFile,*) 'IP: IDF line~'//TRIM(IPTrimSigDigits(NumLines))//' Did not find "'&
+            //TRIM(ADJUSTL(ProposedObject))//'" in list of Objects'
         ! Will need to parse to next ;
         ErrFlag=.true.
       ELSEIF (RepObjects(Found)%Deleted) THEN
