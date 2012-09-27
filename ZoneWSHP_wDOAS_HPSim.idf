@@ -366,6 +366,7 @@
     Air Loop Outlet Node;    !- Air Outlet Node Name
 
   AirTerminal:SingleDuct:Uncontrolled,
+  !ZoneHVAC:HPSim,
     Zone1DirectAir,          !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
     Zone 1 OA Inlet Node,    !- Zone Supply Air Node Name
@@ -654,12 +655,14 @@
     Zone1DirectAir,          !- Zone Equipment 1 Name
     1,                       !- Zone Equipment 1 Cooling Sequence
     1,                       !- Zone Equipment 1 Heating or No-Load Sequence
-    ZoneHVAC:WaterToAirHeatPump,  !- Zone Equipment 2 Object Type
+    !ZoneHVAC:WaterToAirHeatPump,  !- Zone Equipment 2 Object Type
+	ZoneHVAC:HPSim,
     Zone1WTAHP,              !- Zone Equipment 2 Name
     2,                       !- Zone Equipment 2 Cooling Sequence
     2;                       !- Zone Equipment 2 Heating or No-Load Sequence
 
-  ZoneHVAC:WaterToAirHeatPump,
+  !ZoneHVAC:WaterToAirHeatPump,
+  ZoneHVAC:HPSim,
     Zone1WTAHP,              !- Name
     FanAndCoilAvailSched,    !- Availability Schedule Name
     Zone 1 Outlet Node,      !- Air Inlet Node Name

@@ -265,12 +265,12 @@ SUBROUTINE ProcessInput
    OPEN(unit=EchoInputFile,file='audittest.txt')
    !               FullName from StringGlobals is used to build file name with Path
    IF (LEN_TRIM(ProgramPath) == 0) THEN
-     FullName='Energy+.idd'
-     !FullName='Energy+ HPSim.idd'
+     !FullName='Energy+.idd'
+     FullName='Energy+ HPSim.idd'
      !FullName='Energy+ base.idd'
    ELSE
-     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
-     !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ HPSim.idd'
+     !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+.idd'
+     FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ HPSim.idd'
      !FullName=ProgramPath(1:LEN_TRIM(ProgramPath))//'Energy+ base.idd'
    ENDIF
 
@@ -1796,13 +1796,18 @@ INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Found
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   Found=FindIteminList(MakeUPPERCase(ObjectWord),ListofObjects,NumObjectDefs)
 
   IF (Found /= 0) THEN
     GetNumObjectsFound=ObjectDef(Found)%NumFound
   ELSE
-    CALL ShowSevereError('Requested Object not found in Definitions: '//TRIM(ObjectWord))
+    !CALL ShowSevereError('Requested Object not found in Definitions: '//TRIM(ObjectWord))  !RS: Secret Search String
+    WRITE(DebugFile,*) 'HPSim Input Processor: Requested Object not found in Definitions: '//TRIM(ObjectWord)
   ENDIF
 
   RETURN

@@ -1334,7 +1334,10 @@ SUBROUTINE InitAirLoops(FirstHVACIteration)
   LOGICAL :: ErrorsFound
   REAL(r64) :: OAReliefDiff = 0.d0 ! local for massflow change across OA system, kg/s
 
-
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+  
   ErrorsFound = .FALSE.
   AirLoopInit = .TRUE.
 
@@ -1595,12 +1598,17 @@ SUBROUTINE InitAirLoops(FirstHVACIteration)
                 !If the supply air path is not connected to either a heating or a cooling air distribution
                 !unit...we have a problem!
           IF ( .NOT. FoundSupPathZoneConnect) THEN
-            CALL ShowSevereError('Node ' // TRIM(NodeID(SupplyAirPath(SupAirPathNum)%OutletNode(SupAirPathOutNodeNum))) &
-                                 // ' connects to no component')
-            CALL ShowContinueError('Occurs in Supply Air Path='//TRIM(SupplyAirPath(SupAirPathNum)%Name))
-            CALL ShowContinueError('Check the connection to a ZoneHVAC:EquipmentConnections object')
-            CALL ShowContinueError('Check if this component is missing from the Supply Air Path')
-            ErrorsFound=.true.
+            !CALL ShowSevereError('Node ' // TRIM(NodeID(SupplyAirPath(SupAirPathNum)%OutletNode(SupAirPathOutNodeNum))) &
+            !                     // ' connects to no component')
+            !CALL ShowContinueError('Occurs in Supply Air Path='//TRIM(SupplyAirPath(SupAirPathNum)%Name))
+            !CALL ShowContinueError('Check the connection to a ZoneHVAC:EquipmentConnections object')
+            !CALL ShowContinueError('Check if this component is missing from the Supply Air Path')  !RS: Secret Search String
+            WRITE(DebugFile,*) 'Node '//TRIM(NodeID(SupplyAirPath(SupAirPathNum)%OutletNode(SupAirPathOutNodeNum))) &
+                //' connects to no component'
+            WRITE(DebugFile,*) 'Occurs in Supply Air Path='//TRIM(SupplyAirPath(SupAirPathNum)%Name)
+            WRITE(DebugFile,*) 'Check the connection to a ZoneHVAC:EquipmentConnections object'
+            WRITE(DebugFile,*) 'Check if this component is missing from the Supply Air Path'
+            !ErrorsFound=.true.
           END IF
 
         END DO SupplyAirPathOutletLoop
