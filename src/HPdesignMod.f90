@@ -323,7 +323,7 @@
                 WRITE(6,*)'## ERROR ## Highside: Failed to find a solution.'
             END IF
             WRITE(*,*)'Try another condenser, compressor, or change boundary conditions.'
-            STOP
+            !STOP   !RS: We don't want the program just shutting down.
         END IF
         FirstTimeFlowRateLoop=.FALSE.
         !ISI 05-25-05
