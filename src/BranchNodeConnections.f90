@@ -279,6 +279,10 @@ SUBROUTINE CheckNodeConnections(ErrorsFound)
   LOGICAL IsOutlet
   LOGICAL MatchedAtLeastOne
   INTEGER :: ErrorCounter
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   ErrorCounter=0
   !  Check 1 -- check sensor and actuator nodes
@@ -393,11 +397,15 @@ SUBROUTINE CheckNodeConnections(ErrorsFound)
       IsValid=.true.
     ENDDO
     IF (.not. IsValid) THEN
-      CALL ShowSevereError('Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)//  &
-            '", ZoneInlet node did not find an outlet node.')
-      CALL ShowContinueError('Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)//  &
-             ', Name='//TRIM(NodeConnections(Loop1)%ObjectName))
-      ErrorCounter=ErrorCounter+1
+      !CALL ShowSevereError('Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)//  &
+      !      '", ZoneInlet node did not find an outlet node.')
+      !CALL ShowContinueError('Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)//  &
+      !       ', Name='//TRIM(NodeConnections(Loop1)%ObjectName))
+      !ErrorCounter=ErrorCounter+1  !RS: Secret Search String
+      WRITE(DebugFile,*) 'Node Connection Error, Node="'//TRIM(NodeConnections(Loop1)%NodeName)// &
+        '", ZoneInlet node did not find an outlet node.'
+      WRITE(DebugFile,*) 'Reference Object='//TRIM(NodeConnections(Loop1)%ObjectType)// &
+        ', Name='//TRIM(NodeConnections(Loop1)%ObjectName)
 !      ErrorsFound=.true.
     ENDIF
   ENDDO

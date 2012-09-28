@@ -3751,13 +3751,13 @@ END IF
     Enthalpy=hRiCoil*1000   !RS Comment: Unit Conversion
     tRiCoil=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Refrigerant Coil Inlet Temperature
     IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3904'
+        WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3754'
         ErrorFlag=REFPROPERROR
         RETURN
     END IF
     xRiCoil=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)  !RS Comment: Refrigerant Coil Inlet Quality
     IF (RefPropErr .GT. 0) THEN
-        WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3910'
+        WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3760'
         ErrorFlag=REFPROPERROR
         RETURN
     END IF

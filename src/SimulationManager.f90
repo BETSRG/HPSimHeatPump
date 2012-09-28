@@ -1637,6 +1637,10 @@ SUBROUTINE ReportLoopConnections
   INTEGER Num
   LOGICAL :: WarningOut=.true.
   INTEGER :: NumOfControlledZones
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
           ! Report outside air node names on the Branch-Node Details file
   WRITE(OutputFileBNDetails,701) '! ==============================================================='
@@ -1683,11 +1687,15 @@ SUBROUTINE ReportLoopConnections
                               'because not all inputs may have been retrieved.')
         WarningOut=.false.
       ENDIF
-      CALL ShowWarningError ('Node Connection Error for object '//TRIM(CompSets(Count)%CType)// &
-                             ', name='//TRIM(CompSets(Count)%CName))
-      CALL ShowContinueError('  '//TRIM(CompSets(Count)%Description)//' not on any Branch or Parent Object')
-      CALL ShowContinueError('  Inlet Node : '//TRIM(CompSets(Count)%InletNodeName))
-      CALL ShowContinueError('  Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName))
+      !CALL ShowWarningError ('Node Connection Error for object '//TRIM(CompSets(Count)%CType)// &
+      !                       ', name='//TRIM(CompSets(Count)%CName))
+      !CALL ShowContinueError('  '//TRIM(CompSets(Count)%Description)//' not on any Branch or Parent Object')
+      !CALL ShowContinueError('  Inlet Node : '//TRIM(CompSets(Count)%InletNodeName))
+      !CALL ShowContinueError('  Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName))  !RS: Secret Search String
+      WRITE(DebugFile,*) 'Node Connection Error for object '//TRIM(CompSets(Count)%CType)//', name='//TRIM(CompSets(Count)%CName)
+      WRITE(DebugFile,*) ' '//TRIM(CompSets(Count)%Description)//' not on any Branch or Parent Object'
+      WRITE(DebugFile,*) ' Inlet Node: '//TRIM(CompSets(Count)%InletNodeName)
+      WRITE(DebugFile,*) ' Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName)
       NumNodeConnectionErrors=NumNodeConnectionErrors+1
       IF (SameString(TRIM(CompSets(Count)%CType), 'SolarCollector:UnglazedTranspired') ) Then
        CALL ShowContinueError('This report does not necessarily indicate a problem for a MultiSystem Transpired Collector')
@@ -1699,11 +1707,16 @@ SUBROUTINE ReportLoopConnections
                               'because not all inputs may have been retrieved.')
         WarningOut=.false.
       ENDIF
-      CALL ShowWarningError ('Potential Node Connection Error for object '//TRIM(CompSets(Count)%CType)// &
-                             ', name='//TRIM(CompSets(Count)%CName))
-      CALL ShowContinueError('  Node Types are still UNDEFINED -- See Branch/Node Details file for further information')
-      CALL ShowContinueError('  Inlet Node : '//TRIM(CompSets(Count)%InletNodeName))
-      CALL ShowContinueError('  Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName))
+      !CALL ShowWarningError ('Potential Node Connection Error for object '//TRIM(CompSets(Count)%CType)// &
+      !                       ', name='//TRIM(CompSets(Count)%CName))
+      !CALL ShowContinueError('  Node Types are still UNDEFINED -- See Branch/Node Details file for further information')
+      !CALL ShowContinueError('  Inlet Node : '//TRIM(CompSets(Count)%InletNodeName))
+      !CALL ShowContinueError('  Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName))  !RS: Secret Search String
+      WRITE(DebugFile,*) 'Potential Node Connection Error for object '//TRIM(CompSets(Count)%CType)// &
+        ', name='//TRIM(CompSets(Count)%CName)
+      WRITE(DebugFile,*) ' Node Types are still UNDEFINED -- See Branch/Node Details file for further information'
+      WRITE(DebugFile,*) ' Inlet Node: '//TRIM(CompSets(Count)%InletNodeName)
+      WRITE(DebugFile,*) ' Outlet Node: '//TRIM(CompSets(Count)%OutletNodeName)
       NumNodeConnectionErrors=NumNodeConnectionErrors+1
 
 
@@ -2096,7 +2109,8 @@ SUBROUTINE ReportLoopConnections
     WRITE(ChrOut,*) NumNodeConnectionErrors
     ChrOut=ADJUSTL(ChrOut)
     IF (NumNodeConnectionErrors > 1) THEN
-      CALL ShowMessage('There were '//TRIM(ChrOut)//' node connection errors noted.')
+      !CALL ShowMessage('There were '//TRIM(ChrOut)//' node connection errors noted.')
+      WRITE(DebugFile,*) 'There were '//TRIM(ChrOut)//' node connection errors noted.'
     ELSE
       CALL ShowMessage('There was '//TRIM(ChrOut)//' node connection error noted.')
     ENDIF

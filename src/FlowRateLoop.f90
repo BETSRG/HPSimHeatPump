@@ -74,7 +74,7 @@
 
         PRINT=.TRUE.
         IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN
-            IREFC=0 !for specified subcooiling, set to zero
+            IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
         ELSE
             IREFC=3
