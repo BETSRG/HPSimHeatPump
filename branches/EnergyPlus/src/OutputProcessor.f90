@@ -6517,6 +6517,10 @@ SUBROUTINE GenOutputVariablesAuditReport
   LOGICAL :: Rept=.false.
   INTEGER :: Loop
   LOGICAL,SAVE :: OpaqSurfWarned=.false.
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   DO Loop=1,NumOfReqVariables
     IF (ReqRepVars(Loop)%Used) CYCLE
@@ -6529,12 +6533,16 @@ SUBROUTINE GenOutputVariablesAuditReport
       OpaqSurfWarned=.true.
     ENDIF
     IF (.not. Rept) THEN
-      CALL ShowWarningError('The following Report Variables were requested but not generated')
-      CALL ShowContinueError('because IDF did not contain these elements or misspelled variable name -- check .rdd file')
+      !CALL ShowWarningError('The following Report Variables were requested but not generated')
+      !CALL ShowContinueError('because IDF did not contain these elements or misspelled variable name -- check .rdd file')  !RS: Secret Search String
+      WRITE(DebugFile,*) 'The following Report Variables were requested but not generated'// &
+        'because IDF did not contain these elements or misspelled variable name -- check .rdd file'
       Rept=.true.
     ENDIF
-    CALL ShowMessage('Key='//TRIM(ReqRepVars(Loop)%Key)//', VarName='//TRIM(ReqRepVars(Loop)%VarName)//  &
-                     ', Frequency='//TRIM(ReportFrequency(ReqRepVars(Loop)%ReportFreq)))
+    !CALL ShowMessage('Key='//TRIM(ReqRepVars(Loop)%Key)//', VarName='//TRIM(ReqRepVars(Loop)%VarName)//  &
+    !                 ', Frequency='//TRIM(ReportFrequency(ReqRepVars(Loop)%ReportFreq)))   !RS: Secret Search String
+    WRITE(DebugFile,*) 'Key='//TRIM(ReqRepVars(Loop)%Key)//', VarName='//TRIM(ReqRepVars(Loop)%VarName)// &
+        ', Frequency='//TRIM(ReportFrequency(ReqRepVars(Loop)%ReportFreq))
   ENDDO
 
   RETURN
@@ -6640,6 +6648,10 @@ SUBROUTINE UpdateMeterReporting
   LOGICAL NeverFound
 
   LOGICAL :: ErrorsFound = .false.   ! If errors detected in input
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   CALL GetCustomMeterInput(ErrorsFound)
   IF (ErrorsFound) THEN
@@ -6713,8 +6725,9 @@ SUBROUTINE UpdateMeterReporting
     IF (WildCard == 0) THEN
       Meter=FindItem(Alphas(1),EnergyMeters%Name,NumEnergyMeters)
       IF (Meter == 0) THEN
-        CALL ShowWarningError(TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(1))//'="'//  &
-           TRIM(Alphas(1))//'" - not found.')
+        !CALL ShowWarningError(TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(1))//'="'//  &
+        !   TRIM(Alphas(1))//'" - not found.')  !RS: Secret Search String
+        WRITE(DebugFile,*) TRIM(cCurrentModuleObject)//': invalid '//TRIM(cAlphaFieldNames(1))//'="'//TRIM(Alphas(1))//'" - not found.'
         CYCLE
       ENDIF
 

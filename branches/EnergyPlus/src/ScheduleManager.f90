@@ -4417,6 +4417,10 @@ SUBROUTINE ReportOrphanSchedules
   LOGICAL :: NeedUseMessage
   INTEGER :: Item
   INTEGER :: NumCount
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   NeedOrphanMessage=.true.
   NeedUseMessage=.false.
@@ -4437,7 +4441,8 @@ SUBROUTINE ReportOrphanSchedules
   ENDDO
 
   IF (NumCount > 0) THEN
-    CALL ShowMessage('There are '//trim(RoundSigDigits(NumCount))//' unused schedules in input.')
+    !CALL ShowMessage('There are '//trim(RoundSigDigits(NumCount))//' unused schedules in input.')
+    WRITE(DebugFile,*) 'There are '//TRIM(RoundSigDigits(NumCount))//' unused schedules in input.'
     NeedUseMessage=.true.
   ENDIF
 
@@ -4487,7 +4492,9 @@ SUBROUTINE ReportOrphanSchedules
     NeedUseMessage=.true.
   ENDIF
 
-  IF (NeedUseMessage) CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedSchedules; to see them.')
+  IF (NeedUseMessage) THEN !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedSchedules; to see them.') !RS: Secret Search String
+      WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayUnusedSchedules; to see them.'
+  END IF
 
   RETURN
 
