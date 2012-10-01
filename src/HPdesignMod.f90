@@ -82,7 +82,7 @@
     IMASS=1
     LPRINT=1
 
-    !for specified subcooiling, set IREFC to zero
+    !for specified subcooling, set IREFC to zero
     !for specifed flow control, set IREFC to 3 
     IF (MODE .EQ. 1 .OR. MODE .EQ. 3) THEN
         IREFC=3

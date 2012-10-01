@@ -710,7 +710,7 @@
     Poly2DP          = PAR(53)
     Poly3DP          = PAR(54)
     Poly4DP          = PAR(55)
-    PTol			   = PAR(56)
+    PTol             = PAR(56)
     SystemType       = PAR(57) !ISI - 07/14/06
     DisTubeLength    = PAR(58) !ISI - 07/14/06
     Wabsolute        = PAR(59)
@@ -2175,11 +2175,11 @@
         RETURN
     END IF
     
-    IF (ErrorFlag .NE. NOERROR) THEN 
-        ErrorFlag=CKTFILEERROR
-        CALL InitCondenserCoil_Helper_1
-        RETURN
-    END IF
+    !IF (ErrorFlag .NE. NOERROR) THEN 
+    !    ErrorFlag=CKTFILEERROR
+    !    CALL InitCondenserCoil_Helper_1
+    !    RETURN
+    !END IF
     
     !**************************** Model *************************************
 
