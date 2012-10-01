@@ -89,6 +89,7 @@
     REAL, SAVE :: ODCFlowConst
     INTEGER   :: Flag
     INTEGER :: LastTime !Aids in the event of a microchannel device
+    LOGICAL, SAVE :: ONETIME= .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
@@ -177,10 +178,14 @@
         MiniLunit = ' (in)'
     END IF
 
-    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
-    AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
-    Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
-    ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
+    IF (ONETIME) THEN   !RS: Debugging: Only called once
+        CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
+        AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
+        Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
+        ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
+        
+        ONETIME = .FALSE.
+    END IF
 
     CALL InitAccumulator(AccumPAR)
 
