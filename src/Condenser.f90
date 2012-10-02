@@ -434,7 +434,7 @@
     !  Description:	
     !  Ragazzi's modular coil model (Fixed length version)
     !  To predict coil air side and refrigerant side properties, heat transfer, 
-    !  and prssure drop
+    !  and pressure drop
     !
     !  Inputs:
     !  Ref$=Refrigerant name
@@ -572,6 +572,7 @@
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
+    !USE ORNLsolver
 
     IMPLICIT NONE
 
@@ -618,6 +619,8 @@
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
+    LOGICAL :: ONCECALL !RS: Debugging
+    
     !Flow:
 
     mRefTot =XIN(1)
@@ -651,8 +654,12 @@
     IsSimpleCoil=PAR(61) !ISI - 12/22/06
     FirstTime=PAR(62)    !ISI - 12/22/06
 
+    !CALL GETVAR(ONCECALL)
     !Initialize circuiting and refrigerant parameters
     IF (FirstTime .EQ. 1) THEN
+        
+!        ErrorFlag=0 !RS: Trying to debug! Need to move it, or set conditions---it's resetting every iteration
+        
         ODtube      = PAR(15)
         TubeThk     = PAR(16)
         Ltube       = PAR(17)
@@ -680,8 +687,14 @@
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
+        
+    ELSEIF (ONCECALL .NE. .TRUE.) THEN
+    
+    ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
+    ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
+    
     END IF
-
+    
     hciMultiplier   = PAR(30)
     DPrefMultiplier = PAR(31)
     hcoMultiplier   = PAR(32)
