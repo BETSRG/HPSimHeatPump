@@ -1,4 +1,14 @@
-    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !RS: Testing: Attempting to pass variables out
+!MODULE ORNLsolver
+    
+    !SUBROUTINE GETVAR(Variable)
+    !    
+    !    LOGICAL Variable
+    !
+    !    Variable=ONCECALL
+    !
+    !END SUBROUTINE GETVAR
+        
+    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided, ONCECALL) !RS: Testing: Attempting to pass variables out
 
     !
     !
@@ -89,14 +99,16 @@
     REAL, SAVE :: ODCFlowConst
     INTEGER   :: Flag
     INTEGER :: LastTime !Aids in the event of a microchannel device
-    LOGICAL, SAVE :: ONETIME= .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
+    LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
+    !LOGICAL, SAVE :: ONCECALL = .TRUE. !RS: Debugging: Keeps the program from allocating certain arrays when they're already allocated (Condenser sub)
+    LOGICAL :: ONCECALL
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
-    ! GOTO 30 means "skip refined simulation" according to rpevious comments ....
+    ! GOTO 30 means "skip refined simulation" according to previous comments ....
     INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
 
     CHARACTER(LEN=11),PARAMETER :: FMT_103 = "(A20,F30.2)"
@@ -135,7 +147,7 @@
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     
-    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
@@ -920,6 +932,7 @@
         CALL EndEvaporatorCoil
     END IF
 
+    !ONCECALL = .FALSE.  !RS: Debugging
     !CALL EndEnergyPlus !RS: This will be called later by the E+ main routine
 
     CLOSE(666)
@@ -935,3 +948,5 @@
     ! VL_Magic_Number : magic number -- explain or resolve
     ! VL_Index_Replace : Can/should the index number be replaced by a field name?
     ! VL_User_Setting : flag or user setting?
+    
+!END MODULE ORNLsolver
