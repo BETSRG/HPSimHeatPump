@@ -2163,6 +2163,8 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   USE HVACVariableRefrigerantFlow, ONLY: SimulateVRF
   USE RefrigeratedCase, ONLY: SimAirChillerSet
   USE UserDefinedComponents, ONLY: SimZoneAirUserDefined
+  
+!  USE ORNLsolver    !RS: Debugging
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -2193,10 +2195,12 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   LOGICAL,SAVE :: MyOneTimeFlag = .TRUE.
   LOGICAL      :: ErrorFlag
   
-  LOGICAL, SAVE :: ONCECALL = .TRUE. !RS: Debugging
+  !INTEGER :: ONCECALL != 1 !RS: Debugging
 
   REAL(r64) :: SysOutputProvided ! sensible output delivered by zone equipment (W)
   REAL(r64) :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
+  !REAL :: SysOutputProvided
+  !REAL :: LatOutputProvided
   REAL(r64) :: AirSysOutput
   REAL(r64) :: NonAirSysOutput
 
@@ -2321,8 +2325,8 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
              
            CASE (HPSim)
-               CALL SimulationCycle(SysOutputProvided, LatOutputProvided, ONCECALL)  !RS: Testing
-                ONCECALL= .FALSE.
+               CALL SimulationCycle(SysOutputProvided, LatOutputProvided) !, ONCECALL)  !RS: Testing
+                !ONCECALL= 2
                !SysOutputProvided=2000
                !LatOutputProvided=1000
 
