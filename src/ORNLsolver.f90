@@ -1,14 +1,105 @@
 !MODULE ORNLsolver
-    
-    !SUBROUTINE GETVAR(Variable)
-    !    
-    !    LOGICAL Variable
-    !
-    !    Variable=ONCECALL
-    !
-    !END SUBROUTINE GETVAR
+!    
+!    USE InputPreProcessor
+!    USE FluidProperties_HPSim
+!    USE HeatPumpInput
+!    USE CompressorMod
+!    USE CondenserMod
+!    USE EvaporatorMod
+!    USE AccumulatorMod
+!    USE UnitConvertMod
+!    USE DataSimulation
+!    USE FrostModel
+!    USE InputProcessor_HPSim
+!    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+!
+!    IMPLICIT NONE
+!
+!    !Subroutine parameters
+!
+!    CHARACTER(len=80)   :: Refrigerant
+!    CHARACTER (len=15) :: Property           
+!    INTEGER            :: RefrigIndex =0
+!    REAL Temperature,Quality,Pressure,Enthalpy
+!
+!    INTEGER(2) RefPropOpt			!Ref prop calc. option
+!    INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
+!    REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??
+!
+!    INTEGER(2) AirPropOpt			!Air prop calc. option
+!    INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
+!    REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
+!
+!    REAL TimeStart, TimeStop, TimeSpent
+!
+!    INTEGER ICHRGE,I
+!    REAL DTVALU
+!    REAL DTCONV
+!    REAL CHRGECONV
+!    INTEGER IERROR
+!    REAL DTVAL
+!    REAL STEP
+!    REAL CHGDIF
+!
+!    REAL TsubExp,TsubCnd,TsupEvp,TsupCmp,Qcnd,Qevp,QevpSens
+!    REAL PwrCmp,mdot,TsiExp,TsoCnd,TsoEvp
+!    REAL Dshtb,WinTrans,Qloss
+!    REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
+!    REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
+!    REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
+!    REAL MassCoil,MassLiqCoil,MassVapCoil
+!    INTEGER(2) IsCoolingMode !1=yes; 0=no   
+!    REAL, EXTERNAL :: ZEROCH
+!    REAL, EXTERNAL :: CHARGM
+!    !INTEGER :: TimeStep !Added Sankar transient
+!    LOGICAL:: Trues
+!    REAL :: SUPERAct
+!    REAL :: TsiCmpAct
+!    REAL :: TsoCmpAct
+!    REAL :: RHiCAct
+!    REAL :: RHiEAct
+!    REAL, SAVE :: IDCFlowConst
+!    REAL, SAVE :: ODCFlowConst
+!    INTEGER   :: Flag
+!    INTEGER :: LastTime !Aids in the event of a microchannel device
+!    LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
+!    
+!    !REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
+!    !REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
+!    !LOGICAL, SAVE :: ONCECALL = .TRUE. !RS: Debugging: Keeps the program from allocating certain arrays when they're already allocated (Condenser sub)
+!    !INTEGER :: ONCECALL
+!    
+!    ! VL : Flags to assist with dismantling of GOTO-based control structures ....
+!    ! Change names of the flags to reflect the intention of the GOTO statements ...
+!    ! GOTO 30 means "skip refined simulation" according to previous comments ....
+!    INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
+!
+!    CHARACTER(LEN=11),PARAMETER :: FMT_103 = "(A20,F30.2)"
+!    CHARACTER(LEN=15),PARAMETER :: FMT_1005 = "(I20,10(F20.2))"
+!    CHARACTER(LEN=9),PARAMETER :: FMT_1006 = "(10(A20))"
+!    CHARACTER(LEN=9),PARAMETER :: FMT_1007 = "(A17,A42)"
+!    CHARACTER(LEN=33),PARAMETER :: FMT_1008 = "(A13,F10.3,A10,A10,A13,F10.3,A10)"
+!    CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
+!    CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
+!    CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
+!    
+!    INTEGER Variable
+!    
+!    PUBLIC GETVAR
+!    PUBLIC SimulationCycle
+!    
+!    CONTAINS
+!    
+!    SUBROUTINE GETVAR(Variable)
+!        
+!        INTEGER Variable
+!        INTEGER ONCECALL
+!    
+!        Variable=ONCECALL
+!    
+!    END SUBROUTINE GETVAR
         
-    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided, ONCECALL) !RS: Testing: Attempting to pass variables out
+    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !, ONCECALL) !RS: Testing: Attempting to pass variables out
 
     !
     !
@@ -104,7 +195,7 @@
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     !LOGICAL, SAVE :: ONCECALL = .TRUE. !RS: Debugging: Keeps the program from allocating certain arrays when they're already allocated (Condenser sub)
-    LOGICAL :: ONCECALL
+    !INTEGER, SAVE :: ONCECALL = 2
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -197,6 +288,8 @@
         ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
         
         ONETIME = .FALSE.
+        
+        !ONCECALL = 1
     END IF
 
     CALL InitAccumulator(AccumPAR)
@@ -933,6 +1026,7 @@
     END IF
 
     !ONCECALL = .FALSE.  !RS: Debugging
+    !ONCECALL=2
     !CALL EndEnergyPlus !RS: This will be called later by the E+ main routine
 
     CLOSE(666)
