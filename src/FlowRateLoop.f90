@@ -65,6 +65,8 @@
     !LOGICAL,SAVE :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
     REAL, SAVE:: PrevTime = 0.0 
+    INTEGER, SAVE :: ErrorCount = 0  !RS: Debugging
+    INTEGER, SAVE :: LoopCount = 0   !RS: Debugging
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
@@ -83,6 +85,11 @@
         TSOCMP = TINPUT
         CNDNSR = 1.0E+10
         IERR = 0
+        
+        IF (ErrorCount .NE. 0) THEN
+            LoopCount = LoopCount + 1
+            TSOCMP=TSOCMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
+        END IF
 
         IF (.NOT. PRINT) THEN
             CYCLE
@@ -121,6 +128,7 @@
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
             IERR=1
+            ErrorCount = 1
             CYCLE
         END IF
         PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
@@ -156,7 +164,12 @@
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
         END IF
-
+        
+        IF (ErrorCount .NE. 0) THEN !RS: Debugging
+            ErrorCount=0
+            LoopCount=0
+        END IF
+    
         CompIN(1)=PiCmp
         CompIN(2)=PoCmp
         CompIN(3)=HiCmp

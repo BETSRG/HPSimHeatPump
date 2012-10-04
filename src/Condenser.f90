@@ -619,13 +619,6 @@
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
-    INTEGER, SAVE :: ONCECALL = 2 !RS: Debugging
-    REAL :: PRI = 0    !RS: Debugging
-    INTEGER, SAVE :: ONCECALL2 = 2  !RS: Debugging
-    
-    LOGICAL, SAVE :: OneCall = .TRUE.
-    LOGICAL, SAVE :: OneCall2 = .FALSE.
-    
     !Flow:
 
     mRefTot =XIN(1)
@@ -659,7 +652,6 @@
     IsSimpleCoil=PAR(61) !ISI - 12/22/06
     FirstTime=PAR(62)    !ISI - 12/22/06
 
-    !CALL GETVAR(ONCECALL)
     !Initialize circuiting and refrigerant parameters
     IF (FirstTime .EQ. 1) THEN
         
@@ -680,7 +672,7 @@
         NumOfMods   = PAR(28)
         FinType     = PAR(29)
         TubeType    = PAR(37)
-        CALL InitCondenserCoil(CoilType, ONCECALL2, PRI)
+        CALL InitCondenserCoil(CoilType)
         CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
@@ -693,19 +685,13 @@
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
         
-        OneCall2= .TRUE.
-        PRI=DisLnSeg(NumOfMods)%pri
-    !ELSEIF (ONCECALL .EQ. 2) THEN
-    !ELSEIF (ONCECALL .NE. 1 .AND. ONCECALL2 .NE. 0) THEN    !RS: Getting Closer.
-    !ELSEIF (OneCall2 .NE. .TRUE.) THEN
-    !ELSEIF (OneCall2 .NE. .TRUE.) THEN !.OR. PRI .LE. 0) THEN
     ELSEIF (ALLOCATED(DisLnSeg)) THEN
         !Everything okay
     ELSE
-    
+    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
     !ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
     !ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
-    CALL InitCondenserCoil(CoilType, ONCECALL2, PRI)
+    CALL InitCondenserCoil(CoilType)
     
     END IF
     
@@ -1222,8 +1208,6 @@
 
     CALL Condenser_Helper_1
     
-    ONCECALL=ONCECALL2  !RS: Debugging: Just a wild guess, trying to get the ONCECALL to not equal 1 after the first run
-
     RETURN
 
     END SUBROUTINE Condenser
@@ -2137,7 +2121,7 @@
 
     !************************************************************************
 
-    SUBROUTINE InitCondenserCoil(CoilType, ONCECALL, PRI)
+    SUBROUTINE InitCondenserCoil(CoilType)
 
     !------------------------------------------------------------------------
     !Purpose:
@@ -2189,8 +2173,6 @@
   !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  INTEGER :: ONCECALL   !RS: Debugging
-  REAL :: PRI   !RS: Debugging
 
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
@@ -2205,14 +2187,6 @@
         CALL InitCondenserCoil_Helper_1
         RETURN
     END IF
-    
-    ONCECALL = 1
-    
-    !IF (ErrorFlag .NE. NOERROR) THEN 
-    !    ErrorFlag=CKTFILEERROR
-    !    CALL InitCondenserCoil_Helper_1
-    !    RETURN
-    !END IF
     
     !**************************** Model *************************************
 
@@ -3234,8 +3208,6 @@ END IF
     ALLOCATE(LiqLnSeg(NumOfMods))
 
     CALL InitCondenserCoil_Helper_1
-    
-    PRI=DisLnSeg(NumOfMods)%pri !RS: Debugging
 
     RETURN
 
@@ -3284,7 +3256,6 @@ END IF
     IMPLICIT NONE
 
     INTEGER I,II,III,IV,J,K !Loop counters
-    LOGICAL, SAVE :: OneCall2 = .FALSE.
 
             IF (CoilType .EQ. MCCONDENSER) THEN
                 IF (IsSimpleCoil .EQ. 1) THEN   !IsSimpleCoil doesn't seem to really simplify for the microchannel case so much as cause errors
@@ -3394,9 +3365,6 @@ END IF
             IsSimpleCoil=1
         END IF
     END IF
-    
-    OneCall2 = .FALSE.   !RS: Debugging
-    !DEALLOCATE
     
     RETURN
 

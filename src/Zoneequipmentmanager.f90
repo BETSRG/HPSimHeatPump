@@ -2194,8 +2194,6 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   LOGICAL,SAVE :: FirstCall  ! indicates first call to supply air path components
   LOGICAL,SAVE :: MyOneTimeFlag = .TRUE.
   LOGICAL      :: ErrorFlag
-  
-  !INTEGER :: ONCECALL != 1 !RS: Debugging
 
   REAL(r64) :: SysOutputProvided ! sensible output delivered by zone equipment (W)
   REAL(r64) :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
@@ -2325,8 +2323,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                  ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
              
            CASE (HPSim)
-               CALL SimulationCycle(SysOutputProvided, LatOutputProvided) !, ONCECALL)  !RS: Testing
-                !ONCECALL= 2
+               CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
                !SysOutputProvided=2000
                !LatOutputProvided=1000
 
