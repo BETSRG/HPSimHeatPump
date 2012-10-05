@@ -86,9 +86,16 @@
         CNDNSR = 1.0E+10
         IERR = 0
         
-        IF (ErrorCount .NE. 0) THEN
+        IF (ErrorCount .NE. 0) THEN !RS: Debugging: Getting the next iteration to actually try a different value
             LoopCount = LoopCount + 1
-            TSOCMP=TSOCMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
+            IF (TSOCMP .GE. (2*LoopCount)) THEN
+                TSOCMP=TSOCMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
+            ELSE    !RS: Debugging: Dealing with the case where the temperature needs to be raised to iterate properly                TSOCMP=TSOCMP+(2*LoopCount)
+                !IF (TSOCMP .LE. -50) THEN
+                IF (TSOCMP .GE. -50) THEN   !RS: Debugging, trying to deal with case where TSOCMP is a large negative number
+                    TSOCMP=TSOCMP+50
+                END IF
+            END IF
         END IF
 
         IF (.NOT. PRINT) THEN
@@ -164,11 +171,6 @@
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
         END IF
-        
-        IF (ErrorCount .NE. 0) THEN !RS: Debugging
-            ErrorCount=0
-            LoopCount=0
-        END IF
     
         CompIN(1)=PiCmp
         CompIN(2)=PoCmp
@@ -179,8 +181,14 @@
             CASE (1,2)
                 WRITE(*,*)'Trying another iterating value....'
                 IERR=1
+                ErrorCount=1    !RS: Trying to actually use a different value for iteration
                 CYCLE
             END SELECT
+        END IF
+                
+        IF (ErrorCount .NE. 0) THEN !RS: Debugging: Resetting the ErrorCount to 0
+            ErrorCount=0
+            LoopCount=0 !RS: Debugging: Also resetting the LoopCount for 0 so the temperature doesn't go negative
         END IF
 
         XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??

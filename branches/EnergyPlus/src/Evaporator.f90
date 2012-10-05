@@ -198,6 +198,8 @@ REAL QmodTP   !Heat transfer in two-phase region, kW
 REAL QdisTube !Distributor tube heat load, kW
 REAL QmodSens !Sensible Module heat transfer, kW
 REAL QmodLat  !Latent Module heat transfer, kW
+REAL QmodSensTot    !Total sensible heat transfer, kW
+REAL QmodLatTot !Total latent heat transfer, kW
 REAL hciMultiplier  !Multiplier for hci
 REAL hcoMultiplier  !Multiplier for hco
 REAL DPrefMultiplier !Multiplier for DPref
@@ -1957,6 +1959,12 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				      Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
 
 				      QmodSens=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
+                      
+                      QmodLat=Qmod-QmodSens !RS: Determining the latent Q
+                      
+                      QmodSensTot=QmodSens + QmodSensTot    !RS: Summing the total sensible Q
+                    
+                      QmodLatTot=QmodLat + QmodLatTot   !RS: Summing the total latent Q
 
 				      mRefCkt=CoilSection(NumSection)%Ckt(I)%mRef
 
@@ -7086,8 +7094,8 @@ SUBROUTINE GetQOut(Out1, Out2)
 REAL Out1
 REAL Out2
 
-    Out1=QModSens !Sensible Module heat transfer, kW
-    Out2=QModLat  !Latent Module heat transfer, kW
+    Out1=QModSensTot*1000 !Sensible Module heat transfer, W
+    Out2=QModLatTot*1000  !Latent Module heat transfer, W
     
 END SUBROUTINE
 
