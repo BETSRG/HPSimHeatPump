@@ -685,9 +685,9 @@
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
         
-    ELSEIF (ALLOCATED(DisLnSeg)) THEN
+    !ELSEIF (ALLOCATED(DisLnSeg)) THEN
         !Everything okay
-    ELSE
+    ELSEIF (.NOT. ALLOCATED(DisLnSeg)) THEN
     ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
     !ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
     !ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
