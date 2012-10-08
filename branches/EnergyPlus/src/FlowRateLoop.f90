@@ -67,6 +67,7 @@
     REAL, SAVE:: PrevTime = 0.0 
     INTEGER, SAVE :: ErrorCount = 0  !RS: Debugging
     INTEGER, SAVE :: LoopCount = 0   !RS: Debugging
+    INTEGER, SAVE :: LoopCountSmall = 0 !RS: Debugging
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
@@ -90,11 +91,20 @@
             LoopCount = LoopCount + 1
             IF (TSOCMP .GE. (2*LoopCount)) THEN
                 TSOCMP=TSOCMP-(2*LoopCount) !RS: Debugging: Just trying to actually get the temp to change value
-            ELSE    !RS: Debugging: Dealing with the case where the temperature needs to be raised to iterate properly                TSOCMP=TSOCMP+(2*LoopCount)
-                !IF (TSOCMP .LE. -50) THEN
-                IF (TSOCMP .GE. -50) THEN   !RS: Debugging, trying to deal with case where TSOCMP is a large negative number
-                    TSOCMP=TSOCMP+50
+            !ELSE    !RS: Debugging: Dealing with the case where the temperature needs to be raised to iterate properly                TSOCMP=TSOCMP+(2*LoopCount)
+
+            ELSEIF (TSOCMP .LE. 0 .AND. ABS(TSOCMP) .GE. 50) THEN   !RS: Debugging
+                !IF (TSOCMP .GE. -50) THEN   !RS: Debugging, trying to deal with case where TSOCMP is a large negative number
+                IF ((TSOCMP+(50*LoopCount)) .GE. 0) THEN    !RS: Debugging
+                    LoopCountSmall=1+LoopCountSmall
+                    TSOCMP=2*LoopCountSmall
+                ELSEIF (TSOCMP .LE. 0 .AND. ABS(TSOCMP) .GE. 1000) THEN
+                    TSOCMP=TSOCMP +(1000*LoopCount)
+                ELSE
+                    TSOCMP=TSOCMP+(50*LoopCount)
                 END IF
+            ELSE    !RS: Debugging
+                TSOCMP=TSOCMP + (2*LoopCount)
             END IF
         END IF
 
@@ -134,7 +144,6 @@
         PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'Trying another iterating value....'
-            IERR=1
             ErrorCount = 1
             CYCLE
         END IF
@@ -171,6 +180,13 @@
             END IF
             HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
         END IF
+        
+        IF (TSOCMP .LT. 0) THEN !RS: Debugging: Trying to account for it not working when the temp is too low
+            WRITE(*,*)'Trying another iterating value....'
+            IERR=1
+            ErrorCount = 1
+            CYCLE
+        END IF
     
         CompIN(1)=PiCmp
         CompIN(2)=PoCmp
@@ -189,6 +205,7 @@
         IF (ErrorCount .NE. 0) THEN !RS: Debugging: Resetting the ErrorCount to 0
             ErrorCount=0
             LoopCount=0 !RS: Debugging: Also resetting the LoopCount for 0 so the temperature doesn't go negative
+            LoopCountSmall=0
         END IF
 
         XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??

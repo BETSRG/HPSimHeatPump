@@ -634,19 +634,15 @@
         FirstTimeAirTempLoop=.TRUE.
 
         IF (TSICMP .GE. TSOCMP) THEN
-            IF (PrnCon .EQ. 1) THEN
+            IF (PrnCon .EQ. 1) THEN !RS: Just simplifying by combining two lines of code
                 WRITE(*,*)
-            END IF
-            IF (PrnCon .EQ. 1) THEN
                 WRITE(*,*)'## ERROR ## HPdesign: Failed to find a solution.'
             END IF
-            IF (PrnLog .EQ. 1) THEN
+            IF (PrnLog .EQ. 1) THEN !RS: Just combining two lines of code
                 WRITE(6,*)
-            END IF
-            IF (PrnLog .EQ. 1) THEN
                 WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
             END IF
-            STOP
+            !STOP   !RS: Debugging: Don't want the code to just shut down.
         END IF
 
     END DO
