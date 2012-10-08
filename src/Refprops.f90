@@ -1530,11 +1530,11 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
 
         ! PURPOSE OF THIS FUNCTION:
         ! This finds enthalpy for given temperature and a quality under the vapor dome.
-        ! This fucntion is only called with a valid refrigerant and quality between 0 and 1.
+        ! This function is only called with a valid refrigerant and quality between 0 and 1.
 
         ! METHODOLOGY EMPLOYED:
         ! Calls GetInterpolatedSatProp to linearly interpolate between the saturated 
-        ! liquid  and vapour enthalpies according to the given quality.
+        ! liquid and vapour enthalpies according to the given quality.
 
         ! REFERENCES:
         ! na
