@@ -98,7 +98,7 @@
                 IF ((TSOCMP+(50*LoopCount)) .GE. 0) THEN    !RS: Debugging
                     LoopCountSmall=1+LoopCountSmall
                     TSOCMP=2*LoopCountSmall
-                ELSEIF (TSOCMP .LE. 0 .AND. ABS(TSOCMP) .GE. 1000) THEN
+                ELSEIF ((TSOCMP+(1000*(LoopCount-1))) .LE. 0 .AND. ABS(TSOCMP+(1000*(LoopCount-1))) .GE. 1000) THEN
                     TSOCMP=TSOCMP +(1000*LoopCount)
                 ELSE
                     TSOCMP=TSOCMP+(50*LoopCount)
