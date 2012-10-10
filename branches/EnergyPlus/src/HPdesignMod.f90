@@ -371,7 +371,7 @@
         END IF
         
         EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
-        EvapIN(2)=CompIN(1)       !Compressor inlet pressure    !RS: Debugging: This line was commented out for some reason
+!        EvapIN(2)=CompIN(1)       !Compressor inlet pressure    !RS: Debugging: This line was commented out for some reason. Commenting back out for now
         EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
         EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
         EvapIN(5)=(TAIIEI-32)/1.8 !Air side inlet temp. C
