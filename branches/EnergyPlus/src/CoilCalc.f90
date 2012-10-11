@@ -5138,7 +5138,9 @@ REAL FrostThk
 		 mm=SQRT(2*hco/(Kfin*FinThk))
 		 FinEff=TANH(mm*Rc*phi)/(mm*Rc*phi)
 		END IF 
-
+!IF (mm*Rc*phi .EQ. 0) THEN  !RS: Debugging: Just to keep it from crashing
+!    FinEff=0
+!END IF
 		!Hong and Webb
 		!FinEff=TANH(m*Rc*phi)*COS(0.1*m*Rc*phi)/(m*Rc*phi) 
 	END IF
