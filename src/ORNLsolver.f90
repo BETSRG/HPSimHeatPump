@@ -187,6 +187,9 @@
         
         ONETIME = .FALSE.
         
+    ELSE
+        CFMcnd=CFMcnd*UnitArFlw   !RS: Debugging: This needs to be called every time for some reason
+        CFMevp=CFMevp*UnitArFlw
     END IF
 
     CALL InitAccumulator(AccumPAR)
