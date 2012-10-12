@@ -1768,6 +1768,9 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   OPEN (17,FILE='Evaporator.csv')
   !OPEN (17,FILE='Evaporator_longtubes.csv')
+  !RS: Debugging: Setting each QModTot to 0 at the beginning, so previous values don't carry over
+  QModLatTot=0
+  QModSensTot=0
 
   MassCoil=0
   MassLiqCoil=0

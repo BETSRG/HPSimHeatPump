@@ -2163,8 +2163,6 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   USE HVACVariableRefrigerantFlow, ONLY: SimulateVRF
   USE RefrigeratedCase, ONLY: SimAirChillerSet
   USE UserDefinedComponents, ONLY: SimZoneAirUserDefined
-  
-!  USE ORNLsolver    !RS: Debugging
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -2324,8 +2322,6 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              
            CASE (HPSim)
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
-               !SysOutputProvided=2000
-               !LatOutputProvided=1000
 
            CASE (ZoneDXDehumidifier_Num) ! 'ZoneHVAC:Dehumidifier:DX'
              CALL SimZoneDehumidifier(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
