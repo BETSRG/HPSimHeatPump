@@ -216,7 +216,7 @@ LOGICAL :: ErrorsFound=.false.
 LOGICAL       :: IsNotOK               ! Flag to verify name
 LOGICAL       :: IsBlank               ! Flag for blank name
 INTEGER :: Loop !Do Loop Index
-INTEGER :: CtrlZone                    ! controlled zome do loop index
+INTEGER :: CtrlZone                    ! controlled zone do loop index
 INTEGER :: SupAirIn                    ! controlled zone supply air inlet index
 INTEGER :: NodeNum
 INTEGER :: SplitNum
@@ -279,14 +279,14 @@ IF (NumDirectAir.GT.0) THEN
     END DO
 
   ! Find the Zone Equipment Inlet Node from the Supply Air Path Splitter
-    Do SplitNum = 1, NumSplitters
+    DO SplitNum = 1, NumSplitters
        DO NodeNum = 1, SplitterCond(SplitNum)%NumOutletNodes
-         If(DirectAir(DirectAirNum)%ZoneSupplyAirNode .eq. SplitterCond(SplitNum)%OutletNode(NodeNum)) Then
+         IF(DirectAir(DirectAirNum)%ZoneSupplyAirNode .eq. SplitterCond(SplitNum)%OutletNode(NodeNum)) THEN
             DirectAir(DirectAirNum)%ZoneEquipAirInletNode = SplitterCond(SplitNum)%InletNode
-            Exit
-         End If
+            EXIT
+         END IF
        END DO
-    End Do
+    END DO
 
   ! If no splitter, set Zone Equipment Inlet Node to the Zone Supply Air Node
     IF (NumSplitters == 0) THEN
@@ -639,9 +639,9 @@ SUBROUTINE ReportDirectAir(DirectAirNum)
 
 !report the Direct Air Output
  DirectAir(DirectAirNum)%HeatRate = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)
- DirectAir(DirectAirNum)%CoolRate = Abs(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0))
+ DirectAir(DirectAirNum)%CoolRate = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0))
  DirectAir(DirectAirNum)%HeatEnergy = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)*TimeStepSys*SecInHour
- DirectAir(DirectAirNum)%CoolEnergy = Abs(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)*TimeStepSys*SecInHour)
+ DirectAir(DirectAirNum)%CoolEnergy = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)*TimeStepSys*SecInHour)
 
 
   RETURN

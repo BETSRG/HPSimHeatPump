@@ -129,27 +129,27 @@ PRIVATE InitHeatingCoil
 PRIVATE SizeHeatingCoil
 
           ! Algorithms for the module
-Private CalcElectricHeatingCoil
-Private CalcGasHeatingCoil
-Private CalcDesuperheaterHeatingCoil
+PRIVATE CalcElectricHeatingCoil
+PRIVATE CalcGasHeatingCoil
+PRIVATE CalcDesuperheaterHeatingCoil
 
           ! Update routine to check convergence and update nodes
-Private UpdateHeatingCoil
+PRIVATE UpdateHeatingCoil
 
           ! Reporting routines for module
-Private ReportHeatingCoil
+PRIVATE ReportHeatingCoil
 
           ! Utility routines for module
-Public  CheckHeatingCoilSchedule
-Public  GetCoilCapacity
-Public  GetCoilInletNode
-Public  GetCoilOutletNode
-Public  GetCoilIndex
-Public  GetHeatReclaimSourceIndex
-Public  GetCoilControlNodeNum
-Public  GetHeatingCoilTypeNum
-Public  GetHeatingCoilIndex
-Public  GetHeatingCoilPLFCurveIndex
+PUBLIC  CheckHeatingCoilSchedule
+PUBLIC  GetCoilCapacity
+PUBLIC  GetCoilInletNode
+PUBLIC  GetCoilOutletNode
+PUBLIC  GetCoilIndex
+PUBLIC  GetHeatReclaimSourceIndex
+PUBLIC  GetCoilControlNodeNum
+PUBLIC  GetHeatingCoilTypeNum
+PUBLIC  GetHeatingCoilIndex
+PUBLIC  GetHeatingCoilPLFCurveIndex
 
 CONTAINS
 

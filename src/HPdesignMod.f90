@@ -8,6 +8,7 @@
     USE TXVMOD
     USE AccumulatorMod
     USE DataSimulation
+    USE DataEnvironment,      ONLY: StdRhoAir   !RS: Debugging: Trying to see if this changes the iterating conditions at all
 
     IMPLICIT NONE
 
@@ -304,7 +305,9 @@
 
         !Actual mass flow rate
         XMaC=CFMcnd*RhoAiC
+        !XMaC=CFMcnd*StdRhoAir   !RS: Debugging: Trying to see if StdRhoAir changes the iterating conditions at all
         XMaE=CFMevp*RhoAiE
+        !XMaE=CFMevp*StdRhoAir   !RS: Debugging: Trying to see if StdRhoAir changes the iterating conditions at all
 
         TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
         !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
