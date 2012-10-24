@@ -166,8 +166,6 @@ PUBLIC OutWetBulbTempAt
 PUBLIC OutDewPointTempAt
 PUBLIC WindSpeedAt
 PUBLIC SetOutBulbTempAt
-!PUBLIC OutBaroPressAt
-!PUBLIC OutAirDensityAt
 
 CONTAINS
 

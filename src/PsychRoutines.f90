@@ -1287,6 +1287,81 @@ FUNCTION PsyTwbFnTdbWPb(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
 
 END FUNCTION PsyTwbFnTdbWPb
 
+FUNCTION PsyTwbFnTdbWPb2(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         Linda Lawrie/Amir Roth
+          !       DATE WRITTEN   August 2011
+          !       MODIFIED       na
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! Provide a "cache" of results for the given arguments and wetbulb (twb) output result.
+
+          ! METHODOLOGY EMPLOYED:
+          ! Use grid shifting and masking to provide hash into the cache. Use Equivalence to
+          ! make Fortran ignore "types".
+
+          ! REFERENCES:
+          ! na
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+  REAL, intent(in) :: Tdb    ! dry-bulb temperature {C}
+  REAL, intent(in) :: W      ! humidity ratio
+  REAL, intent(in) :: Pb     ! barometric pressure {Pascals}
+  character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
+  REAL        :: Twb_result    ! result=> Temperature Wet-Bulb {C}
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+  integer(i64), parameter :: Grid_Shift=(64 - 12 - Precision_bits)
+!  integer(i64), parameter :: Grid_Mask=NOT(ISHFT(z'0000000000000001', Grid_Shift)-1)
+  integer(i64), parameter :: Grid_Mask=NOT(ISHFT(1_i64, Grid_Shift)-1)
+
+          ! INTERFACE BLOCK SPECIFICATIONS:
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS:
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+  REAL(r64) :: Tdbx,Wx,Pbx
+  integer(i64) :: Tdb_grid, W_grid, Pb_grid
+  equivalence(Tdbx,Tdb_grid)
+  equivalence(Wx,W_grid)
+  equivalence(Pbx,Pb_grid)
+  integer(i64) :: hash
+
+  Tdbx = Tdb
+  Wx = W
+  Pbx = Pb
+
+  !Both Intel & GNU are happy to use .iand.
+  Tdb_grid = IAND(Tdb_grid, Grid_Mask)
+  W_grid = IAND(W_grid, Grid_Mask)
+  Pb_grid = IAND(Pb_grid, Grid_Mask)
+  hash = IAND(IEOR(ISHFT(Tdb_grid, -Grid_Shift), IEOR(ISHFT(W_grid, -Grid_Shift), ISHFT(Pb_grid, -Grid_Shift))), (cache_size - 1))
+
+  IF (cached_Twb(hash)%Tdb /= Tdbx .OR. cached_Twb(hash)%W /= Wx .OR. cached_Twb(hash)%Pb /= Pbx) THEN
+    cached_Twb(hash)%Tdb = Tdbx
+    cached_Twb(hash)%W = Wx
+    cached_Twb(hash)%Pb = Pbx
+    IF (PRESENT(calledfrom)) THEN
+      cached_Twb(hash)%Twb = PsyTwbFnTdbWPb_raw(Tdbx, Wx, Pbx,calledfrom)
+    ELSE
+      cached_Twb(hash)%Twb = PsyTwbFnTdbWPb_raw(Tdbx, Wx, Pbx)
+    ENDIF
+  END IF
+
+  Twb_result = cached_Twb(hash)%Twb
+
+  RETURN
+
+END FUNCTION PsyTwbFnTdbWPb2
 
 FUNCTION PsyTwbFnTdbWPb_raw(TDB,dW,Patm,calledfrom) RESULT(TWB)
 #else

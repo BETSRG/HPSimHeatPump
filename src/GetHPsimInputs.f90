@@ -205,10 +205,10 @@ REAL NominalCoolingCapacity
 REAL NominalHeatingCapacity
 REAL ElectricHeating
 CHARACTER(len=MaxNameLength)DesignConditionDescription
-REAL OutdoorEnteringDrybulbTemperature
-REAL OutdoorEnteringWetbulbTemperature
-REAL IndoorEnteringDrybulbTemperature
-REAL IndoorEnteringWetbulbTemperature
+!REAL OutdoorEnteringDrybulbTemperature
+!REAL OutdoorEnteringWetbulbTemperature
+!REAL IndoorEnteringDrybulbTemperature
+!REAL IndoorEnteringWetbulbTemperature
 REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
@@ -318,6 +318,9 @@ CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
 REAL :: TubeNumber
 REAL :: SystemCost
+REAL TWiC   !RS: Outdoor Entering or Condenser Inlet Wetbulb Temperature
+REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
+
 !Flow:
 
 !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
@@ -368,9 +371,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   DesignConditionDescription = Alphas(4)
   
   TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature
-  RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
+  !RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
+  TWiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
   TAie = Numbers(8) !IndoorEnteringDrybulbTemperature
-  RHiE = Numbers(9) !IndoorEnteringWetbulbTemperature
+  !RHiE = Numbers(9) !IndoorEnteringWetbulbTemperature
+  TWiE = Numbers(9) !IndoorEnteringWetbulbTemperature
   RefChg = Numbers(10)    !Design Refrigerant Charge Mass
 
 

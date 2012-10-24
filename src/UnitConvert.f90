@@ -27,7 +27,7 @@ CONTAINS
 !***********************************************************************************
 
 SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
-                       AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
+                       AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,TWiC,TWiE, &
 				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
 					   ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &
 					   Tdis,Tliq)
@@ -65,8 +65,8 @@ REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
 REAL, INTENT(INOUT) :: XMaE      !Evaporator inlet air flow rate, kg/s
 REAL, INTENT(INOUT) :: TaiC      !Condenser inlet air DB temp, F
 REAL, INTENT(INOUT) :: TaiE      !Evaporator inlet air DB temp, F
-REAL, INTENT(INOUT) :: RHiC      !Condenser inlet air RH
-REAL, INTENT(INOUT) :: RHiE      !Evaporator inlet air RH
+REAL, INTENT(INOUT) :: TWiC      !Condenser inlet air WB temp, F
+REAL, INTENT(INOUT) :: TWiE      !Evaporator inlet air WB temp, F
 REAL, INTENT(INOUT) :: RefChg    !Refrigerant charge, Lbm
 REAL, INTENT(INOUT) :: TSOCMP    !High side saturation temp., F
 REAL, INTENT(INOUT) :: TSICMP    !Low side saturation temp., F
@@ -193,10 +193,10 @@ INTEGER I !Loop counter
     !Air side boundary conditions
     !XMaC             !Condenser inlet air flow rate, kg/s 
     TaiC= TaiC*1.8+32 !Condenser inlet DB temperature F, ORNL solver uses IP unit
-    !RHiC             !Condenser inlet RH 
+    !TWiC             !Condenser inlet WB temperature 
     !XMaE             !Evaporator inlet air flow rate, kg/s 
     TaiE=TaiE*1.8+32  !Evaporator inlet DB temperature F, ORNL solver uses IP unit
-    !RHiE             !Evaporator inlet RH 
+    !TWiE             !Evaporator inlet WB temperature F
 
     !Initial guesses
     TsoCmp=TsoCmp*1.8+32 !High side saturation temp. F, ORNL solver uses IP unit
@@ -325,13 +325,13 @@ INTEGER I !Loop counter
     !Air side boundary conditions
 	XMaC=XMaC*UnitArFlw                 !Condenser inlet air flow rate, m^3/s
     !TaiC                               !Condenser inlet DB temperature F,  ORNL solver uses IP unit
-    IF (RHiC .GT. 1) THEN
-        RHiC=(RHiC-32)/1.8 !Condenser inlet RH or WB temp
+    IF (TWiC .GT. 1) THEN
+        TWiC=(TWiC-32)/1.8 !Condenser inlet WB temp
     END IF
     XMaE=XMaE*UnitArFlw                 !Evaporator inlet air flow rate, m^3/s
     !TaiE                               !Evaporator inlet DB temperature F,  ORNL solver uses IP unit
-    IF (RHiE .GT. 1) THEN
-        RHiE=(RHiE-32)/1.8 !Evaporator inlet RH or WB temp
+    IF (TWiE .GT. 1) THEN
+        TWiE=(TWiE-32)/1.8 !Evaporator inlet WB temp
     END IF
 
     !Initial guesses

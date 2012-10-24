@@ -2992,7 +2992,7 @@ SUBROUTINE InitPTUnit(PTUnitNum,ZoneNum,FirstHVACIteration,OnOffAirFlowRatio,Zon
                                           PTUnit(PTUnitNum)%CompNum,   &
                                           errFlag=errFlag)
         IF (errFlag) THEN
-          CALL ShowContinueError('Reference Unit="'//trim(PTUnit(PTUnitNum)%Name)//'", type='//trim(PTUnit(PTUnitNum)%UnitType))
+          CALL ShowContinueError('Reference Unit="'//TRIM(PTUnit(PTUnitNum)%Name)//'", type='//TRIM(PTUnit(PTUnitNum)%UnitType))
           CALL ShowFatalError('InitPTUnit: Program terminated for previous conditions.')
         ENDIF
 
@@ -3020,7 +3020,7 @@ SUBROUTINE InitPTUnit(PTUnitNum,ZoneNum,FirstHVACIteration,OnOffAirFlowRatio,Zon
                                           PTUnit(PTUnitNum)%CompNum,   &
                                           errFlag=errFlag)
         IF (errFlag) THEN
-          CALL ShowContinueError('Reference Unit="'//trim(PTUnit(PTUnitNum)%Name)//'", type='//trim(PTUnit(PTUnitNum)%UnitType))
+          CALL ShowContinueError('Reference Unit="'//TRIM(PTUnit(PTUnitNum)%Name)//'", type='//TRIM(PTUnit(PTUnitNum)%UnitType))
           CALL ShowFatalError('InitPTUnit: Program terminated for previous conditions.')
         ENDIF
 
@@ -3186,7 +3186,7 @@ SUBROUTINE InitPTUnit(PTUnitNum,ZoneNum,FirstHVACIteration,OnOffAirFlowRatio,Zon
             PTUnit(PTUnitNum)%CoolVolumeFlowRate(NumOfSpeedCooling) = PTUnit(PTUnitNum)%FanVolFlow
             ! Check flow rates in other speeds and ensure flow rates are not above the max flow rate
             DO i=NumOfSpeedCooling-1,1,-1
-              IF (PTUnit(PTUnitNum)%CoolVolumeFlowRate(i) .GT. PTUnit(PTUnitNum)%CoolVolumeFlowRate(i+1)) Then
+              IF (PTUnit(PTUnitNum)%CoolVolumeFlowRate(i) .GT. PTUnit(PTUnitNum)%CoolVolumeFlowRate(i+1)) THEN
                 CALL ShowContinueError(' The MSHP system flow rate when cooling is required is reset to the' &
                      //' flow rate at higher speed and the simulation continues at Speed'//TrimSigDigits(i,0)//'.')
                 CALL ShowContinueError(' Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(PTUnit(PTUnitNum)%Name))
@@ -6474,7 +6474,7 @@ SUBROUTINE SetVSWSHPAirFlow(PTUnitNum,ZoneNum, PartLoadRatio,OnOffAirFlowRatio,S
   END IF
 
   ! Set up fan flow rate during compressor off time
-  If (PTUnit(PTUnitNum)%OpMode .EQ. ContFanCycCoil .AND. Present(SpeedNum)) Then
+  IF (PTUnit(PTUnitNum)%OpMode .EQ. ContFanCycCoil .AND. Present(SpeedNum)) THEN
     IF (PTUnit(PTUnitNum)%AirFlowControl .EQ. UseCompressorOnFlow .AND. CompOnMassFlow > 0.0) THEN
       IF(SpeedNum == 1) THEN  !LOWEST SPEED USE IDLE FLOW
         CompOffMassFlow = PTUnit(PTUnitNum)%IdleMassFlowRate
@@ -6487,7 +6487,7 @@ SUBROUTINE SetVSWSHPAirFlow(PTUnitNum,ZoneNum, PartLoadRatio,OnOffAirFlowRatio,S
         CompOffFlowRatio = PTUnit(PTUnitNum)%MSCoolingSpeedRatio(SpeedNum)
       END IF
     END IF
-  End If
+  END IF
 
   If (Present(SpeedNum)) Then
     If (SpeedNum > 1) Then

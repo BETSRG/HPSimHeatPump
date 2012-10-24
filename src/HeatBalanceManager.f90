@@ -651,7 +651,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      IF (.not. lNumericFieldBlanks(4)) THEN
        MaxNumberOfWarmupDays=BuildingNumbers(4)
        IF (MaxNumberOfWarmupDays <= 0) THEN
-          CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
+          CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
             ' invalid, ['//  &
             TRIM(RoundSigDigits(MaxNumberOfWarmupDays))//'], '//  &
             trim(RoundSigDIgits(DefaultMaxNumberOfWarmupDays))//' will be used')
@@ -664,7 +664,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      IF (.not. lNumericFieldBlanks(5)) THEN
        MinNumberOfWarmupDays=BuildingNumbers(5)
        IF (MinNumberOfWarmupDays <= 0) THEN
-         CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(3))//  &
+         CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(3))//  &
             ' invalid, ['//  &
             TRIM(RoundSigDigits(MinNumberOfWarmupDays))//'], '//  &
             trim(RoundSigDIgits(DefaultMinNumberOfWarmupDays))//' will be used')
@@ -674,22 +674,22 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
        MinNumberOfWarmupDays=DefaultMinNumberOfWarmupDays
      ENDIF
      IF (MinNumberOfWarmupDays > MaxNumberOfWarmupDays) THEN
-       CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
+       CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
           ' is greater than ['//  &
           TRIM(RoundSigDigits(MaxNumberOfWarmupDays))//'], '//TRIM(RoundSigDigits(MinNumberOfWarmupDays))// &
           ' will be used.')
        MaxNumberOfWarmupDays=MinNumberOfWarmupDays
      ENDIF
      IF (MinNumberOfWarmupDays < 6) THEN
-       CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
+       CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//': '//TRIM(cNumericFieldNames(2))//  &
           ' potentially invalid. '//  &
-          'Experience has shown that most files will converge within '//trim(RoundSigDigits(DefaultMaxNumberOfWarmupDays))//  &
+          'Experience has shown that most files will converge within '//TRIM(RoundSigDigits(DefaultMaxNumberOfWarmupDays))//  &
           ' warmup days. ')
-       CALL ShowContinueError('...Choosing less than '//trim(RoundSigDigits(DefaultMinNumberOfWarmupDays))//  &
+       CALL ShowContinueError('...Choosing less than '//TRIM(RoundSigDigits(DefaultMinNumberOfWarmupDays))//  &
           ' warmup days may have adverse effects on the simulation results, '//  &
           'particularly design day simulations. ')
        CALL ShowContinueError('...Users should only alter this default if they are certain that '// &
-                 'less than '//trim(RoundSigDigits(DefaultMinNumberOfWarmupDays))//  &
+                 'less than '//TRIM(RoundSigDigits(DefaultMinNumberOfWarmupDays))//  &
                 ' warmup days is appropriate for a particular file. ')
        CALL ShowContinueError('...Verify that convergence to desired results are achieved. You can report values'//  &
                  ' during warmup days to ascertain convergence.')
@@ -1016,16 +1016,16 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
    ENDIF
 
      ! Write Solution Algorithm to the initialization output file for User Verification
-   Write(OutputFileInits,fmtA) '! <Solution Algorithm>, Value {CTF - ConductionTransferFunction | '//  &
+   WRITE(OutputFileInits,fmtA) '! <Solution Algorithm>, Value {CTF - ConductionTransferFunction | '//  &
            'EMPD - MoisturePenetrationDepthConductionTransferFunction | '// &
            'CONDFD - ConductionFiniteDifference | CONDFDSimple - Conduction Finite Difference Simplified | '// &
            'HAMT - CombinedHeatAndMoistureFiniteElement} - Description,Inside Surface Max Temperature Limit{C}'
-   Write(OutputFileInits,725) TRIM(AlphaName(1)),TRIM(RoundSigDigits(MaxSurfaceTempLimit,0))
-725 Format('Solution Algorithm, ',A,',',A)
+   WRITE(OutputFileInits,725) TRIM(AlphaName(1)),TRIM(RoundSigDigits(MaxSurfaceTempLimit,0))
+725 FORMAT('Solution Algorithm, ',A,',',A)
 
 
-   Write(OutputFileInits,724)
-724 Format('! <Sky Radiance Distribution>, Value {Anisotropic}',/,  &
+   WRITE(OutputFileInits,724)
+724 FORMAT('! <Sky Radiance Distribution>, Value {Anisotropic}',/,  &
            'Sky Radiance Distribution,Anisotropic')
 
 
@@ -1072,10 +1072,10 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
    ENDIF
 
      ! Write Solution Algorithm to the initialization output file for User Verification
-   Write(OutputFileInits,726)
-   Write(OutputFileInits,727) TRIM(AlphaName(1))
-726 Format('! <Zone Air Solution Algorithm>, Value {ThirdOrderBackwardDifference | AnalyticalSolution | EulerMethod}')
-727 Format(' Zone Air Solution Algorithm, ',A)
+   WRITE(OutputFileInits,726)
+   WRITE(OutputFileInits,727) TRIM(AlphaName(1))
+726 FORMAT('! <Zone Air Solution Algorithm>, Value {ThirdOrderBackwardDifference | AnalyticalSolution | EulerMethod}')
+727 FORMAT(' Zone Air Solution Algorithm, ',A)
 
    ! A new object is added by L. Gu, 06/10
    CurrentModuleObject='ZoneAirContaminantBalance'
@@ -1084,7 +1084,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      CALL GetObjectItem(TRIM(CurrentModuleObject),1,AlphaName,NumAlpha,BuildingNumbers,NumNumber,IOStat,  &
                    AlphaBlank=lAlphaFieldBlanks,NumBlank=lNumericFieldBlanks,  &
                    AlphaFieldnames=cAlphaFieldNames,NumericFieldNames=cNumericFieldNames)
-     If (NumAlpha > 0) Then
+     IF (NumAlpha > 0) THEN
        SELECT CASE (AlphaName(1))
          CASE ('YES')
            Contaminant%CO2Simulation = .TRUE.
@@ -1097,24 +1097,24 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
            CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid input of '//TRIM(cAlphaFieldNames(1))//  &
               '. The default choice is assigned = NO')
        END SELECT
-     End If
-     If (NumAlpha .EQ. 1 .AND. Contaminant%CO2Simulation) Then
-       If (Contaminant%CO2Simulation) Then
+     END IF
+     IF (NumAlpha .EQ. 1 .AND. Contaminant%CO2Simulation) THEN
+       IF (Contaminant%CO2Simulation) THEN
          CALL ShowSevereError(TRIM(CurrentModuleObject)//', '//TRIM(cAlphaFieldNames(2))//' is required and not given.')
          ErrorsFound=.true.
-       End If
-     ElseIf (NumAlpha > 1 .AND. Contaminant%CO2Simulation) Then
+       END IF
+     ELSEIF (NumAlpha > 1 .AND. Contaminant%CO2Simulation) THEN
        Contaminant%CO2OutdoorSchedPtr = GetScheduleIndex(AlphaName(2))
        IF (Contaminant%CO2OutdoorSchedPtr == 0) THEN
          CALL ShowSevereError(TRIM(CurrentModuleObject)//', '//TRIM(cAlphaFieldNames(2))//' not found: '//TRIM(AlphaName(2)))
          ErrorsFound=.true.
        ENDIF
-     End If
-     If (NumAlpha > 2) Then
+     END IF
+     If (NumAlpha > 2) THEN
        SELECT CASE (AlphaName(3))
          CASE ('YES')
            Contaminant%GenericContamSimulation = .TRUE.
-           If (.NOT. Contaminant%CO2Simulation) Contaminant%SimulateContaminants = .TRUE.
+           IF (.NOT. Contaminant%CO2Simulation) Contaminant%SimulateContaminants = .TRUE.
          CASE ('NO')
            Contaminant%GenericContamSimulation = .FALSE.
          CASE DEFAULT
@@ -1123,19 +1123,19 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
            CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid input of '//TRIM(cAlphaFieldNames(3))//  &
               '. The default choice is assigned = NO')
        END SELECT
-       If (NumAlpha .EQ. 3 .AND. Contaminant%GenericContamSimulation) Then
-         If (Contaminant%GenericContamSimulation) Then
+       IF (NumAlpha .EQ. 3 .AND. Contaminant%GenericContamSimulation) THEN
+         IF (Contaminant%GenericContamSimulation) THEN
            CALL ShowSevereError(TRIM(CurrentModuleObject)//', '//TRIM(cAlphaFieldNames(4))//' is required and not given.')
            ErrorsFound=.true.
-         End If
-       ElseIf (NumAlpha > 3 .AND. Contaminant%GenericContamSimulation) Then
+         END IF
+       ELSEIF (NumAlpha > 3 .AND. Contaminant%GenericContamSimulation) THEN
          Contaminant%GenericContamOutdoorSchedPtr = GetScheduleIndex(AlphaName(4))
          IF (Contaminant%GenericContamOutdoorSchedPtr == 0) THEN
            CALL ShowSevereError(TRIM(CurrentModuleObject)//', '//TRIM(cAlphaFieldNames(4))//' not found: '//TRIM(AlphaName(4)))
            ErrorsFound=.true.
          ENDIF
-       End If
-     End If
+       END IF
+     END IF
    ELSE
      Contaminant%SimulateContaminants = .FALSE.
      Contaminant%CO2Simulation = .FALSE.
@@ -1144,23 +1144,23 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      AlphaName(3)='NO'
    ENDIF
 
-   Write(OutputFileInits,728)
-   If (Contaminant%SimulateContaminants .AND. Contaminant%CO2Simulation) Then
-     Write(OutputFileInits,730) 'Yes',TRIM(AlphaName(1))
+   WRITE(OutputFileInits,728)
+   IF (Contaminant%SimulateContaminants .AND. Contaminant%CO2Simulation) THEN
+     WRITE(OutputFileInits,730) 'Yes',TRIM(AlphaName(1))
    ELSE
-     Write(OutputFileInits,730) 'No','N/A'
+     WRITE(OutputFileInits,730) 'No','N/A'
    END IF
-728 Format('! <Zone Air Contaminant Balance Simulation>, Simulation {Yes/No}, Carbon Dioxide Concentration')
-730 Format(' Zone Air Carbon Dioxide Balance Simulation, ',A,',',A)
+728 FORMAT('! <Zone Air Contaminant Balance Simulation>, Simulation {Yes/No}, Carbon Dioxide Concentration')
+730 FORMAT(' Zone Air Carbon Dioxide Balance Simulation, ',A,',',A)
 
-   Write(OutputFileInits,729)
-   If (Contaminant%SimulateContaminants .AND. Contaminant%GenericContamSimulation) Then
-     Write(OutputFileInits,731) 'Yes',TRIM(AlphaName(3))
+   WRITE(OutputFileInits,729)
+   IF (Contaminant%SimulateContaminants .AND. Contaminant%GenericContamSimulation) THEN
+     WRITE(OutputFileInits,731) 'Yes',TRIM(AlphaName(3))
    ELSE
-     Write(OutputFileInits,731) 'No','N/A'
+     WRITE(OutputFileInits,731) 'No','N/A'
    END IF
-729 Format('! <Zone Air Contaminant Balance Simulation>, Simulation {Yes/No}, Generic Contaminant Concentration')
-731 Format(' Zone Air Generic Contaminant Balance Simulation, ',A,',',A)
+729 FORMAT('! <Zone Air Contaminant Balance Simulation>, Simulation {Yes/No}, Generic Contaminant Concentration')
+731 FORMAT(' Zone Air Generic Contaminant Balance Simulation, ',A,',',A)
 
 
   RETURN
