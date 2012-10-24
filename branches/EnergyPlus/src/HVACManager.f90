@@ -29,9 +29,7 @@ USE DataGlobals, ONLY: TimeStepZone,WarmUpFlag,EndHourFlag,  &
                        AnyEnergyManagementSystemInModel, &
                        emsCallFromEndSystemTimestepBeforeHVACReporting, &
                        AnyIdealCondEntSetPointInModel, &
-                       RunOptCondEntTemp !, ShowFatalError, ShowWarningError,&
-                       !ShowContinueError,ShowMessage
-!USE UtilityRoutines, ONLY: ShowFatalError,ShowWarningError,ShowContinueError,ShowMessage
+                       RunOptCondEntTemp 
 USE DataInterfaces, ONLY: SetupOutputVariable,  &
                           ShowContinueErrorTimeStamp, ShowRecurringWarningErrorAtEnd
 USE DataEnvironment

@@ -40,6 +40,9 @@
     USE FrostModel
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat  !RS: Debugging: Bringing in TaiE
+    USE WeatherManager !, ONLY: SetCurrentWeather,   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
+    USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2
 
     IMPLICIT NONE
 
@@ -95,6 +98,12 @@
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     
+    REAL TWiC   !RS: Wetbulb Temperature, Outdoor Entering
+    REAL TWiE   !RS: Wetbulb Temperature, Indoor Entering
+    REAL OutDryBulbTemp
+    REAL OutWetBulBTemp
+    REAL PressBarom    !RS: Debugging
+    
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
     ! GOTO 30 means "skip refined simulation" according to previous comments ....
@@ -110,8 +119,6 @@
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     
     !Flow**:
-    !CALL PreProcessInput   !RS: Commenting out since it'll already have been called in E+ module
-    !CALL ProcessInput   !Moved up to avoid errors with "CALL GetInputs"    !RS: Commenting out since it'll already have been called in E+ module
 
     CoarseConvergenceCriteriaMet=.FALSE. !.TRUE. !.FALSE.     ! VL Comment: default initialization for program or user setting?
     FirstTimeAirTempLoop=.TRUE.                               ! VL Comment: default initialization for program or user setting?
@@ -130,8 +137,6 @@
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
 
-    !CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
-    !RS: Debugging: Commenting out above call to see if we can just call it once at the beginning of the entire program
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
@@ -181,7 +186,7 @@
 
     IF (ONETIME) THEN   !RS: Debugging: Only called once
         CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
-        AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
+        AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,TWiC,TWiE, &
         Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
         ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
         
@@ -191,7 +196,12 @@
         CFMcnd=CFMcnd*UnitArFlw   !RS: Debugging: This needs to be called every time for some reason
         CFMevp=CFMevp*UnitArFlw
     END IF
-
+    
+    TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+    TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
+    TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
+    TWiE=PsyTwbFnTdbWPb2(TaiE,ZoneAirHumRat(1),PressBarom)
+    
     CALL InitAccumulator(AccumPAR)
 
     !set up Refrigerant variable...why?
@@ -237,13 +247,13 @@
         CondIn=0.0
         CondOut=0.0
 
-        IF (RHiC .GT. TaiC) THEN
+        IF (TWiC .GT. TaiC) THEN
             WRITE(*,*)'## ERROR ## Main: Condenser wet bulb temperature is greater than dry bulb temperature.'
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
         AirProp(1)=Temperature_F2C(TaiC)  ! VL_Index_Replace
-        AirProp(5)=RHiC                   ! VL_Index_Replace
+        AirProp(5)=TWiC                   ! VL_Index_Replace
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RHiC=AirProp(3)               ! VL_Index_Replace
         RhoAiC=AirProp(7)             ! VL_Index_Replace
@@ -251,13 +261,13 @@
         CondIN(5)=Temperature_F2C(TaiC)   ! VL_Index_Replace
         CondIN(6)=RHiC                    ! VL_Index_Replace
 
-        IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
+        IF (TWiE .GT. TaiE) THEN !ISI - 11/04/07
             WRITE(*,*)'## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.'
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
         AirProp(1)=Temperature_F2C(TaiE)  ! VL_Index_Replace
-        AirProp(5)=RHiE                   ! VL_Index_Replace
+        AirProp(5)=TWiE                   ! VL_Index_Replace
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RHiE=AirProp(3)               ! VL_Index_Replace
         RhoAiE=AirProp(7)             ! VL_Index_Replace

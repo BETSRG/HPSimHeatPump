@@ -2524,7 +2524,7 @@ SUBROUTINE AddVariableSlatBlind(inBlindNumber,outBlindNumber,errFlag)
 
       IF(Blind(TotBlinds)%MaxSlatAngle < Blind(TotBlinds)%MinSlatAngle) THEN
         errFlag = .true.
-        CALL ShowSevereError('WindowMaterial:Blind="'//trim(Blind(inBlindNumber)%Name)//'", Illegal value combination.')
+        CALL ShowSevereError('WindowMaterial:Blind="'//TRIM(Blind(inBlindNumber)%Name)//'", Illegal value combination.')
         CALL ShowContinueError('Minimum Slat Angle=['//TRIM(RoundSigDigits(Blind(TotBlinds)%MinSlatAngle,1))//  &
            '], is greater than '//'Maximum Slat Angle=['//  &
            TRIM(RoundSigDigits(Blind(TotBlinds)%MaxSlatAngle,1))//'] deg.')
@@ -2536,7 +2536,7 @@ SUBROUTINE AddVariableSlatBlind(inBlindNumber,outBlindNumber,errFlag)
          (Blind(TotBlinds)%SlatAngle < Blind(TotBlinds)%MinSlatAngle &
           .OR. Blind(TotBlinds)%SlatAngle > Blind(TotBlinds)%MaxSlatAngle)) THEN
         errFlag = .true.
-        CALL ShowSevereError('WindowMaterial:Blind="'//trim(Blind(inBlindNumber)%Name)//'", Illegal value combination.')
+        CALL ShowSevereError('WindowMaterial:Blind="'//TRIM(Blind(inBlindNumber)%Name)//'", Illegal value combination.')
         CALL ShowContinueError('Slat Angle=['//TRIM(RoundSigDigits(Blind(TotBlinds)%SlatAngle,1))//  &
            '] is outside of the input min/max range, min=['//TRIM(RoundSigDigits(Blind(TotBlinds)%MinSlatAngle,1))//  &
            '], max=['//TRIM(RoundSigDigits(Blind(TotBlinds)%MaxSlatAngle,1))//'] deg.')
