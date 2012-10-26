@@ -62,7 +62,6 @@
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
-    !LOGICAL,SAVE :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
     REAL, SAVE:: PrevTime = 0.0 
     INTEGER, SAVE :: ErrorCount = 0  !RS: Debugging
@@ -202,7 +201,7 @@
             END SELECT
         END IF
                 
-        IF (ErrorCount .NE. 0) THEN !RS: Debugging: Resetting the ErrorCount to 0
+        IF (ErrorCount .NE. 0) THEN !RS: Debugging: Resetting the ErrorCount to 0 after the cycle ends
             ErrorCount=0
             LoopCount=0 !RS: Debugging: Also resetting the LoopCount for 0 so the temperature doesn't go negative
             LoopCountSmall=0

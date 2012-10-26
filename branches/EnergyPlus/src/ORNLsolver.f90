@@ -41,8 +41,8 @@
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat  !RS: Debugging: Bringing in TaiE
-    USE WeatherManager !, ONLY: SetCurrentWeather,   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
-    USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2
+    USE WeatherManager, ONLY: GetTempsOut   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
+    USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2   !RS: Debugging: Solving for TWiE
 
     IMPLICIT NONE
 
@@ -98,11 +98,12 @@
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
     REAL, INTENT (OUT) :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: Testing: Trying to pass variables out
     
-    REAL TWiC   !RS: Wetbulb Temperature, Outdoor Entering
-    REAL TWiE   !RS: Wetbulb Temperature, Indoor Entering
-    REAL OutDryBulbTemp
-    REAL OutWetBulBTemp
-    REAL PressBarom    !RS: Debugging
+    REAL TWiC   !RS: Wetbulb Temperature, Outdoor Entering (C)
+    REAL TWiE   !RS: Wetbulb Temperature, Indoor Entering (C)
+    REAL OutDryBulbTemp !RS: Drybulb temperature, Outdoor (C)
+    REAL OutWetBulBTemp !RS: Wetbulb temperature, Outdoor (C)
+    REAL OutBaroPress   !RS: Debugging
+    REAL DummyHR !RS: Debugging
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -143,6 +144,14 @@
     
     !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    
+    TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+    CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
+    TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
+    TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
+    DummyHR=ZoneAirHumRat(1)    !RS: Debugging
+    CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress, TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+    CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
@@ -185,22 +194,24 @@
     END IF
 
     IF (ONETIME) THEN   !RS: Debugging: Only called once
+        
         CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
         AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,TWiC,TWiE, &
         Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
         ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
         
         ONETIME = .FALSE.
+             
+        !TWiC=TWiC-5 !RS: Debugging: Just so it's not equal to the drybulb the first time around
         
     ELSE
         CFMcnd=CFMcnd*UnitArFlw   !RS: Debugging: This needs to be called every time for some reason
         CFMevp=CFMevp*UnitArFlw
+        TaiC= TaiC*1.8+32   !RS: Debugging: E+ brings it in in C, and HPSim solves it in F
+        TaiE= TaiE*1.8+32
+        !TWiC= TWiC*1.8+32  !RS: Debugging: Apparently, these are used just in C
+        !TWiE= TWiE*1.8+32
     END IF
-    
-    TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
-    TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
-    TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
-    TWiE=PsyTwbFnTdbWPb2(TaiE,ZoneAirHumRat(1),PressBarom)
     
     CALL InitAccumulator(AccumPAR)
 

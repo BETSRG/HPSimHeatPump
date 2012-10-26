@@ -5046,7 +5046,8 @@ END IF
     END DO !end of RefBCiter
 
     IF (RefBCiter .GT. RefBCmaxIter) THEN
-        ErrorFlag=CONVERGEERROR
+        ErrorFlag=CONVERGEERROR    !RS: Debugging
+        !WRITE(*,*) 'Converge Error'
     END IF
 
     !Outside air temp

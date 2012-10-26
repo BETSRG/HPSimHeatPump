@@ -325,15 +325,19 @@ INTEGER I !Loop counter
     !Air side boundary conditions
 	XMaC=XMaC*UnitArFlw                 !Condenser inlet air flow rate, m^3/s
     !TaiC                               !Condenser inlet DB temperature F,  ORNL solver uses IP unit
-    IF (TWiC .GT. 1) THEN
-        TWiC=(TWiC-32)/1.8 !Condenser inlet WB temp
-    END IF
+    !IF (TWiC .GT. 1) THEN
+    !    TWiC=(TWiC-32)/1.8 !Condenser inlet WB temp    !RS: Debugging: The temps are already in C; they need to be in F
+    !END IF
     XMaE=XMaE*UnitArFlw                 !Evaporator inlet air flow rate, m^3/s
     !TaiE                               !Evaporator inlet DB temperature F,  ORNL solver uses IP unit
-    IF (TWiE .GT. 1) THEN
-        TWiE=(TWiE-32)/1.8 !Evaporator inlet WB temp
-    END IF
-
+    !IF (TWiE .GT. 1) THEN
+    !    TWiE=(TWiE-32)/1.8 !Evaporator inlet WB temp   !RS: Debugging: The temps are already in C; they need to be in F
+    !END IF
+    TaiC=TaiC*1.8+32    !Converting Outdoor Drybulb Temp from C to F
+    !TWiC=TWiC*1.8+32    !Converting Outdoor Wetbulb Temp from C to F   !RS: Debugging: Apparently, these are used just in C?
+    TaiE=TaiE*1.8+32    !Converting Indoor Drybulb Temp from C to F
+    !TWiE=TWiE*1.8+32    !Converting Indoor Wetbulb Temp from C to F    !RS: Debugging: Apparently, these are used just in C?
+    !
     !Initial guesses
     !TsoCmp    !Condenser temp. F,  ORNL solver uses IP unit
     !TsiCmp    !Evaparator temp. F,  ORNL solver uses IP unit

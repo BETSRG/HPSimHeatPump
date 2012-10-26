@@ -495,9 +495,10 @@ LOGICAL :: Jan1DatesShouldBeReset = .false.    ! True if Jan 1 should signal res
 PUBLIC  ManageWeather
 PUBLIC  GetNextEnvironment
 PUBLIC  ResetEnvironmentCounter
+PUBLIC  GetTempsOut   !RS: Debugging
 PRIVATE InitializeWeather
 PRIVATE UpdateWeatherData
-PRIVATE SetCurrentWeather
+PRIVATE SetCurrentWeather  !RS: Debugging
 PRIVATE ReadWeatherForDay
 PRIVATE ReadEPlusWeatherForDay
 PRIVATE InterpretWeatherDataLine
@@ -9849,6 +9850,20 @@ FUNCTION CalculateDayOfWeek(JulianDate) RESULT (dayOfWeek)
   RETURN
 
 END FUNCTION CalculateDayOfWeek
+
+SUBROUTINE GetTempsOut(Out1, Out2, Out3, Out4)
+
+REAL Out1
+REAL Out2
+REAL Out3
+REAL Out4
+
+    Out1=OutDryBulbTemp !Outdoor Drybulb Temperature, C
+    Out2=OutWetBulbTemp !Outdoor Wetbulb Temperature, C
+    Out3=OutBaroPress   !Outdoor Barometric Pressure, Pa (I think)
+    Out4=OutRelHum  !Outdoor Relative Humidity, %
+    
+END SUBROUTINE
 
 !     NOTICE
 !
