@@ -52,25 +52,25 @@ TYPE DemandManagerListData
   CHARACTER(len=MaxNameLength)   :: Name = ''                     ! Name of DEMAND MANAGER LIST
   INTEGER                        :: Meter = 0                     ! Index to meter to demand limit
   INTEGER                        :: LimitSchedule = 0             ! Schedule index for demand limit
-  REAL(r64)                      :: SafetyFraction = 1.0          ! Multiplier applied to demand limit schedule
+  REAL                      :: SafetyFraction = 1.0          ! Multiplier applied to demand limit schedule
   INTEGER                        :: BillingSchedule = 0           ! Schedule index for billing month periods
-  REAL(r64)                      :: BillingPeriod = 0.0           ! Current billing period value
+  REAL                      :: BillingPeriod = 0.0           ! Current billing period value
   INTEGER                        :: PeakSchedule = 0              ! Schedule index for billing month periods
   INTEGER                        :: AveragingWindow = 1           ! Number of timesteps for averaging demand window
-  REAL(r64), ALLOCATABLE, DIMENSION(:)    :: History                   ! Demand window history
+  REAL, ALLOCATABLE, DIMENSION(:)    :: History                   ! Demand window history
   INTEGER                        :: ManagerPriority = 0           ! Indicator for priority (SEQUENTIAL, OPTIMAL, ALL)
   INTEGER                        :: NumOfManager                  ! Number of DEMAND MANAGERs
   INTEGER, ALLOCATABLE, DIMENSION(:) :: Manager                   ! Indexes for DEMAND MANAGERs
 
-  REAL(r64)                      :: MeterDemand = 0.0             ! Meter demand at this timestep
-  REAL(r64)                      :: AverageDemand = 0.0           ! Current demand over the demand window
-  REAL(r64)                      :: PeakDemand = 0.0              ! Peak demand in the billing month so far
+  REAL                      :: MeterDemand = 0.0             ! Meter demand at this timestep
+  REAL                      :: AverageDemand = 0.0           ! Current demand over the demand window
+  REAL                      :: PeakDemand = 0.0              ! Peak demand in the billing month so far
 
-  REAL(r64)                      :: ScheduledLimit = 0.0          ! Scheduled demand limit
-  REAL(r64)                      :: DemandLimit = 0.0             ! Scheduled demand limit * Safety Fraction
-  REAL(r64)                      :: AvoidedDemand = 0.0           ! Demand avoided by active DEMAND MANAGERs
-  REAL(r64)                      :: OverLimit = 0.0               ! Amount that demand limit is exceeded
-  REAL(r64)                      :: OverLimitDuration = 0.0       ! Number of hours that demand limit is exceeded
+  REAL                      :: ScheduledLimit = 0.0          ! Scheduled demand limit
+  REAL                      :: DemandLimit = 0.0             ! Scheduled demand limit * Safety Fraction
+  REAL                      :: AvoidedDemand = 0.0           ! Demand avoided by active DEMAND MANAGERs
+  REAL                      :: OverLimit = 0.0               ! Amount that demand limit is exceeded
+  REAL                      :: OverLimitDuration = 0.0       ! Number of hours that demand limit is exceeded
 
 END TYPE DemandManagerListData
 
@@ -95,9 +95,9 @@ TYPE DemandManagerData
   INTEGER                        :: ElapsedRotationTime = 0       ! Elapsed time for the current rotation (min)
   INTEGER                        :: RotatedLoadNum = 0            ! Index for rotated load
 
-  REAL(r64)                      :: LowerLimit = 0.0              ! Lowest demand limit as fraction of design level
+  REAL                      :: LowerLimit = 0.0              ! Lowest demand limit as fraction of design level
                                                                   ! Lowest heating setpoint for thermostats
-  REAL(r64)                      :: UpperLimit = 0.0              ! Not used for demand limit
+  REAL                      :: UpperLimit = 0.0              ! Not used for demand limit
                                                                   ! Highest cooling setpoint for thermostats
   INTEGER                        :: NumOfLoads = 0                ! Number of load objects
   INTEGER, ALLOCATABLE, DIMENSION(:) :: Load                      ! Pointers to load objects
@@ -274,10 +274,10 @@ SUBROUTINE SimulateDemandManagerList(ListNum, ResimExt, ResimHB, ResimHVAC)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                :: MgrNum
   INTEGER                :: MgrPtr
-  REAL(r64)              :: AverageDemand
-  REAL(r64)              :: OverLimit
+  REAL              :: AverageDemand
+  REAL              :: OverLimit
   LOGICAL                :: OnPeak
-  REAL(r64), EXTERNAL         :: GetInstantMeterValue
+  REAL, EXTERNAL         :: GetInstantMeterValue
 
           ! FLOW:
   DemandManagerList(ListNum)%ScheduledLimit = GetCurrentScheduleValue(DemandManagerList(ListNum)%LimitSchedule)
@@ -407,7 +407,7 @@ SUBROUTINE GetDemandManagerListInput
   INTEGER                     :: NumNums   ! Number of elements in the numeric array
   INTEGER                     :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE :: AlphArray  ! Character string data
-  REAL(r64), DIMENSION(:),ALLOCATABLE          :: NumArray  ! Numeric data
+  REAL, DIMENSION(:),ALLOCATABLE          :: NumArray  ! Numeric data
   LOGICAL                     :: IsNotOK   ! Flag to verify name
   LOGICAL                     :: IsBlank   ! Flag for blank name
   CHARACTER(len=5)            :: Units     ! String for meter units
@@ -665,7 +665,7 @@ SUBROUTINE GetDemandManagerInput
   INTEGER                     :: NumParams ! Number of arguments total in an ObjectDef
   INTEGER                     :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE :: AlphArray  ! Character string data
-  REAL(r64), DIMENSION(:),ALLOCATABLE          :: NumArray  ! Numeric data
+  REAL, DIMENSION(:),ALLOCATABLE          :: NumArray  ! Numeric data
   LOGICAL                     :: IsNotOK   ! Flag to verify name
   LOGICAL                     :: IsBlank   ! Flag for blank name
   LOGICAL                     :: ErrorsFound = .FALSE.
@@ -1509,11 +1509,11 @@ SUBROUTINE ReportDemandManagerList(ListNum)
   INTEGER, INTENT(IN) :: ListNum
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: BillingPeriod
+  REAL           :: BillingPeriod
   INTEGER             :: Item
   INTEGER             :: AveragingWindow
   LOGICAL             :: OnPeak
-  REAL(r64)           :: OverLimit
+  REAL           :: OverLimit
 
           ! FLOW:
   IF (DemandManagerList(ListNum)%BillingSchedule .EQ. 0) THEN
@@ -1604,7 +1604,7 @@ SUBROUTINE LoadInterface(Action, MgrNum, LoadPtr, CanReduceDemand)
   LOGICAL, INTENT(OUT)          :: CanReduceDemand
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)                     :: LowestPower
+  REAL                     :: LowestPower
 
           ! FLOW:
   CanReduceDemand = .FALSE.

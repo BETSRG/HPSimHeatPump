@@ -41,8 +41,8 @@ PUBLIC          ! By definition, all variables which are placed in this data
           ! DERIVED TYPE DEFINITIONS
   TYPE timings
     CHARACTER(len=MaxTimingStringLength) :: Element=' '
-    REAL(r64)                            :: rstartTime=0.0d0
-    REAL(r64)                            :: currentTimeSum=0.0d0
+    REAL                            :: rstartTime=0.0
+    REAL                            :: currentTimeSum=0.0
     INTEGER                              :: calls=0
   END TYPE
 
@@ -53,9 +53,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
   TYPE(timings), ALLOCATABLE, DIMENSION(:) :: Timing
   INTEGER :: NumTimingElements=0
   INTEGER :: MaxTimingElements=0
-  real(r64) :: dailyWeatherTime, dailyExteriorEnergyUseTime, dailyHeatBalanceTime
-  real(r64) :: hbdailyInit,hbdailyOutSurf,hbdailyInSurf,hbdailyHVAC,hbdailyRep
-  real(r64) :: clockrate
+  REAL :: dailyWeatherTime, dailyExteriorEnergyUseTime, dailyHeatBalanceTime
+  REAL :: hbdailyInit,hbdailyOutSurf,hbdailyInSurf,hbdailyHVAC,hbdailyRep
+  REAL :: clockrate
   LOGICAL :: lprocessingInputTiming = .false.
   LOGICAL :: lmanageSimulationTiming = .false.
   LOGICAL :: lcloseoutReportingTiming = .false.
@@ -186,7 +186,7 @@ SUBROUTINE epStopTime(ctimingElementstring,printit,wprint)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: loop  ! testing if already in structure
   INTEGER :: found ! indicator for element
-  REAL(r64) :: stoptime
+  REAL :: stoptime
 
 #ifdef EP_NO_Timings
   RETURN
@@ -268,7 +268,7 @@ SUBROUTINE epSummaryTimes(TimeUsed_CPUTime)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64) :: TimeUsed_CPUTime
+  REAL :: TimeUsed_CPUTime
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: fmta='(A)'
@@ -299,7 +299,7 @@ SUBROUTINE epSummaryTimes(TimeUsed_CPUTime)
     ELSE
       WRITE(EchoInputFile,fmta) trim(Timing(loop)%Element)//tabchar//trim(RoundSigDigits(Timing(loop)%calls))//  &
          tabchar//trim(RoundSigDigits(Timing(loop)%currentTimeSum,3))//tabchar//  &
-         trim(RoundSigDigits(-999.0d0,3))
+         trim(RoundSigDigits(-999.0,3))
     ENDIF
   ENDDO
   WRITE(EchoInputFile,fmta) 'Time from CPU_Time'//tabchar//trim(RoundSigDigits(TimeUsed_CPUTime,3))
@@ -335,7 +335,7 @@ FUNCTION epGetTimeUsed(ctimingElementstring) RESULT(totalTimeUsed)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: ctimingElementstring
-  REAL(r64) :: totalTimeUsed
+  REAL :: totalTimeUsed
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -394,7 +394,7 @@ FUNCTION epGetTimeUsedperCall(ctimingElementstring) RESULT(averageTimeUsed)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: ctimingElementstring
-  REAL(r64) :: averageTimeUsed
+  REAL :: averageTimeUsed
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -424,7 +424,7 @@ FUNCTION epGetTimeUsedperCall(ctimingElementstring) RESULT(averageTimeUsed)
   IF (Timing(found)%calls > 0) THEN
     averageTimeUsed = Timing(found)%currentTimeSum/REAL(Timing(found)%calls,r64)
   ELSE
-    averageTimeUsed = -999.0d0
+    averageTimeUsed = -999.0
   ENDIF
 
   RETURN
@@ -457,7 +457,7 @@ FUNCTION eptime() RESULT(calctime)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64) :: calctime  ! calculated time based on "count" and "count_rate"
+  REAL :: calctime  ! calculated time based on "count" and "count_rate"
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -503,7 +503,7 @@ FUNCTION epElapsedTime() RESULT(calctime)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64) :: calctime  ! calculated time based on hrs, minutes, seconds, milliseconds
+  REAL :: calctime  ! calculated time based on hrs, minutes, seconds, milliseconds
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -526,7 +526,7 @@ FUNCTION epElapsedTime() RESULT(calctime)
                !value(8)   Milliseconds (0-999)
 
   CALL date_and_time(values=clockvalues)
-  calctime = clockvalues(5)*3600.d0+clockvalues(6)*60.d0+clockvalues(7)+clockvalues(8)/1000.d0
+  calctime = clockvalues(5)*3600.+clockvalues(6)*60.+clockvalues(7)+clockvalues(8)/1000.
 
   RETURN
 

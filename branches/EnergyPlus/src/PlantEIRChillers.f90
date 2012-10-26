@@ -55,59 +55,59 @@ INTEGER, PARAMETER :: EvapCooled        = 3
           ! MODULE VARIABLE DECLARATIONS:
 PRIVATE
 INTEGER        :: NumElectricEIRChillers         = 0   ! Number of electric EIR chillers specified in input
-REAL(r64)      :: CondMassFlowRate               = 0.0 ! Condenser mass flow rate [kg/s]
-REAL(r64)      :: EvapMassFlowRate               = 0.0 ! Evaporator mass flow rate [kg/s]
-REAL(r64)      :: CondOutletTemp                 = 0.0 ! Condenser outlet temperature [C]
-REAL(r64)      :: EvapOutletTemp                 = 0.0 ! Evaporator outlet temperature [C]
-REAL(r64)      :: Power                          = 0.0 ! Rate of chiller electric energy use [W]
-REAL(r64)      :: QEvaporator                    = 0.0 ! Rate of heat transfer to the evaporator coil [W]
-REAL(r64)      :: QCondenser                     = 0.0 ! Rate of heat transfer to the condenser coil [W]
-REAL(r64)      :: QHeatRecovered                 = 0.0 ! Rate of heat transfer to the heat recovery coil [W]
-REAL(r64)      :: HeatRecOutletTemp              = 0.0 ! Heat recovery outlet temperature [C]
-REAL(r64)      :: CondenserFanPower              = 0.0 ! Condenser Fan Power (fan cycles with compressor) [W]
-REAL(r64)      :: ChillerCapFT                   = 0.0 ! Chiller capacity fraction (evaluated as a function of temperature)
-REAL(r64)      :: ChillerEIRFT                   = 0.0 ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
-REAL(r64)      :: ChillerEIRFPLR                 = 0.0 ! Chiller EIR as a function of part-load ratio (PLR)
-REAL(r64)      :: ChillerPartLoadRatio           = 0.0 ! Chiller part-load ratio (PLR)
-REAL(r64)      :: ChillerCyclingRatio            = 0.0 ! Chiller cycling ratio
-REAL(r64)      :: BasinHeaterPower               = 0.0 ! Basin heater power (W)
-REAL(r64)      :: ChillerFalseLoadRate           = 0.0 ! Chiller false load over and above the water-side load [W]
+REAL      :: CondMassFlowRate               = 0.0 ! Condenser mass flow rate [kg/s]
+REAL      :: EvapMassFlowRate               = 0.0 ! Evaporator mass flow rate [kg/s]
+REAL      :: CondOutletTemp                 = 0.0 ! Condenser outlet temperature [C]
+REAL      :: EvapOutletTemp                 = 0.0 ! Evaporator outlet temperature [C]
+REAL      :: Power                          = 0.0 ! Rate of chiller electric energy use [W]
+REAL      :: QEvaporator                    = 0.0 ! Rate of heat transfer to the evaporator coil [W]
+REAL      :: QCondenser                     = 0.0 ! Rate of heat transfer to the condenser coil [W]
+REAL      :: QHeatRecovered                 = 0.0 ! Rate of heat transfer to the heat recovery coil [W]
+REAL      :: HeatRecOutletTemp              = 0.0 ! Heat recovery outlet temperature [C]
+REAL      :: CondenserFanPower              = 0.0 ! Condenser Fan Power (fan cycles with compressor) [W]
+REAL      :: ChillerCapFT                   = 0.0 ! Chiller capacity fraction (evaluated as a function of temperature)
+REAL      :: ChillerEIRFT                   = 0.0 ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
+REAL      :: ChillerEIRFPLR                 = 0.0 ! Chiller EIR as a function of part-load ratio (PLR)
+REAL      :: ChillerPartLoadRatio           = 0.0 ! Chiller part-load ratio (PLR)
+REAL      :: ChillerCyclingRatio            = 0.0 ! Chiller cycling ratio
+REAL      :: BasinHeaterPower               = 0.0 ! Basin heater power (W)
+REAL      :: ChillerFalseLoadRate           = 0.0 ! Chiller false load over and above the water-side load [W]
 
 TYPE ElectricEIRChillerSpecs
   CHARACTER(len=MaxNameLength) :: Name           =' '  ! User identifier
   INTEGER           :: TypeNum = 0                     ! plant loop type identifier
   CHARACTER(len=MaxNameLength) :: EIRFPLRName    =' '  ! EIRPLR curve name
   INTEGER           :: CondenserType             = 0   ! Type of Condenser - Air Cooled, Water Cooled or Evap Cooled
-  REAL(r64)         :: RefCap                    = 0.0 ! Reference capacity of chiller [W]
-  REAL(r64)         :: RefCOP                    = 0.0 ! Reference coefficient of performance [W/W]
+  REAL         :: RefCap                    = 0.0 ! Reference capacity of chiller [W]
+  REAL         :: RefCOP                    = 0.0 ! Reference coefficient of performance [W/W]
   LOGICAL           :: ConstantFlow           =.False. ! True if this is a Constant Flow Chiller
   LOGICAL           :: VariableFlow           =.False. ! True if this is a Variable Flow Chiller
   LOGICAL           :: VariableFlowSetToLoop  =.FALSE. ! True if the setpoint is missing at the outlet node
   LOGICAL           :: VariableFlowErrDone    =.FALSE. ! true if setpoint warning issued
-  REAL(r64)         :: EvapVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the evaporator [m3/s]
-  REAL(r64)         :: EvapMassFlowRateMax       = 0.0 ! Reference water mass flow rate through evaporator [kg/s]
-  REAL(r64)         :: CondVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the condenser [m3/s]
-  REAL(r64)         :: CondMassFlowRateMax       = 0.0 ! Reference water mass flow rate through condenser [kg/s]
-  REAL(r64)         :: CondenserFanPowerRatio    = 0.0 ! Reference power of condenser fan to capacity ratio, W/W
-  REAL(r64)         :: OpenMotorEff              = 0.0 ! Open chiller motor efficiency [fraction, 0 to 1]
+  REAL         :: EvapVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the evaporator [m3/s]
+  REAL         :: EvapMassFlowRateMax       = 0.0 ! Reference water mass flow rate through evaporator [kg/s]
+  REAL         :: CondVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the condenser [m3/s]
+  REAL         :: CondMassFlowRateMax       = 0.0 ! Reference water mass flow rate through condenser [kg/s]
+  REAL         :: CondenserFanPowerRatio    = 0.0 ! Reference power of condenser fan to capacity ratio, W/W
+  REAL         :: OpenMotorEff              = 0.0 ! Open chiller motor efficiency [fraction, 0 to 1]
   INTEGER           :: EvapInletNodeNum          = 0   ! Node number on the inlet side of the plant (evaporator side)
   INTEGER           :: EvapOutletNodeNum         = 0   ! Node number on the outlet side of the plant (evaporator side)
   INTEGER           :: CondInletNodeNum          = 0   ! Node number on the inlet side of the condenser
   INTEGER           :: CondOutletNodeNum         = 0   ! Node number on the outlet side of the condenser
-  REAL(r64)         :: MinPartLoadRat            = 0.0 ! Minimum allowed operating fraction of full load
-  REAL(r64)         :: MaxPartLoadRat            = 0.0 ! Maximum allowed operating fraction of full load
-  REAL(r64)         :: OptPartLoadRat            = 0.0 ! Optimal operating fraction of full load
-  REAL(r64)         :: MinUnLoadRat              = 0.0 ! Minimum unloading ratio
-  REAL(r64)         :: TempRefCondIn             = 0.0 ! The reference secondary loop fluid temperature
+  REAL         :: MinPartLoadRat            = 0.0 ! Minimum allowed operating fraction of full load
+  REAL         :: MaxPartLoadRat            = 0.0 ! Maximum allowed operating fraction of full load
+  REAL         :: OptPartLoadRat            = 0.0 ! Optimal operating fraction of full load
+  REAL         :: MinUnLoadRat              = 0.0 ! Minimum unloading ratio
+  REAL         :: TempRefCondIn             = 0.0 ! The reference secondary loop fluid temperature
                                                        ! at the chiller condenser side inlet [C]
-  REAL(r64)         :: TempRefEvapOut            = 0.0 ! The reference primary loop fluid temperature
+  REAL         :: TempRefEvapOut            = 0.0 ! The reference primary loop fluid temperature
                                                        ! at the chiller evaporator side outlet [C]
-  REAL(r64)         :: TempLowLimitEvapOut       = 0.0 ! Low temperature shut off [C]
-  REAL(r64)         :: DesignHeatRecVolFlowRate  = 0.0 ! Design water volumetric flow rate through heat recovery loop [m3/s]
-  REAL(r64)         :: DesignHeatRecMassFlowRate = 0.0 ! Design water mass flow rate through heat recovery loop [kg/s]
-  REAL(r64)         :: SizFac                    = 0.0 ! sizing factor
-  REAL(r64)         :: BasinHeaterPowerFTempDiff = 0.0 ! Basin heater capacity per degree C below setpoint (W/C)
-  REAL(r64)         :: BasinHeaterSetPointTemp   = 0.0 ! setpoint temperature for basin heater operation (C)
+  REAL         :: TempLowLimitEvapOut       = 0.0 ! Low temperature shut off [C]
+  REAL         :: DesignHeatRecVolFlowRate  = 0.0 ! Design water volumetric flow rate through heat recovery loop [m3/s]
+  REAL         :: DesignHeatRecMassFlowRate = 0.0 ! Design water mass flow rate through heat recovery loop [kg/s]
+  REAL         :: SizFac                    = 0.0 ! sizing factor
+  REAL         :: BasinHeaterPowerFTempDiff = 0.0 ! Basin heater capacity per degree C below setpoint (W/C)
+  REAL         :: BasinHeaterSetPointTemp   = 0.0 ! setpoint temperature for basin heater operation (C)
   LOGICAL           :: HeatRecActive         = .False. ! True when entered Heat Rec Vol Flow Rate > 0
   INTEGER           :: HeatRecInletNodeNum       = 0   ! Node number for the heat recovery inlet side of the condenser
   INTEGER           :: HeatRecOutletNodeNum      = 0   ! Node number for the heat recovery outlet side of the condenser
@@ -125,8 +125,8 @@ TYPE ElectricEIRChillerSpecs
   INTEGER           :: ChillerEIRFTErrorIndex    = 0   ! Used for negative EIR as a function of temp warnings
   INTEGER           :: ChillerEIRFPLRError       = 0   ! Used for negative EIR as a function of PLR warnings
   INTEGER           :: ChillerEIRFPLRErrorIndex  = 0   ! Used for negative EIR as a function of PLR warnings
-  REAL(r64)         :: ChillerEIRFPLRMin         = 0.0 ! Minimum value of PLR from EIRFPLR curve
-  REAL(r64)         :: ChillerEIRFPLRMax         = 0.0 ! Maximum value of PLR from EIRFPLR curve
+  REAL         :: ChillerEIRFPLRMin         = 0.0 ! Minimum value of PLR from EIRFPLR curve
+  REAL         :: ChillerEIRFPLRMax         = 0.0 ! Maximum value of PLR from EIRFPLR curve
   INTEGER           :: DeltaTErrCount            = 0   ! Evaporator delta T equals 0 for variable flow chiller warning messages
   INTEGER           :: DeltaTErrCountIndex       = 0   ! Index to evaporator delta T = 0 for variable flow chiller warning messages
   INTEGER           :: CWLoopNum     = 0  ! chilled water plant loop index number
@@ -145,7 +145,7 @@ TYPE ElectricEIRChillerSpecs
   INTEGER           :: CondMassFlowIndex = 0
   CHARACTER(len=220):: MsgBuffer1    = ' ' !- buffer to print warning messages on following time step
   CHARACTER(len=300):: MsgBuffer2    = ' ' !- buffer to print warning messages on following time step
-  REAL(r64)         :: MsgDataLast   = 0.0 ! value of data when warning occurred (passed to Recurring Warn)
+  REAL         :: MsgDataLast   = 0.0 ! value of data when warning occurred (passed to Recurring Warn)
   LOGICAL           :: PrintMessage  = .FALSE. ! logical to determine if message is valid
   INTEGER           :: MsgErrorCount = 0   ! number of occurrences of warning
   INTEGER           :: ErrCount1     = 0   ! for recurring error messages
@@ -153,35 +153,35 @@ TYPE ElectricEIRChillerSpecs
 END TYPE ElectricEIRChillerSpecs
 
 TYPE ReportEIRVars
-  REAL(r64)    :: ChillerPartLoadRatio  = 0.0 ! reporting: Chiller PLR (Load/Capacity)
-  REAL(r64)    :: ChillerCyclingRatio   = 0.0 ! reporting: Chiller cycling ratio (time on/time step)
-  REAL(r64)    :: ChillerFalseLoadRate  = 0.0 ! reporting: Chiller false load over and above water side load [J]
-  REAL(r64)    :: ChillerFalseLoad      = 0.0 ! reporting: Chiller false load over and above water side load [W]
-  REAL(r64)    :: Power                 = 0.0 ! reporting: Chiller power, W
-  REAL(r64)    :: QEvap                 = 0.0 ! reporting: Evaporator heat transfer rate [W]
-  REAL(r64)    :: QCond                 = 0.0 ! reporting: Condenser heat transfer rate [W]
-  REAL(r64)    :: Energy                = 0.0 ! reporting: Chiller electric consumption [J]
-  REAL(r64)    :: EvapEnergy            = 0.0 ! reporting: Evaporator heat transfer energy [J]
-  REAL(r64)    :: CondEnergy            = 0.0 ! reporting: Condenser heat transfer energy [J]
-  REAL(r64)    :: CondInletTemp         = 0.0 ! reporting: Condenser inlet temperature [C]
-  REAL(r64)    :: EvapInletTemp         = 0.0 ! reporting: Evaporator inlet temperature [C]
-  REAL(r64)    :: CondOutletTemp        = 0.0 ! reporting: Condenser outlet temperature [C]
-  REAL(r64)    :: EvapOutletTemp        = 0.0 ! reporting: Evaporator outlet temperature [C]
-  REAL(r64)    :: Evapmdot              = 0.0 ! reporting: Evaporator mass flow rate [kg/s]
-  REAL(r64)    :: Condmdot              = 0.0 ! reporting: Condenser mass flow rate [kg/s]
-  REAL(r64)    :: ActualCOP             = 0.0 ! reporting: Coefficient of performance
-  REAL(r64)    :: QHeatRecovery         = 0.0 ! reporting: Heat recovered from water-cooled condenser [W]
-  REAL(r64)    :: EnergyHeatRecovery    = 0.0 ! reporting: Energy recovered from water-cooled condenser [J]
-  REAL(r64)    :: HeatRecInletTemp      = 0.0 ! reporting: Heat reclaim inlet temperature [C]
-  REAL(r64)    :: HeatRecOutletTemp     = 0.0 ! reporting: Heat reclaim outlet temperature [C]
-  REAL(r64)    :: HeatRecMassFlow       = 0.0 ! reporting: Heat reclaim mass flow rate [kg/s]
-  REAL(r64)    :: ChillerCapFT          = 0.0 ! reporting: Chiller capacity curve output value
-  REAL(r64)    :: ChillerEIRFT          = 0.0 ! reporting: Chiller EIRFT curve output value
-  REAL(r64)    :: ChillerEIRFPLR        = 0.0 ! reporting: Chiller EIRFPLR curve output value
-  REAL(r64)    :: CondenserFanPowerUse  = 0.0 ! reporting: Air-cooled condenser fan power [W]
-  REAL(r64)    :: CondenserFanEnergyConsumption = 0.0 ! reporting: Air-cooled condenser fan energy [J]
-  REAL(r64)    :: BasinHeaterPower       = 0.0  ! Basin heater power (W)
-  REAL(r64)    :: BasinHeaterConsumption = 0.0  ! Basin heater energy consumption (J)
+  REAL    :: ChillerPartLoadRatio  = 0.0 ! reporting: Chiller PLR (Load/Capacity)
+  REAL    :: ChillerCyclingRatio   = 0.0 ! reporting: Chiller cycling ratio (time on/time step)
+  REAL    :: ChillerFalseLoadRate  = 0.0 ! reporting: Chiller false load over and above water side load [J]
+  REAL    :: ChillerFalseLoad      = 0.0 ! reporting: Chiller false load over and above water side load [W]
+  REAL    :: Power                 = 0.0 ! reporting: Chiller power, W
+  REAL    :: QEvap                 = 0.0 ! reporting: Evaporator heat transfer rate [W]
+  REAL    :: QCond                 = 0.0 ! reporting: Condenser heat transfer rate [W]
+  REAL    :: Energy                = 0.0 ! reporting: Chiller electric consumption [J]
+  REAL    :: EvapEnergy            = 0.0 ! reporting: Evaporator heat transfer energy [J]
+  REAL    :: CondEnergy            = 0.0 ! reporting: Condenser heat transfer energy [J]
+  REAL    :: CondInletTemp         = 0.0 ! reporting: Condenser inlet temperature [C]
+  REAL    :: EvapInletTemp         = 0.0 ! reporting: Evaporator inlet temperature [C]
+  REAL    :: CondOutletTemp        = 0.0 ! reporting: Condenser outlet temperature [C]
+  REAL    :: EvapOutletTemp        = 0.0 ! reporting: Evaporator outlet temperature [C]
+  REAL    :: Evapmdot              = 0.0 ! reporting: Evaporator mass flow rate [kg/s]
+  REAL    :: Condmdot              = 0.0 ! reporting: Condenser mass flow rate [kg/s]
+  REAL    :: ActualCOP             = 0.0 ! reporting: Coefficient of performance
+  REAL    :: QHeatRecovery         = 0.0 ! reporting: Heat recovered from water-cooled condenser [W]
+  REAL    :: EnergyHeatRecovery    = 0.0 ! reporting: Energy recovered from water-cooled condenser [J]
+  REAL    :: HeatRecInletTemp      = 0.0 ! reporting: Heat reclaim inlet temperature [C]
+  REAL    :: HeatRecOutletTemp     = 0.0 ! reporting: Heat reclaim outlet temperature [C]
+  REAL    :: HeatRecMassFlow       = 0.0 ! reporting: Heat reclaim mass flow rate [kg/s]
+  REAL    :: ChillerCapFT          = 0.0 ! reporting: Chiller capacity curve output value
+  REAL    :: ChillerEIRFT          = 0.0 ! reporting: Chiller EIRFT curve output value
+  REAL    :: ChillerEIRFPLR        = 0.0 ! reporting: Chiller EIRFPLR curve output value
+  REAL    :: CondenserFanPowerUse  = 0.0 ! reporting: Air-cooled condenser fan power [W]
+  REAL    :: CondenserFanEnergyConsumption = 0.0 ! reporting: Air-cooled condenser fan energy [J]
+  REAL    :: BasinHeaterPower       = 0.0  ! Basin heater power (W)
+  REAL    :: BasinHeaterConsumption = 0.0  ! Basin heater energy consumption (J)
 END TYPE ReportEIRVars
 
 TYPE (ElectricEIRChillerSpecs), ALLOCATABLE, DIMENSION(:)  :: ElectricEIRChiller  ! Dimension to number of machines
@@ -241,16 +241,16 @@ SUBROUTINE SimElectricEIRChiller(EIRChillerType,EIRChillerName,EquipFlowCtrl, Co
   LOGICAL, INTENT(IN)          :: RunFlag          ! Simulate chiller when TRUE
   LOGICAL, INTENT(IN)          :: FirstIteration   ! Initialize variables when TRUE
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip    ! If not zero, calculate the max load for operating conditions
-  REAL(r64), INTENT(INOUT)     :: MyLoad           ! Loop demand component will meet
-  REAL(r64), INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
-  REAL(r64), INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
-  REAL(r64), INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: MyLoad           ! Loop demand component will meet
+  REAL, INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
   INTEGER, INTENT(INOUT)       :: CompIndex        ! Chiller number pointer
   INTEGER, INTENT(IN)          :: LoopNum          ! plant loop index pointer
   LOGICAL, INTENT(IN)          :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL(r64), INTENT(INOUT)     :: SizingFactor     ! sizing factor
-  REAL(r64), INTENT(INOUT)     :: TempCondInDesign
-  REAL(r64), INTENT(INOUT)     :: TempEvapOutDesign
+  REAL, INTENT(INOUT)     :: SizingFactor     ! sizing factor
+  REAL, INTENT(INOUT)     :: TempCondInDesign
+  REAL, INTENT(INOUT)     :: TempEvapOutDesign
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -307,9 +307,9 @@ SUBROUTINE SimElectricEIRChiller(EIRChillerType,EIRChillerName,EquipFlowCtrl, Co
       MaxCap = ElectricEIRChiller(EIRChillNum)%RefCap*ElectricEIRChiller(EIRChillNum)%MaxPartLoadRat
       OptCap = ElectricEIRChiller(EIRChillNum)%RefCap*ElectricEIRChiller(EIRChillNum)%OptPartLoadRat
     ELSE
-      MinCap = 0.d0
-      MaxCap = 0.d0
-      OptCap = 0.d0
+      MinCap = 0.
+      MaxCap = 0.
+      OptCap = 0.
     ENDIF
     IF (GetSizingFactor) THEN
       SizingFactor = ElectricEIRChiller(EIRChillNum)%SizFac
@@ -392,11 +392,11 @@ SUBROUTINE GetElectricEIRChillerInput
   LOGICAL, SAVE       :: ErrorsFound=.false.     ! True when input errors are found
   LOGICAL             :: IsNotOK                 ! Flag to verify name
   LOGICAL             :: IsBlank                 ! Flag for blank name
-  REAL(r64)           :: CurveVal                ! Used to verify EIR-FT and CAP-FT curves equal 1 at reference conditions
+  REAL           :: CurveVal                ! Used to verify EIR-FT and CAP-FT curves equal 1 at reference conditions
   LOGICAL             :: FoundNegValue = .FALSE. ! Used to evaluate PLFFPLR curve objects
   INTEGER             :: CurveCheck = 0          ! Used to evaluate PLFFPLR curve objects
-  REAL(r64), DIMENSION(11) :: CurveValArray           ! Used to evaluate PLFFPLR curve objects
-  REAL(r64)           :: CurveValTmp             ! Used to evaluate PLFFPLR curve objects
+  REAL, DIMENSION(11) :: CurveValArray           ! Used to evaluate PLFFPLR curve objects
+  REAL           :: CurveValTmp             ! Used to evaluate PLFFPLR curve objects
   LOGICAL             :: errflag                 ! Used to tell if a unique chiller name has been specified
   CHARACTER(len=132)  :: StringVar               ! Used for EIRFPLR warning messages
   INTEGER             :: CurveValPtr             ! Index to EIRFPLR curve output
@@ -591,7 +591,7 @@ SUBROUTINE GetElectricEIRChillerInput
     ElectricEIRChiller(EIRChillerNum)%OptPartLoadRat         = rNumericArgs(9)
     ElectricEIRChiller(EIRChillerNum)%MinUnLoadRat           = rNumericArgs(10)
     ElectricEIRChiller(EIRChillerNum)%SizFac                 = rNumericArgs(15)
-    IF (ElectricEIRChiller(EIRChillerNum)%SizFac <= 0.0) ElectricEIRChiller(EIRChillerNum)%SizFac = 1.0d0
+    IF (ElectricEIRChiller(EIRChillerNum)%SizFac <= 0.0) ElectricEIRChiller(EIRChillerNum)%SizFac = 1.0
 
     IF(ElectricEIRChiller(EIRChillerNum)%MinPartLoadRat .GT. ElectricEIRChiller(EIRChillerNum)%MaxPartLoadRat) THEN
        CALL ShowSevereError('GetCurveInput: For '//TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaArgs(1)))
@@ -705,7 +705,7 @@ SUBROUTINE GetElectricEIRChillerInput
     END IF
 
     IF (ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR > 0) THEN
-      CurveVal = CurveValue(ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR, 1.0d0)
+      CurveVal = CurveValue(ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR, 1.0)
 
       IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90)THEN
         CALL ShowWarningError('Energy input ratio as a function of part-load ratio curve output is not equal to 1.0')
@@ -717,9 +717,9 @@ SUBROUTINE GetElectricEIRChillerInput
     IF (ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR > 0) THEN
       FoundNegValue = .FALSE.
       DO CurveCheck = 0, 10, 1
-        CurveValTmp = CurveValue(ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR, REAL(CurveCheck/10.0d0,r64))
+        CurveValTmp = CurveValue(ElectricEIRChiller(EIRChillerNum)%ChillerEIRFPLR, REAL(CurveCheck/10.0,r64))
         IF(CurveValTmp .LT. 0.0) FoundNegValue = .TRUE.
-        CurveValArray(CurveCheck+1) = INT(CurveValTmp*100.0d0)/100.0d0
+        CurveValArray(CurveCheck+1) = INT(CurveValTmp*100.0)/100.0
       END DO
       IF(FoundNegValue)THEN
         CALL ShowWarningError('Energy input ratio as a function of part-load ratio curve shows negative values ')
@@ -734,7 +734,7 @@ SUBROUTINE GetElectricEIRChillerInput
     END IF
     !   Basin heater power as a function of temperature must be greater than or equal to 0
     ElectricEIRChiller(EIRChillerNum)%BasinHeaterPowerFTempDiff = rNumericArgs(16)
-    IF(rNumericArgs(16) .LT. 0.0d0) THEN
+    IF(rNumericArgs(16) .LT. 0.0) THEN
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//', "'//TRIM(ElectricEIRChiller(EIRChillerNum)%Name)//&
                      '" TRIM(cNumericFieldNames(16)) must be >= 0')
       ErrorsFound = .TRUE.
@@ -742,11 +742,11 @@ SUBROUTINE GetElectricEIRChillerInput
 
     ElectricEIRChiller(EIRChillerNum)%BasinHeaterSetPointTemp = rNumericArgs(17)
 
-    IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterPowerFTempDiff .GT. 0.0d0) THEN
+    IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterPowerFTempDiff .GT. 0.0) THEN
       IF(NumNums .LT. 17) THEN
-        ElectricEIRChiller(EIRChillerNum)%BasinHeaterSetPointTemp = 2.0d0
+        ElectricEIRChiller(EIRChillerNum)%BasinHeaterSetPointTemp = 2.0
       ENDIF
-      IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterSetPointTemp < 2.0d0) THEN
+      IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterSetPointTemp < 2.0) THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//':"'//TRIM(ElectricEIRChiller(EIRChillerNum)%Name)//&
            '", '//TRIM(cNumericFieldNames(17))//' is less than 2 deg C. Freezing could occur.')
       END IF
@@ -850,7 +850,7 @@ SUBROUTINE GetElectricEIRChillerInput
                ResourceTypeKey='ELECTRICITY',EndUseKey='Cooling',GroupKey='Plant')
        END IF
        IF (ElectricEIRChiller(EIRChillerNum)%CondenserType == EvapCooled) THEN
-         IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterPowerFTempDiff .GT. 0.0d0)THEN
+         IF(ElectricEIRChiller(EIRChillerNum)%BasinHeaterPowerFTempDiff .GT. 0.0)THEN
            CALL SetupOutputVariable('Chiller Basin Heater Electric Power [W]', &
                 ElectricEIRChillerReport(EIRChillerNum)%BasinHeaterPower,'System','Average',ElectricEIRChiller(EIRChillerNum)%Name)
            CALL SetupOutputVariable('Chiller Basin Heater Electric Consumption [J]', &
@@ -899,7 +899,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: EIRChillNum         ! Number of the current electric EIR chiller being simulated
   LOGICAL, INTENT(IN)  :: RunFlag             ! TRUE when chiller operating
-  REAL(r64),INTENT(IN) :: MyLoad              ! current load put on chiller
+  REAL,INTENT(IN) :: MyLoad              ! current load put on chiller
   LOGICAL, INTENT(IN)  :: FirstHVACIteration  ! Initialize variables when TRUE
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -921,9 +921,9 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
   INTEGER                                 :: CondOutletNode         ! Node number for condenser water outlet node
   INTEGER                                 :: HeatRecInNode          ! Node number for heat recovery water inlet node
   INTEGER                                 :: HeatRecOutNode         ! Node number for heat recovery water outlet node
-  REAL(r64)                               :: rho                    ! local fluid density
-  REAL(r64)                               :: mdot                   ! local fluid mass flow rate
-  REAL(r64)                               :: mdotCond               ! local fluid mass flow rate for condenser
+  REAL                               :: rho                    ! local fluid density
+  REAL                               :: mdot                   ! local fluid mass flow rate
+  REAL                               :: mdotCond               ! local fluid mass flow rate for condenser
   INTEGER                                 :: LoopNum
   INTEGER                                 :: LoopSideNum
   INTEGER                                 :: BranchIndex
@@ -1066,7 +1066,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
 
     ElectricEIRChiller(EIRChillNum)%EvapMassFlowRateMax = ElectricEIRChiller(EIRChillNum)%EvapVolFlowRate * rho
 
-    CALL InitComponentNodes(0.d0,  ElectricEIRChiller(EIRChillNum)%EvapMassFlowRateMax,  &
+    CALL InitComponentNodes(0.,  ElectricEIRChiller(EIRChillNum)%EvapMassFlowRateMax,  &
                           EvapInletNode,        &
                           EvapOutletNode,       &
                           ElectricEIRChiller(EIRChillNum)%CWLoopNum,               &
@@ -1081,7 +1081,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
                                   PlantLoop(ElectricEIRChiller(EIRChillNum)%CDLoopNum)%FluidIndex,&
                                   'InitElectricEIRChiller')
       ElectricEIRChiller(EIRChillNum)%CondMassFlowRateMax = rho * ElectricEIRChiller(EIRChillNum)%CondVolFlowRate
-      CALL InitComponentNodes(0.d0, ElectricEIRChiller(EIRChillNum)%CondMassFlowRateMax ,&
+      CALL InitComponentNodes(0., ElectricEIRChiller(EIRChillNum)%CondMassFlowRateMax ,&
                           CondInletNode,        &
                           CondOutletNode,       &
                           ElectricEIRChiller(EIRChillNum)%CDLoopNum,               &
@@ -1092,7 +1092,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
     ELSE ! air or evap air condenser
      ! Initialize maximum available condenser flow rate
       Node(CondInletNode)%MassFlowRate          = ElectricEIRChiller(EIRChillNum)%CondVolFlowRate * &
-        PsyRhoAirFnPbTdbW(StdBaroPress,ElectricEIRChiller(EIRChillNum)%TempRefCondIn,0.0D0,'InitElectricEIRChiller')
+        PsyRhoAirFnPbTdbW(StdBaroPress,ElectricEIRChiller(EIRChillNum)%TempRefCondIn,0.0,'InitElectricEIRChiller')
       Node(CondOutletNode)%MassFlowRate         = Node(CondInletNode)%MassFlowrate
       Node(CondInletNode)%MassFlowRateMaxAvail  = Node(CondInletNode)%MassFlowrate
       Node(CondInletNode)%MassFlowRateMax       = Node(CondInletNode)%MassFlowrate
@@ -1113,7 +1113,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
       ElectricEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate = rho * &
                                       ElectricEIRChiller(EIRChillNum)%DesignHeatRecVolFlowRate
 
-      CALL InitComponentNodes(0.0D0, ElectricEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate ,  &
+      CALL InitComponentNodes(0.0, ElectricEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate ,  &
                          ElectricEIRChiller(EIRChillNum)%HeatRecInletNodeNum,        &
                          ElectricEIRChiller(EIRChillNum)%HeatRecOutletNodeNum,       &
                          ElectricEIRChiller(EIRChillNum)%HRLoopNum,               &
@@ -1138,20 +1138,20 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
   ENDIF
 
   IF (FirstHVACIteration) THEN
-    IF ((ABS(MyLoad) > 0.d0) .AND. RunFlag)  THEN
+    IF ((ABS(MyLoad) > 0.) .AND. RunFlag)  THEN
       mdot     = ElectricEIRChiller(EIRChillNum)%EvapMassFlowRateMax
       mdotCond = ElectricEIRChiller(EIRChillNum)%CondMassFlowRateMax
     ELSE
-      mdot     = 0.d0
-      mdotCond = 0.d0
+      mdot     = 0.
+      mdotCond = 0.
     ENDIF
   ELSE
-    IF ((ABS(MyLoad) > 0.d0) .AND. RunFlag)  THEN
+    IF ((ABS(MyLoad) > 0.) .AND. RunFlag)  THEN
       mdot     = ElectricEIRChillerReport(EIRChillNum)%Evapmdot
       mdotCond = ElectricEIRChillerReport(EIRChillNum)%Condmdot
     ELSE
-      mdot     = 0.d0
-      mdotCond = 0.d0
+      mdot     = 0.
+      mdotCond = 0.
     ENDIF
   ENDIF
 
@@ -1177,11 +1177,11 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
     If (FirstHVACIteration .AND. RunFlag) Then
       mdot          = ElectricEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate
     ELSEIF (FirstHVACIteration .AND. (.NOT. RunFlag)) Then
-      mdot          = 0.0D0
+      mdot          = 0.0
     ELSEIF ((.NOT. FirstHVACIteration) .AND. RunFlag) THEN
       mdot = ElectricEIRChillerReport(EIRChillNum)%HeatRecMassFlow
     ELSEIF ((.NOT. FirstHVACIteration) .AND. (.NOT. RunFlag)) THEN
-      mdot = 0.d0
+      mdot = 0.
     ENDIF
 
     CALL SetComponentFlowRate(mdot,HeatRecInNode,HeatRecOutNode,LoopNum,LoopSideNum,BranchIndex,CompIndex)
@@ -1189,7 +1189,7 @@ SUBROUTINE InitElectricEIRChiller(EIRChillNum,RunFlag, MyLoad, FirstHVACIteratio
   END IF
 
   IF (ElectricEIRChiller(EIRChillNum)%CondenserType == EvapCooled) THEN
-      BasinHeaterPower       = 0.0d0
+      BasinHeaterPower       = 0.0
   ENDIF
   RETURN
 
@@ -1244,11 +1244,11 @@ SUBROUTINE SizeElectricEIRChiller(EIRChillNum)
   LOGICAL             :: ErrorsFound   ! If errors detected in input
   LOGICAL             :: LoopErrorsFound
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL(r64)           :: rho
-  REAL(r64)           :: Cp
-  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
-  REAL(r64)           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
-  REAL(r64)           :: tmpCondVolFlowRate ! local condenser design volume flow rate
+  REAL           :: rho
+  REAL           :: Cp
+  REAL           :: tmpNomCap ! local nominal capacity cooling power
+  REAL           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
+  REAL           :: tmpCondVolFlowRate ! local condenser design volume flow rate
   LOGICAL, SAVE       :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag   ! TRUE in order to calculate IPLV
 
@@ -1281,7 +1281,7 @@ SUBROUTINE SizeElectricEIRChiller(EIRChillNum)
                                     ElectricEIRChiller(EIRChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       ELSE
-        tmpEvapVolFlowRate = 0.d0
+        tmpEvapVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Electric:EIR', ElectricEIRChiller(EIRChillNum)%Name, &
@@ -1311,7 +1311,7 @@ SUBROUTINE SizeElectricEIRChiller(EIRChillNum)
         tmpNomCap =  Cp * rho * PlantSizData(PltSizNum)%DeltaT  * tmpEvapVolFlowRate
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%RefCap = tmpNomCap
       ELSE
-        tmpNomCap = 0.d0
+        tmpNomCap = 0.
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%RefCap = tmpNomCap
       END IF
         IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Electric:EIR', ElectricEIRChiller(EIRChillNum)%Name, &
@@ -1341,7 +1341,7 @@ SUBROUTINE SizeElectricEIRChiller(EIRChillNum)
           ( PlantSizData(PltSizCondNum)%DeltaT * Cp * rho )
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       ELSE
-        tmpCondVolFlowRate = 0.d0
+        tmpCondVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) ElectricEIRChiller(EIRChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       END IF
         IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Electric:EIR', ElectricEIRChiller(EIRChillNum)%Name, &
@@ -1418,7 +1418,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: EIRChillNum     ! Chiller number
-  REAL(r64)              :: MyLoad          ! Operating load
+  REAL              :: MyLoad          ! Operating load
   LOGICAL                :: FirstIteration  ! TRUE when first iteration of timestep
   LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when chiller operating
   INTEGER, INTENT(IN)    :: EquipFlowCtrl   ! Flow control mode for the equipment
@@ -1434,26 +1434,26 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: FRAC                  ! Chiller cycling ratio
-  REAL(r64)              :: MinPartLoadRat        ! Min allowed operating fraction of full load
-  REAL(r64)              :: MinUnloadRat          ! Min allowed unloading fraction of full load
-  REAL(r64)              :: MaxPartLoadRat        ! Max allowed operating fraction of full load
-  REAL(r64)              :: EvapInletTemp         ! Evaporator inlet temperature [C]
-  REAL(r64)              :: CondInletTemp         ! Condenser inlet temperature [C]
-  REAL(r64)              :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
-  REAL(r64)              :: AvailChillerCap       ! Chiller available capacity at current operating conditions [W]
-  REAL(r64)              :: ChillerRefCap         ! Chiller reference capacity
-  REAL(r64)              :: EvapDeltaTemp         ! Evaporator temperature difference [C]
-  REAL(r64)              :: ReferenceCOP          ! Reference coefficient of performance, from user input
-  REAL(r64)              :: PartLoadRat           ! Operating part load ratio
-  REAL(r64)              :: TempLowLimitEout      ! Evaporator low temp. limit cut off [C]
-  REAL(r64)              :: EvapMassFlowRateMax   ! Max reference evaporator mass flow rate converted from volume flow rate [kg/s]
+  REAL              :: FRAC                  ! Chiller cycling ratio
+  REAL              :: MinPartLoadRat        ! Min allowed operating fraction of full load
+  REAL              :: MinUnloadRat          ! Min allowed unloading fraction of full load
+  REAL              :: MaxPartLoadRat        ! Max allowed operating fraction of full load
+  REAL              :: EvapInletTemp         ! Evaporator inlet temperature [C]
+  REAL              :: CondInletTemp         ! Condenser inlet temperature [C]
+  REAL              :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
+  REAL              :: AvailChillerCap       ! Chiller available capacity at current operating conditions [W]
+  REAL              :: ChillerRefCap         ! Chiller reference capacity
+  REAL              :: EvapDeltaTemp         ! Evaporator temperature difference [C]
+  REAL              :: ReferenceCOP          ! Reference coefficient of performance, from user input
+  REAL              :: PartLoadRat           ! Operating part load ratio
+  REAL              :: TempLowLimitEout      ! Evaporator low temp. limit cut off [C]
+  REAL              :: EvapMassFlowRateMax   ! Max reference evaporator mass flow rate converted from volume flow rate [kg/s]
   INTEGER                :: EvapInletNode         ! Evaporator inlet node number
   INTEGER                :: EvapOutletNode        ! Evaporator outlet node number
   INTEGER                :: CondInletNode         ! Condenser inlet node number
   INTEGER                :: CondOutletNode        ! Condenser outlet node number
 !  LOGICAL,SAVE           :: PossibleSubCooling
-  REAL(r64)              :: TempLoad              ! Actual load to be met by chiller. This value is compared to MyLoad
+  REAL              :: TempLoad              ! Actual load to be met by chiller. This value is compared to MyLoad
                                                   ! and reset when necessary since this chiller can cycle, the load passed
                                                   ! should be the actual load. Instead the minimum PLR * RefCap is
                                                   ! passed in. [W]
@@ -1461,11 +1461,11 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
   INTEGER                :: LoopSideNum           ! Plant loop side which contains the current chiller (usually supply side)
   INTEGER                :: BranchNum
   INTEGER                :: CompNum
-  REAL(r64),SAVE         :: TimeStepSysLast=0.0     ! last system time step (used to check for downshifting)
-  REAL(r64)              :: CurrentEndTime          ! end time of time step for current simulation time step
-  REAL(r64),SAVE         :: CurrentEndTimeLast=0.0  ! end time of time step for last simulation time step
+  REAL,SAVE         :: TimeStepSysLast=0.0     ! last system time step (used to check for downshifting)
+  REAL              :: CurrentEndTime          ! end time of time step for current simulation time step
+  REAL,SAVE         :: CurrentEndTimeLast=0.0  ! end time of time step for last simulation time step
   CHARACTER(len=6)       :: OutputChar = ' '        ! character string for warning messages
-  REAL(r64)              :: Cp !local fluid specific heat
+  REAL              :: Cp !local fluid specific heat
 
 ! Set module level inlet and outlet nodes and initialize other local variables
   ChillerPartLoadRatio       = 0.0
@@ -1689,7 +1689,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
       TempLoad = EvapMassFlowRate * Cp * &
                  (Node(EvapInletNode)%Temp - Node(EvapOutletNode)%TempSetPointHi)
     END SELECT
-    TempLoad = MAX(0.0d0,TempLoad)
+    TempLoad = MAX(0.0,TempLoad)
 
     ! MyLoad is capped at minimum PLR * RefCap, adjust load to actual water side load because this chiller can cycle
     IF (ABS(MyLoad) .GT. TempLoad) THEN
@@ -1699,7 +1699,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
 
   ! Part load ratio based on load and available chiller capacity, cap at max part load ratio
   IF(AvailChillerCap .GT. 0)THEN
-    PartLoadRat = MAX(0.0d0, MIN(ABS(MyLoad)/AvailChillerCap,MaxPartLoadRat))
+    PartLoadRat = MAX(0.0, MIN(ABS(MyLoad)/AvailChillerCap,MaxPartLoadRat))
   ELSE
     PartLoadRat = 0.0
   END IF
@@ -1732,10 +1732,10 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
                           ElectricEIRChiller(EIRChillNum)%CWLoopSideNum, &
                           ElectricEIRChiller(EIRChillNum)%CWBranchNum,   &
                           ElectricEIRChiller(EIRChillNum)%CWCompNum)
-      IF (EvapMassFlowRate /= 0.0D0) THEN
+      IF (EvapMassFlowRate /= 0.0) THEN
         EvapDeltaTemp = QEvaporator/EvapMassFlowRate/Cp
       ELSE
-        EvapDeltaTemp = 0.0D0
+        EvapDeltaTemp = 0.0
       ENDIF
       ! Evaluate outlet temp based on delta
       EvapOutletTemp = Node(EvapInletNode)%Temp - EvapDeltaTemp
@@ -1771,7 +1771,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
         CASE (DualSetpointDeadband)
           EvapOutletTemp = Node(EvapOutletNode)%TempSetPointHi
         END SELECT
-        QEvaporator = MAX(0.0d0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
+        QEvaporator = MAX(0.0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
       ELSE
         ! Try to request zero flow
         EvapMassFlowRate=0.0
@@ -1804,8 +1804,8 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
       END IF
    END IF  !End of Constant Variable Flow If Block
 
-  IF(EvapMassFlowRate == 0.0d0)THEN
-    MyLoad = 0.0d0
+  IF(EvapMassFlowRate == 0.0)THEN
+    MyLoad = 0.0
     IF (ElectricEIRChiller(EIRChillNum)%CondenserType == EvapCooled) THEN
       CALL CalcBasinHeaterPower(ElectricEIRChiller(EIRChillNum)%BasinHeaterPowerFTempDiff,&
                           ElectricEIRChiller(EIRChillNum)%BasinHeaterSchedulePtr,&
@@ -1820,7 +1820,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
     EvapOutletTemp = Node(EvapInletNode)%Temp - EvapDeltaTemp
   ELSE
     EvapDeltaTemp = Node(EvapInletNode)%Temp - EvapOutletTempSetpoint
-    QEvaporator = MAX(0.0d0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
+    QEvaporator = MAX(0.0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
     EvapOutletTemp = EvapOutletTempSetpoint
   END IF
  !Check that the Evap outlet temp honors both plant loop temp low limit and also the chiller low limit
@@ -1873,13 +1873,13 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
   END IF
 
   IF(AvailChillerCap .GT. 0.0)THEN
-    PartLoadRat = MAX(0.0d0,MIN((QEvaporator/AvailChillerCap),MaxPartLoadRat))
+    PartLoadRat = MAX(0.0,MIN((QEvaporator/AvailChillerCap),MaxPartLoadRat))
   ELSE
     PartLoadRat = 0.0
   END IF
 
   ! Chiller cycles below minimum part load ratio, FRAC = amount of time chiller is ON during this time step
-  IF (PartLoadRat .LT. MinPartLoadRat) FRAC = MIN(1.0d0,(PartLoadRat/MinPartLoadRat))
+  IF (PartLoadRat .LT. MinPartLoadRat) FRAC = MIN(1.0,(PartLoadRat/MinPartLoadRat))
 
   ! set the module level variable used for reporting FRAC
   ChillerCyclingRatio = FRAC
@@ -1899,7 +1899,7 @@ SUBROUTINE CalcElectricEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration
   IF(ChillerFalseLoadRate .LT. SmallLoad) THEN
     ChillerFalseLoadRate = 0.0
   END IF
-  IF(QEvaporator == 0.0d0 .AND. ElectricEIRChiller(EIRChillNum)%CondenserType == EvapCooled) THEN
+  IF(QEvaporator == 0.0 .AND. ElectricEIRChiller(EIRChillNum)%CondenserType == EvapCooled) THEN
     CALL CalcBasinHeaterPower(ElectricEIRChiller(EIRChillNum)%BasinHeaterPowerFTempDiff,&
                                ElectricEIRChiller(EIRChillNum)%BasinHeaterSchedulePtr,&
                                ElectricEIRChiller(EIRChillNum)%BasinHeaterSetPointTemp,BasinHeaterPower)
@@ -2016,10 +2016,10 @@ SUBROUTINE EIRChillerHeatRecovery(EIRChillNum,QCond,CondMassFlow,CondInletTemp,Q
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)     :: EIRChillNum   ! Number of the current electric EIR chiller being simulated
-  REAL(r64),INTENT(INOut)       :: QCond         ! Current condenser load [W]
-  REAL(r64),INTENT(Out)         :: QHeatRec      ! Amount of heat recovered [W]
-  REAL(r64),INTENT(IN)          :: CondMassFlow  ! Current condenser mass flow [kg/s]
-  REAL(r64),INTENT(IN)          :: CondInletTemp ! Current condenser inlet temp [C]
+  REAL,INTENT(INOut)       :: QCond         ! Current condenser load [W]
+  REAL,INTENT(Out)         :: QHeatRec      ! Amount of heat recovered [W]
+  REAL,INTENT(IN)          :: CondMassFlow  ! Current condenser mass flow [kg/s]
+  REAL,INTENT(IN)          :: CondInletTemp ! Current condenser inlet temp [C]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           !  na
@@ -2032,15 +2032,15 @@ SUBROUTINE EIRChillerHeatRecovery(EIRChillNum,QCond,CondMassFlow,CondInletTemp,Q
   INTEGER :: CondOutletNode      ! Condenser outlet node number
   INTEGER :: HeatRecInNode       ! Node number of heat recovery water inlet node
   INTEGER :: HeatRecOutNode      ! Node number of heat recovery water outlet node
-  REAL(r64)    :: QTotal              ! Total condenser heat [W]
-  REAL(r64)    :: QCondTmp            ! Total condenser heat based on average temperatures [W]
-  REAL(r64)    :: HeatRecInletTemp    ! Heat reclaim inlet temp [C]
-  REAL(r64)    :: HeatRecMassFlowRate ! Heat reclaim mass flow rate [m3/s]
-  REAL(r64)    :: FracHeatRec         ! Fraction of condenser heat reclaimed
-  REAL(r64)    :: TAvgIn              ! Average inlet temperature of heat reclaim inlet and condenser inlet [C]
-  REAL(r64)    :: TAvgOut             ! Average outlet temperature [C]
-  REAL(r64)    :: CpHeatRec           ! Heat reclaim water inlet specific heat [J/kg-K]
-  REAL(r64)    :: CpCond              ! Condenser water inlet specific heat [J/kg-K]
+  REAL    :: QTotal              ! Total condenser heat [W]
+  REAL    :: QCondTmp            ! Total condenser heat based on average temperatures [W]
+  REAL    :: HeatRecInletTemp    ! Heat reclaim inlet temp [C]
+  REAL    :: HeatRecMassFlowRate ! Heat reclaim mass flow rate [m3/s]
+  REAL    :: FracHeatRec         ! Fraction of condenser heat reclaimed
+  REAL    :: TAvgIn              ! Average inlet temperature of heat reclaim inlet and condenser inlet [C]
+  REAL    :: TAvgOut             ! Average outlet temperature [C]
+  REAL    :: CpHeatRec           ! Heat reclaim water inlet specific heat [J/kg-K]
+  REAL    :: CpCond              ! Condenser water inlet specific heat [J/kg-K]
 
 
   ! Begin routine
@@ -2130,7 +2130,7 @@ SUBROUTINE UpdateElectricEIRChillerRecords(MyLoad,RunFlag,Num)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64),INTENT(IN)     :: MyLoad    ! Current load [W]
+  REAL,INTENT(IN)     :: MyLoad    ! Current load [W]
   LOGICAL, INTENT(IN)      :: RunFlag   ! TRUE if chiller operating
   INTEGER, INTENT(IN)      :: Num       ! Chiller number
 
@@ -2147,7 +2147,7 @@ SUBROUTINE UpdateElectricEIRChillerRecords(MyLoad,RunFlag,Num)
   INTEGER                :: CondOutletNode        ! Condenser outlet node number
   INTEGER                :: HeatRecInNode         ! Node number of heat recovery water inlet node
   INTEGER                :: HeatRecOutNode        ! Node number of heat recovery water outlet node
-  REAL(r64)              :: ReportingConstant     ! Number of seconds per HVAC system time step, to convert from W (J/s) to J
+  REAL              :: ReportingConstant     ! Number of seconds per HVAC system time step, to convert from W (J/s) to J
 
   ReportingConstant = TimeStepSys*SecInHour
 
@@ -2313,22 +2313,22 @@ INTEGER, PARAMETER :: LeavingCondenser  = 5
           ! MODULE VARIABLE DECLARATIONS:
 PRIVATE
 INTEGER        :: NumElecReformEIRChillers =0   ! Number of electric reformulated EIR chillers specified in input
-REAL(r64)      :: CondMassFlowRate         =0.0 ! Condenser mass flow rate [kg/s]
-REAL(r64)      :: EvapMassFlowRate         =0.0 ! Evaporator mass flow rate [kg/s]
-REAL(r64)      :: CondOutletTemp           =0.0 ! Condenser outlet temperature [C]
-REAL(r64)      :: EvapOutletTemp           =0.0 ! Evaporator outlet temperature [C]
-REAL(r64)      :: Power                    =0.0 ! Rate of chiller electric energy use [W]
-REAL(r64)      :: QEvaporator              =0.0 ! Rate of heat transfer to the evaporator coil [W]
-REAL(r64)      :: QCondenser               =0.0 ! Rate of heat transfer to the condenser coil [W]
-REAL(r64)      :: QHeatRecovered           =0.0 ! Rate of heat transfer to the heat recovery coil [W]
-REAL(r64)      :: HeatRecOutletTemp        =0.0 ! Heat recovery outlet temperature [C]
-!REAL(r64)      :: CondenserFanPower       =0.0 ! Condenser Fan Power (fan cycles with compressor) [W]
-REAL(r64)      :: ChillerCapFT             =0.0 ! Chiller capacity fraction (evaluated as a function of temperature)
-REAL(r64)      :: ChillerEIRFT             =0.0 ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
-REAL(r64)      :: ChillerEIRFPLR           =0.0 ! Chiller EIR as a function of part-load ratio (PLR)
-REAL(r64)      :: ChillerPartLoadRatio     =0.0 ! Chiller part-load ratio (PLR)
-REAL(r64)      :: ChillerCyclingRatio      =0.0 ! Chiller cycling ratio
-REAL(r64)      :: ChillerFalseLoadRate     =0.0 ! Chiller false load over and above the water-side load [W]
+REAL      :: CondMassFlowRate         =0.0 ! Condenser mass flow rate [kg/s]
+REAL      :: EvapMassFlowRate         =0.0 ! Evaporator mass flow rate [kg/s]
+REAL      :: CondOutletTemp           =0.0 ! Condenser outlet temperature [C]
+REAL      :: EvapOutletTemp           =0.0 ! Evaporator outlet temperature [C]
+REAL      :: Power                    =0.0 ! Rate of chiller electric energy use [W]
+REAL      :: QEvaporator              =0.0 ! Rate of heat transfer to the evaporator coil [W]
+REAL      :: QCondenser               =0.0 ! Rate of heat transfer to the condenser coil [W]
+REAL      :: QHeatRecovered           =0.0 ! Rate of heat transfer to the heat recovery coil [W]
+REAL      :: HeatRecOutletTemp        =0.0 ! Heat recovery outlet temperature [C]
+!REAL      :: CondenserFanPower       =0.0 ! Condenser Fan Power (fan cycles with compressor) [W]
+REAL      :: ChillerCapFT             =0.0 ! Chiller capacity fraction (evaluated as a function of temperature)
+REAL      :: ChillerEIRFT             =0.0 ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
+REAL      :: ChillerEIRFPLR           =0.0 ! Chiller EIR as a function of part-load ratio (PLR)
+REAL      :: ChillerPartLoadRatio     =0.0 ! Chiller part-load ratio (PLR)
+REAL      :: ChillerCyclingRatio      =0.0 ! Chiller cycling ratio
+REAL      :: ChillerFalseLoadRate     =0.0 ! Chiller false load over and above the water-side load [W]
 
 
 TYPE ReformulatedEIRChillerSpecs
@@ -2338,35 +2338,35 @@ TYPE ReformulatedEIRChillerSpecs
   CHARACTER(len=MaxNameLength) :: EIRFTName      = ' ' ! EIRFT curve name
   CHARACTER(len=MaxNameLength) :: EIRFPLRName    = ' ' ! EIRPLR curve name
   INTEGER           :: CondenserType             = 0   ! Type of Condenser. Water Cooled is the only available option for now
-  REAL(r64)         :: RefCap                    = 0.0 ! Reference capacity of the chiller [W]
-  REAL(r64)         :: RefCOP                    = 0.0 ! Reference coefficient of performance [W/W]
+  REAL         :: RefCap                    = 0.0 ! Reference capacity of the chiller [W]
+  REAL         :: RefCOP                    = 0.0 ! Reference coefficient of performance [W/W]
   LOGICAL           :: ConstantFlow           =.False. ! True if this is a Constant Flow Chiller
   LOGICAL           :: VariableFlow           =.False. ! True if this is a Variable Flow Chiller
   LOGICAL           :: VariableFlowSetToLoop  =.FALSE. ! True if the setpoint is missing at the outlet node
   LOGICAL           :: VariableFlowErrDone    =.FALSE. ! true if setpoint warning issued
-  REAL(r64)         :: EvapVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the evaporator [m3/s]
-  REAL(r64)         :: EvapMassFlowRateMax       = 0.0 ! Reference water mass flow rate through evaporator [kg/s]
-  REAL(r64)         :: CondVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the condenser [m3/s]
-  REAL(r64)         :: CondMassFlowRateMax       = 0.0 ! Reference water mass flow rate through condenser [kg/s]
-  REAL(r64)         :: OpenMotorEff              = 0.0 ! Open chiller motor efficiency [fraction, 0 to 1]
+  REAL         :: EvapVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the evaporator [m3/s]
+  REAL         :: EvapMassFlowRateMax       = 0.0 ! Reference water mass flow rate through evaporator [kg/s]
+  REAL         :: CondVolFlowRate           = 0.0 ! Reference water volumetric flow rate through the condenser [m3/s]
+  REAL         :: CondMassFlowRateMax       = 0.0 ! Reference water mass flow rate through condenser [kg/s]
+  REAL         :: OpenMotorEff              = 0.0 ! Open chiller motor efficiency [fraction, 0 to 1]
   INTEGER           :: EvapInletNodeNum          = 0   ! Node number on the inlet side of the plant (evaporator side)
   INTEGER           :: EvapOutletNodeNum         = 0   ! Node number on the outlet side of the plant (evaporator side)
   INTEGER           :: CondInletNodeNum          = 0   ! Node number on the inlet side of the condenser
   INTEGER           :: CondOutletNodeNum         = 0   ! Node number on the outlet side of the condenser
-  REAL(r64)         :: MinPartLoadRat            = 0.0 ! Minimum allowed operating fraction of full load
-  REAL(r64)         :: MaxPartLoadRat            = 0.0 ! Maximum allowed operating fraction of full load
-  REAL(r64)         :: OptPartLoadRat            = 0.0 ! Optimal operating fraction of full load
-  REAL(r64)         :: MinUnLoadRat              = 0.0 ! Minimum unloading ratio
-  REAL(r64)         :: TempRefCondIn             = 0.0 ! The reference secondary loop fluid temperature at the
+  REAL         :: MinPartLoadRat            = 0.0 ! Minimum allowed operating fraction of full load
+  REAL         :: MaxPartLoadRat            = 0.0 ! Maximum allowed operating fraction of full load
+  REAL         :: OptPartLoadRat            = 0.0 ! Optimal operating fraction of full load
+  REAL         :: MinUnLoadRat              = 0.0 ! Minimum unloading ratio
+  REAL         :: TempRefCondIn             = 0.0 ! The reference secondary loop fluid temperature at the
                                                        ! chiller condenser side inlet for the reformulated chiller [C]
-  REAL(r64)         :: TempRefCondOut            = 0.0 ! The reference secondary loop fluid temperature at the
+  REAL         :: TempRefCondOut            = 0.0 ! The reference secondary loop fluid temperature at the
                                                        ! chiller condenser side outlet for the reformulated chiller [C]
-  REAL(r64)         :: TempRefEvapOut            = 0.0 ! The reference primary loop fluid
+  REAL         :: TempRefEvapOut            = 0.0 ! The reference primary loop fluid
                                                        ! temperature at the chiller evaporator side outlet [C]
-  REAL(r64)         :: TempLowLimitEvapOut       = 0.0 ! Low temperature shut off [C]
-  REAL(r64)         :: DesignHeatRecVolFlowRate  = 0.0 ! Design water volumetric flow rate through heat recovery loop [m3/s]
-  REAL(r64)         :: DesignHeatRecMassFlowRate = 0.0 ! Design water mass flow rate through heat recovery loop [kg/s]
-  REAL(r64)         :: SizFac                    = 0.0 ! sizing factor
+  REAL         :: TempLowLimitEvapOut       = 0.0 ! Low temperature shut off [C]
+  REAL         :: DesignHeatRecVolFlowRate  = 0.0 ! Design water volumetric flow rate through heat recovery loop [m3/s]
+  REAL         :: DesignHeatRecMassFlowRate = 0.0 ! Design water mass flow rate through heat recovery loop [kg/s]
+  REAL         :: SizFac                    = 0.0 ! sizing factor
   LOGICAL           :: HeatRecActive         = .False. ! True when entered Heat Rec Vol Flow Rate > 0
   INTEGER           :: HeatRecInletNodeNum       = 0   ! Node number for the heat recovery inlet side of the condenser
   INTEGER           :: HeatRecOutletNodeNum      = 0   ! Node number for the heat recovery outlet side of the condenser
@@ -2383,18 +2383,18 @@ TYPE ReformulatedEIRChillerSpecs
   INTEGER           :: ChillerEIRFTErrorIndex    = 0   ! Used for negative EIR as a function of temp warnings
   INTEGER           :: ChillerEIRFPLRError       = 0   ! Used for negative EIR as a function of PLR warnings
   INTEGER           :: ChillerEIRFPLRErrorIndex  = 0   ! Used for negative EIR as a function of PLR warnings
-  REAL(r64)         :: ChillerCAPFTXTempMin      = 0.0 ! Minimum value of CAPFT curve X variable [C]
-  REAL(r64)         :: ChillerCAPFTXTempMax      = 0.0 ! Maximum value of CAPFT curve X variable [C]
-  REAL(r64)         :: ChillerCAPFTYTempMin      = 0.0 ! Minimum value of CAPFT curve Y variable [C]
-  REAL(r64)         :: ChillerCAPFTYTempMax      = 0.0 ! Maximum value of CAPFT curve Y variable [C]
-  REAL(r64)         :: ChillerEIRFTXTempMin      = 0.0 ! Minimum value of EIRFT curve X variable [C]
-  REAL(r64)         :: ChillerEIRFTXTempMax      = 0.0 ! Maximum value of EIRFT curve X variable [C]
-  REAL(r64)         :: ChillerEIRFTYTempMin      = 0.0 ! Minimum value of EIRFT curve Y variable [C]
-  REAL(r64)         :: ChillerEIRFTYTempMax      = 0.0 ! Maximum value of EIRFT curve Y variable [C]
-  REAL(r64)         :: ChillerEIRFPLRTempMin     = 0.0 ! Minimum value of EIRFPLR curve condenser outlet temperature [C]
-  REAL(r64)         :: ChillerEIRFPLRTempMax     = 0.0 ! Maximum value of EIRFPLR curve condenser outlet temperature [C]
-  REAL(r64)         :: ChillerEIRFPLRPLRMin      = 0.0 ! Minimum value of EIRFPLR curve part-load ratio
-  REAL(r64)         :: ChillerEIRFPLRPLRMax      = 0.0 ! Maximum value of EIRFPLR curve part-load ratio
+  REAL         :: ChillerCAPFTXTempMin      = 0.0 ! Minimum value of CAPFT curve X variable [C]
+  REAL         :: ChillerCAPFTXTempMax      = 0.0 ! Maximum value of CAPFT curve X variable [C]
+  REAL         :: ChillerCAPFTYTempMin      = 0.0 ! Minimum value of CAPFT curve Y variable [C]
+  REAL         :: ChillerCAPFTYTempMax      = 0.0 ! Maximum value of CAPFT curve Y variable [C]
+  REAL         :: ChillerEIRFTXTempMin      = 0.0 ! Minimum value of EIRFT curve X variable [C]
+  REAL         :: ChillerEIRFTXTempMax      = 0.0 ! Maximum value of EIRFT curve X variable [C]
+  REAL         :: ChillerEIRFTYTempMin      = 0.0 ! Minimum value of EIRFT curve Y variable [C]
+  REAL         :: ChillerEIRFTYTempMax      = 0.0 ! Maximum value of EIRFT curve Y variable [C]
+  REAL         :: ChillerEIRFPLRTempMin     = 0.0 ! Minimum value of EIRFPLR curve condenser outlet temperature [C]
+  REAL         :: ChillerEIRFPLRTempMax     = 0.0 ! Maximum value of EIRFPLR curve condenser outlet temperature [C]
+  REAL         :: ChillerEIRFPLRPLRMin      = 0.0 ! Minimum value of EIRFPLR curve part-load ratio
+  REAL         :: ChillerEIRFPLRPLRMax      = 0.0 ! Maximum value of EIRFPLR curve part-load ratio
   INTEGER           :: CAPFTXIter                = 0   ! Iteration counter for evaporator outlet temperature CAPFT warning messages
   INTEGER           :: CAPFTXIterIndex           = 0   ! Index for evaporator outlet temperature CAPFT warning messages
   INTEGER           :: CAPFTYIter                = 0   ! Iteration counter for condenser outlet temperature CAPFT warning messages
@@ -2428,7 +2428,7 @@ TYPE ReformulatedEIRChillerSpecs
   INTEGER           :: CondMassFlowIndex = 0
 !  CHARACTER(len=220):: MsgBuffer1    = ' ' !- buffer to print warning messages on following time step
 !  CHARACTER(len=300):: MsgBuffer2    = ' ' !- buffer to print warning messages on following time step
-!  REAL(r64)         :: MsgDataLast   = 0.0 ! value of data when warning occurred (passed to Recurring Warn)
+!  REAL         :: MsgDataLast   = 0.0 ! value of data when warning occurred (passed to Recurring Warn)
 !  LOGICAL           :: PrintMessage  = .FALSE. ! logical to determine if message is valid
 !  INTEGER           :: MsgErrorCount = 0   ! number of occurrences of warning
 !  INTEGER           :: ErrCount1     = 0   ! for recurring error messages
@@ -2437,33 +2437,33 @@ END TYPE ReformulatedEIRChillerSpecs
 
 
 TYPE ReportVars
-  REAL(r64)    :: ChillerPartLoadRatio  = 0.0 ! reporting: Chiller PLR (Load/Capacity)
-  REAL(r64)    :: ChillerCyclingRatio   = 0.0 ! reporting: Chiller cycling ratio (time on/time step)
-  REAL(r64)    :: ChillerFalseLoadRate  = 0.0 ! reporting: Chiller false load over and above water side load [J]
-  REAL(r64)    :: ChillerFalseLoad      = 0.0 ! reporting: Chiller false load over and above water side load [W]
-  REAL(r64)    :: Power                 = 0.0 ! reporting: Chiller power [W]
-  REAL(r64)    :: QEvap                 = 0.0 ! reporting: Evaporator heat transfer rate [W]
-  REAL(r64)    :: QCond                 = 0.0 ! reporting: Condenser heat transfer rate [W]
-  REAL(r64)    :: Energy                = 0.0 ! reporting: Chiller electric consumption [J]
-  REAL(r64)    :: EvapEnergy            = 0.0 ! reporting: Evaporator heat transfer energy [J]
-  REAL(r64)    :: CondEnergy            = 0.0 ! reporting: Condenser heat transfer energy [J]
-  REAL(r64)    :: CondInletTemp         = 0.0 ! reporting: Condenser inlet temperature [C]
-  REAL(r64)    :: EvapInletTemp         = 0.0 ! reporting: Evaporator inlet temperature [C]
-  REAL(r64)    :: CondOutletTemp        = 0.0 ! reporting: Condenser outlet temperature [C]
-  REAL(r64)    :: EvapOutletTemp        = 0.0 ! reporting: Evaporator outlet temperature [C]
-  REAL(r64)    :: Evapmdot              = 0.0 ! reporting: Evaporator mass flow rate [kg/s]
-  REAL(r64)    :: Condmdot              = 0.0 ! reporting: Condenser mass flow rate [kg/s]
-  REAL(r64)    :: ActualCOP             = 0.0 ! reporting: Coefficient of performance
-  REAL(r64)    :: QHeatRecovery         = 0.0 ! reporting: Heat recovered from water-cooled condenser [W]
-  REAL(r64)    :: EnergyHeatRecovery    = 0.0 ! reporting: Energy recovered from water-cooled condenser [J]
-  REAL(r64)    :: HeatRecInletTemp      = 0.0 ! reporting: Heat reclaim inlet temperature [C]
-  REAL(r64)    :: HeatRecOutletTemp     = 0.0 ! reporting: Heat reclaim outlet temperature [C]
-  REAL(r64)    :: HeatRecMassFlow       = 0.0 ! reporting: Heat reclaim mass flow rate [kg/s]
-  REAL(r64)    :: ChillerCapFT          = 0.0 ! reporting: Chiller capacity curve output value
-  REAL(r64)    :: ChillerEIRFT          = 0.0 ! reporting: Chiller EIRFT curve output value
-  REAL(r64)    :: ChillerEIRFPLR        = 0.0 ! reporting: Chiller EIRFPLR curve output value
-!  REAL(r64)    :: CondenserFanPowerUse  = 0.0 ! reporting: Air-cooled condenser fan power [W]
-!  REAL(r64)    :: CondenserFanEnergyConsumption = 0.0 ! reporting: Air-cooled condenser fan energy [J]
+  REAL    :: ChillerPartLoadRatio  = 0.0 ! reporting: Chiller PLR (Load/Capacity)
+  REAL    :: ChillerCyclingRatio   = 0.0 ! reporting: Chiller cycling ratio (time on/time step)
+  REAL    :: ChillerFalseLoadRate  = 0.0 ! reporting: Chiller false load over and above water side load [J]
+  REAL    :: ChillerFalseLoad      = 0.0 ! reporting: Chiller false load over and above water side load [W]
+  REAL    :: Power                 = 0.0 ! reporting: Chiller power [W]
+  REAL    :: QEvap                 = 0.0 ! reporting: Evaporator heat transfer rate [W]
+  REAL    :: QCond                 = 0.0 ! reporting: Condenser heat transfer rate [W]
+  REAL    :: Energy                = 0.0 ! reporting: Chiller electric consumption [J]
+  REAL    :: EvapEnergy            = 0.0 ! reporting: Evaporator heat transfer energy [J]
+  REAL    :: CondEnergy            = 0.0 ! reporting: Condenser heat transfer energy [J]
+  REAL    :: CondInletTemp         = 0.0 ! reporting: Condenser inlet temperature [C]
+  REAL    :: EvapInletTemp         = 0.0 ! reporting: Evaporator inlet temperature [C]
+  REAL    :: CondOutletTemp        = 0.0 ! reporting: Condenser outlet temperature [C]
+  REAL    :: EvapOutletTemp        = 0.0 ! reporting: Evaporator outlet temperature [C]
+  REAL    :: Evapmdot              = 0.0 ! reporting: Evaporator mass flow rate [kg/s]
+  REAL    :: Condmdot              = 0.0 ! reporting: Condenser mass flow rate [kg/s]
+  REAL    :: ActualCOP             = 0.0 ! reporting: Coefficient of performance
+  REAL    :: QHeatRecovery         = 0.0 ! reporting: Heat recovered from water-cooled condenser [W]
+  REAL    :: EnergyHeatRecovery    = 0.0 ! reporting: Energy recovered from water-cooled condenser [J]
+  REAL    :: HeatRecInletTemp      = 0.0 ! reporting: Heat reclaim inlet temperature [C]
+  REAL    :: HeatRecOutletTemp     = 0.0 ! reporting: Heat reclaim outlet temperature [C]
+  REAL    :: HeatRecMassFlow       = 0.0 ! reporting: Heat reclaim mass flow rate [kg/s]
+  REAL    :: ChillerCapFT          = 0.0 ! reporting: Chiller capacity curve output value
+  REAL    :: ChillerEIRFT          = 0.0 ! reporting: Chiller EIRFT curve output value
+  REAL    :: ChillerEIRFPLR        = 0.0 ! reporting: Chiller EIRFPLR curve output value
+!  REAL    :: CondenserFanPowerUse  = 0.0 ! reporting: Air-cooled condenser fan power [W]
+!  REAL    :: CondenserFanEnergyConsumption = 0.0 ! reporting: Air-cooled condenser fan energy [J]
 END TYPE ReportVars
 
 
@@ -2525,16 +2525,16 @@ SUBROUTINE SimReformulatedEIRChiller(EIRChillerType,EIRChillerName,EquipFlowCtrl
   LOGICAL, INTENT(IN)          :: RunFlag          ! Simulate chiller when TRUE
   LOGICAL, INTENT(IN)          :: FirstIteration   ! Initialize variables when TRUE
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip    ! If not zero, calculate the max load for operating conditions
-  REAL(r64), INTENT(INOUT)     :: MyLoad           ! Loop demand component will meet [W]
-  REAL(r64), INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
-  REAL(r64), INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
-  REAL(r64), INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: MyLoad           ! Loop demand component will meet [W]
+  REAL, INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
+  REAL, INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
   INTEGER, INTENT(INOUT)       :: CompIndex        ! Chiller number pointer
   INTEGER, INTENT(IN)          :: LoopNum          ! plant loop index pointer
   LOGICAL, INTENT(IN)          :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL(r64), INTENT(INOUT)     :: SizingFactor     ! sizing factor
-  REAL(r64), INTENT(INOUT)     :: TempCondInDesign
-  REAL(r64), INTENT(INOUT)     :: TempEvapOutDesign
+  REAL, INTENT(INOUT)     :: SizingFactor     ! sizing factor
+  REAL, INTENT(INOUT)     :: TempCondInDesign
+  REAL, INTENT(INOUT)     :: TempEvapOutDesign
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2591,9 +2591,9 @@ SUBROUTINE SimReformulatedEIRChiller(EIRChillerType,EIRChillerName,EquipFlowCtrl
       MaxCap = ElecReformEIRChiller(EIRChillNum)%RefCap*ElecReformEIRChiller(EIRChillNum)%MaxPartLoadRat
       OptCap = ElecReformEIRChiller(EIRChillNum)%RefCap*ElecReformEIRChiller(EIRChillNum)%OptPartLoadRat
     ELSE
-      MinCap = 0.d0
-      MaxCap = 0.d0
-      OptCap = 0.d0
+      MinCap = 0.
+      MaxCap = 0.
+      OptCap = 0.
     ENDIF
     IF (GetSizingFactor) THEN
       SizingFactor = ElecReformEIRChiller(EIRChillNum)%SizFac
@@ -2813,7 +2813,7 @@ SUBROUTINE GetElecReformEIRChillerInput
     ElecReformEIRChiller(EIRChillerNum)%OptPartLoadRat         = rNumericArgs(9)
     ElecReformEIRChiller(EIRChillerNum)%MinUnLoadRat           = rNumericArgs(10)
     ElecReformEIRChiller(EIRChillerNum)%SizFac                 = rNumericArgs(14)
-    IF (ElecReformEIRChiller(EIRChillerNum)%SizFac <= 0.0) ElecReformEIRChiller(EIRChillerNum)%SizFac = 1.0d0
+    IF (ElecReformEIRChiller(EIRChillerNum)%SizFac <= 0.0) ElecReformEIRChiller(EIRChillerNum)%SizFac = 1.0
 
     IF(ElecReformEIRChiller(EIRChillerNum)%MinPartLoadRat .GT. ElecReformEIRChiller(EIRChillerNum)%MaxPartLoadRat) THEN
        CALL ShowSevereError('GetCurveInput: For '//TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaArgs(1)))
@@ -3016,7 +3016,7 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: EIRChillNum         ! Number of the current electric EIR chiller being simulated
   LOGICAL, INTENT(IN)  :: RunFlag             ! TRUE when chiller operating
-  REAL(r64),INTENT(IN) :: MyLoad              ! Current load put on chiller
+  REAL,INTENT(IN) :: MyLoad              ! Current load put on chiller
   LOGICAL, INTENT(IN)  :: FirstHVACIteration  ! Initialize variables when TRUE
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3038,9 +3038,9 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
   INTEGER                                  :: CondOutletNode         ! Node number for condenser water outlet node
   INTEGER                                  :: HeatRecInNode          ! Node number for heat recovery water inlet node
   INTEGER                                  :: HeatRecOutNode         ! Node number for heat recovery water outlet node
-  REAL(r64)                                :: rho                    ! local fluid density
-  REAL(r64)                                :: mdot                   ! local fluid mass flow rate
-  REAL(r64)                                :: mdotCond               ! local fluid mass flow rate for condenser
+  REAL                                :: rho                    ! local fluid density
+  REAL                                :: mdot                   ! local fluid mass flow rate
+  REAL                                :: mdotCond               ! local fluid mass flow rate for condenser
   INTEGER                                  :: LoopNum
   INTEGER                                  :: LoopSideNum
   INTEGER                                  :: BranchIndex
@@ -3188,7 +3188,7 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
 
     ElecReformEIRChiller(EIRChillNum)%EvapMassFlowRateMax = ElecReformEIRChiller(EIRChillNum)%EvapVolFlowRate * rho
 
-    CALL InitComponentNodes(0.d0,  ElecReformEIRChiller(EIRChillNum)%EvapMassFlowRateMax,  &
+    CALL InitComponentNodes(0.,  ElecReformEIRChiller(EIRChillNum)%EvapMassFlowRateMax,  &
                           EvapInletNode,        &
                           EvapOutletNode,       &
                           ElecReformEIRChiller(EIRChillNum)%CWLoopNum,               &
@@ -3203,7 +3203,7 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
                                   PlantLoop(ElecReformEIRChiller(EIRChillNum)%CDLoopNum)%FluidIndex,&
                                   'InitElecReformEIRChiller')
       ElecReformEIRChiller(EIRChillNum)%CondMassFlowRateMax = rho * ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate
-      CALL InitComponentNodes(0.d0, ElecReformEIRChiller(EIRChillNum)%CondMassFlowRateMax ,&
+      CALL InitComponentNodes(0., ElecReformEIRChiller(EIRChillNum)%CondMassFlowRateMax ,&
                           CondInletNode,        &
                           CondOutletNode,       &
                           ElecReformEIRChiller(EIRChillNum)%CDLoopNum,               &
@@ -3214,7 +3214,7 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
     ELSE ! air or evap air condenser
      ! Initialize maximum available condenser flow rate
       Node(CondInletNode)%MassFlowRate          = ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate * &
-        PsyRhoAirFnPbTdbW(StdBaroPress,ElecReformEIRChiller(EIRChillNum)%TempRefCondIn,0.0D0,'InitElecReformEIRChiller')
+        PsyRhoAirFnPbTdbW(StdBaroPress,ElecReformEIRChiller(EIRChillNum)%TempRefCondIn,0.0,'InitElecReformEIRChiller')
       Node(CondOutletNode)%MassFlowRate         = Node(CondInletNode)%MassFlowrate
       Node(CondInletNode)%MassFlowRateMaxAvail  = Node(CondInletNode)%MassFlowrate
       Node(CondInletNode)%MassFlowRateMax       = Node(CondInletNode)%MassFlowrate
@@ -3234,7 +3234,7 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
                                   'InitElecReformEIRChiller')
       ElecReformEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate = rho * &
                                       ElecReformEIRChiller(EIRChillNum)%DesignHeatRecVolFlowRate
-      CALL InitComponentNodes(0.0D0, ElecReformEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate ,  &
+      CALL InitComponentNodes(0.0, ElecReformEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate ,  &
                          ElecReformEIRChiller(EIRChillNum)%HeatRecInletNodeNum,        &
                          ElecReformEIRChiller(EIRChillNum)%HeatRecOutletNodeNum,       &
                          ElecReformEIRChiller(EIRChillNum)%HRLoopNum,               &
@@ -3259,20 +3259,20 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
   ENDIF
 
   IF (FirstHVACIteration) THEN
-    IF ((ABS(MyLoad) > 0.d0) .AND. RunFlag)  THEN
+    IF ((ABS(MyLoad) > 0.) .AND. RunFlag)  THEN
       mdot     = ElecReformEIRChiller(EIRChillNum)%EvapMassFlowRateMax
       mdotCond = ElecReformEIRChiller(EIRChillNum)%CondMassFlowRateMax
     ELSE
-      mdot     = 0.d0
-      mdotCond = 0.d0
+      mdot     = 0.
+      mdotCond = 0.
     ENDIF
   ELSE
-    IF ((ABS(MyLoad) > 0.d0) .AND. RunFlag)  THEN
+    IF ((ABS(MyLoad) > 0.) .AND. RunFlag)  THEN
       mdot     = ElecReformEIRChillerReport(EIRChillNum)%Evapmdot
       mdotCond = ElecReformEIRChillerReport(EIRChillNum)%Condmdot
     ELSE
-      mdot     = 0.d0
-      mdotCond = 0.d0
+      mdot     = 0.
+      mdotCond = 0.
     ENDIF
   ENDIF
 
@@ -3298,11 +3298,11 @@ SUBROUTINE InitElecReformEIRChiller(EIRChillNum, RunFlag, MyLoad, FirstHVACItera
     If (FirstHVACIteration .AND. RunFlag) Then
       mdot          = ElecReformEIRChiller(EIRChillNum)%DesignHeatRecMassFlowRate
     ELSEIF (FirstHVACIteration .AND. (.NOT. RunFlag)) Then
-      mdot          = 0.0D0
+      mdot          = 0.0
     ELSEIF ((.NOT. FirstHVACIteration) .AND. RunFlag) THEN
       mdot = ElecReformEIRChillerReport(EIRChillNum)%HeatRecMassFlow
     ELSEIF ((.NOT. FirstHVACIteration) .AND. (.NOT. RunFlag)) THEN
-      mdot = 0.d0
+      mdot = 0.
     ENDIF
 
     CALL SetComponentFlowRate(mdot,HeatRecInNode,HeatRecOutNode,LoopNum,LoopSideNum,BranchIndex,CompIndex)
@@ -3362,29 +3362,29 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
   INTEGER             :: PltSizCondNum        ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound          ! If errors detected in input
   LOGICAL             :: LoopErrorsFound      ! Plant loop errors found
-  REAL(r64)           :: SizingEvapOutletTemp ! Plant Sizing outlet temperature for CurLoopNum [C]
-  REAL(r64)           :: SizingCondOutletTemp ! Plant Sizing outlet temperature for condenser loop [C]
-  REAL(r64)           :: RefCAPFT             ! Capacity as a function of temperature curve output used for sizing
+  REAL           :: SizingEvapOutletTemp ! Plant Sizing outlet temperature for CurLoopNum [C]
+  REAL           :: SizingCondOutletTemp ! Plant Sizing outlet temperature for condenser loop [C]
+  REAL           :: RefCAPFT             ! Capacity as a function of temperature curve output used for sizing
   CHARACTER(len=MaxNameLength) :: equipName                ! Name of chiller
-  REAL(r64)                   :: CurveVal                  ! Used to verify EIR-FT/CAP-FT curves = 1 at reference conditions
-  REAL(r64)                   :: CondTemp                  ! Used to verify EIRFPLR curve is > than 0 at reference conditions
+  REAL                   :: CurveVal                  ! Used to verify EIR-FT/CAP-FT curves = 1 at reference conditions
+  REAL                   :: CondTemp                  ! Used to verify EIRFPLR curve is > than 0 at reference conditions
   LOGICAL                     :: FoundNegValue = .FALSE.   ! Used to evaluate EIRFPLR curve objects
   INTEGER                     :: CurveCheck = 0            ! Used to evaluate EIRFPLR curve objects
-  REAL(r64), DIMENSION(11)    :: CurveValArray             ! Used to evaluate EIRFPLR curve objects
-  REAL(r64), DIMENSION(11)    :: CondTempArray             ! Used to evaluate EIRFPLR curve objects
-  REAL(r64)                   :: CurveValTmp               ! Used to evaluate EIRFPLR curve objects
-  REAL(r64)                   :: Density                   ! Density of condenser water used in warning messages
-  REAL(r64)                   :: SpecificHeat              ! Specific heat of condenser water used in warning messages
-  REAL(r64)                   :: CondenserCapacity         ! Full load (reference) condenser capacity used in warning messages
+  REAL, DIMENSION(11)    :: CurveValArray             ! Used to evaluate EIRFPLR curve objects
+  REAL, DIMENSION(11)    :: CondTempArray             ! Used to evaluate EIRFPLR curve objects
+  REAL                   :: CurveValTmp               ! Used to evaluate EIRFPLR curve objects
+  REAL                   :: Density                   ! Density of condenser water used in warning messages
+  REAL                   :: SpecificHeat              ! Specific heat of condenser water used in warning messages
+  REAL                   :: CondenserCapacity         ! Full load (reference) condenser capacity used in warning messages
   CHARACTER(len=132)          :: StringVar                 ! Used for EIRFPLR warning messages
   INTEGER                     :: CurveValPtr               ! Index to EIRFPLR curve output
-  REAL(r64)                   :: DeltaTCond                ! Full load delta T at condenser, used for checking curve objects
-  REAL(r64)                   :: PLRTemp                   ! Temporary variable used for warning messages
-  REAL(r64)                   :: rho
-  REAL(r64)                   :: Cp
-  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
-  REAL(r64)           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
-  REAL(r64)           :: tmpCondVolFlowRate ! local condenser design volume flow rate
+  REAL                   :: DeltaTCond                ! Full load delta T at condenser, used for checking curve objects
+  REAL                   :: PLRTemp                   ! Temporary variable used for warning messages
+  REAL                   :: rho
+  REAL                   :: Cp
+  REAL           :: tmpNomCap ! local nominal capacity cooling power
+  REAL           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
+  REAL           :: tmpCondVolFlowRate ! local condenser design volume flow rate
   LOGICAL, SAVE       :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag   ! TRUE in order to calculate IPLV
 
@@ -3416,7 +3416,7 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
                                ElecReformEIRChiller(EIRChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       ELSE
-        tmpEvapVolFlowRate = 0.d0
+        tmpEvapVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Electric:ReformulatedEIR', &
@@ -3456,7 +3456,7 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
         tmpNomCap = (Cp * rho * PlantSizData(PltSizNum)%DeltaT  * tmpEvapVolFlowRate) / RefCapFT
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%RefCap = tmpNomCap
       ELSE
-        tmpNomCap = 0.d0
+        tmpNomCap = 0.
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%RefCap = tmpNomCap
       END IF
       IF (PlantSizesOkayToFinalize)   &
@@ -3487,7 +3487,7 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate = tmpCondVolFlowRate
 
       ELSE
-        tmpCondVolFlowRate = 0.d0
+        tmpCondVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize)   &
@@ -3529,8 +3529,8 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
   ENDIF
 
 ! Only check performance curves if Capacity and volumetric flow rate are greater than 0
-  IF(ElecReformEIRChiller(EIRChillNum)%RefCap .GT. 0.0D0 .AND. &
-    ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate .GT. 0.0D0) THEN
+  IF(ElecReformEIRChiller(EIRChillNum)%RefCap .GT. 0.0 .AND. &
+    ElecReformEIRChiller(EIRChillNum)%CondVolFlowRate .GT. 0.0) THEN
 !   Check the CAP-FT, EIR-FT, and PLR curves at reference conditions and warn user if different from 1.0 by more than +-10%
     IF (ElecReformEIRChiller(EIRChillNum)%ChillerCAPFT > 0)THEN
       CurveVal = CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerCAPFT, &
@@ -3562,7 +3562,7 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
 
     IF (ElecReformEIRChiller(EIRChillNum)%ChillerEIRFPLR > 0) THEN
       CurveVal = CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerEIRFPLR, &
-                 ElecReformEIRChiller(EIRChillNum)%TempRefCondOut,1.0d0)
+                 ElecReformEIRChiller(EIRChillNum)%TempRefCondOut,1.0)
       IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90)THEN
         CALL ShowWarningError('Energy input ratio as a function of part-load ratio curve output is not equal to 1.0')
         CALL ShowContinueError('(+ or - 10%) at reference conditions for Chiller:Electric:ReformulatedEIR = ' &
@@ -3706,14 +3706,14 @@ SUBROUTINE ControlReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteratio
          ! SUBROUTINE ARGUMENT DEFINITIONS:
 
  INTEGER                :: EIRChillNum     ! Chiller number
- REAL(r64)              :: MyLoad          ! Operating load [W]
+ REAL              :: MyLoad          ! Operating load [W]
  LOGICAL                :: FirstIteration  ! TRUE when first iteration of timestep
  LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when chiller operating
  INTEGER, INTENT(IN)    :: EquipFlowCtrl   ! Flow control mode for the equipment
 
          ! SUBROUTINE PARAMETER DEFINITIONS:
 
- REAL(r64),PARAMETER :: Acc = 0.0001D0    ! Accuracy control for SolveRegulaFalsi
+ REAL,PARAMETER :: Acc = 0.0001    ! Accuracy control for SolveRegulaFalsi
  INTEGER,PARAMETER          :: MaxIter = 500   ! Iteration control for SolveRegulaFalsi
 
          ! INTERFACE BLOCK SPECIFICATIONS:
@@ -3724,21 +3724,21 @@ SUBROUTINE ControlReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteratio
 
          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
- REAL(r64)              :: CAPFTYTmin            ! Minimum condenser leaving temperature allowed by CAPFT curve [C]
- REAL(r64)              :: CAPFTYTmax            ! Maximum condenser leaving temperature allowed by CAPFT curve [C]
- REAL(r64)              :: EIRFTYTmin            ! Minimum condenser leaving temperature allowed by EIRFT curve [C]
- REAL(r64)              :: EIRFTYTmax            ! Maximum condenser leaving temperature allowed by EIRFT curve [C]
- REAL(r64)              :: EIRFPLRTmin           ! Minimum condenser leaving temperature allowed by EIRFPLR curve [C]
- REAL(r64)              :: EIRFPLRTmax           ! Maximum condenser leaving temperature allowed by EIRFPLR curve [C]
- REAL(r64)              :: Tmin                  ! Minimum condenser leaving temperature allowed by curve objects [C]
- REAL(r64)              :: Tmax                  ! Maximum condenser leaving temperature allowed by curve objects [C]
- REAL(r64)              :: Par(6)                ! Pass parameters for RegulaFalsi solver
- REAL(r64)              :: FalsiCondOutTemp      ! RegulaFalsi condenser outlet temperature result [C]
+ REAL              :: CAPFTYTmin            ! Minimum condenser leaving temperature allowed by CAPFT curve [C]
+ REAL              :: CAPFTYTmax            ! Maximum condenser leaving temperature allowed by CAPFT curve [C]
+ REAL              :: EIRFTYTmin            ! Minimum condenser leaving temperature allowed by EIRFT curve [C]
+ REAL              :: EIRFTYTmax            ! Maximum condenser leaving temperature allowed by EIRFT curve [C]
+ REAL              :: EIRFPLRTmin           ! Minimum condenser leaving temperature allowed by EIRFPLR curve [C]
+ REAL              :: EIRFPLRTmax           ! Maximum condenser leaving temperature allowed by EIRFPLR curve [C]
+ REAL              :: Tmin                  ! Minimum condenser leaving temperature allowed by curve objects [C]
+ REAL              :: Tmax                  ! Maximum condenser leaving temperature allowed by curve objects [C]
+ REAL              :: Par(6)                ! Pass parameters for RegulaFalsi solver
+ REAL              :: FalsiCondOutTemp      ! RegulaFalsi condenser outlet temperature result [C]
  INTEGER                :: SolFla                ! Feedback flag from SolveRegulaFalsi
- REAL(r64)              :: CondTempMin     ! Condenser outlet temperature when using Tmin as input to CalcReformEIRChillerModel [C]
- REAL(r64)              :: CondTempMax     ! Condenser outlet temperature when using Tmax as input to CalcReformEIRChillerModel [C]
+ REAL              :: CondTempMin     ! Condenser outlet temperature when using Tmin as input to CalcReformEIRChillerModel [C]
+ REAL              :: CondTempMax     ! Condenser outlet temperature when using Tmax as input to CalcReformEIRChillerModel [C]
 
- IF (MyLoad >= 0.d0 .OR. .NOT. RunFlag) THEN
+ IF (MyLoad >= 0. .OR. .NOT. RunFlag) THEN
    CALL CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,EquipFlowCtrl, &
                                   Node(ElecReformEIRChiller(EIRChillNum)%CondInletNodeNum)%Temp)
  ELSE
@@ -3847,10 +3847,10 @@ SUBROUTINE ReformEIRChillerHeatRecovery(EIRChillNum,QCond,CondMassFlow,CondInlet
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)     :: EIRChillNum   ! Number of the current electric EIR chiller being simulated
-  REAL(r64),INTENT(INOUT)       :: QCond         ! Current condenser load [W]
-  REAL(r64),INTENT(OUT)         :: QHeatRec      ! Amount of heat recovered [W]
-  REAL(r64),INTENT(IN)          :: CondMassFlow  ! Current condenser mass flow [kg/s]
-  REAL(r64),INTENT(IN)          :: CondInletTemp ! Current condenser inlet temp [C]
+  REAL,INTENT(INOUT)       :: QCond         ! Current condenser load [W]
+  REAL,INTENT(OUT)         :: QHeatRec      ! Amount of heat recovered [W]
+  REAL,INTENT(IN)          :: CondMassFlow  ! Current condenser mass flow [kg/s]
+  REAL,INTENT(IN)          :: CondInletTemp ! Current condenser inlet temp [C]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           !  na
@@ -3863,15 +3863,15 @@ SUBROUTINE ReformEIRChillerHeatRecovery(EIRChillNum,QCond,CondMassFlow,CondInlet
   INTEGER :: CondOutletNode      ! Condenser outlet node number
   INTEGER :: HeatRecInNode       ! Node number for heat recovery water inlet node
   INTEGER :: HeatRecOutNode      ! Node number for heat recovery water outlet node
-  REAL(r64)    :: QTotal              ! Total condenser heat [W]
-  REAL(r64)    :: QCondTmp            ! Total condenser heat based on average temperatures [W]
-  REAL(r64)    :: HeatRecInletTemp    ! Heat reclaim inlet temp [C]
-  REAL(r64)    :: HeatRecMassFlowRate ! Heat reclaim mass flow rate [m3/s]
-  REAL(r64)    :: FracHeatRec         ! Fraction of condenser heat reclaimed
-  REAL(r64)    :: TAvgIn              ! Average inlet temperature of heat reclaim inlet and condenser inlet [C]
-  REAL(r64)    :: TAvgOut             ! Average outlet temperature [C]
-  REAL(r64)    :: CpHeatRec           ! Heat reclaim water inlet specific heat [J/kg-K]
-  REAL(r64)    :: CpCond              ! Condenser water inlet specific heat [J/kg-K]
+  REAL    :: QTotal              ! Total condenser heat [W]
+  REAL    :: QCondTmp            ! Total condenser heat based on average temperatures [W]
+  REAL    :: HeatRecInletTemp    ! Heat reclaim inlet temp [C]
+  REAL    :: HeatRecMassFlowRate ! Heat reclaim mass flow rate [m3/s]
+  REAL    :: FracHeatRec         ! Fraction of condenser heat reclaimed
+  REAL    :: TAvgIn              ! Average inlet temperature of heat reclaim inlet and condenser inlet [C]
+  REAL    :: TAvgOut             ! Average outlet temperature [C]
+  REAL    :: CpHeatRec           ! Heat reclaim water inlet specific heat [J/kg-K]
+  REAL    :: CpCond              ! Condenser water inlet specific heat [J/kg-K]
 
 
   ! Begin routine
@@ -3960,7 +3960,7 @@ SUBROUTINE UpdateReformEIRChillerRecords(MyLoad,RunFlag,Num)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64),INTENT(IN)     :: MyLoad    ! Current load [W]
+  REAL,INTENT(IN)     :: MyLoad    ! Current load [W]
   LOGICAL, INTENT(IN)      :: RunFlag   ! TRUE if chiller operating
   INTEGER, INTENT(IN)      :: Num       ! Chiller number
 
@@ -3986,7 +3986,7 @@ SUBROUTINE UpdateReformEIRChillerRecords(MyLoad,RunFlag,Num)
   HeatRecInNode  = ElecReformEIRChiller(Num)%HeatRecInletNodeNum
   HeatRecOutNode = ElecReformEIRChiller(Num)%HeatRecOutletNodeNum
 
-  IF (MyLoad >= 0.d0 .OR. .NOT. RunFlag) THEN ! Chiller not running so pass inlet states to outlet states
+  IF (MyLoad >= 0. .OR. .NOT. RunFlag) THEN ! Chiller not running so pass inlet states to outlet states
     ! Set node temperatures
     Node(EvapOutletNode)%Temp     = Node(EvapInletNode)%Temp
     Node(CondOutletNode)%Temp     = Node(CondInletNode)%Temp
@@ -4070,7 +4070,7 @@ SUBROUTINE UpdateReformEIRChillerRecords(MyLoad,RunFlag,Num)
 
 END SUBROUTINE UpdateReformEIRChillerRecords
 
-REAL(r64) FUNCTION CondOutTempResidual(FalsiCondOutTemp, Par)
+REAL FUNCTION CondOutTempResidual(FalsiCondOutTemp, Par)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad
@@ -4094,8 +4094,8 @@ REAL(r64) FUNCTION CondOutTempResidual(FalsiCondOutTemp, Par)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: FalsiCondOutTemp        ! RegulaFalsi condenser outlet temperature result [C]
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Parameter array used to interface with RegulaFalsi solver
+  REAL, INTENT(IN)     :: FalsiCondOutTemp        ! RegulaFalsi condenser outlet temperature result [C]
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Parameter array used to interface with RegulaFalsi solver
 
           ! FUNCTION PARAMETER DEFINITIONS:
           !  na
@@ -4108,7 +4108,7 @@ REAL(r64) FUNCTION CondOutTempResidual(FalsiCondOutTemp, Par)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER              :: EIRChillNum         ! Chiller number
-  REAL(r64)            :: MyLoad              ! Operating load [W]
+  REAL            :: MyLoad              ! Operating load [W]
   LOGICAL              :: FirstIteration      ! TRUE when first iteration of timestep
   LOGICAL              :: RunFlag             ! TRUE when chiller operating
   INTEGER              :: EquipFlowCtrl       ! Flow control mode for the equipment
@@ -4177,11 +4177,11 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: EIRChillNum      ! Chiller number
-  REAL(r64)              :: MyLoad           ! Operating load [W]
+  REAL              :: MyLoad           ! Operating load [W]
   LOGICAL                :: FirstIteration   ! TRUE when first iteration of timestep !unused1208
   LOGICAL, INTENT(IN)    :: RunFlag          ! TRUE when chiller operating
   INTEGER, INTENT(IN)    :: EquipFlowCtrl    ! Flow control mode for the equipment
-  REAL(r64), INTENT(IN)  :: FalsiCondOutTemp ! RegulaFalsi condenser outlet temperature result [C]
+  REAL, INTENT(IN)  :: FalsiCondOutTemp ! RegulaFalsi condenser outlet temperature result [C]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -4194,26 +4194,26 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: FRAC                  ! Chiller cycling ratio
-  REAL(r64)              :: MinPartLoadRat        ! Minimum allowed operating fraction of full load
-  REAL(r64)              :: MinUnloadRat          ! Minimum allowed unloading fraction of full load
-  REAL(r64)              :: MaxPartLoadRat        ! Maximum allowed operating fraction of full load
-  REAL(r64)              :: EvapInletTemp         ! Evaporator inlet temperature [C]
-  REAL(r64)              :: CondInletTemp         ! Condenser inlet temperature [C]
-  REAL(r64)              :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
-  REAL(r64)              :: AvailChillerCap       ! Chiller available capacity [W]
-  REAL(r64)              :: ChillerRefCap         ! Chiller reference capacity [W]
-  REAL(r64)              :: EvapDeltaTemp         ! Evaporator temperature difference [C]
-  REAL(r64)              :: ReferenceCOP          ! Reference coefficient of performance, from user input
-  REAL(r64)              :: PartLoadRat           ! Operating part load ratio
-  REAL(r64)              :: TempLowLimitEout      ! Evaporator low temp. limit cut off [C]
-  REAL(r64)              :: EvapMassFlowRateMax   ! Maximum evaporator mass flow rate converted from volume flow rate [kg/s]
+  REAL              :: FRAC                  ! Chiller cycling ratio
+  REAL              :: MinPartLoadRat        ! Minimum allowed operating fraction of full load
+  REAL              :: MinUnloadRat          ! Minimum allowed unloading fraction of full load
+  REAL              :: MaxPartLoadRat        ! Maximum allowed operating fraction of full load
+  REAL              :: EvapInletTemp         ! Evaporator inlet temperature [C]
+  REAL              :: CondInletTemp         ! Condenser inlet temperature [C]
+  REAL              :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
+  REAL              :: AvailChillerCap       ! Chiller available capacity [W]
+  REAL              :: ChillerRefCap         ! Chiller reference capacity [W]
+  REAL              :: EvapDeltaTemp         ! Evaporator temperature difference [C]
+  REAL              :: ReferenceCOP          ! Reference coefficient of performance, from user input
+  REAL              :: PartLoadRat           ! Operating part load ratio
+  REAL              :: TempLowLimitEout      ! Evaporator low temp. limit cut off [C]
+  REAL              :: EvapMassFlowRateMax   ! Maximum evaporator mass flow rate converted from volume flow rate [kg/s]
   INTEGER                :: EvapInletNode         ! evaporator inlet node number
   INTEGER                :: EvapOutletNode        ! evaporator outlet node number
   INTEGER                :: CondInletNode         ! condenser inlet node number
   INTEGER                :: CondOutletNode        ! condenser outlet node number
 !  LOGICAL, SAVE          :: PossibleSubCooling
-  REAL(r64)              :: TempLoad              ! actual load to be met by chiller. This value is compared to MyLoad
+  REAL              :: TempLoad              ! actual load to be met by chiller. This value is compared to MyLoad
                                                   ! and reset when necessary since this chiller can cycle, the load passed
                                                   ! should be the actual load.  Instead the minimum PLR * RefCap is
                                                   ! passed in.
@@ -4221,11 +4221,11 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
   INTEGER                :: LoopSideNum           ! Plant loop side which contains the current chiller (usually supply side)
   INTEGER                :: BranchNum
   INTEGER                :: CompNum
-  REAL(r64)              :: Cp                    ! Local fluid specific heat
+  REAL              :: Cp                    ! Local fluid specific heat
 
-!  REAL(r64),SAVE         :: TimeStepSysLast=0.0     ! last system time step (used to check for downshifting)
-!  REAL(r64)              :: CurrentEndTime          ! end time of time step for current simulation time step
-!  REAL(r64),SAVE         :: CurrentEndTimeLast=0.0  ! end time of time step for last simulation time step
+!  REAL,SAVE         :: TimeStepSysLast=0.0     ! last system time step (used to check for downshifting)
+!  REAL              :: CurrentEndTime          ! end time of time step for current simulation time step
+!  REAL,SAVE         :: CurrentEndTimeLast=0.0  ! end time of time step for last simulation time step
 !  CHARACTER(len=6)       :: OutputChar = ' '        ! character string for warning messages
 
 ! Set module level inlet and outlet nodes and initialize other local variables
@@ -4365,7 +4365,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
   END SELECT
 
   ! Get capacity curve info with respect to CW setpoint and leaving condenser water temps
-  ChillerCapFT = MAX(0.0d0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerCapFT, &
+  ChillerCapFT = MAX(0.0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerCapFT, &
                             EvapOutletTempSetpoint,FalsiCondOutTemp))
 
   ! Available chiller capacity as a function of temperature
@@ -4375,16 +4375,16 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
 !    EvapMassFlowRate = MIN(EvapMassFlowRateMax,Node(EvapInletNode)%MassFlowRateMaxAvail)    !CRBranchPump
 !    EvapMassFlowRate = MAX(EvapMassFlowRate,Node(EvapInletNode)%MassFlowRateMinAvail)       !CRBranchPump
 !!   Some other component set the flow to 0. No reason to continue with calculations.
-!    IF(EvapMassFlowRate == 0.0d0)THEN
-!      MyLoad = 0.0d0
+!    IF(EvapMassFlowRate == 0.0)THEN
+!      MyLoad = 0.0
 !!      ElecReformEIRChiller(EIRChillNum)%PrintMessage = .FALSE.
 !      RETURN
 !    END IF
 !  ELSE
   EvapMassFlowRate = Node(EvapInletNode)%MassFlowRate
 !   Some other component set the flow to 0. No reason to continue with calculations.
-  IF(EvapMassFlowRate == 0.0d0)THEN
-    MyLoad = 0.0d0
+  IF(EvapMassFlowRate == 0.0)THEN
+    MyLoad = 0.0
 !      ElecReformEIRChiller(EIRChillNum)%PrintMessage = .FALSE.
     RETURN
   END IF
@@ -4437,7 +4437,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
                               'CalcElecReformEIRChillerModel')
 ! problem here if no setpoint on outlet
   TempLoad = EvapMassFlowRate * Cp * (Node(EvapInletNode)%Temp - EvapOutletTempSetpoint)
-  TempLoad = MAX(0.0d0,TempLoad)
+  TempLoad = MAX(0.0,TempLoad)
 
   ! MyLoad is capped at minimum PLR * RefCap, adjust load to actual water side load because this chiller can cycle
   IF (ABS(MyLoad) .GT. TempLoad) THEN
@@ -4446,7 +4446,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
 
   ! Part load ratio based on load and available chiller capacity, cap at max part load ratio
   IF(AvailChillerCap .GT. 0)THEN
-    PartLoadRat = MAX(0.0d0, MIN(ABS(MyLoad)/AvailChillerCap,MaxPartLoadRat))
+    PartLoadRat = MAX(0.0, MIN(ABS(MyLoad)/AvailChillerCap,MaxPartLoadRat))
   ELSE
     PartLoadRat = 0.0
   END IF
@@ -4475,10 +4475,10 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
                               ElecReformEIRChiller(EIRChillNum)%CWLoopSideNum, &
                               ElecReformEIRChiller(EIRChillNum)%CWBranchNum,   &
                               ElecReformEIRChiller(EIRChillNum)%CWCompNum)
-          IF (EvapMassFlowRate /= 0.0D0) THEN
+          IF (EvapMassFlowRate /= 0.0) THEN
             EvapDeltaTemp = QEvaporator/EvapMassFlowRate/Cp
           ELSE
-            EvapDeltaTemp = 0.0D0
+            EvapDeltaTemp = 0.0
           ENDIF
           EvapOutletTemp = Node(EvapInletNode)%Temp - EvapDeltaTemp
        ELSEIF(ElecReformEIRChiller(EIRChillNum)%VariableFlow)THEN
@@ -4491,7 +4491,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
           END SELECT
           
           IF (EvapDeltaTemp /= 0) THEN
-            EvapMassFlowRate = MAX(0.0d0,(QEvaporator/Cp/EvapDeltaTemp))
+            EvapMassFlowRate = MAX(0.0,(QEvaporator/Cp/EvapDeltaTemp))
             IF((EvapMassFlowRate - EvapMassFlowRateMax) .GT. MassFlowTolerance) &
                   ElecReformEIRChiller(EIRChillNum)%PossibleSubCooling = .TRUE.
             !Check to see if the Maximum is exceeded, if so set to maximum
@@ -4510,7 +4510,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
             CASE (DualSetpointDeadband)
               EvapOutletTemp = Node(EvapOutletNode)%TempSetPointHi
             END SELECT
-            QEvaporator = MAX(0.0d0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
+            QEvaporator = MAX(0.0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
           ELSE
             ! Try to request zero flow
             EvapMassFlowRate=0.0
@@ -4551,8 +4551,8 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
                                  ElecReformEIRChiller(EIRChillNum)%CWBranchNum,   &
                                  ElecReformEIRChiller(EIRChillNum)%CWCompNum)
 !       Some other component set the flow to 0. No reason to continue with calculations.
-      IF(EvapMassFlowRate == 0.0d0)THEN
-        MyLoad = 0.0d0
+      IF(EvapMassFlowRate == 0.0)THEN
+        MyLoad = 0.0
 !        ElecReformEIRChiller(EIRChillNum)%PrintMessage = .FALSE.
         RETURN
       END IF
@@ -4562,7 +4562,7 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
        EvapOutletTemp = Node(EvapInletNode)%Temp - EvapDeltaTemp
       ELSE
        EvapDeltaTemp = Node(EvapInletNode)%Temp - EvapOutletTempSetpoint
-       QEvaporator = MAX(0.0d0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
+       QEvaporator = MAX(0.0,(EvapMassFlowRate*Cp*EvapDeltaTemp))
        EvapOutletTemp = EvapOutletTempSetpoint
       END IF
       IF(EvapOutletTemp .LT. TempLowLimitEout) THEN
@@ -4615,13 +4615,13 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
       END IF
 
       IF(AvailChillerCap .GT. 0.0)THEN
-        PartLoadRat = MAX(0.0d0,MIN((QEvaporator/AvailChillerCap),MaxPartLoadRat))
+        PartLoadRat = MAX(0.0,MIN((QEvaporator/AvailChillerCap),MaxPartLoadRat))
       ELSE
         PartLoadRat = 0.0
       END IF
 
       ! Chiller cycles below minimum part load ratio, FRAC = amount of time chiller is ON during this time step
-      IF (PartLoadRat .LT. MinPartLoadRat) FRAC = MIN(1.0d0,(PartLoadRat/MinPartLoadRat))
+      IF (PartLoadRat .LT. MinPartLoadRat) FRAC = MIN(1.0,(PartLoadRat/MinPartLoadRat))
 
       ! set the module level variable used for reporting FRAC
       ChillerCyclingRatio = FRAC
@@ -4644,9 +4644,9 @@ SUBROUTINE CalcReformEIRChillerModel(EIRChillNum,MyLoad,Runflag,FirstIteration,E
 
   END IF  !This is the end of the FlowLock Block
 
-  ChillerEIRFT   = MAX(0.0d0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerEIRFT,EvapOutletTemp,FalsiCondOutTemp))
+  ChillerEIRFT   = MAX(0.0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerEIRFT,EvapOutletTemp,FalsiCondOutTemp))
 
-  ChillerEIRFPLR  = MAX(0.0d0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerEIRFPLR,FalsiCondOutTemp,PartLoadRat))
+  ChillerEIRFPLR  = MAX(0.0, CurveValue(ElecReformEIRChiller(EIRChillNum)%ChillerEIRFPLR,FalsiCondOutTemp,PartLoadRat))
 
   Power = (AvailChillerCap/ReferenceCOP) * ChillerEIRFPLR * ChillerEIRFT * FRAC
 
@@ -4708,19 +4708,19 @@ SUBROUTINE CheckMinMaxCurveBoundaries(EIRChillNum, FirstIteration)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER    :: EvapOutletNode        ! Chiller evaporator outlet node number
-  REAL(r64)  :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
-  REAL(r64)  :: CAPFTXTmin            ! Minimum evaporator leaving temperature allowed by CAPFT curve [C]
-  REAL(r64)  :: CAPFTXTmax            ! Maximum evaporator leaving temperature allowed by CAPFT curve [C]
-  REAL(r64)  :: CAPFTYTmin            ! Minimum condenser  leaving temperature allowed by CAPFT curve [C]
-  REAL(r64)  :: CAPFTYTmax            ! Maximum condenser  leaving temperature allowed by CAPFT curve [C]
-  REAL(r64)  :: EIRFTXTmin            ! Minimum evaporator leaving temperature allowed by EIRFT curve [C]
-  REAL(r64)  :: EIRFTXTmax            ! Maximum evaporator leaving temperature allowed by EIRFT curve [C]
-  REAL(r64)  :: EIRFTYTmin            ! Minimum condenser  leaving temperature allowed by EIRFT curve [C]
-  REAL(r64)  :: EIRFTYTmax            ! Maximum condenser  leaving temperature allowed by EIRFT curve [C]
-  REAL(r64)  :: EIRFPLRTmin           ! Minimum condenser  leaving temperature allowed by EIRFPLR curve [C]
-  REAL(r64)  :: EIRFPLRTmax           ! Maximum condenser  leaving temperature allowed by EIRFPLR curve [C]
-  REAL(r64)  :: EIRFPLRPLRmin         ! Minimum PLR allowed by EIRFPLR curve
-  REAL(r64)  :: EIRFPLRPLRmax         ! Maximum PLR allowed by EIRFPLR curve
+  REAL  :: EvapOutletTempSetpoint ! Evaporator outlet temperature setpoint [C]
+  REAL  :: CAPFTXTmin            ! Minimum evaporator leaving temperature allowed by CAPFT curve [C]
+  REAL  :: CAPFTXTmax            ! Maximum evaporator leaving temperature allowed by CAPFT curve [C]
+  REAL  :: CAPFTYTmin            ! Minimum condenser  leaving temperature allowed by CAPFT curve [C]
+  REAL  :: CAPFTYTmax            ! Maximum condenser  leaving temperature allowed by CAPFT curve [C]
+  REAL  :: EIRFTXTmin            ! Minimum evaporator leaving temperature allowed by EIRFT curve [C]
+  REAL  :: EIRFTXTmax            ! Maximum evaporator leaving temperature allowed by EIRFT curve [C]
+  REAL  :: EIRFTYTmin            ! Minimum condenser  leaving temperature allowed by EIRFT curve [C]
+  REAL  :: EIRFTYTmax            ! Maximum condenser  leaving temperature allowed by EIRFT curve [C]
+  REAL  :: EIRFPLRTmin           ! Minimum condenser  leaving temperature allowed by EIRFPLR curve [C]
+  REAL  :: EIRFPLRTmax           ! Maximum condenser  leaving temperature allowed by EIRFPLR curve [C]
+  REAL  :: EIRFPLRPLRmin         ! Minimum PLR allowed by EIRFPLR curve
+  REAL  :: EIRFPLRPLRmax         ! Maximum PLR allowed by EIRFPLR curve
   INTEGER    :: PlantLoopNum          ! Plant loop which contains the current chiller
   INTEGER    :: LoopSideNum           ! Plant loop side which contains the current chiller (usually supply side)
   INTEGER    :: BranchNum

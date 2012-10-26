@@ -319,136 +319,136 @@ TYPE MaterialProperties
                                ! MediumRough, Rough, VeryRough)
 
           ! Thermo-physical material properties
-  REAL(r64) :: Conductivity   = 0.0 ! Thermal conductivity of layer (W/m2K)
-  REAL(r64) :: Density        = 0.0 ! Layer density (kg/m3)
-  REAL(r64) :: IsoMoistCap    = 0.0 ! Isothermal moisture capacity on water vapor density (m3/kg)
-  REAL(r64) :: Porosity       = 0.0 ! Layer porosity
-  REAL(r64) :: Resistance     = 0.0 ! Layer thermal resistance (alternative to Density,
+  REAL :: Conductivity   = 0.0 ! Thermal conductivity of layer (W/m2K)
+  REAL :: Density        = 0.0 ! Layer density (kg/m3)
+  REAL :: IsoMoistCap    = 0.0 ! Isothermal moisture capacity on water vapor density (m3/kg)
+  REAL :: Porosity       = 0.0 ! Layer porosity
+  REAL :: Resistance     = 0.0 ! Layer thermal resistance (alternative to Density,
                              ! Conductivity, Thickness, and Specific Heat; K/W)
   LOGICAL :: ROnly    =.false. ! Material defined with "R" only
-  REAL(r64) :: SpecHeat       = 0.0 ! Layer specific heat (J/kgK)
-  REAL(r64) :: ThermGradCoef  = 0.0 ! Thermal-gradient coefficient for moisture capacity
+  REAL :: SpecHeat       = 0.0 ! Layer specific heat (J/kgK)
+  REAL :: ThermGradCoef  = 0.0 ! Thermal-gradient coefficient for moisture capacity
                                ! based on the water vapor density (kg/kgK)
-  REAL(r64) :: Thickness      = 0.0 ! Layer thickness (m)
-  REAL(r64) :: VaporDiffus    = 0.0 ! Layer vapor diffusivity
+  REAL :: Thickness      = 0.0 ! Layer thickness (m)
+  REAL :: VaporDiffus    = 0.0 ! Layer vapor diffusivity
   INTEGER :: GasType(5)  = 0   ! Gas type (air=1, argon=2, krypton=3, xenon=4, custom=0) for
                              !  up to 5 gases in a mixture [Window gas only]
   INTEGER :: GlassSpectralDataPtr = 0   ! Number of a spectral data set associated with a window glass material
   INTEGER :: NumberOfGasesInMixture = 0 ! Number of gases in a window gas mixture
-  REAL(r64) :: GasCon(5,3)    = 0.0 ! Gas conductance coefficients for up to 5 gases in a mixture
-  REAL(r64) :: GasVis(5,3)    = 0.0 ! Gas viscosity coefficients for up to 5 gases in a mixture
-  REAL(r64) :: GasCp(5,3)     = 0.0 ! Gas specific-heat coefficients for up to 5 gases in a mixture
-  REAL(r64) :: GasWght(5)     = 0.0 ! Gas molecular weight for up to 5 gases in a mixture
-  REAL(r64) :: GasFract(5)    = 0.0 ! Gas fractions for up to 5 gases in a mixture
+  REAL :: GasCon(5,3)    = 0.0 ! Gas conductance coefficients for up to 5 gases in a mixture
+  REAL :: GasVis(5,3)    = 0.0 ! Gas viscosity coefficients for up to 5 gases in a mixture
+  REAL :: GasCp(5,3)     = 0.0 ! Gas specific-heat coefficients for up to 5 gases in a mixture
+  REAL :: GasWght(5)     = 0.0 ! Gas molecular weight for up to 5 gases in a mixture
+  REAL :: GasFract(5)    = 0.0 ! Gas fractions for up to 5 gases in a mixture
 
           ! Radiation parameters
-  REAL(r64) :: AbsorpSolar                = 0.d0 ! Layer solar absorptance
-  REAL(r64) :: AbsorpSolarInput           = 0.d0 ! Layer solar absorptance input by user
+  REAL :: AbsorpSolar                = 0. ! Layer solar absorptance
+  REAL :: AbsorpSolarInput           = 0. ! Layer solar absorptance input by user
   LOGICAL   :: AbsorpSolarEMSOverrideOn   = .FALSE. ! if true, then EMS calling to override value for solar absorptance
-  REAL(r64) :: AbsorpSolarEMSOverride     = 0.d0 ! value to use when EMS calling to override value for solar absorptance
-  REAL(r64) :: AbsorpThermal              = 0.d0 ! Layer thermal absorptance
-  REAL(r64) :: AbsorpThermalInput         = 0.d0 ! Layer thermal absorptance input by user
+  REAL :: AbsorpSolarEMSOverride     = 0. ! value to use when EMS calling to override value for solar absorptance
+  REAL :: AbsorpThermal              = 0. ! Layer thermal absorptance
+  REAL :: AbsorpThermalInput         = 0. ! Layer thermal absorptance input by user
   LOGICAL   :: AbsorpThermalEMSOverrideOn = .FALSE. ! if true, then EMS calling to override value for thermal absorptance
-  REAL(r64) :: AbsorpThermalEMSOverride   = 0.d0 ! value to use when EMS calling to override value for thermal absorptance
-  REAL(r64) :: AbsorpVisible              = 0.d0 ! Layer Visible Absorptance
-  REAL(r64) :: AbsorpVisibleInput         = 0.d0 ! Layer Visible Absorptance input by user
+  REAL :: AbsorpThermalEMSOverride   = 0. ! value to use when EMS calling to override value for thermal absorptance
+  REAL :: AbsorpVisible              = 0. ! Layer Visible Absorptance
+  REAL :: AbsorpVisibleInput         = 0. ! Layer Visible Absorptance input by user
   LOGICAL   :: AbsorpVisibleEMSOverrideOn = .FALSE. ! if true, then EMS calling to override value for visible absorptance
-  REAL(r64) :: AbsorpVisibleEMSOverride   = 0.d0 ! value to use when EMS calling to override value for visible absorptance
+  REAL :: AbsorpVisibleEMSOverride   = 0. ! value to use when EMS calling to override value for visible absorptance
 
           ! Window-related radiation parameters
-  REAL(r64) :: Trans                =0.0 ! Transmittance of layer (glass, shade)
-  REAL(r64) :: TransVis             =0.0 ! Visible transmittance (at normal incidence)
-  REAL(r64) :: GlassTransDirtFactor =1.0 ! Multiplier on glass transmittance due to dirt
+  REAL :: Trans                =0.0 ! Transmittance of layer (glass, shade)
+  REAL :: TransVis             =0.0 ! Visible transmittance (at normal incidence)
+  REAL :: GlassTransDirtFactor =1.0 ! Multiplier on glass transmittance due to dirt
   LOGICAL :: SolarDiffusing    =.false. ! True if glass diffuses beam solar radiation
-  REAL(r64) :: ReflectShade         =0.0 ! Shade or screen reflectance (interior shade only)
-  REAL(r64) :: ReflectShadeVis      =0.0 ! Shade reflectance for visible radiation
-  REAL(r64) :: AbsorpThermalBack    =0.0 ! Infrared radiation back absorption
-  REAL(r64) :: AbsorpThermalFront   =0.0 ! Infrared radiation front absorption
-  REAL(r64) :: ReflectSolBeamBack   =0.0 ! Solar back reflectance (beam to everything)
-  REAL(r64) :: ReflectSolBeamFront  =0.0 ! Solar front reflectance (beam to everything)
-  REAL(r64) :: ReflectSolDiffBack   =0.0 ! Solar back diffuse reflectance
-  REAL(r64) :: ReflectSolDiffFront  =0.0 ! Solar front diffuse reflectance
-  REAL(r64) :: ReflectVisBeamBack   =0.0 ! Visible back reflectance (beam to everything)
-  REAL(r64) :: ReflectVisBeamFront  =0.0 ! Visible front reflectance (beam to everything)
-  REAL(r64) :: ReflectVisDiffBack   =0.0 ! Visible back diffuse reflectance
-  REAL(r64) :: ReflectVisDiffFront  =0.0 ! Visible front diffuse reflectance
+  REAL :: ReflectShade         =0.0 ! Shade or screen reflectance (interior shade only)
+  REAL :: ReflectShadeVis      =0.0 ! Shade reflectance for visible radiation
+  REAL :: AbsorpThermalBack    =0.0 ! Infrared radiation back absorption
+  REAL :: AbsorpThermalFront   =0.0 ! Infrared radiation front absorption
+  REAL :: ReflectSolBeamBack   =0.0 ! Solar back reflectance (beam to everything)
+  REAL :: ReflectSolBeamFront  =0.0 ! Solar front reflectance (beam to everything)
+  REAL :: ReflectSolDiffBack   =0.0 ! Solar back diffuse reflectance
+  REAL :: ReflectSolDiffFront  =0.0 ! Solar front diffuse reflectance
+  REAL :: ReflectVisBeamBack   =0.0 ! Visible back reflectance (beam to everything)
+  REAL :: ReflectVisBeamFront  =0.0 ! Visible front reflectance (beam to everything)
+  REAL :: ReflectVisDiffBack   =0.0 ! Visible back diffuse reflectance
+  REAL :: ReflectVisDiffFront  =0.0 ! Visible front diffuse reflectance
   CHARACTER(len=MaxNameLength) :: ReflectanceModeling = ' ' ! method used to account for screen scattering
-  REAL(r64) :: TransSolBeam         =0.0 ! Solar transmittance (beam to everything)
-  REAL(r64) :: TransThermal         =0.0 ! Infrared radiation transmittance
-  REAL(r64) :: TransVisBeam         =0.0 ! Visible transmittance (beam to everything)
+  REAL :: TransSolBeam         =0.0 ! Solar transmittance (beam to everything)
+  REAL :: TransThermal         =0.0 ! Infrared radiation transmittance
+  REAL :: TransVisBeam         =0.0 ! Visible transmittance (beam to everything)
   INTEGER :: BlindDataPtr      =0   ! Pointer to window blind data
   INTEGER :: ScreenDataPtr     =0   ! Pointer to window screen data
   INTEGER :: ScreenMapResolution=0  ! Resolution of azimuth and altitude angles to print in transmittance map
 
           ! Window-shade thermal model parameters
-  REAL(r64) :: WinShadeToGlassDist      =0.0   ! Distance between window shade and adjacent glass (m)
-  REAL(r64) :: WinShadeTopOpeningMult   =0.0   ! Area of air-flow opening at top of shade, expressed as a fraction
+  REAL :: WinShadeToGlassDist      =0.0   ! Distance between window shade and adjacent glass (m)
+  REAL :: WinShadeTopOpeningMult   =0.0   ! Area of air-flow opening at top of shade, expressed as a fraction
                                           !  of the shade-to-glass opening area at the top of the shade
-  REAL(r64) :: WinShadeBottomOpeningMult=0.0   ! Area of air-flow opening at bottom of shade, expressed as a fraction
+  REAL :: WinShadeBottomOpeningMult=0.0   ! Area of air-flow opening at bottom of shade, expressed as a fraction
                                           !  of the shade-to-glass opening area at the bottom of the shade
-  REAL(r64) :: WinShadeLeftOpeningMult  =0.0   ! Area of air-flow opening at left side of shade, expressed as a fraction
+  REAL :: WinShadeLeftOpeningMult  =0.0   ! Area of air-flow opening at left side of shade, expressed as a fraction
                                           !  of the shade-to-glass opening area at the left side of the shade
-  REAL(r64) :: WinShadeRightOpeningMult =0.0   ! Area of air-flow opening at right side of shade, expressed as a fraction
+  REAL :: WinShadeRightOpeningMult =0.0   ! Area of air-flow opening at right side of shade, expressed as a fraction
                                           !  of the shade-to-glass opening area at the right side of the shade
-  REAL(r64) :: WinShadeAirFlowPermeability =0.0 ! The effective area of openings in the shade itself, expressed as a
+  REAL :: WinShadeAirFlowPermeability =0.0 ! The effective area of openings in the shade itself, expressed as a
                                            !  fraction of the shade area
 
   LOGICAL :: EMPDMaterialProps = .false.    ! True if EMPD properties have been assigned
-  REAL(r64) :: EMPDVALUE    =0.0
-  REAL(r64) :: MoistACoeff  =0.0
-  REAL(r64) :: MoistBCoeff  =0.0
-  REAL(r64) :: MoistCCoeff  =0.0
-  REAL(r64) :: MoistDCoeff  =0.0
+  REAL :: EMPDVALUE    =0.0
+  REAL :: MoistACoeff  =0.0
+  REAL :: MoistBCoeff  =0.0
+  REAL :: MoistCCoeff  =0.0
+  REAL :: MoistDCoeff  =0.0
 
-  REAL(r64) :: EMPDaCoeff   =0.0
-  REAL(r64) :: EMPDbCoeff   =0.0
-  REAL(r64) :: EMPDcCoeff   =0.0
-  REAL(r64) :: EMPDdCoeff   =0.0
+  REAL :: EMPDaCoeff   =0.0
+  REAL :: EMPDbCoeff   =0.0
+  REAL :: EMPDcCoeff   =0.0
+  REAL :: EMPDdCoeff   =0.0
 
           ! EcoRoof-Related properties, essentially for the plant layer,
           !    the soil layer uses the same resource as a regular material
           !
   INTEGER :: EcoRoofCalculationMethod = 0  ! 1-Simple, 2-SchaapGenuchten
-  REAL(r64) :: HeightOfPlants = 0.0       !plants' height
-  REAL(r64) :: LAI = 0.0                 !LeafAreaIndex (Dimensionless???)
-  REAL(r64) :: Lreflectivity = 0.0       !LeafReflectivity
-  REAL(r64) :: LEmissitivity = 0.0       !LeafEmissivity
-  REAL(r64) :: InitMoisture = 0.0            ! Initial soil moisture DJS
-  REAL(r64) :: MinMoisture = 0.0    !Minimum moisture allowed DJS
-  REAL(r64) :: RStomata = 0.0 ! Minimum stomatal resistance DJS
+  REAL :: HeightOfPlants = 0.0       !plants' height
+  REAL :: LAI = 0.0                 !LeafAreaIndex (Dimensionless???)
+  REAL :: Lreflectivity = 0.0       !LeafReflectivity
+  REAL :: LEmissitivity = 0.0       !LeafEmissivity
+  REAL :: InitMoisture = 0.0            ! Initial soil moisture DJS
+  REAL :: MinMoisture = 0.0    !Minimum moisture allowed DJS
+  REAL :: RStomata = 0.0 ! Minimum stomatal resistance DJS
 
     ! HAMT
      INTEGER :: niso=-1                 ! Number of data points
-     REAL(r64), DIMENSION(27) :: isodata=0.0d0     !isotherm values
-     REAL(r64), DIMENSION(27) :: isorh  =0.0d0     !isotherm RH values
+     REAL, DIMENSION(27) :: isodata=0.0     !isotherm values
+     REAL, DIMENSION(27) :: isorh  =0.0     !isotherm RH values
      INTEGER :: nsuc=-1                 ! Number of data points
-     REAL(r64), DIMENSION(27) :: sucdata=0.0d0     !suction values
-     REAL(r64), DIMENSION(27) :: sucwater=0.0d0    !suction water values
+     REAL, DIMENSION(27) :: sucdata=0.0     !suction values
+     REAL, DIMENSION(27) :: sucwater=0.0    !suction water values
      INTEGER :: nred=-1                 ! Number of data points
-     REAL(r64), DIMENSION(27) :: reddata =0.0d0    !redistribution values
-     REAL(r64), DIMENSION(27) :: redwater=0.0d0    !redistribution water values
+     REAL, DIMENSION(27) :: reddata =0.0    !redistribution values
+     REAL, DIMENSION(27) :: redwater=0.0    !redistribution water values
      INTEGER :: nmu=-1                  ! Number of data points
-     REAL(r64), DIMENSION(27) :: mudata  =0.0d0    !mu values
-     REAL(r64), DIMENSION(27) :: murh    =0.0d0    !mu rh values
+     REAL, DIMENSION(27) :: mudata  =0.0    !mu values
+     REAL, DIMENSION(27) :: murh    =0.0    !mu rh values
      INTEGER :: ntc=-1                  ! Number of data points
-     REAL(r64), DIMENSION(27) :: tcdata  =0.0d0    !thermal conductivity values
-     REAL(r64), DIMENSION(27) :: tcwater =0.0d0    !thermal conductivity water values
-     REAL(r64) :: itemp=10.0d0                 ! initial Temperature
-     REAL(r64) :: irh=0.5d0                    ! Initial RH
-     REAL(r64) :: iwater=0.2d0                 ! Initial water content kg/kg
+     REAL, DIMENSION(27) :: tcdata  =0.0    !thermal conductivity values
+     REAL, DIMENSION(27) :: tcwater =0.0    !thermal conductivity water values
+     REAL :: itemp=10.0                 ! initial Temperature
+     REAL :: irh=0.5                    ! Initial RH
+     REAL :: iwater=0.2                 ! Initial water content kg/kg
      INTEGER :: divs=3                         ! Number of divisions
-     REAL(r64) :: divsize=0.005d0              ! Average Cell Size
+     REAL :: divsize=0.005              ! Average Cell Size
      INTEGER :: divmin=3                       ! Minimum number of cells
      INTEGER :: divmax=10                      ! Maximum number of cells
 
      ! Added 12/22/2008 for thermochromic window glazing material
-     REAL(r64) :: SpecTemp = 0.0D0             ! Temperature corresponding to the specified material properties
+     REAL :: SpecTemp = 0.0             ! Temperature corresponding to the specified material properties
      INTEGER   :: TCParent = 0                 ! Reference to the parent object WindowMaterial:Glazing:Thermochromic
 
      ! Simple Glazing System
-     REAL(r64) :: SimpleWindowUfactor = 0.0D0  ! user input for simple window U-factor with film coefs (W/m2-k)
-     REAL(r64) :: SimpleWindowSHGC    = 0.0D0  ! user input for simple window Solar Heat Gain Coefficient (non-dimensional)
-     REAL(r64) :: SimpleWindowVisTran = 0.0D0  ! (optional) user input for simple window Visual Transmittance (non-dimensional)
+     REAL :: SimpleWindowUfactor = 0.0  ! user input for simple window U-factor with film coefs (W/m2-k)
+     REAL :: SimpleWindowSHGC    = 0.0  ! user input for simple window Solar Heat Gain Coefficient (non-dimensional)
+     REAL :: SimpleWindowVisTran = 0.0  ! (optional) user input for simple window Visual Transmittance (non-dimensional)
      LOGICAL   :: SimpleWindowVTinputByUser = .FALSE. ! false means not input, true means user provide VT input
 
 END TYPE MaterialProperties
@@ -458,7 +458,7 @@ TYPE TCGlazingsType
     CHARACTER(len=MaxNameLength) :: Name = ' '                  ! Name
     INTEGER                      :: NumGlzMat = 0               ! Number of TC glazing materials
     INTEGER, ALLOCATABLE, DIMENSION(:)   :: LayerPoint          ! Layer pointer
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: SpecTemp            ! Temperature corresponding to the specified TC glaing optical data
+    REAL, ALLOCATABLE, DIMENSION(:) :: SpecTemp            ! Temperature corresponding to the specified TC glaing optical data
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: LayerName  ! Name of the referenced WindowMaterial:Glazing object
 END TYPE
 
@@ -472,13 +472,13 @@ TYPE ConstructionData
   INTEGER :: LayerPoint(MaxLayersInConstruct) = 0 ! Pointer array which refers back to
                                                   ! the Material structure; LayerPoint(i)=j->Material(j)%Name,etc
   LOGICAL :: IsUsed                  =.false.  ! Marked true when the construction is used
-  REAL(r64) :: InsideAbsorpVis       =0.0         ! Inside Layer visible absorptance of an opaque surface; not used for windows.
-  REAL(r64) :: OutsideAbsorpVis      =0.0         ! Outside Layer visible absorptance of an opaque surface; not used for windows.
-  REAL(r64) :: InsideAbsorpSolar     =0.0         ! Inside Layer solar absorptance of an opaque surface; not used for windows.
-  REAL(r64) :: OutsideAbsorpSolar    =0.0         ! Outside Layer solar absorptance of an opaque surface; not used for windows.
-  REAL(r64) :: InsideAbsorpThermal   =0.0         ! Inside Layer Thermal absorptance for opaque surfaces or windows;
+  REAL :: InsideAbsorpVis       =0.0         ! Inside Layer visible absorptance of an opaque surface; not used for windows.
+  REAL :: OutsideAbsorpVis      =0.0         ! Outside Layer visible absorptance of an opaque surface; not used for windows.
+  REAL :: InsideAbsorpSolar     =0.0         ! Inside Layer solar absorptance of an opaque surface; not used for windows.
+  REAL :: OutsideAbsorpSolar    =0.0         ! Outside Layer solar absorptance of an opaque surface; not used for windows.
+  REAL :: InsideAbsorpThermal   =0.0         ! Inside Layer Thermal absorptance for opaque surfaces or windows;
                                              ! for windows, applies to innermost glass layer
-  REAL(r64) :: OutsideAbsorpThermal  =0.0         ! Outside Layer Thermal absorptance
+  REAL :: OutsideAbsorpThermal  =0.0         ! Outside Layer Thermal absorptance
   INTEGER :: OutsideRoughness   =0           ! Outside Surface roughness index (6=very smooth, 5=smooth,
                                              ! 4=medium smooth, 3=medium rough, 2=rough, 1=very rough)
   INTEGER :: DayltPropPtr       =0           ! Pointer to Daylight Construction Properties
@@ -486,117 +486,117 @@ TYPE ConstructionData
                                              !  zero is construction not from Window5 file or Window5 construction has no frame.
 
           ! Conductive properties for the construction
-  REAL(r64) :: CTFCross(0:MaxCTFTerms-1)    =0.0D0     ! Cross or Y terms of the CTF equation
-  REAL(r64) :: CTFFlux(MaxCTFTerms-1)       =0.0D0     ! Flux history terms of the CTF equation
-  REAL(r64) :: CTFInside(0:MaxCTFTerms-1)   =0.0D0     ! Inside or Z terms of the CTF equation
-  REAL(r64) :: CTFOutside(0:MaxCTFTerms-1)  =0.0D0     ! Outside or X terms of the CTF equation
-  REAL(r64) :: CTFSourceIn(0:MaxCTFTerms-1) =0.0D0     ! Heat source/sink inside terms of CTF equation
-  REAL(r64) :: CTFSourceOut(0:MaxCTFTerms-1)=0.0D0     ! Heat source/sink outside terms of CTF equation
-  REAL(r64) :: CTFTimeStep  ! Time increment for stable simulation of construct (could be greater than TimeStep)
+  REAL :: CTFCross(0:MaxCTFTerms-1)    =0.0     ! Cross or Y terms of the CTF equation
+  REAL :: CTFFlux(MaxCTFTerms-1)       =0.0     ! Flux history terms of the CTF equation
+  REAL :: CTFInside(0:MaxCTFTerms-1)   =0.0     ! Inside or Z terms of the CTF equation
+  REAL :: CTFOutside(0:MaxCTFTerms-1)  =0.0     ! Outside or X terms of the CTF equation
+  REAL :: CTFSourceIn(0:MaxCTFTerms-1) =0.0     ! Heat source/sink inside terms of CTF equation
+  REAL :: CTFSourceOut(0:MaxCTFTerms-1)=0.0     ! Heat source/sink outside terms of CTF equation
+  REAL :: CTFTimeStep  ! Time increment for stable simulation of construct (could be greater than TimeStep)
                    ! The next three series of terms are used to calculate the temperature at the location of a source/sink
                    ! in the QTF formulation.  This calculation is necessary to allow the proper simulation of a
                    ! radiant system.
-  REAL(r64) :: CTFTSourceOut(0:MaxCTFTerms-1)=0.0D0  ! Outside terms of the CTF equation for interior temp
+  REAL :: CTFTSourceOut(0:MaxCTFTerms-1)=0.0  ! Outside terms of the CTF equation for interior temp
                                                             ! calc@source location
-  REAL(r64) :: CTFTSourceIn(0:MaxCTFTerms-1) =0.0D0  ! Inside terms of the CTF equation for interior temp
+  REAL :: CTFTSourceIn(0:MaxCTFTerms-1) =0.0  ! Inside terms of the CTF equation for interior temp
                                                             ! calc@source location
-  REAL(r64) :: CTFTSourceQ(0:MaxCTFTerms-1)  =0.0D0  ! Source/sink terms of the CTF equation for interior temp
+  REAL :: CTFTSourceQ(0:MaxCTFTerms-1)  =0.0  ! Source/sink terms of the CTF equation for interior temp
                                                             ! calc@source location
                    ! The next three series of terms are used to calculate the temperature at a location specified by the user.
                    ! This location must be between two layers and is intended to allow the user to evaluate whether or not
                    ! condensation is a possibility between material layers.
-  REAL(r64) :: CTFTUserOut(0:MaxCTFTerms-1)  =0.0D0  ! Outside terms of the CTF equation for interior temp
+  REAL :: CTFTUserOut(0:MaxCTFTerms-1)  =0.0  ! Outside terms of the CTF equation for interior temp
                                                             ! calc@user location
-  REAL(r64) :: CTFTUserIn(0:MaxCTFTerms-1)   =0.0D0  ! Inside terms of the CTF equation for interior temp
+  REAL :: CTFTUserIn(0:MaxCTFTerms-1)   =0.0  ! Inside terms of the CTF equation for interior temp
                                                             ! calc@user location
-  REAL(r64) :: CTFTUserSource(0:MaxCTFTerms-1)=0.0D0 ! Source/sink terms of the CTF equation for interior temp
+  REAL :: CTFTUserSource(0:MaxCTFTerms-1)=0.0 ! Source/sink terms of the CTF equation for interior temp
                                                             ! calc@user location
   INTEGER          :: NumHistories =0            ! CTFTimeStep/TimeStepZone or the number of temp/flux history series
                                                  ! for the construction
   INTEGER          :: NumCTFTerms  =0            ! Number of CTF terms for this construction (not including terms at current time)
-  REAL(r64)        :: UValue       =0.0          ! Overall heat transfer coefficient for the construction
+  REAL        :: UValue       =0.0          ! Overall heat transfer coefficient for the construction
   INTEGER          :: SolutionDimensions =0      ! Number of dimensions in the solution (1 for normal constructions,
                                                  ! 1 or 2 for constructions with sources or sinks)-->may allow 3-D later?
   INTEGER          :: SourceAfterLayer   =0      ! Source/sink is present after this layer in the construction
   INTEGER          :: TempAfterLayer     =0      ! User is requesting a temperature calculation after this layer in the construction
-  REAL(r64)        :: ThicknessPerpend   =0.0    ! Thickness between planes of symmetry in the direction
+  REAL        :: ThicknessPerpend   =0.0    ! Thickness between planes of symmetry in the direction
                                                  ! perpendicular to the main direction of heat transfer
                                                  ! (same as half the distance between tubes)
   ! Moisture Transfer Functions term belong here as well
 
           ! BLAST detailed solar model parameters
-  REAL(r64) :: AbsDiffIn  =0.0           ! Inner absorptance coefficient for diffuse radiation
-  REAL(r64) :: AbsDiffOut =0.0           ! Outer absorptance coefficient for diffuse radiation
+  REAL :: AbsDiffIn  =0.0           ! Inner absorptance coefficient for diffuse radiation
+  REAL :: AbsDiffOut =0.0           ! Outer absorptance coefficient for diffuse radiation
 
           ! Variables for window constructions
-  REAL(r64) :: AbsDiff(MaxSolidWinLayers)  =0.0                 ! Diffuse solar absorptance for each glass layer,
+  REAL :: AbsDiff(MaxSolidWinLayers)  =0.0                 ! Diffuse solar absorptance for each glass layer,
                                                                 ! bare glass or shade on
-  REAL(r64) :: BlAbsDiff(MaxSolidWinLayers,MaxSlatAngs) =0.0    ! Diffuse solar absorptance for each glass layer vs.
+  REAL :: BlAbsDiff(MaxSolidWinLayers,MaxSlatAngs) =0.0    ! Diffuse solar absorptance for each glass layer vs.
                                                                 ! slat angle, blind on
-  REAL(r64) :: BlAbsDiffGnd(MaxSolidWinLayers,MaxSlatAngs) =0.0 ! Diffuse ground solar absorptance for each glass layer
+  REAL :: BlAbsDiffGnd(MaxSolidWinLayers,MaxSlatAngs) =0.0 ! Diffuse ground solar absorptance for each glass layer
                                                                 ! vs. slat angle, blind on
-  REAL(r64) :: BlAbsDiffSky(MaxSolidWinLayers,MaxSlatAngs) =0.0 ! Diffuse sky solar absorptance for each glass layer
+  REAL :: BlAbsDiffSky(MaxSolidWinLayers,MaxSlatAngs) =0.0 ! Diffuse sky solar absorptance for each glass layer
                                                                 ! vs. slat angle, blind on
-  REAL(r64) :: AbsDiffBack(MaxSolidWinLayers)  =0.0             ! Diffuse back solar absorptance for each glass layer
-  REAL(r64) :: BlAbsDiffBack(MaxSolidWinLayers,MaxSlatAngs)=0.0 ! Diffuse back solar absorptance for each glass layer,
+  REAL :: AbsDiffBack(MaxSolidWinLayers)  =0.0             ! Diffuse back solar absorptance for each glass layer
+  REAL :: BlAbsDiffBack(MaxSolidWinLayers,MaxSlatAngs)=0.0 ! Diffuse back solar absorptance for each glass layer,
                                                            !  vs. slat angle, blind on
-  REAL(r64) :: AbsDiffShade                 =0.0 ! Diffuse solar absorptance for shade
-  REAL(r64) :: AbsDiffBlind(MaxSlatAngs)    =0.0 ! Diffuse solar absorptance for blind, vs. slat angle
-  REAL(r64) :: AbsDiffBlindGnd(MaxSlatAngs) =0.0 ! Diffuse ground solar absorptance for blind, vs. slat angle
-  REAL(r64) :: AbsDiffBlindSky(MaxSlatAngs) =0.0 ! Diffuse sky solar absorptance for blind, vs. slat angle
-  REAL(r64) :: AbsDiffBackShade             =0.0 ! Diffuse back solar absorptance for shade
-  REAL(r64) :: AbsDiffBackBlind(MaxSlatAngs)=0.0 ! Diffuse back solar absorptance for blind, vs. slat angle
-  REAL(r64) :: ShadeAbsorpThermal           =0.0 ! Diffuse back thermal absorptance of shade
-  REAL(r64) :: AbsBeamCoef(MaxSolidWinLayers,6) =0.0 ! Coefficients of incidence-angle polynomial for solar
+  REAL :: AbsDiffShade                 =0.0 ! Diffuse solar absorptance for shade
+  REAL :: AbsDiffBlind(MaxSlatAngs)    =0.0 ! Diffuse solar absorptance for blind, vs. slat angle
+  REAL :: AbsDiffBlindGnd(MaxSlatAngs) =0.0 ! Diffuse ground solar absorptance for blind, vs. slat angle
+  REAL :: AbsDiffBlindSky(MaxSlatAngs) =0.0 ! Diffuse sky solar absorptance for blind, vs. slat angle
+  REAL :: AbsDiffBackShade             =0.0 ! Diffuse back solar absorptance for shade
+  REAL :: AbsDiffBackBlind(MaxSlatAngs)=0.0 ! Diffuse back solar absorptance for blind, vs. slat angle
+  REAL :: ShadeAbsorpThermal           =0.0 ! Diffuse back thermal absorptance of shade
+  REAL :: AbsBeamCoef(MaxSolidWinLayers,6) =0.0 ! Coefficients of incidence-angle polynomial for solar
                                                 ! absorptance for each solid glazing layer
 
-  REAL(r64) :: AbsBeamBackCoef(MaxSolidWinLayers,6) =0.0 ! As for AbsBeamCoef but for back-incident solar
-  REAL(r64) :: AbsBeamShadeCoef(6)           =0.0    ! Coefficients of incidence-angle polynomial for solar
+  REAL :: AbsBeamBackCoef(MaxSolidWinLayers,6) =0.0 ! As for AbsBeamCoef but for back-incident solar
+  REAL :: AbsBeamShadeCoef(6)           =0.0    ! Coefficients of incidence-angle polynomial for solar
                                         ! absorptance of shade
-  REAL(r64) :: TransDiff                     =0.0   ! Diffuse solar transmittance, bare glass or shade on
-  REAL(r64) :: BlTransDiff(MaxSlatAngs)      =0.0   ! Diffuse solar transmittance, blind present, vs. slat angle
-  REAL(r64) :: BlTransDiffGnd(MaxSlatAngs)   =0.0   ! Ground diffuse solar transmittance, blind present, vs. slat angle
-  REAL(r64) :: BlTransDiffSky(MaxSlatAngs)   =0.0   ! Sky diffuse solar transmittance, blind present, vs. slat angle
-  REAL(r64) :: TransDiffVis                  =0.0   ! Diffuse visible transmittance, bare glass or shade on
-  REAL(r64) :: BlTransDiffVis(MaxSlatAngs)   =0.0   ! Diffuse visible transmittance, blind present, vs. slat angle
-  REAL(r64) :: ReflectSolDiffBack            =0.0   ! Diffuse back solar reflectance, bare glass or shade on
-  REAL(r64) :: BlReflectSolDiffBack(MaxSlatAngs) =0.0 ! Diffuse back solar reflectance, blind present, vs. slat angle
-  REAL(r64) :: ReflectSolDiffFront               =0.0 ! Diffuse front solar reflectance, bare glass or shade on
-  REAL(r64) :: BlReflectSolDiffFront(MaxSlatAngs)=0.0 ! Diffuse front solar reflectance, blind present, vs. slat angle
-  REAL(r64) :: ReflectVisDiffBack                =0.0 ! Diffuse back visible reflectance, bare glass or shade on
-  REAL(r64) :: BlReflectVisDiffBack(MaxSlatAngs) =0.0 ! Diffuse back visible reflectance, blind present, vs. slat angle
-  REAL(r64) :: ReflectVisDiffFront               =0.0 ! Diffuse front visible reflectance, bare glass or shade on
-  REAL(r64) :: BlReflectVisDiffFront(MaxSlatAngs)=0.0 ! Diffuse front visible reflectance, blind present, vs. slat angle
-  REAL(r64) :: TransSolBeamCoef(6)               =0.0 ! Coeffs of incidence-angle polynomial for beam sol trans,
+  REAL :: TransDiff                     =0.0   ! Diffuse solar transmittance, bare glass or shade on
+  REAL :: BlTransDiff(MaxSlatAngs)      =0.0   ! Diffuse solar transmittance, blind present, vs. slat angle
+  REAL :: BlTransDiffGnd(MaxSlatAngs)   =0.0   ! Ground diffuse solar transmittance, blind present, vs. slat angle
+  REAL :: BlTransDiffSky(MaxSlatAngs)   =0.0   ! Sky diffuse solar transmittance, blind present, vs. slat angle
+  REAL :: TransDiffVis                  =0.0   ! Diffuse visible transmittance, bare glass or shade on
+  REAL :: BlTransDiffVis(MaxSlatAngs)   =0.0   ! Diffuse visible transmittance, blind present, vs. slat angle
+  REAL :: ReflectSolDiffBack            =0.0   ! Diffuse back solar reflectance, bare glass or shade on
+  REAL :: BlReflectSolDiffBack(MaxSlatAngs) =0.0 ! Diffuse back solar reflectance, blind present, vs. slat angle
+  REAL :: ReflectSolDiffFront               =0.0 ! Diffuse front solar reflectance, bare glass or shade on
+  REAL :: BlReflectSolDiffFront(MaxSlatAngs)=0.0 ! Diffuse front solar reflectance, blind present, vs. slat angle
+  REAL :: ReflectVisDiffBack                =0.0 ! Diffuse back visible reflectance, bare glass or shade on
+  REAL :: BlReflectVisDiffBack(MaxSlatAngs) =0.0 ! Diffuse back visible reflectance, blind present, vs. slat angle
+  REAL :: ReflectVisDiffFront               =0.0 ! Diffuse front visible reflectance, bare glass or shade on
+  REAL :: BlReflectVisDiffFront(MaxSlatAngs)=0.0 ! Diffuse front visible reflectance, blind present, vs. slat angle
+  REAL :: TransSolBeamCoef(6)               =0.0 ! Coeffs of incidence-angle polynomial for beam sol trans,
                                                       ! bare glass or shade on
-  REAL(r64) :: TransVisBeamCoef(6)               =0.0 ! Coeffs of incidence-angle polynomial for beam vis trans,
+  REAL :: TransVisBeamCoef(6)               =0.0 ! Coeffs of incidence-angle polynomial for beam vis trans,
                                                       ! bare glass or shade on
-  REAL(r64) :: ReflSolBeamFrontCoef(6)           =0.0 ! Coeffs of incidence-angle polynomial for beam sol front refl,
+  REAL :: ReflSolBeamFrontCoef(6)           =0.0 ! Coeffs of incidence-angle polynomial for beam sol front refl,
                                                       ! bare glass or shade on
-  REAL(r64) :: ReflSolBeamBackCoef(6) =0.0 ! Like ReflSolBeamFrontCoef, but for back-incident beam solar
-  REAL(r64) :: tBareSolCoef(5,6)      =0.0 ! Isolated glass solar transmittance coeffs of inc. angle polynomial
-  REAL(r64) :: tBareVisCoef(5,6)      =0.0 ! Isolated glass visible transmittance coeffs of inc. angle polynomial
-  REAL(r64) :: rfBareSolCoef(5,6)     =0.0 ! Isolated glass front solar reflectance coeffs of inc. angle polynomial
-  REAL(r64) :: rfBareVisCoef(5,6)     =0.0 ! Isolated glass front visible reflectance coeffs of inc. angle polynomial
-  REAL(r64) :: rbBareSolCoef(5,6)     =0.0 ! Isolated glass back solar reflectance coeffs of inc. angle polynomial
-  REAL(r64) :: rbBareVisCoef(5,6)     =0.0 ! Isolated glass back visible reflectance coeffs of inc. angle polynomial
-  REAL(r64) :: afBareSolCoef(5,6)     =0.0 ! Isolated glass front solar absorptance coeffs of inc. angle polynomial
-  REAL(r64) :: abBareSolCoef(5,6)     =0.0 ! Isolated glass back solar absorptance coeffs of inc. angle polynomial
-  REAL(r64) :: tBareSolDiff(5)        =0.0 ! Isolated glass diffuse solar transmittance
-  REAL(r64) :: tBareVisDiff(5)        =0.0 ! Isolated glass diffuse visible transmittance
-  REAL(r64) :: rfBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar front reflectance
-  REAL(r64) :: rfBareVisDiff(5)       =0.0 ! Isolated glass diffuse visible front reflectance
-  REAL(r64) :: rbBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar back reflectance
-  REAL(r64) :: rbBareVisDiff(5)       =0.0 ! Isolated glass diffuse visible back reflectance
-  REAL(r64) :: afBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar front absorptance
-  REAL(r64) :: abBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar back absorptance
+  REAL :: ReflSolBeamBackCoef(6) =0.0 ! Like ReflSolBeamFrontCoef, but for back-incident beam solar
+  REAL :: tBareSolCoef(5,6)      =0.0 ! Isolated glass solar transmittance coeffs of inc. angle polynomial
+  REAL :: tBareVisCoef(5,6)      =0.0 ! Isolated glass visible transmittance coeffs of inc. angle polynomial
+  REAL :: rfBareSolCoef(5,6)     =0.0 ! Isolated glass front solar reflectance coeffs of inc. angle polynomial
+  REAL :: rfBareVisCoef(5,6)     =0.0 ! Isolated glass front visible reflectance coeffs of inc. angle polynomial
+  REAL :: rbBareSolCoef(5,6)     =0.0 ! Isolated glass back solar reflectance coeffs of inc. angle polynomial
+  REAL :: rbBareVisCoef(5,6)     =0.0 ! Isolated glass back visible reflectance coeffs of inc. angle polynomial
+  REAL :: afBareSolCoef(5,6)     =0.0 ! Isolated glass front solar absorptance coeffs of inc. angle polynomial
+  REAL :: abBareSolCoef(5,6)     =0.0 ! Isolated glass back solar absorptance coeffs of inc. angle polynomial
+  REAL :: tBareSolDiff(5)        =0.0 ! Isolated glass diffuse solar transmittance
+  REAL :: tBareVisDiff(5)        =0.0 ! Isolated glass diffuse visible transmittance
+  REAL :: rfBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar front reflectance
+  REAL :: rfBareVisDiff(5)       =0.0 ! Isolated glass diffuse visible front reflectance
+  REAL :: rbBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar back reflectance
+  REAL :: rbBareVisDiff(5)       =0.0 ! Isolated glass diffuse visible back reflectance
+  REAL :: afBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar front absorptance
+  REAL :: abBareSolDiff(5)       =0.0 ! Isolated glass diffuse solar back absorptance
   LOGICAL :: FromWindow5DataFile =.false. ! True if this is a window construction extracted from the Window5 data file
-  REAL(r64) :: W5FileMullionWidth     =0.0    ! Width of mullion for construction from Window5 data file (m)
+  REAL :: W5FileMullionWidth     =0.0    ! Width of mullion for construction from Window5 data file (m)
   INTEGER   :: W5FileMullionOrientation = 0 ! Orientation of mullion, if present, for Window5 data file construction,
-  REAL(r64) :: W5FileGlazingSysWidth     =0.0 ! Glass width for construction from Window5 data file (m)
-  REAL(r64) :: W5FileGlazingSysHeight    =0.0 ! Glass height for construction form Window5 data file (m)
-  REAL(r64) :: SummerSHGC                =0.0 ! Calculated ASHRAE SHGC for summer conditions
-  REAL(r64) :: VisTransNorm              =0.0 ! The normal visible transmittance
+  REAL :: W5FileGlazingSysWidth     =0.0 ! Glass width for construction from Window5 data file (m)
+  REAL :: W5FileGlazingSysHeight    =0.0 ! Glass height for construction form Window5 data file (m)
+  REAL :: SummerSHGC                =0.0 ! Calculated ASHRAE SHGC for summer conditions
+  REAL :: VisTransNorm              =0.0 ! The normal visible transmittance
 
   LOGICAL :: SourceSinkPresent  =.false.  ! .TRUE. if there is a source/sink within this construction
   LOGICAL :: TypeIsWindow       =.false.  ! True if a window construction, false otherwise
@@ -616,23 +616,23 @@ TYPE ConstructionData
   INTEGER   :: TCGlassID = 0                ! Which glass layer is the TC glazing, counting from glass layers only.
 
   !For CFactor underground walls
-  REAL(r64) :: CFactor = 0.0
-  REAL(r64) :: Height = 0.0
+  REAL :: CFactor = 0.0
+  REAL :: Height = 0.0
 
   !For FFactor slabs-on-grade or undeerground floors
-  REAL(r64) :: FFactor = 0.0
-  REAL(r64) :: Area = 0.0
-  REAL(r64) :: PerimeterExposed = 0.0
+  REAL :: FFactor = 0.0
+  REAL :: Area = 0.0
+  REAL :: PerimeterExposed = 0.0
 
 END TYPE ConstructionData
 
 TYPE SpectralDataProperties
   CHARACTER(len=MaxNameLength) :: Name  =' ' ! Name of spectral data set
   INTEGER :: NumOfWavelengths           = 0  ! Number of wavelengths in the data set
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: WaveLength     ! Wavelength (microns)
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: Trans           ! Transmittance at normal incidence
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: ReflFront       ! Front reflectance at normal incidence
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: ReflBack        ! Back reflectance at normal incidence
+  REAL,ALLOCATABLE,DIMENSION(:) :: WaveLength     ! Wavelength (microns)
+  REAL,ALLOCATABLE,DIMENSION(:) :: Trans           ! Transmittance at normal incidence
+  REAL,ALLOCATABLE,DIMENSION(:) :: ReflFront       ! Front reflectance at normal incidence
+  REAL,ALLOCATABLE,DIMENSION(:) :: ReflBack        ! Back reflectance at normal incidence
 END TYPE SpectralDataProperties
 
 TYPE ZoneData
@@ -640,29 +640,29 @@ TYPE ZoneData
     INTEGER :: Multiplier               = 1  ! Used in reporting and for systems calculations
     INTEGER :: ListMultiplier           = 1  ! For Zone Group object:  used in reporting and systems calculations
     INTEGER :: ListGroup                = 0  ! used only in Zone Group verification.  and for error message.
-    REAL(r64) :: RelNorth               =0.0 ! Relative North (to building north) [Degrees]
-    REAL(r64) :: OriginX                =0.0 ! X origin  [m]
-    REAL(r64) :: OriginY                =0.0 ! Y origin  [m]
-    REAL(r64) :: OriginZ                =0.0 ! Z origin  [m]
-    REAL(r64) :: CeilingHeight          =AutoCalculate ! Ceiling Height entered by user [m] or calculated
-    REAL(r64) :: Volume                 =AutoCalculate ! Volume entered by user [m3] or calculated
+    REAL :: RelNorth               =0.0 ! Relative North (to building north) [Degrees]
+    REAL :: OriginX                =0.0 ! X origin  [m]
+    REAL :: OriginY                =0.0 ! Y origin  [m]
+    REAL :: OriginZ                =0.0 ! Z origin  [m]
+    REAL :: CeilingHeight          =AutoCalculate ! Ceiling Height entered by user [m] or calculated
+    REAL :: Volume                 =AutoCalculate ! Volume entered by user [m3] or calculated
     INTEGER :: OfType                   = 1  ! 1=Standard Zone, Not yet used:
                                              ! 2=Plenum Zone, 11=Solar Wall, 12=Roof Pond
-    REAL(r64) :: UserEnteredFloorArea   =AutoCalculate ! User input floor area for this zone
+    REAL :: UserEnteredFloorArea   =AutoCalculate ! User input floor area for this zone
         ! Calculated after input
-    REAL(r64) :: FloorArea              =0.0 ! Floor area used for this zone
-    REAL(r64) :: CalcFloorArea          =0.0 ! Calculated floor area used for this zone
+    REAL :: FloorArea              =0.0 ! Floor area used for this zone
+    REAL :: CalcFloorArea          =0.0 ! Calculated floor area used for this zone
     LOGICAL :: HasFloor             =.false. ! Has "Floor" surface
     LOGICAL :: HasRoof              =.false. ! Has "Roof" or "Ceiling" Surface
     LOGICAL :: IntZWindow           =.false. ! Interzone Window present in this zone
-    REAL(r64) :: AirCapacity            =0.0
-    REAL(r64) :: ExtWindowArea          =0.0 ! Exterior Window Area for Zone
-    REAL(r64) :: ExtGrossWallArea       =0.0 ! Exterior Wall Area for Zone (Gross)
-    REAL(r64) :: ExtWindowArea_Multiplied=0.0 ! Exterior Window Area for Zone with multipliers
-    REAL(r64) :: ExtGrossWallArea_Multiplied=0.0 ! Exterior Wall Area for Zone (Gross) with multipliers
-    REAL(r64) :: ExtNetWallArea         =0.0 ! Exterior Wall Area for Zone (Net)
-    REAL(r64) :: TotalSurfArea          =0.0 ! Total surface area for Zone
-    REAL(r64) :: ExteriorTotalSurfArea  =0.0 ! Total surface area of all exterior surfaces for Zone
+    REAL :: AirCapacity            =0.0
+    REAL :: ExtWindowArea          =0.0 ! Exterior Window Area for Zone
+    REAL :: ExtGrossWallArea       =0.0 ! Exterior Wall Area for Zone (Gross)
+    REAL :: ExtWindowArea_Multiplied=0.0 ! Exterior Window Area for Zone with multipliers
+    REAL :: ExtGrossWallArea_Multiplied=0.0 ! Exterior Wall Area for Zone (Gross) with multipliers
+    REAL :: ExtNetWallArea         =0.0 ! Exterior Wall Area for Zone (Net)
+    REAL :: TotalSurfArea          =0.0 ! Total surface area for Zone
+    REAL :: ExteriorTotalSurfArea  =0.0 ! Total surface area of all exterior surfaces for Zone
                                              ! (ignoring windows as they will be included in their base surfaces)
     INTEGER :: SystemZoneNodeNumber     = 0  ! This is the zone node number for the system for a controlled zone
     LOGICAL :: IsControlled             = .false.  ! True when this is a controlled zone.
@@ -676,27 +676,27 @@ TYPE ZoneData
     INTEGER :: NumShadingSurfaces       = 0  ! Number of shading surfaces for this zone
     INTEGER :: OutsideConvectionAlgo    = ASHRAESimple  ! Ref: appropriate values for Outside Convection solution
     TYPE (Vector) :: Centroid = Vector(0.0, 0.0, 0.0)  ! Center of the zone found by averaging wall, floor, and roof centroids
-    REAL(r64) :: MinimumX               = 0.0 ! Minimum X value for entire zone
-    REAL(r64) :: MaximumX               = 0.0 ! Maximum X value for entire zone
-    REAL(r64) :: MinimumY               = 0.0 ! Minimum Y value for entire zone
-    REAL(r64) :: MaximumY               = 0.0 ! Maximum Y value for entire zone
-    REAL(r64) :: MinimumZ               = 0.0 ! Minimum Z value for entire zone
-    REAL(r64) :: MaximumZ               = 0.0 ! Maximum Z value for entire zone
-    REAL(r64) :: OutDryBulbTemp         =0.0 ! Zone outside dry bulb air temperature, for zone infiltration/ventilation (C)
-    REAL(r64) :: OutWetBulbTemp         =0.0 ! Zone outside wet bulb air temperature, for zone infiltration/ventilation (C)
-    REAL(r64) :: WindSpeed              =0.0 ! Zone outside wind speed, for zone infiltration/ventilation (m/s)
+    REAL :: MinimumX               = 0.0 ! Minimum X value for entire zone
+    REAL :: MaximumX               = 0.0 ! Maximum X value for entire zone
+    REAL :: MinimumY               = 0.0 ! Minimum Y value for entire zone
+    REAL :: MaximumY               = 0.0 ! Maximum Y value for entire zone
+    REAL :: MinimumZ               = 0.0 ! Minimum Z value for entire zone
+    REAL :: MaximumZ               = 0.0 ! Maximum Z value for entire zone
+    REAL :: OutDryBulbTemp         =0.0 ! Zone outside dry bulb air temperature, for zone infiltration/ventilation (C)
+    REAL :: OutWetBulbTemp         =0.0 ! Zone outside wet bulb air temperature, for zone infiltration/ventilation (C)
+    REAL :: WindSpeed              =0.0 ! Zone outside wind speed, for zone infiltration/ventilation (m/s)
     LOGICAL :: isPartOfTotalArea        = .TRUE. ! Count the zone area when determining the building total floor area
     LOGICAL :: isNominalOccupied        = .false. !has occupancy nominally specified
     LOGICAL :: isNominalControlled      = .false. !has Controlled Zone Equip Configuration reference
-    REAL(r64) :: TotOccupants           =0.0 ! total design occupancy
+    REAL :: TotOccupants           =0.0 ! total design occupancy
                                                   ! (sum of NumberOfPeople for the zone from People object)
     INTEGER :: AirHBimBalanceErrIndex   = 0 ! error management counter
     LOGICAL :: NoHeatToReturnAir        =.FALSE.  ! TRUE means that heat to return air should be added to the zone load
     LOGICAL :: RefrigCaseRA             =.FALSE.  ! TRUE means there is potentially heat removal from return air
                                                   ! from refrigeration cases for this zone
-    REAL(r64) :: InternalHeatGains      =0.0      ! internal loads (W)
-    REAL(r64) :: NominalInfilVent       =0.0      ! internal infiltration/ventilaton
-    REAL(r64) :: NominalMixing          =0.0      ! internal mixing/cross mixing
+    REAL :: InternalHeatGains      =0.0      ! internal loads (W)
+    REAL :: NominalInfilVent       =0.0      ! internal infiltration/ventilaton
+    REAL :: NominalMixing          =0.0      ! internal mixing/cross mixing
     LOGICAL   :: TempOutOfBoundsReported=.false.  ! if any temp out of bounds errors, first will show zone details.
     LOGICAL   :: EnforcedReciprocity=.false.      ! if zone required forced reciprocity --
                                                   !   less out of bounds temperature errors allowed
@@ -727,17 +727,17 @@ END TYPE GlobalInternalGainMiscObject
 TYPE PeopleData
     CHARACTER(len=MaxNameLength) :: Name               =' ' ! PEOPLE object name
     INTEGER   :: ZonePtr                               = 0  ! Pointer to the zone number for this people statement
-    REAL(r64) :: NumberOfPeople                        = 0.0 ! Maximum number of people for this statement
+    REAL :: NumberOfPeople                        = 0.0 ! Maximum number of people for this statement
     INTEGER   :: NumberOfPeoplePtr                     = -1  ! Pointer to schedule for number of people
     LOGICAL   :: EMSPeopleOn                           = .FALSE. !EMS actuating number of people if .TRUE.
-    REAL(r64) :: EMSNumberOfPeople                     = 0.0D0 ! Value EMS is directing to use for override
+    REAL :: EMSNumberOfPeople                     = 0.0 ! Value EMS is directing to use for override
 
     ! Note that the schedule and maximum number was kept for people since it seemed likely that
     ! users would want to assign the same schedule to multiple people statements.
     INTEGER :: ActivityLevelPtr                        =-1  ! Pointer to schedule for activity level
-    REAL(r64) :: FractionRadiant                            =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain from people
+    REAL :: FractionRadiant                            =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain from people
                                                             ! that is radiant
-    REAL(r64) :: FractionConvected                          =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain from people
+    REAL :: FractionConvected                          =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain from people
                                                             ! that is convective
     INTEGER :: WorkEffPtr                              =-1  ! Pointer to schedule for work efficiency
     INTEGER :: ClothingPtr                             =-1  ! Pointer to schedule for clothing insulation
@@ -753,38 +753,38 @@ TYPE PeopleData
     INTEGER :: SurfacePtr                              =-1  ! Pointer to the name of surface
     CHARACTER(len=MaxNameLength) :: AngleFactorListName=' ' ! Name of angle factor list
     INTEGER :: AngleFactorListPtr                      =-1  ! Pointer to the name of angle factor list
-    REAL(r64) :: UserSpecSensFrac                        =0.0 ! User specified sensible fraction
+    REAL :: UserSpecSensFrac                        =0.0 ! User specified sensible fraction
     LOGICAL :: Show55Warning                    = .false.   ! show the warning messages about ASHRAE 55-2004
-    REAL(r64) :: CO2RateFactor                              =0.0 ! Carbon Dioxide Generation Rate [m3/s-W]
+    REAL :: CO2RateFactor                              =0.0 ! Carbon Dioxide Generation Rate [m3/s-W]
 
     ! Report variables
-    REAL(r64) :: NumOcc                                     = 0  ! Number of occupants []
-    REAL(r64) :: TemperatureInZone                          = 0  ! Temperature in zone (C)
-    REAL(r64) :: RelativeHumidityInZone                     = 0  ! Relative humidity in zone
+    REAL :: NumOcc                                     = 0  ! Number of occupants []
+    REAL :: TemperatureInZone                          = 0  ! Temperature in zone (C)
+    REAL :: RelativeHumidityInZone                     = 0  ! Relative humidity in zone
 
-    REAL(r64) :: RadGainRate                                =0.0 ! Radiant heat gain [W]
-    REAL(r64) :: ConGainRate                                =0.0 ! Convective heat gain [W]
-    REAL(r64) :: SenGainRate                                =0.0 ! Sensible heat gain [W]
-    REAL(r64) :: LatGainRate                                =0.0 ! Latent heat gain [W]
-    REAL(r64) :: TotGainRate                                =0.0 ! Total heat gain [W]
-    REAL(r64) :: CO2GainRate                                = 0.d0 ! Carbon Dioxide Gain Rate [m3/s]
+    REAL :: RadGainRate                                =0.0 ! Radiant heat gain [W]
+    REAL :: ConGainRate                                =0.0 ! Convective heat gain [W]
+    REAL :: SenGainRate                                =0.0 ! Sensible heat gain [W]
+    REAL :: LatGainRate                                =0.0 ! Latent heat gain [W]
+    REAL :: TotGainRate                                =0.0 ! Total heat gain [W]
+    REAL :: CO2GainRate                                = 0. ! Carbon Dioxide Gain Rate [m3/s]
 
-    REAL(r64) :: RadGainEnergy                              =0.0 ! Radiant heat gain [J]
-    REAL(r64) :: ConGainEnergy                              =0.0 ! Convective heat gain [J]
-    REAL(r64) :: SenGainEnergy                              =0.0 ! Sensible heat gain [J]
-    REAL(r64) :: LatGainEnergy                              =0.0 ! Latent heat gain [J]
-    REAL(r64) :: TotGainEnergy                              =0.0 ! Total heat gain [J]
+    REAL :: RadGainEnergy                              =0.0 ! Radiant heat gain [J]
+    REAL :: ConGainEnergy                              =0.0 ! Convective heat gain [J]
+    REAL :: SenGainEnergy                              =0.0 ! Sensible heat gain [J]
+    REAL :: LatGainEnergy                              =0.0 ! Latent heat gain [J]
+    REAL :: TotGainEnergy                              =0.0 ! Total heat gain [J]
     ! Air velocity check during run time for thermal comfort control
     INTEGER :: AirVelErrIndex                               = 0  ! Air velocity error index
 !
 
 
 ! For AdaptiveComfort tabular report
-    REAL(r64) :: TimeNotMetASH5580 = 0
-    REAL(r64) :: TimeNotMetASH5590 = 0
-    REAL(r64) :: TimeNotMetCEN15251CatI = 0
-    REAL(r64) :: TimeNotMetCEN15251CatII = 0
-    REAL(r64) :: TimeNotMetCEN15251CatIII = 0
+    REAL :: TimeNotMetASH5580 = 0
+    REAL :: TimeNotMetASH5590 = 0
+    REAL :: TimeNotMetCEN15251CatI = 0
+    REAL :: TimeNotMetCEN15251CatII = 0
+    REAL :: TimeNotMetCEN15251CatIII = 0
 
 
 END TYPE PeopleData
@@ -793,72 +793,72 @@ TYPE LightsData
     CHARACTER(len=MaxNameLength) :: Name      =' ' ! LIGHTS object name
     INTEGER :: ZonePtr                        = 0  ! Which zone lights are in
     INTEGER :: SchedPtr                       =-1  ! Schedule for lights
-    REAL(r64) :: DesignLevel                       =0.0 ! design level for lights [W]
+    REAL :: DesignLevel                       =0.0 ! design level for lights [W]
     LOGICAL   :: EMSLightsOn                       = .FALSE. !EMS actuating Lighting power if .TRUE.
-    REAL(r64) :: EMSLightingPower                  = 0.0D0 ! Value EMS is directing to use for override
-    REAL(r64) :: FractionReturnAir                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is return air
-    REAL(r64) :: FractionRadiant                   =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
-    REAL(r64) :: FractionShortWave                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is short wave
-    REAL(r64) :: FractionReplaceable               =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is replaceable
-    REAL(r64) :: FractionConvected                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is convective
+    REAL :: EMSLightingPower                  = 0.0 ! Value EMS is directing to use for override
+    REAL :: FractionReturnAir                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is return air
+    REAL :: FractionRadiant                   =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
+    REAL :: FractionShortWave                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is short wave
+    REAL :: FractionReplaceable               =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is replaceable
+    REAL :: FractionConvected                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is convective
     LOGICAL   :: FractionReturnAirIsCalculated= .false.
-    REAL(r64) :: FractionReturnAirPlenTempCoeff1   =0.0
-    REAL(r64) :: FractionReturnAirPlenTempCoeff2   =0.0
+    REAL :: FractionReturnAirPlenTempCoeff1   =0.0
+    REAL :: FractionReturnAirPlenTempCoeff2   =0.0
 
     LOGICAL :: ManageDemand               =.FALSE. ! Flag to indicate whether to use demand limiting
-    REAL(r64) :: DemandLimit                       =0.0 ! Demand limit set by demand manager [W]
+    REAL :: DemandLimit                       =0.0 ! Demand limit set by demand manager [W]
 
     ! Report variables
-    REAL(r64) :: Power                             =0.0 ! Electric power [W]
-    REAL(r64) :: RadGainRate                       =0.0 ! Radiant heat gain [W]
-    REAL(r64) :: VisGainRate                       =0.0 ! Visible heat gain [W]
-    REAL(r64) :: ConGainRate                       =0.0 ! Convective heat gain [W]
-    REAL(r64) :: RetAirGainRate                    =0.0 ! Return air heat gain [W]
-    REAL(r64) :: TotGainRate                       =0.0 ! Total heat gain [W]
+    REAL :: Power                             =0.0 ! Electric power [W]
+    REAL :: RadGainRate                       =0.0 ! Radiant heat gain [W]
+    REAL :: VisGainRate                       =0.0 ! Visible heat gain [W]
+    REAL :: ConGainRate                       =0.0 ! Convective heat gain [W]
+    REAL :: RetAirGainRate                    =0.0 ! Return air heat gain [W]
+    REAL :: TotGainRate                       =0.0 ! Total heat gain [W]
 
-    REAL(r64) :: Consumption                       =0.0 ! Electric consumption [J]
-    REAL(r64) :: RadGainEnergy                     =0.0 ! Radiant heat gain [J]
-    REAL(r64) :: VisGainEnergy                     =0.0 ! Visible heat gain [J]
-    REAL(r64) :: ConGainEnergy                     =0.0 ! Convective heat gain [J]
-    REAL(r64) :: RetAirGainEnergy                  =0.0 ! Return air heat gain [J]
-    REAL(r64) :: TotGainEnergy                     =0.0 ! Total heat gain [J]
+    REAL :: Consumption                       =0.0 ! Electric consumption [J]
+    REAL :: RadGainEnergy                     =0.0 ! Radiant heat gain [J]
+    REAL :: VisGainEnergy                     =0.0 ! Visible heat gain [J]
+    REAL :: ConGainEnergy                     =0.0 ! Convective heat gain [J]
+    REAL :: RetAirGainEnergy                  =0.0 ! Return air heat gain [J]
+    REAL :: TotGainEnergy                     =0.0 ! Total heat gain [J]
     CHARACTER(len=MaxNameLength) :: EndUseSubcategory = ' ' !user defined name for the end use category
-    REAL(r64) :: SumConsumption                    =0.0 ! sum of electric consumption [J] for reporting
-    REAL(r64) :: SumTimeNotZeroCons                =0.0 ! sum of time of positive electric consumption [hr]
+    REAL :: SumConsumption                    =0.0 ! sum of electric consumption [J] for reporting
+    REAL :: SumTimeNotZeroCons                =0.0 ! sum of time of positive electric consumption [hr]
 END TYPE LightsData
 
 TYPE ZoneEquipData  ! Electric, Gas, Other Equipment, CO2
     CHARACTER(len=MaxNameLength) :: Name      =' ' ! EQUIPMENT object name
     INTEGER :: ZonePtr                        = 0  ! Which zone internal gain is in
     INTEGER :: SchedPtr                       = 0  ! Schedule for internal gain
-    REAL(r64) :: DesignLevel                  =0.0 ! design level for internal gain [W]
+    REAL :: DesignLevel                  =0.0 ! design level for internal gain [W]
     LOGICAL   :: EMSZoneEquipOverrideOn       = .FALSE. !EMS actuating equipment power if .TRUE.
-    REAL(r64) :: EMSEquipPower                = 0.0D0 ! Value EMS is directing to use for override
-    REAL(r64) :: FractionLatent               =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is latent
-    REAL(r64) :: FractionRadiant              =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
-    REAL(r64) :: FractionLost                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is lost
-    REAL(r64) :: FractionConvected            =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is convective
-    REAL(r64) :: CO2DesignRate                =0.d0 ! CO2 design Rate [m3/s]
-    REAL(r64) :: CO2RateFactor                =0.d0 ! CO2 rate factor [m3/s/W]
+    REAL :: EMSEquipPower                = 0.0 ! Value EMS is directing to use for override
+    REAL :: FractionLatent               =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is latent
+    REAL :: FractionRadiant              =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is radiant
+    REAL :: FractionLost                 =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is lost
+    REAL :: FractionConvected            =0.0 ! Percentage (fraction 0.0-1.0) of sensible heat gain that is convective
+    REAL :: CO2DesignRate                =0. ! CO2 design Rate [m3/s]
+    REAL :: CO2RateFactor                =0. ! CO2 rate factor [m3/s/W]
 
     LOGICAL :: ManageDemand               =.FALSE. ! Flag to indicate whether to use demand limiting
-    REAL(r64) :: DemandLimit                  =0.0 ! Demand limit set by demand manager [W]
+    REAL :: DemandLimit                  =0.0 ! Demand limit set by demand manager [W]
 
     ! Report variables
-    REAL(r64) :: Power                        =0.0 ! Electric/Gas/Fuel power [W]
-    REAL(r64) :: RadGainRate                  =0.0 ! Radiant heat gain [W]
-    REAL(r64) :: ConGainRate                  =0.0 ! Convective heat gain [W]
-    REAL(r64) :: LatGainRate                  =0.0 ! Latent heat gain [W]
-    REAL(r64) :: LostRate                     =0.0 ! Lost energy (converted to work) [W]
-    REAL(r64) :: TotGainRate                  =0.0 ! Total heat gain [W]
-    REAL(r64) :: CO2GainRate                  = 0.d0 !CO2 gain rate [m3/s]
+    REAL :: Power                        =0.0 ! Electric/Gas/Fuel power [W]
+    REAL :: RadGainRate                  =0.0 ! Radiant heat gain [W]
+    REAL :: ConGainRate                  =0.0 ! Convective heat gain [W]
+    REAL :: LatGainRate                  =0.0 ! Latent heat gain [W]
+    REAL :: LostRate                     =0.0 ! Lost energy (converted to work) [W]
+    REAL :: TotGainRate                  =0.0 ! Total heat gain [W]
+    REAL :: CO2GainRate                  = 0. !CO2 gain rate [m3/s]
 
-    REAL(r64) :: Consumption                  =0.0 ! Electric/Gas/Fuel consumption [J]
-    REAL(r64) :: RadGainEnergy                =0.0 ! Radiant heat gain [J]
-    REAL(r64) :: ConGainEnergy                =0.0 ! Convective heat gain [J]
-    REAL(r64) :: LatGainEnergy                =0.0 ! Latent heat gain [J]
-    REAL(r64) :: LostEnergy                   =0.0 ! Lost energy (converted to work) [J]
-    REAL(r64) :: TotGainEnergy                =0.0 ! Total heat gain [J]
+    REAL :: Consumption                  =0.0 ! Electric/Gas/Fuel consumption [J]
+    REAL :: RadGainEnergy                =0.0 ! Radiant heat gain [J]
+    REAL :: ConGainEnergy                =0.0 ! Convective heat gain [J]
+    REAL :: LatGainEnergy                =0.0 ! Latent heat gain [J]
+    REAL :: LostEnergy                   =0.0 ! Lost energy (converted to work) [J]
+    REAL :: TotGainEnergy                =0.0 ! Total heat gain [J]
     CHARACTER(len=MaxNameLength) :: EndUseSubcategory = ' ' !user defined name for the end use category
 END TYPE ZoneEquipData
 
@@ -866,28 +866,28 @@ TYPE BBHeatData
     CHARACTER(len=MaxNameLength) :: Name      =' ' ! BASEBOARD HEAT object name
     INTEGER :: ZonePtr                        =0
     INTEGER :: SchedPtr                       =0
-    REAL(r64) :: CapatLowTemperature               =0.0
-    REAL(r64) :: LowTemperature                    =0.0
-    REAL(r64) :: CapatHighTemperature              =0.0
-    REAL(r64) :: HighTemperature                   =0.0
+    REAL :: CapatLowTemperature               =0.0
+    REAL :: LowTemperature                    =0.0
+    REAL :: CapatHighTemperature              =0.0
+    REAL :: HighTemperature                   =0.0
     LOGICAL   :: EMSZoneBaseboardOverrideOn        = .FALSE. !EMS actuating equipment power if .TRUE.
-    REAL(r64) :: EMSZoneBaseboardPower             = 0.0D0 ! Value EMS is directing to use for override
-    REAL(r64) :: FractionRadiant                   =0.0
-    REAL(r64) :: FractionConvected                 =0.0
+    REAL :: EMSZoneBaseboardPower             = 0.0 ! Value EMS is directing to use for override
+    REAL :: FractionRadiant                   =0.0
+    REAL :: FractionConvected                 =0.0
 
     LOGICAL :: ManageDemand               =.FALSE. ! Flag to indicate whether to use demand limiting
-    REAL(r64) :: DemandLimit                       =0.0 ! Demand limit set by demand manager [W]
+    REAL :: DemandLimit                       =0.0 ! Demand limit set by demand manager [W]
 
     ! Report variables
-    REAL(r64) :: Power                             =0.0 ! Electric power [W]
-    REAL(r64) :: RadGainRate                       =0.0 ! Radiant heat gain [W]
-    REAL(r64) :: ConGainRate                       =0.0 ! Convective heat gain [W]
-    REAL(r64) :: TotGainRate                       =0.0 ! Total heat gain [W]
+    REAL :: Power                             =0.0 ! Electric power [W]
+    REAL :: RadGainRate                       =0.0 ! Radiant heat gain [W]
+    REAL :: ConGainRate                       =0.0 ! Convective heat gain [W]
+    REAL :: TotGainRate                       =0.0 ! Total heat gain [W]
 
-    REAL(r64) :: Consumption                       =0.0 ! Electric consumption [J]
-    REAL(r64) :: RadGainEnergy                     =0.0 ! Radiant heat gain [J]
-    REAL(r64) :: ConGainEnergy                     =0.0 ! Convective heat gain [J]
-    REAL(r64) :: TotGainEnergy                     =0.0 ! Total heat gain [J]
+    REAL :: Consumption                       =0.0 ! Electric consumption [J]
+    REAL :: RadGainEnergy                     =0.0 ! Radiant heat gain [J]
+    REAL :: ConGainEnergy                     =0.0 ! Convective heat gain [J]
+    REAL :: TotGainEnergy                     =0.0 ! Total heat gain [J]
     CHARACTER(len=MaxNameLength) :: EndUseSubcategory = ' ' !user defined name for the end use category
 END TYPE BBHeatData
 
@@ -897,26 +897,26 @@ TYPE InfiltrationData
     INTEGER :: SchedPtr                       = 0  ! Schedule for infiltration
     INTEGER :: ModelType                      = 0  ! which model is used for infiltration
     ! Design Flow Rate model terms
-    REAL(r64) :: DesignLevel                  =0.0D0
-    REAL(r64) :: ConstantTermCoef             =0.0D0
-    REAL(r64) :: TemperatureTermCoef          =0.0D0
-    REAL(r64) :: VelocityTermCoef             =0.0D0
-    REAL(r64) :: VelocitySQTermCoef           =0.0D0
+    REAL :: DesignLevel                  =0.0
+    REAL :: ConstantTermCoef             =0.0
+    REAL :: TemperatureTermCoef          =0.0
+    REAL :: VelocityTermCoef             =0.0
+    REAL :: VelocitySQTermCoef           =0.0
 
     ! Effective Leakage Area, Sherman Grimsrud terms
-    REAL(r64) :: LeakageArea                  =0.0D0 ! "AL" effective air leakage area
-    REAL(r64) :: BasicStackCoefficient        =0.0D0 ! "Cs" Stack coefficient
-    REAL(r64) :: BasicWindCoefficient         =0.0D0 ! "Cw" wind coefficient
+    REAL :: LeakageArea                  =0.0 ! "AL" effective air leakage area
+    REAL :: BasicStackCoefficient        =0.0 ! "Cs" Stack coefficient
+    REAL :: BasicWindCoefficient         =0.0 ! "Cw" wind coefficient
 
     ! Flow Coefficient, AIM-2, Walker and Wilson terms
-    REAL(r64) :: FlowCoefficient              =0.0D0 ! "c" Flow coefficient
-    REAL(r64) :: AIM2StackCoefficient         =0.0D0 ! "Cs" stack coefficient
-    REAL(r64) :: AIM2WindCoefficient          =0.0D0 ! "Cw" wind coefficient
-    REAL(r64) :: PressureExponent             =0.0D0 ! "n" pressure power law exponent
-    REAL(r64) :: ShelterFactor                =0.0D0 ! "s" shelter factor
+    REAL :: FlowCoefficient              =0.0 ! "c" Flow coefficient
+    REAL :: AIM2StackCoefficient         =0.0 ! "Cs" stack coefficient
+    REAL :: AIM2WindCoefficient          =0.0 ! "Cw" wind coefficient
+    REAL :: PressureExponent             =0.0 ! "n" pressure power law exponent
+    REAL :: ShelterFactor                =0.0 ! "s" shelter factor
 
     LOGICAL   :: EMSOverrideOn                = .FALSE. ! if true then EMS is requesting to override
-    REAL(r64) :: EMSAirFlowRateValue          = 0.0D0 ! value EMS is setting for air flow rate
+    REAL :: EMSAirFlowRateValue          = 0.0 ! value EMS is setting for air flow rate
     LOGICAL   :: QuadratureSum                = .FALSE. ! If quadrature sum of zone air balance method is used
     INTEGER :: OABalancePtr                   =0   ! A pointer to ZoneAirBalance If quadrature is true
 
@@ -927,24 +927,24 @@ TYPE VentilationData
     INTEGER :: ZonePtr                        =0
     INTEGER :: SchedPtr                       =0
     INTEGER :: ModelType                      =0  ! which model is used for ventilation: DesignFlowRate and WindandStackOpenArea
-    REAL(r64) :: DesignLevel                       =0.0
+    REAL :: DesignLevel                       =0.0
     LOGICAL   :: EMSSimpleVentOn                   = .FALSE. !EMS actuating ventilation flow rate if .TRUE.
-    REAL(r64) :: EMSimpleVentFlowRate              = 0.0D0 ! Value EMS is directing to use for override
-    REAL(r64) :: MinIndoorTemperature              =-100.0d0
-    REAL(r64) :: DelTemperature                    =0.0
+    REAL :: EMSimpleVentFlowRate              = 0.0 ! Value EMS is directing to use for override
+    REAL :: MinIndoorTemperature              =-100.0
+    REAL :: DelTemperature                    =0.0
     INTEGER :: FanType                        =0
-    REAL(r64) :: FanPressure                       =0.0
-    REAL(r64) :: FanEfficiency                     =0.0
-    REAL(r64) :: FanPower                          =0.0
-    REAL(r64) :: AirTemp                           =0.0
-    REAL(r64) :: ConstantTermCoef                  =0.0
-    REAL(r64) :: TemperatureTermCoef               =0.0
-    REAL(r64) :: VelocityTermCoef                  =0.0
-    REAL(r64) :: VelocitySQTermCoef                =0.0
-    REAL(r64) :: MaxIndoorTemperature              =100.0d0
-    REAL(r64) :: MinOutdoorTemperature             =-100.0d0
-    REAL(r64) :: MaxOutdoorTemperature             =100.0d0
-    REAL(r64) :: MaxWindSpeed                      =40.0d0
+    REAL :: FanPressure                       =0.0
+    REAL :: FanEfficiency                     =0.0
+    REAL :: FanPower                          =0.0
+    REAL :: AirTemp                           =0.0
+    REAL :: ConstantTermCoef                  =0.0
+    REAL :: TemperatureTermCoef               =0.0
+    REAL :: VelocityTermCoef                  =0.0
+    REAL :: VelocitySQTermCoef                =0.0
+    REAL :: MaxIndoorTemperature              =100.0
+    REAL :: MinOutdoorTemperature             =-100.0
+    REAL :: MaxOutdoorTemperature             =100.0
+    REAL :: MaxWindSpeed                      =40.0
     INTEGER :: MinIndoorTempSchedPtr          =0   ! Minimum indoor temperature schedule index
     INTEGER :: MaxIndoorTempSchedPtr          =0   ! Maximum indoor temperature schedule index
     INTEGER :: DeltaTempSchedPtr              =0   ! Delta temperature schedule index
@@ -960,12 +960,12 @@ TYPE VentilationData
     LOGICAL   :: QuadratureSum                = .FALSE. ! If quadrature sum of zone air balance method is used
     INTEGER :: OABalancePtr                   =0   ! A pointer to ZoneAirBalance
     ! WindandStackOpenArea
-    REAL(r64) :: OpenArea                     =0.0  ! Opening area [m2]
+    REAL :: OpenArea                     =0.0  ! Opening area [m2]
     INTEGER :: OpenAreaSchedPtr               =0   ! Opening area fraction schedule pointer
-    REAL(r64) :: OpenEff                           =0.0  ! Opening effectiveness [dimensionless]
-    REAL(r64) :: EffAngle                          =0.0  ! Effective angle [degree]
-    REAL(r64) :: DH                                =0.0  ! Height difference [m]
-    REAL(r64) :: DiscCoef                          =0.0  ! Discharge coefficient
+    REAL :: OpenEff                           =0.0  ! Opening effectiveness [dimensionless]
+    REAL :: EffAngle                          =0.0  ! Effective angle [degree]
+    REAL :: DH                                =0.0  ! Height difference [m]
+    REAL :: DiscCoef                          =0.0  ! Discharge coefficient
 END TYPE VentilationData
 
 TYPE ZoneAirBalanceData
@@ -973,14 +973,14 @@ TYPE ZoneAirBalanceData
     CHARACTER(len=MaxNameLength) :: ZoneName  =' '  ! Zone name
     INTEGER :: ZonePtr                        =0    ! Zone number
     INTEGER :: BalanceMethod                  =0    ! Air Balance Method: None=0, Quadrature = 1
-    REAL(r64) :: InducedAirRate               =0.0  ! Induced Outdoor Air Due to Duct Leakage Unbalance [m3/s]
+    REAL :: InducedAirRate               =0.0  ! Induced Outdoor Air Due to Duct Leakage Unbalance [m3/s]
     INTEGER :: InducedAirSchedPtr             =0    ! Induced Outdoor Air Fraction Schedule
-    REAL(r64) :: BalMassFlowRate              =0.0  ! balanced mass flow rate
-    REAL(r64) :: InfMassFlowRate              =0.0  ! unbalanced mass flow rate from infiltration
-    REAL(r64) :: NatMassFlowRate              =0.0  ! unbalanced mass flow rate from natural ventilaton
-    REAL(r64) :: ExhMassFlowRate              =0.0  ! unbalanced mass flow rate from exhaust ventilaton
-    REAL(r64) :: IntMassFlowRate              =0.0  ! unbalanced mass flow rate from intake ventilaton
-    REAL(r64) :: ERVMassFlowRate              =0.0  ! unbalanced mass flow rate from stand-alond ERV
+    REAL :: BalMassFlowRate              =0.0  ! balanced mass flow rate
+    REAL :: InfMassFlowRate              =0.0  ! unbalanced mass flow rate from infiltration
+    REAL :: NatMassFlowRate              =0.0  ! unbalanced mass flow rate from natural ventilaton
+    REAL :: ExhMassFlowRate              =0.0  ! unbalanced mass flow rate from exhaust ventilaton
+    REAL :: IntMassFlowRate              =0.0  ! unbalanced mass flow rate from intake ventilaton
+    REAL :: ERVMassFlowRate              =0.0  ! unbalanced mass flow rate from stand-alond ERV
     LOGICAL :: OneTimeFlag                    =.FALSE. ! One time flag to get nodes of stand alond ERV
     INTEGER :: NumOfERVs                      =0    ! Number of zone stand alone ERVs
     INTEGER, DIMENSION(:), ALLOCATABLE     :: ERVInletNode    ! Stand alone ERV supply air inlet nodes
@@ -991,10 +991,10 @@ TYPE MixingData
     CHARACTER(len=MaxNameLength) :: Name      =' '
     INTEGER :: ZonePtr                        =0
     INTEGER :: SchedPtr                       =0
-    REAL(r64) :: DesignLevel                  =0.0
+    REAL :: DesignLevel                  =0.0
     INTEGER :: FromZone                       =0
-    REAL(r64) :: DeltaTemperature             =0.0
-    REAL(r64) :: DesiredAirFlowRate           =0.0
+    REAL :: DeltaTemperature             =0.0
+    REAL :: DesiredAirFlowRate           =0.0
     INTEGER :: DeltaTempSchedPtr              =0   ! Delta temperature schedule index
     INTEGER :: MinIndoorTempSchedPtr          =0   ! Minimum indoor temperature schedule index
     INTEGER :: MaxIndoorTempSchedPtr          =0   ! Maximum indoor temperature schedule index
@@ -1013,14 +1013,14 @@ TYPE MixingData
     INTEGER :: NumRefDoorConnections          = 0
     LOGICAL   :: EMSSimpleMixingOn            = .FALSE. !EMS actuating ventilation flow rate if .TRUE.
     LOGICAL   :: RefDoorMixFlag               = .FALSE. !Refrigeration door mixing within zone
-    REAL(r64) :: EMSimpleMixingFlowRate       = 0.0D0 ! Value EMS is directing to use for override
+    REAL :: EMSimpleMixingFlowRate       = 0.0 ! Value EMS is directing to use for override
     LOGICAL,   DIMENSION(:), ALLOCATABLE     :: EMSRefDoorMixingOn    !
-    REAL(r64), DIMENSION(:), ALLOCATABLE     :: EMSRefDoorFlowRate    !
-    REAL(r64), DIMENSION(:), ALLOCATABLE     :: VolRefDoorFlowRate    !
+    REAL, DIMENSION(:), ALLOCATABLE     :: EMSRefDoorFlowRate    !
+    REAL, DIMENSION(:), ALLOCATABLE     :: VolRefDoorFlowRate    !
     INTEGER,   DIMENSION(:), ALLOCATABLE     :: OpenSchedPtr  ! Schedule for Refrigeration door open fraction
-    REAL(r64), DIMENSION(:), ALLOCATABLE     :: DoorHeight    ! Door height for refrigeration door, m
-    REAL(r64), DIMENSION(:), ALLOCATABLE     :: DoorArea      ! Door area for refrigeration door, m2
-    REAL(r64), DIMENSION(:), ALLOCATABLE     :: Protection    ! Refrigeration door protection factor, dimensionless
+    REAL, DIMENSION(:), ALLOCATABLE     :: DoorHeight    ! Door height for refrigeration door, m
+    REAL, DIMENSION(:), ALLOCATABLE     :: DoorArea      ! Door area for refrigeration door, m2
+    REAL, DIMENSION(:), ALLOCATABLE     :: Protection    ! Refrigeration door protection factor, dimensionless
     INTEGER,   DIMENSION(:), ALLOCATABLE     :: MateZonePtr   ! Zone connected by refrigeration door (MateZone > ZonePtr)
     CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE     :: DoorMixingObjectName ! Used in one error statement and eio
     CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE     :: DoorProtTypeName ! Used in eio
@@ -1033,64 +1033,64 @@ TYPE GenericComponentZoneIntGainStruct
   CHARACTER(len=MaxNameLength) :: CompObjectType = ' '  ! device object class name
   CHARACTER(len=MaxNameLength) :: CompObjectName = ' '  ! device user unique name
   INTEGER                      :: CompTypeOfNum  = 0    ! type of internal gain device identifier
-  REAL(r64) , POINTER :: PtrConvectGainRate  ! fortan POINTER to value of convection heat gain rate for device, watts
-  REAL(r64)           :: ConvectGainRate  ! current timestep value of convection heat gain rate for device, watts
-  REAL(r64) , POINTER :: PtrReturnAirConvGainRate ! fortan POINTER to value of return air convection heat gain rate for device, W
-  REAL(r64)           :: ReturnAirConvGainRate ! urrent timestep value of return air convection heat gain rate for device, W
-  REAL(r64) , POINTER :: PtrRadiantGainRate  ! fortan POINTER to value of thermal radiation heat gain rate for device, watts
-  REAL(r64)           :: RadiantGainRate  !  current timestep value of thermal radiation heat gain rate for device, watts
-  REAL(r64) , POINTER :: PtrLatentGainRate ! fortan POINTER to value of moisture gain rate for device, Watts
-  REAL(r64)           :: LatentGainRate !  current timestep value of moisture gain rate for device, Watts
-  REAL(r64) , POINTER :: PtrReturnAirLatentGainRate ! fortan POINTER to value of return air moisture gain rate for device, Watts
-  REAL(r64)           :: ReturnAirLatentGainRate !  current timestep value of return air moisture gain rate for device, Watts
-  REAL(R64) , POINTER :: PtrCarbonDioxideGainRate ! fortan POINTER to value of carbon dioxide gain rate for device
-  REAL(R64)           :: CarbonDioxideGainRate !  current timestep value of carbon dioxide gain rate for device
-  REAL(R64) , POINTER :: PtrGenericContamGainRate ! fortan POINTER to value of generic contaminant gain rate for device
-  REAL(R64)           :: GenericContamGainRate !  current timestep value of generic contaminant gain rate for device
+  REAL , POINTER :: PtrConvectGainRate  ! fortan POINTER to value of convection heat gain rate for device, watts
+  REAL           :: ConvectGainRate  ! current timestep value of convection heat gain rate for device, watts
+  REAL , POINTER :: PtrReturnAirConvGainRate ! fortan POINTER to value of return air convection heat gain rate for device, W
+  REAL           :: ReturnAirConvGainRate ! urrent timestep value of return air convection heat gain rate for device, W
+  REAL , POINTER :: PtrRadiantGainRate  ! fortan POINTER to value of thermal radiation heat gain rate for device, watts
+  REAL           :: RadiantGainRate  !  current timestep value of thermal radiation heat gain rate for device, watts
+  REAL , POINTER :: PtrLatentGainRate ! fortan POINTER to value of moisture gain rate for device, Watts
+  REAL           :: LatentGainRate !  current timestep value of moisture gain rate for device, Watts
+  REAL , POINTER :: PtrReturnAirLatentGainRate ! fortan POINTER to value of return air moisture gain rate for device, Watts
+  REAL           :: ReturnAirLatentGainRate !  current timestep value of return air moisture gain rate for device, Watts
+  REAL , POINTER :: PtrCarbonDioxideGainRate ! fortan POINTER to value of carbon dioxide gain rate for device
+  REAL           :: CarbonDioxideGainRate !  current timestep value of carbon dioxide gain rate for device
+  REAL , POINTER :: PtrGenericContamGainRate ! fortan POINTER to value of generic contaminant gain rate for device
+  REAL           :: GenericContamGainRate !  current timestep value of generic contaminant gain rate for device
 END TYPE GenericComponentZoneIntGainStruct
 
 TYPE ZoneSimData        ! Calculated data by Zone during each time step/hour
-  REAL(r64) :: NOFOCC  =0.0        !Number of Occupants, zone total
-  REAL(r64) :: QOCTOT  =0.0        !Total Energy from Occupants
-  REAL(r64) :: QOCSEN  =0.0        !Sensible Energy from Occupants
-  REAL(r64) :: QOCCON  =0.0        !ENERGY CONVECTED FROM OCCUPANTS (WH)
-  REAL(r64) :: QOCRAD  =0.0        !ENERGY RADIATED FROM OCCUPANTS
-  REAL(r64) :: QOCLAT  =0.0        !LATENT ENERGY FROM OCCUPANTS
+  REAL :: NOFOCC  =0.0        !Number of Occupants, zone total
+  REAL :: QOCTOT  =0.0        !Total Energy from Occupants
+  REAL :: QOCSEN  =0.0        !Sensible Energy from Occupants
+  REAL :: QOCCON  =0.0        !ENERGY CONVECTED FROM OCCUPANTS (WH)
+  REAL :: QOCRAD  =0.0        !ENERGY RADIATED FROM OCCUPANTS
+  REAL :: QOCLAT  =0.0        !LATENT ENERGY FROM OCCUPANTS
 
-  REAL(r64) :: QLTTOT  =0.0        !TOTAL ENERGY INTO LIGHTS (WH)
-  REAL(r64) :: QLTCON  =0.0        !ENERGY CONVECTED TO SPACE AIR FROM LIGHTS
-  REAL(r64) :: QLTRAD  =0.0        !ENERGY RADIATED TO SPACE FROM LIGHTS
-  REAL(r64) :: QLTCRA  =0.0        !ENERGY CONVECTED TO RETURN AIR FROM LIGHTS
-  REAL(r64) :: QLTSW   =0.0        !VISIBLE ENERGY FROM LIGHTS
+  REAL :: QLTTOT  =0.0        !TOTAL ENERGY INTO LIGHTS (WH)
+  REAL :: QLTCON  =0.0        !ENERGY CONVECTED TO SPACE AIR FROM LIGHTS
+  REAL :: QLTRAD  =0.0        !ENERGY RADIATED TO SPACE FROM LIGHTS
+  REAL :: QLTCRA  =0.0        !ENERGY CONVECTED TO RETURN AIR FROM LIGHTS
+  REAL :: QLTSW   =0.0        !VISIBLE ENERGY FROM LIGHTS
 
 
-  REAL(r64) :: QEECON  =0.0        !ENERGY CONVECTED FROM ELECTRIC EQUIPMENT
-  REAL(r64) :: QEERAD  =0.0        !ENERCY RADIATED FROM ELECTRIC EQUIPMENT
-  REAL(r64) :: QEELost =0.0        ! Energy from Electric Equipment (lost)
-  REAL(r64) :: QEELAT  =0.0        !LATENT ENERGY FROM Electric Equipment
+  REAL :: QEECON  =0.0        !ENERGY CONVECTED FROM ELECTRIC EQUIPMENT
+  REAL :: QEERAD  =0.0        !ENERCY RADIATED FROM ELECTRIC EQUIPMENT
+  REAL :: QEELost =0.0        ! Energy from Electric Equipment (lost)
+  REAL :: QEELAT  =0.0        !LATENT ENERGY FROM Electric Equipment
 
-  REAL(r64) :: QGECON  =0.0        !ENERGY CONVECTED FROM GAS EQUIPMENT
-  REAL(r64) :: QGERAD  =0.0        !ENERGY RADIATED FROM GAS EQUIPMENT
-  REAL(r64) :: QGELost =0.0        ! Energy from Gas Equipment (lost)
-  REAL(r64) :: QGELAT  =0.0        !LATENT ENERGY FROM Gas Equipment
+  REAL :: QGECON  =0.0        !ENERGY CONVECTED FROM GAS EQUIPMENT
+  REAL :: QGERAD  =0.0        !ENERGY RADIATED FROM GAS EQUIPMENT
+  REAL :: QGELost =0.0        ! Energy from Gas Equipment (lost)
+  REAL :: QGELAT  =0.0        !LATENT ENERGY FROM Gas Equipment
 
-  REAL(r64) :: QOECON  =0.0        !ENERGY CONVECTED FROM OTHER EQUIPMENT
-  REAL(r64) :: QOERAD  =0.0        !ENERGY RADIATED FROM OTHER EQUIPMENT
-  REAL(r64) :: QOELost =0.0        ! Energy from Other Equipment (lost)
-  REAL(r64) :: QOELAT  =0.0        !LATENT ENERGY FROM Other Equipment
+  REAL :: QOECON  =0.0        !ENERGY CONVECTED FROM OTHER EQUIPMENT
+  REAL :: QOERAD  =0.0        !ENERGY RADIATED FROM OTHER EQUIPMENT
+  REAL :: QOELost =0.0        ! Energy from Other Equipment (lost)
+  REAL :: QOELAT  =0.0        !LATENT ENERGY FROM Other Equipment
 
-  REAL(r64) :: QHWCON  =0.0        !ENERGY CONVECTED FROM Hot Water EQUIPMENT
-  REAL(r64) :: QHWRAD  =0.0        !ENERGY RADIATED FROM Hot Water EQUIPMENT
-  REAL(r64) :: QHWLost =0.0        ! Energy from Hot Water Equipment (lost)
-  REAL(r64) :: QHWLAT  =0.0        !LATENT ENERGY FROM Hot Water Equipment
+  REAL :: QHWCON  =0.0        !ENERGY CONVECTED FROM Hot Water EQUIPMENT
+  REAL :: QHWRAD  =0.0        !ENERGY RADIATED FROM Hot Water EQUIPMENT
+  REAL :: QHWLost =0.0        ! Energy from Hot Water Equipment (lost)
+  REAL :: QHWLAT  =0.0        !LATENT ENERGY FROM Hot Water Equipment
 
-  REAL(r64) :: QSECON  =0.0        !ENERGY CONVECTED FROM Steam EQUIPMENT
-  REAL(r64) :: QSERAD  =0.0        !ENERGY RADIATED FROM Steam EQUIPMENT
-  REAL(r64) :: QSELost =0.0        ! Energy from Steam Equipment (lost)
-  REAL(r64) :: QSELAT  =0.0        !LATENT ENERGY FROM Steam Equipment
+  REAL :: QSECON  =0.0        !ENERGY CONVECTED FROM Steam EQUIPMENT
+  REAL :: QSERAD  =0.0        !ENERGY RADIATED FROM Steam EQUIPMENT
+  REAL :: QSELost =0.0        ! Energy from Steam Equipment (lost)
+  REAL :: QSELAT  =0.0        !LATENT ENERGY FROM Steam Equipment
 
-  REAL(r64) :: QBBCON  =0.0        !ENERGY CONVECTED FROM BASEBOARD HEATING
-  REAL(r64) :: QBBRAD  =0.0        !ENERGY RADIATED FROM BASEBOARD HEATING
+  REAL :: QBBCON  =0.0        !ENERGY CONVECTED FROM BASEBOARD HEATING
+  REAL :: QBBRAD  =0.0        !ENERGY RADIATED FROM BASEBOARD HEATING
 
   INTEGER    :: NumberOfDevices = 0
   INTEGER    :: MaxNumberOfDevices = 0
@@ -1105,442 +1105,442 @@ TYPE WindowBlindProperties
                   ! Input properties
   INTEGER :: SlatOrientation=0           ! HORIZONTAL or VERTICAL
   INTEGER :: SlatAngleType  =FixedSlats  ! FIXED or VARIABLE
-  REAL(r64) :: SlatWidth                =0.0 ! Slat width (m)
-  REAL(r64) :: SlatSeparation           =0.0 ! Slat separation (m)
-  REAL(r64) :: SlatThickness            =0.0 ! Slat thickness (m)
-  REAL(r64) :: SlatAngle                =0.0 ! Slat angle (deg)
-  REAL(r64) :: MinSlatAngle             =0.0 ! Minimum slat angle for variable-angle slats (deg) (user input)
-  REAL(r64) :: MaxSlatAngle             =0.0 ! Maximum slat angle for variable-angle slats (deg) (user input)
-  REAL(r64) :: SlatConductivity         =0.0 ! Slat conductivity (W/m-K)
+  REAL :: SlatWidth                =0.0 ! Slat width (m)
+  REAL :: SlatSeparation           =0.0 ! Slat separation (m)
+  REAL :: SlatThickness            =0.0 ! Slat thickness (m)
+  REAL :: SlatAngle                =0.0 ! Slat angle (deg)
+  REAL :: MinSlatAngle             =0.0 ! Minimum slat angle for variable-angle slats (deg) (user input)
+  REAL :: MaxSlatAngle             =0.0 ! Maximum slat angle for variable-angle slats (deg) (user input)
+  REAL :: SlatConductivity         =0.0 ! Slat conductivity (W/m-K)
     ! Solar slat properties
-  REAL(r64) :: SlatTransSolBeamDiff     =0.0 ! Slat solar beam-diffuse transmittance
-  REAL(r64) :: SlatFrontReflSolBeamDiff =0.0 ! Slat front solar beam-diffuse reflectance
-  REAL(r64) :: SlatBackReflSolBeamDiff  =0.0 ! Slat back solar beam-diffuse reflectance
-  REAL(r64) :: SlatTransSolDiffDiff     =0.0 ! Slat solar diffuse-diffuse transmittance
-  REAL(r64) :: SlatFrontReflSolDiffDiff =0.0 ! Slat front solar diffuse-diffuse reflectance
-  REAL(r64) :: SlatBackReflSolDiffDiff  =0.0 ! Slat back solar diffuse-diffuse reflectance
+  REAL :: SlatTransSolBeamDiff     =0.0 ! Slat solar beam-diffuse transmittance
+  REAL :: SlatFrontReflSolBeamDiff =0.0 ! Slat front solar beam-diffuse reflectance
+  REAL :: SlatBackReflSolBeamDiff  =0.0 ! Slat back solar beam-diffuse reflectance
+  REAL :: SlatTransSolDiffDiff     =0.0 ! Slat solar diffuse-diffuse transmittance
+  REAL :: SlatFrontReflSolDiffDiff =0.0 ! Slat front solar diffuse-diffuse reflectance
+  REAL :: SlatBackReflSolDiffDiff  =0.0 ! Slat back solar diffuse-diffuse reflectance
     ! Visible slat properties
-  REAL(r64) :: SlatTransVisBeamDiff     =0.0 ! Slat visible beam-diffuse transmittance
-  REAL(r64) :: SlatFrontReflVisBeamDiff =0.0 ! Slat front visible beam-diffuse reflectance
-  REAL(r64) :: SlatBackReflVisBeamDiff  =0.0 ! Slat back visible beam-diffuse reflectance
-  REAL(r64) :: SlatTransVisDiffDiff     =0.0 ! Slat visible diffuse-diffuse transmittance
-  REAL(r64) :: SlatFrontReflVisDiffDiff =0.0 ! Slat front visible diffuse-diffuse reflectance
-  REAL(r64) :: SlatBackReflVisDiffDiff  =0.0 ! Slat back visible diffuse-diffuse reflectance
+  REAL :: SlatTransVisBeamDiff     =0.0 ! Slat visible beam-diffuse transmittance
+  REAL :: SlatFrontReflVisBeamDiff =0.0 ! Slat front visible beam-diffuse reflectance
+  REAL :: SlatBackReflVisBeamDiff  =0.0 ! Slat back visible beam-diffuse reflectance
+  REAL :: SlatTransVisDiffDiff     =0.0 ! Slat visible diffuse-diffuse transmittance
+  REAL :: SlatFrontReflVisDiffDiff =0.0 ! Slat front visible diffuse-diffuse reflectance
+  REAL :: SlatBackReflVisDiffDiff  =0.0 ! Slat back visible diffuse-diffuse reflectance
     ! Long-wave (IR) slat properties
-  REAL(r64) :: SlatTransIR              =0.0 ! Slat IR transmittance
-  REAL(r64) :: SlatFrontEmissIR         =0.0 ! Slat front emissivity
-  REAL(r64) :: SlatBackEmissIR          =0.0 ! Slat back emissivity
+  REAL :: SlatTransIR              =0.0 ! Slat IR transmittance
+  REAL :: SlatFrontEmissIR         =0.0 ! Slat front emissivity
+  REAL :: SlatBackEmissIR          =0.0 ! Slat back emissivity
     ! Some characteristics for blind thermal calculation
-  REAL(r64) :: BlindToGlassDist         =0.0 ! Distance between window shade and adjacent glass (m)
-  REAL(r64) :: BlindTopOpeningMult      =0.0 ! Area of air-flow opening at top of blind, expressed as a fraction
+  REAL :: BlindToGlassDist         =0.0 ! Distance between window shade and adjacent glass (m)
+  REAL :: BlindTopOpeningMult      =0.0 ! Area of air-flow opening at top of blind, expressed as a fraction
                                         !  of the blind-to-glass opening area at the top of the blind
-  REAL(r64) :: BlindBottomOpeningMult   =0.0 ! Area of air-flow opening at bottom of blind, expressed as a fraction
+  REAL :: BlindBottomOpeningMult   =0.0 ! Area of air-flow opening at bottom of blind, expressed as a fraction
                                         !  of the blind-to-glass opening area at the bottom of the blind
-  REAL(r64) :: BlindLeftOpeningMult     =0.0 ! Area of air-flow opening at left side of blind, expressed as a fraction
+  REAL :: BlindLeftOpeningMult     =0.0 ! Area of air-flow opening at left side of blind, expressed as a fraction
                                         !  of the blind-to-glass opening area at the left side of the blind
-  REAL(r64) :: BlindRightOpeningMult    =0.0 ! Area of air-flow opening at right side of blind, expressed as a fraction
+  REAL :: BlindRightOpeningMult    =0.0 ! Area of air-flow opening at right side of blind, expressed as a fraction
                                         !  of the blind-to-glass opening area at the right side of the blind
                       ! Calculated blind properties
     ! Blind solar properties
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolFrontBeamBeamTrans=0.0 ! Blind solar front beam-beam transmittance vs.
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolFrontBeamBeamTrans=0.0 ! Blind solar front beam-beam transmittance vs.
                                                                     ! profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolFrontBeamBeamRefl =0.0 ! Blind solar front beam-beam reflectance vs. profile angle,
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolFrontBeamBeamRefl =0.0 ! Blind solar front beam-beam reflectance vs. profile angle,
                                                                     ! slat angle (zero)
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolBackBeamBeamTrans =0.0 ! Blind solar back beam-beam transmittance vs. profile angle,
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolBackBeamBeamTrans =0.0 ! Blind solar back beam-beam transmittance vs. profile angle,
                                                                     ! slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolBackBeamBeamRefl  =0.0 ! Blind solar back beam-beam reflectance vs. profile angle,
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolBackBeamBeamRefl  =0.0 ! Blind solar back beam-beam reflectance vs. profile angle,
                                                                     ! slat angle (zero)
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolFrontBeamDiffTrans=0.0 ! Blind solar front beam-diffuse transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolFrontBeamDiffTrans=0.0 ! Blind solar front beam-diffuse transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolFrontBeamDiffRefl =0.0 ! Blind solar front beam-diffuse reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolFrontBeamDiffRefl =0.0 ! Blind solar front beam-diffuse reflectance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolBackBeamDiffTrans =0.0 ! Blind solar back beam-diffuse transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolBackBeamDiffTrans =0.0 ! Blind solar back beam-diffuse transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolBackBeamDiffRefl  =0.0 ! Blind solar back beam-diffuse reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolBackBeamDiffRefl  =0.0 ! Blind solar back beam-diffuse reflectance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTrans   =0.0 ! Blind solar front diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTrans   =0.0 ! Blind solar front diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTransGnd=0.0 ! Blind ground solar front diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTransGnd=0.0 ! Blind ground solar front diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTransSky=0.0 ! Blind sky solar front diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffTransSky=0.0 ! Blind sky solar front diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffRefl    =0.0 ! Blind solar front diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffRefl    =0.0 ! Blind solar front diffuse-diffuse reflectance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffReflGnd =0.0 ! Blind ground solar front diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffReflGnd =0.0 ! Blind ground solar front diffuse-diffuse reflectance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffReflSky =0.0 ! Blind sky solar front diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffDiffReflSky =0.0 ! Blind sky solar front diffuse-diffuse reflectance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolBackDiffDiffTrans    =0.0 ! Blind solar back diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: SolBackDiffDiffTrans    =0.0 ! Blind solar back diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolBackDiffDiffRefl     =0.0 ! Blind solar back diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: SolBackDiffDiffRefl     =0.0 ! Blind solar back diffuse-diffuse reflectance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolFrontBeamAbs         =0.0 ! Blind solar front beam absorptance vs. slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: SolBackBeamAbs          =0.0 ! Blind solar back beam absorptance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffAbs         =0.0 ! Blind solar front diffuse absorptance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffAbsGnd      =0.0 ! Blind ground solar front diffuse absorptance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolFrontDiffAbsSky      =0.0 ! Blind sky solar front diffuse absorptance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: SolBackDiffAbs          =0.0 ! Blind solar back diffuse absorptance vs. slat angle
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolFrontBeamAbs         =0.0 ! Blind solar front beam absorptance vs. slat angle
+  REAL, DIMENSION(37,MaxSlatAngs) :: SolBackBeamAbs          =0.0 ! Blind solar back beam absorptance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffAbs         =0.0 ! Blind solar front diffuse absorptance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffAbsGnd      =0.0 ! Blind ground solar front diffuse absorptance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: SolFrontDiffAbsSky      =0.0 ! Blind sky solar front diffuse absorptance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: SolBackDiffAbs          =0.0 ! Blind solar back diffuse absorptance vs. slat angle
 
     ! Blind visible properties
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisFrontBeamBeamTrans=0.0 ! Blind visible front beam-beam transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisFrontBeamBeamTrans=0.0 ! Blind visible front beam-beam transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisFrontBeamBeamRefl =0.0 ! Blind visible front beam-beam reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisFrontBeamBeamRefl =0.0 ! Blind visible front beam-beam reflectance
                                                                     ! vs. profile angle, slat angle (zero)
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisBackBeamBeamTrans =0.0 ! Blind visible back beam-beam transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisBackBeamBeamTrans =0.0 ! Blind visible back beam-beam transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisBackBeamBeamRefl  =0.0 ! Blind visible back beam-beam reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisBackBeamBeamRefl  =0.0 ! Blind visible back beam-beam reflectance
                                                                     ! vs. profile angle, slat angle (zero)
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisFrontBeamDiffTrans=0.0 ! Blind visible front beam-diffuse transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisFrontBeamDiffTrans=0.0 ! Blind visible front beam-diffuse transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisFrontBeamDiffRefl =0.0 ! Blind visible front beam-diffuse reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisFrontBeamDiffRefl =0.0 ! Blind visible front beam-diffuse reflectance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisBackBeamDiffTrans =0.0 ! Blind visible back beam-diffuse transmittance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisBackBeamDiffTrans =0.0 ! Blind visible back beam-diffuse transmittance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(37,MaxSlatAngs) :: VisBackBeamDiffRefl  =0.0 ! Blind visible back beam-diffuse reflectance
+  REAL, DIMENSION(37,MaxSlatAngs) :: VisBackBeamDiffRefl  =0.0 ! Blind visible back beam-diffuse reflectance
                                                                     ! vs. profile angle, slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: VisFrontDiffDiffTrans   =0.0 ! Blind visible front diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: VisFrontDiffDiffTrans   =0.0 ! Blind visible front diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: VisFrontDiffDiffRefl    =0.0 ! Blind visible front diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: VisFrontDiffDiffRefl    =0.0 ! Blind visible front diffuse-diffuse reflectance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: VisBackDiffDiffTrans    =0.0 ! Blind visible back diffuse-diffuse transmittance
+  REAL, DIMENSION(MaxSlatAngs) :: VisBackDiffDiffTrans    =0.0 ! Blind visible back diffuse-diffuse transmittance
                                                                     ! vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: VisBackDiffDiffRefl     =0.0 ! Blind visible back diffuse-diffuse reflectance
+  REAL, DIMENSION(MaxSlatAngs) :: VisBackDiffDiffRefl     =0.0 ! Blind visible back diffuse-diffuse reflectance
                                                                     ! vs. slat angle
 
     ! Long-wave (IR) blind properties
-  REAL(r64), DIMENSION(MaxSlatAngs) :: IRFrontTrans            =0.0 ! Blind IR front transmittance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: IRFrontEmiss            =0.0 ! Blind IR front emissivity vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: IRBackTrans             =0.0 ! Blind IR back transmittance vs. slat angle
-  REAL(r64), DIMENSION(MaxSlatAngs) :: IRBackEmiss             =0.0 ! Blind IR back emissivity vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: IRFrontTrans            =0.0 ! Blind IR front transmittance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: IRFrontEmiss            =0.0 ! Blind IR front emissivity vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: IRBackTrans             =0.0 ! Blind IR back transmittance vs. slat angle
+  REAL, DIMENSION(MaxSlatAngs) :: IRBackEmiss             =0.0 ! Blind IR back emissivity vs. slat angle
 END TYPE WindowBlindProperties
 
 TYPE SurfaceScreenProperties
   INTEGER :: MaterialNumber        =0   ! Material pointer for the screen
-  REAL(r64) :: BmBmTrans             =0.0 ! Beam solar transmittance (dependent on sun angle)
+  REAL :: BmBmTrans             =0.0 ! Beam solar transmittance (dependent on sun angle)
                                         ! (this value can include scattering if the user so chooses)
-  REAL(r64) :: BmBmTransBack         =0.0 ! Beam solar transmittance (dependent on sun angle) from back side of screen
-  REAL(r64) :: BmBmTransVis          =0.0 ! Visible solar transmittance (dependent on sun angle)
+  REAL :: BmBmTransBack         =0.0 ! Beam solar transmittance (dependent on sun angle) from back side of screen
+  REAL :: BmBmTransVis          =0.0 ! Visible solar transmittance (dependent on sun angle)
                                         ! (this value can include visible scattering if the user so chooses)
-  REAL(r64) :: BmDifTrans            =0.0 ! Beam solar transmitted as diffuse radiation (dependent on sun angle)
-  REAL(r64) :: BmDifTransBack        =0.0 ! Beam solar transmitted as diffuse radiation (dependent on sun angle) from back side
-  REAL(r64) :: BmDifTransVis         =0.0 ! Visible solar transmitted as diffuse radiation (dependent on sun angle)
+  REAL :: BmDifTrans            =0.0 ! Beam solar transmitted as diffuse radiation (dependent on sun angle)
+  REAL :: BmDifTransBack        =0.0 ! Beam solar transmitted as diffuse radiation (dependent on sun angle) from back side
+  REAL :: BmDifTransVis         =0.0 ! Visible solar transmitted as diffuse radiation (dependent on sun angle)
                                         ! The following reflectance properties are dependent on sun angle:
-  REAL(r64) :: ReflectSolBeamFront   =0.0 ! Beam solar reflected as diffuse radiation when sun is in front of screen
-  REAL(r64) :: ReflectVisBeamFront   =0.0 ! Visible solar reflected as diffuse radiation when sun is in front of screen
-  REAL(r64) :: ReflectSolBeamBack    =0.0 ! Beam solar reflected as diffuse radiation when sun is in back of screen
-  REAL(r64) :: ReflectVisBeamBack    =0.0 ! Visible solar reflected as diffuse radiation when sun is in back of screen
-  REAL(r64) :: AbsorpSolarBeamFront  =0.0 ! Front surface solar beam absorptance
-  REAL(r64) :: AbsorpSolarBeamBack   =0.0 ! Back surface solar beam absorptance
-  REAL(r64) :: DifDifTrans           =0.0 ! Back surface diffuse solar transmitted
-  REAL(r64) :: DifDifTransVis        =0.0 ! Back surface diffuse visible solar transmitted
-  REAL(r64) :: DifScreenAbsorp       =0.0 ! Absorption of diffuse radiation
-  REAL(r64) :: DifReflect            =0.0 ! Back reflection of solar diffuse radiation
-  REAL(r64) :: DifReflectVis         =0.0 ! Back reflection of visible diffuse radiation
-  REAL(r64) :: ReflectScreen         =0.0 ! Screen assembly solar reflectance (user input adjusted for holes in screen)
-  REAL(r64) :: ReflectScreenVis      =0.0 ! Screen assembly visible reflectance (user input adjusted for holes in screen)
-  REAL(r64) :: ReflectCylinder       =0.0 ! Screen material solar reflectance (user input, does not account for holes in screen)
-  REAL(r64) :: ReflectCylinderVis    =0.0 ! Screen material visible reflectance (user input, does not account for holes in screen)
-  REAL(r64) :: ScreenDiameterToSpacingRatio = 0.0  ! ratio of screen material diameter to screen material spacing
+  REAL :: ReflectSolBeamFront   =0.0 ! Beam solar reflected as diffuse radiation when sun is in front of screen
+  REAL :: ReflectVisBeamFront   =0.0 ! Visible solar reflected as diffuse radiation when sun is in front of screen
+  REAL :: ReflectSolBeamBack    =0.0 ! Beam solar reflected as diffuse radiation when sun is in back of screen
+  REAL :: ReflectVisBeamBack    =0.0 ! Visible solar reflected as diffuse radiation when sun is in back of screen
+  REAL :: AbsorpSolarBeamFront  =0.0 ! Front surface solar beam absorptance
+  REAL :: AbsorpSolarBeamBack   =0.0 ! Back surface solar beam absorptance
+  REAL :: DifDifTrans           =0.0 ! Back surface diffuse solar transmitted
+  REAL :: DifDifTransVis        =0.0 ! Back surface diffuse visible solar transmitted
+  REAL :: DifScreenAbsorp       =0.0 ! Absorption of diffuse radiation
+  REAL :: DifReflect            =0.0 ! Back reflection of solar diffuse radiation
+  REAL :: DifReflectVis         =0.0 ! Back reflection of visible diffuse radiation
+  REAL :: ReflectScreen         =0.0 ! Screen assembly solar reflectance (user input adjusted for holes in screen)
+  REAL :: ReflectScreenVis      =0.0 ! Screen assembly visible reflectance (user input adjusted for holes in screen)
+  REAL :: ReflectCylinder       =0.0 ! Screen material solar reflectance (user input, does not account for holes in screen)
+  REAL :: ReflectCylinderVis    =0.0 ! Screen material visible reflectance (user input, does not account for holes in screen)
+  REAL :: ScreenDiameterToSpacingRatio = 0.0  ! ratio of screen material diameter to screen material spacing
   INTEGER :: ScreenBeamReflectanceAccounting = 0 ! user specified method of accounting for scattered solar beam
 END TYPE SurfaceScreenProperties
 
 TYPE ScreenTransData
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: Trans
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: Scatt
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: Trans
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: Scatt
 END TYPE ScreenTransData
 
 TYPE ZoneCatEUseData
-  REAL(r64), DIMENSION(0:25)  :: EEConvected     =0.0 ! Category (0 to 25) Energy Convected from Electric Equipment
-  REAL(r64), DIMENSION(0:25)  :: EERadiated      =0.0 ! Category (0 to 25) Energy Radiated from Electric Equipment
-  REAL(r64), DIMENSION(0:25)  :: EELost          =0.0 ! Category (0 to 25) Energy from Electric Equipment (lost)
-  REAL(r64), DIMENSION(0:25)  :: EELatent        =0.0 ! Category (0 to 25) Latent Energy from Electric Equipment
+  REAL, DIMENSION(0:25)  :: EEConvected     =0.0 ! Category (0 to 25) Energy Convected from Electric Equipment
+  REAL, DIMENSION(0:25)  :: EERadiated      =0.0 ! Category (0 to 25) Energy Radiated from Electric Equipment
+  REAL, DIMENSION(0:25)  :: EELost          =0.0 ! Category (0 to 25) Energy from Electric Equipment (lost)
+  REAL, DIMENSION(0:25)  :: EELatent        =0.0 ! Category (0 to 25) Latent Energy from Electric Equipment
 END TYPE ZoneCatEUseData
 
 TYPE RefrigCaseCreditData
-  REAL(r64) :: SenCaseCreditToZone = 0.0 !Refrigerated display case sensible energy delivered to zone
+  REAL :: SenCaseCreditToZone = 0.0 !Refrigerated display case sensible energy delivered to zone
                                          ! includes refrigeration pipe and receiver heat exchange with zone
-  REAL(r64) :: LatCaseCreditToZone = 0.0 !Refrigerated display case latent energy delivered to zone
-  REAL(r64) :: SenCaseCreditToHVAC = 0.0 !Refrigerated display case sensible energy delivered to HVAC RA duct
-  REAL(r64) :: LatCaseCreditToHVAC = 0.0 !Refrigerated display case latent energy delivered to HVAC RA duct
+  REAL :: LatCaseCreditToZone = 0.0 !Refrigerated display case latent energy delivered to zone
+  REAL :: SenCaseCreditToHVAC = 0.0 !Refrigerated display case sensible energy delivered to HVAC RA duct
+  REAL :: LatCaseCreditToHVAC = 0.0 !Refrigerated display case latent energy delivered to HVAC RA duct
 END TYPE RefrigCaseCreditData
 
 TYPE HeatReclaimRefrigeratedRackData
   CHARACTER(len=MaxNameLength) :: Name = ' '          !Name of refrigerated rack
   CHARACTER(len=MaxNameLength) :: SourceType = ' '    !object type for refrigerated rack
-  REAL(r64)                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
-  REAL(r64)                    :: UsedWaterHeater = 0.0 !amount of avail used at plant water heater
-  REAL(r64)                    :: UsedHVACCoil = 0.0  !amount of avail used at hvac coil
+  REAL                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
+  REAL                    :: UsedWaterHeater = 0.0 !amount of avail used at plant water heater
+  REAL                    :: UsedHVACCoil = 0.0  !amount of avail used at hvac coil
 
 END TYPE HeatReclaimRefrigeratedRackData
 
 TYPE HeatReclaimRefrigCondenserData
   CHARACTER(len=MaxNameLength) :: Name = ' '          !Name of refrigeration system
   INTEGER                      :: SourceType    =0    !object type for refrigeration system
-  REAL(r64)                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
-  REAL(r64)                    :: AvailTemperature = 0.0 !Temperature of heat reclaim source
-  REAL(r64)                    :: UsedWaterHeater = 0.0 !amount of avail used at plant water heater
-  REAL(r64)                    :: UsedHVACCoil = 0.0  !amount of avail used at hvac coil
+  REAL                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
+  REAL                    :: AvailTemperature = 0.0 !Temperature of heat reclaim source
+  REAL                    :: UsedWaterHeater = 0.0 !amount of avail used at plant water heater
+  REAL                    :: UsedHVACCoil = 0.0  !amount of avail used at hvac coil
 END TYPE HeatReclaimRefrigCondenserData
 
 TYPE HeatReclaimDXCoilData
   CHARACTER(len=MaxNameLength) :: Name = ' '          !Name of DX Coil
   CHARACTER(len=MaxNameLength) :: SourceType = ' '    !SourceType for DX Coil
-  REAL(r64)                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
+  REAL                    :: AvailCapacity = 0.0 !Total available heat reclaim capacity
 END TYPE HeatReclaimDXCoilData
 
 Type :: AirReportVars
-  REAL(r64) :: MeanAirTemp         =0.0 ! Mean Air Temperature {C}
-  REAL(r64) :: OperativeTemp       =0.0 ! Average of Mean Air Temperature {C} and Mean Radiant Temperature {C}
-  REAL(r64) :: MeanAirHumRat       =0.0D0 ! Mean Air Humidity Ratio {kg/kg} (averaged over zone time step)
-  REAL(r64) :: MeanAirDewpointTemp =0.0 ! Mean Air Dewpoint Temperature {C}
-  REAL(r64) :: ThermOperativeTemp  =0.0 ! Mix or MRT and MAT for Zone Control:Thermostatic:Operative Temperature {C}
-  REAL(r64) :: InfilHeatGain       =0.0 ! Heat Gain {J} due to infiltration
-  REAL(r64) :: InfilHeatLoss       =0.0 ! Heat Loss {J} due to infiltration
-  REAL(r64) :: InfilLatentGain     =0.0 ! Latent Gain {J} due to infiltration
-  REAL(r64) :: InfilLatentLoss     =0.0 ! Latent Loss {J} due to infiltration
-  REAL(r64) :: InfilTotalGain      =0.0 ! Total Gain {J} due to infiltration (sensible+latent)
-  REAL(r64) :: InfilTotalLoss      =0.0 ! Total Loss {J} due to infiltration (sensible+latent)
-  REAL(r64) :: InfilVolumeCurDensity =0.0 ! Volume of Air {m3} due to infiltration at current zone air density
-  REAL(r64) :: InfilVolumeStdDensity =0.0 ! Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
-  REAL(r64) :: InfilVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to infiltration at current zone air density
-  REAL(r64) :: InfilVdotStdDensity =0.0 ! Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
-  REAL(r64) :: InfilMass           =0.0 ! Mass of Air {kg} due to infiltration
-  REAL(r64) :: InfilAirChangeRate  =0.0 ! Infiltration air change rate {ach}
-  REAL(r64) :: VentilHeatLoss      =0.0 ! Heat Gain {J} due to ventilation
-  REAL(r64) :: VentilHeatGain      =0.0 ! Heat Loss {J} due to ventilation
-  REAL(r64) :: VentilLatentLoss    =0.0 ! Latent Gain {J} due to ventilation
-  REAL(r64) :: VentilLatentGain    =0.0 ! Latent Loss {J} due to ventilation
-  REAL(r64) :: VentilTotalLoss     =0.0 ! Total Gain {J} due to ventilation
-  REAL(r64) :: VentilTotalGain     =0.0 ! Total Loss {J} due to ventilation
-  REAL(r64) :: VentilVolumeCurDensity =0.0 ! Volume of Air {m3} due to ventilation at current zone air density
-  REAL(r64) :: VentilVolumeStdDensity =0.0 ! Volume of Air {m3} due to ventilation at standard density (adjusted for elevation)
-  REAL(r64) :: VentilVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to ventilation at current zone air density
-  REAL(r64) :: VentilVdotStdDensity =0.0 ! Volume flowr of Air {m3/s} due to ventilation at standard density (adjusted elevation)
-  REAL(r64) :: VentilMass          =0.0 ! Mass of Air {kg} due to ventilation
-  REAL(r64) :: VentilAirChangeRate =0.0 ! Ventilation air change rate (ach)
-  REAL(r64) :: VentilFanElec       =0.0 ! Fan Electricity {W} due to ventilation
-  REAL(r64) :: VentilAirTemp       =0.0 ! Air Temp {C} of ventilation
-  REAL(r64) :: MixVolume           =0.0 ! Mixing volume of Air {m3}
-  REAL(r64) :: MixMass             =0.0 ! Mixing mass of air {kg}
-  REAL(r64) :: MixHeatLoss         =0.0 ! Heat Gain {J} due to mixing and cross mixing and refrigeration door mixing
-  REAL(r64) :: MixHeatGain         =0.0 ! Heat Loss {J} due to mixing and cross mixing and refrigeration door mixing
-  REAL(r64) :: MixLatentLoss       =0.0 ! Latent Gain {J} due to mixing and cross mixing and refrigeration door mixing
-  REAL(r64) :: MixLatentGain       =0.0 ! Latent Loss {J} due to mixing and cross mixing and refrigeration door mixing
-  REAL(r64) :: MixTotalLoss        =0.0 ! Total Gain {J} due to mixing and cross mixing and refrigeration door mixing
-  REAL(r64) :: MixTotalGain        =0.0 ! Total Loss {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MeanAirTemp         =0.0 ! Mean Air Temperature {C}
+  REAL :: OperativeTemp       =0.0 ! Average of Mean Air Temperature {C} and Mean Radiant Temperature {C}
+  REAL :: MeanAirHumRat       =0.0 ! Mean Air Humidity Ratio {kg/kg} (averaged over zone time step)
+  REAL :: MeanAirDewpointTemp =0.0 ! Mean Air Dewpoint Temperature {C}
+  REAL :: ThermOperativeTemp  =0.0 ! Mix or MRT and MAT for Zone Control:Thermostatic:Operative Temperature {C}
+  REAL :: InfilHeatGain       =0.0 ! Heat Gain {J} due to infiltration
+  REAL :: InfilHeatLoss       =0.0 ! Heat Loss {J} due to infiltration
+  REAL :: InfilLatentGain     =0.0 ! Latent Gain {J} due to infiltration
+  REAL :: InfilLatentLoss     =0.0 ! Latent Loss {J} due to infiltration
+  REAL :: InfilTotalGain      =0.0 ! Total Gain {J} due to infiltration (sensible+latent)
+  REAL :: InfilTotalLoss      =0.0 ! Total Loss {J} due to infiltration (sensible+latent)
+  REAL :: InfilVolumeCurDensity =0.0 ! Volume of Air {m3} due to infiltration at current zone air density
+  REAL :: InfilVolumeStdDensity =0.0 ! Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
+  REAL :: InfilVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to infiltration at current zone air density
+  REAL :: InfilVdotStdDensity =0.0 ! Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
+  REAL :: InfilMass           =0.0 ! Mass of Air {kg} due to infiltration
+  REAL :: InfilAirChangeRate  =0.0 ! Infiltration air change rate {ach}
+  REAL :: VentilHeatLoss      =0.0 ! Heat Gain {J} due to ventilation
+  REAL :: VentilHeatGain      =0.0 ! Heat Loss {J} due to ventilation
+  REAL :: VentilLatentLoss    =0.0 ! Latent Gain {J} due to ventilation
+  REAL :: VentilLatentGain    =0.0 ! Latent Loss {J} due to ventilation
+  REAL :: VentilTotalLoss     =0.0 ! Total Gain {J} due to ventilation
+  REAL :: VentilTotalGain     =0.0 ! Total Loss {J} due to ventilation
+  REAL :: VentilVolumeCurDensity =0.0 ! Volume of Air {m3} due to ventilation at current zone air density
+  REAL :: VentilVolumeStdDensity =0.0 ! Volume of Air {m3} due to ventilation at standard density (adjusted for elevation)
+  REAL :: VentilVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to ventilation at current zone air density
+  REAL :: VentilVdotStdDensity =0.0 ! Volume flowr of Air {m3/s} due to ventilation at standard density (adjusted elevation)
+  REAL :: VentilMass          =0.0 ! Mass of Air {kg} due to ventilation
+  REAL :: VentilAirChangeRate =0.0 ! Ventilation air change rate (ach)
+  REAL :: VentilFanElec       =0.0 ! Fan Electricity {W} due to ventilation
+  REAL :: VentilAirTemp       =0.0 ! Air Temp {C} of ventilation
+  REAL :: MixVolume           =0.0 ! Mixing volume of Air {m3}
+  REAL :: MixMass             =0.0 ! Mixing mass of air {kg}
+  REAL :: MixHeatLoss         =0.0 ! Heat Gain {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MixHeatGain         =0.0 ! Heat Loss {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MixLatentLoss       =0.0 ! Latent Gain {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MixLatentGain       =0.0 ! Latent Loss {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MixTotalLoss        =0.0 ! Total Gain {J} due to mixing and cross mixing and refrigeration door mixing
+  REAL :: MixTotalGain        =0.0 ! Total Loss {J} due to mixing and cross mixing and refrigeration door mixing
   ! air heat balance component load summary results
-  REAL(r64) :: SumIntGains     = 0.0D0   ! Zone sum of convective internal gains
-  REAL(r64) :: SumHADTsurfs    = 0.0D0   ! Zone sum of Hc*Area*(Tsurf - Tz)
-  REAL(r64) :: SumMCpDTzones   = 0.0D0   ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
-  REAL(r64) :: SumMCpDtInfil   = 0.0D0   ! Zone sum of MassFlowRate*Cp*(Tout - Tz) transfer from outside, ventil, earth tube
-  REAL(r64) :: SumMCpDTsystem  = 0.0D0   ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
-  REAL(r64) :: CzdTdt          = 0.0D0   ! Zone air energy storage term.
-  REAL(r64) :: imBalance       = 0.0D0   ! put all terms in eq. 5 on RHS , should be zero
+  REAL :: SumIntGains     = 0.0   ! Zone sum of convective internal gains
+  REAL :: SumHADTsurfs    = 0.0   ! Zone sum of Hc*Area*(Tsurf - Tz)
+  REAL :: SumMCpDTzones   = 0.0   ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
+  REAL :: SumMCpDtInfil   = 0.0   ! Zone sum of MassFlowRate*Cp*(Tout - Tz) transfer from outside, ventil, earth tube
+  REAL :: SumMCpDTsystem  = 0.0   ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
+  REAL :: CzdTdt          = 0.0   ! Zone air energy storage term.
+  REAL :: imBalance       = 0.0   ! put all terms in eq. 5 on RHS , should be zero
   ! for ZoneAirBalance:OutdoorAir object Outputs only
-  REAL(r64) :: OABalanceHeatLoss      =0.0 ! Heat Gain {J} due to OA air balance
-  REAL(r64) :: OABalanceHeatGain      =0.0 ! Heat Loss {J} due to OA air balance
-  REAL(r64) :: OABalanceLatentLoss    =0.0 ! Latent Gain {J} due to OA air balance
-  REAL(r64) :: OABalanceLatentGain    =0.0 ! Latent Loss {J} due to OA air balance
-  REAL(r64) :: OABalanceTotalLoss     =0.0 ! Total Gain {J} due to OA air balance
-  REAL(r64) :: OABalanceTotalGain     =0.0 ! Total Loss {J} due to OA air balance
-  REAL(r64) :: OABalanceVolumeCurDensity =0.0 ! Volume of Air {m3} due to OA air balance
+  REAL :: OABalanceHeatLoss      =0.0 ! Heat Gain {J} due to OA air balance
+  REAL :: OABalanceHeatGain      =0.0 ! Heat Loss {J} due to OA air balance
+  REAL :: OABalanceLatentLoss    =0.0 ! Latent Gain {J} due to OA air balance
+  REAL :: OABalanceLatentGain    =0.0 ! Latent Loss {J} due to OA air balance
+  REAL :: OABalanceTotalLoss     =0.0 ! Total Gain {J} due to OA air balance
+  REAL :: OABalanceTotalGain     =0.0 ! Total Loss {J} due to OA air balance
+  REAL :: OABalanceVolumeCurDensity =0.0 ! Volume of Air {m3} due to OA air balance
                                               ! at current zone air density
-  REAL(r64) :: OABalanceVolumeStdDensity =0.0 ! Volume of Air {m3} due to OA air balance
+  REAL :: OABalanceVolumeStdDensity =0.0 ! Volume of Air {m3} due to OA air balance
                                               ! at standard density (adjusted for elevation)
-  REAL(r64) :: OABalanceVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to OA air balance
+  REAL :: OABalanceVdotCurDensity =0.0 ! Volume flow rate of Air {m3/s} due to OA air balance
                                             ! at current zone air density
-  REAL(r64) :: OABalanceVdotStdDensity =0.0 ! Volume flow rate of Air {m3/s} due to OA air balance
+  REAL :: OABalanceVdotStdDensity =0.0 ! Volume flow rate of Air {m3/s} due to OA air balance
                                             ! at standard density (adjusted elevation)
-  REAL(r64) :: OABalanceMass          =0.0 ! Mass of Air {kg} due to OA air balance
-  REAL(r64) :: OABalanceAirChangeRate =0.0 ! OA air balance air change rate (ach)
-  REAL(r64) :: OABalanceFanElec       =0.0 ! Fan Electricity {W} due to OA air balance
+  REAL :: OABalanceMass          =0.0 ! Mass of Air {kg} due to OA air balance
+  REAL :: OABalanceAirChangeRate =0.0 ! OA air balance air change rate (ach)
+  REAL :: OABalanceFanElec       =0.0 ! Fan Electricity {W} due to OA air balance
 END TYPE
 
   ! For predefined tabular reporting
 TYPE ZonePreDefRepType
   LOGICAL :: isOccupied               = .false. !occupied during the current time step
-  REAL(r64) :: NumOccAccum                 = 0.0     !number of occupants accumulating for entire simulation
-  REAL(r64) :: NumOccAccumTime             = 0.0     !time that the number of occupants is accumulating to compute average
+  REAL :: NumOccAccum                 = 0.0     !number of occupants accumulating for entire simulation
+  REAL :: NumOccAccumTime             = 0.0     !time that the number of occupants is accumulating to compute average
                                                 !  - zone time step
-  REAL(r64) :: TotTimeOcc                  = 0.0     !time occuped (and the mechnical ventilation volume is accumulating)
+  REAL :: TotTimeOcc                  = 0.0     !time occuped (and the mechnical ventilation volume is accumulating)
                                                 !  - system time step
-  REAL(r64) :: MechVentVolTotal            = 0.0     !volume for mechnical ventilation of outside air for entire simulation
-  REAL(r64) :: MechVentVolMin              = 9.9d9   ! a large number since finding minimum volume
-  REAL(r64) :: InfilVolTotal               = 0.0     !volume for infiltration of outside air for entire simulation
-  REAL(r64) :: InfilVolMin                 = 9.9d9   ! a large number since finding minimum volume
-  REAL(r64) :: SimpVentVolTotal            = 0.0     !volume for simple 'ZoneVentilation' of outside air for entire simulation
-  REAL(r64) :: SimpVentVolMin              = 9.9d9   ! a large number since finding minimum volume
+  REAL :: MechVentVolTotal            = 0.0     !volume for mechnical ventilation of outside air for entire simulation
+  REAL :: MechVentVolMin              = 9.9d9   ! a large number since finding minimum volume
+  REAL :: InfilVolTotal               = 0.0     !volume for infiltration of outside air for entire simulation
+  REAL :: InfilVolMin                 = 9.9d9   ! a large number since finding minimum volume
+  REAL :: SimpVentVolTotal            = 0.0     !volume for simple 'ZoneVentilation' of outside air for entire simulation
+  REAL :: SimpVentVolMin              = 9.9d9   ! a large number since finding minimum volume
   ! for Sensible Heat Gas Component Report
   !annual
-  REAL(r64) :: SHGSAnHvacHt                = 0.0     ! hvac air heating
-  REAL(r64) :: SHGSAnHvacCl                = 0.0     ! hvac air cooling
-  REAL(r64) :: SHGSAnSurfHt                = 0.0     ! heated surface heating
-  REAL(r64) :: SHGSAnSurfCl                = 0.0     ! cooled surface cooling
-  REAL(r64) :: SHGSAnPeoplAdd              = 0.0     ! people additions
-  REAL(r64) :: SHGSAnLiteAdd               = 0.0     ! lighing addition
-  REAL(r64) :: SHGSAnEquipAdd              = 0.0     ! equipment addition
-  REAL(r64) :: SHGSAnWindAdd               = 0.0     ! window addition
-  REAL(r64) :: SHGSAnIzaAdd                = 0.0     ! inter zone air addition
-  REAL(r64) :: SHGSAnInfilAdd              = 0.0     ! infiltration addition
-  REAL(r64) :: SHGSAnOtherAdd              = 0.0     ! opaque surface and other addition
-  REAL(r64) :: SHGSAnEquipRem              = 0.0     ! equipment removal
-  REAL(r64) :: SHGSAnWindRem               = 0.0     ! window removal
-  REAL(r64) :: SHGSAnIzaRem                = 0.0     ! inter-zone air removal
-  REAL(r64) :: SHGSAnInfilRem              = 0.0     ! infiltration removal
-  REAL(r64) :: SHGSAnOtherRem              = 0.0     ! opaque surface and other removal
+  REAL :: SHGSAnHvacHt                = 0.0     ! hvac air heating
+  REAL :: SHGSAnHvacCl                = 0.0     ! hvac air cooling
+  REAL :: SHGSAnSurfHt                = 0.0     ! heated surface heating
+  REAL :: SHGSAnSurfCl                = 0.0     ! cooled surface cooling
+  REAL :: SHGSAnPeoplAdd              = 0.0     ! people additions
+  REAL :: SHGSAnLiteAdd               = 0.0     ! lighing addition
+  REAL :: SHGSAnEquipAdd              = 0.0     ! equipment addition
+  REAL :: SHGSAnWindAdd               = 0.0     ! window addition
+  REAL :: SHGSAnIzaAdd                = 0.0     ! inter zone air addition
+  REAL :: SHGSAnInfilAdd              = 0.0     ! infiltration addition
+  REAL :: SHGSAnOtherAdd              = 0.0     ! opaque surface and other addition
+  REAL :: SHGSAnEquipRem              = 0.0     ! equipment removal
+  REAL :: SHGSAnWindRem               = 0.0     ! window removal
+  REAL :: SHGSAnIzaRem                = 0.0     ! inter-zone air removal
+  REAL :: SHGSAnInfilRem              = 0.0     ! infiltration removal
+  REAL :: SHGSAnOtherRem              = 0.0     ! opaque surface and other removal
   !peak cooling
   INTEGER   :: clPtTimeStamp               = 0       ! timestamp for the cooling peak
-  REAL(r64) :: clPeak                      = 0.0     ! cooling peak value (hvac air cooling + cooled surface)
-  REAL(r64) :: SHGSClHvacHt                = 0.0     ! hvac air heating
-  REAL(r64) :: SHGSClHvacCl                = 0.0     ! hvac air cooling
-  REAL(r64) :: SHGSClSurfHt                = 0.0     ! heated surface heating
-  REAL(r64) :: SHGSClSurfCl                = 0.0     ! cooled surface cooling
-  REAL(r64) :: SHGSClPeoplAdd              = 0.0     ! people additions
-  REAL(r64) :: SHGSClLiteAdd               = 0.0     ! lighing addition
-  REAL(r64) :: SHGSClEquipAdd              = 0.0     ! equipment addition
-  REAL(r64) :: SHGSClWindAdd               = 0.0     ! window addition
-  REAL(r64) :: SHGSClIzaAdd                = 0.0     ! inter zone air addition
-  REAL(r64) :: SHGSClInfilAdd              = 0.0     ! infiltration addition
-  REAL(r64) :: SHGSClOtherAdd              = 0.0     ! opaque surface and other addition
-  REAL(r64) :: SHGSClEquipRem              = 0.0     ! equipment removal
-  REAL(r64) :: SHGSClWindRem               = 0.0     ! window removal
-  REAL(r64) :: SHGSClIzaRem                = 0.0     ! inter-zone air removal
-  REAL(r64) :: SHGSClInfilRem              = 0.0     ! infiltration removal
-  REAL(r64) :: SHGSClOtherRem              = 0.0     ! opaque surface and other removal
+  REAL :: clPeak                      = 0.0     ! cooling peak value (hvac air cooling + cooled surface)
+  REAL :: SHGSClHvacHt                = 0.0     ! hvac air heating
+  REAL :: SHGSClHvacCl                = 0.0     ! hvac air cooling
+  REAL :: SHGSClSurfHt                = 0.0     ! heated surface heating
+  REAL :: SHGSClSurfCl                = 0.0     ! cooled surface cooling
+  REAL :: SHGSClPeoplAdd              = 0.0     ! people additions
+  REAL :: SHGSClLiteAdd               = 0.0     ! lighing addition
+  REAL :: SHGSClEquipAdd              = 0.0     ! equipment addition
+  REAL :: SHGSClWindAdd               = 0.0     ! window addition
+  REAL :: SHGSClIzaAdd                = 0.0     ! inter zone air addition
+  REAL :: SHGSClInfilAdd              = 0.0     ! infiltration addition
+  REAL :: SHGSClOtherAdd              = 0.0     ! opaque surface and other addition
+  REAL :: SHGSClEquipRem              = 0.0     ! equipment removal
+  REAL :: SHGSClWindRem               = 0.0     ! window removal
+  REAL :: SHGSClIzaRem                = 0.0     ! inter-zone air removal
+  REAL :: SHGSClInfilRem              = 0.0     ! infiltration removal
+  REAL :: SHGSClOtherRem              = 0.0     ! opaque surface and other removal
   !peak heating
   INTEGER   :: htPtTimeStamp               = 0       ! timestamp for the heating peak
-  REAL(r64) :: htPeak                      = 0.0     ! heating peak value (hvac air heating + heated surface)
-  REAL(r64) :: SHGSHtHvacHt                = 0.0     ! hvac air heating
-  REAL(r64) :: SHGSHtHvacCl                = 0.0     ! hvac air cooling
-  REAL(r64) :: SHGSHtSurfHt                = 0.0     ! heated surface heating
-  REAL(r64) :: SHGSHtSurfCl                = 0.0     ! cooled surface cooling
-  REAL(r64) :: SHGSHtPeoplAdd              = 0.0     ! people additions
-  REAL(r64) :: SHGSHtLiteAdd               = 0.0     ! lighing addition
-  REAL(r64) :: SHGSHtEquipAdd              = 0.0     ! equipment addition
-  REAL(r64) :: SHGSHtWindAdd               = 0.0     ! window addition
-  REAL(r64) :: SHGSHtIzaAdd                = 0.0     ! inter zone air addition
-  REAL(r64) :: SHGSHtInfilAdd              = 0.0     ! infiltration addition
-  REAL(r64) :: SHGSHtOtherAdd              = 0.0     ! opaque surface and other addition
-  REAL(r64) :: SHGSHtEquipRem              = 0.0     ! equipment removal
-  REAL(r64) :: SHGSHtWindRem               = 0.0     ! window removal
-  REAL(r64) :: SHGSHtIzaRem                = 0.0     ! inter-zone air removal
-  REAL(r64) :: SHGSHtInfilRem              = 0.0     ! infiltration removal
-  REAL(r64) :: SHGSHtOtherRem              = 0.0     ! opaque surface and other removal
+  REAL :: htPeak                      = 0.0     ! heating peak value (hvac air heating + heated surface)
+  REAL :: SHGSHtHvacHt                = 0.0     ! hvac air heating
+  REAL :: SHGSHtHvacCl                = 0.0     ! hvac air cooling
+  REAL :: SHGSHtSurfHt                = 0.0     ! heated surface heating
+  REAL :: SHGSHtSurfCl                = 0.0     ! cooled surface cooling
+  REAL :: SHGSHtPeoplAdd              = 0.0     ! people additions
+  REAL :: SHGSHtLiteAdd               = 0.0     ! lighing addition
+  REAL :: SHGSHtEquipAdd              = 0.0     ! equipment addition
+  REAL :: SHGSHtWindAdd               = 0.0     ! window addition
+  REAL :: SHGSHtIzaAdd                = 0.0     ! inter zone air addition
+  REAL :: SHGSHtInfilAdd              = 0.0     ! infiltration addition
+  REAL :: SHGSHtOtherAdd              = 0.0     ! opaque surface and other addition
+  REAL :: SHGSHtEquipRem              = 0.0     ! equipment removal
+  REAL :: SHGSHtWindRem               = 0.0     ! window removal
+  REAL :: SHGSHtIzaRem                = 0.0     ! inter-zone air removal
+  REAL :: SHGSHtInfilRem              = 0.0     ! infiltration removal
+  REAL :: SHGSHtOtherRem              = 0.0     ! opaque surface and other removal
 END TYPE
 
   ! DERIVED TYPE DEFINITIONS:
 TYPE ZoneReportVars  ! Zone level.
   ! People
-  REAL(r64) :: PeopleRadGain                   =0.0
-  REAL(r64) :: PeopleConGain                   =0.0
-  REAL(r64) :: PeopleSenGain                   =0.0
-  REAL(r64) :: PeopleNumOcc                    =0.0
-  REAL(r64) :: PeopleLatGain                   =0.0
-  REAL(r64) :: PeopleTotGain                   =0.0
-  REAL(r64) :: PeopleRadGainRate               =0.0
-  REAL(r64) :: PeopleConGainRate               =0.0
-  REAL(r64) :: PeopleSenGainRate               =0.0
-  REAL(r64) :: PeopleLatGainRate               =0.0
-  REAL(r64) :: PeopleTotGainRate               =0.0
+  REAL :: PeopleRadGain                   =0.0
+  REAL :: PeopleConGain                   =0.0
+  REAL :: PeopleSenGain                   =0.0
+  REAL :: PeopleNumOcc                    =0.0
+  REAL :: PeopleLatGain                   =0.0
+  REAL :: PeopleTotGain                   =0.0
+  REAL :: PeopleRadGainRate               =0.0
+  REAL :: PeopleConGainRate               =0.0
+  REAL :: PeopleSenGainRate               =0.0
+  REAL :: PeopleLatGainRate               =0.0
+  REAL :: PeopleTotGainRate               =0.0
   ! Lights
-  REAL(r64) :: LtsPower                        =0.0
-  REAL(r64) :: LtsElecConsump                  =0.0
-  REAL(r64) :: LtsRadGain                      =0.0
-  REAL(r64) :: LtsVisGain                      =0.0
-  REAL(r64) :: LtsConGain                      =0.0
-  REAL(r64) :: LtsRetAirGain                   =0.0
-  REAL(r64) :: LtsTotGain                      =0.0
-  REAL(r64) :: LtsRadGainRate                  =0.0
-  REAL(r64) :: LtsVisGainRate                  =0.0
-  REAL(r64) :: LtsConGainRate                  =0.0
-  REAL(r64) :: LtsRetAirGainRate               =0.0
-  REAL(r64) :: LtsTotGainRate                  =0.0
+  REAL :: LtsPower                        =0.0
+  REAL :: LtsElecConsump                  =0.0
+  REAL :: LtsRadGain                      =0.0
+  REAL :: LtsVisGain                      =0.0
+  REAL :: LtsConGain                      =0.0
+  REAL :: LtsRetAirGain                   =0.0
+  REAL :: LtsTotGain                      =0.0
+  REAL :: LtsRadGainRate                  =0.0
+  REAL :: LtsVisGainRate                  =0.0
+  REAL :: LtsConGainRate                  =0.0
+  REAL :: LtsRetAirGainRate               =0.0
+  REAL :: LtsTotGainRate                  =0.0
   ! Baseboard Heat
-  REAL(r64) :: BaseHeatPower                   =0.0
-  REAL(r64) :: BaseHeatElecCons                =0.0
-  REAL(r64) :: BaseHeatRadGain                 =0.0
-  REAL(r64) :: BaseHeatConGain                 =0.0
-  REAL(r64) :: BaseHeatTotGain                 =0.0
-  REAL(r64) :: BaseHeatRadGainRate             =0.0
-  REAL(r64) :: BaseHeatConGainRate             =0.0
-  REAL(r64) :: BaseHeatTotGainRate             =0.0
+  REAL :: BaseHeatPower                   =0.0
+  REAL :: BaseHeatElecCons                =0.0
+  REAL :: BaseHeatRadGain                 =0.0
+  REAL :: BaseHeatConGain                 =0.0
+  REAL :: BaseHeatTotGain                 =0.0
+  REAL :: BaseHeatRadGainRate             =0.0
+  REAL :: BaseHeatConGainRate             =0.0
+  REAL :: BaseHeatTotGainRate             =0.0
   ! Electric Equipment
-  REAL(r64) :: ElecPower                       =0.0
-  REAL(r64) :: ElecConsump                     =0.0
-  REAL(r64) :: ElecRadGain                     =0.0
-  REAL(r64) :: ElecConGain                     =0.0
-  REAL(r64) :: ElecLatGain                     =0.0
-  REAL(r64) :: ElecLost                        =0.0
-  REAL(r64) :: ElecTotGain                     =0.0
-  REAL(r64) :: ElecRadGainRate                 =0.0
-  REAL(r64) :: ElecConGainRate                 =0.0
-  REAL(r64) :: ElecLatGainRate                 =0.0
-  REAL(r64) :: ElecLostRate                    =0.0
-  REAL(r64) :: ElecTotGainRate                 =0.0
+  REAL :: ElecPower                       =0.0
+  REAL :: ElecConsump                     =0.0
+  REAL :: ElecRadGain                     =0.0
+  REAL :: ElecConGain                     =0.0
+  REAL :: ElecLatGain                     =0.0
+  REAL :: ElecLost                        =0.0
+  REAL :: ElecTotGain                     =0.0
+  REAL :: ElecRadGainRate                 =0.0
+  REAL :: ElecConGainRate                 =0.0
+  REAL :: ElecLatGainRate                 =0.0
+  REAL :: ElecLostRate                    =0.0
+  REAL :: ElecTotGainRate                 =0.0
   ! Gas Equipment
-  REAL(r64) :: GasPower                        =0.0
-  REAL(r64) :: GasConsump                      =0.0
-  REAL(r64) :: GasRadGain                      =0.0
-  REAL(r64) :: GasConGain                      =0.0
-  REAL(r64) :: GasLatGain                      =0.0
-  REAL(r64) :: GasLost                         =0.0
-  REAL(r64) :: GasTotGain                      =0.0
-  REAL(r64) :: GasRadGainRate                  =0.0
-  REAL(r64) :: GasConGainRate                  =0.0
-  REAL(r64) :: GasLatGainRate                  =0.0
-  REAL(r64) :: GasLostRate                     =0.0
-  REAL(r64) :: GasTotGainRate                  =0.0
+  REAL :: GasPower                        =0.0
+  REAL :: GasConsump                      =0.0
+  REAL :: GasRadGain                      =0.0
+  REAL :: GasConGain                      =0.0
+  REAL :: GasLatGain                      =0.0
+  REAL :: GasLost                         =0.0
+  REAL :: GasTotGain                      =0.0
+  REAL :: GasRadGainRate                  =0.0
+  REAL :: GasConGainRate                  =0.0
+  REAL :: GasLatGainRate                  =0.0
+  REAL :: GasLostRate                     =0.0
+  REAL :: GasTotGainRate                  =0.0
   ! Hot Water Equipment
-  REAL(r64) :: HWPower                         =0.0
-  REAL(r64) :: HWConsump                       =0.0
-  REAL(r64) :: HWRadGain                       =0.0
-  REAL(r64) :: HWConGain                       =0.0
-  REAL(r64) :: HWLatGain                       =0.0
-  REAL(r64) :: HWLost                          =0.0
-  REAL(r64) :: HWTotGain                       =0.0
-  REAL(r64) :: HWRadGainRate                   =0.0
-  REAL(r64) :: HWConGainRate                   =0.0
-  REAL(r64) :: HWLatGainRate                   =0.0
-  REAL(r64) :: HWLostRate                      =0.0
-  REAL(r64) :: HWTotGainRate                   =0.0
+  REAL :: HWPower                         =0.0
+  REAL :: HWConsump                       =0.0
+  REAL :: HWRadGain                       =0.0
+  REAL :: HWConGain                       =0.0
+  REAL :: HWLatGain                       =0.0
+  REAL :: HWLost                          =0.0
+  REAL :: HWTotGain                       =0.0
+  REAL :: HWRadGainRate                   =0.0
+  REAL :: HWConGainRate                   =0.0
+  REAL :: HWLatGainRate                   =0.0
+  REAL :: HWLostRate                      =0.0
+  REAL :: HWTotGainRate                   =0.0
   ! Steam Equipment
-  REAL(r64) :: SteamPower                      =0.0
-  REAL(r64) :: SteamConsump                    =0.0
-  REAL(r64) :: SteamRadGain                    =0.0
-  REAL(r64) :: SteamConGain                    =0.0
-  REAL(r64) :: SteamLatGain                    =0.0
-  REAL(r64) :: SteamLost                       =0.0
-  REAL(r64) :: SteamTotGain                    =0.0
-  REAL(r64) :: SteamRadGainRate                =0.0
-  REAL(r64) :: SteamConGainRate                =0.0
-  REAL(r64) :: SteamLatGainRate                =0.0
-  REAL(r64) :: SteamLostRate                   =0.0
-  REAL(r64) :: SteamTotGainRate                =0.0
+  REAL :: SteamPower                      =0.0
+  REAL :: SteamConsump                    =0.0
+  REAL :: SteamRadGain                    =0.0
+  REAL :: SteamConGain                    =0.0
+  REAL :: SteamLatGain                    =0.0
+  REAL :: SteamLost                       =0.0
+  REAL :: SteamTotGain                    =0.0
+  REAL :: SteamRadGainRate                =0.0
+  REAL :: SteamConGainRate                =0.0
+  REAL :: SteamLatGainRate                =0.0
+  REAL :: SteamLostRate                   =0.0
+  REAL :: SteamTotGainRate                =0.0
   ! Other Equipment
-  REAL(r64) :: OtherRadGain                    =0.0
-  REAL(r64) :: OtherConGain                    =0.0
-  REAL(r64) :: OtherLatGain                    =0.0
-  REAL(r64) :: OtherLost                       =0.0
-  REAL(r64) :: OtherTotGain                    =0.0
-  REAL(r64) :: OtherRadGainRate                =0.0
-  REAL(r64) :: OtherConGainRate                =0.0
-  REAL(r64) :: OtherLatGainRate                =0.0
-  REAL(r64) :: OtherLostRate                   =0.0
-  REAL(r64) :: OtherTotGainRate                =0.0
+  REAL :: OtherRadGain                    =0.0
+  REAL :: OtherConGain                    =0.0
+  REAL :: OtherLatGain                    =0.0
+  REAL :: OtherLost                       =0.0
+  REAL :: OtherTotGain                    =0.0
+  REAL :: OtherRadGainRate                =0.0
+  REAL :: OtherConGainRate                =0.0
+  REAL :: OtherLatGainRate                =0.0
+  REAL :: OtherLostRate                   =0.0
+  REAL :: OtherTotGainRate                =0.0
   ! Overall Zone Variables
-  REAL(r64) :: TotRadiantGain                  =0.0
-  REAL(r64) :: TotVisHeatGain                  =0.0
-  REAL(r64) :: TotConvectiveGain               =0.0
-  REAL(r64) :: TotLatentGain                   =0.0
-  REAL(r64) :: TotTotalHeatGain                =0.0
-  REAL(r64) :: TotRadiantGainRate              =0.0
-  REAL(r64) :: TotVisHeatGainRate              =0.0
-  REAL(r64) :: TotConvectiveGainRate           =0.0
-  REAL(r64) :: TotLatentGainRate               =0.0
-  REAL(r64) :: TotTotalHeatGainRate            =0.0
+  REAL :: TotRadiantGain                  =0.0
+  REAL :: TotVisHeatGain                  =0.0
+  REAL :: TotConvectiveGain               =0.0
+  REAL :: TotLatentGain                   =0.0
+  REAL :: TotTotalHeatGain                =0.0
+  REAL :: TotRadiantGainRate              =0.0
+  REAL :: TotVisHeatGainRate              =0.0
+  REAL :: TotConvectiveGainRate           =0.0
+  REAL :: TotLatentGainRate               =0.0
+  REAL :: TotTotalHeatGainRate            =0.0
   ! Contaminant
-  REAL(r64) :: CO2Rate                         =0.0
-  REAL(r64) :: GCRate                          =0.0
+  REAL :: CO2Rate                         =0.0
+  REAL :: GCRate                          =0.0
 END TYPE
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -1603,12 +1603,12 @@ TYPE (ZoneReportVars), ALLOCATABLE, PUBLIC, DIMENSION(:) :: ZnRpt
           ! MODULE VARIABLE DECLARATIONS:
 
 ! SiteData aka building data
-REAL(r64) :: LowHConvLimit = 0.1d0 ! Lowest allowed convection coefficient for detailed model
+REAL :: LowHConvLimit = 0.1 ! Lowest allowed convection coefficient for detailed model
                                        ! before reverting to the simple model.  This avoids a
                                        ! divide by zero elsewhere.  Not based on any physical
                                        ! reasoning, just the number that was picked.  It corresponds
                                        ! to a delta T for a vertical surface of 0.000444C.
-!!REAL(r64), PARAMETER :: LowHConvLimit = 1.0 !W/m2-K  Lowest allowed natural convection coefficient
+!!REAL, PARAMETER :: LowHConvLimit = 1.0 !W/m2-K  Lowest allowed natural convection coefficient
 !!                           ! A lower limit is needed to avoid numerical problems
 !!                           ! Natural convection correlations are a function of temperature difference,
 !!                           !   there are many times when those temp differences pass through zero leading to non-physical results
@@ -1622,15 +1622,15 @@ REAL(r64) :: LowHConvLimit = 0.1d0 ! Lowest allowed convection coefficient for d
 !!                           !       Taking the still gas thermal conductivity for air at 0.0267 W/m-K (at 300K), then
 !!                           !       this limit of 1.0 corresponds to a completely still layer of air that is around 0.025 m thick
 !!                           !  5) The previous limit of 0.1 (before ver. 3.1) caused loads initialization problems in test files
-REAL(r64)  :: HighHConvLimit = 1000.d0 ! upper limit for Hconv, mostly used for user input limits in practics. !W/m2-K
-REAL(r64)  :: MaxAllowedDelTempCondFD = 0.002d0 ! Convergence criteria for inside surface temperatures for CondFD
+REAL  :: HighHConvLimit = 1000. ! upper limit for Hconv, mostly used for user input limits in practics. !W/m2-K
+REAL  :: MaxAllowedDelTempCondFD = 0.002 ! Convergence criteria for inside surface temperatures for CondFD
 
 
 
 CHARACTER(len=MaxNameLength) :: BuildingName=' '  ! Name of building
-REAL(r64) :: BuildingAzimuth=0.0d0                       ! North Axis of Building
-REAL(r64) :: LoadsConvergTol=0.0d0                       ! Tolerance value for Loads Convergence
-REAL(r64) :: TempConvergTol=0.0d0                        ! Tolerance value for Temperature Convergence
+REAL :: BuildingAzimuth=0.0                       ! North Axis of Building
+REAL :: LoadsConvergTol=0.0                       ! Tolerance value for Loads Convergence
+REAL :: TempConvergTol=0.0                        ! Tolerance value for Temperature Convergence
 INTEGER :: DefaultInsideConvectionAlgo=1          ! 1 = simple (ASHRAE); 2 = detailed (ASHRAE); 3 = ceiling diffuser;
                                                   ! 4 = trombe wall
 INTEGER :: DefaultOutsideConvectionAlgo=1         ! 1 = simple (ASHRAE); 2 = detailed; etc (BLAST, TARP, MOWITT, DOE-2)
@@ -1639,12 +1639,12 @@ INTEGER :: InsideSurfIterations=0                 ! Counts inside surface iterat
 INTEGER :: SolutionAlgo = UseCTF                  ! UseCTF Solution, UseEMPD moisture solution, UseCondFD solution
 INTEGER :: MaxNumberOfWarmupDays=25               ! Maximum number of warmup days allowed
 INTEGER :: MinNumberOfWarmupDays=6                ! Minimum number of warmup days allowed
-REAL(r64) :: CondFDRelaxFactor = 1.0d0  ! Relaxation factor, for looping across all the surfaces.
-REAL(r64) :: CondFDRelaxFactorInput = 1.0d0  ! Relaxation factor, for looping across all the surfaces, user input value
+REAL :: CondFDRelaxFactor = 1.0  ! Relaxation factor, for looping across all the surfaces.
+REAL :: CondFDRelaxFactorInput = 1.0  ! Relaxation factor, for looping across all the surfaces, user input value
 !LOGICAL ::  CondFDVariableProperties = .FALSE. ! if true, then variable conductivity or enthalpy in Cond FD.
 
 INTEGER :: ZoneAirSolutionAlgo = Use3rdOrder      ! ThirdOrderBackwardDifference, AnalyticalSolution, and EulerMethod
-REAL(r64) :: BuildingRotationAppendixG=0.0d0        ! Building Rotation for Appendix G
+REAL :: BuildingRotationAppendixG=0.0        ! Building Rotation for Appendix G
 
 !END SiteData
 
@@ -1703,183 +1703,183 @@ INTEGER :: NumRefrigeratedRacks =0 ! Total number of refrigerated case compresso
 INTEGER :: NumRefrigSystems =0     ! Total number of detailed refrigeration systems in input
 INTEGER :: NumRefrigCondensers =0  ! Total number of detailed refrigeration condensers in input
 INTEGER :: NumRefrigChillerSets =0    ! Total number of refrigerated warehouse coils in input
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadHeatEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadCoolEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadHeatRate
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadCoolRate
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedRate
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedHSPRate ! Predicted load to heating setpoint (unmultiplied)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedCSPRate ! Predicted load to cooling setpoint (unmultiplied)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MoisturePredictedRate
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadHeatEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadCoolEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadHeatRate
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadCoolRate
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedRate
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedHSPRate ! Predicted load to heating setpoint (unmultiplied)
+REAL, ALLOCATABLE, DIMENSION(:) :: SNLoadPredictedCSPRate ! Predicted load to cooling setpoint (unmultiplied)
+REAL, ALLOCATABLE, DIMENSION(:) :: MoisturePredictedRate
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ListSNLoadHeatEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ListSNLoadCoolEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ListSNLoadHeatRate
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ListSNLoadCoolRate
+REAL, ALLOCATABLE, DIMENSION(:) :: ListSNLoadHeatEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: ListSNLoadCoolEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: ListSNLoadHeatRate
+REAL, ALLOCATABLE, DIMENSION(:) :: ListSNLoadCoolRate
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: GroupSNLoadHeatEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: GroupSNLoadCoolEnergy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: GroupSNLoadHeatRate
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: GroupSNLoadCoolRate
+REAL, ALLOCATABLE, DIMENSION(:) :: GroupSNLoadHeatEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: GroupSNLoadCoolEnergy
+REAL, ALLOCATABLE, DIMENSION(:) :: GroupSNLoadHeatRate
+REAL, ALLOCATABLE, DIMENSION(:) :: GroupSNLoadCoolRate
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MRT   !MEAN RADIANT TEMPERATURE (C)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SUMAI               !1 over the Sum of zone areas or 1/SumA
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneTransSolar      ! Exterior beam plus diffuse solar entering zone;
+REAL, ALLOCATABLE, DIMENSION(:) :: MRT   !MEAN RADIANT TEMPERATURE (C)
+REAL, ALLOCATABLE, DIMENSION(:) :: SUMAI               !1 over the Sum of zone areas or 1/SumA
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneTransSolar      ! Exterior beam plus diffuse solar entering zone;
                                                        !   sum of WinTransSolar for exterior windows in zone (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGain     ! Heat gain to zone from all exterior windows (includes
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGain     ! Heat gain to zone from all exterior windows (includes
                                                        !   ZoneTransSolar); sum of WinHeatGain for exterior
                                                        !   windows in zone (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGainRep  ! = ZoneWinHeatGain when ZoneWinHeatGain >= 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatLossRep  ! = -ZoneWinHeatGain when ZoneWinHeatGain < 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrExtWinsRep  ! Beam solar into zone from exterior windows [W]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrIntWinsRep  ! Beam solar into zone from interior windows [W]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: InitialZoneDifSolReflW   ! Initial diffuse solar in zone from ext and int windows
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGainRep  ! = ZoneWinHeatGain when ZoneWinHeatGain >= 0
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatLossRep  ! = -ZoneWinHeatGain when ZoneWinHeatGain < 0
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrExtWinsRep  ! Beam solar into zone from exterior windows [W]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrIntWinsRep  ! Beam solar into zone from interior windows [W]
+REAL, ALLOCATABLE, DIMENSION(:) :: InitialZoneDifSolReflW   ! Initial diffuse solar in zone from ext and int windows
                                                             ! reflected from interior surfaces [W]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrExtWinsRep ! Diffuse solar into zone from exterior windows [W]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrIntWinsRep ! Diffuse solar into zone from interior windows [W]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCond ! Zone inside face opaque surface conduction (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCondGainRep ! = Zone inside face opaque surface conduction when >= 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCondLossRep ! = -Zone inside face opaque surface conduction when < 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCond ! Zone outside face opaque surface conduction (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCondGainRep ! = Zone outside face opaque surface conduction when >= 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCondLossRep ! = -Zone outside face opaque surface conduction when < 0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadThermInAbs      !Thermal radiation absorbed on inside surfaces
-REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: QRadSWwinAbs      !Short wave radiation absorbed in window glass layers
-REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: InitialDifSolwinAbs !Initial diffuse solar absorbed in window glass layers
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrExtWinsRep ! Diffuse solar into zone from exterior windows [W]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrIntWinsRep ! Diffuse solar into zone from interior windows [W]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCond ! Zone inside face opaque surface conduction (W)
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCondGainRep ! = Zone inside face opaque surface conduction when >= 0
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfInsFaceCondLossRep ! = -Zone inside face opaque surface conduction when < 0
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCond ! Zone outside face opaque surface conduction (W)
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCondGainRep ! = Zone outside face opaque surface conduction when >= 0
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOpaqSurfExtFaceCondLossRep ! = -Zone outside face opaque surface conduction when < 0
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadThermInAbs      !Thermal radiation absorbed on inside surfaces
+REAL, ALLOCATABLE, DIMENSION(:,:) :: QRadSWwinAbs      !Short wave radiation absorbed in window glass layers
+REAL, ALLOCATABLE, DIMENSION(:,:) :: InitialDifSolwinAbs !Initial diffuse solar absorbed in window glass layers
                                                               ! from inside(W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncident   !Exterior beam plus diffuse solar incident on surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentBeam !Exterior beam solar incident on surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfIntensRep !Beam sol irrad from ext wins on inside of surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfAmountRep !Beam sol amount from ext wins incident on inside of surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfIntensRep !Beam sol irrad from int wins on inside of surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfAmountRep !Beam sol amount from int wins incident on inside of surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentSkyDiffuse !Exterior sky diffuse solar incident on surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentGndDiffuse !Exterior ground diffuse solar incident on surface (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToDiffReflGnd !Exterior diffuse solar incident from beam to diffuse
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncident   !Exterior beam plus diffuse solar incident on surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentBeam !Exterior beam solar incident on surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfIntensRep !Beam sol irrad from ext wins on inside of surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfAmountRep !Beam sol amount from ext wins incident on inside of surface (W)
+REAL, ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfIntensRep !Beam sol irrad from int wins on inside of surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfAmountRep !Beam sol amount from int wins incident on inside of surface (W)
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentSkyDiffuse !Exterior sky diffuse solar incident on surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncidentGndDiffuse !Exterior ground diffuse solar incident on surface (W/m2)
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToDiffReflGnd !Exterior diffuse solar incident from beam to diffuse
                                                                ! reflection from ground (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncSkyDiffReflGnd  !Exterior diffuse solar incident from sky diffuse
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncSkyDiffReflGnd  !Exterior diffuse solar incident from sky diffuse
                                                               ! reflection from ground (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToBmReflObs   !Exterior beam solar incident from beam-to-beam
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToBmReflObs   !Exterior beam solar incident from beam-to-beam
                                                                ! reflection from obstructions (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToDiffReflObs !Exterior diffuse solar incident from beam-to-diffuse
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncBmToDiffReflObs !Exterior diffuse solar incident from beam-to-diffuse
                                                                ! reflection from obstructions (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncSkyDiffReflObs  !Exterior diffuse solar incident from sky diffuse
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWOutIncSkyDiffReflObs  !Exterior diffuse solar incident from sky diffuse
                                                                ! reflection from obstructions (W/m2)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: CosIncidenceAngle   !Cosine of beam solar incidence angle (for reporting)
+REAL, ALLOCATABLE, DIMENSION(:) :: CosIncidenceAngle   !Cosine of beam solar incidence angle (for reporting)
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWwinAbsTot     !Exterior beam plus diffuse solar absorbed in glass layers of window (W)
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWwinAbsTot     !Exterior beam plus diffuse solar absorbed in glass layers of window (W)
 !energy
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneTransSolarEnergy ! Energy of ZoneTransSolar [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGainRepEnergy  ! Energy of ZoneWinHeatGainRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatLossRepEnergy  ! Energy of ZoneWinHeatLossRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrExtWinsRepEnergy  ! Energy of ZoneBmSolFrExtWinsRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrIntWinsRepEnergy  ! Energy of ZoneBmSolFrIntWinsRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrExtWinsRepEnergy ! Energy of ZoneDifSolFrExtWinsRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrIntWinsRepEnergy ! Energy of ZoneDifSolFrIntWinsRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfInsFaceCondGnRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfInsFaceCondLsRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfExtFaceCondGnRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfExtFaceCondLsRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfAmountRepEnergy !energy of BmIncInsSurfAmountRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfAmountRepEnergy !energy of IntBmIncInsSurfAmountRep [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSWwinAbsTotEnergy     ! Energy of QRadSWwinAbsTot [J]
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SWwinAbsTotalReport  !Report - Total interior/exterior shortwave
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneTransSolarEnergy ! Energy of ZoneTransSolar [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatGainRepEnergy  ! Energy of ZoneWinHeatGainRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneWinHeatLossRepEnergy  ! Energy of ZoneWinHeatLossRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrExtWinsRepEnergy  ! Energy of ZoneBmSolFrExtWinsRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneBmSolFrIntWinsRepEnergy  ! Energy of ZoneBmSolFrIntWinsRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrExtWinsRepEnergy ! Energy of ZoneDifSolFrExtWinsRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneDifSolFrIntWinsRepEnergy ! Energy of ZoneDifSolFrIntWinsRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfInsFaceCondGnRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfInsFaceCondLsRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfExtFaceCondGnRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: ZnOpqSurfExtFaceCondLsRepEnrg ! Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: BmIncInsSurfAmountRepEnergy !energy of BmIncInsSurfAmountRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: IntBmIncInsSurfAmountRepEnergy !energy of IntBmIncInsSurfAmountRep [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSWwinAbsTotEnergy     ! Energy of QRadSWwinAbsTot [J]
+REAL, ALLOCATABLE, DIMENSION(:) :: SWwinAbsTotalReport  !Report - Total interior/exterior shortwave
                                                         !absorbed in all glass layers of window (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: InitialDifSolInAbsReport  !Report - Initial transmitted diffuse solar
+REAL, ALLOCATABLE, DIMENSION(:) :: InitialDifSolInAbsReport  !Report - Initial transmitted diffuse solar
                                                              !absorbed on inside of surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: InitialDifSolInTransReport  !Report - Initial transmitted diffuse solar
+REAL, ALLOCATABLE, DIMENSION(:) :: InitialDifSolInTransReport  !Report - Initial transmitted diffuse solar
                                                                !transmitted out through inside of window surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SWInAbsTotalReport  !Report - Total interior/exterior shortwave
+REAL, ALLOCATABLE, DIMENSION(:) :: SWInAbsTotalReport  !Report - Total interior/exterior shortwave
                                                        !absorbed on inside of surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SWOutAbsTotalReport  !Report - Total exterior shortwave/solar 
+REAL, ALLOCATABLE, DIMENSION(:) :: SWOutAbsTotalReport  !Report - Total exterior shortwave/solar 
                                                        !absorbed on outside of surface (W)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SWOutAbsEnergyReport  !Report - Total exterior shortwave/solar 
+REAL, ALLOCATABLE, DIMENSION(:) :: SWOutAbsEnergyReport  !Report - Total exterior shortwave/solar 
                                                        !absorbed on outside of surface (j)
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: NominalR ! Nominal R value of each material -- used in matching interzone surfaces
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: NominalRSave
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: NominalU ! Nominal U value for each construction -- used in matching interzone surfaces
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: NominalUSave
+REAL, ALLOCATABLE, DIMENSION(:) :: NominalR ! Nominal R value of each material -- used in matching interzone surfaces
+REAL, ALLOCATABLE, DIMENSION(:) :: NominalRSave
+REAL, ALLOCATABLE, DIMENSION(:) :: NominalU ! Nominal U value for each construction -- used in matching interzone surfaces
+REAL, ALLOCATABLE, DIMENSION(:) :: NominalUSave
 
 ! removed variables (these were all arrays):
-!REAL(r64), ALLOCATABLE, :: DifIncInsSurfIntensRep    !Diffuse sol irradiance from ext wins on inside of surface (W/m2)
-!REAL(r64), ALLOCATABLE, :: DifIncInsSurfAmountRep    !Diffuse sol amount from ext wins on inside of surface (W)
-!REAL(r64), ALLOCATABLE, :: IntDifIncInsSurfIntensRep    !Diffuse sol irradiance from int wins on inside of surface (W/m2)
-!REAL(r64), ALLOCATABLE, :: IntDifIncInsSurfAmountRep    !Diffuse sol amount from int wins on inside of surface (W)
-!REAL(r64), ALLOCATABLE, :: DifIncInsSurfAmountRepEnergy    !energy of DifIncInsSurfAmountRep [J]
-!REAL(r64), ALLOCATABLE, :: IntDifIncInsSurfAmountRepEnergy    !energy of IntDifIncInsSurfAmountRep [J]
+!REAL, ALLOCATABLE, :: DifIncInsSurfIntensRep    !Diffuse sol irradiance from ext wins on inside of surface (W/m2)
+!REAL, ALLOCATABLE, :: DifIncInsSurfAmountRep    !Diffuse sol amount from ext wins on inside of surface (W)
+!REAL, ALLOCATABLE, :: IntDifIncInsSurfIntensRep    !Diffuse sol irradiance from int wins on inside of surface (W/m2)
+!REAL, ALLOCATABLE, :: IntDifIncInsSurfAmountRep    !Diffuse sol amount from int wins on inside of surface (W)
+!REAL, ALLOCATABLE, :: DifIncInsSurfAmountRepEnergy    !energy of DifIncInsSurfAmountRep [J]
+!REAL, ALLOCATABLE, :: IntDifIncInsSurfAmountRepEnergy    !energy of IntDifIncInsSurfAmountRep [J]
 
           ! Variables moved from HeatBalanceSurfaceManager and SolarShading
           ! to avoid conflict with their use in WindowManager
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: TempEffBulkAir      ! air temperature adjacent to the surface used for
+REAL, ALLOCATABLE, DIMENSION(:) :: TempEffBulkAir      ! air temperature adjacent to the surface used for
                                                        ! inside surface heat balances
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HConvIn        !INSIDE CONVECTION COEFFICIENT
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: AnisoSkyMult   ! Multiplier on exterior-surface sky view factor to
+REAL, ALLOCATABLE, DIMENSION(:) :: HConvIn        !INSIDE CONVECTION COEFFICIENT
+REAL, ALLOCATABLE, DIMENSION(:) :: AnisoSkyMult   ! Multiplier on exterior-surface sky view factor to
                                                        ! account for anisotropy of sky radiance; = 1.0 for
                                                        ! for isotropic sky
 
 ! Moved from SolarShading to avoid conflicts in DaylightingDevices
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: DifShdgRatioIsoSky ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:) :: DifShdgRatioIsoSkyHRTS ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: curDifShdgRatioIsoSky ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: DifShdgRatioHoriz  ! Horizon shading ratio (WithShdgHoriz/WoShdgHoriz)
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:) :: DifShdgRatioHorizHRTS  ! Horizon shading ratio (WithShdgHoriz/WoShdgHoriz)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: WithShdgIsoSky     ! Diffuse solar irradiance from sky on surface, with shading
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: WoShdgIsoSky       ! Diffuse solar from sky on surface, without shading
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: WithShdgHoriz      ! Diffuse solar irradiance from horizon portion of sky on surface,
+REAL, ALLOCATABLE, DIMENSION(:) :: DifShdgRatioIsoSky ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
+REAL, ALLOCATABLE, DIMENSION(:,:,:) :: DifShdgRatioIsoSkyHRTS ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
+REAL, ALLOCATABLE, DIMENSION(:) :: curDifShdgRatioIsoSky ! Diffuse shading ratio (WithShdgIsoSky/WoShdgIsoSky)
+REAL, ALLOCATABLE, DIMENSION(:) :: DifShdgRatioHoriz  ! Horizon shading ratio (WithShdgHoriz/WoShdgHoriz)
+REAL, ALLOCATABLE, DIMENSION(:,:,:) :: DifShdgRatioHorizHRTS  ! Horizon shading ratio (WithShdgHoriz/WoShdgHoriz)
+REAL, ALLOCATABLE, DIMENSION(:) :: WithShdgIsoSky     ! Diffuse solar irradiance from sky on surface, with shading
+REAL, ALLOCATABLE, DIMENSION(:) :: WoShdgIsoSky       ! Diffuse solar from sky on surface, without shading
+REAL, ALLOCATABLE, DIMENSION(:) :: WithShdgHoriz      ! Diffuse solar irradiance from horizon portion of sky on surface,
                                                            ! with shading
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: WoShdgHoriz        ! Diffuse solar irradiance from horizon portion of sky on surface,
+REAL, ALLOCATABLE, DIMENSION(:) :: WoShdgHoriz        ! Diffuse solar irradiance from horizon portion of sky on surface,
                                                            ! without shading
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MultIsoSky         ! Contribution to eff sky view factor from isotropic sky
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MultCircumSolar    ! Contribution to eff sky view factor from circumsolar brightening
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MultHorizonZenith  ! Contribution to eff sky view factor from horizon or zenith brightening
+REAL, ALLOCATABLE, DIMENSION(:) :: MultIsoSky         ! Contribution to eff sky view factor from isotropic sky
+REAL, ALLOCATABLE, DIMENSION(:) :: MultCircumSolar    ! Contribution to eff sky view factor from circumsolar brightening
+REAL, ALLOCATABLE, DIMENSION(:) :: MultHorizonZenith  ! Contribution to eff sky view factor from horizon or zenith brightening
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QS                  ! Zone short-wave flux density; used to calculate short-wave
+REAL, ALLOCATABLE, DIMENSION(:) :: QS                  ! Zone short-wave flux density; used to calculate short-wave
                                                             !     radiation absorbed on inside surfaces of zone
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QSLights            ! Like QS, but Lights short-wave only.
+REAL, ALLOCATABLE, DIMENSION(:) :: QSLights            ! Like QS, but Lights short-wave only.
 
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QSDifSol            ! Like QS, but diffuse solar short-wave only.
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ITABSF              !FRACTION OF THERMAL FLUX ABSORBED (PER UNIT AREA)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: TMULT               !TMULT  - MULTIPLIER TO COMPUTE 'ITABSF'
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QL                  !TOTAL THERMAL RADIATION ADDED TO ZONE
-REAL(r64), ALLOCATABLE, DIMENSION(:,:)   :: SunlitFracHR ! Hourly fraction of heat transfer surface that is sunlit
-REAL(r64), ALLOCATABLE, DIMENSION(:,:)   :: CosIncAngHR  ! Hourly cosine of beam radiation incidence angle on surface
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:)   :: SunlitFrac ! TimeStep fraction of heat transfer surface that is sunlit
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:)   :: SunlitFracWithoutReveal ! For a window with reveal, the sunlit fraction
+REAL, ALLOCATABLE, DIMENSION(:) :: QSDifSol            ! Like QS, but diffuse solar short-wave only.
+REAL, ALLOCATABLE, DIMENSION(:) :: ITABSF              !FRACTION OF THERMAL FLUX ABSORBED (PER UNIT AREA)
+REAL, ALLOCATABLE, DIMENSION(:) :: TMULT               !TMULT  - MULTIPLIER TO COMPUTE 'ITABSF'
+REAL, ALLOCATABLE, DIMENSION(:) :: QL                  !TOTAL THERMAL RADIATION ADDED TO ZONE
+REAL, ALLOCATABLE, DIMENSION(:,:)   :: SunlitFracHR ! Hourly fraction of heat transfer surface that is sunlit
+REAL, ALLOCATABLE, DIMENSION(:,:)   :: CosIncAngHR  ! Hourly cosine of beam radiation incidence angle on surface
+REAL, ALLOCATABLE, DIMENSION(:,:,:)   :: SunlitFrac ! TimeStep fraction of heat transfer surface that is sunlit
+REAL, ALLOCATABLE, DIMENSION(:,:,:)   :: SunlitFracWithoutReveal ! For a window with reveal, the sunlit fraction
                                                     ! without shadowing by the reveal
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:)   :: CosIncAng  ! TimeStep cosine of beam radiation incidence angle on surface
+REAL, ALLOCATABLE, DIMENSION(:,:,:)   :: CosIncAng  ! TimeStep cosine of beam radiation incidence angle on surface
 INTEGER,ALLOCATABLE,DIMENSION(:,:,:,:) :: BackSurfaces ! For a given hour and timestep, a list of up to 20 surfaces receiving
                                                        ! beam solar radiation from a given exterior window
-REAL(r64),ALLOCATABLE,DIMENSION(:,:,:,:) :: OverlapAreas ! For a given hour and timestep, the areas of the exterior window sending
+REAL,ALLOCATABLE,DIMENSION(:,:,:,:) :: OverlapAreas ! For a given hour and timestep, the areas of the exterior window sending
                                                     ! beam solar radiation to the surfaces listed in BackSurfaces
-REAL(r64)         :: GasCoeffsCon(10,3)   ! Gas conductivity coefficients for gases in a mixture
+REAL         :: GasCoeffsCon(10,3)   ! Gas conductivity coefficients for gases in a mixture
 !                       Air       Argon     Krypton   Xenon
-DATA GasCoeffsCon    /2.873d-3, 2.285d-3, 9.443d-4, 4.538d-4,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                      7.760d-5, 5.149d-5, 2.826d-5, 1.723d-5,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                      0.0d0   , 0.0d0   , 0.0d0   , 0.0d0   ,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0 /
+DATA GasCoeffsCon    /2.873d-3, 2.285d-3, 9.443d-4, 4.538d-4,  0.0,0.0,0.0,0.0,0.0,0.0, &
+                      7.760d-5, 5.149d-5, 2.826d-5, 1.723d-5,  0.0,0.0,0.0,0.0,0.0,0.0, &
+                      0.0   , 0.0   , 0.0   , 0.0   ,  0.0,0.0,0.0,0.0,0.0,0.0 /
 
-REAL(r64)         :: GasCoeffsVis(10,3)   ! Gas viscosity coefficients for gases in a mixture
+REAL         :: GasCoeffsVis(10,3)   ! Gas viscosity coefficients for gases in a mixture
 !                       Air       Argon     Krypton   Xenon
-DATA GasCoeffsVis   /3.723d-6, 3.379d-6, 2.213d-6, 1.069d-6,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                     4.940d-8, 6.451d-8, 7.777d-8, 7.414d-8,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                       0.0d0   , 0.0d0   , 0.0d0   , 0.0d0   ,  0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0 /
+DATA GasCoeffsVis   /3.723d-6, 3.379d-6, 2.213d-6, 1.069d-6,  0.0,0.0,0.0,0.0,0.0,0.0, &
+                     4.940d-8, 6.451d-8, 7.777d-8, 7.414d-8,  0.0,0.0,0.0,0.0,0.0,0.0, &
+                       0.0   , 0.0   , 0.0   , 0.0   ,  0.0,0.0,0.0,0.0,0.0,0.0 /
 
-REAL(r64)         :: GasCoeffsCp(10,3)   ! Gas specific heat coefficients for gases in a mixture
+REAL         :: GasCoeffsCp(10,3)   ! Gas specific heat coefficients for gases in a mixture
 !                     Air       Argon     Krypton   Xenon
-DATA GasCoeffsCp    /1002.737d0 , 521.929d0 , 248.091d0 ,  158.340d0, 0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                     1.2324d-2  , 0.0d0     , 0.0d0     ,      0.0d0, 0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0, &
-                       0.0d0    , 0.0d0     , 0.0d0     ,      0.0d0, 0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0 /
+DATA GasCoeffsCp    /1002.737 , 521.929 , 248.091 ,  158.340, 0.0,0.0,0.0,0.0,0.0,0.0, &
+                     1.2324d-2  , 0.0     , 0.0     ,      0.0, 0.0,0.0,0.0,0.0,0.0,0.0, &
+                       0.0    , 0.0     , 0.0     ,      0.0, 0.0,0.0,0.0,0.0,0.0,0.0 /
 
-REAL(r64)         :: GasWght(10)=         & ! Gas molecular weights for gases in a mixture
+REAL         :: GasWght(10)=         & ! Gas molecular weights for gases in a mixture
 !                       Air       Argon     Krypton   Xenon
-                   (/28.97d0,     39.948d0,    83.8d0,   131.3d0,     0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0/)
+                   (/28.97,     39.948,    83.8,   131.3,     0.0,0.0,0.0,0.0,0.0,0.0/)
 
 !Variables Dimensioned to Number of Zones
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MVFC      ! Design Mixing Flow Rate [m3/s] (Cross Zone Mixing)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: MTC       ! Control Temperature For Mixing [C] (Cross Zone Mixing)
+REAL, ALLOCATABLE, DIMENSION(:) :: MVFC      ! Design Mixing Flow Rate [m3/s] (Cross Zone Mixing)
+REAL, ALLOCATABLE, DIMENSION(:) :: MTC       ! Control Temperature For Mixing [C] (Cross Zone Mixing)
 
-REAL(r64), TARGET :: ZeroPointerVal = 0.d0
+REAL, TARGET :: ZeroPointerVal = 0.
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE DataHeatBalance:
 PUBLIC  CheckAndSetConstructionProperties
@@ -2491,8 +2491,8 @@ SUBROUTINE AddVariableSlatBlind(inBlindNumber,outBlindNumber,errFlag)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   TYPE (WindowBlindProperties),  ALLOCATABLE, DIMENSION(:) :: tmpBlind
   INTEGER :: Found
-  REAL(r64) :: MinSlatAngGeom
-  REAL(r64) :: MaxSlatAngGeom
+  REAL :: MinSlatAngGeom
+  REAL :: MaxSlatAngGeom
 
   ! maybe it's already there
   errFlag=.false.
@@ -2518,7 +2518,7 @@ SUBROUTINE AddVariableSlatBlind(inBlindNumber,outBlindNumber,errFlag)
       ELSE
         MinSlatAngGeom = 0.0
       END IF
-      MaxSlatAngGeom = 180.d0- MinSlatAngGeom
+      MaxSlatAngGeom = 180.- MinSlatAngGeom
 
       ! Error if maximum slat angle less than minimum
 
@@ -2625,47 +2625,47 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: SurfaceNum
 ! The optional arguments Phi and Theta are used to integrate over a hemisphere and are passed as pairs
-  REAL(r64), INTENT (IN), OPTIONAL :: Phi    ! Optional sun altitude relative to surface outward normal (radians)
-  REAL(r64), INTENT (IN), OPTIONAL :: Theta  ! Optional sun azimuth relative to surface outward normal (radians)
+  REAL, INTENT (IN), OPTIONAL :: Phi    ! Optional sun altitude relative to surface outward normal (radians)
+  REAL, INTENT (IN), OPTIONAL :: Theta  ! Optional sun azimuth relative to surface outward normal (radians)
 ! The optional argument ScreenNumber is used during CalcWindowScreenProperties to integrate over a quarter hemispere
 ! "before" the surface # is known. Theta and Phi can be passed without ScreenNumber, but DO NOT pass ScreenNumber
 ! without Theta and Phi.
   INTEGER, INTENT (IN), OPTIONAL :: ScreenNumber ! Optional screen number
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: small  = 1.D-9 !Small Number used to approximate zero
+  REAL, PARAMETER :: small  = 1.*10**-9 !Small Number used to approximate zero  !RS: Debugging: 102612
 
           ! FUNCTION PARAMETER DEFINITIONS:
   INTEGER:: ScNum                        ! Index to screen data
-  REAL(r64) :: Tdirect                      ! Beam solar transmitted through screen (dependent on sun angle)
-  REAL(r64) :: Tscattered                   ! Beam solar reflected through screen (dependent on sun angle)
-  REAL(r64) :: TscatteredVis                ! Visible beam solar reflected through screen (dependent on sun angle)
-  REAL(r64) :: SunAzimuth                   ! Solar azimuth angle from north (rad)
-  REAL(r64) :: SunAltitude                  ! Solar altitude angle from horizon (rad)
-  REAL(r64) :: SurfaceAzimuth               ! Surface azimuth angle from north (rad)
-  REAL(r64) :: SurfaceTilt                  ! Surface tilt angle from vertical (rad)
-  REAL(r64) :: SunAzimuthToScreenNormal     ! Relative solar azimuth (sun angle from screen normal, 0 to PiOvr2, rad)
-  REAL(r64) :: SunAltitudeToScreenNormal    ! Relative solar altitude (sun angle from screen normal, -PiOvr2 to PiOvr2, rad)
-  REAL(r64) :: Beta                         ! Compliment of relative solar azimuth (rad)
-  REAL(r64) :: TransXDir                    ! Horizontal component of direct beam transmittance
-  REAL(r64) :: TransYDir                    ! Vertical component of direct beam transmittance
-  REAL(r64) :: Delta                        ! Intermediate variable used for Tscatter calculation (deg)
-  REAL(r64) :: DeltaMax                     ! Intermediate variable used for Tscatter calculation (deg)
-  REAL(r64) :: Tscattermax                  ! Maximum solar beam  scattered transmittance
-  REAL(r64) :: TscattermaxVis               ! Maximum visible beam scattered transmittance
-  REAL(r64) :: ExponentInterior             ! Exponent used in scattered transmittance calculation
+  REAL :: Tdirect                      ! Beam solar transmitted through screen (dependent on sun angle)
+  REAL :: Tscattered                   ! Beam solar reflected through screen (dependent on sun angle)
+  REAL :: TscatteredVis                ! Visible beam solar reflected through screen (dependent on sun angle)
+  REAL :: SunAzimuth                   ! Solar azimuth angle from north (rad)
+  REAL :: SunAltitude                  ! Solar altitude angle from horizon (rad)
+  REAL :: SurfaceAzimuth               ! Surface azimuth angle from north (rad)
+  REAL :: SurfaceTilt                  ! Surface tilt angle from vertical (rad)
+  REAL :: SunAzimuthToScreenNormal     ! Relative solar azimuth (sun angle from screen normal, 0 to PiOvr2, rad)
+  REAL :: SunAltitudeToScreenNormal    ! Relative solar altitude (sun angle from screen normal, -PiOvr2 to PiOvr2, rad)
+  REAL :: Beta                         ! Compliment of relative solar azimuth (rad)
+  REAL :: TransXDir                    ! Horizontal component of direct beam transmittance
+  REAL :: TransYDir                    ! Vertical component of direct beam transmittance
+  REAL :: Delta                        ! Intermediate variable used for Tscatter calculation (deg)
+  REAL :: DeltaMax                     ! Intermediate variable used for Tscatter calculation (deg)
+  REAL :: Tscattermax                  ! Maximum solar beam  scattered transmittance
+  REAL :: TscattermaxVis               ! Maximum visible beam scattered transmittance
+  REAL :: ExponentInterior             ! Exponent used in scattered transmittance calculation
                                             ! when Delta < DeltaMax (0,0 to peak)
-  REAL(r64) :: ExponentExterior             ! Exponent used in scattered transmittance calculation
+  REAL :: ExponentExterior             ! Exponent used in scattered transmittance calculation
                                             ! when Delta > DeltaMax (peak to max)
-  REAL(r64) :: AlphaDblPrime, COSMu, Epsilon, Eta, MuPrime, Gamma  ! Intermediate variables (used in Eng. Doc.)
-  REAL(r64) :: NormalAltitude               ! Actual altitude angle of sun wrt surface outward normal (rad)
-  REAL(r64) :: NormalAzimuth                ! Actual azimuth angle of sun wrt surface outward normal (rad)
-  REAL(r64) :: IncidentAngle                ! Solar angle wrt surface outward normal to determine
+  REAL :: AlphaDblPrime, COSMu, Epsilon, Eta, MuPrime, Gamma  ! Intermediate variables (used in Eng. Doc.)
+  REAL :: NormalAltitude               ! Actual altitude angle of sun wrt surface outward normal (rad)
+  REAL :: NormalAzimuth                ! Actual azimuth angle of sun wrt surface outward normal (rad)
+  REAL :: IncidentAngle                ! Solar angle wrt surface outward normal to determine
                                             ! if sun is in front of screen (rad)
-  REAL(r64) :: PeakToPlateauRatio           ! Ratio of peak scattering to plateau at 0,0 incident angle
-  REAL(r64) :: PeakToPlateauRatioVis        ! Ratio of peak visible scattering to plateau at 0,0 incident angle
-  REAL(r64) :: ReflectCyl                   ! Screen material reflectance
-  REAL(r64) :: ReflectCylVis                ! Screen material visible reflectance
+  REAL :: PeakToPlateauRatio           ! Ratio of peak scattering to plateau at 0,0 incident angle
+  REAL :: PeakToPlateauRatioVis        ! Ratio of peak visible scattering to plateau at 0,0 incident angle
+  REAL :: ReflectCyl                   ! Screen material reflectance
+  REAL :: ReflectCylVis                ! Screen material visible reflectance
 
 ! SurfaceScreens structure may be accessed using either the surface or screen index
 ! The screen index is based on the number of Surface:HeatTransfer:Sub objects using any Material:WindowScreen object
@@ -2690,7 +2690,7 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
     NormalAzimuth = SunAzimuthToScreenNormal
   ELSE
     SunAzimuth     = ATAN2(SOLCOS(1),SOLCOS(2))
-    IF(SunAzimuth .LT. 0.0)SunAzimuth = 2.d0*Pi + SunAzimuth
+    IF(SunAzimuth .LT. 0.0)SunAzimuth = 2.*Pi + SunAzimuth
     SurfaceAzimuth = Surface(SurfaceNum)%Azimuth * DegToRadians
     NormalAzimuth = SunAzimuth-SurfaceAzimuth
 !   Calculate the transmittance whether sun is in front of or behind screen, place result in BmBmTrans or BmBmTransBack
@@ -2750,8 +2750,8 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
       TransYDir = 1 - Gamma*(COS(AlphaDblPrime)+ &
                                  SIN(AlphaDblPrime)* &
                                  TAN(SunAltitudeToScreenNormal)* &
-                                 SQRT(1.d0+(1.d0/TAN(Beta))**2))
-      TransYDir = MAX(0.0d0,TransYDir)
+                                 SQRT(1.+(1./TAN(Beta))**2))
+      TransYDir = MAX(0.0,TransYDir)
     ELSE
       TransYDir = 0.0
     END IF
@@ -2768,10 +2768,10 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
     IF(COS(Epsilon) .NE. 0.0) THEN
       MuPrime = ATAN(TAN(ACOS(COSMu))/COS(Epsilon))
       IF(Eta .NE. 0.0) THEN
-        TransXDir = 1.d0 - Gamma*(COS(MuPrime)+SIN(MuPrime)* &
+        TransXDir = 1. - Gamma*(COS(MuPrime)+SIN(MuPrime)* &
                                                        TAN(ACOS(COSMu))*   &
-                                                       SQRT(1.d0+(1.d0/TAN(Eta))**2))
-        TransXDir = MAX(0.0d0,TransXDir)
+                                                       SQRT(1.+(1./TAN(Eta))**2))
+        TransXDir = MAX(0.0,TransXDir)
       ELSE
         TransXDir = 0.0
       END IF
@@ -2781,7 +2781,7 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
   ELSE
     TransXDir = 1.0 - Gamma
   END IF
-  Tdirect = MAX(0.0d0, TransXDir * TransYDir)
+  Tdirect = MAX(0.0, TransXDir * TransYDir)
 
 ! *******************************************************************************
 ! * calculate transmittance of scattered beam due to reflecting screen material *
@@ -2795,46 +2795,46 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
     TscatteredVis = 0.0
   ELSE
 !   DeltaMax and Delta are in degrees
-    DeltaMax = 89.7d0 - (10.0d0 * Gamma/0.16d0)
+    DeltaMax = 89.7 - (10.0 * Gamma/0.16)
     Delta    = SQRT((SunAzimuthToScreenNormal/DegToRadians)**2 + (SunAltitudeToScreenNormal/DegToRadians)**2)
 
 !   Use empirical model to determine maximum (peak) scattering
-    Tscattermax    = 0.0229d0 * Gamma + 0.2971d0 * ReflectCyl &
-                    -0.03624d0 * Gamma**2 + 0.04763d0 * ReflectCyl**2 &
-                    -0.44416d0 * Gamma * ReflectCyl
-    TscattermaxVis = 0.0229d0 * Gamma + 0.2971d0 * ReflectCylVis &
-                    -0.03624d0 * Gamma**2 + 0.04763d0 * ReflectCylVis**2 &
-                    -0.44416d0 * Gamma * ReflectCylVis
+    Tscattermax    = 0.0229 * Gamma + 0.2971 * ReflectCyl &
+                    -0.03624 * Gamma**2 + 0.04763 * ReflectCyl**2 &
+                    -0.44416 * Gamma * ReflectCyl
+    TscattermaxVis = 0.0229 * Gamma + 0.2971 * ReflectCylVis &
+                    -0.03624 * Gamma**2 + 0.04763 * ReflectCylVis**2 &
+                    -0.44416 * Gamma * ReflectCylVis
 
 !   Vary slope of interior and exterior surface of scattering model
-    ExponentInterior = (-(ABS(Delta-DeltaMax))**2.0d0)/600.0d0
-    ExponentExterior = (-(ABS(Delta-DeltaMax))**2.5d0)/600.0d0
+    ExponentInterior = (-(ABS(Delta-DeltaMax))**2.0)/600.0
+    ExponentExterior = (-(ABS(Delta-DeltaMax))**2.5)/600.0
 
 !   Determine ratio of scattering at 0,0 incident angle to maximum (peak) scattering
-    PeakToPlateauRatio    = 1.0d0/(0.2d0 * (1-Gamma) * ReflectCyl)
-    PeakToPlateauRatioVis = 1.0d0/(0.2d0 * (1-Gamma) * ReflectCylVis)
+    PeakToPlateauRatio    = 1.0/(0.2 * (1-Gamma) * ReflectCyl)
+    PeakToPlateauRatioVis = 1.0/(0.2 * (1-Gamma) * ReflectCylVis)
 
     IF(Delta .GT. DeltaMax)THEN
 !     Apply offset for plateau and use exterior exponential function to simulate actual scattering as a function of solar angles
-      Tscattered = 0.2d0 * (1.d0-Gamma) * ReflectCyl * Tscattermax *   &
-         (1.0d0 + (PeakToPlateauRatio-1.0d0)*EXP(ExponentExterior))
-      TscatteredVis = 0.2d0 * (1.d0-Gamma) * ReflectCylVis * TscattermaxVis *   &
-         (1.0d0 + (PeakToPlateauRatioVis-1.0d0)*EXP(ExponentExterior))
+      Tscattered = 0.2 * (1.-Gamma) * ReflectCyl * Tscattermax *   &
+         (1.0 + (PeakToPlateauRatio-1.0)*EXP(ExponentExterior))
+      TscatteredVis = 0.2 * (1.-Gamma) * ReflectCylVis * TscattermaxVis *   &
+         (1.0 + (PeakToPlateauRatioVis-1.0)*EXP(ExponentExterior))
 !     Trim off offset if solar angle (delta) is greater than maximum (peak) scattering angle
-      Tscattered = Tscattered -(0.2d0 * (1.d0-Gamma) * ReflectCyl * Tscattermax) *   &
-         MAX(0.0d0,(Delta-DeltaMax)/(90.0d0-DeltaMax))
-      TscatteredVis = TscatteredVis -(0.2d0 * (1.d0-Gamma) * ReflectCylVis * TscattermaxVis) *   &
-         MAX(0.0d0,(Delta-DeltaMax)/(90.0d0-DeltaMax))
+      Tscattered = Tscattered -(0.2 * (1.-Gamma) * ReflectCyl * Tscattermax) *   &
+         MAX(0.0,(Delta-DeltaMax)/(90.0-DeltaMax))
+      TscatteredVis = TscatteredVis -(0.2 * (1.-Gamma) * ReflectCylVis * TscattermaxVis) *   &
+         MAX(0.0,(Delta-DeltaMax)/(90.0-DeltaMax))
     ELSE
 !     Apply offset for plateau and use interior exponential function to simulate actual scattering as a function of solar angles
-      Tscattered = 0.2d0 * (1.d0-Gamma) * ReflectCyl * Tscattermax *   &
-         (1.0d0 + (PeakToPlateauRatio-1.0d0)*EXP(ExponentInterior))
-      TscatteredVis = 0.2d0 * (1.d0-Gamma) * ReflectCylVis * TscattermaxVis *   &
-         (1.0d0 + (PeakToPlateauRatioVis-1.0d0)*EXP(ExponentInterior))
+      Tscattered = 0.2 * (1.-Gamma) * ReflectCyl * Tscattermax *   &
+         (1.0 + (PeakToPlateauRatio-1.0)*EXP(ExponentInterior))
+      TscatteredVis = 0.2 * (1.-Gamma) * ReflectCylVis * TscattermaxVis *   &
+         (1.0 + (PeakToPlateauRatioVis-1.0)*EXP(ExponentInterior))
     END IF
   END IF
-  Tscattered    = MAX(0.0d0,Tscattered)
-  TscatteredVis = MAX(0.0d0,TscatteredVis)
+  Tscattered    = MAX(0.0,Tscattered)
+  TscatteredVis = MAX(0.0,TscatteredVis)
 
   IF(SurfaceScreens(ScNum)%ScreenBeamReflectanceAccounting == DoNotModel)THEN
     IF(ABS(IncidentAngle) .LE. PiOvr2)THEN
@@ -2876,10 +2876,10 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
     SurfaceScreens(ScNum)%BmDifTrans        = Tscattered
     SurfaceScreens(ScNum)%BmDifTransVis     = TscatteredVis
     SurfaceScreens(ScNum)%BmDifTransBack    = 0.0
-    SurfaceScreens(ScNum)%ReflectSolBeamFront = MAX(0.0d0,ReflectCyl*(1.d0- Tdirect)-Tscattered)
-    SurfaceScreens(ScNum)%ReflectVisBeamFront = MAX(0.0d0,ReflectCylVis*(1.d0- Tdirect)-TscatteredVis)
+    SurfaceScreens(ScNum)%ReflectSolBeamFront = MAX(0.0,ReflectCyl*(1.- Tdirect)-Tscattered)
+    SurfaceScreens(ScNum)%ReflectVisBeamFront = MAX(0.0,ReflectCylVis*(1.- Tdirect)-TscatteredVis)
     SurfaceScreens(ScNum)%AbsorpSolarBeamFront = &
-                                                MAX(0.0d0,(1.0d0-Tdirect)*(1.0d0-ReflectCyl))
+                                                MAX(0.0,(1.0-Tdirect)*(1.0-ReflectCyl))
     SurfaceScreens(ScNum)%ReflectSolBeamBack = 0.0
     SurfaceScreens(ScNum)%ReflectVisBeamBack = 0.0
     SurfaceScreens(ScNum)%AbsorpSolarBeamBack = 0.0
@@ -2887,10 +2887,10 @@ SUBROUTINE CalcScreenTransmittance(SurfaceNum, Phi, Theta, ScreenNumber)
     SurfaceScreens(ScNum)%BmDifTrans        = 0.0
     SurfaceScreens(ScNum)%BmDifTransVis     = 0.0
     SurfaceScreens(ScNum)%BmDifTransBack    = Tscattered
-    SurfaceScreens(ScNum)%ReflectSolBeamBack = MAX(0.0d0,ReflectCyl*(1.d0- Tdirect)-Tscattered)
-    SurfaceScreens(ScNum)%ReflectVisBeamBack = MAX(0.0d0,ReflectCylVis*(1.d0- Tdirect)-TscatteredVis)
+    SurfaceScreens(ScNum)%ReflectSolBeamBack = MAX(0.0,ReflectCyl*(1.- Tdirect)-Tscattered)
+    SurfaceScreens(ScNum)%ReflectVisBeamBack = MAX(0.0,ReflectCylVis*(1.- Tdirect)-TscatteredVis)
     SurfaceScreens(ScNum)%AbsorpSolarBeamBack = &
-                                                MAX(0.0d0,(1.0d0-Tdirect)*(1.0d0-ReflectCyl))
+                                                MAX(0.0,(1.0-Tdirect)*(1.0-ReflectCyl))
     SurfaceScreens(ScNum)%ReflectSolBeamFront = 0.0
     SurfaceScreens(ScNum)%ReflectVisBeamFront = 0.0
     SurfaceScreens(ScNum)%AbsorpSolarBeamFront = 0.0

@@ -35,29 +35,29 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
-REAL(r64), PARAMETER :: MassFlowTol = 0.001d0
+REAL, PARAMETER :: MassFlowTol = 0.001
 
   ! DERIVED TYPE DEFINITIONS
 TYPE, PUBLIC :: MixerConditions
   CHARACTER(len=MaxNameLength) :: MixerName=' '  ! Name of the Mixer
-  REAL(r64)    :: OutletTemp=0.0
-  REAL(r64)    :: OutletHumRat=0.0
-  REAL(r64)    :: OutletEnthalpy=0.0
-  REAL(r64)    :: OutletPressure=0.0
+  REAL    :: OutletTemp=0.0
+  REAL    :: OutletHumRat=0.0
+  REAL    :: OutletEnthalpy=0.0
+  REAL    :: OutletPressure=0.0
   INTEGER      :: OutletNode=0
-  REAL(r64)    :: OutletMassFlowRate=0.0 !MassFlow through the Mixer being Simulated [kg/Sec]
-  REAL(r64)    :: OutletMassFlowRateMaxAvail=0.0 ! [kg/Sec]
-  REAL(r64)    :: OutletMassFlowRateMinAvail=0.0 ! [kg/Sec]
+  REAL    :: OutletMassFlowRate=0.0 !MassFlow through the Mixer being Simulated [kg/Sec]
+  REAL    :: OutletMassFlowRateMaxAvail=0.0 ! [kg/Sec]
+  REAL    :: OutletMassFlowRateMinAvail=0.0 ! [kg/Sec]
   LOGICAL      :: InitFlag=.false.
   INTEGER      :: NumInletNodes=0
   INTEGER, DIMENSION(:), ALLOCATABLE ::InletNode
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletMassFlowRate
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletMassFlowRateMaxAvail
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletMassFlowRateMinAvail
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletTemp
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletHumRat
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletEnthalpy
-  REAL(r64), DIMENSION(:), ALLOCATABLE    ::InletPressure
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletMassFlowRate
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletMassFlowRateMaxAvail
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletMassFlowRateMinAvail
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletTemp
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletHumRat
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletEnthalpy
+  REAL, DIMENSION(:), ALLOCATABLE    ::InletPressure
 END TYPE MixerConditions
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -230,7 +230,7 @@ SUBROUTINE GetMixerInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
@@ -612,9 +612,9 @@ SUBROUTINE UpdateAirMixer(MixerNum)
    Node(OutletNode)%Quality         = Node(InletNode)%Quality
 
   IF (Contaminant%CO2Simulation) Then
-    If(MixerCond(MixerNum)%OutletMassFlowRate .gt. 0.d0) Then
+    If(MixerCond(MixerNum)%OutletMassFlowRate .gt. 0.) Then
       ! CO2 balance to get outlet air CO2
-      Node(OutletNode)%CO2 = 0.0d0
+      Node(OutletNode)%CO2 = 0.0
       DO InletNodeNum = 1, MixerCond(MixerNum)%NumInletNodes
         Node(OutletNode)%CO2 = Node(OutletNode)%CO2 + Node(MixerCond(MixerNum)%InletNode(InletNodeNum))%CO2 * &
               MixerCond(MixerNum)%InletMassFlowRate(InletNodeNum) / MixerCond(MixerNum)%OutletMassFlowRate
@@ -625,9 +625,9 @@ SUBROUTINE UpdateAirMixer(MixerNum)
   End If
 
   IF (Contaminant%GenericContamSimulation) Then
-    If(MixerCond(MixerNum)%OutletMassFlowRate .gt. 0.d0) Then
+    If(MixerCond(MixerNum)%OutletMassFlowRate .gt. 0.) Then
       ! Generic contaminant balance to get outlet air CO2
-      Node(OutletNode)%GenContam = 0.0d0
+      Node(OutletNode)%GenContam = 0.0
       DO InletNodeNum = 1, MixerCond(MixerNum)%NumInletNodes
         Node(OutletNode)%GenContam = Node(OutletNode)%GenContam + Node(MixerCond(MixerNum)%InletNode(InletNodeNum))%GenContam * &
               MixerCond(MixerNum)%InletMassFlowRate(InletNodeNum) / MixerCond(MixerNum)%OutletMassFlowRate

@@ -48,9 +48,9 @@ PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
   ! zero load tolerance used in equipment operation decisions (Watts)
-  REAL(r64), PARAMETER                         :: zeroloadtol = 1.d0
+  REAL, PARAMETER                         :: zeroloadtol = 1.
   !zero capacity tolerance used in heat exchanger cal (kg/s * J/kg/K)
-  REAL(r64), PARAMETER                         :: zerocaptol  = .00001d0
+  REAL, PARAMETER                         :: zerocaptol  = .00001
 
 !  CHARACTER(len=MaxNameLength), PARAMETER :: ThisType = 'HeatExchanger:Plate'
 
@@ -65,21 +65,21 @@ TYPE PlateCoolHXData
   CHARACTER(len=MaxNameLength) :: SupplySideInletNode  =' '    ! plant side inlet node name
   CHARACTER(len=MaxNameLength) :: SupplySideOutletNode =' '    ! plant side outlet node name
   CHARACTER(len=MaxNameLength) :: HeatXMode            =' '    ! heat exchange mode (ideal, NTU-effectiveness)
-  REAL(r64)                    :: UA                   =0.0    ! UA for heat exchanger (ignored in ideal mode)
-  REAL(r64)                    :: DemandSideFlowRate   =0.0    ! volumetric flow rate through condenser side of unit
-  REAL(r64)                    :: SupplySideFlowRate   =0.0    ! volumetric flow rate through plant side of unit
+  REAL                    :: UA                   =0.0    ! UA for heat exchanger (ignored in ideal mode)
+  REAL                    :: DemandSideFlowRate   =0.0    ! volumetric flow rate through condenser side of unit
+  REAL                    :: SupplySideFlowRate   =0.0    ! volumetric flow rate through plant side of unit
   INTEGER                      :: DemandSideInletNodeNum  =0   ! condenser side inlet node number
   INTEGER                      :: DemandSideOutletNodeNum =0   ! condenser side outlet node number
   INTEGER                      :: SupplySideInletNodeNum  =0   ! plant side inlet node number
   INTEGER                      :: SupplySideOutletNodeNum =0   ! plant side outlet node number
 ! Report data
-  REAL(r64)                    :: DemandSideInletTemp     =0.0 ! condenser inlet temperature
-  REAL(r64)                    :: DemandSideOutletTemp    =0.0 ! condenser outlet temperature
-  REAL(r64)                    :: SupplySideInletTemp     =0.0 ! plant inlet temperature
-  REAL(r64)                    :: SupplySideOutletTemp    =0.0 ! plant outlet temperature
-  REAL(r64)                    :: DemandSideMassFlowRate  =0.0 ! condenser mass flow rate
-  REAL(r64)                    :: SupplySideMassFlowRate  =0.0 ! plant mass flow rate
-  REAL(r64)                    :: HeatTransRate           =0.0 ! total heat transfer rate, Watts
+  REAL                    :: DemandSideInletTemp     =0.0 ! condenser inlet temperature
+  REAL                    :: DemandSideOutletTemp    =0.0 ! condenser outlet temperature
+  REAL                    :: SupplySideInletTemp     =0.0 ! plant inlet temperature
+  REAL                    :: SupplySideOutletTemp    =0.0 ! plant outlet temperature
+  REAL                    :: DemandSideMassFlowRate  =0.0 ! condenser mass flow rate
+  REAL                    :: SupplySideMassFlowRate  =0.0 ! plant mass flow rate
+  REAL                    :: HeatTransRate           =0.0 ! total heat transfer rate, Watts
   !loop topology variables
   INTEGER                      :: CondLoopNum            =0 ! condenser side plant loop number
   INTEGER                      :: CondLoopSideNum        =0 ! condenser side plant loop side number
@@ -105,10 +105,10 @@ INTEGER   :: SupplySideBranchNum      =0   ! module variable for plant branch nu
 INTEGER   :: SupplySideCompNum        =0   ! module variable for plant component number
 INTEGER   :: DemandSideLoopNum        =0   ! module variable for condenser loop number
 INTEGER   :: SupplySideLoopNum        =0   ! module variable for plant loop number
-REAL(r64) :: SupplySideMassFlowRate   =0.0 ! Flow rate of Plant side fluid
-REAL(r64) :: DemandSideMassFlowRate   =0.0 ! Flow rate of condenser side fluid
-REAL(r64) :: SupplySideInletTemp      =0.0 ! SupplySide side inlet temperature
-REAL(r64) :: DemandSideInletTemp      =0.0 ! condenser side inlet temperature
+REAL :: SupplySideMassFlowRate   =0.0 ! Flow rate of Plant side fluid
+REAL :: DemandSideMassFlowRate   =0.0 ! Flow rate of condenser side fluid
+REAL :: SupplySideInletTemp      =0.0 ! SupplySide side inlet temperature
+REAL :: DemandSideInletTemp      =0.0 ! condenser side inlet temperature
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
 
@@ -447,11 +447,11 @@ SUBROUTINE InitPlateCoolingHeatExchanger(PlateCoolNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: Num                     ! counter
-  REAL(r64)    :: DesignDemandSideMassFlowRate  ! Mass flow rate used to initialize condenser nodes
-  REAL(r64)    :: DesignSupplySideMassFlowRate
+  REAL    :: DesignDemandSideMassFlowRate  ! Mass flow rate used to initialize condenser nodes
+  REAL    :: DesignSupplySideMassFlowRate
   LOGICAL,SAVE :: MyEnvrnFlag = .TRUE.
   LOGICAL      :: errFlag
-  REAL(r64)    :: rho ! local fluid density
+  REAL    :: rho ! local fluid density
 
 
   PlateCool(PlateCoolNum)%HeatTransRate = 0.0
@@ -511,7 +511,7 @@ SUBROUTINE InitPlateCoolingHeatExchanger(PlateCoolNum)
 
       DesignDemandSideMassFlowRate = PlateCool(Num)%DemandSideFlowRate * rho
       CALL InitComponentNodes( &
-        0.0d0, &
+        0.0, &
         DesignDemandSideMassFlowRate, &
         PlateCool(Num)%DemandSideInletNodeNum, &
         PlateCool(Num)%DemandSideOutletNodeNum, &
@@ -528,7 +528,7 @@ SUBROUTINE InitPlateCoolingHeatExchanger(PlateCoolNum)
 
       DesignSupplySideMassFlowRate = PlateCool(Num)%SupplySideFlowRate * rho
       CALL InitComponentNodes( &
-        0.0d0, &
+        0.0, &
         DesignSupplySideMassFlowRate, &
         PlateCool(Num)%SupplySideInletNodeNum, &
         PlateCool(Num)%SupplySideOutletNodeNum, &
@@ -600,16 +600,16 @@ SUBROUTINE CalcPlateCoolingHeatExchanger(PlateCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: SupplySideFluidCp        ! Specific heat of Plant side fluid
-  REAL(r64)    :: SupplySideCapRate        ! Capacity rate (mdot*Cp) of SupplySide side fluid
-  REAL(r64)    :: DemandSideFluidCp         ! Specific heat of condenser side fluid
-  REAL(r64)    :: SupplySideInletdensity   ! density on SupplySide side
-  REAL(r64)    :: DemandSideInletdensity    ! density on condenser side
-  REAL(r64)    :: DemandSideCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
-  REAL(r64)    :: MinCapRate          ! minimum capacity rate
-  REAL(r64)    :: CapRatio            ! capacity ratio (min/max)
-  REAL(r64)    :: Effectiveness       ! heat exchanger effectiveness
-  REAL(r64)    :: NTU                 ! dimensionless NTU calculated from UA
+  REAL    :: SupplySideFluidCp        ! Specific heat of Plant side fluid
+  REAL    :: SupplySideCapRate        ! Capacity rate (mdot*Cp) of SupplySide side fluid
+  REAL    :: DemandSideFluidCp         ! Specific heat of condenser side fluid
+  REAL    :: SupplySideInletdensity   ! density on SupplySide side
+  REAL    :: DemandSideInletdensity    ! density on condenser side
+  REAL    :: DemandSideCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
+  REAL    :: MinCapRate          ! minimum capacity rate
+  REAL    :: CapRatio            ! capacity ratio (min/max)
+  REAL    :: Effectiveness       ! heat exchanger effectiveness
+  REAL    :: NTU                 ! dimensionless NTU calculated from UA
   LOGICAL      :: ItemNotFound        ! error flag
   INTEGER      :: LoopNum
   INTEGER      :: LoopSideNum
@@ -677,8 +677,8 @@ SUBROUTINE CalcPlateCoolingHeatExchanger(PlateCoolNum)
     CapRatio = MinCapRate/MAX(DemandSideCapRate, SupplySideCapRate)
     NTU = PlateCool(PlateCoolNum)%UA/MinCapRate
 
-    Effectiveness = 1.0d0 - EXP( (NTU**0.22d0/CapRatio) * &
-                (EXP(-CapRatio*NTU**0.78d0) - 1.0d0) )
+    Effectiveness = 1.0 - EXP( (NTU**0.22/CapRatio) * &
+                (EXP(-CapRatio*NTU**0.78) - 1.0) )
   ELSE
     ! must be in ideal mode
     Effectiveness = 1.0
@@ -740,7 +740,7 @@ SUBROUTINE TurnOffPHXIfNotNeeded(PlateCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DemandSideMassFlowRate
+  REAL :: DemandSideMassFlowRate
 
   !check supply side for flow, turn off if not needed
   IF (Node(PlateCool(PlateCoolNum)%SupplySideInletNodeNum)%MassFlowRate < MassFlowTolerance) THEN
@@ -801,8 +801,8 @@ SUBROUTINE UpdatePlateCoolingHeatExchanger(PlateCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: DemandSideFluidCp         ! Specific heat of condenser side fluid
-  REAL(r64)    :: SupplySideFluidCp        ! Specific heat of SupplySide side fluid
+  REAL    :: DemandSideFluidCp         ! Specific heat of condenser side fluid
+  REAL    :: SupplySideFluidCp        ! Specific heat of SupplySide side fluid
 
 
   ! flow rates

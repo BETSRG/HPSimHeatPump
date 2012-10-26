@@ -38,7 +38,7 @@ USE DataHeatBalSurface, Only: NetLWRadToSurf, QRadSWOutAbs, QRadSWInAbs,QRadSWOu
 Use DataSurfaces, Only: Surface, TotSurfaces,Ground,SurfaceClass_Window
 Use DataHeatBalFanSys, Only: Mat, ZoneAirHumRat, QHTRadSysSurf, QHWBaseboardSurf, QSteamBaseboardSurf, QElecBaseboardSurf
 Use DataEnvironment, Only: SkyTemp, IsRain
-USE Psychrometrics , Only:PsyRhFnTdbRhovLBnd0C,PsyWFnTdbRhPb,PsyHgAirFnWTdb
+USE Psychrometrics , Only:PsyRhFnTdbRhovLBnC,PsyWFnTdbRhPb,PsyHgAirFnWTdb
   ! Fan system Source/Sink heat value, and source/sink location temp from CondFD
 USE DataHeatBAlFanSys,  ONLY: QRadSysSource,TCondFDSourceNode,QPVSysSource
 USE HeatBalanceMovableInsulation,  ONLY : EvalOutsideMovableInsulation
@@ -48,7 +48,7 @@ IMPLICIT NONE   ! Enforce explicit typing of all variables
 PRIVATE   !Make everything private except what is specifically Public
 
           ! MODULE PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER :: Lambda=2500000.0d0
+REAL, PARAMETER :: Lambda=2500000.0
 
 INTEGER, PARAMETER :: CrankNicholsonSecondOrder = 1 ! original CondFD scheme.  semi implicit, second order in time
 INTEGER, PARAMETER :: FullyImplicitFirstOrder  = 2 ! fully implicit scheme, first order in time.
@@ -56,22 +56,22 @@ CHARACTER(len=*), PARAMETER, DIMENSION(2) :: cCondFDSchemeType=  &
    (/'CrankNicholsonSecondOrder',  &
      'FullyImplicitFirstOrder  '/)
 
-REAL(r64),PARAMETER :: TempInitValue = 23.0d0    ! Initialization value for Temperature
-REAL(r64),PARAMETER :: RhovInitValue = 0.0115d0  ! Initialization value for Rhov
-REAL(r64),PARAMETER :: EnthInitValue = 100.0d0   ! Initialization value for Enthalpy
+REAL,PARAMETER :: TempInitValue = 23.0    ! Initialization value for Temperature
+REAL,PARAMETER :: RhovInitValue = 0.0115  ! Initialization value for Rhov
+REAL,PARAMETER :: EnthInitValue = 100.0   ! Initialization value for Enthalpy
 
           ! DERIVED TYPE DEFINITIONS:
 TYPE, PUBLIC ::  ConstructionDataFD
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Name ! Name of construction
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: DelX                 !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TempStability
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: MoistStability
+  REAL,    ALLOCATABLE, DIMENSION(:) :: DelX                 !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TempStability
+  REAL,    ALLOCATABLE, DIMENSION(:) :: MoistStability
 
   Integer, ALLOCATABLE, DIMENSION(:) :: NodeNumPoint  !
 !  INTEGER, ALLOCATABLE, DIMENSION(:) :: InterfaceNodeNums   ! Layer interfaces occur at these nodes
 
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: Thickness
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: NodeXlocation ! sized to TotNode, contains X distance in m from outside face
+  REAL,    ALLOCATABLE, DIMENSION(:) :: Thickness
+  REAL,    ALLOCATABLE, DIMENSION(:) :: NodeXlocation ! sized to TotNode, contains X distance in m from outside face
   INTEGER :: TotNodes=0
 
   Integer :: DeltaTime=0
@@ -80,36 +80,36 @@ END TYPE ConstructionDataFD
 
 
 TYPE, PUBLIC :: SurfaceDataFD
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: T             !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TOld          !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TT
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: Rhov          !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: RhovOld       !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: RhoT
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TD            !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TDT            !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TDTLast
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TDOld         !
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: TDreport
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: RH
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: RHreport
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: EnthOld        ! Current node enthalpy
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: EnthNew        ! Node enthalpy at new time
-  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: EnthLast
+  REAL,    ALLOCATABLE, DIMENSION(:) :: T             !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TOld          !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TT
+  REAL,    ALLOCATABLE, DIMENSION(:) :: Rhov          !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: RhovOld       !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: RhoT
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TD            !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TDT            !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TDTLast
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TDOld         !
+  REAL,    ALLOCATABLE, DIMENSION(:) :: TDreport
+  REAL,    ALLOCATABLE, DIMENSION(:) :: RH
+  REAL,    ALLOCATABLE, DIMENSION(:) :: RHreport
+  REAL,    ALLOCATABLE, DIMENSION(:) :: EnthOld        ! Current node enthalpy
+  REAL,    ALLOCATABLE, DIMENSION(:) :: EnthNew        ! Node enthalpy at new time
+  REAL,    ALLOCATABLE, DIMENSION(:) :: EnthLast
   INTEGER                                 :: GSloopCounter = 0 ! count of inner loop iterations
   INTEGER                                 :: GSloopErrorCount = 0 ! recurring error counter
-  REAL(r64)                               :: MaxNodeDelTemp = 0 ! largest change in node temps after calc
+  REAL                               :: MaxNodeDelTemp = 0 ! largest change in node temps after calc
 
 END TYPE SurfaceDataFD
 
 TYPE MaterialDataFD
-  REAL(r64) :: tk1          =0.0  ! Temperature coefficient for thermal conductivity
+  REAL :: tk1          =0.0  ! Temperature coefficient for thermal conductivity
   INTEGER   :: numTempEnth  = 0   ! number of Temperature/Enthalpy pairs
   INTEGER   :: numTempCond  = 0   ! number of Temperature/Conductivity pairs
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:)  :: TempEnth  !  Temperature enthalpy Function Pairs,
+  REAL, ALLOCATABLE, DIMENSION(:,:)  :: TempEnth  !  Temperature enthalpy Function Pairs,
                                                        !  TempEnth(1,1)= first Temp, TempEnth(1,2) = First Enthalpy,
                                                        !  TempEnth(2,1) = secomd Temp, etc.
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:)  :: TempCond  !  Temperature thermal conductivity Function Pairs,
+  REAL, ALLOCATABLE, DIMENSION(:,:)  :: TempCond  !  Temperature thermal conductivity Function Pairs,
                                                        !  TempCond(1,1)= first Temp, Tempcond(1,2) = First conductivity,
                                                        !  TempEnth(2,1) = secomd Temp, etc.
 END TYPE
@@ -118,39 +118,39 @@ TYPE (ConstructionDataFD), PUBLIC, ALLOCATABLE, DIMENSION(:) :: ConstructFD
 TYPE (SurfaceDataFD), PUBLIC,   ALLOCATABLE, DIMENSION(:) :: SurfaceFD
 TYPE (MaterialDataFD), ALLOCATABLE, DIMENSION(:) :: MaterialFD
 
-!REAL(r64) :: TFDout   =0.0d0
-!REAL(r64) :: TFDin    =0.0d0
-!REAL(r64) :: rhovFDout=0.0d0
-!REAL(r64) :: rhovFDin =0.0d0
-!REAL(r64) :: TDryout  =0.0d0
-!REAL(r64) :: Tdryin   =0.0d0
-!REAL(r64) :: RHOut    =0.0d0
-!REAL(r64) :: RHIn     =0.0d0
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SigmaR      !  Total Resistance of construction layers
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SigmaC      !  Total Capacitance of construction layers
+!REAL :: TFDout   =0.0
+!REAL :: TFDin    =0.0
+!REAL :: rhovFDout=0.0
+!REAL :: rhovFDin =0.0
+!REAL :: TDryout  =0.0
+!REAL :: Tdryin   =0.0
+!REAL :: RHOut    =0.0
+!REAL :: RHIn     =0.0
+REAL, ALLOCATABLE, DIMENSION(:) :: SigmaR      !  Total Resistance of construction layers
+REAL, ALLOCATABLE, DIMENSION(:) :: SigmaC      !  Total Capacitance of construction layers
 
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: WSurfIn         !Humidity Ratio of the inside surface for reporting
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QMassInFlux     !MassFlux on Surface for reporting
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QMassOutFlux    !MassFlux on Surface for reporting
-REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QHeatInFlux     !HeatFlux on Surface for reporting
-REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QHeatOutFlux    !HeatFlux on Surface for reporting
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QFluxZoneToInSurf !sum of Heat flows at the surface to air interface, zone-side boundary conditions W/m2
+!REAL, ALLOCATABLE, DIMENSION(:)   :: WSurfIn         !Humidity Ratio of the inside surface for reporting
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QMassInFlux     !MassFlux on Surface for reporting
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QMassOutFlux    !MassFlux on Surface for reporting
+REAL, ALLOCATABLE, DIMENSION(:)   :: QHeatInFlux     !HeatFlux on Surface for reporting
+REAL, ALLOCATABLE, DIMENSION(:)   :: QHeatOutFlux    !HeatFlux on Surface for reporting
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QFluxZoneToInSurf !sum of Heat flows at the surface to air interface, zone-side boundary conditions W/m2
 !                                                           ! before CR 8280 was not reported, but was calculated.
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QFluxOutsideToOutSurf !sum of Heat flows at the surface to air interface, Out-side boundary conditions W/m2
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QFluxOutsideToOutSurf !sum of Heat flows at the surface to air interface, Out-side boundary conditions W/m2
 !                                                           ! before CR 8280 was
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QFluxInArrivSurfCond !conduction between surface node and first node into the surface (sensible)
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QFluxInArrivSurfCond !conduction between surface node and first node into the surface (sensible)
 !                                                           ! before CR 8280 was -- Qdryin    !HeatFlux on Surface for reporting for Sensible only
-!REAL(r64), ALLOCATABLE, DIMENSION(:)   :: QFluxOutArrivSurfCond  !HeatFlux on Surface for reporting for Sensible only
+!REAL, ALLOCATABLE, DIMENSION(:)   :: QFluxOutArrivSurfCond  !HeatFlux on Surface for reporting for Sensible only
 !                                                                 ! before CR 8280 -- Qdryout         !HeatFlux on Surface for reporting for Sensible only
 
 
 INTEGER   :: CondFDSchemeType = CrankNicholsonSecondOrder  ! solution scheme for CondFD
-REAL(r64) :: SpaceDescritConstant = 3.d0 ! spatial descritization constant,
-REAL(r64) :: MinTempLimit = -100.d0 ! lower limit check, degree C
-REAL(r64) :: MaxTempLimit =  100.d0 ! upper limit check, degree C
+REAL :: SpaceDescritConstant = 3. ! spatial descritization constant,
+REAL :: MinTempLimit = -100. ! lower limit check, degree C
+REAL :: MaxTempLimit =  100. ! upper limit check, degree C
 !feb2012 INTEGER   :: MaxGSiter = 200  ! maximum number of Gauss Seidel iterations
 INTEGER   :: MaxGSiter = 30  ! maximum number of Gauss Seidel iterations
-REAL(r64) :: fracTimeStepZone_Hour=0.0d0
+REAL :: fracTimeStepZone_Hour=0.0
 LOGICAL   :: GetHBFiniteDiffInputFlag=.true.
           ! Subroutine Specifications for the Heat Balance Module
           ! Driver Routines
@@ -208,8 +208,8 @@ SUBROUTINE ManageHeatBalFiniteDiff(SurfNum,TempSurfInTmp,TempSurfOutTmp)
 
           ! INTERFACE BLOCK SPECIFICATIONS
   Integer, Intent(In) :: SurfNum
-  REAL(r64), Intent(InOut) :: TempSurfInTmp       !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64), Intent(InOut) :: TempSurfOutTmp      !Outside Surface Temperature of each Heat Transfer Surface
+  REAL, Intent(InOut) :: TempSurfInTmp       !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL, Intent(InOut) :: TempSurfOutTmp      !Outside Surface Temperature of each Heat Transfer Surface
 
           ! DERIVED TYPE DEFINITIONS
           ! na
@@ -284,7 +284,7 @@ SUBROUTINE GetCondFDInput
   INTEGER :: MaterNum         ! Counter to keep track of the material number
   INTEGER :: MaterialNumAlpha ! Number of material alpha names being passed
   INTEGER :: MaterialNumProp  ! Number of material properties being passed
-  REAL(r64), DIMENSION(40) :: MaterialProps !Temporary array to transfer material properties
+  REAL, DIMENSION(40) :: MaterialProps !Temporary array to transfer material properties
   LOGICAL :: ErrorsFound = .false. ! If errors detected in input
 !  INTEGER :: CondFDMat                ! Number of variable property CondFD materials in input
   INTEGER :: ConstructNumber     ! Cconstruction with CondHBsimple to be overridden with CondHBdetailed
@@ -386,7 +386,7 @@ SUBROUTINE GetCondFDInput
         ErrorsFound=.true.
       ENDIF
       ALLOCATE(MaterialFD(MaterNum)%TempEnth(MaterialFD(MaterNum)%numTempEnth,2))
-      MaterialFD(MaterNum)%TempEnth     =0.0d0
+      MaterialFD(MaterNum)%TempEnth     =0.0
       propNum=2
       ! Temperature first
       DO pcount=1,MaterialFD(MaterNum)%numTempEnth
@@ -474,7 +474,7 @@ SUBROUTINE GetCondFDInput
         ErrorsFound=.true.
       ENDIF
       ALLOCATE(MaterialFD(MaterNum)%TempCond(MaterialFD(MaterNum)%numTempCond,2))
-      MaterialFD(MaterNum)%TempCond    =0.0d0
+      MaterialFD(MaterNum)%TempCond    =0.0
       propNum=1
       ! Temperature first
       DO pcount=1,MaterialFD(MaterNum)%numTempCond
@@ -509,12 +509,12 @@ SUBROUTINE GetCondFDInput
     IF (MaterialFD(MaterNum)%numTempEnth == 0) THEN
       MaterialFD(MaterNum)%numTempEnth=3
       ALLOCATE(MaterialFD(MaterNum)%TempEnth(MaterialFD(MaterNum)%numTempEnth,2))
-      MaterialFD(MaterNum)%TempEnth=-100.0d0
+      MaterialFD(MaterNum)%TempEnth=-100.0
     ENDIF
     IF (MaterialFD(MaterNum)%numTempCond == 0) THEN
       MaterialFD(MaterNum)%numTempCond=3
       ALLOCATE(MaterialFD(MaterNum)%TempCOnd(MaterialFD(MaterNum)%numTempCond,2))
-      MaterialFD(MaterNum)%TempCond=-100.0d0
+      MaterialFD(MaterNum)%TempCond=-100.0
     ENDIF
   ENDDO
 
@@ -587,7 +587,7 @@ SUBROUTINE InitHeatBalFiniteDiff
   INTEGER :: SurfNum
 !  CHARACTER(len=MaxNameLength) :: LayChar
 
-!  REAL(r64)             :: dxn        ! Intermediate calculation of nodal spacing. This is the full dx. There is
+!  REAL             :: dxn        ! Intermediate calculation of nodal spacing. This is the full dx. There is
                                                   ! a half dxn thick node at each surface. dxn is the "capacitor" spacing.
 !  INTEGER                           :: ipts1      ! Intermediate calculation for number of full thickness nodes per layer. There
                                                   ! are always two half nodes at the layer faces.
@@ -601,23 +601,23 @@ SUBROUTINE InitHeatBalFiniteDiff
 !  INTEGER :: Surf         ! Loop counter
 !  INTEGER :: index        ! Loop Counters
 
-!  REAL(r64) :: Alpha
-!  REAL(r64) :: Malpha
-!  REAL(r64) :: stabilitytemp
-!  REAL(r64) :: stabilitymoist
-!  REAL(r64) :: RHInit
-!  REAL(r64) :: Uinit
-!  REAL(r64) :: At
-!  REAL(r64) :: Bv
-!  REAL(r64) :: a
-!  REAL(r64) :: b
-!  REAL(r64) :: c
-!  REAL(r64) :: d
-!  REAL(r64) :: kt
-!  REAL(r64) :: RhoS
-!  REAL(r64) :: Por
-!  REAL(r64) :: Cp
-!  REAL(r64) :: Dv
+!  REAL :: Alpha
+!  REAL :: Malpha
+!  REAL :: stabilitytemp
+!  REAL :: stabilitymoist
+!  REAL :: RHInit
+!  REAL :: Uinit
+!  REAL :: At
+!  REAL :: Bv
+!  REAL :: a
+!  REAL :: b
+!  REAL :: c
+!  REAL :: d
+!  REAL :: kt
+!  REAL :: RhoS
+!  REAL :: Por
+!  REAL :: Cp
+!  REAL :: Dv
   LOGICAL :: errorsFound
 
   IF (GetHBFiniteDiffInputFlag) THEN
@@ -718,7 +718,7 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
   INTEGER :: SurfNum
   CHARACTER(len=MaxNameLength) :: LayChar
 
-  REAL(r64)             :: dxn        ! Intermediate calculation of nodal spacing. This is the full dx. There is
+  REAL             :: dxn        ! Intermediate calculation of nodal spacing. This is the full dx. There is
                                                   ! a half dxn thick node at each surface. dxn is the "capacitor" spacing.
   INTEGER                           :: ipts1      ! Intermediate calculation for number of full thickness nodes per layer. There
                                                   ! are always two half nodes at the layer faces.
@@ -732,19 +732,19 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
   INTEGER :: Surf         ! Loop counter
   INTEGER :: index        ! Loop Counters
 
-  REAL(r64) :: Alpha
-  REAL(r64) :: Malpha
-  REAL(r64) :: stabilitytemp
-  REAL(r64) :: stabilitymoist
-  REAL(r64) :: a
-  REAL(r64) :: b
-  REAL(r64) :: c
-  REAL(r64) :: d
-  REAL(r64) :: kt
-  REAL(r64) :: RhoS
-  REAL(r64) :: Por
-  REAL(r64) :: Cp
-  REAL(r64) :: Dv
+  REAL :: Alpha
+  REAL :: Malpha
+  REAL :: stabilitytemp
+  REAL :: stabilitymoist
+  REAL :: a
+  REAL :: b
+  REAL :: c
+  REAL :: d
+  REAL :: kt
+  REAL :: RhoS
+  REAL :: Por
+  REAL :: Cp
+  REAL :: Dv
   LOGICAL :: errorsFound
 
   ALLOCATE(ConstructFD(TotConstructs))
@@ -762,20 +762,20 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
 !  ALLOCATE(QFluxOutsideToOutSurf(TotSurfaces))
 
  ! And then initialize
-  QHeatInFlux  = 0.d0
-  QHeatOutFlux  = 0.d0
-  !QFluxZoneToInSurf  = 0.d0
-  !QFluxOutsideToOutSurf  = 0.d0
-  !QFluxInArrivSurfCond  = 0.d0
-  !QFluxOutArrivSurfCond  = 0.d0
-  OpaqSurfInsFaceConductionFlux = 0.d0
-  OpaqSurfOutsideFaceConductionFlux = 0.d0
+  QHeatInFlux  = 0.
+  QHeatOutFlux  = 0.
+  !QFluxZoneToInSurf  = 0.
+  !QFluxOutsideToOutSurf  = 0.
+  !QFluxInArrivSurfCond  = 0.
+  !QFluxOutArrivSurfCond  = 0.
+  OpaqSurfInsFaceConductionFlux = 0.
+  OpaqSurfOutsideFaceConductionFlux = 0.
 
   ! Setup Output Variables
 
   !  set a Delt that fits the zone time step and keeps it below 200s.
 
-  fracTimeStepZone_Hour=1.0d0/REAL(NumOfTimeStepInHour,r64)
+  fracTimeStepZone_Hour=1.0/REAL(NumOfTimeStepInHour,r64)
 
   DO index = 1, 20
     Delt = (fracTimeStepZone_Hour*SecInHour)/index   ! TimeStepZone = Zone time step in fractional hours
@@ -797,8 +797,8 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
 
 
     TotNodes = 0
-    SigmaR(ConstrNum) =0.0d0
-    SigmaC(ConstrNum) =0.0d0
+    SigmaR(ConstrNum) =0.0
+    SigmaC(ConstrNum) =0.0
 
     DO Layer = 1, Construct(ConstrNum)%TotLayers    ! Begin layer loop ...
 
@@ -830,9 +830,9 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
         !  as a pure R in the temperature calc.
         ! assign other properties based on resistance
 
-        Material(CurrentLayer)%SpecHeat  = 0.0001d0
-        Material(CurrentLayer)%Density = 1.d0
-        Material(currentLayer)%Thickness = 0.1d0  !  arbitrary thickness for R layer
+        Material(CurrentLayer)%SpecHeat  = 0.0001
+        Material(CurrentLayer)%Density = 1.
+        Material(currentLayer)%Thickness = 0.1  !  arbitrary thickness for R layer
         Material(CurrentLayer)%Conductivity= &
         Material(currentLayer)%Thickness/Material(CurrentLayer)%Resistance
         kt = Material(CurrentLayer)%Conductivity
@@ -843,7 +843,7 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
 
         Alpha = kt/(Material(CurrentLayer)%Density*Material(CurrentLayer)%SpecHeat)
 
-        mAlpha = 0.d0
+        mAlpha = 0.
 
       ELSE IF (Material(CurrentLayer)%Group == 1 ) THEN   !  Group 1 = Air
 
@@ -854,9 +854,9 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
                 ! assign
                 ! other properties based on resistance
 
-        Material(CurrentLayer)%SpecHeat  = 0.0001d0
-        Material(CurrentLayer)%Density = 1.d0
-        Material(currentLayer)%Thickness = 0.1d0  !  arbitrary thickness for R layer
+        Material(CurrentLayer)%SpecHeat  = 0.0001
+        Material(CurrentLayer)%Density = 1.
+        Material(currentLayer)%Thickness = 0.1  !  arbitrary thickness for R layer
         Material(currentLayer)%Conductivity= &
         Material(currentLayer)%Thickness/Material(CurrentLayer)%Resistance
         kt = Material(CurrentLayer)%Conductivity
@@ -866,7 +866,7 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
         SigmaC(ConstrNum) = SigmaC(ConstrNum)  + 0.0                               !  no capacitance for R layer
 
         Alpha = kt/(Material(CurrentLayer)%Density*Material(CurrentLayer)%SpecHeat)
-        mAlpha = 0.d0
+        mAlpha = 0.
       ELSE IF (Construct(ConstrNum)%TypeIsIRT) THEN  ! make similar to air? (that didn't seem to work well)
         CALL ShowSevereError('InitHeatBalFiniteDiff: Construction ="'//trim(Construct(ConstrNum)%Name)//  &
              '" uses Material:InfraredTransparent. Cannot be used currently with finite difference calculations.')
@@ -878,9 +878,9 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
         ENDIF
         CYCLE
 !            ! set properties to get past other initializations.
-!          Material(CurrentLayer)%SpecHeat  = 0.0001d0
-!          Material(CurrentLayer)%Density = 0.0001d0
-!          Material(currentLayer)%Thickness = 0.1d0  !  arbitrary thickness for R layer
+!          Material(CurrentLayer)%SpecHeat  = 0.0001
+!          Material(CurrentLayer)%Density = 0.0001
+!          Material(currentLayer)%Thickness = 0.1  !  arbitrary thickness for R layer
 !          Material(currentLayer)%Conductivity= &
 !    -      Material(currentLayer)%Thickness/Material(CurrentLayer)%Resistance
 !          kt = Material(CurrentLayer)%Conductivity
@@ -890,7 +890,7 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
 !          SigmaC(ConstrNum) = SigmaC(ConstrNum)  + 0.0                               !  no capacitance for R layer
 !
 !          Alpha = kt/(Material(CurrentLayer)%Density*Material(CurrentLayer)%SpecHeat)
-!          mAlpha = 0.d0
+!          mAlpha = 0.
       ELSE
        !    Regular material Properties
         a = Material(CurrentLayer)%MoistACoeff
@@ -909,7 +909,7 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
         Material(CurrentLayer)%Density*Material(CurrentLayer)%SpecHeat*Material(CurrentLayer)%Thickness
         Alpha = kt/(RhoS*Cp)
         !   Alpha = kt*(Por+At*RhoS)/(RhoS*(Bv*Por*Lambda+Cp*(Por+At*RhoS)))
-        MAlpha = 0.d0
+        MAlpha = 0.
 
       END IF  !  R, Air  or regular material properties and parameters
 
@@ -957,14 +957,14 @@ SUBROUTINE InitialInitHeatBalFiniteDiff
     DO ConstrNum = 1, TotConstructs
        IF (ConstructFD(ConstrNum)%TotNodes > 0) THEN
          ALLOCATE(ConstructFD(ConstrNum)%NodeXlocation(ConstructFD(ConstrNum)%TotNodes + 1 ))
-         ConstructFD(ConstrNum)%NodeXlocation = 0.d0 ! init them all
+         ConstructFD(ConstrNum)%NodeXlocation = 0. ! init them all
          Ipts1 = 0 ! init counter
          DO Layer = 1, Construct(ConstrNum)%TotLayers
            OutwardMatLayerNum = Layer - 1
            DO layerNode = 1, ConstructFD(ConstrNum)%NodeNumPoint(Layer)
              Ipts1 = Ipts1 +1
              IF (Ipts1 == 1) THEN
-               ConstructFD(ConstrNum)%NodeXlocation(Ipts1) = 0.d0 ! first node is on outside face
+               ConstructFD(ConstrNum)%NodeXlocation(Ipts1) = 0. ! first node is on outside face
 
              ELSEIF (LayerNode == 1) THEN
                IF ( OutwardMatLayerNum > 0 .AND. OutwardMatLayerNum <= Construct(ConstrNum)%TotLayers ) THEN
@@ -1104,8 +1104,8 @@ SUBROUTINE CalcHeatBalFiniteDiff(Surf,TempSurfInTmp,TempSurfOutTmp)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(In)    :: Surf
-  REAL(r64), INTENT(InOut) :: TempSurfInTmp       !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64), INTENT(InOut) :: TempSurfOutTmp      !Outside Surface Temperature of each Heat Transfer Surface
+  REAL, INTENT(InOut) :: TempSurfInTmp       !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL, INTENT(InOut) :: TempSurfOutTmp      !Outside Surface Temperature of each Heat Transfer Surface
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1118,10 +1118,10 @@ SUBROUTINE CalcHeatBalFiniteDiff(Surf,TempSurfInTmp,TempSurfOutTmp)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)  :: HMovInsul           !  Equiv H for TIM layer,  Comes with call to
+  REAL  :: HMovInsul           !  Equiv H for TIM layer,  Comes with call to
                                                  ! EvalOutsideMovableInsulation
   INTEGER    :: RoughIndexMovInsul   ! roughness  Movable insulation
-  REAL(r64)  :: AbsExt              ! exterior absorptivity  movable insulation
+  REAL  :: AbsExt              ! exterior absorptivity  movable insulation
 
   INTEGER  :: I       !  Node number in construction
   INTEGER  :: J
@@ -1133,9 +1133,9 @@ SUBROUTINE CalcHeatBalFiniteDiff(Surf,TempSurfInTmp,TempSurfOutTmp)
   INTEGER  :: delt
   INTEGER  :: GSiter !  iteration counter for implicit repeat calculation
 !  INTEGER, SAVE    :: ErrCount=0
-!  REAL(r64) :: ErrorSignal
+!  REAL :: ErrorSignal
 !  INTEGER StartingI     ! Starting node number in layer node arrangement
-  REAL(r64) :: MaxDelTemp = 0
+  REAL :: MaxDelTemp = 0
   INTEGER   :: NodeNum
 
   ConstrNum=Surface(surf)%Construction
@@ -1250,29 +1250,29 @@ SUBROUTINE CalcHeatBalFiniteDiff(Surf,TempSurfInTmp,TempSurfOutTmp)
       IF (Gsiter .gt. 5) THEN
       !apply Relaxation factor for stability, use current (TDT) and previous (TDTLast) iteration temperature values
       !to obtain the actual temperature that is going to be used for next iteration. THis would mostly happen with PCM
-        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.5d0
+        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.5
       ENDIF
 
       IF (Gsiter .gt. 10) THEN
       !apply Relaxation factor for stability, use current (TDT) and previous (TDTLast) iteration temperature values
       !to obtain the actual temperature that is going to be used for next iteration. THis would mostly happen with PCM
-        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.25d0
+        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.25
       ENDIF
 
       IF (Gsiter .gt. 15) THEN
       !apply Relaxation factor for stability, use current (TDT) and previous (TDTLast) iteration temperature values
       !to obtain the actual temperature that is going to be used for next iteration. THis would mostly happen with PCM
-        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.10d0
+        SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDTLast+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast) * 0.10
       ENDIF
 
       ! the following could blow up when all the node temps sum to less than 1.0.  seems poorly formulated for temperature in C.
         !PT delete one zero and decrese number of minimum iterations, from 3 (which actually requires 4 iterations) to 2.
 
-      IF (Gsiter .gt. 2  .and.ABS(SUM(SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast)/SUM(SurfaceFD(Surf)%TDT)) < 0.00001d0 )  EXIT
+      IF (Gsiter .gt. 2  .and.ABS(SUM(SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast)/SUM(SurfaceFD(Surf)%TDT)) < 0.00001 )  EXIT
       !SurfaceFD(Surf)%GSloopCounter = Gsiter  !PT moved out of GSloop so it can actually count all iterations
 
 !feb2012 the following could blow up when all the node temps sum to less than 1.0.  seems poorly formulated for temperature in C.
-!feb2012      IF (Gsiter .gt. 3  .and.ABS(SUM(SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast)/SUM(SurfaceFD(Surf)%TDT)) < 0.000001d0 )  EXIT
+!feb2012      IF (Gsiter .gt. 3  .and.ABS(SUM(SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDTLast)/SUM(SurfaceFD(Surf)%TDT)) < 0.000001 )  EXIT
 !feb2012      SurfaceFD(Surf)%GSloopCounter = Gsiter
 !      IF ((GSiter == MaxGSiter) .AND. (SolutionAlgo /= UseCondFDSimple)) THEN ! didn't ever converge
 !        IF (.NOT. WarmupFlag .AND. (.NOT. KickOffSimulation)) THEN
@@ -1298,7 +1298,7 @@ SUBROUTINE CalcHeatBalFiniteDiff(Surf,TempSurfInTmp,TempSurfOutTmp)
     END DO ! End of Gauss Seidell iteration loop
 
     SurfaceFD(Surf)%GSloopCounter = Gsiter   !outputs GSloop iterations, useful for pinpointing stability issues with condFD
-    IF (CondFDRelaxFactor/=1.0d0) THEN
+    IF (CondFDRelaxFactor/=1.0) THEN
      !apply Relaxation factor for stability, use current (TDT) and previous (TDreport) temperature values
      !   to obtain the actual temperature that is going to be exported/use
       SurfaceFD(Surf)%TDT = SurfaceFD(Surf)%TDreport+ (SurfaceFD(Surf)%TDT-SurfaceFD(Surf)%TDreport) * CondFDRelaxFactor
@@ -1504,7 +1504,7 @@ END SUBROUTINE ReportFiniteDiffInits
 
 ! Utility Interpolation Function for the Module
 !******************************************************************************
-REAL(r64) Function terpld(N,a,x1,nind,ndep)
+REAL Function terpld(N,a,x1,nind,ndep)
     !
     !author:c. o. pedersen
     !
@@ -1528,13 +1528,13 @@ REAL(r64) Function terpld(N,a,x1,nind,ndep)
     !      for out of range x1.
     !
      INTEGER, intent (IN)  :: N
-     REAL(r64), DIMENSION(N,2),intent (IN)     :: a
+     REAL, DIMENSION(N,2),intent (IN)     :: a
      INTEGER, intent (IN)   :: nind
      INTEGER, intent (IN)   :: ndep
-     REAL(r64), intent (IN)     :: x1
+     REAL, intent (IN)     :: x1
      INTEGER :: npts,first,last,i1,i2,i,irange
      INTEGER, DIMENSION(2) :: MaxLocArray
-     REAL(r64) ::  fract
+     REAL ::  fract
 
      npts = size(a,1)
      first=lbound(a,1)
@@ -1593,17 +1593,17 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
   INTEGER, INTENT(IN)  :: I     ! Node Index
   INTEGER, INTENT(IN)  :: Lay   ! Layer Number for Construction
   INTEGER, INTENT(IN)  :: Surf  ! Surface number
-  REAL(r64),DIMENSION(:), INTENT(In)    :: T     !Old node Temperature in MFD finite difference solution
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TT    !New node Temperature in MFD finite difference solution.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: Rhov  !MFD Nodal Vapor Density[kg/m3] and is the old or last time step result.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RhoT  !MFD vapor density for the new time step.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: TD    !The old dry Temperature at each node for the CondFD algorithm..
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TDT   !The current or new Temperature at each node location for the CondFD solution..
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RH    !Nodal relative humidity
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(In)    :: T     !Old node Temperature in MFD finite difference solution
+  REAL,DIMENSION(:), INTENT(InOut) :: TT    !New node Temperature in MFD finite difference solution.
+  REAL,DIMENSION(:), INTENT(In)    :: Rhov  !MFD Nodal Vapor Density[kg/m3] and is the old or last time step result.
+  REAL,DIMENSION(:), INTENT(InOut) :: RhoT  !MFD vapor density for the new time step.
+  REAL,DIMENSION(:), INTENT(In)    :: TD    !The old dry Temperature at each node for the CondFD algorithm..
+  REAL,DIMENSION(:), INTENT(InOut) :: TDT   !The current or new Temperature at each node location for the CondFD solution..
+  REAL,DIMENSION(:), INTENT(InOut) :: RH    !Nodal relative humidity
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
   INTEGER, INTENT(IN)  :: TotNodes !  Total nodes in layer
-  REAL(r64), INTENT(IN) :: HMovInsul  !  Conductance of movable(transparent) insulation.
+  REAL, INTENT(IN) :: HMovInsul  !  Conductance of movable(transparent) insulation.
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1615,36 +1615,36 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: QRadSWOutFD   !Short wave radiation absorbed on outside of opaque surface
-  REAL(r64) :: Delx
+  REAL :: QRadSWOutFD   !Short wave radiation absorbed on outside of opaque surface
+  REAL :: Delx
   INTEGER   :: ConstrNum
   INTEGER   :: MatLay
   INTEGER   :: IndVarCol
   INTEGER   :: DepVarCol
-  REAL(r64) :: hconvo
-  REAL(r64) :: kt  ! temperature dependent thermal conductivity,  kt=ko +kt1(T-20)
-  REAL(r64) :: kto  ! Base 20C thermal conductivity
-  REAL(r64) :: kt1 ! Thermal conductivity gradient coefficient where: kt=ko +kt1(T-20)
-  REAL(r64) :: Cpo ! Specific heat from idf
-  REAL(r64) :: Cp  ! specific heat modified if PCM, otherwise equal to Cpo
-  REAL(r64) :: RhoS
+  REAL :: hconvo
+  REAL :: kt  ! temperature dependent thermal conductivity,  kt=ko +kt1(T-20)
+  REAL :: kto  ! Base 20C thermal conductivity
+  REAL :: kt1 ! Thermal conductivity gradient coefficient where: kt=ko +kt1(T-20)
+  REAL :: Cpo ! Specific heat from idf
+  REAL :: Cp  ! specific heat modified if PCM, otherwise equal to Cpo
+  REAL :: RhoS
 
-  REAL(r64) :: Toa
-  REAL(r64) :: Rhovo
-  REAL(r64) :: hmasso
+  REAL :: Toa
+  REAL :: Rhovo
+  REAL :: hmasso
 
-  REAL(r64) :: hgnd
-  REAL(r64) :: hrad
-  REAL(r64) :: hsky
-  REAL(r64) :: Tgnd
-  REAL(r64) :: Tsky
-  REAL(r64) :: Tia
-  REAL(r64) :: SigmaRLoc
-  REAL(r64) :: SigmaCLoc
-  REAL(r64) :: Rlayer
-  REAL(r64) :: QNetSurfFromOutside  !  Combined outside surface net heat transfer terms
-  REAL(r64) :: TInsulOut  ! Temperature of outisde face of Outside Insulation
-  REAL(r64) :: QRadSWOutMvInsulFD  ! SW radiation at outside of Movable Insulation
+  REAL :: hgnd
+  REAL :: hrad
+  REAL :: hsky
+  REAL :: Tgnd
+  REAL :: Tsky
+  REAL :: Tia
+  REAL :: SigmaRLoc
+  REAL :: SigmaCLoc
+  REAL :: Rlayer
+  REAL :: QNetSurfFromOutside  !  Combined outside surface net heat transfer terms
+  REAL :: TInsulOut  ! Temperature of outisde face of Outside Insulation
+  REAL :: QRadSWOutMvInsulFD  ! SW radiation at outside of Movable Insulation
   INTEGER   :: LayIn  ! layer number for call to interior eqs
   INTEGER   :: NodeIn ! node number "I" for call to interior eqs
 
@@ -1664,7 +1664,7 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
   IF (Surface(Surf)%ExtBoundCond == OtherSideCondModeledExt) THEN
    !CR8046 switch modeled rad temp for sky temp.
     TSky = OSCM(Surface(Surf)%OSCMPtr)%TRad
-    QRadSWOutFD = 0.0D0 ! eliminate incident shortwave on underlying surface
+    QRadSWOutFD = 0.0 ! eliminate incident shortwave on underlying surface
 
   ELSE
   !Set the external conditions to local variables
@@ -1763,14 +1763,14 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
 
       kto = Material(MatLay)%Conductivity   !  20C base conductivity
       kt1 = MaterialFD(MatLay)%tk1  !  linear coefficient (normally zero)
-      kt= kto + kt1*((TDT(I)+TDT(I+1))/2.d0 - 20.d0)
+      kt= kto + kt1*((TDT(I)+TDT(I+1))/2. - 20.)
 
       IF( SUM(MaterialFD(MatLay)%TempCond(1:3,2)) >= 0.) THEN ! Multiple Linear Segment Function
 
         DepVarCol= 2  ! thermal conductivity
         IndVarCol=1  !temperature
             !  Use average temp of surface and first node for k
-        kt =terpld(MaterialFD(MatLay)%numTempCond,MaterialFD(MatLay)%TempCond,(TDT(I)+TDT(I+1))/2.d0,IndVarCol,DepVarCol)
+        kt =terpld(MaterialFD(MatLay)%numTempCond,MaterialFD(MatLay)%TempCond,(TDT(I)+TDT(I+1))/2.,IndVarCol,DepVarCol)
 
       ENDIF
 
@@ -1823,18 +1823,18 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
           SELECT CASE (CondFDSchemeType)
           CASE (CrankNicholsonSecondOrder)
              !  Second Order equation
-            TDT(I)= (1.*QRadSWOutFD + (0.5d0*Cp*Delx*RhoS*TD(I))/DelT + (0.5*kt*(-1.*TD(I) + TD(I+1)))/Delx  &
-                     + (0.5d0*kt*TDT(I+1))/Delx + 0.5d0*hgnd*Tgnd + 0.5d0*hgnd*(-1.*TD(I) + Tgnd) + 0.5d0*hconvo*Toa +   &
-                        0.5d0*hrad*Toa  &
-                     + 0.5d0*hconvo*(-1.d0*TD(I) + Toa) + 0.5d0*hrad*(-1.d0*TD(I) + Toa) + 0.5d0*hsky*Tsky +   &
-                        0.5d0*hsky*(-1.d0*TD(I) + Tsky))/  &
-                       (0.5d0*hconvo + 0.5d0*hgnd + 0.5d0*hrad + 0.5d0*hsky + (0.5d0*kt)/Delx + (0.5d0*Cp*Delx*RhoS)/DelT)
-!feb2012            TDT(I)= (1.*QRadSWOutFD + (0.5d0*Cp*Delx*RhoS*TD(I))/DelT + (0.5*kt*(-1.*TD(I) + TD(I+1)))/Delx  &
-!feb2012                     + (0.5d0*kt*TDT(I+1))/Delx + 0.5d0*hgnd*Tgnd + 0.5d0*hgnd*(-1.*TD(I) + Tgnd) + 0.5d0*hconvo*Toa +   &
-!feb2012                        0.5d0*hrad*Toa  &
-!feb2012                     + 0.5d0*hconvo*(-1.d0*TD(I) + Toa) + 0.5d0*hrad*(-1.d0*TD(I) + Toa) + 0.5d0*hsky*Tsky +   &
-!feb2012                        0.5d0*hsky*(-1.d0*TD(I) + Tsky))/  &
-!feb2012                       (0.5d0*hconvo + 0.5d0*hgnd + 0.5d0*hrad + 0.5d0*hsky + (0.5d0*kt)/Delx + (0.5d0*Cp*Delx*RhoS)/DelT)
+            TDT(I)= (1.*QRadSWOutFD + (0.5*Cp*Delx*RhoS*TD(I))/DelT + (0.5*kt*(-1.*TD(I) + TD(I+1)))/Delx  &
+                     + (0.5*kt*TDT(I+1))/Delx + 0.5*hgnd*Tgnd + 0.5*hgnd*(-1.*TD(I) + Tgnd) + 0.5*hconvo*Toa +   &
+                        0.5*hrad*Toa  &
+                     + 0.5*hconvo*(-1.*TD(I) + Toa) + 0.5*hrad*(-1.*TD(I) + Toa) + 0.5*hsky*Tsky +   &
+                        0.5*hsky*(-1.*TD(I) + Tsky))/  &
+                       (0.5*hconvo + 0.5*hgnd + 0.5*hrad + 0.5*hsky + (0.5*kt)/Delx + (0.5*Cp*Delx*RhoS)/DelT)
+!feb2012            TDT(I)= (1.*QRadSWOutFD + (0.5*Cp*Delx*RhoS*TD(I))/DelT + (0.5*kt*(-1.*TD(I) + TD(I+1)))/Delx  &
+!feb2012                     + (0.5*kt*TDT(I+1))/Delx + 0.5*hgnd*Tgnd + 0.5*hgnd*(-1.*TD(I) + Tgnd) + 0.5*hconvo*Toa +   &
+!feb2012                        0.5*hrad*Toa  &
+!feb2012                     + 0.5*hconvo*(-1.*TD(I) + Toa) + 0.5*hrad*(-1.*TD(I) + Toa) + 0.5*hsky*Tsky +   &
+!feb2012                        0.5*hsky*(-1.*TD(I) + Tsky))/  &
+!feb2012                       (0.5*hconvo + 0.5*hgnd + 0.5*hrad + 0.5*hsky + (0.5*kt)/Delx + (0.5*Cp*Delx*RhoS)/DelT)
 
           CASE (FullyImplicitFirstOrder)
            !   First Order
@@ -1903,11 +1903,11 @@ SUBROUTINE ExteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
  !    -     (2*DelT + 2*DelT*hconvo*SigmaR + 2*DelT*hgnd*SigmaR + 2*DelT*hrad*SigmaR + 2*DelT*hsky*SigmaR + SigmaC*SigmaR))
 
 
-      TDT(I)= (2.d0*delt*QRadSWOutFD*SigmaRLoc + SigmaCLoc*SigmaRLoc*TD(I) +   &
-             2.d0*delt*TDT(I+1) + 2.d0*delt*hgnd*SigmaRLoc*Tgnd + 2.d0*delt*hconvo*SigmaRLoc*Toa +  &
-             2.d0*delt*hrad*SigmaRLoc*Toa + 2.d0*delt*hsky*SigmaRLoc*Tsky)/  &
-            (2.d0*delt + 2.d0*delt*hconvo*SigmaRLoc + 2*delt*hgnd*SigmaRLoc +   &
-             2.d0*delt*hrad*SigmaRLoc + 2.d0*delt*hsky*SigmaRLoc + SigmaCLoc*SigmaRLoc)
+      TDT(I)= (2.*delt*QRadSWOutFD*SigmaRLoc + SigmaCLoc*SigmaRLoc*TD(I) +   &
+             2.*delt*TDT(I+1) + 2.*delt*hgnd*SigmaRLoc*Tgnd + 2.*delt*hconvo*SigmaRLoc*Toa +  &
+             2.*delt*hrad*SigmaRLoc*Toa + 2.*delt*hsky*SigmaRLoc*Tsky)/  &
+            (2.*delt + 2.*delt*hconvo*SigmaRLoc + 2*delt*hgnd*SigmaRLoc +   &
+             2.*delt*hrad*SigmaRLoc + 2.*delt*hsky*SigmaRLoc + SigmaCLoc*SigmaRLoc)
 
       TDT(I) = Max(MinSurfaceTempLimit,Min(MaxSurfaceTempLimit,TDT(I)))  !  +++++ Limit Check
 
@@ -1963,19 +1963,19 @@ SUBROUTINE InteriorNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,Ent
   INTEGER, INTENT(IN)  :: I     ! Node Index
   INTEGER, INTENT(IN)  :: Lay   ! Layer Number for Construction
   INTEGER, INTENT(IN)  :: Surf  ! Surface number
-  REAL(r64),DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: TD     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TDT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RH    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(In)    :: TD     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: TDT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: RH    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: NinetyNine=99.0d0
+  REAL, PARAMETER :: NinetyNine=99.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1986,21 +1986,21 @@ SUBROUTINE InteriorNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,Ent
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  REAL(r64) :: Delx
+  REAL :: Delx
 
   INTEGER :: ConstrNum
   INTEGER :: MatLay
   INTEGER :: DepVarCol
   INTEGER :: IndVarCol
 
-  REAL(r64) :: kt  !  Thermal conductivity in temperature equation
-  REAL(r64) :: ktA1  !  Variable Outer Thermal conductivity in temperature equation
-  REAL(r64) :: ktA2  !  Thermal Inner conductivity in temperature equation
-  REAL(r64) :: kto !  base 20 C thermal conductivity
-  REAL(r64) :: kt1 !  temperature coefficient for simple temp dep k.
-  REAL(r64) :: Cp   !  Cp used
-  REAL(r64) :: Cpo  !  Const Cp from input
-  REAL(r64) :: RhoS
+  REAL :: kt  !  Thermal conductivity in temperature equation
+  REAL :: ktA1  !  Variable Outer Thermal conductivity in temperature equation
+  REAL :: ktA2  !  Thermal Inner conductivity in temperature equation
+  REAL :: kto !  base 20 C thermal conductivity
+  REAL :: kt1 !  temperature coefficient for simple temp dep k.
+  REAL :: Cp   !  Cp used
+  REAL :: Cpo  !  Const Cp from input
+  REAL :: RhoS
 
   ConstrNum=Surface(surf)%Construction
 
@@ -2009,9 +2009,9 @@ SUBROUTINE InteriorNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,Ent
    !  Set Thermal Conductivity.  Can be constant, simple linear temp dep or multiple linear segment temp function dep.
   kto = Material(MatLay)%Conductivity   !  20C base conductivity
   kt1 = MaterialFD(MatLay)%tk1  !  linear coefficient (normally zero)
-  kt  = kto + kt1*((TDT(I)+TDT(I-1))/2.d0 - 20.0d0)
-  ktA1 = kto + kt1*((TDT(I)+TDT(I+1))/2.d0 - 20.0d0)   ! Will be overridden if variable k
-  ktA2 = kto + kt1*((TDT(I)+TDT(I-1))/2.d0 - 20.0d0)   ! Will be overridden if variable k
+  kt  = kto + kt1*((TDT(I)+TDT(I-1))/2. - 20.0)
+  ktA1 = kto + kt1*((TDT(I)+TDT(I+1))/2. - 20.0)   ! Will be overridden if variable k
+  ktA2 = kto + kt1*((TDT(I)+TDT(I-1))/2. - 20.0)   ! Will be overridden if variable k
 
   IF( SUM(MaterialFD(MatLay)%TempCond(1:3,2)) >= 0.) THEN ! Multiple Linear Segment Function
 
@@ -2049,16 +2049,16 @@ SUBROUTINE InteriorNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,Ent
   CASE (CrankNicholsonSecondOrder)
     ! Adams-Moulton second order
     TDT(I)= ((Cp*Delx*RhoS*TD(I))/Delt +   &
-              0.5d0*((ktA2*(-1.*TD(I) + TD(I-1)))/Delx + (ktA1*(-1.d0*TD(I) + TD(I+1)))/Delx) +   &
-              (0.5d0*ktA2*TDT(I-1))/Delx + (0.5d0*ktA1*TDT(I+1))/Delx)/  &
-              ((0.5d0*(ktA1+ktA2))/Delx + (Cp*Delx*RhoS)/Delt)
+              0.5*((ktA2*(-1.*TD(I) + TD(I-1)))/Delx + (ktA1*(-1.*TD(I) + TD(I+1)))/Delx) +   &
+              (0.5*ktA2*TDT(I-1))/Delx + (0.5*ktA1*TDT(I+1))/Delx)/  &
+              ((0.5*(ktA1+ktA2))/Delx + (Cp*Delx*RhoS)/Delt)
 
 
   CASE (FullyImplicitFirstOrder)
     ! Adams-Moulton First order
         TDT(I)= ((Cp*Delx*RhoS*TD(I))/Delt +   &
-                 (1.d0*ktA2*TDT(I-1))/Delx + (1.d0*ktA1*TDT(I+1))/Delx)/  &
-                 ((2.d0*(ktA1+ktA2)/2.d0)/Delx + (Cp*Delx*RhoS)/Delt)
+                 (1.*ktA2*TDT(I-1))/Delx + (1.*ktA1*TDT(I+1))/Delx)/  &
+                 ((2.*(ktA1+ktA2)/2.)/Delx + (Cp*Delx*RhoS)/Delt)
 
 
   END SELECT
@@ -2099,18 +2099,18 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
   INTEGER, INTENT(IN)  :: Lay   ! Layer Number for Construction
   INTEGER, INTENT(IN)  :: Surf  ! Surface number
   INTEGER, INTENT(IN)  :: GSiter  ! Iteration number of Gauss Seidell iteration
-  REAL(r64),DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: TD     !OLD NODE TEMPERATURES OF EACH HEAT TRANSFER SURF IN CONDFD.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TDT    !NEW NODE TEMPERATURES OF EACH HEAT TRANSFER SURF IN CONDFD.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RH    !RELATIVE HUMIDITY.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: EnthOld    ! Old Nodal enthalpy
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(In)    :: TD     !OLD NODE TEMPERATURES OF EACH HEAT TRANSFER SURF IN CONDFD.
+  REAL,DIMENSION(:), INTENT(InOut) :: TDT    !NEW NODE TEMPERATURES OF EACH HEAT TRANSFER SURF IN CONDFD.
+  REAL,DIMENSION(:), INTENT(InOut) :: RH    !RELATIVE HUMIDITY.
+  REAL,DIMENSION(:), INTENT(In)    :: EnthOld    ! Old Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: NinetyNine=99.0d0
+  REAL, PARAMETER :: NinetyNine=99.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2126,29 +2126,29 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
   INTEGER :: IndVarCol
   INTEGER :: DepVarCol
 
-  REAL(r64) :: kt1
-  REAL(r64) :: kt2
-  REAL(r64) :: kt1o
-  REAL(r64) :: kt2o
-  REAL(r64) :: kt11
-  REAL(r64) :: kt21
-  REAL(r64) :: Cp1
-  REAL(r64) :: Cp2
-  REAL(r64) :: Cpo1
-  REAL(r64) :: Cpo2
-  REAL(r64) :: RhoS1
-  REAL(r64) :: RhoS2
+  REAL :: kt1
+  REAL :: kt2
+  REAL :: kt1o
+  REAL :: kt2o
+  REAL :: kt11
+  REAL :: kt21
+  REAL :: Cp1
+  REAL :: Cp2
+  REAL :: Cpo1
+  REAL :: Cpo2
+  REAL :: RhoS1
+  REAL :: RhoS2
 
-  REAL(r64) :: Delx1
-  REAL(r64) :: Delx2
-  REAL(r64) :: Enth1New
-  REAL(r64) :: Enth2New
-  REAL(r64) :: Enth1Old
-  REAL(r64) :: Enth2Old
+  REAL :: Delx1
+  REAL :: Delx2
+  REAL :: Enth1New
+  REAL :: Enth2New
+  REAL :: Enth1Old
+  REAL :: Enth2Old
 
-  REAL(r64) :: Rlayer   !  resistance value of R Layer
-  REAL(r64) :: Rlayer2  !  resistance value of next layer to inside
-  REAL(r64) :: QSSFlux  !  Source/Sink flux value at a layer interface
+  REAL :: Rlayer   !  resistance value of R Layer
+  REAL :: Rlayer2  !  resistance value of next layer to inside
+  REAL :: QSSFlux  !  Source/Sink flux value at a layer interface
   LOGICAL   :: RlayerPresent  = .FALSE.
   LOGICAL   :: RLayer2Present = .FALSE.
 
@@ -2160,13 +2160,13 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
 
   kt1o = Material(MatLay)%Conductivity
   kt11=  MaterialFD(MatLay)%tk1
-  kt1= kt1o + kt11*((TDT(I)+TDT(I-1))/2.d0 -20.d0)
+  kt1= kt1o + kt11*((TDT(I)+TDT(I-1))/2. -20.)
 
   IF( SUM(MaterialFD(MatLay)%TempCond(1:3,2)) >= 0.) THEN ! Multiple Linear Segment Function
 
     DepVarCol = 2  ! thermal conductivity
     IndVarCol = 1  !temperature
-    kt1       = terpld(MaterialFD(MatLay)%numTempCond,MaterialFD(MatLay)%TempCond,(TDT(I)+TDT(I-1))/2.d0,IndVarCol,DepVarCol)
+    kt1       = terpld(MaterialFD(MatLay)%numTempCond,MaterialFD(MatLay)%TempCond,(TDT(I)+TDT(I-1))/2.,IndVarCol,DepVarCol)
 
   ENDIF
 
@@ -2177,13 +2177,13 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
 
   kt2o = Material(MatLay2)%Conductivity
   kt21=  MaterialFD(MatLay2)%tk1
-  kt2= kt2o + kt21*((TDT(I)+TDT(I+1))/2.d0 -20.d0)
+  kt2= kt2o + kt21*((TDT(I)+TDT(I+1))/2. -20.)
 
   IF( SUM(MaterialFD(MatLay2)%TempCond(1:3,2)) >= 0.) THEN ! Multiple Linear Segment Function
 
     DepVarCol= 2  ! thermal conductivity
     IndVarCol=1  !temperature
-    kt2 =terpld(MaterialFD(MatLay2)%numTempCond,MaterialFD(MatLay2)%TempCond,(TDT(I)+TDT(I+1))/2.d0,IndVarCol,DepVarCol)
+    kt2 =terpld(MaterialFD(MatLay2)%numTempCond,MaterialFD(MatLay2)%TempCond,(TDT(I)+TDT(I+1))/2.,IndVarCol,DepVarCol)
 
   ENDIF
 
@@ -2243,14 +2243,14 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
       SELECT CASE (CondFDSchemeType)
         CASE (CrankNicholsonSecondOrder)
 
-          TDT(I) =( 2.d0*delt*Delx2*QSSFlux*Rlayer - delt*Delx2*TD(I) - delt*kt2*Rlayer*TD(I) +  &
+          TDT(I) =( 2.*delt*Delx2*QSSFlux*Rlayer - delt*Delx2*TD(I) - delt*kt2*Rlayer*TD(I) +  &
                 Cp2*Delx2**2*RhoS2*Rlayer*TD(I) + delt*Delx2*TD(I-1) + delt*kt2*Rlayer*TD(I+1) + delt*Delx2*TDT(I-1) +  &
-                delt*kt2*Rlayer*TDT(I+1))/(delt*Delx2 + delt*kt2*Rlayer + Cp2*Delx2**2.d0*RhoS2*Rlayer)
+                delt*kt2*Rlayer*TDT(I+1))/(delt*Delx2 + delt*kt2*Rlayer + Cp2*Delx2**2.*RhoS2*Rlayer)
 
         CASE (FullyImplicitFirstOrder)
 
-          TDT(I) =( 2.d0*delt*Delx2*QSSFlux*Rlayer + Cp2*Delx2**2*RhoS2*Rlayer*TD(I) + 2.d0*delt*Delx2*TDT(I-1) +  &
-                 2.d0*delt*kt2*Rlayer*TDT(I+1))/(2.d0*delt*Delx2 + 2.d0*delt*kt2*Rlayer + Cp2*Delx2**2.d0*RhoS2*Rlayer)
+          TDT(I) =( 2.*delt*Delx2*QSSFlux*Rlayer + Cp2*Delx2**2*RhoS2*Rlayer*TD(I) + 2.*delt*Delx2*TDT(I-1) +  &
+                 2.*delt*kt2*Rlayer*TDT(I+1))/(2.*delt*Delx2 + 2.*delt*kt2*Rlayer + Cp2*Delx2**2.*RhoS2*Rlayer)
 
       END SELECT
 
@@ -2278,13 +2278,13 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
       SELECT CASE (CondFDSchemeType)
 
         CASE (CrankNicholsonSecondOrder)
-          TDT(I)=(2.d0*delt*Delx1*QSSFlux*Rlayer2 - delt*Delx1*TD(I) -  &
+          TDT(I)=(2.*delt*Delx1*QSSFlux*Rlayer2 - delt*Delx1*TD(I) -  &
                 delt*kt1*Rlayer2*TD(I) + Cp1*Delx1**2*RhoS1*Rlayer2*TD(I) + delt*kt1*Rlayer2*TD(I-1) +  &
                 delt*Delx1*TD(I+1) + delt*kt1*Rlayer2*TDT(I-1) + delt*Delx1*TDT(I+1))/  &
                (delt*Delx1 + delt*kt1*Rlayer2 + Cp1*Delx1**2*RhoS1*Rlayer2)
         CASE (FullyImplicitFirstOrder)
-          TDT(I)=(2.d0*delt*Delx1*QSSFlux*Rlayer2  + Cp1*Delx1**2*RhoS1*Rlayer2*TD(I) + 2.d0*delt*kt1*Rlayer2*TDT(I-1) + &
-            2.d0*delt*Delx1*TDT(I+1))/ (2.d0*delt*Delx1 + 2.d0*delt*kt1*Rlayer2 + Cp1*Delx1**2*RhoS1*Rlayer2)
+          TDT(I)=(2.*delt*Delx1*QSSFlux*Rlayer2  + Cp1*Delx1**2*RhoS1*Rlayer2*TD(I) + 2.*delt*kt1*Rlayer2*TDT(I-1) + &
+            2.*delt*Delx1*TDT(I+1))/ (2.*delt*Delx1 + 2.*delt*kt1*Rlayer2 + Cp1*Delx1**2*RhoS1*Rlayer2)
 
       END SELECT
 
@@ -2355,17 +2355,17 @@ SUBROUTINE IntInterfaceNodeEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld
 
         CASE (CrankNicholsonSecondOrder)
         !     Regular Internal Interface Node with Source/sink using Adams Moulton second order
-          TDT(I) = MIN(NinetyNine,(2.d0*delt*Delx1*Delx2*QSSFlux - delt*Delx2*kt1*TD(I) - delt*Delx1*kt2*TD(I) +  &
-                 Cp1*Delx1**2.d0*Delx2*RhoS1*TD(I) + Cp2*Delx1*Delx2**2.d0*RhoS2*TD(I) + delt*Delx2*kt1*TD(I-1) +  &
+          TDT(I) = MIN(NinetyNine,(2.*delt*Delx1*Delx2*QSSFlux - delt*Delx2*kt1*TD(I) - delt*Delx1*kt2*TD(I) +  &
+                 Cp1*Delx1**2.*Delx2*RhoS1*TD(I) + Cp2*Delx1*Delx2**2.*RhoS2*TD(I) + delt*Delx2*kt1*TD(I-1) +  &
                  delt*Delx1*kt2*TD(I+1) + delt*Delx2*kt1*TDT(I-1) + delt*Delx1*kt2*TDT(I+1))/   &
-                 (delt*Delx2*kt1 + delt*Delx1*kt2 + Cp1*Delx1**2.d0*Delx2*RhoS1 + Cp2*Delx1*Delx2**2.d0*RhoS2))
+                 (delt*Delx2*kt1 + delt*Delx1*kt2 + Cp1*Delx1**2.*Delx2*RhoS1 + Cp2*Delx1*Delx2**2.*RhoS2))
 
         CASE (FullyImplicitFirstOrder)
         ! first order adams moulton
-          TDT(I) = MIN(NinetyNine,(2.d0*delt*Delx1*Delx2*QSSFlux + &
-                 Cp1*Delx1**2.d0*Delx2*RhoS1*TD(I) + Cp2*Delx1*Delx2**2.d0*RhoS2*TD(I) +  &
-                 2.d0*delt*Delx2*kt1*TDT(I-1) + 2.d0*delt*Delx1*kt2*TDT(I+1))/   &
-                 (2.d0*delt*Delx2*kt1 + 2.d0*delt*Delx1*kt2 + Cp1*Delx1**2.d0*Delx2*RhoS1 + Cp2*Delx1*Delx2**2.d0*RhoS2))
+          TDT(I) = MIN(NinetyNine,(2.*delt*Delx1*Delx2*QSSFlux + &
+                 Cp1*Delx1**2.*Delx2*RhoS1*TD(I) + Cp2*Delx1*Delx2**2.*RhoS2*TD(I) +  &
+                 2.*delt*Delx2*kt1*TDT(I-1) + 2.*delt*Delx1*kt2*TDT(I+1))/   &
+                 (2.*delt*Delx2*kt1 + 2.*delt*Delx1*kt2 + Cp1*Delx1**2.*Delx2*RhoS1 + Cp2*Delx1*Delx2**2.*RhoS2))
 
       END SELECT
 
@@ -2413,15 +2413,15 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
   INTEGER, INTENT(IN)  :: I     ! Node Index
   INTEGER, INTENT(IN)  :: Lay   ! Layer Number for Construction
   INTEGER, INTENT(IN)  :: Surf  ! Surface number
-  REAL(r64),DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF (Old).
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF (New).
-  REAL(r64),DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(In)    :: TD     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: TDT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: RH    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
-  REAL(r64),DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(In)    :: T     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF (Old).
+  REAL,DIMENSION(:), INTENT(InOut) :: TT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF (New).
+  REAL,DIMENSION(:), INTENT(In)    :: Rhov     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: RhoT  !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(In)    :: TD     !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: TDT    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: RH    !INSIDE SURFACE TEMPERATURE OF EACH HEAT TRANSFER SURF.
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthOld    ! Old Nodal enthalpy
+  REAL,DIMENSION(:), INTENT(InOut) :: EnthNew    ! New Nodal enthalpy
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2433,35 +2433,35 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: NetLWRadToSurfFD !Net interior long wavelength radiation to surface from other surfaces
-  REAL(r64) :: QRadSWInFD    !Short wave radiation absorbed on inside of opaque surface
-  REAL(r64) :: QHtRadSysSurfFD  ! Current radiant heat flux at a surface due to the presence of high temperature radiant heaters
-  Real(r64) :: QHWBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of hot water baseboard heaters
-  Real(r64) :: QSteamBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of steam baseboard heaters
-  Real(r64) :: QElecBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of electric baseboard heaters
-  REAL(r64) :: QRadThermInFD !Thermal radiation absorbed on inside surfaces
-  REAL(r64) :: Delx
+  REAL :: NetLWRadToSurfFD !Net interior long wavelength radiation to surface from other surfaces
+  REAL :: QRadSWInFD    !Short wave radiation absorbed on inside of opaque surface
+  REAL :: QHtRadSysSurfFD  ! Current radiant heat flux at a surface due to the presence of high temperature radiant heaters
+  REAL :: QHWBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of hot water baseboard heaters
+  REAL :: QSteamBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of steam baseboard heaters
+  REAL :: QElecBaseboardSurfFD  ! Current radiant heat flux at a surface due to the presence of electric baseboard heaters
+  REAL :: QRadThermInFD !Thermal radiation absorbed on inside surfaces
+  REAL :: Delx
 
   INTEGER    :: ConstrNum
   INTEGER    :: MatLay
   INTEGER    :: IndVarCol
   INTEGER    :: DepVarCol
 
-  REAL(r64)  :: kto
-  REAL(r64)  :: kt1
-  REAL(r64)  :: kt
-  REAL(r64)  :: Cp
-  REAL(r64)  :: Cpo
-  REAL(r64)  :: RhoS
-  REAL(r64)  :: Tia
-  REAL(r64)  :: Rhovi
-  REAL(r64)  :: hmassi
-  REAL(r64)  :: hconvi
+  REAL  :: kto
+  REAL  :: kt1
+  REAL  :: kt
+  REAL  :: Cp
+  REAL  :: Cpo
+  REAL  :: RhoS
+  REAL  :: Tia
+  REAL  :: Rhovi
+  REAL  :: hmassi
+  REAL  :: hconvi
 
-  REAL(r64)  :: Rlayer
-  REAL(r64)  :: SigmaRLoc
-  REAL(r64)  :: SigmaCLoc
-  REAL(r64)  :: QNetSurfInside
+  REAL  :: Rlayer
+  REAL  :: SigmaRLoc
+  REAL  :: SigmaCLoc
+  REAL  :: QNetSurfInside
 
 
   ConstrNum = Surface(surf)%Construction
@@ -2492,7 +2492,7 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
      !  Set Thermal Conductivity.  Can be constant, simple linear temp dep or multiple linear segment temp function dep.
     kto = Material(MatLay)%Conductivity   !  20C base conductivity
     kt1 = MaterialFD(MatLay)%tk1  !  linear coefficient (normally zero)
-    kt  = kto + kt1*((TDT(I)+TDT(i-1))/2.d0 - 20.d0)
+    kt  = kto + kt1*((TDT(I)+TDT(i-1))/2. - 20.)
 
 
     IF( SUM(MaterialFD(MatLay)%TempCond(1:3,2)) >= 0.) THEN ! Multiple Linear Segment Function
@@ -2520,15 +2520,15 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
           !PT added NetLWRadToSurfFD*Rlayer, it was missing!
         TDT(I)=(NetLWRadToSurfFD*Rlayer+QHtRadSysSurfFD*Rlayer + QHWBaseboardSurfFD*Rlayer + QSteamBaseboardSurfFD*Rlayer + &
                     QElecBaseboardSurfFD*Rlayer +  QRadSWInFD*Rlayer + QRadThermInFD*Rlayer +   &
-                       TDT(I+1) + hconvi*Rlayer*Tia)/(1.0d0 + hconvi*Rlayer)
+                       TDT(I+1) + hconvi*Rlayer*Tia)/(1.0 + hconvi*Rlayer)
 
 
       ELSE !PT,regular wall
         TDT(I)=(NetLWRadToSurfFD*Rlayer+QHtRadSysSurfFD*Rlayer + QHWBaseboardSurfFD*Rlayer + QSteamBaseboardSurfFD*Rlayer + &
                     QElecBaseboardSurfFD*Rlayer + QRadSWInFD*Rlayer + QRadThermInFD*Rlayer +   &
-                       TDT(I-1) + hconvi*Rlayer*Tia)/(1.0d0 + hconvi*Rlayer)
+                       TDT(I-1) + hconvi*Rlayer*Tia)/(1.0 + hconvi*Rlayer)
       ENDIF
-!feb2012      IF (Surface(Surf)%ExtBoundCond > 0 .and. i==1.d0) THEN  !this is for an interzone partition
+!feb2012      IF (Surface(Surf)%ExtBoundCond > 0 .and. i==1.) THEN  !this is for an interzone partition
 !feb2012        TDT(I)=(QHtRadSysSurfFD*Rlayer + QHWBaseboardSurfFD*Rlayer + QSteamBaseboardSurfFD*Rlayer + &
 !feb2012                    QElecBaseboardSurfFD*Rlayer + &
 !feb2012                    QRadSWInFD*Rlayer + QRadThermInFD*Rlayer + TDT(I+1) + hconvi*Rlayer*Tia)/(1 + hconvi*Rlayer)
@@ -2569,38 +2569,38 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
 
         CASE (CrankNicholsonSecondOrder)
           ! Adams-Moulton second order
-          TDT(I)=(2.d0*Delt*Delx*NetLWRadToSurfFD + 2.d0*Delt*Delx*QHtRadSysSurfFD + 2.d0*Delt*Delx*QHWBaseboardSurfFD + &
-                 2.d0*Delt*Delx*QSteamBaseboardSurfFD + 2.d0*Delt*Delx*QElecBaseboardSurfFD + &
-                 2.d0*Delt*Delx*QRadSWInFD + 2.d0*Delt*Delx*QRadThermInFD -  &
+          TDT(I)=(2.*Delt*Delx*NetLWRadToSurfFD + 2.*Delt*Delx*QHtRadSysSurfFD + 2.*Delt*Delx*QHWBaseboardSurfFD + &
+                 2.*Delt*Delx*QSteamBaseboardSurfFD + 2.*Delt*Delx*QElecBaseboardSurfFD + &
+                 2.*Delt*Delx*QRadSWInFD + 2.*Delt*Delx*QRadThermInFD -  &
                   Delt*Delx*hconvi*TD(I) - Delt*kt*TD(I) + Cp*Delx**2*RhoS*TD(I) +  &
-                  Delt*kt*TD(I+1) + Delt*kt*TDT(I+1) + 2.d0*Delt*Delx*hconvi*Tia)/  &
+                  Delt*kt*TD(I+1) + Delt*kt*TDT(I+1) + 2.*Delt*Delx*hconvi*Tia)/  &
                   (Delt*Delx*hconvi + Delt*kt + Cp*Delx**2*RhoS)
 
         CASE (FullyImplicitFirstOrder)
         ! Adams-Moulton First order
-          TDT(I)=(2.d0*Delt*Delx*NetLWRadToSurfFD + 2.d0*Delt*Delx*QHtRadSysSurfFD + 2.d0*Delt*Delx*QHWBaseboardSurfFD + &
-                 2.d0*Delt*Delx*QSteamBaseboardSurfFD + 2.d0*Delt*Delx*QElecBaseboardSurfFD + &
-                 2.d0*Delt*Delx*QRadSWInFD + 2.d0*Delt*Delx*QRadThermInFD +  &
-                  Cp*Delx**2*RhoS*TD(I) + 2.d0*Delt*kt*TDT(I+1) + 2.d0*Delt*Delx*hconvi*Tia)/  &
-                  (2.d0*Delt*Delx*hconvi + 2.d0*Delt*kt + Cp*Delx**2*RhoS)
+          TDT(I)=(2.*Delt*Delx*NetLWRadToSurfFD + 2.*Delt*Delx*QHtRadSysSurfFD + 2.*Delt*Delx*QHWBaseboardSurfFD + &
+                 2.*Delt*Delx*QSteamBaseboardSurfFD + 2.*Delt*Delx*QElecBaseboardSurfFD + &
+                 2.*Delt*Delx*QRadSWInFD + 2.*Delt*Delx*QRadThermInFD +  &
+                  Cp*Delx**2*RhoS*TD(I) + 2.*Delt*kt*TDT(I+1) + 2.*Delt*Delx*hconvi*Tia)/  &
+                  (2.*Delt*Delx*hconvi + 2.*Delt*kt + Cp*Delx**2*RhoS)
         END SELECT
 
       ELSE ! for regular or interzone walls
         SELECT CASE (CondFDSchemeType)
 
         CASE (CrankNicholsonSecondOrder)
-          TDT(I)=(2.d0*Delt*Delx*NetLWRadToSurfFD + 2.d0*Delt*Delx*QHtRadSysSurfFD + 2.d0*Delt*Delx*QHWBaseboardSurfFD + &
-               2.d0*Delt*Delx*QSteamBaseboardSurfFD + 2.d0*Delt*Delx*QElecBaseboardSurfFD + &
-               2.d0*Delt*Delx*QRadSWInFD + 2.d0*Delt*Delx*QRadThermInFD -  &
+          TDT(I)=(2.*Delt*Delx*NetLWRadToSurfFD + 2.*Delt*Delx*QHtRadSysSurfFD + 2.*Delt*Delx*QHWBaseboardSurfFD + &
+               2.*Delt*Delx*QSteamBaseboardSurfFD + 2.*Delt*Delx*QElecBaseboardSurfFD + &
+               2.*Delt*Delx*QRadSWInFD + 2.*Delt*Delx*QRadThermInFD -  &
                 Delt*Delx*hconvi*TD(I) - Delt*kt*TD(I) + Cp*Delx**2*RhoS*TD(I) +  &
-                Delt*kt*TD(I-1) + Delt*kt*TDT(I-1) + 2.d0*Delt*Delx*hconvi*Tia)/  &
+                Delt*kt*TD(I-1) + Delt*kt*TDT(I-1) + 2.*Delt*Delx*hconvi*Tia)/  &
                 (Delt*Delx*hconvi + Delt*kt + Cp*Delx**2*RhoS)
         CASE (FullyImplicitFirstOrder)
-          TDT(I)=(2.d0*Delt*Delx*NetLWRadToSurfFD + 2.d0*Delt*Delx*QHtRadSysSurfFD + 2.d0*Delt*Delx*QHWBaseboardSurfFD + &
-               2.d0*Delt*Delx*QSteamBaseboardSurfFD + 2.d0*Delt*Delx*QElecBaseboardSurfFD + &
-               2.d0*Delt*Delx*QRadSWInFD + 2.d0*Delt*Delx*QRadThermInFD +  &
-                Cp*Delx**2*RhoS*TD(I) + 2.d0*Delt*kt*TDT(I-1) + 2.d0*Delt*Delx*hconvi*Tia)/  &
-                (2.d0*Delt*Delx*hconvi + 2.d0*Delt*kt + Cp*Delx**2*RhoS)
+          TDT(I)=(2.*Delt*Delx*NetLWRadToSurfFD + 2.*Delt*Delx*QHtRadSysSurfFD + 2.*Delt*Delx*QHWBaseboardSurfFD + &
+               2.*Delt*Delx*QSteamBaseboardSurfFD + 2.*Delt*Delx*QElecBaseboardSurfFD + &
+               2.*Delt*Delx*QRadSWInFD + 2.*Delt*Delx*QRadThermInFD +  &
+                Cp*Delx**2*RhoS*TD(I) + 2.*Delt*kt*TDT(I-1) + 2.*Delt*Delx*hconvi*Tia)/  &
+                (2.*Delt*Delx*hconvi + 2.*Delt*kt + Cp*Delx**2*RhoS)
         END SELECT
       ENDIF
 
@@ -2638,11 +2638,11 @@ SUBROUTINE InteriorBCEqns(Delt,I,Lay,Surf,T,TT,Rhov,RhoT,RH,TD,TDT,EnthOld,EnthN
 
 !Tia = 21.   !**************************************TEST OVERIDE OF TIA
 
-    TDT(I) =(2.d0*Delt*NetLWRadToSurfFD*SigmaRLoc +  &
-            2.d0*Delt*QHtRadSysSurfFD*SigmaRLoc +  &
-            2.d0*Delt*QRadSWInFD*SigmaRLoc + 2.d0*Delt*QRadThermInFD*SigmaRLoc +  &
-            SigmaCLoc*SigmaRLoc*TD(I) + 2*Delt*TDT(I-1) + 2.d0*Delt*hconvi*SigmaRLoc*Tia)/  &
-          (2.d0*Delt + 2.d0*Delt*hconvi*SigmaRLoc + SigmaCLoc*SigmaRLoc)
+    TDT(I) =(2.*Delt*NetLWRadToSurfFD*SigmaRLoc +  &
+            2.*Delt*QHtRadSysSurfFD*SigmaRLoc +  &
+            2.*Delt*QRadSWInFD*SigmaRLoc + 2.*Delt*QRadThermInFD*SigmaRLoc +  &
+            SigmaCLoc*SigmaRLoc*TD(I) + 2*Delt*TDT(I-1) + 2.*Delt*hconvi*SigmaRLoc*Tia)/  &
+          (2.*Delt + 2.*Delt*hconvi*SigmaRLoc + SigmaCLoc*SigmaRLoc)
 
 
 

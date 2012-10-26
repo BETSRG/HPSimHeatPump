@@ -49,12 +49,12 @@ PRIVATE
 
           ! MODULE PARAMETER DEFINITIONS:
           ! General Parameters...
-REAL(r64), PARAMETER :: SmallIncrement=1.0d-10     ! Small increment added for shading/sunlit area calculations.
-REAL(r64), PARAMETER :: HCMULT = 100000.d0   ! Multiplier used to change meters to .01 millimeters for homogeneous coordinates.
+REAL, PARAMETER :: SmallIncrement=1.0d-10     ! Small increment added for shading/sunlit area calculations.
+REAL, PARAMETER :: HCMULT = 100000.   ! Multiplier used to change meters to .01 millimeters for homogeneous coordinates.
      ! Homogeneous Coordinates are represented in integers (64 bit). This changes the surface coordinates from meters
      ! to .01 millimeters -- making that the resolution for shadowing, polygon clipping, etc.
-REAL(r64), PARAMETER :: sqHCMULT = HCMULT*HCMULT   ! Square of HCMult used in Homogeneous coordinates
-REAL(r64), PARAMETER :: kHCMULT = 1.0d0/(HCMULT*HCMULT)   ! half of inverse square of HCMult used in Homogeneous coordinates
+REAL, PARAMETER :: sqHCMULT = HCMULT*HCMULT   ! Square of HCMult used in Homogeneous coordinates
+REAL, PARAMETER :: kHCMULT = 1.0/(HCMULT*HCMULT)   ! half of inverse square of HCMult used in Homogeneous coordinates
 
 !INTEGER,          PRIVATE, PARAMETER :: MAXCMB = 2000   ! Length of SHDCMB array
 !INTEGER,          PARAMETER :: MAXHCS = 15000 ! 200      ! Maximum number of HC surfaces (was 56)
@@ -97,7 +97,7 @@ INTEGER   :: OverlapStatus ! Results of overlap calculation:
              ! 1=No overlap; 2=NS1 completely within NS2
              ! 3=NS2 completely within NS1; 4=Partial overlap
 
-REAL(r64), ALLOCATABLE, DIMENSION(:)       :: CTHETA ! Cosine of angle of incidence of sun's rays on surface NS
+REAL, ALLOCATABLE, DIMENSION(:)       :: CTHETA ! Cosine of angle of incidence of sun's rays on surface NS
 INTEGER   :: FBKSHC ! HC location of first back surface
 INTEGER   :: FGSSHC ! HC location of first general shadowing surface
 INTEGER   :: FINSHC ! HC location of first back surface overlap
@@ -122,14 +122,14 @@ INTEGER(i64), ALLOCATABLE, DIMENSION(:,:) :: HCC    ! 'C' homogeneous coordinate
 INTEGER(i64), ALLOCATABLE, DIMENSION(:,:) :: HCX    ! 'X' homogeneous coordinates of vertices of figure.
 INTEGER(i64), ALLOCATABLE, DIMENSION(:,:) :: HCY    ! 'Y' homogeneous coordinates of vertices of figure.
 INTEGER, ALLOCATABLE, DIMENSION(:,:,:)    :: WindowRevealStatus
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HCAREA ! Area of each HC figure.  Sign Convention:  Base Surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HCAREA ! Area of each HC figure.  Sign Convention:  Base Surface
                                                ! - Positive, Shadow - Negative, Overlap between two shadows
                                                ! - positive, etc., so that sum of HC areas=base sunlit area
-REAL(r64), ALLOCATABLE, DIMENSION(:)       :: HCT    ! Transmittance of each HC figure
-REAL(r64), ALLOCATABLE, DIMENSION(:)       :: ISABSF ! For simple interior solar distribution (in which all beam
+REAL, ALLOCATABLE, DIMENSION(:)       :: HCT    ! Transmittance of each HC figure
+REAL, ALLOCATABLE, DIMENSION(:)       :: ISABSF ! For simple interior solar distribution (in which all beam
                                                      ! radiation entering zone is assumed to strike the floor),
                                                      ! fraction of beam radiation absorbed by each floor surface
-REAL(r64), ALLOCATABLE, DIMENSION(:)       :: SAREA  ! Sunlit area of heat transfer surface HTS
+REAL, ALLOCATABLE, DIMENSION(:)       :: SAREA  ! Sunlit area of heat transfer surface HTS
                                                      ! Excludes multiplier for windows
 ! Shadowing combinations data structure...See ShadowingCombinations type
 TYPE (SurfaceErrorTracking), ALLOCATABLE, DIMENSION(:)         :: TrackTooManyFigures
@@ -139,22 +139,22 @@ INTEGER :: NumTooManyVertices = 0
 TYPE (SurfaceErrorTracking), ALLOCATABLE, DIMENSION(:)         :: TrackBaseSubSurround
 INTEGER :: NumBaseSubSurround = 0
 TYPE (SurfaceErrorTracking), ALLOCATABLE, DIMENSION(:)         :: TempSurfErrorTracking
-REAL(r64), DIMENSION(3) :: SUNCOS ! Direction cosines of solar position
-REAL(r64)               :: XShadowProjection  ! X projection of a shadow (formerly called C)
-REAL(r64)               :: YShadowProjection  ! Y projection of a shadow (formerly called S)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: XTEMP  ! Temporary 'X' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: XVC    ! X-vertices of the clipped figure
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: XVS    ! X-vertices of the shadow
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: YTEMP  ! Temporary 'Y' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: YVC    ! Y-vertices of the clipped figure
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: YVS    ! Y-vertices of the shadow
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZVC    ! Z-vertices of the clipped figure
+REAL, DIMENSION(3) :: SUNCOS ! Direction cosines of solar position
+REAL               :: XShadowProjection  ! X projection of a shadow (formerly called C)
+REAL               :: YShadowProjection  ! Y projection of a shadow (formerly called S)
+REAL, ALLOCATABLE, DIMENSION(:) :: XTEMP  ! Temporary 'X' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: XVC    ! X-vertices of the clipped figure
+REAL, ALLOCATABLE, DIMENSION(:) :: XVS    ! X-vertices of the shadow
+REAL, ALLOCATABLE, DIMENSION(:) :: YTEMP  ! Temporary 'Y' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: YVC    ! Y-vertices of the clipped figure
+REAL, ALLOCATABLE, DIMENSION(:) :: YVS    ! Y-vertices of the shadow
+REAL, ALLOCATABLE, DIMENSION(:) :: ZVC    ! Z-vertices of the clipped figure
 ! Used in Sutherland Hodman poly clipping
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ATEMP    ! Temporary 'A' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: BTEMP    ! Temporary 'B' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: CTEMP    ! Temporary 'C' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: XTEMP1   ! Temporary 'X' values for HC vertices of the overlap
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: YTEMP1   ! Temporary 'Y' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: ATEMP    ! Temporary 'A' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: BTEMP    ! Temporary 'B' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: CTEMP    ! Temporary 'C' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: XTEMP1   ! Temporary 'X' values for HC vertices of the overlap
+REAL, ALLOCATABLE, DIMENSION(:) :: YTEMP1   ! Temporary 'Y' values for HC vertices of the overlap
 INTEGER,PUBLIC :: maxNumberOfFigures=0
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE SolarShading
@@ -281,7 +281,7 @@ SUBROUTINE InitSolarCalculations
 
   IF (BeginEnvrnFlag) THEN
     CTHETA=0.0
-    SAREA=0.0d0
+    SAREA=0.0
     SurfSunLitArea=0.0
     SurfSunLitFrac=0.0
     SunlitFracHR=0.0
@@ -311,13 +311,13 @@ SUBROUTINE InitSolarCalculations
     WinHeatGain=0.0
     WinHeatGainRep=0.0
     WinHeatLossRep=0.0
-    WinGainConvGlazToZoneRep        = 0.0D0
-    WinGainIRGlazToZoneRep          = 0.0D0
-    WinLossSWZoneToOutWinRep        = 0.0D0
-    WinGainFrameDividerToZoneRep    = 0.0D0
-    WinGainConvGlazShadGapToZoneRep = 0.0D0
-    WinGainConvShadeToZoneRep       = 0.0D0
-    WinGainIRShadeToZoneRep         = 0.0D0
+    WinGainConvGlazToZoneRep        = 0.0
+    WinGainIRGlazToZoneRep          = 0.0
+    WinLossSWZoneToOutWinRep        = 0.0
+    WinGainFrameDividerToZoneRep    = 0.0
+    WinGainConvGlazShadGapToZoneRep = 0.0
+    WinGainConvShadeToZoneRep       = 0.0
+    WinGainIRShadeToZoneRep         = 0.0
     WinGapConvHtFlowRep=0.0
     WinShadingAbsorbedSolar=0.0
     WinSysSolTransmittance=0.0
@@ -439,7 +439,7 @@ SUBROUTINE GetShadowingInput
   INTEGER NumAlphas
   INTEGER IOStat
 
-  rNumericArgs(1:4)=0.0d0  ! so if nothing gotten, defaults will be maintained.
+  rNumericArgs(1:4)=0.0  ! so if nothing gotten, defaults will be maintained.
   cAlphaArgs(1)=' '
   cAlphaArgs(2)=' '
   cCurrentModuleObject='ShadowCalculation'
@@ -467,7 +467,7 @@ SUBROUTINE GetShadowingInput
        '], Shadowing Calculations will be inaccurate.')
   ENDIF
 
-  IF (rNumericArgs(2) > 199.d0)  THEN
+  IF (rNumericArgs(2) > 199.)  THEN
     MAXHCS=rNumericArgs(2)
   ELSE
     MAXHCS=15000
@@ -597,7 +597,7 @@ SUBROUTINE AllocateModuleArrays
   ALLOCATE (CTHETA(TotSurfaces))
   CTHETA=0.0
   ALLOCATE (SAREA(TotSurfaces))
-  SAREA=0.0d0
+  SAREA=0.0
   ALLOCATE(SurfSunLitArea(TotSurfaces))
   SurfSunLitArea=0.0
   ALLOCATE(SurfSunLitFrac(TotSurfaces))
@@ -656,19 +656,19 @@ SUBROUTINE AllocateModuleArrays
   ALLOCATE (WinHeatLossRep(TotSurfaces))
   WinHeatLossRep=0.0
   ALLOCATE (WinGainConvGlazToZoneRep(TotSurfaces))
-  WinGainConvGlazToZoneRep        = 0.0D0
+  WinGainConvGlazToZoneRep        = 0.0
   ALLOCATE (WinGainIRGlazToZoneRep(TotSurfaces))
-  WinGainIRGlazToZoneRep          = 0.0D0
+  WinGainIRGlazToZoneRep          = 0.0
   ALLOCATE (WinLossSWZoneToOutWinRep(TotSurfaces))
-  WinLossSWZoneToOutWinRep        = 0.0D0
+  WinLossSWZoneToOutWinRep        = 0.0
   ALLOCATE (WinGainFrameDividerToZoneRep(TotSurfaces))
-  WinGainFrameDividerToZoneRep    = 0.0D0
+  WinGainFrameDividerToZoneRep    = 0.0
   ALLOCATE (WinGainConvGlazShadGapToZoneRep(TotSurfaces))
-  WinGainConvGlazShadGapToZoneRep = 0.0D0
+  WinGainConvGlazShadGapToZoneRep = 0.0
   ALLOCATE (WinGainConvShadeToZoneRep(TotSurfaces))
-  WinGainConvShadeToZoneRep       = 0.0D0
+  WinGainConvShadeToZoneRep       = 0.0
   ALLOCATE (WinGainIRShadeToZoneRep(TotSurfaces))
-  WinGainIRShadeToZoneRep         = 0.0D0
+  WinGainIRShadeToZoneRep         = 0.0
   ALLOCATE (WinGapConvHtFlowRep(TotSurfaces))
   WinGapConvHtFlowRep=0.0
   ALLOCATE (WinShadingAbsorbedSolar(TotSurfaces))
@@ -767,31 +767,31 @@ SUBROUTINE AllocateModuleArrays
 
   ! Weiler-Atherton
   ALLOCATE(XTEMP((MaxVerticesPerSurface+1)*2))
-  XTEMP=0.0D0
+  XTEMP=0.0
   ALLOCATE(YTEMP((MaxVerticesPerSurface+1)*2))
-  YTEMP=0.0D0
+  YTEMP=0.0
   ALLOCATE(XVC(MaxVerticesPerSurface+1))
-  XVC=0.0D0
+  XVC=0.0
   ALLOCATE(XVS(MaxVerticesPerSurface+1))
-  XVS=0.0D0
+  XVS=0.0
   ALLOCATE(YVC(MaxVerticesPerSurface+1))
-  YVC=0.0D0
+  YVC=0.0
   ALLOCATE(YVS(MaxVerticesPerSurface+1))
-  YVS=0.0D0
+  YVS=0.0
   ALLOCATE(ZVC(MaxVerticesPerSurface+1))
-  ZVC=0.0D0
+  ZVC=0.0
 
   !Sutherland-Hodgman
   ALLOCATE(ATEMP(2*(MaxVerticesPerSurface + 1)))
-  ATEMP=0.0d0
+  ATEMP=0.0
   ALLOCATE(BTEMP(2*(MaxVerticesPerSurface + 1)))
-  BTEMP=0.0d0
+  BTEMP=0.0
   ALLOCATE(CTEMP(2*(MaxVerticesPerSurface + 1)))
-  CTEMP=0.0d0
+  CTEMP=0.0
   ALLOCATE(XTEMP1(2*(MaxVerticesPerSurface + 1)))
-  XTEMP1=0.0d0
+  XTEMP1=0.0
   ALLOCATE(YTEMP1(2*(MaxVerticesPerSurface + 1)))
-  YTEMP1=0.0d0
+  YTEMP1=0.0
 
   !energy
   ALLOCATE (WinTransSolarEnergy(TotSurfaces))
@@ -1444,47 +1444,47 @@ USE DataSystemVariables, ONLY: DetailedSkyDiffuseAlgorithm
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER, DIMENSION(7) :: EpsilonLimit=  &         ! Upper limit of bins of the sky clearness parameter, Epsilon
-      (/1.065d0,1.23d0,1.5d0,1.95d0,2.8d0,4.5d0,6.2d0/)
+REAL, PARAMETER, DIMENSION(7) :: EpsilonLimit=  &         ! Upper limit of bins of the sky clearness parameter, Epsilon
+      (/1.065,1.23,1.5,1.95,2.8,4.5,6.2/)
        ! Circumsolar brightening coefficients; index corresponds to range of Epsilon, the sky clearness parameter
-REAL(r64), PARAMETER, DIMENSION(8) :: F11R(8)=  &
-               (/ -0.0083117d0,  0.1299457d0,  0.3296958d0,  0.5682053d0, &
-                   0.8730280d0,  1.1326077d0,  1.0601591d0,  0.6777470d0 /)
-REAL(r64), PARAMETER, DIMENSION(8) :: F12R(8)=  &
-               (/  0.5877285d0,  0.6825954d0,  0.4868735d0,  0.1874525d0, &
-                  -0.3920403d0, -1.2367284d0, -1.5999137d0, -0.3272588d0 /)
-REAL(r64), PARAMETER, DIMENSION(8) :: F13R(8)=  &
-               (/ -0.0620636d0, -0.1513752d0, -0.2210958d0, -0.2951290d0, &
-                  -0.3616149d0, -0.4118494d0, -0.3589221d0, -0.2504286d0 /)
+REAL, PARAMETER, DIMENSION(8) :: F11R(8)=  &
+               (/ -0.0083117,  0.1299457,  0.3296958,  0.5682053, &
+                   0.8730280,  1.1326077,  1.0601591,  0.6777470 /)
+REAL, PARAMETER, DIMENSION(8) :: F12R(8)=  &
+               (/  0.5877285,  0.6825954,  0.4868735,  0.1874525, &
+                  -0.3920403, -1.2367284, -1.5999137, -0.3272588 /)
+REAL, PARAMETER, DIMENSION(8) :: F13R(8)=  &
+               (/ -0.0620636, -0.1513752, -0.2210958, -0.2951290, &
+                  -0.3616149, -0.4118494, -0.3589221, -0.2504286 /)
        ! Horizon/zenith brightening coefficient array; index corresponds to range of Epsilon, the sky clearness parameter
-REAL(r64), PARAMETER, DIMENSION(8) :: F21R(8)=  &
-               (/ -0.0596012d0, -0.0189325d0,  0.0554140d0,  0.1088631d0, &
-                   0.2255647d0,  0.2877813d0,  0.2642124d0,  0.1561313d0 /)
-REAL(r64), PARAMETER, DIMENSION(8) :: F22R(8)=  &
-               (/  0.0721249d0,  0.0659650d0, -0.0639588d0, -0.1519229d0, &
-                  -0.4620442d0, -0.8230357d0, -1.1272340d0, -1.3765031d0 /)
-REAL(r64), PARAMETER, DIMENSION(8) :: F23R(8)=  &
-               (/ -0.0220216d0, -0.0288748d0, -0.0260542d0, -0.0139754d0, &
-                   0.0012448d0,  0.0558651d0,  0.1310694d0,  0.2506212d0 /)
+REAL, PARAMETER, DIMENSION(8) :: F21R(8)=  &
+               (/ -0.0596012, -0.0189325,  0.0554140,  0.1088631, &
+                   0.2255647,  0.2877813,  0.2642124,  0.1561313 /)
+REAL, PARAMETER, DIMENSION(8) :: F22R(8)=  &
+               (/  0.0721249,  0.0659650, -0.0639588, -0.1519229, &
+                  -0.4620442, -0.8230357, -1.1272340, -1.3765031 /)
+REAL, PARAMETER, DIMENSION(8) :: F23R(8)=  &
+               (/ -0.0220216, -0.0288748, -0.0260542, -0.0139754, &
+                   0.0012448,  0.0558651,  0.1310694,  0.2506212 /)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL(r64)   :: CosZenithAng            ! Cosine of solar zenith angle
-REAL(r64)   :: ZenithAng               ! Solar zenith angle (radians)
-REAL(r64)   :: ZenithAngDeg            ! Solar zenith angle (degrees)
-REAL(r64)   :: F1                      ! Circumsolar brightening coefficient
-REAL(r64)   :: F2                      ! Horizon/zenith brightening coefficient
-REAL(r64)   :: Epsilon                 ! Sky clearness parameter
-REAL(r64)   :: Delta                   ! Sky brightness parameter
-REAL(r64)   :: CosIncAngBeamOnSurface  ! Cosine of incidence angle of beam solar on surface
-REAL(r64)   :: IncAng                  ! Incidence angle of beam solar on surface (radians)
+REAL   :: CosZenithAng            ! Cosine of solar zenith angle
+REAL   :: ZenithAng               ! Solar zenith angle (radians)
+REAL   :: ZenithAngDeg            ! Solar zenith angle (degrees)
+REAL   :: F1                      ! Circumsolar brightening coefficient
+REAL   :: F2                      ! Horizon/zenith brightening coefficient
+REAL   :: Epsilon                 ! Sky clearness parameter
+REAL   :: Delta                   ! Sky brightness parameter
+REAL   :: CosIncAngBeamOnSurface  ! Cosine of incidence angle of beam solar on surface
+REAL   :: IncAng                  ! Incidence angle of beam solar on surface (radians)
 INTEGER     :: SurfNum                 ! Surface number
 INTEGER     :: EpsilonBin              ! Sky clearness (Epsilon) bin index
-REAL(r64)   :: AirMass                 ! Relative air mass
-REAL(r64)   :: AirMassH                ! Intermediate variable for relative air mass calculation
-REAL(r64)   :: CircumSolarFac          ! Ratio of cosine of incidence angle to cosine of zenith angle
-REAL(r64)   :: KappaZ3                 ! Intermediate variable
-REAL(r64)   :: ViewFactorSkyGeom       ! Geometrical sky view factor
+REAL   :: AirMass                 ! Relative air mass
+REAL   :: AirMassH                ! Intermediate variable for relative air mass calculation
+REAL   :: CircumSolarFac          ! Ratio of cosine of incidence angle to cosine of zenith angle
+REAL   :: KappaZ3                 ! Intermediate variable
+REAL   :: ViewFactorSkyGeom       ! Geometrical sky view factor
 
 
         ! FLOW:
@@ -1493,24 +1493,24 @@ REAL(r64)   :: ViewFactorSkyGeom       ! Geometrical sky view factor
       ZenithAng = ACOS(CosZenithAng)
       ZenithAngDeg = ZenithAng/DegToRadians
 
-      AnisoSkyMult = 0.0d0
+      AnisoSkyMult = 0.0
 
 !           Relative air mass
-      AirMassH = (1.d0 - 0.1d0 * Elevation / 1000.d0)
-      IF(ZenithAngDeg <= 75.d0) THEN
+      AirMassH = (1. - 0.1 * Elevation / 1000.)
+      IF(ZenithAngDeg <= 75.) THEN
         AirMass  = AirMassH/CosZenithAng
       ELSE
-        AirMass = AirMassH/(CosZenithAng + 0.15d0*(93.9d0-ZenithAngDeg)**(-1.253d0))
+        AirMass = AirMassH/(CosZenithAng + 0.15*(93.9-ZenithAngDeg)**(-1.253))
       END IF
-      KappaZ3 = 1.041d0*ZenithAng**3
+      KappaZ3 = 1.041*ZenithAng**3
       Epsilon = ((BeamSolarRad+DifSolarRad)/DifSolarRad + KappaZ3)/(1.+KappaZ3)
-      Delta = DifSolarRad*AirMass/1353.d0 ! 1353 is average extraterrestrial irradiance (W/m2)
+      Delta = DifSolarRad*AirMass/1353. ! 1353 is average extraterrestrial irradiance (W/m2)
 !           Circumsolar (F1) and horizon/zenith (F2) brightening coefficients
       DO EpsilonBin=1,8
         IF(EpsilonBin == 8) EXIT
         IF (Epsilon < EpsilonLimit(EpsilonBin)) EXIT
       END DO
-      F1 = MAX(0.d0,F11R(EpsilonBin) + F12R(EpsilonBin)*Delta + F13R(EpsilonBin)*ZenithAng)
+      F1 = MAX(0.,F11R(EpsilonBin) + F12R(EpsilonBin)*Delta + F13R(EpsilonBin)*ZenithAng)
       F2 = F21R(EpsilonBin) + F22R(EpsilonBin)*Delta + F23R(EpsilonBin)*ZenithAng
 
     DO SurfNum =1,TotSurfaces
@@ -1522,15 +1522,15 @@ REAL(r64)   :: ViewFactorSkyGeom       ! Geometrical sky view factor
       IncAng = ACOS(CosIncAngBeamOnSurface)
 
       ViewFactorSkyGeom = Surface(SurfNum)%ViewFactorSky
-      MultIsoSky(SurfNum) = ViewFactorSkyGeom * (1.d0-F1)
+      MultIsoSky(SurfNum) = ViewFactorSkyGeom * (1.-F1)
 !           0.0871557 below corresponds to a zenith angle of 85 deg
-      CircumSolarFac = MAX(0.d0,CosIncAngBeamOnSurface)/MAX(0.0871557d0,CosZenithAng)
+      CircumSolarFac = MAX(0.,CosIncAngBeamOnSurface)/MAX(0.0871557,CosZenithAng)
 !           For near-horizontal roofs, model has an inconsistency that gives sky diffuse
 !           irradiance significantly different from DifSolarRad when zenith angle is
 !           above 85 deg. The following forces irradiance to be very close to DifSolarRad
 !           in this case.
-      IF(CircumSolarFac > 0.d0 .AND. CosZenithAng < 0.0871557d0 .AND. Surface(SurfNum)%Tilt < 2.0d0) &
-        CircumSolarFac = 1.d0
+      IF(CircumSolarFac > 0. .AND. CosZenithAng < 0.0871557 .AND. Surface(SurfNum)%Tilt < 2.0) &
+        CircumSolarFac = 1.
       MultCircumSolar(SurfNum) = F1*CircumSolarFac
       MultHorizonZenith(SurfNum) = F2*Surface(SurfNum)%SinTilt
       IF (.not. DetailedSkyDiffuseAlgorithm .or. .not.  ShadingTransmittanceVaries .or.  &
@@ -1546,7 +1546,7 @@ REAL(r64)   :: ViewFactorSkyGeom       ! Geometrical sky view factor
           MultHorizonZenith(SurfNum) * DifShdgRatioHorizHRTS(SurfNum,HourOfDay,TimeStep)
         curDifShdgRatioIsoSky(SurfNum) = DifShdgRatioIsoSkyHRTS(SurfNum,HourOfDay,TimeStep)
       ENDIF
-      AnisoSkyMult(SurfNum)=MAX(0.0d0,AnisoSkyMult(SurfNum))  ! make sure not negative.
+      AnisoSkyMult(SurfNum)=MAX(0.0,AnisoSkyMult(SurfNum))  ! make sure not negative.
     END DO
 
 END SUBROUTINE AnisoSkyViewFactors
@@ -1597,7 +1597,7 @@ SUBROUTINE CHKBKS(NBS,NRS)
   TYPE (Vector) BVec    ! Vector from vertex 2 to vertex 3, both same surface
   TYPE (Vector) CVec    ! Vector perpendicular to surface at vertex 2
   TYPE (Vector) DVec    ! Vector from vertex 2 of first surface to vertex 'n' of second surface
-  REAL(r64) DOTP ! Dot product of C and D
+  REAL DOTP ! Dot product of C and D
   CHARACTER(len=20) CharDotP  ! for error messages
   CHARACTER(len=4) VTString
 
@@ -1664,13 +1664,13 @@ SUBROUTINE CHKGSS(NRS,NSS,ZMIN,CannotShade)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: ZMIN   ! Lowest point of the receiving surface
+  REAL, INTENT(IN) :: ZMIN   ! Lowest point of the receiving surface
   INTEGER, INTENT(IN)          :: NRS    ! Surface number of the potential shadow receiving surface
   INTEGER, INTENT(IN)          :: NSS    ! Surface number of the potential shadow casting surface
   LOGICAL, INTENT(OUT)         :: CannotShade ! TRUE if shadow casting surface cannot shade receiving surface.
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(KIND=r64) :: TolValue=0.0003d0
+  REAL(KIND=r64) :: TolValue=0.0003
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1686,8 +1686,8 @@ SUBROUTINE CHKGSS(NRS,NSS,ZMIN,CannotShade)
   TYPE (Vector) BVec    ! Vector from vertex 2 to vertex 3, both same surface
   TYPE (Vector) CVec    ! Vector perpendicular to surface at vertex 2
   TYPE (Vector) DVec    ! Vector from vertex 2 of first surface to vertex 'n' of second surface
-  REAL(r64) ZMAX ! Highest point of the shadow casting surface
-  REAL(r64) DOTP ! Dot Product
+  REAL ZMAX ! Highest point of the shadow casting surface
+  REAL DOTP ! Dot Product
 
   CannotShade=.TRUE.
   NVRS=Surface(NRS)%Sides
@@ -1700,7 +1700,7 @@ SUBROUTINE CHKGSS(NRS,NSS,ZMIN,CannotShade)
 
           ! SEE IF Shadow Casting Surface IS HORIZONTAL AND FACING UPWARD.
 
-  IF (Surface(NSS)%OutNormVec(3) > 0.9999d0) RETURN
+  IF (Surface(NSS)%OutNormVec(3) > 0.9999) RETURN
 
           ! SEE IF ANY VERTICES OF THE Shadow Casting Surface ARE ABOVE THE PLANE OF THE receiving surface
 
@@ -1800,9 +1800,9 @@ SUBROUTINE CHKSBS(HTS,GRSNR,SBSNR)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER N        ! Loop Control
   INTEGER NVT      ! Number of vertices
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: XVT      ! X Vertices of
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: YVT      ! Y vertices of
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: ZVT      ! Z vertices of
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: XVT      ! X Vertices of
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: YVT      ! Y vertices of
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: ZVT      ! Z vertices of
 
   INTEGER NS1      ! Number of the figure being overlapped
   INTEGER NS2      ! Number of the figure doing overlapping
@@ -1812,32 +1812,32 @@ SUBROUTINE CHKSBS(HTS,GRSNR,SBSNR)
   logical :: inside
 
   LOGICAL Out
-  REAL(r64) X1,Y1,Z1,X2,Y2,Z2,BX,BY,BZ,BMAX !,SX,SY,SZ
+  REAL X1,Y1,Z1,X2,Y2,Z2,BX,BY,BZ,BMAX !,SX,SY,SZ
 !  INTEGER M
 
   IF (OneTimeFlag) THEN
     ALLOCATE(XVT(MaxVerticesPerSurface+1))
     ALLOCATE(YVT(MaxVerticesPerSurface+1))
     ALLOCATE(ZVT(MaxVerticesPerSurface+1))
-    XVT=0.0d0
-    YVT=0.0d0
-    ZVT=0.0d0
+    XVT=0.0
+    YVT=0.0
+    ZVT=0.0
     OneTimeFlag=.false.
   ENDIF
 
   NS1    = 1
   NS2    = 2
   NS3    = 3
-  HCT(1) = 0.0d0
-  HCT(2) = 0.0d0
+  HCT(1) = 0.0
+  HCT(2) = 0.0
 
           ! Put coordinates of base surface into clockwise sequence on the x'-y' plane.
 
-  XVT=0.0d0
-  YVT=0.0d0
-  ZVT=0.0d0
-  XVS=0.0d0
-  YVS=0.0d0
+  XVT=0.0
+  YVT=0.0
+  ZVT=0.0
+  XVS=0.0
+  YVS=0.0
   CALL CTRANS(GRSNR,HTS,NVT,XVT,YVT,ZVT)
   DO N = 1, NVT
     XVS(N) = XVT(NVT+1-N)
@@ -2049,7 +2049,7 @@ function polygon_contains_point ( nsides, polygon_3d, point_3d, ignorex, ignorey
   logical :: inside  ! return value, true=inside, false = not inside
 
           ! Function parameter definitions:
-  REAL(r64), parameter :: point_tolerance=.00001
+  REAL, parameter :: point_tolerance=.00001
 
           ! Interface block specifications:
           ! na
@@ -2150,13 +2150,13 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
   INTEGER      ::    ConstrNum        ! Index for constructions
   INTEGER      ::    FirstZoneSurf    ! Index of first surface in current zone
   INTEGER      ::    LastZoneSurf     ! Index of last surface in current zone
-  REAL(r64)    ::    AreaSum              ! Intermediate calculation value
+  REAL    ::    AreaSum              ! Intermediate calculation value
   INTEGER      ::    SurfNum          ! DO loop counter for zone surfaces
   INTEGER      ::    ZoneNum          ! Loop Counter for Zones
   INTEGER      ::    Lay              ! Window glass layer number
-  REAL(r64)    ::    AbsDiffTotWin    ! Sum of a window's glass layer solar absorptances
-  REAL(r64)    ::    TestFractSum
-  REAL(r64)    ::    HorizAreaSum
+  REAL    ::    AbsDiffTotWin    ! Sum of a window's glass layer solar absorptances
+  REAL    ::    TestFractSum
+  REAL    ::    HorizAreaSum
 
           ! FLOW:
 
@@ -2169,7 +2169,7 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 
     FirstZoneSurf=Zone(ZoneNum)%SurfaceFirst
     LastZoneSurf=Zone(ZoneNum)%SurfaceLast
-    AreaSum           = 0.0D0
+    AreaSum           = 0.0
 
     DO SurfNum = FirstZoneSurf, LastZoneSurf
 
@@ -2179,7 +2179,7 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 !      IF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
 !        write(outputfiledebug,*) 'surf=',trim(surface(surfnum)%name),Surface(SurfNum)%CosTilt
 !      endif
-      IF (Zone(ZoneNum)%OfType == StandardZone .and. Surface(SurfNum)%CosTilt < -0.5d0) &
+      IF (Zone(ZoneNum)%OfType == StandardZone .and. Surface(SurfNum)%CosTilt < -0.5) &
            AreaSum = AreaSum + Surface(SurfNum)%Area
       !  Next is not implemented but would be:
       ! IF ((Zone(ZoneNum)%OfType .eq. SolarWallZone .or Zone(ZoneNum)%OfType .eq. RoofPondZone) .and.     &
@@ -2189,7 +2189,7 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 
     HorizAreaSum = AreaSum
 
-    IF ((.NOT. Zone(ZoneNum)%HasFloor) .AND. (HorizAreaSum > 0.d0)) THEN
+    IF ((.NOT. Zone(ZoneNum)%HasFloor) .AND. (HorizAreaSum > 0.)) THEN
       !fill floor area even though surfs not called "Floor", they are roughly horizontal and face upwards.
       Zone(ZoneNum)%FloorArea= HorizAreaSum
       CALL ShowWarningError('ComputeIntSolarAbsorpFactors: Solar distribution model is set to place solar gains '//  &
@@ -2206,12 +2206,12 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 
         ! only horizontal surfaces. !      !CR 8229, relaxed from -0.99 to -0.5  (Tilt > 154)
         ! only horizontal surfaces. !      !CR8769 use ASHRAE std of >120, -0.9 to -0.5  (Tilt > 120)
-      IF ( (Zone(ZoneNum)%OfType /= StandardZone .or. Surface(SurfNum)%CosTilt < -0.5d0) .and. &
+      IF ( (Zone(ZoneNum)%OfType /= StandardZone .or. Surface(SurfNum)%CosTilt < -0.5) .and. &
            (Zone(ZoneNum)%OfType .eq. StandardZone .or. Surface(SurfNum)%ExtBoundCond > 0) ) THEN
 
         ConstrNum=Surface(SurfNum)%Construction
 ! last minute V3.1
-        IF (Construct(ConstrNum)%TransDiff <= 0.0d0) THEN  !Opaque surface
+        IF (Construct(ConstrNum)%TransDiff <= 0.0) THEN  !Opaque surface
           IF (AreaSum > 0.0) &
             ISABSF(SurfNum) = Surface(SurfNum)%Area*Construct(ConstrNum)%InsideAbsorpSolar/AreaSum
         ELSE  !Window (floor windows are assumed to have no shading device and no divider,
@@ -2232,9 +2232,9 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
     !CR 8229  test ISABSF for problems
     TestFractSum = SUM(ISABSF(FirstZoneSurf:LastZoneSurf))
 
-    IF ( TestFractSum <= 0.d0) THEN
-      IF (Zone(ZoneNum)%ExtWindowArea > 0.d0) THEN ! we have a problem, the sun has no floor to go to
-        IF (Zone(ZoneNum)%FloorArea <= 0.0d0) THEN
+    IF ( TestFractSum <= 0.) THEN
+      IF (Zone(ZoneNum)%ExtWindowArea > 0.) THEN ! we have a problem, the sun has no floor to go to
+        IF (Zone(ZoneNum)%FloorArea <= 0.0) THEN
           CALL ShowSevereError('ComputeIntSolarAbsorpFactors: Solar distribution model is set to place solar gains '//  &
                'on the zone floor,')
           CALL ShowContinueError('but Zone ="'//TRIM(Zone(ZoneNum)%Name)//'" does not appear to have any floor surfaces.')
@@ -2249,7 +2249,7 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 
         ! try again but use an even spread across all the surfaces in the zone, regardless of horizontal
         !  so as to not lose solar energy
-        AreaSum = 0.d0
+        AreaSum = 0.
         DO SurfNum = FirstZoneSurf, LastZoneSurf
           IF (.not. Surface(SurfNum)%HeatTransSurf) CYCLE
           AreaSum = AreaSum + Surface(SurfNum)%Area
@@ -2259,7 +2259,7 @@ SUBROUTINE ComputeIntSolarAbsorpFactors
 
           IF (.not. Surface(SurfNum)%HeatTransSurf) CYCLE
           ConstrNum=Surface(SurfNum)%Construction
-          IF (Construct(ConstrNum)%TransDiff <= 0.0d0) THEN  !Opaque surface
+          IF (Construct(ConstrNum)%TransDiff <= 0.0) THEN  !Opaque surface
             IF (AreaSum > 0.0) &
               ISABSF(SurfNum) = Surface(SurfNum)%Area*Construct(ConstrNum)%InsideAbsorpSolar/AreaSum
           ELSE  !Window (floor windows are assumed to have no shading device and no divider,
@@ -2309,9 +2309,9 @@ SUBROUTINE CLIP(NVT,XVT,YVT,ZVT)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)               :: NVT
-  REAL(r64), INTENT(INOUT), DIMENSION(:) :: XVT
-  REAL(r64), INTENT(INOUT), DIMENSION(:) :: YVT
-  REAL(r64), INTENT(INOUT), DIMENSION(:) :: ZVT
+  REAL, INTENT(INOUT), DIMENSION(:) :: XVT
+  REAL, INTENT(INOUT), DIMENSION(:) :: YVT
+  REAL, INTENT(INOUT), DIMENSION(:) :: ZVT
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2327,10 +2327,10 @@ SUBROUTINE CLIP(NVT,XVT,YVT,ZVT)
   INTEGER  NABOVE       ! Number of vertices of shadow casting surface. above the plane of receiving surface
   INTEGER  NEXT         ! First vertex above plane of receiving surface
   INTEGER  NON          ! Number of vertices of shadow casting surface. on plane of receiving surface
-  REAL(r64) XIN  ! X of entry point of shadow casting surface. into plane of receiving surface
-  REAL(r64) XOUT ! X of exit point of shadow casting surface. from plane of receiving surface
-  REAL(r64) YIN  ! Y of entry point of shadow casting surface. into plane of receiving surface
-  REAL(r64) YOUT ! Y of exit point of shadow casting surface. from plane of receiving surface
+  REAL XIN  ! X of entry point of shadow casting surface. into plane of receiving surface
+  REAL XOUT ! X of exit point of shadow casting surface. from plane of receiving surface
+  REAL YIN  ! Y of entry point of shadow casting surface. into plane of receiving surface
+  REAL YOUT ! Y of exit point of shadow casting surface. from plane of receiving surface
 !  INTEGER NVS      ! Number of vertices of the shadow/clipped surface
 
   ! Determine if the shadow casting surface. is above, below, or intersects with the plane of the receiving surface
@@ -2366,12 +2366,12 @@ SUBROUTINE CLIP(NVT,XVT,YVT,ZVT)
     YVT(NVT+1) = YVT(1)
     ZVT(NVT+1) = ZVT(1)
     DO N = 1, NVT
-      IF (ZVT(N) >= 0.0d0 .AND. ZVT(N+1) < 0.0d0) THEN ! Line enters plane of receiving surface
+      IF (ZVT(N) >= 0.0 .AND. ZVT(N+1) < 0.0) THEN ! Line enters plane of receiving surface
 
         XIN=(ZVT(N+1)*XVT(N)-ZVT(N)*XVT(N+1))/(ZVT(N+1)-ZVT(N))
         YIN=(ZVT(N+1)*YVT(N)-ZVT(N)*YVT(N+1))/(ZVT(N+1)-ZVT(N))
 
-      ELSEIF (ZVT(N) <= 0.0d0 .AND. ZVT(N+1) > 0.0d0) THEN ! Line exits plane of receiving surface
+      ELSEIF (ZVT(N) <= 0.0 .AND. ZVT(N+1) > 0.0) THEN ! Line exits plane of receiving surface
 
         NEXT=N+1
         XOUT=(ZVT(N+1)*XVT(N)-ZVT(N)*XVT(N+1))/(ZVT(N+1)-ZVT(N))
@@ -2384,10 +2384,10 @@ SUBROUTINE CLIP(NVT,XVT,YVT,ZVT)
 
     XVC(1)   = XOUT
     YVC(1)   = YOUT
-    ZVC(1)   = 0.0d0
+    ZVC(1)   = 0.0
     XVC(NVS) = XIN
     YVC(NVS) = YIN
-    ZVC(NVS) = 0.0d0
+    ZVC(NVS) = 0.0
     DO N = 1, NABOVE
       IF (NEXT > NVT) NEXT = 1
       XVC(N+1) = XVT(NEXT)
@@ -2431,9 +2431,9 @@ SUBROUTINE CTRANS(NS,NGRS,NVT,XVT,YVT,ZVT)
   INTEGER, INTENT(IN)             :: NS     ! Surface number whose vertex coordinates are being transformed
   INTEGER, INTENT(IN)             :: NGRS   ! Base surface number for surface NS
   INTEGER, INTENT(OUT)            :: NVT    ! Number of vertices for surface NS
-  REAL(r64), INTENT(OUT), DIMENSION(:) :: XVT    ! XYZ coordinates of vertices of NS in plane of NGRS
-  REAL(r64), INTENT(OUT), DIMENSION(:) :: YVT
-  REAL(r64), INTENT(OUT), DIMENSION(:) :: ZVT
+  REAL, INTENT(OUT), DIMENSION(:) :: XVT    ! XYZ coordinates of vertices of NS in plane of NGRS
+  REAL, INTENT(OUT), DIMENSION(:) :: YVT
+  REAL, INTENT(OUT), DIMENSION(:) :: ZVT
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2446,9 +2446,9 @@ SUBROUTINE CTRANS(NS,NGRS,NVT,XVT,YVT,ZVT)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER N             ! Loop Control (vertex number)
-  REAL(r64) Xdif ! Intermediate Result
-  REAL(r64) Ydif ! Intermediate Result
-  REAL(r64) Zdif ! Intermediate Result
+  REAL Xdif ! Intermediate Result
+  REAL Ydif ! Intermediate Result
+  REAL Zdif ! Intermediate Result
 
         ! Perform transformation.
 
@@ -2460,9 +2460,9 @@ SUBROUTINE CTRANS(NS,NGRS,NVT,XVT,YVT,ZVT)
     Ydif = Surface(NS)%Vertex(N)%Y-Y0(NGRS)
     Zdif = Surface(NS)%Vertex(N)%Z-Z0(NGRS)
 
-    IF (ABS(Xdif) <= 1.D-15) Xdif=0.0D0
-    IF (ABS(Ydif) <= 1.D-15) Ydif=0.0D0
-    IF (ABS(Zdif) <= 1.D-15) Zdif=0.0D0
+    IF (ABS(Xdif) <= 1.*10**-15) Xdif=0.0   !RS: Debugging: 102612
+    IF (ABS(Ydif) <= 1.*10**-15) Ydif=0.0
+    IF (ABS(Zdif) <= 1.*10**-15) Zdif=0.0
 
     XVT(N)=Surface(NGRS)%lcsx%x*Xdif+Surface(NGRS)%lcsx%y*Ydif+Surface(NGRS)%lcsx%z*Zdif
     YVT(N)=Surface(NGRS)%lcsy%x*Xdif+Surface(NGRS)%lcsy%y*Ydif+Surface(NGRS)%lcsy%z*Zdif
@@ -2491,11 +2491,11 @@ SUBROUTINE HTRANS(I,NS,NumVertices)
           ! METHODOLOGY EMPLOYED:
           ! Note: Original legacy code used integer arithmetic (tests in subroutines
           ! INCLOS and INTCPT are sensitive to round-off error).  However, porting to Fortran 77
-          ! (BLAST/IBLAST) required some variables to become REAL(r64) instead.
+          ! (BLAST/IBLAST) required some variables to become REAL instead.
 
           ! Notes on homogeneous coordinates:
           ! A point (X,Y) is represented by a 3-element vector
-          ! (W*X,W*Y,W), where W may be any REAL(r64) number except 0.  a line
+          ! (W*X,W*Y,W), where W may be any REAL number except 0.  a line
           ! is also represented by a 3-element vector (A,B,C).  The
           ! directed line (A,B,C) from point (W*X1,W*Y1,W) to point
           ! (V*X2,V*Y2,V) is given by (A,B,C) = (W*X1,W*Y1,W) cross
@@ -2535,7 +2535,7 @@ SUBROUTINE HTRANS(I,NS,NumVertices)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER N              ! Loop Control (vertex number)
-  REAL(r64) SUM   ! Sum variable
+  REAL SUM   ! Sum variable
   INTEGER(i64) ::  ITEMP !
 
   IF (NS > MaxHCS*2) THEN
@@ -2562,7 +2562,7 @@ SUBROUTINE HTRANS(I,NS,NumVertices)
   HCY(NumVertices+1,NS)=HCY(1,NS)
 
           ! Determine lines between points.
-  SUM=0.0D0
+  SUM=0.0
   DO N = 1, NumVertices
     HCA(N,NS) = HCY(N,NS) - HCY(N+1,NS)
     HCB(N,NS) = HCX(N+1,NS) - HCX(N,NS)
@@ -2571,12 +2571,12 @@ SUBROUTINE HTRANS(I,NS,NumVertices)
   END DO
 
           ! Compute area of polygon.
-!  SUM=0.0D0
+!  SUM=0.0
 !  DO N = 1, NumVertices
 !    SUM = SUM + HCX(N,NS)*HCY(N+1,NS) - HCY(N,NS)*HCX(N+1,NS) ! Since HCX and HCY integerized, value of SUM should be ok
 !  END DO
-  HCAREA(NS)=(0.5d0*SUM)/(sqHCMULT)
-!  HCAREA(NS)=0.5d0*SUM*(kHCMULT)
+  HCAREA(NS)=(0.5*SUM)/(sqHCMULT)
+!  HCAREA(NS)=0.5*SUM*(kHCMULT)
 
 
   RETURN
@@ -2590,7 +2590,7 @@ SUBROUTINE HTRANS0(NS,NumVertices)
   INTEGER, INTENT(IN) :: NS  ! Figure Number
   INTEGER, INTENT(IN) :: NumVertices ! Number of vertices
   INTEGER N              ! Loop Control (vertex number)
-  REAL(r64) SUM   ! Sum variable
+  REAL SUM   ! Sum variable
 
   IF (NS > MaxHCS*2) THEN
     CALL ShowFatalError('Solar Shading: HTrans0: Too many Figures (>'//TRIM(TrimSigDigits(MaxHCS))//')')
@@ -2600,7 +2600,7 @@ SUBROUTINE HTRANS0(NS,NumVertices)
   HCX(NumVertices+1,NS)=HCX(1,NS)
   HCY(NumVertices+1,NS)=HCY(1,NS)
 
-  SUM=0.0D0
+  SUM=0.0
   DO N = 1, NumVertices
     HCA(N,NS) = HCY(N,NS) - HCY(N+1,NS)
     HCB(N,NS) = HCX(N+1,NS) - HCX(N,NS)
@@ -2608,7 +2608,7 @@ SUBROUTINE HTRANS0(NS,NumVertices)
     SUM = SUM + HCC(N,NS)
   END DO
 
-  HCAREA(NS)=(0.5d0*SUM)/(sqHCMULT)
+  HCAREA(NS)=(0.5*SUM)/(sqHCMULT)
 
   RETURN
 END SUBROUTINE HTRANS0
@@ -2620,7 +2620,7 @@ SUBROUTINE HTRANS1(NS,NumVertices)
   INTEGER, INTENT(IN) :: NS  ! Figure Number
   INTEGER, INTENT(IN) :: NumVertices ! Number of vertices
   INTEGER N              ! Loop Control (vertex number)
-  REAL(r64) SUM   ! Sum variable
+  REAL SUM   ! Sum variable
   INTEGER(i64) ::  ITEMP !
 
   IF (NS > MaxHCS*2) THEN
@@ -2639,7 +2639,7 @@ SUBROUTINE HTRANS1(NS,NumVertices)
   HCX(NumVertices+1,NS)=HCX(1,NS)
   HCY(NumVertices+1,NS)=HCY(1,NS)
 
-  SUM=0.0D0
+  SUM=0.0
   DO N = 1, NumVertices
     HCA(N,NS) = HCY(N,NS) - HCY(N+1,NS)
     HCB(N,NS) = HCX(N+1,NS) - HCX(N,NS)
@@ -2647,7 +2647,7 @@ SUBROUTINE HTRANS1(NS,NumVertices)
     SUM = SUM + HCC(N,NS)
   END DO
 
-  HCAREA(NS)=(0.5d0*SUM)/(sqHCMULT)
+  HCAREA(NS)=(0.5*SUM)/(sqHCMULT)
 
   RETURN
 END SUBROUTINE HTRANS1
@@ -2698,7 +2698,7 @@ SUBROUTINE INCLOS(N1,N1NumVert,N2,N2NumVert,NumVerticesOverlap,NIN)
   INTEGER M  ! Side number of figure N2
   INTEGER N  ! Vertex number of figure N1
   LOGICAL CycleMainLoop ! Sets when to cycle main loop
-  REAL(r64) HFunct
+  REAL HFunct
 
   NIN=0
 
@@ -2710,7 +2710,7 @@ SUBROUTINE INCLOS(N1,N1NumVert,N2,N2NumVert,NumVerticesOverlap,NIN)
 
     DO M = 1, N2NumVert
       HFunct=HCX(N,N1)*HCA(M,N2)+HCY(N,N1)*HCB(M,N2)+HCC(M,N2)
-      IF (HFunct > 0.0D0 ) THEN
+      IF (HFunct > 0.0 ) THEN
         CycleMainLoop = .TRUE.  ! Set to cycle to the next value of N
         EXIT ! M DO loop
       END IF
@@ -2786,17 +2786,17 @@ SUBROUTINE INTCPT(NV1,NV2,NV3,NS1,NS2)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) W        ! Normalization factor
-  REAL(r64) XUntrunc ! Untruncated X coordinate
-  REAL(r64) YUntrunc ! Untruncated Y coordinate
+  REAL W        ! Normalization factor
+  REAL XUntrunc ! Untruncated X coordinate
+  REAL YUntrunc ! Untruncated Y coordinate
   INTEGER(i64) :: I1       ! Intermediate result for testing intersection
   INTEGER(i64) :: I2       ! Intermediate result for testing intersection
   INTEGER K                 !
   INTEGER KK                !
   INTEGER M                 ! Side number of figure NS2
   INTEGER N                 ! Side number of figure NS1
-  REAL(r64), ALLOCATABLE, DIMENSION(:)      :: XTEMP1  ! Temporary 'X' values for HC vertices of the overlap
-  REAL(r64), ALLOCATABLE, DIMENSION(:)      :: YTEMP1  ! Temporary 'Y' values for HC vertices of the overlap
+  REAL, ALLOCATABLE, DIMENSION(:)      :: XTEMP1  ! Temporary 'X' values for HC vertices of the overlap
+  REAL, ALLOCATABLE, DIMENSION(:)      :: YTEMP1  ! Temporary 'Y' values for HC vertices of the overlap
 
   DO N = 1, NV1
     DO M = 1, NV2
@@ -2824,8 +2824,8 @@ SUBROUTINE INTCPT(NV1,NV2,NV3,NS1,NS2)
 !        write(outputfiledebug,*) 'nv3=',nv3,' size(xtemp)=',size(xtemp)
         ALLOCATE(XTEMP1(SIZE(XTEMP)+10))
         ALLOCATE(YTEMP1(SIZE(YTEMP)+10))
-        XTEMP1=0.0d0
-        YTEMP1=0.0d0
+        XTEMP1=0.0
+        YTEMP1=0.0
         XTEMP1(1:NV3-1)=XTEMP(1:NV3-1)
         YTEMP1(1:NV3-1)=YTEMP(1:NV3-1)
         DEALLOCATE(XTEMP)
@@ -2844,8 +2844,8 @@ SUBROUTINE INTCPT(NV1,NV2,NV3,NS1,NS2)
 
       IF (KK /= 0) THEN
         DO K = 1, KK
-          IF (ABS(XTEMP(NV3)-XTEMP(K)) > 2.0d0) CYCLE
-          IF (ABS(YTEMP(NV3)-YTEMP(K)) > 2.0d0) CYCLE
+          IF (ABS(XTEMP(NV3)-XTEMP(K)) > 2.0) CYCLE
+          IF (ABS(YTEMP(NV3)-YTEMP(K)) > 2.0) CYCLE
           NV3 = KK
           EXIT ! K DO loop
         END DO
@@ -2912,13 +2912,13 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
   INTEGER NVOUT      ! Current output length for loops
   INTEGER NVTEMP
 
-  REAL(r64) W        ! Normalization factor
-  REAL(r64) HFunct
-!  REAL(r64), DIMENSION(2*(MaxVerticesPerSurface + 1))  :: ATEMP    ! Temporary 'A' values for HC vertices of the overlap
-!  REAL(r64), DIMENSION(2*(MaxVerticesPerSurface + 1))  :: BTEMP    ! Temporary 'B' values for HC vertices of the overlap
-!  REAL(r64), DIMENSION(2*(MaxVerticesPerSurface + 1))  :: CTEMP    ! Temporary 'C' values for HC vertices of the overlap
-!  REAL(r64), DIMENSION(2*(MaxVerticesPerSurface + 1))  :: XTEMP1   ! Temporary 'X' values for HC vertices of the overlap
-!  REAL(r64), DIMENSION(2*(MaxVerticesPerSurface + 1))  :: YTEMP1   ! Temporary 'Y' values for HC vertices of the overlap
+  REAL W        ! Normalization factor
+  REAL HFunct
+!  REAL, DIMENSION(2*(MaxVerticesPerSurface + 1))  :: ATEMP    ! Temporary 'A' values for HC vertices of the overlap
+!  REAL, DIMENSION(2*(MaxVerticesPerSurface + 1))  :: BTEMP    ! Temporary 'B' values for HC vertices of the overlap
+!  REAL, DIMENSION(2*(MaxVerticesPerSurface + 1))  :: CTEMP    ! Temporary 'C' values for HC vertices of the overlap
+!  REAL, DIMENSION(2*(MaxVerticesPerSurface + 1))  :: XTEMP1   ! Temporary 'X' values for HC vertices of the overlap
+!  REAL, DIMENSION(2*(MaxVerticesPerSurface + 1))  :: YTEMP1   ! Temporary 'Y' values for HC vertices of the overlap
 
   ! Populate the arrays with the original polygon
   DO P=1, NV1
@@ -2942,9 +2942,9 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
     S = NVOUT
     DO P=1, NVOUT
       HFunct=XTEMP1(P)*HCA(E,NS2)+YTEMP1(P)*HCB(E,NS2)+HCC(E,NS2)
-      IF (HFunct <= 0.0D0 ) THEN          ! Vertex is not in the clipping plane
+      IF (HFunct <= 0.0 ) THEN          ! Vertex is not in the clipping plane
         HFunct=XTEMP1(S)*HCA(E,NS2)+YTEMP1(S)*HCB(E,NS2)+HCC(E,NS2)
-        IF (HFunct > 0.0D0 ) THEN        ! Test vertex is in the clipping plane
+        IF (HFunct > 0.0 ) THEN        ! Test vertex is in the clipping plane
 
           ! Find/store the intersection of the clip edge and the line connecting S and P
           KK            = NVTEMP
@@ -2957,8 +2957,8 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
           IF(E==NV2) THEN       ! Remove near-duplicates on last edge
             IF (KK /= 0) THEN
               DO K = 1, KK
-                IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0d0) CYCLE
-                IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0d0) CYCLE
+                IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0) CYCLE
+                IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0) CYCLE
                 NVTEMP = KK
                 EXIT ! K DO loop
               END DO
@@ -2975,8 +2975,8 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
         IF(E==NV2) THEN            ! Remove near-duplicates on last edge
           IF (KK /= 0) THEN
             DO K = 1, KK
-              IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0d0) CYCLE
-              IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0d0) CYCLE
+              IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0) CYCLE
+              IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0) CYCLE
               NVTEMP = KK
               EXIT ! K DO loop
             END DO
@@ -2985,7 +2985,7 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
 
         ELSE
           HFunct=XTEMP1(S)*HCA(E,NS2)+YTEMP1(S)*HCB(E,NS2)+HCC(E,NS2)
-          IF (HFunct <= 0.0D0) THEN      ! Test vertex is not in the clipping plane
+          IF (HFunct <= 0.0) THEN      ! Test vertex is not in the clipping plane
 
             KK            = NVTEMP
             NVTEMP        = NVTEMP + 1
@@ -2997,8 +2997,8 @@ SUBROUTINE CLIPPOLY(NS1,NS2,NV1,NV2,NV3)
             IF(E==NV2) THEN         ! Remove near-duplicates on last edge
               IF (KK /= 0) THEN
                 DO K = 1, KK
-                  IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0d0) CYCLE
-                  IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0d0) CYCLE
+                  IF (ABS(XTEMP(NVTEMP)-XTEMP(K)) > 2.0) CYCLE
+                  IF (ABS(YTEMP(NVTEMP)-YTEMP(K)) > 2.0) CYCLE
                   NVTEMP = KK
                   EXIT ! K DO loop
                 END DO
@@ -3148,14 +3148,14 @@ SUBROUTINE ORDER(NV3,NS3)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: SLOPE  ! Slopes from left-most vertex to others
-  REAL(r64) DELTAX ! Difference between X coordinates of two vertices
-  REAL(r64) DELTAY ! Difference between Y coordinates of two vertices
-  REAL(r64) SAVES  ! Temporary location for exchange of variables
-  REAL(r64) SAVEX  ! Temporary location for exchange of variables
-  REAL(r64) SAVEY  ! Temporary location for exchange of variables
-  REAL(r64) XMIN   ! X coordinate of left-most vertex
-  REAL(r64) YXMIN  !
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: SLOPE  ! Slopes from left-most vertex to others
+  REAL DELTAX ! Difference between X coordinates of two vertices
+  REAL DELTAY ! Difference between Y coordinates of two vertices
+  REAL SAVES  ! Temporary location for exchange of variables
+  REAL SAVEX  ! Temporary location for exchange of variables
+  REAL SAVEY  ! Temporary location for exchange of variables
+  REAL XMIN   ! X coordinate of left-most vertex
+  REAL YXMIN  !
   INTEGER I      ! Sort index
   INTEGER IM1    ! Sort control
   INTEGER J      ! Sort index
@@ -3188,20 +3188,20 @@ SUBROUTINE ORDER(NV3,NS3)
     DELTAX = XTEMP(N) - XMIN
     DELTAY = YTEMP(N) - YXMIN
 
-    IF (ABS(DELTAX) > 0.5d0) THEN
+    IF (ABS(DELTAX) > 0.5) THEN
 
       M        = M + 1
       SLOPE(M) = DELTAY/DELTAX
       XTEMP(M) = XTEMP(N)
       YTEMP(M) = YTEMP(N)
 
-    ELSEIF (DELTAY > 0.5d0) THEN
+    ELSEIF (DELTAY > 0.5) THEN
 
       P          = 2
       HCX(2,NS3) = NINT(XTEMP(N))
       HCY(2,NS3) = NINT(YTEMP(N))
 
-    ELSEIF (DELTAY < -0.5d0) THEN
+    ELSEIF (DELTAY < -0.5) THEN
 
       HCX(NV3,NS3) = NINT(XTEMP(N))
       HCY(NV3,NS3) = NINT(YTEMP(N))
@@ -3403,9 +3403,9 @@ SUBROUTINE DeterminePolygonOverlap(NS1,NS2,NS3)
     ELSE
       IF (HCAREA(NS1)*HCAREA(NS2) > 0.0) HCAREA(NS3) = -HCAREA(NS3)  ! Determine sign of area of overlap
       HCT(NS3) = HCT(NS2)*HCT(NS1)  ! Determine transmission of overlap
-      if (HCT(NS2) /= 1.0d0 .and. HCT(NS2) /= 0.0d0 .and. HCT(NS1) /= 1.0d0 .and. HCT(NS1) /= 0.0d0) then
-        if (HCT(NS2) >= .5d0 .and. HCT(NS1) >= .5d0) then
-          HCT(NS3)=1.0d0-HCT(NS3)
+      if (HCT(NS2) /= 1.0 .and. HCT(NS2) /= 0.0 .and. HCT(NS1) /= 1.0 .and. HCT(NS1) /= 0.0) then
+        if (HCT(NS2) >= .5 .and. HCT(NS1) >= .5) then
+          HCT(NS3)=1.0-HCT(NS3)
         endif
       endif
     END IF
@@ -3494,18 +3494,18 @@ SUBROUTINE CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AvgSinSolarDeclin ! Average value of Sine of Solar Declination for period
-  REAL(r64), INTENT(IN) :: AvgCosSolarDeclin ! Average value of Cosine of Solar Declination for period
-  REAL(r64), INTENT(IN) :: AvgEqOfTime       ! Average value of Equation of Time for period
+  REAL, INTENT(IN) :: AvgSinSolarDeclin ! Average value of Sine of Solar Declination for period
+  REAL, INTENT(IN) :: AvgCosSolarDeclin ! Average value of Cosine of Solar Declination for period
+  REAL, INTENT(IN) :: AvgEqOfTime       ! Average value of Equation of Time for period
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER,PARAMETER  :: NPhi = 6          ! Number of altitude angle steps for sky integration
   INTEGER,PARAMETER  :: NTheta = 24       ! Number of azimuth angle steps for sky integration
-  REAL(r64),PARAMETER     :: Eps = 1.d-10       ! Small number
-  REAL(r64),PARAMETER :: DPhi = PiOvr2/NPhi         ! Altitude step size, 15 deg for NPhi = 6
-  REAL(r64),PARAMETER :: DTheta = 2.d0*Pi/NTheta    ! Azimuth step size, 15 deg for NTheta = 24
-  REAL(r64),PARAMETER :: DThetaDPhi = DTheta*DPhi   ! Product of DTheta and DPhi
-  REAL(r64),PARAMETER :: PhiMin = 0.5d0*DPhi        ! Minimum altitude
+  REAL,PARAMETER     :: Eps = 1.*10**-10       ! Small number   !RS: Debugging: 102612
+  REAL,PARAMETER :: DPhi = PiOvr2/NPhi         ! Altitude step size, 15 deg for NPhi = 6
+  REAL,PARAMETER :: DTheta = 2.*Pi/NTheta    ! Azimuth step size, 15 deg for NTheta = 24
+  REAL,PARAMETER :: DThetaDPhi = DTheta*DPhi   ! Product of DTheta and DPhi
+  REAL,PARAMETER :: PhiMin = 0.5*DPhi        ! Minimum altitude
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -3518,32 +3518,32 @@ SUBROUTINE CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
   INTEGER IHOUR   ! Hour index number
   INTEGER NS      ! Shadowing surface number
   INTEGER SurfNum ! Surface Loop Control
-  REAL(r64) CurrentTime ! Current Time for passing to Solar Position Routine
-  REAL(r64) SurfArea  ! Surface area. For walls, includes all window frame areas.
+  REAL CurrentTime ! Current Time for passing to Solar Position Routine
+  REAL SurfArea  ! Surface area. For walls, includes all window frame areas.
                  ! For windows, includes divider area
-  REAL(r64), SAVE :: TimeStepFraction=0.0
+  REAL, SAVE :: TimeStepFraction=0.0
   INTEGER TS     ! TimeStep Loop Counter
-  !REAL(r64)  :: Phi               ! Altitude angle
-  !REAL(r64)  :: Theta             ! Azimuth angle
-  REAL(r64)  :: CosPhi            ! Cosine of Phi
-  REAL(r64)  :: Fac1WoShdg        ! Intermediate calculation factor, without shading
-  !REAL(r64)  :: FracIlluminated   ! Fraction of surface area illuminated by a sky patch
-  REAL(r64)  :: Fac1WithShdg      ! Intermediate calculation factor, with shading
+  !REAL  :: Phi               ! Altitude angle
+  !REAL  :: Theta             ! Azimuth angle
+  REAL  :: CosPhi            ! Cosine of Phi
+  REAL  :: Fac1WoShdg        ! Intermediate calculation factor, without shading
+  !REAL  :: FracIlluminated   ! Fraction of surface area illuminated by a sky patch
+  REAL  :: Fac1WithShdg      ! Intermediate calculation factor, with shading
 
   ! Intialize some values for the period
-  IF (TimeStepFraction == 0.0d0) TimeStepFraction=1.0d0/REAL(NumOfTimeStepInHour,r64)
-  SunLitFracHR=0.0d0
-  SunLitFrac=0.0d0
-  SunLitFracWithoutReveal=0.0d0
-  CTHETA=0.0d0
-  CosIncAngHR=0.0d0
-  CosIncAng=0.0d0
-  AOSurf=0.0d0
+  IF (TimeStepFraction == 0.0) TimeStepFraction=1.0/REAL(NumOfTimeStepInHour,r64)
+  SunLitFracHR=0.0
+  SunLitFrac=0.0
+  SunLitFracWithoutReveal=0.0
+  CTHETA=0.0
+  CosIncAngHR=0.0
+  CosIncAng=0.0
+  AOSurf=0.0
   BackSurfaces=0
-  OverlapAreas=0.0d0
+  OverlapAreas=0.0
   DO IHOUR = 1,24
-    SurfaceWindow%OutProjSLFracMult(IHOUR)=1.0d0
-    SurfaceWindow%InOutProjSLFracMult(IHOUR)=1.0d0
+    SurfaceWindow%OutProjSLFracMult(IHOUR)=1.0
+    SurfaceWindow%InOutProjSLFracMult(IHOUR)=1.0
   END DO
 
   DO IHOUR = 1, 24  ! Do for all hours.
@@ -3558,7 +3558,7 @@ SUBROUTINE CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
       ! Save hourly values for use in DaylightingManager
       IF (TS == NumOfTimeStepInHour) SUNCOSHR(1:3,IHOUR) = SUNCOS
 
-      CTHETA=0.0d0
+      CTHETA=0.0
 
       IF (SUNCOS(3) < SunIsUpValue) CYCLE
 
@@ -3574,23 +3574,23 @@ SUBROUTINE CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
 
             ! Transfer current hour
       DO SurfNum = 1, TotSurfaces
-        IF (Surface(SurfNum)%Area >= 1.d-10) THEN
+        IF (Surface(SurfNum)%Area >= 1.*10**-10) THEN   !RS: Debugging: 102612
           SurfArea = Surface(SurfNum)%NetAreaShadowCalc
           IF (TS == NumOfTimeStepInHour) SunLitFracHR(SurfNum,IHOUR) = SAREA(SurfNum)/SurfArea
           SunLitFrac(SurfNum,IHOUR,TS) = SAREA(SurfNum)/SurfArea
-          IF (SunLitFrac(SurfNum,IHOUR,TS) < 1.d-5) SunLitFrac(SurfNum,IHOUR,TS)=0.0d0
+          IF (SunLitFrac(SurfNum,IHOUR,TS) < 1.*10**-5) SunLitFrac(SurfNum,IHOUR,TS)=0.0
         ENDIF
 
         !Added check
         IF (SunLitFrac(SurfNum,IHOUR,TS) > 1.0) THEN
-          SunLitFrac(SurfNum,IHOUR,TS) = 1.0d0
+          SunLitFrac(SurfNum,IHOUR,TS) = 1.0
         ENDIF
       END DO
 
 !   Note -- if not the below, values are set in SkyDifSolarShading routine (constant for simulation)
       IF (DetailedSkyDiffuseAlgorithm .and. ShadingTransmittanceVaries .and.  &
           SolarDistribution /= MinimalShadowing) THEN
-        CosPhi=1.0d0-SUNCOS(3)
+        CosPhi=1.0-SUNCOS(3)
 
         DO SurfNum = 1,TotSurfaces
 
@@ -3655,7 +3655,7 @@ SUBROUTINE CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
 
         IF(Surface(SurfNum)%Class == SurfaceClass_Window .AND.   &
            Surface(SurfNum)%ExtBoundCond == ExternalEnvironment .AND. &
-           SunLitFrac(SurfNum,IHOUR,TS) > 0.0d0 .AND. Surface(SurfNum)%FrameDivider > 0) &
+           SunLitFrac(SurfNum,IHOUR,TS) > 0.0 .AND. Surface(SurfNum)%FrameDivider > 0) &
               CALL CalcFrameDividerShadow(SurfNum,Surface(SurfNum)%FrameDivider,IHOUR)
       END DO
 
@@ -3719,7 +3719,7 @@ SUBROUTINE DetermineShadowingCombinations
   INTEGER :: MaxSBS=50 ! Current Max for SBS array
   LOGICAL CannotShade  ! TRUE if subsurface cannot shade receiving surface
   LOGICAL HasWindow   ! TRUE if a window is present on receiving surface
-  REAL(r64) ZMIN ! Lowest point on the receiving surface
+  REAL ZMIN ! Lowest point on the receiving surface
   INTEGER BackSurfaceNumber ! Back surface number
   INTEGER HTS      ! Heat transfer surface number for a receiving surface
   INTEGER GRSNR    ! Receiving surface number
@@ -3753,13 +3753,13 @@ SUBROUTINE DetermineShadowingCombinations
   ALLOCATE(HCY(MaxHCV+1,MaxHCS*2))
   HCY=0
   ALLOCATE(HCAREA(MaxHCS*2))
-  HCAREA=0.0D0
+  HCAREA=0.0
   ALLOCATE(HCNS(MaxHCS*2))
   HCNS=0
   ALLOCATE(HCNV(MaxHCS*2))
   HCNV=0
   ALLOCATE(HCT(MaxHCS*2))
-  HCT=0.0D0
+  HCT=0.0
 
   ALLOCATE(GSS(MaxGSS))
   ALLOCATE(BKS(MaxGSS))
@@ -4103,23 +4103,23 @@ SUBROUTINE SHADOW(IHOUR,TS)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) XS  ! Intermediate result
-  REAL(r64) YS  ! Intermediate result
-  REAL(r64) ZS  ! Intermediate result
+  REAL XS  ! Intermediate result
+  REAL YS  ! Intermediate result
+  REAL ZS  ! Intermediate result
   INTEGER N     ! Vertex number
   INTEGER NGRS  ! Coordinate transformation index
   INTEGER NZ    ! Zone Number of surface
   INTEGER NVT
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: XVT      ! X Vertices of Shadows
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: YVT      ! Y vertices of Shadows
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: ZVT      ! Z vertices of Shadows
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: XVT      ! X Vertices of Shadows
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: YVT      ! Y vertices of Shadows
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: ZVT      ! Z vertices of Shadows
   LOGICAL, SAVE :: OneTimeFlag=.true.
   INTEGER HTS      ! Heat transfer surface number of the general receiving surface
   INTEGER GRSNR    ! Surface number of general receiving surface
   INTEGER NBKS     ! Number of back surfaces
   INTEGER NGSS     ! Number of general shadowing surfaces
   INTEGER NSBS     ! Number of subsurfaces (windows and doors)
-  REAL(r64) :: SurfArea    ! Surface area. For walls, includes all window frame areas.
+  REAL :: SurfArea    ! Surface area. For walls, includes all window frame areas.
                    ! For windows, includes divider area
 
   IF (OneTimeFlag) THEN
@@ -4132,13 +4132,13 @@ SUBROUTINE SHADOW(IHOUR,TS)
     OneTimeFlag=.false.
   ENDIF
 
-  SAREA=0.0d0
+  SAREA=0.0
 
   DO GRSNR=1,TotSurfaces
 
     IF (.NOT. ShadowComb(GRSNR)%UseThisSurf) CYCLE
 
-    SAREA(GRSNR)=0.0d0
+    SAREA(GRSNR)=0.0
 
     NZ     = Surface(GRSNR)%Zone
     NGSS   = ShadowComb(GRSNR)%NumGenSurf
@@ -4154,7 +4154,7 @@ SUBROUTINE SHADOW(IHOUR,TS)
 
     IF (CTHETA(GRSNR) < SunIsUpValue) THEN !.001) THEN ! Receiving surface is not in the sun
 
-      SAREA(HTS) = 0.0d0
+      SAREA(HTS) = 0.0
       CALL SHDSBS(IHOUR,GRSNR,NBKS,NSBS,HTS,TS)
 
     ELSEIF ((NGSS <= 0).AND.(NSBS <= 0)) THEN   ! Simple surface--no shaders or subsurfaces
@@ -4170,11 +4170,11 @@ SUBROUTINE SHADOW(IHOUR,TS)
       YS = Surface(NGRS)%lcsy%x*SUNCOS(1) + Surface(NGRS)%lcsy%y*SUNCOS(2) + Surface(NGRS)%lcsy%z*SUNCOS(3)
       ZS = Surface(NGRS)%lcsz%x*SUNCOS(1) + Surface(NGRS)%lcsz%y*SUNCOS(2) + Surface(NGRS)%lcsz%z*SUNCOS(3)
 
-      IF (ABS(ZS) > 1.d-4) THEN
+      IF (ABS(ZS) > 1.*10**-4) THEN !RS: Debugging: 102612
         XShadowProjection = XS/ZS
         YShadowProjection = YS/ZS
-        IF (ABS(XShadowProjection) < 1.d-8) XShadowProjection=0.0
-        IF (ABS(YShadowProjection) < 1.d-8) YShadowProjection=0.0
+        IF (ABS(XShadowProjection) < 1.*10**-8) XShadowProjection=0.0
+        IF (ABS(YShadowProjection) < 1.*10**-8) YShadowProjection=0.0
       ELSE
         XShadowProjection = 0.0
         YShadowProjection = 0.0
@@ -4191,7 +4191,7 @@ SUBROUTINE SHADOW(IHOUR,TS)
       CALL HTRANS1(1,NVT)  ! Transform to homogeneous coordinates.
 
       HCAREA(1)=-HCAREA(1)  ! Compute (+) gross surface area.
-      HCT(1)=1.0d0
+      HCT(1)=1.0
 
       CALL SHDGSS(NGRS,IHOUR,TS,GRSNR,NGSS,HTS)   ! Determine shadowing on surface.
       IF(.NOT.CalcSkyDifShading) THEN
@@ -4202,7 +4202,7 @@ SUBROUTINE SHADOW(IHOUR,TS)
 
           ! Error checking:  require that 0 <= SAREA <= AREA.  + or - .01*AREA added for round-off errors
       SurfArea = Surface(GRSNR)%NetAreaShadowCalc
-      SAREA(HTS)=MAX(0.0d0,SAREA(HTS))
+      SAREA(HTS)=MAX(0.0,SAREA(HTS))
 
       SAREA(HTS)=MIN(SAREA(HTS),SurfArea)
 
@@ -4262,9 +4262,9 @@ SUBROUTINE SHDBKS(NGRS,CurSurf,NBKS,HTS)
   INTEGER N
   INTEGER NVR
   INTEGER NVT  ! Number of vertices of back surface
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: XVT    ! X,Y,Z coordinates of vertices of
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: YVT    ! back surfaces projected into system
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: ZVT    ! relative to receiving surface
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: XVT    ! X,Y,Z coordinates of vertices of
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: YVT    ! back surfaces projected into system
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: ZVT    ! relative to receiving surface
   LOGICAL, SAVE :: OneTimeFlag=.true.
   INTEGER BackSurfaceNumber
   INTEGER NS1      ! Number of the figure being overlapped
@@ -4310,7 +4310,7 @@ SUBROUTINE SHDBKS(NGRS,CurSurf,NBKS,HTS)
           ! Transform to the homogeneous coordinate system.
 
     NS3      = LOCHCA+1
-    HCT(NS3) = 0.0d0
+    HCT(NS3) = 0.0
     CALL HTRANS1(NS3,NVT)
 
           ! Adjust near-duplicate points.
@@ -4395,19 +4395,19 @@ SUBROUTINE SHDGSS(NGRS,IHOUR,TS,CurSurf,NGSS,HTS)
   INTEGER N
   INTEGER M
   INTEGER NVR
-  REAL(r64) A  ! Area
+  REAL A  ! Area
   INTEGER GSSNR    ! General shadowing surface number
   INTEGER MainOverlapStatus ! Overlap status of the main overlap calculation not the check for
                             ! multiple overlaps (unless there was an error)
   INTEGER NVT
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: XVT
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: YVT
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: ZVT
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: XVT
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: YVT
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE :: ZVT
   LOGICAL, SAVE :: OneTimeFlag=.true.
   INTEGER NS1      ! Number of the figure being overlapped
   INTEGER NS2      ! Number of the figure doing overlapping
   INTEGER NS3      ! Location to place results of overlap
-  REAL(r64) SchValue    ! Value for Schedule of shading transmittence
+  REAL SchValue    ! Value for Schedule of shading transmittence
   INTEGER ExitLoopStatus
 
   IF (OneTimeFlag) THEN
@@ -4571,11 +4571,11 @@ SUBROUTINE SHDGSS(NGRS,IHOUR,TS,CurSurf,NGSS,HTS)
     SELECT CASE (ExitLoopStatus)
 
       CASE (FirstSurfWithinSecond)    ! Surface fully shaded
-        SAREA(HTS) = 0.0d0
+        SAREA(HTS) = 0.0
         LOCHCA     = FGSSHC
 
       CASE (TooManyVertices,TooManyFigures)   ! Array limits exceeded, estimate
-        SAREA(HTS) = 0.25d0*HCAREA(1)
+        SAREA(HTS) = 0.25*HCAREA(1)
 
       CASE DEFAULT
 
@@ -4588,11 +4588,11 @@ SUBROUTINE SHDGSS(NGRS,IHOUR,TS,CurSurf,NGSS,HTS)
         ELSE
           A = HCAREA(1)
           DO I = 1, NGSSHC
-            A = A + HCAREA(FGSSHC-1+I)*(1.0d0-HCT(FGSSHC-1+I))
+            A = A + HCAREA(FGSSHC-1+I)*(1.0-HCT(FGSSHC-1+I))
           END DO
           SAREA(HTS) = A
-          IF (SAREA(HTS) <= 0.0d0) THEN ! Surface fully shaded
-            SAREA(HTS)=0.0d0
+          IF (SAREA(HTS) <= 0.0) THEN ! Surface fully shaded
+            SAREA(HTS)=0.0
             LOCHCA=FGSSHC
           END IF
         END IF
@@ -4664,14 +4664,14 @@ SUBROUTINE CalcInteriorSolarOverlaps(IHOUR,NBKS,HTSS,GRSNR,TS)
   INTEGER          :: JBKS            ! Counter of back surfaces with non-zero overlap with HTSS
   INTEGER          :: JBKSbase        ! Back base surface counter
   INTEGER          :: BackSurfNum     ! Back surface number
-  REAL(r64) :: OverlapArea     ! Overlap area (m2)
+  REAL :: OverlapArea     ! Overlap area (m2)
 
   LOGICAL        :: UseSimpleDistribution ! TRUE means simple interior solar distribution
                                           ! (all incoming beam assumed to strike floor),
                                           ! FALSE means exact interior solar distribution
                                           ! (track which back surfaces beam illuminates)
 
-  IF (SAREA(HTSS) > 0.0d0) THEN
+  IF (SAREA(HTSS) > 0.0) THEN
 
     UseSimpleDistribution = .FALSE.
 
@@ -4739,10 +4739,10 @@ SUBROUTINE CalcInteriorSolarOverlaps(IHOUR,NBKS,HTSS,GRSNR,TS)
         IF (NINSHC <= 0) CYCLE
         OverlapArea = HCAREA(FINSHC)
         DO J = 2, NINSHC
-          OverlapArea = OverlapArea + HCAREA(FINSHC-1+J)*(1.0d0-HCT(FINSHC-1+J))
+          OverlapArea = OverlapArea + HCAREA(FINSHC-1+J)*(1.0-HCT(FINSHC-1+J))
         END DO
 
-        IF(OverlapArea > 0.001d0) THEN
+        IF(OverlapArea > 0.001) THEN
           JBKS = JBKS + 1
           IF(Surface(BackSurfNum)%BaseSurf == BackSurfNum) JBKSbase = JBKS
           IF(JBKS <= 20) THEN
@@ -4755,7 +4755,7 @@ SUBROUTINE CalcInteriorSolarOverlaps(IHOUR,NBKS,HTSS,GRSNR,TS)
             OverlapAreas(HTSS,JBKS,IHOUR,TS) = OverlapArea*SurfaceWindow(HTSS)%GlazedFrac
             ! If this is a subsurface, subtract its overlap area from the base surface
             IF(Surface(BackSurfNum)%BaseSurf /= BackSurfNum .AND. JBKSbase /= 0) THEN
-              OverlapAreas(HTSS,JBKSbase,IHOUR,TS) =  MAX(0.0d0, &
+              OverlapAreas(HTSS,JBKSbase,IHOUR,TS) =  MAX(0.0, &
               OverlapAreas(HTSS,JBKSbase,IHOUR,TS)- OverlapAreas(HTSS,JBKS,IHOUR,TS))
             END IF
           END IF
@@ -4833,13 +4833,13 @@ INTEGER        :: PipeNum           ! TDD pipe object number
 INTEGER        :: ShelfNum          ! Daylighting shelf object number
 INTEGER        :: InShelfSurf       ! Inside daylighting shelf surface number
 INTEGER        :: OutShelfSurf      ! Outside daylighting shelf surface number
-REAL(r64)      :: ShelfSolarRad     ! Shelf diffuse solar radiation
+REAL      :: ShelfSolarRad     ! Shelf diffuse solar radiation
 INTEGER        :: BackSurfNum       ! Back surface number
 INTEGER        :: IBack             ! Back surface counter
 INTEGER        :: FloorNum          ! Floor surface number
 INTEGER        :: AdjSurfNum        ! Adjacent surface number
 INTEGER        :: AdjZoneNum        ! Adjacent zone number
-REAL(r64)      :: CosTlt            ! Cosine of surface tilt angle
+REAL      :: CosTlt            ! Cosine of surface tilt angle
 INTEGER        :: ConstrNum         ! Construction number
 INTEGER        :: ConstrNumSh       ! Shaded construction number
 INTEGER        :: ConstrNumBack     ! Construction number of back surface
@@ -4848,177 +4848,177 @@ INTEGER        :: FlConstrNum       ! Construction number of floor surface
 INTEGER        :: ShadeFlag         ! Shading flag for a window
 INTEGER        :: ShadeFlagBack     ! Shading flag for a window that is a back surface
 INTEGER        :: Lay               ! Glass layer number
-REAL(r64)      :: SwitchFac         ! Switching factor for a window
-REAL(r64)      :: SwitchFacBack     ! Switching factor for a window that is a back surface
-REAL(r64)      :: TransBeamWin      ! Beam solar transmittance of a window
-REAL(r64)      :: TransBeamWinSh    ! Beam solar transmittance of a shaded window
-REAL(r64)      :: AbsBeamWin(MaxSolidWinLayers) ! Glass layer beam solar absorptance of a window
-REAL(r64)      :: AbsBeamWinSh(MaxSolidWinLayers) ! Glass layer beam solar absorptance of a shaded window
-REAL(r64)      :: AbsBeamTotWin     ! Sum of window glass layer beam solar absorptances
-REAL(r64)      :: ProfAng           ! Window solar profile angle (radians)
-REAL(r64)      :: ProfAngBack       ! Back window solar profile angle (radians)
+REAL      :: SwitchFac         ! Switching factor for a window
+REAL      :: SwitchFacBack     ! Switching factor for a window that is a back surface
+REAL      :: TransBeamWin      ! Beam solar transmittance of a window
+REAL      :: TransBeamWinSh    ! Beam solar transmittance of a shaded window
+REAL      :: AbsBeamWin(MaxSolidWinLayers) ! Glass layer beam solar absorptance of a window
+REAL      :: AbsBeamWinSh(MaxSolidWinLayers) ! Glass layer beam solar absorptance of a shaded window
+REAL      :: AbsBeamTotWin     ! Sum of window glass layer beam solar absorptances
+REAL      :: ProfAng           ! Window solar profile angle (radians)
+REAL      :: ProfAngBack       ! Back window solar profile angle (radians)
 INTEGER        :: BlNum             ! Blind number
 INTEGER        :: ScNum             ! Screen number
 INTEGER        :: BlNumBack         ! Back surface blind number
 INTEGER        :: ScNumBack         ! Back surface screen number
-REAL(r64)      :: TBmBm             ! Beam-beam solar transmittance for bare window or window with switchable glazing
-REAL(r64)      :: TBmDif            ! Beam-diffuse solar transmittance for bare window with diffusing glass
-REAL(r64)      :: TBlBmDif          ! Beam-diffuse solar transmittance of blind
-REAL(r64)      :: TScBmDif          ! Beam-diffuse solar transmittance of screen
-REAL(r64)      :: TBlDifDif         ! Diffuse-diffuse solar transmittance of blind
-REAL(r64)      :: TScDifDif         ! Diffuse-diffuse solar transmittance of screen
-REAL(r64)      :: RhoBlBmDifFr      ! Beam-diffuse front reflectance of blind
-REAL(r64)      :: RhoBlBmDifBk      ! Beam-diffuse back reflectance of blind
-REAL(r64)      :: RScBmDifBk        ! Beam-diffuse back reflectance of blind
-REAL(r64)      :: RhoBlDifDifFr     ! Diffuse-diffuse front refectance of blind
-REAL(r64)      :: RhoBlDifDifBk     ! Diffuse-diffuse back refectance of blind
-REAL(r64)      :: RScDifDifBk       ! Diffuse-diffuse back refectance of screen
-REAL(r64)      :: RGlBmFr           ! Beam front reflectance of glass
-REAL(r64)      :: RGlDifFr          ! Diffuse front reflectance of glass
-REAL(r64)      :: RGlDifBk          ! Diffuse back reflectance of glass
-REAL(r64)      :: TBmBmBl           ! Beam-beam transmittance for window with blind
-REAL(r64)      :: TBmBmSc           ! Beam-beam transmittance for window with screen
-REAL(r64)      :: TBmAllShBlSc      ! Beam-beam + beam-diffuse transmittance for window with shade, blind, screen,
+REAL      :: TBmBm             ! Beam-beam solar transmittance for bare window or window with switchable glazing
+REAL      :: TBmDif            ! Beam-diffuse solar transmittance for bare window with diffusing glass
+REAL      :: TBlBmDif          ! Beam-diffuse solar transmittance of blind
+REAL      :: TScBmDif          ! Beam-diffuse solar transmittance of screen
+REAL      :: TBlDifDif         ! Diffuse-diffuse solar transmittance of blind
+REAL      :: TScDifDif         ! Diffuse-diffuse solar transmittance of screen
+REAL      :: RhoBlBmDifFr      ! Beam-diffuse front reflectance of blind
+REAL      :: RhoBlBmDifBk      ! Beam-diffuse back reflectance of blind
+REAL      :: RScBmDifBk        ! Beam-diffuse back reflectance of blind
+REAL      :: RhoBlDifDifFr     ! Diffuse-diffuse front refectance of blind
+REAL      :: RhoBlDifDifBk     ! Diffuse-diffuse back refectance of blind
+REAL      :: RScDifDifBk       ! Diffuse-diffuse back refectance of screen
+REAL      :: RGlBmFr           ! Beam front reflectance of glass
+REAL      :: RGlDifFr          ! Diffuse front reflectance of glass
+REAL      :: RGlDifBk          ! Diffuse back reflectance of glass
+REAL      :: TBmBmBl           ! Beam-beam transmittance for window with blind
+REAL      :: TBmBmSc           ! Beam-beam transmittance for window with screen
+REAL      :: TBmAllShBlSc      ! Beam-beam + beam-diffuse transmittance for window with shade, blind, screen,
                                     ! or switchable glazing
-REAL(r64)      :: TBmAll            ! Window beam-to-(beam+diffuse) transmittance
-REAL(r64)      :: TBm               ! Window beam-beam transmittance
-REAL(r64)      :: DifSolarInc       ! Exterior diffuse solar incident on window (W/m2)
-REAL(r64)      :: SkySolarTrans     ! Exterior diffuse sky solar transmitted by TDD (W/m2)
-REAL(r64)      :: GndSolarTrans     ! Exterior diffuse ground solar transmitted by TDD (W/m2)
-REAL(r64)      :: TDifBare          ! Bare diffuse transmittance of exterior window
-REAL(r64)      :: TGlDif            ! Bare diffuse transmittance of back window
-REAL(r64)      :: TGlBm             ! Glazing system front solar beam transmittance
-REAL(r64)      :: TGlBmBack         ! Glazing system back solar beam transmittance
-REAL(r64)      :: AGlDiffBack       ! Glass layer back diffuse solar absorptance
-REAL(r64)      :: RGlDiffBack       ! Glazing system back diffuse solar reflectance
-REAL(r64)      :: AGlDiffFront      ! Glass layer front diffuse solar absorptance
-REAL(r64)      :: RGlDiffFront      ! Glazing system front diffuse solar reflectance
-REAL(r64)      :: RhoBlFront        ! Blind solar front beam reflectance
-REAL(r64)      :: RhoBlBack         ! Blind solar back beam-diffuse reflectance
-REAL(r64)      :: RScBack           ! Screen solar back beam-diffuse reflectance
-REAL(r64)      :: RScDifBack        ! Screen solar back diffuse-diffuse reflectance
-REAL(r64)      :: AbsBlFront        ! Blind solar front beam absorptance
-REAL(r64)      :: AbsScBeam         ! Screen solar beam absorptance
-REAL(r64)      :: AbsBlBack         ! Blind solar back beam absorptance
-REAL(r64)      :: AbsScBack         ! Screen solar back beam absorptance
-REAL(r64)      :: AbsBlDiffFront    ! Blind solar front diffuse absorptance
-REAL(r64)      :: AbsBlDiffBack     ! Blind solar back diffuse absorptance
-REAL(r64)      :: AbsScDiffBack     ! Screen solar back diffuse absorptance
-REAL(r64)      :: ABlBack           ! Blind solar back absorptance for interior solar
-REAL(r64)      :: AScBack           ! Screen solar back absorptance for interior solar
-REAL(r64)      :: TrSh              ! Shade material solar transmittance
-REAL(r64)      :: AbsSh             ! Shade material solar absorptance
-REAL(r64)      :: RhoSh             ! Shade material solar reflectance
-REAL(r64)      :: AShBack           ! System shade absorptance for interior beam solar
-REAL(r64)      :: TBlBmBm           ! Blind solar front beam-beam transmittance
-REAL(r64)      :: TScBmBm           ! Screen solar front beam-beam transmittance
-REAL(r64)      :: TBlBmBmBack       ! Blind solar back beam-beam transmittance
-REAL(r64)      :: TScBmBmBack       ! Screen solar back beam-beam transmittance
-REAL(r64)      :: TBlBmDiff         ! Blind solar front beam-diffuse transmittance
-REAL(r64)      :: TScBmDiff         ! Screen solar front beam-diffuse transmittance
-REAL(r64)      :: TBlBmDiffBack     ! Blind solar back beam-diffuse transmittance
-REAL(r64)      :: TScBmDiffBack     ! Screen solar back beam-diffuse transmittance
-REAL(r64)      :: RhoBlDiffFront    ! Blind solar front diffuse reflectance
-REAL(r64)      :: RhoBlDiffBack     ! Blind solar back diffuse reflectance
-REAL(r64)      :: RScDiffBack       ! Screen solar back diffuse reflectance
-REAL(r64)      :: RGlFront          ! Glazing system solar front beam-beam reflectance
-REAL(r64)      :: RGlBack           ! Glazing system solar back beam-beam reflectance
-REAL(r64)      :: BTOTWinZone       ! Transmitted beam solar factor for a window
-REAL(r64)      :: BTOTZone          ! (Solar entering a zone as beam or diffuse radiation, originating as beam solar
+REAL      :: TBmAll            ! Window beam-to-(beam+diffuse) transmittance
+REAL      :: TBm               ! Window beam-beam transmittance
+REAL      :: DifSolarInc       ! Exterior diffuse solar incident on window (W/m2)
+REAL      :: SkySolarTrans     ! Exterior diffuse sky solar transmitted by TDD (W/m2)
+REAL      :: GndSolarTrans     ! Exterior diffuse ground solar transmitted by TDD (W/m2)
+REAL      :: TDifBare          ! Bare diffuse transmittance of exterior window
+REAL      :: TGlDif            ! Bare diffuse transmittance of back window
+REAL      :: TGlBm             ! Glazing system front solar beam transmittance
+REAL      :: TGlBmBack         ! Glazing system back solar beam transmittance
+REAL      :: AGlDiffBack       ! Glass layer back diffuse solar absorptance
+REAL      :: RGlDiffBack       ! Glazing system back diffuse solar reflectance
+REAL      :: AGlDiffFront      ! Glass layer front diffuse solar absorptance
+REAL      :: RGlDiffFront      ! Glazing system front diffuse solar reflectance
+REAL      :: RhoBlFront        ! Blind solar front beam reflectance
+REAL      :: RhoBlBack         ! Blind solar back beam-diffuse reflectance
+REAL      :: RScBack           ! Screen solar back beam-diffuse reflectance
+REAL      :: RScDifBack        ! Screen solar back diffuse-diffuse reflectance
+REAL      :: AbsBlFront        ! Blind solar front beam absorptance
+REAL      :: AbsScBeam         ! Screen solar beam absorptance
+REAL      :: AbsBlBack         ! Blind solar back beam absorptance
+REAL      :: AbsScBack         ! Screen solar back beam absorptance
+REAL      :: AbsBlDiffFront    ! Blind solar front diffuse absorptance
+REAL      :: AbsBlDiffBack     ! Blind solar back diffuse absorptance
+REAL      :: AbsScDiffBack     ! Screen solar back diffuse absorptance
+REAL      :: ABlBack           ! Blind solar back absorptance for interior solar
+REAL      :: AScBack           ! Screen solar back absorptance for interior solar
+REAL      :: TrSh              ! Shade material solar transmittance
+REAL      :: AbsSh             ! Shade material solar absorptance
+REAL      :: RhoSh             ! Shade material solar reflectance
+REAL      :: AShBack           ! System shade absorptance for interior beam solar
+REAL      :: TBlBmBm           ! Blind solar front beam-beam transmittance
+REAL      :: TScBmBm           ! Screen solar front beam-beam transmittance
+REAL      :: TBlBmBmBack       ! Blind solar back beam-beam transmittance
+REAL      :: TScBmBmBack       ! Screen solar back beam-beam transmittance
+REAL      :: TBlBmDiff         ! Blind solar front beam-diffuse transmittance
+REAL      :: TScBmDiff         ! Screen solar front beam-diffuse transmittance
+REAL      :: TBlBmDiffBack     ! Blind solar back beam-diffuse transmittance
+REAL      :: TScBmDiffBack     ! Screen solar back beam-diffuse transmittance
+REAL      :: RhoBlDiffFront    ! Blind solar front diffuse reflectance
+REAL      :: RhoBlDiffBack     ! Blind solar back diffuse reflectance
+REAL      :: RScDiffBack       ! Screen solar back diffuse reflectance
+REAL      :: RGlFront          ! Glazing system solar front beam-beam reflectance
+REAL      :: RGlBack           ! Glazing system solar back beam-beam reflectance
+REAL      :: BTOTWinZone       ! Transmitted beam solar factor for a window
+REAL      :: BTOTZone          ! (Solar entering a zone as beam or diffuse radiation, originating as beam solar
                                     !  incident on exterior windows)/(Beam normal solar) [W/(W/m2)]
-REAL(r64)      :: AbWin(MaxSolidWinLayers) ! Factor for front beam radiation absorbed in window glass layers
-REAL(r64)      :: AbWinBack         ! Factor for back beam radiation absorbed in window glass layers
-REAL(r64)      :: AbWinSh(MaxSolidWinLayers) ! Like AbWin, but for shaded window
-REAL(r64)      :: BABSZone          ! Beam radiation from exterior windows absorbed in a zone or transmitted through
-REAL(r64)      :: AOverlap          ! Back surface area irradiated by beam solar from an exterior window,
+REAL      :: AbWin(MaxSolidWinLayers) ! Factor for front beam radiation absorbed in window glass layers
+REAL      :: AbWinBack         ! Factor for back beam radiation absorbed in window glass layers
+REAL      :: AbWinSh(MaxSolidWinLayers) ! Like AbWin, but for shaded window
+REAL      :: BABSZone          ! Beam radiation from exterior windows absorbed in a zone or transmitted through
+REAL      :: AOverlap          ! Back surface area irradiated by beam solar from an exterior window,
                                     !   projected onto window plane
-REAL(r64)      :: BOverlap          ! AOverlap multiplied by exterior window beam transmittance
+REAL      :: BOverlap          ! AOverlap multiplied by exterior window beam transmittance
                                     ! and cosine of incidence angle
-REAL(r64)      :: AbsScreen         ! Exterior screen beam solar absorptance
-REAL(r64)      :: AbsShade          ! Interior shade or blind beam solar absorptance
-REAL(r64)      :: AbsShadeDiff      ! Interior shade or blind diffuse solar absorptance
-REAL(r64)      :: DSZoneWin         ! Factor for sky diffuse solar gain into a zone from an exterior window
-REAL(r64)      :: DSZoneWinSh       ! Factor for sky diffuse solar gain into a zone from a shaded exterior window
-REAL(r64)      :: DGZoneWin         ! Factor for ground diffuse solar gain into a zone
-REAL(r64)      :: DGZoneWinSh       ! Factor for ground diffuse solar gain into a zone from a shaded exterior window
-REAL(r64)      :: HMovInsul         ! Conductance of movable wall insulation
-REAL(r64)      :: AbsIntSurf, AbsInt ! Interior solar absorptance of opaque surface
+REAL      :: AbsScreen         ! Exterior screen beam solar absorptance
+REAL      :: AbsShade          ! Interior shade or blind beam solar absorptance
+REAL      :: AbsShadeDiff      ! Interior shade or blind diffuse solar absorptance
+REAL      :: DSZoneWin         ! Factor for sky diffuse solar gain into a zone from an exterior window
+REAL      :: DSZoneWinSh       ! Factor for sky diffuse solar gain into a zone from a shaded exterior window
+REAL      :: DGZoneWin         ! Factor for ground diffuse solar gain into a zone
+REAL      :: DGZoneWinSh       ! Factor for ground diffuse solar gain into a zone from a shaded exterior window
+REAL      :: HMovInsul         ! Conductance of movable wall insulation
+REAL      :: AbsIntSurf, AbsInt ! Interior solar absorptance of opaque surface
 
-REAL(r64)      :: MovInsulSchedVal  ! Value of the movable insulation schedule for current time
-REAL(r64)      :: FracSunLit        ! Effective fraction of window that is sunlit;
+REAL      :: MovInsulSchedVal  ! Value of the movable insulation schedule for current time
+REAL      :: FracSunLit        ! Effective fraction of window that is sunlit;
                                     !  takes shadowing effects of frame and divider into account
-REAL(r64)      :: SunLitFract       ! Sunlit fraction w/o shadowing effects of frame and divider
-REAL(r64)      :: InOutProjSLFracMult ! = SurfaceWindow(SurfNum)%InOutProjSLFracMult(HourOfDay)
-REAL(r64)      :: CosInc,CosIncBack ! Incidence angle of beam solar radiation on window
-REAL(r64)      :: SlatAng,SlatAngBack   ! Slat angle this time step for window with blind on (deg)
+REAL      :: SunLitFract       ! Sunlit fraction w/o shadowing effects of frame and divider
+REAL      :: InOutProjSLFracMult ! = SurfaceWindow(SurfNum)%InOutProjSLFracMult(HourOfDay)
+REAL      :: CosInc,CosIncBack ! Incidence angle of beam solar radiation on window
+REAL      :: SlatAng,SlatAngBack   ! Slat angle this time step for window with blind on (deg)
 LOGICAL        :: VarSlats,VarSlatsBack ! True if variable slat angle
-REAL(r64)      :: ADiffWin(5)       ! Diffuse solar absorptance of glass layers, bare window
-REAL(r64)      :: ADiffWinSh(5)     ! Diffuse solar absorptance of glass layers, window with shading device
-REAL(r64)      :: DiffTrans         ! Glazing diffuse solar transmittance (including shade/blind/switching, if present)
-REAL(r64)      :: DiffTransGnd      ! Ground diffuse solar transmittance for glazing with blind with horiz. slats
-REAL(r64)      :: DiffTransSky      ! Sky diffuse solar transmittance for glazing with blind with horiz. slats
+REAL      :: ADiffWin(5)       ! Diffuse solar absorptance of glass layers, bare window
+REAL      :: ADiffWinSh(5)     ! Diffuse solar absorptance of glass layers, window with shading device
+REAL      :: DiffTrans         ! Glazing diffuse solar transmittance (including shade/blind/switching, if present)
+REAL      :: DiffTransGnd      ! Ground diffuse solar transmittance for glazing with blind with horiz. slats
+REAL      :: DiffTransSky      ! Sky diffuse solar transmittance for glazing with blind with horiz. slats
 INTEGER        :: BaseSurfNum       ! Base surface number
-REAL(r64)      :: t1,t2,t3          ! Bare-glass beam solar transmittance for glass layers 1,2 and 3
-REAL(r64)      :: t1t2              ! t1*t2
-REAL(r64)      :: af1,af2,af3       ! Bare-glass beam solar front absorptance for glass layers 1,2 and 3
-REAL(r64)      :: ab1,ab2,ab3       ! Bare-glass beam solar back absorptance for glass layers 1,2 and 3
-REAL(r64)      :: rf1,rf2,rf3       ! Bare-glass beam solar front reflectance for glass layers 1,2 and 3
-REAL(r64)      :: rb1,rb2,rb3       ! Bare-glass beam solar back reflectance for glass layers 1,2 and 3
-REAL(r64)      :: td1,td2,td3       ! Bare-glass diffuse solar transmittance for glass layers 1,2 and 3
-REAL(r64)      :: td1td2            ! td1*td2
-REAL(r64)      :: afd1,afd2,afd3    ! Bare-glass diffuse solar front absorptance for glass layers 1,2 and 3
-REAL(r64)      :: abd1,abd2,abd3    ! Bare-glass diffuse solar back absorptance for glass layers 1,2 and 3
-REAL(r64)      :: rfd1,rfd2,rfd3    ! Bare-glass diffuse solar front reflectance for glass layers 1,2 and 3
-REAL(r64)      :: rbd1,rbd2,rbd3    ! Bare-glass diffuse solar back reflectance for glass layers 1,2 and 3
-REAL(r64)      :: tfshBB,tbshBB     ! Bare-blind front and back beam-beam solar transmittance
-REAL(r64)      :: tfshBd,tbshBd     ! Bare-blind front and back beam-diffuse solar transmittance
-REAL(r64)      :: tfshd,tbshd       ! Bare-blind front and back diffuse-diffuse solar transmittance
-REAL(r64)      :: afshB,abshB       ! Bare-blind front and back beam solar absorptance
-REAL(r64)      :: afshd,abshd       ! Bare-blind front and back diffuse solar absorptance
-REAL(r64)      :: rfshB,rbshB       ! Bare-blind front and back beam solar reflectance
-REAL(r64)      :: rfshd,rbshd       ! Bare-blind front and back diffuse solar reflectance
-REAL(r64)      :: t1k,t2k,t3k       ! Back surface bare-glass beam solar transmittance for glass layers 1,2,3
-REAL(r64)      :: af2k,af3k         ! Back surface bare-glass beam solar front absorptance for glass layers 2 and 3
-REAL(r64)      :: ab1k,ab2k,ab3k    ! Back surface bare-glass beam solar back absorptance for glass layers 1,2 and 3
-REAL(r64)      :: rb1k,rb2k         ! Back surface bare-glass beam solar back reflectance for glass layers 1,2
-REAL(r64)      :: td1k,td2k         ! Back surface bare-glass beam diffuse solar transmittance for glass layers 1,2
-REAL(r64)      :: afd2k,afd3k       ! Back surface bare-glass diffuse solar front absorptance for glass layer 2 and 3
-REAL(r64)      :: abd1k,abd2k       ! Back surface bare-glass diffuse solar back absorptance for glass layer 1 and 2
-REAL(r64)      :: rfd2k,rfd3k       ! Back surface bare-glass diffuse solar front reflectance for glass layer 2 and 3
-REAL(r64)      :: rbd1k,rbd2k       ! Back surface bare-glass diffuse solar back reflectance for glass layer 1 and 2
-REAL(r64)      :: tfshBBk,tbshBBk   ! Back surface bare-blind beam-beam solar front and back transmittance
-REAL(r64)      :: tfshBdk,tbshBdk   ! Back surface bare-blind beam-diffuse solar front and back transmittance
-REAL(r64)      :: tfshdk,tbshdk     ! Back surface bare-blind diffuse-diffuse solar front and back transmittance
-REAL(r64)      :: rfshBk,rbshBk     ! Back surface bare-blind beam solar front, back reflectance
-REAL(r64)      :: rfshdk,rbshdk     ! Back surface bare-blind diffuse solar front, back reflectance
-REAL(r64)      :: afshBk,abshBk     ! Back surface bare-blind beam solar front, back absorptance
-REAL(r64)      :: afshdk,abshdk     ! Back surface bare-blind diffuse solar front, back absorptance
+REAL      :: t1,t2,t3          ! Bare-glass beam solar transmittance for glass layers 1,2 and 3
+REAL      :: t1t2              ! t1*t2
+REAL      :: af1,af2,af3       ! Bare-glass beam solar front absorptance for glass layers 1,2 and 3
+REAL      :: ab1,ab2,ab3       ! Bare-glass beam solar back absorptance for glass layers 1,2 and 3
+REAL      :: rf1,rf2,rf3       ! Bare-glass beam solar front reflectance for glass layers 1,2 and 3
+REAL      :: rb1,rb2,rb3       ! Bare-glass beam solar back reflectance for glass layers 1,2 and 3
+REAL      :: td1,td2,td3       ! Bare-glass diffuse solar transmittance for glass layers 1,2 and 3
+REAL      :: td1td2            ! td1*td2
+REAL      :: afd1,afd2,afd3    ! Bare-glass diffuse solar front absorptance for glass layers 1,2 and 3
+REAL      :: abd1,abd2,abd3    ! Bare-glass diffuse solar back absorptance for glass layers 1,2 and 3
+REAL      :: rfd1,rfd2,rfd3    ! Bare-glass diffuse solar front reflectance for glass layers 1,2 and 3
+REAL      :: rbd1,rbd2,rbd3    ! Bare-glass diffuse solar back reflectance for glass layers 1,2 and 3
+REAL      :: tfshBB,tbshBB     ! Bare-blind front and back beam-beam solar transmittance
+REAL      :: tfshBd,tbshBd     ! Bare-blind front and back beam-diffuse solar transmittance
+REAL      :: tfshd,tbshd       ! Bare-blind front and back diffuse-diffuse solar transmittance
+REAL      :: afshB,abshB       ! Bare-blind front and back beam solar absorptance
+REAL      :: afshd,abshd       ! Bare-blind front and back diffuse solar absorptance
+REAL      :: rfshB,rbshB       ! Bare-blind front and back beam solar reflectance
+REAL      :: rfshd,rbshd       ! Bare-blind front and back diffuse solar reflectance
+REAL      :: t1k,t2k,t3k       ! Back surface bare-glass beam solar transmittance for glass layers 1,2,3
+REAL      :: af2k,af3k         ! Back surface bare-glass beam solar front absorptance for glass layers 2 and 3
+REAL      :: ab1k,ab2k,ab3k    ! Back surface bare-glass beam solar back absorptance for glass layers 1,2 and 3
+REAL      :: rb1k,rb2k         ! Back surface bare-glass beam solar back reflectance for glass layers 1,2
+REAL      :: td1k,td2k         ! Back surface bare-glass beam diffuse solar transmittance for glass layers 1,2
+REAL      :: afd2k,afd3k       ! Back surface bare-glass diffuse solar front absorptance for glass layer 2 and 3
+REAL      :: abd1k,abd2k       ! Back surface bare-glass diffuse solar back absorptance for glass layer 1 and 2
+REAL      :: rfd2k,rfd3k       ! Back surface bare-glass diffuse solar front reflectance for glass layer 2 and 3
+REAL      :: rbd1k,rbd2k       ! Back surface bare-glass diffuse solar back reflectance for glass layer 1 and 2
+REAL      :: tfshBBk,tbshBBk   ! Back surface bare-blind beam-beam solar front and back transmittance
+REAL      :: tfshBdk,tbshBdk   ! Back surface bare-blind beam-diffuse solar front and back transmittance
+REAL      :: tfshdk,tbshdk     ! Back surface bare-blind diffuse-diffuse solar front and back transmittance
+REAL      :: rfshBk,rbshBk     ! Back surface bare-blind beam solar front, back reflectance
+REAL      :: rfshdk,rbshdk     ! Back surface bare-blind diffuse solar front, back reflectance
+REAL      :: afshBk,abshBk     ! Back surface bare-blind beam solar front, back absorptance
+REAL      :: afshdk,abshdk     ! Back surface bare-blind diffuse solar front, back absorptance
 INTEGER        :: NGlass            ! Number of glass layers in a construction
 INTEGER        :: NBackGlass        ! Number of glass layers in the "back" construction
-REAL(r64)      :: SkySolarInc       ! Incident solar radiation on a window: sky diffuse plus beam
+REAL      :: SkySolarInc       ! Incident solar radiation on a window: sky diffuse plus beam
                                     !   reflected from obstruction (W/m2)
-REAL(r64)      :: GndSolarInc       ! Incident solar radiation on a window from the ground (W/m2)
+REAL      :: GndSolarInc       ! Incident solar radiation on a window from the ground (W/m2)
 
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: ExtBeamAbsByShadFac  ! Factor for exterior beam radiation absorbed by shade
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: ExtBeamAbsByShadFac  ! Factor for exterior beam radiation absorbed by shade
                                                              ! (1/m2) (absorbed radation = beam incident * ExtBeamAbsByShad
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: IntBeamAbsByShadFac  ! Like ExtBeamAbsByShadFac, but for interior beam radiation.
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransBmSolar   ! Factor for exterior beam solar transmitted through window,
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: IntBeamAbsByShadFac  ! Like ExtBeamAbsByShadFac, but for interior beam radiation.
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransBmSolar   ! Factor for exterior beam solar transmitted through window,
                                                           ! or window plus shade, into zone at current time (m2)
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolar  ! Factor for exterior diffuse solar transmitted through window,
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolar  ! Factor for exterior diffuse solar transmitted through window,
                                                           ! or window plus shade, into zone at current time (m2)
 
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolarGnd  ! Factor for exterior ground diffuse solar transmitted through
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolarGnd  ! Factor for exterior ground diffuse solar transmitted through
                                                           ! window with horizontally-slatted blind into zone at current time (m2)
-REAL(r64), SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolarSky  ! Factor for exterior sky diffuse solar transmitted through
+REAL, SAVE,ALLOCATABLE, DIMENSION(:) :: WinTransDifSolarSky  ! Factor for exterior sky diffuse solar transmitted through
                                                           ! window with horizontally-slatted blind into zone at current time (m2)
 LOGICAL,SAVE :: MustAlloc=.true.  ! True when local arrays must be allocated
-REAL(r64) :: TBmDenom  ! TBmDenominator
+REAL :: TBmDenom  ! TBmDenominator
 
-REAL(r64) :: TBmBmShBlSc            ! Beam-beam transmittance for window with shade, blind, screen, or switchable glazing
-REAL(r64) :: TBmDifShBlSc           ! Beam-diffuse transmittance for window with shade, blind, screen, or switchable glazing
-REAL(r64) :: WinTransBmBmSolar      ! Factor for exterior beam to beam solar transmitted through window,
+REAL :: TBmBmShBlSc            ! Beam-beam transmittance for window with shade, blind, screen, or switchable glazing
+REAL :: TBmDifShBlSc           ! Beam-diffuse transmittance for window with shade, blind, screen, or switchable glazing
+REAL :: WinTransBmBmSolar      ! Factor for exterior beam to beam solar transmitted through window,
                                     !  or window plus shade, into zone at current time (m2)
-REAL(r64) :: WinTransBmDifSolar     ! Factor for exterior beam to diffuse solar transmitted through window,
+REAL :: WinTransBmDifSolar     ! Factor for exterior beam to diffuse solar transmitted through window,
                                     !  or window plus shade, into zone at current time (m2)
 
 IF (MustAlloc) THEN
@@ -5126,7 +5126,7 @@ DO ZoneNum = 1, NumOfZones
         ! EXTERIOR BEAM SOLAR RADIATION ABSORBED ON THE OUTSIDE OF OPAQUE SURFACES
         !-------------------------------------------------------------------------
 
-    IF(SunLitFract > 0.0d0 .AND. Construct(ConstrNum)%TransDiff <= 0.0d0) THEN
+    IF(SunLitFract > 0.0 .AND. Construct(ConstrNum)%TransDiff <= 0.0) THEN
       AOSurf(SurfNum) = Construct(ConstrNum)%OutsideAbsorpSolar * CosInc * SunLitFract
 
       ! Note: movable insulation, if present, is accounted for in subr. InitIntSolarDistribution,
@@ -5201,10 +5201,10 @@ DO ZoneNum = 1, NumOfZones
                 RhoBlDiffFront = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffDiffRefl)
               END IF
               AGlDiffBack     = Construct(ConstrNum)%AbsDiffBack(Lay)
-              ABWinSh(Lay)    = AbWin(Lay) + (TGlBm*AGlDiffBack*RhoBlFront/(1.d0-RhoBlFront*RGlDiffBack))* &
+              ABWinSh(Lay)    = AbWin(Lay) + (TGlBm*AGlDiffBack*RhoBlFront/(1.-RhoBlFront*RGlDiffBack))* &
                 CosInc * FracSunLit
               ADiffWinSh(Lay) = ADiffWin(Lay) + Construct(ConstrNum)%TransDiff*AGlDiffBack*RhoBlDiffFront/ &
-                                                    (1.d0-RhoBlDiffFront*RGlDiffBack)
+                                                    (1.-RhoBlDiffFront*RGlDiffBack)
             ELSE IF(ShadeFlag == ExtBlindOn) THEN
 
                                  ! Exterior blind on
@@ -5225,7 +5225,7 @@ DO ZoneNum = 1, NumOfZones
                 (1 - RGlDiffFront*RhoBlDiffBack)) * CosInc * FracSunLit
               !ADiffWinSh(Lay) = 0.0  ! Assumes no contribution from reveal reflection when exterior blind in place
               !  Replaced above line with (FCW, 2/10/03):
-              ADiffWinSh(Lay) = ADiffWin(Lay) * TBlDifDif/(1.d0-RGlDifFr*RhoBlDifDifBk)
+              ADiffWinSh(Lay) = ADiffWin(Lay) * TBlDifDif/(1.-RGlDifFr*RhoBlDifDifBk)
 
             ELSE IF(ShadeFlag == ExtScreenOn) THEN
 
@@ -5244,9 +5244,9 @@ DO ZoneNum = 1, NumOfZones
 
 !             Reduce the bare window absorbed beam by the screen beam transmittance and then account for interreflections
               ABWinSh(Lay) = TScBmBm*ABWin(Lay) + (TScBmBm*RGlFront*RScBack + TScBmDiff) *  &
-                                Construct(ConstrNum)%AbsDiff(Lay)/(1.d0-RGlDiffFront*RScDifBack) * CosInc * FracSunLit
+                                Construct(ConstrNum)%AbsDiff(Lay)/(1.-RGlDiffFront*RScDifBack) * CosInc * FracSunLit
 
-              ADiffWinSh(Lay) = ADiffWin(Lay) * TScDifDif/(1.d0-RGlDifFr*RScDifBack)
+              ADiffWinSh(Lay) = ADiffWin(Lay) * TScDifDif/(1.-RGlDifFr*RScDifBack)
 
             ELSE
                                  ! Between-glass blind on
@@ -5407,9 +5407,9 @@ DO ZoneNum = 1, NumOfZones
         RhoBlDiffFront = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffDiffRefl)
         AbsBlDiffFront = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffAbs)
         AbsShade       = TBmBm * (AbsBlFront + &
-          RhoBlFront*RGlDiffBAck*AbsBlDiffFront/(1.d0-RhoBlDiffFront*RGlDiffBack))
+          RhoBlFront*RGlDiffBAck*AbsBlDiffFront/(1.-RhoBlDiffFront*RGlDiffBack))
         AbsShadeDiff   = Construct(ConstrNum)%TransDiff * (AbsBlDiffFront + RhoBlDiffFront * &
-          RGlDiffBAck*AbsBlDiffFront/(1.d0-RhoBlDiffFront*RGlDiffBack))
+          RGlDiffBAck*AbsBlDiffFront/(1.-RhoBlDiffFront*RGlDiffBack))
         ExtBeamAbsByShadFac(SurfNum) = ( AbsShade * CosInc * SunLitFract * InOutProjSLFracMult &
 
           + SurfaceWindow(SurfNum)%OutsRevealDiffOntoGlazing * AbsShadeDiff ) * SurfaceWindow(SurfNum)%GlazedFrac
@@ -5430,7 +5430,7 @@ DO ZoneNum = 1, NumOfZones
         RhoBlBack     = InterpProfSlatAng(ProfAng,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamDiffRefl)
         TBlBmDiff     = InterpProfSlatAng(ProfAng,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamDiffTrans)
         AbsShade      = AbsBlFront + AbsBlBack * RGlFront * TBlBmBm &
-                          + (AbsBlDiffBack*RGlDiffFront/(1.d0-RhoBlDiffBack*RGlDiffFront)) * &
+                          + (AbsBlDiffBack*RGlDiffFront/(1.-RhoBlDiffBack*RGlDiffFront)) * &
                             (RGlFront*TBlBmBm*RhoBlBack + TBlBmDiff)
         ExtBeamAbsByShadFac(SurfNum) = AbsShade * CosInc * SunLitFract * InOutProjSLFracMult
 
@@ -5448,8 +5448,8 @@ DO ZoneNum = 1, NumOfZones
         RScDifBack   = SurfaceScreens(ScNum)%DifReflect
         RScBack       = SurfaceScreens(ScNum)%ReflectSolBeamFront
 
-        AbsScreen      = AbsScBeam * (1.0d0 + TScBmBm * RGlFront) + &
-                       (AbsScDiffBack*TScBmBm*RGlFront*RGlDiffFront*RScBack/(1.d0-RScDifBack*RGlDiffFront))
+        AbsScreen      = AbsScBeam * (1.0 + TScBmBm * RGlFront) + &
+                       (AbsScDiffBack*TScBmBm*RGlFront*RGlDiffFront*RScBack/(1.-RScDifBack*RGlDiffFront))
 
         ExtBeamAbsByShadFac(SurfNum) = AbsScreen * CosInc * SunLitFract * InOutProjSLFracMult
 
@@ -5488,8 +5488,8 @@ DO ZoneNum = 1, NumOfZones
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_TDD_Dome) THEN
       DiffTrans = Construct(ConstrNum)%TransDiff
 
-      DSZoneWin = 0.0d0 ! Solar not added by TDD:DOME; added to zone via TDD:DIFFUSER
-      DGZoneWin = 0.0d0 ! Solar not added by TDD:DOME; added to zone via TDD:DIFFUSER
+      DSZoneWin = 0.0 ! Solar not added by TDD:DOME; added to zone via TDD:DIFFUSER
+      DGZoneWin = 0.0 ! Solar not added by TDD:DOME; added to zone via TDD:DIFFUSER
 
     ELSE IF (OutShelfSurf > 0) THEN ! Outside daylighting shelf
       DiffTrans = Construct(ConstrNum)%TransDiff
@@ -5536,15 +5536,15 @@ DO ZoneNum = 1, NumOfZones
           DiffTransSky = InterpSlatAng(SlatAng,VarSlats,Construct(ConstrNumSh)%BlTransDiffSky)
         END IF
       END IF
-      DSZoneWinSh     = SkySolarInc * DiffTrans * Surface(SurfNum)%Area / (DifSolarRad + 1.d-8)
-      DGZoneWinSh     = GndSolarInc * DiffTrans * Surface(SurfNum)%Area / (GndSolarRad + 1.d-8)
+      DSZoneWinSh     = SkySolarInc * DiffTrans * Surface(SurfNum)%Area / (DifSolarRad + 1.*10**-8) !RS: Debugging: 102612
+      DGZoneWinSh     = GndSolarInc * DiffTrans * Surface(SurfNum)%Area / (GndSolarRad + 1.*10**-8)
       IF(ShadeFlag==IntBlindOn.OR.ShadeFlag==ExtBlindOn.OR.ShadeFlag==BGBlindOn) THEN
         IF(Blind(SurfaceWindow(SurfNum)%BlindNumber)%SlatOrientation == Horizontal) THEN
           CosTlt = Surface(SurfNum)%CosTilt
           DSZoneWinSh   = SkySolarInc * Surface(SurfNum)%Area * &
-                          (0.5d0*ABS(CosTlt)*DiffTransGnd + (1.d0-0.5d0*ABS(CosTlt))*DiffTransSky) / (DifSolarRad + 1.d-8)
+                          (0.5*ABS(CosTlt)*DiffTransGnd + (1.-0.5*ABS(CosTlt))*DiffTransSky) / (DifSolarRad + 1.*10**-8)
           DGZoneWinSh   = GndSolarInc * Surface(SurfNum)%Area * &
-                          ((1.d0-0.5d0*ABS(CosTlt))*DiffTransGnd + 0.5d0*ABS(CosTlt)*DiffTransSky) / (GndSolarRad + 1.d-8)
+                          ((1.-0.5*ABS(CosTlt))*DiffTransGnd + 0.5*ABS(CosTlt)*DiffTransSky) / (GndSolarRad + 1.*10**-8)
         END IF
       END IF
       DSZone(ZoneNum) = DSZone(ZoneNum) + DSZoneWinSh
@@ -5553,8 +5553,8 @@ DO ZoneNum = 1, NumOfZones
              ! Switchable glazing
       SwitchFac       = SurfaceWindow(SurfNum)%SwitchingFactor
       DiffTrans       = InterpSW(SwitchFac,Construct(ConstrNum)%TransDiff,Construct(ConstrNumSh)%TransDiff)
-      DSZoneWinSh     = SkySolarInc * DiffTrans * Surface(SurfNum)%Area / (DifSolarRad + 1.d-8)
-      DGZoneWinSh     = GndSolarInc * DiffTrans * Surface(SurfNum)%Area / (GndSolarRad + 1.d-8)
+      DSZoneWinSh     = SkySolarInc * DiffTrans * Surface(SurfNum)%Area / (DifSolarRad + 1.*10**-8)
+      DGZoneWinSh     = GndSolarInc * DiffTrans * Surface(SurfNum)%Area / (GndSolarRad + 1.*10**-8)
       DSZone(ZoneNum) = DSZone(ZoneNum) + InterpSw(SwitchFac,DSZoneWin,DSZoneWinSh)
       DGZone(ZoneNum) = DGZone(ZoneNum) + InterpSw(SwitchFac,DGZoneWin,DGZoneWinSh)
     END IF
@@ -5712,10 +5712,10 @@ DO ZoneNum = 1, NumOfZones
                         ! Between-glass blind on: beam-beam and diffuse transmittance of exterior beam
 
             IF(NGlass==2) THEN
-              TBmAllShBlSc = t1*tfshBB*t2 + t1*(tfshBB*rf2*rbshB + tfshBd*(1.0d0 + rfd2*rbshd) + rfshB*rbd1*rfshd)*td2
+              TBmAllShBlSc = t1*tfshBB*t2 + t1*(tfshBB*rf2*rbshB + tfshBd*(1.0 + rfd2*rbshd) + rfshB*rbd1*rfshd)*td2
             ELSE   ! NGlass = 3
               TBmAllShBlSc = t1t2*tfshBB*t3 + &
-                 t1t2*(tfshBB*rf3*rbshB + tfshBd*(1.0d0 + rfd3*rbshd) + rbshB*(rbd2*tfshd + td2*rbd1*td2*tfshd))*td3
+                 t1t2*(tfshBB*rf3*rbshB + tfshBd*(1.0 + rfd3*rbshd) + rbshB*(rbd2*tfshd + td2*rbd1*td2*tfshd))*td3
             END IF
 
               !added TH 12/9/2009
@@ -5845,11 +5845,11 @@ DO ZoneNum = 1, NumOfZones
 
                          ! Correction for beam absorbed by inside reveal
         TBmDenom=(SunLitFract *  CosInc * Surface(SurfNum)%Area * InOutProjSLFracMult)
-        IF (TBmDenom /= 0.0d0) THEN  ! when =0.0, no correction
+        IF (TBmDenom /= 0.0) THEN  ! when =0.0, no correction
           TBm = TBm - SurfaceWindow(SurfNum)%BmSolAbsdInsReveal / TBmDenom
         ENDIF
 
-        TBm = MAX(0.0d0,TBm)
+        TBm = MAX(0.0,TBm)
       END IF
 
       IF(TBm == 0.0) CYCLE
@@ -5861,7 +5861,7 @@ DO ZoneNum = 1, NumOfZones
         BTOTWinZone = TBm * SunLitFract * Surface(SurfNum)%Area * CosInc * InOutProjSLFracMult ![m2]
 
         ! Shelf surface area is divided by 2 because only one side sees beam (Area was multiplied by 2 during init)
-        AISurf(InShelfSurf) = AISurf(InShelfSurf) + BTOTWinZone / (0.5d0 * Surface(InShelfSurf)%Area) ![-]
+        AISurf(InShelfSurf) = AISurf(InShelfSurf) + BTOTWinZone / (0.5 * Surface(InShelfSurf)%Area) ![-]
         BABSZone = BABSZone + BTOTWinZone ![m2]
 
         CYCLE
@@ -5882,7 +5882,7 @@ DO ZoneNum = 1, NumOfZones
           Aoverlap = OverlapAreas(SurfNum,IBack,HourOfDay,TimeStep)
           Boverlap = TBm * Aoverlap * CosInc ![m2]
 
-          IF(Construct(ConstrNumBack)%TransDiff <= 0.0d0) THEN
+          IF(Construct(ConstrNumBack)%TransDiff <= 0.0) THEN
 
             ! Back surface is opaque interior or exterior wall
 
@@ -5891,17 +5891,17 @@ DO ZoneNum = 1, NumOfZones
             ! Check for movable insulation; reproduce code from subr. EvalInsideMovableInsulation;
             ! Can't call that routine here since cycle prevents SolarShadingGeometry from USEing
             ! HeatBalanceSurfaceManager, which contains EvalInsideMovableInsulation
-            HMovInsul = 0.0d0
+            HMovInsul = 0.0
             IF (Surface(BackSurfNum)%MaterialMovInsulInt.GT.0) THEN
               MovInsulSchedVal = GetCurrentScheduleValue(Surface(BackSurfNum)%SchedMovInsulExt)
-              IF (MovInsulSchedVal.LE.0.0d0) THEN ! Movable insulation not present at current time
-                HMovInsul = 0.0d0
+              IF (MovInsulSchedVal.LE.0.0) THEN ! Movable insulation not present at current time
+                HMovInsul = 0.0
               ELSE  ! Movable insulation present
-                HMovInsul = 1.0d0/(MovInsulSchedVal*Material(Surface(BackSurfNum)%MaterialMovInsulInt)%Resistance)
+                HMovInsul = 1.0/(MovInsulSchedVal*Material(Surface(BackSurfNum)%MaterialMovInsulInt)%Resistance)
                 AbsInt    = Material(Surface(BackSurfNum)%MaterialMovInsulInt)%AbsorpSolar
               END IF
             END IF
-            IF (HMovInsul > 0.0d0) AbsIntSurf = AbsInt  ! Movable inside insulation present
+            IF (HMovInsul > 0.0) AbsIntSurf = AbsInt  ! Movable inside insulation present
 
             AISurf(BackSurfNum) = AISurf(BackSurfNum) + &     ![-]
               Boverlap * AbsIntSurf / Surface(BackSurfNum)%Area
@@ -5925,8 +5925,8 @@ DO ZoneNum = 1, NumOfZones
               ConstrNum   = Surface(BackSurfNum)%StormWinConstruction
               ConstrNumSh = Surface(BackSurfNum)%StormWinShadedConstruction
             END IF
-            AbsBeamWin      = 0.d0
-            TransBeamWin    = 0.d0
+            AbsBeamWin      = 0.
+            TransBeamWin    = 0.
 
                  ! Interior beam absorptance of glass layers and beam transmittance of back exterior  &
                  ! or interior window WITHOUT SHADING this timestep
@@ -5962,9 +5962,9 @@ DO ZoneNum = 1, NumOfZones
             IF(ShadeFlagBack == ExtShadeOn) THEN
               RGlFront = Construct(ConstrNumBack)%ReflectSolDiffFront
               AbsSh    = Material(Construct(ConstrNumBackSh)%LayerPoint(1))%AbsorpSolar
-              RhoSh    = 1.d0-AbsSh-Material(Construct(ConstrNumBackSh)%LayerPoint(1))%Trans
+              RhoSh    = 1.-AbsSh-Material(Construct(ConstrNumBackSh)%LayerPoint(1))%Trans
               AShBack  = POLYF(CosIncBack,Construct(ConstrNumBack)%TransSolBeamCoef(1:6)) * &
-                AbsSh / (1.d0-RGlFront*RhoSh)
+                AbsSh / (1.-RGlFront*RhoSh)
               BABSZone = BABSZone + Boverlap * AshBack
               IntBeamAbsByShadFac(BackSurfNum) = Boverlap * AShBack / &
                     (Surface(BackSurfNum)%Area + SurfaceWindow(BackSurfNum)%DividerArea)
@@ -5979,13 +5979,13 @@ DO ZoneNum = 1, NumOfZones
                 rfd2k = Construct(ConstrNumBack)%rfBareSolDiff(2)
                 TrSh = Material(Construct(ConstrNumBackSh)%LayerPoint(3))%Trans
                 RhoSh = Material(Construct(ConstrNumBackSh)%LayerPoint(3))%ReflectShade
-                AbsSh = MIN(1.0d0,MAX(0.0d0,1-TrSh-RhoSh))
+                AbsSh = MIN(1.0,MAX(0.0,1-TrSh-RhoSh))
                 AShBack = t2k*(1 + RhoSh*rfd2k + TrSh*rbd1k)*AbsSh
               ELSE  ! NBackGlass = 3
                 t3k = POLYF(CosIncBack,Construct(ConstrNumBack)%tBareSolCoef(3,1:6))
                 TrSh = Material(Construct(ConstrNumBackSh)%LayerPoint(5))%Trans
                 RhoSh = Material(Construct(ConstrNumBackSh)%LayerPoint(5))%ReflectShade
-                AbsSh = MIN(1.0d0,MAX(0.0d0,1-TrSh-RhoSh))
+                AbsSh = MIN(1.0,MAX(0.0,1-TrSh-RhoSh))
                 AShBack = t3k*(1 + RhoSh*rfd3k + TrSh*(rbd2k + td2k*rbd1k*td2k))*AbsSh
               END IF
               IntBeamAbsByShadFac(BackSurfNum) = Boverlap * AShBack / Surface(BackSurfNum)%Area
@@ -6016,14 +6016,14 @@ DO ZoneNum = 1, NumOfZones
                   AGlDiffBack = Construct(ConstrNumBack)%AbsDiffBack(Lay)
                   AbsBeamWin(Lay) = TBlBmBmBack*AbWinBack + &
                     ((TBlBmBmBack*RGlBack*RhoBlFront + TBlBmDiffBack) * AGlDiffBack/ &
-                    (1.d0 - RGlDiffBack*RhoBlDiffFront))
+                    (1. - RGlDiffBack*RhoBlDiffFront))
                 END DO
 
                  ! Interior beam transmitted by exterior back window with INTERIOR BLIND
 
                 TGlDif = Construct(ConstrNumBack)%TransDiff
                 TransBeamWin  = TBlBmBmBack * (TGlBmBack + TGlDif*RGlBack*RhoBlFront/ &
-                                 (1.d0-RGlDiffBack*RhoBlDiffFront)) + TBlBmDiffBack*TGlDif/(1-RGlDiffBack*RhoBlDiffFront)
+                                 (1.-RGlDiffBack*RhoBlDiffFront)) + TBlBmDiffBack*TGlDif/(1-RGlDiffBack*RhoBlDiffFront)
 
                  ! Interior beam absorbed by BLIND on exterior back window with INTERIOR BLIND
 
@@ -6048,7 +6048,7 @@ DO ZoneNum = 1, NumOfZones
                   AbWinBack   = POLYF(CosIncBack,Construct(ConstrNumBack)%AbsBeamBackCoef(Lay,1:6))
                   AGlDiffFront= Construct(ConstrNumBack)%AbsDiff(Lay)
                   AbsBeamWin(Lay) = AbWinBack + &
-                    (TGlBmBack*AGlDiffFront*RhoBlBack / (1.d0 - RhoBlBack*RGlDiffFront))
+                    (TGlBmBack*AGlDiffFront*RhoBlBack / (1. - RhoBlBack*RGlDiffFront))
                 END DO
 
                  ! Interior beam transmitted by exterior back window with EXTERIOR BLIND
@@ -6058,7 +6058,7 @@ DO ZoneNum = 1, NumOfZones
                 RGlDifFr      = Construct(ConstrNum)%ReflectSolDiffFront
                 RhoBlDifDifBk = InterpSlatAng(SlatAngBack,VarSlatsBack,Blind(BlNumBack)%SolBackDiffDiffRefl)
                 TransBeamWin  = TGlBmBack * ( TBlBmBmBack + TBlBmDiffBack + &
-                                  TBlDifDif*RhoBlBmDifBk*RGlDifFr/(1.d0-RhoBlDifDifBk*RGlDifFr) )
+                                  TBlDifDif*RhoBlBmDifBk*RGlDifFr/(1.-RhoBlDifDifBk*RGlDifFr) )
 
                  ! Interior beam absorbed by EXTERIOR BLIND on exterior back window
 
@@ -6117,27 +6117,27 @@ DO ZoneNum = 1, NumOfZones
 
                 IF(NBackGlass==2) THEN
                   AbsBeamWin(2) = ab2k + t2k*tbshBBk*rb1k*tfshBBk*af2k + &
-                     t2k*(tbshBBk*rb1k*tfshBdk + tbshBdk*rbd1k*tfshdk + rbshBk*(1.0d0 + rfd2k*rbshdk))*afd2k
-                  AbsBeamWin(1) = t2k*tbshBBk*ab1k + t2k*(rbshBk*rfd2k*tbshdk + tbshBdk*(1.0d0 + rbd1k*rfshdk))*abd1k
+                     t2k*(tbshBBk*rb1k*tfshBdk + tbshBdk*rbd1k*tfshdk + rbshBk*(1.0 + rfd2k*rbshdk))*afd2k
+                  AbsBeamWin(1) = t2k*tbshBBk*ab1k + t2k*(rbshBk*rfd2k*tbshdk + tbshBdk*(1.0 + rbd1k*rfshdk))*abd1k
                 ELSE  ! NBackGlass = 3
                   AbsBeamWin(3) = ab3k + t3k*tbshBBk*(rb2k + t2k*rb1k*t2k)*tfshBBk*af3k + &
-                     t3k*(tbshBdk*rbd2k*tfshdk + tbshBdk*td2k*rbd1k*td2k*tfshdk + rbshBk*(1.0d0 + rfd3k*rbshdk))*afd3k
+                     t3k*(tbshBdk*rbd2k*tfshdk + tbshBdk*td2k*rbd1k*td2k*tfshdk + rbshBk*(1.0 + rfd3k*rbshdk))*afd3k
                   AbsBeamWin(2) = t3k*tbshBBk*(ab2k + t2k*rb1k*(af2k + t2k*rfshBk*abd2k)) + &
                      t3k*(tbshBdk + tbshBdk*(rbd2k + td2k*rbd1k*td2k)*rfshdk + rbshBk*rfd3k*tbshdk)*abd2k + &
                      t3k*tbshBdk*td2k*rbd1k*afd2k
                   AbsBeamWin(1) = t3k*tbshBBk*(t2k*ab1k + (rb2k + t2k*rb1k*t2k)*rfshBk*td2k*abd1k) + &
-                     t3k*(rbshBk*rfd3k*tbshdk + tbshBdk*(1.0d0 + rbd2k*rfshdk + td2k*rbd2k*td2k*rfshdk))*td2k*abd1k
+                     t3k*(rbshBk*rfd3k*tbshdk + tbshBdk*(1.0 + rbd2k*rfshdk + td2k*rbd2k*td2k*rfshdk))*td2k*abd1k
                 END IF
 
                  ! Interior beam transmitted by exterior back window with BETWEEN-GLASS BLIND
 
                 IF(NBackGlass==2) THEN
                   TransBeamWin = t2k*tbshBBk*t1k + &
-                     t2k*(tbshBBk*rb1k*rfshBk + rbshBk*rfd2k*tbshdk + tbshBdk*(1.0d0 + rbd1k*rfshdk))*td1k
+                     t2k*(tbshBBk*rb1k*rfshBk + rbshBk*rfd2k*tbshdk + tbshBdk*(1.0 + rbd1k*rfshdk))*td1k
                 ELSE  ! NGlass = 3
                   TransBeamWin = t3k*tbshBBk*t2k*t1k + &
                      t3k*(tbshBBk*(rb2k*rfshBk + t2k*rb1k*t2k*rfshBk) + rbshBk*rfd3k*tbshdk + &
-                        tbshBdk*(1.0d0+ rbd2k*rfshdk + td2k*rbd1k*td2k*rfshdk))*td2k*td1k
+                        tbshBdk*(1.0+ rbd2k*rfshdk + td2k*rbd1k*td2k*rfshdk))*td2k*td1k
                 END IF
 
                  ! Interior beam absorbed by BLIND on exterior back window with BETWEEN-GLASS BLIND
@@ -6169,7 +6169,7 @@ DO ZoneNum = 1, NumOfZones
               DO Lay = 1,NBackGlass
                 AbWinBack   = POLYF(CosIncBack,Construct(ConstrNumBack)%AbsBeamBackCoef(Lay,1:6))
                 AGlDiffFront= Construct(ConstrNumBack)%AbsDiff(Lay)
-                AbsBeamWin(Lay) = AbWinBack + (TGlBmBack*AGlDiffFront*RScBack / (1.d0 - RScDifBack*RGlDiffFront))
+                AbsBeamWin(Lay) = AbWinBack + (TGlBmBack*AGlDiffFront*RScBack / (1. - RScDifBack*RGlDiffFront))
               END DO
 
                ! Interior beam transmitted by exterior back window with EXTERIOR SCREEN
@@ -6179,14 +6179,14 @@ DO ZoneNum = 1, NumOfZones
               RGlDifFr      = Construct(ConstrNum)%ReflectSolDiffFront
               RScDifDifBk   = SurfaceScreens(ScNumBack)%DifReflect
               TransBeamWin  = TGlBmBack * ( TScBmBmBack + TScBmDiffBack + &
-                                TScDifDif*RScBmDifBk*RGlDifFr/(1.d0-RScDifDifBk*RGlDifFr) )
+                                TScDifDif*RScBmDifBk*RGlDifFr/(1.-RScDifDifBk*RGlDifFr) )
 
                ! Interior beam absorbed by EXTERIOR SCREEN on exterior back window
 
               AbsScBack     = SurfaceScreens(ScNumBack)%AbsorpSolarBeamBack
               AbsScDiffBack = SurfaceScreens(ScNumBack)%DifScreenAbsorp
               RScDiffBack   = SurfaceScreens(ScNumBack)%ReflectSolBeamFront
-              AScBack = TGlBmBack*(AbsScBack + RScBack*RGlDiffFront*AbsScDiffBack/(1.d0-RScDiffBack*RGlDiffFront))
+              AScBack = TGlBmBack*(AbsScBack + RScBack*RGlDiffFront*AbsScDiffBack/(1.-RScDiffBack*RGlDiffFront))
               BABSZone = BABSZone + Boverlap * AScBack
               IntBeamAbsByShadFac(BackSurfNum) = Boverlap * &
                 AScBack / (Surface(BackSurfNum)%Area + SurfaceWindow(BackSurfNum)%DividerArea)
@@ -6315,16 +6315,16 @@ DO ZoneNum = 1, NumOfZones
       BmIncInsSurfIntensRep(SurfNum) = BmIncInsSurfAmountRep(SurfNum) /  &
           (Surface(SurfNum)%Area + SurfaceWindow(SurfNum)%DividerArea)
     ELSE  ! Simple interior solar distribution. All beam falls on floor.
-      IF(ISABSF(SurfNum) > 0.0d0 .AND. Surface(SurfNum)%HeatTransSurf) THEN
+      IF(ISABSF(SurfNum) > 0.0 .AND. Surface(SurfNum)%HeatTransSurf) THEN
 
-        IF (Zone(ZoneNum)%FloorArea > 0.0d0) THEN
+        IF (Zone(ZoneNum)%FloorArea > 0.0) THEN
           ! spread onto all floor surfaces, these may or may not be called "floor"
           BmIncInsSurfIntensRep(SurfNum) = BeamSolarRad * BTOTZone/Zone(ZoneNum)%FloorArea
-        ELSEIF (Zone(ZoneNum)%TotalSurfArea > 0.d0) THEN
+        ELSEIF (Zone(ZoneNum)%TotalSurfArea > 0.) THEN
           ! spread onto all interior surfaces
           BmIncInsSurfIntensRep(SurfNum) =BeamSolarRad * BTOTZone/Zone(ZoneNum)%TotalSurfArea
         ELSE !divide be zero otherwise
-          BmIncInsSurfIntensRep(SurfNum) = 0.d0
+          BmIncInsSurfIntensRep(SurfNum) = 0.
         ENDIF
       ENDIF
       BmIncInsSurfAmountRep(SurfNum) = Surface(SurfNum)%Area * BmIncInsSurfIntensRep(SurfNum)
@@ -6497,15 +6497,15 @@ SUBROUTINE PerformSolarCalculations
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) SumDec
-  REAL(r64) SumET
-  REAL(r64) AvgEqOfTime
-  REAL(r64) AvgSinSolarDeclin
-  REAL(r64) AvgCosSolarDeclin
+  REAL SumDec
+  REAL SumET
+  REAL AvgEqOfTime
+  REAL AvgSinSolarDeclin
+  REAL AvgCosSolarDeclin
   INTEGER PerDayOfYear
   INTEGER Count
-  REAL(r64) SinDec
-  REAL(r64) EqTime
+  REAL SinDec
+  REAL EqTime
   !not used INTEGER SurfNum
 
   ! Calculate sky diffuse shading
@@ -6547,7 +6547,7 @@ SUBROUTINE PerformSolarCalculations
 
     !  Compute Period Values
     AvgSinSolarDeclin=SumDec/REAL(ShadowingDaysLeft,r64)
-    AvgCosSolarDeclin=SQRT(1.0d0-AvgSinSolarDeclin**2)
+    AvgCosSolarDeclin=SQRT(1.0-AvgSinSolarDeclin**2)
     AvgEqOfTime=SumET/REAL(ShadowingDaysLeft,r64)
 
     CALL CalcPerSolarBeam(AvgEqOfTime,AvgSinSolarDeclin,AvgCosSolarDeclin)
@@ -6619,15 +6619,15 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) A            ! Area
-  REAL(r64) R            ! Depth of the reveal (m)
+  REAL A            ! Area
+  REAL R            ! Depth of the reveal (m)
   INTEGER I                     ! Loop control
   INTEGER N                     ! Vertex number
   INTEGER NS1,NS2               ! Locations in homogeneous coordinate array
   INTEGER NVS                   ! Number of verticies
                                 ! note, below dimensions not changed because subsurface still max 4
-  REAL(r64) XVT(5)                   ! Projected X coordinates of vertices
-  REAL(r64) YVT(5)                   ! Projected Y coordinates of vertices
+  REAL XVT(5)                   ! Projected X coordinates of vertices
+  REAL YVT(5)                   ! Projected Y coordinates of vertices
   LOGICAL :: RevealStatusSet    ! Used to control flow through this subroutine.
                                 ! Certain operations performed only if reveal status not yet set.
   INTEGER :: RevealStatus       ! Status of the reveal, takes the parameter values above
@@ -6641,7 +6641,7 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
   ENDIF
 
   R = Surface(SBSNR)%Reveal
-  IF (R <= 0.0d0) THEN
+  IF (R <= 0.0) THEN
     RevealStatus    =  None
     RevealStatusSet = .TRUE.
   END IF
@@ -6661,14 +6661,14 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
             ! Determine vertices of reveal.
             ! Project the subsurface up to the plane of the wall.
 
-        XVT(1) = ShadeV(SBSNR)%XV(1) + R*MAX(XShadowProjection,0.0d0)
-        XVT(2) = ShadeV(SBSNR)%XV(2) + R*MAX(XShadowProjection,0.0d0)
-        XVT(3) = ShadeV(SBSNR)%XV(3) + R*MIN(XShadowProjection,0.0d0)
-        XVT(4) = ShadeV(SBSNR)%XV(4) + R*MIN(XShadowProjection,0.0d0)
-        YVT(1) = ShadeV(SBSNR)%YV(1) + R*MIN(YShadowProjection,0.0d0)
-        YVT(2) = ShadeV(SBSNR)%YV(2) + R*MAX(YShadowProjection,0.0d0)
-        YVT(3) = ShadeV(SBSNR)%YV(3) + R*MAX(YShadowProjection,0.0d0)
-        YVT(4) = ShadeV(SBSNR)%YV(4) + R*MIN(YShadowProjection,0.0d0)
+        XVT(1) = ShadeV(SBSNR)%XV(1) + R*MAX(XShadowProjection,0.0)
+        XVT(2) = ShadeV(SBSNR)%XV(2) + R*MAX(XShadowProjection,0.0)
+        XVT(3) = ShadeV(SBSNR)%XV(3) + R*MIN(XShadowProjection,0.0)
+        XVT(4) = ShadeV(SBSNR)%XV(4) + R*MIN(XShadowProjection,0.0)
+        YVT(1) = ShadeV(SBSNR)%YV(1) + R*MIN(YShadowProjection,0.0)
+        YVT(2) = ShadeV(SBSNR)%YV(2) + R*MAX(YShadowProjection,0.0)
+        YVT(3) = ShadeV(SBSNR)%YV(3) + R*MAX(YShadowProjection,0.0)
+        YVT(4) = ShadeV(SBSNR)%YV(4) + R*MIN(YShadowProjection,0.0)
 
               ! Check for complete shadowing.
 
@@ -6689,9 +6689,9 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
 
           CALL HTRANS1(FRVLHC,NVS)
           HCAREA(FRVLHC) = -HCAREA(FRVLHC)
-          HCT(FRVLHC)    =  1.0d0
+          HCT(FRVLHC)    =  1.0
 
-          IF (HCAREA(FRVLHC) <= 0.0d0) THEN
+          IF (HCAREA(FRVLHC) <= 0.0) THEN
             RevealStatus    =  EntireWindowShadedByReveal
             RevealStatusSet = .TRUE.
           END IF
@@ -6733,7 +6733,7 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
         NS2 = LOCHCA + 1
         LOCHCA = NS2
         CALL HTRANS1(NS2,NVS)
-        HCT(FRVLHC) = 1.0d0
+        HCT(FRVLHC) = 1.0
 
              ! Find overlap
 
@@ -6776,7 +6776,7 @@ SUBROUTINE SHDRVL(HTSS,SBSNR,Hour,TS)
           ! Compute sunlit area.
     A = HCAREA(FRVLHC)
     DO I = 2, NRVLHC
-      A = A + HCAREA(FRVLHC-1+I)*(1.0d0-HCT(FRVLHC-1+I))
+      A = A + HCAREA(FRVLHC-1+I)*(1.0-HCT(FRVLHC-1+I))
     END DO
     SAREA(HTSS) = A
   END IF
@@ -6841,15 +6841,15 @@ SUBROUTINE SHDSBS(IHOUR,CurSurf,NBKS,NSBS,HTS,TS)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) A  ! Area
+  REAL A  ! Area
   INTEGER I  ! Loop control
   INTEGER J  ! Loop control
   INTEGER K  ! Window construction number
   INTEGER N  ! Vertex number
-  REAL(r64) SurfArea         ! Surface area. For walls, includes all window frame areas.
+  REAL SurfArea         ! Surface area. For walls, includes all window frame areas.
                              ! For windows, includes divider area
-!  REAL(r64) FrameAreaAdd    ! Additional frame area sunlit
-!  REAL(r64) DividerAreaAdd  ! Additional frame area sunlit
+!  REAL FrameAreaAdd    ! Additional frame area sunlit
+!  REAL DividerAreaAdd  ! Additional frame area sunlit
   INTEGER HTSS     ! Heat transfer surface number of the subsurface
   INTEGER SBSNR    ! Subsurface number
 
@@ -6892,11 +6892,11 @@ SUBROUTINE SHDSBS(IHOUR,CurSurf,NBKS,NSBS,HTS,TS)
 
       IF ( (OverlapStatus == TooManyVertices).OR. &
            (OverlapStatus == TooManyFigures) .OR. &
-           (SAREA(HTS) <= 0.0d0) )              THEN  ! General receiving surface totally shaded.
+           (SAREA(HTS) <= 0.0) )              THEN  ! General receiving surface totally shaded.
 
-        SAREA(HTSS) = 0.0d0
+        SAREA(HTSS) = 0.0
 
-        IF(IHour > 0 .AND. TS > 0) SunLitFracWithoutReveal(HTSS,IHour,TS) = 0.0d0
+        IF(IHour > 0 .AND. TS > 0) SunLitFracWithoutReveal(HTSS,IHour,TS) = 0.0
 
       ELSEIF ((NGSSHC <= 0).OR.(NSBSHC == 1)) THEN  ! No shadows.
 
@@ -6914,16 +6914,16 @@ SUBROUTINE SHDSBS(IHOUR,CurSurf,NBKS,NSBS,HTS,TS)
         CALL SHDRVL(HTSS,SBSNR,IHour,TS)   ! Determine shadowing from reveal.
 
         IF ( (OverlapStatus == TooManyVertices).OR. &
-             (OverlapStatus == TooManyFigures) ) SAREA(HTSS) = 0.0d0
+             (OverlapStatus == TooManyFigures) ) SAREA(HTSS) = 0.0
 
       ELSE    ! Compute area.
 
         A = HCAREA(FSBSHC)
         DO J = 2, NSBSHC
-          A = A + HCAREA(FSBSHC-1+J)*(1.0d0-HCT(FSBSHC-1+J))
+          A = A + HCAREA(FSBSHC-1+J)*(1.0-HCT(FSBSHC-1+J))
         END DO
         SAREA(HTSS) = A
-        IF (SAREA(HTSS) > 0.0d0) THEN
+        IF (SAREA(HTSS) > 0.0) THEN
 
           SAREA(HTS) = SAREA(HTS) - SAREA(HTSS) ! Revise sunlit area of general receiving surface.
 
@@ -6932,18 +6932,18 @@ SUBROUTINE SHDSBS(IHOUR,CurSurf,NBKS,NSBS,HTS,TS)
           CALL SHDRVL(HTSS,SBSNR,IHOUR,TS)   ! Determine shadowing from reveal.
 
           IF ( (OverlapStatus == TooManyVertices).OR. &
-               (OverlapStatus == TooManyFigures) ) SAREA(HTSS) = 0.0d0
+               (OverlapStatus == TooManyFigures) ) SAREA(HTSS) = 0.0
 
         ELSE    ! General receiving surface totally shaded.
 
-          SAREA(HTSS) = 0.0d0
+          SAREA(HTSS) = 0.0
 
         END IF
 
       END IF
 
           ! Determine transmittance and absorptances of sunlit window.
-      IF (Construct(K)%TransDiff > 0.0d0) THEN
+      IF (Construct(K)%TransDiff > 0.0) THEN
 
         IF(.NOT.CalcSkyDifShading) THEN  !Overlaps calculation is only done for beam solar
                                          !shading, not for sky diffuse solar shading
@@ -6956,7 +6956,7 @@ SUBROUTINE SHDSBS(IHOUR,CurSurf,NBKS,NSBS,HTS,TS)
 
           ! Error checking.
       SurfArea = Surface(SBSNR)%NetAreaShadowCalc
-      SAREA(HTSS)=MAX(0.0d0,SAREA(HTSS))
+      SAREA(HTSS)=MAX(0.0,SAREA(HTSS))
 
       SAREA(HTSS)=MIN(SAREA(HTSS),SurfArea)
 
@@ -6995,16 +6995,16 @@ SUBROUTINE SUN3(JulianDayOfYear,SineOfSolarDeclination,EquationOfTime)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: JulianDayOfYear     ! Julian Day Of Year
-  REAL(r64), INTENT(OUT)   :: SineOfSolarDeclination    ! Sine of Solar Declination
-  REAL(r64), INTENT(OUT)   :: EquationOfTime            ! Equation of Time (Degrees)
+  REAL, INTENT(OUT)   :: SineOfSolarDeclination    ! Sine of Solar Declination
+  REAL, INTENT(OUT)   :: EquationOfTime            ! Equation of Time (Degrees)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER, DIMENSION(9) :: SineSolDeclCoef = &  !Fitted coefficients of Fourier series
-        (/ .00561800d0, .0657911d0, -.392779d0,   .00064440d0,-.00618495d0, & ! SINE OF DECLINATION
-          -.00010101d0,-.00007951d0,-.00011691d0, .00002096d0/)             ! COEFFICIENTS
-  REAL(r64), PARAMETER, DIMENSION(9) :: EqOfTimeCoef = &  !Fitted coefficients of Fourier Series
-        (/ .00021971d0,-.122649d0,   .00762856d0,-.156308d0,  -.0530028d0,  & ! EQUATION OF TIME
-          -.00388702d0,-.00123978d0,-.00270502d0,-.00167992d0/)              ! COEFFICIENTS
+  REAL, PARAMETER, DIMENSION(9) :: SineSolDeclCoef = &  !Fitted coefficients of Fourier series
+        (/ .00561800, .0657911, -.392779,   .00064440,-.00618495, & ! SINE OF DECLINATION
+          -.00010101,-.00007951,-.00011691, .00002096/)             ! COEFFICIENTS
+  REAL, PARAMETER, DIMENSION(9) :: EqOfTimeCoef = &  !Fitted coefficients of Fourier Series
+        (/ .00021971,-.122649,   .00762856,-.156308,  -.0530028,  & ! EQUATION OF TIME
+          -.00388702,-.00123978,-.00270502,-.00167992/)              ! COEFFICIENTS
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -7013,11 +7013,11 @@ SUBROUTINE SUN3(JulianDayOfYear,SineOfSolarDeclination,EquationOfTime)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    X     ! Day of Year in Radians (Computed from Input JulianDayOfYear)
-  REAL(r64)    COSX  ! COS(X)
-  REAL(r64)    SineX ! SIN(X)
+  REAL    X     ! Day of Year in Radians (Computed from Input JulianDayOfYear)
+  REAL    COSX  ! COS(X)
+  REAL    SineX ! SIN(X)
 
-  X = .017167d0 * JulianDayOfYear   ! Convert julian date to angle X
+  X = .017167 * JulianDayOfYear   ! Convert julian date to angle X
 
           ! Calculate sines and cosines of X
   SineX  = SIN(X)
@@ -7028,20 +7028,20 @@ SUBROUTINE SUN3(JulianDayOfYear,SineOfSolarDeclination,EquationOfTime)
                            SineSolDeclCoef(3)*CosX + &
                            SineSolDeclCoef(4)*(SineX*CosX*2.) + &
                            SineSolDeclCoef(5)*(CosX**2 - SineX**2) + &
-                           SineSolDeclCoef(6)*(SineX*(CosX**2 - SineX**2) + CosX*(SineX*CosX*2.d0)) + &
-                           SineSolDeclCoef(7)*(CosX*(CosX**2 - SineX**2) - SineX*(SineX*CosX*2.d0)) + &
-                           SineSolDeclCoef(8)*(2.d0*(SineX*CosX*2.d0)*(CosX**2 - SineX**2)) + &
-                           SineSolDeclCoef(9)*((CosX**2 - SineX**2)**2 - (SineX*CosX*2.d0)**2)
+                           SineSolDeclCoef(6)*(SineX*(CosX**2 - SineX**2) + CosX*(SineX*CosX*2.)) + &
+                           SineSolDeclCoef(7)*(CosX*(CosX**2 - SineX**2) - SineX*(SineX*CosX*2.)) + &
+                           SineSolDeclCoef(8)*(2.*(SineX*CosX*2.)*(CosX**2 - SineX**2)) + &
+                           SineSolDeclCoef(9)*((CosX**2 - SineX**2)**2 - (SineX*CosX*2.)**2)
 
   EquationOfTime = EqOfTimeCoef(1) + &
                    EqOfTimeCoef(2)*SineX +  &
                    EqOfTimeCoef(3)*CosX + &
-                   EqOfTimeCoef(4)*(SineX*CosX*2.d0) + &
+                   EqOfTimeCoef(4)*(SineX*CosX*2.) + &
                    EqOfTimeCoef(5)*(CosX**2 - SineX**2) + &
-                   EqOfTimeCoef(6)*(SineX*(CosX**2 - SineX**2) + CosX*(SineX*CosX*2.d0)) + &
-                   EqOfTimeCoef(7)*(CosX*(CosX**2 - SineX**2) - SineX*(SineX*CosX*2.d0)) + &
-                   EqOfTimeCoef(8)*(2.d0*(SineX*CosX*2.d0)*(CosX**2 - SineX**2)) + &
-                   EqOfTimeCoef(9)*((CosX**2 - SineX**2)**2 - (SineX*CosX*2.d0)**2)
+                   EqOfTimeCoef(6)*(SineX*(CosX**2 - SineX**2) + CosX*(SineX*CosX*2.)) + &
+                   EqOfTimeCoef(7)*(CosX*(CosX**2 - SineX**2) - SineX*(SineX*CosX*2.)) + &
+                   EqOfTimeCoef(8)*(2.*(SineX*CosX*2.)*(CosX**2 - SineX**2)) + &
+                   EqOfTimeCoef(9)*((CosX**2 - SineX**2)**2 - (SineX*CosX*2.)**2)
 
   RETURN
 
@@ -7071,10 +7071,10 @@ SUBROUTINE SUN4(CurrentTime,EqOfTime,SinSolarDeclin,CosSolarDeclin)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: CurrentTime ! Time to use in shadowing calculations
-  REAL(r64), INTENT(IN) :: EqOfTime        ! Equation of time for current day
-  REAL(r64), INTENT(IN) :: SinSolarDeclin  ! Sine of the Solar declination (current day)
-  REAL(r64), INTENT(IN) :: CosSolarDeclin  ! Cosine of the Solar declination (current day)
+  REAL, INTENT(IN) :: CurrentTime ! Time to use in shadowing calculations
+  REAL, INTENT(IN) :: EqOfTime        ! Equation of time for current day
+  REAL, INTENT(IN) :: SinSolarDeclin  ! Sine of the Solar declination (current day)
+  REAL, INTENT(IN) :: CosSolarDeclin  ! Cosine of the Solar declination (current day)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -7086,17 +7086,17 @@ SUBROUTINE SUN4(CurrentTime,EqOfTime,SinSolarDeclin,CosSolarDeclin)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) H        ! Hour angle (before noon = +) (in radians)
-  REAL(r64) HrAngle  ! Basic hour angle
+  REAL H        ! Hour angle (before noon = +) (in radians)
+  REAL HrAngle  ! Basic hour angle
 
           ! Compute the hour angle
-  HrAngle = (15.d0*(12.d0-(CurrentTime+EqOfTime))+(TimeZoneMeridian-Longitude))
+  HrAngle = (15.*(12.-(CurrentTime+EqOfTime))+(TimeZoneMeridian-Longitude))
   H=HrAngle*DegToRadians
 
           ! Compute the cosine of the solar zenith angle.
   SUNCOS(3) = SinSolarDeclin*SinLatitude + CosSolarDeclin*CosLatitude*COS(H)
-  SUNCOS(2) = 0.0d0
-  SUNCOS(1) = 0.0d0
+  SUNCOS(2) = 0.0
+  SUNCOS(1) = 0.0
 
   IF (SUNCOS(3) < SunIsUpValue) RETURN    ! Return if sun not above horizon.
 
@@ -7189,13 +7189,13 @@ SUBROUTINE WindowShadingManager
   INTEGER            :: ISurf           ! Surface counter
   INTEGER            :: IZone           ! Zone counter
   INTEGER            :: IShadingCtrl    ! Pointer to a window's shading control
-  REAL(r64)          :: BeamSolarOnWindow ! Direct solar intensity on window (W/m2)
-  REAL(r64)          :: SolarOnWindow   ! Direct plus diffuse solar intensity on window (W/m2)
-  REAL(r64)          :: SkySolarOnWindow ! Sky diffuse solar intensity on window (W/m2)
+  REAL          :: BeamSolarOnWindow ! Direct solar intensity on window (W/m2)
+  REAL          :: SolarOnWindow   ! Direct plus diffuse solar intensity on window (W/m2)
+  REAL          :: SkySolarOnWindow ! Sky diffuse solar intensity on window (W/m2)
   INTEGER            :: SchedulePtr     ! Schedule pointer
-  REAL(r64)          :: HorizSolar      ! Horizontal direct plus diffuse solar intensity
-  REAL(r64)          :: SetPoint        ! Control setpoint
-  REAL(r64)          :: SetPoint2       ! Second control setpoint
+  REAL          :: HorizSolar      ! Horizontal direct plus diffuse solar intensity
+  REAL          :: SetPoint        ! Control setpoint
+  REAL          :: SetPoint2       ! Second control setpoint
   INTEGER            :: ShType          ! 1 = interior shade is on,
                                         ! 2 = glass is switched to dark state,
                                         ! 3 = exterior shade is on,
@@ -7210,14 +7210,14 @@ SUBROUTINE WindowShadingManager
                                            !  specified and schedule value = 1
   LOGICAL            :: GlareControlIsActive ! True if glare control is active
   INTEGER            :: BlNum           ! Blind number
-  REAL(r64)          :: InputSlatAngle  ! Slat angle of associated Material:WindowBlind (rad)
-  REAL(r64)          :: ProfAng         ! Solar profile angle (rad)
-  REAL(r64)          :: SlatAng         ! Slat angle this time step (rad)
-  REAL(r64)          :: PermeabilityA,PermeabilityB ! Intermediate variables in blind permeability calc
-  REAL(r64)          :: ThetaBase       ! Intermediate slat angle variable (rad)
-  REAL(r64)          :: ThetaBlock1, ThetaBlock2 ! Slat angles that just block beam solar (rad)
-  REAL(r64),SAVE     :: ThetaBig,ThetaSmall ! Larger and smaller value of ThetaBlock1 and ThetaBlock2, resp.
-  REAL(r64),SAVE     :: ThetaMin,ThetaMax ! Minimum and maximum allowed slat angle, resp. (rad)
+  REAL          :: InputSlatAngle  ! Slat angle of associated Material:WindowBlind (rad)
+  REAL          :: ProfAng         ! Solar profile angle (rad)
+  REAL          :: SlatAng         ! Slat angle this time step (rad)
+  REAL          :: PermeabilityA,PermeabilityB ! Intermediate variables in blind permeability calc
+  REAL          :: ThetaBase       ! Intermediate slat angle variable (rad)
+  REAL          :: ThetaBlock1, ThetaBlock2 ! Slat angles that just block beam solar (rad)
+  REAL,SAVE     :: ThetaBig,ThetaSmall ! Larger and smaller value of ThetaBlock1 and ThetaBlock2, resp.
+  REAL,SAVE     :: ThetaMin,ThetaMax ! Minimum and maximum allowed slat angle, resp. (rad)
 
   INTEGER            :: IConst          ! Construction
 
@@ -7235,7 +7235,7 @@ SUBROUTINE WindowShadingManager
 
     IConst = Surface(ISurf)%Construction
     ! Vis trans at normal incidence of unswitched glass. Counting the GlazedFrac
-    IF (IConst > 0) SurfaceWindow(ISurf)%VisTransSelected = POLYF(1.0d0,Construct(IConst)%TransVisBeamCoef(1)) &
+    IF (IConst > 0) SurfaceWindow(ISurf)%VisTransSelected = POLYF(1.0,Construct(IConst)%TransVisBeamCoef(1)) &
       * SurfaceWindow(ISurf)%GlazedFrac
 
             ! Window has shading control
@@ -7457,7 +7457,7 @@ SUBROUTINE WindowShadingManager
       ! Added TH 1/20/2010
       ! Vis trans at normal incidence of fully switched glass
       IConst = Surface(ISurf)%ShadedConstruction
-      SurfaceWindow(ISurf)%VisTransSelected = POLYF(1.0d0,Construct(IConst)%TransVisBeamCoef(1)) &
+      SurfaceWindow(ISurf)%VisTransSelected = POLYF(1.0,Construct(IConst)%TransVisBeamCoef(1)) &
         * SurfaceWindow(ISurf)%GlazedFrac
     ENDIF
 
@@ -7492,13 +7492,13 @@ SUBROUTINE WindowShadingManager
 
             CALL ProfileAngle(ISurf,SOLCOS,Blind(BlNum)%SlatOrientation,ProfAng)
 
-            IF (ABS(COS(ProfAng)*Blind(BlNum)%SlatSeparation/Blind(BlNum)%SlatWidth) <= 1.0D0) THEN
+            IF (ABS(COS(ProfAng)*Blind(BlNum)%SlatSeparation/Blind(BlNum)%SlatWidth) <= 1.0) THEN
               ! set to block 100% of beam solar, not necessarily to block maximum solar (beam + diffuse)
               ThetaBase   = ACOS(COS(ProfAng)*Blind(BlNum)%SlatSeparation/Blind(BlNum)%SlatWidth)
               SurfaceWindow(ISurf)%SlatsBlockBeam = .TRUE.
             ELSE
               ! cannot block 100% of beam solar, turn slats to be perpendicular to sun beam to block maximal beam solar
-              ThetaBase = 0.0d0
+              ThetaBase = 0.0
             ENDIF
 
             ! There are two solutions for the slat angle that just blocks beam radiation
@@ -7581,7 +7581,7 @@ SUBROUTINE WindowShadingManager
         PermeabilityA = SIN(SlatAng) - Blind(BlNum)%SlatThickness/Blind(BlNum)%SlatSeparation
         PermeabilityB = 1.0-(ABS(Blind(BlNum)%SlatWidth*COS(SlatAng)) + Blind(BlNum)%SlatThickness*SIN(SlatAng))/ &
                             Blind(BlNum)%SlatSeparation
-        SurfaceWindow(ISurf)%BlindAirFlowPermeability = MIN(1.0d0,MAX(0.0d0,PermeabilityA,PermeabilityB))
+        SurfaceWindow(ISurf)%BlindAirFlowPermeability = MIN(1.0,MAX(0.0,PermeabilityA,PermeabilityB))
       END IF
     END IF  ! End of check if interior or exterior blind in place
 
@@ -7631,7 +7631,7 @@ SUBROUTINE WindowGapAirflowControl
 
   INTEGER            :: ISurf           ! Surface counter
   INTEGER            :: SchedulePtr     ! Schedule pointer
-  REAL(r64)          :: ScheduleMult    ! Multiplier value from schedule
+  REAL          :: ScheduleMult    ! Multiplier value from schedule
 
   DO ISurf = 1,TotSurfaces
 
@@ -7734,7 +7734,7 @@ SUBROUTINE SkyDifSolarShading
           ! SUBROUTINE PARAMETER DEFINITIONS:
 INTEGER,PARAMETER  :: NPhi = 6          ! Number of altitude angle steps for sky integration
 INTEGER,PARAMETER  :: NTheta = 24       ! Number of azimuth angle steps for sky integration
-REAL(r64),PARAMETER     :: Eps = 1.d-10       ! Small number
+REAL,PARAMETER     :: Eps = 1.*10**-10       ! Small number !RS: Debugging: 102612
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -7747,25 +7747,25 @@ REAL(r64),PARAMETER     :: Eps = 1.d-10       ! Small number
 INTEGER    :: SurfNum           ! Surface counter
 INTEGER    :: IPhi              ! Altitude step counter
 INTEGER    :: ITheta            ! Azimuth step counter
-REAL(r64)  :: DPhi              ! Altitude step size
-REAL(r64)  :: DTheta            ! Azimuth step size
-REAL(r64)  :: DThetaDPhi        ! Product of DTheta and DPhi
-REAL(r64)  :: PhiMin            ! Minimum altitude
-REAL(r64)  :: Phi               ! Altitude angle
-REAL(r64)  :: Theta             ! Azimuth angle
-REAL(r64)  :: CosPhi            ! Cosine of Phi
-REAL(r64)  :: Fac1WoShdg        ! Intermediate calculation factor, without shading
-REAL(r64)  :: FracIlluminated   ! Fraction of surface area illuminated by a sky patch
-REAL(r64)  :: Fac1WithShdg      ! Intermediate calculation factor, with shading
-REAL(r64)  :: SurfArea          ! Surface area (m2)
+REAL  :: DPhi              ! Altitude step size
+REAL  :: DTheta            ! Azimuth step size
+REAL  :: DThetaDPhi        ! Product of DTheta and DPhi
+REAL  :: PhiMin            ! Minimum altitude
+REAL  :: Phi               ! Altitude angle
+REAL  :: Theta             ! Azimuth angle
+REAL  :: CosPhi            ! Cosine of Phi
+REAL  :: Fac1WoShdg        ! Intermediate calculation factor, without shading
+REAL  :: FracIlluminated   ! Fraction of surface area illuminated by a sky patch
+REAL  :: Fac1WithShdg      ! Intermediate calculation factor, with shading
+REAL  :: SurfArea          ! Surface area (m2)
 LOGICAL    :: ShadowingSurf     ! True if surface is a shadowing surface
-!REAL(r64), ALLOCATABLE, DIMENSION(:) :: WithShdgIsoSky     ! Diffuse solar irradiance from isotropic
+!REAL, ALLOCATABLE, DIMENSION(:) :: WithShdgIsoSky     ! Diffuse solar irradiance from isotropic
 !                                                          ! sky on surface, with shading
-!REAL(r64), ALLOCATABLE, DIMENSION(:) :: WoShdgIsoSky       ! Diffuse solar from isotropic
+!REAL, ALLOCATABLE, DIMENSION(:) :: WoShdgIsoSky       ! Diffuse solar from isotropic
 !                                                           ! sky on surface, without shading
-!REAL(r64), ALLOCATABLE, DIMENSION(:) :: WithShdgHoriz      ! Diffuse solar irradiance from horizon portion of
+!REAL, ALLOCATABLE, DIMENSION(:) :: WithShdgHoriz      ! Diffuse solar irradiance from horizon portion of
 !                                                           ! sky on surface, with shading
-!REAL(r64), ALLOCATABLE, DIMENSION(:) :: WoShdgHoriz        ! Diffuse solar irradiance from horizon portion of
+!REAL, ALLOCATABLE, DIMENSION(:) :: WoShdgHoriz        ! Diffuse solar irradiance from horizon portion of
 !                                                           ! sky on surface, without shading
 !INTEGER iHour,iTS
 
@@ -7822,9 +7822,9 @@ LOGICAL    :: ShadowingSurf     ! True if surface is a shadowing surface
   enddo
 
   DPhi = PiOvr2/NPhi              ! 15 deg for NPhi = 6
-  DTheta = 2.d0*Pi/NTheta           ! 15 deg for NTheta = 24
+  DTheta = 2.*Pi/NTheta           ! 15 deg for NTheta = 24
   DThetaDPhi = DTheta*DPhi
-  PhiMin = 0.5d0*DPhi               ! 7.5 deg for DPhi = 15 deg
+  PhiMin = 0.5*DPhi               ! 7.5 deg for DPhi = 15 deg
 
   DO IPhi = 1,NPhi                ! Loop over patch altitude values
     Phi = PhiMin + (IPhi-1)*DPhi  ! 7.5,22.5,37.5,52.5,67.5,82.5 for NPhi = 6
@@ -7959,27 +7959,27 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER            :: SurfNum           ! Surface number
-REAL(r64)          :: ElevSun           ! Sun elevation; angle between sun and horizontal
-REAL(r64)          :: ElevWin           ! Window elevation: angle between window outward normal and horizontal
-REAL(r64)          :: AzimWin           ! Window azimuth (radians)
-REAL(r64)          :: AzimSun           ! Sun azimuth (radians)
-REAL(r64)          :: ProfileAngHor     ! Solar profile angle (radians) for horizontally oriented window elements
+REAL          :: ElevSun           ! Sun elevation; angle between sun and horizontal
+REAL          :: ElevWin           ! Window elevation: angle between window outward normal and horizontal
+REAL          :: AzimWin           ! Window azimuth (radians)
+REAL          :: AzimSun           ! Sun azimuth (radians)
+REAL          :: ProfileAngHor     ! Solar profile angle (radians) for horizontally oriented window elements
                                         ! such as the top and bottom of a frame.
                                         ! This is the incidence angle in a plane that is normal to the window
                                         ! and parallel to the Y-axis of the window (the axis along
                                         ! which the height of the window is measured).
-REAL(r64)          :: ProfileAngVert    ! Solar profile angle (radians) for vertically oriented elements
+REAL          :: ProfileAngVert    ! Solar profile angle (radians) for vertically oriented elements
                                         ! such as the sides of a frame.
                                         ! This is the incidence angle in a plane that is normal to the window
                                         ! and parallel to the X-axis of the window (the axis along
                                         ! which the width of the window is measured).
-REAL(r64)          :: WinNorm(3)        ! Unit vector normal to window
-REAL(r64)          :: WinNormCrossBase(3) ! Cross product of WinNorm and vector along window baseline
-REAL(r64)          :: SunPrime(3)       ! Projection of sun vector onto plane (perpendicular to
+REAL          :: WinNorm(3)        ! Unit vector normal to window
+REAL          :: WinNormCrossBase(3) ! Cross product of WinNorm and vector along window baseline
+REAL          :: SunPrime(3)       ! Projection of sun vector onto plane (perpendicular to
                                         !  window plane) determined by WinNorm and vector along
                                         !  baseline of window
-REAL(r64)          :: ThWin             ! Azimuth angle of WinNorm (radians)
-real(r64) :: dot1,dot2,dot3
+REAL          :: ThWin             ! Azimuth angle of WinNorm (radians)
+REAL :: dot1,dot2,dot3
 
 DO SurfNum = 1,TotSurfaces
 
@@ -7997,7 +7997,7 @@ DO SurfNum = 1,TotSurfaces
   AzimSun = ATAN2(SOLCOS(1),SOLCOS(2))
 
   ProfileAngHor = ATAN(SIN(ElevSun)/ABS(COS(ElevSun)*COS(AzimWin-AzimSun))) - ElevWin
-  IF(ABS(ElevWin) < 0.1d0) THEN  ! Near-vertical window
+  IF(ABS(ElevWin) < 0.1) THEN  ! Near-vertical window
     ProfileAngVert = ABS(AzimWin-AzimSun)
   ELSE
     WinNorm=Surface(SurfNum)%OutNormVec
@@ -8009,16 +8009,16 @@ DO SurfNum = 1,TotSurfaces
     dot1=DOT_PRODUCT(WinNorm,SunPrime)
     dot2=SQRT(DOT_PRODUCT(SunPrime,SunPrime))
     dot3=dot1/dot2
-    if (dot3 > 1.0d0) then
-      dot3=1.0d0
-    elseif (dot3 < -1.0d0) then
-      dot3=-1.0d0
+    if (dot3 > 1.0) then
+      dot3=1.0
+    elseif (dot3 < -1.0) then
+      dot3=-1.0
     endif
 !    ProfileAngVert = ABS(ACOS(DOT_PRODUCT(WinNorm,SunPrime)/SQRT(DOT_PRODUCT(SunPrime,SunPrime))))
     ProfileAngVert = ABS(ACOS(dot3))
   END IF
   ! Constrain to 0 to pi
-  IF(ProfileAngVert > Pi) ProfileAngVert = 2.d0*Pi - ProfileAngVert
+  IF(ProfileAngVert > Pi) ProfileAngVert = 2.*Pi - ProfileAngVert
 
   SurfaceWindow(SurfNum)%ProfileAngHor     = ProfileAngHor/DegToRadians
   SurfaceWindow(SurfNum)%ProfileAngVert    = ProfileAngVert/DegToRadians
@@ -8075,62 +8075,62 @@ INTEGER,INTENT(IN) :: HourNum           ! Hour number
           ! DERIVED TYPE DEFINITIONS: na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64)   :: ElevSun           ! Sun elevation; angle between sun and horizontal
-REAL(r64)   :: ElevWin           ! Window elevation: angle between window outward normal and horizontal
-REAL(r64)   :: AzimWin           ! Window azimuth (radians)
-REAL(r64)   :: AzimSun           ! Sun azimuth (radians)
-REAL(r64)   :: ProfileAngHor     ! Solar profile angle (radians) for horizontally oriented projections
+REAL   :: ElevSun           ! Sun elevation; angle between sun and horizontal
+REAL   :: ElevWin           ! Window elevation: angle between window outward normal and horizontal
+REAL   :: AzimWin           ! Window azimuth (radians)
+REAL   :: AzimSun           ! Sun azimuth (radians)
+REAL   :: ProfileAngHor     ! Solar profile angle (radians) for horizontally oriented projections
                                         ! such as the top and bottom of a frame or horizontal dividers.
                                         ! This is the incidence angle in a plane that is normal to the window
                                         ! and parallel to the Y-axis of the window (the axis along
                                         ! which the height of the window is measured).
-REAL(r64)   :: ProfileAngVert    ! Solar profile angle (radians) for vertically oriented projections
+REAL   :: ProfileAngVert    ! Solar profile angle (radians) for vertically oriented projections
                                         ! such as the top and bottom of a frame or horizontal dividers.
                                         ! This is the incidence angle in a plane that is normal to the window
                                         ! and parallel to the X-axis of the window (the axis along
                                         ! which the width of the window is measured).
-REAL(r64)   :: TanProfileAngHor  ! Tangent of ProfileAngHor
-REAL(r64)   :: TanProfileAngVert ! Tangent of ProfileAngVert
-REAL(r64)          :: FrWidth           ! Frame width (m)
-REAL(r64)          :: DivWidth          ! Divider width (m)
-REAL(r64)          :: FrProjOut         ! Outside frame projection (m)
-REAL(r64)          :: DivProjOut        ! Outside divider projection (m)
-REAL(r64)          :: FrProjIn          ! Inside frame projection (m)
-REAL(r64)          :: DivProjIn         ! Inside divider projection (m)
+REAL   :: TanProfileAngHor  ! Tangent of ProfileAngHor
+REAL   :: TanProfileAngVert ! Tangent of ProfileAngVert
+REAL          :: FrWidth           ! Frame width (m)
+REAL          :: DivWidth          ! Divider width (m)
+REAL          :: FrProjOut         ! Outside frame projection (m)
+REAL          :: DivProjOut        ! Outside divider projection (m)
+REAL          :: FrProjIn          ! Inside frame projection (m)
+REAL          :: DivProjIn         ! Inside divider projection (m)
 INTEGER            :: NHorDiv           ! Number of horizontal dividers
 INTEGER            :: NVertDiv          ! Number of vertical dividers
-REAL(r64)          :: GlArea            ! Glazed area (m2)
-REAL(r64)   :: Arealite          ! Area of a single lite of glass (m2); glazed area, GlArea,
+REAL          :: GlArea            ! Glazed area (m2)
+REAL   :: Arealite          ! Area of a single lite of glass (m2); glazed area, GlArea,
                                         ! if there is no divider (in which case there is only one lite).
-REAL(r64)   :: ArealiteCol       ! Area of a vertical column of lites (m2)
-REAL(r64)   :: ArealiteRow       ! Area of a horizontal row of lites (m2)
-REAL(r64)          :: AshVDout          ! Shaded area from all vertical divider outside projections (m2)
-REAL(r64)          :: AshVDin           ! Shaded area from all vertical divider inside projections (m2)
-REAL(r64)          :: AshHDout          ! Shaded area from all horizontal divider outside projections (m2)
-REAL(r64)          :: AshHDin           ! Shaded area from all horizontal divider inside projections (m2)
-REAL(r64)          :: AshVFout          ! Shaded area from outside projection of vertical sides of frame (m2)
-REAL(r64)          :: AshVFin           ! Shaded area from inside projection of vertical sides of frame (m2)
-REAL(r64)          :: AshHFout          ! Shaded area from outside projection of horizontal sides
+REAL   :: ArealiteCol       ! Area of a vertical column of lites (m2)
+REAL   :: ArealiteRow       ! Area of a horizontal row of lites (m2)
+REAL          :: AshVDout          ! Shaded area from all vertical divider outside projections (m2)
+REAL          :: AshVDin           ! Shaded area from all vertical divider inside projections (m2)
+REAL          :: AshHDout          ! Shaded area from all horizontal divider outside projections (m2)
+REAL          :: AshHDin           ! Shaded area from all horizontal divider inside projections (m2)
+REAL          :: AshVFout          ! Shaded area from outside projection of vertical sides of frame (m2)
+REAL          :: AshVFin           ! Shaded area from inside projection of vertical sides of frame (m2)
+REAL          :: AshHFout          ! Shaded area from outside projection of horizontal sides
                                         !   (top) of frame (m2)
-REAL(r64)          :: AshHFin           ! Shaded area from inside projection of horizontal sides
+REAL          :: AshHFin           ! Shaded area from inside projection of horizontal sides
                                         !   (top) of frame (m2)
-REAL(r64)          :: AshDDover         ! Divider/divider shadow overlap area (m2)
-REAL(r64)          :: AshFFover         ! Frame/frame shadow overlap area (m2)
-REAL(r64)          :: AshFVDover        ! Frame/vertical divider overlap area (m2)
-REAL(r64)          :: AshFHDover        ! Frame/horizontal divider overlap area (m2)
-REAL(r64)          :: AshFDtotOut       ! Total outside projection shadow area (m2)
-REAL(r64)          :: AshFDtotIn        ! Total inside projection shadow area (m2)
-REAL(r64)          :: FracShFDOut       ! Fraction of glazing shadowed by frame and divider
+REAL          :: AshDDover         ! Divider/divider shadow overlap area (m2)
+REAL          :: AshFFover         ! Frame/frame shadow overlap area (m2)
+REAL          :: AshFVDover        ! Frame/vertical divider overlap area (m2)
+REAL          :: AshFHDover        ! Frame/horizontal divider overlap area (m2)
+REAL          :: AshFDtotOut       ! Total outside projection shadow area (m2)
+REAL          :: AshFDtotIn        ! Total inside projection shadow area (m2)
+REAL          :: FracShFDOut       ! Fraction of glazing shadowed by frame and divider
                                         !  outside projections
-REAL(r64)          :: FracShFDin        ! Fraction of glazing that illuminates frame and divider
+REAL          :: FracShFDin        ! Fraction of glazing that illuminates frame and divider
                                         !  inside projections with beam radiation
 
-REAL(r64)          :: WinNorm(3)        ! Window outward normal unit vector
-REAL(r64)   :: ThWin             ! Azimuth angle of WinNorm
-REAL(r64)   :: SunPrime(3)       ! Projection of sun vector onto plane (perpendicular to
+REAL          :: WinNorm(3)        ! Window outward normal unit vector
+REAL   :: ThWin             ! Azimuth angle of WinNorm
+REAL   :: SunPrime(3)       ! Projection of sun vector onto plane (perpendicular to
                                         !  window plane) determined by WinNorm and vector along
                                         !  baseline of window
-REAL(r64)          :: WinNormCrossBase(3) ! Cross product of WinNorm and vector along window baseline
+REAL          :: WinNormCrossBase(3) ! Cross product of WinNorm and vector along window baseline
 
 IF (FrameDivider(FrDivNum)%FrameProjectionOut==0.0   .AND.  &
     FrameDivider(FrDivNum)%FrameProjectionIn==0.0    .AND.   &
@@ -8149,7 +8149,7 @@ AzimWin = Surface(SurfNum)%Azimuth * DegToRadians
 AzimSun = ATAN2(SUNCOS(1),SUNCOS(2))
 
 ProfileAngHor = ATAN(SIN(ElevSun)/ABS(COS(ElevSun)*COS(AzimWin-AzimSun))) - ElevWin
-IF(ABS(ElevWin) < 0.1d0) THEN  ! Near-vertical window
+IF(ABS(ElevWin) < 0.1) THEN  ! Near-vertical window
   ProfileAngVert = ABS(AzimWin-AzimSun)
 ELSE
   WinNorm=Surface(SurfNum)%OutNormVec
@@ -8170,9 +8170,9 @@ NVertDiv = FrameDivider(FrDivNum)%VertDividers
 FrWidth = FrameDivider(FrDivNum)%FrameWidth
 DivWidth = FrameDivider(FrDivNum)%DividerWidth
 
-Arealite = (Surface(SurfNum)%Height/(NHorDiv + 1.d0) - DivWidth/2.d0) * &
-           (Surface(SurfNum)%Width/(NVertDiv + 1.d0) - DivWidth/2.d0)
-IF(DivProjOut > 0.0d0 .OR. DivProjIn > 0.0d0) THEN
+Arealite = (Surface(SurfNum)%Height/(NHorDiv + 1.) - DivWidth/2.) * &
+           (Surface(SurfNum)%Width/(NVertDiv + 1.) - DivWidth/2.)
+IF(DivProjOut > 0.0 .OR. DivProjIn > 0.0) THEN
   ArealiteCol = (NHorDiv+1)*Arealite
   ArealiteRow = (NVertDiv+1)*Arealite
 ELSE
@@ -8247,8 +8247,8 @@ AshFDtotIn = (AshVDin + AshHDin)*FrameDivider(FrDivNum)%DividerSolAbsorp + &
 ! Divide by the glazed area of the window
 FracShFDout = AshFDtotOut/GlArea
 FracShFDin = AshFDtotIn/GlArea
-SurfaceWindow(SurfNum)%OutProjSLFracMult(HourNum) = 1.d0-FracShFDout
-SurfaceWindow(SurfNum)%InOutProjSLFracMult(HourNum) = 1.d0-(FracShFDin + FracShFDout)
+SurfaceWindow(SurfNum)%OutProjSLFracMult(HourNum) = 1.-FracShFDout
+SurfaceWindow(SurfNum)%InOutProjSLFracMult(HourNum) = 1.-(FracShFDin + FracShFDout)
 
 RETURN
 END SUBROUTINE CalcFrameDividerShadow
@@ -8346,52 +8346,52 @@ USE General, ONLY: POLYF,InterpSw
 
 INTEGER        :: ConstrNum             ! Construction number
 INTEGER        :: ConstrNumSh           ! Shaded construction number
-REAL(r64)      :: CosBetaBottom         ! Cosine of beam solar angle of incidence on bottom reveal
-REAL(r64)      :: CosBetaLeft           ! Cosine of beam solar angle of incidence on left reveal
-REAL(r64)      :: CosBeta               ! ABS of CosBetaBottom or CosBetaLeft
-REAL(r64)      :: d1                    ! Depth of outside reveal + half of glazing thickness (m)
-REAL(r64)      :: d2                    ! Depth of inside sill or of inside reveal plus half of glazing thickness (m)
-REAL(r64)      :: d2prime               ! Depth of shadow cast on a reveal surface by opposite reveal (m)
-REAL(r64)      :: d2prime2              ! Depth of shadow cast by frame onto inside reveal (m)
-REAL(r64)      :: d12                   ! d12 = d1 + d2 - d2prime (m)
-REAL(r64)      :: TanAlpha              ! Tangent of horizontal or vertical profile angle
-REAL(r64)      :: TanGamma              ! Tangent of vertical or horizontal profile angle
-REAL(r64)      :: H,W                   ! Window height, width (m)
-REAL(r64)      :: L                     ! Window height or width (m)
-REAL(r64)      :: A1sh                  ! Shadowed area of outside horizontal or vertical reveal (m2)
-REAL(r64)      :: A2sh                  ! Shadowed area of inside horizontal or vertical reveal (m2)
-REAL(r64)      :: A1ill                 ! Illuminated area of outside horizontal or vertical reveal (m2)
-REAL(r64)      :: A2ill                 ! Illuminated area of inside horizontal or vertical reveal (m2)
-REAL(r64)      :: SolTransGlass         ! Beam solar transmittance of glazing
-REAL(r64)      :: SolTransGlassSh       ! For switchable glazing, beam solar trans in switched state
-REAL(r64)      :: DiffReflGlass         ! Diffuse back reflectance of glazing
-REAL(r64)      :: DiffReflGlassSh       ! For switchable glazing, diffuse back refl in switched state
+REAL      :: CosBetaBottom         ! Cosine of beam solar angle of incidence on bottom reveal
+REAL      :: CosBetaLeft           ! Cosine of beam solar angle of incidence on left reveal
+REAL      :: CosBeta               ! ABS of CosBetaBottom or CosBetaLeft
+REAL      :: d1                    ! Depth of outside reveal + half of glazing thickness (m)
+REAL      :: d2                    ! Depth of inside sill or of inside reveal plus half of glazing thickness (m)
+REAL      :: d2prime               ! Depth of shadow cast on a reveal surface by opposite reveal (m)
+REAL      :: d2prime2              ! Depth of shadow cast by frame onto inside reveal (m)
+REAL      :: d12                   ! d12 = d1 + d2 - d2prime (m)
+REAL      :: TanAlpha              ! Tangent of horizontal or vertical profile angle
+REAL      :: TanGamma              ! Tangent of vertical or horizontal profile angle
+REAL      :: H,W                   ! Window height, width (m)
+REAL      :: L                     ! Window height or width (m)
+REAL      :: A1sh                  ! Shadowed area of outside horizontal or vertical reveal (m2)
+REAL      :: A2sh                  ! Shadowed area of inside horizontal or vertical reveal (m2)
+REAL      :: A1ill                 ! Illuminated area of outside horizontal or vertical reveal (m2)
+REAL      :: A2ill                 ! Illuminated area of inside horizontal or vertical reveal (m2)
+REAL      :: SolTransGlass         ! Beam solar transmittance of glazing
+REAL      :: SolTransGlassSh       ! For switchable glazing, beam solar trans in switched state
+REAL      :: DiffReflGlass         ! Diffuse back reflectance of glazing
+REAL      :: DiffReflGlassSh       ! For switchable glazing, diffuse back refl in switched state
 INTEGER        :: HorVertReveal         ! Index: 1 = horizontal reveal, 2 = vertical reveal
-REAL(r64)      :: OutsReveal            ! Depth of outside reveal (from outside glazing plane to outside wall plane) (m)
-REAL(r64)      :: InsReveal             ! Depth of inside reveal (from inside glazing plane to inside wall plane (m)
-REAL(r64)      :: InsSillDepth          ! Depth of inside sill, measured from innermost face of glazing (m)
-REAL(r64)      :: GlazingThickness      ! Thickness of glazing, measured from innermost face to outermost face (m)
-REAL(r64)      :: InsideRevealSolAbs    ! Solar absorptance of inside reveal or inside sill
-REAL(r64)      :: BmSolRefldOutsReveal  ! Multiplied by beam solar gives beam solar reflected by horiz or vertical
+REAL      :: OutsReveal            ! Depth of outside reveal (from outside glazing plane to outside wall plane) (m)
+REAL      :: InsReveal             ! Depth of inside reveal (from inside glazing plane to inside wall plane (m)
+REAL      :: InsSillDepth          ! Depth of inside sill, measured from innermost face of glazing (m)
+REAL      :: GlazingThickness      ! Thickness of glazing, measured from innermost face to outermost face (m)
+REAL      :: InsideRevealSolAbs    ! Solar absorptance of inside reveal or inside sill
+REAL      :: BmSolRefldOutsReveal  ! Multiplied by beam solar gives beam solar reflected by horiz or vertical
                                         !  outside reveal surface (m2)
-REAL(r64)      :: BmSolRefldInsReveal   ! Multiplied by beam solar gives beam solar reflected by horiz or vertical
+REAL      :: BmSolRefldInsReveal   ! Multiplied by beam solar gives beam solar reflected by horiz or vertical
                                         !  inside reveal surface (m2)
 INTEGER        :: SurfNum               ! Surface number
 INTEGER        :: ShadeFlag             ! Shading flag
 INTEGER        :: FrameDivNum           ! Frame/Divider number
-REAL(r64)      :: FrameWidth            ! Frame width (m)
-REAL(r64)      :: P1,P2                 ! Frame outside/inside projection plus half of glazing thickness (m)
-REAL(r64)      :: f1,f2                 ! f1=d1-P1, f2=d2-P2 (m)
-REAL(r64)      :: L1,L2                 ! Average distance of outside/inside illuminated area to frame;
+REAL      :: FrameWidth            ! Frame width (m)
+REAL      :: P1,P2                 ! Frame outside/inside projection plus half of glazing thickness (m)
+REAL      :: f1,f2                 ! f1=d1-P1, f2=d2-P2 (m)
+REAL      :: L1,L2                 ! Average distance of outside/inside illuminated area to frame;
                                         ! used in calculating view factor to frame (m)
-REAL(r64)      :: FracToGlassOuts       ! View factor from outside horizontal or vertical reveal to glass
-REAL(r64)      :: FracToGlassIns        ! View factor from inside horizontal or vertical reveal to glass
-REAL(r64)      :: TanProfileAngVert     ! Tangent of vertical profile angle (the profile angle appropriate for
+REAL      :: FracToGlassOuts       ! View factor from outside horizontal or vertical reveal to glass
+REAL      :: FracToGlassIns        ! View factor from inside horizontal or vertical reveal to glass
+REAL      :: TanProfileAngVert     ! Tangent of vertical profile angle (the profile angle appropriate for
                                         ! vertical reveal surfaces.
-REAL(r64)      :: TanProfileAngHor      ! Tangent of horizontal profile angle (the profile angle appropriate for
+REAL      :: TanProfileAngHor      ! Tangent of horizontal profile angle (the profile angle appropriate for
                                         ! horizontal reveal surfaces.
 
-REAL(r64)      :: tmp_SunlitFracWithoutReveal      ! Temporary variable
+REAL      :: tmp_SunlitFracWithoutReveal      ! Temporary variable
 
 DO SurfNum = 1,TotSurfaces
 
@@ -8427,7 +8427,7 @@ DO SurfNum = 1,TotSurfaces
   ShadeFlag = SurfaceWindow(SurfNum)%ShadingFlag
   IF(ShadeFlag == ExtShadeOn .OR. ShadeFlag == ExtBlindOn) CYCLE
 
-  IF(CosIncAng(SurfNum,HourOfDay,TimeStep) <= 0.0d0) CYCLE
+  IF(CosIncAng(SurfNum,HourOfDay,TimeStep) <= 0.0) CYCLE
 
   tmp_SunlitFracWithoutReveal = SunlitFracWithoutReveal(SurfNum,HourOfDay,TimeStep)
 
@@ -8449,7 +8449,7 @@ DO SurfNum = 1,TotSurfaces
   GlazingThickness = SurfaceWindow(SurfNum)%TotGlazingThickness
   H = Surface(SurfNum)%Height
   W = Surface(SurfNum)%Width
-  d1 = OutsReveal + 0.5d0*GlazingThickness
+  d1 = OutsReveal + 0.5*GlazingThickness
   ConstrNum = Surface(SurfNum)%Construction
   ConstrNumSh = Surface(SurfNum)%ShadedConstruction
   IF(SurfaceWindow(SurfNum)%StormWinFlag==1) THEN
@@ -8464,31 +8464,31 @@ DO SurfNum = 1,TotSurfaces
   IF(FrameDivNum /= 0) THEN
     FrameWidth = FrameDivider(FrameDivNum)%FrameWidth
     IF(FrameWidth > 0.0) THEN
-      P1  = FrameDivider(FrameDivNum)%FrameProjectionOut + 0.5d0*GlazingThickness
-      P2  = FrameDivider(FrameDivNum)%FrameProjectionIn + 0.5d0*GlazingThickness
-      IF(OutsReveal+0.5d0*GlazingThickness <= P1) d1 = P1 + 0.001d0
+      P1  = FrameDivider(FrameDivNum)%FrameProjectionOut + 0.5*GlazingThickness
+      P2  = FrameDivider(FrameDivNum)%FrameProjectionIn + 0.5*GlazingThickness
+      IF(OutsReveal+0.5*GlazingThickness <= P1) d1 = P1 + 0.001
     END IF
   END IF
                                       ! Loop over vertical and horizontal reveal surfaces
   DO HorVertReveal = 1,2
 
-    FracToGlassOuts = 0.5d0
-    FracToGlassIns  = 0.5d0
-    BmSolRefldOutsReveal = 0.0d0
-    BmSolRefldInsReveal = 0.0d0
-    A1ill = 0.0d0
-    A2ill = 0.0d0
+    FracToGlassOuts = 0.5
+    FracToGlassIns  = 0.5
+    BmSolRefldOutsReveal = 0.0
+    BmSolRefldInsReveal = 0.0
+    A1ill = 0.0
+    A2ill = 0.0
 
     ! Added TH. 5/27/2009
-    A1sh = 0.0d0
-    A2sh = 0.0d0
+    A1sh = 0.0
+    A2sh = 0.0
 
     IF(HorVertReveal == 1) THEN       ! Vertical reveal
       TanAlpha = TanProfileAngHor
       TanGamma = TanProfileAngVert
       CosBeta = ABS(CosBetaLeft)
       L = Surface(SurfNum)%Height
-      d2 = InsReveal + 0.5d0*GlazingThickness
+      d2 = InsReveal + 0.5*GlazingThickness
       d2prime = d1 + d2 - W/TanGamma
       InsideRevealSolAbs = SurfaceWindow(SurfNum)%InsideRevealSolAbs
     ELSE                              ! Horizontal reveal
@@ -8497,19 +8497,19 @@ DO SurfNum = 1,TotSurfaces
       TanGamma = TanProfileAngHor
       CosBeta = ABS(CosBetaBottom)
       L = Surface(SurfNum)%Width
-      IF(CosBetaBottom > 0.0d0) THEN  ! Bottom reveal surfaces may be illuminated
-        d2 = InsSillDepth + 0.5d0*GlazingThickness
+      IF(CosBetaBottom > 0.0) THEN  ! Bottom reveal surfaces may be illuminated
+        d2 = InsSillDepth + 0.5*GlazingThickness
         InsideRevealSolAbs = SurfaceWindow(SurfNum)%InsideSillSolAbs
       ELSE                          ! Top reveal surfaces may be illuminated
-        d2 = InsReveal + 0.5d0*GlazingThickness
+        d2 = InsReveal + 0.5*GlazingThickness
         InsideRevealSolAbs = SurfaceWindow(SurfNum)%InsideRevealSolAbs
       END IF
       d2prime = d1 + d2 - H/TanGamma
     END IF
-    IF(d2prime < 0.0d0) d2prime = 0.0d0  ! No shadow from opposing reveal
+    IF(d2prime < 0.0) d2prime = 0.0  ! No shadow from opposing reveal
     d12 = d1 + d2 - d2prime
 
-    IF(FrameWidth <= 0.001d0) THEN
+    IF(FrameWidth <= 0.001) THEN
       ! Window without frame
 
       ! Find inside and outside shadowed area of vertical or horizontal reveal surfaces
@@ -8517,14 +8517,14 @@ DO SurfNum = 1,TotSurfaces
 
       IF(d2prime <= d2) THEN
         IF(d12*TanAlpha <= L) THEN
-          A1sh = 0.5d0*TanAlpha*d1**2
-          A2sh = d2prime*L + 0.5d0*TanAlpha*d12**2 - A1sh
+          A1sh = 0.5*TanAlpha*d1**2
+          A2sh = d2prime*L + 0.5*TanAlpha*d12**2 - A1sh
         ELSE  ! d12*TanAlpha > L
           IF(d1*TanAlpha <= L) THEN
-            A1sh = 0.5d0*TanAlpha*d1**2
-            A2sh = d2*L - 0.5d0*TanAlpha*(L/TanAlpha - d1)**2
+            A1sh = 0.5*TanAlpha*d1**2
+            A2sh = d2*L - 0.5*TanAlpha*(L/TanAlpha - d1)**2
           ELSE  ! d1*TanAlpha > L
-            A1sh = d1*L - (0.5d0/TanAlpha)*L**2
+            A1sh = d1*L - (0.5/TanAlpha)*L**2
             A2sh = d2*L
           END IF
         END IF
@@ -8532,9 +8532,9 @@ DO SurfNum = 1,TotSurfaces
         A2sh = d2*L
         IF(d2prime < d1+d2) THEN
           IF(d12*TanAlpha <= L) THEN
-            A1sh = L*(d2prime-d2) + 0.5d0*TanAlpha*d12**2
+            A1sh = L*(d2prime-d2) + 0.5*TanAlpha*d12**2
           ELSE  ! d12*TanAlpha > L
-            A1sh = d1*L - 0.5d0*L**2/TanAlpha
+            A1sh = d1*L - 0.5*L**2/TanAlpha
           END IF
         ELSE  ! d2prime >= d1+d2
           A1sh = d1*L
@@ -8545,8 +8545,8 @@ DO SurfNum = 1,TotSurfaces
       IF (A1sh < 0.0) A1sh = 0.0
       IF (A2sh < 0.0) A2sh = 0.0
 
-      IF(OutsReveal >= 0.001d0) A1ill = d1*L - A1sh  ! A1ill = 0.0 if OutsReveal < 0.001
-      IF(InsReveal >= 0.001d0)  A2ill = d2*L - A2sh  ! A2ill = 0.0 if InsReveal < 0.001
+      IF(OutsReveal >= 0.001) A1ill = d1*L - A1sh  ! A1ill = 0.0 if OutsReveal < 0.001
+      IF(InsReveal >= 0.001)  A2ill = d2*L - A2sh  ! A2ill = 0.0 if InsReveal < 0.001
 
     ELSE                             ! Window with frame; take into account shadowing
                                      ! of inside reveal surfaces by frame
@@ -8554,47 +8554,47 @@ DO SurfNum = 1,TotSurfaces
       f2 = d2-P2
       d2prime2 = FrameWidth/TanGamma
       IF(HorVertReveal == 1) THEN  ! Vertical reveal
-          IF(InsReveal+0.5d0*GlazingThickness <= P2) d2 = P2 + 0.001d0
+          IF(InsReveal+0.5*GlazingThickness <= P2) d2 = P2 + 0.001
       ELSE                ! Horizontal
         IF(CosBetaBottom > 0.0) THEN  ! Bottom reveal surfaces may be illuminated
-          IF(InsSillDepth+0.5d0*GlazingThickness <= P2) d2 = P2 + 0.001d0
+          IF(InsSillDepth+0.5*GlazingThickness <= P2) d2 = P2 + 0.001
         ELSE                          ! Top reveal surfaces may be illuminated
-          IF(InsReveal+0.5d0*GlazingThickness <= P2) d2 = P2 + 0.001d0
+          IF(InsReveal+0.5*GlazingThickness <= P2) d2 = P2 + 0.001
         END IF
       END IF
 
       IF(d2prime <= f2) THEN   ! Shadow from opposing reveal does not go beyond inside surface of frame
 
         IF(d12*TanAlpha <= L) THEN
-          A1sh = 0.5d0*TanAlpha*f1**2
-          L1   = f1*(f1*TanAlpha/(6.d0*L)+0.5d0)
+          A1sh = 0.5*TanAlpha*f1**2
+          L1   = f1*(f1*TanAlpha/(6.*L)+0.5)
           IF(d2-(d2prime+d2prime2+P2) >= 0.) THEN
-            A2sh = (d2prime+d2prime2)*L + 0.5d0*TanAlpha*((d1+d2-d2prime)**2-(d1+p2+d2prime2)**2)
-            L2   = d2prime2 + 0.5d0*(d2-(d2prime+d2prime2+P2))
+            A2sh = (d2prime+d2prime2)*L + 0.5*TanAlpha*((d1+d2-d2prime)**2-(d1+p2+d2prime2)**2)
+            L2   = d2prime2 + 0.5*(d2-(d2prime+d2prime2+P2))
           ELSE  ! d2-(d2prime+d2prime2+P2) < 0.  ! Inside reveal is fully shadowed by frame and/or opposing reveal
             A2sh = f2*L
             L2   = f2
           END IF
         ELSE  ! d12*TanAlpha >= L
           IF((d1+P2)*TanAlpha <= L) THEN
-            A1sh = 0.5d0*TanAlpha*f1**2
-            L1 = f1*((f1*TanAlpha)/(6.d0*L) + 0.5d0)
+            A1sh = 0.5*TanAlpha*f1**2
+            L1 = f1*((f1*TanAlpha)/(6.*L) + 0.5)
             IF((d1+P2+d2prime2)*TanAlpha >= L) THEN
               A2sh = f2*L
               L2     = f2
             ELSE  ! (d1+P2+d2prime2)*TanAlpha < L
-              A2sh = f2*L - 0.5d0*(L-(d1+P2)*TanAlpha)**2/TanAlpha + d2prime2*(L-(d1+P2+d2prime2/2.d0)*TanAlpha)
-              L2 = d2prime2 + (L/TanAlpha - (d1+P2+d2prime2))/3.d0
+              A2sh = f2*L - 0.5*(L-(d1+P2)*TanAlpha)**2/TanAlpha + d2prime2*(L-(d1+P2+d2prime2/2.)*TanAlpha)
+              L2 = d2prime2 + (L/TanAlpha - (d1+P2+d2prime2))/3.
             END IF
           ELSE  ! (d1+P2)*TanAlpha > L
             L2 = f2
             A2sh = f2*L
             IF(f1*TanAlpha <= L) THEN
-              A1sh = 0.5d0*TanAlpha*f1**2
-              L1 = f1*((f1*TanAlpha)/(6.d0*L) + 0.5d0)
+              A1sh = 0.5*TanAlpha*f1**2
+              L1 = f1*((f1*TanAlpha)/(6.*L) + 0.5)
             ELSE  ! f1*TanAlpha > L
-              A1sh = f1*L - 0.5d0*L**2/TanAlpha
-              L1 = f1-(L/TanAlpha)/3.d0
+              A1sh = f1*L - 0.5*L**2/TanAlpha
+              L1 = f1-(L/TanAlpha)/3.
             END IF
           END IF
         END IF
@@ -8604,24 +8604,24 @@ DO SurfNum = 1,TotSurfaces
         A2sh = f2*L
         L2 = f2
         IF(d2prime >= d1+d2) THEN
-          A1sh = 0.0d0
+          A1sh = 0.0
           L1   = f1
         ELSE  ! d2prime < d1+d2
           IF(d2prime <= d2+P1) THEN
             IF(f1*TanAlpha <= L) THEN
-              A1sh = 0.5d0*TanAlpha*f1**2
-              L1 = f1*((f1*TanAlpha)/(6.d0*L) + 0.5d0)
+              A1sh = 0.5*TanAlpha*f1**2
+              L1 = f1*((f1*TanAlpha)/(6.*L) + 0.5)
             ELSE  ! f1*TanAlpha > L
-              A1sh = f1*L - 0.5d0*L**2/TanAlpha
-              L1   = f1 - (L/TanAlpha)/3.d0
+              A1sh = f1*L - 0.5*L**2/TanAlpha
+              L1   = f1 - (L/TanAlpha)/3.
             END IF
           ELSE  ! d2prime > d2+P1
             IF(d12*TanAlpha <= L) THEN
-              A1sh = L*(d2prime-(d2+P1)) + 0.5d0*TanAlpha*d12**2
-              L1   = (L*(f1-d12/2.d0)-d12*TanAlpha*(f1/2-d12/3.d0))/(L-d12*TanAlpha/2.d0)
+              A1sh = L*(d2prime-(d2+P1)) + 0.5*TanAlpha*d12**2
+              L1   = (L*(f1-d12/2.)-d12*TanAlpha*(f1/2-d12/3.))/(L-d12*TanAlpha/2.)
             ELSE  ! d12*TanAlpha > L
-              A1sh = f1*L - 0.5d0*L**2/TanAlpha
-              L1   = f1 - (L/TanAlpha)/3.d0
+              A1sh = f1*L - 0.5*L**2/TanAlpha
+              L1   = f1 - (L/TanAlpha)/3.
             END IF
           END IF
         END IF
@@ -8632,23 +8632,23 @@ DO SurfNum = 1,TotSurfaces
       IF (A1sh < 0.0) A1sh = 0.0
       IF (A2sh < 0.0) A2sh = 0.0
 
-      IF(OutsReveal >= P1+0.5d0*GlazingThickness+0.001d0) A1ill = L*f1 - A1sh
-      IF(InsReveal >= P2+0.5d0*GlazingThickness+0.001d0)  A2ill = L*f2 - A2sh
+      IF(OutsReveal >= P1+0.5*GlazingThickness+0.001) A1ill = L*f1 - A1sh
+      IF(InsReveal >= P2+0.5*GlazingThickness+0.001)  A2ill = L*f2 - A2sh
       IF(L1 == 0.0) THEN
-        FracToGlassOuts = 0.0d0
+        FracToGlassOuts = 0.0
       ELSE
-        FracToGlassOuts = 0.5d0*(1.0d0 - ATAN(FrameWidth/L1)/PiOvr2)
+        FracToGlassOuts = 0.5*(1.0 - ATAN(FrameWidth/L1)/PiOvr2)
       END IF
-      IF(L2 == 0.0d0) THEN
-        FracToGlassIns = 0.0d0
+      IF(L2 == 0.0) THEN
+        FracToGlassIns = 0.0
       ELSE
-        FracToGlassIns  = 0.5d0*(1.0d0 - ATAN(FrameWidth/L2)/PiOvr2)
+        FracToGlassIns  = 0.5*(1.0 - ATAN(FrameWidth/L2)/PiOvr2)
       END IF
     END IF  ! End of check if window has frame
 
     ! Added TH. 5/27/2009
-    IF (A1ill < 0.0d0) A1ill = 0.0
-    IF (A2ill < 0.0d0) A2ill = 0.0
+    IF (A1ill < 0.0) A1ill = 0.0
+    IF (A2ill < 0.0) A2ill = 0.0
 
     ! Quantities related to outside reveal
     IF(A1ill > 1.0d-6) THEN
@@ -8656,7 +8656,7 @@ DO SurfNum = 1,TotSurfaces
       SurfaceWindow(SurfNum)%BmSolAbsdOutsReveal = SurfaceWindow(SurfNum)%BmSolAbsdOutsReveal + &
         A1ill * SurfaceWindow(SurfNum)%OutsideRevealSolAbs * CosBeta * tmp_SunlitFracWithoutReveal
 
-      BmSolRefldOutsReveal = A1ill * (1.d0- SurfaceWindow(SurfNum)%OutsideRevealSolAbs) * CosBeta * &
+      BmSolRefldOutsReveal = A1ill * (1.- SurfaceWindow(SurfNum)%OutsideRevealSolAbs) * CosBeta * &
         tmp_SunlitFracWithoutReveal
 
       SurfaceWindow(SurfNum)%BmSolRefldOutsRevealReport = SurfaceWindow(SurfNum)%BmSolRefldOutsRevealReport &
@@ -8668,7 +8668,7 @@ DO SurfNum = 1,TotSurfaces
       SurfaceWindow(SurfNum)%OutsRevealDiffOntoGlazing = SurfaceWindow(SurfNum)%OutsRevealDiffOntoGlazing + &
         FracToGlassOuts * BmSolRefldOutsReveal / Surface(SurfNum)%Area
 
-      IF(FrameWidth > 0.0d0) THEN
+      IF(FrameWidth > 0.0) THEN
       ! Reflected solar from outside horizontal and vertical reveal incident on frame
         SurfaceWindow(SurfNum)%OutsRevealDiffOntoFrame =  SurfaceWindow(SurfNum)%OutsRevealDiffOntoFrame + &
           (0.5-FracToGlassOuts) * BmSolRefldOutsReveal / SurfaceWindow(SurfNum)%FrameArea
@@ -8720,24 +8720,24 @@ DO SurfNum = 1,TotSurfaces
           BeamSolarRad * FracToGlassIns * BmSolRefldInsReveal
 
         ! Reflected solar from inside horizontal and vertical reveal incident on frame
-        IF(FrameWidth > 0.0d0) THEN
+        IF(FrameWidth > 0.0) THEN
           SurfaceWindow(SurfNum)%InsRevealDiffOntoFrame = SurfaceWindow(SurfNum)%InsRevealDiffOntoFrame + &
             (0.5-FracToGlassIns)*BmSolRefldInsReveal / SurfaceWindow(SurfNum)%FrameArea
 
           ! Added TH 5/26/2009 for reporting purpose - diffuse on window frame from inside reveal (W)
           SurfaceWindow(SurfNum)%InsRevealDiffOntoFrameReport = SurfaceWindow(SurfNum)%InsRevealDiffOntoFrameReport + &
-            BeamSolarRad * (0.5d0-FracToGlassIns)*BmSolRefldInsReveal
+            BeamSolarRad * (0.5-FracToGlassIns)*BmSolRefldInsReveal
         END IF
 
         ! Reflected solar from inside reveal going directly into zone and reflected from glass.
         ! Assumes half of solar reflected from inside reveal goes as diffuse radiation into the zone and
         ! half goes as diffuse radiation towards window.
         SurfaceWindow(SurfNum)%InsRevealDiffIntoZone = SurfaceWindow(SurfNum)%InsRevealDiffIntoZone +  &
-          BmSolRefldInsReveal * (0.5d0 + DiffReflGlass * FracToGlassIns)
+          BmSolRefldInsReveal * (0.5 + DiffReflGlass * FracToGlassIns)
 
         ! Added TH 5/26/2009 for reporting purpose - diffuse into zone from inside reveal (W)
         SurfaceWindow(SurfNum)%InsRevealDiffIntoZoneReport = SurfaceWindow(SurfNum)%InsRevealDiffIntoZoneReport +  &
-          BeamSolarRad * BmSolRefldInsReveal * (0.5d0 + DiffReflGlass * FracToGlassIns)
+          BeamSolarRad * BmSolRefldInsReveal * (0.5 + DiffReflGlass * FracToGlassIns)
 
       END IF  ! End of check if A2ill > 0.0
 
@@ -9054,7 +9054,7 @@ INTEGER            :: SurfNum           ! Surface number
 INTEGER            :: ConstrNumSh       ! Window construction number with shade
 INTEGER            :: TotLay            ! Total layers in a construction
 INTEGER            :: MatNumSh          ! Shade layer material number
-REAL(r64)          :: AbsorpEff         ! Effective absorptance of isolated shade layer (fraction of
+REAL          :: AbsorpEff         ! Effective absorptance of isolated shade layer (fraction of
                                         !  of incident radiation remaining after reflected portion is
                                         !  removed that is absorbed
 DO SurfNum = 1,TotSurfaces
@@ -9076,10 +9076,10 @@ DO SurfNum = 1,TotSurfaces
           MatNumSh = Construct(ConstrNumSh)%LayerPoint(5)   ! Triple pane with between-glass shade
         END IF
       END IF
-      AbsorpEff = Material(MatNumSh)%AbsorpSolar/(Material(MatNumSh)%AbsorpSolar + Material(MatNumSh)%Trans + 0.0001d0)
-      AbsorpEff = MIN(MAX(AbsorpEff,0.0001d0),0.999d0) ! Constrain to avoid problems with following log eval
-      SurfaceWindow(SurfNum)%ShadeAbsFacFace(1) = (1.d0-EXP(0.5d0*LOG(1.-AbsorpEff)))/AbsorpEff
-      SurfaceWindow(SurfNum)%ShadeAbsFacFace(2) = 1.d0 - SurfaceWindow(SurfNum)%ShadeAbsFacFace(1)
+      AbsorpEff = Material(MatNumSh)%AbsorpSolar/(Material(MatNumSh)%AbsorpSolar + Material(MatNumSh)%Trans + 0.0001)
+      AbsorpEff = MIN(MAX(AbsorpEff,0.0001),0.999) ! Constrain to avoid problems with following log eval
+      SurfaceWindow(SurfNum)%ShadeAbsFacFace(1) = (1.-EXP(0.5*LOG(1.-AbsorpEff)))/AbsorpEff
+      SurfaceWindow(SurfNum)%ShadeAbsFacFace(2) = 1. - SurfaceWindow(SurfNum)%ShadeAbsFacFace(1)
     END IF
   END IF
 END DO
@@ -9144,43 +9144,43 @@ SUBROUTINE CalcWinTransDifSolInitialDistribution
   INTEGER :: IGlass             ! Glass layer counter
   INTEGER :: TotGlassLayers     ! Number of glass layers in a window construction
   INTEGER :: ShadeFlag          ! Shading flag
-  REAL(r64)    :: AbsInt             ! Tmp var for Inside surface short-wave absorptance
-  REAL(r64)    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
-  REAL(r64)    :: HMovInsul          ! Conductance of movable insulation
-  REAL(r64)    :: InsideDifAbsorptance ! Inside diffuse solar absorptance of a surface
-  REAL(r64)    :: InsideDifReflectance ! Inside diffuse solar reflectance of a surface
+  REAL    :: AbsInt             ! Tmp var for Inside surface short-wave absorptance
+  REAL    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
+  REAL    :: HMovInsul          ! Conductance of movable insulation
+  REAL    :: InsideDifAbsorptance ! Inside diffuse solar absorptance of a surface
+  REAL    :: InsideDifReflectance ! Inside diffuse solar reflectance of a surface
   INTEGER :: BlNum              ! Blind number
-  REAL(r64)    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
-  REAL(r64)    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
+  REAL    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
+  REAL    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
 
-!  REAL(r64)    :: DividerSolAbs      ! Window divider solar absorptance
-!  REAL(r64)    :: DividerSolRefl     ! Window divider solar reflectance
+!  REAL    :: DividerSolAbs      ! Window divider solar absorptance
+!  REAL    :: DividerSolRefl     ! Window divider solar reflectance
 !  INTEGER :: MatNumGl           ! Glass layer material number
 !  INTEGER :: MatNumSh           ! Shade layer material number
-!  REAL(r64)    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
+!  REAL    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
 
-  REAL(r64)    :: ViewFactor         ! temp var for view factor
-  REAL(r64)    :: ViewFactorTotal    ! debug var for view factor total
-  REAL(r64)    :: WinDifSolarTrans   ! debug var for WinDifSolar() [W]
-  REAL(r64)    :: WinDifSolarDistTotl    ! debug var for window total distributed diffuse solar [W]
-  REAL(r64)    :: WinDifSolarDistAbsorbedTotl    ! debug var for individual exterior window total distributed
+  REAL    :: ViewFactor         ! temp var for view factor
+  REAL    :: ViewFactorTotal    ! debug var for view factor total
+  REAL    :: WinDifSolarTrans   ! debug var for WinDifSolar() [W]
+  REAL    :: WinDifSolarDistTotl    ! debug var for window total distributed diffuse solar [W]
+  REAL    :: WinDifSolarDistAbsorbedTotl    ! debug var for individual exterior window total distributed
                                             !    diffuse solar absorbed [W]
-  REAL(r64)    :: WinDifSolarDistReflectedTotl   ! debug var for individual exterior window total distributed
+  REAL    :: WinDifSolarDistReflectedTotl   ! debug var for individual exterior window total distributed
                                             !    diffuse solar reflected [W]
-  REAL(r64)    :: WinDifSolarDistTransmittedTotl ! debug var for individual exterior window total distributed
+  REAL    :: WinDifSolarDistTransmittedTotl ! debug var for individual exterior window total distributed
                                             !    diffuse solar transmitted [W]
-  REAL(r64)    :: WinDifSolLayAbsW   ! temp var for diffuse solar absorbed by individual glass layer [W]
-  REAL(r64)    :: ZoneDifSolarTrans   ! debug var for WinDifSolar() [W]
-  REAL(r64)    :: ZoneDifSolarDistTotl    ! debug var for zone total distributed diffuse solar [W]
-  REAL(r64)    :: ZoneDifSolarDistAbsorbedTotl    ! debug var for zone total distributed diffuse solar absorbed [W]
-  REAL(r64)    :: ZoneDifSolarDistReflectedTotl   ! debug var for zone total distributed diffuse solar reflected [W]
-  REAL(r64)    :: ZoneDifSolarDistTransmittedTotl ! debug var for zone total distributed diffuse solar transmitted [W]
+  REAL    :: WinDifSolLayAbsW   ! temp var for diffuse solar absorbed by individual glass layer [W]
+  REAL    :: ZoneDifSolarTrans   ! debug var for WinDifSolar() [W]
+  REAL    :: ZoneDifSolarDistTotl    ! debug var for zone total distributed diffuse solar [W]
+  REAL    :: ZoneDifSolarDistAbsorbedTotl    ! debug var for zone total distributed diffuse solar absorbed [W]
+  REAL    :: ZoneDifSolarDistReflectedTotl   ! debug var for zone total distributed diffuse solar reflected [W]
+  REAL    :: ZoneDifSolarDistTransmittedTotl ! debug var for zone total distributed diffuse solar transmitted [W]
 
-  REAL(r64)    :: DifSolarAbsW       ! temp var for diffuse solar absorbed by surface [W]
-  REAL(r64)    :: DifSolarAbs        ! temp var for diffuse solar absorbed by surface [W/m2]
-  REAL(r64)    :: DifSolarReflW      ! temp var for diffuse solar reflected by surface [W]
-  REAL(r64)    :: DifSolarTransW     ! temp var for diffuse solar transmitted through interior window surface [W]
-  REAL(r64)    :: ShBlDifSolarAbsW   ! temp var for diffuse solar absorbed by shade/blind [W]
+  REAL    :: DifSolarAbsW       ! temp var for diffuse solar absorbed by surface [W]
+  REAL    :: DifSolarAbs        ! temp var for diffuse solar absorbed by surface [W/m2]
+  REAL    :: DifSolarReflW      ! temp var for diffuse solar reflected by surface [W]
+  REAL    :: DifSolarTransW     ! temp var for diffuse solar transmitted through interior window surface [W]
+  REAL    :: ShBlDifSolarAbsW   ! temp var for diffuse solar absorbed by shade/blind [W]
 
   INTEGER :: FirstZoneSurf      ! conversion index for ViewFactor
   INTEGER :: LastZoneSurf       ! debug
@@ -9267,13 +9267,13 @@ SUBROUTINE CalcWinTransDifSolInitialDistribution
             IF (MovInsulSchedVal.LE.0.0) THEN ! Movable insulation not present at current time
               HMovInsul = 0.0
             ELSE  ! Movable insulation present
-              HMovInsul = 1.0d0/(MovInsulSchedVal*Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%Resistance)
+              HMovInsul = 1.0/(MovInsulSchedVal*Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%Resistance)
               AbsInt    = Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%AbsorpSolar
             END IF
           END IF
           IF (HMovInsul > 0.0) InsideDifAbsorptance = AbsInt  ! Movable inside insulation present
           ! Inside (back) diffuse solar reflectance is assumed to be 1 - absorptance
-          InsideDifReflectance = 1.0d0 - InsideDifAbsorptance
+          InsideDifReflectance = 1.0 - InsideDifAbsorptance
 
           ! Absorbed diffuse solar [W] = current window transmitted diffuse solar [W]
           !    * view factor from current (sending) window DifTransSurfNum to current (receiving) surface HeatTransSurfNum
@@ -9681,7 +9681,7 @@ SUBROUTINE CalcInteriorWinTransDifSolInitialDistribution(ZoneNum, IntWinSurfNum,
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER :: ZoneNum              ! Zone index number
   INTEGER :: IntWinSurfNum        ! Interior Window Surface number in Zone ZoneNum
-  REAL(r64)    :: IntWinDifSolarTransW ! Diffuse Solar transmitted through Interior Window IntWinSurfNum from adjacent zone [W]
+  REAL    :: IntWinDifSolarTransW ! Diffuse Solar transmitted through Interior Window IntWinSurfNum from adjacent zone [W]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -9702,43 +9702,43 @@ SUBROUTINE CalcInteriorWinTransDifSolInitialDistribution(ZoneNum, IntWinSurfNum,
   INTEGER :: IGlass             ! Glass layer counter
   INTEGER :: TotGlassLayers     ! Number of glass layers in a window construction
   INTEGER :: ShadeFlag          ! Shading flag
-  REAL(r64)    :: AbsInt             ! Tmp var for Inside surface short-wave absorptance
-  REAL(r64)    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
-  REAL(r64)    :: HMovInsul          ! Conductance of movable insulation
-  REAL(r64)    :: InsideDifAbsorptance ! Inside diffuse solar absorptance of a surface
-  REAL(r64)    :: InsideDifReflectance ! Inside diffuse solar reflectance of a surface
+  REAL    :: AbsInt             ! Tmp var for Inside surface short-wave absorptance
+  REAL    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
+  REAL    :: HMovInsul          ! Conductance of movable insulation
+  REAL    :: InsideDifAbsorptance ! Inside diffuse solar absorptance of a surface
+  REAL    :: InsideDifReflectance ! Inside diffuse solar reflectance of a surface
   INTEGER :: BlNum              ! Blind number
-  REAL(r64)    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
-  REAL(r64)    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
+  REAL    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
+  REAL    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
 
-!  REAL(r64)    :: DividerSolAbs      ! Window divider solar absorptance
-!  REAL(r64)    :: DividerSolRefl     ! Window divider solar reflectance
+!  REAL    :: DividerSolAbs      ! Window divider solar absorptance
+!  REAL    :: DividerSolRefl     ! Window divider solar reflectance
 !  INTEGER :: MatNumGl           ! Glass layer material number
 !  INTEGER :: MatNumSh           ! Shade layer material number
-!  REAL(r64)    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
+!  REAL    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
 
-  REAL(r64)    :: ViewFactor         ! temp var for view factor
-  REAL(r64)    :: ViewFactorTotal    ! debug var for view factor total
-  REAL(r64)    :: WinDifSolarTrans   ! debug var for WinDifSolar() [W]
-  REAL(r64)    :: WinDifSolarDistTotl    ! debug var for window total distributed diffuse solar [W]
-  REAL(r64)    :: WinDifSolarDistAbsorbedTotl    ! debug var for individual exterior window total distributed
+  REAL    :: ViewFactor         ! temp var for view factor
+  REAL    :: ViewFactorTotal    ! debug var for view factor total
+  REAL    :: WinDifSolarTrans   ! debug var for WinDifSolar() [W]
+  REAL    :: WinDifSolarDistTotl    ! debug var for window total distributed diffuse solar [W]
+  REAL    :: WinDifSolarDistAbsorbedTotl    ! debug var for individual exterior window total distributed
                                             !           diffuse solar absorbed [W]
-  REAL(r64)    :: WinDifSolarDistReflectedTotl   ! debug var for individual exterior window total distributed
+  REAL    :: WinDifSolarDistReflectedTotl   ! debug var for individual exterior window total distributed
                                             !           diffuse solar reflected [W]
-  REAL(r64)    :: WinDifSolarDistTransmittedTotl ! debug var for individual exterior window total distributed
+  REAL    :: WinDifSolarDistTransmittedTotl ! debug var for individual exterior window total distributed
                                             !           diffuse solar transmitted [W]
-  REAL(r64)    :: WinDifSolLayAbsW   ! temp var for diffuse solar absorbed by individual glass layer [W]
-  REAL(r64)    :: ZoneDifSolarTrans   ! debug var for WinDifSolar() [W]
-!  REAL(r64)    :: ZoneDifSolarDistTotl    ! debug var for zone total distributed diffuse solar [W]
-  REAL(r64)    :: ZoneDifSolarDistAbsorbedTotl    ! debug var for zone total distributed diffuse solar absorbed [W]
-  REAL(r64)    :: ZoneDifSolarDistReflectedTotl   ! debug var for zone total distributed diffuse solar reflected [W]
-  REAL(r64)    :: ZoneDifSolarDistTransmittedTotl ! debug var for zone total distributed diffuse solar transmitted [W]
+  REAL    :: WinDifSolLayAbsW   ! temp var for diffuse solar absorbed by individual glass layer [W]
+  REAL    :: ZoneDifSolarTrans   ! debug var for WinDifSolar() [W]
+!  REAL    :: ZoneDifSolarDistTotl    ! debug var for zone total distributed diffuse solar [W]
+  REAL    :: ZoneDifSolarDistAbsorbedTotl    ! debug var for zone total distributed diffuse solar absorbed [W]
+  REAL    :: ZoneDifSolarDistReflectedTotl   ! debug var for zone total distributed diffuse solar reflected [W]
+  REAL    :: ZoneDifSolarDistTransmittedTotl ! debug var for zone total distributed diffuse solar transmitted [W]
 
-  REAL(r64)    :: DifSolarAbsW       ! temp var for diffuse solar absorbed by surface [W]
-  REAL(r64)    :: DifSolarAbs        ! temp var for diffuse solar absorbed by surface [W/m2]
-  REAL(r64)    :: DifSolarReflW      ! temp var for diffuse solar reflected by surface [W]
-  REAL(r64)    :: DifSolarTransW     ! temp var for diffuse solar transmitted through interior window surface [W]
-  REAL(r64)    :: ShBlDifSolarAbsW   ! temp var for diffuse solar absorbed by shade/blind [W]
+  REAL    :: DifSolarAbsW       ! temp var for diffuse solar absorbed by surface [W]
+  REAL    :: DifSolarAbs        ! temp var for diffuse solar absorbed by surface [W/m2]
+  REAL    :: DifSolarReflW      ! temp var for diffuse solar reflected by surface [W]
+  REAL    :: DifSolarTransW     ! temp var for diffuse solar transmitted through interior window surface [W]
+  REAL    :: ShBlDifSolarAbsW   ! temp var for diffuse solar absorbed by shade/blind [W]
 
   INTEGER :: FirstZoneSurf      ! conversion index for ViewFactor
   INTEGER :: LastZoneSurf       ! debug
@@ -9797,13 +9797,13 @@ SUBROUTINE CalcInteriorWinTransDifSolInitialDistribution(ZoneNum, IntWinSurfNum,
         IF (MovInsulSchedVal.LE.0.0) THEN ! Movable insulation not present at current time
           HMovInsul = 0.0
         ELSE  ! Movable insulation present
-          HMovInsul = 1.0d0/(MovInsulSchedVal*Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%Resistance)
+          HMovInsul = 1.0/(MovInsulSchedVal*Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%Resistance)
           AbsInt    = Material(Surface(HeatTransSurfNum)%MaterialMovInsulInt)%AbsorpSolar
         END IF
       END IF
       IF (HMovInsul > 0.0) InsideDifAbsorptance = AbsInt  ! Movable inside insulation present
       ! Inside (back) diffuse solar reflectance is assumed to be 1 - absorptance
-      InsideDifReflectance = 1.0d0 - InsideDifAbsorptance
+      InsideDifReflectance = 1.0 - InsideDifAbsorptance
 
       ! Absorbed diffuse solar [W] = current window transmitted diffuse solar [W]
       !    * view factor from current (sending) window IntWinSurfNum to current (receiving) surface HeatTransSurfNum

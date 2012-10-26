@@ -94,10 +94,10 @@ MODULE DesiccantDehumidifiers
     INTEGER                      :: RegenAirOutNode  =0    ! regen air outlet node of dehumidifier
     INTEGER                      :: RegenFanInNode   =0    ! regen fan inlet node
     INTEGER                      :: ControlType      =0    ! type of controls
-    REAL(r64)                    :: HumRatSet        =0.0  ! humidity ratio setpoint [kg water / kg air]
-    REAL(r64)                    :: NomProcAirVolFlow=0.0  ! nominal process air flow rate [m3/s]
-    REAL(r64)                    :: NomProcAirVel    =0.0  ! nominal process air velocity [m/s]
-    REAL(r64)                    :: NomRotorPower    =0.0  ! rotor power consumption at full output [W]
+    REAL                    :: HumRatSet        =0.0  ! humidity ratio setpoint [kg water / kg air]
+    REAL                    :: NomProcAirVolFlow=0.0  ! nominal process air flow rate [m3/s]
+    REAL                    :: NomProcAirVel    =0.0  ! nominal process air velocity [m/s]
+    REAL                    :: NomRotorPower    =0.0  ! rotor power consumption at full output [W]
     INTEGER                      :: RegenCoilIndex   =0    ! Index for regen coil
     INTEGER                      :: RegenFanIndex    =0    ! Index for regen fan
     INTEGER                      :: ProcDryBulbCurvefTW=0  ! number of process leaving dry bulb f(edb,ew) curve
@@ -108,43 +108,43 @@ MODULE DesiccantDehumidifiers
     INTEGER                      :: RegenEnergyCurvefV =0  ! number of regen energy f(v) curve
     INTEGER                      :: RegenVelCurvefTW   =0  ! number of regen velocity f(edb,ew) curve
     INTEGER                      :: RegenVelCurvefV    =0  ! number of regen velocity f(v) curve
-    REAL(r64)                    :: NomRegenTemp  = 121.0  ! nominal regen temperature for regen energy curve [C]
+    REAL                    :: NomRegenTemp  = 121.0  ! nominal regen temperature for regen energy curve [C]
 
   ! Possible future inputs, hardwired for now depending on which performance model is in use, unit off if out of bounds
-    REAL(r64)            :: MinProcAirInTemp   = -73.3   ! min allowable process inlet air temperature [C]
-    REAL(r64)            :: MaxProcAirInTemp   = 65.6    ! max allowable process inlet air temperature [C]
-    REAL(r64)            :: MinProcAirInHumRat = 0.0     ! min allowable process inlet air humidity ratio [kg water / kg air]
-    REAL(r64)            :: MaxProcAirInHumRat = 0.21273 ! max allowable process inlet air humidity ratio [kg water / kg air]
+    REAL            :: MinProcAirInTemp   = -73.3   ! min allowable process inlet air temperature [C]
+    REAL            :: MaxProcAirInTemp   = 65.6    ! max allowable process inlet air temperature [C]
+    REAL            :: MinProcAirInHumRat = 0.0     ! min allowable process inlet air humidity ratio [kg water / kg air]
+    REAL            :: MaxProcAirInHumRat = 0.21273 ! max allowable process inlet air humidity ratio [kg water / kg air]
 
   ! Internal Data
     INTEGER              :: SchedPtr              =0   ! index of availability schedule
-    REAL(r64)            :: NomProcAirMassFlow    =0.0 ! nominal process air mass flow rate [kg/s]
-    REAL(r64)            :: NomRegenAirMassFlow   =0.0 ! nominal regeneration air mass flow rate [kg/s]
-    REAL(r64)            :: ProcAirInTemp         =0.0 ! process inlet air temperature [C]
-    REAL(r64)            :: ProcAirInHumRat       =0.0 ! process inlet air humidity ratio [kg water / kg air]
-    REAL(r64)            :: ProcAirInEnthalpy     =0.0 ! process inlet air specific enthalpy [J/kg]
-    REAL(r64)            :: ProcAirInMassFlowRate =0.0 ! process inlet air mass flow rate [kg/s]
-    REAL(r64)            :: ProcAirOutTemp        =0.0 ! process outlet air temperature [C]
-    REAL(r64)            :: ProcAirOutHumRat      =0.0 ! process outlet air humidity ratio [kg water / kg air]
-    REAL(r64)            :: ProcAirOutEnthalpy    =0.0 ! process outlet air specific enthalpy [J/kg]
-    REAL(r64)            :: ProcAirOutMassFlowRate=0.0 ! process outlet air mass flow rate [kg/s]
+    REAL            :: NomProcAirMassFlow    =0.0 ! nominal process air mass flow rate [kg/s]
+    REAL            :: NomRegenAirMassFlow   =0.0 ! nominal regeneration air mass flow rate [kg/s]
+    REAL            :: ProcAirInTemp         =0.0 ! process inlet air temperature [C]
+    REAL            :: ProcAirInHumRat       =0.0 ! process inlet air humidity ratio [kg water / kg air]
+    REAL            :: ProcAirInEnthalpy     =0.0 ! process inlet air specific enthalpy [J/kg]
+    REAL            :: ProcAirInMassFlowRate =0.0 ! process inlet air mass flow rate [kg/s]
+    REAL            :: ProcAirOutTemp        =0.0 ! process outlet air temperature [C]
+    REAL            :: ProcAirOutHumRat      =0.0 ! process outlet air humidity ratio [kg water / kg air]
+    REAL            :: ProcAirOutEnthalpy    =0.0 ! process outlet air specific enthalpy [J/kg]
+    REAL            :: ProcAirOutMassFlowRate=0.0 ! process outlet air mass flow rate [kg/s]
 
-    REAL(r64)            :: RegenAirInTemp        =0.0 ! regen inlet air temperature [C]
-    REAL(r64)            :: RegenAirInHumRat      =0.0 ! regen inlet air humidity ratio [kg water / kg air]
-    REAL(r64)            :: RegenAirInEnthalpy    =0.0 ! regen inlet air specific enthalpy [J/kg]
-    REAL(r64)            :: RegenAirInMassFlowRate=0.0 ! regen inlet air mass flow rate [kg/s]
-    REAL(r64)            :: RegenAirVel           =0.0 ! regen air velocity [m/s]
+    REAL            :: RegenAirInTemp        =0.0 ! regen inlet air temperature [C]
+    REAL            :: RegenAirInHumRat      =0.0 ! regen inlet air humidity ratio [kg water / kg air]
+    REAL            :: RegenAirInEnthalpy    =0.0 ! regen inlet air specific enthalpy [J/kg]
+    REAL            :: RegenAirInMassFlowRate=0.0 ! regen inlet air mass flow rate [kg/s]
+    REAL            :: RegenAirVel           =0.0 ! regen air velocity [m/s]
 
     CHARACTER(len=MaxNameLength) :: DehumType         =' '  ! Type of desiccant dehumidifier
     INTEGER                      :: DehumTypeCode     =0    ! Type of desiccant dehumidifier, integer code
-    REAL(r64)                    :: WaterRemove       =0.0  ! water removed [kg]
-    REAL(r64)                    :: WaterRemoveRate   =0.0  ! water removal rate [kg/s]
-    REAL(r64)                    :: SpecRegenEnergy   =0.0  ! specific regen energy [J/kg of water removed]
-    REAL(r64)                    :: QRegen            =0.0  ! regen energy rate requested from regen coil [W]
-    REAL(r64)                    :: RegenEnergy       =0.0  ! regen energy requested from regen coil [J]
-    REAL(r64)                    :: ElecUseEnergy     =0.0  ! electricity consumption [J]
-    REAL(r64)                    :: ElecUseRate       =0.0  ! electricity consumption rate [W]
-    REAL(r64)                    :: PartLoad          =0.0  ! fraction of dehumidification capacity required to meet setpoint
+    REAL                    :: WaterRemove       =0.0  ! water removed [kg]
+    REAL                    :: WaterRemoveRate   =0.0  ! water removal rate [kg/s]
+    REAL                    :: SpecRegenEnergy   =0.0  ! specific regen energy [J/kg of water removed]
+    REAL                    :: QRegen            =0.0  ! regen energy rate requested from regen coil [W]
+    REAL                    :: RegenEnergy       =0.0  ! regen energy requested from regen coil [J]
+    REAL                    :: ElecUseEnergy     =0.0  ! electricity consumption [J]
+    REAL                    :: ElecUseRate       =0.0  ! electricity consumption rate [W]
+    REAL                    :: PartLoad          =0.0  ! fraction of dehumidification capacity required to meet setpoint
     INTEGER                      :: RegenCapErrorIndex1 =0  ! recurring error message index for insufficient regen coil capacity
     INTEGER                      :: RegenCapErrorIndex2 =0  ! recurring error message index for insufficient regen coil capacity
     INTEGER                      :: RegenCapErrorIndex3 =0  ! recurring error message index for insufficient regen coil capacity
@@ -162,13 +162,13 @@ MODULE DesiccantDehumidifiers
     CHARACTER(len=MaxNameLength) :: CoolingCoilType     =' '  ! type of cooling coil used with desiccant heat exchanger
     CHARACTER(len=MaxNameLength) :: CoolingCoilName     =' '  ! name of cooling coil used with desiccant heat exchanger
     INTEGER                      :: Preheat             =0    ! determine condenser waste heat usage for pre heating regen air
-    REAL(r64)                    :: RegenSetPointTemp   =0.0  ! heating set-point for regeneration air [C]
-    REAL(r64)                    :: ExhaustFanMaxVolFlowRate=0.0 ! exhaust fan maximum allowable air flow rate [m3/s]
-    REAL(r64)                    :: ExhaustFanMaxMassFlowRate=0.0 ! exhaust fan maximum allowable air mass flow rate [kg/s]
-    REAL(r64)                    :: ExhaustFanMaxPower  =0.0  ! exhaust fan maximum allowable power [W]
-    REAL(r64)                    :: ExhaustFanPower     =0.0  ! exhaust fan power for reporting [W]
-    REAL(r64)                    :: ExhaustFanElecConsumption = 0.0 ! exhaust fan electric consumption for reporting [J]
-    REAL(r64)                    :: CompanionCoilCapacity=0.0 ! DX coil capacity for dehumidifier companion cooling coil [W]
+    REAL                    :: RegenSetPointTemp   =0.0  ! heating set-point for regeneration air [C]
+    REAL                    :: ExhaustFanMaxVolFlowRate=0.0 ! exhaust fan maximum allowable air flow rate [m3/s]
+    REAL                    :: ExhaustFanMaxMassFlowRate=0.0 ! exhaust fan maximum allowable air mass flow rate [kg/s]
+    REAL                    :: ExhaustFanMaxPower  =0.0  ! exhaust fan maximum allowable power [W]
+    REAL                    :: ExhaustFanPower     =0.0  ! exhaust fan power for reporting [W]
+    REAL                    :: ExhaustFanElecConsumption = 0.0 ! exhaust fan electric consumption for reporting [J]
+    REAL                    :: CompanionCoilCapacity=0.0 ! DX coil capacity for dehumidifier companion cooling coil [W]
     INTEGER                      :: RegenFanPlacement     =0  ! placement of the fan used for regeneration air flow
     INTEGER                      :: ControlNodeNum        =0  ! node number of control node
     INTEGER                      :: ExhaustFanCurveIndex  =0  ! exhaust fan curve object index
@@ -197,8 +197,8 @@ MODULE DesiccantDehumidifiers
     INTEGER                      :: CompNum                   = 0  ! plant loop component index for water heating coil
     Integer                      :: HotWaterCoilMaxIterIndex  = 0  ! Index to recurring warning message
     Integer                      :: HotWaterCoilMaxIterIndex2 = 0  ! Index to recurring warning message
-    REAL(r64)                    :: MaxCoilFluidFlow          = 0  ! hot water or steam mass flow rate regen. heating coil [kg/s]
-    REAL(r64)                    :: RegenCoilCapacity         = 0  ! hot water or steam coil operating capacity [W]
+    REAL                    :: MaxCoilFluidFlow          = 0  ! hot water or steam mass flow rate regen. heating coil [kg/s]
+    REAL                    :: RegenCoilCapacity         = 0  ! hot water or steam coil operating capacity [W]
 
   END TYPE DesiccantDehumidifierData
 
@@ -207,7 +207,7 @@ MODULE DesiccantDehumidifiers
   INTEGER :: NumSolidDesicDehums         ! number of solid desiccant dehumidifiers
   INTEGER :: NumGenericDesicDehums   ! number of generic desiccant dehumidifiers
   TYPE (DesiccantDehumidifierData), ALLOCATABLE, DIMENSION(:) :: DesicDehum
-  REAL(r64)                       :: TempSteamIn = 100.0            ! steam coil steam inlet temperature
+  REAL                       :: TempSteamIn = 100.0            ! steam coil steam inlet temperature
 
   ! SUBROUTINE SPECIFICATIONS FOR MODULE <module_name>
 
@@ -266,7 +266,7 @@ SUBROUTINE SimDesiccantDehumidifier(CompName,FirstHVACIteration,CompIndex)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: DesicDehumNum             ! index of solid desiccant unit being simulated
   LOGICAL,SAVE :: GetInputFlag = .true.     ! First time, input is "gotten"
-  REAL(r64)    :: HumRatNeeded              ! process air leaving humidity ratio set by controller [kg water/kg air]
+  REAL    :: HumRatNeeded              ! process air leaving humidity ratio set by controller [kg water/kg air]
 
 
   IF (GetInputFlag) THEN
@@ -408,11 +408,11 @@ SUBROUTINE GetDesiccantDehumidifierInput
   CHARACTER (len=MaxNameLength)  :: CurrentModuleObject     ! for ease in getting objects
   INTEGER                        :: DesuperHeaterIndex      ! Index of desuperheater heating coil
   INTEGER                        :: RegenCoilControlNodeNum ! Control node number of regen heating coil
-  REAL(r64)                      :: CoilBypassedFlowFrac    ! Bypass air fraction for multimode DX coils
+  REAL                      :: CoilBypassedFlowFrac    ! Bypass air fraction for multimode DX coils
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   INTEGER                        :: MaxNums=0               ! Maximum number of numeric input fields
@@ -424,7 +424,7 @@ SUBROUTINE GetDesiccantDehumidifierInput
   LOGICAL                        :: ErrFlag                 ! local error flag
   CHARACTER(len=MaxNameLength)   :: RegenCoilType           ! Regen heating coil type
   CHARACTER(len=MaxNameLength)   :: RegenCoilName           ! Regen heating coil name
-  REAL(r64)                      :: SteamDensity  = 0.0     ! density of steam at 100C
+  REAL                      :: SteamDensity  = 0.0     ! density of steam at 100C
   INTEGER                        :: SteamIndex              ! steam coil Index
 
   NumSolidDesicDehums = GetNumObjectsFound('Dehumidifier:Desiccant:NoFans')
@@ -627,7 +627,7 @@ SUBROUTINE GetDesiccantDehumidifierInput
                                     GetCoilMaxSteamFlowRate(DesicDehum(DesicDehumNum)%RegenCoilIndex,ErrFlag)
             IF (DesicDehum(DesicDehumNum)%MaxCoilFluidFlow .GT. 0.0)THEN
                 SteamIndex = 0      ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-                SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0d0,SteamIndex,'Dehumidifier:Desiccant:NoFans')
+                SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0,SteamIndex,'Dehumidifier:Desiccant:NoFans')
                 DesicDehum(DesicDehumNum)%MaxCoilFluidFlow = DesicDehum(DesicDehumNum)%MaxCoilFluidFlow * SteamDensity
             END IF
 
@@ -742,10 +742,10 @@ SUBROUTINE GetDesiccantDehumidifierInput
     ELSE
            ! If DEFAULT performance model, set operating limits curves.  Unit is off outside this range
       DesicDehum(DesicDehumNum)%PerformanceModel_Num = PM_Default
-      DesicDehum%MinProcAirInTemp        =  1.67d0     !  35 F
-      DesicDehum%MaxProcAirInTemp        = 48.89d0     ! 120 F
-      DesicDehum%MinProcAirInHumRat      =  0.002857d0 !  20 gr/lb
-      DesicDehum%MaxProcAirInHumRat      =  0.02857d0  ! 200 gr/lb
+      DesicDehum%MinProcAirInTemp        =  1.67     !  35 F
+      DesicDehum%MaxProcAirInTemp        = 48.89     ! 120 F
+      DesicDehum%MinProcAirInHumRat      =  0.002857 !  20 gr/lb
+      DesicDehum%MaxProcAirInHumRat      =  0.02857  ! 200 gr/lb
            !  If DEFAULT performance model, warn if curve names and nominal regen temp have values
       IF ((.NOT. lAlphaBlanks(13)) .OR. (.NOT. lAlphaBlanks(14)) .OR. (.NOT. lAlphaBlanks(15)) .OR. &
           (.NOT. lAlphaBlanks(16)) .OR. (.NOT. lAlphaBlanks(17)) .OR. (.NOT. lAlphaBlanks(18)) .OR. &
@@ -753,13 +753,13 @@ SUBROUTINE GetDesiccantDehumidifierInput
         CALL ShowWarningError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
         CALL ShowContinueError('DEFAULT performance selected, curve names and nominal regen temp will be ignored.')
       ENDIF
-      IF (DesicDehum(DesicDehumNum)%NomProcAirVel > 4.064d0) THEN
+      IF (DesicDehum(DesicDehumNum)%NomProcAirVel > 4.064) THEN
         CALL ShowWarningError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
         CALL ShowContinueError(TRIM(cNumericFields(3))//' > 4.064 m/s.; Value in input='//  &
                           TRIM(RoundSigDigits(DesicDehum(DesicDehumNum)%NomProcAirVel,3)))
         CALL ShowContinueError('DEFAULT performance curves not valid outside 2.032 to 4.064 m/s (400 to 800 fpm).')
       ENDIF
-      IF (DesicDehum(DesicDehumNum)%NomProcAirVel < 2.032d0) THEN
+      IF (DesicDehum(DesicDehumNum)%NomProcAirVel < 2.032) THEN
         CALL ShowWarningError(TRIM(CurrentModuleObject)//' = '//TRIM(Alphas(1)))
         CALL ShowContinueError(TRIM(cNumericFields(3))//' < 2.032 m/s.; Value in input='//  &
                           TRIM(RoundSigDigits(DesicDehum(DesicDehumNum)%NomProcAirVel,3)))
@@ -1114,7 +1114,7 @@ SUBROUTINE GetDesiccantDehumidifierInput
                                     GetCoilMaxSteamFlowRate(DesicDehum(DesicDehumNum)%RegenCoilIndex,ErrFlag)
             IF (DesicDehum(DesicDehumNum)%MaxCoilFluidFlow .GT. 0.0)THEN
                 SteamIndex = 0      ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-                SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0d0,SteamIndex,'Dehumidifier:Desiccant:NoFans')
+                SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0,SteamIndex,'Dehumidifier:Desiccant:NoFans')
                 DesicDehum(DesicDehumNum)%MaxCoilFluidFlow = DesicDehum(DesicDehumNum)%MaxCoilFluidFlow * SteamDensity
             END IF
 
@@ -1610,12 +1610,12 @@ SUBROUTINE InitDesiccantDehumidifier(DesicDehumNum,FirstHVACIteration)
 
   LOGICAL                        :: ErrorsFound=.false.  ! Set to true if errors in input, fatal at end of routine
   INTEGER                        :: SteamIndex           ! steam coil index
-  REAL(r64)                      :: FluidDensity         ! steam or water coil fluid density
-  REAL(r64)                      :: CoilMaxVolFlowRate   ! water or steam max volumetric water flow rate
-  REAL(r64)                      :: QCoilActual          ! actual CBVAV steam heating coil load met (W)
+  REAL                      :: FluidDensity         ! steam or water coil fluid density
+  REAL                      :: CoilMaxVolFlowRate   ! water or steam max volumetric water flow rate
+  REAL                      :: QCoilActual          ! actual CBVAV steam heating coil load met (W)
   LOGICAL                        :: ErrorFlag            ! local error flag returned from data mining
-!unused  REAL(r64)                      :: mdot                 ! heating coil fluid mass flow rate, kg/s
-!unused  REAL(r64)                      :: QDelivered           ! regen heat actually delivered by regen coil [W]
+!unused  REAL                      :: mdot                 ! heating coil fluid mass flow rate, kg/s
+!unused  REAL                      :: QDelivered           ! regen heat actually delivered by regen coil [W]
 
   IF (MyOneTimeFlag) THEN
 
@@ -1676,7 +1676,7 @@ SUBROUTINE InitDesiccantDehumidifier(DesicDehumNum,FirstHVACIteration)
 
         IF(DesicDehum(DesicDehumNum)%MaxCoilFluidFlow .GT. 0.0)THEN
           SteamIndex = 0 ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-          FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamIndex,'InitDesiccantDehumidifier')
+          FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamIndex,'InitDesiccantDehumidifier')
           DesicDehum(DesicDehumNum)%MaxCoilFluidFlow = DesicDehum(DesicDehumNum)%MaxCoilFluidFlow  * FluidDensity
         END IF
 
@@ -1734,7 +1734,7 @@ SUBROUTINE InitDesiccantDehumidifier(DesicDehumNum,FirstHVACIteration)
 
       !  Determine heating coil inlet conditions by calling it with zero load
       !  Not sure if this is really a good way to do this, should revisit for next release.
-      CALL CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,0.0d0)
+      CALL CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,0.0)
 
       RegenInNode  = DesicDehum(DesicDehumNum)%RegenAirInNode
       DesicDehum(DesicDehumNum)%RegenAirInTemp = Node(RegenInNode)%Temp
@@ -1777,7 +1777,7 @@ SUBROUTINE InitDesiccantDehumidifier(DesicDehumNum,FirstHVACIteration)
             IF (DesicDehum(DesicDehumNum)%RegenCoilType_Num == Coil_HeatingSteam) THEN
                 CALL SimulateSteamCoilComponents(DesicDehum(DesicDehumNum)%RegenCoilName, &
                                                  FirstHVACIteration,    &
-                                                 1.0d0, & !simulate any load > 0 to get max capacity of steam coil
+                                                 1.0, & !simulate any load > 0 to get max capacity of steam coil
                                                  DesicDehum(DesicDehumNum)%RegenCoilIndex, QCoilActual)
                 ErrorFlag = .FALSE.
                 CoilMaxVolFlowRate = GetCoilMaxSteamFlowRate(DesicDehum(DesicDehumNum)%RegenCoilIndex,ErrorFlag)
@@ -1786,12 +1786,12 @@ SUBROUTINE InitDesiccantDehumidifier(DesicDehumNum,FirstHVACIteration)
                 ENDIF
                 IF(CoilMaxVolFlowRate .NE. Autosize) THEN
                   SteamIndex = 0             ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-                  FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamIndex,'InitDesiccantDehumidifier')
+                  FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamIndex,'InitDesiccantDehumidifier')
                   DesicDehum(DesicDehumNum)%MaxCoilFluidFlow = CoilMaxVolFlowRate * FluidDensity
                 ENDIF
             ENDIF
            ENDIF
-           Call InitComponentNodes(0.d0, DesicDehum(DesicDehumNum)%MaxCoilFluidFlow, &
+           Call InitComponentNodes(0., DesicDehum(DesicDehumNum)%MaxCoilFluidFlow, &
                                         DesicDehum(DesicDehumNum)%CoilControlNode, &
                                         DesicDehum(DesicDehumNum)%CoilOutletNode, &
                                         DesicDehum(DesicDehumNum)%LoopNum, &
@@ -1878,7 +1878,7 @@ SUBROUTINE ControlDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVACIter
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: DesicDehumNum      ! number of the current dehumidifier being simulated
-  REAL(r64),    INTENT(OUT) :: HumRatNeeded       ! process air leaving humidity ratio set by controller [kg water/kg air]
+  REAL,    INTENT(OUT) :: HumRatNeeded       ! process air leaving humidity ratio set by controller [kg water/kg air]
   LOGICAL, INTENT (IN) :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1892,8 +1892,8 @@ SUBROUTINE ControlDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVACIter
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: UnitOn               ! unit on flag
-  REAL(r64)    :: ProcAirMassFlowRate  ! process air mass flow rate [kg/s]
-  REAL(r64)    :: RegenAirMassFlowRate ! regen air mass flow rate [kg/s]
+  REAL    :: ProcAirMassFlowRate  ! process air mass flow rate [kg/s]
+  REAL    :: RegenAirMassFlowRate ! regen air mass flow rate [kg/s]
 
   ProcAirMassFlowRate = 0.0
   RegenAirMassFlowRate = 0.0
@@ -2029,7 +2029,7 @@ SUBROUTINE CalcSolidDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVACIt
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: DesicDehumNum  ! number of the current dehumidifier being simulated
-  REAL(r64), INTENT(IN)    :: HumRatNeeded ! process air leaving humidity ratio set by controller [kgWater/kgDryAir]
+  REAL, INTENT(IN)    :: HumRatNeeded ! process air leaving humidity ratio set by controller [kgWater/kgDryAir]
   LOGICAL,          INTENT (IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2043,97 +2043,97 @@ SUBROUTINE CalcSolidDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVACIt
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: ProcAirInHumRat        ! process inlet air humidity ratio [kgWater/kgDryAir]
-  REAL(r64) :: ProcAirInTemp          ! process inlet air temperature [C]
-  REAL(r64) :: ProcAirOutHumRat        ! process outlet air humidity ratio [kgWater/kgDryAir]
-  REAL(r64) :: MinProcAirOutHumRat    ! minimum available process outlet air humidity ratio [kgWater/kgDryAir]
-  REAL(r64) :: ProcAirOutTemp          ! process outlet air temperature [C]
-  REAL(r64) :: ProcAirVel              ! process air velocity [m/s]
-  REAL(r64) :: QRegen                  ! regen heat input rate requested from regen coil [W]
-  REAL(r64) :: QDelivered              ! regen heat actually delivered by regen coil [W]
-  !REAL(r64) :: RegenAirInHumRat        ! regen inlet air humidity ratio [kgWater/kgDryAir]
-  REAL(r64) :: RegenAirInTemp          ! regen inlet air temperature [C]
-  REAL(r64) :: RegenAirVel             ! regen air velocity [m/s]
-  REAL(r64) :: ProcAirMassFlowRate     ! process air mass flow rate [kg/s]
-  REAL(r64) :: RegenAirMassFlowRate    ! regen air mass flow rate [kg/s]
-  REAL(r64) :: SpecRegenEnergy         ! specific regen energy [J/kg of water removed]
-  REAL(r64) :: NomRegenTemp            ! nominal regen temperature for regen energy curve
-  REAL(r64) :: ElecUseRate             ! electricity consumption rate [W]
-  REAL(r64) :: PartLoad            ! fraction of dehumidification capacity required to meet setpoint
+  REAL :: ProcAirInHumRat        ! process inlet air humidity ratio [kgWater/kgDryAir]
+  REAL :: ProcAirInTemp          ! process inlet air temperature [C]
+  REAL :: ProcAirOutHumRat        ! process outlet air humidity ratio [kgWater/kgDryAir]
+  REAL :: MinProcAirOutHumRat    ! minimum available process outlet air humidity ratio [kgWater/kgDryAir]
+  REAL :: ProcAirOutTemp          ! process outlet air temperature [C]
+  REAL :: ProcAirVel              ! process air velocity [m/s]
+  REAL :: QRegen                  ! regen heat input rate requested from regen coil [W]
+  REAL :: QDelivered              ! regen heat actually delivered by regen coil [W]
+  !REAL :: RegenAirInHumRat        ! regen inlet air humidity ratio [kgWater/kgDryAir]
+  REAL :: RegenAirInTemp          ! regen inlet air temperature [C]
+  REAL :: RegenAirVel             ! regen air velocity [m/s]
+  REAL :: ProcAirMassFlowRate     ! process air mass flow rate [kg/s]
+  REAL :: RegenAirMassFlowRate    ! regen air mass flow rate [kg/s]
+  REAL :: SpecRegenEnergy         ! specific regen energy [J/kg of water removed]
+  REAL :: NomRegenTemp            ! nominal regen temperature for regen energy curve
+  REAL :: ElecUseRate             ! electricity consumption rate [W]
+  REAL :: PartLoad            ! fraction of dehumidification capacity required to meet setpoint
   LOGICAL :: UnitOn       ! unit on flag
 
   LOGICAL, SAVE :: MyOneTimeFlag = .TRUE.     ! one time flag
-  REAL(r64), SAVE    :: RhoAirStdInit
+  REAL, SAVE    :: RhoAirStdInit
 
 ! Variables for hardwired coefficients for default performance model
 
-  REAL(r64) :: TC0
-  REAL(r64) :: TC1
-  REAL(r64) :: TC2
-  REAL(r64) :: TC3
-  REAL(r64) :: TC4
-  REAL(r64) :: TC5
-  REAL(r64) :: TC6
-  REAL(r64) :: TC7
-  REAL(r64) :: TC8
-  REAL(r64) :: TC9
-  REAL(r64) :: TC10
-  REAL(r64) :: TC11
-  REAL(r64) :: TC12
-  REAL(r64) :: TC13
-  REAL(r64) :: TC14
-  REAL(r64) :: TC15
+  REAL :: TC0
+  REAL :: TC1
+  REAL :: TC2
+  REAL :: TC3
+  REAL :: TC4
+  REAL :: TC5
+  REAL :: TC6
+  REAL :: TC7
+  REAL :: TC8
+  REAL :: TC9
+  REAL :: TC10
+  REAL :: TC11
+  REAL :: TC12
+  REAL :: TC13
+  REAL :: TC14
+  REAL :: TC15
 
-  REAL(r64) :: WC0
-  REAL(r64) :: WC1
-  REAL(r64) :: WC2
-  REAL(r64) :: WC3
-  REAL(r64) :: WC4
-  REAL(r64) :: WC5
-  REAL(r64) :: WC6
-  REAL(r64) :: WC7
-  REAL(r64) :: WC8
-  REAL(r64) :: WC9
-  REAL(r64) :: WC10
-  REAL(r64) :: WC11
-  REAL(r64) :: WC12
-  REAL(r64) :: WC13
-  REAL(r64) :: WC14
-  REAL(r64) :: WC15
+  REAL :: WC0
+  REAL :: WC1
+  REAL :: WC2
+  REAL :: WC3
+  REAL :: WC4
+  REAL :: WC5
+  REAL :: WC6
+  REAL :: WC7
+  REAL :: WC8
+  REAL :: WC9
+  REAL :: WC10
+  REAL :: WC11
+  REAL :: WC12
+  REAL :: WC13
+  REAL :: WC14
+  REAL :: WC15
 
-  REAL(r64) :: QC0
-  REAL(r64) :: QC1
-  REAL(r64) :: QC2
-  REAL(r64) :: QC3
-  REAL(r64) :: QC4
-  REAL(r64) :: QC5
-  REAL(r64) :: QC6
-  REAL(r64) :: QC7
-  REAL(r64) :: QC8
-  REAL(r64) :: QC9
-  REAL(r64) :: QC10
-  REAL(r64) :: QC11
-  REAL(r64) :: QC12
-  REAL(r64) :: QC13
-  REAL(r64) :: QC14
-  REAL(r64) :: QC15
+  REAL :: QC0
+  REAL :: QC1
+  REAL :: QC2
+  REAL :: QC3
+  REAL :: QC4
+  REAL :: QC5
+  REAL :: QC6
+  REAL :: QC7
+  REAL :: QC8
+  REAL :: QC9
+  REAL :: QC10
+  REAL :: QC11
+  REAL :: QC12
+  REAL :: QC13
+  REAL :: QC14
+  REAL :: QC15
 
-  REAL(r64) :: RC0
-  REAL(r64) :: RC1
-  REAL(r64) :: RC2
-  REAL(r64) :: RC3
-  REAL(r64) :: RC4
-  REAL(r64) :: RC5
-  REAL(r64) :: RC6
-  REAL(r64) :: RC7
-  REAL(r64) :: RC8
-  REAL(r64) :: RC9
-  REAL(r64) :: RC10
-  REAL(r64) :: RC11
-  REAL(r64) :: RC12
-  REAL(r64) :: RC13
-  REAL(r64) :: RC14
-  REAL(r64) :: RC15
+  REAL :: RC0
+  REAL :: RC1
+  REAL :: RC2
+  REAL :: RC3
+  REAL :: RC4
+  REAL :: RC5
+  REAL :: RC6
+  REAL :: RC7
+  REAL :: RC8
+  REAL :: RC9
+  REAL :: RC10
+  REAL :: RC11
+  REAL :: RC12
+  REAL :: RC13
+  REAL :: RC14
+  REAL :: RC15
 
 ! Setup internal variables for calculations
 
@@ -2158,22 +2158,22 @@ IF (HumRatNeeded .lt. ProcAirInHumRat) THEN
 
     CASE (PM_Default)
 
-      WC0  = 0.0148880824323806d0
-      WC1  = -0.000283393198398211d0
-      WC2  = -0.87802168940547d0
-      WC3  = -0.000713615831236411d0
-      WC4  = 0.0311261188874622d0
+      WC0  = 0.0148880824323806
+      WC1  = -0.000283393198398211
+      WC2  = -0.87802168940547
+      WC3  = -0.000713615831236411
+      WC4  = 0.0311261188874622
       WC5  = 1.51738892142485d-06
-      WC6  = 0.0287250198281021d0
+      WC6  = 0.0287250198281021
       WC7  = 4.94796903231558d-06
-      WC8  = 24.0771139652826d0
-      WC9  = 0.000122270283927978d0
-      WC10 = -0.0151657189566474d0
+      WC8  = 24.0771139652826
+      WC9  = 0.000122270283927978
+      WC10 = -0.0151657189566474
       WC11 = 3.91641393230322d-08
-      WC12 = 0.126032651553348d0
-      WC13 = 0.000391653854431574d0
-      WC14 = 0.002160537360507d0
-      WC15 = 0.00132732844211593d0
+      WC12 = 0.126032651553348
+      WC13 = 0.000391653854431574
+      WC14 = 0.002160537360507
+      WC15 = 0.00132732844211593
 
       MinProcAirOutHumRat   =  WC0 &
         + WC1*ProcAirInTemp + WC2*ProcAirInHumRat + WC3*ProcAirVel &
@@ -2201,7 +2201,7 @@ IF (HumRatNeeded .lt. ProcAirInHumRat) THEN
 
   END SELECT ! Performance Model Part A
 
-  MinProcAirOutHumRat = max(MinProcAirOutHumRat,0.000857d0)
+  MinProcAirOutHumRat = max(MinProcAirOutHumRat,0.000857)
 
 ENDIF
 
@@ -2213,30 +2213,30 @@ IF (UnitOn) THEN
   PartLoad = 1.0
   IF (MinProcAirOutHumRat .LT. HumRatNeeded) &
     PartLoad = (ProcAirInHumRat - HumRatNeeded) / (ProcAirInHumRat - MinProcAirOutHumRat)
-  PartLoad = MAX(0.0d0,PartLoad)
-  PartLoad = MIN(1.0d0,PartLoad)
+  PartLoad = MAX(0.0,PartLoad)
+  PartLoad = MIN(1.0,PartLoad)
 
   SELECT CASE(DesicDehum(DesicDehumNum)%PerformanceModel_Num) ! Performance Model Part B
 
     CASE (PM_Default)
 
       ! Calculate leaving conditions
-      TC0  = -38.7782841989449d0
-      TC1  = 2.0127655837628d0
-      TC2  = 5212.49360216097d0
-      TC3  = 15.2362536782665d0
-      TC4  = -80.4910419759181d0
-      TC5  = -0.105014122001509d0
-      TC6  = -229.668673645144d0
-      TC7  = -0.015424703743461d0
-      TC8  = -69440.0689831847d0
-      TC9  = -1.6686064694322d0
-      TC10 = 38.5855718977592d0
-      TC11 = 0.000196395381206009d0
-      TC12 = 386.179386548324d0
-      TC13 = -0.801959614172614d0
-      TC14 = -3.33080986818745d0
-      TC15 = -15.2034386065714d0
+      TC0  = -38.7782841989449
+      TC1  = 2.0127655837628
+      TC2  = 5212.49360216097
+      TC3  = 15.2362536782665
+      TC4  = -80.4910419759181
+      TC5  = -0.105014122001509
+      TC6  = -229.668673645144
+      TC7  = -0.015424703743461
+      TC8  = -69440.0689831847
+      TC9  = -1.6686064694322
+      TC10 = 38.5855718977592
+      TC11 = 0.000196395381206009
+      TC12 = 386.179386548324
+      TC13 = -0.801959614172614
+      TC14 = -3.33080986818745
+      TC15 = -15.2034386065714
 
       ProcAirOutTemp   =  TC0 &
         + TC1*ProcAirInTemp + TC2*ProcAirInHumRat + TC3*ProcAirVel &
@@ -2250,22 +2250,22 @@ IF (UnitOn) THEN
         + TC15*LOG(ProcAirVel)
 
       ! Regen energy
-      QC0  = -27794046.6291107d0
-      QC1  = -235725.171759615d0
-      QC2  = 975461343.331328d0
-      QC3  = -686069.373946731d0
-      QC4  = -17717307.3766266d0
-      QC5  = 31482.2539662489d0
-      QC6  = 55296552.8260743d0
-      QC7  = 6195.36070023868d0
-      QC8  = -8304781359.40435d0
-      QC9  = -188987.543809419d0
-      QC10 = 3933449.40965846d0
-      QC11 = -6.66122876558634d0
-      QC12 = -349102295.417547d0
-      QC13 = 83672.179730172d0
-      QC14 = -6059524.33170538d0
-      QC15 = 1220523.39525162d0
+      QC0  = -27794046.6291107
+      QC1  = -235725.171759615
+      QC2  = 975461343.331328
+      QC3  = -686069.373946731
+      QC4  = -17717307.3766266
+      QC5  = 31482.2539662489
+      QC6  = 55296552.8260743
+      QC7  = 6195.36070023868
+      QC8  = -8304781359.40435
+      QC9  = -188987.543809419
+      QC10 = 3933449.40965846
+      QC11 = -6.66122876558634
+      QC12 = -349102295.417547
+      QC13 = 83672.179730172
+      QC14 = -6059524.33170538
+      QC15 = 1220523.39525162
 
       SpecRegenEnergy   =  QC0 &
         + QC1*ProcAirInTemp + QC2*ProcAirInHumRat + QC3*ProcAirVel &
@@ -2279,22 +2279,22 @@ IF (UnitOn) THEN
         + QC15*LOG(ProcAirVel)
 
       ! Regen face velocity
-      RC0 = -4.67358908091488d0
-      RC1 = 0.0654323095468338d0
-      RC2 = 396.950518702316d0
-      RC3 = 1.52610165426736d0
-      RC4 = -11.3955868430328d0
-      RC5 = 0.00520693906104437d0
-      RC6 = 57.783645385621d0
-      RC7 = -0.000464800668311693d0
-      RC8 = -5958.78613212602d0
-      RC9 = -0.205375818291012d0
-      RC10 = 5.26762675442845d0
+      RC0 = -4.67358908091488
+      RC1 = 0.0654323095468338
+      RC2 = 396.950518702316
+      RC3 = 1.52610165426736
+      RC4 = -11.3955868430328
+      RC5 = 0.00520693906104437
+      RC6 = 57.783645385621
+      RC7 = -0.000464800668311693
+      RC8 = -5958.78613212602
+      RC9 = -0.205375818291012
+      RC10 = 5.26762675442845
       RC11 = -8.88452553055039d-05
-      RC12 = -182.382479369311d0
-      RC13 = -0.100289774002047d0
-      RC14 = -0.486980507964251d0
-      RC15 = -0.972715425435447d0
+      RC12 = -182.382479369311
+      RC13 = -0.100289774002047
+      RC14 = -0.486980507964251
+      RC15 = -0.972715425435447
 
       RegenAirVel   =  RC0 &
         + RC1*ProcAirInTemp + RC2*ProcAirInHumRat + RC3*ProcAirVel &
@@ -2336,11 +2336,11 @@ IF (UnitOn) THEN
 
   ! Adjust for regen inlet temperature
   SpecRegenEnergy = SpecRegenEnergy * (NomRegenTemp - RegenAirInTemp) / (NomRegenTemp - ProcAirInTemp)
-  SpecRegenEnergy = MAX(SpecRegenEnergy, 0.0d0)
+  SpecRegenEnergy = MAX(SpecRegenEnergy, 0.0)
   QRegen = SpecRegenEnergy*DesicDehum(DesicDehumNum)%WaterRemoveRate
 
   ! Above curves are based on a 90deg regen angle and 245deg process air angle
-  RegenAirMassFlowRate = ProcAirMassFlowRate * 90.d0/245.d0 * RegenAirVel/ProcAirVel
+  RegenAirMassFlowRate = ProcAirMassFlowRate * 90./245. * RegenAirVel/ProcAirVel
 
   ElecUseRate = DesicDehum(DesicDehumNum)%NomRotorPower
 
@@ -2463,11 +2463,11 @@ SUBROUTINE CalcGenericDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVAC
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: DesicDehumNum  ! number of the current dehumidifier being simulated
-  REAL(r64),    INTENT (IN) :: HumRatNeeded ! process air leaving humidity ratio set by controller [kg water/kg air]
+  REAL,    INTENT (IN) :: HumRatNeeded ! process air leaving humidity ratio set by controller [kg water/kg air]
   LOGICAL, INTENT (IN) :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: MinVolFlowPerRatedTotQ = 0.00002684d0 ! m3/s per W = 200 cfm/ton,
+  REAL, PARAMETER :: MinVolFlowPerRatedTotQ = 0.00002684 ! m3/s per W = 200 cfm/ton,
                                                                 ! min vol flow per rated evaporator capacity
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2477,28 +2477,28 @@ SUBROUTINE CalcGenericDesiccantDehumidifier(DesicDehumNum,HumRatNeeded,FirstHVAC
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DDPartLoadRatio        ! fraction of dehumidification capacity required to meet setpoint
-  REAL(r64) :: QRegen = 0.0           ! required coil load passed to sim heating coil routine (W)
-  REAL(r64) :: MassFlowRateNew        ! new required mass flow rate calculated to keep regen setpoint temperature (kg/s)
-  REAL(r64) :: CondenserWasteHeat     ! Condenser waste heat (W)
-  REAL(r64) :: CpAir                  ! Specific heat of air (J/kg-K)
-  REAL(r64) :: NewRegenInTemp         ! new temp calculated from condenser waste heat (C)
-  REAL(r64) :: ExhaustFanMassFlowRate ! exhaust fan mass flow rate (kg/s)
-  REAL(r64) :: ExhaustFanPLR          ! exhaust fan run time fraction calculated from new mass flow rate for regen side
-  REAL(r64) :: ExhaustFanPowerMod     ! used to calculate exhaust fan power from flow fraction
-  REAL(r64) :: VolFlowPerRatedTotQ    ! flow rate per rated total cooling capacity of the companion coil (m3/s/W)
-  REAL(r64) :: FanDeltaT                           ! used to account for fan heat when calculating regeneration heater energy (C)
-  REAL(r64) :: OnOffFanPLF                         ! save air loop fan part load fracton while calculating exhaust fan power
-  REAL(r64) :: RegenSetPointTemp                   ! regeneration temperature setpoint (C)
+  REAL :: DDPartLoadRatio        ! fraction of dehumidification capacity required to meet setpoint
+  REAL :: QRegen = 0.0           ! required coil load passed to sim heating coil routine (W)
+  REAL :: MassFlowRateNew        ! new required mass flow rate calculated to keep regen setpoint temperature (kg/s)
+  REAL :: CondenserWasteHeat     ! Condenser waste heat (W)
+  REAL :: CpAir                  ! Specific heat of air (J/kg-K)
+  REAL :: NewRegenInTemp         ! new temp calculated from condenser waste heat (C)
+  REAL :: ExhaustFanMassFlowRate ! exhaust fan mass flow rate (kg/s)
+  REAL :: ExhaustFanPLR          ! exhaust fan run time fraction calculated from new mass flow rate for regen side
+  REAL :: ExhaustFanPowerMod     ! used to calculate exhaust fan power from flow fraction
+  REAL :: VolFlowPerRatedTotQ    ! flow rate per rated total cooling capacity of the companion coil (m3/s/W)
+  REAL :: FanDeltaT                           ! used to account for fan heat when calculating regeneration heater energy (C)
+  REAL :: OnOffFanPLF                         ! save air loop fan part load fracton while calculating exhaust fan power
+  REAL :: RegenSetPointTemp                   ! regeneration temperature setpoint (C)
   INTEGER :: RegenCoilIndex                   ! index to regeneration heating coil, 0 when not used
   INTEGER :: CompanionCoilIndexNum            ! index for companion DX cooling coil, 0 when DX coil is not used
   CHARACTER(len=MaxNameLength) :: MinVol      ! character string used for error messages
   CHARACTER(len=MaxNameLength) :: VolFlowChar ! character string used for error messages
   LOGICAL, SAVE :: MyOneTimeFlag = .TRUE.     ! one time flag
-  REAL(r64), SAVE    :: RhoAirStdInit              ! standard air density (kg/m3)
+  REAL, SAVE    :: RhoAirStdInit              ! standard air density (kg/m3)
   LOGICAL       :: UnitOn                     ! unit on flag
 !  LOGICAL       :: SimFlag                    ! used to turn off additional simulation if DX Coil is off
-  REAL(r64)     :: QRegen_OASysFanAdjust      ! temporary variable used to adjust regen heater load during iteration
+  REAL     :: QRegen_OASysFanAdjust      ! temporary variable used to adjust regen heater load during iteration
 
 UnitOn = .FALSE.
 DDPartLoadRatio = 0.0
@@ -2596,7 +2596,7 @@ IF (UnitOn) THEN
 !       calculate mass flow rate required to maintain regen inlet setpoint temp
         IF(NewRegenInTemp .GT. RegenSetPointTemp)THEN
           IF(RegenSetPointTemp - Node(DesicDehum(DesicDehumNum)%CondenserInletNode)%Temp .NE. 0.0)THEN
-            MassFlowRateNew =  MAX(0.0d0, CondenserWasteHeat / &
+            MassFlowRateNew =  MAX(0.0, CondenserWasteHeat / &
                 (CpAir*(RegenSetPointTemp - Node(DesicDehum(DesicDehumNum)%CondenserInletNode)%Temp)))
           ELSE
             MassFlowRateNew =  Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate
@@ -2606,7 +2606,7 @@ IF (UnitOn) THEN
 !       calculate exhaust fan mass flow rate and new regen inlet temperature (may not be at setpoint)
         IF (MassFlowRateNew > Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate)THEN
           ExhaustFanMassFlowRate = MassFlowRateNew - Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate
-          ExhaustFanMassFlowRate = MAX(0.0d0,MIN(ExhaustFanMassFlowRate,DesicDehum(DesicDehumNum)%ExhaustFanMaxMassFlowRate))
+          ExhaustFanMassFlowRate = MAX(0.0,MIN(ExhaustFanMassFlowRate,DesicDehum(DesicDehumNum)%ExhaustFanMaxMassFlowRate))
 
           Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%Temp = Node(DesicDehum(DesicDehumNum)%CondenserInletNode)%Temp &
            + CondenserWasteHeat/(CpAir*(Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate+ExhaustFanMassFlowRate))
@@ -2623,7 +2623,7 @@ IF (UnitOn) THEN
           CpAir = PsyCpAirFnWTdb(Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%HumRat, &
                            Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%Temp)
         END IF
-        QRegen = MAX(0.0d0, (CpAir * Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate * &
+        QRegen = MAX(0.0, (CpAir * Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate * &
                           (RegenSetPointTemp-Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%Temp)))
         IF(QRegen .EQ. 0.0) QRegen = -1.0
       END IF
@@ -2646,14 +2646,14 @@ IF (UnitOn) THEN
         END IF
 
         CALL SimHeatRecovery(DesicDehum(DesicDehumNum)%HXName,FirstHVACIteration,DesicDehum(DesicDehumNum)%CompIndex, &
-                 ContFanCycCoil, HXPartLoadRatio=1.0d0, HXUnitEnable=.TRUE., CompanionCoilIndex=CompanionCoilIndexNum, &
+                 ContFanCycCoil, HXPartLoadRatio=1.0, HXUnitEnable=.TRUE., CompanionCoilIndex=CompanionCoilIndexNum, &
                  RegenInletIsOANode=DesicDehum(DesicDehumNum)%RegenInletIsOutsideAirNode)
 
 !       calculate desiccant part-load ratio
         IF(Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat .NE. Node(DesicDehum(DesicDehumNum)%ProcAirOutNode)%HumRat) THEN
           DDPartLoadRatio = (Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat - HumRatNeeded) / &
                 (Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat - Node(DesicDehum(DesicDehumNum)%ProcAirOutNode)%HumRat)
-          DDPartLoadRatio = MAX(0.0d0, MIN(1.0d0, DDPartLoadRatio))
+          DDPartLoadRatio = MAX(0.0, MIN(1.0, DDPartLoadRatio))
         ELSE
           DDPartLoadRatio = 1.0
         END IF
@@ -2670,7 +2670,7 @@ IF (UnitOn) THEN
 
 !       find exhaust fan power multiplier using exhaust fan part-load ratio
         IF(DesicDehum(DesicDehumNum)%ExhaustFanCurveIndex .GT. 0) THEN
-           ExhaustFanPowerMod = MIN(1.0d0,MAX(0.0d0,CurveValue(DesicDehum(DesicDehumNum)%ExhaustFanCurveIndex,ExhaustFanPLR)))
+           ExhaustFanPowerMod = MIN(1.0,MAX(0.0,CurveValue(DesicDehum(DesicDehumNum)%ExhaustFanCurveIndex,ExhaustFanPLR)))
         ELSE
            ExhaustFanPowerMod = 1.0
         END IF
@@ -2696,7 +2696,7 @@ IF (UnitOn) THEN
         IF(RegenCoilIndex .GT. 0)THEN
           CpAir = PsyCpAirFnWTdb(Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%HumRat, &
                                  Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%Temp)
-          QRegen = MAX(0.0d0, (CpAir * Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate * &
+          QRegen = MAX(0.0, (CpAir * Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate * &
                             (RegenSetPointTemp-Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%Temp)))
 
           QRegen_OASysFanAdjust = QRegen
@@ -2715,14 +2715,14 @@ IF (UnitOn) THEN
 !       CompanionCoilIndexNum .EQ. 0 means the same thing as DesicDehum(DesicDehumNum)%CoilUpstreamOfProcessSide == No
         IF(CompanionCoilIndexNum .EQ. 0)THEN
           CALL SimHeatRecovery(DesicDehum(DesicDehumNum)%HXName,FirstHVACIteration,DesicDehum(DesicDehumNum)%CompIndex, &
-                 ContFanCycCoil, HXPartLoadRatio=1.0d0, HXUnitEnable=.TRUE., CompanionCoilIndex=CompanionCoilIndexNum, &
+                 ContFanCycCoil, HXPartLoadRatio=1.0, HXUnitEnable=.TRUE., CompanionCoilIndex=CompanionCoilIndexNum, &
                  RegenInletIsOANode=DesicDehum(DesicDehumNum)%RegenInletIsOutsideAirNode)
 
 !         calculate desiccant part-load ratio
           IF(Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat .NE. Node(DesicDehum(DesicDehumNum)%ProcAirOutNode)%HumRat) THEN
             DDPartLoadRatio = (Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat - HumRatNeeded) / &
                 (Node(DesicDehum(DesicDehumNum)%ProcAirInNode)%HumRat - Node(DesicDehum(DesicDehumNum)%ProcAirOutNode)%HumRat)
-            DDPartLoadRatio = MAX(0.0d0, MIN(1.0d0, DDPartLoadRatio))
+            DDPartLoadRatio = MAX(0.0, MIN(1.0, DDPartLoadRatio))
           ELSE
             DDPartLoadRatio = 1.0
           END IF
@@ -2790,7 +2790,7 @@ IF (UnitOn) THEN
   IF(DesicDehum(DesicDehumNum)%Preheat == Yes .AND. DesicDehum(DesicDehumNum)%CoilUpstreamOfProcessSide == No)THEN
 !    should actually use DX coil RTF instead of PLR since fan power is being calculated
      DesicDehum(DesicDehumNum)%ExhaustFanPower = DesicDehum(DesicDehumNum)%ExhaustFanPower + &
-                                  MAX(0.0d0,(DesicDehum(DesicDehumNum)%ExhaustFanMaxPower * &
+                                  MAX(0.0,(DesicDehum(DesicDehumNum)%ExhaustFanMaxPower * &
                                   (DXCoilPartLoadRatio(DesicDehum(DesicDehumNum)%DXCoilIndex)-DDPartLoadRatio)))
   END IF
 
@@ -2809,11 +2809,11 @@ ELSE ! unit must be off
   ENDIF
 
   IF(RegenCoilIndex .GT. 0)THEN
-    CALL CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,-1.0d0)
+    CALL CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,-1.0)
   END IF
 
   CALL SimHeatRecovery(DesicDehum(DesicDehumNum)%HXName,FirstHVACIteration,DesicDehum(DesicDehumNum)%CompIndex, &
-                       ContFanCycCoil,HXPartLoadRatio=0.0d0,HXUnitEnable=.FALSE.,CompanionCoilIndex=CompanionCoilIndexNum, &
+                       ContFanCycCoil,HXPartLoadRatio=0.0,HXUnitEnable=.FALSE.,CompanionCoilIndex=CompanionCoilIndexNum, &
                        RegenInletIsOANode=DesicDehum(DesicDehumNum)%RegenInletIsOutsideAirNode)
 
   IF (DesicDehum(DesicDehumNum)%RegenFanPlacement == DrawThru)THEN
@@ -2835,7 +2835,7 @@ ENDIF  ! UnitOn/Off
 ! check condenser minimum flow per rated total capacity
 IF(DDPartLoadRatio .GT. 0.0 .AND. DesicDehum(DesicDehumNum)%ExhaustFanMaxVolFlowRate .GT. 0.0) THEN
   VolFlowperRatedTotQ = (Node(DesicDehum(DesicDehumNum)%RegenAirInNode)%MassFlowRate+ExhaustFanMassFlowRate)/ &
-                        MAX(0.00001d0,(DesicDehum(DesicDehumNum)%CompanionCoilCapacity*DDPartLoadRatio*RhoAirStdInit))
+                        MAX(0.00001,(DesicDehum(DesicDehumNum)%CompanionCoilCapacity*DDPartLoadRatio*RhoAirStdInit))
   IF(.NOT. WarmupFlag .AND. (VolFlowperRatedTotQ .LT. MinVolFlowPerRatedTotQ)) THEN
     WRITE(VolFlowChar,*) VolFlowperRatedTotQ
     DesicDehum(DesicDehumNum)%ErrCount=DesicDehum(DesicDehumNum)%ErrCount+1
@@ -2985,7 +2985,7 @@ SUBROUTINE ReportDesiccantDehumidifier(DesicDehumNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: ReportingConstant
+    REAL :: ReportingConstant
 
 ReportingConstant=TimeStepSys*SecInHour
 
@@ -3036,11 +3036,11 @@ SUBROUTINE CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,RegenCoilLoad,
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,      INTENT(IN)             :: DesicDehumNum        ! Desiccant dehumidifier unit index
   LOGICAL,      INTENT(IN)             :: FirstHVACIteration   ! flag for first HVAC iteration in the time step
-  REAL(r64),    INTENT(IN)             :: RegenCoilLoad        ! heating coil load to be met (Watts)
-  REAL(r64),    INTENT(OUT), OPTIONAL  :: RegenCoilLoadmet     ! heating load met
+  REAL,    INTENT(IN)             :: RegenCoilLoad        ! heating coil load to be met (Watts)
+  REAL,    INTENT(OUT), OPTIONAL  :: RegenCoilLoadmet     ! heating load met
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: ErrTolerance = 0.001d0    ! convergence limit for hotwater coil
+  REAL, PARAMETER :: ErrTolerance = 0.001    ! convergence limit for hotwater coil
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3049,16 +3049,16 @@ SUBROUTINE CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,RegenCoilLoad,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)      :: RegenCoilActual   ! actual heating load met
-  REAL(r64)      :: mdot              ! heating coil steam or hot water mass flow rate
-  REAL(r64)      :: MinWaterFlow      ! minimum hot water mass flow rate
-!unused  REAL(r64)      :: PartLoadFraction  ! heating or cooling part load fraction
-  REAL(r64)      :: MaxHotWaterFlow   ! maximum hot water mass flow rate, kg/s
-  REAL(r64)      :: HotWaterMdot      ! actual hot water mass flow rate
-  REAL(r64), DIMENSION(3) :: Par
+  REAL      :: RegenCoilActual   ! actual heating load met
+  REAL      :: mdot              ! heating coil steam or hot water mass flow rate
+  REAL      :: MinWaterFlow      ! minimum hot water mass flow rate
+!unused  REAL      :: PartLoadFraction  ! heating or cooling part load fraction
+  REAL      :: MaxHotWaterFlow   ! maximum hot water mass flow rate, kg/s
+  REAL      :: HotWaterMdot      ! actual hot water mass flow rate
+  REAL, DIMENSION(3) :: Par
   INTEGER        :: SolFlag
 
-  RegenCoilActual=0.0d0
+  RegenCoilActual=0.0
   IF (RegenCoilLoad > SmallLoad) THEN
      Select Case (DesicDehum(DesicDehumNum)%RegenCoilType_Num)
         Case (Coil_HeatingGas, Coil_HeatingElectric)
@@ -3082,7 +3082,7 @@ SUBROUTINE CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,RegenCoilLoad,
           IF ( RegenCoilActual > (RegenCoilLoad + SmallLoad) ) THEN
               ! control water flow to obtain output matching RegenCoilLoad
               SolFlag = 0
-              MinWaterFlow = 0.0d0
+              MinWaterFlow = 0.0
               Par(1) = REAL(DesicDehumNum,r64)
               IF (FirstHVACIteration) THEN
                 Par(2) = 1.
@@ -3135,7 +3135,7 @@ SUBROUTINE CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,RegenCoilLoad,
                                              RegenCoilLoad, DesicDehum(DesicDehumNum)%RegenCoilIndex, &
                                              RegenCoilActual)
         Case (Coil_HeatingWater)
-          mdot = 0.0d0
+          mdot = 0.0
           Call SetComponentFlowRate(mdot, &
                                     DesicDehum(DesicDehumNum)%CoilControlNode, &
                                     DesicDehum(DesicDehumNum)%CoilOutletNode, &
@@ -3148,7 +3148,7 @@ SUBROUTINE CalcNonDXHeatingCoils(DesicDehumNum,FirstHVACIteration,RegenCoilLoad,
           CALL SimulateWaterCoilComponents(DesicDehum(DesicDehumNum)%RegenCoilName,FirstHVACIteration, &
                                            DesicDehum(DesicDehumNum)%RegenCoilIndex, RegenCoilActual)
         Case (Coil_HeatingSteam)
-          mdot = 0.0d0
+          mdot = 0.0
           Call SetComponentFlowRate(mdot, &
                                     DesicDehum(DesicDehumNum)%CoilControlNode, &
                                     DesicDehum(DesicDehumNum)%CoilOutletNode, &
@@ -3194,9 +3194,9 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)                         :: HWFlow   ! hot water flow rate in kg/s
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par      ! Par(5) is the requested coil load
-  REAL(r64)                                     :: Residuum ! residual to be minimized to zero
+  REAL, INTENT(IN)                         :: HWFlow   ! hot water flow rate in kg/s
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par      ! Par(5) is the requested coil load
+  REAL                                     :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3210,12 +3210,12 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER               :: DesicDehumNum
   LOGICAL               :: FirstHVACSoln
-  REAL(r64)             :: RegenCoilActual             ! delivered coild load, W
-  REAL(r64)             :: RegenCoilHeatLoad           ! requested coild load, W
-  REAL(r64)             :: mdot
+  REAL             :: RegenCoilActual             ! delivered coild load, W
+  REAL             :: RegenCoilHeatLoad           ! requested coild load, W
+  REAL             :: mdot
 
   DesicDehumNum = INT(Par(1))
-  IF (Par(2) > 0.0d0) THEN
+  IF (Par(2) > 0.0) THEN
     FirstHVACSoln = .TRUE.
   ELSE
     FirstHVACSoln = .FALSE.
@@ -3234,7 +3234,7 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
     ! simulate the hot water regenerator heating coil
   CALL SimulateWaterCoilComponents(DesicDehum(DesicDehumNum)%RegenCoilName,FirstHVACSoln, &
                                    DesicDehum(DesicDehumNum)%RegenCoilIndex, RegenCoilActual)
-  IF (RegenCoilHeatLoad /= 0.0d0) THEN
+  IF (RegenCoilHeatLoad /= 0.0) THEN
     Residuum = (RegenCoilActual - RegenCoilHeatLoad)/ RegenCoilHeatLoad
   ENDIF
   RETURN

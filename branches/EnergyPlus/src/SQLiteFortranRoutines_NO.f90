@@ -88,11 +88,11 @@ SUBROUTINE CreateSQLiteReportVariableDataRecord (recordIndex, timeIndex, value, 
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: recordIndex
     INTEGER, INTENT(IN) :: timeIndex
-    REAL(r64), INTENT(IN) :: value
+    REAL, INTENT(IN) :: value
     INTEGER, INTENT(IN), OPTIONAL :: reportingInterval
-    REAL(r64), INTENT(IN), OPTIONAL :: maxValue
+    REAL, INTENT(IN), OPTIONAL :: maxValue
     INTEGER, INTENT(IN), OPTIONAL :: maxValueDate
-    REAL(r64), INTENT(IN), OPTIONAL :: minValue
+    REAL, INTENT(IN), OPTIONAL :: minValue
     INTEGER, INTENT(IN), OPTIONAL :: minValueDate
     INTEGER, INTENT(IN), OPTIONAL :: minutesPerTimeStep
 
@@ -111,8 +111,8 @@ INTEGER FUNCTION CreateSQLiteTimeIndexRecord(reportingInterval, recordIndex, Cum
     INTEGER, INTENT(IN), OPTIONAL :: Month
     INTEGER, INTENT(IN), OPTIONAL :: DayOfMonth
     INTEGER, INTENT(IN), OPTIONAL :: Hour
-    REAL(r64), INTENT(IN), OPTIONAL :: EndMinute
-    REAL(r64), INTENT(IN), OPTIONAL :: StartMinute
+    REAL, INTENT(IN), OPTIONAL :: EndMinute
+    REAL, INTENT(IN), OPTIONAL :: StartMinute
     INTEGER, INTENT(IN), OPTIONAL :: DST
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: DayType
 
@@ -176,15 +176,15 @@ SUBROUTINE AddSQLiteZoneSizingRecord (ZoneName, LoadType, CalcDesLoad, UserDesLo
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     CHARACTER(len=*), INTENT(IN) :: ZoneName     ! the name of the zone
     CHARACTER(len=*), INTENT(IN) :: LoadType     ! the description of the input variable
-    REAL(r64), INTENT(IN)        :: CalcDesLoad  ! the value from the sizing calculation [W]
-    REAL(r64), INTENT(IN)        :: UserDesLoad  ! the value from the sizing calculation modified by user input [W]
-    REAL(r64), INTENT(IN)        :: CalcDesFlow  ! calculated design air flow rate [m3/s]
-    REAL(r64), INTENT(IN)        :: UserDesFlow  ! user input or modified design air flow rate [m3/s]
+    REAL, INTENT(IN)        :: CalcDesLoad  ! the value from the sizing calculation [W]
+    REAL, INTENT(IN)        :: UserDesLoad  ! the value from the sizing calculation modified by user input [W]
+    REAL, INTENT(IN)        :: CalcDesFlow  ! calculated design air flow rate [m3/s]
+    REAL, INTENT(IN)        :: UserDesFlow  ! user input or modified design air flow rate [m3/s]
     CHARACTER(len=*), INTENT(IN) :: DesDayName   ! the name of the design day that produced the peak
     CHARACTER(len=*), INTENT(IN) :: PeakHrMin    ! time stamp of the peak
-    REAL(r64), INTENT(IN)        :: PeakTemp     ! temperature at peak [C]
-    REAL(r64), INTENT(IN)        :: PeakHumRat   ! humidity ratio at peak [kg water/kg dry air]
-    REAL(r64), INTENT(IN)        :: MinOAVolFlow ! zone design minimum outside air flow rate [m3/s]
+    REAL, INTENT(IN)        :: PeakTemp     ! temperature at peak [C]
+    REAL, INTENT(IN)        :: PeakHumRat   ! humidity ratio at peak [kg water/kg dry air]
+    REAL, INTENT(IN)        :: MinOAVolFlow ! zone design minimum outside air flow rate [m3/s]
 
 END SUBROUTINE AddSQLiteZoneSizingRecord
 
@@ -195,7 +195,7 @@ SUBROUTINE AddSQLiteSystemSizingRecord (SysName, VarDesc, VarValue)
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     CHARACTER(len=*), INTENT(IN) :: SysName      ! the name of the system
     CHARACTER(len=*), INTENT(IN) :: VarDesc      ! the description of the input variable
-    REAL(r64), INTENT(IN)        :: VarValue     ! the value from the sizing calculation
+    REAL, INTENT(IN)        :: VarValue     ! the value from the sizing calculation
 
 END SUBROUTINE AddSQLiteSystemSizingRecord
 
@@ -207,7 +207,7 @@ SUBROUTINE AddSQLiteComponentSizingRecord (CompType, CompName, VarDesc, VarValue
     CHARACTER(len=*), INTENT(IN) :: CompType  ! the type of the component
     CHARACTER(len=*), INTENT(IN) :: CompName  ! the name of the component
     CHARACTER(len=*), INTENT(IN) :: VarDesc   ! the description of the input variable
-    REAL(r64), INTENT(IN)        :: VarValue  ! the value from the sizing calculation
+    REAL, INTENT(IN)        :: VarValue  ! the value from the sizing calculation
 
 END SUBROUTINE AddSQLiteComponentSizingRecord
 
@@ -240,11 +240,11 @@ SUBROUTINE CreateSQLiteMeterRecord (recordIndex, timeIndex, value, reportingInte
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: recordIndex
     INTEGER, INTENT(IN) :: timeIndex
-    REAL(r64), INTENT(IN) :: value
+    REAL, INTENT(IN) :: value
     INTEGER, INTENT(IN), OPTIONAL :: reportingInterval
-    REAL(r64), INTENT(IN), OPTIONAL :: maxValue
+    REAL, INTENT(IN), OPTIONAL :: maxValue
     INTEGER, INTENT(IN), OPTIONAL :: maxValueDate
-    REAL(r64), INTENT(IN), OPTIONAL :: minValue
+    REAL, INTENT(IN), OPTIONAL :: minValue
     INTEGER, INTENT(IN), OPTIONAL :: minValueDate
     INTEGER, INTENT(IN), OPTIONAL :: minutesPerTimeStep
 
@@ -289,7 +289,7 @@ SUBROUTINE CreateSQLiteDaylightMapTitle (mapNum, mapName, environmentName, zone,
     CHARACTER(len=*), INTENT(IN) :: mapName
     CHARACTER(len=*), INTENT(IN) :: environmentName
     INTEGER, INTENT(IN) :: zone
-    REAL(r64), INTENT(IN) :: zCoord
+    REAL, INTENT(IN) :: zCoord
     CHARACTER(len=*), INTENT(IN) :: refPt1
     CHARACTER(len=*), INTENT(IN) :: refPt2
 
@@ -323,10 +323,10 @@ SUBROUTINE CreateSQLiteDaylightMap (mapNum, month, dayOfMonth, hourOfDay, nX, x,
     INTEGER, INTENT(IN) :: dayOfMonth
     INTEGER, INTENT(IN) :: hourOfDay
     INTEGER, INTENT(IN) :: nX
-    REAL(r64), INTENT(IN), DIMENSION(:) :: x
+    REAL, INTENT(IN), DIMENSION(:) :: x
     INTEGER, INTENT(IN) :: nY
-    REAL(r64), INTENT(IN), DIMENSION(:) :: y
-    REAL(r64), INTENT(IN), DIMENSION(:,:) :: illuminance
+    REAL, INTENT(IN), DIMENSION(:) :: y
+    REAL, INTENT(IN), DIMENSION(:,:) :: illuminance
 
 END SUBROUTINE CreateSQLiteDaylightMap
 

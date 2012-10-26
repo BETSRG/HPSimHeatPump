@@ -34,7 +34,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER                                                 :: NumOfSurfaces  =0    ! Number of surfaces in the list
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: SurfName             ! Surfaces named in the list
     INTEGER,                      ALLOCATABLE, DIMENSION(:) :: SurfPtr              ! Location of surfaces in Surface derived type
-    REAL(r64),                    ALLOCATABLE, DIMENSION(:) :: SurfFlowFrac         ! Fraction of mass flow/length for a surface
+    REAL,                    ALLOCATABLE, DIMENSION(:) :: SurfFlowFrac         ! Fraction of mass flow/length for a surface
   END TYPE SurfaceListData
 
   TYPE SlabListData
@@ -44,9 +44,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER,                      ALLOCATABLE, DIMENSION(:) :: SurfPtr              ! Location of surfaces in Surface derived type
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: ZoneName             ! Zone named in the list
     INTEGER,                      ALLOCATABLE, DIMENSION(:) :: ZonePtr              ! Location of Zone in Surface derived type
-    REAL(r64),                    ALLOCATABLE, DIMENSION(:) :: CoreDiameter         ! Fraction of mass flow/length for a surface
-    REAL(r64),                    ALLOCATABLE, DIMENSION(:) :: CoreLength           ! Fraction of mass flow/length for a surface
-    REAL(r64),                    ALLOCATABLE, DIMENSION(:) :: CoreNumbers          ! Fraction of mass flow/length for a surface
+    REAL,                    ALLOCATABLE, DIMENSION(:) :: CoreDiameter         ! Fraction of mass flow/length for a surface
+    REAL,                    ALLOCATABLE, DIMENSION(:) :: CoreLength           ! Fraction of mass flow/length for a surface
+    REAL,                    ALLOCATABLE, DIMENSION(:) :: CoreNumbers          ! Fraction of mass flow/length for a surface
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: SlabInNodeName       ! Zone named in the list
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: SlabOutNodeName      ! Zone named in the list
   END TYPE SlabListData
@@ -103,7 +103,7 @@ SUBROUTINE GetSurfaceListsInputs
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: CurrentModuleObject1 = 'ZoneHVAC:LowTemperatureRadiant:SurfaceGroup'
   CHARACTER(len=*), PARAMETER :: CurrentModuleObject2 = 'ZoneHVAC:VentilatedSlab:SlabGroup'
-  REAL(r64),        PARAMETER :: FlowFractionTolerance = 0.0001d0 ! Smallest deviation from unity for the sum of all fractions
+  REAL,        PARAMETER :: FlowFractionTolerance = 0.0001 ! Smallest deviation from unity for the sum of all fractions
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -118,11 +118,11 @@ SUBROUTINE GetSurfaceListsInputs
   INTEGER                         :: MaxAlphas  ! Maximum number of alphas for these input keywords
   INTEGER                         :: MaxNumbers ! Maximum number of numbers for these input keywords
   INTEGER                         :: NameConflict ! Used to see if a surface name matches the name of a surface list (not allowed)
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
   INTEGER                         :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                         :: NumArgs    ! Unused variable that is part of a subroutine call
   INTEGER                         :: NumNumbers ! Number of Numbers for each GetObjectItem call
-  REAL(r64)                       :: SumOfAllFractions   ! Summation of all of the fractions for splitting flow (must sum to 1)
+  REAL                       :: SumOfAllFractions   ! Summation of all of the fractions for splitting flow (must sum to 1)
   INTEGER                         :: SurfNum    ! DO loop counter for surfaces
   INTEGER                         :: ZoneForSurface  ! Zone number that a particular surface is attached to
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
@@ -223,7 +223,7 @@ SUBROUTINE GetSurfaceListsInputs
         SumOfAllFractions = SumOfAllFractions + SurfList(Item)%SurfFlowFrac(SurfNum)
       END DO
 
-      IF (ABS(SumOfAllFractions-1.0d0) > FlowFractionTolerance) THEN
+      IF (ABS(SumOfAllFractions-1.0) > FlowFractionTolerance) THEN
         CALL ShowSevereError(TRIM(CurrentModuleObject1)//' flow fractions do not add up to unity for '//  &
                              TRIM(SurfList(Item)%Name))
         ErrorsFound = .TRUE.

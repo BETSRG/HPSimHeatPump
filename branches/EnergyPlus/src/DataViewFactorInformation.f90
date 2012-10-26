@@ -39,12 +39,12 @@ PUBLIC ! Everything private unless explicitly made public
 TYPE ZoneViewFactorInformation
   CHARACTER(len=MaxNameLength)   :: Name          =' ' ! Zone name
   INTEGER                        :: NumOfSurfaces =0   ! Number of surfaces in the zone
-  REAL(r64), DIMENSION(:,:),  ALLOCATABLE :: F             ! View Factors
-  REAL(r64), DIMENSION(:,:),  ALLOCATABLE :: ScriptF       ! Hottel's Script F
-  REAL(r64), DIMENSION(:),    ALLOCATABLE :: Area          ! Surface area
-  REAL(r64), DIMENSION(:),    ALLOCATABLE :: Emissivity    ! Surface emissivity
-  REAL(r64), DIMENSION(:),    ALLOCATABLE :: Azimuth       ! Azimuth angle of the surface (in degrees)
-  REAL(r64), DIMENSION(:),    ALLOCATABLE :: Tilt          ! Tilt angle of the surface (in degrees)
+  REAL, DIMENSION(:,:),  ALLOCATABLE :: F             ! View Factors
+  REAL, DIMENSION(:,:),  ALLOCATABLE :: ScriptF       ! Hottel's Script F
+  REAL, DIMENSION(:),    ALLOCATABLE :: Area          ! Surface area
+  REAL, DIMENSION(:),    ALLOCATABLE :: Emissivity    ! Surface emissivity
+  REAL, DIMENSION(:),    ALLOCATABLE :: Azimuth       ! Azimuth angle of the surface (in degrees)
+  REAL, DIMENSION(:),    ALLOCATABLE :: Tilt          ! Tilt angle of the surface (in degrees)
   INTEGER, DIMENSION(:), ALLOCATABLE :: SurfacePtr    ! Surface ALLOCATABLE (to Surface derived type)
   Character(len=MaxNameLength),DIMENSION(:),ALLOCATABLE :: Class        ! Class of surface (Wall, Roof, etc.)
 END TYPE ZoneViewFactorInformation

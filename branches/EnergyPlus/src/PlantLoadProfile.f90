@@ -38,24 +38,24 @@ TYPE PlantProfileData
   LOGICAL                      :: Init = .TRUE.            ! Flag for initialization:  TRUE means do the init
   LOGICAL                      :: InitSizing = .TRUE.      ! Flag for initialization of plant sizing
   INTEGER                      :: InletNode = 0
-  REAL(r64)                    :: InletTemp = 0.0          ! Inlet temperature (C)
+  REAL                    :: InletTemp = 0.0          ! Inlet temperature (C)
   INTEGER                      :: OutletNode = 0
-  REAL(r64)                    :: OutletTemp = 0.0         ! Outlet temperature (C)
+  REAL                    :: OutletTemp = 0.0         ! Outlet temperature (C)
   INTEGER                      :: LoadSchedule = 0         ! Pointer to schedule object
   LOGICAL                      :: EMSOverridePower  = .FALSE. ! if true, then EMS is calling to override power level
-  REAL(r64)                    :: EMSPowerValue  = 0.0D0  ! value EMS is directing to use for power [W]
-  REAL(r64)                    :: PeakVolFlowRate = 0.0    ! Peak volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: EMSPowerValue  = 0.0  ! value EMS is directing to use for power [W]
+  REAL                    :: PeakVolFlowRate = 0.0    ! Peak volumetric flow rate, also water consumption rate (m3/s)
   INTEGER                      :: FlowRateFracSchedule = 0 ! Pointer to schedule object
-  REAL(r64)                    :: VolFlowRate = 0.0        ! Volumetric flow rate (m3/s)
-  REAL(r64)                    :: MassFlowRate = 0.0       ! Mass flow rate (kg/s)
+  REAL                    :: VolFlowRate = 0.0        ! Volumetric flow rate (m3/s)
+  REAL                    :: MassFlowRate = 0.0       ! Mass flow rate (kg/s)
   LOGICAL                      :: EMSOverrideMassFlow = .FALSE. !
-  REAL(r64)                    :: EMSMassFlowValue    = 0.0D0 ! 
+  REAL                    :: EMSMassFlowValue    = 0.0 ! 
 
   ! Report variables
-  REAL(r64)                    :: Power = 0.0              ! Power required to meet the load (W)
-  REAL(r64)                    :: Energy = 0.0             ! Energy required to meet the load (J)
-  REAL(r64)                    :: HeatingEnergy = 0.0      ! Heating Energy required to meet the load (J)
-  REAL(r64)                    :: CoolingEnergy = 0.0      ! Cooling Energy required to meet the load (J)
+  REAL                    :: Power = 0.0              ! Power required to meet the load (W)
+  REAL                    :: Energy = 0.0             ! Energy required to meet the load (J)
+  REAL                    :: HeatingEnergy = 0.0      ! Heating Energy required to meet the load (J)
+  REAL                    :: CoolingEnergy = 0.0      ! Cooling Energy required to meet the load (J)
   LOGICAL                      :: SetLoopIndexFlag = .TRUE.
 END TYPE PlantProfileData
 
@@ -109,9 +109,9 @@ SUBROUTINE SimulatePlantProfile(EquipTypeName,EquipName,EquipTypeNum,ProfileNum,
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DeltaTemp
+  REAL :: DeltaTemp
   LOGICAL, SAVE :: GetInput = .TRUE.
-  REAL(r64) :: Cp ! local fluid specific heat
+  REAL :: Cp ! local fluid specific heat
 
           ! FLOW:
   IF (GetInput) THEN
@@ -131,7 +131,7 @@ SUBROUTINE SimulatePlantProfile(EquipTypeName,EquipName,EquipTypeNum,ProfileNum,
 
     CALL InitPlantProfile(ProfileNum,FirstHVACIteration)
 
-    IF (PlantProfile(ProfileNum)%MassFlowRate > 0.d0) THEN
+    IF (PlantProfile(ProfileNum)%MassFlowRate > 0.) THEN
 
       Cp = GetSpecificHeatGlycol(PlantLoop(PlantProfile(ProfileNum)%WLoopNum)%FluidName,  &
                                  PlantProfile(ProfileNum)%InletTemp,                      &
@@ -141,8 +141,8 @@ SUBROUTINE SimulatePlantProfile(EquipTypeName,EquipName,EquipTypeNum,ProfileNum,
       DeltaTemp = PlantProfile(ProfileNum)%Power &
                     / (PlantProfile(ProfileNum)%MassFlowRate * Cp)
     ELSE
-      PlantProfile(ProfileNum)%Power = 0.d0
-      DeltaTemp = 0.d0
+      PlantProfile(ProfileNum)%Power = 0.
+      DeltaTemp = 0.
     END IF
 
     PlantProfile(ProfileNum)%OutletTemp = PlantProfile(ProfileNum)%InletTemp - DeltaTemp
@@ -314,8 +314,8 @@ SUBROUTINE InitPlantProfile(ProfileNum, FirstHVACIteration)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: InletNode
   INTEGER :: OutletNode
-  REAL(r64) :: MaxFlowMultiplier
-  REAL(R64) :: FluidDensityInit 
+  REAL :: MaxFlowMultiplier
+  REAL :: FluidDensityInit 
   LOGICAL   :: errFlag
  
           ! FLOW:
@@ -360,15 +360,15 @@ SUBROUTINE InitPlantProfile(ProfileNum, FirstHVACIteration)
 
     MaxFlowMultiplier = GetScheduleMaxValue(PlantProfile(ProfileNum)%FlowRateFracSchedule)
 
-    CALL InitComponentNodes(0.d0, PlantProfile(ProfileNum)%PeakVolFlowRate*FluidDensityInit*MaxFlowMultiplier,  &
+    CALL InitComponentNodes(0., PlantProfile(ProfileNum)%PeakVolFlowRate*FluidDensityInit*MaxFlowMultiplier,  &
                             InletNode,OutletNode, &    
                             PlantProfile(ProfileNum)%WLoopNum,PlantProfile(ProfileNum)%WLoopSideNum, &
                             PlantProfile(ProfileNum)%WLoopBranchNum, PlantProfile(ProfileNum)%WLoopCompNum) 
 
     PlantProfile(ProfileNum)%EMSOverrideMassFlow = .FALSE.
-    PlantProfile(ProfileNum)%EMSMassFlowValue    = 0.d0
+    PlantProfile(ProfileNum)%EMSMassFlowValue    = 0.
     PlantProfile(ProfileNum)%EMSOverridePower    = .FALSE.
-    PlantProfile(ProfileNum)%EMSPowerValue       = 0.d0
+    PlantProfile(ProfileNum)%EMSPowerValue       = 0.
     PlantProfile(ProfileNum)%Init = .FALSE.
 
   END IF

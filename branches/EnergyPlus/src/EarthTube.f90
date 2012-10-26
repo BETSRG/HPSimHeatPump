@@ -41,47 +41,47 @@ TYPE EarthTubeData
     INTEGER :: ZonePtr                        =0
     INTEGER :: SchedPtr                       =0
     CHARACTER(len=MaxNameLength) :: SchedName =' '
-    REAL(r64) :: DesignLevel                       =0.0D0
-    REAL(r64) :: MinTemperature                    =0.0D0
-    REAL(r64) :: MaxTemperature                    =0.0D0
-    REAL(r64) :: DelTemperature                    =0.0D0
+    REAL :: DesignLevel                       =0.0
+    REAL :: MinTemperature                    =0.0
+    REAL :: MaxTemperature                    =0.0
+    REAL :: DelTemperature                    =0.0
     INTEGER :: FanType                             =0
-    REAL(r64) :: FanPressure                       =0.0D0
-    REAL(r64) :: FanEfficiency                     =0.0D0
-    REAL(r64) :: FanPower                          =0.0D0
-    REAL(r64) :: GroundTempz1z2t                   =0.0D0   ! ground temp between z1 and z2 at time t
-    REAL(r64) :: InsideAirTemp                     =0.0D0
-    REAL(r64) :: AirTemp                           =0.0D0
-    REAL(r64) :: r1                                =0.0D0   ! Inner Pipe Radius (m)
-    REAL(r64) :: r2                                =0.0D0   ! Pipe Thickness (m)
-    REAL(r64) :: r3                                =0.0D0   ! Distance between Pipe Outer Surface and Undistubed Soil (m)
-    REAL(r64) :: PipeLength                        =0.0D0   ! Entire Pipe Length
-    REAL(r64) :: PipeThermCond                     =0.0D0   ! Pipe Thermal Conductivity
-    REAL(r64) :: z                                 =0.0D0   ! Depth under the Ground Surface (m)
-    REAL(r64) :: SoilThermDiff                     =0.0D0   ! Soil Thermal Diffusivity
-    REAL(r64) :: SoilThermCond                     =0.0D0   ! Soil Thermal Conductivity
-    REAL(r64) :: AverSoilSurTemp     ! Average Soil Surface Temperature
-    REAL(r64) :: ApmlSoilSurTemp     ! Amplitude of Soil Surface Temperature
+    REAL :: FanPressure                       =0.0
+    REAL :: FanEfficiency                     =0.0
+    REAL :: FanPower                          =0.0
+    REAL :: GroundTempz1z2t                   =0.0   ! ground temp between z1 and z2 at time t
+    REAL :: InsideAirTemp                     =0.0
+    REAL :: AirTemp                           =0.0
+    REAL :: r1                                =0.0   ! Inner Pipe Radius (m)
+    REAL :: r2                                =0.0   ! Pipe Thickness (m)
+    REAL :: r3                                =0.0   ! Distance between Pipe Outer Surface and Undistubed Soil (m)
+    REAL :: PipeLength                        =0.0   ! Entire Pipe Length
+    REAL :: PipeThermCond                     =0.0   ! Pipe Thermal Conductivity
+    REAL :: z                                 =0.0   ! Depth under the Ground Surface (m)
+    REAL :: SoilThermDiff                     =0.0   ! Soil Thermal Diffusivity
+    REAL :: SoilThermCond                     =0.0   ! Soil Thermal Conductivity
+    REAL :: AverSoilSurTemp     ! Average Soil Surface Temperature
+    REAL :: ApmlSoilSurTemp     ! Amplitude of Soil Surface Temperature
     INTEGER :: SoilSurPhaseConst     ! Phase constant of Soil Surface
-    REAL(r64) :: ConstantTermCoef                  =0.0D0
-    REAL(r64) :: TemperatureTermCoef               =0.0D0
-    REAL(r64) :: VelocityTermCoef                  =0.0D0
-    REAL(r64) :: VelocitySQTermCoef                =0.0D0
+    REAL :: ConstantTermCoef                  =0.0
+    REAL :: TemperatureTermCoef               =0.0
+    REAL :: VelocityTermCoef                  =0.0
+    REAL :: VelocitySQTermCoef                =0.0
 END TYPE EarthTubeData
 
 Type EarthTubeZoneReportVars
-  REAL(r64) :: EarthTubeHeatLoss      = 0.0D0 ! [J] Heat loss or cooling to zone from air delivered by earth tube
-  REAL(r64) :: EarthTubeHeatLossRate  = 0.0D0 ! [W] Heat loss or cooling rate to zone from air delivered by earth tube
-  REAL(r64) :: EarthTubeHeatGain      = 0.0D0 ! [J] Heat Gain to zone from air delivered by earth tube
-  REAL(r64) :: EarthTubeHeatGainRate  = 0.0D0 ! [W] Heat Gain rate to zone from air delivered by earth tube
-  REAL(r64) :: EarthTubeOATreatmentPower  = 0.0D0 ! [W] rate of heat transfer to/from air.  positive is heating OA to higher temp
-  REAL(r64) :: EarthTubeVolume        =0.0D0 ! Volume of Air {m3} due to EarthTube
-  REAL(r64) :: EarthTubeVolFlowRate   =0.0D0 ! Volume flow rate of air (m3/s) due to EarthTube
-  REAL(r64) :: EarthTubeMass          =0.0D0 ! Mass of Air {kg} due to EarthTube
-  REAL(r64) :: EarthTubeMassFlowRate  =0.0D0 ! Mass flow rate of air (kg/s) due to EarthTube
-  REAL(r64) :: EarthTubeFanElec       =0.0D0 ! [J] Fan Electricity consumed by EarthTube
-  REAL(r64) :: EarthTubeFanElecPower  =0.0D0 ! [W] Fan Electric power for EarthTube
-  REAL(r64) :: EarthTubeAirTemp       =0.0D0 ! Air Temp {C} of EarthTube, air leaving tube and entering zone
+  REAL :: EarthTubeHeatLoss      = 0.0 ! [J] Heat loss or cooling to zone from air delivered by earth tube
+  REAL :: EarthTubeHeatLossRate  = 0.0 ! [W] Heat loss or cooling rate to zone from air delivered by earth tube
+  REAL :: EarthTubeHeatGain      = 0.0 ! [J] Heat Gain to zone from air delivered by earth tube
+  REAL :: EarthTubeHeatGainRate  = 0.0 ! [W] Heat Gain rate to zone from air delivered by earth tube
+  REAL :: EarthTubeOATreatmentPower  = 0.0 ! [W] rate of heat transfer to/from air.  positive is heating OA to higher temp
+  REAL :: EarthTubeVolume        =0.0 ! Volume of Air {m3} due to EarthTube
+  REAL :: EarthTubeVolFlowRate   =0.0 ! Volume flow rate of air (m3/s) due to EarthTube
+  REAL :: EarthTubeMass          =0.0 ! Mass of Air {kg} due to EarthTube
+  REAL :: EarthTubeMassFlowRate  =0.0 ! Mass flow rate of air (kg/s) due to EarthTube
+  REAL :: EarthTubeFanElec       =0.0 ! [J] Fan Electricity consumed by EarthTube
+  REAL :: EarthTubeFanElecPower  =0.0 ! [W] Fan Electric power for EarthTube
+  REAL :: EarthTubeAirTemp       =0.0 ! Air Temp {C} of EarthTube, air leaving tube and entering zone
 END TYPE
 
 ! MODULE VARIABLES DECLARATIONS:
@@ -200,7 +200,7 @@ SUBROUTINE GetEarthTube(ErrorsFound)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     CHARACTER(len=*), PARAMETER :: Blank=' '
-    REAL(r64),        PARAMETER :: EarthTubeTempLimit = 100.d0 ! degrees Celsius
+    REAL,        PARAMETER :: EarthTubeTempLimit = 100. ! degrees Celsius
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -210,7 +210,7 @@ SUBROUTINE GetEarthTube(ErrorsFound)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !unused1208    CHARACTER(len=MaxNameLength), DIMENSION(10) :: AlphaName
-!unused1208    REAL(r64), DIMENSION(20)              :: IHGNumbers
+!unused1208    REAL, DIMENSION(20)              :: IHGNumbers
     INTEGER                         :: NumAlpha, NumNumber
     INTEGER                         :: IOStat
     INTEGER                         :: Loop
@@ -334,7 +334,7 @@ DO Loop=1, TotEarthTube
       ErrorsFound = .TRUE.
     END IF
 
-    EarthTubeSys(Loop)%r3                 = 2.d0*EarthTubeSys(Loop)%r1
+    EarthTubeSys(Loop)%r3                 = 2.*EarthTubeSys(Loop)%r1
 
     EarthTubeSys(Loop)%PipeLength         = rNumericArgs(9)
     IF (EarthTubeSys(Loop)%PipeLength <= 0.0) THEN
@@ -375,17 +375,17 @@ DO Loop=1, TotEarthTube
 
     SELECT CASE (cAlphaArgs(4))   ! Soil type character input --> convert to number
       CASE ('HEAVYANDSATURATED')
-        EarthTubeSys(Loop)%SoilThermDiff = 0.0781056d0
-        EarthTubeSys(Loop)%SoilThermCond = 2.42d0
+        EarthTubeSys(Loop)%SoilThermDiff = 0.0781056
+        EarthTubeSys(Loop)%SoilThermCond = 2.42
       CASE ('HEAVYANDDAMP')
-        EarthTubeSys(Loop)%SoilThermDiff = 0.055728d0
-        EarthTubeSys(Loop)%SoilThermCond = 1.3d0
+        EarthTubeSys(Loop)%SoilThermDiff = 0.055728
+        EarthTubeSys(Loop)%SoilThermCond = 1.3
       CASE ('HEAVYANDDRY')
-        EarthTubeSys(Loop)%SoilThermDiff = 0.0445824d0
-        EarthTubeSys(Loop)%SoilThermCond = 0.865d0
+        EarthTubeSys(Loop)%SoilThermDiff = 0.0445824
+        EarthTubeSys(Loop)%SoilThermCond = 0.865
       CASE ('LIGHTANDDRY')
-        EarthTubeSys(Loop)%SoilThermDiff = 0.024192d0
-        EarthTubeSys(Loop)%SoilThermCond = 0.346d0
+        EarthTubeSys(Loop)%SoilThermDiff = 0.024192
+        EarthTubeSys(Loop)%SoilThermCond = 0.346
       CASE DEFAULT
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//': '//TRIM(cAlphaFieldNames(1))//  &
            '='//TRIM(cAlphaArgs(1)) // &
@@ -509,31 +509,31 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: Loop, NZ
-REAL(r64) :: Process1     ! Variable Used in the Middle of the Calculation
-REAL(r64) :: GroundTempz1z2t     ! Average Ground Temperature between Depth z1 and z2 at time t
+REAL :: Process1     ! Variable Used in the Middle of the Calculation
+REAL :: GroundTempz1z2t     ! Average Ground Temperature between Depth z1 and z2 at time t
 
-REAL(r64) :: AirThermCond     ! Thermal Conductivity of Air (W/mC)
-REAL(r64) :: AirKinemVisco     ! Kinematic Viscosity of Air (m2/s)
-REAL(r64) :: AirThermDiffus     ! Thermal Diffusivity of Air (m2/s)
-REAL(r64) :: Re     ! Reynolds Number for Flow Inside Pipe
-REAL(r64) :: Pr     ! Prandtl Number for Flow Inside Pipe
-REAL(r64) :: Nu     ! Nusselt Number for Flow Inside Pipe
-REAL(r64) :: fa     ! Friction Factor of Pipe
-REAL(r64) :: PipeHeatTransCoef     ! Convective Heat Transfer Coefficient at Inner Pipe Surface
-REAL(r64) :: Rc     ! Thermal Resistance due to Convection between Air and Pipe Inner Surface
-REAL(r64) :: Rp     ! Thermal Resistance due to Conduction between Pipe Inner and Outer Surface
-REAL(r64) :: Rs     ! Thermal Resistance due to Conduction between Pipe Outer Surface and Soil
-REAL(r64) :: Rt     ! Total Thermal Resistance between Pipe Air and Soil
-REAL(r64) :: OverallHeatTransCoef     ! Overall Heat Transfer Coefficient of Earth Tube
-REAL(r64) :: AverPipeAirVel     ! Average Pipe Air Velocity (m/s)
-REAL(r64) :: AirMassFlowRate     ! Actual Mass Flow Rate of Air inside Pipe
-REAL(r64) :: AirSpecHeat     ! Specific Heat of Air
-REAL(r64) :: AirDensity     ! Density of Air
-REAL(r64) :: InsideEnthalpy
-REAL(r64) :: OutletAirEnthalpy
-REAL(r64) :: InsideDewPointTemp
-REAL(r64) :: InsideHumRat
-REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: EVF  ! DESIGN EARTHTUBE FLOW RATE (M**3/SEC)
+REAL :: AirThermCond     ! Thermal Conductivity of Air (W/mC)
+REAL :: AirKinemVisco     ! Kinematic Viscosity of Air (m2/s)
+REAL :: AirThermDiffus     ! Thermal Diffusivity of Air (m2/s)
+REAL :: Re     ! Reynolds Number for Flow Inside Pipe
+REAL :: Pr     ! Prandtl Number for Flow Inside Pipe
+REAL :: Nu     ! Nusselt Number for Flow Inside Pipe
+REAL :: fa     ! Friction Factor of Pipe
+REAL :: PipeHeatTransCoef     ! Convective Heat Transfer Coefficient at Inner Pipe Surface
+REAL :: Rc     ! Thermal Resistance due to Convection between Air and Pipe Inner Surface
+REAL :: Rp     ! Thermal Resistance due to Conduction between Pipe Inner and Outer Surface
+REAL :: Rs     ! Thermal Resistance due to Conduction between Pipe Outer Surface and Soil
+REAL :: Rt     ! Total Thermal Resistance between Pipe Air and Soil
+REAL :: OverallHeatTransCoef     ! Overall Heat Transfer Coefficient of Earth Tube
+REAL :: AverPipeAirVel     ! Average Pipe Air Velocity (m/s)
+REAL :: AirMassFlowRate     ! Actual Mass Flow Rate of Air inside Pipe
+REAL :: AirSpecHeat     ! Specific Heat of Air
+REAL :: AirDensity     ! Density of Air
+REAL :: InsideEnthalpy
+REAL :: OutletAirEnthalpy
+REAL :: InsideDewPointTemp
+REAL :: InsideHumRat
+REAL, ALLOCATABLE, DIMENSION(:), SAVE :: EVF  ! DESIGN EARTHTUBE FLOW RATE (M**3/SEC)
 
 
    ! Allocate the EVF array
@@ -579,32 +579,32 @@ GroundTempz1z2t=EarthTubeSys(Loop)%AverSoilSurTemp-EarthTubeSys(Loop)%ApmlSoilSu
 EarthTubeSys(Loop)%GroundTempz1z2t = GroundTempz1z2t
 
 ! Calculation of Convective Heat Transfer Coefficient at Inner Pipe Surface
-AirThermCond=0.02442d0+0.6992d0*OutDryBulbTemp/10000.d0
-AirKinemVisco=(0.1335d0+0.000925d0*OutDryBulbTemp)/10000.d0
-AirThermDiffus=(0.0014d0*OutDryBulbTemp+0.1872d0)/10000.d0
-Re=2.d0*EarthTubeSys(Loop)%r1*AverPipeAirVel/AirKinemVisco
+AirThermCond=0.02442+0.6992*OutDryBulbTemp/10000.
+AirKinemVisco=(0.1335+0.000925*OutDryBulbTemp)/10000.
+AirThermDiffus=(0.0014*OutDryBulbTemp+0.1872)/10000.
+Re=2.*EarthTubeSys(Loop)%r1*AverPipeAirVel/AirKinemVisco
 Pr=AirKinemVisco/AirThermDiffus
-IF (Re<=2300.d0) THEN
- Nu=3.66d0
-ELSE IF (Re<=4000.d0) THEN
- fa=(1.58d0*LOG(Re)-3.28d0)**(-2.d0)
- Process1=(fa/2.d0)*(Re-1000.d0)*Pr/(1.d0+12.7d0*((fa/2.d0)**0.5d0)*(Pr**(2.d0/3.d0)-1.d0))
- Nu=(Process1-3.66d0)/(1700.d0)*Re+(4000.d0*3.66d0-2300.d0*Process1)/1700.d0
+IF (Re<=2300.) THEN
+ Nu=3.66
+ELSE IF (Re<=4000.) THEN
+ fa=(1.58*LOG(Re)-3.28)**(-2.)
+ Process1=(fa/2.)*(Re-1000.)*Pr/(1.+12.7*((fa/2.)**0.5)*(Pr**(2./3.)-1.))
+ Nu=(Process1-3.66)/(1700.)*Re+(4000.*3.66-2300.*Process1)/1700.
 ELSE
- fa=(1.58d0*LOG(Re)-3.28d0)**(-2.d0)
- Nu=(fa/2.d0)*(Re-1000.d0)*Pr/(1.d0+12.7d0*((fa/2.d0)**0.5d0)*(Pr**(2.d0/3.d0)-1.d0))
+ fa=(1.58*LOG(Re)-3.28)**(-2.)
+ Nu=(fa/2.)*(Re-1000.)*Pr/(1.+12.7*((fa/2.)**0.5)*(Pr**(2./3.)-1.))
 END IF
-PipeHeatTransCoef=Nu*AirThermCond/2.d0/EarthTubeSys(Loop)%r1
+PipeHeatTransCoef=Nu*AirThermCond/2./EarthTubeSys(Loop)%r1
 
 
 ! Claculation of Thermal Resistance and Overall Heat Transger Coefficient
-Rc=1.d0/2.d0/PI/EarthTubeSys(Loop)%r1/PipeHeatTransCoef
-Rp=LOG((EarthTubeSys(Loop)%r1+EarthTubeSys(Loop)%r2)/EarthTubeSys(Loop)%r1)/2.d0/PI/  &
+Rc=1./2./PI/EarthTubeSys(Loop)%r1/PipeHeatTransCoef
+Rp=LOG((EarthTubeSys(Loop)%r1+EarthTubeSys(Loop)%r2)/EarthTubeSys(Loop)%r1)/2./PI/  &
     EarthTubeSys(Loop)%PipeThermCond
 Rs=LOG((EarthTubeSys(Loop)%r1+EarthTubeSys(Loop)%r2+EarthTubeSys(Loop)%r3)/  &
-   (EarthTubeSys(Loop)%r1+EarthTubeSys(Loop)%r2))/2.d0/PI/EarthTubeSys(Loop)%SoilThermCond
+   (EarthTubeSys(Loop)%r1+EarthTubeSys(Loop)%r2))/2./PI/EarthTubeSys(Loop)%SoilThermCond
 Rt=Rc+Rp+Rs
-OverallHeatTransCoef=1.d0/Rt
+OverallHeatTransCoef=1./Rt
 
 IF (AirMassFlowRate*AirSpecHeat == 0.0) THEN
  EarthTubeSys(Loop)%InsideAirTemp=GroundTempz1z2t
@@ -703,9 +703,9 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: ZoneLoop                ! Counter for the # of zones (nz)
   INTEGER  :: EarthTubeNum           ! Counter for EarthTube statements
-  REAL(r64) ::  AirDensity
-  REAL(r64) :: CpAir
-  REAL(r64) :: ReportingConstant   ! reporting constant for this module
+  REAL ::  AirDensity
+  REAL :: CpAir
+  REAL :: ReportingConstant   ! reporting constant for this module
 
   ReportingConstant = TimeStepSys*SecInHour
 
@@ -733,16 +733,16 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ZnRptET(ZoneLoop)%EarthTubeHeatLoss     = MCPE(ZoneLoop)*(ZT(ZoneLoop)-EarthTubeSys(EarthTubeNum)%AirTemp)* &
                                                        ReportingConstant
           ZnRptET(ZoneLoop)%EarthTubeHeatLossRate = MCPE(ZoneLoop)*(ZT(ZoneLoop)-EarthTubeSys(EarthTubeNum)%AirTemp)
-          ZnRptET(ZoneLoop)%EarthTubeHeatGain     = 0.0D0
-          ZnRptET(ZoneLoop)%EarthTubeHeatGainRate = 0.0D0
+          ZnRptET(ZoneLoop)%EarthTubeHeatGain     = 0.0
+          ZnRptET(ZoneLoop)%EarthTubeHeatGainRate = 0.0
 
         ELSE IF (ZT(ZoneLoop) <= EarthTubeSys(EarthTubeNum)%AirTemp) THEN
 
           ZnRptET(ZoneLoop)%EarthTubeHeatGain     = MCPE(ZoneLoop)*(EarthTubeSys(EarthTubeNum)%AirTemp-ZT(ZoneLoop))* &
                                                        ReportingConstant
           ZnRptET(ZoneLoop)%EarthTubeHeatGainRate = MCPE(ZoneLoop)*(EarthTubeSys(EarthTubeNum)%AirTemp-ZT(ZoneLoop))
-          ZnRptET(ZoneLoop)%EarthTubeHeatLoss     = 0.0D0
-          ZnRptET(ZoneLoop)%EarthTubeHeatLossRate = 0.0D0
+          ZnRptET(ZoneLoop)%EarthTubeHeatLoss     = 0.0
+          ZnRptET(ZoneLoop)%EarthTubeHeatLossRate = 0.0
 
         END IF
 

@@ -160,15 +160,15 @@ INTEGER :: NumDualFangerHeatCoolControls   =0
 
 LOGICAL :: GetZoneAirInputFlag = .TRUE.  ! True when need to get input
 
-REAL(r64),DIMENSION(:),ALLOCATABLE  :: ZoneSetPointLast
-REAL(r64),DIMENSION(:),ALLOCATABLE  :: TempIndZnLd
-REAL(r64),DIMENSION(:),ALLOCATABLE  :: TempDepZnLd
-REAL(r64),DIMENSION(:),ALLOCATABLE  :: ZoneAirRelHum  ! Zone relative humidity in percent
+REAL,DIMENSION(:),ALLOCATABLE  :: ZoneSetPointLast
+REAL,DIMENSION(:),ALLOCATABLE  :: TempIndZnLd
+REAL,DIMENSION(:),ALLOCATABLE  :: TempDepZnLd
+REAL,DIMENSION(:),ALLOCATABLE  :: ZoneAirRelHum  ! Zone relative humidity in percent
 
 ! Zone temperature history - used only for oscillation test
-REAL(r64),DIMENSION(:,:),ALLOCATABLE ::  ZoneTempHist
-REAL(r64),DIMENSION(:),ALLOCATABLE   ::  ZoneTempOscillate
-REAL(r64)                       ::  AnyZoneTempOscillate
+REAL,DIMENSION(:,:),ALLOCATABLE ::  ZoneTempHist
+REAL,DIMENSION(:),ALLOCATABLE   ::  ZoneTempOscillate
+REAL                       ::  AnyZoneTempOscillate
 
 
           ! SUBROUTINE SPECIFICATIONS:
@@ -226,10 +226,10 @@ SUBROUTINE ManageZoneAirUpdates(UpdateType, ZoneTempChange, ShortenTimeStepSys, 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: UpdateType             ! Can be iGetZoneSetpoints, iPredictStep, iCorrectStep
-  REAL(r64), INTENT(INOUT) :: ZoneTempChange    ! Temp change in zone air btw previous and current timestep
+  REAL, INTENT(INOUT) :: ZoneTempChange    ! Temp change in zone air btw previous and current timestep
   LOGICAL, INTENT(IN) :: ShortenTimeStepSys
   LOGICAL, INTENT(IN) :: UseZoneTimeStepHistory      ! if true then use zone timestep history, if false use system time step
-  REAL(r64),    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL,    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -334,7 +334,7 @@ SUBROUTINE GetZoneAirSetpoints
   INTEGER :: DualTempHeatCoolControlNum
   INTEGER :: ControlTypeNum
   INTEGER :: IOSTAT
-!unused1208  REAL(r64), DIMENSION(2) :: NumArray
+!unused1208  REAL, DIMENSION(2) :: NumArray
 !unused1208  CHARACTER(len=MaxNameLength), DIMENSION(29) :: AlphArray
   LOGICAL :: ErrorsFound = .FALSE.
   LOGICAL :: ErrFlag
@@ -1621,10 +1621,10 @@ SUBROUTINE GetZoneAirSetpoints
   cCurrentModuleObject='ZoneCapacitanceMultiplier:ResearchSpecial'
   NumNums=GetNumObjectsFound(trim(cCurrentModuleObject))
   IF (NumNums == 0) THEN
-    ZoneVolCapMultpSens  = 1.d0
-    ZoneVolCapMultpMoist = 1.d0
-    ZoneVolCapMultpCO2   = 1.d0
-    ZoneVolCapMultpGenContam = 1.0d0
+    ZoneVolCapMultpSens  = 1.
+    ZoneVolCapMultpMoist = 1.
+    ZoneVolCapMultpCO2   = 1.
+    ZoneVolCapMultpGenContam = 1.0
   ELSE
     CALL GetObjectItem(trim(cCurrentModuleObject),1,cAlphaArgs,NumAlphas,rNumericArgs,NumNums,IOStat, &
                        NumBlank=lNumericFieldBlanks,AlphaBlank=lAlphaFieldBlanks, &
@@ -1689,7 +1689,7 @@ SUBROUTINE GetZoneAirSetpoints
                  trim(cNumericFieldNames(1))//'=['//trim(TrimSigDigits(rNumericArgs(1),2))//'" cannot be negative.')
              ErrorsFound = .TRUE.
            ENDIF
-           IF ( (TempControlledZone(TempControlledZoneNum)%FixedRadiativeFraction >= 0.9d0) &
+           IF ( (TempControlledZone(TempControlledZoneNum)%FixedRadiativeFraction >= 0.9) &
                 .AND. (.NOT. (TempControlledZone(TempControlledZoneNum)%OpTempCntrlModeScheduled)) ) THEN
              CALL ShowSevereError(trim(cCurrentModuleObject)//'='//trim(cAlphaArgs(1))//' invalid '//  &
                  trim(cNumericFieldNames(1))//'=['//trim(TrimSigDigits(rNumericArgs(1),2))//'" cannot >= .9.')
@@ -1751,7 +1751,7 @@ SUBROUTINE GetZoneAirSetpoints
              ENDIF
            ENDIF
            IF (Item == 1) THEN
-             IF ( (TempControlledZone(TempControlledZoneNum)%FixedRadiativeFraction >= 0.9d0) &
+             IF ( (TempControlledZone(TempControlledZoneNum)%FixedRadiativeFraction >= 0.9) &
                   .AND. (.NOT. (TempControlledZone(TempControlledZoneNum)%OpTempCntrlModeScheduled)) ) THEN
                 CALL ShowSevereError(trim(cCurrentModuleObject)//'='//trim(cAlphaArgs(1))//' invalid '//  &
                   trim(cNumericFieldNames(1))//'=['//trim(TrimSigDigits(rNumericArgs(1),2))//'" cannot >= .9.')
@@ -1843,7 +1843,7 @@ SUBROUTINE GetZoneAirSetpoints
                  TRIM(cNumericFieldNames(1))//'=['//TRIM(TrimSigDigits(rNumericArgs(1),2))//'" cannot be negative.')
              ErrorsFound = .TRUE.
            ENDIF
-           IF ( (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolConstRange > 3.0d0) &
+           IF ( (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolConstRange > 3.0) &
                 .AND. (.NOT. (TempControlledZone(TempControlledZoneNum)%OvercoolCntrlModeScheduled)) ) THEN
              CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(cAlphaArgs(1))//' invalid '//  &
                  TRIM(cNumericFieldNames(1))//'=['//TRIM(TrimSigDigits(rNumericArgs(1),2))//'" cannot be > 3.0')
@@ -1864,7 +1864,7 @@ SUBROUTINE GetZoneAirSetpoints
            ENDIF
            ! check Overcool Control Ratio limits
            TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio = rNumericArgs(2)
-           IF (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio < 0.0d0) THEN
+           IF (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio < 0.0) THEN
              CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(cAlphaArgs(2))//' invalid '//  &
                  trim(cNumericFieldNames(2))//'=['//TRIM(TrimSigDigits(rNumericArgs(2),2))//'" cannot be negative.')
              ErrorsFound = .TRUE.
@@ -1914,7 +1914,7 @@ SUBROUTINE GetZoneAirSetpoints
              ENDIF
            ENDIF
            IF (Item == 1) THEN
-             IF ( (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolConstRange > 3.0d0) &
+             IF ( (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolConstRange > 3.0) &
                   .AND. (.NOT. (TempControlledZone(TempControlledZoneNum)%OvercoolCntrlModeScheduled)) ) THEN
                 CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(cAlphaArgs(1))//' invalid '//  &
                   TRIM(cNumericFieldNames(1))//'=['//TRIM(TrimSigDigits(rNumericArgs(1),2))//'" cannot > 3.0')
@@ -1938,7 +1938,7 @@ SUBROUTINE GetZoneAirSetpoints
            TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio = rNumericArgs(2)
            ! check Overcool Control Ratio limits
            IF (Item == 1) THEN
-             IF (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio < 0.0d0) THEN
+             IF (TempControlledZone(TempControlledZoneNum)%ZoneOvercoolControlRatio < 0.0) THEN
                CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(cAlphaArgs(2))//' invalid '//  &
                   trim(cNumericFieldNames(2))//'=['//TRIM(TrimSigDigits(rNumericArgs(2),2))//'" cannot be negative.')
                ErrorsFound = .TRUE.
@@ -2087,9 +2087,9 @@ SUBROUTINE InitZoneAirSetpoints
     ALLOCATE(ZoneAirRelHum(NumOfZones))
     ZoneAirRelHum=0.0
     ALLOCATE(ZoneWMX(NumOfZones))
-    ZoneWMX = 0.0d0
+    ZoneWMX = 0.0
     ALLOCATE(ZoneWM2(NumOfZones))
-    ZoneWM2 = 0.0d0
+    ZoneWM2 = 0.0
     ALLOCATE(ZoneT1(NumOfZones))
     ZoneT1=0.0
     ALLOCATE(ZoneW1(NumOfZones))
@@ -2265,17 +2265,17 @@ SUBROUTINE InitZoneAirSetpoints
     ZoneSysMoistureDemand(1:NumOfZones)%TotalOutputRequired = 0.0
     DO ZoneNum = 1, NumOfZones
       IF (ALLOCATED(ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequired)) &
-        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequired = 0.d0
+        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequired = 0.
       IF (ALLOCATED(ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToHeatingSP)) &
-        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToHeatingSP = 0.d0
+        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToHeatingSP = 0.
       IF (ALLOCATED(ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToCoolingSP)) &
-        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToCoolingSP = 0.d0
+        ZoneSysEnergyDemand(ZoneNum)%SequencedOutputRequiredToCoolingSP = 0.
       IF (ALLOCATED(ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequired)) &
-        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequired = 0.d0
+        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequired = 0.
       IF (ALLOCATED(ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToHumidSP)) &
-        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToHumidSP = 0.d0
+        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToHumidSP = 0.
       IF (ALLOCATED(ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToDehumidSP)) &
-        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToDehumidSP = 0.d0
+        ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToDehumidSP = 0.
     ENDDO
 
 
@@ -2589,7 +2589,7 @@ SUBROUTINE PredictSystemLoads(ShortenTimeStepSys, UseZoneTimeStepHistory, PriorT
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT(IN) :: ShortenTimeStepSys
   LOGICAL, INTENT(IN) :: UseZoneTimeStepHistory      ! if true then use zone timestep history, if false use system time step
-  REAL(r64),    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL,    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2601,19 +2601,19 @@ SUBROUTINE PredictSystemLoads(ShortenTimeStepSys, UseZoneTimeStepHistory, PriorT
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)      :: SumIntGain                  ! Zone sum of convective internal gains
-  REAL(r64)      :: SumHA                       ! Zone sum of Hc*Area
-  REAL(r64)      :: SumHATsurf                  ! Zone sum of Hc*Area*Tsurf
-  REAL(r64)      :: SumHATref                   ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
-  REAL(r64)      :: SumMCp                      ! Zone sum of MassFlowRate*Cp
-  REAL(r64)      :: SumMCpT                     ! Zone sum of MassFlowRate*Cp*T
-  REAL(r64)      :: SumSysMCp                   ! Zone sum of air system MassFlowRate*Cp
-  REAL(r64)      :: SumSysMCpT                  ! Zone sum of air system MassFlowRate*Cp*T
-  REAL(r64)      :: TempDepCoef                 ! Formerly CoefSumha
-  REAL(r64)      :: TempIndCoef                 ! Formerly CoefSumhat
-  REAL(r64)      :: AirCap                      ! Formerly CoefAirrat
-!unused1208  REAL(r64)      :: TimeStepSeconds
-  REAL(r64)      :: TempHistoryTerm
+  REAL      :: SumIntGain                  ! Zone sum of convective internal gains
+  REAL      :: SumHA                       ! Zone sum of Hc*Area
+  REAL      :: SumHATsurf                  ! Zone sum of Hc*Area*Tsurf
+  REAL      :: SumHATref                   ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
+  REAL      :: SumMCp                      ! Zone sum of MassFlowRate*Cp
+  REAL      :: SumMCpT                     ! Zone sum of MassFlowRate*Cp*T
+  REAL      :: SumSysMCp                   ! Zone sum of air system MassFlowRate*Cp
+  REAL      :: SumSysMCpT                  ! Zone sum of air system MassFlowRate*Cp*T
+  REAL      :: TempDepCoef                 ! Formerly CoefSumha
+  REAL      :: TempIndCoef                 ! Formerly CoefSumhat
+  REAL      :: AirCap                      ! Formerly CoefAirrat
+!unused1208  REAL      :: TimeStepSeconds
+  REAL      :: TempHistoryTerm
   INTEGER        :: ZoneNum
 
   ! Update zone temperatures
@@ -2709,22 +2709,22 @@ SUBROUTINE PredictSystemLoads(ShortenTimeStepSys, UseZoneTimeStepHistory, PriorT
     TempDepCoef = SumHA + SumMCp
     TempIndCoef = SumIntGain + SumHATsurf - SumHATref + SumMCpT + SysDepZoneLoadsLagged(ZoneNum)
     IF (AirModel(ZoneNum)%AirModelType.EQ.RoomAirModel_Mixing) THEN
-        TempHistoryTerm = AirCap * (3.0d0 * ZTM1(ZoneNum) - (3.0d0/2.0d0) * ZTM2(ZoneNum) + (1.0d0/3.0d0) * ZTM3(ZoneNum))
-        TempDepZnLd(ZoneNum) = (11.0d0/6.0d0) * AirCap + TempDepCoef
+        TempHistoryTerm = AirCap * (3.0 * ZTM1(ZoneNum) - (3.0/2.0) * ZTM2(ZoneNum) + (1.0/3.0) * ZTM3(ZoneNum))
+        TempDepZnLd(ZoneNum) = (11.0/6.0) * AirCap + TempDepCoef
         TempIndZnLd(ZoneNum) = TempHistoryTerm + TempIndCoef
     ELSEIF (IsZoneDV(ZoneNum)) THEN
        ! UCSD displacement ventilation model - make dynamic term independent of TimeStepSys
-        TempHistoryTerm = AirCap * (3.0d0 * ZTM1(ZoneNum) - (3.0d0/2.0d0) * ZTM2(ZoneNum) + (1.0d0/3.0d0) * ZTM3(ZoneNum))
-        TempDepZnLd(ZoneNum) = (11.0d0/6.0d0) * AirCap + TempDepCoef
+        TempHistoryTerm = AirCap * (3.0 * ZTM1(ZoneNum) - (3.0/2.0) * ZTM2(ZoneNum) + (1.0/3.0) * ZTM3(ZoneNum))
+        TempDepZnLd(ZoneNum) = (11.0/6.0) * AirCap + TempDepCoef
         TempIndZnLd(ZoneNum) = TempHistoryTerm + TempIndCoef
     ELSEIF (IsZoneUI(ZoneNum)) THEN
        ! UCSD UFAD model - make dynamic term independent of TimeStepSys
-        TempHistoryTerm = AirCap * (3.0d0 * ZTM1(ZoneNum) - (3.0d0/2.0d0) * ZTM2(ZoneNum) + (1.0d0/3.0d0) * ZTM3(ZoneNum))
-        TempDepZnLd(ZoneNum) = (11.0d0/6.0d0) * AirCap + TempDepCoef
+        TempHistoryTerm = AirCap * (3.0 * ZTM1(ZoneNum) - (3.0/2.0) * ZTM2(ZoneNum) + (1.0/3.0) * ZTM3(ZoneNum))
+        TempDepZnLd(ZoneNum) = (11.0/6.0) * AirCap + TempDepCoef
         TempIndZnLd(ZoneNum) = TempHistoryTerm + TempIndCoef
     ELSE ! other imperfectly mixed room models
-        TempHistoryTerm = AirCap * (3.0d0 * ZTM1(ZoneNum) - (3.0d0/2.0d0) * ZTM2(ZoneNum) + (1.0d0/3.0d0) * ZTM3(ZoneNum))
-        TempDepZnLd(ZoneNum) = (11.0d0/6.0d0) * AirCap + TempDepCoef
+        TempHistoryTerm = AirCap * (3.0 * ZTM1(ZoneNum) - (3.0/2.0) * ZTM2(ZoneNum) + (1.0/3.0) * ZTM3(ZoneNum))
+        TempDepZnLd(ZoneNum) = (11.0/6.0) * AirCap + TempDepCoef
         TempIndZnLd(ZoneNum) = TempHistoryTerm + TempIndCoef
     END IF
 
@@ -2929,9 +2929,9 @@ SUBROUTINE CalcPredictedSystemLoad(ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: LoadToHeatingSetPoint
-  REAL(r64) :: LoadToCoolingSetPoint
-  REAL(r64) :: ZoneSetPoint
+  REAL :: LoadToHeatingSetPoint
+  REAL :: LoadToCoolingSetPoint
+  REAL :: ZoneSetPoint
 
           ! FLOW:
   DeadBandOrSetback(ZoneNum) = .FALSE.
@@ -2961,13 +2961,13 @@ SUBROUTINE CalcPredictedSystemLoad(ZoneNum)
                               (TempZoneThermostatSetPoint(ZoneNum)+HeatingSetPointOffset(ZoneNum)) - TempIndZnLd(ZoneNum))
       ! Exact solution
         CASE (UseAnalyticalSolution)
-          If (TempDepZnLd(ZoneNum) .eq. 0.0d0) Then ! B=0
+          If (TempDepZnLd(ZoneNum) .eq. 0.0) Then ! B=0
             LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
           Else
             LoadToHeatingSetPoint = TempDepZnLd(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+ &
-            HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
-            (1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))-TempIndZnLd(ZoneNum)
+            HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
+            (1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))-TempIndZnLd(ZoneNum)
           End If
         CASE (UseEulerMethod)
           LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
@@ -2989,13 +2989,13 @@ SUBROUTINE CalcPredictedSystemLoad(ZoneNum)
           LoadToCoolingSetPoint = (TempDepZnLd(ZoneNum) * &
                               (TempZoneThermostatSetPoint(ZoneNum)+CoolingSetPointOffset(ZoneNum)) - TempIndZnLd(ZoneNum))
         CASE (UseAnalyticalSolution)
-          If (TempDepZnLd(ZoneNum) .eq. 0.0d0) Then ! B=0
+          If (TempDepZnLd(ZoneNum) .eq. 0.0) Then ! B=0
             LoadToCoolingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+CoolingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
           Else
             LoadToCoolingSetPoint = TempDepZnLd(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+ &
-                  CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
-                                /(1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
+                  CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
+                                /(1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
           End If
         CASE (UseEulerMethod)
           LoadToCoolingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+CoolingSetPointOffset(ZoneNum)- &
@@ -3021,18 +3021,18 @@ SUBROUTINE CalcPredictedSystemLoad(ZoneNum)
                               (TempZoneThermostatSetPoint(ZoneNum)+CoolingSetPointOffset(ZoneNum)) - TempIndZnLd(ZoneNum))
       ! Exact solution
         CASE (UseAnalyticalSolution)
-          If (TempDepZnLd(ZoneNum) .eq. 0.0d0) Then ! B=0
+          If (TempDepZnLd(ZoneNum) .eq. 0.0) Then ! B=0
             LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
             LoadToCoolingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+CoolingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
           Else
             LoadToHeatingSetPoint = TempDepZnLd(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+ &
-                         HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
-                                  /(1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
+                         HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
+                                  /(1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
             LoadToCoolingSetPoint = TempDepZnLd(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+ &
-                         CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
-                                /(1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
+                         CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) &
+                                /(1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
           End If
         CASE (UseEulerMethod)
           LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(TempZoneThermostatSetPoint(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
@@ -3108,18 +3108,18 @@ SUBROUTINE CalcPredictedSystemLoad(ZoneNum)
                               (ZoneThermostatSetPointHi(ZoneNum)+CoolingSetPointOffset(ZoneNum)) - TempIndZnLd(ZoneNum))
       ! Exact solution
         CASE (UseAnalyticalSolution)
-          If (TempDepZnLd(ZoneNum) .eq. 0.0d0) Then ! B=0
+          If (TempDepZnLd(ZoneNum) .eq. 0.0) Then ! B=0
             LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(ZoneThermostatSetPointLo(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
             LoadToCoolingSetPoint = AIRRAT(ZoneNum)*(ZoneThermostatSetPointHi(ZoneNum)+CoolingSetPointOffset(ZoneNum)- &
                                 ZoneT1(ZoneNum)) - TempIndZnLd(ZoneNum)
           Else
             LoadToHeatingSetPoint = TempDepZnLd(ZoneNum)*(ZoneThermostatSetPointLo(ZoneNum)+ &
-                    HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
-                                (1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
+                    HeatingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
+                                (1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
             LoadToCoolingSetPoint = TempDepZnLd(ZoneNum)*(ZoneThermostatSetPointHi(ZoneNum)+ &
-                    CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
-                                (1.0d0-exp(MIN(700.d0,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
+                    CoolingSetPointOffset(ZoneNum)-ZoneT1(ZoneNum)*exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum))))/ &
+                                (1.0-exp(MIN(700.,-TempDepZnLd(ZoneNum)/AIRRAT(ZoneNum)))) - TempIndZnLd(ZoneNum)
           End If
         CASE (UseEulerMethod)
           LoadToHeatingSetPoint = AIRRAT(ZoneNum)*(ZoneThermostatSetPointLo(ZoneNum)+HeatingSetPointOffset(ZoneNum)- &
@@ -3264,22 +3264,22 @@ SUBROUTINE CalcPredictedHumidityRatio(ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: LatentGain ! Zone latent load
-  REAL(r64) :: RhoAir
-  REAL(r64) :: A
-  REAL(r64) :: B
-  REAL(r64) :: C
-  REAL(r64) :: SysTimeStepInSeconds
-  REAL(r64) :: H2OHtOfVap
-  REAL(r64) :: RHSetPoint             ! Relative Humidity in percent
-  REAL(r64) :: WZoneSetPoint
+  REAL :: LatentGain ! Zone latent load
+  REAL :: RhoAir
+  REAL :: A
+  REAL :: B
+  REAL :: C
+  REAL :: SysTimeStepInSeconds
+  REAL :: H2OHtOfVap
+  REAL :: RHSetPoint             ! Relative Humidity in percent
+  REAL :: WZoneSetPoint
   INTEGER   :: HumidControlledZoneNum
   LOGICAL   :: ControlledHumidZoneFlag     ! This determines whether this is a humidity controlled zone or not
-  REAL(r64) :: ZoneRHHumidifyingSetPoint   ! Zone humidifying set point (%)
-  REAL(r64) :: ZoneRHDehumidifyingSetPoint ! Zone dehumidifying set point (%)
-  REAL(r64) :: LoadToHumidifySetPoint      ! Moisture load at humidifying set point
-  REAL(r64) :: LoadToDehumidifySetPoint    ! Moisture load at dehumidifying set point
-  REAL(r64) :: ZoneAirRH                   ! Zone air relative humidity
+  REAL :: ZoneRHHumidifyingSetPoint   ! Zone humidifying set point (%)
+  REAL :: ZoneRHDehumidifyingSetPoint ! Zone dehumidifying set point (%)
+  REAL :: LoadToHumidifySetPoint      ! Moisture load at humidifying set point
+  REAL :: LoadToDehumidifySetPoint    ! Moisture load at dehumidifying set point
+  REAL :: ZoneAirRH                   ! Zone air relative humidity
   LOGICAL   :: SingleSetpoint              ! This determines whether both setpoint are equal or not
 
           ! FLOW:
@@ -3295,7 +3295,7 @@ SUBROUTINE CalcPredictedHumidityRatio(ZoneNum)
   ! Check all the controlled zones to see if it matches the zone simulated
   DO HumidControlledZoneNum = 1, NumHumidityControlZones
     IF (HumidityControlZone(HumidControlledZoneNum)%ActualZoneNum /= ZoneNum) CYCLE
-    ZoneAirRH = PsyRhFnTdbWPb(MAT(ZoneNum),ZoneAirHumRat(ZoneNum),OutBaroPress)*100.d0
+    ZoneAirRH = PsyRhFnTdbWPb(MAT(ZoneNum),ZoneAirHumRat(ZoneNum),OutBaroPress)*100.
     ZoneRHHumidifyingSetPoint = GetCurrentScheduleValue(HumidityControlZone(HumidControlledZoneNum)%HumidifyingSchedIndex)
     ZoneRHDehumidifyingSetPoint = GetCurrentScheduleValue(HumidityControlZone(HumidControlledZoneNum)%DehumidifyingSchedIndex)
     IF (HumidityControlZone(HumidControlledZoneNum)%EMSOverrideHumidifySetpointOn) THEN
@@ -3339,8 +3339,8 @@ SUBROUTINE CalcPredictedHumidityRatio(ZoneNum)
     ! SumHmARaW and SumHmARa will be used with the Moisture Balance on the building elements and
     ! are currently set to zero when the CTF only version is used.
     IF (SolutionAlgo /= UseEMPD .and. SolutionAlgo /= UseHAMT) THEN
-      SumHmARaW(ZoneNum) = 0.0d0
-      SumHmARa(ZoneNum) = 0.0d0
+      SumHmARaW(ZoneNum) = 0.0
+      SumHmARa(ZoneNum) = 0.0
     END IF
 
     ! The density of air and latent heat of vaporization are calculated as functions.
@@ -3368,35 +3368,35 @@ SUBROUTINE CalcPredictedHumidityRatio(ZoneNum)
     ! this amount of moisture must be added to the zone to reach the setpoint.  Negative values represent
     ! the amount of moisture that must be removed by the system.
     !MoistLoadHumidSetPoint = massflow * HumRat = kg air/sec  * kg H2O/kg Air = kg H2O/sec
-    WZoneSetPoint = PsyWFnTdbRhPb(ZT(ZoneNum),(ZoneRHHumidifyingSetPoint/100.0d0),OutBaroPress,'CalcPredictedHumidityRatio')
+    WZoneSetPoint = PsyWFnTdbRhPb(ZT(ZoneNum),(ZoneRHHumidifyingSetPoint/100.0),OutBaroPress,'CalcPredictedHumidityRatio')
     SELECT CASE (ZoneAirSolutionAlgo)
       CASE (Use3rdOrder)
-        LoadToHumidifySetPoint = ((11.0d0/6.0d0) * C + A) * WZoneSetPoint - &
-           (B + C * (3.0d0 * WZoneTimeMinus1Temp(ZoneNum) - (3.0d0/2.0d0) * WZoneTimeMinus2Temp(ZoneNum) + &
-           (1.0d0/3.0d0) * WZoneTimeMinus3Temp(ZoneNum)))
+        LoadToHumidifySetPoint = ((11.0/6.0) * C + A) * WZoneSetPoint - &
+           (B + C * (3.0 * WZoneTimeMinus1Temp(ZoneNum) - (3.0/2.0) * WZoneTimeMinus2Temp(ZoneNum) + &
+           (1.0/3.0) * WZoneTimeMinus3Temp(ZoneNum)))
       ! Exact solution
       CASE (UseAnalyticalSolution)
-        If (A .eq. 0.0d0) Then ! B=0
+        If (A .eq. 0.0) Then ! B=0
           LoadToHumidifySetPoint = C*(WZoneSetPoint-ZoneW1(ZoneNum)) - B
         Else
-          LoadToHumidifySetPoint = A*(WZoneSetPoint-ZoneW1(ZoneNum)*exp(MIN(700.d0,-A/C)))/(1.0d0-exp(MIN(700.d0,-A/C))) - B
+          LoadToHumidifySetPoint = A*(WZoneSetPoint-ZoneW1(ZoneNum)*exp(MIN(700.,-A/C)))/(1.0-exp(MIN(700.,-A/C))) - B
         End If
       CASE (UseEulerMethod)
         LoadToHumidifySetPoint = C*(WZoneSetPoint-ZoneW1(ZoneNum)) + A*WZoneSetPoint - B
     END SELECT
     ZoneSysMoistureDemand(ZoneNum)%OutputRequiredToHumidifyingSP = LoadToHumidifySetPoint
-    WZoneSetPoint = PsyWFnTdbRhPb(ZT(ZoneNum),(ZoneRHDehumidifyingSetPoint / 100.0d0),OutBaroPress,'CalcPredictedHumidityRatio')
+    WZoneSetPoint = PsyWFnTdbRhPb(ZT(ZoneNum),(ZoneRHDehumidifyingSetPoint / 100.0),OutBaroPress,'CalcPredictedHumidityRatio')
     SELECT CASE (ZoneAirSolutionAlgo)
       CASE (Use3rdOrder)
-        LoadToDehumidifySetPoint = ((11.0d0/6.0d0) * C + A) * WZoneSetPoint - &
-           (B + C * (3.0d0 * WZoneTimeMinus1Temp(ZoneNum) - (3.0d0/2.0d0) * WZoneTimeMinus2Temp(ZoneNum) + &
-           (1.0d0/3.0d0) * WZoneTimeMinus3Temp(ZoneNum)))
+        LoadToDehumidifySetPoint = ((11.0/6.0) * C + A) * WZoneSetPoint - &
+           (B + C * (3.0 * WZoneTimeMinus1Temp(ZoneNum) - (3.0/2.0) * WZoneTimeMinus2Temp(ZoneNum) + &
+           (1.0/3.0) * WZoneTimeMinus3Temp(ZoneNum)))
       ! Exact solution
       CASE (UseAnalyticalSolution)
-        If (A .eq. 0.0d0) Then ! B=0
+        If (A .eq. 0.0) Then ! B=0
           LoadToDehumidifySetPoint = C*(WZoneSetPoint-ZoneW1(ZoneNum)) - B
         Else
-          LoadToDehumidifySetPoint = A*(WZoneSetPoint-ZoneW1(ZoneNum)*exp(MIN(700.d0,-A/C)))/(1.0d0-exp(MIN(700.d0,-A/C))) - B
+          LoadToDehumidifySetPoint = A*(WZoneSetPoint-ZoneW1(ZoneNum)*exp(MIN(700.,-A/C)))/(1.0-exp(MIN(700.,-A/C))) - B
         End If
       CASE (UseEulerMethod)
         LoadToDehumidifySetPoint = C*(WZoneSetPoint-ZoneW1(ZoneNum)) + A*WZoneSetPoint - B
@@ -3488,10 +3488,10 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64) , INTENT(OUT) :: ZoneTempChange     ! Temperature change in zone air between previous and current timestep
+  REAL , INTENT(OUT) :: ZoneTempChange     ! Temperature change in zone air between previous and current timestep
   LOGICAL, INTENT(IN)  :: ShortenTimeStepSys
   LOGICAL, INTENT(IN)  :: UseZoneTimeStepHistory  ! if true then use zone timestep history, if false use system time step history
-  REAL(r64),  INTENT(IN)  :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL,  INTENT(IN)  :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3503,27 +3503,27 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)               :: CpAir                           !specific heat of air
-  REAL(r64)      :: SumIntGain =0.0                 ! Zone sum of convective internal gains
-  REAL(r64)      :: SumHA      =0.0                 ! Zone sum of Hc*Area
-  REAL(r64)      :: SumHATsurf =0.0                 ! Zone sum of Hc*Area*Tsurf
-  REAL(r64)      :: SumHATref  =0.0                 ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
-  REAL(r64)      :: SumMCp     =0.0                 ! Zone sum of MassFlowRate*Cp
-  REAL(r64)      :: SumMCpT    =0.0                 ! Zone sum of MassFlowRate*Cp*T
-  REAL(r64)      :: SumSysMCp  =0.0                 ! Zone sum of air system MassFlowRate*Cp
-  REAL(r64)      :: SumSysMCpT =0.0                 ! Zone sum of air system MassFlowRate*Cp*T
-  REAL(r64)      :: ZoneEnthalpyIn =0.0             ! Zone inlet air enthalpy
-  REAL(r64)      :: TempDepCoef=0.0                 ! Formerly CoefSumha, coef in zone temp equation with dimensions of h*A
-  REAL(r64)      :: TempIndCoef=0.0                 ! Formerly CoefSumhat, coef in zone temp equation with dimensions of h*A(T1
-  REAL(r64)      :: AirCap     =0.0                 ! Formerly CoefAirrat, coef in zone temp eqn with dim of "air power capacity"
-  REAL(r64)      :: SNLoad     =0.0                 ! Sensible load calculated for zone in watts and then loaded in report variables
+  REAL               :: CpAir                           !specific heat of air
+  REAL      :: SumIntGain =0.0                 ! Zone sum of convective internal gains
+  REAL      :: SumHA      =0.0                 ! Zone sum of Hc*Area
+  REAL      :: SumHATsurf =0.0                 ! Zone sum of Hc*Area*Tsurf
+  REAL      :: SumHATref  =0.0                 ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
+  REAL      :: SumMCp     =0.0                 ! Zone sum of MassFlowRate*Cp
+  REAL      :: SumMCpT    =0.0                 ! Zone sum of MassFlowRate*Cp*T
+  REAL      :: SumSysMCp  =0.0                 ! Zone sum of air system MassFlowRate*Cp
+  REAL      :: SumSysMCpT =0.0                 ! Zone sum of air system MassFlowRate*Cp*T
+  REAL      :: ZoneEnthalpyIn =0.0             ! Zone inlet air enthalpy
+  REAL      :: TempDepCoef=0.0                 ! Formerly CoefSumha, coef in zone temp equation with dimensions of h*A
+  REAL      :: TempIndCoef=0.0                 ! Formerly CoefSumhat, coef in zone temp equation with dimensions of h*A(T1
+  REAL      :: AirCap     =0.0                 ! Formerly CoefAirrat, coef in zone temp eqn with dim of "air power capacity"
+  REAL      :: SNLoad     =0.0                 ! Sensible load calculated for zone in watts and then loaded in report variables
   INTEGER :: ZoneNum   =0
   INTEGER :: ZoneNodeNum=0                        ! System node number for air flow through zone either by system or as a plenum
 !  LOGICAL,SAVE   :: OneTimeFlag = .TRUE.
 !unusd1208  LOGICAL,SAVE   :: MyEnvrnFlag = .TRUE.
-  REAL(r64)      :: TempSupplyAir
-  REAL(r64)      :: ZoneMult
-!unused1208  REAL(r64)           :: TimeStepSeconds  ! dt term for denominator under Cz in Seconds
+  REAL      :: TempSupplyAir
+  REAL      :: ZoneMult
+!unused1208  REAL           :: TimeStepSeconds  ! dt term for denominator under Cz in Seconds
 
           ! FLOW:
   ! Initializations
@@ -3599,7 +3599,7 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
 
     ! Calculate the various heat balance sums
     CALL CalcZoneSums(ZoneNum, SumIntGain, SumHA, SumHATsurf, SumHATref, SumMCp, SumMCpT, SumSysMCp, SumSysMCpT)
-!    ZoneTempHistoryTerm = (3.0D0 * ZTM1(ZoneNum) - (3.0D0/2.0D0) * ZTM2(ZoneNum) + (1.0D0/3.0D0) * ZTM3(ZoneNum))
+!    ZoneTempHistoryTerm = (3.0 * ZTM1(ZoneNum) - (3.0/2.0) * ZTM2(ZoneNum) + (1.0/3.0) * ZTM3(ZoneNum))
     ZoneNodeNum = Zone(ZoneNum)%SystemZoneNodeNumber
 
     SNLOAD=0.0
@@ -3620,14 +3620,14 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
        ! Solve for zone air temperature
        SELECT CASE (ZoneAirSolutionAlgo)
          CASE (Use3rdOrder)
-           ZT(ZoneNum) = (TempIndCoef + AirCap*(3.0d0*ZTM1(ZoneNum) - (3.0d0/2.0d0)*ZTM2(ZoneNum) + (1.0d0/3.0d0)*ZTM3(ZoneNum))) &
-                   / ((11.0d0/6.0d0) * AirCap + TempDepCoef)
+           ZT(ZoneNum) = (TempIndCoef + AirCap*(3.0*ZTM1(ZoneNum) - (3.0/2.0)*ZTM2(ZoneNum) + (1.0/3.0)*ZTM3(ZoneNum))) &
+                   / ((11.0/6.0) * AirCap + TempDepCoef)
          ! Exact solution
          CASE (UseAnalyticalSolution)
-           If (TempDepCoef .eq. 0.0d0) Then ! B=0
+           If (TempDepCoef .eq. 0.0) Then ! B=0
              ZT(ZoneNum) = ZoneT1(ZoneNum) + TempIndCoef/AirCap
            Else
-             ZT(ZoneNum) = (ZoneT1(ZoneNum)-TempIndCoef/TempDepCoef)*exp(MIN(700.d0,-TempDepCoef/AirCap))+TempIndCoef/TempDepCoef
+             ZT(ZoneNum) = (ZoneT1(ZoneNum)-TempIndCoef/TempDepCoef)*exp(MIN(700.,-TempDepCoef/AirCap))+TempIndCoef/TempDepCoef
            End If
          CASE (UseEulerMethod)
            ZT(ZoneNum) = (AirCap*ZoneT1(ZoneNum)+TempIndCoef)/(AirCap+TempDepCoef)
@@ -3697,14 +3697,14 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
         ! Solve for zone air temperature
        SELECT CASE (ZoneAirSolutionAlgo)
          CASE (Use3rdOrder)
-           ZT(ZoneNum) = (TempIndCoef + AirCap*(3.0d0*ZTM1(ZoneNum) - (3.0d0/2.0d0)*ZTM2(ZoneNum) + (1.0d0/3.0d0)*ZTM3(ZoneNum))) &
-                    / ((11.0d0/6.0d0)*AirCap + TempDepCoef)
+           ZT(ZoneNum) = (TempIndCoef + AirCap*(3.0*ZTM1(ZoneNum) - (3.0/2.0)*ZTM2(ZoneNum) + (1.0/3.0)*ZTM3(ZoneNum))) &
+                    / ((11.0/6.0)*AirCap + TempDepCoef)
          ! Exact solution
          CASE (UseAnalyticalSolution)
-           If (TempDepCoef .eq. 0.0d0) Then ! B=0
+           If (TempDepCoef .eq. 0.0) Then ! B=0
              ZT(ZoneNum) = ZoneT1(ZoneNum) + TempIndCoef/AirCap
            Else
-             ZT(ZoneNum) = (ZoneT1(ZoneNum)-TempIndCoef/TempDepCoef)*exp(MIN(700.d0,-TempDepCoef/AirCap))+TempIndCoef/TempDepCoef
+             ZT(ZoneNum) = (ZoneT1(ZoneNum)-TempIndCoef/TempDepCoef)*exp(MIN(700.,-TempDepCoef/AirCap))+TempIndCoef/TempDepCoef
            End If
          CASE (UseEulerMethod)
            ZT(ZoneNum) = (AirCap*ZoneT1(ZoneNum)+TempIndCoef)/(AirCap+TempDepCoef)
@@ -3717,16 +3717,16 @@ SUBROUTINE CorrectZoneAirTemp(ZoneTempChange, ShortenTimeStepSys,  &
     MAT(ZoneNum)  = ZT(ZoneNum)
 
     ! Determine sensible load heating/cooling rate and energy
-    SNLoadHeatRate(ZoneNum) = MAX(SNLOAD,0.0d0)
-    SNLoadCoolRate(ZoneNum) = ABS(MIN(SNLOAD,0.0d0))
-    SNLoadHeatEnergy(ZoneNum) = MAX(SNLOAD,0.0d0) * TimeStepSys * SecInHour
-    SNLoadCoolEnergy(ZoneNum) = ABS(MIN(SNLOAD,0.0d0) * TimeStepSys * SecInHour)
+    SNLoadHeatRate(ZoneNum) = MAX(SNLOAD,0.0)
+    SNLoadCoolRate(ZoneNum) = ABS(MIN(SNLOAD,0.0))
+    SNLoadHeatEnergy(ZoneNum) = MAX(SNLOAD,0.0) * TimeStepSys * SecInHour
+    SNLoadCoolEnergy(ZoneNum) = ABS(MIN(SNLOAD,0.0) * TimeStepSys * SecInHour)
 
     ! Final humidity calcs
     CALL CorrectZoneHumRat(ZoneNum)
 
     ZoneAirHumRat(ZoneNum) = ZoneAirHumRatTemp(ZoneNum)
-    ZoneAirRelHum(ZoneNum) = 100.0d0 * PsyRhFnTdbWPb(ZT(ZoneNum),ZoneAirHumRat(ZoneNum),OutBaroPress,'CorrectZoneAirTemp')
+    ZoneAirRelHum(ZoneNum) = 100.0 * PsyRhFnTdbWPb(ZT(ZoneNum),ZoneAirHumRat(ZoneNum),OutBaroPress,'CorrectZoneAirTemp')
 
     ! ZoneTempChange is used by HVACManager to determine if the timestep needs to be shortened.
     SELECT CASE (ZoneAirSolutionAlgo)
@@ -4089,19 +4089,19 @@ SUBROUTINE CorrectZoneHumRat(ZoneNum)
   INTEGER :: ZoneSupPlenumNum
   LOGICAL :: ZoneRetPlenumAirFlag
   LOGICAL :: ZoneSupPlenumAirFlag
-  REAL(r64) :: LatentGain ! Zone latent load
-  REAL(r64) :: RhoAir
-  REAL(r64) :: A
-  REAL(r64) :: B
-  REAL(r64) :: C
-  REAL(r64) :: WZSat
-  REAL(r64) :: MoistureMassFlowRate
-  REAL(r64) :: ExhMassFlowRate
-  REAL(r64) :: TotExitMassFlowRate
-  REAL(r64) :: ZoneMassFlowRate
-  REAL(r64) :: SysTimeStepInSeconds
-  REAL(r64) :: H2OHtOfVap
-  REAL(r64) :: ZoneMult
+  REAL :: LatentGain ! Zone latent load
+  REAL :: RhoAir
+  REAL :: A
+  REAL :: B
+  REAL :: C
+  REAL :: WZSat
+  REAL :: MoistureMassFlowRate
+  REAL :: ExhMassFlowRate
+  REAL :: TotExitMassFlowRate
+  REAL :: ZoneMassFlowRate
+  REAL :: SysTimeStepInSeconds
+  REAL :: H2OHtOfVap
+  REAL :: ZoneMult
   INTEGER :: ADUListIndex
   INTEGER :: ADUNum
   INTEGER :: ADUInNode
@@ -4211,8 +4211,8 @@ SUBROUTINE CorrectZoneHumRat(ZoneNum)
   ! SumHmARaW and SumHmARa will be used with the moisture balance on the building elements and
   ! are currently set to zero to remind us where they need to be in the future
   IF (SolutionAlgo /= UseEMPD .and. SolutionAlgo /= UseHAMT) THEN
-    SumHmARaW(ZoneNum) = 0.0d0
-    SumHmARa(ZoneNum) = 0.0d0
+    SumHmARaW(ZoneNum) = 0.0
+    SumHmARa(ZoneNum) = 0.0
   END IF
 
   RhoAir = PsyRhoAirFnPbTdbW(OutBaroPress,ZT(ZoneNum),ZoneAirHumRat(ZoneNum),'CorrectZoneHumRat')
@@ -4259,14 +4259,14 @@ SUBROUTINE CorrectZoneHumRat(ZoneNum)
   ! smooth the changes using the zone air capacitance.
   SELECT CASE (ZoneAirSolutionAlgo)
     CASE (Use3rdOrder)
-      ZoneAirHumRatTemp(ZoneNum)=(B+C*(3.0d0*WZoneTimeMinus1Temp(ZoneNum)-(3.0d0/2.0d0)*WZoneTimeMinus2Temp(ZoneNum)+ &
-                             (1.0d0/3.0d0)*WZoneTimeMinus3Temp(ZoneNum)))/((11.0d0/6.0d0)*C+A)
+      ZoneAirHumRatTemp(ZoneNum)=(B+C*(3.0*WZoneTimeMinus1Temp(ZoneNum)-(3.0/2.0)*WZoneTimeMinus2Temp(ZoneNum)+ &
+                             (1.0/3.0)*WZoneTimeMinus3Temp(ZoneNum)))/((11.0/6.0)*C+A)
     ! Exact solution
     CASE (UseAnalyticalSolution)
-      If (A .eq. 0.0d0) Then ! B=0
+      If (A .eq. 0.0) Then ! B=0
         ZoneAirHumRatTemp(ZoneNum)= ZoneW1(ZoneNum) + B/C
       Else
-        ZoneAirHumRatTemp(ZoneNum)= (ZoneW1(ZoneNum)-B/A)*exp(MIN(700.d0,-A/C))+B/A
+        ZoneAirHumRatTemp(ZoneNum)= (ZoneW1(ZoneNum)-B/A)*exp(MIN(700.,-A/C))+B/A
       End If
     CASE (UseEulerMethod)
       ZoneAirHumRatTemp(ZoneNum) = (C*ZoneW1(ZoneNum)+B)/(C+A)
@@ -4277,7 +4277,7 @@ SUBROUTINE CorrectZoneHumRat(ZoneNum)
 
   ! Check to make sure that is saturated there is condensation in the zone
   ! by resetting to saturation conditions.
-  Wzsat = PsyWFnTdbRhPb(Zt(ZoneNum),1.0d0,OutBaroPress,'CorrectZoneHumRat')
+  Wzsat = PsyWFnTdbRhPb(Zt(ZoneNum),1.0,OutBaroPress,'CorrectZoneHumRat')
 
   IF (ZoneAirHumRatTemp(ZoneNum) .GT. Wzsat) ZoneAirHumRatTemp(ZoneNum) = Wzsat
 
@@ -4322,18 +4322,18 @@ SUBROUTINE DownInterpolate4HistoryValues ( OldTimeStep, NewTimeStep,            
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)    :: OldTimeStep
-  REAL(r64), INTENT(IN)    :: NewTimeStep
-  REAL(r64), INTENT(INOUT) :: oldVal0
-  REAL(r64), INTENT(INOUT) :: oldVal1
-  REAL(r64), INTENT(INOUT) :: oldVal2
-  REAL(r64), INTENT(INOUT) :: oldVal3
-  REAL(r64), INTENT(INOUT) :: oldVal4
-  REAL(r64), INTENT(INOUT) :: newVal0
-  REAL(r64), INTENT(INOUT) :: newVal1
-  REAL(r64), INTENT(INOUT) :: newVal2
-  REAL(r64), INTENT(INOUT) :: newVal3  ! unused 1208
-  REAL(r64), INTENT(INOUT) :: newVal4  ! unused 1208
+  REAL, INTENT(IN)    :: OldTimeStep
+  REAL, INTENT(IN)    :: NewTimeStep
+  REAL, INTENT(INOUT) :: oldVal0
+  REAL, INTENT(INOUT) :: oldVal1
+  REAL, INTENT(INOUT) :: oldVal2
+  REAL, INTENT(INOUT) :: oldVal3
+  REAL, INTENT(INOUT) :: oldVal4
+  REAL, INTENT(INOUT) :: newVal0
+  REAL, INTENT(INOUT) :: newVal1
+  REAL, INTENT(INOUT) :: newVal2
+  REAL, INTENT(INOUT) :: newVal3  ! unused 1208
+  REAL, INTENT(INOUT) :: newVal4  ! unused 1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4345,27 +4345,27 @@ SUBROUTINE DownInterpolate4HistoryValues ( OldTimeStep, NewTimeStep,            
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: oldTime0
-  REAL(r64) :: oldTime1
-  REAL(r64) :: oldTime2
-  REAL(r64) :: oldTime3
-  REAL(r64) :: oldTime4
-  REAL(r64) :: newTime0
-  REAL(r64) :: newTime1
-  REAL(r64) :: newTime2
-  REAL(r64) :: newTime3
-  REAL(r64) :: newTime4
+  REAL :: oldTime0
+  REAL :: oldTime1
+  REAL :: oldTime2
+  REAL :: oldTime3
+  REAL :: oldTime4
+  REAL :: newTime0
+  REAL :: newTime1
+  REAL :: newTime2
+  REAL :: newTime3
+  REAL :: newTime4
 
-  REAL(r64) :: DSRatio
+  REAL :: DSRatio
 
   ! first construct data on timestamps for interpolating with later
-  oldTime0 = 0.0D0
+  oldTime0 = 0.0
   oldTime1 = oldTime0 - OldTimeStep
   oldTime2 = oldTime1 - OldTimeStep
   oldTime3 = oldTime2 - OldTimeStep
   oldTime4 = oldTime3 - OldTimeStep
 
-  newTime0 = 0.0D0
+  newTime0 = 0.0
   newTime1 = newTime0 - NewTimeStep
   newTime2 = newTime1 - NewTimeStep
   newTime3 = newTime2 - NewTimeStep
@@ -4375,14 +4375,14 @@ SUBROUTINE DownInterpolate4HistoryValues ( OldTimeStep, NewTimeStep,            
 
   newVal0 = oldVal0
 
-  IF (ABS(DSRatio - 2.0D0) < 0.01D0) THEN  ! DSRatio = 2
+  IF (ABS(DSRatio - 2.0) < 0.01) THEN  ! DSRatio = 2
     ! first two points lie between oldVal0 and oldVal1
     newVal1 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime1) / (OldTimeStep))
     newVal2 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime2) / (OldTimeStep))
     ! last two points lie between oldVal1 and oldVal2
     newVal3 = oldVal1 + (oldVal2 - oldVal1) * ((oldTime1 - newTime3)/ (OldTimeStep))
     newVal4 = oldVal1 + (oldVal2 - oldVal1) * ((oldTime1 - newTime4)/ (OldTimeStep))
-  ELSE IF (ABS(DSRatio - 3.0D0) < 0.01D0) THEN  ! DSRatio = 3
+  ELSE IF (ABS(DSRatio - 3.0) < 0.01) THEN  ! DSRatio = 3
     ! first three points lie between oldVal0 and oldVal1
     newVal1 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime1) / (OldTimeStep))
     newVal2 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime2) / (OldTimeStep))
@@ -4390,7 +4390,7 @@ SUBROUTINE DownInterpolate4HistoryValues ( OldTimeStep, NewTimeStep,            
     ! last point lie between oldVal1 and oldVal2
     newVal4 = oldVal1 + (oldVal2 - oldVal1) * ((oldTime1 - newTime4)/ (OldTimeStep))
 
-  ELSE IF (DSRatio > 3.99D0) THEN ! DSRatio = 4 or more
+  ELSE IF (DSRatio > 3.99) THEN ! DSRatio = 4 or more
     !all new points lie between oldVal0 and oldVal1
     newVal1 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime1) / (OldTimeStep))
     newVal2 = oldVal0 + (oldVal1 - oldVal0) * ((oldTime0 - newTime2) / (OldTimeStep))
@@ -4446,36 +4446,36 @@ SUBROUTINE CalcZoneSums(ZoneNum, SumIntGain, SumHA, SumHATsurf, SumHATref, SumMC
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum               ! Zone number
-  REAL(r64), INTENT(OUT)   :: SumIntGain            ! Zone sum of convective internal gains
-  REAL(r64), INTENT(OUT)   :: SumHA                 ! Zone sum of Hc*Area
-  REAL(r64), INTENT(OUT)   :: SumHATsurf            ! Zone sum of Hc*Area*Tsurf
-  REAL(r64), INTENT(OUT)   :: SumHATref             ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
-  REAL(r64), INTENT(OUT)   :: SumMCp                ! Zone sum of MassFlowRate*Cp
-  REAL(r64), INTENT(OUT)   :: SumMCpT               ! Zone sum of MassFlowRate*Cp*T
-  REAL(r64), INTENT(OUT)   :: SumSysMCp             ! Zone sum of air system MassFlowRate*Cp
-  REAL(r64), INTENT(OUT)   :: SumSysMCpT            ! Zone sum of air system MassFlowRate*Cp*T
+  REAL, INTENT(OUT)   :: SumIntGain            ! Zone sum of convective internal gains
+  REAL, INTENT(OUT)   :: SumHA                 ! Zone sum of Hc*Area
+  REAL, INTENT(OUT)   :: SumHATsurf            ! Zone sum of Hc*Area*Tsurf
+  REAL, INTENT(OUT)   :: SumHATref             ! Zone sum of Hc*Area*Tref, for ceiling diffuser convection correlation
+  REAL, INTENT(OUT)   :: SumMCp                ! Zone sum of MassFlowRate*Cp
+  REAL, INTENT(OUT)   :: SumMCpT               ! Zone sum of MassFlowRate*Cp*T
+  REAL, INTENT(OUT)   :: SumSysMCp             ! Zone sum of air system MassFlowRate*Cp
+  REAL, INTENT(OUT)   :: SumSysMCpT            ! Zone sum of air system MassFlowRate*Cp*T
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: NodeNum               ! System node number
-  REAL(r64)           :: NodeTemp              ! System node temperature
-  REAL(r64)           :: MassFlowRate          ! System node mass flow rate
+  REAL           :: NodeTemp              ! System node temperature
+  REAL           :: MassFlowRate          ! System node mass flow rate
   INTEGER             :: ZoneEquipConfigNum
   LOGICAL             :: ControlledZoneAirFlag
   INTEGER             :: ZoneRetPlenumNum
   INTEGER             :: ZoneSupPlenumNum
   LOGICAL             :: ZoneRetPlenumAirFlag
   LOGICAL             :: ZoneSupPlenumAirFlag
-  REAL(r64)           :: CpAir                 ! Specific heat of air
+  REAL           :: CpAir                 ! Specific heat of air
   INTEGER             :: SurfNum               ! Surface number
-  REAL(r64)           :: HA                    ! Hc*Area
-  REAL(r64)           :: Area                  ! Effective surface area
-  REAL(r64)           :: RefAirTemp            ! Reference air temperature for surface convection calculations
-  REAL(r64)           :: ZoneMult
+  REAL           :: HA                    ! Hc*Area
+  REAL           :: Area                  ! Effective surface area
+  REAL           :: RefAirTemp            ! Reference air temperature for surface convection calculations
+  REAL           :: ZoneMult
   INTEGER             :: ADUListIndex
   INTEGER             :: ADUNum
   INTEGER             :: ADUInNode
   INTEGER             :: ADUOutNode
-  REAL(r64)           :: RetAirGain
+  REAL           :: RetAirGain
 
           ! FLOW:
   SumIntGain = 0.0
@@ -4650,16 +4650,16 @@ SUBROUTINE CalcZoneSums(ZoneNum, SumIntGain, SumHA, SumHATsurf, SumHATref, SumMC
       IF (SurfaceWindow(SurfNum)%FrameArea > 0.0) THEN
         ! Window frame contribution
         SumHATsurf = SumHATsurf + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%FrameArea &
-          * (1.0d0 + SurfaceWindow(SurfNum)%ProjCorrFrIn) * SurfaceWindow(SurfNum)%FrameTempSurfIn
-        HA = HA + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%FrameArea * (1.0d0 + SurfaceWindow(SurfNum)%ProjCorrFrIn)
+          * (1.0 + SurfaceWindow(SurfNum)%ProjCorrFrIn) * SurfaceWindow(SurfNum)%FrameTempSurfIn
+        HA = HA + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%FrameArea * (1.0 + SurfaceWindow(SurfNum)%ProjCorrFrIn)
       END IF
 
       IF (SurfaceWindow(SurfNum)%DividerArea > 0.0 .AND. SurfaceWindow(SurfNum)%ShadingFlag /= IntShadeOn &
            .AND. SurfaceWindow(SurfNum)%ShadingFlag /= IntBlindOn) THEN
         ! Window divider contribution (only from shade or blind for window with divider and interior shade or blind)
         SumHATsurf = SumHATsurf + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%DividerArea &
-          * (1.0d0 + 2.0d0 * SurfaceWindow(SurfNum)%ProjCorrDivIn) * SurfaceWindow(SurfNum)%DividerTempSurfIn
-        HA = HA + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%DividerArea * (1.0d0 + 2.0d0 * SurfaceWindow(SurfNum)%ProjCorrDivIn)
+          * (1.0 + 2.0 * SurfaceWindow(SurfNum)%ProjCorrDivIn) * SurfaceWindow(SurfNum)%DividerTempSurfIn
+        HA = HA + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%DividerArea * (1.0 + 2.0 * SurfaceWindow(SurfNum)%ProjCorrDivIn)
       END IF
 
     END IF  ! End of check if window
@@ -4684,7 +4684,7 @@ SUBROUTINE CalcZoneSums(ZoneNum, SumIntGain, SumHA, SumHATsurf, SumHATref, SumMC
                 RETURN
             END IF
             ! determine supply air temperature as a weighted average of the inlet temperatures.
-            IF (SumSysMCp > 0.0d0) THEN
+            IF (SumSysMCp > 0.0) THEN
               RefAirTemp = SumSysMCpT/SumSysMCp
             ELSE
               ! no system flow (yet) so just use last value for inlet node temp, this can happen early in the environment
@@ -4747,53 +4747,53 @@ SUBROUTINE CalcZoneComponentLoadSums(ZoneNum, TempDepCoef, TempIndCoef, SumIntGa
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum            ! Zone number
-  REAL(r64), INTENT(IN)  :: TempDepCoef     ! Dependent coefficient
-  REAL(r64), INTENT(IN)  :: TempIndCoef     ! Independent coefficient
-  REAL(r64), INTENT(OUT) :: SumIntGains     ! Zone sum of convective internal gains
-  REAL(r64), INTENT(OUT) :: SumHADTsurfs    ! Zone sum of Hc*Area*(Tsurf - Tz)
-  REAL(r64), INTENT(OUT) :: SumMCpDTzones   ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
-  REAL(r64), INTENT(OUT) :: SumMCpDtInfil   ! Zone sum of MassFlowRate*Cp*(Tout - Tz) transfer from outside, ventil, earth tube
-  REAL(r64), INTENT(OUT) :: SumMCpDTsystem  ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
-  REAL(r64), INTENT(OUT) :: CzdTdt          ! Zone air energy storage term.
-  REAL(r64), INTENT(OUT) :: imBalance       ! put all terms in eq. 5 on RHS , should be zero
+  REAL, INTENT(IN)  :: TempDepCoef     ! Dependent coefficient
+  REAL, INTENT(IN)  :: TempIndCoef     ! Independent coefficient
+  REAL, INTENT(OUT) :: SumIntGains     ! Zone sum of convective internal gains
+  REAL, INTENT(OUT) :: SumHADTsurfs    ! Zone sum of Hc*Area*(Tsurf - Tz)
+  REAL, INTENT(OUT) :: SumMCpDTzones   ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
+  REAL, INTENT(OUT) :: SumMCpDtInfil   ! Zone sum of MassFlowRate*Cp*(Tout - Tz) transfer from outside, ventil, earth tube
+  REAL, INTENT(OUT) :: SumMCpDTsystem  ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
+  REAL, INTENT(OUT) :: CzdTdt          ! Zone air energy storage term.
+  REAL, INTENT(OUT) :: imBalance       ! put all terms in eq. 5 on RHS , should be zero
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: NodeNum               ! System node number
-  REAL(r64)           :: NodeTemp              ! System node temperature
-  REAL(r64)           :: MassFlowRate          ! System node mass flow rate
+  REAL           :: NodeTemp              ! System node temperature
+  REAL           :: MassFlowRate          ! System node mass flow rate
   INTEGER             :: ZoneEquipConfigNum
   LOGICAL             :: ControlledZoneAirFlag
   INTEGER             :: ZoneRetPlenumNum
   INTEGER             :: ZoneSupPlenumNum
   LOGICAL             :: ZoneRetPlenumAirFlag
   LOGICAL             :: ZoneSupPlenumAirFlag
-  REAL(r64)           :: RhoAir
-  REAL(r64)           :: CpAir                 ! Specific heat of air
+  REAL           :: RhoAir
+  REAL           :: CpAir                 ! Specific heat of air
   INTEGER             :: SurfNum               ! Surface number
-!unused  REAL(r64)           :: HA                    ! Hc*Area
-  REAL(r64)           :: Area                  ! Effective surface area
-  REAL(r64)           :: RefAirTemp            ! Reference air temperature for surface convection calculations
+!unused  REAL           :: HA                    ! Hc*Area
+  REAL           :: Area                  ! Effective surface area
+  REAL           :: RefAirTemp            ! Reference air temperature for surface convection calculations
 !unused  LOGICAL             :: FirstTimeFlag
 !unused  INTEGER             :: Tref           ! Used to check if reference air temp for all surfaces in the zone are the same
-!unused  REAL(r64)           :: ZoneMult
+!unused  REAL           :: ZoneMult
   INTEGER             :: ADUListIndex
   INTEGER             :: ADUNum
   INTEGER             :: ADUInNode
   INTEGER             :: ADUOutNode
-  REAL(r64)           :: SumSysMCp
-  REAL(r64)           :: SumSysMCpT
-  REAL(r64)           :: Threshold
-  REAL(r64)           :: SumRetAirGains
+  REAL           :: SumSysMCp
+  REAL           :: SumSysMCpT
+  REAL           :: Threshold
+  REAL           :: SumRetAirGains
 
-  SumIntGains    = 0.0D0    ! Zone sum of convective internal gains
-  SumHADTsurfs   = 0.0D0    ! Zone sum of Hc*Area*(Tsurf - Tz)
-  SumMCpDTzones  = 0.0D0    ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
-  SumMCpDtInfil  = 0.0D0    ! Zone sum of MassFlowRate*Cp*(Tout - Tz)
-  SumMCpDTsystem = 0.0D0    ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
-  CzdTdt         = 0.0D0    !
-  imBalance      = 0.0D0
-  SumSysMCp      = 0.0d0
-  SumSysMCpT     = 0.0d0
+  SumIntGains    = 0.0    ! Zone sum of convective internal gains
+  SumHADTsurfs   = 0.0    ! Zone sum of Hc*Area*(Tsurf - Tz)
+  SumMCpDTzones  = 0.0    ! zone sum of MassFlowRate*cp*(TremotZone - Tz) transfer air from other zone, Mixing
+  SumMCpDtInfil  = 0.0    ! Zone sum of MassFlowRate*Cp*(Tout - Tz)
+  SumMCpDTsystem = 0.0    ! Zone sum of air system MassFlowRate*Cp*(Tsup - Tz)
+  CzdTdt         = 0.0    !
+  imBalance      = 0.0
+  SumSysMCp      = 0.0
+  SumSysMCpT     = 0.0
 
   ! Sum all convective internal gains: SumIntGain
   Call SumAllInternalConvectionGains(ZoneNum, SumIntGains)
@@ -4932,7 +4932,7 @@ SUBROUTINE CalcZoneComponentLoadSums(ZoneNum, TempDepCoef, TempIndCoef, SumIntGa
                SumSysMCpT = SumSysMCpT + MassFlowRate * CpAir * NodeTemp
 
             END DO ! NodeNum
-            IF (SumSysMCp > 0.0d0) THEN
+            IF (SumSysMCp > 0.0) THEN
               RefAirTemp = SumSysMCpT/SumSysMCp
             ELSE
               ! no system flow (yet) so just use last value for inlet node temp, this can happen early in the environment
@@ -5018,7 +5018,7 @@ SUBROUTINE CalcZoneComponentLoadSums(ZoneNum, TempDepCoef, TempIndCoef, SumIntGa
 
     ! throw warning if seriously out of balance (this may need to be removed if too noisy... )
     ! formulate dynamic threshold value based on 20% of quadrature sum of components
-    Threshold   =  0.2D0 * SQRT(SumIntGains**2 + SumHADTsurfs**2 + SumMCpDTzones**2 + SumMCpDtInfil**2 &
+    Threshold   =  0.2 * SQRT(SumIntGains**2 + SumHADTsurfs**2 + SumMCpDTzones**2 + SumMCpDtInfil**2 &
                                 + SumMCpDTsystem**2 + CzdTdt**2)
     IF ((ABS(ImBalance) > Threshold) .AND. (.NOT. WarmUpFlag) &
         .AND. (.NOT. DoingSizing) ) THEN ! air balance is out by more than threshold
@@ -5187,11 +5187,11 @@ SUBROUTINE DetectOscillatingZoneTemp
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: iZone
-REAL(r64)    :: NegOscillateMagnitude
+REAL    :: NegOscillateMagnitude
 LOGICAL :: isOscillate
-REAL(r64)    :: Diff12
-REAL(r64)    :: Diff23
-REAL(r64)    :: Diff34
+REAL    :: Diff12
+REAL    :: Diff23
+REAL    :: Diff34
 LOGICAL,SAVE :: SetupOscillationOutputFlag = .TRUE.
 LOGICAL :: isAnyZoneOscillating
 
@@ -5282,7 +5282,7 @@ SUBROUTINE AdjustAirSetpointsforOpTempCntrl(TempControlledZoneID, ActualZoneNum,
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: TempControlledZoneID
   INTEGER, INTENT(IN) :: ActualZoneNum
-  REAL(r64),    INTENT(INOUT) :: ZoneAirSetpoint
+  REAL,    INTENT(INOUT) :: ZoneAirSetpoint
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5294,8 +5294,8 @@ SUBROUTINE AdjustAirSetpointsforOpTempCntrl(TempControlledZoneID, ActualZoneNum,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: thisMRT  ! local variable for mean radiant temperature in this zone
-  REAL(r64) :: thisMRTFraction ! local variable for fraction that MRT is in Op Temp definition
+  REAL :: thisMRT  ! local variable for mean radiant temperature in this zone
+  REAL :: thisMRTFraction ! local variable for fraction that MRT is in Op Temp definition
 
   IF (.NOT.(AnyOpTempControl)) RETURN  ! do nothing to setpoint
 
@@ -5313,7 +5313,7 @@ SUBROUTINE AdjustAirSetpointsforOpTempCntrl(TempControlledZoneID, ActualZoneNum,
 
   ! modify setpoint for operative temperature control
   !  traping for MRT fractions between 0.0 and 0.9 during get input, so shouldn't be able to divide by zero here.
-  ZoneAirSetpoint = (ZoneAirSetpoint - thisMRTFraction * thisMRT) / (1.d0 - thisMRTFraction)
+  ZoneAirSetpoint = (ZoneAirSetpoint - thisMRTFraction * thisMRT) / (1. - thisMRTFraction)
 
   RETURN
 
@@ -5367,11 +5367,11 @@ SUBROUTINE CalcZoneAirComfortSetpoints
   INTEGER :: SchedTypeIndex
   INTEGER :: PeopleNum
   INTEGER :: ObjectCount
-  REAL(r64)    :: PeopleCount
-  REAL(r64)    :: SetPointLo
-  REAL(r64)    :: SetPointHi
-  REAL(r64)    :: NumberOccupants
-  REAL(r64)    :: Tset
+  REAL    :: PeopleCount
+  REAL    :: SetPointLo
+  REAL    :: SetPointHi
+  REAL    :: NumberOccupants
+  REAL    :: Tset
 
   LOGICAL,SAVE :: FirstTimeFlag = .TRUE. ! Flag set to make sure you get input once
 
@@ -5395,8 +5395,8 @@ SUBROUTINE CalcZoneAirComfortSetpoints
     SELECT CASE (ComfortControlType(ActualZoneNum)) ! Is this missing the possibility of sometimes having no control on a zone
                                                  ! during the simulation?
       CASE (0) ! Uncontrolled for thermal comfort
-        ZoneComfortControlsFanger(ActualZoneNum)%LowPMV = -999.0d0
-        ZoneComfortControlsFanger(ActualZoneNum)%HighPMV = -999.0d0
+        ZoneComfortControlsFanger(ActualZoneNum)%LowPMV = -999.0
+        ZoneComfortControlsFanger(ActualZoneNum)%HighPMV = -999.0
 
       CASE (SglHeatSetPointFanger)
 
@@ -5405,7 +5405,7 @@ SUBROUTINE CalcZoneAirComfortSetpoints
         SetPointComfortSchedIndex = SetPointSingleHeatingFanger(SchedTypeIndex)%PMVSchedIndex
         ZoneComfortControlsFanger(ActualZoneNum)%FangerType = SglHeatSetPointFanger
         ZoneComfortControlsFanger(ActualZoneNum)%LowPMV = GetCurrentScheduleValue(SetPointComfortSchedIndex)
-        ZoneComfortControlsFanger(ActualZoneNum)%HighPMV = -999.0d0
+        ZoneComfortControlsFanger(ActualZoneNum)%HighPMV = -999.0
 
       CASE (SglCoolSetPointFanger)
 
@@ -5413,7 +5413,7 @@ SUBROUTINE CalcZoneAirComfortSetpoints
         SchedTypeIndex = ComfortControlledZone(RelativeZoneNum)%ControlTypeSchIndx(SchedNameIndex)
         SetPointComfortSchedIndex = SetPointSingleCoolingFanger(SchedTypeIndex)%PMVSchedIndex
         ZoneComfortControlsFanger(ActualZoneNum)%FangerType = SglCoolSetPointFanger
-        ZoneComfortControlsFanger(ActualZoneNum)%LowPMV = -999.0d0
+        ZoneComfortControlsFanger(ActualZoneNum)%LowPMV = -999.0
         ZoneComfortControlsFanger(ActualZoneNum)%HighPMV = GetCurrentScheduleValue(SetPointComfortSchedIndex)
 
       CASE (SglHCSetPointFanger)
@@ -5696,12 +5696,12 @@ SUBROUTINE GetComfortSetpoints(PeopleNum, ComfortControlNum, PMVSet, Tset)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
        INTEGER, INTENT(IN)    :: PeopleNum                    !
        INTEGER, INTENT(IN)    :: ComfortControlNum                    !
-       REAL(r64), INTENT(IN)       :: PMVSet                      !
-       REAL(r64), INTENT(OUT)      :: TSet              ! drybulb setpoint temperature for a given PMV value
+       REAL, INTENT(IN)       :: PMVSet                      !
+       REAL, INTENT(OUT)      :: TSet              ! drybulb setpoint temperature for a given PMV value
                                                    ! 0 = Solution; 1 = Set to Min; 2 Set to Max
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-          REAL(r64),PARAMETER :: Acc = 0.001D0    ! accuracy control for SolveRegulaFalsi
+          REAL,PARAMETER :: Acc = 0.001    ! accuracy control for SolveRegulaFalsi
           INTEGER,PARAMETER          :: MaxIter = 500  !iteration control for SolveRegulaFalsi
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -5711,12 +5711,12 @@ SUBROUTINE GetComfortSetpoints(PeopleNum, ComfortControlNum, PMVSet, Tset)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-          REAL(r64) :: Tmin ! Minimun drybulb setpoint temperature
-          REAL(r64) :: Tmax ! Maximun drybulb setpoint temperature
-          REAL(r64) :: PMVResult ! Calculated PMV value
-          REAL(r64) :: PMVMin ! Minimum allowed PMV value
-          REAL(r64) :: PMVMax ! Calculated PMV value
-          REAL(r64) :: Par(2) ! Passed parameter for RegularFalsi function
+          REAL :: Tmin ! Minimun drybulb setpoint temperature
+          REAL :: Tmax ! Maximun drybulb setpoint temperature
+          REAL :: PMVResult ! Calculated PMV value
+          REAL :: PMVMin ! Minimum allowed PMV value
+          REAL :: PMVMax ! Calculated PMV value
+          REAL :: Par(2) ! Passed parameter for RegularFalsi function
           INTEGER  :: SolFla !feed back flag from SolveRegulaFalsi
           INTEGER, SAVE :: IterLimitExceededNum1 = 0
           INTEGER, SAVE :: IterLimitErrIndex1 = 0
@@ -5769,7 +5769,7 @@ SUBROUTINE GetComfortSetpoints(PeopleNum, ComfortControlNum, PMVSet, Tset)
 
 END SUBROUTINE GetComfortSetpoints
 
-REAL(r64) FUNCTION PMVResidual(Tset, Par)
+REAL FUNCTION PMVResidual(Tset, Par)
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad
           !       DATE WRITTEN   May 2006
@@ -5791,8 +5791,8 @@ REAL(r64) FUNCTION PMVResidual(Tset, Par)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: Tset                    !
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = PMV set point
+  REAL, INTENT(IN)     :: Tset                    !
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = PMV set point
 
           ! FUNCTION PARAMETER DEFINITIONS:
           !  na
@@ -5805,7 +5805,7 @@ REAL(r64) FUNCTION PMVResidual(Tset, Par)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: PeopleNum          ! index of people object
-  REAL(r64)    :: PMVresult          ! resulting PMV values
+  REAL    :: PMVresult          ! resulting PMV values
 
   PeopleNum = INT(Par(2))
   CALL CalcThermalComfortFanger(PeopleNum, Tset, PMVresult)
@@ -5850,10 +5850,10 @@ SUBROUTINE AdjustCoolingSetPointforTempAndHumidityControl(TempControlledZoneID, 
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: MaxAllowedOvercoolRange    ! Maximum allowed zone overcool range [DeltaC]
-  REAL(r64)    :: RelativeHumidityDiff       ! Difference between zone air relative humidity and dehumidifying setpoint [%RH]
-  REAL(r64)    :: ZoneOvercoolRange          !
-  REAL(r64)    :: ZoneOvercoolControlRatio   !
+  REAL    :: MaxAllowedOvercoolRange    ! Maximum allowed zone overcool range [DeltaC]
+  REAL    :: RelativeHumidityDiff       ! Difference between zone air relative humidity and dehumidifying setpoint [%RH]
+  REAL    :: ZoneOvercoolRange          !
+  REAL    :: ZoneOvercoolControlRatio   !
 
 
   IF (.NOT.(AnyZoneTempAndHumidityControl)) RETURN  ! do nothing to setpoint
@@ -5871,13 +5871,13 @@ SUBROUTINE AdjustCoolingSetPointforTempAndHumidityControl(TempControlledZoneID, 
   ! For Dual Setpoint thermostat the overcool range is limited by the temperature difference between cooling
   ! and heating setpoints
   MaxAllowedOvercoolRange = ZoneThermostatSetPointHi(ActualZoneNum) - ZoneThermostatSetPointLo(ActualZoneNum)
-  IF (MaxAllowedOvercoolRange > 0.0d0)THEN
+  IF (MaxAllowedOvercoolRange > 0.0)THEN
       ZoneOvercoolRange = MIN(ZoneOvercoolRange, MaxAllowedOvercoolRange)
   ENDIF
   ! Calculate difference between zone air relative humidity and the dehumidifying setpoint
   RelativeHumidityDiff = ZoneAirRelHum(ActualZoneNum) &
                  - GetCurrentScheduleValue(TempControlledZone(TempControlledZoneID)%DehumidifyingSchedIndex)
-  IF (RelativeHumidityDiff > 0.0d0 .AND. ZoneOvercoolControlRatio > 0.0d0) THEN
+  IF (RelativeHumidityDiff > 0.0 .AND. ZoneOvercoolControlRatio > 0.0) THEN
     ! proportionally reset the cooling setpoint temperature downward (zone Overcool)
     ZoneOvercoolRange = MIN(ZoneOvercoolRange, RelativeHumidityDiff / ZoneOvercoolControlRatio)
     ZoneThermostatSetPointHi(ActualZoneNum) = ZoneThermostatSetPointHi(ActualZoneNum) - ZoneOvercoolRange

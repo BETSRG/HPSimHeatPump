@@ -52,37 +52,37 @@ TYPE GshpSpecs
   INTEGER            :: WWHPPlantTypeOfNum      = 0       ! equipment type num
   LOGICAL            :: Available               = .false. ! need an array of logicals--load identifiers of available equipment
   LOGICAL            :: ON                      = .false. ! simulate the machine at it's operating part load ratio
-  REAL(r64)          :: COP                     = 0.0 ! Coefficient of Performance of the machine
-  REAL(r64)          :: NomCap                  = 0.0 ! Nominal Capcity of the HeatPump
-  REAL(r64)          :: MinPartLoadRat          = 0.0 ! Minimum operating Part Load Ratio
-  REAL(r64)          :: MaxPartLoadRat          = 0.0 ! Maximum operating Part Load Ratio
-  REAL(r64)          :: OptPartLoadRat          = 0.0 ! Optimal operating Part Load Ratio
-  REAL(r64)          :: LoadSideVolFlowRate     = 0.0 ! Design Flow Rate on the Load side m3/sec
-  REAL(r64)          :: LoadSideDesignMassFlow  = 0.d0 ! Design flow rate (kg/s)
-  REAL(r64)          :: SourceSideVolFlowRate   = 0.0 ! Design Flow Rate on th Source Side m3/sec
-  REAL(r64)          :: SourceSideDesignMassFlow = 0.d0 ! Design flow rate (kg/s)
+  REAL          :: COP                     = 0.0 ! Coefficient of Performance of the machine
+  REAL          :: NomCap                  = 0.0 ! Nominal Capcity of the HeatPump
+  REAL          :: MinPartLoadRat          = 0.0 ! Minimum operating Part Load Ratio
+  REAL          :: MaxPartLoadRat          = 0.0 ! Maximum operating Part Load Ratio
+  REAL          :: OptPartLoadRat          = 0.0 ! Optimal operating Part Load Ratio
+  REAL          :: LoadSideVolFlowRate     = 0.0 ! Design Flow Rate on the Load side m3/sec
+  REAL          :: LoadSideDesignMassFlow  = 0. ! Design flow rate (kg/s)
+  REAL          :: SourceSideVolFlowRate   = 0.0 ! Design Flow Rate on th Source Side m3/sec
+  REAL          :: SourceSideDesignMassFlow = 0. ! Design flow rate (kg/s)
   INTEGER            :: SourceSideInletNodeNum  = 0   ! Node number on the inlet side of the plant
   INTEGER            :: SourceSideOutletNodeNum = 0   ! Node number on the outlet side of the plant
   INTEGER            :: LoadSideInletNodeNum    = 0   ! Node number on the inlet side of the Load Side
   INTEGER            :: LoadSideOutletNodeNum   = 0   ! Node number on the outlet side of the Load Side
-  REAL(r64)          :: SourceSideUACoeff       = 0.0 ! Source Side heat transfer coeff W/K
-  REAL(r64)          :: LoadSideUACoeff         = 0.0 ! Load Side heat transfer coeff  W/K
-  REAL(r64)          :: CompPistonDisp          = 0.0 ! compressor piston displacement m3
-  REAL(r64)          :: CompClearanceFactor     = 0.0 ! compressor clearance factor
-  REAL(r64)          :: CompSucPressDrop        = 0.0 ! deltap ,  compressor suction and discharge pressure drop Pascals
-  REAL(r64)          :: SuperheatTemp           = 0.0 ! deltatsh , super heating  °C
-  REAL(r64)          :: PowerLosses             = 0.0 ! constant part of electro mechanical power losses  watts Joules/sec
-  REAL(r64)          :: LossFactor              = 0.0 ! loss factor used ot define the electro mechanical
+  REAL          :: SourceSideUACoeff       = 0.0 ! Source Side heat transfer coeff W/K
+  REAL          :: LoadSideUACoeff         = 0.0 ! Load Side heat transfer coeff  W/K
+  REAL          :: CompPistonDisp          = 0.0 ! compressor piston displacement m3
+  REAL          :: CompClearanceFactor     = 0.0 ! compressor clearance factor
+  REAL          :: CompSucPressDrop        = 0.0 ! deltap ,  compressor suction and discharge pressure drop Pascals
+  REAL          :: SuperheatTemp           = 0.0 ! deltatsh , super heating  °C
+  REAL          :: PowerLosses             = 0.0 ! constant part of electro mechanical power losses  watts Joules/sec
+  REAL          :: LossFactor              = 0.0 ! loss factor used ot define the electro mechanical
                                                       ! loss that is supposed to be proportional to the theoretical power
-  REAL(r64)          :: HighPressCutOff         = 0.0 ! Maximum Design Pressure on the Load Side Pascals
-  REAL(r64)          :: LowPressCutOff          = 0.0 ! Minimum Design Pressure on the Source Side Pascals
+  REAL          :: HighPressCutOff         = 0.0 ! Maximum Design Pressure on the Load Side Pascals
+  REAL          :: LowPressCutOff          = 0.0 ! Minimum Design Pressure on the Source Side Pascals
 
   ! Added by Arun 6-27-02
   ! to implement cycletime
   LOGICAL            :: WasOn                   = .false.
   LOGICAL            :: IsOn                    = .false.
-  REAL(r64)   :: LastEventTime           = 0.0
-  REAL(r64)   :: CycleTime               = 0.0
+  REAL   :: LastEventTime           = 0.0
+  REAL   :: CycleTime               = 0.0
   LOGICAL            :: MustRun                 = .false.
   !loop topology variables
   INTEGER            :: SourceLoopNum           = 0 ! source side plant loop index number
@@ -98,18 +98,18 @@ END TYPE GshpSpecs
 
     ! Output Variables Type definition
 TYPE ReportVars
-  REAL(r64)    :: Power                              = 0.0 ! Power Consumption Watts
-  REAL(r64)    :: Energy                             = 0.0 ! Energy Consumption Joules
-  REAL(r64)    :: QLoad                              = 0.0 ! Load Side heat transfer rate Watts
-  REAL(r64)    :: QLoadEnergy                        = 0.0 ! Load Side heat transfer Joules
-  REAL(r64)    :: QSource                            = 0.0 ! Source Side heat transfer rate Watts
-  REAL(r64)    :: QSourceEnergy                      = 0.0 ! Source Side heat transfer Joules
-  REAL(r64)    :: LoadSideWaterInletTemp             = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: SourceSideWaterInletTemp           = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)    :: LoadSideWaterOutletTemp            = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: SourceSideWaterOutletTemp          = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)    :: LoadSidemdot                       = 0.0 ! Mass flow rate of the cooling water in Load Side Kg/s
-  REAL(r64)    :: SourceSidemdot                     = 0.0 ! Mass flow rate of chilled water in Eavporator Kg/s
+  REAL    :: Power                              = 0.0 ! Power Consumption Watts
+  REAL    :: Energy                             = 0.0 ! Energy Consumption Joules
+  REAL    :: QLoad                              = 0.0 ! Load Side heat transfer rate Watts
+  REAL    :: QLoadEnergy                        = 0.0 ! Load Side heat transfer Joules
+  REAL    :: QSource                            = 0.0 ! Source Side heat transfer rate Watts
+  REAL    :: QSourceEnergy                      = 0.0 ! Source Side heat transfer Joules
+  REAL    :: LoadSideWaterInletTemp             = 0.0 ! Load Side outlet temperature °C
+  REAL    :: SourceSideWaterInletTemp           = 0.0 ! Source Side outlet temperature °C
+  REAL    :: LoadSideWaterOutletTemp            = 0.0 ! Load Side outlet temperature °C
+  REAL    :: SourceSideWaterOutletTemp          = 0.0 ! Source Side outlet temperature °C
+  REAL    :: LoadSidemdot                       = 0.0 ! Mass flow rate of the cooling water in Load Side Kg/s
+  REAL    :: SourceSidemdot                     = 0.0 ! Mass flow rate of chilled water in Eavporator Kg/s
   INTEGER :: WasOn                              = 0   ! On reporting Flag
 END TYPE ReportVars
 
@@ -123,15 +123,15 @@ END TYPE ReportVars
   INTEGER            :: GSHPRefrigIndex=0
 
   INTEGER         :: NumGSHPs                      = 0   ! number of Gshps specified in input
-  REAL(r64)       :: LoadSideWaterMassFlowRate     = 0.0 ! Load Side mass flow rate, water side Kg/s
-  REAL(r64)       :: SourceSideWaterMassFlowRate   = 0.0 ! Source Side mass flow rate, water side Kg/s
-  REAL(r64)       :: Power                         = 0.0 ! power consumption Watts Joules/sec
-  REAL(r64)       :: QLoad                         = 0.0 ! heat rejection from Load Side coil Joules
-  REAL(r64)       :: QSource                       = 0.0 ! cooling capacity Joules
-  REAL(r64)       :: SourceSideWaterOutletTemp     = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)       :: SourceSideWaterInletTemp      = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)       :: LoadSideWaterOutletTemp       = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)       :: LoadSideWaterInletTemp        = 0.0 ! Source Side outlet temperature °C
+  REAL       :: LoadSideWaterMassFlowRate     = 0.0 ! Load Side mass flow rate, water side Kg/s
+  REAL       :: SourceSideWaterMassFlowRate   = 0.0 ! Source Side mass flow rate, water side Kg/s
+  REAL       :: Power                         = 0.0 ! power consumption Watts Joules/sec
+  REAL       :: QLoad                         = 0.0 ! heat rejection from Load Side coil Joules
+  REAL       :: QSource                       = 0.0 ! cooling capacity Joules
+  REAL       :: SourceSideWaterOutletTemp     = 0.0 ! Source Side outlet temperature °C
+  REAL       :: SourceSideWaterInletTemp      = 0.0 ! Source Side outlet temperature °C
+  REAL       :: LoadSideWaterOutletTemp       = 0.0 ! Source Side outlet temperature °C
+  REAL       :: LoadSideWaterInletTemp        = 0.0 ! Source Side outlet temperature °C
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
 
@@ -181,7 +181,7 @@ SUBROUTINE SimHPWatertoWaterHEATING(GSHPType, GSHPName, CompIndex,FirstHVACItera
   INTEGER, INTENT(IN)          :: LoopNum
   INTEGER, INTENT(INOUT)       :: CompIndex
   LOGICAL, INTENT(INOUT) :: InitLoopEquip   ! If not zero, calculate the max load for operating conditions
-  REAL(r64), INTENT(INOUT)    :: MyLoad          ! loop demand component will meet
+  REAL, INTENT(INOUT)    :: MyLoad          ! loop demand component will meet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -194,9 +194,9 @@ SUBROUTINE SimHPWatertoWaterHEATING(GSHPType, GSHPName, CompIndex,FirstHVACItera
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE     :: GetInput = .TRUE.    ! then TRUE, calls subroutine to read input file.
-  REAL(r64)         :: MinCap               ! W - minimum operating capacity of GSHP
-  REAL(r64)         :: MaxCap               ! W - maximum operating capacity of GSHP
-  REAL(r64)         :: OptCap               ! W - optimal operating capacity of GSHP
+  REAL         :: MinCap               ! W - minimum operating capacity of GSHP
+  REAL         :: MaxCap               ! W - maximum operating capacity of GSHP
+  REAL         :: OptCap               ! W - optimal operating capacity of GSHP
   INTEGER                      :: GSHPNum
 
 
@@ -311,7 +311,7 @@ SUBROUTINE GetGshpInput
   INTEGER                     :: NumNums                   ! Number of elements in the numeric array
   INTEGER                     :: IOStat                    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(5)   :: AlphArray !character string data
-  REAL(r64),                        DIMENSION(23)  :: NumArray  !numeric data
+  REAL,                        DIMENSION(23)  :: NumArray  !numeric data
 
   LOGICAL, SAVE :: ErrorsFound = .false.
   LOGICAL       :: IsNotOk          ! Flag to verify name
@@ -568,7 +568,7 @@ SUBROUTINE InitGshp(GSHPNum)
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)  :: MyEnvrnFlag
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)  :: MyPlanScanFlag
   LOGICAL, SAVE    :: MyOneTimeFlag = .TRUE.
-  REAL(r64)        :: rho  ! local fluid density
+  REAL        :: rho  ! local fluid density
 
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyPlanScanFlag(NumGSHPs))
@@ -606,7 +606,7 @@ SUBROUTINE InitGshp(GSHPNum)
                          'InitGshp')
     GSHP(GSHPNum)%LoadSideDesignMassFlow   = GSHP(GSHPNum)%LoadSideVolFlowRate * rho
 
-    CALL InitComponentNodes( 0.d0, GSHP(GSHPNum)%LoadSideDesignMassFlow, &
+    CALL InitComponentNodes( 0., GSHP(GSHPNum)%LoadSideDesignMassFlow, &
                                     GSHP(GSHPNum)%LoadSideInletNodeNum, &
                                     GSHP(GSHPNum)%LoadSideOutletNodeNum, &
                                     GSHP(GSHPNum)%LoadLoopNum, &
@@ -620,7 +620,7 @@ SUBROUTINE InitGshp(GSHPNum)
                          'InitGshp')
     GSHP(GSHPNum)%SourceSideDesignMassFlow = GSHP(GSHPNum)%SourceSideVolFlowRate * rho
 
-    CALL InitComponentNodes( 0.d0,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
+    CALL InitComponentNodes( 0.,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
                                  GSHP(GSHPNum)%SourceSideInletNodeNum, &
                                  GSHP(GSHPNum)%SourceSideOutletNodeNum, &
                                  GSHP(GSHPNum)%SourceLoopNum, &
@@ -679,14 +679,14 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
   CHARACTER(len=*), INTENT(IN) :: GshpType  ! type ofGSHP
   CHARACTER(len=*), INTENT(IN) :: GshpName  ! user specified name ofGSHP
   INTEGER  , INTENT(IN)     :: GSHPNum      ! GSHP Number
-  REAL(r64)             :: MyLoad           ! Operating Load
+  REAL             :: MyLoad           ! Operating Load
   LOGICAL, INTENT(IN) :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER        :: gamma            = 1.114d0             ! Expnasion Coefficient
-  REAL(r64), PARAMETER        :: HeatBalTol       = 0.0005d0
-  REAL(r64), PARAMETER        :: RelaxParam       = 0.6d0
-  REAL(r64), PARAMETER        :: SmallNum         = 1.0d-20
+  REAL, PARAMETER        :: gamma            = 1.114             ! Expnasion Coefficient
+  REAL, PARAMETER        :: HeatBalTol       = 0.0005
+  REAL, PARAMETER        :: RelaxParam       = 0.6
+  REAL, PARAMETER        :: SmallNum         = 1.0d-20
   INTEGER, PARAMETER     :: IterationLimit   = 500
 
 
@@ -697,44 +697,44 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: SourceSideEffect         ! Source Side effectiveness
-  REAL(r64)              :: LoadSideEffect           ! Load Side effectiveness
-  REAL(r64)              :: SourceSideTemp           ! Source Side temperature °C
-  REAL(r64)              :: LoadSideTemp             ! Load Side temperature °C
-  REAL(r64)              :: SourceSideUA             ! Source Side heat transfer coefficient    w/k
-  REAL(r64)              :: LoadSideUA               ! Load Side heat transfer coefficient W/k
-  REAL(r64)              :: SourceSidePressure       ! Source Side pressure Pascals
-  REAL(r64)              :: LoadSidePressure         ! Load Side pressure Pascals
-  REAL(r64)              :: SuctionPr                ! Suction Pressure  pascals
-  REAL(r64)              :: DischargePr              ! Discharge Pressure pascals
-  REAL(r64)              :: CompressInletTemp        ! Compressor inlet temperature  °C
-  REAL(r64)              :: PressureDrop             ! Suction Pressure drop °C
-  REAL(r64)              :: ClearanceFactor          ! Clearance factor
-  REAL(r64)              :: PistonDisp               ! Compressor piston displacement  m3
-  REAL(r64)              :: ShTemp                   ! Superheat temperature °C
-  REAL(r64)              :: LosFac                   ! Loss factor used to define the electromechanical loss for compressor
-  REAL(r64)              :: MassRef                  ! mass flow rate of refrigerant Kg/s
-  REAL(r64)              :: SourceSideOutletEnth     ! Enthalpy at Source Side pressure Joules
-  REAL(r64)              :: LoadSideOutletEnth       ! Enthalpy at Condensor Pressure  Joules
-  REAL(r64)              :: initialQSource           ! Guess Source Side Heat rate Joules
-  REAL(r64)              :: initialQLoad             ! Guess Load Side Heat rate Joules
-  REAL(r64)              :: qual                     ! quality
-  REAL(r64)              :: SuperHeatEnth
-  REAL(r64)              :: T110
-  REAL(r64)              :: T111
-  REAL(r64)              :: CompSuctionTemp
-  REAL(r64)              :: CompSuctionEnth
-  REAL(r64)              :: CompSuctionDensity
-  REAL(r64)              :: PowerLosses
-  REAL(r64)              :: CompSuctionSatTemp
-  REAL(r64)              :: HighPressCutOff
-  REAL(r64)              :: LowPressCutOff
+  REAL              :: SourceSideEffect         ! Source Side effectiveness
+  REAL              :: LoadSideEffect           ! Load Side effectiveness
+  REAL              :: SourceSideTemp           ! Source Side temperature °C
+  REAL              :: LoadSideTemp             ! Load Side temperature °C
+  REAL              :: SourceSideUA             ! Source Side heat transfer coefficient    w/k
+  REAL              :: LoadSideUA               ! Load Side heat transfer coefficient W/k
+  REAL              :: SourceSidePressure       ! Source Side pressure Pascals
+  REAL              :: LoadSidePressure         ! Load Side pressure Pascals
+  REAL              :: SuctionPr                ! Suction Pressure  pascals
+  REAL              :: DischargePr              ! Discharge Pressure pascals
+  REAL              :: CompressInletTemp        ! Compressor inlet temperature  °C
+  REAL              :: PressureDrop             ! Suction Pressure drop °C
+  REAL              :: ClearanceFactor          ! Clearance factor
+  REAL              :: PistonDisp               ! Compressor piston displacement  m3
+  REAL              :: ShTemp                   ! Superheat temperature °C
+  REAL              :: LosFac                   ! Loss factor used to define the electromechanical loss for compressor
+  REAL              :: MassRef                  ! mass flow rate of refrigerant Kg/s
+  REAL              :: SourceSideOutletEnth     ! Enthalpy at Source Side pressure Joules
+  REAL              :: LoadSideOutletEnth       ! Enthalpy at Condensor Pressure  Joules
+  REAL              :: initialQSource           ! Guess Source Side Heat rate Joules
+  REAL              :: initialQLoad             ! Guess Load Side Heat rate Joules
+  REAL              :: qual                     ! quality
+  REAL              :: SuperHeatEnth
+  REAL              :: T110
+  REAL              :: T111
+  REAL              :: CompSuctionTemp
+  REAL              :: CompSuctionEnth
+  REAL              :: CompSuctionDensity
+  REAL              :: PowerLosses
+  REAL              :: CompSuctionSatTemp
+  REAL              :: HighPressCutOff
+  REAL              :: LowPressCutOff
   CHARACTER(len=25)      :: ErrString
-  REAL(r64)              :: DutyFactor
+  REAL              :: DutyFactor
   INTEGER                :: IterationCount
 
-  REAL(r64), SAVE :: CurrentSimTime = 0.0
-  REAL(r64), SAVE :: PrevSimTime = 0.0
+  REAL, SAVE :: CurrentSimTime = 0.0
+  REAL, SAVE :: PrevSimTime = 0.0
   LOGICAL, SAVE          :: OneTimeFlag = .TRUE.
   ! Nodes
   INTEGER                :: SourceSideInletNode      ! Source Side inlet node number, water side
@@ -743,8 +743,8 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
   INTEGER                :: LoadSideOutletNode       ! Load Side outlet node number, water side
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: CpSourceSide ! local temporary for fluid specific heat
-  REAL(r64) :: CpLoadSide ! local temporary for fluid specific heat
+  REAL :: CpSourceSide ! local temporary for fluid specific heat
+  REAL :: CpLoadSide ! local temporary for fluid specific heat
 
   !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
   PressureDrop      = GSHP(GSHPNum)%CompSucPressDrop
@@ -850,12 +850,12 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
 !*******Set flow based on "run" flags**********
 ! Set flows if the heat pump is not running
   IF( .NOT. GSHP(GSHPNum)%MustRun )THEN
-    LoadSideWaterMassFlowRate = 0.d0
+    LoadSideWaterMassFlowRate = 0.
     Call SetComponentFlowRate(LoadSideWaterMassFlowRate, &
           LoadSideInletNode, LoadSideOutletNode, &
           GSHP(GSHPNum)%LoadLoopNum, GSHP(GSHPNum)%LoadLoopSideNum, &
           GSHP(GSHPNum)%LoadBranchNum, GSHP(GSHPNum)%LoadCompNum)
-    SourceSideWaterMassFlowRate = 0.d0
+    SourceSideWaterMassFlowRate = 0.
     Call SetComponentFlowRate(SourceSideWaterMassFlowRate, &
           SourceSideInletNode, SourceSideOutletNode, &
           GSHP(GSHPNum)%SourceLoopNum, GSHP(GSHPNum)%SourceLoopSideNum, &
@@ -890,12 +890,12 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
     !if there's no flow, turn the "heat pump off"
     IF(LoadSideWaterMassFlowRate < MassFlowTolerance .OR. &
          SourceSideWaterMassFlowRate < MassFlowTolerance)THEN
-        LoadSideWaterMassFlowRate = 0.d0
+        LoadSideWaterMassFlowRate = 0.
         Call SetComponentFlowRate(LoadSideWaterMassFlowRate, &
               LoadSideInletNode, LoadSideOutletNode, &
               GSHP(GSHPNum)%LoadLoopNum, GSHP(GSHPNum)%LoadLoopSideNum, &
               GSHP(GSHPNum)%LoadBranchNum, GSHP(GSHPNum)%LoadCompNum)
-        SourceSideWaterMassFlowRate = 0.d0
+        SourceSideWaterMassFlowRate = 0.
         Call SetComponentFlowRate(SourceSideWaterMassFlowRate, &
               SourceSideInletNode, SourceSideOutletNode, &
               GSHP(GSHPNum)%SourceLoopNum, GSHP(GSHPNum)%SourceLoopSideNum, &
@@ -1015,7 +1015,7 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
 
       CompSuctionEnth = GetSupHeatEnthalpyRefrig(GSHPRefrigerant,CompSuctionTemp,SuctionPr,  &
          GSHPRefrigIndex,'CalcGSHPModel:CompSuctionTemp')
-      IF (ABS(CompsuctionEnth-SuperHeatEnth)/SuperHeatEnth < .0001d0)  THEN
+      IF (ABS(CompsuctionEnth-SuperHeatEnth)/SuperHeatEnth < .0001)  THEN
           EXIT LOOP
       END IF
 
@@ -1030,7 +1030,7 @@ SUBROUTINE CalcGshpModel( GSHPType, GSHPName, GSHPNum, MyLoad,FirstHVACIteration
     CompSuctionDensity = GetSupHeatDensityRefrig(GSHPRefrigerant, CompSuctionTemp, SuctionPr,   &
        GSHPRefrigIndex,'CalcGSHPModel:CompSuctionTemp')
     MassRef = PistonDisp * CompSuctionDensity * (1+ClearanceFactor-ClearanceFactor* &
-              ((DischargePr/SuctionPr)**(1.d0/gamma)))
+              ((DischargePr/SuctionPr)**(1./gamma)))
 
     ! Find the  Source Side Heat Transfer
     QSource = MassRef * ( SourceSideOutletEnth - LoadSideOutletEnth )
@@ -1195,7 +1195,7 @@ SUBROUTINE UpdateGSHPRecords(GSHPNum)
   INTEGER     :: SourceSideOutletNode     ! Source Side outlet node number, water side
   INTEGER     :: LoadSideInletNode        ! Load Side inlet node number, water side
   INTEGER     :: LoadSideOutletNode       ! Load Side outlet node number, water side
-  REAL(r64) :: ReportingConstant
+  REAL :: ReportingConstant
 
     LoadSideInletNode    = GSHP(GSHPNum)%LoadSideInletNodeNum
     LoadSideOutletNode   = GSHP(GSHPNum)%LoadSideOutletNodeNum
@@ -1298,37 +1298,37 @@ TYPE GshpSpecs   ! Needs Some Modifications talk with Dr.Fisher and decide....
   INTEGER            :: WWHPPlantTypeOfNum
   LOGICAL            :: Available           = .false. ! need an array of logicals--load identifiers of available equipment
   LOGICAL            :: ON                  = .false. ! simulate the machine at it's operating part load ratio
-  REAL(r64)          :: COP                     = 0.0 ! Coefficeint of Performance of the machine
-  REAL(r64)          :: NomCap                  = 0.0 ! Nomial Capcity of the HeatPump
-  REAL(r64)          :: MinPartLoadRat          = 0.0 ! Minimum operating Part Load Ratio
-  REAL(r64)          :: MaxPartLoadRat          = 0.0 ! Maximum operating Part Load Ratio
-  REAL(r64)          :: OptPartLoadRat          = 0.0 ! Optimal operating Part Load Ratio
-  REAL(r64)          :: LoadSideVolFlowRate     = 0.0 ! Design Flow Rate on the Load side
-  REAL(r64)          :: LoadSideDesignMassFlow  = 0.d0 ! Design flow rate (kg/s)
-  REAL(r64)          :: SourceSideVolFlowRate   = 0.0 ! Design Flow Rate on th Source Side
-  REAL(r64)          :: SourceSideDesignMassFlow = 0.d0 ! Design flow rate (kg/s)
+  REAL          :: COP                     = 0.0 ! Coefficeint of Performance of the machine
+  REAL          :: NomCap                  = 0.0 ! Nomial Capcity of the HeatPump
+  REAL          :: MinPartLoadRat          = 0.0 ! Minimum operating Part Load Ratio
+  REAL          :: MaxPartLoadRat          = 0.0 ! Maximum operating Part Load Ratio
+  REAL          :: OptPartLoadRat          = 0.0 ! Optimal operating Part Load Ratio
+  REAL          :: LoadSideVolFlowRate     = 0.0 ! Design Flow Rate on the Load side
+  REAL          :: LoadSideDesignMassFlow  = 0. ! Design flow rate (kg/s)
+  REAL          :: SourceSideVolFlowRate   = 0.0 ! Design Flow Rate on th Source Side
+  REAL          :: SourceSideDesignMassFlow = 0. ! Design flow rate (kg/s)
   INTEGER            :: SourceSideInletNodeNum  = 0   ! Node number on the inlet side of the plant
   INTEGER            :: SourceSideOutletNodeNum = 0   ! Node number on the outlet side of the plant
   INTEGER            :: LoadSideInletNodeNum    = 0   ! Node number on the inlet side of the Load Side
   INTEGER            :: LoadSideOutletNodeNum   = 0   ! Node number on the outlet side of the Load Side
-  REAL(r64)          :: SourceSideUACoeff       = 0.0 ! Source Side heat transfer coeff
-  REAL(r64)          :: LoadSideUACoeff         = 0.0 ! Load Side heat transfer coeff
-  REAL(r64)          :: CompPistonDisp          = 0.0 ! compressor piston displacement
-  REAL(r64)          :: CompClearanceFactor     = 0.0 ! compressor clearance factor
-  REAL(r64)          :: CompSucPressDrop        = 0.0 ! deltap ,  compressor suction and discharge pressure drop
-  REAL(r64)          :: SuperheatTemp           = 0.0 ! deltatsh , super heating
-  REAL(r64)          :: PowerLosses             = 0.0 ! constant part of electro mechanical power losses
-  REAL(r64)          :: LossFactor              = 0.0 ! loss factor used ot define the electro mechanical loss
+  REAL          :: SourceSideUACoeff       = 0.0 ! Source Side heat transfer coeff
+  REAL          :: LoadSideUACoeff         = 0.0 ! Load Side heat transfer coeff
+  REAL          :: CompPistonDisp          = 0.0 ! compressor piston displacement
+  REAL          :: CompClearanceFactor     = 0.0 ! compressor clearance factor
+  REAL          :: CompSucPressDrop        = 0.0 ! deltap ,  compressor suction and discharge pressure drop
+  REAL          :: SuperheatTemp           = 0.0 ! deltatsh , super heating
+  REAL          :: PowerLosses             = 0.0 ! constant part of electro mechanical power losses
+  REAL          :: LossFactor              = 0.0 ! loss factor used ot define the electro mechanical loss
                                                       !  that is supposed to be proportional to the theoretical power
-  REAL(r64)          :: HighPressCutOff         = 0.0 ! Maximum Design Pressure on the Load Side
-  REAL(r64)          :: LowPressCutOff          = 0.0 ! Minimum Design Pressure on the Source Side
+  REAL          :: HighPressCutOff         = 0.0 ! Maximum Design Pressure on the Load Side
+  REAL          :: LowPressCutOff          = 0.0 ! Minimum Design Pressure on the Source Side
 
       ! Added by Arun 6-27-02
   ! to implement cycletime
   LOGICAL            :: WasOn                     = .false.
   LOGICAL            :: IsOn                      = .false.
-  REAL(r64)   :: LastEventTime             = 0.0
-  REAL(r64)   :: CycleTime                 = 0.0
+  REAL   :: LastEventTime             = 0.0
+  REAL   :: CycleTime                 = 0.0
   LOGICAL      :: MustRun                         = .false.
   !loop topology variables
   INTEGER            :: SourceLoopNum           = 0 ! source side plant loop index number
@@ -1344,18 +1344,18 @@ END TYPE GshpSpecs
 
     ! Output Variables Type definition
 TYPE ReportVars
-  REAL(r64)    :: Power                       = 0.0 ! Power Consumption Watts
-  REAL(r64)    :: Energy                      = 0.0 ! Energy Consumption Joules
-  REAL(r64)    :: QLoad                       = 0.0 ! Load Side heat transfer rate Watts
-  REAL(r64)    :: QLoadEnergy                 = 0.0 ! Load Side heat transfer Joules
-  REAL(r64)    :: QSource                     = 0.0 ! Source Side heat transfer rate Watts
-  REAL(r64)    :: QSourceEnergy               = 0.0 ! Source Side heat transfer Joules
-  REAL(r64)    :: LoadSideWaterInletTemp      = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: SourceSideWaterInletTemp    = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)    :: LoadSideWaterOutletTemp     = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: SourceSideWaterOutletTemp   = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)    :: LoadSidemdot                = 0.0 ! Mass flow rate of the cooling water in Load Side kg/s
-  REAL(r64)    :: SourceSidemdot              = 0.0 ! Mass flow rate of chilled water in Eavporator kg/s
+  REAL    :: Power                       = 0.0 ! Power Consumption Watts
+  REAL    :: Energy                      = 0.0 ! Energy Consumption Joules
+  REAL    :: QLoad                       = 0.0 ! Load Side heat transfer rate Watts
+  REAL    :: QLoadEnergy                 = 0.0 ! Load Side heat transfer Joules
+  REAL    :: QSource                     = 0.0 ! Source Side heat transfer rate Watts
+  REAL    :: QSourceEnergy               = 0.0 ! Source Side heat transfer Joules
+  REAL    :: LoadSideWaterInletTemp      = 0.0 ! Load Side outlet temperature °C
+  REAL    :: SourceSideWaterInletTemp    = 0.0 ! Source Side outlet temperature °C
+  REAL    :: LoadSideWaterOutletTemp     = 0.0 ! Load Side outlet temperature °C
+  REAL    :: SourceSideWaterOutletTemp   = 0.0 ! Source Side outlet temperature °C
+  REAL    :: LoadSidemdot                = 0.0 ! Mass flow rate of the cooling water in Load Side kg/s
+  REAL    :: SourceSidemdot              = 0.0 ! Mass flow rate of chilled water in Eavporator kg/s
   INTEGER :: WasOn                       = 0   ! On reporting Flag
 END TYPE ReportVars
 
@@ -1369,15 +1369,15 @@ LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
     INTEGER            :: GSHPRefrigIndex=0
 
     INTEGER     :: NumGSHPs                  = 0   ! number of Gshps specified in input
-    REAL(r64)   :: LoadSideWaterMassFlowRate     = 0.0 ! Load Side mass flow rate, water side kg/s
-    REAL(r64)   :: SourceSideWaterMassFlowRate   = 0.0 ! Source Side mass flow rate, water side kg/s
-    REAL(r64)   :: Power                         = 0.0 ! power consumption Watts
-    REAL(r64)   :: QLoad                         = 0.0 ! heat rejection from Load Side coil Watts
-    REAL(r64)   :: QSource                       = 0.0 ! cooling capacity Watts
-    REAL(r64)   :: SourceSideWaterOutletTemp     = 0.0 ! Source Side outlet temperature °C
-    REAL(r64)   :: SourceSideWaterInletTemp      = 0.0 ! Source Side outlet temperature °C
-    REAL(r64)   :: LoadSideWaterOutletTemp       = 0.0 ! Source Side outlet temperature °C
-    REAL(r64)   :: LoadSidewaterInletTemp        = 0.0 ! Source Side outlet temperature °C
+    REAL   :: LoadSideWaterMassFlowRate     = 0.0 ! Load Side mass flow rate, water side kg/s
+    REAL   :: SourceSideWaterMassFlowRate   = 0.0 ! Source Side mass flow rate, water side kg/s
+    REAL   :: Power                         = 0.0 ! power consumption Watts
+    REAL   :: QLoad                         = 0.0 ! heat rejection from Load Side coil Watts
+    REAL   :: QSource                       = 0.0 ! cooling capacity Watts
+    REAL   :: SourceSideWaterOutletTemp     = 0.0 ! Source Side outlet temperature °C
+    REAL   :: SourceSideWaterInletTemp      = 0.0 ! Source Side outlet temperature °C
+    REAL   :: LoadSideWaterOutletTemp       = 0.0 ! Source Side outlet temperature °C
+    REAL   :: LoadSidewaterInletTemp        = 0.0 ! Source Side outlet temperature °C
 
 
 
@@ -1426,7 +1426,7 @@ SUBROUTINE SimHPWatertoWaterCOOLING(GSHPType,GSHPName,CompIndex, FirstHVACIterat
   INTEGER, INTENT(INOUT)       :: CompIndex
   LOGICAL, INTENT(IN)          :: FirstHVACIteration
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip  ! If not zero, calculate the max load for operating conditions
-  REAL(r64), INTENT(INOUT)     :: MyLoad         ! loop demand component will meet
+  REAL, INTENT(INOUT)     :: MyLoad         ! loop demand component will meet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1439,9 +1439,9 @@ SUBROUTINE SimHPWatertoWaterCOOLING(GSHPType,GSHPName,CompIndex, FirstHVACIterat
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE     :: GetInput = .TRUE.  ! then TRUE, calls subroutine to read input file.
-  REAL(r64)         :: MinCap             ! W - minimum operating capacity of GSHP
-  REAL(r64)         :: MaxCap             ! W - maximum operating capacity of GSHP
-  REAL(r64)         :: OptCap             ! W - optimal operating capacity of GSHP
+  REAL         :: MinCap             ! W - minimum operating capacity of GSHP
+  REAL         :: MaxCap             ! W - maximum operating capacity of GSHP
+  REAL         :: OptCap             ! W - optimal operating capacity of GSHP
   INTEGER           :: GSHPNum
 
     !Get input from IDF
@@ -1554,7 +1554,7 @@ SUBROUTINE GetGshpInput
   INTEGER                     :: NumNums                   ! Number of elements in the numeric array
   INTEGER                     :: IOStat                    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(5)   :: AlphArray !character string data
-  REAL(r64),                        DIMENSION(23)  :: NumArray  !numeric data
+  REAL,                        DIMENSION(23)  :: NumArray  !numeric data
 
   LOGICAL, SAVE :: ErrorsFound = .false.
   LOGICAL       :: IsNotOk          ! Flag to verify name
@@ -1828,7 +1828,7 @@ SUBROUTINE InitGshp(GSHPNum)
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)  :: MyEnvrnFlag
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)  :: MyPlanScanFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
-  REAL(r64)  :: rho ! local fluid density
+  REAL  :: rho ! local fluid density
     LOGICAL :: errFlag
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyPlanScanFlag(NumGSHPs))
@@ -1889,7 +1889,7 @@ SUBROUTINE InitGshp(GSHPNum)
                          'InitGshp')
     GSHP(GSHPNum)%LoadSideDesignMassFlow   = GSHP(GSHPNum)%LoadSideVolFlowRate * rho
 
-    CALL InitComponentNodes( 0.d0, GSHP(GSHPNum)%LoadSideDesignMassFlow, &
+    CALL InitComponentNodes( 0., GSHP(GSHPNum)%LoadSideDesignMassFlow, &
                                     GSHP(GSHPNum)%LoadSideInletNodeNum, &
                                     GSHP(GSHPNum)%LoadSideOutletNodeNum, &
                                     GSHP(GSHPNum)%LoadLoopNum, &
@@ -1903,7 +1903,7 @@ SUBROUTINE InitGshp(GSHPNum)
                          'InitGshp')
     GSHP(GSHPNum)%SourceSideDesignMassFlow = GSHP(GSHPNum)%SourceSideVolFlowRate * rho
 
-    CALL InitComponentNodes( 0.d0,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
+    CALL InitComponentNodes( 0.,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
                                  GSHP(GSHPNum)%SourceSideInletNodeNum, &
                                  GSHP(GSHPNum)%SourceSideOutletNodeNum, &
                                  GSHP(GSHPNum)%SourceLoopNum, &
@@ -1962,14 +1962,14 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
   CHARACTER(len=*), INTENT(IN) :: GshpType  ! type ofGSHP
   CHARACTER(len=*), INTENT(IN) :: GshpName  ! user specified name ofGSHP
   INTEGER, INTENT(IN)   :: GSHPNum                      ! GSHP Number
-  REAL(r64)             :: MyLoad                       ! Operating Load
+  REAL             :: MyLoad                       ! Operating Load
   LOGICAL, INTENT(IN)   :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER        :: gamma            = 1.114d0    ! Expnasion Coefficient
-  REAL(r64), PARAMETER        :: HeatBalTol       = 0.0005d0
-  REAL(r64), PARAMETER        :: RelaxParam       = 0.6d0
-  REAL(r64), PARAMETER        :: SmallNum         = 1.0d-20
+  REAL, PARAMETER        :: gamma            = 1.114    ! Expnasion Coefficient
+  REAL, PARAMETER        :: HeatBalTol       = 0.0005
+  REAL, PARAMETER        :: RelaxParam       = 0.6
+  REAL, PARAMETER        :: SmallNum         = 1.0d-20
   INTEGER, PARAMETER          :: IterationLimit   = 500
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1979,45 +1979,45 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL(r64)              :: SourceSideEffect         ! Source Side effectiveness
-   REAL(r64)              :: LoadSideEffect           ! Load Side effectiveness
-   REAL(r64)              :: SourceSideRefridgTemp    ! Source Side temperature
-   REAL(r64)              :: LoadSideRefridgTemp      ! Load Side temperature
-   REAL(r64)              :: SourceSideUA             ! Source Side heat transfer coefficient
-   REAL(r64)              :: LoadSideUA               ! Load Side heat transfer coefficient
-   REAL(r64)              :: SourceSidePressure       ! Source Side pressure
-   REAL(r64)              :: LoadSidePressure         ! Load Side pressure
-   REAL(r64)              :: SuctionPr                ! Suction Pressure
-   REAL(r64)              :: DischargePr              ! Discharge Pressure
-   REAL(r64)              :: CompressInletTemp        ! Compressor inlet temperature
-   REAL(r64)              :: PressureDrop             ! Suction Pressure drop
-   REAL(r64)              :: ClearanceFactor          ! Clearance factor
-   REAL(r64)              :: PistonDisp               ! Compressor piston displacement
-   REAL(r64)              :: ShTemp                   ! Superheat temperature
-   REAL(r64)              :: LosFac                   ! Loss factor used to define the electromechanical loss for compressor
-   REAL(r64)              :: MassRef                  ! mass flow rate of refrigerant
-   REAL(r64)              :: SourceSideOutletEnth     ! Enthalpy at Source Side pressure
-   REAL(r64)              :: LoadSideOutletEnth       ! Enthalpy at Condensor Pressure
-   REAL(r64)              :: initialQSource           ! Guess Source Side Heat rate
-   REAL(r64)              :: initialQLoad             ! Guess Load Side Heat rate
-   REAL(r64)              :: qual                     ! quality
-   REAL(r64)              :: COP
-   REAL(r64)              :: SuperHeatEnth
-   REAL(r64)              :: T110
-   REAL(r64)              :: T111
-   REAL(r64)              :: CompSuctionTemp
-   REAL(r64)              :: CompSuctionEnth
-   REAL(r64)              :: CompSuctionDensity
-   REAL(r64)              :: PowerLosses
-   REAL(r64)              :: CompSuctionSatTemp
-   REAL(r64)              :: HighPressCutOff
-   REAL(r64)              :: LowPressCutOff
+   REAL              :: SourceSideEffect         ! Source Side effectiveness
+   REAL              :: LoadSideEffect           ! Load Side effectiveness
+   REAL              :: SourceSideRefridgTemp    ! Source Side temperature
+   REAL              :: LoadSideRefridgTemp      ! Load Side temperature
+   REAL              :: SourceSideUA             ! Source Side heat transfer coefficient
+   REAL              :: LoadSideUA               ! Load Side heat transfer coefficient
+   REAL              :: SourceSidePressure       ! Source Side pressure
+   REAL              :: LoadSidePressure         ! Load Side pressure
+   REAL              :: SuctionPr                ! Suction Pressure
+   REAL              :: DischargePr              ! Discharge Pressure
+   REAL              :: CompressInletTemp        ! Compressor inlet temperature
+   REAL              :: PressureDrop             ! Suction Pressure drop
+   REAL              :: ClearanceFactor          ! Clearance factor
+   REAL              :: PistonDisp               ! Compressor piston displacement
+   REAL              :: ShTemp                   ! Superheat temperature
+   REAL              :: LosFac                   ! Loss factor used to define the electromechanical loss for compressor
+   REAL              :: MassRef                  ! mass flow rate of refrigerant
+   REAL              :: SourceSideOutletEnth     ! Enthalpy at Source Side pressure
+   REAL              :: LoadSideOutletEnth       ! Enthalpy at Condensor Pressure
+   REAL              :: initialQSource           ! Guess Source Side Heat rate
+   REAL              :: initialQLoad             ! Guess Load Side Heat rate
+   REAL              :: qual                     ! quality
+   REAL              :: COP
+   REAL              :: SuperHeatEnth
+   REAL              :: T110
+   REAL              :: T111
+   REAL              :: CompSuctionTemp
+   REAL              :: CompSuctionEnth
+   REAL              :: CompSuctionDensity
+   REAL              :: PowerLosses
+   REAL              :: CompSuctionSatTemp
+   REAL              :: HighPressCutOff
+   REAL              :: LowPressCutOff
   CHARACTER(len=25)      :: ErrString
-  REAL(r64)              :: DutyFactor
+  REAL              :: DutyFactor
   INTEGER                :: IterationCount
 
-  REAL(r64), SAVE :: CurrentSimTime = 0.0
-  REAL(r64), SAVE :: PrevSimTime = 0.0
+  REAL, SAVE :: CurrentSimTime = 0.0
+  REAL, SAVE :: PrevSimTime = 0.0
   LOGICAL, SAVE          :: OneTimeFlag = .TRUE.
   ! Nodes
   INTEGER                :: SourceSideInletNode      ! Source Side inlet node number, water side
@@ -2026,8 +2026,8 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
   INTEGER                :: LoadSideOutletNode       ! Load Side outlet node number, water side
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: CpSourceSide ! local temporary for fluid specific heat
-  REAL(r64) :: CpLoadSide ! local temporary for fluid specific heat
+  REAL :: CpSourceSide ! local temporary for fluid specific heat
+  REAL :: CpLoadSide ! local temporary for fluid specific heat
 
   !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
   PressureDrop      = GSHP(GSHPNum)%CompSucPressDrop
@@ -2094,14 +2094,14 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
       ! Keep the pump truned off
       ELSE IF(.NOT. GSHP(GSHPNum)%WasOn .AND. ((GSHP(GSHPNum)%LastEventTime + GSHP(GSHPNum)%CycleTime)>CurrentSimTime)) THEN TIMEIF
         ! Even if there is zone demand we DO NOT run the heat pump for the cycle time
-        IF( ABS(MyLoad) > 0.d0 .AND. PlantLoop(LoopNum)%Loopside(LoopSideNum)%FlowLock == 0 )THEN
+        IF( ABS(MyLoad) > 0. .AND. PlantLoop(LoopNum)%Loopside(LoopSideNum)%FlowLock == 0 )THEN
           GSHP(GSHPNum)%MustRun = .FALSE.
           CALL ForceEquipment( GshpType, GshpName, .FALSE. ) !DSU?  still need? looks like a band aid?
         END IF
       END IF TIMEIF
     ELSE ! FIRSTHVAC .OR. WARMUP FLAG
 
-      IF(MyLoad < 0.d0)THEN
+      IF(MyLoad < 0.)THEN
         GSHP(GSHPNum)%MustRun = .TRUE.
       ELSE
         GSHP(GSHPNum)%MustRun = .FALSE.
@@ -2111,7 +2111,7 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
 
   ELSE !CYCLE TIME < SYS TIME STEP
 
-    IF(MyLoad < 0.d0)THEN
+    IF(MyLoad < 0.)THEN
       GSHP(GSHPNum)%MustRun = .TRUE.
       GSHP(GSHPNum)%IsOn = .TRUE.
     ELSE
@@ -2124,12 +2124,12 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
 !*******Set flow based on "flowlock" and "run" flags**********
 ! Set flows if the heat pump is not running
   IF( .NOT. GSHP(GSHPNum)%MustRun )THEN
-    LoadSideWaterMassFlowRate = 0.d0
+    LoadSideWaterMassFlowRate = 0.
     Call SetComponentFlowRate(LoadSideWaterMassFlowRate, &
           LoadSideInletNode, LoadSideOutletNode, &
           GSHP(GSHPNum)%LoadLoopNum, GSHP(GSHPNum)%LoadLoopSideNum, &
           GSHP(GSHPNum)%LoadBranchNum, GSHP(GSHPNum)%LoadCompNum)
-    SourceSideWaterMassFlowRate = 0.d0
+    SourceSideWaterMassFlowRate = 0.
     Call SetComponentFlowRate(SourceSideWaterMassFlowRate, &
           SourceSideInletNode, SourceSideOutletNode, &
           GSHP(GSHPNum)%SourceLoopNum, GSHP(GSHPNum)%SourceLoopSideNum, &
@@ -2163,12 +2163,12 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
     !if there's no flow, turn the "heat pump off"
     IF(LoadSideWaterMassFlowRate < MassFlowTolerance .OR. &
       SourceSideWaterMassFlowRate < MassFlowTolerance)THEN
-        LoadSideWaterMassFlowRate = 0.d0
+        LoadSideWaterMassFlowRate = 0.
         Call SetComponentFlowRate(LoadSideWaterMassFlowRate, &
               LoadSideInletNode, LoadSideOutletNode, &
               GSHP(GSHPNum)%LoadLoopNum, GSHP(GSHPNum)%LoadLoopSideNum, &
               GSHP(GSHPNum)%LoadBranchNum, GSHP(GSHPNum)%LoadCompNum)
-        SourceSideWaterMassFlowRate = 0.d0
+        SourceSideWaterMassFlowRate = 0.
         Call SetComponentFlowRate(SourceSideWaterMassFlowRate, &
               SourceSideInletNode, SourceSideOutletNode, &
               GSHP(GSHPNum)%SourceLoopNum, GSHP(GSHPNum)%SourceLoopSideNum, &
@@ -2293,12 +2293,12 @@ SUBROUTINE CalcGshpModel(GSHPType,GSHPName,GSHPNum, MyLoad,FirstHVACIteration)
     T111 = CompSuctionSatTemp + 100
     ! Iterate to find the Suction State
     LOOP: DO
-      CompSuctionTemp = 0.5d0 * ( T110 + T111 )
+      CompSuctionTemp = 0.5 * ( T110 + T111 )
 
       CompSuctionEnth = GetSupHeatEnthalpyRefrig(GSHPRefrigerant,CompSuctionTemp,SuctionPr,  &
          GSHPRefrigIndex,'CalcGSHPModel:CompSuctionTemp')
 
-      IF (ABS(CompsuctionEnth-SuperHeatEnth)/SuperHeatEnth < .0001d0)  THEN
+      IF (ABS(CompsuctionEnth-SuperHeatEnth)/SuperHeatEnth < .0001)  THEN
         EXIT LOOP
       END IF
 
@@ -2477,7 +2477,7 @@ IMPLICIT NONE
   INTEGER     :: SourceSideOutletNode     ! Source Side outlet node number, water side
   INTEGER     :: LoadSideInletNode        ! Load Side inlet node number, water side
   INTEGER     :: LoadSideOutletNode       ! Load Side outlet node number, water side
-  REAL(r64) :: ReportingConstant
+  REAL :: ReportingConstant
 
     LoadSideInletNode    = GSHP(GSHPNum)%LoadSideInletNodeNum
     LoadSideOutletNode   = GSHP(GSHPNum)%LoadSideOutletNodeNum
@@ -2605,44 +2605,44 @@ TYPE GshpSpecs
   LOGICAL      :: WasOn               = .false. ! flag that the heat pump is ON during previous time step
   LOGICAL      :: IsOn                = .false. ! flag that the heat pump is ON during current time step
   LOGICAL      :: MustRun             = .false. ! flag that the heat pump is MUST RUN during current time step
-  REAL(r64)    :: LastEventTime       = 0.0     ! time of last event
-  REAL(r64)    :: CoolCycleTime       = 0.0     ! cycle time for the cooling coil
-  REAL(r64)    :: HeatCycleTime       = 0.0     ! cycle time for the heating coil
-  REAL(r64)    :: SourceSideDesignMassFlow = 0.d0 ! Design flow rate (kg/s)
-  REAL(r64)    :: LoadSideDesignMassFlow  = 0.d0 ! Design flow rate (kg/s)
-  REAL(r64)    :: RatedLoadVolFlowCool    = 0.0 ! Rated Cooling Load Side Volumetric Flow Rate [m3/s]
-  REAL(r64)    :: RatedSourceVolFlowCool  = 0.0 ! Rated Cooling Source Side Volumetric Flow Rate [m3/s]
-  REAL(r64)    :: RatedCapCool            = 0.0 ! Rated Cooling Capacity [W]
-  REAL(r64)    :: RatedPowerCool          = 0.0 ! Rated Cooling Power Consumption[W]
-  REAL(r64)    :: CoolCap1                = 0.0 ! 1st coefficient of the Cooling capacity performance curve
-  REAL(r64)    :: CoolCap2                = 0.0 ! 2nd coefficient of the Cooling capacity performance curve
-  REAL(r64)    :: CoolCap3                = 0.0 ! 3rd coefficient of the Cooling capacity performance curve
-  REAL(r64)    :: CoolCap4                = 0.0 ! 4th coefficient of the Cooling capacity performance curve
-  REAL(r64)    :: CoolCap5                = 0.0 ! 5th coefficient of the Cooling capacity performance curve
-  REAL(r64)    :: CoolPower1              = 0.0 ! 1st coefficient of the Cooling power consumption curve
-  REAL(r64)    :: CoolPower2              = 0.0 ! 2nd coefficient of the Cooling power consumption curve
-  REAL(r64)    :: CoolPower3              = 0.0 ! 3rd coefficient of the Cooling power consumption curve
-  REAL(r64)    :: CoolPower4              = 0.0 ! 4th coefficient of the Cooling power consumption curve
-  REAL(r64)    :: CoolPower5              = 0.0 ! 5th coefficient of the Cooling power consumption curve
+  REAL    :: LastEventTime       = 0.0     ! time of last event
+  REAL    :: CoolCycleTime       = 0.0     ! cycle time for the cooling coil
+  REAL    :: HeatCycleTime       = 0.0     ! cycle time for the heating coil
+  REAL    :: SourceSideDesignMassFlow = 0. ! Design flow rate (kg/s)
+  REAL    :: LoadSideDesignMassFlow  = 0. ! Design flow rate (kg/s)
+  REAL    :: RatedLoadVolFlowCool    = 0.0 ! Rated Cooling Load Side Volumetric Flow Rate [m3/s]
+  REAL    :: RatedSourceVolFlowCool  = 0.0 ! Rated Cooling Source Side Volumetric Flow Rate [m3/s]
+  REAL    :: RatedCapCool            = 0.0 ! Rated Cooling Capacity [W]
+  REAL    :: RatedPowerCool          = 0.0 ! Rated Cooling Power Consumption[W]
+  REAL    :: CoolCap1                = 0.0 ! 1st coefficient of the Cooling capacity performance curve
+  REAL    :: CoolCap2                = 0.0 ! 2nd coefficient of the Cooling capacity performance curve
+  REAL    :: CoolCap3                = 0.0 ! 3rd coefficient of the Cooling capacity performance curve
+  REAL    :: CoolCap4                = 0.0 ! 4th coefficient of the Cooling capacity performance curve
+  REAL    :: CoolCap5                = 0.0 ! 5th coefficient of the Cooling capacity performance curve
+  REAL    :: CoolPower1              = 0.0 ! 1st coefficient of the Cooling power consumption curve
+  REAL    :: CoolPower2              = 0.0 ! 2nd coefficient of the Cooling power consumption curve
+  REAL    :: CoolPower3              = 0.0 ! 3rd coefficient of the Cooling power consumption curve
+  REAL    :: CoolPower4              = 0.0 ! 4th coefficient of the Cooling power consumption curve
+  REAL    :: CoolPower5              = 0.0 ! 5th coefficient of the Cooling power consumption curve
   INTEGER      :: CoolCapNegativeCounter  = 0   ! Counter for number of times cooling capacity curve is <= 0.0
   INTEGER      :: CoolCapNegativeIndex    = 0   ! Index for recurring warning message regarding cooling capacity curve is <= 0.0
   INTEGER      :: CoolPowerNegativeCounter  = 0 ! Counter for number of times cooling power curve is <= 0.0
   INTEGER      :: CoolPowerNegativeIndex  = 0   ! Index for recurring warning message regarding cooling power curve is <= 0.0
 
-  REAL(r64)    :: RatedLoadVolFlowHeat    = 0.0 ! Rated Heating Load Side Volumetric Flow Rate [m3/s]
-  REAL(r64)    :: RatedSourceVolFlowHeat  = 0.0 ! Rated Heating Source Side Volumetric Flow Rate [m3/s]
-  REAL(r64)    :: RatedCapHeat            = 0.0 ! Rated Heating Capacity [W]
-  REAL(r64)    :: RatedPowerHeat          = 0.0 ! Rated Heating Compressor Power[W]
-  REAL(r64)    :: HeatCap1                = 0.0 ! 1st coefficient of the Heating capacity performance curve
-  REAL(r64)    :: HeatCap2                = 0.0 ! 2nd coefficient of the Heating capacity performance curve
-  REAL(r64)    :: HeatCap3                = 0.0 ! 3rd coefficient of the Heating capacity performance curve
-  REAL(r64)    :: HeatCap4                = 0.0 ! 4th coefficient of the Heating capacity performance curve
-  REAL(r64)    :: HeatCap5                = 0.0 ! 5th coefficient of the Heating capacity performance curve
-  REAL(r64)    :: HeatPower1              = 0.0 ! 1st coefficient of the Heating power consumption curve
-  REAL(r64)    :: HeatPower2              = 0.0 ! 2nd coefficient of the Heating power consumption curve
-  REAL(r64)    :: HeatPower3              = 0.0 ! 3rd coefficient of the Heating power consumption curve
-  REAL(r64)    :: HeatPower4              = 0.0 ! 4th coefficient of the Heating power consumption curve
-  REAL(r64)    :: HeatPower5              = 0.0 ! 5th coefficient of the Heating power consumption curve
+  REAL    :: RatedLoadVolFlowHeat    = 0.0 ! Rated Heating Load Side Volumetric Flow Rate [m3/s]
+  REAL    :: RatedSourceVolFlowHeat  = 0.0 ! Rated Heating Source Side Volumetric Flow Rate [m3/s]
+  REAL    :: RatedCapHeat            = 0.0 ! Rated Heating Capacity [W]
+  REAL    :: RatedPowerHeat          = 0.0 ! Rated Heating Compressor Power[W]
+  REAL    :: HeatCap1                = 0.0 ! 1st coefficient of the Heating capacity performance curve
+  REAL    :: HeatCap2                = 0.0 ! 2nd coefficient of the Heating capacity performance curve
+  REAL    :: HeatCap3                = 0.0 ! 3rd coefficient of the Heating capacity performance curve
+  REAL    :: HeatCap4                = 0.0 ! 4th coefficient of the Heating capacity performance curve
+  REAL    :: HeatCap5                = 0.0 ! 5th coefficient of the Heating capacity performance curve
+  REAL    :: HeatPower1              = 0.0 ! 1st coefficient of the Heating power consumption curve
+  REAL    :: HeatPower2              = 0.0 ! 2nd coefficient of the Heating power consumption curve
+  REAL    :: HeatPower3              = 0.0 ! 3rd coefficient of the Heating power consumption curve
+  REAL    :: HeatPower4              = 0.0 ! 4th coefficient of the Heating power consumption curve
+  REAL    :: HeatPower5              = 0.0 ! 5th coefficient of the Heating power consumption curve
   INTEGER      :: LoadSideInletNodeNum    = 0   ! Load Side Inlet Node
   INTEGER      :: LoadSideOutletNodeNum   = 0   ! Load Side Outlet Node
   INTEGER      :: SourceSideInletNodeNum  = 0   ! Source Side Inlet Node
@@ -2664,18 +2664,18 @@ END TYPE GshpSpecs
 
     ! Output Variables Type definition
 TYPE ReportVars
-  REAL(r64)    :: Power                   = 0.0 ! Power Consumption [W]
-  REAL(r64)    :: Energy                  = 0.0 ! Energy Consumption [J]
-  REAL(r64)    :: QLoad                   = 0.0 ! Load Side Heat Transfer Rate [W]
-  REAL(r64)    :: QLoadEnergy             = 0.0 ! Load Side Heat Transfer [J]
-  REAL(r64)    :: QSource                 = 0.0 ! Source Side Heat Transfer Rate [W]
-  REAL(r64)    :: QSourceEnergy           = 0.0 ! Source Side Heat Transfer [J]
-  REAL(r64)    :: LoadSideMassFlowRate    = 0.0 ! Load side volumetric flow rate m3/s
-  REAL(r64)    :: LoadSideInletTemp       = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: LoadSideOutletTemp      = 0.0 ! Load Side outlet temperature °C
-  REAL(r64)    :: SourceSideMassFlowRate  = 0.0 ! Source side volumetric flow rate m3/s
-  REAL(r64)    :: SourceSideInletTemp     = 0.0 ! Source Side outlet temperature °C
-  REAL(r64)    :: SourceSideOutletTemp    = 0.0 ! Source Side outlet temperature °C
+  REAL    :: Power                   = 0.0 ! Power Consumption [W]
+  REAL    :: Energy                  = 0.0 ! Energy Consumption [J]
+  REAL    :: QLoad                   = 0.0 ! Load Side Heat Transfer Rate [W]
+  REAL    :: QLoadEnergy             = 0.0 ! Load Side Heat Transfer [J]
+  REAL    :: QSource                 = 0.0 ! Source Side Heat Transfer Rate [W]
+  REAL    :: QSourceEnergy           = 0.0 ! Source Side Heat Transfer [J]
+  REAL    :: LoadSideMassFlowRate    = 0.0 ! Load side volumetric flow rate m3/s
+  REAL    :: LoadSideInletTemp       = 0.0 ! Load Side outlet temperature °C
+  REAL    :: LoadSideOutletTemp      = 0.0 ! Load Side outlet temperature °C
+  REAL    :: SourceSideMassFlowRate  = 0.0 ! Source side volumetric flow rate m3/s
+  REAL    :: SourceSideInletTemp     = 0.0 ! Source Side outlet temperature °C
+  REAL    :: SourceSideOutletTemp    = 0.0 ! Source Side outlet temperature °C
 END TYPE ReportVars
 
 TYPE (GSHPSpecs), ALLOCATABLE, DIMENSION(:)  ::GSHP
@@ -2742,10 +2742,10 @@ SUBROUTINE SimHPWatertoWaterSimple(GSHPType, GSHPTypeNum, GSHPName, GSHPNum, Fir
   INTEGER, INTENT(INOUT)        :: GSHPNum          ! Index of Equipment
   LOGICAL, INTENT(IN)           :: FirstHVACIteration
   LOGICAL, INTENT(INOUT)        :: InitLoopEquip    ! If not zero, calculate the max load for operating conditions
-  REAL(r64), INTENT(IN)              :: MyLoad           ! Loop demand component will meet
-  REAL(r64), INTENT(OUT)             :: MinCap           ! Minimum operating capacity of GSHP [W]
-  REAL(r64), INTENT(OUT)             :: MaxCap           ! Maximum operating capacity of GSHP [W]
-  REAL(r64), INTENT(OUT)             :: OptCap           ! Optimal operating capacity of GSHP [W]
+  REAL, INTENT(IN)              :: MyLoad           ! Loop demand component will meet
+  REAL, INTENT(OUT)             :: MinCap           ! Minimum operating capacity of GSHP [W]
+  REAL, INTENT(OUT)             :: MaxCap           ! Maximum operating capacity of GSHP [W]
+  REAL, INTENT(OUT)             :: OptCap           ! Optimal operating capacity of GSHP [W]
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2893,7 +2893,7 @@ SUBROUTINE GetWatertoWaterHPInput
   INTEGER                     :: NumNums                   ! Number of elements in the numeric array
   INTEGER                     :: IOStat                    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(5)   :: AlphArray ! character string data
-  REAL(r64),                   DIMENSION(15)  :: NumArray  ! numeric data
+  REAL,                   DIMENSION(15)  :: NumArray  ! numeric data
 
   LOGICAL, SAVE :: ErrorsFound = .false.
   LOGICAL       :: IsNotOk          ! Flag to verify name
@@ -3189,7 +3189,7 @@ SUBROUTINE InitWatertoWaterHP(GSHPTypeNum, GSHPName, GSHPNum, FirstHVACIteration
   CHARACTER(len=*), INTENT(IN) :: GSHPName  ! User Specified Name of GSHP
   INTEGER, INTENT(IN)          :: GSHPNum   ! GSHP Number
   LOGICAL, INTENT(IN)          :: FirstHVACIteration
-  REAL(r64), INTENT(IN)        :: MyLoad    ! Demand Load
+  REAL, INTENT(IN)        :: MyLoad    ! Demand Load
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3204,16 +3204,16 @@ SUBROUTINE InitWatertoWaterHP(GSHPTypeNum, GSHPName, GSHPNum, FirstHVACIteration
   INTEGER                :: LoadSideOutletNode      ! Load Side Outlet Node
   INTEGER                :: SourceSideInletNode     ! Source Side Inlet Node
   INTEGER                :: SourceSideOutletNode    ! Source Side Outlet Node
-  REAL(r64)  :: CycleTime               ! Cycle Time of the Coil (for cooling or heating)
+  REAL  :: CycleTime               ! Cycle Time of the Coil (for cooling or heating)
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)     :: MyEnvrnFlag   ! Flag required to keep track of initialization
   LOGICAL, SAVE          :: OneTimeFlag = .TRUE.    ! One Time Flag
-  REAL(r64), SAVE :: CurrentSimTime = 0.0    ! Current Simulation Time
-  REAL(r64), SAVE :: PrevSimTime = 0.0       ! Previous Simulation Time
+  REAL, SAVE :: CurrentSimTime = 0.0    ! Current Simulation Time
+  REAL, SAVE :: PrevSimTime = 0.0       ! Previous Simulation Time
   LOGICAL,  ALLOCATABLE, SAVE, DIMENSION(:)  :: MyPlanScanFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: rho ! local fluid density
+  REAL :: rho ! local fluid density
 
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyPlanScanFlag(NumGSHPs))
@@ -3285,7 +3285,7 @@ SUBROUTINE InitWatertoWaterHP(GSHPTypeNum, GSHPName, GSHPNum, FirstHVACIteration
       GSHP(GSHPNum)%SourceSideDesignMassFlow = GSHP(GSHPNum)%RatedSourceVolFlowCool * rho
     ENDIF
 
-    CALL InitComponentNodes( 0.d0, GSHP(GSHPNum)%LoadSideDesignMassFlow, &
+    CALL InitComponentNodes( 0., GSHP(GSHPNum)%LoadSideDesignMassFlow, &
                                     GSHP(GSHPNum)%LoadSideInletNodeNum, &
                                     GSHP(GSHPNum)%LoadSideOutletNodeNum, &
                                     GSHP(GSHPNum)%LoadLoopNum, &
@@ -3293,7 +3293,7 @@ SUBROUTINE InitWatertoWaterHP(GSHPTypeNum, GSHPName, GSHPNum, FirstHVACIteration
                                     GSHP(GSHPNum)%LoadBranchNum, &
                                     GSHP(GSHPNum)%LoadCompNum)
 
-    CALL InitComponentNodes( 0.d0,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
+    CALL InitComponentNodes( 0.,GSHP(GSHPNum)%SourceSideDesignMassFlow, &
                                  GSHP(GSHPNum)%SourceSideInletNodeNum, &
                                  GSHP(GSHPNum)%SourceSideOutletNodeNum, &
                                  GSHP(GSHPNum)%SourceLoopNum, &
@@ -3509,12 +3509,12 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)          :: GSHPNum   ! GSHP Number
-  REAL(r64), INTENT(IN)             :: MyLoad    ! Operating Load
+  REAL, INTENT(IN)             :: MyLoad    ! Operating Load
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
-  REAL(r64), PARAMETER   :: CelsiustoKelvin  = KelvinConv  ! Conversion from Celsius to Kelvin
-  REAL(r64), PARAMETER   :: Tref             = 283.15d0  ! Reference Temperature for performance curves,10C [K]
+  REAL, PARAMETER   :: CelsiustoKelvin  = KelvinConv  ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER   :: Tref             = 283.15  ! Reference Temperature for performance curves,10C [K]
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -3525,41 +3525,41 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: CoolCapRated                 ! Rated Cooling Capacity [W]
-  REAL(r64) :: CoolPowerRated               ! Rated Cooling Power Consumption[W]
-  REAL(r64) :: LoadSideVolFlowRateRated     ! Rated Load Side Volumetric Flow Rate [m3/s]
-  REAL(r64) :: SourceSideVolFlowRateRated   ! Rated Source Side Volumetric Flow Rate [m3/s]
-  REAL(r64) :: CoolCapCoeff1                ! 1st coefficient of the cooling capacity performance curve
-  REAL(r64) :: CoolCapCoeff2                ! 2nd coefficient of the cooling capacity performance curve
-  REAL(r64) :: CoolCapCoeff3                ! 3rd coefficient of the cooling capacity performance curve
-  REAL(r64) :: CoolCapCoeff4                ! 4th coefficient of the cooling capacity performance curve
-  REAL(r64) :: CoolCapCoeff5                ! 5th coefficient of the cooling capacity performance curve
-  REAL(r64) :: CoolPowerCoeff1              ! 1st coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff2              ! 2nd coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff3              ! 3rd coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff4              ! 4th coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff5              ! 5th coefficient of the cooling power consumption curve
+  REAL :: CoolCapRated                 ! Rated Cooling Capacity [W]
+  REAL :: CoolPowerRated               ! Rated Cooling Power Consumption[W]
+  REAL :: LoadSideVolFlowRateRated     ! Rated Load Side Volumetric Flow Rate [m3/s]
+  REAL :: SourceSideVolFlowRateRated   ! Rated Source Side Volumetric Flow Rate [m3/s]
+  REAL :: CoolCapCoeff1                ! 1st coefficient of the cooling capacity performance curve
+  REAL :: CoolCapCoeff2                ! 2nd coefficient of the cooling capacity performance curve
+  REAL :: CoolCapCoeff3                ! 3rd coefficient of the cooling capacity performance curve
+  REAL :: CoolCapCoeff4                ! 4th coefficient of the cooling capacity performance curve
+  REAL :: CoolCapCoeff5                ! 5th coefficient of the cooling capacity performance curve
+  REAL :: CoolPowerCoeff1              ! 1st coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff2              ! 2nd coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff3              ! 3rd coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff4              ! 4th coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff5              ! 5th coefficient of the cooling power consumption curve
 
-  REAL(r64) :: LoadSideMassFlowRate         ! Load Side Mass Flow Rate [kg/s]
-  REAL(r64) :: LoadSideInletTemp            ! Load Side Inlet Temperature [C]
-  REAL(r64) :: LoadSideOutletTemp           ! Load side Outlet Temperature [C]
-  REAL(r64) :: SourceSideMassFlowRate       ! Source Side Mass Flow Rate [kg/s]
-  REAL(r64) :: SourceSideInletTemp          ! Source Side Inlet Temperature [C]
-  REAL(r64) :: SourceSideOutletTemp         ! Source Side Outlet Temperature [C]
+  REAL :: LoadSideMassFlowRate         ! Load Side Mass Flow Rate [kg/s]
+  REAL :: LoadSideInletTemp            ! Load Side Inlet Temperature [C]
+  REAL :: LoadSideOutletTemp           ! Load side Outlet Temperature [C]
+  REAL :: SourceSideMassFlowRate       ! Source Side Mass Flow Rate [kg/s]
+  REAL :: SourceSideInletTemp          ! Source Side Inlet Temperature [C]
+  REAL :: SourceSideOutletTemp         ! Source Side Outlet Temperature [C]
 
-  REAL(r64) :: func1                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func2                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func3                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func4                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: Power                        ! Power Consumption [W]
-  REAL(r64) :: QLoad                        ! Cooling Capacity [W]
-  REAL(r64) :: QSource                      ! Source Side Heat Transfer Rate [W]
-  REAL(r64) :: PartLoadRatio                ! Part-Load Ratio
-  REAL(r64) :: ReportingConstant
-  REAL(r64) :: rhoLoadSide
-  REAL(r64) :: rhoSourceSide
-  REAL(r64) :: CpLoadSide
-  REAL(r64) :: CpSourceSide
+  REAL :: func1                        ! Portion of the heat transfer and power equation
+  REAL :: func2                        ! Portion of the heat transfer and power equation
+  REAL :: func3                        ! Portion of the heat transfer and power equation
+  REAL :: func4                        ! Portion of the heat transfer and power equation
+  REAL :: Power                        ! Power Consumption [W]
+  REAL :: QLoad                        ! Cooling Capacity [W]
+  REAL :: QSource                      ! Source Side Heat Transfer Rate [W]
+  REAL :: PartLoadRatio                ! Part-Load Ratio
+  REAL :: ReportingConstant
+  REAL :: rhoLoadSide
+  REAL :: rhoSourceSide
+  REAL :: CpLoadSide
+  REAL :: CpSourceSide
 
   !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE
   LoadSideVolFlowRateRated  = GSHP(GSHPNum)%RatedLoadVolFlowCool
@@ -3607,8 +3607,8 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
   Power = CoolPowerRated*(CoolPowerCoeff1 + (func1 * CoolPowerCoeff2) + (func2 * CoolPowerCoeff3) +   &
                                           (func3 * CoolPowerCoeff4) + (func4 * CoolPowerCoeff5))
 
-  IF ( (Qload .LE. 0.0d0 .OR. Power .LE. 0.0d0) .AND. .NOT. WarmupFlag) THEN
-    IF (Qload .LE. 0.0d0) THEN
+  IF ( (Qload .LE. 0.0 .OR. Power .LE. 0.0) .AND. .NOT. WarmupFlag) THEN
+    IF (Qload .LE. 0.0) THEN
       IF (GSHP(GSHPNum)%CoolCapNegativeCounter .LT. 1) THEN
         GSHP(GSHPNum)%CoolCapNegativeCounter = GSHP(GSHPNum)%CoolCapNegativeCounter + 1
         CALL ShowWarningError(TRIM(HPEqFitCooling)//' "'//TRIM(GSHP(GSHPNum)%Name)//'":')
@@ -3628,7 +3628,7 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
                      , GSHP(GSHPNum)%CoolCapNegativeIndex, Qload, Qload)
       END IF
     END IF
-    IF (Power .LE. 0.0d0) THEN
+    IF (Power .LE. 0.0) THEN
       IF (GSHP(GSHPNum)%CoolPowerNegativeCounter .LT. 1) THEN
         GSHP(GSHPNum)%CoolPowerNegativeCounter = GSHP(GSHPNum)%CoolPowerNegativeCounter + 1
         CALL ShowWarningError(TRIM(HPEqFitCooling)//' "'//TRIM(GSHP(GSHPNum)%Name)//'":')
@@ -3649,8 +3649,8 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
       END IF
     END IF
 
-    Qload = 0.0d0
-    Power = 0.0d0
+    Qload = 0.0
+    Power = 0.0
 
   END IF
 
@@ -3658,7 +3658,7 @@ SUBROUTINE CalcWatertoWaterHPCooling(GSHPNum, MyLoad)
 
   !Control Strategy
   IF( GSHP(GSHPNum)%CoolCycleTime  < TimeStepSys )THEN
-    IF(ABS(MyLoad) < QLoad .AND. Qload .NE. 0.0d0) THEN
+    IF(ABS(MyLoad) < QLoad .AND. Qload .NE. 0.0) THEN
       PartLoadRatio        = ABS(MyLoad)/QLoad
       QLoad                = ABS(MyLoad)
       Power                = Power * PartLoadRatio
@@ -3720,12 +3720,12 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)          :: GSHPNum   ! GSHP Number
-  REAL(r64), INTENT(IN)             :: MyLoad    ! Operating Load
+  REAL, INTENT(IN)             :: MyLoad    ! Operating Load
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
-  REAL(r64), PARAMETER   :: CelsiustoKelvin  = KelvinConv  ! Conversion from Celsius to Kelvin
-  REAL(r64), PARAMETER   :: Tref             = 283.15  ! Reference Temperature for performance curves,10C [K]
+  REAL, PARAMETER   :: CelsiustoKelvin  = KelvinConv  ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER   :: Tref             = 283.15  ! Reference Temperature for performance curves,10C [K]
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -3736,39 +3736,39 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: HeatCapRated                 ! Rated Heating Capacity [W]
-  REAL(r64) :: HeatPowerRated               ! Rated Heating Compressor Power[W]
-  REAL(r64) :: LoadSideVolFlowRateRated     ! Rated Load Side Volumetric Flow Rate [m3/s]
-  REAL(r64) :: SourceSideVolFlowRateRated   ! Rated Source Side Volumetric Flow Rate [m3/s]
-  REAL(r64) :: HeatCapCoeff1                ! 1st coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff2                ! 2nd coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff3                ! 3rd coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff4                ! 4th coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff5                ! 5th coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatPowerCoeff1              ! 1st coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff2              ! 2nd coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff3              ! 3rd coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff4              ! 4th coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff5              ! 5th coefficient of the heating power consumption curve
-  REAL(r64) :: LoadSideMassFlowRate         ! Load Side Mass Flow Rate [kg/s]
-  REAL(r64) :: LoadSideInletTemp            ! Load Side Inlet Temperature [C]
-  REAL(r64) :: LoadSideOutletTemp           ! Load side Outlet Temperature [C]
-  REAL(r64) :: SourceSideMassFlowRate       ! Source Side Mass Flow Rate [kg/s]
-  REAL(r64) :: SourceSideInletTemp          ! Source Side Inlet Temperature [C]
-  REAL(r64) :: SourceSideOutletTemp         ! Source Side Outlet Temperature [C]
-  REAL(r64) :: func1                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func2                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func3                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: func4                        ! Portion of the heat transfer and power equation
-  REAL(r64) :: Power                        ! Power Consumption [W]
-  REAL(r64) :: QLoad                        ! Cooling Capacity [W]
-  REAL(r64) :: QSource                      ! Source Side Heat Transfer Rate [W]
-  REAL(r64) :: PartLoadRatio                ! Part Load Ratio
-  REAL(r64) :: ReportingConstant
-  REAL(r64) :: rhoLoadSide
-  REAL(r64) :: rhoSourceSide
-  REAL(r64) :: CpLoadSide
-  REAL(r64) :: CpSourceSide
+  REAL :: HeatCapRated                 ! Rated Heating Capacity [W]
+  REAL :: HeatPowerRated               ! Rated Heating Compressor Power[W]
+  REAL :: LoadSideVolFlowRateRated     ! Rated Load Side Volumetric Flow Rate [m3/s]
+  REAL :: SourceSideVolFlowRateRated   ! Rated Source Side Volumetric Flow Rate [m3/s]
+  REAL :: HeatCapCoeff1                ! 1st coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff2                ! 2nd coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff3                ! 3rd coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff4                ! 4th coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff5                ! 5th coefficient of the heating capacity performance curve
+  REAL :: HeatPowerCoeff1              ! 1st coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff2              ! 2nd coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff3              ! 3rd coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff4              ! 4th coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff5              ! 5th coefficient of the heating power consumption curve
+  REAL :: LoadSideMassFlowRate         ! Load Side Mass Flow Rate [kg/s]
+  REAL :: LoadSideInletTemp            ! Load Side Inlet Temperature [C]
+  REAL :: LoadSideOutletTemp           ! Load side Outlet Temperature [C]
+  REAL :: SourceSideMassFlowRate       ! Source Side Mass Flow Rate [kg/s]
+  REAL :: SourceSideInletTemp          ! Source Side Inlet Temperature [C]
+  REAL :: SourceSideOutletTemp         ! Source Side Outlet Temperature [C]
+  REAL :: func1                        ! Portion of the heat transfer and power equation
+  REAL :: func2                        ! Portion of the heat transfer and power equation
+  REAL :: func3                        ! Portion of the heat transfer and power equation
+  REAL :: func4                        ! Portion of the heat transfer and power equation
+  REAL :: Power                        ! Power Consumption [W]
+  REAL :: QLoad                        ! Cooling Capacity [W]
+  REAL :: QSource                      ! Source Side Heat Transfer Rate [W]
+  REAL :: PartLoadRatio                ! Part Load Ratio
+  REAL :: ReportingConstant
+  REAL :: rhoLoadSide
+  REAL :: rhoSourceSide
+  REAL :: CpLoadSide
+  REAL :: CpSourceSide
 
   !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE
   LoadSideVolFlowRateRated  = GSHP(GSHPNum)%RatedLoadVolFlowHeat
@@ -3816,8 +3816,8 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
   Power = HeatPowerRated*(HeatPowerCoeff1 + (func1 * HeatPowerCoeff2) + (func2 * HeatPowerCoeff3) +   &
                                          (func3 * HeatPowerCoeff4) + (func4 * HeatPowerCoeff5))
 
-  IF ( (Qload .LE. 0.0d0 .OR. Power .LE. 0.0d0) .AND. .NOT. WarmupFlag) THEN
-    IF (Qload .LE. 0.0d0) THEN
+  IF ( (Qload .LE. 0.0 .OR. Power .LE. 0.0) .AND. .NOT. WarmupFlag) THEN
+    IF (Qload .LE. 0.0) THEN
       IF (GSHP(GSHPNum)%HeatCapNegativeCounter .LT. 1) THEN
         GSHP(GSHPNum)%HeatCapNegativeCounter = GSHP(GSHPNum)%HeatCapNegativeCounter + 1
         CALL ShowWarningError(TRIM(HPEqFitHeating)//' "'//TRIM(GSHP(GSHPNum)%Name)//'":')
@@ -3837,7 +3837,7 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
                      , GSHP(GSHPNum)%HeatCapNegativeIndex, Qload, Qload)
       END IF
     END IF
-    IF (Power .LE. 0.0d0) THEN
+    IF (Power .LE. 0.0) THEN
       IF (GSHP(GSHPNum)%HeatPowerNegativeCounter .LT. 1) THEN
         GSHP(GSHPNum)%HeatPowerNegativeCounter = GSHP(GSHPNum)%HeatPowerNegativeCounter + 1
         CALL ShowWarningError(TRIM(HPEqFitHeating)//' "'//TRIM(GSHP(GSHPNum)%Name)//'":')
@@ -3858,8 +3858,8 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
       END IF
     END IF
 
-    Qload = 0.0d0
-    Power = 0.0d0
+    Qload = 0.0
+    Power = 0.0
 
   END IF
 
@@ -3867,7 +3867,7 @@ SUBROUTINE CalcWatertoWaterHPHeating(GSHPNum, MyLoad)
 
   !Control Strategy
 !  IF( GSHP(GSHPNum)%HeatCycleTime  < TimeStepSys )THEN
-  IF(ABS(MyLoad) < QLoad .AND. Qload .NE. 0.0d0) THEN
+  IF(ABS(MyLoad) < QLoad .AND. Qload .NE. 0.0) THEN
     PartLoadRatio        = ABS(MyLoad)/QLoad
     QLoad                = ABS(MyLoad)
     Power                = Power * PartLoadRatio

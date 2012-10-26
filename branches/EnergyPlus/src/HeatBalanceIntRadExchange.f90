@@ -108,13 +108,13 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENTS:
-  REAL(r64), DIMENSION(:), INTENT(IN)  :: SurfaceTemp    ! Current surface temperatures
+  REAL, DIMENSION(:), INTENT(IN)  :: SurfaceTemp    ! Current surface temperatures
   INTEGER, INTENT(IN)               :: SurfIterations ! Number of iterations in calling subroutine
-  REAL(r64), DIMENSION(:), INTENT(INOUT) :: NetLWRadToSurf ! Net long wavelength radiant exchange from other surfaces
+  REAL, DIMENSION(:), INTENT(INOUT) :: NetLWRadToSurf ! Net long wavelength radiant exchange from other surfaces
   INTEGER, INTENT(IN), OPTIONAL          :: ZoneToResimulate  ! if passed in, then only calculate for this zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
+  REAL, PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -132,9 +132,9 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
   INTEGER       :: ZoneNum              ! DO loop counter for zones
   INTEGER       :: ConstrNumRec         ! Receiving surface construction number
   INTEGER       :: ConstrNumSend        ! Sending surface construction number
-  REAL(r64)     :: RecSurfTemp          ! Receiving surface temperature (C)
-  REAL(r64)     :: SendSurfTemp         ! Sending surface temperature (C)
-  REAL(r64)     :: RecSurfEmiss         ! Inside surface emissivity
+  REAL     :: RecSurfTemp          ! Receiving surface temperature (C)
+  REAL     :: SendSurfTemp         ! Sending surface temperature (C)
+  REAL     :: RecSurfEmiss         ! Inside surface emissivity
   INTEGER       :: ZoneSurfNum          ! Runs from 1 to number of surfaces in zone
   INTEGER       :: SurfNum              ! Surface number
   INTEGER       :: ConstrNum            ! Construction number
@@ -143,19 +143,19 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
   INTEGER       :: ShadeFlag            ! Window shading status current time step
   INTEGER       :: ShadeFlagPrev        ! Window shading status previous time step
 
-  real(r64) :: t0,t1
-  REAL(r64) :: wtime
+  REAL :: t0,t1
+  REAL :: wtime
   integer, save :: totalSurfaces, minNSurfaces, maxNSurfaces
   CHARACTER(len=158) :: tdstring
   integer :: i, NumSurfaces, previousRSN
   logical :: threadloop=.True., problem_with_recsurfnum
   integer, dimension(:,:), allocatable, save :: ZoneSurfaceKey
-  REAL(r64)     :: sumLW, sumIR
+  REAL     :: sumLW, sumIR
 
   !variables added as part of strategy to reduce calculation time - Glazer 2011-04-22
-  REAL(r64)     :: SendSurfTempInKTo4th ! Sending surface temperature in K to 4th power
-  REAL(r64)     :: RecSurfTempInKTo4th  ! Receiving surface temperature in K to 4th power
-  REAL(r64),DIMENSION(:),ALLOCATABLE, SAVE :: SendSurfaceTempInKto4thPrecalc
+  REAL     :: SendSurfTempInKTo4th ! Sending surface temperature in K to 4th power
+  REAL     :: RecSurfTempInKTo4th  ! Receiving surface temperature in K to 4th power
+  REAL,DIMENSION(:),ALLOCATABLE, SAVE :: SendSurfaceTempInKto4thPrecalc
 
   ! FLOW:
 #ifdef EP_Detailed_Timings
@@ -281,8 +281,8 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
            IF (ZoneNum /= ZoneToResimulate ) THEN
               CYCLE
            ELSE
-              NetLWRadToSurf(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)                 = 0.d0
-              SurfaceWindow(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)%IRfromParentZone = 0.d0
+              NetLWRadToSurf(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)                 = 0.
+              SurfaceWindow(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)%IRfromParentZone = 0.
            ENDIF
         ENDIF
 
@@ -389,8 +389,8 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
         ! Calculate net long-wave radiation for opaque surfaces and incident
         ! long-wave radiation for windows.
         ! Sum these locally as private variables first, then store where they belong (NDK)
-        sumLW = 0.0d0
-        sumIR = 0.0d0
+        sumLW = 0.0
+        sumIR = 0.0
         DO SendZoneSurfNum = 1, ZoneInfo(ZoneNum)%NumOfSurfaces
            SendSurfNum = ZoneInfo(ZoneNum)%SurfacePtr(SendZoneSurfNum)
            ConstrNumSend = Surface(SendSurfNum)%Construction
@@ -472,13 +472,13 @@ USE DataTimings
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENTS:
-  REAL(r64), DIMENSION(:), INTENT(IN)  :: SurfaceTemp    ! Current surface temperatures
+  REAL, DIMENSION(:), INTENT(IN)  :: SurfaceTemp    ! Current surface temperatures
   INTEGER, INTENT(IN)               :: SurfIterations ! Number of iterations in calling subroutine
-  REAL(r64), DIMENSION(:), INTENT(INOUT) :: NetLWRadToSurf ! Net long wavelength radiant exchange from other surfaces
+  REAL, DIMENSION(:), INTENT(INOUT) :: NetLWRadToSurf ! Net long wavelength radiant exchange from other surfaces
   INTEGER, INTENT(IN), OPTIONAL          :: ZoneToResimulate  ! if passed in, then only calculate for this zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
+  REAL, PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -496,9 +496,9 @@ USE DataTimings
   INTEGER       :: ZoneNum              ! DO loop counter for zones
   INTEGER       :: ConstrNumRec         ! Receiving surface construction number
   INTEGER       :: ConstrNumSend        ! Sending surface construction number
-  REAL(r64)     :: RecSurfTemp          ! Receiving surface temperature (C)
-  REAL(r64)     :: SendSurfTemp         ! Sending surface temperature (C)
-  REAL(r64)     :: RecSurfEmiss         ! Inside surface emissivity
+  REAL     :: RecSurfTemp          ! Receiving surface temperature (C)
+  REAL     :: SendSurfTemp         ! Sending surface temperature (C)
+  REAL     :: RecSurfEmiss         ! Inside surface emissivity
   INTEGER       :: ZoneSurfNum          ! Runs from 1 to number of surfaces in zone
   INTEGER       :: SurfNum              ! Surface number
   INTEGER       :: ConstrNum            ! Construction number
@@ -509,9 +509,9 @@ USE DataTimings
   CHARACTER(len=158) :: tdstring
 
   !variables added as part of strategy to reduce calculation time - Glazer 2011-04-22
-  REAL(r64)     :: SendSurfTempInKTo4th ! Sending surface temperature in K to 4th power
-  REAL(r64)     :: RecSurfTempInKTo4th  ! Receiving surface temperature in K to 4th power
-  REAL(r64),DIMENSION(:),ALLOCATABLE, SAVE :: SendSurfaceTempInKto4thPrecalc
+  REAL     :: SendSurfTempInKTo4th ! Sending surface temperature in K to 4th power
+  REAL     :: RecSurfTempInKTo4th  ! Receiving surface temperature in K to 4th power
+  REAL,DIMENSION(:),ALLOCATABLE, SAVE :: SendSurfaceTempInKto4thPrecalc
 
           ! FLOW:
 
@@ -540,8 +540,8 @@ USE DataTimings
       IF (ZoneNum /= ZoneToResimulate ) THEN
         CYCLE
       ELSE
-        NetLWRadToSurf(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)                 = 0.d0
-        SurfaceWindow(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)%IRfromParentZone = 0.d0
+        NetLWRadToSurf(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)                 = 0.
+        SurfaceWindow(Zone(ZoneNum)%SurfaceFirst:Zone(ZoneNum)%SurfaceLast)%IRfromParentZone = 0.
       ENDIF
     ENDIF
 
@@ -749,12 +749,12 @@ SUBROUTINE InitInteriorRadExchange
 !unused  INTEGER :: MaxUserFArgs
   LOGICAL :: ErrorsFound=.false.
 !unused  LOGICAL,SAVE :: FirstTime=.true.
-  REAL(r64) :: CheckValue1
-  REAL(r64) :: CheckValue2
-  REAL(r64) :: FinalCheckValue
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: SaveApproximateViewFactors   ! Save for View Factor reporting
-  REAL(r64) :: RowSum
-  REAL(r64) :: FixedRowSum
+  REAL :: CheckValue1
+  REAL :: CheckValue2
+  REAL :: FinalCheckValue
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: SaveApproximateViewFactors   ! Save for View Factor reporting
+  REAL :: RowSum
+  REAL :: FixedRowSum
   INTEGER  :: NumIterations
   CHARACTER(len=MaxNameLength) :: Option1  ! view factor report option
 
@@ -832,7 +832,7 @@ SUBROUTINE InitInteriorRadExchange
             ZoneInfo(ZoneNum)%Area(ZoneSurfNum)       = Surface(SurfNum)%Area
         ELSE
            ! Double area for infrared transparent (IRT) surfaces
-           ZoneInfo(ZoneNum)%Area(ZoneSurfNum)       = 2.0d0* Surface(SurfNum)%Area
+           ZoneInfo(ZoneNum)%Area(ZoneSurfNum)       = 2.0* Surface(SurfNum)%Area
         END IF
 !***********************************************
 
@@ -1145,7 +1145,7 @@ USE General, ONLY: TrimSigDigits
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(Len=*), INTENT(IN)          :: ZoneName  !  Needed to check for user input view factors.
   INTEGER, INTENT (IN)                  :: N    ! NUMBER OF SURFACES
-  REAL(r64), INTENT (OUT), DIMENSION(N,N) :: F    ! USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
+  REAL, INTENT (OUT), DIMENSION(N,N) :: F    ! USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
   INTEGER, INTENT (IN),  DIMENSION(N)   :: SPtr ! pointer to actual surface number
   LOGICAL, INTENT (OUT)                 :: NoUserInputF ! Flag signifying no input F's for this
   LOGICAL, INTENT (INOUT)               :: ErrorsFound  ! True when errors are found in number of fields vs max args
@@ -1230,7 +1230,7 @@ USE General, ONLY: TrimSigDigits
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(Len=*), INTENT(IN)          :: ZoneName  !  Needed to check for user input view factors.
   INTEGER, INTENT (IN)                  :: N    ! NUMBER OF SURFACES
-  REAL(r64), INTENT (OUT), DIMENSION(N,N) :: F    ! USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
+  REAL, INTENT (OUT), DIMENSION(N,N) :: F    ! USER INPUT DIRECT VIEW FACTOR MATRIX (N X N)
   INTEGER, INTENT (IN),  DIMENSION(N)   :: SPtr ! pointer to actual surface number
   LOGICAL, INTENT (OUT)                 :: NoUserInputF ! Flag signifying no input F's for this
   LOGICAL, INTENT (INOUT)               :: ErrorsFound  ! True when errors are found in number of fields vs max args
@@ -1337,14 +1337,14 @@ SUBROUTINE CalcApproximateViewFactors(N,A,Azimuth,Tilt,F,SPtr)
 
           ! SUBROUTINE ARGUMENTS:
   INTEGER, INTENT (IN)                  :: N    ! NUMBER OF SURFACES
-  REAL(r64), INTENT (IN),  DIMENSION(N)   :: A    ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
-  REAL(r64), INTENT (IN),  DIMENSION(N)   :: Azimuth ! Facing angle of the surface (in degrees)
-  REAL(r64), INTENT (IN),  DIMENSION(N)   :: Tilt ! Tilt angle of the surface (in degrees)
-  REAL(r64), INTENT (OUT), DIMENSION(N,N) :: F    ! APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
-  INTEGER, INTENT (IN),  DIMENSION(N)   :: SPtr ! pointer to REAL(r64) surface number (for error message)
+  REAL, INTENT (IN),  DIMENSION(N)   :: A    ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
+  REAL, INTENT (IN),  DIMENSION(N)   :: Azimuth ! Facing angle of the surface (in degrees)
+  REAL, INTENT (IN),  DIMENSION(N)   :: Tilt ! Tilt angle of the surface (in degrees)
+  REAL, INTENT (OUT), DIMENSION(N,N) :: F    ! APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
+  INTEGER, INTENT (IN),  DIMENSION(N)   :: SPtr ! pointer to REAL surface number (for error message)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: SameAngleLimit = 10.0d0 ! If the difference in the azimuth angles are above this value (degrees),
+  REAL, PARAMETER :: SameAngleLimit = 10.0 ! If the difference in the azimuth angles are above this value (degrees),
                                           ! then the surfaces are assumed to be facing different directions.
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1356,7 +1356,7 @@ SUBROUTINE CalcApproximateViewFactors(N,A,Azimuth,Tilt,F,SPtr)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER :: I, J       ! DO loop counters for surfaces in the zone
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneArea   ! Sum of the area of all zone surfaces seen
+  REAL, ALLOCATABLE, DIMENSION(:) :: ZoneArea   ! Sum of the area of all zone surfaces seen
 
           ! FLOW:
           ! Calculate the sum of the areas seen by all zone surfaces
@@ -1474,18 +1474,18 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
 
           ! SUBROUTINE ARGUMENTS:
   INTEGER, INTENT (IN)                       :: N        ! NUMBER OF SURFACES
-  REAL(r64), INTENT (IN),     DIMENSION(N)   :: A        ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
-  REAL(r64), INTENT (INOUT),  DIMENSION(N,N) :: F        ! APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
+  REAL, INTENT (IN),     DIMENSION(N)   :: A        ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
+  REAL, INTENT (INOUT),  DIMENSION(N,N) :: F        ! APPROXIMATE DIRECT VIEW FACTOR MATRIX (N X N)
   INTEGER, INTENT (IN)                       :: ZoneNum  ! Zone number being fixe
-  REAL(r64), INTENT (INOUT) :: OriginalCheckValue        ! check of SUM(F) - N
-  REAL(r64), INTENT (INOUT) :: FixedCheckValue           ! check after fixed of SUM(F) - N
-  REAL(r64), INTENT (INOUT) :: FinalCheckValue           ! the one to go with
+  REAL, INTENT (INOUT) :: OriginalCheckValue        ! check of SUM(F) - N
+  REAL, INTENT (INOUT) :: FixedCheckValue           ! check after fixed of SUM(F) - N
+  REAL, INTENT (INOUT) :: FinalCheckValue           ! the one to go with
   INTEGER, INTENT (INOUT)   :: NumIterations             ! number of iterations to fixed
-  REAL(r64), INTENT (INOUT) :: RowSum                    ! RowSum of Fixed
+  REAL, INTENT (INOUT) :: RowSum                    ! RowSum of Fixed
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: PrimaryConvergence   =0.001d0
-  REAL(r64), PARAMETER :: DifferenceConvergence=0.00001d0
+  REAL, PARAMETER :: PrimaryConvergence   =0.001
+  REAL, PARAMETER :: DifferenceConvergence=0.00001
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1494,18 +1494,18 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AF             ! = (AREA * DIRECT VIEW FACTOR) MATRIX
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AFTranspose
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AFAverage
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: FixedAF
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: FixedF         ! CORRECTED MATRIX OF VIEW FACTORS (N X N)
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: FixedAFTranspose
-  REAL(r64), ALLOCATABLE, DIMENSION(:)   :: RowCoefficient
-  REAL(r64) :: LargestArea
-  REAL(r64) :: ConvrgNew
-  REAL(r64) :: ConvrgOld
-  REAL(r64) :: Accelerator   !  RowCoefficient multipler to accelerate convergence
-  REAL(r64) :: CheckConvergeTolerance  ! check value for actual warning
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AF             ! = (AREA * DIRECT VIEW FACTOR) MATRIX
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AFTranspose
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AFAverage
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: FixedAF
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: FixedF         ! CORRECTED MATRIX OF VIEW FACTORS (N X N)
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: FixedAFTranspose
+  REAL, ALLOCATABLE, DIMENSION(:)   :: RowCoefficient
+  REAL :: LargestArea
+  REAL :: ConvrgNew
+  REAL :: ConvrgOld
+  REAL :: Accelerator   !  RowCoefficient multipler to accelerate convergence
+  REAL :: CheckConvergeTolerance  ! check value for actual warning
 
   LOGICAL :: Converged
   INTEGER :: I
@@ -1548,7 +1548,7 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
          LargestSurf=I
          EXIT
        END DO
-       FixedAF(LargestSurf,LargestSurf)=MIN(0.9D0,1.2d0*LargestArea/SUM(A))  ! Give self view to big surface
+       FixedAF(LargestSurf,LargestSurf)=MIN(0.9,1.2*LargestArea/SUM(A))  ! Give self view to big surface
   END IF
 
           !  Set up AF matrix.
@@ -1560,7 +1560,7 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
 
           !  Enforce reciprocity by averaging AiFij and AjFji
   AFTranspose = TRANSPOSE(AF)
-  AFAverage   = 0.5d0*(AF+AFTranspose)
+  AFAverage   = 0.5*(AF+AFTranspose)
 
   FixedAF=AFAverage  !Initialize Fixed Matrix
 
@@ -1619,13 +1619,13 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
 
      !  Enforce reciprocity by averaging AiFij and AjFji
     FixedAFTranspose = TRANSPOSE(FixedAF)
-    FixedAF=0.5d0*(FixedAFTranspose+FixedAF)
+    FixedAF=0.5*(FixedAFTranspose+FixedAF)
 
      !  Form FixedF matrix
     DO I=1,N
       DO J=1,N
         FixedF(i,j)=FixedAF(i,j)/A(i)
-        IF (ABS(FixedF(i,j)) < 1.d-10) Then
+        IF (ABS(FixedF(i,j)) < 1.*10**-10) Then !RS: Debugging: 102612
           FixedF(i,j)=0.0
           FixedAF(i,j) = 0.0
         END IF
@@ -1641,7 +1641,7 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
     IF (NumIterations > 400 ) THEN  !  If everything goes bad,enforce reciprocity and go home.
       !  Enforce reciprocity by averaging AiFij and AjFji
       FixedAFTranspose = TRANSPOSE(FixedAF)
-      FixedAF=0.5d0*(FixedAFTranspose+FixedAF)
+      FixedAF=0.5*(FixedAFTranspose+FixedAF)
 
        !  Form FixedF matrix
       DO I=1,N
@@ -1650,7 +1650,7 @@ SUBROUTINE FixViewFactors(N,A,F,ZoneNum,OriginalCheckValue,FixedCheckValue,Final
         END DO
       END DO
       CheckConvergeTolerance=ABS(SUM(FixedF)-N)
-      IF (CheckConvergeTolerance > .005d0) THEN
+      IF (CheckConvergeTolerance > .005) THEN
         CALL ShowWarningError('FixViewFactors: View factors not complete. Check for '//&
                    'bad surface descriptions or unenclosed zone="'//TRIM(Zone(ZoneNum)%Name)//'".')
         CALL ShowContinueError('Enforced reciprocity has tolerance (ideal is 0)=['//  &
@@ -1729,15 +1729,15 @@ SUBROUTINE CalcScriptF(N,A,F,EMISS,ScriptF)
 
           ! SUBROUTINE ARGUMENTS:
   INTEGER, INTENT (IN)                  :: N         ! Number of surfaces
-  REAL(r64), INTENT (IN),  DIMENSION(N)   :: A       ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
-  REAL(r64), INTENT (IN),  DIMENSION(N,N) :: F       ! DIRECT VIEW FACTOR MATRIX (N X N)
+  REAL, INTENT (IN),  DIMENSION(N)   :: A       ! AREA VECTOR- ASSUMED,BE N ELEMENTS LONG
+  REAL, INTENT (IN),  DIMENSION(N,N) :: F       ! DIRECT VIEW FACTOR MATRIX (N X N)
                                                      ! --Must satisfy reciprocity and completeness:
                                                      !  A(i)*F(i,j)=A(j)*F(j,i); F(i,i)=0.; SUM(F(i,j)=1.0, j=1,N)
-  REAL(r64), INTENT (INOUT), DIMENSION(N) :: EMISS   ! VECTOR OF SURFACE EMISSIVITIES
-  REAL(r64), INTENT (OUT), DIMENSION(N,N) :: ScriptF ! MATRIX OF SCRIPT F FACTORS (N X N)
+  REAL, INTENT (INOUT), DIMENSION(N) :: EMISS   ! VECTOR OF SURFACE EMISSIVITIES
+  REAL, INTENT (OUT), DIMENSION(N,N) :: ScriptF ! MATRIX OF SCRIPT F FACTORS (N X N)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: MaxEmissLimit = 0.99999d0        ! Limit the emissivity internally/avoid a divide by zero error
+  REAL, PARAMETER :: MaxEmissLimit = 0.99999        ! Limit the emissivity internally/avoid a divide by zero error
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1746,14 +1746,14 @@ SUBROUTINE CalcScriptF(N,A,F,EMISS,ScriptF)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  REAL(r64)    :: Delta
+!  REAL    :: Delta
   INTEGER :: I, J  ! DO loop counters (for rows and columns of matrices)
   INTEGER :: K
-  REAL(r64),  ALLOCATABLE, DIMENSION(:,:) :: AF           ! = (AREA * DIRECT VIEW FACTOR) MATRIX
-  REAL(r64),  ALLOCATABLE, DIMENSION(:,:) :: Cinverse     ! Inverse of Cmatrix
-  REAL(r64),  ALLOCATABLE, DIMENSION(:,:) :: Cmatrix      ! = (AF- EMISS/REFLECTANCE) MATRIX
-  REAL(r64),  ALLOCATABLE, DIMENSION(:,:) :: ExciteMatrix ! EXCITATION VECTOR = A*EMISS/REFLECTANCE
-  REAL(r64),  ALLOCATABLE, DIMENSION(:,:) :: Jmatrix      ! MATRIX OF PARTIAL RADIOSITIES
+  REAL,  ALLOCATABLE, DIMENSION(:,:) :: AF           ! = (AREA * DIRECT VIEW FACTOR) MATRIX
+  REAL,  ALLOCATABLE, DIMENSION(:,:) :: Cinverse     ! Inverse of Cmatrix
+  REAL,  ALLOCATABLE, DIMENSION(:,:) :: Cmatrix      ! = (AF- EMISS/REFLECTANCE) MATRIX
+  REAL,  ALLOCATABLE, DIMENSION(:,:) :: ExciteMatrix ! EXCITATION VECTOR = A*EMISS/REFLECTANCE
+  REAL,  ALLOCATABLE, DIMENSION(:,:) :: Jmatrix      ! MATRIX OF PARTIAL RADIOSITIES
 
           ! FLOW:
           ! Allocate and zero arrays
@@ -1814,10 +1814,10 @@ SUBROUTINE CalcScriptF(N,A,F,EMISS,ScriptF)
     DO J=1,N
       IF (I == J) THEN
 !        ScriptF(I,J) = EMISS(I)/(1.-EMISS(I))*(Jmatrix(I,J)-Delta*EMISS(I)), where Delta=1
-        ScriptF(I,J) = EMISS(I)/(1.d0-EMISS(I))*(Jmatrix(I,J)-EMISS(I))
+        ScriptF(I,J) = EMISS(I)/(1.-EMISS(I))*(Jmatrix(I,J)-EMISS(I))
       ELSE
 !        ScriptF(I,J) = EMISS(I)/(1.-EMISS(I))*(Jmatrix(I,J)-Delta*EMISS(I)), where Delta=0
-        ScriptF(I,J) = EMISS(I)/(1.d0-EMISS(I))*(Jmatrix(I,J))
+        ScriptF(I,J) = EMISS(I)/(1.-EMISS(I))*(Jmatrix(I,J))
       END IF
     END DO
   END DO
@@ -1854,8 +1854,8 @@ SUBROUTINE CalcMatrixInverse(Matrix,InvMatrix)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENTS:
-  REAL(r64), DIMENSION(:,:), INTENT(INOUT) :: Matrix      ! Input Matrix
-  REAL(r64), DIMENSION(:,:), INTENT(INOUT) :: InvMatrix   ! Inverse of Matrix
+  REAL, DIMENSION(:,:), INTENT(INOUT) :: Matrix      ! Input Matrix
+  REAL, DIMENSION(:,:), INTENT(INOUT) :: InvMatrix   ! Inverse of Matrix
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1868,12 +1868,12 @@ SUBROUTINE CalcMatrixInverse(Matrix,InvMatrix)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: DimOfMatrix ! Matrix dimension
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: Identity    ! Identity matrix
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: Identity    ! Identity matrix
   INTEGER,   ALLOCATABLE, DIMENSION(:)   :: p           ! Vector containing the
                                                                ! pivot order
   INTEGER         :: temp        ! Temporary variable
-  REAL(r64)  :: mm          ! Multiplier
-  REAL(r64)  :: pivot       ! Pivot value
+  REAL  :: mm          ! Multiplier
+  REAL  :: pivot       ! Pivot value
   INTEGER         :: piv         ! Pivot index
   INTEGER         :: i           ! Loop counter
   INTEGER         :: j           ! Loop counter
@@ -1888,7 +1888,7 @@ SUBROUTINE CalcMatrixInverse(Matrix,InvMatrix)
   InvMatrix = 0
 
   DO i = 1, DimOfMatrix
-    Identity(i,i) = 1.0d0
+    Identity(i,i) = 1.0
   END DO
 
   p=(/ (I, I=1,DimOfMatrix) /)

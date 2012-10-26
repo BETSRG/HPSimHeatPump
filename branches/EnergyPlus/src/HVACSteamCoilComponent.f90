@@ -56,39 +56,39 @@ MODULE SteamCoils
      INTEGER      :: SteamCoilType_Num              = 0   !
      CHARACTER(len=MaxNameLength) :: Schedule       = ' ' ! SteamCoil Operation Schedule
      INTEGER      :: SchedPtr                       = 0   ! Pointer to the correct schedule
-     REAL(r64)    :: InletAirMassFlowRate           = 0.0 ! MassFlow through the SteamCoil being Simulated [kg/s]
-     REAL(r64)    :: OutletAirMassFlowRate          = 0.0 ! MassFlow throught the SteamCoil being Simulated[kg/s]
-     REAL(r64)    :: InletAirTemp                   = 0.0 ! Inlet Air Temperature Operating Condition [C]
-     REAL(r64)    :: OutletAirTemp                  = 0.0 ! Outlet Air Temperature Operating Condition [C]
-     REAL(r64)    :: InletAirHumRat                 = 0.0 ! Inlet Air Humidity Ratio Operating Condition
-     REAL(r64)    :: OutletAirHumRat                = 0.0 ! Outlet Air Humidity Ratio Calculated Condition
-     REAL(r64)    :: InletAirEnthalpy               = 0.0 ! Inlet Air enthalpy [J/kg]
-     REAL(r64)    :: OutletAirEnthalpy              = 0.0 ! Outlet Air enthalpy [J/kg]
-     REAL(r64)    :: TotSteamCoilLoad               = 0.0 ! Total Load on the Coil [W]
-     REAL(r64)    :: SenSteamCoilLoad               = 0.0 ! Sensible Load on the Coil [W]
-     REAL(r64)    :: TotSteamHeatingCoilEnergy      = 0.0 ! Total Heating Coil energy of the Coil [J]
-     REAL(r64)    :: TotSteamCoolingCoilEnergy      = 0.0 ! Total Cooling Coil energy of the Coil [J]
-     REAL(r64)    :: SenSteamCoolingCoilEnergy      = 0.0 ! Sensible Cooling Coil energy of the Coil [J]
-     REAL(r64)    :: TotSteamHeatingCoilRate        = 0.0 ! Total Heating Coil Rate on the Coil [W]
-     REAL(r64)    :: LoopLoss                       = 0.0 ! Loss in loop due to cond return to atm pressure
-     REAL(r64)    :: TotSteamCoolingCoilRate        = 0.0 ! Total Cooling Coil Rate on the Coil [W]
-     REAL(r64)    :: SenSteamCoolingCoilRate        = 0.0 ! Sensible Cooling Coil Rate on the Coil [W]
-     REAL(r64)    :: LeavingRelHum                  = 0.0 ! Simple Coil Latent Model requires User input for leaving RH
-     REAL(r64)    :: DesiredOutletTemp              = 0.0 ! Temp desired at the outlet (C)
-     REAL(r64)    :: DesiredOutletHumRat            = 0.0 ! Humudity Ratio desired at outlet (C)
-     REAL(r64)    :: InletSteamTemp                 = 0.0 ! Inlet Steam Temperature [C]
-     REAL(r64)    :: OutletSteamTemp                = 0.0 ! Outlet Steam Temperature [C]
-     REAL(r64)    :: InletSteamMassFlowRate         = 0.0 ! Inlet Steam Mass Flow Rate [Kg/s]
-     REAL(r64)    :: OutletSteamMassFlowRate        = 0.0 ! Outlet Steam Mass Flow Rate [Kg/s]
-     REAL(r64)    :: MaxSteamVolFlowRate            = 0.0 ! Maximum water Volume flow rate [m3/s]
-     REAL(r64)    :: MaxSteamMassFlowRate           = 0.0 ! Maximum water mass flow rate [Kg/s]
-     REAL(r64)    :: InletSteamEnthalpy             = 0.0 ! Inlet Water Enthalpy (J/Kg)
-     REAL(r64)    :: OutletWaterEnthalpy            = 0.0 ! Outlet Water Enthalpy (J/kg)
-     REAL(r64)    :: InletSteamPress                = 0.0 ! Pressure at steam inlet (Pa)
-     REAL(r64)    :: InletSteamQuality              = 0.0 ! Quality of steam at inlet
-     REAL(r64)    :: OutletSteamQuality             = 0.0 ! Quality of steam at outlet
-     REAL(r64)    :: DegOfSubCooling                = 0.0
-     REAL(r64)    :: LoopSubCoolReturn              = 0.0
+     REAL    :: InletAirMassFlowRate           = 0.0 ! MassFlow through the SteamCoil being Simulated [kg/s]
+     REAL    :: OutletAirMassFlowRate          = 0.0 ! MassFlow throught the SteamCoil being Simulated[kg/s]
+     REAL    :: InletAirTemp                   = 0.0 ! Inlet Air Temperature Operating Condition [C]
+     REAL    :: OutletAirTemp                  = 0.0 ! Outlet Air Temperature Operating Condition [C]
+     REAL    :: InletAirHumRat                 = 0.0 ! Inlet Air Humidity Ratio Operating Condition
+     REAL    :: OutletAirHumRat                = 0.0 ! Outlet Air Humidity Ratio Calculated Condition
+     REAL    :: InletAirEnthalpy               = 0.0 ! Inlet Air enthalpy [J/kg]
+     REAL    :: OutletAirEnthalpy              = 0.0 ! Outlet Air enthalpy [J/kg]
+     REAL    :: TotSteamCoilLoad               = 0.0 ! Total Load on the Coil [W]
+     REAL    :: SenSteamCoilLoad               = 0.0 ! Sensible Load on the Coil [W]
+     REAL    :: TotSteamHeatingCoilEnergy      = 0.0 ! Total Heating Coil energy of the Coil [J]
+     REAL    :: TotSteamCoolingCoilEnergy      = 0.0 ! Total Cooling Coil energy of the Coil [J]
+     REAL    :: SenSteamCoolingCoilEnergy      = 0.0 ! Sensible Cooling Coil energy of the Coil [J]
+     REAL    :: TotSteamHeatingCoilRate        = 0.0 ! Total Heating Coil Rate on the Coil [W]
+     REAL    :: LoopLoss                       = 0.0 ! Loss in loop due to cond return to atm pressure
+     REAL    :: TotSteamCoolingCoilRate        = 0.0 ! Total Cooling Coil Rate on the Coil [W]
+     REAL    :: SenSteamCoolingCoilRate        = 0.0 ! Sensible Cooling Coil Rate on the Coil [W]
+     REAL    :: LeavingRelHum                  = 0.0 ! Simple Coil Latent Model requires User input for leaving RH
+     REAL    :: DesiredOutletTemp              = 0.0 ! Temp desired at the outlet (C)
+     REAL    :: DesiredOutletHumRat            = 0.0 ! Humudity Ratio desired at outlet (C)
+     REAL    :: InletSteamTemp                 = 0.0 ! Inlet Steam Temperature [C]
+     REAL    :: OutletSteamTemp                = 0.0 ! Outlet Steam Temperature [C]
+     REAL    :: InletSteamMassFlowRate         = 0.0 ! Inlet Steam Mass Flow Rate [Kg/s]
+     REAL    :: OutletSteamMassFlowRate        = 0.0 ! Outlet Steam Mass Flow Rate [Kg/s]
+     REAL    :: MaxSteamVolFlowRate            = 0.0 ! Maximum water Volume flow rate [m3/s]
+     REAL    :: MaxSteamMassFlowRate           = 0.0 ! Maximum water mass flow rate [Kg/s]
+     REAL    :: InletSteamEnthalpy             = 0.0 ! Inlet Water Enthalpy (J/Kg)
+     REAL    :: OutletWaterEnthalpy            = 0.0 ! Outlet Water Enthalpy (J/kg)
+     REAL    :: InletSteamPress                = 0.0 ! Pressure at steam inlet (Pa)
+     REAL    :: InletSteamQuality              = 0.0 ! Quality of steam at inlet
+     REAL    :: OutletSteamQuality             = 0.0 ! Quality of steam at outlet
+     REAL    :: DegOfSubCooling                = 0.0
+     REAL    :: LoopSubCoolReturn              = 0.0
      INTEGER      :: AirInletNodeNum                = 0   ! Inlet node number at air side
      INTEGER      :: AirOutletNodeNum               = 0   ! Outlet node number at air side
      INTEGER      :: SteamInletNodeNum              = 0   ! SteamInletNodeNum
@@ -101,7 +101,7 @@ MODULE SteamCoils
      INTEGER      :: BranchNum                      = 0   ! index for plant branch for steam coil
      INTEGER      :: CompNum                        = 0   ! index for plant component for steam coil
      INTEGER      :: Coil_PlantTypeNum              = 0   ! plant level index for coil type
-     REAL(r64)    :: OperatingCapacity              = 0.0 ! capacity of steam coil at operating conditions (W)
+     REAL    :: OperatingCapacity              = 0.0 ! capacity of steam coil at operating conditions (W)
  END TYPE SteamCoilEquipConditions
 
   ! INTERFACE DEFINITIONS
@@ -186,10 +186,10 @@ CONTAINS
    CHARACTER(len=*), INTENT(IN) :: CompName
    LOGICAL         , INTENT(IN) :: FirstHVACIteration
    INTEGER         , INTENT(INOUT)  :: CompIndex
-   REAL(r64),INTENT (IN), OPTIONAL :: QCoilReq       ! coil load to be met
-   REAL(r64),OPTIONAL :: QCoilActual    ! coil load actually delivered returned to calling component
+   REAL,INTENT (IN), OPTIONAL :: QCoilReq       ! coil load to be met
+   REAL,OPTIONAL :: QCoilActual    ! coil load actually delivered returned to calling component
    INTEGER, OPTIONAL, INTENT(IN)  :: FanOpMode
-   REAL(r64), OPTIONAL, INTENT(IN)  :: PartLoadRatio
+   REAL, OPTIONAL, INTENT(IN)  :: PartLoadRatio
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -202,10 +202,10 @@ CONTAINS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL(r64)     :: QCoilActualTemp    ! coil load actually delivered returned to calling component
+   REAL     :: QCoilActualTemp    ! coil load actually delivered returned to calling component
    INTEGER  :: CoilNum      ! The SteamCoil that you are currently loading input into
    INTEGER  :: OpMode       ! fan operating mode
-   REAL(r64)     :: PartLoadFrac ! part-load fraction of heating coil
+   REAL     :: PartLoadFrac ! part-load fraction of heating coil
 
 
    ! Obtains and Allocates SteamCoil related parameters from input file
@@ -318,7 +318,7 @@ CONTAINS
    CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
    CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
    CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-   REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+   REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
    LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
    LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
    INTEGER                              :: TotalArgs=0       ! Total number of alpha and numeric arguments (max) for a
@@ -515,8 +515,8 @@ CONTAINS
    INTEGER             :: SteamInletNode
    INTEGER             :: ControlNode
    INTEGER             :: AirOutletNode
-   REAL(r64)           :: SteamDensity
-   REAL(r64)           :: StartEnthSteam
+   REAL           :: SteamDensity
+   REAL           :: StartEnthSteam
    LOGICAL,SAVE        :: MyOneTimeFlag = .true.
    LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
    LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyPlantScanFlag
@@ -596,10 +596,10 @@ CONTAINS
      ControlNode                               = SteamCoil(CoilNum)%TempSetPointNodeNum
      AirOutletNode                             = SteamCoil(CoilNum)%AirOutletNodeNum
 
-     Node(SteamInletNode)%Temp                 = 100.0d0
-     Node(SteamInletNode)%Press                = 101325.d0
-     SteamDensity   =GetSatDensityRefrig ('STEAM',Node(SteamInletNode)%Temp,1.0d0,Node(SteamInletNode)%FluidIndex,'InitSteamCoil')
-     StartEnthSteam =GetSatEnthalpyRefrig('STEAM',Node(SteamInletNode)%Temp,1.0d0,Node(SteamInletNode)%FluidIndex,'InitSteamCoil')
+     Node(SteamInletNode)%Temp                 = 100.0
+     Node(SteamInletNode)%Press                = 101325.
+     SteamDensity   =GetSatDensityRefrig ('STEAM',Node(SteamInletNode)%Temp,1.0,Node(SteamInletNode)%FluidIndex,'InitSteamCoil')
+     StartEnthSteam =GetSatEnthalpyRefrig('STEAM',Node(SteamInletNode)%Temp,1.0,Node(SteamInletNode)%FluidIndex,'InitSteamCoil')
      Node(SteamInletNode)%Enthalpy             = StartEnthSteam
      Node(SteamInletNode)%Quality              = 1.0
      Node(SteamInletNode)%HumRat               = 0.0
@@ -607,7 +607,7 @@ CONTAINS
 !     Node(SteamInletNode)%MassFlowRate         = SteamCoil(CoilNum)%MaxSteamMassFlowRate
 !     Node(SteamInletNode)%MassFlowRateMinAvail = 0.0
 !     Node(SteamInletNode)%MassFlowRateMaxAvail = SteamCoil(CoilNum)%MaxSteamMassFlowRate
-     CALL InitComponentNodes(0.d0,SteamCoil(CoilNum)%MaxSteamMassFlowRate, &
+     CALL InitComponentNodes(0.,SteamCoil(CoilNum)%MaxSteamMassFlowRate, &
                                   SteamCoil(CoilNum)%SteamInletNodeNum,    &
                                   SteamCoil(CoilNum)%SteamOutletNodeNum,   &
                                   SteamCoil(CoilNum)%LoopNum,              &
@@ -711,23 +711,23 @@ CONTAINS
    INTEGER             :: PltSizNum     ! do loop index for plant sizing
    INTEGER             :: PltSizSteamNum ! index of plant sizing object for 1st steam loop
    LOGICAL             :: ErrorsFound   ! If errors detected in input
-   REAL(r64)           :: CoilInTemp    !
-   REAL(r64)           :: CoilOutTemp   !
-   REAL(r64)           :: CoilOutHumRat !
-   REAL(r64)           :: CoilInHumRat  !
-   REAL(r64)           :: DesCoilLoad   !
-   REAL(r64)           :: DesMassFlow   !
-   REAL(r64)           :: DesVolFlow    !
-   REAL(r64)           :: MinFlowFrac   !
-   REAL(r64)           :: OutAirFrac    !
-   REAL(r64)           :: TempSteamIn         !
-   REAL(r64)           :: EnthSteamInDry      !
-   REAL(r64)           :: EnthSteamOutWet     !
-   REAL(r64)           :: LatentHeatSteam     !
-   REAL(r64)           :: SteamDensity        !
-   REAL(r64)           :: RhoAirStd           ! density of air at standard conditions
-   REAL(r64)           :: CpAirStd            ! specific heat of air at std conditions
-   REAL(r64)           :: CpWater             ! specific heat of water (condensed steam)
+   REAL           :: CoilInTemp    !
+   REAL           :: CoilOutTemp   !
+   REAL           :: CoilOutHumRat !
+   REAL           :: CoilInHumRat  !
+   REAL           :: DesCoilLoad   !
+   REAL           :: DesMassFlow   !
+   REAL           :: DesVolFlow    !
+   REAL           :: MinFlowFrac   !
+   REAL           :: OutAirFrac    !
+   REAL           :: TempSteamIn         !
+   REAL           :: EnthSteamInDry      !
+   REAL           :: EnthSteamOutWet     !
+   REAL           :: LatentHeatSteam     !
+   REAL           :: SteamDensity        !
+   REAL           :: RhoAirStd           ! density of air at standard conditions
+   REAL           :: CpAirStd            ! specific heat of air at std conditions
+   REAL           :: CpWater             ! specific heat of water (condensed steam)
 
 
    ErrorsFound   = .FALSE.
@@ -740,8 +740,8 @@ CONTAINS
    MinFlowFrac   = 0.0
    DesMassFlow   = 0.0
    CpWater       = 0.0
-   RhoAirStd     = PsyRhoAirFnPbTdbW(StdBaroPress,20.0d0,0.0d0)
-   CpAirStd      = PsyCpAirFnWTdb(0.0d0,20.0d0)
+   RhoAirStd     = PsyRhoAirFnPbTdbW(StdBaroPress,20.0,0.0)
+   CpAirStd      = PsyCpAirFnWTdb(0.0,20.0)
 
    ! If this is a steam coil
    ! Find the appropriate steam Plant Sizing object
@@ -777,7 +777,7 @@ CONTAINS
            ELSE
              OutAirFrac = 1.0
            END IF
-           OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
+           OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
          ELSE
            OutAirFrac = 1.0
          END IF
@@ -790,18 +790,18 @@ CONTAINS
          IF (DesCoilLoad >= SmallLoad) THEN
             !TempSteamIn=SteamCoil(CoilNum)%InletSteamTemp
             !TempSteamIn=PlantSizData(PltSizSteamNum)%ExitTemp
-            TempSteamIn    =  100.0d0 ! DSU? Should be from the PlantSizing object (ExitTemp) instead of hardwired to 100?
+            TempSteamIn    =  100.0 ! DSU? Should be from the PlantSizing object (ExitTemp) instead of hardwired to 100?
             ! RefrigIndex is set during GetInput for this module
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
             ! SteamCoil(CoilNum)%MaxSteamVolFlowRate = DesCoilLoad/(SteamDensity * LatentHeatSteam)
 !            CpWater  =  GetSpecificHeatGlycol('WATER',  &
 !                                              TempSteamIn, &
 !                                              PlantLoop(SteamCoil(CoilNum)%LoopNum)%FluidIndex, &
 !                                             'SizeSteamCoil')
-            CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
             SteamCoil(CoilNum)%MaxSteamVolFlowRate = DesCoilLoad / (SteamDensity*(LatentHeatSteam + &
                                                        SteamCoil(CoilNum)%DegOfSubCooling*CpWater))
@@ -831,21 +831,21 @@ CONTAINS
            CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%HeatDesTemp
            CoilOutHumRat = FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat
            DesMassFlow = FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow
-           DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5d0*(CoilInTemp+CoilOutTemp)) &
+           DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
                          * DesMassFlow * (CoilOutTemp-CoilInTemp)
            IF (DesCoilLoad >= SmallLoad) THEN
-            TempSteamIn=100.0d0 ! DSU? Should be from the PlantSizing object (ExitTemp) instead of hardwired to 100?
+            TempSteamIn=100.0 ! DSU? Should be from the PlantSizing object (ExitTemp) instead of hardwired to 100?
             ! RefrigIndex is set during GetInput for this module
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
             ! SteamCoil(CoilNum)%MaxSteamVolFlowRate = DesCoilLoad/(SteamDensity * LatentHeatSteam)
  !           CpWater  =  GetSpecificHeatGlycol('WATER',  &
  !                                             TempSteamIn, &
  !                                             PlantLoop(SteamCoil(CoilNum)%LoopNum)%FluidIndex, &
  !                                            'SizeSteamCoil')
-            CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+            CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
             SteamCoil(CoilNum)%MaxSteamVolFlowRate = DesCoilLoad / (SteamDensity*(LatentHeatSteam + &
                                                        SteamCoil(CoilNum)%DegOfSubCooling*CpWater))
@@ -916,10 +916,10 @@ CONTAINS
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
    Integer, Intent(IN) :: CoilNum
-   REAL(r64),    Intent(IN) :: QCoilRequested ! requested coil load
-   REAL(r64),    Intent(OUT):: QCoilActual    ! coil load actually delivered
+   REAL,    Intent(IN) :: QCoilRequested ! requested coil load
+   REAL,    Intent(OUT):: QCoilActual    ! coil load actually delivered
    INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-   REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+   REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -931,31 +931,31 @@ CONTAINS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL(r64) :: SteamMassFlowRate =0.0
-   REAL(r64) :: AirMassFlow       =0.0! [kg/sec]
-   REAL(r64) :: TempAirIn         =0.0! [C]
-   REAL(r64) :: TempAirOut        =0.0! [C]
-   REAL(r64) :: Win               =0.0
-   REAL(r64) :: TempSteamIn       =0.0
-   REAL(r64) :: TempWaterOut      =0.0
-   REAL(r64) :: CapacitanceAir    =0.0
-   REAL(r64) :: HeatingCoilLoad   =0.0
-   REAL(r64) :: CoilPress         =0.0
-   REAL(r64) :: EnthSteamInDry    =0.0
-   REAL(r64) :: EnthSteamOutWet   =0.0
-   REAL(r64) :: LatentHeatSteam   =0.0
-   REAL(r64) :: SubCoolDeltaTemp  =0.0
-   REAL(r64) :: TempSetPoint      =0.0
-   REAL(r64) :: QCoilReq          =0.0
-   REAL(r64) :: QCoilCap          =0.0
-   REAL(r64) :: QSteamCoilMaxHT   =0.0
-   REAL(r64) :: TempWaterAtmPress =0.0
-   REAL(r64) :: TempLoopOutToPump =0.0
-   REAL(r64) :: EnergyLossToEnvironment=0.0
-   REAL(r64) :: EnthCoilOutlet    =0.0
-   REAL(r64) :: EnthPumpInlet     =0.0
-   REAL(r64) :: EnthAtAtmPress    =0.0
-   REAL(r64) :: CpWater           =0.0
+   REAL :: SteamMassFlowRate =0.0
+   REAL :: AirMassFlow       =0.0! [kg/sec]
+   REAL :: TempAirIn         =0.0! [C]
+   REAL :: TempAirOut        =0.0! [C]
+   REAL :: Win               =0.0
+   REAL :: TempSteamIn       =0.0
+   REAL :: TempWaterOut      =0.0
+   REAL :: CapacitanceAir    =0.0
+   REAL :: HeatingCoilLoad   =0.0
+   REAL :: CoilPress         =0.0
+   REAL :: EnthSteamInDry    =0.0
+   REAL :: EnthSteamOutWet   =0.0
+   REAL :: LatentHeatSteam   =0.0
+   REAL :: SubCoolDeltaTemp  =0.0
+   REAL :: TempSetPoint      =0.0
+   REAL :: QCoilReq          =0.0
+   REAL :: QCoilCap          =0.0
+   REAL :: QSteamCoilMaxHT   =0.0
+   REAL :: TempWaterAtmPress =0.0
+   REAL :: TempLoopOutToPump =0.0
+   REAL :: EnergyLossToEnvironment=0.0
+   REAL :: EnthCoilOutlet    =0.0
+   REAL :: EnthPumpInlet     =0.0
+   REAL :: EnthAtAtmPress    =0.0
+   REAL :: CpWater           =0.0
 
    QCoilReq          = QCoilRequested
    TempAirIn         = SteamCoil(CoilNum)%InletAirTemp
@@ -1001,8 +1001,8 @@ CONTAINS
           ! Steam heat exchangers would not have effectivness, since all of the steam is
           ! converted to water and only then the steam trap allows it to leave the heat
           ! exchanger, subsequently heat exchange is latent heat + subcooling.
-          EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
-          EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+          EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+          EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
 
           LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
 
@@ -1011,7 +1011,7 @@ CONTAINS
 !                                           PlantLoop(SteamCoil(CoilNum)%LoopNum)%FluidIndex, &
 !                                           'CalcSteamAirCoil')
 
-          CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+          CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
           ! Max Heat Transfer
           QSteamCoilMaxHT= SteamCoil(CoilNum)%MaxSteamMassFlowRate*(LatentHeatSteam+SubCoolDeltaTemp*CpWater)
@@ -1065,14 +1065,14 @@ CONTAINS
               TempLoopOutToPump=TempWaterAtmPress-SteamCoil(CoilNum)%LoopSubCoolReturn
 
               ! Actual Steam Coil Outlet Enthalpy
-              EnthCoilOutlet=GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,  &
+              EnthCoilOutlet=GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,  &
                  SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil') - CpWater*SubCoolDeltaTemp
 
               ! Enthalpy at Point 4
-              EnthAtAtmPress=GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+              EnthAtAtmPress=GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
 
               ! Reported value of coil outlet enthalpy at the node to match the node outlet temperature
-              CpWater = GetSatSpecificHeatRefrig('STEAM',TempLoopOutToPump,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+              CpWater = GetSatSpecificHeatRefrig('STEAM',TempLoopOutToPump,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
               EnthPumpInlet=EnthAtAtmPress-CpWater*SteamCoil(CoilNum)%LoopSubCoolReturn
 
@@ -1106,15 +1106,15 @@ CONTAINS
           ! Steam heat exchangers would not have effectivness, since all of the steam is
           ! converted to water and only then the steam trap allows it to leave the heat
           ! exchanger, subsequently heat exchange is latent heat + subcooling.
-          EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
-          EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+          EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+          EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
           LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
 
 !          CpWater = GetSpecificHeatGlycol('WATER',  &
 !                                           TempSteamIn, &
 !                                           PlantLoop(SteamCoil(CoilNum)%LoopNum)%FluidIndex, &
 !                                           'CalcSteamAirCoil')
-          CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+          CpWater = GetSatSpecificHeatRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
           ! Max Heat Transfer
           QSteamCoilMaxHT= SteamCoil(CoilNum)%MaxSteamMassFlowRate*(LatentHeatSteam+SubCoolDeltaTemp*CpWater)
@@ -1222,13 +1222,13 @@ CONTAINS
               TempLoopOutToPump=TempWaterAtmPress-SteamCoil(CoilNum)%LoopSubCoolReturn
 
               ! Actual Steam Coil Outlet Enthalpy
-              EnthCoilOutlet=GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')-&
+              EnthCoilOutlet=GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')-&
                                                                       CpWater*SubCoolDeltaTemp
 
               ! Enthalpy at Point 4
-              EnthAtAtmPress=GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0d0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
+              EnthAtAtmPress=GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0,SteamCoil(CoilNum)%FluidIndex,'CalcSteamAirCoil')
 
-              CpWater = GetSatSpecificHeatRefrig('STEAM',TempLoopOutToPump,0.0d0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
+              CpWater = GetSatSpecificHeatRefrig('STEAM',TempLoopOutToPump,0.0,SteamCoil(CoilNum)%FluidIndex,'SizeSteamCoil')
 
               ! Reported value of coil outlet enthalpy at the node to match the node outlet temperature
               EnthPumpInlet=EnthAtAtmPress-CpWater*SteamCoil(CoilNum)%LoopSubCoolReturn
@@ -1511,7 +1511,7 @@ SUBROUTINE CheckSteamCoilSchedule(CompType,CompName,Value,CompIndex)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: CompType
   CHARACTER(len=*), INTENT(IN) :: CompName
-  REAL(r64), INTENT(OUT)            :: Value
+  REAL, INTENT(OUT)            :: Value
   INTEGER, INTENT(INOUT)       :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1585,7 +1585,7 @@ FUNCTION GetCoilMaxWaterFlowRate(CoilType,CoilName,ErrorsFound) RESULT(MaxWaterF
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
+  REAL                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1655,7 +1655,7 @@ FUNCTION GetCoilMaxSteamFlowRate(CoilIndex,ErrorsFound) RESULT(MaxSteamFlowRate)
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)          :: CoilIndex    ! must match coil types in this module
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: MaxSteamFlowRate  ! returned max steam flow rate of matched coil
+  REAL                    :: MaxSteamFlowRate  ! returned max steam flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2156,7 +2156,7 @@ FUNCTION GetCoilCapacity(CoilType,CoilName,ErrorsFound) RESULT(Capacity)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: Capacity     ! returned operating capacity of matched coil (W)
+  REAL                    :: Capacity     ! returned operating capacity of matched coil (W)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

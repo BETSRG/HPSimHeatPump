@@ -45,7 +45,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
           DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed time at end of run
           CHARACTER*80 :: RefName   !Refrigerant Name
           
-          REAL, PARAMETER    :: AutoCalculate = -99999.d0 ! automatically calculate some fields.    !RS: Debugging
+          REAL, PARAMETER    :: AutoCalculate = -99999. ! automatically calculate some fields.    !RS: Debugging
 
           ! DERIVED TYPE DEFINITIONS:
           ! na

@@ -89,39 +89,39 @@ TYPE Towerspecs
   CHARACTER(len=MaxNameLength):: ModelCoeffObjectName    = ' ' ! Cooling Tower:Variable Speed Model Coefficient Object name
   LOGICAL    :: Available                    = .TRUE. ! need an array of logicals--load identifiers of available equipment
   LOGICAL    :: ON                           = .TRUE. ! Simulate the machine at it's operating part load ratio
-  REAL(r64)  :: DesignWaterFlowRate             = 0.0 ! Design water flow rate through the tower [m3/s]
-  REAL(r64)  :: DesWaterMassFlowRate            = 0.0 ! Design water flow rate through the tower [kg/s]
-  REAL(r64)  :: HighSpeedAirFlowRate            = 0.0 ! Air flow rate through tower at high speed [m3/s]
-  REAL(r64)  :: HighSpeedFanPower               = 0.0 ! Fan power at high fan speed [W]
-  REAL(r64)  :: HighSpeedTowerUA                = 0.0 ! UA of tower at high fan speed [W/C]
-  REAL(r64)  :: LowSpeedAirFlowRate             = 0.0 ! Air flow rate through tower at low speed [m3/s]
-  REAL(r64)  :: LowSpeedFanPower                = 0.0 ! Fan power at low fan speed [W]
-  REAL(r64)  :: LowSpeedTowerUA                 = 0.0 ! UA of tower at low fan speed [W/C]
-  REAL(r64)  :: FreeConvAirFlowRate             = 0.0 ! Air flow rate through tower with fan off [m3/s]
-  REAL(r64)  :: FreeConvTowerUA                 = 0.0 ! UA of tower with fan off [W/C]
-  REAL(r64)  :: DesignInletWB                   = 0.0 ! Design inlet air wet-bulb temperature (C)
-  REAL(r64)  :: DesignApproach                  = 0.0 ! Design approach (outlet water temp minus inlet air wet-bulb temp (C)
-  REAL(r64)  :: DesignRange                     = 0.0 ! Design range temperature (inlet water temp minus outlet water temp (C)
-  REAL(r64)  :: MinimumVSAirFlowFrac            = 0.0 ! Min air flow ratio (used for VS tower only, point where free conv occurs)
-  REAL(r64)  :: CalibratedWaterFlowRate         = 0.0 ! Water flow ratio required for model calibration
-  REAL(r64)  :: BasinHeaterPowerFTempDiff       = 0.0 ! Basin heater capacity per degree C below setpoint (W/C)
-  REAL(r64)  :: BasinHeaterSetPointTemp         = 0.0 ! setpoint temperature for basin heater operation (C)
-  REAL(r64)  :: MakeupWaterDrift                = 0.0 ! Makeup water flow rate fraction due to drift
-  REAL(r64)  :: FreeConvectionCapacityFraction  = 0.0 ! Percentage of tower capacity in free convection regime
-  REAL(r64)  :: TowerMassFlowRateMultiplier     = 0.0 ! Maximum tower flow rate is this multiplier times design flow rate
-  REAL(r64)  :: TowerNominalCapacity            = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
+  REAL  :: DesignWaterFlowRate             = 0.0 ! Design water flow rate through the tower [m3/s]
+  REAL  :: DesWaterMassFlowRate            = 0.0 ! Design water flow rate through the tower [kg/s]
+  REAL  :: HighSpeedAirFlowRate            = 0.0 ! Air flow rate through tower at high speed [m3/s]
+  REAL  :: HighSpeedFanPower               = 0.0 ! Fan power at high fan speed [W]
+  REAL  :: HighSpeedTowerUA                = 0.0 ! UA of tower at high fan speed [W/C]
+  REAL  :: LowSpeedAirFlowRate             = 0.0 ! Air flow rate through tower at low speed [m3/s]
+  REAL  :: LowSpeedFanPower                = 0.0 ! Fan power at low fan speed [W]
+  REAL  :: LowSpeedTowerUA                 = 0.0 ! UA of tower at low fan speed [W/C]
+  REAL  :: FreeConvAirFlowRate             = 0.0 ! Air flow rate through tower with fan off [m3/s]
+  REAL  :: FreeConvTowerUA                 = 0.0 ! UA of tower with fan off [W/C]
+  REAL  :: DesignInletWB                   = 0.0 ! Design inlet air wet-bulb temperature (C)
+  REAL  :: DesignApproach                  = 0.0 ! Design approach (outlet water temp minus inlet air wet-bulb temp (C)
+  REAL  :: DesignRange                     = 0.0 ! Design range temperature (inlet water temp minus outlet water temp (C)
+  REAL  :: MinimumVSAirFlowFrac            = 0.0 ! Min air flow ratio (used for VS tower only, point where free conv occurs)
+  REAL  :: CalibratedWaterFlowRate         = 0.0 ! Water flow ratio required for model calibration
+  REAL  :: BasinHeaterPowerFTempDiff       = 0.0 ! Basin heater capacity per degree C below setpoint (W/C)
+  REAL  :: BasinHeaterSetPointTemp         = 0.0 ! setpoint temperature for basin heater operation (C)
+  REAL  :: MakeupWaterDrift                = 0.0 ! Makeup water flow rate fraction due to drift
+  REAL  :: FreeConvectionCapacityFraction  = 0.0 ! Percentage of tower capacity in free convection regime
+  REAL  :: TowerMassFlowRateMultiplier     = 0.0 ! Maximum tower flow rate is this multiplier times design flow rate
+  REAL  :: TowerNominalCapacity            = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
                                                       !  leaving water at 29.44C (85F), entering air at 25.56C (78F) wet-bulb
                                                       !  temp and 35C (95F) dry-bulb temp, and water flow
                                                       !  rate of 5.382E-8 m3/s per watt (3 gpm/ton)
-  REAL(r64)  :: TowerLowSpeedNomCap             = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
+  REAL  :: TowerLowSpeedNomCap             = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
                                                       !  leaving water at 29.44C (85F), entering air at 25.56C (78F) wet-bulb
                                                       !  temp and 35C (95F) dry-bulb temp, and water flow
                                                       !  rate of 5.382E-8 m3/s per nominal capacity watt (3 gpm/ton)
-  REAL(r64)  :: TowerFreeConvNomCap             = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
+  REAL  :: TowerFreeConvNomCap             = 0.0 ! Nominal capacity of the tower [W] with entering water at 35C (95F),
                                                       !  leaving water at 29.44C (85F), entering air at 25.56C (78F) wet-bulb
                                                       !  temp and 35C (95F) dry-bulb temp, and water flow
                                                       !  rate of 5.382E-8 m3/s per nominal capacity watt (3 gpm/ton)
-  REAL(r64)  :: SizFac                                !  sizing factor
+  REAL  :: SizFac                                !  sizing factor
   INTEGER    :: WaterInletNodeNum               = 0   ! Node number on the water inlet side of the tower
   INTEGER    :: WaterOutletNodeNum              = 0   ! Node number on the water outlet side of the tower
   INTEGER    :: OutdoorAirInletNodeNum          = 0   ! Node number of outdoor air inlet for the tower
@@ -146,22 +146,22 @@ TYPE Towerspecs
   !fluid bypass
   INTEGER    :: CapacityControl                 = 0   ! Type of capacity control for single speed cooling tower:
                                                       !  0 - FanCycling, 1 - FluidBypass
-  REAL(r64)  :: BypassFraction                  = 0.0 ! Fraction of fluid bypass as a ratio of total fluid flow
+  REAL  :: BypassFraction                  = 0.0 ! Fraction of fluid bypass as a ratio of total fluid flow
                                                       !  through the tower sump
   !multi cell tower
   INTEGER    :: NumCell                         = 0 ! Number of cells in the cooling tower
   CHARACTER(len=15)  :: CellCtrl                = ' ' ! Cell control type : either MaxCell or MinCell
   INTEGER    :: CellCtrl_Num                    = 0
   INTEGER    :: NumCellON                       = 0   ! number of cells working
-  REAL(r64)  :: MinFracFlowRate                 = 0.0 ! Minimal fraction of design flow/cell allowable
-  REAL(r64)  :: MaxFracFlowRate                 = 0.0 ! Maximal ratio of design flow/cell allowable
+  REAL  :: MinFracFlowRate                 = 0.0 ! Minimal fraction of design flow/cell allowable
+  REAL  :: MaxFracFlowRate                 = 0.0 ! Maximal ratio of design flow/cell allowable
 
   !begin water system interactions
   INTEGER    :: EvapLossMode                    = EvapLossByMoistTheory  ! sets how tower water evaporation is modeled
-  REAL(r64)  :: UserEvapLossFactor              = 0.0 ! simple model [%/Delt C]
-  REAL(r64)  :: DriftLossFraction               = 0.0
+  REAL  :: UserEvapLossFactor              = 0.0 ! simple model [%/Delt C]
+  REAL  :: DriftLossFraction               = 0.0
   INTEGER    :: BlowdownMode                    = BlowdownByConcentration ! sets how tower water blowdown is modeled
-  REAL(r64)  :: ConcentrationRatio              = 0.0 ! ratio of solids in blowdown vs make up water
+  REAL  :: ConcentrationRatio              = 0.0 ! ratio of solids in blowdown vs make up water
   INTEGER    :: SchedIDBlowdown                 = 0 ! index "pointer" to schedule of blowdown in [m3/s]
   Logical    :: SuppliedByWaterSystem           = .false.
   INTEGER    :: WaterTankID                     = 0 ! index "pointer" to WaterStorage structure
@@ -180,38 +180,38 @@ TYPE Towerspecs
 END TYPE Towerspecs
 
 TYPE TowerInletConds
-  REAL(r64) :: WaterTemp      = 0.0  ! Tower water inlet temperature (C)
-  REAL(r64) :: AirTemp        = 0.0  ! Tower air inlet dry-bulb temperature (C)
-  REAL(r64) :: AirWetBulb     = 0.0  ! Tower air inlet wet-bulb temperature (C)
-  REAL(r64) :: AirPress       = 0.0  ! Tower air barometric pressure
-  REAL(r64) :: AirHumRat      = 0.0  ! Tower air inlet humidity ratio (kg/kg)
+  REAL :: WaterTemp      = 0.0  ! Tower water inlet temperature (C)
+  REAL :: AirTemp        = 0.0  ! Tower air inlet dry-bulb temperature (C)
+  REAL :: AirWetBulb     = 0.0  ! Tower air inlet wet-bulb temperature (C)
+  REAL :: AirPress       = 0.0  ! Tower air barometric pressure
+  REAL :: AirHumRat      = 0.0  ! Tower air inlet humidity ratio (kg/kg)
 END TYPE TowerInletConds
 
 TYPE ReportVars
-  REAL(r64)    :: InletWaterTemp         = 0.0  ! Tower inlet water temperature (C)
-  REAL(r64)    :: OutletWaterTemp        = 0.0  ! Tower outlet water temperature (C)
-  REAL(r64)    :: WaterMassFlowRate      = 0.0  ! Tower water mass flow rate (m3/s)
-  REAL(r64)    :: Qactual                = 0.0  ! Tower heat rejection rate (W)
-  REAL(r64)    :: FanPower               = 0.0  ! Tower fan power (W)
-  REAL(r64)    :: FanEnergy              = 0.0  ! Tower fan energy consumption (J)
-  REAL(r64)    :: AirFlowRatio           = 0.0  ! Air flow ratio through variable speed cooling tower
-  REAL(r64)    :: BasinHeaterPower       = 0.0  ! Basin heater power (W)
-  REAL(r64)    :: BasinHeaterConsumption = 0.0  ! Basin heater energy consumption (J)
-  REAL(r64)    :: WaterAmountUsed        = 0.0  ! Tower make up water usage (m3)
-  REAL(r64)    :: FanCyclingRatio        = 0.0  ! cycling ratio of tower fan when min fan speed provide too much capacity (for VFD)
-  REAL(r64)    :: EvaporationVdot        = 0.0  !
-  REAL(r64)    :: EvaporationVol         = 0.0  !
-  REAL(r64)    :: DriftVdot              = 0.0  !
-  REAL(r64)    :: DriftVol               = 0.0  !
-  REAL(r64)    :: BlowdownVdot           = 0.0  !
-  REAL(r64)    :: BlowdownVol            = 0.0  !
-  REAL(r64)    :: MakeUpVdot             = 0.0  !
-  REAL(r64)    :: MakeUpVol              = 0.0  !
-  REAL(r64)    :: TankSupplyVdot         = 0.0  !
-  REAL(r64)    :: TankSupplyVol          = 0.0  !
-  REAL(r64)    :: StarvedMakeUpVdot      = 0.0  !
-  REAL(r64)    :: StarvedMakeUpVol       = 0.0  !
-  REAL(r64)    :: BypassFraction         = 0.0  ! Added for fluid bypass
+  REAL    :: InletWaterTemp         = 0.0  ! Tower inlet water temperature (C)
+  REAL    :: OutletWaterTemp        = 0.0  ! Tower outlet water temperature (C)
+  REAL    :: WaterMassFlowRate      = 0.0  ! Tower water mass flow rate (m3/s)
+  REAL    :: Qactual                = 0.0  ! Tower heat rejection rate (W)
+  REAL    :: FanPower               = 0.0  ! Tower fan power (W)
+  REAL    :: FanEnergy              = 0.0  ! Tower fan energy consumption (J)
+  REAL    :: AirFlowRatio           = 0.0  ! Air flow ratio through variable speed cooling tower
+  REAL    :: BasinHeaterPower       = 0.0  ! Basin heater power (W)
+  REAL    :: BasinHeaterConsumption = 0.0  ! Basin heater energy consumption (J)
+  REAL    :: WaterAmountUsed        = 0.0  ! Tower make up water usage (m3)
+  REAL    :: FanCyclingRatio        = 0.0  ! cycling ratio of tower fan when min fan speed provide too much capacity (for VFD)
+  REAL    :: EvaporationVdot        = 0.0  !
+  REAL    :: EvaporationVol         = 0.0  !
+  REAL    :: DriftVdot              = 0.0  !
+  REAL    :: DriftVol               = 0.0  !
+  REAL    :: BlowdownVdot           = 0.0  !
+  REAL    :: BlowdownVol            = 0.0  !
+  REAL    :: MakeUpVdot             = 0.0  !
+  REAL    :: MakeUpVol              = 0.0  !
+  REAL    :: TankSupplyVdot         = 0.0  !
+  REAL    :: TankSupplyVol          = 0.0  !
+  REAL    :: StarvedMakeUpVdot      = 0.0  !
+  REAL    :: StarvedMakeUpVol       = 0.0  !
+  REAL    :: BypassFraction         = 0.0  ! Added for fluid bypass
   INTEGER      :: NumCellON              = 0    ! for multi-cell tower
   INTEGER      :: SpeedSelected            = 0    ! Speed selected for the two speed tower
 
@@ -219,17 +219,17 @@ END TYPE ReportVars
 
 TYPE VSTowerData
 ! variables specific to variable-speed towers
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Coeff                       !- model coefficients
+  REAL, ALLOCATABLE, DIMENSION(:) :: Coeff                       !- model coefficients
   LOGICAL                         :: FoundModelCoeff   = .FALSE. !- TRUE if model is calibratable
-  REAL(r64)                       :: MinInletAirWBTemp = 0.0     !- model limit for min inlet air WB temp
-  REAL(r64)                       :: MaxInletAirWBTemp = 0.0     !- model limit for max inlet air WB temp
-  REAL(r64)                       :: MinRangeTemp      = 0.0     !- model limit for min range temp
-  REAL(r64)                       :: MaxRangeTemp      = 0.0     !- model limit for max range temp
-  REAL(r64)                       :: MinApproachTemp   = 0.0     !- model limit for min approach temp
-  REAL(r64)                       :: MaxApproachTemp   = 0.0     !- model limit for max approach temp
-  REAL(r64)                       :: MinWaterFlowRatio = 0.0     !- model limit for min water flow rate ratio
-  REAL(r64)                       :: MaxWaterFlowRatio = 0.0     !- model limit for max water flow rate ratio
-  REAL(r64)                       :: MaxLiquidToGasRatio = 0.0   !- model limit for max liquid to gas ratio
+  REAL                       :: MinInletAirWBTemp = 0.0     !- model limit for min inlet air WB temp
+  REAL                       :: MaxInletAirWBTemp = 0.0     !- model limit for max inlet air WB temp
+  REAL                       :: MinRangeTemp      = 0.0     !- model limit for min range temp
+  REAL                       :: MaxRangeTemp      = 0.0     !- model limit for max range temp
+  REAL                       :: MinApproachTemp   = 0.0     !- model limit for min approach temp
+  REAL                       :: MaxApproachTemp   = 0.0     !- model limit for max approach temp
+  REAL                       :: MinWaterFlowRatio = 0.0     !- model limit for min water flow rate ratio
+  REAL                       :: MaxWaterFlowRatio = 0.0     !- model limit for max water flow rate ratio
+  REAL                       :: MaxLiquidToGasRatio = 0.0   !- model limit for max liquid to gas ratio
   INTEGER                         :: VSErrorCountFlowFrac  = 0   !- counter if water flow rate ratio limits are exceeded
   INTEGER                         :: VSErrorCountWFRR  = 0       !- counter if water flow rate ratio limits are exceeded
   INTEGER                         :: VSErrorCountIAWB  = 0       !- counter if inlet air wet-bulb temperature limits are exceeded
@@ -266,11 +266,11 @@ TYPE VSTowerData
   LOGICAL                         :: PrintTaMessage    = .FALSE. !- flag to print Ta error message
   LOGICAL                         :: PrintWFRRMessage  = .FALSE. !- flag to print WFRR error message
   LOGICAL                         :: PrintLGMessage    = .FALSE. !- flag to print liquid-gas ratio error message
-  REAL(r64)                       :: TrLast            = 0.0 ! value of Tr when warning occurred (passed to Recurring Warning)
-  REAL(r64)                       :: TwbLast           = 0.0 ! value of Twb when warning occurred (passed to Recurring Warning)
-  REAL(r64)                       :: TaLast            = 0.0 ! value of Ta when warning occurred (passed to Recurring Warning)
-  REAL(r64)                       :: WaterFlowRateRatioLast = 0.0 ! value of WFRR when warning occurred (passed to Recurring Warn)
-  REAL(r64)                       :: LGLast            = 0.0      ! value of LG when warning occurred (passed to Recurring Warn)
+  REAL                       :: TrLast            = 0.0 ! value of Tr when warning occurred (passed to Recurring Warning)
+  REAL                       :: TwbLast           = 0.0 ! value of Twb when warning occurred (passed to Recurring Warning)
+  REAL                       :: TaLast            = 0.0 ! value of Ta when warning occurred (passed to Recurring Warning)
+  REAL                       :: WaterFlowRateRatioLast = 0.0 ! value of WFRR when warning occurred (passed to Recurring Warn)
+  REAL                       :: LGLast            = 0.0      ! value of LG when warning occurred (passed to Recurring Warn)
 END TYPE VSTowerData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -280,21 +280,21 @@ INTEGER           :: NumSimpleTowers          = 0      ! Number of similar tower
 !   across sim, update, and report routines.  Simulation manager must be careful
 !   in models with multiple towers.
 
-REAL(r64)         :: InletWaterTemp           = 0.0    ! CW temperature at tower inlet
-REAL(r64)         :: OutletWaterTemp          = 0.0    ! CW temperature at tower outlet
+REAL         :: InletWaterTemp           = 0.0    ! CW temperature at tower inlet
+REAL         :: OutletWaterTemp          = 0.0    ! CW temperature at tower outlet
 INTEGER           :: WaterInletNode           = 0      ! Node number at tower inlet
 INTEGER           :: WaterOutletNode          = 0      ! Node number at tower outlet
-REAL(r64)         :: WaterMassFlowRate        = 0.0    ! WaterMassFlowRate through tower
-!DSU this is plant level stuff now REAL(r64)         :: TowerMassFlowRateMax     = 0.0    ! Max Hardware Mass Flow Rate
-!DSU this is plant level stuff now REAL(r64)         :: TowerMassFlowRateMin     = 0.0    ! Min Hardware Mass Flow Rate
-!DSU this is plant level stuff now REAL(r64)         :: LoopMassFlowRateMaxAvail = 0.0    ! Max Loop Mass Flow Rate available
-!DSU this is plant level stuff now REAL(r64)         :: LoopMassFlowRateMinAvail = 0.0    ! Min Loop Mass Flow Rate available
-REAL(r64)         :: Qactual                  = 0.0    ! Tower heat transfer
-REAL(r64)         :: CTFanPower               = 0.0    ! Tower fan power used
-REAL(r64)         :: AirFlowRateRatio         = 0.0    ! Ratio of air flow rate through VS cooling tower to design air flow rate
-REAL(r64)         :: BasinHeaterPower         = 0.0    ! Basin heater power use (W)
-REAL(r64)         :: WaterUsage               = 0.0    ! Tower water usage (m3/s)
-REAL(r64)         :: FanCyclingRatio          = 0.0    ! cycling ratio of tower fan when min fan speed provide to much capacity
+REAL         :: WaterMassFlowRate        = 0.0    ! WaterMassFlowRate through tower
+!DSU this is plant level stuff now REAL         :: TowerMassFlowRateMax     = 0.0    ! Max Hardware Mass Flow Rate
+!DSU this is plant level stuff now REAL         :: TowerMassFlowRateMin     = 0.0    ! Min Hardware Mass Flow Rate
+!DSU this is plant level stuff now REAL         :: LoopMassFlowRateMaxAvail = 0.0    ! Max Loop Mass Flow Rate available
+!DSU this is plant level stuff now REAL         :: LoopMassFlowRateMinAvail = 0.0    ! Min Loop Mass Flow Rate available
+REAL         :: Qactual                  = 0.0    ! Tower heat transfer
+REAL         :: CTFanPower               = 0.0    ! Tower fan power used
+REAL         :: AirFlowRateRatio         = 0.0    ! Ratio of air flow rate through VS cooling tower to design air flow rate
+REAL         :: BasinHeaterPower         = 0.0    ! Basin heater power use (W)
+REAL         :: WaterUsage               = 0.0    ! Tower water usage (m3/s)
+REAL         :: FanCyclingRatio          = 0.0    ! cycling ratio of tower fan when min fan speed provide to much capacity
 
 
 TYPE (Towerspecs),      ALLOCATABLE, DIMENSION(:) :: SimpleTower         ! dimension to number of machines
@@ -367,11 +367,11 @@ SUBROUTINE SimTowers(TowerType,TowerName, CompIndex, RunFlag,InitLoopEquip, &
   INTEGER,INTENT(INOUT)       :: CompIndex
   LOGICAL,INTENT(INOUT)       :: RunFlag
   LOGICAL, INTENT(IN)         :: InitLoopEquip
-  REAL(r64),INTENT(INOUT)     :: OptCap
-  REAL(r64),INTENT(INOUT)     :: MaxCap
-  REAL(r64),INTENT(INOUT)     :: MinCap
+  REAL,INTENT(INOUT)     :: OptCap
+  REAL,INTENT(INOUT)     :: MaxCap
+  REAL,INTENT(INOUT)     :: MinCap
   LOGICAL, INTENT(IN)         :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL(r64), INTENT(INOUT)    :: SizingFactor     ! sizing factor
+  REAL, INTENT(INOUT)    :: SizingFactor     ! sizing factor
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -431,7 +431,7 @@ SUBROUTINE SimTowers(TowerType,TowerName, CompIndex, RunFlag,InitLoopEquip, &
           CALL InitTower(TowerNum, RunFlag)
           CALL SizeTower(TowerNum)
           MinCap = 0.0
-          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25d0
+          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25
           OptCap = SimpleTower(TowerNum)%TowerNominalCapacity
           IF (GetSizingFactor) THEN
             SizingFactor = SimpleTower(TowerNum)%SizFac
@@ -450,7 +450,7 @@ SUBROUTINE SimTowers(TowerType,TowerName, CompIndex, RunFlag,InitLoopEquip, &
           CALL InitTower(TowerNum, RunFlag)
           CALL SizeTower(TowerNum)
           MinCap = 0.0
-          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25d0
+          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25
           OptCap = SimpleTower(TowerNum)%TowerNominalCapacity
           IF (GetSizingFactor) THEN
             SizingFactor = SimpleTower(TowerNum)%SizFac
@@ -469,7 +469,7 @@ SUBROUTINE SimTowers(TowerType,TowerName, CompIndex, RunFlag,InitLoopEquip, &
           CALL InitTower(TowerNum, RunFlag)
           CALL SizeTower(TowerNum)
           MinCap = 0.0
-          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25d0
+          MaxCap = SimpleTower(TowerNum)%TowerNominalCapacity * 1.25
           OptCap = SimpleTower(TowerNum)%TowerNominalCapacity
           IF (GetSizingFactor) THEN
             SizingFactor = SimpleTower(TowerNum)%SizFac
@@ -568,8 +568,8 @@ SUBROUTINE GetTowerInput
     CHARACTER(len=6)            :: OutputChar                ! report variable for warning messages
     CHARACTER(len=6)            :: OutputCharLo              ! report variable for warning messages
     CHARACTER(len=6)            :: OutputCharHi              ! report variable for warning messages
-    REAL(r64), DIMENSION(21)         :: NumArray                  ! Numeric input data array
-    REAL(r64), DIMENSION(43)         :: NumArray2                 ! Numeric input data array for VS tower coefficients
+    REAL, DIMENSION(21)         :: NumArray                  ! Numeric input data array
+    REAL, DIMENSION(43)         :: NumArray2                 ! Numeric input data array for VS tower coefficients
     CHARACTER(len=MaxNameLength),DIMENSION(13) :: AlphArray   ! Character string input data array
     CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray2  ! Character string input data array for VS tower coefficients
 
@@ -617,7 +617,7 @@ SUBROUTINE GetTowerInput
     SimpleTower(TowerNum)%Name                     = AlphArray(1)
     SimpleTower(TowerNum)%TowerType                = TRIM(cCurrentModuleObject)
     SimpleTower(TowerNum)%TowerType_Num            = CoolingTower_SingleSpeed
-    SimpleTower(TowerNum)%TowerMassFlowRateMultiplier = 2.5d0
+    SimpleTower(TowerNum)%TowerMassFlowRateMultiplier = 2.5
     SimpleTower(TowerNum)%WaterInletNodeNum        = &
                GetOnlySingleNode(AlphArray(2),ErrorsFound,TRIM(cCurrentModuleObject),AlphArray(1), &
                NodeType_Water,NodeConnectionType_Inlet, 1, ObjectIsNotParent)
@@ -651,7 +651,7 @@ SUBROUTINE GetTowerInput
 
     !   Basin heater power as a function of temperature must be greater than or equal to 0
     SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff = NumArray(9)
-    IF(NumArray(9) .LT. 0.0d0) THEN
+    IF(NumArray(9) .LT. 0.0) THEN
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//', "'//TRIM(SimpleTower(TowerNum)%Name)//&
                      '" basin heater power as a function of temperature difference must be >= 0')
       ErrorsFound = .TRUE.
@@ -659,11 +659,11 @@ SUBROUTINE GetTowerInput
 
     SimpleTower(TowerNum)%BasinHeaterSetPointTemp = NumArray(10)
 
-    IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0d0) THEN
+    IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0) THEN
       IF(NumNums .LT. 10) THEN
-        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0d0
+        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0
       ENDIF
-      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0d0) THEN
+      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0) THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//':"'//TRIM(SimpleTower(TowerNum)%Name)//&
            '", '//TRIM(cNumericFieldNames(10))//' is less than 2 deg C. Freezing could occur.')
       END IF
@@ -692,16 +692,16 @@ SUBROUTINE GetTowerInput
     ENDIF
 
     SimpleTower(TowerNum)%UserEvapLossFactor = NumArray(11) !  N11 , \field Evaporation Loss Factor
-    SimpleTower(TowerNum)%DriftLossFraction = NumArray(12)/100.0d0  !  N12, \field Drift Loss Percent
+    SimpleTower(TowerNum)%DriftLossFraction = NumArray(12)/100.0  !  N12, \field Drift Loss Percent
 
     If ((NumNums < 12) .and. (SimpleTower(TowerNum)%DriftLossFraction == 0.0) ) Then
       ! assume Drift loss not entered and should be defaulted
-      SimpleTower(TowerNum)%DriftLossFraction = 0.008d0 /100.0d0
+      SimpleTower(TowerNum)%DriftLossFraction = 0.008 /100.0
     endif
 
     SimpleTower(TowerNum)%ConcentrationRatio = NumArray(13) !  N13, \field Blowdown Concentration Ratio
     SimpleTower(TowerNum)%SizFac = NumArray(17)             !  N17  \field Sizing Factor
-    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0d0
+    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0
 
     If (SameString(AlphArray(7), 'ScheduledRate')) then
       SimpleTower(TowerNum)%BlowdownMode  = BlowdownBySchedule
@@ -711,7 +711,7 @@ SUBROUTINE GetTowerInput
       SimpleTower(TowerNum)%BlowdownMode  = BlowdownByConcentration
       If ((NumNums < 13) .and.(SimpleTower(TowerNum)%ConcentrationRatio == 0.0) ) THEN
         ! assume Concetratino ratio was omitted and should be defaulted
-            SimpleTower(TowerNum)%ConcentrationRatio = 3.0d0
+            SimpleTower(TowerNum)%ConcentrationRatio = 3.0
       endif
     ELSE
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
@@ -775,12 +775,12 @@ SUBROUTINE GetTowerInput
     SimpleTower(TowerNum)%MinFracFlowRate          = NumArray(15)
     If ((NumNums < 15) .and. (SimpleTower(TowerNum)%MinFracFlowRate == 0.0) ) Then
       ! assume Cell Minimum Water Flow Rate Fraction not entered and should be defaulted
-      SimpleTower(TowerNum)%MinFracFlowRate = 0.33d0
+      SimpleTower(TowerNum)%MinFracFlowRate = 0.33
     endif
     SimpleTower(TowerNum)%MaxFracFlowRate              = NumArray(16)
     If ((NumNums < 16) .and. (SimpleTower(TowerNum)%MaxFracFlowRate == 0.0) ) Then
       ! assume Cell Maximum Water Flow Rate Fraction not entered and should be defaulted
-      SimpleTower(TowerNum)%MaxFracFlowRate = 2.5d0
+      SimpleTower(TowerNum)%MaxFracFlowRate = 2.5
     endif
 
     IF (NumAlphas >= 12) THEN
@@ -959,9 +959,9 @@ SUBROUTINE GetTowerInput
     SimpleTower(TowerNum)%BasinHeaterSetPointTemp = NumArray(14)
     IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0) THEN
       IF(NumNums .LT. 14) THEN
-        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0d0
+        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0
       ENDIF
-      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0d0) THEN
+      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0) THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//':"'//TRIM(SimpleTower(TowerNum)%Name)//&
            '", '//TRIM(cNumericFieldNames(10))//' is less than 2 deg C. Freezing could occur.')
       END IF
@@ -990,15 +990,15 @@ SUBROUTINE GetTowerInput
     ENDIF
 
     SimpleTower(TowerNum)%UserEvapLossFactor = NumArray(15) !  N15 , \field Evaporation Loss Factor
-    SimpleTower(TowerNum)%DriftLossFraction = NumArray(16) / 100.0d0  !  N16, \field Drift Loss Percent
+    SimpleTower(TowerNum)%DriftLossFraction = NumArray(16) / 100.0  !  N16, \field Drift Loss Percent
    If ((NumNums < 16) .and. (SimpleTower(TowerNum)%DriftLossFraction == 0.0) ) Then
     ! assume Drift loss not entered and should be defaulted
-    SimpleTower(TowerNum)%DriftLossFraction = 0.008d0 /100.0d0
+    SimpleTower(TowerNum)%DriftLossFraction = 0.008 /100.0
    endif
 
     SimpleTower(TowerNum)%ConcentrationRatio = NumArray(17) !  N17, \field Blowdown Concentration Ratio
     SimpleTower(TowerNum)%SizFac = NumArray(21)             !  N21  \field Sizing Factor
-    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0d0
+    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0
 
     If (SameString(AlphArray(7), 'ScheduledRate')) then
       SimpleTower(TowerNum)%BlowdownMode  = BlowdownBySchedule
@@ -1008,7 +1008,7 @@ SUBROUTINE GetTowerInput
       SimpleTower(TowerNum)%BlowdownMode  = BlowdownByConcentration
       If ((NumNums < 17) .and.(SimpleTower(TowerNum)%ConcentrationRatio == 0.0) ) THEN
         ! assume Concetration ratio was omitted and should be defaulted
-            SimpleTower(TowerNum)%ConcentrationRatio = 3.0d0
+            SimpleTower(TowerNum)%ConcentrationRatio = 3.0
       endif
     ELSE
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
@@ -1309,51 +1309,51 @@ SUBROUTINE GetTowerInput
 !        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(35) = 0.000249188476685273
 
 !       Outputs approach in C
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(1)  =   0.52049709836241d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(2)  = -10.617046395344d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(3)  =  10.7292974722538d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(4)  =  -2.74988377158227d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(5)  =   4.73629943913743d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(6)  =  -8.25759700874711d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(7)  =   1.57640938114136d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(8)  =   6.51119643791324d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(9)  =   1.50433525206692d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(10) =  -3.2888529287801d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(11) =   0.0257786145353773d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(12) =   0.182464289315254d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(13) =  -0.0818947291400898d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(14) =  -0.215010003996285d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(15) =   0.0186741309635284d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(16) =   0.0536824177590012d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(17) =  -0.00270968955115031d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(18) =   0.00112277498589279d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(19) =  -0.00127758497497718d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(20) =   0.0000760420796601607d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(21) =   1.43600088336017d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(22) =  -0.5198695909109d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(23) =   0.117339576910507d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(24) =   1.50492810819924d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(25) =  -0.135898905926974d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(26) =  -0.152577581866506d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(27) =  -0.0533843828114562d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(28) =   0.00493294869565511d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(29) =  -0.00796260394174197d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(30) =   0.000222619828621544d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(31) =  -0.0543952001568055d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(32) =   0.00474266879161693d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(33) =  -0.0185854671815598d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(34) =   0.00115667701293848d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(35) =   0.000807370664460284d0
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(1)  =   0.52049709836241
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(2)  = -10.617046395344
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(3)  =  10.7292974722538
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(4)  =  -2.74988377158227
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(5)  =   4.73629943913743
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(6)  =  -8.25759700874711
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(7)  =   1.57640938114136
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(8)  =   6.51119643791324
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(9)  =   1.50433525206692
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(10) =  -3.2888529287801
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(11) =   0.0257786145353773
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(12) =   0.182464289315254
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(13) =  -0.0818947291400898
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(14) =  -0.215010003996285
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(15) =   0.0186741309635284
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(16) =   0.0536824177590012
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(17) =  -0.00270968955115031
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(18) =   0.00112277498589279
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(19) =  -0.00127758497497718
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(20) =   0.0000760420796601607
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(21) =   1.43600088336017
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(22) =  -0.5198695909109
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(23) =   0.117339576910507
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(24) =   1.50492810819924
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(25) =  -0.135898905926974
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(26) =  -0.152577581866506
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(27) =  -0.0533843828114562
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(28) =   0.00493294869565511
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(29) =  -0.00796260394174197
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(30) =   0.000222619828621544
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(31) =  -0.0543952001568055
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(32) =   0.00474266879161693
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(33) =  -0.0185854671815598
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(34) =   0.00115667701293848
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(35) =   0.000807370664460284
 
 !       set minimum and maximum boundaries for CoolTools crossflow model input variables
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinInletAirWBTemp = -1.0d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxInletAirWBTemp = 26.6667d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinRangeTemp      = 1.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxRangeTemp      = 11.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinApproachTemp   = 1.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxApproachTemp   = 11.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio = 0.75d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio = 1.25d0
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinInletAirWBTemp = -1.0
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxInletAirWBTemp = 26.6667
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinRangeTemp      = 1.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxRangeTemp      = 11.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinApproachTemp   = 1.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxApproachTemp   = 11.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio = 0.75
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio = 1.25
 
 !    CoolTools counterflow model does not work properly. The empirical model seems flawed since the tower
 !    operates in the free convection regime on the design day.
@@ -1477,44 +1477,44 @@ SUBROUTINE GetTowerInput
 !        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(27) = -0.000000260086
 
 !       Outputs approach in C
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(1)  = -0.359741205d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(2)  = -0.055053608d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(3)  =  0.0023850432d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(4)  =  0.173926877d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(5)  = -0.0248473764d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(6)  =  0.00048430224d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(7)  = -0.005589849456d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(8)  =  0.0005770079712d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(9)  = -0.00001342427256d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(10) =  2.84765801111111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(11) = -0.121765149d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(12) =  0.0014599242d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(13) =  1.680428651d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(14) = -0.0166920786d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(15) = -0.0007190532d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(16) = -0.025485194448d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(17) =  0.0000487491696d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(18) =  0.00002719234152d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(19) = -0.0653766255555556d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(20) = -0.002278167d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(21) =  0.0002500254d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(22) = -0.0910565458d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(23) =  0.00318176316d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(24) =  0.000038621772d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(25) = -0.0034285382352d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(26) =  0.00000856589904d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(27) = -0.000001516821552d0
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(1)  = -0.359741205
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(2)  = -0.055053608
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(3)  =  0.0023850432
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(4)  =  0.173926877
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(5)  = -0.0248473764
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(6)  =  0.00048430224
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(7)  = -0.005589849456
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(8)  =  0.0005770079712
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(9)  = -0.00001342427256
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(10) =  2.84765801111111
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(11) = -0.121765149
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(12) =  0.0014599242
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(13) =  1.680428651
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(14) = -0.0166920786
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(15) = -0.0007190532
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(16) = -0.025485194448
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(17) =  0.0000487491696
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(18) =  0.00002719234152
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(19) = -0.0653766255555556
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(20) = -0.002278167
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(21) =  0.0002500254
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(22) = -0.0910565458
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(23) =  0.00318176316
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(24) =  0.000038621772
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(25) = -0.0034285382352
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(26) =  0.00000856589904
+        VSTower(SimpleTower(TowerNum)%VSTower)%Coeff(27) = -0.000001516821552
 
 !       set minimum and maximum boundaries for YorkCalc model input variables
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinInletAirWBTemp = -34.4d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxInletAirWBTemp = 29.4444d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinRangeTemp      = 1.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxRangeTemp      = 22.2222d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinApproachTemp   = 1.1111d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxApproachTemp   = 40.0d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio = 0.75d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio = 1.25d0
-        VSTower(SimpleTower(TowerNum)%VSTower)%MaxLiquidToGasRatio = 8.0d0
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinInletAirWBTemp = -34.4
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxInletAirWBTemp = 29.4444
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinRangeTemp      = 1.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxRangeTemp      = 22.2222
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinApproachTemp   = 1.1111
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxApproachTemp   = 40.0
+        VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio = 0.75
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio = 1.25
+        VSTower(SimpleTower(TowerNum)%VSTower)%MaxLiquidToGasRatio = 8.0
 
     ELSEIF(SameString(AlphArray(4),'CoolToolsUserDefined'))THEN
       SimpleTower(TowerNum)%TowerModelType                         = CoolToolsUserDefined
@@ -1697,7 +1697,7 @@ SUBROUTINE GetTowerInput
 !   minimum air flow rate fraction must be >= 0.2 and <= 0.5, below this value the tower fan cycles to maintain the setpoint
     SimpleTower(TowerNum)%MinimumVSAirFlowFrac      = NumArray(7)
     SimpleTower(TowerNum)%MinimumVSAirFlowFrac      = NumArray(7)
-     IF(NumArray(7) .LT. 0.2d0 .OR. NumArray(7) .GT. 0.5d0) THEN
+     IF(NumArray(7) .LT. 0.2 .OR. NumArray(7) .GT. 0.5) THEN
        CALL ShowSevereError(TRIM(cCurrentModuleObject)//', "'//TRIM(SimpleTower(TowerNum)%Name)//&
                        '" minimum VS air flow rate ratio must be >= 0.2 and <= 0.5')
        ErrorsFound = .TRUE.
@@ -1705,7 +1705,7 @@ SUBROUTINE GetTowerInput
 
 !   fraction of tower capacity in free convection regime must be >= to 0 and <= 0.2
     SimpleTower(TowerNum)%FreeConvectionCapacityFraction = NumArray(8)
-     IF(NumArray(8) .LT. 0.0 .OR. NumArray(8) .GT. 0.2d0) THEN
+     IF(NumArray(8) .LT. 0.0 .OR. NumArray(8) .GT. 0.2) THEN
        CALL ShowSevereError(TRIM(cCurrentModuleObject)//', "'//TRIM(SimpleTower(TowerNum)%Name)//&
                        '" fraction of tower capacity in free convection regime must be >= 0 and <= 0.2')
        ErrorsFound = .TRUE.
@@ -1722,9 +1722,9 @@ SUBROUTINE GetTowerInput
     SimpleTower(TowerNum)%BasinHeaterSetPointTemp = NumArray(10)
     IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0) THEN
       IF(NumNums .LT. 10) THEN
-        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0d0
+        SimpleTower(TowerNum)%BasinHeaterSetPointTemp = 2.0
       ENDIF
-      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0d0) THEN
+      IF(simpleTower(TowerNum)%BasinHeaterSetPointTemp < 2.0) THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//':"'//TRIM(SimpleTower(TowerNum)%Name)//&
            '", '//TRIM(cNumericFieldNames(10))//' is less than 2 deg C. Freezing could occur.')
       END IF
@@ -1775,10 +1775,10 @@ SUBROUTINE GetTowerInput
     ENDIF
 
     SimpleTower(TowerNum)%UserEvapLossFactor = NumArray(11) !  N11 , \field Evaporation Loss Factor
-    SimpleTower(TowerNum)%DriftLossFraction = NumArray(12) / 100.0d0 !  N12, \field Drift Loss Percent
+    SimpleTower(TowerNum)%DriftLossFraction = NumArray(12) / 100.0 !  N12, \field Drift Loss Percent
     SimpleTower(TowerNum)%ConcentrationRatio = NumArray(13) !  N13, \field Blowdown Concentration Ratio
     SimpleTower(TowerNum)%SizFac             = NumArray(17) !  N14  \field Sizing Factor
-    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0d0
+    IF (SimpleTower(TowerNum)%SizFac <= 0.0) SimpleTower(TowerNum)%SizFac = 1.0
 
     If (SameString(AlphArray(9), 'ScheduledRate')) then
       SimpleTower(TowerNum)%BlowdownMode  = BlowdownBySchedule
@@ -1893,7 +1893,7 @@ SUBROUTINE GetTowerInput
           SimpleTowerReport(TowerNum)%NumCellON,'System','Average',SimpleTower(TowerNum)%Name)
     CALL SetupOutputVariable('Tower Fan Cycling Ratio', &
           SimpleTowerReport(TowerNum)%FanCyclingRatio,'System','Average',SimpleTower(TowerNum)%Name)
-    IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0d0)THEN
+    IF(SimpleTower(TowerNum)%BasinHeaterPowerFTempDiff .GT. 0.0)THEN
       CALL SetupOutputVariable('Tower Basin Heater Electric Power [W]', &
           SimpleTowerReport(TowerNum)%BasinHeaterPower,'System','Average',SimpleTower(TowerNum)%Name)
       CALL SetupOutputVariable('Tower Basin Heater Electric Consumption [J]', &
@@ -2136,7 +2136,7 @@ SUBROUTINE InitTower(TowerNum, RunFlag)
   INTEGER  :: LoopSideNum
   INTEGER  :: BranchIndex
   INTEGER  :: CompIndex
-  REAL(r64) :: rho ! local density of fluid
+  REAL :: rho ! local density of fluid
 
   ! Do the one time initializations
   IF (MyOneTimeFlag) THEN
@@ -2184,7 +2184,7 @@ SUBROUTINE InitTower(TowerNum, RunFlag)
 
     SimpleTower(TowerNum)%DesWaterMassFlowRate = SimpleTower(TowerNum)%DesignWaterFlowRate * &
                                                   rho
-    CALL InitComponentNodes(0.0D0,  SimpleTower(TowerNum)%DesWaterMassFlowRate , &
+    CALL InitComponentNodes(0.0,  SimpleTower(TowerNum)%DesWaterMassFlowRate , &
                                     SimpleTower(TowerNum)%WaterInletNodeNum,     &
                                     SimpleTower(TowerNum)%WaterOutletNodeNum,    &
                                     SimpleTower(TowerNum)%LoopNum,               &
@@ -2240,8 +2240,8 @@ SUBROUTINE InitTower(TowerNum, RunFlag)
 
 
     ! Added for fluid bypass. 8/2008
-  SimpleTower(TowerNum)%BypassFraction = 0.0D0
-  BasinHeaterPower = 0.0D0
+  SimpleTower(TowerNum)%BypassFraction = 0.0
+  BasinHeaterPower = 0.0
 
   RETURN
 
@@ -2287,7 +2287,7 @@ SUBROUTINE SizeTower(TowerNum)
   CHARACTER(len=*), PARAMETER :: OutputFormat  ='(F6.2)'
   CHARACTER(len=*), PARAMETER :: OutputFormat2 ='(F9.6)'
   INTEGER, PARAMETER          :: MaxIte = 500       ! Maximum number of iterations
-  REAL(r64), PARAMETER :: Acc =  0.0001d0    ! Accuracy of result
+  REAL, PARAMETER :: Acc =  0.0001    ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -2298,35 +2298,35 @@ SUBROUTINE SizeTower(TowerNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizCondNum          ! Plant Sizing index for condenser loop
   INTEGER             :: SolFla                 ! Flag of solver
-  REAL(r64)           :: DesTowerLoad           ! Design tower load [W]
-  REAL(r64)           :: UA0                    ! Lower bound for UA [W/C]
-  REAL(r64)           :: UA1                    ! Upper bound for UA [W/C]
-  REAL(r64)           :: UA                     ! Calculated UA value
-  REAL(r64)           :: Twb                    ! tower inlet air wet-bulb temperature [C]
-  REAL(r64)           :: Tr                     ! tower range temperature [C]
-  REAL(r64)           :: Ta                     ! tower approach temperature [C]
-  REAL(r64)           :: WaterFlowRatio         ! tower water flow rate ratio found during model calibration
-  REAL(r64)           :: MaxWaterFlowRateRatio  ! maximum water flow rate ratio which yields desired approach temp
-  REAL(r64)           :: WaterFlowRateRatio     ! tower water flow rate ratio
-  REAL(r64)           :: Tapproach              ! temporary tower approach temp variable [C]
-  REAL(r64)           :: ModelWaterFlowRatioMax ! maximum water flow rate ratio used for model calibration
-  REAL(r64)           :: FlowRateRatioStep      ! flow rate ratio to determine maximum water flow rate ratio during calibration
-  REAL(r64), DIMENSION(6)  :: Par                    ! Parameter array need for RegulaFalsi routine
+  REAL           :: DesTowerLoad           ! Design tower load [W]
+  REAL           :: UA0                    ! Lower bound for UA [W/C]
+  REAL           :: UA1                    ! Upper bound for UA [W/C]
+  REAL           :: UA                     ! Calculated UA value
+  REAL           :: Twb                    ! tower inlet air wet-bulb temperature [C]
+  REAL           :: Tr                     ! tower range temperature [C]
+  REAL           :: Ta                     ! tower approach temperature [C]
+  REAL           :: WaterFlowRatio         ! tower water flow rate ratio found during model calibration
+  REAL           :: MaxWaterFlowRateRatio  ! maximum water flow rate ratio which yields desired approach temp
+  REAL           :: WaterFlowRateRatio     ! tower water flow rate ratio
+  REAL           :: Tapproach              ! temporary tower approach temp variable [C]
+  REAL           :: ModelWaterFlowRatioMax ! maximum water flow rate ratio used for model calibration
+  REAL           :: FlowRateRatioStep      ! flow rate ratio to determine maximum water flow rate ratio during calibration
+  REAL, DIMENSION(6)  :: Par                    ! Parameter array need for RegulaFalsi routine
   LOGICAL             :: ModelCalibrated        ! TRUE if water flow rate ratio is with the specified range
   CHARACTER(len=6)    :: OutputChar             ! report variable for warning messages
   CHARACTER(len=9)    :: OutputChar2            ! report variable for warning messages
   CHARACTER(len=6)    :: OutputCharLo           ! report variable for warning messages
   CHARACTER(len=6)    :: OutputCharHi           ! report variable for warning messages
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL(r64)           :: Cp  ! local specific heat for fluid
-  REAL(r64)           :: rho ! local density for fluid
-  REAL(r64)           :: tmpDesignWaterFlowRate ! local temporary for water volume flow rate
-  REAL(r64)           :: tmpHighSpeedFanPower !local temporary for high speed fan power
-  REAL(r64)           :: tmpHighSpeedAirFlowRate ! local temporary for high speed air flow rate
-  REAL(r64)           :: tmpHighSpeedTowerUA ! local temporary for high speed tower UA
-  REAL(r64)           :: tmpLowSpeedAirFlowRate !local temporary for low speed air flow rate
-  REAL(r64)           :: AssumedDeltaT ! default delta T for nominal capacity of hard sized with UA method
-  REAL(r64)           :: AssumedExitTemp ! default for cp fo nominal capacity of hard sized with UA method
+  REAL           :: Cp  ! local specific heat for fluid
+  REAL           :: rho ! local density for fluid
+  REAL           :: tmpDesignWaterFlowRate ! local temporary for water volume flow rate
+  REAL           :: tmpHighSpeedFanPower !local temporary for high speed fan power
+  REAL           :: tmpHighSpeedAirFlowRate ! local temporary for high speed air flow rate
+  REAL           :: tmpHighSpeedTowerUA ! local temporary for high speed tower UA
+  REAL           :: tmpLowSpeedAirFlowRate !local temporary for low speed air flow rate
+  REAL           :: AssumedDeltaT ! default delta T for nominal capacity of hard sized with UA method
+  REAL           :: AssumedExitTemp ! default for cp fo nominal capacity of hard sized with UA method
   LOGICAL             :: ErrorsFound
 
   PltSizCondNum = 0
@@ -2353,10 +2353,10 @@ SUBROUTINE SizeTower(TowerNum)
                                'SizeTower')
       DesTowerLoad = rho * Cp  &
                       * SimpleTower(TowerNum)%DesignWaterFlowRate * PlantSizData(PltSizCondNum)%DeltaT
-      SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25d0
+      SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25
     ELSE
-      AssumedDeltaT = 11.d0
-      AssumedExitTemp = 21.d0
+      AssumedDeltaT = 11.
+      AssumedExitTemp = 21.
       rho = GetDensityGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
                                 AssumedExitTemp, &
                                 PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex,&
@@ -2368,7 +2368,7 @@ SUBROUTINE SizeTower(TowerNum)
 
       DesTowerLoad = rho * Cp  &
                       * SimpleTower(TowerNum)%DesignWaterFlowRate * AssumedDeltaT
-      SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25d0
+      SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25
     ENDIF
   END IF
 
@@ -2378,7 +2378,7 @@ SUBROUTINE SizeTower(TowerNum)
         tmpDesignWaterFlowRate = PlantSizData(PltSizCondNum)%DesVolFlowRate * SimpleTower(TowerNum)%SizFac
         IF (PlantSizesOkayToFinalize) SimpleTower(TowerNum)%DesignWaterFlowRate = tmpDesignWaterFlowRate
       ELSE
-        tmpDesignWaterFlowRate = 0.d0
+        tmpDesignWaterFlowRate = 0.
         IF (PlantSizesOkayToFinalize) SimpleTower(TowerNum)%DesignWaterFlowRate = tmpDesignWaterFlowRate
       ENDIF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
@@ -2409,7 +2409,7 @@ SUBROUTINE SizeTower(TowerNum)
   IF (SimpleTower(TowerNum)%HighSpeedFanPower == AutoSize) THEN
     ! We assume the nominal fan power is 0.0105 times the design load
     IF (SimpleTower(TowerNum)%PerformanceInputMethod_Num == PIM_NominalCapacity) THEN
-      SimpleTower(TowerNum)%HighSpeedFanPower = 0.0105d0 * SimpleTower(TowerNum)%TowerNominalCapacity
+      SimpleTower(TowerNum)%HighSpeedFanPower = 0.0105 * SimpleTower(TowerNum)%TowerNominalCapacity
     ELSE
       IF (PltSizCondNum > 0) THEN
         IF (PlantSizData(PltSizCondNum)%DesVolFlowRate >= SmallWaterVolFlow) THEN
@@ -2422,10 +2422,10 @@ SUBROUTINE SizeTower(TowerNum)
                                PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex, &
                                'SizeTower')
           DesTowerLoad = rho * Cp * tmpDesignWaterFlowRate * PlantSizData(PltSizCondNum)%DeltaT
-          tmpHighSpeedFanPower =  0.0105d0 * DesTowerLoad
+          tmpHighSpeedFanPower =  0.0105 * DesTowerLoad
           IF (PlantSizesOkayToFinalize) SimpleTower(TowerNum)%HighSpeedFanPower =  tmpHighSpeedFanPower
         ELSE
-          tmpHighSpeedFanPower = 0.d0
+          tmpHighSpeedFanPower = 0.
           IF (PlantSizesOkayToFinalize) SimpleTower(TowerNum)%HighSpeedFanPower = tmpHighSpeedFanPower
         ENDIF
       ELSE
@@ -2445,8 +2445,8 @@ SUBROUTINE SizeTower(TowerNum)
 
   IF (SimpleTower(TowerNum)%HighSpeedAirFlowRate == AutoSize) THEN
 ! Plant Sizing Object is not required to AUTOSIZE this field since its simply a multiple of another field.
-    tmpHighSpeedAirFlowRate = tmpHighSpeedFanPower * 0.5d0 &
-                                 * (101325.d0/StdBaroPress) / 190.d0
+    tmpHighSpeedAirFlowRate = tmpHighSpeedFanPower * 0.5 &
+                                 * (101325./StdBaroPress) / 190.
     IF (PlantSizesOkayToFinalize)  SimpleTower(TowerNum)%HighSpeedAirFlowRate = tmpHighSpeedAirFlowRate
 
     IF (SimpleTower(TowerNum)%TowerType_Num == CoolingTower_SingleSpeed .OR. &
@@ -2474,7 +2474,7 @@ SUBROUTINE SizeTower(TowerNum)
 
         ! This conditional statement is to trap when the user specified condenser/tower water design setpoint
         !  temperature is less than design inlet air wet bulb temperature of 25.6 C
-        IF ( PlantSizData(PltSizCondNum)%ExitTemp <= 25.6d0 ) THEN
+        IF ( PlantSizData(PltSizCondNum)%ExitTemp <= 25.6 ) THEN
           CALL ShowSevereError('Error when autosizing the UA value for cooling tower = '//TRIM(SimpleTower(TowerNum)%Name)// &
                                '.'//' Design Loop Exit Temperature must be greater than 25.6 C when autosizing the tower UA.')
           CALL ShowContinueError('The Design Loop Exit Temperature specified in Sizing:Plant object = '// &
@@ -2491,11 +2491,11 @@ SUBROUTINE SizeTower(TowerNum)
         Par(3) = rho * tmpDesignWaterFlowRate ! design water mass flow rate
         Par(4) = tmpHighSpeedAirFlowRate ! design air volume flow rate
         Par(5) = Cp
-        UA0 = 0.0001d0 * DesTowerLoad ! Assume deltaT = 10000K (limit)
+        UA0 = 0.0001 * DesTowerLoad ! Assume deltaT = 10000K (limit)
         UA1 = DesTowerLoad          ! Assume deltaT = 1K
         SimpleTowerInlet(TowerNum)%WaterTemp = PlantSizData(PltSizCondNum)%ExitTemp + PlantSizData(PltSizCondNum)%DeltaT
-        SimpleTowerInlet(TowerNum)%AirTemp = 35.d0
-        SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6d0
+        SimpleTowerInlet(TowerNum)%AirTemp = 35.
+        SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6
         SimpleTowerInlet(TowerNum)%AirPress = StdBaroPress
         SimpleTowerInlet(TowerNum)%AirHumRat =   &
            PsyWFnTdbTwbPb(SimpleTowerInlet(TowerNum)%AirTemp,     &
@@ -2516,12 +2516,12 @@ SUBROUTINE SizeTower(TowerNum)
         ELSE
           tmpHighSpeedTowerUA = UA
         ENDIF
-        SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25d0
+        SimpleTower(TowerNum)%TowerNominalCapacity=DesTowerLoad/1.25
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          SimpleTower(TowerNum)%HighSpeedTowerUA = 0.d0
+          SimpleTower(TowerNum)%HighSpeedTowerUA = 0.
         ELSE
-          tmpHighSpeedTowerUA = 0.d0
+          tmpHighSpeedTowerUA = 0.
         ENDIF
       ENDIF
       IF (SimpleTower(TowerNum)%TowerType_Num == CoolingTower_SingleSpeed) THEN
@@ -2543,25 +2543,25 @@ SUBROUTINE SizeTower(TowerNum)
     IF (SimpleTower(TowerNum)%DesignWaterFlowRate >= SmallWaterVolFlow) THEN
       ! nominal capacity doesn't include compressor heat; predefined factor is 1.25 W heat rejection per W of delivered cooling
       rho   = GetDensityGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                          29.44d0,     & ! 85F design exiting water temp
+                          29.44,     & ! 85F design exiting water temp
                           PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex,&
                           'SizeTower')
       Cp = GetSpecificHeatGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                             29.44d0,     & ! 85F design exiting water temp
+                             29.44,     & ! 85F design exiting water temp
                              PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex, &
                              'SizeTower')
 
-      DesTowerLoad = SimpleTower(TowerNum)%TowerNominalCapacity * (1.25d0)
+      DesTowerLoad = SimpleTower(TowerNum)%TowerNominalCapacity * (1.25)
       Par(1) = DesTowerLoad
       Par(2) = REAL(TowerNum,r64)
       Par(3) = rho * tmpDesignWaterFlowRate ! design water mass flow rate
       Par(4) = tmpHighSpeedAirFlowRate ! design air volume flow rate
       Par(5) = Cp ! 85F design exiting water temp
-      UA0 = 0.0001d0 * DesTowerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001 * DesTowerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesTowerLoad          ! Assume deltaT = 1K
-      SimpleTowerInlet(TowerNum)%WaterTemp = 35.d0   ! 95F design inlet water temperature
-      SimpleTowerInlet(TowerNum)%AirTemp = 35.d0     ! 95F design inlet air dry-bulb temp
-      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6d0 ! 78F design inlet air wet-bulb temp
+      SimpleTowerInlet(TowerNum)%WaterTemp = 35.   ! 95F design inlet water temperature
+      SimpleTowerInlet(TowerNum)%AirTemp = 35.     ! 95F design inlet air dry-bulb temp
+      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6 ! 78F design inlet air wet-bulb temp
       SimpleTowerInlet(TowerNum)%AirPress = StdBaroPress
       SimpleTowerInlet(TowerNum)%AirHumRat =   &
          PsyWFnTdbTwbPb(SimpleTowerInlet(TowerNum)%AirTemp,  &
@@ -2593,25 +2593,25 @@ SUBROUTINE SizeTower(TowerNum)
 
   IF (SimpleTower(TowerNum)%LowSpeedAirFlowRate == AutoSize ) THEN
     IF (PlantSizesOkayToFinalize) THEN
-      SimpleTower(TowerNum)%LowSpeedAirFlowRate = 0.5d0*SimpleTower(TowerNum)%HighSpeedAirFlowRate
+      SimpleTower(TowerNum)%LowSpeedAirFlowRate = 0.5*SimpleTower(TowerNum)%HighSpeedAirFlowRate
       tmpLowSpeedAirFlowRate = SimpleTower(TowerNum)%LowSpeedAirFlowRate
       CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
                               'Air Flow Rate at Low Fan Speed [m3/s]', SimpleTower(TowerNum)%LowSpeedAirFlowRate)
     ELSE
-      tmpLowSpeedAirFlowRate = 0.5d0* tmpHighSpeedAirFlowRate
+      tmpLowSpeedAirFlowRate = 0.5* tmpHighSpeedAirFlowRate
     ENDIF
   ENDIF
 
   IF (SimpleTower(TowerNum)%LowSpeedFanPower == AutoSize ) THEN
     IF (PlantSizesOkayToFinalize) THEN
-      SimpleTower(TowerNum)%LowSpeedFanPower = 0.16d0*SimpleTower(TowerNum)%HighSpeedFanPower
+      SimpleTower(TowerNum)%LowSpeedFanPower = 0.16*SimpleTower(TowerNum)%HighSpeedFanPower
       CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
                               'Fan Power at Low Fan Speed [W]', SimpleTower(TowerNum)%LowSpeedFanPower)
     ENDIF
   ENDIF
 
   IF (SimpleTower(TowerNum)%LowSpeedTowerUA == AutoSize .AND. PlantSizesOkayToFinalize) THEN
-      SimpleTower(TowerNum)%LowSpeedTowerUA = 0.6d0*SimpleTower(TowerNum)%HighSpeedTowerUA
+      SimpleTower(TowerNum)%LowSpeedTowerUA = 0.6*SimpleTower(TowerNum)%HighSpeedTowerUA
       CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
                               'U-Factor Times Area Value at Low Fan Speed [W/C]', SimpleTower(TowerNum)%LowSpeedTowerUA)
   ENDIF
@@ -2621,24 +2621,24 @@ SUBROUTINE SizeTower(TowerNum)
     IF (SimpleTower(TowerNum)%DesignWaterFlowRate >= SmallWaterVolFlow.AND.SimpleTower(TowerNum)%TowerLowSpeedNomCap > 0.0) THEN
       ! nominal capacity doesn't include compressor heat; predefined factor is 1.25 W heat rejection per W of evap cooling
       rho   = GetDensityGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                          29.44d0,     & ! 85F design exiting water temp
+                          29.44,     & ! 85F design exiting water temp
                           PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex,&
                           'SizeTower')
       Cp = GetSpecificHeatGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                             29.44d0,     & ! 85F design exiting water temp
+                             29.44,     & ! 85F design exiting water temp
                              PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex, &
                              'SizeTower')
-      DesTowerLoad = SimpleTower(TowerNum)%TowerLowSpeedNomCap * (1.25d0)
+      DesTowerLoad = SimpleTower(TowerNum)%TowerLowSpeedNomCap * (1.25)
       Par(1) = DesTowerLoad
       Par(2) = REAL(TowerNum,r64)
       Par(3) = rho * tmpDesignWaterFlowRate ! design water mass flow rate
       Par(4) = tmpLowSpeedAirFlowRate ! Air volume flow rate at low fan speed
       Par(5) = Cp ! 85F design exiting water temp
-      UA0 = 0.0001d0 * DesTowerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001 * DesTowerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesTowerLoad          ! Assume deltaT = 1K
-      SimpleTowerInlet(TowerNum)%WaterTemp = 35.d0   ! 95F design inlet water temperature
-      SimpleTowerInlet(TowerNum)%AirTemp = 35.d0     ! 95F design inlet air dry-bulb temp
-      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6d0 ! 78F design inlet air wet-bulb temp
+      SimpleTowerInlet(TowerNum)%WaterTemp = 35.   ! 95F design inlet water temperature
+      SimpleTowerInlet(TowerNum)%AirTemp = 35.     ! 95F design inlet air dry-bulb temp
+      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6 ! 78F design inlet air wet-bulb temp
       SimpleTowerInlet(TowerNum)%AirPress = StdBaroPress
       SimpleTowerInlet(TowerNum)%AirHumRat =   &
          PsyWFnTdbTwbPb(SimpleTowerInlet(TowerNum)%AirTemp,  &
@@ -2663,7 +2663,7 @@ SUBROUTINE SizeTower(TowerNum)
 
   IF (SimpleTower(TowerNum)%FreeConvAirFlowRate == AutoSize) THEN
     IF (PlantSizesOkayToFinalize) THEN
-      SimpleTower(TowerNum)%FreeConvAirFlowRate = 0.1d0*SimpleTower(TowerNum)%HighSpeedAirFlowRate
+      SimpleTower(TowerNum)%FreeConvAirFlowRate = 0.1*SimpleTower(TowerNum)%HighSpeedAirFlowRate
       CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
                               'Air Flow Rate in Free Convection Regime [m3/s]', SimpleTower(TowerNum)%FreeConvAirFlowRate)
     ENDIF
@@ -2671,7 +2671,7 @@ SUBROUTINE SizeTower(TowerNum)
 
   IF (SimpleTower(TowerNum)%FreeConvTowerUA == AutoSize) THEN
     IF (PlantSizesOkayToFinalize) THEN
-      SimpleTower(TowerNum)%FreeConvTowerUA = 0.1d0*SimpleTower(TowerNum)%HighSpeedTowerUA
+      SimpleTower(TowerNum)%FreeConvTowerUA = 0.1*SimpleTower(TowerNum)%HighSpeedTowerUA
       CALL ReportSizingOutput(SimpleTower(TowerNum)%TowerType, SimpleTower(TowerNum)%Name, &
                               'U-Factor Times Area Value at Free Convection Air Flow Rate [W/C]',   &
                                SimpleTower(TowerNum)%FreeConvTowerUA)
@@ -2682,24 +2682,24 @@ SUBROUTINE SizeTower(TowerNum)
     IF (SimpleTower(TowerNum)%DesignWaterFlowRate >= SmallWaterVolFlow.AND.SimpleTower(TowerNum)%TowerFreeConvNomCap > 0.0) THEN
       ! nominal capacity doesn't include compressor heat; predefined factor is 1.25 W heat rejection per W of evap cooling
       rho   = GetDensityGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                          29.44d0,     & ! 85F design exiting water temp
+                          29.44,     & ! 85F design exiting water temp
                           PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex,&
                           'SizeTower')
       Cp = GetSpecificHeatGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                             29.44d0,     & ! 85F design exiting water temp
+                             29.44,     & ! 85F design exiting water temp
                              PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex, &
                              'SizeTower')
-      DesTowerLoad = SimpleTower(TowerNum)%TowerFreeConvNomCap * (1.25d0)
+      DesTowerLoad = SimpleTower(TowerNum)%TowerFreeConvNomCap * (1.25)
       Par(1) = DesTowerLoad
       Par(2) = REAL(TowerNum,r64)
       Par(3) = rho * SimpleTower(TowerNum)%DesignWaterFlowRate ! design water mass flow rate
       Par(4) = SimpleTower(TowerNum)%FreeConvAirFlowRate ! free convection air volume flow rate
       Par(5) = Cp ! 85F design exiting water temp
-      UA0 = 0.0001d0 * DesTowerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001 * DesTowerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesTowerLoad          ! Assume deltaT = 1K
-      SimpleTowerInlet(TowerNum)%WaterTemp = 35.d0   ! 95F design inlet water temperature
-      SimpleTowerInlet(TowerNum)%AirTemp = 35.d0     ! 95F design inlet air dry-bulb temp
-      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6d0 ! 78F design inlet air wet-bulb temp
+      SimpleTowerInlet(TowerNum)%WaterTemp = 35.   ! 95F design inlet water temperature
+      SimpleTowerInlet(TowerNum)%AirTemp = 35.     ! 95F design inlet air dry-bulb temp
+      SimpleTowerInlet(TowerNum)%AirWetBulb = 25.6 ! 78F design inlet air wet-bulb temp
       SimpleTowerInlet(TowerNum)%AirPress = StdBaroPress
       SimpleTowerInlet(TowerNum)%AirHumRat =   &
          PsyWFnTdbTwbPb(SimpleTowerInlet(TowerNum)%AirTemp,  &
@@ -2738,22 +2738,22 @@ SUBROUTINE SizeTower(TowerNum)
     Par(6) = 0.0      ! Calculation FLAG, 0.0 = calc water flow ratio, 1.0 calc air flow ratio
 
 !   check range for water flow rate ratio (make sure RegulaFalsi converges)
-    MaxWaterFlowRateRatio = 0.5d0
+    MaxWaterFlowRateRatio = 0.5
     Tapproach     = 0.0
     FlowRateRatioStep = (VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio - &
-                         VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio)/10.0d0
+                         VSTower(SimpleTower(TowerNum)%VSTower)%MinWaterFlowRatio)/10.0
     ModelCalibrated = .TRUE.
-    ModelWaterFlowRatioMax = VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio * 4.0d0
+    ModelWaterFlowRatioMax = VSTower(SimpleTower(TowerNum)%VSTower)%MaxWaterFlowRatio * 4.0
 !   find a flow rate large enough to provide an approach temperature > than the user defined approach
     DO WHILE (Tapproach < Ta .AND. MaxWaterFlowRateRatio .LE. ModelWaterFlowRatioMax)
       WaterFlowRateRatio = MaxWaterFlowRateRatio
-      CALL CalcVSTowerApproach(TowerNum,WaterFlowRateRatio,1.0d0,Twb,Tr,Tapproach)
+      CALL CalcVSTowerApproach(TowerNum,WaterFlowRateRatio,1.0,Twb,Tr,Tapproach)
       IF(Tapproach < Ta)THEN
         MaxWaterFlowRateRatio = MaxWaterFlowRateRatio + FlowRateRatioStep
       END IF
       ! a water flow rate large enough to provide an approach temperature > than the user defined approach does not exist
       ! within the tolerances specified by the user
-      IF((MaxWaterFlowRateRatio .EQ. 0.5d0 .AND. Tapproach .GT. Ta) .OR. MaxWaterFlowRateRatio .GE. ModelWaterFlowRatioMax) THEN
+      IF((MaxWaterFlowRateRatio .EQ. 0.5 .AND. Tapproach .GT. Ta) .OR. MaxWaterFlowRateRatio .GE. ModelWaterFlowRatioMax) THEN
         ModelCalibrated = .FALSE.
         EXIT
       END IF
@@ -2968,8 +2968,8 @@ SUBROUTINE CalcSingleSpeedTower(TowerNum)
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER  :: MaxIteration = 100          ! Maximum fluid bypass iteration calculations
   CHARACTER(len=3), PARAMETER :: MaxItChar  ='100'
-  REAL(r64), PARAMETER :: BypassFractionThreshold = 0.01d0   !Threshold to stop bypass iteration
-  REAL(r64), PARAMETER :: OWTLowerLimit = 0.0d0       ! The limit of tower exit fluid temperature used in the fluid bypass
+  REAL, PARAMETER :: BypassFractionThreshold = 0.01   !Threshold to stop bypass iteration
+  REAL, PARAMETER :: OWTLowerLimit = 0.0       ! The limit of tower exit fluid temperature used in the fluid bypass
                                                      !  calculation to avoid fluid freezing. For water, it is 0 degreeC,
                                                      !  for glycols, it can be much lower. The fluid type is stored at the loop.
                                                      !  Current choices are Water and Steam, needs to expand for glycols
@@ -2981,32 +2981,32 @@ SUBROUTINE CalcSingleSpeedTower(TowerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: AirFlowRate
-  REAL(r64)              :: UAdesign            ! UA value at design conditions (entered by user or calculated)
-  REAL(r64)              :: OutletWaterTempOFF
-  REAL(r64)              :: FanModeFrac
-  REAL(r64)              :: DesignWaterFlowRate
-  REAL(r64)              :: FanPowerOn
-  REAL(r64)              :: CpWater
-  REAL(r64)              :: TempSetPoint
+  REAL              :: AirFlowRate
+  REAL              :: UAdesign            ! UA value at design conditions (entered by user or calculated)
+  REAL              :: OutletWaterTempOFF
+  REAL              :: FanModeFrac
+  REAL              :: DesignWaterFlowRate
+  REAL              :: FanPowerOn
+  REAL              :: CpWater
+  REAL              :: TempSetPoint
 
 
   !Added variables for fluid bypass
   INTEGER                :: NumIteration
   INTEGER                :: CapacityControl                  ! Capacity Control (0 - FanCycling, 1 - FluidBypass)
   INTEGER                :: BypassFlag                       ! Flag indicator for fluid bypass (0 - no bypass, 1 - bypass)
-  REAL(r64)              :: BypassFraction                   ! Fluid bypass fraction
-  REAL(r64)              :: BypassFraction2                  ! Fluid bypass fraction
-  REAL(r64)              :: BypassFractionPrev
-  REAL(r64)              :: OutletWaterTempPrev
+  REAL              :: BypassFraction                   ! Fluid bypass fraction
+  REAL              :: BypassFraction2                  ! Fluid bypass fraction
+  REAL              :: BypassFractionPrev
+  REAL              :: OutletWaterTempPrev
 
   !Added variables for multicell
-  REAL(r64)              :: WaterMassFlowRatePerCellMin
-  REAL(r64)              :: WaterMassFlowRatePerCellMax
+  REAL              :: WaterMassFlowRatePerCellMin
+  REAL              :: WaterMassFlowRatePerCellMax
   INTEGER                :: NumCellMin = 0
   INTEGER                :: NumCellMax = 0
   INTEGER                :: NumCellON = 0
-  REAL(r64)              :: WaterMassFlowRatePerCell
+  REAL              :: WaterMassFlowRatePerCell
   LOGICAL                :: IncrNumCellFlag                   ! determine if yes or no we increase the number of cells
 
   INTEGER :: LoopNum
@@ -3036,15 +3036,15 @@ SUBROUTINE CalcSingleSpeedTower(TowerNum)
 
 
     ! Added for multi-cell. Determine the number of cells operating
-    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0D0) THEN
+    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0) THEN
       WaterMassFlowRatePerCellMin = SimpleTower(TowerNum)%DesWaterMassFlowRate *   &
          SimpleTower(TowerNum)%MinFracFlowRate / SimpleTower(TowerNum)%NumCell
       WaterMassFlowRatePerCellMax = SimpleTower(TowerNum)%DesWaterMassFlowRate *   &
          SimpleTower(TowerNum)%MaxFracFlowRate / SimpleTower(TowerNum)%NumCell
 
       !round it up to the nearest integer
-      NumCellMin = MIN(INT((WaterMassFlowRate / WaterMassFlowRatePerCellMax)+.9999d0),SimpleTower(TowerNum)%NumCell)
-      NumCellMax = MIN(INT((WaterMassFlowRate / WaterMassFlowRatePerCellMin)+.9999d0),SimpleTower(TowerNum)%NumCell)
+      NumCellMin = MIN(INT((WaterMassFlowRate / WaterMassFlowRatePerCellMax)+.9999),SimpleTower(TowerNum)%NumCell)
+      NumCellMax = MIN(INT((WaterMassFlowRate / WaterMassFlowRatePerCellMin)+.9999),SimpleTower(TowerNum)%NumCell)
     ENDIF
 
     ! cap min at 1
@@ -3309,17 +3309,17 @@ SUBROUTINE CalcTwoSpeedTower(TowerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: AirFlowRate
-  REAL(r64)              :: UAdesign            ! UA value at design conditions (entered by user) [W/C]
-  REAL(r64)              :: OutletWaterTempOFF
-  REAL(r64)              :: OutletWaterTemp1stStage
-  REAL(r64)              :: OutletWaterTemp2ndStage
-  REAL(r64)              :: FanModeFrac
-  REAL(r64)              :: designWaterFlowRate
-  REAL(r64)              :: FanPowerLow
-  REAL(r64)              :: FanPowerHigh
-  REAL(r64)              :: CpWater
-  REAL(r64)              :: TempSetPoint
+  REAL              :: AirFlowRate
+  REAL              :: UAdesign            ! UA value at design conditions (entered by user) [W/C]
+  REAL              :: OutletWaterTempOFF
+  REAL              :: OutletWaterTemp1stStage
+  REAL              :: OutletWaterTemp2ndStage
+  REAL              :: FanModeFrac
+  REAL              :: designWaterFlowRate
+  REAL              :: FanPowerLow
+  REAL              :: FanPowerHigh
+  REAL              :: CpWater
+  REAL              :: TempSetPoint
 
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
@@ -3327,12 +3327,12 @@ SUBROUTINE CalcTwoSpeedTower(TowerNum)
   INTEGER :: SpeedSel = 0
 
  !Added variables for multicell
-  REAL(r64)              :: WaterMassFlowRatePerCellMin
-  REAL(r64)              :: WaterMassFlowRatePerCellMax
+  REAL              :: WaterMassFlowRatePerCellMin
+  REAL              :: WaterMassFlowRatePerCellMax
   INTEGER                :: NumCellMin = 0
   INTEGER                :: NumCellMax = 0
   INTEGER                :: NumCellON = 0
-  REAL(r64)              :: WaterMassFlowRatePerCell
+  REAL              :: WaterMassFlowRatePerCell
   LOGICAL                :: IncrNumCellFlag                   ! determine if yes or no we increase the number of cells
 
 
@@ -3363,7 +3363,7 @@ SUBROUTINE CalcTwoSpeedTower(TowerNum)
     ENDIF
 
     ! Added for multi-cell. Determine the number of cells operating
-    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0D0) THEN
+    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0) THEN
       WaterMassFlowRatePerCellMin = SimpleTower(TowerNum)%DesWaterMassFlowRate * SimpleTower(TowerNum)%MinFracFlowRate /   &
          SimpleTower(TowerNum)%NumCell
       WaterMassFlowRatePerCellMax = SimpleTower(TowerNum)%DesWaterMassFlowRate * SimpleTower(TowerNum)%MaxFracFlowRate /   &
@@ -3435,7 +3435,7 @@ SUBROUTINE CalcTwoSpeedTower(TowerNum)
           IF((OutletWaterTemp2ndStage .LE. TempSetPoint).AND. UAdesign .GT. 0.0)THEN
 !           Setpoint was met with pump ON and fan ON 2nd stage, calculate fan mode fraction
             FanModeFrac     = (TempSetPoint-OutletWaterTemp1stStage)/(OutletWaterTemp2ndStage-OutletWaterTemp1stStage)
-            CTFanPower      = (FanModeFrac * FanPowerHigh) + (1.d0-FanModeFrac)*FanPowerLow
+            CTFanPower      = (FanModeFrac * FanPowerHigh) + (1.-FanModeFrac)*FanPowerLow
             OutletWaterTemp = TempSetPoint
             SpeedSel = 2
           ELSE
@@ -3547,7 +3547,7 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
   CHARACTER(len=*), PARAMETER :: OutputFormat  ='(F5.2)'
   CHARACTER(len=*), PARAMETER :: OutputFormat2 ='(F8.5)'
   INTEGER, PARAMETER          :: MaxIte = 500         ! Maximum number of iterations
-  REAL(r64), PARAMETER :: Acc =  0.0001d0      ! Accuracy of result
+  REAL, PARAMETER :: Acc =  0.0001      ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3556,50 +3556,50 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)              :: OutletWaterTempOFF   ! Outlet water temperature with fan OFF (C)
-  REAL(r64)              :: OutletWaterTempON    ! Outlet water temperature with fan ON at maximum fan speed (C)
-  REAL(r64)              :: OutletWaterTempMIN   ! Outlet water temperature with fan at minimum speed (C)
-  REAL(r64)              :: CpWater              ! Specific heat of water
-  REAL(r64)              :: TempSetPoint         ! Outlet water temperature setpoint (C)
-  REAL(r64)              :: FanCurveValue        ! Output of fan power as a func of air flow rate ratio curve
-  REAL(r64)              :: AirDensity           ! Density of air [kg/m3]
-  REAL(r64)              :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
-  REAL(r64)              :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
+  REAL              :: OutletWaterTempOFF   ! Outlet water temperature with fan OFF (C)
+  REAL              :: OutletWaterTempON    ! Outlet water temperature with fan ON at maximum fan speed (C)
+  REAL              :: OutletWaterTempMIN   ! Outlet water temperature with fan at minimum speed (C)
+  REAL              :: CpWater              ! Specific heat of water
+  REAL              :: TempSetPoint         ! Outlet water temperature setpoint (C)
+  REAL              :: FanCurveValue        ! Output of fan power as a func of air flow rate ratio curve
+  REAL              :: AirDensity           ! Density of air [kg/m3]
+  REAL              :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
+  REAL              :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
   INTEGER                :: SolFla               ! Flag of solver
-  REAL(r64), DIMENSION(6)     :: Par                  ! Parameter array for regula falsi solver
-  REAL(r64)              :: Twb                  ! inlet air wet-bulb temperature
-  REAL(r64)              :: TwbCapped            ! inlet air wet-bulb temp passed to VS tower model
-  REAL(r64)              :: Tr                   ! range temperature
-  REAL(r64)              :: TrCapped             ! range temp passed to VS tower model
-  REAL(r64)              :: Ta                   ! approach temperature
-  REAL(r64)              :: TaCapped             ! approach temp passed to VS tower model
-  REAL(r64)              :: WaterFlowRateRatio   ! Water flow rate ratio
-  REAL(r64)              :: WaterFlowRateRatioCapped ! Water flow rate ratio passed to VS tower model
-  REAL(r64)              :: WaterDensity             ! density of inlet water
-  REAL(r64)              :: FreeConvectionCapFrac    ! fraction of tower capacity in free convection
-  REAL(r64)              :: FlowFraction         ! liquid to gas (L/G) ratio for cooling tower
+  REAL, DIMENSION(6)     :: Par                  ! Parameter array for regula falsi solver
+  REAL              :: Twb                  ! inlet air wet-bulb temperature
+  REAL              :: TwbCapped            ! inlet air wet-bulb temp passed to VS tower model
+  REAL              :: Tr                   ! range temperature
+  REAL              :: TrCapped             ! range temp passed to VS tower model
+  REAL              :: Ta                   ! approach temperature
+  REAL              :: TaCapped             ! approach temp passed to VS tower model
+  REAL              :: WaterFlowRateRatio   ! Water flow rate ratio
+  REAL              :: WaterFlowRateRatioCapped ! Water flow rate ratio passed to VS tower model
+  REAL              :: WaterDensity             ! density of inlet water
+  REAL              :: FreeConvectionCapFrac    ! fraction of tower capacity in free convection
+  REAL              :: FlowFraction         ! liquid to gas (L/G) ratio for cooling tower
   CHARACTER(len=6)       :: OutputChar           ! character string used for warning messages
   CHARACTER(len=6)       :: OutputChar2          ! character string used for warning messages
   CHARACTER(len=6)       :: OutputChar3          ! character string used for warning messages
   CHARACTER(len=6)       :: OutputChar4          ! character string used for warning messages
   CHARACTER(len=6)       :: OutputChar5          ! character string used for warning messages
-  REAL(r64),SAVE  :: TimeStepSysLast=0.0      ! last system time step (used to check for downshifting)
-  REAL(r64)  :: CurrentEndTime       ! end time of time step for current simulation time step
-  REAL(r64),SAVE  :: CurrentEndTimeLast=0.0   ! end time of time step for last simulation time step
+  REAL,SAVE  :: TimeStepSysLast=0.0      ! last system time step (used to check for downshifting)
+  REAL  :: CurrentEndTime       ! end time of time step for current simulation time step
+  REAL,SAVE  :: CurrentEndTimeLast=0.0   ! end time of time step for last simulation time step
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
 
    !Added variables for multicell
-  REAL(r64)              :: WaterMassFlowRatePerCellMin
-  REAL(r64)              :: WaterMassFlowRatePerCellMax
+  REAL              :: WaterMassFlowRatePerCellMin
+  REAL              :: WaterMassFlowRatePerCellMax
   INTEGER                :: NumCellMin = 0
   INTEGER                :: NumCellMax = 0
   INTEGER                :: NumCellON = 0
-  REAL(r64)              :: WaterMassFlowRatePerCell
+  REAL              :: WaterMassFlowRatePerCell
   LOGICAL                :: IncrNumCellFlag
 
    ! Added for multi-cell. Determine the number of cells operating
-    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0D0) THEN
+    IF (SimpleTower(TowerNum)%DesWaterMassFlowRate > 0.0) THEN
       WaterMassFlowRatePerCellMin = SimpleTower(TowerNum)%DesWaterMassFlowRate * SimpleTower(TowerNum)%MinFracFlowRate /   &
          SimpleTower(TowerNum)%NumCell
       WaterMassFlowRatePerCellMax = SimpleTower(TowerNum)%DesWaterMassFlowRate * SimpleTower(TowerNum)%MaxFracFlowRate /   &
@@ -3724,7 +3724,7 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
                SimpleTower(TowerNum)%NumCell
           ELSE
             FanCurveValue   = CurveValue(SimpleTower(TowerNum)%FanPowerfAirFlowCurve,AirFlowRateRatio)
-            CTFanPower      = MAX(0.0d0,(SimpleTower(TowerNum)%HighSpeedFanPower * FanCurveValue)) * NumCellON /  &
+            CTFanPower      = MAX(0.0,(SimpleTower(TowerNum)%HighSpeedFanPower * FanCurveValue)) * NumCellON /  &
                SimpleTower(TowerNum)%NumCell
           END IF
   !       fan is cycling ON and OFF at the minimum fan speed. Adjust fan power and air flow rate ratio according to cycling rate
@@ -3754,7 +3754,7 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
             Par(6) = 1.0                               ! calculate the air flow rate ratio required for a balance
 
             CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, AirFlowRateRatio, SimpleTowerApproachResidual, &
-                                SimpleTower(TowerNum)%MinimumVSAirFlowFrac, 1.0d0, Par)
+                                SimpleTower(TowerNum)%MinimumVSAirFlowFrac, 1.0, Par)
             IF (SolFla == -1) THEN
               IF(.NOT. WarmUpFlag)CALL ShowWarningError('Cooling tower iteration limit exceeded when calculating air flow ' &
                                   //'rate ratio for tower '//TRIM(SimpleTower(TowerNum)%Name))
@@ -3792,7 +3792,7 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
                  SimpleTower(TowerNum)%NumCell
             ELSE
               FanCurveValue   = CurveValue(SimpleTower(TowerNum)%FanPowerfAirFlowCurve,AirFlowRateRatio)
-              CTFanPower      = MAX(0.0d0,(SimpleTower(TowerNum)%HighSpeedFanPower * FanCurveValue)) * NumCellON /   &
+              CTFanPower      = MAX(0.0,(SimpleTower(TowerNum)%HighSpeedFanPower * FanCurveValue)) * NumCellON /   &
                  SimpleTower(TowerNum)%NumCell
             END IF
 !           outlet water temperature is calculated as the inlet air wet-bulb temperature plus tower approach temperature
@@ -3815,7 +3815,7 @@ SUBROUTINE CalcVariableSpeedTower(TowerNum)
                           *SimpleTower(TowerNum)%NumCellON/SimpleTower(TowerNum)%NumCell
     InletAirEnthalpy    =   &
        PsyHFnTdbRhPb(SimpleTowerInlet(TowerNum)%AirWetBulb,  &
-                     1.0d0,  &
+                     1.0,  &
                      SimpleTowerInlet(TowerNum)%AirPress)
 
 !   calculate end time of current time step
@@ -3904,17 +3904,17 @@ SUBROUTINE SimSimpleTower(TowerNum,WaterMassFlowRate,AirFlowRate,UAdesign,Outlet
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: TowerNum
-  REAL(r64)              :: WaterMassFlowRate
-  REAL(r64)              :: AirFlowRate
-  REAL(r64)              :: UAdesign
-  REAL(r64)              :: OutletWaterTemp
+  REAL              :: WaterMassFlowRate
+  REAL              :: AirFlowRate
+  REAL              :: UAdesign
+  REAL              :: OutletWaterTemp
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER   :: IterMax           = 50      ! Maximum number of iterations allowed
-  REAL(r64), PARAMETER :: WetBulbTolerance  = 0.00001d0 ! Maximum error for exiting wet-bulb temperature between iterations
+  REAL, PARAMETER :: WetBulbTolerance  = 0.00001 ! Maximum error for exiting wet-bulb temperature between iterations
                                                         ! [delta K/K]
-  REAL(r64), PARAMETER :: DeltaTwbTolerance = 0.001d0   ! Maximum error (tolerance) in DeltaTwb for iteration convergence [C]
+  REAL, PARAMETER :: DeltaTwbTolerance = 0.001   ! Maximum error (tolerance) in DeltaTwb for iteration convergence [C]
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3924,28 +3924,28 @@ SUBROUTINE SimSimpleTower(TowerNum,WaterMassFlowRate,AirFlowRate,UAdesign,Outlet
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                :: Iter                 ! Number of iterations completed
-  REAL(r64)              :: MdotCpWater          ! Water mass flow rate times the heat capacity [W/K]
-  REAL(r64)              :: InletAirTemp         ! Dry-bulb temperature of air entering the tower [C]
-  REAL(r64)              :: CpWater              ! Heat capacity of water [J/kg/K]
-  REAL(r64)              :: CpAir                ! Heat capacity of air [J/kg/K]
-  REAL(r64)              :: AirDensity           ! Density of air [kg/m3]
-  REAL(r64)              :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
-  REAL(r64)              :: effectiveness        ! Effectiveness of the heat exchanger [-]
-  REAL(r64)              :: UAactual             ! UA value at actual conditions [W/C]
-  REAL(r64)              :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
-  REAL(r64)              :: InletAirWetBulb      ! Wetbulb temp of entering moist air [C]
-  REAL(r64)              :: OutletAirEnthalpy    ! Enthalpy of exiting moist air [J/kg]
-  REAL(r64)              :: OutletAirWetBulb     ! Wetbulb temp of exiting moist air [C]
-  REAL(r64)              :: OutletAirWetBulbLast ! temporary Wetbulb temp of exiting moist air [C]
-  REAL(r64)              :: AirCapacity          ! MdotCp of air through the tower
-  REAL(r64)              :: CapacityRatioMin     ! Minimum capacity of airside and waterside
-  REAL(r64)              :: CapacityRatioMax     ! Maximum capacity of airside and waterside
-  REAL(r64)              :: CapacityRatio        ! Ratio of minimum to maximum capacity
-  REAL(r64)              :: NumTransferUnits     ! Number of transfer Units [NTU]
-  REAL(r64)              :: WetBulbError      ! Calculated error for exiting wet-bulb temperature between iterations [delta K/K]
-  REAL(r64)              :: CpAirside            ! Delta enthalpy of the tower air divides by delta air wet-bulb temp [J/kg/K]
-  REAL(r64)              :: Qactual              ! Actual heat transfer rate between tower water and air [W]
-  REAL(r64)              :: DeltaTwb             ! Absolute value of difference between inlet and outlet air wet-bulb temp [C]
+  REAL              :: MdotCpWater          ! Water mass flow rate times the heat capacity [W/K]
+  REAL              :: InletAirTemp         ! Dry-bulb temperature of air entering the tower [C]
+  REAL              :: CpWater              ! Heat capacity of water [J/kg/K]
+  REAL              :: CpAir                ! Heat capacity of air [J/kg/K]
+  REAL              :: AirDensity           ! Density of air [kg/m3]
+  REAL              :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
+  REAL              :: effectiveness        ! Effectiveness of the heat exchanger [-]
+  REAL              :: UAactual             ! UA value at actual conditions [W/C]
+  REAL              :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
+  REAL              :: InletAirWetBulb      ! Wetbulb temp of entering moist air [C]
+  REAL              :: OutletAirEnthalpy    ! Enthalpy of exiting moist air [J/kg]
+  REAL              :: OutletAirWetBulb     ! Wetbulb temp of exiting moist air [C]
+  REAL              :: OutletAirWetBulbLast ! temporary Wetbulb temp of exiting moist air [C]
+  REAL              :: AirCapacity          ! MdotCp of air through the tower
+  REAL              :: CapacityRatioMin     ! Minimum capacity of airside and waterside
+  REAL              :: CapacityRatioMax     ! Maximum capacity of airside and waterside
+  REAL              :: CapacityRatio        ! Ratio of minimum to maximum capacity
+  REAL              :: NumTransferUnits     ! Number of transfer Units [NTU]
+  REAL              :: WetBulbError      ! Calculated error for exiting wet-bulb temperature between iterations [delta K/K]
+  REAL              :: CpAirside            ! Delta enthalpy of the tower air divides by delta air wet-bulb temp [J/kg/K]
+  REAL              :: Qactual              ! Actual heat transfer rate between tower water and air [W]
+  REAL              :: DeltaTwb             ! Absolute value of difference between inlet and outlet air wet-bulb temp [C]
 
      ! set inlet and outlet node numbers, and initialize some local variables
 
@@ -3976,14 +3976,14 @@ SUBROUTINE SimSimpleTower(TowerNum,WaterMassFlowRate,AirFlowRate,UAdesign,Outlet
                                'SimSimpleTower')
      InletAirEnthalpy  =    &
        PsyHFnTdbRhPb(SimpleTowerInlet(TowerNum)%AirWetBulb,  &
-                     1.0d0,  &
+                     1.0,  &
                      SimpleTowerInlet(TowerNum)%AirPress)
 
     ! initialize exiting wet bulb temperature before iterating on final solution
     OutletAirWetBulb = InletAirWetBulb + 6.0
 
     ! Calcluate mass flow rates
-    IF (WaterMassFlowRate > 0.d0) THEN
+    IF (WaterMassFlowRate > 0.) THEN
       MdotCpWater =   WaterMassFlowRate * CpWater
     ELSE
       OutletWaterTemp = InletWaterTemp
@@ -3993,7 +3993,7 @@ SUBROUTINE SimSimpleTower(TowerNum,WaterMassFlowRate,AirFlowRate,UAdesign,Outlet
     DO WHILE ((WetBulbError.GT.WetBulbTolerance) .AND. (Iter.LE.IterMax) .AND. (DeltaTwb.gt.DeltaTwbTolerance))
         Iter = Iter + 1
 !        OutletAirEnthalpy = PsyHFnTdbRhPb(OutletAirWetBulb,1.0,OutBaroPress)
-        OutletAirEnthalpy = PsyHFnTdbRhPb(OutletAirWetBulb,1.0d0,SimpleTowerInlet(TowerNum)%AirPress)
+        OutletAirEnthalpy = PsyHFnTdbRhPb(OutletAirWetBulb,1.0,SimpleTowerInlet(TowerNum)%AirPress)
         ! calculate the airside specific heat and capacity
         CpAirside   =   (OutletAirEnthalpy - InletAirEnthalpy)/(OutletAirWetBulb-InletAirWetBulb)
         AirCapacity = AirMassFlowRate * CpAirside
@@ -4005,11 +4005,11 @@ SUBROUTINE SimSimpleTower(TowerNum,WaterMassFlowRate,AirFlowRate,UAdesign,Outlet
         UAactual = UAdesign*CpAirside/CpAir
         NumTransferUnits = UAactual/CapacityRatioMin
         ! calculate heat exchanger effectiveness
-        IF (CapacityRatio.LE.0.995d0)THEN
-          effectiveness = (1.d0-EXP(-1.0d0*NumTransferUnits*(1.0d0-CapacityRatio)))/ &
-                         (1.0d0-CapacityRatio*EXP(-1.0d0*NumTransferUnits*(1.0d0-CapacityRatio)))
+        IF (CapacityRatio.LE.0.995)THEN
+          effectiveness = (1.-EXP(-1.0*NumTransferUnits*(1.0-CapacityRatio)))/ &
+                         (1.0-CapacityRatio*EXP(-1.0*NumTransferUnits*(1.0-CapacityRatio)))
         ELSE
-          effectiveness = NumTransferUnits/(1.d0+NumTransferUnits)
+          effectiveness = NumTransferUnits/(1.+NumTransferUnits)
         ENDIF
         ! calculate water to air heat transfer and store last exiting WB temp of air
         Qactual = effectiveness * CapacityRatioMin * (InletWaterTemp-InletAirWetBulb)
@@ -4068,14 +4068,14 @@ SUBROUTINE SimVariableTower(TowerNum, WaterFlowRateRatio, AirFlowRateRatio, Twb,
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)         :: TowerNum              ! variable speed tower index
-  REAL(r64),    INTENT(IN)    :: WaterFlowRateRatio    ! current water flow rate ratio (capped if applicable)
-  REAL(r64),    INTENT(IN)    :: AirFlowRateRatio      ! current air flow rate ratio
-  REAL(r64),    INTENT(IN)    :: Twb                   ! current inlet air wet-bulb temperature (C, capped if applicable)
-  REAL(r64),    INTENT(OUT)   :: OutletWaterTemp       ! calculated tower outlet water temperature (C)
+  REAL,    INTENT(IN)    :: WaterFlowRateRatio    ! current water flow rate ratio (capped if applicable)
+  REAL,    INTENT(IN)    :: AirFlowRateRatio      ! current air flow rate ratio
+  REAL,    INTENT(IN)    :: Twb                   ! current inlet air wet-bulb temperature (C, capped if applicable)
+  REAL,    INTENT(OUT)   :: OutletWaterTemp       ! calculated tower outlet water temperature (C)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte = 500         ! Maximum number of iterations
-  REAL(r64), PARAMETER :: Acc =  0.0001d0        ! Accuracy of result
+  REAL, PARAMETER :: Acc =  0.0001        ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4085,16 +4085,16 @@ SUBROUTINE SimVariableTower(TowerNum, WaterFlowRateRatio, AirFlowRateRatio, Twb,
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                :: SolFla               ! Flag of solver
-  REAL(r64), DIMENSION(4)     :: Par                  ! Parameter array for regula falsi solver
-  REAL(r64)              :: Tr                   ! range temperature which results in an energy balance
-  REAL(r64)  :: TempSetPoint ! local temporary for loop setpoint
+  REAL, DIMENSION(4)     :: Par                  ! Parameter array for regula falsi solver
+  REAL              :: Tr                   ! range temperature which results in an energy balance
+  REAL  :: TempSetPoint ! local temporary for loop setpoint
 
 !   determine tower outlet water temperature
     Par(1) = TowerNum                  ! Index to cooling tower
     Par(2) = WaterFlowRateRatio        ! water flow rate ratio
     Par(3) = AirFlowRateRatio          ! air flow rate ratio
     Par(4) = Twb                       ! inlet air wet-bulb temperature [C]
-    CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, Tr, SimpleTowerTrResidual, 0.001d0, &
+    CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, Tr, SimpleTowerTrResidual, 0.001, &
                           VSTower(SimpleTower(TowerNum)%VSTower)%MaxRangeTemp, Par)
 
     OutletWaterTemp = SimpleTowerInlet(TowerNum)%WaterTemp - Tr
@@ -4152,18 +4152,18 @@ SUBROUTINE CalcVSTowerApproach(TowerNum, PctWaterFlow, AirFlowRatio, Twb, Tr, Ap
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER         , INTENT(IN)  :: TowerNum     ! Index to cooling tower
-    REAL(r64)       , INTENT(IN)  :: AirFlowRatio ! Air flow ratio of cooling tower
-    REAL(r64)       , INTENT(IN)  :: PctWaterFlow ! Water flow ratio of cooling tower
-    REAL(r64)       , INTENT(IN)  :: Twb          ! Inlet air wet-bulb temperature [C]
-    REAL(r64)       , INTENT(IN)  :: Tr           ! Cooling tower range (outlet water temp minus inlet air wet-bulb temp) [C]
-    REAL(r64)       , INTENT(OUT) :: Approach     ! Calculated approach temperature [C]
+    REAL       , INTENT(IN)  :: AirFlowRatio ! Air flow ratio of cooling tower
+    REAL       , INTENT(IN)  :: PctWaterFlow ! Water flow ratio of cooling tower
+    REAL       , INTENT(IN)  :: Twb          ! Inlet air wet-bulb temperature [C]
+    REAL       , INTENT(IN)  :: Tr           ! Cooling tower range (outlet water temp minus inlet air wet-bulb temp) [C]
+    REAL       , INTENT(OUT) :: Approach     ! Calculated approach temperature [C]
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!    REAL(r64)        :: Twb                       ! Inlet air wet-bulb temperature [C] (or [F] for CoolTools Model)
-!    REAL(r64)        :: Tr                        ! Cooling tower range (outlet water temp minus inlet air wet-bulb temp) [C]
+!    REAL        :: Twb                       ! Inlet air wet-bulb temperature [C] (or [F] for CoolTools Model)
+!    REAL        :: Tr                        ! Cooling tower range (outlet water temp minus inlet air wet-bulb temp) [C]
                                                   !   (or [F] for CoolTools Model)
-    REAL(r64)        :: PctAirFlow   = 0.0        ! air flow rate ratio (fan power ratio in the case of CoolTools model)
-    REAL(r64)        :: FlowFactor   = 0.0        ! water flow rate to air flow rate ratio (L/G) for YorkCalc model
+    REAL        :: PctAirFlow   = 0.0        ! air flow rate ratio (fan power ratio in the case of CoolTools model)
+    REAL        :: FlowFactor   = 0.0        ! water flow rate to air flow rate ratio (L/G) for YorkCalc model
 
 !    IF(SimpleTower(TowerNum)%TowerModelType .EQ. CoolToolsXFModel .OR. &
 !        SimpleTower(TowerNum)%TowerModelType .EQ. CoolToolsCFModel .OR. &
@@ -4295,14 +4295,14 @@ SUBROUTINE CheckModelBounds(TowerNum, Twb,Tr, Ta, WaterFlowRateRatio, TwbCapped,
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: TowerNum                        ! index to tower
-  REAL(r64),    INTENT(IN)  :: Twb                             ! current inlet air wet-bulb temperature (C)
-  REAL(r64),    INTENT(IN)  :: Tr                              ! requested range temperature for current time step (C)
-  REAL(r64),    INTENT(IN)  :: Ta                              ! requested approach temperature for current time step (C)
-  REAL(r64),    INTENT(IN)  :: WaterFlowRateRatio              ! current water flow rate ratio at water inlet node
-  REAL(r64),    INTENT(OUT) :: TwbCapped                       ! bounded value of inlet air wet-bulb temperature (C)
-  REAL(r64),    INTENT(OUT) :: TrCapped                        ! bounded value of range temperature (C)
-  REAL(r64),    INTENT(OUT) :: TaCapped                        ! bounded value of approach temperature (C)
-  REAL(r64),    INTENT(OUT) :: WaterFlowRateRatioCapped        ! bounded value of water flow rate ratio
+  REAL,    INTENT(IN)  :: Twb                             ! current inlet air wet-bulb temperature (C)
+  REAL,    INTENT(IN)  :: Tr                              ! requested range temperature for current time step (C)
+  REAL,    INTENT(IN)  :: Ta                              ! requested approach temperature for current time step (C)
+  REAL,    INTENT(IN)  :: WaterFlowRateRatio              ! current water flow rate ratio at water inlet node
+  REAL,    INTENT(OUT) :: TwbCapped                       ! bounded value of inlet air wet-bulb temperature (C)
+  REAL,    INTENT(OUT) :: TrCapped                        ! bounded value of range temperature (C)
+  REAL,    INTENT(OUT) :: TaCapped                        ! bounded value of approach temperature (C)
+  REAL,    INTENT(OUT) :: WaterFlowRateRatioCapped        ! bounded value of water flow rate ratio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 !  CHARACTER(len=*), PARAMETER :: OutputFormat  ='(F5.2)'
@@ -4319,9 +4319,9 @@ SUBROUTINE CheckModelBounds(TowerNum, Twb,Tr, Ta, WaterFlowRateRatio, TwbCapped,
  CHARACTER(len=32)         :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)         :: OutputCharHi       = ' '     ! character string for warning messages
  CHARACTER(len=32)         :: TrimValue          = ' '     ! character string for warning messages
- REAL(r64),SAVE    :: TimeStepSysLast        = 0.0 ! last system time step (used to check for downshifting)
- REAL(r64)    :: CurrentEndTime         = 0.0 ! end time of time step for current simulation time step
- REAL(r64),SAVE    :: CurrentEndTimeLast     = 0.0 ! end time of time step for last simulation time step
+ REAL,SAVE    :: TimeStepSysLast        = 0.0 ! last system time step (used to check for downshifting)
+ REAL    :: CurrentEndTime         = 0.0 ! end time of time step for current simulation time step
+ REAL,SAVE    :: CurrentEndTimeLast     = 0.0 ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
 
 !   initialize capped variables in case independent variables are in bounds
@@ -4561,13 +4561,13 @@ FUNCTION SimpleTowerUAResidual(UA, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: UA                         ! UA of cooling tower
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design tower load [W]
+    REAL, INTENT(IN)  :: UA                         ! UA of cooling tower
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design tower load [W]
                                                     ! par(2) = tower number
                                                     ! par(3) = design water mass flow rate [kg/s]
                                                     ! par(4) = design air volume flow rate [m3/s]
                                                     ! par(5) = water specific heat [J/(kg*C)]
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4580,8 +4580,8 @@ FUNCTION SimpleTowerUAResidual(UA, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: TowerIndex                             ! index of this tower
-  REAL(r64)    :: OutWaterTemp                           ! outlet water temperature [C]
-  REAL(r64)    :: CoolingOutput                          ! tower cooling output [W]
+  REAL    :: OutWaterTemp                           ! outlet water temperature [C]
+  REAL    :: CoolingOutput                          ! tower cooling output [W]
 
   TowerIndex = INT(Par(2))
   CALL SimSimpleTower(TowerIndex,Par(3),Par(4),UA,OutWaterTemp)
@@ -4613,12 +4613,12 @@ FUNCTION SimpleTowerTrResidual(Trange, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: Trange                     ! cooling tower range temperature [C]
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = tower number
+    REAL, INTENT(IN)  :: Trange                     ! cooling tower range temperature [C]
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = tower number
                                                     ! par(2) = water flow ratio
                                                     ! par(3) = air flow ratio
                                                     ! par(4) = inlet air wet-bulb temperature [C]
-    REAL(r64)         :: Residuum                   ! residual to be minimized to zero
+    REAL         :: Residuum                   ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4631,10 +4631,10 @@ FUNCTION SimpleTowerTrResidual(Trange, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: TowerIndex                             ! index of this tower
-  REAL(r64) ::    WaterFlowRateRatio                     ! ratio of water flow rate to design water flow rate
-  REAL(r64) ::    AirFlowRateRatio                       ! ratio of water flow rate to design water flow rate
-  REAL(r64) ::    InletAirWB                             ! inlet air wet-bulb temperature [C]
-  REAL(r64) ::    Tapproach                              ! tower approach temperature [C]
+  REAL ::    WaterFlowRateRatio                     ! ratio of water flow rate to design water flow rate
+  REAL ::    AirFlowRateRatio                       ! ratio of water flow rate to design water flow rate
+  REAL ::    InletAirWB                             ! inlet air wet-bulb temperature [C]
+  REAL ::    Tapproach                              ! tower approach temperature [C]
 
   TowerIndex         = INT(Par(1))
   WaterFlowRateRatio = Par(2)
@@ -4674,14 +4674,14 @@ FUNCTION SimpleTowerApproachResidual(FlowRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  :: FlowRatio                  ! water or air flow ratio of cooling tower
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = tower number
+  REAL, INTENT(IN)  :: FlowRatio                  ! water or air flow ratio of cooling tower
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = tower number
                                                   ! par(2) = water or air flow ratio (opposite of input variable)
                                                   ! par(3) = inlet air wet-bulb temp [C]
                                                   ! par(4) = tower range [C]
                                                   ! par(5) = desired approach [C]
                                                   ! par(6) = 0.0 to calculate water flow rate ratio, 1.0 for air
-  REAL(r64)         :: Residuum ! residual to be minimized to zero
+  REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4694,12 +4694,12 @@ FUNCTION SimpleTowerApproachResidual(FlowRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: TowerIndex                           ! index of this tower
-  REAL(r64) ::    WaterFlowRateRatio                   ! ratio of water flow rate to design water flow rate
-  REAL(r64) ::    AirFlowRateRatio                     ! ratio of water flow rate to design water flow rate
-  REAL(r64) ::    InletAirWB                           ! inlet air wet-bulb temperature [C]
-  REAL(r64) ::    Trange                               ! tower range temperature [C]
-  REAL(r64) ::    TapproachActual                      ! actual tower approach temperature [C]
-  REAL(r64) ::    TapproachDesired                     ! desired tower approach temperature [C]
+  REAL ::    WaterFlowRateRatio                   ! ratio of water flow rate to design water flow rate
+  REAL ::    AirFlowRateRatio                     ! ratio of water flow rate to design water flow rate
+  REAL ::    InletAirWB                           ! inlet air wet-bulb temperature [C]
+  REAL ::    Trange                               ! tower range temperature [C]
+  REAL ::    TapproachActual                      ! actual tower approach temperature [C]
+  REAL ::    TapproachDesired                     ! desired tower approach temperature [C]
 
   TowerIndex = INT(Par(1))
   IF(Par(6) .EQ. 0.0) THEN
@@ -4766,25 +4766,25 @@ SUBROUTINE CalculateWaterUseage(TowerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: AirDensity
-  REAL(r64) :: AirMassFlowRate
-  REAL(r64) :: AvailTankVdot
-  REAL(r64) :: BlowDownVdot      =0.0
-  REAL(r64) :: DriftVdot         =0.0
-  REAL(r64) :: EvapVdot          =0.0
-  REAL(r64) :: InletAirEnthalpy
-  REAL(r64) :: InSpecificHumRat
-  REAL(r64) :: OutSpecificHumRat
-  REAL(r64) :: TairAvg
-  REAL(r64) :: MakeUpVdot
-  REAL(r64) :: OutletAirEnthalpy
-  REAL(r64) :: OutletAirHumRatSat
-  REAL(r64) :: OutletAirTSat
-  REAL(r64) :: StarvedVdot
-  REAL(r64) :: TankSupplyVdot
-  REAL(r64) :: rho
+  REAL :: AirDensity
+  REAL :: AirMassFlowRate
+  REAL :: AvailTankVdot
+  REAL :: BlowDownVdot      =0.0
+  REAL :: DriftVdot         =0.0
+  REAL :: EvapVdot          =0.0
+  REAL :: InletAirEnthalpy
+  REAL :: InSpecificHumRat
+  REAL :: OutSpecificHumRat
+  REAL :: TairAvg
+  REAL :: MakeUpVdot
+  REAL :: OutletAirEnthalpy
+  REAL :: OutletAirHumRatSat
+  REAL :: OutletAirTSat
+  REAL :: StarvedVdot
+  REAL :: TankSupplyVdot
+  REAL :: rho
 
-  REAL(r64) :: AverageWaterTemp
+  REAL :: AverageWaterTemp
 
   AverageWaterTemp = (InletWaterTemp + OutletWaterTemp) / 2.0
 
@@ -4797,7 +4797,7 @@ SUBROUTINE CalculateWaterUseage(TowerNum)
                           * SimpleTower(TowerNum)%NumCellON / SimpleTower(TowerNum)%NumCell
     InletAirEnthalpy    =   &
        PsyHFnTdbRhPb(SimpleTowerInlet(TowerNum)%AirWetBulb,  &
-          1.0d0,  &
+          1.0,  &
           SimpleTowerInlet(TowerNum)%AirPress)
 
     IF  (AirMassFlowRate > 0.0) Then
@@ -4816,7 +4816,7 @@ SUBROUTINE CalculateWaterUseage(TowerNum)
 
       ! Amount of water evaporated, get density water at air temp or 4 C if too cold
        rho =  GetDensityGlycol(PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidName,  &
-                                MAX(TairAvg,4.d0), &
+                                MAX(TairAvg,4.), &
                                 PlantLoop(SimpleTower(TowerNum)%LoopNum)%FluidIndex,&
                                 'CalculateWaterUseage')
 
@@ -4960,7 +4960,7 @@ SUBROUTINE UpdateTowers(TowerNum)
   CHARACTER(len=25)      :: CharLowOutletTemp
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: LoopMinTemp
+  REAL :: LoopMinTemp
   ! set node information
 
 
@@ -5097,7 +5097,7 @@ SUBROUTINE ReportTowers(RunFlag, TowerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ReportingConstant
+  REAL :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
 

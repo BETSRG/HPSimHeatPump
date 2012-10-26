@@ -107,15 +107,15 @@ TYPE, PUBLIC :: VentilatedSlabData
                   DIMENSION(:) :: SurfacePtr                  ! Pointer to the slabs in the Surface derived type
   CHARACTER(len=MaxNameLength), &
      ALLOCATABLE, DIMENSION(:) :: SurfaceName                 ! Name of surfaces that are the radiant system (can be one or more)
-  REAL(r64), ALLOCATABLE,   &
+  REAL, ALLOCATABLE,   &
                   DIMENSION(:) :: SurfaceFlowFrac             ! Fraction of flow/pipe length for a particular surface
-  REAL(r64), ALLOCATABLE,  &
+  REAL, ALLOCATABLE,  &
                   DIMENSION(:) :: CDiameter                   ! Number of core diameter
 
-  REAL(r64), ALLOCATABLE,  &
+  REAL, ALLOCATABLE,  &
                   DIMENSION(:) :: CLength                     ! Number of core length
 
-  REAL(r64), ALLOCATABLE,  &
+  REAL, ALLOCATABLE,  &
                   DIMENSION(:) :: CNumbers                    ! Number of core numbers
 
   CHARACTER(len=MaxNameLength), &
@@ -127,10 +127,10 @@ TYPE, PUBLIC :: VentilatedSlabData
 
 
 
-  REAL(r64)                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this system
-  REAL(r64)                    :: CoreDiameter      = 0.0 ! tube diameter for embedded tubing
-  REAL(r64)                    :: CoreLength        = 0.0 ! tube length embedded in radiant surface
-  REAL(r64)                    :: CoreNumbers        = 0.0 ! tube length embedded in radiant surface
+  REAL                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this system
+  REAL                    :: CoreDiameter      = 0.0 ! tube diameter for embedded tubing
+  REAL                    :: CoreLength        = 0.0 ! tube length embedded in radiant surface
+  REAL                    :: CoreNumbers        = 0.0 ! tube length embedded in radiant surface
   INTEGER                      :: ControlType       = 0   ! Control type for the system
                                                           ! (MAT, MRT, Op temp, ODB, OWB, DPTZ, Surf Temp.)
   INTEGER                      :: ReturnAirNode           =0   ! inlet air node number
@@ -145,8 +145,8 @@ TYPE, PUBLIC :: VentilatedSlabData
   INTEGER                      :: Fan_Index           =0
   INTEGER                      :: ControlCompTypeNum =0
   INTEGER                      :: CompErrIndex       =0
-  REAL(r64)                    :: MaxAirVolFlow       =0.0 ! m3/s
-  REAL(r64)                    :: MaxAirMassFlow      =0.0 ! kg/s
+  REAL                    :: MaxAirVolFlow       =0.0 ! m3/s
+  REAL                    :: MaxAirMassFlow      =0.0 ! kg/s
   INTEGER                      :: OAControlType       =0 ! type of control; options are VARIABLE PERCENT and FIXED TEMPERATURE
   CHARACTER(len=MaxNameLength) :: MinOASchedName      =' ' ! schedule of fraction for minimum outside air (all controls)
   INTEGER                      :: MinOASchedPtr       =0   ! index to schedule
@@ -158,10 +158,10 @@ TYPE, PUBLIC :: VentilatedSlabData
   INTEGER                      :: OutsideAirNode      =0   ! outside air node number
   INTEGER                      :: AirReliefNode       =0   ! relief air node number
   INTEGER                      :: OAMixerOutNode      =0   ! outlet node after the outside air mixer (inlet to coils if present)
-  REAL(r64)                    :: OutAirVolFlow       =0.0 ! m3/s
-  REAL(r64)                    :: OutAirMassFlow      =0.0 ! kg/s
-  REAL(r64)                    :: MinOutAirVolFlow    =0.0 ! m3/s
-  REAL(r64)                    :: MinOutAirMassFlow   =0.0 ! kg/s
+  REAL                    :: OutAirVolFlow       =0.0 ! m3/s
+  REAL                    :: OutAirMassFlow      =0.0 ! kg/s
+  REAL                    :: MinOutAirVolFlow    =0.0 ! m3/s
+  REAL                    :: MinOutAirMassFlow   =0.0 ! kg/s
   INTEGER                      :: SysConfg            =0 ! type of coil option; options are BOTH, HEATING, COOLING, AND NONE
   INTEGER                      :: CoilOption          =0 ! type of coil option; options are BOTH, HEATING, COOLING, AND NONE
   LOGICAL                      :: HCoilPresent        =.false. ! .TRUE. if ventilated slab has a heating coil
@@ -173,18 +173,18 @@ TYPE, PUBLIC :: VentilatedSlabData
   INTEGER                      :: HCoil_FluidIndex    =0
   CHARACTER(len=MaxNameLength) :: HCoilSchedName      =' ' ! availability schedule for the heating coil
   INTEGER                      :: HCoilSchedPtr       =0   ! index to schedule
-  REAL(r64)                    :: HCoilSchedValue     =0.0
-  REAL(r64)                    :: MaxVolHotWaterFlow  =0.0 ! m3/s
-  REAL(r64)                    :: MaxVolHotSteamFlow  =0.0 ! m3/s
-  REAL(r64)                    :: MaxHotWaterFlow     =0.0 ! kg/s
-  REAL(r64)                    :: MaxHotSteamFlow=0.0
-  REAl(r64)                    :: MinHotSteamFlow =0.0
-  REAL(r64)                    :: MinVolHotWaterFlow  =0.0 ! m3/s
-  REAL(r64)                    :: MinVolHotSteamFlow  =0.0 ! m3/s
-  REAL(r64)                    :: MinHotWaterFlow     =0.0 ! kg/s
+  REAL                    :: HCoilSchedValue     =0.0
+  REAL                    :: MaxVolHotWaterFlow  =0.0 ! m3/s
+  REAL                    :: MaxVolHotSteamFlow  =0.0 ! m3/s
+  REAL                    :: MaxHotWaterFlow     =0.0 ! kg/s
+  REAL                    :: MaxHotSteamFlow=0.0
+  REAL                    :: MinHotSteamFlow =0.0
+  REAL                    :: MinVolHotWaterFlow  =0.0 ! m3/s
+  REAL                    :: MinVolHotSteamFlow  =0.0 ! m3/s
+  REAL                    :: MinHotWaterFlow     =0.0 ! kg/s
   INTEGER                      :: HotControlNode      =0   ! hot water control node
   INTEGER                      :: HotCoilOutNodeNum   =0   ! outlet of coil
-  REAL(r64)                    :: HotControlOffset    =0.0 ! control tolerance
+  REAL                    :: HotControlOffset    =0.0 ! control tolerance
   INTEGER                      :: HWLoopNum           =0   ! index for plant loop with hot water coil
   INTEGER                      :: HWLoopSide          =0   ! index for plant loop side for hot water coil
   INTEGER                      :: HWBranchNum         =0   ! index for plant branch for hot water coil
@@ -213,14 +213,14 @@ TYPE, PUBLIC :: VentilatedSlabData
                                                            ! 'CoilSystem:Cooling:Water:HeatExchangerAssisted'
   CHARACTER(len=MaxNameLength) :: CCoilSchedName      =' ' ! availability schedule for the cooling coil
   INTEGER                      :: CCoilSchedPtr       =0   ! index to schedule
-  REAL(r64)                    :: CCoilSchedValue     =0.0
-  REAL(r64)                    :: MaxVolColdWaterFlow =0.0 ! m3/s
-  REAL(r64)                    :: MaxColdWaterFlow    =0.0 ! kg/s
-  REAL(r64)                    :: MinVolColdWaterFlow =0.0 ! m3/s
-  REAL(r64)                    :: MinColdWaterFlow    =0.0 ! kg/s
+  REAL                    :: CCoilSchedValue     =0.0
+  REAL                    :: MaxVolColdWaterFlow =0.0 ! m3/s
+  REAL                    :: MaxColdWaterFlow    =0.0 ! kg/s
+  REAL                    :: MinVolColdWaterFlow =0.0 ! m3/s
+  REAL                    :: MinColdWaterFlow    =0.0 ! kg/s
   INTEGER                      :: ColdControlNode     =0   ! chilled water control node
   INTEGER                      :: ColdCoilOutNodeNum  =0   ! chilled water coil out nod
-  REAL(r64)                    :: ColdControlOffset   =0.0 ! control tolerance
+  REAL                    :: ColdControlOffset   =0.0 ! control tolerance
   INTEGER                      :: CWLoopNum           =0   ! index for plant loop with chilled water coil
   INTEGER                      :: CWLoopSide          =0   ! index for plant loop side for chilled water coil
   INTEGER                      :: CWBranchNum         =0   ! index for plant branch for chilled water coil
@@ -245,32 +245,32 @@ TYPE, PUBLIC :: VentilatedSlabData
   CHARACTER(len=MaxNameLength) :: DSSlabInNodeName  =' '
   CHARACTER(len=MaxNameLength) :: DSSlabOutNodeName  =' '
   ! Report data
-  REAL(r64)                    :: DirectHeatLossPower          =0.0 ! system direct heat loss in W
-  REAL(r64)                    :: DirectHeatLossEnergy         =0.0 ! system direct heat loss in J
-  REAL(r64)                    :: DirectHeatGainPower          =0.0 ! system direct heat gain in W
-  REAL(r64)                    :: DirectHeatGainEnergy         =0.0 ! system direct heat gain in J
-  REAL(r64)                    :: TotalVentSlabRadPower        =0.0
-  REAL(r64)                    :: RadHeatingPower              =0.0 ! radiant heating output in watts
-  REAL(r64)                    :: RadHeatingEnergy             =0.0 ! radiant heating output in J
-  REAL(r64)                    :: RadCoolingPower              =0.0 ! radiant cooling output in watts
-  REAL(r64)                    :: RadCoolingEnergy             =0.0 ! radiant cooling output in J
-  REAL(r64)                    :: HeatCoilPower                =0.0
-  REAL(r64)                    :: HeatCoilEnergy               =0.0
-  REAL(r64)                    :: TotCoolCoilPower             =0.0
-  REAL(r64)                    :: TotCoolCoilEnergy            =0.0
-  REAL(r64)                    :: SensCoolCoilPower            =0.0
-  REAL(r64)                    :: SensCoolCoilEnergy           =0.0
-  REAL(r64)                    :: LateCoolCoilPower            =0.0
-  REAL(r64)                    :: LateCoolCoilEnergy           =0.0
-  REAL(r64)                    :: ElecFanPower                 =0.0
-  REAL(r64)                    :: ElecFanEnergy                =0.0
-  REAL(r64)                    :: AirMassFlowRate              =0.0 ! Circulated air mass flow rate in kg/s
-  REAL(r64)                    :: AirVolFlow                   =0.0 ! Circulated air volumetric flow rate in m3/s
-  REAL(r64)                    :: SlabInTemp                   =0.0 ! Slab inlet temp in degree C
-  REAL(r64)                    :: SlabOutTemp                  =0.0 ! Slab outlet temp in degree C
-  REAL(r64)                    :: ReturnAirTemp                =0.0 !
-  REAL(r64)                    :: FanOutletTemp                =0.0 ! FanOutlet temp in degree C
-  REAL(r64)                    :: ZoneInletTemp               =0.0  ! supply air temp
+  REAL                    :: DirectHeatLossPower          =0.0 ! system direct heat loss in W
+  REAL                    :: DirectHeatLossEnergy         =0.0 ! system direct heat loss in J
+  REAL                    :: DirectHeatGainPower          =0.0 ! system direct heat gain in W
+  REAL                    :: DirectHeatGainEnergy         =0.0 ! system direct heat gain in J
+  REAL                    :: TotalVentSlabRadPower        =0.0
+  REAL                    :: RadHeatingPower              =0.0 ! radiant heating output in watts
+  REAL                    :: RadHeatingEnergy             =0.0 ! radiant heating output in J
+  REAL                    :: RadCoolingPower              =0.0 ! radiant cooling output in watts
+  REAL                    :: RadCoolingEnergy             =0.0 ! radiant cooling output in J
+  REAL                    :: HeatCoilPower                =0.0
+  REAL                    :: HeatCoilEnergy               =0.0
+  REAL                    :: TotCoolCoilPower             =0.0
+  REAL                    :: TotCoolCoilEnergy            =0.0
+  REAL                    :: SensCoolCoilPower            =0.0
+  REAL                    :: SensCoolCoilEnergy           =0.0
+  REAL                    :: LateCoolCoilPower            =0.0
+  REAL                    :: LateCoolCoilEnergy           =0.0
+  REAL                    :: ElecFanPower                 =0.0
+  REAL                    :: ElecFanEnergy                =0.0
+  REAL                    :: AirMassFlowRate              =0.0 ! Circulated air mass flow rate in kg/s
+  REAL                    :: AirVolFlow                   =0.0 ! Circulated air volumetric flow rate in m3/s
+  REAL                    :: SlabInTemp                   =0.0 ! Slab inlet temp in degree C
+  REAL                    :: SlabOutTemp                  =0.0 ! Slab outlet temp in degree C
+  REAL                    :: ReturnAirTemp                =0.0 !
+  REAL                    :: FanOutletTemp                =0.0 ! FanOutlet temp in degree C
+  REAL                    :: ZoneInletTemp               =0.0  ! supply air temp
 END TYPE VentilatedSlabData
 
 TYPE (VentilatedSlabData), ALLOCATABLE, PUBLIC, DIMENSION(:) :: VentSlab
@@ -278,17 +278,17 @@ TYPE (VentilatedSlabData), ALLOCATABLE, PUBLIC, DIMENSION(:) :: VentSlab
   ! MODULE VARIABLE DECLARATIONS:
 LOGICAL :: HCoilOn         =.false. ! TRUE if the heating coil (gas or electric especially) should be running
 INTEGER, PUBLIC :: NumOfVentSlabs  =0       ! Number of ventilated slab in the input file
-REAL(r64)    :: OAMassFlowRate  =0.0     ! Outside air mass flow rate for the ventilated slab
+REAL    :: OAMassFlowRate  =0.0     ! Outside air mass flow rate for the ventilated slab
 DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:) :: QRadSysSrcAvg ! Average source over the time step for a particular radiant surfaceD
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to SumHATsurf for all the walls in a zone with no source
+REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to SumHATsurf for all the walls in a zone with no source
 INTEGER :: MaxCloNumOfSurfaces    =0 ! Used to set allocate size in CalcClo routine
-REAL(r64)    :: QZnReq          =0.0     ! heating or cooling needed by system [watts]
+REAL    :: QZnReq          =0.0     ! heating or cooling needed by system [watts]
 
   ! Record keeping variables used to calculate QRadSysSrcAvg locally
 
 DOUBLE PRECISION, ALLOCATABLE, DIMENSION(:) :: LastQRadSysSrc       ! Need to keep the last value in case we are still iterating
-REAL(r64), ALLOCATABLE, DIMENSION(:)        :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
-REAL(r64), ALLOCATABLE, DIMENSION(:)        :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
+REAL, ALLOCATABLE, DIMENSION(:)        :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
+REAL, ALLOCATABLE, DIMENSION(:)        :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
   ! Autosizing variables
@@ -338,8 +338,8 @@ SUBROUTINE SimVentilatedSlab(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOut
   CHARACTER(len=*), INTENT(IN)  :: CompName            ! name of the fan coil unit
   INTEGER,          INTENT(IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
-  REAL(r64),        INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL,        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
+  REAL,        INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT) :: CompIndex
 
 
@@ -475,13 +475,13 @@ SUBROUTINE GetVentilatedSlabInput
   INTEGER                         :: BaseNum            ! Temporary number for creating RadiantSystemTypes structure
   LOGICAL                         :: errflag            ! interim error flag
   INTEGER                         :: SurfListNum        ! Index within the SurfList derived type for a surface list name
-!unused0309  INTEGER                         :: NumOfSurfListVB  ! Number of surface lists in the user input file
+!unuse309  INTEGER                         :: NumOfSurfListVB  ! Number of surface lists in the user input file
   INTEGER                         :: SurfNum            ! DO loop counter for surfaces
   LOGICAL                         :: IsValid            ! Set for outside air node check
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaArgs      ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: rNumericArgs          ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: rNumericArgs          ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   LOGICAL                              :: SteamMessageNeeded
@@ -1110,7 +1110,7 @@ SUBROUTINE GetVentilatedSlabInput
             GetOnlySingleNode(cAlphaArgs(29),ErrorsFound,CurrentModuleObject,cAlphaArgs(1), &
                             NodeType_Water,NodeConnectionType_Actuator,1,ObjectIsParent)
        END IF
-       VentSlab(Item)%HotControlOffset = 0.001d0
+       VentSlab(Item)%HotControlOffset = 0.001
 
        IF (VentSlab(Item)%HCoilType == Heating_WaterCoilType) THEN
            VentSlab(Item)%MaxVolHotWaterFlow = GetWaterCoilMaxFlowRate('Coil:Heating:Water',  &
@@ -1206,7 +1206,7 @@ SUBROUTINE GetVentilatedSlabInput
          ErrorsFound=.true.
        END IF
 
-       VentSlab(Item)%ColdControlOffset = 0.001d0
+       VentSlab(Item)%ColdControlOffset = 0.001
 
        IF (VentSlab(Item)%CCoilType == Cooling_CoilWaterCooling) THEN
            VentSlab(Item)%MaxVolColdWaterFlow = GetWaterCoilMaxFlowRate('Coil:Cooling:Water',  &
@@ -1411,12 +1411,12 @@ SUBROUTINE InitVentilatedSlab(Item, FirstHVACIteration)
   INTEGER        :: InNode             ! inlet node number in Ventilated Slab loop
   INTEGER        :: OutNode            ! outlet node number in Ventilated Slab loop
   INTEGER        :: OutsideAirNode     ! outside air node number in Ventilated Slab loop
-  REAL(r64)      :: RhoAir             ! air density at InNode
-  REAL(r64)      :: TempSteamIn
-  REAL(r64)      :: SteamDensity
+  REAL      :: RhoAir             ! air density at InNode
+  REAL      :: TempSteamIn
+  REAL      :: SteamDensity
   INTEGER        :: ZoneAirInNode
   INTEGER        :: MixOut
-  REAL(r64)      :: rho
+  REAL      :: rho
   LOGICAL        :: errFlag
           ! FLOW:
 
@@ -1427,15 +1427,15 @@ IF (MyOneTimeFlag) THEN
    ALLOCATE(MySizeFlag(NumOfVentSlabs))
    ALLOCATE(MyPlantScanFlag(NumOfVentSlabs))
    ALLOCATE(ZeroSourceSumHATsurf(NumOfZones))
-    ZeroSourceSumHATsurf = 0.0D0
+    ZeroSourceSumHATsurf = 0.0
    ALLOCATE(QRadSysSrcAvg(TotSurfaces))
-    QRadSysSrcAvg = 0.0D0
+    QRadSysSrcAvg = 0.0
    ALLOCATE(LastQRadSysSrc(TotSurfaces))
-    LastQRadSysSrc = 0.0D0
+    LastQRadSysSrc = 0.0
    ALLOCATE(LastSysTimeElapsed(TotSurfaces))
-    LastSysTimeElapsed = 0.0D0
+    LastSysTimeElapsed = 0.0
    ALLOCATE(LastTimeStepSys(TotSurfaces))
-    LastTimeStepSys = 0.0D0
+    LastTimeStepSys = 0.0
 
 
     ! Initialize total areas for all radiant systems
@@ -1531,16 +1531,16 @@ IF (BeginEnvrnFlag .AND. MyEnvrnFlag(Item) .AND. .NOT. MyPlantScanFlag(item)) TH
     RhoAir         = StdRhoAir
 
          ! Radiation Panel Part
-    ZeroSourceSumHATsurf = 0.0D0
-    QRadSysSrcAvg = 0.0D0
-    LastQRadSysSrc = 0.0D0
-    LastSysTimeElapsed = 0.0D0
-    LastTimeStepSys = 0.0D0
+    ZeroSourceSumHATsurf = 0.0
+    QRadSysSrcAvg = 0.0
+    LastQRadSysSrc = 0.0
+    LastSysTimeElapsed = 0.0
+    LastTimeStepSys = 0.0
     IF (NumOfVentSlabs > 0) THEN
-      VentSlab%RadHeatingPower          = 0.0D0
-      VentSlab%RadHeatingEnergy         = 0.0D0
-      VentSlab%RadCoolingPower          = 0.0D0
-      VentSlab%RadCoolingEnergy         = 0.0D0
+      VentSlab%RadHeatingPower          = 0.0
+      VentSlab%RadHeatingEnergy         = 0.0
+      VentSlab%RadCoolingPower          = 0.0
+      VentSlab%RadCoolingEnergy         = 0.0
     ENDIF
 
     ! set the initial Temperature of Return Air
@@ -1572,7 +1572,7 @@ IF (BeginEnvrnFlag .AND. MyEnvrnFlag(Item) .AND. .NOT. MyPlantScanFlag(item)) TH
 
       IF (VentSlab(Item)%HCoil_PlantTypeNum == TypeOf_CoilWaterSimpleHeating .AND. .NOT. MyPlantScanFlag(item)) THEN
         rho =  GetDensityGlycol(PlantLoop(VentSlab(Item)%HWLoopNum )%fluidName, &
-                                       60.d0, &
+                                       60., &
                                       PlantLoop( VentSlab(Item)%HWLoopNum )%fluidIndex, &
                                         'InitVentilatedSlab' )
 
@@ -1591,7 +1591,7 @@ IF (BeginEnvrnFlag .AND. MyEnvrnFlag(Item) .AND. .NOT. MyPlantScanFlag(item)) TH
       END IF
       IF (VentSlab(Item)%HCoil_PlantTypeNum == TypeOf_CoilSteamAirHeating .AND. .NOT. MyPlantScanFlag(item)) THEN
         TempSteamIn= 100.00
-        SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,VentSlab(Item)%HCoil_FluidIndex,'InitVentilatedSlab')
+        SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,VentSlab(Item)%HCoil_FluidIndex,'InitVentilatedSlab')
         VentSlab(Item)%MaxHotSteamFlow = SteamDensity*VentSlab(Item)%MaxVolHotSteamFlow
         VentSlab(Item)%MinHotSteamFlow = SteamDensity*VentSlab(Item)%MinVolHotSteamFlow
 
@@ -1687,10 +1687,10 @@ END IF  ! ...end start of environment inits
        ZeroSourceSumHATsurf(ZoneNum) = SumHATsurf(ZoneNum) ! Set this to figure what part of the load the radiant system meets
         DO RadSurfNum = 1, VentSlab(Item)%NumOfSurfaces
           SurfNum                     = VentSlab(Item)%SurfacePtr(RadSurfNum)
-          QRadSysSrcAvg(SurfNum)      = 0.0D0  ! Initialize this variable to zero (radiant system defaults to off)
-          LastQRadSysSrc(SurfNum)     = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastSysTimeElapsed(SurfNum) = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastTimeStepSys(SurfNum)    = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
+          QRadSysSrcAvg(SurfNum)      = 0.0  ! Initialize this variable to zero (radiant system defaults to off)
+          LastQRadSysSrc(SurfNum)     = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastSysTimeElapsed(SurfNum) = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastTimeStepSys(SurfNum)    = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
         END DO
   END IF
 
@@ -1746,24 +1746,24 @@ SUBROUTINE SizeVentilatedSlab(Item)
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
   LOGICAL             :: ErrorsFound
-  REAL(r64)                :: CoilInTemp
-  REAL(r64)                :: CoilOutTemp
-  REAL(r64)                :: CoilOutHumRat
-  REAL(r64)                :: CoilInHumRat
-  REAL(r64)                :: DesCoilLoad
-  REAL(r64)                :: TempSteamIn
-  REAL(r64)                :: EnthSteamInDry
-  REAL(r64)                :: EnthSteamOutWet
-  REAL(r64)                :: LatentHeatSteam
-  REAL(r64)                :: SteamDensity
+  REAL                :: CoilInTemp
+  REAL                :: CoilOutTemp
+  REAL                :: CoilOutHumRat
+  REAL                :: CoilInHumRat
+  REAL                :: DesCoilLoad
+  REAL                :: TempSteamIn
+  REAL                :: EnthSteamInDry
+  REAL                :: EnthSteamOutWet
+  REAL                :: LatentHeatSteam
+  REAL                :: SteamDensity
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0
   INTEGER             :: CoilSteamOutletNode=0
   CHARACTER(len=MaxNameLength) :: CoolingCoilName
   CHARACTER(len=MaxNameLength) :: CoolingCoilType
-  REAL(r64)           :: rho
-  REAL(r64)           :: Cp
+  REAL           :: rho
+  REAL           :: Cp
   INTEGER             :: DummyWaterIndex = 1
 
   PltSizCoolNum = 0
@@ -1835,12 +1835,12 @@ SUBROUTINE SizeVentilatedSlab(Item)
                               * FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow &
                               * (CoilOutTemp-CoilInTemp)
             rho = GetDensityGlycol(PlantLoop(VentSlab(Item)%HWLoopNum )%fluidName, &
-                                    60.d0, &
+                                    60., &
                                       PlantLoop( VentSlab(Item)%HWLoopNum )%fluidIndex, &
                                         'SizeVentilatedSlab' )
 
             Cp  = GetSpecificHeatGlycol(PlantLoop(VentSlab(Item)%HWLoopNum )%fluidName, &
-                                    60.d0, &
+                                    60., &
                                       PlantLoop( VentSlab(Item)%HWLoopNum )%fluidIndex, &
                                         'SizeVentilatedSlab' )
 
@@ -1881,12 +1881,12 @@ SUBROUTINE SizeVentilatedSlab(Item)
                               * (CoilOutTemp-CoilInTemp)
 
             TempSteamIn= 100.00
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
-            Cp = GetSpecificHeatGlycol('WATER', 60.d0, DummyWaterIndex, 'SizeVentilatedSlab')
-            rho = GetDensityGlycol('WATER', 60.d0, DummyWaterIndex, 'SizeVentilatedSlab')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,VentSlab(Item)%HCoil_FluidIndex,'SizeVentilatedSlab')
+            Cp = GetSpecificHeatGlycol('WATER', 60., DummyWaterIndex, 'SizeVentilatedSlab')
+            rho = GetDensityGlycol('WATER', 60., DummyWaterIndex, 'SizeVentilatedSlab')
             VentSlab(Item)%MaxVolHotSteamFlow = DesCoilLoad/((PlantSizData(PltSizHeatNum)%DeltaT * &
                                                                              Cp  * rho )+ &
                                                                                     SteamDensity* LatentHeatSteam)
@@ -1938,12 +1938,12 @@ SUBROUTINE SizeVentilatedSlab(Item)
           DesCoilLoad = FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow &
                           * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
           rho = GetDensityGlycol(PlantLoop(VentSlab(Item)%CWLoopNum )%fluidName, &
-                                    5.d0, &
+                                    5., &
                                       PlantLoop( VentSlab(Item)%CWLoopNum )%fluidIndex, &
                                         'SizeVentilatedSlab' )
 
           Cp  = GetSpecificHeatGlycol(PlantLoop(VentSlab(Item)%CWLoopNum )%fluidName, &
-                                    5.d0, &
+                                    5., &
                                       PlantLoop( VentSlab(Item)%CWLoopNum )%fluidIndex, &
                                         'SizeVentilatedSlab' )
 
@@ -2056,17 +2056,17 @@ SUBROUTINE CalcVentilatedSlab(Item,ZoneNum,FirstHVACIteration,PowerMet,LatOutput
   INTEGER, INTENT(INOUT) :: Item        ! number of the current ventilated slab being simulated
   INTEGER, INTENT(IN)   :: ZoneNum            ! number of zone being served
   LOGICAL, INTENT(IN)    :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),    INTENT(OUT)   :: PowerMet           ! power supplied (W)
-  REAL(r64),    INTENT(OUT)   :: LatOutputProvided  ! latent capacity supplied (kg/s)
+  REAL,    INTENT(OUT)   :: PowerMet           ! power supplied (W)
+  REAL,    INTENT(OUT)   :: LatOutputProvided  ! latent capacity supplied (kg/s)
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
-  REAL(r64), PARAMETER :: LowTempDiff = 0.1d0      ! Smallest allowed temperature difference for comparisons
+  REAL, PARAMETER :: LowTempDiff = 0.1      ! Smallest allowed temperature difference for comparisons
                                                    ! (below this value the temperatures are assumed equal)
-  REAL(r64), PARAMETER :: LowOAFracDiff = 0.01d0   ! Smallest allowed outside air fraction difference for comparison
+  REAL, PARAMETER :: LowOAFracDiff = 0.01   ! Smallest allowed outside air fraction difference for comparison
                                                    ! (below this value the fractions are assumed equal)
-  REAL(r64), PARAMETER :: MinFlowAllowed = 0.001d0 ! lowest air flow rate allowed [kg/sec]
+  REAL, PARAMETER :: MinFlowAllowed = 0.001 ! lowest air flow rate allowed [kg/sec]
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! see use DataInterfaces
@@ -2075,39 +2075,39 @@ SUBROUTINE CalcVentilatedSlab(Item,ZoneNum,FirstHVACIteration,PowerMet,LatOutput
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: AirMassFlow      ! air mass flow rate [kg/sec]
+  REAL    :: AirMassFlow      ! air mass flow rate [kg/sec]
   INTEGER :: AirRelNode       ! outside air relief node
   INTEGER :: ControlNode      ! the hot water or cold water inlet node
   INTEGER :: InletNode        ! system air inlet node
   INTEGER :: FanOutletNode        ! system fan outlet node
   INTEGER :: ZoneAirInNode        ! zone supply air node
-  REAL(r64)    :: MaxOAFrac        ! maximum possible outside air fraction
-  REAL(r64)    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL(r64)    :: MinOAFrac        ! minimum possible outside air fraction
-  REAL(r64)    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+  REAL    :: MaxOAFrac        ! maximum possible outside air fraction
+  REAL    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+  REAL    :: MinOAFrac        ! minimum possible outside air fraction
+  REAL    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
   INTEGER :: OutletNode       ! air outlet node
   INTEGER :: OutsideAirNode   ! outside air node
-  REAL(r64)    :: QTotUnitOut      ! total unit output [watts]
-  REAL(r64)    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
-  REAL(r64)    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
-  REAL(r64)    :: SpecHumOut       ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL(r64)    :: SpecHumIn        ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
-  REAL(r64)    :: Tdesired         ! desired temperature after mixing inlet and outdoor air [degrees C]
-  REAL(r64)    :: Tinlet           ! temperature of air coming into the ventilated slab [degrees C]
-  REAL(r64)    :: Toutdoor         ! temperature of outdoor air being introduced into the ventilated slab [degrees C]
-  Real(r64)    :: MaxSteamFlow
-  Real(r64)    :: MinSteamFlow
-  REAL(r64)    :: RadInTemp        ! "Desired" radiant system air inlet temperature [Celsius]**setpoint
-  REAL(r64)    :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
-  REAL(r64)    :: SetpointTempHi   ! Current high point in setpoint temperature range
-  REAL(r64)    :: SetpointTempLo   ! Current low point in setpoint temperature range
-  REAL(r64)    :: AirTempHi      ! Current high point in water temperature range
-  REAL(r64)    :: AirTempLo      ! Current low point in water temperature range
-  REAL(r64)    :: AirTempHeatHi      ! Current high point in water temperature range
-  REAL(r64)    :: AirTempCoolLo      ! Current low point in water temperature range
-  REAL(r64)    :: CpFan             ! Intermediate calculational variable for specific heat of air <<NOV9 Updated
-  REAL(r64)    :: ZoneRadNum      ! number of zone being served *********************
-  REAL(r64)    :: QZnReq
+  REAL    :: QTotUnitOut      ! total unit output [watts]
+  REAL    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
+  REAL    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+  REAL    :: SpecHumOut       ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL    :: SpecHumIn        ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL    :: Tdesired         ! desired temperature after mixing inlet and outdoor air [degrees C]
+  REAL    :: Tinlet           ! temperature of air coming into the ventilated slab [degrees C]
+  REAL    :: Toutdoor         ! temperature of outdoor air being introduced into the ventilated slab [degrees C]
+  REAL    :: MaxSteamFlow
+  REAL    :: MinSteamFlow
+  REAL    :: RadInTemp        ! "Desired" radiant system air inlet temperature [Celsius]**setpoint
+  REAL    :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
+  REAL    :: SetpointTempHi   ! Current high point in setpoint temperature range
+  REAL    :: SetpointTempLo   ! Current low point in setpoint temperature range
+  REAL    :: AirTempHi      ! Current high point in water temperature range
+  REAL    :: AirTempLo      ! Current low point in water temperature range
+  REAL    :: AirTempHeatHi      ! Current high point in water temperature range
+  REAL    :: AirTempCoolLo      ! Current low point in water temperature range
+  REAL    :: CpFan             ! Intermediate calculational variable for specific heat of air <<NOV9 Updated
+  REAL    :: ZoneRadNum      ! number of zone being served *********************
+  REAL    :: QZnReq
   INTEGER      :: RadSurfNum      ! DO loop counter for the surfaces that comprise a particular radiant system
   CHARACTER(len=MaxNameLength) ::MSlabIn
   CHARACTER(len=MaxNameLength) ::MSlabOut
@@ -2199,13 +2199,13 @@ SUBROUTINE CalcVentilatedSlab(Item,ZoneNum,FirstHVACIteration,PowerMet,LatOutput
 
           ! FLOW:
 
-  FanElecPower = 0.0D0
+  FanElecPower = 0.0
           ! initialize local variables
   ControlNode    = 0
-  QUnitOut       = 0.0D0
-  LatentOutput   = 0.0D0
-  MaxWaterFlow   = 0.0D0
-  MinWaterFlow   = 0.0D0
+  QUnitOut       = 0.0
+  LatentOutput   = 0.0
+  MaxWaterFlow   = 0.0
+  MinWaterFlow   = 0.0
   InletNode      = VentSlab(Item)%ReturnAirNode
   OutletNode     = VentSlab(Item)%RadInNode
   FanOutletNode  = VentSlab(Item)%FanOutletNode
@@ -2361,7 +2361,7 @@ Else ! System On
          MinOAFrac = 0.0
        End IF
 
-       MinOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
+       MinOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
 
       IF ((.NOT.VentSlab(Item)%HCoilPresent) .OR. &
            (VentSlab(Item)%HCoilSchedValue <= 0.0) ) THEN
@@ -2458,7 +2458,7 @@ Else ! System On
           Else
             MaxOAFrac = 0.0
           End If
-          MaxOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
+          MaxOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
           OAMassFlowRate = MaxOAFrac*Node(OutsideAirNode)%MassFlowRate
 
       CASE (VariablePercent)
@@ -2524,7 +2524,7 @@ Else ! System On
         CALL ControlCompOutput(CompName=VentSlab(Item)%Name,CompType=cMO_VentilatedSlab,CompNum=Item, &
                                  FirstHVACIteration=FirstHVACIteration,QZnReq=QZnReq, &
                                  ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                                 MinFlow=MinWaterFlow,ControlOffSet=0.001d0, &
+                                 MinFlow=MinWaterFlow,ControlOffSet=0.001, &
                                  ControlCompTypeNum=VentSlab(Item)%ControlCompTypeNum, &
                                  CompErrIndex=VentSlab(Item)%CompErrIndex,  &
                                  LoopNum     = VentSlab(Item)%HWLoopNum,    &
@@ -2595,7 +2595,7 @@ ElSE IF (SetpointTemp>AirTempCoolLo)  THEN  ! Cooling Mode
       Else
          MinOAFrac = 0.0
       End If
-      MinOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
+      MinOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
 
 
        IF ((.NOT.VentSlab(Item)%CCoilPresent) .OR. &
@@ -2619,7 +2619,7 @@ ElSE IF (SetpointTemp>AirTempCoolLo)  THEN  ! Cooling Mode
           Else
             MaxOAFrac = 0.0
           End If
-          MaxOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
+          MaxOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
           OAMassFlowRate = MaxOAFrac*Node(OutsideAirNode)%MassFlowRate
 
         CASE (VariablePercent)
@@ -2706,7 +2706,7 @@ ElSE IF (SetpointTemp>AirTempCoolLo)  THEN  ! Cooling Mode
           Else
             MaxOAFrac = 0.0
           End If
-          MaxOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
+          MaxOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
           OAMassFlowRate = MaxOAFrac*Node(OutsideAirNode)%MassFlowRate
 
         CASE (VariablePercent)
@@ -2767,7 +2767,7 @@ ElSE IF (SetpointTemp>AirTempCoolLo)  THEN  ! Cooling Mode
           CALL ControlCompOutput(CompName=VentSlab(Item)%Name,CompType=cMO_VentilatedSlab,CompNum=Item, &
                                  FirstHVACIteration=FirstHVACIteration,QZnReq=QZnReq, &
                                  ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                                 MinFlow=MinWaterFlow,ControlOffSet=0.001d0, &
+                                 MinFlow=MinWaterFlow,ControlOffSet=0.001, &
                                  ControlCompTypeNum=VentSlab(Item)%ControlCompTypeNum, &
                                  CompErrIndex=VentSlab(Item)%CompErrIndex,  &
                                  LoopNum     = VentSlab(Item)%CWLoopNum,    &
@@ -2790,16 +2790,16 @@ ElSE IF (SetpointTemp>AirTempCoolLo)  THEN  ! Cooling Mode
 
 END IF    ! ...end of system ON/OFF IF-THEN block
 
-  SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
-  SpecHumIn  = Node(FanOutletNode)%HumRat / (1.0d0 + Node(FanOutletNode)%HumRat)
+  SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
+  SpecHumIn  = Node(FanOutletNode)%HumRat / (1.0 + Node(FanOutletNode)%HumRat)
   LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 
   QTotUnitOut = AirMassFlow * (Node(FanOutletNode)%Enthalpy - Node(OutletNode)%Enthalpy)
 
           ! Report variables...
-  VentSlab(Item)%HeatCoilPower     = MAX(0.0d0,QUnitOut)
-  VentSlab(Item)%SensCoolCoilPower = ABS(MIN(0.0d0,QUnitOut))
-  VentSlab(Item)%TotCoolCoilPower  = ABS(MIN(0.0d0,QTotUnitOut))
+  VentSlab(Item)%HeatCoilPower     = MAX(0.0,QUnitOut)
+  VentSlab(Item)%SensCoolCoilPower = ABS(MIN(0.0,QUnitOut))
+  VentSlab(Item)%TotCoolCoilPower  = ABS(MIN(0.0,QTotUnitOut))
   VentSlab(Item)%LateCoolCoilPower = VentSlab(Item)%TotCoolCoilPower - VentSlab(Item)%SensCoolCoilPower
   VentSlab(Item)%ElecFanPower      = FanElecPower
 
@@ -2847,7 +2847,7 @@ SUBROUTINE CalcVentilatedSlabComps(Item,FirstHVACIteration,LoadMet)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,       INTENT(IN)  :: Item        ! system index in ventilated slab array
   LOGICAL,       INTENT(IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
-  REAL(r64),      INTENT(OUT)  :: LoadMet            ! load met by the system (watts)
+  REAL,      INTENT(OUT)  :: LoadMet            ! load met by the system (watts)
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2860,16 +2860,16 @@ SUBROUTINE CalcVentilatedSlabComps(Item,FirstHVACIteration,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: AirMassFlow     ! total mass flow through the system
-  REAL(r64)           :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as system inlet)
+  REAL           :: AirMassFlow     ! total mass flow through the system
+  REAL           :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as system inlet)
   INTEGER        :: HCoilInAirNode  ! inlet node number for fan exit/coil inlet
   INTEGER        :: InletNode       ! system air inlet node
   INTEGER        :: OutletNode      ! system air outlet node
-!unused0309  INTEGER        :: HCoilOutAirNode
-  REAL(r64)           :: QCoilReq        ! Heat addition required from an electric/gas heating coil
-  REAL(r64)           :: HCoilOutAirTemp
-  REAL(r64)           :: HCoilInAirTemp
-!unused1208  REAL(r64)           :: RadInTemp       ! Set temperature for "Slab In Node"
+!unuse309  INTEGER        :: HCoilOutAirNode
+  REAL           :: QCoilReq        ! Heat addition required from an electric/gas heating coil
+  REAL           :: HCoilOutAirTemp
+  REAL           :: HCoilInAirTemp
+!unused1208  REAL           :: RadInTemp       ! Set temperature for "Slab In Node"
 
           ! FLOW:
 
@@ -2880,7 +2880,7 @@ SUBROUTINE CalcVentilatedSlabComps(Item,FirstHVACIteration,LoadMet)
 
   IF ((VentSlab(Item)%CCoilPresent) .AND. (VentSlab(Item)%CCoilSchedValue >= 0.0)) THEN
     IF(VentSlab(Item)%CCoilType == Cooling_CoilHXAssisted) THEN
-      CALL SimHXAssistedCoolingCoil(VentSlab(Item)%CCoilName,FirstHVACIteration,On,0.0d0,VentSlab(Item)%CCoil_Index,ContFanCycCoil)
+      CALL SimHXAssistedCoolingCoil(VentSlab(Item)%CCoilName,FirstHVACIteration,On,0.0,VentSlab(Item)%CCoil_Index,ContFanCycCoil)
     ELSE
       CALL SimulateWaterCoilComponents(VentSlab(Item)%CCoilName,FirstHVACIteration,  &
                                        VentSlab(Item)%CCoil_Index)
@@ -3010,11 +3010,11 @@ SUBROUTINE CalcVentilatedSlabRadComps(Item, FirstHVACIteration)
   LOGICAL, INTENT(IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CondDeltaTemp  = 0.001d0   ! How close the surface temperatures can get to the dewpoint temperature
+  REAL, PARAMETER :: CondDeltaTemp  = 0.001   ! How close the surface temperatures can get to the dewpoint temperature
                                             ! of a space before the radiant cooling system shuts off the flow.
-  REAL(r64), PARAMETER :: ZeroSystemResp = 0.1d0   ! Response below which the system response is really zero
-  REAL(r64), PARAMETER :: TempCheckLimit = 0.1d0   ! Maximum allowed temperature difference between outlet temperature calculations
-  REAL(r64), PARAMETER :: VentSlabAirTempToler = 0.001d0    !Maximum allowed temperature difference between the zone and return air
+  REAL, PARAMETER :: ZeroSystemResp = 0.1   ! Response below which the system response is really zero
+  REAL, PARAMETER :: TempCheckLimit = 0.1   ! Maximum allowed temperature difference between outlet temperature calculations
+  REAL, PARAMETER :: VentSlabAirTempToler = 0.001    !Maximum allowed temperature difference between the zone and return air
   CHARACTER(len=*), PARAMETER :: CurrentModuleObject='ZoneHVAC:VentilatedSlab'
 
 
@@ -3026,42 +3026,42 @@ SUBROUTINE CalcVentilatedSlabRadComps(Item, FirstHVACIteration)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: ConstrNum      ! Index for construction number in Construct derived type
-  REAL(r64):: CpAirZn             ! Intermediate calculational variable for specific heat of air
-  REAL(r64):: DewPointTemp   ! Dew-point temperature based on the zone air conditions
-  REAL(r64):: EpsMdotCpAirzn      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
-  REAL(r64):: Mdot           ! Intermediate calculation variable for mass flow rate in a surface within the radiant system
+  REAL:: CpAirZn             ! Intermediate calculational variable for specific heat of air
+  REAL:: DewPointTemp   ! Dew-point temperature based on the zone air conditions
+  REAL:: EpsMdotCpAirzn      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
+  REAL:: Mdot           ! Intermediate calculation variable for mass flow rate in a surface within the radiant system
   INTEGER  :: RadSurfNum        ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER  :: RadSurfNum2    ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER  :: RadSurfNum3    ! DO loop counter for the surfaces that comprise a particular radiant system
-!unused0309  INTEGER  :: RadSurfNum4    ! DO loop counter for the surfaces that comprise a particular radiant system
+!unuse309  INTEGER  :: RadSurfNum4    ! DO loop counter for the surfaces that comprise a particular radiant system
 
   INTEGER  :: SurfNum        ! Index for radiant surface in Surface derived type
   INTEGER  :: SurfNum2       ! Index for radiant surface in Surface derived type
-!unused0309  INTEGER  :: RadSurfNumNum
-  REAL(r64):: TotalVentSlabRadPower      ! Total heat source/sink to radiant system
-  REAL(r64):: AirMassFlow  ! air mass flow rate in the radiant system, kg/s
+!unuse309  INTEGER  :: RadSurfNumNum
+  REAL:: TotalVentSlabRadPower      ! Total heat source/sink to radiant system
+  REAL:: AirMassFlow  ! air mass flow rate in the radiant system, kg/s
   INTEGER  :: SlabInNode    ! Node number of the air entering the radiant system
-  REAL(r64):: AirOutletTempCheck  ! Radiant system air outlet temperature (calculated from mixing all outlet streams together)
-  REAL(r64):: AirTempIn    ! Temperature of the air entering the radiant system, in C
+  REAL:: AirOutletTempCheck  ! Radiant system air outlet temperature (calculated from mixing all outlet streams together)
+  REAL:: AirTempIn    ! Temperature of the air entering the radiant system, in C
   INTEGER  :: ZoneNum        ! number of zone being served
-  REAL(r64):: ZoneMult       ! Zone multiplier for this system
-  REAL(r64):: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl  ! Coefficients to relate the inlet air temperature to the heat source
+  REAL:: ZoneMult       ! Zone multiplier for this system
+  REAL:: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl  ! Coefficients to relate the inlet air temperature to the heat source
                               ! For more info on Ca through Cl, refer Constant Flow Radiant System
-!unused0309  REAL(r64):: CoreNumber
-  REAL(r64), SAVE :: Ckj, Cmj     ! Coefficients for individual surfaces within a radiant system
-  REAL(r64), SAVE, DIMENSION(:), ALLOCATABLE :: AirTempOut ! Array of outlet air temperatures for each surface in the radiant system
+!unuse309  REAL:: CoreNumber
+  REAL, SAVE :: Ckj, Cmj     ! Coefficients for individual surfaces within a radiant system
+  REAL, SAVE, DIMENSION(:), ALLOCATABLE :: AirTempOut ! Array of outlet air temperatures for each surface in the radiant system
   INTEGER  :: FanOutletNode      ! unit air outlet node
   INTEGER  :: OAInletNode      ! unit air outlet node
   INTEGER  :: MixoutNode      ! unit air outlet node
   INTEGER  :: Returnairnode ! discription
   INTEGER  :: ZoneAirInNode !supply air node
 !For Phase 3
-  REAL(r64)  :: CNumDS
-  REAL(r64)  :: CLengDS
-  REAL(r64)  :: CDiaDS
-  REAL(r64)  :: FlowFrac
-!unused0309  REAL(r64)  :: SlabAirOutTemp
-  REAL(r64)  :: MSlabAirInTemp
+  REAL  :: CNumDS
+  REAL  :: CLengDS
+  REAL  :: CDiaDS
+  REAL  :: FlowFrac
+!unuse309  REAL  :: SlabAirOutTemp
+  REAL  :: MSlabAirInTemp
   LOGICAL                        :: ErrorsFound=.false. ! Set to true if errors in input, fatal at end of routine
 
   CHARACTER(len=MaxNameLength) ::MSlabIn
@@ -3137,9 +3137,9 @@ IF (AirMassFlow <= 0.0) THEN
 
     DO RadSurfNum = 1, VentSlab(Item)%NumOfSurfaces
       SurfNum= VentSlab(Item)%SurfacePtr(RadSurfNum)
-      QRadSysSource(SurfNum)= 0.0D0
+      QRadSysSource(SurfNum)= 0.0
       IF (Surface(SurfNum)%ExtBoundCond > 0 .AND. Surface(SurfNum)%ExtBoundCond /= SurfNum) &
-      QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0D0    ! Also zero the other side of an interzone
+      QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0    ! Also zero the other side of an interzone
     END DO
 
     VentSlab(Item)%SlabOutTemp = VentSlab(Item)%SlabInTemp
@@ -3228,9 +3228,9 @@ IF (AirMassFlow > 0.0) THEN
 
         DO RadSurfNum2 = 1, VentSlab(Item)%NumOfSurfaces
           SurfNum2 = VentSlab(Item)%SurfacePtr(RadSurfNum2)
-          QRadSysSource(SurfNum2) = 0.0D0
+          QRadSysSource(SurfNum2) = 0.0
           IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
 
          IF (VentSlab(Item)%SysConfg == SlabOnly) THEN
 !            Node(Returnairnode)%Temp = MAT(Zonenum)
@@ -3268,9 +3268,9 @@ IF (AirMassFlow > 0.0) THEN
             AirMassFlow                            = 0.0
             DO RadSurfNum3 = 1, VentSlab(Item)%NumOfSurfaces
               SurfNum2 = VentSlab(Item)%SurfacePtr(RadSurfNum3)
-              QRadSysSource(SurfNum2) = 0.0D0
+              QRadSysSource(SurfNum2) = 0.0
               IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
             END DO
           ! Produce a warning message so that user knows the system was shut-off due to potential for condensation
             IF (.not. WarmupFlag) THEN
@@ -3415,7 +3415,7 @@ IF (AirMassFlow > 0.0) THEN
        CNumDS=VentSlab(Item)%CNumbers(RadSurfNum)
        CLengDS=VentSlab(Item)%CLength(RadSurfNum)! for check
        CDiaDS=VentSlab(Item)%CDiameter(RadSurfNum)! for check
-       FlowFrac=1.0d0
+       FlowFrac=1.0
 
        SurfNum = VentSlab(Item)%SurfacePtr(RadSurfNum)
 
@@ -3499,9 +3499,9 @@ IF (AirMassFlow > 0.0) THEN
 
         DO RadSurfNum2 = 1, VentSlab(Item)%NumOfSurfaces
           SurfNum2 = VentSlab(Item)%SurfacePtr(RadSurfNum2)
-          QRadSysSource(SurfNum2) = 0.0D0
+          QRadSysSource(SurfNum2) = 0.0
           IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
        END DO
             Node(Returnairnode)%Temp = TH(VentSlab(Item)%SurfacePtr(1),1,2)
             Node(FanOutletNode)%Temp = Node(Returnairnode)%Temp
@@ -3531,9 +3531,9 @@ IF (AirMassFlow > 0.0) THEN
             AirMassFlow                            = 0.0
             DO RadSurfNum3 = 1, VentSlab(Item)%NumOfSurfaces
               SurfNum2 = VentSlab(Item)%SurfacePtr(RadSurfNum3)
-              QRadSysSource(SurfNum2) = 0.0D0
+              QRadSysSource(SurfNum2) = 0.0
               IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
             END DO
           ! Produce a warning message so that user knows the system was shut-off due to potential for condensation
             IF (.not. WarmupFlag) THEN
@@ -3715,7 +3715,7 @@ SUBROUTINE SimVentSlabOAMixer(Item)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER        :: AirRelNode              ! relief air node number in ventilated slab loop
   INTEGER        :: InletNode               ! inlet node number for ventilated slab loop
-  REAL(r64)           :: OAFraction         ! Outside air fraction of inlet air
+  REAL           :: OAFraction         ! Outside air fraction of inlet air
   INTEGER        :: OAMixOutNode   ! outside air mixer outlet node for ventilated slab loop
   INTEGER        :: OutsideAirNode    ! outside air node number in ventilated slab loop
 
@@ -3823,20 +3823,20 @@ SUBROUTINE UpdateVentilatedSlab(Item,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: CpAppAir            ! Specific heat of air
+  REAL    :: CpAppAir            ! Specific heat of air
   INTEGER :: RadSurfNum         ! DO loop counter for radiant surfaces in the ventilated slab
   INTEGER :: SurfNum            ! Surface index number for the current ventilated slab
   INTEGER :: AirInletNode     ! Node number for the air side inlet of the ventilated slab
-  REAL(r64)    :: TotalHeatSource    ! Total heat source or sink for a particular system (sum of all surface source/sinks)
+  REAL    :: TotalHeatSource    ! Total heat source or sink for a particular system (sum of all surface source/sinks)
   INTEGER :: TotRadSurfaces     ! Total number of radiant surfaces in this system
-  REAL(r64)    :: AirMassFlow      ! Flow rate of water in the radiant system
+  REAL    :: AirMassFlow      ! Flow rate of water in the radiant system
   INTEGER :: AirOutletNode    ! Node number for the water side outlet of the radiant system
   INTEGER :: FanOutNode    ! Node number for the water side outlet of the radiant system
-  REAL(r64)    :: ZoneMult           ! Zone multiplier
+  REAL    :: ZoneMult           ! Zone multiplier
   INTEGER :: ZoneNum            ! Zone for this ventilated slab
   INTEGER :: MixOutNode    ! Node number for the water side outlet of the radiant system
   INTEGER :: OANode    ! Node number for the water side outlet of the radiant system
-  REAL(r64)    :: OAFraction            ! Outside air fraction of inlet air
+  REAL    :: OAFraction            ! Outside air fraction of inlet air
   INTEGER :: ZoneInletNode     ! Node number for the air side inlet of the ventilated slab
           ! FLOW:
      ZoneNum       = VentSlab(Item)%ZonePtr
@@ -3908,12 +3908,12 @@ SUBROUTINE UpdateVentilatedSlab(Item,FirstHVACIteration)
     ELSE
        IF ((VentSlab(Item)%SysConfg == SlabOnly).OR.(VentSlab(Item)%SysConfg == SeriesSlabs)) THEN
             Node(FanOutNode)= Node(AirOutletNode)
-            QRadSysSource(SurfNum) = 0.0d0
+            QRadSysSource(SurfNum) = 0.0
 
        ELSE IF (VentSlab(Item)%SysConfg == SlabandZone) THEN
             Node(ZoneInletNode) = Node(AirInletNode)
             Node(FanOutNode)= Node(AirOutletNode)   ! Fan Resolve
-            QRadSysSource(SurfNum) = 0.0d0
+            QRadSysSource(SurfNum) = 0.0
        END IF
 
      END IF
@@ -3952,7 +3952,7 @@ SUBROUTINE UpdateVentilatedSlab(Item,FirstHVACIteration)
 
 END SUBROUTINE UpdateVentilatedSlab
 
-REAL(r64) FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFraction,CoreLength,CoreDiameter,CoreNumbers)
+REAL FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFraction,CoreLength,CoreDiameter,CoreNumbers)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Rick Strand
@@ -3988,27 +3988,27 @@ REAL(r64) FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFra
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: Item      ! Index number of radiant system under consideration
-  REAL(r64),    INTENT(IN) :: Temperature    ! Temperature of air entering the radiant system, in C
-  REAL(r64),    INTENT(IN) :: AirMassFlow  ! Mass flow rate of water in the radiant system, in kg/s
-  REAL(r64),    INTENT(IN) :: FlowFraction   ! Mass flow rate fraction for this surface in the radiant system
-  REAL(r64),    INTENT(IN) :: CoreLength     ! Length of tubing in the radiant system, in m
-  REAL(r64),    INTENT(IN) :: CoreDiameter   ! Inside diameter of the tubing in the radiant system, in m
-  REAL(r64),    INTENT(IN) :: CoreNumbers    !
+  REAL,    INTENT(IN) :: Temperature    ! Temperature of air entering the radiant system, in C
+  REAL,    INTENT(IN) :: AirMassFlow  ! Mass flow rate of water in the radiant system, in kg/s
+  REAL,    INTENT(IN) :: FlowFraction   ! Mass flow rate fraction for this surface in the radiant system
+  REAL,    INTENT(IN) :: CoreLength     ! Length of tubing in the radiant system, in m
+  REAL,    INTENT(IN) :: CoreDiameter   ! Inside diameter of the tubing in the radiant system, in m
+  REAL,    INTENT(IN) :: CoreNumbers    !
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: MaxLaminarRe = 2300.d0    ! Maximum Reynolds number for laminar flow
+  REAL, PARAMETER :: MaxLaminarRe = 2300.    ! Maximum Reynolds number for laminar flow
   INTEGER, PARAMETER :: NumOfPropDivisions = 13
-  REAL(r64), PARAMETER :: MaxExpPower = 50.d0       ! Maximum power after which EXP argument would be zero for DP variables
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
-                   (/1.85d0,6.85d0,11.85d0,16.85d0,21.85d0,26.85d0,31.85d0,36.85d0,41.85d0,46.85d0,51.85d0,56.85d0,61.85d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
-                   (/0.0000088d0,0.0000176d0,0.00001781d0,0.00001802d0,0.000018225d0,0.00001843d0,0.00001865d0,0.00001887d0,  &
-                     0.00001908d0,0.00001929d0,0.0000195d0,0.00001971d0,0.00001992d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
-                   (/0.01275d0,0.0255d0,0.0258d0,0.0261d0,0.0264d0,0.0267d0,0.02705d0,0.0274d0,0.02775d0,0.0281d0,  &
-                     0.0284d0,0.0287d0,0.01435d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
-                   (/0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0,0.69d0/)
+  REAL, PARAMETER :: MaxExpPower = 50.       ! Maximum power after which EXP argument would be zero for DP variables
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
+                   (/1.85,6.85,11.85,16.85,21.85,26.85,31.85,36.85,41.85,46.85,51.85,56.85,61.85/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
+                   (/0.0000088,0.0000176,0.00001781,0.00001802,0.000018225,0.00001843,0.00001865,0.00001887,  &
+                     0.00001908,0.00001929,0.0000195,0.00001971,0.00001992/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
+                   (/0.01275,0.0255,0.0258,0.0261,0.0264,0.0267,0.02705,0.0274,0.02775,0.0281,  &
+                     0.0284,0.0287,0.01435/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
+                   (/0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69/)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4018,15 +4018,15 @@ REAL(r64) FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFra
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Index
-  REAL(r64)    :: InterpFrac
-  REAL(r64)    :: NuD
-  REAL(r64)    :: ReD
-  REAL(r64)    :: NTU
-  REAL(r64)    :: CpAppAir
-  REAL(r64)    :: Kactual
-  REAL(r64)    :: MUactual
-  REAL(r64)    :: PRactual
-  REAL(r64)    :: SysAirMassFlow            ! Specific heat of air
+  REAL    :: InterpFrac
+  REAL    :: NuD
+  REAL    :: ReD
+  REAL    :: NTU
+  REAL    :: CpAppAir
+  REAL    :: Kactual
+  REAL    :: MUactual
+  REAL    :: PRactual
+  REAL    :: SysAirMassFlow            ! Specific heat of air
 
 
           ! FLOW:
@@ -4058,16 +4058,16 @@ REAL(r64) FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFra
     SysAirMassFlow = AirMassFlow/CoreNumbers
 
           ! Calculate the Reynold's number from RE=(4*Mdot)/(Pi*Mu*Diameter)
-  ReD = 4.0d0 * SysAirMassFlow * FlowFraction / ( PI * MUactual * CoreDiameter )
+  ReD = 4.0 * SysAirMassFlow * FlowFraction / ( PI * MUactual * CoreDiameter )
 
           ! Calculate the Nusselt number based on what flow regime one is in
   IF (ReD >= MaxLaminarRe) THEN ! Turbulent flow --> use Colburn equation
 
-    NuD = 0.023d0*(ReD**(0.8d0))*(PRactual**(1.d0/3.d0))
+    NuD = 0.023*(ReD**(0.8))*(PRactual**(1./3.))
 
   ELSE    ! Laminar flow --> use constant surface temperature relation
 
-    NuD = 3.66d0
+    NuD = 3.66
 
   END IF
 
@@ -4081,14 +4081,14 @@ REAL(r64) FUNCTION CalcVentSlabHXEffectTerm(Item,Temperature,AirMassFlow,FlowFra
   IF (NTU > MaxExpPower) THEN
     CalcVentSlabHXEffectTerm = FlowFraction*SysAirMassFlow*CpAppAir
   ELSE
-    CalcVentSlabHXEffectTerm = (1.d0-EXP(-NTU))*FlowFraction*SysAirMassFlow*CpAppAir
+    CalcVentSlabHXEffectTerm = (1.-EXP(-NTU))*FlowFraction*SysAirMassFlow*CpAppAir
   END IF
 
   RETURN
 
 END FUNCTION CalcVentSlabHXEffectTerm
 
-REAL(r64) FUNCTION SumHATsurf(ZoneNum)
+REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -4119,7 +4119,7 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL(r64)           :: Area        ! Effective surface area
+  REAL           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0
@@ -4138,14 +4138,14 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
       IF (SurfaceWindow(SurfNum)%FrameArea > 0.0) THEN
         ! Window frame contribution
         SumHATsurf = SumHATsurf + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%FrameArea &
-          * (1.0d0 + SurfaceWindow(SurfNum)%ProjCorrFrIn) * SurfaceWindow(SurfNum)%FrameTempSurfIn
+          * (1.0 + SurfaceWindow(SurfNum)%ProjCorrFrIn) * SurfaceWindow(SurfNum)%FrameTempSurfIn
       END IF
 
       IF (SurfaceWindow(SurfNum)%DividerArea > 0.0 .AND. SurfaceWindow(SurfNum)%ShadingFlag /= IntShadeOn &
           .AND. SurfaceWindow(SurfNum)%ShadingFlag /= IntBlindOn) THEN
         ! Window divider contribution (only from shade or blind for window with divider and interior shade or blind)
         SumHATsurf = SumHATsurf + HConvIn(SurfNum) * SurfaceWindow(SurfNum)%DividerArea &
-          * (1.0d0 + 2.0d0 * SurfaceWindow(SurfNum)%ProjCorrDivIn) * SurfaceWindow(SurfNum)%DividerTempSurfIn
+          * (1.0 + 2.0 * SurfaceWindow(SurfNum)%ProjCorrDivIn) * SurfaceWindow(SurfNum)%DividerTempSurfIn
       END IF
     END IF
 
@@ -4199,8 +4199,8 @@ SUBROUTINE ReportVentilatedSlab(Item)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: RadSurfNum         ! DO loop counter for radiant surfaces in the system
   INTEGER :: SurfNum            ! Surface number (index) in Surface derived type
-  REAL(r64)    :: TotalVentSlabRadPower   ! Total source/sink power for the radiant system (sum of all surfaces of the system)
-  REAL(r64)    :: ZoneMult           ! Total zone multiplier to apply to the system level variables
+  REAL    :: TotalVentSlabRadPower   ! Total source/sink power for the radiant system (sum of all surfaces of the system)
+  REAL    :: ZoneMult           ! Total zone multiplier to apply to the system level variables
 
           ! FLOW:
 

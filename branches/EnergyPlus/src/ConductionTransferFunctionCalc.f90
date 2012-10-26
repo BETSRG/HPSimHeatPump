@@ -61,26 +61,26 @@ INTEGER, PARAMETER :: NumOfPerpendNodes = 7     ! Number of nodes in the directi
           ! na
 
           ! MODULE VARIABLE DECLARATIONS:
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AExp   ! Exponential of AMat
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AInv   ! Inverse of AMat
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AMat   ! "A" matrix from Seem's dissertation
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AExp   ! Exponential of AMat
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AInv   ! Inverse of AMat
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: AMat   ! "A" matrix from Seem's dissertation
                                                                         ! (constant coefficients of linear system)
-REAL(r64), PRIVATE, DIMENSION(3)                       :: BMat   ! "B" matrix of state space method (non-zero elements)
-REAL(r64), PRIVATE, DIMENSION(2)                       :: CMat   ! "C" matrix of state space method (non-zero elements)
-REAL(r64), PRIVATE, DIMENSION(2)                       :: DMat   ! "D" matrix of state space method (non-zero elements)
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:)          :: e      ! Coefficients for the surface flux history term
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: Gamma1 ! Intermediate calculation array corresponding to a term
+REAL, PRIVATE, DIMENSION(3)                       :: BMat   ! "B" matrix of state space method (non-zero elements)
+REAL, PRIVATE, DIMENSION(2)                       :: CMat   ! "C" matrix of state space method (non-zero elements)
+REAL, PRIVATE, DIMENSION(2)                       :: DMat   ! "D" matrix of state space method (non-zero elements)
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:)          :: e      ! Coefficients for the surface flux history term
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: Gamma1 ! Intermediate calculation array corresponding to a term
                                                                         ! in Seem's dissertation
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: Gamma2 ! Intermediate calculation array corresponding to a term
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: Gamma2 ! Intermediate calculation array corresponding to a term
                                                                         ! in Seem's dissertation
 INTEGER,   PRIVATE                                     :: NodeSource ! Node at which a source or sink is present
 INTEGER,   PRIVATE                                     :: NodeUserTemp ! Node where user wishes to calculate a temperature
                                                                               ! (for constructions with sources/sinks only)
 INTEGER,   PRIVATE                                     :: rcmax  ! Total number of nodes in the construct (<= MaxTotNodes)
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:,:)      :: s      ! Coefficients for the surface temperature history terms
-REAL(r64), PRIVATE, DIMENSION(4,3)                     :: s0     ! Coefficients for the current surface temperature terms
-REAL(r64), PRIVATE                                     :: TinyLimit
-REAL(r64), PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: IdenMatrix  ! Identity Matrix
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:,:)      :: s      ! Coefficients for the surface temperature history terms
+REAL, PRIVATE, DIMENSION(4,3)                     :: s0     ! Coefficients for the current surface temperature terms
+REAL, PRIVATE                                     :: TinyLimit
+REAL, PRIVATE, ALLOCATABLE, DIMENSION(:,:)        :: IdenMatrix  ! Identity Matrix
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE ConductionTransferFunctionCalc
 
@@ -161,10 +161,10 @@ SUBROUTINE InitConductionTransferFunctions
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: PhysPropLimit = 1.0d-6  ! Physical properties limit.
+  REAL, PARAMETER :: PhysPropLimit = 1.0d-6  ! Physical properties limit.
           ! This is more or less the traditional value from BLAST.
 
-  REAL(r64), PARAMETER :: RValueLowLimit = 1.0d-3  ! Physical properties limit for R-value only layers
+  REAL, PARAMETER :: RValueLowLimit = 1.0d-3  ! Physical properties limit for R-value only layers
           ! This value was based on trial and error related to CR 7791 where a
           ! user had entered a "no insulation" layer with an R-value of 1.0E-05.
           ! Some trial and error established this as a potential value though
@@ -173,12 +173,12 @@ SUBROUTINE InitConductionTransferFunctions
   INTEGER, PARAMETER :: MinNodes = 6 ! Minimum number of state space nodes
           ! per layer.  This value was chosen based on experience with IBLAST.
 
-  REAL(r64), PARAMETER :: MaxAllowedCTFSumError = 0.01d0 ! Allow a 1 percent
+  REAL, PARAMETER :: MaxAllowedCTFSumError = 0.01 ! Allow a 1 percent
           ! difference between the CTF series summations.  If the difference is
           ! greater than this, then the coefficients will not yield a valid steady
           ! state solution.
 
-  REAL(r64), PARAMETER :: MaxAllowedTimeStep = 4.0d0   ! Sets the maximum allowed time step
+  REAL, PARAMETER :: MaxAllowedTimeStep = 4.0   ! Sets the maximum allowed time step
           ! for CTF calculations to be 4 hours.  This is done in response to some
           ! rare situations where odd or faulty input will cause the routine to
           ! go off and get some huge time step (in excess of 20 hours).  This value
@@ -201,28 +201,28 @@ SUBROUTINE InitConductionTransferFunctions
     DIMENSION(MaxLayersInConstruct) :: AdjacentResLayerNum ! Layers that are adjacent to each other which are resistive
                                                            ! only can and should be combined
   INTEGER                           :: AdjLayer   ! Loop counter for adjacent resistance-only layers
-  REAL(r64)             :: amatx      ! Intermediate calculation variable
-  REAL(r64)             :: amatxx     ! Intermediate calculation variable
-  REAL(r64)             :: amaty      ! Intermediate calculation variable
-  REAL(r64)             :: BiggestSum ! Largest CTF series summation (maximum of SumXi, SumYi, and SumZi)
-  REAL(r64)             :: cap        ! Thermal capacitance of a node (intermediate calculation)
-  REAL(r64)             :: capavg     ! Thermal capacitance of a node (average value for a node at an interface)
-  REAL(r64)             :: cnd        ! Total thermal conductance (1/Rtot) of the bldg element
+  REAL             :: amatx      ! Intermediate calculation variable
+  REAL             :: amatxx     ! Intermediate calculation variable
+  REAL             :: amaty      ! Intermediate calculation variable
+  REAL             :: BiggestSum ! Largest CTF series summation (maximum of SumXi, SumYi, and SumZi)
+  REAL             :: cap        ! Thermal capacitance of a node (intermediate calculation)
+  REAL             :: capavg     ! Thermal capacitance of a node (average value for a node at an interface)
+  REAL             :: cnd        ! Total thermal conductance (1/Rtot) of the bldg element
   INTEGER                           :: Constr     ! Loop counter
   INTEGER                           :: ConstrNum  ! Loop counter (construct number)
-  REAL(r64), &
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: cp         ! Specific heat of a material layer
   LOGICAL                           :: CTFConvrg  ! Set after CTFs are calculated, based on whether there are too
                                                   ! many CTF terms
   INTEGER                           :: CurrentLayer ! Pointer to material number in Material derived type (current layer)
-  REAL(r64), &
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: dl         ! Thickness of a material layer
-  REAL(r64)             :: dtn        ! Intermediate calculation of the time step
-  REAL(r64), &
+  REAL             :: dtn        ! Intermediate calculation of the time step
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: dx         ! Distance between nodes in a particular material layer
-  REAL(r64)             :: dxn        ! Intermediate calculation of nodal spacing
-  REAL(r64)             :: dxtmp      ! Intermediate calculation variable ( = 1/dx/cap)
-  REAL(r64)             :: dyn        ! Nodal spacing in the direction perpendicular to the main direction
+  REAL             :: dxn        ! Intermediate calculation of nodal spacing
+  REAL             :: dxtmp      ! Intermediate calculation variable ( = 1/dx/cap)
+  REAL             :: dyn        ! Nodal spacing in the direction perpendicular to the main direction
                                                   ! of heat transfer (only valid for a 2-D solution)
   LOGICAL                           :: ErrorsFound=.false.  !Flag for input error condition
   INTEGER                           :: HistTerm   ! Loop counter
@@ -232,7 +232,7 @@ SUBROUTINE InitConductionTransferFunctions
   INTEGER                           :: Layer1     ! Loop counter
   INTEGER                           :: LayersInConstruct ! Array containing the number of layers for each construct
                                                   ! Different from TotLayers because shades are not include in local var
-  REAL(r64), &
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: lr         ! R value of a material layer
   INTEGER                           :: Node       ! Loop counter
   INTEGER                           :: Node2      ! Node number (modification of Node and NodeInRow)
@@ -248,14 +248,14 @@ SUBROUTINE InitConductionTransferFunctions
     DIMENSION(MaxLayersInConstruct) :: ResLayer   ! Set true if the layer must be handled as a resistive
   LOGICAL                           :: RevConst   ! Set true if one construct is the reverse of another (CTFs already
                                                   ! available)
-  REAL(r64), &
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: rho        ! Density of a material layer
-  REAL(r64), &
+  REAL, &
     DIMENSION(MaxLayersInConstruct) :: rk         ! Thermal conductivity of a material layer
-  REAL(r64)             :: rs         ! Total thermal resistance of the building element
-  REAL(r64)             :: SumXi      ! Summation of all of the Xi terms (inside CTFs) for a construction
-  REAL(r64)             :: SumYi      ! Summation of all of the Xi terms (cross CTFs) for a construction
-  REAL(r64)             :: SumZi      ! Summation of all of the Xi terms (outside CTFs) for a construction
+  REAL             :: rs         ! Total thermal resistance of the building element
+  REAL             :: SumXi      ! Summation of all of the Xi terms (inside CTFs) for a construction
+  REAL             :: SumYi      ! Summation of all of the Xi terms (cross CTFs) for a construction
+  REAL             :: SumZi      ! Summation of all of the Xi terms (outside CTFs) for a construction
   LOGICAL :: DoCTFErrorReport
 
           ! FLOW:
@@ -265,19 +265,19 @@ SUBROUTINE InitConductionTransferFunctions
 
   DO ConstrNum = 1, TotConstructs   ! Begin construction loop ...
 
-    Construct(ConstrNum)%CTFCross       = 0.0D0
-    Construct(ConstrNum)%CTFFlux        = 0.0D0
-    Construct(ConstrNum)%CTFInside      = 0.0D0
-    Construct(ConstrNum)%CTFOutside     = 0.0D0
-    Construct(ConstrNum)%CTFSourceIn    = 0.0D0
-    Construct(ConstrNum)%CTFSourceOut   = 0.0D0
-    Construct(ConstrNum)%CTFTimeStep    = 0.0D0
-    Construct(ConstrNum)%CTFTSourceOut  = 0.0D0
-    Construct(ConstrNum)%CTFTSourceIn   = 0.0D0
-    Construct(ConstrNum)%CTFTSourceQ    = 0.0D0
-    Construct(ConstrNum)%CTFTUserOut    = 0.0D0
-    Construct(ConstrNum)%CTFTUserIn     = 0.0D0
-    Construct(ConstrNum)%CTFTUserSource = 0.0D0
+    Construct(ConstrNum)%CTFCross       = 0.0
+    Construct(ConstrNum)%CTFFlux        = 0.0
+    Construct(ConstrNum)%CTFInside      = 0.0
+    Construct(ConstrNum)%CTFOutside     = 0.0
+    Construct(ConstrNum)%CTFSourceIn    = 0.0
+    Construct(ConstrNum)%CTFSourceOut   = 0.0
+    Construct(ConstrNum)%CTFTimeStep    = 0.0
+    Construct(ConstrNum)%CTFTSourceOut  = 0.0
+    Construct(ConstrNum)%CTFTSourceIn   = 0.0
+    Construct(ConstrNum)%CTFTSourceQ    = 0.0
+    Construct(ConstrNum)%CTFTUserOut    = 0.0
+    Construct(ConstrNum)%CTFTUserIn     = 0.0
+    Construct(ConstrNum)%CTFTUserSource = 0.0
     Construct(ConstrNum)%NumHistories   = 0
     Construct(ConstrNum)%NumCTFTerms    = 0
     Construct(ConstrNum)%UValue         = 0.0
@@ -289,7 +289,7 @@ SUBROUTINE InitConductionTransferFunctions
           ! Initialize construct parameters
 
     Construct(ConstrNum)%CTFTimeStep = TimeStepZone
-    rs = 0.0D0
+    rs = 0.0
     LayersInConstruct = 0
     NumResLayers = 0
     ResLayer     = .FALSE.
@@ -362,14 +362,14 @@ SUBROUTINE InitConductionTransferFunctions
 
             IF ( (Layer == 1) .OR. (Layer == Construct(ConstrNum)%TotLayers) .OR. &
                  (.NOT. Material(Construct(ConstrNum)%LayerPoint(Layer))%ROnly) ) THEN
-              cp(Layer)  = 1.007d0
-              rho(Layer) = 1.1614d0
-              rk(Layer)  = 0.0263d0
+              cp(Layer)  = 1.007
+              rho(Layer) = 1.1614
+              rk(Layer)  = 0.0263
               dl(Layer)  = rk(Layer)*lr(Layer)
             ELSE
-              cp(Layer)  = 0.0d0
-              rho(Layer) = 0.0d0
-              rk(Layer)  = 1.0d0
+              cp(Layer)  = 0.0
+              rho(Layer) = 0.0
+              rk(Layer)  = 1.0
               dl(Layer)  = lr(Layer)
             END IF
 
@@ -404,9 +404,9 @@ SUBROUTINE InitConductionTransferFunctions
         IF ( (ResLayer(Layer)) .AND. (ResLayer(Layer+1)) ) THEN
             ! Shift layers forward after combining two adjacent layers.  Then
             ! restart the do loop.
-          cp(Layer)  = 0.0d0
-          rho(Layer) = 0.0d0
-          rk(Layer)  = 1.0d0
+          cp(Layer)  = 0.0
+          rho(Layer) = 0.0
+          rk(Layer)  = 1.0
           lr(Layer)  = lr(Layer) + lr(Layer+1)
           dl(Layer)  = lr(Layer)
           NumResLayers = NumResLayers - 1 ! Combining layers so decrease number of resistive layers
@@ -419,11 +419,11 @@ SUBROUTINE InitConductionTransferFunctions
             ResLayer(Layer1) = ResLayer(Layer1+1)
           END DO
             ! Then zero out the layer that got shifted forward
-          cp(LayersInConstruct)  = 0.0d0
-          rho(LayersInConstruct) = 0.0d0
-          rk(LayersInConstruct)  = 0.0d0
-          lr(LayersInConstruct)  = 0.0d0
-          dl(LayersInConstruct)  = 0.0d0
+          cp(LayersInConstruct)  = 0.0
+          rho(LayersInConstruct) = 0.0
+          rk(LayersInConstruct)  = 0.0
+          lr(LayersInConstruct)  = 0.0
+          dl(LayersInConstruct)  = 0.0
             ! Now reduce the number of layers in construct since merger is complete
           LayersInConstruct = LayersInConstruct - 1
             ! Also adjust layers with source/sinks if two layers are merged
@@ -449,12 +449,12 @@ SUBROUTINE InitConductionTransferFunctions
       dl(Layer)  = dl(Layer)/CFL
       rk(Layer)  = rk(Layer)/CFK
       rho(Layer) = rho(Layer)/CFD
-      cp(Layer)  = cp(Layer)/(CFC*1000.0d0)
+      cp(Layer)  = cp(Layer)/(CFC*1000.0)
 
     END DO          ! ... end of layer loop for units conversion.
 
     IF (Construct(ConstrNum)%SolutionDimensions == 1) THEN
-      dyn = 0.0d0
+      dyn = 0.0
     ELSE
       dyn = (Construct(ConstrNum)%ThicknessPerpend/CFL)/REAL(NumOfPerpendNodes-1,r64)
     END IF
@@ -465,7 +465,7 @@ SUBROUTINE InitConductionTransferFunctions
       rs = rs + lr(Layer)   ! Resistances in series sum algebraically
     END DO
 
-    cnd = 1.0D0/rs      ! Conductivity is the inverse of resistivity
+    cnd = 1.0/rs      ! Conductivity is the inverse of resistivity
 
     IF (LayersInConstruct > NumResLayers) THEN
 
@@ -556,7 +556,7 @@ SUBROUTINE InitConductionTransferFunctions
             Nodes(Layer) = 1
             dx(Layer)    = dl(Layer)
           ELSE
-            dxn = sqrt(2.0d0*(rk(Layer)/rho(Layer)/cp(Layer)) &
+            dxn = sqrt(2.0*(rk(Layer)/rho(Layer)/cp(Layer)) &
                         *Construct(ConstrNum)%CTFTimeStep)
 
             ipts1 = int(dl(Layer)/dxn)  ! number of nodes=thickness/spacing
@@ -656,8 +656,8 @@ SUBROUTINE InitConductionTransferFunctions
           ! the time step is adjusted and the CTFs end up being recalculated
           ! (see later code in this routine).
 
-        dtn = 0.0D0
-        Construct(ConstrNum)%CTFTimeStep = 0.0D0
+        dtn = 0.0
+        Construct(ConstrNum)%CTFTimeStep = 0.0
         DO Layer = 1, LayersInConstruct
           IF (Nodes(Layer) >= MaxCTFTerms) THEN
             IF (Construct(ConstrNum)%SolutionDimensions == 1) THEN
@@ -674,14 +674,14 @@ SUBROUTINE InitConductionTransferFunctions
           ! calculated time step for this construct, then CTFTimeStep must be
           ! revised.
 
-        IF (ABS((TimeStepZone-Construct(ConstrNum)%CTFTimeStep)/TimeStepZone) > 0.1d0) THEN
+        IF (ABS((TimeStepZone-Construct(ConstrNum)%CTFTimeStep)/TimeStepZone) > 0.1) THEN
 
           IF (Construct(ConstrNum)%CTFTimeStep > TimeStepZone) THEN
 
           ! CTFTimeStep larger than TimeStepZone:  Make sure TimeStepZone
           ! divides evenly into CTFTimeStep
             Construct(ConstrNum)%NumHistories = &
-              INT((Construct(ConstrNum)%CTFTimeStep/TimeStepZone)+0.5D0)
+              INT((Construct(ConstrNum)%CTFTimeStep/TimeStepZone)+0.5)
             Construct(ConstrNum)%CTFTimeStep = &
               TimeStepZone*REAL(Construct(ConstrNum)%NumHistories,r64)
 
@@ -712,40 +712,40 @@ SUBROUTINE InitConductionTransferFunctions
         CTFConvrg = .FALSE.         ! Initialize loop control logical
 
         ALLOCATE(AExp(rcmax,rcmax))
-        AExp=0.0D0
+        AExp=0.0
         ALLOCATE(AMat(rcmax,rcmax))
-        AMat=0.0D0
+        AMat=0.0
         ALLOCATE(AInv(rcmax,rcmax))
-        AInv=0.0D0
+        AInv=0.0
         ALLOCATE(IdenMatrix(rcmax,rcmax))
-        IdenMatrix=0.0D0
+        IdenMatrix=0.0
         DO ir=1,rcmax
-          IdenMatrix(ir,ir)=1.0D0
+          IdenMatrix(ir,ir)=1.0
         ENDDO
         ALLOCATE(e(rcmax))
-        e=0.0D0
+        e=0.0
         ALLOCATE(Gamma1(rcmax,3))
-        Gamma1=0.0D0
+        Gamma1=0.0
         ALLOCATE(Gamma2(rcmax,3))
-        Gamma2=0.0D0
+        Gamma2=0.0
         ALLOCATE(s(rcmax,4,3))
-        s=0.0D0
+        s=0.0
 
         DO WHILE (.NOT.CTFConvrg)   ! Begin CTF calculation loop ...
 
-          BMat(3) = 0.0d0
+          BMat(3) = 0.0
 
           IF (Construct(ConstrNum)%SolutionDimensions == 1) THEN
 
           ! Set up intermediate calculations for the first layer.
             cap = rho(1)*cp(1)*dx(1)
-            cap = 1.5d0*cap ! For the first node, account for the fact that the
+            cap = 1.5*cap ! For the first node, account for the fact that the
                             ! half-node at the surface results in a "loss" of some
                             ! thermal mass.  Therefore, for simplicity, include it
                             ! at this node.  Same thing done at the last node...
-            dxtmp = 1.0D0/dx(1)/cap
+            dxtmp = 1.0/dx(1)/cap
 
-            AMat(1,1) = -2.0D0*rk(1)*dxtmp    ! Assign the matrix values for the
+            AMat(1,1) = -2.0*rk(1)*dxtmp    ! Assign the matrix values for the
             AMat(1,2) = rk(1)*dxtmp           ! first node.
             BMat(1)   = rk(1)*dxtmp           ! Assign non-zero value of BMat.
 
@@ -764,10 +764,10 @@ SUBROUTINE InitConductionTransferFunctions
                     ! halves which may be made up of 2 different materials.
 
                 cap = ( rho(Layer)*cp(Layer)*dx(Layer) &
-                       +rho(Layer+1)*cp(Layer+1)*dx(Layer+1) ) * 0.5D0
+                       +rho(Layer+1)*cp(Layer+1)*dx(Layer+1) ) * 0.5
 
                 AMat(Node,Node-1) = rk(Layer)/dx(Layer)/cap           ! Assign matrix
-                AMat(Node,Node)   = -1.0D0 * ( rk(Layer)/dx(Layer)+ & ! values for
+                AMat(Node,Node)   = -1.0 * ( rk(Layer)/dx(Layer)+ & ! values for
                                     rk(Layer+1)/dx(Layer+1) ) / cap   ! the current
                 AMat(Node,Node+1) = rk(Layer+1)/dx(Layer+1)/cap       ! node.
 
@@ -777,27 +777,27 @@ SUBROUTINE InitConductionTransferFunctions
               ELSE    ! Standard node within any layer
 
                 cap = rho(Layer)*cp(Layer)*dx(Layer)      ! Intermediate
-                dxtmp = 1.0D0/dx(Layer)/cap               ! calculations.
+                dxtmp = 1.0/dx(Layer)/cap               ! calculations.
                 AMat(Node,Node-1) = rk(Layer)*dxtmp       ! Assign matrix
-                AMat(Node,Node) = -2.0D0*rk(Layer)*dxtmp  ! values for the
+                AMat(Node,Node) = -2.0*rk(Layer)*dxtmp  ! values for the
                 AMat(Node,Node+1) = rk(Layer)*dxtmp       ! current node.
 
               END IF
 
               NodeInLayer = NodeInLayer+1 ! Increment nodes in layer counter
-              IF (Node == NodeSource) BMat(3) = 1.0d0/cap
+              IF (Node == NodeSource) BMat(3) = 1.0/cap
 
             END DO    ! ... end of nodes loop.
 
             ! Intermediate calculations for the last node.
             cap = rho(LayersInConstruct)*cp(LayersInConstruct)* dx(LayersInConstruct)
-            cap = 1.5d0*cap ! For the last node, account for the fact that the
+            cap = 1.5*cap ! For the last node, account for the fact that the
                             ! half-node at the surface results in a "loss" of some
                             ! thermal mass.  Therefore, for simplicity, include it
                             ! at this node.  Same thing done at the first node...
-            dxtmp = 1.0D0/dx(LayersInConstruct)/cap
+            dxtmp = 1.0/dx(LayersInConstruct)/cap
 
-            AMat(rcmax,rcmax) = -2.0D0*rk(LayersInConstruct)*dxtmp ! Assign matrix
+            AMat(rcmax,rcmax) = -2.0*rk(LayersInConstruct)*dxtmp ! Assign matrix
             AMat(rcmax,rcmax-1) = rk(LayersInConstruct)*dxtmp      ! values for the
             BMat(2) = rk(LayersInConstruct)*dxtmp                  ! last node.
 
@@ -812,8 +812,8 @@ SUBROUTINE InitConductionTransferFunctions
             ! of the half-node at the surface by adding it to the first row
             ! of interior nodes at both sides of the construction.  This is not
             ! exact, but it does take all of the thermal mass into account.
-            amatx = rk(1)/(1.5d0*rho(1)*cp(1)*dx(1)*dx(1))
-            amaty = rk(1)/(1.5d0*rho(1)*cp(1)*dyn*dyn)
+            amatx = rk(1)/(1.5*rho(1)*cp(1)*dx(1)*dx(1))
+            amaty = rk(1)/(1.5*rho(1)*cp(1)*dyn*dyn)
 
             ! FIRST ROW OF NODES: This first row within the first material layer
             ! is special in that it is exposed to a boundary condition.  Thus,
@@ -821,19 +821,19 @@ SUBROUTINE InitConductionTransferFunctions
             ! Note also that the first and last nodes in a row are slightly
             ! different from the rest since they are on an adiabatic plane in
             ! the direction perpendicular to the main direction of heat transfer.
-            AMat(1,1)                   =-2.0d0*(amatx+amaty)
-            AMat(1,2)                   = 2.0d0*amaty
+            AMat(1,1)                   =-2.0*(amatx+amaty)
+            AMat(1,2)                   = 2.0*amaty
             AMat(1,NumOfPerpendNodes+1) = amatx
 
             DO Node = 2, NumOfPerpendNodes-1
               AMat(Node,Node-1)                 = amaty
-              AMat(Node,Node)                   =-2.0d0*(amatx+amaty)
+              AMat(Node,Node)                   =-2.0*(amatx+amaty)
               AMat(Node,Node+1)                 = amaty
               AMat(Node,Node+NumOfPerpendNodes) = amatx
             END DO
 
-            AMat(NumOfPerpendNodes,NumOfPerpendNodes)                   =-2.0d0*(amatx+amaty)
-            AMat(NumOfPerpendNodes,NumOfPerpendNodes-1)                 = 2.0d0*amaty
+            AMat(NumOfPerpendNodes,NumOfPerpendNodes)                   =-2.0*(amatx+amaty)
+            AMat(NumOfPerpendNodes,NumOfPerpendNodes-1)                 = 2.0*amaty
             AMat(NumOfPerpendNodes,NumOfPerpendNodes+NumOfPerpendNodes) = amatx
 
             BMat(1) = amatx
@@ -858,54 +858,54 @@ SUBROUTINE InitConductionTransferFunctions
                 ! Note that the first and last layers in a row are slightly different
                 ! from the rest since they are on an adiabatic plane in the direction
                 ! perpendicular to the main direction of heat transfer.
-                AMat(Node,Node)                   =-2.0d0*(amatx+amaty)
-                AMat(Node,Node+1)                 = 2.0d0*amaty
+                AMat(Node,Node)                   =-2.0*(amatx+amaty)
+                AMat(Node,Node+1)                 = 2.0*amaty
                 AMat(Node,Node-NumOfPerpendNodes) = amatx
                 AMat(Node,Node+NumOfPerpendNodes) = amatx
 
                 DO NodeInRow = 2, NumOfPerpendNodes-1
                   Node2 = Node + NodeInRow - 1
                   AMat(Node2,Node2-1)                 = amaty
-                  AMat(Node2,Node2)                   =-2.0d0*(amatx+amaty)
+                  AMat(Node2,Node2)                   =-2.0*(amatx+amaty)
                   AMat(Node2,Node2+1)                 = amaty
                   AMat(Node2,Node2-NumOfPerpendNodes) = amatx
                   AMat(Node2,Node2+NumOfPerpendNodes) = amatx
                 END DO
 
                 Node2 = Node - 1 + NumOfPerpendNodes
-                AMat(Node2,Node2)                   =-2.0d0*(amatx+amaty)
-                AMat(Node2,Node2-1)                 = 2.0d0*amaty
+                AMat(Node2,Node2)                   =-2.0*(amatx+amaty)
+                AMat(Node2,Node2-1)                 = 2.0*amaty
                 AMat(Node2,Node2-NumOfPerpendNodes) = amatx
                 AMat(Node2,Node2+NumOfPerpendNodes) = amatx
 
               ELSE  ! Row at a two-layer interface (half of node consists of one layer's materials
                     ! and the other half consist of the next layer's materials)
-                capavg = 0.5d0*(rho(Layer)*cp(Layer)*dx(Layer)+rho(Layer+1)*cp(Layer+1)*dx(Layer+1))
+                capavg = 0.5*(rho(Layer)*cp(Layer)*dx(Layer)+rho(Layer+1)*cp(Layer+1)*dx(Layer+1))
                 amatx  = rk(Layer)/(capavg*dx(Layer))
                 amatxx = rk(Layer+1)/(capavg*dx(Layer+1))
                 amaty  = (rk(Layer)*dx(Layer)+rk(Layer+1)*dx(Layer+1))/(capavg*dyn*dyn)
 
-                AMat(Node,Node)                   =-amatx-amatxx-2.0d0*amaty
-                AMat(Node,Node+1)                 = 2.0d0*amaty
+                AMat(Node,Node)                   =-amatx-amatxx-2.0*amaty
+                AMat(Node,Node+1)                 = 2.0*amaty
                 AMat(Node,Node-NumOfPerpendNodes) = amatx
                 AMat(Node,Node+NumOfPerpendNodes) = amatxx
 
                 DO NodeInRow = 2, NumOfPerpendNodes-1
                   Node2 = Node + NodeInRow - 1
                   AMat(Node2,Node2-1)                 = amaty
-                  AMat(Node2,Node2)                   =-amatx-amatxx-2.0d0*amaty
+                  AMat(Node2,Node2)                   =-amatx-amatxx-2.0*amaty
                   AMat(Node2,Node2+1)                 = amaty
                   AMat(Node2,Node2-NumOfPerpendNodes) = amatx
                   AMat(Node2,Node2+NumOfPerpendNodes) = amatxx
                 END DO
 
                 Node2 = Node - 1 + NumOfPerpendNodes
-                AMat(Node2,Node2)                   =-amatx-amatxx-2.0d0*amaty
-                AMat(Node2,Node2-1)                 = 2.0d0*amaty
+                AMat(Node2,Node2)                   =-amatx-amatxx-2.0*amaty
+                AMat(Node2,Node2-1)                 = 2.0*amaty
                 AMat(Node2,Node2-NumOfPerpendNodes) = amatx
                 AMat(Node2,Node2+NumOfPerpendNodes) = amatxx
 
-                IF (Node == NodeSource) BMat(3) = 2.0d0*REAL(NumOfPerpendNodes-1,r64)/capavg
+                IF (Node == NodeSource) BMat(3) = 2.0*REAL(NumOfPerpendNodes-1,r64)/capavg
                 NodeInLayer = 0
                 Layer       = Layer + 1
 
@@ -921,23 +921,23 @@ SUBROUTINE InitConductionTransferFunctions
             ! of the half-node at the surface by adding it to the first row
             ! of interior nodes at both sides of the construction.  This is not
             ! exact, but it does take all of the thermal mass into account.
-            amatx = amatx/1.5d0
-            amaty = amaty/1.5d0
+            amatx = amatx/1.5
+            amaty = amaty/1.5
 
             Node = rcmax + 1 - NumOfPerpendNodes
-            AMat(Node,Node)                   =-2.0d0*(amatx+amaty)
-            AMat(Node,Node+1)                 = 2.0d0*amaty
+            AMat(Node,Node)                   =-2.0*(amatx+amaty)
+            AMat(Node,Node+1)                 = 2.0*amaty
             AMat(Node,Node-NumOfPerpendNodes) = amatx
 
             DO Node = rcmax+2-NumOfPerpendNodes, rcmax-1
               AMat(Node,Node-1)                 = amaty
-              AMat(Node,Node)                   =-2.0d0*(amatx+amaty)
+              AMat(Node,Node)                   =-2.0*(amatx+amaty)
               AMat(Node,Node+1)                 = amaty
               AMat(Node,Node-NumOfPerpendNodes) = amatx
             END DO
 
-            AMat(rcmax,rcmax)                   =-2.0d0*(amatx+amaty)
-            AMat(rcmax,rcmax-1)                 = 2.0d0*amaty
+            AMat(rcmax,rcmax)                   =-2.0*(amatx+amaty)
+            AMat(rcmax,rcmax-1)                 = 2.0*amaty
             AMat(rcmax,rcmax-NumOfPerpendNodes) = amatx
 
             BMat(2) = amatx
@@ -1007,7 +1007,7 @@ SUBROUTINE InitConductionTransferFunctions
             SumYi = ABS(SumYi)
             SumZi = ABS(SumZi)
             BiggestSum = MAX(SumXi,SumYi,SumZi)
-            IF (BiggestSum > 0.0d0) THEN
+            IF (BiggestSum > 0.0) THEN
               IF ( ((ABS(SumXi-SumYi)/BiggestSum) > MaxAllowedCTFSumError) .OR. &
                    ((ABS(SumZi-SumYi)/BiggestSum) > MaxAllowedCTFSumError) ) THEN
                 Construct(ConstrNum)%NumHistories = Construct(ConstrNum)%NumHistories + 1
@@ -1075,14 +1075,14 @@ SUBROUTINE InitConductionTransferFunctions
       s0(2,2) = -cnd  ! of the construction.
 
       ALLOCATE(e(1))
-      e=0.0D0
+      e=0.0
       ALLOCATE(s(1,2,2))
-      s=0.0D0
-      s(1,1,1) = 0.0D0  ! CTF temperature
-      s(1,1,2) = 0.0D0  ! and flux
-      s(1,2,1) = 0.0D0  ! history terms
-      s(1,2,2) = 0.0D0  ! are all
-      e(1) = 0.0D0      ! zero.
+      s=0.0
+      s(1,1,1) = 0.0  ! CTF temperature
+      s(1,1,2) = 0.0  ! and flux
+      s(1,2,1) = 0.0  ! history terms
+      s(1,2,2) = 0.0  ! are all
+      e(1) = 0.0      ! zero.
 
       IF (Construct(ConstrNum)%SourceSinkPresent) THEN
         CALL ShowSevereError('Sources/sinks not allowed in purely resistive constructions --> '//Construct(ConstrNum)%Name)
@@ -1214,23 +1214,23 @@ SUBROUTINE CalculateExponentialMatrix(delt)
 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64) :: delt  ! Time step of the resulting CTFs
+  REAL :: delt  ! Time step of the resulting CTFs
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
-  REAL(r64), PARAMETER :: DPLimit = 1.0d-20
+  REAL, PARAMETER :: DPLimit = 1.0d-20
           ! This argument is nice, but not sure it's accurate -- LKL Nov 1999.
           ! Parameter set to the significant figures limit of double
           ! precision variables plus a safety factor.- The argument for setting this parameter to 1E-20 involves the
-          ! number of significant figures for REAL(r64) variables which is 16 and the largest power to which
+          ! number of significant figures for REAL variables which is 16 and the largest power to which
           ! AMat will be raised which is 100.  This would be a factor of 1E-18.  A factor of "safety" of another 100
           ! arrives at the value chosen.  It is argued that if one number is 1E-16 larger than a second number, then
           ! adding the second to the first will not effect the first.  However, on the conservative side, there could
           ! be up to 100 numbers which might, added together, still could effect the original number.  Each
           ! successive power of AMat will have terms smaller than the previous power.  Thus, when the ratio between
           ! the terms of the latest power of AMat and the total (AExp) is less than DPLim, all further powers of
-          ! AMat will have absolutely no effect on the REAL(r64) value of AExp.  Thus, there is no need to
-          ! continue the calculation.  In effect, AExp has "converged".  In REAL(r64)ity, 1E-16 would probably guarantee
+          ! AMat will have absolutely no effect on the REAL value of AExp.  Thus, there is no need to
+          ! continue the calculation.  In effect, AExp has "converged".  In REALity, 1E-16 would probably guarantee
           ! convergence since AMat terms drop off quickly, but the extra powers allows for differences between
           ! computer platforms.
 
@@ -1241,14 +1241,14 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)                         :: AMatRowNorm      ! Row norm for AMat
-  REAL(r64)                         :: AMatRowNormMax   ! Largest row norm for AMat
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AMat1    ! AMat factored by (delt/2^k)
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AMato    ! AMat raised to the previous power (power of AMat1-1)
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AMatN    ! Current value of AMat raised to power n (n = 1,2...)
+  REAL                         :: AMatRowNorm      ! Row norm for AMat
+  REAL                         :: AMatRowNormMax   ! Largest row norm for AMat
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AMat1    ! AMat factored by (delt/2^k)
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AMato    ! AMat raised to the previous power (power of AMat1-1)
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AMatN    ! Current value of AMat raised to power n (n = 1,2...)
   LOGICAL                                       :: Backup   ! Used when numerics get to small in Exponentiation
-  REAL(r64)                                     :: CheckVal ! Used to avoid possible overflow from Double->REAL(r64)->Integer
-  REAL(r64)                         :: fact     ! Intermediate calculation variable (delt/2^k)
+  REAL                                     :: CheckVal ! Used to avoid possible overflow from Double->REAL->Integer
+  REAL                         :: fact     ! Intermediate calculation variable (delt/2^k)
   INTEGER                                       :: i        ! Loop counter
   INTEGER                                       :: ic       ! Loop counter
   INTEGER                                       :: ict      ! Loop counter
@@ -1261,7 +1261,7 @@ SUBROUTINE CalculateExponentialMatrix(delt)
                                                             ! raised to accurately calculate the exponential matrix
   LOGICAL                                       :: SigFigLimit      ! Significant figure limit logical, true
                                                                     ! when exponential calculation loop can be exited (i.e.
-                                                                    ! the significant figure limit for REAL(r64)
+                                                                    ! the significant figure limit for REAL
                                                                     ! variables reached)
 
           ! FLOW:
@@ -1274,9 +1274,9 @@ SUBROUTINE CalculateExponentialMatrix(delt)
   AMat1=AMat
 
   !  Other arrays are initialized to zero.
-  AExp=0.0D0
-  AMato=0.0D0
-  AMatN=0.0D0
+  AExp=0.0
+  AMato=0.0
+  AMatN=0.0
 
 
           ! Step 1, page 128 (Seem's thesis):  Compute the matrix row norm.
@@ -1284,11 +1284,11 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! maximum summation of the elements in a row of AMat multiplied by
           ! the time step.
 
-  AMatRowNormMax = 0.0D0            ! Start of Step 1 ...
+  AMatRowNormMax = 0.0            ! Start of Step 1 ...
 
   DO i = 1,rcmax
 
-    AMatRowNorm = 0.0D0
+    AMatRowNorm = 0.0
     DO j = 1,rcmax
       AMatRowNorm = AMatRowNorm+ABS(AMat1(i,j))
     END DO
@@ -1302,13 +1302,13 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! Step 2, page 128:  Find smallest integer k such that
           ! AMatRowNormMax< = 2^k
 
-  k = INT(LOG(AMatRowNormMax)/LOG(2.0D0))+1
+  k = INT(LOG(AMatRowNormMax)/LOG(2.0))+1
 
           ! Step 3, page 128:  Divide (AMat*delt) by 2^k.  This section of code
           ! takes advantage of the fact that AMat is tridiagonal.  Thus, it
           ! only factors the elements of the AMat that are known to be non-zero.
 
-  fact  = delt/(2.0d0**k)   ! Start of Step 3 ...
+  fact  = delt/(2.0**k)   ! Start of Step 3 ...
   AMat1 = AMat1*fact        ! ... end of Step 3.
 
           ! Step 4, page 128:  Calculate l, the highest power to which AMat
@@ -1321,7 +1321,7 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! precision variable is used as a more practical limit on the
           ! exponentiation algorithm.
 
-  CheckVal = MIN(3.0d0*AMatRowNormMax+6.d0,100.0d0)
+  CheckVal = MIN(3.0*AMatRowNormMax+6.,100.0)
   l        = INT(CheckVal)
 
           ! Step 5, page 128:  Calculate the exponential.  First, add the
@@ -1352,7 +1352,7 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! For 2-D heat transfer, the number of off-diagonal non-zero terms
           ! is slightly more complicated as well.
       DO ic = 1, rcmax
-        AMatN(ir,ic) = 0.0d0
+        AMatN(ir,ic) = 0.0
         DO ict = 1, rcmax
           ! Make sure the next term won't cause an underflow.  If it will end up being
           ! so small as to go below TinyLimit, then ignore it since it won't add anything
@@ -1416,7 +1416,7 @@ SUBROUTINE CalculateExponentialMatrix(delt)
           ! Use AMato to store the old values of AExp
     AMato  = AExp
     Backup = .true.
-    AExp   = 0.0D0
+    AExp   = 0.0
 
           ! Multiply the old value of AExp (AMato) by itself and store in AExp.
     DO ir = 1,rcmax
@@ -1487,7 +1487,7 @@ SUBROUTINE CalculateInverseMatrix
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: AMat1  ! Intermediate calculation matrix equivalent at first to AMat
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: AMat1  ! Intermediate calculation matrix equivalent at first to AMat
   INTEGER                                       :: ic     ! Loop counter
   INTEGER                                       :: ir     ! Loop counter
   INTEGER                                       :: irr    ! Loop counter
@@ -1523,7 +1523,7 @@ SUBROUTINE CalculateInverseMatrix
       AInv(ir,ic) = AInv(ir,ic)/AMat1(ir,ir)
     END DO
 
-    AMat1(ir,ir) = 1.0d0      ! By definition, the diagonal of AMat is now 1.
+    AMat1(ir,ir) = 1.0      ! By definition, the diagonal of AMat is now 1.
 
           ! Use this factored row to eliminate the off-diagonal element of the
           ! rows below the current one (ir)...
@@ -1542,7 +1542,7 @@ SUBROUTINE CalculateInverseMatrix
         AInv(irr,ic) = AInv(irr,ic) - AMat1(irr,ir)*AInv(ir,ic)
       END DO
 
-      AMat1(irr,ir) = 0.0d0 ! By definition, the element to the left of the
+      AMat1(irr,ir) = 0.0 ! By definition, the element to the left of the
                             ! diagonal in the next row of AMat is now zero.
 
     END DO                  ! ...end of row reduction loop
@@ -1557,7 +1557,7 @@ SUBROUTINE CalculateInverseMatrix
   DO ic = 1,rcmax
     AInv(rcmax,ic) = AInv(rcmax,ic)/AMat1(rcmax,rcmax)
   END DO
-  AMat1(rcmax,rcmax) = 1.0D0
+  AMat1(rcmax,rcmax) = 1.0
 
           ! Now, use back substitution to eliminate the elements to the right
           ! of the diagonal in AMat.  The procedure is similar to the forward
@@ -1577,7 +1577,7 @@ SUBROUTINE CalculateInverseMatrix
       DO ic = 1,rcmax
         AInv(irr,ic) = AInv(irr,ic)-AMat1(irr,ir)*AInv(ir,ic)
       END DO
-      AMat1(irr,ir) = 0.0d0
+      AMat1(irr,ir) = 0.0
     END DO
   END DO                ! ... end of reverse elimination loop.
 
@@ -1622,7 +1622,7 @@ SUBROUTINE CalculateGammas(delt,SolutionDimensions)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: delt               ! Time increment in fraction of an hour
+  REAL, INTENT(IN) :: delt               ! Time increment in fraction of an hour
   INTEGER,          INTENT(IN) :: SolutionDimensions ! Integer relating whether a 1- or 2-D solution is required
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1635,7 +1635,7 @@ SUBROUTINE CalculateGammas(delt,SolutionDimensions)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: ATemp    ! Intermediate variable equal to AExp - I
+  REAL, ALLOCATABLE, DIMENSION(:,:) :: ATemp    ! Intermediate variable equal to AExp - I
   INTEGER :: i          ! Loop counter
   INTEGER :: is1        ! Loop counter
   INTEGER :: j          ! Loop counter
@@ -1650,7 +1650,7 @@ SUBROUTINE CalculateGammas(delt,SolutionDimensions)
 
   ALLOCATE(ATemp(rcmax,rcmax))
   ATemp  = AExp - IdenMatrix
-  Gamma1 = 0.0d0
+  Gamma1 = 0.0
 
   DO i = 1,rcmax
 
@@ -1678,7 +1678,7 @@ SUBROUTINE CalculateGammas(delt,SolutionDimensions)
           ! Compute Gamma2 from equation (2.1.13) in Seem's dissertation which
           ! states that:  Gamma2  =  [AInv] * ([Gamma1]/delt - [BMat])
           ! again noting that BMat contains only the non-zero values of B.
-  Gamma2 = 0.0d0
+  Gamma2 = 0.0
 
   DO i = 1,rcmax
 
@@ -1757,7 +1757,7 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
   INTEGER, INTENT(IN)  :: SolutionDimensions ! Integer relating whether a 1- or 2-D solution is required
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: ConvrgLim = 1.0d-13   ! Convergence limit (ratio) for cutting off the calculation of further
+  REAL, PARAMETER :: ConvrgLim = 1.0d-13   ! Convergence limit (ratio) for cutting off the calculation of further
                                                        ! CTFs.  This value was found to give suitable accuracy in IBLAST.
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1771,7 +1771,7 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)                                :: avg       ! Intermediate calculation variable (average)
+  REAL                                :: avg       ! Intermediate calculation variable (average)
   LOGICAL                                              :: CTFConvrg ! Set after CTFs are calculated, based on whether there are
                                                                     ! too many CTFs terms
   INTEGER                                              :: i         ! Loop counter
@@ -1781,15 +1781,15 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
   INTEGER                                              :: is        ! Loop counter
   INTEGER                                              :: is2       ! Loop counter
   INTEGER                                              :: j         ! Loop counter
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:)        :: PhiR0     ! Product of Phi( = AExp) and R0 matrices from the state
+  REAL, ALLOCATABLE, DIMENSION(:,:)        :: PhiR0     ! Product of Phi( = AExp) and R0 matrices from the state
                                                                     ! space method
-  REAL(r64)                                :: rat       ! Intermediate calculation variable (ratio of flux history
+  REAL                                :: rat       ! Intermediate calculation variable (ratio of flux history
                                                                     ! terms)
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:)        :: Rnew      ! Current R matrix
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:)        :: Rold      ! R matrix from the last iteration
+  REAL, ALLOCATABLE, DIMENSION(:,:)        :: Rnew      ! Current R matrix
+  REAL, ALLOCATABLE, DIMENSION(:,:)        :: Rold      ! R matrix from the last iteration
   INTEGER                                              :: SurfNode  ! Loop counter (for nodes at a surface)
-  REAL(r64)                                :: SurfNodeFac ! Multiplying factor applied to various surface nodes
-  REAL(r64)                                :: trace     ! Trace of the product of Phi( = AExp) and R0
+  REAL                                :: SurfNodeFac ! Multiplying factor applied to various surface nodes
+  REAL                                :: trace     ! Trace of the product of Phi( = AExp) and R0
 
           ! FLOW:
 
@@ -1797,12 +1797,12 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
   ALLOCATE(PhiR0(rcmax,rcmax))
   ALLOCATE(Rnew(rcmax,rcmax))
   ALLOCATE(Rold(rcmax,rcmax))
-  PhiR0 = 0.0D0
-  Rold  = 0.0D0
+  PhiR0 = 0.0
+  Rold  = 0.0
 
-  s0   = 0.0D0
-  s    = 0.0D0
-  e    = 0.0D0
+  s0   = 0.0
+  s    = 0.0
+  e    = 0.0
   Rnew = IdenMatrix ! Rnew initialized to the identity matrix
 
           ! Calculate Gamma1-Gamma2.  Gamma1 is not used by itself in the
@@ -1829,9 +1829,9 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
   ELSE  ! SolutionDimensions = 2
     DO SurfNode = 1, NumOfPerpendNodes
       IF ( (SurfNode == 1) .OR. (SurfNode == NumOfPerpendNodes) ) THEN
-        SurfNodeFac = 0.5d0
+        SurfNodeFac = 0.5
       ELSE
-        SurfNodeFac = 1.0d0
+        SurfNodeFac = 1.0
       END IF
       s0(1,1) = s0(1,1) + SurfNodeFac*CMat(1)*Gamma2(SurfNode,1)
       s0(1,2) = s0(1,2) + SurfNodeFac*CMat(1)*Gamma2(SurfNode,2)
@@ -1857,7 +1857,7 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
 
           ! Check for and enforce symmetry in the cross term (Y)
   IF (ABS(s0(1,2)) /= ABS(s0(2,1))) THEN
-    avg = (ABS(s0(1,2))+ABS(s0(2,1))) * 0.5D0
+    avg = (ABS(s0(1,2))+ABS(s0(2,1))) * 0.5
     s0(1,2) = avg*s0(1,2)/ABS(s0(1,2))
     s0(2,1) = avg*s0(2,1)/ABS(s0(2,1))
   END IF
@@ -1876,12 +1876,12 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
           ! Compute e(inum) based on Appendix C (Seem's dissertation). First,
           ! compute the new PhiR0 and its trace.
 
-    trace = 0.0D0
+    trace = 0.0
 
     DO ir = 1,rcmax
 
       DO ic = 1,rcmax
-        PhiR0(ir,ic) = 0.0D0
+        PhiR0(ir,ic) = 0.0
         DO is = 1,rcmax
           ! Make sure the next term won't cause an underflow.  If it will end up being
           ! so small as to go below TinyLimit, then ignore it since it won't add anything
@@ -1940,9 +1940,9 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
         DO is2 = 1,rcmax
           DO SurfNode = 1, NumOfPerpendNodes
             IF ( (SurfNode == 1) .OR. (SurfNode == NumOfPerpendNodes) ) THEN
-              SurfNodeFac = 0.5d0
+              SurfNodeFac = 0.5
             ELSE
-              SurfNodeFac = 1.0d0
+              SurfNodeFac = 1.0
             END IF
             s(inum,1,j) = s(inum,1,j) + SurfNodeFac*CMat(1)*( Rold(SurfNode,is2)*Gamma1(is2,j)  &
                                                              +Rnew(SurfNode,is2)*Gamma2(is2,j) )
@@ -1965,13 +1965,13 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
 
           ! Check for and enforce symmetry in the cross term (Y)
     IF (ABS(s(inum,1,2)) /= ABS(s(inum,2,1))) THEN
-      avg = (ABS(s(inum,1,2))+ABS(s(inum,2,1))) * 0.5D0
+      avg = (ABS(s(inum,1,2))+ABS(s(inum,2,1))) * 0.5
       s(inum,1,2) = avg*s(inum,1,2)/ABS(s(inum,1,2))
       s(inum,2,1) = avg*s(inum,2,1)/ABS(s(inum,2,1))
     END IF
 
           ! Check for convergence of the CTFs.
-    IF (e(1) == 0.0D0) THEN
+    IF (e(1) == 0.0) THEN
 
       nrf = 1                   ! e(1) is zero, so there are no history terms.
       CTFConvrg = .TRUE.        ! CTF calculations have converged--set logical.
@@ -2001,7 +2001,7 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
           ! Compute e(inum) based on Appendix C (Seem's dissertation) or see
           ! equation above.  First compute the new PhiR0 and its trace.
 
-    trace = 0.0D0
+    trace = 0.0
 
     DO ir = 1,rcmax
       DO is = 1,rcmax
@@ -2035,9 +2035,9 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
         DO is2 = 1,rcmax
           DO SurfNode = 1, NumOfPerpendNodes
             IF ( (SurfNode == 1) .OR. (SurfNode == NumOfPerpendNodes) ) THEN
-              SurfNodeFac = 0.5d0
+              SurfNodeFac = 0.5
             ELSE
-              SurfNodeFac = 1.0d0
+              SurfNodeFac = 1.0
             END IF
             s(rcmax,1,j) = s(rcmax,1,j) + SurfNodeFac*CMat(1)*Rnew(SurfNode,is2)*Gamma1(is2,j)
             s(rcmax,2,j) = s(rcmax,2,j) + SurfNodeFac*CMat(2)*Rnew(rcmax+1-SurfNode,is2)*Gamma1(is2,j)
@@ -2057,7 +2057,7 @@ SUBROUTINE CalculateCTFs(nrf,SolutionDimensions)
           ! Check for and enforce symmetry in the cross term (Y)
 
     IF (ABS(s(rcmax,1,2)) /= ABS(s(rcmax,2,1))) THEN
-      avg = (ABS(s(rcmax,1,2))+ABS(s(rcmax,2,1)))*0.5D0
+      avg = (ABS(s(rcmax,1,2))+ABS(s(rcmax,2,1)))*0.5
       s(rcmax,1,2) = avg*s(rcmax,1,2)/ABS(s(rcmax,1,2))
       s(rcmax,2,1) = avg*s(rcmax,2,1)/ABS(s(rcmax,2,1))
     END IF

@@ -298,33 +298,33 @@ SUBROUTINE DXFOut(PolygonAction,ColorScheme)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
-  REAL(r64), dimension(4) :: StemY =(/3.,3.,0.,0./)
-  REAL(r64), dimension(4) :: StemZ =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
+  REAL, dimension(4) :: StemY =(/3.,3.,0.,0./)
+  REAL, dimension(4) :: StemZ =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
+  REAL, dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
+  REAL, dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
+  REAL, dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
 !  integer, dimension(7) :: colorno=(/3,4,5,6,2,8,9/)
   integer unit              ! Unit number on which to write file
   integer surf              ! Loop variable for surfaces
   integer vert              ! Loop counter
   integer,external :: getnewunitnumber  ! External function for a new unit number
   integer colorindex        ! color index by surface type
-  REAL(r64) minx                 ! minimum x in surface data
-  REAL(r64) miny                 ! minimum y in surface data
-  REAL(r64) minz                 ! minimum z in surface data (for polygon output)
+  REAL minx                 ! minimum x in surface data
+  REAL miny                 ! minimum y in surface data
+  REAL minz                 ! minimum z in surface data (for polygon output)
   integer zones             ! loop counter for zone loop
   character(len=25) zonenum
   character(len=MaxNameLength) TempZoneName
@@ -800,33 +800,33 @@ SUBROUTINE DXFOutLines(ColorScheme)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
-  REAL(r64), dimension(4) :: StemY =(/3.,3.,0.,0./)
-  REAL(r64), dimension(4) :: StemZ =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
+  REAL, dimension(4) :: StemY =(/3.,3.,0.,0./)
+  REAL, dimension(4) :: StemZ =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
+  REAL, dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
+  REAL, dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
+  REAL, dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
 !  integer, dimension(7) :: colorno=(/3,4,5,6,2,8,9/)
   integer unit              ! Unit number on which to write file
   integer surf              ! Loop variable for surfaces
   integer vert              ! Loop counter
   integer,external :: getnewunitnumber  ! External function for a new unit number
   integer colorindex        ! color index by surface type
-  REAL(r64) minx                 ! minimum x in surface data
-  REAL(r64) miny                 ! minimum y in surface data
-  REAL(r64) minz                 ! minimum z in surface data (for polygon output)
+  REAL minx                 ! minimum x in surface data
+  REAL miny                 ! minimum y in surface data
+  REAL minz                 ! minimum z in surface data (for polygon output)
   integer zones             ! loop counter for zone loop
   character(len=25) zonenum
   character(len=MaxNameLength) TempZoneName
@@ -1229,33 +1229,33 @@ SUBROUTINE DXFOutWireFrame(ColorScheme)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
-  REAL(r64), dimension(4) :: StemY =(/3.,3.,0.,0./)
-  REAL(r64), dimension(4) :: StemZ =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
-  REAL(r64), dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
-  REAL(r64), dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
-  REAL(r64), dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
-  REAL(r64), dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
-  REAL(r64), dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: StemX =(/-10.,-10.,-10.,-10./)
+  REAL, dimension(4) :: StemY =(/3.,3.,0.,0./)
+  REAL, dimension(4) :: StemZ =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head1X =(/-10.,-10.,-10.5,-10.5/)
+  REAL, dimension(4) :: Head1Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: Head2X =(/-10.,-10.,-9.5,-9.5/)
+  REAL, dimension(4) :: Head2Y =(/3.,3.,2.133975,2.133975/)
+  REAL, dimension(4) :: Head2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide1X =(/-10.5,-10.5,-10.5,-10.5/)
+  REAL, dimension(4) :: NSide1Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide1Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide2X =(/-10.5,-10.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide2Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide2Z =(/.1,0.,0.,.1/)
+  REAL, dimension(4) :: NSide3X =(/-9.5,-9.5,-9.5,-9.5/)
+  REAL, dimension(4) :: NSide3Y =(/4.5,4.5,3.5,3.5/)
+  REAL, dimension(4) :: NSide3Z =(/.1,0.,0.,.1/)
 !  integer, dimension(7) :: colorno=(/3,4,5,6,2,8,9/)
   integer unit              ! Unit number on which to write file
   integer surf              ! Loop variable for surfaces
   integer vert              ! Loop counter
   integer,external :: getnewunitnumber  ! External function for a new unit number
   integer colorindex        ! color index by surface type
-  REAL(r64) minx                 ! minimum x in surface data
-  REAL(r64) miny                 ! minimum y in surface data
-  REAL(r64) minz                 ! minimum z in surface data (for polygon output)
+  REAL minx                 ! minimum x in surface data
+  REAL miny                 ! minimum y in surface data
+  REAL minz                 ! minimum z in surface data (for polygon output)
   integer zones             ! loop counter for zone loop
   character(len=25) zonenum
   character(len=MaxNameLength) TempZoneName
@@ -1646,7 +1646,7 @@ SUBROUTINE DetailsForSurfaces(RptType)
   character(len=MaxNameLength) :: scheduleName
   CHARACTER(len=32) :: IntConvCoeffCalc
   CHARACTER(len=32) :: ExtConvCoeffCalc
-  REAL(r64) :: NominalUwithConvCoeffs
+  REAL :: NominalUwithConvCoeffs
   CHARACTER(len=32) :: cNominalU
   CHARACTER(len=32) :: cNominalUwithConvCoeffs
   CHARACTER(len=32) :: cSchedMin
@@ -1775,7 +1775,7 @@ SUBROUTINE DetailsForSurfaces(RptType)
               ! Interior:  vertical, still air, Rcin = 0.68 ft2-F-hr/BTU
               ! Exterior:  vertical, exterior wind exposure, Rcout = 0.17 ft2-F-hr/BTU
               IF (NominalU(Surface(surf)%Construction) > 0.0) THEN
-                NominalUwithConvCoeffs = 1.0d0 / (0.1197548d0 + (1.0d0 / NominalU(Surface(surf)%Construction)) + 0.0299387d0)
+                NominalUwithConvCoeffs = 1.0 / (0.1197548 + (1.0 / NominalU(Surface(surf)%Construction)) + 0.0299387)
               ELSE
                 cNominalUwithConvCoeffs = '[invalid]'
               ENDIF
@@ -1783,7 +1783,7 @@ SUBROUTINE DetailsForSurfaces(RptType)
               ! Interior:  horizontal, still air, heat flow downward, Rcin = 0.92 ft2-F-hr/BTU
               ! Exterior:  horizontal, semi-exterior (crawlspace), Rcout = 0.46 ft2-F-hr/BTU
               IF (NominalU(Surface(surf)%Construction) > 0.0) THEN
-                NominalUwithConvCoeffs = 1.0d0 / (0.1620212 + (1.0d0 / NominalU(Surface(surf)%Construction)) + 0.0810106d0)
+                NominalUwithConvCoeffs = 1.0 / (0.1620212 + (1.0 / NominalU(Surface(surf)%Construction)) + 0.0810106)
               ELSE
                 cNominalUwithConvCoeffs = '[invalid]'
               ENDIF
@@ -1791,7 +1791,7 @@ SUBROUTINE DetailsForSurfaces(RptType)
               ! Interior:  horizontal, still air, heat flow upward, Rcin = 0.61 ft2-F-hr/BTU
               ! Exterior:  horizontal, semi-exterior (attic), Rcout = 0.46 ft2-F-hr/BTU
               IF (NominalU(Surface(surf)%Construction) > 0.0) THEN
-                NominalUwithConvCoeffs = 1.0d0 / (0.1074271d0 + (1.0d0 / NominalU(Surface(surf)%Construction)) + 0.0810106d0)
+                NominalUwithConvCoeffs = 1.0 / (0.1074271 + (1.0 / NominalU(Surface(surf)%Construction)) + 0.0810106)
               ELSE
                 cNominalUwithConvCoeffs = '[invalid]'
               ENDIF
@@ -2161,9 +2161,9 @@ SUBROUTINE VRMLOut(PolygonAction,ColorScheme)
   integer vert              ! Loop counter
   integer,external :: getnewunitnumber  ! External function for a new unit number
   integer colorindex        ! color index by surface type
-!  REAL(r64) minx                 ! minimum x in surface data
-!  REAL(r64) miny                 ! minimum y in surface data
-!  REAL(r64) minz                 ! minimum z in surface data (for polygon output)
+!  REAL minx                 ! minimum x in surface data
+!  REAL miny                 ! minimum y in surface data
+!  REAL minz                 ! minimum z in surface data (for polygon output)
   integer zones             ! loop counter for zone loop
   character(len=25) zonenum
   character(len=MaxNameLength) TempZoneName

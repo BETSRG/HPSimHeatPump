@@ -70,7 +70,7 @@ SUBROUTINE ReportSizingOutput(CompType,CompName,VarDesc,VarValue)
     CHARACTER(len=*), INTENT(IN) :: CompType  ! the type of the component
     CHARACTER(len=*), INTENT(IN) :: CompName  ! the name of the component
     CHARACTER(len=*), INTENT(IN) :: VarDesc   ! the description of the input variable
-    REAL(r64), INTENT(IN)        :: VarValue  ! the value from the sizing calculation
+    REAL, INTENT(IN)        :: VarValue  ! the value from the sizing calculation
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
     ! na

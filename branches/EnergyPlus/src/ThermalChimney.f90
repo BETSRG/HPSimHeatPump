@@ -43,29 +43,29 @@ TYPE ThermalChimneyData
     CHARACTER(len=MaxNameLength) :: RealZoneName   =' '
     INTEGER :: SchedPtr                            =0
     CHARACTER(len=MaxNameLength) :: SchedName      =' '
-    REAL(r64)                   :: AbsorberWallWidth    =0.0
-    REAL(r64)                   :: AirOutletCrossArea   =0.0
-    REAL(r64)                    :: DischargeCoeff       =0.0
+    REAL                   :: AbsorberWallWidth    =0.0
+    REAL                   :: AirOutletCrossArea   =0.0
+    REAL                    :: DischargeCoeff       =0.0
     INTEGER                :: TotZoneToDistrib     =0
     INTEGER, ALLOCATABLE, DIMENSION(:) :: ZonePtr        !
     CHARACTER(len=MaxNameLength), &
              ALLOCATABLE, DIMENSION(:) :: ZoneName       !
-    REAL(r64) ,    ALLOCATABLE, DIMENSION(:) :: DistanceThermChimInlet !
-    REAL(r64) ,    ALLOCATABLE, DIMENSION(:) :: RatioThermChimAirFlow
-    REAL(r64) ,    ALLOCATABLE, DIMENSION(:) :: EachAirInletCrossArea
+    REAL ,    ALLOCATABLE, DIMENSION(:) :: DistanceThermChimInlet !
+    REAL ,    ALLOCATABLE, DIMENSION(:) :: RatioThermChimAirFlow
+    REAL ,    ALLOCATABLE, DIMENSION(:) :: EachAirInletCrossArea
 END TYPE ThermalChimneyData
 
 Type ThermChimZnReportVars
-  REAL(r64)    :: ThermalChimneyHeatLoss      =0.0 ! Heat Gain {Joules} due to ThermalChimney
-  REAL(r64)    :: ThermalChimneyHeatGain      =0.0 ! Heat Loss {Joules} due to ThermalChimney
-  REAL(r64)    :: ThermalChimneyVolume        =0.0 ! Volume of Air {m3} due to ThermalChimney
-  REAL(r64)    :: ThermalChimneyMass          =0.0 ! Mass of Air {kg} due to ThermalChimney
+  REAL    :: ThermalChimneyHeatLoss      =0.0 ! Heat Gain {Joules} due to ThermalChimney
+  REAL    :: ThermalChimneyHeatGain      =0.0 ! Heat Loss {Joules} due to ThermalChimney
+  REAL    :: ThermalChimneyVolume        =0.0 ! Volume of Air {m3} due to ThermalChimney
+  REAL    :: ThermalChimneyMass          =0.0 ! Mass of Air {kg} due to ThermalChimney
 END TYPE ThermChimZnReportVars
 
 Type ThermChimReportVars
-  REAL(r64)    :: OverallTCVolumeFlow        =0.0 ! Volume of Air {m3/s} due to ThermalChimney
-  REAL(r64)    :: OverallTCMassFlow          =0.0 ! Mass of Air {kg/s} due to ThermalChimney
-  REAL(r64)    :: OutletAirTempThermalChim   =0.0 ! Air Temp {C} of ThermalChimney
+  REAL    :: OverallTCVolumeFlow        =0.0 ! Volume of Air {m3/s} due to ThermalChimney
+  REAL    :: OverallTCMassFlow          =0.0 ! Mass of Air {kg/s} due to ThermalChimney
+  REAL    :: OutletAirTempThermalChim   =0.0 ! Air Temp {C} of ThermalChimney
 END TYPE ThermChimReportVars
 
 TYPE (ThermalChimneyData), ALLOCATABLE, DIMENSION(:) :: ThermalChimneySys
@@ -179,7 +179,7 @@ SUBROUTINE GetThermalChimney(ErrorsFound)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank=' '
-  REAL(r64),        PARAMETER :: FlowFractionTolerance = 0.0001d0 ! Smallest deviation from unity for the sum of all fractions
+  REAL,        PARAMETER :: FlowFractionTolerance = 0.0001 ! Smallest deviation from unity for the sum of all fractions
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -189,10 +189,10 @@ SUBROUTINE GetThermalChimney(ErrorsFound)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !    CHARACTER(len=MaxNameLength), DIMENSION(23) :: AlphaName
-!    REAL(r64) , DIMENSION(63)              :: IHGNumbers
+!    REAL , DIMENSION(63)              :: IHGNumbers
     INTEGER :: NumAlpha
     INTEGER :: NumNumber
-    REAL(r64) :: AllRatiosSummed  !
+    REAL :: AllRatiosSummed  !
     INTEGER :: TCZoneNum    ! Thermal chimney zone counter
     INTEGER :: TCZoneNum1    ! Thermal chimney zone counter
     INTEGER :: IOStat
@@ -294,7 +294,7 @@ DO Loop=1, TotThermalChimney
       ThermalChimneySys(Loop)%ZonePtr(TCZoneNum)   = FindIteminList(cAlphaArgs(TCZoneNum+3),Zone%Name,NumOfZones)
       ThermalChimneySys(Loop)%DistanceThermChimInlet(TCZoneNum) = rNumericArgs(3*TCZoneNum+1)
       ThermalChimneySys(Loop)%RatioThermChimAirFlow(TCZoneNum) = rNumericArgs(3*TCZoneNum+2)
-      IF (lNumericFieldBlanks(3*TCZoneNum+2)) ThermalChimneySys(Loop)%RatioThermChimAirFlow(TCZoneNum) = 1.0d0
+      IF (lNumericFieldBlanks(3*TCZoneNum+2)) ThermalChimneySys(Loop)%RatioThermChimAirFlow(TCZoneNum) = 1.0
       ThermalChimneySys(Loop)%EachAirInletCrossArea(TCZoneNum) = rNumericArgs(3*TCZoneNum+3)
 
           !!! Error trap for zones that do not exist or zones not in the zone the thermal chimney is in
@@ -509,10 +509,10 @@ END SUBROUTINE GetThermalChimney
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         ! To be obtained from other modules and subroutines
-  REAL(r64)                    :: SurfTempAbsorberWall                ! Absorber wall surface temperature (K)
-  REAL(r64)                    :: SurfTempGlassCover                  ! Glass cover surface temperature (K)
-  REAL(r64)                    :: ConvTransCoeffWallFluid             ! Absorber wall convection trasnfer coefficient
-  REAL(r64)                    :: ConvTransCoeffGlassFluid            ! Glass cover convection trasnfer coefficient
+  REAL                    :: SurfTempAbsorberWall                ! Absorber wall surface temperature (K)
+  REAL                    :: SurfTempGlassCover                  ! Glass cover surface temperature (K)
+  REAL                    :: ConvTransCoeffWallFluid             ! Absorber wall convection trasnfer coefficient
+  REAL                    :: ConvTransCoeffGlassFluid            ! Glass cover convection trasnfer coefficient
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         ! Real local vaiables
@@ -521,40 +521,40 @@ END SUBROUTINE GetThermalChimney
   INTEGER   :: ZoneNum            ! DO loop counter for zones
   INTEGER   :: TCZoneNumCounter
   INTEGER   :: TCZoneNum
-  REAL(r64) :: minorW             ! width of enclosure (narrow dimension)
-  REAL(r64) :: majorW             ! width of major surface
-  REAL(r64) :: TempmajorW
+  REAL :: minorW             ! width of enclosure (narrow dimension)
+  REAL :: majorW             ! width of major surface
+  REAL :: TempmajorW
 
-  REAL(r64) :: RoomAirTemp
-  REAL(r64) :: AirSpecHeatThermalChim              ! (J/kg*C) or (J/kg*K)
-  REAL(r64) :: AbsorberWallWidthTC
-  REAL(r64) :: TCVolumeAirFlowRate                 ! (m^3/s)
-  REAL(r64) :: TCMassAirFlowRate                   ! (kg/s)
-  REAL(r64) :: DischargeCoeffTC
-  REAL(r64) :: AirOutletCrossAreaTC
-  REAL(r64) :: AirInletCrossArea
-  REAL(r64) :: AirRelativeCrossArea
-  ! REAL(r64)                    :: OutletAirTempThermalChim
-  REAL(r64) :: OverallThermalChimLength
-  REAL(r64) :: ThermChimTolerance
-  REAL(r64), DIMENSION(10) :: TempTCMassAirFlowRate                  ! Temporary Value of Thermal Chimney Mass Flow Rate ()
-  REAL(r64), DIMENSION(10) :: TempTCVolumeAirFlowRate                ! Temporary Value of Thermal Chimney Volume Flow Rate ()
+  REAL :: RoomAirTemp
+  REAL :: AirSpecHeatThermalChim              ! (J/kg*C) or (J/kg*K)
+  REAL :: AbsorberWallWidthTC
+  REAL :: TCVolumeAirFlowRate                 ! (m^3/s)
+  REAL :: TCMassAirFlowRate                   ! (kg/s)
+  REAL :: DischargeCoeffTC
+  REAL :: AirOutletCrossAreaTC
+  REAL :: AirInletCrossArea
+  REAL :: AirRelativeCrossArea
+  ! REAL                    :: OutletAirTempThermalChim
+  REAL :: OverallThermalChimLength
+  REAL :: ThermChimTolerance
+  REAL, DIMENSION(10) :: TempTCMassAirFlowRate                  ! Temporary Value of Thermal Chimney Mass Flow Rate ()
+  REAL, DIMENSION(10) :: TempTCVolumeAirFlowRate                ! Temporary Value of Thermal Chimney Volume Flow Rate ()
   INTEGER   :: IterationLoop
-  REAL(r64) :: Process1                            ! Temporary Variable Used in the Middle of the Calculation
-  REAL(r64) :: Process2                            ! Temporary Variable Used in the Middle of the Calculation
-  REAL(r64) :: Process3                            ! Temporary Variable Used in the Middle of the Calculation
-!unused1208  REAL(r64)   :: Process4                            ! Temporary Variable Used in the Middle of the Calculation
-  REAL(r64) :: AirDensityThermalChim               ! (kg/m^3)
-  REAL(r64) :: AirDensity                          ! (kg/m^3)
-  REAL(r64) :: CpAir
-  REAL(r64) :: TemporaryWallSurfTemp
+  REAL :: Process1                            ! Temporary Variable Used in the Middle of the Calculation
+  REAL :: Process2                            ! Temporary Variable Used in the Middle of the Calculation
+  REAL :: Process3                            ! Temporary Variable Used in the Middle of the Calculation
+!unused1208  REAL   :: Process4                            ! Temporary Variable Used in the Middle of the Calculation
+  REAL :: AirDensityThermalChim               ! (kg/m^3)
+  REAL :: AirDensity                          ! (kg/m^3)
+  REAL :: CpAir
+  REAL :: TemporaryWallSurfTemp
 
-  REAL(r64) :: DeltaL                              ! OverallThermalChimLength / NTC
+  REAL :: DeltaL                              ! OverallThermalChimLength / NTC
   INTEGER   :: ThermChimLoop1
   INTEGER   :: ThermChimLoop2
-  REAL(r64), DIMENSION(NTC, NTC) :: EquaCoef               ! Coefficients in Linear Algebraic Euqation for FINITE DIFFERENCE
-  REAL(r64), DIMENSION(NTC)     :: EquaConst               ! Constants in Linear Algebraic Equation for FINITE DIFFERENCE
-  REAL(r64), DIMENSION(NTC)     :: ThermChimSubTemp        ! Air temperature of each thermal chimney air channel subregion
+  REAL, DIMENSION(NTC, NTC) :: EquaCoef               ! Coefficients in Linear Algebraic Euqation for FINITE DIFFERENCE
+  REAL, DIMENSION(NTC)     :: EquaConst               ! Constants in Linear Algebraic Equation for FINITE DIFFERENCE
+  REAL, DIMENSION(NTC)     :: ThermChimSubTemp        ! Air temperature of each thermal chimney air channel subregion
 
 
 DO Loop=1, TotThermalChimney
@@ -644,11 +644,11 @@ DO Loop=1, TotThermalChimney
 
 
  ! Starting the iteration for mass and volumetric flow rate calculation
- ThermChimTolerance = 10000000.0d0      ! An impossibly big tolerance
+ ThermChimTolerance = 10000000.0      ! An impossibly big tolerance
  DO IterationLoop = 1,10
 
   IF (IterationLoop == 1) THEN
-    TempTCMassAirFlowRate(IterationLoop) = 0.05d0     ! Inital Guess
+    TempTCMassAirFlowRate(IterationLoop) = 0.05     ! Inital Guess
 
   ELSE
     TempTCMassAirFlowRate(IterationLoop) = TempTCVolumeAirFlowRate(IterationLoop-1) * AirDensityThermalChim
@@ -691,8 +691,8 @@ DO Loop=1, TotThermalChimney
        TempTCVolumeAirFlowRate(IterationLoop) = 0.
     ELSE
        TempTCVolumeAirFlowRate(IterationLoop) = DischargeCoeffTC * AirOutletCrossAreaTC *    &
-                            ((  2.d0*((ThermChimSubTemp(NTC)-RoomAirTemp)/RoomAirTemp)  &
-                            * 9.8d0 * OverallThermalChimLength / ((1.d0+AirRelativeCrossArea)**2)  )**0.5d0)
+                            ((  2.*((ThermChimSubTemp(NTC)-RoomAirTemp)/RoomAirTemp)  &
+                            * 9.8 * OverallThermalChimLength / ((1.+AirRelativeCrossArea)**2)  )**0.5)
     END IF
 
  END DO     ! DO IterationLoop = 1,10
@@ -700,11 +700,11 @@ DO Loop=1, TotThermalChimney
 
    ! Calculation of Thermal Chimney Discharge Temperature
    Process1= AbsorberWallWidthTC*DeltaL*ConvTransCoeffGlassFluid + AbsorberWallWidthTC*DeltaL*ConvTransCoeffWallFluid -   &
-             2.d0*TCMassAirFlowRate*AirSpecHeatThermalChim
+             2.*TCMassAirFlowRate*AirSpecHeatThermalChim
    Process2= AbsorberWallWidthTC*DeltaL*ConvTransCoeffGlassFluid + AbsorberWallWidthTC*DeltaL*ConvTransCoeffWallFluid +   &
-             2.d0*TCMassAirFlowRate*AirSpecHeatThermalChim
-   Process3= 2.d0*AbsorberWallWidthTC*DeltaL*ConvTransCoeffGlassFluid*SurfTempGlassCover  &
-             + 2.d0*AbsorberWallWidthTC*DeltaL*ConvTransCoeffWallFluid*SurfTempAbsorberWall
+             2.*TCMassAirFlowRate*AirSpecHeatThermalChim
+   Process3= 2.*AbsorberWallWidthTC*DeltaL*ConvTransCoeffGlassFluid*SurfTempGlassCover  &
+             + 2.*AbsorberWallWidthTC*DeltaL*ConvTransCoeffWallFluid*SurfTempAbsorberWall
 
    DO ThermChimLoop1=1, NTC
     DO ThermChimLoop2=1, NTC
@@ -727,8 +727,8 @@ DO Loop=1, TotThermalChimney
        TCVolumeAirFlowRate = 0.
     ELSE
        TCVolumeAirFlowRate = DischargeCoeffTC * AirOutletCrossAreaTC *    &
-                            ((  2.d0*((ThermChimSubTemp(NTC)-RoomAirTemp)/RoomAirTemp)  &
-                            * 9.8d0 * OverallThermalChimLength / ((1.d0+AirRelativeCrossArea)**2)  )**0.5d0)
+                            ((  2.*((ThermChimSubTemp(NTC)-RoomAirTemp)/RoomAirTemp)  &
+                            * 9.8 * OverallThermalChimLength / ((1.+AirRelativeCrossArea)**2)  )**0.5)
     END IF
 
    ! Now assignment of the overall mass flow rate into each zone
@@ -817,9 +817,9 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: ZoneLoop                ! Counter for the # of zones (nz)
-  REAL(r64)  ::  AirDensity
-  REAL(r64)  :: CpAir
-  REAL(r64)  :: TSMult
+  REAL  ::  AirDensity
+  REAL  :: CpAir
+  REAL  :: TSMult
 
   TSMult=TimeStepSys*SecInHour
 
@@ -887,16 +887,16 @@ END SUBROUTINE ReportThermalChimney
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER, INTENT(IN) :: NTC
-  REAL(r64) , DIMENSION(NTC, NTC), INTENT(INOUT) :: EquaCoef
-  REAL(r64) , DIMENSION(NTC), INTENT(INOUT) :: EquaConst
-  REAL(r64) , DIMENSION(NTC), INTENT(OUT) :: ThermChimSubTemp
+  REAL , DIMENSION(NTC, NTC), INTENT(INOUT) :: EquaCoef
+  REAL , DIMENSION(NTC), INTENT(INOUT) :: EquaConst
+  REAL , DIMENSION(NTC), INTENT(OUT) :: ThermChimSubTemp
 
-  REAL(r64) , DIMENSION(NTC) :: tempor
-  REAL(r64)  :: tempb
-  REAL(r64)  :: TCvalue
-  REAL(r64)  :: TCcoefficient
+  REAL , DIMENSION(NTC) :: tempor
+  REAL  :: tempb
+  REAL  :: TCvalue
+  REAL  :: TCcoefficient
   INTEGER :: PIVOT
-  REAL(r64)  :: ThermalChimSum
+  REAL  :: ThermalChimSum
   INTEGER                :: ThermChimLoop1
   INTEGER                :: ThermChimLoop2
   INTEGER                :: ThermChimLoop3

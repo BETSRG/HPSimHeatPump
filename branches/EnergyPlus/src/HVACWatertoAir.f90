@@ -55,64 +55,64 @@ TYPE WatertoAirHPEquipConditions
   INTEGER                      :: WAHPPlantTypeOfNum   = 0   ! type of component in plant
   CHARACTER(len=MaxNameLength) :: Refrigerant          =' '  ! Refrigerant name
   LOGICAL                      :: Simflag              = .false.
-  REAL(r64) :: InletAirMassFlowRate  =0.0 ! Inlet Air Mass Flow through the Water to Air Heat Pump being Simulated [kg/s]
-  REAL(r64) :: OutletAirMassFlowRate =0.0 ! Outlet Air Mass Flow through the Water to Air Heat Pump being Simulated [kg/s]
-  REAL(r64) :: InletAirDBTemp        =0.0 ! Inlet Air Dry Bulb Temperature [C]
-  REAL(r64) :: InletAirHumRat        =0.0 ! Inlet Air Humidity Ratio [kg/kg]
-  REAL(r64) :: OutletAirDBTemp       =0.0 ! Outlet Air Dry Bulb Temperature [C]
-  REAL(r64) :: OutletAirHumRat       =0.0 ! Outlet Air Humidity Ratio [kg/kg]
-  REAL(r64) :: InletAirEnthalpy      =0.0 ! Inlet Air Enthalpy [J/kg]
-  REAL(r64) :: OutletAirEnthalpy     =0.0 ! Outlet Air Enthalpy [J/kg]
+  REAL :: InletAirMassFlowRate  =0.0 ! Inlet Air Mass Flow through the Water to Air Heat Pump being Simulated [kg/s]
+  REAL :: OutletAirMassFlowRate =0.0 ! Outlet Air Mass Flow through the Water to Air Heat Pump being Simulated [kg/s]
+  REAL :: InletAirDBTemp        =0.0 ! Inlet Air Dry Bulb Temperature [C]
+  REAL :: InletAirHumRat        =0.0 ! Inlet Air Humidity Ratio [kg/kg]
+  REAL :: OutletAirDBTemp       =0.0 ! Outlet Air Dry Bulb Temperature [C]
+  REAL :: OutletAirHumRat       =0.0 ! Outlet Air Humidity Ratio [kg/kg]
+  REAL :: InletAirEnthalpy      =0.0 ! Inlet Air Enthalpy [J/kg]
+  REAL :: OutletAirEnthalpy     =0.0 ! Outlet Air Enthalpy [J/kg]
 
-  REAL(r64) :: InletWaterTemp        =0.0 ! Inlet Water Temperature [C]
-  REAL(r64) :: OutletWaterTemp       =0.0 ! Outlet Water Temperature [C]
+  REAL :: InletWaterTemp        =0.0 ! Inlet Water Temperature [C]
+  REAL :: OutletWaterTemp       =0.0 ! Outlet Water Temperature [C]
 
-  REAL(r64) :: InletWaterMassFlowRate=0.0 ! Inlet Water Mass Flow Rate [kg/s]
-  REAL(r64) :: OutletWaterMassFlowRate=0.0 ! Outlet Water Mass Flow Rate [kg/s]
-  REAL(r64) :: DesignWaterMassFlowRate=0.0  ! Design Water Mass Flow Rate [kg/s]
-  REAL(r64) :: DesignWaterVolFlowRate =0.0  ! Design Water Volumetric Flow Rate [m3/s]
-  REAL(r64) :: InletWaterEnthalpy     =0.0  ! Inlet Water Enthalpy [J/kg]
-  REAL(r64) :: OutletWaterEnthalpy    =0.0  ! Outlet Water Enthalpy [J/kg]
+  REAL :: InletWaterMassFlowRate=0.0 ! Inlet Water Mass Flow Rate [kg/s]
+  REAL :: OutletWaterMassFlowRate=0.0 ! Outlet Water Mass Flow Rate [kg/s]
+  REAL :: DesignWaterMassFlowRate=0.0  ! Design Water Mass Flow Rate [kg/s]
+  REAL :: DesignWaterVolFlowRate =0.0  ! Design Water Volumetric Flow Rate [m3/s]
+  REAL :: InletWaterEnthalpy     =0.0  ! Inlet Water Enthalpy [J/kg]
+  REAL :: OutletWaterEnthalpy    =0.0  ! Outlet Water Enthalpy [J/kg]
 
-  REAL(r64) :: Power                  =0.0  ! Power Consumption [W]
-  REAL(r64) :: Energy                 =0.0  ! Energy Consumption [J]
-  REAL(r64) :: QSensible              =0.0 ! Sensible Load Side Heat Transfer Rate [W]
-  REAL(r64) :: QLatent                =0.0 ! Latent Load Side Heat Transfer Rate [W]
-  REAL(r64) :: QSource                =0.0 ! Source Side Heat Transfer Rate [W]
-  REAL(r64) :: EnergySensible = 0.0        ! Sensible Load Side Heat Transferred [J]
-  REAL(r64) :: EnergyLatent =0.0          ! Latent Load Side Heat Transferred [J]
-  REAL(r64) :: EnergySource =0.0          ! Source Side Heat Transferred [J]
-  REAL(r64) :: RunFrac           =0.0 ! Duty Factor
-  REAL(r64) :: PartLoadRatio     =0.0 ! Part Load Ratio
-  REAL(r64) :: HeatingCapacity   =0.0 ! Nominal Heating Capacity
-  REAL(r64) :: CoolingCapacity   =0.0 ! Nominal Cooling Capacity
-  REAL(r64) :: QLoadTotal        =0.0 ! Load Side Total Heat Transfer Rate [W]
-  REAL(r64) :: EnergyLoadTotal =0.0       ! Load Side Total Heat Transferred [J]
-  REAL(r64) :: Twet_Rated        =0.0 ! Nominal Time for Condensate Removal to Begin [s]
-  REAL(r64) :: Gamma_Rated       =0.0 ! Ratio of Initial Moisture Evaporation Rate and Steady-state Latent Capacity
-  REAL(r64) :: MaxONOFFCyclesperHour =0.0 ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64) :: HPTimeConstant        =0.0 ! Heat pump time constant [s]
-  REAL(r64) :: FanDelayTime          =0.0 ! Fan delay time, time delay for the HP's fan to
+  REAL :: Power                  =0.0  ! Power Consumption [W]
+  REAL :: Energy                 =0.0  ! Energy Consumption [J]
+  REAL :: QSensible              =0.0 ! Sensible Load Side Heat Transfer Rate [W]
+  REAL :: QLatent                =0.0 ! Latent Load Side Heat Transfer Rate [W]
+  REAL :: QSource                =0.0 ! Source Side Heat Transfer Rate [W]
+  REAL :: EnergySensible = 0.0        ! Sensible Load Side Heat Transferred [J]
+  REAL :: EnergyLatent =0.0          ! Latent Load Side Heat Transferred [J]
+  REAL :: EnergySource =0.0          ! Source Side Heat Transferred [J]
+  REAL :: RunFrac           =0.0 ! Duty Factor
+  REAL :: PartLoadRatio     =0.0 ! Part Load Ratio
+  REAL :: HeatingCapacity   =0.0 ! Nominal Heating Capacity
+  REAL :: CoolingCapacity   =0.0 ! Nominal Cooling Capacity
+  REAL :: QLoadTotal        =0.0 ! Load Side Total Heat Transfer Rate [W]
+  REAL :: EnergyLoadTotal =0.0       ! Load Side Total Heat Transferred [J]
+  REAL :: Twet_Rated        =0.0 ! Nominal Time for Condensate Removal to Begin [s]
+  REAL :: Gamma_Rated       =0.0 ! Ratio of Initial Moisture Evaporation Rate and Steady-state Latent Capacity
+  REAL :: MaxONOFFCyclesperHour =0.0 ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL :: HPTimeConstant        =0.0 ! Heat pump time constant [s]
+  REAL :: FanDelayTime          =0.0 ! Fan delay time, time delay for the HP's fan to
                                              ! shut off after compressor cycle off [s]
 
-  REAL(r64) :: SourceSideUACoeff     =0.0 ! Source Side Heat Transfer coefficient [W/C]
-  REAL(r64) :: LoadSideTotalUACoeff  =0.0 ! Load Side Total Heat Transfer coefficient [W/C]
-  REAL(r64) :: LoadSideOutsideUACoeff=0.0     ! Load Side Outside Heat Transfer coefficient [W/C]
-  REAL(r64) :: CompPistonDisp        =0.0     ! Compressor Piston Displacement [m3/s]
-  REAL(r64) :: CompClearanceFactor   =0.0     ! Compressor Clearance Factor
-  REAL(r64) :: CompSucPressDrop      =0.0 ! Suction Pressure Drop [Pa]
-  REAL(r64) :: SuperheatTemp         =0.0 ! Superheat Temperature [C]
-  REAL(r64) :: PowerLosses           =0.0 ! Constant Part of the Compressor Power Losses [W]
-  REAL(r64) :: LossFactor        =0.0 ! Compressor Power Loss Factor
-  REAL(r64) :: RefVolFlowRate    =0.0 ! Refrigerant Volume Flow rate at the beginning
+  REAL :: SourceSideUACoeff     =0.0 ! Source Side Heat Transfer coefficient [W/C]
+  REAL :: LoadSideTotalUACoeff  =0.0 ! Load Side Total Heat Transfer coefficient [W/C]
+  REAL :: LoadSideOutsideUACoeff=0.0     ! Load Side Outside Heat Transfer coefficient [W/C]
+  REAL :: CompPistonDisp        =0.0     ! Compressor Piston Displacement [m3/s]
+  REAL :: CompClearanceFactor   =0.0     ! Compressor Clearance Factor
+  REAL :: CompSucPressDrop      =0.0 ! Suction Pressure Drop [Pa]
+  REAL :: SuperheatTemp         =0.0 ! Superheat Temperature [C]
+  REAL :: PowerLosses           =0.0 ! Constant Part of the Compressor Power Losses [W]
+  REAL :: LossFactor        =0.0 ! Compressor Power Loss Factor
+  REAL :: RefVolFlowRate    =0.0 ! Refrigerant Volume Flow rate at the beginning
                                     ! of the Compression [m3/s]
-  REAL(r64) :: VolumeRatio       =0.0 ! Built-in-volume ratio [~]
-  REAL(r64) :: LeakRateCoeff     =0.0 ! Coefficient for the relationship between
+  REAL :: VolumeRatio       =0.0 ! Built-in-volume ratio [~]
+  REAL :: LeakRateCoeff     =0.0 ! Coefficient for the relationship between
                                     ! Pressure Ratio and Leakage Rate [~]
-  REAL(r64) :: SourceSideHTR1    =0.0 ! Source Side Heat Transfer Resistance coefficient 1 [~]
-  REAL(r64) :: SourceSideHTR2    =0.0 ! Source Side Heat Transfer Resistance coefficient 2 [k/kW]
-  REAL(r64) :: HighPressCutOff   =0.0 ! High Pressure Cut-off [Pa]
-  REAL(r64) :: LowPressCutOff    =0.0 ! Low Pressure Cut-off [Pa]
+  REAL :: SourceSideHTR1    =0.0 ! Source Side Heat Transfer Resistance coefficient 1 [~]
+  REAL :: SourceSideHTR2    =0.0 ! Source Side Heat Transfer Resistance coefficient 2 [k/kW]
+  REAL :: HighPressCutOff   =0.0 ! High Pressure Cut-off [Pa]
+  REAL :: LowPressCutOff    =0.0 ! Low Pressure Cut-off [Pa]
   INTEGER   :: CompressorType    =0   ! Type of Compressor ie. Reciprocating,Rotary or Scroll
   INTEGER   :: AirInletNodeNum   =0   ! air side coil inlet node number
   INTEGER   :: AirOutletNodeNum  =0   ! air side coil outlet node number
@@ -199,15 +199,15 @@ SUBROUTINE SimWatertoAirHP(CompName,CompIndex,DesignAirflow,CyclingScheme, &
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
-  REAL(r64), INTENT (IN):: DesignAirflow         !design air flow rate
-  REAL(r64), INTENT (IN):: RuntimeFrac           !compressor run time fraction
+  REAL, INTENT (IN):: DesignAirflow         !design air flow rate
+  REAL, INTENT (IN):: RuntimeFrac           !compressor run time fraction
 
-  REAL(r64), INTENT (INOUT) :: MaxONOFFCyclesperHour !Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64), INTENT (INOUT) :: HPTimeConstant        !Heat pump time constant [s]
-  REAL(r64), INTENT (INOUT) :: FanDelayTime          !Fan delay time, time delay for the HP's fan to
+  REAL, INTENT (INOUT) :: MaxONOFFCyclesperHour !Maximum cycling rate of heat pump [cycles/hr]
+  REAL, INTENT (INOUT) :: HPTimeConstant        !Heat pump time constant [s]
+  REAL, INTENT (INOUT) :: FanDelayTime          !Fan delay time, time delay for the HP's fan to
                                                 !shut off after compressor cycle off  [s]
-  REAL(r64), INTENT (IN):: SensLoad              !sensible load
-  REAL(r64), INTENT (IN):: LatentLoad            !latent load
+  REAL, INTENT (IN):: SensLoad              !sensible load
+  REAL, INTENT (IN):: LatentLoad            !latent load
   LOGICAL, INTENT (IN):: FirstHVACIteration !first iteration flag
   LOGICAL, INTENT (IN):: Initflag      !initialization flag used to suppress property routine errors
   CHARACTER(len=*), INTENT(IN) :: CompName  !component name
@@ -215,7 +215,7 @@ SUBROUTINE SimWatertoAirHP(CompName,CompIndex,DesignAirflow,CyclingScheme, &
   INTEGER, INTENT(IN) :: CyclingScheme      !cycling scheme--either continuous fan/cycling compressor or
                                             !cycling fan/cycling compressor
   INTEGER, INTENT(IN) :: CompOp
-  REAL(r64), INTENT(IN) :: PartLoadRatio
+  REAL, INTENT(IN) :: PartLoadRatio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
@@ -351,7 +351,7 @@ SUBROUTINE GetWatertoAirHPInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
@@ -743,21 +743,21 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)      :: HPNum  ! index to main heat pump data structure
-  REAL(r64),    INTENT(IN) :: MaxONOFFCyclesperHour !Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64),    INTENT(IN) :: HPTimeConstant        !Heat pump time constant [s]
-  REAL(r64),    INTENT(IN) :: FanDelayTime          !Fan delay time, time delay for the HP's fan to
+  REAL,    INTENT(IN) :: MaxONOFFCyclesperHour !Maximum cycling rate of heat pump [cycles/hr]
+  REAL,    INTENT(IN) :: HPTimeConstant        !Heat pump time constant [s]
+  REAL,    INTENT(IN) :: FanDelayTime          !Fan delay time, time delay for the HP's fan to
                                                !shut off after compressor cycle off  [s]
-  REAL(r64),    INTENT(IN) :: SensLoad
-  REAL(r64),    INTENT(IN) :: LatentLoad
-  REAL(r64),    INTENT(IN) :: DesignAirFlow
+  REAL,    INTENT(IN) :: SensLoad
+  REAL,    INTENT(IN) :: LatentLoad
+  REAL,    INTENT(IN) :: DesignAirFlow
   LOGICAL,      INTENT(IN) :: InitFlag
-  REAL(r64),    INTENT(IN) :: PartLoadRatio
+  REAL,    INTENT(IN) :: PartLoadRatio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-! REAL(r64), PARAMETER        :: CpWater=4210.d0          ! Specific heat of water J/kg_C
-  REAL(r64), PARAMETER        :: TempTOL=0.2d0            ! air temperature tolerance to trigger resimulation
-  REAL(r64), PARAMETER        :: EnthTOL=0.2d0            ! air enthalpy tolerance to trigger resimulation
-  REAL(r64), PARAMETER        :: HumRatTOL=0.2d0          ! air humidity ratio tolerance
+! REAL, PARAMETER        :: CpWater=4210.          ! Specific heat of water J/kg_C
+  REAL, PARAMETER        :: TempTOL=0.2            ! air temperature tolerance to trigger resimulation
+  REAL, PARAMETER        :: EnthTOL=0.2            ! air enthalpy tolerance to trigger resimulation
+  REAL, PARAMETER        :: HumRatTOL=0.2          ! air humidity ratio tolerance
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -773,9 +773,9 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:)  :: MyEnvrnFlag
-  REAL(r64) :: rho ! local fluid density
-  REAL(r64) :: Cp  ! local fluid specific heat
-  REAL(r64) :: Temptemp
+  REAL :: rho ! local fluid density
+  REAL :: Cp  ! local fluid specific heat
+  REAL :: Temptemp
   LOGICAL   :: errFlag
 
   IF (MyOneTimeFlag) THEN
@@ -829,28 +829,28 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
     WaterInletNode = WatertoAirHP(HPNum)%WaterInletNodeNum
 
       !Initialize all report variables to a known state at beginning of simulation
-    WatertoAirHP(HPNum)%Power=0.d0
-    WatertoAirHP(HPNum)%Energy=0.d0
-    WatertoAirHP(HPNum)%QLoadTotal=0.d0
-    WatertoAirHP(HPNum)%QSensible=0.d0
-    WatertoAirHP(HPNum)%QLatent=0.d0
-    WatertoAirHP(HPNum)%QSource=0.d0
-    WatertoAirHP(HPNum)%EnergyLoadTotal=0.d0
-    WatertoAirHP(HPNum)%EnergySensible=0.d0
-    WatertoAirHP(HPNum)%EnergyLatent=0.d0
-    WatertoAirHP(HPNum)%EnergySource=0.d0
-    WatertoAirHP(HPNum)%RunFrac=0.d0
-    WatertoAirHP(HPNum)%PartLoadRatio=0.d0
-    WatertoAirHP(HPNum)%OutletAirDBTemp=0.d0
-    WatertoAirHP(HPNum)%OutletAirHumRat=0.d0
-    WatertoAirHP(HPNum)%InletAirDBTemp=0.d0
-    WatertoAirHP(HPNum)%InletAirHumRat=0.d0
-    WatertoAirHP(HPNum)%OutletWaterTemp=0.d0
-    WatertoAirHP(HPNum)%InletWaterTemp=0.d0
-    WatertoAirHP(HPNum)%InletAirMassFlowRate=0.d0
-    WatertoAirHP(HPNum)%InletWaterMassFlowRate=0.d0
-    WatertoAirHP(HPNum)%OutletAirEnthalpy = 0.d0
-    WatertoAirHP(HPNum)%OutletWaterEnthalpy = 0.d0
+    WatertoAirHP(HPNum)%Power=0.
+    WatertoAirHP(HPNum)%Energy=0.
+    WatertoAirHP(HPNum)%QLoadTotal=0.
+    WatertoAirHP(HPNum)%QSensible=0.
+    WatertoAirHP(HPNum)%QLatent=0.
+    WatertoAirHP(HPNum)%QSource=0.
+    WatertoAirHP(HPNum)%EnergyLoadTotal=0.
+    WatertoAirHP(HPNum)%EnergySensible=0.
+    WatertoAirHP(HPNum)%EnergyLatent=0.
+    WatertoAirHP(HPNum)%EnergySource=0.
+    WatertoAirHP(HPNum)%RunFrac=0.
+    WatertoAirHP(HPNum)%PartLoadRatio=0.
+    WatertoAirHP(HPNum)%OutletAirDBTemp=0.
+    WatertoAirHP(HPNum)%OutletAirHumRat=0.
+    WatertoAirHP(HPNum)%InletAirDBTemp=0.
+    WatertoAirHP(HPNum)%InletAirHumRat=0.
+    WatertoAirHP(HPNum)%OutletWaterTemp=0.
+    WatertoAirHP(HPNum)%InletWaterTemp=0.
+    WatertoAirHP(HPNum)%InletAirMassFlowRate=0.
+    WatertoAirHP(HPNum)%InletWaterMassFlowRate=0.
+    WatertoAirHP(HPNum)%OutletAirEnthalpy = 0.
+    WatertoAirHP(HPNum)%OutletWaterEnthalpy = 0.
 
       ! The rest of the one time initializations
     rho = GetDensityGlycol(PlantLoop(WatertoAirHP(HPNum)%LoopNum)%FluidName, &
@@ -869,7 +869,7 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
 
     PlantOutletNode = PlantLoop(WatertoAirHP(HPNum)%LoopNum)%LoopSide(WatertoAirHP(HPNum)%LoopSide) &
                          %Branch(WatertoAirHP(HPNum)%BranchNum)%Comp(WatertoAirHP(HPNum)%CompNum)%NodeNumOut
-    Call InitComponentNodes(0.d0, WatertoAirHP(HPNum)%DesignWaterMassFlowRate, &
+    Call InitComponentNodes(0., WatertoAirHP(HPNum)%DesignWaterMassFlowRate, &
                                  WaterInletNode, PlantOutletNode , &
                                  WatertoAirHP(HPNum)%LoopNum, &
                                  WatertoAirHP(HPNum)%LoopSide, &
@@ -937,7 +937,7 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
                                                              !the heat pump model requires an accurate (i.e. full load
                                                              !flow rate for accurate simulation.
   ELSE !heat pump is off
-    WatertoAirHP(HPNum)%InletWaterMassFlowRate = 0.d0
+    WatertoAirHP(HPNum)%InletWaterMassFlowRate = 0.
 
     WatertoAirHP(HPNum)%InletAirMassFlowRate = 0.0
   ENDIF
@@ -1015,22 +1015,22 @@ SUBROUTINE CalcWatertoAirHPCooling(HPNum,CyclingScheme,FirstHVACIteration,Runtim
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
    INTEGER, INTENT(IN) ::   HPNum               !heat pump number
-   REAL(r64)   , INTENT(IN) ::   RuntimeFrac
-   REAL(r64)   , INTENT(IN) ::   SensDemand
+   REAL   , INTENT(IN) ::   RuntimeFrac
+   REAL   , INTENT(IN) ::   SensDemand
    INTEGER, INTENT(IN) ::   CyclingScheme       !fan/compressor cycling scheme indicator
    LOGICAL, INTENT (IN)::   FirstHVACIteration  !first iteration flag
    LOGICAL, INTENT (IN)::   initflag            !suppress property errors if true
    INTEGER, INTENT(IN) ::   CompOp
-   REAL(r64), INTENT(IN) :: PartLoadRatio
+   REAL, INTENT(IN) :: PartLoadRatio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-      REAL(r64), PARAMETER        :: CpWater=4210.d0             ! Specific heat of water J/kg_C
-      REAL(r64), PARAMETER        :: DegreeofSuperheat=80.d0    ! Initial guess of degree of superheat
-      REAL(r64), PARAMETER        :: gamma= 1.114d0             ! Expansion Coefficient
-      REAL(r64), PARAMETER        :: RelaxParam = .5d0          ! Relaxation Parameter
-      REAL(r64), PARAMETER        :: ERR=0.01d0                 ! Error Value
-      REAL(r64), PARAMETER        :: ERR1=0.001d0               ! Error Value
-      REAL(r64), PARAMETER        :: PB=1.013d5               ! Barometric Pressure (Pa)
+      REAL, PARAMETER        :: CpWater=4210.             ! Specific heat of water J/kg_C
+      REAL, PARAMETER        :: DegreeofSuperheat=80.    ! Initial guess of degree of superheat
+      REAL, PARAMETER        :: gamma= 1.114             ! Expansion Coefficient
+      REAL, PARAMETER        :: RelaxParam = .5          ! Relaxation Parameter
+      REAL, PARAMETER        :: ERR=0.01                 ! Error Value
+      REAL, PARAMETER        :: ERR1=0.001               ! Error Value
+      REAL, PARAMETER        :: PB=1.013d5               ! Barometric Pressure (Pa)
 
 
       INTEGER, PARAMETER     :: STOP1=100000             ! Iteration stopper1
@@ -1055,110 +1055,110 @@ SUBROUTINE CalcWatertoAirHPCooling(HPNum,CyclingScheme,FirstHVACIteration,Runtim
       CHARACTER(len=MaxNameLength) :: SourceSideFluidName   ! Name of source side fluid
       CHARACTER(len=MaxNameLength) :: Refrigerant           ! Name of refrigerant
 !      CHARACTER(len=25) :: CErrCount
-      REAL(r64)        :: NominalCoolingCapacity   ! Nominal Cooling Capacity (W)
-      REAL(r64)        :: LoadSideTotalUA          ! Load Side Total Heat Transfer coefficient [W/C]
-      REAL(r64)        :: LoadSideoutsideUA        ! Load Side Outside Heat Transfer coefficient [W/C]
-      REAL(r64)        :: SourceSideUA             ! Source Side Heat Transfer coefficient [W/C]
-      REAL(r64)        :: PressureDrop             ! Suction or Discharge Pressure Drop [Pa]
-      REAL(r64)        :: ClearanceFactor          ! Compressor Clearance Factor
-      REAL(r64)        :: PistonDisp               ! Compressor Piston Displacement [m3/s]
-      REAL(r64)        :: ShTemp                   ! Superheat Temperature [C]
-      REAL(r64)        :: LosFac                   ! Compressor Power Loss Factor
-      REAL(r64)        :: PowerLos                 ! Constant Part of Power Losses [kW]
-      REAL(r64)        :: RefVolFlowRate           ! Refrigerant Volume Flow rate at the beginning
-      REAL(r64)        :: VolumeRatio              ! Built-in-volume ratio [~]
-      REAL(r64)        :: LeakRateCoeff            ! Coefficient for the relationship between
+      REAL        :: NominalCoolingCapacity   ! Nominal Cooling Capacity (W)
+      REAL        :: LoadSideTotalUA          ! Load Side Total Heat Transfer coefficient [W/C]
+      REAL        :: LoadSideoutsideUA        ! Load Side Outside Heat Transfer coefficient [W/C]
+      REAL        :: SourceSideUA             ! Source Side Heat Transfer coefficient [W/C]
+      REAL        :: PressureDrop             ! Suction or Discharge Pressure Drop [Pa]
+      REAL        :: ClearanceFactor          ! Compressor Clearance Factor
+      REAL        :: PistonDisp               ! Compressor Piston Displacement [m3/s]
+      REAL        :: ShTemp                   ! Superheat Temperature [C]
+      REAL        :: LosFac                   ! Compressor Power Loss Factor
+      REAL        :: PowerLos                 ! Constant Part of Power Losses [kW]
+      REAL        :: RefVolFlowRate           ! Refrigerant Volume Flow rate at the beginning
+      REAL        :: VolumeRatio              ! Built-in-volume ratio [~]
+      REAL        :: LeakRateCoeff            ! Coefficient for the relationship between
                                                    ! Pressure Ratio and Leakage Rate [~]
-      REAL(r64)        :: SourceSideHTRes1         ! Source Side Heat Transfer Resistance coefficient 1 [~]
-      REAL(r64)        :: SourceSideHTRes2         ! Source Side Heat Transfer Resistance coefficient 2 [K/kW]
-      REAL(r64)        :: HighPressCutOff          ! High Pressure Cut-off [Pa]
-      REAL(r64)        :: LowPressCutOff           ! Low Pressure Cut-off [Pa]
+      REAL        :: SourceSideHTRes1         ! Source Side Heat Transfer Resistance coefficient 1 [~]
+      REAL        :: SourceSideHTRes2         ! Source Side Heat Transfer Resistance coefficient 2 [K/kW]
+      REAL        :: HighPressCutOff          ! High Pressure Cut-off [Pa]
+      REAL        :: LowPressCutOff           ! Low Pressure Cut-off [Pa]
 
-      REAL(r64)        :: Quality                  ! Quality of Refrigerant
-      REAL(r64)        :: SourceSideMassFlowRate   ! Source Side Mass Flow Rate [kg/s]
-      REAL(r64)        :: SourceSideInletTemp      ! Source Side Inlet Temperature [C]
-      REAL(r64)        :: SourceSideWaterInletEnth ! Source Side Outlet Enthalpy [J/kg]
-      REAL(r64)        :: SourceSideoutletTemp     ! Source Side Outlet Temperature [C]
-      REAL(r64)        :: SourceSideVolFlowRate    ! Source Side Volumetric Flow Rate [m3/s]
-      REAL(r64)        :: DegradFactor             ! Degradation Factor [~]
-      REAL(r64)        :: CpFluid                  ! Specific heat of source side fluid(J/kg)
-      REAL(r64)        :: LoadSideMassFlowRate     ! Load Side Mass Flow Rate [kg/s]
-      REAL(r64)        :: LoadSideInletWBTemp      ! Wet-bulb temperature of indoor inlet air [C]
-      REAL(r64)        :: LoadSideInletDBTemp      ! Load Side Inlet Dry Bulb Temp [C]
-      REAL(r64)        :: LoadSideInletHumRat      ! Load Side Inlet Humidity Ratio [kg/kg]
-      REAL(r64)        :: LoadSideoutletDBTemp     ! Load Side Outlet Dry Bulb Temperature [C]
-      REAL(r64)        :: LoadsideOutletHumRat     ! Load Side Outlet Humidity Ratio [kg/kg]
-      REAL(r64)        :: LoadSideAirInletEnth     ! Load Side Inlet Enthalpy [J/kg]
-      REAL(r64)        :: LoadSideAirOutletEnth    ! Load Side Outlet Enthalpy [J/kg]
-!      REAL(r64)        :: EffectiveSurfaceTemp1    ! Effective Surface Temperature Guess #1 [C]
-!      REAL(r64)        :: EffectiveSurfaceTemp2    ! Effective Surface Temperature Guess #2 [C]
-      REAL(r64), SAVE  :: EffectiveSurfaceTemp     ! Effective Surface Temperature [C]
-      REAL(r64)        :: EffectiveSatEnth         ! Saturated Enthalpy of Air Corresponding to the Effective Surface
+      REAL        :: Quality                  ! Quality of Refrigerant
+      REAL        :: SourceSideMassFlowRate   ! Source Side Mass Flow Rate [kg/s]
+      REAL        :: SourceSideInletTemp      ! Source Side Inlet Temperature [C]
+      REAL        :: SourceSideWaterInletEnth ! Source Side Outlet Enthalpy [J/kg]
+      REAL        :: SourceSideoutletTemp     ! Source Side Outlet Temperature [C]
+      REAL        :: SourceSideVolFlowRate    ! Source Side Volumetric Flow Rate [m3/s]
+      REAL        :: DegradFactor             ! Degradation Factor [~]
+      REAL        :: CpFluid                  ! Specific heat of source side fluid(J/kg)
+      REAL        :: LoadSideMassFlowRate     ! Load Side Mass Flow Rate [kg/s]
+      REAL        :: LoadSideInletWBTemp      ! Wet-bulb temperature of indoor inlet air [C]
+      REAL        :: LoadSideInletDBTemp      ! Load Side Inlet Dry Bulb Temp [C]
+      REAL        :: LoadSideInletHumRat      ! Load Side Inlet Humidity Ratio [kg/kg]
+      REAL        :: LoadSideoutletDBTemp     ! Load Side Outlet Dry Bulb Temperature [C]
+      REAL        :: LoadsideOutletHumRat     ! Load Side Outlet Humidity Ratio [kg/kg]
+      REAL        :: LoadSideAirInletEnth     ! Load Side Inlet Enthalpy [J/kg]
+      REAL        :: LoadSideAirOutletEnth    ! Load Side Outlet Enthalpy [J/kg]
+!      REAL        :: EffectiveSurfaceTemp1    ! Effective Surface Temperature Guess #1 [C]
+!      REAL        :: EffectiveSurfaceTemp2    ! Effective Surface Temperature Guess #2 [C]
+      REAL, SAVE  :: EffectiveSurfaceTemp     ! Effective Surface Temperature [C]
+      REAL        :: EffectiveSatEnth         ! Saturated Enthalpy of Air Corresponding to the Effective Surface
                                                    ! Temperature [J/kg]
-!      REAL(r64)        :: EffectiveSatEnth1        ! Guess of the Saturated Enthalpy of Air Corresponding to the
+!      REAL        :: EffectiveSatEnth1        ! Guess of the Saturated Enthalpy of Air Corresponding to the
 !                                                   ! Effective Surface Temperature [J/kg]
-      REAL(r64)        :: QSource                  ! Source Side Heat Transfer Rate [W]
-      REAL(r64)        :: QLoadTotal               ! Load Side Total Heat Transfer Rate [W]
-      REAL(r64)        :: QSensible                ! Load Side Sensible Heat Transfer Rate [W]
-      REAL(r64)        :: Power                    ! Power Consumption [W]
-!      REAL(r64)        :: EvapTemp1                ! Evaporating Temperature Guess #1 [C]
-!      REAL(r64)        :: EvapTemp2                ! Evaporating Temperature Guess #2 [C]
-      REAL(r64) ,SAVE  :: EvapTemp                 ! Evaporating Temperature [C]
-      REAL(r64)        :: ANTUWET                  ! Number of Transfer Unit for Wet Condition
-      REAL(r64)        :: EffectWET                ! Load Side Heat Exchanger Effectiveness
-      REAL(r64)        :: EvapSatEnth              ! Saturated Enthalpy of Air Corresponding to the Evaporating
+      REAL        :: QSource                  ! Source Side Heat Transfer Rate [W]
+      REAL        :: QLoadTotal               ! Load Side Total Heat Transfer Rate [W]
+      REAL        :: QSensible                ! Load Side Sensible Heat Transfer Rate [W]
+      REAL        :: Power                    ! Power Consumption [W]
+!      REAL        :: EvapTemp1                ! Evaporating Temperature Guess #1 [C]
+!      REAL        :: EvapTemp2                ! Evaporating Temperature Guess #2 [C]
+      REAL ,SAVE  :: EvapTemp                 ! Evaporating Temperature [C]
+      REAL        :: ANTUWET                  ! Number of Transfer Unit for Wet Condition
+      REAL        :: EffectWET                ! Load Side Heat Exchanger Effectiveness
+      REAL        :: EvapSatEnth              ! Saturated Enthalpy of Air Corresponding to the Evaporating
                                                    ! Temperature [J/kg]
-!      REAL(r64)        :: EvapSatEnth1             ! Guess of the Saturated Enthalpy of Air Corresponding to the
+!      REAL        :: EvapSatEnth1             ! Guess of the Saturated Enthalpy of Air Corresponding to the
 !                                                   ! Evaporating Temperature [J/kg]
-      REAL(r64)        :: SourceSideEffect         ! Source Side Heat Exchanger Effectiveness
-      REAL(r64)        :: LoadSideEffec            ! Load Side Effectiveness based on Outside Heat Transfer Coefficient
-      REAL(r64)        :: SourceSideTemp           ! Source Side Saturated Refrigerant Temperature [C]
-      REAL(r64)        :: LoadSideTemp             ! Load Side Saturated Refrigerant Temperature [C]
-      REAL(r64)        :: SourceSidePressure       ! Source Side Saturated Refrigerant Pressure [Pa]
-      REAL(r64)        :: LoadSidePressure         ! Load Side Saturated Refrigerant Pressure [Pa]
-      REAL(r64)        :: SuctionPr                ! Compressor Suction Pressure [Pa]
-      REAL(r64)        :: DischargePr              ! Compressor Discharge Pressure [Pa]
-      REAL(r64)        :: CompressInletTemp        ! Temperature of the Refrigerant Entering the Compressor [C]
-      REAL(r64)        :: MassRef                  ! Mass Flow Rate of Refrigerant [kg/s]
-      REAL(r64)        :: SourceSideOutletEnth     ! Enthalpy of Refrigerant leaving the Source Side Heat Exchanger [J/kg]
-      REAL(r64)        :: LoadSideOutletEnth       ! Enthalpy of Refrigerant leaving the Load Side Heat Exchanger [J/kg]
-      REAL(r64)        :: CpAir                    ! Specific Heat of Air [J/kg_C]
-      REAL(r64), SAVE       :: initialQSource           ! Guess Source Side Heat Transfer Rate [W]
-      REAL(r64), SAVE       :: initialQLoadTotal        ! Guess Load Side Heat Transfer rate [W]
-      REAL(r64)        :: SuperHeatEnth            ! Enthalpy of the Superheated Refrigerant [J/kg]
-      REAL(r64)        :: CompSuctionTemp1         ! Guess of the Temperature of the Refrigerant Entering the
+      REAL        :: SourceSideEffect         ! Source Side Heat Exchanger Effectiveness
+      REAL        :: LoadSideEffec            ! Load Side Effectiveness based on Outside Heat Transfer Coefficient
+      REAL        :: SourceSideTemp           ! Source Side Saturated Refrigerant Temperature [C]
+      REAL        :: LoadSideTemp             ! Load Side Saturated Refrigerant Temperature [C]
+      REAL        :: SourceSidePressure       ! Source Side Saturated Refrigerant Pressure [Pa]
+      REAL        :: LoadSidePressure         ! Load Side Saturated Refrigerant Pressure [Pa]
+      REAL        :: SuctionPr                ! Compressor Suction Pressure [Pa]
+      REAL        :: DischargePr              ! Compressor Discharge Pressure [Pa]
+      REAL        :: CompressInletTemp        ! Temperature of the Refrigerant Entering the Compressor [C]
+      REAL        :: MassRef                  ! Mass Flow Rate of Refrigerant [kg/s]
+      REAL        :: SourceSideOutletEnth     ! Enthalpy of Refrigerant leaving the Source Side Heat Exchanger [J/kg]
+      REAL        :: LoadSideOutletEnth       ! Enthalpy of Refrigerant leaving the Load Side Heat Exchanger [J/kg]
+      REAL        :: CpAir                    ! Specific Heat of Air [J/kg_C]
+      REAL, SAVE       :: initialQSource           ! Guess Source Side Heat Transfer Rate [W]
+      REAL, SAVE       :: initialQLoadTotal        ! Guess Load Side Heat Transfer rate [W]
+      REAL        :: SuperHeatEnth            ! Enthalpy of the Superheated Refrigerant [J/kg]
+      REAL        :: CompSuctionTemp1         ! Guess of the Temperature of the Refrigerant Entering the
                                                    ! Compressor #1 [C]
-      REAL(r64)        :: CompSuctionTemp2         ! Guess of the Temperature of the Refrigerant Entering the
+      REAL        :: CompSuctionTemp2         ! Guess of the Temperature of the Refrigerant Entering the
                                                    ! Compressor #2 [C]
-      REAL(r64), SAVE       :: CompSuctionTemp          ! Temperature of the Refrigerant Entering the Compressor [C]
-      REAL(r64)        :: CompSuctionEnth          ! Enthalpy of the Refrigerant Entering the Compressor [J/kg]
-      REAL(r64)        :: CompSuctionDensity       ! Density of the Refrigerant Entering the Compressorkg/m3
-      REAL(r64)        :: CompSuctionSatTemp       ! Temperature of Saturated Refrigerant at Compressor Suction Pressure [C]
-      REAL(r64)        :: Twet_rated               ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-      REAL(r64)        :: Gamma_rated              ! Gamma at rated conditions (coil air flow rate and air temperatures)
+      REAL, SAVE       :: CompSuctionTemp          ! Temperature of the Refrigerant Entering the Compressor [C]
+      REAL        :: CompSuctionEnth          ! Enthalpy of the Refrigerant Entering the Compressor [J/kg]
+      REAL        :: CompSuctionDensity       ! Density of the Refrigerant Entering the Compressorkg/m3
+      REAL        :: CompSuctionSatTemp       ! Temperature of Saturated Refrigerant at Compressor Suction Pressure [C]
+      REAL        :: Twet_rated               ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+      REAL        :: Gamma_rated              ! Gamma at rated conditions (coil air flow rate and air temperatures)
       LOGICAL          :: LatDegradModelSimFlag    ! Latent degradation model simulation flag
       LOGICAL          :: FinalSimFlag             ! Final Simulation Flag
       LOGICAL          :: Converged                ! overall convergence Flag
 
-      REAL(r64)        :: QLatRated                ! Qlatent at rated conditions of indoor(TDB,TWB)=(26.7C,19.4C)
-      REAL(r64)        :: QLatActual               ! Qlatent at actual operating conditions
-      REAL(r64)        :: SHRss                    ! Sensible heat ratio at steady state
-      REAL(r64)        :: SHReff                   ! Effective sensible heat ratio at part-load condition
-      REAL(r64)        :: Par(4)                   ! Parameter array passed to RegulaFalsi function
+      REAL        :: QLatRated                ! Qlatent at rated conditions of indoor(TDB,TWB)=(26.7C,19.4C)
+      REAL        :: QLatActual               ! Qlatent at actual operating conditions
+      REAL        :: SHRss                    ! Sensible heat ratio at steady state
+      REAL        :: SHReff                   ! Effective sensible heat ratio at part-load condition
+      REAL        :: Par(4)                   ! Parameter array passed to RegulaFalsi function
       INTEGER          :: SolFlag                  ! Solution flag returned from RegulaFalsi function
       LOGICAL          :: ErrorsFound = .FALSE.
       LOGICAL, SAVE    :: FirstTime = .true.
-      REAL(r64), SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
-      REAL(r64), SAVE  :: LoadSideInletHumRat_Init ! rated conditions
-      REAL(r64), SAVE  :: LoadSideAirInletEnth_Init ! rated conditions
-      REAL(r64)        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
-      REAL(r64)        :: LoadSideInletHumRat_Unit ! calc conditions for unit
-      REAL(r64)        :: LoadSideAirInletEnth_Unit ! calc conditions for unit
+      REAL, SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
+      REAL, SAVE  :: LoadSideInletHumRat_Init ! rated conditions
+      REAL, SAVE  :: LoadSideAirInletEnth_Init ! rated conditions
+      REAL        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
+      REAL        :: LoadSideInletHumRat_Unit ! calc conditions for unit
+      REAL        :: LoadSideAirInletEnth_Unit ! calc conditions for unit
 
     IF (FirstTime) THEN
       !Set indoor air conditions to the rated condition
-      LoadSideInletDBTemp_Init = 26.7d0
-      LoadSideInletHumRat_Init = 0.0111d0
+      LoadSideInletDBTemp_Init = 26.7
+      LoadSideInletHumRat_Init = 0.0111
       LoadSideAirInletEnth_Init = PsyHFnTdbW(LoadSideInletDBTemp,LoadSideInletHumRat)
       FirstTime=.false.
     ENDIF
@@ -1223,8 +1223,8 @@ IF(FirstHVACIteration) THEN
   initialQLoadTotal = NominalCoolingCapacity
 ENDIF
 
-IF(initialQLoadTotal==0.0d0)  initialQLoadTotal = NominalCoolingCapacity
-IF(initialQSource==0.0d0)  initialQSource = NominalCoolingCapacity
+IF(initialQLoadTotal==0.0)  initialQLoadTotal = NominalCoolingCapacity
+IF(initialQSource==0.0)  initialQSource = NominalCoolingCapacity
 
 
 !Loop the calculation at least twice depending whether the latent degradation model
@@ -1290,10 +1290,10 @@ END IF
 
 !      IF (SourceSideFluidName=='WATER') THEN
       IF (SourceSideFluidIndex == WaterIndex) THEN  ! SourceSideFluidName=='Water'
-        SourceSideEffect = 1.0d0 - EXP( -SourceSideUA / (CpFluid * SourceSideMassFlowRate))
+        SourceSideEffect = 1.0 - EXP( -SourceSideUA / (CpFluid * SourceSideMassFlowRate))
       ELSE
         DegradFactor=DegradF(SourceSideFluidName,SourceSideInletTemp,SourceSideFluidIndex)
-        SourceSideEffect = 1.0d0 / ((SourceSideHTRes1 * SourceSideVolFlowRate**(-0.8d0)) / DegradFactor + SourceSideHTRes2)
+        SourceSideEffect = 1.0 / ((SourceSideHTRes1 * SourceSideVolFlowRate**(-0.8)) / DegradFactor + SourceSideHTRes2)
       END IF
 
       ! Determine Source Side Tempertaure (Condensing Temp in this case)
@@ -1338,7 +1338,7 @@ END IF
 
       QSensible=LoadSideMassFlowRate*CpAir*(LoadSideInletDBTemp-EffectiveSurfaceTemp)*LoadSideEffec
       ANTUWET=LoadSideTotalUA/(LoadSideMassFlowRate*CpAir)
-      EffectWET = 1.0d0 - EXP(-ANTUWET)
+      EffectWET = 1.0 - EXP(-ANTUWET)
       EvapSatEnth=LoadsideAirInletEnth-initialQloadTotal/(EffectWET*LoadSideMassFlowRate)
 
 !      ! Iterate to compute Evaporating Temperature
@@ -1485,7 +1485,7 @@ END IF
       SELECT CASE  (CompressorType)
         CASE (CompressorType_Reciprocating) ! RECIPROCATING
           MassRef = PistonDisp * CompSuctionDensity * &
-                (1.0d0+ClearanceFactor-ClearanceFactor*((DischargePr/SuctionPr)**(1.0d0/gamma)))
+                (1.0+ClearanceFactor-ClearanceFactor*((DischargePr/SuctionPr)**(1.0/gamma)))
         CASE (CompressorType_Rotary) ! ROTARY
           MassRef = PistonDisp * CompSuctionDensity
         CASE (CompressorType_Scroll) ! SCROLL
@@ -1507,18 +1507,18 @@ END IF
     ! Determine the Power Consumption
       SELECT CASE  (CompressorType)
         CASE (CompressorType_Reciprocating) ! RECIPROCATING
-          Power = PowerLos+(1.0d0/LosFac)*(MassRef*gamma/(gamma-1.0d0) * &
+          Power = PowerLos+(1.0/LosFac)*(MassRef*gamma/(gamma-1.0) * &
                 SuctionPr /CompSuctionDensity  &
-                *(((DischargePr/SuctionPr)**((gamma-1.0d0)/gamma)) - 1.0d0))
+                *(((DischargePr/SuctionPr)**((gamma-1.0)/gamma)) - 1.0))
         CASE (CompressorType_Rotary) ! ROTARY
-          Power = PowerLos+(1.0d0/LosFac)*(MassRef*gamma/(gamma-1.0d0) * &
+          Power = PowerLos+(1.0/LosFac)*(MassRef*gamma/(gamma-1.0) * &
                 SuctionPr /CompSuctionDensity  &
-                *(((DischargePr/SuctionPr)**((gamma-1.0d0)/gamma)) - 1.0d0))
+                *(((DischargePr/SuctionPr)**((gamma-1.0)/gamma)) - 1.0))
         CASE (CompressorType_Scroll) ! SCROLL
-          Power = PowerLos+(1.0d0/LosFac)*(gamma/(gamma-1.0d0)) * SuctionPr * &
-                  RefVolFlowRate * (((gamma-1.0d0) / gamma) * &
-                 ((DischargePr / SuctionPr) / VolumeRatio) + ((1.0d0/gamma) * &
-                 VolumeRatio **(gamma-1.0d0)) - 1.0d0)
+          Power = PowerLos+(1.0/LosFac)*(gamma/(gamma-1.0)) * SuctionPr * &
+                  RefVolFlowRate * (((gamma-1.0) / gamma) * &
+                 ((DischargePr / SuctionPr) / VolumeRatio) + ((1.0/gamma) * &
+                 VolumeRatio **(gamma-1.0)) - 1.0)
       END SELECT
 
     ! Determine the Sourceside Heat Rate
@@ -1581,9 +1581,9 @@ END IF
   IF (CyclingScheme .EQ. ContFanCycCoil) THEN
     ! continuous fan, cycling compressor
     WatertoAirHP(HPNum)%OutletAirEnthalpy = PartLoadRatio*LoadSideAirOutletEnth + &
-                                          (1.0d0-PartLoadRatio)*LoadSideAirInletEnth
+                                          (1.0-PartLoadRatio)*LoadSideAirInletEnth
     WatertoAirHP(HPNum)%OutletAirHumRat =PartLoadRatio*LoadsideOutletHumRat + &
-                                          (1.0d0-PartLoadRatio)*LoadSideInletHumRat
+                                          (1.0-PartLoadRatio)*LoadSideInletHumRat
     WatertoAirHP(HPNum)%OutletAirDBTemp = PsyTdbFnHW(WatertoAirHP(HPNum)%OutletAirEnthalpy,WatertoAirHP(HPNum)%OutletAirHumRat)
   ELSE
     ! default to cycling fan, cycling compressor
@@ -1644,9 +1644,9 @@ FUNCTION CalcCompSuctionTempResidual(CompSuctionTemp, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)                             :: CompSuctionTemp  ! HP compressor suction temperature (C)
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL     :: Par              ! Function parameters
-  REAL(r64)                                    :: Residuum         ! Result (force to 0)
+  REAL, INTENT(IN)                             :: CompSuctionTemp  ! HP compressor suction temperature (C)
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL     :: Par              ! Function parameters
+  REAL                                    :: Residuum         ! Result (force to 0)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1659,10 +1659,10 @@ FUNCTION CalcCompSuctionTempResidual(CompSuctionTemp, Par) RESULT (Residuum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength) :: Refrigerant           ! Name of refrigerant
-  REAL(r64)  :: SuctionPR
+  REAL  :: SuctionPR
   INTEGER    :: RefrigIndex
-  REAL(r64)  :: CompSuctionEnth
-  REAL(r64)  :: SuperHeatEnth
+  REAL  :: CompSuctionEnth
+  REAL  :: SuperHeatEnth
 
 ! Convert parameters to usable variables
   Refrigerant  = ''
@@ -1704,22 +1704,22 @@ SUBROUTINE CalcWatertoAirHPHeating(HPNum,CyclingScheme,FirstHVACIteration,Runtim
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
    INTEGER, INTENT(IN) :: HPNum                 !heat pump number
-   REAL(r64)   , INTENT(IN) :: RuntimeFrac
-   REAL(r64)   , INTENT(IN) :: SensDemand
+   REAL   , INTENT(IN) :: RuntimeFrac
+   REAL   , INTENT(IN) :: SensDemand
    INTEGER             :: CyclingScheme         !fan/compressor cycling scheme indicator
    LOGICAL, INTENT(IN) :: FirstHVACIteration    !first iteration flag
    LOGICAL, INTENT(IN) :: InitFlag              !first iteration flag
    INTEGER, INTENT(IN) :: CompOp
-   REAL(r64), INTENT(IN) :: PartLoadRatio
+   REAL, INTENT(IN) :: PartLoadRatio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-      REAL(r64), PARAMETER        :: CpWater=4210.d0             ! Specific heat of water J/kg_C
-      REAL(r64), PARAMETER        :: DegreeofSuperheat=80.d0    ! Initial guess of degree of superheat
-      REAL(r64), PARAMETER        :: gamma= 1.114d0             ! Expnasion Coefficient
-      REAL(r64), PARAMETER        :: RelaxParam = .5d0          ! Relaxation Parameter
-      REAL(r64), PARAMETER        :: ERR=0.01d0                 ! Error Value
-      REAL(r64), PARAMETER        :: ERR1=0.01d0                ! Error Value
-      REAL(r64), PARAMETER        :: PB=1.013d5               ! Barometric Pressure (Pa)
+      REAL, PARAMETER        :: CpWater=4210.             ! Specific heat of water J/kg_C
+      REAL, PARAMETER        :: DegreeofSuperheat=80.    ! Initial guess of degree of superheat
+      REAL, PARAMETER        :: gamma= 1.114             ! Expnasion Coefficient
+      REAL, PARAMETER        :: RelaxParam = .5          ! Relaxation Parameter
+      REAL, PARAMETER        :: ERR=0.01                 ! Error Value
+      REAL, PARAMETER        :: ERR1=0.01                ! Error Value
+      REAL, PARAMETER        :: PB=1.013d5               ! Barometric Pressure (Pa)
       INTEGER, PARAMETER     :: STOP1=10000              ! Iteration stopper1
       INTEGER, PARAMETER     :: STOP2=100000             ! Iteration stopper2
       INTEGER, PARAMETER     :: STOP3=100000             ! Iteration stopper3
@@ -1740,70 +1740,70 @@ SUBROUTINE CalcWatertoAirHPHeating(HPNum,CyclingScheme,FirstHVACIteration,Runtim
       CHARACTER(len=MaxNameLength) :: SourceSideFluidName   ! Name of source side fluid
       CHARACTER(len=MaxNameLength) :: Refrigerant           ! Name of refrigerant
 !      CHARACTER(len=25) :: CErrCount
-      REAL(r64)              :: NominalHeatingCapacity   ! Nominal Heating Capacity(W)
-      REAL(r64)              :: LoadSideUA               ! Load Side Heat Transfer coefficient [W/C]
-      REAL(r64)              :: SourceSideUA             ! Source Side Heat Transfer coefficient [W/C]
-      REAL(r64)              :: PressureDrop             ! Suction or Discharge Pressure Drop [Pa]
-      REAL(r64)              :: ClearanceFactor          ! Compressor Clearance Factor
-      REAL(r64)              :: PistonDisp               ! Compressor Piston Displacement [m3/s]
-      REAL(r64)              :: ShTemp                   ! Superheat Temperature [C]
-      REAL(r64)              :: LosFac                   ! Compressor Power Loss Factor
-      REAL(r64)              :: PowerLos                 ! Constant Part of Power Losses [kW]
-      REAL(r64)              :: RefVolFlowRate           ! Refrigerant Volume Flow rate at the beginning
-      REAL(r64)              :: VolumeRatio              ! Built-in-volume ratio [~]
-      REAL(r64)              :: LeakRateCoeff            ! Coefficient for the relationship between
+      REAL              :: NominalHeatingCapacity   ! Nominal Heating Capacity(W)
+      REAL              :: LoadSideUA               ! Load Side Heat Transfer coefficient [W/C]
+      REAL              :: SourceSideUA             ! Source Side Heat Transfer coefficient [W/C]
+      REAL              :: PressureDrop             ! Suction or Discharge Pressure Drop [Pa]
+      REAL              :: ClearanceFactor          ! Compressor Clearance Factor
+      REAL              :: PistonDisp               ! Compressor Piston Displacement [m3/s]
+      REAL              :: ShTemp                   ! Superheat Temperature [C]
+      REAL              :: LosFac                   ! Compressor Power Loss Factor
+      REAL              :: PowerLos                 ! Constant Part of Power Losses [kW]
+      REAL              :: RefVolFlowRate           ! Refrigerant Volume Flow rate at the beginning
+      REAL              :: VolumeRatio              ! Built-in-volume ratio [~]
+      REAL              :: LeakRateCoeff            ! Coefficient for the relationship between
                                                          ! Pressure Ratio and Leakage Rate [~]
-      REAL(r64)              :: SourceSideHTRes1         ! Source Side Heat Transfer Resistance coefficient 1 [~]
-      REAL(r64)              :: SourceSideHTRes2         ! Source Side Heat Transfer Resistance coefficient 2 [K/kW]
-      REAL(r64)              :: HighPressCutOff          ! High Pressure Cut-off [Pa]
-      REAL(r64)              :: LowPressCutOff           ! Low Pressure Cut-off [Pa]
+      REAL              :: SourceSideHTRes1         ! Source Side Heat Transfer Resistance coefficient 1 [~]
+      REAL              :: SourceSideHTRes2         ! Source Side Heat Transfer Resistance coefficient 2 [K/kW]
+      REAL              :: HighPressCutOff          ! High Pressure Cut-off [Pa]
+      REAL              :: LowPressCutOff           ! Low Pressure Cut-off [Pa]
 
-      REAL(r64)              :: Quality
-      REAL(r64)              :: SourceSideMassFlowRate   ! Source Side Mass Flow Rate [kg/s]
-      REAL(r64)              :: SourceSideInletTemp      ! Source Side Inlet Temperature [C]
-      REAL(r64)              :: SourceSideWaterInletEnth ! Source Side Inlet Water Enthalpy [J/kg]
-      REAL(r64)              :: SourceSideoutletTemp     ! Source Side Outlet Temperature [C]
-      REAL(r64)              :: SourceSideVolFlowRate    ! Source Side Volumetric Flow Rate [m3/s]
-      REAL(r64)              :: CpFluid                  ! Specific heat of source side fluid(J/kg)
-      REAL(r64)              :: LoadSideMassFlowRate     ! Load Side Mass Flow Rate [kg/s]
-      REAL(r64)              :: LoadSideInletDBTemp      ! Load Side Inlet Dry Bulb Temp [C]
-      REAL(r64)              :: LoadSideInletHumRat      ! Load Side Inlet Humidity Ratio [kg/kg]
-      REAL(r64)              :: LoadSideoutletDBTemp     ! Load Side Outlet Dry Bulb Temperature [C]
-      REAL(r64)              :: LoadsideOutletHumRat     ! Load Side Outlet Humidity Ratio [kg/kg]
-      REAL(r64)              :: LoadSideAirInletEnth     ! Load Side Inlet Enthalpy [J/kg]
-      REAL(r64)              :: LoadSideAirOutletEnth    ! Load Side Outlet Enthalpy [J/kg]
-      REAL(r64)              :: CpAir                    ! Specific Heat of Air [J/kg_C]
-      REAL(r64)              :: DegradFactor             ! Degradation Factor [~]
-      REAL(r64)              :: QSource                  ! Source Side Heat Transfer Rate [W]
-      REAL(r64)              :: QLoadTotal               ! Load Side Heat Transfer Rate [W]
-      REAL(r64)              :: Power                    ! Power Consumption [W]
+      REAL              :: Quality
+      REAL              :: SourceSideMassFlowRate   ! Source Side Mass Flow Rate [kg/s]
+      REAL              :: SourceSideInletTemp      ! Source Side Inlet Temperature [C]
+      REAL              :: SourceSideWaterInletEnth ! Source Side Inlet Water Enthalpy [J/kg]
+      REAL              :: SourceSideoutletTemp     ! Source Side Outlet Temperature [C]
+      REAL              :: SourceSideVolFlowRate    ! Source Side Volumetric Flow Rate [m3/s]
+      REAL              :: CpFluid                  ! Specific heat of source side fluid(J/kg)
+      REAL              :: LoadSideMassFlowRate     ! Load Side Mass Flow Rate [kg/s]
+      REAL              :: LoadSideInletDBTemp      ! Load Side Inlet Dry Bulb Temp [C]
+      REAL              :: LoadSideInletHumRat      ! Load Side Inlet Humidity Ratio [kg/kg]
+      REAL              :: LoadSideoutletDBTemp     ! Load Side Outlet Dry Bulb Temperature [C]
+      REAL              :: LoadsideOutletHumRat     ! Load Side Outlet Humidity Ratio [kg/kg]
+      REAL              :: LoadSideAirInletEnth     ! Load Side Inlet Enthalpy [J/kg]
+      REAL              :: LoadSideAirOutletEnth    ! Load Side Outlet Enthalpy [J/kg]
+      REAL              :: CpAir                    ! Specific Heat of Air [J/kg_C]
+      REAL              :: DegradFactor             ! Degradation Factor [~]
+      REAL              :: QSource                  ! Source Side Heat Transfer Rate [W]
+      REAL              :: QLoadTotal               ! Load Side Heat Transfer Rate [W]
+      REAL              :: Power                    ! Power Consumption [W]
 
-      REAL(r64)              :: SourceSideEffect         ! Source Side Heat Exchanger Effectiveness
-      REAL(r64)              :: LoadSideEffect           ! Load Side Effectiveness based on Outside Heat Transfer Coefficient
-      REAL(r64)              :: SourceSideTemp           ! Source Side Saturated Refrigerant Temperature [C]
-      REAL(r64)              :: LoadSideTemp             ! Load Side Saturated Refrigerant Temperature [C]
-      REAL(r64)              :: SourceSidePressure       ! Source Side Saturated Refrigerant Pressure [Pa]
-      REAL(r64)              :: LoadSidePressure         ! Load Side Saturated Refrigerant Pressure [Pa]
-      REAL(r64)              :: SuctionPr                ! Compressor Suction Pressure [Pa]
-      REAL(r64)              :: DischargePr              ! Compressor Discharge Pressure [Pa]
-      REAL(r64)              :: CompressInletTemp        ! Temperature of the Refrigerant Entering the Compressor [C]
-      REAL(r64)              :: MassRef                  ! Mass Flow Rate of Refrigerant [kg/s]
-      REAL(r64)              :: SourceSideOutletEnth     ! Enthalpy of Refrigerant leaving the Source Side Heat Exchanger [J/kg]
-      REAL(r64)              :: LoadSideOutletEnth       ! Enthalpy of Refrigerant leaving the Load Side Heat Exchanger [J/kg]
-      REAL(r64),SAVE              :: initialQSource           ! Guess Source Side Heat Transfer Rate [W]
-      REAL(r64),SAVE              :: initialQLoad             ! Guess Load Side Heat Transfer rate [W]
-      REAL(r64)              :: SuperHeatEnth            ! Enthalpy of the Superheated Refrigerant [J/kg]
-      REAL(r64)              :: CompSuctionTemp1         ! Guess of the Temperature of the Refrigerant Entering the
+      REAL              :: SourceSideEffect         ! Source Side Heat Exchanger Effectiveness
+      REAL              :: LoadSideEffect           ! Load Side Effectiveness based on Outside Heat Transfer Coefficient
+      REAL              :: SourceSideTemp           ! Source Side Saturated Refrigerant Temperature [C]
+      REAL              :: LoadSideTemp             ! Load Side Saturated Refrigerant Temperature [C]
+      REAL              :: SourceSidePressure       ! Source Side Saturated Refrigerant Pressure [Pa]
+      REAL              :: LoadSidePressure         ! Load Side Saturated Refrigerant Pressure [Pa]
+      REAL              :: SuctionPr                ! Compressor Suction Pressure [Pa]
+      REAL              :: DischargePr              ! Compressor Discharge Pressure [Pa]
+      REAL              :: CompressInletTemp        ! Temperature of the Refrigerant Entering the Compressor [C]
+      REAL              :: MassRef                  ! Mass Flow Rate of Refrigerant [kg/s]
+      REAL              :: SourceSideOutletEnth     ! Enthalpy of Refrigerant leaving the Source Side Heat Exchanger [J/kg]
+      REAL              :: LoadSideOutletEnth       ! Enthalpy of Refrigerant leaving the Load Side Heat Exchanger [J/kg]
+      REAL,SAVE              :: initialQSource           ! Guess Source Side Heat Transfer Rate [W]
+      REAL,SAVE              :: initialQLoad             ! Guess Load Side Heat Transfer rate [W]
+      REAL              :: SuperHeatEnth            ! Enthalpy of the Superheated Refrigerant [J/kg]
+      REAL              :: CompSuctionTemp1         ! Guess of the Temperature of the Refrigerant Entering the
                                                          ! Compressor #1 [C]
-      REAL(r64)              :: CompSuctionTemp2         ! Guess of the Temperature of the Refrigerant Entering the
+      REAL              :: CompSuctionTemp2         ! Guess of the Temperature of the Refrigerant Entering the
                                                          ! Compressor #2 [C]
-      REAL(r64)              :: CompSuctionTemp          ! Temperature of the Refrigerant Entering the Compressor [C]
-      REAL(r64)              :: CompSuctionEnth          ! Enthalpy of the Refrigerant Entering the Compressor [J/kg]
-      REAL(r64)              :: CompSuctionDensity       ! Density of the Refrigerant Entering the Compressorkg/m3
-      REAL(r64)              :: CompSuctionSatTemp       ! Temperature of Saturated Refrigerant at Compressor Suction Pressure [C]
+      REAL              :: CompSuctionTemp          ! Temperature of the Refrigerant Entering the Compressor [C]
+      REAL              :: CompSuctionEnth          ! Enthalpy of the Refrigerant Entering the Compressor [J/kg]
+      REAL              :: CompSuctionDensity       ! Density of the Refrigerant Entering the Compressorkg/m3
+      REAL              :: CompSuctionSatTemp       ! Temperature of Saturated Refrigerant at Compressor Suction Pressure [C]
       LOGICAL                :: FinalSimFlag             ! Final Simulation Flag
       LOGICAL                :: Converged                ! Overall convergence Flag
-      REAL(r64)              :: Par(4)                   ! Parameter array passed to RegulaFalsi function
+      REAL              :: Par(4)                   ! Parameter array passed to RegulaFalsi function
       INTEGER                :: SolFlag                  ! Solution flag returned from RegulaFalsi function
 
 
@@ -1864,8 +1864,8 @@ IF(FirstHVACIteration) THEN
   initialQSource = NominalHeatingCapacity
 END IF
 
-IF(initialQLoad==0.0d0)  initialQLoad = NominalHeatingCapacity
-IF(initialQSource==0.0d0)  initialQSource = NominalHeatingCapacity
+IF(initialQLoad==0.0)  initialQLoad = NominalHeatingCapacity
+IF(initialQSource==0.0)  initialQSource = NominalHeatingCapacity
 
  !Outerloop: calculate load side heat transfer
   NumIteration3=0
@@ -1901,7 +1901,7 @@ IF(initialQSource==0.0d0)  initialQSource = NominalHeatingCapacity
         SourceSideEffect = 1- EXP( -SourceSideUA / (CpFluid * SourceSideMassFlowRate))  ! SourceSideFluidName=='Water'
       ELSE
         DegradFactor=DegradF(SourceSideFluidName,SourceSideInletTemp,SourceSideFluidIndex)
-        SourceSideEffect = 1 / ((SourceSideHTRes1 * SourceSideVolFlowRate**(-0.8d0)) / DegradFactor + SourceSideHTRes2)
+        SourceSideEffect = 1 / ((SourceSideHTRes1 * SourceSideVolFlowRate**(-0.8)) / DegradFactor + SourceSideHTRes2)
       END IF
 
        ! Determine Load Side Effectiveness
@@ -2195,7 +2195,7 @@ SUBROUTINE UpdateWatertoAirHP(HPNum)
   INTEGER              :: WaterInletNode
   INTEGER              :: AirOutletNode
   INTEGER              :: WaterOutletNode
-  REAL(r64) :: ReportingConstant
+  REAL :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
  !WatertoAirHP(HPNum)%Simflag=.FALSE.
@@ -2305,13 +2305,13 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: HPNum   ! Index number for cooling coil
   INTEGER, INTENT (IN) :: CyclingScheme !fan/compressor cycling scheme indicator
-  REAL(r64), INTENT (IN) :: SHRss       ! Steady-state sensible heat ratio
-  REAL(r64), INTENT (IN) :: RTF         ! Compressor run-time fraction
-  REAL(r64), INTENT (IN) :: QLatRated   ! Rated latent capacity
-  REAL(r64), INTENT (IN) :: QLatActual  ! Actual latent capacity
-  REAL(r64), INTENT (IN) :: EnteringDB  ! Entering air dry-bulb temperature
-  REAL(r64), INTENT (IN) :: EnteringWB  ! Entering air wet-bulb temperature
-  REAL(r64)            :: SHReff      ! Effective sensible heat ratio, includes degradation due to cycling effects
+  REAL, INTENT (IN) :: SHRss       ! Steady-state sensible heat ratio
+  REAL, INTENT (IN) :: RTF         ! Compressor run-time fraction
+  REAL, INTENT (IN) :: QLatRated   ! Rated latent capacity
+  REAL, INTENT (IN) :: QLatActual  ! Actual latent capacity
+  REAL, INTENT (IN) :: EnteringDB  ! Entering air dry-bulb temperature
+  REAL, INTENT (IN) :: EnteringWB  ! Entering air wet-bulb temperature
+  REAL            :: SHReff      ! Effective sensible heat ratio, includes degradation due to cycling effects
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2323,26 +2323,26 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Twet        ! Nominal time for condensate to begin leaving the coil's condensate drain line
+  REAL :: Twet        ! Nominal time for condensate to begin leaving the coil's condensate drain line
                          !   at the current operating conditions (sec)
-  REAL(r64) :: Gamma       ! Initial moisture evaporation rate divided by steady-state AC latent capacity
+  REAL :: Gamma       ! Initial moisture evaporation rate divided by steady-state AC latent capacity
                          !   at the current operating conditions
-  REAL(r64) :: Twet_rated  ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-  REAL(r64) :: Gamma_rated ! Gamma at rated conditions (coil air flow rate and air temperatures)
-  REAL(r64) :: Twet_max    ! Maximum allowed value for Twet
-  REAL(r64) :: MaxONOFFCyclesperHour  !Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64) :: HPTimeConstant         !Heat pump time constant [s]
-  REAL(r64) :: FanDelayTime           !Fan delay time, time delay for the HP's fan to
+  REAL :: Twet_rated  ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+  REAL :: Gamma_rated ! Gamma at rated conditions (coil air flow rate and air temperatures)
+  REAL :: Twet_max    ! Maximum allowed value for Twet
+  REAL :: MaxONOFFCyclesperHour  !Maximum cycling rate of heat pump [cycles/hr]
+  REAL :: HPTimeConstant         !Heat pump time constant [s]
+  REAL :: FanDelayTime           !Fan delay time, time delay for the HP's fan to
                                     !shut off after compressor cycle off  [s]
 
-  REAL(r64) :: Ton         ! Coil on time (sec)
-  REAL(r64) :: Toff        ! Coil off time (sec)
-  REAL(r64) :: Toffa       ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
-  REAL(r64) :: aa          ! Intermediate variable
-  REAL(r64) :: To1         ! Intermediate variable (first guess at To). To = time to the start of moisture removal
-  REAL(r64) :: To2         ! Intermediate variable (second guess at To). To = time to the start of moisture removal
-  REAL(r64) :: Error       ! Error for iteration (DO) loop
-  REAL(r64) :: LHRmult     ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
+  REAL :: Ton         ! Coil on time (sec)
+  REAL :: Toff        ! Coil off time (sec)
+  REAL :: Toffa       ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
+  REAL :: aa          ! Intermediate variable
+  REAL :: To1         ! Intermediate variable (first guess at To). To = time to the start of moisture removal
+  REAL :: To2         ! Intermediate variable (second guess at To). To = time to the start of moisture removal
+  REAL :: Error       ! Error for iteration (DO) loop
+  REAL :: LHRmult     ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
 
    Twet_rated  = WatertoAirHP(HPNum)%Twet_Rated
    Gamma_rated = WatertoAirHP(HPNum)%Gamma_Rated
@@ -2361,14 +2361,14 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
      RETURN
    ENDIF
 
-   Twet_max   = 9999.0d0 ! high limit for Twet
+   Twet_max   = 9999.0 ! high limit for Twet
 
 !  Calculate the model parameters at the actual operating conditions
-   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.d-10),Twet_max)
-   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7d0-19.4d0)*QLatActual+1.d-10)
+   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.*10**-10),Twet_max)    !RS: Debugging: 102612
+   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7-19.4)*QLatActual+1.*10**-10)
 
 !  Calculate the compressor on and off times using a converntional thermostat curve
-   Ton  = 3600.d0/(4.d0*MaxONOFFCyclesperHour*(1.d0-RTF))   ! duration of cooling coil on-cycle (sec)
+   Ton  = 3600./(4.*MaxONOFFCyclesperHour*(1.-RTF))   ! duration of cooling coil on-cycle (sec)
 
    IF ((CyclingScheme .EQ. CycFanCycCoil).AND.(FanDelayTime.NE.0.0)) THEN
 !  For CycFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
@@ -2377,23 +2377,23 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
    ELSE
 !  For ContFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
 !  for the entire heat pump off-cycle.
-   Toff = 3600.d0/(4.d0*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
+   Toff = 3600./(4.*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
    END IF
 
 !  Cap Toff to meet the equation restriction
    IF(Gamma .GT. 0.0)THEN
-     Toffa = MIN(Toff, 2.d0*Twet/Gamma)
+     Toffa = MIN(Toff, 2.*Twet/Gamma)
    ELSE
      Toffa = Toff
    END IF
 
 !  Use sucessive substitution to solve for To
-   aa = (Gamma*Toffa) - (0.25d0/Twet)*(Gamma**2)*(Toffa**2)
+   aa = (Gamma*Toffa) - (0.25/Twet)*(Gamma**2)*(Toffa**2)
 
    To1 = aa+HPTimeConstant
    Error = 1.0
-   DO WHILE (Error .gt. 0.001d0)
-       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0d0)
+   DO WHILE (Error .gt. 0.001)
+       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0)
        Error = ABS((To2-To1)/To1)
        To1 = To2
    END DO
@@ -2401,9 +2401,9 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
 !  Adjust Sensible Heat Ratio (SHR) using Latent Heat Ratio (LHR) multiplier
 !  Floating underflow errors occur when -Ton/HPTimeConstant is a large negative number.
 !  Cap lower limit at -700 to avoid the underflow errors.
-   aa = EXP(MAX(-700.0d0,-Ton/HPTimeConstant))
+   aa = EXP(MAX(-700.0,-Ton/HPTimeConstant))
 !  Calculate latent heat ratio multiplier
-   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0d0))),0.0d0)
+   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0))),0.0)
 
 !  Calculate part-load or "effective" sensible heat ratio
    SHReff = 1.0-(1.0-SHRss)*LHRmult
@@ -2415,7 +2415,7 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
 
 END FUNCTION CalcEffectiveSHR
 
-REAL(r64) FUNCTION DegradF(FluidName,Temp,FluidIndex)
+REAL FUNCTION DegradF(FluidName,Temp,FluidIndex)
 ! FUNCTION INFORMATION:
         !    AUTHOR         Kenneth Tang
         !    DATE WRITTEN   October 2004
@@ -2438,7 +2438,7 @@ REAL(r64) FUNCTION DegradF(FluidName,Temp,FluidIndex)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=MaxNameLength), INTENT (INOUT) :: FluidName  !Name of glycol used in source side
-  REAL(r64), INTENT (INOUT) :: Temp           ! Temperature of the fluid
+  REAL, INTENT (INOUT) :: Temp           ! Temperature of the fluid
   INTEGER, INTENT (INOUT) :: FluidIndex    ! Index number for the fluid
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -2451,14 +2451,14 @@ REAL(r64) FUNCTION DegradF(FluidName,Temp,FluidIndex)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: VisWater          !Viscosity of water [mPa-s]
-  REAL(r64) :: DensityWater      !Density of water [kg/m3]
-  REAL(r64) :: CpWater           !Specific heat of water [J/kg-K]
-  REAL(r64) :: CondWater         !Conductivity of water [W/m-K]
-  REAL(r64) :: VisCoolant        !Viscosity of water [mPa-s]
-  REAL(r64) :: DensityCoolant    !Density of water [kg/m3]
-  REAL(r64) :: CpCoolant         !Specific heat of water [J/kg-K]
-  REAL(r64) :: CondCoolant       !Conductivity of water [W/m-K]
+  REAL :: VisWater          !Viscosity of water [mPa-s]
+  REAL :: DensityWater      !Density of water [kg/m3]
+  REAL :: CpWater           !Specific heat of water [J/kg-K]
+  REAL :: CondWater         !Conductivity of water [W/m-K]
+  REAL :: VisCoolant        !Viscosity of water [mPa-s]
+  REAL :: DensityCoolant    !Density of water [kg/m3]
+  REAL :: CpCoolant         !Specific heat of water [J/kg-K]
+  REAL :: CondCoolant       !Conductivity of water [W/m-K]
 
  VisWater = GetViscosityGlycol('WATER',Temp,WaterIndex,CalledFrom)
  DensityWater = GetDensityGlycol('WATER',Temp,WaterIndex,CalledFrom)
@@ -2469,9 +2469,9 @@ REAL(r64) FUNCTION DegradF(FluidName,Temp,FluidIndex)
  CpCoolant = GetSpecificHeatGlycol(FluidName,Temp,FluidIndex,CalledFrom)
  CondCoolant =  GetConductivityGlycol(FluidName,Temp,FluidIndex,CalledFrom)
 
- DegradF = (VisCoolant / VisWater)**(-0.47d0) *   &
-           (DensityCoolant / DensityWater)**0.8d0 * (CpCoolant / CpWater)**0.33d0 *   &
-             (CondCoolant / CondWater)**0.67d0
+ DegradF = (VisCoolant / VisWater)**(-0.47) *   &
+           (DensityCoolant / DensityWater)**0.8 * (CpCoolant / CpWater)**0.33 *   &
+             (CondCoolant / CondWater)**0.67
 
 END FUNCTION DegradF
 
@@ -2565,7 +2565,7 @@ FUNCTION GetCoilCapacity(CoilType,CoilName,ErrorsFound) RESULT(CoilCapacity)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: CoilCapacity ! returned capacity of matched coil
+  REAL                    :: CoilCapacity ! returned capacity of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2796,7 +2796,7 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE               ! Everything private unless explicitly made public
 
  !MODULE PARAMETER DEFINITIONS
-  REAL(r64), PARAMETER    :: CelsiustoKelvin=KelvinConv     ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER    :: CelsiustoKelvin=KelvinConv     ! Conversion from Celsius to Kelvin
 
 ! DERIVED TYPE DEFINITIONS
 TYPE SimpleWatertoAirHPConditions
@@ -2804,70 +2804,70 @@ TYPE SimpleWatertoAirHPConditions
   CHARACTER(len=MaxNameLength) :: WatertoAirHPType=' ' ! Type of WatertoAirHP ie. Heating or Cooling
   INTEGER   :: WAHPPlantTypeOfNum              = 0     ! type of component in plant
   LOGICAL   :: Simflag                         =.false. ! Heat Pump Simulation Flag
-  REAL(r64) :: AirVolFlowRate                  =0.0  ! Air Volumetric Flow Rate[m3/s]
-  REAL(r64) :: AirMassFlowRate                 =0.0  ! Air Mass Flow Rate[kg/s]
-  REAL(r64) :: InletAirDBTemp                  =0.0  ! Inlet Air Dry Bulb Temperature [C]
-  REAL(r64) :: InletAirHumRat                  =0.0  ! Inlet Air Humidity Ratio [kg/kg]
-  REAL(r64) :: InletAirEnthalpy                =0.0  ! Inlet Air Enthalpy [J/kg]
-  REAL(r64) :: OutletAirDBTemp                 =0.0  ! Outlet Air Dry Bulb Temperature [C]
-  REAL(r64) :: OutletAirHumRat                 =0.0  ! Outlet Air Humidity Ratio [kg/kg]
-  REAL(r64) :: OutletAirEnthalpy               =0.0  ! Outlet Air Enthalpy [J/kg]
-  REAL(r64) :: WaterVolFlowRate                =0.0  ! Water Volumetric Flow Rate [m3/s]
-  REAL(r64) :: WaterMassFlowRate               =0.0  ! Water Mass Flow Rate [kg/s]
-  REAL(r64) :: DesignWaterMassFlowRate         =0.0
-  REAL(r64) :: InletWaterTemp                  =0.0  ! Inlet Water Temperature [C]
-  REAL(r64) :: InletWaterEnthalpy              =0.0  ! Inlet Water Enthalpy [J/kg]
-  REAL(r64) :: OutletWaterTemp                 =0.0  ! Outlet Water Temperature [C]
-  REAL(r64) :: OutletWaterEnthalpy             =0.0  ! Outlet Water Enthalpy [J/kg]
-  REAL(r64) :: Power                           =0.0  ! Power Consumption [W]
-  REAL(r64) :: QLoadTotal                      =0.0  ! Load Side Total Heat Transfer Rate [W]
-  REAL(r64) :: QSensible                       =0.0  ! Sensible Load Side Heat Transfer Rate [W]
-  REAL(r64) :: QLatent                         =0.0  ! Latent Load Side Heat Transfer Rate [W]
-  REAL(r64) :: QSource                         =0.0  ! Source Side Heat Transfer Rate [W]
-  REAL(r64) :: Energy                          =0.0  ! Energy Consumption [J]
-  REAL(r64) :: EnergyLoadTotal                 =0.0  ! Load Side Total Heat Transferred [J]
-  REAL(r64) :: EnergySensible                  =0.0  ! Sensible Load Side Heat Transferred [J]
-  REAL(r64) :: EnergyLatent                    =0.0  ! Latent Load Side Heat Transferred [J]
-  REAL(r64) :: EnergySource                    =0.0  ! Source Side Heat Transferred [J]
-  REAL(r64) :: COP                             =0.0  ! Heat Pump Coefficient of Performance [-]
-  REAL(r64) :: RunFrac                         =0.0  ! Duty Factor
-  REAL(r64) :: PartLoadRatio                   =0.0  ! Part Load Ratio
+  REAL :: AirVolFlowRate                  =0.0  ! Air Volumetric Flow Rate[m3/s]
+  REAL :: AirMassFlowRate                 =0.0  ! Air Mass Flow Rate[kg/s]
+  REAL :: InletAirDBTemp                  =0.0  ! Inlet Air Dry Bulb Temperature [C]
+  REAL :: InletAirHumRat                  =0.0  ! Inlet Air Humidity Ratio [kg/kg]
+  REAL :: InletAirEnthalpy                =0.0  ! Inlet Air Enthalpy [J/kg]
+  REAL :: OutletAirDBTemp                 =0.0  ! Outlet Air Dry Bulb Temperature [C]
+  REAL :: OutletAirHumRat                 =0.0  ! Outlet Air Humidity Ratio [kg/kg]
+  REAL :: OutletAirEnthalpy               =0.0  ! Outlet Air Enthalpy [J/kg]
+  REAL :: WaterVolFlowRate                =0.0  ! Water Volumetric Flow Rate [m3/s]
+  REAL :: WaterMassFlowRate               =0.0  ! Water Mass Flow Rate [kg/s]
+  REAL :: DesignWaterMassFlowRate         =0.0
+  REAL :: InletWaterTemp                  =0.0  ! Inlet Water Temperature [C]
+  REAL :: InletWaterEnthalpy              =0.0  ! Inlet Water Enthalpy [J/kg]
+  REAL :: OutletWaterTemp                 =0.0  ! Outlet Water Temperature [C]
+  REAL :: OutletWaterEnthalpy             =0.0  ! Outlet Water Enthalpy [J/kg]
+  REAL :: Power                           =0.0  ! Power Consumption [W]
+  REAL :: QLoadTotal                      =0.0  ! Load Side Total Heat Transfer Rate [W]
+  REAL :: QSensible                       =0.0  ! Sensible Load Side Heat Transfer Rate [W]
+  REAL :: QLatent                         =0.0  ! Latent Load Side Heat Transfer Rate [W]
+  REAL :: QSource                         =0.0  ! Source Side Heat Transfer Rate [W]
+  REAL :: Energy                          =0.0  ! Energy Consumption [J]
+  REAL :: EnergyLoadTotal                 =0.0  ! Load Side Total Heat Transferred [J]
+  REAL :: EnergySensible                  =0.0  ! Sensible Load Side Heat Transferred [J]
+  REAL :: EnergyLatent                    =0.0  ! Latent Load Side Heat Transferred [J]
+  REAL :: EnergySource                    =0.0  ! Source Side Heat Transferred [J]
+  REAL :: COP                             =0.0  ! Heat Pump Coefficient of Performance [-]
+  REAL :: RunFrac                         =0.0  ! Duty Factor
+  REAL :: PartLoadRatio                   =0.0  ! Part Load Ratio
 
-  REAL(r64) :: RatedWaterVolFlowRate           =0.0  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
-  REAL(r64) :: RatedAirVolFlowRate             =0.0  ! Rated/Ref Air Volumetric Flow Rate [m3/s]
-  REAL(r64) :: RatedCapHeat                    =0.0  ! Rated/Ref Heating Capacity [W]
-  REAL(r64) :: RatedPowerHeat                  =0.0  ! Rated/Ref Heating Power Consumption[W]
-  REAL(r64) :: RatedCOPHeat                    =0.0  ! Rated/Ref Heating COP [W/W]
-  REAL(r64) :: RatedCapCoolTotal               =0.0  ! Rated/Ref Total Cooling Capacity [W]
-  REAL(r64) :: RatedCapCoolSens                =0.0  ! Rated/Ref Sensible Cooling Capacity [W]
-  REAL(r64) :: RatedPowerCool                  =0.0  ! Rated/Ref Cooling Power Consumption[W]
-  REAL(r64) :: RatedCOPCool                    =0.0  ! Rated/Ref Cooling COP [W/W]
-  REAL(r64) :: HeatCap1                        =0.0  ! 1st coefficient of the Heating capacity performance curve
-  REAL(r64) :: HeatCap2                        =0.0  ! 2nd coefficient of the Heating capacity performance curve
-  REAL(r64) :: HeatCap3                        =0.0  ! 3rd coefficient of the Heating capacity performance curve
-  REAL(r64) :: HeatCap4                        =0.0  ! 4th coefficient of the Heating capacity performance curve
-  REAL(r64) :: HeatCap5                        =0.0  ! 5th coefficient of the Heating capacity performance curve
-  REAL(r64) :: HeatPower1                      =0.0  ! 1st coefficient of the Heating power consumption curve
-  REAL(r64) :: HeatPower2                      =0.0  ! 2nd coefficient of the Heating power consumption curve
-  REAL(r64) :: HeatPower3                      =0.0  ! 3rd coefficient of the Heating power consumption curve
-  REAL(r64) :: HeatPower4                      =0.0  ! 4th coefficient of the Heating power consumption curve
-  REAL(r64) :: HeatPower5                      =0.0  ! 5th coefficient of the Heating power consumption curve
-  REAL(r64) :: TotalCoolCap1                   =0.0  ! 1st coefficient of the Total Cooling capacity performance curve
-  REAL(r64) :: TotalCoolCap2                   =0.0  ! 2nd coefficient of the Total Cooling capacity performance curve
-  REAL(r64) :: TotalCoolCap3                   =0.0  ! 3rd coefficient of the Total Cooling capacity performance curve
-  REAL(r64) :: TotalCoolCap4                   =0.0  ! 4th coefficient of the Total Cooling capacity performance curve
-  REAL(r64) :: TotalCoolCap5                   =0.0  ! 5th coefficient of the Total Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap1                    =0.0  ! 1st coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap2                    =0.0  ! 2nd coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap3                    =0.0  ! 3rd coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap4                    =0.0  ! 4th coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap5                    =0.0  ! 5th coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: SensCoolCap6                    =0.0  ! 6th coefficient of the Sensible Cooling capacity performance curve
-  REAL(r64) :: CoolPower1                      =0.0  ! 1st coefficient of the Cooling power consumption curve
-  REAL(r64) :: CoolPower2                      =0.0  ! 2nd coefficient of the Cooling power consumption curve
-  REAL(r64) :: CoolPower3                      =0.0  ! 3rd coefficient of the Cooling power consumption curve
-  REAL(r64) :: CoolPower4                      =0.0  ! 4th coefficient of the Cooling power consumption curve
-  REAL(r64) :: CoolPower5                      =0.0  ! 5th coefficient of the Cooling power consumption curve
+  REAL :: RatedWaterVolFlowRate           =0.0  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
+  REAL :: RatedAirVolFlowRate             =0.0  ! Rated/Ref Air Volumetric Flow Rate [m3/s]
+  REAL :: RatedCapHeat                    =0.0  ! Rated/Ref Heating Capacity [W]
+  REAL :: RatedPowerHeat                  =0.0  ! Rated/Ref Heating Power Consumption[W]
+  REAL :: RatedCOPHeat                    =0.0  ! Rated/Ref Heating COP [W/W]
+  REAL :: RatedCapCoolTotal               =0.0  ! Rated/Ref Total Cooling Capacity [W]
+  REAL :: RatedCapCoolSens                =0.0  ! Rated/Ref Sensible Cooling Capacity [W]
+  REAL :: RatedPowerCool                  =0.0  ! Rated/Ref Cooling Power Consumption[W]
+  REAL :: RatedCOPCool                    =0.0  ! Rated/Ref Cooling COP [W/W]
+  REAL :: HeatCap1                        =0.0  ! 1st coefficient of the Heating capacity performance curve
+  REAL :: HeatCap2                        =0.0  ! 2nd coefficient of the Heating capacity performance curve
+  REAL :: HeatCap3                        =0.0  ! 3rd coefficient of the Heating capacity performance curve
+  REAL :: HeatCap4                        =0.0  ! 4th coefficient of the Heating capacity performance curve
+  REAL :: HeatCap5                        =0.0  ! 5th coefficient of the Heating capacity performance curve
+  REAL :: HeatPower1                      =0.0  ! 1st coefficient of the Heating power consumption curve
+  REAL :: HeatPower2                      =0.0  ! 2nd coefficient of the Heating power consumption curve
+  REAL :: HeatPower3                      =0.0  ! 3rd coefficient of the Heating power consumption curve
+  REAL :: HeatPower4                      =0.0  ! 4th coefficient of the Heating power consumption curve
+  REAL :: HeatPower5                      =0.0  ! 5th coefficient of the Heating power consumption curve
+  REAL :: TotalCoolCap1                   =0.0  ! 1st coefficient of the Total Cooling capacity performance curve
+  REAL :: TotalCoolCap2                   =0.0  ! 2nd coefficient of the Total Cooling capacity performance curve
+  REAL :: TotalCoolCap3                   =0.0  ! 3rd coefficient of the Total Cooling capacity performance curve
+  REAL :: TotalCoolCap4                   =0.0  ! 4th coefficient of the Total Cooling capacity performance curve
+  REAL :: TotalCoolCap5                   =0.0  ! 5th coefficient of the Total Cooling capacity performance curve
+  REAL :: SensCoolCap1                    =0.0  ! 1st coefficient of the Sensible Cooling capacity performance curve
+  REAL :: SensCoolCap2                    =0.0  ! 2nd coefficient of the Sensible Cooling capacity performance curve
+  REAL :: SensCoolCap3                    =0.0  ! 3rd coefficient of the Sensible Cooling capacity performance curve
+  REAL :: SensCoolCap4                    =0.0  ! 4th coefficient of the Sensible Cooling capacity performance curve
+  REAL :: SensCoolCap5                    =0.0  ! 5th coefficient of the Sensible Cooling capacity performance curve
+  REAL :: SensCoolCap6                    =0.0  ! 6th coefficient of the Sensible Cooling capacity performance curve
+  REAL :: CoolPower1                      =0.0  ! 1st coefficient of the Cooling power consumption curve
+  REAL :: CoolPower2                      =0.0  ! 2nd coefficient of the Cooling power consumption curve
+  REAL :: CoolPower3                      =0.0  ! 3rd coefficient of the Cooling power consumption curve
+  REAL :: CoolPower4                      =0.0  ! 4th coefficient of the Cooling power consumption curve
+  REAL :: CoolPower5                      =0.0  ! 5th coefficient of the Cooling power consumption curve
 
   INTEGER      :: AirInletNodeNum              =0    ! Node Number of the Air Inlet
   INTEGER      :: AirOutletNodeNum             =0     ! Node Number of the Air Outlet
@@ -2881,12 +2881,12 @@ TYPE SimpleWatertoAirHPConditions
   INTEGER      :: CompanionCoolingCoilNum      =0    ! Heating coil companion cooling coil index
   INTEGER      :: CompanionHeatingCoilNum      =0    ! Cooling coil companion heating coil index
 
-  REAL(r64) :: Twet_Rated                      =0.0  ! Nominal Time for Condensate Removal to Begin [s]
-  REAL(r64) :: Gamma_Rated                     =0.0  ! Ratio of Initial Moisture Evaporation Rate
+  REAL :: Twet_Rated                      =0.0  ! Nominal Time for Condensate Removal to Begin [s]
+  REAL :: Gamma_Rated                     =0.0  ! Ratio of Initial Moisture Evaporation Rate
                                                    ! and Steady-state Latent Capacity
-  REAL(r64) :: MaxONOFFCyclesperHour           =0.0  ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64) :: HPTimeConstant                  =0.0  ! Heat pump time constant [s]
-  REAL(r64) :: FanDelayTime                    =0.0  ! Fan delay time, time delay for the HP's fan to
+  REAL :: MaxONOFFCyclesperHour           =0.0  ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL :: HPTimeConstant                  =0.0  ! Heat pump time constant [s]
+  REAL :: FanDelayTime                    =0.0  ! Fan delay time, time delay for the HP's fan to
  END TYPE SimpleWatertoAirHPConditions
 TYPE (SimpleWatertoAirHPConditions), ALLOCATABLE, DIMENSION(:) :: SimpleWatertoAirHP
 
@@ -2896,24 +2896,24 @@ INTEGER        :: NumWatertoAirHPs  = 0        ! The Number of Water to Air Heat
 LOGICAL        :: GetCoilsInputFlag = .TRUE.       ! Flag set to make sure you get input once
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
 
-REAL(r64) :: SourceSideMassFlowRate =0.0 ! Source Side Mass flow rate [Kg/s]
-REAL(r64) :: SourceSideInletTemp    =0.0 ! Source Side Inlet Temperature [C]
-REAL(r64) :: SourceSideInletEnth    =0.0 ! Source Side Inlet Enthalpy [J/kg]
-REAL(r64) :: LoadSideMassFlowRate   =0.0 ! Load Side Mass flow rate [Kg/s]
-REAL(r64) :: LoadSideInletDBTemp    =0.0 ! Load Side Inlet Dry Bulb Temp [C]
-REAL(r64) :: LoadSideInletWBTemp    =0.0 ! Load Side Inlet Wet Bulb Temp [C]
-REAL(r64) :: LoadSideInletHumRat    =0.0 ! Load Side Outlet Humidity ratio
-REAL(r64) :: LoadSideInletEnth      =0.0 ! Load Side Inlet Enthalpy [J/kg]
-REAL(r64) :: LoadSideOutletDBTemp   =0.0 ! Load Side Outlet Dry Bulb Temp [C]
-REAL(r64) :: LoadSideOutletHumRat   =0.0 ! Load Side Outlet Humidity ratio
-REAL(r64) :: LoadSideOutletEnth     =0.0 ! Load Side Outlet Enthalpy [J/kg]
-REAL(r64) :: QSensible              =0.0 ! Load side sensible heat transfer rate [W]
-REAL(r64) :: QLoadTotal             =0.0 ! Load side total heat transfer rate [W]
-REAL(r64) :: QLatRated              =0.0 ! Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
-REAL(r64) :: QLatActual             =0.0 ! Actual Latent Capacity [W]
-REAL(r64) :: QSource                =0.0 ! Source side heat transfer rate [W]
-REAL(r64) :: Winput                 =0.0 ! Power Consumption [W]
-REAL(r64) :: PLRCorrLoadSideMdot    =0.0 ! Load Side Mdot corrected for Part Load Ratio of the unit
+REAL :: SourceSideMassFlowRate =0.0 ! Source Side Mass flow rate [Kg/s]
+REAL :: SourceSideInletTemp    =0.0 ! Source Side Inlet Temperature [C]
+REAL :: SourceSideInletEnth    =0.0 ! Source Side Inlet Enthalpy [J/kg]
+REAL :: LoadSideMassFlowRate   =0.0 ! Load Side Mass flow rate [Kg/s]
+REAL :: LoadSideInletDBTemp    =0.0 ! Load Side Inlet Dry Bulb Temp [C]
+REAL :: LoadSideInletWBTemp    =0.0 ! Load Side Inlet Wet Bulb Temp [C]
+REAL :: LoadSideInletHumRat    =0.0 ! Load Side Outlet Humidity ratio
+REAL :: LoadSideInletEnth      =0.0 ! Load Side Inlet Enthalpy [J/kg]
+REAL :: LoadSideOutletDBTemp   =0.0 ! Load Side Outlet Dry Bulb Temp [C]
+REAL :: LoadSideOutletHumRat   =0.0 ! Load Side Outlet Humidity ratio
+REAL :: LoadSideOutletEnth     =0.0 ! Load Side Outlet Enthalpy [J/kg]
+REAL :: QSensible              =0.0 ! Load side sensible heat transfer rate [W]
+REAL :: QLoadTotal             =0.0 ! Load side total heat transfer rate [W]
+REAL :: QLatRated              =0.0 ! Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
+REAL :: QLatActual             =0.0 ! Actual Latent Capacity [W]
+REAL :: QSource                =0.0 ! Source side heat transfer rate [W]
+REAL :: Winput                 =0.0 ! Power Consumption [W]
+REAL :: PLRCorrLoadSideMdot    =0.0 ! Load Side Mdot corrected for Part Load Ratio of the unit
 
           ! Subroutine Specifications for the Module
           ! Driver/Manager Routines
@@ -2986,18 +2986,18 @@ SUBROUTINE SimWatertoAirHPSimple(CompName,CompIndex,SensLoad,LatentLoad, &
 
   CHARACTER(len=*), INTENT(IN) :: CompName                    ! Coil Name
   INTEGER, INTENT(INOUT)       :: CompIndex                   ! Index for Component name
-  REAL(r64), INTENT(IN)             :: SensLoad                    ! Sensible demand load [W]
-  REAL(r64), INTENT(IN)             :: LatentLoad                  ! Latent demand load [W]
+  REAL, INTENT(IN)             :: SensLoad                    ! Sensible demand load [W]
+  REAL, INTENT(IN)             :: LatentLoad                  ! Latent demand load [W]
   INTEGER, INTENT(IN)          :: CyclingScheme               ! Continuous fan OR cycling compressor
-  REAL(r64), INTENT (IN)            :: RuntimeFrac                 ! Compressor run time fraction  or
+  REAL, INTENT (IN)            :: RuntimeFrac                 ! Compressor run time fraction  or
                                                               ! percent on-time (on-time/cycle time)
-  REAL(r64), INTENT (INOUT)         :: MaxONOFFCyclesperHour       ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64), INTENT (INOUT)         :: HPTimeConstant              ! Heat pump time constant [s]
-  REAL(r64), INTENT (INOUT)         :: FanDelayTime                ! Fan delay time, time delay for the HP's fan to
+  REAL, INTENT (INOUT)         :: MaxONOFFCyclesperHour       ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL, INTENT (INOUT)         :: HPTimeConstant              ! Heat pump time constant [s]
+  REAL, INTENT (INOUT)         :: FanDelayTime                ! Fan delay time, time delay for the HP's fan to
                                                               ! shut off after compressor cycle off  [s]
   INTEGER, INTENT(IN) :: CompOp
-  REAL(r64), INTENT(IN) :: PartLoadRatio
-  REAL(r64), OPTIONAL, INTENT(IN) :: OnOffAirFlowRat          ! ratio of comp on to comp off air flow rate
+  REAL, INTENT(IN) :: PartLoadRatio
+  REAL, OPTIONAL, INTENT(IN) :: OnOffAirFlowRat          ! ratio of comp on to comp off air flow rate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
@@ -3010,7 +3010,7 @@ SUBROUTINE SimWatertoAirHPSimple(CompName,CompIndex,SensLoad,LatentLoad, &
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                      :: HPNum                       ! The WatertoAirHP that you are currently loading input into
-  REAL(r64)                    :: OnOffAirFlowRatio           ! ratio of comp on to comp off air flow rate
+  REAL                    :: OnOffAirFlowRatio           ! ratio of comp on to comp off air flow rate
            ! FLOW:
 
   ! Obtains and Allocates WatertoAirHP related parameters from input file
@@ -3045,7 +3045,7 @@ SUBROUTINE SimWatertoAirHPSimple(CompName,CompIndex,SensLoad,LatentLoad, &
   IF(PRESENT(OnOffAirFlowRat))THEN
     OnOffAirFlowRatio = OnOffAirFlowRat
   ELSE
-    OnOffAirFlowRatio = 1.0d0
+    OnOffAirFlowRatio = 1.0
   END IF
 
   ! Calculate the Correct Water to Air HP Model with the current HPNum
@@ -3136,7 +3136,7 @@ SUBROUTINE GetSimpleWatertoAirHPInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
@@ -3438,14 +3438,14 @@ SUBROUTINE InitSimpleWatertoAirHP(HPNum,MaxONOFFCyclesperHour,HPTimeConstant,Fan
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
   INTEGER, INTENT(IN) :: HPNum                 ! Current HPNum under simulation
-  REAL(r64),    INTENT(IN) :: MaxONOFFCyclesperHour ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64),    INTENT(IN) :: HPTimeConstant        ! Heat pump time constant [s]
-  REAL(r64),    INTENT(IN) :: FanDelayTime          ! Fan delay time, time delay for the HP's fan to
+  REAL,    INTENT(IN) :: MaxONOFFCyclesperHour ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL,    INTENT(IN) :: HPTimeConstant        ! Heat pump time constant [s]
+  REAL,    INTENT(IN) :: FanDelayTime          ! Fan delay time, time delay for the HP's fan to
                                                ! shut off after compressor cycle off  [s]
-  REAL(r64), INTENT(IN) :: SensLoad              ! Control zone sensible load[W]
-  REAL(r64), INTENT(IN) :: LatentLoad            ! Control zone latent load[W]
+  REAL, INTENT(IN) :: SensLoad              ! Control zone sensible load[W]
+  REAL, INTENT(IN) :: LatentLoad            ! Control zone latent load[W]
   INTEGER,   INTENT(IN) :: CyclingScheme         ! fan operating mode
-  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio     ! ratio of compressor on flow to average flow over time step
+  REAL, INTENT(IN) :: OnOffAirFlowRatio     ! ratio of compressor on flow to average flow over time step
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3464,8 +3464,8 @@ SUBROUTINE InitSimpleWatertoAirHP(HPNum,MaxONOFFCyclesperHour,HPTimeConstant,Fan
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeFlag  ! used for sizing PTHP inputs one time
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
-  REAL(r64)   :: rho ! local fluid density
-  REAL(r64)   :: Cp  ! local fluid specific heat
+  REAL   :: rho ! local fluid density
+  REAL   :: Cp  ! local fluid specific heat
   LOGICAL     :: errFlag
 
 
@@ -3553,7 +3553,7 @@ SUBROUTINE InitSimpleWatertoAirHP(HPNum,MaxONOFFCyclesperHour,HPTimeConstant,Fan
     SimpleWatertoAirHP(HPNum)%HPTimeConstant=HPTimeConstant
     SimpleWatertoAirHP(HPNum)%FanDelayTime=FanDelayTime
 
-    CALL InitComponentNodes(0.d0, SimpleWatertoAirHP(HPNum)%DesignWaterMassFlowRate, &
+    CALL InitComponentNodes(0., SimpleWatertoAirHP(HPNum)%DesignWaterMassFlowRate, &
                                   SimpleWatertoAirHP(HPNum)%WaterInletNodeNum,  &
                                   SimpleWatertoAirHP(HPNum)%WaterOutletNodeNum , &
                                   SimpleWatertoAirHP(HPNum)%LoopNum, &
@@ -3604,16 +3604,16 @@ SUBROUTINE InitSimpleWatertoAirHP(HPNum,MaxONOFFCyclesperHour,HPTimeConstant,Fan
              PsyRhoAirFnPbTdbW(StdBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)
     !If air flow is less than 25% rated flow. Then set air flow to the 25% of rated conditions
     IF(SimpleWatertoAirHP(HPNum)%AirMassFlowRate.LT.  &
-         0.25d0*SimpleWatertoAirHP(HPNum)%RatedAirVolFlowRate*  &
+         0.25*SimpleWatertoAirHP(HPNum)%RatedAirVolFlowRate*  &
              PsyRhoAirFnPbTdbW(StdBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)) THEN
         SimpleWatertoAirHP(HPNum)%AirMassFlowRate =   &
-          0.25d0*SimpleWatertoAirHP(HPNum)%RatedAirVolFlowRate* &
+          0.25*SimpleWatertoAirHP(HPNum)%RatedAirVolFlowRate* &
               PsyRhoAirFnPbTdbW(StdBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)
     END IF
 
   ELSE !heat pump is off
-    SimpleWatertoAirHP(HPNum)%WaterMassFlowRate = 0.d0
-    SimpleWatertoAirHP(HPNum)%AirMassFlowRate   = 0.d0
+    SimpleWatertoAirHP(HPNum)%WaterMassFlowRate = 0.
+    SimpleWatertoAirHP(HPNum)%AirMassFlowRate   = 0.
   ENDIF
 
   CALL SetComponentFlowRate(SimpleWatertoAirHP(HPNum)%WaterMassFlowRate, &
@@ -3709,45 +3709,45 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: rhoair
-  REAL(r64) :: CpAir
-  REAL(r64) :: MixTemp
-  REAL(r64) :: MixHumRat
-  REAL(r64) :: MixEnth
-  REAL(r64) :: MixWetBulb
-  REAL(r64) :: SupTemp
-  REAL(r64) :: SupHumRat
-  REAL(r64) :: SupEnth
-  REAL(r64) :: OutTemp
-  REAL(r64) :: ratioTDB
-  REAL(r64) :: ratioTWB
-  REAL(r64) :: ratioTS
-  REAL(r64) :: OutAirFrac
-  REAL(r64) :: VolFlowRate
-  REAL(r64) :: CoolCapAtPeak
-  REAL(r64) :: TotCapTempModFac
-  REAL(r64) :: SensCapAtPeak
-  REAL(r64) :: SensCapTempModFac
-  REAL(r64) :: TotalCapCoeff1         ! 1st coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff2         ! 2nd coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff3         ! 3rd coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff4         ! 4th coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff5         ! 5th coefficient of the total cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff1          ! 1st coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff2          ! 2nd coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff3          ! 3rd coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff4          ! 4th coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff5          ! 5th coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff6          ! 6th coefficient of the sensible cooling capacity performance curve
+  REAL :: rhoair
+  REAL :: CpAir
+  REAL :: MixTemp
+  REAL :: MixHumRat
+  REAL :: MixEnth
+  REAL :: MixWetBulb
+  REAL :: SupTemp
+  REAL :: SupHumRat
+  REAL :: SupEnth
+  REAL :: OutTemp
+  REAL :: ratioTDB
+  REAL :: ratioTWB
+  REAL :: ratioTS
+  REAL :: OutAirFrac
+  REAL :: VolFlowRate
+  REAL :: CoolCapAtPeak
+  REAL :: TotCapTempModFac
+  REAL :: SensCapAtPeak
+  REAL :: SensCapTempModFac
+  REAL :: TotalCapCoeff1         ! 1st coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff2         ! 2nd coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff3         ! 3rd coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff4         ! 4th coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff5         ! 5th coefficient of the total cooling capacity performance curve
+  REAL :: SensCapCoeff1          ! 1st coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff2          ! 2nd coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff3          ! 3rd coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff4          ! 4th coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff5          ! 5th coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff6          ! 6th coefficient of the sensible cooling capacity performance curve
   INTEGER   :: TimeStepNumAtMax
   INTEGER   :: DDNum
   INTEGER   :: PltSizNum
   LOGICAL   :: RatedCapCoolTotalAutosized
   LOGICAL   :: RatedCapCoolSensAutosized
   LOGICAL   :: ErrorsFound
-  REAL(r64) :: SystemCapacity
-  REAL(r64) :: rho
-  REAL(r64) :: cp
+  REAL :: SystemCapacity
+  REAL :: rho
+  REAL :: cp
 
 
   PltSizNum = 0
@@ -3816,13 +3816,13 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
             IF (VolFlowRate > 0.0) THEN
               OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / VolFlowRate
             ELSE
-              OutAirFrac = 1.0d0
+              OutAirFrac = 1.0
             END IF
-            OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
+            OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
             MixTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolTemp + &
-                        (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
+                        (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
             MixHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolHumRat + &
-                          (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
+                          (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
           END IF
         END IF
         OutTemp = FinalSysSizing(CurSysNum)%CoolOutTemp
@@ -3835,20 +3835,20 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         TotalCapCoeff3   = SimpleWatertoAirHP(HPNum)%TotalCoolCap3
         TotalCapCoeff4   = SimpleWatertoAirHP(HPNum)%TotalCoolCap4
         TotalCapCoeff5   = SimpleWatertoAirHP(HPNum)%TotalCoolCap5
-        ratioTWB         = (MixWetBulb+273.15d0)/283.15d0
+        ratioTWB         = (MixWetBulb+273.15)/283.15
         ! rated condenser water inlet temperature of 85F
-        ratioTS          = (((85.0d0 - 32.0d0)/1.8d0)+273.15d0)/283.15d0
+        ratioTS          = (((85.0 - 32.0)/1.8)+273.15)/283.15
         TotCapTempModFac = TotalCapCoeff1 + (ratioTWB * TotalCapCoeff2) + (ratioTS * TotalCapCoeff3) +   &
-                             (1.0d0 * TotalCapCoeff4) + (1.0d0 * TotalCapCoeff5)
+                             (1.0 * TotalCapCoeff4) + (1.0 * TotalCapCoeff5)
 !       The mixed air temp for zone equipment without an OA mixer is 0.
 !       This test avoids a negative capacity until a solution can be found.
         IF(MixEnth .GT. SupEnth)THEN
           CoolCapAtPeak = rhoair * VolFlowRate * (MixEnth-SupEnth)
         ELSE
-          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0d0-SupEnth)
+          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0-SupEnth)
         END IF
-        CoolCapAtPeak = MAX(0.0d0, CoolCapAtPeak)
-        IF(TotCapTempModFac .GT. 0.0d0)THEN
+        CoolCapAtPeak = MAX(0.0, CoolCapAtPeak)
+        IF(TotCapTempModFac .GT. 0.0)THEN
           SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal = CoolCapAtPeak / TotCapTempModFac
         ELSE
           SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal = CoolCapAtPeak
@@ -3893,20 +3893,20 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         TotalCapCoeff3   = SimpleWatertoAirHP(HPNum)%TotalCoolCap3
         TotalCapCoeff4   = SimpleWatertoAirHP(HPNum)%TotalCoolCap4
         TotalCapCoeff5   = SimpleWatertoAirHP(HPNum)%TotalCoolCap5
-        ratioTWB         = (MixWetBulb+273.15d0)/283.15d0
+        ratioTWB         = (MixWetBulb+273.15)/283.15
         ! rated condenser water inlet temperature of 85F
-        ratioTS          = (((85.0d0 - 32.0d0)/1.8d0)+273.15d0)/283.15d0
+        ratioTS          = (((85.0 - 32.0)/1.8)+273.15)/283.15
         TotCapTempModFac = TotalCapCoeff1 + (ratioTWB * TotalCapCoeff2) + (ratioTS * TotalCapCoeff3) +   &
-                             (1.0d0 * TotalCapCoeff4) + (1.0d0 * TotalCapCoeff5)
+                             (1.0 * TotalCapCoeff4) + (1.0 * TotalCapCoeff5)
 !       The mixed air temp for zone equipment without an OA mixer is 0.
 !       This test avoids a negative capacity until a solution can be found.
         IF(MixEnth .GT. SupEnth)THEN
           CoolCapAtPeak = rhoair * VolFlowRate * (MixEnth-SupEnth)
         ELSE
-          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0d0-SupEnth)
+          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0-SupEnth)
         END IF
-        CoolCapAtPeak = MAX(0.0d0, CoolCapAtPeak)
-        IF(TotCapTempModFac .GT. 0.0d0)THEN
+        CoolCapAtPeak = MAX(0.0, CoolCapAtPeak)
+        IF(TotCapTempModFac .GT. 0.0)THEN
           SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal = CoolCapAtPeak / TotCapTempModFac
         ELSE
           SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal = CoolCapAtPeak
@@ -3928,14 +3928,14 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
     CALL PreDefTableEntry(pdchCoolCoilTotCap,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal)
     CALL PreDefTableEntry(pdchCoolCoilLatCap,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal &
                                  - SimpleWatertoAirHP(HPNum)%RatedCapCoolSens)
-    IF (SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal /= 0.0d0) THEN
+    IF (SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal /= 0.0) THEN
       CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolSens &
                                    / SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal)
       CALL PreDefTableEntry(pdchCoolCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedPowerCool &
                                    / SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal)
     ELSE
-      CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,0.0d0)
-      CALL PreDefTableEntry(pdchCoolCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,0.0d0)
+      CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,0.0)
+      CALL PreDefTableEntry(pdchCoolCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,0.0)
     ENDIF
 
   END IF
@@ -3972,13 +3972,13 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
             IF (VolFlowRate > 0.0) THEN
               OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / VolFlowRate
             ELSE
-              OutAirFrac = 1.0d0
+              OutAirFrac = 1.0
             END IF
-            OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
+            OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
             MixTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolTemp + &
-                        (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
+                        (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
             MixHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolHumRat + &
-                          (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
+                          (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
           END IF
         END IF
         OutTemp = FinalSysSizing(CurSysNum)%CoolOutTemp
@@ -3992,21 +3992,21 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         SensCapCoeff4    = SimpleWatertoAirHP(HPNum)%SensCoolCap4
         SensCapCoeff5    = SimpleWatertoAirHP(HPNum)%SensCoolCap5
         SensCapCoeff6    = SimpleWatertoAirHP(HPNum)%SensCoolCap6
-        ratioTDB         = (MixTemp+273.15d0)/283.15d0
-        ratioTWB         = (MixWetBulb+273.15d0)/283.15d0
+        ratioTDB         = (MixTemp+273.15)/283.15
+        ratioTWB         = (MixWetBulb+273.15)/283.15
         ! rated condenser water inlet temperature of 85F
-        ratioTS          = (((85.0d0 - 32.0d0)/1.8d0)+273.15d0)/283.15d0
+        ratioTS          = (((85.0 - 32.0)/1.8)+273.15)/283.15
         CpAir = PsyCpAirFnWTdb(SupHumRat,SupTemp,RoutineName)
         SensCapTempModFac = SensCapCoeff1 + (ratioTDB * SensCapCoeff2) + (ratioTWB * SensCapCoeff3) +   &
-                            (ratioTS * SensCapCoeff4) + (1.0d0 * SensCapCoeff5) + (1.0d0 * SensCapCoeff6)
+                            (ratioTS * SensCapCoeff4) + (1.0 * SensCapCoeff5) + (1.0 * SensCapCoeff6)
 !       The mixed air temp for zone equipment without an OA mixer is 0.
 !       This test avoids a negative capacity until a solution can be found.
         IF(MixTemp .GT. SupTemp)THEN
           SensCapAtPeak = rhoair * VolFlowRate * CpAir * (MixTemp-SupTemp)
         ELSE
-          SensCapAtPeak = rhoair * VolFlowRate * CpAir * (24.0d0-SupTemp)
+          SensCapAtPeak = rhoair * VolFlowRate * CpAir * (24.0-SupTemp)
         END IF
-        SensCapAtPeak = MAX(0.0d0, SensCapAtPeak)
+        SensCapAtPeak = MAX(0.0, SensCapAtPeak)
         SimpleWatertoAirHP(HPNum)%RatedCapCoolSens = SensCapAtPeak / SensCapTempModFac
       ELSE
         SimpleWatertoAirHP(HPNum)%RatedCapCoolSens = 0.0
@@ -4049,22 +4049,22 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         SensCapCoeff4    = SimpleWatertoAirHP(HPNum)%SensCoolCap4
         SensCapCoeff5    = SimpleWatertoAirHP(HPNum)%SensCoolCap5
         SensCapCoeff6    = SimpleWatertoAirHP(HPNum)%SensCoolCap6
-        ratioTDB         = (MixTemp+273.15d0)/283.15d0
-        ratioTWB         = (MixWetBulb+273.15d0)/283.15d0
+        ratioTDB         = (MixTemp+273.15)/283.15
+        ratioTWB         = (MixWetBulb+273.15)/283.15
         ! rated condenser water inlet temperature of 85F
-        ratioTS          = (((85.0d0 - 32.0d0)/1.8d0)+273.15d0)/283.15d0
+        ratioTS          = (((85.0 - 32.0)/1.8)+273.15)/283.15
         CpAir = PsyCpAirFnWTdb(SupHumRat,SupTemp,RoutineName)
         SensCapTempModFac = SensCapCoeff1 + (ratioTDB * SensCapCoeff2) + (ratioTWB * SensCapCoeff3) +   &
-                            (ratioTS * SensCapCoeff4) + (1.0d0 * SensCapCoeff5) + (1.0d0 * SensCapCoeff6)
+                            (ratioTS * SensCapCoeff4) + (1.0 * SensCapCoeff5) + (1.0 * SensCapCoeff6)
 !       The mixed air temp for zone equipment without an OA mixer is 0.
 !       This test avoids a negative capacity until a solution can be found.
         IF(MixTemp .GT. SupTemp)THEN
           SensCapAtPeak = rhoair * VolFlowRate * CpAir * (MixTemp-SupTemp)
         ELSE
-          SensCapAtPeak = rhoair * VolFlowRate * CpAir * (24.0d0-SupTemp)
+          SensCapAtPeak = rhoair * VolFlowRate * CpAir * (24.0-SupTemp)
         END IF
-        SensCapAtPeak = MAX(0.0d0, SensCapAtPeak)
-        IF(SensCapTempModFac .GT. 0.0d0)THEN
+        SensCapAtPeak = MAX(0.0, SensCapAtPeak)
+        IF(SensCapTempModFac .GT. 0.0)THEN
           SimpleWatertoAirHP(HPNum)%RatedCapCoolSens = SensCapAtPeak / SensCapTempModFac
         ELSE
           SimpleWatertoAirHP(HPNum)%RatedCapCoolSens = SensCapAtPeak
@@ -4086,11 +4086,11 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
     CALL PreDefTableEntry(pdchCoolCoilSensCap,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolSens)
     CALL PreDefTableEntry(pdchCoolCoilLatCap,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal &
                                  - SimpleWatertoAirHP(HPNum)%RatedCapCoolSens)
-    IF (SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal /= 0.0d0) THEN
+    IF (SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal /= 0.0) THEN
       CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapCoolSens &
                                  / SimpleWatertoAirHP(HPNum)%RatedCapCoolTotal)
     ELSE
-      CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,0.0d0)
+      CALL PreDefTableEntry(pdchCoolCoilSHR,SimpleWatertoAirHP(HPNum)%Name,0.0)
     ENDIF
 
   END IF
@@ -4115,9 +4115,9 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         CALL ShowContinueError('Entering Air Wet-Bulb Temperature = '//TRIM(TrimSigDigits(MixWetBulb,3))//' C')
         CALL ShowContinueError('Entering Condenser Water Temperature used = 24.4444 C')
         CALL ShowContinueError('Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)')
-        CALL ShowContinueError('ratioTDB = '//TRIM(TrimSigDigits(((MixTemp+283.15d0)/273.15d0),3)))
-        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15d0)/273.15d0),3)))
-        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0d0+283.15d0)/273.15d0),3)))
+        CALL ShowContinueError('ratioTDB = '//TRIM(TrimSigDigits(((MixTemp+283.15)/273.15),3)))
+        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15)/273.15),3)))
+        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0+283.15)/273.15),3)))
         CALL ShowContinueError('Sensible Cooling Capacity Modifier = '//TRIM(TrimSigDigits(SensCapTempModFac,5)))
         CALL ShowContinueError('...Rated Sensible Cooling Capacity = Sensible Design Load / Sensible Cooling Capacity Modifier')
         CALL ShowContinueError('Total Cooling Capacity Modifier = '//TRIM(TrimSigDigits(TotCapTempModFac,5)))
@@ -4142,8 +4142,8 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
         CALL ShowContinueError('Entering Air Wet-Bulb Temperature = '//TRIM(TrimSigDigits(MixWetBulb,3))//' C')
         CALL ShowContinueError('Entering Condenser Water Temperature used = 24.4444 C')
         CALL ShowContinueError('Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)')
-        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15d0)/273.15d0),3)))
-        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0d0+283.15d0)/273.15d0),3)))
+        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15)/273.15),3)))
+        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0+283.15)/273.15),3)))
         CALL ShowContinueError('Sensible Cooling Capacity Modifier = '//TRIM(TrimSigDigits(SensCapTempModFac,5)))
         CALL ShowContinueError('...Rated Sensible Cooling Capacity = Sensible Design Load / Sensible Cooling Capacity Modifier')
         CALL ShowContinueError('Carefully review the Load Side Total, Sensible, and Latent heat transfer rates')
@@ -4175,11 +4175,11 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
                             'Nominal Heating Capacity [W]', &
                              SimpleWatertoAirHP(HPNum)%RatedCapHeat)
     CALL PreDefTableEntry(pdchHeatCoilNomCap,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedCapHeat)
-    IF (SimpleWatertoAirHP(HPNum)%RatedCapHeat /= 0.0d0) THEN
+    IF (SimpleWatertoAirHP(HPNum)%RatedCapHeat /= 0.0) THEN
       CALL PreDefTableEntry(pdchHeatCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,SimpleWatertoAirHP(HPNum)%RatedPowerHeat &
                              / SimpleWatertoAirHP(HPNum)%RatedCapHeat)
     ELSE
-      CALL PreDefTableEntry(pdchHeatCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,0.0d0)
+      CALL PreDefTableEntry(pdchHeatCoilNomEff,SimpleWatertoAirHP(HPNum)%Name,0.0)
     ENDIF
   END IF
 
@@ -4188,11 +4188,11 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
   IF (SimpleWatertoAirHP(HPNum)%WaterToAirHPType == 'HEATING' .AND. &
       SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum .GT. 0)THEN
 
-    IF(SimpleWatertoAirHP(SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.0D0)THEN
+    IF(SimpleWatertoAirHP(SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.0)THEN
 
       IF(ABS(SimpleWatertoAirHP(SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal-&
            SimpleWatertoAirHP(HPNum)%RatedCapHeat)/&
-           SimpleWatertoAirHP(SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.2d0) THEN
+           SimpleWatertoAirHP(SimpleWatertoAirHP(HPNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.2) THEN
 
         CALL ShowWarningError('COIL:'//TRIM(SimpleWatertoAirHP(HPNum)%WaterToAirHPType)// &
                             ':WATERTOAIRHEATPUMP:EQUATIONFIT "'//TRIM(SimpleWatertoAirHP(HPNum)%Name)//'"')
@@ -4298,7 +4298,7 @@ SUBROUTINE SizeHVACWaterToAir(HPNum)
 ! Use 1/2 flow since both cooling and heating coil will save flow yet only 1 will operate at a time
   IF(SimpleWatertoAirHP(HPNum)%RatedWaterVolFlowRate .GT. 0.0)THEN
     CALL RegisterPlantCompDesignFlow(SimpleWatertoAirHP(HPNum)%WaterInletNodeNum,  &
-       0.5d0*SimpleWatertoAirHP(HPNum)%RatedWaterVolFlowRate)
+       0.5*SimpleWatertoAirHP(HPNum)%RatedWaterVolFlowRate)
   END IF
 
   RETURN
@@ -4357,15 +4357,15 @@ SUBROUTINE  CalcHPCoolingSimple(HPNum,CyclingScheme,RuntimeFrac,SensDemand,Laten
 
   INTEGER,   INTENT(IN) :: HPNum              ! Heat Pump Number
   INTEGER,   INTENT(IN) :: CyclingScheme      ! Fan/Compressor cycling scheme indicator
-  REAL(r64), INTENT(IN) :: RuntimeFrac        ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
-  REAL(r64), INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
-  REAL(r64), INTENT(IN) :: LatentDemand       ! Cooling Latent Demand [W]
+  REAL, INTENT(IN) :: RuntimeFrac        ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
+  REAL, INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
+  REAL, INTENT(IN) :: LatentDemand       ! Cooling Latent Demand [W]
   INTEGER,   INTENT(IN) :: CompOp             ! compressor operation flag
-  REAL(r64), INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
-  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
+  REAL, INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
+  REAL, INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER  :: Tref=283.15d0      ! Reference Temperature for performance curves,10C [K]
+  REAL, PARAMETER  :: Tref=283.15      ! Reference Temperature for performance curves,10C [K]
   CHARACTER(len=*), PARAMETER :: RoutineName='CalcHPCoolingSimple'
 
 
@@ -4377,62 +4377,62 @@ SUBROUTINE  CalcHPCoolingSimple(HPNum,CyclingScheme,RuntimeFrac,SensDemand,Laten
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: TotalCapRated          ! Rated Total Cooling Capacity [W]
-  REAL(r64) :: SensCapRated           ! Rated Sensible Cooling Capacity [W]
-  REAL(r64) :: CoolPowerRated         ! Rated Cooling Power Input[W]
-  REAL(r64) :: AirVolFlowRateRated    ! Rated Air Volumetric Flow Rate [m3/s]
-  REAL(r64) :: WaterVolFlowRateRated  ! Rated Water Volumetric Flow Rate [m3/s]
-  REAL(r64) :: TotalCapCoeff1         ! 1st coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff2         ! 2nd coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff3         ! 3rd coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff4         ! 4th coefficient of the total cooling capacity performance curve
-  REAL(r64) :: TotalCapCoeff5         ! 5th coefficient of the total cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff1          ! 1st coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff2          ! 2nd coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff3          ! 3rd coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff4          ! 4th coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff5          ! 5th coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: SensCapCoeff6          ! 6th coefficient of the sensible cooling capacity performance curve
-  REAL(r64) :: CoolPowerCoeff1        ! 1st coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff2        ! 2nd coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff3        ! 3rd coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff4        ! 4th coefficient of the cooling power consumption curve
-  REAL(r64) :: CoolPowerCoeff5        ! 5th coefficient of the cooling power consumption curve
-  REAL(r64) :: Twet_rated             ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-  REAL(r64) :: Gamma_rated            ! Gamma at rated conditions (coil air flow rate and air temperatures)
+  REAL :: TotalCapRated          ! Rated Total Cooling Capacity [W]
+  REAL :: SensCapRated           ! Rated Sensible Cooling Capacity [W]
+  REAL :: CoolPowerRated         ! Rated Cooling Power Input[W]
+  REAL :: AirVolFlowRateRated    ! Rated Air Volumetric Flow Rate [m3/s]
+  REAL :: WaterVolFlowRateRated  ! Rated Water Volumetric Flow Rate [m3/s]
+  REAL :: TotalCapCoeff1         ! 1st coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff2         ! 2nd coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff3         ! 3rd coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff4         ! 4th coefficient of the total cooling capacity performance curve
+  REAL :: TotalCapCoeff5         ! 5th coefficient of the total cooling capacity performance curve
+  REAL :: SensCapCoeff1          ! 1st coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff2          ! 2nd coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff3          ! 3rd coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff4          ! 4th coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff5          ! 5th coefficient of the sensible cooling capacity performance curve
+  REAL :: SensCapCoeff6          ! 6th coefficient of the sensible cooling capacity performance curve
+  REAL :: CoolPowerCoeff1        ! 1st coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff2        ! 2nd coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff3        ! 3rd coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff4        ! 4th coefficient of the cooling power consumption curve
+  REAL :: CoolPowerCoeff5        ! 5th coefficient of the cooling power consumption curve
+  REAL :: Twet_rated             ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+  REAL :: Gamma_rated            ! Gamma at rated conditions (coil air flow rate and air temperatures)
 
-  REAL(r64) :: SHRss                  ! Sensible heat ratio at steady state
-  REAL(r64) :: SHReff                 ! Effective sensible heat ratio at part-load condition
-!  REAL(r64) :: PartLoadRatio          ! Part load ratio
+  REAL :: SHRss                  ! Sensible heat ratio at steady state
+  REAL :: SHReff                 ! Effective sensible heat ratio at part-load condition
+!  REAL :: PartLoadRatio          ! Part load ratio
 
-  REAL(r64) :: ratioTDB               ! Ratio of the inlet air dry bulb temperature to the rated conditions
-  REAL(r64) :: ratioTWB               ! Ratio of the inlet air wet bulb temperature to the rated conditions
-  REAL(r64) :: ratioTS                ! Ratio of the source side(water) inlet temperature to the rated conditions
-  REAL(r64) :: ratioVL                ! Ratio of the air flow rate to the rated conditions
-  REAL(r64) :: ratioVS                ! Ratio of the water flow rate to the rated conditions
-  REAL(r64) :: CpWater                ! Specific heat of water [J/kg_C]
-  REAL(r64) :: CpAir                  ! Specific heat of air [J/kg_C]
-  REAL(r64) :: ReportingConstant
+  REAL :: ratioTDB               ! Ratio of the inlet air dry bulb temperature to the rated conditions
+  REAL :: ratioTWB               ! Ratio of the inlet air wet bulb temperature to the rated conditions
+  REAL :: ratioTS                ! Ratio of the source side(water) inlet temperature to the rated conditions
+  REAL :: ratioVL                ! Ratio of the air flow rate to the rated conditions
+  REAL :: ratioVS                ! Ratio of the water flow rate to the rated conditions
+  REAL :: CpWater                ! Specific heat of water [J/kg_C]
+  REAL :: CpAir                  ! Specific heat of air [J/kg_C]
+  REAL :: ReportingConstant
 
   LOGICAL :: LatDegradModelSimFlag  ! Latent degradation model simulation flag
   INTEGER :: NumIteration           ! Iteration Counter
   INTEGER, SAVE :: Count=0          ! No idea what this is for.
   LOGICAL, SAVE    :: FirstTime = .true.
-  REAL(r64), SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
-  REAL(r64), SAVE  :: LoadSideInletWBTemp_Init ! rated conditions
-  REAL(r64), SAVE  :: LoadSideInletHumRat_Init ! rated conditions
-  REAL(r64), SAVE  :: LoadSideInletEnth_Init ! rated conditions
-  REAL(r64), SAVE  :: CpAir_Init                ! rated conditions
-  REAL(r64)        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
-  REAL(r64)        :: LoadSideInletWBTemp_Unit ! calc conditions for unit
-  REAL(r64)        :: LoadSideInletHumRat_Unit ! calc conditions for unit
-  REAL(r64)        :: LoadSideInletEnth_Unit ! calc conditions for unit
-  REAL(r64)        :: CpAir_Unit                ! calc conditions for unit
+  REAL, SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
+  REAL, SAVE  :: LoadSideInletWBTemp_Init ! rated conditions
+  REAL, SAVE  :: LoadSideInletHumRat_Init ! rated conditions
+  REAL, SAVE  :: LoadSideInletEnth_Init ! rated conditions
+  REAL, SAVE  :: CpAir_Init                ! rated conditions
+  REAL        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
+  REAL        :: LoadSideInletWBTemp_Unit ! calc conditions for unit
+  REAL        :: LoadSideInletHumRat_Unit ! calc conditions for unit
+  REAL        :: LoadSideInletEnth_Unit ! calc conditions for unit
+  REAL        :: CpAir_Unit                ! calc conditions for unit
 
   IF (FirstTime) THEN
     !Set indoor air conditions to the rated condition
-    LoadSideInletDBTemp_Init = 26.7d0
-    LoadSideInletHumRat_Init = 0.0111d0
+    LoadSideInletDBTemp_Init = 26.7
+    LoadSideInletHumRat_Init = 0.0111
     LoadSideInletEnth_Init = PsyHFnTdbW(LoadSideInletDBTemp_Init,LoadSideInletHumRat_Init,RoutineName//':Init')
     CpAir_Init = PsyCpAirFnWTdb(LoadSideInletHumRat_Init,LoadSideInletDBTemp_Init,RoutineName//':Init')
     FirstTime=.false.
@@ -4669,14 +4669,14 @@ SUBROUTINE  CalcHPHeatingSimple(HPNum,CyclingScheme,RuntimeFrac,SensDemand,CompO
 
   INTEGER,   INTENT(IN) :: HPNum              ! Heat Pump Number
   INTEGER,   INTENT(IN) :: CyclingScheme      ! Fan/Compressor cycling scheme indicator
-  REAL(r64), INTENT(IN) :: RuntimeFrac        ! Runtime Fraction of compressor
-  REAL(r64), INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
+  REAL, INTENT(IN) :: RuntimeFrac        ! Runtime Fraction of compressor
+  REAL, INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
   INTEGER,   INTENT(IN) :: CompOp             ! compressor operation flag
-  REAL(r64), INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
-  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
+  REAL, INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
+  REAL, INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER  :: Tref=283.15d0      ! Reference Temperature for performance curves,10C [K]
+  REAL, PARAMETER  :: Tref=283.15      ! Reference Temperature for performance curves,10C [K]
   CHARACTER(len=*), PARAMETER :: RoutineName='CalcHPHeatingSimple'
 
 
@@ -4689,29 +4689,29 @@ SUBROUTINE  CalcHPHeatingSimple(HPNum,CyclingScheme,RuntimeFrac,SensDemand,CompO
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 
-  REAL(r64) :: HeatCapRated           ! Rated Heating Capacity [W]
-  REAL(r64) :: HeatPowerRated         ! Rated Heating Power Input[W]
-  REAL(r64) :: AirVolFlowRateRated    ! Rated Air Volumetric Flow Rate [m3/s]
-  REAL(r64) :: WaterVolFlowRateRated  ! Rated Water Volumetric Flow Rate [m3/s]
-  REAL(r64) :: HeatCapCoeff1          ! 1st coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff2          ! 2nd coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff3          ! 3rd coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff4          ! 4th coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatCapCoeff5          ! 5th coefficient of the heating capacity performance curve
-  REAL(r64) :: HeatPowerCoeff1        ! 1st coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff2        ! 2nd coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff3        ! 3rd coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff4        ! 4th coefficient of the heating power consumption curve
-  REAL(r64) :: HeatPowerCoeff5        ! 5th coefficient of the heating power consumption curve
+  REAL :: HeatCapRated           ! Rated Heating Capacity [W]
+  REAL :: HeatPowerRated         ! Rated Heating Power Input[W]
+  REAL :: AirVolFlowRateRated    ! Rated Air Volumetric Flow Rate [m3/s]
+  REAL :: WaterVolFlowRateRated  ! Rated Water Volumetric Flow Rate [m3/s]
+  REAL :: HeatCapCoeff1          ! 1st coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff2          ! 2nd coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff3          ! 3rd coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff4          ! 4th coefficient of the heating capacity performance curve
+  REAL :: HeatCapCoeff5          ! 5th coefficient of the heating capacity performance curve
+  REAL :: HeatPowerCoeff1        ! 1st coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff2        ! 2nd coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff3        ! 3rd coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff4        ! 4th coefficient of the heating power consumption curve
+  REAL :: HeatPowerCoeff5        ! 5th coefficient of the heating power consumption curve
 
-!  REAL(r64) :: PartLoadRatio          ! Part load ratio
-  REAL(r64) :: ratioTDB               ! Ratio of the inlet air dry bulb temperature to the rated conditions
-  REAL(r64) :: ratioTS                ! Ratio of the source side (water) inlet temperature to the rated conditions
-  REAL(r64) :: ratioVL                ! Ratio of the load side flow rate to the rated conditions
-  REAL(r64) :: ratioVS                ! Ratio of the source side flow rate to the rated conditions
-  REAL(r64) :: CpWater                ! Specific heat of water [J/kg_C]
-  REAL(r64) :: CpAir                  ! Specific heat of air [J/kg_C]
-  REAL(r64) :: ReportingConstant
+!  REAL :: PartLoadRatio          ! Part load ratio
+  REAL :: ratioTDB               ! Ratio of the inlet air dry bulb temperature to the rated conditions
+  REAL :: ratioTS                ! Ratio of the source side (water) inlet temperature to the rated conditions
+  REAL :: ratioVL                ! Ratio of the load side flow rate to the rated conditions
+  REAL :: ratioVS                ! Ratio of the source side flow rate to the rated conditions
+  REAL :: CpWater                ! Specific heat of water [J/kg_C]
+  REAL :: CpAir                  ! Specific heat of air [J/kg_C]
+  REAL :: ReportingConstant
 
  !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
 
@@ -4780,9 +4780,9 @@ SUBROUTINE  CalcHPHeatingSimple(HPNum,CyclingScheme,RuntimeFrac,SensDemand,CompO
   IF (CyclingScheme .EQ. ContFanCycCoil) THEN
     ! continuous fan, cycling compressor
     SimpleWatertoAirHP(HPNum)%OutletAirEnthalpy = PartLoadRatio*LoadSideOutletEnth + &
-                                                  (1.d0-PartLoadRatio)*LoadSideInletEnth
+                                                  (1.-PartLoadRatio)*LoadSideInletEnth
     SimpleWatertoAirHP(HPNum)%OutletAirHumRat   = PartLoadRatio*LoadsideOutletHumRat + &
-                                                  (1.d0-PartLoadRatio)*LoadSideInletHumRat
+                                                  (1.-PartLoadRatio)*LoadSideInletHumRat
     SimpleWatertoAirHP(HPNum)%OutletAirDBTemp   = PsyTdbFnHW(SimpleWatertoAirHP(HPNum)%OutletAirEnthalpy,  &
                                                                SimpleWatertoAirHP(HPNum)%OutletAirHumRat,RoutineName)
     PLRCorrLoadSideMdot = LoadSideMassFlowRate
@@ -4871,7 +4871,7 @@ SUBROUTINE UpdateSimpleWatertoAirHP(HPNum)
   INTEGER              :: WaterInletNode
   INTEGER              :: AirOutletNode
   INTEGER              :: WaterOutletNode
-  REAL(r64)            :: ReportingConstant
+  REAL            :: ReportingConstant
 
 
   !WatertoAirHP(HPNum)%Simflag=.FALSE.
@@ -4984,13 +4984,13 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: HPNum         ! Index number for cooling coil
   INTEGER, INTENT (IN) :: CyclingScheme ! Fan/compressor cycling scheme indicator
-  REAL(r64), INTENT (IN) :: SHRss         ! Steady-state sensible heat ratio
-  REAL(r64), INTENT (IN) :: RTF           ! Compressor run-time fraction
-  REAL(r64), INTENT (IN) :: QLatRated     ! Rated latent capacity
-  REAL(r64), INTENT (IN) :: QLatActual    ! Actual latent capacity
-  REAL(r64), INTENT (IN) :: EnteringDB    ! Entering air dry-bulb temperature
-  REAL(r64), INTENT (IN) :: EnteringWB    ! Entering air wet-bulb temperature
-  REAL(r64)            :: SHReff        ! Effective sensible heat ratio, includes degradation due to cycling effects
+  REAL, INTENT (IN) :: SHRss         ! Steady-state sensible heat ratio
+  REAL, INTENT (IN) :: RTF           ! Compressor run-time fraction
+  REAL, INTENT (IN) :: QLatRated     ! Rated latent capacity
+  REAL, INTENT (IN) :: QLatActual    ! Actual latent capacity
+  REAL, INTENT (IN) :: EnteringDB    ! Entering air dry-bulb temperature
+  REAL, INTENT (IN) :: EnteringWB    ! Entering air wet-bulb temperature
+  REAL            :: SHReff        ! Effective sensible heat ratio, includes degradation due to cycling effects
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5002,25 +5002,25 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Twet                 ! Nominal time for condensate to begin leaving the coil's condensate drain line
+  REAL :: Twet                 ! Nominal time for condensate to begin leaving the coil's condensate drain line
                                     ! at the current operating conditions (sec)
-  REAL(r64) :: Gamma                ! Initial moisture evaporation rate divided by steady-state AC latent capacity
+  REAL :: Gamma                ! Initial moisture evaporation rate divided by steady-state AC latent capacity
                                     ! at the current operating conditions
-  REAL(r64) :: Twet_rated           ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-  REAL(r64) :: Gamma_rated          ! Gamma at rated conditions (coil air flow rate and air temperatures)
-  REAL(r64) :: Twet_max             ! Maximum allowed value for Twet
-  REAL(r64) :: MaxONOFFCyclesperHour  ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL(r64) :: HPTimeConstant       ! Heat pump time constant [s]
-  REAL(r64) :: FanDelayTime         ! Fan delay time, time delay for the HP's fan to
+  REAL :: Twet_rated           ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+  REAL :: Gamma_rated          ! Gamma at rated conditions (coil air flow rate and air temperatures)
+  REAL :: Twet_max             ! Maximum allowed value for Twet
+  REAL :: MaxONOFFCyclesperHour  ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL :: HPTimeConstant       ! Heat pump time constant [s]
+  REAL :: FanDelayTime         ! Fan delay time, time delay for the HP's fan to
                                     ! shut off after compressor cycle off  [s]
-  REAL(r64) :: Ton                  ! Coil on time (sec)
-  REAL(r64) :: Toff                 ! Coil off time (sec)
-  REAL(r64) :: Toffa                ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
-  REAL(r64) :: aa                   ! Intermediate variable
-  REAL(r64) :: To1                  ! Intermediate variable (first guess at To). To = time to the start of moisture removal
-  REAL(r64) :: To2                  ! Intermediate variable (second guess at To). To = time to the start of moisture removal
-  REAL(r64) :: Error                ! Error for iteration (DO) loop
-  REAL(r64) :: LHRmult              ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
+  REAL :: Ton                  ! Coil on time (sec)
+  REAL :: Toff                 ! Coil off time (sec)
+  REAL :: Toffa                ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
+  REAL :: aa                   ! Intermediate variable
+  REAL :: To1                  ! Intermediate variable (first guess at To). To = time to the start of moisture removal
+  REAL :: To2                  ! Intermediate variable (second guess at To). To = time to the start of moisture removal
+  REAL :: Error                ! Error for iteration (DO) loop
+  REAL :: LHRmult              ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
 
    Twet_rated               = SimpleWatertoAirHP(HPNum)%Twet_Rated
    Gamma_rated              = SimpleWatertoAirHP(HPNum)%Gamma_Rated
@@ -5040,11 +5040,11 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
    Twet_max   = 9999.0 ! high limit for Twet
 
 !  Calculate the model parameters at the actual operating conditions
-   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.d-10),Twet_max)
-   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7d0-19.4d0)*QLatActual+1.d-10)
+   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.*10**-10),Twet_max)    !RS: Debugging: 102612
+   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7-19.4)*QLatActual+1.*10**-10)
 
 !  Calculate the compressor on and off times using a converntional thermostat curve
-   Ton  = 3600.d0/(4.d0*MaxONOFFCyclesperHour*(1.d0-RTF))   ! duration of cooling coil on-cycle (sec)
+   Ton  = 3600./(4.*MaxONOFFCyclesperHour*(1.-RTF))   ! duration of cooling coil on-cycle (sec)
 
    IF ((CyclingScheme .EQ. CycFanCycCoil).AND.(FanDelayTime.NE.0.0)) THEN
     ! For CycFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
@@ -5053,23 +5053,23 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
    ELSE
     ! For ContFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
     ! for the entire heat pump off-cycle.
-        Toff = 3600.d0/(4.d0*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
+        Toff = 3600./(4.*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
    END IF
 
 !  Cap Toff to meet the equation restriction
    IF(Gamma .GT. 0.0)THEN
-     Toffa = MIN(Toff, 2.d0*Twet/Gamma)
+     Toffa = MIN(Toff, 2.*Twet/Gamma)
    ELSE
      Toffa = Toff
    END IF
 
 !  Use sucessive substitution to solve for To
-   aa = (Gamma*Toffa) - (0.25d0/Twet)*(Gamma**2)*(Toffa**2)
+   aa = (Gamma*Toffa) - (0.25/Twet)*(Gamma**2)*(Toffa**2)
 
    To1 = aa+HPTimeConstant
    Error = 1.0
-   DO WHILE (Error .gt. 0.001d0)
-       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0d0)
+   DO WHILE (Error .gt. 0.001)
+       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0)
        Error = ABS((To2-To1)/To1)
        To1 = To2
    END DO
@@ -5077,9 +5077,9 @@ FUNCTION CalcEffectiveSHR(HPNum,SHRss, CyclingScheme, RTF, QLatRated, QLatActual
 !  Adjust Sensible Heat Ratio (SHR) using Latent Heat Ratio (LHR) multiplier
 !  Floating underflow errors occur when -Ton/HPTimeConstant is a large negative number.
 !  Cap lower limit at -700 to avoid the underflow errors.
-   aa = EXP(MAX(-700.0d0,-Ton/HPTimeConstant))
+   aa = EXP(MAX(-700.0,-Ton/HPTimeConstant))
 !  Calculate latent heat ratio multiplier
-   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0d0))),0.0d0)
+   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0))),0.0)
 
 !  Calculate part-load or "effective" sensible heat ratio
    SHReff = 1.0-(1.0-SHRss)*LHRmult
@@ -5181,7 +5181,7 @@ FUNCTION GetCoilCapacity(CoilType,CoilName,ErrorsFound) RESULT(CoilCapacity)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: CoilCapacity ! returned capacity of matched coil
+  REAL                    :: CoilCapacity ! returned capacity of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5255,7 +5255,7 @@ FUNCTION GetCoilAirFlowRate(CoilType,CoilName,ErrorsFound) RESULT(CoilAirFlowRat
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: CoilAirFlowRate ! returned air volume flow rate of matched coil
+  REAL                    :: CoilAirFlowRate ! returned air volume flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

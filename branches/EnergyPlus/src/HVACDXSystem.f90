@@ -45,7 +45,7 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
-REAL(r64), PARAMETER :: MinAirMassFlow = 0.001d0
+REAL, PARAMETER :: MinAirMassFlow = 0.001
 ! Compressor operation
 INTEGER, PARAMETER :: On =  1              ! normal compressor operation
 INTEGER, PARAMETER :: Off = 0              ! signal DXCoil that compressor shouldn't run
@@ -69,13 +69,13 @@ TYPE DXCoolingConditions
   INTEGER      :: DXCoolingCoilInletNodeNum          =0
   INTEGER      :: DXCoolingCoilOutletNodeNum         =0
   Integer      :: DXSystemControlNodeNum             =0   ! the node number of the node with the setpoint
-  REAL(r64)    :: DesiredOutletTemp                  =0.0 ! the temperature at the unit outlet node needed
+  REAL    :: DesiredOutletTemp                  =0.0 ! the temperature at the unit outlet node needed
                                                           ! to meet the supply air setpoint.
-  REAL(r64)    :: DesiredOutletHumRat                =1.0 ! the humidity ratio at the unit outlet node needed
+  REAL    :: DesiredOutletHumRat                =1.0 ! the humidity ratio at the unit outlet node needed
                                                           ! to meet the supply air setpoint.
-  REAL(r64)    :: PartLoadFrac                       =0.0 ! part load fraction for current time step (single speed)
-  REAL(r64)    :: SpeedRatio                         =0.0 ! current compressor speed ratio (variable speed)
-  REAL(r64)    :: CycRatio                           =0.0 ! cycling part load ratio (variable speed)
+  REAL    :: PartLoadFrac                       =0.0 ! part load fraction for current time step (single speed)
+  REAL    :: SpeedRatio                         =0.0 ! current compressor speed ratio (variable speed)
+  REAL    :: CycRatio                           =0.0 ! cycling part load ratio (variable speed)
   LOGICAL      :: RunOnSensibleLoad              =.true.  ! logical determines if this system will run to
                                                           ! meet a sensible load - for future use
   LOGICAL      :: RunOnLatentLoad                =.false. ! logical determines if this system will run to
@@ -129,7 +129,7 @@ TYPE DXCoolingConditions
   INTEGER      :: MModeLatPLRIter2                    =0   ! used in MultiMode calculations
   INTEGER      :: MModeLatPLRIterIndex2               =0   ! used in MultiMode calculations
 ! When the Dx system is a part of Outdoor Air Unit
-  REAL(r64)    :: OAUnitSetTemp                        =0.0 ! set
+  REAL    :: OAUnitSetTemp                        =0.0 ! set
 
 END TYPE DXCoolingConditions
 
@@ -203,8 +203,8 @@ SUBROUTINE SimDXCoolingSystem(DXCoolingSystemName, FirstHVACIteration, AirLoopNu
   INTEGER, INTENT(IN)          :: AirLoopNum          ! Primary air loop number
   INTEGER, INTENT(INOUT)       :: CompIndex           ! Index to DXSystem:Airloop object
   INTEGER, INTENT(IN), OPTIONAL:: OAUnitNum           ! If the system is an equipment of OutdoorAirUnit
-  REAL(r64), INTENT(IN), OPTIONAL :: OAUCoilOutTemp   ! the coil inlet temperature of OutdoorAirUnit
-  REAL(r64), INTENT(INOUT), OPTIONAL :: QTotOut       ! the total cooling output of unit
+  REAL, INTENT(IN), OPTIONAL :: OAUCoilOutTemp   ! the coil inlet temperature of OutdoorAirUnit
+  REAL, INTENT(INOUT), OPTIONAL :: QTotOut       ! the total cooling output of unit
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -225,7 +225,7 @@ SUBROUTINE SimDXCoolingSystem(DXCoolingSystemName, FirstHVACIteration, AirLoopNu
   INTEGER                       :: DXSystemNum           ! Index to DXSystem:Airloop object
   LOGICAL,SAVE                  :: GetInputFlag = .True. ! Flag to get input only once
   LOGICAL                       :: HXUnitOn              ! Flag to control HX for HXAssisted Cooling Coil
-  REAL(r64)                     :: AirMassFlow           ! DX System air mass flow rate
+  REAL                     :: AirMassFlow           ! DX System air mass flow rate
   INTEGER                       :: InletNodeNum          ! DX System inlet node number
   INTEGER                       :: OutletNodeNum         ! DX System outlet node number
 
@@ -387,7 +387,7 @@ SUBROUTINE GetDXCoolingSystemInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
     INTEGER                              :: TotalArgs=0       ! Total number of alpha and numeric arguments (max) for a
@@ -635,7 +635,7 @@ SUBROUTINE InitDXCoolingSystem(DXSystemNum,AirLoopNum,OAUnitNum,OAUCoilOutTemp)
   INTEGER, INTENT (IN) :: DXSystemNum ! number of the current DX Sys being simulated
   INTEGER, INTENT (IN) :: AirLoopNum  ! number of the current air loop being simulated
   INTEGER, INTENT (IN), Optional :: OAUnitNum  ! number of the current outdoor air unit being simulated
-  REAL(r64), INTENT(IN), OPTIONAL :: OAUCoilOutTemp    ! the coil inlet temperature of OutdoorAirUnit
+  REAL, INTENT(IN), OPTIONAL :: OAUCoilOutTemp    ! the coil inlet temperature of OutdoorAirUnit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -653,7 +653,7 @@ SUBROUTINE InitDXCoolingSystem(DXSystemNum,AirLoopNum,OAUnitNum,OAUCoilOutTemp)
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL,SAVE        :: MySetPointCheckFlag = .TRUE.
   INTEGER             :: OutdoorAirUnitNum ! "ONLY" for ZoneHVAC:OutdoorAirUnit
-  REAL(r64)           :: OAUCoilOutletTemp  ! "ONLY" for zoneHVAC:OutdoorAirUnit
+  REAL           :: OAUCoilOutletTemp  ! "ONLY" for zoneHVAC:OutdoorAirUnit
           ! FLOW:
 
 IF (MyOneTimeFlag) THEN
@@ -806,8 +806,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte    = 500     ! Maximum number of iterations for solver
-  REAL(r64), PARAMETER :: Acc       = 1.d-3   ! Accuracy of solver result
-  REAL(r64), PARAMETER :: HumRatAcc = 1.d-6   ! Accuracy of solver result
+  REAL, PARAMETER :: Acc       = 1.*10**-3   ! Accuracy of solver result    !RS: Debugging: 102612
+  REAL, PARAMETER :: HumRatAcc = 1.*10**-6   ! Accuracy of solver result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           !  na
@@ -817,37 +817,37 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength)  :: CompName  ! Name of the DX cooling coil
-  REAL(r64)           :: NoOutput            ! Sensible capacity (outlet - inlet) when the compressor is off
-  REAL(r64)           :: FullOutput          ! Sensible capacity (outlet - inlet) when the compressor is on
-  REAL(r64)           :: ReqOutput           ! Sensible capacity (outlet - inlet) required to meet load or setpoint temperature
+  REAL           :: NoOutput            ! Sensible capacity (outlet - inlet) when the compressor is off
+  REAL           :: FullOutput          ! Sensible capacity (outlet - inlet) when the compressor is on
+  REAL           :: ReqOutput           ! Sensible capacity (outlet - inlet) required to meet load or setpoint temperature
   Integer             :: InletNode           ! Inlet node number of the DX cooling coil
   Integer             :: OutletNode          ! Outlet node number of the DX cooling coil
   Integer             :: ControlNode         ! The node number where a setpoint is placed to control the DX cooling coil
-  REAL(r64)           :: PartLoadFrac        ! The part-load fraction of the compressor
-  REAL(r64)           :: SpeedRatio          ! SpeedRatio = (CompressorSpeed - CompressorSpeedMin) /
+  REAL           :: PartLoadFrac        ! The part-load fraction of the compressor
+  REAL           :: SpeedRatio          ! SpeedRatio = (CompressorSpeed - CompressorSpeedMin) /
                                              !              (CompressorSpeedMax - CompressorSpeedMin)
                                              ! for variable speed or 2 speed compressors
-  REAL(r64)           :: CycRatio            ! Cycling part-load ratio for variable speed or 2 speed compressors
-  REAL(r64)           :: DesOutTemp          ! Desired outlet temperature of the DX cooling coil
-  REAL(r64)           :: DesOutHumRat        ! Desired outlet humidity ratio of the DX cooling coil
-  REAL(r64)           :: OutletTempDXCoil    ! Actual outlet temperature of the DX cooling coil
-  REAL(r64)           :: OutletTempLS        ! Actual outlet temperature of the variable speed DX cooling coil at low speed
-  REAL(r64)           :: OutletTempHS        ! Actual outlet temperature of the variable speed DX cooling coil at high speed
-  REAL(r64)           :: OutletHumRatLS      ! Actual outlet humrat of the variable speed DX cooling coil at low speed
-  REAL(r64)           :: OutletHumRatHS      ! Actual outlet humrat of the variable speed DX cooling coil at high speed
-  REAL(r64)           :: OutletHumRatDXCoil  ! Actual outlet humidity ratio of the DX cooling coil
+  REAL           :: CycRatio            ! Cycling part-load ratio for variable speed or 2 speed compressors
+  REAL           :: DesOutTemp          ! Desired outlet temperature of the DX cooling coil
+  REAL           :: DesOutHumRat        ! Desired outlet humidity ratio of the DX cooling coil
+  REAL           :: OutletTempDXCoil    ! Actual outlet temperature of the DX cooling coil
+  REAL           :: OutletTempLS        ! Actual outlet temperature of the variable speed DX cooling coil at low speed
+  REAL           :: OutletTempHS        ! Actual outlet temperature of the variable speed DX cooling coil at high speed
+  REAL           :: OutletHumRatLS      ! Actual outlet humrat of the variable speed DX cooling coil at low speed
+  REAL           :: OutletHumRatHS      ! Actual outlet humrat of the variable speed DX cooling coil at high speed
+  REAL           :: OutletHumRatDXCoil  ! Actual outlet humidity ratio of the DX cooling coil
   INTEGER             :: SolFla              ! Flag of solver
-  REAL(r64), DIMENSION(5)  :: Par                 ! Parameter array passed to solver
+  REAL, DIMENSION(5)  :: Par                 ! Parameter array passed to solver
   LOGICAL             :: SensibleLoad        ! True if there is a sensible cooling load on this system
   LOGICAL             :: LatentLoad          ! True if there is a latent   cooling load on this system
   INTEGER             :: DehumidMode         ! Dehumidification mode (0=normal, 1=enhanced)
   INTEGER             :: FanOpMode           ! Supply air fan operating mode
-  REAL(r64)           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempOutletHumRatDXCoil ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: NoLoadHumRatOut     ! DX coil outlet air humidity ratio with comprssor off
-  REAL(r64)           :: FullLoadHumRatOut   ! DX coil outlet air humidity ratio with comprssor full on
+  REAL           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempOutletHumRatDXCoil ! Used to find latent PLR when max iterations exceeded
+  REAL           :: NoLoadHumRatOut     ! DX coil outlet air humidity ratio with comprssor off
+  REAL           :: FullLoadHumRatOut   ! DX coil outlet air humidity ratio with comprssor full on
 
       ! Set local variables
       ! Retrieve the load on the controlled zone
@@ -926,8 +926,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutTemp
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXCoolingSystem(DXSystemNum)%DXCoilSensPLRIter .LT. 1)THEN
@@ -994,8 +994,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutHumRat
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilHumRatResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilHumRatResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXCoolingSystem(DXSystemNum)%DXCoilLatPLRIter .LT. 1)THEN
@@ -1097,7 +1097,7 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
             ELSE
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutTemp
-              ! FirstHVACIteration is a logical, Par is REAL(r64), so make TRUE = 1 and FALSE = 0
+              ! FirstHVACIteration is a logical, Par is REAL, so make TRUE = 1 and FALSE = 0
               IF(FirstHVACIteration)THEN
                 Par(3) = 1.0
               ELSE
@@ -1109,8 +1109,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 Par(4) = 0.0
               END IF
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilTempResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilTempResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
 
 !               RegulaFalsi may not find sensible PLR when the latent degradation model is used.
@@ -1119,7 +1119,7 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 TempOutletTempDXCoil = Node(InletNode)%Temp
                 DO WHILE((TempOutletTempDXCoil-DesOutTemp) .GT. 0.0 .AND. TempMaxPLR .LE. 1.0)
 !                 find upper limit of PLR
-                  TempMaxPLR = TempMaxPLR + 0.1d0
+                  TempMaxPLR = TempMaxPLR + 0.1
                   CALL SimHXAssistedCoolingCoil(CompName,FirstHVACIteration,On,TempMaxPLR, &
                                                 DXCoolingSystem(DXSystemNum)%CoolingCoilIndex, FanOpMOde, &
                                                 HXUnitEnable=HXUnitOn, EconomizerFlag=EconomizerFlag)
@@ -1130,7 +1130,7 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
 !                 pull upper limit of PLR down to last valid limit (i.e. outlet temp still exceeds DesOutTemp)
                   TempMaxPLR = TempMinPLR
 !                 find minimum limit of PLR
-                  TempMinPLR = TempMinPLR - 0.01d0
+                  TempMinPLR = TempMinPLR - 0.01
                   CALL SimHXAssistedCoolingCoil(CompName,FirstHVACIteration,On,TempMinPLR, &
                                                 DXCoolingSystem(DXSystemNum)%CoolingCoilIndex, FanOpMode, &
                                                 HXUnitEnable=HXUnitOn, EconomizerFlag=EconomizerFlag)
@@ -1138,8 +1138,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 END DO
 !               Relax boundary slightly to assure a solution can be found using RegulaFalsi (i.e. one boundary may be
 !               very near the desired result)
-                TempMinPLR = MAX(0.0d0,(TempMinPLR - 0.01d0))
-                TempMaxPLR = MIN(1.0d0,(TempMaxPLR + 0.01d0))
+                TempMinPLR = MAX(0.0,(TempMinPLR - 0.01))
+                TempMaxPLR = MIN(1.0,(TempMaxPLR + 0.01))
 !               tighter boundary of solution has been found, call RegulaFalsi a second time
                 CALL SolveRegulaFalsi(Acc,MaxIte,SolFla,PartLoadFrac,HXAssistedCoolCoilTempResidual,TempMinPLR,TempMaxPLR,Par)
                 IF (SolFla == -1) THEN
@@ -1237,12 +1237,12 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
               PartLoadFrac = 0.0
 !           OutletTempDXCoil is the full capacity outlet temperature at PartLoadFrac = 1 from the CALL above.
 !           If this temp is greater than or very near the desired outlet temp, then run the compressor at PartLoadFrac = 1.
-            ELSE IF ((OutletTempDXCoil > DesOutTemp) .OR. ABS(OutletTempDXCoil - DesOutTemp) .LE. (Acc*2.0d0)) THEN
+            ELSE IF ((OutletTempDXCoil > DesOutTemp) .OR. ABS(OutletTempDXCoil - DesOutTemp) .LE. (Acc*2.0)) THEN
                PartLoadFrac = 1.0
             ELSE
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutTemp
-              ! FirstHVACIteration is a logical, Par is REAL(r64), so make TRUE = 1.0 and FALSE = 0.0
+              ! FirstHVACIteration is a logical, Par is REAL, so make TRUE = 1.0 and FALSE = 0.0
               IF(FirstHVACIteration)THEN
                 Par(3) = 1.0
               ELSE
@@ -1254,8 +1254,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 Par(4) = 0.0
               END IF
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilTempResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilTempResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXCoolingSystem(DXSystemNum)%HXAssistedLatPLRIter .LT. 1)THEN
@@ -1302,17 +1302,17 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
 
 !           IF NoLoadHumRatOut is lower than (more dehumidification than required) or very near the DesOutHumRat,
 !           do not run the compressor
-            IF ((NoLoadHumRatOut-DesOutHumRat) .LT. HumRatAcc*2.0d0) THEN
+            IF ((NoLoadHumRatOut-DesOutHumRat) .LT. HumRatAcc*2.0) THEN
               PartLoadFrac = PartLoadFrac  ! keep part-load fraction from sensible calculation
 !           If the FullLoadHumRatOut is greater than (insufficient dehumidification) or very near the DesOutHumRat,
 !           run the compressor at PartLoadFrac = 1.
-            ELSE IF ((DesOutHumRat-FullLoadHumRatOut) .LT. HumRatAcc*2.0d0) THEN
+            ELSE IF ((DesOutHumRat-FullLoadHumRatOut) .LT. HumRatAcc*2.0) THEN
               PartLoadFrac = 1.0
 !           Else find the PLR to meet the load
             ELSE
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutHumRat
-              ! FirstHVACIteration is a logical, Par is REAL(r64), so make TRUE = 1 and FALSE = 0
+              ! FirstHVACIteration is a logical, Par is REAL, so make TRUE = 1 and FALSE = 0
               IF(FirstHVACIteration)THEN
                 Par(3) = 1.0
               ELSE
@@ -1324,17 +1324,17 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 Par(4) = 0.0
               END IF
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilHRResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, PartLoadFrac, HXAssistedCoolCoilHRResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
 
 !               RegulaFalsi may not find latent PLR when the latent degradation model is used.
 !               If iteration limit is exceeded, find tighter boundary of solution and repeat RegulaFalsi
-                TempMaxPLR = -0.1d0
+                TempMaxPLR = -0.1
                 TempOutletHumRatDXCoil = OutletHumRatDXCoil
                 DO WHILE((OutletHumRatDXCoil - TempOutletHumRatDXCoil) .GE. 0.0 .AND. TempMaxPLR .LE. 1.0)
 !                 find upper limit of LatentPLR
-                  TempMaxPLR = TempMaxPLR + 0.1d0
+                  TempMaxPLR = TempMaxPLR + 0.1
                   CALL SimHXAssistedCoolingCoil(CompName,FirstHVACIteration,On,TempMaxPLR, &
                                                 DXCoolingSystem(DXSystemNum)%CoolingCoilIndex, FanOpMode, &
                                                 HXUnitEnable=HXUnitOn, EconomizerFlag=EconomizerFlag)
@@ -1345,7 +1345,7 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
 !                 pull upper limit of LatentPLR down to last valid limit (i.e. latent output still exceeds SystemMoisuterLoad)
                   TempMaxPLR = TempMinPLR
 !                 find minimum limit of Latent PLR
-                  TempMinPLR = TempMinPLR - 0.01d0
+                  TempMinPLR = TempMinPLR - 0.01
                   CALL SimHXAssistedCoolingCoil(CompName,FirstHVACIteration,On,TempMaxPLR, &
                                                 DXCoolingSystem(DXSystemNum)%CoolingCoilIndex, FanOpMode, &
                                                 HXUnitEnable=HXUnitOn, EconomizerFlag=EconomizerFlag)
@@ -1420,17 +1420,17 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
         CASE (CoilDX_CoolingTwoSpeed)  ! Coil:Cooling:DX:TwoSpeed 
                                        ! formerly (v3 and beyond)COIL:DX:MULTISPEED:COOLINGEMPIRICAL
 !         SUBROUTINE SimDXCoilMultiSpeed(CompName,SpeedRatio,CycRatio,CompIndex,SpeedNum,FanMode,CompOp)
-          CALL SimDXCoilMultiSpeed(CompName,0.0d0,1.0d0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
+          CALL SimDXCoilMultiSpeed(CompName,0.0,1.0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
           OutletTempLS = DXCoilOutletTemp(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
           IF (OutletTempLS > DesOutTemp) THEN
             CycRatio = 1.0
-            CALL SimDXCoilMultiSpeed(CompName,1.0d0,1.0d0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
+            CALL SimDXCoilMultiSpeed(CompName,1.0,1.0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
             OutletTempHS = DXCoilOutletTemp(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
             IF (OutletTempHS < DesOutTemp) THEN
               Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
               Par(2) = DesOutTemp
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, SpeedRatio, DXCoilVarSpeedResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, SpeedRatio, DXCoilVarSpeedResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXCoolingSystem(DXSystemNum)%MSpdSensPLRIter .LT. 1)THEN
@@ -1460,8 +1460,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
             SpeedRatio = 0.0
             Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
             Par(2) = DesOutTemp
-            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, CycRatio, DXCoilCyclingResidual, 0.0d0,   &
-                                            1.0d0, Par)
+            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, CycRatio, DXCoilCyclingResidual, 0.0,   &
+                                            1.0, Par)
             IF (SolFla == -1) THEN
               IF(.NOT. WarmupFlag)THEN
                 IF(DXCoolingSystem(DXSystemNum)%MSpdCycSensPLRIter .LT. 1)THEN
@@ -1501,17 +1501,17 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
               SpeedRatio = 0.0
 
 !             SUBROUTINE SimDXCoilMultiSpeed(CompName,SpeedRatio,CycRatio,CompIndex,SpeedNum,FanMode,CompOp)
-              CALL SimDXCoilMultiSpeed(CompName,0.0d0,1.0d0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
+              CALL SimDXCoilMultiSpeed(CompName,0.0,1.0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
               OutletHumRatLS = DXCoilOutletHumRat(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
               IF (OutletHumRatLS > DesOutHumRat) THEN
                 CycRatio = 1.0
-                CALL SimDXCoilMultiSpeed(CompName,1.0d0,1.0d0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
+                CALL SimDXCoilMultiSpeed(CompName,1.0,1.0,DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
                 OutletHumRatHS = DXCoilOutletHumRat(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex)
                 IF (OutletHumRatHS < DesOutHumRat) THEN
                   Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
                   Par(2) = DesOutHumRat
-                  CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, SpeedRatio, DXCoilVarSpeedHumRatResidual, 0.0d0,   &
-                                            1.0d0, Par)
+                  CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, SpeedRatio, DXCoilVarSpeedHumRatResidual, 0.0,   &
+                                            1.0, Par)
                   IF (SolFla == -1) THEN
                     IF(.NOT. WarmupFlag)THEN
                       IF(DXCoolingSystem(DXSystemNum)%MSpdLatPLRIter .LT. 1)THEN
@@ -1541,8 +1541,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 SpeedRatio = 0.0
                 Par(1) = REAL(DXCoolingSystem(DXSystemNum)%CoolingCoilIndex,r64)
                 Par(2) = DesOutHumRat
-                CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, CycRatio, DXCoilCyclingHumRatResidual, 0.0d0,   &
-                                            1.0d0, Par)
+                CALL SolveRegulaFalsi(HumRatAcc, MaxIte, SolFla, CycRatio, DXCoilCyclingHumRatResidual, 0.0,   &
+                                            1.0, Par)
                 IF (SolFla == -1) THEN
                   IF(.NOT. WarmupFlag)THEN
                     IF(DXCoolingSystem(DXSystemNum)%MSpdCycLatPLRIter .LT. 1)THEN
@@ -1615,8 +1615,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
               ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
               Par(3) = REAL(DehumidMode,r64)
               Par(4) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXCoolingSystem(DXSystemNum)%MModeSensPLRIter .LT. 1)THEN
@@ -1693,8 +1693,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
                 Par(3) = REAL(DehumidMode,r64)
                 Par(4) = REAL(FanOpMode,r64)
-                CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilHumRatResidual, 0.0d0,   &
-                                            1.0d0, Par)
+                CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilHumRatResidual, 0.0,   &
+                                            1.0, Par)
                 IF (SolFla == -1) THEN
                   IF(.NOT. WarmupFlag)THEN
                     IF(DXCoolingSystem(DXSystemNum)%MModeLatPLRIter .LT. 1)THEN
@@ -1703,7 +1703,7 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                                             ' - Iteration limit exceeded calculating DX unit multimode'// &
                                             ' latent (no sensible) part-load ratio for unit = '// &
                                             TRIM(DXCoolingSystem(DXSystemNum)%Name))
-                      IF(NoLoadHumRatOut-OutletHumRatDXCoil > 0.d0)THEN
+                      IF(NoLoadHumRatOut-OutletHumRatDXCoil > 0.)THEN
                         TempMinPLR = (DesOutHumRat-OutletHumRatDXCoil)/(NoLoadHumRatOut-OutletHumRatDXCoil)
                       ELSE
                         TempMinPLR = PartLoadFrac + 0.00d1
@@ -1735,8 +1735,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                 ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
                 Par(3) = REAL(DehumidMode,r64)
                 Par(4) = REAL(FanOpMode,r64)
-                CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0d0,   &
-                                            1.0d0, Par)
+                CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0,   &
+                                            1.0, Par)
                 IF (SolFla == -1) THEN
                   IF(.NOT. WarmupFlag)THEN
                     IF(DXCoolingSystem(DXSystemNum)%MModeLatPLRIter .LT. 1)THEN
@@ -1798,8 +1798,8 @@ SUBROUTINE ControlDXSystem(DXSystemNum, FirstHVACIteration, HXUnitOn)
                ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
                Par(3) = REAL(DehumidMode,r64)
                Par(4) = REAL(FanOpMode,r64)
-               CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilHumRatResidual, 0.0d0,   &
-                                           1.0d0, Par)
+               CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilHumRatResidual, 0.0,   &
+                                           1.0, Par)
                IF (SolFla == -1) THEN
                  IF(.NOT. WarmupFlag)THEN
                    IF(DXCoolingSystem(DXSystemNum)%MModeLatPLRIter2 .LT. 1)THEN
@@ -1875,10 +1875,10 @@ FUNCTION DXCoilVarSpeedResidual(SpeedRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: SpeedRatio ! compressor speed ratio (1.0 is max, 0.0 is min)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: SpeedRatio ! compressor speed ratio (1.0 is max, 0.0 is min)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet temperature [C]
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1891,10 +1891,10 @@ FUNCTION DXCoilVarSpeedResidual(SpeedRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirTemp   ! outlet air temperature [C]
+  REAL :: OutletAirTemp   ! outlet air temperature [C]
 
   CoilIndex = INT(Par(1))
-  CALL CalcMultiSpeedDXCoil(CoilIndex,SpeedRatio,1.0d0)
+  CALL CalcMultiSpeedDXCoil(CoilIndex,SpeedRatio,1.0)
   OutletAirTemp = DXCoilOutletTemp(CoilIndex)
   Residuum = Par(2) - OutletAirTemp
 
@@ -1924,10 +1924,10 @@ FUNCTION DXCoilVarSpeedHumRatResidual(SpeedRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: SpeedRatio ! compressor speed ratio (1.0 is max, 0.0 is min)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: SpeedRatio ! compressor speed ratio (1.0 is max, 0.0 is min)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet humidity ratio [kg/kg]
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1940,10 +1940,10 @@ FUNCTION DXCoilVarSpeedHumRatResidual(SpeedRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex        ! index of this coil
-  REAL(r64) :: OutletAirHumRat  ! outlet air humidity ratio [kg/kg]
+  REAL :: OutletAirHumRat  ! outlet air humidity ratio [kg/kg]
 
   CoilIndex = INT(Par(1))
-  CALL CalcMultiSpeedDXCoil(CoilIndex,SpeedRatio,1.0d0)
+  CALL CalcMultiSpeedDXCoil(CoilIndex,SpeedRatio,1.0)
   OutletAirHumRat = DXCoilOutletHumRat(CoilIndex)
   Residuum = Par(2) - OutletAirHumRat
 
@@ -1973,10 +1973,10 @@ FUNCTION DXCoilCyclingResidual(CycRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: CycRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: CycRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet temperature [C]
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1989,10 +1989,10 @@ FUNCTION DXCoilCyclingResidual(CycRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirTemp   ! outlet air temperature [C]
+  REAL :: OutletAirTemp   ! outlet air temperature [C]
 
   CoilIndex = INT(Par(1))
-  CALL CalcMultiSpeedDXCoil(CoilIndex,0.0d0,CycRatio)
+  CALL CalcMultiSpeedDXCoil(CoilIndex,0.0,CycRatio)
   OutletAirTemp = DXCoilOutletTemp(CoilIndex)
   Residuum = Par(2) - OutletAirTemp
 
@@ -2022,10 +2022,10 @@ FUNCTION DXCoilCyclingHumRatResidual(CycRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: CycRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: CycRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet humidity ratio [kg/kg]
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2038,10 +2038,10 @@ FUNCTION DXCoilCyclingHumRatResidual(CycRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex        ! index of this coil
-  REAL(r64) :: OutletAirHumRat  ! outlet air humidity ratio [kg/kg]
+  REAL :: OutletAirHumRat  ! outlet air humidity ratio [kg/kg]
 
   CoilIndex = INT(Par(1))
-  CALL CalcMultiSpeedDXCoil(CoilIndex,0.0d0,CycRatio)
+  CALL CalcMultiSpeedDXCoil(CoilIndex,0.0,CycRatio)
   OutletAirHumRat = DXCoilOutletHumRat(CoilIndex)
   Residuum = Par(2) - OutletAirHumRat
 
@@ -2071,11 +2071,11 @@ FUNCTION DOE2DXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet temperature [C]
                                                     ! par(5) = supply air fan operating mode (ContFanCycCoil)
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2088,7 +2088,7 @@ FUNCTION DOE2DXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirTemp   ! outlet air temperature [C]
+  REAL :: OutletAirTemp   ! outlet air temperature [C]
   INTEGER   :: FanOpMode       ! Supply air fan operating mode
 
   CoilIndex = INT(Par(1))
@@ -2123,11 +2123,11 @@ FUNCTION DOE2DXCoilHumRatResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet humidity ratio [kg/kg]
                                                     ! par(5) = supply air fan operating mode (ContFanCycCoil)
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2140,7 +2140,7 @@ FUNCTION DOE2DXCoilHumRatResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirHumRat ! outlet air humidity ratio [kg/kg]
+  REAL :: OutletAirHumRat ! outlet air humidity ratio [kg/kg]
   INTEGER   :: FanOpMode       ! Supply air fan operating mode
 
   CoilIndex = INT(Par(1))
@@ -2176,12 +2176,12 @@ FUNCTION MultiModeDXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet temperature [C]
                                                     ! par(3) = dehumidification mode (0=normal, 1=enhanced)
                                                     ! par(4) = supply air fan operating mode (ContFanCycCoil)
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2194,7 +2194,7 @@ FUNCTION MultiModeDXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirTemp   ! outlet air temperature [C]
+  REAL :: OutletAirTemp   ! outlet air temperature [C]
   INTEGER   :: DehumidMode     ! dehumidification mode (par3)
   INTEGER   :: FanOpMode       ! supply air fan operating mode
 
@@ -2231,12 +2231,12 @@ FUNCTION MultiModeDXCoilHumRatResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL, INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet humidity ratio [kg/kg]
                                                     ! par(3) = dehumidification mode (0=normal, 1=enhanced)
                                                     ! par(4) = supply air fan operating mode (ContFanCycCoil)
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2249,7 +2249,7 @@ FUNCTION MultiModeDXCoilHumRatResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex       ! index of this coil
-  REAL(r64) :: OutletAirHumRat ! outlet air humidity ratio [kg/kg]
+  REAL :: OutletAirHumRat ! outlet air humidity ratio [kg/kg]
   INTEGER   :: DehumidMode     ! dehumidification mode (par3)
   INTEGER   :: FanOpMode       ! supply air fan operating mode
 
@@ -2286,13 +2286,13 @@ FUNCTION HXAssistedCoolCoilTempResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+  REAL, INTENT(IN)     :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                   ! par(2) = desired air outlet temperature [C]
                                                   ! par(3) = FirstHVACIteration logical converted to numeric (1=TRUE,0=FALSE)
                                                   ! par(4) = HX control (On/Off)
                                                   ! par(5) = supply air fan operating mode (ContFanCycCoil)
-  REAL(r64)         :: Residuum  ! residual to be minimized to zero
+  REAL         :: Residuum  ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           !  na
@@ -2305,13 +2305,13 @@ FUNCTION HXAssistedCoolCoilTempResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex          ! index of this coil
-  REAL(r64) :: OutletAirTemp      ! outlet air temperature [C]
+  REAL :: OutletAirTemp      ! outlet air temperature [C]
   LOGICAL   :: FirstHVACIteration ! FirstHVACIteration flag
   LOGICAL   :: HXUnitOn           ! flag to enable heat exchanger heat recovery
   INTEGER   :: FanOpMode          ! Supply air fan operating mode
 
   CoilIndex = INT(Par(1))
-  ! FirstHVACIteration is a logical, Par is REAL(r64), so make 1=TRUE and 0=FALSE
+  ! FirstHVACIteration is a logical, Par is REAL, so make 1=TRUE and 0=FALSE
   IF(Par(3) .EQ. 1.0)THEN
     FirstHVACIteration = .TRUE.
   ELSE
@@ -2353,13 +2353,13 @@ FUNCTION HXAssistedCoolCoilHRResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+  REAL, INTENT(IN)     :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                   ! par(2) = desired air outlet humidity ratio [kg/kg]
                                                   ! par(3) = FirstHVACIteration logical converted to numeric (1=TRUE,0=FALSE)
                                                   ! par(4) = HX control (On/Off)
                                                   ! par(5) = supply air fan operating mode (ContFanCycCoil)
-  REAL(r64)         :: Residuum  ! residual to be minimized to zero
+  REAL         :: Residuum  ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           !  na
@@ -2372,13 +2372,13 @@ FUNCTION HXAssistedCoolCoilHRResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilIndex          ! index of this coil
-  REAL(r64) :: OutletAirHumRat    ! outlet air humidity ratio [kg/kg]
+  REAL :: OutletAirHumRat    ! outlet air humidity ratio [kg/kg]
   LOGICAL   :: FirstHVACIteration ! FirstHVACIteration flag
   LOGICAL   :: HXUnitOn           ! flag to enable heat exchanger heat recovery
   INTEGER   :: FanOpMode          ! Supply air fan operating mode
 
   CoilIndex = INT(Par(1))
-  ! FirstHVACIteration is a logical, Par is REAL(r64), so make 1=TRUE and 0=FALSE
+  ! FirstHVACIteration is a logical, Par is REAL, so make 1=TRUE and 0=FALSE
   IF(Par(3) .EQ. 1.0)THEN
     FirstHVACIteration = .TRUE.
   ELSE
@@ -2472,7 +2472,7 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
-REAL(r64), PARAMETER :: MinAirMassFlow = 0.001d0
+REAL, PARAMETER :: MinAirMassFlow = 0.001
 ! Compressor operation
 INTEGER, PARAMETER :: On =  1              ! normal compressor operation
 INTEGER, PARAMETER :: Off = 0              ! signal DXCoil that compressor shouldn't run
@@ -2492,12 +2492,12 @@ TYPE DXHeatPumpSystemStruct
   INTEGER      :: DXHeatPumpCoilInletNodeNum          =0
   INTEGER      :: DXHeatPumpCoilOutletNodeNum         =0
   Integer      :: DXSystemControlNodeNum             =0   ! the node number of the node with the set point
-  REAL(r64)    :: DesiredOutletTemp                  =0.0 ! the temperature at the unit outlet node needed
+  REAL    :: DesiredOutletTemp                  =0.0 ! the temperature at the unit outlet node needed
                                                           ! to meet the supply air set point.
 
-  REAL(r64)    :: PartLoadFrac                       =0.0 ! part load fraction for current time step (single speed)
-  REAL(r64)    :: SpeedRatio                         =0.0 ! current compressor speed ratio (variable speed)
-  REAL(r64)    :: CycRatio                           =0.0 ! cycling part load ratio (variable speed)
+  REAL    :: PartLoadFrac                       =0.0 ! part load fraction for current time step (single speed)
+  REAL    :: SpeedRatio                         =0.0 ! current compressor speed ratio (variable speed)
+  REAL    :: CycRatio                           =0.0 ! cycling part load ratio (variable speed)
   INTEGER      :: FanOpMode                          =0   ! Fan operating mode (see parameter above)
 
 ! Warning message variables
@@ -2510,7 +2510,7 @@ TYPE DXHeatPumpSystemStruct
   INTEGER      :: DXCoilSensPLRFailIndex              =0   ! used in DXCoil calculations
 
 ! When the Dx system is a part of Outdoor Air Unit
-  REAL(r64)    :: OAUnitSetTemp                        =0.0 ! set
+  REAL    :: OAUnitSetTemp                        =0.0 ! set
 
 END TYPE DXHeatPumpSystemStruct
 
@@ -2574,8 +2574,8 @@ SUBROUTINE SimDXHeatPumpSystem(DXHeatPumpSystemName, FirstHVACIteration, AirLoop
   INTEGER, INTENT(IN)          :: AirLoopNum          ! Primary air loop number
   INTEGER, INTENT(INOUT)       :: CompIndex           ! Index to CoilSystem:Heating:DX object
   INTEGER, INTENT(IN), OPTIONAL:: OAUnitNum           ! If the system is an equipment of OutdoorAirUnit
-  REAL(r64), INTENT(IN), OPTIONAL :: OAUCoilOutTemp   ! the coil inlet temperature of OutdoorAirUnit
-  REAL(r64), INTENT(INOUT), OPTIONAL :: QTotOut       ! the total cooling output of unit
+  REAL, INTENT(IN), OPTIONAL :: OAUCoilOutTemp   ! the coil inlet temperature of OutdoorAirUnit
+  REAL, INTENT(INOUT), OPTIONAL :: QTotOut       ! the total cooling output of unit
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -2596,7 +2596,7 @@ SUBROUTINE SimDXHeatPumpSystem(DXHeatPumpSystemName, FirstHVACIteration, AirLoop
   INTEGER                       :: DXSystemNum           ! Index to CoilSystem:Heating:DX object
   LOGICAL,SAVE                  :: GetInputFlag = .True. ! Flag to get input only once
   LOGICAL                       :: HXUnitOn              ! Flag to control HX for HXAssisted Cooling Coil
-  REAL(r64)                     :: AirMassFlow           ! DX System air mass flow rate
+  REAL                     :: AirMassFlow           ! DX System air mass flow rate
   INTEGER                       :: InletNodeNum          ! DX System inlet node number
   INTEGER                       :: OutletNodeNum         ! DX System outlet node number
 
@@ -2740,7 +2740,7 @@ SUBROUTINE GetDXHeatPumpSystemInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
     INTEGER                              :: TotalArgs=0       ! Total number of alpha and numeric arguments (max) for a
@@ -2911,7 +2911,7 @@ SUBROUTINE InitDXHeatPumpSystem(DXSystemNum,AirLoopNum,OAUnitNum,OAUCoilOutTemp)
   INTEGER, INTENT (IN) :: DXSystemNum ! number of the current DX Sys being simulated
   INTEGER, INTENT (IN) :: AirLoopNum  ! number of the current air loop being simulated
   INTEGER, INTENT (IN), OPTIONAL :: OAUnitNum  ! number of the current outdoor air unit being simulated
-  REAL(r64), INTENT(IN), OPTIONAL :: OAUCoilOutTemp    ! the coil inlet temperature of OutdoorAirUnit
+  REAL, INTENT(IN), OPTIONAL :: OAUCoilOutTemp    ! the coil inlet temperature of OutdoorAirUnit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2929,7 +2929,7 @@ SUBROUTINE InitDXHeatPumpSystem(DXSystemNum,AirLoopNum,OAUnitNum,OAUCoilOutTemp)
 !  LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL,SAVE        :: MySetPointCheckFlag = .TRUE.
   INTEGER             :: OutdoorAirUnitNum ! "ONLY" for ZoneHVAC:OutdoorAirUnit
-  REAL(r64)           :: OAUCoilOutletTemp  ! "ONLY" for zoneHVAC:OutdoorAirUnit
+  REAL           :: OAUCoilOutletTemp  ! "ONLY" for zoneHVAC:OutdoorAirUnit
           ! FLOW:
 
 !  IF (MyOneTimeFlag) THEN
@@ -3028,8 +3028,8 @@ SUBROUTINE ControlDXHeatingSystem(DXSystemNum, FirstHVACIteration )
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte    = 500     ! Maximum number of iterations for solver
-  REAL(r64), PARAMETER :: Acc       = 1.d-3   ! Accuracy of solver result
-  REAL(r64), PARAMETER :: HumRatAcc = 1.d-6   ! Accuracy of solver result
+  REAL, PARAMETER :: Acc       = 1.*10**-3   ! Accuracy of solver result    !RS: Debugging: 102612
+  REAL, PARAMETER :: HumRatAcc = 1.*10**-6   ! Accuracy of solver result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           !  na
@@ -3039,25 +3039,25 @@ SUBROUTINE ControlDXHeatingSystem(DXSystemNum, FirstHVACIteration )
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength)  :: CompName  ! Name of the DX cooling coil
-  REAL(r64)           :: NoOutput            ! Sensible capacity (outlet - inlet) when the compressor is off
-  REAL(r64)           :: FullOutput          ! Sensible capacity (outlet - inlet) when the compressor is on
-  REAL(r64)           :: ReqOutput           ! Sensible capacity (outlet - inlet) required to meet load or set point temperature
+  REAL           :: NoOutput            ! Sensible capacity (outlet - inlet) when the compressor is off
+  REAL           :: FullOutput          ! Sensible capacity (outlet - inlet) when the compressor is on
+  REAL           :: ReqOutput           ! Sensible capacity (outlet - inlet) required to meet load or set point temperature
   Integer             :: InletNode           ! Inlet node number of the DX cooling coil
   Integer             :: OutletNode          ! Outlet node number of the DX cooling coil
   Integer             :: ControlNode         ! The node number where a set point is placed to control the DX cooling coil
-  REAL(r64)           :: PartLoadFrac        ! The part-load fraction of the compressor
+  REAL           :: PartLoadFrac        ! The part-load fraction of the compressor
 
-  REAL(r64)           :: DesOutTemp          ! Desired outlet temperature of the DX cooling coil
-  REAL(r64)           :: OutletTempDXCoil    ! Actual outlet temperature of the DX cooling coil
+  REAL           :: DesOutTemp          ! Desired outlet temperature of the DX cooling coil
+  REAL           :: OutletTempDXCoil    ! Actual outlet temperature of the DX cooling coil
 
   INTEGER             :: SolFla              ! Flag of solver
-  REAL(r64), DIMENSION(5)  :: Par                 ! Parameter array passed to solver
+  REAL, DIMENSION(5)  :: Par                 ! Parameter array passed to solver
   LOGICAL             :: SensibleLoad        ! True if there is a sensible cooling load on this system
   LOGICAL             :: LatentLoad          ! True if there is a latent   cooling load on this system
   INTEGER             :: FanOpMode           ! Supply air fan operating mode
-  REAL(r64)           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded
+  REAL           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded
 
       ! Set local variables
       ! Retrieve the load on the controlled zone
@@ -3073,7 +3073,7 @@ SUBROUTINE ControlDXHeatingSystem(DXSystemNum, FirstHVACIteration )
   SensibleLoad = .FALSE.
 
   ! If DXHeatingSystem is scheduled on and there is flow
-  If((GetCurrentScheduleValue(DXHeatPumpSystem(DXSystemNum)%SchedPtr) > 0.d0) .AND. &
+  If((GetCurrentScheduleValue(DXHeatPumpSystem(DXSystemNum)%SchedPtr) > 0.) .AND. &
      (Node(InletNode)%MassFlowRate .gt. MinAirMassFlow)) THEN
 
     ! Determine if there is a sensible load on this system
@@ -3124,10 +3124,10 @@ SUBROUTINE ControlDXHeatingSystem(DXSystemNum, FirstHVACIteration )
             ELSE
               Par(1) = REAL(DXHeatPumpSystem(DXSystemNum)%HeatPumpCoilIndex,r64)
               Par(2) = DesOutTemp
-              Par(3) = 1.d0  !OnOffAirFlowFrac assume = 1.0 for continuous fan dx system
+              Par(3) = 1.  !OnOffAirFlowFrac assume = 1.0 for continuous fan dx system
               Par(5) = REAL(FanOpMode,r64)
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, DXHeatingCoilResidual, 0.0d0,   &
-                                            1.0d0, Par)
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadFrac, DXHeatingCoilResidual, 0.0,   &
+                                            1.0, Par)
               IF (SolFla == -1) THEN
                 IF(.NOT. WarmupFlag)THEN
                   IF(DXHeatPumpSystem(DXSystemNum)%DXCoilSensPLRIter .LT. 1)THEN
@@ -3214,10 +3214,10 @@ FUNCTION DXHeatingCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
+    REAL, INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
                                                     ! Par(2) = desired air outlet temperature [C]
-    REAL(r64)         :: Residuum                   ! Residual to be minimized to zero
+    REAL         :: Residuum                   ! Residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3230,8 +3230,8 @@ FUNCTION DXHeatingCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex        ! Index of this coil
-  REAL(r64)    :: OutletAirTemp    ! Outlet air temperature [C]
-  REAL(r64)    :: OnOffAirFlowFrac ! Ratio of compressor ON to compressor OFF air mass flow rate
+  REAL    :: OutletAirTemp    ! Outlet air temperature [C]
+  REAL    :: OnOffAirFlowFrac ! Ratio of compressor ON to compressor OFF air mass flow rate
 
   CoilIndex        = INT(Par(1))
   OnOffAirFlowFrac = Par(3)

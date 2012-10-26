@@ -52,27 +52,27 @@ PUBLIC ! Everything private unless explicitly made public
 
 
     LOGICAL :: ManageDemand                          =.FALSE. ! Flag to indicate whether to use demand limiting
-    REAL(r64) :: HeatingResetLimit                       =0.0 ! Lowest heating setpoint that can be set by demand manager [C]
-    REAL(r64) :: CoolingResetLimit                       =0.0 ! Highest cooling setpoint that can be set by demand manager [C]
+    REAL :: HeatingResetLimit                       =0.0 ! Lowest heating setpoint that can be set by demand manager [C]
+    REAL :: CoolingResetLimit                       =0.0 ! Highest cooling setpoint that can be set by demand manager [C]
     LOGICAL   :: EMSOverrideHeatingSetpointOn          = .FALSE. ! EMS is calling to override heating setpoint
-    REAL(r64) :: EMSOverrideHeatingSetpointValue       = 0.0D0   ! value EMS is directing to use for heating setpoint [C]
+    REAL :: EMSOverrideHeatingSetpointValue       = 0.0   ! value EMS is directing to use for heating setpoint [C]
     LOGICAL   :: EMSOverrideCoolingSetpointOn          = .FALSE. ! EMS is calling to override cooling setpoint
-    REAL(r64) :: EMSOverrideCoolingSetpointValue       = 0.0D0   ! value EMS is directing to use for cooling setpoint [C]
+    REAL :: EMSOverrideCoolingSetpointValue       = 0.0   ! value EMS is directing to use for cooling setpoint [C]
 
     LOGICAL :: OperativeTempControl                      = .FALSE.  ! flag to indicate whether control based on Operative Temp
     LOGICAL :: OpTempCntrlModeScheduled                  = .FALSE.  ! flag to indicate if radiative fraction is scheduled,
                                                                     ! else constant
-    REAL(r64) :: FixedRadiativeFraction                  = 0.0  ! weighting factor for mean radiant temp for Operative temperature
+    REAL :: FixedRadiativeFraction                  = 0.0  ! weighting factor for mean radiant temp for Operative temperature
     INTEGER :: OpTempRadiativeFractionSched              = 0 ! index of schedule for when fraction is scheduled
 
 
-    REAL(r64) :: ZoneOvercoolRange                     = 0.0d0   ! Zone overcool temperature range (max), deg C
+    REAL :: ZoneOvercoolRange                     = 0.0   ! Zone overcool temperature range (max), deg C
     LOGICAL   :: ZoneOvercoolControl                   = .FALSE. ! Flag to indicate whether control is based on overcool
     LOGICAL   :: OvercoolCntrlModeScheduled            = .FALSE. ! Flag to indicate if zone overcool range is scheduled
                                                                  !   or constant
-    REAL(r64) :: ZoneOvercoolConstRange                = 0.0d0   ! Overcool Range for Zone Air Setpoint Temperature [deltaC]
+    REAL :: ZoneOvercoolConstRange                = 0.0   ! Overcool Range for Zone Air Setpoint Temperature [deltaC]
     INTEGER   :: ZoneOvercoolRangeSchedIndex           = 0       ! Index for Overcool Range Schedule
-    REAL(r64) :: ZoneOvercoolControlRatio              = 0.0d0   ! Zone relative humidity shift per dry-bulb temperature overcooling
+    REAL :: ZoneOvercoolControlRatio              = 0.0   ! Zone relative humidity shift per dry-bulb temperature overcooling
                                                                  !      below the original cooling setpoint, %RH/deltaC
     CHARACTER(len=MaxNameLength) :: DehumidifyingSched =' '  ! Name of the schedule to determine the zone dehumidifying setpoint
     INTEGER                 :: DehumidifyingSchedIndex =0    ! Index for dehumidifying schedule
@@ -89,9 +89,9 @@ PUBLIC ! Everything private unless explicitly made public
     INTEGER                      :: DehumidifyingSchedIndex =0 ! Index for dehumidifying schedule
     INTEGER                      :: ErrorIndex = 0             ! Error index when LowRH setpoint > HighRH setpoint
     LOGICAL   :: EMSOverrideHumidifySetpointOn          = .FALSE. ! EMS is calling to override humidifying setpoint
-    REAL(r64) :: EMSOverrideHumidifySetpointValue       = 0.0D0   ! value EMS is directing to use for humidifying setpoint
+    REAL :: EMSOverrideHumidifySetpointValue       = 0.0   ! value EMS is directing to use for humidifying setpoint
     LOGICAL   :: EMSOverrideDehumidifySetpointOn        = .FALSE. ! EMS is calling to override dehumidifying setpoint
-    REAL(r64) :: EMSOverrideDehumidifySetpointValue     = 0.0D0   ! value EMS is directing to use for dehumidifying setpoint
+    REAL :: EMSOverrideDehumidifySetpointValue     = 0.0   ! value EMS is directing to use for dehumidifying setpoint
   END TYPE ZoneHumidityControls
 
 
@@ -120,15 +120,15 @@ PUBLIC ! Everything private unless explicitly made public
 
 
     LOGICAL :: ManageDemand                          =.FALSE. ! Flag to indicate whether to use demand limiting
-    REAL(r64) :: HeatingResetLimit                            =0.0 ! Lowest heating setpoint that can be set by demand manager [C]
-    REAL(r64) :: CoolingResetLimit                            =0.0 ! Highest cooling setpoint that can be set by demand manager [C]
+    REAL :: HeatingResetLimit                            =0.0 ! Lowest heating setpoint that can be set by demand manager [C]
+    REAL :: CoolingResetLimit                            =0.0 ! Highest cooling setpoint that can be set by demand manager [C]
     LOGICAL   :: EMSOverrideHeatingSetpointOn          = .FALSE. ! EMS is calling to override heating setpoint
-    REAL(r64) :: EMSOverrideHeatingSetpointValue       = 0.0D0   ! value EMS is directing to use for heating setpoint
+    REAL :: EMSOverrideHeatingSetpointValue       = 0.0   ! value EMS is directing to use for heating setpoint
     LOGICAL   :: EMSOverrideCoolingSetpointOn          = .FALSE. ! EMS is calling to override cooling setpoint
-    REAL(r64) :: EMSOverrideCoolingSetpointValue       = 0.0D0   ! value EMS is directing to use for cooling setpoint
+    REAL :: EMSOverrideCoolingSetpointValue       = 0.0   ! value EMS is directing to use for cooling setpoint
 
-    REAL(r64) :: TdbMaxSetPoint                              =50.0 ! Maximum dry-bulb temperature setpoint [C]
-    REAL(r64) :: TdbMinSetPoint                              = 0.0 ! Minimum dry-bulb temperature setpoint [C]
+    REAL :: TdbMaxSetPoint                              =50.0 ! Maximum dry-bulb temperature setpoint [C]
+    REAL :: TdbMinSetPoint                              = 0.0 ! Minimum dry-bulb temperature setpoint [C]
     CHARACTER(len=MaxNameLength) :: AverageMethodName ='PEOPLE AVERGAE' ! Averaging Method for Zones with Multiple People Objects
     CHARACTER(len=MaxNameLength) :: AverageObjectName =' '    ! Object Name for Specific Object Average
     INTEGER :: AverageMethodNum                         =0    ! Numerical value for averaging method

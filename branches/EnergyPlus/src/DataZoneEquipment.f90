@@ -80,7 +80,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER                               :: ReportVarIndex     =0
     INTEGER                               :: ReportVarIndexType =0
     INTEGER                               :: ReportVarType      =0
-    REAL(r64)                             :: CurMeterReading    =0
+    REAL                             :: CurMeterReading    =0
   END TYPE EquipMeterData
 
   TYPE SubSubEquipmentData  !data for an individual component
@@ -95,20 +95,20 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER                        :: EnergyTransComp  =0 !1=EnergyTransfer, 0=No EnergyTransfer  Flag needed for reporting
     INTEGER                        :: ZoneEqToPlantPtr =0 !0=No plant loop connection, >=0 index to ZoneEqToPlant array
     INTEGER                        :: OpMode = 0
-    REAL(r64)                      :: Capacity=0.0
-    REAL(r64)                      :: Efficiency=0.0
-    REAL(r64)                      :: TotPlantSupplyElec    =0.0
-    REAL(r64)                      :: PlantSupplyElecEff    =0.0
-    REAL(r64)                      :: PeakPlantSupplyElecEff    =0.0
-    REAL(r64)                      :: TotPlantSupplyGas     =0.0
-    REAL(r64)                      :: PlantSupplyGasEff     =0.0
-    REAL(r64)                      :: PeakPlantSupplyGasEff     =0.0
-    REAL(r64)                      :: TotPlantSupplyPurch   =0.0
-    REAL(r64)                      :: PlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: TotPlantSupplyOther   =0.0
-    REAL(r64)                      :: PlantSupplyOtherEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyOtherEff   =0.0
+    REAL                      :: Capacity=0.0
+    REAL                      :: Efficiency=0.0
+    REAL                      :: TotPlantSupplyElec    =0.0
+    REAL                      :: PlantSupplyElecEff    =0.0
+    REAL                      :: PeakPlantSupplyElecEff    =0.0
+    REAL                      :: TotPlantSupplyGas     =0.0
+    REAL                      :: PlantSupplyGasEff     =0.0
+    REAL                      :: PeakPlantSupplyGasEff     =0.0
+    REAL                      :: TotPlantSupplyPurch   =0.0
+    REAL                      :: PlantSupplyPurchEff   =0.0
+    REAL                      :: PeakPlantSupplyPurchEff   =0.0
+    REAL                      :: TotPlantSupplyOther   =0.0
+    REAL                      :: PlantSupplyOtherEff   =0.0
+    REAL                      :: PeakPlantSupplyOtherEff   =0.0
   END TYPE SubSubEquipmentData
 
   TYPE SubEquipmentData  !data for an individual component
@@ -126,20 +126,20 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER                        :: EnergyTransComp  =0 !1=EnergyTransfer, 0=No EnergyTransfer  Flag needed for reporting
     INTEGER                        :: ZoneEqToPlantPtr =0 !0=No plant loop connection, >0 index to ZoneEqToPlant array
     INTEGER                        :: OpMode = 0
-    REAL(r64)                      :: Capacity=0.0
-    REAL(r64)                      :: Efficiency=0.0
-    REAL(r64)                      :: TotPlantSupplyElec    =0.0
-    REAL(r64)                      :: PlantSupplyElecEff    =0.0
-    REAL(r64)                      :: PeakPlantSupplyElecEff    =0.0
-    REAL(r64)                      :: TotPlantSupplyGas     =0.0
-    REAL(r64)                      :: PlantSupplyGasEff     =0.0
-    REAL(r64)                      :: PeakPlantSupplyGasEff     =0.0
-    REAL(r64)                      :: TotPlantSupplyPurch   =0.0
-    REAL(r64)                      :: PlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: TotPlantSupplyOther   =0.0
-    REAL(r64)                      :: PlantSupplyOtherEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyOtherEff   =0.0
+    REAL                      :: Capacity=0.0
+    REAL                      :: Efficiency=0.0
+    REAL                      :: TotPlantSupplyElec    =0.0
+    REAL                      :: PlantSupplyElecEff    =0.0
+    REAL                      :: PeakPlantSupplyElecEff    =0.0
+    REAL                      :: TotPlantSupplyGas     =0.0
+    REAL                      :: PlantSupplyGasEff     =0.0
+    REAL                      :: PeakPlantSupplyGasEff     =0.0
+    REAL                      :: TotPlantSupplyPurch   =0.0
+    REAL                      :: PlantSupplyPurchEff   =0.0
+    REAL                      :: PeakPlantSupplyPurchEff   =0.0
+    REAL                      :: TotPlantSupplyOther   =0.0
+    REAL                      :: PlantSupplyOtherEff   =0.0
+    REAL                      :: PeakPlantSupplyOtherEff   =0.0
   END TYPE SubEquipmentData
 
   TYPE AirIn
@@ -150,7 +150,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER   :: SupplyBranchIndex   =0
     INTEGER   :: AirDistUnitIndex    =0    ! equipment number in EquipList
     INTEGER   :: SupplyAirPathIndex  =0
-    REAL(r64) :: NetBranchCoilDemand =0.0
+    REAL :: NetBranchCoilDemand =0.0
     TYPE (SubSubEquipmentData), ALLOCATABLE, DIMENSION(:) :: Coil
   END TYPE AirIn
 
@@ -174,8 +174,8 @@ PUBLIC          ! By definition, all variables which are placed in this data
                                                                       ! =2 if central sysis in constant fan mode.
     LOGICAL                                :: ZonalSystemOnly=.FALSE. ! TRUE if served by a zonal system (only)
     LOGICAL                                 :: IsControlled =.false.  ! True when this is a controlled zone.
-    REAL(r64)                              :: ZoneExh          = 0    ! zone exhaust (unbalanced) mass flow rate [kg/s]
-    REAL(r64)                              :: PlenumMassFlow   = 0.0  ! zone air mass flow rate induced from plenum [kg/s]
+    REAL                              :: ZoneExh          = 0    ! zone exhaust (unbalanced) mass flow rate [kg/s]
+    REAL                              :: PlenumMassFlow   = 0.0  ! zone air mass flow rate induced from plenum [kg/s]
                         ! AirDistUnitCool and AirDistUnitHeat
                         ! do not correspond with the AIR DISTRIBUTION UNIT object in the zone equipment list.
                         ! AirDistUnitCool/AirDistUnitHeat, may represent a DIRECT AIR object,
@@ -208,19 +208,19 @@ PUBLIC          ! By definition, all variables which are placed in this data
     TYPE(SubEquipmentData), ALLOCATABLE, DIMENSION(:)   :: SubEquipData             ! Component list
     INTEGER                        :: EnergyTransComp  =0 !1=EnergyTransfer, 0=No EnergyTransfer  Flag needed for reporting
     INTEGER                        :: ZoneEqToPlantPtr =0 !0=No plant loop connection, >0 index to ZoneEqToPlant array
-    REAL(r64)                      :: TotPlantSupplyElec    =0.0
-    REAL(r64)                      :: PlantSupplyElecEff    =0.0
-    REAL(r64)                      :: PeakPlantSupplyElecEff    =0.0
-    REAL(r64)                      :: TotPlantSupplyGas     =0.0
-    REAL(r64)                      :: PlantSupplyGasEff     =0.0
-    REAL(r64)                      :: PeakPlantSupplyGasEff     =0.0
-    REAL(r64)                      :: TotPlantSupplyPurch   =0.0
-    REAL(r64)                      :: PlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyPurchEff   =0.0
-    REAL(r64)                      :: TotPlantSupplyOther   =0.0
-    REAL(r64)                      :: PlantSupplyOtherEff   =0.0
-    REAL(r64)                      :: PeakPlantSupplyOtherEff   =0.0
-    REAL(r64)                      :: Capacity=0.0
+    REAL                      :: TotPlantSupplyElec    =0.0
+    REAL                      :: PlantSupplyElecEff    =0.0
+    REAL                      :: PeakPlantSupplyElecEff    =0.0
+    REAL                      :: TotPlantSupplyGas     =0.0
+    REAL                      :: PlantSupplyGasEff     =0.0
+    REAL                      :: PeakPlantSupplyGasEff     =0.0
+    REAL                      :: TotPlantSupplyPurch   =0.0
+    REAL                      :: PlantSupplyPurchEff   =0.0
+    REAL                      :: PeakPlantSupplyPurchEff   =0.0
+    REAL                      :: TotPlantSupplyOther   =0.0
+    REAL                      :: PlantSupplyOtherEff   =0.0
+    REAL                      :: PeakPlantSupplyOtherEff   =0.0
+    REAL                      :: Capacity=0.0
     INTEGER                        :: OpMode = 0
   END TYPE EquipmentData
 
@@ -396,7 +396,7 @@ INTEGER :: IOSTAT
 CHARACTER(len=MaxNameLength) :: InletNodeListName
 CHARACTER(len=MaxNameLength) :: ExhaustNodeListName
 CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE :: AlphArray
-REAL(r64), DIMENSION(:), ALLOCATABLE :: NumArray
+REAL, DIMENSION(:), ALLOCATABLE :: NumArray
 INTEGER MaxAlphas
 INTEGER MaxNums
 INTEGER NumParams

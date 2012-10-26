@@ -294,13 +294,13 @@ SUBROUTINE CheckCostEstimateInput(ErrorsFound)
   CHARACTER(len=MaxNameLength) ::ThisConstructStr
 
 !  LOGICAL,ALLOCATABLE, DIMENSION(:) :: uniqueSurfMask !
-!  REAL(r64), ALLOCATABLE, DIMENSION(:)   :: SurfMultipleARR
+!  REAL, ALLOCATABLE, DIMENSION(:)   :: SurfMultipleARR
 !  INTEGER             :: surf ! do-loop counter for checking for surfaces for uniqueness
   INTEGER             :: thisCoil ! index of named coil in its derived type
   LOGICAL             :: WildcardObjNames
   INTEGER             :: thisChil
   INTEGER             :: ThisPV
-  REAL(r64)           :: Multipliers
+  REAL           :: Multipliers
 
   !Setup working data structure for line items
   DO Item=1,NumLineItems  !Loop thru cost line items
@@ -593,13 +593,13 @@ SUBROUTINE CalcCostEstimate
   CHARACTER(len=MaxNameLength) ::ThisConstructStr
 
   LOGICAL,ALLOCATABLE, DIMENSION(:) :: uniqueSurfMask !
-  REAL(r64), ALLOCATABLE, DIMENSION(:)   :: SurfMultipleARR
+  REAL, ALLOCATABLE, DIMENSION(:)   :: SurfMultipleARR
   INTEGER             :: surf ! do-loop counter for checking for surfaces for uniqueness
   INTEGER             :: thisCoil ! index of named coil in its derived type
   LOGICAL             :: WildcardObjNames
   INTEGER             :: thisChil
   INTEGER             :: ThisPV
-  REAL(r64)           :: Multipliers
+  REAL           :: Multipliers
 
   !Setup working data structure for line items
   DO Item=1,NumLineItems  !Loop thru cost line items

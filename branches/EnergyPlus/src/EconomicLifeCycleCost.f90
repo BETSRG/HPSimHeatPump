@@ -104,16 +104,16 @@ LOGICAL :: LCCparamPresent = .FALSE.                  ! If a LifeCycleCost:Param
 CHARACTER(len=MaxNameLength)   :: LCCname             ! Name
 INTEGER :: discountConvension = disConvEndOfYear      ! Discounting Convention
 INTEGER :: inflationApproach = inflAppConstantDollar  ! Inflation Approach
-REAL(r64) :: realDiscountRate = 0.0                   ! Real Discount Rate
-REAL(r64) :: nominalDiscountRate = 0.0                ! Nominal Discount Rate
-REAL(r64) :: inflation = 0.0                          ! Inflation
+REAL :: realDiscountRate = 0.0                   ! Real Discount Rate
+REAL :: nominalDiscountRate = 0.0                ! Nominal Discount Rate
+REAL :: inflation = 0.0                          ! Inflation
 INTEGER ::  baseDateMonth = 0                         ! Base Date Month (1=Jan, 12=Dec)
 INTEGER ::  baseDateYear = 0                          ! Base Date Year  1900-2100
 INTEGER ::  serviceDateMonth = 0                      ! Service Date Month (1=Jan, 12=Dec)
 INTEGER ::  serviceDateYear = 0                       ! Service Date Year 1900-2100
 INTEGER ::  lengthStudyYears = 0                      ! Length of Study Period in Years
 INTEGER ::  lengthStudyTotalMonths = 0                ! Length of Study expressed in months (years x 12)
-REAL(r64) :: taxRate = 0.0                            ! Tax rate
+REAL :: taxRate = 0.0                            ! Tax rate
 INTEGER :: depreciationMethod = depMethNone           ! Depreciation Method
 ! derived
 INTEGER ::  lastDateMonth = 0                         ! Last Date Month (the month before the base date month)
@@ -123,7 +123,7 @@ TYPE RecurringCostsType
   CHARACTER(len=MaxNameLength)   :: name  = ' '      ! Name
   CHARACTER(len=MaxNameLength)   :: lineItem = ' '   ! Line Item
   INTEGER :: category = costCatMaintenance           ! Category
-  REAL(r64) :: cost                                  ! Cost
+  REAL :: cost                                  ! Cost
   INTEGER :: startOfCosts = startServicePeriod       ! Start of Costs
   INTEGER :: yearsFromStart = 0                      ! Years from Start 0 - 100
   INTEGER :: monthsFromStart = 0                     ! Months from Start 0 - 11
@@ -131,7 +131,7 @@ TYPE RecurringCostsType
   INTEGER :: repeatPeriodYears = 0                   ! Repeat Period Years 1 - 100
   INTEGER :: repeatPeriodMonths = 0                  ! Repeat Period Months 0 - 11
   INTEGER :: totalRepeatPeriodMonths = 0             ! Total months (12 x years) + months
-  REAL(r64) :: annualEscalationRate = 0.0            ! Annual escalation rate
+  REAL :: annualEscalationRate = 0.0            ! Annual escalation rate
 END TYPE
 TYPE (RecurringCostsType), ALLOCATABLE, DIMENSION(:) :: RecurringCosts
 INTEGER                                              :: numRecurringCosts = 0
@@ -140,7 +140,7 @@ TYPE NonrecurringCostType
   CHARACTER(len=MaxNameLength)   :: name  = ' '      ! Name
   CHARACTER(len=MaxNameLength)   :: lineItem = ' '   ! Line Item
   INTEGER :: category = costCatConstruction          ! Category
-  REAL(r64) :: cost                                  ! Cost
+  REAL :: cost                                  ! Cost
   INTEGER :: startOfCosts = startServicePeriod       ! Start of Costs
   INTEGER :: yearsFromStart = 0                      ! Years from Start 0 - 100
   INTEGER :: monthsFromStart = 0                     ! Months from Start 0 - 11
@@ -154,7 +154,7 @@ TYPE UsePriceEscalationType
   INTEGER :: resource                                  ! resource like electricity or natural gas (uses definitions from DataGlobalConstants)
   INTEGER :: escalationStartYear = 0                   ! Escalation Start Year 1900-2100
   INTEGER :: escalationStartMonth = 0                  ! Escalation Start Month 1 to 12
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Escalation   ! Escalation by year, first year is baseDateYear
+  REAL, ALLOCATABLE, DIMENSION(:) :: Escalation   ! Escalation by year, first year is baseDateYear
                                                        ! last year is baseDateYear + lengthStudyYears - 1
 END TYPE
 TYPE (UsePriceEscalationType) , ALLOCATABLE, DIMENSION(:) :: UsePriceEscalation
@@ -163,7 +163,7 @@ INTEGER                                                   :: numUsePriceEscalati
 TYPE UseAdjustmentType
   CHARACTER(len=MaxNameLength)   :: name  = ' '        ! Name
   INTEGER :: resource                                  ! resource like electricity or natural gas (uses definitions from DataGlobalConstants)
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Adjustment   ! Adjustment by year, first year is baseDateYear
+  REAL, ALLOCATABLE, DIMENSION(:) :: Adjustment   ! Adjustment by year, first year is baseDateYear
                                                        ! last year is baseDateYear + lengthStudyYears - 1
 END TYPE
 TYPE (UseAdjustmentType), ALLOCATABLE, DIMENSION(:) :: UseAdjustment
@@ -174,13 +174,13 @@ TYPE CashFlowType
   INTEGER :: SourceKind                                ! 1=recurring, 2=nonrecurring, 3=resource
   INTEGER :: Resource                                  ! resource like electricity or natural gas (uses definitions from DataGlobalConstants)
   INTEGER :: Category                                  ! uses "costCat" constants above
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: mnAmount     ! cashflow dollar amount by month, first year is baseDateYear
+  REAL, ALLOCATABLE, DIMENSION(:) :: mnAmount     ! cashflow dollar amount by month, first year is baseDateYear
                                                        ! last year is baseDateYear + lengthStudyYears - 1
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: yrAmount     ! cashflow dollar amount by year, first year is baseDateYear
+  REAL, ALLOCATABLE, DIMENSION(:) :: yrAmount     ! cashflow dollar amount by year, first year is baseDateYear
   INTEGER :: pvKind = 0                                ! kind of present value 1=energy, 2=non-energy,3=not computed but summed
-  REAL(r64) :: presentValue                            ! total present value for cashflow
-  REAL(r64) :: orginalCost                             ! original cost from recurring, non-recurring or energy cost
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: yrPresVal    ! present value by year, first year is baseDateYear
+  REAL :: presentValue                            ! total present value for cashflow
+  REAL :: orginalCost                             ! original cost from recurring, non-recurring or energy cost
+  REAL, ALLOCATABLE, DIMENSION(:) :: yrPresVal    ! present value by year, first year is baseDateYear
 END TYPE
 TYPE (CashFlowType), ALLOCATABLE, DIMENSION(:) :: CashFlow
 INTEGER :: numCashFlow
@@ -194,15 +194,15 @@ INTEGER, PARAMETER :: pvkNotComputed = 3
 INTEGER :: numResourcesUsed
 
 !present value factors
-REAL(r64),ALLOCATABLE,DIMENSION(:) :: SPV
-REAL(r64),ALLOCATABLE,DIMENSION(:,:) :: energySPV  !yearly equivalent to FEMP UPV* values
+REAL,ALLOCATABLE,DIMENSION(:) :: SPV
+REAL,ALLOCATABLE,DIMENSION(:,:) :: energySPV  !yearly equivalent to FEMP UPV* values
 
 !arrays related to computing after tax cashflow and present value
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: DepreciatedCapital
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: TaxableIncome
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: Taxes
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: AfterTaxCashFlow
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: AfterTaxPresentValue
+REAL, ALLOCATABLE, DIMENSION(:) :: DepreciatedCapital
+REAL, ALLOCATABLE, DIMENSION(:) :: TaxableIncome
+REAL, ALLOCATABLE, DIMENSION(:) :: Taxes
+REAL, ALLOCATABLE, DIMENSION(:) :: AfterTaxCashFlow
+REAL, ALLOCATABLE, DIMENSION(:) :: AfterTaxPresentValue
 
 CHARACTER(len=*), PARAMETER, DIMENSION(12) :: MonthNames = &
      (/"January  ",  &
@@ -377,7 +377,7 @@ INTEGER                     :: jFld
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                   DIMENSION(100)  :: NumArray  !numeric data
+REAL,                   DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 INTEGER                     :: NumObj !count of objects
@@ -442,7 +442,7 @@ ELSEIF (NumObj .EQ. 1) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid for field '//TRIM(cNumericFieldNames(1))//    &
        ' to be blank when ConstantDollar analysis is be used.')
   END IF
-  IF ((realDiscountRate .GT. 0.30d0) .OR. (realDiscountRate .LT. -0.30d0)) THEN
+  IF ((realDiscountRate .GT. 0.30) .OR. (realDiscountRate .LT. -0.30)) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid value in field '//TRIM(cNumericFieldNames(1))//    &
        '.  This value is the decimal value not a percentage so most values are between 0.02 and 0.15. ')
   END IF
@@ -453,7 +453,7 @@ ELSEIF (NumObj .EQ. 1) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid for field '//TRIM(cNumericFieldNames(2))//    &
        ' to be blank when CurrentDollar analysis is be used.')
   END IF
-  IF ((nominalDiscountRate .GT. 0.30d0) .OR. (nominalDiscountRate .LT. -0.30d0)) THEN
+  IF ((nominalDiscountRate .GT. 0.30) .OR. (nominalDiscountRate .LT. -0.30)) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid value in field '//TRIM(cNumericFieldNames(2))//    &
        '.  This value is the decimal value not a percentage so most values are between 0.02 and 0.15. ')
   END IF
@@ -464,7 +464,7 @@ ELSEIF (NumObj .EQ. 1) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid for field '//TRIM(cNumericFieldNames(3))//    &
        ' contain a value when ConstantDollar analysis is be used.')
   END IF
-  IF ((inflation .GT. 0.30d0) .OR. (inflation .LT. -0.30d0)) THEN
+  IF ((inflation .GT. 0.30) .OR. (inflation .LT. -0.30)) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid value in field '//TRIM(cNumericFieldNames(3))//    &
        '.  This value is the decimal value not a percentage so most values are between 0.02 and 0.15. ')
   END IF
@@ -644,7 +644,7 @@ INTEGER                     :: jFld
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                   DIMENSION(100)  :: NumArray  !numeric data
+REAL,                   DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 
@@ -781,11 +781,11 @@ DO iInObj = 1 , numRecurringCosts
   !   N6;  \field Annual escalation rate
   !        \type real
   RecurringCosts(iInObj)%annualEscalationRate = INT(NumArray(6))
-  IF (RecurringCosts(iInObj)%annualEscalationRate .GT. 0.30d0) THEN
+  IF (RecurringCosts(iInObj)%annualEscalationRate .GT. 0.30) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid value in field '//TRIM(cNumericFieldNames(6))//    &
        '.  This value is the decimal value for the annual escalation so most values are between 0.02 and 0.15. ')
   END IF
-  IF (RecurringCosts(iInObj)%annualEscalationRate .LT. -0.30d0) THEN
+  IF (RecurringCosts(iInObj)%annualEscalationRate .LT. -0.30) THEN
     CALL ShowWarningError(TRIM(CurrentModuleObject)//': Invalid value in field '//TRIM(cNumericFieldNames(6))//    &
        '.  This value is the decimal value for the annual escalation so most values are between 0.02 and 0.15. ')
   END IF
@@ -837,7 +837,7 @@ INTEGER                     :: jFld
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                   DIMENSION(100)  :: NumArray  !numeric data
+REAL,                   DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 INTEGER                     :: numComponentCostLineItems !number of ComponentCost:LineItem objects
@@ -977,7 +977,7 @@ INTEGER                     :: jFld
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                   DIMENSION(100)  :: NumArray  !numeric data
+REAL,                   DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 INTEGER :: escStartYear = 0
@@ -1128,7 +1128,7 @@ INTEGER                     :: jYear
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                   DIMENSION(100)  :: NumArray  !numeric data
+REAL,                   DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 INTEGER                      :: numFldsToUse
@@ -1314,16 +1314,16 @@ INTEGER :: repeatMonths
 INTEGER :: baseMonths1900 = 0       ! number of months since 1900 for base period
 INTEGER :: serviceMonths1900 = 0    ! number of months since 1900 for service period
 INTEGER :: monthsBaseToService
-REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: resourceCosts
-REAL(r64), DIMENSION(12) :: curResourceCosts
+REAL, ALLOCATABLE, DIMENSION(:,:) :: resourceCosts
+REAL, DIMENSION(12) :: curResourceCosts
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: resourceCostNotZero
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: resourceCostAnnual
-REAL(r64) :: annualCost
+REAL, ALLOCATABLE, DIMENSION(:) :: resourceCostAnnual
+REAL :: annualCost
 INTEGER :: cashFlowCounter
 INTEGER :: found
 INTEGER :: curCategory
-REAL(r64),ALLOCATABLE,DIMENSION(:) :: monthlyInflationFactor
-REAL(r64) :: inflationPerMonth
+REAL,ALLOCATABLE,DIMENSION(:) :: monthlyInflationFactor
+REAL :: inflationPerMonth
 INTEGER :: iLoop
 
 ! compute months from 1900 for base and service period
@@ -1370,7 +1370,7 @@ ELSEIF (inflationApproach .EQ. inflAppCurrentDollar) THEN
   ! to allocate an interest rate (in this case inflation) cannot just use 1/12
   ! for the monthly value since it will be slightly wrong. Instead use inverse of
   ! formula from Newnan (4-32) which is r = m x (ia + 1)^(1/m) - 1)
-  inflationPerMonth = ((inflation + 1.00) ** (1.0d0/12.0d0)) - 1
+  inflationPerMonth = ((inflation + 1.00) ** (1.0/12.0)) - 1
   DO jMonth = 1, lengthStudyTotalMonths
     monthlyInflationFactor(jMonth) = (1 + inflationPerMonth) ** (jMonth - 1)
   END DO
@@ -1565,15 +1565,15 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: totalPV
+REAL :: totalPV
 INTEGER :: curCategory
 INTEGER :: curResource
-REAL(r64) :: curDiscountRate
+REAL :: curDiscountRate
 INTEGER :: iCashFlow
 INTEGER :: jYear
 INTEGER :: kResource
 INTEGER :: nUsePriceEsc
-REAL(r64) :: effectiveYear
+REAL :: effectiveYear
 
 ! identify how each cashflow should be treated
 DO iCashFlow = 1, numCashFlow
@@ -1612,14 +1612,14 @@ DO jYear = 1, lengthStudyYears
   ! NIST 155 D.2.1.1 - Single Present Value (SPV) formula
   SELECT CASE (discountConvension)
     CASE (disConvBeginOfYear)
-      effectiveYear = REAL(jYear,r64) - 1.0d0
+      effectiveYear = REAL(jYear,r64) - 1.0
     CASE (disConvMidYear)
-      effectiveYear = REAL(jYear,r64) - 0.5d0
+      effectiveYear = REAL(jYear,r64) - 0.5
     CASE (disConvEndOfYear)
       effectiveYear = REAL(jYear,r64)
     CASE DEFAULT
   END SELECT
-  SPV(jYear) = 1.0d0 / ((1.0d0 + curDiscountRate) ** effectiveYear)
+  SPV(jYear) = 1.0 / ((1.0 + curDiscountRate) ** effectiveYear)
 END DO
 !use SPV as default values for all energy types
 DO jYear = 1, lengthStudyYears
@@ -1635,15 +1635,15 @@ DO nUsePriceEsc = 1,numUsePriceEscalation
       !the following is based on UPV* formula from NIST 135 supplement but is for a single year
       SELECT CASE (discountConvension)
         CASE (disConvBeginOfYear)
-          effectiveYear = REAL(jYear,r64) - 1.0d0
+          effectiveYear = REAL(jYear,r64) - 1.0
         CASE (disConvMidYear)
-          effectiveYear = REAL(jYear,r64) - 0.5d0
+          effectiveYear = REAL(jYear,r64) - 0.5
         CASE (disConvEndOfYear)
           effectiveYear = REAL(jYear,r64)
         CASE DEFAULT
       END SELECT
       energySPV(curResource,jYear) = UsePriceEscalation(nUsePriceEsc)%Escalation(jYear) /   &
-         ((1.0d0 + curDiscountRate) ** effectiveYear)
+         ((1.0 + curDiscountRate) ** effectiveYear)
     END DO
   END IF
 END DO
@@ -1749,8 +1749,8 @@ INTEGER, PARAMETER :: SizeDepr =  41
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64),DIMENSION(SizeDepr) :: DepreciationPercent !values expressed as percent 5% is 5.0 (based on tables)
-REAL(r64) :: curCapital
+REAL,DIMENSION(SizeDepr) :: DepreciationPercent !values expressed as percent 5% is 5.0 (based on tables)
+REAL :: curCapital
 INTEGER :: curDepYear
 INTEGER :: iYear
 INTEGER :: jYear
@@ -2078,7 +2078,7 @@ INTEGER :: curCashFlow
 INTEGER :: numRows
 INTEGER :: offset
 INTEGER :: numYears
-REAL(r64) :: totalPV
+REAL :: totalPV
 
 IF (LCCparamPresent) THEN
   !---------------------------------

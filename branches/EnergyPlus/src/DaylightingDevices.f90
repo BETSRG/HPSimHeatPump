@@ -125,7 +125,7 @@ PRIVATE ! Everything private unless explicitly made public
           ! MODULE VARIABLE TYPE DECLARATIONS: na
 
           ! MODULE VARIABLE DECLARATIONS:
-REAL(r64), DIMENSION(NumOfAngles) :: COSAngle ! List of cosines of incident angle
+REAL, DIMENSION(NumOfAngles) :: COSAngle ! List of cosines of incident angle
 
           ! SUBROUTINE SPECIFICATIONS:
 PUBLIC InitDaylightingDevices
@@ -173,9 +173,9 @@ SUBROUTINE InitDaylightingDevices
 
           ! DERIVED TYPE DEFINITIONS:
   TYPE TDDPipeStoredData
-    REAL(r64)                    :: AspectRatio = 0.0 ! Aspect ratio, length / diameter
-    REAL(r64)                    :: Reflectance = 0.0 ! Reflectance of surface
-    REAL(r64), DIMENSION(NumOfAngles) :: TransBeam = 0.0   ! Table of beam transmittance vs. cosine angle
+    REAL                    :: AspectRatio = 0.0 ! Aspect ratio, length / diameter
+    REAL                    :: Reflectance = 0.0 ! Reflectance of surface
+    REAL, DIMENSION(NumOfAngles) :: TransBeam = 0.0   ! Table of beam transmittance vs. cosine angle
   END TYPE TDDPipeStoredData
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -184,10 +184,10 @@ SUBROUTINE InitDaylightingDevices
   INTEGER          :: AngleNum
   INTEGER          :: TZoneNum
   INTEGER          :: Loop
-  REAL(r64)        :: Theta              ! Angle of entry in degrees, 0 is parallel to pipe axis
-  REAL(r64)        :: dTheta             ! Angle increment
-  REAL(r64)        :: Reflectance        ! Visible or solar reflectance of surface
-  REAL(r64)        :: SumTZoneLengths
+  REAL        :: Theta              ! Angle of entry in degrees, 0 is parallel to pipe axis
+  REAL        :: dTheta             ! Angle increment
+  REAL        :: Reflectance        ! Visible or solar reflectance of surface
+  REAL        :: SumTZoneLengths
   LOGICAL          :: Found
   TYPE (TDDPipeStoredData), ALLOCATABLE, DIMENSION(:) :: TDDPipeStored
   INTEGER          :: ShelfNum           ! Daylighting shelf object number
@@ -207,8 +207,8 @@ SUBROUTINE InitDaylightingDevices
     COSAngle(1) = 0.0
     COSAngle(NumOfAngles) = 1.0
 
-    dTheta = 90.0d0 * DegToRadians / (NumOfAngles - 1.0d0)
-    Theta = 90.0d0 * DegToRadians
+    dTheta = 90.0 * DegToRadians / (NumOfAngles - 1.0)
+    Theta = 90.0 * DegToRadians
     DO AngleNum = 2, NumOfAngles - 1
       Theta = Theta - dTheta
       COSAngle(AngleNum) = COS(Theta)
@@ -399,14 +399,14 @@ SUBROUTINE GetTDDInput
   INTEGER                        :: IOStatus              ! Used in GetObjectItem
   LOGICAL                        :: IsBlank               ! TRUE if the name is blank
   LOGICAL                        :: IsNotOk               ! TRUE if there was a problem with a list name
-!unused1208  REAL(r64), DIMENSION(9)             :: Numbers               ! Numeric items for object
+!unused1208  REAL, DIMENSION(9)             :: Numbers               ! Numeric items for object
   INTEGER                        :: NumAlphas             ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers            ! Number of Numbers for each GetObjectItem call
   INTEGER                        :: PipeNum               ! TDD pipe object number
   INTEGER                        :: SurfNum               ! Dome or diffuser surface
   INTEGER                        :: TZoneNum              ! Transition zone loop
   CHARACTER(len=MaxNameLength)   :: TZoneName             ! Transition zone name
-  REAL(r64)                      :: PipeArea
+  REAL                      :: PipeArea
 
           ! FLOW:
   cCurrentModuleObject='DaylightingDevice:Tubular'
@@ -503,9 +503,9 @@ SUBROUTINE GetTDDInput
           ErrorsFound = .TRUE.
         END IF
 
-        IF (TDDPipe(PipeNum)%Dome > 0 .AND. ABS(Surface(SurfNum)%Area - Surface(TDDPipe(PipeNum)%Dome)%Area) > 0.1d0) THEN
+        IF (TDDPipe(PipeNum)%Dome > 0 .AND. ABS(Surface(SurfNum)%Area - Surface(TDDPipe(PipeNum)%Dome)%Area) > 0.1) THEN
           IF (SafeDivide(ABS(Surface(SurfNum)%Area - Surface(TDDPipe(PipeNum)%Dome)%Area),  &
-                         Surface(TDDPipe(PipeNum)%Dome)%Area) > .1d0) THEN  ! greater than 10%
+                         Surface(TDDPipe(PipeNum)%Dome)%Area) > .1) THEN  ! greater than 10%
             CALL ShowSevereError(trim(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1))// &
               ':  Dome and diffuser areas are significantly different (>10%).')
             CALL ShowContinueError('...Diffuser Area=['//trim(RoundSigDigits(Surface(SurfNum)%Area,4))//  &
@@ -555,10 +555,10 @@ SUBROUTINE GetTDDInput
         ErrorsFound = .TRUE.
       END IF
 
-      PipeArea=0.25d0 * Pi * TDDPipe(PipeNum)%Diameter**2
-      IF (TDDPipe(PipeNum)%Dome > 0 .AND. ABS(PipeArea - Surface(TDDPipe(PipeNum)%Dome)%Area) > 0.1d0) THEN
+      PipeArea=0.25 * Pi * TDDPipe(PipeNum)%Diameter**2
+      IF (TDDPipe(PipeNum)%Dome > 0 .AND. ABS(PipeArea - Surface(TDDPipe(PipeNum)%Dome)%Area) > 0.1) THEN
         IF (SafeDivide(ABS(PipeArea - Surface(TDDPipe(PipeNum)%Dome)%Area),  &
-                         Surface(TDDPipe(PipeNum)%Dome)%Area) > .1d0) THEN  ! greater than 10%
+                         Surface(TDDPipe(PipeNum)%Dome)%Area) > .1) THEN  ! greater than 10%
           CALL ShowSevereError(trim(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1))// &
             ':  Pipe and dome/diffuser areas are significantly different (>10%).')
           CALL ShowContinueError('...Pipe Area=['//trim(RoundSigDigits(PipeArea,4))//']; Dome/Diffuser Area=['//  &
@@ -604,8 +604,8 @@ SUBROUTINE GetTDDInput
         ALLOCATE(TDDPipe(PipeNum)%TZoneHeatGain(TDDPipe(PipeNum)%NumOfTZones))
 
         TDDPipe(PipeNum)%TZone = 0
-        TDDPipe(PipeNum)%TZoneLength = 0.d0
-        TDDPipe(PipeNum)%TZoneHeatGain = 0.d0
+        TDDPipe(PipeNum)%TZoneLength = 0.
+        TDDPipe(PipeNum)%TZoneHeatGain = 0.
 
         DO TZoneNum = 1, TDDPipe(PipeNum)%NumOfTZones
           TZoneName = cAlphaArgs(TZoneNum + 4)
@@ -849,7 +849,7 @@ SUBROUTINE GetShelfInput
 END SUBROUTINE GetShelfInput
 
 
-REAL(r64) FUNCTION CalcPipeTransBeam(R, A, Theta)
+REAL FUNCTION CalcPipeTransBeam(R, A, Theta)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -879,41 +879,41 @@ REAL(r64) FUNCTION CalcPipeTransBeam(R, A, Theta)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)            :: R            ! Reflectance of surface, constant (can be made R = f(theta) later)
-  REAL(r64), INTENT(IN)            :: A            ! Aspect ratio, L / d
-  REAL(r64), INTENT(IN)            :: Theta        ! Angle of entry in radians
+  REAL, INTENT(IN)            :: R            ! Reflectance of surface, constant (can be made R = f(theta) later)
+  REAL, INTENT(IN)            :: A            ! Aspect ratio, L / d
+  REAL, INTENT(IN)            :: Theta        ! Angle of entry in radians
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: N = 100000.0d0 ! Number of integration points
-  REAL(r64), PARAMETER :: xTol = 150.0d0 ! Tolerance factor to skip iterations where dT is approximately 0
+  REAL, PARAMETER :: N = 100000.0 ! Number of integration points
+  REAL, PARAMETER :: xTol = 150.0 ! Tolerance factor to skip iterations where dT is approximately 0
                                               ! Must be >= 1.0, increase this number to decrease the execution time
-  REAL(r64), PARAMETER :: myLocalTiny =  TINY(1.0D0)
+  REAL, PARAMETER :: myLocalTiny =  TINY(1.0)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)       :: i            ! Integration interval between points
-  REAL(r64)       :: s            ! Entry point
-  REAL(r64)       :: dT
-  REAL(r64)       :: T            ! Beam transmittance for collimated solar real
-  REAL(r64)       :: x, c1, c2    ! Intermediate variables for speed optimization
-  REAL(r64)       :: xLimit       ! Limiting x value to prevent floating point underflow
+  REAL       :: i            ! Integration interval between points
+  REAL       :: s            ! Entry point
+  REAL       :: dT
+  REAL       :: T            ! Beam transmittance for collimated solar real
+  REAL       :: x, c1, c2    ! Intermediate variables for speed optimization
+  REAL       :: xLimit       ! Limiting x value to prevent floating point underflow
 
           ! FLOW:
   CalcPipeTransBeam = 0.0
 
   T = 0.0
-  i = 1.0d0 / N
+  i = 1.0 / N
 
-  xLimit = (LOG(N**2.0d0*myLocalTiny)/LOG(R))/xTol
+  xLimit = (LOG(N**2.0*myLocalTiny)/LOG(R))/xTol
 
   c1 = A * TAN(Theta)
-  c2 = 4.0d0 / Pi
+  c2 = 4.0 / Pi
 
   s = i
-  DO WHILE (s < (1.0d0 - i))
+  DO WHILE (s < (1.0 - i))
     x = c1 / s
 
     IF (x < xLimit) THEN
-      dT = c2 * (R**INT(x)) * (1.0d0 - (1.0d0 - R) * (x - INT(x))) * (s**2) / SQRT(1.0d0 - s**2)
+      dT = c2 * (R**INT(x)) * (1.0 - (1.0 - R) * (x - INT(x))) * (s**2) / SQRT(1.0 - s**2)
       T = T + dT
     END IF
 
@@ -929,7 +929,7 @@ REAL(r64) FUNCTION CalcPipeTransBeam(R, A, Theta)
 END FUNCTION CalcPipeTransBeam
 
 
-REAL(r64) FUNCTION CalcTDDTransSolIso(PipeNum)
+REAL FUNCTION CalcTDDTransSolIso(PipeNum)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -964,23 +964,23 @@ REAL(r64) FUNCTION CalcTDDTransSolIso(PipeNum)
   INTEGER, PARAMETER  :: NPH = 1000 ! Number of altitude integration points
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: FluxInc    ! Incident solar flux
-  REAL(r64)    :: FluxTrans  ! Transmitted solar flux
-  REAL(r64)    :: trans      ! Total beam solar transmittance of TDD
+  REAL    :: FluxInc    ! Incident solar flux
+  REAL    :: FluxTrans  ! Transmitted solar flux
+  REAL    :: trans      ! Total beam solar transmittance of TDD
   INTEGER             :: N          ! Loop counter
-  REAL(r64)           :: PH         ! Altitude angle of sky element
-  REAL(r64)           :: dPH        ! Altitude angle increment
-  REAL(r64)           :: COSI       ! Cosine of incident angle
-  REAL(r64)           :: SINI       ! Sine of incident angle
-  REAL(r64)           :: P          ! Angular distribution function
+  REAL           :: PH         ! Altitude angle of sky element
+  REAL           :: dPH        ! Altitude angle increment
+  REAL           :: COSI       ! Cosine of incident angle
+  REAL           :: SINI       ! Sine of incident angle
+  REAL           :: P          ! Angular distribution function
 
           ! FLOW:
   FluxInc = 0.0
   FluxTrans = 0.0
 
   ! Integrate from 0 to Pi/2 altitude
-  dPH = 90.0d0 * DegToRadians / NPH
-  PH = 0.5d0 * dPH
+  dPH = 90.0 * DegToRadians / NPH
+  PH = 0.5 * dPH
   DO N = 1, NPH
     COSI = COS(PiOvr2 - PH)
     SINI = SIN(PiOvr2 - PH)
@@ -1003,7 +1003,7 @@ REAL(r64) FUNCTION CalcTDDTransSolIso(PipeNum)
 END FUNCTION CalcTDDTransSolIso
 
 
-REAL(r64) FUNCTION CalcTDDTransSolHorizon(PipeNum)
+REAL FUNCTION CalcTDDTransSolHorizon(PipeNum)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1038,17 +1038,17 @@ REAL(r64) FUNCTION CalcTDDTransSolHorizon(PipeNum)
   INTEGER, PARAMETER  :: NTH = 18   ! Number of azimuth integration points
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: FluxInc    ! Incident solar flux
-  REAL(r64)    :: FluxTrans  ! Transmitted solar flux
-  REAL(r64)    :: trans      ! Total beam solar transmittance of TDD
+  REAL    :: FluxInc    ! Incident solar flux
+  REAL    :: FluxTrans  ! Transmitted solar flux
+  REAL    :: trans      ! Total beam solar transmittance of TDD
   INTEGER             :: N          ! Loop counter
-  REAL(r64)           :: TH         ! Azimuth angle of sky horizon element
-  REAL(r64)           :: dTH        ! Azimuth angle increment
-  REAL(r64)           :: THMIN      ! Minimum azimuth integration limit
-  REAL(r64)           :: THMAX      ! Maximum azimuth integration limit
-  REAL(r64)           :: CosPhi     ! Cosine of TDD:DOME altitude angle
-  REAL(r64)           :: Theta      ! TDD:DOME azimuth angle
-  REAL(r64)           :: COSI       ! Cosine of the incident angle
+  REAL           :: TH         ! Azimuth angle of sky horizon element
+  REAL           :: dTH        ! Azimuth angle increment
+  REAL           :: THMIN      ! Minimum azimuth integration limit
+  REAL           :: THMAX      ! Maximum azimuth integration limit
+  REAL           :: CosPhi     ! Cosine of TDD:DOME altitude angle
+  REAL           :: Theta      ! TDD:DOME azimuth angle
+  REAL           :: COSI       ! Cosine of the incident angle
 
           ! FLOW:
   FluxInc = 0.0
@@ -1057,12 +1057,12 @@ REAL(r64) FUNCTION CalcTDDTransSolHorizon(PipeNum)
   CosPhi = COS(PiOvr2 - Surface(TDDPipe(PipeNum)%Dome)%Tilt * DegToRadians)
   Theta = Surface(TDDPipe(PipeNum)%Dome)%Azimuth * DegToRadians
 
-  IF (CosPhi > 0.01d0) THEN ! Dome has a view of the horizon
+  IF (CosPhi > 0.01) THEN ! Dome has a view of the horizon
     ! Integrate over the semicircle
     THMIN = Theta - PiOvr2
     THMAX = Theta + PiOvr2
-    dTH = 180.0d0 * DegToRadians / NTH
-    TH = THMIN + 0.5d0 * dTH
+    dTH = 180.0 * DegToRadians / NTH
+    TH = THMIN + 0.5 * dTH
     DO N = 1, NTH
       ! Calculate incident angle between dome outward normal and horizon element
       COSI = CosPhi * COS(TH - Theta)
@@ -1087,7 +1087,7 @@ REAL(r64) FUNCTION CalcTDDTransSolHorizon(PipeNum)
 END FUNCTION CalcTDDTransSolHorizon
 
 
-REAL(r64) FUNCTION CalcTDDTransSolAniso(PipeNum, COSI)
+REAL FUNCTION CalcTDDTransSolAniso(PipeNum, COSI)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1128,14 +1128,14 @@ REAL(r64) FUNCTION CalcTDDTransSolAniso(PipeNum, COSI)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: PipeNum         ! TDD pipe object number
-  REAL(r64), INTENT(IN)    :: COSI            ! Cosine of the incident angle
+  REAL, INTENT(IN)    :: COSI            ! Cosine of the incident angle
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: DomeSurf        ! TDD:DOME surface number
-  REAL(r64)           :: IsoSkyRad       ! Isotropic sky radiation component
-  REAL(r64)           :: CircumSolarRad  ! Circumsolar sky radiation component
-  REAL(r64)           :: HorizonRad      ! Horizon sky radiation component
-  REAL(r64)           :: AnisoSkyTDDMult ! Anisotropic sky multiplier for TDD
+  REAL           :: IsoSkyRad       ! Isotropic sky radiation component
+  REAL           :: CircumSolarRad  ! Circumsolar sky radiation component
+  REAL           :: HorizonRad      ! Horizon sky radiation component
+  REAL           :: AnisoSkyTDDMult ! Anisotropic sky multiplier for TDD
 
           ! FLOW:
   DomeSurf = TDDPipe(PipeNum)%Dome
@@ -1155,10 +1155,10 @@ REAL(r64) FUNCTION CalcTDDTransSolAniso(PipeNum, COSI)
     + TransTDD(PipeNum, COSI, SolarBeam) * CircumSolarRad &
     + TDDPipe(PipeNum)%TransSolHorizon * HorizonRad
 
-  IF (AnisoSkyMult(DomeSurf) > 0.0d0) THEN
+  IF (AnisoSkyMult(DomeSurf) > 0.0) THEN
     CalcTDDTransSolAniso = AnisoSkyTDDMult / AnisoSkyMult(DomeSurf)
   ELSE
-    CalcTDDTransSolAniso = 0.0d0
+    CalcTDDTransSolAniso = 0.0
   ENDIF
 
   RETURN
@@ -1166,7 +1166,7 @@ REAL(r64) FUNCTION CalcTDDTransSolAniso(PipeNum, COSI)
 END FUNCTION CalcTDDTransSolAniso
 
 
-RECURSIVE REAL(r64) FUNCTION TransTDD(PipeNum, COSI, RadiationType)
+RECURSIVE REAL FUNCTION TransTDD(PipeNum, COSI, RadiationType)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1203,15 +1203,15 @@ RECURSIVE REAL(r64) FUNCTION TransTDD(PipeNum, COSI, RadiationType)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: PipeNum        ! TDD pipe object number
-  REAL(r64), INTENT(IN)              :: COSI           ! Cosine of the incident angle
+  REAL, INTENT(IN)              :: COSI           ! Cosine of the incident angle
   INTEGER, INTENT(IN)           :: RadiationType  ! Radiation type flag
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER                       :: constDome      ! Construction object number for TDD:DOME
   INTEGER                       :: constDiff      ! Construction object number for TDD:DIFFUSER
-  REAL(r64)                     :: transDome
-  REAL(r64)                     :: transPipe
-  REAL(r64)                     :: transDiff
+  REAL                     :: transDome
+  REAL                     :: transPipe
+  REAL                     :: transDiff
 
           ! FLOW:
   TransTDD = 0.0
@@ -1250,7 +1250,7 @@ RECURSIVE REAL(r64) FUNCTION TransTDD(PipeNum, COSI, RadiationType)
 END FUNCTION TransTDD
 
 
-REAL(r64) FUNCTION InterpolatePipeTransBeam(COSI, transBeam)
+REAL FUNCTION InterpolatePipeTransBeam(COSI, transBeam)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1270,12 +1270,12 @@ REAL(r64) FUNCTION InterpolatePipeTransBeam(COSI, transBeam)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)                         :: COSI         ! Cosine of the incident angle
-  REAL(r64), DIMENSION(NumOfAngles), INTENT(IN) :: transBeam    ! Table of beam transmittance vs. cosine angle
+  REAL, INTENT(IN)                         :: COSI         ! Cosine of the incident angle
+  REAL, DIMENSION(NumOfAngles), INTENT(IN) :: transBeam    ! Table of beam transmittance vs. cosine angle
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER                                  :: Lo, Hi
-  REAL(r64)                                :: m, b
+  REAL                                :: m, b
 
           ! FLOW:
   InterpolatePipeTransBeam = 0.0
@@ -1381,9 +1381,9 @@ SUBROUTINE DistributeTDDAbsorbedSolar
   INTEGER :: DiffSurf       ! Surface number of TDD:DIFFUSER
   INTEGER :: TZoneNum       ! Transition zone index
 !  INTEGER :: ActualZone     ! Actual transition zone number
-  REAL(r64)    :: transDiff      ! Diffuse transmittance of TDD:DIFFUSER
-  REAL(r64)    :: QRefl          ! Diffuse radiation reflected back up the pipe
-  REAL(r64)    :: TotTDDPipeGain ! Total absorbed solar gain in the tubular daylighting device pipe
+  REAL    :: transDiff      ! Diffuse transmittance of TDD:DIFFUSER
+  REAL    :: QRefl          ! Diffuse radiation reflected back up the pipe
+  REAL    :: TotTDDPipeGain ! Total absorbed solar gain in the tubular daylighting device pipe
 
           ! FLOW:
   DO PipeNum = 1, NumOfTDDPipes
@@ -1399,11 +1399,11 @@ SUBROUTINE DistributeTDDAbsorbedSolar
 
     TotTDDPipeGain = WinTransSolar(TDDPipe(PipeNum)%Dome) & ! Solar entering pipe
       - QRadSWOutIncident(DiffSurf) * Surface(DiffSurf)%Area & ! Solar exiting pipe
-      + QRefl * (1.0d0 - TDDPipe(PipeNum)%TransSolIso / transDiff) & ! Absorbed due to reflections on the way out
-      + QRadSWwinAbs(TDDPipe(PipeNum)%Dome,1) * Surface(DiffSurf)%Area / 2.0d0 & ! Inward absorbed solar from dome glass
-      + QRadSWwinAbs(DiffSurf,1) * Surface(DiffSurf)%Area / 2.0d0 ! Inward absorbed solar from diffuser glass
+      + QRefl * (1.0 - TDDPipe(PipeNum)%TransSolIso / transDiff) & ! Absorbed due to reflections on the way out
+      + QRadSWwinAbs(TDDPipe(PipeNum)%Dome,1) * Surface(DiffSurf)%Area / 2.0 & ! Inward absorbed solar from dome glass
+      + QRadSWwinAbs(DiffSurf,1) * Surface(DiffSurf)%Area / 2.0 ! Inward absorbed solar from diffuser glass
 
-    TDDPipe(PipeNum)%PipeAbsorbedSolar = MAX(0.0d0, TotTDDPipeGain) ! Report variable [W]
+    TDDPipe(PipeNum)%PipeAbsorbedSolar = MAX(0.0, TotTDDPipeGain) ! Report variable [W]
 
     DO TZoneNum = 1, TDDPipe(PipeNum)%NumOfTZones
       ! Distribute absorbed solar gain in proportion to transition zone length
@@ -1447,9 +1447,9 @@ SUBROUTINE CalcViewFactorToShelf(ShelfNum)
   INTEGER, INTENT(IN) :: ShelfNum           ! Daylighting shelf object number
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: W, H, L            ! Width, height, and length of window/shelf geometry
-  REAL(r64)           :: M, N               ! Intermediate variables
-  REAL(r64)           :: E1, E2, E3, E4     ! Intermediate equations
+  REAL           :: W, H, L            ! Width, height, and length of window/shelf geometry
+  REAL           :: M, N               ! Intermediate variables
+  REAL           :: E1, E2, E3, E4     ! Intermediate equations
   INTEGER             :: VWin, VShelf       ! Vertex indices
   INTEGER             :: NumMatch           ! Number of vertices matched
 
@@ -1488,12 +1488,12 @@ SUBROUTINE CalcViewFactorToShelf(ShelfNum)
   M = H / W
   N = L / W
 
-  E1 = M * ATAN((1.0d0 / M)) + N * ATAN((1.0d0 / N)) - (SQRT(N**2 + M**2)) * ATAN(((N**2 + M**2))**(-0.5d0))
-  E2 = ((1.0d0 + M**2) * (1.0d0 + N**2)) / (1.0d0 + M**2 + N**2)
-  E3 = ((M**2) * (1.0d0 + M**2 + N**2) / ((1.0d0 + M**2) * (M**2 + N**2)))**(M**2)
-  E4 = ((N**2) * (1.0d0 + M**2 + N**2) / ((1.0d0 + N**2) * (M**2 + N**2)))**(N**2)
+  E1 = M * ATAN((1.0 / M)) + N * ATAN((1.0 / N)) - (SQRT(N**2 + M**2)) * ATAN(((N**2 + M**2))**(-0.5))
+  E2 = ((1.0 + M**2) * (1.0 + N**2)) / (1.0 + M**2 + N**2)
+  E3 = ((M**2) * (1.0 + M**2 + N**2) / ((1.0 + M**2) * (M**2 + N**2)))**(M**2)
+  E4 = ((N**2) * (1.0 + M**2 + N**2) / ((1.0 + N**2) * (M**2 + N**2)))**(N**2)
 
-  Shelf(ShelfNum)%ViewFactor = (1.0 / (Pi * M)) * (E1 + 0.25d0 * LOG(E2 * E3 * E4))
+  Shelf(ShelfNum)%ViewFactor = (1.0 / (Pi * M)) * (E1 + 0.25 * LOG(E2 * E3 * E4))
 
   RETURN
 
@@ -1541,7 +1541,7 @@ SUBROUTINE FigureTDDZoneGains
   
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
     DO Loop = 1, NumOfTDDPipes
-      TDDPipe(Loop)%TZoneHeatGain = 0.d0
+      TDDPipe(Loop)%TZoneHeatGain = 0.
     ENDDO
     MyEnvrnFlag = .FALSE.
   ENDIF

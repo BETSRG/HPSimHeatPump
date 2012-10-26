@@ -93,10 +93,10 @@ TYPE OAEquipList
     INTEGER                      :: BranchNum = 0
     INTEGER                      :: CompNum = 0
     INTEGER                      :: FluidIndex         =0        ! used in Steam...
-    REAL(r64)                    :: MaxVolWaterFlow    = 0.0d0
-    REAL(r64)                    :: MaxWaterMassFlow   = 0.d0
-    REAL(r64)                    :: MinVolWaterFlow    = 0.0d0
-    REAL(r64)                    :: MinWaterMassFlow   = 0.d0
+    REAL                    :: MaxVolWaterFlow    = 0.0
+    REAL                    :: MaxWaterMassFlow   = 0.
+    REAL                    :: MinVolWaterFlow    = 0.0
+    REAL                    :: MinWaterMassFlow   = 0.
   ! End Of Equipment list data
 END TYPE
 
@@ -119,7 +119,7 @@ TYPE OAUnitData
   INTEGER                      :: SFanType                 =0        ! type of fan in cFanTypes
   INTEGER                      :: SFanAvailSchedPtr        =0        ! supply fan availability sched from fan object
   INTEGER                      :: FanPlace                 =0        ! fan placement; blow through and draw through
-  REAL(r64)                    :: FanCorTemp               =0.0      ! correction temperature
+  REAL                    :: FanCorTemp               =0.0      ! correction temperature
   LOGICAL                      :: FanEffect                =.FALSE.  ! .TRUE. if unit has a fan type of draw through
   INTEGER                      :: SFanOutletNode           = 0       ! supply fan outlet node number
   CHARACTER(len=MaxNameLength) :: ExtFanName               =' '      ! name of exhaust fan
@@ -130,13 +130,13 @@ TYPE OAUnitData
   CHARACTER(len=MaxNameLength) :: OutAirSchedName          =' '      ! schedule of fraction for outside air (all controls)
   INTEGER                      :: OutAirSchedPtr           =0        ! index to schedule
   INTEGER                      :: OutsideAirNode           =0        ! outside air node number
-  REAL(r64)                    :: OutAirVolFlow            =0.0      ! m3/s
-  REAL(r64)                    :: OutAirMassFlow           =0.0      ! kg/s
-  REAL(r64)                    :: ExtAirVolFlow            =0.0      ! m3/s
-  REAL(r64)                    :: ExtAirMassFlow           =0.0      ! kg/s
+  REAL                    :: OutAirVolFlow            =0.0      ! m3/s
+  REAL                    :: OutAirMassFlow           =0.0      ! kg/s
+  REAL                    :: ExtAirVolFlow            =0.0      ! m3/s
+  REAL                    :: ExtAirMassFlow           =0.0      ! kg/s
   CHARACTER(len=MaxNameLength) :: ExtAirSchedName          =' '      ! schedule of fraction for exhaust air
   INTEGER                      :: ExtOutAirSchedPtr        =0        ! index to schedule
-  REAL(r64)                    :: MaxAirMassFlow           =0.0      ! kg/s
+  REAL                    :: MaxAirMassFlow           =0.0      ! kg/s
   CHARACTER(len=MaxNameLength) :: HiCtrlTempSched          = ' '     ! Schedule name for the High Control Air temperature
   INTEGER                      :: HiCtrlTempSchedPtr       = 0       ! Schedule index for the High Control Air temperature
   CHARACTER(len=MaxNameLength) :: LoCtrlTempSched          = ' '     ! Schedule name for the Low Control Air temperature
@@ -144,30 +144,30 @@ TYPE OAUnitData
   INTEGER                      :: OperatingMode            =0         ! operating condition( NeutralMode, HeatingMode, CoolingMode)
   INTEGER                      :: ControlCompTypeNum       =0
   INTEGER                      :: CompErrIndex             =0
-  REAL(r64)                    :: AirMassFlow              =0.0       ! kg/s
+  REAL                    :: AirMassFlow              =0.0       ! kg/s
   INTEGER                      :: UnBalancedErrCount       =0         ! Counter for recurring warning message
   INTEGER                      :: UnBalancedErrIndex       =0              ! Index to recurring warning message
   INTEGER                      :: NumComponents            = 0
   CHARACTER(len=MaxNameLength) :: ComponentListName        = ' '
-  REAL(r64)                    :: CompOutSetTemp      =0.0   ! component outlet setpoint temperature
+  REAL                    :: CompOutSetTemp      =0.0   ! component outlet setpoint temperature
   TYPE(OAEquipList),  &
      ALLOCATABLE,DIMENSION(:)  :: OAEquip
 
   ! Report data
-  REAL(r64) :: TotCoolingRate              =0.0 ! Rate of total cooling delivered to the zone [W]
-  REAL(r64) :: TotCoolingEnergy            =0.0 ! Total cooling energy delivered by the OAU supply air to the zone [J]
-  REAL(r64) :: SensCoolingRate             =0.0 ! Rate of sensible cooling delivered to the zone [W]
-  REAL(r64) :: SensCoolingEnergy           =0.0 ! Sensible cooling energy delivered by the OAU supply air to the zone [J]
-  REAL(r64) :: LatCoolingRate              =0.0 ! Rate of latent cooling delivered to the zone [W]
-  REAL(r64) :: LatCoolingEnergy            =0.0 ! Latent cooling energy delivered by the OAU supply air to the zone [J]
-  REAL(r64) :: ElecFanRate                 =0.0 ! Total electric use rate (power) for supply/exhaust fans [W]
-  REAL(r64) :: ElecFanEnergy               =0.0 ! Electric energy use for supply fan and exhaust fan [J]
-  REAL(r64) :: SensHeatingEnergy           =0.0 ! sensible heating energy delivered by the ERV supply air to the zone [J]
-  REAL(r64) :: SensHeatingRate             =0.0 ! rate of sensible heating delivered to the zone [W]
-  REAL(r64) :: LatHeatingEnergy            =0.0 ! latent heating energy delivered by the ERV supply air to the zone [J]
-  REAL(r64) :: LatHeatingRate              =0.0 ! rate of latent heating delivered to the zone [W]
-  REAL(r64) :: TotHeatingEnergy            =0.0 ! total heating energy delivered by the ERV supply air to the zone [J]
-  REAL(r64) :: TotHeatingRate              =0.0 ! rate of total heating delivered to the zone [W]
+  REAL :: TotCoolingRate              =0.0 ! Rate of total cooling delivered to the zone [W]
+  REAL :: TotCoolingEnergy            =0.0 ! Total cooling energy delivered by the OAU supply air to the zone [J]
+  REAL :: SensCoolingRate             =0.0 ! Rate of sensible cooling delivered to the zone [W]
+  REAL :: SensCoolingEnergy           =0.0 ! Sensible cooling energy delivered by the OAU supply air to the zone [J]
+  REAL :: LatCoolingRate              =0.0 ! Rate of latent cooling delivered to the zone [W]
+  REAL :: LatCoolingEnergy            =0.0 ! Latent cooling energy delivered by the OAU supply air to the zone [J]
+  REAL :: ElecFanRate                 =0.0 ! Total electric use rate (power) for supply/exhaust fans [W]
+  REAL :: ElecFanEnergy               =0.0 ! Electric energy use for supply fan and exhaust fan [J]
+  REAL :: SensHeatingEnergy           =0.0 ! sensible heating energy delivered by the ERV supply air to the zone [J]
+  REAL :: SensHeatingRate             =0.0 ! rate of sensible heating delivered to the zone [W]
+  REAL :: LatHeatingEnergy            =0.0 ! latent heating energy delivered by the ERV supply air to the zone [J]
+  REAL :: LatHeatingRate              =0.0 ! rate of latent heating delivered to the zone [W]
+  REAL :: TotHeatingEnergy            =0.0 ! total heating energy delivered by the ERV supply air to the zone [J]
+  REAL :: TotHeatingRate              =0.0 ! rate of total heating delivered to the zone [W]
 
   END TYPE OAUnitData
 
@@ -175,7 +175,7 @@ TYPE (OAUnitData), ALLOCATABLE, DIMENSION(:) :: OutAirUnit
 
   ! MODULE VARIABLE DECLARATIONS:
   INTEGER                            :: NumOfOAunits               =0    ! Number of outdoor air unit in the input file
-  REAL(r64)                          :: OAMassFlowRate             =0.0  ! Outside air mass flow rate for the zone outdoor air unit
+  REAL                          :: OAMassFlowRate             =0.0  ! Outside air mass flow rate for the zone outdoor air unit
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: MyOneTimeErrorFlag
   LOGICAL                            :: GetOutdoorAirUnitInputFlag =.TRUE.  ! Flag set to make sure you get input once
 
@@ -230,8 +230,8 @@ SUBROUTINE SimOutdoorAirUnit(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOut
   CHARACTER(len=*), INTENT(IN)  :: CompName            ! name of the outdoor air unit
   INTEGER,          INTENT(IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
-  REAL(r64),        INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL,        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
+  REAL,        INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT) :: CompIndex
 
 
@@ -388,7 +388,7 @@ SUBROUTINE GetOutdoorAirUnitInputs
   CHARACTER(len=MaxNameLength),  ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
   LOGICAL,  ALLOCATABLE, DIMENSION(:) :: lAlphaBlanks     ! Logical array, alpha field input BLANK = .true.
   LOGICAL,  ALLOCATABLE, DIMENSION(:) :: lNumericBlanks   ! Logical array, numeric field input BLANK = .true.
-  REAL(r64),  ALLOCATABLE, DIMENSION(:) :: NumArray
+  REAL,  ALLOCATABLE, DIMENSION(:) :: NumArray
   CHARACTER(len=MaxNameLength),  ALLOCATABLE, DIMENSION(:) :: AlphArray
   LOGICAL :: ErrFlag = .FALSE.
 
@@ -409,7 +409,7 @@ SUBROUTINE GetOutdoorAirUnitInputs
   ALLOCATE(cAlphaFields(MaxAlphas))
   cAlphaFields=' '
   ALLOCATE(NumArray(MaxNums))
-  NumArray=0.0d0
+  NumArray=0.0
   ALLOCATE(cNumericFields(MaxNums))
   cNumericFields=' '
   ALLOCATE(lAlphaBlanks(MaxAlphas))
@@ -1000,18 +1000,18 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
   INTEGER        :: InNode             ! inlet node number in outdoor air unit
   INTEGER        :: OutNode            ! outlet node number in outdoor air unit
   INTEGER        :: OutsideAirNode     ! outside air node number outdoor air unit
-  REAL(r64)      :: OAFrac             ! possible outside air fraction
-  REAL(r64)      :: EAFrac             ! possible exhaust air fraction
-  REAL(r64)      :: RhoAir             ! air density at InNode
-  REAL(r64)      :: TempSteamIn
-  REAL(r64)      :: SteamDensity
+  REAL      :: OAFrac             ! possible outside air fraction
+  REAL      :: EAFrac             ! possible exhaust air fraction
+  REAL      :: RhoAir             ! air density at InNode
+  REAL      :: TempSteamIn
+  REAL      :: SteamDensity
   INTEGER        :: EQListNum
   INTEGER        :: EQNum
   INTEGER        :: SteamConNode        ! Hot Steam control node number for steam coil
   INTEGER        :: HotConNode          ! Hot water control node number of hot water coil
   INTEGER        :: ColdConNode         ! Cold water control node number of cold water coil
   INTEGER        :: compLoop !local do loop index
-  REAL(r64)      :: rho
+  REAL      :: rho
   LOGICAL        :: errFlag
 
 
@@ -1108,7 +1108,7 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
         IF( (OutAirUnit(OAUnitNum)%OAEquip(compLoop)%CoilPlantTypeOfNum == TypeOf_CoilWaterCooling) .OR. &
             (OutAirUnit(OAUnitNum)%OAEquip(compLoop)%CoilPlantTypeOfNum == TypeOf_CoilWaterDetailedFlatCooling)  ) THEN
           rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidIndex, &
                                       'SizeOutdoorAirUnit' )
           OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxWaterMassFlow = rho * OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxVolWaterFlow
@@ -1126,7 +1126,7 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
 
         IF (OutAirUnit(OAUnitNum)%OAEquip(compLoop)%CoilPlantTypeOfNum == TypeOf_CoilWaterSimpleHeating) THEN
           rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidName, &
-                                       60.d0, &
+                                       60., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidIndex, &
                                       'SizeOutdoorAirUnit' )
           OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxWaterMassFlow = rho * OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxVolWaterFlow
@@ -1143,7 +1143,7 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
         IF  (OutAirUnit(OAUnitNum)%OAEquip(compLoop)%CoilPlantTypeOfNum == TypeOf_CoilSteamAirHeating) THEN
           !DSU deal with steam mass flow rate , currenlty just like hot water  DSU?
           rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidName, &
-                                       60.d0, &
+                                       60., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(compLoop)%LoopNum )%fluidIndex, &
                                       'SizeOutdoorAirUnit' )
           OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxWaterMassFlow = rho * OutAirUnit(OAUnitNum)%OAEquip(compLoop)%MaxVolWaterFlow
@@ -1188,23 +1188,23 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
   IF (OutAirUnit(OAUnitNum)%SFanAvailSchedPtr > 0.0) THEN ! fan is available
     OutAirUnit(OAUnitNum)%OutAirMassFlow = RhoAir*OAFrac*OutAirUnit(OAUnitNum)%OutAirVolFlow
   ELSE
-    OutAirUnit(OAUnitNum)%OutAirMassFlow = 0.d0
+    OutAirUnit(OAUnitNum)%OutAirMassFlow = 0.
   ENDIF
 
  ! set the exhaust air mass flow rate from input
   IF (OutAirUnit(OAUnitNum)%ExtFan ) THEN
     InNode = OutAirUnit(OAUnitNum)%AirInletNode
     EAFrac = GetCurrentScheduleValue(OutAirUnit(OAUnitNum)%ExtOutAirSchedPtr)
-    IF (OutAirUnit(OAUnitNum)%ExtFanAvailSchedPtr > 0.d0) THEN
+    IF (OutAirUnit(OAUnitNum)%ExtFanAvailSchedPtr > 0.) THEN
       OutAirUnit(OAUnitNum)%ExtAirMassFlow = RhoAir*EAFrac*OutAirUnit(OAUnitNum)%ExtAirVolFlow
     ELSE
-      OutAirUnit(OAUnitNum)%ExtAirMassFlow =  0.d0
+      OutAirUnit(OAUnitNum)%ExtAirMassFlow =  0.
     ENDIF
     Node(InNode)%MassFlowRate                 = OutAirUnit(OAUnitNum)%ExtAirMassFlow
     Node(InNode)%MassFlowRateMaxAvail         = OutAirUnit(OAUnitNum)%ExtAirMassFlow
-    Node(InNode)%MassFlowRateMinAvail         = 0.d0
+    Node(InNode)%MassFlowRateMinAvail         = 0.
   ELSE IF (.NOT. OutAirUnit(OAUnitNum)%ExtFan )THEN
-    OutAirUnit(OAUnitNum)%ExtAirMassFlow= 0.d0
+    OutAirUnit(OAUnitNum)%ExtAirMassFlow= 0.
   END IF
 
   ! First, set the flow conditions up so that there is flow through the unit
@@ -1293,18 +1293,18 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
   LOGICAL             :: ErrorsFound
-  REAL(r64)           :: CoilInTemp
-  REAL(r64)           :: CoilOutTemp
-  REAL(r64)           :: CoilOutHumRat
-  REAL(r64)           :: CoilInHumRat
-  REAL(r64)           :: DesCoilLoad
-  REAL(r64)           :: TempSteamIn
-  REAL(r64)           :: EnthSteamInDry
-  REAL(r64)           :: EnthSteamOutWet
-  REAL(r64)           :: LatentHeatSteam
-  REAL(r64)           :: SteamDensity
-  REAL(r64)           :: RhoAir
-  REAL(r64)           :: SizeAirMassFlow
+  REAL           :: CoilInTemp
+  REAL           :: CoilOutTemp
+  REAL           :: CoilOutHumRat
+  REAL           :: CoilInHumRat
+  REAL           :: DesCoilLoad
+  REAL           :: TempSteamIn
+  REAL           :: EnthSteamInDry
+  REAL           :: EnthSteamOutWet
+  REAL           :: LatentHeatSteam
+  REAL           :: SteamDensity
+  REAL           :: RhoAir
+  REAL           :: SizeAirMassFlow
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0
@@ -1314,8 +1314,8 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
   INTEGER             :: SizeComp
   INTEGER             :: CompNum
   INTEGER             :: ComponentType_Num
-  REAL(r64)           :: rho
-  REAL(r64)           :: Cp
+  REAL           :: rho
+  REAL           :: Cp
   INTEGER             :: DummyWaterIndex = 1
 
 
@@ -1330,14 +1330,14 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
       CALL CheckZoneSizing(CurrentModuleObjects(1), OutAirUnit(OAUnitNum)%Name)
       OutAirUnit(OAUnitNum)%OutAirVolFlow = FinalZoneSizing(CurZoneEqNum)%MinOA
       IF (OutAirUnit(OAUnitNum)%OutAirVolFlow < SmallAirVolFlow) THEN
-        OutAirUnit(OAUnitNum)%OutAirVolFlow = 0.0D0
+        OutAirUnit(OAUnitNum)%OutAirVolFlow = 0.0
       ENDIF
       CALL ReportSizingOutput(CurrentModuleObjects(1), OutAirUnit(OAUnitNum)%Name, &
                             'Outdoor Air Flow Rate [m3/s]', OutAirUnit(OAUnitNum)%OutAirVolFlow)
 
       CALL SetFanData(OutAirUnit(OAUnitNum)%SFan_Index, ErrorsFound, OutAirUnit(OAUnitNum)%SFanName, &
                                 MaxAirVolFlow = OutAirUnit(OAUnitNum)%OutAirVolFlow, &
-                                MinAirVolFlow = 0.d0)
+                                MinAirVolFlow = 0.)
       CALL ReportSizingOutput(TRIM(cFanTypes(OutAirUnit(OAUnitNum)%SFanType)), OutAirUnit(OAUnitNum)%SFanName, &
                                 'Maximum Outdoor Air Flow Rate [m3/s]', OutAirUnit(OAUnitNum)%OutAirVolFlow )
     ENDIF
@@ -1352,7 +1352,7 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                             'Exhaust Air Flow Rate [m3/s]', OutAirUnit(OAUnitNum)%ExtAirVolFlow)
       CALL SetFanData(OutAirUnit(OAUnitNum)%ExtFan_Index, ErrorsFound, OutAirUnit(OAUnitNum)%ExtFanName, &
                                 MaxAirVolFlow = OutAirUnit(OAUnitNum)%ExtAirVolFlow, &
-                                MinAirVolFlow = 0.d0)
+                                MinAirVolFlow = 0.)
       CALL ReportSizingOutput(TRIM(cFanTypes(OutAirUnit(OAUnitNum)%ExtFanType)), OutAirUnit(OAUnitNum)%ExtFanName, &
                                 'Maximum Exhaust Air Flow Rate [m3/s]', OutAirUnit(OAUnitNum)%ExtAirVolFlow )
     ENDIF
@@ -1387,14 +1387,14 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                 CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%DesCoolCoilInHumRat
                 DesCoilLoad = FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow &
                                 * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
-                DesCoilLoad = MAX(0.d0, DesCoilLoad)
+                DesCoilLoad = MAX(0., DesCoilLoad)
                 rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
                 Cp  = GetSpecificHeatGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
@@ -1435,14 +1435,14 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                   DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
                                     * FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow &
                                     * (CoilOutTemp-CoilInTemp)
-                  DesCoilLoad = MAX(0.d0, DesCoilLoad)
+                  DesCoilLoad = MAX(0., DesCoilLoad)
                   rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       60.d0, &
+                                       60., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
                   Cp  = GetSpecificHeatGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       60.d0, &
+                                       60., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
@@ -1487,18 +1487,18 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                   DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
                                     * FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow &
                                     * (CoilOutTemp-CoilInTemp)
-                  DesCoilLoad = MAX(0.d0, DesCoilLoad)
+                  DesCoilLoad = MAX(0., DesCoilLoad)
                   TempSteamIn= 100.00
-                  EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,  &
+                  EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,  &
                      OutAirUnit(OAUnitNum)%OAEquip(CompNum)%FluidIndex,'SizeOutdoorAirUnit')
-                  EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,  &
+                  EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,  &
                      OutAirUnit(OAUnitNum)%OAEquip(CompNum)%FluidIndex,'SizeOutdoorAirUnit')
                   LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-                  SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,  &
+                  SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,  &
                      OutAirUnit(OAUnitNum)%OAEquip(CompNum)%FluidIndex,'SizeOutdoorAirUnit')
                   !DSU?  deal with steam properties
-                  Cp = GetSpecificHeatGlycol('WATER', 60.d0, DummyWaterIndex, 'SizeOutdoorAirUnit')
-                  rho = GetDensityGlycol('WATER', 60.d0, DummyWaterIndex, 'SizeOutdoorAirUnit')
+                  Cp = GetSpecificHeatGlycol('WATER', 60., DummyWaterIndex, 'SizeOutdoorAirUnit')
+                  rho = GetDensityGlycol('WATER', 60., DummyWaterIndex, 'SizeOutdoorAirUnit')
                   OutAirUnit(OAUnitNum)%OAEquip(CompNum)%MaxVolWaterFlow = DesCoilLoad/((PlantSizData(PltSizHeatNum)%DeltaT * &
                                                                                           Cp * rho )+ &
                                                                                           SteamDensity* LatentHeatSteam)
@@ -1536,14 +1536,14 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                 CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%DesCoolCoilInHumRat
                 DesCoilLoad = SizeAirMassFlow  &
                                 * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
-                DesCoilLoad = MAX(0.d0, DesCoilLoad)
+                DesCoilLoad = MAX(0., DesCoilLoad)
                 rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
                 Cp  = GetSpecificHeatGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
@@ -1585,12 +1585,12 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
                 DesCoilLoad = FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow &
                                 * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
                 rho = GetDensityGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
                 Cp  = GetSpecificHeatGlycol(PlantLoop(OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidName, &
-                                       5.d0, &
+                                       5., &
                                       PlantLoop( OutAirUnit(OAUnitNum)%OAEquip(CompNum)%LoopNum )%fluidIndex, &
                                         'SizeOutdoorAirUnit' )
 
@@ -1696,8 +1696,8 @@ SUBROUTINE CalcOutdoorAirUnit(OAUnitNum,ZoneNum,FirstHVACIteration,PowerMet,LatO
   INTEGER, INTENT(INOUT)      :: OAUnitNum          ! number of the current unit being simulated
   INTEGER, INTENT(IN)         :: ZoneNum            ! number of zone being served
   LOGICAL, INTENT(IN)         :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),    INTENT(OUT)   :: PowerMet           ! power supplied
-  REAL(r64), INTENT (OUT)     :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
+  REAL,    INTENT(OUT)   :: PowerMet           ! power supplied
+  REAL, INTENT (OUT)     :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1716,47 +1716,47 @@ SUBROUTINE CalcOutdoorAirUnit(OAUnitNum,ZoneNum,FirstHVACIteration,PowerMet,LatO
   CHARACTER(len=MaxNameLength) :: CtrlName
   LOGICAL                      :: Sim
   LOGICAL                      :: ReSim
-  REAL(r64)                    :: DesOATemp        ! Design OA Temp degree C
-  REAL(r64)                    :: AirMassFlow      ! air mass flow rate [kg/s]
+  REAL                    :: DesOATemp        ! Design OA Temp degree C
+  REAL                    :: AirMassFlow      ! air mass flow rate [kg/s]
   INTEGER                      :: ControlNode      ! the hot water or cold water inlet node
   INTEGER                      :: InletNode        ! Unit air inlet node
   INTEGER                      :: SFanOutletNode   ! Unit supply fan outlet node
   INTEGER                      :: ZoneAirInNode    ! zone supply air node
-  REAL(r64)                    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL(r64)                    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+  REAL                    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+  REAL                    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
   INTEGER                      :: OutletNode       ! air outlet node
   INTEGER                      :: OutsideAirNode   ! outside air node
-  REAL(r64)                    :: QTotUnitOut      ! total unit output [watts]
-  REAL(r64)                    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
-  REAL(r64)                    :: LatLoadMet         ! heating or sens. cooling provided by fan coil unit [watts]
-  REAL(r64)                    :: MinHumRat        ! desired temperature after mixing inlet and outdoor air [degrees C]
-  REAL(r64)                    :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
-  REAL(r64)                    :: HiCtrlTemp       ! Current high point in setpoint temperature range
-  REAL(r64)                    :: LoCtrlTemp       ! Current low point in setpoint temperature range
-  REAL(r64)                    :: CpFan            ! Intermediate calculational variable for specific heat of air <<NOV9 Updated
-  REAL(r64)                    :: airinent         ! RE-calcualte the Enthalpy of supply air
-  REAL(r64)                    :: outsideent       ! RE-calculate the Enthalpy of outdoor air
-  REAL(r64)                    :: AirOutletTemp
+  REAL                    :: QTotUnitOut      ! total unit output [watts]
+  REAL                    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
+  REAL                    :: LatLoadMet         ! heating or sens. cooling provided by fan coil unit [watts]
+  REAL                    :: MinHumRat        ! desired temperature after mixing inlet and outdoor air [degrees C]
+  REAL                    :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
+  REAL                    :: HiCtrlTemp       ! Current high point in setpoint temperature range
+  REAL                    :: LoCtrlTemp       ! Current low point in setpoint temperature range
+  REAL                    :: CpFan            ! Intermediate calculational variable for specific heat of air <<NOV9 Updated
+  REAL                    :: airinent         ! RE-calcualte the Enthalpy of supply air
+  REAL                    :: outsideent       ! RE-calculate the Enthalpy of outdoor air
+  REAL                    :: AirOutletTemp
   INTEGER                      :: OperatingMode   =0
   INTEGER                      :: UnitControlType =0
-  REAL(r64)                    :: OutSideAirEnt     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL(r64)                    :: ZoneSupAirEnt     ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL                    :: OutSideAirEnt     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL                    :: ZoneSupAirEnt     ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
 ! Latent output
-  REAL(r64)                    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
-  REAL(r64)                    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL(r64)                    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
-  REAL(r64)                    :: OAMassFlowRate
-  REAL(r64)                    :: EAMassFlowRate
+  REAL                    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+  REAL                    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL                    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL                    :: OAMassFlowRate
+  REAL                    :: EAMassFlowRate
   LOGICAL                      :: ErrorsFound=.false. ! Set to true if errors in input, fatal at end of routine
   LOGICAL                      :: FatalErrorFlag
-  REAL(r64)                    :: ZoneAirEnt    ! zone air enthalphy J/kg
+  REAL                    :: ZoneAirEnt    ! zone air enthalphy J/kg
 
           ! FLOW:
 
-  FanElecPower = 0.0D0
+  FanElecPower = 0.0
           ! initialize local variables
   ControlNode    = 0
-  QUnitOut       = 0.0D0
+  QUnitOut       = 0.0
   IF (OutAirUnit(OAUnitNum)%ExtFan ) InletNode   = OutAirUnit(OAUnitNum)%AirInletNode
   SFanOutletNode = OutAirUnit(OAUnitNum)%SFanOutletNode
   OutletNode     = OutAirUnit(OAUnitNum)%AirOutletNode
@@ -1916,8 +1916,8 @@ SUBROUTINE CalcOutdoorAirUnit(OAUnitNum,ZoneNum,FirstHVACIteration,PowerMet,LatO
   ZoneAirEnt = PsyHFnTdbW(Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%Temp,MinHumRat) ! zone air enthalpy
   QUnitOut = AirMassFlow*(AirInEnt-ZoneAirEnt)                 ! Senscooling
 
-  SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
-  SpecHumIn  = Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%HumRat / (1.0d0 + Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%HumRat)
+  SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
+  SpecHumIn  = Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%HumRat / (1.0 + Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%HumRat)
   LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 
   ZoneAirEnT=PsyHFnTdbW(Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%Temp,Node(OutAirUnit(OAUnitNum)%ZoneNodeNum)%HumRat)
@@ -2083,15 +2083,15 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
 
            ! SUBROUTINE LOCAL VARIABLE DEFINITIONS
   INTEGER      :: OperatingMode
-  REAL(r64)    :: OAMassFlow
-  REAL(r64)    :: QCompReq
+  REAL    :: OAMassFlow
+  REAL    :: QCompReq
   INTEGER      :: UnitNum
-  REAL(r64)    :: MaxWaterFlow
-  REAL(r64)    :: MinWaterFlow
+  REAL    :: MaxWaterFlow
+  REAL    :: MinWaterFlow
   INTEGER      :: ControlNode
   INTEGER      :: CoilInletNode
   INTEGER      :: OutletNode
-  REAL(r64)    :: CpAirZn
+  REAL    :: CpAirZn
   INTEGER      :: AirOutletNode
   INTEGER      :: CoilWaterInletNode
   INTEGER      :: SimCompNum
@@ -2105,14 +2105,14 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
   INTEGER      :: WHCoilContNode
   INTEGER      :: SHCoilInletNode
   INTEGER      :: SHCoilOutletNode
-  REAL(r64)    :: Qcoilout
-  REAL(r64)    :: QUnitOut
+  REAL    :: Qcoilout
+  REAL    :: QUnitOut
   INTEGER      :: DXSystemIndex =0
-  REAL(r64)    :: CompAirOutTemp
-  REAL(r64)    :: Faneffect
+  REAL    :: CompAirOutTemp
+  REAL    :: Faneffect
   LOGICAL      :: DrawFan              !fan position If .True., the temperature increasing by fan operating is considered
-  REAL(r64)    :: Dxsystemouttemp
-  REAL(r64)    :: DXsystemInlettemp
+  REAL    :: Dxsystemouttemp
+  REAL    :: DXsystemInlettemp
   LOGICAL      :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine
 
 
@@ -2174,14 +2174,14 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
            QCompReq=0.0
         ELSE
           QCompReq=CpAirZn*OAMassFlow*((CompAirOutTemp-Node(WHCoilInletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
-          IF (QCompReq < 0.d0) QCompReq = 0.d0 ! coil can heat only
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
+          IF (QCompReq < 0.) QCompReq = 0. ! coil can heat only
         END IF
 
         CALL ControlCompOutput(CompName=OutAirUnit(OAUnitNum)%Name, CompType=cMO_OutdoorAirUnit,CompNum=UnitNum, &
                              FirstHVACIteration=FirstHVACIteration,QZnReq=QCompReq, &
                              ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                             MinFlow=MinWaterFlow,ControlOffSet=0.0001d0,Action=2,  &
+                             MinFlow=MinWaterFlow,ControlOffSet=0.0001,Action=2,  &
                              ControlCompTypeNum=OutAirUnit(OAUnitNum)%ControlCompTypeNum,&
                              CompErrIndex=OutAirUnit(OAUnitNum)%CompErrIndex,EquipIndex=SimCompNum,&
                              LoopNum     = OutAirUnit(OAUnitNum)%OAEquip(EquipNum)%LoopNum,&
@@ -2234,15 +2234,15 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
         ELSE
 
           QCompReq=CpAirZn*OAMassFlow*((CompAirOutTemp-Node(WCCoilInletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
-          IF (QCompReq > 0.d0) QCompReq = 0.d0 ! coil can cool only
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
+          IF (QCompReq > 0.) QCompReq = 0. ! coil can cool only
         END IF
 
 
         CALL ControlCompOutput(CompName=OutAirUnit(OAUnitNum)%Name, CompType=cMO_OutdoorAirUnit,CompNum=UnitNum, &
                              FirstHVACIteration=FirstHVACIteration,QZnReq=QCompReq, &
                              ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                             MinFlow=MinWaterFlow,ControlOffSet=0.001d0,Action=1,  &
+                             MinFlow=MinWaterFlow,ControlOffSet=0.001,Action=1,  &
                              ControlCompTypeNum=OutAirUnit(OAUnitNum)%ControlCompTypeNum,&
                              CompErrIndex=OutAirUnit(OAUnitNum)%CompErrIndex,EquipIndex=SimCompNum,&
                              LoopNum     = OutAirUnit(OAUnitNum)%OAEquip(EquipNum)%LoopNum,&
@@ -2274,14 +2274,14 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
         ELSE
 
           QCompReq=CpAirZn*OAMassFlow*((CompAirOutTemp-Node(WCCoilInletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
-          IF (QCompReq > 0.d0) QCompReq = 0.d0 ! coil can cool only
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
+          IF (QCompReq > 0.) QCompReq = 0. ! coil can cool only
         END IF
 
         CALL ControlCompOutput(CompName=OutAirUnit(OAUnitNum)%Name, CompType='ZONEHVAC:OUTDOORAIRUNIT',CompNum=UnitNum, &
                              FirstHVACIteration=FirstHVACIteration,QZnReq=QCompReq, &
                              ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                             MinFlow=MinWaterFlow,ControlOffSet=0.001d0,Action=1,  &
+                             MinFlow=MinWaterFlow,ControlOffSet=0.001,Action=1,  &
                              ControlCompTypeNum=OutAirUnit(OAUnitNum)%ControlCompTypeNum,&
                              CompErrIndex=OutAirUnit(OAUnitNum)%CompErrIndex,EquipIndex=SimCompNum,&
                              LoopNum     = OutAirUnit(OAUnitNum)%OAEquip(EquipNum)%LoopNum,&
@@ -2309,13 +2309,13 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
           QCompReq=0.0
         ELSE
           QCompReq=CpAirZn*OAMassFlow*((CompAirOutTemp-Node(WCCoilInletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
-          IF (QCompReq > 0.d0) QCompReq = 0.d0 ! coil can cool only
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
+          IF (QCompReq > 0.) QCompReq = 0. ! coil can cool only
         END IF
         CALL ControlCompOutput(CompName=OutAirUnit(OAUnitNum)%Name, CompType='ZONEHVAC:OUTDOORAIRUNIT',CompNum=UnitNum, &
                              FirstHVACIteration=FirstHVACIteration,QZnReq=QCompReq, &
                              ActuatedNode=ControlNode,MaxFlow=MaxWaterFlow, &
-                             MinFlow=MinWaterFlow,ControlOffSet=0.001d0,Action=1,  &
+                             MinFlow=MinWaterFlow,ControlOffSet=0.001,Action=1,  &
                              ControlCompTypeNum=OutAirUnit(OAUnitNum)%ControlCompTypeNum,&
                              CompErrIndex=OutAirUnit(OAUnitNum)%CompErrIndex,EquipIndex=SimCompNum, &
                              LoopNum     = OutAirUnit(OAUnitNum)%OAEquip(EquipNum)%LoopNum,&
@@ -2379,29 +2379,29 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
   INTEGER, INTENT(IN)           :: CompNum ! actual outdoor air unit num
   LOGICAL, INTENT (IN)          :: FirstHVACIteration
   INTEGER, INTENT(IN)           :: EquipIndex ! Component Type -- Integerized for this module
-  REAL(r64), INTENT(OUT)        :: LoadMet
+  REAL, INTENT(OUT)        :: LoadMet
 
            ! SUBROUTINE LOCAL VARIABLE DEFINITIONS
   INTEGER   :: OAUnitNum
-  REAL(r64) :: CpAirZn
+  REAL :: CpAirZn
   INTEGER   :: CoilIndex
   INTEGER   :: OPMode
-  REAL(r64) :: AirMassFlow
-  REAL(r64) :: Faneffect
+  REAL :: AirMassFlow
+  REAL :: Faneffect
   LOGICAL   :: DrawFan             ! Fan Flag
   INTEGER   :: InletNode
   INTEGER   :: OutletNode
   INTEGER   :: AirOutletNode
   INTEGER   :: WaterCoilIndex =0
-  REAL(r64) :: QCompReq            ! Actual equipment load
-  REAL(r64) :: CoilInTemp
-  REAL(r64) :: MinWaterFlow
+  REAL :: QCompReq            ! Actual equipment load
+  REAL :: CoilInTemp
+  REAL :: MinWaterFlow
   INTEGER   :: SHCoilInletNode
   INTEGER   :: SHCoilOutletNode
   INTEGER   :: CoilWaterInletNode
   INTEGER   :: CoilTypeNum
   LOGICAL   :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine
-  REAL(r64) ::CoilAirOutTemp
+  REAL ::CoilAirOutTemp
   INTEGER   :: CoilNum
   INTEGER   :: CompoNum
 
@@ -2430,7 +2430,7 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
           CpAirZn        = PsyCpAirFnWTdb(Node(InletNode)%HumRat,Node(InletNode)%Temp)
           QCompReq       = Node(InletNode)%MassFlowRate * CpAirZn &
                            *((CoilAirOutTemp-Node(InletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
         END IF
 
         IF (QCompReq .LE. 0.0) THEN
@@ -2459,7 +2459,7 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
           CpAirZn        = PsyCpAirFnWTdb(Node(InletNode)%HumRat,Node(InletNode)%Temp)
           QCompReq       = Node(InletNode)%MassFlowRate * CpAirZn &
                            *((CoilAirOutTemp-Node(InletNode)%Temp)-faneffect)
-          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
+          IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
         END IF
         IF (QCompReq .LE. 0.0) THEN
           QCompReq = 0.0    ! a heating coil can only heat, not cool
@@ -2484,7 +2484,7 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
         CpAirZn        = PsyCpAirFnWTdb(Node(InletNode)%HumRat,Node(InletNode)%Temp)
         QCompReq       = Node(InletNode)%MassFlowRate * CpAirZn &
                                    *((CoilAirOutTemp-Node(InletNode)%Temp)-faneffect)
-        IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.d0
+        IF (ABS(QCompReq) < SmallLoad) QCompReq = 0.
       END IF
       IF (QCompReq .LE. 0.0) THEN
             QCompReq = 0.0    ! a heating coil can only heat, not cool
@@ -2525,7 +2525,7 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
 
     CASE(WaterCoil_CoolingHXAsst)
         CALL SimHXAssistedCoolingCoil(OutAirUnit(OAUnitNum)%OAEquip(CompoNum)%ComponentName,FirstHVACIteration,1,  &
-                 0.0d0,CoilIndex,ContFanCycCoil)
+                 0.0,CoilIndex,ContFanCycCoil)
         InletNode=OutAirUnit(OAUnitNum)%OAEquip(CompoNum)%CoilAirInletNode
         OutletNode=OutAirUnit(OAUnitNum)%OAEquip(CompoNum)%CoilAirOutletNode
         AirMassFlow = Node(InletNode)%MassFlowRate

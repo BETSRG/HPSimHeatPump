@@ -65,10 +65,10 @@ TYPE WindACData
   INTEGER                      :: SchedPtr         =0    ! index to schedule
   INTEGER                      :: FanSchedPtr      =0    ! index to fan operating mode schedule
   INTEGER                      :: FanAvailSchedPtr = 0   ! index to fan availability schedule
-  REAL(r64)                    :: MaxAirVolFlow    =0.0  ! m3/s
-  REAL(r64)                    :: MaxAirMassFlow   =0.0  ! kg/s
-  REAL(r64)                    :: OutAirVolFlow    =0.0  ! m3/s
-  REAL(r64)                    :: OutAirMassFlow   =0.0  ! kg/s
+  REAL                    :: MaxAirVolFlow    =0.0  ! m3/s
+  REAL                    :: MaxAirMassFlow   =0.0  ! kg/s
+  REAL                    :: OutAirVolFlow    =0.0  ! m3/s
+  REAL                    :: OutAirMassFlow   =0.0  ! kg/s
   INTEGER                      :: AirInNode        =0    ! inlet air node number
   INTEGER                      :: AirOutNode       =0    ! outlet air node number
   INTEGER                      :: OutsideAirNode   =0    ! outside air node number
@@ -92,22 +92,22 @@ TYPE WindACData
   INTEGER :: FanPlace          =0 ! fan placement; 1=blow through, 2=draw through
   INTEGER :: MaxIterIndex1     =0
   INTEGER :: MaxIterIndex2     =0
-  REAL(r64)                    :: ConvergenceTol    =0.0 ! Convergence tolerance, fraction (ZoneLoad - Equip Output)/ZoneLoad
+  REAL                    :: ConvergenceTol    =0.0 ! Convergence tolerance, fraction (ZoneLoad - Equip Output)/ZoneLoad
   ! Calc data
-  REAL(r64)                    :: PartLoadFrac      =0.0 ! part load fraction for the unit
+  REAL                    :: PartLoadFrac      =0.0 ! part load fraction for the unit
   Logical                      :: EMSOverridePartLoadFrac = .FALSE.
-  REAL(r64)                    :: EMSValueForPartLoadFrac = 0.0D0 !
+  REAL                    :: EMSValueForPartLoadFrac = 0.0 !
   ! Report data
-  REAL(r64)                    :: TotCoolEnergyRate =0.0 ! total cooling output [W]
-  REAL(r64)                    :: TotCoolEnergy     =0.0 ! total cooling output [J]
-  REAL(r64)                    :: SensCoolEnergyRate=0.0 ! sensible cooling output [W]
-  REAL(r64)                    :: SensCoolEnergy    =0.0 ! sensible cooling output [J]
-  REAL(r64)                    :: LatCoolEnergyRate =0.0 ! sensible cooling output [W]
-  REAL(r64)                    :: LatCoolEnergy     =0.0 ! sensible cooling output [J]
-  REAL(r64)                    :: ElecPower         =0.0 ! electricity consumed [W]
-  REAL(r64)                    :: ElecConsumption   =0.0 ! electricity consumed [J]
-  REAL(r64)                    :: FanPartLoadRatio  =0.0 ! fan part-load ratio for time step
-  REAL(r64)                    :: CompPartLoadRatio =0.0 ! compressor part-load ratio for time step
+  REAL                    :: TotCoolEnergyRate =0.0 ! total cooling output [W]
+  REAL                    :: TotCoolEnergy     =0.0 ! total cooling output [J]
+  REAL                    :: SensCoolEnergyRate=0.0 ! sensible cooling output [W]
+  REAL                    :: SensCoolEnergy    =0.0 ! sensible cooling output [J]
+  REAL                    :: LatCoolEnergyRate =0.0 ! sensible cooling output [W]
+  REAL                    :: LatCoolEnergy     =0.0 ! sensible cooling output [J]
+  REAL                    :: ElecPower         =0.0 ! electricity consumed [W]
+  REAL                    :: ElecConsumption   =0.0 ! electricity consumed [J]
+  REAL                    :: FanPartLoadRatio  =0.0 ! fan part-load ratio for time step
+  REAL                    :: CompPartLoadRatio =0.0 ! compressor part-load ratio for time step
   CHARACTER(len=MaxNameLength) :: AvailManagerListName = ' ' ! Name of an availability manager list object
   Logical                      :: AvailManagerListFound = .FALSE. ! True if availability manager list name is specified
                                                                   ! for Window AC object
@@ -169,8 +169,8 @@ SUBROUTINE SimWindowAC(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOutputPro
   CHARACTER(len=*), INTENT (IN)  :: CompName            ! name of the window AC unit
   INTEGER,          INTENT (IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT (IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),        INTENT (OUT) :: PowerMet            ! Sensible power supplied by window AC (W)
-  REAL(r64),        INTENT (OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL,        INTENT (OUT) :: PowerMet            ! Sensible power supplied by window AC (W)
+  REAL,        INTENT (OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT):: CompIndex           ! component index
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -184,8 +184,8 @@ SUBROUTINE SimWindowAC(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOutputPro
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: WindACNum              ! index of window AC unit being simulated
-  REAL(r64)    :: QZnReq                 ! zone load (W)
-  REAL(r64)    :: RemainingOutputToCoolingSP !- remaining load to cooling setpoint (W)
+  REAL    :: QZnReq                 ! zone load (W)
+  REAL    :: RemainingOutputToCoolingSP !- remaining load to cooling setpoint (W)
 
 
           ! FLOW
@@ -224,10 +224,10 @@ ENDIF
 
 RemainingOutputToCoolingSP = ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToCoolSP
 
-IF(RemainingOutputToCoolingSP .LT. 0.0D0 .and. TempControlType(ZoneNum) .NE. SingleHeatingSetPoint)THEN
+IF(RemainingOutputToCoolingSP .LT. 0.0 .and. TempControlType(ZoneNum) .NE. SingleHeatingSetPoint)THEN
   QZnReq = RemainingOutputToCoolingSP
 ELSE
-  QZnReq = 0.0D0
+  QZnReq = 0.0
 END IF
 
 ZoneEqDXCoil = .TRUE.
@@ -309,13 +309,13 @@ SUBROUTINE GetWindowAC
   LOGICAL                         :: IsNotOK    ! Flag to verify name
   LOGICAL                         :: IsBlank    ! Flag for blank name
   LOGICAL                         :: FanErrFlag=.false. ! Error flag used in GetFanIndex call
-  REAL(r64)                       :: FanVolFlow ! Fan volumetric flow rate
+  REAL                       :: FanVolFlow ! Fan volumetric flow rate
   LOGICAL                         :: CoilNodeErrFlag ! Used in error messages for mining coil outlet node number
   CHARACTER(len=MaxNameLength)    :: CurrentModuleObject                    ! Object type for getting and error messages
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   INTEGER                              :: TotalArgs=0       ! Total number of alpha and numeric arguments (max) for a
@@ -689,7 +689,7 @@ SUBROUTINE InitWindowAC(WindACNum,QZnReq,ZoneNum,FirstHVACIteration)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT (IN)    :: WindACNum ! number of the current window AC unit being simulated
-  REAL(r64), INTENT (INOUT) :: QZnReq    ! zone load (modified as needed) (W)
+  REAL, INTENT (INOUT) :: QZnReq    ! zone load (modified as needed) (W)
   INTEGER,   INTENT (IN)    :: ZoneNum   ! index to zone
   LOGICAL,   INTENT (IN)    :: FirstHVACIteration   ! TRUE when first HVAC iteration
 
@@ -708,13 +708,13 @@ SUBROUTINE InitWindowAC(WindACNum,QZnReq,ZoneNum,FirstHVACIteration)
   INTEGER             :: InletNode      ! inlet node number for window AC WindACNum
   INTEGER             :: OutsideAirNode ! outside air node number in window AC loop
   INTEGER             :: AirRelNode     ! relief air node number in window AC loop
-  REAL(r64)           :: RhoAir         ! air density at InNode
+  REAL           :: RhoAir         ! air density at InNode
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   Integer             :: Loop           ! loop counter
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag  ! one time initialization flag
-  REAL(r64)           :: QToCoolSetPt   ! sensible load to cooling setpoint (W)
-  REAL(r64)           :: NoCompOutput   ! sensible load delivered with compressor off (W)
+  REAL           :: QToCoolSetPt   ! sensible load to cooling setpoint (W)
+  REAL           :: NoCompOutput   ! sensible load delivered with compressor off (W)
   INTEGER             :: AvailStatus    ! Availability status set by system availability manager
 
 AvailStatus = NoAction
@@ -789,7 +789,7 @@ OutsideAirNode = WindAC(WindACNum)%OutsideAirNode
 AirRelNode = WindAC(WindACNum)%AirReliefNode
 ! Set the inlet node mass flow rate
 IF (GetCurrentScheduleValue(WindAC(WindACNum)%SchedPtr) .LE. 0.0 &
-    .OR. (GetCurrentScheduleValue(WindAC(WindACNum)%FanAvailSchedPtr) .LE. 0.0d0 .AND. &
+    .OR. (GetCurrentScheduleValue(WindAC(WindACNum)%FanAvailSchedPtr) .LE. 0.0 .AND. &
     AvailStatus .NE. CycleOn) .OR. AvailStatus .EQ. ForceOff) THEN
   WindAC(WindACNum)%PartLoadFrac = 0.0
   Node(InletNode)%MassFlowRate = 0.0
@@ -815,7 +815,7 @@ ELSE
 END IF
 
 ! Original thermostat control logic (works only for cycling fan systems)
-IF(QZnReq .LT. 0.0d0 .AND. .NOT. CurDeadbandOrSetback(ZoneNum) .AND. WindAC(WindACNum)%PartLoadFrac .GT. 0.0)THEN
+IF(QZnReq .LT. 0.0 .AND. .NOT. CurDeadbandOrSetback(ZoneNum) .AND. WindAC(WindACNum)%PartLoadFrac .GT. 0.0)THEN
   CoolingLoad = .TRUE.
 ELSE
   CoolingLoad = .FALSE.
@@ -823,16 +823,16 @@ END IF
 
 ! Constant fan systems are tested for ventilation load to determine if load to be met changes.
 IF(WindAC(WindACNum)%OpMode .EQ. ContFanCycCoil .AND. WindAC(WindACNum)%PartLoadFrac .GT. 0.0 &
-    .AND. (GetCurrentScheduleValue(WindAC(WindACNum)%FanAvailSchedPtr) .GT. 0.0d0 .OR. &
+    .AND. (GetCurrentScheduleValue(WindAC(WindACNum)%FanAvailSchedPtr) .GT. 0.0 .OR. &
     AvailStatus .EQ. CycleOn) .AND. AvailStatus .NE. ForceOff)THEN
 
   CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,WindAC(WindACNum)%OpMode, &
-                          0.0d0,.FALSE.,NoCompOutput)
+                          0.0,.FALSE.,NoCompOutput)
 
   QToCoolSetPt=ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToCoolSP
 
 ! If the unit has a net heating capacity and the zone temp is below the Tstat cooling setpoint
-  IF(NoCompOutput .GT. 0.0d0 .AND. QToCoolSetPt .GT. 0.0d0 .AND. CurDeadbandOrSetback(ZoneNum))THEN
+  IF(NoCompOutput .GT. 0.0 .AND. QToCoolSetPt .GT. 0.0 .AND. CurDeadbandOrSetback(ZoneNum))THEN
     IF(NoCompOutput .GT. QToCoolSetPt)THEN
       QZnReq       = QToCoolSetPt
       CoolingLoad  = .TRUE.
@@ -950,9 +950,9 @@ SUBROUTINE SimCyclingWindowAC(WindACNum,ZoneNum,FirstHVACIteration,PowerMet,QZnR
   LOGICAL, INTENT (IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
   INTEGER, INTENT (IN)  :: WindACNum           ! number of the current window AC unit being simulated
   INTEGER, INTENT (IN)  :: ZoneNum             ! number of zone being served !unused1208
-  REAL(r64), INTENT (OUT) :: PowerMet          ! Sensible power supplied (W)
-  REAL(r64), INTENT (IN)  :: QZnReq            ! Sensible load to be met (W)
-  REAL(r64), INTENT (OUT) :: LatOutputProvided ! Latent power supplied (kg/s), negative = dehumidification
+  REAL, INTENT (OUT) :: PowerMet          ! Sensible power supplied (W)
+  REAL, INTENT (IN)  :: QZnReq            ! Sensible load to be met (W)
+  REAL, INTENT (OUT) :: LatOutputProvided ! Latent power supplied (kg/s), negative = dehumidification
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -964,32 +964,32 @@ SUBROUTINE SimCyclingWindowAC(WindACNum,ZoneNum,FirstHVACIteration,PowerMet,QZnR
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64)    :: PartLoadFrac     ! unit part load fraction
-REAL(r64)    :: QUnitOut         ! Dry air sens. cooling provided by AC unit [watts]
-REAL(r64)    :: SensCoolOut      ! Moist air sensible cooling rate [W]
-REAL(r64)    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+REAL    :: PartLoadFrac     ! unit part load fraction
+REAL    :: QUnitOut         ! Dry air sens. cooling provided by AC unit [watts]
+REAL    :: SensCoolOut      ! Moist air sensible cooling rate [W]
+REAL    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
 LOGICAL :: UnitOn           ! TRUE if unit is on
 LOGICAL :: CoilOn           ! TRUE if coil is on
 INTEGER :: OutletNode       ! unit air outlet node
 INTEGER :: InletNode        ! unit air inlet node
-REAL(r64)    :: QTotUnitOut      ! total unit output [watts]
-REAL(r64)    :: AirMassFlow      ! air mass flow rate [kg/sec]
-REAL(r64)    :: CpAir            ! inlet air specific heat [J/kg-C]
-REAL(r64)    :: Test
+REAL    :: QTotUnitOut      ! total unit output [watts]
+REAL    :: AirMassFlow      ! air mass flow rate [kg/sec]
+REAL    :: CpAir            ! inlet air specific heat [J/kg-C]
+REAL    :: Test
 INTEGER :: OpMode           ! operating mode (fan cycling or continious; DX coil always cycles)
-REAL(r64)    :: MinHumRat        ! minimum of inlet & outlet humidity ratio
+REAL    :: MinHumRat        ! minimum of inlet & outlet humidity ratio
 LOGICAL :: HXUnitOn         ! Used to control HX heat recovery as needed
-REAL(r64) :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-REAL(r64) :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+REAL :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+REAL :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
 
 ! zero the fan and DX coil electricity consumption
-FanElecPower = 0.0d0
-DXElecCoolingPower = 0.0d0
+FanElecPower = 0.0
+DXElecCoolingPower = 0.0
 ! initialize local variables
 UnitOn = .TRUE.
 CoilOn = .TRUE.
-QUnitOut = 0.0d0
-LatentOutput = 0.0d0
+QUnitOut = 0.0
+LatentOutput = 0.0
 OutletNode = WindAC(WindACNum)%AirOutNode
 InletNode = WindAC(WindACNum)%AirInNode
 AirMassFlow = Node(InletNode)%MassFlowRate
@@ -1039,8 +1039,8 @@ QUnitOut = AirMassFlow * (PsyHFnTdbW(Node(OutletNode)%Temp,MinHumRat)   &
 SensCoolOut = AirMassFlow * (PsyHFnTdbW(Node(OutletNode)%Temp,MinHumRat) - &
                              PsyHFnTdbW(Node(InletNode)%Temp,MinHumRat))
 
-SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
-SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
+SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
+SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
 LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate, kg/s
 
 QTotUnitOut = AirMassFlow * (Node(OutletNode)%Enthalpy - Node(InletNode)%Enthalpy)
@@ -1056,8 +1056,8 @@ ELSE
     WindAC(WindACNum)%FanPartLoadRatio = 0.0
   END IF
 END IF
-WindAC(WindACNum)%SensCoolEnergyRate = ABS(MIN(0.0d0,SensCoolOut))
-WindAC(WindACNum)%TotCoolEnergyRate = ABS(MIN(0.0d0,QTotUnitOut))
+WindAC(WindACNum)%SensCoolEnergyRate = ABS(MIN(0.0,SensCoolOut))
+WindAC(WindACNum)%TotCoolEnergyRate = ABS(MIN(0.0,QTotUnitOut))
 WindAC(WindACNum)%SensCoolEnergyRate = MIN(WindAC(WindACNum)%SensCoolEnergyRate,WindAC(WindACNum)%TotCoolEnergyRate)
 WindAC(WindACNum)%LatCoolEnergyRate = WindAC(WindACNum)%TotCoolEnergyRate - WindAC(WindACNum)%SensCoolEnergyRate
 WindAC(WindACNum)%ElecPower = FanElecPower + DXElecCoolingPower
@@ -1103,7 +1103,7 @@ SUBROUTINE ReportWindowAC(WindACNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ReportingConstant
+  REAL :: ReportingConstant
 
           ! FLOW
 
@@ -1149,9 +1149,9 @@ USE DataHVACGlobals,             ONLY: ZoneComp, NoAction, ForceOff, CycleOn
   INTEGER, INTENT (IN)  :: WindACNum          ! Unit index in fan coil array
   LOGICAL, INTENT (IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
   INTEGER, INTENT (IN)  :: OpMode             ! operating mode: CycFanCycCoil | ContFanCycCoil
-  REAL(r64)   , INTENT (IN)  :: PartLoadFrac       ! unit part load fraction
+  REAL   , INTENT (IN)  :: PartLoadFrac       ! unit part load fraction
   LOGICAL, INTENT (IN)  :: HXUnitOn           ! Flag to toggle HX heat recovery as needed
-  REAL(r64),    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
+  REAL,    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1167,8 +1167,8 @@ INTEGER :: OutletNode       ! unit air outlet node
 INTEGER :: InletNode        ! unit air inlet node
 INTEGER :: OutsideAirNode   ! outside air node number in window AC loop
 INTEGER :: AirRelNode       ! relief air node number in window AC loop
-REAL(r64)    :: AirMassFlow      ! total mass flow through the unit
-REAL(r64)    :: MinHumRat        ! minimum of inlet & outlet humidity ratio
+REAL    :: AirMassFlow      ! total mass flow through the unit
+REAL    :: MinHumRat        ! minimum of inlet & outlet humidity ratio
 LOGICAL :: WindACTurnFansOn      ! TurnFansOn Availalability status as set by SAM
 LOGICAL :: WindACTurnFansOff     ! TurnFansOff Availalability status as set by SAM
 
@@ -1260,14 +1260,14 @@ SUBROUTINE ControlCycWindACOutput(WindACNum,FirstHVACIteration,OpMode,QZnReq,Par
   INTEGER, INTENT (IN)  :: WindACNum          ! Unit index in fan coil array
   LOGICAL, INTENT (IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
   INTEGER, INTENT(IN)   :: OpMode             ! operating mode: CycFanCycCoil | ContFanCycCoil
-  REAL(r64)   , INTENT(IN)   :: QZnReq             ! cooling output needed by zone [W]
-  REAL(r64)   , INTENT (OUT) :: PartLoadFrac       ! unit part load fraction
+  REAL   , INTENT(IN)   :: QZnReq             ! cooling output needed by zone [W]
+  REAL   , INTENT (OUT) :: PartLoadFrac       ! unit part load fraction
   LOGICAL, INTENT (INOUT) :: HXUnitOn         ! Used to control HX heat recovery as needed
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           !
 INTEGER, PARAMETER  ::   MaxIter = 50         !maximum number of iterations
-REAL(r64), PARAMETER     ::   MinPLF = 0.0         !minimum part load factor allowed
+REAL, PARAMETER     ::   MinPLF = 0.0         !minimum part load factor allowed
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1276,16 +1276,16 @@ REAL(r64), PARAMETER     ::   MinPLF = 0.0         !minimum part load factor all
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: FullOutput   ! unit full output [W]
-REAL(r64) :: NoCoolOutput ! output when no active cooling [W]
-REAL(r64) :: ActualOutput ! output at current partloadfrac [W]
-REAL(r64) :: Error        ! error between QznReq and ActualOutput [W]
-REAL(r64) :: ErrorToler   ! error tolerance
+REAL :: FullOutput   ! unit full output [W]
+REAL :: NoCoolOutput ! output when no active cooling [W]
+REAL :: ActualOutput ! output at current partloadfrac [W]
+REAL :: Error        ! error between QznReq and ActualOutput [W]
+REAL :: ErrorToler   ! error tolerance
 INTEGER :: Iter      ! iteration counter
 !CHARACTER(len=20) :: ErrNum
 !INTEGER,SAVE :: ErrCount=0
-REAL(r64) :: DelPLF
-REAL(r64) :: Relax
+REAL :: DelPLF
+REAL :: Relax
 
 ! DX Cooling HX assisted coils can cycle the heat exchanger, see if coil ON, HX OFF can meet humidity setpoint if one exists
 IF(WindAC(WindACNum)%DXCoilType_Num == CoilDX_CoolingHXAssisted)THEN
@@ -1305,7 +1305,7 @@ IF (WindAC(WindACNum)%EMSOverridePartLoadFrac) THEN
 ENDIF
 
 ! Get result when DX coil is off
-CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,0.0d0,HXUnitOn,NoCoolOutput)
+CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,0.0,HXUnitOn,NoCoolOutput)
 
 ! If NoCoolOutput < QZnReq, the coil needs to be off
 IF (NoCoolOutput < QZnReq) THEN
@@ -1314,7 +1314,7 @@ IF (NoCoolOutput < QZnReq) THEN
 END IF
 
 ! Get full load result
-CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,1.0d0,HXUnitOn,FullOutput)
+CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,1.0,HXUnitOn,FullOutput)
 
 ! Since we are cooling, we expect FullOutput to be < 0 and FullOutput < NoCoolOutput
 ! Check that this is the case; if not set PartLoadFrac = 0.0 (off) and return
@@ -1353,7 +1353,7 @@ PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCoolOutput) / ABS(FullOutput - NoCoolO
     Error = (QZnReq - ActualOutput)/QZnReq
     DelPLF = (QZnReq-ActualOutput)/FullOutput
     PartLoadFrac = PartLoadFrac + Relax * DelPLF
-    PartLoadFrac = MAX(MinPLF,MIN(1.0d0,PartLoadFrac))
+    PartLoadFrac = MAX(MinPLF,MIN(1.0,PartLoadFrac))
     Iter = Iter + 1
     IF (Iter == 16) THEN
       Relax = 0.5
@@ -1378,7 +1378,7 @@ PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCoolOutput) / ABS(FullOutput - NoCoolO
     HXUnitOn = .TRUE.
 
 !   Get full load result
-    CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,1.0d0,HXUnitOn,FullOutput)
+    CALL CalcWindowACOutput(WindACNum,FirstHVACIteration,OpMode,1.0,HXUnitOn,FullOutput)
 
     IF(Node(WindAC(WindACNum)%CoilOutletNodeNum)%HumRatMax .LT. Node(WindAC(WindACNum)%CoilOutletNodeNum)%HumRat .OR. &
        QZnReq  <=  FullOutput) THEN
@@ -1396,7 +1396,7 @@ PartLoadFrac = MAX(MinPLF, ABS(QZnReq - NoCoolOutput) / ABS(FullOutput - NoCoolO
       Error = (QZnReq - ActualOutput)/QZnReq
       DelPLF = (QZnReq-ActualOutput)/FullOutput
       PartLoadFrac = PartLoadFrac + Relax * DelPLF
-      PartLoadFrac = MAX(MinPLF,MIN(1.0d0,PartLoadFrac))
+      PartLoadFrac = MAX(MinPLF,MIN(1.0,PartLoadFrac))
       Iter = Iter + 1
       IF (Iter == 16) THEN
         Relax = 0.5

@@ -197,7 +197,7 @@ TYPE EconVarType
   INTEGER                        :: tariffIndx    = 0   !index of the tariff name in the tariff array
   INTEGER                        :: kindOfObj     = 0   !enumerated list for the kind of economics object
   INTEGER                        :: index         = 0   !pointer to item in specific array
-  REAL(r64),DIMENSION(MaxNumMonths)   :: values        = 0   !values
+  REAL,DIMENSION(MaxNumMonths)   :: values        = 0   !values
   ! the following items are not part of the object description
   LOGICAL                        :: isArgument    = .FALSE. !flag if the variable is ever used as an argument (value needed)
   LOGICAL                        :: isAssigned    = .FALSE. !flag if the variable is ever assigned to
@@ -232,8 +232,8 @@ TYPE TariffType
   INTEGER                        :: kindElectricMtr = 0  !kind of electric meter - see enumerated list above, 0 is not electric
   INTEGER                        :: resourceNum     = 0  !based on list of DataGlobalConstants
   INTEGER                        :: convChoice      = 0  !enumerated choice index of the conversion factor
-  REAL(r64)                      :: energyConv      = 0  !energy conversion factor
-  REAL(r64)                      :: demandConv      = 0  !demand conversion factor
+  REAL                      :: energyConv      = 0  !energy conversion factor
+  REAL                      :: demandConv      = 0  !demand conversion factor
   CHARACTER(len=MaxNameLength)   :: periodSchedule  = '' !name of the period schedule (time of day)
   INTEGER                        :: periodSchIndex  = 0  !index to the period schedule
   CHARACTER(len=MaxNameLength)   :: seasonSchedule  = '' !name of the season schedule (winter/summer)
@@ -241,11 +241,11 @@ TYPE TariffType
   CHARACTER(len=MaxNameLength)   :: monthSchedule   = '' !name of month schedule (when months end)
   INTEGER                        :: monthSchIndex   = 0  !index to the month schedule
   INTEGER                        :: demandWindow    = 0  !enumerated list of the kind of demand window
-  REAL(r64)                      :: demWinTime      = 0  !length of time for the demand window
-  REAL(r64)                      :: monthChgVal     = 0  !monthly charge value
+  REAL                      :: demWinTime      = 0  !length of time for the demand window
+  REAL                      :: monthChgVal     = 0  !monthly charge value
   INTEGER                        :: monthChgPt      = 0  !pointer to a variable that contains the monthly charge
                                                          !if 0 then use monthChgVal
-  REAL(r64)                      :: minMonthChgVal  = 0  !minimum monthly charge value
+  REAL                      :: minMonthChgVal  = 0  !minimum monthly charge value
   INTEGER                        :: minMonthChgPt   = 0  !pointer to a variable that contains the minimum monthly charge
                                                          !if 0 then use minMonthChgVal
   CHARACTER(len=MaxNameLength)   :: chargeSchedule  = '' !name of the charge schedule (for real time pricing)
@@ -313,16 +313,16 @@ TYPE TariffType
   INTEGER                        :: nativeBelowCustomerBaseEnergy  = 0
 
   !arrays for holding gathered values
-  REAL(r64),DIMENSION(countPeriod,MaxNumMonths)  :: gatherEnergy   = 0
-  REAL(r64),DIMENSION(countPeriod,MaxNumMonths)  :: gatherDemand   = 0
-  REAL(r64)                                 :: collectTime    = 0
-  REAL(r64)                                 :: collectEnergy  = 0
+  REAL,DIMENSION(countPeriod,MaxNumMonths)  :: gatherEnergy   = 0
+  REAL,DIMENSION(countPeriod,MaxNumMonths)  :: gatherDemand   = 0
+  REAL                                 :: collectTime    = 0
+  REAL                                 :: collectEnergy  = 0
   !arryas for holding real time pricing gathered values
-  REAL(r64),DIMENSION(MaxNumMonths)         :: RTPcost             = 0
-  REAL(r64),DIMENSION(MaxNumMonths)         :: RTPaboveBaseCost    = 0
-  REAL(r64),DIMENSION(MaxNumMonths)         :: RTPbelowBaseCost    = 0
-  REAL(r64),DIMENSION(MaxNumMonths)         :: RTPaboveBaseEnergy  = 0
-  REAL(r64),DIMENSION(MaxNumMonths)         :: RTPbelowBaseEnergy  = 0
+  REAL,DIMENSION(MaxNumMonths)         :: RTPcost             = 0
+  REAL,DIMENSION(MaxNumMonths)         :: RTPaboveBaseCost    = 0
+  REAL,DIMENSION(MaxNumMonths)         :: RTPbelowBaseCost    = 0
+  REAL,DIMENSION(MaxNumMonths)         :: RTPaboveBaseEnergy  = 0
+  REAL,DIMENSION(MaxNumMonths)         :: RTPbelowBaseEnergy  = 0
 
   INTEGER,DIMENSION(MaxNumMonths)           :: seasonForMonth = 0
   !overall qualification of the rate
@@ -330,7 +330,7 @@ TYPE TariffType
   INTEGER                        :: ptDisqualifier            = 0
   !overall selection and annual cost
   LOGICAL                        :: isSelected                = .FALSE.
-  REAL(r64)                      :: totalAnnualCost           = 0
+  REAL                      :: totalAnnualCost           = 0
 END TYPE
 TYPE (TariffType), ALLOCATABLE, DIMENSION(:)     :: tariff
 INTEGER                                          :: numTariff = 0
@@ -340,7 +340,7 @@ TYPE QualifyType
   INTEGER                        :: tariffIndx     = 0 !index of the tariff name in the tariff array
   INTEGER                        :: sourcePt       = 0 !index of the variable in the variable array
   LOGICAL                        :: isMaximum      = .FALSE. !indicator if maximum test otherwise minimum
-  REAL(r64)                      :: thresholdVal   = 0 !value of the threshold
+  REAL                      :: thresholdVal   = 0 !value of the threshold
   INTEGER                        :: thresholdPt    = 0 !pointer to the variable holding the values
   INTEGER                        :: season         = 0 !enumerated list of the kind of season
   LOGICAL                        :: isConsecutive  = .FALSE. !indicator if consecutive months otherwise count
@@ -355,7 +355,7 @@ TYPE ChargeSimpleType
   INTEGER                        :: sourcePt       = 0 !index of the variable in the variable array
   INTEGER                        :: season         = 0 !enumerated list of the kind of season
   INTEGER                        :: categoryPt     = 0 !index of the category in the variable array
-  REAL(r64)                      :: costPerVal     = 0 !cost per unit value
+  REAL                      :: costPerVal     = 0 !cost per unit value
   INTEGER                        :: costPerPt      = 0 !cost per unit index in the variable array (0 is flag for no variable)
 END TYPE
 TYPE (ChargeSimpleType), ALLOCATABLE, DIMENSION(:) :: chargeSimple
@@ -368,12 +368,12 @@ TYPE ChargeBlockType
   INTEGER                        :: season         = 0 !enumerated list of the kind of season
   INTEGER                        :: categoryPt     = 0 !index of the category in the variable array
   INTEGER                        :: remainingPt    = 0 !index of the remaining into variable in the variable array
-  REAL(r64)                      :: blkSzMultVal   = 0 !block size multiplier value
+  REAL                      :: blkSzMultVal   = 0 !block size multiplier value
   INTEGER                        :: blkSzMultPt    = 0 !block size variable in the variable array (0 is flag for no variable)
   INTEGER                        :: numBlk         = 0 !number of blocks used
-  REAL(r64),DIMENSION(maxNumBlk)      :: blkSzVal       = 0 !array of block size values
+  REAL,DIMENSION(maxNumBlk)      :: blkSzVal       = 0 !array of block size values
   INTEGER,DIMENSION(maxNumBlk)   :: blkSzPt        = 0 !block size variables index to the variable array (0 is no variable)
-  REAL(r64),DIMENSION(maxNumBlk)      :: blkCostVal     = 0 !array of block cost values
+  REAL,DIMENSION(maxNumBlk)      :: blkCostVal     = 0 !array of block cost values
   INTEGER,DIMENSION(maxNumBlk)   :: blkCostPt      = 0 !block cost variables index to the variable array (0 is no variable)
 END TYPE
 TYPE (ChargeBlockType), ALLOCATABLE, DIMENSION(:)  :: chargeBlock
@@ -386,9 +386,9 @@ TYPE RatchetType
   INTEGER                        :: adjustmentPt   = 0 !index fo the adjustment variable in the variable array
   INTEGER                        :: seasonFrom     = 0 !enumerated list of the kind of season
   INTEGER                        :: seasonTo       = 0 !enumerated list of the kind of season
-  REAL(r64)                      :: multiplierVal  = 0 !value of the ratchet multiplier
+  REAL                      :: multiplierVal  = 0 !value of the ratchet multiplier
   INTEGER                        :: multiplierPt   = 0 !multiplier variable in the variable array (0 for no variable)
-  REAL(r64)                      :: offsetVal      = 0 !value of the ratchet offset
+  REAL                      :: offsetVal      = 0 !value of the ratchet offset
   INTEGER                        :: offsetPt       = 0 !offset variable in the variable array (0 for no variable)
 END TYPE
 TYPE (RatchetType), ALLOCATABLE, DIMENSION(:)      :: ratchet
@@ -411,7 +411,7 @@ INTEGER                                            :: sizeSteps = 0
 
 TYPE StackType
   INTEGER                        :: varPt          = 0 !pointer to item in specific array
-  REAL(r64),DIMENSION(MaxNumMonths)   :: values         = 0 !values
+  REAL,DIMENSION(MaxNumMonths)   :: values         = 0 !values
 END TYPE
 TYPE (StackType), ALLOCATABLE, DIMENSION(:)      :: stack
 TYPE (StackType), ALLOCATABLE, DIMENSION(:)      :: stackCopy
@@ -588,7 +588,7 @@ INTEGER                     :: jObj       ! loop index for objects
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: found
 LOGICAL                     :: isNotNumeric
@@ -663,36 +663,36 @@ DO iInObj = 1 , NumTariff
     tariff(iInObj)%demandConv = NumArray(2)      !demand conversion factor
   ELSE IF (SameString(AlphaArray(3),'KWH')) THEN
     tariff(iInObj)%convChoice = conversionKWH
-    tariff(iInObj)%energyConv = 0.0000002778d0
-    tariff(iInObj)%demandConv = 0.001d0
+    tariff(iInObj)%energyConv = 0.0000002778
+    tariff(iInObj)%demandConv = 0.001
   ELSE IF (SameString(AlphaArray(3),'THERM')) THEN
     tariff(iInObj)%convChoice = conversionTHERM
     tariff(iInObj)%energyConv = 9.4781712d-9
-    tariff(iInObj)%demandConv = 0.00003412d0
+    tariff(iInObj)%demandConv = 0.00003412
   ELSE IF (SameString(AlphaArray(3),'MMBTU')) THEN
     tariff(iInObj)%convChoice = conversionMMBTU
     tariff(iInObj)%energyConv = 9.4781712d-10
-    tariff(iInObj)%demandConv = 0.000003412d0
+    tariff(iInObj)%demandConv = 0.000003412
   ELSE IF (SameString(AlphaArray(3),'MJ')) THEN
     tariff(iInObj)%convChoice = conversionMJ
-    tariff(iInObj)%energyConv = 0.000001d0
-    tariff(iInObj)%demandConv = 0.0036d0
+    tariff(iInObj)%energyConv = 0.000001
+    tariff(iInObj)%demandConv = 0.0036
   ELSE IF (SameString(AlphaArray(3),'KBTU')) THEN
     tariff(iInObj)%convChoice = conversionKBTU
     tariff(iInObj)%energyConv = 9.4781712d-7
-    tariff(iInObj)%demandConv = 0.003412d0
+    tariff(iInObj)%demandConv = 0.003412
   ELSE IF (SameString(AlphaArray(3),'MCF')) THEN
     tariff(iInObj)%convChoice = conversionMCF
     tariff(iInObj)%energyConv = 9.4781712d-10
-    tariff(iInObj)%demandConv = 0.000003412d0
+    tariff(iInObj)%demandConv = 0.000003412
   ELSE IF (SameString(AlphaArray(3),'CCF')) THEN
     tariff(iInObj)%convChoice = conversionCCF
     tariff(iInObj)%energyConv = 9.4781712d-9
-    tariff(iInObj)%demandConv = 0.00003412d0
+    tariff(iInObj)%demandConv = 0.00003412
   ELSE
     tariff(iInObj)%convChoice = conversionKWH
-    tariff(iInObj)%energyConv = 0.0000002778d0
-    tariff(iInObj)%demandConv = 0.001d0
+    tariff(iInObj)%energyConv = 0.0000002778
+    tariff(iInObj)%demandConv = 0.001
     CALL ShowWarningError('In '//TRIM(CurrentModuleObject)//' = '//TRIM(tariff(iInObj)%tariffName))
     CALL ShowContinueError('Invalid conversion.  Defaulting to KWH.')
   END IF
@@ -736,50 +736,50 @@ DO iInObj = 1 , NumTariff
     SELECT CASE (NumOfTimeStepInHour)
       CASE (1,3,5,15)
         tariff(iInObj)%demandWindow = demandWindowHour
-        tariff(iInObj)%demWinTime = 1.00d0
+        tariff(iInObj)%demWinTime = 1.00
         CALL ShowWarningError('Demand window of QuarterHour is not consistent with number of timesteps per hour')
         CALL ShowContinueError('Demand window will be set to FullHour, and the simulation continues.')
       CASE (2,6,10,30)
         tariff(iInObj)%demandWindow = demandWindowHalf
-        tariff(iInObj)%demWinTime = 0.50d0
+        tariff(iInObj)%demWinTime = 0.50
         CALL ShowWarningError('Demand window of QuarterHour is not consistent with number of timesteps per hour')
         CALL ShowContinueError('Demand window will be set to HalfHour, and the simulation continues.')
       CASE (4,12,20,60)
         tariff(iInObj)%demandWindow = demandWindowQuarter
-        tariff(iInObj)%demWinTime = 0.25d0
+        tariff(iInObj)%demWinTime = 0.25
     END SELECT
   ELSE IF (SameString(AlphaArray(7),'HalfHour')) THEN
     SELECT CASE (NumOfTimeStepInHour)
       CASE (1,3,5,15)
         tariff(iInObj)%demandWindow = demandWindowHour
-        tariff(iInObj)%demWinTime = 1.00d0
+        tariff(iInObj)%demWinTime = 1.00
         CALL ShowWarningError('Demand window of HalfHour is not consistent with number of timesteps per hour')
         CALL ShowContinueError('Demand window will be set to FullHour, and the simulation continues.')
       CASE (2,4,6,10,12,20,30,60)
         tariff(iInObj)%demandWindow = demandWindowHalf
-        tariff(iInObj)%demWinTime = 0.50d0
+        tariff(iInObj)%demWinTime = 0.50
     END SELECT
   ELSE IF (SameString(AlphaArray(7),'FullHour')) THEN
     tariff(iInObj)%demandWindow = demandWindowHour
-    tariff(iInObj)%demWinTime = 1.00d0
+    tariff(iInObj)%demWinTime = 1.00
   ELSE IF (SameString(AlphaArray(7),'Day')) THEN
     tariff(iInObj)%demandWindow = demandWindowDay
-    tariff(iInObj)%demWinTime = 24.00d0
+    tariff(iInObj)%demWinTime = 24.00
   ELSE IF (SameString(AlphaArray(7),'Week')) THEN
     tariff(iInObj)%demandWindow = demandWindowWeek
-    tariff(iInObj)%demWinTime = 24.d0 * 7.d0
+    tariff(iInObj)%demWinTime = 24. * 7.
   ELSE
     ! if not entered default to the same logic as quarter of an hour
     SELECT CASE (NumOfTimeStepInHour)
       CASE (1,3,5,15)
         tariff(iInObj)%demandWindow = demandWindowHour
-        tariff(iInObj)%demWinTime = 1.00d0
+        tariff(iInObj)%demWinTime = 1.00
       CASE (2,6,10,30)
         tariff(iInObj)%demandWindow = demandWindowHalf
-        tariff(iInObj)%demWinTime = 0.50d0
+        tariff(iInObj)%demWinTime = 0.50
       CASE (4,12,20,60)
         tariff(iInObj)%demandWindow = demandWindowQuarter
-        tariff(iInObj)%demWinTime = 0.25d0
+        tariff(iInObj)%demWinTime = 0.25
     END SELECT
   END IF
   !monthly charge
@@ -789,7 +789,7 @@ DO iInObj = 1 , NumTariff
   IF (LEN_TRIM(AlphaArray(9)) .GT. 0) THEN
   tariff(iInObj)%minMonthChgVal = ProcessNumber(AlphaArray(9),isNotNumeric)
   ELSE
-    tariff(iInObj)%minMonthChgVal = -HUGE(-1.0d0) !set to a very negative value
+    tariff(iInObj)%minMonthChgVal = -HUGE(-1.0) !set to a very negative value
   END IF
   tariff(iInObj)%minMonthChgPt = AssignVariablePt(AlphaArray(9),isNotNumeric,varIsArgument,varNotYetDefined,kindUnknown,0,iInObj)
   !real time pricing
@@ -892,7 +892,7 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 LOGICAL                     :: isNotNumeric
 INTEGER          :: jFld
@@ -983,7 +983,7 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 LOGICAL                     :: isNotNumeric
 INTEGER          :: jFld
@@ -1069,12 +1069,12 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 LOGICAL                     :: isNotNumeric
 INTEGER                     :: jBlk       ! loop index for blocks
 INTEGER                     :: alphaOffset ! offset used in blocks for alpha array
-REAL(r64)                   :: hugeNumber
+REAL                   :: hugeNumber
 INTEGER                     :: jFld
 CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
 
@@ -1186,7 +1186,7 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 LOGICAL                     :: isNotNumeric
 INTEGER                     :: jFld
@@ -1269,7 +1269,7 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: jVal
 INTEGER                     :: variablePt
@@ -1358,7 +1358,7 @@ INTEGER                     :: iInObj     ! loop index variable for reading in o
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(100)  :: AlphaArray !character string data
-REAL(r64),                        DIMENSION(100)  :: NumArray  !numeric data
+REAL,                        DIMENSION(100)  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: jLine
 INTEGER                     :: jFld
@@ -1619,7 +1619,7 @@ INTEGER                     :: NumCurrencyType
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(5) :: AlphArray !character string data - should be 1
-REAL(r64),                   DIMENSION(5) :: NumArray  !numeric data          - should be 0
+REAL,                   DIMENSION(5) :: NumArray  !numeric data          - should be 0
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: i
 
@@ -3265,7 +3265,7 @@ USE DataEnvironment, ONLY: Month
 
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
-REAL(r64), external :: GetCurrentMeterValue
+REAL, external :: GetCurrentMeterValue
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           ! na
@@ -3282,17 +3282,17 @@ REAL(r64), external :: GetCurrentMeterValue
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER :: iTariff
-REAL(r64)    :: curInstantValue
-REAL(r64)    :: curDemand
-REAL(r64)    :: curEnergy
+REAL    :: curInstantValue
+REAL    :: curDemand
+REAL    :: curEnergy
 LOGICAL :: isGood
 INTEGER :: curSeason
 INTEGER :: curMonth
 INTEGER :: curPeriod
-REAL(r64)    :: curRTPprice    !real time price
-REAL(r64)    :: curRTPbaseline !real time price customer baseline load
-REAL(r64)    :: curRTPenergy   !energy applied to real time price
-REAL(r64)    :: curRTPcost     !cost for energy for current time
+REAL    :: curRTPprice    !real time price
+REAL    :: curRTPbaseline !real time price customer baseline load
+REAL    :: curRTPenergy   !energy applied to real time price
+REAL    :: curRTPcost     !cost for energy for current time
 
 IF (numTariff .GE. 1) THEN
   DO iTariff = 1, numTariff
@@ -3475,13 +3475,13 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS
 
 ! values used in specific operations
-REAL(r64), DIMENSION(MaxNumMonths) :: a
+REAL, DIMENSION(MaxNumMonths) :: a
 INTEGER                       :: aPt
-REAL(r64), DIMENSION(MaxNumMonths) :: b
+REAL, DIMENSION(MaxNumMonths) :: b
 INTEGER                       :: bPt
-REAL(r64), DIMENSION(MaxNumMonths) :: c
+REAL, DIMENSION(MaxNumMonths) :: c
 INTEGER                       :: cPt
-REAL(r64), DIMENSION(MaxNumMonths) :: d
+REAL, DIMENSION(MaxNumMonths) :: d
 
 INTEGER :: iTariff
 INTEGER :: jStep
@@ -3491,8 +3491,8 @@ INTEGER :: nVar
 INTEGER :: curStep
 INTEGER, parameter :: noVar = 0
 
-REAL(r64) :: hugeValue
-REAL(r64) :: annualAggregate
+REAL :: hugeValue
+REAL :: annualAggregate
 INTEGER :: annualCnt
 
 hugeValue = HUGE(hugeValue)
@@ -3555,7 +3555,7 @@ IF (numTariff .GE. 1) THEN
           CALL pushStack(REAL(INT(a),r64),noVar)
         CASE (opSIGN)
           CALL popStack(a,aPt)
-          CALL pushStack(SIGN(1.d0,a),noVar)
+          CALL pushStack(SIGN(1.,a),noVar)
 !        CASE (opROUND)
 !          CALL popStack(b,bPt)
 !          CALL popStack(a,aPt)
@@ -3866,7 +3866,7 @@ USE OutputReportTabular, ONLY: IntToStr
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL(r64), DIMENSION(MaxNumMonths),INTENT(IN) :: monthlyArray
+REAL, DIMENSION(MaxNumMonths),INTENT(IN) :: monthlyArray
 INTEGER,INTENT(IN)                       :: variablePointer
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3879,7 +3879,7 @@ INTEGER,INTENT(IN)                       :: variablePointer
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64), DIMENSION(MaxNumMonths) :: curMonthlyArray
+REAL, DIMENSION(MaxNumMonths) :: curMonthlyArray
 INTEGER :: sizeIncrement = 50
 
 curMonthlyArray = monthlyArray
@@ -3965,7 +3965,7 @@ SUBROUTINE popStack(monthlyArray,variablePointer)
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL(r64), DIMENSION(MaxNumMonths),INTENT(OUT) :: monthlyArray
+REAL, DIMENSION(MaxNumMonths),INTENT(OUT) :: monthlyArray
 INTEGER,INTENT(INOUT)                     :: variablePointer
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4025,10 +4025,10 @@ INTEGER, INTENT(IN) :: usingVariable
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: curTariff
 INTEGER :: indexInChg
-REAL(r64), DIMENSION(MaxNumMonths) :: sourceVals
-REAL(r64), DIMENSION(MaxNumMonths) :: costPer
-REAL(r64), DIMENSION(MaxNumMonths) :: resultChg
-REAL(r64), DIMENSION(MaxNumMonths) :: seasonMask
+REAL, DIMENSION(MaxNumMonths) :: sourceVals
+REAL, DIMENSION(MaxNumMonths) :: costPer
+REAL, DIMENSION(MaxNumMonths) :: resultChg
+REAL, DIMENSION(MaxNumMonths) :: seasonMask
 
 curTariff = econVar(usingVariable)%tariffIndx
 indexInChg = econVar(usingVariable)%index
@@ -4108,14 +4108,14 @@ INTEGER :: curTariff
 INTEGER :: indexInChg
 INTEGER :: iBlk
 INTEGER :: jMonth
-REAL(r64), DIMENSION(MaxNumMonths) :: sourceVals
-REAL(r64), DIMENSION(MaxNumMonths) :: blkSzMult
-REAL(r64), DIMENSION(MaxNumMonths) :: remainVals
-REAL(r64), DIMENSION(MaxNumMonths) :: resultChg
-REAL(r64), DIMENSION(MaxNumMonths) :: amountForBlk
-REAL(r64), DIMENSION(MaxNumMonths) :: curBlkSz
-REAL(r64), DIMENSION(MaxNumMonths) :: curBlkCost
-REAL(r64), DIMENSION(MaxNumMonths) :: seasonMask
+REAL, DIMENSION(MaxNumMonths) :: sourceVals
+REAL, DIMENSION(MaxNumMonths) :: blkSzMult
+REAL, DIMENSION(MaxNumMonths) :: remainVals
+REAL, DIMENSION(MaxNumMonths) :: resultChg
+REAL, DIMENSION(MaxNumMonths) :: amountForBlk
+REAL, DIMENSION(MaxNumMonths) :: curBlkSz
+REAL, DIMENSION(MaxNumMonths) :: curBlkCost
+REAL, DIMENSION(MaxNumMonths) :: seasonMask
 LOGICAL :: flagAllZero
 
 curTariff = econVar(usingVariable)%tariffIndx
@@ -4244,19 +4244,19 @@ INTEGER, INTENT(IN) :: usingVariable
 
 INTEGER :: curTariff
 INTEGER :: indexInChg
-REAL(r64), DIMENSION(MaxNumMonths) :: baselineVals
-REAL(r64), DIMENSION(MaxNumMonths) :: adjustmentVals
-REAL(r64), DIMENSION(MaxNumMonths) :: multiplierVals
-REAL(r64), DIMENSION(MaxNumMonths) :: offsetVals
-REAL(r64), DIMENSION(MaxNumMonths) :: seasonFromMask
-REAL(r64), DIMENSION(MaxNumMonths) :: seasonToMask
+REAL, DIMENSION(MaxNumMonths) :: baselineVals
+REAL, DIMENSION(MaxNumMonths) :: adjustmentVals
+REAL, DIMENSION(MaxNumMonths) :: multiplierVals
+REAL, DIMENSION(MaxNumMonths) :: offsetVals
+REAL, DIMENSION(MaxNumMonths) :: seasonFromMask
+REAL, DIMENSION(MaxNumMonths) :: seasonToMask
 LOGICAL                       :: isMonthly
-REAL(r64), DIMENSION(MaxNumMonths) :: adjSeasonal
-REAL(r64), DIMENSION(MaxNumMonths) :: adjPeak
-REAL(r64), DIMENSION(MaxNumMonths) :: maxAdjBase
-REAL(r64)                     :: maximumVal
+REAL, DIMENSION(MaxNumMonths) :: adjSeasonal
+REAL, DIMENSION(MaxNumMonths) :: adjPeak
+REAL, DIMENSION(MaxNumMonths) :: maxAdjBase
+REAL                     :: maximumVal
 INTEGER                       :: iMonth
-REAL(r64), DIMENSION(MaxNumMonths) :: finalResult
+REAL, DIMENSION(MaxNumMonths) :: finalResult
 
 curTariff = econVar(usingVariable)%tariffIndx
 indexInChg = econVar(usingVariable)%index
@@ -4392,10 +4392,10 @@ INTEGER, INTENT(IN) :: usingVariable
 
 INTEGER :: curTariff
 INTEGER :: indexInQual
-REAL(r64), DIMENSION(MaxNumMonths) :: sourceVals
-REAL(r64), DIMENSION(MaxNumMonths) :: thresholdVals
+REAL, DIMENSION(MaxNumMonths) :: sourceVals
+REAL, DIMENSION(MaxNumMonths) :: thresholdVals
 INTEGER, DIMENSION(MaxNumMonths) :: monthsQualify
-REAL(r64), DIMENSION(MaxNumMonths) :: seasonMask
+REAL, DIMENSION(MaxNumMonths) :: seasonMask
 LOGICAL :: curIsMaximum
 LOGICAL :: curIsConsecutive
 INTEGER :: curNumberOfMonths
@@ -4673,8 +4673,8 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 INTEGER :: iTariff
 INTEGER :: jPeriod
 INTEGER :: kMonth
-REAL(r64), DIMENSION(MaxNumMonths) :: monthVal
-REAL(r64)    :: bigNumber
+REAL, DIMENSION(MaxNumMonths) :: monthVal
+REAL    :: bigNumber
 
 bigNumber = HUGE(bigNumber)
 DO iTariff = 1, numTariff
@@ -4902,10 +4902,10 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 !other local variables
 INTEGER :: elecFacilMeter
 INTEGER :: gasFacilMeter
-REAL(r64)    :: elecTotalCost
-REAL(r64)    :: gasTotalCost
-REAL(r64)    :: otherTotalCost
-REAL(r64)    :: allTotalCost
+REAL    :: elecTotalCost
+REAL    :: gasTotalCost
+REAL    :: otherTotalCost
+REAL    :: allTotalCost
 CHARACTER(len=2000) :: outString !an arbitarilty long string
 INTEGER :: curStep
 INTEGER :: indexInChg
@@ -4914,7 +4914,7 @@ INTEGER :: kVar
 INTEGER :: lStep
 CHARACTER(len=MaxNameLength) :: SIunit = ''
 INTEGER :: unitConvIndex = 0
-REAL(r64) :: perAreaUnitConv = 0.0d0
+REAL :: perAreaUnitConv = 0.0
 CHARACTER(len=MaxNameLength) :: perAreaUnitName = ''
 
 
@@ -4927,10 +4927,10 @@ CHARACTER(len=MaxNameLength) :: perAreaUnitName = ''
   IF (unitsStyle .EQ. unitsStyleInchPound) THEN
     SIunit = '[~~$~~/m2]'
     CALL LookupSItoIP(SIunit, unitConvIndex, perAreaUnitName)
-    perAreaUnitConv = convertIP(unitConvIndex,1.0d0)
+    perAreaUnitConv = convertIP(unitConvIndex,1.0)
   ELSE
     perAreaUnitName = '[~~$~~/m2]'
-    perAreaUnitConv = 1.0d0
+    perAreaUnitConv = 1.0
   END IF
 
 
@@ -5377,8 +5377,8 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT(IN) :: varPointer
-REAL(r64),INTENT(OUT) :: sumResult
-REAL(r64),INTENT(OUT) :: maxResult
+REAL,INTENT(OUT) :: sumResult
+REAL,INTENT(OUT) :: maxResult
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5390,9 +5390,9 @@ REAL(r64),INTENT(OUT) :: maxResult
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: sumVal
-REAL(r64) :: maximumVal
-REAL(r64) :: curVal
+REAL :: sumVal
+REAL :: maximumVal
+REAL :: curVal
 INTEGER :: jMonth
 
 sumVal = 0
@@ -5454,9 +5454,9 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: columnHead
 INTEGER,ALLOCATABLE,DIMENSION(:)                           :: columnWidth
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
-REAL(r64)    :: sumVal
-REAL(r64)    :: maximumVal
-REAL(r64)    :: curVal
+REAL    :: sumVal
+REAL    :: maximumVal
+REAL    :: curVal
 INTEGER :: curIndex
 INTEGER :: curCatPt
 INTEGER :: curCategory
@@ -5626,7 +5626,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: totalVarPt
-REAL(r64)    :: annualTotal
+REAL    :: annualTotal
 INTEGER :: iTariff
 INTEGER :: jMonth
 INTEGER :: kTariff
@@ -5842,7 +5842,7 @@ SUBROUTINE GetMonthlyCostForResource(inResourceNumber,outMonthlyCosts)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
 INTEGER, INTENT(IN)                  :: inResourceNumber
-REAL(r64), INTENT(OUT),DIMENSION(12) :: outMonthlyCosts
+REAL, INTENT(OUT),DIMENSION(12) :: outMonthlyCosts
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

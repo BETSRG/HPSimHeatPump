@@ -55,18 +55,18 @@ TYPE ZoneAirEquip
   INTEGER, DIMENSION(MaxZoneAirComponents) :: EquipType_Num=0
   CHARACTER(len=MaxNameLength), DIMENSION(MaxZoneAirComponents) :: EquipName=' '   ! name of subcomponent
   INTEGER, DIMENSION(MaxZoneAirComponents) :: EquipIndex=0
-  REAL(r64)    :: UpStreamLeakFrac   =0.0 ! upstream nominal leakage fraction
-  REAL(r64)    :: DownStreamLeakFrac =0.0 ! downstream constant leakage fraction
-  REAL(r64)    :: MassFlowRateUpStrLk=0.0 ! current air mass flow rate of the upstream leak [kg/s]
-  REAL(r64)    :: MassFlowRateDnStrLk=0.0 ! current air mass flow rate of the downstream leak [kg/s]
-  REAL(r64)    :: MassFlowRateTU     =0.0 ! current air mass flow rate tjrough the terminal unit [kg/s]
-  REAL(r64)    :: MassFlowRateZSup   =0.0 ! current air mass flow rate of zone supply air [kg/s]
-  REAL(r64)    :: MassFlowRateSup    =0.0 ! current air mass flow rate of supply air upstream of upstream leak [kg/s]
-  REAL(r64)    :: MaxAvailDelta      =0.0 ! change in max avail mass low rate due to leaks [kg/s]
-  REAL(r64)    :: MinAvailDelta      =0.0 ! change in min avail mass low rate due to leaks [kg/s]
+  REAL    :: UpStreamLeakFrac   =0.0 ! upstream nominal leakage fraction
+  REAL    :: DownStreamLeakFrac =0.0 ! downstream constant leakage fraction
+  REAL    :: MassFlowRateUpStrLk=0.0 ! current air mass flow rate of the upstream leak [kg/s]
+  REAL    :: MassFlowRateDnStrLk=0.0 ! current air mass flow rate of the downstream leak [kg/s]
+  REAL    :: MassFlowRateTU     =0.0 ! current air mass flow rate tjrough the terminal unit [kg/s]
+  REAL    :: MassFlowRateZSup   =0.0 ! current air mass flow rate of zone supply air [kg/s]
+  REAL    :: MassFlowRateSup    =0.0 ! current air mass flow rate of supply air upstream of upstream leak [kg/s]
+  REAL    :: MaxAvailDelta      =0.0 ! change in max avail mass low rate due to leaks [kg/s]
+  REAL    :: MinAvailDelta      =0.0 ! change in min avail mass low rate due to leaks [kg/s]
   INTEGER      :: InletNodeNum       =0   ! index of inlet node
   INTEGER      :: ZoneEqNum          =0   ! index of zone equipment object for this terminal unit
-  REAL(r64)    :: LeakLoadMult       =0.0 ! zome load multiplier to adjust for downstream leak
+  REAL    :: LeakLoadMult       =0.0 ! zome load multiplier to adjust for downstream leak
   LOGICAL      :: UpStreamLeak       =.FALSE. ! if true, there is an upstream leak
   LOGICAL      :: DownStreamLeak     =.FALSE. ! if true, there is an downstream leak
 END TYPE ZoneAirEquip
