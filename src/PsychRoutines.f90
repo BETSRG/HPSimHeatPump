@@ -148,6 +148,8 @@ PUBLIC  CPCW
 PUBLIC  CPHW
 PUBLIC  RhoH2O
 PUBLIC  ShowPsychrometricSummary
+PUBLIC  PsyTwbFnTdbWPb2 !RS: Debugging: Trying to solve for wetbulb temp
+PUBLIC  PsyRhFnTdbWPb2  !RS: Debugging: Solving for the relative humidity
 
 CONTAINS
 
@@ -1210,6 +1212,124 @@ FUNCTION PsyRhFnTdbWPb(TDB,dW,PB,calledfrom) RESULT(RHValue)
     RETURN
 END FUNCTION PsyRhFnTdbWPb
 
+SUBROUTINE PsyRhFnTdbWPb2(TDB,dW,PB,RHValue,calledfrom)
+
+          ! FUNCTION INFORMATION:
+          !       AUTHOR         Richard J. Liesen
+          !       DATE WRITTEN   Nov 1988
+          !       MODIFIED       Aug 1989, Michael J. Witte
+          !       RE-ENGINEERED  na
+
+          ! PURPOSE OF THIS FUNCTION:
+          ! This function provides the relative humidity value (0.0-1.0) as a result of
+          ! dry-bulb temperature, humidity ratio and barometric pressure.
+
+          ! METHODOLOGY EMPLOYED:
+          ! na
+
+          ! REFERENCES:
+          ! ASHRAE HANDBOOK FUNDAMENTALS 1985, P6.12, EQN 10,21,23
+
+          ! USE STATEMENTS:
+          ! na
+
+  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
+
+          ! FUNCTION ARGUMENT DEFINITIONS:
+      REAL, intent(in) :: TDB   ! dry-bulb temperature {C}
+      REAL, intent(in) :: dW     ! humidity ratio
+      REAL, intent(in) :: PB    ! barometric pressure {Pascals}
+      character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
+      REAL        :: RHValue ! relative humidity value (0.0-1.0)
+
+          ! FUNCTION PARAMETER DEFINITIONS:
+          ! na
+
+          ! INTERFACE BLOCK SPECIFICATIONS
+          ! na
+
+          ! DERIVED TYPE DEFINITIONS
+          ! na
+
+          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
+      REAL U    ! Degree of Saturation
+      REAL PWS  ! Pressure -- saturated for pure water
+      REAL W   ! humidity ratio
+
+        IF (PRESENT(calledfrom)) THEN
+          PWS=PsyPsatFnTemp(TDB,calledfrom)
+        ELSE
+          PWS=PsyPsatFnTemp(TDB,'PsyRhFnTdbWPb')
+        ENDIF
+
+  !                   Find Degree Of Saturation
+        W=MAX(dW,1.0d-5)
+        U=W/(0.62198d0*PWS/(PB-PWS))
+  !                   Calculate The Relative Humidity
+        RHValue=U/(1.0d0-(1.0d0-U)*(PWS/PB))
+  !
+#ifdef EP_psych_stats
+      NumTimesCalled(iPsyRhFnTdbWPb)=NumTimesCalled(iPsyRhFnTdbWPb)+1
+#endif
+
+  !                   VALIDITY TEST
+        IF (RHValue < 0.0 .or. RHValue > 1.0) THEN
+          IF (RHValue > 1.0d0) THEN
+#ifdef EP_psych_errors
+            IF (RHValue > 1.01d0) THEN
+              IF (.not. WarmupFlag) THEN
+                IF (iPsyErrIndex(iPsyRhFnTdbWPb) == 0) THEN
+                  String=' Dry-Bulb= '//TRIM(TrimSigDigits(TDB,2))//  &
+                         ' Humidity Ratio= '//TRIM(TrimSigDigits(W,3))// &
+                         ' Calculated Relative Humidity [%]= '//TRIM(TrimSigDigits(RHValue*100.d0,2))
+                  CALL ShowWarningMessage('Calculated Relative Humidity out of range (PsyRhFnTdbWPb) ')
+                  if (present(calledfrom)) then
+                    CALL ShowContinueErrorTimeStamp(' Routine='//trim(calledfrom)//',')
+                  else
+                    CALL ShowContinueErrorTimeStamp(' Routine=Unknown,')
+                  endif
+                  CALL ShowContinueError(TRIM(String))
+                  CALL ShowContinueError('Relative Humidity being reset to 100.0%')
+                ENDIF
+                CALL ShowRecurringWarningErrorAtEnd('Calculated Relative Humidity out of range (PsyRhFnTdbWPb)',   &
+                  iPsyErrIndex(iPsyRhFnTdbWPb),ReportMinOf=RHValue*100.d0,ReportMaxOf=RHValue*100.d0,  &
+                  ReportMinUnits='%',ReportMaxUnits='%')
+              ENDIF
+            ENDIF
+#endif
+            RHValue=1.0d0
+          ELSE    ! RHValue < 0.0
+#ifdef EP_psych_errors
+            IF (RHValue < -0.05d0) THEN
+              IF (.not. WarmupFlag) THEN
+                IF (iPsyErrIndex(iPsyRhFnTdbWPb) == 0) THEN
+                  String=' Dry-Bulb= '//TRIM(TrimSigDigits(TDB,2))//  &
+                         ' Humidity Ratio= '//TRIM(TrimSigDigits(W,3))// &
+                         ' Calculated Relative Humidity [%]= '//TRIM(TrimSigDigits(RHValue*100.d0,2))
+                  CALL ShowWarningMessage('Calculated Relative Humidity out of range (PsyRhFnTdbWPb) ')
+                  if (present(calledfrom)) then
+                    CALL ShowContinueErrorTimeStamp(' Routine='//trim(calledfrom)//',')
+                  else
+                    CALL ShowContinueErrorTimeStamp(' Routine=Unknown,')
+                  endif
+                  CALL ShowContinueError(TRIM(String))
+                  CALL ShowContinueError('Relative Humidity being reset to 1%')
+                ENDIF
+                CALL ShowRecurringWarningErrorAtEnd('Calculated Relative Humidity out of range (PsyRhFnTdbWPb)',   &
+                  iPsyErrIndex(iPsyRhFnTdbWPb),ReportMinOf=RHValue*100.d0,ReportMaxOf=RHValue*100.d0,  &
+                  ReportMinUnits='%',ReportMaxUnits='%')
+              ENDIF
+            ENDIF
+#endif
+            RHValue=.01d0
+          ENDIF
+        ENDIF    ! RHValue in proper range
+
+     ! RHValue is the result
+
+    RETURN
+END SUBROUTINE PsyRhFnTdbWPb2
+
 #ifdef EP_cache_PsyTwbFnTdbWPb
 FUNCTION PsyTwbFnTdbWPb(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
 
@@ -1287,7 +1407,8 @@ FUNCTION PsyTwbFnTdbWPb(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
 
 END FUNCTION PsyTwbFnTdbWPb
 
-FUNCTION PsyTwbFnTdbWPb2(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
+SUBROUTINE PsyTwbFnTdbWPb2(Tdb,W,Pb,Twb_result, calledfrom) !RS: Debugging: Same as above function, but a subroutine instead
+                                                            !RS: Debugging: Used in ORNLSolver only
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda Lawrie/Amir Roth
@@ -1361,7 +1482,7 @@ FUNCTION PsyTwbFnTdbWPb2(Tdb,W,Pb,calledfrom)  RESULT (Twb_result)
 
   RETURN
 
-END FUNCTION PsyTwbFnTdbWPb2
+END SUBROUTINE PsyTwbFnTdbWPb2
 
 FUNCTION PsyTwbFnTdbWPb_raw(TDB,dW,Patm,calledfrom) RESULT(TWB)
 #else
