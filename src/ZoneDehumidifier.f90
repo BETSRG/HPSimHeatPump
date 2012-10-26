@@ -67,16 +67,16 @@ TYPE ZoneDehumidifierData
  CHARACTER(len=MaxNameLength) :: UnitType         =' '  ! Type of unit
  INTEGER                      :: UnitType_Num     = 0   ! Parameter equivalent to type of unit
  INTEGER                      :: SchedPtr         = 0   ! Index number to availability schedule
- REAL(r64)                    :: RatedWaterRemoval = 0.0d0 ! Rated water removal [liters/day]
- REAL(r64)                    :: RatedEnergyFactor = 0.0d0 ! Rated energy factor [liters/kWh]
- REAL(r64)                    :: RatedAirVolFlow = 0.0d0   ! Rated air flow rate through the dehumidifier [m3/s]
- REAL(r64)                    :: RatedAirMassFlow = 0.0d0  ! Rated air mass flow rate through the dehumidifier [kg/s]
- REAL(r64)                    :: MinInletAirTemp = 0.0d0 ! Minimum dry-bulb temperature for dehumidifier operation [C]
- REAL(r64)                    :: MaxInletAirTemp = 0.0d0 ! Maximum dry-bulb temperature for dehumidifier operation [C]
- REAL(r64)                    :: InletAirMassFlow      = 0.0d0 ! Inlet air mass flow rate for the time step being simulated [kg/s]
- REAL(r64)                    :: OutletAirEnthalpy     = 0.0d0 ! Dehumidifier outlet air enthalpy [J/kg]
- REAL(r64)                    :: OutletAirHumRat       = 0.0d0 ! Dehumidifier outlet air humidity ratio [kg/kg]
- REAL(r64)                    :: OffCycleParasiticLoad = 0.0d0 ! Off Cycle Parasitic Load, user input [W]
+ REAL                    :: RatedWaterRemoval = 0.0 ! Rated water removal [liters/day]
+ REAL                    :: RatedEnergyFactor = 0.0 ! Rated energy factor [liters/kWh]
+ REAL                    :: RatedAirVolFlow = 0.0   ! Rated air flow rate through the dehumidifier [m3/s]
+ REAL                    :: RatedAirMassFlow = 0.0  ! Rated air mass flow rate through the dehumidifier [kg/s]
+ REAL                    :: MinInletAirTemp = 0.0 ! Minimum dry-bulb temperature for dehumidifier operation [C]
+ REAL                    :: MaxInletAirTemp = 0.0 ! Maximum dry-bulb temperature for dehumidifier operation [C]
+ REAL                    :: InletAirMassFlow      = 0.0 ! Inlet air mass flow rate for the time step being simulated [kg/s]
+ REAL                    :: OutletAirEnthalpy     = 0.0 ! Dehumidifier outlet air enthalpy [J/kg]
+ REAL                    :: OutletAirHumRat       = 0.0 ! Dehumidifier outlet air humidity ratio [kg/kg]
+ REAL                    :: OffCycleParasiticLoad = 0.0 ! Off Cycle Parasitic Load, user input [W]
 
  INTEGER                      :: AirInletNodeNum        = 0   ! Inlet air node number
  INTEGER                      :: AirOutletNodeNum       = 0   ! Outlet air node number
@@ -108,19 +108,19 @@ TYPE ZoneDehumidifierData
  INTEGER                      :: CondensateTankSupplyARRID             = 0 ! Condensate collection tank supply ID number
 
 ! Report data
- REAL(r64)                    :: SensHeatingRate        = 0.0d0 ! Zone Dehumidifier Sensible Heating Rate [W]
- REAL(r64)                    :: SensHeatingEnergy      = 0.0d0 ! Zone Dehumidifier Sensible Heating Energy [J]
- REAL(r64)                    :: WaterRemovalRate       = 0.0d0 ! Zone Dehumidifier Water Removal Rate [kg/s]
- REAL(r64)                    :: WaterRemoved           = 0.0d0 ! Zone Dehumidifier Water Removed [kg]
- REAL(r64)                    :: ElecPower              = 0.0d0 ! Zone Dehumidifier Electric Power [W]
- REAL(r64)                    :: ElecConsumption        = 0.0d0 ! Zone Dehumidifier Electric Consumption [J]
- REAL(r64)                    :: DehumidPLR             = 0.0d0 ! Zone Dehumidifier Part-Load Ratio [-]
- REAL(r64)                    :: DehumidRTF             = 0.0d0 ! Zone Dehumidifier Runtime Fraction [-]
- REAL(r64)                    :: DehumidCondVolFlowRate = 0.0d0 ! Zone Dehumidifier Condensate Volumetric Flow Rate [m3/s]
- REAL(r64)                    :: DehumidCondVol         = 0.0d0 ! Zone Dehumidifier Condensate Volume [m3]
- REAL(r64)                    :: OutletAirTemp          = 0.0d0 ! Zone Dehumidifier Outlet Air Temperature [C]
- REAL(r64)                 :: OffCycleParasiticElecPower = 0.0d0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Power [W]
- REAL(r64)                 :: OffCycleParasiticElecCons  = 0.0d0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Consumption [J]
+ REAL                    :: SensHeatingRate        = 0.0 ! Zone Dehumidifier Sensible Heating Rate [W]
+ REAL                    :: SensHeatingEnergy      = 0.0 ! Zone Dehumidifier Sensible Heating Energy [J]
+ REAL                    :: WaterRemovalRate       = 0.0 ! Zone Dehumidifier Water Removal Rate [kg/s]
+ REAL                    :: WaterRemoved           = 0.0 ! Zone Dehumidifier Water Removed [kg]
+ REAL                    :: ElecPower              = 0.0 ! Zone Dehumidifier Electric Power [W]
+ REAL                    :: ElecConsumption        = 0.0 ! Zone Dehumidifier Electric Consumption [J]
+ REAL                    :: DehumidPLR             = 0.0 ! Zone Dehumidifier Part-Load Ratio [-]
+ REAL                    :: DehumidRTF             = 0.0 ! Zone Dehumidifier Runtime Fraction [-]
+ REAL                    :: DehumidCondVolFlowRate = 0.0 ! Zone Dehumidifier Condensate Volumetric Flow Rate [m3/s]
+ REAL                    :: DehumidCondVol         = 0.0 ! Zone Dehumidifier Condensate Volume [m3]
+ REAL                    :: OutletAirTemp          = 0.0 ! Zone Dehumidifier Outlet Air Temperature [C]
+ REAL                 :: OffCycleParasiticElecPower = 0.0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Power [W]
+ REAL                 :: OffCycleParasiticElecCons  = 0.0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Consumption [J]
 
 END TYPE ZoneDehumidifierData
 
@@ -187,8 +187,8 @@ SUBROUTINE SimZoneDehumidifier(CompName,ZoneNum,FirstHVACIteration,QSensOut,QLat
   CHARACTER(len=*), INTENT    (IN) :: CompName            ! Name of the zone dehumidifier
   INTEGER,          INTENT    (IN) :: ZoneNum             ! Number of zone being served
   LOGICAL,          INTENT    (IN) :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),        INTENT   (OUT) :: QSensOut            ! Sensible capacity delivered to zone (W)
-  REAL(r64),        INTENT   (OUT) :: QLatOut             ! Latent capacity delivered to zone (kg/s), dehumidify = negative
+  REAL,        INTENT   (OUT) :: QSensOut            ! Sensible capacity delivered to zone (W)
+  REAL,        INTENT   (OUT) :: QLatOut             ! Latent capacity delivered to zone (kg/s), dehumidify = negative
   INTEGER,          INTENT (INOUT) :: CompIndex           ! Index to the zone dehumidifier
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -202,7 +202,7 @@ SUBROUTINE SimZoneDehumidifier(CompName,ZoneNum,FirstHVACIteration,QSensOut,QLat
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER       :: ZoneDehumidNum         ! Index of zone dehumidifier being simulated
-  REAL(r64)     :: QZnDehumidReq          ! Zone dehumidification load required (kg moisture/sec)
+  REAL     :: QZnDehumidReq          ! Zone dehumidification load required (kg moisture/sec)
 
 
   IF (GetInputFlag) THEN
@@ -285,8 +285,8 @@ SUBROUTINE GetZoneDehumidifierInput
   INTEGER, PARAMETER :: Quadratic   = 1
   INTEGER, PARAMETER :: Biquadratic = 2
   INTEGER, PARAMETER :: Cubic       = 3
-  REAL(r64), PARAMETER :: RatedInletAirTemp = 26.7d0
-  REAL(r64), PARAMETER :: RatedInletAirRH = 60.0d0
+  REAL, PARAMETER :: RatedInletAirTemp = 26.7
+  REAL, PARAMETER :: RatedInletAirRH = 60.0
 
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -306,11 +306,11 @@ SUBROUTINE GetZoneDehumidifierInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .TRUE.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .TRUE.
   INTEGER :: TotalArgs=0                       ! Total number of alpha and numeric arguments (max)
-  REAL(r64)                      :: CurveVal   ! Output from curve object (water removal or energy factor curves)
+  REAL                      :: CurveVal   ! Output from curve object (water removal or energy factor curves)
 
 
   NumDehumidifiers = GetNumObjectsFound(CurrentModuleObject)
@@ -328,7 +328,7 @@ SUBROUTINE GetZoneDehumidifierInput
   ALLOCATE(cNumericFields(NumNumbers))
   cNumericFields=' '
   ALLOCATE(Numbers(NumNumbers))
-  Numbers=0.0d0
+  Numbers=0.0
   ALLOCATE(lAlphaBlanks(NumAlphas))
   lAlphaBlanks=.TRUE.
   ALLOCATE(lNumericBlanks(NumNumbers))
@@ -375,7 +375,7 @@ SUBROUTINE GetZoneDehumidifierInput
 
     ! N1,  \field Rated Water Removal
     ZoneDehumid(ZoneDehumidIndex)%RatedWaterRemoval = Numbers(1)
-    IF (ZoneDehumid(ZoneDehumidIndex)%RatedWaterRemoval .LE. 0.0d0) THEN
+    IF (ZoneDehumid(ZoneDehumidIndex)%RatedWaterRemoval .LE. 0.0) THEN
       CALL ShowSevereError(TRIM(cNumericFields(1))//' must be greater than zero.')
       CALL ShowContinueError('Value specified = '//TRIM(TrimSigDigits(Numbers(1),5)))
       CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(ZoneDehumid(ZoneDehumidIndex)%Name))
@@ -384,7 +384,7 @@ SUBROUTINE GetZoneDehumidifierInput
 
     ! N2,  \field Rated Energy Factor
     ZoneDehumid(ZoneDehumidIndex)%RatedEnergyFactor = Numbers(2)
-    IF (ZoneDehumid(ZoneDehumidIndex)%RatedEnergyFactor .LE. 0.0d0) THEN
+    IF (ZoneDehumid(ZoneDehumidIndex)%RatedEnergyFactor .LE. 0.0) THEN
       CALL ShowSevereError(TRIM(cNumericFields(2))//' must be greater than zero.')
       CALL ShowContinueError('Value specified = '//TRIM(TrimSigDigits(Numbers(2),5)))
       CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(ZoneDehumid(ZoneDehumidIndex)%Name))
@@ -393,7 +393,7 @@ SUBROUTINE GetZoneDehumidifierInput
 
     ! N3,  \field Rated Air Flow Rate
     ZoneDehumid(ZoneDehumidIndex)%RatedAirVolFlow   = Numbers(3)
-    IF (ZoneDehumid(ZoneDehumidIndex)%RatedAirVolFlow .LE. 0.0d0) THEN
+    IF (ZoneDehumid(ZoneDehumidIndex)%RatedAirVolFlow .LE. 0.0) THEN
       CALL ShowSevereError(TRIM(cNumericFields(3))//' must be greater than zero.')
       CALL ShowContinueError('Value specified = '//TRIM(TrimSigDigits(Numbers(3),5)))
       CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(ZoneDehumid(ZoneDehumidIndex)%Name))
@@ -418,7 +418,7 @@ SUBROUTINE GetZoneDehumidifierInput
       CASE('BIQUADRATIC')
          ZoneDehumid(ZoneDehumidIndex)%WaterRemovalCurveType=Biquadratic
          CurveVal = CurveValue(ZoneDehumid(ZoneDehumidIndex)%WaterRemovalCurveIndex,RatedInletAirTemp,RatedInletAirRH)
-         IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
+         IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
            CALL ShowWarningError(TRIM(cAlphaFields(5))//' output is not equal to 1.0')
            CALL ShowContinueError('(+ or -10%) at rated conditions for '//TRIM(CurrentModuleObject)//' = ' &
                                  //TRIM(Alphas(1)))
@@ -452,7 +452,7 @@ SUBROUTINE GetZoneDehumidifierInput
       CASE('BIQUADRATIC')
          ZoneDehumid(ZoneDehumidIndex)%EnergyFactorCurveType=Biquadratic
          CurveVal = CurveValue(ZoneDehumid(ZoneDehumidIndex)%EnergyFactorCurveIndex,RatedInletAirTemp,RatedInletAirRH)
-         IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
+         IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
            CALL ShowWarningError(TRIM(cAlphaFields(6))//' output is not equal to 1.0')
            CALL ShowContinueError('(+ or -10%) at rated conditions for '//TRIM(CurrentModuleObject)//' = ' &
                                  //TRIM(Alphas(1)))
@@ -514,7 +514,7 @@ SUBROUTINE GetZoneDehumidifierInput
     ! N6,  \field Off Cycle Parasitic Electric Load
     ZoneDehumid(ZoneDehumidIndex)%OffCycleParasiticLoad = Numbers(6) ! Off Cycle Parasitic Load [W]
 
-    IF (ZoneDehumid(ZoneDehumidIndex)%OffCycleParasiticLoad .LT. 0.0d0) THEN
+    IF (ZoneDehumid(ZoneDehumidIndex)%OffCycleParasiticLoad .LT. 0.0) THEN
       CALL ShowSevereError(TRIM(cNumericFields(6))//' must be >= zero.')
       CALL ShowContinueError('Value specified = '//TRIM(TrimSigDigits(Numbers(6),2)))
       CALL ShowContinueError('Occurs in '//TRIM(CurrentModuleObject)//' = '//TRIM(ZoneDehumid(ZoneDehumidIndex)%Name))
@@ -630,9 +630,9 @@ SUBROUTINE InitZoneDehumidifier(ZoneDehumNum)
   LOGICAL,SAVE        :: ZoneEquipmentListChecked = .FALSE.  ! True after the Zone Equipment List has been checked for items
   INTEGER             :: LoopIndex      ! DO loop index
   INTEGER             :: AirInletNode   ! Inlet air node number
-  REAL(r64)           :: RatedAirHumrat ! Humidity ratio (kg/kg) at rated inlet air conditions of 26.6667C, 60% RH
-  REAL(r64)           :: RatedAirDBTemp ! Dry-bulb air temperature at rated conditions 26.6667C
-  REAL(r64)           :: RatedAirRH     ! Relative humidity of air (0.6 --> 60%) at rated conditions
+  REAL           :: RatedAirHumrat ! Humidity ratio (kg/kg) at rated inlet air conditions of 26.6667C, 60% RH
+  REAL           :: RatedAirDBTemp ! Dry-bulb air temperature at rated conditions 26.6667C
+  REAL           :: RatedAirRH     ! Relative humidity of air (0.6 --> 60%) at rated conditions
 
   ! Do the one time initializations
   IF (MyOneTimeFlag) THEN
@@ -659,8 +659,8 @@ SUBROUTINE InitZoneDehumidifier(ZoneDehumNum)
 
     ! Set the mass flow rates from the input volume flow rates, at rated conditions of 26.6667C, 60% RH
     ! Might default back to STP later after discussion with M. Witte, use StdRhoAir instead of calc'd RhoAir at rated conditions
-    RatedAirDBTemp = 26.6667d0 ! 26.6667 C, 80F
-    RatedAirRH = 0.6d0 ! 60% RH
+    RatedAirDBTemp = 26.6667 ! 26.6667 C, 80F
+    RatedAirRH = 0.6 ! 60% RH
     RatedAirHumrat = PsyWFnTdbRhPb(RatedAirDBTemp,RatedAirRH,StdBaroPress,'InitZoneDehumidifier')
     ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow = PsyRhoAirFnPbTdbW(StdBaroPress,RatedAirDBTemp,RatedAirHumrat, &
                                                  'InitZoneDehumidifier') * ZoneDehumid(ZoneDehumNum)%RatedAirVolFlow
@@ -668,8 +668,8 @@ SUBROUTINE InitZoneDehumidifier(ZoneDehumNum)
     ! Set the node max and min mass flow rates on inlet node... outlet node gets updated in UPDATE subroutine
     Node(AirInletNode)%MassFlowRateMax      = ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow
     Node(AirInletNode)%MassFlowRateMaxAvail = ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow
-    Node(AirInletNode)%MassFlowRateMinAvail = 0.0d0
-    Node(AirInletNode)%MassFlowRateMin      = 0.0d0
+    Node(AirInletNode)%MassFlowRateMinAvail = 0.0
+    Node(AirInletNode)%MassFlowRateMin      = 0.0
 
     MyEnvrnFlag(ZoneDehumNum) = .FALSE.
   END IF ! End one time inits
@@ -682,18 +682,18 @@ SUBROUTINE InitZoneDehumidifier(ZoneDehumNum)
   Node(AirInletNode)%MassFlowRate = ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow
 
   ! Zero out the report variables
-  ZoneDehumid(ZoneDehumNum)%SensHeatingRate            = 0.0d0 ! Zone Dehumidifier Sensible Heating Rate [W]
-  ZoneDehumid(ZoneDehumNum)%SensHeatingEnergy          = 0.0d0 ! Zone Dehumidifier Sensible Heating Energy [J]
-  ZoneDehumid(ZoneDehumNum)%WaterRemovalRate           = 0.0d0 ! Zone Dehumidifier Water Removal Rate [kg/s]
-  ZoneDehumid(ZoneDehumNum)%WaterRemoved               = 0.0d0 ! Zone Dehumidifier Water Removed [kg]
-  ZoneDehumid(ZoneDehumNum)%ElecPower                  = 0.0d0 ! Zone Dehumidifier Electric Power [W]
-  ZoneDehumid(ZoneDehumNum)%ElecConsumption            = 0.0d0 ! Zone Dehumidifier Electric Consumption [J]
-  ZoneDehumid(ZoneDehumNum)%DehumidPLR                 = 0.0d0 ! Zone Dehumidifier Part-Load Ratio [-]
-  ZoneDehumid(ZoneDehumNum)%DehumidRTF                 = 0.0d0 ! Zone Dehumidifier Runtime Fraction [-]
-  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecPower = 0.0d0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Power [W]
-  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecCons  = 0.0d0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Consumption [J]
-  ZoneDehumid(ZoneDehumNum)%DehumidCondVolFlowRate     = 0.0d0 ! Zone Dehumidifier Condensate Volumetric Flow Rate [m3/s]
-  ZoneDehumid(ZoneDehumNum)%DehumidCondVol             = 0.0d0 ! Zone Dehumidifier Condensate Volume [m3]
+  ZoneDehumid(ZoneDehumNum)%SensHeatingRate            = 0.0 ! Zone Dehumidifier Sensible Heating Rate [W]
+  ZoneDehumid(ZoneDehumNum)%SensHeatingEnergy          = 0.0 ! Zone Dehumidifier Sensible Heating Energy [J]
+  ZoneDehumid(ZoneDehumNum)%WaterRemovalRate           = 0.0 ! Zone Dehumidifier Water Removal Rate [kg/s]
+  ZoneDehumid(ZoneDehumNum)%WaterRemoved               = 0.0 ! Zone Dehumidifier Water Removed [kg]
+  ZoneDehumid(ZoneDehumNum)%ElecPower                  = 0.0 ! Zone Dehumidifier Electric Power [W]
+  ZoneDehumid(ZoneDehumNum)%ElecConsumption            = 0.0 ! Zone Dehumidifier Electric Consumption [J]
+  ZoneDehumid(ZoneDehumNum)%DehumidPLR                 = 0.0 ! Zone Dehumidifier Part-Load Ratio [-]
+  ZoneDehumid(ZoneDehumNum)%DehumidRTF                 = 0.0 ! Zone Dehumidifier Runtime Fraction [-]
+  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecPower = 0.0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Power [W]
+  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecCons  = 0.0 ! Zone Dehumidifier Off-Cycle Parasitic Electric Consumption [J]
+  ZoneDehumid(ZoneDehumNum)%DehumidCondVolFlowRate     = 0.0 ! Zone Dehumidifier Condensate Volumetric Flow Rate [m3/s]
+  ZoneDehumid(ZoneDehumNum)%DehumidCondVol             = 0.0 ! Zone Dehumidifier Condensate Volume [m3]
   ZoneDehumid(ZoneDehumNum)%OutletAirTemp              = Node(AirInletNode)%Temp ! Zone Dehumidifier Outlet Air Temperature [C]
 
   RETURN
@@ -769,9 +769,9 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)    :: ZoneDehumNum   ! Index number of the current zone dehumidifier being simulated
-  REAL(r64), INTENT (IN)  :: QZnDehumidReq  ! Dehumidification load to be met (kg/s), negative value means dehumidification load
-  REAL(r64), INTENT (OUT) :: SensibleOutput ! Sensible (heating) output (W), sent to load predictor for next simulation time step
-  REAL(r64), INTENT (OUT) :: LatentOutput   ! Latent (dehumidification) output provided (kg/s)
+  REAL, INTENT (IN)  :: QZnDehumidReq  ! Dehumidification load to be met (kg/s), negative value means dehumidification load
+  REAL, INTENT (OUT) :: SensibleOutput ! Sensible (heating) output (W), sent to load predictor for next simulation time step
+  REAL, INTENT (OUT) :: LatentOutput   ! Latent (dehumidification) output provided (kg/s)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -783,46 +783,46 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: WaterRemovalRateFactor   ! Adjustment to  Rate Water Removal as a function of inlet air T and RH
-  REAL(r64)  :: WaterRemovalVolRate      ! Actual water removal rate at current inlet air conditions (L/day)
-  REAL(r64)  :: WaterRemovalMassRate     ! Actual water removal rate at current inlet air conditions (kg/s)
-  REAL(r64)  :: EnergyFactorAdjFactor    ! Adjustment to Rate Energy Factor as a function of inlet air T and RH
-  REAL(r64)  :: EnergyFactor             ! Actual Energy Factor as a function of inlet air T and RH
-  REAL(r64)  :: InletAirTemp             ! Dry-bulb temperature of air entering the dehumidifier (C)
-  REAL(r64)  :: InletAirHumRat           ! Humidity ratio of the air entering the dehumidifier (kg/kg)
-  REAL(r64)  :: InletAirRH               ! Relative humidity of air entering the dehumidifier (%)
-  REAL(r64)  :: OutletAirTemp            ! Dry-bulb temperature of air leaving the dehumidifier (C)
-  REAL(r64)  :: OutletAirHumRat          ! Humidity ratio of air leaving the dehumidifier (kg/kg)
-  REAL(r64)  :: PLR                      ! Part-load ratio = (dehumid load to be met)/(dehumid capacity of the dehumidifier)
-  REAL(r64)  :: PLF                      ! Part-load fraction (-), RuntimeFraction = PLR/PLF
-  REAL(r64)  :: RunTimeFraction          ! Dehumidifier runtime fraction (-)
-  REAL(r64)  :: ElectricPowerOnCycle     ! Electric power when dehumidifier is operating (W)
-  REAL(r64)  :: ElectricPowerAvg         ! Average electric power for this dehumidifier (W)
-  REAL(r64)  :: hfg                      ! Enthalpy of evaporation of inlet air (J/kg)
-  REAL(r64)  :: AirMassFlowRate          ! Air mass flow rate through this dehumidifier (kg/s)
-  REAL(r64)  :: Cp                       ! Heat capacity of inlet air (J/kg-C)
+  REAL  :: WaterRemovalRateFactor   ! Adjustment to  Rate Water Removal as a function of inlet air T and RH
+  REAL  :: WaterRemovalVolRate      ! Actual water removal rate at current inlet air conditions (L/day)
+  REAL  :: WaterRemovalMassRate     ! Actual water removal rate at current inlet air conditions (kg/s)
+  REAL  :: EnergyFactorAdjFactor    ! Adjustment to Rate Energy Factor as a function of inlet air T and RH
+  REAL  :: EnergyFactor             ! Actual Energy Factor as a function of inlet air T and RH
+  REAL  :: InletAirTemp             ! Dry-bulb temperature of air entering the dehumidifier (C)
+  REAL  :: InletAirHumRat           ! Humidity ratio of the air entering the dehumidifier (kg/kg)
+  REAL  :: InletAirRH               ! Relative humidity of air entering the dehumidifier (%)
+  REAL  :: OutletAirTemp            ! Dry-bulb temperature of air leaving the dehumidifier (C)
+  REAL  :: OutletAirHumRat          ! Humidity ratio of air leaving the dehumidifier (kg/kg)
+  REAL  :: PLR                      ! Part-load ratio = (dehumid load to be met)/(dehumid capacity of the dehumidifier)
+  REAL  :: PLF                      ! Part-load fraction (-), RuntimeFraction = PLR/PLF
+  REAL  :: RunTimeFraction          ! Dehumidifier runtime fraction (-)
+  REAL  :: ElectricPowerOnCycle     ! Electric power when dehumidifier is operating (W)
+  REAL  :: ElectricPowerAvg         ! Average electric power for this dehumidifier (W)
+  REAL  :: hfg                      ! Enthalpy of evaporation of inlet air (J/kg)
+  REAL  :: AirMassFlowRate          ! Air mass flow rate through this dehumidifier (kg/s)
+  REAL  :: Cp                       ! Heat capacity of inlet air (J/kg-C)
   INTEGER    :: AirInletNodeNum = 0      ! Node number for the inlet air to the dehumidifier
   INTEGER    :: AirOutletNodeNum = 0     ! Node number for the outlet air from the dehumidifier
 
-  SensibleOutput = 0.0d0
-  LatentOutput   = 0.0d0
-  WaterRemovalRateFactor = 0.0d0
-  AirMassFlowRate = 0.0d0
-  PLR = 0.0d0
-  PLF = 0.0d0
-  EnergyFactorAdjFactor = 0.0d0
-  RunTimeFraction = 0.0d0
-  ElectricPowerAvg = 0.0d0
-  ElectricPowerOnCycle = 0.0d0
+  SensibleOutput = 0.0
+  LatentOutput   = 0.0
+  WaterRemovalRateFactor = 0.0
+  AirMassFlowRate = 0.0
+  PLR = 0.0
+  PLF = 0.0
+  EnergyFactorAdjFactor = 0.0
+  RunTimeFraction = 0.0
+  ElectricPowerAvg = 0.0
+  ElectricPowerOnCycle = 0.0
 
   AirInletNodeNum  = ZoneDehumid(ZoneDehumNum)%AirInletNodeNum
   AirOutletNodeNum = ZoneDehumid(ZoneDehumNum)%AirOutletNodeNum
 
   InletAirTemp   = Node(AirInletNodeNum)%Temp
   InletAirHumRat = Node(AirInletNodeNum)%Humrat
-  InletAirRH     = 100.0d0 * PsyRhFnTdbWPb(InletAirTemp,InletAirHumRat,OutBaroPress,'CalcZoneDehumidifier') ! RH in percent (%)
+  InletAirRH     = 100.0 * PsyRhFnTdbWPb(InletAirTemp,InletAirHumRat,OutBaroPress,'CalcZoneDehumidifier') ! RH in percent (%)
 
-  IF (QZnDehumidReq .LT. 0.0d0 .AND. GetCurrentScheduleValue(ZoneDehumid(ZoneDehumNum)%SchedPtr) .GT. 0.0d0 .AND. &
+  IF (QZnDehumidReq .LT. 0.0 .AND. GetCurrentScheduleValue(ZoneDehumid(ZoneDehumNum)%SchedPtr) .GT. 0.0 .AND. &
       InletAirTemp .GE. ZoneDehumid(ZoneDehumNum)%MinInletAirTemp .AND. &
       InletAirTemp .LE. ZoneDehumid(ZoneDehumNum)%MaxInletAirTemp) THEN
     ! A dehumidification load is being requested and dehumidifier is available (schedule value > 0)
@@ -830,7 +830,7 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
 
     WaterRemovalRateFactor = CurveValue(ZoneDehumid(ZoneDehumNum)%WaterRemovalCurveIndex,InletAirTemp,InletAirRH)
     ! Warn user if curve output goes negative
-    IF (WaterRemovalRateFactor .LE. 0.0d0) THEN
+    IF (WaterRemovalRateFactor .LE. 0.0) THEN
       IF (ZoneDehumid(ZoneDehumNum)%WaterRemovalCurveErrorCount .LT. 1) THEN
         ZoneDehumid(ZoneDehumNum)%WaterRemovalCurveErrorCount = ZoneDehumid(ZoneDehumNum)%WaterRemovalCurveErrorCount + 1
         CALL ShowWarningError(TRIM(ZoneDehumid(ZoneDehumNum)%UnitType)//' "'//TRIM(ZoneDehumid(ZoneDehumNum)%Name)//'":')
@@ -846,25 +846,25 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                        ' Water Removal Rate Curve output is <= 0.0 warning continues...' &
                        , ZoneDehumid(ZoneDehumNum)%WaterRemovalCurveErrorIndex, WaterRemovalRateFactor, WaterRemovalRateFactor)
       END IF
-      WaterRemovalRateFactor = 0.0d0
+      WaterRemovalRateFactor = 0.0
     END IF
 
     WaterRemovalVolRate = WaterRemovalRateFactor * ZoneDehumid(ZoneDehumNum)%RatedWaterRemoval
 
-    WaterRemovalMassRate = WaterRemovalVolRate / (24.0d0 * SecInHour * 1000.0d0) * & !(L/d)/(24 hr/day *3600 sec/hr * 1000 L/m3)
-                           RhoH2O(MAX((InletAirTemp-11.0d0),1.0d0),'CalcZoneDehumidifier') ! Density of water, minimum temp = 1.0C
+    WaterRemovalMassRate = WaterRemovalVolRate / (24.0 * SecInHour * 1000.0) * & !(L/d)/(24 hr/day *3600 sec/hr * 1000 L/m3)
+                           RhoH2O(MAX((InletAirTemp-11.0),1.0),'CalcZoneDehumidifier') ! Density of water, minimum temp = 1.0C
 
-    IF (WaterRemovalMassRate .GT. 0.0d0) THEN
-      PLR = MAX(0.0d0, MIN(1.0d0, -QZnDehumidReq / WaterRemovalMassRate))
+    IF (WaterRemovalMassRate .GT. 0.0) THEN
+      PLR = MAX(0.0, MIN(1.0, -QZnDehumidReq / WaterRemovalMassRate))
     ELSE
-      PLR = 0.0d0
-      RunTimeFraction = 0.0d0
+      PLR = 0.0
+      RunTimeFraction = 0.0
     END IF
 
     EnergyFactorAdjFactor = CurveValue(ZoneDehumid(ZoneDehumNum)%EnergyFactorCurveIndex,InletAirTemp,InletAirRH)
 
     ! Warn user if curve output goes negative
-    IF (EnergyFactorAdjFactor .LE. 0.0d0) THEN
+    IF (EnergyFactorAdjFactor .LE. 0.0) THEN
       IF (ZoneDehumid(ZoneDehumNum)%EnergyFactorCurveErrorCount .LT. 1) THEN
         ZoneDehumid(ZoneDehumNum)%EnergyFactorCurveErrorCount = ZoneDehumid(ZoneDehumNum)%EnergyFactorCurveErrorCount + 1
         CALL ShowWarningError(TRIM(ZoneDehumid(ZoneDehumNum)%UnitType)//' "'//TRIM(ZoneDehumid(ZoneDehumNum)%Name)//'":')
@@ -880,9 +880,9 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                         ' Energy Factor Curve output is <= 0.0 warning continues...' &
                         , ZoneDehumid(ZoneDehumNum)%EnergyFactorCurveErrorIndex, EnergyFactorAdjFactor, EnergyFactorAdjFactor)
       END IF
-      ElectricPowerAvg = 0.0d0
-      PLR = 0.0d0
-      RunTimeFraction = 0.0d0
+      ElectricPowerAvg = 0.0
+      PLR = 0.0
+      RunTimeFraction = 0.0
     ELSE
     ! EnergyFactorAdjFactor is not negative, so proceed with calculations
       EnergyFactor = EnergyFactorAdjFactor * ZoneDehumid(ZoneDehumNum)%RatedEnergyFactor
@@ -890,10 +890,10 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
       IF (ZoneDehumid(ZoneDehumNum)%PartLoadCurveIndex .GT. 0) THEN
         PLF = CurveValue(ZoneDehumid(ZoneDehumNum)%PartLoadCurveIndex,PLR) ! Calculate part load fraction
       ELSE
-        PLF = 1.0d0
+        PLF = 1.0
       END IF
 
-      IF (PLF < 0.7d0) THEN
+      IF (PLF < 0.7) THEN
         IF (ZoneDehumid(ZoneDehumNum)%LowPLFErrorCount .LT. 1) THEN
           ZoneDehumid(ZoneDehumNum)%LowPLFErrorCount = ZoneDehumid(ZoneDehumNum)%LowPLFErrorCount + 1
           CALL ShowWarningError(TRIM(ZoneDehumid(ZoneDehumNum)%UnitType)//' "'//TRIM(ZoneDehumid(ZoneDehumNum)%Name)//'":')
@@ -907,10 +907,10 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                            ' Part Load Fraction Correlation Curve output < 0.7 warning continues...' &
                            , ZoneDehumid(ZoneDehumNum)%LowPLFErrorIndex, PLF, PLF)
         END IF
-        PLF = 0.7d0
+        PLF = 0.7
       END IF
 
-      IF (PLF > 1.0d0) THEN
+      IF (PLF > 1.0) THEN
         IF (ZoneDehumid(ZoneDehumNum)%HighPLFErrorCount .LT. 1) THEN
           ZoneDehumid(ZoneDehumNum)%HighPLFErrorCount = ZoneDehumid(ZoneDehumNum)%HighPLFErrorCount + 1
           CALL ShowWarningError(TRIM(ZoneDehumid(ZoneDehumNum)%UnitType)//' "'//TRIM(ZoneDehumid(ZoneDehumNum)%Name)//'":')
@@ -924,10 +924,10 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                            ' Part Load Fraction Correlation Curve output > 1.0 warning continues...' &
                            , ZoneDehumid(ZoneDehumNum)%HighPLFErrorIndex, PLF, PLF)
         END IF
-        PLF = 1.0d0
+        PLF = 1.0
       END IF
 
-      IF (PLF .GT. 0.0d0 .AND. PLF .GE. PLR) THEN
+      IF (PLF .GT. 0.0 .AND. PLF .GE. PLR) THEN
         RunTimeFraction = PLR/PLF ! Calculate dehumidifier runtime fraction
       ELSE
         IF (ZoneDehumid(ZoneDehumNum)%PLFPLRErrorCount .LT. 1) THEN
@@ -943,10 +943,10 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                            ' Part load fraction less than part load ratio warning continues...' &
                            , ZoneDehumid(ZoneDehumNum)%PLFPLRErrorIndex)
         END IF
-        RunTimeFraction = 1.0d0
+        RunTimeFraction = 1.0
       END IF
 
-      IF (RunTimeFraction > 1.0d0 .AND. ABS(RunTimeFraction-1.0d0) > 0.001d0) THEN
+      IF (RunTimeFraction > 1.0 .AND. ABS(RunTimeFraction-1.0) > 0.001) THEN
         IF (ZoneDehumid(ZoneDehumNum)%HighRTFErrorCount .LT. 1) THEN
           ZoneDehumid(ZoneDehumNum)%HighRTFErrorCount = ZoneDehumid(ZoneDehumNum)%HighRTFErrorCount + 1
           CALL ShowWarningError(TRIM(ZoneDehumid(ZoneDehumNum)%UnitType)//' "'//TRIM(ZoneDehumid(ZoneDehumNum)%Name)//'":')
@@ -960,14 +960,14 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
                            ' Runtime fraction for zone dehumidifier exceeded 1.0 warning continues...' &
                            , ZoneDehumid(ZoneDehumNum)%HighRTFErrorIndex, RunTimeFraction, RunTimeFraction)
         END IF
-        RunTimeFraction = 1.0d0
+        RunTimeFraction = 1.0
       END IF
 
       ! ElectricPowerOnCycle = Water removal volumetric rate (L/day) / (Energy Factor(L/kWh) * 24 hrs/day ) * 1000 Wh/kWh
-      ElectricPowerOnCycle = WaterRemovalVolRate / (EnergyFactor*24.0d0) * 1000.0d0 ! Watts
+      ElectricPowerOnCycle = WaterRemovalVolRate / (EnergyFactor*24.0) * 1000.0 ! Watts
       ! ElectricPowerAvg     = ElectricPowerOnCycle * RTF + (1-RTF)*OffCycleParsiticLoad
       ElectricPowerAvg     = ElectricPowerOnCycle * RunTimeFraction + & ! average Watts
-                             (1.0d0 - RunTimeFraction)*ZoneDehumid(ZoneDehumNum)%OffCycleParasiticLoad
+                             (1.0 - RunTimeFraction)*ZoneDehumid(ZoneDehumNum)%OffCycleParasiticLoad
     END IF
 
     LatentOutput = WaterRemovalMassRate * PLR ! Average moisture removal rate, kg/s, for this timestep
@@ -978,7 +978,7 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
     Node(AirInletNodeNum)%MassFlowRate = ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow * PLR
     AirMassFlowRate = Node(AirInletNodeNum)%MassFlowRate ! Average air mass flow for this timestep
     Cp = PsyCpAirFnWTdb(InletAirHumRat,InletAirTemp)     ! Heat capacity of air
-    IF (AirMassFlowRate .GT. 0.0d0 .AND. Cp .GT. 0.0d0) THEN
+    IF (AirMassFlowRate .GT. 0.0 .AND. Cp .GT. 0.0) THEN
       OutletAirTemp   = InletAirTemp + (ElectricPowerOnCycle + (WaterRemovalMassRate*hfg)) / &
                                        (ZoneDehumid(ZoneDehumNum)%RatedAirMassFlow * Cp)
       OutletAirHumRat = InletAirHumRat - LatentOutput / AirMassFlowRate
@@ -993,15 +993,15 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
     ! equal to inlet conditions and PLR = RTF = 0.0
     OutletAirTemp = InletAirTemp
     OutletAirHumRat = InletAirHumRat
-    PLR = 0.0d0
-    RunTimeFraction = 0.0d0
-    Node(AirInletNodeNum)%MassFlowRate = 0.0d0
+    PLR = 0.0
+    RunTimeFraction = 0.0
+    Node(AirInletNodeNum)%MassFlowRate = 0.0
     ! If available but didn't operate, then set electric power = off cycle parasitic load.
     ! Else, electric power = 0.0
-    IF (GetCurrentScheduleValue(ZoneDehumid(ZoneDehumNum)%SchedPtr) .GT. 0.0d0) THEN
+    IF (GetCurrentScheduleValue(ZoneDehumid(ZoneDehumNum)%SchedPtr) .GT. 0.0) THEN
       ElectricPowerAvg = ZoneDehumid(ZoneDehumNum)%OffCycleParasiticLoad ! off cycle parasitic is on entire timestep
     ELSE
-      ElectricPowerAvg = 0.0d0
+      ElectricPowerAvg = 0.0
     END IF
 
   END IF
@@ -1018,7 +1018,7 @@ SUBROUTINE CalcZoneDehumidifier(ZoneDehumNum,QZnDehumidReq,SensibleOutput,Latent
   ZoneDehumid(ZoneDehumNum)%WaterRemovalRate = LatentOutput   ! Report variable update, kg/s
   LatentOutput = - LatentOutput ! change sign... negative is dehumidification in zone air balance
 
-  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecPower=(1.0d0 - RunTimeFraction)*ZoneDehumid(ZoneDehumNum)%OffCycleParasiticLoad
+  ZoneDehumid(ZoneDehumNum)%OffCycleParasiticElecPower=(1.0 - RunTimeFraction)*ZoneDehumid(ZoneDehumNum)%OffCycleParasiticLoad
   ZoneDehumid(ZoneDehumNum)%ElecPower = ElectricPowerAvg
   ZoneDehumid(ZoneDehumNum)%DehumidPLR = PLR
   ZoneDehumid(ZoneDehumNum)%DehumidRTF = RunTimeFraction
@@ -1133,10 +1133,10 @@ SUBROUTINE ReportZoneDehumidifier(DehumidNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ReportingConstant ! Number of seconds per HVAC system time step, to convert from W (J/s) to J
-  REAL(r64) :: RhoWater          ! Density of condensate (water) being removed (kg/m3)
-  REAL(r64) :: InletAirTemp      ! Dry-bulb temperature of air entering the dehumidifier (C)
-  REAL(r64) :: OutletAirTemp     ! Dry-bulb temperature of air leaving the dehumidifier (C)
+  REAL :: ReportingConstant ! Number of seconds per HVAC system time step, to convert from W (J/s) to J
+  REAL :: RhoWater          ! Density of condensate (water) being removed (kg/m3)
+  REAL :: InletAirTemp      ! Dry-bulb temperature of air entering the dehumidifier (C)
+  REAL :: OutletAirTemp     ! Dry-bulb temperature of air leaving the dehumidifier (C)
   INTEGER   :: AirInletNodeNum   ! Node number corresponding to the air entering dehumidifier
 
 
@@ -1154,10 +1154,10 @@ SUBROUTINE ReportZoneDehumidifier(DehumidNum)
 
     AirInletNodeNum  = ZoneDehumid(DehumidNum)%AirInletNodeNum
     InletAirTemp     = Node(AirInletNodeNum)%Temp
-    OutletAirTemp    = MAX((InletAirTemp-11.0d0),1.0d0) ! Assume coil outlet air is 11C (20F) lower than inlet air temp
+    OutletAirTemp    = MAX((InletAirTemp-11.0),1.0) ! Assume coil outlet air is 11C (20F) lower than inlet air temp
     RhoWater = RhoH2O(OutletAirTemp,'ReportZoneDehumidifier') ! Density of water, minimum temp = 1.0 C
 
-    IF (RhoWater .GT. 0.0d0) THEN
+    IF (RhoWater .GT. 0.0) THEN
       ZoneDehumid(DehumidNum)%DehumidCondVolFlowRate = ZoneDehumid(DehumidNum)%WaterRemovalRate / RhoWater
     END IF
 

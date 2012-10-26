@@ -48,9 +48,9 @@ TYPE IndUnitData
   INTEGER                      :: UnitType_Num        =0   ! index to type of unit
   CHARACTER(len=MaxNameLength) :: Sched               =' ' ! availability schedule
   INTEGER                      :: SchedPtr            =0   ! index to schedule
-  REAL(r64)                    :: MaxTotAirVolFlow    =0.0 ! m3/s (autosizable)
-  REAL(r64)                    :: MaxTotAirMassFlow   =0.0 ! kg/s
-  REAL(r64)                    :: InducRatio          =0.0 ! ratio of induced air flow to primary air flow
+  REAL                    :: MaxTotAirVolFlow    =0.0 ! m3/s (autosizable)
+  REAL                    :: MaxTotAirMassFlow   =0.0 ! kg/s
+  REAL                    :: InducRatio          =0.0 ! ratio of induced air flow to primary air flow
   INTEGER                      :: PriAirInNode        =0   ! unit primary air inlet node number
   INTEGER                      :: SecAirInNode        =0   ! unit induced air inlet node number
   INTEGER                      :: OutAirNode          =0   ! unit air outlet node number
@@ -60,11 +60,11 @@ TYPE IndUnitData
   CHARACTER(len=MaxNameLength) :: HCoil               =' ' ! name of heating coil component
   INTEGER                      :: HCoil_Num           =0   ! index to this coil
   INTEGER                      :: HCoil_PlantTypeNum  =0   !
-  REAL(r64)                    :: MaxVolHotWaterFlow  =0.0 ! m3/s (autosizable)
-  REAL(r64)                    :: MaxHotWaterFlow     =0.0 ! kg/s
-  REAL(r64)                    :: MinVolHotWaterFlow  =0.0 ! m3/s
-  REAL(r64)                    :: MinHotWaterFlow     =0.0 ! kg/s
-  REAL(r64)                    :: HotControlOffset    =0.0 ! control tolerance
+  REAL                    :: MaxVolHotWaterFlow  =0.0 ! m3/s (autosizable)
+  REAL                    :: MaxHotWaterFlow     =0.0 ! kg/s
+  REAL                    :: MinVolHotWaterFlow  =0.0 ! m3/s
+  REAL                    :: MinHotWaterFlow     =0.0 ! kg/s
+  REAL                    :: HotControlOffset    =0.0 ! control tolerance
   INTEGER                      :: HWLoopNum           =0   ! index for plant loop with hot water coil
   INTEGER                      :: HWLoopSide          =0   ! index for plant loop side for hot water coil
   INTEGER                      :: HWBranchNum         =0   ! index for plant branch for hot water coil
@@ -77,11 +77,11 @@ TYPE IndUnitData
   CHARACTER(len=MaxNameLength) :: CCoil               =' ' ! name of cooling coil component
   INTEGER                      :: CCoil_Num           =0   ! index to this coil
   INTEGER                      :: CCoil_PlantTypeNum  =0   !
-  REAL(r64)                    :: MaxVolColdWaterFlow =0.0 ! m3/s (autosizable)
-  REAL(r64)                    :: MaxColdWaterFlow    =0.0 ! kg/s
-  REAL(r64)                    :: MinVolColdWaterFlow =0.0 ! m3/s
-  REAL(r64)                    :: MinColdWaterFlow    =0.0 ! kg/s
-  REAL(r64)                    :: ColdControlOffset   =0.0 ! control tolerance
+  REAL                    :: MaxVolColdWaterFlow =0.0 ! m3/s (autosizable)
+  REAL                    :: MaxColdWaterFlow    =0.0 ! kg/s
+  REAL                    :: MinVolColdWaterFlow =0.0 ! m3/s
+  REAL                    :: MinColdWaterFlow    =0.0 ! kg/s
+  REAL                    :: ColdControlOffset   =0.0 ! control tolerance
   INTEGER                      :: CWLoopNum           =0   ! index for plant loop with chilled water coil
   INTEGER                      :: CWLoopSide          =0   ! index for plant loop side for chilled water coil
   INTEGER                      :: CWBranchNum         =0   ! index for plant branch for chilled water coil
@@ -92,8 +92,8 @@ TYPE IndUnitData
 
   CHARACTER(len=MaxNameLength) :: MixerName           =' ' ! name of air mixer component
   INTEGER                      :: Mixer_Num           =0   ! index to this mixer
-  REAL(r64)                    :: MaxPriAirMassFlow   =0.0 ! kg/s
-  REAL(r64)                    :: MaxSecAirMassFlow   =0.0 ! kg/s
+  REAL                    :: MaxPriAirMassFlow   =0.0 ! kg/s
+  REAL                    :: MaxSecAirMassFlow   =0.0 ! kg/s
   INTEGER                      :: ADUNum              =0   ! index of corresponding air distribution unit
 END TYPE IndUnitData
           ! MODULE VARIABLE DECLARATIONS:
@@ -278,7 +278,7 @@ SUBROUTINE GetIndUnits
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   INTEGER :: NumAlphas=0  ! Number of Alphas for each GetObjectItem call
@@ -530,8 +530,8 @@ SUBROUTINE InitIndUnit(IUNum,FirstHVACIteration)
   INTEGER             :: OutletNode      ! unit air outlet node
   INTEGER             :: HotConNode      ! hot water control node number
   INTEGER             :: ColdConNode     ! cold water control node  number
-  REAL(r64)           :: IndRat          ! unit induction ratio
-  REAL(r64)           :: RhoAir          ! air density at outside pressure and standard temperature and humidity
+  REAL           :: IndRat          ! unit induction ratio
+  REAL           :: RhoAir          ! air density at outside pressure and standard temperature and humidity
   LOGICAL,SAVE             :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MySizeFlag
@@ -539,7 +539,7 @@ SUBROUTINE InitIndUnit(IUNum,FirstHVACIteration)
 
   LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   Integer             :: Loop  ! Loop checking control variable
-  REAL(r64)           :: rho ! local fluid density
+  REAL           :: rho ! local fluid density
   INTEGER  :: HWOutletNode ! local node index for hot water coil's outlet node
   INTEGER  :: CWOutletNode ! local node index for cold water coil's outlet node
   LOGICAL  :: errFlag
@@ -633,7 +633,7 @@ SUBROUTINE InitIndUnit(IUNum,FirstHVACIteration)
     IF (HotConNode.GT.0 .AND. .NOT. MyPlantScanFlag(IUNum)) THEN
 
       rho = GetDensityGlycol(PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidName,  &
-                                  60.d0, &
+                                  60., &
                                   PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidIndex,&
                                   'InitIndUnit' )
       IndUnit(IUNum)%MaxHotWaterFlow = rho * IndUnit(IUNum)%MaxVolHotWaterFlow
@@ -758,15 +758,15 @@ SUBROUTINE SizeIndUnit(IUNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
-  REAL(r64)           :: DesCoilLoad
-  REAL(r64)           :: DesPriVolFlow
-  REAL(r64)           :: RhoAir
-  REAL(r64)           :: CpAir
+  REAL           :: DesCoilLoad
+  REAL           :: DesPriVolFlow
+  REAL           :: RhoAir
+  REAL           :: CpAir
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   LOGICAL             :: ErrorsFound
-  REAL(r64)           :: Cp ! local fluid specific heat
-  REAL(r64)           :: rho ! local fluid density
+  REAL           :: Cp ! local fluid specific heat
+  REAL           :: rho ! local fluid density
 
   PltSizHeatNum = 0
   PltSizCoolNum = 0
@@ -807,7 +807,7 @@ SUBROUTINE SizeIndUnit(IUNum)
         IF (PltSizHeatNum > 0) THEN
 
           IF (TermUnitFinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow >= SmallAirVolFlow) THEN
-            DesPriVolFlow = IndUnit(IUNum)%MaxTotAirVolFlow / (1.d0+IndUnit(IUNum)%InducRatio)
+            DesPriVolFlow = IndUnit(IUNum)%MaxTotAirVolFlow / (1.+IndUnit(IUNum)%InducRatio)
             CpAir = PsyCpAirFnWTdb(TermUnitFinalZoneSizing(CurZoneEqNum)%HeatDesHumRat,  &
                                      TermUnitFinalZoneSizing(CurZoneEqNum)%HeatDesTemp)
             ! the design heating coil load is the zone load minus whatever the central system does. Note that
@@ -823,19 +823,19 @@ SUBROUTINE SizeIndUnit(IUNum)
             END IF
 
             Cp = GetSpecificHeatGlycol(PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidName, &
-                                       60.d0, &
+                                       60., &
                                        PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidIndex, &
                                        'SizeIndUnit' )
 
             rho = GetDensityGlycol( PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidName, &
-                                       60.d0, &
+                                       60., &
                                        PlantLoop(IndUnit(IUNum)%HWLoopNum)%FluidIndex, &
                                        'SizeIndUnit' )
 
             IndUnit(IUNum)%MaxVolHotWaterFlow = DesCoilLoad / &
                                                ( PlantSizData(PltSizHeatNum)%DeltaT * &
                                                  Cp * rho )
-            IndUnit(IUNum)%MaxVolHotWaterFlow = MAX(IndUnit(IUNum)%MaxVolHotWaterFlow,0.0d0)
+            IndUnit(IUNum)%MaxVolHotWaterFlow = MAX(IndUnit(IUNum)%MaxVolHotWaterFlow,0.0)
           ELSE
             IndUnit(IUNum)%MaxVolHotWaterFlow = 0.0
           END IF
@@ -875,7 +875,7 @@ IF (IndUnit(IUNum)%MaxVolColdWaterFlow == AutoSize) THEN
         IF (PltSizCoolNum > 0) THEN
 
           IF (TermUnitFinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow >= SmallAirVolFlow) THEN
-            DesPriVolFlow = IndUnit(IUNum)%MaxTotAirVolFlow / (1.d0+IndUnit(IUNum)%InducRatio)
+            DesPriVolFlow = IndUnit(IUNum)%MaxTotAirVolFlow / (1.+IndUnit(IUNum)%InducRatio)
             CpAir = PsyCpAirFnWTdb(TermUnitFinalZoneSizing(CurZoneEqNum)%CoolDesHumRat,  &
                                    TermUnitFinalZoneSizing(CurZoneEqNum)%CoolDesTemp)
             ! the design cooling coil load is the zone load minus whatever the central system does. Note that
@@ -891,12 +891,12 @@ IF (IndUnit(IUNum)%MaxVolColdWaterFlow == AutoSize) THEN
             END IF
 
             Cp = GetSpecificHeatGlycol(PlantLoop(IndUnit(IUNum)%CWLoopNum)%FluidName, &
-                                       5.0d0, &
+                                       5.0, &
                                        PlantLoop(IndUnit(IUNum)%CWLoopNum)%FluidIndex, &
                                        'SizeIndUnit' )
 
             rho = GetDensityGlycol( PlantLoop(IndUnit(IUNum)%CWLoopNum)%FluidName, &
-                                       5.0d0, &
+                                       5.0, &
                                        PlantLoop(IndUnit(IUNum)%CWLoopNum)%FluidIndex, &
                                        'SizeIndUnit' )
 
@@ -904,7 +904,7 @@ IF (IndUnit(IUNum)%MaxVolColdWaterFlow == AutoSize) THEN
             IndUnit(IUNum)%MaxVolColdWaterFlow = DesCoilLoad / &
                                                ( PlantSizData(PltSizCoolNum)%DeltaT * &
                                                  Cp * rho )
-            IndUnit(IUNum)%MaxVolColdWaterFlow = MAX(IndUnit(IUNum)%MaxVolColdWaterFlow,0.0d0)
+            IndUnit(IUNum)%MaxVolColdWaterFlow = MAX(IndUnit(IUNum)%MaxVolColdWaterFlow,0.0)
           ELSE
             IndUnit(IUNum)%MaxVolColdWaterFlow = 0.0
           END IF
@@ -930,7 +930,7 @@ IF (IndUnit(IUNum)%MaxVolColdWaterFlow == AutoSize) THEN
   IF (CurZoneEqNum > 0) THEN
     ! note we save the induced air flow for use by the hw and cw coil sizing routines
     TermUnitSizing(CurZoneEqNum)%AirVolFlow = IndUnit(IUNum)%MaxTotAirVolFlow * &
-      IndUnit(IUNum)%InducRatio / (1.d0+ IndUnit(IUNum)%InducRatio)
+      IndUnit(IUNum)%InducRatio / (1.+ IndUnit(IUNum)%InducRatio)
     ! save the max hot and cold water flows for use in coil sizing
     TermUnitSizing(CurZoneEqNum)%MaxHWVolFlow = IndUnit(IUNum)%MaxVolHotWaterFlow
     TermUnitSizing(CurZoneEqNum)%MaxCWVolFlow = IndUnit(IUNum)%MaxVolColdWaterFlow
@@ -997,29 +997,29 @@ SUBROUTINE SimFourPipeIndUnit(IUNum,ZoneNum,ZoneNodeNum,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: QZnReq            ! heating or cooling needed by zone [Watts]
-  REAL(r64)    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
-  REAL(r64)    :: QToCoolSetPt      ! [W]  remaining load to cooling setpoint
-  REAL(r64)    :: PowerMet          ! power supplied
+  REAL    :: QZnReq            ! heating or cooling needed by zone [Watts]
+  REAL    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
+  REAL    :: QToCoolSetPt      ! [W]  remaining load to cooling setpoint
+  REAL    :: PowerMet          ! power supplied
   LOGICAL :: UnitOn            ! TRUE if unit is on
-  REAL(r64)    :: MaxHotWaterFlow   ! maximum water flow for heating [kg/s]
-  REAL(r64)    :: MinHotWaterFlow   ! minimum water flow for heating [kg/s]
-  REAL(r64)    :: MaxColdWaterFlow  ! maximum water flow for cooling [kg/s]
-  REAL(r64)    :: MinColdWaterFlow  ! minimum water flow for cooling [kg/s]
-  REAL(r64)    :: HWFlow            ! hot water flow [kg/s]
-  REAL(r64)    :: CWFlow            ! cold water flow [kg/s]
+  REAL    :: MaxHotWaterFlow   ! maximum water flow for heating [kg/s]
+  REAL    :: MinHotWaterFlow   ! minimum water flow for heating [kg/s]
+  REAL    :: MaxColdWaterFlow  ! maximum water flow for cooling [kg/s]
+  REAL    :: MinColdWaterFlow  ! minimum water flow for cooling [kg/s]
+  REAL    :: HWFlow            ! hot water flow [kg/s]
+  REAL    :: CWFlow            ! cold water flow [kg/s]
   INTEGER :: PriNode           ! unit primary air inlet node
   INTEGER :: SecNode           ! unit secondary air inlet node
   INTEGER :: OutletNode        ! unit air outlet node
   INTEGER :: HotControlNode    ! hot water coil inlet node
   INTEGER :: ColdControlNode   ! cold water coil inlet node
-  REAL(r64)    :: QPriOnly          ! unit output with no zone coils active
-  REAL(r64)    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
-  REAL(r64)    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
-  REAL(r64)    :: InducRat          ! Induction Ratio
-  REAL(r64), DIMENSION(7)  :: Par
+  REAL    :: QPriOnly          ! unit output with no zone coils active
+  REAL    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
+  REAL    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
+  REAL    :: InducRat          ! Induction Ratio
+  REAL, DIMENSION(7)  :: Par
   INTEGER :: SolFlag
-  REAL(r64) :: ErrTolerance
+  REAL :: ErrTolerance
   INTEGER   :: HWOutletNode
   INTEGER   :: CWOutletNode
 
@@ -1212,9 +1212,9 @@ SUBROUTINE CalcFourPipeIndUnit(IUNum,FirstHVACIteration,ZoneNode,HWFlow,CWFlow,L
   INTEGER, INTENT (IN)  :: IUNum         ! Unit index
   LOGICAL, INTENT (IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
   INTEGER, INTENT (IN)  :: ZoneNode           ! zone node number
-  REAL(r64),    INTENT (IN)  :: HWFlow             ! hot water flow (kg/s)
-  REAL(r64),    INTENT (IN)  :: CWFlow             ! cold water flow (kg/s)
-  REAL(r64),    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
+  REAL,    INTENT (IN)  :: HWFlow             ! hot water flow (kg/s)
+  REAL,    INTENT (IN)  :: CWFlow             ! cold water flow (kg/s)
+  REAL,    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1230,13 +1230,13 @@ SUBROUTINE CalcFourPipeIndUnit(IUNum,FirstHVACIteration,ZoneNode,HWFlow,CWFlow,L
   INTEGER :: PriNode           ! unit primary air inlet node
   INTEGER :: HotControlNode    ! the hot water inlet node
   INTEGER :: ColdControlNode   ! the cold water inlet node
-  REAL(r64)    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
-  REAL(r64)    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
-  REAL(r64)    :: TotAirMassFlow    ! total air mass flow rate [kg/s]
-  REAL(r64)    :: InducRat          ! induction ratio
-  REAL(r64)    :: CpAirZn           ! zone air specific heat [J/kg-C]
-  REAL(r64)    :: mdotHW  ! local temporary hot water flow rate [kg/s]
-  REAL(r64)    :: mdotCW  ! local temporary cold water flow rate [kg/s]
+  REAL    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
+  REAL    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
+  REAL    :: TotAirMassFlow    ! total air mass flow rate [kg/s]
+  REAL    :: InducRat          ! induction ratio
+  REAL    :: CpAirZn           ! zone air specific heat [J/kg-C]
+  REAL    :: mdotHW  ! local temporary hot water flow rate [kg/s]
+  REAL    :: mdotCW  ! local temporary cold water flow rate [kg/s]
   INTEGER      :: HWOutletNode
   INTEGER      :: CWOutletNode
 
@@ -1311,9 +1311,9 @@ FUNCTION FourPipeIUHeatingResidual(HWFlow, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: HWFlow ! hot water flow rate in kg/s
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(5) is the requested zone load
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL, INTENT(IN)  :: HWFlow ! hot water flow rate in kg/s
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(5) is the requested zone load
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1328,8 +1328,8 @@ FUNCTION FourPipeIUHeatingResidual(HWFlow, Par) RESULT (Residuum)
   INTEGER :: IUIndex
   LOGICAL :: FirstHVACSoln
   INTEGER :: ZoneNodeIndex
-  REAL(r64)    :: MinCWFlow
-  REAL(r64)    :: UnitOutput
+  REAL    :: MinCWFlow
+  REAL    :: UnitOutput
 
   IUIndex = INT(Par(1))
   IF (Par(2) > 0.0) THEN
@@ -1369,9 +1369,9 @@ FUNCTION FourPipeIUCoolingResidual(CWFlow, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: CWFlow ! cold water flow rate in kg/s
-    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(5) is the requested zone load
-    REAL(r64)         :: Residuum ! residual to be minimized to zero
+    REAL, INTENT(IN)  :: CWFlow ! cold water flow rate in kg/s
+    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(5) is the requested zone load
+    REAL         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1386,8 +1386,8 @@ FUNCTION FourPipeIUCoolingResidual(CWFlow, Par) RESULT (Residuum)
   INTEGER :: IUIndex
   LOGICAL :: FirstHVACSoln
   INTEGER :: ZoneNodeIndex
-  REAL(r64)    :: MinHWFlow
-  REAL(r64)    :: UnitOutput
+  REAL    :: MinHWFlow
+  REAL    :: UnitOutput
 
   IUIndex = INT(Par(1))
   IF (Par(2) > 0.0) THEN

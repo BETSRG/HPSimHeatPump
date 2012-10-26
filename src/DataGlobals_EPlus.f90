@@ -47,23 +47,23 @@ INTEGER, PARAMETER :: ksRunPeriodWeather = 3
 INTEGER, PARAMETER :: ZoneTSReporting = 1  ! value for Zone Time Step Reporting (UpdateDataAndReport)
 INTEGER, PARAMETER :: HVACTSReporting = 2  ! value for HVAC Time Step Reporting (UpdateDataAndReport)
 
-REAL(r64), PARAMETER    :: MaxEXPArg = 709.78        ! maximum exponent in EXP() function
-REAL(r64), PARAMETER    :: Pi = 3.141592653589793D0   ! Pi 3.1415926535897932384626435
-REAL(r64), PARAMETER    :: PiOvr2 = Pi/2.D0          ! Pi/2
-REAL(r64), PARAMETER    :: DegToRadians = Pi/180.D0  ! Conversion for Degrees to Radians
-REAL(r64), PARAMETER    :: SecInHour = 3600.0D0      ! Conversion for hours to seconds
-REAL(r64), PARAMETER    :: HoursInDay = 24.0D0       ! Number of Hourse in Day
-REAL(r64), PARAMETER    :: SecsInDay = SecInHour*HoursInDay  ! Number of seconds in Day
-REAL(r64), PARAMETER    :: BigNumber=HUGE(1.0d0)     ! Max Number real used for initializations
-REAL(r64), PARAMETER    :: rTinyValue=EPSILON(1.0d0) ! Tiny value to replace use of TINY(x)
+REAL, PARAMETER    :: MaxEXPArg = 709.78        ! maximum exponent in EXP() function
+REAL, PARAMETER    :: Pi = 3.141592653589793   ! Pi 3.1415926535897932384626435
+REAL, PARAMETER    :: PiOvr2 = Pi/2.          ! Pi/2
+REAL, PARAMETER    :: DegToRadians = Pi/180.  ! Conversion for Degrees to Radians
+REAL, PARAMETER    :: SecInHour = 3600.0      ! Conversion for hours to seconds
+REAL, PARAMETER    :: HoursInDay = 24.0       ! Number of Hourse in Day
+REAL, PARAMETER    :: SecsInDay = SecInHour*HoursInDay  ! Number of seconds in Day
+REAL, PARAMETER    :: BigNumber=HUGE(1.0)     ! Max Number real used for initializations
+REAL, PARAMETER    :: rTinyValue=EPSILON(1.0) ! Tiny value to replace use of TINY(x)
 INTEGER, PARAMETER :: MaxNameLength = 100     ! Maximum Name Length in Characters -- should be the same
                                               ! as MaxAlphaArgLength in InputProcessor module
 
-REAL(r64), PARAMETER    :: KelvinConv = 273.15d0     ! Conversion factor for C to K and K to C
-REAL(r64), PARAMETER    :: InitConvTemp = 5.05d0     ! [deg C], standard init vol to mass flow conversion temp
-REAL(r64), PARAMETER    :: AutoCalculate = -99999.d0 ! automatically calculate some fields.
+REAL, PARAMETER    :: KelvinConv = 273.15     ! Conversion factor for C to K and K to C
+REAL, PARAMETER    :: InitConvTemp = 5.05     ! [deg C], standard init vol to mass flow conversion temp
+REAL, PARAMETER    :: AutoCalculate = -99999. ! automatically calculate some fields.
 
-REAL(r64), PARAMETER    :: StefanBoltzmann = 5.6697D-8   ! Stefan-Boltzmann constant in W/(m2*K4)
+REAL, PARAMETER    :: StefanBoltzmann = 5.6697D-8   ! Stefan-Boltzmann constant in W/(m2*K4)
 
 ! Parameters for EMS Calling Points
 INTEGER, PARAMETER :: emsCallFromZoneSizing                           = 1 ! Indentify where EMS called from
@@ -107,13 +107,13 @@ LOGICAL :: EndDayFlag        =.false.   ! True at the end of each day (last time
 LOGICAL :: EndHourFlag       =.false.   ! True at the end of each hour (last time step of hour)
 INTEGER :: PreviousHour      =0   ! Previous Hour Index
 INTEGER :: HourOfDay         =0   ! Counter for hours in a simulation day
-REAL(r64) :: WeightPreviousHour=0.0D0   ! Weighting of value for previous hour
-REAL(r64) :: WeightNow=0.0D0            ! Weighting of value for current hour
+REAL :: WeightPreviousHour=0.0   ! Weighting of value for previous hour
+REAL :: WeightNow=0.0            ! Weighting of value for current hour
 INTEGER :: NumOfDayInEnvrn      =0 ! Number of days in the simulation for a particular environment
 INTEGER :: NumOfTimeStepInHour  =0 ! Number of time steps in each hour of the simulation
 INTEGER :: NumOfZones           =0 ! Total number of Zones for simulation
 INTEGER :: TimeStep             =0 ! Counter for time steps (fractional hours)
-REAL(r64) :: TimeStepZone=0.0d0         ! Zone time step in fractional hours
+REAL :: TimeStepZone=0.0         ! Zone time step in fractional hours
 LOGICAL :: WarmupFlag           =.false. ! True during the warmup portion of a simulation
 INTEGER :: OutputFileStandard   =0 ! Unit number for the standard output file (hourly data only)
 INTEGER :: StdOutputRecordCount =0 ! Count of Standard output records
@@ -143,7 +143,7 @@ LOGICAL :: DisplayUnusedSchedules=.false. ! True when selection for  "DisplayUnu
 LOGICAL :: DisplayAdvancedReportVariables=.false. ! True when selection for  "DisplayAdvancedReportVariables" is entered
 LOGICAL :: DisplayZoneAirHeatBalanceOffBalance=.false. ! True when selection for  "DisplayZoneAirHeatBalanceOffBalance" is entered
 LOGICAL :: CreateMinimalSurfaceVariables=.false. ! True when selection for  "CreateMinimalSurfaceVariables" is entered
-REAL(r64) :: CurrentTime=0.0D0 ! CurrentTime, in fractional hours, from start of day. Uses Loads time step.
+REAL :: CurrentTime=0.0 ! CurrentTime, in fractional hours, from start of day. Uses Loads time step.
 INTEGER :: SimTimeSteps    =0     ! Number of (Loads) timesteps since beginning of run period (environment).
 INTEGER :: MinutesPerTimeStep   ! Minutes per time step calculated from NumTimeStepInHour (number of minutes per load time step)
 LOGICAL :: MetersHaveBeenInitialized=.false.

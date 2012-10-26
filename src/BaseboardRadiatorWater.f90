@@ -57,39 +57,39 @@ CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Water='ZoneHVAC:Baseboard:Radiant
     INTEGER :: TotSurfToDistrib         = 0
     INTEGER :: ControlCompTypeNum       = 0
     INTEGER :: CompErrIndex             = 0
-    REAL(r64) :: AirMassFlowRate        =0.0
-    REAL(r64) :: AirMassFlowRateStd     =0.0
-    REAL(r64) :: WaterTempAvg           =0.0
-    REAL(r64) :: RatedCapacity          =0.0
-    REAL(r64) :: UA                     =0.0
-    REAL(r64) :: Offset                 =0.0
-    REAL(r64) :: WaterMassFlowRate      =0.0
-    REAL(r64) :: WaterMassFlowRateMax   =0.0
-    REAL(r64) :: WaterMassFlowRateStd   =0.0
-    REAL(r64) :: WaterVolFlowRateMax    =0.0
-    REAL(r64) :: WaterInletTempStd      =0.0
-    REAL(r64) :: WaterInletTemp         =0.0
-    REAL(r64) :: WaterInletEnthalpy     =0.0
-    REAL(r64) :: WaterOutletTempStd     =0.0
-    REAL(r64) :: WaterOutletTemp        =0.0
-    REAL(r64) :: WaterOutletEnthalpy    =0.0
-    REAL(r64) :: AirInletTempStd        =0.0
-    REAL(r64) :: AirInletTemp           =0.0
-    REAL(r64) :: AirOutletTemp          =0.0
-    REAL(r64) :: AirInletHumRat         =0.0
-    REAL(r64) :: AirOutletTempStd       =0.0
-    REAL(r64) :: FracRadiant            =0.0
-    REAL(r64) :: FracConvect            =0.0
-    REAL(r64) :: FracDistribPerson      =0.0
-    REAL(r64),   ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
-    REAL(r64) :: TotPower               =0.0
-    REAL(r64) :: Power                  =0.0
-    REAL(r64) :: ConvPower              =0.0
-    REAL(r64) :: RadPower               =0.0
-    REAL(r64) :: TotEnergy              =0.0
-    REAL(r64) :: Energy                 =0.0
-    REAL(r64) :: ConvEnergy             =0.0
-    REAL(r64) :: RadEnergy              =0.0
+    REAL :: AirMassFlowRate        =0.0
+    REAL :: AirMassFlowRateStd     =0.0
+    REAL :: WaterTempAvg           =0.0
+    REAL :: RatedCapacity          =0.0
+    REAL :: UA                     =0.0
+    REAL :: Offset                 =0.0
+    REAL :: WaterMassFlowRate      =0.0
+    REAL :: WaterMassFlowRateMax   =0.0
+    REAL :: WaterMassFlowRateStd   =0.0
+    REAL :: WaterVolFlowRateMax    =0.0
+    REAL :: WaterInletTempStd      =0.0
+    REAL :: WaterInletTemp         =0.0
+    REAL :: WaterInletEnthalpy     =0.0
+    REAL :: WaterOutletTempStd     =0.0
+    REAL :: WaterOutletTemp        =0.0
+    REAL :: WaterOutletEnthalpy    =0.0
+    REAL :: AirInletTempStd        =0.0
+    REAL :: AirInletTemp           =0.0
+    REAL :: AirOutletTemp          =0.0
+    REAL :: AirInletHumRat         =0.0
+    REAL :: AirOutletTempStd       =0.0
+    REAL :: FracRadiant            =0.0
+    REAL :: FracConvect            =0.0
+    REAL :: FracDistribPerson      =0.0
+    REAL,   ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
+    REAL :: TotPower               =0.0
+    REAL :: Power                  =0.0
+    REAL :: ConvPower              =0.0
+    REAL :: RadPower               =0.0
+    REAL :: TotEnergy              =0.0
+    REAL :: Energy                 =0.0
+    REAL :: ConvEnergy             =0.0
+    REAL :: RadEnergy              =0.0
     INTEGER   :: LoopNum                =0  ! plant loop index
     INTEGER   :: LoopSideNum            =0  ! plant loop side index
     INTEGER   :: BranchNum              =0  ! plant loop branch index
@@ -103,14 +103,14 @@ CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Water='ZoneHVAC:Baseboard:Radiant
   !MODULE VARIABLE DECLARATIONS:
   TYPE (HWBaseboardParams), ALLOCATABLE, DIMENSION(:) :: HWBaseboard
   INTEGER :: NumHWBaseboards = 0
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBRadSource ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBRadSrcAvg ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBRadSource ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBRadSrcAvg ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
 
   ! Record keeping variables used to calculate QBBRadSrcAvg locally
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastQBBRadSrc        ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastQBBRadSrc        ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: MySizeFlag
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: CheckEquipName
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: SetLoopIndexFlag       ! get loop number flag
@@ -165,7 +165,7 @@ CONTAINS
     INTEGER, INTENT(IN)          :: ControlledZoneNum
     INTEGER, INTENT(INOUT)       :: CompIndex
     LOGICAL, INTENT(IN)          :: FirstHVACIteration
-    REAL(r64),    INTENT(OUT)    :: PowerMet
+    REAL,    INTENT(OUT)    :: PowerMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     INTEGER, PARAMETER :: MaxIter = 30
@@ -179,9 +179,9 @@ CONTAINS
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER      :: BaseboardNum           ! Index of unit in baseboard array
     LOGICAL,SAVE :: GetInputFlag = .TRUE.  ! One time get input flag
-    REAL(r64)    :: QZnReq                 ! Zone load not yet satisfied
-    REAL(r64)    :: MaxWaterFlow
-    REAL(r64)    :: MinWaterFlow
+    REAL    :: QZnReq                 ! Zone load not yet satisfied
+    REAL    :: MaxWaterFlow
+    REAL    :: MinWaterFlow
 
     IF (GetInputFlag) THEN
       CALL GetHWBaseboardInput
@@ -283,7 +283,7 @@ CONTAINS
 
           ! USE STATEMENTS:
     USE DataLoopNode, ONLY: Node, NodeType_Water, NodeConnectionType_Inlet, NodeConnectionType_Outlet, ObjectIsNotParent
-!unused0909    USE DataGlobals,           ONLY: NumOfZones
+!unuse909    USE DataGlobals,           ONLY: NumOfZones
     USE InputProcessor,        ONLY: GetNumObjectsFound, GetObjectItem, FindItemInList, SameString, VerifyName
     USE NodeInputManager,      ONLY: GetOnlySingleNode
     USE BranchNodeConnections, ONLY: TestCompSet
@@ -301,18 +301,18 @@ CONTAINS
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     CHARACTER(len=*), PARAMETER :: RoutineName='GetHWBaseboardInput:'
-    REAL(r64), PARAMETER :: MaxFraction           = 1.0d0
-    REAL(r64), PARAMETER :: MinFraction           = 0.0d0
-    REAL(r64), PARAMETER :: MaxWaterTempAvg       = 150.0d0    ! Maximum limit of average water temperature in degree C
-    REAL(r64), PARAMETER :: MinWaterTempAvg       = 20.0d0     ! Minimum limit of average water temperature in degree C
-    REAL(r64), PARAMETER :: HighWaterMassFlowRate = 10.0d0     ! Maximum limit of water mass flow rate in kg/s
-    REAL(r64), PARAMETER :: LowWaterMassFlowRate  = 0.00001d0  ! Minimum limit of water mass flow rate in kg/s
-    REAL(r64), PARAMETER :: MaxWaterFlowRate      = 10.0d0     ! Maximum limit of water volume flow rate in m3/s
-    REAL(r64), PARAMETER :: MinWaterFlowRate      = 0.00001d0  ! Minimum limit of water volume flow rate in m3/s
-    REAL(r64), PARAMETER :: WaterTempAvgDefault   = 87.78d0    ! Default water mass flow rate in kg/s
-    REAL(r64), PARAMETER :: WaterMassFlowDefault  = 0.063d0    ! Default water mass flow rate in kg/s
-    REAL(r64), PARAMETER :: AirInletTempStd       = 18.0d0     ! Standard air inlet temperature in degree C
-    REAL(r64), PARAMETER :: CPAirStd              = 1005.0d0   ! Average specific heat of air at between 25C and 40C in J/kg-k
+    REAL, PARAMETER :: MaxFraction           = 1.0
+    REAL, PARAMETER :: MinFraction           = 0.0
+    REAL, PARAMETER :: MaxWaterTempAvg       = 150.0    ! Maximum limit of average water temperature in degree C
+    REAL, PARAMETER :: MinWaterTempAvg       = 20.0     ! Minimum limit of average water temperature in degree C
+    REAL, PARAMETER :: HighWaterMassFlowRate = 10.0     ! Maximum limit of water mass flow rate in kg/s
+    REAL, PARAMETER :: LowWaterMassFlowRate  = 0.00001  ! Minimum limit of water mass flow rate in kg/s
+    REAL, PARAMETER :: MaxWaterFlowRate      = 10.0     ! Maximum limit of water volume flow rate in m3/s
+    REAL, PARAMETER :: MinWaterFlowRate      = 0.00001  ! Minimum limit of water volume flow rate in m3/s
+    REAL, PARAMETER :: WaterTempAvgDefault   = 87.78    ! Default water mass flow rate in kg/s
+    REAL, PARAMETER :: WaterMassFlowDefault  = 0.063    ! Default water mass flow rate in kg/s
+    REAL, PARAMETER :: AirInletTempStd       = 18.0     ! Standard air inlet temperature in degree C
+    REAL, PARAMETER :: CPAirStd              = 1005.0   ! Average specific heat of air at between 25C and 40C in J/kg-k
 !    INTEGER, PARAMETER   :: MaxDistribSurfaces    = 20         ! Maximum number of surfaces that a baseboard heater can radiate to
     INTEGER, PARAMETER   :: MinDistribSurfaces    = 1          ! Minimum number of surfaces that a baseboard heater can radiate to
 
@@ -323,7 +323,7 @@ CONTAINS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: AllFracsSummed        ! Sum of the fractions radiant
+    REAL :: AllFracsSummed        ! Sum of the fractions radiant
     INTEGER   :: BaseboardNum          ! Baseboard number
     INTEGER   :: NumAlphas             ! Number of Alphas for each GetobjectItem call
     INTEGER   :: NumNumbers            ! Number of Numbers for each GetobjectItem call
@@ -392,12 +392,12 @@ CONTAINS
                        cAlphaArgs(4),'Hot Water Nodes')
 
       HWBaseboard(BaseboardNum)%WaterTempAvg = rNumericArgs(1)
-      IF (HWBaseboard(BaseboardNum)%WaterTempAvg > MaxWaterTempAvg + 0.001d0) THEN
+      IF (HWBaseboard(BaseboardNum)%WaterTempAvg > MaxWaterTempAvg + 0.001) THEN
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", '//trim(cNumericFieldNames(1))//' was higher than the allowable maximum.')
         CALL ShowContinueError('...reset to maximum value=['//trim(RoundSigDigits(MaxWaterTempAvg,2))//'].')
         HWBaseboard(BaseboardNum)%WaterTempAvg = MaxWaterTempAvg
-      ELSE IF (HWBaseboard(BaseboardNum)%WaterTempAvg < MinWaterTempAvg - 0.001d0) THEN
+      ELSE IF (HWBaseboard(BaseboardNum)%WaterTempAvg < MinWaterTempAvg - 0.001) THEN
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", '//trim(cNumericFieldNames(1))//' was lower than the allowable minimum.')
         CALL ShowContinueError('...reset to minimum value=['//trim(RoundSigDigits(MinWaterTempAvg,2))//'].')
@@ -405,8 +405,8 @@ CONTAINS
       END IF
 
       HWBaseboard(BaseboardNum)%WaterMassFlowRateStd = rNumericArgs(2)
-      IF (HWBaseboard(BaseboardNum)%WaterMassFlowRateStd < LowWaterMassFlowRate-0.0001d0 .OR. &
-          HWBaseboard(BaseboardNum)%WaterMassFlowRateStd > HighWaterMassFlowRate+0.0001d0 ) THEN
+      IF (HWBaseboard(BaseboardNum)%WaterMassFlowRateStd < LowWaterMassFlowRate-0.0001 .OR. &
+          HWBaseboard(BaseboardNum)%WaterMassFlowRateStd > HighWaterMassFlowRate+0.0001 ) THEN
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", '//trim(cNumericFieldNames(2))//' is an invalid Standard Water mass flow rate.')
         CALL ShowContinueError('...reset to a default value=['//trim(RoundSigDigits(WaterMassFlowDefault,1))//'].')
@@ -430,11 +430,11 @@ CONTAINS
 
       HWBaseboard(BaseboardNum)%Offset = rNumericArgs(5)
          ! Set default convergence tolerance
-      IF (HWBaseboard(BaseboardNum)%Offset .LE. 0.0d0) THEN
+      IF (HWBaseboard(BaseboardNum)%Offset .LE. 0.0) THEN
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", '//trim(cNumericFieldNames(5))//' was less than the allowable minimum.')
         CALL ShowContinueError('...reset to a default value=['//trim(RoundSigDigits(MaxFraction,2))//'].')
-        HWBaseboard(BaseboardNum)%Offset = 0.001d0
+        HWBaseboard(BaseboardNum)%Offset = 0.001
       END IF
 
       HWBaseboard(BaseboardNum)%FracRadiant = rNumericArgs(6)
@@ -457,9 +457,9 @@ CONTAINS
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", Fraction Radiant was higher than the allowable maximum.')
         HWBaseboard(BaseboardNum)%FracRadiant = MaxFraction
-        HWBaseboard(BaseboardNum)%FracConvect = 0.0d0
+        HWBaseboard(BaseboardNum)%FracConvect = 0.0
       ELSE
-        HWBaseboard(BaseboardNum)%FracConvect = 1.0d0 - AllFracsSummed
+        HWBaseboard(BaseboardNum)%FracConvect = 1.0 - AllFracsSummed
       END IF
 
       HWBaseboard(BaseboardNum)%FracDistribPerson = rNumericArgs(7)
@@ -498,7 +498,7 @@ CONTAINS
       ALLOCATE(HWBaseboard(BaseboardNum)%SurfacePtr(HWBaseboard(BaseboardNum)%TotSurfToDistrib))
       HWBaseboard(BaseboardNum)%SurfacePtr=0
       ALLOCATE(HWBaseboard(BaseboardNum)%FracDistribToSurf(HWBaseboard(BaseboardNum)%TotSurfToDistrib))
-      HWBaseboard(BaseboardNum)%FracDistribToSurf=0.0d0
+      HWBaseboard(BaseboardNum)%FracDistribToSurf=0.0
 
       AllFracsSummed = HWBaseboard(BaseboardNum)%FracDistribPerson
       Do SurfNum = 1,HWBaseboard(BaseboardNum)%TotSurfToDistrib
@@ -529,12 +529,12 @@ CONTAINS
         AllFracsSummed = AllFracsSummed + HWBaseboard(BaseboardNum)%FracDistribToSurf(SurfNum)
       End DO ! Surfaces
 
-      IF (AllFracsSummed > (MaxFraction + 0.01d0) ) THEN
+      IF (AllFracsSummed > (MaxFraction + 0.01) ) THEN
         CALL ShowSevereError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", Summed radiant fractions for people + surface groups > 1.0')
         ErrorsFound = .TRUE.
       END IF
-      IF ( (AllFracsSummed < (MaxFraction - 0.01d0)) .AND. &            ! User didn't distribute all of the
+      IF ( (AllFracsSummed < (MaxFraction - 0.01)) .AND. &            ! User didn't distribute all of the
            (HWBaseboard(BaseboardNum)%FracRadiant > MinFraction) ) THEN ! radiation warn that some will be lost
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Water//'="'//trim(cAlphaArgs(1))// &
           '", Summed radiant fractions for people + surface groups < 1.0')
@@ -628,8 +628,8 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
   INTEGER, INTENT(IN)    :: ControlledZoneNumSub
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: Constant         = 0.0062     ! Constant of linear equation for air mass flow rate
-  REAL(r64), PARAMETER :: Coeff            = 0.0000275  ! Correlation coefficient to capacity
+  REAL, PARAMETER :: Constant         = 0.0062     ! Constant of linear equation for air mass flow rate
+  REAL, PARAMETER :: Coeff            = 0.0000275  ! Correlation coefficient to capacity
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -645,9 +645,9 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
   INTEGER    :: WaterInletNode
   INTEGER    :: ZoneNode
   INTEGER    :: ZoneNum
-  REAL(r64)  :: RhoAirStdInit
-  REAL(r64)  :: rho !local fluid density
-  REAL(r64)  :: Cp  ! local fluid specific heat
+  REAL  :: RhoAirStdInit
+  REAL  :: rho !local fluid density
+  REAL  :: Cp  ! local fluid specific heat
   LOGICAL    :: errFlag
 
 
@@ -658,17 +658,17 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
       ALLOCATE(MyEnvrnFlag(NumHWBaseboards))
       ALLOCATE(MySizeFlag(NumHWBaseboards))
       ALLOCATE(ZeroSourceSumHATsurf(NumofZones))
-               ZeroSourceSumHATsurf = 0.0D0
+               ZeroSourceSumHATsurf = 0.0
       ALLOCATE(QBBRadSource(NumHWBaseboards))
-               QBBRadSource = 0.0D0
+               QBBRadSource = 0.0
       ALLOCATE(QBBRadSrcAvg(NumHWBaseboards))
-               QBBRadSrcAvg = 0.0D0
+               QBBRadSrcAvg = 0.0
       ALLOCATE(LastQBBRadSrc(NumHWBaseboards))
-               LastQBBRadSrc = 0.0D0
+               LastQBBRadSrc = 0.0
       ALLOCATE(LastSysTimeElapsed(NumHWBaseboards))
-               LastSysTimeElapsed = 0.0D0
+               LastSysTimeElapsed = 0.0
       ALLOCATE(LastTimeStepSys(NumHWBaseboards))
-               LastTimeStepSys = 0.0D0
+               LastTimeStepSys = 0.0
       ALLOCATE(SetLoopIndexFlag(NumHWBaseboards))
       MyEnvrnFlag = .TRUE.
       MySizeFlag  = .TRUE.
@@ -733,7 +733,7 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
 
       HWBaseboard(BaseboardNum)%WaterMassFlowRateMax =  rho * HWBaseboard(BaseboardNum)%WaterVolFlowRateMax
 
-      CALL InitComponentNodes(0.d0,HWBaseboard(BaseboardNum)%WaterMassFlowRateMax, &
+      CALL InitComponentNodes(0.,HWBaseboard(BaseboardNum)%WaterMassFlowRateMax, &
                                    HWBaseboard(BaseboardNum)%WaterInletNode,       &
                                    HWBaseboard(BaseboardNum)%WaterOutletNode,       &
                                    HWBaseboard(BaseboardNum)%LoopNum,              &
@@ -753,12 +753,12 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
       Node(WaterInletNode)%Press                     = 0.0
       Node(WaterInletNode)%HumRat                    = 0.0
 
-      ZeroSourceSumHATsurf      =0.0D0
-      QBBRadSource              =0.0D0
-      QBBRadSrcAvg              =0.0D0
-      LastQBBRadSrc             =0.0D0
-      LastSysTimeElapsed        =0.0D0
-      LastTimeStepSys           =0.0D0
+      ZeroSourceSumHATsurf      =0.0
+      QBBRadSource              =0.0
+      QBBRadSrcAvg              =0.0
+      LastQBBRadSrc             =0.0
+      LastSysTimeElapsed        =0.0
+      LastTimeStepSys           =0.0
 
       MyEnvrnFlag(BaseboardNum) = .FALSE.
     END IF
@@ -770,10 +770,10 @@ SUBROUTINE InitHWBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIteratio
     IF (BeginTimeStepFlag .AND. FirstHVACIteration) THEN
       ZoneNum = HWBaseboard(BaseboardNum)%ZonePtr
       ZeroSourceSumHATsurf(ZoneNum)    = SumHATsurf(ZoneNum)
-      QBBRadSrcAvg(BaseboardNum)       = 0.0D0
-      LastQBBRadSrc(BaseboardNum)      = 0.0D0
-      LastSysTimeElapsed(BaseboardNum) = 0.0D0
-      LastTimeStepSys(BaseboardNum)    = 0.0D0
+      QBBRadSrcAvg(BaseboardNum)       = 0.0
+      LastQBBRadSrc(BaseboardNum)      = 0.0
+      LastSysTimeElapsed(BaseboardNum) = 0.0
+      LastTimeStepSys(BaseboardNum)    = 0.0
     END IF
 
        ! Do the every time step initializations
@@ -826,10 +826,10 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
   INTEGER, INTENT(IN) :: BaseboardNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: AirInletTempStd  = 18.0d0     ! I=B=R rating document
-  REAL(r64), PARAMETER :: CPAirStd         = 1005.0d0   ! Average specific heat of air at between 25C and 40C in J/kg-k
-  REAL(r64), PARAMETER :: Constant         = 0.0062     ! Constant of linear equation for air mass flow rate
-  REAL(r64), PARAMETER :: Coeff            = 0.0000275  ! Correlation coefficient to capacity
+  REAL, PARAMETER :: AirInletTempStd  = 18.0     ! I=B=R rating document
+  REAL, PARAMETER :: CPAirStd         = 1005.0   ! Average specific heat of air at between 25C and 40C in J/kg-k
+  REAL, PARAMETER :: Constant         = 0.0062     ! Constant of linear equation for air mass flow rate
+  REAL, PARAMETER :: Coeff            = 0.0000275  ! Correlation coefficient to capacity
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -840,22 +840,22 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER    :: PltSizNum         ! do loop index for plant sizing
   INTEGER    :: PltSizHeatNum     ! index of plant sizing object for 1st heating loop
-  REAL(r64)  :: DesCoilLoad
-  REAL(r64)  :: WaterInletTempStd
-  REAL(r64)  :: WaterOutletTempStd
-  REAL(r64)  :: AirOutletTempStd
-  REAL(r64)  :: DeltaT1
-  REAL(r64)  :: DeltaT2
-  REAL(r64)  :: LMTD
-  REAL(r64)  :: AirMassFlowRate
-  REAL(r64)  :: WaterMassFlowRateStd
-  REAL(r64)  :: rho ! local fluid density
-  REAL(r64)  :: Cp  ! local fluid specific heat
+  REAL  :: DesCoilLoad
+  REAL  :: WaterInletTempStd
+  REAL  :: WaterOutletTempStd
+  REAL  :: AirOutletTempStd
+  REAL  :: DeltaT1
+  REAL  :: DeltaT2
+  REAL  :: LMTD
+  REAL  :: AirMassFlowRate
+  REAL  :: WaterMassFlowRateStd
+  REAL  :: rho ! local fluid density
+  REAL  :: Cp  ! local fluid specific heat
   LOGICAL   :: ErrorsFound       ! If errors detected in input
 
   PltSizHeatNum = 0
   PltSizNum = 0
-  DesCoilLoad = 0.0d0
+  DesCoilLoad = 0.0
   ErrorsFound = .FALSE.
 
   ! find the appropriate heating Plant Sizing object
@@ -870,7 +870,7 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
         DesCoilLoad = CalcFinalZoneSizing(CurZoneEqNum)%DesHeatLoad * CalcFinalZoneSizing(CurZoneEqNum)%HeatSizingFactor
         IF (DesCoilLoad >= SmallLoad) THEN
           Cp =  GetSpecificHeatGlycol(PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidName,  &
-                                         60.0d0,                      &
+                                         60.0,                      &
                                          PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidIndex, &
                                          'SizeHWBaseboard')
           rho = GetDensityGlycol(PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidName,  &
@@ -879,17 +879,17 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
                                           'SizeHWBaseboard')
           HWBaseboard(BaseboardNum)%WaterVolFlowRateMax = DesCoilLoad / (PlantSizData(PltSizHeatNum)%DeltaT * Cp * rho)
         ELSE
-          HWBaseboard(BaseboardNum)%WaterVolFlowRateMax = 0.0d0
+          HWBaseboard(BaseboardNum)%WaterVolFlowRateMax = 0.0
         END IF
         CALL ReportSizingOutput(cCMO_BBRadiator_Water,HWBaseboard(BaseboardNum)%EquipID,&
                                'Maximum Water Flow Rate [m3/s]',HWBaseboard(BaseboardNum)%WaterVolFlowRateMax)
       END IF
-      IF (HWBaseboard(BaseboardNum)%WaterTempAvg > 0.0d0 .AND. HWBaseboard(BaseboardNum)%WaterMassFlowRateStd > 0.0d0 &
-          .AND. HWBaseboard(BaseboardNum)%RatedCapacity > 0.0d0) THEN
+      IF (HWBaseboard(BaseboardNum)%WaterTempAvg > 0.0 .AND. HWBaseboard(BaseboardNum)%WaterMassFlowRateStd > 0.0 &
+          .AND. HWBaseboard(BaseboardNum)%RatedCapacity > 0.0) THEN
         DesCoilLoad = HWBaseboard(BaseboardNum)%RatedCapacity
         WaterMassFlowRateStd = HWBaseboard(BaseboardNum)%WaterMassFlowRateStd
       Else IF (HWBaseboard(BaseboardNum)%RatedCapacity == AutoSize .OR. &
-            HWBaseboard(BaseboardNum)%RatedCapacity == 0.0d0) THEN
+            HWBaseboard(BaseboardNum)%RatedCapacity == 0.0) THEN
         DesCoilLoad = CalcFinalZoneSizing(CurZoneEqNum)%DesHeatLoad * CalcFinalZoneSizing(CurZoneEqNum)%HeatSizingFactor
         rho = GetDensityGlycol(PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidName,  &
                           InitConvTemp, &
@@ -907,10 +907,10 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
                          HWBaseboard(BaseboardNum)%WaterTempAvg,                      &
                          PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidIndex, &
                          'SizeHWBaseboard')
-        WaterInletTempStd  = (DesCoilLoad / (2.0d0 * WaterMassFlowRateStd &
+        WaterInletTempStd  = (DesCoilLoad / (2.0 * WaterMassFlowRateStd &
                          * Cp)) &
                          + HWBaseboard(BaseboardNum)%WaterTempAvg
-        WaterOutletTempStd = ABS((2.0d0 * HWBaseboard(BaseboardNum)%WaterTempAvg) - WaterInletTempStd)
+        WaterOutletTempStd = ABS((2.0 * HWBaseboard(BaseboardNum)%WaterTempAvg) - WaterInletTempStd)
         AirOutletTempStd = (DesCoilLoad / (AirMassFlowRate * CPAirStd)) + AirInletTempStd
               HWBaseboard(BaseboardNum)%AirMassFlowRateStd = AirMassFlowRate
 
@@ -920,7 +920,7 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
           CALL ShowSevereError('SizeHWBaseboard: Air outlet temperature must be below the inlet water temperature')
           CALL ShowContinueError('...reset to rated capacity')
           CALL ShowContinueError('Occurs in Hot Water Baseboard Heater='//TRIM(HWBaseboard(BaseboardNum)%EquipID))
-          AirOutletTempStd = WaterInletTempStd-0.01d0
+          AirOutletTempStd = WaterInletTempStd-0.01
         END IF
                   ! LMTD calculation
         DeltaT1 = WaterInletTempStd  - AirOutletTempStd
@@ -938,7 +938,7 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
   ELSE
      ! if there is no heating Sizing:Plant object and autosizng was requested, issue an error message
     IF (HWBaseboard(BaseboardNum)%WaterVolFlowRateMax == AutoSize .OR. &
-      HWBaseboard(BaseboardNum)%RatedCapacity == AutoSize .OR. HWBaseboard(BaseboardNum)%RatedCapacity == 0.0d0 ) THEN
+      HWBaseboard(BaseboardNum)%RatedCapacity == AutoSize .OR. HWBaseboard(BaseboardNum)%RatedCapacity == 0.0 ) THEN
       CALL ShowSevereError('Autosizing of hot water baseboard requires a heating loop Sizing:Plant object')
       CALL ShowContinueError('Occurs in Hot Water Baseboard Heater='//TRIM(HWBaseboard(BaseboardNum)%EquipID))
            ErrorsFound = .TRUE.
@@ -953,10 +953,10 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
                        HWBaseboard(BaseboardNum)%WaterTempAvg,                      &
                        PlantLoop(HWBaseboard(BaseboardNum)%LoopNum)%FluidIndex, &
                        'SizeHWBaseboard')
-      WaterInletTempStd  = (DesCoilLoad / (2.0d0 * WaterMassFlowRateStd &
+      WaterInletTempStd  = (DesCoilLoad / (2.0 * WaterMassFlowRateStd &
                        * Cp)) &
                        + HWBaseboard(BaseboardNum)%WaterTempAvg
-      WaterOutletTempStd = ABS((2.0d0 * HWBaseboard(BaseboardNum)%WaterTempAvg) - WaterInletTempStd)
+      WaterOutletTempStd = ABS((2.0 * HWBaseboard(BaseboardNum)%WaterTempAvg) - WaterInletTempStd)
       AirOutletTempStd = (DesCoilLoad / (AirMassFlowRate * CPAirStd)) + AirInletTempStd
       HWBaseboard(BaseboardNum)%AirMassFlowRateStd = AirMassFlowRate
 
@@ -966,7 +966,7 @@ SUBROUTINE SizeHWBaseboard(BaseboardNum)
         CALL ShowSevereError('SizeHWBaseboard: Air outlet temperature must be below the inlet water temperature')
         CALL ShowContinueError('...reset to rated capacity')
         CALL ShowContinueError('Occurs in Hot Water Baseboard Heater='//TRIM(HWBaseboard(BaseboardNum)%EquipID))
-        AirOutletTempStd = WaterInletTempStd-0.01d0
+        AirOutletTempStd = WaterInletTempStd-0.01
       END IF
                 ! LMTD calculation
       DeltaT1 = WaterInletTempStd  - AirOutletTempStd
@@ -1026,12 +1026,12 @@ END SUBROUTINE SizeHWBaseboard
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER                :: BaseboardNum
-    REAL(r64), INTENT(OUT) :: LoadMet
+    REAL, INTENT(OUT) :: LoadMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: Constant = 0.0062     ! Constant of linear equation for air mass flow rate
-  REAL(r64), PARAMETER :: Coeff  = 0.0000275    ! Correlation coefficient to capacity
-  REAL(r64), PARAMETER :: MinFrac  = 0.0005     ! Minimum fraction that delivers radiant heats to surfaces
+  REAL, PARAMETER :: Constant = 0.0062     ! Constant of linear equation for air mass flow rate
+  REAL, PARAMETER :: Coeff  = 0.0000275    ! Correlation coefficient to capacity
+  REAL, PARAMETER :: MinFrac  = 0.0005     ! Minimum fraction that delivers radiant heats to surfaces
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1042,26 +1042,26 @@ END SUBROUTINE SizeHWBaseboard
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER   :: ZoneNum
-    REAL(r64) :: RadHeat
-    REAL(r64) :: BBHeat
-    REAL(r64) :: AirInletTemp
-    REAL(r64) :: AirOutletTemp
-    REAL(r64) :: WaterInletTemp
-    REAL(r64) :: WaterOutletTemp
-    REAL(r64) :: WaterMassFlowRate
-    REAL(r64) :: AirMassFlowRate
-    REAL(r64) :: CapacitanceAir
-    REAL(r64) :: CapacitanceWater
-    REAL(r64) :: CapacitanceMax
-    REAL(r64) :: CapacitanceMin
-    REAL(r64) :: CapacityRatio
-    REAL(r64) :: NTU
-    REAL(r64) :: Effectiveness
-    REAL(r64) :: AA
-    REAL(r64) :: BB
-    REAL(r64) :: CC
-    REAL(r64) :: QZnReq
-    REAL(r64) :: Cp
+    REAL :: RadHeat
+    REAL :: BBHeat
+    REAL :: AirInletTemp
+    REAL :: AirOutletTemp
+    REAL :: WaterInletTemp
+    REAL :: WaterOutletTemp
+    REAL :: WaterMassFlowRate
+    REAL :: AirMassFlowRate
+    REAL :: CapacitanceAir
+    REAL :: CapacitanceWater
+    REAL :: CapacitanceMax
+    REAL :: CapacitanceMin
+    REAL :: CapacityRatio
+    REAL :: NTU
+    REAL :: Effectiveness
+    REAL :: AA
+    REAL :: BB
+    REAL :: CC
+    REAL :: QZnReq
+    REAL :: Cp
 
     ZoneNum = HWBaseboard(BaseboardNum)%ZonePtr
     QZnReq  = ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToHeatSP
@@ -1071,10 +1071,10 @@ END SUBROUTINE SizeHWBaseboard
     WaterOutletTemp   = WaterInletTemp
     WaterMassFlowRate = Node(HWBaseboard(BaseboardNum)%WaterInletNode)%MassFlowRate
 
-    IF (QZnReq > 0.0d0 &
+    IF (QZnReq > 0.0 &
        .AND. .NOT. DeadbandOrSetback(ZoneNum) &
        .AND. (GetCurrentScheduleValue(HWBaseboard(BaseboardNum)%SchedPtr) > 0) &
-       .AND. (WaterMassFlowRate > 0.0d0) ) THEN
+       .AND. (WaterMassFlowRate > 0.0) ) THEN
         ! Assume the air mass flow rate is twice the water mass flow rate
         ! Calculate air mass flow rate
     AirMassFlowRate  = HWBaseboard(BaseboardNum)%AirMassFlowRateStd * &
@@ -1095,17 +1095,17 @@ END SUBROUTINE SizeHWBaseboard
       ! Effectiveness = 1. - EXP((1./CapacityRatio)*(NTU)**0.22*(EXP(-CapacityRatio*(NTU)**0.78)-1.))
       ! To prevent possible underflows (numbers smaller than the computer can handle) we must break
       ! the calculation up into steps and check the size of the exponential arguments.
-    AA = -CapacityRatio*(NTU)**0.78d0
-    IF (AA.LT.-20.0d0) THEN
-      BB = 0.0d0
+    AA = -CapacityRatio*(NTU)**0.78
+    IF (AA.LT.-20.0) THEN
+      BB = 0.0
     ELSE
       BB = EXP(AA)
     END IF
-      CC = (1.d0/ CapacityRatio)*(NTU)**0.22d0 * (BB-1.d0)
-    IF (CC.LT.-20.d0) THEN
-       Effectiveness = 1.0d0
+      CC = (1./ CapacityRatio)*(NTU)**0.22 * (BB-1.)
+    IF (CC.LT.-20.) THEN
+       Effectiveness = 1.0
     ELSE
-       Effectiveness  = 1.0d0 - EXP(CC)
+       Effectiveness  = 1.0 - EXP(CC)
     END IF
 
     AirOutletTemp = AirInletTemp + Effectiveness * CapacitanceMin * (WaterInletTemp-AirInletTemp) / CapacitanceAir
@@ -1140,19 +1140,19 @@ END SUBROUTINE SizeHWBaseboard
     HWBaseboard(BaseboardNum)%WaterOutletEnthalpy = HWBaseboard(BaseboardNum)%WaterInletEnthalpy - BBHeat &
                                                     / WaterMassFlowRate
     ELSE
-      CapacitanceWater  = 0.0d0
-      CapacitanceMax    = 0.0d0
-      CapacitanceMin    = 0.0d0
-      NTU               = 0.0d0
-      Effectiveness     = 0.0d0
+      CapacitanceWater  = 0.0
+      CapacitanceMax    = 0.0
+      CapacitanceMin    = 0.0
+      NTU               = 0.0
+      Effectiveness     = 0.0
       AirOutletTemp     = AirInletTemp
       WaterOutletTemp   = WaterInletTemp
-      BBHeat            = 0.0d0
-      LoadMet           = 0.0d0
-      RadHeat           = 0.0d0
-      WaterMassFlowRate = 0.0d0
-      AirMassFlowRate   = 0.0d0
-      QBBRadSource(BaseboardNum)   = 0.0d0
+      BBHeat            = 0.0
+      LoadMet           = 0.0
+      RadHeat           = 0.0
+      WaterMassFlowRate = 0.0
+      AirMassFlowRate   = 0.0
+      QBBRadSource(BaseboardNum)   = 0.0
       HWBaseboard(BaseboardNum)%WaterOutletEnthalpy = HWBaseboard(BaseboardNum)%WaterInletEnthalpy
     END IF
 
@@ -1300,7 +1300,7 @@ END SUBROUTINE SizeHWBaseboard
 
        ! If it was allocated, then we have to check to see if this was running at all...
     DO BaseboardNum = 1, NumHWBaseboards
-      IF (QBBRadSrcAvg(BaseboardNum) /= 0.0D0) THEN
+      IF (QBBRadSrcAvg(BaseboardNum) /= 0.0) THEN
           HWBaseboardSysOn = .TRUE.
         EXIT !DO loop
       END IF
@@ -1350,7 +1350,7 @@ SUBROUTINE DistributeBBRadGains
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: SmallestArea = 0.001d0   ! Smallest area in meters squared (to avoid a divide by zero)
+  REAL, PARAMETER :: SmallestArea = 0.001   ! Smallest area in meters squared (to avoid a divide by zero)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1363,12 +1363,12 @@ SUBROUTINE DistributeBBRadGains
   INTEGER   :: BaseboardNum    ! Counter for the baseboard
   INTEGER   :: SurfNum         ! Pointer to the Surface derived type
   INTEGER   :: ZoneNum         ! Pointer to the Zone derived type
-  REAL(R64) :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
+  REAL :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
 
           ! FLOW:
           ! Initialize arrays
-    QHWBaseboardSurf     = 0.0D0
-    QHWBaseboardToPerson = 0.0D0
+    QHWBaseboardSurf     = 0.0
+    QHWBaseboardToPerson = 0.0
 
     DO BaseboardNum = 1, NumHWBaseboards
 
@@ -1457,7 +1457,7 @@ END SUBROUTINE DistributeBBRadGains
 
   END SUBROUTINE ReportHWBaseboard
 
-REAL(r64) FUNCTION SumHATsurf(ZoneNum)
+REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1488,7 +1488,7 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL(r64)           :: Area        ! Effective surface area
+  REAL           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0

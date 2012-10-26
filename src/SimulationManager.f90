@@ -145,7 +145,7 @@ SUBROUTINE ManageSimulation     ! Main driver routine for this module
   LOGICAL, SAVE :: TerminalError = .FALSE.
   LOGICAL       :: SimsDone
   LOGICAL       :: ErrFound
-!  real(r64) :: t0,t1,st0,st1
+!  REAL :: t0,t1,st0,st1
 
 !  CHARACTER(len=70) :: tdstring
 !  CHARACTER(len=138) :: tdstringlong
@@ -476,7 +476,7 @@ SUBROUTINE GetProjectData
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength), DIMENSION(5) :: Alphas
-  REAL(r64), DIMENSION(4) :: Number
+  REAL, DIMENSION(4) :: Number
   INTEGER NumAlpha, NumNumber, IOStat
   INTEGER :: NumDebugOut
   INTEGER :: MinInt
@@ -589,7 +589,7 @@ SUBROUTINE GetProjectData
     ErrorsFound=.true.
   ENDIF
 
-  TimeStepZone=1.0d0/REAL(NumOfTimeStepInHour,r64)
+  TimeStepZone=1.0/REAL(NumOfTimeStepInHour,r64)
   MinutesPerTimeStep=TimeStepZone*60
 
   CurrentModuleObject='ConvergenceLimits'
@@ -605,11 +605,11 @@ SUBROUTINE GetProjectData
     IF (MinInt < 0 .or. MinInt > 60) THEN
       CALL ShowWarningError(TRIM(CurrentModuleObject)//': Requested '//TRIM(cNumericFieldNames(1))//  &
          ' ('//TRIM(RoundSigDigits(MinInt))//') invalid. Set to 1 minute.')
-      MinTimeStepSys=1.d0/60.d0
+      MinTimeStepSys=1./60.
     ELSEIF (MinInt == 0) THEN  ! Set to TimeStepZone
       MinTimeStepSys=TimeStepZone
     ELSE
-      MinTimeStepSys=REAL(MinInt,r64)/60.0d0
+      MinTimeStepSys=REAL(MinInt,r64)/60.0
     ENDIF
     MaxIter=INT(Number(2))
     IF (MaxIter <= 0) THEN
@@ -623,7 +623,7 @@ SUBROUTINE GetProjectData
     IF (MinPlantSubIterations > MaxPlantSubIterations) MaxPlantSubIterations = MinPlantSubIterations + 1
 
   ELSEIF (Num == 0) THEN
-    MinTimeStepSys=1.d0/60.d0
+    MinTimeStepSys=1./60.
     MaxIter=20
     MinPlantSubIterations = 2
     MaxPlantSubIterations = 8
@@ -717,12 +717,12 @@ SUBROUTINE GetProjectData
     IF (.not. lNumericFieldBlanks(1)) THEN
       deviationFromSetPtThresholdHtg=-Number(1)
     ELSE
-      deviationFromSetPtThresholdHtg=-.2d0
+      deviationFromSetPtThresholdHtg=-.2
     ENDIF
     IF (.not. lNumericFieldBlanks(2)) THEN
       deviationFromSetPtThresholdClg=Number(2)
     ELSE
-      deviationFromSetPtThresholdClg=.2d0
+      deviationFromSetPtThresholdClg=.2
     ENDIF
   END IF
 
@@ -767,7 +767,7 @@ SUBROUTINE GetProjectData
 
   Write(OutputFileInits,fmtA) '! <System Convergence Limits>, Minimum System TimeStep {minutes}, Max HVAC Iterations, '//  &
       ' Minimum Plant Iterations, Maximum Plant Iterations'
-  MinInt=MinTimeStepSys*60.d0
+  MinInt=MinTimeStepSys*60.
   Write(OutputFileInits,733) trim(RoundSigDigits(MinInt)),trim(RoundSigDigits(MaxIter)),  &
      trim(RoundSigDigits(MinPlantSubIterations)),trim(RoundSigDigits(MaxPlantSubIterations))
 733 Format(' System Convergence Limits',4(', ',A))
@@ -824,7 +824,7 @@ SUBROUTINE GetProjectData
 !    ELSE
 !      NumOut2='No'
 !    ENDIF
-!unused0909743 Format(' Display Extra Warnings',2(', ',A))
+!unuse909743 Format(' Display Extra Warnings',2(', ',A))
 !  ENDIF
 
   RETURN
@@ -2782,7 +2782,7 @@ SUBROUTINE Resimulate(ResimExt, ResimHB, ResimHVAC)
   LOGICAL, INTENT(INOUT) :: ResimHVAC  ! Flag to resimulate the HVAC simulation
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ZoneTempChange               ! Dummy variable needed for calling ManageZoneAirUpdates
+  REAL :: ZoneTempChange               ! Dummy variable needed for calling ManageZoneAirUpdates
 
           ! FLOW:
   IF (ResimExt) THEN
@@ -2808,14 +2808,14 @@ SUBROUTINE Resimulate(ResimExt, ResimHB, ResimHVAC)
   IF (ResimHVAC) THEN
     ! HVAC simulation
     CALL ManageZoneAirUpdates(iGetZoneSetpoints,ZoneTempChange,.FALSE.,  UseZoneTimeStepHistory, &
-              0.0D0 )
+              0.0 )
     If (Contaminant%SimulateContaminants) &
-      CALL ManageZoneContaminanUpdates(iGetZoneSetpoints,.FALSE.,UseZoneTimeStepHistory,0.0D0)
+      CALL ManageZoneContaminanUpdates(iGetZoneSetpoints,.FALSE.,UseZoneTimeStepHistory,0.0)
     CALL CalcAirFlowSimple
     CALL ManageZoneAirUpdates(iPredictStep,ZoneTempChange,.FALSE.,  UseZoneTimeStepHistory,  &
-               0.0D0 )
+               0.0 )
     If (Contaminant%SimulateContaminants) &
-      CALL ManageZoneContaminanUpdates(iPredictStep,.FALSE.,UseZoneTimeStepHistory,0.0D0 )
+      CALL ManageZoneContaminanUpdates(iPredictStep,.FALSE.,UseZoneTimeStepHistory,0.0 )
     CALL SimHVAC
 
     DemandManagerHVACIterations = DemandManagerHVACIterations + 1

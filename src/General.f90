@@ -112,27 +112,27 @@ RECURSIVE SUBROUTINE SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: Eps    ! required absolute accuracy
+  REAL, INTENT(IN)     :: Eps    ! required absolute accuracy
   INTEGER, INTENT(IN)  :: MaxIte ! maximum number of allowed iterations
   INTEGER, INTENT(OUT) :: Flag   ! integer storing exit status
                                  ! = -2: f(x0) and f(x1) have the same sign
                                  ! = -1: no convergence
                                  ! >  0: number of iterations performed
-  REAL(r64), INTENT(OUT)    :: XRes   ! value of x that solves f(x [,Par]) = 0
-  REAL(r64), INTENT(IN)     :: X_0    ! 1st bound of interval that contains the solution
-  REAL(r64), INTENT(IN)     :: X_1    ! 2nd bound of interval that contains the solution
-  REAL(r64), DIMENSION(:), INTENT(IN), OPTIONAL :: Par ! array with additional parameters used for function evaluation
+  REAL, INTENT(OUT)    :: XRes   ! value of x that solves f(x [,Par]) = 0
+  REAL, INTENT(IN)     :: X_0    ! 1st bound of interval that contains the solution
+  REAL, INTENT(IN)     :: X_1    ! 2nd bound of interval that contains the solution
+  REAL, DIMENSION(:), INTENT(IN), OPTIONAL :: Par ! array with additional parameters used for function evaluation
                                                   ! optional
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: SMALL = 1.d-10
+  REAL, PARAMETER :: SMALL = 1.*10**-10 !RS: Debugging: 102612
 
           ! INTERFACE BLOCK SPECIFICATIONS
   INTERFACE ! Interface to function to be solved for zero: f(X, Par) = 0
     FUNCTION f(X, Par) RESULT (Y)
       USE DataPrecisionGlobals
-      REAL(r64), INTENT(IN) :: X
-      REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par
-      REAL(r64)        :: Y
+      REAL, INTENT(IN) :: X
+      REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par
+      REAL        :: Y
     END FUNCTION
   END INTERFACE
 
@@ -140,13 +140,13 @@ RECURSIVE SUBROUTINE SolveRegulaFalsi(Eps, MaxIte, Flag, XRes, f, X_0, X_1, Par)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: X0           ! present 1st bound
-  REAL(r64) :: X1           ! present 2nd bound
-  REAL(r64) :: XTemp        ! new estimate
-  REAL(r64) :: Y0           ! f at X0
-  REAL(r64) :: Y1           ! f at X1
-  REAL(r64) :: YTemp        ! f at XTemp
-  REAL(r64) :: DY          ! DY = Y0 - Y1
+  REAL :: X0           ! present 1st bound
+  REAL :: X1           ! present 2nd bound
+  REAL :: XTemp        ! new estimate
+  REAL :: Y0           ! f at X0
+  REAL :: Y1           ! f at X1
+  REAL :: YTemp        ! f at XTemp
+  REAL :: DY          ! DY = Y0 - Y1
   LOGICAL :: Conv          ! flag, true if convergence is achieved
   LOGICAL :: StopMaxIte    ! stop due to exceeding of maximum # of iterations
   LOGICAL :: Cont          ! flag, if true, continue searching
@@ -234,7 +234,7 @@ RETURN
 
 END SUBROUTINE SolveRegulaFalsi
 
-REAL(r64) FUNCTION InterpSw(SwitchFac,A,B)
+REAL FUNCTION InterpSw(SwitchFac,A,B)
           ! FUNCTION INFORMATION:
           !       AUTHOR         Fred Winkelmann
           !       DATE WRITTEN   February 1999
@@ -255,9 +255,9 @@ REAL(r64) FUNCTION InterpSw(SwitchFac,A,B)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64), INTENT(IN)  :: SwitchFac ! Switching factor: 0.0 if glazing is unswitched, = 1.0 if fully switched
-REAL(r64), INTENT(IN)  :: A        ! Glazing property in unswitched state
-REAL(r64), INTENT(IN)  :: B        ! Glazing property in fully switched state
+REAL, INTENT(IN)  :: SwitchFac ! Switching factor: 0.0 if glazing is unswitched, = 1.0 if fully switched
+REAL, INTENT(IN)  :: A        ! Glazing property in unswitched state
+REAL, INTENT(IN)  :: B        ! Glazing property in fully switched state
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -275,7 +275,7 @@ InterpSw = (1.-SwitchFac)*A + SwitchFac*B
 RETURN
 END FUNCTION InterpSw
 
-REAL(r64) FUNCTION InterpBlind(ProfAng,PropArray)
+REAL FUNCTION InterpBlind(ProfAng,PropArray)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Winkelmann
@@ -298,11 +298,11 @@ REAL(r64) FUNCTION InterpBlind(ProfAng,PropArray)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64), INTENT(IN)                :: ProfAng    ! Profile angle (rad)
-REAL(r64), INTENT(IN), DIMENSION(37) :: PropArray  ! Array of blind properties
+REAL, INTENT(IN)                :: ProfAng    ! Profile angle (rad)
+REAL, INTENT(IN), DIMENSION(37) :: PropArray  ! Array of blind properties
 
           ! FUNCTION PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER    :: DeltaAngRad =  Pi/36.d0  ! Profile angle increment (rad)
+REAL, PARAMETER    :: DeltaAngRad =  Pi/36.  ! Profile angle increment (rad)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -311,7 +311,7 @@ REAL(r64), PARAMETER    :: DeltaAngRad =  Pi/36.d0  ! Profile angle increment (r
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-REAL(r64) InterpFac      ! Interpolation factor
+REAL InterpFac      ! Interpolation factor
 INTEGER IAlpha      ! Profile angle index
 
 IF(ProfAng > PiOvr2 .OR. ProfAng < -PiOvr2) THEN
@@ -319,12 +319,12 @@ IF(ProfAng > PiOvr2 .OR. ProfAng < -PiOvr2) THEN
 ELSE
   IAlpha = 1 + INT((ProfAng+PiOvr2)/DeltaAngRad)
   InterpFac = (ProfAng - (-PiOvr2 + DeltaAngRad*(IAlpha-1)))/DeltaAngRad
-  InterpBlind = (1.d0-InterpFac)*PropArray(IAlpha) + InterpFac*PropArray(IAlpha+1)
+  InterpBlind = (1.-InterpFac)*PropArray(IAlpha) + InterpFac*PropArray(IAlpha+1)
 END IF
 RETURN
 END FUNCTION InterpBlind
 
-REAL(r64) FUNCTION InterpProfAng(ProfAng,PropArray)
+REAL FUNCTION InterpProfAng(ProfAng,PropArray)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Winkelmann
@@ -346,14 +346,14 @@ REAL(r64) FUNCTION InterpProfAng(ProfAng,PropArray)
 IMPLICIT NONE
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64),INTENT(IN) :: PropArray(37)  ! Array of blind properties
-REAL(r64),INTENT(IN) :: ProfAng        ! Profile angle (rad)
+REAL,INTENT(IN) :: PropArray(37)  ! Array of blind properties
+REAL,INTENT(IN) :: ProfAng        ! Profile angle (rad)
 
           ! FUNCTION PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER    :: DeltaAngRad =  Pi/36.d0  ! Profile angle increment (rad)
+REAL, PARAMETER    :: DeltaAngRad =  Pi/36.  ! Profile angle increment (rad)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-REAL(r64) InterpFac      ! Interpolation factor
+REAL InterpFac      ! Interpolation factor
 INTEGER IAlpha      ! Profile angle index
 
 ! DeltaAng = Pi/36
@@ -367,7 +367,7 @@ END IF
 RETURN
 END FUNCTION InterpProfAng
 
-REAL(r64) FUNCTION InterpSlatAng(SlatAng,VarSlats,PropArray)
+REAL FUNCTION InterpSlatAng(SlatAng,VarSlats,PropArray)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Winkelmann
@@ -391,23 +391,23 @@ REAL(r64) FUNCTION InterpSlatAng(SlatAng,VarSlats,PropArray)
 IMPLICIT NONE
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64), INTENT(IN)   :: SlatAng        ! Slat angle (rad)
+REAL, INTENT(IN)   :: SlatAng        ! Slat angle (rad)
 LOGICAL,INTENT(IN) :: VarSlats    ! True if slat angle is variable
-REAL(r64),INTENT(IN)    :: PropArray(MaxSlatAngs) ! Array of blind properties as function of slat angle
+REAL,INTENT(IN)    :: PropArray(MaxSlatAngs) ! Array of blind properties as function of slat angle
 
           ! FUNCTION PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER    :: DeltaAng =  Pi/(REAL(MaxSlatAngs,r64)-1.d0)
+REAL, PARAMETER    :: DeltaAng =  Pi/(REAL(MaxSlatAngs,r64)-1.)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-REAL(r64) InterpFac      ! Interpolation factor
+REAL InterpFac      ! Interpolation factor
 INTEGER IBeta       ! Slat angle index
-REAL(r64) SlatAng1
+REAL SlatAng1
 
 IF(SlatAng > Pi .OR. SlatAng < 0.0) THEN
 !  InterpSlatAng = 0.0
 !  RETURN
 !END IF
-  SlatAng1 = MIN(MAX(SlatAng,0.0d0),PI)
+  SlatAng1 = MIN(MAX(SlatAng,0.0),PI)
 ELSE
   SlatAng1 = SlatAng
 END IF
@@ -424,7 +424,7 @@ END IF
 RETURN
 END FUNCTION InterpSlatAng
 
-REAL(r64) FUNCTION InterpProfSlatAng(ProfAng,SlatAng,VarSlats,PropArray)
+REAL FUNCTION InterpProfSlatAng(ProfAng,SlatAng,VarSlats,PropArray)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Winkelmann
@@ -448,29 +448,29 @@ REAL(r64) FUNCTION InterpProfSlatAng(ProfAng,SlatAng,VarSlats,PropArray)
 IMPLICIT NONE
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64),INTENT(IN   ) :: ProfAng        ! Profile angle (rad)
-REAL(r64),INTENT(IN)    :: SlatAng        ! Slat angle (rad)
+REAL,INTENT(IN   ) :: ProfAng        ! Profile angle (rad)
+REAL,INTENT(IN)    :: SlatAng        ! Slat angle (rad)
 LOGICAL,INTENT(IN) :: VarSlats    ! True if variable-angle slats
-REAL(r64),INTENT(IN)    :: PropArray(37,MaxSlatAngs) ! Array of blind properties
+REAL,INTENT(IN)    :: PropArray(37,MaxSlatAngs) ! Array of blind properties
 
           ! FUNCTION PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER    :: DeltaProfAng = Pi/36.d0
-REAL(r64), PARAMETER    :: DeltaSlatAng = Pi/(REAL(MaxSlatAngs,r64)-1.d0)
+REAL, PARAMETER    :: DeltaProfAng = Pi/36.
+REAL, PARAMETER    :: DeltaSlatAng = Pi/(REAL(MaxSlatAngs,r64)-1.)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-REAL(r64) ProfAngRatio   ! Profile angle interpolation factor
-REAL(r64) SlatAngRatio   ! Slat angle interpolation factor
+REAL ProfAngRatio   ! Profile angle interpolation factor
+REAL SlatAngRatio   ! Slat angle interpolation factor
 INTEGER IAlpha      ! Profile angle index
 INTEGER IBeta       ! Slat angle index
-REAL(r64) Val1,Val2,Val3,Val4 ! Property values at points enclosing the given ProfAngle and SlatAngle
-REAL(r64) ValA,ValB      ! Property values at given SlatAngle to be interpolated in profile angle
-REAL(r64) SlatAng1
-REAL(r64) ProfAng1
+REAL Val1,Val2,Val3,Val4 ! Property values at points enclosing the given ProfAngle and SlatAngle
+REAL ValA,ValB      ! Property values at given SlatAngle to be interpolated in profile angle
+REAL SlatAng1
+REAL ProfAng1
 
 IF(SlatAng > Pi .OR. SlatAng < 0.0 .OR. ProfAng > PiOvr2 .OR. ProfAng < -PiOvr2) THEN
 !  InterpProfSlatAng = 0.0
 !  RETURN
-  SlatAng1 = MIN(MAX(SlatAng,0.0d0),PI)
+  SlatAng1 = MIN(MAX(SlatAng,0.0),PI)
 
   ! This is not correct, fixed 2/17/2010
   !ProfAng1 = MIN(MAX(SlatAng,-PiOvr2),PiOvr2)
@@ -502,7 +502,7 @@ END IF
 RETURN
 END FUNCTION InterpProfSlatAng
 
-REAL(r64) FUNCTION BlindBeamBeamTrans(ProfAng,SlatAng,SlatWidth,SlatSeparation,SlatThickness)
+REAL FUNCTION BlindBeamBeamTrans(ProfAng,SlatAng,SlatWidth,SlatSeparation,SlatThickness)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Fred Winkelmann
@@ -524,27 +524,27 @@ REAL(r64) FUNCTION BlindBeamBeamTrans(ProfAng,SlatAng,SlatWidth,SlatSeparation,S
 IMPLICIT NONE
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64),INTENT(IN) :: ProfAng        ! Solar profile angle (rad)
-REAL(r64),INTENT(IN) :: SlatAng        ! Slat angle (rad)
-REAL(r64),INTENT(IN) :: SlatWidth      ! Slat width (m)
-REAL(r64),INTENT(IN) :: SlatSeparation ! Slat separation (distance between surfaces of adjacent slats) (m)
-REAL(r64),INTENT(IN) :: SlatThickness  ! Slat thickness (m)
+REAL,INTENT(IN) :: ProfAng        ! Solar profile angle (rad)
+REAL,INTENT(IN) :: SlatAng        ! Slat angle (rad)
+REAL,INTENT(IN) :: SlatWidth      ! Slat width (m)
+REAL,INTENT(IN) :: SlatSeparation ! Slat separation (distance between surfaces of adjacent slats) (m)
+REAL,INTENT(IN) :: SlatThickness  ! Slat thickness (m)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-REAL(r64) fEdge          ! Slat edge correction factor
-REAL(r64) wbar           ! Intermediate variable
-REAL(r64) gamma          ! Intermediate variable
-REAL(r64) fEdge1         ! Intermediate variable
-REAL(r64) CosProfAng     ! Cosine of profile angle
+REAL fEdge          ! Slat edge correction factor
+REAL wbar           ! Intermediate variable
+REAL gamma          ! Intermediate variable
+REAL fEdge1         ! Intermediate variable
+REAL CosProfAng     ! Cosine of profile angle
 
 CosProfAng = COS(ProfAng)
 gamma = SlatAng - ProfAng
 wbar = SlatSeparation
 IF(CosProfAng /= 0.0) wbar = SlatWidth * COS(gamma)/CosProfAng
-BlindBeamBeamTrans = MAX(0.0d0,1.-ABS(wbar/SlatSeparation))
+BlindBeamBeamTrans = MAX(0.0,1.-ABS(wbar/SlatSeparation))
 
 IF(BlindBeamBeamTrans > 0.) THEN
 
@@ -554,12 +554,12 @@ IF(BlindBeamBeamTrans > 0.) THEN
 
   fEdge  = 0.
   fEdge1 = 0.
-  IF(ABS(SIN(gamma))>0.01d0) THEN
+  IF(ABS(SIN(gamma))>0.01) THEN
     IF((SlatAng > 0.0 .AND. SlatAng <= PiOvr2 .AND. ProfAng <= SlatAng) .OR. &
        (SlatAng > PiOvr2 .AND. SlatAng <= Pi .AND. ProfAng > -(Pi-SlatAng))) &
       fEdge1 = SlatThickness * ABS(SIN(gamma)) / &
                   ((SlatSeparation + SlatThickness/ABS(SIN(SlatAng)))*CosProfAng)
-    fEdge = MIN(1.0d0,ABS(fEdge1))
+    fEdge = MIN(1.0,ABS(fEdge1))
   END IF
   BlindBeamBeamTrans = BlindBeamBeamTrans * (1.-fEdge)
 
@@ -567,7 +567,7 @@ END IF
 
 END FUNCTION BlindBeamBeamTrans
 
-REAL(r64) FUNCTION POLYF(X,A)
+REAL FUNCTION POLYF(X,A)
           ! FUNCTION INFORMATION:
           !       AUTHOR         Fred Winkelmann
           !       DATE WRITTEN   February 1999
@@ -591,8 +591,8 @@ REAL(r64) FUNCTION POLYF(X,A)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-REAL(r64), INTENT(IN)                :: X   ! Cosine of angle of incidence
-REAL(r64), DIMENSION(6), INTENT(IN)  :: A   ! Polynomial coefficients
+REAL, INTENT(IN)                :: X   ! Cosine of angle of incidence
+REAL, DIMENSION(6), INTENT(IN)  :: A   ! Polynomial coefficients
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -614,7 +614,7 @@ END IF
 RETURN
 END FUNCTION POLYF
 
-REAL(r64) FUNCTION POLY1F(X,A,N)
+REAL FUNCTION POLY1F(X,A,N)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         George N. Walton
@@ -639,8 +639,8 @@ REAL(r64) FUNCTION POLY1F(X,A,N)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER  N     ! number of terms in polynomial
-  REAL(r64)     X     ! independent variable
-  REAL(r64)     A(N)  ! array of polynomial coefficients
+  REAL     X     ! independent variable
+  REAL     A(N)  ! array of polynomial coefficients
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -653,7 +653,7 @@ REAL(r64) FUNCTION POLY1F(X,A,N)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER  I    ! Loop parameter
-  REAL(r64)     SUM  ! Temporary summation variable
+  REAL     SUM  ! Temporary summation variable
 
   SUM=A(N)
   DO I=2,N
@@ -666,7 +666,7 @@ REAL(r64) FUNCTION POLY1F(X,A,N)
 
 END FUNCTION POLY1F
 
-REAL(r64) FUNCTION POLY2F(X,A,N)
+REAL FUNCTION POLY2F(X,A,N)
           ! FUNCTION INFORMATION:
           !       AUTHOR         George N. Walton
           !       DATE WRITTEN   May 1977
@@ -690,8 +690,8 @@ REAL(r64) FUNCTION POLY2F(X,A,N)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER  N     ! number of terms in polynomial
-  REAL(r64)     X     ! independent variable
-  REAL(r64)     A(N)  ! array of polynomial coefficients
+  REAL     X     ! independent variable
+  REAL     A(N)  ! array of polynomial coefficients
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -704,7 +704,7 @@ REAL(r64) FUNCTION POLY2F(X,A,N)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER  I    ! Loop parameter
-  REAL(r64)     SUM  ! Temporary summation variable
+  REAL     SUM  ! Temporary summation variable
 
   SUM=A(N)*X
   DO I=2,N
@@ -717,7 +717,8 @@ REAL(r64) FUNCTION POLY2F(X,A,N)
 
 END FUNCTION POLY2F
 
-FUNCTION rTrimSigDigits(RealValue,SigDigits) RESULT(OutputString)
+FUNCTION rTrimSigDigits(RealValue,SigDigits) RESULT(OutputString)  !RS: Debugging: 102612
+!FUNCTION TrimSigDigits(RealValue,SigDigits) RESULT(OutputString)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -742,7 +743,7 @@ FUNCTION rTrimSigDigits(RealValue,SigDigits) RESULT(OutputString)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: RealValue
+  REAL, INTENT(IN) :: RealValue
   INTEGER, INTENT(IN) :: SigDigits
   CHARACTER(len=32) OutputString
 
@@ -795,6 +796,7 @@ FUNCTION rTrimSigDigits(RealValue,SigDigits) RESULT(OutputString)
   RETURN
 
 END FUNCTION rTrimSigDigits
+!END FUNCTION TrimSigDigits  !RS: Debugging: 102612
 
 FUNCTION iTrimSigDigits(IntegerValue,SigDigits) RESULT(OutputString)
 
@@ -869,7 +871,7 @@ FUNCTION rRoundSigDigits(RealValue,SigDigits) RESULT(OutputString)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: RealValue
+  REAL, INTENT(IN) :: RealValue
   INTEGER, INTENT(IN) :: SigDigits
   CHARACTER(len=32) OutputString
 
@@ -1105,9 +1107,9 @@ SUBROUTINE MovingAvg(DataIn,NumDataItems,NumItemsInAvg,SmoothedData)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) ::             NumDataItems               ! number of values in DataIn
-  REAL(r64), INTENT(IN), DIMENSION(NumDataItems) ::  DataIn          ! input data that needs smoothing
+  REAL, INTENT(IN), DIMENSION(NumDataItems) ::  DataIn          ! input data that needs smoothing
   INTEGER, INTENT(IN) ::             NumItemsInAvg              ! number of items in the averaging window
-  REAL(r64), INTENT(OUT), DIMENSION(NumDataItems) :: SmoothedData    ! output data after smoothing
+  REAL, INTENT(OUT), DIMENSION(NumDataItems) :: SmoothedData    ! output data after smoothing
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -1118,7 +1120,7 @@ SUBROUTINE MovingAvg(DataIn,NumDataItems,NumItemsInAvg,SmoothedData)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: i             ! loop index
   INTEGER :: j             ! inner loop index
-  REAL(r64), DIMENSION(:), ALLOCATABLE :: TempData ! a scratch array
+  REAL, DIMENSION(:), ALLOCATABLE :: TempData ! a scratch array
 
   ALLOCATE(TempData(3*NumDataItems))
 
@@ -1482,7 +1484,7 @@ SUBROUTINE ValidateMonthDay(String,Day,Month,ErrorsFound)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  CHARACTER(len=*), INTENT(IN) :: String  ! REAL(r64) string being processed
+  CHARACTER(len=*), INTENT(IN) :: String  ! REAL string being processed
   INTEGER, INTENT(IN) :: Day
   INTEGER, INTENT(IN) :: Month
   LOGICAL, INTENT(OUT) :: ErrorsFound
@@ -1732,7 +1734,7 @@ FUNCTION CreateSysTimeIntervalString() RESULT(OutputString)
           ! FUNCTION PARAMETER DEFINITIONS:
   CHARACTER(len=*),PARAMETER :: TstmpFmt="(I2.2,':',F3.0)"
   CHARACTER(len=*),PARAMETER :: TstmpFmti="(I2.2,':',I2.2)"
-  REAL(r64),PARAMETER :: FracToMin=60.0d0
+  REAL,PARAMETER :: FracToMin=60.0
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1741,8 +1743,8 @@ FUNCTION CreateSysTimeIntervalString() RESULT(OutputString)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) ActualTimeS  ! Start of current interval (HVAC time step)
-  REAL(r64) ActualTimeE  ! End of current interval (HVAC time step)
+  REAL ActualTimeS  ! Start of current interval (HVAC time step)
+  REAL ActualTimeE  ! End of current interval (HVAC time step)
   INTEGER ActualTimeHrS
 !  INTEGER ActualTimeHrE
   CHARACTER(len=10) TimeStmpS  ! Character representation of start of interval
@@ -1780,10 +1782,10 @@ FUNCTION SafeDivide(a, b) RESULT (c)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! returns a / b while preventing division by zero
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  REAL(r64), INTENT(IN) :: a, b
-  REAL(r64) :: c
+  REAL, INTENT(IN) :: a, b
+  REAL :: c
 
-  REAL(r64), PARAMETER :: SMALL=1.D-10
+  REAL, PARAMETER :: SMALL=1.*10**-10   !RS: Debugging: 102612
 
   IF (ABS(b) >= SMALL) THEN
     c = a / b
@@ -1818,7 +1820,7 @@ END FUNCTION
 !
 !          ! SUBROUTINE ARGUMENT DEFINITIONS:
 !  INTEGER :: WaterInletNodeNum ! the component's water inlet node number (condenser side for water / water compoennts)
-!  REAL(r64)    :: DesWaterFlow      ! the component's design water flow rate [m3/s]
+!  REAL    :: DesWaterFlow      ! the component's design water flow rate [m3/s]
 !
 !          ! SUBROUTINE PARAMETER DEFINITIONS:
 !          ! na
@@ -1888,8 +1890,8 @@ SUBROUTINE Invert3By3Matrix(A,InverseA)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  ::  A(3,3)       ! Input 3X3 Matrix
-  REAL(r64), INTENT(OUT) :: InverseA(3,3) ! Output 3X3 Matrix - Inverse Of A
+  REAL, INTENT(IN)  ::  A(3,3)       ! Input 3X3 Matrix
+  REAL, INTENT(OUT) :: InverseA(3,3) ! Output 3X3 Matrix - Inverse Of A
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1901,7 +1903,7 @@ SUBROUTINE Invert3By3Matrix(A,InverseA)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- REAL(r64) :: Determinant ! Determinant of Matrix A
+ REAL :: Determinant ! Determinant of Matrix A
 
           ! Compute Determinant
 
@@ -1949,25 +1951,25 @@ SUBROUTINE ITERATE(ResultX,Tol,X0,Y0,X1,Y1,Iter,Cnvg)
 
           ! USE STATEMENTS:
   USE DataPrecisionGlobals
-!unused0909  use dataglobals, only: outputfiledebug
+!unuse909  use dataglobals, only: outputfiledebug
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(Out)   :: ResultX     !ResultX is the final Iteration result passed back to the calling routine
-  REAL(r64), INTENT(In)    :: Tol         !Tolerance for Convergence
-  REAL(r64), INTENT(InOut) :: X0          !Current value of X
-  REAL(r64), INTENT(InOut) :: Y0          !Current value of the function Y(X)
-  REAL(r64), INTENT(InOut) :: X1          !First Previous values of X
-  REAL(r64), INTENT(InOut) :: Y1          !First Previous values of Y(X1)
+  REAL, INTENT(Out)   :: ResultX     !ResultX is the final Iteration result passed back to the calling routine
+  REAL, INTENT(In)    :: Tol         !Tolerance for Convergence
+  REAL, INTENT(InOut) :: X0          !Current value of X
+  REAL, INTENT(InOut) :: Y0          !Current value of the function Y(X)
+  REAL, INTENT(InOut) :: X1          !First Previous values of X
+  REAL, INTENT(InOut) :: Y1          !First Previous values of Y(X1)
 
   Integer, Intent(In) :: Iter        !Number of iterations
   Integer, Intent(Out):: Cnvg        !Convergence flag  Cnvg = 0:  Not converged
                                      !                  Cnvg = 1:  Converged
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: small  = 1.d-9 !Small Number used to approximate zero
-  REAL(r64), PARAMETER :: Perturb=0.1d0  !Perturbation applied to X to initialize iteration
+  REAL, PARAMETER :: small  = 1.*10**-9 !Small Number used to approximate zero  !RS: Debugging: 102612
+  REAL, PARAMETER :: Perturb=0.1  !Perturbation applied to X to initialize iteration
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1977,7 +1979,7 @@ SUBROUTINE ITERATE(ResultX,Tol,X0,Y0,X1,Y1,Iter,Cnvg)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: Dy                         !Linear fit result
+  REAL :: Dy                         !Linear fit result
 
           ! FLOW:
 
@@ -2165,7 +2167,7 @@ FUNCTION DetermineMinuteForReporting(IndexTypeKey) RESULT(ActualTimeMin)
   INTEGER             :: ActualTimeMin    ! calculated Minute for reporting
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64),PARAMETER :: FracToMin=60.0d0
+  REAL,PARAMETER :: FracToMin=60.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2174,8 +2176,8 @@ FUNCTION DetermineMinuteForReporting(IndexTypeKey) RESULT(ActualTimeMin)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  real(r64) ActualTimeS  ! Start of current interval (HVAC time step)
-  real(r64) ActualTimeE  ! End of current interval (HVAC time step)
+  REAL ActualTimeS  ! Start of current interval (HVAC time step)
+  REAL ActualTimeE  ! End of current interval (HVAC time step)
   integer ActualTimeHrS
 
   if (IndexTypeKey == HVACTSReporting) then
@@ -2292,7 +2294,7 @@ END SUBROUTINE EncodeMonDayHrMin
 
   END FUNCTION LogicalToInteger
 
-  REAL(r64) FUNCTION GetCurrentHVACTime()
+  REAL FUNCTION GetCurrentHVACTime()
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Dimitri Curtil
           !       DATE WRITTEN   November 2004
@@ -2327,7 +2329,7 @@ END SUBROUTINE EncodeMonDayHrMin
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64)  :: CurrentHVACTime
+    REAL  :: CurrentHVACTime
 
     ! This is the correct formula that does not use MinutesPerSystemTimeStep, which would
     ! erronously truncate all sub-minute system time steps down to the closest full minute.
@@ -2342,7 +2344,7 @@ END SUBROUTINE EncodeMonDayHrMin
   END FUNCTION GetCurrentHVACTime
 
 
-  REAL(r64) FUNCTION GetPreviousHVACTime()
+  REAL FUNCTION GetPreviousHVACTime()
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Dimitri Curtil
           !       DATE WRITTEN   November 2004
@@ -2377,7 +2379,7 @@ END SUBROUTINE EncodeMonDayHrMin
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64)  :: PreviousHVACTime
+    REAL  :: PreviousHVACTime
 
     ! This is the correct formula that does not use MinutesPerSystemTimeStep, which would
     ! erronously truncate all sub-minute system time steps down to the closest full minute.
@@ -2448,7 +2450,7 @@ END SUBROUTINE EncodeMonDayHrMin
             ! However, this function provides better accuracy for sub-minute time steps
             ! by also showing information down to the 10th of a second.
             !
-            ! Note that Time is expected to be specified in REAL(r64).
+            ! Note that Time is expected to be specified in REAL.
 
             ! METHODOLOGY EMPLOYED:
             ! na
@@ -2462,7 +2464,7 @@ END SUBROUTINE EncodeMonDayHrMin
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
             ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN) :: Time         ! Time in seconds
+    REAL, INTENT(IN) :: Time         ! Time in seconds
     CHARACTER(len=10)            :: OutputString ! Contains time stamp
 
             ! FUNCTION PARAMETER DEFINITIONS:
@@ -2478,7 +2480,7 @@ END SUBROUTINE EncodeMonDayHrMin
     CHARACTER(len=10) TimeStamp  ! Character representation of time using hh:mm:ss.ssss format
     INTEGER Hours                ! Number of hours <= 24
     INTEGER Minutes              ! Remaining minutes < 60
-    REAL(r64) Seconds     ! Remaining seconds < 60
+    REAL Seconds     ! Remaining seconds < 60
 
     CALL ParseTime( Time, Hours, Minutes, Seconds )
 
@@ -2533,8 +2535,8 @@ END SUBROUTINE EncodeMonDayHrMin
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
             ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN) :: StartTime    ! Start of current interval in seconds
-    REAL(r64), INTENT(IN) :: EndTime      ! End of current interval in seconds
+    REAL, INTENT(IN) :: StartTime    ! Start of current interval in seconds
+    REAL, INTENT(IN) :: EndTime      ! End of current interval in seconds
     CHARACTER(len=32)            :: OutputString ! Contains time stamp
 
             ! FUNCTION PARAMETER DEFINITIONS:
@@ -2587,14 +2589,14 @@ END SUBROUTINE EncodeMonDayHrMin
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
             ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN)  :: Time         ! Time value in seconds
+    REAL, INTENT(IN)  :: Time         ! Time value in seconds
     INTEGER, INTENT(OUT)          :: Hours        ! Number of hours
     INTEGER, INTENT(OUT)          :: Minutes      ! Number of minutes < 60
-    REAL(r64), INTENT(OUT) :: Seconds      ! Number of seconds < 60
+    REAL, INTENT(OUT) :: Seconds      ! Number of seconds < 60
 
             ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL(r64), PARAMETER               :: MinToSec  = 60.0d0
-    REAL(r64), PARAMETER               :: HourToSec  = MinToSec * 60.0d0
+    REAL, PARAMETER               :: MinToSec  = 60.0
+    REAL, PARAMETER               :: HourToSec  = MinToSec * 60.0
 
             ! INTERFACE BLOCK SPECIFICATIONS:
             ! na
@@ -2603,7 +2605,7 @@ END SUBROUTINE EncodeMonDayHrMin
             ! na
 
             ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64)         :: Remainder = 0.0
+    REAL         :: Remainder = 0.0
 
 
     ! Get number of hours

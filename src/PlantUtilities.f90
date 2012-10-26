@@ -70,8 +70,8 @@ SUBROUTINE InitComponentNodes(MinCompMdot,MaxCompMdot, InletNode,OutletNode,Loop
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)    :: MinCompMdot !
-  REAL(r64), INTENT(IN)    :: MaxCompMdot !
+  REAL, INTENT(IN)    :: MinCompMdot !
+  REAL, INTENT(IN)    :: MaxCompMdot !
   INTEGER,   INTENT(IN)    :: InletNode  ! component's inlet node index in node structure
   INTEGER,   INTENT(IN)    :: OutletNode ! component's outlet node index in node structure
   INTEGER,   INTENT(IN)    :: LoopNum  ! plant loop index for PlantLoop structure
@@ -88,18 +88,18 @@ SUBROUTINE InitComponentNodes(MinCompMdot,MaxCompMdot, InletNode,OutletNode,Loop
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: tmpMinCompMdot  ! local value
-  REAL(r64)  :: tmpMaxCompMdot  ! local value
+  REAL  :: tmpMinCompMdot  ! local value
+  REAL  :: tmpMaxCompMdot  ! local value
 
   tmpMinCompMdot = MinCompMdot
   tmpMaxCompMdot = MaxCompMdot
   ! trap bad values that can happen before all the setup is done
-  IF (tmpMinCompMdot < 0.d0) tmpMinCompMdot = 0.d0
-  IF (tmpMaxCompMdot < 0.d0) tmpMaxCompMdot = 0.d0
+  IF (tmpMinCompMdot < 0.) tmpMinCompMdot = 0.
+  IF (tmpMaxCompMdot < 0.) tmpMaxCompMdot = 0.
 
 
   ! reset outlet node
-  Node(OutletNode)%MassFlowRate         = 0.d0
+  Node(OutletNode)%MassFlowRate         = 0.
 !  Node(OutletNode)%MassFlowRateMin      = MinCompMdot
 !  Node(OutletNode)%MassFlowRateMinAvail = MinCompMdot
 !  Node(OutletNode)%MassFlowRateMax      = MaxCompMdot
@@ -110,25 +110,25 @@ SUBROUTINE InitComponentNodes(MinCompMdot,MaxCompMdot, InletNode,OutletNode,Loop
   Node(InletNode)%MassFlowRateMax      = tmpMaxCompMdot
   Node(InletNode)%MassFlowRateMaxAvail = tmpMaxCompMdot
   !reset inlet node, but only change from inlet setting if set and more restrictive
-  Node(InletNode)%MassFlowRate          = 0.d0
-  Node(InletNode)%MassFlowRateRequest   = 0.d0
-!  IF (Node(InletNode)%MassFlowRateMax > 0.d0) THEN !if inlet has been set, only change it if more restrictive
+  Node(InletNode)%MassFlowRate          = 0.
+  Node(InletNode)%MassFlowRateRequest   = 0.
+!  IF (Node(InletNode)%MassFlowRateMax > 0.) THEN !if inlet has been set, only change it if more restrictive
 !    Node(InletNode)%MassFlowRateMax       = MIN(tmpMaxCompMdot, Node(InletNode)%MassFlowRateMax)
 !  ELSE
 !    Node(InletNode)%MassFlowRateMax       = tmpMaxCompMdot
 !  ENDIF
-!  IF (Node(InletNode)%MassFlowRateMaxAvail> 0.d0) THEN !if inlet has been set, only change it if more restrictive
+!  IF (Node(InletNode)%MassFlowRateMaxAvail> 0.) THEN !if inlet has been set, only change it if more restrictive
 !    Node(InletNode)%MassFlowRateMaxAvail  = MIN(tmpMaxCompMdot, Node(InletNode)%MassFlowRateMaxAvail)
 !  ELSE
 !    Node(InletNode)%MassFlowRateMaxAvail  = tmpMaxCompMdot
 !  ENDIF
-!  IF (Node(InletNode)%MassFlowRateMin > 0.d0) THEN
+!  IF (Node(InletNode)%MassFlowRateMin > 0.) THEN
 !    Node(InletNode)%MassFlowRateMin       = MAX(tmpMinCompMdot, Node(InletNode)%MassFlowRateMin)
 !  ELSE
 !    Node(InletNode)%MassFlowRateMin       = tmpMinCompMdot
 !  ENDIF
 !
-!  IF (Node(InletNode)%MassFlowRateMinAvail > 0.d0) THEN
+!  IF (Node(InletNode)%MassFlowRateMinAvail > 0.) THEN
 !    Node(InletNode)%MassFlowRateMinAvail  = MAX(tmpMinCompMdot, Node(InletNode)%MassFlowRateMinAvail)
 !  ELSE
 !    Node(InletNode)%MassFlowRateMinAvail  = tmpMinCompMdot
@@ -172,7 +172,7 @@ SUBROUTINE SetComponentFlowRate(CompFlow,InletNode,OutletNode,LoopNum,LoopSideNu
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(INOUT) :: CompFlow  ![kg/s]
+  REAL, INTENT(INOUT) :: CompFlow  ![kg/s]
   INTEGER,   INTENT(IN)    :: LoopNum  ! plant loop index for PlantLoop structure
   INTEGER,   INTENT(IN)    :: LoopSideNum ! Loop side index for PlantLoop structure
   INTEGER,   INTENT(IN)    :: BranchIndex ! branch index for PlantLoop
@@ -193,11 +193,11 @@ SUBROUTINE SetComponentFlowRate(CompFlow,InletNode,OutletNode,LoopNum,LoopSideNu
   LOGICAL, SAVE :: OneTimeDiagSetup = .TRUE.
   LOGICAL, DIMENSION(:), ALLOCATABLE, SAVE :: NodeErrorMsgIssued
   LOGICAL, SAVE :: NullPlantErrorMsgIssued
-  REAL(r64)     :: MdotOldRequest  ! initial value of mass flow
+  REAL     :: MdotOldRequest  ! initial value of mass flow
   INTEGER       :: CompInletNodeNum
   INTEGER       :: CompOutletNodeNum
   INTEGER       :: CompNum
-  REAL(r64)     :: SeriesBranchHighFlowRequest ! local temporary used for sweeping across components on a branch
+  REAL     :: SeriesBranchHighFlowRequest ! local temporary used for sweeping across components on a branch
 
   IF (OneTimeDiagSetup) THEN
     ALLOCATE(NodeErrorMsgIssued(NumOfNodes) )
@@ -242,7 +242,7 @@ SUBROUTINE SetComponentFlowRate(CompFlow,InletNode,OutletNode,LoopNum,LoopSideNu
         !Update Min/Max Avail
 
   Node(OutletNode)%MassFlowRateMinAvail = MAX(Node(InletNode)%MassFlowRateMinAvail ,Node(InletNode)%MassFlowRateMin)
-  IF (Node(InletNode)%MassFlowRateMax >= 0.d0) THEN
+  IF (Node(InletNode)%MassFlowRateMax >= 0.) THEN
     Node(OutletNode)%MassFlowRateMaxAvail = MIN(Node(InletNode)%MassFlowRateMaxAvail,Node(InletNode)%MassFlowRateMax)
   ELSE
 
@@ -267,7 +267,7 @@ SUBROUTINE SetComponentFlowRate(CompFlow,InletNode,OutletNode,LoopNum,LoopSideNu
     ELSE !bound the flow by Min/Max available and hardware limits
       IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchIndex)%Comp(CompIndex)%FlowCtrl == ControlType_SeriesActive) THEN
         ! determine highest flow request for all the components on the branch
-        SeriesBranchHighFlowRequest = 0.d0
+        SeriesBranchHighFlowRequest = 0.
         DO CompNum = 1, PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchIndex)%TotalComponents
           CompInletNodeNum = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchIndex)%Comp(CompNum)%NodeNumIn
           SeriesBranchHighFlowRequest = MAX(Node(CompInletNodeNum)%MassFlowRateRequest, SeriesBranchHighFlowRequest)
@@ -327,7 +327,7 @@ SUBROUTINE SetComponentFlowRate(CompFlow,InletNode,OutletNode,LoopNum,LoopSideNu
 
 
   IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchIndex)%Comp(CompIndex)%CurOpSchemeType == DemandOpSchemeType) THEN
-    IF ((MdotOldRequest > 0.d0) .AND. (CompFlow > 0.d0)) THEN ! sure that not coming back from a no flow reset
+    IF ((MdotOldRequest > 0.) .AND. (CompFlow > 0.)) THEN ! sure that not coming back from a no flow reset
       IF (ABS(MdotOldRequest - Node(InletNode)%MassFlowRateRequest) > MassFlowTolerance) THEN !demand comp changed its flow request
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%SimLoopSideNeeded = .TRUE.
       ENDIF
@@ -370,7 +370,7 @@ SUBROUTINE SetActuatedBranchFlowRate(CompFlow,ActuatedNode,LoopNum,LoopSideNum, 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(INOUT) :: CompFlow
+  REAL, INTENT(INOUT) :: CompFlow
   INTEGER, INTENT(IN) :: ActuatedNode
   INTEGER, INTENT(IN) :: LoopNum
   INTEGER, INTENT(IN) :: LoopSideNum
@@ -391,14 +391,14 @@ SUBROUTINE SetActuatedBranchFlowRate(CompFlow,ActuatedNode,LoopNum,LoopSideNum, 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: CompNum
   INTEGER  :: NodeNum
-  REAL(r64) :: MdotOldRequest
+  REAL :: MdotOldRequest
 
           ! FLOW:
           ! store original flow
   MdotOldRequest = Node(ActuatedNode)%MassFlowRateRequest
   Node(ActuatedNode)%MassFlowRateRequest = CompFlow
   IF (LoopNum > 0 .AND. LoopSideNum > 0 .AND. (.NOT. ResetMode)) THEN
-    IF ((MdotOldRequest > 0.d0) .AND. (CompFlow > 0.d0)) THEN ! sure that not coming back from a no flow reset
+    IF ((MdotOldRequest > 0.) .AND. (CompFlow > 0.)) THEN ! sure that not coming back from a no flow reset
       IF ( (ABS(MdotOldRequest - Node(ActuatedNode)%MassFlowRateRequest) > MassFlowTolerance) .AND. &
            (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Flowlock == FlowUnlocked)) THEN
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%SimLoopSideNeeded = .TRUE.
@@ -483,7 +483,7 @@ SUBROUTINE SetActuatedBranchFlowRate(CompFlow,ActuatedNode,LoopNum,LoopSideNum, 
   RETURN
 END SUBROUTINE SetActuatedBranchFlowRate             !DSU3
 
-REAL(r64) FUNCTION RegulateCondenserCompFlowReqOp(LoopNum, LoopSideNum, BranchNum, CompNum, TentativeFlowRequest) RESULT(FlowVal)
+REAL FUNCTION RegulateCondenserCompFlowReqOp(LoopNum, LoopSideNum, BranchNum, CompNum, TentativeFlowRequest) RESULT(FlowVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -520,13 +520,13 @@ REAL(r64) FUNCTION RegulateCondenserCompFlowReqOp(LoopNum, LoopSideNum, BranchNu
     INTEGER   :: LoopSideNum
     INTEGER   :: BranchNum
     INTEGER   :: CompNum
-    REAL(R64) :: TentativeFlowRequest
+    REAL :: TentativeFlowRequest
 
           ! FUNCTION PARAMETER DEFINITIONS:
-    REAL(r64), PARAMETER :: ZeroLoad = 0.0001d0
+    REAL, PARAMETER :: ZeroLoad = 0.0001
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: CompCurLoad
+    REAL :: CompCurLoad
     LOGICAL   :: CompRunFlag
     INTEGER   :: CompOpScheme
 
@@ -542,7 +542,7 @@ REAL(r64) FUNCTION RegulateCondenserCompFlowReqOp(LoopNum, LoopSideNum, BranchNu
             IF (ABS(CompCurLoad) > ZeroLoad) THEN
                 FlowVal = TentativeFlowRequest
             ELSE !no load
-                FlowVal = 0.0d0
+                FlowVal = 0.0
             END IF
 
         CASE DEFAULT ! Types that don't provide meaningful myload values
@@ -552,7 +552,7 @@ REAL(r64) FUNCTION RegulateCondenserCompFlowReqOp(LoopNum, LoopSideNum, BranchNu
 
     ELSE !runflag OFF
 
-        FlowVal = 0.0d0
+        FlowVal = 0.0
 
     END IF
 
@@ -604,14 +604,14 @@ SUBROUTINE UpdatePlantMixer(LoopNum,LoopSideNum,MixNum)
   INTEGER :: MixerOutletNode
   INTEGER :: SplitterNum
   INTEGER :: SplitterInNode
-  REAL(r64)    :: MixerOutletMassFlow  ! local calculation of mixer outlet mass flow rate
-  REAL(r64)    :: MixerOutletMassFlowMaxAvail ! branch contribution to MassFlowRateMaxAvail at outlet
-  REAL(r64)    :: MixerOutletMassFlowMinAvail
-  REAL(r64)    :: MixerOutletTemp
-  REAL(r64)    :: MixerInletMassFlow
-  REAL(r64)    :: MassFrac
-  REAL(r64)    :: MixerOutletPress
-  REAL(r64)    :: MixerOutletQuality
+  REAL    :: MixerOutletMassFlow  ! local calculation of mixer outlet mass flow rate
+  REAL    :: MixerOutletMassFlowMaxAvail ! branch contribution to MassFlowRateMaxAvail at outlet
+  REAL    :: MixerOutletMassFlowMinAvail
+  REAL    :: MixerOutletTemp
+  REAL    :: MixerInletMassFlow
+  REAL    :: MassFrac
+  REAL    :: MixerOutletPress
+  REAL    :: MixerOutletQuality
 
 
           ! FLOW:
@@ -727,8 +727,8 @@ FUNCTION AnyPlantSplitterMixerLacksContinuity() RESULT (NeedToReSimulate)
   INTEGER :: OutletNum
   INTEGER :: BranchNum
   INTEGER :: LastNodeOnBranch
-  REAL(r64) :: SumOutletFlow
-  REAL(r64) :: AbsDifference
+  REAL :: SumOutletFlow
+  REAL :: AbsDifference
 
 
   NeedToReSimulate = .FALSE.
@@ -739,7 +739,7 @@ FUNCTION AnyPlantSplitterMixerLacksContinuity() RESULT (NeedToReSimulate)
         SplitterInletNode = PlantLoop(LoopNum)%LoopSide(LoopSide)%Splitter(1)%NodeNumIn
         ! loop across branch outlet nodes and check mass continuity
         NumSplitterOutlets = PlantLoop(LoopNum)%LoopSide(LoopSide)%Splitter(1)%TotalOutletNodes
-        SumOutletFlow = 0.d0
+        SumOutletFlow = 0.
         DO OutletNum = 1, NumSplitterOutlets
           BranchNum        = PlantLoop(LoopNum)%LoopSide(LoopSide)%Splitter(1)%BranchNumOut(OutletNum)
           LastNodeOnBranch = PlantLoop(LoopNum)%LoopSide(LoopSide)%Branch(branchNum)%NodeNumOut
@@ -805,9 +805,9 @@ SUBROUTINE CheckPlantMixerSplitterConsistency(LoopNum,LoopSideNum,SplitNum, MixN
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: MixerOutletNode
   INTEGER  :: SplitterInletNode
-  REAL(r64) :: AbsDifference
+  REAL :: AbsDifference
   INTEGER  :: NumSplitterOutlets
-  REAL(r64) :: SumOutletFlow
+  REAL :: SumOutletFlow
   INTEGER   :: OutletNum
   INTEGER   :: BranchNum
   INTEGER   :: LastNodeOnBranch
@@ -841,7 +841,7 @@ SUBROUTINE CheckPlantMixerSplitterConsistency(LoopNum,LoopSideNum,SplitNum, MixN
         CALL ShowRecurringSevereErrorAtEnd('Plant Flows (Loop='//trim(PlantLoop(LoopNum)%Name)//  &
            ') splitter inlet flow not match mixer outlet flow',PlantLoop(LoopNum)%MFErrIndex1,    &
            ReportMaxOf=AbsDifference,ReportMinOf=AbsDifference,ReportMaxUnits='kg/s',ReportMinUnits='kg/s')
-        IF (AbsDifference > MassFlowTolerance*10.0d0) THEN
+        IF (AbsDifference > MassFlowTolerance*10.0) THEN
           CALL ShowSevereError('Plant flows do not resolve -- splitter inlet flow does not match mixer outlet flow ')
           CALL ShowContinueErrorTimeStamp(' ')
           CALL ShowContinueError('PlantLoop name= '//trim(PlantLoop(LoopNum)%Name) )
@@ -863,8 +863,8 @@ SUBROUTINE CheckPlantMixerSplitterConsistency(LoopNum,LoopSideNum,SplitNum, MixN
 
       ! loop across branch outlet nodes and check mass continuity
       NumSplitterOutlets = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Splitter(SplitNum)%TotalOutletNodes
-      SumOutletFlow = 0.d0
-    !  SumInletFlow  = 0.d0
+      SumOutletFlow = 0.
+    !  SumInletFlow  = 0.
       DO OutletNum = 1, NumSplitterOutlets
         BranchNum        = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Splitter(SplitNum)%BranchNumOut(OutletNum)
         LastNodeOnBranch = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(branchNum)%NodeNumOut
@@ -891,7 +891,7 @@ SUBROUTINE CheckPlantMixerSplitterConsistency(LoopNum,LoopSideNum,SplitNum, MixN
         CALL ShowRecurringSevereErrorAtEnd('Plant Flows (Loop='//trim(PlantLoop(LoopNum)%Name)//  &
            ') splitter inlet flow does not match branch outlet flows',PlantLoop(LoopNum)%MFErrIndex2,    &
            ReportMaxOf=AbsDifference,ReportMinOf=AbsDifference,ReportMaxUnits='kg/s',ReportMinUnits='kg/s')
-!        IF (AbsDifference > CriteriaDelta_MassFlowRate*10.0d0) THEN
+!        IF (AbsDifference > CriteriaDelta_MassFlowRate*10.0) THEN
 !          CALL ShowSevereError('Plant flows do not resolve -- splitter inlet flow does not match branch outlet flows')
 !          CALL ShowContinueErrorTimeStamp(' ')
 !          CALL ShowContinueError('PlantLoop name= '//trim(PlantLoop(LoopNum)%Name) )
@@ -948,10 +948,10 @@ SUBROUTINE CheckForRunawayPlantTemps(LoopNum,LoopSideNum)
   INTEGER, INTENT(IN) :: LoopSideNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64) , PARAMETER :: OverShootOffset = 5.d0
-  REAL(r64) , PARAMETER :: UnderShootOffset = 5.d0
-  REAL(r64) , PARAMETER :: FatalOverShootOffset = 200.d0
-  REAL(r64) , PARAMETER :: FatalUnderShootOffset = 100.d0
+  REAL , PARAMETER :: OverShootOffset = 5.
+  REAL , PARAMETER :: UnderShootOffset = 5.
+  REAL , PARAMETER :: FatalOverShootOffset = 200.
+  REAL , PARAMETER :: FatalUnderShootOffset = 100.
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
@@ -965,12 +965,12 @@ SUBROUTINE CheckForRunawayPlantTemps(LoopNum,LoopSideNum)
   INTEGER :: LSN
   INTEGER :: BrN
   INTEGER :: CpN
-  REAL(r64) :: LoopCapacity
-  REAL(r64) :: LoopDemandSideCapacity
-  REAL(r64) :: LoopSupplySideCapacity
-  REAL(r64) :: DispatchedCapacity
-  REAL(r64) :: LoopDemandSideDispatchedCapacity
-  REAL(r64) :: LoopSupplySideDispatchedCapacity
+  REAL :: LoopCapacity
+  REAL :: LoopDemandSideCapacity
+  REAL :: LoopSupplySideCapacity
+  REAL :: DispatchedCapacity
+  REAL :: LoopDemandSideDispatchedCapacity
+  REAL :: LoopSupplySideDispatchedCapacity
 
   makefatalerror=.false.
   IF (Node(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%NodeNumOut)%Temp > (PlantLoop(LoopNum)%MaxTemp + OverShootOffset )) THEN
@@ -1067,8 +1067,8 @@ SUBROUTINE CheckForRunawayPlantTemps(LoopNum,LoopSideNum)
        trim(RoundSigDigits(PlantReport(LoopNum)%DemandNotDispatched,1))//' {W}')
     CALL ShowContinueError('PlantLoop Unmet Demand='//trim(RoundSigDigits(PlantReport(LoopNum)%UnMetDemand,1))//' {W}')
 
-    LoopCapacity=0.0d0
-    DispatchedCapacity = 0.d0
+    LoopCapacity=0.0
+    DispatchedCapacity = 0.
     DO LSN=DemandSide,SupplySide
       DO BrN=1,PlantLoop(LoopNum)%LoopSide(LSN)%TotalBranches
         DO CpN=1,PlantLoop(LoopNum)%LoopSide(LSN)%Branch(BrN)%TotalComponents
@@ -1184,17 +1184,17 @@ SUBROUTINE UpdatePlantSplitter(LoopNum, LoopSideNum, SplitNum)
           ! Changed to include hardware max in next line 7/26/2011
           Node(SplitterOutletNode)%MassFlowRateMaxAvail = MIN(Node(SplitterInletNode)%MassFlowRateMaxAvail, &
                                                                Node(SplitterOutletNode)%MassFlowRateMax)
-          Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0d0
+          Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0
 !
 !          If(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%FlowLock == 0 .and. LoopSideNum == SupplySide) Then
 !             Node(SplitterOutletNode)%MassFlowRateMaxAvail = Node(SplitterInletNode)%MassFlowRateMaxAvail
-!             Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0d0
+!             Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0
 !             !Node(SplitterInletNode)%MassFlowRateMinAvail CR branch pumps (7643)
 !          End If
 !          If(LoopSideNum == DemandSide .AND. (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%LoopPump .OR. &
 !             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%BranchPump)) Then
 !             Node(SplitterOutletNode)%MassFlowRateMaxAvail = Node(SplitterInletNode)%MassFlowRateMaxAvail
-!             Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0d0
+!             Node(SplitterOutletNode)%MassFlowRateMinAvail = 0.0
 !          End If
 
           !DSU? Not sure about passing min avail if it is nonzero.  I am testing a pump with nonzero
@@ -1364,7 +1364,7 @@ SUBROUTINE PullCompInterconnectTrigger(LoopNum, LoopSide, BranchNum, CompNum, &
   INTEGER,          INTENT(IN)     :: ConnectedLoopNum         ! Component's interconnected loop number
   INTEGER,          INTENT(IN)     :: ConnectedLoopSide        ! Component's interconnected loop side number
   INTEGER,          INTENT(IN)     :: CriteriaType             ! The criteria check to use, see DataPlant: SimFlagCriteriaTypes
-  REAL(r64),        INTENT(IN)     :: CriteriaValue            ! The value of the criteria check to evaluate
+  REAL,        INTENT(IN)     :: CriteriaValue            ! The value of the criteria check to evaluate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1375,7 +1375,7 @@ SUBROUTINE PullCompInterconnectTrigger(LoopNum, LoopSide, BranchNum, CompNum, &
     INTEGER    :: CallingCompLoopSideNum = 0     ! for debug error handling
     INTEGER    :: CallingCompBranchNum   = 0     ! for debug error handling
     INTEGER    :: CallingCompCompNum     = 0     ! for debug error handling
-    REAL(r64)  :: ThisCriteriaCheckValue = 0.0d0 ! the previous value, to check the current against
+    REAL  :: ThisCriteriaCheckValue = 0.0 ! the previous value, to check the current against
   END TYPE CriteriaData
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -1497,10 +1497,10 @@ SUBROUTINE UpdateChillerComponentCondenserSide(LoopNum, LoopSide, TypeOfNum,    
   INTEGER ,  INTENT(IN) :: TypeOfNum ! Component's type index
   INTEGER ,  INTENT(IN) :: InletNodeNum ! Component's inlet node pointer
   INTEGER ,  INTENT(IN) :: OutletNodeNum ! Component's outlet node pointer
-  REAL(r64), INTENT(IN) :: ModelCondenserHeatRate ! model's heat rejection rate at condenser (W)
-  REAL(r64), INTENT(IN) :: ModelInletTemp ! model's inlet temperature (C)
-  REAL(r64), INTENT(IN) :: ModelOutletTemp ! model's outlet temperature (C)
-  REAL(r64), INTENT(IN) :: ModelMassFlowRate  ! model's condenser water mass flow rate (kg/s)
+  REAL, INTENT(IN) :: ModelCondenserHeatRate ! model's heat rejection rate at condenser (W)
+  REAL, INTENT(IN) :: ModelInletTemp ! model's inlet temperature (C)
+  REAL, INTENT(IN) :: ModelOutletTemp ! model's outlet temperature (C)
+  REAL, INTENT(IN) :: ModelMassFlowRate  ! model's condenser water mass flow rate (kg/s)
   LOGICAL ,  INTENT(IN) :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1516,7 +1516,7 @@ SUBROUTINE UpdateChillerComponentCondenserSide(LoopNum, LoopSide, TypeOfNum,    
   INTEGER :: OtherLoopNum  ! local loop pointer for remote connected loop
   INTEGER :: OtherLoopSide ! local loop side pointer for remote connected loop
   INTEGER :: ConnectLoopNum  ! local do loop counter
-  REAL(r64) :: Cp
+  REAL :: Cp
 
   DidAnythingChange = .FALSE.
 
@@ -1531,7 +1531,7 @@ SUBROUTINE UpdateChillerComponentCondenserSide(LoopNum, LoopSide, TypeOfNum,    
 
   ! could also check heat rate agains McDeltaT from node data
 
-  IF ((Node(InletNodeNum)%MassFlowRate == 0.0D0) .AND. (ModelCondenserHeatRate > 0.0D0) ) THEN
+  IF ((Node(InletNodeNum)%MassFlowRate == 0.0) .AND. (ModelCondenserHeatRate > 0.0) ) THEN
 
   ! DSU3 TODO also send a request that condenser loop be made available, interlock message infrastructure??
 
@@ -1609,10 +1609,10 @@ SUBROUTINE UpdateComponentHeatRecoverySide(LoopNum, LoopSide, TypeOfNum,        
   INTEGER ,  INTENT(IN) :: TypeOfNum ! Component's type index
   INTEGER ,  INTENT(IN) :: InletNodeNum ! Component's inlet node pointer
   INTEGER ,  INTENT(IN) :: OutletNodeNum ! Component's outlet node pointer
-  REAL(r64), INTENT(IN) :: ModelRecoveryHeatRate ! model's heat rejection rate at recovery (W)
-  REAL(r64), INTENT(IN) :: ModelInletTemp ! model's inlet temperature (C)
-  REAL(r64), INTENT(IN) :: ModelOutletTemp ! model's outlet temperature (C)
-  REAL(r64), INTENT(IN) :: ModelMassFlowRate  ! model's condenser water mass flow rate (kg/s)
+  REAL, INTENT(IN) :: ModelRecoveryHeatRate ! model's heat rejection rate at recovery (W)
+  REAL, INTENT(IN) :: ModelInletTemp ! model's inlet temperature (C)
+  REAL, INTENT(IN) :: ModelOutletTemp ! model's outlet temperature (C)
+  REAL, INTENT(IN) :: ModelMassFlowRate  ! model's condenser water mass flow rate (kg/s)
   LOGICAL ,  INTENT(IN) :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1629,7 +1629,7 @@ SUBROUTINE UpdateComponentHeatRecoverySide(LoopNum, LoopSide, TypeOfNum,        
   INTEGER :: OtherLoopSide ! local loop side pointer for remote connected loop
 !  INTEGER :: CountConnectedLoops ! local total number of connected loops
   INTEGER :: ConnectLoopNum  ! local do loop counter
-  REAL(r64) :: Cp ! local fluid specific heat
+  REAL :: Cp ! local fluid specific heat
 
   DidAnythingChange = .FALSE.
 
@@ -1644,7 +1644,7 @@ SUBROUTINE UpdateComponentHeatRecoverySide(LoopNum, LoopSide, TypeOfNum,        
 
   ! could also check heat rate agains McDeltaT from node data
 
-  IF ((Node(InletNodeNum)%MassFlowRate == 0.0D0) .AND. (ModelRecoveryHeatRate > 0.0D0) ) THEN
+  IF ((Node(InletNodeNum)%MassFlowRate == 0.0) .AND. (ModelRecoveryHeatRate > 0.0) ) THEN
     !no flow but trying to move heat to this loop problem!
 
     DidAnythingChange = .TRUE.
@@ -1721,8 +1721,8 @@ SUBROUTINE UpdateAbsorberChillerComponentGeneratorSide(LoopNum, LoopSide, TypeOf
   INTEGER ,  INTENT(IN) :: InletNodeNum ! Component's inlet node pointer
   INTEGER ,  INTENT(IN) :: OutletNodeNum ! Component's outlet node pointer
   INTEGER ,  INTENT(IN) :: HeatSourceType ! Type of fluid in Generator loop
-  REAL(r64), INTENT(IN) :: ModelGeneratorHeatRate ! model's generator heat rate (W)
-  REAL(r64), INTENT(IN) :: ModelMassFlowRate  ! model's generator mass flow rate (kg/s)
+  REAL, INTENT(IN) :: ModelGeneratorHeatRate ! model's generator heat rate (W)
+  REAL, INTENT(IN) :: ModelMassFlowRate  ! model's generator mass flow rate (kg/s)
   LOGICAL,   INTENT(IN) :: FirstHVACIteration
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1756,7 +1756,7 @@ SUBROUTINE UpdateAbsorberChillerComponentGeneratorSide(LoopNum, LoopSide, TypeOf
   !check if any conditions have changed
   IF (Node(InletNodeNum)%MassFlowRate /= ModelMassFlowRate) DidAnythingChange = .TRUE.
 
-    IF ((Node(InletNodeNum)%MassFlowRate == 0.0D0) .AND. (ModelGeneratorHeatRate > 0.0D0) ) THEN
+    IF ((Node(InletNodeNum)%MassFlowRate == 0.0) .AND. (ModelGeneratorHeatRate > 0.0) ) THEN
 
   ! DSU3 TODO also send a request that generator loop be made available, interlock message infrastructure??
 
@@ -2044,7 +2044,7 @@ SUBROUTINE RegisterPlantCompDesignFlow(ComponentInletNodeNum,DesPlantFlow)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)   :: ComponentInletNodeNum ! the component's water inlet node number
                                                    ! (condenser side for water / water components)
-  REAL(r64), INTENT(IN)   :: DesPlantFlow          ! the component's design fluid volume flow rate [m3/s]
+  REAL, INTENT(IN)   :: DesPlantFlow          ! the component's design fluid volume flow rate [m3/s]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2149,7 +2149,7 @@ SUBROUTINE SafeCopyPlantNode( InletNodeNum, OutletNodeNum, LoopNum, OutletTemp )
   INTEGER , INTENT(IN) :: InletNodeNum
   INTEGER , INTENT(IN) :: OutletNodeNum
   INTEGER , INTENT(IN) , OPTIONAL :: LoopNum
-  REAL(r64), INTENT(IN), OPTIONAL :: OutletTemp !set on outlet node if present and water.
+  REAL, INTENT(IN), OPTIONAL :: OutletTemp !set on outlet node if present and water.
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2192,7 +2192,7 @@ SUBROUTINE SafeCopyPlantNode( InletNodeNum, OutletNodeNum, LoopNum, OutletTemp )
 
 END SUBROUTINE SafeCopyPlantNode
 
-REAL(r64) FUNCTION BoundValueToNodeMinMaxAvail(ValueToBound, NodeNumToBoundWith) RESULT(BoundedValue)
+REAL FUNCTION BoundValueToNodeMinMaxAvail(ValueToBound, NodeNumToBoundWith) RESULT(BoundedValue)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -2212,7 +2212,7 @@ REAL(r64) FUNCTION BoundValueToNodeMinMaxAvail(ValueToBound, NodeNumToBoundWith)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: ValueToBound
+  REAL, INTENT(IN) :: ValueToBound
   INTEGER,   INTENT(IN) :: NodeNumToBoundWith
 
   BoundedValue = ValueToBound
@@ -2249,8 +2249,8 @@ SUBROUTINE TightenNodeMinMaxAvails(NodeNum, NewMinAvail, NewMaxAvail)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: NodeNum
-  REAL(r64), INTENT(IN) :: NewMinAvail
-  REAL(r64), INTENT(IN) :: NewMaxAvail
+  REAL, INTENT(IN) :: NewMinAvail
+  REAL, INTENT(IN) :: NewMaxAvail
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2262,8 +2262,8 @@ SUBROUTINE TightenNodeMinMaxAvails(NodeNum, NewMinAvail, NewMaxAvail)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: OldMinAvail
-  REAL(r64) :: OldMaxAvail
+  REAL :: OldMinAvail
+  REAL :: OldMaxAvail
 
   OldMinAvail = Node(NodeNum)%MassFlowRateMinAvail
   OldMaxAvail = Node(NodeNum)%MassFlowRateMaxAvail
@@ -2277,7 +2277,7 @@ SUBROUTINE TightenNodeMinMaxAvails(NodeNum, NewMinAvail, NewMaxAvail)
 
 END SUBROUTINE
 
-REAL(r64) FUNCTION BoundValueToWithinTwoValues(ValueToBound, LowerBound, UpperBound) RESULT(BoundedValue)
+REAL FUNCTION BoundValueToWithinTwoValues(ValueToBound, LowerBound, UpperBound) RESULT(BoundedValue)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -2297,9 +2297,9 @@ REAL(r64) FUNCTION BoundValueToWithinTwoValues(ValueToBound, LowerBound, UpperBo
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: ValueToBound
-  REAL(r64), INTENT(IN) :: LowerBound
-  REAL(r64), INTENT(IN) :: UpperBound
+  REAL, INTENT(IN) :: ValueToBound
+  REAL, INTENT(IN) :: LowerBound
+  REAL, INTENT(IN) :: UpperBound
 
   BoundedValue = ValueToBound
   BoundedValue = MAX(BoundedValue, LowerBound)
@@ -2377,19 +2377,19 @@ SUBROUTINE LogPlantConvergencePoints(FirstHVACIteration)
   INTEGER :: ThisLoopSide
   INTEGER :: InletNodeNum
   INTEGER :: OutletNodeNum
-  REAL(r64) :: InletNodeTemp
-  REAL(r64) :: InletNodeMdot
-  REAL(r64) :: OutletNodeTemp
-  REAL(r64) :: OutletNodeMdot
+  REAL :: InletNodeTemp
+  REAL :: InletNodeMdot
+  REAL :: OutletNodeTemp
+  REAL :: OutletNodeMdot
 
   DO ThisLoopNum = 1, SIZE(PlantLoop)
     DO ThisLoopSide = 1, SIZE(PlantLoop(ThisLoopNum)%LoopSide)
 
       IF (FirstHVACIteration) THEN
-        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%InletNode%TemperatureHistory =   0.0d0
-        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%InletNode%MassFlowRateHistory =  0.0d0
-        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%OutletNode%TemperatureHistory =  0.0d0
-        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%OutletNode%MassFlowRateHistory = 0.0d0
+        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%InletNode%TemperatureHistory =   0.0
+        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%InletNode%MassFlowRateHistory =  0.0
+        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%OutletNode%TemperatureHistory =  0.0
+        PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%OutletNode%MassFlowRateHistory = 0.0
       END IF
 
       InletNodeNum  = PlantLoop(ThisLoopNum)%LoopSide(ThisLoopSide)%NodeNumIn
@@ -2453,10 +2453,10 @@ LOGICAL FUNCTION CheckPlantConvergence(ThisLoopNum, ThisLoopSide, FirstHVACItera
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: InletAvgTemp
-  REAL(r64) :: InletAvgMdot
-  REAL(r64) :: OutletAvgTemp
-  REAL(r64) :: OutletAvgMdot
+  REAL :: InletAvgTemp
+  REAL :: InletAvgMdot
+  REAL :: OutletAvgTemp
+  REAL :: OutletAvgMdot
 
   IF (FirstHVACIteration) THEN
     Converged = .FALSE.

@@ -25,7 +25,7 @@ PUBLIC    ! By definition, all variables which are placed in this data-only
           ! Parameters for the definition and limitation of arrays:
 
           ! This is more or less the traditional value from BLAST.
-REAL(r64), Parameter :: Lam = 2500000.0d0 ! heat of adsorption for building materials
+REAL, Parameter :: Lam = 2500000.0 ! heat of adsorption for building materials
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -33,33 +33,33 @@ REAL(r64), Parameter :: Lam = 2500000.0d0 ! heat of adsorption for building mate
 
           ! MODULE VARIABLE DECLARATIONS:
 ! Public Variables that will also be used in the Moisture Surface Balance
-REAL(r64), Allocatable, DIMENSION(:,:,:)    :: FluxH  ! transfer function coeff for calculating the CPF Flux history term
-REAL(r64), Allocatable, DIMENSION(:,:,:,:,:):: IcoefH ! transfer function coeff for calculating the CPF history term
-REAL(r64), Allocatable, DIMENSION(:,:,:,:)  :: Icoef  ! transfer function coeff for calculating the CPF history term
-REAL(r64), Allocatable, DIMENSION(:,:)      :: DiffC  ! Thermal Diffusivity in combined potential formulation (CPF)
+REAL, Allocatable, DIMENSION(:,:,:)    :: FluxH  ! transfer function coeff for calculating the CPF Flux history term
+REAL, Allocatable, DIMENSION(:,:,:,:,:):: IcoefH ! transfer function coeff for calculating the CPF history term
+REAL, Allocatable, DIMENSION(:,:,:,:)  :: Icoef  ! transfer function coeff for calculating the CPF history term
+REAL, Allocatable, DIMENSION(:,:)      :: DiffC  ! Thermal Diffusivity in combined potential formulation (CPF)
                                                              ! for each equation
-REAL(r64), Allocatable, DIMENSION(:,:)      :: mtinc  ! # of Moisture transfer function time increment for each equation
-REAL(r64), Allocatable, DIMENSION(:)        :: S1     ! Thermal Diffusivity in combined potential formulation (CPF)
+REAL, Allocatable, DIMENSION(:,:)      :: mtinc  ! # of Moisture transfer function time increment for each equation
+REAL, Allocatable, DIMENSION(:)        :: S1     ! Thermal Diffusivity in combined potential formulation (CPF)
                                                              ! for each equation
-REAL(r64), Allocatable, DIMENSION(:)        :: R2     ! Thermal Diffusivity in combined potential formulation (CPF)
+REAL, Allocatable, DIMENSION(:)        :: R2     ! Thermal Diffusivity in combined potential formulation (CPF)
                                                              ! for each equation
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: TempOutsideAirFD ! Temperature outside air for the FD surface
+REAL, ALLOCATABLE, DIMENSION(:) :: TempOutsideAirFD ! Temperature outside air for the FD surface
 
 Integer, Allocatable, DIMENSION(:,:)  :: mhstry         ! # of FD History terms for each equation
 Integer, Allocatable, Dimension(:)    :: CMTF           ! Type of material layer
 Integer, Allocatable, DIMENSION(:,:)  :: Nmrf           ! # of Moisture Response Factors for CPF Solution
 
     !variables used for MTF moisture implementation
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: RhoVaporAirOut  ! Vapor Density outside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: RhoVaporAirIn   ! Vapor Density inside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HConvExtFD      ! thermal convection coefficient outside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HMassConvExtFD  ! mass convection coefficient outside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HConvInFD       ! thermal convection coefficient inside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HMassConvInFD   ! mass convection coefficient inside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: RhoVaporSurfIn  ! Vapor Density inside surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HSkyFD          ! Sky Convection Coefficient
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HGrndFD         ! Ground Convection Coefficient
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: HAirFD          ! Air Convection Coefficient
+REAL, ALLOCATABLE, DIMENSION(:) :: RhoVaporAirOut  ! Vapor Density outside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: RhoVaporAirIn   ! Vapor Density inside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HConvExtFD      ! thermal convection coefficient outside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HMassConvExtFD  ! mass convection coefficient outside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HConvInFD       ! thermal convection coefficient inside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HMassConvInFD   ! mass convection coefficient inside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: RhoVaporSurfIn  ! Vapor Density inside surface
+REAL, ALLOCATABLE, DIMENSION(:) :: HSkyFD          ! Sky Convection Coefficient
+REAL, ALLOCATABLE, DIMENSION(:) :: HGrndFD         ! Ground Convection Coefficient
+REAL, ALLOCATABLE, DIMENSION(:) :: HAirFD          ! Air Convection Coefficient
 
 !     NOTICE
 !

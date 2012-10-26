@@ -79,12 +79,12 @@ TYPE GenData
   CHARACTER(len=MaxNameLength) :: TypeOf             = ' ' ! equipment type
   INTEGER                      :: CompType_Num       = 0  ! Numeric designator for CompType (TypeOf)
   INTEGER                      :: GeneratorIndex     = 0
-  REAL(r64)                    :: MaxPowerOut        = 0.0 ! Maximum Power Output (W)
+  REAL                    :: MaxPowerOut        = 0.0 ! Maximum Power Output (W)
   CHARACTER(len=MaxNameLength) :: AvailSched         = ' ' ! Operation Schedule.
   INTEGER                      :: AvailSchedPtr      = 0   ! pointer to operation schedule
-  REAL(r64)                    :: PowerRequestThisTimestep   = 0.0 ! Current Demand on Equipment (W)
+  REAL                    :: PowerRequestThisTimestep   = 0.0 ! Current Demand on Equipment (W)
   LOGICAL                      :: ONThisTimestep     =.false. !Indicator whether Generator on
-  REAL(r64)                    :: EMSPowerRequest    = 0.0D0 ! EMS actuator for current demand on equipment (W)
+  REAL                    :: EMSPowerRequest    = 0.0 ! EMS actuator for current demand on equipment (W)
   LOGICAL                      :: EMSRequestOn       = .FALSE. ! EMS actuating On if true.
 
   LOGICAL                      :: PlantInfoFound     = .false.
@@ -92,14 +92,14 @@ TYPE GenData
   INTEGER                      :: LoopSideNum        = 0 ! Cogen: pointer to plant loop data structure
   INTEGER                      :: BranchNum          = 0 ! Cogen: pointer to plant loop data structure
   INTEGER                      :: CompNum            = 0 ! Cogen: pointer to plant loop data structure
-  REAL(r64)                    :: NominalThermElectRatio  = 0.0 ! Cogen: nominal ratio of thermal to elect production
+  REAL                    :: NominalThermElectRatio  = 0.0 ! Cogen: nominal ratio of thermal to elect production
   !results of component models for load center reporting
-  REAL(r64)                    :: DCElectricityProd    = 0.0 ! Current DC Electric Produced from Equipment (J)
-  REAL(r64)                    :: DCElectProdRate      = 0.0 ! Current DC Electric Production Rate from Equipment (W)
-  REAL(r64)                    :: ElectricityProd      = 0.0 ! Current AC Electric Produced from Equipment (J)
-  REAL(r64)                    :: ElectProdRate        = 0.0 ! Current AC Electric Production Rate from Equipment (W)
-  REAL(r64)                    :: ThermalProd          = 0.0 ! Current Thermal energy Produced from Equipment (J)
-  REAL(r64)                    :: ThermalProdRate      = 0.0 ! Current Thermal energy Production Rate from Equipment (W)
+  REAL                    :: DCElectricityProd    = 0.0 ! Current DC Electric Produced from Equipment (J)
+  REAL                    :: DCElectProdRate      = 0.0 ! Current DC Electric Production Rate from Equipment (W)
+  REAL                    :: ElectricityProd      = 0.0 ! Current AC Electric Produced from Equipment (J)
+  REAL                    :: ElectProdRate        = 0.0 ! Current AC Electric Production Rate from Equipment (W)
+  REAL                    :: ThermalProd          = 0.0 ! Current Thermal energy Produced from Equipment (J)
+  REAL                    :: ThermalProdRate      = 0.0 ! Current Thermal energy Production Rate from Equipment (W)
 
 END TYPE GenData
 
@@ -113,16 +113,16 @@ TYPE ElectricPowerLoadCenter
   CHARACTER(len=MaxNameLength) :: GenerationMeterName= ' ' ! Name of Generated Energy Meter for "on demand" operation
   INTEGER                      :: NumGenerators      = 0   ! Number of Generators
   TYPE(GenData), ALLOCATABLE, DIMENSION(:) :: ElecGen          ! pointer to generator
-  REAL(r64)                    :: DemandLimit        = 0.0 ! Demand Limit in Watts(W) which the generator will operate above
+  REAL                    :: DemandLimit        = 0.0 ! Demand Limit in Watts(W) which the generator will operate above
   INTEGER                      :: TrackSchedPtr      = 0   ! "pointer" to schedule for electrical demand to meet.
 
   INTEGER                      :: BussType           = 0   ! is this load center powered by AC or DC generators
   LOGICAL                      :: InverterPresent    = .FALSE.
   CHARACTER(len=MaxNameLength) :: InverterName       = ' ' ! hold name for verificaton and error messages
   INTEGER                      :: InverterModelNum   = 0   ! simulation model parameter type
-  REAL(r64)                    :: DCElectricityProd  = 0.0D0 ! Current DC Elect produced (J) (if buss type DCbussInverter)
-  REAL(r64)                    :: DCElectProdRate    = 0.0D0 ! Current DC Elect power produced (W) (if buss type DCbussInverter)
-  REAL(r64)                    :: DCpowerConditionLosses = 0.0D0 ! current DC to AC inverter losses (W) (if DCbussInverter)
+  REAL                    :: DCElectricityProd  = 0.0 ! Current DC Elect produced (J) (if buss type DCbussInverter)
+  REAL                    :: DCElectProdRate    = 0.0 ! Current DC Elect power produced (W) (if buss type DCbussInverter)
+  REAL                    :: DCpowerConditionLosses = 0.0 ! current DC to AC inverter losses (W) (if DCbussInverter)
 
   LOGICAL                      :: StoragePresent     = .FALSE.
   CHARACTER(len=MaxNameLength) :: StorageName        = ' ' ! hold name for verificaton and error messages
@@ -132,19 +132,19 @@ TYPE ElectricPowerLoadCenter
   CHARACTER(len=MaxNameLength) :: TransformerName    = ' ' ! hold name for verificaton and error messages
   INTEGER                      :: TransformerModelNum= 0   ! simulation model parameter type
 
-  REAL(r64)                    :: ElectricityProd    = 0.0 ! Current AC Electric Produced from Equipment (J)
-  REAL(r64)                    :: ElectProdRate      = 0.0 ! Current Electric Production Rate from Equipment (W)
-  REAL(r64)                    :: ThermalProd        = 0.0 ! Current Thermal energy Produced from Equipment (J)
-  REAL(r64)                    :: ThermalProdRate    = 0.0 ! Current Thermal energy Production Rate from Equipment (W)
-  REAL(r64)                    :: TotalPowerRequest  = 0.0 ! Total electric power request from the load center (W)
-  REAL(r64)                    :: TotalThermalPowerRequest  = 0.0 ! Total thermal power request from the load center (W)
-  REAL(r64)                    :: ElectDemand        = 0.0 ! Current electric power demand on the load center (W)
+  REAL                    :: ElectricityProd    = 0.0 ! Current AC Electric Produced from Equipment (J)
+  REAL                    :: ElectProdRate      = 0.0 ! Current Electric Production Rate from Equipment (W)
+  REAL                    :: ThermalProd        = 0.0 ! Current Thermal energy Produced from Equipment (J)
+  REAL                    :: ThermalProdRate    = 0.0 ! Current Thermal energy Production Rate from Equipment (W)
+  REAL                    :: TotalPowerRequest  = 0.0 ! Total electric power request from the load center (W)
+  REAL                    :: TotalThermalPowerRequest  = 0.0 ! Total thermal power request from the load center (W)
+  REAL                    :: ElectDemand        = 0.0 ! Current electric power demand on the load center (W)
 END TYPE ElectricPowerLoadCenter
 
 TYPE CECInverterLookUpTableData
-  REAL(r64) :: NightTareLossPower = 0.0D0
-  REAL(r64) :: NominalVoltage = 0.0D0
-  REAL(r64), DIMENSION(6) :: NomVoltEfficiencyARR = 0.0D0  ! eff at 10, 20, 30, 50, 75, & 100% power and Nominal voltage
+  REAL :: NightTareLossPower = 0.0
+  REAL :: NominalVoltage = 0.0
+  REAL, DIMENSION(6) :: NomVoltEfficiencyARR = 0.0  ! eff at 10, 20, 30, 50, 75, & 100% power and Nominal voltage
 END TYPE CECInverterLookUpTableData
 
 TYPE DCtoACInverterStruct
@@ -153,27 +153,27 @@ TYPE DCtoACInverterStruct
   INTEGER                      :: AvailSchedPtr = 0 ! number for availability schedule.
   INTEGER                      :: HeatLossesDestination = 0 !
   INTEGER                      :: ZoneNum = 0 ! destination zone for heat losses from inverter.
-  REAL(r64)                    :: ZoneRadFract = 0.0D0 ! radiative fraction for thermal losses to zone
+  REAL                    :: ZoneRadFract = 0.0 ! radiative fraction for thermal losses to zone
   Type (CECInverterLookUpTableData) :: LUTable
   INTEGER                      :: CurveNum = 0 ! curve index for eff as func of power
-  REAL(r64)                    :: RatedPower = 0.0D0 ! rated, max continuous power output level for inverter
-  REAL(r64)                    :: MinPower   = 0.0D0
-  REAL(r64)                    :: MaxPower   = 0.0D0
-  REAL(r64)                    :: MinEfficiency    = 0.0D0
-  REAL(r64)                    :: MaxEfficiency    = 0.0D0
-  REAL(r64)                    :: StandbyPower     = 0.0D0
+  REAL                    :: RatedPower = 0.0 ! rated, max continuous power output level for inverter
+  REAL                    :: MinPower   = 0.0
+  REAL                    :: MaxPower   = 0.0
+  REAL                    :: MinEfficiency    = 0.0
+  REAL                    :: MaxEfficiency    = 0.0
+  REAL                    :: StandbyPower     = 0.0
   !results and reporting
-  REAL(r64)                    :: Efficiency       = 0.0D0
-  REAL(r64)                    :: DCPowerIn        = 0.0D0
-  REAL(r64)                    :: ACPowerOut       = 0.0D0
-  REAL(r64)                    :: DCEnergyIn       = 0.0D0
-  REAL(r64)                    :: ACEnergyOut      = 0.0D0
-  REAL(r64)                    :: ThermLossRate    = 0.0D0
-  REAL(r64)                    :: ThermLossEnergy  = 0.0D0
-  REAL(r64)                    :: QdotconvZone     = 0.0D0
-  REAL(r64)                    :: QdotRadZone      = 0.0D0
-  REAL(r64)                    :: AncillACuseRate  = 0.0D0
-  REAL(r64)                    :: AncillACuseEnergy = 0.0D0
+  REAL                    :: Efficiency       = 0.0
+  REAL                    :: DCPowerIn        = 0.0
+  REAL                    :: ACPowerOut       = 0.0
+  REAL                    :: DCEnergyIn       = 0.0
+  REAL                    :: ACEnergyOut      = 0.0
+  REAL                    :: ThermLossRate    = 0.0
+  REAL                    :: ThermLossEnergy  = 0.0
+  REAL                    :: QdotconvZone     = 0.0
+  REAL                    :: QdotRadZone      = 0.0
+  REAL                    :: AncillACuseRate  = 0.0
+  REAL                    :: AncillACuseEnergy = 0.0
 END TYPE DCtoACInverterStruct
 
 TYPE, PUBLIC :: ElecStorageDataStruct
@@ -183,62 +183,62 @@ TYPE, PUBLIC :: ElecStorageDataStruct
   INTEGER                      :: AvailSchedPtr             = 0 ! availability schedule index.
   INTEGER                      :: HeatLossesDestination     = 0 ! mode for where thermal losses go
   INTEGER                      :: ZoneNum                   = 0 ! destination zone for heat losses from inverter.
-  REAL(r64)                    :: ZoneRadFract              = 0.0D0 ! radiative fraction for thermal losses to zone
-  REAL(r64)                    :: StartingEnergyStored      = 0.0D0 ![J] joules inside at beginning of environment period
-  REAL(r64)                    :: EnergeticEfficCharge      = 0.0D0 ! [ ] efficiency of charging
-  REAL(r64)                    :: EnergeticEfficDischarge   = 0.0D0 ! [ ] efficiency of discharging
-  REAL(r64)                    :: MaxPowerDraw              = 0.0D0 ! [W] max rate of discharge
-  REAL(r64)                    :: MaxPowerStore             = 0.0D0 ! [W] max rate of charge
-  REAL(r64)                    :: MaxEnergyCapacity         = 0.0D0 ! [J] max storage capacity
+  REAL                    :: ZoneRadFract              = 0.0 ! radiative fraction for thermal losses to zone
+  REAL                    :: StartingEnergyStored      = 0.0 ![J] joules inside at beginning of environment period
+  REAL                    :: EnergeticEfficCharge      = 0.0 ! [ ] efficiency of charging
+  REAL                    :: EnergeticEfficDischarge   = 0.0 ! [ ] efficiency of discharging
+  REAL                    :: MaxPowerDraw              = 0.0 ! [W] max rate of discharge
+  REAL                    :: MaxPowerStore             = 0.0 ! [W] max rate of charge
+  REAL                    :: MaxEnergyCapacity         = 0.0 ! [J] max storage capacity
   INTEGER                      :: ParallelNum               = 0     ! [ ] number of battery modules in parallel
   INTEGER                      :: SeriesNum                 = 0     ! [ ] number of battery modules in series
   INTEGER                      :: ChargeCurveNum            = 0     ! [ ] voltage change curve index number for charging
   INTEGER                      :: DischargeCurveNum         = 0     ! [ ] voltage change curve index number for discharging
   INTEGER                      :: CycleBinNum               = 0     ! [ ] number of cycle bins
-  REAL(r64)                    :: StartingSOC               = 0.0D0 ! [ ] initial fractional state of charge
-  REAL(r64)                    :: MaxAhCapacity             = 0.0D0 ! [Ah]maximum capacity
-  REAL(r64)                    :: AvailableFrac             = 0.0D0 ! [ ] fraction of available charge capacity
-  REAL(r64)                    :: ChargeConversionRate      = 0.0D0 ! [1/h]change rate from bound charge energy to available charge
-  REAL(r64)                    :: ChargedOCV                = 0.0D0 ! [V] fully charged oppen circuit voltage
-  REAL(r64)                    :: DischargedOCV             = 0.0D0 ! [V] fully discharged open circuit voltage
-  REAL(r64)                    :: InternalR                 = 0.0D0 ! [ohm]internal electric resistance
-  REAL(r64)                    :: MaxDischargeI             = 0.0D0 ! [A] maximum discharging current
-  REAL(r64)                    :: CutoffV                   = 0.0D0 ! [V] cut-off voltage
-  REAL(r64)                    :: MaxChargeRate             = 0.0D0 ! [1/h]charge rate limit
+  REAL                    :: StartingSOC               = 0.0 ! [ ] initial fractional state of charge
+  REAL                    :: MaxAhCapacity             = 0.0 ! [Ah]maximum capacity
+  REAL                    :: AvailableFrac             = 0.0 ! [ ] fraction of available charge capacity
+  REAL                    :: ChargeConversionRate      = 0.0 ! [1/h]change rate from bound charge energy to available charge
+  REAL                    :: ChargedOCV                = 0.0 ! [V] fully charged oppen circuit voltage
+  REAL                    :: DischargedOCV             = 0.0 ! [V] fully discharged open circuit voltage
+  REAL                    :: InternalR                 = 0.0 ! [ohm]internal electric resistance
+  REAL                    :: MaxDischargeI             = 0.0 ! [A] maximum discharging current
+  REAL                    :: CutoffV                   = 0.0 ! [V] cut-off voltage
+  REAL                    :: MaxChargeRate             = 0.0 ! [1/h]charge rate limit
   INTEGER                      :: LifeCalculation           = 0     ! [ ]battery life calculation: Yes or No
   INTEGER                      :: LifeCurveNum              = 0     ! [ ]battery life curve name index number
   !calculated and from elsewhere vars
-  REAL(r64)                    :: ThisTimeStepStateOfCharge = 0.0D0 ! [J]
-  REAL(r64)                    :: LastTimeStepStateOfCharge = 0.0D0 ! [J]
-  REAL(r64)                    :: PelNeedFromStorage        = 0.0D0 ! [W]
-  REAL(r64)                    :: PelFromStorage            = 0.0D0 ! [W]
+  REAL                    :: ThisTimeStepStateOfCharge = 0.0 ! [J]
+  REAL                    :: LastTimeStepStateOfCharge = 0.0 ! [J]
+  REAL                    :: PelNeedFromStorage        = 0.0 ! [W]
+  REAL                    :: PelFromStorage            = 0.0 ! [W]
   LOGICAL                      :: EMSOverridePelFromStorage = .FALSE.  ! if true, EMS calling for override
-  REAL(r64)                    :: EMSValuePelFromStorage    = 0.0D0 ! value EMS is directing to use, power from storage [W]
-  REAL(r64)                    :: PelIntoStorage            = 0.0D0 ! [W]
+  REAL                    :: EMSValuePelFromStorage    = 0.0 ! value EMS is directing to use, power from storage [W]
+  REAL                    :: PelIntoStorage            = 0.0 ! [W]
   LOGICAL                      :: EMSOverridePelIntoStorage = .FALSE. ! if true, EMS calling for override
-  REAL(r64)                    :: EMSValuePelIntoStorage    = 0.0D0  ! value EMS is directing to use, power into storage [W]
-  REAL(r64)                    :: QdotConvZone              = 0.0D0 ! [W]
-  REAL(r64)                    :: QdotRadZone               = 0.0D0 ! [W]
-  REAL(r64)                    :: TimeElapsed               = 0.0D0 ! [h]
-  REAL(r64)                    :: ThisTimeStepAvailable     = 0.0D0 ! [Ah] available charge at the current timestep
-  REAL(r64)                    :: ThisTimeStepBound         = 0.0D0 ! [Ah] bound charge at the current timestep
-  REAL(r64)                    :: LastTimeStepAvailable     = 0.0D0 ! [Ah] available charge at the previous timestep
-  REAL(r64)                    :: LastTimeStepBound         = 0.0D0 ! [Ah] bound charge at the current timestep
+  REAL                    :: EMSValuePelIntoStorage    = 0.0  ! value EMS is directing to use, power into storage [W]
+  REAL                    :: QdotConvZone              = 0.0 ! [W]
+  REAL                    :: QdotRadZone               = 0.0 ! [W]
+  REAL                    :: TimeElapsed               = 0.0 ! [h]
+  REAL                    :: ThisTimeStepAvailable     = 0.0 ! [Ah] available charge at the current timestep
+  REAL                    :: ThisTimeStepBound         = 0.0 ! [Ah] bound charge at the current timestep
+  REAL                    :: LastTimeStepAvailable     = 0.0 ! [Ah] available charge at the previous timestep
+  REAL                    :: LastTimeStepBound         = 0.0 ! [Ah] bound charge at the current timestep
   !report
-  REAL(r64)                    :: ElectEnergyinStorage      = 0.0D0 ! [J] state of charge
-  REAL(r64)                    :: StoredPower               = 0.0D0 ! [W]
-  REAL(r64)                    :: StoredEnergy              = 0.0D0 ! [J]
-  REAL(r64)                    :: DecrementedEnergyStored   = 0.0D0 ! [J] this is the negative of StoredEnergy
-  REAL(r64)                    :: DrawnPower                = 0.0D0 ! [W]
-  REAL(r64)                    :: DrawnEnergy               = 0.0D0 ! [J]
-  REAL(r64)                    :: ThermLossRate             = 0.0D0 ! [W]
-  REAL(r64)                    :: ThermLossEnergy           = 0.0D0 ! [J]
+  REAL                    :: ElectEnergyinStorage      = 0.0 ! [J] state of charge
+  REAL                    :: StoredPower               = 0.0 ! [W]
+  REAL                    :: StoredEnergy              = 0.0 ! [J]
+  REAL                    :: DecrementedEnergyStored   = 0.0 ! [J] this is the negative of StoredEnergy
+  REAL                    :: DrawnPower                = 0.0 ! [W]
+  REAL                    :: DrawnEnergy               = 0.0 ! [J]
+  REAL                    :: ThermLossRate             = 0.0 ! [W]
+  REAL                    :: ThermLossEnergy           = 0.0 ! [J]
   INTEGER                      :: StorageMode               = 0     ! [ ] mode of operation 0 for idle, 1 for discharging, 2 for charging
-  REAL(r64)                    :: AbsoluteSOC               = 0.0D0 ! [Ah] total state of charge
-  REAL(r64)                    :: FractionSOC               = 0.0D0 ! [ ] fractional state of charge
-  REAL(r64)                    :: BatteryCurrent            = 0.0D0 ! [A] total current
-  REAL(r64)                    :: BatteryVoltage            = 0.0D0 ! [V] total voltage
-  REAL(r64)                    :: BatteryDamage             = 0.0D0 ! [ ] fractional battery damage
+  REAL                    :: AbsoluteSOC               = 0.0 ! [Ah] total state of charge
+  REAL                    :: FractionSOC               = 0.0 ! [ ] fractional state of charge
+  REAL                    :: BatteryCurrent            = 0.0 ! [A] total current
+  REAL                    :: BatteryVoltage            = 0.0 ! [V] total voltage
+  REAL                    :: BatteryDamage             = 0.0 ! [ ] fractional battery damage
 
 
 END TYPE ElecStorageDataStruct
@@ -250,17 +250,17 @@ TYPE ElectricTransformer
   INTEGER                      :: UsageMode = 0             ! mode for transformer usage
   INTEGER                      :: HeatLossesDestination = 0 ! mode for where thermal losses go
   INTEGER                      :: ZoneNum = 0               ! destination zone for heat losses from inverter.
-  REAL(r64)                    :: ZoneRadFrac = 0.0D0       ! radiative fraction for thermal losses to zone
-  REAL(r64)                    :: RatedCapacity = 0.0D0     ! rated capacity [VA]
+  REAL                    :: ZoneRadFrac = 0.0       ! radiative fraction for thermal losses to zone
+  REAL                    :: RatedCapacity = 0.0     ! rated capacity [VA]
   INTEGER                      :: Phase = 0                 ! phase
-  REAL(r64)                    :: FactorTempCoeff = 0.0D0   ! thermal coefficient of resistance for winding material
-  REAL(r64)                    :: TempRise = 0.0D0          ! full load temperature rise [C]
-  REAL(r64)                    :: EddyFrac = 0.0D0          ! fraction of eddy current losses []
+  REAL                    :: FactorTempCoeff = 0.0   ! thermal coefficient of resistance for winding material
+  REAL                    :: TempRise = 0.0          ! full load temperature rise [C]
+  REAL                    :: EddyFrac = 0.0          ! fraction of eddy current losses []
   INTEGER                      :: PerformanceInputMode = 0  ! performance input method
-  REAL(r64)                    :: RatedEfficiency = 0.0D0   ! nameplate efficiency []
-  REAL(r64)                    :: RatedPUL = 0.0D0          ! per unit load for nameplate efficiency []
-  REAL(r64)                    :: RatedTemp = 0.0D0         ! reference temperature for nameplate efficiency [C]
-  REAL(r64)                    :: MaxPUL = 0.0D0            ! per unit load for maximum efficiency []
+  REAL                    :: RatedEfficiency = 0.0   ! nameplate efficiency []
+  REAL                    :: RatedPUL = 0.0          ! per unit load for nameplate efficiency []
+  REAL                    :: RatedTemp = 0.0         ! reference temperature for nameplate efficiency [C]
+  REAL                    :: MaxPUL = 0.0            ! per unit load for maximum efficiency []
   LOGICAL                      :: ConsiderLosses = .TRUE.   ! if true, consider transformer lossses in metering
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:)  :: WiredMeterNames ! names of the meters wired to transformer
   INTEGER, ALLOCATABLE, DIMENSION(:) :: WiredMeterPtrs      ! array of "pointers" to meters wired to transformer
@@ -268,47 +268,47 @@ TYPE ElectricTransformer
                                                             ! Electricity:Facility and Electricity:HVAC are two special
                                                             ! meters because tranformer loss is part of them
   !calculated and from elsewhere vars
-  REAL(r64)                    :: RatedNL = 0.0D0           ! rated no load losses, user input or calculated [W]
-  REAL(r64)                    :: RatedLL = 0.0D0           ! rated load losses, user input or calculated [W]
+  REAL                    :: RatedNL = 0.0           ! rated no load losses, user input or calculated [W]
+  REAL                    :: RatedLL = 0.0           ! rated load losses, user input or calculated [W]
   INTEGER                      :: LoadCenterNum = 0         ! number of load centers served by the transformer
   Integer, ALLOCATABLE, DIMENSION(:) :: LoadCenterIndexes   ! index array of load centers served by the transformer
   INTEGER                      :: OverloadErrorIndex = 0    ! used for warning message when transformer is overloaded
   !results and reporting
-  REAL(r64)                    :: Efficiency       = 0.0D0  ! transformer efficiency
-  REAL(r64)                    :: PowerIn          = 0.0D0  ! [W]
-  REAL(r64)                    :: EnergyIn         = 0.0D0  ! [J]
-  REAL(r64)                    :: PowerOut         = 0.0D0  ! [W]
-  REAL(r64)                    :: EnergyOut        = 0.0D0  ! [J]
-  REAL(r64)                    :: NoLoadLossRate   = 0.0D0  ! [W]
-  REAL(r64)                    :: NoLoadLossEnergy = 0.0D0  ! [J]
-  REAL(r64)                    :: LoadLossRate     = 0.0D0  ! [W]
-  REAL(r64)                    :: LoadLossEnergy   = 0.0D0  ! [J]
-  REAL(r64)                    :: ThermalLossRate  = 0.0D0  ! [W]
-  REAL(r64)                    :: ThermalLossEnergy= 0.0D0  ! [J]
-  REAL(r64)                    :: ElecUseUtility   = 0.0D0  ! [J] Energy consumption for a utility transformer (power in)
+  REAL                    :: Efficiency       = 0.0  ! transformer efficiency
+  REAL                    :: PowerIn          = 0.0  ! [W]
+  REAL                    :: EnergyIn         = 0.0  ! [J]
+  REAL                    :: PowerOut         = 0.0  ! [W]
+  REAL                    :: EnergyOut        = 0.0  ! [J]
+  REAL                    :: NoLoadLossRate   = 0.0  ! [W]
+  REAL                    :: NoLoadLossEnergy = 0.0  ! [J]
+  REAL                    :: LoadLossRate     = 0.0  ! [W]
+  REAL                    :: LoadLossEnergy   = 0.0  ! [J]
+  REAL                    :: ThermalLossRate  = 0.0  ! [W]
+  REAL                    :: ThermalLossEnergy= 0.0  ! [J]
+  REAL                    :: ElecUseUtility   = 0.0  ! [J] Energy consumption for a utility transformer (power in)
                                                             ! Positive values
-  REAL(r64)                    :: ElecProducedCoGen= 0.0D0  ! [J] Energy consumption for a cogeneration transformer (power out)
+  REAL                    :: ElecProducedCoGen= 0.0  ! [J] Energy consumption for a cogeneration transformer (power out)
                                                             ! Negative values
-  REAL(r64)                    :: QdotconvZone     = 0.0D0  ! [W]
-  REAL(r64)                    :: QdotRadZone      = 0.0D0  ! [W]
+  REAL                    :: QdotconvZone     = 0.0  ! [W]
+  REAL                    :: QdotRadZone      = 0.0  ! [W]
 END TYPE ElectricTransformer
 
 
 Type WholeBuildingElectricPowerSummary
   CHARACTER(len=MaxNameLength) :: Name = 'Whole Building'
-  REAL(r64)                    :: ElectricityProd    = 0.0D0 ! Current Electric Produced from Equipment (J)
-  REAL(r64)                    :: ElectProdRate      = 0.0D0 ! Current Electric Production Rate from Equipment (W)
-  REAL(r64)                    :: ElectricityPurch   = 0.0D0 ! Current Purchased Electric (J)
-  REAL(r64)                    :: ElectPurchRate      = 0.0D0 ! Current Electric Purhcased Rate (W)
-  REAL(r64)                    :: ElectSurplusRate    = 0.0D0 ! Current excess power (W)
-  REAL(r64)                    :: ElectricitySurplus  = 0.0D0 ! Current excess energy (J)
-  REAL(r64)                    :: ElectricityNetRate  = 0.0D0 ! Net elect rate, + is Purchased, - is Surplus (W)
-  REAL(r64)                    :: ElectricityNet      = 0.0D0 ! Net energy, + is Purchased, - is Surplus (J)
-  REAL(r64)                    :: TotalBldgElecDemand = 0.0D0 ! Current Total Building Electric Demand (W)
-  REAL(r64)                    :: TotalHVACElecDemand = 0.0D0 ! Current Total HVAC Electric Demand (W)
-  REAL(r64)                    :: TotalElectricDemand = 0.0D0 ! Current Total Electric Demand (W)
-  REAL(r64)                    :: ElecProducedPVRate  = 0.0D0 ! Current Rate of PV Produced from the Arrays (W)
-  REAL(r64)                    :: ElecProducedWTRate  = 0.0D0 ! Current Rate of Wind Turbine Produced (W)
+  REAL                    :: ElectricityProd    = 0.0 ! Current Electric Produced from Equipment (J)
+  REAL                    :: ElectProdRate      = 0.0 ! Current Electric Production Rate from Equipment (W)
+  REAL                    :: ElectricityPurch   = 0.0 ! Current Purchased Electric (J)
+  REAL                    :: ElectPurchRate      = 0.0 ! Current Electric Purhcased Rate (W)
+  REAL                    :: ElectSurplusRate    = 0.0 ! Current excess power (W)
+  REAL                    :: ElectricitySurplus  = 0.0 ! Current excess energy (J)
+  REAL                    :: ElectricityNetRate  = 0.0 ! Net elect rate, + is Purchased, - is Surplus (W)
+  REAL                    :: ElectricityNet      = 0.0 ! Net energy, + is Purchased, - is Surplus (J)
+  REAL                    :: TotalBldgElecDemand = 0.0 ! Current Total Building Electric Demand (W)
+  REAL                    :: TotalHVACElecDemand = 0.0 ! Current Total HVAC Electric Demand (W)
+  REAL                    :: TotalElectricDemand = 0.0 ! Current Total Electric Demand (W)
+  REAL                    :: ElecProducedPVRate  = 0.0 ! Current Rate of PV Produced from the Arrays (W)
+  REAL                    :: ElecProducedWTRate  = 0.0 ! Current Rate of Wind Turbine Produced (W)
 end type WholeBuildingElectricPowerSummary
 
 
@@ -328,8 +328,8 @@ TYPE (DCtoACInverterStruct), ALLOCATABLE, DIMENSION(:)     :: Inverter
 TYPE (ElectricPowerLoadCenter), ALLOCATABLE, DIMENSION(:)  :: ElecLoadCenter  !dimension to number of machines
 TYPE (ElectricTransformer), ALLOCATABLE, DIMENSION(:)      :: Transformer
 TYPE (WholeBuildingElectricPowerSummary),SAVE :: WholeBldgElectSummary=  &
-           WholeBuildingElectricPowerSummary('Whole Building',0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,0.0d0,  &
-                          0.0d0,0.0d0,0.0d0,0.0d0,0.0d0)
+           WholeBuildingElectricPowerSummary('Whole Building',0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,  &
+                          0.0,0.0,0.0,0.0,0.0)
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE PrimaryPlantLoops
 PUBLIC    ManageElectricLoadCenters
@@ -405,28 +405,28 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
   INTEGER           :: MeterNum = 0        ! A transformer's meter number counter
   INTEGER           :: MeterIndex = 0      ! Meter index number from GetMeterIndex
   INTEGER, SAVE     :: ElecFacilityIndex = 0
-  REAL(r64)         :: ElecFacilityBldg = 0.0D0
-  REAL(r64)         :: ElecFacilityHVAC = 0.0D0
-  REAL(r64)         :: ElecProducedPV = 0.0D0
-  REAL(r64)         :: ElecProducedWT = 0.0D0
-  REAL(r64)         :: RemainingLoad = 0.0D0          ! Remaining electric power load to be met by a load center
-  REAL(r64)         :: WholeBldgRemainingLoad = 0.0D0 ! Remaining electric power load for the building
-  REAL(r64)         :: RemainingThermalLoad = 0.0D0   ! Remaining thermal load to be met
+  REAL         :: ElecFacilityBldg = 0.0
+  REAL         :: ElecFacilityHVAC = 0.0
+  REAL         :: ElecProducedPV = 0.0
+  REAL         :: ElecProducedWT = 0.0
+  REAL         :: RemainingLoad = 0.0          ! Remaining electric power load to be met by a load center
+  REAL         :: WholeBldgRemainingLoad = 0.0 ! Remaining electric power load for the building
+  REAL         :: RemainingThermalLoad = 0.0   ! Remaining thermal load to be met
   LOGICAL,SAVE      :: MyOneTimeFlag = .true.
-  REAL(r64)         :: CustomMeterDemand  = 0.0D0 ! local variable for Custom metered elec demand
+  REAL         :: CustomMeterDemand  = 0.0 ! local variable for Custom metered elec demand
   INTEGER, external      :: GetMeterIndex
-  REAL(r64), external    :: GetInstantMeterValue
-  REAL(r64), external    :: GetCurrentMeterValue
+  REAL, external    :: GetInstantMeterValue
+  REAL, external    :: GetCurrentMeterValue
   CHARACTER(len=MaxNameLength), external :: GetMeterResourceType
 
-  REAL(r64)         :: ElectricProdRate = 0.0d0    ! Electric Power Production Rate of Generators
-  REAL(r64)         :: ThermalProdRate = 0.0d0     ! Thermal Power Production Rate of Generators
-  REAL(r64)         :: ExcessThermalPowerRequest = 0.0d0   ! Excess Thermal Power Request
+  REAL         :: ElectricProdRate = 0.0    ! Electric Power Production Rate of Generators
+  REAL         :: ThermalProdRate = 0.0     ! Thermal Power Production Rate of Generators
+  REAL         :: ExcessThermalPowerRequest = 0.0   ! Excess Thermal Power Request
 
-  REAL(r64)         :: LoadCenterElectricLoad = 0.0D0 ! Load center electric load to be dispatched
-  REAL(r64)         :: LoadCenterThermalLoad = 0.0D0  ! Load center thermal load to be dispatched
-  REAL(r64)         :: StorageDrawnPower = 0.0D0      ! Electric Power Draw Rate from storage units
-  REAL(r64)         :: StorageStoredPower = 0.0D0     ! Electric Power Store Rate from storage units
+  REAL         :: LoadCenterElectricLoad = 0.0 ! Load center electric load to be dispatched
+  REAL         :: LoadCenterThermalLoad = 0.0  ! Load center thermal load to be dispatched
+  REAL         :: StorageDrawnPower = 0.0      ! Electric Power Draw Rate from storage units
+  REAL         :: StorageStoredPower = 0.0     ! Electric Power Store Rate from storage units
 
 
   ! Get Generator data from input file
@@ -503,8 +503,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
         ElecLoadCenter(LoadCenterNum)%DemandMeterPtr =  GetMeterIndex(ElecLoadCenter(LoadCenterNum)%DemandMeterName)
     ENDIF
 
-    ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = 0.0d0
-    ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest = 0.0d0
+    ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = 0.0
+    ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest = 0.0
 
    ! Check Operation Scheme and assign power generation load
    ! Both the Demand Limit and Track Electrical schemes will sequentially load the available generators.  All demand
@@ -520,7 +520,7 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
       DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-        IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0) THEN
+        IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0) THEN
           ! Set the Operation Flag
           ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
           ! Set the electric generator load request
@@ -528,14 +528,14 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
         ELSE
           ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
         END IF
 
         ! now handle EMS override
         IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
           ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-             MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+             MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
             ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
           ELSE
             ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -559,8 +559,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0 &
-          .and. RemainingLoad > 0.0D0) THEN
+       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0 &
+          .and. RemainingLoad > 0.0) THEN
          ! Set the Operation Flag
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
 
@@ -571,8 +571,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -581,13 +581,13 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        ELSE
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
 
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -600,9 +600,9 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest &
-                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
+                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
        ELSE
-          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest  &
                                                     + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =  &
@@ -621,8 +621,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0 &
-          .and. RemainingLoad > 0.0D0) THEN
+       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0 &
+          .and. RemainingLoad > 0.0) THEN
          ! Set the Operation Flag
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
 
@@ -633,8 +633,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -643,13 +643,13 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        ELSE
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
 
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -662,9 +662,9 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest &
-                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
+                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
        ELSE
-          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest  &
                                                     + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =  &
@@ -685,8 +685,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0 &
-          .and. RemainingLoad > 0.0D0) THEN
+       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0 &
+          .and. RemainingLoad > 0.0) THEN
          ! Set the Operation Flag
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
 
@@ -697,8 +697,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -706,13 +706,13 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ENDIF
        ELSE
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
 
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -725,9 +725,9 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest &
-                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
+                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
        ELSE
-          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest  &
                                                     + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =  &
@@ -751,8 +751,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0 &
-          .and. RemainingLoad > 0.0D0) THEN
+       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0 &
+          .and. RemainingLoad > 0.0) THEN
          ! Set the Operation Flag
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
          ! Set the electric generator load
@@ -762,8 +762,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -772,13 +772,13 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        ELSE
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
 
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -791,9 +791,9 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
        IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest &
-                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
+                                 + MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
        ELSE
-          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalPowerRequest  &
                                                     + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
               ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =  &
@@ -807,17 +807,17 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
    CASE (iOpSchemeThermalFollow)
      ! Turn thermal load into an electrical load for cogenerators controlled to follow heat loads
-     RemainingThermalLoad = 0.0D0
+     RemainingThermalLoad = 0.0
 
      CALL CalcLoadCenterThermalLoad(FirstHVACIteration, LoadCenterNum, RemainingThermalLoad)
      LoadCenterThermalLoad = RemainingThermalLoad
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0 &
-          .and. RemainingThermalLoad > 0.0D0) THEN
+       IF(GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0 &
+          .and. RemainingThermalLoad > 0.0) THEN
 
-         IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0D0) THEN
+         IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0) THEN
 
            RemainingLoad = RemainingThermalLoad / ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio
 
@@ -828,8 +828,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
            ! now handle EMS override
            IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                      MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-             IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                      MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+             IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
                ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
              ELSE
                ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -839,13 +839,13 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
          ENDIF
        ELSE
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
 
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -860,22 +860,22 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
           ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest =                                       &
                              ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest                      &
-                          + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0))  &
+                          + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0))  &
                           * ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio
           ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =                                              &
                                ElecLoadCenter(LoadCenterNum)%TotalPowerRequest                           &
-                               + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0))
+                               + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0))
        ELSE
 
           IF (ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest <  LoadCenterThermalLoad .AND. &
-              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0d0) THEN
+              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
 
              ExcessThermalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest         &
                                      + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut        &
                                 * ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio  &
                                 - LoadCenterThermalLoad
 
-             IF ( ExcessThermalPowerRequest < 0.0d0 ) THEN
+             IF ( ExcessThermalPowerRequest < 0.0 ) THEN
                 ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest =                                  &
                                 ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest                    &
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut               &
@@ -885,7 +885,7 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
              ELSE
                ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest = LoadCenterThermalLoad
-               IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0d0) THEN
+               IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0) THEN
                    ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =                                      &
                                   ElecLoadCenter(LoadCenterNum)%TotalPowerRequest                         &
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut               &
@@ -915,10 +915,10 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
      DO GenNum = 1, ElecLoadCenter(LoadCenterNum)%NumGenerators
 
-       IF((GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0D0) &
-          .and. (RemainingThermalLoad > 0.0D0) .and. (RemainingLoad > 0.0D0) ) THEN
+       IF((GetCurrentScheduleValue(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%AvailSchedPtr) .gt. 0.0) &
+          .and. (RemainingThermalLoad > 0.0) .and. (RemainingLoad > 0.0) ) THEN
 
-         IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0D0) THEN
+         IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0) THEN
 
            RemainingLoad = MIN(WholeBldgRemainingLoad, RemainingThermalLoad /   &
                                       ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio)
@@ -930,8 +930,8 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
            ! now handle EMS override
            IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                      MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-             IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                      MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+             IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
                ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
              ELSE
                ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -943,12 +943,12 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
        ELSE
 
          ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
-         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0D0
+         ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = 0.0
          ! now handle EMS override
          IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSRequestOn) THEN
            ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep = &
-                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0)
-           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0D0) THEN
+                    MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0)
+           IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .TRUE.
            ELSE
              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%ONThisTimeStep = .FALSE.
@@ -964,22 +964,22 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
 
            ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest =                                       &
                               ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest                      &
-                           + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0))  &
+                           + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0))  &
                            * ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio
            ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =                                              &
                                 ElecLoadCenter(LoadCenterNum)%TotalPowerRequest                           &
-                                + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0D0))
+                                + (MAX(ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%EMSPowerRequest, 0.0))
        ELSE
 
           IF (ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest <  LoadCenterThermalLoad .AND. &
-              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0d0) THEN
+              ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%PowerRequestThisTimestep > 0.0) THEN
 
              ExcessThermalPowerRequest = ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest         &
                                      + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut        &
                                 * ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio  &
                                 - LoadCenterThermalLoad
 
-             IF ( ExcessThermalPowerRequest < 0.0d0 ) THEN
+             IF ( ExcessThermalPowerRequest < 0.0 ) THEN
                 ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest =                                  &
                                 ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest                    &
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut               &
@@ -989,7 +989,7 @@ SUBROUTINE ManageElectricLoadCenters(FirstHVACIteration,SimElecCircuits, UpdateM
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut
              ELSE
                ElecLoadCenter(LoadCenterNum)%TotalThermalPowerRequest = LoadCenterThermalLoad
-               IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0d0) THEN
+               IF (ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%NominalThermElectRatio > 0.0) THEN
                    ElecLoadCenter(LoadCenterNum)%TotalPowerRequest =                                      &
                                   ElecLoadCenter(LoadCenterNum)%TotalPowerRequest                         &
                                 + ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%MaxPowerOut               &
@@ -1129,7 +1129,7 @@ SUBROUTINE GetPowerManagerInput
   INTEGER :: NumNums        ! Number of elements in the numeric array
   INTEGER :: IOStat         ! IO Status when calling get input subroutine
   !CHARACTER(len=MaxNameLength),DIMENSION(:), ALLOCATABLE :: Alpha !dimension to num of alpha fields in input
-  !REAL(r64), DIMENSION(:), ALLOCATABLE   :: Num                   !dimension to num of numeric data fields in input
+  !REAL, DIMENSION(:), ALLOCATABLE   :: Num                   !dimension to num of numeric data fields in input
   LOGICAL               :: ErrorsFound=.false.  ! error in input
   LOGICAL               :: IsNotOK              ! Flag to verify name
   LOGICAL               :: IsBlank              ! Flag for blank name
@@ -1692,9 +1692,9 @@ SUBROUTINE GetPowerManagerInput
       Transformer(TransfNum)%Phase                 = rNumericArgs(3)
 
       IF (SameString(cAlphaArgs(5) ,    'Copper') )    THEN
-        Transformer(TransfNum)%FactorTempCoeff     = 234.5d0
+        Transformer(TransfNum)%FactorTempCoeff     = 234.5
       ELSEIF (SameString(cAlphaArgs(5), 'Aluminum' ) )   THEN
-        Transformer(TransfNum)%FactorTempCoeff     = 225.0d0
+        Transformer(TransfNum)%FactorTempCoeff     = 225.0
       ELSE
         CALL ShowSevereError(RoutineName//trim(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'", invalid entry.')
         CALL ShowContinueError('Invalid '//TRIM(cAlphaFieldNames(5))//' = '//TRIM(cAlphaArgs(5)) )
@@ -2239,8 +2239,8 @@ SUBROUTINE GeneratorPowerOutput(LoadCenterNum,GenNum,FirstHVACIteration,Electric
   INTEGER, INTENT(IN) :: GenNum           ! Generator number counter
   INTEGER, INTENT(IN) :: LoadCenterNum    ! Load Center number counter
   LOGICAL, INTENT(IN) :: FirstHVACIteration ! Unused 2010 JANUARY
-  REAL(r64), INTENT(OUT) :: ElectricPowerOutput ! Actual generator electric power output
-  REAL(r64), INTENT(OUT) :: ThermalPowerOutput  ! Actual generator thermal power output
+  REAL, INTENT(OUT) :: ElectricPowerOutput ! Actual generator electric power output
+  REAL, INTENT(OUT) :: ThermalPowerOutput  ! Actual generator thermal power output
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2255,7 +2255,7 @@ SUBROUTINE GeneratorPowerOutput(LoadCenterNum,GenNum,FirstHVACIteration,Electric
   CHARACTER(len=MaxNameLength)  :: GeneratorName    ! User-specified name of generator
   INTEGER                       :: GeneratorType    ! Type of generator
   LOGICAL                       :: RunFlag          ! Simulate generator when TRUE
-  REAL(r64)                     :: MyLoad           ! Generator load request (W)
+  REAL                     :: MyLoad           ! Generator load request (W)
 
 
   GeneratorType = ElecLoadCenter(LoadCenterNum)%ElecGen(GenNum)%CompType_Num
@@ -2388,7 +2388,7 @@ SUBROUTINE CalcLoadCenterThermalLoad(FirstHVACIteration, LoadCenterNum, ThermalL
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT (IN)   :: FirstHVACIteration !unused1208
   INTEGER, INTENT (IN)   :: LoadCenterNum    ! Load Center number counter
-  REAL(r64),    INTENT (OUT)  :: ThermalLoad ! heat rate called for from cogenerator(watts)
+  REAL,    INTENT (OUT)  :: ThermalLoad ! heat rate called for from cogenerator(watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2415,7 +2415,7 @@ SUBROUTINE CalcLoadCenterThermalLoad(FirstHVACIteration, LoadCenterNum, ThermalL
 !unused  INTEGER :: ThisTypeNum
 
   !debugstuff
-!unused    REAL(r64) :: ActualTime
+!unused    REAL :: ActualTime
 !unused    CHARACTER*300 :: OutputString
 !unused    CHARACTER*5 :: strFirstHVACIteration
 
@@ -2570,11 +2570,11 @@ SUBROUTINE ManageInverter(LoadCenterNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)   :: NormalizedPower
+  REAL   :: NormalizedPower
   INTEGER     :: InvertNum
   INTEGER     :: StorNum
-  REAL(r64)   :: tmpEffic
-  REAL(r64)   :: tempACpower
+  REAL   :: tmpEffic
+  REAL   :: tempACpower
 
   !model inverters
   InvertNum = ElecLoadCenter(LoadCenterNum)%InverterModelNum
@@ -2615,48 +2615,48 @@ SUBROUTINE ManageInverter(LoadCenterNum)
       NormalizedPower = Inverter(InvertNum)%DCPowerIn / Inverter(InvertNum)%RatedPower
 
       ! get efficiency
-      IF (NormalizedPower <= 0.1D0) THEN
+      IF (NormalizedPower <= 0.1) THEN
         ! extrapolate or fix at 10% value? fix it for now
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(1)
-      ELSEIF ((NormalizedPower > 0.1D0) .and. (NormalizedPower <0.20D0)) THEN
+      ELSEIF ((NormalizedPower > 0.1) .and. (NormalizedPower <0.20)) THEN
        tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(1) &
-                  + ((NormalizedPower - 0.1D0)/(0.2D0 - 0.1D0)) &
+                  + ((NormalizedPower - 0.1)/(0.2 - 0.1)) &
                     * (Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(2) &
                         - Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(1) )
-      ELSEIF (NormalizedPower == 0.2D0) THEN
+      ELSEIF (NormalizedPower == 0.2) THEN
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(2)
-      ELSEIF ((NormalizedPower > 0.2D0) .and. (NormalizedPower <0.30D0)) THEN
+      ELSEIF ((NormalizedPower > 0.2) .and. (NormalizedPower <0.30)) THEN
        tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(2) &
-                  + ((NormalizedPower - 0.2D0)/(0.3D0 - 0.2D0)) &
+                  + ((NormalizedPower - 0.2)/(0.3 - 0.2)) &
                     * (Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(3) &
                         - Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(2) )
-      ELSEIF (NormalizedPower == 0.3D0) THEN
+      ELSEIF (NormalizedPower == 0.3) THEN
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(3)
-      ELSEIF ((NormalizedPower > 0.3D0) .and. (NormalizedPower <0.50D0)) THEN
+      ELSEIF ((NormalizedPower > 0.3) .and. (NormalizedPower <0.50)) THEN
        tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(3) &
-                  + ((NormalizedPower - 0.3D0)/(0.5D0 - 0.3D0)) &
+                  + ((NormalizedPower - 0.3)/(0.5 - 0.3)) &
                     * (Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(4) &
                         - Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(3) )
-      ELSEIF (NormalizedPower == 0.5D0) THEN
+      ELSEIF (NormalizedPower == 0.5) THEN
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(4)
-      ELSEIF ((NormalizedPower > 0.5D0) .and. (NormalizedPower <0.75D0)) THEN
+      ELSEIF ((NormalizedPower > 0.5) .and. (NormalizedPower <0.75)) THEN
        tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(4) &
-                  + ((NormalizedPower - 0.5D0)/(0.75D0 - 0.5D0)) &
+                  + ((NormalizedPower - 0.5)/(0.75 - 0.5)) &
                     * (Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(5) &
                         - Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(4) )
-      ELSEIF (NormalizedPower == 0.75D0) THEN
+      ELSEIF (NormalizedPower == 0.75) THEN
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(5)
-      ELSEIF ((NormalizedPower > 0.75D0) .and. (NormalizedPower <1.0D0)) THEN
+      ELSEIF ((NormalizedPower > 0.75) .and. (NormalizedPower <1.0)) THEN
        tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(5) &
-                  + ((NormalizedPower - 0.75D0)/(1.0D0 - 0.75D0)) &
+                  + ((NormalizedPower - 0.75)/(1.0 - 0.75)) &
                     * (Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(6) &
                         - Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(5) )
-      ELSEIF (NormalizedPower >= 1.0D0) THEN
+      ELSEIF (NormalizedPower >= 1.0) THEN
         tmpEffic = Inverter(InvertNum)%LUTable%NomVoltEfficiencyARR(6)
       ENDIF
 
-      Inverter(InvertNum)%Efficiency = Max(tmpEffic, 0.0D0)
-      Inverter(InvertNum)%Efficiency = Min(Inverter(InvertNum)%Efficiency, 1.0D0)
+      Inverter(InvertNum)%Efficiency = Max(tmpEffic, 0.0)
+      Inverter(InvertNum)%Efficiency = Min(Inverter(InvertNum)%Efficiency, 1.0)
 
       tempACpower = Inverter(InvertNum)%Efficiency * Inverter(InvertNum)%DCPowerIn
 
@@ -2670,15 +2670,15 @@ SUBROUTINE ManageInverter(LoadCenterNum)
 
       tempACpower = Inverter(InvertNum)%Efficiency * Inverter(InvertNum)%DCPowerIn
       If (tempACpower < Inverter(InvertNum)%MinPower) Then  ! not enough to produce any AC power.  all lost. also standby mode
-        tempACpower = 0.0D0
+        tempACpower = 0.0
 
       ELSEIF (tempACpower > Inverter(InvertNum)%MaxPower) then ! too much DC for inverter to handle, excess is lost
         tempACpower = Inverter(InvertNum)%MaxPower
-        Inverter(InvertNum)%AncillACuseRate   = 0.0D0
-        Inverter(InvertNum)%AncillACuseEnergy = 0.0D0
+        Inverter(InvertNum)%AncillACuseRate   = 0.0
+        Inverter(InvertNum)%AncillACuseEnergy = 0.0
       ELSE
-        Inverter(InvertNum)%AncillACuseRate   = 0.0D0
-        Inverter(InvertNum)%AncillACuseEnergy = 0.0D0
+        Inverter(InvertNum)%AncillACuseRate   = 0.0
+        Inverter(InvertNum)%AncillACuseEnergy = 0.0
       ENDIF
 
     CASE(SimpleConstantEff)
@@ -2690,16 +2690,16 @@ SUBROUTINE ManageInverter(LoadCenterNum)
     Inverter(InvertNum)%ACPowerOut = tempACpower
     Inverter(InvertNum)%ACEnergyOut = tempACpower * (TimeStepSys * SecInHour)
 
-    IF (tempACpower == 0.0D0) THEN
+    IF (tempACpower == 0.0) THEN
       Inverter(InvertNum)%AncillACuseEnergy = Inverter(InvertNum)%StandbyPower * (TimeStepSys * SecInHour)
       Inverter(InvertNum)%AncillACuseRate   = Inverter(InvertNum)%StandbyPower
     ENDIF
   ELSE ! not available per schedule, inverter is dead.
   !  assume thermal shunt for DC in, but no standby electricity
-    Inverter(InvertNum)%ACPowerOut        = 0.0D0
-    Inverter(InvertNum)%ACEnergyOut       =  0.0D0
-    Inverter(InvertNum)%AncillACuseRate   = 0.0D0
-    Inverter(InvertNum)%AncillACuseEnergy = 0.0D0
+    Inverter(InvertNum)%ACPowerOut        = 0.0
+    Inverter(InvertNum)%ACEnergyOut       =  0.0
+    Inverter(InvertNum)%AncillACuseRate   = 0.0
+    Inverter(InvertNum)%AncillACuseEnergy = 0.0
 
   ENDIF
 
@@ -2707,7 +2707,7 @@ SUBROUTINE ManageInverter(LoadCenterNum)
   Inverter(InvertNum)%ThermLossRate   = Inverter(InvertNum)%DCPowerIn - Inverter(InvertNum)%ACPowerOut +   &
      Inverter(InvertNum)%StandbyPower
   Inverter(InvertNum)%ThermLossEnergy = Inverter(InvertNum)%ThermLossRate * (TimeStepSys * SecInHour)
-  Inverter(InvertNum)%QdotconvZone    = Inverter(InvertNum)%ThermLossRate * ( 1.0D0 - Inverter(InvertNum)%ZoneRadFract)
+  Inverter(InvertNum)%QdotconvZone    = Inverter(InvertNum)%ThermLossRate * ( 1.0 - Inverter(InvertNum)%ZoneRadFract)
   Inverter(InvertNum)%QdotRadZone     = Inverter(InvertNum)%ThermLossRate * Inverter(InvertNum)%ZoneRadFract
 
 
@@ -2822,13 +2822,13 @@ IMPLICIT NONE
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), external    :: GetInstantMeterValue
+  REAL, external    :: GetInstantMeterValue
 
-  REAL(r64) :: ElecProducedCoGen = 0.0
-  REAL(r64) :: ElecProducedFacility = 0.0
-  REAL(r64) :: TotalPurchased = 0.0
-  REAL(r64) :: TotalSurplus = 0.0
-  REAL(r64) :: NetPurchased = 0.0
+  REAL :: ElecProducedCoGen = 0.0
+  REAL :: ElecProducedFacility = 0.0
+  REAL :: TotalPurchased = 0.0
+  REAL :: TotalSurplus = 0.0
+  REAL :: NetPurchased = 0.0
 
         ! Flow
 
@@ -2845,7 +2845,7 @@ IMPLICIT NONE
   !Report the Total Electric Power Purchased [W], If negative then there is extra power to be sold or stored.
   TotalPurchased = WholeBldgElectSummary%TotalElectricDemand - WholeBldgElectSummary%ElectProdRate
   !Check this value against a tolerance to aid in reporting.
-  If(ABS(TotalPurchased) .lt. 0.0001d0) TotalPurchased = 0.0
+  If(ABS(TotalPurchased) .lt. 0.0001) TotalPurchased = 0.0
   If (TotalPurchased < 0.0) totalPurchased = 0.0  ! don't want negative purchased...
   WholeBldgElectSummary%ElectPurchRate = TotalPurchased
   !Report the Total Electric Energy Purchased [J]
@@ -2853,7 +2853,7 @@ IMPLICIT NONE
 
   !report the total electric surplus....
   TotalSurplus =WholeBldgElectSummary%ElectProdRate -  WholeBldgElectSummary%TotalElectricDemand
-  If(ABS(TotalSurplus) .lt. 0.0001d0) TotalSurplus = 0.0
+  If(ABS(TotalSurplus) .lt. 0.0001) TotalSurplus = 0.0
   If (TotalSurplus < 0.0) TotalSurplus = 0.0  ! don't want negative surplus
 
   WholeBldgElectSummary%ElectSurplusRate = TotalSurplus
@@ -2911,8 +2911,8 @@ SUBROUTINE FigureInverterZoneGains
   IF (NumInverters == 0) RETURN
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
-    Inverter%QdotconvZone = 0.0D0
-    Inverter%QdotRadZone  = 0.0D0
+    Inverter%QdotconvZone = 0.0
+    Inverter%QdotRadZone  = 0.0
     MyEnvrnFlag = .FALSE.
   ENDIF
   IF( .NOT. BeginEnvrnFlag) MyEnvrnFlag = .TRUE.
@@ -2955,8 +2955,8 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,      INTENT(IN)  :: LoadCenterNum ! load center number, index for structure
-  REAL(r64), INTENT(OUT)    :: StorageDrawnPower       ! Electric Power Draw Rate from storage units
-  REAL(r64), INTENT(OUT)    :: StorageStoredPower      ! Electric Power Store Rate from storage units
+  REAL, INTENT(OUT)    :: StorageDrawnPower       ! Electric Power Draw Rate from storage units
+  REAL, INTENT(OUT)    :: StorageStoredPower      ! Electric Power Store Rate from storage units
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2968,59 +2968,59 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: tmpPdraw    = 0.0D0    ! power draw from storage, working var
-  REAL(r64)    :: tmpPcharge  = 0.0D0    ! power charge to storage, working var
+  REAL    :: tmpPdraw    = 0.0    ! power draw from storage, working var
+  REAL    :: tmpPcharge  = 0.0    ! power charge to storage, working var
   LOGICAL      :: drawing     = .false.  ! true if drawing power
   LOGICAL      :: charging    = .false.  ! true if charging
   INTEGER      :: ElecStorNum = 0
-  REAL(r64)    :: Pgensupply  = 0.0D0
-  REAL(r64)    :: Pdemand     = 0.0D0  !
-  REAL(r64)    :: PpcuLosses  = 0.0D0  !
-  REAL(r64)    :: Pstorage    = 0.0D0
+  REAL    :: Pgensupply  = 0.0
+  REAL    :: Pdemand     = 0.0  !
+  REAL    :: PpcuLosses  = 0.0  !
+  REAL    :: Pstorage    = 0.0
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyWarmupFlag ! flag for init after warmup complete
-  REAL(r64)    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
   INTEGER, SAVE   :: count0                      = 1
   INTEGER         :: Numbin0                    = 0
   INTEGER         :: BinNum                     = 0
-  REAL(r64)       :: Input0                     = 0.0D0
-!  REAL(r64)       :: RealType                   = 1.0D0
-  REAL(r64) ,SAVE, DIMENSION(0:20)   :: B10     = 0.0D0
-  REAL(r64) ,SAVE, DIMENSION(0:20)   :: X0      = 0.0D0
-  REAL(r64) ,SAVE, DIMENSION(0:20)   :: OneNmb0 = 0.0D0
-  REAL(r64) ,SAVE, DIMENSION(0:20)   :: Nmb0    = 0.0D0
-  REAL(r64)    I0     ! initial guess of current
-  REAL(r64)    T0     ! initial guess of T(I)
-  REAL(r64)    q0     ! initial charge
-  REAL(r64)    qmax   ! maximum capacity
-  REAL(r64)    qmaxf  ! maximum capacity, a function of current(I)
-  REAL(r64)    k      ! change rate from chemically bound charge to available charge
-  REAL(r64)    c      ! fraction available charge capacity to total capacity
-  REAL(r64)    TotalSOC ! total charge (ThisTimeStepAvailable+ThisTimeStepBound)
-  REAL(r64)    Ef     ! effective internal voltage source, V
-  REAL(r64)    E0c    ! fully charged internal battery voltage
-  REAL(r64)    Volt   ! terminal voltage
-  REAL(r64)    Pw     ! power required
-  REAL(r64)    E0d    ! fully discharged internal battery voltage
-  REAL(r64)    InternalR  ! internal resistance
-  REAL(r64)    XF     ! normalized maximum capacity at the given current
-  REAL(r64)    X      ! normalized maximum capacity at the given current
-  REAL(r64)    Inew   ! converged current
-  REAL(r64)    Tnew   ! charge of discharge time, defined by T=qmaxf/I
-  REAL(r64)    Imax   ! maximum current
-  REAL(r64)    Numpar          ! number of battery in parallel
-  REAL(r64)    Numser          ! number of battery in series
-  REAL(r64)    Numbattery      ! number of battery (Numpar*Numser)
-  REAL(r64)    initialCharge   ! initial charge in Ah
-  REAL(r64)    dividend        !
-  REAL(r64)    divisor         !
-  REAL(r64)    newAvailable    ! new available charge in Ah
-  REAL(r64)    newBound        ! new bound charge in Ah
-  REAL(r64)    ::error=0.0D0   ! error in iterative process
-  REAL(r64)    ::Pactual=0.0D0 ! actual Power output
-  REAL(r64)    ::RHS=0.0D0     ! right hand side of a equation
-  REAL(r64)    ::I=0.0D0       ! current
+  REAL       :: Input0                     = 0.0
+!  REAL       :: RealType                   = 1.0
+  REAL ,SAVE, DIMENSION(0:20)   :: B10     = 0.0
+  REAL ,SAVE, DIMENSION(0:20)   :: X0      = 0.0
+  REAL ,SAVE, DIMENSION(0:20)   :: OneNmb0 = 0.0
+  REAL ,SAVE, DIMENSION(0:20)   :: Nmb0    = 0.0
+  REAL    I0     ! initial guess of current
+  REAL    T0     ! initial guess of T(I)
+  REAL    q0     ! initial charge
+  REAL    qmax   ! maximum capacity
+  REAL    qmaxf  ! maximum capacity, a function of current(I)
+  REAL    k      ! change rate from chemically bound charge to available charge
+  REAL    c      ! fraction available charge capacity to total capacity
+  REAL    TotalSOC ! total charge (ThisTimeStepAvailable+ThisTimeStepBound)
+  REAL    Ef     ! effective internal voltage source, V
+  REAL    E0c    ! fully charged internal battery voltage
+  REAL    Volt   ! terminal voltage
+  REAL    Pw     ! power required
+  REAL    E0d    ! fully discharged internal battery voltage
+  REAL    InternalR  ! internal resistance
+  REAL    XF     ! normalized maximum capacity at the given current
+  REAL    X      ! normalized maximum capacity at the given current
+  REAL    Inew   ! converged current
+  REAL    Tnew   ! charge of discharge time, defined by T=qmaxf/I
+  REAL    Imax   ! maximum current
+  REAL    Numpar          ! number of battery in parallel
+  REAL    Numser          ! number of battery in series
+  REAL    Numbattery      ! number of battery (Numpar*Numser)
+  REAL    initialCharge   ! initial charge in Ah
+  REAL    dividend        !
+  REAL    divisor         !
+  REAL    newAvailable    ! new available charge in Ah
+  REAL    newBound        ! new bound charge in Ah
+  REAL    ::error=0.0   ! error in iterative process
+  REAL    ::Pactual=0.0 ! actual Power output
+  REAL    ::RHS=0.0     ! right hand side of a equation
+  REAL    ::I=0.0       ! current
 
   If ( .NOT. (ElecLoadCenter(LoadCenterNum)%StoragePresent)) RETURN
 
@@ -3045,15 +3045,15 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
     ELSEIF(ElecStorage(ElecStorNum)%StorageModelMode == KiBaMBattery) THEN
        initialCharge = Elecstorage(ElecStorNum)%MaxAhCapacity * Elecstorage(ElecStorNum)%StartingSOC
        Elecstorage(ElecStorNum)%LastTimeStepAvailable = initialCharge * Elecstorage(ElecStorNum)%AvailableFrac
-       Elecstorage(ElecStorNum)%LastTimeStepBound = initialCharge * (1.0d0-Elecstorage(ElecStorNum)%AvailableFrac)
+       Elecstorage(ElecStorNum)%LastTimeStepBound = initialCharge * (1.0-Elecstorage(ElecStorNum)%AvailableFrac)
        Elecstorage(ElecStorNum)%ThisTimeStepAvailable = initialCharge * Elecstorage(ElecStorNum)%AvailableFrac
-       Elecstorage(ElecStorNum)%ThisTimeStepBound = initialCharge * (1.0d0-Elecstorage(ElecStorNum)%AvailableFrac)
+       Elecstorage(ElecStorNum)%ThisTimeStepBound = initialCharge * (1.0-Elecstorage(ElecStorNum)%AvailableFrac)
        IF (ElecStorage(ElecStorNum)%LifeCalculation .eq. 1) THEN
           count0  = 1
-          B10     = 0.0D0
-          X0      = 0.0D0
-          OneNmb0 = 0.0D0
-          Nmb0    = 0.0D0
+          B10     = 0.0
+          X0      = 0.0
+          OneNmb0 = 0.0
+          Nmb0    = 0.0
        ENDIF
     ENDIF
     MyEnvrnFlag(ElecStorNum)  = .FALSE.
@@ -3069,15 +3069,15 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
     ELSEIF(ElecStorage(ElecStorNum)%StorageModelMode == KiBaMBattery) THEN
        initialCharge = Elecstorage(ElecStorNum)%MaxAhCapacity * Elecstorage(ElecStorNum)%StartingSOC
        Elecstorage(ElecStorNum)%LastTimeStepAvailable = initialCharge * Elecstorage(ElecStorNum)%AvailableFrac
-       Elecstorage(ElecStorNum)%LastTimeStepBound = initialCharge * (1.0d0-Elecstorage(ElecStorNum)%AvailableFrac)
+       Elecstorage(ElecStorNum)%LastTimeStepBound = initialCharge * (1.0-Elecstorage(ElecStorNum)%AvailableFrac)
        Elecstorage(ElecStorNum)%ThisTimeStepAvailable = initialCharge * Elecstorage(ElecStorNum)%AvailableFrac
-       Elecstorage(ElecStorNum)%ThisTimeStepBound = initialCharge * (1.0d0-Elecstorage(ElecStorNum)%AvailableFrac)
+       Elecstorage(ElecStorNum)%ThisTimeStepBound = initialCharge * (1.0-Elecstorage(ElecStorNum)%AvailableFrac)
        IF (ElecStorage(ElecStorNum)%LifeCalculation .eq. 1) THEN
           count0  = 1
-          B10     = 0.0D0
-          X0      = 0.0D0
-          OneNmb0 = 0.0D0
-          Nmb0    = 0.0D0
+          B10     = 0.0
+          X0      = 0.0
+          OneNmb0 = 0.0
+          Nmb0    = 0.0
        ENDIF
     ENDIF
     MyWarmupFlag(ElecStorNum) = .FALSE.
@@ -3099,7 +3099,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
    ! this will be lagged from last calc.
     PpcuLosses = Inverter(ElecLoadCenter(LoadCenterNum)%InverterModelNum)%ThermLossRate
   ELSE
-    PpcuLosses = 0.0D0
+    PpcuLosses = 0.0
   ENDIF
 
   !  Pdemand = Sum (ElecLoadCenter(LoadCenterNum)%ElecGen%PowerRequestThisTimestep) + PpcuLosses
@@ -3122,11 +3122,11 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   ! End determine available generation
 
    !initialize locals
-  tmpPdraw   = 0.d0
-  tmpPcharge = 0.d0
+  tmpPdraw   = 0.
+  tmpPcharge = 0.
   drawing  = .false.
   charging = .false.
-  Pstorage = 0.d0
+  Pstorage = 0.
 
   IF (ElecStorage(ElecStorNum)%StorageModelMode == KiBaMBattery) THEN
       Numpar     = ElecStorage(ElecStorNum)%ParallelNum
@@ -3149,21 +3149,21 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   If (Pgensupply < (Pdemand )) THEN
     !draw from storage
     tmpPdraw = Pdemand  - Pgensupply
-    tmpPcharge = 0.d0
+    tmpPcharge = 0.
     drawing = .true.
     charging = .false.
 
   ELSEIF (Pgensupply > (Pdemand )) THEN
     !add to storage
     tmpPcharge = Pgensupply - Pdemand
-    tmpPdraw = 0.d0
+    tmpPdraw = 0.
     charging = .true.
     drawing = .false.
 
   ELSEIF (Pgensupply == (Pdemand )) THEN
     !do nothing
-    tmpPcharge = 0.d0
-    tmpPdraw = 0.d0
+    tmpPcharge = 0.
+    tmpPdraw = 0.
     charging = .false.
     drawing = .false.
   ENDIF
@@ -3172,15 +3172,15 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   IF ((ElecStorage(ElecStorNum)%EMSOverridePelFromStorage)  &
       .AND. (.NOT. ElecStorage(ElecStorNum)%EMSOverridePelIntoStorage)  ) THEN
     ! EMS is calling for specific discharge rate
-    tmpPdraw = MAX(ElecStorage(ElecStorNum)%EMSValuePelFromStorage, 0.0D0)
-    tmpPcharge = 0.0D0
+    tmpPdraw = MAX(ElecStorage(ElecStorNum)%EMSValuePelFromStorage, 0.0)
+    tmpPcharge = 0.0
     drawing  = .TRUE.
     charging = .FALSE.
   ELSEIF((.NOT. ElecStorage(ElecStorNum)%EMSOverridePelFromStorage) &
          .AND. (ElecStorage(ElecStorNum)%EMSOverridePelIntoStorage)) THEN
     ! EMS is calling for specific charge rate
-    tmpPcharge= MAX(ElecStorage(ElecStorNum)%EMSValuePelIntoStorage, 0.0D0)
-    tmpPdraw = 0.0D0
+    tmpPcharge= MAX(ElecStorage(ElecStorNum)%EMSValuePelIntoStorage, 0.0)
+    tmpPdraw = 0.0
     drawing  = .FALSE.
     charging = .TRUE.
   ELSEIF ((ElecStorage(ElecStorNum)%EMSOverridePelFromStorage)  &
@@ -3188,17 +3188,17 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
     ! EMS is asking to override both
     IF ( ElecStorage(ElecStorNum)%EMSValuePelIntoStorage > ElecStorage(ElecStorNum)%EMSValuePelFromStorage) THEN
       tmpPcharge= ElecStorage(ElecStorNum)%EMSValuePelIntoStorage - ElecStorage(ElecStorNum)%EMSValuePelFromStorage
-      tmpPdraw = 0.0D0
+      tmpPdraw = 0.0
       drawing  = .FALSE.
       charging = .TRUE.
     ELSEIF ( ElecStorage(ElecStorNum)%EMSValuePelIntoStorage < ElecStorage(ElecStorNum)%EMSValuePelFromStorage) THEN
       tmpPdraw = ElecStorage(ElecStorNum)%EMSValuePelFromStorage - ElecStorage(ElecStorNum)%EMSValuePelIntoStorage
-      tmpPcharge = 0.0D0
+      tmpPcharge = 0.0
       drawing  = .TRUE.
       charging = .FALSE.
     ELSE !they equal just hold
-      tmpPdraw = 0.0D0
-      tmpPcharge = 0.0D0
+      tmpPdraw = 0.0
+      tmpPcharge = 0.0
       drawing  = .FALSE.
       charging = .FALSE.
     ENDIF
@@ -3215,7 +3215,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
 
       IF (ElecStorage(ElecStorNum)%LastTimeStepStateOfCharge >= ElecStorage(ElecStorNum)%MaxEnergyCapacity) THEN
           ! storage full!  no more allowed!
-          tmpPcharge = 0.d0
+          tmpPcharge = 0.
    !       Constrained = .true.
           charging  = .FALSE.
       ENDIF
@@ -3251,9 +3251,9 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
       Pw = -tmpPcharge/Numbattery
       q0 = ElecStorage(ElecStorNum)%LastTimeStepAvailable + ElecStorage(ElecStorNum)%LastTimeStepBound
 
-      I0    = 1.0d0         ! Initial assumption
+      I0    = 1.0         ! Initial assumption
       T0    = abs(qmax/I0) ! Initial Assumption
-      qmaxf = qmax*k*c*T0/(1.0d0-exp(-k*T0)+c*(k*T0-1.0d0+exp(-k*T0))) !Initial calculation of a function qmax(I)
+      qmaxf = qmax*k*c*T0/(1.0-exp(-k*T0)+c*(k*T0-1.0+exp(-k*T0))) !Initial calculation of a function qmax(I)
       Xf    = q0/qmaxf
       Ef    = E0d + CurveValue(ElecStorage(ElecStorNum)%ChargeCurveNum,Xf) !E0d+Ac*Xf+Cc*Xf/(Dc-Xf) (use curve)
       Volt  = Ef-I0*InternalR
@@ -3261,10 +3261,10 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
       Tnew  = qmaxf/abs(Inew)
       error = 1.0
 
-      DO WHILE (error.gt.0.0001d0)    !Iteration process to get converged current(I)
+      DO WHILE (error.gt.0.0001)    !Iteration process to get converged current(I)
         I0    = Inew
         T0    = Tnew
-        qmaxf = qmax*k*c*T0/(1.0d0-exp(-k*T0)+c*(k*T0-1.0d0+exp(-k*T0)))
+        qmaxf = qmax*k*c*T0/(1.0-exp(-k*T0)+c*(k*T0-1.0+exp(-k*T0)))
         Xf    = q0/qmaxf
         Ef    = E0d+CurveValue(ElecStorage(ElecStorNum)%ChargeCurveNum,Xf) !E0d+Ac*Xf+Cc*Xf/(Dc-Xf) (use curve)
         Volt  = Ef-I0*InternalR
@@ -3274,8 +3274,8 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
       ENDDO
 
       dividend = -k*c*qmax + k*ElecStorage(ElecStorNum)%LastTimeStepAvailable*exp(-k*TimeStepSys) +   &
-                      q0*k*c*(1.0d0-exp(-k*TimeStepSys))
-      divisor  = 1.0d0 - exp(-k*TimeStepSys) + c*(k*TimeStepSys-1+exp(-k*TimeStepSys))
+                      q0*k*c*(1.0-exp(-k*TimeStepSys))
+      divisor  = 1.0 - exp(-k*TimeStepSys) + c*(k*TimeStepSys-1+exp(-k*TimeStepSys))
       Imax  = dividend/divisor
       ! Below: This is the limit of charging current from Charge Rate Limit (input)
       Imax  = Max(Imax,-(qmax-q0)*ElecStorage(ElecStorNum)%MaxChargeRate)
@@ -3287,9 +3287,9 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
          I0    = Imax
          qmaxf = 80 !Initial assumption to solve the equation using iterative method
          error = 10 !Initial assumption ...
-         DO WHILE (error.gt.0.001d0)
+         DO WHILE (error.gt.0.001)
             ! *** I0(current) should be positive for this calculation
-            RHS=(qmax*k*c*qmaxf/abs(I0))/(1.0d0-exp(-k*qmaxf/abs(I0))+c*(k*qmaxf/abs(I0)-1.0d0+exp(-k*qmaxf/abs(I0))))
+            RHS=(qmax*k*c*qmaxf/abs(I0))/(1.0-exp(-k*qmaxf/abs(I0))+c*(k*qmaxf/abs(I0)-1.0+exp(-k*qmaxf/abs(I0))))
             error=abs(qmaxf-RHS)
             qmaxf=RHS
          ENDDO
@@ -3302,7 +3302,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   IF (drawing) THEN
     IF (ElecStorage(ElecStorNum)%StorageModelMode == SimpleBucketStorage) THEN
 
-      IF (ElecStorage(ElecStorNum)%LastTimeStepStateOfCharge <= 0.d0) THEN
+      IF (ElecStorage(ElecStorNum)%LastTimeStepStateOfCharge <= 0.) THEN
           ! storage empty  no more allowed!
           tmpPdraw = 0.0
           drawing = .FALSE.
@@ -3322,10 +3322,10 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
                    /(TimeStepSys*SecInHour)
         ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge =  ElecStorage(ElecStorNum)%LastTimeStepStateOfCharge &
                                 - tmpPdraw *TimeStepSys*SecInHour/ElecStorage(ElecStorNum)%EnergeticEfficDischarge
-        ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge = MAX(ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge, 0.0D0)
+        ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge = MAX(ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge, 0.0)
       ENDIF
 
-      ElecStorage(ElecStorNum)%ThermLossRate  = tmpPdraw * (1.0d0/ElecStorage(ElecStorNum)%EnergeticEfficDischarge - 1.0d0)
+      ElecStorage(ElecStorNum)%ThermLossRate  = tmpPdraw * (1.0/ElecStorage(ElecStorNum)%EnergeticEfficDischarge - 1.0)
       Pstorage = - tmpPdraw
     ENDIF ! simple discharging
 
@@ -3337,20 +3337,20 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
 
       Pw    = tmpPdraw/Numbattery
       q0    = ElecStorage(ElecStorNum)%LastTimeStepAvailable+ElecStorage(ElecStorNum)%LastTimeStepBound
-      I0    = 10.0d0    ! Initial assumption
+      I0    = 10.0    ! Initial assumption
       T0    = qmax/I0   ! Initial Assumption
-      qmaxf = qmax*k*c*T0/(1.0d0-exp(-k*T0)+c*(k*T0-1.0d0+exp(-k*T0))) !Initial calculation of a function qmax(I)
+      qmaxf = qmax*k*c*T0/(1.0-exp(-k*T0)+c*(k*T0-1.0+exp(-k*T0))) !Initial calculation of a function qmax(I)
       Xf    = (qmax-q0)/qmaxf
       Ef    = E0c + CurveValue(ElecStorage(ElecStorNum)%DischargeCurveNum,Xf) !E0d+Ac*Xf+Cc*X/(Dc-Xf)
       Volt  = Ef-I0*InternalR
       Inew  = Pw/Volt
       Tnew  = qmaxf/Inew
-      error = 1.0d0
+      error = 1.0
 
-      DO WHILE (error.gt.0.0001d0) !Iteration process to get converged current(I)
+      DO WHILE (error.gt.0.0001) !Iteration process to get converged current(I)
         I0   = Inew
         T0   = Tnew
-        qmaxf= qmax*k*c*T0/(1.0d0-exp(-k*T0)+c*(k*T0-1.0d0+exp(-k*T0)))
+        qmaxf= qmax*k*c*T0/(1.0-exp(-k*T0)+c*(k*T0-1.0+exp(-k*T0)))
         Xf   = (qmax-q0)/qmaxf
         Ef   = E0c + CurveValue(ElecStorage(ElecStorNum)%DischargeCurveNum,Xf) !E0c+Ad*Xf+Cd*X/(Dd-Xf)
         Volt = Ef - I0*InternalR
@@ -3360,8 +3360,8 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
       ENDDO
 
       dividend = k*ElecStorage(ElecStorNum)%LastTimeStepAvailable*exp(-k*TimeStepSys) +   &
-                q0*k*c*(1.0d0-exp(-k*TimeStepSys))
-      divisor  = 1.0d0 - exp(-k*TimeStepSys) + c*(k*TimeStepSys-1.0d0+exp(-k*TimeStepSys))
+                q0*k*c*(1.0-exp(-k*TimeStepSys))
+      divisor  = 1.0 - exp(-k*TimeStepSys) + c*(k*TimeStepSys-1.0+exp(-k*TimeStepSys))
       Imax     = dividend/divisor
       Imax     = Min(Imax,ElecStorage(ElecStorNum)%MaxDischargeI)
       IF (abs(I0).le.Imax) THEN
@@ -3371,8 +3371,8 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
          I0    = Imax
          qmaxf = 10     !Initial assumption to solve the equation using iterative method
          error = 10     !Initial assumption ...
-         DO WHILE (error.gt.0.001d0)
-            RHS = (qmax*k*c*qmaxf/I0)/(1.0d0-exp(-k*qmaxf/I0)+c*(k*qmaxf/I0-1+exp(-k*qmaxf/I0)))
+         DO WHILE (error.gt.0.001)
+            RHS = (qmax*k*c*qmaxf/I0)/(1.0-exp(-k*qmaxf/I0)+c*(k*qmaxf/I0-1+exp(-k*qmaxf/I0)))
             error = abs(qmaxf-RHS)
             qmaxf = RHS
          ENDDO
@@ -3382,14 +3382,14 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
       ENDIF
 
       IF (Volt.lt.ElecStorage(ElecStorNum)%CutoffV) THEN
-         I0 = 0.d0
+         I0 = 0.
       ENDIF
     ENDIF  ! end KiBaM discharging
 
   ENDIF !drawing
 
   ! correct if not available.
-  IF (GetCurrentScheduleValue(ElecStorage(ElecStorNum)%AvailSchedPtr) == 0.d0) THEN
+  IF (GetCurrentScheduleValue(ElecStorage(ElecStorNum)%AvailSchedPtr) == 0.) THEN
     IF ((.NOT. ElecStorage(ElecStorNum)%EMSOverridePelFromStorage) &
         .AND. (.NOT. ElecStorage(ElecStorNum)%EMSOverridePelIntoStorage)) THEN
       charging = .FALSE.
@@ -3401,20 +3401,20 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   IF ((.NOT. charging) .AND. ( .NOT. drawing)) THEN
 
      ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge = ElecStorage(ElecStorNum)%LastTimeStepStateOfCharge
-     ElecStorage(ElecStorNum)%PelIntoStorage = 0.d0
-     ElecStorage(ElecStorNum)%PelFromStorage = 0.d0
-     Pstorage = 0.d0
+     ElecStorage(ElecStorNum)%PelIntoStorage = 0.
+     ElecStorage(ElecStorNum)%PelFromStorage = 0.
+     Pstorage = 0.
   ENDIF
 
-  IF (Pstorage >= 0.d0) THEN
+  IF (Pstorage >= 0.) THEN
 
     ElecStorage(ElecStorNum)%PelIntoStorage = Pstorage
     ElecStorage(ElecStorNum)%PelFromStorage = 0.0
   ENDIF
 
-  IF (Pstorage < 0.d0) THEN
+  IF (Pstorage < 0.) THEN
 
-    ElecStorage(ElecStorNum)%PelIntoStorage = 0.d0
+    ElecStorage(ElecStorNum)%PelIntoStorage = 0.
     ElecStorage(ElecStorNum)%PelFromStorage = - Pstorage
 
   ENDIF
@@ -3422,17 +3422,17 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   ElecStorage(ElecStorNum)%ElectEnergyinStorage  = ElecStorage(ElecStorNum)%ThisTimeStepStateOfCharge
   ElecStorage(ElecStorNum)%StoredPower           = ElecStorage(ElecStorNum)%PelIntoStorage
   ElecStorage(ElecStorNum)%StoredEnergy          = ElecStorage(ElecStorNum)%PelIntoStorage * TimeStepSys * SecInHour
-  ElecStorage(ElecStorNum)%DecrementedEnergyStored = -1.0D0 * ElecStorage(ElecStorNum)%StoredEnergy
+  ElecStorage(ElecStorNum)%DecrementedEnergyStored = -1.0 * ElecStorage(ElecStorNum)%StoredEnergy
   ElecStorage(ElecStorNum)%DrawnPower            = ElecStorage(ElecStorNum)%PelFromStorage
   ElecStorage(ElecStorNum)%DrawnEnergy           = ElecStorage(ElecStorNum)%PelFromStorage * TimeStepSys * SecInHour
   ElecStorage(ElecStorNum)%ThermLossRate         =  MAX(ElecStorage(ElecStorNum)%StoredPower &
-                                                       *  (1.0D0 - ElecStorage(ElecStorNum)%EnergeticEfficCharge ) , &
+                                                       *  (1.0 - ElecStorage(ElecStorNum)%EnergeticEfficCharge ) , &
                                                         ElecStorage(ElecStorNum)%DrawnPower &
-                                                       *  (1.0D0 - ElecStorage(ElecStorNum)%EnergeticEfficDischarge  ) )
+                                                       *  (1.0 - ElecStorage(ElecStorNum)%EnergeticEfficDischarge  ) )
   ElecStorage(ElecStorNum)%ThermLossEnergy       = ElecStorage(ElecStorNum)%ThermLossRate * TimeStepSys * SecInHour
 
   IF (ElecStorage(ElecStorNum)%ZoneNum > 0) THEN ! set values for zone heat gains
-    ElecStorage(ElecStorNum)%QdotconvZone = (1.0D0 - ElecStorage(ElecStorNum)%ZoneRadFract)* ElecStorage(ElecStorNum)%ThermLossRate
+    ElecStorage(ElecStorNum)%QdotconvZone = (1.0 - ElecStorage(ElecStorNum)%ZoneRadFract)* ElecStorage(ElecStorNum)%ThermLossRate
     ElecStorage(ElecStorNum)%QdotRadZone  = (ElecStorage(ElecStorNum)%ZoneRadFract) * ElecStorage(ElecStorNum)%ThermLossRate
   ENDIF
 
@@ -3445,16 +3445,16 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
     IF ((.NOT. charging) .AND. ( .NOT. drawing)) THEN
         ElecStorage(ElecStorNum)%ThisTimeStepAvailable = ElecStorage(ElecStorNum)%LastTimeStepAvailable
         ElecStorage(ElecStorNum)%ThisTimeStepBound = ElecStorage(ElecStorNum)%LastTimeStepBound
-        I0   = 0.d0
-        Volt = 0.d0
+        I0   = 0.
+        Volt = 0.
         q0   = ElecStorage(ElecStorNum)%LastTimeStepAvailable+ElecStorage(ElecStorNum)%LastTimeStepBound
     ELSE
         newAvailable = ElecStorage(ElecStorNum)%LastTimeStepAvailable*exp(-k*TimeStepSys) +   &
-           (q0*k*c-I0)*(1.0d0-exp(-k*TimeStepSys))/k - I0*c*(k*TimeStepSys-1.0d0+exp(-k*TimeStepSys))/k
-        newBound     = ElecStorage(ElecStorNum)%LastTimeStepBound*exp(-k*TimeStepSys)+q0*(1.0d0-c)*  &
-           (1.0d0-exp(-k*TimeStepSys))-I0*(1.0d0-c)*(k*TimeStepSys-1.0d0+exp(-k*TimeStepSys))/k
-        ElecStorage(ElecStorNum)%ThisTimeStepAvailable = Max(0.0d0 , newAvailable)
-        ElecStorage(ElecStorNum)%ThisTimeStepBound = Max(0.0d0 , newBound)
+           (q0*k*c-I0)*(1.0-exp(-k*TimeStepSys))/k - I0*c*(k*TimeStepSys-1.0+exp(-k*TimeStepSys))/k
+        newBound     = ElecStorage(ElecStorNum)%LastTimeStepBound*exp(-k*TimeStepSys)+q0*(1.0-c)*  &
+           (1.0-exp(-k*TimeStepSys))-I0*(1.0-c)*(k*TimeStepSys-1.0+exp(-k*TimeStepSys))/k
+        ElecStorage(ElecStorNum)%ThisTimeStepAvailable = Max(0.0 , newAvailable)
+        ElecStorage(ElecStorNum)%ThisTimeStepBound = Max(0.0 , newBound)
     ENDIF
 
     Pactual  = I0*Volt
@@ -3465,7 +3465,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
        ElecStorage(ElecStorNum)%StorageMode  = 2
        ElecStorage(ElecStorNum)%StoredPower  = Volt*I0*Numbattery
        ElecStorage(ElecStorNum)%StoredEnergy = Volt*I0*Numbattery*TimeStepSys*SecInHour
-       ElecStorage(ElecStorNum)%DecrementedEnergyStored = -1.0D0 * ElecStorage(ElecStorNum)%StoredEnergy
+       ElecStorage(ElecStorNum)%DecrementedEnergyStored = -1.0 * ElecStorage(ElecStorNum)%StoredEnergy
        ElecStorage(ElecStorNum)%DrawnPower  = 0.0
        ElecStorage(ElecStorNum)%DrawnEnergy = 0.0
 
@@ -3513,7 +3513,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
     ENDIF
 
   IF (ElecStorage(ElecStorNum)%ZoneNum > 0) THEN ! set values for zone heat gains
-    ElecStorage(ElecStorNum)%QdotconvZone = ( (1.0D0 - ElecStorage(ElecStorNum)%ZoneRadFract) *  &
+    ElecStorage(ElecStorNum)%QdotconvZone = ( (1.0 - ElecStorage(ElecStorNum)%ZoneRadFract) *  &
        ElecStorage(ElecStorNum)%ThermLossRate) * Numbattery
     ElecStorage(ElecStorNum)%QdotRadZone  = ((ElecStorage(ElecStorNum)%ZoneRadFract) *   &
        ElecStorage(ElecStorNum)%ThermLossRate)*Numbattery
@@ -3572,8 +3572,8 @@ SUBROUTINE FigureElectricalStorageZoneGains
   IF (NumElecStorageDevices == 0) RETURN
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
-    ElecStorage%QdotconvZone = 0.0D0
-    ElecStorage%QdotRadZone  = 0.0D0
+    ElecStorage%QdotconvZone = 0.0
+    ElecStorage%QdotRadZone  = 0.0
     MyEnvrnFlag = .FALSE.
   ENDIF
   IF( .NOT. BeginEnvrnFlag) MyEnvrnFlag = .TRUE.
@@ -3633,33 +3633,33 @@ SUBROUTINE ManageTransformers()
   INTEGER     :: LCNum            !counter for the load centers served by a transformer
   INTEGER     :: ZoneNum          !pointer to the zone where transformer is located
 
-  REAL(r64), external  :: GetInstantMeterValue
-  REAL(r64), external  :: GetCurrentMeterValue
+  REAL, external  :: GetInstantMeterValue
+  REAL, external  :: GetCurrentMeterValue
 
-  REAL(r64)   :: FactorTempCorr   !temperature correction factor
+  REAL   :: FactorTempCorr   !temperature correction factor
 
-  REAL(r64)   :: ResRef           !winding resistance at reference temperature (full load)
-  REAL(r64)   :: ResSpecified     !winding resistance at specified temperature (specified load)
-  REAL(r64)   :: ResRatio         !ratio of winding resistance = ResSpecified/ResRef
-  REAL(r64)   :: TempChange       !winding temperature rise (C)
-  REAL(r64)   :: AmbTemp          !ambient temperature (C)
-  REAL(r64)   :: AmbTempRef       !reference ambient temperature (C)
-  REAL(r64)   :: Capacity         !transformer nameplate capacity(VA)
-  REAL(r64)   :: PUL              !per unit load
-  REAL(r64)   :: SurplusPower     !surplus power for an electric load center
-  REAL(r64)   :: ElecLoad         !transformer load which may be power in or out depending on the usage mode
-  REAL(r64)   :: PastElecLoad     !transformer load at the previous timestep
-  REAL(r64)   :: TotalLossRate    !the sum of no load loss rate and load loss rate
+  REAL   :: ResRef           !winding resistance at reference temperature (full load)
+  REAL   :: ResSpecified     !winding resistance at specified temperature (specified load)
+  REAL   :: ResRatio         !ratio of winding resistance = ResSpecified/ResRef
+  REAL   :: TempChange       !winding temperature rise (C)
+  REAL   :: AmbTemp          !ambient temperature (C)
+  REAL   :: AmbTempRef       !reference ambient temperature (C)
+  REAL   :: Capacity         !transformer nameplate capacity(VA)
+  REAL   :: PUL              !per unit load
+  REAL   :: SurplusPower     !surplus power for an electric load center
+  REAL   :: ElecLoad         !transformer load which may be power in or out depending on the usage mode
+  REAL   :: PastElecLoad     !transformer load at the previous timestep
+  REAL   :: TotalLossRate    !the sum of no load loss rate and load loss rate
 
-  REAL(r64)   :: Numerator        !intermediate variable for numerator
-  REAL(r64)   :: Denominator      !intermediate variable for denominator
+  REAL   :: Numerator        !intermediate variable for numerator
+  REAL   :: Denominator      !intermediate variable for denominator
 
   LOGICAL, SAVE :: MyOneTimeFlag = .TRUE.
 
 
 
 
-  AmbTempRef = 20.0D0               ![C]
+  AmbTempRef = 20.0               ![C]
 
 
   IF(NumTransformers <= 0) RETURN
@@ -3672,12 +3672,12 @@ SUBROUTINE ManageTransformers()
         ResRef = Transformer(TransfNum)%FactorTempCoeff + Transformer(TransfNum)%TempRise + AmbTempRef
         ResSpecified = Transformer(TransfNum)%FactorTempCoeff + Transformer(TransfNum)%RatedTemp
         ResRatio = ResSpecified/ResRef
-        FactorTempCorr = (1.0D0-Transformer(TransfNum)%EddyFrac) * ResRatio +  &
-                          Transformer(TransfNum)%EddyFrac * (1.0D0/ResRatio)
+        FactorTempCorr = (1.0-Transformer(TransfNum)%EddyFrac) * ResRatio +  &
+                          Transformer(TransfNum)%EddyFrac * (1.0/ResRatio)
 
         Capacity = Transformer(TransfNum)%RatedCapacity
-        Numerator = Capacity * Transformer(TransfNum)%RatedPUL * (1.0D0-Transformer(TransfNum)%RatedEfficiency)
-        Denominator = Transformer(TransfNum)%RatedEfficiency * (1.0D0 + &
+        Numerator = Capacity * Transformer(TransfNum)%RatedPUL * (1.0-Transformer(TransfNum)%RatedEfficiency)
+        Denominator = Transformer(TransfNum)%RatedEfficiency * (1.0 + &
                        (Transformer(TransfNum)%RatedPUL / Transformer(TransfNum)%MaxPUL)**2)
 
         Transformer(TransfNum)%RatedNL = Numerator / Denominator
@@ -3693,8 +3693,8 @@ SUBROUTINE ManageTransformers()
 
 
   DO TransfNum = 1, NumTransformers
-    ElecLoad = 0.0D0
-    PastElecLoad = 0.0D0
+    ElecLoad = 0.0
+    PastElecLoad = 0.0
 
     IF(Transformer(TransfNum)%UsageMode == PowerInFromGrid) THEN
 
@@ -3708,8 +3708,8 @@ SUBROUTINE ManageTransformers()
           ! a transformer is overloaded or not.
           PastElecLoad = PastElecLoad + GetCurrentMeterValue(MeterPtr)/ (TimeStepZone * SecInHour)
         ELSE
-          ElecLoad =0.0D0
-          PastElecLoad = 0.0D0
+          ElecLoad =0.0
+          PastElecLoad = 0.0
         ENDIF
 
         ! Because transformer loss has been accounted for by Electricity:Facility and Electricity:HVAC, the transformer
@@ -3756,26 +3756,26 @@ SUBROUTINE ManageTransformers()
                                  Transformer(TransfNum)%OverloadErrorIndex)
       END IF
 
-      TempChange = (PUL ** 1.6d0) * Transformer(TransfNum)%TempRise
+      TempChange = (PUL ** 1.6) * Transformer(TransfNum)%TempRise
 
       IF(Transformer(TransfNum)%HeatLossesDestination == ZoneGains) THEN
         ZoneNum = Transformer(TransfNum)%ZoneNum
         AmbTemp = ZnAirRpt(ZoneNum)%MeanAirTemp
       ELSE
-         AmbTemp = 20.0D0
+         AmbTemp = 20.0
       ENDIF
 
       ResRef         = Transformer(TransfNum)%FactorTempCoeff + Transformer(TransfNum)%TempRise + AmbTempRef
       ResSpecified   = Transformer(TransfNum)%FactorTempCoeff + TempChange + AmbTemp
       ResRatio       = ResSpecified/ResRef
-      FactorTempCorr = (1.0D0-Transformer(TransfNum)%EddyFrac) * ResRatio +  &
-                          Transformer(TransfNum)%EddyFrac * (1.0D0/ResRatio)
+      FactorTempCorr = (1.0-Transformer(TransfNum)%EddyFrac) * ResRatio +  &
+                          Transformer(TransfNum)%EddyFrac * (1.0/ResRatio)
 
       Transformer(TransfNum)%LoadLossRate   = Transformer(TransfNum)%RatedLL * (PUL **2) * FactorTempCorr
       Transformer(TransfNum)%NoLoadLossRate = Transformer(TransfNum)%RatedNL
     ELSE !Transformer is not available.
-      Transformer(TransfNum)%LoadLossRate   = 0.0D0
-      Transformer(TransfNum)%NoLoadLossRate = 0.0D0
+      Transformer(TransfNum)%LoadLossRate   = 0.0
+      Transformer(TransfNum)%NoLoadLossRate = 0.0
     ENDIF
 
     TotalLossRate = Transformer(TransfNum)%LoadLossRate + Transformer(TransfNum)%NoLoadLossRate
@@ -3789,26 +3789,26 @@ SUBROUTINE ManageTransformers()
       IF(Transformer(TransfNum)%ConsiderLosses) THEN
         Transformer(TransfNum)%ElecUseUtility = TotalLossRate * TimeStepSys * SecInHour
       ELSE
-        Transformer(TransfNum)%ElecUseUtility = 0.0D0
+        Transformer(TransfNum)%ElecUseUtility = 0.0
       ENDIF
 
       !Transformer has two modes.If it works in one mode, the variable for meter output in the other mode
       !is assigned 0
-      Transformer(TransfNum)%ElecProducedCoGen   = 0.0D0
+      Transformer(TransfNum)%ElecProducedCoGen   = 0.0
     ELSE   !Usage mode is PowerOutFromBldg
       Transformer(TransfNum)%PowerOut   = ElecLoad - TotalLossRate
 
-      IF(Transformer(TransfNum)%PowerOut < 0) Transformer(TransfNum)%PowerOut = 0.0D0
+      IF(Transformer(TransfNum)%PowerOut < 0) Transformer(TransfNum)%PowerOut = 0.0
 
-      Transformer(TransfNum)%ElecProducedCoGen   = -1.0D0 * TotalLossRate * TimeStepSys * SecInHour
+      Transformer(TransfNum)%ElecProducedCoGen   = -1.0 * TotalLossRate * TimeStepSys * SecInHour
 
       !Transformer has two modes.If it works in one mode, the variable for meter output in the other mode
       !is assigned 0
-      Transformer(TransfNum)%ElecUseUtility = 0.0D0
+      Transformer(TransfNum)%ElecUseUtility = 0.0
     ENDIF
 
     IF( Transformer(TransfNum)%PowerIn <= 0) THEN
-      Transformer(TransfNum)%Efficiency      = 0.0D0
+      Transformer(TransfNum)%Efficiency      = 0.0
     ELSE
       Transformer(TransfNum)%Efficiency      = Transformer(TransfNum)%PowerOut / Transformer(TransfNum)%PowerIn
     ENDIF
@@ -3825,7 +3825,7 @@ SUBROUTINE ManageTransformers()
     Transformer(TransfNum)%ThermalLossEnergy = TotalLossRate * TimeStepSys * SecInHour
 
     IF (Transformer(TransfNum)%ZoneNum > 0) THEN ! set values for zone heat gains
-      Transformer(TransfNum)%QdotconvZone = (1.0D0 - Transformer(TransfNum)%ZoneRadFrac)* Transformer(TransfNum)%ThermalLossRate
+      Transformer(TransfNum)%QdotconvZone = (1.0 - Transformer(TransfNum)%ZoneRadFrac)* Transformer(TransfNum)%ThermalLossRate
       Transformer(TransfNum)%QdotRadZone  = (Transformer(TransfNum)%ZoneRadFrac) * Transformer(TransfNum)%ThermalLossRate
     ENDIF
   END DO   ! End TransfNum Loop
@@ -3877,8 +3877,8 @@ SUBROUTINE FigureTransformerZoneGains
   IF (NumTransformers == 0) RETURN
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
-    Transformer%QdotconvZone = 0.0D0
-    Transformer%QdotRadZone  = 0.0D0
+    Transformer%QdotconvZone = 0.0
+    Transformer%QdotRadZone  = 0.0
     MyEnvrnFlag = .FALSE.
   ENDIF
 
@@ -3917,7 +3917,7 @@ SUBROUTINE Rainflow(numbin,input,B1,X,count,Nmb,OneNmb) ! this variable should b
 ! numbin = constant value
 ! input = input value from other object (battery model)
 ! These variables (X,B1,count,Nmb) should be stored for the next timestep in main loop
- REAL(r64) B1(0:20),X(0:20),input,Nmb(0:20),var1,var2,OneNmb(0:20)
+ REAL B1(0:20),X(0:20),input,Nmb(0:20),var1,var2,OneNmb(0:20)
  INTEGER count,numbin,num
  INTEGER i,k
  !Array B1 stores the value of points
@@ -3936,7 +3936,7 @@ SUBROUTINE Rainflow(numbin,input,B1,X,count,Nmb,OneNmb) ! this variable should b
 
    DO WHILE (abs(X(1)).le.abs(X(2)))  !Start counting a half cycle here.
      num = Int((abs(X(1))*numbin*10+5)/10) ! Count half cycle
-     Nmb(num) = Nmb(num)+0.5d0
+     Nmb(num) = Nmb(num)+0.5
      B1 = EOSHIft(B1,shift=1)              ! Once counting a half cycle, get rid of the value.
      X = EOSHIft(X,shift=1)
      count=count-1                      ! The number of matrix, B1 and X1 decrease.
@@ -3947,7 +3947,7 @@ SUBROUTINE Rainflow(numbin,input,B1,X,count,Nmb,OneNmb) ! this variable should b
  IF (count .ge. 3) THEN !count 1 cycle
    DO WHILE (abs(X(count)) .gt. abs(X(count-1)))
      num = Int((abs(X(count-1))*numbin*10+5)/10)
-     Nmb(num)=Nmb(num)+1.0d0
+     Nmb(num)=Nmb(num)+1.0
 
      CALL shift(B1,count-1,count,B1)   ! Get rid of two data points one by one
      CALL shift(B1,count-2,count,B1)   ! Delete one point
@@ -3969,7 +3969,7 @@ SUBROUTINE Rainflow(numbin,input,B1,X,count,Nmb,OneNmb) ! this variable should b
                      ! OneNmb is used to show the current output only.
  DO k = 1, count
     num = Int((abs(X(k))*numbin*10+5)/10) !Bin number
-    OneNmb(num) = OneNmb(num)+0.5d0
+    OneNmb(num) = OneNmb(num)+0.5
  ENDDO
 END SUBROUTINE
 
@@ -3985,8 +3985,8 @@ SUBROUTINE shift(A,m,n,B)
           ! PURPOSE OF THIS SUBROUTINE:
           ! Utility subroutine for rainflow cycle counting
 
-  REAL(r64) A(0:20)
-  REAL(r64) B(0:20)
+  REAL A(0:20)
+  REAL B(0:20)
   INTEGER m,n,ShiftNum
 
   DO ShiftNum=1,m-1

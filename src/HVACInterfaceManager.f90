@@ -48,22 +48,22 @@ TYPE, PUBLIC :: CommonPipeData
   INTEGER                          :: DemandSideInletPumpType = FlowTypeNotSet
 !Following report variables are used in uncontrolled common pipe
   INTEGER                          :: FlowDir               = 0       ! Direction in which flow is in Common Pipe
-  REAL(r64)                        :: Flow                  = 0.0d0   ! Flow in the Common Pipe
-  REAL(r64)                        :: Temp                  = 0.0d0
+  REAL                        :: Flow                  = 0.0   ! Flow in the Common Pipe
+  REAL                        :: Temp                  = 0.0
 !Following report variables are used in two way common pipe
-  REAL(r64)                        :: SecCPLegFlow          = 0.0d0   ! Mass flow in the secondary side Common pipe leg
-  REAL(r64)                        :: PriCPLegFlow          = 0.0d0   ! Mass flow in the primary side Common pipe leg
-  REAL(r64)                        :: SecToPriFlow          = 0.0d0   ! Mass flow in the pipe from Secondary to primary side
-  REAL(r64)                        :: PriToSecFlow          = 0.0d0   ! Mass flow in the pipe from primary to Secondary side
-  REAL(r64)                        :: PriInTemp             = 0.0d0   ! Temperature at primary inlet node
-  REAL(r64)                        :: PriOutTemp            = 0.0d0   ! Temperature at primary outlet node
-  REAL(r64)                        :: SecInTemp             = 0.0d0   ! Temperature at secondary inlet node
-  REAL(r64)                        :: SecOutTemp            = 0.0d0   ! Temperature at secondary outlet node
-  REAL(r64)                        :: PriInletSetPoint      = 0.0d0   ! Setpoint at Primary inlet node
-  REAL(r64)                        :: SecInletSetPoint      = 0.0d0   ! Setpoint at Secondary inlet node
+  REAL                        :: SecCPLegFlow          = 0.0   ! Mass flow in the secondary side Common pipe leg
+  REAL                        :: PriCPLegFlow          = 0.0   ! Mass flow in the primary side Common pipe leg
+  REAL                        :: SecToPriFlow          = 0.0   ! Mass flow in the pipe from Secondary to primary side
+  REAL                        :: PriToSecFlow          = 0.0   ! Mass flow in the pipe from primary to Secondary side
+  REAL                        :: PriInTemp             = 0.0   ! Temperature at primary inlet node
+  REAL                        :: PriOutTemp            = 0.0   ! Temperature at primary outlet node
+  REAL                        :: SecInTemp             = 0.0   ! Temperature at secondary inlet node
+  REAL                        :: SecOutTemp            = 0.0   ! Temperature at secondary outlet node
+  REAL                        :: PriInletSetPoint      = 0.0   ! Setpoint at Primary inlet node
+  REAL                        :: SecInletSetPoint      = 0.0   ! Setpoint at Secondary inlet node
   LOGICAL                          :: PriInletControlled    = .FALSE. !True if Primary inlet node is controlled
   LOGICAL                          :: SecInletControlled    = .FALSE. !True if secondary inlet is controlled
-  REAL(r64)                        :: PriFlowRequest        = 0.d0    ! total flow request on supply side.
+  REAL                        :: PriFlowRequest        = 0.    ! total flow request on supply side.
 END TYPE CommonPipeData
 
 
@@ -129,7 +129,7 @@ SUBROUTINE UpdateHVACInterface(OutletNode,InletNode,OutOfToleranceFlag)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)       :: DeltaEnergy
+  REAL       :: DeltaEnergy
 
           ! FLOW:
 
@@ -266,12 +266,12 @@ SUBROUTINE UpdatePlantLoopInterface(LoopNum,ThisLoopSideNum,ThisLoopSideOutletNo
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)       :: DeltaEnergy
-  REAL(r64)       :: OldTankOutletTemp
-  REAL(r64)       :: OldTankOutletEnthalpy
-  REAL(r64)       :: TankOutletTemp
-  REAL(r64)       :: Cp
-  REAL(r64)       :: MixedOutletTemp
+  REAL       :: DeltaEnergy
+  REAL       :: OldTankOutletTemp
+  REAL       :: OldTankOutletEnthalpy
+  REAL       :: TankOutletTemp
+  REAL       :: Cp
+  REAL       :: MixedOutletTemp
   INTEGER         :: ThisLoopSideInletNode
 
           ! FLOW:
@@ -438,11 +438,11 @@ SUBROUTINE UpdateHalfLoopInletTemp(LoopNum, TankInletLoopSide, TankOutletTemp)
           ! SUBROUTINE ARGUMENTS:
   INTEGER, INTENT(IN)  :: LoopNum
   INTEGER, INTENT(IN)  :: TankInletLoopSide
-  REAL(r64),INTENT(OUT) :: TankOutletTemp
+  REAL,INTENT(OUT) :: TankOutletTemp
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64),PARAMETER     ::     FracTotLoopMass = 0.5d0   !Fraction of total loop mass assigned to the half loop
+  REAL,PARAMETER     ::     FracTotLoopMass = 0.5   !Fraction of total loop mass assigned to the half loop
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -454,17 +454,17 @@ SUBROUTINE UpdateHalfLoopInletTemp(LoopNum, TankInletLoopSide, TankOutletTemp)
   INTEGER       :: TankOutletLoopSide                ! inlet loopsidenumber
   INTEGER       :: TankInletNode          ! inlet loop side outlet node
   INTEGER       :: TankOutletNode          ! inlet loop side outlet node
-  REAL(r64)     :: TankInletTemp   ! temporary variable
-  REAL(r64)     :: LastTankOutletTemp   ! temporary variable
-  REAL(r64)     :: Cp                           ! specific heat
-  REAL(r64)     :: TimeElapsed ! temporary value based on current clock time during simulation, fractional hours
+  REAL     :: TankInletTemp   ! temporary variable
+  REAL     :: LastTankOutletTemp   ! temporary variable
+  REAL     :: Cp                           ! specific heat
+  REAL     :: TimeElapsed ! temporary value based on current clock time during simulation, fractional hours
 
-  REAL(r64)     :: TimeStepSeconds
-  REAL(r64)     :: MassFlowRate
-  REAL(r64)     :: PumpHeat
-  REAL(r64)     :: ThisTankMass
-  REAL(r64)     :: TankFinalTemp
-  REAL(r64)     :: TankAverageTemp
+  REAL     :: TimeStepSeconds
+  REAL     :: MassFlowRate
+  REAL     :: PumpHeat
+  REAL     :: ThisTankMass
+  REAL     :: TankFinalTemp
+  REAL     :: TankAverageTemp
 
           ! FLOW:
 
@@ -507,8 +507,8 @@ SUBROUTINE UpdateHalfLoopInletTemp(LoopNum, TankInletLoopSide, TankOutletTemp)
   PumpHeat = PlantLoop(LoopNum)%LoopSide(TankOutletLoopSide)%TotalPumpHeat
   ThisTankMass = FracTotLoopMass * PlantLoop(LoopNum)%Mass
 
-  IF (ThisTankMass <= 0.d0) THEN ! no mass, no plant loop volume
-    IF (MassFlowRate > 0.d0) THEN
+  IF (ThisTankMass <= 0.) THEN ! no mass, no plant loop volume
+    IF (MassFlowRate > 0.) THEN
       TankFinalTemp = TankInletTemp + PumpHeat/(MassFlowRate * Cp)
       TankAverageTemp = (TankFinalTemp + LastTankOutletTemp)/2.0
     ELSE
@@ -517,7 +517,7 @@ SUBROUTINE UpdateHalfLoopInletTemp(LoopNum, TankInletLoopSide, TankOutletTemp)
     END IF
 
   ELSE ! tank has mass
-    IF (MassFlowRate > 0.d0 ) THEN
+    IF (MassFlowRate > 0. ) THEN
       TankFinalTemp = (LastTankOutletTemp - (MassFlowRate * Cp * TankInletTemp + PumpHeat)/(MassFlowRate * Cp)) * &
                        exp(-(MassFlowRate * Cp) / (ThisTankMass*Cp)*TimeStepSeconds) + &
                        (MassFlowRate * Cp * TankInletTemp + PumpHeat)/ (MassFlowRate * Cp)
@@ -588,7 +588,7 @@ SUBROUTINE UpdateCommonPipe(LoopNum,TankInletLoopSide,CommonPipeType,FirstHVACIt
   INTEGER, INTENT(IN)   :: LoopNum
   INTEGER, INTENT(IN)   :: CommonPipeType
   INTEGER, INTENT(IN)   :: TankInletLoopSide
-  REAL(r64),INTENT(OUT) :: MixedOutletTemp
+  REAL,INTENT(OUT) :: MixedOutletTemp
   LOGICAL, INTENT(IN)   :: FirstHVACIteration
 
 
@@ -606,18 +606,18 @@ SUBROUTINE UpdateCommonPipe(LoopNum,TankInletLoopSide,CommonPipeType,FirstHVACIt
   INTEGER       :: TankOutletLoopSide                ! inlet loopsidenumber
   INTEGER       :: TankInletNode          ! inlet loop side outlet node
   INTEGER       :: TankOutletNode          ! inlet loop side outlet node
-  REAL(r64)     :: TankInletTemp   ! temporary variable
-  REAL(r64)     :: LastTankOutletTemp   ! temporary variable
-  REAL(r64)     :: Cp                           ! specific heat
-  REAL(r64)     :: TimeElapsed ! temporary value based on current clock time during simulation, fractional hours
+  REAL     :: TankInletTemp   ! temporary variable
+  REAL     :: LastTankOutletTemp   ! temporary variable
+  REAL     :: Cp                           ! specific heat
+  REAL     :: TimeElapsed ! temporary value based on current clock time during simulation, fractional hours
 
-  REAL(r64)     :: FracTotLoopMass       !Fraction of total loop mass assigned to the half loop
-  REAL(r64)     :: TimeStepSeconds
-  REAL(r64)     :: MassFlowRate
-  REAL(r64)     :: PumpHeat
-  REAL(r64)     :: ThisTankMass
-  REAL(r64)     :: TankFinalTemp
-  REAL(r64)     :: TankAverageTemp
+  REAL     :: FracTotLoopMass       !Fraction of total loop mass assigned to the half loop
+  REAL     :: TimeStepSeconds
+  REAL     :: MassFlowRate
+  REAL     :: PumpHeat
+  REAL     :: ThisTankMass
+  REAL     :: TankFinalTemp
+  REAL     :: TankAverageTemp
 
           ! FLOW:
 
@@ -668,8 +668,8 @@ SUBROUTINE UpdateCommonPipe(LoopNum,TankInletLoopSide,CommonPipeType,FirstHVACIt
   PumpHeat = PlantLoop(LoopNum)%LoopSide(TankInletLoopSide)%TotalPumpHeat
   ThisTankMass = FracTotLoopMass * PlantLoop(LoopNum)%Mass
 
-  IF (ThisTankMass <= 0.d0) THEN ! no mass, no plant loop volume
-    IF (MassFlowRate > 0.d0) THEN
+  IF (ThisTankMass <= 0.) THEN ! no mass, no plant loop volume
+    IF (MassFlowRate > 0.) THEN
       TankFinalTemp = TankInletTemp + PumpHeat/(MassFlowRate * Cp)
       TankAverageTemp = (TankFinalTemp + LastTankOutletTemp)/2.0
     ELSE
@@ -678,7 +678,7 @@ SUBROUTINE UpdateCommonPipe(LoopNum,TankInletLoopSide,CommonPipeType,FirstHVACIt
     END IF
 
   ELSE ! tank has mass
-    IF (MassFlowRate > 0.d0 ) THEN
+    IF (MassFlowRate > 0. ) THEN
       TankFinalTemp = (LastTankOutletTemp - (MassFlowRate * Cp * TankInletTemp + PumpHeat)/(MassFlowRate * Cp)) * &
                     exp(-(MassFlowRate * Cp) / (ThisTankMass*Cp)*TimeStepSeconds) + &
                     (MassFlowRate * Cp * TankInletTemp + PumpHeat)/ (MassFlowRate * Cp)
@@ -744,19 +744,19 @@ SUBROUTINE ManageSingleCommonPipe(LoopNum,LoopSide,TankOutletTemp, MixedOutletTe
           !SUBROUTINE ARGUMENT DEFINITIONS
   INTEGER, INTENT(IN)    :: LoopNum          !plant loop number
   INTEGER, INTENT(IN)    :: LoopSide          !plant loop side number
-  REAL(r64), INTENT(IN)  :: TankOutletTemp      !inlet temperature to the common pipe passed in from the capacitance calculation
-  REAL(r64), INTENT(OUT) :: MixedOutletTemp      !inlet temperature to the common pipe passed in from the capacitance calculation
+  REAL, INTENT(IN)  :: TankOutletTemp      !inlet temperature to the common pipe passed in from the capacitance calculation
+  REAL, INTENT(OUT) :: MixedOutletTemp      !inlet temperature to the common pipe passed in from the capacitance calculation
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS
-  REAL(r64)  :: MdotPri      = 0.d0 ! flow rate on primary side kg/s
-  REAL(r64)  :: MdotSec      = 0.d0 ! flow rate on secondary side kg/s
-  REAL(r64)  :: MdotPriRCLeg = 0.d0 ! flow rate of primary recirculation thru common pipe kg/s
-  REAL(r64)  :: MdotSecRCLeg = 0.d0 ! flow rate of secondary recirculation thru common pipe kg/s
-  REAL(r64)  :: TempSecInlet = 0.d0 ! temperature at secondary inlet deg C
-  REAL(r64)  :: TempPriInlet = 0.d0 ! temperature at primary inlet deg C
-  REAL(r64)  :: TempPriOutTankOut = 0.d0
-  REAL(r64)  :: TempSecOutTankOut = 0.d0
+  REAL  :: MdotPri      = 0. ! flow rate on primary side kg/s
+  REAL  :: MdotSec      = 0. ! flow rate on secondary side kg/s
+  REAL  :: MdotPriRCLeg = 0. ! flow rate of primary recirculation thru common pipe kg/s
+  REAL  :: MdotSecRCLeg = 0. ! flow rate of secondary recirculation thru common pipe kg/s
+  REAL  :: TempSecInlet = 0. ! temperature at secondary inlet deg C
+  REAL  :: TempPriInlet = 0. ! temperature at primary inlet deg C
+  REAL  :: TempPriOutTankOut = 0.
+  REAL  :: TempSecOutTankOut = 0.
   INTEGER    :: NodeNumPriOut = 0
   INTEGER    :: NodeNumSecOut = 0
   INTEGER    :: NodeNumPriIn  = 0
@@ -764,7 +764,7 @@ SUBROUTINE ManageSingleCommonPipe(LoopNum,LoopSide,TankOutletTemp, MixedOutletTe
   INTEGER       :: CPFlowDir  !flow direction in single common pipe
   LOGICAL,SAVE,ALLOCATABLE, DIMENSION(:)   :: MyEnvrnFlag
   LOGICAL,SAVE  :: OneTimeData = .TRUE.
-  REAL(r64)     :: CommonPipeTemp
+  REAL     :: CommonPipeTemp
 
     !One time call to set up report variables and set common pipe 'type' flag
   IF (OneTimeData) THEN
@@ -781,8 +781,8 @@ SUBROUTINE ManageSingleCommonPipe(LoopNum,LoopSide,TankOutletTemp, MixedOutletTe
   NodeNumSecOut = PlantLoop(LoopNum)%LoopSide(DemandSide)%NodeNumOut
 
   IF (MyEnvrnFlag(LoopNum) .and. BeginEnvrnFlag) THEN
-    PlantCommonPipe(LoopNum)%Flow = 0.d0
-    PlantCommonPipe(LoopNum)%Temp = 0.d0
+    PlantCommonPipe(LoopNum)%Flow = 0.
+    PlantCommonPipe(LoopNum)%Temp = 0.
     PlantCommonPipe(LoopNum)%FlowDir = NoRecircFlow
     MyEnvrnFlag(LoopNum)  = .FALSE.
   ENDIF
@@ -806,39 +806,39 @@ SUBROUTINE ManageSingleCommonPipe(LoopNum,LoopSide,TankOutletTemp, MixedOutletTe
   IF (MdotPri > MdotSec) THEN
     MdotPriRCLeg = MdotPri - MdotSec
     IF (MdotPriRCLeg <  MassFlowTolerance) THEN
-      MdotPriRCLeg = 0.d0
+      MdotPriRCLeg = 0.
       CPFlowDir = NoRecircFlow
     ELSE
       CPFlowDir = PrimaryRecirc
     ENDIF
-    MdotSecRCLeg = 0.d0
+    MdotSecRCLeg = 0.
     CommonPipeTemp = TempPriOutTankOut
   ELSEIF (MdotPri < MdotSec) THEN
     MdotSecRCLeg = MdotSec - MdotPri
     IF (MdotSecRCLeg < MassFlowTolerance) THEN
-      MdotSecRCLeg = 0.d0
+      MdotSecRCLeg = 0.
       CPFlowDir = NoRecircFlow
     ELSE
       CPFlowDir = SecondaryRecirc
     ENDIF
-    MdotPriRCLeg = 0.d0
+    MdotPriRCLeg = 0.
     CommonPipeTemp = TempSecOutTankOut
   ELSE ! equal
-    MdotPriRCLeg = 0.d0
-    MdotSecRCLeg = 0.d0
+    MdotPriRCLeg = 0.
+    MdotSecRCLeg = 0.
     CPFlowDir = NoRecircFlow
-    CommonPipeTemp = (TempPriOutTankOut + TempSecOutTankOut) / 2.d0
+    CommonPipeTemp = (TempPriOutTankOut + TempSecOutTankOut) / 2.
   ENDIF
 
   ! now calculate inlet temps
 
-  IF (MdotSec > 0.d0) THEN
+  IF (MdotSec > 0.) THEN
     TempSecInlet = (MdotPri*TempPriOutTankOut + MdotSecRCLeg*TempSecOutTankOut - MdotPriRCLeg * TempPriOutTankOut) &
                    / (MdotSec)
   ELSE
     TempSecInlet = TempPriOutTankOut
   ENDIF
-  IF (MdotPri > 0.d0) THEN
+  IF (MdotPri > 0.) THEN
     TempPriInlet = (MdotSec*TempSecOutTankOut + MdotPriRCLeg*TempPriOutTankOut - MdotSecRCLeg*TempSecOutTankOut) &
                     / (MdotPri)
   ELSE
@@ -892,7 +892,7 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)    :: LoopNum
   INTEGER, INTENT(IN)    :: LoopSide
-  REAL(r64), INTENT(IN)  :: TankOutletTemp
+  REAL, INTENT(IN)  :: TankOutletTemp
   LOGICAL, INTENT(IN)    :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -907,7 +907,7 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
   INTEGER, PARAMETER :: NeedsLessFlow    = 202
   INTEGER, PARAMETER :: NeedsSameFlow    = 203
 
-  REAL(r64), PARAMETER :: MdotPerturbFactor = 0.02D0
+  REAL, PARAMETER :: MdotPerturbFactor = 0.02
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -919,19 +919,19 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
   LOGICAL,SAVE,ALLOCATABLE, DIMENSION(:)   :: MyEnvrnFlag
   LOGICAL,SAVE     :: OneTimeData =.TRUE.
   INTEGER  :: CurCallingCase ! local temporary
-  REAL(r64)  :: MdotPri      = 0.d0 ! flow rate on primary side kg/s
-  REAL(r64)  :: MdotSec      = 0.d0 ! flow rate on secondary side kg/s
-  REAL(r64)  :: MdotPriToSec = 0.d0 ! flow rate between primary and secondary side kg/s
-  REAL(r64)  :: MdotPriRCLeg = 0.d0 ! flow rate on primary recirculation common pipe kg/s
-  REAL(r64)  :: MdotSecRCLeg = 0.d0 ! flow rate on secondary recirculation common pipe kg/s
-  REAL(r64)  :: TempSecInlet = 0.d0 ! temperature at secondary inlet deg C
-  REAL(r64)  :: TempPriInlet = 0.d0 ! temperature at primary inlet deg C
-  REAL(r64)  :: TempPriOutTankOut = 0.d0
-  REAL(r64)  :: TempSecOutTankOut = 0.d0
-  REAL(r64)  :: TempCPPrimaryCntrlSetpoint = 0.d0
- ! REAL(r64)  :: TempCPCntrlCurrent  = 0.d0
-  REAL(r64)  :: TempCPSecondaryCntrlSetpoint = 0.d0
- ! REAL(r64)  :: TempCPCntrlCurrent  = 0.d0
+  REAL  :: MdotPri      = 0. ! flow rate on primary side kg/s
+  REAL  :: MdotSec      = 0. ! flow rate on secondary side kg/s
+  REAL  :: MdotPriToSec = 0. ! flow rate between primary and secondary side kg/s
+  REAL  :: MdotPriRCLeg = 0. ! flow rate on primary recirculation common pipe kg/s
+  REAL  :: MdotSecRCLeg = 0. ! flow rate on secondary recirculation common pipe kg/s
+  REAL  :: TempSecInlet = 0. ! temperature at secondary inlet deg C
+  REAL  :: TempPriInlet = 0. ! temperature at primary inlet deg C
+  REAL  :: TempPriOutTankOut = 0.
+  REAL  :: TempSecOutTankOut = 0.
+  REAL  :: TempCPPrimaryCntrlSetpoint = 0.
+ ! REAL  :: TempCPCntrlCurrent  = 0.
+  REAL  :: TempCPSecondaryCntrlSetpoint = 0.
+ ! REAL  :: TempCPCntrlCurrent  = 0.
   INTEGER    :: NodeNumPriOut = 0
   INTEGER    :: NodeNumSecOut = 0
   INTEGER    :: NodeNumPriIn  = 0
@@ -959,10 +959,10 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
 
   ! begin environment inits
   IF (MyEnvrnFlag(LoopNum) .and. BeginEnvrnFlag) THEN
-    PlantCommonPipe(LoopNum)%PriToSecFlow = 0.d0
-    PlantCommonPipe(LoopNum)%SecToPriFlow = 0.d0
-    PlantCommonPipe(LoopNum)%PriCPLegFlow = 0.d0
-    PlantCommonPipe(LoopNum)%SecCPLegFlow = 0.d0
+    PlantCommonPipe(LoopNum)%PriToSecFlow = 0.
+    PlantCommonPipe(LoopNum)%SecToPriFlow = 0.
+    PlantCommonPipe(LoopNum)%PriCPLegFlow = 0.
+    PlantCommonPipe(LoopNum)%SecCPLegFlow = 0.
     MyEnvrnFlag(LoopNum)  = .FALSE.
   ENDIF
 
@@ -1029,18 +1029,18 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
         IF (ABS(TempSecOutTankOut -  TempCPPrimaryCntrlSetpoint )  > DeltaTemptol) THEN
           MdotPriToSec = MdotPriRCLeg * (TempCPPrimaryCntrlSetpoint - TempPriOutTankOut) &
                                    / ( TempSecOutTankOut -  TempCPPrimaryCntrlSetpoint)
-          IF (MdotPriToSec < MassFlowTolerance) MdotPriToSec = 0.d0
+          IF (MdotPriToSec < MassFlowTolerance) MdotPriToSec = 0.
           IF (MdotPriToSec > MdotSec) MdotPriToSec = MdotSec
         ELSE
           MdotPriToSec = MdotSec !  what to do (?)
         ENDIF
         ! eq. 5
         MdotPriRCLeg = MdotPri - MdotPriToSec
-        IF (MdotPriRCLeg < MassFlowTolerance) MdotPriRCLeg = 0.d0
+        IF (MdotPriRCLeg < MassFlowTolerance) MdotPriRCLeg = 0.
 
         ! eq. 4
         MdotSecRCLeg = MdotSec - MdotPriToSec
-        IF (MdotSecRCLeg < MassFlowTolerance) MdotSecRCLeg = 0.d0
+        IF (MdotSecRCLeg < MassFlowTolerance) MdotSecRCLeg = 0.
 
         ! eq  6
         IF ((MdotPriToSec + MdotSecRCLeg) > MassFlowTolerance) THEN
@@ -1064,7 +1064,7 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
                           / (TempCPPrimaryCntrlSetpoint)
 
          !   ENDDO
-            IF (MdotPri < MassFlowTolerance) MdotPri = 0.d0
+            IF (MdotPri < MassFlowTolerance) MdotPri = 0.
           ELSE
             MdotPri = MdotSec
           ENDIF
@@ -1091,7 +1091,7 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
         IF (ABS(TempPriOutTankOut   - TempSecOutTankOut )  > DeltaTemptol) THEN
           MdotPriToSec = MdotSec * (TempCPSecondaryCntrlSetpoint - TempSecOutTankOut ) &
                                / (TempPriOutTankOut   - TempSecOutTankOut )
-          IF (MdotPriToSec < MassFlowTolerance) MdotPriToSec = 0.d0
+          IF (MdotPriToSec < MassFlowTolerance) MdotPriToSec = 0.
           IF (MdotPriToSec > MdotSec) MdotPriToSec = MdotSec
         ELSE
           MdotPriToSec = MdotSec
@@ -1113,7 +1113,7 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
           IF (ABS(TempPriOutTankOut - TempPriInlet ) > DeltaTemptol) THEN
             MdotPri = MdotSec * ( TempCPSecondaryCntrlSetpoint -  TempSecOutTankOut )  &
                           /  (TempPriOutTankOut - TempPriInlet )
-            IF (MdotPri < MassFlowTolerance) MdotPri = 0.d0
+            IF (MdotPri < MassFlowTolerance) MdotPri = 0.
           ELSE
             MdotPri = MdotSec
           ENDIF
@@ -1122,11 +1122,11 @@ SUBROUTINE ManageTwoWayCommonPipe(LoopNum,LoopSide, TankOutletTemp, FirstHVACIte
 
         ! eq. 4
         MdotSecRCLeg = MdotSec - MdotPriToSec
-        IF (MdotSecRCLeg < MassFlowTolerance) MdotSecRCLeg = 0.d0
+        IF (MdotSecRCLeg < MassFlowTolerance) MdotSecRCLeg = 0.
 
         ! eq. 5
         MdotPriRCLeg = MdotPri - MdotPriToSec
-        IF (MdotPriRCLeg < MassFlowTolerance) MdotPriRCLeg = 0.d0
+        IF (MdotPriRCLeg < MassFlowTolerance) MdotPriRCLeg = 0.
 
         ! eq  6
         IF ((MdotPriToSec + MdotSecRCLeg) > MassFlowTolerance) THEN

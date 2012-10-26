@@ -42,48 +42,48 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
-REAL(r64), PARAMETER :: TAbsConv = KelvinConv      ! Converter for absolute temperature
-REAL(r64), PARAMETER :: ActLevelConv = 58.2d0    ! Converter for activity level (1Met = 58.2 W/m2)
-REAL(r64), PARAMETER :: BodySurfArea = 1.8d0     ! Dubois body surface area of the human body (m2)
-REAL(r64), PARAMETER :: RadSurfEff = 0.72d0      ! Fraction of surface effective for radiation
-REAL(r64), PARAMETER :: StefanBoltz = 5.67d-8  ! Stefan-Boltzmann constant (W/m2K4)
+REAL, PARAMETER :: TAbsConv = KelvinConv      ! Converter for absolute temperature
+REAL, PARAMETER :: ActLevelConv = 58.2    ! Converter for activity level (1Met = 58.2 W/m2)
+REAL, PARAMETER :: BodySurfArea = 1.8     ! Dubois body surface area of the human body (m2)
+REAL, PARAMETER :: RadSurfEff = 0.72      ! Fraction of surface effective for radiation
+REAL, PARAMETER :: StefanBoltz = 5.67d-8  ! Stefan-Boltzmann constant (W/m2K4)
 
   ! DERIVED TYPE DEFINITIONS
 TYPE, PUBLIC :: ThermalComfortDataType
-  REAL(r64) :: FangerPMV = 0.0d0
-  REAL(r64) :: FangerPPD = 0.0d0
-  REAL(r64) :: CloSurfTemp = 0.0d0  ! clothing surface temp from iteration in FANGER calcs
-  REAL(r64) :: PiercePMVET = 0.0d0
-  REAL(r64) :: PiercePMVSET = 0.0d0
-  REAL(r64) :: PierceDISC = 0.0d0
-  REAL(r64) :: PierceTSENS = 0.0d0
-  REAL(r64) :: KsuTSV = 0.0d0
-  REAL(r64) :: ThermalComfortMRT = 0.0d0
-  REAL(r64) :: ThermalComfortOpTemp = 0.0d0
+  REAL :: FangerPMV = 0.0
+  REAL :: FangerPPD = 0.0
+  REAL :: CloSurfTemp = 0.0  ! clothing surface temp from iteration in FANGER calcs
+  REAL :: PiercePMVET = 0.0
+  REAL :: PiercePMVSET = 0.0
+  REAL :: PierceDISC = 0.0
+  REAL :: PierceTSENS = 0.0
+  REAL :: KsuTSV = 0.0
+  REAL :: ThermalComfortMRT = 0.0
+  REAL :: ThermalComfortOpTemp = 0.0
   INTEGER :: ThermalComfortAdaptiveASH5590 = 0
   INTEGER :: ThermalComfortAdaptiveASH5580 = 0
   INTEGER :: ThermalComfortAdaptiveCEN15251CatI = 0
   INTEGER :: ThermalComfortAdaptiveCEN15251CatII = 0
   INTEGER :: ThermalComfortAdaptiveCEN15251CatIII = 0
-  REAL(r64) :: TComfASH55 = 0
-  REAL(r64) :: TComfCEN15251 = 0
-  REAL(r64) :: ASHRAE55RunningMeanOutdoorTemp = 0
-  REAL(r64) :: CEN15251RunningMeanOutdoorTemp = 0
+  REAL :: TComfASH55 = 0
+  REAL :: TComfCEN15251 = 0
+  REAL :: ASHRAE55RunningMeanOutdoorTemp = 0
+  REAL :: CEN15251RunningMeanOutdoorTemp = 0
 END TYPE
 
 TYPE ThermalComfortInASH55Type
   ! for debugging
-  !REAL(r64)    :: dCurAirTemp
-  !REAL(r64)    :: dCurMeanRadiantTemp
-  !REAL(r64)    :: dOperTemp
-  !REAL(r64)    :: dHumidRatio
+  !REAL    :: dCurAirTemp
+  !REAL    :: dCurMeanRadiantTemp
+  !REAL    :: dOperTemp
+  !REAL    :: dHumidRatio
 
-  REAL(r64)    :: timeNotSummer = 0.0d0 !time when not in summer comfort range based on ASHRAE 55 simplified
-  REAL(r64)    :: timeNotWinter = 0.0d0 !time when not in winter comfort range based on ASHRAE 55 simplified
-  REAL(r64)    :: timeNotEither = 0.0d0 !time when  not in summer or winter comfort range based on ASHRAE 55 simplified
-  REAL(r64)    :: totalTimeNotSummer = 0.0d0 !sum for simulation for summer
-  REAL(r64)    :: totalTimeNotWinter = 0.0d0 !sum for simulation for winter
-  REAL(r64)    :: totalTimeNotEither = 0.0d0 !sum for simulation for either
+  REAL    :: timeNotSummer = 0.0 !time when not in summer comfort range based on ASHRAE 55 simplified
+  REAL    :: timeNotWinter = 0.0 !time when not in winter comfort range based on ASHRAE 55 simplified
+  REAL    :: timeNotEither = 0.0 !time when  not in summer or winter comfort range based on ASHRAE 55 simplified
+  REAL    :: totalTimeNotSummer = 0.0 !sum for simulation for summer
+  REAL    :: totalTimeNotWinter = 0.0 !sum for simulation for winter
+  REAL    :: totalTimeNotEither = 0.0 !sum for simulation for either
   LOGICAL :: ZoneIsOccupied = .false. !flag if zone has people
   INTEGER :: warningIndex =  0   !variable to store pointer to the recurring warning
   INTEGER :: warningIndex2 =  0   !variable to store pointer to the recurring warning
@@ -91,18 +91,18 @@ TYPE ThermalComfortInASH55Type
 END TYPE
 
 TYPE ThermalComfortSetpointType
-  REAL(r64)    :: notMetHeating = 0.0d0
-  REAL(r64)    :: notMetCooling = 0.0d0
-  REAL(r64)    :: notMetHeatingOccupied = 0.0d0
-  REAL(r64)    :: notMetCoolingOccupied = 0.0d0
-  REAL(r64)    :: totalNotMetHeating = 0.0d0
-  REAL(r64)    :: totalNotMetCooling = 0.0d0
-  REAL(r64)    :: totalNotMetHeatingOccupied = 0.0d0
-  REAL(r64)    :: totalNotMetCoolingOccupied = 0.0d0
+  REAL    :: notMetHeating = 0.0
+  REAL    :: notMetCooling = 0.0
+  REAL    :: notMetHeatingOccupied = 0.0
+  REAL    :: notMetCoolingOccupied = 0.0
+  REAL    :: totalNotMetHeating = 0.0
+  REAL    :: totalNotMetCooling = 0.0
+  REAL    :: totalNotMetHeatingOccupied = 0.0
+  REAL    :: totalNotMetCoolingOccupied = 0.0
 END TYPE
 
 TYPE AngleFactorData
-  REAL(r64), ALLOCATABLE, DIMENSION(:)    :: AngleFactor         ! Angle factor of each surface
+  REAL, ALLOCATABLE, DIMENSION(:)    :: AngleFactor         ! Angle factor of each surface
   CHARACTER(len=MaxNameLength)   :: Name = ' '                ! Angle factor list name
   CHARACTER(len=MaxNameLength), &
       ALLOCATABLE, DIMENSION(:)      :: SurfaceName         ! Names of the Surfces
@@ -117,94 +117,94 @@ TYPE(ThermalComfortSetpointType), DIMENSION(:), ALLOCATABLE :: ThermalComfortSet
 TYPE(ThermalComfortDataType), DIMENSION(:), ALLOCATABLE, PUBLIC :: ThermalComfortData
 TYPE (AngleFactorData), DIMENSION(:), ALLOCATABLE :: AngleFactorList   ! Angle Factor List data for each Angle Factor List
   ! MODULE VARIABLE DECLARATIONS:
-REAL(r64) :: AbsAirTemp        = 0.0d0 ! Absolute air temperature; K
-REAL(r64) :: AbsCloSurfTemp    = 0.0d0 ! Absolute clothing surface temperature; K
-REAL(r64) :: AbsRadTemp        = 0.0d0 ! Absolute radiant temperature; K
-REAL(r64) :: AcclPattern       = 0.0d0 ! The pattern of acclimation
-REAL(r64) :: ActLevel          = 0.0d0 ! Metabolic rate; w/m2
-REAL(r64) :: AirVel            = 0.0d0 ! Air velocity; m/s
-REAL(r64) :: AirTemp           = 0.0d0 ! Air temperature; C
-REAL(r64) :: CloBodyRat        = 0.0d0 ! Ratio of clothed body
-REAL(r64) :: CloInsul          = 0.0d0 ! Clothing insulation
-REAL(r64) :: CloPermeatEff     = 0.0d0 ! Clothing permeation efficiency
-REAL(r64) :: CloSurfTemp       = 0.0d0 ! Clothing surface temperature; K
-REAL(r64) :: CloThermEff       = 0.0d0 ! The Burton thermal efficiency factor for clothing
-REAL(r64) :: CloUnit           = 0.0d0 ! Clothing unit; CLO
-REAL(r64) :: ConvHeatLoss      = 0.0d0 ! Convective heat loss
-REAL(r64) :: CoreTempChange    = 0.0d0 ! Temperature change of core in 1 minute
-REAL(r64) :: CoreTemp          = 0.0d0 ! Body core temperature
-REAL(r64) :: CoreTempNeut      = 0.0d0 ! Body core temperature of neutral state
-REAL(r64) :: CoreThermCap      = 0.0d0 ! Thermal capacity of core
-REAL(r64) :: DryHeatLoss       = 0.0d0 ! Heat loss from clothing surface due to both convection and radiation
-REAL(r64) :: DryRespHeatLoss   = 0.0d0 ! Dry respiration heat loss
-REAL(r64) :: EvapHeatLoss      = 0.0d0 ! Evaporative heat loss from skin
-REAL(r64) :: EvapHeatLossDiff  = 0.0d0 ! Evaporative heat loss due to moisture diffusion through skin
-REAL(r64) :: EvapHeatLossMax   = 0.0d0 ! Maximum evaporative heat loss
-REAL(r64) :: EvapHeatLossRegComf   = 0.0d0 ! Evaporative heat loss due to regulatory sweating at the state of comfort
-REAL(r64) :: EvapHeatLossRegSweat  = 0.0d0 ! Evaporative heat loss from regulatory sweating
-REAL(r64) :: EvapHeatLossSweat     = 0.0d0 ! Evaporative heat loss from the sweat secreted
-REAL(r64) :: EvapHeatLossSweatPrev = 0.0d0 ! Old value of evaporative heat loss from the sweat secreted (KSU)
-REAL(r64) :: H                 = 0.0d0 ! Combined heat transfer coefficient
-REAL(r64) :: Hc                = 0.0d0 ! Convective heat transfer coeffiency
-REAL(r64) :: HcFor             = 0.0d0 ! Convective heat transfer coeffiency - Forced
-REAL(r64) :: HcNat             = 0.0d0 ! Convective heat transfer coeffiency - Natural
-REAL(r64) :: HeatFlow          = 0.0d0 ! Heat flow from core to skin
-REAL(r64) :: Hr                = 0.0d0 ! Radiant heat transfer coeffiency
-REAL(r64) :: IntHeatProd       = 0.0d0 ! Internal heat production
+REAL :: AbsAirTemp        = 0.0 ! Absolute air temperature; K
+REAL :: AbsCloSurfTemp    = 0.0 ! Absolute clothing surface temperature; K
+REAL :: AbsRadTemp        = 0.0 ! Absolute radiant temperature; K
+REAL :: AcclPattern       = 0.0 ! The pattern of acclimation
+REAL :: ActLevel          = 0.0 ! Metabolic rate; w/m2
+REAL :: AirVel            = 0.0 ! Air velocity; m/s
+REAL :: AirTemp           = 0.0 ! Air temperature; C
+REAL :: CloBodyRat        = 0.0 ! Ratio of clothed body
+REAL :: CloInsul          = 0.0 ! Clothing insulation
+REAL :: CloPermeatEff     = 0.0 ! Clothing permeation efficiency
+REAL :: CloSurfTemp       = 0.0 ! Clothing surface temperature; K
+REAL :: CloThermEff       = 0.0 ! The Burton thermal efficiency factor for clothing
+REAL :: CloUnit           = 0.0 ! Clothing unit; CLO
+REAL :: ConvHeatLoss      = 0.0 ! Convective heat loss
+REAL :: CoreTempChange    = 0.0 ! Temperature change of core in 1 minute
+REAL :: CoreTemp          = 0.0 ! Body core temperature
+REAL :: CoreTempNeut      = 0.0 ! Body core temperature of neutral state
+REAL :: CoreThermCap      = 0.0 ! Thermal capacity of core
+REAL :: DryHeatLoss       = 0.0 ! Heat loss from clothing surface due to both convection and radiation
+REAL :: DryRespHeatLoss   = 0.0 ! Dry respiration heat loss
+REAL :: EvapHeatLoss      = 0.0 ! Evaporative heat loss from skin
+REAL :: EvapHeatLossDiff  = 0.0 ! Evaporative heat loss due to moisture diffusion through skin
+REAL :: EvapHeatLossMax   = 0.0 ! Maximum evaporative heat loss
+REAL :: EvapHeatLossRegComf   = 0.0 ! Evaporative heat loss due to regulatory sweating at the state of comfort
+REAL :: EvapHeatLossRegSweat  = 0.0 ! Evaporative heat loss from regulatory sweating
+REAL :: EvapHeatLossSweat     = 0.0 ! Evaporative heat loss from the sweat secreted
+REAL :: EvapHeatLossSweatPrev = 0.0 ! Old value of evaporative heat loss from the sweat secreted (KSU)
+REAL :: H                 = 0.0 ! Combined heat transfer coefficient
+REAL :: Hc                = 0.0 ! Convective heat transfer coeffiency
+REAL :: HcFor             = 0.0 ! Convective heat transfer coeffiency - Forced
+REAL :: HcNat             = 0.0 ! Convective heat transfer coeffiency - Natural
+REAL :: HeatFlow          = 0.0 ! Heat flow from core to skin
+REAL :: Hr                = 0.0 ! Radiant heat transfer coeffiency
+REAL :: IntHeatProd       = 0.0 ! Internal heat production
 INTEGER :: IterNum        = 0   ! Number of iteration
-REAL(r64) :: LatRespHeatLoss   = 0.0d0 ! Latent respiration heat loss
+REAL :: LatRespHeatLoss   = 0.0 ! Latent respiration heat loss
 INTEGER :: MaxZoneNum     = 0   ! Number of zones
 INTEGER :: MRTCalcType    = 0   ! The type of MRT calculation (ZoneAveraged or SurfaceWeighted)
-REAL(r64) :: OpTemp            = 0.0d0 ! Operative temperature
+REAL :: OpTemp            = 0.0 ! Operative temperature
 INTEGER :: PeopleNum      = 0   ! People number
-REAL(r64) :: RadHeatLoss       = 0.0d0 ! Radiant heat loss
-REAL(r64) :: RadTemp           = 0.0d0 ! Radiant temperature; C
-REAL(r64) :: RelHum            = 0.0d0 ! Relative humidity; Fraction
-REAL(r64) :: RespHeatLoss      = 0.0d0 ! The rate of respiratory heat loss
-REAL(r64) :: SatSkinVapPress   = 0.0d0 ! Saturated vapor pressure at skin temperature
-REAL(r64) :: ShivResponse      = 0.0d0 ! Metalbolic heat production due to shivering
-REAL(r64) :: SkinComfTemp      = 0.0d0 ! Skin temperature required to achieve thermal comfort; C
-REAL(r64) :: SkinComfVPress    = 0.0d0 ! Saturated water vapor pressure at required skin temperature; Torr
-REAL(r64) :: SkinTemp          = 0.0d0 ! Skin temperature
-REAL(r64) :: SkinTempChange    = 0.0d0 ! Temperature change of skin in 1 minute
-REAL(r64) :: SkinTempNeut      = 0.0d0 ! Skin temperature at neutral state
-REAL(r64) :: SkinThermCap      = 0.0d0 ! Thermal capacity of Skin
-REAL(r64) :: SkinWetDiff       = 0.0d0 ! Skin wettedness for nonsweating portion of skin
-REAL(r64) :: SkinWetSweat      = 0.0d0 ! Skin wettedness required to evaporate regulatory sweat
-REAL(r64) :: SkinWetTot        = 0.0d0 ! Total skin wettedness
-REAL(r64) :: SkinVapPress      = 0.0d0 ! Vapor pressure at skin
-REAL(r64) :: SurfaceTemp       = 0.0d0 ! Surface temperature when MRTType is 'SurfaceWeighted'
-REAL(r64) :: ThermCndct        = 0.0d0 ! Thermal conductance of skin
-REAL(r64) :: ThermSensTransCoef = 0.0d0 ! Theraml sensation coefficient for PMV
-REAL(r64) :: Time              = 0.0d0 ! Time, hr
-REAL(r64) :: TimeChange        = 0.0d0 ! Change of time, hr
-REAL(r64) :: VapPress          = 0.0d0 ! Vapor pressure; Torr  ?? BG Oct 2005 humm, this should be kPa
-REAL(r64) :: VasoconstrictFac  = 0.0d0 ! Constriction factor of blood vessel
-REAL(r64) :: VasodilationFac   = 0.0d0 ! Dilation factor of blood vessel
-REAL(r64) :: WorkEff           = 0.0d0 ! Energy cosumption by external work; w/m2
+REAL :: RadHeatLoss       = 0.0 ! Radiant heat loss
+REAL :: RadTemp           = 0.0 ! Radiant temperature; C
+REAL :: RelHum            = 0.0 ! Relative humidity; Fraction
+REAL :: RespHeatLoss      = 0.0 ! The rate of respiratory heat loss
+REAL :: SatSkinVapPress   = 0.0 ! Saturated vapor pressure at skin temperature
+REAL :: ShivResponse      = 0.0 ! Metalbolic heat production due to shivering
+REAL :: SkinComfTemp      = 0.0 ! Skin temperature required to achieve thermal comfort; C
+REAL :: SkinComfVPress    = 0.0 ! Saturated water vapor pressure at required skin temperature; Torr
+REAL :: SkinTemp          = 0.0 ! Skin temperature
+REAL :: SkinTempChange    = 0.0 ! Temperature change of skin in 1 minute
+REAL :: SkinTempNeut      = 0.0 ! Skin temperature at neutral state
+REAL :: SkinThermCap      = 0.0 ! Thermal capacity of Skin
+REAL :: SkinWetDiff       = 0.0 ! Skin wettedness for nonsweating portion of skin
+REAL :: SkinWetSweat      = 0.0 ! Skin wettedness required to evaporate regulatory sweat
+REAL :: SkinWetTot        = 0.0 ! Total skin wettedness
+REAL :: SkinVapPress      = 0.0 ! Vapor pressure at skin
+REAL :: SurfaceTemp       = 0.0 ! Surface temperature when MRTType is 'SurfaceWeighted'
+REAL :: ThermCndct        = 0.0 ! Thermal conductance of skin
+REAL :: ThermSensTransCoef = 0.0 ! Theraml sensation coefficient for PMV
+REAL :: Time              = 0.0 ! Time, hr
+REAL :: TimeChange        = 0.0 ! Change of time, hr
+REAL :: VapPress          = 0.0 ! Vapor pressure; Torr  ?? BG Oct 2005 humm, this should be kPa
+REAL :: VasoconstrictFac  = 0.0 ! Constriction factor of blood vessel
+REAL :: VasodilationFac   = 0.0 ! Dilation factor of blood vessel
+REAL :: WorkEff           = 0.0 ! Energy cosumption by external work; w/m2
 INTEGER :: ZoneNum        = 0   ! Zone number
 
 !time that any zone is not comfortable based on simple ASHRAE 55 using summer clothes
-REAL(r64) :: AnyZoneTimeNotSimpleASH55Summer = 0.0d0
+REAL :: AnyZoneTimeNotSimpleASH55Summer = 0.0
 !time that any zone is not comfortable based on simple ASHRAE 55 using winter clothes
-REAL(r64) :: AnyZoneTimeNotSimpleASH55Winter = 0.0d0
+REAL :: AnyZoneTimeNotSimpleASH55Winter = 0.0
 !time that any zone is not comfortable based on simple ASHRAE 55 using summer or winter clothes
-REAL(r64) :: AnyZoneTimeNotSimpleASH55Either = 0.0d0
+REAL :: AnyZoneTimeNotSimpleASH55Either = 0.0
 
 !time that any zone has unmet met loads
-REAL(r64)    :: AnyZoneNotMetHeating = 0.0d0
-REAL(r64)    :: AnyZoneNotMetCooling = 0.0d0
-REAL(r64)    :: AnyZoneNotMetHeatingOccupied = 0.0d0
-REAL(r64)    :: AnyZoneNotMetCoolingOccupied = 0.0d0
+REAL    :: AnyZoneNotMetHeating = 0.0
+REAL    :: AnyZoneNotMetCooling = 0.0
+REAL    :: AnyZoneNotMetHeatingOccupied = 0.0
+REAL    :: AnyZoneNotMetCoolingOccupied = 0.0
 !total time from beginning of simulation AnyZoneTimeNotSimpleASH55
-REAL(r64) :: TotalAnyZoneTimeNotSimpleASH55Summer = 0.0d0
-REAL(r64) :: TotalAnyZoneTimeNotSimpleASH55Winter = 0.0d0
-REAL(r64) :: TotalAnyZoneTimeNotSimpleASH55Either = 0.0d0
+REAL :: TotalAnyZoneTimeNotSimpleASH55Summer = 0.0
+REAL :: TotalAnyZoneTimeNotSimpleASH55Winter = 0.0
+REAL :: TotalAnyZoneTimeNotSimpleASH55Either = 0.0
 !total time from beginning of simulation any zone not met
-REAL(r64)    :: TotalAnyZoneNotMetHeating = 0.0d0
-REAL(r64)    :: TotalAnyZoneNotMetCooling = 0.0d0
-REAL(r64)    :: TotalAnyZoneNotMetHeatingOccupied = 0.0d0
-REAL(r64)    :: TotalAnyZoneNotMetCoolingOccupied = 0.0d0
+REAL    :: TotalAnyZoneNotMetHeating = 0.0
+REAL    :: TotalAnyZoneNotMetCooling = 0.0
+REAL    :: TotalAnyZoneNotMetHeatingOccupied = 0.0
+REAL    :: TotalAnyZoneNotMetCoolingOccupied = 0.0
 
 
 
@@ -501,13 +501,13 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN), OPTIONAL :: PNum      ! People number for thermal comfort control
-          REAL(r64), INTENT(IN), OPTIONAL    :: Tset      ! Temperature setpoint for thermal comfort control
-          REAL(r64), INTENT(OUT), OPTIONAL   :: PMVResult ! PMV value for thermal comfort control
+          REAL, INTENT(IN), OPTIONAL    :: Tset      ! Temperature setpoint for thermal comfort control
+          REAL, INTENT(OUT), OPTIONAL   :: PMVResult ! PMV value for thermal comfort control
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     INTEGER, PARAMETER :: MaxIter = 150       ! Limit of iteration
-    REAL(r64), PARAMETER :: StopIterCrit = 0.00015d0 ! Stop criteria for iteration
-    REAL(r64), PARAMETER :: SkinEmiss = 0.97d0       ! Emissivity of clothing-skin surface
+    REAL, PARAMETER :: StopIterCrit = 0.00015 ! Stop criteria for iteration
+    REAL, PARAMETER :: SkinEmiss = 0.97       ! Emissivity of clothing-skin surface
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
@@ -516,16 +516,16 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-    REAL(r64) :: P1   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-    REAL(r64) :: P2   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-    REAL(r64) :: P3   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-    REAL(r64) :: P4   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-    REAL(r64) :: XF   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-    REAL(r64) :: XN   ! Intermediate variables to calculate clothed body ratio and clothing temperature
-!    REAL(r64) :: SkinTempComf        ! Skin temperature required to achieve thermal comfort; C
+    REAL :: P1   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+    REAL :: P2   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+    REAL :: P3   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+    REAL :: P4   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+    REAL :: XF   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+    REAL :: XN   ! Intermediate variables to calculate clothed body ratio and clothing temperature
+!    REAL :: SkinTempComf        ! Skin temperature required to achieve thermal comfort; C
 
-    REAL(r64) :: PMV  ! temporary variable to store calculated Fanger PMV value
-    REAL(r64) :: PPD  ! temporary variable to store calculated Fanger PPD value
+    REAL :: PMV  ! temporary variable to store calculated Fanger PMV value
+    REAL :: PPD  ! temporary variable to store calculated Fanger PPD value
 
       DO PeopleNum = 1, TotPeople
 
@@ -583,12 +583,12 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
               ELSEIF (ZoneUCSDCV(ZoneNum)%VforComfort== VComfort_Recirculation) THEN
                  AirVel = Urec(ZoneNum)
               ELSE
-                 AirVel = 0.2d0
+                 AirVel = 0.2
               ENDIF
           ELSE
             AirVel = GetCurrentScheduleValue(People(PeopleNum)%AirVelocityPtr)
             ! Ensure air velocity within the reasonable range. Otherwise reccusive warnings is provided
-            If (PRESENT(PNum) .AND. (AirVel < 0.1d0 .OR. AirVel > 0.5d0)) then
+            If (PRESENT(PNum) .AND. (AirVel < 0.1 .OR. AirVel > 0.5)) then
               if (People(PeopleNum)%AirVelErrIndex == 0) then
                 CALL ShowWarningMessage('PEOPLE="'//TRIM(People(PeopleNum)%Name)// &
                      '", Air velocity is beyond the reasonable range (0.1,0.5) for thermal comfort control.')
@@ -612,41 +612,41 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
           IntHeatProd = ActLevel - WorkEff
 
           ! Compute the Corresponding Clothed Body Ratio
-          CloBodyRat = 1.05d0 + 0.1d0*CloUnit ! The ratio of the surface area of the clothed body
+          CloBodyRat = 1.05 + 0.1*CloUnit ! The ratio of the surface area of the clothed body
                                           ! to the surface area of nude body
 
-          IF(CloUnit < 0.5d0) CloBodyRat = CloBodyRat - 0.05d0 + 0.1d0*CloUnit
+          IF(CloUnit < 0.5) CloBodyRat = CloBodyRat - 0.05 + 0.1*CloUnit
 
           AbsRadTemp = RadTemp + TAbsConv
           AbsAirTemp = AirTemp + TAbsConv
 
-          CloInsul = CloUnit*CloBodyRat*0.155d0 ! Thermal resistance of the clothing
+          CloInsul = CloUnit*CloBodyRat*0.155 ! Thermal resistance of the clothing
 
-          P2 = CloInsul*3.96d0
-          P3 = CloInsul*100.d0
+          P2 = CloInsul*3.96
+          P3 = CloInsul*100.
           P1 = CloInsul*AbsAirTemp
-          P4 = 308.7d0 - 0.028d0*IntHeatProd + P2*(AbsRadTemp/100.d0)**4
+          P4 = 308.7 - 0.028*IntHeatProd + P2*(AbsRadTemp/100.)**4
 
           ! First guess for clothed surface tempeature
-          AbsCloSurfTemp = AbsAirTemp + (35.5d0-AirTemp)/(3.5d0*(CloUnit + 0.1d0))
-          XN = AbsCloSurfTemp/100.d0
-          HcFor = 12.1d0*SQRT(AirVel) ! Heat transfer coefficient by forced convection
+          AbsCloSurfTemp = AbsAirTemp + (35.5-AirTemp)/(3.5*(CloUnit + 0.1))
+          XN = AbsCloSurfTemp/100.
+          HcFor = 12.1*SQRT(AirVel) ! Heat transfer coefficient by forced convection
           IterNum = 0
           XF = XN
 
           ! COMPUTE SURFACE TEMPERATURE OF CLOTHING BY ITERATIONS
             DO WHILE (( (ABS(XN - XF) > StopIterCrit) .OR. (IterNum == 0) ) &
                                                   .AND. (IterNum < MaxIter))
-              XF = (XF + XN)/2.d0
-              HcNat = 2.38d0*ABS(100.*XF - AbsAirTemp)**0.25d0 ! Heat transfer coefficient by natural convection
+              XF = (XF + XN)/2.
+              HcNat = 2.38*ABS(100.*XF - AbsAirTemp)**0.25 ! Heat transfer coefficient by natural convection
               Hc = MAX(HcFor, HcNat) ! Determination of convective heat transfer coefficient
-              XN = (P4+P1*Hc - P2*XF**4)/(100.d0 + P3*Hc)
+              XN = (P4+P1*Hc - P2*XF**4)/(100. + P3*Hc)
               IterNum = IterNum + 1
               IF (IterNum > MaxIter) THEN
                 CALL ShowWarningError('Max iteration exceeded in CalcThermalFanger')
               END IF
             END DO
-          AbsCloSurfTemp = 100.d0*XN
+          AbsCloSurfTemp = 100.*XN
           CloSurfTemp = AbsCloSurfTemp - TAbsConv
 
           ! COMPUTE PREDICTED MEAN VOTE
@@ -655,7 +655,7 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
           !                            (AbsCloSurfTemp**4 - AbsRadTemp**4) ! Heat loss by radiation
 
           ! following line is ln 480 in ASHRAE 55 append. D
-          RadHeatLoss = 3.96d0*CloBodyRat*((AbsCloSurfTemp/100.d0)**4.0d0 - (AbsRadTemp/100.d0)**4.0d0)
+          RadHeatLoss = 3.96*CloBodyRat*((AbsCloSurfTemp/100.)**4.0 - (AbsRadTemp/100.)**4.0)
 
           ConvHeatLoss = CloBodyRat*Hc*(CloSurfTemp - AirTemp) ! Heat loss by convection
 
@@ -663,30 +663,30 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
 
           ! Evaporative heat loss
           ! Heat loss by regulatory sweating
-          EvapHeatLossRegComf = 0.0d0
-          IF (IntHeatProd > 58.2d0) THEN
-            EvapHeatLossRegComf = 0.42d0*(IntHeatProd - ActLevelConv)
+          EvapHeatLossRegComf = 0.0
+          IF (IntHeatProd > 58.2) THEN
+            EvapHeatLossRegComf = 0.42*(IntHeatProd - ActLevelConv)
           END IF
           ! SkinTempComf = 35.7 - 0.028*IntHeatProd ! Skin temperature required to achieve thermal comfort
           ! SatSkinVapPress = 1.92*SkinTempComf - 25.3 ! Water vapor pressure at required skin temperature
           ! Heat loss by diffusion
           ! EvapHeatLossDiff = 0.4148*(SatSkinVapPress - VapPress) !original
-          EvapHeatLossDiff = 3.05d0 *0.001d0*(5733.d0 -6.99d0*IntHeatProd-VapPress) ! ln 440 in ASHRAE 55 Append. D
+          EvapHeatLossDiff = 3.05 *0.001*(5733. -6.99*IntHeatProd-VapPress) ! ln 440 in ASHRAE 55 Append. D
 
           EvapHeatLoss = EvapHeatLossRegComf + EvapHeatLossDiff
           ! Heat loss by respiration
           ! original: LatRespHeatLoss = 0.0023*ActLevel*(44. - VapPress) ! Heat loss by latent respiration
-          LatRespHeatLoss = 1.7d0 * 0.00001d0 * ActLevel * (5867.d0 - VapPress) !ln 460 in ASHRAE 55 Append. D
+          LatRespHeatLoss = 1.7 * 0.00001 * ActLevel * (5867. - VapPress) !ln 460 in ASHRAE 55 Append. D
 
          ! LatRespHeatLoss = 0.017251*ActLevel*(5.8662 - VapPress)
              ! V-1.2.2 'fix' BG 3/2005 5th term in LHS Eq (58)  in 2001 HOF Ch. 8
              ! this was wrong because VapPress needed to be kPa
 
-          DryRespHeatLoss = 0.0014d0*ActLevel*(34.d0- AirTemp) ! Heat loss by dry respiration.
+          DryRespHeatLoss = 0.0014*ActLevel*(34.- AirTemp) ! Heat loss by dry respiration.
 
           RespHeatLoss = LatRespHeatLoss + DryRespHeatLoss
 
-          ThermSensTransCoef = 0.303d0*EXP(-0.036d0*ActLevel) + 0.028d0 ! Thermal transfer coefficient to calculate PMV
+          ThermSensTransCoef = 0.303*EXP(-0.036*ActLevel) + 0.028 ! Thermal transfer coefficient to calculate PMV
 
           PMV = ThermSensTransCoef*(IntHeatProd - EvapHeatLoss - RespHeatLoss - DryHeatLoss)
 
@@ -697,11 +697,11 @@ SUBROUTINE CalcThermalComfortFanger(PNum,Tset,PMVResult)
             PMVResult = PMV
           End If
           ThermalComfortData(PeopleNum)%ThermalComfortMRT = RadTemp
-          ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0d0
+          ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0
           ThermalComfortData(PeopleNum)%CloSurfTemp       = CloSurfTemp
 
           ! Calculate the Fanger PPD (Predicted Percentage of Dissatisfied), as a %
-          PPD = 100.0 - 95.0*EXP(-0.03353d0*PMV**4 - 0.2179d0*PMV**2)
+          PPD = 100.0 - 95.0*EXP(-0.03353*PMV**4 - 0.2179*PMV**2)
           IF (PPD < 0.0 ) PPD = 0.0
           IF (PPD > 100.0 ) PPD = 100.0
 
@@ -741,15 +741,15 @@ SUBROUTINE CalcThermalComfortPierce
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CloFac = 0.25d0             ! Clothing factor determined experimentally
-  REAL(r64), PARAMETER :: EvapEff = 0.9d0             ! Evaporative efficiency
-  REAL(r64), PARAMETER :: MaxSkinBloodFlow = 90.d0    ! Max. value of skin blood flow
-  REAL(r64), PARAMETER :: RegSweatMax = 670.d0        ! Max. value of regulatory sweating; w/m2
-  REAL(r64), PARAMETER :: SkinBloodFlowConst = 200.d0 ! Skin blood flow coefficient for average person; l/m2.hr.k
-  REAL(r64), PARAMETER :: STdAtm = 1.d0               ! Standard Atmospheres
-  REAL(r64), PARAMETER :: Str = 0.1d0                 ! Constriction constant of skin blood flow for average person
-  REAL(r64), PARAMETER :: SweatContConst = 170.d0     ! Proportionality constant for sweat control; g/m2.hr
-  REAL(r64), PARAMETER :: VapPressConv = 0.1333227d0 ! Vapor pressure converter from torr to Kpa
+  REAL, PARAMETER :: CloFac = 0.25             ! Clothing factor determined experimentally
+  REAL, PARAMETER :: EvapEff = 0.9             ! Evaporative efficiency
+  REAL, PARAMETER :: MaxSkinBloodFlow = 90.    ! Max. value of skin blood flow
+  REAL, PARAMETER :: RegSweatMax = 670.        ! Max. value of regulatory sweating; w/m2
+  REAL, PARAMETER :: SkinBloodFlowConst = 200. ! Skin blood flow coefficient for average person; l/m2.hr.k
+  REAL, PARAMETER :: STdAtm = 1.               ! Standard Atmospheres
+  REAL, PARAMETER :: Str = 0.1                 ! Constriction constant of skin blood flow for average person
+  REAL, PARAMETER :: SweatContConst = 170.     ! Proportionality constant for sweat control; g/m2.hr
+  REAL, PARAMETER :: VapPressConv = 0.1333227 ! Vapor pressure converter from torr to Kpa
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -759,59 +759,59 @@ SUBROUTINE CalcThermalComfortPierce
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: AirEvapHeatResist    ! Evaporative heat resistance of air
-  REAL(r64) :: ActMet               ! Metalbolic rate in MET
-  REAL(r64) :: ActLevelStart        ! Activity level at the start of the minute-by-minute iterations
-  REAL(r64) :: AvgBodyTemp          ! Average body temperature
-  REAL(r64) :: AvgBodyTempHigh      ! Average body temperature when HSI(Belding's classic heat sterss index) is 100
-  REAL(r64) :: AvgBodyTempLow       ! Average body temperature when DISC is 0
-  REAL(r64) :: AvgBodyTempSet       ! Setpoint for average body temperature
-  REAL(r64) :: BodyThermSigCold     ! Temperature difference of Body when BodyTempSet is higher than BodyTemp
-  REAL(r64) :: BodyTempChange       ! Temperature change of body in 1 minute
-  REAL(r64) :: BodyThermSigWarm     ! Temperature difference of Body when BodyTemp is higher than BodyTempSet
-  REAL(r64) :: CloCond              ! The conductance of the clothing
-  REAL(r64) :: CloEvapHeatResist    ! Evaporative heat resistance of clothing
-  REAL(r64) :: CloSurfTempOld       ! Old value of clothing surface temperature
-  REAL(r64) :: CoreThermSigCold     ! Temperature difference of core when CoreTempSet is higher than CoreTemp
-  REAL(r64) :: CoreHeatStorage      ! Heat storage in core compartment
-  REAL(r64) :: CoreTempSet          ! Setpoint for body core temperature
-  REAL(r64) :: CoreThermSigWarm     ! Temperature difference of core when CoreTemp is higher than CoreTempSet
-  REAL(r64) :: DryHeatLossET        ! Heat loss from clothing surface due to both convection and radiation at ET
-  REAL(r64) :: DryHeatLossSET       ! Heat loss from clothing surface due to both convection and radiation at SET
-  REAL(r64) :: EffectCloThermEff    ! Effective clothing thermal efficiency
-  REAL(r64) :: EffectCloUnit        ! Effective clothing unit; clo
-  REAL(r64) :: EnergyBalErrET       ! Stop criterion for iteration to solve energy balance
-  REAL(r64) :: EnergyBalErrSET      ! Stop criterion for iteration to solve energy balance
-  REAL(r64) :: ET                   ! Effective temperature
-  REAL(r64) :: EvapHeatLossStart    ! Starting value of evaporative heat loss
+  REAL :: AirEvapHeatResist    ! Evaporative heat resistance of air
+  REAL :: ActMet               ! Metalbolic rate in MET
+  REAL :: ActLevelStart        ! Activity level at the start of the minute-by-minute iterations
+  REAL :: AvgBodyTemp          ! Average body temperature
+  REAL :: AvgBodyTempHigh      ! Average body temperature when HSI(Belding's classic heat sterss index) is 100
+  REAL :: AvgBodyTempLow       ! Average body temperature when DISC is 0
+  REAL :: AvgBodyTempSet       ! Setpoint for average body temperature
+  REAL :: BodyThermSigCold     ! Temperature difference of Body when BodyTempSet is higher than BodyTemp
+  REAL :: BodyTempChange       ! Temperature change of body in 1 minute
+  REAL :: BodyThermSigWarm     ! Temperature difference of Body when BodyTemp is higher than BodyTempSet
+  REAL :: CloCond              ! The conductance of the clothing
+  REAL :: CloEvapHeatResist    ! Evaporative heat resistance of clothing
+  REAL :: CloSurfTempOld       ! Old value of clothing surface temperature
+  REAL :: CoreThermSigCold     ! Temperature difference of core when CoreTempSet is higher than CoreTemp
+  REAL :: CoreHeatStorage      ! Heat storage in core compartment
+  REAL :: CoreTempSet          ! Setpoint for body core temperature
+  REAL :: CoreThermSigWarm     ! Temperature difference of core when CoreTemp is higher than CoreTempSet
+  REAL :: DryHeatLossET        ! Heat loss from clothing surface due to both convection and radiation at ET
+  REAL :: DryHeatLossSET       ! Heat loss from clothing surface due to both convection and radiation at SET
+  REAL :: EffectCloThermEff    ! Effective clothing thermal efficiency
+  REAL :: EffectCloUnit        ! Effective clothing unit; clo
+  REAL :: EnergyBalErrET       ! Stop criterion for iteration to solve energy balance
+  REAL :: EnergyBalErrSET      ! Stop criterion for iteration to solve energy balance
+  REAL :: ET                   ! Effective temperature
+  REAL :: EvapHeatLossStart    ! Starting value of evaporative heat loss
   LOGICAL :: FirstMinIter
-  REAL(r64) :: HcAct                ! Convective heat transfer coefficient at high activity
-  REAL(r64) :: HcStd                ! Standard convective heat transfer coefficient
-  REAL(r64) :: HrStd                ! Standard radiant heat transfer coefficient
-  REAL(r64) :: HStd                 ! Standard combined heat transfer coefficient
+  REAL :: HcAct                ! Convective heat transfer coefficient at high activity
+  REAL :: HcStd                ! Standard convective heat transfer coefficient
+  REAL :: HrStd                ! Standard radiant heat transfer coefficient
+  REAL :: HStd                 ! Standard combined heat transfer coefficient
   INTEGER :: IterMin                ! Time period for the ieterative calculation
-  REAL(r64) :: LewisRat             ! Lewis ratio
-  REAL(r64) :: RegSweat             ! The rate of regulatory sweating
-  REAL(r64) :: SET                  ! Standard effective temperature
-  REAL(r64) :: SkinBloodFlow        ! The skin blood flow
-  REAL(r64) :: SkinThermSigCold     ! Temperature difference of skin when SkinTempSet is higher than SkinTemp
-  REAL(r64) :: SkinHeatLoss         ! Heat loss from skin
-  REAL(r64) :: SkinHeatStorage      ! Heat storage in skin compartment
-  REAL(r64) :: SkinMassRat          ! Actual skin mass to total body mass ratio
-  REAL(r64) :: SkinMassRatSet       ! Setpoint for skin mass to total body mass ratio
-  REAL(r64) :: SkinRelHum           ! Relative humidity at skin
-  REAL(r64) :: SkinTempSet          ! Setpoint for skin temperature
-  REAL(r64) :: SkinThermSigWarm     ! Temperature difference of skin when SkinTemp is higher than SkinTempSet
-  REAL(r64) :: StdCloBodyRat        ! Standard ratio of clothed body
-  REAL(r64) :: StdCloFac            ! Clothing factor determined experimentally at standard environment
-  REAL(r64) :: StdCloPermeatEff     ! Standard clothing permeation efficiency
-  REAL(r64) :: StdCloUnit           ! standard clothing unit
-  REAL(r64) :: StdEffectCloThermEff ! Standard effective clothing theraml efficiency
-  REAL(r64) :: StdEffectCloUnit     ! standard effective clothing unit
-  REAL(r64) :: StdVapPressET        ! Standard vapor pressure at effective temperature
-  REAL(r64) :: StdVapPressSET       ! Standard vapor pressure at standar effective temperature
-  REAL(r64) :: TotEvapHeatResist    ! Total evaporative heat resistance
-  REAL(r64) :: UnevapSweat          ! Unevaporated sweat; g/m2/hr
+  REAL :: LewisRat             ! Lewis ratio
+  REAL :: RegSweat             ! The rate of regulatory sweating
+  REAL :: SET                  ! Standard effective temperature
+  REAL :: SkinBloodFlow        ! The skin blood flow
+  REAL :: SkinThermSigCold     ! Temperature difference of skin when SkinTempSet is higher than SkinTemp
+  REAL :: SkinHeatLoss         ! Heat loss from skin
+  REAL :: SkinHeatStorage      ! Heat storage in skin compartment
+  REAL :: SkinMassRat          ! Actual skin mass to total body mass ratio
+  REAL :: SkinMassRatSet       ! Setpoint for skin mass to total body mass ratio
+  REAL :: SkinRelHum           ! Relative humidity at skin
+  REAL :: SkinTempSet          ! Setpoint for skin temperature
+  REAL :: SkinThermSigWarm     ! Temperature difference of skin when SkinTemp is higher than SkinTempSet
+  REAL :: StdCloBodyRat        ! Standard ratio of clothed body
+  REAL :: StdCloFac            ! Clothing factor determined experimentally at standard environment
+  REAL :: StdCloPermeatEff     ! Standard clothing permeation efficiency
+  REAL :: StdCloUnit           ! standard clothing unit
+  REAL :: StdEffectCloThermEff ! Standard effective clothing theraml efficiency
+  REAL :: StdEffectCloUnit     ! standard effective clothing unit
+  REAL :: StdVapPressET        ! Standard vapor pressure at effective temperature
+  REAL :: StdVapPressSET       ! Standard vapor pressure at standar effective temperature
+  REAL :: TotEvapHeatResist    ! Total evaporative heat resistance
+  REAL :: UnevapSweat          ! Unevaporated sweat; g/m2/hr
 
         ! FLOW:
 
@@ -841,18 +841,18 @@ SUBROUTINE CalcThermalComfortPierce
     IntHeatProd = ActLevel - WorkEff
     ActMet = ActLevel/ActLevelConv
     ! CALCULATE VARIABLESS THAT REMAIN CONSTANT FOR AN HOUR
-    CloBodyRat = 1.0d0 + CloFac*CloUnit
+    CloBodyRat = 1.0 + CloFac*CloUnit
 
-    IF(CloUnit < .01d0) CloUnit=.01d0
+    IF(CloUnit < .01) CloUnit=.01
 
-    CloCond = 1.d0/(CloUnit*0.155d0)
+    CloCond = 1./(CloUnit*0.155)
 
     ! INITIALIZE THE POLLOWING VARIABLES
-    IF(AirVel < .137d0) AirVel = .137d0
+    IF(AirVel < .137) AirVel = .137
 
-    Hc = 8.6d0*AirVel**0.53d0
-    IF(ActMet > .9d0) THEN
-      HcAct = 5.66d0*(ActMet - 0.85d0)**0.39d0
+    Hc = 8.6*AirVel**0.53
+    IF(ActMet > .9) THEN
+      HcAct = 5.66*(ActMet - 0.85)**0.39
       Hc = MAX(HcAct, Hc)
     ENDIF
 
@@ -862,22 +862,22 @@ SUBROUTINE CalcThermalComfortPierce
     ! SkinMassRatSet is the ratio of skin mass to total body mass (skin+core)
     ! Typical values for CoreTempSet, SkinTempSet and SkinMassRatSet are 36.8, 33.7 and 0.10
     ! SkinMassRat is the actual skin to total body mass ratio
-    SkinTempSet = 33.7d0
-    CoreTempSet = 36.8d0
-    SkinMassRatSet = 0.10d0
-    AvgBodyTempSet = SkinMassRatSet*SkinTempSet + (1.d0-SkinMassRatSet)*CoreTempSet
+    SkinTempSet = 33.7
+    CoreTempSet = 36.8
+    SkinMassRatSet = 0.10
+    AvgBodyTempSet = SkinMassRatSet*SkinTempSet + (1.-SkinMassRatSet)*CoreTempSet
 
     ! APPROXIMATE THE FOLLOWING VALUES TO START
-    SkinTemp = 33.7d0
-    CoreTemp = 36.8d0
-    SkinBloodFlow = 6.3d0
-    EvapHeatLossStart = 5.0d0
-    LatRespHeatLoss = 0.017251d0*ActLevel*(5.8662d0 - VapPress)
+    SkinTemp = 33.7
+    CoreTemp = 36.8
+    SkinBloodFlow = 6.3
+    EvapHeatLossStart = 5.0
+    LatRespHeatLoss = 0.017251*ActLevel*(5.8662 - VapPress)
     EvapHeatLoss = (EvapHeatLossStart - LatRespHeatLoss)
-    SkinMassRat = 0.0417737d0 + 0.7451832d0/(SkinBloodFlow + 0.585417d0)
+    SkinMassRat = 0.0417737 + 0.7451832/(SkinBloodFlow + 0.585417)
 
     ! GUESS CloSurfTemp TO START
-    CloSurfTemp = (SkinTemp + AirTemp)/2.d0
+    CloSurfTemp = (SkinTemp + AirTemp)/2.
 
     ! SIMULATION OF TEMPERATURE REGULATION.
     ! This SECTION simulates the temperature regulation over 1 minute.
@@ -892,11 +892,11 @@ SUBROUTINE CalcThermalComfortPierce
 
       ! Dry heat balance:  solve  for CloSurfTemp and Hr
       FirstMinIter = .TRUE.
-      CloSurfTempOld=0.0d0
-      DO WHILE ((ABS(CloSurfTemp-CloSurfTempOld) > 0.01d0) .OR. FirstMinIter)
+      CloSurfTempOld=0.0
+      DO WHILE ((ABS(CloSurfTemp-CloSurfTempOld) > 0.01) .OR. FirstMinIter)
         FirstMinIter = .FALSE.
         CloSurfTempOld = CloSurfTemp
-        Hr = 4.d0*RadSurfEff*StefanBoltz*((CloSurfTemp + RadTemp)/2.d0 + TAbsConv)**3
+        Hr = 4.*RadSurfEff*StefanBoltz*((CloSurfTemp + RadTemp)/2. + TAbsConv)**3
         CloSurfTemp = (CloCond*SkinTemp + CloBodyRat*(Hc*AirTemp + Hr*RadTemp))/(CloCond + CloBodyRat*(Hc + Hr))
       END DO
 
@@ -905,100 +905,100 @@ SUBROUTINE CalcThermalComfortPierce
       ! Heat flow from Clothing surface to environment
       DryHeatLoss = CloBodyRat*(Hc*(CloSurfTemp - AirTemp) + Hr*(CloSurfTemp - RadTemp))
       ! dry and latent respiratory heat losses
-      LatRespHeatLoss = 0.017251d0*ActLevel*(5.8662d0 - VapPress)
-      DryRespHeatLoss = 0.0014d0*ActLevel*(34.d0 - AirTemp)*StdAtm
+      LatRespHeatLoss = 0.017251*ActLevel*(5.8662 - VapPress)
+      DryRespHeatLoss = 0.0014*ActLevel*(34. - AirTemp)*StdAtm
       RespHeatLoss = LatRespHeatLoss + DryRespHeatLoss
       ! Heat flows to skin and core:
-      HeatFlow = (CoreTemp-SkinTemp)*(5.28d0 + 1.163d0*SkinBloodFlow)
+      HeatFlow = (CoreTemp-SkinTemp)*(5.28 + 1.163*SkinBloodFlow)
       ! 5.28 is skin conductance in the
       ! absence of skin blood flow
       SkinHeatStorage = HeatFlow - DryHeatLoss - EvapHeatLoss
-      CoreHeatStorage = ActLevel - (CoreTemp - SkinTemp)*(5.28d0+1.163d0*SkinBloodFlow) - &
+      CoreHeatStorage = ActLevel - (CoreTemp - SkinTemp)*(5.28+1.163*SkinBloodFlow) - &
                         RespHeatLoss - WorkEff
 
       ! Thermal capacities (average man: 70 kg, 1.8 square meter).
-      CoreThermCap = ActLevelConv*(1.d0 - SkinMassRat)*70.d0
-      SkinThermCap = ActLevelConv*SkinMassRat*70.d0
+      CoreThermCap = ActLevelConv*(1. - SkinMassRat)*70.
+      SkinThermCap = ActLevelConv*SkinMassRat*70.
 
       ! Temperature changes in 1 minute
-      SkinTempChange = (SkinHeatStorage*1.8d0)/SkinThermCap
-      CoreTempChange = (CoreHeatStorage*1.8d0)/CoreThermCap
-      BodyTempChange = SkinMassRat*SkinTempChange + (1.d0 - SkinMassRat)*CoreTempChange
+      SkinTempChange = (SkinHeatStorage*1.8)/SkinThermCap
+      CoreTempChange = (CoreHeatStorage*1.8)/CoreThermCap
+      BodyTempChange = SkinMassRat*SkinTempChange + (1. - SkinMassRat)*CoreTempChange
       SkinTemp    = SkinTemp + SkinTempChange
       CoreTemp    = CoreTemp + CoreTempChange
-      AvgBodyTemp = SkinMassRat*SkinTemp + (1.d0 - SkinMassRat)*CoreTemp
+      AvgBodyTemp = SkinMassRat*SkinTemp + (1. - SkinMassRat)*CoreTemp
 
       IF(SkinTemp > SkinTempSet) THEN
         SkinThermSigWarm = SkinTemp - SkinTempSet
-        SkinThermSigCold = 0.d0
+        SkinThermSigCold = 0.
       ELSE
         SkinThermSigCold = SkinTempSet - SkinTemp
-        SkinThermSigWarm = 0.d0
+        SkinThermSigWarm = 0.
       END IF
 
       IF(CoreTemp > CoreTempSet) THEN
         CoreThermSigWarm = CoreTemp - CoreTempSet
-        CoreThermSigCold = 0.d0
+        CoreThermSigCold = 0.
       ELSE
         CoreThermSigCold = CoreTempSet - CoreTemp
-        CoreThermSigWarm = 0.d0
+        CoreThermSigWarm = 0.
       END IF
 
       IF(AvgBodyTemp > AvgBodyTempSet) THEN
         BodyThermSigWarm = AvgBodyTemp - AvgBodyTempSet
-        BodyThermSigCold = 0.d0
+        BodyThermSigCold = 0.
       ELSE
         BodyThermSigCold = AvgBodyTempSet-AvgBodyTemp
-        BodyThermSigWarm = 0.d0
+        BodyThermSigWarm = 0.
       END IF
 
       VasodilationFac = SkinBloodFlowConst*CoreThermSigWarm
       VasoconstrictFac = Str*SkinThermSigCold
-      SkinBloodFlow = (6.3d0 + VasodilationFac)/(1.d0 + VasoconstrictFac)
+      SkinBloodFlow = (6.3 + VasodilationFac)/(1. + VasoconstrictFac)
 
       ! SkinBloodFlow is never below 0.5 liter/(m2.hr) nor above MaxSkinBloodFlow
-      IF(SkinBloodFlow < 0.5d0) SkinBloodFlow = 0.5d0
+      IF(SkinBloodFlow < 0.5) SkinBloodFlow = 0.5
       IF(SkinBloodFlow > MaxSkinBloodFlow) SkinBloodFlow = MaxSkinBloodFlow
 
       ! ratio of skin-core masses change with SkinBloodFlow
       ! (SkinMassRat,SkinBloodFlow) = (.15,6.3),(.45,1.24),(.05,90)
-      SkinMassRat = 0.0417737d0 + 0.7451832d0/(SkinBloodFlow + 0.585417d0)
+      SkinMassRat = 0.0417737 + 0.7451832/(SkinBloodFlow + 0.585417)
 
       ! control of regulatory sweating
-      RegSweat = SweatContConst*BodyThermSigWarm*EXP(SkinThermSigWarm/10.7d0)
+      RegSweat = SweatContConst*BodyThermSigWarm*EXP(SkinThermSigWarm/10.7)
 
       IF(RegSweat > RegSweatMax) RegSweat = RegSweatMax
 
-      EvapHeatLossRegSweat = 0.68d0*RegSweat
+      EvapHeatLossRegSweat = 0.68*RegSweat
 
       ! adjustment of metabolic heat due to shivering (Stolwijk, Hardy)
-      ShivResponse = 19.4d0*SkinThermSigCold*CoreThermSigCold
+      ShivResponse = 19.4*SkinThermSigCold*CoreThermSigCold
       ActLevel = ActLevelStart + ShivResponse
 
       ! Evaluation of heat transfer by evaporation at skin surface
       ! LewisRat varies with SkinTemp.
       ! LewisRat=2.02 C/mmHg or 15.1512 C/kPa at 0 C (lr=2.2 at 25 C)
-      LewisRat = 15.1512d0*(SkinTemp + TAbsConv)/TAbsConv
+      LewisRat = 15.1512*(SkinTemp + TAbsConv)/TAbsConv
 
       ! Mass transfer equation between skin and environment
       ! TotEvapHeatResist is total vapor resistance of CloUnitthing + air layer
       ! CloInsul is efficiency of mass transfer for CloUnitthing
       ! CloInsul IS SET TO .45 (FOR WOVEN MATERIAL)
       ! Reference:  Woodcock, Breckenridge and Goldman
-      CloInsul = 0.45d0
-      CloThermEff = 1.d0/(1.d0 + 0.155d0*CloBodyRat*H*CloUnit)
+      CloInsul = 0.45
+      CloThermEff = 1./(1. + 0.155*CloBodyRat*H*CloUnit)
 
-      AirEvapHeatResist = 1.d0/(LewisRat*CloBodyRat*Hc)
-      CloEvapHeatResist = 0.155d0*CloUnit/(LewisRat*CloInsul)
+      AirEvapHeatResist = 1./(LewisRat*CloBodyRat*Hc)
+      CloEvapHeatResist = 0.155*CloUnit/(LewisRat*CloInsul)
       TotEvapHeatResist = AirEvapHeatResist + CloEvapHeatResist
 
       SatSkinVapPress = CalcSatVapPressFromTemp(SkinTemp)
-      SatSkinVapPress = SatSkinVapPress*0.1333227d0
-      EvapHeatLossMax = (1.d0/TotEvapHeatResist)*(SatSkinVapPress - VapPress)
+      SatSkinVapPress = SatSkinVapPress*0.1333227
+      EvapHeatLossMax = (1./TotEvapHeatResist)*(SatSkinVapPress - VapPress)
       SkinWetSweat = EvapHeatLossRegSweat/EvapHeatLossMax
 
       ! 0.06 if SkinWetDiff for nonsweating skin --- Kerslake
-      SkinWetDiff = (1.d0-SkinWetSweat)*.06d0
+      SkinWetDiff = (1.-SkinWetSweat)*.06
       EvapHeatLossDiff = SkinWetDiff*EvapHeatLossMax
       EvapHeatLoss = EvapHeatLossRegSweat + EvapHeatLossDiff
       SkinWetTot = EvapHeatLoss/EvapHeatLossMax
@@ -1006,9 +1006,9 @@ SUBROUTINE CalcThermalComfortPierce
       ! Beginning of dripping (Sweat not evaporated on skin surface)
       IF((SkinWetTot >= EvapEff).AND.(EvapHeatLossMax >= 0)) THEN
         SkinWetTot = EvapEff
-        SkinWetSweat = (EvapEff - 0.06d0)/.94d0
+        SkinWetSweat = (EvapEff - 0.06)/.94
         EvapHeatLossRegSweat = SkinWetSweat*EvapHeatLossMax
-        SkinWetDiff = (1.d0 - SkinWetSweat)*.06d0
+        SkinWetDiff = (1. - SkinWetSweat)*.06
         EvapHeatLossDiff = SkinWetDiff*EvapHeatLossMax
         EvapHeatLoss = EvapHeatLossRegSweat + EvapHeatLossDiff
       END IF
@@ -1024,11 +1024,11 @@ SUBROUTINE CalcThermalComfortPierce
       END IF
 
       ! UnevapSweat = unevaporated sweat in grams/sq.m/hr
-      UnevapSweat = (RegSweat*.68d0 - SkinWetSweat*EvapHeatLossMax)/0.68d0
+      UnevapSweat = (RegSweat*.68 - SkinWetSweat*EvapHeatLossMax)/0.68
       IF(UnevapSweat <= 0.) UnevapSweat=0.
 
       ! Vapor pressure at skin (as measured by dewpoint sensors)
-      SkinVapPress=SkinWetTot*SatSkinVapPress + (1.d0 - SkinWetTot)*VapPress
+      SkinVapPress=SkinWetTot*SatSkinVapPress + (1. - SkinWetTot)*VapPress
 
       ! SkinRelHum is skin relative humidity
       SkinRelHum = SkinVapPress/SatSkinVapPress
@@ -1041,11 +1041,11 @@ SUBROUTINE CalcThermalComfortPierce
 
     ! PART I: Heat transfer indices in real environment
     OpTemp = (Hr*RadTemp + Hc*AirTemp)/H
-    EffectCloUnit = CloUnit - (CloBodyRat-1.d0)/(.155d0*CloBodyRat*H)
-    EffectCloThermEff = 1.d0/(1.d0 + .155d0*H*EffectCloUnit)
-    CloPermeatEff = 1.d0/(1.d0 + (.155d0/CloInsul)*Hc*EffectCloUnit)
+    EffectCloUnit = CloUnit - (CloBodyRat-1.)/(.155*CloBodyRat*H)
+    EffectCloThermEff = 1./(1. + .155*H*EffectCloUnit)
+    CloPermeatEff = 1./(1. + (.155/CloInsul)*Hc*EffectCloUnit)
 
-    ! PART II: ET*(standardization humidity/REAL(r64) CloUnit, StdAtm and Hc)
+    ! PART II: ET*(standardization humidity/REAL CloUnit, StdAtm and Hc)
     ! calculation of skin heat Loss (SkinHeatLoss)
     SkinHeatLoss = H*EffectCloThermEff*(SkinTemp - OpTemp) + &
                    SkinWetTot*LewisRat*Hc*CloPermeatEff*(SatSkinVapPress - VapPress)
@@ -1060,7 +1060,7 @@ SUBROUTINE CalcThermalComfortPierce
       EnergyBalErrET = SkinHeatLoss - H*EffectCloThermEff*(SkinTemp - ET) - &
                        SkinWetTot*LewisRat*Hc*CloPermeatEff*(SatSkinVapPress - StdVapPressET/2.)
       IF (EnergyBalErrET >= 0.) EXIT
-      ET = ET + 0.1d0
+      ET = ET + 0.1
     END DO
 
     ! Part III: Standard effective temperature SET*
@@ -1070,20 +1070,20 @@ SUBROUTINE CalcThermalComfortPierce
     ! Standard environment
     HrStd = Hr
     ! HcStd = standard conv. heat tr. coeff. (level walking/still air)
-    IF(ActMet <= 0.86d0) ActMet = 0.86d0
-    HcStd = 5.66d0*(ActMet - 0.85d0)**0.39d0
+    IF(ActMet <= 0.86) ActMet = 0.86
+    HcStd = 5.66*(ActMet - 0.85)**0.39
 
     ! minimum value of Hc at sea leAirVel = 3.0 (AirVel = .137 m/s)
-    IF(HcStd <= 3.d0) HcStd = 3.d0
+    IF(HcStd <= 3.) HcStd = 3.
 
     ! standard MET - StdCloUnit relation gives SET* = 24 C when PMV = 0
-    StdCloUnit = 1.3264d0/((ActLevel-WorkEff)/ActLevelConv + 0.7383d0) - 0.0953d0
+    StdCloUnit = 1.3264/((ActLevel-WorkEff)/ActLevelConv + 0.7383) - 0.0953
     StdCloFac = CloFac
-    StdCloBodyRat = 1.d0 + StdCloFac*StdCloUnit
+    StdCloBodyRat = 1. + StdCloFac*StdCloUnit
     HStd = HrStd + HcStd
-    StdEffectCloUnit = StdCloUnit - (StdCloBodyRat - 1.d0)/(0.155d0*StdCloBodyRat*HStd)
-    StdEffectCloThermEff = 1.d0/(1.d0 + 0.155d0*HStd*StdEffectCloUnit)
-    StdCloPermeatEff = 1.d0/(1.d0+(0.155d0/.45d0)*HcStd*StdEffectCloUnit)
+    StdEffectCloUnit = StdCloUnit - (StdCloBodyRat - 1.)/(0.155*StdCloBodyRat*HStd)
+    StdEffectCloThermEff = 1./(1. + 0.155*HStd*StdEffectCloUnit)
+    StdCloPermeatEff = 1./(1.+(0.155/.45)*HcStd*StdEffectCloUnit)
 
     ! Get a low approximation for SET*
     ! and solve balance equ. by iteration
@@ -1095,14 +1095,14 @@ SUBROUTINE CalcThermalComfortPierce
       EnergyBalErrSET = SkinHeatLoss - HStd*StdEffectCloThermEff*(SkinTemp - SET) - &
                         SkinWetTot*LewisRat*HcStd*StdCloPermeatEff*(SatSkinVapPress - StdVapPressSET/2.)
       IF (EnergyBalErrSET >= 0.) EXIT
-      SET = SET + 0.1d0
+      SET = SET + 0.1
     END DO
 
     ! Part IV:  Fanger's comfort equation.
     ! Thermal transfer coefficient to calculate PMV
-    ThermSensTransCoef = 0.303d0*EXP(-0.036d0*ActLevel) + 0.028d0
+    ThermSensTransCoef = 0.303*EXP(-0.036*ActLevel) + 0.028
     ! Fanger's reg. sweating at comfort threshold (PMV=0) is:
-    EvapHeatLossRegComf = (IntHeatProd - ActLevelConv)*0.42d0
+    EvapHeatLossRegComf = (IntHeatProd - ActLevelConv)*0.42
 
     ! PMV*(PMVET in prgm) uses ET instead of OpTemp
     DryHeatLossET = HStd*StdEffectCloThermEff*(SkinTemp - ET)
@@ -1120,28 +1120,28 @@ SUBROUTINE CalcThermalComfortPierce
     ! EvapHeatLossMax is readjusted for EvapEff
     EvapHeatLossMax = EvapHeatLossMax*EvapEff
     ! DISC (discomfort) varies with relative thermoregulatory strain
-    ThermalComfortData(PeopleNum)%PierceDISC = 5.d0*(EvapHeatLossRegSweat - EvapHeatLossRegComf)/(EvapHeatLossMax - &
+    ThermalComfortData(PeopleNum)%PierceDISC = 5.*(EvapHeatLossRegSweat - EvapHeatLossRegComf)/(EvapHeatLossMax - &
                                                EvapHeatLossRegComf - EvapHeatLossDiff)
 
     ! Part VI:  Thermal sensation TSENS as function of mean body temp.-
     ! AvgBodyTempLow is AvgBodyTemp when DISC is 0. (lower limit of zone of evap. regul.)
-    AvgBodyTempLow = (0.185d0/ActLevelConv)*(ActLevel - WorkEff) + 36.313d0
+    AvgBodyTempLow = (0.185/ActLevelConv)*(ActLevel - WorkEff) + 36.313
     ! AvgBodyTempHigh is AvgBodyTemp when HSI=100 (upper limit of zone of evap. regul.)
-    AvgBodyTempHigh = (0.359d0/ActLevelConv)*(ActLevel - WorkEff) + 36.664d0
+    AvgBodyTempHigh = (0.359/ActLevelConv)*(ActLevel - WorkEff) + 36.664
 
     ! TSENS=DISC=4.7 when HSI =1 00 (HSI is Belding's classic heat stress index)
     ! In cold, DISC &TSENS are the same and neg. fct of AvgBodyTemp
     IF(AvgBodyTemp > AvgBodyTempLow) THEN
-      ThermalComfortData(PeopleNum)%PierceTSENS = 4.7d0*(AvgBodyTemp - AvgBodyTempLow)/(AvgBodyTempHigh - &
+      ThermalComfortData(PeopleNum)%PierceTSENS = 4.7*(AvgBodyTemp - AvgBodyTempLow)/(AvgBodyTempHigh - &
                                                   AvgBodyTempLow)
 
     ELSE
-      ThermalComfortData(PeopleNum)%PierceTSENS = .68175d0*(AvgBodyTemp - AvgBodyTempLow)
+      ThermalComfortData(PeopleNum)%PierceTSENS = .68175*(AvgBodyTemp - AvgBodyTempLow)
       ThermalComfortData(PeopleNum)%PierceDISC = ThermalComfortData(PeopleNum)%PierceTSENS
     END IF
 
     ThermalComfortData(PeopleNum)%ThermalComfortMRT = RadTemp
-    ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0d0
+    ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0
 
   END DO
 
@@ -1176,7 +1176,7 @@ SUBROUTINE CalcThermalComfortKSU
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CloEmiss = 0.8d0             ! Clothing Emissivity
+  REAL, PARAMETER :: CloEmiss = 0.8             ! Clothing Emissivity
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1186,30 +1186,30 @@ SUBROUTINE CalcThermalComfortKSU
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64) :: BodyWt                ! Weight of body, kg
-  REAL(r64), DIMENSION(2) :: Coeff   ! Coefficients used in Range-Kutta's Method
-  REAL(r64) :: DayNum                ! Number of days of acclimation
+  REAL :: BodyWt                ! Weight of body, kg
+  REAL, DIMENSION(2) :: Coeff   ! Coefficients used in Range-Kutta's Method
+  REAL :: DayNum                ! Number of days of acclimation
   INTEGER :: NumDay             ! Loop counter for DayNum
-  REAL(r64) :: EmissAvg              ! Average emissivity
+  REAL :: EmissAvg              ! Average emissivity
   INTEGER :: IncreDayNum        ! Number of days of increment in the outputs as desired
-  REAL(r64) :: IntHeatProdMet        ! Internal heat production in MET
-  REAL(r64) :: IntHeatProdMetMax     ! Maximum value of internal heat production in MET
+  REAL :: IntHeatProdMet        ! Internal heat production in MET
+  REAL :: IntHeatProdMetMax     ! Maximum value of internal heat production in MET
   INTEGER :: LastDayNum         ! Number of days for the last print out
-  REAL(r64) :: SkinWetFac            ! Skin wettedness factor
-  REAL(r64) :: SkinWetNeut           ! Skin wettedness at neutral state
+  REAL :: SkinWetFac            ! Skin wettedness factor
+  REAL :: SkinWetNeut           ! Skin wettedness at neutral state
   INTEGER :: StartDayNum        ! Number of days for the first print out
                                 ! Unacclimated man = 1, Acclimated man = 14
-  REAL(r64) :: SweatSuppFac          ! Sweat suppression factor due to skin wettedness
-  REAL(r64), DIMENSION(2) :: Temp       ! Temperature
-  REAL(r64), DIMENSION(2) :: TempChange ! Change of temperature
-  REAL(r64) :: TempDiffer            ! Temperature difference between the rectal and esophageal temperatures
+  REAL :: SweatSuppFac          ! Sweat suppression factor due to skin wettedness
+  REAL, DIMENSION(2) :: Temp       ! Temperature
+  REAL, DIMENSION(2) :: TempChange ! Change of temperature
+  REAL :: TempDiffer            ! Temperature difference between the rectal and esophageal temperatures
                                 ! If not measured, set it to be 0.5 Deg. C.
   INTEGER :: TempIndiceNum      ! Number of temperature indices
-  REAL(r64) :: ThermCndctMin         ! Minimum value of thermal conductance
-  REAL(r64) :: ThermCndctNeut        ! Thermal conductance at neutral state
-  REAL(r64) :: TimeExpos             ! Time period in the exposure, hr
-  REAL(r64) :: TimeInterval          ! Time interval of outputs desired, hr
-  REAL(r64) :: TSVMax                ! Maximum value of thermal sensation vote
+  REAL :: ThermCndctMin         ! Minimum value of thermal conductance
+  REAL :: ThermCndctNeut        ! Thermal conductance at neutral state
+  REAL :: TimeExpos             ! Time period in the exposure, hr
+  REAL :: TimeInterval          ! Time interval of outputs desired, hr
+  REAL :: TSVMax                ! Maximum value of thermal sensation vote
 
 ! FLOW:
 
@@ -1244,70 +1244,70 @@ SUBROUTINE CalcThermalComfortKSU
     IntHeatProd = ActLevel - WorkEff
 ! THE FOLLOWING ARE TYPICAL VALUES SET FOR BLAST RUNS
 ! STANDARD MAN: 70. KG WEIGHT, 1.8 M2 SURFACE AREA
-    BodyWt = 70.d0
-    CoreTemp = 37.d0
-    SkinTemp = 31.d0
+    BodyWt = 70.
+    CoreTemp = 37.
+    SkinTemp = 31.
 
 !   CALCULATIONS NEEDED FOR THE PASSIVE STATE EQUATIONS
-    CoreThermCap = 0.9d0*BodyWt*0.97d0/BodySurfArea
-    SkinThermCap = 0.1d0*BodyWt*0.97d0/BodySurfArea
+    CoreThermCap = 0.9*BodyWt*0.97/BodySurfArea
+    SkinThermCap = 0.1*BodyWt*0.97/BodySurfArea
 !   KERSLAKE'S FORMULA (0.05<AirVel<5. M/S)
-    IF(AirVel < 0.137d0) AirVel = 0.137d0
-    Hc = 8.3d0*SQRT(AirVel)
-    EmissAvg = RadSurfEff*CloEmiss + (1.d0 - RadSurfEff)*1.d0
+    IF(AirVel < 0.137) AirVel = 0.137
+    Hc = 8.3*SQRT(AirVel)
+    EmissAvg = RadSurfEff*CloEmiss + (1. - RadSurfEff)*1.
 !   IBERALL EQUATION
-    Hr = EmissAvg*(3.87d0 + 0.031d0*RadTemp)
+    Hr = EmissAvg*(3.87 + 0.031*RadTemp)
     H = Hr+Hc
     OpTemp = (Hc*AirTemp + Hr*RadTemp)/H
     VapPress = CalcSatVapPressFromTemp(AirTemp)
     VapPress = RelHum*VapPress
-    CloBodyRat = 1.0d0+0.2d0*CloUnit
-    CloThermEff = 1.d0/(1.d0 + 0.155d0*H*CloBodyRat*CloUnit)
-    CloPermeatEff = 1.d0/(1.d0 + 0.143d0*Hc*CloUnit)
+    CloBodyRat = 1.0+0.2*CloUnit
+    CloThermEff = 1./(1. + 0.155*H*CloBodyRat*CloUnit)
+    CloPermeatEff = 1./(1. + 0.143*Hc*CloUnit)
 !  CALCULATE THE PHYSIOLOGICAL REACTIONS OF AN UNACCLIMATED
 !  MAN (LastDayNum = 1), OR AN ACCLIMATED MAN (LastDayNum = 14, IncreDayNum = 13),
     DO NumDay = StartDayNum,LastDayNum,IncreDayNum
 !  INITIAL CONDITIONS IN AN EXPOSURE
       DayNum=REAL(NumDay,r64)
       Time = 0.0
-      TimeChange = .01d0
-      SweatSuppFac = 1.d0
+      TimeChange = .01
+      SweatSuppFac = 1.
       Temp(1) = CoreTemp
       Temp(2) = SkinTemp
       Coeff(1) = 0.
       Coeff(2) = 0.
 !  PHYSIOLOGICAL ADJUSTMENTS IN HEAT ACCLIMATION.
-      AcclPattern = 1.d0 - EXP(-0.12d0*(DayNum - 1.0d0))
-      CoreTempNeut = 36.9d0 - 0.6d0*AcclPattern
-      SkinTempNeut = 33.8d0 - 1.6d0*AcclPattern
-      ActLevel = ActLevel - 0.07d0*ActLevel*AcclPattern
+      AcclPattern = 1. - EXP(-0.12*(DayNum - 1.0))
+      CoreTempNeut = 36.9 - 0.6*AcclPattern
+      SkinTempNeut = 33.8 - 1.6*AcclPattern
+      ActLevel = ActLevel - 0.07*ActLevel*AcclPattern
 !  BASIC INFORMATION FOR THERMAL SENSATION.
       IntHeatProdMet = IntHeatProd/ActLevelConv
-      IntHeatProdMetMax = MAX(1.d0,IntHeatProdMet)
-      ThermCndctNeut = 12.05d0*EXP(0.2266d0*(IntHeatProdMetMax - 1.0d0))
-      SkinWetNeut = 0.02d0 + 0.4d0*(1.d0-EXP(-0.6d0*(IntHeatProdMetMax - 1.0d0)))
-      ThermCndctMin = (ThermCndctNeut - 5.3d0)*0.26074074d0 + 5.3d0
+      IntHeatProdMetMax = MAX(1.,IntHeatProdMet)
+      ThermCndctNeut = 12.05*EXP(0.2266*(IntHeatProdMetMax - 1.0))
+      SkinWetNeut = 0.02 + 0.4*(1.-EXP(-0.6*(IntHeatProdMetMax - 1.0)))
+      ThermCndctMin = (ThermCndctNeut - 5.3)*0.26074074 + 5.3
 !  CALCULATION OF CoreTempChange/TempChange & SkinTempChange/TempChange
       CALL DERIV(TempIndiceNum,Temp,TempChange)
       DO
 !  CALCULATION OF THERMAL SENSATION VOTE (TSV).
 !  THE TSV MODEL CAN BE APPLIED TO UNACCLIMATED MAN ONLY.
-        SkinWetFac = (SkinWetSweat - SkinWetNeut)/(1.d0 - SkinWetNeut)
-        VasodilationFac = (ThermCndct - ThermCndctNeut)/(75.d0 - ThermCndctNeut)
+        SkinWetFac = (SkinWetSweat - SkinWetNeut)/(1. - SkinWetNeut)
+        VasodilationFac = (ThermCndct - ThermCndctNeut)/(75. - ThermCndctNeut)
         VasoconstrictFac = (ThermCndctNeut - ThermCndct)/(ThermCndctNeut - ThermCndctMin)
 !  IF VasodilationFac < 0.0, VASOCONSTRICTION OCCURS AND RESULTS IN COLD SENSATION.
 !  OTHERWISE NORMAL BLOOD FLOW OR VASODILATION OCCURS AND RESULTS IN
 !  THERMAL NEUTRALITY OR WARM SENSATION.
         IF (VasodilationFac < 0) THEN
-         ThermalComfortData(PeopleNum)%KsuTSV = -1.46153d0*VasoconstrictFac + 3.74721d0*VasoconstrictFac**2 - &
-                                                6.168856d0*VasoconstrictFac**3
+         ThermalComfortData(PeopleNum)%KsuTSV = -1.46153*VasoconstrictFac + 3.74721*VasoconstrictFac**2 - &
+                                                6.168856*VasoconstrictFac**3
         ELSE
-         ThermalComfortData(PeopleNum)%KsuTSV = (5.d0 - 6.56d0*(RelHum - 0.50d0))*SkinWetFac
+         ThermalComfortData(PeopleNum)%KsuTSV = (5. - 6.56*(RelHum - 0.50))*SkinWetFac
          IF (ThermalComfortData(PeopleNum)%KsuTSV > TSVMax) ThermalComfortData(PeopleNum)%KsuTSV = TSVMax
         END IF
 
       ThermalComfortData(PeopleNum)%ThermalComfortMRT = RadTemp
-      ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0d0
+      ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = (RadTemp+AirTemp)/2.0
 
       CoreTemp = Temp(1)
       SkinTemp = Temp(2)
@@ -1355,8 +1355,8 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER :: TempIndiceNum        ! Number of temperature indices  unused1208
-  REAL(r64), DIMENSION(2) :: Temp       ! Temperature unused1208
-  REAL(r64), DIMENSION(2) :: TempChange ! Change of temperature
+  REAL, DIMENSION(2) :: Temp       ! Temperature unused1208
+  REAL, DIMENSION(2) :: TempChange ! Change of temperature
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1368,96 +1368,96 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ActLevelTot             ! Total activity level
-  REAL(r64) :: CoreSignalShiv          ! Core signal when shivering occurs
-  REAL(r64) :: CoreSignalShivMax       ! Maximum value of core signal when shivering occurs
-  REAL(r64) :: CoreSignalSkinSens      ! The sensitivity of the skin signal increases
-  REAL(r64) :: CoreSignalSweatMax      ! Maximum value of core signal when sweating occurs
-  REAL(r64) :: CoreSignalSweatWarm     ! Core signal when sweating occurs
-  REAL(r64) :: CoreTempSweat           ! Core temperature when sweating occurs
-  REAL(r64) :: CoreSignalWarm          ! Warm core signal
-  REAL(r64) :: CoreSignalWarmMax       ! Maximum value of warm core signal
-  REAL(r64) :: EvapHeatLossDrySweat    ! Evaporative heat loss by sweating when total skin wettedness < 0.4
-  REAL(r64) :: Err                     ! Stop criteria for iteration
-  REAL(r64) :: ErrPrev                 ! Previous value of stop criteria for iteration
-  REAL(r64) :: EvapHeatLossSweatEst    ! Estimated evaporative heat loss by sweating
-  REAL(r64) :: EvapHeatLossSweatEstNew ! New value of estimated evaporative heat loss by sweating
-  REAL(r64) :: IntHeatProdTot          ! Total internal heat production
-  REAL(r64) :: SkinCndctMax            ! Maximum value of skin conductance
-  REAL(r64) :: SkinSignalCold          ! Cold skin signal
-  REAL(r64) :: SkinSignalColdMax       ! Maximum value of cold skin signal
-  REAL(r64) :: SkinSignalSweatCold     ! Cold skin signal for sweat inhibition
-  REAL(r64) :: SkinSignalSweatColdMax  ! Maximum value of cold skin signal for sweat inhibition
-  REAL(r64) :: SkinCndctDilation       ! Overall skin conductance due to vasodilation
-  REAL(r64) :: SkinCndctConstriction   ! Overall skin conductance due to vasoconstriction
-  REAL(r64) :: SkinSignalShiv          ! Skin signal when shivering occurs
-  REAL(r64) :: SkinSignalShivMax       ! Maximum value of skin signal when shivering occurs
-  REAL(r64) :: SkinSignalSweatMax      ! Skin signal when sweating occurs
-  REAL(r64) :: SkinSignalSweatWarm     ! Maximum value of skin signal when sweating occurs
-  REAL(r64) :: SkinSignalWarm          ! Warm skin signal
-  REAL(r64) :: SkinSignalWarmMax       ! Maximum value of warm skin signal
-  REAL(r64) :: SkinTempSweat           ! Skin temperature when sweating occurs
-  REAL(r64) :: SkinWetSignal           ! Skin wettedness signal
-  REAL(r64) :: SweatCtrlFac            ! Sweat control factor
-  REAL(r64) :: SweatSuppFac            ! Sweat suppression factor due to skin wettedness
-  REAL(r64) :: WeighFac                ! Weighting factor of core siganl
+  REAL :: ActLevelTot             ! Total activity level
+  REAL :: CoreSignalShiv          ! Core signal when shivering occurs
+  REAL :: CoreSignalShivMax       ! Maximum value of core signal when shivering occurs
+  REAL :: CoreSignalSkinSens      ! The sensitivity of the skin signal increases
+  REAL :: CoreSignalSweatMax      ! Maximum value of core signal when sweating occurs
+  REAL :: CoreSignalSweatWarm     ! Core signal when sweating occurs
+  REAL :: CoreTempSweat           ! Core temperature when sweating occurs
+  REAL :: CoreSignalWarm          ! Warm core signal
+  REAL :: CoreSignalWarmMax       ! Maximum value of warm core signal
+  REAL :: EvapHeatLossDrySweat    ! Evaporative heat loss by sweating when total skin wettedness < 0.4
+  REAL :: Err                     ! Stop criteria for iteration
+  REAL :: ErrPrev                 ! Previous value of stop criteria for iteration
+  REAL :: EvapHeatLossSweatEst    ! Estimated evaporative heat loss by sweating
+  REAL :: EvapHeatLossSweatEstNew ! New value of estimated evaporative heat loss by sweating
+  REAL :: IntHeatProdTot          ! Total internal heat production
+  REAL :: SkinCndctMax            ! Maximum value of skin conductance
+  REAL :: SkinSignalCold          ! Cold skin signal
+  REAL :: SkinSignalColdMax       ! Maximum value of cold skin signal
+  REAL :: SkinSignalSweatCold     ! Cold skin signal for sweat inhibition
+  REAL :: SkinSignalSweatColdMax  ! Maximum value of cold skin signal for sweat inhibition
+  REAL :: SkinCndctDilation       ! Overall skin conductance due to vasodilation
+  REAL :: SkinCndctConstriction   ! Overall skin conductance due to vasoconstriction
+  REAL :: SkinSignalShiv          ! Skin signal when shivering occurs
+  REAL :: SkinSignalShivMax       ! Maximum value of skin signal when shivering occurs
+  REAL :: SkinSignalSweatMax      ! Skin signal when sweating occurs
+  REAL :: SkinSignalSweatWarm     ! Maximum value of skin signal when sweating occurs
+  REAL :: SkinSignalWarm          ! Warm skin signal
+  REAL :: SkinSignalWarmMax       ! Maximum value of warm skin signal
+  REAL :: SkinTempSweat           ! Skin temperature when sweating occurs
+  REAL :: SkinWetSignal           ! Skin wettedness signal
+  REAL :: SweatCtrlFac            ! Sweat control factor
+  REAL :: SweatSuppFac            ! Sweat suppression factor due to skin wettedness
+  REAL :: WeighFac                ! Weighting factor of core siganl
 
   ! THE CONTROLLING SYSTEM.
   ! THE CONTROLLING SIGNALS :
   ! SIGNALS FOR KS.
-  CoreSignalWarm = CoreTemp - 36.98d0
-  SkinSignalWarm = SkinTemp - 33.8d0
-  SkinSignalCold = 32.1d0 - SkinTemp
-  CoreSignalSkinSens = CoreTemp - 35.15d0
-  CoreSignalWarmMax = MAX(0.d0,CoreSignalWarm)
-  SkinSignalWarmMax = MAX(0.d0,SkinSignalWarm)
-  SkinSignalColdMax = MAX(0.d0,SkinSignalCold)
+  CoreSignalWarm = CoreTemp - 36.98
+  SkinSignalWarm = SkinTemp - 33.8
+  SkinSignalCold = 32.1 - SkinTemp
+  CoreSignalSkinSens = CoreTemp - 35.15
+  CoreSignalWarmMax = MAX(0.,CoreSignalWarm)
+  SkinSignalWarmMax = MAX(0.,SkinSignalWarm)
+  SkinSignalColdMax = MAX(0.,SkinSignalCold)
 
   ! SIGNALS FOR EvapHeatLossSweat.
   CoreTempSweat = CoreTemp
-  IF(CoreTempSweat > 38.29d0) CoreTempSweat = 38.29d0
+  IF(CoreTempSweat > 38.29) CoreTempSweat = 38.29
   CoreSignalSweatWarm = CoreTempSweat - CoreTempNeut
   SkinTempSweat = SkinTemp
-  IF(SkinTempSweat > 36.1d0) SkinTempSweat = 36.1d0
+  IF(SkinTempSweat > 36.1) SkinTempSweat = 36.1
   SkinSignalSweatWarm = SkinTempSweat - SkinTempNeut
-  CoreSignalSweatMax = MAX(0.d0,CoreSignalSweatWarm)
-  SkinSignalSweatMax = MAX(0.d0,SkinSignalSweatWarm)
-  SkinSignalSweatCold = 33.37d0 - SkinTemp
-  IF(SkinTempNeut < 33.37d0) SkinSignalSweatCold = SkinTempNeut - SkinTemp
-  SkinSignalSweatColdMax = MAX(0.d0,SkinSignalSweatCold)
+  CoreSignalSweatMax = MAX(0.,CoreSignalSweatWarm)
+  SkinSignalSweatMax = MAX(0.,SkinSignalSweatWarm)
+  SkinSignalSweatCold = 33.37 - SkinTemp
+  IF(SkinTempNeut < 33.37) SkinSignalSweatCold = SkinTempNeut - SkinTemp
+  SkinSignalSweatColdMax = MAX(0.,SkinSignalSweatCold)
 
   ! SIGNALS FOR SHIVERING.
-  CoreSignalShiv = 36.9d0 - CoreTemp
-  SkinSignalShiv = 32.5d0 - SkinTemp
-  CoreSignalShivMax = MAX(0.d0,CoreSignalShiv)
-  SkinSignalShivMax = MAX(0.d0,SkinSignalShiv)
+  CoreSignalShiv = 36.9 - CoreTemp
+  SkinSignalShiv = 32.5 - SkinTemp
+  CoreSignalShivMax = MAX(0.,CoreSignalShiv)
+  SkinSignalShivMax = MAX(0.,SkinSignalShiv)
 
   ! CONTROLLING FUNCTIONS :
   ! SHIVERING RESPONSE IN W/M**2.
-  ShivResponse = 20.d0*CoreSignalShivMax*SkinSignalShivMax + 5.d0*SkinSignalShivMax
-  IF(CoreTemp >= 37.1d0) ShivResponse = 0.
+  ShivResponse = 20.*CoreSignalShivMax*SkinSignalShivMax + 5.*SkinSignalShivMax
+  IF(CoreTemp >= 37.1) ShivResponse = 0.
 
   ! SWEAT FUNCTION IN W/M**2.
-  WeighFac = 260.d0+70.d0*AcclPattern
-  SweatCtrlFac = 1.d0 + 0.05d0*SkinSignalSweatColdMax**2.4d0
+  WeighFac = 260.+70.*AcclPattern
+  SweatCtrlFac = 1. + 0.05*SkinSignalSweatColdMax**2.4
 
   ! EvapHeatLossDrySweat = SWEAT WHEN SkinWetTot < 0.4.
-  EvapHeatLossDrySweat = ((WeighFac*CoreSignalSweatMax + 0.1d0*WeighFac*SkinSignalSweatMax) &
-                         *EXP(SkinSignalSweatMax/8.5d0))/SweatCtrlFac
+  EvapHeatLossDrySweat = ((WeighFac*CoreSignalSweatMax + 0.1*WeighFac*SkinSignalSweatMax) &
+                         *EXP(SkinSignalSweatMax/8.5))/SweatCtrlFac
 
   ! MAXIMUM EVAPORATIVE POWER, EvapHeatLossMax, IN W/M**2.
   SkinVapPress = CalcSatVapPressFromTemp(SkinTemp)
-  EvapHeatLossMax = 2.2d0*Hc*(SkinVapPress - VapPress)*CloPermeatEff
+  EvapHeatLossMax = 2.2*Hc*(SkinVapPress - VapPress)*CloPermeatEff
   IF(EvapHeatLossMax > 0.0) THEN
     SkinWetSweat = EvapHeatLossDrySweat/EvapHeatLossMax
-    EvapHeatLossDiff = 0.408d0*(SkinVapPress - VapPress)
-    EvapHeatLoss = SkinWetSweat*EvapHeatLossMax+(1.d0 - SkinWetSweat)*EvapHeatLossDiff
+    EvapHeatLossDiff = 0.408*(SkinVapPress - VapPress)
+    EvapHeatLoss = SkinWetSweat*EvapHeatLossMax+(1. - SkinWetSweat)*EvapHeatLossDiff
     SkinWetTot = EvapHeatLoss/EvapHeatLossMax
     IF(Time == 0.) THEN
       EvapHeatLossSweat = EvapHeatLossDrySweat
       EvapHeatLossSweatPrev = EvapHeatLossDrySweat
     END IF
-    IF(SkinWetTot > 0.4d0) THEN
+    IF(SkinWetTot > 0.4) THEN
 
   ! ITERATION  FOR SWEAT WHEN SkinWetTot IS GREATER THAT 0.4.
       IterNum = 0
@@ -1468,14 +1468,14 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
 
         IF(SkinWetSweat > 1.) SkinWetSweat = 1.
 
-        EvapHeatLossDiff = 0.408d0*(SkinVapPress - VapPress)
-        EvapHeatLoss = (1.d0 - SkinWetTot)*EvapHeatLossDiff + EvapHeatLossSweat
+        EvapHeatLossDiff = 0.408*(SkinVapPress - VapPress)
+        EvapHeatLoss = (1. - SkinWetTot)*EvapHeatLossDiff + EvapHeatLossSweat
         SkinWetTot = EvapHeatLoss/EvapHeatLossMax
 
         IF(SkinWetTot > 1.) SkinWetTot = 1.
 
-        SkinWetSignal = MAX(0.d0,SkinWetTot - .4d0)
-        SweatSuppFac = 0.5d0 + 0.5d0*EXP(-5.6d0*SkinWetSignal)
+        SkinWetSignal = MAX(0.,SkinWetTot - .4)
+        SweatSuppFac = 0.5 + 0.5*EXP(-5.6*SkinWetSignal)
         EvapHeatLossSweatEstNew = SweatSuppFac*EvapHeatLossDrySweat
 
         IF(IterNum == 0) EvapHeatLossSweat = EvapHeatLossSweatEstNew
@@ -1488,7 +1488,7 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
         END IF
 
   ! STOP CRITERION FOR THE ITERATION.
-        IF((ABS(Err) <= 0.5d0) .OR. (IterNum >= 10)) EXIT
+        IF((ABS(Err) <= 0.5) .OR. (IterNum >= 10)) EXIT
         IterNum = IterNum + 1
         EvapHeatLossSweatPrev = EvapHeatLossSweat
         ErrPrev = Err
@@ -1502,18 +1502,18 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
   ELSE
     SkinWetSweat = 1.
     SkinWetTot = 1.
-    EvapHeatLossSweat = 0.5d0*EvapHeatLossDrySweat
+    EvapHeatLossSweat = 0.5*EvapHeatLossDrySweat
     EvapHeatLoss = EvapHeatLossSweat
   END IF
 
   ! OVERALL SKIN CONDUCTANCE, KS, IN W/M**2/C.
   ! SkinCndctDilation = EFFECT DUE TO VASODILATION.
   ! SkinCndctConstriction = EFFECT DUE TO VASOCONSTRICTION.
-  SkinCndctDilation = 42.45d0*CoreSignalWarmMax + 8.15d0*CoreSignalSkinSens**0.8d0*SkinSignalWarmMax
-  SkinCndctConstriction = 1.0d0 + 0.4d0*SkinSignalColdMax
+  SkinCndctDilation = 42.45*CoreSignalWarmMax + 8.15*CoreSignalSkinSens**0.8*SkinSignalWarmMax
+  SkinCndctConstriction = 1.0 + 0.4*SkinSignalColdMax
   ! ThermCndct IS EQUIVALENT TO KS
-  ThermCndct = 5.3d0+(6.75d0+SkinCndctDilation)/SkinCndctConstriction
-  SkinCndctMax = 75.d0+10.d0*AcclPattern
+  ThermCndct = 5.3+(6.75+SkinCndctDilation)/SkinCndctConstriction
+  SkinCndctMax = 75.+10.*AcclPattern
   IF(ThermCndct > SkinCndctMax) ThermCndct = SkinCndctMax
 
   ! PASSIVE ENERGY BALANCE EQUATIONS.
@@ -1521,8 +1521,8 @@ SUBROUTINE DERIV(TempIndiceNum,Temp,TempChange)
   ActLevelTot = ActLevel + ShivResponse
   IntHeatProdTot = ActLevelTot - WorkEff
   ! RESPIRATION HEAT LOSS, RespHeatLoss, IN W/M**0.
-  LatRespHeatLoss = 0.0023d0*ActLevelTot*(44.d0 - VapPress)
-  DryRespHeatLoss = 0.0014d0*ActLevelTot*(34.d0 - AirTemp)
+  LatRespHeatLoss = 0.0023*ActLevelTot*(44. - VapPress)
+  DryRespHeatLoss = 0.0014*ActLevelTot*(34. - AirTemp)
   RespHeatLoss = LatRespHeatLoss + DryRespHeatLoss
   ! HEAT FLOW FROM CORE TO SKIN, HeatFlow, IN W/M**2.
   HeatFlow = ThermCndct*(CoreTemp - SkinTemp)
@@ -1580,24 +1580,24 @@ SUBROUTINE RKG(NEQ,H,X,Y,DY,C)
   INTEGER :: I
   INTEGER :: J
   INTEGER :: NEQ
-  REAL(r64) :: B
-  REAL(r64) :: H
-  REAL(r64) :: H2
-  REAL(r64) :: X
-  REAL(r64), DIMENSION(2)   :: A
-  REAL(r64), DIMENSION(NEQ) :: C
-  REAL(r64), DIMENSION(NEQ) :: DY
-  REAL(r64), DIMENSION(NEQ) :: Y
+  REAL :: B
+  REAL :: H
+  REAL :: H2
+  REAL :: X
+  REAL, DIMENSION(2)   :: A
+  REAL, DIMENSION(NEQ) :: C
+  REAL, DIMENSION(NEQ) :: DY
+  REAL, DIMENSION(NEQ) :: Y
 
-  A(1) = 0.29289321881345d0
-  A(2) = 1.70710678118654d0
-  H2 = .5d0*H
+  A(1) = 0.29289321881345
+  A(2) = 1.70710678118654
+  H2 = .5*H
 
   CALL DERIV (NEQ,Y,DY)
   DO I = 1,NEQ
     B = H2*DY(I) - C(I)
     Y(I) = Y(I) + B
-    C(I) = C(I) + 3.d0*B - H2*DY(I)
+    C(I) = C(I) + 3.*B - H2*DY(I)
   END DO
 
   X = X + H2
@@ -1607,7 +1607,7 @@ SUBROUTINE RKG(NEQ,H,X,Y,DY,C)
     DO I = 1,NEQ
       B = A(J)*(H*DY(I) - C(I))
       Y(I) = Y(I) + B
-      C(I) = C(I) + 3.d0*B - A(J)*H*DY(I)
+      C(I) = C(I) + 3.*B - A(J)*H*DY(I)
     END DO
   END DO
 
@@ -1615,9 +1615,9 @@ SUBROUTINE RKG(NEQ,H,X,Y,DY,C)
   CALL DERIV (NEQ,Y,DY)
 
   DO I = 1,NEQ
-    B = (H*DY(I) - 2.d0*C(I))/6.
+    B = (H*DY(I) - 2.*C(I))/6.
     Y(I) = Y(I) + B
-    C(I) = C(I) + 3.d0*B - H2*DY(I)
+    C(I) = C(I) + 3.*B - H2*DY(I)
   END DO
 
   CALL DERIV (NEQ,Y,DY)
@@ -1655,7 +1655,7 @@ SUBROUTINE GetAngleFactorList
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER        :: AngleFacLimit = 0.01d0     ! To set the limit of sum of angle factors
+  REAL, PARAMETER        :: AngleFacLimit = 0.01     ! To set the limit of sum of angle factors
   CHARACTER(len=*), PARAMETER :: Blank = ' '
   INTEGER,          PARAMETER :: MaxSurfaces = 20         ! Maximum number of surfaces in each AngleFactor List
 
@@ -1668,12 +1668,12 @@ SUBROUTINE GetAngleFactorList
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !unused1208  CHARACTER(len=MaxNameLength),  &
 !        DIMENSION(22)       :: Alphas                  ! Alpha strings from Input Processor
-  REAL(r64)                 :: AllAngleFacSummed       ! Sum of angle factors in each zone
+  REAL                 :: AllAngleFacSummed       ! Sum of angle factors in each zone
   LOGICAL                   :: ErrorsFound=.false.     ! Set to true if errors in input, fatal at end of routine
   INTEGER                   :: IOStatus
   INTEGER                   :: Item                    ! Item to be "gotten"
   INTEGER                   :: NumAlphas               ! Number of Alphas from InputProcessor
-!unused1208  REAL(r64), DIMENSION(20)       :: Numbers                 ! Numbers from Input Processor
+!unused1208  REAL, DIMENSION(20)       :: Numbers                 ! Numbers from Input Processor
   INTEGER                   :: NumNumbers              ! Number of Numbers from Input Processor
   INTEGER                   :: NumOfAngleFactorLists   ! Number of Angle Factor Lists found in IDF
   INTEGER                   :: SurfNum                 ! Surface number DO loop counter
@@ -1743,7 +1743,7 @@ SUBROUTINE GetAngleFactorList
 
     END DO
 
-    IF (ABS(AllAngleFacSummed-1.0d0) > AngleFacLimit) THEN
+    IF (ABS(AllAngleFacSummed-1.0) > AngleFacLimit) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'", invalid - Sum[AngleFactors]')
         CALL ShowContinueError('...Sum of Angle Factors ['//trim(RoundSigDigits(AllAngleFacSummed,3))//  &
            '] exceed expected sum [1.0] by more than limit ['//TRIM(RoundSigDigits(AngleFacLimit,3))//'].')
@@ -1779,7 +1779,7 @@ SUBROUTINE GetAngleFactorList
 
 END SUBROUTINE GetAngleFactorList
 
-REAL(r64) FUNCTION CalcAngleFactorMRT(AngleFacNum)
+REAL FUNCTION CalcAngleFactorMRT(AngleFacNum)
 
           ! SUBROUTINE INFORMATION:
           !     AUTHOR         Jaewook Lee
@@ -1810,9 +1810,9 @@ REAL(r64) FUNCTION CalcAngleFactorMRT(AngleFacNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: SurfaceTemp
+  REAL    :: SurfaceTemp
   INTEGER :: SurfNum
-  REAL(r64)    :: SurfTempAngleFacSummed
+  REAL    :: SurfTempAngleFacSummed
 
           ! FLOW:
 
@@ -1831,7 +1831,7 @@ REAL(r64) FUNCTION CalcAngleFactorMRT(AngleFacNum)
 
 END FUNCTION CalcAngleFactorMRT
 
-REAL(r64) FUNCTION CalcSatVapPressFromTemp(Temp)
+REAL FUNCTION CalcSatVapPressFromTemp(Temp)
 
           ! FUNCTION INFORMATION:
           !     AUTHOR         Jaewook Lee
@@ -1867,19 +1867,19 @@ REAL(r64) FUNCTION CalcSatVapPressFromTemp(Temp)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64), INTENT(IN) :: Temp
-  REAL(r64) :: XT
+  REAL, INTENT(IN) :: Temp
+  REAL :: XT
 
           ! FLOW
 
-  XT = Temp/100.d0
-  CalcSatVapPressFromTemp = 6.16796d0 + 358.1855d0*XT**2 - 550.3543d0*XT**3 + 1048.8115d0*XT**4
+  XT = Temp/100.
+  CalcSatVapPressFromTemp = 6.16796 + 358.1855*XT**2 - 550.3543*XT**3 + 1048.8115*XT**4
 
   RETURN
 
 END FUNCTION CalcSatVapPressFromTemp
 
-REAL(r64) FUNCTION CalcRadTemp(PeopleListNum)
+REAL FUNCTION CalcRadTemp(PeopleListNum)
 
           ! FUNCTION INFORMATION:
           !     AUTHOR         Jaewook Lee
@@ -1925,9 +1925,9 @@ REAL(r64) FUNCTION CalcRadTemp(PeopleListNum)
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: PeopleListNum    ! Type of MRT calculation (zone averaged or surface weighted)
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: AreaEff = 1.8d0                      ! Effective area of a "standard" person in meters squared
-!  REAL(r64), PARAMETER :: KelvinConv = KelvinConv                ! Conversion from Celsius to Kelvin
-  REAL(r64), PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
+  REAL, PARAMETER :: AreaEff = 1.8                      ! Effective area of a "standard" person in meters squared
+!  REAL, PARAMETER :: KelvinConv = KelvinConv                ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER :: StefanBoltzmannConst = 5.6697d-8   ! Stefan-Boltzmann constant in W/(m2*K4)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1936,8 +1936,8 @@ REAL(r64) FUNCTION CalcRadTemp(PeopleListNum)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: SurfaceTemp
-  REAL(r64) :: ZoneRadTemp
+  REAL :: SurfaceTemp
+  REAL :: ZoneRadTemp
 
           ! FLOW:
   SELECT CASE (People(PeopleListNum)%MRTCalcType)
@@ -1947,7 +1947,7 @@ REAL(r64) FUNCTION CalcRadTemp(PeopleListNum)
     CASE (SurfaceWeighted)
       ZoneRadTemp = MRT(ZoneNum)
       SurfaceTemp = TH(People(PeopleListNum)%SurfacePtr,1,2)
-      RadTemp = (ZoneRadTemp + SurfaceTemp)/2.0d0
+      RadTemp = (ZoneRadTemp + SurfaceTemp)/2.0
     CASE (AngleFactor)
       RadTemp = CalcAngleFactorMRT(People(PeopleListNum)%AngleFactorListPtr)
 
@@ -1959,7 +1959,7 @@ REAL(r64) FUNCTION CalcRadTemp(PeopleListNum)
     RadTemp = RadTemp + KelvinConv  ! Convert to Kelvin
     RadTemp = ((RadTemp**4)+((QHTRadSysToPerson(ZoneNum)+QHWBaseboardToPerson(ZoneNum)+ &
                 QSteamBaseboardToPerson(ZoneNum) + QElecBaseboardToPerson(ZoneNum))/ &
-                AreaEff/StefanBoltzmannConst))**(1.0d0/4.0d0)
+                AreaEff/StefanBoltzmannConst))**(1.0/4.0)
     RadTemp = RadTemp - KelvinConv  ! Convert back to Celsius
   END IF
 
@@ -2004,16 +2004,16 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: OperTemp
-REAL(r64) :: HumidRatio
-REAL(r64) :: CurAirTemp
-REAL(r64) :: CurMeanRadiantTemp
-REAL(r64) :: NumberOccupants
+REAL :: OperTemp
+REAL :: HumidRatio
+REAL :: CurAirTemp
+REAL :: CurMeanRadiantTemp
+REAL :: NumberOccupants
 LOGICAL :: isComfortableWithSummerClothes
 LOGICAL :: isComfortableWithWinterClothes
 INTEGER :: iPeople
 INTEGER :: iZone
-REAL(r64) :: allowedHours
+REAL :: allowedHours
 LOGICAL :: showWarning
 
 AnyZoneTimeNotSimpleASH55Summer = 0
@@ -2039,7 +2039,7 @@ DO iZone = 1, NumOfZones
       CurAirTemp = ZTAV(iZone)
     ENDIF
     CurMeanRadiantTemp = MRT(iZone)
-    OperTemp = CurAirTemp * 0.5d0 + CurMeanRadiantTemp * 0.5d0
+    OperTemp = CurAirTemp * 0.5 + CurMeanRadiantTemp * 0.5
     HumidRatio = ZoneAirHumRat(iZone)
     !for debugging
     !ThermalComfortInASH55(iZone)%dCurAirTemp = CurAirTemp
@@ -2074,16 +2074,16 @@ DO iZone = 1, NumOfZones
     !
     !check summer clothing conditions
     isComfortableWithSummerClothes = isInQuadrilateral(OperTemp,HumidRatio,  &
-                         25.1d0, 0.0d0,    &
-                         23.6d0, 0.012d0,  &
-                         26.8d0, 0.012d0,  &
-                         28.3d0, 0.0d0)
+                         25.1, 0.0,    &
+                         23.6, 0.012,  &
+                         26.8, 0.012,  &
+                         28.3, 0.0)
     !check winter clothing conditions
     isComfortableWithWinterClothes = isInQuadrilateral(OperTemp,HumidRatio,  &
-                         21.7d0, 0.0d0,    &
-                         19.6d0, 0.012d0,  &
-                         23.9d0, 0.012d0,  &
-                         26.3d0, 0.0d0)
+                         21.7, 0.0,    &
+                         19.6, 0.012,  &
+                         23.9, 0.012,  &
+                         26.3, 0.0)
     IF (isComfortableWithSummerClothes) THEN
       ThermalComfortInASH55(iZone)%timeNotSummer = 0
     ELSE
@@ -2121,7 +2121,7 @@ TotalAnyZoneTimeNotSimpleASH55Winter = TotalAnyZoneTimeNotSimpleASH55Winter + An
 TotalAnyZoneTimeNotSimpleASH55Either = TotalAnyZoneTimeNotSimpleASH55Either + AnyZoneTimeNotSimpleASH55Either
 !was EndEnvrnsFlag prior to CR7562
 IF (EndDesignDayEnvrnsFlag) THEN
-  allowedHours = NumOfDayInEnvrn * 24 * 0.04d0
+  allowedHours = NumOfDayInEnvrn * 24 * 0.04
   !first check if warning should be printed
   showWarning = .FALSE.
   DO iZone = 1, NumOfZones
@@ -2225,8 +2225,8 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: SensibleLoadPredictedNoAdj
-REAL(r64) :: deltaT
+REAL :: SensibleLoadPredictedNoAdj
+REAL :: deltaT
 INTEGER :: iZone
 LOGICAL :: testHeating
 LOGICAL :: testCooling
@@ -2370,7 +2370,7 @@ IMPLICIT NONE
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 LOGICAL, INTENT(IN) :: initiate  ! true if supposed to initiate
 LOGICAL, INTENT(IN), OPTIONAL :: wthrsim   ! true if this is a weather simulation
-REAL(r64), INTENT(IN), OPTIONAL :: avgdrybulb  ! approximate avg drybulb for design day.  will be used as previous period in design day
+REAL, INTENT(IN), OPTIONAL :: avgdrybulb  ! approximate avg drybulb for design day.  will be used as previous period in design day
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2389,12 +2389,12 @@ CHARACTER(len=200) :: lineIn
 CHARACTER(len=200) :: lineAvg
 CHARACTER(len=200) :: epwLine
 CHARACTER(len=52) :: ioerrmsg
-REAL(r64), SAVE :: avgDryBulbASH=0.0d0
-REAL(r64) :: dryBulb
-REAL(r64), SAVE :: runningAverageASH=0.0d0
-REAL(r64), DIMENSION(12), SAVE :: monthlyTemp=0.0d0
-REAL(r64) :: tComf
-REAL(r64) :: numOccupants
+REAL, SAVE :: avgDryBulbASH=0.0
+REAL :: dryBulb
+REAL, SAVE :: runningAverageASH=0.0
+REAL, DIMENSION(12), SAVE :: monthlyTemp=0.0
+REAL :: tComf
+REAL :: numOccupants
 INTEGER :: statFile
 INTEGER :: epwFile
 INTEGER :: lnPtr
@@ -2415,13 +2415,13 @@ INTEGER :: ind
 INTEGER :: i
 INTEGER :: j
 LOGICAL :: weathersimulation
-REAL(r64) :: inavgdrybulb
+REAL :: inavgdrybulb
 
 IF (initiate) THEN  ! not optional on initiate=true.  would otherwise check for presence
   weathersimulation=wthrsim
-  avgDryBulbASH=0.0d0
-  runningAverageASH=0.0d0
-  monthlyTemp=0.0d0
+  avgDryBulbASH=0.0
+  runningAverageASH=0.0
+  monthlyTemp=0.0
   inavgdrybulb=avgdrybulb
 ELSE
   weathersimulation=.false.
@@ -2480,9 +2480,9 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0d0)
+          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0)
         END DO
-        runningAverageASH = (29.0d0 * runningAverageASH + avgDryBulbASH) / 30.0d0
+        runningAverageASH = (29.0 * runningAverageASH + avgDryBulbASH) / 30.0
       END DO
     ELSE  ! Do special things for wrapping the epw
       calcEndDay = jStartDay
@@ -2499,9 +2499,9 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0d0)
+          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0)
         END DO
-        runningAverageASH = (29.0d0 * runningAverageASH + avgDryBulbASH) / 30.0d0
+        runningAverageASH = (29.0 * runningAverageASH + avgDryBulbASH) / 30.0
       END DO
       DO i = calcEndHr+1, calcStartHr-1
         READ(unit=epwFile,fmt='(A)',iostat=readStat)
@@ -2516,9 +2516,9 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0d0)
+          avgDryBulbASH = avgDryBulbASH + (dryBulb / 24.0)
         END DO
-        runningAverageASH = (29.0d0 * runningAverageASH + avgDryBulbASH) / 30.0d0
+        runningAverageASH = (29.0 * runningAverageASH + avgDryBulbASH) / 30.0
       END DO
     END IF
     CLOSE(unit=epwFile)
@@ -2527,15 +2527,15 @@ IF (initiate .and. weathersimulation) THEN
 ELSEIF (initiate .and. .not. weathersimulation) THEN
   runningAverageASH=inavgdrybulb
   monthlyTemp=inavgdrybulb
-  avgDryBulbASH = 0.0d0
+  avgDryBulbASH = 0.0
 END IF
 
 IF (initiate) RETURN
 
 IF (BeginDayFlag .and. useEpwData) THEN
   ! Update the running average, reset the daily avg
-  runningAverageASH = (29.0d0 * runningAverageASH + avgDryBulbASH) / 30.0d0
-  avgDryBulbASH = 0.0d0
+  runningAverageASH = (29.0 * runningAverageASH + avgDryBulbASH) / 30.0
+  avgDryBulbASH = 0.0
 END IF
 
 ! If exists BeginMonthFlag we can use it to call InvJulianDay once per month.
@@ -2548,7 +2548,7 @@ END IF
 ! Update the daily average
 !IF (BeginHourFlag .and. useEpwData) THEN
 IF (BeginHourFlag) THEN
-  avgDryBulbASH = avgDryBulbASH + (OutDryBulbTemp / 24.0d0)
+  avgDryBulbASH = avgDryBulbASH + (OutDryBulbTemp / 24.0)
 END IF
 
 DO PeopleNum = 1, TotPeople
@@ -2560,20 +2560,20 @@ DO PeopleNum = 1, TotPeople
     AirTemp = ZTAV(ZoneNum)
   ENDIF
   RadTemp = CalcRadTemp(PeopleNum)
-  OpTemp = (AirTemp + RadTemp) / 2.0d0
+  OpTemp = (AirTemp + RadTemp) / 2.0
   ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = OpTemp
   ThermalComfortData(PeopleNum)%ASHRAE55RunningMeanOutdoorTemp = runningAverageASH
-  IF (runningAverageASH >= 10.0d0 .and. runningAverageASH <= 33.5d0) THEN
+  IF (runningAverageASH >= 10.0 .and. runningAverageASH <= 33.5) THEN
     ! Calculate the comfort here  (people/output handling loop)
     numOccupants = People(PeopleNum)%NumberOfPeople * GetCurrentScheduleValue(People(PeopleNum)%NumberOfPeoplePtr)
-    tComf = 0.31d0 * runningAverageASH + 17.8d0
+    tComf = 0.31 * runningAverageASH + 17.8
     ThermalComfortData(PeopleNum)%TComfASH55 = tComf
     IF (numOccupants > 0) THEN
-      IF (OpTemp < tComf+2.5d0 .and. OpTemp > tComf-2.5d0) THEN
+      IF (OpTemp < tComf+2.5 .and. OpTemp > tComf-2.5) THEN
         ! 80% and 90% limits okay
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveASH5590 = 1
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveASH5580 = 1
-      ELSE IF (OpTemp < tComf+3.5d0 .and. OpTemp > tComf-3.5d0) THEN
+      ELSE IF (OpTemp < tComf+3.5 .and. OpTemp > tComf-3.5) THEN
         ! 80% only
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveASH5590 = 0
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveASH5580 = 1
@@ -2627,10 +2627,10 @@ IMPLICIT NONE
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 LOGICAL, INTENT(IN) :: initiate  ! true if supposed to initiate
 LOGICAL, INTENT(IN), OPTIONAL :: wthrsim   ! true if this is a weather simulation
-REAL(r64), INTENT(IN), OPTIONAL :: avgdrybulb  ! approximate avg drybulb for design day.  will be used as previous period in design day
+REAL, INTENT(IN), OPTIONAL :: avgdrybulb  ! approximate avg drybulb for design day.  will be used as previous period in design day
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64),PARAMETER :: alpha = 0.8d0
+REAL,PARAMETER :: alpha = 0.8
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2642,12 +2642,12 @@ REAL(r64),PARAMETER :: alpha = 0.8d0
 
 INTEGER, EXTERNAL :: GetNewUnitNumber
 CHARACTER(len=200) :: epwLine
-REAL(r64), SAVE :: avgDryBulbCEN=0.0d0
-REAL(r64) :: dryBulb
-REAL(r64) :: tComf
-REAL(r64) :: tComfLow
-REAL(r64), SAVE :: runningAverageCEN=0.0d0
-REAL(r64) :: numOccupants
+REAL, SAVE :: avgDryBulbCEN=0.0
+REAL :: dryBulb
+REAL :: tComf
+REAL :: tComfLow
+REAL, SAVE :: runningAverageCEN=0.0
+REAL :: numOccupants
 INTEGER :: epwFile
 LOGICAL :: epwFileExists
 LOGICAL, SAVE :: useEpwData = .false.
@@ -2663,13 +2663,13 @@ INTEGER :: ind
 INTEGER :: i
 INTEGER :: j
 LOGICAL :: weathersimulation
-REAL(r64) :: inavgdrybulb
+REAL :: inavgdrybulb
 
 IF (initiate) THEN  ! not optional on initiate=true.  would otherwise check for presence
   weathersimulation=wthrsim
   inavgdrybulb=avgdrybulb
-  avgDryBulbCEN=0.0d0
-  runningAverageCEN=0.0d0
+  avgDryBulbCEN=0.0
+  runningAverageCEN=0.0
 ELSE
   weathersimulation=.false.
   inavgdrybulb=0.0
@@ -2705,7 +2705,7 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0d0)
+          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0)
         END DO
         runningAverageCEN = runningAverageCEN + alpha**(7-i)*avgDryBulbCEN
       END DO
@@ -2724,7 +2724,7 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0d0)
+          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0)
         END DO
         runningAverageCEN = runningAverageCEN + alpha**(calcEndDay-i)*avgDryBulbCEN
       END DO
@@ -2741,34 +2741,34 @@ IF (initiate .and. weathersimulation) THEN
           END DO
           pos = INDEX(epwLine,',')
           dryBulb = StrToReal(epwLine(1:pos-1))
-          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0d0)
+          avgDryBulbCEN = avgDryBulbCEN + (dryBulb / 24.0)
         END DO
         runningAverageCEN = runningAverageCEN + alpha**(7-i)*avgDryBulbCEN
       END DO
     END IF
-    runningAverageCEN = (1.0d0-alpha) * runningAverageCEN
-    avgDryBulbCEN = 0.0d0
+    runningAverageCEN = (1.0-alpha) * runningAverageCEN
+    avgDryBulbCEN = 0.0
     CLOSE(unit=epwFile)
     useEpwData = .true.
     firstDaySet=.true.
   END IF
 ELSEIF (initiate .and. .not. weathersimulation) THEN
   runningAverageCEN = inavgdrybulb
-  avgDryBulbCEN = 0.0d0
+  avgDryBulbCEN = 0.0
 ENDIF
 IF (initiate) RETURN
 
 IF (BeginDayFlag .and. .not. firstDaySet) THEN
   ! Update the running average, reset the daily avg
-  runningAverageCEN = 0.2d0 * runningAverageCEN + 0.8d0 * avgDryBulbCEN
-  avgDryBulbCEN = 0.0d0
+  runningAverageCEN = 0.2 * runningAverageCEN + 0.8 * avgDryBulbCEN
+  avgDryBulbCEN = 0.0
 END IF
 
 firstDaySet=.false.
 
 ! Update the daily average
 IF (BeginHourFlag) THEN
-  avgDryBulbCEN = avgDryBulbCEN + (OutDryBulbTemp / 24.0d0)
+  avgDryBulbCEN = avgDryBulbCEN + (OutDryBulbTemp / 24.0)
 ENDIF
 
 
@@ -2781,32 +2781,32 @@ DO PeopleNum = 1, TotPeople
     AirTemp = ZTAV(ZoneNum)
   END IF
   RadTemp = CalcRadTemp(PeopleNum)
-  OpTemp = (AirTemp + RadTemp) / 2.0d0
+  OpTemp = (AirTemp + RadTemp) / 2.0
   ThermalComfortData(PeopleNum)%ThermalComfortOpTemp = OpTemp
   ThermalComfortData(PeopleNum)%CEN15251RunningMeanOutdoorTemp = runningAverageCEN
-  IF (runningAverageCEN >= 10.0d0 .and. runningAverageCEN <= 30.0d0) THEN
+  IF (runningAverageCEN >= 10.0 .and. runningAverageCEN <= 30.0) THEN
     ! Calculate the comfort here (people/output handling loop)
     numOccupants = People(PeopleNum)%NumberOfPeople * GetCurrentScheduleValue(People(PeopleNum)%NumberOfPeoplePtr)
-    tComf = 0.33d0 * runningAverageCEN + 18.8d0
+    tComf = 0.33 * runningAverageCEN + 18.8
     ThermalComfortData(PeopleNum)%TComfCEN15251 = tComf
     IF (numOccupants > 0) THEN
       IF (runningAverageCEN < 15) THEN
-        tComfLow = 23.75d0 ! Lower limit is constant in this region
+        tComfLow = 23.75 ! Lower limit is constant in this region
       ELSE
         tComfLow = tComf
       END IF
-      IF (OpTemp < tComf+2.0d0 .and. OpTemp > tComfLow-2.0d0) THEN
+      IF (OpTemp < tComf+2.0 .and. OpTemp > tComfLow-2.0) THEN
         ! Within Cat I, II, III Limits
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatI = 1
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatII = 1
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatIII = 1
-      ELSE IF (OpTemp < tComf+3.0d0 .and. OpTemp > tComfLow-3.0d0) THEN
+      ELSE IF (OpTemp < tComf+3.0 .and. OpTemp > tComfLow-3.0) THEN
         ! Within Cat II, III Limits
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatI = 0
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatII = 1
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatIII = 1
         People(PeopleNum)%TimeNotMetCEN15251CatI = People(PeopleNum)%TimeNotMetCEN15251CatI + SysTimeElapsed
-      ELSE IF (OpTemp < tComf+4.0d0 .and. OpTemp > tComfLow-4.0d0) THEN
+      ELSE IF (OpTemp < tComf+4.0 .and. OpTemp > tComfLow-4.0) THEN
         ! Within Cat III Limits
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatI = 0
         ThermalComfortData(PeopleNum)%ThermalComfortAdaptiveCEN15251CatII = 0

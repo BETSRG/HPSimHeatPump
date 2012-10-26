@@ -66,7 +66,7 @@ SUBROUTINE  DElightDaylightCoefficients (dBldgLat, iErrorFlag)
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
     ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64) :: dBldgLat
+    REAL :: dBldgLat
     INTEGER iErrorFlag
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -116,15 +116,15 @@ SUBROUTINE DElightElecLtgCtrl (iNameLength, cZoneName, dBldgLat, &
     ! SUBROUTINE PARAMETER DEFINITIONS:
     INTEGER iNameLength
     CHARACTER(len=*) cZoneName
-!    REAL(r64) rBldgLat
-    REAL(r64) :: dBldgLat
-    REAL(r64) :: dHISKF
-    REAL(r64) :: dHISUNF
-    REAL(r64) :: dCloudFraction
-    REAL(r64) :: dSOLCOSX
-    REAL(r64) :: dSOLCOSY
-    REAL(r64) :: dSOLCOSZ
-    REAL(r64) :: pdPowerReducFac
+!    REAL rBldgLat
+    REAL :: dBldgLat
+    REAL :: dHISKF
+    REAL :: dHISUNF
+    REAL :: dCloudFraction
+    REAL :: dSOLCOSX
+    REAL :: dSOLCOSY
+    REAL :: dSOLCOSZ
+    REAL :: pdPowerReducFac
     INTEGER iErrorFlag
 
     ! INTERFACE BLOCK SPECIFICATIONS

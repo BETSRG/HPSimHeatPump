@@ -74,7 +74,7 @@ INTEGER, PARAMETER :: Total                 = 2
 INTEGER, PARAMETER :: Ventilation           = 3
 
 ! parameter for autosize
-REAL(r64), PARAMETER :: AutoSize            = -99999.0d0
+REAL, PARAMETER :: AutoSize            = -99999.0
 
 ! parameter for (time-of-peak) sizing format
 CHARACTER(len=*), PARAMETER :: PeakHrMinFmt = "(I2.2,':',I2.2,':00')"
@@ -83,44 +83,44 @@ CHARACTER(len=*), PARAMETER :: PeakHrMinFmt = "(I2.2,':',I2.2,':00')"
 TYPE ZoneSizingInputData
   CHARACTER &
     (len=MaxNameLength) :: ZoneName                 = ' '     ! name of a zone
-  REAL(r64)             :: CoolDesTemp              = 0.0d0   ! zone design cooling supply air temperature [C]
-  REAL(r64)             :: HeatDesTemp              = 0.0d0   ! zone design heating supply air temperature [C]
-  REAL(r64)             :: CoolDesHumRat            = 0.0d0   ! zone design cooling supply air humidity ratio [kg-H2O/kg-air]
-  REAL(r64)             :: HeatDesHumRat            = 0.0d0   ! zone design heating supply air humidity ratio [kg-H2O/kg-air]
+  REAL             :: CoolDesTemp              = 0.0   ! zone design cooling supply air temperature [C]
+  REAL             :: HeatDesTemp              = 0.0   ! zone design heating supply air temperature [C]
+  REAL             :: CoolDesHumRat            = 0.0   ! zone design cooling supply air humidity ratio [kg-H2O/kg-air]
+  REAL             :: HeatDesHumRat            = 0.0   ! zone design heating supply air humidity ratio [kg-H2O/kg-air]
   CHARACTER &
     (len=MaxNameLength) :: DesignSpecOAObjName      = ' '     ! name of the design specification outdoor air object
   INTEGER               :: OADesMethod              = 0       ! choice of how to calculate minimum outside air;
                                                               !  1 = m3/s per person; 2 = m3/s per zone; 3 = m3/s per zone area;
                                                               !  4 = sum of flow from 3 OA input fields;
                                                               !  5 = max of flow from 3 OA input fields
-  REAL(r64)             :: DesOAFlowPPer            = 0.0d0   ! design outside air flow per person in zone [m3/s]
-  REAL(r64)             :: DesOAFlowPerArea         = 0.0d0   ! design outside air flow per zone area [m3/s / m2]
-  REAL(r64)             :: DesOAFlow                = 0.0d0   ! design outside air flow for the zone [m3/s]
+  REAL             :: DesOAFlowPPer            = 0.0   ! design outside air flow per person in zone [m3/s]
+  REAL             :: DesOAFlowPerArea         = 0.0   ! design outside air flow per zone area [m3/s / m2]
+  REAL             :: DesOAFlow                = 0.0   ! design outside air flow for the zone [m3/s]
   INTEGER               :: CoolAirDesMethod         = 0       ! choice of how to get zone cooling design air flow rates;
                                                               !  1 = calc from des day simulation; 2 = m3/s per zone, user input
                                                               !  3 = apply limits to air flow rate from DD calc
-  REAL(r64)             :: DesCoolAirFlow           = 0.0d0   ! design zone supply air flow rate [m3/s]
-  REAL(r64)             :: DesCoolMinAirFlowPerArea = 0.0d0   ! design cooling minimum air flow rate per zone area [m3/s / m2]
-  REAL(r64)             :: DesCoolMinAirFlow        = 0.0d0   ! design cooling minimum air flow rate [m3/s]
-  REAL(r64)             :: DesCoolMinAirFlowFrac    = 0.0d0   ! design cooling minimum air flow rate fraction
+  REAL             :: DesCoolAirFlow           = 0.0   ! design zone supply air flow rate [m3/s]
+  REAL             :: DesCoolMinAirFlowPerArea = 0.0   ! design cooling minimum air flow rate per zone area [m3/s / m2]
+  REAL             :: DesCoolMinAirFlow        = 0.0   ! design cooling minimum air flow rate [m3/s]
+  REAL             :: DesCoolMinAirFlowFrac    = 0.0   ! design cooling minimum air flow rate fraction
                                                               !  (of the cooling design air flow rate)
   INTEGER               :: HeatAirDesMethod         = 0       ! choice of how to get zone heating design air flow rates;
                                                               !  1 = calc from des day simulation; 2 = m3/s per zone, user input
                                                               !  3 = apply limits to air flow rate from DD calc
-  REAL(r64)             :: DesHeatAirFlow           = 0.0d0   ! design zone heating supply air flow rate [m3/s]
-  REAL(r64)             :: DesHeatMaxAirFlowPerArea = 0.0d0   ! design heating maximum air flow rate per zone area [m3/s / m2]
-  REAL(r64)             :: DesHeatMaxAirFlow        = 0.0d0   ! design heating maximum air flow rate [m3/s]
-  REAL(r64)             :: DesHeatMaxAirFlowFrac    = 0.0d0   ! design heating maximum air flow rate fraction
+  REAL             :: DesHeatAirFlow           = 0.0   ! design zone heating supply air flow rate [m3/s]
+  REAL             :: DesHeatMaxAirFlowPerArea = 0.0   ! design heating maximum air flow rate per zone area [m3/s / m2]
+  REAL             :: DesHeatMaxAirFlow        = 0.0   ! design heating maximum air flow rate [m3/s]
+  REAL             :: DesHeatMaxAirFlowFrac    = 0.0   ! design heating maximum air flow rate fraction
                                                               !  (of the cooling design air flow rate)
-  REAL(r64)             :: HeatSizingFactor             = 0.0d0   ! the zone heating sizing ratio
-  REAL(r64)             :: CoolSizingFactor             = 0.0d0   ! the zone cooling sizing ratio
-  REAL(r64)             :: ZoneADEffCooling         = 1.0
-  REAL(r64)             :: ZoneADEffHeating         = 1.0
+  REAL             :: HeatSizingFactor             = 0.0   ! the zone heating sizing ratio
+  REAL             :: CoolSizingFactor             = 0.0   ! the zone cooling sizing ratio
+  REAL             :: ZoneADEffCooling         = 1.0
+  REAL             :: ZoneADEffHeating         = 1.0
   CHARACTER &
     (len=MaxNameLength) :: ZoneAirDistEffObjName      = ' '     ! name of the zone air distribution effectiveness object name
   INTEGER               :: ZoneAirDistributionIndex     = 0   ! index to the zone air distribution object
   INTEGER               :: ZoneDesignSpecOAIndex        = 0   ! index to the zone design spec OA object
-  REAL(r64)             :: ZoneSecondaryRecirculation   = 0.0d0   ! the zone secondary air recirculation fraction
+  REAL             :: ZoneSecondaryRecirculation   = 0.0   ! the zone secondary air recirculation fraction
 END TYPE ZoneSizingInputData
 
 TYPE ZoneSizingData
@@ -130,164 +130,164 @@ TYPE ZoneSizingData
     (len=MaxNameLength) :: CoolDesDay               = ' '     ! name of a cooling design day
   CHARACTER &
     (len=MaxNameLength) :: HeatDesDay               = ' '     ! name of a heating design day
-  REAL(r64)             :: CoolDesTemp              = 0.0d0   ! zone design cooling supply air temperature [C]
-  REAL(r64)             :: HeatDesTemp              = 0.0d0   ! zone design heating supply air temperature [C]
-  REAL(r64)             :: CoolDesHumRat            = 0.0d0   ! zone design cooling supply air humidity ratio [kg-H2O/kg-air]
-  REAL(r64)             :: HeatDesHumRat            = 0.0d0   ! zone design heating supply air humidity ratio [kg-H2O/kg-air]
+  REAL             :: CoolDesTemp              = 0.0   ! zone design cooling supply air temperature [C]
+  REAL             :: HeatDesTemp              = 0.0   ! zone design heating supply air temperature [C]
+  REAL             :: CoolDesHumRat            = 0.0   ! zone design cooling supply air humidity ratio [kg-H2O/kg-air]
+  REAL             :: HeatDesHumRat            = 0.0   ! zone design heating supply air humidity ratio [kg-H2O/kg-air]
   INTEGER               :: OADesMethod              = 0       ! choice of how to calculate minimum outside air;
                                                               !  1 = m3/s per person; 2 = m3/s per zone; 3 = m3/s per zone area;
                                                               !  4 = sum of flow from 3 OA input fields;
                                                               !  5 = max of flow from 3 OA input fields
-  REAL(r64)             :: DesOAFlowPPer            = 0.0d0   ! design outside air flow per person in zone [m3/s]
-  REAL(r64)             :: DesOAFlowPerArea         = 0.0d0   ! design outside air flow per zone area [m3/s / m2]
-  REAL(r64)             :: DesOAFlow                = 0.0d0   ! design outside air flow for the zone [m3/s]
+  REAL             :: DesOAFlowPPer            = 0.0   ! design outside air flow per person in zone [m3/s]
+  REAL             :: DesOAFlowPerArea         = 0.0   ! design outside air flow per zone area [m3/s / m2]
+  REAL             :: DesOAFlow                = 0.0   ! design outside air flow for the zone [m3/s]
   INTEGER               :: CoolAirDesMethod         = 0       ! choice of how to get zone cooling design air flow rates;
                                                               !  1 = calc from des day simulation; 2 = m3/s per zone, user input
                                                               !  3 = apply limits to air flow rate from DD calc
-  REAL(r64)             :: InpDesCoolAirFlow        = 0.0d0   ! design zone supply air flow rate [m3/s]
-  REAL(r64)             :: DesCoolMinAirFlowPerArea = 0.0d0   ! design cooling minimum air flow rate per zone area [m3/s / m2]
-  REAL(r64)             :: DesCoolMinAirFlow        = 0.0d0   ! design cooling minimum air flow rate [m3/s]
-  REAL(r64)             :: DesCoolMinAirFlowFrac    = 0.0d0   ! design cooling minimum air flow rate fraction
+  REAL             :: InpDesCoolAirFlow        = 0.0   ! design zone supply air flow rate [m3/s]
+  REAL             :: DesCoolMinAirFlowPerArea = 0.0   ! design cooling minimum air flow rate per zone area [m3/s / m2]
+  REAL             :: DesCoolMinAirFlow        = 0.0   ! design cooling minimum air flow rate [m3/s]
+  REAL             :: DesCoolMinAirFlowFrac    = 0.0   ! design cooling minimum air flow rate fraction
                                                               !  (of the cooling design air flow rate)
   INTEGER               :: HeatAirDesMethod         = 0       ! choice of how to get zone heating design air flow rates;
                                                               !  1 = calc from des day simulation; 2 = m3/s per zone, user input
                                                               !  3 = apply limits to air flow rate from DD calc
-  REAL(r64)             :: InpDesHeatAirFlow        = 0.0d0   ! design zone heating supply air flow rate [m3/s]
-  REAL(r64)             :: DesHeatMaxAirFlowPerArea = 0.0d0   ! design heating maximum air flow rate per zone area [m3/s / m2]
-  REAL(r64)             :: DesHeatMaxAirFlow        = 0.0d0   ! design heating maximum air flow rate [m3/s]
-  REAL(r64)             :: DesHeatMaxAirFlowFrac    = 0.0d0   ! design heating maximum air flow rate fraction
+  REAL             :: InpDesHeatAirFlow        = 0.0   ! design zone heating supply air flow rate [m3/s]
+  REAL             :: DesHeatMaxAirFlowPerArea = 0.0   ! design heating maximum air flow rate per zone area [m3/s / m2]
+  REAL             :: DesHeatMaxAirFlow        = 0.0   ! design heating maximum air flow rate [m3/s]
+  REAL             :: DesHeatMaxAirFlowFrac    = 0.0   ! design heating maximum air flow rate fraction
                                                               !  (of the cooling design air flow rate)
-  REAL(r64)             :: HeatSizingFactor             = 0.0d0   ! the zone heating sizing ratio
-  REAL(r64)             :: CoolSizingFactor             = 0.0d0   ! the zone cooling sizing ratio
+  REAL             :: HeatSizingFactor             = 0.0   ! the zone heating sizing ratio
+  REAL             :: CoolSizingFactor             = 0.0   ! the zone cooling sizing ratio
   INTEGER               :: ActualZoneNum            = 0       ! index into the Zone data array (in DataHeatBalance)
   INTEGER               :: SupplyAirNode            = 0       ! node number of supply air node
 
-  REAL(r64)             :: DesHeatMassFlow          = 0.0d0   ! zone design heating air mass flow rate [kg/s]
+  REAL             :: DesHeatMassFlow          = 0.0   ! zone design heating air mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideDesHeatMassOn = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesHeatMassFlow  = 0.0D0   ! Value EMS directing to use for Design Heating air mass flow [kg/s]
+  REAL             :: EMSValueDesHeatMassFlow  = 0.0   ! Value EMS directing to use for Design Heating air mass flow [kg/s]
 
-  REAL(r64)             :: DesCoolMassFlow          = 0.0d0   ! zone design cooling air mass flow rate [kg/s]
+  REAL             :: DesCoolMassFlow          = 0.0   ! zone design cooling air mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideDesCoolMassOn = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesCoolMassFlow  = 0.0D0   ! Value EMS directing to use for Design Cooling air mass flow [kg/s]
+  REAL             :: EMSValueDesCoolMassFlow  = 0.0   ! Value EMS directing to use for Design Cooling air mass flow [kg/s]
 
-  REAL(r64)             :: DesHeatLoad              = 0.0d0   ! zone design heating load [W]
+  REAL             :: DesHeatLoad              = 0.0   ! zone design heating load [W]
   LOGICAL               :: EMSOverrideDesHeatLoadOn = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesHeatLoad      = 0.0D0   ! Value EMS directing to use for zone design heating load  [W]
+  REAL             :: EMSValueDesHeatLoad      = 0.0   ! Value EMS directing to use for zone design heating load  [W]
 
-  REAL(r64)             :: DesCoolLoad              = 0.0d0   ! zone design cooling load [W]
+  REAL             :: DesCoolLoad              = 0.0   ! zone design cooling load [W]
   LOGICAL               :: EMSOverrideDesCoolLoadOn = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesCoolLoad      = 0.0D0   ! Value EMS directing to use for zone design cooling load  [W]
+  REAL             :: EMSValueDesCoolLoad      = 0.0   ! Value EMS directing to use for zone design cooling load  [W]
 
-  REAL(r64)             :: DesHeatDens              = 0.0d0   ! zone design heating air density [kg/m3]
-  REAL(r64)             :: DesCoolDens              = 0.0d0   ! zone design cooling air density [kg/m3]
+  REAL             :: DesHeatDens              = 0.0   ! zone design heating air density [kg/m3]
+  REAL             :: DesCoolDens              = 0.0   ! zone design cooling air density [kg/m3]
 
-  REAL(r64)             :: DesHeatVolFlow           = 0.0d0   ! zone design heating air volume flow rate [m3/s]
+  REAL             :: DesHeatVolFlow           = 0.0   ! zone design heating air volume flow rate [m3/s]
   LOGICAL               :: EMSOverrideDesHeatVolOn  = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesHeatVolFlow   = 0.0D0   ! Value EMS directing to use for Design Heating air volume flow [m3/s]
+  REAL             :: EMSValueDesHeatVolFlow   = 0.0   ! Value EMS directing to use for Design Heating air volume flow [m3/s]
 
-  REAL(r64)             :: DesCoolVolFlow           = 0.0d0   ! zone design cooling air volume flow rate [m3/s]
+  REAL             :: DesCoolVolFlow           = 0.0   ! zone design cooling air volume flow rate [m3/s]
   LOGICAL               :: EMSOverrideDesCoolVolOn  = .FALSE. ! true if EMS is acting on this structure
-  REAL(r64)             :: EMSValueDesCoolVolFlow   = 0.0D0   ! Value EMS directing to use for Design cooling air volume flow [m3/s]
+  REAL             :: EMSValueDesCoolVolFlow   = 0.0   ! Value EMS directing to use for Design cooling air volume flow [m3/s]
 
-  REAL(r64)             :: DesHeatVolFlowMax        = 0.0d0   ! zone design heating maximum air volume flow rate [m3/s]
-  REAL(r64)             :: DesCoolVolFlowMin        = 0.0d0   ! zone design cooling minimum air volume flow rate [m3/s]
-  REAL(r64)             :: DesHeatCoilInTemp        = 0.0d0   ! zone heating coil design air inlet temperature [C]
-  REAL(r64)             :: DesCoolCoilInTemp        = 0.0d0   ! zone cooling coil design air inlet temperature [C]
-  REAL(r64)             :: DesHeatCoilInHumRat      = 0.0d0   ! zone heating coil design air inlet humidity ratio [kg/kg]
-  REAL(r64)             :: DesCoolCoilInHumRat      = 0.0d0   ! zone cooling coil design air inlet humidity ratio [kg/kg]
-  REAL(r64)             :: DesHeatCoilInTempTU      = 0.0d0   ! zone heating coil design air inlet temperature (supply air)([C]
-  REAL(r64)             :: DesCoolCoilInTempTU      = 0.0d0   ! zone cooling coil design air inlet temperature (supply air)[C]
-  REAL(r64)             :: DesHeatCoilInHumRatTU    = 0.0d0   ! zone heating coil design air inlet humidity ratio
+  REAL             :: DesHeatVolFlowMax        = 0.0   ! zone design heating maximum air volume flow rate [m3/s]
+  REAL             :: DesCoolVolFlowMin        = 0.0   ! zone design cooling minimum air volume flow rate [m3/s]
+  REAL             :: DesHeatCoilInTemp        = 0.0   ! zone heating coil design air inlet temperature [C]
+  REAL             :: DesCoolCoilInTemp        = 0.0   ! zone cooling coil design air inlet temperature [C]
+  REAL             :: DesHeatCoilInHumRat      = 0.0   ! zone heating coil design air inlet humidity ratio [kg/kg]
+  REAL             :: DesCoolCoilInHumRat      = 0.0   ! zone cooling coil design air inlet humidity ratio [kg/kg]
+  REAL             :: DesHeatCoilInTempTU      = 0.0   ! zone heating coil design air inlet temperature (supply air)([C]
+  REAL             :: DesCoolCoilInTempTU      = 0.0   ! zone cooling coil design air inlet temperature (supply air)[C]
+  REAL             :: DesHeatCoilInHumRatTU    = 0.0   ! zone heating coil design air inlet humidity ratio
                                                               !  (supply air) [kg/kg]
-  REAL(r64)             :: DesCoolCoilInHumRatTU    = 0.0d0   ! zone cooling coil design air inlet humidity ratio
+  REAL             :: DesCoolCoilInHumRatTU    = 0.0   ! zone cooling coil design air inlet humidity ratio
                                                               !  (supply air) [kg/kg]
-  REAL(r64)             :: HeatMassFlow             = 0.0d0   ! current zone heating air mass flow rate (HVAC time step)
-  REAL(r64)             :: CoolMassFlow             = 0.0d0   ! current zone cooling air mass flow rate (HVAC time step)
-  REAL(r64)             :: HeatLoad                 = 0.0d0   ! current zone heating load (HVAC time step)
-  REAL(r64)             :: CoolLoad                 = 0.0d0   ! current zone heating load (HVAC time step)
-  REAL(r64)             :: HeatZoneTemp             = 0.0d0   ! current zone temperature (heating, time step)
-  REAL(r64)             :: HeatOutTemp              = 0.0d0   ! current outdoor temperature (heating, time step)
-  REAL(r64)             :: HeatZoneRetTemp          = 0.0d0   ! current zone return temperature (heating, time step)
-  REAL(r64)             :: CoolZoneTemp             = 0.0d0   ! current zone temperature (cooling, time step)
-  REAL(r64)             :: CoolOutTemp              = 0.0d0   ! current Outdoor temperature (cooling, time step)
-  REAL(r64)             :: CoolZoneRetTemp          = 0.0d0   ! current zone return temperature (cooling, time step)
-  REAL(r64)             :: HeatZoneHumRat           = 0.0d0   ! current zone humidity ratio (heating, time step)
-  REAL(r64)             :: CoolZoneHumRat           = 0.0d0   ! current zone humidity ratio (cooling, time step)
-  REAL(r64)             :: HeatOutHumRat            = 0.0d0   ! current outdoor humidity ratio (heating, time step)
-  REAL(r64)             :: CoolOutHumRat            = 0.0d0   ! current outdoor humidity ratio (cooling, time step)
-  REAL(r64)             :: ZoneTempAtHeatPeak       = 0.0d0   ! zone temp at max heating [C]
-  REAL(r64)             :: ZoneRetTempAtHeatPeak    = 0.0d0   ! zone return temp at max heating [C]
-  REAL(r64)             :: OutTempAtHeatPeak        = 0.0d0   ! outdoor temperature at max heating [C]
-  REAL(r64)             :: ZoneTempAtCoolPeak       = 0.0d0   ! zone temp at max cooling [C]
-  REAL(r64)             :: ZoneRetTempAtCoolPeak    = 0.0d0   ! zone return temp at max cooling [C]
-  REAL(r64)             :: OutTempAtCoolPeak        = 0.0d0   ! outdoor temperature at max cooling [C]
-  REAL(r64)             :: ZoneHumRatAtHeatPeak     = 0.0d0   ! zone humidity ratio at max heating [kg/kg]
-  REAL(r64)             :: ZoneHumRatAtCoolPeak     = 0.0d0   ! zone humidity ratio at max cooling [kg/kg]
-  REAL(r64)             :: OutHumRatAtHeatPeak      = 0.0d0   ! outdoor humidity at max heating [kg/kg]
-  REAL(r64)             :: OutHumRatAtCoolPeak      = 0.0d0   ! outdoor humidity at max cooling [kg/kg]
+  REAL             :: HeatMassFlow             = 0.0   ! current zone heating air mass flow rate (HVAC time step)
+  REAL             :: CoolMassFlow             = 0.0   ! current zone cooling air mass flow rate (HVAC time step)
+  REAL             :: HeatLoad                 = 0.0   ! current zone heating load (HVAC time step)
+  REAL             :: CoolLoad                 = 0.0   ! current zone heating load (HVAC time step)
+  REAL             :: HeatZoneTemp             = 0.0   ! current zone temperature (heating, time step)
+  REAL             :: HeatOutTemp              = 0.0   ! current outdoor temperature (heating, time step)
+  REAL             :: HeatZoneRetTemp          = 0.0   ! current zone return temperature (heating, time step)
+  REAL             :: CoolZoneTemp             = 0.0   ! current zone temperature (cooling, time step)
+  REAL             :: CoolOutTemp              = 0.0   ! current Outdoor temperature (cooling, time step)
+  REAL             :: CoolZoneRetTemp          = 0.0   ! current zone return temperature (cooling, time step)
+  REAL             :: HeatZoneHumRat           = 0.0   ! current zone humidity ratio (heating, time step)
+  REAL             :: CoolZoneHumRat           = 0.0   ! current zone humidity ratio (cooling, time step)
+  REAL             :: HeatOutHumRat            = 0.0   ! current outdoor humidity ratio (heating, time step)
+  REAL             :: CoolOutHumRat            = 0.0   ! current outdoor humidity ratio (cooling, time step)
+  REAL             :: ZoneTempAtHeatPeak       = 0.0   ! zone temp at max heating [C]
+  REAL             :: ZoneRetTempAtHeatPeak    = 0.0   ! zone return temp at max heating [C]
+  REAL             :: OutTempAtHeatPeak        = 0.0   ! outdoor temperature at max heating [C]
+  REAL             :: ZoneTempAtCoolPeak       = 0.0   ! zone temp at max cooling [C]
+  REAL             :: ZoneRetTempAtCoolPeak    = 0.0   ! zone return temp at max cooling [C]
+  REAL             :: OutTempAtCoolPeak        = 0.0   ! outdoor temperature at max cooling [C]
+  REAL             :: ZoneHumRatAtHeatPeak     = 0.0   ! zone humidity ratio at max heating [kg/kg]
+  REAL             :: ZoneHumRatAtCoolPeak     = 0.0   ! zone humidity ratio at max cooling [kg/kg]
+  REAL             :: OutHumRatAtHeatPeak      = 0.0   ! outdoor humidity at max heating [kg/kg]
+  REAL             :: OutHumRatAtCoolPeak      = 0.0   ! outdoor humidity at max cooling [kg/kg]
   INTEGER               :: TimeStepNumAtHeatMax     = 0       ! time step number (in day) at Heating peak
   INTEGER               :: TimeStepNumAtCoolMax     = 0       ! time step number (in day) at cooling peak
   INTEGER               :: HeatDDNum                = 0       ! design day index of design day causing heating peak
   INTEGER               :: CoolDDNum                = 0       ! design day index of design day causing heating peak
   CHARACTER(len=8)      :: cHeatDDDate              = ' '     ! date of design day causing heating peak
   CHARACTER(len=8)      :: cCoolDDDate              = ' '     ! date of design day causing cooling peak
-  REAL(r64)             :: MinOA                    = 0.0d0   ! design minimum outside air in m3/s
-  REAL(r64)             :: DesCoolMinAirFlow2       = 0.0d0   ! design cooling minimum air flow rate [m3/s] derived from
+  REAL             :: MinOA                    = 0.0   ! design minimum outside air in m3/s
+  REAL             :: DesCoolMinAirFlow2       = 0.0   ! design cooling minimum air flow rate [m3/s] derived from
                                                               !  DesCoolMinAirFlowPerArea
-  REAL(r64)             :: DesHeatMaxAirFlow2       = 0.0d0   ! design heating maximum air flow rate [m3/s] derived from
+  REAL             :: DesHeatMaxAirFlow2       = 0.0   ! design heating maximum air flow rate [m3/s] derived from
                                                               !  DesHeatMaxAirFlowPerArea
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatFlowSeq        ! daily sequence of zone heating air mass flow rate
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatFlowSeq        ! daily sequence of zone heating air mass flow rate
                                                               !  (zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolFlowSeq        ! daily sequence of zone cooling air mass flow rate
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolFlowSeq        ! daily sequence of zone cooling air mass flow rate
                                                               !  (zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatLoadSeq        ! daily sequence of zone heating load zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolLoadSeq        ! daily sequence of zone cooling load zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatZoneTempSeq    ! daily sequence of zone temperatures (heating, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatOutTempSeq     ! daily sequence of outdoor temperatures (heating, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatZoneRetTempSeq ! daily sequence of zone return temperatures (heating,
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatLoadSeq        ! daily sequence of zone heating load zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolLoadSeq        ! daily sequence of zone cooling load zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatZoneTempSeq    ! daily sequence of zone temperatures (heating, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatOutTempSeq     ! daily sequence of outdoor temperatures (heating, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatZoneRetTempSeq ! daily sequence of zone return temperatures (heating,
                                                               !  zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolZoneTempSeq    ! daily sequence of zone temperatures (cooling, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolOutTempSeq     ! daily sequence of outdoor temperatures (cooling, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolZoneRetTempSeq ! daily sequence of zone return temperatures (cooling,
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolZoneTempSeq    ! daily sequence of zone temperatures (cooling, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolOutTempSeq     ! daily sequence of outdoor temperatures (cooling, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolZoneRetTempSeq ! daily sequence of zone return temperatures (cooling,
                                                               !  zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatZoneHumRatSeq  ! daily sequence of zone humidity ratios (heating, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolZoneHumRatSeq  ! daily sequence of zone humidity ratios (cooling, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatOutHumRatSeq   ! daily sequence of outdoor humidity ratios (heating, zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolOutHumRatSeq   ! daily sequence of outdoor humidity ratios (cooling, zone time step)
-  REAL(r64)             :: ZoneADEffCooling         = 1.0d0   ! the zone air distribution effectiveness in cooling mode
-  REAL(r64)             :: ZoneADEffHeating         = 1.0d0   ! the zone air distribution effectiveness in heating mode
-  REAL(r64)             :: ZoneSecondaryRecirculation   = 0.0d0   ! the zone secondary air recirculation fraction
-  REAL(r64)             :: ZonePrimaryAirFraction       = 0.0d0   ! the zone primary air fraction for cooling based calculations
-  REAL(r64)             :: ZonePrimaryAirFractionHtg    = 0.0d0   ! the zone primary air fraction for heating based calculations
-  REAL(r64)             :: ZoneOAFracCooling        = 0.0d0   ! OA fraction in cooling mode
-  REAL(r64)             :: ZoneOAFracHeating        = 0.0d0   ! OA fraction in heating mode
-  REAL(r64)             :: TotalOAFromPeople        = 0.0d0   ! Zone OA required due to people
-  REAL(r64)             :: TotalOAFromArea          = 0.0d0   ! Zone OA required based on floor area
-  REAL(r64)             :: TotPeopleInZone          = 0.0d0   ! total number of people in the zone
-  REAL(r64)             :: ZonePeakOccupancy        = 0.0d0   ! zone peak occupancy based on max schedule value
-  REAL(r64)             :: SupplyAirAdjustFactor    = 1.0d0   ! supply air adjustment factor for next time step if OA is capped
-  REAL(r64)             :: ZpzClgByZone             = 0.0d0   ! OA Std 62.1 required fraction in cooling mode
-  REAL(r64)             :: ZpzHtgByZone             = 0.0d0   ! OA Std 62.1 required fraction in heating mode
-  REAL(r64)             :: VozClgByZone             = 0.0d0   ! value of required cooling vent to zone, used in 62.1 tabular report
-  REAL(r64)             :: VozHtgByZone             = 0.0d0   ! value of required heating vent to zone, used in 62.1 tabular report
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatZoneHumRatSeq  ! daily sequence of zone humidity ratios (heating, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolZoneHumRatSeq  ! daily sequence of zone humidity ratios (cooling, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatOutHumRatSeq   ! daily sequence of outdoor humidity ratios (heating, zone time step)
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolOutHumRatSeq   ! daily sequence of outdoor humidity ratios (cooling, zone time step)
+  REAL             :: ZoneADEffCooling         = 1.0   ! the zone air distribution effectiveness in cooling mode
+  REAL             :: ZoneADEffHeating         = 1.0   ! the zone air distribution effectiveness in heating mode
+  REAL             :: ZoneSecondaryRecirculation   = 0.0   ! the zone secondary air recirculation fraction
+  REAL             :: ZonePrimaryAirFraction       = 0.0   ! the zone primary air fraction for cooling based calculations
+  REAL             :: ZonePrimaryAirFractionHtg    = 0.0   ! the zone primary air fraction for heating based calculations
+  REAL             :: ZoneOAFracCooling        = 0.0   ! OA fraction in cooling mode
+  REAL             :: ZoneOAFracHeating        = 0.0   ! OA fraction in heating mode
+  REAL             :: TotalOAFromPeople        = 0.0   ! Zone OA required due to people
+  REAL             :: TotalOAFromArea          = 0.0   ! Zone OA required based on floor area
+  REAL             :: TotPeopleInZone          = 0.0   ! total number of people in the zone
+  REAL             :: ZonePeakOccupancy        = 0.0   ! zone peak occupancy based on max schedule value
+  REAL             :: SupplyAirAdjustFactor    = 1.0   ! supply air adjustment factor for next time step if OA is capped
+  REAL             :: ZpzClgByZone             = 0.0   ! OA Std 62.1 required fraction in cooling mode
+  REAL             :: ZpzHtgByZone             = 0.0   ! OA Std 62.1 required fraction in heating mode
+  REAL             :: VozClgByZone             = 0.0   ! value of required cooling vent to zone, used in 62.1 tabular report
+  REAL             :: VozHtgByZone             = 0.0   ! value of required heating vent to zone, used in 62.1 tabular report
 
 END TYPE ZoneSizingData
 
 TYPE TermUnitSizingData
-  REAL(r64)             :: AirVolFlow               = 0.0d0 ! design air vol flow rate for single duct terminal unit [m3/s]
-  REAL(r64)             :: MaxHWVolFlow             = 0.0d0 ! design Hot Water vol flow for single duct terminal unit [m3/s]
-  REAL(r64)             :: MaxSTVolFlow             = 0.0d0 ! design Steam vol flow rate for single duct terminal unit [m3/s]
-  REAL(r64)             :: MaxCWVolFlow             = 0.0d0 ! design Cold Water vol flow for single duct terminal unit [m3/s]
-  REAL(r64)             :: MinFlowFrac              = 0.0d0 ! design minimum flow fraction for a terminal unit
-  REAL(r64)             :: InducRat                 = 0.0d0 ! design induction ratio for a terminal unit
-  REAL(r64)             :: ReheatMult               = 1.0d0 ! multiplier for reheat coil UA calculation
+  REAL             :: AirVolFlow               = 0.0 ! design air vol flow rate for single duct terminal unit [m3/s]
+  REAL             :: MaxHWVolFlow             = 0.0 ! design Hot Water vol flow for single duct terminal unit [m3/s]
+  REAL             :: MaxSTVolFlow             = 0.0 ! design Steam vol flow rate for single duct terminal unit [m3/s]
+  REAL             :: MaxCWVolFlow             = 0.0 ! design Cold Water vol flow for single duct terminal unit [m3/s]
+  REAL             :: MinFlowFrac              = 0.0 ! design minimum flow fraction for a terminal unit
+  REAL             :: InducRat                 = 0.0 ! design induction ratio for a terminal unit
+  REAL             :: ReheatMult               = 1.0 ! multiplier for reheat coil UA calculation
 END TYPE TermUnitSizingData
 
 TYPE ZoneEqSizingData                                       ! data saved from zone eq component sizing and passed to subcomponents
-  REAL(r64)             :: AirVolFlow               = 0.0d0 ! design air vol flow rate for zone equipment unit [m3/s]
-  REAL(r64)             :: MaxHWVolFlow             = 0.0d0 ! design Hot Water vol flow for zone equipment unit [m3/s]
-  REAL(r64)             :: MaxCWVolFlow             = 0.0d0 ! design Cold Water vol flow for zone equipment unit [m3/s]
-  REAL(r64)             :: OAVolFlow                = 0.0d0 ! design outside air flow for zone equipment unit [m3/s]
+  REAL             :: AirVolFlow               = 0.0 ! design air vol flow rate for zone equipment unit [m3/s]
+  REAL             :: MaxHWVolFlow             = 0.0 ! design Hot Water vol flow for zone equipment unit [m3/s]
+  REAL             :: MaxCWVolFlow             = 0.0 ! design Cold Water vol flow for zone equipment unit [m3/s]
+  REAL             :: OAVolFlow                = 0.0 ! design outside air flow for zone equipment unit [m3/s]
 END TYPE ZoneEqSizingData
 
 TYPE SystemSizingInputData
@@ -298,24 +298,24 @@ TYPE SystemSizingInputData
   INTEGER               :: SizingOption             = 0       ! 1 = noncoincident, 2 = coincident
   INTEGER               :: CoolOAOption             = 0       ! 1 = use 100% outside air; 2 = use min OA; for cooling sizing
   INTEGER               :: HeatOAOption             = 0       ! 1 = use 100% outside air; 2 = use min OA; for heating sizing
-  REAL(r64)             :: DesOutAirVolFlow         = 0.0d0   ! design (minimum) outside air flow rate [m3/s]
-  REAL(r64)             :: SysAirMinFlowRat         = 0.0d0   ! minimum system air flow ratio
-  REAL(r64)             :: PreheatTemp              = 0.0d0   ! preheat design set temperature [C]
-  REAL(r64)             :: PrecoolTemp              = 0.0d0   ! precool design set temperature [C]
-  REAL(r64)             :: PreheatHumRat            = 0.0d0   ! preheat design humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: PrecoolHumRat            = 0.0d0   ! precool design humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: CoolSupTemp              = 0.0d0   ! cooling design supply air temperature [C]
-  REAL(r64)             :: HeatSupTemp              = 0.0d0   ! heating design supply air temperature [C]
-  REAL(r64)             :: CoolSupHumRat            = 0.0d0   ! cooling design supply air humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: HeatSupHumRat            = 0.0d0   ! heating design supply air humidity ratio [kg water/kg dry air]
+  REAL             :: DesOutAirVolFlow         = 0.0   ! design (minimum) outside air flow rate [m3/s]
+  REAL             :: SysAirMinFlowRat         = 0.0   ! minimum system air flow ratio
+  REAL             :: PreheatTemp              = 0.0   ! preheat design set temperature [C]
+  REAL             :: PrecoolTemp              = 0.0   ! precool design set temperature [C]
+  REAL             :: PreheatHumRat            = 0.0   ! preheat design humidity ratio [kg water/kg dry air]
+  REAL             :: PrecoolHumRat            = 0.0   ! precool design humidity ratio [kg water/kg dry air]
+  REAL             :: CoolSupTemp              = 0.0   ! cooling design supply air temperature [C]
+  REAL             :: HeatSupTemp              = 0.0   ! heating design supply air temperature [C]
+  REAL             :: CoolSupHumRat            = 0.0   ! cooling design supply air humidity ratio [kg water/kg dry air]
+  REAL             :: HeatSupHumRat            = 0.0   ! heating design supply air humidity ratio [kg water/kg dry air]
   INTEGER               :: CoolAirDesMethod         = 0       ! choice of how to get system cooling design air flow rates;
                                                               !  1 = calc from des day simulation; 2=m3/s per system, user input
-  REAL(r64)             :: DesCoolAirFlow           = 0.0d0   ! design system supply air flow rate for cooling[m3/s]
+  REAL             :: DesCoolAirFlow           = 0.0   ! design system supply air flow rate for cooling[m3/s]
   INTEGER               :: HeatAirDesMethod         = 0       ! choice of how to get system heating design air flow rates;
                                                               !  1 = calc from des day simulation; 2=m3/s per zone, user input
-  REAL(r64)             :: DesHeatAirFlow           = 0.0d0   ! design system heating supply air flow rate [m3/s]
+  REAL             :: DesHeatAirFlow           = 0.0   ! design system heating supply air flow rate [m3/s]
   INTEGER               :: SystemOAMethod           = 0       ! System Outdoor Air Method; 1 = SOAM_ZoneSum, 2 = SOAM_VRP
-  REAL(r64)             :: MaxZoneOAFraction        = 0.0d0   ! maximum value of min OA for zones served by system
+  REAL             :: MaxZoneOAFraction        = 0.0   ! maximum value of min OA for zones served by system
   LOGICAL               :: OAAutosized              = .FALSE.  ! Set to true if design OA vol flow is set to 'autosize'
                                                                ! in Sizing:System
 END TYPE SystemSizingInputData
@@ -332,93 +332,93 @@ TYPE SystemSizingData             ! Contains data for system sizing
   INTEGER               :: SizingOption             = 0       ! 1 = noncoincident, 2 = coincident.
   INTEGER               :: CoolOAOption             = 0       ! 1 = use 100% outside air; 2 = use min OA; for cooling sizing
   INTEGER               :: HeatOAOption             = 0       ! 1 = use 100% outside air; 2 = use min OA; for heating sizing
-  REAL(r64)             :: DesOutAirVolFlow         = 0.0d0   ! design (minimum) outside air flow rate [m3/s]
-  REAL(r64)             :: SysAirMinFlowRat         = 0.0d0   ! minimum system air flow ratio
-  REAL(r64)             :: PreheatTemp              = 0.0d0   ! preheat design set temperature
-  REAL(r64)             :: PrecoolTemp              = 0.0d0   ! precool design set temperature [C]
-  REAL(r64)             :: PreheatHumRat            = 0.0d0   ! preheat design humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: PrecoolHumRat            = 0.0d0   ! precool design humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: CoolSupTemp              = 0.0d0   ! cooling design supply air temperature [C]
-  REAL(r64)             :: HeatSupTemp              = 0.0d0   ! heating design supply air temperature[C]
-  REAL(r64)             :: CoolSupHumRat            = 0.0d0   ! cooling design supply air humidity ratio [kg water/kg dry air]
-  REAL(r64)             :: HeatSupHumRat            = 0.0d0   ! heating design supply air humidity ratio [kg water/kg dry air]
+  REAL             :: DesOutAirVolFlow         = 0.0   ! design (minimum) outside air flow rate [m3/s]
+  REAL             :: SysAirMinFlowRat         = 0.0   ! minimum system air flow ratio
+  REAL             :: PreheatTemp              = 0.0   ! preheat design set temperature
+  REAL             :: PrecoolTemp              = 0.0   ! precool design set temperature [C]
+  REAL             :: PreheatHumRat            = 0.0   ! preheat design humidity ratio [kg water/kg dry air]
+  REAL             :: PrecoolHumRat            = 0.0   ! precool design humidity ratio [kg water/kg dry air]
+  REAL             :: CoolSupTemp              = 0.0   ! cooling design supply air temperature [C]
+  REAL             :: HeatSupTemp              = 0.0   ! heating design supply air temperature[C]
+  REAL             :: CoolSupHumRat            = 0.0   ! cooling design supply air humidity ratio [kg water/kg dry air]
+  REAL             :: HeatSupHumRat            = 0.0   ! heating design supply air humidity ratio [kg water/kg dry air]
   INTEGER               :: CoolAirDesMethod         = 0       ! choice of how to get system design cooling air flow rates;
                                                               !  1 = calc from des day simulation; 2=m3/s per system, user input
   INTEGER               :: HeatAirDesMethod         = 0       ! choice of how to get system design heating air flow rates;
                                                               !  1 = calc from des day simulation; 2=m3/s per system, user input
-  REAL(r64)             :: InpDesCoolAirFlow        = 0.0d0   ! input design system supply air flow rate [m3/s]
-  REAL(r64)             :: InpDesHeatAirFlow        = 0.0d0   ! input design system heating supply air flow rate [m3/s]
-  REAL(r64)             :: CoinCoolMassFlow         = 0.0d0   ! coincident peak cooling mass flow rate [kg/s]
+  REAL             :: InpDesCoolAirFlow        = 0.0   ! input design system supply air flow rate [m3/s]
+  REAL             :: InpDesHeatAirFlow        = 0.0   ! input design system heating supply air flow rate [m3/s]
+  REAL             :: CoinCoolMassFlow         = 0.0   ! coincident peak cooling mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideCoinCoolMassFlowOn = .FALSE. ! If true, EMS to change coincident peak cooling mass flow rate
-  REAL(r64)             :: EMSValueCoinCoolMassFlow   = 0.0D0 ! Value EMS wants for coincident peak cooling mass flow rate [kg/s]
+  REAL             :: EMSValueCoinCoolMassFlow   = 0.0 ! Value EMS wants for coincident peak cooling mass flow rate [kg/s]
 
-  REAL(r64)             :: CoinHeatMassFlow         = 0.0d0   ! coincident peak heating mass flow rate [kg/s]
+  REAL             :: CoinHeatMassFlow         = 0.0   ! coincident peak heating mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideCoinHeatMassFlowOn = .FALSE. ! If true, EMS to set coincident peak heating mass flow rate
-  REAL(r64)             :: EMSValueCoinHeatMassFlow   = 0.0D0 ! Value EMS wants for coincident peak heating mass flow rate [kg/s]
+  REAL             :: EMSValueCoinHeatMassFlow   = 0.0 ! Value EMS wants for coincident peak heating mass flow rate [kg/s]
 
-  REAL(r64)             :: NonCoinCoolMassFlow      = 0.0d0   ! noncoincident peak cooling mass flow rate [kg/s]
+  REAL             :: NonCoinCoolMassFlow      = 0.0   ! noncoincident peak cooling mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideNonCoinCoolMassFlowOn = .FALSE. ! true, EMS to set noncoincident peak cooling mass flow rate
-  REAL(r64)             :: EMSValueNonCoinCoolMassFlow   = 0.0D0 ! Value EMS for noncoincident peak cooling mass flow rate [kg/s]
+  REAL             :: EMSValueNonCoinCoolMassFlow   = 0.0 ! Value EMS for noncoincident peak cooling mass flow rate [kg/s]
 
-  REAL(r64)             :: NonCoinHeatMassFlow      = 0.0d0   ! noncoincident peak heating mass flow rate [kg/s]
+  REAL             :: NonCoinHeatMassFlow      = 0.0   ! noncoincident peak heating mass flow rate [kg/s]
   LOGICAL               :: EMSOverrideNonCoinHeatMassFlowOn = .FALSE. ! true, EMS to set noncoincident peak heating mass flow rate
-  REAL(r64)             :: EMSValueNonCoinHeatMassFlow   = 0.0D0 ! Value EMS for noncoincident peak heating mass flow rate [kg/s]
+  REAL             :: EMSValueNonCoinHeatMassFlow   = 0.0 ! Value EMS for noncoincident peak heating mass flow rate [kg/s]
 
-  REAL(r64)             :: DesMainVolFlow           = 0.0d0   ! design main supply duct volume flow [m3/s]
+  REAL             :: DesMainVolFlow           = 0.0   ! design main supply duct volume flow [m3/s]
   LOGICAL               :: EMSOverrideDesMainVolFlowOn = .FALSE. ! If true, EMS is acting to change DesMainVolFlow
-  REAL(r64)             :: EMSValueDesMainVolFlow   = 0.0D0 ! Value EMS providing for design main supply duct volume flow [m3/s]
+  REAL             :: EMSValueDesMainVolFlow   = 0.0 ! Value EMS providing for design main supply duct volume flow [m3/s]
 
-  REAL(r64)             :: DesHeatVolFlow           = 0.0d0   ! design heat supply duct volume flow [m3/s]
+  REAL             :: DesHeatVolFlow           = 0.0   ! design heat supply duct volume flow [m3/s]
   LOGICAL               :: EMSOverrideDesHeatVolFlowOn = .FALSE. ! If true, EMS is acting to change DesCoolVolFlow
-  REAL(r64)             :: EMSValueDesHeatVolFlow   = 0.0D0 ! Value EMS providing for design cool  supply duct volume flow [m3/s]
+  REAL             :: EMSValueDesHeatVolFlow   = 0.0 ! Value EMS providing for design cool  supply duct volume flow [m3/s]
 
-  REAL(r64)             :: DesCoolVolFlow           = 0.0d0   ! design cool  supply duct volume flow [m3/s]
+  REAL             :: DesCoolVolFlow           = 0.0   ! design cool  supply duct volume flow [m3/s]
   LOGICAL               :: EMSOverrideDesCoolVolFlowOn = .FALSE. ! If true, EMS is acting to change DesCoolVolFlow
-  REAL(r64)             :: EMSValueDesCoolVolFlow   = 0.0D0 ! Value EMS providing for design cool  supply duct volume flow [m3/s]
+  REAL             :: EMSValueDesCoolVolFlow   = 0.0 ! Value EMS providing for design cool  supply duct volume flow [m3/s]
 
-  REAL(r64)             :: SensCoolCap              = 0.0d0   ! design sensible cooling capacity [W]
-  REAL(r64)             :: HeatCap                  = 0.0d0   ! design heating capacity [W]
-  REAL(r64)             :: PreheatCap               = 0.0d0   ! design preheat capacity [W]
-  REAL(r64)             :: CoolMixTemp              = 0.0d0   ! design mixed air temperature for cooling [C]
-  REAL(r64)             :: CoolMixHumRat            = 0.0d0   ! design mixed air hum ratio for cooling [kg water/kg dry air]
-  REAL(r64)             :: CoolRetTemp              = 0.0d0   ! design return air temperature for cooling [C]
-  REAL(r64)             :: CoolRetHumRat            = 0.0d0   ! design return air hum ratio for cooling [kg water/kg dry air]
-  REAL(r64)             :: CoolOutTemp              = 0.0d0   ! design outside air temperature for cooling [C]
-  REAL(r64)             :: CoolOutHumRat            = 0.0d0   ! design outside air hum ratio for cooling [kg water/kg dry air]
-  REAL(r64)             :: HeatMixTemp              = 0.0d0   ! design mixed air temperature for heating [C]
-  REAL(r64)             :: HeatMixHumRat            = 0.0d0   ! design mixed air hum ratio for heating [kg water/kg dry air]
-  REAL(r64)             :: HeatRetTemp              = 0.0d0   ! design return air temperature for heating [C]
-  REAL(r64)             :: HeatRetHumRat            = 0.0d0   ! design return air hum ratio for heating [kg water/kg dry air]
-  REAL(r64)             :: HeatOutTemp              = 0.0d0   ! design outside air temperature for heating [C]
-  REAL(r64)             :: HeatOutHumRat            = 0.0d0   ! design outside air hum ratio for Heating [kg water/kg dry air]
-  REAL(r64)             :: DesCoolVolFlowMin        = 0.0d0   ! design minimum system cooling flow rate [m3/s]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatFlowSeq         ! daily sequence of system heating air mass flow rate
+  REAL             :: SensCoolCap              = 0.0   ! design sensible cooling capacity [W]
+  REAL             :: HeatCap                  = 0.0   ! design heating capacity [W]
+  REAL             :: PreheatCap               = 0.0   ! design preheat capacity [W]
+  REAL             :: CoolMixTemp              = 0.0   ! design mixed air temperature for cooling [C]
+  REAL             :: CoolMixHumRat            = 0.0   ! design mixed air hum ratio for cooling [kg water/kg dry air]
+  REAL             :: CoolRetTemp              = 0.0   ! design return air temperature for cooling [C]
+  REAL             :: CoolRetHumRat            = 0.0   ! design return air hum ratio for cooling [kg water/kg dry air]
+  REAL             :: CoolOutTemp              = 0.0   ! design outside air temperature for cooling [C]
+  REAL             :: CoolOutHumRat            = 0.0   ! design outside air hum ratio for cooling [kg water/kg dry air]
+  REAL             :: HeatMixTemp              = 0.0   ! design mixed air temperature for heating [C]
+  REAL             :: HeatMixHumRat            = 0.0   ! design mixed air hum ratio for heating [kg water/kg dry air]
+  REAL             :: HeatRetTemp              = 0.0   ! design return air temperature for heating [C]
+  REAL             :: HeatRetHumRat            = 0.0   ! design return air hum ratio for heating [kg water/kg dry air]
+  REAL             :: HeatOutTemp              = 0.0   ! design outside air temperature for heating [C]
+  REAL             :: HeatOutHumRat            = 0.0   ! design outside air hum ratio for Heating [kg water/kg dry air]
+  REAL             :: DesCoolVolFlowMin        = 0.0   ! design minimum system cooling flow rate [m3/s]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatFlowSeq         ! daily sequence of system heating air mass flow rate
                                                                !  (zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: CoolFlowSeq         ! daily sequence of system cooling air mass flow rate
+  REAL, ALLOCATABLE, DIMENSION(:)  :: CoolFlowSeq         ! daily sequence of system cooling air mass flow rate
                                                                !  (zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SensCoolCapSeq      ! daily sequence of system sensible cooling capacity
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SensCoolCapSeq      ! daily sequence of system sensible cooling capacity
                                                                !  (zone time step)
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HeatCapSeq          ! daily sequence of system heating capacity [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: PreHeatCapSeq       ! daily sequence of system preheat capacity [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysCoolRetTempSeq   ! daily sequence of system cooling return temperatures [C]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HeatCapSeq          ! daily sequence of system heating capacity [zone time step]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: PreHeatCapSeq       ! daily sequence of system preheat capacity [zone time step]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysCoolRetTempSeq   ! daily sequence of system cooling return temperatures [C]
                                                                !  [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysCoolRetHumRatSeq ! daily sequence of system cooling return humidity ratios
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysCoolRetHumRatSeq ! daily sequence of system cooling return humidity ratios
                                                                !  [kg water/kg dry air] [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysHeatRetTempSeq   ! daily sequence of system heating return temperatures [C]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysHeatRetTempSeq   ! daily sequence of system heating return temperatures [C]
                                                                !   [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysHeatRetHumRatSeq ! daily sequence of system heating return humidity ratios
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysHeatRetHumRatSeq ! daily sequence of system heating return humidity ratios
                                                                !  [kg water/kg dry air] [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysCoolOutTempSeq   ! daily sequence of system cooling outside temperatures [C]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysCoolOutTempSeq   ! daily sequence of system cooling outside temperatures [C]
                                                                !  [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysCoolOutHumRatSeq ! daily sequence of system cooling outside humidity ratios
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysCoolOutHumRatSeq ! daily sequence of system cooling outside humidity ratios
                                                                !  [kg water/kg dry air] [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysHeatOutTempSeq   ! daily sequence of system heating outside temperatures [C]
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysHeatOutTempSeq   ! daily sequence of system heating outside temperatures [C]
                                                                !  [zone time step]
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: SysHeatOutHumRatSeq ! daily sequence of system heating outside humidity ratios
+  REAL, ALLOCATABLE, DIMENSION(:)  :: SysHeatOutHumRatSeq ! daily sequence of system heating outside humidity ratios
                                                                !   [kg water/kg dry air] [zone time step]
   INTEGER               :: SystemOAMethod           = 0        ! System Outdoor Air Method; 1 = SOAM_ZoneSum, 2 = SOAM_VRP
-  REAL(r64)             :: MaxZoneOAFraction        = 0.0d0    ! maximum value of min OA for zones served by system
-  REAL(r64)             :: SysUncOA                 = 0.0d0    ! uncorrected system outdoor air flow based on zone people and
+  REAL             :: MaxZoneOAFraction        = 0.0    ! maximum value of min OA for zones served by system
+  REAL             :: SysUncOA                 = 0.0    ! uncorrected system outdoor air flow based on zone people and
                                                                ! zone area
   LOGICAL               :: OAAutosized              = .FALSE.  ! Set to true if design OA vol flow is set to 'autosize'
                                                                ! in Sizing:System
@@ -428,44 +428,44 @@ TYPE PlantSizingData
   CHARACTER &
     (len=MaxNameLength) :: PlantLoopName            = ' '     ! name of PLANT LOOP or CONDENSER LOOP object
   INTEGER               :: LoopType                 = 0       ! type of loop: 1=heating, 2=cooling, 3=condenser
-  REAL(r64)             :: ExitTemp                 = 0.0d0   ! loop design exit (supply) temperature [C]
-  REAL(r64)             :: DeltaT                   = 0.0d0   ! loop design temperature drop (or rise) [DelK]
+  REAL             :: ExitTemp                 = 0.0   ! loop design exit (supply) temperature [C]
+  REAL             :: DeltaT                   = 0.0   ! loop design temperature drop (or rise) [DelK]
   ! Calculated
-  REAL(r64)             :: DesVolFlowRate           = 0.0d0   ! loop design flow rate in m3/s
+  REAL             :: DesVolFlowRate           = 0.0   ! loop design flow rate in m3/s
   LOGICAL               :: VolFlowSizingDone        = .FALSE. ! flag to indicate when this loop has finished sizing flow rate
 END TYPE PlantSizingData
 
 TYPE DesDayWeathData
   CHARACTER(len=8)      :: DateString               = ' '     ! date of design day weather values
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: Temp               ! design day temperatures at the major time step
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: HumRat             ! design day humidity ratios at the major time step
-  REAL(r64), ALLOCATABLE, DIMENSION(:)  :: Press              ! design day braometric pressure at the major time step
+  REAL, ALLOCATABLE, DIMENSION(:)  :: Temp               ! design day temperatures at the major time step
+  REAL, ALLOCATABLE, DIMENSION(:)  :: HumRat             ! design day humidity ratios at the major time step
+  REAL, ALLOCATABLE, DIMENSION(:)  :: Press              ! design day braometric pressure at the major time step
 END TYPE DesDayWeathData
 
 TYPE CompDesWaterFlowData                                     ! design water flow rate for components that use water as an
                                                               !  energy source or sink
   INTEGER               :: SupNode                  = 0       ! water inlet node number (condenser side for water / water)
-  REAL(r64)             :: DesVolFlowRate           = 0.0d0   ! water design flow rate [m3/s]
+  REAL             :: DesVolFlowRate           = 0.0   ! water design flow rate [m3/s]
 END TYPE CompDesWaterFlowData
 
 TYPE OARequirementsData
   CHARACTER(len=MaxNameLength) :: Name   = ' '
   INTEGER      :: OAFlowMethod           = 0        !- Method for OA flow calculation
                                                     !- (Flow/Person, Flow/Zone, Flow/Area, FlowACH, Sum, Maximum)
-  REAL(r64)    :: OAFlowPerPerson        = 0.0D0    !- OA requirement per person
-  REAL(r64)    :: OAFlowPerArea          = 0.0D0    !- OA requirement per zone area
-  REAL(r64)    :: OAFlowPerZone          = 0.0D0    !- OA requirement per zone
-  REAL(r64)    :: OAFlowACH              = 0.0D0    !- OA requirement per zone per hour
+  REAL    :: OAFlowPerPerson        = 0.0    !- OA requirement per person
+  REAL    :: OAFlowPerArea          = 0.0    !- OA requirement per zone area
+  REAL    :: OAFlowPerZone          = 0.0    !- OA requirement per zone
+  REAL    :: OAFlowACH              = 0.0    !- OA requirement per zone per hour
   INTEGER      :: OAFlowFracSchPtr       = 0        !- Fraction schedule applied to total OA requirement
-  REAL(r64)    :: MaxOAFractionSchValue  = 0.0D0    !- Maximum value from OAFlow fraction schedule (used for sizing)
+  REAL    :: MaxOAFractionSchValue  = 0.0    !- Maximum value from OAFlow fraction schedule (used for sizing)
 END TYPE OARequirementsData
 
 TYPE ZoneAirDistributionData
   CHARACTER(len=MaxNameLength) :: Name       = ' '
   CHARACTER(len=MaxNameLength) :: ZoneADEffSchName = ' '!- Zone air distribution effectiveness schedule name
-  REAL(r64)    :: ZoneADEffCooling           = 1.0D0    !- Zone air distribution effectiveness in cooling mode
-  REAL(r64)    :: ZoneADEffHeating           = 1.0D0    !- Zone air distribution effectiveness in heating mode
-  REAL(r64)    :: ZoneSecondaryRecirculation = 0.0D0    !- Zone air secondary recirculation ratio
+  REAL    :: ZoneADEffCooling           = 1.0    !- Zone air distribution effectiveness in cooling mode
+  REAL    :: ZoneADEffHeating           = 1.0    !- Zone air distribution effectiveness in heating mode
+  REAL    :: ZoneSecondaryRecirculation = 0.0    !- Zone air secondary recirculation ratio
   INTEGER      :: ZoneADEffSchPtr       = 0             !- Zone air distribution effectiveness schedule index
 END TYPE ZoneAirDistributionData
 
@@ -524,13 +524,13 @@ LOGICAL   :: ZoneEqDXCoil       = .FALSE. ! TRUE if a ZoneHVAC DX coil is being 
 LOGICAL   :: ZoneHeatingOnlyFan = .FALSE. ! TRUE if zone unit only does heating and contains a fam (such as Unit Heater)
 LOGICAL   :: SysSizingRunDone   = .FALSE. ! True if a system sizing run is successfully completed.
 LOGICAL   :: ZoneSizingRunDone  = .FALSE. ! True if a zone sizing run has been successfully completed.
-REAL(r64) :: DXCoolCap          = 0.0d0   ! The ARI cooling capacity of a DX unit.
-REAL(r64) :: UnitaryHeatCap     = 0.0d0   ! the heating capacity of a unitary system
-REAL(r64) :: SuppHeatCap        = 0.0d0   ! the heating capacity of the supplemental heater in a unitary system
-REAL(r64) :: GlobalHeatSizingFactor = 0.0d0   ! the global heating sizing ratio
-REAL(r64) :: GlobalCoolSizingFactor = 0.0d0   ! the global cooling sizing ratio
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneSizThermSetPtHi ! highest zone thermostat setpoint during zone sizing calcs
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneSizThermSetPtLo ! lowest zone thermostat setpoint during zone sizing calcs
+REAL :: DXCoolCap          = 0.0   ! The ARI cooling capacity of a DX unit.
+REAL :: UnitaryHeatCap     = 0.0   ! the heating capacity of a unitary system
+REAL :: SuppHeatCap        = 0.0   ! the heating capacity of the supplemental heater in a unitary system
+REAL :: GlobalHeatSizingFactor = 0.0   ! the global heating sizing ratio
+REAL :: GlobalCoolSizingFactor = 0.0   ! the global cooling sizing ratio
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneSizThermSetPtHi ! highest zone thermostat setpoint during zone sizing calcs
+REAL, ALLOCATABLE, DIMENSION(:) :: ZoneSizThermSetPtLo ! lowest zone thermostat setpoint during zone sizing calcs
 CHARACTER(len=15), ALLOCATABLE, DIMENSION(:) :: CoolPeakDateHrMin
 CHARACTER(len=15), ALLOCATABLE, DIMENSION(:) :: HeatPeakDateHrMin
 CHARACTER(len=1) :: SizingFileColSep=' '  ! Character to separate columns in sizing outputs

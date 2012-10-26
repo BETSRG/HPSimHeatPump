@@ -67,12 +67,12 @@ INTEGER, PARAMETER :: UnreconciledZoneSurface=-999          ! interim value betw
 
   !MODULE VARIABLE DECLARATIONS:
   ! Following are used only during getting vertices, so are module variables here.
-REAL(r64)   :: CosBldgRelNorth =0.0d0 ! Cosine of the building rotation (relative north) (includes appendix G rotation)
-REAL(r64)   :: SinBldgRelNorth =0.0d0 ! Sine of the building rotation (relative north)   (includes appendix G rotation)
-REAL(r64)   :: CosBldgRotAppGonly =0.0d0 ! Cosine of the building rotation for appendix G only(relative north)
-REAL(r64)   :: SinBldgRotAppGonly =0.0d0 ! Sine of the building rotation for appendix G only (relative north)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: CosZoneRelNorth ! Cosine of the zone rotation (relative north)
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: SinZoneRelNorth ! Sine of the zone rotation (relative north)
+REAL   :: CosBldgRelNorth =0.0 ! Cosine of the building rotation (relative north) (includes appendix G rotation)
+REAL   :: SinBldgRelNorth =0.0 ! Sine of the building rotation (relative north)   (includes appendix G rotation)
+REAL   :: CosBldgRotAppGonly =0.0 ! Cosine of the building rotation for appendix G only(relative north)
+REAL   :: SinBldgRotAppGonly =0.0 ! Sine of the building rotation for appendix G only (relative north)
+REAL, ALLOCATABLE, DIMENSION(:) :: CosZoneRelNorth ! Cosine of the zone rotation (relative north)
+REAL, ALLOCATABLE, DIMENSION(:) :: SinZoneRelNorth ! Sine of the zone rotation (relative north)
 TYPE (SurfaceData),        ALLOCATABLE, DIMENSION(:) :: SurfaceTmp  ! Allocated/Deallocated during input processing
 TYPE (SurfaceData),        ALLOCATABLE, DIMENSION(:) :: SurfaceTmpSave  ! Allocated/Deallocated during input processing
 
@@ -171,26 +171,26 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)          :: AverageHeight   ! Used to keep track of average height of a surface/zone
+  REAL          :: AverageHeight   ! Used to keep track of average height of a surface/zone
   INTEGER            :: SurfNum         ! Surface number (DO loop counter)
   INTEGER            :: ZoneNum         ! Zone number for current surface and DO loop counter
-  REAL(r64)          :: ZMax            ! Maximum Z of a surface (detailed outside coefficient calculation)
-  REAL(r64)          :: ZMin            ! Minimum Z of a surface (detailed outside coefficient calculation)
-  REAL(r64)          :: ZCeilAvg
-  REAL(r64)          :: CeilCount
-  REAL(r64)          :: ZFlrAvg
-  REAL(r64)          :: FloorCount
-  REAL(r64)          :: TotSurfArea
-  REAL(r64)          :: Z1
-  REAL(r64)          :: Z2
+  REAL          :: ZMax            ! Maximum Z of a surface (detailed outside coefficient calculation)
+  REAL          :: ZMin            ! Minimum Z of a surface (detailed outside coefficient calculation)
+  REAL          :: ZCeilAvg
+  REAL          :: CeilCount
+  REAL          :: ZFlrAvg
+  REAL          :: FloorCount
+  REAL          :: TotSurfArea
+  REAL          :: Z1
+  REAL          :: Z2
   CHARACTER(len=32) String1
   CHARACTER(len=32) String2
   CHARACTER(len=3) String3
   INTEGER Count    ! To count wall surfaces for ceiling height calculation
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: ZoneCeilingHeightEntered
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneCeilingArea
+  REAL, ALLOCATABLE, DIMENSION(:) :: ZoneCeilingArea
   INTEGER, SAVE :: ErrCount=0
-  REAL(r64) :: NominalUwithConvCoeffs
+  REAL :: NominalUwithConvCoeffs
   CHARACTER(len=32) :: cNominalU
   CHARACTER(len=32) :: cNominalUwithConvCoeffs
 !  INTEGER, ALLOCATABLE, DIMENSION(:) :: ZoneSurfacesCount
@@ -224,7 +224,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
   ALLOCATE (ZoneCeilingHeightEntered(NumOfZones))
   ZoneCeilingHeightEntered=.false.
   ALLOCATE (ZoneCeilingArea(NumOfZones))
-  ZoneCeilingArea=0.0d0
+  ZoneCeilingArea=0.0
 
   DO ZoneNum = 1, NumOfZones
 
@@ -262,7 +262,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
 
   DO SurfNum = 1, TotSurfaces   ! Loop through all surfaces...
 
-    AirSkyRadSplit(SurfNum) = SQRT(0.5d0*(1.0d0+Surface(SurfNum)%CosTilt))
+    AirSkyRadSplit(SurfNum) = SQRT(0.5*(1.0+Surface(SurfNum)%CosTilt))
 
     ! Set flag that determines whether a surface is a shadowing surface
     Surface(SurfNum)%ShadowingSurf = .FALSE.
@@ -368,19 +368,19 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
     DO SurfNum=Zone(ZoneNum)%SurfaceFirst,Zone(ZoneNum)%SurfaceLast
       IF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
         ! Use Average Z for surface, more important for roofs than floors...
-        CeilCount=CeilCount+1.0d0
+        CeilCount=CeilCount+1.0
         Z1=MINVAL(Surface(SurfNum)%Vertex(1:Surface(SurfNum)%Sides)%Z)
         Z2=MAXVAL(Surface(SurfNum)%Vertex(1:Surface(SurfNum)%Sides)%Z)
-!        ZCeilAvg=ZCeilAvg+(Z1+Z2)/2.d0
-        ZCeilAvg=ZCeilAvg+((Z1+Z2)/2.d0)*(Surface(SurfNum)%Area/ZoneCeilingArea(ZoneNum))
+!        ZCeilAvg=ZCeilAvg+(Z1+Z2)/2.
+        ZCeilAvg=ZCeilAvg+((Z1+Z2)/2.)*(Surface(SurfNum)%Area/ZoneCeilingArea(ZoneNum))
       ENDIF
       IF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
         ! Use Average Z for surface, more important for roofs than floors...
-        FloorCount=FloorCount+1.0d0
+        FloorCount=FloorCount+1.0
         Z1=MINVAL(Surface(SurfNum)%Vertex(1:Surface(SurfNum)%Sides)%Z)
         Z2=MAXVAL(Surface(SurfNum)%Vertex(1:Surface(SurfNum)%Sides)%Z)
-!        ZFlrAvg=ZFlrAvg+(Z1+Z2)/2.d0
-        ZFlrAvg=ZFlrAvg+((Z1+Z2)/2.d0)*(Surface(SurfNum)%Area/Zone(ZoneNum)%FloorArea)
+!        ZFlrAvg=ZFlrAvg+(Z1+Z2)/2.
+        ZFlrAvg=ZFlrAvg+((Z1+Z2)/2.)*(Surface(SurfNum)%Area/Zone(ZoneNum)%FloorArea)
       ENDIF
       IF (Surface(SurfNum)%Class == SurfaceClass_Wall) THEN
         ! Use Wall calculation in case no roof & floor in zone
@@ -407,7 +407,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
     IF (Zone(ZoneNum)%CeilingHeight > 0.0) THEN
       ZoneCeilingHeightEntered(ZoneNum)=.true.
       IF (AverageHeight > 0.0) THEN
-        IF (ABS(AverageHeight-Zone(ZoneNum)%CeilingHeight)/Zone(ZoneNum)%CeilingHeight  > .05d0) THEN
+        IF (ABS(AverageHeight-Zone(ZoneNum)%CeilingHeight)/Zone(ZoneNum)%CeilingHeight  > .05) THEN
           IF (ErrCount == 1 .and. .not. DisplayExtraWarnings) THEN
             CALL ShowWarningError(RoutineName//'Entered Ceiling Height for some zone(s) significantly '//  &
                'different from calculated Ceiling Height')
@@ -438,8 +438,8 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
   ! Calculate zone centroid (and min/max x,y,z for zone)
   DO ZoneNum = 1, NumOfZones
     nonInternalMassSurfacesPresent=.false.
-    TotSurfArea = 0.0d0
-    Zone(ZoneNum)%Centroid = Vector(0.0d0, 0.0d0, 0.0d0)
+    TotSurfArea = 0.0
+    Zone(ZoneNum)%Centroid = Vector(0.0, 0.0, 0.0)
     IF (Surface(Zone(ZoneNum)%SurfaceFirst)%Sides > 0) THEN
       Zone(ZoneNum)%MinimumX=Surface(Zone(ZoneNum)%SurfaceFirst)%Vertex(1)%x
       Zone(ZoneNum)%MaximumX=Surface(Zone(ZoneNum)%SurfaceFirst)%Vertex(1)%x
@@ -519,7 +519,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
           ! Interior:  vertical, still air, Rcin = 0.68 ft2-F-hr/BTU
           ! Exterior:  vertical, exterior wind exposure, Rcout = 0.17 ft2-F-hr/BTU
           IF (NominalU(Surface(surfnum)%Construction) > 0.0) THEN
-            NominalUwithConvCoeffs = 1.0d0 / (0.1197548d0 + (1.0d0 / NominalU(Surface(surfnum)%Construction)) + 0.0299387d0)
+            NominalUwithConvCoeffs = 1.0 / (0.1197548 + (1.0 / NominalU(Surface(surfnum)%Construction)) + 0.0299387)
           ELSE
             cNominalUwithConvCoeffs = '[invalid]'
           ENDIF
@@ -527,7 +527,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
           ! Interior:  horizontal, still air, heat flow downward, Rcin = 0.92 ft2-F-hr/BTU
           ! Exterior:  horizontal, semi-exterior (crawlspace), Rcout = 0.46 ft2-F-hr/BTU
           IF (NominalU(Surface(surfnum)%Construction) > 0.0) THEN
-            NominalUwithConvCoeffs = 1.0d0 / (0.1620212d0 + (1.0d0 / NominalU(Surface(surfnum)%Construction)) + 0.0810106d0)
+            NominalUwithConvCoeffs = 1.0 / (0.1620212 + (1.0 / NominalU(Surface(surfnum)%Construction)) + 0.0810106)
           ELSE
             cNominalUwithConvCoeffs = '[invalid]'
           ENDIF
@@ -535,7 +535,7 @@ SUBROUTINE SetupZoneGeometry(ErrorsFound)
           ! Interior:  horizontal, still air, heat flow upward, Rcin = 0.61 ft2-F-hr/BTU
           ! Exterior:  horizontal, semi-exterior (attic), Rcout = 0.46 ft2-F-hr/BTU
           IF (NominalU(Surface(surfnum)%Construction) > 0.0) THEN
-            NominalUwithConvCoeffs = 1.0d0 / (0.1074271d0 + (1.0d0 / NominalU(Surface(surfnum)%Construction)) + 0.0810106d0)
+            NominalUwithConvCoeffs = 1.0 / (0.1074271 + (1.0 / NominalU(Surface(surfnum)%Construction)) + 0.0810106)
           ELSE
             cNominalUwithConvCoeffs = '[invalid]'
           ENDIF
@@ -717,11 +717,11 @@ SUBROUTINE AllocateModuleArrays
   ShadeV%NVert=0
   ! Individual components (XV,YV,ZV) allocated in routine ProcessSurfaceVertices
   ALLOCATE (X0(TotSurfaces))
-  X0=0.0d0
+  X0=0.0
   ALLOCATE (Y0(TotSurfaces))
-  Y0=0.0d0
+  Y0=0.0
   ALLOCATE (Z0(TotSurfaces))
-  Z0=0.0d0
+  Z0=0.0
 
   ALLOCATE (CBZone(NumOfZones))
   CBZone=0.0
@@ -936,8 +936,8 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
   INTEGER :: NVert
   INTEGER :: Vert
   INTEGER :: N
-  REAL(r64) SurfWorldAz
-  REAL(r64) :: surfTilt
+  REAL SurfWorldAz
+  REAL :: surfTilt
 
   INTEGER :: MultFound, MultSurfNum
   CHARACTER(len=20) :: MultString
@@ -956,21 +956,21 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
   INTEGER :: BlNumNew
   INTEGER :: WinShadingControlPtr
   INTEGER :: ShadingType
-!unused  REAL(r64) :: SchSlatAngle = 0.0D0
+!unused  REAL :: SchSlatAngle = 0.0
 !unused  LOGICAL :: initmsg
   INTEGER :: errCount
-  REAL(r64) :: diffp
+  REAL :: diffp
 !  TYPE (vector), ALLOCATABLE, DIMENSION(:) :: TestVertex
 !  INTEGER :: Vrt
 !  INTEGER :: testV
 !  INTEGER :: testVsave
 !  INTEGER :: countSides
 !  INTEGER :: LLCVrt
-!  REAL(r64) :: maxX
-!  REAL(r64) :: maxY
-!  REAL(r64) :: testX
-!  REAL(r64) :: testY
-  REAL(r64) :: surfAzimuth
+!  REAL :: maxX
+!  REAL :: maxY
+!  REAL :: testX
+!  REAL :: testY
+  REAL :: surfAzimuth
 !  LOGICAL :: Located
   LOGICAL :: sameSurfNormal
 
@@ -1144,19 +1144,19 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
       ! Outward normal unit vector (pointing away from room)
       SurfaceTmp(CurNewSurf)%OutNormVec = SurfaceTmp(CurNewSurf)%NewellSurfaceNormalVector
       DO N=1,3
-        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N)-1.0) < 1.d-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) = +1.0
-        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N)+1.0) < 1.d-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) = -1.0
-        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N))     < 1.d-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) =  0.0
+        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N)-1.0) < 1.*10**-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) = +1.0
+        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N)+1.0) < 1.*10**-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) = -1.0
+        IF (ABS(SurfaceTmp(CurNewSurf)%OutNormVec(N))     < 1.*10**-06) SurfaceTmp(CurNewSurf)%OutNormVec(N) =  0.0
       ENDDO
 
       ! Can perform tests on this surface here
-      SurfaceTmp(CurNewSurf)%ViewFactorSky=0.5d0*(1.d0+SurfaceTmp(CurNewSurf)%CosTilt)
-      SurfaceTmp(CurNewSurf)%ViewFactorGround=0.5d0*(1.d0-SurfaceTmp(CurNewSurf)%CosTilt)
+      SurfaceTmp(CurNewSurf)%ViewFactorSky=0.5*(1.+SurfaceTmp(CurNewSurf)%CosTilt)
+      SurfaceTmp(CurNewSurf)%ViewFactorGround=0.5*(1.-SurfaceTmp(CurNewSurf)%CosTilt)
 
       ! The following IR view factors are modified in subr. SkyDifSolarShading if there are shadowing
       ! surfaces
       SurfaceTmp(CurNewSurf)%ViewFactorSkyIR = SurfaceTmp(CurNewSurf)%ViewFactorSky
-      SurfaceTmp(CurNewSurf)%ViewFactorGroundIR = 0.5d0*(1.d0-SurfaceTmp(CurNewSurf)%CosTilt)
+      SurfaceTmp(CurNewSurf)%ViewFactorGroundIR = 0.5*(1.-SurfaceTmp(CurNewSurf)%CosTilt)
     ENDIF
 
 
@@ -1257,7 +1257,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
     ! If flat surface
     surfAzimuth = SurfaceTmp(SurfNum)%Azimuth
     surfTilt    = SurfaceTmp(SurfNum)%Tilt
-    IF (ABS(surfTilt) <= 1.d-5 .or. ABS(surfTilt-180.d0) <= 1.d-5)  THEN
+    IF (ABS(surfTilt) <= 1.*10**-5 .or. ABS(surfTilt-180.) <= 1.*10**-5)  THEN
       ! see if there are any subsurfaces on roofs/floors
       DO itmp1=1,TotSurfaces
         IF (itmp1 == SurfNum) CYCLE
@@ -1273,23 +1273,23 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
 !          write(outputfiledebug,'(3f7.2)') SurfaceTmp(itmp1)%lcsy
 !          write(outputfiledebug,'(3f7.2)') SurfaceTmp(itmp1)%lcsz
 !          write(outputfiledebug,'(A,3f7.2)') 'subsurface surfnorm=',SurfaceTmp(itmp1)%NewellSurfaceNormalVector
-        IF (ABS(SurfaceTmp(itmp1)%Azimuth-surfAzimuth) <= 10.d0) CYCLE
+        IF (ABS(SurfaceTmp(itmp1)%Azimuth-surfAzimuth) <= 10.) CYCLE
         CALL CompareTwoVectors(SurfaceTmp(SurfNum)%NewellSurfaceNormalVector,SurfaceTmp(itmp1)%NewellSurfaceNormalVector,  &
-           sameSurfNormal,.001d0)
+           sameSurfNormal,.001)
         IF (sameSurfNormal) THEN  ! copy lcs vectors
           SurfaceTmp(itmp1)%lcsx=SurfaceTmp(SurfNum)%lcsx
           SurfaceTmp(itmp1)%lcsy=SurfaceTmp(SurfNum)%lcsy
           SurfaceTmp(itmp1)%lcsy=SurfaceTmp(SurfNum)%lcsy
           CYCLE
         ENDIF
-!        IF (ABS(SurfaceTmp(itmp1)%Azimuth-360.0d0) < .01d0) THEN
-!          SurfaceTmp(itmp1)%Azimuth=360.0d0-SurfaceTmp(itmp1)%Azimuth
+!        IF (ABS(SurfaceTmp(itmp1)%Azimuth-360.0) < .01) THEN
+!          SurfaceTmp(itmp1)%Azimuth=360.0-SurfaceTmp(itmp1)%Azimuth
 !        ENDIF
-!        IF (ABS(surfAzimuth-360.0d0) < .01d0) THEN
-!          surfAzimuth=360.0d0-surfAzimuth
+!        IF (ABS(surfAzimuth-360.0) < .01) THEN
+!          surfAzimuth=360.0-surfAzimuth
 !          SurfaceTmp(SurfNum)%Azimuth=surfAzimuth
 !        ENDIF
-!        IF (ABS(SurfaceTmp(itmp1)%Azimuth-surfAzimuth) <= 10.d0) CYCLE
+!        IF (ABS(SurfaceTmp(itmp1)%Azimuth-surfAzimuth) <= 10.) CYCLE
         ! have subsurface of base surface
         ! warning error
 !        Warning4Count=Warning4Count+1
@@ -1496,23 +1496,23 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
 !          write(outputfiledebug,'(3f7.2)') Surface(SubSurfNum)%lcsy
 !          write(outputfiledebug,'(3f7.2)') Surface(SubSurfNum)%lcsz
 !          write(outputfiledebug,'(A,3f7.2)') 'subsurface surfnorm=',Surface(SubSurfNum)%NewellSurfaceNormalVector
-        IF (ABS(Surface(SubSurfNum)%Azimuth-Surface(SurfNum)%Azimuth) <= 30.0d0) CYCLE
+        IF (ABS(Surface(SubSurfNum)%Azimuth-Surface(SurfNum)%Azimuth) <= 30.0) CYCLE
         CALL CompareTwoVectors(Surface(SurfNum)%NewellSurfaceNormalVector,Surface(SubSurfNum)%NewellSurfaceNormalVector,  &
-           sameSurfNormal,.001d0)
+           sameSurfNormal,.001)
         IF (sameSurfNormal) THEN  ! copy lcs vectors
           Surface(SubSurfNum)%lcsx=Surface(SurfNum)%lcsx
           Surface(SubSurfNum)%lcsy=Surface(SurfNum)%lcsy
           Surface(SubSurfNum)%lcsy=Surface(SurfNum)%lcsy
           CYCLE
         ENDIF
-        IF (ABS(Surface(SubSurfNum)%Azimuth-360.0d0) < .01d0) THEN
-          Surface(SubSurfNum)%Azimuth=360.0d0-Surface(SubSurfNum)%Azimuth
+        IF (ABS(Surface(SubSurfNum)%Azimuth-360.0) < .01) THEN
+          Surface(SubSurfNum)%Azimuth=360.0-Surface(SubSurfNum)%Azimuth
         ENDIF
-        IF (ABS(Surface(SurfNum)%Azimuth-360.0d0) < .01d0) THEN
-          Surface(SurfNum)%Azimuth=360.0d0-Surface(SurfNum)%Azimuth
+        IF (ABS(Surface(SurfNum)%Azimuth-360.0) < .01) THEN
+          Surface(SurfNum)%Azimuth=360.0-Surface(SurfNum)%Azimuth
         ENDIF
-        IF (ABS(Surface(SubSurfNum)%Azimuth-Surface(SurfNum)%Azimuth) > 30.0d0) THEN
-          IF (ABS(Surface(SurfNum)%SinTilt) > .17d0) THEN
+        IF (ABS(Surface(SubSurfNum)%Azimuth-Surface(SurfNum)%Azimuth) > 30.0) THEN
+          IF (ABS(Surface(SurfNum)%SinTilt) > .17) THEN
             ErrCount1=ErrCount1+1
             IF (ErrCount1 == 1 .and. .not. DisplayExtraWarnings) THEN
               CALL ShowSevereError(Routinename//'Some Outward Facing angles of subsurfaces differ '//  &
@@ -1594,7 +1594,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
             TotLayFound = Construct(ConstrNumFound)%TotLayers
             IF(TotLay /= TotLayFound) THEN  ! Different number of layers
               ! match on like Uvalues (nominal)
-              IF (ABS(NominalU(ConstrNum)-NominalU(ConstrNumFound)) > .001d0) THEN
+              IF (ABS(NominalU(ConstrNum)-NominalU(ConstrNumFound)) > .001) THEN
                 CALL ShowSevereError(RoutineName//'Construction '//TRIM(Construct(ConstrNum)%Name)// &
                                      ' of interzone surface '//TRIM(Surface(SurfNum)%Name)// &
                                      ' does not have the same number of layers as the construction '   &
@@ -1604,7 +1604,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
               ENDIF
             ELSE                            ! Same number of layers; check for reverse layers
               ! ok if same nominal U
-              IF (ABS(NominalU(ConstrNum)-NominalU(ConstrNumFound)) > .001d0) THEN
+              IF (ABS(NominalU(ConstrNum)-NominalU(ConstrNumFound)) > .001) THEN
                 DO Lay = 1,TotLay
                   IF(Construct(ConstrNum)%LayerPoint(Lay) /=  &
                      Construct(ConstrNumFound)%LayerPoint(TotLay-Lay+1)) THEN
@@ -1625,7 +1625,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
             MultSurfNum = Zone(Surface(SurfNum)%Zone)%Multiplier * Zone(Surface(SurfNum)%Zone)%ListMultiplier
             IF (Surface(Found)%Area > 0.0) THEN
               IF (ABS((Surface(Found)%Area*MultFound - Surface(SurfNum)%Area*MultSurfNum)/  &
-                       Surface(Found)%Area*MultFound) > .02d0) THEN  ! 2% difference in areas
+                       Surface(Found)%Area*MultFound) > .02) THEN  ! 2% difference in areas
                 ErrCount4=ErrCount4+1
                 IF (ErrCount4 == 1 .and. .not. DisplayExtraWarnings) THEN
                   CALL ShowWarningError(RoutineName//''//  &
@@ -1665,7 +1665,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
             ENDIF
             ! Check opposites Azimuth and Tilt
             ! Tilt
-            IF (ABS(ABS(Surface(Found)%Tilt+Surface(SurfNum)%Tilt)-180.d0) > 1.) THEN
+            IF (ABS(ABS(Surface(Found)%Tilt+Surface(SurfNum)%Tilt)-180.) > 1.) THEN
               CALL ShowWarningError(RoutineName//'InterZone Surface Tilts do not match as expected.')
               CALL ShowContinueError('  Tilt='//TRIM(TrimSigDigits(Surface(SurfNum)%Tilt,1))//  &
                                      ' in Surface='//TRIM(Surface(SurfNum)%Name)//', Zone='//TRIM(Surface(SurfNum)%ZoneName))
@@ -1680,8 +1680,8 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
                 IF (Surface(Surface(SurfNum)%BaseSurf)%Class == SurfaceClass_Roof .or.   &
                     Surface(Surface(SurfNum)%BaseSurf)%Class == SurfaceClass_Floor) CYCLE
               ENDIF
-              IF (ABS(ABS(Surface(SurfNum)%Azimuth-Surface(Found)%Azimuth)-180.d0) > 1.d0) THEN
-                IF (ABS(Surface(SurfNum)%SinTilt) > .5d0 .or. DisplayExtraWarnings) THEN
+              IF (ABS(ABS(Surface(SurfNum)%Azimuth-Surface(Found)%Azimuth)-180.) > 1.) THEN
+                IF (ABS(Surface(SurfNum)%SinTilt) > .5 .or. DisplayExtraWarnings) THEN
                   ! if horizontal surfaces, then these are windows/doors/etc in those items.
                   CALL ShowWarningError(RoutineName//'InterZone Surface Azimuths do not match as expected.')
                   CALL ShowContinueError('  Azimuth='//TRIM(TrimSigDigits(Surface(SurfNum)%Azimuth,1))//  &
@@ -1835,7 +1835,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
                                                              ! produce message if not near calculated
           IF (Zone(ZoneNum)%CalcFloorArea > 0.0) THEN
             diffp=ABS(Zone(ZoneNum)%CalcFloorArea-Zone(ZoneNum)%UserEnteredFloorArea)/Zone(ZoneNum)%UserEnteredFloorArea
-            IF (diffp  > .05d0) THEN
+            IF (diffp  > .05) THEN
               ErrCount=ErrCount+1
               IF (ErrCount == 1 .and. .not. DisplayExtraWarnings) THEN
                 CALL ShowWarningError(RoutineName//'Entered Zone Floor Areas differ from calculated Zone Floor Area(s).')
@@ -1863,7 +1863,7 @@ SUBROUTINE GetSurfaceData(ErrorsFound)
 
   DO SurfNum=1,MovedSurfs !TotSurfaces
     IF (.not. Surface(SurfNum)%HeatTransSurf) CYCLE
-      IF (Surface(SurfNum)%Area < 1.d-06) THEN
+      IF (Surface(SurfNum)%Area < 1.*10**-06) THEN
         CALL ShowSevereError(RoutineName//'Zero or negative surface area, Surface='//Trim(Surface(SurfNum)%Name))
         SurfError=.true.
       ENDIF
@@ -2215,7 +2215,7 @@ SUBROUTINE GetGeometryParameters(ErrorsFound)
   INTEGER NumStmt
   CHARACTER(len=MaxNameLength), DIMENSION(5) :: GAlphas
   INTEGER NAlphas
-  REAL(r64), DIMENSION(1) :: GNum
+  REAL, DIMENSION(1) :: GNum
   INTEGER NNum
   INTEGER IOSTAT
   LOGICAL OK
@@ -2472,8 +2472,8 @@ SUBROUTINE GetDetShdSurfaceData(ErrorsFound,SurfNum,TotDetachedFixed,TotDetached
   INTEGER :: ItemsToGet
   INTEGER :: ClassItem
   INTEGER :: numSides
-  REAL(r64) :: SchedMinValue
-  REAL(r64) :: SchedMaxValue
+  REAL :: SchedMinValue
+  REAL :: SchedMaxValue
   
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -2552,13 +2552,13 @@ SUBROUTINE GetDetShdSurfaceData(ErrorsFound,SurfNum,TotDetachedFixed,TotDetached
                                '", is always transparent.')
           SurfaceTmp(SurfNum)%IsTransparent=.true.
         ENDIF
-        IF (SchedMinValue < 0.0d0) THEN
+        IF (SchedMinValue < 0.0) THEN
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
                                '", '//TRIM(cAlphaFieldNames(2))//'="'//TRIM(cAlphaArgs(2))// &
                                '", has schedule values < 0.')
           CALL ShowContinueError('...Schedule values < 0 have no meaning for shading elements.')
         ENDIF
-        IF (SchedMaxValue > 1.0d0) THEN
+        IF (SchedMaxValue > 1.0) THEN
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
                                '", '//TRIM(cAlphaFieldNames(2))//'="'//TRIM(cAlphaArgs(2))// &
                                '", has schedule values > 1.')
@@ -3601,11 +3601,11 @@ SUBROUTINE MakeRectangularVertices(SurfNum,XCoord,YCoord,ZCoord,Length,Height,Su
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfNum
-  REAL(r64), INTENT(IN) :: XCoord
-  REAL(r64), INTENT(IN) :: YCoord
-  REAL(r64), INTENT(IN) :: ZCoord
-  REAL(r64), INTENT(IN) :: Length
-  REAL(r64), INTENT(IN) :: Height
+  REAL, INTENT(IN) :: XCoord
+  REAL, INTENT(IN) :: YCoord
+  REAL, INTENT(IN) :: ZCoord
+  REAL, INTENT(IN) :: Length
+  REAL, INTENT(IN) :: Height
   LOGICAL, INTENT(IN) :: SurfWorldCoordSystem
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3618,18 +3618,18 @@ SUBROUTINE MakeRectangularVertices(SurfNum,XCoord,YCoord,ZCoord,Length,Height,Su
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: SurfAzimuth  ! Surface Azimuth/Facing (same as Base Surface)
-  REAL(r64) :: SurfTilt     ! Tilt (same as Base Surface)
-  REAL(r64) :: XLLC
-  REAL(r64) :: YLLC
-  REAL(r64) :: ZLLC
-  REAL(r64) :: CosSurfAzimuth
-  REAL(r64) :: SinSurfAzimuth
-  REAL(r64) :: CosSurfTilt
-  REAL(r64) :: SinSurfTilt
-  REAL(r64) :: XX(4),YY(4)
-  REAL(r64) :: Xb, Yb
-  REAL(r64) :: Perimeter
+  REAL :: SurfAzimuth  ! Surface Azimuth/Facing (same as Base Surface)
+  REAL :: SurfTilt     ! Tilt (same as Base Surface)
+  REAL :: XLLC
+  REAL :: YLLC
+  REAL :: ZLLC
+  REAL :: CosSurfAzimuth
+  REAL :: SinSurfAzimuth
+  REAL :: CosSurfTilt
+  REAL :: SinSurfTilt
+  REAL :: XX(4),YY(4)
+  REAL :: Xb, Yb
+  REAL :: Perimeter
   INTEGER :: N
   INTEGER :: Vrt
 
@@ -3714,13 +3714,13 @@ SUBROUTINE MakeRectangularVertices(SurfNum,XCoord,YCoord,ZCoord,Length,Height,Su
   SurfaceTmp(SurfNum)%CosAzim = CosSurfAzimuth
   SurfaceTmp(SurfNum)%SinTilt = SinSurfTilt
   SurfaceTmp(SurfNum)%CosTilt = CosSurfTilt
-  SurfaceTmp(SurfNum)%ViewFactorGround = 0.5d0 * (1.0d0 - SurfaceTmp(SurfNum)%CosTilt)
+  SurfaceTmp(SurfNum)%ViewFactorGround = 0.5 * (1.0 - SurfaceTmp(SurfNum)%CosTilt)
   ! Outward normal unit vector (pointing away from room)
   SurfaceTmp(SurfNum)%OutNormVec = SurfaceTmp(SurfNum)%NewellSurfaceNormalVector
   DO N=1,3
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
   ENDDO
 
 !  IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Roof .and. SurfTilt > 80.) THEN
@@ -3739,11 +3739,11 @@ SUBROUTINE MakeRectangularVertices(SurfNum,XCoord,YCoord,ZCoord,Length,Height,Su
 !  ENDIF
 
   ! Can perform tests on this surface here
-  SurfaceTmp(SurfNum)%ViewFactorSky=0.5d0*(1.d0+SurfaceTmp(SurfNum)%CosTilt)
+  SurfaceTmp(SurfNum)%ViewFactorSky=0.5*(1.+SurfaceTmp(SurfNum)%CosTilt)
   ! The following IR view factors are modified in subr. SkyDifSolarShading if there are shadowing
   ! surfaces
   SurfaceTmp(SurfNum)%ViewFactorSkyIR = SurfaceTmp(SurfNum)%ViewFactorSky
-  SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5d0*(1.d0-SurfaceTmp(SurfNum)%CosTilt)
+  SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5*(1.-SurfaceTmp(SurfNum)%CosTilt)
 
   Perimeter=Distance(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides),SurfaceTmp(SurfNum)%Vertex(1))
   DO Vrt=2,SurfaceTmp(SurfNum)%Sides
@@ -4663,7 +4663,7 @@ SUBROUTINE CheckWindowShadingControlFrameDivider(cRoutineName,ErrorsFound,SurfNu
         MatGap2 = Construct(ConstrNumSh)%LayerPoint(2*TotGlassLayers)
         MatSh = Construct(ConstrNumSh)%LayerPoint(2*TotGlassLayers-1)
         IF(WindowShadingControl(WSCptr)%ShadingType==WSC_ST_BetweenGlassBlind) THEN
-          IF(ABS(Material(MatGap)%Thickness-(Material(MatGap1)%Thickness+Material(MatGap2)%Thickness)) > 0.001d0) THEN
+          IF(ABS(Material(MatGap)%Thickness-(Material(MatGap1)%Thickness+Material(MatGap2)%Thickness)) > 0.001) THEN
             CALL ShowSevereError(trim(cRoutineName)//': The gap width(s) for the unshaded window construction ' &
                   //TRIM(Construct(ConstrNum)%Name))
             CALL ShowContinueError('are inconsistent with the gap widths for shaded window construction ' &
@@ -4679,7 +4679,7 @@ SUBROUTINE CheckWindowShadingControlFrameDivider(cRoutineName,ErrorsFound,SurfNu
           END IF
         ELSE  ! Between-glass shade
           IF(ABS(Material(MatGap)%Thickness- &
-             (Material(MatGap1)%Thickness+Material(MatGap2)%Thickness+Material(MatSh)%Thickness)) > 0.001d0) THEN
+             (Material(MatGap1)%Thickness+Material(MatGap2)%Thickness+Material(MatSh)%Thickness)) > 0.001) THEN
             CALL ShowSevereError(trim(cRoutineName)//': The gap width(s) for the unshaded window construction ' &
                   //TRIM(Construct(ConstrNum)%Name))
             CALL ShowContinueError('are inconsistent with the gap widths for shaded window construction ' &
@@ -4936,10 +4936,10 @@ SUBROUTINE MakeRelativeRectangularVertices(BaseSurfNum,SurfNum,XCoord,ZCoord,Len
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: BaseSurfNum  ! Base surface
   INTEGER, INTENT(IN) :: SurfNum
-  REAL(r64), INTENT(IN) :: XCoord
-  REAL(r64), INTENT(IN) :: ZCoord
-  REAL(r64), INTENT(IN) :: Length
-  REAL(r64), INTENT(IN) :: Height
+  REAL, INTENT(IN) :: XCoord
+  REAL, INTENT(IN) :: ZCoord
+  REAL, INTENT(IN) :: Length
+  REAL, INTENT(IN) :: Height
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4951,21 +4951,21 @@ SUBROUTINE MakeRelativeRectangularVertices(BaseSurfNum,SurfNum,XCoord,ZCoord,Len
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: SurfAzimuth  ! Surface Azimuth/Facing (same as Base Surface)
-  REAL(r64) :: SurfTilt     ! Tilt (same as Base Surface)
-  REAL(r64) :: XLLC
-  REAL(r64) :: YLLC
-  REAL(r64) :: ZLLC
-  REAL(r64) :: CosSurfAzimuth
-  REAL(r64) :: SinSurfAzimuth
-  REAL(r64) :: CosSurfTilt
-  REAL(r64) :: SinSurfTilt
-  REAL(r64) :: BaseCosSurfAzimuth
-  REAL(r64) :: BaseSinSurfAzimuth
-  REAL(r64) :: BaseCosSurfTilt
-  REAL(r64) :: BaseSinSurfTilt
-  REAL(r64) :: XX(4),YY(4)
-  REAL(r64) :: Perimeter
+  REAL :: SurfAzimuth  ! Surface Azimuth/Facing (same as Base Surface)
+  REAL :: SurfTilt     ! Tilt (same as Base Surface)
+  REAL :: XLLC
+  REAL :: YLLC
+  REAL :: ZLLC
+  REAL :: CosSurfAzimuth
+  REAL :: SinSurfAzimuth
+  REAL :: CosSurfTilt
+  REAL :: SinSurfTilt
+  REAL :: BaseCosSurfAzimuth
+  REAL :: BaseSinSurfAzimuth
+  REAL :: BaseCosSurfTilt
+  REAL :: BaseSinSurfTilt
+  REAL :: XX(4),YY(4)
+  REAL :: Perimeter
   INTEGER :: N
   INTEGER :: Vrt
 
@@ -5026,13 +5026,13 @@ SUBROUTINE MakeRelativeRectangularVertices(BaseSurfNum,SurfNum,XCoord,ZCoord,Len
   SurfaceTmp(SurfNum)%CosTilt = CosSurfTilt
   IF (SurfaceTmp(SurfNum)%Class /= SurfaceClass_Window .and. SurfaceTmp(SurfNum)%Class /= SurfaceClass_GlassDoor .and.  &
       SurfaceTmp(SurfNum)%Class /= SurfaceClass_Door) &
-    SurfaceTmp(SurfNum)%ViewFactorGround = 0.5d0 * (1.0d0 - SurfaceTmp(SurfNum)%CosTilt)
+    SurfaceTmp(SurfNum)%ViewFactorGround = 0.5 * (1.0 - SurfaceTmp(SurfNum)%CosTilt)
   ! Outward normal unit vector (pointing away from room)
   SurfaceTmp(SurfNum)%OutNormVec = SurfaceTmp(SurfNum)%NewellSurfaceNormalVector
   DO N=1,3
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
-    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
+    IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
   ENDDO
 
 !  IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Roof .and. SurfTilt > 80.) THEN
@@ -5053,11 +5053,11 @@ SUBROUTINE MakeRelativeRectangularVertices(BaseSurfNum,SurfNum,XCoord,ZCoord,Len
       SurfaceTmp(SurfNum)%Class == SurfaceClass_Door) &
       SurfaceTmp(SurfNum)%Area =  SurfaceTmp(SurfNum)%Area * SurfaceTmp(SurfNum)%Multiplier
   ! Can perform tests on this surface here
-  SurfaceTmp(SurfNum)%ViewFactorSky=0.5d0*(1.d0+SurfaceTmp(SurfNum)%CosTilt)
+  SurfaceTmp(SurfNum)%ViewFactorSky=0.5*(1.+SurfaceTmp(SurfNum)%CosTilt)
   ! The following IR view factors are modified in subr. SkyDifSolarShading if there are shadowing
   ! surfaces
   SurfaceTmp(SurfNum)%ViewFactorSkyIR = SurfaceTmp(SurfNum)%ViewFactorSky
-  SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5d0*(1.d0-SurfaceTmp(SurfNum)%CosTilt)
+  SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5*(1.-SurfaceTmp(SurfNum)%CosTilt)
 
   Perimeter=Distance(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides),SurfaceTmp(SurfNum)%Vertex(1))
   DO Vrt=2,SurfaceTmp(SurfNum)%Sides
@@ -5149,8 +5149,8 @@ SUBROUTINE GetAttShdSurfaceData(ErrorsFound,SurfNum,TotShdSubs)
   INTEGER :: Loop
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
-  REAL(r64) :: SchedMinValue
-  REAL(r64) :: SchedMaxValue
+  REAL :: SchedMinValue
+  REAL :: SchedMaxValue
 
   IF (TotShdSubs > 0 .and. SolarDistribution == MinimalShadowing) THEN
     CALL ShowWarningError('Shading effects of Fins and Overhangs are ignored when Solar Distribution = MinimalShadowing')
@@ -5235,19 +5235,19 @@ SUBROUTINE GetAttShdSurfaceData(ErrorsFound,SurfNum,TotShdSubs)
       SchedMinValue=GetScheduleMinValue(SurfaceTmp(SurfNum)%SchedShadowSurfIndex)
       SurfaceTmp(SurfNum)%SchedMinValue=SchedMinValue
       SchedMaxValue=GetScheduleMaxValue(SurfaceTmp(SurfNum)%SchedShadowSurfIndex)
-      IF (SchedMinValue == 1.0d0) THEN
+      IF (SchedMinValue == 1.0) THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
                              '", '//TRIM(cAlphaFieldNames(2))//'="'//TRIM(cAlphaArgs(2))// &
                              '", is always transparent.')
         SurfaceTmp(SurfNum)%IsTransparent=.true.
       ENDIF
-      IF (SchedMinValue < 0.0d0) THEN
+      IF (SchedMinValue < 0.0) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
                              '", '//TRIM(cAlphaFieldNames(2))//'="'//TRIM(cAlphaArgs(2))// &
                              '", has schedule values < 0.')
         CALL ShowContinueError('...Schedule values < 0 have no meaning for shading elements.')
       ENDIF
-      IF (SchedMaxValue > 1.0d0) THEN
+      IF (SchedMaxValue > 1.0) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
                              '", '//TRIM(cAlphaFieldNames(2))//'="'//TRIM(cAlphaArgs(2))// &
                              '", has schedule values > 1.')
@@ -5359,15 +5359,15 @@ SUBROUTINE GetSimpleShdSurfaceData(ErrorsFound,SurfNum,TotOverhangs,TotOverhangs
   INTEGER :: Found             ! For matching base surfaces
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
-  REAL(r64) :: Depth
-  REAL(r64) :: Length
-  REAL(r64) :: Xp
-  REAL(r64) :: Yp
-  REAL(r64) :: Zp
-  REAL(r64) :: XLLC
-  REAL(r64) :: YLLC
+  REAL :: Depth
+  REAL :: Length
+  REAL :: Xp
+  REAL :: Yp
+  REAL :: Zp
+  REAL :: XLLC
+  REAL :: YLLC
   INTEGER :: BaseSurfNum
-  REAL(r64) :: TiltAngle
+  REAL :: TiltAngle
   LOGICAL :: MakeFin
 
   IF ((TotOverhangs+TotOverhangsProjection+TotFins+TotFinsProjection) > 0 .and. SolarDistribution == MinimalShadowing) THEN
@@ -5465,7 +5465,7 @@ SUBROUTINE GetSimpleShdSurfaceData(ErrorsFound,SurfNum,TotOverhangs,TotOverhangs
           Depth=rNumericArgs(5)*SurfaceTmp(Found)%Height
         ENDIF
 
-        IF (Length*Depth <= 0.0d0) THEN
+        IF (Length*Depth <= 0.0) THEN
           CALL ShowSevereError(trim(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))//'", illegal surface area=['//  &
             trim(RoundSigDigits(Length*Depth,2))//']. Surface will NOT be entered.')
           CYCLE
@@ -5536,7 +5536,7 @@ SUBROUTINE GetSimpleShdSurfaceData(ErrorsFound,SurfNum,TotOverhangs,TotOverhangs
         ENDIF
 
         MakeFin=.true.
-        IF (Length*Depth <= 0.0d0) THEN
+        IF (Length*Depth <= 0.0) THEN
           CALL ShowWarningError(trim(cCurrentModuleObject)//'=Left Fin of "'//trim(cAlphaArgs(1))//  &
             '", illegal surface area=['//  &
             trim(RoundSigDigits(Length*Depth,2))//']. Surface will NOT be entered.')
@@ -5546,7 +5546,7 @@ SUBROUTINE GetSimpleShdSurfaceData(ErrorsFound,SurfNum,TotOverhangs,TotOverhangs
         IF (MakeFin) THEN
           TiltAngle=SurfaceTmp(Found)%Tilt
           SurfaceTmp(SurfNum)%Tilt=TiltAngle
-          SurfaceTmp(SurfNum)%Azimuth=SurfaceTmp(Found)%Azimuth-(180.0d0-rNumericArgs(4))
+          SurfaceTmp(SurfNum)%Azimuth=SurfaceTmp(Found)%Azimuth-(180.0-rNumericArgs(4))
 
           ! Make it relative to surface origin.....
 
@@ -5626,7 +5626,7 @@ SUBROUTINE GetSimpleShdSurfaceData(ErrorsFound,SurfNum,TotOverhangs,TotOverhangs
         ENDIF
 
         MakeFin=.true.
-        IF (Length*Depth <= 0.0d0) THEN
+        IF (Length*Depth <= 0.0) THEN
           CALL ShowWarningError(trim(cCurrentModuleObject)//'=Right Fin of "'//trim(cAlphaArgs(1))//  &
             '", illegal surface area=['//  &
             trim(RoundSigDigits(Length*Depth,2))//']. Surface will NOT be entered.')
@@ -5800,10 +5800,10 @@ SUBROUTINE GetIntMassSurfaceData(ErrorsFound,SurfNum,TotIntMass)
     SurfaceTmp(SurfNum)%Area=SurfaceTmp(SurfNum)%GrossArea
     SurfaceTmp(SurfNum)%NetAreaShadowCalc = SurfaceTmp(SurfNum)%Area
     SurfaceTmp(SurfNum)%Width=SurfaceTmp(SurfNum)%Area
-    SurfaceTmp(SurfNum)%Height=1.0d0
-    SurfaceTmp(SurfNum)%Tilt=90.d0
-    SurfaceTmp(SurfNum)%CosTilt=COS(90.d0*DegToRadians)
-    SurfaceTmp(SurfNum)%SinTilt=SIN(90.d0*DegToRadians)
+    SurfaceTmp(SurfNum)%Height=1.0
+    SurfaceTmp(SurfNum)%Tilt=90.
+    SurfaceTmp(SurfNum)%CosTilt=COS(90.*DegToRadians)
+    SurfaceTmp(SurfNum)%SinTilt=SIN(90.*DegToRadians)
     SurfaceTmp(SurfNum)%Azimuth=0.
     SurfaceTmp(SurfNum)%CosAzim=COS(0.0)
     SurfaceTmp(SurfNum)%SinAzim=SIN(0.0)
@@ -5979,8 +5979,8 @@ SUBROUTINE GetHTSurfExtVentedCavityData(ErrorsFound )
   INTEGER                        :: AlphaOffset !local temp var
   CHARACTER(len=MaxNameLength)   :: Roughness
   INTEGER                        :: thisSurf  ! do loop counter
-  REAL(r64)                      :: AvgAzimuth ! temp for error checking
-  REAL(r64)                      :: AvgTilt    ! temp for error checking
+  REAL                      :: AvgAzimuth ! temp for error checking
+  REAL                      :: AvgTilt    ! temp for error checking
   INTEGER                        :: SurfID  ! local surface "pointer"
   LOGICAL                        :: IsBlank
   LOGICAL                        :: ErrorInName
@@ -6226,12 +6226,12 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                     :: SurfNum     ! Current surface number
   INTEGER, INTENT(IN)                     :: NSides      ! Number of sides to figure
-  REAL(r64), INTENT(IN), DIMENSION(1:NSides*3) :: Vertices    ! Vertices, in specified order
+  REAL, INTENT(IN), DIMENSION(1:NSides*3) :: Vertices    ! Vertices, in specified order
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     CHARACTER(len=*), PARAMETER :: RoutineName='GetVertices: '
     character(len=*), parameter :: fmt3="(A,I5,A,3(1x,f18.13))"
-    TYPE (vector), PARAMETER     :: TestVector=vector(0.0d0,0.0d0,1.0d0)
+    TYPE (vector), PARAMETER     :: TestVector=vector(0.0,0.0,1.0)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -6244,22 +6244,22 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
     INTEGER N    ! Loop counter
     INTEGER NSrc   ! Used for CW -> CCW transformation
     INTEGER NTar   ! Used for CW -> CCW transformation
-    REAL(r64) SurfWorldAz
-    REAL(r64) SurfTilt
-    REAL(r64)     :: Perimeter       ! Perimeter length of the surface
+    REAL SurfWorldAz
+    REAL SurfTilt
+    REAL     :: Perimeter       ! Perimeter length of the surface
     INTEGER Vrt   ! Used for calculating perimeter
     TYPE (vector) :: temp
-    REAL(r64)   :: Xb                 ! Intermediate calculation
-    REAL(r64)   :: Yb                 ! Intermediate calculation
+    REAL   :: Xb                 ! Intermediate calculation
+    REAL   :: Yb                 ! Intermediate calculation
     INTEGER :: ZoneNum
     INTEGER :: ThisCorner
     CHARACTER(len=10) :: TiltString
-    REAL(r64) ThisWidth
-    REAL(r64) ThisHeight
-    REAL(r64) :: DistanceCheck
-!unused    REAL(r64) :: ccwtest
+    REAL ThisWidth
+    REAL ThisHeight
+    REAL :: DistanceCheck
+!unused    REAL :: ccwtest
 !unused    LOGICAL   :: SurfaceCCW
-    REAL(r64) :: dotp
+    REAL :: dotp
     
     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -6361,7 +6361,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
 
     IF (NSides > 2) THEN
       DistanceCheck=Distance(SurfaceTmp(SurfNum)%Vertex(SurfaceTmp(SurfNum)%Sides),SurfaceTmp(SurfNum)%Vertex(1))
-      IF (DistanceCheck < .01d0) THEN
+      IF (DistanceCheck < .01) THEN
         IF (DisplayExtraWarnings) THEN
           !CALL ShowWarningError(RoutineName//'Distance between two vertices < .01, possibly coincident.'//  &
           !                      ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//  &
@@ -6401,14 +6401,14 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
           TotalDegenerateSurfaces=TotalDegenerateSurfaces+1
           ! mark degenerate surface?
         ENDIF
-        DistanceCheck=0.0d0
+        DistanceCheck=0.0
       ENDIF
       Perimeter=DistanceCheck
 !      DO Vrt=2,SurfaceTmp(SurfNum)%Sides
       Vrt=2
       DO
         DistanceCheck=Distance(SurfaceTmp(SurfNum)%Vertex(Vrt),SurfaceTmp(SurfNum)%Vertex(Vrt-1))
-        IF (DistanceCheck < .01d0) THEN
+        IF (DistanceCheck < .01) THEN
           IF (DisplayExtraWarnings) THEN
             CALL ShowWarningError(RoutineName//'Distance between two vertices < .01, possibly coincident.'//  &
                                   ' for Surface='//TRIM(SurfaceTmp(SurfNum)%Name)//  &
@@ -6437,7 +6437,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
               TotalDegenerateSurfaces=TotalDegenerateSurfaces+1
               ! mark degenerate surface?
             ENDIF
-            DistanceCheck=0.0d0
+            DistanceCheck=0.0
           ELSE
             IF (SurfaceTmp(SurfNum)%Sides > 3) THEN
               IF (DisplayExtraWarnings) THEN
@@ -6457,7 +6457,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
               TotalDegenerateSurfaces=TotalDegenerateSurfaces+1
               ! mark degenerate surface?
             ENDIF
-            DistanceCheck=0.0d0
+            DistanceCheck=0.0
           ENDIF
         ENDIF
         Perimeter = Perimeter+DistanceCheck
@@ -6479,7 +6479,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
                                    SurfaceTmp(SurfNum)%lcsx,SurfaceTmp(SurfNum)%lcsy,SurfaceTmp(SurfNum)%lcsz, &
                                    SurfaceTmp(SurfNum)%GrossArea,SurfaceTmp(SurfNum)%NewellSurfaceNormalVector)
       dotp=SurfaceTmp(SurfNum)%NewellSurfaceNormalVector .dot. TestVector
-      IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Roof .and. dotp < -0.000001d0) THEN
+      IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Roof .and. dotp < -0.000001) THEN
         TiltString=RoundSigDigits(SurfTilt,1)
         CALL ShowWarningError(RoutineName//'Roof/Ceiling is upside down! Tilt angle=['//TRIM(TiltString)//  &
            '], should be near 0,'//   &
@@ -6494,7 +6494,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
            ' Surface="'//TRIM(SurfaceTmp(SurfNum)%Name)//  &
            '", in Zone="'//TRIM(SurfaceTmp(SurfNum)%ZoneName)//'".')
       ENDIF
-      IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. dotp > 0.000001d0) THEN
+      IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. dotp > 0.000001) THEN
         TiltString=RoundSigDigits(SurfTilt,1)
         CALL ShowWarningError(RoutineName//'Floor is upside down! Tilt angle=['//TRIM(TiltString)//  &
            '], should be near 180,'//   &
@@ -6502,7 +6502,7 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
            '", in Zone="'//TRIM(SurfaceTmp(SurfNum)%ZoneName)//'".')
         CALL ShowContinueError('Automatic fix is attempted.')
         CALL ReverseAndRecalculate(SurfNum,SurfaceTmp(SurfNum)%Sides,SurfWorldAz,SurfTilt)
-      ELSEIF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. SurfTilt < 158.2d0) THEN  ! slope/grade = 40%!
+      ELSEIF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. SurfTilt < 158.2) THEN  ! slope/grade = 40%!
         TiltString=RoundSigDigits(SurfTilt,1)
         CALL ShowWarningError(RoutineName//'Floor is not oriented correctly! Tilt angle=['//TRIM(TiltString)//  &
            '], should be near 180,'//   &
@@ -6518,25 +6518,25 @@ SUBROUTINE GetVertices(SurfNum,NSides,Vertices)
       SurfaceTmp(SurfNum)%SinTilt = SIN(SurfTilt*DegToRadians)
       SurfaceTmp(SurfNum)%CosTilt = COS(SurfTilt*DegToRadians)
       IF (SurfaceTmp(SurfNum)%ViewFactorGround == AutoCalculate) THEN
-        SurfaceTmp(SurfNum)%ViewFactorGround = 0.5d0 * (1.0d0 - SurfaceTmp(SurfNum)%CosTilt)
+        SurfaceTmp(SurfNum)%ViewFactorGround = 0.5 * (1.0 - SurfaceTmp(SurfNum)%CosTilt)
       ENDIF
       ! Outward normal unit vector (pointing away from room)
       SurfaceTmp(SurfNum)%OutNormVec = SurfaceTmp(SurfNum)%NewellSurfaceNormalVector
       DO N=1,3
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))     < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
       ENDDO
 
       IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Window .or. SurfaceTmp(SurfNum)%Class == SurfaceClass_GlassDoor .or.  &
           SurfaceTmp(SurfNum)%Class == SurfaceClass_Door) &
           SurfaceTmp(SurfNum)%Area =  SurfaceTmp(SurfNum)%Area * SurfaceTmp(SurfNum)%Multiplier
       ! Can perform tests on this surface here
-      SurfaceTmp(SurfNum)%ViewFactorSky=0.5d0*(1.d0+SurfaceTmp(SurfNum)%CosTilt)
+      SurfaceTmp(SurfNum)%ViewFactorSky=0.5*(1.+SurfaceTmp(SurfNum)%CosTilt)
       ! The following IR view factors are modified in subr. SkyDifSolarShading if there are shadowing
       ! surfaces
       SurfaceTmp(SurfNum)%ViewFactorSkyIR = SurfaceTmp(SurfNum)%ViewFactorSky
-      SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5d0*(1.d0-SurfaceTmp(SurfNum)%CosTilt)
+      SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5*(1.-SurfaceTmp(SurfNum)%CosTilt)
 
 
       ! Call to transform vertices
@@ -6586,8 +6586,8 @@ SUBROUTINE ReverseAndRecalculate(SurfNum,NSides,SurfAzimuth,SurfTilt)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfNum   ! Surface number for the surface
   INTEGER, INTENT(IN) :: NSides    ! number of sides to surface
-  REAL(r64), INTENT(INOUT) :: SurfAzimuth ! Surface Facing angle (will be 0 for roofs/floors)
-  REAL(r64), INTENT(INOUT) :: SurfTilt    ! Surface tilt (
+  REAL, INTENT(INOUT) :: SurfAzimuth ! Surface Facing angle (will be 0 for roofs/floors)
+  REAL, INTENT(INOUT) :: SurfTilt    ! Surface tilt (
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   character(len=*), parameter :: fmt3="(A,I5,A,3(1x,f18.13))"
@@ -6630,7 +6630,7 @@ SUBROUTINE ReverseAndRecalculate(SurfNum,NSides,SurfAzimuth,SurfTilt)
       CALL ShowWarningError(RoutineName//'Roof/Ceiling is still upside down! Tilt angle=['//TRIM(TiltString)//  &
            '], should be near 0, please fix manually.')
     ENDIF
-    IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. SurfTilt < 158.2d0) THEN  ! 40% grade!
+    IF (SurfaceTmp(SurfNum)%Class == SurfaceClass_Floor .and. SurfTilt < 158.2) THEN  ! 40% grade!
       CALL ShowWarningError(RoutineName//'Floor is still upside down! Tilt angle=['//TRIM(TiltString)//  &
          '], should be near 180, please fix manually.')
     ENDIF
@@ -6679,8 +6679,8 @@ SUBROUTINE MakeMirrorSurface(SurfNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Vert
   INTEGER NVert
-  REAL(r64) SurfWorldAz
-  REAL(r64) SurfTilt
+  REAL SurfWorldAz
+  REAL SurfTilt
   INTEGER N
 !  TYPE (Vector) :: temp1
 
@@ -6760,17 +6760,17 @@ SUBROUTINE MakeMirrorSurface(SurfNum)
       ! Outward normal unit vector (pointing away from room)
       SurfaceTmp(SurfNum)%OutNormVec = SurfaceTmp(SurfNum)%NewellSurfaceNormalVector
       DO N=1,3
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0d0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0d0) < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
-        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))       < 1.d-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)-1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = +1.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N)+1.0) < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) = -1.0
+        IF (ABS(SurfaceTmp(SurfNum)%OutNormVec(N))       < 1.*10**-06) SurfaceTmp(SurfNum)%OutNormVec(N) =  0.0
       ENDDO
 
     ! Can perform tests on this surface here
-    SurfaceTmp(SurfNum)%ViewFactorSky=0.5d0*(1.d0+SurfaceTmp(SurfNum)%CosTilt)
+    SurfaceTmp(SurfNum)%ViewFactorSky=0.5*(1.+SurfaceTmp(SurfNum)%CosTilt)
     ! The following IR view factors are modified in subr. SkyDifSolarShading if there are shadowing
     ! surfaces
     SurfaceTmp(SurfNum)%ViewFactorSkyIR = SurfaceTmp(SurfNum)%ViewFactorSky
-    SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5d0*(1.d0-SurfaceTmp(SurfNum)%CosTilt)
+    SurfaceTmp(SurfNum)%ViewFactorGroundIR = 0.5*(1.-SurfaceTmp(SurfNum)%CosTilt)
   ENDIF
 
   RETURN
@@ -8242,19 +8242,19 @@ SUBROUTINE CalculateZoneVolume(ErrorsFound,CeilingHeightEntered)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) MinimumVolume        ! The minimum allowable Zone volume (equivalent to a ceiling height of 2.5 meters)
-  REAL(r64) SumAreas             ! Sum of the Zone surface areas that are not "internal mass"
-  REAL(r64) SurfCount            ! Surface Count
+  REAL MinimumVolume        ! The minimum allowable Zone volume (equivalent to a ceiling height of 2.5 meters)
+  REAL SumAreas             ! Sum of the Zone surface areas that are not "internal mass"
+  REAL SurfCount            ! Surface Count
   INTEGER SurfNum           ! Loop counter for surfaces
   INTEGER ZoneNum           ! Loop counter for Zones
   LOGICAL ErrorFlag
-  REAL(r64) TempVolume           ! Temporary for calculating volume
+  REAL TempVolume           ! Temporary for calculating volume
   type(polyhedron) :: ZoneStruct
   integer, allocatable, dimension(:) :: surfacenotused
   integer :: notused
   INTEGER NFaces
   INTEGER NActFaces
-  REAL(r64) CalcVolume
+  REAL CalcVolume
   LOGICAL initmsg
   integer iside
   LOGICAL :: ShowZoneSurfaces=.false.
@@ -8306,7 +8306,7 @@ SUBROUTINE CalculateZoneVolume(ErrorsFound,CeilingHeightEntered)
     CALL CalcPolyhedronVolume(ZoneStruct,CalcVolume)
 
     IF(Zone(ZoneNum)%FloorArea > 0.0) THEN
-      MinimumVolume=Zone(ZoneNum)%FloorArea * 2.5d0
+      MinimumVolume=Zone(ZoneNum)%FloorArea * 2.5
       IF (Zone(ZoneNum)%CeilingHeight > 0.0) THEN
         MinimumVolume=Zone(ZoneNum)%FloorArea*Zone(ZoneNum)%CeilingHeight
       ENDIF
@@ -8325,7 +8325,7 @@ SUBROUTINE CalculateZoneVolume(ErrorsFound,CeilingHeightEntered)
 
     IF (Zone(ZoneNum)%Volume > 0.0) THEN   ! User entered zone volume, produce message if not near calculated
       IF (TempVolume > 0.0) THEN
-        IF (ABS(TempVolume-Zone(ZoneNum)%Volume)/Zone(ZoneNum)%Volume  > .05d0) THEN
+        IF (ABS(TempVolume-Zone(ZoneNum)%Volume)/Zone(ZoneNum)%Volume  > .05) THEN
           ErrCount=ErrCount+1
           IF (ErrCount == 1 .and. .not. DisplayExtraWarnings) THEN
             IF (initmsg) THEN
@@ -8472,67 +8472,67 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
           ! na
 
           ! LOCAL VARIABLES
-!  REAL(r64) :: X00    ! Intermediate Result
-!  REAL(r64) :: Y00    ! Intermediate Result
-!  REAL(r64) :: Z00    ! Intermediate Result
-!  REAL(r64) :: A(3,3) ! Surface Rotation Matrix
-!  REAL(r64), SAVE :: B(3,3) ! Inverse Of Rotation Matrix
-  REAL(r64) :: X1    ! Intermediate Result
-  REAL(r64) :: Y1    ! Intermediate Result
-  REAL(r64) :: Z1    ! Intermediate Result
-  REAL(r64), SAVE :: XSHIFT  ! Shift of X to Lower Left Corner
-  REAL(r64), SAVE :: YSHIFT  ! Shift of Y to Lower Left Corner
-  REAL(r64)  :: XLLC   ! X-coordinate of lower left corner
-  REAL(r64)  :: YLLC   ! Y-coordinate of lower left corner
-  REAL(r64)  :: ZLLC   ! Z-coordinate of lower left corner
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE  :: X
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE  :: Y
-  REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE  :: Z
+!  REAL :: X00    ! Intermediate Result
+!  REAL :: Y00    ! Intermediate Result
+!  REAL :: Z00    ! Intermediate Result
+!  REAL :: A(3,3) ! Surface Rotation Matrix
+!  REAL, SAVE :: B(3,3) ! Inverse Of Rotation Matrix
+  REAL :: X1    ! Intermediate Result
+  REAL :: Y1    ! Intermediate Result
+  REAL :: Z1    ! Intermediate Result
+  REAL, SAVE :: XSHIFT  ! Shift of X to Lower Left Corner
+  REAL, SAVE :: YSHIFT  ! Shift of Y to Lower Left Corner
+  REAL  :: XLLC   ! X-coordinate of lower left corner
+  REAL  :: YLLC   ! Y-coordinate of lower left corner
+  REAL  :: ZLLC   ! Z-coordinate of lower left corner
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE  :: X
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE  :: Y
+  REAL, ALLOCATABLE, DIMENSION(:), SAVE  :: Z
   LOGICAL :: OneTimeFlag=.true.
 !  INTEGER :: I  ! Loop Control
 !  INTEGER :: J  ! Loop Control
   INTEGER :: N  ! Vertex Number in Loop
   INTEGER ThisBaseSurface  ! Current base surface
-  REAL(r64) Xp
-  REAL(r64) Yp
-  REAL(r64) Zp
-  REAL(r64), SAVE :: BaseCosAzimuth
-  REAL(r64), SAVE :: BaseCosTilt
-  REAL(r64), SAVE :: BaseSinAzimuth
-  REAL(r64), SAVE :: BaseSinTilt
-  REAL(r64), SAVE :: BaseXLLC
-  REAL(r64), SAVE :: BaseYLLC
-  REAL(r64), SAVE :: BaseZLLC
-  REAL(r64) SurfWorldAz  ! Surface Azimuth (facing)
-  REAL(r64) SurfTilt     ! Surface Tilt
+  REAL Xp
+  REAL Yp
+  REAL Zp
+  REAL, SAVE :: BaseCosAzimuth
+  REAL, SAVE :: BaseCosTilt
+  REAL, SAVE :: BaseSinAzimuth
+  REAL, SAVE :: BaseSinTilt
+  REAL, SAVE :: BaseXLLC
+  REAL, SAVE :: BaseYLLC
+  REAL, SAVE :: BaseZLLC
+  REAL SurfWorldAz  ! Surface Azimuth (facing)
+  REAL SurfTilt     ! Surface Tilt
   type (planeeq) BasePlane
 !  type (planeeq) PlanarEQ
 !  type (vector), dimension(3) :: TriVect
-!  REAL(r64) testval
+!  REAL testval
 !  INTEGER ploop
 !  INTEGER vloop
   type (vector) TVect
   type (vector) CoordinateTransVector
   INTEGER ThisShape
   LOGICAL BaseSurface   ! True if a base surface or a detached shading surface
-  REAL(r64) ThisSurfAz
-  REAL(r64) ThisSurfTilt
-  REAL(r64) ThisReveal
-  REAL(r64) ThisWidth
-  REAL(r64) ThisHeight
+  REAL ThisSurfAz
+  REAL ThisSurfTilt
+  REAL ThisReveal
+  REAL ThisWidth
+  REAL ThisHeight
   INTEGER FrDivNum ! Frame/divider number
-  REAL(r64) FrWidth    ! Frame width for exterior windows (m)
-  REAL(r64) FrArea     ! Frame area for exterior windows(m2)
-  REAL(r64) DivWidth   ! Divider width for exterior windows (m)
-  REAL(r64) DivArea    ! Divider area for exterior windows (m2)
-  REAL(r64) DivFrac    ! Fraction of divider area without overlaps
+  REAL FrWidth    ! Frame width for exterior windows (m)
+  REAL FrArea     ! Frame area for exterior windows(m2)
+  REAL DivWidth   ! Divider width for exterior windows (m)
+  REAL DivArea    ! Divider area for exterior windows (m2)
+  REAL DivFrac    ! Fraction of divider area without overlaps
   LOGICAL ErrorInSurface ! false/true, depending on pass through routine
-  REAL(r64) Diagonal1  ! Length of diagonal of 4-sided figure (m)
-  REAL(r64) Diagonal2  ! Length of diagonal of 4-sided figure (m)
+  REAL Diagonal1  ! Length of diagonal of 4-sided figure (m)
+  REAL Diagonal2  ! Length of diagonal of 4-sided figure (m)
   LOGICAL SError
   LOGICAL HeatTransSurf
   LOGICAL IsCoplanar
-  REAL(r64) OutOfLine
+  REAL OutOfLine
   INTEGER LastVertexInError
 
   ErrorInSurface=.false.
@@ -8568,7 +8568,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
    IF (.NOT. Surface(ThisSurf)%MirroredSurf) THEN
      CALL CalcCoPlanarNess(Surface(ThisSurf)%Vertex,Surface(ThisSurf)%Sides,IsCoplanar,OutOfLine,LastVertexInError)
      IF (.not. IsCoPlanar) THEN
-       IF (OutOfLine > .01d0) THEN
+       IF (OutOfLine > .01) THEN
          CALL ShowSevereError(RoutineName//'Suspected non-planar surface:"'//TRIM(Surface(ThisSurf)%Name)//'",'// &
                               ' Max "out of line"='//TRIM(TrimSigDigits(OutOfLine,5))//' at Vertex # '//  &
                               TRIM(TrimSigDigits(LastVertexInError)))
@@ -8607,7 +8607,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
        Diagonal1 = VecLength(Surface(ThisSurf)%Vertex(1)-Surface(ThisSurf)%Vertex(3))
        Diagonal2 = VecLength(Surface(ThisSurf)%Vertex(2)-Surface(ThisSurf)%Vertex(4))
        ! Test for rectangularity
-       IF(ABS(Diagonal1-Diagonal2) < 0.020d0) THEN
+       IF(ABS(Diagonal1-Diagonal2) < 0.020) THEN
          Surface(ThisSurf)%Shape = Rectangle
        ELSE
          Surface(ThisSurf)%Shape = Quadrilateral
@@ -8615,7 +8615,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
      END IF
      IF (Surface(ThisSurf)%Sides >4) THEN
        Surface(ThisSurf)%Shape = Polygonal
-       if (abs(thisheight*thiswidth-surface(thissurf)%grossarea) > .001d0) then
+       if (abs(thisheight*thiswidth-surface(thissurf)%grossarea) > .001) then
          surface(thissurf)%width=sqrt(surface(thissurf)%grossarea)
          surface(thissurf)%height=surface(thissurf)%width
          thiswidth=surface(thissurf)%width
@@ -8640,9 +8640,9 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
 
      ELSE    !  this is a shadowing subsurface
 
-       IF (ABS(Surface(Surface(ThisSurf)%Basesurf)%Tilt-ThisSurfTilt) <= .01d0) then
+       IF (ABS(Surface(Surface(ThisSurf)%Basesurf)%Tilt-ThisSurfTilt) <= .01) then
          ! left or right fin
-         IF (ThisSurfAz < 0.) ThisSurfAz=ThisSurfAz+360.d0
+         IF (ThisSurfAz < 0.) ThisSurfAz=ThisSurfAz+360.
          IF (ThisSurfAz > Surface(Surface(ThisSurf)%BaseSurf)%Azimuth) then
            ThisShape=RectangularLeftFin
          ELSE
@@ -8665,7 +8665,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
          ErrorInSurface=.true.
        ENDIF
        ThisReveal=-Pt2Plane(Surface(ThisSurf)%Vertex(2),BasePlane)
-       IF (ABS(ThisReveal) < .0002d0) ThisReveal=0.0
+       IF (ABS(ThisReveal) < .0002) ThisReveal=0.0
        Surface(ThisSurf)%Reveal=ThisReveal
        Xp=Surface(ThisSurf)%Vertex(2)%x-BaseXLLC
        Yp=Surface(ThisSurf)%Vertex(2)%y-BaseYLLC
@@ -8683,7 +8683,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
        Diagonal2 = VecLength(Surface(ThisSurf)%Vertex(2)-Surface(ThisSurf)%Vertex(4))
 
        ! Test for rectangularity
-       IF(ABS(Diagonal1-Diagonal2) > 0.020d0) THEN
+       IF(ABS(Diagonal1-Diagonal2) > 0.020) THEN
          CALL ShowSevereError(RoutineName//'Suspected 4-sided but non-rectangular Window, Door or GlassDoor:')
          CALL ShowContinueError('Surface='//TRIM(Surface(ThisSurf)%Name) &
                      //', Diagonal1='//TRIM(TrimSigDigits(Diagonal1,3))//', Diagonal2='//TRIM(TrimSigDigits(Diagonal2,3)))
@@ -8718,7 +8718,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
          ! Surface(ThisSurf)%FrameDivider will be 0 for triangular windows)
          FrWidth = FrameDivider(FrDivNum)%FrameWidth
          IF(FrWidth > 0.0) THEN
-           FrArea = (Surface(ThisSurf)%Height + 2.0d0*FrWidth)*(Surface(ThisSurf)%Width + 2.0d0*FrWidth) &
+           FrArea = (Surface(ThisSurf)%Height + 2.0*FrWidth)*(Surface(ThisSurf)%Width + 2.0*FrWidth) &
                         - Surface(ThisSurf)%Area/Surface(ThisSurf)%Multiplier
            SurfaceWindow(ThisSurf)%FrameArea = FrArea * Surface(ThisSurf)%Multiplier
            IF((Surface(Surface(ThisSurf)%BaseSurf)%Area - SurfaceWindow(ThisSurf)%FrameArea) <= 0.0) THEN
@@ -8791,7 +8791,7 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
          ErrorInSurface=.true.
        ENDIF
        ThisReveal=-Pt2Plane(Surface(ThisSurf)%Vertex(2),BasePlane)
-       IF (ABS(ThisReveal) < .0002d0) ThisReveal=0.0
+       IF (ABS(ThisReveal) < .0002) ThisReveal=0.0
        Surface(ThisSurf)%Reveal=ThisReveal
        Xp=Surface(ThisSurf)%Vertex(2)%x-BaseXLLC
        Yp=Surface(ThisSurf)%Vertex(2)%y-BaseYLLC
@@ -8807,8 +8807,8 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
        Surface(ThisSurf)%Height=ThisHeight
        ! Effective height and width of a triangular window for use in calc of convective air flow
        ! in gap between glass and shading device when shading device is present
-       Surface(ThisSurf)%Height = 4.d0*Surface(ThisSurf)%Area/(3.d0*Surface(ThisSurf)%Width)
-       Surface(ThisSurf)%Width  = 0.75d0*Surface(ThisSurf)%Width
+       Surface(ThisSurf)%Height = 4.*Surface(ThisSurf)%Area/(3.*Surface(ThisSurf)%Width)
+       Surface(ThisSurf)%Width  = 0.75*Surface(ThisSurf)%Width
 
        Xp=Surface(ThisSurf)%Vertex(1)%x-BaseXLLC
        Yp=Surface(ThisSurf)%Vertex(1)%y-BaseYLLC
@@ -8915,12 +8915,12 @@ SUBROUTINE ProcessSurfaceVertices(ThisSurf,ErrorsFound)
 
      DO N = 1, Surface(ThisSurf)%Sides
       ! if less than 1/10 inch
-       X(N)=ANINT(10000.d0*X(N),r64)/10000.d0
-       IF (ABS(X(N)) < .0025d0) X(N)=0.0
-       Y(N)=ANINT(10000.d0*Y(N),r64)/10000.d0
-       IF (ABS(Y(N)) < .0025d0) Y(N)=0.0
-       Z(N)=ANINT(10000.d0*Z(N),r64)/10000.d0
-       IF (ABS(Z(N)) < .0025d0) Z(N)=0.0
+       X(N)=ANINT(10000.*X(N),r64)/10000.
+       IF (ABS(X(N)) < .0025) X(N)=0.0
+       Y(N)=ANINT(10000.*Y(N),r64)/10000.
+       IF (ABS(Y(N)) < .0025) Y(N)=0.0
+       Z(N)=ANINT(10000.*Z(N),r64)/10000.
+       IF (ABS(Z(N)) < .0025) Z(N)=0.0
      ENDDO
 
      Surface(ThisSurf)%Shape=ThisShape
@@ -9030,8 +9030,8 @@ SUBROUTINE CalcCoordinateTransformation(SurfNum,CompCoordTranslVector)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER I               ! Loop Control
-  REAL(r64) GAMMA              ! Intermediate Result
-  REAL(r64) DotSelfX23
+  REAL GAMMA              ! Intermediate Result
+  REAL DotSelfX23
   CHARACTER(len=132) :: ErrLineOut=Blank ! Character string for producing error messages
   TYPE (vector) :: x21
   TYPE (vector) :: x23
@@ -9167,19 +9167,19 @@ ELSE
         Material(Construct(ConstrNum)%LayerPoint(TotLayersOld))%AbsorpThermalBack
   Construct(ConstrNewSh)%OutSideRoughness     = VerySmooth
   Construct(ConstrNewSh)%DayltPropPtr        = 0
-  Construct(ConstrNewSh)%CTFCross            = 0.0D0
-  Construct(ConstrNewSh)%CTFFlux             = 0.0D0
-  Construct(ConstrNewSh)%CTFInside           = 0.0D0
-  Construct(ConstrNewSh)%CTFOutside          = 0.0D0
-  Construct(ConstrNewSh)%CTFSourceIn         = 0.0D0
-  Construct(ConstrNewSh)%CTFSourceOut        = 0.0D0
-  Construct(ConstrNewSh)%CTFTimeStep         = 0.0D0
-  Construct(ConstrNewSh)%CTFTSourceOut       = 0.0D0
-  Construct(ConstrNewSh)%CTFTSourceIn        = 0.0D0
-  Construct(ConstrNewSh)%CTFTSourceQ         = 0.0D0
-  Construct(ConstrNewSh)%CTFTUserOut         = 0.0D0
-  Construct(ConstrNewSh)%CTFTUserIn          = 0.0D0
-  Construct(ConstrNewSh)%CTFTUserSource      = 0.0D0
+  Construct(ConstrNewSh)%CTFCross            = 0.0
+  Construct(ConstrNewSh)%CTFFlux             = 0.0
+  Construct(ConstrNewSh)%CTFInside           = 0.0
+  Construct(ConstrNewSh)%CTFOutside          = 0.0
+  Construct(ConstrNewSh)%CTFSourceIn         = 0.0
+  Construct(ConstrNewSh)%CTFSourceOut        = 0.0
+  Construct(ConstrNewSh)%CTFTimeStep         = 0.0
+  Construct(ConstrNewSh)%CTFTSourceOut       = 0.0
+  Construct(ConstrNewSh)%CTFTSourceIn        = 0.0
+  Construct(ConstrNewSh)%CTFTSourceQ         = 0.0
+  Construct(ConstrNewSh)%CTFTUserOut         = 0.0
+  Construct(ConstrNewSh)%CTFTUserIn          = 0.0
+  Construct(ConstrNewSh)%CTFTUserSource      = 0.0
   Construct(ConstrNewSh)%NumHistories        = 0
   Construct(ConstrNewSh)%NumCTFTerms         = 0
   Construct(ConstrNewSh)%UValue              = 0.0
@@ -9469,19 +9469,19 @@ DO StormWinNum = 1,TotStormWin
       Construct(ConstrNew)%OutsideAbsorpThermal = Material(StormWinMatNum)%AbsorpThermalFront
       Construct(ConstrNew)%OutSideRoughness     = VerySmooth
       Construct(ConstrNew)%DayltPropPtr        = 0
-      Construct(ConstrNew)%CTFCross            = 0.0D0
-      Construct(ConstrNew)%CTFFlux             = 0.0D0
-      Construct(ConstrNew)%CTFInside           = 0.0D0
-      Construct(ConstrNew)%CTFOutside          = 0.0D0
-      Construct(ConstrNew)%CTFSourceIn         = 0.0D0
-      Construct(ConstrNew)%CTFSourceOut        = 0.0D0
-      Construct(ConstrNew)%CTFTimeStep         = 0.0D0
-      Construct(ConstrNew)%CTFTSourceOut       = 0.0D0
-      Construct(ConstrNew)%CTFTSourceIn        = 0.0D0
-      Construct(ConstrNew)%CTFTSourceQ         = 0.0D0
-      Construct(ConstrNew)%CTFTUserOut         = 0.0D0
-      Construct(ConstrNew)%CTFTUserIn          = 0.0D0
-      Construct(ConstrNew)%CTFTUserSource      = 0.0D0
+      Construct(ConstrNew)%CTFCross            = 0.0
+      Construct(ConstrNew)%CTFFlux             = 0.0
+      Construct(ConstrNew)%CTFInside           = 0.0
+      Construct(ConstrNew)%CTFOutside          = 0.0
+      Construct(ConstrNew)%CTFSourceIn         = 0.0
+      Construct(ConstrNew)%CTFSourceOut        = 0.0
+      Construct(ConstrNew)%CTFTimeStep         = 0.0
+      Construct(ConstrNew)%CTFTSourceOut       = 0.0
+      Construct(ConstrNew)%CTFTSourceIn        = 0.0
+      Construct(ConstrNew)%CTFTSourceQ         = 0.0
+      Construct(ConstrNew)%CTFTUserOut         = 0.0
+      Construct(ConstrNew)%CTFTUserIn          = 0.0
+      Construct(ConstrNew)%CTFTUserSource      = 0.0
       Construct(ConstrNew)%NumHistories        = 0
       Construct(ConstrNew)%NumCTFTerms         = 0
       Construct(ConstrNew)%UValue              = 0.0
@@ -9579,17 +9579,17 @@ SUBROUTINE ModifyWindow(SurfNum,ErrorsFound,AddedSubSurfaces)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !unused1208  INTEGER :: TotSurfacesPrev                 ! Total number of surfaces before splitting window
 !unused1208  INTEGER :: loop                            ! DO loop index
-  REAL(r64)    :: H,W                             ! Height and width of original window (m)
-!unused1208  REAL(r64)    :: MulWidth                        ! Mullion width (m)
-  REAL(r64)    :: h1,w1                           ! height and width of first glazing system (m)
-!unused1208  REAL(r64)    :: h2,w2                           ! height and width of second glazing system (m)
+  REAL    :: H,W                             ! Height and width of original window (m)
+!unused1208  REAL    :: MulWidth                        ! Mullion width (m)
+  REAL    :: h1,w1                           ! height and width of first glazing system (m)
+!unused1208  REAL    :: h2,w2                           ! height and width of second glazing system (m)
   type (vector) TVect
 !unused1208  type (rectangularwindow) :: NewCoord
   type (rectangularwindow) :: OriginalCoord
   INTEGER :: IConst                          ! Construction number of first glazing system
   INTEGER :: IConst2                         ! Construction number of second glazing system
   CHARACTER(len=MaxNameLength) :: Const2Name ! Name of construction of second glazing system
-!unused1208  REAL(r64)    :: AreaNew                         ! Sum of areas of the two glazing systems (m2)
+!unused1208  REAL    :: AreaNew                         ! Sum of areas of the two glazing systems (m2)
 
 IConst = SurfaceTmp(SurfNum)%Construction
 
@@ -9614,7 +9614,7 @@ IF(IConst2 == 0) THEN  ! Only one glazing system on Window5 Data File for this w
   ! So... original dimensions and area of window are used (entered in IDF)
   ! Warning if dimensions of original window differ from those on Data File by more than 10%
 
-  IF(ABS((H-h1)/H) > 0.10d0 .OR. ABS((W-w1)/W) > 0.10d0) THEN
+  IF(ABS((H-h1)/H) > 0.10 .OR. ABS((W-w1)/W) > 0.10) THEN
 
     IF (DisplayExtraWarnings) THEN
       CALL ShowWarningError('SurfaceGeometry: ModifyWindow: Window '//TRIM(SurfaceTmp(SurfNum)%Name)// &
@@ -9749,19 +9749,19 @@ SUBROUTINE AddWindow(SurfNum,ErrorsFound,AddedSubSurfaces)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: TotSurfacesPrev                 ! Total number of surfaces before splitting window
   INTEGER :: loop                            ! DO loop index
-  REAL(r64)    :: H,W                             ! Height and width of original window (m)
-  REAL(r64)    :: MulWidth                        ! Mullion width (m)
-  REAL(r64)    :: h1,w1                           ! height and width of first glazing system (m)
-  REAL(r64)    :: h2,w2                           ! height and width of second glazing system (m)
-  REAL(r64)    :: xa,ya,za,xb,yb,zb               ! Vertex intermediate variables (m)
-  REAL(r64)    :: dx,dy                           ! Vertex displacements from original window (m)
+  REAL    :: H,W                             ! Height and width of original window (m)
+  REAL    :: MulWidth                        ! Mullion width (m)
+  REAL    :: h1,w1                           ! height and width of first glazing system (m)
+  REAL    :: h2,w2                           ! height and width of second glazing system (m)
+  REAL    :: xa,ya,za,xb,yb,zb               ! Vertex intermediate variables (m)
+  REAL    :: dx,dy                           ! Vertex displacements from original window (m)
   type (vector) TVect
   type (rectangularwindow) :: NewCoord
   type (rectangularwindow) :: OriginalCoord
   INTEGER :: IConst                          ! Construction number of first glazing system
   INTEGER :: IConst2                         ! Construction number of second glazing system
   CHARACTER(len=MaxNameLength) :: Const2Name ! Name of construction of second glazing system
-  REAL(r64)    :: AreaNew                         ! Sum of areas of the two glazing systems (m2)
+  REAL    :: AreaNew                         ! Sum of areas of the two glazing systems (m2)
 
   IConst = SurfaceTmp(SurfNum)%Construction
 
@@ -10184,18 +10184,18 @@ SUBROUTINE TransformVertsByAspect(SurfNum,NSides)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength), DIMENSION(1) :: cAlphas
-  REAL(r64), DIMENSION(2) :: rNumerics
+  REAL, DIMENSION(2) :: rNumerics
   INTEGER            :: NAlphas
   INTEGER            :: NNum
   INTEGER            :: IOSTAT
-  REAL(r64),SAVE          :: OldAspectRatio
-  REAL(r64),SAVE          :: NewAspectRatio
+  REAL,SAVE          :: OldAspectRatio
+  REAL,SAVE          :: NewAspectRatio
   Logical, save      :: firstTime = .true.
   Logical, save      :: noTransform = .true.
   CHARACTER(len=2),save   :: transformPlane
   INTEGER            :: N
-  REAL(r64)          :: Xo, XnoRot, Xtrans
-  REAL(r64)          :: Yo, YnoRot, Ytrans
+  REAL          :: Xo, XnoRot, Xtrans
+  REAL          :: Yo, YnoRot, Ytrans
   !begin execution
   !get user input...
   IF (firstTime) then
@@ -10297,18 +10297,18 @@ SUBROUTINE CalcSurfaceCentroid
     Type(vector), Dimension(3)   :: Triangle2 !working struct for a 3-sided surface
 
     INTEGER   :: thisSurf  ! working variable for do loop
-    REAL(r64) :: Tri1Area  ! working variable for denominator
-    REAL(r64) :: Tri2Area  ! working variable for denominator
-    REAL(r64) :: TotalArea ! working variable for denominator
-    REAL(r64) :: Xcm       ! temporary X coord for centriod
-    REAL(r64) :: Ycm       ! temporary Y coord for centriod
-    REAL(r64) :: Zcm       ! temporary Z coord for centriod
-    REAL(r64) :: XcmTri1   ! temporary X coord for centriod of triangle 1
-    REAL(r64) :: YcmTri1   ! temporary Y coord for centriod of triangle 1
-    REAL(r64) :: ZcmTri1   ! temporary Z coord for centriod of triangle 1
-    REAL(r64) :: XcmTri2   ! temporary X coord for centriod of triangle 2
-    REAL(r64) :: YcmTri2   ! temporary Y coord for centriod of triangle 2
-    REAL(r64) :: ZcmTri2   ! temporary Z coord for centriod of triangle 2
+    REAL :: Tri1Area  ! working variable for denominator
+    REAL :: Tri2Area  ! working variable for denominator
+    REAL :: TotalArea ! working variable for denominator
+    REAL :: Xcm       ! temporary X coord for centriod
+    REAL :: Ycm       ! temporary Y coord for centriod
+    REAL :: Zcm       ! temporary Z coord for centriod
+    REAL :: XcmTri1   ! temporary X coord for centriod of triangle 1
+    REAL :: YcmTri1   ! temporary Y coord for centriod of triangle 1
+    REAL :: ZcmTri1   ! temporary Z coord for centriod of triangle 1
+    REAL :: XcmTri2   ! temporary X coord for centriod of triangle 2
+    REAL :: YcmTri2   ! temporary Y coord for centriod of triangle 2
+    REAL :: ZcmTri2   ! temporary Z coord for centriod of triangle 2
     type(vector) :: VecAvg ! Average (calc for multisided polygons (>4 sides))
     integer   :: vert
     integer   :: negZcount  ! for warning error in surface centroids
@@ -10414,7 +10414,7 @@ SUBROUTINE CalcSurfaceCentroid
         do vert=1,Surface(thisSurf)%Sides
           VecAvg=VecAvg + Surface(thisSurf)%Vertex(vert)
         enddo
-        VecAvg=VecAvg/REAL(Surface(thisSurf)%Sides,r64)
+        VecAvg=VecAvg/REAL(Surface(thisSurf)%Sides) !,r64)  !RS: Debugging: 102612
         Xcm=VecAvg%x
         Ycm=VecAvg%y
         Zcm=VecAvg%z
@@ -10645,7 +10645,7 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
   INTEGER, INTENT(IN)  :: NSides      ! Number of sides to figure
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64),PARAMETER :: TurnThreshold = 0.000001d0 ! Sensitivity of convexity test, in radians
+  REAL,PARAMETER :: TurnThreshold = 0.000001 ! Sensitivity of convexity test, in radians
   CHARACTER(len=*), PARAMETER :: ErrFmt="(' (',F8.3,',',F8.3,',',F8.3,')')"
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -10658,34 +10658,34 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
   INTEGER   :: N             ! Loop index
   INTEGER   :: Np1             ! Loop index
   INTEGER   :: Np2             ! Loop index
-  REAL(r64) :: Det           ! Determinant for picking projection plane
-  REAL(r64) :: DotProd       ! Dot product for determining angle
-  REAL(r64) :: Theta         ! Angle between edge vectors
-  REAL(r64) :: LastTheta     ! Angle between edge vectors
-  REAL(r64) :: V1len         ! Edge vector length
-  REAL(r64) :: V2len         ! Edge vector length
+  REAL :: Det           ! Determinant for picking projection plane
+  REAL :: DotProd       ! Dot product for determining angle
+  REAL :: Theta         ! Angle between edge vectors
+  REAL :: LastTheta     ! Angle between edge vectors
+  REAL :: V1len         ! Edge vector length
+  REAL :: V2len         ! Edge vector length
   LOGICAL   :: SignFlag      ! Direction of edge turn : .true. is right, .false. is left
   LOGICAL   :: PrevSignFlag  ! Container for the sign of the previous iteration's edge turn
   LOGICAL   :: FirstTimeFlag ! Flag indicating first iteration
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: X ! containers for x,y,z vertices of the surface
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: Y
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: Z
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: A    ! containers for convexity test
-  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: B
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: X ! containers for x,y,z vertices of the surface
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: Y
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: Z
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: A    ! containers for convexity test
+  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: B
   INTEGER, ALLOCATABLE, SAVE, DIMENSION(:) :: SurfCollinearVerts ! Array containing indices of collinear vertices
   INTEGER, SAVE :: VertSize  ! size of X,Y,Z,A,B arrays
-  REAL(r64) :: cosarg
+  REAL :: cosarg
   INTEGER   :: M             ! Array index for SurfCollinearVerts container
   INTEGER   :: J             ! Loop index
   INTEGER   :: K             ! Loop index
   INTEGER   :: Ind           ! Location of surface vertex to be removed
   LOGICAL, SAVE :: firstTime=.true.
-  REAL(r64), SAVE :: ACosZero  ! set on firstTime
+  REAL, SAVE :: ACosZero  ! set on firstTime
   LOGICAL :: SurfCollinearWarning
   CHARACTER(len=132) :: ErrLineOut=Blank ! Character string for producing error messages
 
   if (firstTime) then
-    ACosZero=ACOS(0.0d0)
+    ACosZero=ACOS(0.0)
     ALLOCATE(X(MaxVerticesPerSurface+2))
     ALLOCATE(Y(MaxVerticesPerSurface+2))
     ALLOCATE(Z(MaxVerticesPerSurface+2))
@@ -10730,7 +10730,7 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
   DO N = 1, NSides
     Det = Det + X(N)*Y(N+1) - X(N+1)*Y(N)
   END DO
-  IF (ABS(Det) > 1.d-4) THEN
+  IF (ABS(Det) > 1.*10**-4) THEN
     A = X
     B = Y
   ELSE
@@ -10738,7 +10738,7 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
     DO N = 1, NSides
       Det = Det + X(N)*Z(N+1) - X(N+1)*Z(N)
     END DO
-    IF (ABS(Det) > 1.d-4) THEN
+    IF (ABS(Det) > 1.*10**-4) THEN  !RS: Debugging: 102612
       A = X
       B = Z
     ELSE
@@ -10746,7 +10746,7 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
       DO N = 1, NSides
         Det = Det + Y(N)*Z(N+1) - Y(N+1)*Z(N)
       END DO
-      IF (ABS(Det) > 1.d-4) THEN
+      IF (ABS(Det) > 1.*10**-4) THEN
         A = Y
         B = Z
       ELSE
@@ -10769,12 +10769,12 @@ SUBROUTINE CheckConvexity(SurfNum,NSides)
     DotProd = (A(N+1)-A(N))*(B(N+2)-B(N+1))-(B(N+1)-B(N))*(A(N+2)-A(N+1))
     V1len = SQRT((A(N+1)-A(N))**2+(B(N+1)-B(N))**2)
     V2len = SQRT((A(N+2)-A(N+1))**2+(B(N+2)-B(N+1))**2)
-    IF (V1Len <= 1.d-8 .or. V2Len <= 1.d-8) CYCLE
+    IF (V1Len <= 1.*10**-8 .or. V2Len <= 1.*10**-8) CYCLE
     cosarg=DotProd/(V1len * V2len)
-    if (cosarg < -1.0d0) then
-      cosarg=-1.0d0
-    elseif (cosarg > 1.0d0) then
-      cosarg=1.0d0
+    if (cosarg < -1.0) then
+      cosarg=-1.0
+    elseif (cosarg > 1.0) then
+      cosarg=1.0
     endif
     Theta   = ACOS(cosarg)
     IF (Theta < (ACosZero-TurnThreshold)) THEN

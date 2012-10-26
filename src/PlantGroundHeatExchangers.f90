@@ -50,31 +50,31 @@ TYPE GlheSpecs
   CHARACTER(len=MaxNameLength)  :: Name               =' ' ! user identifier
   LOGICAL                       :: Available          =.false. ! need an array of logicals--load identifiers of available equipment
   LOGICAL                       :: ON                 =.false. ! simulate the machine at it's operating part load ratio
-  REAL(r64)                     :: MaxGlheFlowRate    =0.0 ! design nominal capacity of Pump
+  REAL                     :: MaxGlheFlowRate    =0.0 ! design nominal capacity of Pump
   INTEGER                       :: MaxSimYears        =0   ! maximum length of simulation (years)
   INTEGER                       :: GlheInletNodeNum   =0   ! Node number on the inlet side of the plant
   INTEGER                       :: GlheOutletNodeNum  =0   ! Node number on the outlet side of the plant
   INTEGER                       :: NumBoreholes       =0
-  REAL(r64)                     :: BoreholeLength     =0.0
-  REAL(r64)                     :: BoreholeRadius     =0.0
-  REAL(r64)                     :: KGround            =0.0 ! Thermal conductivity of the ground        [W/(mK)]
-  REAL(r64)                     :: CpRhoGround        =0.0 ! Specific heat capacity of ground      [J/Kg/K]
-  REAL(r64)                     :: TempGround         =0.0 ! The far feild temperature of the ground   [°C]
-  REAL(r64)                     :: DesignFlow         =0.0 ! Design volumetric flow rate               [m3/S]
-  REAL(r64)                     :: DesignMassFlow     =0.0 ! Design mass flow rate                    [kg/S]
-  REAL(r64)                     :: KGrout             =0.0 ! Grout thermal conductivity                [W/(mK)]
-  REAL(r64)                     :: KPipe              =0.0 ! Thermal Conductivity of the U tube        [W/(mK)]
-  REAL(r64)                     :: PipeOutDia         =0.0 ! Outer diameter of the Pipe                [m]
-  REAL(r64)                     :: UtubeDist          =0.0 ! Distance between the legs of the Utube    [m]
-  REAL(r64)                     :: PipeThick          =0.0 ! Thickness of the pipe wall
-  REAL(r64)                     :: gReferenceRatio    =0.0 ! Reference ratio for developing g-functions [-]
+  REAL                     :: BoreholeLength     =0.0
+  REAL                     :: BoreholeRadius     =0.0
+  REAL                     :: KGround            =0.0 ! Thermal conductivity of the ground        [W/(mK)]
+  REAL                     :: CpRhoGround        =0.0 ! Specific heat capacity of ground      [J/Kg/K]
+  REAL                     :: TempGround         =0.0 ! The far feild temperature of the ground   [°C]
+  REAL                     :: DesignFlow         =0.0 ! Design volumetric flow rate               [m3/S]
+  REAL                     :: DesignMassFlow     =0.0 ! Design mass flow rate                    [kg/S]
+  REAL                     :: KGrout             =0.0 ! Grout thermal conductivity                [W/(mK)]
+  REAL                     :: KPipe              =0.0 ! Thermal Conductivity of the U tube        [W/(mK)]
+  REAL                     :: PipeOutDia         =0.0 ! Outer diameter of the Pipe                [m]
+  REAL                     :: UtubeDist          =0.0 ! Distance between the legs of the Utube    [m]
+  REAL                     :: PipeThick          =0.0 ! Thickness of the pipe wall
+  REAL                     :: gReferenceRatio    =0.0 ! Reference ratio for developing g-functions [-]
   INTEGER                       :: NPairs             =0   ! Number of pairs of Lntts and Gfunc
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: QnMonthlyAgg       ! Monthly aggregated normalised heat extraction/rejection rate [W/m]
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: QnHr               ! Hourly aggregated normalised heat extraction/rejection rate [W/m]
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: QnSubHr            ! Contains the subhourly heat extraction/rejection rate normalised
+  REAL,ALLOCATABLE,DIMENSION(:) :: QnMonthlyAgg       ! Monthly aggregated normalised heat extraction/rejection rate [W/m]
+  REAL,ALLOCATABLE,DIMENSION(:) :: QnHr               ! Hourly aggregated normalised heat extraction/rejection rate [W/m]
+  REAL,ALLOCATABLE,DIMENSION(:) :: QnSubHr            ! Contains the subhourly heat extraction/rejection rate normalised
                                                       ! by the total active length of bore holes  [W/m]
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: LNTTS              ! natural log of Non Dimensional Time Ln(t/ts)
-  REAL(r64),ALLOCATABLE,DIMENSION(:) :: GFNC               ! G-function ( Non Dimensional temperature response factors)
+  REAL,ALLOCATABLE,DIMENSION(:) :: LNTTS              ! natural log of Non Dimensional Time Ln(t/ts)
+  REAL,ALLOCATABLE,DIMENSION(:) :: GFNC               ! G-function ( Non Dimensional temperature response factors)
   INTEGER                       :: AGG                =0   ! Minimum Hourly Histroy required
   INTEGER                       :: SubAGG             =0   ! Minimum subhourly History
   INTEGER,ALLOCATABLE,DIMENSION(:) :: LastHourN            ! Stores the Previous hour's N for past hours
@@ -88,36 +88,36 @@ END TYPE GlheSpecs
 
 
 TYPE ReportVars
-  REAL(r64)                     :: GlheBoreholeTemp   =0.0 ! [°C]
-  REAL(r64)                     :: GlheMassFlowRate   =0.0 ! [kg/s]
-  REAL(r64)                     :: GlheOutletTemp     =0.0 ! [°C]
-  REAL(r64)                     :: GlheInletTemp      =0.0 ! [°C]
-  REAL(r64)                     :: GlheAveFluidTemp   =0.0 ! [°C]
-  REAL(r64)                     :: QGlhe              =0.0 ! [W] heat transfer rate
+  REAL                     :: GlheBoreholeTemp   =0.0 ! [°C]
+  REAL                     :: GlheMassFlowRate   =0.0 ! [kg/s]
+  REAL                     :: GlheOutletTemp     =0.0 ! [°C]
+  REAL                     :: GlheInletTemp      =0.0 ! [°C]
+  REAL                     :: GlheAveFluidTemp   =0.0 ! [°C]
+  REAL                     :: QGlhe              =0.0 ! [W] heat transfer rate
 END TYPE ReportVars
 
   ! MODULE PARAMETER DEFINITIONS
-REAL(r64) , PARAMETER    :: HrsPerDay   = 24.d0   ! Number of hours in a day
-REAL(r64) , PARAMETER    :: HrsPerMonth =730.0d0 ! Number of hours in month
+REAL , PARAMETER    :: HrsPerDay   = 24.   ! Number of hours in a day
+REAL , PARAMETER    :: HrsPerMonth =730.0 ! Number of hours in month
 INTEGER, PARAMETER       :: MaxTSinHr   = 60   ! Max number of time step in a hour
 
   ! MODULE VARIABLE DECLARATIONS:
 INTEGER                         :: NumVerticalGlhes=0
 INTEGER                         :: N               =1    ! COUNTER OF TIME STEP
-REAL(r64)                       :: CurrentSimTime  =0.0  ! Current simulation time in hours
-REAL(r64)                       :: GlheOutletTemp  =0.0  ! Outlet temperature of the fluid  [°C]
-REAL(r64)                       :: GlheInletTemp   =0.0  ! Inlet temperature of the fluid   [°C]
-REAL(r64)                       :: GlheMassFlowRate=0.0  ! Mass flowrate of the fluid       [Kg/s]
-REAL(r64)                       :: QGlhe           =0.0  ! The normalised heat transfer rate[W/m]
-REAL(r64)                       :: GlheRB          =0.0  ! [K per W/m] Just for Analyis will be removed later
-REAL(r64)                       :: GlheAveFluidTemp=0.0  ! The average fluid temperature    [°C]
-REAL(r64)                       :: GlheBoreholeTemp=0.0  ! The average borehole tempreature [°C]
+REAL                       :: CurrentSimTime  =0.0  ! Current simulation time in hours
+REAL                       :: GlheOutletTemp  =0.0  ! Outlet temperature of the fluid  [°C]
+REAL                       :: GlheInletTemp   =0.0  ! Inlet temperature of the fluid   [°C]
+REAL                       :: GlheMassFlowRate=0.0  ! Mass flowrate of the fluid       [Kg/s]
+REAL                       :: QGlhe           =0.0  ! The normalised heat transfer rate[W/m]
+REAL                       :: GlheRB          =0.0  ! [K per W/m] Just for Analyis will be removed later
+REAL                       :: GlheAveFluidTemp=0.0  ! The average fluid temperature    [°C]
+REAL                       :: GlheBoreholeTemp=0.0  ! The average borehole tempreature [°C]
 INTEGER                         :: LocHourofDay    =0
 INTEGER                         :: LocDayofSim     =0
-REAL(r64),SAVE, ALLOCATABLE,DIMENSION(:):: LastQnSubHr   ! Previous time step Qn subhourly value
-REAL(r64)                               :: MDotActual
+REAL,SAVE, ALLOCATABLE,DIMENSION(:):: LastQnSubHr   ! Previous time step Qn subhourly value
+REAL                               :: MDotActual
 
-REAL(r64), ALLOCATABLE,DIMENSION(:)  :: PrevTimeSteps  ! This is used to store only the Last Few time step's time
+REAL, ALLOCATABLE,DIMENSION(:)  :: PrevTimeSteps  ! This is used to store only the Last Few time step's time
                                                       ! to enable the calculation of the subhouly contribution..
                                                       ! Recommended size, the product of Minimum subhourly history required and
                                                       ! the maximum no of system time steps in an hour
@@ -281,42 +281,42 @@ SUBROUTINE CalcVerticalGroundHeatExchanger(GlheNum)
 
     !LOCAL BHORE HOLE PARAMETERS
     INTEGER                :: NumBholes
-    REAL(r64)              :: FluidDensity
-    REAL(r64)              :: BholeLength
-    REAL(r64)              :: K_Ground
-    REAL(r64)              :: K_Ground_Factor
-    REAL(r64)              :: Cp_Fluid
-    REAL(r64)              :: Tground
-    REAL(r64),SAVE              :: ResistanceBhole           ! The thermal resistance of the borehole, (K per W/m]
-    REAL(r64)              :: Gfuncval                  ! Interpolated G function value at a sub-hour
-    REAL(r64)              :: ToutNew = 19.375
-    REAL(r64)              :: FluidAveTemp
-    REAL(r64)              :: GroundDiffusivity
-    REAL(r64)              :: TimeSS                    !Steady state time
-    REAL(r64)              :: TimeSS_Factor             !Steady state time factor for calculation
-    REAL(r64)              :: XI
-    REAL(r64)              :: C_1
+    REAL              :: FluidDensity
+    REAL              :: BholeLength
+    REAL              :: K_Ground
+    REAL              :: K_Ground_Factor
+    REAL              :: Cp_Fluid
+    REAL              :: Tground
+    REAL,SAVE              :: ResistanceBhole           ! The thermal resistance of the borehole, (K per W/m]
+    REAL              :: Gfuncval                  ! Interpolated G function value at a sub-hour
+    REAL              :: ToutNew = 19.375
+    REAL              :: FluidAveTemp
+    REAL              :: GroundDiffusivity
+    REAL              :: TimeSS                    !Steady state time
+    REAL              :: TimeSS_Factor             !Steady state time factor for calculation
+    REAL              :: XI
+    REAL              :: C_1
     INTEGER                :: NumOfMonths               ! the number of months of simulation elapsed
     INTEGER                :: CurrentMonth              ! The Month upto which the Montly blocks are superposed
-    REAL(r64)              :: SumQnMonthly              ! tmp variable which holds the sum of the Temperature diffrence
+    REAL              :: SumQnMonthly              ! tmp variable which holds the sum of the Temperature diffrence
                                                         ! due to Aggregated heat extraction/rejection step
-    REAL(r64)              :: SumQnHourly               ! same as above for hourly
-    REAL(r64)              :: SumQnSubHourly            ! same as above for subhourly( with no aggreation]
-    REAL(r64)              :: RQMonth
-    REAL(r64)              :: RQHour
-    REAL(r64)              :: RQSubHr
+    REAL              :: SumQnHourly               ! same as above for hourly
+    REAL              :: SumQnSubHourly            ! same as above for subhourly( with no aggreation]
+    REAL              :: RQMonth
+    REAL              :: RQHour
+    REAL              :: RQSubHr
     INTEGER                :: I
-    REAL(r64)              :: tmpQnSubHourly            ! current Qn subhourly value
+    REAL              :: tmpQnSubHourly            ! current Qn subhourly value
     INTEGER                :: HourlyLimit               ! number of hours to be taken into account in superposition
     INTEGER                :: SubHourlyLimit            ! number of subhourlys to be taken into account in subhourly superposition
-    REAL(r64)              :: SumTotal                  ! sum of all the Qn (load) blocks
-    REAL(r64)              :: C0                        ! **Intermediate constants used
-    REAL(r64)              :: C1                        ! **Intermediate constants used
-    REAL(r64)              :: C2                        ! **in explicit  calcualtion of the
-    REAL(r64)              :: C3                        ! **temperature at the U tube outlet.
+    REAL              :: SumTotal                  ! sum of all the Qn (load) blocks
+    REAL              :: C0                        ! **Intermediate constants used
+    REAL              :: C1                        ! **Intermediate constants used
+    REAL              :: C2                        ! **in explicit  calcualtion of the
+    REAL              :: C3                        ! **temperature at the U tube outlet.
     INTEGER, SAVE          :: PrevN =1                  ! The saved value of N at previous time step
     INTEGER                :: IndexN                    ! Used to index the LastHourN array
-    REAL(r64),SAVE              :: SavedMDot=-1     ! Holds the previous value of mass flow rate to detect change in mass flow rate.
+    REAL,SAVE              :: SavedMDot=-1     ! Holds the previous value of mass flow rate to detect change in mass flow rate.
     LOGICAL,SAVE           :: UpdateCurSimTime = .TRUE. ! Used to reset the CurSimtime to reset after Warmupflag
     LOGICAL, SAVE          :: TriggerDesignDayReset = .FALSE.
     INTEGER                :: GlheInletNode             ! Inlet node number of the Glhe
@@ -345,14 +345,14 @@ SUBROUTINE CalcVerticalGroundHeatExchanger(GlheNum)
                                        PlantLoop(VerticalGlhe(GlheNum)%LoopNum)%FluidIndex, &
                                        'CalcVerticalGroundHeatExchanger')
   K_Ground     = VerticalGlhe(GlheNum)%KGround
-  K_Ground_Factor = 2.0d0 * PI * K_Ground
+  K_Ground_Factor = 2.0 * PI * K_Ground
   AGG      = VerticalGlhe(GlheNum)%AGG
   SubAGG     = VerticalGlhe(GlheNum)%SubAGG
   GroundDiffusivity = VerticalGlhe(GlheNum)%KGround/VerticalGlhe(GlheNum)%CpRhoGround
 
   ! calculate annual time constant for ground conduction
-  TimeSS = (VerticalGlhe(GlheNum)%BoreholeLength**2/(9.d0*GroundDiffusivity)) /SecInHour/8760.0d0
-  TimeSS_Factor = TimeSS*8760.d0
+  TimeSS = (VerticalGlhe(GlheNum)%BoreholeLength**2/(9.*GroundDiffusivity)) /SecInHour/8760.0
+  TimeSS_Factor = TimeSS*8760.
 
   GlheOutletNode      = VerticalGlhe(GlheNum)%GlheOutletNodeNum
   LoopNum = VerticalGlhe(GlheNum)%LoopNum
@@ -425,7 +425,7 @@ SUBROUTINE CalcVerticalGroundHeatExchanger(GlheNum)
       XI = LOG( CurrentSimTime / (TimeSS_Factor)  )
       CALL INTERP(GlheNum,XI,GfuncVal)
 
-      C_1 = (BholeLength * NumBholes )/( 2.d0 * MDotActual * Cp_Fluid)
+      C_1 = (BholeLength * NumBholes )/( 2. * MDotActual * Cp_Fluid)
       tmpQnSubHourly = (Tground - GlheInletTemp)/ &
                            (GfuncVal/(K_Ground_Factor ) + ResistanceBhole + C_1)
       FluidAveTemp = Tground - tmpQnSubHourly * ResistanceBhole
@@ -507,7 +507,7 @@ SUBROUTINE CalcVerticalGroundHeatExchanger(GlheNum)
          !Dr.Spitler's Explicit set of equations to calculate the New Outlet Temperature of the U-Tube
         C0 = RQSubHr
         C1 = Tground - (SumTotal - VerticalGlhe(GlheNum)%QnSubHr(1)*RQSubHr)
-        C2 = BholeLength * NumBholes / ( 2.d0 * MDotActual *Cp_Fluid)
+        C2 = BholeLength * NumBholes / ( 2. * MDotActual *Cp_Fluid)
         C3 = MDotActual * Cp_Fluid / ( BholeLength * NumBholes )
         tmpQnsubHourly = (C1 - GlheInletTemp)/( ResistanceBhole + C0 - C2 + ( 1 / C3 ))
         FluidAveTemp = C1 - (C0 + ResistanceBhole) * tmpQnsubHourly
@@ -650,8 +650,8 @@ SUBROUTINE CalcAggregateLoad(GlheNum)
     INTEGER, INTENT(IN):: GlheNum
 
 !LOCAL VARIABLES
-    REAL(r64)   :: SumQnMonth                           ! intermediate variable to store the Montly heat rejection/
-    REAL(r64)   :: SumQnHr
+    REAL   :: SumQnMonth                           ! intermediate variable to store the Montly heat rejection/
+    REAL   :: SumQnHr
     INTEGER     :: MonthNum
     INTEGER     :: J                                    ! Loop counter
     INTEGER,SAVE, ALLOCATABLE,DIMENSION(:):: PrevHour   ! Saved Var to store the previous hour
@@ -823,7 +823,7 @@ SUBROUTINE GetGroundheatExchangerInput
     VerticalGlhe(GlheNum)%gReferenceRatio   = rNumericArgs(15)
 
 !   Not many checks
-    IF (VerticalGlhe(GlheNum)%PipeThick >= VerticalGlhe(GlheNum)%PipeOutDia/2.0d0) THEN
+    IF (VerticalGlhe(GlheNum)%PipeThick >= VerticalGlhe(GlheNum)%PipeOutDia/2.0) THEN
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//'="'//trim(VerticalGlhe(GlheNum)%Name)//  &
          '", invalid value in field.')
       CALL ShowContinueError('...'//trim(cNumericFieldNames(13))//'=['//  &
@@ -933,7 +933,7 @@ END SUBROUTINE GetGroundheatExchangerInput
 
             ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN)    :: GlheNum
-    REAL(r64), INTENT(OUT)      :: ResistanceBhole
+    REAL, INTENT(OUT)      :: ResistanceBhole
             ! SUBROUTINE PARAMETER DEFINITIONS:
             ! na
 
@@ -945,34 +945,34 @@ END SUBROUTINE GetGroundheatExchangerInput
 
             ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER                :: NumBholes           !number of boreholes
-    REAL(r64)              :: BholeLength
-    REAL(r64)              :: BholeRadius
-    REAL(r64)              :: K_Ground
-    REAL(r64)              :: Cp_Ground
-    REAL(r64)              :: Cp_Fluid
-    REAL(r64)              :: Tground
-    REAL(r64)              :: K_Grout
-    REAL(r64)              :: K_Fluid
-    REAL(r64)              :: K_Pipe
-    REAL(r64)              :: FluidDensity
-    REAL(r64)              :: FluidViscosity
-    REAL(r64)              :: PipeOuterDia
-    REAL(r64)              :: PipeInnerDia
-    REAL(r64)              :: DistUtube
-    REAL(r64)              :: ThickPipe
-    REAL(r64)              :: BholeMdot
-    REAL(r64)              :: PipeOuterRad
-    REAL(r64)              :: PipeInnerRad
-    REAL(r64)              :: NusseltNum
-    REAL(r64)              :: ReynoldsNum
-    REAL(r64)              :: PrandlNum
-    REAL(r64)              :: hci
-    REAL(r64)              :: Rcond
-    REAL(r64)              :: Rconv
-    REAL(r64)              :: Rgrout
-    REAL(r64)              :: B0, B1              !grout resistance curve fit coefficients
-    REAL(r64)              :: MaxDistance
-    REAL(r64)              :: DistanceRatio
+    REAL              :: BholeLength
+    REAL              :: BholeRadius
+    REAL              :: K_Ground
+    REAL              :: Cp_Ground
+    REAL              :: Cp_Fluid
+    REAL              :: Tground
+    REAL              :: K_Grout
+    REAL              :: K_Fluid
+    REAL              :: K_Pipe
+    REAL              :: FluidDensity
+    REAL              :: FluidViscosity
+    REAL              :: PipeOuterDia
+    REAL              :: PipeInnerDia
+    REAL              :: DistUtube
+    REAL              :: ThickPipe
+    REAL              :: BholeMdot
+    REAL              :: PipeOuterRad
+    REAL              :: PipeInnerRad
+    REAL              :: NusseltNum
+    REAL              :: ReynoldsNum
+    REAL              :: PrandlNum
+    REAL              :: hci
+    REAL              :: Rcond
+    REAL              :: Rconv
+    REAL              :: Rgrout
+    REAL              :: B0, B1              !grout resistance curve fit coefficients
+    REAL              :: MaxDistance
+    REAL              :: DistanceRatio
 
         !assign local variables
     NumBholes   = VerticalGlhe(GlheNum)%NumBoreholes
@@ -1011,44 +1011,44 @@ END SUBROUTINE GetGroundheatExchangerInput
         !calculate mass flow rate
     BholeMdot = GlheMassFlowRate/NumBholes !VerticalGlhe(GlheNum)%DesignFlow*FluidDensity /NumBholes
 
-    PipeOuterRad = PipeOuterDia / 2.0d0
+    PipeOuterRad = PipeOuterDia / 2.0
     PipeInnerRad = PipeOuterRad-ThickPipe
-    PipeInnerDia = 2.0d0 * PipeInnerRad
+    PipeInnerDia = 2.0 * PipeInnerRad
                     !Re=Rho*V*D/Mu
     ReynoldsNum = FluidDensity*PipeInnerDia*(BholeMdot/FluidDensity/(PI*PipeInnerRad**2))/FluidViscosity
     PrandlNum=(Cp_Fluid*FluidViscosity)/(K_Fluid)
 !   Convection Resistance
-    NusseltNum = 0.023d0 * (ReynoldsNum**0.8d0) * (PrandlNum**0.35d0)
+    NusseltNum = 0.023 * (ReynoldsNum**0.8) * (PrandlNum**0.35)
     hci = NusseltNum * K_Fluid / PipeInnerDia
     IF(BholeMdot == 0.)THEN
         RCONV=0.
     ELSE
-        RCONV = 1.0d0 / (2.0d0*PI*PipeInnerDia*hci)
+        RCONV = 1.0 / (2.0*PI*PipeInnerDia*hci)
     ENDIF
 
 !   Conduction Resistance
-    RCOND = LOG(PipeOuterRad/PipeInnerRad) / (2.0d0*PI*K_Pipe)/2.d0 ! pipe in parallel so /2
+    RCOND = LOG(PipeOuterRad/PipeInnerRad) / (2.0*PI*K_Pipe)/2. ! pipe in parallel so /2
 
 !   Resistance Due to the grout.
-    MaxDistance=2.d0*BholeRadius-(2.d0*PipeOuterDia)
+    MaxDistance=2.*BholeRadius-(2.*PipeOuterDia)
     DistanceRatio=DistUtube/MaxDistance
 
 
-    IF(DistanceRatio >= 0. .AND. DistanceRatio <= 0.25d0) THEN
-        B0=14.450872d0
-        B1=-0.8176d0
-    ELSE IF(DistanceRatio > 0.25d0 .AND. DistanceRatio < 0.5d0) THEN
-        B0=20.100377d0
-        B1=-0.94467d0
-    ELSE IF(DistanceRatio >= 0.5d0.and.DistanceRatio <= 0.75d0) THEN
-        B0=17.44268d0
-        B1=-0.605154d0
+    IF(DistanceRatio >= 0. .AND. DistanceRatio <= 0.25) THEN
+        B0=14.450872
+        B1=-0.8176
+    ELSE IF(DistanceRatio > 0.25 .AND. DistanceRatio < 0.5) THEN
+        B0=20.100377
+        B1=-0.94467
+    ELSE IF(DistanceRatio >= 0.5.and.DistanceRatio <= 0.75) THEN
+        B0=17.44268
+        B1=-0.605154
     ELSE
-        B0=21.90587d0
-        B1=-0.3796d0
+        B0=21.90587
+        B1=-0.3796
     END IF
 
-    RGROUT=1.d0/(K_Grout*(B0*(BholeRadius/PipeOuterRad)**B1))
+    RGROUT=1./(K_Grout*(B0*(BholeRadius/PipeOuterRad)**B1))
     ResistanceBhole = RCOND+RCONV+RGROUT
     RETURN
 END SUBROUTINE BoreholeResistance
@@ -1082,9 +1082,9 @@ SUBROUTINE INTERP(GlheNum,LnTTsVal,GfuncVal)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN)     :: GlheNum      ! Ground loop heat exchanger ID number
-    REAL(r64),    INTENT(IN)     :: LnTTsVal     ! The value of LN(t/TimeSS) that a g-function
+    REAL,    INTENT(IN)     :: LnTTsVal     ! The value of LN(t/TimeSS) that a g-function
                                             !          needs to be found for.
-    REAL(r64), INTENT(OUT)       :: GfuncVal     ! The value of the g-function at LnTTsVal; found by
+    REAL, INTENT(OUT)       :: GfuncVal     ! The value of the g-function at LnTTsVal; found by
                                             !          either extrapolation or interpolation
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1097,8 +1097,8 @@ SUBROUTINE INTERP(GlheNum,LnTTsVal,GfuncVal)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER         :: NumPairs
-    REAL(r64)       :: RATIO
-    REAL(r64)       :: ReferenceRatio
+    REAL       :: RATIO
+    REAL       :: ReferenceRatio
 
     !Binary Search Algorithms Variables
     ! REFERENCE      :  DATA STRUCTURES AND ALGORITHM ANALYSIS IN C BY MARK ALLEN WEISS
@@ -1243,7 +1243,7 @@ SUBROUTINE InitBoreholeHXSimVars(GlheNum,Runflag)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL,SAVE :: MyEnvironFlag = .TRUE.
-  REAL(r64)      :: FluidDensity
+  REAL      :: FluidDensity
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag
@@ -1279,11 +1279,11 @@ SUBROUTINE InitBoreholeHXSimVars(GlheNum,Runflag)
 
       IF(.NOT. ALLOCATED(LastQnSubHr)) ALLOCATE(LastQnSubHr(NumVerticalGlhes))
       FluidDensity = GetDensityGlycol(PlantLoop(VerticalGlhe(GlheNum)%LoopNum)%FluidName, &
-                                      20.d0 , &
+                                      20. , &
                                       PlantLoop(VerticalGlhe(GlheNum)%LoopNum)%FluidIndex, &
                                       'InitBoreholeHXSimVars')
       VerticalGlhe(GlheNum)%DesignMassFlow = VerticalGlhe(GlheNum)%DesignFlow * FluidDensity
-      Call InitComponentNodes(0.d0, VerticalGlhe(GlheNum)%DesignMassFlow, &
+      Call InitComponentNodes(0., VerticalGlhe(GlheNum)%DesignMassFlow, &
                                  VerticalGlhe(GlheNum)%GlheInletNodeNum, &
                                  VerticalGlhe(GlheNum)%GlheOutletNodeNum, &
                                  VerticalGlhe(GlheNum)%LoopNum, &
@@ -1359,7 +1359,7 @@ SUBROUTINE UpdateVerticalGroundHeatExchanger(RunFlag, Num)
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER      :: DeltaTempLimit = 100.d0    ! temp limit for warnings
+  REAL, PARAMETER      :: DeltaTempLimit = 100.    ! temp limit for warnings
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1371,10 +1371,10 @@ SUBROUTINE UpdateVerticalGroundHeatExchanger(RunFlag, Num)
           ! na
   INTEGER                :: GlheInletNode      ! Inlet node number of the Glhe
   INTEGER                :: GlheOutletNode     ! Outlet node number of the Glhe
-  REAL(r64)              :: GlhedeltaTemp      ! ABS(Outlet temp -inlet temp)
+  REAL              :: GlhedeltaTemp      ! ABS(Outlet temp -inlet temp)
   INTEGER, SAVE          :: NumErrorCalls = 0
-  REAL(r64)              :: DesignMassFlow
-  REAL(r64)              :: FluidDensity
+  REAL              :: DesignMassFlow
+  REAL              :: FluidDensity
 
         !set node temperatures
   GlheInletNode                             = VerticalGlhe(Num)%GlheInletNodeNum

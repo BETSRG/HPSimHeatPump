@@ -48,7 +48,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
  LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
  LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
  CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
- REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+ REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
  CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
 
 

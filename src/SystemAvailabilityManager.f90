@@ -121,7 +121,7 @@ MODULE SystemAvailabilityManager
     INTEGER                      :: FanSchedPtr       = 0    ! Fan schedule pointer
     INTEGER                      :: CtrlType          = 0    ! type of control: Stay Off, Cycle On Any,
                                                             !   Cycle On Control Zone, or Cycle On Any - Zone Fans Only
-    REAL(r64)                    :: TempTolRange      = 1.0  ! range in degrees C of thermostat tolerance
+    REAL                    :: TempTolRange      = 1.0  ! range in degrees C of thermostat tolerance
     INTEGER                      :: CyclingTimeSteps  = 1    ! period (in Loads time steps) system will cycle on.
     CHARACTER(len=MaxNameLength) :: CtrlZoneName      = ' '  ! Name of the control zone
     INTEGER                      :: ZoneNum           = 0    ! zome number of control zone
@@ -134,8 +134,8 @@ MODULE SystemAvailabilityManager
     INTEGER                      :: MgrType           = 0   ! Integer equivalent of availability manager type
     INTEGER                      :: HotNode           = 0   ! "Hot" sensor node
     INTEGER                      :: ColdNode          = 0   ! "Cold" sensor node
-    REAL(r64)                    :: TempDiffOn        = 0.0 ! Temperature difference for turn on (delta C)
-    REAL(r64)                    :: TempDiffOff       = 0.0 ! Temperature difference for turn off (delta C)
+    REAL                    :: TempDiffOn        = 0.0 ! Temperature difference for turn on (delta C)
+    REAL                    :: TempDiffOff       = 0.0 ! Temperature difference for turn off (delta C)
     INTEGER                      :: AvailStatus       = 0   ! reports status of availability manager
   END TYPE DefineDiffTSysAvailManager
 
@@ -143,7 +143,7 @@ MODULE SystemAvailabilityManager
     CHARACTER(len=MaxNameLength) :: Name              = ' ' ! Name of the manager object
     INTEGER                      :: MgrType           = 0   ! Integer equivalent of availability manager type
     INTEGER                      :: Node              = 0   ! Sensor node
-    REAL(r64)                    :: Temp              = 0.0 ! Temperature for on/off (C)
+    REAL                    :: Temp              = 0.0 ! Temperature for on/off (C)
     INTEGER                      :: SchedPtr          = 0   ! Applicability schedule pointer
     INTEGER                      :: AvailStatus       = 0   ! reports status of availability manager
   END TYPE DefineHiLoSysAvailManager
@@ -156,12 +156,12 @@ MODULE SystemAvailabilityManager
     INTEGER                      :: FanSchedPtr       = 0   ! Fan schedule pointer
     CHARACTER(len=MaxNameLength) :: VentTempSched     = ' ' ! Ventilation temperature schedule
     INTEGER                      :: VentTempSchedPtr  = 0   ! Ventilation temperature schedule pointer
-    REAL(r64)                    :: VentDelT          = 0.0 ! Ventilation delta T [deltaC]
-    REAL(r64)                    :: VentTempLowLim    = 0.0 ! ventilation temperature low limit
+    REAL                    :: VentDelT          = 0.0 ! Ventilation delta T [deltaC]
+    REAL                    :: VentTempLowLim    = 0.0 ! ventilation temperature low limit
     CHARACTER(len=MaxNameLength) :: CtrlZoneName      = ' ' ! Name of the control zone
     INTEGER                      :: ZoneNum           = 0   ! zome number of control zone
     INTEGER                      :: ControlledZoneNum = 0   ! controlled zone number of control zone
-    REAL(r64)                    :: VentFlowFrac      = 0.0 ! the night venting flow fraction
+    REAL                    :: VentFlowFrac      = 0.0 ! the night venting flow fraction
     INTEGER                      :: AvailStatus       = 0   ! reports status of availability manager
   END TYPE DefineNightVentSysAvailManager
 
@@ -177,13 +177,13 @@ MODULE SystemAvailabilityManager
     INTEGER                      :: ControlModeSchedPtr    = 0   ! Ventilation control mode schedule pointer
     INTEGER                      :: ControlMode            = 0   ! hybrid ventilation control mode
     INTEGER                      :: VentilationCtrl        = 0   ! Ventilation control type: Noaction, Close, Open
-    REAL(r64)                    :: MinOutdoorTemp    = -100.0   ! Minimum Outdoor Temperature [C]
-    REAL(r64)                    :: MaxOutdoorTemp     = 100.0   ! Maximum Outdoor Temperature [C]
-    REAL(r64)                    :: MinOutdoorEnth       = 0.1   ! Minimum Outdoor Enthalpy [J/kg]
-    REAL(r64)                    :: MaxOutdoorEnth  = 300000.0   ! Maximum Outdoor Enthalpy [J/kg]
-    REAL(r64)                    :: MinOutdoorDewPoint =-100.0   ! Minimum Outdoor Dew point temperature [C]
-    REAL(r64)                    :: MaxOutdoorDewPoint = 100.0   ! Maximum Outdoor Dew Point Temperature [C]
-    REAL(r64)                    :: MaxWindSpeed         = 0.0   ! Maximum Wind speed [m/s]
+    REAL                    :: MinOutdoorTemp    = -100.0   ! Minimum Outdoor Temperature [C]
+    REAL                    :: MaxOutdoorTemp     = 100.0   ! Maximum Outdoor Temperature [C]
+    REAL                    :: MinOutdoorEnth       = 0.1   ! Minimum Outdoor Enthalpy [J/kg]
+    REAL                    :: MaxOutdoorEnth  = 300000.0   ! Maximum Outdoor Enthalpy [J/kg]
+    REAL                    :: MinOutdoorDewPoint =-100.0   ! Minimum Outdoor Dew point temperature [C]
+    REAL                    :: MaxOutdoorDewPoint = 100.0   ! Maximum Outdoor Dew Point Temperature [C]
+    REAL                    :: MaxWindSpeed         = 0.0   ! Maximum Wind speed [m/s]
     LOGICAL                      :: UseRainIndicator  = .TRUE.   ! Use WeatherFile Rain Indicators
     CHARACTER(len=MaxNameLength) :: MinOASched             = ' ' ! Minimum Outdoor Ventilation Air Schedule Name
     INTEGER                      :: MinOASchedPtr          = 0   ! Minimum Outdoor Ventilation Air Schedule pointer
@@ -477,7 +477,7 @@ SUBROUTINE GetSysAvailManagerInputs
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
   INTEGER       :: NumAlphas            ! Number of Alphas for each GetObjectItem call
   INTEGER       :: NumNumbers           ! Number of Numbers for each GetObjectItem call
@@ -542,7 +542,7 @@ SUBROUTINE GetSysAvailManagerInputs
   ALLOCATE(cNumericFieldNames(maxNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(maxNumbers))
-  rNumericArgs=0.0d0
+  rNumericArgs=0.0
   ALLOCATE(lNumericFieldBlanks(maxNumbers))
   lNumericFieldBlanks=.false.
 
@@ -1085,7 +1085,7 @@ SUBROUTINE GetSysAvailManagerListInputs
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
   integer :: NumAlphas
   integer :: NumNumbers
@@ -1116,7 +1116,7 @@ SUBROUTINE GetSysAvailManagerListInputs
   ALLOCATE(cNumericFieldNames(NumNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(NumNumbers))
-  rNumericArgs=0.0d0
+  rNumericArgs=0.0
   ALLOCATE(lNumericFieldBlanks(NumNumbers))
   lNumericFieldBlanks=.false.
 
@@ -1961,7 +1961,7 @@ SUBROUTINE CalcNCycSysAvailMgr(SysAvailNum,PriAirSysNum,AvailStatus,ZoneEquipTyp
   INTEGER :: ZoneInSysNum
   INTEGER :: CtrldZoneNum
   INTEGER :: ZoneNum
-  REAL(r64)    :: TempTol
+  REAL    :: TempTol
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: ZoneCompNCControlType
   LOGICAL, SAVE :: OneTimeFlag = .TRUE.
 
@@ -2241,7 +2241,7 @@ SUBROUTINE CalcNVentSysAvailMgr(SysAvailNum,PriAirSysNum,AvailStatus,ZoneEquipTy
   LOGICAL :: TempCheck ! TRUE if one zone's temperature is above the value of the vent temp sched
   LOGICAL :: DelTCheck ! TRUE if the control zone temperature - outside temperature > VentDelT
   LOGICAL :: LowLimCheck ! TRUE if one zones's air temperature is below this value
-  REAL(r64) :: VentTemp       ! value of the ventilation temperature schedule
+  REAL :: VentTemp       ! value of the ventilation temperature schedule
   INTEGER :: ControlZoneNum ! actual zone number of the control zone
 
   TempCheck = .FALSE.
@@ -2336,7 +2336,7 @@ SUBROUTINE CalcDiffTSysAvailMgr(SysAvailNum,PreviousStatus,AvailStatus)
   INTEGER, INTENT (OUT) :: AvailStatus         ! System status indicator
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DeltaTemp
+  REAL :: DeltaTemp
 
           ! FLOW:
   DeltaTemp = Node(DiffTSysAvailMgrData(SysAvailNum)%HotNode)%Temp - Node(DiffTSysAvailMgrData(SysAvailNum)%ColdNode)%Temp
@@ -2686,11 +2686,11 @@ SUBROUTINE GetHybridVentilationInputs
   LOGICAL       :: IsNotOK                      ! Flag to verify name
   LOGICAL       :: IsBlank                      ! Flag for blank name
   INTEGER       :: SysAvailNum                  ! DO loop index for all System Availability Managers
-  REAL(r64)     :: SchedMin                     ! Minimum value specified in a schedule
-  REAL(r64)     :: SchedMax                     ! Maximum value specified in a schedule
-  REAL(r64)     :: CurveMin                     ! Minimum value specified in a curve
-  REAL(r64)     :: CurveMax                     ! Maximum value specified in a curve
-  REAL(r64)     :: CurveVal                     ! Curve value
+  REAL     :: SchedMin                     ! Minimum value specified in a schedule
+  REAL     :: SchedMax                     ! Maximum value specified in a schedule
+  REAL     :: CurveMin                     ! Minimum value specified in a curve
+  REAL     :: CurveMax                     ! Maximum value specified in a curve
+  REAL     :: CurveVal                     ! Curve value
 
 
   ! Get the number of occurences of each type of System Availability Manager
@@ -2752,14 +2752,14 @@ SUBROUTINE GetHybridVentilationInputs
                          '" specifies control mode 0 for all entries.')
       CALL ShowContinueError('All zones using this '//TRIM(cAlphaFieldNames(4))//' have no hybrid ventilation control.')
     END IF
-    IF (SchedMax > 4.0d0) THEN
+    IF (SchedMax > 4.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
       CALL ShowContinueError(TRIM(cAlphaFieldNames(4))//'="'//TRIM(cAlphaArgs(4))// &
                          '", the maximum schedule value should be 4. However, ')
       CALL ShowContinueError('the maximum entered value in the schedule is '//TRIM(TrimSigDigits(SchedMax,1)))
       ErrorsFound = .TRUE.
     END IF
-    IF (SchedMin < 0.0d0) THEN
+    IF (SchedMin < 0.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
       CALL ShowContinueError(TRIM(cAlphaFieldNames(4))//'="'//TRIM(cAlphaArgs(4))// &
                               'the minimum schedule value should be 0. However, ')
@@ -2782,7 +2782,7 @@ SUBROUTINE GetHybridVentilationInputs
     ! Check max wind speed
     IF (NumNumbers > 0) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MaxWindSpeed = rNumericArgs(1)
-      IF (rNumericArgs(1) > 40.0d0 .OR. rNumericArgs(1) < 0.0d0) THEN
+      IF (rNumericArgs(1) > 40.0 .OR. rNumericArgs(1) < 0.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(1))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(1),0))// &
@@ -2794,7 +2794,7 @@ SUBROUTINE GetHybridVentilationInputs
     ! Read Max and Min outdoor temperature
     IF (NumNumbers > 1) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MinOutdoorTemp = rNumericArgs(2)
-      IF (rNumericArgs(2) > 100.0d0 .OR. rNumericArgs(2) < -100.0d0) THEN
+      IF (rNumericArgs(2) > 100.0 .OR. rNumericArgs(2) < -100.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(2))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(2),0))// &
@@ -2804,7 +2804,7 @@ SUBROUTINE GetHybridVentilationInputs
     END IF
     IF (NumNumbers > 2) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MaxOutdoorTemp = rNumericArgs(3)
-      IF (rNumericArgs(3) > 100.0d0 .OR. rNumericArgs(3) < -100.0d0) THEN
+      IF (rNumericArgs(3) > 100.0 .OR. rNumericArgs(3) < -100.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(3))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(3),0))// &
@@ -2825,7 +2825,7 @@ SUBROUTINE GetHybridVentilationInputs
     ! Read Max and Min outdoor enthalpy
     IF (NumNumbers > 3) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MinOutdoorEnth = rNumericArgs(4)
-      IF (rNumericArgs(4) > 300000.0d0 .OR. rNumericArgs(4) < 0.0d0) THEN
+      IF (rNumericArgs(4) > 300000.0 .OR. rNumericArgs(4) < 0.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(4))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(4),0))// &
@@ -2835,7 +2835,7 @@ SUBROUTINE GetHybridVentilationInputs
     END IF
     IF (NumNumbers > 4) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MaxOutdoorEnth = rNumericArgs(5)
-      IF (rNumericArgs(5) > 300000.0d0 .OR. rNumericArgs(5) < 0.0d0) THEN
+      IF (rNumericArgs(5) > 300000.0 .OR. rNumericArgs(5) < 0.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(5))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(5),0))// &
@@ -2856,7 +2856,7 @@ SUBROUTINE GetHybridVentilationInputs
     ! Read Max and Min outdoor dew point
     IF (NumNumbers > 5) THEN
       HybridVentSysAvailMgrData(SysAvailNum)%MinOutdoorDewPoint = rNumericArgs(6)
-      IF (rNumericArgs(6) > 100.0d0 .OR. rNumericArgs(6) < -100.0d0) THEN
+      IF (rNumericArgs(6) > 100.0 .OR. rNumericArgs(6) < -100.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(6))//' is beyond the range.')
         CALL ShowContinueError('The input value is '//TRIM(TrimSigDigits(rNumericArgs(6),0))// &
@@ -2892,7 +2892,7 @@ SUBROUTINE GetHybridVentilationInputs
       ErrorsFound = .TRUE.
     END IF
     SchedMin=GetScheduleMinValue(HybridVentSysAvailMgrData(SysAvailNum)%MinOASchedPtr)
-    IF (SchedMin < 0.0d0) THEN
+    IF (SchedMin < 0.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="' //TRIM(cAlphaArgs(1))// &
                            '", Schedule value must be >= 0 in '// &
                             TRIM(cAlphaFieldNames(6))//'="'//TRIM(cAlphaArgs(6))//'".')
@@ -2908,7 +2908,7 @@ SUBROUTINE GetHybridVentilationInputs
         ErrorsFound = .TRUE.
       ELSE
         CALL GetCurveMinMaxValues(HybridVentSysAvailMgrData(SysAvailNum)%OpeningFactorFWS,CurveMin,CurveMax)
-        IF (CurveMin < 0.0d0) THEN
+        IF (CurveMin < 0.0) THEN
           CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
           CALL ShowContinueError('The minimum wind speed used in '//TRIM(cAlphaFieldNames(7))//'="'//TRIM(cAlphaArgs(7))// &
                            'should be greater than or equal to 0.0 (m/s)')
@@ -2916,7 +2916,7 @@ SUBROUTINE GetHybridVentilationInputs
           ErrorsFound = .TRUE.
         END IF
         CurveVal = CurveValue(HybridVentSysAvailMgrData(SysAvailNum)%OpeningFactorFWS,CurveMin)
-        IF(CurveVal .LT. 0.0d0)THEN
+        IF(CurveVal .LT. 0.0)THEN
           CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
           CALL ShowContinueError('The minimum value of '//TRIM(cAlphaFieldNames(7))//' must be greater ' &
                                  //'than or equal to 0.0 at the minimum value of wind speed.')
@@ -2925,7 +2925,7 @@ SUBROUTINE GetHybridVentilationInputs
           ErrorsFound = .TRUE.
         END IF
         CurveVal = CurveValue(HybridVentSysAvailMgrData(SysAvailNum)%OpeningFactorFWS,CurveMax)
-        IF(CurveVal .GT. 1.0d0)THEN
+        IF(CurveVal .GT. 1.0)THEN
           CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
           CALL ShowContinueError('The maximum value of '//TRIM(cAlphaFieldNames(7))//' must be less ' &
                                  //'than or equal to 1.0 at the maximum value of wind speed.')
@@ -2954,14 +2954,14 @@ SUBROUTINE GetHybridVentilationInputs
       SchedMin=GetScheduleMinValue(HybridVentSysAvailMgrData(SysAvailNum)%ANControlTypeSchedPtr)
       SchedMax=GetScheduleMaxValue(HybridVentSysAvailMgrData(SysAvailNum)%ANControlTypeSchedPtr)
       HybridVentSysAvailANCtrlStatus(SysAvailNum) = HybridVentSysAvailMgrData(SysAvailNum)%ANControlTypeSchedPtr
-      IF (SchedMax > 1.0d0) THEN
+      IF (SchedMax > 1.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError(' For '//TRIM(cAlphaFieldNames(8))//'="'//TRIM(cAlphaArgs(8))//'",')
         CALL ShowContinueError('the maximum schedule value should be 1. However, ')
         CALL ShowContinueError('the maximum entered value in the schedule is '//TRIM(TrimSigDigits(SchedMax,1)))
         ErrorsFound = .TRUE.
       END IF
-      IF (SchedMin < 0.0d0) THEN
+      IF (SchedMin < 0.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError('For '//TRIM(cAlphaFieldNames(8))//'="'//TRIM(cAlphaArgs(8))//'",')
         CALL ShowContinueError('the minimum schedule value should be 0. However, ')
@@ -2982,14 +2982,14 @@ SUBROUTINE GetHybridVentilationInputs
       ! Check schedule values
       SchedMin=GetScheduleMinValue(HybridVentSysAvailMgrData(SysAvailNum)%SimpleControlTypeSchedPtr)
       SchedMax=GetScheduleMaxValue(HybridVentSysAvailMgrData(SysAvailNum)%SimpleControlTypeSchedPtr)
-      IF (SchedMax > 1.0d0) THEN
+      IF (SchedMax > 1.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError('For '//TRIM(cAlphaFieldNames(9))//'="'//TRIM(cAlphaArgs(9))//'",')
         CALL ShowContinueError('the maximum schedule value should be 1. However, ')
         CALL ShowContinueError('the maximum entered value in the schedule is '//TRIM(TrimSigDigits(SchedMax,1)))
         ErrorsFound = .TRUE.
       END IF
-      IF (SchedMin < 0.0d0) THEN
+      IF (SchedMin < 0.0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
         CALL ShowContinueError('For '//TRIM(cAlphaFieldNames(9))//'="'//TRIM(cAlphaArgs(9))//'",')
         CALL ShowContinueError('the minimum schedule value should be 0. However, ')
@@ -3047,7 +3047,7 @@ SUBROUTINE GetHybridVentilationInputs
 
     ! Disallow combination of simple control and OA control mode
     SchedMax=GetScheduleMaxValue(HybridVentSysAvailMgrData(SysAvailNum)%ControlModeSchedPtr)
-    IF (HybridVentSysAvailMgrData(SysAvailNum)%SimpleControlTypeSchedPtr > 0 .AND. SchedMax .EQ. 4.0d0) THEN
+    IF (HybridVentSysAvailMgrData(SysAvailNum)%SimpleControlTypeSchedPtr > 0 .AND. SchedMax .EQ. 4.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'"')
       CALL ShowContinueError('The outdoor ventilation air control type defined in '// TRIM(cAlphaArgs(4))//    &
                         ' cannot work together with '//TRIM(cAlphaFieldNames(9)))
@@ -3143,7 +3143,7 @@ SUBROUTINE InitHybridVentSysAvailMgr
   INTEGER       :: AirLoopNum                ! Air loop number
   INTEGER       :: ControlMode               ! Hybrid control mode
   INTEGER       :: AirLoopCount              ! Air loop name count
-  REAL(r64)     :: SchedMax                  ! Maximum value specified in a schedule
+  REAL     :: SchedMax                  ! Maximum value specified in a schedule
   INTEGER       :: SysAvailIndex             ! Hybrid Ventilation Sys Avail Manager index
 
   ! One time initializations
@@ -3293,18 +3293,18 @@ SUBROUTINE CalcHybridVentSysAvailMgr(SysAvailNum,PriAirSysNum)
   INTEGER      :: ZoneNum         ! actual zone number of the control zone
   INTEGER      :: ControlMode     ! Hybrid control mode
   INTEGER      :: HstatZoneNum    ! Humidity control zone number
-  REAL(r64)    :: ZoneAirEnthalpy ! Zone air enthalpy
-  REAL(r64)    :: ZoneAirDewpoint ! Zone air dew point temperature
-  REAL(r64)    :: ZoneAirRH       ! Zone air relative humidity
-  REAL(r64)    :: TempExt         ! Outdoor dry bulb temperature at zone height
-  REAL(r64)    :: WindExt         ! Outdoor wind spped at zone height
-!unused  REAL(r64)    :: RHSetPoint      ! RH setpoint from a given schedule
-  REAL(r64)    :: WSetPoint       ! Humidity ratio setpoint from a given RH setpoint schedule
-  REAL(r64)    :: OASetPoint      ! Outdoor air setpoint from a given OA setpoint schedule
-  REAL(r64)    :: ACH             ! Zone air change per hour
+  REAL    :: ZoneAirEnthalpy ! Zone air enthalpy
+  REAL    :: ZoneAirDewpoint ! Zone air dew point temperature
+  REAL    :: ZoneAirRH       ! Zone air relative humidity
+  REAL    :: TempExt         ! Outdoor dry bulb temperature at zone height
+  REAL    :: WindExt         ! Outdoor wind spped at zone height
+!unused  REAL    :: RHSetPoint      ! RH setpoint from a given schedule
+  REAL    :: WSetPoint       ! Humidity ratio setpoint from a given RH setpoint schedule
+  REAL    :: OASetPoint      ! Outdoor air setpoint from a given OA setpoint schedule
+  REAL    :: ACH             ! Zone air change per hour
   LOGICAL      :: found           ! Used for humidistat object
-  REAL(r64)    :: ZoneRHHumidifyingSetPoint   ! Zone humidifying setpoint (%)
-  REAL(r64)    :: ZoneRHDehumidifyingSetPoint ! Zone dehumidifying setpoint (%)
+  REAL    :: ZoneRHHumidifyingSetPoint   ! Zone humidifying setpoint (%)
+  REAL    :: ZoneRHDehumidifyingSetPoint ! Zone dehumidifying setpoint (%)
   INTEGER      :: ControlledZoneNum           ! Index into the ZoneEquipConfig array
   INTEGER      :: SimpleControlType           ! Simple control type from a schedule: 0 individual, 1 global
   INTEGER      :: i                ! Array index

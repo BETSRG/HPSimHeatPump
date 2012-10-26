@@ -42,10 +42,10 @@ PRIVATE ! Everything private unless explicitly made public
   ! na
 
  ! MODULE VARIABLE DECLARATIONS:
-  REAL(r64)  :: HAT_J =0.0 ! HAT_J Convection Coefficient times Area times Temperature for Jet subzone
-  REAL(r64)  :: HA_J  =0.0 ! HA_J  Convection Coefficient times Area for Jet subzone
-  REAL(r64)  :: HAT_R =0.0 ! HAT_R Convection Coefficient times Area times Temperature for Recirculation subzone
-  REAL(r64)  :: HA_R  =0.0 ! HA_J  Convection Coefficient times Area for Recirculation subzone
+  REAL  :: HAT_J =0.0 ! HAT_J Convection Coefficient times Area times Temperature for Jet subzone
+  REAL  :: HA_J  =0.0 ! HA_J  Convection Coefficient times Area for Jet subzone
+  REAL  :: HAT_R =0.0 ! HAT_R Convection Coefficient times Area times Temperature for Recirculation subzone
+  REAL  :: HA_R  =0.0 ! HA_J  Convection Coefficient times Area for Recirculation subzone
   INTEGER, ALLOCATABLE, DIMENSION (:)  :: LastMaxSurfdt
   INTEGER                              :: LastMaxSurf=0
   INTEGER                              :: LastZone=0
@@ -146,7 +146,7 @@ SUBROUTINE InitUCSDCV(ZoneNum)
   INTEGER, INTENT(IN)                     :: ZoneNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64),PARAMETER  :: BaseDischargeCoef = 0.62d0
+  REAL,PARAMETER  :: BaseDischargeCoef = 0.62
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -239,8 +239,8 @@ SUBROUTINE HcUCSDCV(ZoneNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                                 :: Ctd                 ! DO loop counter for surfaces
   INTEGER                                 :: SurfNum             ! Surface number
-  REAL(r64)                               :: Hjet
-  REAL(r64)                               :: Hrec
+  REAL                               :: Hjet
+  REAL                               :: Hrec
 
   ! Initialize HAT and HA
   HAT_J    = 0.0
@@ -270,7 +270,7 @@ SUBROUTINE HcUCSDCV(ZoneNum)
       SurfNum = APos_Window(Ctd)
       Surface(SurfNum)%TAirRef = AdjacentAirTemp
       IF (SurfNum == 0) CYCLE
-      IF (Surface(SurfNum)%Tilt > 10.0d0 .AND. Surface(SurfNum)%Tilt < 170.0d0) THEN ! Window Wall
+      IF (Surface(SurfNum)%Tilt > 10.0 .AND. Surface(SurfNum)%Tilt < 170.0) THEN ! Window Wall
           TempEffBulkAir(SurfNum) = ZTrec(ZoneNum)%Med
           CALL CalcDetailedHcInForDVModel(SurfNum,TempSurfIn,CVHcIn,Uhc)
           HWindow(Ctd)= CVHcIn(SurfNum)
@@ -278,7 +278,7 @@ SUBROUTINE HcUCSDCV(ZoneNum)
           HA_R = Surface(SurfNum)%Area*HWindow(Ctd) + HA_R
       ENDIF
 
-      IF (Surface(SurfNum)%Tilt <= 10.0d0) THEN ! Window Ceiling
+      IF (Surface(SurfNum)%Tilt <= 10.0) THEN ! Window Ceiling
          TempEffBulkAir(SurfNum) = ZTJET(ZoneNum)%In
          CALL CalcDetailedHcInForDVModel(SurfNum,TempSurfIn,CVHcIn,Uhc)
          Hjet= CVHcIn(SurfNum)
@@ -286,14 +286,14 @@ SUBROUTINE HcUCSDCV(ZoneNum)
          CALL CalcDetailedHcInForDVModel(SurfNum,TempSurfIn,CVHcIn,Uhc)
          Hrec= CVHcIn(SurfNum)
          HWindow(Ctd)= JetRecAreaRatio(ZoneNum)*Hjet+(1-JetRecAreaRatio(ZoneNum))*Hrec
-         HAT_R = Surface(SurfNum)%Area*(1.d0-JetRecAreaRatio(ZoneNum))*TempSurfIn(SurfNum)*Hrec + HAT_R
-         HA_R  = Surface(SurfNum)%Area*(1.d0-JetRecAreaRatio(ZoneNum))*Hrec + HA_R
+         HAT_R = Surface(SurfNum)%Area*(1.-JetRecAreaRatio(ZoneNum))*TempSurfIn(SurfNum)*Hrec + HAT_R
+         HA_R  = Surface(SurfNum)%Area*(1.-JetRecAreaRatio(ZoneNum))*Hrec + HA_R
          HAT_J = Surface(SurfNum)%Area*JetRecAreaRatio(ZoneNum)*TempSurfIn(SurfNum)*Hjet + HAT_J
          HA_J  = Surface(SurfNum)%Area*JetRecAreaRatio(ZoneNum)*Hjet + HA_J
          TempEffBulkAir(SurfNum)=JetRecAreaRatio(ZoneNum)*ZTJET(ZoneNum)%In+(1-JetRecAreaRatio(ZoneNum))*ZTREC(ZoneNum)%Med
       ENDIF
 
-      IF (Surface(SurfNum)%Tilt >= 170.0d0) THEN ! Window Floor
+      IF (Surface(SurfNum)%Tilt >= 170.0) THEN ! Window Floor
          TempEffBulkAir(SurfNum) = ZTJET(ZoneNum)%In
          CALL CalcDetailedHcInForDVModel(SurfNum,TempSurfIn,CVHcIn,Uhc)
          Hjet= CVHcIn(SurfNum)
@@ -301,8 +301,8 @@ SUBROUTINE HcUCSDCV(ZoneNum)
          CALL CalcDetailedHcInForDVModel(SurfNum,TempSurfIn,CVHcIn,Uhc)
          Hrec= CVHcIn(SurfNum)
          HWindow(Ctd)= JetRecAreaRatio(ZoneNum)*Hjet+(1-JetRecAreaRatio(ZoneNum))*Hrec
-         HAT_R = Surface(SurfNum)%Area*(1.d0-JetRecAreaRatio(ZoneNum))*TempSurfIn(SurfNum)*Hrec + HAT_R
-         HA_R  = Surface(SurfNum)%Area*(1.d0-JetRecAreaRatio(ZoneNum))*Hrec + HA_R
+         HAT_R = Surface(SurfNum)%Area*(1.-JetRecAreaRatio(ZoneNum))*TempSurfIn(SurfNum)*Hrec + HAT_R
+         HA_R  = Surface(SurfNum)%Area*(1.-JetRecAreaRatio(ZoneNum))*Hrec + HA_R
          HAT_J = Surface(SurfNum)%Area*JetRecAreaRatio(ZoneNum)*TempSurfIn(SurfNum)*Hjet + HAT_J
          HA_J  = Surface(SurfNum)%Area*JetRecAreaRatio(ZoneNum)*Hjet + HA_J
          TempEffBulkAir(SurfNum)=JetRecAreaRatio(ZoneNum)*ZTJET(ZoneNum)%In+(1-JetRecAreaRatio(ZoneNum))*ZTREC(ZoneNum)%Med
@@ -418,11 +418,11 @@ SUBROUTINE EvolveParaUCSDCV(ZoneNum)
   INTEGER,INTENT (IN)                     :: ZoneNum             !
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64),PARAMETER  :: VoltoAinRatio = 20.0d0
-  REAL(r64),PARAMETER  :: Sigma = 10.0d0
-  REAL(r64),PARAMETER  :: MinFluxRatio = 0.9d0
-  REAL(r64),PARAMETER  :: MinUin = 0.2d0
-  REAL(r64),PARAMETER  :: BaseDischargeCoef = 0.62d0
+  REAL,PARAMETER  :: VoltoAinRatio = 20.0
+  REAL,PARAMETER  :: Sigma = 10.0
+  REAL,PARAMETER  :: MinFluxRatio = 0.9
+  REAL,PARAMETER  :: MinUin = 0.2
+  REAL,PARAMETER  :: BaseDischargeCoef = 0.62
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -434,30 +434,30 @@ SUBROUTINE EvolveParaUCSDCV(ZoneNum)
 INTEGER                                  :: Ctd           ! counter
 INTEGER                                  :: Ctd2          ! counter
 INTEGER                                  :: OPtr          ! counter
-REAL(r64), SAVE                               :: Win           ! Inflow aperture width
-REAL(r64), SAVE                               :: Wroom         ! Room width, relative to jet direction
-REAL(r64), SAVE                               :: Aroom         ! Room area cross section
-REAL(r64)                                :: Fin           ! Inflow air flux
-REAL(r64)                                :: Uin           ! Inflow air velocity
-REAL(r64)                                :: Fr            !
-REAL(r64)                                :: Cl
-REAL(r64)                                :: Cd
-REAL(r64)                                :: SumToZone
-REAL(r64)                                :: MaxFlux
+REAL, SAVE                               :: Win           ! Inflow aperture width
+REAL, SAVE                               :: Wroom         ! Room width, relative to jet direction
+REAL, SAVE                               :: Aroom         ! Room area cross section
+REAL                                :: Fin           ! Inflow air flux
+REAL                                :: Uin           ! Inflow air velocity
+REAL                                :: Fr            !
+REAL                                :: Cl
+REAL                                :: Cd
+REAL                                :: SumToZone
+REAL                                :: MaxFlux
 INTEGER                                  :: MaxSurf
-REAL(r64)                                :: XX
-REAL(r64)                                :: YY
-REAL(r64)                                :: ZZ
-REAL(r64)                                :: XX_Wall
-REAL(r64)                                :: YY_Wall
-REAL(r64)                                :: ZZ_Wall
+REAL                                :: XX
+REAL                                :: YY
+REAL                                :: ZZ
+REAL                                :: XX_Wall
+REAL                                :: YY_Wall
+REAL                                :: ZZ_Wall
 INTEGER                                  :: NSides        ! Number of sides in surface
 INTEGER         :: CompNum = 0 ! AirflowNetwork Component number
 INTEGER         :: TypeNum = 0 ! Airflownetwork Type Number within a component
 INTEGER         :: NodeNum1 = 0 ! The first node number in an AirflowNetwork linkage data
 INTEGER         :: NodeNum2 = 0 ! The Second node number in an AirflowNetwork linkage data
-REAL(r64)       :: OpenFactor = 0    ! Opening factor for a detailed opening component
-REAL(r64)       :: DischargeCoef = 0 ! Discharge coefficient for a detailed opening component
+REAL       :: OpenFactor = 0    ! Opening factor for a detailed opening component
+REAL       :: DischargeCoef = 0 ! Discharge coefficient for a detailed opening component
 
 maxsurf=0
 sumtozone=0.0
@@ -565,7 +565,7 @@ IF (((MaxSurf== LastMaxSurf) .AND. (ZoneNum==LastZone)) .or. LastMaxSurfdt(ZoneN
     CALL ShowContinueError('AirflowNetwork:MultiZone:Surface:Crack can be used with the cross ventilation room air model')
     CALL ShowFatalError('Previous severe error causes program termination')
   END IF
-  IF (Cd <= 0.0 .OR. Cd >= 10) Cd = 0.6d0
+  IF (Cd <= 0.0 .OR. Cd >= 10) Cd = 0.6
 
   Uin=Fin/(Cd*Ain(ZoneNum))
   Aroom=Zone(ZoneNum)%Volume/Lroom(ZoneNum)
@@ -678,7 +678,7 @@ ELSE
     End If
   END IF
 
-  IF (Cd <= 0.0 .OR. Cd >= 10) Cd = 0.6d0
+  IF (Cd <= 0.0 .OR. Cd >= 10) Cd = 0.6
   Uin=Fin/(Cd*Ain(ZoneNum))
 
 END IF
@@ -720,18 +720,18 @@ END IF
 ! Evaluate parameter that determines wether recirculations are present
 DO Ctd=1,TotUCSDCV
     IF(ZoneNum == ZoneUCSDCV(Ctd)%ZonePtr) THEN
-      IF (Ain(ZoneNum)/Aroom >1.0d0/2.0d0) THEN
+      IF (Ain(ZoneNum)/Aroom >1.0/2.0) THEN
         JetRecAreaRatio(ZoneNum)=1.0
       ELSE
         JetRecAreaRatio(ZoneNum)=Sqrt(Ain(ZoneNum)/Aroom)
       ENDIF
-      UPsOFo(ZoneNum) = 4.d0*Sqrt(Ain(ZoneNum))/(0.622d0*Ain(ZoneNum)*4*Sqrt(3.1416d0)*Sigma)
+      UPsOFo(ZoneNum) = 4.*Sqrt(Ain(ZoneNum))/(0.622*Ain(ZoneNum)*4*Sqrt(3.1416)*Sigma)
     ENDIF
 ENDDO
 
 
 !Verify if Volume to Input Area ratio is acceptable
-IF (SQRT(Zone(ZoneNum)%Volume/Ain(ZoneNum)**(3.0d0/2.0d0)) >= VoltoAinRatio) THEN
+IF (SQRT(Zone(ZoneNum)%Volume/Ain(ZoneNum)**(3.0/2.0)) >= VoltoAinRatio) THEN
   AirModel(ZoneNum)%SimAirModel= .FALSE.
 IF (Surface(MultizoneSurfaceData(MaxSurf)%SurfNum)%ExtBoundCond>0) THEN
     Tin(ZoneNum)=MAT(Surface(Surface(MultizoneSurfaceData(MaxSurf)%SurfNum)%ExtBoundCond)%zone)
@@ -766,19 +766,19 @@ Cl = 2.0*Lroom(ZoneNum)/(Wroom-Win)
 IF (Cl>=1.0/3.0 .AND. Cl<=4.0) THEN
   AirModel(ZoneNum)%SimAirModel= .TRUE.
   !Recirculation velocity
-  Urec(ZoneNum)=0.298d0*sqrt(Lroom(ZoneNum)/(Aroom*Ain(ZoneNum)**(3.0d0/2.0d0)))*Fin
+  Urec(ZoneNum)=0.298*sqrt(Lroom(ZoneNum)/(Aroom*Ain(ZoneNum)**(3.0/2.0)))*Fin
   !Jet velocity
-  Ujet(ZoneNum)= 1.56d0*Fin/(sqrt(Aroom*Ain(Zonenum)))
+  Ujet(ZoneNum)= 1.56*Fin/(sqrt(Aroom*Ain(Zonenum)))
   !Recirculation flux
-  Fr= 0.147d0**sqrt(Lroom(ZoneNum)*Aroom/Ain(ZoneNum)**(3.0d0/2.0d0))*Fin
+  Fr= 0.147**sqrt(Lroom(ZoneNum)*Aroom/Ain(ZoneNum)**(3.0/2.0))*Fin
   !Velocity for forced hc calculation
-  Uhc(ZoneNum)=0.115d0**(10.0d0/8.0d0)*((121.0d0+Lroom(ZoneNum)/sqrt(Ain(ZoneNum)))/Aroom/Ain(ZoneNum))**(0.5d0)*Uin
+  Uhc(ZoneNum)=0.115**(10.0/8.0)*((121.0+Lroom(ZoneNum)/sqrt(Ain(ZoneNum)))/Aroom/Ain(ZoneNum))**(0.5)*Uin
 ELSEIF (Cl>4.0 .AND. Cl<= 11.0) THEN
   AirModel(ZoneNum)%SimAirModel= .TRUE.
-  Urec(ZoneNum)=0.162d0*sqrt(Lroom(ZoneNum)/(Aroom*Ain(ZoneNum)**(3.0d0/2.0d0)))*Fin
-  Ujet(ZoneNum)= 1.56d0*Fin/(sqrt(Aroom*Ain(Zonenum)))
-  Fr= 0.077**sqrt(Lroom(ZoneNum)*Aroom/Ain(ZoneNum)**(3.0d0/2.0d0))*Fin
-  Uhc(ZoneNum)=0.082d0**(10.0d0/8.0d0)*((121.0d0+Lroom(ZoneNum)/sqrt(Ain(ZoneNum)))/Aroom/Ain(ZoneNum))**(0.5d0)*Uin
+  Urec(ZoneNum)=0.162*sqrt(Lroom(ZoneNum)/(Aroom*Ain(ZoneNum)**(3.0/2.0)))*Fin
+  Ujet(ZoneNum)= 1.56*Fin/(sqrt(Aroom*Ain(Zonenum)))
+  Fr= 0.077**sqrt(Lroom(ZoneNum)*Aroom/Ain(ZoneNum)**(3.0/2.0))*Fin
+  Uhc(ZoneNum)=0.082**(10.0/8.0)*((121.0+Lroom(ZoneNum)/sqrt(Ain(ZoneNum)))/Aroom/Ain(ZoneNum))**(0.5)*Uin
 ELSE
   AirModel(ZoneNum)%SimAirModel= .FALSE.
   Tin(ZoneNum)=MAT(Surface(MultizoneSurfaceData(MaxSurf)%SurfNum)%Zone)
@@ -903,7 +903,7 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
   INTEGER,                         INTENT(IN) :: ZoneNum   ! Which Zonenum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: Sigma=10.0d0
+  REAL, PARAMETER :: Sigma=10.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -912,26 +912,26 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)     :: GainsFrac            ! Fraction of lower subzone internal gains that mix as opposed to forming plumes
-  REAL(r64)     :: ConvGains            ! Total convective gains in the room
-  REAL(r64)     :: ConvGainsJet         ! Total convective gains released in jet subzone
-  REAL(r64)     :: ConvGainsRec         ! Total convective gains released in recirculation subzone
-  REAL(r64)     :: MCP_Total            ! Total capacity rate into the zone - assumed to enter at low level
-  REAL(r64)     :: ZTAveraged
-!unused  REAL(r64)     :: TempDiffCritRep      ! Minimum temperature difference between mixed and occupied subzones for reporting
+  REAL     :: GainsFrac            ! Fraction of lower subzone internal gains that mix as opposed to forming plumes
+  REAL     :: ConvGains            ! Total convective gains in the room
+  REAL     :: ConvGainsJet         ! Total convective gains released in jet subzone
+  REAL     :: ConvGainsRec         ! Total convective gains released in recirculation subzone
+  REAL     :: MCP_Total            ! Total capacity rate into the zone - assumed to enter at low level
+  REAL     :: ZTAveraged
+!unused  REAL     :: TempDiffCritRep      ! Minimum temperature difference between mixed and occupied subzones for reporting
 !unused  LOGICAL       :: MIXFLAG
 !unused  INTEGER       :: ZoneNodeNum          ! index number of the zone node
 !unused  INTEGER       :: NodeNum
 
   INTEGER       :: CTD
-!unused  REAL(r64)     :: MinFlow
-  REAL(r64)     :: VolOverAin
-!unused  REAL(r64)     :: MTGAUX
-!unused  REAL(r64)     :: CpAir
-  REAL(r64)     :: MCpT_Total
-  REAL(r64)     :: L
-  REAL(r64)     :: ZoneMult   ! total zone multiplier
-  REAL(r64)     :: RetAirConvGain 
+!unused  REAL     :: MinFlow
+  REAL     :: VolOverAin
+!unused  REAL     :: MTGAUX
+!unused  REAL     :: CpAir
+  REAL     :: MCpT_Total
+  REAL     :: L
+  REAL     :: ZoneMult   ! total zone multiplier
+  REAL     :: RetAirConvGain 
 
   GainsFrac=0.0
   ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
@@ -956,7 +956,7 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
   END IF
 
   ConvGainsJet = ConvGains*GainsFrac
-  ConvGainsRec = ConvGains*(1.d0-GainsFrac)
+  ConvGainsRec = ConvGains*(1.-GainsFrac)
 
   MCP_Total = MCPI(ZoneNum) + MCPV(ZoneNum) + MCPM(ZoneNum) + MCPE(ZoneNum) + MCPC(ZoneNum) + MdotCPOA(ZoneNum)
   MCpT_Total = MCPTI(ZoneNum) + MCPTV(ZoneNum) + MCPTM(ZoneNum) + MCPTE(ZoneNum) + MCPTC(ZoneNum) + &
@@ -969,9 +969,9 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
 
   CALL EvolveParaUCSDCV(ZoneNum)
 
-  Rfr(zonenum)=0.147d0*Sqrt(Zone(ZoneNum)%Volume/Ain(ZoneNum)**1.5d0)
+  Rfr(zonenum)=0.147*Sqrt(Zone(ZoneNum)%Volume/Ain(ZoneNum)**1.5)
   L=Lroom(ZoneNum)
-  VolOverAin=Sqrt(Zone(ZoneNum)%Volume/Ain(ZoneNum)**1.5d0)
+  VolOverAin=Sqrt(Zone(ZoneNum)%Volume/Ain(ZoneNum)**1.5)
 
   IF (AirModel(ZoneNum)%SimAirModel) THEN
     !=============================== CROSS VENTILATION  Calculation ==============================================
@@ -982,69 +982,69 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
 
      IF (JetRecAreaRatio(ZoneNum)/=1.0) THEN
 
-       ZTREC(ZoneNum)%In =((-0.294d0*MCp_Total*VolOverAin + HA_R)*(ConvGainsJet + 2.d0*MCp_Total*Tin(ZoneNum)) +   &
-                         Exp((6.170068027210885d0*L* &
-                         (1.d0 + 0.147d0*VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(0.294d0*ConvGainsJet*MCp_Total* &
-                         VolOverAin + 4.d0*ConvGainsRec*MCp_Total*(1.d0 + 0.147d0*VolOverAin) - ConvGainsJet*HA_R + 4*MCp_Total* &
-                         HAT_R + 0.588d0*MCp_Total*VolOverAin*HAT_R + 0.588d0*MCp_Total**2*VolOverAin* &
-                         Tin(ZoneNum) - 2.d0*MCp_Total*HA_R*Tin(ZoneNum)))/(2.d0*MCp_Total*(-0.294d0*MCp_Total*VolOverAin + HA_R + &
-                         Exp((6.170068027210885d0*L*(1.d0 + 0.147d0*VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))* &
-                         (HA_R + 0.294d0*VolOverAin*(MCp_Total + HA_R))))
+       ZTREC(ZoneNum)%In =((-0.294*MCp_Total*VolOverAin + HA_R)*(ConvGainsJet + 2.*MCp_Total*Tin(ZoneNum)) +   &
+                         Exp((6.170068027210885*L* &
+                         (1. + 0.147*VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(0.294*ConvGainsJet*MCp_Total* &
+                         VolOverAin + 4.*ConvGainsRec*MCp_Total*(1. + 0.147*VolOverAin) - ConvGainsJet*HA_R + 4*MCp_Total* &
+                         HAT_R + 0.588*MCp_Total*VolOverAin*HAT_R + 0.588*MCp_Total**2*VolOverAin* &
+                         Tin(ZoneNum) - 2.*MCp_Total*HA_R*Tin(ZoneNum)))/(2.*MCp_Total*(-0.294*MCp_Total*VolOverAin + HA_R + &
+                         Exp((6.170068027210885*L*(1. + 0.147*VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))* &
+                         (HA_R + 0.294*VolOverAin*(MCp_Total + HA_R))))
 
-       ZTREC(ZoneNum)%Out=(4.d0*ConvGainsRec*MCp_Total - 0.294d0*ConvGainsJet*MCp_Total*VolOverAin - ConvGainsJet*HA_R +   &
-                         4.d0*MCp_Total*HAT_R - 0.588d0*MCp_Total**2* &
+       ZTREC(ZoneNum)%Out=(4.*ConvGainsRec*MCp_Total - 0.294*ConvGainsJet*MCp_Total*VolOverAin - ConvGainsJet*HA_R +   &
+                         4.*MCp_Total*HAT_R - 0.588*MCp_Total**2* &
                          VolOverAin*Tin(ZoneNum) - 2*MCp_Total*HA_R*Tin(ZoneNum) +   &
-                         Exp((6.170068027210885d0*L*(1.d0 + 0.147d0*VolOverAin))/ &
-                         (Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(ConvGainsJet*(0.294d0*MCp_Total*VolOverAin + HA_R) +   &
-                         0.588d0*MCp_Total* &
-                         VolOverAin*(ConvGainsRec + HAT_R) + 2.d0*MCp_Total*(0.294d0*MCp_Total*VolOverAin + HA_R)*Tin(ZoneNum)))/  &
-                         (2.d0*MCp_Total* &
-                         (-0.294d0*MCp_Total*VolOverAin + HA_R + Exp((6.170068027210885d0*L*(1.d0 + 0.147d0*VolOverAin))/  &
+                         Exp((6.170068027210885*L*(1. + 0.147*VolOverAin))/ &
+                         (Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(ConvGainsJet*(0.294*MCp_Total*VolOverAin + HA_R) +   &
+                         0.588*MCp_Total* &
+                         VolOverAin*(ConvGainsRec + HAT_R) + 2.*MCp_Total*(0.294*MCp_Total*VolOverAin + HA_R)*Tin(ZoneNum)))/  &
+                         (2.*MCp_Total* &
+                         (-0.294*MCp_Total*VolOverAin + HA_R + Exp((6.170068027210885*L*(1. + 0.147*VolOverAin))/  &
                          (Sqrt(Ain(ZoneNum))* &
-                         VolOverAin*Sigma))*(HA_R + 0.294d0*VolOverAin*(MCp_Total + HA_R))))
-       ZTREC(ZoneNum)%Med= (ZTREC(ZoneNum)%In + ZTREC(ZoneNum)%Out)/2.d0
+                         VolOverAin*Sigma))*(HA_R + 0.294*VolOverAin*(MCp_Total + HA_R))))
+       ZTREC(ZoneNum)%Med= (ZTREC(ZoneNum)%In + ZTREC(ZoneNum)%Out)/2.
      ENDIF
 
        ZTJET(ZoneNum)%In = Tin(ZoneNum)+ConvGainsJet/(2* MCP_Total)
 
 
-       ZTJET(ZoneNum)%Out=(-0.294d0*ConvGainsJet*MCp_Total*VolOverAin - 0.588d0*ConvGainsRec*MCp_Total*VolOverAin +   &
-                           ConvGainsJet*HA_R + 0.294d0*ConvGainsJet* &
-                        VolOverAin*HA_R - 0.588d0*MCp_Total*VolOverAin*HAT_R - 0.588d0*MCp_Total**2*VolOverAin*Tin(ZoneNum) &
-                        + 2*MCp_Total*HA_R*Tin(ZoneNum) + 0.588d0*MCp_Total*VolOverAin*HA_R*Tin(ZoneNum) +   &
-                        Exp((6.170068027210885d0*L*(1.d0 + 0.147d0* &
+       ZTJET(ZoneNum)%Out=(-0.294*ConvGainsJet*MCp_Total*VolOverAin - 0.588*ConvGainsRec*MCp_Total*VolOverAin +   &
+                           ConvGainsJet*HA_R + 0.294*ConvGainsJet* &
+                        VolOverAin*HA_R - 0.588*MCp_Total*VolOverAin*HAT_R - 0.588*MCp_Total**2*VolOverAin*Tin(ZoneNum) &
+                        + 2*MCp_Total*HA_R*Tin(ZoneNum) + 0.588*MCp_Total*VolOverAin*HA_R*Tin(ZoneNum) +   &
+                        Exp((6.170068027210885*L*(1. + 0.147* &
                         VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*  &
-                        (ConvGainsJet*(0.294d0*MCp_Total*VolOverAin + HA_R) + &
-                        0.588d0*MCp_Total*VolOverAin*(ConvGainsRec + HAT_R) + 2.d0*MCp_Total*  &
-                        (0.294d0*MCp_Total*VolOverAin + HA_R)*Tin(ZoneNum)))/(2.d0* &
-                        MCp_Total*(-0.294d0*MCp_Total*VolOverAin + HA_R +   &
-                        Exp((6.170068027210885*L*(1.d0 + 0.147d0*VolOverAin))/(Sqrt(Ain(ZoneNum))* &
-                        VolOverAin*Sigma))*(HA_R + 0.294d0*VolOverAin*(MCp_Total + HA_R))))
+                        (ConvGainsJet*(0.294*MCp_Total*VolOverAin + HA_R) + &
+                        0.588*MCp_Total*VolOverAin*(ConvGainsRec + HAT_R) + 2.*MCp_Total*  &
+                        (0.294*MCp_Total*VolOverAin + HA_R)*Tin(ZoneNum)))/(2.* &
+                        MCp_Total*(-0.294*MCp_Total*VolOverAin + HA_R +   &
+                        Exp((6.170068027210885*L*(1. + 0.147*VolOverAin))/(Sqrt(Ain(ZoneNum))* &
+                        VolOverAin*Sigma))*(HA_R + 0.294*VolOverAin*(MCp_Total + HA_R))))
 
-       ZTJET(ZoneNum)%OutRoom=(ConvGainsJet*(-0.588d0*MCp_Total**2*VolOverAin + 0.294d0*MCp_Total*VolOverAin*HA_J +   &
-                             2.d0*MCp_Total*HA_R + &
-                             0.294d0*MCp_Total*VolOverAin*HA_R - HA_J*HA_R - 0.294d0*VolOverAin*HA_J*HA_R +   &
-                             Exp((6.170068027210885d0* L*(1.d0 + 0.147d0*VolOverAin))/  &
-                                (Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(0.588d0*MCp_Total**2*VolOverAin - &
-                             HA_J*HA_R + 2.d0*MCp_Total*(-0.147d0*VolOverAin*HA_J + HA_R + 0.147d0*VolOverAin*HA_R))) + &
-                             2.d0*MCp_Total*(-0.294d0*ConvGainsRec*MCp_Total*VolOverAin + 0.294d0*ConvGainsRec*VolOverAin*HA_J -   &
-                             0.294d0*MCp_Total* &
-                             VolOverAin*HAT_J + HA_R*HAT_J - 0.294d0*MCp_Total*VolOverAin*HAT_R + 0.294d0* &
-                             VolOverAin*HA_J*HAT_R - 0.294d0*MCp_Total**2*VolOverAin*Tin(ZoneNum) + 0.294d0*MCp_Total*VolOverAin* &
-                             HA_J*Tin(ZoneNum) + MCp_Total*HA_R*Tin(ZoneNum) + 0.294d0*MCp_Total*VolOverAin*HA_R*Tin(ZoneNum) -  &
-                             HA_J*HA_R*Tin(ZoneNum) - 0.294d0* &
-                             VolOverAin*HA_J*HA_R*Tin(ZoneNum) + Exp((6.170068027210885d0*L*(1.d0 + 0.147d0*VolOverAin))/ &
+       ZTJET(ZoneNum)%OutRoom=(ConvGainsJet*(-0.588*MCp_Total**2*VolOverAin + 0.294*MCp_Total*VolOverAin*HA_J +   &
+                             2.*MCp_Total*HA_R + &
+                             0.294*MCp_Total*VolOverAin*HA_R - HA_J*HA_R - 0.294*VolOverAin*HA_J*HA_R +   &
+                             Exp((6.170068027210885* L*(1. + 0.147*VolOverAin))/  &
+                                (Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(0.588*MCp_Total**2*VolOverAin - &
+                             HA_J*HA_R + 2.*MCp_Total*(-0.147*VolOverAin*HA_J + HA_R + 0.147*VolOverAin*HA_R))) + &
+                             2.*MCp_Total*(-0.294*ConvGainsRec*MCp_Total*VolOverAin + 0.294*ConvGainsRec*VolOverAin*HA_J -   &
+                             0.294*MCp_Total* &
+                             VolOverAin*HAT_J + HA_R*HAT_J - 0.294*MCp_Total*VolOverAin*HAT_R + 0.294* &
+                             VolOverAin*HA_J*HAT_R - 0.294*MCp_Total**2*VolOverAin*Tin(ZoneNum) + 0.294*MCp_Total*VolOverAin* &
+                             HA_J*Tin(ZoneNum) + MCp_Total*HA_R*Tin(ZoneNum) + 0.294*MCp_Total*VolOverAin*HA_R*Tin(ZoneNum) -  &
+                             HA_J*HA_R*Tin(ZoneNum) - 0.294* &
+                             VolOverAin*HA_J*HA_R*Tin(ZoneNum) + Exp((6.170068027210885*L*(1. + 0.147*VolOverAin))/ &
                              (Sqrt(Ain(ZoneNum))* &
-                             VolOverAin*Sigma))*(0.294d0*ConvGainsRec*VolOverAin*(MCp_Total - HA_J) +   &
-                                0.294d0*MCp_Total*VolOverAin* &
-                             HAT_J + HA_R*HAT_J + 0.294d0*VolOverAin*HA_R*HAT_J + 0.294d0*MCp_Total*VolOverAin* &
-                             HAT_R - 0.294d0*VolOverAin*HA_J*HAT_R + (MCp_Total - HA_J)*(0.294d0*MCp_Total*VolOverAin + &
-                             HA_R)*Tin(ZoneNum))))/(2.d0*MCp_Total**2*(-0.294d0*MCp_Total*VolOverAin + HA_R + &
-                             Exp((6.170068027210885d0*L*(1.d0 + 0.147d0* &
-                             VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(HA_R + 0.294d0*VolOverAin*(MCp_Total + HA_R))))
+                             VolOverAin*Sigma))*(0.294*ConvGainsRec*VolOverAin*(MCp_Total - HA_J) +   &
+                                0.294*MCp_Total*VolOverAin* &
+                             HAT_J + HA_R*HAT_J + 0.294*VolOverAin*HA_R*HAT_J + 0.294*MCp_Total*VolOverAin* &
+                             HAT_R - 0.294*VolOverAin*HA_J*HAT_R + (MCp_Total - HA_J)*(0.294*MCp_Total*VolOverAin + &
+                             HA_R)*Tin(ZoneNum))))/(2.*MCp_Total**2*(-0.294*MCp_Total*VolOverAin + HA_R + &
+                             Exp((6.170068027210885*L*(1. + 0.147* &
+                             VolOverAin))/(Sqrt(Ain(ZoneNum))*VolOverAin*Sigma))*(HA_R + 0.294*VolOverAin*(MCp_Total + HA_R))))
 
 
-       ZTJET(ZoneNum)%Med= (ZTJET(ZoneNum)%In + ZTJET(ZoneNum)%Out)/2.d0
+       ZTJET(ZoneNum)%Med= (ZTJET(ZoneNum)%In + ZTJET(ZoneNum)%Out)/2.
 
     END DO
 
@@ -1056,7 +1056,7 @@ SUBROUTINE CalcUCSDCV(ZoneNum)
     ENDIF
 
     ! If temperature increase is above 1.5C then go to mixing
-    IF (ZTJET(ZoneNum)%OutRoom - Tin(ZoneNum) > 1.5d0) THEN
+    IF (ZTJET(ZoneNum)%OutRoom - Tin(ZoneNum) > 1.5) THEN
       ZoneCVisMixing(ZoneNum)=1.0
       ZoneCVhasREC(ZoneNum)=0
       AirModel(ZoneNum)%SimAirModel = .FALSE.

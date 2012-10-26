@@ -91,10 +91,10 @@ INTEGER, PARAMETER :: FuncHFnTdbW            = 38 ! accessor for E+ psych routin
 INTEGER, PARAMETER :: FuncHFnTdbRhPb         = 39 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncTdbFnHW            = 40 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncRhovFnTdbRh        = 41 ! accessor for E+ psych routine
-INTEGER, PARAMETER :: FuncRhovFnTdbRhLBnd0C  = 42 ! accessor for E+ psych routine
+INTEGER, PARAMETER :: FuncRhovFnTdbRhLBnC  = 42 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncRhovFnTdbWPb       = 43 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncRhFnTdbRhov        = 44 ! accessor for E+ psych routine
-INTEGER, PARAMETER :: FuncRhFnTdbRhovLBnd0C  = 45 ! accessor for E+ psych routine
+INTEGER, PARAMETER :: FuncRhFnTdbRhovLBnC  = 45 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncRhFnTdbWPb         = 46 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncTwbFnTdbWPb        = 47 ! accessor for E+ psych routine
 INTEGER, PARAMETER :: FuncVFnTdbWPb          = 48 ! accessor for E+ psych routine
@@ -146,7 +146,7 @@ TYPE InternalVarsAvailableType
   CHARACTER(len=MaxNameLength)            :: UniqueIDName    = '' ! unique id for internal var, All uppercase
   CHARACTER(len=MaxNameLength)            :: Units           = '' ! registered units, used for reporting and checks.
   INTEGER                                 :: PntrVarTypeUsed = 0 ! data type used: integer (PntrInteger) or real (PntrReal)
-  REAL(r64), POINTER                      :: RealValue    ! fortran POINTER to the REAL value that is being accessed
+  REAL, POINTER                      :: RealValue    ! fortran POINTER to the REAL value that is being accessed
   INTEGER, POINTER                        :: IntValue     ! fortran POINTER to the Integer value that is being accessed
 END TYPE InternalVarsAvailableType
 
@@ -169,7 +169,7 @@ TYPE EMSActuatorAvailableType
   INTEGER                                 :: PntrVarTypeUsed   = 0 ! data type used: integer (PntrInteger), real (PntrReal)
                                                                    ! or logical (PntrLogical)
   LOGICAL, POINTER                        :: Actuated  ! fortran POINTER to the logical value that signals EMS is actuating
-  REAL(r64), POINTER                      :: RealValue ! fortran POINTER to the REAL value that is being actuated
+  REAL, POINTER                      :: RealValue ! fortran POINTER to the REAL value that is being actuated
   INTEGER, POINTER                        :: IntValue  ! fortran POINTER to the Integer value that is being actuated
   LOGICAL, POINTER                        :: LogValue  ! fortran POINTER to the Logical value that is being actuated
 
@@ -197,7 +197,7 @@ END TYPE EMSProgramCallManagementType
 TYPE ErlValueType
   ! instance data structure for the values taken by Erl variables, nested structure in ErlVariable
   INTEGER                        :: Type            = 0   ! value type, eg. ValueNumber,
-  REAL(r64)                      :: Number          = 0.0 ! numeric value instance for Erl variable
+  REAL                      :: Number          = 0.0 ! numeric value instance for Erl variable
   CHARACTER(len=2*MaxNameLength) :: String          = ''  ! string data types in Erl (not used yet)
   INTEGER                        :: Variable        = 0   ! Pointer to another Erl variable
 !  Might be good to change names to VariableNum and ExpressionNum just to be clear
@@ -251,9 +251,9 @@ Type TrendVariableType
   CHARACTER(len=MaxNameLength)   :: Name               = '' !
   Integer                        :: ErlVariablePointer = 0  ! the Erl variable being logged in trend
   INTEGER                        :: LogDepth = 0            ! number of timesteps back
-  REAL(r64), DIMENSION(:), ALLOCATABLE :: TrendValARR       ! the main storage of trend data
-  REAL(r64), DIMENSION(:), ALLOCATABLE :: tempTrendARR      ! temporary holder during push
-  REAL(r64), DIMENSION(:), ALLOCATABLE :: TimeARR           ! hours back in time for trend points
+  REAL, DIMENSION(:), ALLOCATABLE :: TrendValARR       ! the main storage of trend data
+  REAL, DIMENSION(:), ALLOCATABLE :: tempTrendARR      ! temporary holder during push
+  REAL, DIMENSION(:), ALLOCATABLE :: TimeARR           ! hours back in time for trend points
 END TYPE TrendVariableType
 
           ! MODULE VARIABLE TYPE DECLARATIONS:

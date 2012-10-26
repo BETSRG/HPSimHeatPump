@@ -47,9 +47,9 @@ USE DataInterfaces
 IMPLICIT NONE       ! Enforce explicit typing of all variables
 
 ! MODULE VARIABLE and Function DECLARATIONs
-REAL(r64), Allocatable, Dimension(:)   :: RhoVapEMPD           ! Inside Surface Vapor Density Reporting variable
-REAL(r64), Allocatable, Dimension(:)   :: WSurfEMPD           ! Inside Surface Humidity Ratio Reporting variable
-REAL(r64), Allocatable, Dimension(:)   :: RHEMPD           ! Inside Surface Relative Humidity Reporting variable
+REAL, Allocatable, Dimension(:)   :: RhoVapEMPD           ! Inside Surface Vapor Density Reporting variable
+REAL, Allocatable, Dimension(:)   :: WSurfEMPD           ! Inside Surface Humidity Ratio Reporting variable
+REAL, Allocatable, Dimension(:)   :: RHEMPD           ! Inside Surface Relative Humidity Reporting variable
 
 ! SUBROUTINE SPECIFICATION FOR MODULE MoistureBalanceEMPDManager
 PRIVATE InitMoistureBalanceEMPD
@@ -106,7 +106,7 @@ SUBROUTINE GetMoistureBalanceEMPDInput  ! Moisture Balance EMPD Input Reader Man
   INTEGER :: MaterNum         ! Counter to keep track of the material number
   INTEGER :: MaterialNumAlpha ! Number of material alpha names being passed
   INTEGER :: MaterialNumProp  ! Number of material properties being passed
-  REAL(r64), DIMENSION(5) :: MaterialProps !Temporary array to transfer material properties
+  REAL, DIMENSION(5) :: MaterialProps !Temporary array to transfer material properties
   LOGICAL :: ErrorsFound = .false. ! If errors detected in input
 
   INTEGER :: EMPDMat                ! EMPD Moisture Material additional properties for each base material
@@ -298,9 +298,9 @@ SUBROUTINE InitMoistureBalanceEMPD
        ZoneNum               = Surface(SurfNum)%Zone
        IF (.not. Surface(SurfNum)%HeatTransSurf) CYCLE
        IF(ZoneAirHumRat(ZoneNum) == 0.0)Then
-          MoistEMPDOld(SurfNum) = 0.0001d0
-          MoistEMPDInt(SurfNum) = 0.0001d0
-          MoistEMPDNew(SurfNum) = 0.0001d0
+          MoistEMPDOld(SurfNum) = 0.0001
+          MoistEMPDInt(SurfNum) = 0.0001
+          MoistEMPDNew(SurfNum) = 0.0001
        Else
           MoistEMPDOld(SurfNum) = ZoneAirHumRat(ZoneNum) ! Surface moisture level initialization
           MoistEMPDInt(SurfNum) = ZoneAirHumRat(ZoneNum) ! by assuming initial values be equal to ZoneAirHumRat
@@ -309,8 +309,8 @@ SUBROUTINE InitMoistureBalanceEMPD
     end do
     if (.Not. InitEnvrnFlag) Return
     !Initialize the report variable
-    RhoVapEMPD = 0.015d0
-    WSurfEMPD  = 0.015d0
+    RhoVapEMPD = 0.015
+    WSurfEMPD  = 0.015
     RHEMPD = 0.0
     MoistEMPDFlux = 0.0
 
@@ -345,21 +345,21 @@ SUBROUTINE CalcMoistureBalanceEMPD(SurfNum, TempSurfIn, TempSurfInOld, TempZone,
     ! na
 
     ! USE STATEMENTS:
-USE Psychrometrics, ONLY:PsyRhFnTdbWPb,PsyRhFnTdbRhovLBnd0C,PsyWFnTdbRhPb,PsyRhoAirFnPbTdbW,PsyCpAirFnWTdb,PsyRhovFnTdbWPb
+USE Psychrometrics, ONLY:PsyRhFnTdbWPb,PsyRhFnTdbRhovLBnC,PsyWFnTdbRhPb,PsyRhoAirFnPbTdbW,PsyCpAirFnWTdb,PsyRhovFnTdbWPb
 
     IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   Integer, Intent(In) :: SurfNum
-  REAL(r64), Intent(In)    :: TempSurfIn       !INSIDE SURFACE TEMPERATURE at current time step
-  REAL(r64), Intent(In)    :: TempSurfInOld    !INSIDE SURFACE TEMPERATURE at previous time step.
-  REAL(r64), Intent(In)    :: TempZone         !Zone temperature at current time step.
-  REAL(r64), Intent(OUT)   :: TempSat         ! Satutare surface temperature.
+  REAL, Intent(In)    :: TempSurfIn       !INSIDE SURFACE TEMPERATURE at current time step
+  REAL, Intent(In)    :: TempSurfInOld    !INSIDE SURFACE TEMPERATURE at previous time step.
+  REAL, Intent(In)    :: TempZone         !Zone temperature at current time step.
+  REAL, Intent(OUT)   :: TempSat         ! Satutare surface temperature.
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL(r64), PARAMETER :: Error = 0.01d0    ! Totlarence (%)
-    REAL(r64), PARAMETER :: RLXM  = 0.3d0     ! Relaxation factor (0-1)
-    REAL(r64), PARAMETER :: Lam  = 2.5d6    ! Heat of vaporization (J/kg)
+    REAL, PARAMETER :: Error = 0.01    ! Totlarence (%)
+    REAL, PARAMETER :: RLXM  = 0.3     ! Relaxation factor (0-1)
+    REAL, PARAMETER :: Lam  = 2.5d6    ! Heat of vaporization (J/kg)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -372,22 +372,22 @@ USE Psychrometrics, ONLY:PsyRhFnTdbWPb,PsyRhFnTdbRhovLBnd0C,PsyWFnTdbRhPb,PsyRho
     INTEGER :: ZoneNum   ! Surface number
     INTEGER :: MatNum    ! Material number at interior layer
     INTEGER :: ConstrNum ! Construction number
-    REAL(r64)    :: RHOBULK   ! Material bulk density
-    REAL(r64)    :: HM        ! Moisture transfer coefficient
-    REAL(r64)    :: Taver     ! Average zone temperature between current time and previous time
-!    REAL(r64)    :: Waver     ! Average zone humidity ratio between current time and previous time
-    REAL(r64)    :: RHaver    ! Average zone relative humidity {0-1} between current time and previous time
-    REAL(r64)    :: RVaver    ! Average zone vapor density
-    REAL(r64)    :: AT
-    REAL(r64)    :: BR
-    REAL(r64)    :: RALPHA    ! Zone vapor density
-    REAL(r64)    :: BB        ! Coefficient for ODE
-    REAL(r64)    :: CC        ! Coefficient for ODE
-    REAL(r64)    :: ErrorM    ! Percent error
+    REAL    :: RHOBULK   ! Material bulk density
+    REAL    :: HM        ! Moisture transfer coefficient
+    REAL    :: Taver     ! Average zone temperature between current time and previous time
+!    REAL    :: Waver     ! Average zone humidity ratio between current time and previous time
+    REAL    :: RHaver    ! Average zone relative humidity {0-1} between current time and previous time
+    REAL    :: RVaver    ! Average zone vapor density
+    REAL    :: AT
+    REAL    :: BR
+    REAL    :: RALPHA    ! Zone vapor density
+    REAL    :: BB        ! Coefficient for ODE
+    REAL    :: CC        ! Coefficient for ODE
+    REAL    :: ErrorM    ! Percent error
     INTEGER :: Flag      ! Convergence flag (0 - converged)
     LOGICAL,SAVE :: OneTimeFlag = .True.
-    REAL(r64)    :: Wsurf ! Surface moisture flux
-    REAL(r64)    :: PVsurf ! Surface vapor pressure
+    REAL    :: Wsurf ! Surface moisture flux
+    REAL    :: PVsurf ! Surface vapor pressure
 
 !    if (OneTimeFlag) then
 !       Call InitMoistureBalanceEMPD
@@ -418,28 +418,28 @@ USE Psychrometrics, ONLY:PsyRhFnTdbWPb,PsyRhFnTdbRhovLBnd0C,PsyWFnTdbRhPb,PsyRho
        RETURN
     End If
 
-    Taver = (TempSurfIn+TempSurfInOld)/2.0d0
+    Taver = (TempSurfIn+TempSurfInOld)/2.0
 
 
     DO WHILE (Flag > 0 )
-       RVaver = (MoistEMPDNew(SurfNum)+MoistEMPDOld(SurfNum))/2.0d0
-       RHaver = RVaver*461.52d0*(Taver+KelvinConv)*exp(-23.7093d0+4111.0d0/(Taver+237.7d0))
+       RVaver = (MoistEMPDNew(SurfNum)+MoistEMPDOld(SurfNum))/2.0
+       RHaver = RVaver*461.52*(Taver+KelvinConv)*exp(-23.7093+4111.0/(Taver+237.7))
        if (RHaver .GT. 1.0) RHaver = 1.0
-       if (RHaver .LT. 0.0) RHaver = 0.00001d0
+       if (RHaver .LT. 0.0) RHaver = 0.00001
 
        AT = (Material(MatNum)%MoistACoeff*Material(MatNum)%MoistBCoeff*RHaver**Material(MatNum)%MoistBCoeff + &
            Material(MatNum)%MoistCCoeff*Material(MatNum)%MoistDCoeff*RHaver**Material(MatNum)%MoistDCoeff)/RVaver
-       BR = (4111.0d0/(Taver+237.7d0)**2-(1.0d0/(Taver+KelvinConv)))*AT*RVaver
+       BR = (4111.0/(Taver+237.7)**2-(1.0/(Taver+KelvinConv)))*AT*RVaver
        RHOBULK = Material(MatNum)%density
        HM = HConvIn(SurfNum)/(PsyRhoAirFnPbTdbW(outbaropress,TempZone,ZoneAirHumRat(ZoneNum),'CalcMoistureEMPD') &
                    *PsyCpAirFnWTdb(ZoneAirHumRat(ZoneNum),TempZone,'CalcMoistureEMPD'))
        ZoneNum = Surface(SurfNum)%Zone
-       RALPHA = ZoneAirHumRat(ZoneNum)*OutBaroPress/(461.52d0*(TempZone+KelvinConv) &
-               *(ZoneAirHumRat(ZoneNum)+0.62198d0))
+       RALPHA = ZoneAirHumRat(ZoneNum)*OutBaroPress/(461.52*(TempZone+KelvinConv) &
+               *(ZoneAirHumRat(ZoneNum)+0.62198))
        BB = HM/(RHOBULK*Material(MatNum)%EMPDValue*AT)
        CC = BB*RALPHA+BR/AT*(TempSurfIn-TempSurfInOld)/(TimeStepZone*SecInHour)
        CALL SolverMoistureBalanceEMPD (MoistEMPDNew(SurfNum),MoistEMPDOld(SurfNum), &
-                                         1.0d0,BB,CC)
+                                         1.0,BB,CC)
 
        Flag = 0
        ERRORM = ABS((MoistEMPDNew(SurfNum)-MoistEMPDInt(SurfNum))/MoistEMPDInt(SurfNum))*100.0
@@ -459,17 +459,17 @@ USE Psychrometrics, ONLY:PsyRhFnTdbWPb,PsyRhFnTdbRhovLBnd0C,PsyWFnTdbRhPb,PsyRho
     END DO
 
     ! Calculate latent load
-    PVsurf = RHaver*exp(23.7093d0-4111.0d0/(Taver+237.7d0))
-    Wsurf = 0.62198*RHaver/(exp(-23.7093d0+4111.0d0/(Taver+237.7d0))*OutBaroPress-RHaver)
+    PVsurf = RHaver*exp(23.7093-4111.0/(Taver+237.7))
+    Wsurf = 0.62198*RHaver/(exp(-23.7093+4111.0/(Taver+237.7))*OutBaroPress-RHaver)
     MoistEMPDFlux(SurfNum) = HM*(MoistEMPDNew(SurfNum)-  &
            PsyRhoAirFnPbTdbW(OutBaroPress, TempZone, ZoneAirHumRat(ZoneNum),'CalcMoistureEMPD')* &
            ZoneAirHumRat(ZoneNum))*Lam
     ! Calculate surface dew point temperature based on surface vapor density
-    TempSat = 4111.0d0/(23.7093d0-LOG(PVsurf))+35.45d0-KelvinConv
+    TempSat = 4111.0/(23.7093-LOG(PVsurf))+35.45-KelvinConv
 
     ! Put results in the single precision reporting variable
     RhoVapEMPD(SurfNum) = MoistEMPDNew(SurfNum)
-    RHEMPD(SurfNum) = PsyRhFnTdbRhovLBnd0C(TempSurfIn,RhoVapEMPD(SurfNum),'CalcMoistureEMPD')*100.0
+    RHEMPD(SurfNum) = PsyRhFnTdbRhovLBnC(TempSurfIn,RhoVapEMPD(SurfNum),'CalcMoistureEMPD')*100.0
     WSurfEMPD(SurfNum) = PsyWFnTdbRhPb(TempSurfIn,RHEMPD(SurfNum)/100.0,OutBaroPress,'CalcMoistureEMPD')
 
 
@@ -496,11 +496,11 @@ SUBROUTINE SolverMoistureBalanceEMPD (VARNEW,VAROLD,A,B,C)
 IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL(r64), INTENT(OUT) :: VARNEW ! Value at current time step
-REAL(r64), INTENT(IN)  :: VAROLD ! Value at previous time step
-REAL(r64), INTENT(IN)  :: A      ! Coefficient of time derivative in AdV/dt+BV=C
-REAL(r64), INTENT(IN)  :: B      ! Coefficienct of variable
-REAL(r64), INTENT(IN)  :: C      ! Constant
+REAL, INTENT(OUT) :: VARNEW ! Value at current time step
+REAL, INTENT(IN)  :: VAROLD ! Value at previous time step
+REAL, INTENT(IN)  :: A      ! Coefficient of time derivative in AdV/dt+BV=C
+REAL, INTENT(IN)  :: B      ! Coefficienct of variable
+REAL, INTENT(IN)  :: C      ! Constant
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -514,7 +514,7 @@ REAL(r64), INTENT(IN)  :: C      ! Constant
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
 
-   VARNEW = (VAROLD+TimeStepZone*SecInHour*C/A)/(1.d0+TimeStepZone*SecInHour*B/A)
+   VARNEW = (VAROLD+TimeStepZone*SecInHour*C/A)/(1.+TimeStepZone*SecInHour*B/A)
 
 RETURN
 

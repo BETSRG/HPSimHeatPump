@@ -109,8 +109,8 @@ CHARACTER(LEN=*), parameter :: validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi
 TYPE OutputTableBinnedType
   CHARACTER(len=MaxNameLength)   :: keyValue      =' ' ! the key value (usually an asterisk to indicate all variables
   CHARACTER(len=MaxNameLength)   :: varOrMeter    =' ' ! the name of the variable or meter
-  REAL(r64)                      :: intervalStart =0.0 ! The lowest value for the intervals being binned into.
-  REAL(r64)                      :: intervalSize  =0.0 ! The size of the bins starting with Interval start.
+  REAL                      :: intervalStart =0.0 ! The lowest value for the intervals being binned into.
+  REAL                      :: intervalSize  =0.0 ! The size of the bins starting with Interval start.
   INTEGER                        :: intervalCount =0   ! The number of bins used. The number of hours below the start of
                                                        ! the lowest bin and above the value of the last bin are also shown.
   INTEGER                        :: resIndex      =0   ! result index - pointer to BinResults array
@@ -124,8 +124,8 @@ TYPE OutputTableBinnedType
 END TYPE
 
 TYPE BinResultsType
-  REAL(r64),DIMENSION(12)             :: mnth          =0.0 ! monthly bins
-  REAL(r64),DIMENSION(24)             :: hrly          =0.0 ! hourly bins
+  REAL,DIMENSION(12)             :: mnth          =0.0 ! monthly bins
+  REAL,DIMENSION(24)             :: hrly          =0.0 ! hourly bins
 END TYPE
 
 TYPE BinObjVarIDType
@@ -134,11 +134,11 @@ TYPE BinObjVarIDType
 END TYPE
 
 TYPE BinStatisticsType
-  REAL(r64)                      :: sum           =0.0 !sum of the variable
-  REAL(r64)                      :: sum2          =0.0 !sum of the variable squared
+  REAL                      :: sum           =0.0 !sum of the variable
+  REAL                      :: sum2          =0.0 !sum of the variable squared
   INTEGER                        :: n             =0   !number of items in sum
-  REAL(r64)                      :: minimum       =0.0 !minimum value
-  REAL(r64)                      :: maximum       =0.0 !maximum value
+  REAL                      :: minimum       =0.0 !minimum value
+  REAL                      :: maximum       =0.0 !maximum value
 END TYPE
 
 ! arrays for time binned results
@@ -206,10 +206,10 @@ TYPE MonthlyColumnsType
   INTEGER                        :: stepType     =0   ! Variable time step is Zone=1 or HVAC=2
   CHARACTER(len=MaxNameLength)   :: units        =' ' ! the units string, may be blank
   INTEGER                        :: aggType      =0   ! index to the type of aggregation (see list of parameters)
-  REAL(r64),DIMENSION(12)        :: reslt        =0.0 ! monthly results
-  REAL(r64),DIMENSION(12)        :: duration     =0.0 ! the time during which results are summed for use in averages
+  REAL,DIMENSION(12)        :: reslt        =0.0 ! monthly results
+  REAL,DIMENSION(12)        :: duration     =0.0 ! the time during which results are summed for use in averages
   INTEGER,DIMENSION(12)          :: timeStamp    =0   ! encoded timestamp of max or min
-  REAL(r64)                      :: aggForStep   =0.0 ! holds the aggregation for the HVAC time steps when smaller than
+  REAL                      :: aggForStep   =0.0 ! holds the aggregation for the HVAC time steps when smaller than
                                                       ! the zone timestep
 END TYPE
 
@@ -243,8 +243,8 @@ INTEGER :: TOCEntriesSize  = 0
 TYPE UnitConvType
   CHARACTER(len=20)   :: siName    = ' '     ! the name abbreviation or symbol of the SI units
   CHARACTER(len=20)   :: ipName    = ' '     ! the name abbreviation or symbol of the IP units
-  REAL(r64)           :: mult      = 1.d0    ! the multiplier used to convert from SI to IP in IP = (SI * mult) + offset
-  REAL(r64)           :: offset    = 0.d0    ! the offset used to convert from SI to IP in IP = (SI * mult) + offset
+  REAL           :: mult      = 1.    ! the multiplier used to convert from SI to IP in IP = (SI * mult) + offset
+  REAL           :: offset    = 0.    ! the offset used to convert from SI to IP in IP = (SI * mult) + offset
   CHARACTER(len=20)   :: hint      = ' '     ! the string used when multiple SI units match
   LOGICAL             :: several   = .FALSE. ! several different options for the SI unit to be converted into IP
   LOGICAL             :: default   = .FALSE. ! if part of a set of "several" this should be used as default
@@ -264,7 +264,7 @@ INTEGER,DIMENSION(maxNumStyles)         :: TabularOutputFile = 0   ! file number
 CHARACTER(LEN=1),DIMENSION(maxNumStyles):: del               = ' ' ! the delimiter to use
 INTEGER,DIMENSION(maxNumStyles)         :: TableStyle        = 0   ! see list of parameters
 
-REAL(r64)        :: timeInYear      =0.0
+REAL        :: timeInYear      =0.0
 
 ! Flags for predefined tabular reports
 LOGICAL   ::    displayTabularBEPS =.false.
@@ -283,7 +283,7 @@ INTEGER, DIMENSION(numResourceTypes)            :: meterNumTotalsBEPS =0
 INTEGER, DIMENSION(numSourceTypes)              :: meterNumTotalsSource =0
 LOGICAL, DIMENSION(numSourceTypes)              :: fuelfactorsused=.false.
 LOGICAL, DIMENSION(numResourceTypes)            :: ffUsed=.false.
-REAL(r64), DIMENSION(numResourceTypes)          :: SourceFactors = 0.0
+REAL, DIMENSION(numResourceTypes)          :: SourceFactors = 0.0
 LOGICAL, DIMENSION(numResourceTypes)            :: ffSchedUsed =.false.
 INTEGER, DIMENSION(numResourceTypes)            :: ffSchedIndex = 0
 INTEGER, DIMENSION(numEndUses,numResourceTypes) :: meterNumEndUseBEPS =0
@@ -293,77 +293,77 @@ CHARACTER(len=32), DIMENSION(numResourceTypes)  :: resourceTypeNames =' '
 CHARACTER(len=32), DIMENSION(numSourceTypes)    :: sourceTypeNames   =' '
 CHARACTER(len=32), DIMENSION(numEndUses)        :: endUseNames       =' '
 ! arrays that hold the actual values for the year
-REAL(r64), DIMENSION(numResourceTypes)               :: gatherTotalsBEPS   =0.0
-REAL(r64), DIMENSION(numResourceTypes)               :: gatherTotalsBySourceBEPS =0.0
-REAL(r64), DIMENSION(numSourceTypes)                 :: gatherTotalsSource =0.0
-REAL(r64), DIMENSION(numSourceTypes)                 :: gatherTotalsBySource =0.0
-REAL(r64), DIMENSION(numEndUses,numResourceTypes)    :: gatherEndUseBEPS   =0.0
-REAL(r64), DIMENSION(numEndUses,numResourceTypes)    :: gatherEndUseBySourceBEPS   =0.0
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:)             :: gatherEndUseSubBEPS
+REAL, DIMENSION(numResourceTypes)               :: gatherTotalsBEPS   =0.0
+REAL, DIMENSION(numResourceTypes)               :: gatherTotalsBySourceBEPS =0.0
+REAL, DIMENSION(numSourceTypes)                 :: gatherTotalsSource =0.0
+REAL, DIMENSION(numSourceTypes)                 :: gatherTotalsBySource =0.0
+REAL, DIMENSION(numEndUses,numResourceTypes)    :: gatherEndUseBEPS   =0.0
+REAL, DIMENSION(numEndUses,numResourceTypes)    :: gatherEndUseBySourceBEPS   =0.0
+REAL, ALLOCATABLE, DIMENSION(:,:,:)             :: gatherEndUseSubBEPS
 ! arrays the hold the demand values
-REAL(r64), DIMENSION(numResourceTypes)               :: gatherDemandTotal  =0.0
-REAL(r64), DIMENSION(numEndUses,numResourceTypes)    :: gatherDemandEndUse  =0.0
-REAL(r64), ALLOCATABLE, DIMENSION(:,:,:)             :: gatherDemandEndUseSub
+REAL, DIMENSION(numResourceTypes)               :: gatherDemandTotal  =0.0
+REAL, DIMENSION(numEndUses,numResourceTypes)    :: gatherDemandEndUse  =0.0
+REAL, ALLOCATABLE, DIMENSION(:,:,:)             :: gatherDemandEndUseSub
 INTEGER, DIMENSION(numResourceTypes)                 :: gatherDemandTimeStamp = 0
 ! to keep track of hours for the BEPS report gathering
-REAL(r64)                           :: gatherElapsedTimeBEPS =0.0
+REAL                           :: gatherElapsedTimeBEPS =0.0
 ! for normalization of results
-REAL(r64)  , PUBLIC                             :: buildingGrossFloorArea       =0.0
-REAL(r64)  , PUBLIC                             :: buildingConditionedFloorArea =0.0
+REAL  , PUBLIC                             :: buildingGrossFloorArea       =0.0
+REAL  , PUBLIC                             :: buildingConditionedFloorArea =0.0
 ! keep track if schedules are used in fuel factors
 LOGICAL  ::  fuelFactorSchedulesUsed = .FALSE.
 ! for electic load components on BEPS report
 INTEGER                                         :: meterNumPowerFuelFireGen       =0
-REAL(r64)                                       :: gatherPowerFuelFireGen         =0.0
+REAL                                       :: gatherPowerFuelFireGen         =0.0
 INTEGER                                         :: meterNumPowerPV                =0
-REAL(r64)                                       :: gatherPowerPV                  =0.0
+REAL                                       :: gatherPowerPV                  =0.0
 INTEGER                                         :: meterNumPowerWind              =0
-REAL(r64)                                       :: gatherPowerWind                =0.0
-REAL(r64)                                       :: OverallNetEnergyFromStorage    =0.0
+REAL                                       :: gatherPowerWind                =0.0
+REAL                                       :: OverallNetEnergyFromStorage    =0.0
 INTEGER                                         :: meterNumPowerHTGeothermal      =0
-REAL(r64)                                       :: gatherPowerHTGeothermal        =0.0
+REAL                                       :: gatherPowerHTGeothermal        =0.0
 INTEGER                                         :: meterNumElecProduced           =0
-REAL(r64)                                       :: gatherElecProduced             =0.0
+REAL                                       :: gatherElecProduced             =0.0
 INTEGER                                         :: meterNumElecPurchased          =0
-REAL(r64)                                       :: gatherElecPurchased            =0.0
+REAL                                       :: gatherElecPurchased            =0.0
 INTEGER                                         :: meterNumElecSurplusSold        =0
-REAL(r64)                                       :: gatherElecSurplusSold          =0.0
+REAL                                       :: gatherElecSurplusSold          =0.0
 ! for on site thermal source components on BEPS report
 INTEGER                                         :: meterNumWaterHeatRecovery      =0
-REAL(r64)                                       :: gatherWaterHeatRecovery        =0.0
+REAL                                       :: gatherWaterHeatRecovery        =0.0
 INTEGER                                         :: meterNumAirHeatRecoveryCool    =0
-REAL(r64)                                       :: gatherAirHeatRecoveryCool      =0.0
+REAL                                       :: gatherAirHeatRecoveryCool      =0.0
 INTEGER                                         :: meterNumAirHeatRecoveryHeat    =0
-REAL(r64)                                       :: gatherAirHeatRecoveryHeat      =0.0
+REAL                                       :: gatherAirHeatRecoveryHeat      =0.0
 INTEGER                                         :: meterNumHeatHTGeothermal       =0
-REAL(r64)                                       :: gatherHeatHTGeothermal         =0.0
+REAL                                       :: gatherHeatHTGeothermal         =0.0
 INTEGER                                         :: meterNumHeatSolarWater         =0
-REAL(r64)                                       :: gatherHeatSolarWater           =0.0
+REAL                                       :: gatherHeatSolarWater           =0.0
 INTEGER                                         :: meterNumHeatSolarAir           =0
-REAL(r64)                                       :: gatherHeatSolarAir             =0.0
+REAL                                       :: gatherHeatSolarAir             =0.0
 ! for on site water components on BEPS report
 INTEGER                                         :: meterNumRainWater       =0
-REAL(r64)                                       :: gatherRainWater         =0.0
+REAL                                       :: gatherRainWater         =0.0
 INTEGER                                         :: meterNumCondensate      =0
-REAL(r64)                                       :: gatherCondensate        =0.0
+REAL                                       :: gatherCondensate        =0.0
 INTEGER                                         :: meterNumGroundwater      =0
-REAL(r64)                                       :: gatherWellwater        =0.0
+REAL                                       :: gatherWellwater        =0.0
 INTEGER                                         :: meterNumMains         =0
-REAL(r64)                                       :: gatherMains           =0.0
+REAL                                       :: gatherMains           =0.0
 INTEGER                                         :: meterNumWaterEndUseTotal     =0
-REAL(r64)                                       :: gatherWaterEndUseTotal       =0.0
+REAL                                       :: gatherWaterEndUseTotal       =0.0
 ! for source energy conversion factors on BEPS report
-REAL(r64)                                       :: sourceFactorElectric           =0.0
-REAL(r64)                                       :: sourceFactorNaturalGas         =0.0
-REAL(r64)                                       :: efficiencyDistrictCooling     =0.0
-REAL(r64)                                       :: efficiencyDistrictHeating     =0.0
-REAL(r64)                                       :: sourceFactorSteam              =0.0
-REAL(r64)                                       :: sourceFactorGasoline           =0.0
-REAL(r64)                                       :: sourceFactorDiesel             =0.0
-REAL(r64)                                       :: sourceFactorCoal               =0.0
-REAL(r64)                                       :: sourceFactorFuelOil1           =0.0
-REAL(r64)                                       :: sourceFactorFuelOil2           =0.0
-REAL(r64)                                       :: sourceFactorPropane            =0.0
+REAL                                       :: sourceFactorElectric           =0.0
+REAL                                       :: sourceFactorNaturalGas         =0.0
+REAL                                       :: efficiencyDistrictCooling     =0.0
+REAL                                       :: efficiencyDistrictHeating     =0.0
+REAL                                       :: sourceFactorSteam              =0.0
+REAL                                       :: sourceFactorGasoline           =0.0
+REAL                                       :: sourceFactorDiesel             =0.0
+REAL                                       :: sourceFactorCoal               =0.0
+REAL                                       :: sourceFactorFuelOil1           =0.0
+REAL                                       :: sourceFactorFuelOil2           =0.0
+REAL                                       :: sourceFactorPropane            =0.0
 
 INTEGER,DIMENSION(8)        :: td
 !(1)   Current year
@@ -558,7 +558,7 @@ INTEGER          :: NumParams  ! Number of elements combined
 INTEGER          :: NumAlphas  ! Number of elements in the alpha array
 INTEGER          :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE  :: AlphArray !character string data
-REAL(r64), DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
+REAL, DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
 INTEGER          :: IOStat     ! IO Status when calling get input subroutine
 LOGICAL, SAVE    :: ErrorsFound=.false.
 LOGICAL          :: IsNotOK               ! Flag to verify name
@@ -836,7 +836,7 @@ INTEGER          :: lTable
 INTEGER          :: mColumn
 INTEGER          :: ColumnsRecount
 INTEGER          :: TablesRecount
-REAL(r64)        :: bigNum=0.0d0
+REAL        :: bigNum=0.0
 LOGICAL          :: environmentKeyFound
 LOGICAL, SAVE :: VarWarning=.true.
 INTEGER, SAVE :: ErrCount1=0
@@ -1250,14 +1250,14 @@ INTEGER                     :: NumParams  ! Number of elements combined
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE  :: AlphArray !character string data
-REAL(r64), DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
+REAL, DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: iTable
 INTEGER                     :: firstReport
 INTEGER                     :: repIndex
 INTEGER                     :: indx
 INTEGER                     :: found
-REAL(r64)                   :: bigVal !used with HUGE
+REAL                   :: bigVal !used with HUGE
 
 CHARACTER(len=MaxNameLength),ALLOCATABLE,DIMENSION(:)  :: objNames
 INTEGER,ALLOCATABLE,DIMENSION(:)                       :: objVarIDs
@@ -1466,7 +1466,7 @@ INTEGER                     :: NumParams  ! Number of elements combined
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE  :: AlphArray !character string data
-REAL(r64), DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
+REAL, DIMENSION(:), ALLOCATABLE  :: NumArray  !numeric data
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 
 CALL GetObjectDefMaxArgs(CurrentModuleObject,NumParams,NumAlphas,NumNums)
@@ -1618,7 +1618,7 @@ INTEGER                     :: NumParams
 INTEGER                     :: NumAlphas  ! Number of elements in the alpha array
 INTEGER                     :: NumNums    ! Number of elements in the numeric array
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)  :: AlphArray
-REAL(r64),ALLOCATABLE,                         DIMENSION(:)  :: NumArray
+REAL,ALLOCATABLE,                         DIMENSION(:)  :: NumArray
 INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
 INTEGER                     :: iReport
 CHARACTER(len=MaxNameLength) :: meterName
@@ -2674,24 +2674,24 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64)   :: curSourceFactor
+REAL   :: curSourceFactor
 LOGICAL     :: fuelFactorUsed
 LOGICAL     :: fFScheduleUsed
 INTEGER     :: ffScheduleIndex
 
 !set the default factors for source energy - they will be overwritten if the user sets any values
-sourceFactorElectric         = 3.167d0
-sourceFactorNaturalGas       = 1.084d0
-sourceFactorSteam            = 0.3d0
-sourceFactorGasoline         = 1.05d0
-sourceFactorDiesel           = 1.05d0
-sourceFactorCoal             = 1.05d0
-sourceFactorFuelOil1         = 1.05d0
-sourceFactorFuelOil2         = 1.05d0
-sourceFactorPropane          = 1.05d0
+sourceFactorElectric         = 3.167
+sourceFactorNaturalGas       = 1.084
+sourceFactorSteam            = 0.3
+sourceFactorGasoline         = 1.05
+sourceFactorDiesel           = 1.05
+sourceFactorCoal             = 1.05
+sourceFactorFuelOil1         = 1.05
+sourceFactorFuelOil2         = 1.05
+sourceFactorPropane          = 1.05
 ! the following should be kept consistent with the assumptions in the pollution calculation routines
-efficiencyDistrictCooling   = 3.0d0
-efficiencyDistrictHeating   = 0.3d0
+efficiencyDistrictCooling   = 3.0
+efficiencyDistrictHeating   = 0.3
 
 
 !  TotalSourceEnergyUse = (gatherTotalsSource(1) & !total source from electricity
@@ -3222,24 +3222,24 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER  :: iInObj
 INTEGER  :: jTable
-REAL(r64)     :: curValue
+REAL     :: curValue
 ! values of OutputTableBinned array for current index
-REAL(r64)     :: curIntervalStart
-REAL(r64)     :: curIntervalSize
+REAL     :: curIntervalStart
+REAL     :: curIntervalSize
 INTEGER  :: curIntervalCount
 INTEGER  :: curResIndex
 INTEGER  :: curNumTables
 INTEGER  :: curTypeOfVar
 INTEGER  :: curScheduleIndex
-REAL(r64)     :: elapsedTime
+REAL     :: elapsedTime
 LOGICAL  :: gatherThisTime
 !
-REAL(r64)     :: topValue
+REAL     :: topValue
 INTEGER  :: binNum
 INTEGER  :: repIndex
 INTEGER  :: curStepType
 
-!REAL(r64), external :: GetInternalVariableValue
+!REAL, external :: GetInternalVariableValue
 
 IF (.NOT. DoWeathSim) RETURN
 elapsedTime = TimeStepSys
@@ -3345,16 +3345,16 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
 INTEGER  :: iTable    ! loop variable for monthlyTables
 INTEGER  :: jColumn   ! loop variable for monthlyColumns
 INTEGER  :: curCol
-REAL(r64)     :: curValue
+REAL     :: curValue
 INTEGER  :: curTypeOfVar
 INTEGER  :: curVarNum
-REAL(r64)     :: elapsedTime
-REAL(r64)     :: oldResultValue
+REAL     :: elapsedTime
+REAL     :: oldResultValue
 INTEGER  :: oldTimeStamp
-REAL(r64)     :: oldDuration
-REAL(r64)     :: newResultValue
+REAL     :: oldDuration
+REAL     :: newResultValue
 INTEGER  :: newTimeStamp
-REAL(r64)     :: newDuration
+REAL     :: newDuration
 INTEGER  :: timestepTimeStamp
 LOGICAL  :: activeMinMax
 !LOGICAL,SAVE  :: activeHoursShown=.false.  !fix by LKL addressing CR6482
@@ -3364,10 +3364,10 @@ INTEGER  :: curStepType
 INTEGER  :: minuteCalculated
 INTEGER  :: kOtherColumn   ! variable used in loop to scan through additional columns
 INTEGER  :: scanColumn
-REAL(r64)     :: scanValue
+REAL     :: scanValue
 INTEGER  :: scanTypeOfVar
 INTEGER  :: scanVarNum
-REAL(r64)     :: oldScanValue
+REAL     :: oldScanValue
 ! local copies of some of the MonthlyColumns array references since
 ! profiling showed that they were slow.
 LOGICAL, SAVE     :: RunOnce = .TRUE.
@@ -3716,10 +3716,10 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
 INTEGER  :: iResource
 INTEGER  :: jEndUse
 INTEGER  :: kEndUseSub
-REAL(r64)     :: curMeterValue
+REAL     :: curMeterValue
 INTEGER  :: curMeterNumber
 
-REAL(r64), external :: GetCurrentMeterValue
+REAL, external :: GetCurrentMeterValue
 
 
 ! if no beps report is called then skip
@@ -3881,10 +3881,10 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
 INTEGER   :: iResource
 INTEGER   :: jEndUse
 INTEGER   :: kEndUseSub
-REAL(r64) :: curMeterValue
+REAL :: curMeterValue
 INTEGER   :: curMeterNumber
 
-REAL(r64), external :: GetCurrentMeterValue
+REAL, external :: GetCurrentMeterValue
 
 ! if no beps by source report is called then skip
 
@@ -4010,11 +4010,11 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
 INTEGER  :: iResource
 INTEGER  :: jEndUse
 INTEGER  :: kEndUseSub
-REAL(r64)  :: curDemandValue
+REAL  :: curDemandValue
 INTEGER  :: curMeterNumber
 INTEGER  :: minuteCalculated
 INTEGER  :: timestepTimeStamp
-REAL(r64), external :: GetCurrentMeterValue
+REAL, external :: GetCurrentMeterValue
 
 IF ((displayDemandEndUse) .AND. (IndexTypeKey .EQ. stepTypeZone)) THEN
   ! loop through all of the resources and end uses for the entire facility
@@ -4149,7 +4149,7 @@ IMPLICIT NONE
 INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64),PARAMETER :: FracToMin=60.0d0
+REAL,PARAMETER :: FracToMin=60.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4161,15 +4161,15 @@ REAL(r64),PARAMETER :: FracToMin=60.0d0
 INTEGER :: iZone = 0
 INTEGER :: iRadiant = 0
 INTEGER :: curZone = 0
-REAL(r64) :: eqpSens = 0.0
-REAL(r64) :: total = 0.0
+REAL :: eqpSens = 0.0
+REAL :: total = 0.0
 ! the following arrays store the radiant total for each timestep
-REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE :: radiantHeat
-REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE :: radiantCool
+REAL, ALLOCATABLE, DIMENSION(:),SAVE :: radiantHeat
+REAL, ALLOCATABLE, DIMENSION(:),SAVE :: radiantCool
 INTEGER  :: timestepTimeStamp = 0
-REAL(r64) :: bldgHtPk = 0.0
-REAL(r64) :: bldgClPk = 0.0
-REAL(r64) :: timeStepRatio = 0.0
+REAL :: bldgHtPk = 0.0
+REAL :: bldgClPk = 0.0
+REAL :: timeStepRatio = 0.0
 LOGICAL, SAVE :: firstTime=.true.
 
 integer ActualTimeMin
@@ -4187,8 +4187,8 @@ IF (firstTime) THEN
   firstTime=.false.
 END IF
   !clear the radiant surface accumulation variables
-radiantHeat=0.0d0
-radiantCool=0.0d0
+radiantHeat=0.0
+radiantCool=0.0
 !--------------------
 !     ANNUAL
 !--------------------
@@ -5380,32 +5380,32 @@ IMPLICIT NONE
 INTEGER :: iLight
 INTEGER :: zonePt
 INTEGER :: iZone
-REAL(r64) :: totalVolume = 0.0
+REAL :: totalVolume = 0.0
 INTEGER :: numUncondZones = 0
 INTEGER :: numCondZones = 0
 INTEGER :: StartOfWeek
-REAL(r64) :: HrsPerWeek = 0.0
-REAL(r64) :: consumptionTotal
-REAL(r64) :: convertJtoGJ
+REAL :: HrsPerWeek = 0.0
+REAL :: consumptionTotal
+REAL :: convertJtoGJ
 ! sensible heat gain report totals
-REAL(r64) :: totalHvacHt = 0.0
-REAL(r64) :: totalHvacCl = 0.0
-REAL(r64) :: totalSurfHt = 0.0
-REAL(r64) :: totalSurfCl = 0.0
-REAL(r64) :: totalPeoplAdd = 0.0
-REAL(r64) :: totalLiteAdd = 0.0
-REAL(r64) :: totalEquipAdd = 0.0
-REAL(r64) :: totalWindAdd = 0.0
-REAL(r64) :: totalIzaAdd = 0.0
-REAL(r64) :: totalInfilAdd = 0.0
-REAL(r64) :: totalOtherAdd = 0.0
-REAL(r64) :: totalEquipRem = 0.0
-REAL(r64) :: totalWindRem = 0.0
-REAL(r64) :: totalIzaRem = 0.0
-REAL(r64) :: totalInfilRem = 0.0
-REAL(r64) :: totalOtherRem = 0.0
+REAL :: totalHvacHt = 0.0
+REAL :: totalHvacCl = 0.0
+REAL :: totalSurfHt = 0.0
+REAL :: totalSurfCl = 0.0
+REAL :: totalPeoplAdd = 0.0
+REAL :: totalLiteAdd = 0.0
+REAL :: totalEquipAdd = 0.0
+REAL :: totalWindAdd = 0.0
+REAL :: totalIzaAdd = 0.0
+REAL :: totalInfilAdd = 0.0
+REAL :: totalOtherAdd = 0.0
+REAL :: totalEquipRem = 0.0
+REAL :: totalWindRem = 0.0
+REAL :: totalIzaRem = 0.0
+REAL :: totalInfilRem = 0.0
+REAL :: totalOtherRem = 0.0
 
-convertJtoGJ = 1.0d0/1000000000.0d0
+convertJtoGJ = 1.0/1000000000.0
 StartOfWeek = RunPeriodStartDayOfWeek
 IF (StartOfWeek .EQ. 0) StartOfWeek = 2 !if the first day of the week has not been set yet, assume monday
 
@@ -5430,8 +5430,8 @@ DO iLight = 1, TotLights
     HrsPerWeek = 24 * 7 * Lights(iLight)%SumConsumption/(Lights(iLight)%DesignLevel * gatherElapsedTimeBEPS * SecInHour)
     CALL PreDefTableEntry(pdchInLtFullLoadHrs,Lights(iLight)%Name,HrsPerWeek)
   END IF
-  CALL PreDefTableEntry(pdchInLtConsump,Lights(iLight)%Name,Lights(iLight)%SumConsumption/1000000000.d0)
-  consumptionTotal = consumptionTotal + Lights(iLight)%SumConsumption/1000000000.d0
+  CALL PreDefTableEntry(pdchInLtConsump,Lights(iLight)%Name,Lights(iLight)%SumConsumption/1000000000.)
+  consumptionTotal = consumptionTotal + Lights(iLight)%SumConsumption/1000000000.
 END DO
 CALL PreDefTableEntry(pdchInLtConsump,'Interior Lighting Total',consumptionTotal)
 
@@ -5453,8 +5453,8 @@ DO iLight = 1, NumExteriorLights
        (ExteriorLights(iLight)%DesignLevel * gatherElapsedTimeBEPS * SecInHour)
     CALL PreDefTableEntry(pdchExLtFullLoadHrs,ExteriorLights(iLight)%Name,HrsPerWeek)
   END IF
-  CALL PreDefTableEntry(pdchExLtConsump,ExteriorLights(iLight)%Name,ExteriorLights(iLight)%SumConsumption/1000000000.d0)
-  consumptionTotal = consumptionTotal + ExteriorLights(iLight)%SumConsumption/1000000000.d0
+  CALL PreDefTableEntry(pdchExLtConsump,ExteriorLights(iLight)%Name,ExteriorLights(iLight)%SumConsumption/1000000000.)
+  consumptionTotal = consumptionTotal + ExteriorLights(iLight)%SumConsumption/1000000000.
 END DO
 CALL PreDefTableEntry(pdchExLtConsump,'Exterior Lighting Total',consumptionTotal)
 
@@ -5712,20 +5712,20 @@ INTEGER    :: kColumn
 INTEGER    :: lMonth
 INTEGER    :: curTable
 INTEGER    :: curCol
-REAL(r64)  :: curVal
-REAL(r64)  :: curConversionFactor
-REAL(r64)  :: curConversionOffset = 0
+REAL  :: curVal
+REAL  :: curConversionFactor
+REAL  :: curConversionOffset = 0
 INTEGER    :: columnUsedCount
 INTEGER    :: columnRecount
 INTEGER    :: digitsShown
-REAL(r64)  :: minVal,maxVal,sumVal,sumDuration
+REAL  :: minVal,maxVal,sumVal,sumDuration
 CHARACTER(len=MaxNameLength) :: curUnits
 CHARACTER(len=MaxNameLength) :: energyUnitsString
-REAL(r64)  :: energyUnitsConversionFactor
+REAL  :: energyUnitsConversionFactor
 INTEGER    :: indexUnitConv
 CHARACTER(len=MaxNameLength) :: varNameWithUnits
-REAL(r64)  :: veryLarge
-REAL(r64)  :: verySmall
+REAL  :: veryLarge
+REAL  :: verySmall
 
 rowHead(1)  =  'January'
 rowHead(2)  =  'February'
@@ -5768,13 +5768,13 @@ SELECT CASE (unitsStyle)
     energyUnitsConversionFactor = 1
   CASE (unitsStyleJtoKWH)
     energyUnitsString = 'kWh'
-    energyUnitsConversionFactor = 1.0d0/3600000.0d0
+    energyUnitsConversionFactor = 1.0/3600000.0
   CASE (unitsStyleJtoMJ)
     energyUnitsString = 'MJ '
-    energyUnitsConversionFactor = 1.0d0/1000000.0d0
+    energyUnitsConversionFactor = 1.0/1000000.0
   CASE (unitsStyleJtoGJ)
     energyUnitsString = 'GJ '
-    energyUnitsConversionFactor = 1.0d0/1000000000.0d0
+    energyUnitsConversionFactor = 1.0/1000000000.0
 END SELECT
 
 ! loop through each input to get the name of the tables
@@ -5919,27 +5919,27 @@ DO iInput = 1, MonthlyInputCount
           !CR7783 fix
           IF (sameString(curUnits,'kWh/s')) THEN
             curUnits = 'W'
-            curConversionFactor = curConversionFactor * 3600000.0d0
+            curConversionFactor = curConversionFactor * 3600000.0
           END IF
           IF (sameString(curUnits,'GJ/s')) THEN
             curUnits = 'kW'
-            curConversionFactor = curConversionFactor * 1000000.0d0
+            curConversionFactor = curConversionFactor * 1000000.0
           END IF
           IF (sameString(curUnits,'MJ/s')) THEN
             curUnits = 'kW'
-            curConversionFactor = curConversionFactor * 1000.0d0
+            curConversionFactor = curConversionFactor * 1000.0
           END IF
           IF (sameString(curUnits,'therm/s')) THEN
             curUnits = 'kBtu/h'
-            curConversionFactor = curConversionFactor * 360000.0d0
+            curConversionFactor = curConversionFactor * 360000.0
           END IF
           IF (sameString(curUnits,'kBtu/s')) THEN
             curUnits = 'kBtu/h'
-            curConversionFactor = curConversionFactor * 3600.0d0
+            curConversionFactor = curConversionFactor * 3600.0
           END IF
           IF (sameString(curUnits,'ton-hrs/s')) THEN
             curUnits = 'ton'
-            curConversionFactor = curConversionFactor * 3600.0d0
+            curConversionFactor = curConversionFactor * 3600.0
           END IF
           columnHead(columnRecount) = TRIM(MonthlyColumns(curCol)%varName) // TRIM(curAggString) // ' [' &
                                        // TRIM(curUnits) //']'
@@ -5974,27 +5974,27 @@ DO iInput = 1, MonthlyInputCount
           !CR7783 fix
           IF (sameString(curUnits,'kWh/s')) THEN
             curUnits = 'W'
-            curConversionFactor = curConversionFactor * 3600000.0d0
+            curConversionFactor = curConversionFactor * 3600000.0
           END IF
           IF (sameString(curUnits,'GJ/s')) THEN
             curUnits = 'kW'
-            curConversionFactor = curConversionFactor * 1000000.0d0
+            curConversionFactor = curConversionFactor * 1000000.0
           END IF
           IF (sameString(curUnits,'MJ/s')) THEN
             curUnits = 'kW'
-            curConversionFactor = curConversionFactor * 1000.0d0
+            curConversionFactor = curConversionFactor * 1000.0
           END IF
           IF (sameString(curUnits,'therm/s')) THEN
             curUnits = 'kBtu/h'
-            curConversionFactor = curConversionFactor * 360000.0d0
+            curConversionFactor = curConversionFactor * 360000.0
           END IF
           IF (sameString(curUnits,'kBtu/s')) THEN
             curUnits = 'kBtu/h'
-            curConversionFactor = curConversionFactor * 3600.0d0
+            curConversionFactor = curConversionFactor * 3600.0
           END IF
           IF (sameString(curUnits,'ton-hrs/s')) THEN
             curUnits = 'ton'
-            curConversionFactor = curConversionFactor * 3600.0d0
+            curConversionFactor = curConversionFactor * 3600.0
           END IF
           columnHead(columnRecount - 1) = TRIM(MonthlyColumns(curCol)%varName) // TRIM(curAggString) //   &
                                               '[' // TRIM(curUnits) // ']'
@@ -6101,24 +6101,24 @@ INTEGER,DIMENSION(1)                                      :: columnWidthStat
 CHARACTER(len=MaxNameLength), DIMENSION(6)                :: rowHeadStat
 CHARACTER(len=MaxNameLength), DIMENSION(6,1)              :: tableBodyStat
 
-REAL(r64)     :: curIntervalStart
-REAL(r64)     :: curIntervalSize
+REAL     :: curIntervalStart
+REAL     :: curIntervalSize
 INTEGER  :: curIntervalCount
 INTEGER  :: curResIndex
 INTEGER  :: curNumTables
 INTEGER  :: numIntervalDigits
 INTEGER  :: firstReport
-REAL(r64)     :: topValue
+REAL     :: topValue
 INTEGER  :: repIndex
-REAL(r64)     :: rowTotal
-REAL(r64)     :: colTotal
-REAL(r64)     :: aboveTotal
-REAL(r64)     :: belowTotal
-REAL(r64)     :: tableTotal
+REAL     :: rowTotal
+REAL     :: colTotal
+REAL     :: aboveTotal
+REAL     :: belowTotal
+REAL     :: tableTotal
 !CHARACTER(len=MaxNameLength):: repNameWithUnits ! For time bin reports, varible name with units
 CHARACTER(len=MaxNameLength*2+15) :: repNameWithUnitsandscheduleName
-REAL(r64)     :: repStDev                            ! standard deviation
-REAL(r64)     :: repMean
+REAL     :: repStDev                            ! standard deviation
+REAL     :: repMean
 CHARACTER(len=MaxNameLength) :: curNameWithSIUnits
 CHARACTER(len=MaxNameLength) :: curNameAndUnits
 INTEGER :: indexUnitConv
@@ -6370,7 +6370,7 @@ INTEGER, parameter  ::  colPurchCool          = 4
 INTEGER, parameter  ::  colPurchHeat          = 5
 INTEGER, parameter  ::  colWater              = 6
 
-REAL(r64), parameter :: SmallValue = 1.d-14
+REAL, parameter :: SmallValue = 1.*10**14
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -6387,39 +6387,39 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 
 ! all arrays are in the format: (row, columnm)
-REAL(r64),DIMENSION(15,6)                           :: useVal
-REAL(r64),DIMENSION(4,6)                            :: normalVal
-REAL(r64),DIMENSION(6)                              :: collapsedTotal
-REAL(r64),DIMENSION(numEndUses,6)                   :: collapsedEndUse
-REAL(r64),DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
-REAL(r64),DIMENSION(numEndUses,6)                     :: endUseSubOther
+REAL,DIMENSION(15,6)                           :: useVal
+REAL,DIMENSION(4,6)                            :: normalVal
+REAL,DIMENSION(6)                              :: collapsedTotal
+REAL,DIMENSION(numEndUses,6)                   :: collapsedEndUse
+REAL,DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
+REAL,DIMENSION(numEndUses,6)                     :: endUseSubOther
 LOGICAL,DIMENSION(numEndUses)                         :: needOtherRow
-REAL(r64)                                      :: totalOnsiteHeat
-REAL(r64)                                      :: totalOnsiteWater
-REAL(r64)                                      :: totalWater
-REAL(r64)                                      :: netElecPurchasedSold
-REAL(r64)                                      :: totalSiteEnergyUse
-REAL(r64)                                      :: netSiteEnergyUse
-REAL(r64)                                      :: totalSourceEnergyUse
-REAL(r64)                                      :: netSourceEnergyUse
-REAL(r64)                                      :: netSourceElecPurchasedSold
+REAL                                      :: totalOnsiteHeat
+REAL                                      :: totalOnsiteWater
+REAL                                      :: totalWater
+REAL                                      :: netElecPurchasedSold
+REAL                                      :: totalSiteEnergyUse
+REAL                                      :: netSiteEnergyUse
+REAL                                      :: totalSourceEnergyUse
+REAL                                      :: netSourceEnergyUse
+REAL                                      :: netSourceElecPurchasedSold
 INTEGER                                        :: iResource
 INTEGER                                        :: jEndUse
 INTEGER                                        :: kEndUseSub
 INTEGER                                        :: i
-REAL(r64)                                      :: largeConversionFactor
-REAL(r64)                                      :: kConversionFactor
+REAL                                      :: largeConversionFactor
+REAL                                      :: kConversionFactor
 INTEGER                                        :: numRows
-REAL(r64)                                      :: initialStorage
-REAL(r64)                                      :: finalStorage
-REAL(r64)                                      :: StorageChange
+REAL                                      :: initialStorage
+REAL                                      :: finalStorage
+REAL                                      :: StorageChange
 INTEGER                                        :: resourcePrimaryHeating
-REAL(r64)                                      :: heatingMaximum
+REAL                                      :: heatingMaximum
 CHARACTER(len=100)                             :: footnote
-REAL(r64)                                      :: waterConversionFactor
-REAL(r64)                                      :: areaConversionFactor
-REAL(r64)                                      :: convBldgGrossFloorArea
-REAL(r64)                                      :: convBldgCondFloorArea
+REAL                                      :: waterConversionFactor
+REAL                                      :: areaConversionFactor
+REAL                                      :: convBldgGrossFloorArea
+REAL                                      :: convBldgCondFloorArea
 CHARACTER(len=MaxNameLength) :: curNameWithSIUnits
 CHARACTER(len=MaxNameLength) :: curNameAndUnits
 INTEGER :: indexUnitConv
@@ -6486,7 +6486,7 @@ IF (displayTabularBEPS) THEN
   ! unit conversion - all values are used as divisors
   SELECT CASE (unitsStyle)
     CASE (unitsStyleJtoKWH)
-      largeConversionFactor = 3600000.d0
+      largeConversionFactor = 3600000.
       kConversionFactor = 1
       waterConversionFactor = 1
       areaConversionFactor = 1
@@ -6496,7 +6496,7 @@ IF (displayTabularBEPS) THEN
       waterConversionFactor = getSpecificUnitDivider('m3','gal')     !0.003785413 m3 to gal
       areaConversionFactor = getSpecificUnitDivider('m2','ft2')      !0.092893973 m2 to ft2
     CASE DEFAULT
-      largeConversionFactor = 1000000000.d0
+      largeConversionFactor = 1000000000.
       kConversionFactor =  1000
       waterConversionFactor = 1
       areaConversionFactor = 1
@@ -6540,7 +6540,7 @@ IF (displayTabularBEPS) THEN
     OverallNetEnergyFromStorage = (Sum(ElecStorage%StartingEnergyStored) - Sum(ElecStorage%ThisTimeStepStateOfCharge))
     OverallNetEnergyFromStorage = OverallNetEnergyFromStorage  / largeConversionFactor
   ELSE
-    OverallNetEnergyFromStorage = 0.0D0
+    OverallNetEnergyFromStorage = 0.0
   ENDIF
   ! determine which resource is the primary heating resourse
   resourcePrimaryHeating = 0
@@ -7346,7 +7346,7 @@ IF (displayTabularBEPS) THEN
     tableBody(10,2)  = TRIM(RealToStr(100. * (gatherElecPurchased - gatherElecSurplusSold) / collapsedTotal(1),2))
     tableBody(12,2) = TRIM(RealToStr(100. * (gatherElecProduced + (gatherElecPurchased - gatherElecSurplusSold)) /   &
                                                collapsedTotal(1),2))
-    tableBody(13,2) = TRIM(RealToStr(100.0d0,2))
+    tableBody(13,2) = TRIM(RealToStr(100.0,2))
   END IF
 
   ! heading for the entire sub-table
@@ -7425,7 +7425,7 @@ IF (displayTabularBEPS) THEN
     tableBody(4,2)  = TRIM(RealToStr(100. * gatherHeatHTGeothermal / totalOnsiteHeat,2))
     tableBody(5,2)  = TRIM(RealToStr(100. * gatherHeatSolarWater / totalOnsiteHeat,2))
     tableBody(6,2)  = TRIM(RealToStr(100. * gatherHeatSolarAir / totalOnsiteHeat,2))
-    tableBody(7,2)  = TRIM(RealToStr(100.0d0,2))
+    tableBody(7,2)  = TRIM(RealToStr(100.0,2))
   END IF
 
   ! heading for the entire sub-table
@@ -7528,7 +7528,7 @@ IF (displayTabularBEPS) THEN
     tableBody(10,2)  = TRIM(RealToStr(100. * gatherMains / gatherWaterEndUseTotal,2))
 
     tableBody(12,2)  = TRIM(RealToStr(100. * totalWater / gatherWaterEndUseTotal,2))
-    tableBody(13,2)  = TRIM(RealToStr(100.0d0,2))
+    tableBody(13,2)  = TRIM(RealToStr(100.0,2))
   END IF
 !
 
@@ -7668,21 +7668,21 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 
 ! all arrays are in the format: (row, columnm)
-REAL(r64),DIMENSION(15,6)                           :: useVal
-REAL(r64),DIMENSION(6)                              :: collapsedTotal
-REAL(r64),DIMENSION(numEndUses,6)                   :: collapsedEndUse
-REAL(r64),DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
-REAL(r64)                                      :: totalSourceEnergyUse
+REAL,DIMENSION(15,6)                           :: useVal
+REAL,DIMENSION(6)                              :: collapsedTotal
+REAL,DIMENSION(numEndUses,6)                   :: collapsedEndUse
+REAL,DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
+REAL                                      :: totalSourceEnergyUse
 INTEGER                                        :: iResource
 INTEGER                                        :: jEndUse
 INTEGER                                        :: kEndUseSub
 INTEGER                                        :: i
-REAL(r64)                                      :: largeConversionFactor
+REAL                                      :: largeConversionFactor
 INTEGER                                        :: numRows
 CHARACTER(len=100)                             :: footnote = ' '
-REAL(r64)                                      :: areaConversionFactor
-REAL(r64)                                      :: convBldgGrossFloorArea
-REAL(r64)                                      :: convBldgCondFloorArea
+REAL                                      :: areaConversionFactor
+REAL                                      :: convBldgGrossFloorArea
+REAL                                      :: convBldgCondFloorArea
 CHARACTER(len=MaxNameLength) :: curNameWithSIUnits
 CHARACTER(len=MaxNameLength) :: curNameAndUnits
 INTEGER :: indexUnitConv
@@ -7731,13 +7731,13 @@ IF (displaySourceEnergyEndUseSummary) THEN
 
   SELECT CASE (unitsStyle)
     CASE (unitsStyleJtoKWH)
-      largeConversionFactor = 3600000.d0
+      largeConversionFactor = 3600000.
       areaConversionFactor = 1
     CASE (unitsStyleInchPound)
       largeConversionFactor =  getSpecificUnitDivider('J','kBtu')    !1054351.84 J to kBtu
       areaConversionFactor = getSpecificUnitDivider('m2','ft2')      !0.092893973 m2 to ft2
     CASE DEFAULT
-      largeConversionFactor = 1000000.d0 ! to MJ
+      largeConversionFactor = 1000000. ! to MJ
       areaConversionFactor = 1
   END SELECT
 
@@ -7793,7 +7793,7 @@ IF (displaySourceEnergyEndUseSummary) THEN
   rowHead(15) = ''
   rowHead(16) = 'Total Source Energy End Use Components'
 
-  largeConversionFactor = 1.0d0
+  largeConversionFactor = 1.0
 
   SELECT CASE (unitsStyle)
     CASE (unitsStyleJtoKWH)
@@ -7814,7 +7814,7 @@ IF (displaySourceEnergyEndUseSummary) THEN
       columnHead(3) = 'Source Other Fuel [GJ]'
       columnHead(4) = 'Source District Cooling [GJ]'
       columnHead(5) = 'Source District Heating [GJ]'
-      largeConversionFactor = 1000.d0 ! for converting MJ to GJ
+      largeConversionFactor = 1000. ! for converting MJ to GJ
   END SELECT
 
   !
@@ -7968,24 +7968,24 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 
 ! all arrays are in the format: (row, columnm)
-REAL(r64),DIMENSION(15,6)                           :: useVal
-REAL(r64),DIMENSION(6)                              :: collapsedTotal
-REAL(r64),DIMENSION(numEndUses,6)                   :: collapsedEndUse
+REAL,DIMENSION(15,6)                           :: useVal
+REAL,DIMENSION(6)                              :: collapsedTotal
+REAL,DIMENSION(numEndUses,6)                   :: collapsedEndUse
 INTEGER, DIMENSION(6)                               :: collapsedTimeStep
-REAL(r64),DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
+REAL,DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
 INTEGER                                        :: iResource
 INTEGER                                        :: jEndUse
 INTEGER                                        :: kEndUseSub
 INTEGER                                        :: i
 INTEGER                                        :: numRows
 CHARACTER(len=100)                             :: footnote = ''
-REAL(r64)                                      :: otherFuelMax
+REAL                                      :: otherFuelMax
 INTEGER                                        :: otherFuelSelected
 INTEGER                                        :: otherFuelNonZeroCount
 INTEGER                                        :: distrHeatSelected
 LOGICAL                                        :: bothDistrHeatNonZero
-REAL(r64)                                      :: powerConversion
-REAL(r64)                                      :: flowConversion
+REAL                                      :: powerConversion
+REAL                                      :: flowConversion
 
 IF (displayDemandEndUse) THEN
   ! show the headers of the report
@@ -8376,9 +8376,9 @@ SUBROUTINE WriteCompCostTable
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64), DIMENSION(10,3):: TableBodyData
-REAL(r64)  :: RefBldgConstCost ! holds interim value for construction component costs: reference bldg.
-REAL(r64)  :: CurntBldgConstCost ! holds interim value for construction component costs: current bldg.
+REAL, DIMENSION(10,3):: TableBodyData
+REAL  :: RefBldgConstCost ! holds interim value for construction component costs: reference bldg.
+REAL  :: CurntBldgConstCost ! holds interim value for construction component costs: current bldg.
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: columnHead
 INTEGER,ALLOCATABLE,DIMENSION(:)                           :: columnWidth
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
@@ -8388,12 +8388,12 @@ INTEGER    :: NumRows ! number of rows in report table excluding table header
 INTEGER    :: NumCols ! number of columns in report table
 CHARACTER(len=MaxNameLength) :: SIunit = ''
 CHARACTER(len=MaxNameLength) :: m2_unitName = ''
-REAL(r64) :: m2_unitConv = 0.0d0
+REAL :: m2_unitConv = 0.0
 INTEGER :: unitConvIndex = 0
 CHARACTER(len=MaxNameLength) :: IPunitName = ''
-REAL(r64) :: IPqty
-REAL(r64) :: IPsingleValue
-REAL(r64) :: IPvaluePer
+REAL :: IPqty
+REAL :: IPsingleValue
+REAL :: IPvaluePer
 
   If (.not. DoCostEstimate)  RETURN
 
@@ -8427,11 +8427,11 @@ REAL(r64) :: IPvaluePer
   IF (unitsStyle .EQ. unitsStyleInchPound) THEN
     SIunit = '[m2]'
     CALL LookupSItoIP(SIunit, unitConvIndex, m2_unitName)
-    m2_unitConv = convertIP(unitConvIndex,1.0d0)
+    m2_unitConv = convertIP(unitConvIndex,1.0)
     rowHead(10)   = 'Cost Per Conditioned Building Area (~~$~~/ft2)'
   ELSE
     rowHead(10)   = 'Cost Per Conditioned Building Area (~~$~~/m2)'
-    m2_unitConv = 1.0d0
+    m2_unitConv = 1.0
   END IF
   TableBodyData = 0.0
   TableBody     = ''
@@ -8556,7 +8556,7 @@ REAL(r64) :: IPvaluePer
         IPqty = convertIP(unitConvIndex,CostLineItem(item)%Qty)
         tableBody(item, 3) = trim(RealToStr(IPqty, 2))
         tableBody(item, 4) = trim(IPunitName)
-        IPsingleValue = convertIP(unitConvIndex,1.0d0)
+        IPsingleValue = convertIP(unitConvIndex,1.0)
         IF (IPsingleValue .NE. 0.0) THEN
           IPvaluePer = CostLineItem(item)%ValuePer / IPsingleValue
           tableBody(item, 5) = trim(RealToStr(IPvaluePer, 2))
@@ -8662,35 +8662,35 @@ INTEGER :: iLight
 INTEGER :: iZone
 INTEGER :: iPeople
 INTEGER :: iPlugProc
-REAL(r64) :: mult
-REAL(r64) :: curAzimuth
-REAL(r64) :: curArea
-REAL(r64) :: wallAreaN
-REAL(r64) :: wallAreaS
-REAL(r64) :: wallAreaE
-REAL(r64) :: wallAreaW
-REAL(r64) :: windowAreaN
-REAL(r64) :: windowAreaS
-REAL(r64) :: windowAreaE
-REAL(r64) :: windowAreaW
+REAL :: mult
+REAL :: curAzimuth
+REAL :: curArea
+REAL :: wallAreaN
+REAL :: wallAreaS
+REAL :: wallAreaE
+REAL :: wallAreaW
+REAL :: windowAreaN
+REAL :: windowAreaS
+REAL :: windowAreaE
+REAL :: windowAreaW
 !wall and window areas attached to conditioned zones
-REAL(r64) :: wallAreaNcond
-REAL(r64) :: wallAreaScond
-REAL(r64) :: wallAreaEcond
-REAL(r64) :: wallAreaWcond
-REAL(r64) :: windowAreaNcond
-REAL(r64) :: windowAreaScond
-REAL(r64) :: windowAreaEcond
-REAL(r64) :: windowAreaWcond
+REAL :: wallAreaNcond
+REAL :: wallAreaScond
+REAL :: wallAreaEcond
+REAL :: wallAreaWcond
+REAL :: windowAreaNcond
+REAL :: windowAreaScond
+REAL :: windowAreaEcond
+REAL :: windowAreaWcond
 LOGICAL :: isConditioned
 
-REAL(r64) :: roofArea
-REAL(r64) :: skylightArea
-REAL(r64) :: totLightPower
-REAL(r64) :: totNumPeople
-REAL(r64) :: totPlugProcess
-REAL(r64) :: frameWidth
-REAL(r64) :: frameArea
+REAL :: roofArea
+REAL :: skylightArea
+REAL :: totLightPower
+REAL :: totNumPeople
+REAL :: totPlugProcess
+REAL :: frameWidth
+REAL :: frameArea
 
 LOGICAL :: zoneIsCond
 LOGICAL :: usezoneFloorArea
@@ -8702,29 +8702,29 @@ INTEGER :: notpartTotal = 4
 INTEGER :: iTotal
 CHARACTER(len=MaxNameLength) :: SIunit = ''
 INTEGER :: unitConvIndex = 0
-REAL(r64) :: m_unitConv = 0.0d0
-REAL(r64) :: m2_unitConv = 0.0d0
-REAL(r64) :: m3_unitConv = 0.0d0
-REAL(r64) :: Wm2_unitConv = 0.0d0
+REAL :: m_unitConv = 0.0
+REAL :: m2_unitConv = 0.0
+REAL :: m3_unitConv = 0.0
+REAL :: Wm2_unitConv = 0.0
 CHARACTER(len=MaxNameLength) :: m_unitName = ''
 CHARACTER(len=MaxNameLength) :: m2_unitName = ''
 CHARACTER(len=MaxNameLength) :: m3_unitName = ''
 CHARACTER(len=MaxNameLength) :: Wm2_unitName = ''
 
 !zone summary total
-REAL(r64), DIMENSION(4) :: zstArea = 0.0
-REAL(r64), DIMENSION(4) :: zstVolume = 0.0
-REAL(r64), DIMENSION(4) :: zstWallArea = 0.0
-REAL(r64), DIMENSION(4) :: zstWindowArea = 0.0
-REAL(r64), DIMENSION(4) :: zstLight = 0.0
-REAL(r64), DIMENSION(4) :: zstPeople = 0.0
-REAL(r64), DIMENSION(4) :: zstPlug = 0.0
+REAL, DIMENSION(4) :: zstArea = 0.0
+REAL, DIMENSION(4) :: zstVolume = 0.0
+REAL, DIMENSION(4) :: zstWallArea = 0.0
+REAL, DIMENSION(4) :: zstWindowArea = 0.0
+REAL, DIMENSION(4) :: zstLight = 0.0
+REAL, DIMENSION(4) :: zstPeople = 0.0
+REAL, DIMENSION(4) :: zstPlug = 0.0
 
 ! misc
-REAL(r64) :: pdiff
+REAL :: pdiff
 LOGICAL :: DetailedWWR
-REAL(r64) :: TotalWallArea
-REAL(r64) :: TotalWindowArea
+REAL :: TotalWallArea
+REAL :: TotalWindowArea
 
 ! all arrays are in the format: (row, columnm)
 IF (displayTabularVeriSum) THEN
@@ -8735,25 +8735,25 @@ IF (displayTabularVeriSum) THEN
   IF (unitsStyle .EQ. unitsStyleInchPound) THEN
     SIunit = '[m]'
     CALL LookupSItoIP(SIunit, unitConvIndex, m_unitName)
-    m_unitConv = convertIP(unitConvIndex,1.0d0)
+    m_unitConv = convertIP(unitConvIndex,1.0)
     SIunit = '[m2]'
     CALL LookupSItoIP(SIunit, unitConvIndex, m2_unitName)
-    m2_unitConv = convertIP(unitConvIndex,1.0d0)
+    m2_unitConv = convertIP(unitConvIndex,1.0)
     SIunit = '[m3]'
     CALL LookupSItoIP(SIunit, unitConvIndex, m3_unitName)
-    m3_unitConv = convertIP(unitConvIndex,1.0d0)
+    m3_unitConv = convertIP(unitConvIndex,1.0)
     SIunit = '[W/m2]'
     CALL LookupSItoIP(SIunit, unitConvIndex, Wm2_unitName)
-    Wm2_unitConv = convertIP(unitConvIndex,1.0d0)
+    Wm2_unitConv = convertIP(unitConvIndex,1.0)
   ELSE
     m_unitName = '[m]'
-    m_unitConv = 1.0d0
+    m_unitConv = 1.0
     m2_unitName = '[m2]'
-    m2_unitConv = 1.0d0
+    m2_unitConv = 1.0
     m3_unitName = '[m3]'
-    m3_unitConv = 1.0d0
+    m3_unitConv = 1.0
     Wm2_unitName = '[W/m2]'
-    Wm2_unitConv = 1.0d0
+    Wm2_unitConv = 1.0
   END IF
   !
   !---- General Sub-Table
@@ -8865,7 +8865,7 @@ IF (displayTabularVeriSum) THEN
       curArea = Surface(iSurf)%GrossArea
       IF  (Surface(iSurf)%FrameDivider .NE. 0) THEN
         frameWidth = FrameDivider(Surface(iSurf)%FrameDivider)%FrameWidth
-        frameArea = (Surface(iSurf)%Height + 2.0d0*frameWidth)*(Surface(iSurf)%Width + 2.0d0*frameWidth) &
+        frameArea = (Surface(iSurf)%Height + 2.0*frameWidth)*(Surface(iSurf)%Width + 2.0*frameWidth) &
            - (Surface(iSurf)%Height * Surface(iSurf)%Width)
         curArea = curArea + frameArea
       END IF
@@ -8876,21 +8876,21 @@ IF (displayTabularVeriSum) THEN
           isConditioned = .TRUE.
         ENDIF
       END IF
-      IF ((Surface(iSurf)%Tilt >= 60.d0) .AND. (Surface(iSurf)%Tilt <= 120.d0)) THEN
+      IF ((Surface(iSurf)%Tilt >= 60.) .AND. (Surface(iSurf)%Tilt <= 120.)) THEN
         !vertical walls and windows
         SELECT CASE (Surface(iSurf)%Class)
           CASE (SurfaceClass_Wall,SurfaceClass_Floor,SurfaceClass_Roof)
             mult = Zone(zonePt)%Multiplier * Zone(zonePt)%ListMultiplier
-            IF ((curAzimuth .GE. 315.d0) .OR. (curAzimuth .LT. 45.d0)) THEN
+            IF ((curAzimuth .GE. 315.) .OR. (curAzimuth .LT. 45.)) THEN
               wallAreaN = wallAreaN + curArea * mult
               IF (isConditioned) wallAreaNcond = wallAreaNcond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 45.d0) .AND. (curAzimuth .LT. 135.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 45.) .AND. (curAzimuth .LT. 135.)) THEN
               wallAreaE = wallAreaE + curArea * mult
               IF (isConditioned) wallAreaEcond = wallAreaEcond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 135.d0) .AND. (curAzimuth .LT. 225.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 135.) .AND. (curAzimuth .LT. 225.)) THEN
               wallAreaS = wallAreaS + curArea * mult
               IF (isConditioned) wallAreaScond = wallAreaScond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 225.d0) .AND. (curAzimuth .LT. 315.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 225.) .AND. (curAzimuth .LT. 315.)) THEN
               wallAreaW = wallAreaW + curArea * mult
               IF (isConditioned) wallAreaWcond = wallAreaWcond + curArea * mult
             ENDIF
@@ -8900,16 +8900,16 @@ IF (displayTabularVeriSum) THEN
             ENDIF
           CASE (SurfaceClass_Window,SurfaceClass_TDD_Dome)
             mult = Zone(zonePt)%Multiplier * Zone(zonePt)%ListMultiplier * Surface(iSurf)%Multiplier
-            IF ((curAzimuth .GE. 315.d0) .OR. (curAzimuth .LT. 45.d0)) THEN
+            IF ((curAzimuth .GE. 315.) .OR. (curAzimuth .LT. 45.)) THEN
               windowAreaN = windowAreaN + curArea * mult
               IF (isConditioned) windowAreaNcond = windowAreaNcond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 45.d0) .AND. (curAzimuth .LT. 135.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 45.) .AND. (curAzimuth .LT. 135.)) THEN
               windowAreaE = windowAreaE + curArea * mult
               IF (isConditioned) windowAreaEcond = windowAreaEcond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 135.d0) .AND. (curAzimuth .LT. 225.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 135.) .AND. (curAzimuth .LT. 225.)) THEN
               windowAreaS = windowAreaS + curArea * mult
               IF (isConditioned) windowAreaScond = windowAreaScond + curArea * mult
-            ELSE IF ((curAzimuth .GE. 225.d0) .AND. (curAzimuth .LT. 315.d0)) THEN
+            ELSE IF ((curAzimuth .GE. 225.) .AND. (curAzimuth .LT. 315.)) THEN
               windowAreaW = windowAreaW + curArea * mult
               IF (isConditioned) windowAreaWcond = windowAreaWcond + curArea * mult
             ENDIF
@@ -8918,7 +8918,7 @@ IF (displayTabularVeriSum) THEN
                  ','//trim(RoundSigDigits(Surface(iSurf)%Tilt,1))
             ENDIF
         END SELECT
-      ELSE IF (Surface(iSurf)%Tilt < 60.d0) THEN !roof and skylights
+      ELSE IF (Surface(iSurf)%Tilt < 60.) THEN !roof and skylights
         SELECT CASE (Surface(iSurf)%Class)
           CASE (SurfaceClass_Wall,SurfaceClass_Floor,SurfaceClass_Roof)
               mult = Zone(zonePt)%Multiplier * Zone(zonePt)%ListMultiplier
@@ -8969,11 +8969,11 @@ IF (displayTabularVeriSum) THEN
   tableBody(wwrrWindow,wwrcWest) =  TRIM(RealToStr(windowAreaW * m2_unitConv,2))
   tableBody(wwrrWindow,wwrcTotal) =  TRIM(RealToStr((TotalWindowArea) * m2_unitConv,2))
 
-  tableBody(wwrrWWR,wwrcNorth) = TRIM(RealToStr(100.d0 * SafeDivide(windowAreaN , wallAreaN),2))
-  tableBody(wwrrWWR,wwrcSouth) = TRIM(RealToStr(100.d0 * SafeDivide(windowAreaS , wallAreaS),2))
-  tableBody(wwrrWWR,wwrcEast) =  TRIM(RealToStr(100.d0 * SafeDivide(windowAreaE , wallAreaE),2))
-  tableBody(wwrrWWR,wwrcWest) =  TRIM(RealToStr(100.d0 * SafeDivide(windowAreaW , wallAreaW),2))
-  tableBody(wwrrWWR,wwrcTotal) =  TRIM(RealToStr(100.d0 * SafeDivide(TotalWindowArea , TotalWallArea),2))
+  tableBody(wwrrWWR,wwrcNorth) = TRIM(RealToStr(100. * SafeDivide(windowAreaN , wallAreaN),2))
+  tableBody(wwrrWWR,wwrcSouth) = TRIM(RealToStr(100. * SafeDivide(windowAreaS , wallAreaS),2))
+  tableBody(wwrrWWR,wwrcEast) =  TRIM(RealToStr(100. * SafeDivide(windowAreaE , wallAreaE),2))
+  tableBody(wwrrWWR,wwrcWest) =  TRIM(RealToStr(100. * SafeDivide(windowAreaW , wallAreaW),2))
+  tableBody(wwrrWWR,wwrcTotal) =  TRIM(RealToStr(100. * SafeDivide(TotalWindowArea , TotalWallArea),2))
 
   CALL writeSubtitle('Window-Wall Ratio')
   CALL writeTable(tableBody,rowHead,columnHead,columnWidth)
@@ -9025,11 +9025,11 @@ IF (displayTabularVeriSum) THEN
   tableBody(wwrrWindow,wwrcTotal) =  TRIM(RealToStr(  &
      (windowAreaNcond + windowAreaScond + windowAreaEcond + windowAreaWcond) * m2_unitConv,2))
 
-  tableBody(wwrrWWR,wwrcNorth) = TRIM(RealToStr(100.d0 * SafeDivide(windowAreaNcond , wallAreaNcond),2))
-  tableBody(wwrrWWR,wwrcSouth) = TRIM(RealToStr(100.d0 * SafeDivide(windowAreaScond , wallAreaScond),2))
-  tableBody(wwrrWWR,wwrcEast) =  TRIM(RealToStr(100.d0 * SafeDivide(windowAreaEcond , wallAreaEcond),2))
-  tableBody(wwrrWWR,wwrcWest) =  TRIM(RealToStr(100.d0 * SafeDivide(windowAreaWcond , wallAreaWcond),2))
-  tableBody(wwrrWWR,wwrcTotal) =  TRIM(RealToStr(SafeDivide( (100.d0 *   &
+  tableBody(wwrrWWR,wwrcNorth) = TRIM(RealToStr(100. * SafeDivide(windowAreaNcond , wallAreaNcond),2))
+  tableBody(wwrrWWR,wwrcSouth) = TRIM(RealToStr(100. * SafeDivide(windowAreaScond , wallAreaScond),2))
+  tableBody(wwrrWWR,wwrcEast) =  TRIM(RealToStr(100. * SafeDivide(windowAreaEcond , wallAreaEcond),2))
+  tableBody(wwrrWWR,wwrcWest) =  TRIM(RealToStr(100. * SafeDivide(windowAreaWcond , wallAreaWcond),2))
+  tableBody(wwrrWWR,wwrcTotal) =  TRIM(RealToStr(SafeDivide( (100. *   &
                               (windowAreaNcond + windowAreaScond + windowAreaEcond + windowAreaWcond)) , &
                               (wallAreaNcond + wallAreaScond + wallAreaEcond + wallAreaWcond) ),2))
 
@@ -9070,7 +9070,7 @@ IF (displayTabularVeriSum) THEN
 
   tableBody(1,1) = TRIM(RealToStr(roofArea * m2_unitConv,2))
   tableBody(2,1) = TRIM(RealToStr(skylightArea * m2_unitConv,2))
-  tableBody(3,1) = TRIM(RealToStr(100.d0 * SafeDivide(skylightArea , roofArea),2))
+  tableBody(3,1) = TRIM(RealToStr(100. * SafeDivide(skylightArea , roofArea),2))
 
   CALL writeSubtitle('Skylight-Roof Ratio')
   CALL writeTable(tableBody,rowHead,columnHead,columnWidth)
@@ -9085,13 +9085,13 @@ IF (displayTabularVeriSum) THEN
   DEALLOCATE(columnWidth)
   DEALLOCATE(tableBody)
 
-  IF (SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied) > 0.0d0) THEN
+  IF (SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied) > 0.0) THEN
     pdiff=ABS((wallAreaN + wallAreaS + wallAreaE + wallAreaW)-SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied))/  &
        SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied)
-    IF (pdiff > .019d0) THEN
+    IF (pdiff > .019) THEN
       CALL ShowWarningError('WriteVeriSumTable: InputVerificationsAndResultsSummary: '//  &
          'Wall area based on [>=60,<=120] degrees (tilt) as walls ')
-      CALL ShowContinueError('differs ~'//trim(RoundSigDigits(pdiff*100.d0,1))//  &
+      CALL ShowContinueError('differs ~'//trim(RoundSigDigits(pdiff*100.,1))//  &
          '% from user entered Wall class surfaces. '//  &
          'Degree calculation based on ASHRAE 90.1 wall definitions.')
       CALL ShowContinueError('Calculated based on degrees=['//  &
@@ -9447,7 +9447,7 @@ INTEGER, ALLOCATABLE, DIMENSION(:)  ::   colUnitConv
 INTEGER :: indexUnitConv
 INTEGER :: columnUnitConv
 CHARACTER(len=MaxNameLength) :: repTableTag
-REAL(r64) :: IPvalue
+REAL :: IPvalue
 
 ! loop through the entries and associate them with the subtable and create
 ! list of unique object names
@@ -9678,8 +9678,8 @@ INTEGER :: jUnique
 CHARACTER(len=MaxNameLength) :: curColHeadWithSI = ''
 CHARACTER(len=MaxNameLength) :: curColHead = ''
 INTEGER :: indexUnitConv = 0
-REAL(r64) :: curValueSI = 0.0d0
-REAL(r64) :: curValue = 0.0d0
+REAL :: curValueSI = 0.0
+REAL :: curValue = 0.0
 
 IF (displayComponentSizing) THEN
   CALL WriteReportHeaders('ComponentSizingSummary','Entire Facility',isAverage)
@@ -10527,7 +10527,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64)     :: curZoneArea
+REAL     :: curZoneArea
 INTEGER  :: iZone
 !INTEGER  :: found
 
@@ -10598,14 +10598,14 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64), INTENT(IN) :: qx
-REAL(r64), INTENT(IN) :: qy
-REAL(r64), INTENT(IN) :: x1
-REAL(r64), INTENT(IN) :: y1
-REAL(r64), INTENT(IN) :: x2
-REAL(r64), INTENT(IN) :: y2
-REAL(r64), INTENT(IN) :: x3
-REAL(r64), INTENT(IN) :: y3
+REAL, INTENT(IN) :: qx
+REAL, INTENT(IN) :: qy
+REAL, INTENT(IN) :: x1
+REAL, INTENT(IN) :: y1
+REAL, INTENT(IN) :: x2
+REAL, INTENT(IN) :: y2
+REAL, INTENT(IN) :: x3
+REAL, INTENT(IN) :: y3
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -10614,9 +10614,9 @@ REAL(r64), INTENT(IN) :: y3
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: fAB
-REAL(r64) :: fCA
-REAL(r64) :: fBC
+REAL :: fAB
+REAL :: fCA
+REAL :: fBC
 
 fAB = (qy - y1) * (x2 - x1) - (qx - x1) * (y2 - y1)
 fCA = (qy - y3) * (x1 - x3) - (qx - x3) * (y1 - y3)
@@ -10656,16 +10656,16 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64), INTENT(IN) :: qx
-REAL(r64), INTENT(IN) :: qy
-REAL(r64), INTENT(IN) :: ax
-REAL(r64), INTENT(IN) :: ay
-REAL(r64), INTENT(IN) :: bx
-REAL(r64), INTENT(IN) :: by
-REAL(r64), INTENT(IN) :: cx
-REAL(r64), INTENT(IN) :: cy
-REAL(r64), INTENT(IN) :: dx
-REAL(r64), INTENT(IN) :: dy
+REAL, INTENT(IN) :: qx
+REAL, INTENT(IN) :: qy
+REAL, INTENT(IN) :: ax
+REAL, INTENT(IN) :: ay
+REAL, INTENT(IN) :: bx
+REAL, INTENT(IN) :: by
+REAL, INTENT(IN) :: cx
+REAL, INTENT(IN) :: cy
+REAL, INTENT(IN) :: dx
+REAL, INTENT(IN) :: dy
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -10719,7 +10719,7 @@ FUNCTION RealToStr(RealIn,numDigits) RESULT (stringOut)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)            :: RealIn
+  REAL, INTENT(IN)            :: RealIn
   INTEGER, INTENT(IN)              :: numDigits
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -10734,17 +10734,17 @@ FUNCTION RealToStr(RealIn,numDigits) RESULT (stringOut)
       '(F12.7)',   &  ! formDigits(7)
       '(F12.8)',   &  ! formDigits(8)
       '(F12.9)'/)     ! formDigits(9)
-   REAL(r64), PARAMETER, DIMENSION(0:9) :: maxvalDigits= &
-     (/9999999999.d0,  &  ! maxvalDigits(0)
-        999999999.d0,  &  ! maxvalDigits(1)
-         99999999.d0,  &  ! maxvalDigits(2)
-          9999999.d0,  &  ! maxvalDigits(3)
-           999999.d0,  &  ! maxvalDigits(4)
-            99999.d0,  &  ! maxvalDigits(5)
-             9999.d0,  &  ! maxvalDigits(6)
-              999.d0,  &  ! maxvalDigits(7)
-               99.d0,  &  ! maxvalDigits(8)
-                9.d0/)    ! maxvalDigits(9)
+   REAL, PARAMETER, DIMENSION(0:9) :: maxvalDigits= &
+     (/9999999999.,  &  ! maxvalDigits(0)
+        999999999.,  &  ! maxvalDigits(1)
+         99999999.,  &  ! maxvalDigits(2)
+          9999999.,  &  ! maxvalDigits(3)
+           999999.,  &  ! maxvalDigits(4)
+            99999.,  &  ! maxvalDigits(5)
+             9999.,  &  ! maxvalDigits(6)
+              999.,  &  ! maxvalDigits(7)
+               99.,  &  ! maxvalDigits(8)
+                9./)    ! maxvalDigits(9)
 
    CHARACTER(len=*), PARAMETER :: fmtd='(E12.6)'
 
@@ -10759,7 +10759,7 @@ FUNCTION RealToStr(RealIn,numDigits) RESULT (stringOut)
   INTEGER           :: nDigits
 
   nDigits = numDigits
-  if (RealIn < 0.0d0) nDigits=nDigits-1
+  if (RealIn < 0.0) nDigits=nDigits-1
   IF (nDigits .GT. 9) nDigits = 9
   IF (nDigits .LT. 0) nDigits = 0
 
@@ -10807,10 +10807,10 @@ FUNCTION StrToReal(stringIn) RESULT (realValue)
 IMPLICIT NONE
 
 CHARACTER(len=*), INTENT(IN)    :: stringIn
-REAL(R64)                       :: realValue
+REAL                       :: realValue
 READ(FMT=*, UNIT=stringIn, Err=900) realValue
 RETURN
-900 realValue=-99999.d0
+900 realValue=-99999.
 RETURN
 END FUNCTION
 
@@ -11170,103 +11170,103 @@ UnitConv(89)%ipName = 'Wh'
 UnitConv(90)%ipName = 'ton-hrs'
 UnitConv(91)%ipName = 'Invalid/Undefined'
 
-UnitConv(1)%mult = 1.d0
-UnitConv(2)%mult = 1.8d0
-UnitConv(3)%mult = 1.d0
-UnitConv(4)%mult = 1.d0
-UnitConv(5)%mult = 1.d0
-UnitConv(6)%mult = 1.d0
-UnitConv(7)%mult = 1.d0
-UnitConv(8)%mult = 1.d0
-UnitConv(9)%mult = 1.8d0
-UnitConv(10)%mult = 1.8d0
-UnitConv(11)%mult = 1.8d0
-UnitConv(12)%mult = 0.000645160041625726d0
-UnitConv(13)%mult = 1.d0
-UnitConv(14)%mult = 1.d0
-UnitConv(15)%mult = 1.d0
-UnitConv(16)%mult = 1.d0
-UnitConv(17)%mult = 1.d0
-UnitConv(18)%mult = 1.d0
-UnitConv(19)%mult = 0.00000094845d0
-UnitConv(20)%mult = 0.000000277778d0
-UnitConv(21)%mult = 0.0000000094845d0
-UnitConv(22)%mult = 0.00000000094845d0
-UnitConv(23)%mult = 0.000277777777777778d0
-UnitConv(24)%mult = 0.0000000789847d0
-UnitConv(25)%mult = 0.00042956d0
-UnitConv(26)%mult = 0.0000004302105d0
-UnitConv(27)%mult = 0.00000008811404d0
-UnitConv(28)%mult = 0.54861322767449d0
-UnitConv(29)%mult = 2.2046d0
-UnitConv(30)%mult = 1.d0
-UnitConv(31)%mult = 0.062428d0
-UnitConv(32)%mult = 2.2046d0
-UnitConv(33)%mult = 1.d0
-UnitConv(34)%mult = 2.2046d0
-UnitConv(35)%mult = 1.d0
-UnitConv(36)%mult = 1.d0
-UnitConv(37)%mult = 1.d0
-UnitConv(38)%mult = 0.264172037284185d0
-UnitConv(39)%mult = 0.0353146624712848d0
-UnitConv(40)%mult = 1.d0
-UnitConv(41)%mult = 0.092902267d0
-UnitConv(42)%mult = 3.281d0
-UnitConv(43)%mult = 39.37d0
-UnitConv(44)%mult = 196.86d0
-UnitConv(45)%mult = 2.2369d0
-UnitConv(46)%mult = 10.764961d0
-UnitConv(47)%mult = 10.764961d0
-UnitConv(48)%mult = 35.319837041d0
-UnitConv(49)%mult = 264.172d0
-UnitConv(50)%mult = 3.281d0
-UnitConv(51)%mult = 2118.6438d0
-UnitConv(52)%mult = 15852.d0
-UnitConv(53)%mult = 196.85d0
-UnitConv(54)%mult = 2118.6438d0
-UnitConv(55)%mult = 15852.d0
-UnitConv(56)%mult = 0.0001450377d0
-UnitConv(57)%mult = 0.00029613d0
-UnitConv(58)%mult = 0.00401463d0
-UnitConv(59)%mult = 0.00033455d0
-UnitConv(60)%mult = 0.0001450377d0
-UnitConv(61)%mult = 0.00029613d0
-UnitConv(62)%mult = 0.00401463d0
-UnitConv(63)%mult = 0.00033455d0
-UnitConv(64)%mult = 1.d0
-UnitConv(65)%mult = 1.d0
-UnitConv(66)%mult = 3.412d0
-UnitConv(67)%mult = 1.d0
-UnitConv(68)%mult = 0.001d0
-UnitConv(69)%mult = 0.00341442d0
-UnitConv(70)%mult = 0.0002843333d0
-UnitConv(71)%mult = 0.001547673d0
-UnitConv(72)%mult = 0.001547673d0
-UnitConv(73)%mult = 1.8987d0
-UnitConv(74)%mult = 0.316954237d0
-UnitConv(75)%mult = 0.000316954237d0
-UnitConv(76)%mult = 0.176085687d0
-UnitConv(77)%mult = 0.176085687d0
-UnitConv(78)%mult = 1.d0
-UnitConv(79)%mult = 1.8d0
-UnitConv(80)%mult = 0.42956d0
-UnitConv(81)%mult = 1.0d0/2118.6438d0
-UnitConv(82)%mult = 1.0d0/15852d0
-UnitConv(83)%mult = 1.0d0/10.764961d0
-UnitConv(84)%mult = 0.00000094845d0 * 1000000000d0
-UnitConv(85)%mult = 0.000000277778d0 * 1000000000d0
-UnitConv(86)%mult = 0.000000277778d0 * 1000000000d0
-UnitConv(87)%mult = 0.0000000094845d0 * 1000000000d0
-UnitConv(88)%mult = 0.00000000094845d0 * 1000000000d0
-UnitConv(89)%mult = 0.000277777777777778d0 * 1000000000d0
-UnitConv(90)%mult = 0.0000000789847d0 * 1000000000d0
-UnitConv(91)%mult = 1.0d0
+UnitConv(1)%mult = 1.
+UnitConv(2)%mult = 1.8
+UnitConv(3)%mult = 1.
+UnitConv(4)%mult = 1.
+UnitConv(5)%mult = 1.
+UnitConv(6)%mult = 1.
+UnitConv(7)%mult = 1.
+UnitConv(8)%mult = 1.
+UnitConv(9)%mult = 1.8
+UnitConv(10)%mult = 1.8
+UnitConv(11)%mult = 1.8
+UnitConv(12)%mult = 0.000645160041625726
+UnitConv(13)%mult = 1.
+UnitConv(14)%mult = 1.
+UnitConv(15)%mult = 1.
+UnitConv(16)%mult = 1.
+UnitConv(17)%mult = 1.
+UnitConv(18)%mult = 1.
+UnitConv(19)%mult = 0.00000094845
+UnitConv(20)%mult = 0.000000277778
+UnitConv(21)%mult = 0.0000000094845
+UnitConv(22)%mult = 0.00000000094845
+UnitConv(23)%mult = 0.000277777777777778
+UnitConv(24)%mult = 0.0000000789847
+UnitConv(25)%mult = 0.00042956
+UnitConv(26)%mult = 0.0000004302105
+UnitConv(27)%mult = 0.00000008811404
+UnitConv(28)%mult = 0.54861322767449
+UnitConv(29)%mult = 2.2046
+UnitConv(30)%mult = 1.
+UnitConv(31)%mult = 0.062428
+UnitConv(32)%mult = 2.2046
+UnitConv(33)%mult = 1.
+UnitConv(34)%mult = 2.2046
+UnitConv(35)%mult = 1.
+UnitConv(36)%mult = 1.
+UnitConv(37)%mult = 1.
+UnitConv(38)%mult = 0.264172037284185
+UnitConv(39)%mult = 0.0353146624712848
+UnitConv(40)%mult = 1.
+UnitConv(41)%mult = 0.092902267
+UnitConv(42)%mult = 3.281
+UnitConv(43)%mult = 39.37
+UnitConv(44)%mult = 196.86
+UnitConv(45)%mult = 2.2369
+UnitConv(46)%mult = 10.764961
+UnitConv(47)%mult = 10.764961
+UnitConv(48)%mult = 35.319837041
+UnitConv(49)%mult = 264.172
+UnitConv(50)%mult = 3.281
+UnitConv(51)%mult = 2118.6438
+UnitConv(52)%mult = 15852.
+UnitConv(53)%mult = 196.85
+UnitConv(54)%mult = 2118.6438
+UnitConv(55)%mult = 15852.
+UnitConv(56)%mult = 0.0001450377
+UnitConv(57)%mult = 0.00029613
+UnitConv(58)%mult = 0.00401463
+UnitConv(59)%mult = 0.00033455
+UnitConv(60)%mult = 0.0001450377
+UnitConv(61)%mult = 0.00029613
+UnitConv(62)%mult = 0.00401463
+UnitConv(63)%mult = 0.00033455
+UnitConv(64)%mult = 1.
+UnitConv(65)%mult = 1.
+UnitConv(66)%mult = 3.412
+UnitConv(67)%mult = 1.
+UnitConv(68)%mult = 0.001
+UnitConv(69)%mult = 0.00341442
+UnitConv(70)%mult = 0.0002843333
+UnitConv(71)%mult = 0.001547673
+UnitConv(72)%mult = 0.001547673
+UnitConv(73)%mult = 1.8987
+UnitConv(74)%mult = 0.316954237
+UnitConv(75)%mult = 0.000316954237
+UnitConv(76)%mult = 0.176085687
+UnitConv(77)%mult = 0.176085687
+UnitConv(78)%mult = 1.
+UnitConv(79)%mult = 1.8
+UnitConv(80)%mult = 0.42956
+UnitConv(81)%mult = 1.0/2118.6438
+UnitConv(82)%mult = 1.0/15852
+UnitConv(83)%mult = 1.0/10.764961
+UnitConv(84)%mult = 0.00000094845 * 1000000000
+UnitConv(85)%mult = 0.000000277778 * 1000000000
+UnitConv(86)%mult = 0.000000277778 * 1000000000
+UnitConv(87)%mult = 0.0000000094845 * 1000000000
+UnitConv(88)%mult = 0.00000000094845 * 1000000000
+UnitConv(89)%mult = 0.000277777777777778 * 1000000000
+UnitConv(90)%mult = 0.0000000789847 * 1000000000
+UnitConv(91)%mult = 1.0
 
 
-UnitConv(2)%offset = 32.d0
-UnitConv(11)%offset = 32.d0
-UnitConv(25)%offset = 7.6736d0
-UnitConv(80)%offset = 7.6736d0  ! 80 is KJ/KG -- should this be multiplied by 1000?
+UnitConv(2)%offset = 32.
+UnitConv(11)%offset = 32.
+UnitConv(25)%offset = 7.6736
+UnitConv(80)%offset = 7.6736  ! 80 is KJ/KG -- should this be multiplied by 1000?
 
 UnitConv(20)%hint = 'ELEC'
 UnitConv(21)%hint = 'GAS'
@@ -11467,7 +11467,7 @@ END IF
 unitConvIndex = selectedConv
 END SUBROUTINE
 
-REAL(r64) FUNCTION ConvertIP(unitConvIndex,SIvalue)
+REAL FUNCTION ConvertIP(unitConvIndex,SIvalue)
           ! SUBROUTINE INFORMATION:
           !    AUTHOR         Jason Glazer of GARD Analytics, Inc.
           !    DATE WRITTEN   February 13, 2009
@@ -11488,7 +11488,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER,INTENT(IN)                      :: unitConvIndex
-REAL(r64), INTENT(IN)                   :: SIvalue
+REAL, INTENT(IN)                   :: SIvalue
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           !    na
@@ -11509,7 +11509,7 @@ ELSE
 END IF
 END FUNCTION ConvertIP
 
-REAL(r64) FUNCTION ConvertIPdelta(unitConvIndex,SIvalue)
+REAL FUNCTION ConvertIPdelta(unitConvIndex,SIvalue)
           ! SUBROUTINE INFORMATION:
           !    AUTHOR         Jason Glazer of GARD Analytics, Inc.
           !    DATE WRITTEN   February 18, 2009
@@ -11533,7 +11533,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER,INTENT(IN)                      :: unitConvIndex
-REAL(r64), INTENT(IN)                   :: SIvalue
+REAL, INTENT(IN)                   :: SIvalue
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           !    na
@@ -11583,8 +11583,8 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER,INTENT(IN)                        :: unitConvIndex
-REAL(r64), INTENT(OUT)                    :: multiplier
-REAL(r64), INTENT(OUT)                    :: offset
+REAL, INTENT(OUT)                    :: multiplier
+REAL, INTENT(OUT)                    :: offset
 CHARACTER(len=MaxNameLength), INTENT(OUT) :: IPunit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -11609,7 +11609,7 @@ ELSE
 END IF
 END SUBROUTINE GetUnitConversion
 
-REAL(r64) FUNCTION getSpecificUnitMultiplier(SIunit,IPunit)
+REAL FUNCTION getSpecificUnitMultiplier(SIunit,IPunit)
           ! SUBROUTINE INFORMATION:
           !    AUTHOR         Jason Glazer of GARD Analytics, Inc.
           !    DATE WRITTEN   February 13, 2009
@@ -11670,7 +11670,7 @@ END IF
 END FUNCTION getSpecificUnitMultiplier
 
 
-REAL(r64) FUNCTION getSpecificUnitDivider(SIunit,IPunit)
+REAL FUNCTION getSpecificUnitDivider(SIunit,IPunit)
           ! SUBROUTINE INFORMATION:
           !    AUTHOR         Jason Glazer of GARD Analytics, Inc.
           !    DATE WRITTEN   February 13, 2009
@@ -11712,7 +11712,7 @@ CHARACTER(len=*), INTENT(IN) :: IPunit
           !    na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64) :: mult
+REAL :: mult
 
 mult = getSpecificUnitMultiplier(SIunit,IPunit)
 IF (mult .NE. 0) THEN

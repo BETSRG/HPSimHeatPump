@@ -39,24 +39,24 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER :: AdaptiveHcInsideLowLimit  = 0.5d0 ! W/m2-K
-REAL(r64), PARAMETER :: AdaptiveHcOutsideLowLimit = 1.d0 ! W/m2-K
+REAL, PARAMETER :: AdaptiveHcInsideLowLimit  = 0.5 ! W/m2-K
+REAL, PARAMETER :: AdaptiveHcOutsideLowLimit = 1. ! W/m2-K
 character(len=*), PARAMETER :: fmtx='(A,I4,1x,A,1x,6f16.8)'
 character(len=*), PARAMETER :: fmty='(A,1x,6f16.8)'
 
-REAL(r64), PARAMETER :: MinFlow = 0.01d0      ! Minimum mass flow rate
-REAL(r64), PARAMETER :: MaxACH = 100.0d0      ! Maximum ceiling diffuser correlation limit
+REAL, PARAMETER :: MinFlow = 0.01      ! Minimum mass flow rate
+REAL, PARAMETER :: MaxACH = 100.0      ! Maximum ceiling diffuser correlation limit
 CHARACTER(len=*), PARAMETER :: Blank = ' '
 
-REAL(r64), PARAMETER :: OneThird  = (1.d0/3.d0)  ! 1/3 in highest precision
-REAL(r64), PARAMETER :: OneFourth = (1.d0/4.d0)  ! 1/4 in highest precision
-REAL(r64), PARAMETER :: OneFifth  = (1.d0/5.d0)  ! 1/5 in highest precision
-REAL(r64), PARAMETER :: OneSixth  = (1.d0/6.d0)  ! 1/6 in highest precision
-REAL(r64), PARAMETER :: FourFifths = (4.d0/5.d0) ! 4/5 in highest precision
+REAL, PARAMETER :: OneThird  = (1./3.)  ! 1/3 in highest precision
+REAL, PARAMETER :: OneFourth = (1./4.)  ! 1/4 in highest precision
+REAL, PARAMETER :: OneFifth  = (1./5.)  ! 1/5 in highest precision
+REAL, PARAMETER :: OneSixth  = (1./6.)  ! 1/6 in highest precision
+REAL, PARAMETER :: FourFifths = (4./5.) ! 4/5 in highest precision
 
 
 ! Coefficients that modify the convection coeff based on surface roughness
-REAL(r64), PARAMETER, DIMENSION(6) :: RoughnessMultiplier = (/ 2.17d0, 1.67d0, 1.52d0, 1.13d0, 1.11d0, 1.0d0 /)
+REAL, PARAMETER, DIMENSION(6) :: RoughnessMultiplier = (/ 2.17, 1.67, 1.52, 1.13, 1.11, 1.0 /)
 
 ! parameters for identifying more specific hc model equations, inside face
 INTEGER, PARAMETER :: HcInt_UserValue                               = 200
@@ -284,7 +284,7 @@ INTEGER, PARAMETER :: RefWindParallCompAtZ   = 4
   TYPE BoundingBoxVertStruct
     INTEGER   :: SurfNum    =0
     INTEGER   :: VertNum    =0
-    TYPE(vector) :: Vertex  =vector(0.0d0,0.0d0,0.0d0)
+    TYPE(vector) :: Vertex  =vector(0.0,0.0,0.0)
   END TYPE BoundingBoxVertStruct
 
   TYPE RoofGeoCharactisticsStruct
@@ -298,9 +298,9 @@ INTEGER, PARAMETER :: RefWindParallCompAtZ   = 4
     TYPE(BoundingBoxVertStruct) :: XuYdZu ! 7 hi x, low y, hi z
     TYPE(BoundingBoxVertStruct) :: XuYuZu ! 8 hi x, hi y, hi z
     TYPE(vector), DIMENSION(4)  :: BoundSurf !long edge of roof group bounding surface
-    REAL(r64) :: Area          =0.0d0
-    REAL(r64) :: Perimeter     =0.0d0
-    REAL(r64) :: Height        =0.0d0
+    REAL :: Area          =0.0
+    REAL :: Perimeter     =0.0
+    REAL :: Height        =0.0
   END TYPE RoofGeoCharactisticsStruct
 
   TYPE(InsideFaceAdaptiveConvAlgoStruct),SAVE  :: InsideFaceAdaptiveConvectionAlgo !stores rules for Hc model equations
@@ -314,8 +314,8 @@ INTEGER, PARAMETER :: RefWindParallCompAtZ   = 4
   LOGICAL :: GetUserSuppliedConvectionCoeffs = .true.  ! Get user input first call for Init
 
   LOGICAL :: ConvectionGeometryMetaDataSetup = .false. ! set to true once geometry meta data are setup
-  REAL(r64) :: CubeRootOfOverallBuildingVolume = 0.d0 ! building meta data. cube root of the volume of all the zones
-  REAL(r64) :: RoofLongAxisOutwardAzimuth      = 0.d0 ! roof surfaces meta data. outward normal azimuth for longest roof edge
+  REAL :: CubeRootOfOverallBuildingVolume = 0. ! building meta data. cube root of the volume of all the zones
+  REAL :: RoofLongAxisOutwardAzimuth      = 0. ! roof surfaces meta data. outward normal azimuth for longest roof edge
 
   ! SUBROUTINE SPECIFICATIONS:
 PUBLIC  InitInteriorConvectionCoeffs
@@ -434,7 +434,7 @@ SUBROUTINE InitInteriorConvectionCoeffs(SurfaceTemperatures,ZoneToResimulate)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
+  REAL, DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
   INTEGER, INTENT(IN), OPTIONAL :: ZoneToResimulate  ! if passed in, then only calculate surfaces that have this zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -618,31 +618,31 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: SurfNum       ! Surface number (in Surface derived type)
   INTEGER, INTENT(IN)  :: Roughness     ! Roughness index (1-6), see DataHeatBalance parameters
-  REAL(r64),    INTENT(IN)  :: HMovInsul     ! Equivalent convection coefficient of movable insulation
-  REAL(r64),    INTENT(IN)  :: AbsExt        ! Exterior thermal absorptance
-  REAL(r64),    INTENT(IN)  :: TempExt       ! Exterior surface temperature (C)
-!  REAL(r64),    INTENT(IN)  :: WindSpeedExt  ! Exterior wind speed (m/s)  **No longer used
-  REAL(r64),    INTENT(OUT) :: HExt          ! Convection coefficient to exterior air
-  REAL(r64),    INTENT(OUT) :: HSky          ! "Convection" coefficient to sky temperature
-  REAL(r64),    INTENT(OUT) :: HGround       ! "Convection" coefficient to ground temperature
-  REAL(r64),    INTENT(OUT) :: HAir          ! Radiation to Air Component
+  REAL,    INTENT(IN)  :: HMovInsul     ! Equivalent convection coefficient of movable insulation
+  REAL,    INTENT(IN)  :: AbsExt        ! Exterior thermal absorptance
+  REAL,    INTENT(IN)  :: TempExt       ! Exterior surface temperature (C)
+!  REAL,    INTENT(IN)  :: WindSpeedExt  ! Exterior wind speed (m/s)  **No longer used
+  REAL,    INTENT(OUT) :: HExt          ! Convection coefficient to exterior air
+  REAL,    INTENT(OUT) :: HSky          ! "Convection" coefficient to sky temperature
+  REAL,    INTENT(OUT) :: HGround       ! "Convection" coefficient to ground temperature
+  REAL,    INTENT(OUT) :: HAir          ! Radiation to Air Component
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: MoWiTTTurbulentConstant = 0.84d0  ! Turbulent natural convection constant
+  REAL, PARAMETER :: MoWiTTTurbulentConstant = 0.84  ! Turbulent natural convection constant
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: TAir           ! Absolute dry bulb temperature of outdoor air (K)
-!  REAL(r64) :: TSky           ! Absolute temperature of the sky (K)
-  REAL(r64) :: TSurf          ! Absolute temperature of the exterior surface (K)
-  REAL(r64) :: SurfWindSpeed  ! Local wind speed at height of the heat transfer surface (m/s)
-  REAL(r64) :: ConstantA      ! = a, Constant, W/(m2K(m/s)^b)
-  REAL(r64) :: ConstantB      ! = b, Constant, W/(m2K^(4/3))
-  REAL(r64) :: Hn             ! Natural part of exterior convection
-  REAL(r64) :: Hf             ! Forced part of exterior convection
-  REAL(r64) :: HcGlass
-  REAL(r64) :: rcalcPerimeter ! approximation for Perimeter
+  REAL :: TAir           ! Absolute dry bulb temperature of outdoor air (K)
+!  REAL :: TSky           ! Absolute temperature of the sky (K)
+  REAL :: TSurf          ! Absolute temperature of the exterior surface (K)
+  REAL :: SurfWindSpeed  ! Local wind speed at height of the heat transfer surface (m/s)
+  REAL :: ConstantA      ! = a, Constant, W/(m2K(m/s)^b)
+  REAL :: ConstantB      ! = b, Constant, W/(m2K^(4/3))
+  REAL :: Hn             ! Natural part of exterior convection
+  REAL :: Hf             ! Forced part of exterior convection
+  REAL :: HcGlass
+  REAL :: rcalcPerimeter ! approximation for Perimeter
   INTEGER :: BaseSurf
-! real(r64) :: flag
+! REAL :: flag
 
           ! FLOW:
   IF (GetUserSuppliedConvectionCoeffs) THEN
@@ -697,7 +697,7 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           ! approximation calculation
 
           IF (Surface(BaseSurf)%GrossArea /= 0.0 .and. Surface(BaseSurf)%Height /= 0.0) THEN
-            rCalcPerimeter = 2.0d0  * (Surface(BaseSurf)%GrossArea / Surface(BaseSurf)%Height + Surface(BaseSurf)%Height)
+            rCalcPerimeter = 2.0  * (Surface(BaseSurf)%GrossArea / Surface(BaseSurf)%Height + Surface(BaseSurf)%Height)
             Hf = CalcHfExteriorSparrow(SurfWindSpeed, Surface(BaseSurf)%GrossArea, rCalcPerimeter, &
               Surface(SurfNum)%CosTilt, Surface(SurfNum)%Azimuth, Roughness, WindDir)
           ELSE
@@ -718,11 +718,11 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           !   ASHRAE Transactions 100(1):  1087.
 
           IF (Windward(Surface(SurfNum)%CosTilt,Surface(SurfNum)%Azimuth, WindDir)) THEN
-           ConstantA = 2.38d0
-           ConstantB = 0.89d0
+           ConstantA = 2.38
+           ConstantB = 0.89
           ELSE ! leeward
-           ConstantA = 2.86d0
-           ConstantB = 0.617d0
+           ConstantA = 2.86
+           ConstantB = 0.617
           END IF
 
           ! NOTE: Movable insulation is not taken into account here
@@ -738,11 +738,11 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           !   Lawrence Berkeley Laboratory.  1994.  DOE2.1E-053 source code.
 
           IF (Windward(Surface(SurfNum)%CosTilt,Surface(SurfNum)%Azimuth, WindDir)) THEN
-            ConstantA = 2.38d0
-            ConstantB = 0.89d0
+            ConstantA = 2.38
+            ConstantB = 0.89
           ELSE ! leeward
-            ConstantA = 2.86d0
-            ConstantB = 0.617d0
+            ConstantA = 2.86
+            ConstantB = 0.617
           END IF
 
           Hn = CalcHnASHRAETARPExterior(TSurf,TAir,Surface(SurfNum)%CosTilt)
@@ -786,7 +786,7 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
 
          ! Compute air radiation coefficient
          HAir = StefanBoltzmann*AbsExt*Surface(SurfNum)%ViewFactorSkyIR &
-           *(1.d0-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
+           *(1.-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
        END IF
 
     CASE(0) ! Not set by user  -- uses Zone setting
@@ -820,7 +820,7 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           ! approximation calculation
 
           IF (Surface(BaseSurf)%GrossArea /= 0.0 .and. Surface(BaseSurf)%Height /= 0.0) THEN
-            rCalcPerimeter = 2.0d0  * (Surface(BaseSurf)%GrossArea / Surface(BaseSurf)%Height + Surface(BaseSurf)%Height)
+            rCalcPerimeter = 2.0  * (Surface(BaseSurf)%GrossArea / Surface(BaseSurf)%Height + Surface(BaseSurf)%Height)
             Hf = CalcHfExteriorSparrow(SurfWindSpeed, Surface(BaseSurf)%GrossArea, rCalcPerimeter, &
               Surface(SurfNum)%CosTilt, Surface(SurfNum)%Azimuth, Roughness, WindDir)
           ELSE
@@ -840,11 +840,11 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           !   film coefficient for windows in low-rise buildings.
           !   ASHRAE Transactions 100(1):  1087.
           IF (Windward(Surface(SurfNum)%CosTilt,Surface(SurfNum)%Azimuth, WindDir)) THEN
-           ConstantA = 2.38d0
-           ConstantB = 0.89d0
+           ConstantA = 2.38
+           ConstantB = 0.89
           ELSE ! leeward
-           ConstantA = 2.86d0
-           ConstantB = 0.617d0
+           ConstantA = 2.86
+           ConstantB = 0.617
           END IF
 
           ! NOTE: Movable insulation is not taken into account here
@@ -860,11 +860,11 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
           !   Lawrence Berkeley Laboratory.  1994.  DOE2.1E-053 source code.
 
           IF (Windward(Surface(SurfNum)%CosTilt,Surface(SurfNum)%Azimuth, WindDir)) THEN
-            ConstantA = 2.38d0
-            ConstantB = 0.89d0
+            ConstantA = 2.38
+            ConstantB = 0.89
           ELSE ! leeward
-            ConstantA = 2.86d0
-            ConstantB = 0.617d0
+            ConstantA = 2.86
+            ConstantB = 0.617
           END IF
 
           Hn = CalcHnASHRAETARPExterior(TSurf,TAir,Surface(SurfNum)%CosTilt)
@@ -908,7 +908,7 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
 
          ! Compute air radiation coefficient
          HAir = StefanBoltzmann*AbsExt*Surface(SurfNum)%ViewFactorSkyIR &
-           *(1.d0-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
+           *(1.-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
        END IF
 
     CASE DEFAULT  ! Exterior convection scheme for this surface has been set by user
@@ -935,7 +935,7 @@ SUBROUTINE InitExteriorConvectionCoeff(SurfNum,HMovInsul,Roughness,AbsExt,TempEx
 
         ! Compute air radiation coefficient
         HAir = StefanBoltzmann*AbsExt*Surface(SurfNum)%ViewFactorSkyIR &
-          *(1.d0-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
+          *(1.-AirSkyRadSplit(SurfNum))*((TSurf**4)-(TAir**4))/(TSurf-TAir)
       END IF
 
   END SELECT
@@ -979,16 +979,16 @@ FUNCTION CalcHfExteriorSparrow(SurfWindSpeed, GrossArea, Perimeter, CosTilt, Azi
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64),    INTENT(IN)  :: SurfWindSpeed  ! Local wind speed at height of the heat transfer surface (m/s)
-  REAL(r64),    INTENT(IN)  :: GrossArea     ! Gross surface area {m2}
-  REAL(r64),    INTENT(IN)  :: CosTilt       ! Cosine of the Surface Tilt Angle
+  REAL,    INTENT(IN)  :: SurfWindSpeed  ! Local wind speed at height of the heat transfer surface (m/s)
+  REAL,    INTENT(IN)  :: GrossArea     ! Gross surface area {m2}
+  REAL,    INTENT(IN)  :: CosTilt       ! Cosine of the Surface Tilt Angle
                                         ! (Angle between the ground and the surface outward normal)
-  REAL(r64),    INTENT(IN)  :: Azimuth       ! Facing angle (degrees) of the surface outward normal
-  REAL(r64),    INTENT(IN)  :: Perimeter     ! Surface perimeter length {m}
+  REAL,    INTENT(IN)  :: Azimuth       ! Facing angle (degrees) of the surface outward normal
+  REAL,    INTENT(IN)  :: Perimeter     ! Surface perimeter length {m}
   INTEGER, INTENT(IN)  :: Roughness     ! Surface roughness index (6=very smooth, 5=smooth, 4=medium smooth,
                                         ! 3=medium rough,2=rough,1=very rough)
-  REAL(r64),    INTENT(IN)  :: WindDirection ! Wind (compass) direction (degrees)
-  REAL(r64)            :: Hf            ! Surface exterior forced convective heat transfer coefficient, W/(m2-K)
+  REAL,    INTENT(IN)  :: WindDirection ! Wind (compass) direction (degrees)
+  REAL            :: Hf            ! Surface exterior forced convective heat transfer coefficient, W/(m2-K)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1000,16 +1000,16 @@ FUNCTION CalcHfExteriorSparrow(SurfWindSpeed, GrossArea, Perimeter, CosTilt, Azi
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: WindDirectionModifier
+  REAL :: WindDirectionModifier
 
   IF ( Windward(CosTilt,Azimuth,WindDirection) ) THEN
-     WindDirectionModifier = 1.0d0
+     WindDirectionModifier = 1.0
   ELSE
-     WindDirectionModifier = 0.5d0
+     WindDirectionModifier = 0.5
   END IF
 
 
-  Hf = 2.537d0 * WindDirectionModifier * RoughnessMultiplier(Roughness) &
+  Hf = 2.537 * WindDirectionModifier * RoughnessMultiplier(Roughness) &
     * SQRT(SurfWindSpeed * Perimeter / GrossArea)
 
   RETURN
@@ -1047,14 +1047,14 @@ FUNCTION CalcHnASHRAETARPExterior(TOutSurf, TAir, CosTilt) RESULT(Hn)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  :: TOutSurf ! Exterior surface temperature
-  REAL(r64), INTENT(IN)  :: TAir     ! Outdoor Air temperature
-  REAL(r64), INTENT(IN)  :: CosTilt  ! Cosine of the Surface Tilt Angle (Angle between the ground outward normal and
+  REAL, INTENT(IN)  :: TOutSurf ! Exterior surface temperature
+  REAL, INTENT(IN)  :: TAir     ! Outdoor Air temperature
+  REAL, INTENT(IN)  :: CosTilt  ! Cosine of the Surface Tilt Angle (Angle between the ground outward normal and
                                 ! the surface outward normal)
-  REAL(r64)         :: Hn       ! Natural convective heat transfer coefficient,{W/(m2-K)}
+  REAL         :: Hn       ! Natural convective heat transfer coefficient,{W/(m2-K)}
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: OneThird = (1.d0/3.d0)  ! 1/3 in highest precision
+  REAL, PARAMETER :: OneThird = (1./3.)  ! 1/3 in highest precision
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1072,17 +1072,17 @@ FUNCTION CalcHnASHRAETARPExterior(TOutSurf, TAir, CosTilt) RESULT(Hn)
 
   IF (CosTilt == 0.0) THEN ! Vertical Surface
 
-    Hn = 1.31d0*(ABS((TOutSurf-TAir))**OneThird)
+    Hn = 1.31*(ABS((TOutSurf-TAir))**OneThird)
 
   ELSE IF ( ((CosTilt < 0.0) .AND. (TOutSurf < TAir)) .OR. &
            ((CosTilt > 0.0) .AND. (TOutSurf > TAir)) ) THEN   ! Enhanced convection
 
-    Hn = 9.482d0*(ABS((TOutSurf-TAir))**OneThird)/(7.238d0-ABS(CosTilt))
+    Hn = 9.482*(ABS((TOutSurf-TAir))**OneThird)/(7.238-ABS(CosTilt))
 
   ELSE IF ( ((CosTilt < 0.0) .AND. (TOutSurf > TAir)) .OR. &
            ((CosTilt > 0.0) .AND. (TOutSurf < TAir)) ) THEN   ! Reduced convection
 
-    Hn = 1.810d0*(ABS((TOutSurf-TAir))**OneThird)/(1.382d0+ABS(CosTilt))
+    Hn = 1.810*(ABS((TOutSurf-TAir))**OneThird)/(1.382+ABS(CosTilt))
 
   END IF    ! Only other condition is TOutSurf=TAir, in which case there is no natural convection part.
 
@@ -1120,9 +1120,9 @@ FUNCTION Windward(CosTilt, Azimuth, WindDirection) RESULT(AgainstWind)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN) :: CosTilt       ! Cosine of the surface tilt angle
-    REAL(r64), INTENT(IN) :: Azimuth       ! or Facing, Direction the surface outward normal faces (degrees)
-    REAL(r64), INTENT(IN) :: WindDirection ! Wind direction measured clockwise from geographhic North
+    REAL, INTENT(IN) :: CosTilt       ! Cosine of the surface tilt angle
+    REAL, INTENT(IN) :: Azimuth       ! or Facing, Direction the surface outward normal faces (degrees)
+    REAL, INTENT(IN) :: WindDirection ! Wind direction measured clockwise from geographhic North
     LOGICAL          :: AgainstWind   ! True for windward, false for leeward.
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -1135,13 +1135,13 @@ FUNCTION Windward(CosTilt, Azimuth, WindDirection) RESULT(AgainstWind)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Diff ! Difference between the wind direction and the surface azimuth
+    REAL :: Diff ! Difference between the wind direction and the surface azimuth
 
     AgainstWind = .True.
-    IF (ABS(CosTilt) < 0.98d0) THEN    ! Surface is not horizontal
+    IF (ABS(CosTilt) < 0.98) THEN    ! Surface is not horizontal
        Diff = ABS(WindDirection - Azimuth)
-       IF ((Diff-180.d0) > .001d0 ) Diff  = Diff - 360.0d0
-       IF ((ABS(Diff)-100.d0) > .001d0) AgainstWind = .False. ! Surface is leeward
+       IF ((Diff-180.) > .001 ) Diff  = Diff - 360.0
+       IF ((ABS(Diff)-100.) > .001) AgainstWind = .False. ! Surface is leeward
     ENDIF
 
   RETURN
@@ -1465,7 +1465,7 @@ SUBROUTINE GetUserConvectionCoefficients
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength) :: Alphas(9)
-  REAL(r64) :: Numbers(2)
+  REAL :: Numbers(2)
   INTEGER :: NumAlphas
   INTEGER :: NumNumbers
   INTEGER :: Loop
@@ -3999,7 +3999,7 @@ END SUBROUTINE ApplyConvectionValue
 
 END SUBROUTINE GetUserConvectionCoefficients
 
-REAL(r64) FUNCTION CalcASHRAESimpExtConvectCoeff(Roughness, SurfWindSpeed)
+REAL FUNCTION CalcASHRAESimpExtConvectCoeff(Roughness, SurfWindSpeed)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Rick Strand
@@ -4026,12 +4026,12 @@ REAL(r64) FUNCTION CalcASHRAESimpExtConvectCoeff(Roughness, SurfWindSpeed)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: Roughness  ! Integer index for roughness, relates to parameter array indices
-  REAL(r64),    INTENT(IN) :: SurfWindSpeed  ! Current wind speed, m/s
+  REAL,    INTENT(IN) :: SurfWindSpeed  ! Current wind speed, m/s
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER, DIMENSION(6) :: D = (/ 11.58d0, 12.49d0, 10.79d0, 8.23d0, 10.22d0, 8.23d0 /)
-  REAL(r64), PARAMETER, DIMENSION(6) :: E = (/ 5.894d0, 4.065d0, 4.192d0, 4.00d0, 3.100d0, 3.33d0 /)
-  REAL(r64), PARAMETER, DIMENSION(6) :: F = (/ 0.0d0, 0.028d0, 0.0d0, -0.057d0, 0.0d0, -0.036d0 /)
+  REAL, PARAMETER, DIMENSION(6) :: D = (/ 11.58, 12.49, 10.79, 8.23, 10.22, 8.23 /)
+  REAL, PARAMETER, DIMENSION(6) :: E = (/ 5.894, 4.065, 4.192, 4.00, 3.100, 3.33 /)
+  REAL, PARAMETER, DIMENSION(6) :: F = (/ 0.0, 0.028, 0.0, -0.057, 0.0, -0.036 /)
 
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -4082,8 +4082,8 @@ SUBROUTINE CalcASHRAESimpleIntConvCoeff(SurfNum,SurfaceTemperature,ZoneMeanAirTe
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)            :: SurfNum ! surface number for which coefficients are being calculated
-  REAL(r64), INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
-  REAL(r64), INTENT(IN)   :: ZoneMeanAirTemperature  ! Mean Air Temperature of Zone
+  REAL, INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
+  REAL, INTENT(IN)   :: ZoneMeanAirTemperature  ! Mean Air Temperature of Zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4095,27 +4095,27 @@ SUBROUTINE CalcASHRAESimpleIntConvCoeff(SurfNum,SurfaceTemperature,ZoneMeanAirTe
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: DeltaTemp          ! Temperature difference between the zone air and the surface
+  REAL    :: DeltaTemp          ! Temperature difference between the zone air and the surface
 
 
-  IF (ABS(Surface(SurfNum)%CosTilt) >= 0.3827d0) THEN   ! Recalculate HConvIn
+  IF (ABS(Surface(SurfNum)%CosTilt) >= 0.3827) THEN   ! Recalculate HConvIn
 
     DeltaTemp = ZoneMeanAirTemperature - SurfaceTemperature
 
     ! Set HConvIn using the proper correlation based on DeltaTemp and Cosine of the Tilt of the Surface
-    IF (ABS(Surface(SurfNum)%CosTilt) >= 0.9239d0) THEN  ! Horizontal Surface
+    IF (ABS(Surface(SurfNum)%CosTilt) >= 0.9239) THEN  ! Horizontal Surface
 
       IF (DeltaTemp*Surface(SurfNum)%CosTilt < 0.0) THEN ! Horizontal, Reduced Convection
 
-        HConvIn(SurfNum) = 0.948d0
+        HConvIn(SurfNum) = 0.948
 
       ELSEIF (DeltaTemp*Surface(SurfNum)%CosTilt == 0.0) THEN ! Vertical Surface
 
-        HConvIn(SurfNum) = 3.076d0
+        HConvIn(SurfNum) = 3.076
 
       ELSEIF (DeltaTemp*Surface(SurfNum)%CosTilt > 0.0) THEN ! Horizontal, Enhanced Convection
 
-        HConvIn(SurfNum) = 4.040d0
+        HConvIn(SurfNum) = 4.040
 
       END IF
 
@@ -4123,15 +4123,15 @@ SUBROUTINE CalcASHRAESimpleIntConvCoeff(SurfNum,SurfaceTemperature,ZoneMeanAirTe
 
       IF (DeltaTemp*Surface(SurfNum)%CosTilt < 0.0) THEN ! Tilted, Reduced Convection
 
-        HConvIn(SurfNum) = 2.281d0
+        HConvIn(SurfNum) = 2.281
 
       ELSEIF (DeltaTemp*Surface(SurfNum)%CosTilt == 0.0) THEN ! Vertical Surface
 
-        HConvIn(SurfNum) = 3.076d0
+        HConvIn(SurfNum) = 3.076
 
       ELSEIF (DeltaTemp*Surface(SurfNum)%CosTilt > 0.0) THEN ! Tilted, Enhanced Convection
 
-        HConvIn(SurfNum) = 3.870d0
+        HConvIn(SurfNum) = 3.870
 
       END IF
 
@@ -4181,11 +4181,11 @@ SUBROUTINE CalcASHRAEDetailedIntConvCoeff(SurfNum,SurfaceTemperature,ZoneMeanAir
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)            :: SurfNum ! surface number for which coefficients are being calculated
-  REAL(r64), INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
-  REAL(r64), INTENT(IN)   :: ZoneMeanAirTemperature  ! Mean Air Temperature of Zone
+  REAL, INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
+  REAL, INTENT(IN)   :: ZoneMeanAirTemperature  ! Mean Air Temperature of Zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: OneThird = (1.d0/3.d0)  ! 1/3 in highest precision
+  REAL, PARAMETER :: OneThird = (1./3.)  ! 1/3 in highest precision
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4194,7 +4194,7 @@ SUBROUTINE CalcASHRAEDetailedIntConvCoeff(SurfNum,SurfaceTemperature,ZoneMeanAir
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: DeltaTemp          ! Temperature difference between the zone air and the surface
+  REAL    :: DeltaTemp          ! Temperature difference between the zone air and the surface
 
           ! FLOW:
 
@@ -4251,13 +4251,13 @@ SUBROUTINE CalcDetailedHcInForDVModel(SurfNum,SurfaceTemperatures,HcIn,Vhc)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                        :: SurfNum ! surface number for which coefficients are being calculated
-  REAL(r64), DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
-  REAL(r64), DIMENSION(:), INTENT(INOUT)          :: HcIn ! Interior Convection Coeff Array
-  REAL(r64), DIMENSION(:), INTENT(IN), OPTIONAL   :: Vhc !Velocity array for forced convection coeff calculation
+  REAL, DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
+  REAL, DIMENSION(:), INTENT(INOUT)          :: HcIn ! Interior Convection Coeff Array
+  REAL, DIMENSION(:), INTENT(IN), OPTIONAL   :: Vhc !Velocity array for forced convection coeff calculation
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: OneThird = (1.d0/3.d0)  ! 1/3 in highest precision
+  REAL, PARAMETER :: OneThird = (1./3.)  ! 1/3 in highest precision
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4266,9 +4266,9 @@ SUBROUTINE CalcDetailedHcInForDVModel(SurfNum,SurfaceTemperatures,HcIn,Vhc)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: DeltaTemp          ! Temperature difference between the zone air and the surface
-  REAL(r64)    :: TAirConv
-  REAL(r64)    :: Hf
+  REAL    :: DeltaTemp          ! Temperature difference between the zone air and the surface
+  REAL    :: TAirConv
+  REAL    :: Hf
 
           ! FLOW:
 
@@ -4296,25 +4296,25 @@ SUBROUTINE CalcDetailedHcInForDVModel(SurfNum,SurfaceTemperatures,HcIn,Vhc)
 
       ELSEIF ((DeltaTemp == 0.0) .OR. (Surface(surfnum)%CosTilt == 0.0)) THEN   ! Vertical Surface
 
-        HcIn(SurfNum) = 1.31d0*((ABS(DeltaTemp))**OneThird)
+        HcIn(SurfNum) = 1.31*((ABS(DeltaTemp))**OneThird)
 
       ELSEIF ( ((DeltaTemp < 0.0) .AND. (Surface(SurfNum)%CosTilt > 0.0)) .OR. &
              ((DeltaTemp > 0.0) .AND. (Surface(SurfNum)%CosTilt < 0.0)) ) THEN  ! Enhanced Convection
 
-        HcIn(SurfNum) = 9.482d0*((ABS(DeltaTemp))**OneThird) &
-                                /(7.283d0 - ABS(Surface(SurfNum)%CosTilt))
+        HcIn(SurfNum) = 9.482*((ABS(DeltaTemp))**OneThird) &
+                                /(7.283 - ABS(Surface(SurfNum)%CosTilt))
 
       ELSEIF ( ((DeltaTemp > 0.0) .AND. (Surface(SurfNum)%CosTilt > 0.0)) .OR. &
              ((DeltaTemp < 0.0) .AND. (Surface(SurfNum)%CosTilt < 0.0)) ) THEN  ! Reduced Convection
 
-        HcIn(SurfNum) = 1.810d0*((ABS(DeltaTemp))**OneThird) &
-                                /(1.382d0 + ABS(Surface(SurfNum)%CosTilt))
+        HcIn(SurfNum) = 1.810*((ABS(DeltaTemp))**OneThird) &
+                                /(1.382 + ABS(Surface(SurfNum)%CosTilt))
 
       END IF  ! ...end of IF-THEN block to set HConvIn
 
     ELSEIF (AirModel(Surface(SurfNum)%Zone)%AirModelType == RoomAirModel_UCSDCV) THEN
 
-      Hf=4.3d0*Vhc(Surface(SurfNum)%Zone)
+      Hf=4.3*Vhc(Surface(SurfNum)%Zone)
 
       ! Set HConvIn using the proper correlation based on DeltaTemp and CosTiltSurf
       IF (Surface(SurfNum)%IntConvCoeff /= 0) THEN
@@ -4324,25 +4324,25 @@ SUBROUTINE CalcDetailedHcInForDVModel(SurfNum,SurfaceTemperatures,HcIn,Vhc)
 
       ELSEIF ((DeltaTemp == 0.0) .OR. (Surface(SurfNum)%CosTilt == 0.0)) THEN   ! Vertical Surface
 
-        HcIn(SurfNum) = 1.31d0*((ABS(DeltaTemp))**OneThird)
+        HcIn(SurfNum) = 1.31*((ABS(DeltaTemp))**OneThird)
 
-        HcIn(SurfNum)= (HcIn(SurfNum)**3.2d0+Hf**3.2d0)**(1.d0/3.2d0)
+        HcIn(SurfNum)= (HcIn(SurfNum)**3.2+Hf**3.2)**(1./3.2)
 
 
       ELSEIF ( ((DeltaTemp < 0.0) .AND. (Surface(SurfNum)%CosTilt > 0.0)) .OR. &
              ((DeltaTemp > 0.0) .AND. (Surface(SurfNum)%CosTilt < 0.0)) ) THEN  ! Enhanced Convection
 
-        HcIn(SurfNum) = 9.482d0*((ABS(DeltaTemp))**(1.d0/3.d0)) &
+        HcIn(SurfNum) = 9.482*((ABS(DeltaTemp))**(1./3.)) &
                                 /(7.283 - ABS(Surface(SurfNum)%CosTilt))
-        HcIn(SurfNum)= (HcIn(SurfNum)**3.2d0+Hf**3.2d0)**(1.d0/3.2d0)
+        HcIn(SurfNum)= (HcIn(SurfNum)**3.2+Hf**3.2)**(1./3.2)
 
 
       ELSEIF ( ((DeltaTemp > 0.0) .AND. (Surface(SurfNum)%CosTilt > 0.0)) .OR. &
              ((DeltaTemp < 0.0) .AND. (Surface(SurfNum)%CosTilt < 0.0)) ) THEN  ! Reduced Convection
 
-        HcIn(SurfNum) = 1.810d0*((ABS(DeltaTemp))**OneThird) &
-                                /(1.382d0 + ABS(Surface(SurfNum)%CosTilt))
-        HcIn(SurfNum)= (HcIn(SurfNum)**3.2d0+Hf**3.2d0)**(1.d0/3.2d0)
+        HcIn(SurfNum) = 1.810*((ABS(DeltaTemp))**OneThird) &
+                                /(1.382 + ABS(Surface(SurfNum)%CosTilt))
+        HcIn(SurfNum)= (HcIn(SurfNum)**3.2+Hf**3.2)**(1./3.2)
 
 
       END IF  ! ...end of IF-THEN block to set HConvIn
@@ -4396,12 +4396,12 @@ SUBROUTINE CalcCeilingDiffuserIntConvCoeff(ZoneNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: SurfNum            ! DO loop counter for surfaces
-  REAL(r64)    :: ACH                ! Air changes per hour
+  REAL    :: ACH                ! Air changes per hour
   INTEGER :: ZoneNode           ! Zone node as defined in system simulation
-  REAL(r64)    :: ZoneVolume         ! Zone node as defined in system simulation
-  REAL(r64)    :: ZoneMassFlowRate   ! Zone node as defined in system simulation
-  REAL(r64)    :: AirDensity         ! zone air density
-  REAL(r64)    :: ZoneMult
+  REAL    :: ZoneVolume         ! Zone node as defined in system simulation
+  REAL    :: ZoneMassFlowRate   ! Zone node as defined in system simulation
+  REAL    :: AirDensity         ! zone air density
+  REAL    :: ZoneMult
 
           ! FLOW:
   IF (SysSizingCalc .OR. ZoneSizingCalc .OR. .NOT. ALLOCATED(Node)) THEN
@@ -4415,7 +4415,7 @@ SUBROUTINE CalcCeilingDiffuserIntConvCoeff(ZoneNum)
       AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
       ZoneMassFlowRate = Node(ZoneNode)%MassFlowRate / ZoneMult
     ELSE  ! because these are not updated yet for new environment
-      AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,0.0d0,PsyWFnTdpPb(0.0d0,OutBaroPress))
+      AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,0.0,PsyWFnTdpPb(0.0,OutBaroPress))
       ZoneMassFlowRate = 0.0
     ENDIF
 
@@ -4426,7 +4426,7 @@ SUBROUTINE CalcCeilingDiffuserIntConvCoeff(ZoneNum)
       ACH = ZoneMassFlowRate/AirDensity/ZoneVolume*SecInHour
       ! Limit ACH to range of correlation
       ACH = MIN(ACH, MaxACH)
-      ACH = MAX(ACH, 0.0d0)
+      ACH = MAX(ACH, 0.0)
     END IF
   END IF
 
@@ -4439,7 +4439,7 @@ SUBROUTINE CalcCeilingDiffuserIntConvCoeff(ZoneNum)
     IF (.NOT. Surface(SurfNum)%HeatTransSurf) CYCLE  ! Skip non-heat transfer surfaces
 
     ! Set HConvIn using the proper correlation based on Surface Tilt
-    IF (Surface(SurfNum)%Tilt > 135.0d0) THEN
+    IF (Surface(SurfNum)%Tilt > 135.0) THEN
       HConvIn(SurfNum) = CalcFisherPedersenCeilDiffuserFloor(ACH) ! Floor correlation
     ELSEIF (Surface(SurfNum)%Tilt < 45.) THEN
       HConvIn(SurfNum) =CalcFisherPedersenCeilDiffuserCeiling(ACH) ! Ceiling correlation
@@ -4488,17 +4488,17 @@ SUBROUTINE CalcCeilingDiffuserInletCorr(ZoneNum, SurfaceTemperatures)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)            :: ZoneNum             ! Zone number
-  REAL(r64), DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! For CalcASHRAEDetailed, if called
+  REAL, DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! For CalcASHRAEDetailed, if called
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: ACH              ! Air changes per hour
+  REAL    :: ACH              ! Air changes per hour
   INTEGER :: ZoneNode         ! Zone node as defined in system simulation
-  REAL(r64)    :: ZoneVolume       ! Zone node as defined in system simulation
-  REAL(r64)    :: ZoneMassFlowRate ! Zone node as defined in system simulation
-  REAL(r64)    :: AirDensity       ! zone air density
+  REAL    :: ZoneVolume       ! Zone node as defined in system simulation
+  REAL    :: ZoneMassFlowRate ! Zone node as defined in system simulation
+  REAL    :: AirDensity       ! zone air density
   INTEGER :: SurfNum          ! DO loop counter for surfaces
-  REAL(r64)    :: Tilt             ! Surface tilt
-  REAL(r64)    :: ZoneMult
+  REAL    :: Tilt             ! Surface tilt
+  REAL    :: ZoneMult
 
           ! FLOW:
   IF (SysSizingCalc .OR. ZoneSizingCalc .OR. .NOT. ALLOCATED(Node)) THEN
@@ -4518,14 +4518,14 @@ SUBROUTINE CalcCeilingDiffuserInletCorr(ZoneNum, SurfaceTemperatures)
       ACH = ZoneMassFlowRate / AirDensity / ZoneVolume * SecInHour
       ! Limit ACH to range of correlation
       ACH = MIN(ACH, MaxACH)
-      ACH = MAX(ACH, 0.0d0)
+      ACH = MAX(ACH, 0.0)
     END IF
   END IF
 
     DO SurfNum = Zone(ZoneNum)%SurfaceFirst,Zone(ZoneNum)%SurfaceLast
       IF (.NOT. Surface(SurfNum)%HeatTransSurf) CYCLE ! Skip non-heat transfer surfaces
 
-      IF (ACH <= 3.0d0) THEN ! Use the other convection algorithm
+      IF (ACH <= 3.0) THEN ! Use the other convection algorithm
         IF (.NOT. Construct(Surface(SurfNum)%Construction)%TypeIsWindow) THEN
           CALL CalcASHRAEDetailedIntConvCoeff(SurfNum,SurfaceTemperatures(SurfNum),MAT(ZoneNum))
         ELSE
@@ -4536,12 +4536,12 @@ SUBROUTINE CalcCeilingDiffuserInletCorr(ZoneNum, SurfaceTemperatures)
 
         ! assume that reference air temp for user defined convection coefficient is the mean air temperature (=MAT)
         ! Calculate the convection coefficient based on inlet (supply) air conditions
-        IF (Tilt < 45.0d0) THEN
-          HConvIn(SurfNum) = 0.49d0 * ACH**0.8d0 ! Ceiling correlation
-        ELSE IF (Tilt > 135.0d0) THEN
-          HConvIn(SurfNum) = 0.13d0 * ACH**0.8d0 ! Floor correlation
+        IF (Tilt < 45.0) THEN
+          HConvIn(SurfNum) = 0.49 * ACH**0.8 ! Ceiling correlation
+        ELSE IF (Tilt > 135.0) THEN
+          HConvIn(SurfNum) = 0.13 * ACH**0.8 ! Floor correlation
         ELSE
-          HConvIn(SurfNum) = 0.19d0 * ACH**0.8d0 ! Wall correlation
+          HConvIn(SurfNum) = 0.19 * ACH**0.8 ! Wall correlation
         END IF
         ! set flag for reference air temperature
         Surface(SurfNum)%TAirRef = ZoneSupplyAirTemp
@@ -4583,13 +4583,13 @@ SUBROUTINE CalcTrombeWallIntConvCoeff(ZoneNum,SurfaceTemperatures)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
   INTEGER, INTENT(IN)            :: ZoneNum             ! Zone number for which coefficients are being calculated
-  REAL(r64), DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
+  REAL, DIMENSION(:), INTENT(IN) :: SurfaceTemperatures ! Temperature of surfaces for evaluation of HcIn
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: g = 9.81d0       ! gravity constant (m/s**2)
-  REAL(r64), PARAMETER :: v = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
-  REAL(r64), PARAMETER :: k = 0.0263d0     ! thermal conductivity (W/m K) for air at 300 K
-  REAL(r64), PARAMETER :: Pr = 0.71d0      ! Prandtl number for air at ?
+  REAL, PARAMETER :: g = 9.81       ! gravity constant (m/s**2)
+  REAL, PARAMETER :: v = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
+  REAL, PARAMETER :: k = 0.0263     ! thermal conductivity (W/m K) for air at 300 K
+  REAL, PARAMETER :: Pr = 0.71      ! Prandtl number for air at ?
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4602,17 +4602,17 @@ SUBROUTINE CalcTrombeWallIntConvCoeff(ZoneNum,SurfaceTemperatures)
   INTEGER :: Surf1              ! first major wall surface
   INTEGER :: Surf2              ! second major wall surface
 
-  REAL(r64)    :: H                  ! height of enclosure
-  REAL(r64)    :: minorW             ! width of enclosure (narrow dimension)
-  REAL(r64)    :: majorW             ! width of major surface
-  REAL(r64)    :: gapW               ! width of air gap
-  REAL(r64)  :: asp      ! aspect ratio H/gapW
-  REAL(r64)  :: beta     ! volumetric thermal expansion coefficient
-  REAL(r64)  :: Gr       ! Grashof number
-  REAL(r64)  :: Nu       ! Nusselt number
-  REAL(r64)    :: HConvNet           ! net heat transfer coefficient from wall to wall
-  REAL(r64)  :: Tso      ! outside surface temperature [K]
-  REAL(r64)  :: Tsi      ! inside surface temperature [K]
+  REAL    :: H                  ! height of enclosure
+  REAL    :: minorW             ! width of enclosure (narrow dimension)
+  REAL    :: majorW             ! width of major surface
+  REAL    :: gapW               ! width of air gap
+  REAL  :: asp      ! aspect ratio H/gapW
+  REAL  :: beta     ! volumetric thermal expansion coefficient
+  REAL  :: Gr       ! Grashof number
+  REAL  :: Nu       ! Nusselt number
+  REAL    :: HConvNet           ! net heat transfer coefficient from wall to wall
+  REAL  :: Tso      ! outside surface temperature [K]
+  REAL  :: Tsi      ! inside surface temperature [K]
 
   ! If the Trombe Wall option is selected the following correlations
   ! will be used based on references by .....
@@ -4679,7 +4679,7 @@ SUBROUTINE CalcTrombeWallIntConvCoeff(ZoneNum,SurfaceTemperatures)
       Tsi = SurfaceTemperatures(Surf2) + KelvinConv
     ENDIF
 
-    beta = 2.0d0/(Tso + Tsi)
+    beta = 2.0/(Tso + Tsi)
 
     Gr = (g*beta*ABS(Tsi - Tso)*gapW**3)/(v**2) ! curve fit for v = v(T)?
 
@@ -4700,7 +4700,7 @@ SUBROUTINE CalcTrombeWallIntConvCoeff(ZoneNum,SurfaceTemperatures)
 
     ! assign the convection coefficent to the major surfaces and any subsurfaces on them
     IF ((Surface(SurfNum)%BaseSurf == Surf1) .OR. (Surface(SurfNum)%BaseSurf == Surf2)) THEN
-      HConvIn(SurfNum) = 2.0d0*HConvNet
+      HConvIn(SurfNum) = 2.0*HConvNet
     END IF
 
     ! Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
@@ -4739,13 +4739,13 @@ SUBROUTINE CalcNusselt(SurfNum, asp, tso, tsi, gr, pr, gnu)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)         :: tso               ! Temperature of gap surface closest to outside (K)
-  REAL(r64), INTENT(IN)         :: tsi               ! Temperature of gap surface closest to zone (K)
+  REAL, INTENT(IN)         :: tso               ! Temperature of gap surface closest to outside (K)
+  REAL, INTENT(IN)         :: tsi               ! Temperature of gap surface closest to zone (K)
   INTEGER, INTENT(IN)                  :: SurfNum           ! Surface number
-  REAL(r64)  , INTENT(IN)       :: asp               ! Aspect ratio: window height to gap width
-  REAL(r64)  , INTENT(IN)       :: pr                ! Gap gas Prandtl number
-  REAL(r64)  , INTENT(IN)       :: gr                ! Gap gas Grashof number
-  REAL(r64)  , INTENT(OUT)      :: gnu               ! Gap gas Nusselt number
+  REAL  , INTENT(IN)       :: asp               ! Aspect ratio: window height to gap width
+  REAL  , INTENT(IN)       :: pr                ! Gap gas Prandtl number
+  REAL  , INTENT(IN)       :: gr                ! Gap gas Grashof number
+  REAL  , INTENT(OUT)      :: gnu               ! Gap gas Nusselt number
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4754,11 +4754,11 @@ SUBROUTINE CalcNusselt(SurfNum, asp, tso, tsi, gr, pr, gnu)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS
-  REAL(r64)  :: ra                                 ! Rayleigh number
-  REAL(r64)  :: gnu901, gnu902, gnu90, gnu601      ! Nusselt number temporary variables for
-  REAL(r64)  :: gnu602, gnu60, gnu601a, gnua, gnub !  different tilt and Ra ranges
-  REAL(r64)  :: cra, a, b, g, ang, tilt, tiltr     ! Temporary variables
-  REAL(r64)  :: costilt,sintilt
+  REAL  :: ra                                 ! Rayleigh number
+  REAL  :: gnu901, gnu902, gnu90, gnu601      ! Nusselt number temporary variables for
+  REAL  :: gnu602, gnu60, gnu601a, gnua, gnub !  different tilt and Ra ranges
+  REAL  :: cra, a, b, g, ang, tilt, tiltr     ! Temporary variables
+  REAL  :: costilt,sintilt
 
 
   tilt = Surface(SurfNum)%Tilt
@@ -4768,35 +4768,35 @@ SUBROUTINE CalcNusselt(SurfNum, asp, tso, tsi, gr, pr, gnu)
   ra = gr*pr
                          !!fw if (ra > 2.0e6): error that outside range of Rayleigh number?
 
-  IF (ra <= 1.0d4)                  gnu901 = 1. + 1.7596678d-10 * ra**2.2984755d0   ! eq. 51
-  IF (ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =      0.028154d0      * ra**0.4134d0      ! eq. 50
-  IF (ra > 5.0d4)                   gnu901 =      0.0673838d0     * ra**(1.0d0/3.0d0)   ! eq. 49
-                                   gnu902 = 0.242d0 * (ra/asp)**.272d0               ! eq. 52
+  IF (ra <= 1.0d4)                  gnu901 = 1. + 1.7596678d-10 * ra**2.2984755   ! eq. 51
+  IF (ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =      0.028154      * ra**0.4134      ! eq. 50
+  IF (ra > 5.0d4)                   gnu901 =      0.0673838     * ra**(1.0/3.0)   ! eq. 49
+                                   gnu902 = 0.242 * (ra/asp)**.272               ! eq. 52
                                    gnu90 = MAX(gnu901,gnu902)
 
   IF (tso > tsi) THEN ! window heated from above
-    gnu = 1.0d0 + (gnu90-1.0d0)*sintilt                     ! eq. 53
+    gnu = 1.0 + (gnu90-1.0)*sintilt                     ! eq. 53
   ELSE                ! window heated from below
-    IF (tilt >= 60.0d0) THEN
-      g       = 0.5d0 * (1.0d0+(ra/3160.d0)**20.6d0)**(-0.1d0)    ! eq. 47
-      gnu601a = 1.0d0 + (0.0936d0*(ra**0.314d0)/(1.0d0+g))**7   ! eq. 45
-      gnu601  = gnu601a**0.142857d0
+    IF (tilt >= 60.0) THEN
+      g       = 0.5 * (1.0+(ra/3160.)**20.6)**(-0.1)    ! eq. 47
+      gnu601a = 1.0 + (0.0936*(ra**0.314)/(1.0+g))**7   ! eq. 45
+      gnu601  = gnu601a**0.142857
 
       ! For any aspect ratio
-      gnu602  = (0.104d0+0.175d0/asp) * ra**0.283d0           ! eq. 46
+      gnu602  = (0.104+0.175/asp) * ra**0.283           ! eq. 46
       gnu60   = MAX(gnu601,gnu602)
 
       ! linear interpolation for layers inclined at angles between 60 and 90 deg
-      gnu     = ((90.0d0-tilt)*gnu60 + (tilt-60.0d0)*gnu90)/30.0d0
+      gnu     = ((90.0-tilt)*gnu60 + (tilt-60.0)*gnu90)/30.0
     ENDIF
-    IF (tilt < 60.0d0) THEN                               ! eq. 42
+    IF (tilt < 60.0) THEN                               ! eq. 42
       cra  = ra*costilt
-      a    = 1.0d0 - 1708.0d0/cra
-      b    = (cra/5830.0d0)**0.33333d0-1.0d0    ! LKL- replace .333 with OneThird?
-      gnua = (ABS(a)+a)/2.0d0
-      gnub = (ABS(b)+b)/2.0d0
-      ang  = 1708.0d0 * (SIN(1.8d0*tiltr))**1.6d0
-      gnu  = 1.0d0 + 1.44d0*gnua*(1.0d0-ang/cra) + gnub
+      a    = 1.0 - 1708.0/cra
+      b    = (cra/5830.0)**0.33333-1.0    ! LKL- replace .333 with OneThird?
+      gnua = (ABS(a)+a)/2.0
+      gnub = (ABS(b)+b)/2.0
+      ang  = 1708.0 * (SIN(1.8*tiltr))**1.6
+      gnu  = 1.0 + 1.44*gnua*(1.0-ang/cra) + gnub
     ENDIF
   ENDIF
 
@@ -4804,7 +4804,7 @@ SUBROUTINE CalcNusselt(SurfNum, asp, tso, tsi, gr, pr, gnu)
 
 END SUBROUTINE CalcNusselt
 
-REAL(r64) FUNCTION SetExtConvectionCoeff(SurfNum)
+REAL FUNCTION SetExtConvectionCoeff(SurfNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -4842,7 +4842,7 @@ REAL(r64) FUNCTION SetExtConvectionCoeff(SurfNum)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) HExt   ! Will become the returned value
+    REAL HExt   ! Will become the returned value
 
     SELECT CASE (UserExtConvectionCoeffs(Surface(SurfNum)%ExtConvCoeff)%OverrideType)
 
@@ -4874,7 +4874,7 @@ REAL(r64) FUNCTION SetExtConvectionCoeff(SurfNum)
 
 END FUNCTION SetExtConvectionCoeff
 
-REAL(r64) FUNCTION SetIntConvectionCoeff(SurfNum)
+REAL FUNCTION SetIntConvectionCoeff(SurfNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -4914,7 +4914,7 @@ REAL(r64) FUNCTION SetIntConvectionCoeff(SurfNum)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-    REAL(r64) HInt   ! Will become the returned value
+    REAL HInt   ! Will become the returned value
 
     SELECT CASE (UserIntConvectionCoeffs(Surface(SurfNum)%IntConvCoeff)%OverrideType)
 
@@ -4968,11 +4968,11 @@ SUBROUTINE CalcISO15099WindowIntConvCoeff(SurfNum,SurfaceTemperature,AirTemperat
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)     :: SurfNum ! surface number for which coefficients are being calculated
-  REAL(r64), INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
-  REAL(r64), INTENT(IN)   :: AirTemperature  ! Mean Air Temperature of Zone (or adjacent air temperature)
+  REAL, INTENT(IN)   :: SurfaceTemperature ! Temperature of surface for evaluation of HcIn
+  REAL, INTENT(IN)   :: AirTemperature  ! Mean Air Temperature of Zone (or adjacent air temperature)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: OneThird = (1.d0/3.d0)  ! 1/3 in highest precision
+  REAL, PARAMETER :: OneThird = (1./3.)  ! 1/3 in highest precision
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4981,34 +4981,34 @@ SUBROUTINE CalcISO15099WindowIntConvCoeff(SurfNum,SurfaceTemperature,AirTemperat
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: DeltaTemp          ! Temperature difference between the zone air and the surface
-  REAL(r64)  :: TmeanFilm  ! mean film temperature
-  REAL(r64)  :: TmeanFilmKelvin !  mean film temperature for property evaluation
-  REAL(r64)  :: rho     ! density of air [kg/m3]
-  REAL(r64)  :: g       ! acceleration due to gravity [m/s2]
-  REAL(r64)  :: Height  ! window cavity height [m]
-  REAL(r64)  :: Cp      ! specific heat of air [J/kg-K]
-  REAL(r64)  :: lambda  ! thermal conductivity of air [W/m-K]
-  REAL(r64)  :: mu      ! dynamic viscosity of air [kg/m-s]
-  REAL(r64)  :: RaH     ! Rayleigh number for cavity height [ Non dim]
-  REAL(r64)  :: RaCV    ! Rayleigh number for slanted cavity
-  REAL(r64)  :: tiltDeg ! glazing tilt in degrees
-  REAL(r64)  :: sineTilt ! sine of glazing tilt
-  REAL(r64)  :: Nuint    ! Nusselt number for interior surface convection
-  REAL(r64)  :: SurfTempKelvin ! surface temperature in Kelvin
-  REAL(r64)  :: AirTempKelvin  ! air temperature in Kelvin
-  REAL(r64)  :: AirHumRat  ! air humidity ratio
+  REAL  :: DeltaTemp          ! Temperature difference between the zone air and the surface
+  REAL  :: TmeanFilm  ! mean film temperature
+  REAL  :: TmeanFilmKelvin !  mean film temperature for property evaluation
+  REAL  :: rho     ! density of air [kg/m3]
+  REAL  :: g       ! acceleration due to gravity [m/s2]
+  REAL  :: Height  ! window cavity height [m]
+  REAL  :: Cp      ! specific heat of air [J/kg-K]
+  REAL  :: lambda  ! thermal conductivity of air [W/m-K]
+  REAL  :: mu      ! dynamic viscosity of air [kg/m-s]
+  REAL  :: RaH     ! Rayleigh number for cavity height [ Non dim]
+  REAL  :: RaCV    ! Rayleigh number for slanted cavity
+  REAL  :: tiltDeg ! glazing tilt in degrees
+  REAL  :: sineTilt ! sine of glazing tilt
+  REAL  :: Nuint    ! Nusselt number for interior surface convection
+  REAL  :: SurfTempKelvin ! surface temperature in Kelvin
+  REAL  :: AirTempKelvin  ! air temperature in Kelvin
+  REAL  :: AirHumRat  ! air humidity ratio
 
-  SurfTempKelvin = SurfaceTemperature +  273.15D0
-  AirTempKelvin  = AirTemperature     + 273.15D0
+  SurfTempKelvin = SurfaceTemperature +  273.15
+  AirTempKelvin  = AirTemperature     + 273.15
   DeltaTemp      = SurfaceTemperature - AirTemperature
 
   ! protect against wildly out of range temperatures
-  IF ((AirTempKelvin < 200.0D0) .OR. (AirTempKelvin > 400.0D0)) THEN ! out of range
+  IF ((AirTempKelvin < 200.0) .OR. (AirTempKelvin > 400.0)) THEN ! out of range
     HConvIn(SurfNum) = LowHConvLimit
     RETURN
   ENDIF
-  IF ((SurfTempKelvin < 180.0D0) .OR. (SurfTempKelvin > 450.0D0)) THEN ! out of range
+  IF ((SurfTempKelvin < 180.0) .OR. (SurfTempKelvin > 450.0)) THEN ! out of range
     HConvIn(SurfNum) = LowHConvLimit
     RETURN
   ENDIF
@@ -5021,11 +5021,11 @@ SUBROUTINE CalcISO15099WindowIntConvCoeff(SurfNum,SurfaceTemperature,AirTemperat
   ENDIF
 
   ! mean film temperature
-  TmeanFilmKelvin = AirTempKelvin + 0.25D0*(SurfTempKelvin - AirTempKelvin) ! eq. 133 in ISO 15099
-  TmeanFilm = TmeanFilmKelvin - 273.15D0
+  TmeanFilmKelvin = AirTempKelvin + 0.25*(SurfTempKelvin - AirTempKelvin) ! eq. 133 in ISO 15099
+  TmeanFilm = TmeanFilmKelvin - 273.15
 
   rho    = PsyRhoAirFnPbTdbW(OutBaroPress, TmeanFilm, AirHumRat, 'WindowTempsForNominalCond')
-  g      = 9.81D0
+  g      = 9.81
   Height = Surface(SurfNum)%Height
 
   ! the following properties are probably for dry air, should maybe be remade for moist-air
@@ -5038,46 +5038,46 @@ SUBROUTINE CalcISO15099WindowIntConvCoeff(SurfNum,SurfaceTemperature,AirTemperat
   sineTilt=Surface(SurfNum)%SinTilt
 
   ! four cases depending on tilt and DeltaTemp (heat flow direction )
-  If (DeltaTemp > 0.0 ) TiltDeg = 180.0D0 - TiltDeg ! complement angle if cooling situation
+  If (DeltaTemp > 0.0 ) TiltDeg = 180.0 - TiltDeg ! complement angle if cooling situation
 
-  RaH = ( rho**2.0D0 * Height**3.0D0 * g * Cp *(ABS(SurfTempKelvin-AirTempKelvin) ) ) &
+  RaH = ( rho**2.0 * Height**3.0 * g * Cp *(ABS(SurfTempKelvin-AirTempKelvin) ) ) &
            / (TmeanFilmKelvin * mu * lambda) ! eq 132 in ISO 15099
 
   ! case a)
-  IF ( (0.0D0 <= TiltDeg) .AND. (TiltDeg  < 15.0D0) ) THEN
+  IF ( (0.0 <= TiltDeg) .AND. (TiltDeg  < 15.0) ) THEN
 
-    Nuint =  0.13d0*(RaH)**OneThird
+    Nuint =  0.13*(RaH)**OneThird
 
   ! case b)
-  ELSEIF ( (15.0D0 <= TiltDeg) .AND. (TiltDeg  <= 90.0D0) ) THEN
+  ELSEIF ( (15.0 <= TiltDeg) .AND. (TiltDeg  <= 90.0) ) THEN
 
-    RaCV = 2.5D+5 * ( EXP(0.72d0*TiltDeg) / sineTilt)**0.2D0 ! eq. 137
+    RaCV = 2.5D+5 * ( EXP(0.72*TiltDeg) / sineTilt)**0.2 ! eq. 137
 
     IF (RaH <= RaCV) Then
-      Nuint = 0.56D0*(RaH * sineTilt)**0.25  ! eq. 135 in ISO 15099
+      Nuint = 0.56*(RaH * sineTilt)**0.25  ! eq. 135 in ISO 15099
     ELSE
-      Nuint = 0.13D0 * (RaH**OneThird - RaCV**OneThird) &
-              + 0.56D0 * (RaCV * sineTilt )**0.25D0 ! eq. 136 in ISO 15099
+      Nuint = 0.13 * (RaH**OneThird - RaCV**OneThird) &
+              + 0.56 * (RaCV * sineTilt )**0.25 ! eq. 136 in ISO 15099
     ENDIF
 
   !case c)
-  ELSEIF  ( (90.0D0 < TiltDeg) .AND. (TiltDeg  <= 179.0D0) ) THEN
+  ELSEIF  ( (90.0 < TiltDeg) .AND. (TiltDeg  <= 179.0) ) THEN
     ! bound by applicability
     IF (RaH * sineTilt < 1.0D+5) THEN
-      Nuint = 0.56D0*(1.0D+5)**0.25 ! bounded
+      Nuint = 0.56*(1.0D+5)**0.25 ! bounded
     ElseIF (RaH * sineTilt >= 1.0D+11 ) THEN
-      Nuint = 0.56D0*(1.0D+11)**0.25 ! bounded
+      Nuint = 0.56*(1.0D+11)**0.25 ! bounded
     Else
-      Nuint = 0.56D0*(RaH * sineTilt)**0.25 ! eq.. 138
+      Nuint = 0.56*(RaH * sineTilt)**0.25 ! eq.. 138
     ENDIF
 
   ! case d)
-  ELSEIF  ( (179.0D0 < TiltDeg) .AND. (TiltDeg  <= 180.0D0) ) THEN
+  ELSEIF  ( (179.0 < TiltDeg) .AND. (TiltDeg  <= 180.0) ) THEN
 
     IF (RaH > 1.0D+11) THEN
-      Nuint = 0.58d0*1D+11**0.2D0  ! bounded
+      Nuint = 0.58*1D+11**0.2  ! bounded
     ELSE
-      Nuint = 0.58d0*RaH**0.2D0
+      Nuint = 0.58*RaH**0.2
     ENDIF
 
   ENDIF
@@ -5131,17 +5131,17 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
 
 
   TYPE FacadeGeoCharactisticsStruct
-    REAL(r64) :: AzimuthRangeLow
-    REAL(r64) :: AzimuthRangeHi
-    REAL(r64) :: Zmax
-    REAL(r64) :: Zmin
-    REAL(r64) :: Ymax
-    REAL(r64) :: Ymin
-    REAL(r64) :: Xmax
-    REAL(r64) :: Xmin
-    REAL(r64) :: Area
-    REAL(r64) :: Perimeter
-    REAL(r64) :: Height
+    REAL :: AzimuthRangeLow
+    REAL :: AzimuthRangeHi
+    REAL :: Zmax
+    REAL :: Zmin
+    REAL :: Ymax
+    REAL :: Ymin
+    REAL :: Xmax
+    REAL :: Xmin
+    REAL :: Area
+    REAL :: Perimeter
+    REAL :: Height
   END TYPE FacadeGeoCharactisticsStruct
 
 
@@ -5150,79 +5150,79 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
   INTEGER :: ZoneLoop !
   INTEGER :: SurfLoop !
   INTEGER :: VertLoop
-!  REAL(r64) :: thisZoneHeight
-  REAL(r64) :: BldgVolumeSum
-  REAL(r64) :: PerimExtLengthSum
+!  REAL :: thisZoneHeight
+  REAL :: BldgVolumeSum
+  REAL :: PerimExtLengthSum
 
-  REAL(r64) :: thisWWR
-  REAL(r64) :: thisZoneSimplePerim
-  REAL(r64) :: thisZoneHorizHydralicDiameter
+  REAL :: thisWWR
+  REAL :: thisZoneSimplePerim
+  REAL :: thisZoneHorizHydralicDiameter
   INTEGER   :: ExtWallCount
   INTEGER   :: ExtWindowCount
-  REAL(r64) :: thisAzimuth
-  REAL(r64) :: thisArea
+  REAL :: thisAzimuth
+  REAL :: thisArea
   INTEGER   :: thisZone
-  REAL(r64), DIMENSION(8)    :: RoofBoundZvals
-  REAL(r64), DIMENSION(4)    :: TestDist
+  REAL, DIMENSION(8)    :: RoofBoundZvals
+  REAL, DIMENSION(4)    :: TestDist
 !  TYPE(vector), DIMENSION(4) :: BoundSurf
   Type(vector)               :: BoundNewellVec
   Type(vector)               :: BoundNewellAreaVec
-  REAL(r64)                  :: surfacearea
-  REAL(r64)                  :: BoundTilt
-  REAL(r64)                  :: BoundAzimuth
+  REAL                  :: surfacearea
+  REAL                  :: BoundTilt
+  REAL                  :: BoundAzimuth
   Type(vector)               :: dummy1
   Type(vector)               :: dummy2
   Type(vector)               :: dummy3
   LOGICAL DoReport
-  REAL(r64) :: SideALength
-  REAL(r64) :: SideBLength
-  REAL(r64) :: SideCLength
-  REAL(r64) :: SideDLength
+  REAL :: SideALength
+  REAL :: SideBLength
+  REAL :: SideCLength
+  REAL :: SideDLength
   CHARACTER(len=3) :: YesNo1
   CHARACTER(len=3) :: YesNo2
 
   TYPE(FacadeGeoCharactisticsStruct) ::  NorthFacade = &
-       FacadeGeoCharactisticsStruct(332.5d0, 22.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(332.5, 22.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  NorthEastFacade = &
-       FacadeGeoCharactisticsStruct(22.5d0, 67.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(22.5, 67.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  EastFacade = &
-       FacadeGeoCharactisticsStruct(67.5d0, 112.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(67.5, 112.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  SouthEastFacade = &
-       FacadeGeoCharactisticsStruct(112.5d0, 157.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(112.5, 157.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  SouthFacade = &
-       FacadeGeoCharactisticsStruct(157.5d0, 202.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(157.5, 202.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  SouthWestFacade = &
-       FacadeGeoCharactisticsStruct(202.5d0, 247.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(202.5, 247.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  WestFacade = &
-       FacadeGeoCharactisticsStruct(247.5d0, 287.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(247.5, 287.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
   TYPE(FacadeGeoCharactisticsStruct) ::  NorthWestFacade = &
-       FacadeGeoCharactisticsStruct(287.5d0, 332.5d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0, 0.d0 )
+       FacadeGeoCharactisticsStruct(287.5, 332.5, 0., 0., 0., 0., 0., 0., 0., 0., 0. )
 
 
 
-  BldgVolumeSum = 0.d0
-  RoofBoundZVals=0.0d0
+  BldgVolumeSum = 0.
+  RoofBoundZVals=0.0
   DO ZoneLoop=1, NumOfZones
 
     BldgVolumeSum = BldgVolumeSum + Zone(ZoneLoop)%Volume*Zone(ZoneLoop)%Multiplier*Zone(ZoneLoop)%ListMultiplier
-    PerimExtLengthSum   = 0.d0 ! init
+    PerimExtLengthSum   = 0. ! init
     ExtWallCount        = 0    ! init
     ExtWindowCount      = 0    ! init
     !model perimeter of bounding horizontal rectangle from max and min x and y values
-    thisZoneSimplePerim =  2.d0 * (Zone(ZoneLoop)%MaximumY - Zone(ZoneLoop)%MinimumY) &
-                         + 2.d0 * (Zone(ZoneLoop)%MaximumX - Zone(ZoneLoop)%MinimumX)
-    IF (thisZoneSimplePerim > 0.d0) THEN
-      thisZoneHorizHydralicDiameter = 4.d0*Zone(ZoneLoop)%FloorArea / thisZoneSimplePerim
+    thisZoneSimplePerim =  2. * (Zone(ZoneLoop)%MaximumY - Zone(ZoneLoop)%MinimumY) &
+                         + 2. * (Zone(ZoneLoop)%MaximumX - Zone(ZoneLoop)%MinimumX)
+    IF (thisZoneSimplePerim > 0.) THEN
+      thisZoneHorizHydralicDiameter = 4.*Zone(ZoneLoop)%FloorArea / thisZoneSimplePerim
     ELSE
-      IF (Zone(ZoneLoop)%FloorArea > 0.d0) THEN
+      IF (Zone(ZoneLoop)%FloorArea > 0.) THEN
         thisZoneHorizHydralicDiameter = SQRT(Zone(ZoneLoop)%FloorArea)
       ENDIF
     ENDIF
 
-    IF (Zone(ZoneLoop)%ExtGrossWallArea > 0.d0 ) THEN
+    IF (Zone(ZoneLoop)%ExtGrossWallArea > 0. ) THEN
      thisWWR = Zone(ZoneLoop)%ExtWindowArea / Zone(ZoneLoop)%ExtGrossWallArea
     ELSE
-     thisWWR = -999.d0  !throw error?
+     thisWWR = -999.  !throw error?
     ENDIF
     ! first pass thru this zones surfaces to gather data
     DO SurfLoop = Zone(ZoneLoop)%SurfaceFirst, Zone(ZoneLoop)%SurfaceLast
@@ -5254,7 +5254,7 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
         IF (  ( Surface(SurfLoop)%ExtBoundCond == ExternalEnvironment) &
            .AND. ((Surface(SurfLoop)%Class == SurfaceClass_Window)     &
                .OR. (Surface(SurfLoop)%Class ==  SurfaceClass_GlassDoor) )) THEN
-          IF (Surface(SurfLoop)%IntConvWindowWallRatio < 0.5d0) THEN
+          IF (Surface(SurfLoop)%IntConvWindowWallRatio < 0.5) THEN
             IF (Surface(SurfLoop)%Centroid%Z < Zone(ZoneLoop)%Centroid%Z) THEN
               Surface(SurfLoop)%IntConvWindowLocation = InConvWinLoc_LowerPartOfExteriorWall
             ELSE
@@ -5296,7 +5296,7 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
     thisAzimuth = Surface(SurfLoop)%Azimuth
     thisArea    = Surface(SurfLoop)%Area
     thisZone    = Surface(SurfLoop)%Zone
-    IF ((Surface(SurfLoop)%Tilt >= 45.d0) .AND. (Surface(SurfLoop)%Tilt < 135.d0) ) THEN
+    IF ((Surface(SurfLoop)%Tilt >= 45.) .AND. (Surface(SurfLoop)%Tilt < 135.) ) THEN
      !treat as vertical wall
       IF ((thisAzimuth >= NorthFacade%AzimuthRangeLow) .OR. &
           (thisAzimuth < NorthFacade%AzimuthRangeHi)) THEN
@@ -5378,7 +5378,7 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
         NorthWestFacade%Xmin = MIN(MINVAL(Surface(SurfLoop)%Vertex(1:Surface(SurfLoop)%Sides)%x),  NorthWestFacade%Xmin)
 
       ENDIF
-    ELSEIF (Surface(SurfLoop)%Tilt < 45.0d0) THEN !TODO Double check tilt wrt outside vs inside
+    ELSEIF (Surface(SurfLoop)%Tilt < 45.0) THEN !TODO Double check tilt wrt outside vs inside
 
       IF (FirstRoofSurf) THEN !Init with something in the group
         RoofGeo%XdYdZd%SurfNum = SurfLoop
@@ -5511,44 +5511,44 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
     ENDIF
   ENDDO ! fist loop over surfaces for outside face params
 
-  NorthFacade%Perimeter     = 2.d0 * (((NorthFacade%Xmax - NorthFacade%Xmin)**2   &
-                                     + (NorthFacade%Ymax - NorthFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (NorthFacade%Zmax - NorthFacade%Zmin)
+  NorthFacade%Perimeter     = 2. * (((NorthFacade%Xmax - NorthFacade%Xmin)**2   &
+                                     + (NorthFacade%Ymax - NorthFacade%Ymin)**2)**0.5) + &
+                              2. *   (NorthFacade%Zmax - NorthFacade%Zmin)
   NorthFacade%Height        = NorthFacade%Zmax - NorthFacade%Zmin
 
-  NorthEastFacade%Perimeter = 2.d0 * (((NorthEastFacade%Xmax - NorthEastFacade%Xmin)**2   &
-                                     + (NorthEastFacade%Ymax - NorthEastFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (NorthEastFacade%Zmax - NorthEastFacade%Zmin)
+  NorthEastFacade%Perimeter = 2. * (((NorthEastFacade%Xmax - NorthEastFacade%Xmin)**2   &
+                                     + (NorthEastFacade%Ymax - NorthEastFacade%Ymin)**2)**0.5) + &
+                              2. *   (NorthEastFacade%Zmax - NorthEastFacade%Zmin)
   NorthEastFacade%Height    = NorthEastFacade%Zmax - NorthEastFacade%Zmin
 
-  EastFacade%Perimeter      = 2.d0 * (((EastFacade%Xmax - EastFacade%Xmin)**2   &
-                                     + (EastFacade%Ymax - EastFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (EastFacade%Zmax - EastFacade%Zmin)
+  EastFacade%Perimeter      = 2. * (((EastFacade%Xmax - EastFacade%Xmin)**2   &
+                                     + (EastFacade%Ymax - EastFacade%Ymin)**2)**0.5) + &
+                              2. *   (EastFacade%Zmax - EastFacade%Zmin)
   EastFacade%Height         = EastFacade%Zmax - EastFacade%Zmin
 
-  SouthEastFacade%Perimeter = 2.d0 * (((SouthEastFacade%Xmax - SouthEastFacade%Xmin)**2   &
-                                     + (SouthEastFacade%Ymax - SouthEastFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (SouthEastFacade%Zmax - SouthEastFacade%Zmin)
+  SouthEastFacade%Perimeter = 2. * (((SouthEastFacade%Xmax - SouthEastFacade%Xmin)**2   &
+                                     + (SouthEastFacade%Ymax - SouthEastFacade%Ymin)**2)**0.5) + &
+                              2. *   (SouthEastFacade%Zmax - SouthEastFacade%Zmin)
   SouthEastFacade%Height    = SouthEastFacade%Zmax - SouthEastFacade%Zmin
 
-  SouthFacade%Perimeter     = 2.d0 * (((SouthFacade%Xmax - SouthFacade%Xmin)**2   &
-                                     + (SouthFacade%Ymax - SouthFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (SouthFacade%Zmax - SouthFacade%Zmin)
+  SouthFacade%Perimeter     = 2. * (((SouthFacade%Xmax - SouthFacade%Xmin)**2   &
+                                     + (SouthFacade%Ymax - SouthFacade%Ymin)**2)**0.5) + &
+                              2. *   (SouthFacade%Zmax - SouthFacade%Zmin)
   SouthFacade%Height        = SouthFacade%Zmax - SouthFacade%Zmin
 
-  SouthWestFacade%Perimeter = 2.d0 * (((SouthWestFacade%Xmax - SouthWestFacade%Xmin)**2   &
-                                     + (SouthWestFacade%Ymax - SouthWestFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (SouthWestFacade%Zmax - SouthWestFacade%Zmin)
+  SouthWestFacade%Perimeter = 2. * (((SouthWestFacade%Xmax - SouthWestFacade%Xmin)**2   &
+                                     + (SouthWestFacade%Ymax - SouthWestFacade%Ymin)**2)**0.5) + &
+                              2. *   (SouthWestFacade%Zmax - SouthWestFacade%Zmin)
   SouthWestFacade%Height    = SouthWestFacade%Zmax - SouthWestFacade%Zmin
 
-  WestFacade%Perimeter      = 2.d0 * (((WestFacade%Xmax - WestFacade%Xmin)**2   &
-                                     + (WestFacade%Ymax - WestFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (WestFacade%Zmax - WestFacade%Zmin)
+  WestFacade%Perimeter      = 2. * (((WestFacade%Xmax - WestFacade%Xmin)**2   &
+                                     + (WestFacade%Ymax - WestFacade%Ymin)**2)**0.5) + &
+                              2. *   (WestFacade%Zmax - WestFacade%Zmin)
   WestFacade%Height         = WestFacade%Zmax - WestFacade%Zmin
 
-  NorthWestFacade%Perimeter = 2.d0 * (((NorthWestFacade%Xmax - NorthWestFacade%Xmin)**2   &
-                                     + (NorthWestFacade%Ymax - NorthWestFacade%Ymin)**2)**0.5d0) + &
-                              2.d0 *   (NorthWestFacade%Zmax - NorthWestFacade%Zmin)
+  NorthWestFacade%Perimeter = 2. * (((NorthWestFacade%Xmax - NorthWestFacade%Xmin)**2   &
+                                     + (NorthWestFacade%Ymax - NorthWestFacade%Ymin)**2)**0.5) + &
+                              2. *   (NorthWestFacade%Zmax - NorthWestFacade%Zmin)
   NorthWestFacade%Height    = NorthWestFacade%Zmax - NorthWestFacade%Zmin
 
 
@@ -5624,20 +5624,20 @@ SUBROUTINE SetupAdaptiveConvectionStaticMetaData
 
   CALL CreateNewellAreaVector(RoofGeo%BoundSurf, 4, BoundNewellAreaVec)
   surfacearea=VecLength(BoundNewellAreaVec)
-  IF (surfacearea > .001d0) THEN  ! Roof is not flat
+  IF (surfacearea > .001) THEN  ! Roof is not flat
     CALL CreateNewellSurfaceNormalVector(RoofGeo%BoundSurf, 4, BoundNewellVec)
     CALL DetermineAzimuthAndTilt(RoofGeo%BoundSurf, 4, BoundAzimuth, BoundTilt, dummy1, dummy2, dummy3,   &
        surfacearea, BoundNewellVec)
     RoofLongAxisOutwardAzimuth = BoundAzimuth
   ELSE
-    RoofLongAxisOutwardAzimuth = 0.0d0  ! flat roofs don't really have azimuth
+    RoofLongAxisOutwardAzimuth = 0.0  ! flat roofs don't really have azimuth
   ENDIF
 
   DO SurfLoop=1, TotSurfaces
     IF (Surface(SurfLoop)%ExtBoundCond /= ExternalEnvironment) CYCLE
     IF (.NOT. Surface(SurfLoop)%HeatTransSurf) CYCLE
     thisAzimuth = Surface(SurfLoop)%Azimuth
-    IF ((Surface(SurfLoop)%Tilt >= 45.d0) .AND. (Surface(SurfLoop)%Tilt < 135.d0) ) THEN
+    IF ((Surface(SurfLoop)%Tilt >= 45.) .AND. (Surface(SurfLoop)%Tilt < 135.) ) THEN
      !treat as vertical wall
       IF ((thisAzimuth >= NorthFacade%AzimuthRangeLow) .OR. &
           (thisAzimuth < NorthFacade%AzimuthRangeHi)) THEN
@@ -5940,21 +5940,21 @@ SUBROUTINE SetupAdaptiveConvectionRadiantSurfaceData
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: ActiveWallCount    = 0
-  REAL(r64) :: ActiveWallArea     = 0.d0
+  REAL :: ActiveWallArea     = 0.
   INTEGER   :: ActiveCeilingCount = 0
-  Real(r64) :: ActiveCeilingArea  = 0.d0
+  REAL :: ActiveCeilingArea  = 0.
   INTEGER   :: ActiveFloorCount   = 0
-  REAL(r64) :: ActiveFloorArea    = 0.d0
+  REAL :: ActiveFloorArea    = 0.
   INTEGER   :: ZoneLoop
   INTEGER   :: SurfLoop
 
   DO ZoneLoop=1, NumOfZones
     ActiveWallCount    = 0
-    ActiveWallArea     = 0.d0
+    ActiveWallArea     = 0.
     ActiveCeilingCount = 0
-    ActiveCeilingArea  = 0.d0
+    ActiveCeilingArea  = 0.
     ActiveFloorCount   = 0
-    ActiveFloorArea    = 0.d0
+    ActiveFloorArea    = 0.
 
     DO SurfLoop = Zone(ZoneLoop)%SurfaceFirst, Zone(ZoneLoop)%SurfaceLast
       IF (.NOT. Surface(SurfLoop)%IntConvSurfHasActiveInIt) CYCLE
@@ -5971,10 +5971,10 @@ SUBROUTINE SetupAdaptiveConvectionRadiantSurfaceData
       ENDIF
     ENDDO ! surface loop
 
-    IF ((ActiveWallCount > 0) .AND. (ActiveWallArea > 0.d0 )) THEN
+    IF ((ActiveWallCount > 0) .AND. (ActiveWallArea > 0. )) THEN
       ZoneEquipConfig(ZoneLoop)%InWallActiveElement    = .TRUE.
     ENDIF
-    IF ((ActiveCeilingCount > 0) .AND. (ActiveCeilingArea > 0.d0)) THEN
+    IF ((ActiveCeilingCount > 0) .AND. (ActiveCeilingArea > 0.)) THEN
       ZoneEquipConfig(ZoneLoop)%InCeilingActiveElement = .TRUE.
     ENDIF
     IF (( ActiveFloorCount > 0) .AND. (ActiveFloorArea > 0)) THEN
@@ -6065,7 +6065,7 @@ SUBROUTINE ManageOutsideAdaptiveConvectionAlgo(SurfNum, Hc)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)     :: SurfNum ! surface number for which coefficients are being calculated
-  REAL(r64), INTENT(OUT)  :: Hc  !  result for Hc Outside face, becomes HExt.
+  REAL, INTENT(OUT)  :: Hc  !  result for Hc Outside face, becomes HExt.
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -6124,7 +6124,7 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)  :: SurfNum
   INTEGER,   INTENT(IN)  :: ConvModelEquationNum
-  REAL(R64), INTENT(OUT) :: Hc  ! calculated Hc value
+  REAL, INTENT(OUT) :: Hc  ! calculated Hc value
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -6136,19 +6136,19 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)    :: SupplyAirTemp
-  REAL(r64)    :: AirChangeRate
+  REAL    :: SupplyAirTemp
+  REAL    :: AirChangeRate
   INTEGER      :: ZoneNum  ! zone associated with inside face of surface
   INTEGER      :: ZoneNode ! the system node for the zone, node index
   INTEGER      :: EquipNum
-  REAL(r64)    :: SumMdotTemp
-  REAL(r64)    :: SumMdot
-  REAL(r64)    :: AirDensity
-  REAL(r64)    :: AirSystemVolFlowRate
+  REAL    :: SumMdotTemp
+  REAL    :: SumMdot
+  REAL    :: AirDensity
+  REAL    :: AirSystemVolFlowRate
   INTEGER      :: thisZoneInletNode
-  REAL(r64)    :: tmpHc
-  REAL(r64)    :: ZoneMult  ! local product of zone multiplier and zonelist multipler
-  tmpHc = 0.d0
+  REAL    :: tmpHc
+  REAL    :: ZoneMult  ! local product of zone multiplier and zonelist multipler
+  tmpHc = 0.
 !now call appropriate function to calculate Hc
   SELECT CASE (ConvModelEquationNum)
 
@@ -6175,7 +6175,7 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
     AirChangeRate = MIN(AirChangeRate, MaxACH)
-    AirChangeRate = MAX(AirChangeRate, 0.0d0)
+    AirChangeRate = MAX(AirChangeRate, 0.0)
     tmpHc = CalcFisherPedersenCeilDiffuserFloor(AirChangeRate)
     Surface(SurfNum)%TAirRef = ZoneSupplyAirTemp
   CASE(HcInt_FisherPedersenCeilDiffuserCeiling)
@@ -6185,7 +6185,7 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
     AirChangeRate = MIN(AirChangeRate, MaxACH)
-    AirChangeRate = MAX(AirChangeRate, 0.0d0)
+    AirChangeRate = MAX(AirChangeRate, 0.0)
     tmpHc = CalcFisherPedersenCeilDiffuserCeiling(AirChangeRate)
     Surface(SurfNum)%TAirRef = ZoneSupplyAirTemp
   CASE(HcInt_FisherPedersenCeilDiffuserWalls)
@@ -6195,7 +6195,7 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
     AirChangeRate = MIN(AirChangeRate, MaxACH)
-    AirChangeRate = MAX(AirChangeRate, 0.0d0)
+    AirChangeRate = MAX(AirChangeRate, 0.0)
     tmpHc = CalcFisherPedersenCeilDiffuserWalls(AirChangeRate)
     Surface(SurfNum)%TAirRef = ZoneSupplyAirTemp
   CASE(HcInt_AlamdariHammondStableHorizontal)
@@ -6249,18 +6249,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6281,18 +6281,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume* ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6315,18 +6315,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6348,18 +6348,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6381,18 +6381,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume * ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6414,18 +6414,18 @@ SUBROUTINE EvaluateIntHcModels(SurfNum, ConvModelEquationNum, Hc)
     ZoneMult = Zone(ZoneNum)%Multiplier * Zone(ZoneNum)%ListMultiplier
     AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
     AirChangeRate = (Node(ZoneNode)%MassFlowRate * SecInHour)/ (AirDensity * Zone(ZoneNum)%Volume  * ZoneMult)
-    SumMdotTemp = 0.d0
-    SumMdot     = 0.d0
+    SumMdotTemp = 0.
+    SumMdot     = 0.
     DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
       IF (ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%NumOutlets > 0) THEN
         thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+        IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
           SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           SumMdot     = SumMdot     + Node(thisZoneInletNode)%MassFlowRate
         ENDIF
       ENDIF
     ENDDO
-    IF (SumMdot > 0.d0) THEN
+    IF (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ELSE
       IF (thisZoneInletNode > 0) THEN
@@ -6526,7 +6526,7 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
   INTEGER, INTENT(IN) :: SurfNum
   INTEGER, INTENT(IN) :: NaturalConvModelEqNum
   INTEGER, INTENT(IN) :: ForcedConvModelEqNum
-  REAL(r64), INTENT(OUT) :: Hc
+  REAL, INTENT(OUT) :: Hc
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6538,17 +6538,17 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(R64) :: Hf = 0.d0 ! the forced, or wind driven portion of film coefficient
-  REAL(R64) :: Hn = 0.d0 ! the natural, or bouyancy driven portion of film coefficient
+  REAL :: Hf = 0. ! the forced, or wind driven portion of film coefficient
+  REAL :: Hn = 0. ! the natural, or bouyancy driven portion of film coefficient
   INTEGER   :: ConstructNum
-  REAL(r64) :: SurfWindSpeed
-  REAL(r64) :: HydraulicDiameter
+  REAL :: SurfWindSpeed
+  REAL :: HydraulicDiameter
 
   ! first call Hn models
   SELECT CASE (NaturalConvModelEqNum)
 
   CASE (HcExt_None)
-    Hn = 0.d0
+    Hn = 0.
   CASE (HcExt_UserCurve)
 
    CALL CalcUserDefinedOutsideHcModel(SurfNum, Surface(SurfNum)%OutConvHnUserCurveIndex, Hn)
@@ -6573,16 +6573,16 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
 !  CASE (HcExt_ISO15099Windows)
 
   CASE (HcExt_AlamdariHammondStableHorizontal)
-    IF (Surface(SurfNum)%OutConvFacePerimeter > 0.d0) THEN
-      HydraulicDiameter = 4.d0 * Surface(SurfNum)%OutConvFaceArea / Surface(SurfNum)%OutConvFacePerimeter
+    IF (Surface(SurfNum)%OutConvFacePerimeter > 0.) THEN
+      HydraulicDiameter = 4. * Surface(SurfNum)%OutConvFaceArea / Surface(SurfNum)%OutConvFacePerimeter
     ELSE
       HydraulicDiameter = SQRT(Surface(SurfNum)%OutConvFaceArea)
     ENDIF
     Hn = CalcAlamdariHammondStableHorizontal((TH(SurfNum, 1, 1) - Surface(SurfNum)%OutDryBulbTemp), &
                                                HydraulicDiameter )
   CASE (HcExt_AlamdariHammondUnstableHorizontal)
-    IF (Surface(SurfNum)%OutConvFacePerimeter > 0.d0) THEN
-      HydraulicDiameter = 4.d0 * Surface(SurfNum)%OutConvFaceArea / Surface(SurfNum)%OutConvFacePerimeter
+    IF (Surface(SurfNum)%OutConvFacePerimeter > 0.) THEN
+      HydraulicDiameter = 4. * Surface(SurfNum)%OutConvFaceArea / Surface(SurfNum)%OutConvFacePerimeter
     ELSE
       HydraulicDiameter = SQRT(Surface(SurfNum)%OutConvFaceArea)
     ENDIF
@@ -6594,15 +6594,15 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
   SELECT CASE (ForcedConvModelEqNum)
 
   CASE (HcExt_None)
-    Hf = 0.d0
+    Hf = 0.
   CASE (HcExt_UserCurve)
    Call CalcUserDefinedOutsideHcModel(SurfNum, Surface(SurfNum)%OutConvHfUserCurveIndex, Hf)
   CASE (HcExt_SparrowWindward)
     ConstructNum = Surface(SurfNum)%Construction
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6614,9 +6614,9 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
   CASE (HcExt_SparrowLeeward)
     ConstructNum = Surface(SurfNum)%Construction
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6626,18 +6626,18 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
                              SurfWindSpeed )
   CASE (HcExt_MoWiTTWindward)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
     Hf = CalcMoWITTWindward( TH(SurfNum, 1, 1) - Surface(SurfNum)%OutDryBulbTemp, SurfWindSpeed)
   CASE (HcExt_MoWiTTLeeward)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6645,9 +6645,9 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
   CASE (HcExt_DOE2Windward)
     ConstructNum = Surface(SurfNum)%Construction
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6657,9 +6657,9 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
   CASE (HcExt_DOE2Leeward)
     ConstructNum = Surface(SurfNum)%Construction
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6668,9 +6668,9 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
                           Material(Construct(ConstructNum)%LayerPoint(1))%Roughness)
   CASE (HcExt_NusseltJurges)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6678,18 +6678,18 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
 
   CASE (HcExt_McAdams)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
     Hf = CalcMcAdams(SurfWindSpeed)
   CASE (HcExt_Mitchell)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6697,9 +6697,9 @@ SUBROUTINE EvaluateExtHcModels(SurfNum, NaturalConvModelEqNum, ForcedConvModelEq
 
   CASE (HcExt_ClearRoof)
     IF (.NOT. Surface(SurfNum)%ExtWind) THEN
-      SurfWindSpeed = 0.d0  ! No wind exposure
+      SurfWindSpeed = 0.  ! No wind exposure
     ELSE IF (Surface(SurfNum)%Class == SurfaceClass_Window .AND. SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) THEN
-      SurfWindSpeed = 0.d0  ! Assume zero wind speed at outside glass surface of window with exterior shade
+      SurfWindSpeed = 0.  ! Assume zero wind speed at outside glass surface of window with exterior shade
     ELSE
       SurfWindSpeed = Surface(SurfNum)%WindSpeed
     ENDIF
@@ -6761,13 +6761,13 @@ SUBROUTINE DynamicExtConvSurfaceClassification(SurfNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DeltaTemp = 0.d0
+  REAL :: DeltaTemp = 0.
 
 
 
   IF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
     DeltaTemp = TH(SurfNum, 1, 1) - Surface(SurfNum)%OutDryBulbTemp
-    IF (DeltaTemp < 0.d0) THEN
+    IF (DeltaTemp < 0.) THEN
       Surface(SurfNum)%OutConvClassification = OutConvClass_RoofStable
     ELSE
       Surface(SurfNum)%OutConvClassification = OutConvClass_RoofUnstable
@@ -6905,9 +6905,9 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
   INTEGER, INTENT(IN)            :: SurfNum ! surface number
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: g  = 9.81d0       ! gravity constant (m/s**2)
-  REAL(r64), PARAMETER :: v  = 15.89d-6     ! kinematic viscosity (m**2/s) for air at 300 K
-  REAL(r64), PARAMETER :: ActiveDelTempThreshold = 1.5d0  ! deg C, temperature difference for surfaces to be considered "active"
+  REAL, PARAMETER :: g  = 9.81       ! gravity constant (m/s**2)
+  REAL, PARAMETER :: v  = 15.89d-6     ! kinematic viscosity (m**2/s) for air at 300 K
+  REAL, PARAMETER :: ActiveDelTempThreshold = 1.5  ! deg C, temperature difference for surfaces to be considered "active"
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -6928,13 +6928,13 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
   INTEGER :: thisZoneInletNode = 0
 !  INTEGER :: thisZnEqInletNode = 0
   INTEGER :: FinalFlowRegime = 0
-  REAL(r64) :: Tmin = 0.0d0 ! temporary min surf temp
-  REAL(r64) :: Tmax = 0.0d0 ! temporary max surf temp
-  REAL(r64) :: GrH = 0.d0 ! Grashof number for zone height H
-  REAL(r64) :: Re = 0.d0 ! Reynolds number for zone air system flow
-  REAL(r64) :: Ri = 0.d0 ! Richardson Number, Gr/Re**2 for determining mixed regime
-  REAL(r64) :: AirDensity = 0.d0 ! temporary zone air density
-  REAL(r64) :: DeltaTemp = 0.d0 ! temporary temperature difference (Tsurf - Tair)
+  REAL :: Tmin = 0.0 ! temporary min surf temp
+  REAL :: Tmax = 0.0 ! temporary max surf temp
+  REAL :: GrH = 0. ! Grashof number for zone height H
+  REAL :: Re = 0. ! Reynolds number for zone air system flow
+  REAL :: Ri = 0. ! Richardson Number, Gr/Re**2 for determining mixed regime
+  REAL :: AirDensity = 0. ! temporary zone air density
+  REAL :: DeltaTemp = 0. ! temporary temperature difference (Tsurf - Tair)
   INTEGER   :: SurfLoop  ! local for separate looping across surfaces in the zone that has SurfNum
 
   EquipOnCount = 0
@@ -6960,14 +6960,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
           !get inlet node, not zone node if possible
           thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
           IF (thisZoneInletNode > 0) THEN
-            IF (Node(thisZoneInletNode)%MassFlowRate > 0.d0) THEN
+            IF (Node(thisZoneInletNode)%MassFlowRate > 0.) THEN
               EquipOnCount = MIN(EquipOnCount + 1, 10)
               FlowRegimeStack(EquipOnCount) = InConvFlowRegime_C
               HeatingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%HeatingPriority(EquipNum)
               CoolingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%CoolingPriority(EquipNum)
             ENDIF
           ELSE
-            IF (Node(ZoneNode)%MassFlowRate > 0.d0) THEN
+            IF (Node(ZoneNode)%MassFlowRate > 0.) THEN
               EquipOnCount = MIN(EquipOnCount + 1, 10)
               FlowRegimeStack(EquipOnCount) = InConvFlowRegime_C
               HeatingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%HeatingPriority(EquipNum)
@@ -6980,14 +6980,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
           IF (.NOT. (ALLOCATED( ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums))) CYCLE
           thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
           IF (thisZoneInletNode > 0) THEN
-            IF (Node(thisZoneInletNode)%MassFlowRate > 0.d0) THEN
+            IF (Node(thisZoneInletNode)%MassFlowRate > 0.) THEN
               EquipOnCount = MIN(EquipOnCount + 1, 10)
               FlowRegimeStack(EquipOnCount) = InConvFlowRegime_D
               HeatingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%HeatingPriority(EquipNum)
               CoolingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%CoolingPriority(EquipNum)
             ENDIF
           ELSE
-            IF (Node(ZoneNode)%MassFlowRate > 0.d0) THEN
+            IF (Node(ZoneNode)%MassFlowRate > 0.) THEN
               EquipOnCount = MIN(EquipOnCount + 1, 10)
               FlowRegimeStack(EquipOnCount) = InConvFlowRegime_D
               HeatingPriorityStack(EquipOnCount) = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%HeatingPriority(EquipNum)
@@ -7082,7 +7082,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
 
   ! now select which equipment type is dominant compared to all those that are ON
   IF (EquipOnCount > 0) THEN
-    If (SNLoadPredictedRate(ZoneNum) >= 0.d0 ) Then ! heating load
+    If (SNLoadPredictedRate(ZoneNum) >= 0. ) Then ! heating load
       PriorityEquipOn = 1
       DO EquipOnLoop = 1, EquipOnCount
         !assume highest priority/first sim order is dominant for flow regime
@@ -7090,7 +7090,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
           PriorityEquipOn = EquipOnLoop
         ENDIF
       ENDDO
-    ELSEIF (SNLoadPredictedRate(ZoneNum) < 0.d0) THEN ! cooling load
+    ELSEIF (SNLoadPredictedRate(ZoneNum) < 0.) THEN ! cooling load
       PriorityEquipOn = 1
       DO EquipOnLoop = 1, EquipOnCount
         !assume highest priority/first sim order is dominant for flow regime
@@ -7118,18 +7118,18 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
             /((MAT(ZoneNum) + KelvinConv) * (v**2))
 
     ! Reynolds number = Vdot supply / v * cube root of zone volume (Goldstein and Noveselac 2010)
-    IF (Node(ZoneNode)%MassFlowRate > 0.d0) THEN
+    IF (Node(ZoneNode)%MassFlowRate > 0.) THEN
       AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Node(ZoneNode)%Temp,PsyWFnTdpPb(Node(ZoneNode)%Temp,OutBaroPress))
       Re = Node(ZoneNode)%MassFlowRate /(v *AirDensity *(Zone(ZoneNum)%Volume**OneThird))
     ELSE
-      Re = 0.d0
+      Re = 0.
     ENDIF
 
     Ri = GrH/(Re**2)  !Richardson Number
 
-    IF (Ri > 10.d0 ) Then ! natural convection expected
+    IF (Ri > 10. ) Then ! natural convection expected
       FinalFlowRegime = InConvFlowRegime_A3
-    ELSEIF (Ri < 0.1d0) THEN !forced
+    ELSEIF (Ri < 0.1) THEN !forced
       ! no change, already a forced regime
     ELSE  ! mixed
       FinalFlowRegime = InConvFlowRegime_E
@@ -7145,16 +7145,16 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     IF (Surface(SurfNum)%Class == SurfaceClass_Wall &
        .OR. Surface(SurfNum)%Class == SurfaceClass_Door ) THEN
 
-      IF  ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN !vertical wall
+      IF  ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_VertWalls
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableTilted
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt <= 85.d0 ) THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt <= 85. ) THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableTilted
@@ -7164,22 +7164,22 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
       IF (Surface(SurfNum)%IntConvSurfHasActiveInIt) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_ChilledCeil
-      ELSEIF (Surface(SurfNum)%Tilt < 5.0d0) THEN
-        IF (DeltaTemp <0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt < 5.0) THEN
+        IF (DeltaTemp <0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableHoriz
         Else
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt >= 5.d0) .AND. ((Surface(SurfNum)%Tilt < 95.d0)))THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt >= 5.) .AND. ((Surface(SurfNum)%Tilt < 95.)))THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableTilted
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN  !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN  !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_VertWalls
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableTilted
@@ -7189,14 +7189,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
       IF (Surface(SurfNum)%IntConvSurfHasActiveInIt) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_HeatedFloor
-      ELSEIF (Surface(SurfNum)%Tilt > 175.d0) THEN !floor
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt > 175.) THEN !floor
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableHoriz
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt <= 175.d0) .AND. (Surface(SurfNum)%Tilt >= 95.d0)) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt <= 175.) .AND. (Surface(SurfNum)%Tilt >= 95.)) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableTilted
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableTilted
@@ -7208,7 +7208,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       Surface(SurfNum)%IntConvClassification = InConvClass_A1_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
       ! assume horizontal upwards.
-      IF (DeltaTemp > 0.d0) THEN
+      IF (DeltaTemp > 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_UnstableHoriz
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_A1_StableHoriz
@@ -7227,16 +7227,16 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
 
       IF (Surface(SurfNum)%IntConvSurfHasActiveInIt) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A2_HeatedVerticalWall
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A2_VertWallsNonHeated
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableTilted
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt <= 85.d0 ) THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt <= 85. ) THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableTilted
@@ -7244,22 +7244,22 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
-      IF (Surface(SurfNum)%Tilt < 5.0d0) THEN
-        IF (DeltaTemp <0.d0) THEN
+      IF (Surface(SurfNum)%Tilt < 5.0) THEN
+        IF (DeltaTemp <0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableHoriz
         Else
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt >= 5.d0) .AND. ((Surface(SurfNum)%Tilt < 95.d0)))THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt >= 5.) .AND. ((Surface(SurfNum)%Tilt < 95.)))THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableTilted
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN  !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN  !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A2_VertWallsNonHeated
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableTilted
@@ -7267,14 +7267,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
-      IF (Surface(SurfNum)%Tilt > 175.d0) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      IF (Surface(SurfNum)%Tilt > 175.) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableHoriz
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt <= 175.d0) .AND. (Surface(SurfNum)%Tilt >= 95.d0)) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt <= 175.) .AND. (Surface(SurfNum)%Tilt >= 95.)) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableTilted
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableTilted
@@ -7286,7 +7286,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       Surface(SurfNum)%IntConvClassification = InConvClass_A2_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
       ! assume horizontal upwards.
-      IF (DeltaTemp > 0.d0) THEN
+      IF (DeltaTemp > 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A2_UnstableHoriz
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_A2_StableHoriz
@@ -7302,16 +7302,16 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     IF (Surface(SurfNum)%Class == SurfaceClass_Wall &
          .OR. Surface(SurfNum)%Class == SurfaceClass_Door) THEN
 
-      IF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN !vertical wall
+      IF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A3_VertWalls
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableTilted
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt <= 85.d0 ) THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt <= 85. ) THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableTilted
@@ -7320,21 +7320,21 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
       IF (Surface(SurfNum)%Tilt < 5.0) THEN
-        IF (DeltaTemp <0.d0) THEN
+        IF (DeltaTemp <0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableHoriz
         Else
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 5.d0) .AND. ((Surface(SurfNum)%Tilt < 85.d0)))THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt > 5.) .AND. ((Surface(SurfNum)%Tilt < 85.)))THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableTilted
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN  !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN  !vertical wall
         Surface(SurfNum)%IntConvClassification = InConvClass_A3_VertWalls
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableTilted
@@ -7342,14 +7342,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
-      IF (Surface(SurfNum)%Tilt > 175.d0) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      IF (Surface(SurfNum)%Tilt > 175.) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableHoriz
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt <= 175.d0) .AND. (Surface(SurfNum)%Tilt >= 95.d0)) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt <= 175.) .AND. (Surface(SurfNum)%Tilt >= 95.)) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableTilted
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableTilted
@@ -7361,7 +7361,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       Surface(SurfNum)%IntConvClassification = InConvClass_A3_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
       ! assume horizontal upwards.
-      IF (DeltaTemp >= 0.d0) THEN
+      IF (DeltaTemp >= 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_A3_UnstableHoriz
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_A3_StableHoriz
@@ -7377,21 +7377,21 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     IF (Surface(SurfNum)%Class == SurfaceClass_Wall &
         .OR. Surface(SurfNum)%Class == SurfaceClass_Door) THEN
 
-      IF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN !vertical wall
+      IF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN !vertical wall
         IF (Surface(SurfNum)%IntConvSurfGetsRadiantHeat) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_B_VertWallsNearHeat
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_B_VertWalls
         ENDIF
 
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_B_StableTilted
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt <= 85.d0 ) THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt <= 85. ) THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_B_StableTilted
@@ -7400,25 +7400,25 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
       IF (Surface(SurfNum)%Tilt < 5.0) THEN
-        IF (DeltaTemp <0.d0) THEN
+        IF (DeltaTemp <0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableHoriz
         Else
           Surface(SurfNum)%IntConvClassification = InConvClass_B_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt >= 5.d0) .AND. ((Surface(SurfNum)%Tilt < 85.d0)))THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt >= 5.) .AND. ((Surface(SurfNum)%Tilt < 85.)))THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_B_StableTilted
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN  !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN  !vertical wall
         IF (Surface(SurfNum)%IntConvSurfGetsRadiantHeat) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_B_VertWallsNearHeat
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_B_VertWalls
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_B_StableTilted
@@ -7426,14 +7426,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
-      IF (Surface(SurfNum)%Tilt > 175.d0) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      IF (Surface(SurfNum)%Tilt > 175.) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableHoriz
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_B_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt <= 175.d0) .AND. (Surface(SurfNum)%Tilt >= 95.d0)) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt <= 175.) .AND. (Surface(SurfNum)%Tilt >= 95.)) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableTilted
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_B_StableTilted
@@ -7445,7 +7445,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       Surface(SurfNum)%IntConvClassification = InConvClass_B_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
       ! assume horizontal upwards.
-      IF (DeltaTemp > 0.d0) THEN
+      IF (DeltaTemp > 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_B_UnstableHoriz
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_B_StableHoriz
@@ -7482,18 +7482,18 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
     IF (Surface(SurfNum)%Class == SurfaceClass_Wall &
          .OR. Surface(SurfNum)%Class == SurfaceClass_Door) THEN
 
-      IF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN !vertical wall
+      IF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN !vertical wall
 
         Surface(SurfNum)%IntConvClassification = InConvClass_D_Walls
 
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_D_StableTilted
         ENDIF
-      ELSEIF (Surface(SurfNum)%Tilt <= 85.d0 ) THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt <= 85. ) THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_D_StableTilted
@@ -7501,24 +7501,24 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
-      IF (Surface(SurfNum)%Tilt < 5.0d0) THEN
-        IF (DeltaTemp <0.d0) THEN
+      IF (Surface(SurfNum)%Tilt < 5.0) THEN
+        IF (DeltaTemp <0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableHoriz
         Else
           Surface(SurfNum)%IntConvClassification = InConvClass_D_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt >= 5.d0) .AND. ((Surface(SurfNum)%Tilt <= 85.d0)))THEN !tilted downwards
-        IF (DeltaTemp < 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt >= 5.) .AND. ((Surface(SurfNum)%Tilt <= 85.)))THEN !tilted downwards
+        IF (DeltaTemp < 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_D_StableTilted
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt > 85.d0) .AND. (Surface(SurfNum)%Tilt < 95.d0 ) ) THEN  !vertical wall
+      ELSEIF ((Surface(SurfNum)%Tilt > 85.) .AND. (Surface(SurfNum)%Tilt < 95. ) ) THEN  !vertical wall
 
         Surface(SurfNum)%IntConvClassification = InConvClass_D_Walls
 
-      ELSEIF (Surface(SurfNum)%Tilt >= 95.d0) THEN !tilted upwards
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF (Surface(SurfNum)%Tilt >= 95.) THEN !tilted upwards
+        IF (DeltaTemp > 0.) THEN
          Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableTilted
         ELSE
          Surface(SurfNum)%IntConvClassification = InConvClass_D_StableTilted
@@ -7526,14 +7526,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       ENDIF
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
-      IF (Surface(SurfNum)%Tilt > 175.d0) THEN !floor
-        IF (DeltaTemp > 0.d0) THEN
+      IF (Surface(SurfNum)%Tilt > 175.) THEN !floor
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableHoriz
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_D_StableHoriz
         ENDIF
-      ELSEIF ((Surface(SurfNum)%Tilt <= 175.d0) .AND. (Surface(SurfNum)%Tilt >= 95.d0)) THEN
-        IF (DeltaTemp > 0.d0) THEN
+      ELSEIF ((Surface(SurfNum)%Tilt <= 175.) .AND. (Surface(SurfNum)%Tilt >= 95.)) THEN
+        IF (DeltaTemp > 0.) THEN
           Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableTilted
         ELSE
           Surface(SurfNum)%IntConvClassification = InConvClass_D_StableTilted
@@ -7545,7 +7545,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       Surface(SurfNum)%IntConvClassification = InConvClass_D_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
       ! assume horizontal upwards.
-      IF (DeltaTemp > 0.d0) THEN
+      IF (DeltaTemp > 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_D_UnstableHoriz
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_D_StableHoriz
@@ -7569,14 +7569,14 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
 
       CASE (InConvFlowRegime_C)
         !assume forced flow is down along wall (ceiling diffuser)
-        IF (DeltaTemp > 0.d0) THEN ! surface is hotter so plume upwards and forces oppose
+        IF (DeltaTemp > 0.) THEN ! surface is hotter so plume upwards and forces oppose
           Surface(SurfNum)%IntConvClassification = InConvClass_E_OpposFlowWalls
         ELSE ! surface is cooler so plume down and forces assist
           Surface(SurfNum)%IntConvClassification = InConvClass_E_AssistFlowWalls
         ENDIF
       CASE (InConvFlowRegime_D)
         ! assume forced flow is upward along wall (perimeter zone HVAC with fan)
-        IF (DeltaTemp > 0.d0) THEN ! surface is hotter so plume up and forces assist
+        IF (DeltaTemp > 0.) THEN ! surface is hotter so plume up and forces assist
           Surface(SurfNum)%IntConvClassification = InConvClass_E_AssistFlowWalls
         ELSE ! surface is cooler so plume downward and forces oppose
           Surface(SurfNum)%IntConvClassification = InConvClass_E_OpposFlowWalls
@@ -7584,13 +7584,13 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
       END SELECT
 
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Roof) THEN
-      IF (DeltaTemp > 0.d0) THEN !surface is hotter so stable
+      IF (DeltaTemp > 0.) THEN !surface is hotter so stable
         Surface(SurfNum)%IntConvClassification = InConvClass_E_StableCeiling
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_E_UnstableCieling
       ENDIF
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_Floor) THEN
-      IF (DeltaTemp > 0.d0) THEN !surface is hotter so unstable
+      IF (DeltaTemp > 0.) THEN !surface is hotter so unstable
         Surface(SurfNum)%IntConvClassification = InConvClass_E_UnstableFloor
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_E_StableFloor
@@ -7600,7 +7600,7 @@ SUBROUTINE DynamicIntConvSurfaceClassification(SurfNum)
             .OR.  (Surface(SurfNum)%Class == SurfaceClass_TDD_Diffuser)) THEN
       Surface(SurfNum)%IntConvClassification = InConvClass_E_Windows
     ELSEIF (Surface(SurfNum)%Class == SurfaceClass_IntMass) THEN
-      IF (DeltaTemp > 0.d0) THEN
+      IF (DeltaTemp > 0.) THEN
         Surface(SurfNum)%IntConvClassification = InConvClass_E_UnstableFloor
       ELSE
         Surface(SurfNum)%IntConvClassification = InConvClass_E_StableFloor
@@ -7801,7 +7801,7 @@ SUBROUTINE MapIntConvClassificationToHcModels(SurfNum)
       Surface(SurfNum)%IntConvHcUserCurveIndex = InsideFaceAdaptiveConvectionAlgo%ConvectiveHeatWindowsUserCurveNum
     ENDIF
   CASE ( InConvClass_C_Walls          )
-    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.d0) &
+    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.) &
         .AND. (InsideFaceAdaptiveConvectionAlgo%CentralAirWallEqNum == HcInt_GoldsteinNovoselacCeilingDiffuserWalls)) THEN
       ! no perimeter, Goldstein Novolselac model not good so revert to fisher pedersen model
       Surface(SurfNum)%IntConvHcModelEq          = HcInt_FisherPedersenCeilDiffuserWalls
@@ -7817,7 +7817,7 @@ SUBROUTINE MapIntConvClassificationToHcModels(SurfNum)
       Surface(SurfNum)%IntConvHcUserCurveIndex = InsideFaceAdaptiveConvectionAlgo%CentralAirCeilingUserCurveNum
     ENDIF
   CASE ( InConvClass_C_Floor          )
-    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.d0) &
+    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.) &
         .AND. (InsideFaceAdaptiveConvectionAlgo%CentralAirFloorEqNum == HcInt_GoldsteinNovoselacCeilingDiffuserFloor)) THEN
       ! no perimeter, Goldstein Novolselac model not good so revert to fisher pedersen model
       Surface(SurfNum)%IntConvHcModelEq          = HcInt_FisherPedersenCeilDiffuserFloor
@@ -7828,7 +7828,7 @@ SUBROUTINE MapIntConvClassificationToHcModels(SurfNum)
       Surface(SurfNum)%IntConvHcUserCurveIndex = InsideFaceAdaptiveConvectionAlgo%CentralAirFloorUserCurveNum
     ENDIF
   CASE ( InConvClass_C_Windows        )
-    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.d0) &
+    IF ((Surface(SurfNum)%IntConvZonePerimLength == 0.) &
         .AND. (InsideFaceAdaptiveConvectionAlgo%CentralAirWindowsEqNum == HcInt_GoldsteinNovoselacCeilingDiffuserWindow)) THEN
       ! no perimeter, Goldstein Novolselac model not good so revert to ISO15099
       Surface(SurfNum)%IntConvHcModelEq          = HcInt_ISO15099Windows
@@ -7940,7 +7940,7 @@ SUBROUTINE CalcUserDefinedInsideHcModel(SurfNum, UserCurveNum, Hc)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER , INTENT(IN)  :: SurfNum
   INTEGER , INTENT(IN)  :: UserCurveNum
-  REAL(r64), INTENT(OUT):: Hc
+  REAL, INTENT(OUT):: Hc
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -7952,21 +7952,21 @@ SUBROUTINE CalcUserDefinedInsideHcModel(SurfNum, UserCurveNum, Hc)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: tmpHc
-  REAL(r64) :: tmpAirTemp
-  REAL(r64)    :: SupplyAirTemp
-  REAL(r64)    :: AirChangeRate
+  REAL :: tmpHc
+  REAL :: tmpAirTemp
+  REAL    :: SupplyAirTemp
+  REAL    :: AirChangeRate
   INTEGER      :: ZoneNum
   INTEGER      :: ZoneNode
   INTEGER      :: EquipNum
-  REAL(r64)    :: SumMdotTemp
-  REAL(r64)    :: SumMdot
-  REAL(r64)    :: AirDensity
+  REAL    :: SumMdotTemp
+  REAL    :: SumMdot
+  REAL    :: AirDensity
   INTEGER      :: thisZoneInletNode
 
   ZoneNum = Surface(SurfNum)%Zone
-  SumMdotTemp = 0.d0
-  SumMdot     = 0.d0
+  SumMdotTemp = 0.
+  SumMdot     = 0.
   SupplyAirTemp = MAT(ZoneNum)
   IF (Zone(ZoneNum)%IsControlled) THEN
     ZoneNode = Zone(ZoneNum)%SystemZoneNodeNumber
@@ -7976,13 +7976,13 @@ SUBROUTINE CalcUserDefinedInsideHcModel(SurfNum, UserCurveNum, Hc)
       DO EquipNum = 1, ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%NumOfEquipTypes
         IF (ALLOCATED(ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums)) THEN
           thisZoneInletNode = ZoneEquipList(ZoneEquipConfig(ZoneNum)%EquipListIndex)%EquipData(EquipNum)%OutletNodeNums(1)
-          IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.d0)) THEN
+          IF ((thisZoneInletNode > 0) .AND. (Node(thisZoneInletNode)%MassFlowRate > 0.)) THEN
             SumMdotTemp = SumMdotTemp + Node(thisZoneInletNode)%MassFlowRate * Node(thisZoneInletNode)%Temp
           ENDIF
         ENDIF
       ENDDO
     ENDIF
-    If (SumMdot > 0.d0) THEN
+    If (SumMdot > 0.) THEN
       SupplyAirTemp = SumMdotTemp / SumMdot      ! mass flow weighted inlet temperature
     ENDIF
   ENDIF
@@ -8000,7 +8000,7 @@ SUBROUTINE CalcUserDefinedInsideHcModel(SurfNum, UserCurveNum, Hc)
     Surface(SurfNum)%TAirRef = ZoneSupplyAirTemp
   END SELECT
 
-  tmpHc = 0.d0
+  tmpHc = 0.
   IF (HcInsideUserCurve(UserCurveNum)%HcFnTempDiffCurveNum > 0) THEN
     tmpHc = CurveValue(HcInsideUserCurve(UserCurveNum)%HcFnTempDiffCurveNum, &
                               ABS(TH(SurfNum,1, 2) - tmpAirTemp) )
@@ -8055,7 +8055,7 @@ SUBROUTINE CalcUserDefinedOutsideHcModel(SurfNum, UserCurveNum, H)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER , INTENT(IN)  :: SurfNum
   INTEGER , INTENT(IN)  :: UserCurveNum
-  REAL(r64),INTENT(OUT) :: H
+  REAL,INTENT(OUT) :: H
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -8067,10 +8067,10 @@ SUBROUTINE CalcUserDefinedOutsideHcModel(SurfNum, UserCurveNum, H)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: tmpHc
-  REAL(r64) :: windVel
-  REAL(r64) :: theta
-  REAL(r64) :: ThetaRad
+  REAL :: tmpHc
+  REAL :: windVel
+  REAL :: theta
+  REAL :: ThetaRad
 
   SELECT CASE (HcOutsideUserCurve(UserCurveNum)%WindSpeedType)
 
@@ -8080,18 +8080,18 @@ SUBROUTINE CalcUserDefinedOutsideHcModel(SurfNum, UserCurveNum, H)
     windVel = Surface(SurfNum)%WindSpeed
   CASE (RefWindParallComp)
     ! WindSpeed , WindDir, surface Azimuth
-     Theta = WindDir - Surface(SurfNum)%Azimuth - 90.d0 !TODO double check theta
+     Theta = WindDir - Surface(SurfNum)%Azimuth - 90. !TODO double check theta
      ThetaRad = Theta * DegToRadians
      windVel = cos(ThetaRad) * WindSpeed
   CASE (RefWindParallCompAtZ)
     ! Surface WindSpeed , WindDir, surface Azimuth
-     Theta = WindDir - Surface(SurfNum)%Azimuth - 90.d0 !TODO double check theta
+     Theta = WindDir - Surface(SurfNum)%Azimuth - 90. !TODO double check theta
      ThetaRad = Theta * DegToRadians
      windVel = cos(ThetaRad) * Surface(SurfNum)%WindSpeed
   END SELECT
 
 
-  tmpHc = 0.d0
+  tmpHc = 0.
   IF (  HcOutsideUserCurve(UserCurveNum)%HfFnWindSpeedCurveNum > 0) THEN
     tmpHc = CurveValue(HcOutsideUserCurve(UserCurveNum)%HfFnWindSpeedCurveNum, &
                         windVel )
@@ -8103,7 +8103,7 @@ SUBROUTINE CalcUserDefinedOutsideHcModel(SurfNum, UserCurveNum, H)
   ENDIF
 
   IF (  HcOutsideUserCurve(UserCurveNum)%HnFnTempDiffDivHeightCurveNum > 0) THEN
-    IF (Surface(SurfNum)%OutConvFaceHeight > 0.d0) THEN
+    IF (Surface(SurfNum)%OutConvFaceHeight > 0.) THEN
       tmpHc = tmpHc + CurveValue(HcOutsideUserCurve(UserCurveNum)%HnFnTempDiffDivHeightCurveNum, &
                         ((ABS(TH(SurfNum,1, 1) - Surface(SurfNum)%OutDryBulbTemp))&
                         /Surface(SurfNum)%OutConvFaceHeight)  )
@@ -8142,8 +8142,8 @@ FUNCTION CalcASHRAEVerticalWall(DeltaTemp) RESULT (Hn)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hn ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hn ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8155,7 +8155,7 @@ FUNCTION CalcASHRAEVerticalWall(DeltaTemp) RESULT (Hn)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hn = 1.31d0 *( (ABS(DeltaTemp))**OneThird)
+  Hn = 1.31 *( (ABS(DeltaTemp))**OneThird)
 
   RETURN
 
@@ -8187,9 +8187,9 @@ FUNCTION CalcWaltonUnstableHorizontalOrTilt(DeltaTemp, CosineTilt) RESULT (Hn)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp     ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: CosineTilt   ! Cosine of tilt angle
-  REAL(r64)             :: Hn ! function result
+  REAL, INTENT(IN) :: DeltaTemp     ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: CosineTilt   ! Cosine of tilt angle
+  REAL             :: Hn ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8201,8 +8201,8 @@ FUNCTION CalcWaltonUnstableHorizontalOrTilt(DeltaTemp, CosineTilt) RESULT (Hn)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hn =  9.482d0*((ABS(DeltaTemp))**OneThird) &
-                      /(7.283d0 - ABS(CosineTilt))
+  Hn =  9.482*((ABS(DeltaTemp))**OneThird) &
+                      /(7.283 - ABS(CosineTilt))
 
   RETURN
 
@@ -8234,9 +8234,9 @@ FUNCTION CalcWaltonStableHorizontalOrTilt(DeltaTemp, CosineTilt) RESULT (Hn)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp     ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: CosineTilt   ! Cosine of tilt angle
-  REAL(r64)             :: Hn ! function result
+  REAL, INTENT(IN) :: DeltaTemp     ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: CosineTilt   ! Cosine of tilt angle
+  REAL             :: Hn ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8248,8 +8248,8 @@ FUNCTION CalcWaltonStableHorizontalOrTilt(DeltaTemp, CosineTilt) RESULT (Hn)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hn = 1.810d0*((ABS(DeltaTemp))**OneThird) &
-                      /(1.382d0 + ABS(CosineTilt))
+  Hn = 1.810*((ABS(DeltaTemp))**OneThird) &
+                      /(1.382 + ABS(CosineTilt))
 
   RETURN
 
@@ -8280,8 +8280,8 @@ FUNCTION CalcFisherPedersenCeilDiffuserFloor(AirChangeRate) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
+  REAL             :: Hc ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8293,7 +8293,7 @@ FUNCTION CalcFisherPedersenCeilDiffuserFloor(AirChangeRate) RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hc = 3.873d0 + 0.082d0 * (AirChangeRate**0.98d0)
+  Hc = 3.873 + 0.082 * (AirChangeRate**0.98)
 
   RETURN
 
@@ -8324,8 +8324,8 @@ FUNCTION CalcFisherPedersenCeilDiffuserCeiling(AirChangeRate) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
+  REAL             :: Hc ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8337,7 +8337,7 @@ FUNCTION CalcFisherPedersenCeilDiffuserCeiling(AirChangeRate) RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hc = 2.234d0 + 4.099d0 * (AirChangeRate**0.503d0)
+  Hc = 2.234 + 4.099 * (AirChangeRate**0.503)
 
   RETURN
 
@@ -8368,8 +8368,8 @@ FUNCTION CalcFisherPedersenCeilDiffuserWalls(AirChangeRate) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: AirChangeRate    ! [1/hr] air system air change rate
+  REAL             :: Hc ! function result
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -8381,7 +8381,7 @@ FUNCTION CalcFisherPedersenCeilDiffuserWalls(AirChangeRate) RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  Hc = 1.208d0 + 1.012d0 * (AirChangeRate**0.604d0)
+  Hc = 1.208 + 1.012 * (AirChangeRate**0.604)
 
   RETURN
 
@@ -8413,9 +8413,9 @@ FUNCTION CalcAlamdariHammondUnstableHorizontal(DeltaTemp, HydraulicDiameter )  R
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64)             :: Hn ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL             :: Hn ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8429,11 +8429,11 @@ FUNCTION CalcAlamdariHammondUnstableHorizontal(DeltaTemp, HydraulicDiameter )  R
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (HydraulicDiameter > 0.d0) THEN
-    Hn  = (  ((1.4d0 * (( ABS(DeltaTemp)/HydraulicDiameter)**OneFourth))**6.0d0) &
-           + ((1.63d0*( (ABS(DeltaTemp))**OneThird)**6.0d0) ))**OneSixth
+  IF (HydraulicDiameter > 0.) THEN
+    Hn  = (  ((1.4 * (( ABS(DeltaTemp)/HydraulicDiameter)**OneFourth))**6.0) &
+           + ((1.63*( (ABS(DeltaTemp))**OneThird)**6.0) ))**OneSixth
   ELSE
-    Hn = 9.999d0
+    Hn = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcAlamdariHammondUnstableHorizontal: bad inputs, Hydraulic Diameter =' &
                                //TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -8471,9 +8471,9 @@ FUNCTION CalcAlamdariHammondStableHorizontal(DeltaTemp, HydraulicDiameter )  RES
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64)             :: Hn ! function result, natural convection Hc value
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL             :: Hn ! function result, natural convection Hc value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8487,10 +8487,10 @@ FUNCTION CalcAlamdariHammondStableHorizontal(DeltaTemp, HydraulicDiameter )  RES
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (HydraulicDiameter > 0.d0) THEN
-    Hn  = 0.6d0 * (( ABS(DeltaTemp)/(HydraulicDiameter**2.0d0 )) ** OneFifth)
+  IF (HydraulicDiameter > 0.) THEN
+    Hn  = 0.6 * (( ABS(DeltaTemp)/(HydraulicDiameter**2.0 )) ** OneFifth)
   ELSE
-    Hn = 9.999d0
+    Hn = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcAlamdariHammondStableHorizontal: bad inputs, Hydraulic Diameter =' &
                                //TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -8528,9 +8528,9 @@ FUNCTION CalcAlamdariHammondVerticalWall(DeltaTemp, Height )  RESULT (Hn)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: Height ! [m] characteristic size, = zone height
-  REAL(r64)             :: Hn ! function result, natural convection Hc value
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: Height ! [m] characteristic size, = zone height
+  REAL             :: Hn ! function result, natural convection Hc value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8544,9 +8544,9 @@ FUNCTION CalcAlamdariHammondVerticalWall(DeltaTemp, Height )  RESULT (Hn)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (Height > 0.d0) THEN
-    Hn  = (  ((1.5d0 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0d0) &
-           + ((1.23d0*( (ABS(DeltaTemp))**OneThird)**6.0d0) ))**OneSixth
+  IF (Height > 0.) THEN
+    Hn  = (  ((1.5 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0) &
+           + ((1.23*( (ABS(DeltaTemp))**OneThird)**6.0) ))**OneSixth
   ELSE
     Hn  = 9.999
     IF (ErrorIndex == 0) &
@@ -8589,8 +8589,8 @@ FUNCTION CalcKhalifaEq3WallAwayFromHeat(DeltaTemp )  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8603,7 +8603,7 @@ FUNCTION CalcKhalifaEq3WallAwayFromHeat(DeltaTemp )  RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hc = 2.07d0*((ABS(DeltaTemp))**0.23d0)
+  Hc = 2.07*((ABS(DeltaTemp))**0.23)
 
   RETURN
 
@@ -8638,8 +8638,8 @@ FUNCTION CalcKhalifaEq4CeilingAwayFromHeat(DeltaTemp )  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8652,7 +8652,7 @@ FUNCTION CalcKhalifaEq4CeilingAwayFromHeat(DeltaTemp )  RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hc = 2.72d0*((ABS(DeltaTemp))**0.13d0)
+  Hc = 2.72*((ABS(DeltaTemp))**0.13)
 
   RETURN
 
@@ -8687,8 +8687,8 @@ FUNCTION CalcKhalifaEq5WallsNearHeat(DeltaTemp )  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8701,7 +8701,7 @@ FUNCTION CalcKhalifaEq5WallsNearHeat(DeltaTemp )  RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hc = 1.98d0*((ABS(DeltaTemp))**0.32d0)
+  Hc = 1.98*((ABS(DeltaTemp))**0.32)
 
   RETURN
 
@@ -8736,8 +8736,8 @@ FUNCTION CalcKhalifaEq6NonHeatedWalls(DeltaTemp )  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8750,7 +8750,7 @@ FUNCTION CalcKhalifaEq6NonHeatedWalls(DeltaTemp )  RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hc = 2.30d0*((ABS(DeltaTemp))**0.24d0)
+  Hc = 2.30*((ABS(DeltaTemp))**0.24)
 
   RETURN
 
@@ -8785,8 +8785,8 @@ FUNCTION CalcKhalifaEq7Ceiling(DeltaTemp )  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8799,7 +8799,7 @@ FUNCTION CalcKhalifaEq7Ceiling(DeltaTemp )  RESULT (Hc)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hc = 3.10d0*((ABS(DeltaTemp))**0.17d0)
+  Hc = 3.10*((ABS(DeltaTemp))**0.17)
 
   RETURN
 
@@ -8831,9 +8831,9 @@ FUNCTION CalcAwbiHattonHeatedFloor(DeltaTemp, HydraulicDiameter)  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8845,10 +8845,10 @@ FUNCTION CalcAwbiHattonHeatedFloor(DeltaTemp, HydraulicDiameter)  RESULT (Hc)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  IF (HydraulicDiameter > 1.d0) THEN
-    Hc = 2.175d0*((ABS(DeltaTemp))**0.308d0)/ (HydraulicDiameter**0.076d0)
+  IF (HydraulicDiameter > 1.) THEN
+    Hc = 2.175*((ABS(DeltaTemp))**0.308)/ (HydraulicDiameter**0.076)
   ELSE
-    Hc = 2.175d0*((ABS(DeltaTemp))**0.308d0)/ (1.d0**0.076d0)
+    Hc = 2.175*((ABS(DeltaTemp))**0.308)/ (1.**0.076)
   ENDIF
 
   RETURN
@@ -8880,9 +8880,9 @@ FUNCTION CalcAwbiHattonHeatedWall(DeltaTemp, HydraulicDiameter)  RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8894,10 +8894,10 @@ FUNCTION CalcAwbiHattonHeatedWall(DeltaTemp, HydraulicDiameter)  RESULT (Hc)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  IF (HydraulicDiameter > 1.d0) THEN
-    Hc = 1.823d0*((ABS(DeltaTemp))**0.293d0)/ (HydraulicDiameter**0.121d0)
+  IF (HydraulicDiameter > 1.) THEN
+    Hc = 1.823*((ABS(DeltaTemp))**0.293)/ (HydraulicDiameter**0.121)
   ELSE
-    Hc = 1.823d0*((ABS(DeltaTemp))**0.293d0)/ (1.d0**0.121d0)
+    Hc = 1.823*((ABS(DeltaTemp))**0.293)/ (1.**0.121)
   ENDIF
 
   RETURN
@@ -8930,12 +8930,12 @@ FUNCTION CalcBeausoleilMorrisonMixedAssistedWall(DeltaTemp, Height, SurfTemp, Su
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: Height ! [m] characteristic size
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: Height ! [m] characteristic size
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8949,12 +8949,12 @@ FUNCTION CalcBeausoleilMorrisonMixedAssistedWall(DeltaTemp, Height, SurfTemp, Su
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF ((DeltaTemp /= 0.d0) .and. (Height /= 0.d0)) THEN
-    Hc =   (  ((  ((1.5d0 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0d0)            &
-             + ((1.23d0*( (ABS(DeltaTemp))**OneThird)**6.0d0) )**OneSixth)**0.5d0   &
-             + (( ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199d0 + 0.190d0*(AirChangeRate**0.8d0) ) )**3.d0) ))**OneThird
+  IF ((DeltaTemp /= 0.) .and. (Height /= 0.)) THEN
+    Hc =   (  ((  ((1.5 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0)            &
+             + ((1.23*( (ABS(DeltaTemp))**OneThird)**6.0) )**OneSixth)**0.5   &
+             + (( ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199 + 0.190*(AirChangeRate**0.8) ) )**3.) ))**OneThird
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedAssistedWall: bad inputs, Delta Temp =' &
                //TRIM(RoundSigDigits(DeltaTemp,4))//', Height='//TRIM(RoundSigDigits(Height,4)))
@@ -8991,12 +8991,12 @@ FUNCTION CalcBeausoleilMorrisonMixedOpposingWall(DeltaTemp, Height, SurfTemp, Su
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: Height ! [m] characteristic size
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: Height ! [m] characteristic size
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9008,24 +9008,24 @@ FUNCTION CalcBeausoleilMorrisonMixedOpposingWall(DeltaTemp, Height, SurfTemp, Su
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: HcTmp1
-  REAL(r64) :: HcTmp2
-  REAL(r64) :: HcTmp3
+  REAL :: HcTmp1
+  REAL :: HcTmp2
+  REAL :: HcTmp3
   INTEGER, SAVE :: ErrorIndex  = 0
   INTEGER, SAVE :: ErrorIndex2 = 0
 
-  IF ((DeltaTemp /= 0.d0) ) THEN ! protect divide by zero
+  IF ((DeltaTemp /= 0.) ) THEN ! protect divide by zero
 
-    IF (Height /= 0.d0) THEN
-      HcTmp1 =   (  ((  ((1.5d0 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0d0)            &
-            + ((1.23d0*( (ABS(DeltaTemp))**OneThird)**6.0d0) )**OneSixth)**0.5d0   &
-            - (( ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199d0 + 0.190d0*(AirChangeRate**0.8d0) )  )**3.d0) ))**OneThird
+    IF (Height /= 0.) THEN
+      HcTmp1 =   (  ((  ((1.5 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0)            &
+            + ((1.23*( (ABS(DeltaTemp))**OneThird)**6.0) )**OneSixth)**0.5   &
+            - (( ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199 + 0.190*(AirChangeRate**0.8) )  )**3.) ))**OneThird
 
-      HcTmp2 = 0.8d0 * ((  ((1.5d0 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0d0)            &
-                 + ((1.23d0*( (ABS(DeltaTemp))**OneThird)**6.0d0) ))**OneSixth)
+      HcTmp2 = 0.8 * ((  ((1.5 * (( ABS(DeltaTemp)/Height)**OneFourth))**6.0)            &
+                 + ((1.23*( (ABS(DeltaTemp))**OneThird)**6.0) ))**OneSixth)
     ELSE
-      HcTmp1 = 9.999d0
-      HcTmp2 = 9.999d0
+      HcTmp1 = 9.999
+      HcTmp2 = 9.999
       IF (ErrorIndex2 == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedOpposingWall: bad inputs, Height =' &
                                //TRIM(RoundSigDigits(Height,4)))
@@ -9033,12 +9033,12 @@ FUNCTION CalcBeausoleilMorrisonMixedOpposingWall(DeltaTemp, Height, SurfTemp, Su
                                //TRIM(RoundSigDigits(Height,4)) , ErrorIndex2 )
 
     ENDIF
-    HcTmp3 = 0.8d0 *  ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199d0 + 0.190d0*(AirChangeRate**0.8d0) )
+    HcTmp3 = 0.8 *  ((SurfTemp -  SupplyAirTemp)/ABS(DeltaTemp)) *(-0.199 + 0.190*(AirChangeRate**0.8) )
 
     Hc = MAX( MAX(HcTmp1,HcTmp2), HcTmp3)
 
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedOpposingWall: bad inputs, Delta Temperature =' &
                                //TRIM(RoundSigDigits(DeltaTemp,4)))
@@ -9076,12 +9076,12 @@ FUNCTION CalcBeausoleilMorrisonMixedStableFloor(DeltaTemp, HydraulicDiameter, Su
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9095,11 +9095,11 @@ FUNCTION CalcBeausoleilMorrisonMixedStableFloor(DeltaTemp, HydraulicDiameter, Su
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF ((HydraulicDiameter /= 0.d0) .AND. (DeltaTemp /= 0.d0)) THEN
-    Hc = ( (0.6d0 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFifth)**3  &
-        + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (0.159d0 + 0.116d0* (AirChangeRate **0.8d0)) )**3 )**OneThird
+  IF ((HydraulicDiameter /= 0.) .AND. (DeltaTemp /= 0.)) THEN
+    Hc = ( (0.6 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFifth)**3  &
+        + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (0.159 + 0.116* (AirChangeRate **0.8)) )**3 )**OneThird
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedStableFloor: bad inputs, DeltaTemp =' &
                //TRIM(RoundSigDigits(DeltaTemp,4))//', Hydraulic Diameter='//TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -9137,12 +9137,12 @@ FUNCTION CalcBeausoleilMorrisonMixedUnstableFloor(DeltaTemp, HydraulicDiameter, 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result, total convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9157,11 +9157,11 @@ FUNCTION CalcBeausoleilMorrisonMixedUnstableFloor(DeltaTemp, HydraulicDiameter, 
   INTEGER, SAVE :: ErrorIndex = 0
 
 
-  IF ((HydraulicDiameter /= 0.d0) .AND. (DeltaTemp /= 0.d0)) THEN
-    Hc = ( ((1.4d0 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFourth)**6 + ( 1.63d0*(ABS(DeltaTemp)**OneThird))**6 )**0.5d0 &
-        + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (0.159d0 + 0.116d0* (AirChangeRate **0.8d0)) )**3 )**OneThird
+  IF ((HydraulicDiameter /= 0.) .AND. (DeltaTemp /= 0.)) THEN
+    Hc = ( ((1.4 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFourth)**6 + ( 1.63*(ABS(DeltaTemp)**OneThird))**6 )**0.5 &
+        + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (0.159 + 0.116* (AirChangeRate **0.8)) )**3 )**OneThird
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedUnstableFloor: bad inputs, DeltaTemp =' &
                //TRIM(RoundSigDigits(DeltaTemp,4))//', Hydraulic Diameter='//TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -9201,12 +9201,12 @@ FUNCTION CalcBeausoleilMorrisonMixedStableCeiling(DeltaTemp, HydraulicDiameter, 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result, total convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9220,11 +9220,11 @@ FUNCTION CalcBeausoleilMorrisonMixedStableCeiling(DeltaTemp, HydraulicDiameter, 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF ((HydraulicDiameter /= 0.d0) .AND. (DeltaTemp /= 0.d0)) THEN
-    Hc = ( (0.6d0 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFifth)**3 &
-           + ( ((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (-0.166d0 + 0.484d0* (AirChangeRate **0.8d0)) )**3 )**OneThird
+  IF ((HydraulicDiameter /= 0.) .AND. (DeltaTemp /= 0.)) THEN
+    Hc = ( (0.6 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFifth)**3 &
+           + ( ((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (-0.166 + 0.484* (AirChangeRate **0.8)) )**3 )**OneThird
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedStableCeiling: bad inputs, DeltaTemp =' &
                  //TRIM(RoundSigDigits(DeltaTemp,4))//', Hydraulic Diameter='//TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -9264,12 +9264,12 @@ FUNCTION CalcBeausoleilMorrisonMixedUnstableCeiling(DeltaTemp, HydraulicDiameter
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
-  REAL(r64), INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: HydraulicDiameter ! [m] characteristic size, = (4 * area) / perimeter
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: SupplyAirTemp ![C] temperature of supply air into zone
+  REAL, INTENT(IN) :: AirChangeRate ! [ACH] [1/hour] supply air ACH for zone
+  REAL             :: Hc ! function result, total convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9283,11 +9283,11 @@ FUNCTION CalcBeausoleilMorrisonMixedUnstableCeiling(DeltaTemp, HydraulicDiameter
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF ((HydraulicDiameter /= 0.d0) .AND. (DeltaTemp /= 0.d0)) THEN
-    Hc =  ( ((1.4d0 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFourth)**6 + ( 1.63d0*(ABS(DeltaTemp)**OneThird))**6 )**0.5d0 &
-          + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (-0.166d0 + 0.484d0* (AirChangeRate **0.8d0)) )**3 )**OneThird
+  IF ((HydraulicDiameter /= 0.) .AND. (DeltaTemp /= 0.)) THEN
+    Hc =  ( ((1.4 * (ABS(DeltaTemp)/HydraulicDiameter)**OneFourth)**6 + ( 1.63*(ABS(DeltaTemp)**OneThird))**6 )**0.5 &
+          + (((SurfTemp -  SupplyAirTemp )/ABS(DeltaTemp))* (-0.166 + 0.484* (AirChangeRate **0.8)) )**3 )**OneThird
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcBeausoleilMorrisonMixedUnstableCeiling: bad inputs, DeltaTemp =' &
                  //TRIM(RoundSigDigits(DeltaTemp,4))//', Hydraulic Diameter='//TRIM(RoundSigDigits(HydraulicDiameter,4)))
@@ -9324,17 +9324,17 @@ FUNCTION CalcFohannoPolidoriVerticalWall(DeltaTemp, Height, SurfTemp, QdotConv) 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
-  REAL(r64), INTENT(IN) :: Height ! [m] characteristic size, height of zone
-  REAL(r64), INTENT(IN) :: SurfTemp ![C] surface temperature
-  REAL(r64), INTENT(IN) :: QdotConv ![W/m2] heat flux rate for rayleigh #
-  REAL(r64)             :: Hn ! function result, natural convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp         ! [C] temperature difference between surface and air
+  REAL, INTENT(IN) :: Height ! [m] characteristic size, height of zone
+  REAL, INTENT(IN) :: SurfTemp ![C] surface temperature
+  REAL, INTENT(IN) :: QdotConv ![W/m2] heat flux rate for rayleigh #
+  REAL             :: Hn ! function result, natural convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: g  = 9.81d0       ! gravity constant (m/s**2)
-  REAL(r64), PARAMETER :: v  = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
-  REAL(r64), PARAMETER :: k  = 0.0263d0     ! thermal conductivity (W/m K) for air at 300 K
-  REAL(r64), PARAMETER :: Pr = 0.71d0      ! Prandtl number for air at ?
+  REAL, PARAMETER :: g  = 9.81       ! gravity constant (m/s**2)
+  REAL, PARAMETER :: v  = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
+  REAL, PARAMETER :: k  = 0.0263     ! thermal conductivity (W/m K) for air at 300 K
+  REAL, PARAMETER :: Pr = 0.71      ! Prandtl number for air at ?
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
@@ -9342,22 +9342,22 @@ FUNCTION CalcFohannoPolidoriVerticalWall(DeltaTemp, Height, SurfTemp, QdotConv) 
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: RaH = 0.d0
-  REAL(r64) :: BetaFilm = 0.d0
+  REAL :: RaH = 0.
+  REAL :: BetaFilm = 0.
   INTEGER, SAVE :: ErrorIndex = 0
 
-  BetaFilm = 1.d0 / (KelvinConv + SurfTemp + 0.5d0 * DeltaTemp) ! TODO check sign on DeltaTemp
-  IF (Height > 0.d0) THEN
+  BetaFilm = 1. / (KelvinConv + SurfTemp + 0.5 * DeltaTemp) ! TODO check sign on DeltaTemp
+  IF (Height > 0.) THEN
     RaH = (g * BetaFilm * QdotConv * (Height**4) * Pr )/(k * v**2)
 
-    IF (RaH <= 6.3d09) Then
-      Hn = 1.332d0*((ABS(DeltaTemp)/Height)**OneFourth)
+    IF (RaH <= 6.39) Then
+      Hn = 1.332*((ABS(DeltaTemp)/Height)**OneFourth)
     ELSE
-      Hn = 1.235d0*EXP(0.0467d0*Height)*(ABS(DeltaTemp))**0.316d0
+      Hn = 1.235*EXP(0.0467*Height)*(ABS(DeltaTemp))**0.316
     ENDIF
   ELSE
    ! bad value for Height, but we have little info to identify calling culprit
-    Hn = 9.999d0
+    Hn = 9.999
     IF (ErrorIndex == 0) &
       CALL ShowSevereMessage('CalcFohannoPolidoriVerticalWall: bad value for height=' &
              //TRIM(RoundSigDigits(Height,5)))
@@ -9395,8 +9395,8 @@ FUNCTION CalcKaradagChilledCeiling(DeltaTemp)  RESULT (Hn)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64),   INTENT(IN) :: DeltaTemp  ! [C] temperature difference between surface and air
-  REAL(r64)               :: Hn ! function result, natural convection coefficient
+  REAL,   INTENT(IN) :: DeltaTemp  ! [C] temperature difference between surface and air
+  REAL               :: Hn ! function result, natural convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
 
@@ -9408,7 +9408,7 @@ FUNCTION CalcKaradagChilledCeiling(DeltaTemp)  RESULT (Hn)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-  Hn = 3.1d0* (ABS(DeltaTemp))**0.22d0
+  Hn = 3.1* (ABS(DeltaTemp))**0.22
 
   RETURN
 
@@ -9441,11 +9441,11 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWindow(AirSystemFlowRate, ZoneExtP
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
-  REAL(r64), INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
-  REAL(r64), INTENT(IN) :: WindWallRatio ![ ] fraction of window area to wall area for zone
+  REAL, INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
+  REAL, INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
+  REAL, INTENT(IN) :: WindWallRatio ![ ] fraction of window area to wall area for zone
   INTEGER, INTENT(IN)   :: WindowLocationType !index for location types
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL             :: Hc ! function result, total convection coefficient
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -9460,20 +9460,20 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWindow(AirSystemFlowRate, ZoneExtP
   INTEGER, SAVE :: ErrorIndex = 0
   INTEGER, SAVE :: ErrorIndex2 = 0
 
-  IF (ZoneExtPerimLength > 0.d0) THEN
-    IF (WindWallRatio <= 0.5d0) THEN
+  IF (ZoneExtPerimLength > 0.) THEN
+    IF (WindWallRatio <= 0.5) THEN
 
       IF (WindowLocationType == InConvWinLoc_UpperPartOfExteriorWall) THEN
-        Hc = 0.117d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+        Hc = 0.117*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
       ELSEIF(WindowLocationType == InConvWinLoc_LowerPartOfExteriorWall) THEN
-        Hc = 0.093d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+        Hc = 0.093*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
       ELSEIF(WindowLocationType == InConvWinLoc_LargePartOfExteriorWall) THEN
-        Hc = 0.117d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0) ! assumption for case not covered by model
+        Hc = 0.117*((AirSystemFlowRate / ZoneExtPerimLength)**0.8) ! assumption for case not covered by model
       ELSEIF(WindowLocationType == InConvWinLoc_NotSet) THEN
-        Hc = 0.117d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0) ! assumption for case not covered by model
+        Hc = 0.117*((AirSystemFlowRate / ZoneExtPerimLength)**0.8) ! assumption for case not covered by model
       ELSE
         !shouldn'tcome
-        Hc = 9.999d0
+        Hc = 9.999
         IF (ErrorIndex == 0) &
           CALL ShowSevereMessage('CalcGoldsteinNovoselacCeilingDiffuserWindow: bad code for relative window location =' &
                                                                   //TRIM(RoundSigDigits(WindowLocationType)))
@@ -9481,10 +9481,10 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWindow(AirSystemFlowRate, ZoneExtP
                                                                   //TRIM(RoundSigDigits(WindowLocationType)) , ErrorIndex )
       ENDIF
     ELSE
-      Hc = 0.103d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+      Hc = 0.103*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
     ENDIF
   ELSE
-   Hc = 9.999d0
+   Hc = 9.999
    IF (ErrorIndex2 == 0) &
      CALL ShowSevereMessage('CalcGoldsteinNovoselacCeilingDiffuserWindow: bad value for Zone Exterior Perimeter Length=' &
                                       //TRIM(RoundSigDigits(ZoneExtPerimLength,5)))
@@ -9521,10 +9521,10 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWall(AirSystemFlowRate, ZoneExtPer
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
-  REAL(r64), INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
+  REAL, INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
+  REAL, INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
   INTEGER, INTENT(IN)   :: WindowLocationType !index for location types
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL             :: Hc ! function result, total convection coefficient
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -9539,15 +9539,15 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWall(AirSystemFlowRate, ZoneExtPer
   INTEGER, SAVE :: ErrorIndex = 0
   INTEGER, SAVE :: ErrorIndex2 = 0
 
-  IF (ZoneExtPerimLength > 0.d0) THEN
+  IF (ZoneExtPerimLength > 0.) THEN
     IF (WindowLocationType == InConvWinLoc_WindowAboveThis) THEN
-      Hc = 0.063d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+      Hc = 0.063*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
     ELSEIF(WindowLocationType == InConvWinLoc_WindowBelowThis) THEN
-      Hc = 0.093d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+      Hc = 0.093*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
     ELSEIF(WindowLocationType == InConvWinLoc_NotSet) THEN
-      Hc = 0.063d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)  ! assumption for case not covered by model
+      Hc = 0.063*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)  ! assumption for case not covered by model
     ELSE
-      Hc = 9.999d0
+      Hc = 9.999
       IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcGoldsteinNovoselacCeilingDiffuserWall: bad code for relative window location =' &
                                                                     //TRIM(RoundSigDigits(WindowLocationType)))
@@ -9556,7 +9556,7 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserWall(AirSystemFlowRate, ZoneExtPer
 
     ENDIF
   ELSE
-    Hc = 9.999d0
+    Hc = 9.999
     IF (ErrorIndex2 == 0) &
         CALL ShowSevereMessage('CalcGoldsteinNovoselacCeilingDiffuserWall: bad Zone Exterior Perimeter Length =' &
                                       //TRIM(RoundSigDigits(ZoneExtPerimLength,5)))
@@ -9592,9 +9592,9 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserFloor(AirSystemFlowRate, ZoneExtPe
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
-  REAL(r64), INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
-  REAL(r64)             :: Hc ! function result, total convection coefficient
+  REAL, INTENT(IN) :: AirSystemFlowRate  ! [m3/s] air system flow rate
+  REAL, INTENT(IN) :: ZoneExtPerimLength ! [m] length of zone perimeter with exterior walls
+  REAL             :: Hc ! function result, total convection coefficient
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -9608,15 +9608,15 @@ FUNCTION CalcGoldsteinNovoselacCeilingDiffuserFloor(AirSystemFlowRate, ZoneExtPe
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (ZoneExtPerimLength > 0.d0) THEN
-    Hc = 0.048d0*((AirSystemFlowRate / ZoneExtPerimLength)**0.8d0)
+  IF (ZoneExtPerimLength > 0.) THEN
+    Hc = 0.048*((AirSystemFlowRate / ZoneExtPerimLength)**0.8)
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcGoldsteinNovoselacCeilingDiffuserFloor: bad value for Zone Exterior Perimeter Length=' &
                                       //TRIM(RoundSigDigits(ZoneExtPerimLength,5)))
     CALL ShowRecurringSevereErrorAtEnd('CalcGoldsteinNovoselacCeilingDiffuserFloor: bad value for Zone Exterior Perimeter Length=' &
                                       //TRIM(RoundSigDigits(ZoneExtPerimLength,5)) , ErrorIndex)
-    Hc = 9.999d0 ! safe but noticeable
+    Hc = 9.999 ! safe but noticeable
   ENDIF
   RETURN
 
@@ -9654,10 +9654,10 @@ FUNCTION CalcSparrowWindward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ) R
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: RoughnessIndex
-  REAL(r64), INTENT(IN) :: FacePerimeter
-  REAL(r64), INTENT(IN) :: FaceArea
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hf
+  REAL, INTENT(IN) :: FacePerimeter
+  REAL, INTENT(IN) :: FaceArea
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9671,8 +9671,8 @@ FUNCTION CalcSparrowWindward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ) R
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (FaceArea > 0.d0) THEN
-    Hf = 2.53d0 * RoughnessMultiplier(RoughnessIndex)*(( FacePerimeter * WindAtZ/FaceArea)**0.5d0)
+  IF (FaceArea > 0.) THEN
+    Hf = 2.53 * RoughnessMultiplier(RoughnessIndex)*(( FacePerimeter * WindAtZ/FaceArea)**0.5)
 
   ELSE
     IF (ErrorIndex == 0) &
@@ -9680,7 +9680,7 @@ FUNCTION CalcSparrowWindward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ) R
                                       //TRIM(RoundSigDigits(FaceArea,5)))
     CALL ShowRecurringSevereErrorAtEnd('CalcSparrowWindward: bad value for face area=' &
                                       //TRIM(RoundSigDigits(FaceArea,5)) , ErrorIndex )
-    Hf = 9.999d0 ! safe but noticeable
+    Hf = 9.999 ! safe but noticeable
   ENDIF
   RETURN
 
@@ -9718,10 +9718,10 @@ FUNCTION CalcSparrowLeeward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ) RE
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: RoughnessIndex
-  REAL(r64), INTENT(IN) :: FacePerimeter
-  REAL(r64), INTENT(IN) :: FaceArea
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hf
+  REAL, INTENT(IN) :: FacePerimeter
+  REAL, INTENT(IN) :: FaceArea
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9735,15 +9735,15 @@ FUNCTION CalcSparrowLeeward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ) RE
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (FaceArea > 0.d0) THEN
-    Hf = 2.53d0 * 0.5d0 * RoughnessMultiplier(RoughnessIndex)*(( FacePerimeter * WindAtZ/FaceArea)**0.5d0)
+  IF (FaceArea > 0.) THEN
+    Hf = 2.53 * 0.5 * RoughnessMultiplier(RoughnessIndex)*(( FacePerimeter * WindAtZ/FaceArea)**0.5)
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcSparrowLeeward: bad value for face area=' &
                                       //TRIM(RoundSigDigits(FaceArea,5)))
     CALL ShowRecurringSevereErrorAtEnd('CalcSparrowLeeward: bad value for face area=' &
                                       //TRIM(RoundSigDigits(FaceArea,5)) , ErrorIndex )
-    Hf = 9.999d0 ! safe but noticeable
+    Hf = 9.999 ! safe but noticeable
   ENDIF
   RETURN
 
@@ -9774,9 +9774,9 @@ FUNCTION CalcMoWITTWindward(DeltaTemp, WindAtZ) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hc ! total convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hc ! total convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9790,7 +9790,7 @@ FUNCTION CalcMoWITTWindward(DeltaTemp, WindAtZ) RESULT (Hc)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  Hc = ((  0.84d0*((ABS(DeltaTemp))**OneThird)  )**2 + (2.38d0 * (WindAtZ**0.89d0) )**2) **0.5d0
+  Hc = ((  0.84*((ABS(DeltaTemp))**OneThird)  )**2 + (2.38 * (WindAtZ**0.89) )**2) **0.5
 
   RETURN
 
@@ -9821,9 +9821,9 @@ FUNCTION CalcMoWITTLeeward(DeltaTemp, WindAtZ) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: DeltaTemp
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hc ! total convection coefficient
+  REAL, INTENT(IN) :: DeltaTemp
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hc ! total convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9837,7 +9837,7 @@ FUNCTION CalcMoWITTLeeward(DeltaTemp, WindAtZ) RESULT (Hc)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  Hc = ((  0.84d0*((ABS(DeltaTemp))**OneThird)  )**2 + (2.86d0 * (WindAtZ**0.617d0) )**2) **0.5d0
+  Hc = ((  0.84*((ABS(DeltaTemp))**OneThird)  )**2 + (2.86 * (WindAtZ**0.617) )**2) **0.5
 
   RETURN
 
@@ -9870,12 +9870,12 @@ FUNCTION CalcDOE2Windward(SurfaceTemp, AirTemp, CosineTilt, WindAtZ, RoughnessIn
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: SurfaceTemp
-  REAL(r64), INTENT(IN) :: AirTemp
-  REAL(r64), INTENT(IN) :: CosineTilt
-  REAL(r64), INTENT(IN) :: WindAtZ
+  REAL, INTENT(IN) :: SurfaceTemp
+  REAL, INTENT(IN) :: AirTemp
+  REAL, INTENT(IN) :: CosineTilt
+  REAL, INTENT(IN) :: WindAtZ
   INTEGER  , INTENT(IN) :: RoughnessIndex
-  REAL(r64)             :: Hf ! forced convection coefficient
+  REAL             :: Hf ! forced convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9887,15 +9887,15 @@ FUNCTION CalcDOE2Windward(SurfaceTemp, AirTemp, CosineTilt, WindAtZ, RoughnessIn
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: HcSmooth
-  REAL(r64) :: Hn
-  REAL(r64) :: DeltaTemp
+  REAL :: HcSmooth
+  REAL :: Hn
+  REAL :: DeltaTemp
 
   DeltaTemp = SurfaceTemp - AirTemp
 
   Hn = CalcHnASHRAETARPExterior(SurfaceTemp, AirTemp, CosineTilt)
 
-  HcSmooth = SQRT(Hn**2 + (2.38d0 * WindAtZ ** 0.89d0)**2)
+  HcSmooth = SQRT(Hn**2 + (2.38 * WindAtZ ** 0.89)**2)
 
   Hf = RoughnessMultiplier(RoughnessIndex) * (HcSmooth - Hn)
 
@@ -9930,12 +9930,12 @@ FUNCTION CalcDOE2Leeward(SurfaceTemp, AirTemp, CosineTilt, WindAtZ, RoughnessInd
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: SurfaceTemp
-  REAL(r64), INTENT(IN) :: AirTemp
-  REAL(r64), INTENT(IN) :: CosineTilt
-  REAL(r64), INTENT(IN) :: WindAtZ
+  REAL, INTENT(IN) :: SurfaceTemp
+  REAL, INTENT(IN) :: AirTemp
+  REAL, INTENT(IN) :: CosineTilt
+  REAL, INTENT(IN) :: WindAtZ
   INTEGER  , INTENT(IN) :: RoughnessIndex
-  REAL(r64)             :: Hf ! forced convection coefficient
+  REAL             :: Hf ! forced convection coefficient
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -9947,15 +9947,15 @@ FUNCTION CalcDOE2Leeward(SurfaceTemp, AirTemp, CosineTilt, WindAtZ, RoughnessInd
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: HcSmooth
-  REAL(r64) :: Hn
-  REAL(r64) :: DeltaTemp
+  REAL :: HcSmooth
+  REAL :: Hn
+  REAL :: DeltaTemp
 
   DeltaTemp = SurfaceTemp - AirTemp
 
   Hn = CalcHnASHRAETARPExterior(SurfaceTemp, AirTemp, CosineTilt)
 
-  HcSmooth = SQRT(Hn**2 + (2.86d0 * WindAtZ ** 0.617d0)**2)
+  HcSmooth = SQRT(Hn**2 + (2.86 * WindAtZ ** 0.617)**2)
 
   Hf = RoughnessMultiplier(RoughnessIndex) * (HcSmooth - Hn)
 
@@ -9992,8 +9992,8 @@ FUNCTION CalcNusseltJurges(WindAtZ) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hc
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hc
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10005,7 +10005,7 @@ FUNCTION CalcNusseltJurges(WindAtZ) RESULT (Hc)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  Hc = 5.8d0 + 3.94d0 * WindAtZ
+  Hc = 5.8 + 3.94 * WindAtZ
 
   RETURN
 
@@ -10039,8 +10039,8 @@ FUNCTION CalcMcAdams(WindAtZ) RESULT (Hc)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64)             :: Hc
+  REAL, INTENT(IN) :: WindAtZ
+  REAL             :: Hc
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10052,7 +10052,7 @@ FUNCTION CalcMcAdams(WindAtZ) RESULT (Hc)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  Hc = 5.8d0 + 3.8d0 * WindAtZ
+  Hc = 5.8 + 3.8 * WindAtZ
 
   RETURN
 
@@ -10085,9 +10085,9 @@ FUNCTION CalcMitchell(WindAtZ, LengthScale ) RESULT (Hf)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN) :: WindAtZ
-  REAL(r64), INTENT(IN) :: LengthScale
-  REAL(r64)             :: Hf
+  REAL, INTENT(IN) :: WindAtZ
+  REAL, INTENT(IN) :: LengthScale
+  REAL             :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10101,15 +10101,15 @@ FUNCTION CalcMitchell(WindAtZ, LengthScale ) RESULT (Hf)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER, SAVE :: ErrorIndex = 0
 
-  IF (LengthScale > 0.d0) THEN
-    Hf = 8.6d0 * (WindAtZ**0.6d0) / (LengthScale**0.4d0)
+  IF (LengthScale > 0.) THEN
+    Hf = 8.6 * (WindAtZ**0.6) / (LengthScale**0.4)
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcMitchell: bad value for length scale =' &
                                     //TRIM(RoundSigDigits(LengthScale,5)))
     CALL ShowRecurringSevereErrorAtEnd('CalcMitchell: bad value for length scale =' &
                                     //TRIM(RoundSigDigits(LengthScale,5)) , ErrorIndex )
-    Hf = 9.999d0 ! safe but noticeable
+    Hf = 9.999 ! safe but noticeable
   ENDIF
   RETURN
 
@@ -10141,10 +10141,10 @@ FUNCTION CalcBlockenWindward(WindAt10m, WindDir, SurfAzimuth) RESULT (Hf)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64) , INTENT(IN) :: WindAt10m
-  REAL(r64) , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
-  REAL(r64) , INTENT(IN) :: SurfAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
-  REAL(r64)              :: Hf
+  REAL , INTENT(IN) :: WindAt10m
+  REAL , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
+  REAL , INTENT(IN) :: SurfAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
+  REAL              :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10156,22 +10156,22 @@ FUNCTION CalcBlockenWindward(WindAt10m, WindDir, SurfAzimuth) RESULT (Hf)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Theta ! angle between wind and surface azimuth
+  REAL :: Theta ! angle between wind and surface azimuth
 
-  Theta = WindDir - SurfAzimuth - 90.d0 !TODO double check theta
+  Theta = WindDir - SurfAzimuth - 90. !TODO double check theta
   IF (Theta > 180 ) Theta = Theta - 360.00
 
-  IF (Theta <= 11.25d0) THEN
-    Hf = 4.6d0 * (WindAt10m**0.89d0)
-  ELSEIF ((11.25d0 < Theta) .AND. (Theta <= 33.75d0)) THEN
-    Hf = 5.d0 * (WindAt10m**0.8d0)
-  ELSEIF ((33.75d0 < Theta) .AND. (Theta <= 56.25d0)) THEN
-    Hf = 4.6d0 * (WindAt10m**0.84d0)
-  ELSEIF ((56.25d0 < Theta) .AND. (Theta <= 100.d0)) THEN
-    Hf = 4.5d0 * (WindAt10m**0.81d0)
+  IF (Theta <= 11.25) THEN
+    Hf = 4.6 * (WindAt10m**0.89)
+  ELSEIF ((11.25 < Theta) .AND. (Theta <= 33.75)) THEN
+    Hf = 5. * (WindAt10m**0.8)
+  ELSEIF ((33.75 < Theta) .AND. (Theta <= 56.25)) THEN
+    Hf = 4.6 * (WindAt10m**0.84)
+  ELSEIF ((56.25 < Theta) .AND. (Theta <= 100.)) THEN
+    Hf = 4.5 * (WindAt10m**0.81)
   ELSE
     ! should not be used for leeward... check why come here?
-    Hf = 3.54d0 * (WindAt10m**0.76d0)  !emmel model for robustness?
+    Hf = 3.54 * (WindAt10m**0.76)  !emmel model for robustness?
   ENDIF
   RETURN
 
@@ -10203,10 +10203,10 @@ FUNCTION CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth) RESULT (Hf)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64) , INTENT(IN) :: WindAt10m
-  REAL(r64) , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
-  REAL(r64) , INTENT(IN) :: SurfAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
-  REAL(r64)              :: Hf
+  REAL , INTENT(IN) :: WindAt10m
+  REAL , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
+  REAL , INTENT(IN) :: SurfAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
+  REAL              :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10218,28 +10218,28 @@ FUNCTION CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth) RESULT (Hf)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Theta ! angle between wind and surface azimuth
+  REAL :: Theta ! angle between wind and surface azimuth
   INTEGER, SAVE :: ErrorIndex = 0
 
-  Theta = WindDir - SurfAzimuth - 90.d0 !TODO double check theta
+  Theta = WindDir - SurfAzimuth - 90. !TODO double check theta
   IF (Theta > 180 ) Theta = Theta - 360.00
 
-  IF (Theta <= 22.5d0) THEN
-    Hf = 5.15d0 * (WindAt10m**0.81d0)
-  ELSEIF ((22.5d0 < Theta) .AND. (Theta <= 67.5d0)) THEN
-    Hf = 3.34d0 * (WindAt10m**0.84d0)
-  ELSEIF ((67.5d0 < Theta) .AND. (Theta <= 112.5d0)) THEN
-    Hf = 4.78d0 * (WindAt10m**0.71d0)
-  ELSEIF ((112.5d0 < Theta) .AND. (Theta <= 157.5d0)) THEN
-    Hf = 4.05d0 * (WindAt10m**0.77d0)
-  ELSEIF ((157.5d0 < Theta) .AND. (Theta <= 180.d0)) THEN
-    Hf = 3.54d0 * (WindAt10m**0.76d0)
+  IF (Theta <= 22.5) THEN
+    Hf = 5.15 * (WindAt10m**0.81)
+  ELSEIF ((22.5 < Theta) .AND. (Theta <= 67.5)) THEN
+    Hf = 3.34 * (WindAt10m**0.84)
+  ELSEIF ((67.5 < Theta) .AND. (Theta <= 112.5)) THEN
+    Hf = 4.78 * (WindAt10m**0.71)
+  ELSEIF ((112.5 < Theta) .AND. (Theta <= 157.5)) THEN
+    Hf = 4.05 * (WindAt10m**0.77)
+  ELSEIF ((157.5 < Theta) .AND. (Theta <= 180.)) THEN
+    Hf = 3.54 * (WindAt10m**0.76)
 
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcEmmelVertical: check angle calculations')
     CALL ShowRecurringSevereErrorAtEnd('CalcEmmelVertical: check angle calculations', ErrorIndex)
-    Hf = 3.54d0 * (WindAt10m**0.76d0)
+    Hf = 3.54 * (WindAt10m**0.76)
   ENDIF
   RETURN
 
@@ -10271,10 +10271,10 @@ FUNCTION CalcEmmelRoof(WindAt10m, WindDir, LongAxisOutwardAzimuth) RESULT (Hf)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64) , INTENT(IN) :: WindAt10m
-  REAL(r64) , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
-  REAL(r64) , INTENT(IN) :: LongAxisOutwardAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
-  REAL(r64)              :: Hf
+  REAL , INTENT(IN) :: WindAt10m
+  REAL , INTENT(IN) :: WindDir ! Wind direction measured clockwise from geographhic North
+  REAL , INTENT(IN) :: LongAxisOutwardAzimuth ! or Facing, Direction the surface outward normal faces (degrees)
+  REAL              :: Hf
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -10286,28 +10286,28 @@ FUNCTION CalcEmmelRoof(WindAt10m, WindDir, LongAxisOutwardAzimuth) RESULT (Hf)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Theta ! angle between wind and surface azimuth
+  REAL :: Theta ! angle between wind and surface azimuth
   INTEGER, SAVE :: ErrorIndex = 0
 
-  Theta = WindDir - LongAxisOutwardAzimuth - 90.d0 !TODO double check theta
+  Theta = WindDir - LongAxisOutwardAzimuth - 90. !TODO double check theta
   IF (Theta > 180 ) Theta = Theta - 360.00
 
-  IF (Theta <= 22.5d0) THEN
-    Hf = 5.15d0 * (WindAt10m**0.81d0)
-  ELSEIF ((22.5d0 < Theta) .AND. (Theta <= 67.5d0)) THEN
-    Hf = 3.34d0 * (WindAt10m**0.84d0)
-  ELSEIF ((67.5d0 < Theta) .AND. (Theta <= 112.5d0)) THEN
-    Hf = 4.78d0 * (WindAt10m**0.71d0)
-  ELSEIF ((112.5d0 < Theta) .AND. (Theta <= 157.5d0)) THEN
-    Hf = 4.05d0 * (WindAt10m**0.77d0)
-  ELSEIF ((157.5d0 < Theta) .AND. (Theta <= 180.d0)) THEN
-    Hf = 3.54d0 * (WindAt10m**0.76d0)
+  IF (Theta <= 22.5) THEN
+    Hf = 5.15 * (WindAt10m**0.81)
+  ELSEIF ((22.5 < Theta) .AND. (Theta <= 67.5)) THEN
+    Hf = 3.34 * (WindAt10m**0.84)
+  ELSEIF ((67.5 < Theta) .AND. (Theta <= 112.5)) THEN
+    Hf = 4.78 * (WindAt10m**0.71)
+  ELSEIF ((112.5 < Theta) .AND. (Theta <= 157.5)) THEN
+    Hf = 4.05 * (WindAt10m**0.77)
+  ELSEIF ((157.5 < Theta) .AND. (Theta <= 180.)) THEN
+    Hf = 3.54 * (WindAt10m**0.76)
 
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcEmmelRoof: check angle calculations')
     CALL ShowRecurringSevereErrorAtEnd('CalcEmmelRoof: check angle calculations', ErrorIndex)
-    Hf = 3.54d0 * (WindAt10m**0.76d0)
+    Hf = 3.54 * (WindAt10m**0.76)
   ENDIF
   RETURN
 
@@ -10338,19 +10338,19 @@ FUNCTION CalcClearRoof(SurfNum, SurfTemp, AirTemp, WindAtZ, WindDirect, RoofArea
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,    INTENT(IN) :: SurfNum
-  REAL(r64) , INTENT(IN) :: SurfTemp
-  REAL(r64) , INTENT(IN) :: AirTemp
-  REAL(r64) , INTENT(IN) :: WindAtZ
-  REAL(r64) , INTENT(IN) :: WindDirect ! Wind direction measured clockwise from geographhic North
-  REAL(R64) , INTENT(IN) :: RoofArea
-  REAL(r64) , INTENT(IN) :: RoofPerimeter
-  REAL(r64)              :: Hc
+  REAL , INTENT(IN) :: SurfTemp
+  REAL , INTENT(IN) :: AirTemp
+  REAL , INTENT(IN) :: WindAtZ
+  REAL , INTENT(IN) :: WindDirect ! Wind direction measured clockwise from geographhic North
+  REAL , INTENT(IN) :: RoofArea
+  REAL , INTENT(IN) :: RoofPerimeter
+  REAL              :: Hc
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: g  = 9.81d0       ! gravity constant (m/s**2)
-  REAL(r64), PARAMETER :: v  = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
-  REAL(r64), PARAMETER :: k  = 0.0263d0     ! thermal conductivity (W/m K) for air at 300 K
-  REAL(r64), PARAMETER :: Pr = 0.71d0      ! Prandtl number for air at ?
+  REAL, PARAMETER :: g  = 9.81       ! gravity constant (m/s**2)
+  REAL, PARAMETER :: v  = 15.89d-6   ! kinematic viscosity (m**2/s) for air at 300 K
+  REAL, PARAMETER :: k  = 0.0263     ! thermal conductivity (W/m K) for air at 300 K
+  REAL, PARAMETER :: Pr = 0.71      ! Prandtl number for air at ?
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -10359,54 +10359,54 @@ FUNCTION CalcClearRoof(SurfNum, SurfTemp, AirTemp, WindAtZ, WindDirect, RoofArea
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: DeltaTemp
-  REAL(r64) :: Ln
-  REAL(r64) :: RaLn ! Rayleigh number
-  REAL(r64) :: GrLn ! Grashof number
-  REAL(r64) :: AirDensity
-  REAL(r64) :: Rex ! Reynolds number
-  REAL(r64) :: x  ! distance to roof edge toward wind direction
-  REAL(r64) :: eta
-  REAL(r64), DIMENSION(6) :: RfARR
-  REAL(r64) :: Rf
-  REAL(r64) :: BetaFilm
+  REAL :: DeltaTemp
+  REAL :: Ln
+  REAL :: RaLn ! Rayleigh number
+  REAL :: GrLn ! Grashof number
+  REAL :: AirDensity
+  REAL :: Rex ! Reynolds number
+  REAL :: x  ! distance to roof edge toward wind direction
+  REAL :: eta
+  REAL, DIMENSION(6) :: RfARR
+  REAL :: Rf
+  REAL :: BetaFilm
   INTEGER, SAVE :: ErrorIndex = 0
 
-  RfARR = (/2.10d0, 1.67d0, 1.52d0, 1.13d0,1.11d0, 1.0d0/)
+  RfARR = (/2.10, 1.67, 1.52, 1.13,1.11, 1.0/)
 
   Rf = RfARR(Material(Construct(Surface(SurfNum)%Construction)%LayerPoint(1))%Roughness)
   !find x, don't know x. avoid time consuming geometry algorithm
-  x = SQRT(RoofArea)/2.d0 ! quick simplification, geometry routines to develop
+  x = SQRT(RoofArea)/2. ! quick simplification, geometry routines to develop
 
-  IF (RoofPerimeter >0.d0 ) THEN
+  IF (RoofPerimeter >0. ) THEN
     Ln = RoofArea / RoofPerimeter
   ELSE
     Ln = SQRT(RoofArea)
   ENDIF
   DeltaTemp = SurfTemp - AirTemp
-  BetaFilm = 1.d0 / (KelvinConv + SurfTemp + 0.5d0 * DeltaTemp)
+  BetaFilm = 1. / (KelvinConv + SurfTemp + 0.5 * DeltaTemp)
   AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,AirTemp,OutHumRat)
 
-  GrLn = g * (AirDensity**2) * (Ln**3.d0) * ABS(DeltaTemp) * BetaFilm / v**2
+  GrLn = g * (AirDensity**2) * (Ln**3.) * ABS(DeltaTemp) * BetaFilm / v**2
   RaLn = GrLn * Pr
 
   Rex = WindAtZ * AirDensity * x / v
 
-  IF (Rex > 0.1d0) THEN !avoid zero and crazy small denominators
+  IF (Rex > 0.1) THEN !avoid zero and crazy small denominators
     eta = (log(1+GrLn/Rex**2))/(1 + Log(1 + GrLn/(Rex**2)))
   ELSE
-    eta = 1.d0 ! forced convection gone because no wind
+    eta = 1. ! forced convection gone because no wind
   ENDIF
 
-  IF ( x > 0.d0) THEN
-    Hc = eta *(k/Ln)*0.15d0*(RaLn**OneThird) + (k/x)*Rf*0.0296d0*(Rex**FourFifths)*(Pr**OneThird)
+  IF ( x > 0.) THEN
+    Hc = eta *(k/Ln)*0.15*(RaLn**OneThird) + (k/x)*Rf*0.0296*(Rex**FourFifths)*(Pr**OneThird)
   ELSE
     IF (ErrorIndex == 0) &
         CALL ShowSevereMessage('CalcClearRoof: bad value for distance to roof edge=' &
                                       //TRIM(RoundSigDigits(x,3)))
     CALL ShowRecurringSevereErrorAtEnd('CalcClearRoof: bad value for distance to roof edge=' &
                                       //TRIM(RoundSigDigits(x,3)) , ErrorIndex)
-    Hc = 9.9999d0 ! safe but noticeable
+    Hc = 9.9999 ! safe but noticeable
   ENDIf
   RETURN
 

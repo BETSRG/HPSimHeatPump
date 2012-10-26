@@ -7,7 +7,7 @@ MODULE WaterThermalTanks
         !                      Jan 2007, PGE - added stratified water heater
         !                      Oct 2007, BTG - extended for indirect water heater
         !                      May 2008, Stovall - added desup from condenser and removed double counting
-        !                           (includes "d0"s from revision 145)
+        !                           (includes ""s from revision 145)
         !                       Nov 2011, BAN; corrected use and source outlet temp. calculation of stratified tank
         !       RE-ENGINEERED  Feb 2004, PGE
         !                      Sep 2008, BTG - refactored, was PlantWaterHeater.f90 is now PlantWaterThermalTank.f90
@@ -118,36 +118,36 @@ INTEGER, PARAMETER :: UseOutletHPWHControl   = 506
 
           ! DERIVED TYPE DEFINITIONS:
 TYPE StratifiedNodeData
-  REAL(r64) :: Mass = 0.0                        ! All nodes have the same mass (kg)
-  REAL(r64) :: OnCycLossCoeff = 0.0
-  REAL(r64) :: OffCycLossCoeff = 0.0
+  REAL :: Mass = 0.0                        ! All nodes have the same mass (kg)
+  REAL :: OnCycLossCoeff = 0.0
+  REAL :: OffCycLossCoeff = 0.0
 
-  REAL(r64) :: Temp = 0.0
-  REAL(r64) :: SavedTemp = 0.0
-  REAL(r64) :: NewTemp = 0.0
+  REAL :: Temp = 0.0
+  REAL :: SavedTemp = 0.0
+  REAL :: NewTemp = 0.0
 
-  REAL(r64) :: TempSum = 0.0
-  REAL(r64) :: TempAvg = 0.0                    ! Average node temperature over the time step (C)
+  REAL :: TempSum = 0.0
+  REAL :: TempAvg = 0.0                    ! Average node temperature over the time step (C)
 
-  REAL(r64) :: CondCoeffUp = 0.0
-  REAL(r64) :: CondCoeffDn = 0.0
+  REAL :: CondCoeffUp = 0.0
+  REAL :: CondCoeffDn = 0.0
 
-  REAL(r64) :: OffCycParaLoad = 0.0   ! Heat delivered to the tank from off-cycle parasitic sources
-  REAL(r64) :: OnCycParaLoad = 0.0
+  REAL :: OffCycParaLoad = 0.0   ! Heat delivered to the tank from off-cycle parasitic sources
+  REAL :: OnCycParaLoad = 0.0
 
-  REAL(r64) :: UseMassFlowRate = 0.0
-  REAL(r64) :: SourceMassFlowRate = 0.0
+  REAL :: UseMassFlowRate = 0.0
+  REAL :: SourceMassFlowRate = 0.0
 
-  REAL(r64) :: MassFlowFromUpper = 0.0  ! Mass flow rate into this node from node above
-  REAL(r64) :: MassFlowFromLower = 0.0  ! Mass flow rate into this node from node below
-  REAL(r64) :: MassFlowToUpper = 0.0  ! Mass flow rate from this node to node above
-  REAL(r64) :: MassFlowToLower = 0.0  ! Mass flow rate from this node to node below
+  REAL :: MassFlowFromUpper = 0.0  ! Mass flow rate into this node from node above
+  REAL :: MassFlowFromLower = 0.0  ! Mass flow rate into this node from node below
+  REAL :: MassFlowToUpper = 0.0  ! Mass flow rate from this node to node above
+  REAL :: MassFlowToLower = 0.0  ! Mass flow rate from this node to node below
 
   ! Report Variables
-  REAL(r64) :: Volume = 0.0
-  REAL(r64) :: Height = 0.0  ! Node height from top to bottom (like a thickness)
+  REAL :: Volume = 0.0
+  REAL :: Height = 0.0  ! Node height from top to bottom (like a thickness)
 
-  REAL(r64) :: MaxCapacity = 0.0  ! For reporting
+  REAL :: MaxCapacity = 0.0  ! For reporting
 
   INTEGER :: Inlets = 0
   INTEGER :: Outlets = 0
@@ -156,26 +156,26 @@ END TYPE StratifiedNodeData
 TYPE WaterHeaterSizingData
   ! input data
   INTEGER :: DesignMode                        = SizeNotSet  ! what sizing method to use
-  REAL(r64)    :: TankDrawTime                 = 0.0D0 ! in hours, time storage can meet peak demand
-  REAL(r64)    :: RecoveryTime                 = 0.0D0 ! time for tank to recover
-  REAL(r64)    :: NominalVolForSizingDemandSideFlow = 0.0D0 ! nominal tank size to use in sizing demand side connections
+  REAL    :: TankDrawTime                 = 0.0 ! in hours, time storage can meet peak demand
+  REAL    :: RecoveryTime                 = 0.0 ! time for tank to recover
+  REAL    :: NominalVolForSizingDemandSideFlow = 0.0 ! nominal tank size to use in sizing demand side connections
   INTEGER      :: NumberOfBedrooms             = 0 !
-  REAL(r64)    :: NumberOfBathrooms            = 0.0D0 !
-  REAL(r64)    :: TankCapacityPerPerson        = 0.0D0 !
-  REAL(r64)    :: RecoveryCapacityPerPerson    = 0.0D0
-  REAL(r64)    :: TankCapacityPerArea          = 0.0D0
-  REAL(r64)    :: RecoveryCapacityPerArea      = 0.0D0
-  REAL(r64)    :: NumberOfUnits                = 0.0D0
-  REAL(r64)    :: TankCapacityPerUnit          = 0.0D0
-  REAL(r64)    :: RecoveryCapacityPerUnit      = 0.0D0
-  REAL(r64)    :: TankCapacityPerCollectorArea = 0.0D0
-  REAL(r64)    :: HeightAspectRatio            = 0.0D0
+  REAL    :: NumberOfBathrooms            = 0.0 !
+  REAL    :: TankCapacityPerPerson        = 0.0 !
+  REAL    :: RecoveryCapacityPerPerson    = 0.0
+  REAL    :: TankCapacityPerArea          = 0.0
+  REAL    :: RecoveryCapacityPerArea      = 0.0
+  REAL    :: NumberOfUnits                = 0.0
+  REAL    :: TankCapacityPerUnit          = 0.0
+  REAL    :: RecoveryCapacityPerUnit      = 0.0
+  REAL    :: TankCapacityPerCollectorArea = 0.0
+  REAL    :: HeightAspectRatio            = 0.0
 
   ! data from elsewhere in E+
-  REAL(r64)    :: PeakDemand                   = 0.0D0
-  REAL(r64)    :: PeakNumberOfPeople           = 0.0D0
-  REAL(r64)    :: TotalFloorArea               = 0.0D0
-  REAL(r64)    :: TotalSolarCollectorArea      = 0.0D0
+  REAL    :: PeakDemand                   = 0.0
+  REAL    :: PeakNumberOfPeople           = 0.0
+  REAL    :: TotalFloorArea               = 0.0
+  REAL    :: TotalSolarCollectorArea      = 0.0
 
 END TYPE WaterHeaterSizingData
 
@@ -188,62 +188,62 @@ TYPE WaterThermalTankData
   CHARACTER(len=MaxNameLength) :: EndUseSubcategoryName = ''    ! User-defined end-use subcategory name
   LOGICAL                      :: Init = .TRUE.                 ! Flag for initialization:  TRUE means do the init
   LOGICAL                      :: StandAlone = .FALSE.          ! Flag for operation with no plant connections (no source or use)
-  REAL(r64)                    :: Volume = 0.0                  ! Tank volume (m3)
-  REAL(r64)                    :: Mass = 0.0                    ! Total mass of fluid in the tank (kg)
+  REAL                    :: Volume = 0.0                  ! Tank volume (m3)
+  REAL                    :: Mass = 0.0                    ! Total mass of fluid in the tank (kg)
 
-  REAL(r64)                    :: TimeElapsed = 0.0             ! Fraction of the current hour that has elapsed (h)
+  REAL                    :: TimeElapsed = 0.0             ! Fraction of the current hour that has elapsed (h)
                                                                 ! Saved in order to identify the beginning of a new system time
 
   INTEGER                      :: AmbientTempIndicator = 0      ! Indicator for ambient tank losses (SCHEDULE, ZONE, EXTERIOR)
   INTEGER                      :: AmbientTempSchedule = 0       ! Schedule index pointer
   INTEGER                      :: AmbientTempZone = 0           ! Number of ambient zone around tank
   INTEGER                      :: AmbientTempOutsideAirNode = 0 ! Number of outside air node
-  REAL(r64)                    :: AmbientTemp = 0.0             ! Ambient temperature around tank (C)
-  REAL(r64)                    :: AmbientZoneGain = 0.0         ! Internal gain to zone from tank losses (W)
-  REAL(r64)                    :: LossCoeff = 0.0               ! Overall tank heat loss coefficient, UA (W/K)
-  REAL(r64)                    :: OffCycLossCoeff = 0.0         ! Off-cycle overall tank heat loss coefficient, UA (W/K)
-  REAL(r64)                    :: OffCycLossFracToZone = 0.0    ! Fraction of off-cycle losses added to zone
-  REAL(r64)                    :: OnCycLossCoeff = 0.0          ! On-cycle overall tank heat loss coefficient, UA (W/K)
-  REAL(r64)                    :: OnCycLossFracToZone = 0.0     ! Fraction of on-cycle losses added to zone
+  REAL                    :: AmbientTemp = 0.0             ! Ambient temperature around tank (C)
+  REAL                    :: AmbientZoneGain = 0.0         ! Internal gain to zone from tank losses (W)
+  REAL                    :: LossCoeff = 0.0               ! Overall tank heat loss coefficient, UA (W/K)
+  REAL                    :: OffCycLossCoeff = 0.0         ! Off-cycle overall tank heat loss coefficient, UA (W/K)
+  REAL                    :: OffCycLossFracToZone = 0.0    ! Fraction of off-cycle losses added to zone
+  REAL                    :: OnCycLossCoeff = 0.0          ! On-cycle overall tank heat loss coefficient, UA (W/K)
+  REAL                    :: OnCycLossFracToZone = 0.0     ! Fraction of on-cycle losses added to zone
 
   INTEGER                      :: Mode = 0                      ! Indicator for current operating mode
   INTEGER                      :: SavedMode = 0                 ! Mode indicator saved from previous time step
   INTEGER                      :: ControlType = 1               ! Indicator for control type
   CHARACTER(len=MaxNameLength) :: FuelType = ''                 ! Fuel type
-  REAL(r64)                    :: MaxCapacity = 0.0             ! Maximum capacity of auxiliary heater 1 (W)
-  REAL(r64)                    :: MinCapacity = 0.0             ! Minimum capacity of auxiliary heater 1 (W)
-  REAL(r64)                    :: Efficiency = 0.0              ! Thermal efficiency of auxiliary heater 1 ()
+  REAL                    :: MaxCapacity = 0.0             ! Maximum capacity of auxiliary heater 1 (W)
+  REAL                    :: MinCapacity = 0.0             ! Minimum capacity of auxiliary heater 1 (W)
+  REAL                    :: Efficiency = 0.0              ! Thermal efficiency of auxiliary heater 1 ()
   INTEGER                      :: PLFCurve = 0                  ! Part load factor curve as a function of part load ratio
   INTEGER                      :: SetpointTempSchedule = 0      ! Schedule index pointer
-  REAL(r64)                    :: SetpointTemp = 0.0            ! Setpoint temperature of auxiliary heater 1 (C)
-  REAL(r64)                    :: DeadbandDeltaTemp = 0.0       ! Deadband temperature difference of auxiliary heater 1 (deltaC)
-  REAL(r64)                    :: TankTempLimit = 0.0           ! Maximum tank temperature limit before venting (C)
-  REAL(r64)                    :: IgnitionDelay = 0.0           ! Time delay before heater is allowed to turn on (s)
+  REAL                    :: SetpointTemp = 0.0            ! Setpoint temperature of auxiliary heater 1 (C)
+  REAL                    :: DeadbandDeltaTemp = 0.0       ! Deadband temperature difference of auxiliary heater 1 (deltaC)
+  REAL                    :: TankTempLimit = 0.0           ! Maximum tank temperature limit before venting (C)
+  REAL                    :: IgnitionDelay = 0.0           ! Time delay before heater is allowed to turn on (s)
 
-  REAL(r64)                    :: OffCycParaLoad = 0.0          ! Rate for off-cycle parasitic load (W)
+  REAL                    :: OffCycParaLoad = 0.0          ! Rate for off-cycle parasitic load (W)
   CHARACTER(len=MaxNameLength) :: OffCycParaFuelType = ''       ! Fuel type for off-cycle parasitic load
-  REAL(r64)                    :: OffCycParaFracToTank = 0.0    ! Fraction of off-cycle parasitic energy ending up in tank (W)
+  REAL                    :: OffCycParaFracToTank = 0.0    ! Fraction of off-cycle parasitic energy ending up in tank (W)
 
-  REAL(r64)                    :: OnCycParaLoad = 0.0           ! Rate for on-cycle parasitic load (W)
+  REAL                    :: OnCycParaLoad = 0.0           ! Rate for on-cycle parasitic load (W)
   CHARACTER(len=MaxNameLength) :: OnCycParaFuelType = ''        ! Fuel type for on-cycle parasitic load
-  REAL(r64)                    :: OnCycParaFracToTank = 0.0     ! Fraction of on-cycle parasitic energy ending up in tank (W)
+  REAL                    :: OnCycParaFracToTank = 0.0     ! Fraction of on-cycle parasitic energy ending up in tank (W)
 
   INTEGER                      :: UseCurrentFlowLock = 0        ! current flow lock setting on use side
 
   INTEGER                      :: UseInletNode = 0              ! Inlet node on the use side; colder water returning to a hottank
-  REAL(r64)                    :: UseInletTemp = 0.0            ! Use side inlet temperature (C)
+  REAL                    :: UseInletTemp = 0.0            ! Use side inlet temperature (C)
   INTEGER                      :: UseOutletNode = 0             ! Outlet node on the use side; hot tank water
-  REAL(r64)                    :: UseOutletTemp = 0.0           ! Use side outlet temperature (C)
-  REAL(r64)                    :: UseMassFlowRate = 0.0         ! Mass flow rate on the use side (kg/s)
-  REAL(r64)                    :: UseEffectiveness = 0.0        ! Heat transfer effectiveness on use side ()
-  REAL(r64)                    :: PlantUseMassFlowRateMax = 0.0 ! Plant demand-side max flow request on use side (kg/s)
-  REAL(r64)                    :: SavedUseOutletTemp = 0.0      ! Use side outlet temp saved for demand-side flow control (C)
-  REAL(r64)                    :: UseDesignVolFlowRate = 0.0    ! Use side plant volume flow rate (input data, autosizable) m3/s
+  REAL                    :: UseOutletTemp = 0.0           ! Use side outlet temperature (C)
+  REAL                    :: UseMassFlowRate = 0.0         ! Mass flow rate on the use side (kg/s)
+  REAL                    :: UseEffectiveness = 0.0        ! Heat transfer effectiveness on use side ()
+  REAL                    :: PlantUseMassFlowRateMax = 0.0 ! Plant demand-side max flow request on use side (kg/s)
+  REAL                    :: SavedUseOutletTemp = 0.0      ! Use side outlet temp saved for demand-side flow control (C)
+  REAL                    :: UseDesignVolFlowRate = 0.0    ! Use side plant volume flow rate (input data, autosizable) m3/s
   INTEGER                      :: UseBranchControlType = 2      ! Use side plant branch control type e.g active, passive, bypass
   INTEGER                      :: UseSidePlantSizNum = 0        ! index in plant sizing that the use side is on
   LOGICAL                      :: UseSideSeries = .TRUE.
   INTEGER                      :: UseSideAvailSchedNum = 0      ! use side availability schedule
-  REAL(r64)                    :: UseSideLoadRequested = 0.0D0  ! hold MyLoad request from plant management.
+  REAL                    :: UseSideLoadRequested = 0.0  ! hold MyLoad request from plant management.
   INTEGER                      :: UseSidePlantLoopNum = 0       ! if not zero, then this use side is on plant loop #
   INTEGER                      :: UseSidePlantLoopSide = 0      ! use side is on loop side index
   INTEGER                      :: UseSidePlantBranchNum = 0     ! use side branch num in plant topology
@@ -251,14 +251,14 @@ TYPE WaterThermalTankData
 
   INTEGER                      :: SourceCurrentFlowLock = 0     ! current flow lock setting on source side
   INTEGER                      :: SourceInletNode = 0           ! Inlet node for the source side; hot water from supply
-  REAL(r64)                    :: SourceInletTemp = 0.0         ! Source side inlet temperature (C)
+  REAL                    :: SourceInletTemp = 0.0         ! Source side inlet temperature (C)
   INTEGER                      :: SourceOutletNode = 0          ! Outlet node for the source side; colder tank water
-  REAL(r64)                    :: SourceOutletTemp = 0.0        ! Source side outlet temperature (C)
-  REAL(r64)                    :: SourceMassFlowRate = 0.0      ! Mass flow rate on the source side (kg/s)
-  REAL(r64)                    :: SourceEffectiveness = 0.0     ! Heat transfer effectiveness on source side ()
-  REAL(r64)                    :: PlantSourceMassFlowRateMax = 0.0 ! Plant demand-side max flow request on source side (kg/s)
-  REAL(r64)                    :: SavedSourceOutletTemp = 0.0   ! Source side outlet temp saved for demand-side flow control (C)
-  REAL(r64)                    :: SourceDesignVolFlowRate = 0.0 ! Source side plant volume flow rate (input data, autosizable) m3/s
+  REAL                    :: SourceOutletTemp = 0.0        ! Source side outlet temperature (C)
+  REAL                    :: SourceMassFlowRate = 0.0      ! Mass flow rate on the source side (kg/s)
+  REAL                    :: SourceEffectiveness = 0.0     ! Heat transfer effectiveness on source side ()
+  REAL                    :: PlantSourceMassFlowRateMax = 0.0 ! Plant demand-side max flow request on source side (kg/s)
+  REAL                    :: SavedSourceOutletTemp = 0.0   ! Source side outlet temp saved for demand-side flow control (C)
+  REAL                    :: SourceDesignVolFlowRate = 0.0 ! Source side plant volume flow rate (input data, autosizable) m3/s
   INTEGER                      :: SourceBranchControlType = 2   ! source side plant branch control type e.g active, passive, bypass
   INTEGER                      :: SourceSidePlantSizNum = 0     ! index in plant sizing that the source side is on
   LOGICAL                      :: SourceSideSeries = .TRUE.
@@ -268,52 +268,52 @@ TYPE WaterThermalTankData
   INTEGER                      :: SourceSidePlantBranchNum = 0   ! Source side branch num in plant topology
   INTEGER                      :: SourceSidePlantCompNum  = 0    ! Source side component num in plant topology
 
-  REAL(r64)                    :: SizingRecoveryTime = 0.0      ! sizing parameter for autosizing indirect water heaters (hr)
+  REAL                    :: SizingRecoveryTime = 0.0      ! sizing parameter for autosizing indirect water heaters (hr)
 
-  REAL(r64)                    :: MassFlowRateMax = 0.0         ! Maximum flow rate for scheduled DHW (kg/s)
-  REAL(r64)                    :: VolFlowRateMin  = 0.d0        ! Minimum flow rate for heater ignition (kg/s)
-  REAL(r64)                    :: MassFlowRateMin = 0.0         ! Minimum mass flow rate for heater ignition (kg/s)
+  REAL                    :: MassFlowRateMax = 0.0         ! Maximum flow rate for scheduled DHW (kg/s)
+  REAL                    :: VolFlowRateMin  = 0.        ! Minimum flow rate for heater ignition (kg/s)
+  REAL                    :: MassFlowRateMin = 0.0         ! Minimum mass flow rate for heater ignition (kg/s)
   INTEGER                      :: FlowRateSchedule = 0          ! Schedule index pointer
   INTEGER                      :: UseInletTempSchedule = 0      ! Cold water supply temperature schedule index pointer
 
-  REAL(r64)                    :: TankTemp = 0.0                ! Temperature of tank fluid (average, if stratified) (C)
-  REAL(r64)                    :: SavedTankTemp = 0.0           ! Tank temp that is carried from time step to time step (C)
-  REAL(r64)                    :: TankTempAvg = 0.0             ! Average tank temperature over the time step (C)
+  REAL                    :: TankTemp = 0.0                ! Temperature of tank fluid (average, if stratified) (C)
+  REAL                    :: SavedTankTemp = 0.0           ! Tank temp that is carried from time step to time step (C)
+  REAL                    :: TankTempAvg = 0.0             ! Average tank temperature over the time step (C)
 
   ! Stratified variables (in addition to the above)
-  REAL(r64)                    :: Height = 0.0                  ! Height of tank (m)
-  REAL(r64)                    :: Perimeter = 0.0               ! Perimeter of tank (m), only used for OTHER shape
+  REAL                    :: Height = 0.0                  ! Height of tank (m)
+  REAL                    :: Perimeter = 0.0               ! Perimeter of tank (m), only used for OTHER shape
   INTEGER                      :: Shape = 0                     ! Tank shape:  VERTICAL CYLINDER, HORIZONTAL CYLINDER, or OTHER
 
-  REAL(r64)                    :: HeaterHeight1 = 0.0
+  REAL                    :: HeaterHeight1 = 0.0
   INTEGER                      :: HeaterNode1 = 0
   LOGICAL                      :: HeaterOn1 = .FALSE.
   LOGICAL                      :: SavedHeaterOn1 = .FALSE.
 
-  REAL(r64)                    :: HeaterHeight2 = 0.0
+  REAL                    :: HeaterHeight2 = 0.0
   INTEGER                      :: HeaterNode2 = 0
   LOGICAL                      :: HeaterOn2 = .FALSE.
   LOGICAL                      :: SavedHeaterOn2 = .FALSE.
 
-  REAL(r64)                    :: AdditionalCond = 0.0           ! Additional destratification conductivity (W/m K)
+  REAL                    :: AdditionalCond = 0.0           ! Additional destratification conductivity (W/m K)
 
-  REAL(r64)                    :: SetpointTemp2 = 0.0            ! Setpoint temperature of auxiliary heater 2 (C)
+  REAL                    :: SetpointTemp2 = 0.0            ! Setpoint temperature of auxiliary heater 2 (C)
   INTEGER                      :: SetpointTempSchedule2 = 0
-  REAL(r64)                    :: DeadbandDeltaTemp2 = 0.0
-  REAL(r64)                    :: MaxCapacity2 = 0.0
+  REAL                    :: DeadbandDeltaTemp2 = 0.0
+  REAL                    :: MaxCapacity2 = 0.0
 
-  REAL(r64)                    :: OffCycParaHeight = 0.0
-  REAL(r64)                    :: OnCycParaHeight = 0.0
+  REAL                    :: OffCycParaHeight = 0.0
+  REAL                    :: OnCycParaHeight = 0.0
 
-  REAL(r64)                    :: SkinLossCoeff = 0.0
-  REAL(r64)                    :: SkinLossFracToZone = 0.0
-  REAL(r64)                    :: OffCycFlueLossCoeff = 0.0
-  REAL(r64)                    :: OffCycFlueLossFracToZone = 0.0
+  REAL                    :: SkinLossCoeff = 0.0
+  REAL                    :: SkinLossFracToZone = 0.0
+  REAL                    :: OffCycFlueLossCoeff = 0.0
+  REAL                    :: OffCycFlueLossFracToZone = 0.0
 
-  REAL(r64)                    :: UseInletHeight = 0.0          ! Height of use side inlet (m)
-  REAL(r64)                    :: UseOutletHeight = 0.0         ! Height of use side outlet (m)
-  REAL(r64)                    :: SourceInletHeight = 0.0       ! Height of source side inlet (m)
-  REAL(r64)                    :: SourceOutletHeight = 0.0      ! Height of source side outlet (m)
+  REAL                    :: UseInletHeight = 0.0          ! Height of use side inlet (m)
+  REAL                    :: UseOutletHeight = 0.0         ! Height of use side outlet (m)
+  REAL                    :: SourceInletHeight = 0.0       ! Height of source side inlet (m)
+  REAL                    :: SourceOutletHeight = 0.0      ! Height of source side outlet (m)
 
   INTEGER                      :: UseInletStratNode = 0         ! Use-side inlet node number
   INTEGER                      :: UseOutletStratNode = 0        ! Use-side outlet node number
@@ -322,65 +322,65 @@ TYPE WaterThermalTankData
 
   INTEGER                      :: InletMode = 1                 ! Inlet position mode:  1 = FIXED; 2 = SEEKING
 
-  REAL(r64)                    :: InversionMixingRate = 0.0
+  REAL                    :: InversionMixingRate = 0.0
 
-  REAL(r64), DIMENSION(:), ALLOCATABLE :: AdditionalLossCoeff        ! Loss coefficient added to the skin loss coefficient (W/m2-K)
+  REAL, DIMENSION(:), ALLOCATABLE :: AdditionalLossCoeff        ! Loss coefficient added to the skin loss coefficient (W/m2-K)
 
   INTEGER                      :: Nodes = 0                     ! Number of nodes
   TYPE(StratifiedNodeData), DIMENSION(:), ALLOCATABLE :: Node   ! Array of node data
 
   ! Report variables
-  REAL(r64)                    :: VolFlowRate = 0.0             ! Scheduled DHW demand (m3/s)
-  REAL(r64)                    :: VolumeConsumed = 0.0          ! Volume of DHW consumed (m3)
+  REAL                    :: VolFlowRate = 0.0             ! Scheduled DHW demand (m3/s)
+  REAL                    :: VolumeConsumed = 0.0          ! Volume of DHW consumed (m3)
 
-  REAL(r64)                    :: UnmetRate = 0.0               ! Energy demand to heat tank water to setpoint (W)
-  REAL(r64)                    :: LossRate = 0.0                ! Energy demand to support heat losses due to ambient temp (W)
-  REAL(r64)                    :: FlueLossRate = 0.0            ! Heat loss rate to flue (W)
-  REAL(r64)                    :: UseRate = 0.0                 ! Energy demand to heat the Use Side water to tank temp (W)
-  REAL(r64)                    :: TotalDemandRate = 0.0         ! Total demand rate (sum of all above rates) (W)
-  REAL(r64)                    :: SourceRate = 0.0              ! Energy supplied by the source side to help heat the tank (W)
-  REAL(r64)                    :: HeaterRate = 0.0              ! The energy the water heater burner puts into the water (W)
-  REAL(r64)                    :: HeaterRate1 = 0.0             ! The energy heater 1 puts into the water (W)
-  REAL(r64)                    :: HeaterRate2 = 0.0             ! The energy heater 2 puts into the water (W)
-  REAL(r64)                    :: FuelRate = 0.0                ! The fuel consumption rate for the water heater burner (W)
-  REAL(r64)                    :: FuelRate1 = 0.0               ! The fuel consumption rate for heater 1 (W)
-  REAL(r64)                    :: FuelRate2 = 0.0               ! The fuel consumption rate for heater 2 (W)
-  REAL(r64)                    :: VentRate = 0.0                ! Heat recovery energy lost due to setpoint temp (W)
-  REAL(r64)                    :: OffCycParaFuelRate = 0.0      ! Fuel consumption rate for off-cycle parasitic load (W)
-  REAL(r64)                    :: OffCycParaRateToTank = 0.0    ! Heat rate to tank for off-cycle parasitic load (W)
-  REAL(r64)                    :: OnCycParaFuelRate = 0.0       ! Fuel consumption rate for on-cycle parasitic load (W)
-  REAL(r64)                    :: OnCycParaRateToTank = 0.0     ! Heat rate to tank for on-cycle parasitic load (W)
-  REAL(r64)                    :: NetHeatTransferRate = 0.0     ! Net heat transfer rate to/from tank (W)
+  REAL                    :: UnmetRate = 0.0               ! Energy demand to heat tank water to setpoint (W)
+  REAL                    :: LossRate = 0.0                ! Energy demand to support heat losses due to ambient temp (W)
+  REAL                    :: FlueLossRate = 0.0            ! Heat loss rate to flue (W)
+  REAL                    :: UseRate = 0.0                 ! Energy demand to heat the Use Side water to tank temp (W)
+  REAL                    :: TotalDemandRate = 0.0         ! Total demand rate (sum of all above rates) (W)
+  REAL                    :: SourceRate = 0.0              ! Energy supplied by the source side to help heat the tank (W)
+  REAL                    :: HeaterRate = 0.0              ! The energy the water heater burner puts into the water (W)
+  REAL                    :: HeaterRate1 = 0.0             ! The energy heater 1 puts into the water (W)
+  REAL                    :: HeaterRate2 = 0.0             ! The energy heater 2 puts into the water (W)
+  REAL                    :: FuelRate = 0.0                ! The fuel consumption rate for the water heater burner (W)
+  REAL                    :: FuelRate1 = 0.0               ! The fuel consumption rate for heater 1 (W)
+  REAL                    :: FuelRate2 = 0.0               ! The fuel consumption rate for heater 2 (W)
+  REAL                    :: VentRate = 0.0                ! Heat recovery energy lost due to setpoint temp (W)
+  REAL                    :: OffCycParaFuelRate = 0.0      ! Fuel consumption rate for off-cycle parasitic load (W)
+  REAL                    :: OffCycParaRateToTank = 0.0    ! Heat rate to tank for off-cycle parasitic load (W)
+  REAL                    :: OnCycParaFuelRate = 0.0       ! Fuel consumption rate for on-cycle parasitic load (W)
+  REAL                    :: OnCycParaRateToTank = 0.0     ! Heat rate to tank for on-cycle parasitic load (W)
+  REAL                    :: NetHeatTransferRate = 0.0     ! Net heat transfer rate to/from tank (W)
 
   INTEGER                      :: CycleOnCount = 0              ! Number of times heater cycles on in the current time step
   INTEGER                      :: CycleOnCount1 = 0             ! Number of times heater 1 cycles on in the current time step
   INTEGER                      :: CycleOnCount2 = 0             ! Number of times heater 2 cycles on in the current time step
-  REAL(r64)                    :: RuntimeFraction = 0.0         ! Runtime fraction, fraction of timestep that any  heater is running
-  REAL(r64)                    :: RuntimeFraction1 = 0.0        ! Runtime fraction, fraction of timestep that heater 1 is running
-  REAL(r64)                    :: RuntimeFraction2 = 0.0        ! Runtime fraction, fraction of timestep that heater 2 is running
-  REAL(r64)                    :: PartLoadRatio = 0.0           ! Part load ratio, fraction of maximum heater capacity
+  REAL                    :: RuntimeFraction = 0.0         ! Runtime fraction, fraction of timestep that any  heater is running
+  REAL                    :: RuntimeFraction1 = 0.0        ! Runtime fraction, fraction of timestep that heater 1 is running
+  REAL                    :: RuntimeFraction2 = 0.0        ! Runtime fraction, fraction of timestep that heater 2 is running
+  REAL                    :: PartLoadRatio = 0.0           ! Part load ratio, fraction of maximum heater capacity
 
-  REAL(r64)                    :: UnmetEnergy = 0.0             ! Energy to heat tank water to setpoint (J)
-  REAL(r64)                    :: LossEnergy = 0.0              ! Energy to support heat losses due to ambient temp (J)
-  REAL(r64)                    :: FlueLossEnergy = 0.0          ! Energy to support heat losses to the flue (J)
-  REAL(r64)                    :: UseEnergy = 0.0               ! Energy to heat the use side water to tank temp (J)
-  REAL(r64)                    :: TotalDemandEnergy = 0.0       ! Total energy demand (sum of all above energies) (J)
-  REAL(r64)                    :: SourceEnergy = 0.0            ! Energy supplied by the source side to help heat the tank (J)
-  REAL(r64)                    :: HeaterEnergy = 0.0            ! The energy the water heater burner puts into the water (J)
-  REAL(r64)                    :: HeaterEnergy1 = 0.0           ! The energy heater 1 puts into the water (J)
-  REAL(r64)                    :: HeaterEnergy2 = 0.0           ! The energy heater 2 puts into the water (J)
-  REAL(r64)                    :: FuelEnergy = 0.0              ! The fuel consumption energy for the water heater burner (J)
-  REAL(r64)                    :: FuelEnergy1 = 0.0             ! The fuel consumption energy for heater 1 (J)
-  REAL(r64)                    :: FuelEnergy2 = 0.0             ! The fuel consumption energy for heater 2 (J)
-  REAL(r64)                    :: VentEnergy = 0.0              ! Heat recovery energy lost due to setpoint temp (J)
-  REAL(r64)                    :: OffCycParaFuelEnergy = 0.0    ! Fuel consumption energy for off-cycle parasitic load (J)
-  REAL(r64)                    :: OffCycParaEnergyToTank = 0.0  ! Energy to tank for off-cycle parasitic load (J)
-  REAL(r64)                    :: OnCycParaFuelEnergy = 0.0     ! Fuel consumption energy for on-cycle parasitic load (J)
-  REAL(r64)                    :: OnCycParaEnergyToTank = 0.0   ! Energy to tank for on-cycle parasitic load (J)
-  REAL(r64)                    :: NetHeatTransferEnergy = 0.0   ! Net heat transfer energy to/from tank (J)
+  REAL                    :: UnmetEnergy = 0.0             ! Energy to heat tank water to setpoint (J)
+  REAL                    :: LossEnergy = 0.0              ! Energy to support heat losses due to ambient temp (J)
+  REAL                    :: FlueLossEnergy = 0.0          ! Energy to support heat losses to the flue (J)
+  REAL                    :: UseEnergy = 0.0               ! Energy to heat the use side water to tank temp (J)
+  REAL                    :: TotalDemandEnergy = 0.0       ! Total energy demand (sum of all above energies) (J)
+  REAL                    :: SourceEnergy = 0.0            ! Energy supplied by the source side to help heat the tank (J)
+  REAL                    :: HeaterEnergy = 0.0            ! The energy the water heater burner puts into the water (J)
+  REAL                    :: HeaterEnergy1 = 0.0           ! The energy heater 1 puts into the water (J)
+  REAL                    :: HeaterEnergy2 = 0.0           ! The energy heater 2 puts into the water (J)
+  REAL                    :: FuelEnergy = 0.0              ! The fuel consumption energy for the water heater burner (J)
+  REAL                    :: FuelEnergy1 = 0.0             ! The fuel consumption energy for heater 1 (J)
+  REAL                    :: FuelEnergy2 = 0.0             ! The fuel consumption energy for heater 2 (J)
+  REAL                    :: VentEnergy = 0.0              ! Heat recovery energy lost due to setpoint temp (J)
+  REAL                    :: OffCycParaFuelEnergy = 0.0    ! Fuel consumption energy for off-cycle parasitic load (J)
+  REAL                    :: OffCycParaEnergyToTank = 0.0  ! Energy to tank for off-cycle parasitic load (J)
+  REAL                    :: OnCycParaFuelEnergy = 0.0     ! Fuel consumption energy for on-cycle parasitic load (J)
+  REAL                    :: OnCycParaEnergyToTank = 0.0   ! Energy to tank for on-cycle parasitic load (J)
+  REAL                    :: NetHeatTransferEnergy = 0.0   ! Net heat transfer energy to/from tank (J)
 
   LOGICAL                      :: FirstRecoveryDone = .FALSE.   ! Flag to indicate when first recovery to the setpoint is done
-  REAL(r64)                    :: FirstRecoveryFuel = 0.0       ! Fuel energy needed for first recovery to the setpoint (J)
+  REAL                    :: FirstRecoveryFuel = 0.0       ! Fuel energy needed for first recovery to the setpoint (J)
   INTEGER                      :: HeatPumpNum = 0               ! Index to heat pump water heater
   INTEGER                      :: DesuperheaterNum = 0          ! Index to desuperheating coil
   LOGICAL                      :: ShowSetpointWarning = .TRUE.  ! Warn when set point is greater than max tank temp limit
@@ -399,22 +399,22 @@ TYPE HeatPumpWaterHeaterData
   LOGICAL                      :: StandAlone          = .FALSE.  ! Flag for operation with no plant connections (no use nodes)
   INTEGER                      :: AvailSchedPtr            = 0   ! Index to Availability Schedule curve index
   INTEGER                      :: SetpointTempSchedule     = 0   ! Index to Setpoint Temperature Schedule curve
-  REAL(r64)                    :: DeadbandTempDiff         = 0.0 ! Dead band temperature difference (cut-in temperature)
-  REAL(r64)                    :: Capacity                 = 0.0 ! Heat Pump rated capacity (W)
-  REAL(r64)                    :: BackupElementCapacity    = 0.0 ! Tank backup element capacity (W)
-  REAL(r64)                    :: BackupElementEfficiency  = 0.0 ! Tank backup element efficiency
-  REAL(r64)                    :: WHOnCycParaLoad          = 0.0 ! tank's on-cycle parasitic load (W), disable for rating
-  REAL(r64)                    :: WHOffCycParaLoad         = 0.0 ! tank's off-cycle parasitic load (W), disable for rating
-  REAL(r64)                    :: WHOnCycParaFracToTank    = 0.0 ! tank's on-cycle parasitic frac to tank, disable for rating
-  REAL(r64)                    :: WHOffCycParaFracToTank   = 0.0 ! tank's off-cycle parasitic frac to tank, disable for rating
+  REAL                    :: DeadbandTempDiff         = 0.0 ! Dead band temperature difference (cut-in temperature)
+  REAL                    :: Capacity                 = 0.0 ! Heat Pump rated capacity (W)
+  REAL                    :: BackupElementCapacity    = 0.0 ! Tank backup element capacity (W)
+  REAL                    :: BackupElementEfficiency  = 0.0 ! Tank backup element efficiency
+  REAL                    :: WHOnCycParaLoad          = 0.0 ! tank's on-cycle parasitic load (W), disable for rating
+  REAL                    :: WHOffCycParaLoad         = 0.0 ! tank's off-cycle parasitic load (W), disable for rating
+  REAL                    :: WHOnCycParaFracToTank    = 0.0 ! tank's on-cycle parasitic frac to tank, disable for rating
+  REAL                    :: WHOffCycParaFracToTank   = 0.0 ! tank's off-cycle parasitic frac to tank, disable for rating
   INTEGER                      :: WHPLFCurve               = 0   ! tank part-load fraction curve index, used for rating procedure
-  REAL(r64)                    :: OperatingAirFlowRate     = 0.0 ! Operating volumetric air flow rate (m3/s)
-  REAL(r64)                    :: OperatingWaterFlowRate   = 0.0 ! Operating volumetric water flow rate (m3/s)
-  REAL(r64)                    :: COP                      = 0.0 ! Heat Pump coefficient of performance (W/W)
-  REAL(r64)                    :: SHR                      = 0.0 ! Heat Pump air-side coil sensible heat ratio
-  REAL(r64)                    :: RatedInletDBTemp         = 0.0 ! Rated evaporator inlet air dry-bulb temperature (C)
-  REAL(r64)                    :: RatedInletWBTemp         = 0.0 ! Rated evaporator inlet air wet-bulb temperature (C)
-  REAL(r64)                    :: RatedInletWaterTemp      = 0.0 ! Rated condenser inlet water temperature (C)
+  REAL                    :: OperatingAirFlowRate     = 0.0 ! Operating volumetric air flow rate (m3/s)
+  REAL                    :: OperatingWaterFlowRate   = 0.0 ! Operating volumetric water flow rate (m3/s)
+  REAL                    :: COP                      = 0.0 ! Heat Pump coefficient of performance (W/W)
+  REAL                    :: SHR                      = 0.0 ! Heat Pump air-side coil sensible heat ratio
+  REAL                    :: RatedInletDBTemp         = 0.0 ! Rated evaporator inlet air dry-bulb temperature (C)
+  REAL                    :: RatedInletWBTemp         = 0.0 ! Rated evaporator inlet air wet-bulb temperature (C)
+  REAL                    :: RatedInletWaterTemp      = 0.0 ! Rated condenser inlet water temperature (C)
   LOGICAL                      :: FoundTank            = .FALSE. ! Found storage tank flag associated with HP water heater
   INTEGER                      :: HeatPumpAirInletNode     = 0   ! HP air inlet node (for zone, zone/outdoor or scheduled)
   INTEGER                      :: HeatPumpAirOutletNode    = 0   ! HP air outlet node (for zone, zone/outdoor or scheduled)
@@ -442,14 +442,14 @@ TYPE HeatPumpWaterHeaterData
   INTEGER                      :: Mode                     = 0   ! HP mode (0 = float, 1 = heating [-1 = venting na for HP])
   INTEGER                      :: SaveMode                 = 0   ! HP mode on first iteration
   INTEGER                      :: SaveWHMode               = 0   ! mode of water heater tank element (backup element)
-  REAL(r64)                    :: Power                    = 0.0 ! HP power used for reporting
-  REAL(r64)                    :: Energy                   = 0.0 ! HP energy used for reporting
-  REAL(r64)                    :: HeatingPLR               = 0.0 ! HP PLR used for reporting
-  REAL(r64)                    :: SetpointTemp             = 0.0 ! set point or cut-out temperature [C]
-  REAL(r64)                    :: MinAirTempForHPOperation = 5.0 ! HP does not operate below this ambient temperature
+  REAL                    :: Power                    = 0.0 ! HP power used for reporting
+  REAL                    :: Energy                   = 0.0 ! HP energy used for reporting
+  REAL                    :: HeatingPLR               = 0.0 ! HP PLR used for reporting
+  REAL                    :: SetpointTemp             = 0.0 ! set point or cut-out temperature [C]
+  REAL                    :: MinAirTempForHPOperation = 5.0 ! HP does not operate below this ambient temperature
   INTEGER                      :: InletAirMixerNode        = 0   ! Inlet air mixer node number of HP water heater
   INTEGER                      :: OutletAirSplitterNode    = 0   ! Outlet air splitter node number of HP water heater
-  REAL(r64)                    :: SourceMassFlowRate       = 0.0 ! Maximum mass flow rate on the source side (kg/s)
+  REAL                    :: SourceMassFlowRate       = 0.0 ! Maximum mass flow rate on the source side (kg/s)
   INTEGER                      :: InletAirConfiguration    = 0   ! Identifies source of HPWH inlet air
   INTEGER                      :: AmbientTempSchedule      = 0   ! Schedule index pointer for ambient air temp at HPWH inlet
   INTEGER                      :: AmbientRHSchedule        = 0   ! Schedule index pointer for ambient air RH at HPWH inlet
@@ -457,13 +457,13 @@ TYPE HeatPumpWaterHeaterData
   INTEGER                      :: CrankcaseTempIndicator   = 0   ! Indicator for HPWH compressor/crankcase heater location
   INTEGER                      :: CrankcaseTempSchedule    = 0   ! Schedule index pointer where crankcase heater is located
   INTEGER                      :: CrankcaseTempZone        = 0   ! Index of zone where compressor/crankcase heater is located
-  REAL(r64)                    :: OffCycParaLoad           = 0.0 ! Rate for off-cycle parasitic load (W)
-  REAL(r64)                    :: OnCycParaLoad            = 0.0 ! Rate for on-cycle parasitic load (W)
+  REAL                    :: OffCycParaLoad           = 0.0 ! Rate for off-cycle parasitic load (W)
+  REAL                    :: OnCycParaLoad            = 0.0 ! Rate for on-cycle parasitic load (W)
   INTEGER                      :: ParasiticTempIndicator   = 0   ! Indicator for HPWH parasitic heat rejection location
-  REAL(r64)                    :: OffCycParaFuelRate       = 0.0 ! Electric consumption rate for off-cycle parasitic load (W)
-  REAL(r64)                    :: OnCycParaFuelRate        = 0.0 ! Electric consumption rate for on-cycle parasitic load (W)
-  REAL(r64)                    :: OffCycParaFuelEnergy     = 0.0 ! Electric energy consumption for off-cycle parasitic load (J)
-  REAL(r64)                    :: OnCycParaFuelEnergy      = 0.0 ! Electric energy consumption for on-cycle parasitic load (J)
+  REAL                    :: OffCycParaFuelRate       = 0.0 ! Electric consumption rate for off-cycle parasitic load (W)
+  REAL                    :: OnCycParaFuelRate        = 0.0 ! Electric consumption rate for on-cycle parasitic load (W)
+  REAL                    :: OffCycParaFuelEnergy     = 0.0 ! Electric energy consumption for off-cycle parasitic load (J)
+  REAL                    :: OnCycParaFuelEnergy      = 0.0 ! Electric energy consumption for on-cycle parasitic load (J)
   LOGICAL                      :: AirFlowRateAutosized = .FALSE. ! Used to report air flow autosize info in Init
   LOGICAL                      :: WaterFlowRateAutosized = .FALSE. ! Used to report water flow autosize info in Init
   INTEGER                      :: HPSetPointError          = 0   ! Used when temperature SP's in tank and HP are reversed
@@ -478,8 +478,8 @@ TYPE HeatPumpWaterHeaterData
   INTEGER                      :: RegulaFalsiFailedNum2    = 0   ! Counter for recurring RegulaFalsi failed warning messages
   LOGICAL                      :: FirstTimeThroughFlag = .TRUE.  ! Flag for saving water heater status
   LOGICAL                      :: ShowSetpointWarning = .TRUE.  ! Warn when set point is greater than max tank temp limit
-  REAL(r64)               :: HPWaterHeaterSensibleCapacity =0.0 ! sensible capacity delivered when HPWH is attached to a zone (W)
-  REAL(r64)               :: HPWaterHeaterLatentCapacity   =0.0 ! latent capacity delivered when HPWH is attached to a zone (kg/s)
+  REAL               :: HPWaterHeaterSensibleCapacity =0.0 ! sensible capacity delivered when HPWH is attached to a zone (W)
+  REAL               :: HPWaterHeaterLatentCapacity   =0.0 ! latent capacity delivered when HPWH is attached to a zone (kg/s)
   INTEGER                 :: ControlSensorLocation         = HPWHControlNotSet ! if using stratified tank, indicates control point
 END TYPE HeatPumpWaterHeaterData
 
@@ -489,13 +489,13 @@ TYPE WaterHeaterDesuperheaterData
   INTEGER                      :: InsuffTemperatureWarn    = 0   ! Used for recurring error count on low source temperature
   INTEGER                      :: AvailSchedPtr            = 0   ! Index to Availability Schedule curve index
   INTEGER                      :: SetpointTempSchedule     = 0   ! Index to Setpoint Temperature Schedule curve
-  REAL(r64)                    :: DeadbandTempDiff         = 0.0 ! Dead band temperature difference (cut-in temperature)
-  REAL(r64)                    :: HeatReclaimRecoveryEff   = 0.0 ! recovery efficiency of desuperheater (0.3 max)
+  REAL                    :: DeadbandTempDiff         = 0.0 ! Dead band temperature difference (cut-in temperature)
+  REAL                    :: HeatReclaimRecoveryEff   = 0.0 ! recovery efficiency of desuperheater (0.3 max)
   INTEGER                      :: WaterInletNode           = 0   ! Desuperheater water inlet node
   INTEGER                      :: WaterOutletNode          = 0   ! Desuperheater water outlet node
-  REAL(r64)                    :: RatedInletWaterTemp      = 0.0 ! Inlet water temp at rated heat reclaim recovery eff (C)
-  REAL(r64)                    :: RatedOutdoorAirTemp      = 0.0 ! Outdoor air temp at rated heat reclaim recovery eff (C)
-  REAL(r64)                    :: MaxInletWaterTemp        = 0.0 ! Max water temp for heat reclaim recovery (C)
+  REAL                    :: RatedInletWaterTemp      = 0.0 ! Inlet water temp at rated heat reclaim recovery eff (C)
+  REAL                    :: RatedOutdoorAirTemp      = 0.0 ! Outdoor air temp at rated heat reclaim recovery eff (C)
+  REAL                    :: MaxInletWaterTemp        = 0.0 ! Max water temp for heat reclaim recovery (C)
   CHARACTER(len=MaxNameLength) :: TankType                 = ''  ! Type of water heater (MIXED or STRATIFIED)
   INTEGER                      :: TankTypeNum              = 0   ! Parameter for tank type (MIXED or STRATIFIED)
   CHARACTER(len=MaxNameLength) :: TankName                 = ''  ! Name of tank associated with desuperheater
@@ -503,29 +503,29 @@ TYPE WaterHeaterDesuperheaterData
   !note char variable heatingsourcetype doesn't seem to be used anywhere
   CHARACTER(len=MaxNameLength) :: HeatingSourceType        = ''  ! Type of heating source (DX coil or refrigerated rack)
   CHARACTER(len=MaxNameLength) :: HeatingSourceName        = ''  ! Name of heating source
-  REAL(r64)                    :: HeaterRate               = 0.0 ! Report variable for desuperheater heating rate [W]
-  REAL(r64)                    :: HeaterEnergy             = 0.0 ! Report variable for desuperheater heating energy [J]
-  REAL(r64)                    :: PumpPower                = 0.0 ! Report variable for water circulation pump power [W]
-  REAL(r64)                    :: PumpEnergy               = 0.0 ! Report variable for water circulation pump energy [J]
-  REAL(r64)                    :: PumpElecPower            = 0.0 ! Nominal power input to the water circulation pump [W]
-  REAL(r64)                    :: PumpFracToWater          = 0.0 ! Nominal power fraction to water for the water circulation pump
-  REAL(r64)                    :: OperatingWaterFlowRate   = 0.0 ! Operating volumetric water flow rate (m3/s)
+  REAL                    :: HeaterRate               = 0.0 ! Report variable for desuperheater heating rate [W]
+  REAL                    :: HeaterEnergy             = 0.0 ! Report variable for desuperheater heating energy [J]
+  REAL                    :: PumpPower                = 0.0 ! Report variable for water circulation pump power [W]
+  REAL                    :: PumpEnergy               = 0.0 ! Report variable for water circulation pump energy [J]
+  REAL                    :: PumpElecPower            = 0.0 ! Nominal power input to the water circulation pump [W]
+  REAL                    :: PumpFracToWater          = 0.0 ! Nominal power fraction to water for the water circulation pump
+  REAL                    :: OperatingWaterFlowRate   = 0.0 ! Operating volumetric water flow rate (m3/s)
   INTEGER                      :: HEffFTemp                = 0   ! Heating capacity as a function of temperature curve index
-  REAL(r64)                    :: HEffFTempOutput          = 0.0 ! report variable for HEffFTemp curve
-  REAL(r64)                    :: SetpointTemp             = 0.0 ! set point or cut-out temperature [C]
+  REAL                    :: HEffFTempOutput          = 0.0 ! report variable for HEffFTemp curve
+  REAL                    :: SetpointTemp             = 0.0 ! set point or cut-out temperature [C]
   INTEGER                      :: WaterHeaterTankNum       = 0   ! Index of Water Heater Tank
-  REAL(r64)                    :: DesuperheaterPLR         = 0.0 ! part load ratio of desuperheater
-  REAL(r64)                    :: OnCycParaLoad            = 0.0 ! Rate for on-cycle parasitic load (W)
-  REAL(r64)                    :: OffCycParaLoad           = 0.0 ! Rate for off-cycle parasitic load (W)
-  REAL(r64)                    :: OnCycParaFuelEnergy      = 0.0 ! Electric energy consumption for on-cycle parasitic load (J)
-  REAL(r64)                    :: OnCycParaFuelRate        = 0.0 ! Electric consumption rate for on-cycle parasitic load (W)
-  REAL(r64)                    :: OffCycParaFuelEnergy     = 0.0 ! Electric energy consumption for off-cycle parasitic load (J)
-  REAL(r64)                    :: OffCycParaFuelRate       = 0.0 ! Electric consumption rate for off-cycle parasitic load (W)
+  REAL                    :: DesuperheaterPLR         = 0.0 ! part load ratio of desuperheater
+  REAL                    :: OnCycParaLoad            = 0.0 ! Rate for on-cycle parasitic load (W)
+  REAL                    :: OffCycParaLoad           = 0.0 ! Rate for off-cycle parasitic load (W)
+  REAL                    :: OnCycParaFuelEnergy      = 0.0 ! Electric energy consumption for on-cycle parasitic load (J)
+  REAL                    :: OnCycParaFuelRate        = 0.0 ! Electric consumption rate for on-cycle parasitic load (W)
+  REAL                    :: OffCycParaFuelEnergy     = 0.0 ! Electric energy consumption for off-cycle parasitic load (J)
+  REAL                    :: OffCycParaFuelRate       = 0.0 ! Electric consumption rate for off-cycle parasitic load (W)
   INTEGER                      :: Mode                     = 0   ! mode (0 = float, 1 = heating [-1=venting na for desuperheater])
   INTEGER                      :: SaveMode                 = 0   ! desuperheater mode on first iteration
   INTEGER                      :: SaveWHMode               = 0   ! mode of water heater tank element (backup element)
-  REAL(r64)                    :: BackupElementCapacity    = 0.0 ! Tank backup element capacity (W)
-  REAL(r64)                    :: DXSysPLR                 = 0.0 ! runtime fraction of desuperheater heating coil
+  REAL                    :: BackupElementCapacity    = 0.0 ! Tank backup element capacity (W)
+  REAL                    :: DXSysPLR                 = 0.0 ! runtime fraction of desuperheater heating coil
   CHARACTER(len=MaxNameLength) :: ReclaimHeatingSourceName = ' ' ! The source name for the Desuperheater Heating Coil
   INTEGER                  :: ReclaimHeatingSourceIndexNum = 0   ! Index to reclaim heating source (condenser) of a specific type
   INTEGER                  :: ReclaimHeatingSource         = 0   ! The source for the Desuperheater Heating Coil
@@ -565,10 +565,10 @@ INTEGER :: NumWaterHeaterDesuperheater   =0 ! number of desuperheater heating co
 INTEGER :: NumHeatPumpWaterHeater        =0 ! number of heat pump water heaters
 !INTEGER :: MaxCyclesErrorCount           =0 ! error counter for water heater that cycles more than max during time step
 
-REAL(r64)    :: HPPartLoadRatio               =0.0 ! part load ratio of HPWH
+REAL    :: HPPartLoadRatio               =0.0 ! part load ratio of HPWH
 LOGICAL :: GetWaterThermalTankInputFlag = .TRUE.             ! Calls to Water Heater from multiple places in code
-REAL(r64)    :: MixerInletAirSchedule         =0.0 ! output of inlet air mixer node schedule
-REAL(r64)    :: MdotAir                       =0.0 ! mass flow rate of evaporator air, kg/s
+REAL    :: MixerInletAirSchedule         =0.0 ! output of inlet air mixer node schedule
+REAL    :: MdotAir                       =0.0 ! mass flow rate of evaporator air, kg/s
 INTEGER :: NumWaterHeaterSizing          =0 ! Number of sizing/design objects for water heaters.
 LOGICAL, DIMENSION(:), ALLOCATABLE :: AlreadyRated ! control so we don't repeat again
 
@@ -636,10 +636,10 @@ SUBROUTINE SimWaterThermalTank(CompType,CompName,CompIndex,RunFlag,InitLoopEquip
   INTEGER, INTENT(INOUT)       :: CompIndex
   LOGICAL, INTENT(IN)          :: RunFlag !unused1208
   LOGICAL, INTENT(IN)          :: InitLoopEquip
-  REAL(r64), INTENT(INOUT)          :: MyLoad
-  REAL(r64), INTENT(INOUT)            :: MinCap
-  REAL(r64), INTENT(INOUT)            :: MaxCap
-  REAL(r64), INTENT(INOUT)            :: OptCap
+  REAL, INTENT(INOUT)          :: MyLoad
+  REAL, INTENT(INOUT)            :: MinCap
+  REAL, INTENT(INOUT)            :: MaxCap
+  REAL, INTENT(INOUT)            :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
   INTEGER, INTENT(IN) , Optional         :: LoopNum
   INTEGER, INTENT(IN) , Optional         :: LoopSideNum
@@ -928,7 +928,7 @@ SUBROUTINE SimulateWaterHeaterStandAlone(WaterHeaterNum, FirstHVACIteration)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: LocalRunFlag,LocalInitLoopEquip     ! local variables of similar name as others used in Sim modules
-  REAL(r64)    :: MyLoad, MinCap, MaxCap, OptCap
+  REAL    :: MyLoad, MinCap, MaxCap, OptCap
   INTEGER :: TestNum
 
           ! FLOW:
@@ -1012,15 +1012,15 @@ SUBROUTINE SimHeatPumpWaterHeater(CompName,FirstHVACIteration,SensLoadMet,LatLoa
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=MaxNameLength), INTENT(IN) :: CompName
   LOGICAL, INTENT(IN)                    :: FirstHVACIteration
-  REAL(r64), INTENT(OUT)                 :: SensLoadMet ! sensible load met by this equipment and sent to zone, W
-  REAL(r64), INTENT (OUT)                :: LatLoadMet  ! net latent load met and sent to zone (kg/s), dehumid = negative
+  REAL, INTENT(OUT)                 :: SensLoadMet ! sensible load met by this equipment and sent to zone, W
+  REAL, INTENT (OUT)                :: LatLoadMet  ! net latent load met and sent to zone (kg/s), dehumid = negative
   INTEGER, INTENT(INOUT)                 :: CompIndex
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: LocalRunFlag,LocalInitLoopEquip     ! local variables of similar name as others used in Sim modules
   INTEGER :: LocalFlowLock                       ! local variables of similar name as others used in sim modules
   INTEGER :: HeatPumpNum
-  REAL(r64) :: MyLoad, MinCap, MaxCap, OptCap
+  REAL :: MyLoad, MinCap, MaxCap, OptCap
 
           ! FLOW:
   IF (GetWaterThermalTankInputFlag) THEN
@@ -1102,8 +1102,8 @@ SUBROUTINE CalcWaterThermalTankZoneGains
   INTEGER :: WaterThermalTankNum
   INTEGER :: ZoneNum
   LOGICAL, SAVE :: MyEnvrnFlag=.true.
-  REAL(r64) :: TankTemp
-  REAL(r64) :: QLossToZone
+  REAL :: TankTemp
+  REAL :: QLossToZone
   INTEGER :: SchIndex
 
           ! FLOW:
@@ -1145,7 +1145,7 @@ SUBROUTINE CalcWaterThermalTankZoneGains
       IF (SchIndex > 0) THEN
         TankTemp = GetCurrentScheduleValue(SchIndex)
       ELSE
-        TankTemp = 20.0d0
+        TankTemp = 20.0
       END IF
       SELECT CASE(WaterThermalTank(WaterThermalTankNum)%TypeNum)
         CASE (MixedWaterHeater)
@@ -1282,16 +1282,16 @@ SUBROUTINE GetWaterThermalTankInput
   INTEGER                     :: TankCoolingPriority = 0 ! Used to determine if a HPWH tank is prioritized correctly in ZEL
   INTEGER                     :: TankHeatingPriority = 0 ! Used to determine if a HPWH tank is prioritized correctly in ZEL
   LOGICAL                     :: DXCoilErrFlag = .FALSE. ! Used for error checking DX coils used with HPWHs
-  REAL(r64)                   :: FanVolFlow = 0.0        ! Used for error checking fans used with HPWHs
+  REAL                   :: FanVolFlow = 0.0        ! Used for error checking fans used with HPWHs
   LOGICAL                     :: ErrFlag = .FALSE.       ! Used for error checking used with HPWHs
-  REAL(r64)                   :: HEffFTemp = 0.0         ! Used for error checking desuperheater heating coils
+  REAL                   :: HEffFTemp = 0.0         ! Used for error checking desuperheater heating coils
   LOGICAL                     :: Okay
 
   ! Following allow for temporary storage of character strings but not saved in main structure
   TYPE (WaterHeaterSaveNodes), ALLOCATABLE, DIMENSION(:) :: HPWHSaveNodeNames  ! temporary for HPWH node names used in later checks
   TYPE (WaterHeaterSaveNodes), ALLOCATABLE, DIMENSION(:) :: WHSaveNodeNames    ! temporary for WH node names used in later checks
   TYPE (WaterHeaterSaveNodes), ALLOCATABLE, DIMENSION(:) :: CoilSaveNodeNames  ! temporary for coil node names used in later checks
-  REAL(r64)  :: rho ! local fluid density
+  REAL  :: rho ! local fluid density
   INTEGER    :: DummyWaterIndex = 1
 
           ! FLOW:
@@ -1420,10 +1420,10 @@ SUBROUTINE GetWaterThermalTankInput
             CASE('BIQUADRATIC')
 
               IF(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp .GT. 0)THEN
-                HEffFTemp = MIN(1.0d0,MAX(0.0d0,CurveValue(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp, &
+                HEffFTemp = MIN(1.0,MAX(0.0,CurveValue(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp, &
                                            WaterHeaterDesuperheater(DesuperheaterNum)%RatedInletWaterTemp, &
                                            WaterHeaterDesuperheater(DesuperheaterNum)%RatedOutdoorAirTemp)))
-                IF(ABS(HEffFTemp - 1.0) .GT. 0.05d0)THEN
+                IF(ABS(HEffFTemp - 1.0) .GT. 0.05)THEN
                   CALL ShowWarningError(TRIM(cCurrentModuleObject)//', "'//  &
                      TRIM(WaterHeaterDesuperheater(DesuperheaterNum)%Name)//'":')
                   CALL ShowContinueError('The '//TRIM(cAlphaFieldNames(4))//' should be normalized ')
@@ -1580,11 +1580,11 @@ SUBROUTINE GetWaterThermalTankInput
         !Now have source type, so set limits on heat recovery efficiency
         IF(WaterHeaterDesuperheater(DesuperheaterNum)%ReclaimHeatingSource == CONDENSER_REFRIGERATION) THEN
           IF (lNumericFieldBlanks(2)) THEN
-            WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = 0.8d0
+            WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = 0.8
           ELSE
             WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = rNumericArgs(2)
             IF(WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .LE. 0.0 .OR. &
-                 WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .GT. 0.9d0) THEN
+                 WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .GT. 0.9) THEN
                CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = '//TRIM(WaterHeaterDesuperheater(DesuperheaterNum)%Name)//&
                                 ': '//TRIM(cNumericFieldNames(2))//' must be > 0.0 and <= 0.9, Efficiency = ' &
                                 //TRIM(TrimSigDigits(WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff,3)))
@@ -1593,11 +1593,11 @@ SUBROUTINE GetWaterThermalTankInput
           END IF !Blank Num(2)
         ELSE ! max is 0.3 for all other sources
           IF (lNumericFieldBlanks(2)) THEN
-            WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = 0.25d0
+            WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = 0.25
           ELSE
             WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff       = rNumericArgs(2)
             IF(WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .LE. 0.0 .OR. &
-               WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .GT. 0.3d0) THEN
+               WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff .GT. 0.3) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = '//TRIM(WaterHeaterDesuperheater(DesuperheaterNum)%Name)//&
                                 ': '//TRIM(cNumericFieldNames(2))//' must be > 0.0 and <= 0.3, '//TRIM(cNumericFieldNames(2))// &
                                 ' = '//TRIM(TrimSigDigits(WaterHeaterDesuperheater(DesuperheaterNum)%HeatReclaimRecoveryEff,3)))
@@ -2004,7 +2004,7 @@ SUBROUTINE GetWaterThermalTankInput
           HPWaterHeater(HPWaterHeaterNum)%DXCoilPLFFPLR = DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%PLFFPLR(1)
 !         check the range of condenser pump power to be <= 5 gpm/ton
           IF(DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%HPWHCondPumpElecNomPower/ &
-             DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%RatedTotCap2 .GT. 0.1422d0)THEN
+             DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%RatedTotCap2 .GT. 0.1422)THEN
             CALL ShowWarningError(TRIM(DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%DXCoilType)// &
                  '= '//TRIM(DXCoil(HPWaterHeater(HPWaterHeaterNum)%DXCoilNum)%Name)//&
                 ': Rated condenser pump power per watt of rated heating capacity has exceeded the recommended'// &
@@ -2015,12 +2015,12 @@ SUBROUTINE GetWaterThermalTankInput
         END IF
 
         IF (HPWaterHeater(HPWaterHeaterNum)%OperatingWaterFlowRate == AutoCalculate) THEN
-          HPWaterHeater(HPWaterHeaterNum)%OperatingWaterFlowRate = 0.00000004487d0 * HPWaterHeater(HPWaterHeaterNum)%Capacity
+          HPWaterHeater(HPWaterHeaterNum)%OperatingWaterFlowRate = 0.00000004487 * HPWaterHeater(HPWaterHeaterNum)%Capacity
           HPWaterHeater(HPWaterHeaterNum)%WaterFlowRateAutosized = .TRUE.
         END IF
 
         IF (HPWaterHeater(HPWaterHeaterNum)%OperatingAirFlowRate == AutoCalculate) THEN
-          HPWaterHeater(HPWaterHeaterNum)%OperatingAirFlowRate = 0.00005035d0 * HPWaterHeater(HPWaterHeaterNum)%Capacity
+          HPWaterHeater(HPWaterHeaterNum)%OperatingAirFlowRate = 0.00005035 * HPWaterHeater(HPWaterHeaterNum)%Capacity
           HPWaterHeater(HPWaterHeaterNum)%AirFlowRateAutosized = .TRUE.
         END IF
 
@@ -2253,7 +2253,7 @@ SUBROUTINE GetWaterThermalTankInput
 !       set the max mass flow rate for outdoor fans
         Node(HPWaterHeater(HPWaterHeaterNum)%FanOutletNode)%MassFlowRateMax =    &
                 HPWaterHeater(HPWaterHeaterNum)%OperatingAirFlowRate *   &
-                    PsyRhoAirFnPbTdbW(OutBaroPress,20.0d0, 0.0d0)
+                    PsyRhoAirFnPbTdbW(OutBaroPress,20.0, 0.0)
 
         IF(HPWaterHeater(HPWaterHeaterNum)%FanPlacement .EQ. BlowThru)THEN
           IF(HPWaterHeater(HPWaterHeaterNum)%InletAirMixerNode .GT. 0)THEN
@@ -2387,7 +2387,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%Volume = rNumericArgs(1)
         IF (rNumericArgs(1) == 0.0) THEN
           ! Set volume to a really small number to simulate a tankless/instantaneous water heater
-          WaterThermalTank(WaterThermalTankNum)%Volume = 0.000001d0 ! = 1 cm3
+          WaterThermalTank(WaterThermalTankNum)%Volume = 0.000001 ! = 1 cm3
         END IF
 
         WaterThermalTank(WaterThermalTankNum)%SetpointTempSchedule = GetScheduleIndex(cAlphaArgs(2))
@@ -2397,7 +2397,7 @@ SUBROUTINE GetWaterThermalTankInput
           ErrorsFound = .TRUE.
         END IF
 
-        IF (rNumericArgs(2) > 0.0001d0) THEN
+        IF (rNumericArgs(2) > 0.0001) THEN
           WaterThermalTank(WaterThermalTankNum)%DeadbandDeltaTemp = rNumericArgs(2)
         ELSE
           ! Default to very small number (however it can't be TINY or it will break the algorithm)
@@ -2442,7 +2442,7 @@ SUBROUTINE GetWaterThermalTankInput
             ErrorsFound = .TRUE.
         END SELECT
         WaterThermalTank(WaterThermalTankNum)%VolFlowRateMin = rNumericArgs(6)
-        WaterThermalTank(WaterThermalTankNum)%VolFlowRateMin = MAX(0.d0, WaterThermalTank(WaterThermalTankNum)%VolFlowRateMin)
+        WaterThermalTank(WaterThermalTankNum)%VolFlowRateMin = MAX(0., WaterThermalTank(WaterThermalTankNum)%VolFlowRateMin)
 !        rho = GetDensityGlycol('WATER', InitConvTemp, DummyWaterIndex, 'GetWaterThermalTankInput')
 !        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMin = rNumericArgs(6) * rho   ! Not yet implemented
         WaterThermalTank(WaterThermalTankNum)%IgnitionDelay = rNumericArgs(7)  ! Not yet implemented
@@ -2706,14 +2706,14 @@ SUBROUTINE GetWaterThermalTankInput
         IF (.NOT. lNumericFieldBlanks(20)) THEN
           WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = rNumericArgs(20)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.
         ENDIF
         WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopSide = DemandSupply_No
 
         IF (.NOT. lNumericFieldBlanks(21)) THEN
           WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = rNumericArgs(21)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.
         END IF
         WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopSide = DemandSupply_No
 
@@ -3157,7 +3157,7 @@ SUBROUTINE GetWaterThermalTankInput
         IF (NumNums > 25) THEN
           WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness = rNumericArgs(26)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness = 1.0D0
+          WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness = 1.0
         END IF
 
         IF ((NumNums > 26) .AND. (rNumericArgs(27) /= Autocalculate)) THEN
@@ -3179,7 +3179,7 @@ SUBROUTINE GetWaterThermalTankInput
           WaterThermalTank(WaterThermalTankNum)%SourceOutletHeight = rNumericArgs(28)
         ELSE
           ! Defaults to bottom of tank
-          WaterThermalTank(WaterThermalTankNum)%SourceOutletHeight = 0.0D0
+          WaterThermalTank(WaterThermalTankNum)%SourceOutletHeight = 0.0
         END IF
         IF (WaterThermalTank(WaterThermalTankNum)%SourceOutletHeight &
              > WaterThermalTank(WaterThermalTankNum)%Height) THEN
@@ -3197,7 +3197,7 @@ SUBROUTINE GetWaterThermalTankInput
         IF (.NOT. lNumericFieldBlanks(29)) THEN
           WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = rNumericArgs(29)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.
         END IF
 
         WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopSide = DemandSupply_No
@@ -3205,13 +3205,13 @@ SUBROUTINE GetWaterThermalTankInput
         IF (.NOT.  lNumericFieldBlanks(30) ) THEN
           WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = rNumericArgs(30)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.
         END IF
 
         If (NumNums > 30) then
           WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime      = rNumericArgs(31)
         ELSE
-          WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime      = 1.5d0
+          WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime      = 1.5
         END IF
 
           WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopSide = DemandSupply_No
@@ -3320,7 +3320,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%Volume = rNumericArgs(1)
         IF (rNumericArgs(1) == 0.0) THEN
           ! Set volume to a really small number to continue simulation
-          WaterThermalTank(WaterThermalTankNum)%Volume = 0.000001d0 ! = 1 cm3
+          WaterThermalTank(WaterThermalTankNum)%Volume = 0.000001 ! = 1 cm3
         END IF
 
         WaterThermalTank(WaterThermalTankNum)%SetpointTempSchedule = GetScheduleIndex(cAlphaArgs(2))
@@ -3331,7 +3331,7 @@ SUBROUTINE GetWaterThermalTankInput
           ErrorsFound = .TRUE.
         END IF
 
-        IF (rNumericArgs(2) > 0.0001d0) THEN
+        IF (rNumericArgs(2) > 0.0001) THEN
           WaterThermalTank(WaterThermalTankNum)%DeadbandDeltaTemp = rNumericArgs(2)
         ELSE
           ! Default to very small number (however it can't be TINY or it will break the algorithm)
@@ -3342,24 +3342,24 @@ SUBROUTINE GetWaterThermalTankInput
           WaterThermalTank(WaterThermalTankNum)%TankTempLimit = rNumericArgs(3)
         ELSE
           ! default to just above freezing
-          WaterThermalTank(WaterThermalTankNum)%TankTempLimit = 1.0D0
+          WaterThermalTank(WaterThermalTankNum)%TankTempLimit = 1.0
         END IF
 
         WaterThermalTank(WaterThermalTankNum)%MaxCapacity = rNumericArgs(4)
-        WaterThermalTank(WaterThermalTankNum)%MinCapacity = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%MinCapacity = 0.0
         WaterThermalTank(WaterThermalTankNum)%ControlType = ControlTypeCycle
 
-        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMin = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%IgnitionDelay   = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMin = 0.0
+        WaterThermalTank(WaterThermalTankNum)%IgnitionDelay   = 0.0
         WaterThermalTank(WaterThermalTankNum)%FuelType        = 'Electric'
-        WaterThermalTank(WaterThermalTankNum)%Efficiency      = 1.0D0
+        WaterThermalTank(WaterThermalTankNum)%Efficiency      = 1.0
         WaterThermalTank(WaterThermalTankNum)%PLFCurve        = 0
-        WaterThermalTank(WaterThermalTankNum)%OffCycParaLoad  = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OffCycParaLoad  = 0.0
         WaterThermalTank(WaterThermalTankNum)%OffCycParaFuelType = 'Electric'
-        WaterThermalTank(WaterThermalTankNum)%OffCycParaFracToTank = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%OnCycParaLoad   = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OffCycParaFracToTank = 0.0
+        WaterThermalTank(WaterThermalTankNum)%OnCycParaLoad   = 0.0
         WaterThermalTank(WaterThermalTankNum)%OnCycParaFuelType = 'Electric'
-        WaterThermalTank(WaterThermalTankNum)%OnCycParaFracToTank = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OnCycParaFracToTank = 0.0
 
         SELECT CASE (cAlphaArgs(3))
           CASE ('SCHEDULE')
@@ -3408,12 +3408,12 @@ SUBROUTINE GetWaterThermalTankInput
         END SELECT
 
         WaterThermalTank(WaterThermalTankNum)%OffCycLossCoeff = rNumericArgs(5)
-        WaterThermalTank(WaterThermalTankNum)%OffCycLossFracToZone = 1.0D0
+        WaterThermalTank(WaterThermalTankNum)%OffCycLossFracToZone = 1.0
 
         WaterThermalTank(WaterThermalTankNum)%OnCycLossCoeff = rNumericArgs(5)
-        WaterThermalTank(WaterThermalTankNum)%OnCycLossFracToZone =1.0D0
+        WaterThermalTank(WaterThermalTankNum)%OnCycLossFracToZone =1.0
 
-        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMax = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMax = 0.0
         WaterThermalTank(WaterThermalTankNum)%FlowRateSchedule = 0
         WaterThermalTank(WaterThermalTankNum)%UseInletTempSchedule = 0
 
@@ -3434,7 +3434,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness = rNumericArgs(8)
 
         IF (lNumericFieldBlanks(7)) THEN
-          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.
         ELSE
           WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = rNumericArgs(7)
         ENDIF
@@ -3452,7 +3452,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopSide = DemandSupply_No
 
         IF (lNumericFieldBlanks(9)) THEN
-          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.
         ELSE
           WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = rNumericArgs(9)
         ENDIF
@@ -3465,7 +3465,7 @@ SUBROUTINE GetWaterThermalTankInput
           ErrorsFound = .TRUE.
         ENDIF
         IF (lNumericFieldBlanks(10)) THEN
-          WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime   = 4.0D0
+          WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime   = 4.0
         ELSE
           WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime   =  rNumericArgs(10)
         ENDIF
@@ -3571,7 +3571,7 @@ SUBROUTINE GetWaterThermalTankInput
           WaterThermalTank(WaterThermalTankNum)%TankTempLimit = rNumericArgs(6)
         ELSE
           ! default to just above freezing
-          WaterThermalTank(WaterThermalTankNum)%TankTempLimit = 1.0D0
+          WaterThermalTank(WaterThermalTankNum)%TankTempLimit = 1.0
         END IF
 
         WaterThermalTank(WaterThermalTankNum)%SetpointTempSchedule = GetScheduleIndex(cAlphaArgs(3))
@@ -3591,20 +3591,20 @@ SUBROUTINE GetWaterThermalTankInput
 
         WaterThermalTank(WaterThermalTankNum)%HeaterHeight1         = rNumericArgs(5)
         WaterThermalTank(WaterThermalTankNum)%MaxCapacity          =  rNumericArgs(7)
-        WaterThermalTank(WaterThermalTankNum)%Efficiency            = 1.0D0
+        WaterThermalTank(WaterThermalTankNum)%Efficiency            = 1.0
         WaterThermalTank(WaterThermalTankNum)%SetpointTempSchedule2 = 0
-        WaterThermalTank(WaterThermalTankNum)%MaxCapacity2          = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%HeaterHeight2         = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%MaxCapacity2          = 0.0
+        WaterThermalTank(WaterThermalTankNum)%HeaterHeight2         = 0.0
         WaterThermalTank(WaterThermalTankNum)%FuelType = 'Electric'
 
-        WaterThermalTank(WaterThermalTankNum)%OffCycParaLoad = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OffCycParaLoad = 0.0
         WaterThermalTank(WaterThermalTankNum)%OffCycParaFuelType = 'Electric'
-        WaterThermalTank(WaterThermalTankNum)%OffCycParaFracToTank = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%OffCycParaHeight =0.0D0
-        WaterThermalTank(WaterThermalTankNum)%OnCycParaLoad = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OffCycParaFracToTank = 0.0
+        WaterThermalTank(WaterThermalTankNum)%OffCycParaHeight =0.0
+        WaterThermalTank(WaterThermalTankNum)%OnCycParaLoad = 0.0
         WaterThermalTank(WaterThermalTankNum)%OnCycParaFuelType = 'Electric'
-        WaterThermalTank(WaterThermalTankNum)%OnCycParaFracToTank = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%OnCycParaHeight = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%OnCycParaFracToTank = 0.0
+        WaterThermalTank(WaterThermalTankNum)%OnCycParaHeight = 0.0
 
 
         SELECT CASE (cAlphaArgs(4))
@@ -3627,7 +3627,7 @@ SUBROUTINE GetWaterThermalTankInput
               CALL ShowContinueError('Zone was not found.')
               ErrorsFound = .TRUE.
             END IF
-            WaterThermalTank(WaterThermalTankNum)%OffCycLossFracToZone = 1.0D0
+            WaterThermalTank(WaterThermalTankNum)%OffCycLossFracToZone = 1.0
 
           CASE ('OUTDOORS')
             WaterThermalTank(WaterThermalTankNum)%AmbientTempIndicator = AmbientTempOutsideAir
@@ -3655,11 +3655,11 @@ SUBROUTINE GetWaterThermalTankInput
         END SELECT
 
         WaterThermalTank(WaterThermalTankNum)%SkinLossCoeff = rNumericArgs(8)
-        WaterThermalTank(WaterThermalTankNum)%SkinLossFracToZone = 1.0D0
-        WaterThermalTank(WaterThermalTankNum)%OffCycFlueLossCoeff = 0.0D0
-        WaterThermalTank(WaterThermalTankNum)%OffCycFlueLossFracToZone = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%SkinLossFracToZone = 1.0
+        WaterThermalTank(WaterThermalTankNum)%OffCycFlueLossCoeff = 0.0
+        WaterThermalTank(WaterThermalTankNum)%OffCycFlueLossFracToZone = 0.0
 
-        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMax = 0.0D0
+        WaterThermalTank(WaterThermalTankNum)%MassFlowRateMax = 0.0
         WaterThermalTank(WaterThermalTankNum)%FlowRateSchedule = 0
         WaterThermalTank(WaterThermalTankNum)%UseInletTempSchedule = 0
         WaterThermalTank(WaterThermalTankNum)%UseEffectiveness = rNumericArgs(9)
@@ -3714,7 +3714,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%StandAlone = .FALSE.
 
         IF (lNumericFieldBlanks(12)) THEN
-          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = 0.
         ELSE
           WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate    = rNumericArgs(12)
         ENDIF
@@ -3722,7 +3722,7 @@ SUBROUTINE GetWaterThermalTankInput
         WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopSide = DemandSupply_No
 
         IF (lNumericFieldBlanks(16)) THEN
-          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.d0
+          WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.
         ELSE
           WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = rNumericArgs(16)
         ENDIF
@@ -4132,13 +4132,13 @@ SUBROUTINE GetWaterThermalTankInput
           CASE (SizeNotSet)
             ! do nothing, error thrown if design mode not found
           CASE (SizePeakDraw) ! need to have entered a reasonable value for TankDrawTime
-            IF (WaterThermalTank(WaterThermalTankNum)%Sizing%TankDrawTime <= 0.0D0 ) then
+            IF (WaterThermalTank(WaterThermalTankNum)%Sizing%TankDrawTime <= 0.0 ) then
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                  ', design mode set to Peak Draw but needs a positive value for tank draw time' )
               ErrorsFound = .true.
             ENDIF
             !constrain crazy sizes by limiting to 10 years or 8760*10
-            IF (WaterThermalTank(WaterThermalTankNum)%Sizing%TankDrawTime > 87600.0D0 )THEN
+            IF (WaterThermalTank(WaterThermalTankNum)%Sizing%TankDrawTime > 87600.0 )THEN
               CALL ShowWarningError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))//  &
                 ',  has input with an unreasonably large Tank Draw Time, more than 10 years')
               ErrorsFound = .true.
@@ -4146,7 +4146,7 @@ SUBROUTINE GetWaterThermalTankInput
             ! if both volume and demand side flow connections are autosized, must be a good NominalVolForSizingDemandSideFlow
             If ((WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopSide == DemandSide) .AND. &
                 (WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate == AutoSize)) Then
-                IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NominalVolForSizingDemandSideFlow <= 0.0D0) then
+                IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NominalVolForSizingDemandSideFlow <= 0.0) then
                   Call ShowWarningError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))//  &
                     ' needs a value for Nominal Tank Volume for Autosizing Plant Connections')
                   ErrorsFound = .true.
@@ -4154,7 +4154,7 @@ SUBROUTINE GetWaterThermalTankInput
             ENDIF
             If ((WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopSide == DemandSide) .AND. &
                 (WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate == AutoSize)) Then
-                IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NominalVolForSizingDemandSideFlow <= 0.0D0) then
+                IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NominalVolForSizingDemandSideFlow <= 0.0) then
                   Call ShowWarningError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))//  &
                     ' needs a value for Nominal Tank Volume for Autosizing Plant Connections')
                   ErrorsFound = .true.
@@ -4176,14 +4176,14 @@ SUBROUTINE GetWaterThermalTankInput
           CASE (SizePerPerson)
 
             IF ((WaterThermalTank(WaterThermalTankNum)%Volume == Autosize) .AND. &
-                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerPerson <= 0.d0)) THEN
+                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerPerson <= 0.)) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerPerson mode needs positive value input for storage capacity per person')
               ErrorsFound = .true.
             ENDIF
 
             IF ((WaterThermalTank(WaterThermalTankNum)%MaxCapacity == Autosize)  .AND. &
-                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerPerson <= 0.d0) ) THEN
+                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerPerson <= 0.) ) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerPerson mode needs positive value input for recovery capacity per person')
               ErrorsFound = .true.
@@ -4191,13 +4191,13 @@ SUBROUTINE GetWaterThermalTankInput
 
           CASE (SizePerFloorArea)
             IF ((WaterThermalTank(WaterThermalTankNum)%Volume == Autosize) .AND. &
-                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerArea <= 0.d0)) THEN
+                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerArea <= 0.)) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerArea mode needs positive value input for storage capacity per floor area')
               ErrorsFound = .true.
             ENDIF
             IF ((WaterThermalTank(WaterThermalTankNum)%MaxCapacity == Autosize)  .AND. &
-                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerArea <= 0.d0) ) THEN
+                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerArea <= 0.) ) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerArea mode needs positive value input for recovery capacity per floor area')
               ErrorsFound = .true.
@@ -4205,32 +4205,32 @@ SUBROUTINE GetWaterThermalTankInput
 
           CASE (SizePerUnit)
             IF ((WaterThermalTank(WaterThermalTankNum)%Volume == Autosize) .AND. &
-                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerUnit <= 0.d0)) THEN
+                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerUnit <= 0.)) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerUnit mode needs positive value input for storage capacity per unit')
               ErrorsFound = .true.
             ENDIF
             IF ((WaterThermalTank(WaterThermalTankNum)%Volume == Autosize) .AND. &
-                 (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfUnits <= 0.d0)) THEN
+                 (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfUnits <= 0.)) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerUnit mode needs positive value input for number of units')
               ErrorsFound = .true.
             ENDIF
             IF ((WaterThermalTank(WaterThermalTankNum)%MaxCapacity == Autosize)  .AND. &
-                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerUnit <= 0.d0) ) THEN
+                (WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerUnit <= 0.) ) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerUnit mode needs positive value input for recovery capacity per unit')
               ErrorsFound = .true.
             ENDIF
             IF ((WaterThermalTank(WaterThermalTankNum)%MaxCapacity == Autosize)  .AND. &
-                (WaterThermalTank(WaterThermalTankNum)%sizing%NumberOfUnits <= 0.d0) ) THEN
+                (WaterThermalTank(WaterThermalTankNum)%sizing%NumberOfUnits <= 0.) ) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerUnit mode needs positive value input for number of units')
               ErrorsFound = .true.
             ENDIF
           CASE (SizePerSolarColArea)
             IF ((WaterThermalTank(WaterThermalTankNum)%Volume == Autosize) .AND. &
-                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerCollectorArea <= 0.d0)) THEN
+                 (WaterThermalTank(WaterThermalTankNum)%Sizing%TankCapacityPerCollectorArea <= 0.)) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//', named '//TRIM(cAlphaArgs(1))// &
                 ', PerSolarCollectorArea mode needs positive value input for storage capacity per collector area')
               ErrorsFound = .true.
@@ -4712,8 +4712,8 @@ SUBROUTINE ValidatePLFCurve(CurveIndex, IsValid)
   IsValid = .TRUE.
 
   ! Check 0 and 1
-  IF (CurveValue(CurveIndex,0.0d0) <= 0) IsValid = .FALSE.
-  IF (CurveValue(CurveIndex,1.0d0) <= 0) IsValid = .FALSE.
+  IF (CurveValue(CurveIndex,0.0) <= 0) IsValid = .FALSE.
+  IF (CurveValue(CurveIndex,1.0) <= 0) IsValid = .FALSE.
 
   IF (IsValid) THEN  ! Check min/maxs
 
@@ -4761,32 +4761,32 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
   INTEGER, INTENT(IN) :: WaterThermalTankNum      ! Water Heater being simulated
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64)           :: Tolerance = 1.0d-8  ! Tolerance for Newton-Raphson solution
-  REAL(r64)           :: FluidCond = 0.6d0     ! Conductivity of water (W/m-K)
+  REAL           :: Tolerance = 1.0d-8  ! Tolerance for Newton-Raphson solution
+  REAL           :: FluidCond = 0.6     ! Conductivity of water (W/m-K)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: NumNodes            ! Number of stratified nodes
   INTEGER             :: NodeNum             ! Node number index
-  REAL(r64)           :: NodeMass            ! Mass of one node (kg)
-  REAL(r64)           :: EndArea             ! Circular area of one end of the cylinder (m2)
-  REAL(r64)           :: CrossArea           ! Cross sectional area (for horizontal cylinders) (m2)
-  REAL(r64)           :: NodeEndArea         ! Area of the node at the end of the horizontal cylinder (m2)
-  REAL(r64)           :: NodeHeight          ! Height of one node (m)
-  REAL(r64)           :: ApproxEndArea       ! End area approximated by Newton-Raphson iteration (m2)
-  REAL(r64)           :: CondCoeff           ! Coefficient for vertical conduction between nodes (W/K)
-  REAL(r64)           :: Radius              ! Radius of the tank (m)
-  REAL(r64)           :: Perimeter           ! Perimeter of the tank (m)
-  REAL(r64)           :: SkinArea            ! Area of skin exposed to ambient environment (m2)
-  REAL(r64)           :: ChordLength         ! Chord length for horizontal tanks (m)
-  REAL(r64)           :: TankHeight          ! Dimension in the vertical direction; for horizontal tanks it is radius * 2 (m)
-  REAL(r64)           :: TankLength          ! For horizontal tanks, it is the length in the axial direction (m)
-  REAL(r64)           :: R                   ! Radius (m)
-  REAL(r64)           :: H0                  ! Starting height (m)
-  REAL(r64)           :: H                   ! Ending height (m)
-  REAL(r64)           :: a, b, c             ! Intermediate variables
-  REAL(r64)           :: a0, b0, c0          ! Intermediate variables
-  REAL(r64)           :: G                   ! Function that should converge to zero for the Newton-Raphson solution
-  REAL(r64)           :: rho                 ! local fluid density (kg/m3)
+  REAL           :: NodeMass            ! Mass of one node (kg)
+  REAL           :: EndArea             ! Circular area of one end of the cylinder (m2)
+  REAL           :: CrossArea           ! Cross sectional area (for horizontal cylinders) (m2)
+  REAL           :: NodeEndArea         ! Area of the node at the end of the horizontal cylinder (m2)
+  REAL           :: NodeHeight          ! Height of one node (m)
+  REAL           :: ApproxEndArea       ! End area approximated by Newton-Raphson iteration (m2)
+  REAL           :: CondCoeff           ! Coefficient for vertical conduction between nodes (W/K)
+  REAL           :: Radius              ! Radius of the tank (m)
+  REAL           :: Perimeter           ! Perimeter of the tank (m)
+  REAL           :: SkinArea            ! Area of skin exposed to ambient environment (m2)
+  REAL           :: ChordLength         ! Chord length for horizontal tanks (m)
+  REAL           :: TankHeight          ! Dimension in the vertical direction; for horizontal tanks it is radius * 2 (m)
+  REAL           :: TankLength          ! For horizontal tanks, it is the length in the axial direction (m)
+  REAL           :: R                   ! Radius (m)
+  REAL           :: H0                  ! Starting height (m)
+  REAL           :: H                   ! Ending height (m)
+  REAL           :: a, b, c             ! Intermediate variables
+  REAL           :: a0, b0, c0          ! Intermediate variables
+  REAL           :: G                   ! Function that should converge to zero for the Newton-Raphson solution
+  REAL           :: rho                 ! local fluid density (kg/m3)
   INTEGER             :: DummyWaterIndex = 1
 
           ! FLOW:
@@ -4806,7 +4806,7 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
   NodeMass = WaterThermalTank(WaterThermalTankNum)%Volume * rho / NumNodes
 
   ! Mixing rate set to 50% of the max value for dt = 1.0
-  WaterThermalTank(WaterThermalTankNum)%InversionMixingRate = NodeMass * 0.5d0 * 1.0d0
+  WaterThermalTank(WaterThermalTankNum)%InversionMixingRate = NodeMass * 0.5 * 1.0
 
   IF ((WaterThermalTank(WaterThermalTankNum)%Shape == TankShapeVertCylinder) &
     .OR. (WaterThermalTank(WaterThermalTankNum)%Shape == TankShapeOther)) THEN
@@ -4818,7 +4818,7 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
 
     IF (WaterThermalTank(WaterThermalTankNum)%Shape == TankShapeVertCylinder) THEN
       Radius = SQRT(EndArea / Pi)
-      Perimeter = 2.0d0 * Pi * Radius
+      Perimeter = 2.0 * Pi * Radius
     ELSE  ! TankShapeOther
       Perimeter = WaterThermalTank(WaterThermalTankNum)%Perimeter
     END IF
@@ -4853,7 +4853,7 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
     TankLength = WaterThermalTank(WaterThermalTankNum)%Height  ! Height is the length in the axial direction
     EndArea = WaterThermalTank(WaterThermalTankNum)%Volume / TankLength
     Radius = SQRT(EndArea / Pi)
-    TankHeight = 2.0d0 * Radius  ! Actual vertical height
+    TankHeight = 2.0 * Radius  ! Actual vertical height
     NodeEndArea = EndArea / NumNodes
 
     R = Radius
@@ -4872,13 +4872,13 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
 
         DO WHILE (.TRUE.)
           a = SQRT(H)
-          b = SQRT(2.0d0 * R - H)
-          c = 2.0d0 * R * R * ATAN(a / b) - (2.0d0 * R * R - 3.0d0 * H * R + H * H) * (a / b)
+          b = SQRT(2.0 * R - H)
+          c = 2.0 * R * R * ATAN(a / b) - (2.0 * R * R - 3.0 * H * R + H * H) * (a / b)
 
           IF (H0 > 0.0) THEN
             a0 = SQRT(H0)
-            b0 = SQRT(2.0d0 * R - H0)
-            c0 = 2.0d0 * R * R * ATAN(a0 / b0) - (2.0d0 * R * R - 3.0d0 * H0 * R + H0 * H0) * (a0 / b0)
+            b0 = SQRT(2.0 * R - H0)
+            c0 = 2.0 * R * R * ATAN(a0 / b0) - (2.0 * R * R - 3.0 * H0 * R + H0 * H0) * (a0 / b0)
           ELSE
             c0 = 0.0
           END IF
@@ -4889,7 +4889,7 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
           IF (ABS(G) < Tolerance) THEN
             EXIT  ! Converged !!!
           ELSE
-            H = H - G / (2.0d0 * a * b)  ! Calculate next guess:  H = Hprev - G/G'
+            H = H - G / (2.0 * a * b)  ! Calculate next guess:  H = Hprev - G/G'
           END IF
         END DO  ! Newton-Raphson
 
@@ -4898,17 +4898,17 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
       WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%Height = H - H0
 
       IF (NodeNum > 1) THEN
-        CrossArea = 2.0d0 * ChordLength * TankLength  ! Use old ChordLength from previous node
+        CrossArea = 2.0 * ChordLength * TankLength  ! Use old ChordLength from previous node
         CondCoeff = (FluidCond + WaterThermalTank(WaterThermalTankNum)%AdditionalCond)* CrossArea &
-          / (0.5d0 * (H - H0) + 0.5d0 * WaterThermalTank(WaterThermalTankNum)%Node(NodeNum - 1)%Height)
+          / (0.5 * (H - H0) + 0.5 * WaterThermalTank(WaterThermalTankNum)%Node(NodeNum - 1)%Height)
         WaterThermalTank(WaterThermalTankNum)%Node(NodeNum - 1)%CondCoeffUp = CondCoeff  ! Set for previous node
         WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%CondCoeffDn = CondCoeff  ! Set for this node
       END IF
 
-      ChordLength = SQRT(2.0d0 * R * H - H * H)  ! Calc new ChordLength to be used with next node
+      ChordLength = SQRT(2.0 * R * H - H * H)  ! Calc new ChordLength to be used with next node
 
-      Perimeter = 2.0d0 * R * (ACOS((R - H)/ R) - ACOS((R - H0)/ R))  ! Segments of circular perimeter
-      SkinArea = Perimeter * TankLength + 2.0d0 * NodeEndArea
+      Perimeter = 2.0 * R * (ACOS((R - H)/ R) - ACOS((R - H0)/ R))  ! Segments of circular perimeter
+      SkinArea = Perimeter * TankLength + 2.0 * NodeEndArea
 
       WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%OnCycLossCoeff = &
         WaterThermalTank(WaterThermalTankNum)%SkinLossCoeff * SkinArea +   &
@@ -4931,7 +4931,7 @@ SUBROUTINE SetupStratifiedNodes(WaterThermalTankNum)
   H0 = TankHeight
   DO NodeNum = 1, NumNodes
     IF (NodeNum == NumNodes) THEN
-      H = -1.0d0  ! Avoids rounding errors and ensures that anything at height 0.0 goes into the bottom node
+      H = -1.0  ! Avoids rounding errors and ensures that anything at height 0.0 goes into the bottom node
     ELSE
       H = H0 - WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%Height
     END IF
@@ -5074,10 +5074,10 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
   INTEGER             :: HPWaterOutletNode       ! HP condenser water outlet node number
   INTEGER             :: InletAirMixerNode       ! HP inlet node number after inlet mixing damper
   INTEGER             :: OutletAirSplitterNode   ! HP outlet node number before outlet mixing damper
-  REAL(r64)           :: HPInletDryBulbTemp      ! HPWH's air inlet dry-bulb temperature, C
-  REAL(r64)           :: HPInletHumRat           ! HPWH's air inlet humidity ratio, kg/kg
-  REAL(r64)           :: HPInletRelHum           ! HPWH's air inlet relative humidity
-  REAL(r64)           :: DeadBandTemp                 ! Minimum tank temperature (SetpointTemp - DeadbandDeltaTemp) (C)
+  REAL           :: HPInletDryBulbTemp      ! HPWH's air inlet dry-bulb temperature, C
+  REAL           :: HPInletHumRat           ! HPWH's air inlet humidity ratio, kg/kg
+  REAL           :: HPInletRelHum           ! HPWH's air inlet relative humidity
+  REAL           :: DeadBandTemp                 ! Minimum tank temperature (SetpointTemp - DeadbandDeltaTemp) (C)
 !  LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
 !  Integer             :: Loop
   LOGICAL,SAVE        :: InitWaterThermalTanksOnce = .TRUE. ! flag for 1 time initialization
@@ -5086,12 +5086,12 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: SetLoopIndexFlag    ! get loop number flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizingDoneFlag ! true if sizing is finished
 
-  REAL(r64)           :: sensedTemp
+  REAL           :: sensedTemp
   INTEGER             :: tmpNodeNum
-  REAL(r64)           :: mdotUse ! local temporary for use side mass flow
-  REAL(r64)           :: mdotSource ! local temporary for source side mass flow
+  REAL           :: mdotUse ! local temporary for use side mass flow
+  REAL           :: mdotSource ! local temporary for source side mass flow
   LOGICAL             :: errFlag
-  REAL(r64)           :: rho ! local fluid density
+  REAL           :: rho ! local fluid density
   INTEGER             :: DummyWaterIndex = 1
   INTEGER             :: found = 0
 
@@ -5316,7 +5316,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
 
     ! Clear node initial conditions
     IF (UseInletNode > 0 .AND. UseOutletNode > 0 ) THEN
-      Node(UseInletNode)%Temp = 0.d0
+      Node(UseInletNode)%Temp = 0.
       rho = GetDensityGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
                                  InitConvTemp, &
                                  PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
@@ -5331,9 +5331,9 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
                               WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopSide, &
                               WaterThermalTank(WaterThermalTankNum)%UseSidePlantBranchNum, &
                               WaterThermalTank(WaterThermalTankNum)%UseSidePlantCompNum )
-      WaterThermalTank(WaterThermalTankNum)%UseOutletTemp      = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%UseMassFlowRate    = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SavedUseOutletTemp = 0.d0
+      WaterThermalTank(WaterThermalTankNum)%UseOutletTemp      = 0.
+      WaterThermalTank(WaterThermalTankNum)%UseMassFlowRate    = 0.
+      WaterThermalTank(WaterThermalTankNum)%SavedUseOutletTemp = 0.
 
       WaterThermalTank(WaterThermalTankNum)%Mass = WaterThermalTank(WaterThermalTankNum)%Volume * rho
       WaterThermalTank(WaterThermalTankNum)%UseBranchControlType = &
@@ -5352,16 +5352,16 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
                                  'GetWaterThermalTankInput')
       WaterThermalTank(WaterThermalTankNum)%PlantSourceMassFlowRateMax = &
                              WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate * rho
-      CALL InitComponentNodes(0.d0, WaterThermalTank(WaterThermalTankNum)%PlantSourceMassFlowRateMax, &
+      CALL InitComponentNodes(0., WaterThermalTank(WaterThermalTankNum)%PlantSourceMassFlowRateMax, &
                               SourceInletNode, SourceOutletNode, &
                               WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum, &
                               WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopSide, &
                               WaterThermalTank(WaterThermalTankNum)%SourceSidePlantBranchNum, &
                               WaterThermalTank(WaterThermalTankNum)%SourceSidePlantCompNum )
 
-      WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp      = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SourceMassFlowRate    = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SavedSourceOutletTemp = 0.d0
+      WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp      = 0.
+      WaterThermalTank(WaterThermalTankNum)%SourceMassFlowRate    = 0.
+      WaterThermalTank(WaterThermalTankNum)%SavedSourceOutletTemp = 0.
 
       WaterThermalTank(WaterThermalTankNum)%SourceBranchControlType = &
                        PlantLoop(WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum)% &
@@ -5372,10 +5372,10 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
 
     IF ((SourceInletNode > 0) .AND. ((WaterThermalTank(WaterThermalTankNum)%DesuperheaterNum > 0) &
          .OR. (WaterThermalTank(WaterThermalTankNum)%HeatPumpNum > 0))) THEN
-      Node(SourceInletNode)%Temp = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp      = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SourceMassFlowRate    = 0.d0
-      WaterThermalTank(WaterThermalTankNum)%SavedSourceOutletTemp = 0.d0
+      Node(SourceInletNode)%Temp = 0.
+      WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp      = 0.
+      WaterThermalTank(WaterThermalTankNum)%SourceMassFlowRate    = 0.
+      WaterThermalTank(WaterThermalTankNum)%SavedSourceOutletTemp = 0.
       rho = GetDensityGlycol('WATER', InitConvTemp, DummyWaterIndex, 'SizeTankForDemandSide')
       WaterThermalTank(WaterThermalTankNum)%PlantSourceMassFlowRateMax = &
                              WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate * rho
@@ -5402,7 +5402,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
         WaterThermalTank(WaterThermalTankNum)%Node%SavedTemp = WaterThermalTank(WaterThermalTankNum)%TankTemp
       END IF
     ELSE
-      WaterThermalTank(WaterThermalTankNum)%TankTemp = 20.0d0
+      WaterThermalTank(WaterThermalTankNum)%TankTemp = 20.0
       WaterThermalTank(WaterThermalTankNum)%SavedTankTemp = WaterThermalTank(WaterThermalTankNum)%TankTemp
 
       IF (WaterThermalTank(WaterThermalTankNum)%Nodes > 0) THEN
@@ -5453,7 +5453,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
         WaterThermalTank(WaterThermalTankNum)%Node%SavedTemp = WaterThermalTank(WaterThermalTankNum)%TankTemp
       END IF
     ELSE
-      WaterThermalTank(WaterThermalTankNum)%TankTemp = 20.0d0
+      WaterThermalTank(WaterThermalTankNum)%TankTemp = 20.0
       WaterThermalTank(WaterThermalTankNum)%SavedTankTemp = WaterThermalTank(WaterThermalTankNum)%TankTemp
 
       IF (WaterThermalTank(WaterThermalTankNum)%Nodes > 0) THEN
@@ -5480,7 +5480,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
     IF (.NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank) Then
       IF (WaterThermalTank(WaterThermalTankNum)%SetpointTemp > WaterThermalTank(WaterThermalTankNum)%TankTempLimit) THEN
         ! Setpoint temperature scheduled higher than maximum tank temperature limit
-        WaterThermalTank(WaterThermalTankNum)%SetpointTemp = WaterThermalTank(WaterThermalTankNum)%TankTempLimit - 1.0d0
+        WaterThermalTank(WaterThermalTankNum)%SetpointTemp = WaterThermalTank(WaterThermalTankNum)%TankTempLimit - 1.0
 
         IF(WaterThermalTank(WaterThermalTankNum)%ShowSetpointWarning)THEN
           CALL ShowSevereError('Water heater = '//TRIM(WaterThermalTank(WaterThermalTankNum)%Name)// &
@@ -5495,7 +5495,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
     ELSE
       IF (WaterThermalTank(WaterThermalTankNum)%SetpointTemp < WaterThermalTank(WaterThermalTankNum)%TankTempLimit) THEN
         ! Setpoint temperature scheduled lower than minimum tank temperature limit
-        WaterThermalTank(WaterThermalTankNum)%SetpointTemp = WaterThermalTank(WaterThermalTankNum)%TankTempLimit + 1.0d0
+        WaterThermalTank(WaterThermalTankNum)%SetpointTemp = WaterThermalTank(WaterThermalTankNum)%TankTempLimit + 1.0
 
         IF(WaterThermalTank(WaterThermalTankNum)%ShowSetpointWarning)THEN
           CALL ShowSevereError('Chilled Water Tank = '//TRIM(WaterThermalTank(WaterThermalTankNum)%Name)// &
@@ -5561,7 +5561,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
           WaterThermalTank(WaterThermalTankNum)%TankTempLimit) THEN
         ! HP setpoint temperature scheduled equal to or higher than tank temperature limit
         HPWaterHeater(WaterThermalTank(WaterThermalTankNum)%HeatPumpNum)%SetpointTemp = &
-           WaterThermalTank(WaterThermalTankNum)%TankTempLimit - 1.0d0
+           WaterThermalTank(WaterThermalTankNum)%TankTempLimit - 1.0
 
         IF(HPWaterHeater(WaterThermalTank(WaterThermalTankNum)%HeatPumpNum)%ShowSetpointWarning)THEN
           CALL ShowSevereError('Heat Pump Water Heater = '// &
@@ -5713,9 +5713,9 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
           MixerInletAirSchedule       = 0.0
         END IF
         HPInletDryBulbTemp            = MixerInletAirSchedule * Node(OutdoorAirNode)%Temp + &
-                                        (1.0d0 - MixerInletAirSchedule) * Node(HPAirInletNode)%Temp
+                                        (1.0 - MixerInletAirSchedule) * Node(HPAirInletNode)%Temp
         HPInletHumRat                 = MixerInletAirSchedule * Node(OutdoorAirNode)%Humrat + &
-                                        (1.0d0 - MixerInletAirSchedule) * Node(HPAirInletNode)%HumRat
+                                        (1.0 - MixerInletAirSchedule) * Node(HPAirInletNode)%HumRat
       CASE (AmbientTempOutsideAir)
         MixerInletAirSchedule         = 1.0
         HPInletDryBulbTemp            = Node(OutdoorAirNode)%Temp
@@ -5816,67 +5816,67 @@ SUBROUTINE CalcWaterThermalTankMixed(WaterThermalTankNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
-  REAL(r64)           :: SetpointTemp        ! Current setpoint temperature (C)
-  REAL(r64)           :: DeadBandTemp        ! Heating: Minimum tank temperature (SetpointTemp - DeadbandDeltaTemp) (C)
+  REAL           :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL           :: SetpointTemp        ! Current setpoint temperature (C)
+  REAL           :: DeadBandTemp        ! Heating: Minimum tank temperature (SetpointTemp - DeadbandDeltaTemp) (C)
                                              ! Cooling: Maximum Tank temperature (SetpointTemp + DeadbandDeltaTemp) (C)
-  REAL(r64)           :: MaxTemp             ! Maximum tank temperature before venting (C)
-  REAL(r64)           :: AmbientTemp         ! Current ambient air temperature around tank (C)
-  REAL(r64)           :: TankMass            ! Mass of water in tank (kg)
-  REAL(r64)           :: LossCoeff           ! Loss coefficient to ambient environment (W/K)
-  REAL(r64)           :: LossFracToZone      ! Fraction of losses added to the zone as a gain
-  REAL(r64)           :: TankTemp            ! Instantaneous tank temperature (C)
-  REAL(r64)           :: NewTankTemp         ! Predicted new tank temperature (C)
-  REAL(r64)           :: TankTempAvg         ! Average tank temperature over the timestep (C)
-  REAL(r64)           :: Cp                  ! Specific heat of water (J/kg K)
-  REAL(r64)           :: Quse                ! Heating rate due to use side mass flow (W)
-  REAL(r64)           :: Qsource             ! Heating rate due to source side mass flow (W)
-  REAL(r64)           :: Qloss               ! Heating rate due to ambient environment (W)
-  REAL(r64)           :: Qlosszone           ! Heating rate of fraction of losses added to the zone as a gain (W)
-  REAL(r64)           :: Qheat               ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
-  REAL(r64)           :: Qheater             ! Heating rate of the burner or electric heating element (W)
-  REAL(r64)           :: Qmaxcap             ! Maximum capacity heating rate of the burner or electric heating element (W)
-  REAL(r64)           :: Qmincap             ! Minimum capacity heating rate of the burner or electric heating element (W)
-  REAL(r64)           :: Qoffcycfuel         ! Fuel consumption rate of off-cycle parasitics (W)
-  REAL(r64)           :: Qoffcycheat         ! Heating rate of fraction of off-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qoncycfuel          ! Fuel consumption rate on-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qoncycheat          ! Heating rate of fraction of on-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qneeded             ! Heating rate needed to recover or maintain the setpoint temperature (W)
-  REAL(r64)           :: Qunmet              ! The difference between Qneeded and Qheater (W)
-  REAL(r64)           :: Qvent               ! Heating rate due to venting because tank exceeded max temperature limit (W)
-  REAL(r64)           :: Qnet                ! Net heat transfer rate including everything (W)
-  REAL(r64)           :: Qfuel               ! Heating rate for fuel consumed (W)
-  REAL(r64)           :: UseInletTemp        ! Use side inlet temperature (C)
-  REAL(r64)           :: UseMassFlowRate     ! Use side flow rate, including effectiveness factor (kg/s)
-  REAL(r64)           :: MinMassFlowRate     ! Minimum use side flow rate required before heater is enabled (kg/s)
-  REAL(r64)           :: SourceInletTemp     ! Source side inlet temperature (C)
-  REAL(r64)           :: SourceMassFlowRate  ! Source side flow rate, including effectiveness factor (kg/s)
+  REAL           :: MaxTemp             ! Maximum tank temperature before venting (C)
+  REAL           :: AmbientTemp         ! Current ambient air temperature around tank (C)
+  REAL           :: TankMass            ! Mass of water in tank (kg)
+  REAL           :: LossCoeff           ! Loss coefficient to ambient environment (W/K)
+  REAL           :: LossFracToZone      ! Fraction of losses added to the zone as a gain
+  REAL           :: TankTemp            ! Instantaneous tank temperature (C)
+  REAL           :: NewTankTemp         ! Predicted new tank temperature (C)
+  REAL           :: TankTempAvg         ! Average tank temperature over the timestep (C)
+  REAL           :: Cp                  ! Specific heat of water (J/kg K)
+  REAL           :: Quse                ! Heating rate due to use side mass flow (W)
+  REAL           :: Qsource             ! Heating rate due to source side mass flow (W)
+  REAL           :: Qloss               ! Heating rate due to ambient environment (W)
+  REAL           :: Qlosszone           ! Heating rate of fraction of losses added to the zone as a gain (W)
+  REAL           :: Qheat               ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
+  REAL           :: Qheater             ! Heating rate of the burner or electric heating element (W)
+  REAL           :: Qmaxcap             ! Maximum capacity heating rate of the burner or electric heating element (W)
+  REAL           :: Qmincap             ! Minimum capacity heating rate of the burner or electric heating element (W)
+  REAL           :: Qoffcycfuel         ! Fuel consumption rate of off-cycle parasitics (W)
+  REAL           :: Qoffcycheat         ! Heating rate of fraction of off-cycle parasitics added to the tank (W)
+  REAL           :: Qoncycfuel          ! Fuel consumption rate on-cycle parasitics added to the tank (W)
+  REAL           :: Qoncycheat          ! Heating rate of fraction of on-cycle parasitics added to the tank (W)
+  REAL           :: Qneeded             ! Heating rate needed to recover or maintain the setpoint temperature (W)
+  REAL           :: Qunmet              ! The difference between Qneeded and Qheater (W)
+  REAL           :: Qvent               ! Heating rate due to venting because tank exceeded max temperature limit (W)
+  REAL           :: Qnet                ! Net heat transfer rate including everything (W)
+  REAL           :: Qfuel               ! Heating rate for fuel consumed (W)
+  REAL           :: UseInletTemp        ! Use side inlet temperature (C)
+  REAL           :: UseMassFlowRate     ! Use side flow rate, including effectiveness factor (kg/s)
+  REAL           :: MinMassFlowRate     ! Minimum use side flow rate required before heater is enabled (kg/s)
+  REAL           :: SourceInletTemp     ! Source side inlet temperature (C)
+  REAL           :: SourceMassFlowRate  ! Source side flow rate, including effectiveness factor (kg/s)
   INTEGER             :: Mode                ! Indicator for current operating mode (HeatMode=1 | FloatMode=0 | VentMode=-1)
-  REAL(r64)           :: SecInTimeStep       ! Seconds in one timestep (s)
-  REAL(r64)           :: TimeRemaining       ! Time remaining in the current timestep (s)
-  REAL(r64)           :: TimeNeeded          ! Time needed to reach the next substep (s)
+  REAL           :: SecInTimeStep       ! Seconds in one timestep (s)
+  REAL           :: TimeRemaining       ! Time remaining in the current timestep (s)
+  REAL           :: TimeNeeded          ! Time needed to reach the next substep (s)
   INTEGER             :: CycleOnCount        ! Number of times heater cycles on in the current time step
   INTEGER             :: MaxCycles           ! Maximum number of cycles allowed before exiting loop
-  REAL(r64)           :: Runtime             ! Time that heater is running (s)
-  REAL(r64)           :: RTF                 ! Runtime fraction, fraction of timestep that heater is running
-  REAL(r64)           :: PLR                 ! Part load ratio, fraction of maximum heater capacity
-  REAL(r64)           :: PLRsum              ! Integrated part load ratio over the timestep (J)
-  REAL(r64)           :: PLF                 ! Part load factor, modifies thermal efficiency to get total energy efficiency
-  REAL(r64)           :: Tsum                ! Integrated tank temp over the timestep, dividing by time gives the average (C s)
-  REAL(r64)           :: deltaTsum           ! Change in integrated tank temperature, dividing by time gives the average (C s)
-  REAL(r64)           :: Eloss               ! Energy change due to ambient losses over the timestep (J)
-  REAL(r64)           :: Elosszone           ! Energy change to the zone due to ambient losses over the timestep (J)
-  REAL(r64)           :: Euse                ! Energy change due to use side mass flow over the timestep (J)
-  REAL(r64)           :: Esource             ! Energy change due to source side mass flow over the timestep (J)
-  REAL(r64)           :: Eheater             ! Energy change due to the heater over the timestep (J)
-  REAL(r64)           :: Eoncycfuel          ! Fuel energy consumed by on-cycle parasitics over the timestep (J)
-  REAL(r64)           :: Eoffcycfuel         ! Fuel energy consumed by off-cycle parasitics over the timestep (J)
-  REAL(r64)           :: Event               ! Energy change due to venting over the timestep (J)
-  REAL(r64)           :: Eneeded             ! Energy change needed over the timestep (J)
-  REAL(r64)           :: Eunmet              ! Energy change unmet over the timestep (J)
-  REAL(r64)           :: Efuel               ! Energy change for fuel consumed over the timestep (J)
+  REAL           :: Runtime             ! Time that heater is running (s)
+  REAL           :: RTF                 ! Runtime fraction, fraction of timestep that heater is running
+  REAL           :: PLR                 ! Part load ratio, fraction of maximum heater capacity
+  REAL           :: PLRsum              ! Integrated part load ratio over the timestep (J)
+  REAL           :: PLF                 ! Part load factor, modifies thermal efficiency to get total energy efficiency
+  REAL           :: Tsum                ! Integrated tank temp over the timestep, dividing by time gives the average (C s)
+  REAL           :: deltaTsum           ! Change in integrated tank temperature, dividing by time gives the average (C s)
+  REAL           :: Eloss               ! Energy change due to ambient losses over the timestep (J)
+  REAL           :: Elosszone           ! Energy change to the zone due to ambient losses over the timestep (J)
+  REAL           :: Euse                ! Energy change due to use side mass flow over the timestep (J)
+  REAL           :: Esource             ! Energy change due to source side mass flow over the timestep (J)
+  REAL           :: Eheater             ! Energy change due to the heater over the timestep (J)
+  REAL           :: Eoncycfuel          ! Fuel energy consumed by on-cycle parasitics over the timestep (J)
+  REAL           :: Eoffcycfuel         ! Fuel energy consumed by off-cycle parasitics over the timestep (J)
+  REAL           :: Event               ! Energy change due to venting over the timestep (J)
+  REAL           :: Eneeded             ! Energy change needed over the timestep (J)
+  REAL           :: Eunmet              ! Energy change unmet over the timestep (J)
+  REAL           :: Efuel               ! Energy change for fuel consumed over the timestep (J)
   LOGICAL             :: SetpointRecovered   ! Flag to indicate when setpoint is recovered for the first time
-  REAL(r64)           :: rho
+  REAL           :: rho
   INTEGER             :: DummyWaterIndex = 1
 
           ! FLOW:
@@ -6003,7 +6003,7 @@ SUBROUTINE CalcWaterThermalTankMixed(WaterThermalTankNum)
           ! Qneeded is calculated above
           ! Qneeded does not account for the extra energy needed to recover to the setpoint
           Qheater = Qmaxcap
-          Qunmet = MAX(Qneeded - Qheater,0.0d0)
+          Qunmet = MAX(Qneeded - Qheater,0.0)
           Qheat = Qoncycheat + Qheater
 
           ! Calculate time needed to recover to the setpoint at maximum heater capacity
@@ -6182,7 +6182,7 @@ SUBROUTINE CalcWaterThermalTankMixed(WaterThermalTankNum)
 
         ELSEIF(( TankTemp > DeadBandTemp) .AND. (WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank)) THEN
           Mode = CoolMode
-          Qheat = 0.0D0
+          Qheat = 0.0
 
           NewTankTemp = CalcTankTemp(TankTemp, AmbientTemp, UseInletTemp, SourceInletTemp, TankMass, &
                                      Cp, UseMassFlowRate, SourceMassFlowRate, LossCoeff, Qheat, TimeRemaining)
@@ -6191,7 +6191,7 @@ SUBROUTINE CalcWaterThermalTankMixed(WaterThermalTankNum)
 
           IF (TankTemp < SetpointTemp) Mode = FloatMode
 
-          Qheat = 0.0D0
+          Qheat = 0.0
 
           NewTankTemp = CalcTankTemp(TankTemp, AmbientTemp, UseInletTemp, SourceInletTemp, TankMass, &
                                      Cp, UseMassFlowRate, SourceMassFlowRate, LossCoeff, Qheat, TimeRemaining)
@@ -6338,7 +6338,7 @@ SUBROUTINE CalcWaterThermalTankMixed(WaterThermalTankNum)
 END SUBROUTINE CalcWaterThermalTankMixed
 
 
-REAL(r64) FUNCTION CalcTimeNeeded(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q)
+REAL FUNCTION CalcTimeNeeded(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -6358,27 +6358,27 @@ REAL(r64) FUNCTION CalcTimeNeeded(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  :: Ti        ! Initial tank temperature (C)
-  REAL(r64), INTENT(IN)  :: Tf        ! Final tank temperature (C)
-  REAL(r64), INTENT(IN)  :: Ta        ! Ambient environment temperature (C)
-  REAL(r64), INTENT(IN)  :: T1        ! Temperature of flow 1 (C)
-  REAL(r64), INTENT(IN)  :: T2        ! Temperature of flow 2 (C)
-  REAL(r64), INTENT(IN)  :: m         ! Mass of tank fluid (kg)
-  REAL(r64), INTENT(IN)  :: Cp        ! Specific heat of fluid (J/kg deltaC)
-  REAL(r64), INTENT(IN)  :: m1        ! Mass flow rate 1 (kg/s)
-  REAL(r64), INTENT(IN)  :: m2        ! Mass flow rate 2 (kg/s)
-  REAL(r64), INTENT(IN)  :: UA        ! Heat loss coefficient to ambient environment (W/deltaC)
-  REAL(r64), INTENT(IN)  :: Q         ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
+  REAL, INTENT(IN)  :: Ti        ! Initial tank temperature (C)
+  REAL, INTENT(IN)  :: Tf        ! Final tank temperature (C)
+  REAL, INTENT(IN)  :: Ta        ! Ambient environment temperature (C)
+  REAL, INTENT(IN)  :: T1        ! Temperature of flow 1 (C)
+  REAL, INTENT(IN)  :: T2        ! Temperature of flow 2 (C)
+  REAL, INTENT(IN)  :: m         ! Mass of tank fluid (kg)
+  REAL, INTENT(IN)  :: Cp        ! Specific heat of fluid (J/kg deltaC)
+  REAL, INTENT(IN)  :: m1        ! Mass flow rate 1 (kg/s)
+  REAL, INTENT(IN)  :: m2        ! Mass flow rate 2 (kg/s)
+  REAL, INTENT(IN)  :: UA        ! Heat loss coefficient to ambient environment (W/deltaC)
+  REAL, INTENT(IN)  :: Q         ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER   :: Infinity = 99999999.9d0  ! A time interval much larger than any single timestep (s)
+  REAL, PARAMETER   :: Infinity = 99999999.9  ! A time interval much larger than any single timestep (s)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)         :: a         ! Intermediate variable
-  REAL(r64)         :: b         ! Intermediate variable
-  REAL(r64)         :: Tm        ! Mixed temperature after an infinite amount of time has passed (C)
-  REAL(r64)  :: quotient  ! Intermediate variable
-  REAL(r64)         :: t         ! Time elapsed from Ti to Tf (s)
+  REAL         :: a         ! Intermediate variable
+  REAL         :: b         ! Intermediate variable
+  REAL         :: Tm        ! Mixed temperature after an infinite amount of time has passed (C)
+  REAL  :: quotient  ! Intermediate variable
+  REAL         :: t         ! Time elapsed from Ti to Tf (s)
 
           ! FLOW:
   IF (Tf == Ti) THEN
@@ -6440,7 +6440,7 @@ REAL(r64) FUNCTION CalcTimeNeeded(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q)
 END FUNCTION CalcTimeNeeded
 
 
-REAL(r64) FUNCTION CalcTankTemp(Ti, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
+REAL FUNCTION CalcTankTemp(Ti, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -6458,22 +6458,22 @@ REAL(r64) FUNCTION CalcTankTemp(Ti, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  :: Ti       ! Initial tank temperature (C)
-  REAL(r64), INTENT(IN)  :: Ta       ! Ambient environment temperature (C)
-  REAL(r64), INTENT(IN)  :: T1       ! Temperature of flow 1 (C)
-  REAL(r64), INTENT(IN)  :: T2       ! Temperature of flow 2 (C)
-  REAL(r64), INTENT(IN)  :: m        ! Mass of tank fluid (kg)
-  REAL(r64), INTENT(IN)  :: Cp       ! Specific heat of fluid (J/kg deltaC)
-  REAL(r64), INTENT(IN)  :: m1       ! Mass flow rate 1 (kg/s)
-  REAL(r64), INTENT(IN)  :: m2       ! Mass flow rate 2 (kg/s)
-  REAL(r64), INTENT(IN)  :: UA       ! Heat loss coefficient to ambient environment (W/deltaC)
-  REAL(r64), INTENT(IN)  :: Q        ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
-  REAL(r64), INTENT(IN)  :: t        ! Time elapsed from Ti to Tf (s)
+  REAL, INTENT(IN)  :: Ti       ! Initial tank temperature (C)
+  REAL, INTENT(IN)  :: Ta       ! Ambient environment temperature (C)
+  REAL, INTENT(IN)  :: T1       ! Temperature of flow 1 (C)
+  REAL, INTENT(IN)  :: T2       ! Temperature of flow 2 (C)
+  REAL, INTENT(IN)  :: m        ! Mass of tank fluid (kg)
+  REAL, INTENT(IN)  :: Cp       ! Specific heat of fluid (J/kg deltaC)
+  REAL, INTENT(IN)  :: m1       ! Mass flow rate 1 (kg/s)
+  REAL, INTENT(IN)  :: m2       ! Mass flow rate 2 (kg/s)
+  REAL, INTENT(IN)  :: UA       ! Heat loss coefficient to ambient environment (W/deltaC)
+  REAL, INTENT(IN)  :: Q        ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
+  REAL, INTENT(IN)  :: t        ! Time elapsed from Ti to Tf (s)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)         :: a        ! Intermediate variable
-  REAL(r64)  :: b        ! Intermediate variable
-  REAL(r64)         :: Tf       ! Final tank temperature (C)
+  REAL         :: a        ! Intermediate variable
+  REAL  :: b        ! Intermediate variable
+  REAL         :: Tf       ! Final tank temperature (C)
 
           ! FLOW:
   IF (UA / Cp + m1 + m2 == 0.0) THEN
@@ -6496,7 +6496,7 @@ REAL(r64) FUNCTION CalcTankTemp(Ti, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
 END FUNCTION CalcTankTemp
 
 
-REAL(r64) FUNCTION CalcTempIntegral(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
+REAL FUNCTION CalcTempIntegral(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -6514,23 +6514,23 @@ REAL(r64) FUNCTION CalcTempIntegral(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)  :: Ti        ! Initial tank temperature (C)
-  REAL(r64), INTENT(IN)  :: Tf        ! Final tank temperature (C)
-  REAL(r64), INTENT(IN)  :: Ta        ! Ambient environment temperature (C)
-  REAL(r64), INTENT(IN)  :: T1        ! Temperature of flow 1 (C)
-  REAL(r64), INTENT(IN)  :: T2        ! Temperature of flow 2 (C)
-  REAL(r64), INTENT(IN)  :: m         ! Mass of tank fluid (kg)
-  REAL(r64), INTENT(IN)  :: Cp        ! Specific heat of fluid (J/kg deltaC)
-  REAL(r64), INTENT(IN)  :: m1        ! Mass flow rate 1 (kg/s)
-  REAL(r64), INTENT(IN)  :: m2        ! Mass flow rate 2 (kg/s)
-  REAL(r64), INTENT(IN)  :: UA        ! Heat loss coefficient to ambient environment (W/deltaC)
-  REAL(r64), INTENT(IN)  :: Q         ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
-  REAL(r64), INTENT(IN)  :: t         ! Time elapsed from Ti to Tf (s)
+  REAL, INTENT(IN)  :: Ti        ! Initial tank temperature (C)
+  REAL, INTENT(IN)  :: Tf        ! Final tank temperature (C)
+  REAL, INTENT(IN)  :: Ta        ! Ambient environment temperature (C)
+  REAL, INTENT(IN)  :: T1        ! Temperature of flow 1 (C)
+  REAL, INTENT(IN)  :: T2        ! Temperature of flow 2 (C)
+  REAL, INTENT(IN)  :: m         ! Mass of tank fluid (kg)
+  REAL, INTENT(IN)  :: Cp        ! Specific heat of fluid (J/kg deltaC)
+  REAL, INTENT(IN)  :: m1        ! Mass flow rate 1 (kg/s)
+  REAL, INTENT(IN)  :: m2        ! Mass flow rate 2 (kg/s)
+  REAL, INTENT(IN)  :: UA        ! Heat loss coefficient to ambient environment (W/deltaC)
+  REAL, INTENT(IN)  :: Q         ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
+  REAL, INTENT(IN)  :: t         ! Time elapsed from Ti to Tf (s)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)         :: a         ! Intermediate variable
-  REAL(r64)  :: b         ! Intermediate variable
-  REAL(r64)         :: dTsum     ! Integral of tank temperature (C s)
+  REAL         :: a         ! Intermediate variable
+  REAL  :: b         ! Intermediate variable
+  REAL         :: dTsum     ! Integral of tank temperature (C s)
 
           ! FLOW:
   IF (t == 0.0) THEN
@@ -6550,7 +6550,7 @@ REAL(r64) FUNCTION CalcTempIntegral(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
     b = -(UA / Cp + m1 + m2) / m
 
     ! Integral of T(t) = (a / b + Ti) * EXP(b * t) - a / b, evaluated from 0 to t
-    dTsum = (a / b + Ti) * (EXP(b * t) - 1.0d0) / b - a * t / b
+    dTsum = (a / b + Ti) * (EXP(b * t) - 1.0) / b - a * t / b
   END IF
 
   CalcTempIntegral = dTsum
@@ -6560,7 +6560,7 @@ REAL(r64) FUNCTION CalcTempIntegral(Ti, Tf, Ta, T1, T2, m, Cp, m1, m2, UA, Q, t)
 END FUNCTION CalcTempIntegral
 
 
-REAL(r64) FUNCTION PartLoadFactor(WaterThermalTankNum, PartLoadRatio)
+REAL FUNCTION PartLoadFactor(WaterThermalTankNum, PartLoadRatio)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -6582,13 +6582,13 @@ REAL(r64) FUNCTION PartLoadFactor(WaterThermalTankNum, PartLoadRatio)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: WaterThermalTankNum
-  REAL(r64), INTENT(IN)    :: PartLoadRatio
+  REAL, INTENT(IN)    :: PartLoadRatio
 
           ! FLOW:
   IF (WaterThermalTank(WaterThermalTankNum)%PLFCurve > 0) THEN
     PartLoadFactor = CurveValue(WaterThermalTank(WaterThermalTankNum)%PLFCurve, PartLoadRatio)
 
-    PartLoadFactor = MAX(PartLoadFactor,0.1d0)
+    PartLoadFactor = MAX(PartLoadFactor,0.1)
   ELSE
     ! No curve was defined
     PartLoadFactor = 1.0
@@ -6629,71 +6629,71 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
   INTEGER, INTENT(IN) :: WaterThermalTankNum      ! Water Heater being simulated
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER     :: dt = 1.0d0          ! Sub time step interval (s)
+  REAL, PARAMETER     :: dt = 1.0          ! Sub time step interval (s)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
-  REAL(r64)           :: SecInTimeStep       ! Seconds in one timestep (s)
-  REAL(r64)           :: TimeRemaining       ! Time remaining in the current timestep (s)
+  REAL           :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL           :: SecInTimeStep       ! Seconds in one timestep (s)
+  REAL           :: TimeRemaining       ! Time remaining in the current timestep (s)
   INTEGER             :: NumNodes            ! Number of stratified nodes
   INTEGER             :: NodeNum             ! Node number index
-  REAL(r64)           :: NodeMass            ! Mass of water in a node (kg)
-  REAL(r64)           :: NodeTemp            ! Instantaneous node temperature (C)
-  REAL(r64)           :: TempUp              ! Temperature of the upper node (C)
-  REAL(r64)           :: TempDn              ! Temperature of the lower node (C)
-  REAL(r64)           :: InvMixUp            ! Inversion mixing rate with the upper node (kg/s)
-  REAL(r64)           :: InvMixDn            ! Inversion mixing rate with the lower node (kg/s)
-  REAL(r64)           :: Cp                  ! Specific heat of water (J/kg K)
-  REAL(r64)           :: LossCoeff           ! Loss coefficient to ambient environment (W/K)
-  REAL(r64)           :: AmbientTemp         ! Current ambient air temperature around tank (C)
-  REAL(r64)           :: SetPointTemp1       ! Current set point temperature for heater 1 (C)
-  REAL(r64)           :: SetPointTemp2       ! Current set point temperature for heater 2 (C)
-  REAL(r64)           :: MinTemp1            ! Minimum tank temperature (SetPointTemp1 - DeadbandDeltaTemp1) (C)
-  REAL(r64)           :: MinTemp2            ! Minimum tank temperature (SetPointTemp2 - DeadbandDeltaTemp2) (C)
-  REAL(r64)           :: MaxTemp             ! Maximum tank temperature before venting (C)
-  REAL(r64)           :: Quse                ! Heating rate due to use side mass flow (W)
-  REAL(r64)           :: Qsource             ! Heating rate due to source side mass flow (W)
-  REAL(r64)           :: Qcond               ! Heating rate due to vertical conduction between nodes
-  REAL(r64)           :: Qflow               ! Heating rate due to fluid flow between inlet and outlet nodes
-  REAL(r64)           :: Qmix                ! Heating rate due to temperature inversion mixing between nodes
-  REAL(r64)           :: Qloss               ! Heating rate due to ambient environment (W)
-  REAL(r64)           :: Qlosszone           ! Heating rate of fraction of losses added to the zone as a gain (W)
-  REAL(r64)           :: Qheat               ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
-  REAL(r64)           :: Qheater1            ! Heating rate of burner or electric heating element 1 (W)
-  REAL(r64)           :: Qheater2            ! Heating rate of burner or electric heating element 2 (W)
-  REAL(r64)           :: Qheater             ! Combined heating rate of heater 1 and 2 (W)
-  REAL(r64)           :: Qoffcycfuel         ! Fuel consumption rate of off-cycle parasitics (W)
-  REAL(r64)           :: Qoffcycheat         ! Heating rate of fraction of off-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qoncycfuel          ! Fuel consumption rate on-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qoncycheat          ! Heating rate of fraction of on-cycle parasitics added to the tank (W)
-  REAL(r64)           :: Qneeded             ! Heating rate needed to recover or maintain the setpoint temperature (W)
-  REAL(r64)           :: Qunmet              ! The difference between Qneeded and Qheater (W)
-  REAL(r64)           :: Qvent               ! Heating rate due to venting because tank exceeded max temperature limit (W)
-  REAL(r64)           :: Qfuel               ! Heating rate for fuel consumed (W)
-  REAL(r64)           :: UseInletTemp        ! Use side inlet temperature (C)
-  REAL(r64)           :: UseMassFlowRate     ! Use side flow rate, including effectiveness factor (kg/s)
-  REAL(r64)           :: SourceInletTemp     ! Source side inlet temperature (C)
-  REAL(r64)           :: SourceMassFlowRate  ! Source side flow rate, including effectiveness factor (kg/s)
+  REAL           :: NodeMass            ! Mass of water in a node (kg)
+  REAL           :: NodeTemp            ! Instantaneous node temperature (C)
+  REAL           :: TempUp              ! Temperature of the upper node (C)
+  REAL           :: TempDn              ! Temperature of the lower node (C)
+  REAL           :: InvMixUp            ! Inversion mixing rate with the upper node (kg/s)
+  REAL           :: InvMixDn            ! Inversion mixing rate with the lower node (kg/s)
+  REAL           :: Cp                  ! Specific heat of water (J/kg K)
+  REAL           :: LossCoeff           ! Loss coefficient to ambient environment (W/K)
+  REAL           :: AmbientTemp         ! Current ambient air temperature around tank (C)
+  REAL           :: SetPointTemp1       ! Current set point temperature for heater 1 (C)
+  REAL           :: SetPointTemp2       ! Current set point temperature for heater 2 (C)
+  REAL           :: MinTemp1            ! Minimum tank temperature (SetPointTemp1 - DeadbandDeltaTemp1) (C)
+  REAL           :: MinTemp2            ! Minimum tank temperature (SetPointTemp2 - DeadbandDeltaTemp2) (C)
+  REAL           :: MaxTemp             ! Maximum tank temperature before venting (C)
+  REAL           :: Quse                ! Heating rate due to use side mass flow (W)
+  REAL           :: Qsource             ! Heating rate due to source side mass flow (W)
+  REAL           :: Qcond               ! Heating rate due to vertical conduction between nodes
+  REAL           :: Qflow               ! Heating rate due to fluid flow between inlet and outlet nodes
+  REAL           :: Qmix                ! Heating rate due to temperature inversion mixing between nodes
+  REAL           :: Qloss               ! Heating rate due to ambient environment (W)
+  REAL           :: Qlosszone           ! Heating rate of fraction of losses added to the zone as a gain (W)
+  REAL           :: Qheat               ! Net heating rate for non-temp dependent sources, i.e. heater and parasitics (W)
+  REAL           :: Qheater1            ! Heating rate of burner or electric heating element 1 (W)
+  REAL           :: Qheater2            ! Heating rate of burner or electric heating element 2 (W)
+  REAL           :: Qheater             ! Combined heating rate of heater 1 and 2 (W)
+  REAL           :: Qoffcycfuel         ! Fuel consumption rate of off-cycle parasitics (W)
+  REAL           :: Qoffcycheat         ! Heating rate of fraction of off-cycle parasitics added to the tank (W)
+  REAL           :: Qoncycfuel          ! Fuel consumption rate on-cycle parasitics added to the tank (W)
+  REAL           :: Qoncycheat          ! Heating rate of fraction of on-cycle parasitics added to the tank (W)
+  REAL           :: Qneeded             ! Heating rate needed to recover or maintain the setpoint temperature (W)
+  REAL           :: Qunmet              ! The difference between Qneeded and Qheater (W)
+  REAL           :: Qvent               ! Heating rate due to venting because tank exceeded max temperature limit (W)
+  REAL           :: Qfuel               ! Heating rate for fuel consumed (W)
+  REAL           :: UseInletTemp        ! Use side inlet temperature (C)
+  REAL           :: UseMassFlowRate     ! Use side flow rate, including effectiveness factor (kg/s)
+  REAL           :: SourceInletTemp     ! Source side inlet temperature (C)
+  REAL           :: SourceMassFlowRate  ! Source side flow rate, including effectiveness factor (kg/s)
   INTEGER             :: CycleOnCount1       ! Number of times heater 1 cycles on in the current time step
   INTEGER             :: CycleOnCount2       ! Number of times heater 2 cycles on in the current time step
-  REAL(r64)           :: Runtime1            ! Time that heater 1 is running (s)
-  REAL(r64)           :: Runtime2            ! Time that heater 2 is running (s)
-  REAL(r64)           :: Runtime             ! Time that either heater is running (s)
-  REAL(r64)           :: RTF1                ! Runtime fraction, fraction of timestep that heater 1 is running
-  REAL(r64)           :: RTF2                ! Runtime fraction, fraction of timestep that heater 2 is running
-  REAL(r64)           :: RTF                 ! Runtime fraction, fraction of timestep that either heater is running
-  REAL(r64)           :: Eloss               ! Energy change due to ambient losses over the timestep (J)
-  REAL(r64)           :: Elosszone           ! Energy change to the zone due to ambient losses over the timestep (J)
-  REAL(r64)           :: Euse                ! Energy change due to use side mass flow over the timestep (J)
-  REAL(r64)           :: Esource             ! Energy change due to source side mass flow over the timestep (J)
-  REAL(r64)           :: Eheater1            ! Energy change due to heater 1 over the timestep (J)
-  REAL(r64)           :: Eheater2            ! Energy change due to heater 2 over the timestep (J)
-  REAL(r64)           :: Eoncycfuel          ! Fuel energy consumed by on-cycle parasitics over the timestep (J)
-  REAL(r64)           :: Eoffcycfuel         ! Fuel energy consumed by off-cycle parasitics over the timestep (J)
-  REAL(r64)           :: Event               ! Energy change due to venting over the timestep (J)
-  REAL(r64)           :: Eneeded             ! Energy change needed over the timestep (J)
-  REAL(r64)           :: Eunmet              ! Energy change unmet over the timestep (J)
-  REAL(r64)           :: Efuel               ! Energy change for fuel consumed over the timestep (J)
+  REAL           :: Runtime1            ! Time that heater 1 is running (s)
+  REAL           :: Runtime2            ! Time that heater 2 is running (s)
+  REAL           :: Runtime             ! Time that either heater is running (s)
+  REAL           :: RTF1                ! Runtime fraction, fraction of timestep that heater 1 is running
+  REAL           :: RTF2                ! Runtime fraction, fraction of timestep that heater 2 is running
+  REAL           :: RTF                 ! Runtime fraction, fraction of timestep that either heater is running
+  REAL           :: Eloss               ! Energy change due to ambient losses over the timestep (J)
+  REAL           :: Elosszone           ! Energy change to the zone due to ambient losses over the timestep (J)
+  REAL           :: Euse                ! Energy change due to use side mass flow over the timestep (J)
+  REAL           :: Esource             ! Energy change due to source side mass flow over the timestep (J)
+  REAL           :: Eheater1            ! Energy change due to heater 1 over the timestep (J)
+  REAL           :: Eheater2            ! Energy change due to heater 2 over the timestep (J)
+  REAL           :: Eoncycfuel          ! Fuel energy consumed by on-cycle parasitics over the timestep (J)
+  REAL           :: Eoffcycfuel         ! Fuel energy consumed by off-cycle parasitics over the timestep (J)
+  REAL           :: Event               ! Energy change due to venting over the timestep (J)
+  REAL           :: Eneeded             ! Energy change needed over the timestep (J)
+  REAL           :: Eunmet              ! Energy change unmet over the timestep (J)
+  REAL           :: Efuel               ! Energy change for fuel consumed over the timestep (J)
   LOGICAL             :: SetPointRecovered   ! Flag to indicate when set point is recovered for the first time
   INTEGER             :: DummyWaterIndex = 1
 
@@ -6795,7 +6795,7 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
         Qheater1 = WaterThermalTank(WaterThermalTankNum)%MaxCapacity
         Runtime1 = Runtime1 + dt
       ELSE
-        Qheater1 = 0.0D0
+        Qheater1 = 0.0
       END IF
 
       ! Control the second heater element (slave)
@@ -6830,8 +6830,8 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
       END IF
     ELSE ! chilled water thank, no heating
 
-      Qheater1 = 0.0D0
-      Qheater2 = 0.0D0
+      Qheater1 = 0.0
+      Qheater2 = 0.0
 
     ENDIF
 
@@ -6891,7 +6891,7 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
         Qoncycheat = WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%OnCycParaLoad *   &
            WaterThermalTank(WaterThermalTankNum)%OnCycParaFracToTank
 
-        Qneeded = MAX(- Quse - Qsource - Qloss - Qoncycheat, 0.0d0)
+        Qneeded = MAX(- Quse - Qsource - Qloss - Qoncycheat, 0.0)
 
         Qheat = Qoncycheat
         IF (NodeNum == WaterThermalTank(WaterThermalTankNum)%HeaterNode1) Qheat = Qheat + Qheater1
@@ -6903,11 +6903,11 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
         Qoffcycheat = WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%OffCycParaLoad *   &
            WaterThermalTank(WaterThermalTankNum)%OffCycParaFracToTank
 
-        Qneeded = MAX(- Quse - Qsource - Qloss - Qoffcycheat, 0.0d0)
+        Qneeded = MAX(- Quse - Qsource - Qloss - Qoffcycheat, 0.0)
         Qheat = Qoffcycheat
       END IF
 
-      Qunmet = MAX(Qneeded - Qheater1 - Qheater2, 0.0d0)
+      Qunmet = MAX(Qneeded - Qheater1 - Qheater2, 0.0)
 
       ! Calculate node heat balance
       WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%NewTemp = NodeTemp  &
@@ -6985,7 +6985,7 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
   IF (NodeNum > 0) Then
     IF (WaterThermalTank(WaterThermalTankNum)%UseMassFlowRate .GT. 0.0) Then
       WaterThermalTank(WaterThermalTankNum)%UseOutletTemp =  WaterThermalTank(WaterThermalTankNum)%UseInletTemp     &
-                                                          * (1.0d0 - WaterThermalTank(WaterThermalTankNum)%UseEffectiveness)  &
+                                                          * (1.0 - WaterThermalTank(WaterThermalTankNum)%UseEffectiveness)  &
                                                           +  WaterThermalTank(WaterThermalTankNum)%UseOutletTemp   &
                                                           *  WaterThermalTank(WaterThermalTankNum)%UseEffectiveness
     End If
@@ -6997,7 +6997,7 @@ SUBROUTINE CalcWaterThermalTankStratified(WaterThermalTankNum)
   IF (NodeNum > 0) Then
     IF (WaterThermalTank(WaterThermalTankNum)%SourceMassFlowRate .GT. 0.0) Then
       WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp =  WaterThermalTank(WaterThermalTankNum)%SourceInletTemp     &
-                                                       * (1.0d0 - WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness)  &
+                                                       * (1.0 - WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness)  &
                                                        +  WaterThermalTank(WaterThermalTankNum)%SourceOutletTemp   &
                                                        *  WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness
     End If
@@ -7073,11 +7073,11 @@ SUBROUTINE CalcNodeMassFlows(WaterThermalTankNum, InletMode)
   INTEGER :: SourceInletStratNode   ! Source-side inlet node number
   INTEGER :: SourceOutletStratNode  ! Source-side outlet node number
   INTEGER :: NodeNum                ! Node number index
-  REAL(r64) :: UseMassFlowRate           ! Use side flow rate, including effectiveness factor (kg/s)
-  REAL(r64) :: SourceMassFlowRate        ! Source side flow rate, including effectiveness factor (kg/s)
+  REAL :: UseMassFlowRate           ! Use side flow rate, including effectiveness factor (kg/s)
+  REAL :: SourceMassFlowRate        ! Source side flow rate, including effectiveness factor (kg/s)
   INTEGER :: Step                   ! DO loop step direction, 1 or -1
-  REAL(r64) :: DeltaTemp                 ! Temperature difference between node and inlet (delta C)
-  REAL(r64) :: MinDeltaTemp              ! Smallest temperature difference found so far (delta C)
+  REAL :: DeltaTemp                 ! Temperature difference between node and inlet (delta C)
+  REAL :: MinDeltaTemp              ! Smallest temperature difference found so far (delta C)
 
           ! FLOW:
   NumNodes = WaterThermalTank(WaterThermalTankNum)%Nodes
@@ -7209,10 +7209,10 @@ SUBROUTINE CalcNodeMassFlows(WaterThermalTankNum, InletMode)
   DO NodeNum = 1, NumNodes
     WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowFromUpper =  &
       MAX((WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowFromUpper  &
-      - WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowToUpper), 0.0d0)
+      - WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowToUpper), 0.0)
     WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowFromLower =  &
       MAX((WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowFromLower  &
-      - WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowToLower), 0.0d0)
+      - WaterThermalTank(WaterThermalTankNum)%Node(NodeNum)%MassFlowToLower), 0.0)
   END DO
 
   RETURN
@@ -7258,29 +7258,29 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte = 500            ! Maximum number of iterations for RegulaFalsi
-  REAL(r64), PARAMETER :: Acc =  0.00001D0        ! Accuracy of result from RegulaFalsi
+  REAL, PARAMETER :: Acc =  0.00001        ! Accuracy of result from RegulaFalsi
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: AvailSchedule           ! desuperheater availability schedule
-  REAL(r64)           :: SetPointTemp            ! desuperheater set point temperature (cut-out temperature, C)
-  REAL(r64)           :: DeadbandTempDiff        ! desuperheater dead band temperature difference (C)
-  REAL(r64)           :: CutInTemp               ! desuperheater cut-in temperature (SetpointTemp - DeadbandTempDiff, C)
-  REAL(r64)           :: TankTemp                ! tank temperature before simulation, C
-  REAL(r64)           :: NewTankTemp             ! tank temperature after simulation, C
-  REAL(r64)           :: MdotWater               ! mass flow rate through desuperheater, kg/s
-  REAL(r64)           :: PartLoadRatio           ! desuperheater part load ratio
-  REAL(r64)           :: QHeatRate               ! desuperheater heating rate (W)
-  REAL(r64)           :: AverageWasteHeat        ! average hating rate from DX system condenser (W)
-  REAL(r64)           :: HEffFTemp               ! output of heating efficiency as a function of temperature curve
-  REAL(r64)           :: Effic                   ! efficiency of desuperheater heating coil
-  REAL(r64)           :: CpWater                 ! specific heat of water (J/Kg/k)
+  REAL           :: AvailSchedule           ! desuperheater availability schedule
+  REAL           :: SetPointTemp            ! desuperheater set point temperature (cut-out temperature, C)
+  REAL           :: DeadbandTempDiff        ! desuperheater dead band temperature difference (C)
+  REAL           :: CutInTemp               ! desuperheater cut-in temperature (SetpointTemp - DeadbandTempDiff, C)
+  REAL           :: TankTemp                ! tank temperature before simulation, C
+  REAL           :: NewTankTemp             ! tank temperature after simulation, C
+  REAL           :: MdotWater               ! mass flow rate through desuperheater, kg/s
+  REAL           :: PartLoadRatio           ! desuperheater part load ratio
+  REAL           :: QHeatRate               ! desuperheater heating rate (W)
+  REAL           :: AverageWasteHeat        ! average hating rate from DX system condenser (W)
+  REAL           :: HEffFTemp               ! output of heating efficiency as a function of temperature curve
+  REAL           :: Effic                   ! efficiency of desuperheater heating coil
+  REAL           :: CpWater                 ! specific heat of water (J/Kg/k)
   INTEGER             :: WaterInletNode          ! desuperheater water inlet node number
   INTEGER             :: WaterOutletNode         ! desuperheater water outlet node number
   INTEGER             :: DesuperheaterNum        ! Index to desuperheater
   INTEGER             :: SolFla                  ! Flag of RegulaFalsi solver
   INTEGER             :: SourceID                ! Waste Heat Source ID number
-  REAL(r64), DIMENSION(5)  :: Par                     ! Parameters passed to RegulaFalsi
-  REAL(r64)           :: MinTemp = 0.0           ! used for error messages, C
+  REAL, DIMENSION(5)  :: Par                     ! Parameters passed to RegulaFalsi
+  REAL           :: MinTemp = 0.0           ! used for error messages, C
   CHARACTER(len=20)   :: IterNum                    ! Max number of iterations for warning message
 
           ! FLOW:
@@ -7342,7 +7342,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
   END IF     ! validsourcetype
 
   WaterHeaterDesuperheater(DesuperheaterNum)%OffCycParaFuelRate   = WaterHeaterDesuperheater(DesuperheaterNum)%OffCycParaLoad * &
-                                                                    (1.d0-PartLoadRatio)
+                                                                    (1.-PartLoadRatio)
   WaterHeaterDesuperheater(DesuperheaterNum)%OffCycParaFuelEnergy = WaterHeaterDesuperheater(DesuperheaterNum)%OffCycParaFuelRate *&
                                                                     TimeStepSys * SecInHour
 
@@ -7385,16 +7385,16 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
   WaterHeaterDesuperheater(DesuperheaterNum)%Mode = WaterHeaterDesuperheater(DesuperheaterNum)%SaveMode
 
   IF(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp .GT. 0)THEN
-    HEffFTemp = MAX(0.0d0,CurveValue(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp, TankTemp, OutDryBulbTemp))
+    HEffFTemp = MAX(0.0,CurveValue(WaterHeaterDesuperheater(DesuperheaterNum)%HEffFTemp, TankTemp, OutDryBulbTemp))
   ELSE
     HEffFTemp = 1.0
   END IF
 
 !set limits on heat recovery efficiency
   IF(WaterHeaterDesuperheater(DesuperheaterNum)%ReclaimHeatingSource == CONDENSER_REFRIGERATION) THEN
-    IF((HEffFTemp * Effic) .GT. 0.9d0)HEffFTemp = 0.9d0 / Effic
+    IF((HEffFTemp * Effic) .GT. 0.9)HEffFTemp = 0.9 / Effic
   ELSE ! max is 0.3 for all other sources
-    IF((HEffFTemp * Effic) .GT. 0.3d0)HEffFTemp = 0.3d0 / Effic
+    IF((HEffFTemp * Effic) .GT. 0.3)HEffFTemp = 0.3 / Effic
   END IF  !setting limits on heat recovery efficiency
 
   ! Access the appropriate structure to find the average heating capacity of the desuperheater heating coil
@@ -7430,7 +7430,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
   IF(SetPointTemp .GT. WaterHeaterDesuperheater(DesuperheaterNum)%MaxInletWaterTemp)THEN
     CutInTemp    = SetPointTemp - DeadbandTempDiff
     SetPointTemp = WaterHeaterDesuperheater(DesuperheaterNum)%MaxInletWaterTemp
-    DeadbandTempDiff = MAX(0.0d0, (SetPointTemp - CutInTemp))
+    DeadbandTempDiff = MAX(0.0, (SetPointTemp - CutInTemp))
   END IF
 
 ! set the water-side mass flow rate
@@ -7488,7 +7488,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
               Par(4) = 0.0
             END IF
             Par(5) = MdotWater
-            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadRatio, PLRResidualMixedTank, 0.0d0, &
+            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadRatio, PLRResidualMixedTank, 0.0, &
                                   WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, Par)
             IF (SolFla == -1) THEN
               WRITE(IterNum,*) MaxIte
@@ -7511,7 +7511,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
                 END IF
               END IF
             ELSE IF (SolFla == -2) THEN
-              PartLoadRatio = MAX(0.0d0,MIN(WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, &
+              PartLoadRatio = MAX(0.0,MIN(WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, &
                                          (SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
               IF(.NOT. WarmupFlag)THEN
                 WaterHeaterDesuperheater(DesuperheaterNum)%RegulaFalsiFailedNum1 = &
@@ -7559,7 +7559,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
             WaterThermalTank(WaterThermalTankNum)%Mode = WaterHeaterDesuperheater(DesuperheaterNum)%SaveWHMode
             IF((Tanktemp - NewTankTemp) .NE. 0.0) THEN
               PartLoadRatio = MIN(WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, &
-                              MAX(0.0d0,((SetPointTemp - DeadbandTempDiff) - NewTankTemp) / (Tanktemp - NewTankTemp)))
+                              MAX(0.0,((SetPointTemp - DeadbandTempDiff) - NewTankTemp) / (Tanktemp - NewTankTemp)))
             ELSE
               PartLoadRatio = WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR
             END IF
@@ -7584,7 +7584,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
                 Par(4) = 0.0
               END IF
               Par(5) = MdotWater
-              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadRatio, PLRResidualMixedTank, 0.0d0, &
+              CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, PartLoadRatio, PLRResidualMixedTank, 0.0, &
                                     WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, Par)
               IF (SolFla == -1) THEN
                 WRITE(IterNum,*) MaxIte
@@ -7607,7 +7607,7 @@ SUBROUTINE CalcDesuperheaterWaterHeater(WaterThermalTankNum,FirstHVACIteration)
                   END IF
                 END IF
               ELSE IF (SolFla == -2) THEN
-                PartLoadRatio = MAX(0.0d0,MIN(WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, &
+                PartLoadRatio = MAX(0.0,MIN(WaterHeaterDesuperheater(DesuperheaterNum)%DXSysPLR, &
                                            (SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
                 IF(.NOT. WarmupFlag)THEN
                   WaterHeaterDesuperheater(DesuperheaterNum)%RegulaFalsiFailedNum2 = &
@@ -7732,17 +7732,17 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte = 500            ! maximum number of iterations
-  REAL(r64), PARAMETER :: Acc =  0.001D0          ! Accuracy of result from RegulaFalsi
+  REAL, PARAMETER :: Acc =  0.001          ! Accuracy of result from RegulaFalsi
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: AvailSchedule           ! HP compressor availability schedule
-  REAL(r64)           :: SetPointTemp            ! HP set point temperature (cut-out temperature, C)
-  REAL(r64)           :: DeadbandTempDiff        ! HP dead band temperature difference (C)
-  REAL(r64)           :: TankTemp                ! tank temperature before simulation, C
-  REAL(r64)           :: NewTankTemp             ! tank temperature after simulation, C
-  REAL(r64)           :: CpAir                   ! specific heat of air, kJ/kg/K
-  REAL(r64)           :: MdotWater               ! mass flow rate of condenser water, kg/s
-  REAL(r64)           :: OutletAirSplitterSch    ! output of outlet air splitter schedule
+  REAL           :: AvailSchedule           ! HP compressor availability schedule
+  REAL           :: SetPointTemp            ! HP set point temperature (cut-out temperature, C)
+  REAL           :: DeadbandTempDiff        ! HP dead band temperature difference (C)
+  REAL           :: TankTemp                ! tank temperature before simulation, C
+  REAL           :: NewTankTemp             ! tank temperature after simulation, C
+  REAL           :: CpAir                   ! specific heat of air, kJ/kg/K
+  REAL           :: MdotWater               ! mass flow rate of condenser water, kg/s
+  REAL           :: OutletAirSplitterSch    ! output of outlet air splitter schedule
   INTEGER             :: HPAirInletNode          ! HP air inlet node number
   INTEGER             :: HPAirOutletNode         ! HP air outlet node number
   INTEGER             :: OutdoorAirNode          ! Outdoor air inlet node number
@@ -7754,13 +7754,13 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
   INTEGER             :: DXCoilAirInletNode      ! Inlet air node number of DX coil
   INTEGER             :: HPNum                   ! Index to heat pump water heater
   INTEGER             :: SolFla                  ! Flag of RegulaFalsi solver
-  REAL(r64), DIMENSION(5)  :: Par                     ! Parameters passed to RegulaFalsi
-  REAL(r64)           :: HPMinTemp               ! used for error messages, C
+  REAL, DIMENSION(5)  :: Par                     ! Parameters passed to RegulaFalsi
+  REAL           :: HPMinTemp               ! used for error messages, C
   CHARACTER(len=MaxNameLength) :: HPMinTempChar  ! used for error messages
   CHARACTER(len=20)   :: IterNum                 ! Max number of iterations for warning message
   INTEGER             :: CompOp                  ! DX compressor operation; 1=on, 0=off
-  REAL(r64)           :: CondenserDeltaT         ! HPWH condenser water temperature difference
-  REAL(r64)           :: HPWHCondInletNodeLast   ! Water temp sent from WH on last iteration
+  REAL           :: CondenserDeltaT         ! HPWH condenser water temperature difference
+  REAL           :: HPWHCondInletNodeLast   ! Water temp sent from WH on last iteration
   INTEGER             :: loopIter                ! iteration loop counter
 
           ! FLOW:
@@ -7930,11 +7930,11 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
         Par(5) = MdotWater
         SELECT CASE(HPWaterHeater(HPNum)%TankTypeNum)
         CASE(MixedWaterHeater)
-          CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualMixedTank, 0.0d0,    &
-                             1.0d0, Par)
+          CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualMixedTank, 0.0,    &
+                             1.0, Par)
         CASE(StratifiedWaterHeater)
-          CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualStratifiedTank, 0.0d0,    &
-                             1.0d0, Par)
+          CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualStratifiedTank, 0.0,    &
+                             1.0, Par)
         END SELECT
         IF (SolFla == -1) THEN
           WRITE(IterNum,*) MaxIte
@@ -7955,7 +7955,7 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
             END IF
           END IF
         ELSE IF (SolFla == -2) THEN
-          HPPartLoadRatio = MAX(0.0d0,MIN(1.0d0,(SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
+          HPPartLoadRatio = MAX(0.0,MIN(1.0,(SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
           IF(.NOT. WarmupFlag)THEN
             HPWaterHeater(HPNum)%RegulaFalsiFailedNum1 = HPWaterHeater(HPNum)%RegulaFalsiFailedNum1 + 1
             IF (HPWaterHeater(HPNum)%RegulaFalsiFailedNum1 .EQ. 1) THEN
@@ -8035,7 +8035,7 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
 !           estimate portion of time step that the HP operates based on a linear interpolation of the tank temperature decay
 !           this assumes that all heating sources are off
         IF(Tanktemp .NE. NewTankTemp) THEN
-          HPPartLoadRatio = MAX(0.0d0,MIN(1.0d0,((SetPointTemp - DeadbandTempDiff) - NewTankTemp) / (Tanktemp - NewTankTemp)))
+          HPPartLoadRatio = MAX(0.0,MIN(1.0,((SetPointTemp - DeadbandTempDiff) - NewTankTemp) / (Tanktemp - NewTankTemp)))
         ELSE
           HPPartLoadRatio = 1.0
         END IF
@@ -8082,11 +8082,11 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
           Par(5) = MdotWater
           SELECT CASE(HPWaterHeater(HPNum)%TankTypeNum)
           CASE(MixedWaterHeater)
-            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualMixedTank, 0.0d0,    &
-                               1.0d0, Par)
+            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualMixedTank, 0.0,    &
+                               1.0, Par)
           CASE(StratifiedWaterHeater)
-            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualStratifiedTank, 0.0d0,    &
-                               1.0d0, Par)
+            CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, HPPartLoadRatio, PLRResidualStratifiedTank, 0.0,    &
+                               1.0, Par)
           END SELECT
           IF (SolFla == -1) THEN
             WRITE(IterNum,*) MaxIte
@@ -8107,7 +8107,7 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
               END IF
             END IF
           ELSE IF (SolFla == -2) THEN
-            HPPartLoadRatio = MAX(0.0d0,MIN(1.0d0,(SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
+            HPPartLoadRatio = MAX(0.0,MIN(1.0,(SetPointTemp - TankTemp)/(NewTankTemp - TankTemp)))
             IF(.NOT. WarmupFlag)THEN
               HPWaterHeater(HPNum)%RegulaFalsiFailedNum2 = HPWaterHeater(HPNum)%RegulaFalsiFailedNum2 + 1
               IF (HPWaterHeater(HPNum)%RegulaFalsiFailedNum2 .EQ. 1) THEN
@@ -8224,7 +8224,7 @@ SUBROUTINE CalcHeatPumpWaterHeater(WaterThermalTankNum,FirstHVACIteration)
 END SUBROUTINE CalcHeatPumpWaterHeater
 
 
-REAL(r64) FUNCTION PLRResidualMixedTank(HPPartLoadRatio, Par)
+REAL FUNCTION PLRResidualMixedTank(HPPartLoadRatio, Par)
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad
           !       DATE WRITTEN   May 2005
@@ -8248,8 +8248,8 @@ REAL(r64) FUNCTION PLRResidualMixedTank(HPPartLoadRatio, Par)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: HPPartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = HP set point temperature [C]
+  REAL, INTENT(IN)     :: HPPartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = HP set point temperature [C]
                                                   ! par(2) = tank mode
                                                   ! par(3) = water heater num
                                                   ! par(4) = FirstHVACIteration
@@ -8266,7 +8266,7 @@ REAL(r64) FUNCTION PLRResidualMixedTank(HPPartLoadRatio, Par)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: WaterThermalTankNum     ! index of water heater
-  REAL(r64)    :: NewTankTemp        ! resulting tank temperature [C]
+  REAL    :: NewTankTemp        ! resulting tank temperature [C]
   LOGICAL :: FirstHVACIteration ! FirstHVACIteration flag
 
   WaterThermalTankNum = INT(Par(3))
@@ -8285,7 +8285,7 @@ REAL(r64) FUNCTION PLRResidualMixedTank(HPPartLoadRatio, Par)
 
 END FUNCTION PLRResidualMixedTank
 
-REAL(r64) FUNCTION PLRResidualStratifiedTank(HPPartLoadRatio, Par)
+REAL FUNCTION PLRResidualStratifiedTank(HPPartLoadRatio, Par)
           ! FUNCTION INFORMATION:
           !       AUTHOR         B.Griffith,  Richard Raustad
           !       DATE WRITTEN   Jan 2012
@@ -8309,8 +8309,8 @@ REAL(r64) FUNCTION PLRResidualStratifiedTank(HPPartLoadRatio, Par)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64), INTENT(IN)     :: HPPartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = HP set point temperature [C]
+  REAL, INTENT(IN)     :: HPPartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = HP set point temperature [C]
                                                   ! par(2) = tank mode
                                                   ! par(3) = water heater num
                                                   ! par(4) = FirstHVACIteration
@@ -8327,7 +8327,7 @@ REAL(r64) FUNCTION PLRResidualStratifiedTank(HPPartLoadRatio, Par)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: WaterThermalTankNum     ! index of water heater
-  REAL(r64)    :: NewTankTemp        ! resulting tank temperature [C]
+  REAL    :: NewTankTemp        ! resulting tank temperature [C]
   LOGICAL :: FirstHVACIteration ! FirstHVACIteration flag
 
   WaterThermalTankNum = INT(Par(3))
@@ -8347,7 +8347,7 @@ REAL(r64) FUNCTION PLRResidualStratifiedTank(HPPartLoadRatio, Par)
 
 END FUNCTION PLRResidualStratifiedTank
 
-REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstHVACIteration, &
+REAL FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstHVACIteration, &
                                 WaterThermalTankSide, &
                                 PlantLoopSide, PlumbedInSeries, BranchControlType, &
                                 OutletTemp, DeadBandTemp, SetpointTemp)
@@ -8383,9 +8383,9 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
   INTEGER, INTENT(IN) :: PlantLoopSide      !
   LOGICAL, INTENT(IN) :: PlumbedInSeries    ! !unused1208
   INTEGER, INTENT(IN) :: BranchControlType  !
-  REAL(r64)   , INTENT(IN) :: OutletTemp         !
-  REAL(r64)   , INTENT(IN) :: DeadBandTemp       !
-  REAL(r64)   , INTENT(IN) :: SetpointTemp       !
+  REAL   , INTENT(IN) :: OutletTemp         !
+  REAL   , INTENT(IN) :: DeadBandTemp       !
+  REAL   , INTENT(IN) :: SetpointTemp       !
 
 
 
@@ -8402,10 +8402,10 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CurrentMode
-  REAL(r64) :: MassFlowRequest
+  REAL :: MassFlowRequest
   LOGICAL   :: NeedsHeat
   LOGICAL   :: NeedsCool
-  REAL(r64) :: FlowResult
+  REAL :: FlowResult
   LOGICAL   :: ScheduledAvail
 
   NeedsHeat = .FALSE.  ! init
@@ -8425,7 +8425,7 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
   ! If FlowLock is True (1),  the new resolved plant loop mdot is used
     If (WaterThermalTank(WaterThermalTankNum)%UseCurrentFlowLock == 0) Then
       CurrentMode = PassingFlowThru
-      IF ((WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested > 0.0D0) &
+      IF ((WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested > 0.0) &
                  .AND. (WaterThermalTankSide == UseSide) ) THEN
         CurrentMode = MaybeRequestingFlow
       ENDIF
@@ -8471,13 +8471,13 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
   ScheduledAvail = .TRUE.
   IF (WaterThermalTankSide == UseSide) THEN
     IF (WaterThermalTank(WaterThermalTankNum)%UseSideAvailSchedNum > 0) Then
-      IF (GetCurrentScheduleValue(WaterThermalTank(WaterThermalTankNum)%UseSideAvailSchedNum) == 0.0D0) Then
+      IF (GetCurrentScheduleValue(WaterThermalTank(WaterThermalTankNum)%UseSideAvailSchedNum) == 0.0) Then
         ScheduledAvail = .FALSE.
       ENDIF
     ENDIF
   ELSE IF (WaterThermalTankSide == SourceSide) THEN
     IF (WaterThermalTank(WaterThermalTankNum)%SourceSideAvailSchedNum > 0) Then
-      IF (GetCurrentScheduleValue(WaterThermalTank(WaterThermalTankNum)%SourceSideAvailSchedNum) == 0.0D0) Then
+      IF (GetCurrentScheduleValue(WaterThermalTank(WaterThermalTankNum)%SourceSideAvailSchedNum) == 0.0) Then
         ScheduledAvail = .FALSE.
       ENDIF
     ENDIF
@@ -8488,7 +8488,7 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
 
   CASE (PassingFlowThru)
     IF (.NOT. ScheduledAvail ) Then
-      FlowResult = 0.0D0
+      FlowResult = 0.0
     ELSE
       FlowResult = Node(InNodeNum)%MassFlowRate
     ENDIF
@@ -8496,7 +8496,7 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
   CASE (ThrottlingFlow)
         ! first determine what mass flow would be if it is to requested
     IF (.NOT. ScheduledAvail ) Then
-      MassFlowRequest = 0.0D0
+      MassFlowRequest = 0.0
     ELSE
       IF (WaterThermalTankSide == UseSide) THEN
         MassFlowRequest = WaterThermalTank(WaterThermalTankNum)%PlantUseMassFlowRateMax
@@ -8540,18 +8540,18 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
       ENDIF
     ENDIF
 
-    IF (MassFlowRequest > 0.0D0) THEN
+    IF (MassFlowRequest > 0.0) THEN
       IF (WaterThermalTankSide == UseSide) THEN
         FlowResult = MassFlowRequest
       ELSE IF (WaterThermalTankSide == SourceSide) THEN
         IF (NeedsHeat .or. NeedsCool) THEN
           FlowResult = MassFlowRequest
         ELSE
-          FlowResult = 0.0D0
+          FlowResult = 0.0
         ENDIF
       END IF
     ELSE
-     FlowResult = 0.0D0
+     FlowResult = 0.0
     ENDIF
 
     ! now throttle against MassFlowRateMaxAvail, MassFlowRateMinAvail, MassFlowRateMax, and MassFlowRateMin
@@ -8568,15 +8568,15 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
 
     ! first determine what mass flow would be if it is to requested
     IF (.NOT. ScheduledAvail ) Then
-      MassFlowRequest = 0.0D0
+      MassFlowRequest = 0.0
     ELSE
       IF (WaterThermalTankSide == UseSide) THEN
         IF ((WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank)  &
-             .AND. (WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested > 0.0D0)) THEN
+             .AND. (WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested > 0.0)) THEN
           MassFlowRequest = WaterThermalTank(WaterThermalTankNum)%PlantUseMassFlowRateMax
         ELSEIF ((WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank) &
-             .AND. (WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested == 0.0D0)) THEN
-          MassFlowRequest = 0.0D0
+             .AND. (WaterThermalTank(WaterThermalTankNum)%UseSideLoadRequested == 0.0)) THEN
+          MassFlowRequest = 0.0
         ELSE
           MassFlowRequest = WaterThermalTank(WaterThermalTankNum)%PlantUseMassFlowRateMax
         ENDIF
@@ -8622,25 +8622,25 @@ REAL(r64) FUNCTION PlantMassFlowRatesFunc(WaterThermalTankNum, InNodeNum, FirstH
 
       ENDIF ! chilled water
 
-      IF (MassFlowRequest > 0.0D0) THEN
+      IF (MassFlowRequest > 0.0) THEN
         IF (NeedsHeat .OR. NeedsCool) THEN
           FlowResult = MassFlowRequest
         ELSE
-          FlowResult = 0.0D0
+          FlowResult = 0.0
         ENDIF
       ELSE
-        FlowResult = 0.0D0
+        FlowResult = 0.0
       ENDIF
     Else ! end source side, begin use side
-      IF (MassFlowRequest > 0.0D0) THEN
+      IF (MassFlowRequest > 0.0) THEN
         FlowResult = MassFlowRequest
       ELSE
-        FlowResult = 0.0D0
+        FlowResult = 0.0
       ENDIF
     ENDIF
 !    IF (FirstHVACIteration) Then
 !      Node(InNodeNum)%MassFlowRateMaxAvail = FlowResult
-!      Node(InNodeNum)%MassFlowRateMinAvail = 0.0D0
+!      Node(InNodeNum)%MassFlowRateMinAvail = 0.0
 !    ENDIF
 
   END SELECT
@@ -8816,11 +8816,11 @@ SUBROUTINE SizeSupplySidePlantConnections(WaterThermalTankNum, LoopNum, LoopSide
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   LOGICAL             :: ErrorsFound   ! If errors detected in input
   INTEGER   :: DummyWaterIndex = 1
-  REAL(r64) :: rho !temporary fluid density
+  REAL :: rho !temporary fluid density
   INTEGER   :: tmpLoopNum
   INTEGER   :: tmpLoopSideNum
-  REAL(r64) :: tmpUseDesignVolFlowRate ! local use side design flow rate
-  REAL(r64) :: tmpSourceDesignVolFlowRate ! local source side design flow rate
+  REAL :: tmpUseDesignVolFlowRate ! local use side design flow rate
+  REAL :: tmpSourceDesignVolFlowRate ! local source side design flow rate
 
   PltSizNum = 0
   ErrorsFound =  .FALSE.
@@ -8852,9 +8852,9 @@ SUBROUTINE SizeSupplySidePlantConnections(WaterThermalTankNum, LoopNum, LoopSide
             ENDIF
           ELSE
             IF (PlantSizesOkayToFinalize) THEN
-              WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate = 0.d0
+              WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate = 0.
             ELSE
-              tmpUseDesignVolFlowRate = 0.d0
+              tmpUseDesignVolFlowRate = 0.
             ENDIF
           END IF
           IF (PlantSizesOkayToFinalize)   &
@@ -8919,7 +8919,7 @@ SUBROUTINE SizeSupplySidePlantConnections(WaterThermalTankNum, LoopNum, LoopSide
             IF (PlantSizesOkayToFinalize) THEN
               WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate = 0.0
             ELSE
-              tmpSourceDesignVolFlowRate = 0.d0
+              tmpSourceDesignVolFlowRate = 0.
             ENDIF
           END IF
           IF (PlantSizesOkayToFinalize)   &
@@ -9010,8 +9010,8 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
-  Real(r64), PARAMETER :: GalTocubicMeters = 0.0037854D0
-  Real(r64), PARAMETER :: kBtuPerHrToWatts = 293.1D0
+  REAL, PARAMETER :: GalTocubicMeters = 0.0037854
+  REAL, PARAMETER :: kBtuPerHrToWatts = 293.1
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
 
@@ -9019,23 +9019,23 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Tstart        ! initial tank temp for sizing.
-  REAL(r64) :: Tfinish       ! final target temp for sizing
-  Real(r64) :: SumPeopleAllZones
-  Real(r64) :: SumFloorAreaAllZones
+  REAL :: Tstart        ! initial tank temp for sizing.
+  REAL :: Tfinish       ! final target temp for sizing
+  REAL :: SumPeopleAllZones
+  REAL :: SumFloorAreaAllZones
 !unused  INTEGER   :: CollectorNum  ! do loop index
   Logical   :: SizeVolume = .FALSE.
   LOGICAL   :: SizeMaxCapacity = .FALSE.
-  REAL(r64) :: rho
-  REAL(r64) :: Cp
+  REAL :: rho
+  REAL :: Cp
   INTEGER   :: DummyWaterIndex = 1
-  REAL(r64) :: tmpTankVolume ! local temporary for tank volume m3
-  REAL(r64) :: tmpMaxCapacity ! local temporary for heating capacity W
+  REAL :: tmpTankVolume ! local temporary for tank volume m3
+  REAL :: tmpMaxCapacity ! local temporary for heating capacity W
   LOGICAL   :: FuelTypeIsLikeGas = .FALSE.
 
   ! local inits
-  Tstart  = 14.44d0
-  TFinish = 57.22d0
+  Tstart  = 14.44
+  TFinish = 57.22
   SizeVolume = .FALSE.
   SizeMaxCapacity = .FALSE.
 
@@ -9076,109 +9076,109 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
 
     If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms == 1 ) then
       If (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) then
-        If (SizeVolume)      tmpTankVolume   = 20.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity  = 2.5D0 * 1000.0D0  !2.5 kW
+        If (SizeVolume)      tmpTankVolume   = 20.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity  = 2.5 * 1000.0  !2.5 kW
       else if (FuelTypeIsLikeGas) then
-        If (SizeVolume)      tmpTankVolume  = 20.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity = 27.0D0 * kBtuPerHrToWatts !27kBtu/hr
+        If (SizeVolume)      tmpTankVolume  = 20.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity = 27.0 * kBtuPerHrToWatts !27kBtu/hr
       endif
 
     Else If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms == 2 ) THEN
-      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5D0) THEN
+      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5) THEN
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 30.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 3.5D0 * 1000.0D0  !3.5 kW
+          If (SizeVolume)      tmpTankVolume  = 30.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 3.5 * 1000.0  !3.5 kW
         ELSE IF (FuelTypeIsLikeGas) THEN
-          If (SizeVolume)      tmpTankVolume  = 30.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 30.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
-      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5D0) &
-               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0D0)) then
+      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5) &
+               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0)) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 4.5D0 * 1000.0D0  !4.5 kW
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 4.5 * 1000.0  !4.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 30.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 30.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
-      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0D0) then
+      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
       ENDIF
     else if (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms == 3 ) then
-      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5D0) THEN
+      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5) THEN
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 4.5D0 * 1000.0D0  !4.5 kW
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 4.5 * 1000.0  !4.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 30.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 30.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
-      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5D0) &
-               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0D0)) then
+      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5) &
+               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0)) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
-      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0D0) then
+      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 38.0D0 * kBtuPerHrToWatts !38 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts !38 kBtu/hr
         ENDIF
       ENDIF
     else if (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms == 4 ) then
-      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5D0) THEN
+      If (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms <= 1.5) THEN
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 36.0D0 * kBtuPerHrToWatts !36 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts !36 kBtu/hr
         ENDIF
-      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5D0) &
-               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0D0)) then
+      ELSE IF ((WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms > 1.5) &
+               .and. (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms < 3.0)) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 40.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 38.0D0 * kBtuPerHrToWatts !38 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 40.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts !38 kBtu/hr
         ENDIF
-      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0D0) then
+      ELSE IF (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBathrooms >= 3.0) then
         IF (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) THEN
-          If (SizeVolume)      tmpTankVolume  = 66.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+          If (SizeVolume)      tmpTankVolume  = 66.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
         ELSE IF (FuelTypeIsLikeGas ) THEN
-          If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-          If (SizeMaxCapacity) tmpMaxCapacity = 38.0D0 * kBtuPerHrToWatts !38 kBtu/hr
+          If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+          If (SizeMaxCapacity) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts !38 kBtu/hr
         ENDIF
       ENDIF
     else if (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms == 5 ) then
       If (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) then
-        If (SizeVolume)      tmpTankVolume  = 66.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+        If (SizeVolume)      tmpTankVolume  = 66.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
       else if (FuelTypeIsLikeGas ) then
-        If (SizeVolume)      tmpTankVolume = 50.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity = 47.0D0 * kBtuPerHrToWatts !47 kBtu/hr
+        If (SizeVolume)      tmpTankVolume = 50.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity = 47.0 * kBtuPerHrToWatts !47 kBtu/hr
       endif
     else if (WaterThermalTank(WaterThermalTankNum)%Sizing%NumberOfBedrooms >= 6 ) then
       If (SameString(WaterThermalTank(WaterThermalTankNum)%FuelType , 'Electric') ) then
-        If (SizeVolume)      tmpTankVolume  = 66.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity = 5.5D0 * 1000.0D0  !5.5 kW
+        If (SizeVolume)      tmpTankVolume  = 66.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity = 5.5 * 1000.0  !5.5 kW
       else if (FuelTypeIsLikeGas ) then
-        If (SizeVolume)      tmpTankVolume  = 50.0D0 * GalTocubicMeters
-        If (SizeMaxCapacity) tmpMaxCapacity = 50.0D0 * kBtuPerHrToWatts !50 kBtu/hr
+        If (SizeVolume)      tmpTankVolume  = 50.0 * GalTocubicMeters
+        If (SizeMaxCapacity) tmpMaxCapacity = 50.0 * kBtuPerHrToWatts !50 kBtu/hr
       endif
     ENDIF
 
@@ -9203,22 +9203,22 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
                                                          * SumPeopleAllZones
     IF (WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum > 0) THEN
       rho = GetDensityGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
       Cp = GetSpecificHeatGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
     ELSE
-      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
-      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
+      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
+      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
     ENDIF
 
     IF (SizeMaxCapacity)    tmpMaxCapacity  = SumPeopleAllZones   &
                                             * WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerPerson & !m3/hr/person
                                             * (Tfinish - Tstart) & ! delta T  in K
-                                            * (1.0D0 / SecInHour)  & !  1 hr/ 3600 s
+                                            * (1.0 / SecInHour)  & !  1 hr/ 3600 s
                                             * rho &  ! kg/m3
                                             * Cp  ! J/Kg/k
     IF (SizeVolume .AND. PlantSizesOkayToFinalize) THEN
@@ -9241,22 +9241,22 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
                                                          * SumFloorAreaAllZones
     IF (WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum > 0) THEN
       rho = GetDensityGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
       Cp = GetSpecificHeatGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
     ELSE
-      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
-      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
+      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
+      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
     ENDIF
 
     If (SizeMaxCapacity) tmpMaxCapacity     = SumFloorAreaAllZones   & ! m2
                                             * WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerArea & !m3/hr/m2
                                             * (Tfinish - Tstart) & ! delta T  in K
-                                            * (1.0D0 / SecInHour)  & !  1 hr/ 3600 s
+                                            * (1.0 / SecInHour)  & !  1 hr/ 3600 s
                                             * rho &  ! kg/m3
                                             * Cp  ! J/Kg/k
     IF (SizeVolume .AND. PlantSizesOkayToFinalize) THEN
@@ -9278,22 +9278,22 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
                                        * WaterThermalTank(WaterThermalTankNum)%sizing%NumberOfUnits
     IF (WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum > 0) THEN
       rho = GetDensityGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
       Cp = GetSpecificHeatGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%UseSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForDemandSide')
     ELSE
-      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
-      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForDemandSide')
+      rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
+      Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForDemandSide')
     ENDIF
     If (SizeMaxCapacity)  tmpMaxCapacity =   &
        WaterThermalTank(WaterThermalTankNum)%sizing%NumberOfUnits   &
                                             * WaterThermalTank(WaterThermalTankNum)%sizing%RecoveryCapacityPerUnit & !m3/hr/ea
                                             * (Tfinish - Tstart) & ! delta T  in K
-                                            * (1.0D0 / SecInHour)  & !  1 hr/ 3600 s
+                                            * (1.0 / SecInHour)  & !  1 hr/ 3600 s
                                             * rho &  ! kg/m3
                                             * Cp ! J/Kg/k
     IF (SizeVolume .AND. PlantSizesOkayToFinalize) THEN
@@ -9317,9 +9317,9 @@ SUBROUTINE SizeTankForDemandSide(WaterThermalTankNum)
        .AND. PlantSizesOkayToFinalize ) THEN ! might set height
     IF ((WaterThermalTank(WaterThermalTankNum)%Height == Autosize) .AND.   &
        (WaterThermalTank(WaterThermalTankNum)%Volume /= autosize )) THEN
-      WaterThermalTank(WaterThermalTankNum)%Height = ( ( 4.0D0 * WaterThermalTank(WaterThermalTankNum)%Volume  &
+      WaterThermalTank(WaterThermalTankNum)%Height = ( ( 4.0 * WaterThermalTank(WaterThermalTankNum)%Volume  &
                                             * (WaterThermalTank(WaterThermalTankNum)%sizing%HeightAspectRatio**2) ) &
-                                            / Pi)** 0.33333333333333D0
+                                            / Pi)** 0.33333333333333
       CALL ReportSizingOutput(WaterThermalTank(WaterThermalTankNum)%Type, WaterThermalTank(WaterThermalTankNum)%Name, &
                            'Tank Height [m]', WaterThermalTank(WaterThermalTankNum)%Height )
     ENDIF
@@ -9361,8 +9361,8 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
-  Real(r64), PARAMETER :: GalTocubicMeters = 0.0037854D0
-  Real(r64), PARAMETER :: kBtuPerHrToWatts = 293.1D0
+  REAL, PARAMETER :: GalTocubicMeters = 0.0037854
+  REAL, PARAMETER :: kBtuPerHrToWatts = 293.1
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
 
@@ -9370,20 +9370,20 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: Tstart        ! initial tank temp for sizing.
-  REAL(r64) :: Tfinish       ! final target temp for sizing
+  REAL :: Tstart        ! initial tank temp for sizing.
+  REAL :: Tfinish       ! final target temp for sizing
   INTEGER   :: CollectorNum
   Logical   :: SizeVolume = .FALSE.
   LOGICAL   :: SizeMaxCapacity = .FALSE.
-  REAL(r64) :: rho
-  REAL(r64) :: Cp
+  REAL :: rho
+  REAL :: Cp
   INTEGER   :: DummyWaterIndex = 1
-  REAL(r64) :: tmpTankVolume ! local temporary for tank volume m3
-  REAL(r64) :: tmpMaxCapacity ! local temporary for heating capacity W
+  REAL :: tmpTankVolume ! local temporary for tank volume m3
+  REAL :: tmpMaxCapacity ! local temporary for heating capacity W
 
   ! local inits
-  Tstart  = 14.44d0
-  TFinish = 57.22d0
+  Tstart  = 14.44
+  TFinish = 57.22
   SizeVolume = .FALSE.
   SizeMaxCapacity = .FALSE.
 
@@ -9409,16 +9409,16 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
       IF (WaterThermalTank(WaterThermalTankNum)%Sizing%RecoveryTime > 0.0) THEN
         IF (WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum > 0) THEN
           rho = GetDensityGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForSupplySide')
           Cp = GetSpecificHeatGlycol(PlantLoop(WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum)%FluidName, &
-                                   ((Tfinish + Tstart)/2.0D0), &
+                                   ((Tfinish + Tstart)/2.0), &
                                    PlantLoop(WaterThermalTank(WaterThermalTankNum)%SourceSidePlantLoopNum)%FluidIndex, &
                                    'SizeTankForSupplySide')
         ELSE
-          rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForSupplySide')
-          Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0D0), DummyWaterIndex, 'SizeTankForSupplySide')
+          rho = GetDensityGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForSupplySide')
+          Cp  = GetSpecificHeatGlycol('WATER', ((Tfinish + Tstart)/2.0), DummyWaterIndex, 'SizeTankForSupplySide')
         ENDIF
           tmpMaxCapacity =  ( WaterThermalTank(WaterThermalTankNum)%Volume & ! m3
                                                * rho & ! kg/m3
@@ -9439,7 +9439,7 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
     ENDIF
   CASE (SizePerSolarColArea)
 
-    WaterThermalTank(WaterThermalTankNum)%sizing%TotalSolarCollectorArea = 0.0D0
+    WaterThermalTank(WaterThermalTankNum)%sizing%TotalSolarCollectorArea = 0.0
     DO CollectorNum = 1, NumOfCollectors
       WaterThermalTank(WaterThermalTankNum)%sizing%TotalSolarCollectorArea =   &
          WaterThermalTank(WaterThermalTankNum)%sizing%TotalSolarCollectorArea &
@@ -9449,7 +9449,7 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
     IF (SizeVolume) tmpTankVolume =   &
        WaterThermalTank(WaterThermalTankNum)%sizing%TotalSolarCollectorArea &
                                          * WaterThermalTank(WaterThermalTankNum)%sizing%TankCapacityPerCollectorArea
-    IF (SizeMaxCapacity) tmpMaxCapacity = 0.0D0
+    IF (SizeMaxCapacity) tmpMaxCapacity = 0.0
     IF (SizeVolume .AND. PlantSizesOkayToFinalize) THEN
       WaterThermalTank(WaterThermalTankNum)%Volume = tmpTankVolume
       CALL ReportSizingOutput(WaterThermalTank(WaterThermalTankNum)%Type,   &
@@ -9468,9 +9468,9 @@ SUBROUTINE SizeTankForSupplySide(WaterThermalTankNum)
        .AND. PlantSizesOkayToFinalize ) THEN ! might set height
     IF ((WaterThermalTank(WaterThermalTankNum)%Height == Autosize) .AND.   &
        (WaterThermalTank(WaterThermalTankNum)%Volume /= autosize )) THEN
-      WaterThermalTank(WaterThermalTankNum)%Height = ( ( 4.0D0 * WaterThermalTank(WaterThermalTankNum)%Volume  &
+      WaterThermalTank(WaterThermalTankNum)%Height = ( ( 4.0 * WaterThermalTank(WaterThermalTankNum)%Volume  &
                                             * (WaterThermalTank(WaterThermalTankNum)%sizing%HeightAspectRatio**2) ) &
-                                            / Pi)** 0.33333333333333D0
+                                            / Pi)** 0.33333333333333
       CALL ReportSizingOutput(WaterThermalTank(WaterThermalTankNum)%Type, WaterThermalTank(WaterThermalTankNum)%Name, &
                            'Tank Height [m]', WaterThermalTank(WaterThermalTankNum)%Height )
     ENDIF
@@ -9526,21 +9526,21 @@ SUBROUTINE SizeDemandSidePlantConnections(WaterThermalTankNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(R64)           :: TankVolume    ! local variable for tank volume.
-  REAL(r64)           :: Tpdesign      ! plant sizing exit temperature
-  REAL(r64)           :: Tstart        ! initial tank temp for sizing.
-  REAL(r64)           :: Tfinish       ! final target temp for sizing
-  REAL(r64)           :: tankRecoverhours ! parameter in sizing, hours to recover
+  REAL           :: TankVolume    ! local variable for tank volume.
+  REAL           :: Tpdesign      ! plant sizing exit temperature
+  REAL           :: Tstart        ! initial tank temp for sizing.
+  REAL           :: Tfinish       ! final target temp for sizing
+  REAL           :: tankRecoverhours ! parameter in sizing, hours to recover
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   LOGICAL             :: ErrorsFound   ! If errors detected in input
 
-  REAL(r64)           :: eff           ! temporary effectiveness value for heat exchanger inside tank
+  REAL           :: eff           ! temporary effectiveness value for heat exchanger inside tank
 
   INTEGER      :: DummyWaterIndex = 1
-  REAL(r64)    :: rho
-  REAL(r64)    :: Cp
-  REAL(r64)    :: tmpUseDesignVolFlowRate ! local use side design flow rate
-  REAL(r64)    :: tmpSourceDesignVolFlowRate ! local use side design flow rate
+  REAL    :: rho
+  REAL    :: Cp
+  REAL    :: tmpUseDesignVolFlowRate ! local use side design flow rate
+  REAL    :: tmpSourceDesignVolFlowRate ! local use side design flow rate
 
   tankRecoverhours = WaterThermalTank(WaterThermalTankNum)%SizingRecoveryTime
   PltSizNum = 0
@@ -9549,11 +9549,11 @@ SUBROUTINE SizeDemandSidePlantConnections(WaterThermalTankNum)
   tmpSourceDesignVolFlowRate = WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate
 
   IF ( .NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  ) THEN
-    Tstart = 14.44d0
-    TFinish = 57.22d0
+    Tstart = 14.44
+    TFinish = 57.22
   ELSE
-    Tstart = 14.44d0
-    TFinish = 9.0d0
+    Tstart = 14.44
+    TFinish = 9.0
   endif
 
   ! determine tank volume to use for sizing.
@@ -9575,27 +9575,27 @@ SUBROUTINE SizeDemandSidePlantConnections(WaterThermalTankNum)
           !  using the plant inlet design temp for sizing.
           Tpdesign = PlantSizData(PltSizNum)%ExitTemp
           eff      = WaterThermalTank(WaterThermalTankNum)%UseEffectiveness
-          IF ((Tpdesign >= 58.0d0) .AND. ( .NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
+          IF ((Tpdesign >= 58.0) .AND. ( .NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
             IF (PlantSizesOkayToFinalize) THEN
               WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate =       &
-                 -1.0d0 *  (TankVolume                &
+                 -1.0 *  (TankVolume                &
                    / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ELSE
               tmpUseDesignVolFlowRate =       &
-                 -1.0d0 *  (TankVolume                &
+                 -1.0 *  (TankVolume                &
                    / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ENDIF
-          ELSEIF ((Tpdesign <= 8.0D0) .AND. ( WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
+          ELSEIF ((Tpdesign <= 8.0) .AND. ( WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
             IF (PlantSizesOkayToFinalize) THEN
               WaterThermalTank(WaterThermalTankNum)%UseDesignVolFlowRate =       &
-                  -1.0d0 *  (TankVolume                &
+                  -1.0 *  (TankVolume                &
                    / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ELSE
               tmpUseDesignVolFlowRate =        &
-                  -1.0d0 *  (TankVolume                &
+                  -1.0 *  (TankVolume                &
                    / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ENDIF
@@ -9668,25 +9668,25 @@ SUBROUTINE SizeDemandSidePlantConnections(WaterThermalTankNum)
           !  using the plant inlet design temp for sizing.
           Tpdesign = PlantSizData(PltSizNum)%ExitTemp
           eff      = WaterThermalTank(WaterThermalTankNum)%SourceEffectiveness
-          IF ((Tpdesign >= 58.0d0) .AND. ( .NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
+          IF ((Tpdesign >= 58.0) .AND. ( .NOT. WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
 
             IF (PlantSizesOkayToFinalize) THEN
               WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate =                                    &
-                  -1.0d0 * (TankVolume/ (tankRecoverhours * SecInHour * eff) ) *  &
+                  -1.0 * (TankVolume/ (tankRecoverhours * SecInHour * eff) ) *  &
                   Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ELSE
               tmpSourceDesignVolFlowRate =                               &
-                  -1.0d0 * (TankVolume/ (tankRecoverhours * SecInHour * eff) ) *  &
+                  -1.0 * (TankVolume/ (tankRecoverhours * SecInHour * eff) ) *  &
                   Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ENDIF
-          ELSEIF ((Tpdesign <= 8.0D0) .AND. ( WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
+          ELSEIF ((Tpdesign <= 8.0) .AND. ( WaterThermalTank(WaterThermalTankNum)%IsChilledWaterTank  )) THEN
             IF (PlantSizesOkayToFinalize) THEN
               WaterThermalTank(WaterThermalTankNum)%SourceDesignVolFlowRate =       &
-                  -1.0d0 * (TankVolume  / (tankRecoverhours * SecInHour * eff) )                   &
+                  -1.0 * (TankVolume  / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ELSE
               tmpSourceDesignVolFlowRate =       &
-                  -1.0d0 * (TankVolume  / (tankRecoverhours * SecInHour * eff) )                   &
+                  -1.0 * (TankVolume  / (tankRecoverhours * SecInHour * eff) )                   &
                    * Log((Tpdesign - Tfinish)/(Tpdesign - Tstart) )
             ENDIF
           ELSE
@@ -9835,7 +9835,7 @@ SUBROUTINE ReportWaterThermalTank(WaterThermalTankNum)
   INTEGER, INTENT(IN) :: WaterThermalTankNum
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: SecInTimeStep
+  REAL           :: SecInTimeStep
 
           ! FLOW:
   SecInTimeStep = TimeStepSys * SecInHour
@@ -9910,21 +9910,21 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: TotalDrawMass            ! Total mass of hot water drawn during the test (kg), equivalent to 64.3 gallons
-  REAL(r64)    :: DrawMass                 ! Mass of a single draw of hot water (kg)
-  REAL(r64)    :: SecInTimeStep            ! Seconds per timestep, depends on user-specified system timestep (s)
-  REAL(r64)    :: DrawMassFlowRate         ! Mass flow rate of all test draw (m3/s)
+  REAL    :: TotalDrawMass            ! Total mass of hot water drawn during the test (kg), equivalent to 64.3 gallons
+  REAL    :: DrawMass                 ! Mass of a single draw of hot water (kg)
+  REAL    :: SecInTimeStep            ! Seconds per timestep, depends on user-specified system timestep (s)
+  REAL    :: DrawMassFlowRate         ! Mass flow rate of all test draw (m3/s)
   INTEGER :: TimeStepPerHour          ! Number of timesteps per hour
   INTEGER :: Step                     ! Current timestep in the self-contained water heater simulation
-  REAL(r64)    :: FuelEnergy               ! Cumulative fuel energy used to heat the tank (J)
-  REAL(r64)    :: MaxCapacity              ! Maximum heating capacity (W)
-  REAL(r64)    :: RecoveryEfficiency       ! Standard water heater rating
-  REAL(r64)    :: EnergyFactor             ! Standard water heater rating
+  REAL    :: FuelEnergy               ! Cumulative fuel energy used to heat the tank (J)
+  REAL    :: MaxCapacity              ! Maximum heating capacity (W)
+  REAL    :: RecoveryEfficiency       ! Standard water heater rating
+  REAL    :: EnergyFactor             ! Standard water heater rating
   INTEGER :: HPNum                    ! index to heat pump water heater
-  REAL(r64)    :: MdotAir                  ! air mass flow rate through HP water heater evaporator (kg/s)
-  REAL(r64)    :: MdotWater                ! water mass flow rate through HP water heater condenser (kg/s)
-  REAL(r64)    :: AmbientHumRat            ! used during HPWH rating procedure
-  REAL(r64)    :: RatedDXCoilTotalCapacity ! used during HPWH rating procedure
+  REAL    :: MdotAir                  ! air mass flow rate through HP water heater evaporator (kg/s)
+  REAL    :: MdotWater                ! water mass flow rate through HP water heater condenser (kg/s)
+  REAL    :: AmbientHumRat            ! used during HPWH rating procedure
+  REAL    :: RatedDXCoilTotalCapacity ! used during HPWH rating procedure
   LOGICAL :: FirstTimeFlag            ! used during HPWH rating procedure
   CHARACTER(len=MaxNameLength) :: equipName
   Logical, SAVE :: MyOneTimeSetupFlag = .true. ! one time setup flag
@@ -9936,21 +9936,21 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
           ! FLOW:
   IF (WaterThermalTank(WaterThermalTankNum)%MaxCapacity > 0.0 .OR. WaterThermalTank(WaterThermalTankNum)%HeatPumpNum .GT. 0) THEN
     ! Set test conditions
-    WaterThermalTank(WaterThermalTankNum)%AmbientTemp   = 19.7222d0  ! 67.5 F
-    WaterThermalTank(WaterThermalTankNum)%UseInletTemp  = 14.4444d0  ! 58 F
-    WaterThermalTank(WaterThermalTankNum)%SetpointTemp  = 57.2222d0  ! 135 F
-    WaterThermalTank(WaterThermalTankNum)%SetPointTemp2 = 57.2222d0  ! 135 F
-    WaterThermalTank(WaterThermalTankNum)%TankTemp      = 57.2222d0  ! Initialize tank temperature
+    WaterThermalTank(WaterThermalTankNum)%AmbientTemp   = 19.7222  ! 67.5 F
+    WaterThermalTank(WaterThermalTankNum)%UseInletTemp  = 14.4444  ! 58 F
+    WaterThermalTank(WaterThermalTankNum)%SetpointTemp  = 57.2222  ! 135 F
+    WaterThermalTank(WaterThermalTankNum)%SetPointTemp2 = 57.2222  ! 135 F
+    WaterThermalTank(WaterThermalTankNum)%TankTemp      = 57.2222  ! Initialize tank temperature
     IF (WaterThermalTank(WaterThermalTankNum)%Nodes > 0) WaterThermalTank(WaterThermalTankNum)%Node%Temp = 57.2222
 
-    TotalDrawMass = 0.243402d0 * RhoH2O(InitConvTemp)  ! 64.3 gal * rho
-    DrawMass = TotalDrawMass / 6.0d0  ! 6 equal draws
+    TotalDrawMass = 0.243402 * RhoH2O(InitConvTemp)  ! 64.3 gal * rho
+    DrawMass = TotalDrawMass / 6.0  ! 6 equal draws
     SecInTimeStep = TimeStepSys * SecInHour
     DrawMassFlowRate = DrawMass / SecInTimeStep
     FuelEnergy = 0.0
     FirstTimeFlag = .TRUE.
 
-    TimeStepPerHour = INT(1.0d0 / TimeStepSys)
+    TimeStepPerHour = INT(1.0 / TimeStepSys)
 
     ! Simulate 24 hour test
     DO Step = 1, TimeStepPerHour * 24
@@ -9993,7 +9993,7 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
       ELSE
 
         HPNum = WaterThermalTank(WaterThermalTankNum)%HeatPumpNum
-        AmbientHumRat = 0.00717d0     ! Humidity ratio at 67.5 F / 50% RH
+        AmbientHumRat = 0.00717     ! Humidity ratio at 67.5 F / 50% RH
 
 !       set the heat pump air- and water-side mass flow rate
         MdotWater = HPWaterHeater(HPNum)%OperatingWaterFlowRate * RhoH2O(WaterThermalTank(WaterThermalTankNum)%TankTemp)
@@ -10041,13 +10041,13 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
         IF(HPWaterHeater(HPNum)%FanPlacement .EQ. BlowThru) THEN
           CALL SimulateFanComponents(HPWaterHeater(HPNum)%FanName, .TRUE. ,HPWaterHeater(HPNum)%FanNum)
 !         CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName, CompOp,  .TRUE.,PartLoadRatio, HPWaterHeater(HPNum)%DXCoilNum,FanOpMode)
-          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0d0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
+          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
           CALL SimulateFanComponents(HPWaterHeater(HPNum)%FanName, .TRUE. ,HPWaterHeater(HPNum)%FanNum)
-          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0d0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
+          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
         ELSE
-          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0d0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
+          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
           CALL SimulateFanComponents(HPWaterHeater(HPNum)%FanName, .TRUE. ,HPWaterHeater(HPNum)%FanNum)
-          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0d0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
+          CALL SimDXCoil(HPWaterHeater(HPNum)%DXCoilName,  1,   .TRUE.,     1.0, HPWaterHeater(HPNum)%DXCoilNum,CycFanCycCoil)
           CALL SimulateFanComponents(HPWaterHeater(HPNum)%FanName, .TRUE. ,HPWaterHeater(HPNum)%FanNum)
         END IF
 
@@ -10103,11 +10103,11 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
        WaterThermalTank(WaterThermalTankNum)%FirstRecoveryFuel > 0.0) THEN
         ! Calculate Recovery Efficiency based on energy used to recover from the first draw
         ! FirstRecoveryFuel is recorded inside the CalcWaterThermalTank subroutine
-        RecoveryEfficiency = DrawMass * CPHW(57.2222d0) * (57.2222d0 - 14.4444d0) /   &
+        RecoveryEfficiency = DrawMass * CPHW(57.2222) * (57.2222 - 14.4444) /   &
            WaterThermalTank(WaterThermalTankNum)%FirstRecoveryFuel
 
         ! Calculate Energy Factor based on total energy (including parasitics) used over entire test
-        EnergyFactor = TotalDrawMass * CPHW(57.2222d0) * (57.2222d0 - 14.4444d0) / FuelEnergy
+        EnergyFactor = TotalDrawMass * CPHW(57.2222) * (57.2222 - 14.4444) / FuelEnergy
 
     ELSE
         RecoveryEfficiency = 0.0
@@ -10271,7 +10271,7 @@ FUNCTION FindStratifiedTankSensedTemp(WaterThermalTankNum,ControlLocationType)  
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: WaterThermalTankNum
   INTEGER, INTENT(IN)  :: ControlLocationType
-  REAL(r64)            :: SensedTemp
+  REAL            :: SensedTemp
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

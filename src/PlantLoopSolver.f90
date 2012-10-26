@@ -43,10 +43,10 @@ MODULE PlantLoopSolver
   END TYPE m_FlowControlValidator
 
           ! MODULE VARIABLE DEFINITIONS
-  REAL(r64) :: InitialDemandToLoopSetPoint
-  REAL(r64) :: CurrentAlterationsToDemand
-  REAL(r64) :: UpdatedDemandToLoopSetPoint
-  REAL(r64) :: LoadToLoopSetPointThatWasntMet ! Unmet Demand
+  REAL :: InitialDemandToLoopSetPoint
+  REAL :: CurrentAlterationsToDemand
+  REAL :: UpdatedDemandToLoopSetPoint
+  REAL :: LoadToLoopSetPointThatWasntMet ! Unmet Demand
   INTEGER   :: RefrigIndex = 0 ! Index denoting refrigerant used (possibly steam)
 
           ! SUBROUTINE SPECIFICATIONS:
@@ -134,15 +134,15 @@ SUBROUTINE PlantHalfLoopSolver(FirstHVACIteration, LoopSideNum, LoopNum, ReSimOt
   LOGICAL                                   :: LoopShutDownFlag
 
   !~ Other variables
-  REAL(r64)                                 :: ThisLoopSideFlow
-  REAL(r64)                                 :: TotalPumpMaxAvailFlow
-  REAL(r64)                                 :: TotalPumpMinAvailFlow
-  REAL(r64)                                 :: InitialDemandToLoopSetPointSAVED
+  REAL                                 :: ThisLoopSideFlow
+  REAL                                 :: TotalPumpMaxAvailFlow
+  REAL                                 :: TotalPumpMinAvailFlow
+  REAL                                 :: InitialDemandToLoopSetPointSAVED
 
   ! Initialize variables
-  InitialDemandToLoopSetPoint = 0.0d0
-  CurrentAlterationsToDemand  = 0.0d0
-  UpdatedDemandToLoopSetPoint = 0.0d0
+  InitialDemandToLoopSetPoint = 0.0
+  CurrentAlterationsToDemand  = 0.0
+  UpdatedDemandToLoopSetPoint = 0.0
   ThisSide                    = LoopSideNum
   OtherSide                   = 3 - ThisSide !will give us 1 if thisside is 2, or 2 if thisside is 1
   LoopShutDownFlag            = .FALSE.
@@ -183,8 +183,8 @@ SUBROUTINE PlantHalfLoopSolver(FirstHVACIteration, LoopSideNum, LoopNum, ReSimOt
   IF (ALLOCATED(PlantLoop(LoopNum)%LoopSide(ThisSide)%Pumps)) THEN
 
     !~ Initialize pump values
-    PlantLoop(LoopNum)%LoopSide(ThisSide)%Pumps%CurrentMinAvail = 0.0d0
-    PlantLoop(LoopNum)%LoopSide(ThisSide)%Pumps%CurrentMaxAvail = 0.0d0
+    PlantLoop(LoopNum)%LoopSide(ThisSide)%Pumps%CurrentMinAvail = 0.0
+    PlantLoop(LoopNum)%LoopSide(ThisSide)%Pumps%CurrentMaxAvail = 0.0
     PlantLoop(LoopNum)%LoopSide(ThisSide)%FlowLock = FlowPumpQuery
 
     !~ Simulate pumps
@@ -219,7 +219,7 @@ SUBROUTINE PlantHalfLoopSolver(FirstHVACIteration, LoopSideNum, LoopNum, ReSimOt
   InitialDemandToLoopSetPoint = CalcOtherSideDemand(LoopNum, ThisSide)
   UpdatedDemandToLoopSetPoint = InitialDemandToLoopSetPoint
 
-  LoadToLoopSetPointThatWasntMet = 0.0d0
+  LoadToLoopSetPointThatWasntMet = 0.0
 
   ! We now have a loop side flow request, along with inlet min/max avails.
   ! We can now make a first pass through the component simulation, requesting flow as necessary.
@@ -257,7 +257,7 @@ SUBROUTINE PlantHalfLoopSolver(FirstHVACIteration, LoopSideNum, LoopNum, ReSimOt
 
   ! Re-Initialize variables for this next pass
   InitialDemandToLoopSetPointSAVED = InitialDemandToLoopSetPoint
-  CurrentAlterationsToDemand  = 0.0d0
+  CurrentAlterationsToDemand  = 0.0
   UpdatedDemandToLoopSetPoint = InitialDemandToLoopSetPoint
 
   ! Now that flow rates have been resolved, we just need to set the flow lock status
@@ -558,7 +558,7 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
   INTEGER,   INTENT(IN)                :: LoopNum
   INTEGER,   INTENT(IN)                :: ThisSide
   INTEGER,   INTENT(IN)                :: OtherSide
-  REAL(r64), INTENT(IN OUT)            :: LoopFlow  ! Once all flow requests are evaluated, this is the desired flow on this side
+  REAL, INTENT(IN OUT)            :: LoopFlow  ! Once all flow requests are evaluated, this is the desired flow on this side
 
             ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER                   :: ThisSideFlowIndex  = 1
@@ -573,31 +573,31 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
   INTEGER                              :: NumBranchesOnThisLoopSide
   INTEGER                              :: NumCompsOnThisBranch
   INTEGER                              :: NodeToCheckRequest
-  REAL(r64)                            :: ThisBranchFlowRequestNeedAndTurnOn
-  REAL(r64)                            :: ThisBranchFlowRequestNeedIfOn
-  REAL(r64)                            :: InletBranchRequestNeedAndTurnOn
-  REAL(r64)                            :: InletBranchRequestNeedIfOn
-  REAL(r64), DIMENSION(:), ALLOCATABLE, SAVE :: ParallelBranchRequestsNeedAndTurnOn
-  REAL(r64), DIMENSION(:), ALLOCATABLE, SAVE :: ParallelBranchRequestsNeedIfOn
-  REAL(r64), DIMENSION(:, :), ALLOCATABLE, SAVE :: LoadedConstantSpeedBranchFlowRateSteps
-  REAL(r64), DIMENSION(:, :), ALLOCATABLE, SAVE :: NoLoadConstantSpeedBranchFlowRateSteps
+  REAL                            :: ThisBranchFlowRequestNeedAndTurnOn
+  REAL                            :: ThisBranchFlowRequestNeedIfOn
+  REAL                            :: InletBranchRequestNeedAndTurnOn
+  REAL                            :: InletBranchRequestNeedIfOn
+  REAL, DIMENSION(:), ALLOCATABLE, SAVE :: ParallelBranchRequestsNeedAndTurnOn
+  REAL, DIMENSION(:), ALLOCATABLE, SAVE :: ParallelBranchRequestsNeedIfOn
+  REAL, DIMENSION(:, :), ALLOCATABLE, SAVE :: LoadedConstantSpeedBranchFlowRateSteps
+  REAL, DIMENSION(:, :), ALLOCATABLE, SAVE :: NoLoadConstantSpeedBranchFlowRateSteps
   INTEGER                              :: ParallelBranchIndex
-  REAL(r64)                            :: OutletBranchRequestNeedAndTurnOn
-  REAL(r64)                            :: OutletBranchRequestNeedIfOn
+  REAL                            :: OutletBranchRequestNeedAndTurnOn
+  REAL                            :: OutletBranchRequestNeedIfOn
   LOGICAL                              :: ThisSideHasPumps
   LOGICAL                              :: OtherSideHasPumps
   LOGICAL                              :: ThisLoopHasCommonPipe
   LOGICAL, DIMENSION(2)                :: ThisLoopHasConstantSpeedBranchPumps
-  REAL(r64), DIMENSION(2)              :: EachSideFlowRequestNeedAndTurnOn   ! 2 for SupplySide/DemandSide
-  REAL(r64), DIMENSION(2)              :: EachSideFlowRequestNeedIfOn       ! 2 for SupplySide/DemandSide
-  REAL(r64), DIMENSION(2)              :: EachSideFlowRequestFinal  ! 2 for SupplySide/DemandSide
+  REAL, DIMENSION(2)              :: EachSideFlowRequestNeedAndTurnOn   ! 2 for SupplySide/DemandSide
+  REAL, DIMENSION(2)              :: EachSideFlowRequestNeedIfOn       ! 2 for SupplySide/DemandSide
+  REAL, DIMENSION(2)              :: EachSideFlowRequestFinal  ! 2 for SupplySide/DemandSide
 
   LOGICAL, SAVE                        :: AllocatedParallelArray = .FALSE.
   INTEGER                              :: MaxParallelBranchCount
   INTEGER                              :: FlowPriorityStatus
-  REAL(r64)                            :: tmpLoopFlow
-  REAL(r64)                            :: AccumFlowSteps
-  REAL(r64)                            :: MaxBranchPumpLoopSideFlow
+  REAL                            :: tmpLoopFlow
+  REAL                            :: AccumFlowSteps
+  REAL                            :: MaxBranchPumpLoopSideFlow
 
   !~ One time init for array allocated
   IF (.NOT. AllocatedParallelArray) THEN
@@ -615,32 +615,32 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
   END IF
 
   !~ Initialize
-  LoopFlow = 0.0d0
+  LoopFlow = 0.0
   ThisLoopHasConstantSpeedBranchPumps = .FALSE.
-  EachSideFlowRequestNeedAndTurnOn  = 0.0d0
-  EachSideFlowRequestNeedIfOn       = 0.0d0
-  EachSideFlowRequestFinal          = 0.0d0
+  EachSideFlowRequestNeedAndTurnOn  = 0.0
+  EachSideFlowRequestNeedIfOn       = 0.0
+  EachSideFlowRequestFinal          = 0.0
 !  AtLeastOneNonLRBRequested       = .FALSE.
 
   !~ First we need to set up the flow requests on each loopside
   DO LoopSideCounter = DemandSide, SupplySide
     ! Clear things out for this loopside
-    InletBranchRequestNeedAndTurnOn = 0.0d0
-    InletBranchRequestNeedIfOn      = 0.0d0
+    InletBranchRequestNeedAndTurnOn = 0.0
+    InletBranchRequestNeedIfOn      = 0.0
     IF(AllocatedParallelArray) THEN
-      ParallelBranchRequestsNeedAndTurnOn = 0.0d0
-      ParallelBranchRequestsNeedIfOn      = 0.0d0
+      ParallelBranchRequestsNeedAndTurnOn = 0.0
+      ParallelBranchRequestsNeedIfOn      = 0.0
     ENDIF
-    OutletBranchRequestNeedAndTurnOn = 0.0d0
-    OutletBranchRequestNeedIfOn      = 0.0d0
-    EachSideFlowRequestNeedAndTurnOn(LoopSideCounter) = 0.0d0
-    EachSideFlowRequestNeedIfOn(LoopSideCounter)      = 0.0d0
+    OutletBranchRequestNeedAndTurnOn = 0.0
+    OutletBranchRequestNeedIfOn      = 0.0
+    EachSideFlowRequestNeedAndTurnOn(LoopSideCounter) = 0.0
+    EachSideFlowRequestNeedIfOn(LoopSideCounter)      = 0.0
     ! Now loop through all the branches on this loopside and get flow requests
     NumBranchesOnThisLoopSide =  PlantLoop(LoopNum)%LoopSide(LoopSideCounter)%TotalBranches
     ParallelBranchIndex = 0
     DO BranchCounter = 1, NumBranchesOnThisLoopSide
-      ThisBranchFlowRequestNeedAndTurnOn = 0.0d0
-      ThisBranchFlowRequestNeedIfOn      = 0.0d0
+      ThisBranchFlowRequestNeedAndTurnOn = 0.0
+      ThisBranchFlowRequestNeedIfOn      = 0.0
       IF(BranchCounter > 1 .AND. BranchCounter < NumBranchesOnThisLoopSide) ParallelBranchIndex = ParallelBranchIndex + 1
       NumCompsOnThisBranch =  PlantLoop(LoopNum)%LoopSide(LoopSideCounter)%Branch(BranchCounter)%TotalComponents
       DO CompCounter = 1, NumCompsOnThisBranch
@@ -748,7 +748,7 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
 
   !~ Now that we have calculated each sides different status's requests, process to find final
   IF (Sum(EachSideFlowRequestNeedAndTurnOn) < MassFlowTolerance ) THEN
-    EachSideFlowRequestFinal = 0.0d0
+    EachSideFlowRequestFinal = 0.0
   ELSE ! some flow is needed and loop should try to run
     EachSideFlowRequestFinal(ThisSide) &
          = MAX(EachSideFlowRequestNeedAndTurnOn(ThisSide),  EachSideFlowRequestNeedIfOn(ThisSide) )
@@ -789,8 +789,8 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
         ! 3. step through and find out needed information
         ! 3a.  search the loop side with branch pumps and find the steps available with non-zero Myloads
         ! 3b.  search the loop side with branch pumps and find the steps available with zero Myloads
-        LoadedConstantSpeedBranchFlowRateSteps = 0.d0
-        NoLoadConstantSpeedBranchFlowRateSteps = 0.d0
+        LoadedConstantSpeedBranchFlowRateSteps = 0.
+        NoLoadConstantSpeedBranchFlowRateSteps = 0.
         ParallelBranchIndex = 0
         NumBranchesOnThisLoopSide =  PlantLoop(LoopNum)%LoopSide(LoopSideCounter)%TotalBranches
         DO BranchCounter = 1, NumBranchesOnThisLoopSide
@@ -808,7 +808,7 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
 
         ! 4. allocate which branches to use, 
         tmpLoopFlow = MAXVAL(EachSideFlowRequestFinal)
-        AccumFlowSteps = 0.d0
+        AccumFlowSteps = 0.
         MaxBranchPumpLoopSideFlow = SUM(LoadedConstantSpeedBranchFlowRateSteps) + SUM(NoLoadConstantSpeedBranchFlowRateSteps)
         tmpLoopFlow = MIN(tmpLoopFlow, MaxBranchPumpLoopSideFlow)
         !  4b. first use all the branches with non-zero MyLoad 
@@ -823,7 +823,7 @@ SUBROUTINE SetupLoopFlowRequest(LoopNum, ThisSide, OtherSide, LoopFlow)
             ELSE
               CYCLE
             ENDIF
-            IF (NoLoadConstantSpeedBranchFlowRateSteps(LoopSideCounter, ParallelBranchIndex) > 0.d0) THEN
+            IF (NoLoadConstantSpeedBranchFlowRateSteps(LoopSideCounter, ParallelBranchIndex) > 0.) THEN
                   !  add in branches with zero MyLoad  in branch input order until satisfied
               IF ((tmpLoopFlow > AccumFlowSteps) .AND. (tmpLoopFlow <= (AccumFlowSteps + &
                                                 NoLoadConstantSpeedBranchFlowRateSteps(LoopSideCounter, ParallelBranchIndex)))) THEN
@@ -928,7 +928,7 @@ SUBROUTINE SimulateAllLoopSideBranches(LoopNum, LoopSideNum, ThisLoopSideFlow, F
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: LoopNum
   INTEGER,   INTENT(IN) :: LoopSideNum
-  REAL(r64), INTENT(IN) :: ThisLoopSideFlow
+  REAL, INTENT(IN) :: ThisLoopSideFlow
   LOGICAL,   INTENT(IN) :: FirstHVACIteration
   LOGICAL,   INTENT(INOUT) :: LoopShutDownFlag
 
@@ -1050,7 +1050,7 @@ SUBROUTINE SimulateLoopSideBranchGroup(LoopNum, LoopSideNum, FirstBranchNum, Las
   INTEGER,   INTENT(IN)  :: LoopSideNum
   INTEGER,   INTENT(IN)  :: FirstBranchNum
   INTEGER,   INTENT(IN)  :: LastBranchNum
-  REAL(r64), INTENT(IN)  :: FlowRequest
+  REAL, INTENT(IN)  :: FlowRequest
   LOGICAL,   INTENT(IN)  :: FirstHVACIteration
   LOGICAL,   INTENT(INOUT)  :: LoopShutDownFlag
   LOGICAL,   INTENT(IN), OPTIONAL :: StartingNewLoopSidePass
@@ -1083,7 +1083,7 @@ SUBROUTINE SimulateLoopSideBranchGroup(LoopNum, LoopSideNum, FirstBranchNum, Las
   !~ General variables
   TYPE (Location), DIMENSION(:), ALLOCATABLE, SAVE :: AccessibleBranches
   INTEGER,         DIMENSION(:), ALLOCATABLE, SAVE :: LastComponentSimulated
-  REAL(r64)                                        :: LoadToLoopSetPoint
+  REAL                                        :: LoadToLoopSetPoint
   TYPE(Location)                                   :: PumpLocation
 
 
@@ -1353,7 +1353,7 @@ SUBROUTINE SimulateAllLoopSidePumps(LoopNum, ThisSide, SpecificPumpLocation, Spe
   INTEGER,        INTENT(IN)                            :: LoopNum
   INTEGER,        INTENT(IN)                            :: ThisSide
   TYPE(Location), OPTIONAL,               INTENT(IN)    :: SpecificPumpLocation
-  REAL(r64),      OPTIONAL,               INTENT(IN)    :: SpecificPumpFlowRate
+  REAL,      OPTIONAL,               INTENT(IN)    :: SpecificPumpFlowRate
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER       :: LoopCounter
@@ -1361,11 +1361,11 @@ SUBROUTINE SimulateAllLoopSidePumps(LoopNum, ThisSide, SpecificPumpLocation, Spe
   INTEGER       :: PumpCounter
   INTEGER       :: PumpIndexStart
   INTEGER       :: PumpIndexEnd
-  REAL(r64)     :: FlowToRequest
+  REAL     :: FlowToRequest
   LOGICAL       :: ThisPumpRunning
-  REAL(r64)     :: ThisPumpFlowRate
-  REAL(r64)     :: ThisPumpMinAvail
-  REAL(r64)     :: ThisPumpMaxAvail
+  REAL     :: ThisPumpFlowRate
+  REAL     :: ThisPumpMinAvail
+  REAL     :: ThisPumpMaxAvail
   INTEGER       :: PumpLoopNum
   INTEGER       :: PumpLoopSideNum
   INTEGER       :: PumpBranchNum
@@ -1408,7 +1408,7 @@ SUBROUTINE SimulateAllLoopSidePumps(LoopNum, ThisSide, SpecificPumpLocation, Spe
   IF (PRESENT(SpecificPumpFlowRate)) THEN
     FlowToRequest = SpecificPumpFlowRate
   ELSE
-    FlowToRequest = 0.0d0
+    FlowToRequest = 0.0
   END IF
 
   !~ Now loop through all the pumps and simulate them, keeping track of their status
@@ -1457,7 +1457,7 @@ END SUBROUTINE SimulateAllLoopSidePumps
 !==================================================================!
 !============ EVALUATE LOAD REQUIRED FOR WHOLE LOOP ===============!
 !==================================================================!
-REAL(r64) FUNCTION CalcOtherSideDemand(LoopNum, ThisSide) RESULT(Demand)
+REAL FUNCTION CalcOtherSideDemand(LoopNum, ThisSide) RESULT(Demand)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -1524,7 +1524,7 @@ FUNCTION EvaluateLoopSetPointLoad(LoopNum, LoopSideNum, FirstBranchNum, LastBran
   INTEGER               :: FirstBranchNum
   INTEGER               :: LastBranchNum
   INTEGER, DIMENSION(:) :: LastComponentSimulated
-  REAL(r64)             :: LoadToLoopSetPoint !function result
+  REAL             :: LoadToLoopSetPoint !function result
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   !~ Indexing variables
   INTEGER              :: BranchCounter      !~ This contains the index for the %Branch(:) structure
@@ -1532,30 +1532,30 @@ FUNCTION EvaluateLoopSetPointLoad(LoopNum, LoopSideNum, FirstBranchNum, LastBran
   INTEGER              :: StartingComponent  !~ The component which "would" be simulated next
 
   !~ General variables
-  REAL(r64)                 :: EnteringTemperature
-  REAL(r64)                 :: MassFlowRate
-  REAL(r64)                 :: SumMdotTimesTemp
-  REAL(r64)                 :: SumMdot
-  REAL(r64)                 :: WeightedInletTemp
-  REAL(r64)                 :: LoopSetPointTemperature
-  REAL(r64)                 :: LoopSetPointTemperatureHi
-  REAL(r64)                 :: LoopSetPointTemperatureLo
-  REAL(r64)                 :: LoadtoHeatingSetPoint
-  REAL(r64)                 :: LoadtoCoolingSetPoint
-  REAL(r64)                 :: DeltaTemp
+  REAL                 :: EnteringTemperature
+  REAL                 :: MassFlowRate
+  REAL                 :: SumMdotTimesTemp
+  REAL                 :: SumMdot
+  REAL                 :: WeightedInletTemp
+  REAL                 :: LoopSetPointTemperature
+  REAL                 :: LoopSetPointTemperatureHi
+  REAL                 :: LoopSetPointTemperatureLo
+  REAL                 :: LoadtoHeatingSetPoint
+  REAL                 :: LoadtoCoolingSetPoint
+  REAL                 :: DeltaTemp
   INTEGER                   :: EnteringNodeNum
-  REAL(r64)                 :: Cp
-  REAL(r64)                 :: EnthalpySteamSatVapor  ! Enthalpy of saturated vapor
-  REAL(r64)                 :: EnthalpySteamSatLiquid ! Enthalpy of saturated liquid
-  REAL(r64)                 :: LatentHeatSteam        ! Latent heat of steam
+  REAL                 :: Cp
+  REAL                 :: EnthalpySteamSatVapor  ! Enthalpy of saturated vapor
+  REAL                 :: EnthalpySteamSatLiquid ! Enthalpy of saturated liquid
+  REAL                 :: LatentHeatSteam        ! Latent heat of steam
 
   ! Initialize
   LoadToLoopSetPoint = 0.0
 
   ! Sweep across flow paths in this group and calculate the deltaT and then the load
   BranchIndex = 0
-  SumMdotTimesTemp = 0.d0
-  SumMdot = 0.d0
+  SumMdotTimesTemp = 0.
+  SumMdot = 0.
   DO BranchCounter = FirstBranchNum, LastBranchNum
 
     BranchIndex = BranchIndex + 1
@@ -1664,9 +1664,9 @@ FUNCTION EvaluateLoopSetPointLoad(LoopNum, LoopSideNum, FirstBranchNum, LastBran
         ! Calculate the delta temperature
         DeltaTemp    = LoopSetPointTemperature - WeightedInletTemp
 
-        EnthalpySteamSatVapor  =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,1.0d0,RefrigIndex, &
+        EnthalpySteamSatVapor  =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,1.0,RefrigIndex, &
                                                'PlantSupplySide:EvaluateLoopSetPointLoad')
-        EnthalpySteamSatLiquid =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,0.0d0,RefrigIndex, &
+        EnthalpySteamSatLiquid =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,0.0,RefrigIndex, &
                                                'PlantSupplySide:EvaluateLoopSetPointLoad')
 
         LatentHeatSteam = EnthalpySteamSatVapor - EnthalpySteamSatLiquid
@@ -1743,17 +1743,17 @@ SUBROUTINE UpdateAnyLoopDemandAlterations(LoopNum, LoopSideNum, BranchNum, CompN
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ComponentCp
-  REAL(r64) :: ComponentMassFlowRate
+  REAL :: ComponentCp
+  REAL :: ComponentMassFlowRate
   INTEGER   :: InletNode
-  REAL(r64) :: InletTemp
+  REAL :: InletTemp
   INTEGER   :: OutletNode
-  REAL(r64) :: OutletTemp
-  REAL(r64) :: AverageTemp
-  REAL(r64) :: LoadAlteration
+  REAL :: OutletTemp
+  REAL :: AverageTemp
+  REAL :: LoadAlteration
 
   ! Init to zero, so that if we don't find anything, we exit early
-  ComponentMassFlowRate = 0.0d0
+  ComponentMassFlowRate = 0.0
 
   ! Get information
   InletNode   = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%NodeNumIn
@@ -1851,7 +1851,7 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                       :: LoopNum         !plant loop number that we are balancing flow for
   INTEGER, INTENT(IN)                       :: LoopSideNum     !plant loop number that we are balancing flow for
-  REAL(r64), INTENT(IN)   :: ThisLoopSideFlow ! [kg/s]  total flow to be split
+  REAL, INTENT(IN)   :: ThisLoopSideFlow ! [kg/s]  total flow to be split
   LOGICAL, INTENT(IN)     :: FirstHVACIteration   ! TRUE if First HVAC iteration of Time step
 
 
@@ -1862,12 +1862,12 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: NumActiveBranches      !Active branch counter
-  REAL(r64) :: ActiveFlowRate      !The flow available when cycling through branches
-  REAL(r64) :: PassiveFlowRate      !The flow available when cycling through branches
-  REAL(r64) :: FracFlow            !The flow available when cycling through branches
-  REAL(r64) :: ThisBranchRequestFrac      !The request ratio
-  REAL(r64) :: totalMax      !The flow available when cycling through branches
-  REAL(r64) :: FlowRemaining      !The flow available when cycling through branches
+  REAL :: ActiveFlowRate      !The flow available when cycling through branches
+  REAL :: PassiveFlowRate      !The flow available when cycling through branches
+  REAL :: FracFlow            !The flow available when cycling through branches
+  REAL :: ThisBranchRequestFrac      !The request ratio
+  REAL :: totalMax      !The flow available when cycling through branches
+  REAL :: FlowRemaining      !The flow available when cycling through branches
   INTEGER   :: OutletNum              !Splitter outlet
   INTEGER   :: MixerBranchOut
   INTEGER   :: SplitterBranchIn       !As the name implies
@@ -1877,21 +1877,21 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
   INTEGER   :: BranchNum       ! intermediate value used for better readabilty
   INTEGER   :: iBranch         ! DO loop counter for cycling through branches
   INTEGER   :: NumSplitOutlets      !As the name implies
-  REAL(r64) :: OutletBranchMinAvail
-  REAL(r64) :: OutletBranchMaxAvail
-  REAL(r64) :: InletBranchMinAvail
-  REAL(r64) :: InletBranchMaxAvail
-  REAL(r64) :: BranchFlowReq
-  REAL(r64) :: BranchMinAvail
-  REAL(r64) :: BranchMaxAvail
-  REAL(r64) :: ParallelBranchMaxAvail
-  REAL(r64) :: ParallelBranchMinAvail
-  REAL(r64) :: TotParallelBranchFlowReq
-  REAL(r64) :: LoopFlowRate
+  REAL :: OutletBranchMinAvail
+  REAL :: OutletBranchMaxAvail
+  REAL :: InletBranchMinAvail
+  REAL :: InletBranchMaxAvail
+  REAL :: BranchFlowReq
+  REAL :: BranchMinAvail
+  REAL :: BranchMaxAvail
+  REAL :: ParallelBranchMaxAvail
+  REAL :: ParallelBranchMinAvail
+  REAL :: TotParallelBranchFlowReq
+  REAL :: LoopFlowRate
   INTEGER   :: FirstNodeOnBranchIn
   INTEGER   :: FirstNodeOnBranchOut
-  REAL(r64) :: StartingFlowRate
-  REAL(r64) :: ThisBranchRequest
+  REAL :: StartingFlowRate
+  REAL :: ThisBranchRequest
   INTEGER :: CompCounter
   INTEGER :: CompInletNode
   INTEGER :: CompOutletNode
@@ -2083,10 +2083,10 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
           FirstNodeOnBranch = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(SplitterBranchOut)%NodeNumIn
           CompInletNode  = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(SplitterBranchOut)%Comp(CompCounter)%NodeNumIn
           CompOutletNode = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(SplitterBranchOut)%Comp(CompCounter)%NodeNumOut
-          Node(CompInletNode)%MassFlowRate          =  0.d0
-          Node(CompInletNode)%MassFlowRateMaxAvail  =  0.d0
-          Node(CompOutletNode)%MassFlowRate         =  0.d0
-          Node(CompOutletNode)%MassFlowRateMaxAvail =  0.d0
+          Node(CompInletNode)%MassFlowRate          =  0.
+          Node(CompInletNode)%MassFlowRateMaxAvail  =  0.
+          Node(CompOutletNode)%MassFlowRate         =  0.
+          Node(CompOutletNode)%MassFlowRateMaxAvail =  0.
         ENDDO
       END DO
       RETURN
@@ -2133,7 +2133,7 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
               PassiveFlowRate = MIN(FlowRemaining,PassiveFlowRate)
                   !Allow FlowRequest to be increased to meet minimum on branch
               PassiveFlowRate = MAX(PassiveFlowRate,Node(FirstNodeOnBranch)%MassFlowRateMinAvail)
-              FlowRemaining = MAX((FlowRemaining - PassiveFlowRate),0.0d0)
+              FlowRemaining = MAX((FlowRemaining - PassiveFlowRate),0.0)
               Node(FirstNodeOnBranch)%MassFlowRate = PassiveFlowRate
             ELSE !Each Branch receives maximum flow and BYPASS must be used
               Node(FirstNodeOnBranch)%MassFlowRate = MIN(Node(FirstNodeOnBranch)%MassFlowRateMaxAvail, FlowRemaining)
@@ -2312,7 +2312,7 @@ END SUBROUTINE
 !==================================================================!
 !================= EVALUATING BRANCH REQUEST ======================!
 !==================================================================!
-REAL(r64) FUNCTION DetermineBranchFlowRequest(LoopNum, LoopSideNum, BranchNum) RESULT(OverallFlowRequest)
+REAL FUNCTION DetermineBranchFlowRequest(LoopNum, LoopSideNum, BranchNum) RESULT(OverallFlowRequest)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -2371,7 +2371,7 @@ REAL(r64) FUNCTION DetermineBranchFlowRequest(LoopNum, LoopSideNum, BranchNum) R
   !~ Initialize
   BranchInletNodeNum  = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%NodeNumIn
   BranchOutletNodeNum = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%NodeNumOut
-  OverallFlowRequest  = 0.0d0
+  OverallFlowRequest  = 0.0
 
   SELECT CASE (WhichRequestCalculation)
 
@@ -2465,7 +2465,7 @@ SUBROUTINE PushBranchFlowCharacteristics(LoopNum, LoopSideNum, BranchNum, ValueT
   INTEGER,   INTENT(IN) :: LoopNum
   INTEGER,   INTENT(IN) :: LoopSideNum
   INTEGER,   INTENT(IN) :: BranchNum
-  REAL(r64), INTENT(IN) :: ValueToPush
+  REAL, INTENT(IN) :: ValueToPush
   LOGICAL, INTENT(IN)     :: FirstHVACIteration   ! TRUE if First HVAC iteration of Time step
 
 
@@ -2485,11 +2485,11 @@ SUBROUTINE PushBranchFlowCharacteristics(LoopNum, LoopSideNum, BranchNum, ValueT
   INTEGER   :: ComponentInletNode
   INTEGER   :: ComponentOutletNode
   INTEGER   :: ComponentTypeOfNum
-  REAL(r64) :: MassFlowRateFound
-  REAL(r64) :: MassFlow
+  REAL :: MassFlowRateFound
+  REAL :: MassFlow
   LOGICAL   :: PlantIsRigid
-  !REAL(r64) :: MinAvail
- ! REAL(r64) :: MaxAvail
+  !REAL :: MinAvail
+ ! REAL :: MaxAvail
 
   BranchInletNode  = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%NodeNumIn
   BranchOutletNode = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%NodeNumOut
@@ -2609,11 +2609,11 @@ SUBROUTINE UpdateLoopSideReportVars(LoopNum, LoopSide, OtherSideDemand, LocalRem
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER , INTENT(IN)  :: LoopNum
   INTEGER , INTENT(IN)  :: LoopSide
-  REAL(r64), INTENT(IN) :: OtherSideDemand ! This is the 'other side' demand, based on other side flow
+  REAL, INTENT(IN) :: OtherSideDemand ! This is the 'other side' demand, based on other side flow
                                            ! and delta T (inlet to SetPt)
                                          ! This is evaluated once at the beginning of the loop side solver, before
                                          !  any of this side equipment alters it
-  REAL(r64), INTENT(IN) :: LocalRemLoopDemand ! Unmet Demand after equipment has been simulated (report variable)
+  REAL, INTENT(IN) :: LocalRemLoopDemand ! Unmet Demand after equipment has been simulated (report variable)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -2690,23 +2690,23 @@ SUBROUTINE CalcUnmetPlantDemand(LoopNum, LoopSideNum)
 !  INTEGER              :: StartingComponent  !~ The component which "would" be simulated next
 
   !~ General variables
-!  REAL(r64)                 :: EnteringTemperature
-  REAL(r64)                 :: MassFlowRate
-!  REAL(r64)                 :: SumMdotTimesTemp
-!  REAL(r64)                 :: SumMdot
-  REAL(r64)                 :: TargetTemp
-  REAL(r64)                 :: LoopSetPointTemperature
-  REAL(r64)                 :: LoopSetPointTemperatureHi
-  REAL(r64)                 :: LoopSetPointTemperatureLo
-  REAL(r64)                 :: LoadtoHeatingSetPoint
-  REAL(r64)                 :: LoadtoCoolingSetPoint
-  REAL(r64)                 :: DeltaTemp
+!  REAL                 :: EnteringTemperature
+  REAL                 :: MassFlowRate
+!  REAL                 :: SumMdotTimesTemp
+!  REAL                 :: SumMdot
+  REAL                 :: TargetTemp
+  REAL                 :: LoopSetPointTemperature
+  REAL                 :: LoopSetPointTemperatureHi
+  REAL                 :: LoopSetPointTemperatureLo
+  REAL                 :: LoadtoHeatingSetPoint
+  REAL                 :: LoadtoCoolingSetPoint
+  REAL                 :: DeltaTemp
 !  INTEGER                   :: EnteringNodeNum
-  REAL(r64)                 :: Cp
-  REAL(r64)                 :: EnthalpySteamSatVapor  ! Enthalpy of saturated vapor
-  REAL(r64)                 :: EnthalpySteamSatLiquid ! Enthalpy of saturated liquid
-  REAL(r64)                 :: LatentHeatSteam        ! Latent heat of steam
-  REAL(r64)                 :: LoadToLoopSetPoint
+  REAL                 :: Cp
+  REAL                 :: EnthalpySteamSatVapor  ! Enthalpy of saturated vapor
+  REAL                 :: EnthalpySteamSatLiquid ! Enthalpy of saturated liquid
+  REAL                 :: LatentHeatSteam        ! Latent heat of steam
+  REAL                 :: LoadToLoopSetPoint
 
   ! Initialize
   LoadToLoopSetPoint = 0.0
@@ -2776,9 +2776,9 @@ SUBROUTINE CalcUnmetPlantDemand(LoopNum, LoopSideNum)
         ! Calculate the delta temperature
         DeltaTemp    = LoopSetPointTemperature - TargetTemp
 
-        EnthalpySteamSatVapor  =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,1.0d0,RefrigIndex, &
+        EnthalpySteamSatVapor  =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,1.0,RefrigIndex, &
                                                'PlantSupplySide:EvaluateLoopSetPointLoad')
-        EnthalpySteamSatLiquid =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,0.0d0,RefrigIndex, &
+        EnthalpySteamSatLiquid =  GetSatEnthalpyRefrig('STEAM',LoopSetPointTemperature,0.0,RefrigIndex, &
                                                'PlantSupplySide:EvaluateLoopSetPointLoad')
 
         LatentHeatSteam = EnthalpySteamSatVapor - EnthalpySteamSatLiquid
@@ -2919,7 +2919,7 @@ SUBROUTINE AdjustPumpFlowRequestByEMSControls(LoopNum, LoopSideNum, BranchNum, C
  INTEGER,INTENT(IN)         :: LoopSideNum
  INTEGER,INTENT(IN)         :: BranchNum
  INTEGER,INTENT(IN)         :: CompNum
- REAL(r64), INTENT(INOUT)   :: FlowToRequest
+ REAL, INTENT(INOUT)   :: FlowToRequest
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2932,20 +2932,20 @@ SUBROUTINE AdjustPumpFlowRequestByEMSControls(LoopNum, LoopSideNum, BranchNum, C
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   IF ((PlantLoop(LoopNum)%LoopSide(LoopSideNum)%EMSCtrl) .AND. &
-      (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%EMSValue <= 0.d0)) THEN
-    FlowToRequest = 0.d0
+      (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%EMSValue <= 0.)) THEN
+    FlowToRequest = 0.
     RETURN
   ENDIF
 
   IF ((PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%EMSCtrlOverrideOn) .AND. &
-      (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%EMSCtrlOverrideValue <= 0.d0)) THEN
-    FlowToRequest = 0.d0
+      (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%EMSCtrlOverrideValue <= 0.)) THEN
+    FlowToRequest = 0.
     RETURN
   ENDIF
 
   IF(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%EMSLoadOverrideOn) THEN
-    IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%EMSLoadOverrideValue == 0.d0) THEN
-      FlowToRequest = 0.d0
+    IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%EMSLoadOverrideValue == 0.) THEN
+      FlowToRequest = 0.
     ENDIF
   ENDIF
 

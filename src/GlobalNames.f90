@@ -418,7 +418,7 @@ SUBROUTINE DetermineIfCoilIsOn(CompType,CompName,CompIndex,IsScheduledOn)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) Value
+  REAL Value
 
   SELECT CASE(CompType)
 

@@ -57,9 +57,9 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
-  REAL(r64), PARAMETER :: SmallNum      = 1.0d-30          ! Very small number to avoid div0 errors
-  REAL(r64), PARAMETER :: StefBoltzmann = 5.6697d-08       ! Stefan-Boltzmann constant
-!  REAL(r64), PARAMETER :: KelvinConv    = KelvinConv           ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER :: SmallNum      = 1.0d-30          ! Very small number to avoid div0 errors
+  REAL, PARAMETER :: StefBoltzmann = 5.6697d-08       ! Stefan-Boltzmann constant
+!  REAL, PARAMETER :: KelvinConv    = KelvinConv           ! Conversion from Celsius to Kelvin
 
   ! DERIVED TYPE DEFINITIONS
 TYPE PondGroundHeatExchangerData
@@ -67,17 +67,17 @@ TYPE PondGroundHeatExchangerData
   CHARACTER(len=MaxNameLength) :: Name                =' ' ! name of pond GHE
   CHARACTER(len=MaxNameLength) :: InletNode           =' ' ! pond inlet fluid node
   CHARACTER(len=MaxNameLength) :: OutletNode          =' ' ! pond outlet fluid node
-  REAL(r64)                    :: DesignMassFlowRate  =0.d0 ! design flow rate of circulating fluid
-  REAL(r64)                    :: DesignCapacity      =0.d0 ! design cooling capacity of pond at 
-  REAL(r64)                    :: Depth               =0.0 ! depth of pond
-  REAL(r64)                    :: Area                =0.0 ! area of pond
-  REAL(r64)                    :: TubeInDiameter      =0.0 ! hydronic tube inside diameter
-  REAL(r64)                    :: TubeOutDiameter     =0.0 ! hydronic tube outside diameter
-  REAL(r64)                    :: TubeConductivity    =0.0 ! hydronic tube thermal conductivity
-  REAL(r64)                    :: GrndConductivity    =0.0 ! ground thermal conductivity
-  REAL(r64)                    :: CircuitLength       =0.0 ! length of each circuit
-  REAL(r64)                    :: BulkTemperature     =0.0 ! current pond bulk temperature
-  REAL(r64)                    :: PastBulkTemperature =0.0 ! past pond bulk temperature
+  REAL                    :: DesignMassFlowRate  =0. ! design flow rate of circulating fluid
+  REAL                    :: DesignCapacity      =0. ! design cooling capacity of pond at 
+  REAL                    :: Depth               =0.0 ! depth of pond
+  REAL                    :: Area                =0.0 ! area of pond
+  REAL                    :: TubeInDiameter      =0.0 ! hydronic tube inside diameter
+  REAL                    :: TubeOutDiameter     =0.0 ! hydronic tube outside diameter
+  REAL                    :: TubeConductivity    =0.0 ! hydronic tube thermal conductivity
+  REAL                    :: GrndConductivity    =0.0 ! ground thermal conductivity
+  REAL                    :: CircuitLength       =0.0 ! length of each circuit
+  REAL                    :: BulkTemperature     =0.0 ! current pond bulk temperature
+  REAL                    :: PastBulkTemperature =0.0 ! past pond bulk temperature
   INTEGER                      :: NumCircuits         =0 ! number of circuits in total
   INTEGER                      :: InletNodeNum        =0 ! inlet node number
   INTEGER                      :: OutletNodeNum       =0 ! oulet node number
@@ -93,12 +93,12 @@ END TYPE PondGroundHeatExchangerData
 
 TYPE PondGroundHeatExchangerReport
   ! Report data
-  REAL(r64)                    :: InletTemp           ! fluid inlet temperature
-  REAL(r64)                    :: OutletTemp          ! fluid outlet temperature
-  REAL(r64)                    :: MassFlowRate        ! fluid mass flow rate
-  REAL(r64)                    :: PondTemp            ! pond bulk temperature
-  REAL(r64)                    :: HeatTransferRate    ! total fluid heat transfer rate, Watts
-  REAL(r64)                    :: Energy              ! cumulative energy, Joules
+  REAL                    :: InletTemp           ! fluid inlet temperature
+  REAL                    :: OutletTemp          ! fluid outlet temperature
+  REAL                    :: MassFlowRate        ! fluid mass flow rate
+  REAL                    :: PondTemp            ! pond bulk temperature
+  REAL                    :: HeatTransferRate    ! total fluid heat transfer rate, Watts
+  REAL                    :: Energy              ! cumulative energy, Joules
 END TYPE PondGroundHeatExchangerReport
 
 TYPE(PondGroundHeatExchangerData),   DIMENSION(:), ALLOCATABLE :: PondGHE
@@ -109,20 +109,20 @@ TYPE(PondGroundHeatExchangerReport), DIMENSION(:), ALLOCATABLE :: PondGHEReport
   ! utility variables initialized once
 INTEGER :: NumOfPondGHEs                 =0 ! Number of pond ground heat exchangers
   ! Utility variables - initialized for each instance of a pond
-REAL(r64)    :: InletTemp                =0.0  ! water inlet temperature
-REAL(r64)    :: OutletTemp               =0.0  ! water outlet temperature
-REAL(r64)    :: FlowRate                 =0.0  ! water mass flow rate
-REAL(r64)    :: HeatTransRate            =0.0  ! total heat transfer rate, Watts
-REAL(r64)    :: PondTemp                 =0.0  ! pond temperature
-REAL(r64)    :: PastPondTemp             =0.0  ! past pond temperature
-REAL(r64)    :: PondArea                 =0.0  ! pond surface area
-REAL(r64)    :: PondDepth                =0.0  ! pond depth
-REAL(r64)    :: TubeInDiameter           =0.0  ! hydronic tube inside diameter
-REAL(r64)    :: TubeOutDiameter          =0.0  ! hydronic tube outside diameter
-REAL(r64)    :: TubeConductivity         =0.0  ! hydronic tube thermal conductivity
-REAL(r64)    :: GrndConductivity         =0.0  ! ground thermal conductivity
-REAL(r64)    :: Concentration            =0.0  ! fluid/glycol concentration 0.0-1.0 proportion.
-REAL(r64)    :: CircLength               =0.0  ! length of each circuit
+REAL    :: InletTemp                =0.0  ! water inlet temperature
+REAL    :: OutletTemp               =0.0  ! water outlet temperature
+REAL    :: FlowRate                 =0.0  ! water mass flow rate
+REAL    :: HeatTransRate            =0.0  ! total heat transfer rate, Watts
+REAL    :: PondTemp                 =0.0  ! pond temperature
+REAL    :: PastPondTemp             =0.0  ! past pond temperature
+REAL    :: PondArea                 =0.0  ! pond surface area
+REAL    :: PondDepth                =0.0  ! pond depth
+REAL    :: TubeInDiameter           =0.0  ! hydronic tube inside diameter
+REAL    :: TubeOutDiameter          =0.0  ! hydronic tube outside diameter
+REAL    :: TubeConductivity         =0.0  ! hydronic tube thermal conductivity
+REAL    :: GrndConductivity         =0.0  ! ground thermal conductivity
+REAL    :: Concentration            =0.0  ! fluid/glycol concentration 0.0-1.0 proportion.
+REAL    :: CircLength               =0.0  ! length of each circuit
 INTEGER :: NumCircuits                   =0 ! number of circuits in total
 INTEGER :: InletNodeNum                  =0  ! inlet node number
 INTEGER :: OutletNodeNum                 =0  ! oulet node number
@@ -183,9 +183,9 @@ SUBROUTINE SimPondGroundHeatExchanger(CompName,CompIndex,FirstHVACIteration,RunF
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
   LOGICAL,          INTENT(IN)  :: Runflag             ! TRUE if equipment turned on by loop operation scheme
   LOGICAL                       :: InitLoopEquip
-  REAL(r64),INTENT(INOUT)     :: Maxload
-  REAL(r64),INTENT(INOUT)     :: MinLoad
-  REAL(r64),INTENT(INOUT)     :: OptLoad
+  REAL,INTENT(INOUT)     :: Maxload
+  REAL,INTENT(INOUT)     :: MinLoad
+  REAL,INTENT(INOUT)     :: OptLoad
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -234,7 +234,7 @@ SUBROUTINE SimPondGroundHeatExchanger(CompName,CompIndex,FirstHVACIteration,RunF
   IF (InitLoopEquip) THEN
     CALL InitPondGroundHeatExchanger(PondGHENum,FirstHVACIteration,RunFlag)
     Maxload = PondGHE(PondGHENum)%DesignCapacity
-    MinLoad = 0.d0
+    MinLoad = 0.
     OptLoad = PondGHE(PondGHENum)%DesignCapacity
     RETURN
   ENDIF
@@ -515,8 +515,8 @@ SUBROUTINE InitPondGroundHeatExchanger(PondGHENum,FirstHVACIteration,RunFlag)
   LOGICAL, INTENT(IN) :: RunFlag             ! TRUE if equipment scheduled to operate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: DesignVelocity=0.5d0  ! Hypothetical design max pipe velocity [m/s]
-  REAL(r64), PARAMETER :: PondHeight = 0.0d0    ! for now
+  REAL, PARAMETER :: DesignVelocity=0.5  ! Hypothetical design max pipe velocity [m/s]
+  REAL, PARAMETER :: PondHeight = 0.0    ! for now
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -526,23 +526,23 @@ SUBROUTINE InitPondGroundHeatExchanger(PondGHENum,FirstHVACIteration,RunFlag)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)           :: DesignFlow              ! Hypothetical design flow rate
+  REAL           :: DesignFlow              ! Hypothetical design flow rate
   LOGICAL, SAVE       :: OneTimeFlag = .TRUE.    ! flag for one time intializations
   INTEGER             :: PondNum                 ! loop counter
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: rho
-  REAL(r64) :: Cp
+  REAL :: rho
+  REAL :: Cp
   LOGICAL :: errFlag
   !repeated warm up days tend to drive the initial pond temperature toward the drybulb temperature
   !For each environment start the pond midway between drybulb and ground temp.
   IF(OneTimeFlag .or. warmupflag)THEN
     DO PondNum = 1, NumOfPondGHEs
       ! initialize pond temps to mean of drybulb and ground temps.
-      PondGHE%BulkTemperature     = 0.5d0 * (OutDryBulbTempAt(PondHeight) + GroundTemp_Deep)
-      PondGHE%PastBulkTemperature = 0.5d0 * (OutDryBulbTempAt(PondHeight) + GroundTemp_Deep)
+      PondGHE%BulkTemperature     = 0.5 * (OutDryBulbTempAt(PondHeight) + GroundTemp_Deep)
+      PondGHE%PastBulkTemperature = 0.5 * (OutDryBulbTempAt(PondHeight) + GroundTemp_Deep)
       OneTimeFlag = .FALSE.
     END DO
   END IF
@@ -575,10 +575,10 @@ SUBROUTINE InitPondGroundHeatExchanger(PondGHENum,FirstHVACIteration,RunFlag)
                                        constant_zero,&
                                         PlantLoop(PondGHE(PondGHENum)%LoopNum)%fluidIndex, &
                                         'InitPondGroundHeatExchanger')
-    PondGHE(PondGHENum)%DesignMassFlowRate = PI/4.0d0 * PondGHE(PondGHENum)%TubeInDiameter**2 * DesignVelocity * &
+    PondGHE(PondGHENum)%DesignMassFlowRate = PI/4.0 * PondGHE(PondGHENum)%TubeInDiameter**2 * DesignVelocity * &
                                    rho * PondGHE(PondGHENum)%NumCircuits
-    PondGHE(PondGHENum)%DesignCapacity = PondGHE(PondGHENum)%DesignMassFlowRate * Cp * 10.d0 !assume 10C delta T?
-    CALL InitComponentNodes(0.d0,  PondGHE(PondGHENum)%DesignMassFlowRate, &
+    PondGHE(PondGHENum)%DesignCapacity = PondGHE(PondGHENum)%DesignMassFlowRate * Cp * 10. !assume 10C delta T?
+    CALL InitComponentNodes(0.,  PondGHE(PondGHENum)%DesignMassFlowRate, &
                                  PondGHE(PondGHENum)%InletNodeNum, &
                                  PondGHE(PondGHENum)%OutletNodeNum, &
                                  PondGHE(PondGHENum)%LoopNum, &
@@ -688,15 +688,15 @@ SUBROUTINE CalcPondGroundHeatExchanger(PondGHENum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)    :: PondTempStar
-  REAL(r64)    :: PondTempStarStar
-  REAL(r64)    :: PondTempStarStarStar
-  REAL(r64)    :: Flux
-  REAL(r64)    :: FluxStar
-  REAL(r64)    :: FluxStarStar
-  REAL(r64)    :: NewPondTemp
-  REAL(r64)    :: SpecificHeat
-  REAL(r64)    :: PondMass
+  REAL    :: PondTempStar
+  REAL    :: PondTempStarStar
+  REAL    :: PondTempStarStarStar
+  REAL    :: Flux
+  REAL    :: FluxStar
+  REAL    :: FluxStarStar
+  REAL    :: NewPondTemp
+  REAL    :: SpecificHeat
+  REAL    :: PondMass
 
   PondMass = PondDepth*PondArea* &
              GetDensityGlycol('WATER',MAX(PondTemp, constant_zero),  &
@@ -706,17 +706,17 @@ SUBROUTINE CalcPondGroundHeatExchanger(PondGHENum)
                  WaterIndex,'CalcPondGroundHeatExchanger')  !DSU bug fix here, was using working fluid index
 
   Flux = CalcTotalFLux(PondTemp,PondGHENum)
-  PondTempStar = PastPondTemp + 0.5d0*SecInHour*TimeStepSys*Flux/ (SpecificHeat*PondMass)
+  PondTempStar = PastPondTemp + 0.5*SecInHour*TimeStepSys*Flux/ (SpecificHeat*PondMass)
 
   FluxStar = CalcTotalFLux(PondTempStar,PondGHENum)
-  PondTempStarStar = PastPondTemp + 0.5d0*SecInHour*TimeStepSys*FluxStar/ (SpecificHeat*PondMass)
+  PondTempStarStar = PastPondTemp + 0.5*SecInHour*TimeStepSys*FluxStar/ (SpecificHeat*PondMass)
 
   FluxStarStar = CalcTotalFLux(PondTempStarStar,PondGHENum)
   PondTempStarStarStar = PastPondTemp + SecInHour*TimeStepSys*FluxStarStar/(SpecificHeat*PondMass)
 
-  NewPondTemp = PastPondTemp + SecInHour*TimeStepSys*(Flux+2.0d0*FluxStar + 2.0d0*FluxStarStar + &
+  NewPondTemp = PastPondTemp + SecInHour*TimeStepSys*(Flux+2.0*FluxStar + 2.0*FluxStarStar + &
                                                           CalcTotalFLux(PondTempStarStarStar,PondGHENum)) / &
-                                                          (6.0d0*SpecificHeat*PondMass)
+                                                          (6.0*SpecificHeat*PondMass)
 
   PondTemp = NewPondTemp
 
@@ -772,14 +772,14 @@ FUNCTION CalcTotalFLux(PondBulkTemp,PondGHENum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64)         :: CalcTotalFLux            ! function return variable
-  REAL(r64), INTENT(IN)  :: PondBulkTemp             ! pond temp for this flux calculation
+  REAL         :: CalcTotalFLux            ! function return variable
+  REAL, INTENT(IN)  :: PondBulkTemp             ! pond temp for this flux calculation
   INTEGER, INTENT(IN) :: PondGHENum  ! Number of the Pond GHE
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER   :: PrantlAir = 0.71d0         ! Prantl number for air - assumed constant
-  REAL(r64), PARAMETER   :: SchmidtAir = 0.6d0         ! Schmidt number for air - assumed constant
-  REAL(r64), PARAMETER   :: PondHeight = 0.0d0         ! for now
+  REAL, PARAMETER   :: PrantlAir = 0.71         ! Prantl number for air - assumed constant
+  REAL, PARAMETER   :: SchmidtAir = 0.6         ! Schmidt number for air - assumed constant
+  REAL, PARAMETER   :: PondHeight = 0.0         ! for now
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -788,30 +788,30 @@ FUNCTION CalcTotalFLux(PondBulkTemp,PondGHENum)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: ConvCoef             ! convection coefficient
-  REAL(r64)    :: ExternalTemp         ! external environmental temp - drybulb or wetbulb
-  REAL(r64)    :: FluxSolAbsorbed      ! absorbed solar flux
-  REAL(r64)    :: FluxLongwave         ! absorbed longwave flux
-  REAL(r64)    :: FluxConvect          ! convective flux
-  REAL(r64)    :: FluxEvap             ! evaporative heat flux
-  REAL(r64)    :: FluxGround           ! ground heat transfer flux
-  REAL(r64)    :: Qfluid               ! convective flux
-  REAL(r64)    :: SurfTempAbs          ! absolute value of surface temp
-  REAL(r64)    :: SkyTempAbs           ! absolute value of sky temp
-  REAL(r64)    :: ThermalAbs           ! thermal absorptivity
-  REAL(r64)    :: SpecHeat             ! specific heat capacity
-  REAL(r64)    :: HumRatioFilm         ! humidity ratio at pond surface/film temperature
-  REAL(r64)    :: HumRatioAir          ! humidity ratio of air
-  REAL(r64)    :: SpecHeatAir          ! air specific heat
-  REAL(r64)    :: LatentHeatAir        ! latent heat of air
-  REAL(r64)    :: UvalueGround         ! ground heat transfer coefficient
-  REAL(r64)    :: Perimeter            ! pond perimeter
-  REAL(r64)    :: OutDryBulb           ! drybulb at pond height
-  REAL(r64)    :: OutWetBulb           ! wetbulb at pond height
+  REAL    :: ConvCoef             ! convection coefficient
+  REAL    :: ExternalTemp         ! external environmental temp - drybulb or wetbulb
+  REAL    :: FluxSolAbsorbed      ! absorbed solar flux
+  REAL    :: FluxLongwave         ! absorbed longwave flux
+  REAL    :: FluxConvect          ! convective flux
+  REAL    :: FluxEvap             ! evaporative heat flux
+  REAL    :: FluxGround           ! ground heat transfer flux
+  REAL    :: Qfluid               ! convective flux
+  REAL    :: SurfTempAbs          ! absolute value of surface temp
+  REAL    :: SkyTempAbs           ! absolute value of sky temp
+  REAL    :: ThermalAbs           ! thermal absorptivity
+  REAL    :: SpecHeat             ! specific heat capacity
+  REAL    :: HumRatioFilm         ! humidity ratio at pond surface/film temperature
+  REAL    :: HumRatioAir          ! humidity ratio of air
+  REAL    :: SpecHeatAir          ! air specific heat
+  REAL    :: LatentHeatAir        ! latent heat of air
+  REAL    :: UvalueGround         ! ground heat transfer coefficient
+  REAL    :: Perimeter            ! pond perimeter
+  REAL    :: OutDryBulb           ! drybulb at pond height
+  REAL    :: OutWetBulb           ! wetbulb at pond height
 
 
   ! make a surface heat balance and solve for temperature
-  ThermalAbs = 0.9d0
+  ThermalAbs = 0.9
 
   ! set appropriate external temp
   ! use height dependency --  if there was a height for this unit, it could be inserted.
@@ -842,7 +842,7 @@ FUNCTION CalcTotalFLux(PondBulkTemp,PondGHENum)
   FluxSolAbsorbed = CalcSolarFlux()
 
   ! specific heat from fluid prop routines
-  SpecHeat = GetSpecificHeatGlycol(PlantLoop(PondGHE(PondGHENum)%LoopNum)%FluidName,MAX(InletTemp,0.0d0),  &
+  SpecHeat = GetSpecificHeatGlycol(PlantLoop(PondGHE(PondGHENum)%LoopNum)%FluidName,MAX(InletTemp,0.0),  &
                                 PlantLoop(PondGHE(PondGHENum)%LoopNum)%FluidIndex,'PondGroundHeatExchanger:CalcTotalFlux')
   ! heat transfer with fluid - heat exchanger analogy.
   Qfluid = FlowRate*SpecHeat*CalcEffectiveness(InletTemp,PondBulkTemp,FlowRate,PondGHENum)* &
@@ -862,7 +862,7 @@ FUNCTION CalcTotalFLux(PondBulkTemp,PondGHENum)
 
   ! ground heat transfer flux
   Perimeter = 4.0*SQRT(PondArea)  ! square assumption
-  UvalueGround = 0.999d0*(GrndConductivity/PondDepth) + 1.37d0*(GrndConductivity*Perimeter/PondArea)
+  UvalueGround = 0.999*(GrndConductivity/PondDepth) + 1.37*(GrndConductivity*Perimeter/PondArea)
   FluxGround   = UvalueGround * (PondBulkTemp - GroundTemp_Deep)
 
   CalcTotalFLux = Qfluid + PondArea*(FluxSolAbsorbed - FluxConvect - FluxLongwave - &
@@ -909,12 +909,12 @@ FUNCTION CalcSolarFlux()
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64)           :: CalcSolarFlux      ! Function return variable
+  REAL           :: CalcSolarFlux      ! Function return variable
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER    :: WaterRefIndex       = 1.33d0     ! refractive index of water
-  REAL(r64), PARAMETER    :: AirRefIndex         = 1.0003d0   ! refractive index of air
-  REAL(r64), PARAMETER    :: PondExtCoef         = 0.3d0      ! extinction coefficent of water
+  REAL, PARAMETER    :: WaterRefIndex       = 1.33     ! refractive index of water
+  REAL, PARAMETER    :: AirRefIndex         = 1.0003   ! refractive index of air
+  REAL, PARAMETER    :: PondExtCoef         = 0.3      ! extinction coefficent of water
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -924,14 +924,14 @@ FUNCTION CalcSolarFlux()
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)    :: IncidAngle           ! angle of incidence of beam
-  REAL(r64)    :: RefractAngle         ! angle of refraction of beam
-  REAL(r64)    :: Transmitance         ! transmitted solar
-  REAL(r64)    :: Reflectance          ! reflectance
-  REAL(r64)    :: Absorbtance          ! absorbed solar
+  REAL    :: IncidAngle           ! angle of incidence of beam
+  REAL    :: RefractAngle         ! angle of refraction of beam
+  REAL    :: Transmitance         ! transmitted solar
+  REAL    :: Reflectance          ! reflectance
+  REAL    :: Absorbtance          ! absorbed solar
 
-  REAL(r64)    :: ParallelRad          ! parallel component of irradiation
-  REAL(r64)    :: PerpendRad           ! parallel component of irradiation
+  REAL    :: ParallelRad          ! parallel component of irradiation
+  REAL    :: PerpendRad           ! parallel component of irradiation
 
         ! FLOW:
 
@@ -953,13 +953,13 @@ FUNCTION CalcSolarFlux()
   PerpendRad   = SIN(RefractAngle-IncidAngle)**2 / SIN(RefractAngle+IncidAngle)**2
 
   ! transmittance: Tau
-  Transmitance = 0.5d0*Absorbtance*((1.0d0-ParallelRad)/(1.0d0+ParallelRad)+(1.0d0-PerpendRad)/(1.0d0+PerpendRad))
+  Transmitance = 0.5*Absorbtance*((1.0-ParallelRad)/(1.0+ParallelRad)+(1.0-PerpendRad)/(1.0+PerpendRad))
 
   ! reflectance: Tau_a - Tau
   Reflectance  = Absorbtance - Transmitance
 
   ! apply reflectance to beam and diffuse solar to find flux
-  CalcSolarFlux = (1.0d0-Reflectance)*(SOLCOS(3)*BeamSolarRad + DifSolarRad)
+  CalcSolarFlux = (1.0-Reflectance)*(SOLCOS(3)*BeamSolarRad + DifSolarRad)
 
   RETURN
 
@@ -1005,15 +1005,15 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL(r64)            :: CalcEffectiveness             ! Function return variable
-  REAL(r64),INTENT(IN) :: InsideTemperature             ! Temperature of fluid in pipe circuit, in C
-  REAL(r64),INTENT(IN) :: PondTemperature               ! Temperature of pond water (i.e. outside the pipe), in C
-  REAL(r64),INTENT(IN) :: MassFlowRate                  ! Mass flow rate, in kg/s
+  REAL            :: CalcEffectiveness             ! Function return variable
+  REAL,INTENT(IN) :: InsideTemperature             ! Temperature of fluid in pipe circuit, in C
+  REAL,INTENT(IN) :: PondTemperature               ! Temperature of pond water (i.e. outside the pipe), in C
+  REAL,INTENT(IN) :: MassFlowRate                  ! Mass flow rate, in kg/s
   INTEGER, INTENT(IN)  :: PondGHENum                    ! Number of the Pond GHE
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER    :: MaxLaminarRe       = 2300.d0     ! Maximum Reynolds number for laminar flow
-  REAL(r64), PARAMETER    :: GravConst          = 9.81d0      ! gravitational constant - should be fixed!
+  REAL, PARAMETER    :: MaxLaminarRe       = 2300.     ! Maximum Reynolds number for laminar flow
+  REAL, PARAMETER    :: GravConst          = 9.81      ! gravitational constant - should be fixed!
   CHARACTER(len=*), PARAMETER :: CalledFrom='PondGroundHeatExchanger:CalcEffectiveness'
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1024,22 +1024,22 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)    :: NuseltNum              ! Nuselt number (dimensionless)
-  REAL(r64)    :: PrantlNum              ! Prandtl number (dimensionless)
-  REAL(r64)    :: ReynoldsNum            ! Reynolds number (dimensionless)
-  REAL(r64)    :: RayleighNum            ! Rayleigh number (dimensionless)
-  REAL(r64)    :: ThermDiff              ! thermal diffusivity
-  REAL(r64)    :: ExpansionCoef          ! Expansion coefficient, in K^-1
-  REAL(r64)    :: Viscosity              ! Viscosity, in Ns/m2
-  REAL(r64)    :: Density                ! fluid density
-  REAL(r64)    :: SpecificHeat           ! Fluid specific heat
-  REAL(r64)    :: Conductivity           ! Fluid thermal conductivity
-  REAL(r64)    :: WaterSpecHeat          ! Specific heat of pond water
-  REAL(r64)    :: NTU                    ! Number of transfer units, non-dimensional
-  REAL(r64)    :: ConvCoefOut            ! convection coefficient at outside of pipe
-  REAL(r64)    :: ConvCoefIn             ! convection coefficient at inside of pipe
-  REAL(r64)    :: PipeResistance         ! pipe wall thermal resistance
-  REAL(r64)    :: TotalResistance        ! total pipe thermal resistance - conduction and convection
+  REAL    :: NuseltNum              ! Nuselt number (dimensionless)
+  REAL    :: PrantlNum              ! Prandtl number (dimensionless)
+  REAL    :: ReynoldsNum            ! Reynolds number (dimensionless)
+  REAL    :: RayleighNum            ! Rayleigh number (dimensionless)
+  REAL    :: ThermDiff              ! thermal diffusivity
+  REAL    :: ExpansionCoef          ! Expansion coefficient, in K^-1
+  REAL    :: Viscosity              ! Viscosity, in Ns/m2
+  REAL    :: Density                ! fluid density
+  REAL    :: SpecificHeat           ! Fluid specific heat
+  REAL    :: Conductivity           ! Fluid thermal conductivity
+  REAL    :: WaterSpecHeat          ! Specific heat of pond water
+  REAL    :: NTU                    ! Number of transfer units, non-dimensional
+  REAL    :: ConvCoefOut            ! convection coefficient at outside of pipe
+  REAL    :: ConvCoefIn             ! convection coefficient at inside of pipe
+  REAL    :: PipeResistance         ! pipe wall thermal resistance
+  REAL    :: TotalResistance        ! total pipe thermal resistance - conduction and convection
 !  INTEGER, SAVE ::ErrCount=0
 !  INTEGER, SAVE ::ConsecutiveFrozen=0
 
@@ -1062,28 +1062,28 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
 
   ! Calculate the Nusselt number based on what flow regime one is in. h = (k)(Nu)/D
   IF (ReynoldsNum >= MaxLaminarRe) THEN ! Turbulent flow --> use Dittus-Boelter equation
-    NuseltNum = 0.023d0*(ReynoldsNum**(0.8d0))*(PrantlNum**(0.3d0))
+    NuseltNum = 0.023*(ReynoldsNum**(0.8))*(PrantlNum**(0.3))
   ELSE    ! Laminar flow --> use constant surface temperature relation
-    NuseltNum = 3.66d0
+    NuseltNum = 3.66
   END IF
 
   ! inside convection resistance, from Nu
   ConvCoefIn = Conductivity * NuseltNum / TubeInDiameter
 
   ! now find properties of pond water - always assume pond fluid is water
-  WaterSpecHeat = GetSpecificHeatGlycol('WATER',MAX(PondTemperature,0.0d0), WaterIndex,CalledFrom)
-  Conductivity  = GetConductivityGlycol('WATER',MAX(PondTemperature,0.0d0), WaterIndex,CalledFrom)
-  Viscosity     = GetViscosityGlycol('WATER',MAX(PondTemperature,0.0d0), WaterIndex,CalledFrom)
-  Density       = GetDensityGlycol('WATER',MAX(PondTemperature,0.0d0), WaterIndex,CalledFrom)
+  WaterSpecHeat = GetSpecificHeatGlycol('WATER',MAX(PondTemperature,0.0), WaterIndex,CalledFrom)
+  Conductivity  = GetConductivityGlycol('WATER',MAX(PondTemperature,0.0), WaterIndex,CalledFrom)
+  Viscosity     = GetViscosityGlycol('WATER',MAX(PondTemperature,0.0), WaterIndex,CalledFrom)
+  Density       = GetDensityGlycol('WATER',MAX(PondTemperature,0.0), WaterIndex,CalledFrom)
 
   ! derived properties for natural convection coefficient
   ! expansion coef (Beta) = -1/Rho. dRho/dT
   ! The following code includes some slight modifications from Simon's original code.
   ! It guarantees that the delta T is 10C and also avoids the problems associated with
   ! water hitting a maximum density at around 4C. (RKS)
-  ExpansionCoef = -(GetDensityGlycol('WATER',MAX(PondTemperature,10.0d0) + 5.0d0, WaterIndex,CalledFrom) - &
-                   GetDensityGlycol('WATER',MAX(PondTemperature,10.0d0) - 5.0d0, WaterIndex,CalledFrom)) / &
-                   (10.0d0*Density)
+  ExpansionCoef = -(GetDensityGlycol('WATER',MAX(PondTemperature,10.0) + 5.0, WaterIndex,CalledFrom) - &
+                   GetDensityGlycol('WATER',MAX(PondTemperature,10.0) - 5.0, WaterIndex,CalledFrom)) / &
+                   (10.0*Density)
 
   ThermDiff = Conductivity/(Density*WaterSpecHeat)
   PrantlNum = Viscosity*WaterSpecHeat/Conductivity
@@ -1092,7 +1092,7 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
                      TubeOutDiameter**3 / (Viscosity*ThermDiff)
 
   ! Calculate the Nusselt number for natural convection at outside of pipe
-  NuseltNum = (0.6d0 + (0.387d0*RayleighNum**(1.0d0/6.0d0)/((1.0d0+0.559d0/PrantlNum**(9.0d0/16.0d0))**(8.0d0/27.0d0))))**2
+  NuseltNum = (0.6 + (0.387*RayleighNum**(1.0/6.0)/((1.0+0.559/PrantlNum**(9.0/16.0))**(8.0/27.0))))**2
 
   ! outside convection resistance, from Nu
   ConvCoefOut = Conductivity * NuseltNum / TubeOutDiameter
@@ -1100,7 +1100,7 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
   ! conduction resistance of pipe
   PipeResistance = TubeInDiameter/TubeConductivity * LOG(TubeOutDiameter/TubeInDiameter)
 
-  TotalResistance = PipeResistance + 1.0d0/ConvCoefIn + TubeInDiameter/(TubeOutDiameter*ConvCoefOut)
+  TotalResistance = PipeResistance + 1.0/ConvCoefIn + TubeInDiameter/(TubeOutDiameter*ConvCoefOut)
 
   ! Calculate the NTU parameter
   ! NTU = UA/[(Mdot*Cp)min] = A/[Rtot*(Mdot*Cp)min]
@@ -1112,7 +1112,7 @@ FUNCTION CalcEffectiveness(InsideTemperature, PondTemperature,MassFlowRate,PondG
   Else
     NTU = PI * TubeInDiameter * CircLength*NumCircuits / (TotalResistance * MassFlowRate * SpecificHeat)
      ! Calculate effectiveness - formula for static fluid
-    CalcEffectiveness = (1.d0-EXP(-NTU))
+    CalcEffectiveness = (1.-EXP(-NTU))
   End If
 
   ! Check for frozen pond
@@ -1180,7 +1180,7 @@ SUBROUTINE UpdatePondGroundHeatExchanger(PondGHENum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: CpFluid            ! Specific heat of working fluid
+  REAL    :: CpFluid            ! Specific heat of working fluid
 
   ! Calculate the water side outlet conditions and set the
   ! appropriate conditions on the correct HVAC node.

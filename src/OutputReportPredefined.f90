@@ -557,7 +557,7 @@ TYPE TableEntryType
   INTEGER                       :: indexColumn   = 0
   INTEGER                       :: subTableIndex = 0
   INTEGER                       :: uniqueObjName = 0
-  REAL(r64)                     :: origRealEntry = 0.0
+  REAL                     :: origRealEntry = 0.0
   INTEGER                       :: significantDigits = 0
   LOGICAL                       :: origEntryIsReal = .FALSE.
 END TYPE
@@ -570,7 +570,7 @@ TYPE CompSizeTableEntryType
   CHARACTER(len=MaxNameLength)  :: typeField     = ''
   CHARACTER(len=MaxNameLength)  :: nameField     = ''
   CHARACTER(len=MaxNameLength)  :: description   = ''
-  REAL(r64)                     :: valField      = 0.0
+  REAL                     :: valField      = 0.0
   LOGICAL                       :: active        = .false.
   LOGICAL                       :: written       = .false.
 END TYPE
@@ -593,9 +593,9 @@ INTEGER                                           :: numShadowRelate
 INTEGER, PARAMETER                                :: recKindSurface = 1
 INTEGER, PARAMETER                                :: recKindSubsurface = 2
 
-REAL(r64) :: TotalNotMetHeatingOccupiedForABUPS = 0.0
-REAL(r64) :: TotalNotMetCoolingOccupiedForABUPS = 0.0
-REAL(r64) :: TotalTimeNotSimpleASH55EitherForABUPS = 0.0
+REAL :: TotalNotMetHeatingOccupiedForABUPS = 0.0
+REAL :: TotalNotMetCoolingOccupiedForABUPS = 0.0
+REAL :: TotalTimeNotSimpleASH55EitherForABUPS = 0.0
 
 CONTAINS
 
@@ -1257,7 +1257,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT(IN)                      :: columnIndex
 CHARACTER(len=*),INTENT(IN)  :: objName
-REAL(r64),INTENT(IN)                          :: tableEntryReal
+REAL,INTENT(IN)                          :: tableEntryReal
 INTEGER, INTENT(IN),OPTIONAL             :: numSigDigits
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1472,7 +1472,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 CHARACTER(len=*),INTENT(IN)  :: FieldType
 CHARACTER(len=*),INTENT(IN)  :: FieldName
 CHARACTER(len=*),INTENT(IN)  :: FieldDescription
-REAL(r64),INTENT(IN)              :: FieldValue
+REAL,INTENT(IN)              :: FieldValue
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

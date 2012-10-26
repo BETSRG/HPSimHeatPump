@@ -44,7 +44,7 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
-REAL(r64), PARAMETER :: MinAirMassFlow                     = 0.001d0
+REAL, PARAMETER :: MinAirMassFlow                     = 0.001
 INTEGER :: NumDesuperheaterCoil  ! Total number of desuperheater heating coil objects in input
 
 ! reclaim heat object types
@@ -63,37 +63,37 @@ TYPE, PUBLIC                   :: HeatingCoilEquipConditions
   CHARACTER(len=MaxNameLength) :: Schedule         = ' ' ! HeatingCoil Operation Schedule
   Integer      :: SchedPtr                         = 0   ! Pointer to the correct schedule
   Integer      :: InsuffTemperatureWarn            = 0   ! Used for recurring error message
-  REAL(r64)    :: InletAirMassFlowRate             = 0.0 ! MassFlow through the HeatingCoil being Simulated [kg/Sec]
-  REAL(r64)    :: OutletAirMassFlowRate            = 0.0 !
-  REAL(r64)    :: InletAirTemp                     = 0.0 !
-  REAL(r64)    :: OutletAirTemp                    = 0.0 !
-  REAL(r64)    :: InletAirHumRat                   = 0.0 !
-  REAL(r64)    :: OutletAirHumRat                  = 0.0 !
-  REAL(r64)    :: InletAirEnthalpy                 = 0.0 !
-  REAL(r64)    :: OutletAirEnthalpy                = 0.0 !
-  REAL(r64)    :: HeatingCoilLoad                  = 0.0 ! Total Load on the Coil [J]
-  REAL(r64)    :: HeatingCoilRate                  = 0.0 ! Total Coil Rate on the Coil [W]
-  REAL(r64)    :: GasUseLoad                       = 0.0 ! Gas Usage of Coil [J]
-  REAL(r64)    :: ElecUseLoad                      = 0.0 ! Electric Usage of Coil [J]
-  REAL(r64)    :: GasUseRate                       = 0.0 ! Gas Usage of Coil [W]
-  REAL(r64)    :: ElecUseRate                      = 0.0 ! Electric Usage of Coil [W]
-  REAL(r64)    :: Efficiency                       = 0.0 ! HeatingCoil Efficiency Value
-  REAL(r64)    :: NominalCapacity                  = 0.0 ! Nominal Capacity of Coil [W]
-  REAL(r64)    :: DesiredOutletTemp                = 0.0 !
-  REAL(r64)    :: DesiredOutletHumRat              = 0.0 !
-  REAL(r64)    :: AvailTemperature                 = 0.0 ! Used in heat recovery test [C]
+  REAL    :: InletAirMassFlowRate             = 0.0 ! MassFlow through the HeatingCoil being Simulated [kg/Sec]
+  REAL    :: OutletAirMassFlowRate            = 0.0 !
+  REAL    :: InletAirTemp                     = 0.0 !
+  REAL    :: OutletAirTemp                    = 0.0 !
+  REAL    :: InletAirHumRat                   = 0.0 !
+  REAL    :: OutletAirHumRat                  = 0.0 !
+  REAL    :: InletAirEnthalpy                 = 0.0 !
+  REAL    :: OutletAirEnthalpy                = 0.0 !
+  REAL    :: HeatingCoilLoad                  = 0.0 ! Total Load on the Coil [J]
+  REAL    :: HeatingCoilRate                  = 0.0 ! Total Coil Rate on the Coil [W]
+  REAL    :: GasUseLoad                       = 0.0 ! Gas Usage of Coil [J]
+  REAL    :: ElecUseLoad                      = 0.0 ! Electric Usage of Coil [J]
+  REAL    :: GasUseRate                       = 0.0 ! Gas Usage of Coil [W]
+  REAL    :: ElecUseRate                      = 0.0 ! Electric Usage of Coil [W]
+  REAL    :: Efficiency                       = 0.0 ! HeatingCoil Efficiency Value
+  REAL    :: NominalCapacity                  = 0.0 ! Nominal Capacity of Coil [W]
+  REAL    :: DesiredOutletTemp                = 0.0 !
+  REAL    :: DesiredOutletHumRat              = 0.0 !
+  REAL    :: AvailTemperature                 = 0.0 ! Used in heat recovery test [C]
   INTEGER      :: AirInletNodeNum                  = 0   !
   INTEGER      :: AirOutletNodeNum                 = 0   !
   INTEGER      :: TempSetPointNodeNum              = 0   ! If applicable this is the node number that the temp setpoint exists.
   INTEGER      :: Control                          = 0   !
   INTEGER      :: PLFCurveIndex                    = 0   ! Index for part-load factor curve index for gas heating coil
-  REAL(r64)    :: ParasiticElecLoad                = 0.0 ! parasitic electric load associated with the gas heating coil
-  REAL(r64)    :: ParasiticGasLoad                 = 0.0 ! parasitic gas load associated with the gas heating coil
+  REAL    :: ParasiticElecLoad                = 0.0 ! parasitic electric load associated with the gas heating coil
+  REAL    :: ParasiticGasLoad                 = 0.0 ! parasitic gas load associated with the gas heating coil
                                                          ! (standing pilot light) [J]
-  REAL(r64)    :: ParasiticGasRate                 = 0.0 ! avg. parasitic gas consumption rate with the gas heating coil
+  REAL    :: ParasiticGasRate                 = 0.0 ! avg. parasitic gas consumption rate with the gas heating coil
                                                          ! (standing pilot light) [J]
-  REAL(r64)    :: ParasiticGasCapacity             = 0.0 ! capacity of parasitic gas consumption rate, input by user [W]
-  REAL(r64)    :: RTF                              = 0.0 ! Heater runtime fraction, including PLF curve impacts
+  REAL    :: ParasiticGasCapacity             = 0.0 ! capacity of parasitic gas consumption rate, input by user [W]
+  REAL    :: RTF                              = 0.0 ! Heater runtime fraction, including PLF curve impacts
   INTEGER      :: RTFErrorIndex                    = 0   ! used in recurring error warnings
   INTEGER      :: RTFErrorCount                    = 0   ! used in recurring error warnings
   INTEGER      :: PLFErrorIndex                    = 0   ! used in recurring error warnings
@@ -182,13 +182,13 @@ SUBROUTINE SimulateHeatingCoilComponents(CompName,FirstHVACIteration,QCoilReq,Co
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT (IN)            :: FirstHVACIteration
   CHARACTER(len=*), INTENT(IN)    :: CompName
-  REAL(r64),    INTENT (IN), OPTIONAL  :: QCoilReq        ! coil load to be met
+  REAL,    INTENT (IN), OPTIONAL  :: QCoilReq        ! coil load to be met
   INTEGER, OPTIONAL               :: CompIndex
-  REAL(r64),    INTENT (OUT), OPTIONAL :: QCoilActual    ! coil load actually delivered returned to calling component
+  REAL,    INTENT (OUT), OPTIONAL :: QCoilActual    ! coil load actually delivered returned to calling component
   LOGICAL, INTENT(IN), OPTIONAL   :: SuppHeat       ! True if current heating coil is a supplemental heating coil
                                                     ! in a unitary system
   INTEGER, OPTIONAL, INTENT(IN)   :: FanOpMode      ! fan operating mode, CycFanCycCoil or ContFanCycCoil
-  REAL(r64), OPTIONAL, INTENT(IN)      :: PartLoadRatio  ! part-load ratio of heating coil
+  REAL, OPTIONAL, INTENT(IN)      :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
@@ -201,10 +201,10 @@ SUBROUTINE SimulateHeatingCoilComponents(CompName,FirstHVACIteration,QCoilReq,Co
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: CoilNum               ! The HeatingCoil that you are currently loading input into
-  REAL(r64) :: QCoilActual2          ! coil load actually delivered returned from specific coil
+  REAL :: QCoilActual2          ! coil load actually delivered returned from specific coil
   INTEGER   :: OpMode                ! fan operating mode
-  REAL(r64) :: PartLoadFrac          ! part-load fraction of heating coil
-  REAL(r64) :: QCoilRequired         ! local variable for optional argument
+  REAL :: PartLoadFrac          ! part-load fraction of heating coil
+  REAL :: QCoilRequired         ! local variable for optional argument
 
           ! FLOW:
   ! Obtains and Allocates HeatingCoil related parameters from input file
@@ -354,7 +354,7 @@ SUBROUTINE GetHeatingCoilInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
     INTEGER                       :: MaxNums=0                ! Maximum number of numeric input fields
@@ -657,10 +657,10 @@ SUBROUTINE GetHeatingCoilInput
 
         IF (HeatingCoil(CoilNum)%ReclaimHeatingSource == CONDENSER_REFRIGERATION) THEN
            IF (lNumericBlanks(1))THEN
-             HeatingCoil(CoilNum)%Efficiency = 0.8d0
+             HeatingCoil(CoilNum)%Efficiency = 0.8
            ELSE
              HeatingCoil(CoilNum)%Efficiency       = Numbers(1)
-             IF(Numbers(1) .LT. 0.0d0 .OR. Numbers(1) .GT. 0.9d0) THEN
+             IF(Numbers(1) .LT. 0.0 .OR. Numbers(1) .GT. 0.9) THEN
                CALL ShowSevereError(TRIM(CurrentModuleObject)//', "'//TRIM(HeatingCoil(CoilNum)%Name)//&
                            '" heat reclaim recovery efficiency must be >= 0 and <=0.9')
                ErrorsFound = .TRUE.
@@ -668,10 +668,10 @@ SUBROUTINE GetHeatingCoilInput
            END IF
         ELSE
            IF (lNumericBlanks(1))THEN
-             HeatingCoil(CoilNum)%Efficiency = 0.25d0
+             HeatingCoil(CoilNum)%Efficiency = 0.25
            ELSE
              HeatingCoil(CoilNum)%Efficiency       = Numbers(1)
-             IF(Numbers(1) .LT. 0.0d0 .OR. Numbers(1) .GT. 0.3d0) THEN
+             IF(Numbers(1) .LT. 0.0 .OR. Numbers(1) .GT. 0.3) THEN
                CALL ShowSevereError(TRIM(CurrentModuleObject)//', "'//TRIM(HeatingCoil(CoilNum)%Name)//&
                            '" heat reclaim recovery efficiency must be >= 0 and <=0.3')
                ErrorsFound = .TRUE.
@@ -688,7 +688,7 @@ SUBROUTINE GetHeatingCoilInput
         !parasitic electric load associated with the desuperheater heating coil
         HeatingCoil(CoilNum)%ParasiticElecLoad      = Numbers(2)
 
-        IF(Numbers(2) .LT. 0.0d0) THEN
+        IF(Numbers(2) .LT. 0.0) THEN
           CALL ShowSevereError(TRIM(CurrentModuleObject)//', "'//TRIM(HeatingCoil(CoilNum)%Name)//&
                            '" parasitic electric load must be >= 0')
           ErrorsFound = .TRUE.
@@ -800,7 +800,7 @@ SUBROUTINE InitHeatingCoil(CoilNum, FirstHVACIteration, QCoilRequired)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   Intent(IN) :: CoilNum
   LOGICAL,   Intent(IN) :: FirstHVACIteration
-  REAL(r64), Intent(IN) :: QCoilRequired
+  REAL, Intent(IN) :: QCoilRequired
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1029,17 +1029,17 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: CoilInTemp
-  REAL(r64)           :: CoilOutTemp
-  REAL(r64)           :: CoilOutHumRat
-  REAL(r64)           :: DesCoilLoad
-  REAL(r64)           :: DesPriVolFlow
-  REAL(r64)           :: DesVolFlow
-  REAL(r64)           :: DesMassFlow
-  REAL(r64)           :: CpAir
-  REAL(r64)           :: OutAirFrac
-  REAL(r64)           :: RhoAirStd
-  REAL(r64)           :: CpAirStd
+  REAL           :: CoilInTemp
+  REAL           :: CoilOutTemp
+  REAL           :: CoilOutHumRat
+  REAL           :: DesCoilLoad
+  REAL           :: DesPriVolFlow
+  REAL           :: DesVolFlow
+  REAL           :: DesMassFlow
+  REAL           :: CpAir
+  REAL           :: OutAirFrac
+  REAL           :: RhoAirStd
+  REAL           :: CpAirStd
 
   CoilInTemp = 0.0
   CoilOutTemp = 0.0
@@ -1050,7 +1050,7 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
   DesMassFlow = 0.0
   CpAir = 0.0
   OutAirFrac = 0.0
-  CpAirStd = PsyCpAirFnWTdb(0.0d0,20.0d0)
+  CpAirStd = PsyCpAirFnWTdb(0.0,20.0)
   RhoAirStd = StdRhoAir
 
   IF (HeatingCoil(CoilNum)%NominalCapacity == AutoSize) THEN
@@ -1085,17 +1085,17 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
           ELSE
             OutAirFrac = 1.0
           END IF
-          OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
+          OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
         ELSE
           OutAirFrac = 1.0
         END IF
         ! coil inlet temperature
         IF (CurOASysNum == 0 .AND. PrimaryAirSystem(CurSysNum)%NumOAHeatCoils > 0) THEN
           CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PreheatTemp + &
-                         (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                         (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
         ELSE
           CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%HeatOutTemp + &
-                         (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                         (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
         END IF
         ! coil load
         IF (CurOASysNum > 0) THEN
@@ -1137,10 +1137,10 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
         IF (TermUnitSingDuct .OR. TermUnitPIU) THEN
           CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%HeatDesTemp
           CoilOutHumRat = FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat
-          CpAir = PsyCpAirFnWTdb(CoilOutHumRat, 0.5d0*(CoilInTemp+CoilOutTemp))
+          CpAir = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp))
           DesCoilLoad = CpAir * RhoAirStd * TermUnitSizing(CurZoneEqNum)%AirVolFlow * (CoilOutTemp-CoilInTemp)
         ELSE IF (TermUnitIU) THEN
-          IF (TermUnitSizing(CurZoneEqNum)%InducRat > 0.01d0) THEN
+          IF (TermUnitSizing(CurZoneEqNum)%InducRat > 0.01) THEN
             DesPriVolFlow = TermUnitSizing(CurZoneEqNum)%AirVolFlow / TermUnitSizing(CurZoneEqNum)%InducRat
             CpAir = PsyCpAirFnWTdb(FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat,FinalZoneSizing(CurZoneEqNum)%HeatDesTemp)
             ! the design heating coil load is the zone load minus whatever the central system does. Note that
@@ -1153,7 +1153,7 @@ SUBROUTINE SizeHeatingCoil(CoilNum)
         ELSE
           CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%HeatDesTemp
           CoilOutHumRat = FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat
-          CpAir = PsyCpAirFnWTdb(CoilOutHumRat, 0.5d0*(CoilInTemp+CoilOutTemp))
+          CpAir = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp))
           DesCoilLoad = CpAir * FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow * (CoilOutTemp-CoilInTemp)
         END IF
         HeatingCoil(CoilNum)%NominalCapacity = DesCoilLoad
@@ -1213,9 +1213,9 @@ Subroutine CalcElectricHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLo
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       INTEGER,   INTENT(IN)  :: CoilNum        ! index to heating coil
-      REAL(r64), INTENT(OUT) :: QCoilActual    ! coil load actually delivered (W)
+      REAL, INTENT(OUT) :: QCoilActual    ! coil load actually delivered (W)
       INTEGER,   INTENT(IN)  :: FanOpMode      ! fan operating mode
-      REAL(r64), INTENT(IN)  :: PartLoadRatio  ! part-load ratio of heating coil
+      REAL, INTENT(IN)  :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1227,16 +1227,16 @@ Subroutine CalcElectricHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLo
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL(r64) AirMassFlow  ! [kg/sec]
-      REAL(r64) TempAirIn    ! [C]
-      REAL(r64) TempAirOut   ! [C]
-      REAL(r64) Win
-      REAL(r64) Effic
-      REAL(r64) CapacitanceAir
-      REAL(r64) HeatingCoilLoad
-      REAL(r64) QCoilReq
-      REAL(r64) QCoilCap
-      REAL(r64) TempSetPoint
+      REAL AirMassFlow  ! [kg/sec]
+      REAL TempAirIn    ! [C]
+      REAL TempAirOut   ! [C]
+      REAL Win
+      REAL Effic
+      REAL CapacitanceAir
+      REAL HeatingCoilLoad
+      REAL QCoilReq
+      REAL QCoilCap
+      REAL TempSetPoint
       Integer Control
 
    Effic        = HeatingCoil(CoilNum)%Efficiency
@@ -1334,8 +1334,8 @@ Subroutine CalcElectricHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLo
                                              HeatingCoil(CoilNum)%OutletAirHumRat)
 
    QCoilActual = HeatingCoilLoad
-   IF (ABS(HeatingCoil(CoilNum)%NominalCapacity) < 1.d-8) THEN
-     LoopHeatingCoilMaxRTF = MAX(LoopHeatingCoilMaxRTF,0.0d0)
+   IF (ABS(HeatingCoil(CoilNum)%NominalCapacity) < 1.*10**-8) THEN
+     LoopHeatingCoilMaxRTF = MAX(LoopHeatingCoilMaxRTF,0.0)
    ELSE
      LoopHeatingCoilMaxRTF = MAX(LoopHeatingCoilMaxRTF,HeatingCoilLoad/HeatingCoil(CoilNum)%NominalCapacity)
    ENDIF
@@ -1366,9 +1366,9 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       INTEGER,   INTENT(IN)  :: CoilNum        ! index to heating coil
-      REAL(r64), INTENT(OUT) :: QCoilActual    ! coil load actually delivered (W)
+      REAL, INTENT(OUT) :: QCoilActual    ! coil load actually delivered (W)
       INTEGER,   INTENT(IN)  :: FanOpMode      ! fan operating mode
-      REAL(r64), INTENT(IN)  :: PartLoadRatio  ! part-load ratio of heating coil
+      REAL, INTENT(IN)  :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1380,19 +1380,19 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL(r64) AirMassFlow  ! [kg/sec]
-      REAL(r64) TempAirIn    ! [C]
-      REAL(r64) TempAirOut   ! [C]
-      REAL(r64) Win
-      REAL(r64) Effic
-      REAL(r64) CapacitanceAir
-      REAL(r64) HeatingCoilLoad
-      REAL(r64) QCoilReq
-      REAL(r64) QCoilCap
-      REAL(r64) TempSetPoint
+      REAL AirMassFlow  ! [kg/sec]
+      REAL TempAirIn    ! [C]
+      REAL TempAirOut   ! [C]
+      REAL Win
+      REAL Effic
+      REAL CapacitanceAir
+      REAL HeatingCoilLoad
+      REAL QCoilReq
+      REAL QCoilCap
+      REAL TempSetPoint
       Integer Control
-      REAL(r64) PartLoadRat
-      REAL(r64) PLF
+      REAL PartLoadRat
+      REAL PLF
 
    Effic        = HeatingCoil(CoilNum)%Efficiency
    TempAirIn    = HeatingCoil(CoilNum)%InletAirTemp
@@ -1457,7 +1457,7 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
       !The HeatingCoilLoad is the change in the enthalpy of the Heating
       HeatingCoil(CoilNum)%GasUseLoad = HeatingCoilLoad/Effic
       HeatingCoil(CoilNum)%ElecUseLoad = HeatingCoil(CoilNum)%ParasiticElecLoad*PartLoadRat
-      HeatingCoil(CoilNum)%ParasiticGasRate = HeatingCoil(CoilNum)%ParasiticGasCapacity * (1.0d0 - PartLoadRat)
+      HeatingCoil(CoilNum)%ParasiticGasRate = HeatingCoil(CoilNum)%ParasiticGasCapacity * (1.0 - PartLoadRat)
 
   Else ! If not running Conditions do not change across coil from inlet to outlet
 
@@ -1477,7 +1477,7 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
         HeatingCoil(CoilNum)%GasUseLoad = 0.0
       ELSE
         PLF = CurveValue(HeatingCoil(CoilNum)%PLFCurveIndex, PartLoadRat)
-        IF (PLF < 0.7d0) THEN
+        IF (PLF < 0.7) THEN
           IF (HeatingCoil(CoilNum)%PLFErrorCount < 1) THEN
             HeatingCoil(CoilNum)%PLFErrorCount=HeatingCoil(CoilNum)%PLFErrorCount+1
             CALL ShowWarningError(TRIM(cAllCoilTypes(HeatingCoil(CoilNum)%HCoilType_Num))//' = '//TRIM(HeatingCoil(CoilNum)%Name))
@@ -1490,11 +1490,11 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
                         ', Heating coil PLF curve < 0.7 warning continues... ',  &
                         HeatingCoil(CoilNum)%PLFErrorIndex,PLF,PLF)
           END IF
-          PLF = 0.7d0
+          PLF = 0.7
         END IF
         ! Modify the Gas Coil Consumption and parasitic loads based on PLF curve
         HeatingCoil(CoilNum)%RTF = PartLoadRat/PLF
-        IF (HeatingCoil(CoilNum)%RTF > 1.0d0 .and. ABS(HeatingCoil(CoilNum)%RTF-1.0d0) > .001d0) THEN
+        IF (HeatingCoil(CoilNum)%RTF > 1.0 .and. ABS(HeatingCoil(CoilNum)%RTF-1.0) > .001) THEN
           IF (HeatingCoil(CoilNum)%RTFErrorCount < 1) THEN
             HeatingCoil(CoilNum)%RTFErrorCount=HeatingCoil(CoilNum)%RTFErrorCount+1
             CALL ShowWarningError(TRIM(cAllCoilTypes(HeatingCoil(CoilNum)%HCoilType_Num))//' = '//TRIM(HeatingCoil(CoilNum)%Name))
@@ -1512,7 +1512,7 @@ Subroutine CalcGasHeatingCoil(CoilNum,QCoilReq,QCoilActual,FanOpMode,PartLoadRat
         END IF
         HeatingCoil(CoilNum)%ElecUseLoad = HeatingCoil(CoilNum)%ParasiticElecLoad * HeatingCoil(CoilNum)%RTF
         HeatingCoil(CoilNum)%GasUseLoad  = HeatingCoil(CoilNum)%NominalCapacity / Effic * HeatingCoil(CoilNum)%RTF
-        HeatingCoil(CoilNum)%ParasiticGasRate = HeatingCoil(CoilNum)%ParasiticGasCapacity * (1.0d0 - HeatingCoil(CoilNum)%RTF)
+        HeatingCoil(CoilNum)%ParasiticGasRate = HeatingCoil(CoilNum)%ParasiticGasCapacity * (1.0 - HeatingCoil(CoilNum)%RTF)
         ! Fan power will also be modified by the heating coil's part load fraction
         ! OnOffFanPartLoadFraction passed to fan via DataHVACGlobals (cycling fan only)
         IF(FanOpMode .EQ. CycFanCycCoil)THEN
@@ -1568,8 +1568,8 @@ Subroutine CalcDesuperheaterHeatingCoil(CoilNum,QCoilReq,QCoilActual)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
    INTEGER,      INTENT (IN)  :: CoilNum        ! index to desuperheater heating coil
-   REAL(r64),    INTENT (IN)  :: QCoilReq       ! load requested by the simulation for load based control [W]
-   REAL(r64),    INTENT (OUT) :: QCoilActual    ! coil load actually delivered
+   REAL,    INTENT (IN)  :: QCoilReq       ! load requested by the simulation for load based control [W]
+   REAL,    INTENT (OUT) :: QCoilActual    ! coil load actually delivered
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1581,16 +1581,16 @@ Subroutine CalcDesuperheaterHeatingCoil(CoilNum,QCoilReq,QCoilActual)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL(r64) AirMassFlow     ! air mass flow through the desuperheater heating coil [kg/sec]
-   REAL(r64) AvailTemp       ! Lowest temperature available from desuperheater (~T condensing)[C]
-   REAL(r64) TempAirIn       ! temperature of the air entering the desuperheater heating coil [C]
-   REAL(r64) TempAirOut      ! temperature of the air leaving the desuperheater heating coil [C]
-   REAL(r64) Win             ! humidity ratio of the air entering the desuperheater heating coil [kg/kg]
-   REAL(r64) Effic           ! ratio of condenser waste heat reclaimed to total condenser waste heat rejected
-   REAL(r64) CapacitanceAir  ! MdotCp of air entering the desuperheater heating coil
-   REAL(r64) HeatingCoilLoad ! actual load delivered by the desuperheater heating coil [W]
-   REAL(r64) QCoilCap        ! available capacity of the desuperheater heating coil [W]
-   REAL(r64) TempSetPoint    ! setpoint temperature to be met when using temperature based control [C]
+   REAL AirMassFlow     ! air mass flow through the desuperheater heating coil [kg/sec]
+   REAL AvailTemp       ! Lowest temperature available from desuperheater (~T condensing)[C]
+   REAL TempAirIn       ! temperature of the air entering the desuperheater heating coil [C]
+   REAL TempAirOut      ! temperature of the air leaving the desuperheater heating coil [C]
+   REAL Win             ! humidity ratio of the air entering the desuperheater heating coil [kg/kg]
+   REAL Effic           ! ratio of condenser waste heat reclaimed to total condenser waste heat rejected
+   REAL CapacitanceAir  ! MdotCp of air entering the desuperheater heating coil
+   REAL HeatingCoilLoad ! actual load delivered by the desuperheater heating coil [W]
+   REAL QCoilCap        ! available capacity of the desuperheater heating coil [W]
+   REAL TempSetPoint    ! setpoint temperature to be met when using temperature based control [C]
    INTEGER   SourceID        ! waste heat source id number
 
    Effic          = HeatingCoil(CoilNum)%Efficiency
@@ -1615,7 +1615,7 @@ Subroutine CalcDesuperheaterHeatingCoil(CoilNum,QCoilReq,QCoilActual)
          AvailTemp = HeatReclaimRefrigCondenser(SourceID)%AvailTemperature
          HeatingCoil(CoilNum)%RTF = 1.0
         IF(AvailTemp .LE. TempAirIn)THEN
-          HeatingCoil(CoilNum)%NominalCapacity = 0.d0
+          HeatingCoil(CoilNum)%NominalCapacity = 0.
           CALL ShowRecurringWarningErrorAtEnd('Coil:Heating:Desuperheater '// &
             TRIM(HeatingCoil(CoilNum)%Name) // &
             ' - Waste heat source temperature was too low to be useful.',&
@@ -1836,7 +1836,7 @@ SUBROUTINE ReportHeatingCoil(CoilNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL(r64) :: ReportingConstant
+   REAL :: ReportingConstant
 
    ReportingConstant = TimeStepSys*SecInHour
  ! report the HeatingCoil energy from this component
@@ -1937,7 +1937,7 @@ SUBROUTINE CheckHeatingCoilSchedule(CompType,CompName,Value,CompIndex)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: CompType !unused1208
   CHARACTER(len=*), INTENT(IN) :: CompName
-  REAL(r64), INTENT(OUT)            :: Value
+  REAL, INTENT(OUT)            :: Value
   INTEGER, INTENT(INOUT)       :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2024,7 +2024,7 @@ FUNCTION GetCoilCapacity(CoilType,CoilName,ErrorsFound) RESULT(CoilCapacity)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL(r64)                    :: CoilCapacity ! returned capacity of matched coil
+  REAL                    :: CoilCapacity ! returned capacity of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

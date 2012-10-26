@@ -49,14 +49,14 @@ PUBLIC ! Everything private unless explicitly made public
         CHARACTER(len=*), INTENT (IN)           :: CompType            ! Type of component
         INTEGER, INTENT (INOUT)                 :: CompNum             ! Index of component in component array
         LOGICAL, INTENT (IN)                    :: FirstHVACIteration  ! Flag for 1st HVAV iteration in the time step
-        REAL(r64),    INTENT (IN)               :: QZnReq              ! Zone load to be met
+        REAL,    INTENT (IN)               :: QZnReq              ! Zone load to be met
         INTEGER, INTENT (IN)                    :: ActuatedNode        ! Node that controls unit output
-        REAL(r64),    INTENT (IN)               :: MaxFlow             ! Maximum water flow
-        REAL(r64),    INTENT (IN)               :: MinFlow             ! Minimum water flow
+        REAL,    INTENT (IN)               :: MaxFlow             ! Maximum water flow
+        REAL,    INTENT (IN)               :: MinFlow             ! Minimum water flow
         INTEGER, INTENT (IN), OPTIONAL          :: TempInNode          ! Inlet node for output calculation
         INTEGER, INTENT (IN), OPTIONAL          :: TempOutNode         ! Outlet node for output calculation
-        REAL(r64),    INTENT (IN)               :: ControlOffset       ! Tolerance
-        REAL(r64),    INTENT (IN), OPTIONAL     :: AirMassFlow         ! Air mass flow rate
+        REAL,    INTENT (IN)               :: ControlOffset       ! Tolerance
+        REAL,    INTENT (IN), OPTIONAL     :: AirMassFlow         ! Air mass flow rate
         INTEGER, INTENT (IN), OPTIONAL          :: Action              ! 1=reverse; 2=normal
         INTEGER, INTENT (INOUT)                 :: ControlCompTypeNum  ! Internal control comp for unit
         INTEGER, INTENT (INOUT)                 :: CompErrIndex        ! Error count for recurring error
@@ -173,9 +173,9 @@ PUBLIC ! Everything private unless explicitly made public
     !  with count of occurences and optional max, min, sum
     CHARACTER(len=*) :: Message     ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: Index       ! Recurring message index, if zero, next available index is assigned
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -189,9 +189,9 @@ PUBLIC ! Everything private unless explicitly made public
     !  with count of occurences and optional max, min, sum
     CHARACTER(len=*) :: Message     ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: Index       ! Recurring message index, if zero, next available index is assigned
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -205,9 +205,9 @@ PUBLIC ! Everything private unless explicitly made public
     !  over several lines with optional max, min, sum
     CHARACTER(len=*) :: Message     ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: Index       ! Recurring message index, if zero, next available index is assigned
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-    REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+    REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -219,7 +219,7 @@ PUBLIC ! Everything private unless explicitly made public
                ReportFreq,ResourceTypeKey,EndUseKey,EndUseSubKey,GroupKey,ZoneKey,ZoneMult,ZoneListMult,IndexGroupKey)
     USE DataPrecisionGlobals
       CHARACTER(len=*), INTENT(IN) :: VariableName   ! String Name of variable
-      REAL(r64), INTENT(IN), TARGET     :: ActualVariable ! Actual Variable, used to set up pointer
+      REAL, INTENT(IN), TARGET     :: ActualVariable ! Actual Variable, used to set up pointer
       CHARACTER(len=*), INTENT(IN) :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
       CHARACTER(len=*), INTENT(IN) :: VariableTypeKey ! State, Average=1, NonState, Sum=2
       CHARACTER(len=*), INTENT(IN) :: KeyedValue     ! Associated Key for this variable
@@ -247,7 +247,7 @@ PUBLIC ! Everything private unless explicitly made public
                ReportFreq,ResourceTypeKey,EndUseKey,EndUseSubKey,GroupKey,ZoneKey,ZoneMult,ZoneListMult,IndexGroupKey)
     USE DataPrecisionGlobals
       CHARACTER(len=*), INTENT(IN) :: VariableName   ! String Name of variable
-      REAL(r64), INTENT(IN), TARGET     :: ActualVariable ! Actual Variable, used to set up pointer
+      REAL, INTENT(IN), TARGET     :: ActualVariable ! Actual Variable, used to set up pointer
       CHARACTER(len=*), INTENT(IN) :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
       CHARACTER(len=*), INTENT(IN) :: VariableTypeKey ! State, Average=1, NonState, Sum=2
       INTEGER, INTENT(IN)          :: KeyedValue     ! Associated Key for this variable
@@ -267,8 +267,8 @@ PUBLIC ! Everything private unless explicitly made public
     FUNCTION GetInternalVariableValue(varType, keyVarIndex) RESULT (resultVal)
       USE DataPrecisionGlobals
       INTEGER, INTENT(IN)      :: keyVarIndex  ! Array index (from call to GetVariableKeys
-      INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL(r64), 3=meter, from call to GetVariableKeyCountandType
-      REAL(r64)                :: resultVal    ! value returned
+      INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL, 3=meter, from call to GetVariableKeyCountandType
+      REAL                :: resultVal    ! value returned
     END FUNCTION
   END INTERFACE
 
@@ -276,8 +276,8 @@ PUBLIC ! Everything private unless explicitly made public
     FUNCTION GetInternalVariableValueExternalInterface(varType, keyVarIndex) RESULT (resultVal)
       USE DataPrecisionGlobals
       INTEGER, INTENT(IN)      :: keyVarIndex  ! Array index (from call to GetVariableKeys
-      INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL(r64), 3=meter, from call to GetVariableKeyCountandType
-      REAL(r64)                :: resultVal    ! value returned
+      INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL, 3=meter, from call to GetVariableKeyCountandType
+      REAL                :: resultVal    ! value returned
     END FUNCTION
   END INTERFACE
 
@@ -289,7 +289,7 @@ PUBLIC ! Everything private unless explicitly made public
       CHARACTER(len=*), INTENT(IN)  :: cControlTypeName   ! control type id for actuator
       CHARACTER(len=*), INTENT(IN)  :: cUnits             ! control value units
       LOGICAL,  TARGET, INTENT(IN)  :: lEMSActuated       ! pointer target for remote actuation control logical
-      REAL(r64),TARGET, INTENT(IN)  :: rValue             ! pointer target for remote real value to be used
+      REAL,TARGET, INTENT(IN)  :: rValue             ! pointer target for remote real value to be used
     END SUBROUTINE SetupEMSRealActuator
     SUBROUTINE SetupEMSIntegerActuator (cComponentTypeName, cUniqueIDName, cControlTypeName, cUnits, lEMSActuated, iValue )
       USE DataPrecisionGlobals
@@ -317,7 +317,7 @@ PUBLIC ! Everything private unless explicitly made public
       CHARACTER(len=*), INTENT(IN)  :: cDataTypeName      ! general internal variable name
       CHARACTER(len=*), INTENT(IN)  :: cUniqueIDName      ! unique id for internal var
       CHARACTER(len=*), INTENT(IN)  :: cUnits             ! registered units
-      REAL(r64), TARGET, INTENT(IN) :: rValue             ! pointer target for remote real value to be accessed
+      REAL, TARGET, INTENT(IN) :: rValue             ! pointer target for remote real value to be accessed
     END SUBROUTINE SetupEMSRealInternalVariable
     SUBROUTINE SetupEMSIntegerInternalVariable(cDataTypeName, cUniqueIDName, cUnits,  iValue )
       USE DataPrecisionGlobals
@@ -351,13 +351,13 @@ INTERFACE SetupZoneInternalGain
     CHARACTER(len=*),  INTENT(IN) :: cComponentObject ! class name for device contributing internal gain
     CHARACTER(len=*),  INTENT(IN) :: cComponentName  ! user unique name for device
     INTEGER         ,  INTENT(IN) :: IntGainComp_TypeOfNum ! integer identify for device
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ConvectionGainRate          ! target convection gain value (W)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ReturnAirConvectionGainRate ! target return air sensible gain (W)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ThermalRadiationGainRate  ! target IR radiation gain value (W)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: LatentGainRate           ! target latent (energy) gain value (W)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ReturnAirLatentGainRate ! target return air latent gain (W)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: CarbonDioxideGainRate ! target CO2 gain value (m3/s)
-    REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: GenericContamGainRate ! target generic air contaminant value (m3/s)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: ConvectionGainRate          ! target convection gain value (W)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: ReturnAirConvectionGainRate ! target return air sensible gain (W)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: ThermalRadiationGainRate  ! target IR radiation gain value (W)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: LatentGainRate           ! target latent (energy) gain value (W)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: ReturnAirLatentGainRate ! target return air latent gain (W)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: CarbonDioxideGainRate ! target CO2 gain value (m3/s)
+    REAL, TARGET, OPTIONAL, INTENT(IN) :: GenericContamGainRate ! target generic air contaminant value (m3/s)
   END SUBROUTINE
 END INTERFACE
 

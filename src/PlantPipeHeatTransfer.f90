@@ -54,7 +54,7 @@ PRIVATE ! Everything private unless explicitly made public
   INTEGER, PARAMETER  :: CurrentTimeIndex   = 2
   INTEGER, PARAMETER  :: TentativeTimeIndex = 3
 
-  REAL(r64), PARAMETER :: InnerDeltaTime = 60.0d0 !one minute time step in seconds
+  REAL, PARAMETER :: InnerDeltaTime = 60.0 !one minute time step in seconds
    
   ! DERIVED TYPE DEFINITIONS
 TYPE PipeHTData
@@ -66,8 +66,8 @@ TYPE PipeHTData
   CHARACTER(len=MaxNameLength) :: EnvrVelSchedule       = Blank  ! temperature schedule for environmental temp
   CHARACTER(len=MaxNameLength) :: EnvrZone              = Blank  ! zone providing environmental temp
   CHARACTER(len=MaxNameLength) :: EnvrAirNode           = Blank  ! outside air node providing environmental temp
-  REAL(r64)                    :: Length                =0.0     ! total pipe length [m]
-  REAL(r64)                    :: PipeID                =0.0     ! pipe inside diameter [m]
+  REAL                    :: Length                =0.0     ! total pipe length [m]
+  REAL                    :: PipeID                =0.0     ! pipe inside diameter [m]
   CHARACTER(len=MaxNameLength) :: InletNode             = Blank  ! inlet node name
   CHARACTER(len=MaxNameLength) :: OutletNode            = Blank  ! outlet node name
   INTEGER                      :: InletNodeNum          =0       ! inlet node number
@@ -81,69 +81,69 @@ TYPE PipeHTData
   INTEGER                      :: EnvrZonePtr           =0       ! pointer to zone number used to set environmental temp
   INTEGER                      :: EnvrAirNodeNum        =0       ! pointer to outside air node used to set environmental temp
   INTEGER                      :: NumSections           =0       ! total number of nodes along pipe length
-  REAL(r64)                    :: FluidSpecHeat         =0.0     ! fluid Cp [J/kg.K]
-  REAL(r64)                    :: FluidDensity          =0.0     ! density [kg/m3]
-  REAL(r64)                    :: MaxFlowRate           =0.0     ! max flow rate (from loop/node data)
-  REAL(r64)                    :: FluidSectionVol       =0.0     ! volume of each pipe section (node) [m^3]
-  REAL(r64)                    :: InsideArea            =0.0     ! pipe section inside surface area [m^2]
-  REAL(r64)                    :: OutsideArea           =0.0     ! pipe section outside surface area [m^2]
-  REAL(r64)                    :: SectionArea           =0.0     ! cross sectional area [m^2]
-  REAL(r64)                    :: PipeHeatCapacity      =0.0     ! heat capacity of pipe section [J/m.K]
-  REAL(r64)                    :: PipeOD                =0.0     ! pipe outside diameter [m]
-  REAL(r64)                    :: PipeCp                =0.0     ! pipe materail Cp [J/kg.K]
-  REAL(r64)                    :: PipeDensity           =0.0     ! pipe material density [kg/m3]
-  REAL(r64)                    :: PipeConductivity      =0.0     ! pipe material thermal conductivity [W/m.K]
-  REAL(r64)                    :: InsulationOD          =0.0     ! insulation outside diameter [m]
-  REAL(r64)                    :: InsulationCp          =0.0     ! insulation  specific heat [J/kg.K]
-  REAL(r64)                    :: InsulationDensity     =0.0     ! insulation density [kg/m3]
-  REAL(r64)                    :: InsulationConductivity=0.0     ! insulation conductivity [W/m.K]
-  REAL(r64)                    :: InsulationThickness   =0.0     ! insulation thickness [m]
-  REAL(r64)                    :: InsulationResistance  =0.0     ! Insulation thermal resistance [m2.K/W]
-  REAL(r64)                    :: CurrentSimTime        =0.0     ! Current simulation time [hr]
-  REAL(r64)                    :: PreviousSimTime       =0.0     ! simulation time the report data was last updated
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TentativeFluidTemp
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: FluidTemp              ! arrays for fluid and pipe temperatures at each node
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: PreviousFluidTemp
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TentativePipeTemp
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: PipeTemp
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: PreviousPipeTemp
+  REAL                    :: FluidSpecHeat         =0.0     ! fluid Cp [J/kg.K]
+  REAL                    :: FluidDensity          =0.0     ! density [kg/m3]
+  REAL                    :: MaxFlowRate           =0.0     ! max flow rate (from loop/node data)
+  REAL                    :: FluidSectionVol       =0.0     ! volume of each pipe section (node) [m^3]
+  REAL                    :: InsideArea            =0.0     ! pipe section inside surface area [m^2]
+  REAL                    :: OutsideArea           =0.0     ! pipe section outside surface area [m^2]
+  REAL                    :: SectionArea           =0.0     ! cross sectional area [m^2]
+  REAL                    :: PipeHeatCapacity      =0.0     ! heat capacity of pipe section [J/m.K]
+  REAL                    :: PipeOD                =0.0     ! pipe outside diameter [m]
+  REAL                    :: PipeCp                =0.0     ! pipe materail Cp [J/kg.K]
+  REAL                    :: PipeDensity           =0.0     ! pipe material density [kg/m3]
+  REAL                    :: PipeConductivity      =0.0     ! pipe material thermal conductivity [W/m.K]
+  REAL                    :: InsulationOD          =0.0     ! insulation outside diameter [m]
+  REAL                    :: InsulationCp          =0.0     ! insulation  specific heat [J/kg.K]
+  REAL                    :: InsulationDensity     =0.0     ! insulation density [kg/m3]
+  REAL                    :: InsulationConductivity=0.0     ! insulation conductivity [W/m.K]
+  REAL                    :: InsulationThickness   =0.0     ! insulation thickness [m]
+  REAL                    :: InsulationResistance  =0.0     ! Insulation thermal resistance [m2.K/W]
+  REAL                    :: CurrentSimTime        =0.0     ! Current simulation time [hr]
+  REAL                    :: PreviousSimTime       =0.0     ! simulation time the report data was last updated
+  REAL, ALLOCATABLE, DIMENSION(:) :: TentativeFluidTemp
+  REAL, ALLOCATABLE, DIMENSION(:) :: FluidTemp              ! arrays for fluid and pipe temperatures at each node
+  REAL, ALLOCATABLE, DIMENSION(:) :: PreviousFluidTemp
+  REAL, ALLOCATABLE, DIMENSION(:) :: TentativePipeTemp
+  REAL, ALLOCATABLE, DIMENSION(:) :: PipeTemp
+  REAL, ALLOCATABLE, DIMENSION(:) :: PreviousPipeTemp
   INTEGER                      :: NumDepthNodes         =0       ! number of soil grid points in the depth direction
   INTEGER                      :: PipeNodeDepth         =0       ! soil depth grid point where pipe is located
   INTEGER                      :: PipeNodeWidth         =0       ! soil width grid point where pipe is located
-  REAL(r64)                    :: PipeDepth             =0.0     ! pipe burial depth [m]
-  REAL(r64)                    :: DomainDepth           =0.0     ! soil grid depth [m]
-  REAL(r64)                    :: dSregular             =0.0     ! grid spacing in cartesian domain [m]
-  REAL(r64)                    :: OutdoorConvCoef       =0.0     ! soil to air convection coefficient [W/m2.K]
+  REAL                    :: PipeDepth             =0.0     ! pipe burial depth [m]
+  REAL                    :: DomainDepth           =0.0     ! soil grid depth [m]
+  REAL                    :: dSregular             =0.0     ! grid spacing in cartesian domain [m]
+  REAL                    :: OutdoorConvCoef       =0.0     ! soil to air convection coefficient [W/m2.K]
   CHARACTER(len=MaxNameLength) :: SoilMaterial          =Blank   ! name of soil material:regular object
   INTEGER                      :: SoilMaterialNum       =0       ! soil material index in material data structure
   INTEGER                      :: MonthOfMinSurfTemp    =0       ! month of minimum ground surface temperature
-  REAL(r64)                    :: AvgGroundTemp         =0.0     ! annual average ground temperature [C]
-  REAL(r64)                    :: AvgGndTempAmp         =0.0     ! annual average amplitude of gnd temp [C]
+  REAL                    :: AvgGroundTemp         =0.0     ! annual average ground temperature [C]
+  REAL                    :: AvgGndTempAmp         =0.0     ! annual average amplitude of gnd temp [C]
   INTEGER                      :: PhaseShiftDays        =0       ! shift of minimum gnd surf temp from 1/1  [days]
-  REAL(r64)                    :: MinSurfTemp           =0.0     ! minimum annual surface temperature [C]
-  REAL(r64)                    :: SoilDensity           =0.0     ! density of soil [kg/m3]
-  REAL(r64)                    :: SoilDepth             =0.0     ! thickness of soil [m]
-  REAL(r64)                    :: SoilCp                =0.0     ! specific heat of soil [J/kg.K]
-  REAL(r64)                    :: SoilConductivity      =0.0     ! thermal conductivity of soil [W/m.K]
-  REAL(r64)                    :: SoilRoughness         =0.0     ! ground surface roughness
-  REAL(r64)                    :: SoilThermAbs          =0.0     ! ground surface thermal absorptivity
-  REAL(r64)                    :: SoilSolarAbs          =0.0     ! ground surface solar absorptivity
-  REAL(r64)                    :: CoefS1                =0.0     ! soil surface finite difference coefficient
-  REAL(r64)                    :: CoefS2                =0.0     ! soil surface finite difference coefficient
-  REAL(r64)                    :: CoefA1                =0.0     ! soil finite difference coefficient
-  REAL(r64)                    :: CoefA2                =0.0     ! soil finite difference coefficient
-  REAL(r64)                    :: FourierDS             =0.0     ! soil Fourier number based on grid spacing
-  REAL(r64)                    :: SoilDiffusivity       =0.0     ! soil thermal diffusivity [m2/s]
-  REAL(r64)                    :: SoilDiffusivityPerDay =0.0     ! soil thermal diffusivity [m2/day]
+  REAL                    :: MinSurfTemp           =0.0     ! minimum annual surface temperature [C]
+  REAL                    :: SoilDensity           =0.0     ! density of soil [kg/m3]
+  REAL                    :: SoilDepth             =0.0     ! thickness of soil [m]
+  REAL                    :: SoilCp                =0.0     ! specific heat of soil [J/kg.K]
+  REAL                    :: SoilConductivity      =0.0     ! thermal conductivity of soil [W/m.K]
+  REAL                    :: SoilRoughness         =0.0     ! ground surface roughness
+  REAL                    :: SoilThermAbs          =0.0     ! ground surface thermal absorptivity
+  REAL                    :: SoilSolarAbs          =0.0     ! ground surface solar absorptivity
+  REAL                    :: CoefS1                =0.0     ! soil surface finite difference coefficient
+  REAL                    :: CoefS2                =0.0     ! soil surface finite difference coefficient
+  REAL                    :: CoefA1                =0.0     ! soil finite difference coefficient
+  REAL                    :: CoefA2                =0.0     ! soil finite difference coefficient
+  REAL                    :: FourierDS             =0.0     ! soil Fourier number based on grid spacing
+  REAL                    :: SoilDiffusivity       =0.0     ! soil thermal diffusivity [m2/s]
+  REAL                    :: SoilDiffusivityPerDay =0.0     ! soil thermal diffusivity [m2/day]
   INTEGER                      :: AvgAnnualManualInput  =0       ! flag for method of bringing in annual avg data yes-1 no-0
-  REAL(r64), ALLOCATABLE, DIMENSION(:,:,:,:) :: T                ! soil temperature array
+  REAL, ALLOCATABLE, DIMENSION(:,:,:,:) :: T                ! soil temperature array
   LOGICAL                      :: BeginSimInit          =.TRUE.  ! begin sim and begin environment flag
   LOGICAL                      :: BeginSimEnvrn         =.TRUE.  ! begin sim and begin environment flag
   LOGICAL                      :: FirstHVACupdateFlag   =.TRUE.
   LOGICAL                      :: BeginEnvrnupdateFlag  =.TRUE.
   LOGICAL                      :: SolarExposed          =.TRUE.  ! Flag to determine if solar is included at ground surface
-  REAL(r64)                    :: SumTK                 =0.0     ! Sum of thickness/conductivity over all material layers
-  REAL(r64)                    :: ZoneHeatGainRate      =0.0     ! Lagged energy summation for zone heat gain {W}
+  REAL                    :: SumTK                 =0.0     ! Sum of thickness/conductivity over all material layers
+  REAL                    :: ZoneHeatGainRate      =0.0     ! Lagged energy summation for zone heat gain {W}
   INTEGER                      :: LoopNum               =0       ! PlantLoop index where this pipe lies
   INTEGER                      :: LoopSideNum           =0       ! PlantLoop%LoopSide index where this pipe lies
   INTEGER                      :: BranchNum             =0       ! ..LoopSide%Branch index where this pipe lies
@@ -153,16 +153,16 @@ END TYPE PipeHTData
 
 TYPE PipeHeatTransferReport
   ! Report data
-  REAL(r64)                    :: FluidInletTemp          =0.0 ! inlet temperature [C]
-  REAL(r64)                    :: FluidOutletTemp         =0.0 ! outlet temperature [C]
-  REAL(r64)                    :: MassFlowRate            =0.0 ! mass flow rate [kg/s]
-  REAL(r64)                    :: FluidHeatLossRate       =0.0 ! overall heat transfer rate from fluid to pipe [W]
-  REAL(r64)                    :: FluidHeatLossEnergy     =0.0 ! energy transferred from fluid to pipe [J]
-  REAL(r64)                    :: PipeInletTemp           =0.0 ! pipe temperature at inlet [C]
-  REAL(r64)                    :: PipeOutletTemp          =0.0 ! pipe temperature at Oulet [C]
-  REAL(r64)                    :: EnvironmentHeatLossRate =0.0 ! overall heat transfer rate from pipe to environment [W]
-  REAL(r64)                    :: EnvHeatLossEnergy       =0.0 ! energy transferred from pipe to environment [J]
-  REAL(r64)                    :: VolumeFlowRate          =0.0
+  REAL                    :: FluidInletTemp          =0.0 ! inlet temperature [C]
+  REAL                    :: FluidOutletTemp         =0.0 ! outlet temperature [C]
+  REAL                    :: MassFlowRate            =0.0 ! mass flow rate [kg/s]
+  REAL                    :: FluidHeatLossRate       =0.0 ! overall heat transfer rate from fluid to pipe [W]
+  REAL                    :: FluidHeatLossEnergy     =0.0 ! energy transferred from fluid to pipe [J]
+  REAL                    :: PipeInletTemp           =0.0 ! pipe temperature at inlet [C]
+  REAL                    :: PipeOutletTemp          =0.0 ! pipe temperature at Oulet [C]
+  REAL                    :: EnvironmentHeatLossRate =0.0 ! overall heat transfer rate from pipe to environment [W]
+  REAL                    :: EnvHeatLossEnergy       =0.0 ! energy transferred from pipe to environment [J]
+  REAL                    :: VolumeFlowRate          =0.0
 END TYPE PipeHeatTransferReport
 
 ! the model data structures
@@ -174,14 +174,14 @@ INTEGER      :: NumOfPipeHT            =0        ! Number of Pipe Heat Transfer 
 INTEGER      :: InletNodeNum           =0        ! module variable for inlet node number
 INTEGER      :: OutletNodeNum          =0        ! module variable for outlet node number
 INTEGER      :: PipeHTNum              =0        ! object index
-REAL(r64)    :: MassFlowRate           =0.0      ! pipe mass flow rate
-REAL(r64)    :: VolumeFlowRate         =0.0      ! pipe volumetric flow rate
-REAL(r64)    :: DeltaTime              =0.0      ! time change from last update
-REAL(r64)    :: InletTemp              =0.0      ! pipe inlet temperature
-REAL(r64)    :: OutletTemp             =0.0      ! pipe outlet temperature
-REAL(r64)    :: EnvironmentTemp        =0.0      ! environmental temperature (surrounding pipe)
-REAL(r64)    :: EnvHeatLossRate        =0.0      ! heat loss rate from pipe to the environment
-REAL(r64)    :: FluidHeatLossRate      =0.0      ! overall heat loss from fluid to pipe
+REAL    :: MassFlowRate           =0.0      ! pipe mass flow rate
+REAL    :: VolumeFlowRate         =0.0      ! pipe volumetric flow rate
+REAL    :: DeltaTime              =0.0      ! time change from last update
+REAL    :: InletTemp              =0.0      ! pipe inlet temperature
+REAL    :: OutletTemp             =0.0      ! pipe outlet temperature
+REAL    :: EnvironmentTemp        =0.0      ! environmental temperature (surrounding pipe)
+REAL    :: EnvHeatLossRate        =0.0      ! heat loss rate from pipe to the environment
+REAL    :: FluidHeatLossRate      =0.0      ! overall heat loss from fluid to pipe
 LOGICAL      :: GetPipeInputFlag       = .TRUE.  ! First time, input is "gotten"
 INTEGER      :: NumInnerTimeSteps      =0        ! the number of "inner" time steps for our model
 
@@ -371,8 +371,8 @@ SUBROUTINE GetPipesHeatTransfer
           ! SUBROUTINE PARAMETER DEFINITIONS:
  INTEGER, PARAMETER   :: NumPipeSections    = 20
  INTEGER, PARAMETER   :: NumberOfDepthNodes = 8  ! Number of nodes in the cartesian grid-Should be an even # for now
- REAL(r64), PARAMETER :: SecondsInHour      = SecInHour
- REAL(r64), PARAMETER :: HoursInDay         = 24.0d0
+ REAL, PARAMETER :: SecondsInHour      = SecInHour
+ REAL, PARAMETER :: HoursInDay         = 24.0
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -738,8 +738,8 @@ SUBROUTINE GetPipesHeatTransfer
       PipeHT(Item)%SoilThermAbs=Material(PipeHT(Item)%SoilMaterialNum)%AbsorpThermal
       PipeHT(Item)%SoilSolarAbs=Material(PipeHT(Item)%SoilMaterialNum)%AbsorpSolar
       PipeHT(Item)%SoilRoughness=Material(PipeHT(Item)%SoilMaterialNum)%Roughness
-      PipeHT(Item)%PipeDepth=PipeHT(Item)%SoilDepth+PipeHT(Item)%PipeID/2.0d0
-      PipeHT(Item)%DomainDepth=PipeHT(Item)%PipeDepth*2.0d0
+      PipeHT(Item)%PipeDepth=PipeHT(Item)%SoilDepth+PipeHT(Item)%PipeID/2.0
+      PipeHT(Item)%DomainDepth=PipeHT(Item)%PipeDepth*2.0
       PipeHT(Item)%SoilDiffusivity=PipeHT(Item)%SoilConductivity/(PipeHT(Item)%SoilDensity*PipeHT(Item)%SoilCp)
       PipeHT(Item)%SoilDiffusivityPerDay=PipeHT(Item)%SoilDiffusivity*SecondsInHour*HoursInDay
 
@@ -747,7 +747,7 @@ SUBROUTINE GetPipesHeatTransfer
       PipeHT(Item)%NumDepthNodes=NumberOfDepthNodes
       PipeHT(Item)%PipeNodeDepth = PipeHT(Item)%NumDepthNodes/2
       PipeHT(Item)%PipeNodeWidth = PipeHT(Item)%NumDepthNodes/2
-      PipeHT(Item)%DomainDepth = PipeHT(Item)%PipeDepth * 2.0d0
+      PipeHT(Item)%DomainDepth = PipeHT(Item)%PipeDepth * 2.0
       PipeHT(Item)%dSregular = PipeHT(Item)%DomainDepth / (PipeHT(Item)%NumDepthNodes-1)
     END IF
 
@@ -834,11 +834,11 @@ SUBROUTINE GetPipesHeatTransfer
                                         PipeHT(Item)%Length/NumSections
 
     ! cross sectional area
-    PipeHT(Item)%SectionArea = PI * 0.25d0 * PipeHT(Item)%PipeID**2
+    PipeHT(Item)%SectionArea = PI * 0.25 * PipeHT(Item)%PipeID**2
 
     ! pipe & insulation mass
     PipeHT(Item)%PipeHeatCapacity = PipeHT(Item)%PipeCp * PipeHT(Item)%PipeDensity * &          ! the metal component
-                                      (PI * 0.25d0 * PipeHT(Item)%PipeOD**2 - PipeHT(Item)%SectionArea)
+                                      (PI * 0.25 * PipeHT(Item)%PipeOD**2 - PipeHT(Item)%SectionArea)
   ENDDO
 
   ! final error check
@@ -930,10 +930,10 @@ SUBROUTINE ValidatePipeConstruction(PipeType,ConstructionName,FieldName,Construc
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)           :: Resistance             ! overall thermal resistance [m^2.C/W]
-  REAL(r64)           :: Density                ! average density [kg/m^3]
-  REAL(r64)           :: TotThickness           ! total thickness of all layers
-  REAL(r64)           :: SpHeat                 ! average specific heat [J/kg.K]
+  REAL           :: Resistance             ! overall thermal resistance [m^2.C/W]
+  REAL           :: Density                ! average density [kg/m^3]
+  REAL           :: TotThickness           ! total thickness of all layers
+  REAL           :: SpHeat                 ! average specific heat [J/kg.K]
   INTEGER             :: LayerNum
   INTEGER             :: TotalLayers            ! total number of layers (pipe layer + insulation layers)
 
@@ -1042,9 +1042,9 @@ SUBROUTINE InitPipesHeatTransfer(PipeType,PipeHTNum,FirstHVACIteration)
  INTEGER, PARAMETER   :: MonthsInYear       = 12     ! Number of months in the year
  INTEGER, PARAMETER   :: AvgDaysInMonth     = 30     ! Average days in a month
  INTEGER, PARAMETER   :: DemandLoopSide     = 1      ! Demand Loop side indicator
- REAL(r64), PARAMETER :: LargeNumber        = 9999.9d0 ! Large number (compared to temperature values)
- REAL(r64), PARAMETER :: SecondsInHour      = 3600.0d0 ! Number of seconds in hour
- REAL(r64), PARAMETER :: HoursInDay         = 24.0d0   ! Number of hours in day
+ REAL, PARAMETER :: LargeNumber        = 9999.9 ! Large number (compared to temperature values)
+ REAL, PARAMETER :: SecondsInHour      = 3600.0 ! Number of seconds in hour
+ REAL, PARAMETER :: HoursInDay         = 24.0   ! Number of hours in day
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1055,16 +1055,16 @@ SUBROUTINE InitPipesHeatTransfer(PipeType,PipeHTNum,FirstHVACIteration)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   LOGICAL,SAVE        :: OneTimeInit = .TRUE.   ! one time flag
-  REAL(r64)           :: FirstTemperatures      ! initial temperature of every node in pipe (set to inlet temp) [C]
+  REAL           :: FirstTemperatures      ! initial temperature of every node in pipe (set to inlet temp) [C]
   INTEGER             :: PipeNum                ! number of pipes
   INTEGER             :: MonthIndex
   INTEGER             :: TimeIndex
   INTEGER             :: LengthIndex
   INTEGER             :: DepthIndex
   INTEGER             :: WidthIndex
-  REAL(r64)           :: CurrentDepth
-  REAL(r64)           :: CurTemp
-  REAL(r64)           :: CurSimDay
+  REAL           :: CurrentDepth
+  REAL           :: CurTemp
+  REAL           :: CurSimDay
   INTEGER             :: PlantLoopCtr
   INTEGER             :: LoopSideCtr
   INTEGER             :: BranchCtr
@@ -1183,7 +1183,7 @@ SUBROUTINE InitPipesHeatTransfer(PipeType,PipeHTNum,FirstHVACIteration)
     ENDDO
 
     ! We also need to re-init the Hanby arrays for all pipes, including buried
-    FirstTemperatures = 21.0d0 !Node(InletNodeNum)%Temp
+    FirstTemperatures = 21.0 !Node(InletNodeNum)%Temp
     PipeHT(PipeHTNum)%TentativeFluidTemp = FirstTemperatures
     PipeHT(PipeHTNum)%FluidTemp          = FirstTemperatures
     PipeHT(PipeHTNum)%PreviousFluidTemp  = FirstTemperatures
@@ -1329,7 +1329,7 @@ SUBROUTINE InitPipesHeatTransfer(PipeType,PipeHTNum,FirstHVACIteration)
   PipeHTReport(PipeHTNum)%FluidHeatLossEnergy     = 0.0
   PipeHTReport(PipeHTNum)%EnvironmentHeatLossRate = 0.0
   PipeHTReport(PipeHTNum)%EnvHeatLossEnergy       = 0.0
-  PipeHT(PipeHTNum)%ZoneHeatGainRate              = 0.d0
+  PipeHT(PipeHTNum)%ZoneHeatGainRate              = 0.
   FluidHeatLossRate                               = 0.0
   EnvHeatLossRate                                 = 0.0
   OutletTemp                                      = 0.0
@@ -1457,30 +1457,30 @@ SUBROUTINE CalcPipesHeatTransfer(PipeHTNum, LengthIndex)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
             ! fluid node heat balance (see engineering doc).
-  REAL(r64)        :: A1 = 0.0   !sum of the heat balance terms
-  REAL(r64)        :: A2 = 0.0   !mass flow term
-  REAL(r64)        :: A3 = 0.0   !inside pipe wall convection term
-  REAL(r64)        :: A4 = 0.0   !fluid node heat capacity term
+  REAL        :: A1 = 0.0   !sum of the heat balance terms
+  REAL        :: A2 = 0.0   !mass flow term
+  REAL        :: A3 = 0.0   !inside pipe wall convection term
+  REAL        :: A4 = 0.0   !fluid node heat capacity term
             ! pipe wall node heat balance (see engineering doc).
-  REAL(r64)        :: B1 = 0.0   !sum of the heat balance terms
-  REAL(r64)        :: B2 = 0.0   !inside pipe wall convection term
-  REAL(r64)        :: B3 = 0.0   !outside pipe wall convection term
-  REAL(r64)        :: B4 = 0.0   !fluid node heat capacity term
+  REAL        :: B1 = 0.0   !sum of the heat balance terms
+  REAL        :: B2 = 0.0   !inside pipe wall convection term
+  REAL        :: B3 = 0.0   !outside pipe wall convection term
+  REAL        :: B4 = 0.0   !fluid node heat capacity term
 
-  REAL(r64)        :: AirConvCoef           = 0.0    ! air-pipe convection coefficient
-  REAL(r64)        :: FluidConvCoef         = 0.0    ! fluid-pipe convection coefficient
-  REAL(r64)        :: EnvHeatTransCoef      = 0.0    ! external convection coefficient (outside pipe)
-  REAL(r64)        :: FluidNodeHeatCapacity = 0.0    ! local var for MCp for single node of pipe
+  REAL        :: AirConvCoef           = 0.0    ! air-pipe convection coefficient
+  REAL        :: FluidConvCoef         = 0.0    ! fluid-pipe convection coefficient
+  REAL        :: EnvHeatTransCoef      = 0.0    ! external convection coefficient (outside pipe)
+  REAL        :: FluidNodeHeatCapacity = 0.0    ! local var for MCp for single node of pipe
 
   INTEGER          :: PipeDepth = 0
   INTEGER          :: PipeWidth = 0
   INTEGER          :: curnode
-  REAL(r64)        :: TempBelow
-  REAL(r64)        :: TempBeside
-  REAL(r64)        :: TempAbove
-  REAL(r64)        :: Numerator
-  REAL(r64)        :: Denominator
-  REAL(r64)        :: SurfaceTemp
+  REAL        :: TempBelow
+  REAL        :: TempBeside
+  REAL        :: TempAbove
+  REAL        :: Numerator
+  REAL        :: Denominator
+  REAL        :: SurfaceTemp
 
   ! traps fluid properties problems such as freezing conditions
   IF(PipeHT(PipeHTNum)%FluidSpecHeat <= 0.0 .OR. PipeHT(PipeHTNum)%FluidDensity <= 0.0)THEN
@@ -1639,38 +1639,38 @@ Subroutine CalcBuriedPipeSoil(PipeHTNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER,   PARAMETER ::  NumSections   = 20
-  REAL(r64), PARAMETER ::  ConvCrit      = 0.05d0
+  REAL, PARAMETER ::  ConvCrit      = 0.05
   INTEGER,   PARAMETER ::  MaxIterations = 200
-  REAL(r64), PARAMETER ::  StefBoltzmann = 5.6697d-08     ! Stefan-Boltzmann constant
+  REAL, PARAMETER ::  StefBoltzmann = 5.6697d-08     ! Stefan-Boltzmann constant
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER          :: IterationIndex = 0    ! Index when stepping through equations
   INTEGER          :: LengthIndex    = 0    ! Index for nodes along length of pipe
   INTEGER          :: DepthIndex     = 0    ! Index for nodes in the depth direction
   INTEGER          :: WidthIndex     = 0    ! Index for nodes in the width direction
-  REAL(r64)        :: ConvCoef       = 0.0  ! Current convection coefficient = f(Wind Speed,Roughness)
-  REAL(r64)        :: RadCoef        = 0.0  ! Current radiation coefficient
-  REAL(r64)        :: QSolAbsorbed   = 0.0  ! Current total solar energy absorbed
-  REAL(r64), DIMENSION(NumSections, PipeHT(PipeHTNum)%NumDepthNodes, PipeHT(PipeHTNum)%PipeNodeWidth) :: T_O
+  REAL        :: ConvCoef       = 0.0  ! Current convection coefficient = f(Wind Speed,Roughness)
+  REAL        :: RadCoef        = 0.0  ! Current radiation coefficient
+  REAL        :: QSolAbsorbed   = 0.0  ! Current total solar energy absorbed
+  REAL, DIMENSION(NumSections, PipeHT(PipeHTNum)%NumDepthNodes, PipeHT(PipeHTNum)%PipeNodeWidth) :: T_O
 
   !Local variable placeholders for code readability
-  REAL(r64)        :: A1             = 0.0  ! Placeholder for CoefA1
-  REAL(r64)        :: A2             = 0.0  ! Placeholder for CoefA2
-  REAL(r64)        :: NodeBelow      = 0.0  ! Placeholder for Node temp below current node
-  REAL(r64)        :: NodeAbove      = 0.0  ! Placeholder for Node temp above current node
-  REAL(r64)        :: NodeRight      = 0.0  ! Placeholder for Node temp to the right of current node
-  REAL(r64)        :: NodeLeft       = 0.0  ! Placeholder for Node temp to the left of current node
-  REAL(r64)        :: NodePast       = 0.0  ! Placeholder for Node temp at current node but previous time step
-  REAL(r64)        :: PastNodeTempAbs= 0.0  ! Placeholder for absolute temperature (K) version of NodePast
-  REAL(r64)        :: Ttemp          = 0.0  ! Placeholder for a current temperature node in convergence check
-  REAL(r64)        :: SkyTempAbs     = 0.0  ! Placeholder for current sky temperature in Kelvin
+  REAL        :: A1             = 0.0  ! Placeholder for CoefA1
+  REAL        :: A2             = 0.0  ! Placeholder for CoefA2
+  REAL        :: NodeBelow      = 0.0  ! Placeholder for Node temp below current node
+  REAL        :: NodeAbove      = 0.0  ! Placeholder for Node temp above current node
+  REAL        :: NodeRight      = 0.0  ! Placeholder for Node temp to the right of current node
+  REAL        :: NodeLeft       = 0.0  ! Placeholder for Node temp to the left of current node
+  REAL        :: NodePast       = 0.0  ! Placeholder for Node temp at current node but previous time step
+  REAL        :: PastNodeTempAbs= 0.0  ! Placeholder for absolute temperature (K) version of NodePast
+  REAL        :: Ttemp          = 0.0  ! Placeholder for a current temperature node in convergence check
+  REAL        :: SkyTempAbs     = 0.0  ! Placeholder for current sky temperature in Kelvin
   INTEGER          :: TopRoughness   = 0    ! Placeholder for soil surface roughness
-  REAL(r64)        :: TopThermAbs    = 0.0  ! Placeholder for soil thermal radiation absorptivity
-  REAL(r64)        :: TopSolarAbs    = 0.0  ! Placeholder for soil solar radiation absorptivity
-  REAL(r64)        :: kSoil          = 0.0  ! Placeholder for soil conductivity
-  REAL(r64)        :: dS             = 0.0  ! Placeholder for soil grid spacing
-  REAL(r64)        :: rho            = 0.0  ! Placeholder for soil density
-  REAL(r64)        :: Cp             = 0.0  ! Placeholder for soil specific heat
+  REAL        :: TopThermAbs    = 0.0  ! Placeholder for soil thermal radiation absorptivity
+  REAL        :: TopSolarAbs    = 0.0  ! Placeholder for soil solar radiation absorptivity
+  REAL        :: kSoil          = 0.0  ! Placeholder for soil conductivity
+  REAL        :: dS             = 0.0  ! Placeholder for soil grid spacing
+  REAL        :: rho            = 0.0  ! Placeholder for soil density
+  REAL        :: Cp             = 0.0  ! Placeholder for soil specific heat
 
   ! There are a number of coefficients which change through the simulation, and they are updated here
   PipeHT(PipeHTNum)%FourierDS = PipeHT(PipeHTNum)%SoilDiffusivity *     &
@@ -1723,7 +1723,7 @@ Subroutine CalcBuriedPipeSoil(PipeHTNum)
             ENDIF
 
             ! total absorbed solar - no ground solar
-            QSolAbsorbed = TopSolarAbs*(MAX(SOLCOS(3),0.0d0)*BeamSolarRad + DifSolarRad)
+            QSolAbsorbed = TopSolarAbs*(MAX(SOLCOS(3),0.0)*BeamSolarRad + DifSolarRad)
 
             ! If sun is not exposed, then turn off both solar and thermal radiation
             IF (.NOT. PipeHT(PipeHTNum)%SolarExposed) THEN
@@ -1984,7 +1984,7 @@ SUBROUTINE CalcZonePipesHeatGain
 !  INTEGER :: PipeNum
 !  INTEGER :: ZoneNum
   LOGICAL, SAVE :: MyEnvrnFlag=.true.
-!  REAL(r64) :: QLossToZone
+!  REAL :: QLossToZone
 
           ! FLOW:
   IF (NumOfPipeHT == 0) RETURN
@@ -2014,7 +2014,7 @@ END SUBROUTINE CalcZonePipesHeatGain
 
 !==============================================================================
 
-REAL(r64) FUNCTION CalcPipeHeatTransCoef(PipeHTNum,Temperature,MassFlowRate,Diameter)
+REAL FUNCTION CalcPipeHeatTransCoef(PipeHTNum,Temperature,MassFlowRate,Diameter)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Simon Rees
@@ -2045,23 +2045,23 @@ REAL(r64) FUNCTION CalcPipeHeatTransCoef(PipeHTNum,Temperature,MassFlowRate,Diam
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,      INTENT(IN) :: PipeHTNum
-  REAL(r64),    INTENT(IN) :: Temperature   ! Temperature of water entering the surface, in C
-  REAL(r64),    INTENT(IN) :: MassFlowRate  ! Mass flow rate, in kg/s
-  REAL(r64),    INTENT(IN) :: Diameter      ! Pipe diameter, m
+  REAL,    INTENT(IN) :: Temperature   ! Temperature of water entering the surface, in C
+  REAL,    INTENT(IN) :: MassFlowRate  ! Mass flow rate, in kg/s
+  REAL,    INTENT(IN) :: Diameter      ! Pipe diameter, m
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(*), PARAMETER :: RoutineName = 'PipeHeatTransfer::CalcPipeHeatTransCoef: '
-  REAL(r64), PARAMETER    :: MaxLaminarRe       = 2300.d0    ! Maximum Reynolds number for laminar flow
+  REAL, PARAMETER    :: MaxLaminarRe       = 2300.    ! Maximum Reynolds number for laminar flow
   INTEGER, PARAMETER :: NumOfPropDivisions = 13       ! intervals in property correlation
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
-                   (/1.85d0,6.85d0,11.85d0,16.85d0,21.85d0,26.85d0,31.85d0,36.85d0,41.85d0,46.85d0,51.85d0,56.85d0,61.85d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
-                   (/.001652d0,.001422d0,.001225d0,.00108d0,.000959d0,.000855d0,.000769d0,.000695d0,.000631d0,.000577d0,  &
-                     .000528d0,.000489d0,.000453d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
-                   (/.574d0,.582d0,.590d0,.598d0,.606d0,.613d0,.620d0,.628d0,.634d0,.640d0,.645d0,.650d0,.656d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
-                   (/12.22d0,10.26d0,8.81d0,7.56d0,6.62d0,5.83d0,5.20d0,4.62d0,4.16d0,3.77d0,3.42d0,3.15d0,2.88d0/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
+                   (/1.85,6.85,11.85,16.85,21.85,26.85,31.85,36.85,41.85,46.85,51.85,56.85,61.85/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
+                   (/.001652,.001422,.001225,.00108,.000959,.000855,.000769,.000695,.000631,.000577,  &
+                     .000528,.000489,.000453/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
+                   (/.574,.582,.590,.598,.606,.613,.620,.628,.634,.640,.645,.650,.656/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
+                   (/12.22,10.26,8.81,7.56,6.62,5.83,5.20,4.62,4.16,3.77,3.42,3.15,2.88/)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -2071,12 +2071,12 @@ REAL(r64) FUNCTION CalcPipeHeatTransCoef(PipeHTNum,Temperature,MassFlowRate,Diam
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Index
-  REAL(r64)    :: InterpFrac
-  REAL(r64)    :: NuD
-  REAL(r64)    :: ReD
-  REAL(r64)    :: Kactual
-  REAL(r64)    :: MUactual
-  REAL(r64)    :: PRactual
+  REAL    :: InterpFrac
+  REAL    :: NuD
+  REAL    :: ReD
+  REAL    :: Kactual
+  REAL    :: MUactual
+  REAL    :: PRactual
   INTEGER :: LoopNum
 
   !retrieve loop index for this component so we can look up fluid properties
@@ -2109,23 +2109,23 @@ REAL(r64) FUNCTION CalcPipeHeatTransCoef(PipeHTNum,Temperature,MassFlowRate,Diam
   MuActual = GetViscosityGlycol(PlantLoop(LoopNum)%FluidName, &
                                          PipeHT(PipeHTNum)%FluidTemp(0), &
                                          PlantLoop(LoopNum)%FluidIndex, &
-                                         RoutineName) / 1000.0d0  !Note fluid properties routine returns mPa-s, we need Pa-s
+                                         RoutineName) / 1000.0  !Note fluid properties routine returns mPa-s, we need Pa-s
 
   ! Calculate the Reynold's number from RE=(4*Mdot)/(Pi*Mu*Diameter) - as RadiantSysLowTemp
   ReD = 4.0 * MassFlowRate / ( PI * MUactual * Diameter)
 
-  IF (ReD == 0.0d0) THEN  ! No flow
+  IF (ReD == 0.0) THEN  ! No flow
 
     !For now just leave it how it was doing it before
-    NuD = 3.66d0
+    NuD = 3.66
     !Although later it would be nice to have a natural convection correlation
 
   ELSE ! Calculate the Nusselt number based on what flow regime one is in
 
     IF (ReD >= MaxLaminarRe) THEN ! Turbulent flow --> use Colburn equation
-      NuD = 0.023d0*(ReD**(0.8d0))*(PRactual**(1.d0/3.d0))
+      NuD = 0.023*(ReD**(0.8))*(PRactual**(1./3.))
     ELSE    ! Laminar flow --> use constant surface temperature relation
-      NuD = 3.66d0
+      NuD = 3.66
     END IF
 
   ENDIF
@@ -2138,7 +2138,7 @@ END FUNCTION CalcPipeHeatTransCoef
 
 !==============================================================================
 
-REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
+REAL FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Dan Fisher
@@ -2169,10 +2169,10 @@ REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER    :: Pr      = 0.7d0   ! Prandl number for air (assume constant)
-  REAL(r64), PARAMETER    :: CondAir      = 0.025d0   ! thermal conductivity of air (assume constant) [W/m.K]
-  REAL(r64), PARAMETER    :: RoomAirVel  = 0.381d0   !room air velocity of 75 ft./min [m/s]
-  REAL(r64), PARAMETER    :: NaturalConvNusselt = 0.36
+  REAL, PARAMETER    :: Pr      = 0.7   ! Prandl number for air (assume constant)
+  REAL, PARAMETER    :: CondAir      = 0.025   ! thermal conductivity of air (assume constant) [W/m.K]
+  REAL, PARAMETER    :: RoomAirVel  = 0.381   !room air velocity of 75 ft./min [m/s]
+  REAL, PARAMETER    :: NaturalConvNusselt = 0.36
                              !Nusselt for natural convection for horizontal cylinder
                              !from: Correlations for Convective Heat Transfer
                              !      Dr. Bernhard Spang
@@ -2180,18 +2180,18 @@ REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
   INTEGER, PARAMETER :: NumOfParamDivisions = 5       ! intervals in property correlation
   INTEGER, PARAMETER :: NumOfPropDivisions = 12       ! intervals in property correlation
 
-  REAL(r64), PARAMETER, DIMENSION(NumOfParamDivisions) :: CCoef =  &   ! correlation coefficient
-                   (/0.989d0,0.911d0,0.683d0,0.193d0,0.027d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfParamDivisions) :: mExp =  &      ! exponent
-                   (/0.33d0,0.385d0,0.466d0,0.618d0,0.805d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfParamDivisions) :: LowerBound =  &     ! upper bound of correlation range
-                   (/0.4d0,4.d0,40.d0,4000.d0,40000.d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfParamDivisions) :: UpperBound =  &      ! lower bound of correlation range
-                   (/4.d0,40.d0,4000.d0,40000.d0,400000.d0/)
+  REAL, PARAMETER, DIMENSION(NumOfParamDivisions) :: CCoef =  &   ! correlation coefficient
+                   (/0.989,0.911,0.683,0.193,0.027/)
+  REAL, PARAMETER, DIMENSION(NumOfParamDivisions) :: mExp =  &      ! exponent
+                   (/0.33,0.385,0.466,0.618,0.805/)
+  REAL, PARAMETER, DIMENSION(NumOfParamDivisions) :: LowerBound =  &     ! upper bound of correlation range
+                   (/0.4,4.,40.,4000.,40000./)
+  REAL, PARAMETER, DIMENSION(NumOfParamDivisions) :: UpperBound =  &      ! lower bound of correlation range
+                   (/4.,40.,4000.,40000.,400000./)
 
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Temperature =  &      ! temperature [C]
-                   (/-73.d0,-23.d0,-10.d0,0.d0,10.d0,20.d0,27.d0,30.d0,40.d0,50.d0,76.85d0,126.85d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: DynVisc =  &      ! dynamic viscosity [m^2/s]
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Temperature =  &      ! temperature [C]
+                   (/-73.,-23.,-10.,0.,10.,20.,27.,30.,40.,50.,76.85,126.85/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: DynVisc =  &      ! dynamic viscosity [m^2/s]
                    (/75.52d-7,11.37d-6,12.44d-6,13.3d-6,14.18d-6,15.08d-6,15.75d-6,16d-6,16.95d-6,17.91d-6,20.92d-6,26.41d-6/)
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2202,15 +2202,15 @@ REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Index
-  REAL(r64)    :: NuD
-  REAL(r64)    :: ReD
-  REAL(r64)    :: Coef
-  REAL(r64)    :: rExp
-  REAL(r64)    :: AirVisc
-  REAL(r64)    :: AirVel
-  REAL(r64)    :: AirTemp
-  REAL(r64)    :: MidTemp
-  REAL(r64)    :: PipeOD
+  REAL    :: NuD
+  REAL    :: ReD
+  REAL    :: Coef
+  REAL    :: rExp
+  REAL    :: AirVisc
+  REAL    :: AirVel
+  REAL    :: AirTemp
+  REAL    :: MidTemp
+  REAL    :: PipeOD
   LOGICAL :: ViscositySet
   LOGICAL :: CoefSet
 
@@ -2283,7 +2283,7 @@ REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
   ENDIF
 
           ! Calculate the Nusselt number
-    NuD = Coef*(ReD**(rExp))*(Pr**(1.d0/3.d0))
+    NuD = Coef*(ReD**(rExp))*(Pr**(1./3.))
 
           ! If the wind speed is too small, we need to use natural convection behavior:
     NuD = MAX(NuD,NaturalConvNusselt)
@@ -2297,7 +2297,7 @@ END FUNCTION OutsidePipeHeatTransCoef
 
 !==============================================================================
 
-REAL(r64) FUNCTION TBND(z, DayOfSim, PipeHTNum)
+REAL FUNCTION TBND(z, DayOfSim, PipeHTNum)
 
           !       AUTHOR         Edwin Lee
           !       DATE WRITTEN   December 2007
@@ -2314,15 +2314,15 @@ REAL(r64) FUNCTION TBND(z, DayOfSim, PipeHTNum)
           ! REFERENCES: See Module Level Description
 
   USE DataGlobals,     ONLY : Pi
-  REAL(r64), INTENT(IN)    :: z                       !Current Depth
-  REAL(r64), INTENT(IN)    :: DayOfSim                !Current Simulation Day
+  REAL, INTENT(IN)    :: z                       !Current Depth
+  REAL, INTENT(IN)    :: DayOfSim                !Current Simulation Day
   INTEGER, INTENT(IN)      :: PipeHTNum               !Current Pipe Number
 
   !Kusuda and Achenbach
   TBND=PipeHT(PipeHTNum)%AvgGroundTemp-PipeHT(PipeHTNum)%AvgGndTempAmp* &
-        Exp(-z*((Pi/(365.d0*PipeHT(PipeHTNum)%SoilDiffusivityPerDay))**(0.5d0)))* &
-        Cos((2.d0*Pi/365.d0)*(DayOfSim-PipeHT(PipeHTNum)%PhaseShiftDays-(z/2.d0)* &
-        ((365.d0/(Pi*PipeHT(PipeHTNum)%SoilDiffusivityPerDay))**(0.5d0))))
+        Exp(-z*((Pi/(365.*PipeHT(PipeHTNum)%SoilDiffusivityPerDay))**(0.5)))* &
+        Cos((2.*Pi/365.)*(DayOfSim-PipeHT(PipeHTNum)%PhaseShiftDays-(z/2.)* &
+        ((365./(Pi*PipeHT(PipeHTNum)%SoilDiffusivityPerDay))**(0.5))))
 
   RETURN
 

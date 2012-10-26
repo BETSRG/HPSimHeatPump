@@ -49,37 +49,37 @@ TYPE ElecBaseboardParams
     INTEGER :: ZonePtr                 = 0
     INTEGER :: SchedPtr                = 0
     INTEGER :: TotSurfToDistrib        = 0
-    REAL(r64) :: NominalCapacity       =0.0
-    REAL(r64) :: BaseBoardEfficiency   =0.0
-    REAL(r64) :: AirInletTemp          =0.0
-    REAL(r64) :: AirInletHumRat        =0.0
-    REAL(r64) :: AirOutletTemp         =0.0
-    REAL(r64) :: ElecUseLoad           =0.0
-    REAL(r64) :: ElecUseRate           =0.0
-    REAL(r64) :: FracRadiant           =0.0
-    REAL(r64) :: FracConvect           =0.0
-    REAL(r64) :: FracDistribPerson     =0.0
-    REAL(r64) :: TotPower              =0.0
-    REAL(r64) :: Power                 =0.0
-    REAL(r64) :: ConvPower             =0.0
-    REAL(r64) :: RadPower              =0.0
-    REAL(r64) :: TotEnergy             =0.0
-    REAL(r64) :: Energy                =0.0
-    REAL(r64) :: ConvEnergy            =0.0
-    REAL(r64) :: RadEnergy             =0.0
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
+    REAL :: NominalCapacity       =0.0
+    REAL :: BaseBoardEfficiency   =0.0
+    REAL :: AirInletTemp          =0.0
+    REAL :: AirInletHumRat        =0.0
+    REAL :: AirOutletTemp         =0.0
+    REAL :: ElecUseLoad           =0.0
+    REAL :: ElecUseRate           =0.0
+    REAL :: FracRadiant           =0.0
+    REAL :: FracConvect           =0.0
+    REAL :: FracDistribPerson     =0.0
+    REAL :: TotPower              =0.0
+    REAL :: Power                 =0.0
+    REAL :: ConvPower             =0.0
+    REAL :: RadPower              =0.0
+    REAL :: TotEnergy             =0.0
+    REAL :: Energy                =0.0
+    REAL :: ConvEnergy            =0.0
+    REAL :: RadEnergy             =0.0
+    REAL, ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
 END TYPE ElecBaseboardParams
 
   !MODULE VARIABLE DECLARATIONS:
   TYPE (ElecBaseboardParams), ALLOCATABLE, DIMENSION(:) :: ElecBaseboard
   INTEGER :: NumElecBaseboards=0
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBElecRadSource ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBElecRadSrcAvg ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBElecRadSource ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBElecRadSrcAvg ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
   ! Record keeping variables used to calculate QBBRadSrcAvg locally
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastQBBElecRadSrc    ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastQBBElecRadSrc    ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: MySizeFlag
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: CheckEquipName
   !SUBROUTINE SPECIFICATIONS FOR MODULE BaseboardRadiator
@@ -123,7 +123,7 @@ CONTAINS
     CHARACTER(len=*), INTENT(IN) :: EquipName
     INTEGER, INTENT(IN)    :: ActualZoneNum
     INTEGER, INTENT(IN)    :: ControlledZoneNum
-    REAL(r64), INTENT(OUT) :: PowerMet
+    REAL, INTENT(OUT) :: PowerMet
     INTEGER, INTENT(INOUT) :: CompIndex
     LOGICAL, INTENT(IN)    :: FirstHVACIteration
 
@@ -227,8 +227,8 @@ CONTAINS
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     CHARACTER(len=*), PARAMETER  :: RoutineName='GetBaseboardInput: ' ! include trailing blank space
-    REAL(r64), PARAMETER :: MaxFraction       = 1.0d0   ! Maximum limit of fractional values
-    REAL(r64), PARAMETER :: MinFraction       = 0.0d0   ! Minimum limit of fractional values
+    REAL, PARAMETER :: MaxFraction       = 1.0   ! Maximum limit of fractional values
+    REAL, PARAMETER :: MinFraction       = 0.0   ! Minimum limit of fractional values
 !    INTEGER,PARAMETER :: MaxDistribSurfaces   = 20      ! Maximum number of surfaces that a baseboard heater can radiate to
     INTEGER,PARAMETER :: MinDistribSurfaces   = 1       ! Minimum number of surfaces that a baseboard heater can radiate to
 
@@ -239,7 +239,7 @@ CONTAINS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: AllFracsSummed         ! Sum of the fractions radiant
+    REAL :: AllFracsSummed         ! Sum of the fractions radiant
     INTEGER   :: BaseboardNum
     INTEGER   :: ElecBBNum
     INTEGER   :: NumAlphas
@@ -318,9 +318,9 @@ CONTAINS
         CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))// &
           '", Fraction Radiant was higher than the allowable maximum.')
         ElecBaseboard(BaseboardNum)%FracRadiant = MaxFraction
-        ElecBaseboard(BaseboardNum)%FracConvect = 0.0d0
+        ElecBaseboard(BaseboardNum)%FracConvect = 0.0
       ELSE
-        ElecBaseboard(BaseboardNum)%FracConvect = 1.0d0 - AllFracsSummed
+        ElecBaseboard(BaseboardNum)%FracConvect = 1.0 - AllFracsSummed
       END IF
 
       ElecBaseboard(BaseboardNum)%FracDistribPerson = rNumericArgs(4)
@@ -359,7 +359,7 @@ CONTAINS
       ALLOCATE(ElecBaseboard(BaseboardNum)%SurfacePtr(ElecBaseboard(BaseboardNum)%TotSurfToDistrib))
       ElecBaseboard(BaseboardNum)%SurfacePtr=0
       ALLOCATE(ElecBaseboard(BaseboardNum)%FracDistribToSurf(ElecBaseboard(BaseboardNum)%TotSurfToDistrib))
-      ElecBaseboard(BaseboardNum)%FracDistribToSurf=0.0d0
+      ElecBaseboard(BaseboardNum)%FracDistribToSurf=0.0
 
       AllFracsSummed = ElecBaseboard(BaseboardNum)%FracDistribPerson
       Do SurfNum = 1,ElecBaseboard(BaseboardNum)%TotSurfToDistrib
@@ -390,12 +390,12 @@ CONTAINS
         AllFracsSummed = AllFracsSummed + ElecBaseboard(BaseboardNum)%FracDistribToSurf(SurfNum)
       End DO ! Surfaces
 
-      IF (AllFracsSummed > (MaxFraction + 0.01d0) ) THEN
+      IF (AllFracsSummed > (MaxFraction + 0.01) ) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))// &
           '", Summed radiant fractions for people + surface groups > 1.0')
         ErrorsFound = .TRUE.
       END IF
-      IF ( (AllFracsSummed < (MaxFraction - 0.01d0)) .AND. &              ! User didn't distribute all of the
+      IF ( (AllFracsSummed < (MaxFraction - 0.01)) .AND. &              ! User didn't distribute all of the
            (ElecBaseboard(BaseboardNum)%FracRadiant > MinFraction) ) THEN ! radiation warn that some will be lost
         CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//'="'//trim(cAlphaArgs(1))// &
           '", Summed radiant fractions for people + surface groups < 1.0')
@@ -491,17 +491,17 @@ SUBROUTINE InitElectricBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIt
     ALLOCATE(MyEnvrnFlag(NumElecBaseboards))
     ALLOCATE(MySizeFlag(NumElecBaseboards))
     ALLOCATE(ZeroSourceSumHATsurf(NumofZones))
-             ZeroSourceSumHATsurf = 0.0D0
+             ZeroSourceSumHATsurf = 0.0
     ALLOCATE(QBBElecRadSource(NumElecBaseboards))
-             QBBElecRadSource = 0.0D0
+             QBBElecRadSource = 0.0
     ALLOCATE(QBBElecRadSrcAvg(NumElecBaseboards))
-             QBBElecRadSrcAvg = 0.0D0
+             QBBElecRadSrcAvg = 0.0
     ALLOCATE(LastQBBElecRadSrc(NumElecBaseboards))
-             LastQBBElecRadSrc = 0.0D0
+             LastQBBElecRadSrc = 0.0
     ALLOCATE(LastSysTimeElapsed(NumElecBaseboards))
-             LastSysTimeElapsed = 0.0D0
+             LastSysTimeElapsed = 0.0
     ALLOCATE(LastTimeStepSys(NumElecBaseboards))
-             LastTimeStepSys = 0.0D0
+             LastTimeStepSys = 0.0
     MyEnvrnFlag = .TRUE.
     MySizeFlag  = .TRUE.
 
@@ -532,12 +532,12 @@ SUBROUTINE InitElectricBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIt
        ! Do the Begin Environment initializations
     IF (BeginEnvrnFlag .and. MyEnvrnFlag(BaseboardNum)) THEN
         ! Initialize
-    ZeroSourceSumHATsurf   =0.0D0
-    QBBElecRadSource       =0.0D0
-    QBBElecRadSrcAvg       =0.0D0
-    LastQBBElecRadSrc      =0.0D0
-    LastSysTimeElapsed     =0.0D0
-    LastTimeStepSys        =0.0D0
+    ZeroSourceSumHATsurf   =0.0
+    QBBElecRadSource       =0.0
+    QBBElecRadSrcAvg       =0.0
+    LastQBBElecRadSrc      =0.0
+    LastSysTimeElapsed     =0.0
+    LastTimeStepSys        =0.0
 
     MyEnvrnFlag(BaseboardNum) = .FALSE.
     END IF
@@ -554,10 +554,10 @@ SUBROUTINE InitElectricBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACIt
     IF (BeginTimeStepFlag .AND. FirstHVACIteration) THEN
       ZoneNum = ElecBaseboard(BaseboardNum)%ZonePtr
       ZeroSourceSumHATsurf(ZoneNum)    = SumHATsurf(ZoneNum)
-      QBBElecRadSrcAvg(BaseboardNum)   = 0.0D0
-      LastQBBElecRadSrc(BaseboardNum)  = 0.0D0
-      LastSysTimeElapsed(BaseboardNum) = 0.0D0
-      LastTimeStepSys(BaseboardNum)    = 0.0D0
+      QBBElecRadSrcAvg(BaseboardNum)   = 0.0
+      LastQBBElecRadSrc(BaseboardNum)  = 0.0
+      LastSysTimeElapsed(BaseboardNum) = 0.0
+      LastTimeStepSys(BaseboardNum)    = 0.0
     END IF
 
       ! Do the every time step initializations
@@ -669,7 +669,7 @@ SUBROUTINE CalcElectricBaseboard(BaseboardNum, ControlledZoneNum)
     INTEGER, INTENT(IN)    :: ControlledZoneNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
+REAL, PARAMETER :: SimpConvAirFlowSpeed = 0.5 ! m/s
           ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -680,16 +680,16 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER   :: ZoneNum
-    REAL(r64) :: AirInletTemp
-    REAL(r64) :: CpAir
-    REAL(r64) :: AirMassFlowRate
-    REAL(r64) :: CapacitanceAir
-    REAL(r64) :: Effic
-    REAL(r64) :: AirOutletTemp
-    REAL(r64) :: QBBCap
-    REAL(r64) :: RadHeat
-    REAL(r64) :: QZnReq
-    REAL(r64) :: LoadMet
+    REAL :: AirInletTemp
+    REAL :: CpAir
+    REAL :: AirMassFlowRate
+    REAL :: CapacitanceAir
+    REAL :: Effic
+    REAL :: AirOutletTemp
+    REAL :: QBBCap
+    REAL :: RadHeat
+    REAL :: QZnReq
+    REAL :: LoadMet
 
     ZoneNum = ElecBaseboard(BaseboardNum)%ZonePtr
     QZnReq = ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToHeatSP
@@ -703,9 +703,9 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
     ! thermal loss that could be accounted for with this efficiency input.
     Effic = ElecBaseboard(BaseboardNum)%BaseBoardEfficiency
 
-    IF (QZnReq > 0.0d0 &
+    IF (QZnReq > 0.0 &
         .AND. .NOT. CurDeadBandOrSetback(ZoneNum) &
-        .AND. GetCurrentScheduleValue(ElecBaseboard(BaseboardNum)%SchedPtr) > 0.0d0) THEN
+        .AND. GetCurrentScheduleValue(ElecBaseboard(BaseboardNum)%SchedPtr) > 0.0) THEN
 
             ! If the load exceeds the capacity than the capacity is set to the BB limit.
        IF(QZnReq > ElecBaseboard(BaseboardNum)%NominalCapacity) THEN
@@ -716,7 +716,7 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
     RadHeat = QBBCap * ElecBaseboard(BaseboardNum)%FracRadiant
     QBBElecRadSource(BaseboardNum) = RadHeat
 
-       IF (ElecBaseboard(BaseboardNum)%FracRadiant > 0.0d0) THEN  ! User defines radiant heat addition
+       IF (ElecBaseboard(BaseboardNum)%FracRadiant > 0.0) THEN  ! User defines radiant heat addition
             ! Now, distribute the radiant energy of all systems to the appropriate surfaces, to people, and the air
           CALL DistributeBBElecRadGains
             ! Now "simulate" the system by recalculating the heat balances
@@ -734,9 +734,9 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
                  + (QBBCap *  ElecBaseboard(BaseboardNum)%FracConvect) &
                  + (RadHeat * ElecBaseboard(BaseboardNum)%FracDistribPerson)
 
-          IF (LoadMet < 0.0d0) THEN ! No cooling output
+          IF (LoadMet < 0.0) THEN ! No cooling output
           AirOutletTemp = AirInletTemp
-          ElecBaseboard(BaseboardNum)%ElecUseRate = 0.0d0
+          ElecBaseboard(BaseboardNum)%ElecUseRate = 0.0
           ELSE
           AirOutletTemp = AirInletTemp + QBBCap/CapacitanceAir
             ! This could be utilized somehow or even reported so the data structures are left in place
@@ -753,12 +753,12 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
 
     ELSE  ! If there is an off condition the BB does nothing.
 
-    QBBCap  = 0.0d0
-    LoadMet = 0.0d0
-    RadHeat = 0.0d0
+    QBBCap  = 0.0
+    LoadMet = 0.0
+    RadHeat = 0.0
     AirOutletTemp = AirInletTemp
-    QBBElecRadSource(BaseboardNum) = 0.0d0
-    ElecBaseboard(BaseboardNum)%ElecUseRate = 0.0d0
+    QBBElecRadSource(BaseboardNum) = 0.0
+    ElecBaseboard(BaseboardNum)%ElecUseRate = 0.0
     END IF
 
         ! Assign calculated ones
@@ -889,7 +889,7 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
 
        ! If it was allocated, then we have to check to see if this was running at all...
     DO BaseboardNum = 1, NumElecBaseboards
-      IF (QBBElecRadSrcAvg(BaseboardNum) /= 0.0D0) THEN
+      IF (QBBElecRadSrcAvg(BaseboardNum) /= 0.0) THEN
           ElecBaseboardSysOn = .TRUE.
         EXIT !DO loop
       END IF
@@ -941,7 +941,7 @@ END SUBROUTINE UpdateBBElecRadSourceValAvg
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: SmallestArea = 0.001d0   ! Smallest area in meters squared (to avoid a divide by zero)
+  REAL, PARAMETER :: SmallestArea = 0.001   ! Smallest area in meters squared (to avoid a divide by zero)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -954,12 +954,12 @@ END SUBROUTINE UpdateBBElecRadSourceValAvg
   INTEGER   :: BaseboardNum    ! Counter for the baseboard
   INTEGER   :: SurfNum         ! Pointer to the Surface derived type
   INTEGER   :: ZoneNum        ! Pointer to the Zone derived type
-  REAL(R64) :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
+  REAL :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
 
           ! FLOW:
           ! Initialize arrays
-    QElecBaseboardSurf     = 0.0D0
-    QElecBaseboardToPerson = 0.0D0
+    QElecBaseboardSurf     = 0.0
+    QElecBaseboardToPerson = 0.0
 
     DO BaseboardNum = 1, NumElecBaseboards
 
@@ -1044,7 +1044,7 @@ END SUBROUTINE DistributeBBElecRadGains
     RETURN
   END SUBROUTINE ReportElectricBaseboard
 
-REAL(r64) FUNCTION SumHATsurf(ZoneNum)
+REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1075,7 +1075,7 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL(r64)           :: Area        ! Effective surface area
+  REAL           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0

@@ -35,16 +35,16 @@ PUBLIC          ! By definition, all variables which are placed in this data
           ! DERIVED TYPE DEFINITIONS
   TYPE :: vector  ! This is used to specify a point in 3D space
                   ! Right Handed Coordinate system is used
-    REAL(r64) :: x
-    REAL(r64) :: y
-    REAL(r64) :: z
+    REAL :: x
+    REAL :: y
+    REAL :: z
   END TYPE
 
   TYPE :: PlaneEq ! This is used to specify a plane based on vectors in that plane
-    REAL(r64) :: x
-    REAL(r64) :: y
-    REAL(r64) :: z
-    REAL(r64) :: w
+    REAL :: x
+    REAL :: y
+    REAL :: z
+    REAL :: w
   END TYPE
 
   TYPE :: Face  ! Used to specify the face of a polyhedron
@@ -63,8 +63,8 @@ PUBLIC          ! By definition, all variables which are placed in this data
   ! the following two derived types are used in triangulation (for DXF outputs)
   !'Points (Vertices)
   Type Vector_2d
-     REAL(r64) x
-     REAL(r64) y
+     REAL x
+     REAL y
   End Type
 
   !'Created Triangles, vv# are the vertex pointers

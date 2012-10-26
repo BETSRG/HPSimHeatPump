@@ -33,16 +33,16 @@ PUBLIC ! This data only module is public.
     INTEGER, PARAMETER :: i32=Selected_Int_Kind(6)  ! 6 digits
     INTEGER, PARAMETER :: i64=Selected_Int_Kind(12) ! 12 digits
     INTEGER, PARAMETER :: r32=KIND(1.0)
-    INTEGER, PARAMETER :: r64=KIND(1.0D0)
+    INTEGER, PARAMETER :: r64=KIND(1.0)
     INTEGER, PARAMETER :: default_prec=r64
-    REAL(r64), PARAMETER :: constant_zero=0.0d0
-    REAL(r64), PARAMETER :: constant_one=1.0d0
-    REAL(r64), PARAMETER :: constant_minusone=-1.0d0
-    REAL(r64), PARAMETER :: constant_twenty=20.0d0
-    REAL(r64), PARAMETER :: constant_pointfive=.5d0
-    REAL(r64), PARAMETER :: EXP_LowerLimit=-20.d0  ! In IVF=2.061153622438558E-009 - used 20
+    REAL, PARAMETER :: constant_zero=0.0
+    REAL, PARAMETER :: constant_one=1.0
+    REAL, PARAMETER :: constant_minusone=-1.0
+    REAL, PARAMETER :: constant_twenty=20.0
+    REAL, PARAMETER :: constant_pointfive=.5
+    REAL, PARAMETER :: EXP_LowerLimit=-20.  ! In IVF=2.061153622438558E-009 - used 20
                                                    ! because it's already used in other parts of the code
-    REAL(r64), PARAMETER :: EXP_UpperLimit= 40.d0  ! In IVF=2.353852668370200E+017
+    REAL, PARAMETER :: EXP_UpperLimit= 40.  ! In IVF=2.353852668370200E+017
 
           ! DERIVED TYPE DEFINITIONS:
           ! na

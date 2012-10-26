@@ -36,46 +36,46 @@ TYPE WaterEquipmentType
   CHARACTER(len=MaxNameLength) :: EndUseSubcatName = ''
   INTEGER                      :: Connections = 0          ! Index for WATER USE CONNECTIONS object
 
-  REAL(r64)                    :: PeakVolFlowRate = 0.0    ! Peak volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: PeakVolFlowRate = 0.0    ! Peak volumetric flow rate, also water consumption rate (m3/s)
   INTEGER                      :: FlowRateFracSchedule = 0 ! Pointer to schedule object
 
-  REAL(r64)                    :: ColdVolFlowRate = 0.0
-  REAL(r64)                    :: HotVolFlowRate = 0.0
-  REAL(r64)                    :: TotalVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: ColdVolFlowRate = 0.0
+  REAL                    :: HotVolFlowRate = 0.0
+  REAL                    :: TotalVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
 
-  REAL(r64)                    :: ColdMassFlowRate = 0.0
-  REAL(r64)                    :: HotMassFlowRate = 0.0
-  REAL(r64)                    :: TotalMassFlowRate = 0.0       ! Mass flow rate (kg/s)
-  REAL(r64)                    :: DrainMassFlowRate = 0.0
+  REAL                    :: ColdMassFlowRate = 0.0
+  REAL                    :: HotMassFlowRate = 0.0
+  REAL                    :: TotalMassFlowRate = 0.0       ! Mass flow rate (kg/s)
+  REAL                    :: DrainMassFlowRate = 0.0
 
   INTEGER                      :: ColdTempSchedule = 0     ! Index for schedule object
   INTEGER                      :: HotTempSchedule = 0      ! Index for schedule object
   INTEGER                      :: TargetTempSchedule = 0   ! Index for schedule object
 
-  REAL(r64)                    :: ColdTemp = 0.0           ! Cold supply water temperature (C)
-  REAL(r64)                    :: HotTemp = 0.0            ! Hot supply water temperature (C)
-  REAL(r64)                    :: TargetTemp = 0.0         ! Target (mixed) water temperature (C)
-  REAL(r64)                    :: MixedTemp = 0.0         ! Actual outlet (mixed) water temperature (C)
-  REAL(r64)                    :: DrainTemp = 0.0
+  REAL                    :: ColdTemp = 0.0           ! Cold supply water temperature (C)
+  REAL                    :: HotTemp = 0.0            ! Hot supply water temperature (C)
+  REAL                    :: TargetTemp = 0.0         ! Target (mixed) water temperature (C)
+  REAL                    :: MixedTemp = 0.0         ! Actual outlet (mixed) water temperature (C)
+  REAL                    :: DrainTemp = 0.0
 
   INTEGER                      :: Zone = 0                 ! Index for zone object
   INTEGER                      :: SensibleFracSchedule = 0 ! Pointer to schedule object
-  REAL(r64)                    :: SensibleRate = 0.0
-  REAL(r64)                    :: SensibleEnergy = 0.0
-  REAL(r64)                    :: SensibleRateNoMultiplier = 0.d0
+  REAL                    :: SensibleRate = 0.0
+  REAL                    :: SensibleEnergy = 0.0
+  REAL                    :: SensibleRateNoMultiplier = 0.
   INTEGER                      :: LatentFracSchedule = 0   ! Pointer to schedule object
-  REAL(r64)                    :: LatentRate = 0.0
-  REAL(r64)                    :: LatentEnergy = 0.0
-  REAL(r64)                    :: LatentRateNoMultiplier = 0.d0 
-  REAL(r64)                    :: MoistureRate = 0.0
-  REAL(r64)                    :: MoistureMass = 0.0
+  REAL                    :: LatentRate = 0.0
+  REAL                    :: LatentEnergy = 0.0
+  REAL                    :: LatentRateNoMultiplier = 0. 
+  REAL                    :: MoistureRate = 0.0
+  REAL                    :: MoistureMass = 0.0
 
-  REAL(r64)                    :: ColdVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: HotVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: TotalVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: ColdVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: HotVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: TotalVolume = 0.0             ! Water consumption (m3)
 
-  REAL(r64)                    :: Power = 0.0              ! Heating rate required to meet the mixed water temperature (W)
-  REAL(r64)                    :: Energy = 0.0             ! Heating energy required to meet the mixed water temperature (J)
+  REAL                    :: Power = 0.0              ! Heating rate required to meet the mixed water temperature (W)
+  REAL                    :: Energy = 0.0             ! Heating energy required to meet the mixed water temperature (J)
 END TYPE WaterEquipmentType
 
 TYPE WaterConnectionsType
@@ -93,51 +93,51 @@ TYPE WaterConnectionsType
   LOGICAL                      :: HeatRecovery = .FALSE.
   INTEGER                      :: HeatRecoveryHX = HeatRecoveryHXIdeal
   INTEGER                      :: HeatRecoveryConfig = HeatRecoveryConfigPlant
-  REAL(r64)                    :: HXUA = 0.0
-  REAL(r64)                    :: Effectiveness = 0.0
-  REAL(r64)                    :: RecoveryRate = 0.0
-  REAL(r64)                    :: RecoveryEnergy = 0.0
+  REAL                    :: HXUA = 0.0
+  REAL                    :: Effectiveness = 0.0
+  REAL                    :: RecoveryRate = 0.0
+  REAL                    :: RecoveryEnergy = 0.0
 
-  REAL(r64)                    :: MainsMassFlowRate = 0.0       ! Mass flow rate (kg/s)
-  REAL(r64)                    :: TankMassFlowRate = 0.0       ! Mass flow rate (kg/s)
-  REAL(r64)                    :: ColdMassFlowRate = 0.0       ! Mass flow rate (kg/s)  cold = mains + tank
-  REAL(r64)                    :: HotMassFlowRate = 0.0       ! Mass flow rate (kg/s)
-  REAL(r64)                    :: TotalMassFlowRate = 0.0       ! Mass flow rate (kg/s) total = cold + hot
-  REAL(r64)                    :: DrainMassFlowRate = 0.0
-  REAL(r64)                    :: RecoveryMassFlowRate = 0.0
+  REAL                    :: MainsMassFlowRate = 0.0       ! Mass flow rate (kg/s)
+  REAL                    :: TankMassFlowRate = 0.0       ! Mass flow rate (kg/s)
+  REAL                    :: ColdMassFlowRate = 0.0       ! Mass flow rate (kg/s)  cold = mains + tank
+  REAL                    :: HotMassFlowRate = 0.0       ! Mass flow rate (kg/s)
+  REAL                    :: TotalMassFlowRate = 0.0       ! Mass flow rate (kg/s) total = cold + hot
+  REAL                    :: DrainMassFlowRate = 0.0
+  REAL                    :: RecoveryMassFlowRate = 0.0
 
-  REAL(r64)                    :: PeakVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: MainsVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: TankVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: ColdVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: HotVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: TotalVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
-  REAL(r64)                    :: DrainVolFlowRate = 0.0
-  REAL(r64)                    :: PeakMassFlowRate = 0.0D0 ! Peak Mass flow rate for MassFlowRateMax
+  REAL                    :: PeakVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: MainsVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: TankVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: ColdVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: HotVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: TotalVolFlowRate = 0.0        ! Volumetric flow rate, also water consumption rate (m3/s)
+  REAL                    :: DrainVolFlowRate = 0.0
+  REAL                    :: PeakMassFlowRate = 0.0 ! Peak Mass flow rate for MassFlowRateMax
 
   INTEGER                      :: ColdTempSchedule = 0     ! Index for schedule object
   INTEGER                      :: HotTempSchedule = 0      ! Index for schedule object
 
-  REAL(r64)                    :: MainsTemp = 0.0           ! Cold supply water temperature (C)
-  REAL(r64)                    :: TankTemp = 0.0           ! Cold supply water temperature (C)
-  REAL(r64)                    :: ColdSupplyTemp = 0.0     ! cold from mains, schedule, or tank, depending
-  REAL(r64)                    :: ColdTemp = 0.0           ! Cold supply water temperature (C)  actual cold (could be reheated)
-  REAL(r64)                    :: HotTemp = 0.0            ! Hot supply water temperature (C)
-  REAL(r64)                    :: DrainTemp = 0.0          !
-  REAL(r64)                    :: RecoveryTemp = 0.0          !
-  REAL(r64)                    :: ReturnTemp = 0.0         !
-  REAL(r64)                    :: WasteTemp = 0.0         !
+  REAL                    :: MainsTemp = 0.0           ! Cold supply water temperature (C)
+  REAL                    :: TankTemp = 0.0           ! Cold supply water temperature (C)
+  REAL                    :: ColdSupplyTemp = 0.0     ! cold from mains, schedule, or tank, depending
+  REAL                    :: ColdTemp = 0.0           ! Cold supply water temperature (C)  actual cold (could be reheated)
+  REAL                    :: HotTemp = 0.0            ! Hot supply water temperature (C)
+  REAL                    :: DrainTemp = 0.0          !
+  REAL                    :: RecoveryTemp = 0.0          !
+  REAL                    :: ReturnTemp = 0.0         !
+  REAL                    :: WasteTemp = 0.0         !
 
-  REAL(r64)                    :: TempError = 0.0         !
+  REAL                    :: TempError = 0.0         !
 
-  REAL(r64)                    :: MainsVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: TankVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: ColdVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: HotVolume = 0.0             ! Water consumption (m3)
-  REAL(r64)                    :: TotalVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: MainsVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: TankVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: ColdVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: HotVolume = 0.0             ! Water consumption (m3)
+  REAL                    :: TotalVolume = 0.0             ! Water consumption (m3)
 
-  REAL(r64)                    :: Power = 0.0              ! Heating rate required to raise temperature from cold to hot (W)
-  REAL(r64)                    :: Energy = 0.0             ! Heating energy required to raise temperature from cold to hot (J)
+  REAL                    :: Power = 0.0              ! Heating rate required to raise temperature from cold to hot (W)
+  REAL                    :: Energy = 0.0             ! Heating energy required to raise temperature from cold to hot (J)
 
   INTEGER                      :: NumWaterEquipment = 0
   INTEGER                      :: MaxIterationsErrorIndex = 0   ! recurring error index
@@ -203,7 +203,7 @@ SUBROUTINE SimulateWaterUse(FirstHVACIteration)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: MaxIterations = 100
-  REAL(r64), PARAMETER    :: Tolerance = 0.1d0  ! Make input?
+  REAL, PARAMETER    :: Tolerance = 0.1  ! Make input?
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT(IN) :: FirstHVACIteration
@@ -319,7 +319,7 @@ SUBROUTINE SimulateWaterUseConnection(EquipTypeNum, CompName, CompIndex, InitLoo
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: MaxIterations = 100
-  REAL(r64), PARAMETER    :: Tolerance = 0.1d0  ! Make input?
+  REAL, PARAMETER    :: Tolerance = 0.1  ! Make input?
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)          :: EquipTypeNum
@@ -718,21 +718,21 @@ SUBROUTINE GetWaterUseInput
   ! determine connection's peak mass flow rates.
   IF (NumWaterConnections > 0) THEN
     DO WaterConnNum = 1, NumWaterConnections
-      WaterConnections(WaterConnNum)%PeakMassFlowRate = 0.0D0
+      WaterConnections(WaterConnNum)%PeakMassFlowRate = 0.0
       Do WaterEquipNum = 1, WaterConnections(WaterConnNum)%NumWaterEquipment
         thisWaterEquipNum = WaterConnections(WaterConnNum)%WaterEquipment(WaterEquipNum)
         IF (WaterEquipment(thisWaterEquipNum)%zone > 0) then
           WaterConnections(WaterConnNum)%PeakMassFlowRate = WaterConnections(WaterConnNum)%PeakMassFlowRate &
-           + WaterEquipment(thisWaterEquipNum)%PeakVolFlowRate * RhoH2O(60.0D0)                               &
+           + WaterEquipment(thisWaterEquipNum)%PeakVolFlowRate * RhoH2O(60.0)                               &
             * Zone(WaterEquipment(thisWaterEquipNum)%zone)%Multiplier                                         &
             * Zone(WaterEquipment(thisWaterEquipNum)%zone)%ListMultiplier
         ELSE ! can't have multipliers
           WaterConnections(WaterConnNum)%PeakMassFlowRate = WaterConnections(WaterConnNum)%PeakMassFlowRate &
-           + WaterEquipment(thisWaterEquipNum)%PeakVolFlowRate * RhoH2O(60.0D0)
+           + WaterEquipment(thisWaterEquipNum)%PeakVolFlowRate * RhoH2O(60.0)
         ENDIF
       ENDDO
       CALL RegisterPlantCompDesignFlow(WaterConnections(WaterConnNum)%InletNode, &
-                                WaterConnections(WaterConnNum)%PeakMassFlowRate/RhoH2O(60.0D0) )
+                                WaterConnections(WaterConnNum)%PeakMassFlowRate/RhoH2O(60.0) )
     ENDDO
   ENDIF
 
@@ -1080,13 +1080,13 @@ SUBROUTINE CalcEquipmentDrainTemp(WaterEquipNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ZoneNum
-  REAL(r64) :: ZoneMAT
-  REAL(r64) :: ZoneHumRat
-  REAL(r64) :: ZoneHumRatSat
-  REAL(r64) :: RhoAirDry
-  REAL(r64) :: ZoneMassMax
-  REAL(r64) :: FlowMassMax
-  REAL(r64) :: MoistureMassMax
+  REAL :: ZoneMAT
+  REAL :: ZoneHumRat
+  REAL :: ZoneHumRatSat
+  REAL :: RhoAirDry
+  REAL :: ZoneMassMax
+  REAL :: FlowMassMax
+  REAL :: MoistureMassMax
 
           ! FLOW:
 
@@ -1118,8 +1118,8 @@ SUBROUTINE CalcEquipmentDrainTemp(WaterEquipNum)
       WaterEquipment(WaterEquipNum)%LatentEnergy = 0.0
     ELSE
       ZoneHumRat = ZoneAirHumRat(ZoneNum)
-      ZoneHumRatSat = PsyWFnTdbRhPb(ZoneMAT, 1.0d0, OutBaroPress, 'CalcEquipmentDrainTemp')  ! Humidratio at 100% relative humidity
-      RhoAirDry = PsyRhoAirFnPbTdbW(OutBaroPress, ZoneMAT, 0.0d0)
+      ZoneHumRatSat = PsyWFnTdbRhPb(ZoneMAT, 1.0, OutBaroPress, 'CalcEquipmentDrainTemp')  ! Humidratio at 100% relative humidity
+      RhoAirDry = PsyRhoAirFnPbTdbW(OutBaroPress, ZoneMAT, 0.0)
 
       ZoneMassMax = (ZoneHumRatSat - ZoneHumRat) * RhoAirDry * Zone(ZoneNum)%Volume  ! Max water that can be evaporated to zone
       FlowMassMax = WaterEquipment(WaterEquipNum)%TotalMassFlowRate * TimeStepSys * SecInHour  ! Max water in flow
@@ -1241,7 +1241,7 @@ SUBROUTINE InitConnections(WaterConnNum, FirstHVACIteration)
     IF (BeginEnvrnFlag .AND. WaterConnections(WaterConnNum)%Init) THEN
       ! Clear node initial conditions
       IF (InletNode > 0 .AND. OutletNode > 0) THEN
-        CALL InitComponentNodes(0.d0,WaterConnections(WaterConnNum)%PeakMassFlowRate, &
+        CALL InitComponentNodes(0.,WaterConnections(WaterConnNum)%PeakMassFlowRate, &
                                  InletNode,       &
                                  OutletNode,       &
                                  WaterConnections(WaterConnNum)%PlantLoopNum,         &
@@ -1263,7 +1263,7 @@ SUBROUTINE InitConnections(WaterConnNum, FirstHVACIteration)
       ELSE
         ! plant loop will not be running so need a value here.
         ! should change to use tank setpoint but water use connections don't have knowledge of the tank they are fed by
-        WaterConnections(WaterConnNum)%HotTemp = 60.0d0  !
+        WaterConnections(WaterConnNum)%HotTemp = 60.0  !
       ENDIF
     END IF
   END IF
@@ -1305,8 +1305,8 @@ SUBROUTINE CalcConnectionsFlowRates(WaterConnNum, FirstHVACIteration)
   INTEGER :: OutletNode
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64) :: AvailableFraction
-  REAL(r64) :: DesiredHotWaterMassFlow ! store original request
+  REAL :: AvailableFraction
+  REAL :: DesiredHotWaterMassFlow ! store original request
 
           ! FLOW:
   WaterConnections(WaterConnNum)%ColdMassFlowRate = 0.0
@@ -1337,7 +1337,7 @@ SUBROUTINE CalcConnectionsFlowRates(WaterConnNum, FirstHVACIteration)
         ! Request the mass flow rate from the demand side manager
 !        Node(InletNode)%MassFlowRate = WaterConnections(WaterConnNum)%HotMassFlowRate
 !        Node(InletNode)%MassFlowRateMaxAvail = WaterConnections(WaterConnNum)%PeakMassFlowRate
-!        Node(InletNode)%MassFlowRateMinAvail = 0.0D0
+!        Node(InletNode)%MassFlowRateMinAvail = 0.0
         CALL  SetComponentFlowRate(WaterConnections(WaterConnNum)%HotMassFlowRate,InletNode,OutletNode,LoopNum,LoopSideNum, &
                                    WaterConnections(WaterConnNum)%PlantLoopBranchNum, &
                                    WaterConnections(WaterConnNum)%PlantLoopCompNum)
@@ -1428,7 +1428,7 @@ SUBROUTINE CalcConnectionsDrainTemp(WaterConnNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: WaterEquipNum, Loop
-  REAL(r64) :: MassFlowTempSum
+  REAL :: MassFlowTempSum
 
           ! FLOW:
   WaterConnections(WaterConnNum)%DrainMassFlowRate = 0.0
@@ -1473,7 +1473,7 @@ SUBROUTINE CalcConnectionsHeatRecovery(WaterConnNum)
 
           ! USE STATEMENTS:
   USE Psychrometrics, ONLY: CPHW
-!unused0909  USE DataEnvironment, ONLY: WaterMainsTemp
+!unuse909  USE DataEnvironment, ONLY: WaterMainsTemp
   USE DataWater,   ONLY: WaterStorage
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
@@ -1482,7 +1482,7 @@ SUBROUTINE CalcConnectionsHeatRecovery(WaterConnNum)
   INTEGER, INTENT(IN) :: WaterConnNum
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: CapacityRatio, NTU, ExpVal, HXCapacityRate, DrainCapacityRate, MinCapacityRate
+  REAL :: CapacityRatio, NTU, ExpVal, HXCapacityRate, DrainCapacityRate, MinCapacityRate
 
           ! FLOW:
   IF (.NOT. WaterConnections(WaterConnNum)%HeatRecovery) THEN
@@ -1520,17 +1520,17 @@ SUBROUTINE CalcConnectionsHeatRecovery(WaterConnNum)
         CapacityRatio = MinCapacityRate / MAX(DrainCapacityRate, HXCapacityRate)
         NTU = WaterConnections(WaterConnNum)%HXUA / MinCapacityRate
         IF (CapacityRatio == 1.0) THEN
-          WaterConnections(WaterConnNum)%Effectiveness = NTU / (1.0d0 + NTU)
+          WaterConnections(WaterConnNum)%Effectiveness = NTU / (1.0 + NTU)
         ELSE
-          ExpVal = EXP(-NTU * (1.0d0 - CapacityRatio))
-          WaterConnections(WaterConnNum)%Effectiveness = (1.0d0 - ExpVal) / (1.0d0 - CapacityRatio * ExpVal)
+          ExpVal = EXP(-NTU * (1.0 - CapacityRatio))
+          WaterConnections(WaterConnNum)%Effectiveness = (1.0 - ExpVal) / (1.0 - CapacityRatio * ExpVal)
         END IF
 
       CASE (HeatRecoveryHXCrossFlow)  ! Unmixed
         CapacityRatio = MinCapacityRate / MAX(DrainCapacityRate, HXCapacityRate)
         NTU = WaterConnections(WaterConnNum)%HXUA / MinCapacityRate
-        WaterConnections(WaterConnNum)%Effectiveness = 1.0d0 - EXP((NTU ** 0.22d0 / CapacityRatio) * &
-          (EXP(-CapacityRatio * NTU ** 0.78d0) - 1.0d0))
+        WaterConnections(WaterConnNum)%Effectiveness = 1.0 - EXP((NTU ** 0.22 / CapacityRatio) * &
+          (EXP(-CapacityRatio * NTU ** 0.78) - 1.0))
     END SELECT
 
     WaterConnections(WaterConnNum)%RecoveryRate = WaterConnections(WaterConnNum)%Effectiveness * MinCapacityRate * &
@@ -1780,10 +1780,10 @@ SUBROUTINE CalcWaterUseZoneGains
   IF (BeginEnvrnFlag .and. MyEnvrnFlag) THEN
     WaterEquipment%SensibleRate = 0.0
     WaterEquipment%SensibleEnergy = 0.0
-    WaterEquipment%SensibleRateNoMultiplier = 0.d0 
+    WaterEquipment%SensibleRateNoMultiplier = 0. 
     WaterEquipment%LatentRate = 0.0
     WaterEquipment%LatentEnergy = 0.0
-    WaterEquipment%LatentRateNoMultiplier = 0.d0
+    WaterEquipment%LatentRateNoMultiplier = 0.
     WaterEquipment%MixedTemp = 0.0
     WaterEquipment%TotalMassFlowRate = 0.0
     WaterEquipment%DrainTemp = 0.0

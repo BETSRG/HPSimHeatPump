@@ -1621,7 +1621,7 @@
 
             !*** If points are colinear, set mode for linear fit and return to top
 
-            IF (ABS(coef(3)) .LT. 1.D-10) THEN
+            IF (ABS(coef(3)) .LT. 1.*10**-10) THEN  !RS: Debugging: 102612
                 mode=2
                 !VL: Previously: GO TO 10
                 CYCLE
@@ -1631,7 +1631,7 @@
             !*** predict the given data points due to round-off errors, set
             !*** mode for a linear fit and return to top.
 
-            IF (ABS((coef(1)+(coef(2)+coef(3)*X1Q)*X1Q-F1Q)/F1Q) .GT. 1.D-4) THEN
+            IF (ABS((coef(1)+(coef(2)+coef(3)*X1Q)*X1Q-F1Q)/F1Q) .GT. 1.*10**-4) THEN
                 mode=2
                 !VL: Previously: GO TO 10
                 CYCLE

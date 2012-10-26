@@ -36,31 +36,31 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
 
           ! MODULE PARAMETER DEFINITIONS:
-!REAL(r64), PARAMETER:: CFC     =4.184D0            ! Specific Heat:  BTU/(LB*R) * CFC = KJ/(KG*K)
-REAL(r64), PARAMETER:: CFC     =4.1868D0           ! Specific Heat:  BTU/(LB*R) * CFC = KJ/(KG*K)
+!REAL, PARAMETER:: CFC     =4.184            ! Specific Heat:  BTU/(LB*R) * CFC = KJ/(KG*K)
+REAL, PARAMETER:: CFC     =4.1868           ! Specific Heat:  BTU/(LB*R) * CFC = KJ/(KG*K)
 !  above is listed in July 1976 publication as "International Table"
-REAL(r64), PARAMETER:: CFL     =0.3048D0           ! Length:         FT * CFL = M
-REAL(r64), PARAMETER:: CFM     =0.45359237D0       ! Mass:           LB * CFM = KG
-!REAL(r64), PARAMETER:: CFP     =249.082D0          ! Pressure:       IN-H2O * CFP = N/M**2
+REAL, PARAMETER:: CFL     =0.3048           ! Length:         FT * CFL = M
+REAL, PARAMETER:: CFM     =0.45359237       ! Mass:           LB * CFM = KG
+!REAL, PARAMETER:: CFP     =249.082          ! Pressure:       IN-H2O * CFP = N/M**2
 ! above is listed in July 1976 publication as in-water at 39.2 deg F
-REAL(r64), PARAMETER:: CFP     =248.84D0           ! Pressure:       IN-H2O * CFP = N/M**2
+REAL, PARAMETER:: CFP     =248.84           ! Pressure:       IN-H2O * CFP = N/M**2
 !  above is listed in July 1976 publication as in-water at 60 deg F
-REAL(r64), PARAMETER:: DELTMP  =-32.D0             ! Temperature:    (F + DELTMP) * CFT = C
-REAL(r64), PARAMETER:: CFA     =CFL*CFL            ! Area:           FT**2 * CFA = M**2
-REAL(r64), PARAMETER:: CFT     =5.D0/9.D0          ! Temperature:    R * CFT = K
-REAL(r64), PARAMETER:: CFV     =CFA*CFL            ! Volume:         FT**3 * CFV = M**3
-REAL(r64), PARAMETER:: CFE     =CFC*CFM*CFT/3.6D0  ! Energy:         BTU * CFE = W-HR
-REAL(r64), PARAMETER:: CFD     =CFM/CFV            ! Density:        LB/FT**3 * CFD = KG/M**3
-REAL(r64), PARAMETER:: CFH     =CFC*CFT            ! Enthalpy:       BTU/LB * CFH = J/KG
-REAL(r64), PARAMETER:: CFK     =CFE/(CFL*CFT)      ! Conductivity:   BTU/(HR*FT*R) * CFK = W/(M*K)
-REAL(r64), PARAMETER:: CFMF    =CFM/3600.D0        ! Mass Flow:      LB/HR * CFMF = KG/SEC
-REAL(r64), PARAMETER:: CFQ     =CFE                ! Power:          BTU/HR * CFQ = W
-REAL(r64), PARAMETER:: CFU     =CFK/CFL            ! U-Value:        BTU/(HR*FT**2*R) * CFU = W/(M**2*K)
+REAL, PARAMETER:: DELTMP  =-32.             ! Temperature:    (F + DELTMP) * CFT = C
+REAL, PARAMETER:: CFA     =CFL*CFL            ! Area:           FT**2 * CFA = M**2
+REAL, PARAMETER:: CFT     =5./9.          ! Temperature:    R * CFT = K
+REAL, PARAMETER:: CFV     =CFA*CFL            ! Volume:         FT**3 * CFV = M**3
+REAL, PARAMETER:: CFE     =CFC*CFM*CFT/3.6  ! Energy:         BTU * CFE = W-HR
+REAL, PARAMETER:: CFD     =CFM/CFV            ! Density:        LB/FT**3 * CFD = KG/M**3
+REAL, PARAMETER:: CFH     =CFC*CFT            ! Enthalpy:       BTU/LB * CFH = J/KG
+REAL, PARAMETER:: CFK     =CFE/(CFL*CFT)      ! Conductivity:   BTU/(HR*FT*R) * CFK = W/(M*K)
+REAL, PARAMETER:: CFMF    =CFM/3600.        ! Mass Flow:      LB/HR * CFMF = KG/SEC
+REAL, PARAMETER:: CFQ     =CFE                ! Power:          BTU/HR * CFQ = W
+REAL, PARAMETER:: CFU     =CFK/CFL            ! U-Value:        BTU/(HR*FT**2*R) * CFU = W/(M**2*K)
                                                           ! Note:  R-Value = 1/U-Value
-REAL(r64), PARAMETER:: CFS     =CFL/60.D0          ! Speed:          FT/MIN * CFS = M/SEC
-REAL(r64), PARAMETER:: CFVF    =CFV/60.D0          ! Volume Flow:    FT**3/MIN * CFVF = M**3/SEC
-REAL(r64), PARAMETER:: CFHF    =CFQ/CFA            ! Heat Flux:      BTU/(HR*FT**2) * CFHF = W/M**2
-REAL(r64), PARAMETER:: CFTMP   =DELTMP             ! Temperature:    Same as DELTMP
+REAL, PARAMETER:: CFS     =CFL/60.          ! Speed:          FT/MIN * CFS = M/SEC
+REAL, PARAMETER:: CFVF    =CFV/60.          ! Volume Flow:    FT**3/MIN * CFVF = M**3/SEC
+REAL, PARAMETER:: CFHF    =CFQ/CFA            ! Heat Flux:      BTU/(HR*FT**2) * CFHF = W/M**2
+REAL, PARAMETER:: CFTMP   =DELTMP             ! Temperature:    Same as DELTMP
 
           ! DERIVED TYPE DEFINITIONS
           ! na

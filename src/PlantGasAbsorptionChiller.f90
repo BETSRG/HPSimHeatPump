@@ -60,12 +60,12 @@ TYPE GasAbsorberSpecs
 ! Part of Type that directly corresponds with IDD definition
        CHARACTER(len=MaxNameLength) :: Name    =' ' ! user identifier
        CHARACTER(len=MaxNameLength) ::FuelType =' ' ! Type of Fuel - DIESEL, GASOLINE, GAS
-       REAL(r64)         :: NomCoolingCap      =0.0 ! W - design nominal capacity of Absorber
-       REAL(r64)         :: NomHeatCoolRatio   =0.0 ! ratio of heating to cooling capacity
-       REAL(r64)         :: FuelCoolRatio      =0.0 ! ratio of fuel input to cooling output
-       REAL(r64)         :: FuelHeatRatio      =0.0 ! ratio of fuel input to heating output
-       REAL(r64)         :: ElecCoolRatio      =0.0 ! ratio of electricity input to cooling output
-       REAL(r64)         :: ElecHeatRatio      =0.0 ! ratio of electricity input to heating output
+       REAL         :: NomCoolingCap      =0.0 ! W - design nominal capacity of Absorber
+       REAL         :: NomHeatCoolRatio   =0.0 ! ratio of heating to cooling capacity
+       REAL         :: FuelCoolRatio      =0.0 ! ratio of fuel input to cooling output
+       REAL         :: FuelHeatRatio      =0.0 ! ratio of fuel input to heating output
+       REAL         :: ElecCoolRatio      =0.0 ! ratio of electricity input to cooling output
+       REAL         :: ElecHeatRatio      =0.0 ! ratio of electricity input to heating output
        INTEGER           :: ChillReturnNodeNum =0   ! Node number on the inlet side of the plant
        INTEGER           :: ChillSupplyNodeNum =0   ! Node number on the outlet side of the plant
        LOGICAL           :: ChillSetpointErrDone = .FALSE. ! flag to report missing setpoint on CW outlet
@@ -76,15 +76,15 @@ TYPE GasAbsorberSpecs
        INTEGER           :: HeatSupplyNodeNum  =0   ! absorber steam outlet node number, water side
        LOGICAL           :: HeatSetpointErrDone = .FALSE. ! flag to report missing setpoint on HW outlet
        LOGICAL           :: HeatSetpointSetToLoop = .FALSE. ! flag to use overall loop setpoint
-       REAL(r64)         :: MinPartLoadRat     =0.0 ! min allowed operating frac full load
-       REAL(r64)         :: MaxPartLoadRat     =0.0 ! max allowed operating frac full load
-       REAL(r64)         :: OptPartLoadRat     =0.0 ! optimal operating frac full load
-       REAL(r64)         :: TempDesCondReturn  =0.0 ! design secondary loop fluid temperature at the Absorber condenser side inlet
-       REAL(r64)         :: TempDesCHWSupply   =0.0 ! design chilled water supply temperature
-       REAL(r64)         :: EvapVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the evaporator
-       REAL(r64)         :: CondVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the condenser
-       REAL(r64)         :: HeatVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the heater side
-       REAL(r64)         :: SizFac             =0.0 ! sizing factor
+       REAL         :: MinPartLoadRat     =0.0 ! min allowed operating frac full load
+       REAL         :: MaxPartLoadRat     =0.0 ! max allowed operating frac full load
+       REAL         :: OptPartLoadRat     =0.0 ! optimal operating frac full load
+       REAL         :: TempDesCondReturn  =0.0 ! design secondary loop fluid temperature at the Absorber condenser side inlet
+       REAL         :: TempDesCHWSupply   =0.0 ! design chilled water supply temperature
+       REAL         :: EvapVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the evaporator
+       REAL         :: CondVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the condenser
+       REAL         :: HeatVolFlowRate    =0.0 ! m**3/s - design nominal water volumetric flow rate through the heater side
+       REAL         :: SizFac             =0.0 ! sizing factor
        INTEGER           :: CoolCapFTCurve     =0   ! cooling capacity as a function of temperature curve (chilled water temp,
                                                     ! condenser water temp)
        INTEGER           :: FuelCoolFTCurve    =0   ! Fuel-Input-to cooling output Ratio Function of Temperature Curve (chilled
@@ -97,12 +97,12 @@ TYPE GasAbsorberSpecs
        INTEGER           :: FuelHeatFHPLRCurve =0   ! Fuel Input to heat output ratio during heating only function
        LOGICAL           :: isEnterCondensTemp =.false. ! if using entering conderser water temperature is TRUE, exiting is FALSE
        LOGICAL           :: isWaterCooled      =.false. ! if water cooled it is TRUE
-       REAL(r64)         :: CHWLowLimitTemp    =0.0 ! Chilled Water Lower Limit Temperature
-       REAL(r64)         :: FuelHeatingValue   =0.0
+       REAL         :: CHWLowLimitTemp    =0.0 ! Chilled Water Lower Limit Temperature
+       REAL         :: FuelHeatingValue   =0.0
 ! Calculated design values
-       REAL(r64)         :: DesCondMassFlowRate=0.0    ! design nominal mass flow rate of water through the condenser [kg/s]
-       REAL(r64)         :: DesHeatMassFlowRate=0.d0   ! design nominal mass flow rate of water through the hot water side [kg/s]
-       REAL(r64)         :: DesEvapMassFlowRate=0.d0   ! design nominal mass flow rate of water through chilled water side [kg/s]
+       REAL         :: DesCondMassFlowRate=0.0    ! design nominal mass flow rate of water through the condenser [kg/s]
+       REAL         :: DesHeatMassFlowRate=0.   ! design nominal mass flow rate of water through the hot water side [kg/s]
+       REAL         :: DesEvapMassFlowRate=0.   ! design nominal mass flow rate of water through chilled water side [kg/s]
 ! other values used during simulation
        INTEGER           :: DeltaTempCoolErrCount  = 0  ! error count for Delta Temp = 0 while cooling
        INTEGER           :: DeltaTempHeatErrCount  = 0  ! error count for Delta Temp = 0 while heating
@@ -126,39 +126,39 @@ END TYPE GasAbsorberSpecs
 
 ! This type holds the output from the algorithm i.e., the Report Variables
 TYPE ReportVars
-  REAL(r64)    :: CoolingLoad        =0.0 ! cooling load on the chiller (previously called QEvap)
-  REAL(r64)    :: CoolingEnergy      =0.0 ! variable to track total cooling load for period (was EvapEnergy)
-  REAL(r64)    :: HeatingLoad        =0.0 ! heating load on the chiller
-  REAL(r64)    :: HeatingEnergy      =0.0 ! heating energy
-  REAL(r64)    :: TowerLoad          =0.0 ! load on the cooling tower/condenser (previously called QCond)
-  REAL(r64)    :: TowerEnergy        =0.0 ! variable to track total tower load for a period (was CondEnergy)
-  REAL(r64)    :: FuelUseRate        =0.0 ! instantaneous use of gas for period
-  REAL(r64)    :: FuelEnergy         =0.0 ! variable to track total fuel used for a period
-  REAL(r64)    :: CoolFuelUseRate    =0.0 ! instantaneous use of gas for period for cooling
-  REAL(r64)    :: CoolFuelEnergy     =0.0 ! variable to track total fuel used for a period for cooling
-  REAL(r64)    :: HeatFuelUseRate    =0.0 ! instantaneous use of gas for period for heating
-  REAL(r64)    :: HeatFuelEnergy     =0.0 ! variable to track total fuel used for a period for heating
-  REAL(r64)    :: ElectricPower      =0.0 ! parasitic electric power used (was PumpingPower)
-  REAL(r64)    :: ElectricEnergy     =0.0 ! track the total electricity used for a period (was PumpingEnergy)
-  REAL(r64)    :: CoolElectricPower  =0.0 ! parasitic electric power used  for cooling
-  REAL(r64)    :: CoolElectricEnergy =0.0 ! track the total electricity used for a period for cooling
-  REAL(r64)    :: HeatElectricPower  =0.0 ! parasitic electric power used  for heating
-  REAL(r64)    :: HeatElectricEnergy =0.0 ! track the total electricity used for a period for heating
-  REAL(r64)    :: ChillReturnTemp    =0.0 ! reporting: evaporator inlet temperature (was EvapInletTemp)
-  REAL(r64)    :: ChillSupplyTemp    =0.0 ! reporting: evaporator outlet temperature (was EvapOutletTemp)
-  REAL(r64)    :: ChillWaterFlowRate =0.0 ! reporting: evaporator mass flow rate (was Evapmdot)
-  REAL(r64)    :: CondReturnTemp     =0.0 ! reporting: condenser inlet temperature (was CondInletTemp)
-  REAL(r64)    :: CondSupplyTemp     =0.0 ! reporting: condenser outlet temperature (was CondOutletTemp)
-  REAL(r64)    :: CondWaterFlowRate  =0.0 ! reporting: condenser mass flow rate (was Condmdot)
-  REAL(r64)    :: HotWaterReturnTemp =0.0 ! reporting: hot water return (inlet) temperature
-  REAL(r64)    :: HotWaterSupplyTemp =0.0 ! reporting: hot water supply (outlet) temperature
-  REAL(r64)    :: HotWaterFlowRate   =0.0 ! reporting: hot water mass flow rate
-  REAL(r64)    :: CoolPartLoadRatio  =0.0     ! operating part load ratio (load/capacity for cooling)
-  REAL(r64)    :: HeatPartLoadRatio  =0.0 ! operating part load ratio (load/capacity for heating)
-  REAL(r64)    :: CoolingCapacity    =0.0 ! current capacity after temperature adjustment
-  REAL(r64)    :: HeatingCapacity    =0.0 ! current heating capacity
-  REAL(r64)    :: FractionOfPeriodRunning =0.0 ! fraction of the time period that the unit is operating
-  REAL(r64)    :: FuelCOP            =0.0 ! reporting: cooling output/fuel input = CoolingLoad/CoolFuelUseRate
+  REAL    :: CoolingLoad        =0.0 ! cooling load on the chiller (previously called QEvap)
+  REAL    :: CoolingEnergy      =0.0 ! variable to track total cooling load for period (was EvapEnergy)
+  REAL    :: HeatingLoad        =0.0 ! heating load on the chiller
+  REAL    :: HeatingEnergy      =0.0 ! heating energy
+  REAL    :: TowerLoad          =0.0 ! load on the cooling tower/condenser (previously called QCond)
+  REAL    :: TowerEnergy        =0.0 ! variable to track total tower load for a period (was CondEnergy)
+  REAL    :: FuelUseRate        =0.0 ! instantaneous use of gas for period
+  REAL    :: FuelEnergy         =0.0 ! variable to track total fuel used for a period
+  REAL    :: CoolFuelUseRate    =0.0 ! instantaneous use of gas for period for cooling
+  REAL    :: CoolFuelEnergy     =0.0 ! variable to track total fuel used for a period for cooling
+  REAL    :: HeatFuelUseRate    =0.0 ! instantaneous use of gas for period for heating
+  REAL    :: HeatFuelEnergy     =0.0 ! variable to track total fuel used for a period for heating
+  REAL    :: ElectricPower      =0.0 ! parasitic electric power used (was PumpingPower)
+  REAL    :: ElectricEnergy     =0.0 ! track the total electricity used for a period (was PumpingEnergy)
+  REAL    :: CoolElectricPower  =0.0 ! parasitic electric power used  for cooling
+  REAL    :: CoolElectricEnergy =0.0 ! track the total electricity used for a period for cooling
+  REAL    :: HeatElectricPower  =0.0 ! parasitic electric power used  for heating
+  REAL    :: HeatElectricEnergy =0.0 ! track the total electricity used for a period for heating
+  REAL    :: ChillReturnTemp    =0.0 ! reporting: evaporator inlet temperature (was EvapInletTemp)
+  REAL    :: ChillSupplyTemp    =0.0 ! reporting: evaporator outlet temperature (was EvapOutletTemp)
+  REAL    :: ChillWaterFlowRate =0.0 ! reporting: evaporator mass flow rate (was Evapmdot)
+  REAL    :: CondReturnTemp     =0.0 ! reporting: condenser inlet temperature (was CondInletTemp)
+  REAL    :: CondSupplyTemp     =0.0 ! reporting: condenser outlet temperature (was CondOutletTemp)
+  REAL    :: CondWaterFlowRate  =0.0 ! reporting: condenser mass flow rate (was Condmdot)
+  REAL    :: HotWaterReturnTemp =0.0 ! reporting: hot water return (inlet) temperature
+  REAL    :: HotWaterSupplyTemp =0.0 ! reporting: hot water supply (outlet) temperature
+  REAL    :: HotWaterFlowRate   =0.0 ! reporting: hot water mass flow rate
+  REAL    :: CoolPartLoadRatio  =0.0     ! operating part load ratio (load/capacity for cooling)
+  REAL    :: HeatPartLoadRatio  =0.0 ! operating part load ratio (load/capacity for heating)
+  REAL    :: CoolingCapacity    =0.0 ! current capacity after temperature adjustment
+  REAL    :: HeatingCapacity    =0.0 ! current heating capacity
+  REAL    :: FractionOfPeriodRunning =0.0 ! fraction of the time period that the unit is operating
+  REAL    :: FuelCOP            =0.0 ! reporting: cooling output/fuel input = CoolingLoad/CoolFuelUseRate
 
 END TYPE ReportVars
 
@@ -218,15 +218,15 @@ SUBROUTINE SimGasAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl, CompIndex,Run
   LOGICAL , INTENT(IN)   :: RunFlag             ! simulate Absorber when TRUE
   LOGICAL , INTENT(IN)   :: FirstIteration      ! initialize variables when TRUE
   LOGICAL, INTENT(INOUT) :: InitLoopEquip       ! If not false, calculate the max load for operating conditions
-  REAL(r64), INTENT(INOUT)    :: MyLoad         ! loop demand component will meet
-  REAL(r64), INTENT(OUT) :: MinCap              ! W - minimum operating capacity of Absorber
-  REAL(r64), INTENT(OUT) :: MaxCap              ! W - maximum operating capacity of Absorber
-  REAL(r64), INTENT(OUT) :: OptCap              ! W - optimal operating capacity of Absorber
+  REAL, INTENT(INOUT)    :: MyLoad         ! loop demand component will meet
+  REAL, INTENT(OUT) :: MinCap              ! W - minimum operating capacity of Absorber
+  REAL, INTENT(OUT) :: MaxCap              ! W - maximum operating capacity of Absorber
+  REAL, INTENT(OUT) :: OptCap              ! W - optimal operating capacity of Absorber
   INTEGER, INTENT(INOUT) :: CompIndex           ! Absorber number counter
   LOGICAL, INTENT(IN)    :: GetSizingFactor     ! TRUE when just the sizing factor is requested
-  REAL(r64), INTENT(INOUT) :: SizingFactor        ! sizing factor
-  REAL(r64), INTENT(INOUT)    :: TempCondInDesign
-  REAL(r64), INTENT(INOUT)    :: TempEvapOutDesign
+  REAL, INTENT(INOUT) :: SizingFactor        ! sizing factor
+  REAL, INTENT(INOUT)    :: TempCondInDesign
+  REAL, INTENT(INOUT)    :: TempEvapOutDesign
          ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -238,7 +238,7 @@ SUBROUTINE SimGasAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl, CompIndex,Run
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL(r64)         :: HeatCap = 0.0       ! W - nominal heating capacity
+  REAL         :: HeatCap = 0.0       ! W - nominal heating capacity
   LOGICAL, SAVE     :: GetInput = .TRUE.   ! then TRUE, calls subroutine to read input file.
   INTEGER :: ChillNum            ! Absorber number counter
 
@@ -291,10 +291,10 @@ SUBROUTINE SimGasAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl, CompIndex,Run
       MaxCap  = HeatCap*GasAbsorber(ChillNum)%MaxPartLoadRat
       OptCap  = HeatCap*GasAbsorber(ChillNum)%OptPartLoadRat
     ELSEIF (BranchInletNodeNum == GasAbsorber(ChillNum)%CondReturnNodeNum) THEN ! called from condenser loop
-      HeatCap = 0.d0
-      MinCap  = 0.d0
-      MaxCap  = 0.d0
-      OptCap  = 0.d0
+      HeatCap = 0.
+      MinCap  = 0.
+      MaxCap  = 0.
+      OptCap  = 0.
     ELSE  ! Error, nodes do not match
       CALL ShowSevereError('SimGasAbsorber: Invalid call to Gas Absorbtion Chiller-Heater '//TRIM(AbsorberName))
       CALL ShowContinueError('Node connections in branch are not consistent with object nodes.')
@@ -734,8 +734,8 @@ SUBROUTINE InitGasAbsorber(ChillNum,RunFlag)
   INTEGER :: HeatInletNode      ! node number of hot water inlet node
   INTEGER :: HeatOutletNode     ! node number of hot water outlet node
   LOGICAL :: errFlag
-  REAL(r64) :: rho ! local fluid density
-  REAL(r64) :: mdot ! lcoal fluid mass flow rate
+  REAL :: rho ! local fluid density
+  REAL :: mdot ! lcoal fluid mass flow rate
 
   ! Do the one time initializations
   IF (MyOneTimeFlag) THEN
@@ -901,7 +901,7 @@ SUBROUTINE InitGasAbsorber(ChillNum,RunFlag)
       ENDIF
 
       GasAbsorber(ChillNum)%DesCondMassFlowRate = rho * GasAbsorber(ChillNum)%CondVolFlowRate
-      CALL InitComponentNodes(0.d0, GasAbsorber(ChillNum)%DesCondMassFlowRate, &
+      CALL InitComponentNodes(0., GasAbsorber(ChillNum)%DesCondMassFlowRate, &
                                     CondInletNode, CondOutletNode,      &
                                     GasAbsorber(ChillNum)%CDLoopNum,     &
                                     GasAbsorber(ChillNum)%CDLoopSideNum, &
@@ -919,7 +919,7 @@ SUBROUTINE InitGasAbsorber(ChillNum,RunFlag)
     ENDIF
     GasAbsorber(ChillNum)%DesHeatMassFlowRate = rho * GasAbsorber(ChillNum)%HeatVolFlowRate
     !init available hot water flow rate
-    CALL InitComponentNodes(0.d0, GasAbsorber(ChillNum)%DesHeatMassFlowRate, &
+    CALL InitComponentNodes(0., GasAbsorber(ChillNum)%DesHeatMassFlowRate, &
                                   HeatInletNode, HeatOutletNode,      &
                                  GasAbsorber(ChillNum)%HWLoopNum, &
                                  GasAbsorber(ChillNum)%HWLoopSideNum, &
@@ -936,7 +936,7 @@ SUBROUTINE InitGasAbsorber(ChillNum,RunFlag)
     ENDIF
     GasAbsorber(ChillNum)%DesEvapMassFlowRate = rho * GasAbsorber(ChillNum)%EvapVolFlowRate
     !init available hot water flow rate
-    CALL InitComponentNodes(0.d0, GasAbsorber(ChillNum)%DesEvapMassFlowRate, &
+    CALL InitComponentNodes(0., GasAbsorber(ChillNum)%DesEvapMassFlowRate, &
                                   GasAbsorber(ChillNum)%ChillReturnNodeNum,   &
                                   GasAbsorber(ChillNum)%ChillSupplyNodeNum,   &
                                   GasAbsorber(ChillNum)%CWLoopNum,     &
@@ -983,7 +983,7 @@ SUBROUTINE InitGasAbsorber(ChillNum,RunFlag)
                               GasAbsorber(ChillNum)%CDCompNum)
 
   ELSE
-    mdot = 0.d0
+    mdot = 0.
     CALL SetComponentFlowRate(mdot, &
                               GasAbsorber(ChillNum)%CondReturnNodeNum,     &
                               GasAbsorber(ChillNum)%CondSupplyNodeNum,     &
@@ -1049,12 +1049,12 @@ SUBROUTINE SizeGasAbsorber(ChillNum)
   LOGICAL             :: ErrorsFound   ! If errors detected in input
 !  LOGICAL             :: LoopErrorsFound
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL(r64)   :: Cp ! local fluid specific heat
-  REAL(r64)   :: rho ! local fluid density
-  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
-  REAL(r64)           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
-  REAL(r64)           :: tmpCondVolFlowRate ! local condenser design volume flow rate
-  REAL(r64)           :: tmpHeatRecVolFlowRate ! local heat recovery design volume flow rate
+  REAL   :: Cp ! local fluid specific heat
+  REAL   :: rho ! local fluid density
+  REAL           :: tmpNomCap ! local nominal capacity cooling power
+  REAL           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
+  REAL           :: tmpCondVolFlowRate ! local condenser design volume flow rate
+  REAL           :: tmpHeatRecVolFlowRate ! local heat recovery design volume flow rate
 
   PltSizCoolNum = 0
   PltSizCondNum = 0
@@ -1092,7 +1092,7 @@ SUBROUTINE SizeGasAbsorber(ChillNum)
                                                     * PlantSizData(PltSizCoolNum)%DesVolFlowRate * GasAbsorber(ChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%NomCoolingCap = tmpNomCap
       ELSE
-        tmpNomCap = 0.d0
+        tmpNomCap = 0.
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%NomCoolingCap = tmpNomCap
       END IF
         IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('ChillerHeater:Absorption:DirectFired', GasAbsorber(ChillNum)%Name, &
@@ -1111,7 +1111,7 @@ SUBROUTINE SizeGasAbsorber(ChillNum)
         tmpEvapVolFlowRate = PlantSizData(PltSizCoolNum)%DesVolFlowRate * GasAbsorber(ChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       ELSE
-        tmpEvapVolFlowRate = 0.d0
+        tmpEvapVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('ChillerHeater:Absorption:DirectFired', GasAbsorber(ChillNum)%Name, &
@@ -1134,7 +1134,7 @@ SUBROUTINE SizeGasAbsorber(ChillNum)
         tmpHeatRecVolFlowRate = PlantSizData(PltSizHeatNum)%DesVolFlowRate * GasAbsorber(ChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%HeatVolFlowRate = tmpHeatRecVolFlowRate
       ELSE
-        tmpHeatRecVolFlowRate = 0.d0
+        tmpHeatRecVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%HeatVolFlowRate = tmpHeatRecVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('ChillerHeater:Absorption:DirectFired', GasAbsorber(ChillNum)%Name, &
@@ -1167,7 +1167,7 @@ SUBROUTINE SizeGasAbsorber(ChillNum)
                              ( PlantSizData(PltSizCondNum)%DeltaT * Cp * rho )
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       ELSE
-        tmpCondVolFlowRate = 0.d0
+        tmpCondVolFlowRate = 0.
         IF (PlantSizesOkayToFinalize) GasAbsorber(ChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('ChillerHeater:Absorption:DirectFired', GasAbsorber(ChillNum)%Name, &
@@ -1236,7 +1236,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER              :: ChillNum        ! Absorber number
-  REAL(r64)            :: MyLoad          ! operating load
+  REAL            :: MyLoad          ! operating load
   LOGICAL, INTENT(IN)  :: RunFlag         ! TRUE when Absorber operating
 
 ! FlowLock = 0  if mass flow rates may be changed by loop components
@@ -1254,20 +1254,20 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
           ! Local copies of GasAbsorberSpecs Type
           ! all variables that are local copies of data structure
           ! variables are prefaced with an "l" for local.
-  REAL(r64)         :: lNomCoolingCap      ! W - design nominal capacity of Absorber
-  REAL(r64)         :: lFuelCoolRatio      ! ratio of fuel input to cooling output
-  REAL(r64)         :: lFuelHeatRatio      ! ratio of fuel input to heating output
-  REAL(r64)         :: lElecCoolRatio      ! ratio of electricity input to cooling output
+  REAL         :: lNomCoolingCap      ! W - design nominal capacity of Absorber
+  REAL         :: lFuelCoolRatio      ! ratio of fuel input to cooling output
+  REAL         :: lFuelHeatRatio      ! ratio of fuel input to heating output
+  REAL         :: lElecCoolRatio      ! ratio of electricity input to cooling output
   INTEGER           :: lChillReturnNodeNum ! Node number on the inlet side of the plant
   INTEGER           :: lChillSupplyNodeNum ! Node number on the outlet side of the plant
   INTEGER           :: lCondReturnNodeNum  ! Node number on the inlet side of the condenser
   INTEGER           :: lCondSupplyNodeNum  ! Node number on the outlet side of the condenser
-  REAL(r64)         :: lMinPartLoadRat     ! min allowed operating frac full load
-  REAL(r64)         :: lMaxPartLoadRat     ! max allowed operating frac full load
-  REAL(r64)         :: lOptPartLoadRat     ! optimal operating frac full load
-  REAL(r64)         :: lTempDesCondReturn  ! design secondary loop fluid temperature at the Absorber condenser side inlet
-  REAL(r64)         :: lTempDesCHWSupply   ! design chilled water supply temperature
-  REAL(r64)         :: lCondVolFlowRate    ! m**3/s - design nominal water volumetric flow rate through the condenser
+  REAL         :: lMinPartLoadRat     ! min allowed operating frac full load
+  REAL         :: lMaxPartLoadRat     ! max allowed operating frac full load
+  REAL         :: lOptPartLoadRat     ! optimal operating frac full load
+  REAL         :: lTempDesCondReturn  ! design secondary loop fluid temperature at the Absorber condenser side inlet
+  REAL         :: lTempDesCHWSupply   ! design chilled water supply temperature
+  REAL         :: lCondVolFlowRate    ! m**3/s - design nominal water volumetric flow rate through the condenser
   INTEGER           :: lCoolCapFTCurve     ! cooling capacity as a function of temperature curve
   INTEGER           :: lFuelCoolFTCurve    ! Fuel-Input-to cooling output Ratio Function of Temperature Curve
   INTEGER           :: lFuelCoolFPLRCurve  ! Fuel-Input-to cooling output Ratio Function of Part Load Ratio Curve
@@ -1275,52 +1275,52 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
   INTEGER           :: lElecCoolFPLRCurve  ! Electric-Input-to cooling output Ratio Function of Part Load Ratio Curve
   LOGICAL           :: lIsEnterCondensTemp ! if using entering conderser water temperature is TRUE, exiting is FALSE
   LOGICAL           :: lIsWaterCooled      ! if water cooled it is TRUE
-  REAL(r64)         :: lCHWLowLimitTemp    ! Chilled Water Lower Limit Temperature
-  REAL(r64)         :: lFuelHeatingValue
+  REAL         :: lCHWLowLimitTemp    ! Chilled Water Lower Limit Temperature
+  REAL         :: lFuelHeatingValue
             ! Local copies of GasAbsorberReportVars Type
-  REAL(r64)    :: lCoolingLoad        ! cooling load on the chiller (previously called QEvap)
-  REAL(r64)    :: lCoolingEnergy      ! variable to track total cooling load for period (was EvapEnergy)
-  REAL(r64)    :: lTowerLoad          ! load on the cooling tower/condenser (previously called QCond)
-  REAL(r64)    :: lTowerEnergy        ! variable to track total tower load for a period (was CondEnergy)
-  REAL(r64)    :: lFuelUseRate        ! instantaneous use of gas for period
-  REAL(r64)    :: lFuelEnergy         ! variable to track total fuel used for a period
-  REAL(r64)    :: lCoolFuelUseRate    ! instantaneous use of gas for period for cooling
-  REAL(r64)    :: lCoolFuelEnergy     ! variable to track total fuel used for a period for cooling
-  REAL(r64)    :: lHeatFuelUseRate    ! instantaneous use of gas for period for heating
-  REAL(r64)    :: lElectricPower      ! parasitic electric power used (was PumpingPower)
-  REAL(r64)    :: lElectricEnergy     ! track the total electricity used for a period (was PumpingEnergy)
-  REAL(r64)    :: lCoolElectricPower  ! parasitic electric power used  for cooling
-  REAL(r64)    :: lCoolElectricEnergy ! track the total electricity used for a period for cooling
-  REAL(r64)    :: lHeatElectricPower  ! parasitic electric power used  for heating
-  REAL(r64)    :: lChillReturnTemp    ! reporting: evaporator inlet temperature (was EvapInletTemp)
-  REAL(r64)    :: lChillSupplyTemp    ! reporting: evaporator outlet temperature (was EvapOutletTemp)
-  REAL(r64)    :: lChillWaterMassFlowRate ! reporting: evaporator mass flow rate (was Evapmdot)
-  REAL(r64)    :: lCondReturnTemp     ! reporting: condenser inlet temperature (was CondInletTemp)
-  REAL(r64)    :: lCondSupplyTemp     ! reporting: condenser outlet temperature (was CondOutletTemp)
-  REAL(r64)    :: lCondWaterMassFlowRate  ! reporting: condenser mass flow rate (was Condmdot)
-  REAL(r64)    :: lCoolPartLoadRatio      ! operating part load ratio (load/capacity for cooling)
-  REAL(r64)    :: lHeatPartLoadRatio      ! operating part load ratio (load/capacity for heating)
-  REAL(r64)    :: lAvailableCoolingCapacity   ! current capacity after temperature adjustment
-  REAL(r64)    :: lFractionOfPeriodRunning
-  REAL(r64)    :: Partloadrat                 ! actual operating part load ratio of unit (ranges from minplr to 1)
-  Real(r64)    :: lChillWaterMassflowratemax  ! Maximum flow rate through the evaporator
+  REAL    :: lCoolingLoad        ! cooling load on the chiller (previously called QEvap)
+  REAL    :: lCoolingEnergy      ! variable to track total cooling load for period (was EvapEnergy)
+  REAL    :: lTowerLoad          ! load on the cooling tower/condenser (previously called QCond)
+  REAL    :: lTowerEnergy        ! variable to track total tower load for a period (was CondEnergy)
+  REAL    :: lFuelUseRate        ! instantaneous use of gas for period
+  REAL    :: lFuelEnergy         ! variable to track total fuel used for a period
+  REAL    :: lCoolFuelUseRate    ! instantaneous use of gas for period for cooling
+  REAL    :: lCoolFuelEnergy     ! variable to track total fuel used for a period for cooling
+  REAL    :: lHeatFuelUseRate    ! instantaneous use of gas for period for heating
+  REAL    :: lElectricPower      ! parasitic electric power used (was PumpingPower)
+  REAL    :: lElectricEnergy     ! track the total electricity used for a period (was PumpingEnergy)
+  REAL    :: lCoolElectricPower  ! parasitic electric power used  for cooling
+  REAL    :: lCoolElectricEnergy ! track the total electricity used for a period for cooling
+  REAL    :: lHeatElectricPower  ! parasitic electric power used  for heating
+  REAL    :: lChillReturnTemp    ! reporting: evaporator inlet temperature (was EvapInletTemp)
+  REAL    :: lChillSupplyTemp    ! reporting: evaporator outlet temperature (was EvapOutletTemp)
+  REAL    :: lChillWaterMassFlowRate ! reporting: evaporator mass flow rate (was Evapmdot)
+  REAL    :: lCondReturnTemp     ! reporting: condenser inlet temperature (was CondInletTemp)
+  REAL    :: lCondSupplyTemp     ! reporting: condenser outlet temperature (was CondOutletTemp)
+  REAL    :: lCondWaterMassFlowRate  ! reporting: condenser mass flow rate (was Condmdot)
+  REAL    :: lCoolPartLoadRatio      ! operating part load ratio (load/capacity for cooling)
+  REAL    :: lHeatPartLoadRatio      ! operating part load ratio (load/capacity for heating)
+  REAL    :: lAvailableCoolingCapacity   ! current capacity after temperature adjustment
+  REAL    :: lFractionOfPeriodRunning
+  REAL    :: Partloadrat                 ! actual operating part load ratio of unit (ranges from minplr to 1)
+  REAL    :: lChillWaterMassflowratemax  ! Maximum flow rate through the evaporator
 
   ! other local variables
-  REAL(r64)              :: ChillDeltaTemp      ! chilled water temperature difference
-  REAL(r64)              :: ChillSupplySetPointTemp
+  REAL              :: ChillDeltaTemp      ! chilled water temperature difference
+  REAL              :: ChillSupplySetPointTemp
 
-  REAL(r64)              :: calcCondTemp          ! the condenser temperature used for curve calculation
+  REAL              :: calcCondTemp          ! the condenser temperature used for curve calculation
                                                   ! either return or supply depending on user input
-  REAL(r64), SAVE        :: oldCondSupplyTemp = 0 ! save the last iteration value of leaving condenser water temperature
-  REAL(r64)              :: revisedEstimateAvailCap ! final estimate of available capacity if using leaving
+  REAL, SAVE        :: oldCondSupplyTemp = 0 ! save the last iteration value of leaving condenser water temperature
+  REAL              :: revisedEstimateAvailCap ! final estimate of available capacity if using leaving
                                                     ! condenser water temperature
-  REAL(r64)              :: errorAvailCap          ! error fraction on final estimate of AvailableCoolingCapacity
+  REAL              :: errorAvailCap          ! error fraction on final estimate of AvailableCoolingCapacity
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL(r64)  :: rhoCW ! local fluid density for chilled water
-  REAL(r64)  :: Cp_CW  ! local fluid specific heat for chilled water
-  REAL(r64)  :: rhoCD ! local fluid density for condenser water
-  REAL(r64)  :: Cp_CD  ! local fluid specific heat for condenser water
+  REAL  :: rhoCW ! local fluid density for chilled water
+  REAL  :: Cp_CW  ! local fluid specific heat for chilled water
+  REAL  :: rhoCD ! local fluid density for condenser water
+  REAL  :: Cp_CD  ! local fluid specific heat for condenser water
 
   !initialize all output variables to zero
 
@@ -1431,7 +1431,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
 
     ENDIF
     ChillDeltaTemp   = 0.0
-    lFractionOfPeriodRunning = MIN(1.0d0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
+    lFractionOfPeriodRunning = MIN(1.0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
  ELSE
 
   ! if water cooled use the input node otherwise just use outside air temperature
@@ -1444,7 +1444,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
       calcCondTemp = lCondReturnTemp
     ELSE
       IF (oldCondSupplyTemp == 0) THEN
-        oldCondSupplyTemp = lCondReturnTemp + 8.0d0 ! if not previously estimated assume 8C greater than return
+        oldCondSupplyTemp = lCondReturnTemp + 8.0 ! if not previously estimated assume 8C greater than return
       END IF
       calcCondTemp = oldCondSupplyTemp
     END IF
@@ -1461,7 +1461,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
     ! air cooled
     Node(lCondReturnNodeNum)%Temp=Node(lCondReturnNodeNum)%OutAirDryBulb
     lCondReturnTemp = Node(lCondReturnNodeNum)%Temp
-    lCondWaterMassFlowRate = 0.d0
+    lCondWaterMassFlowRate = 0.
     CALL SetComponentFlowRate(lCondWaterMassFlowRate, &
                               GasAbsorber(ChillNum)%CondReturnNodeNum, &
                               GasAbsorber(ChillNum)%CondSupplyNodeNum, &
@@ -1491,7 +1491,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
     CASE (0) ! mass flow rates may be changed by loop components
       GasAbsorber(ChillNum)%Possiblesubcooling = .FALSE.
       lCoolingLoad = ABS(myLoad)
-      IF (ChillDeltaTemp /= 0.0d0) THEN
+      IF (ChillDeltaTemp /= 0.0) THEN
         lChillWaterMassFlowRate = ABS(lCoolingLoad / (Cp_CW * ChillDeltaTemp))
         If(lChillWaterMassFlowRate -lChillWaterMassflowratemax.GT.MassFlowTolerance)   &
            GasAbsorber(ChillNum)%Possiblesubcooling = .TRUE.
@@ -1577,7 +1577,7 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
   ! calculate the fraction of the time period that the chiller would be running
   ! use maximum from heating and cooling sides
   IF(lCoolPartLoadRatio.LT.lMinPartLoadRat.OR.lHeatPartLoadRatio.LT.lMinPartLoadRat) THEN
-    lFractionOfPeriodRunning = MIN(1.0d0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
+    lFractionOfPeriodRunning = MIN(1.0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
   ELSE
     lFractionOfPeriodRunning = 1.0
   ENDIF
@@ -1624,9 +1624,9 @@ SUBROUTINE CalcGasAbsorberChillerModel(ChillNum,MyLoad,Runflag)
     ! temperature.  If this becomes too common then may need to iterate a solution instead of
     ! relying on previous iteration method.
     revisedEstimateAvailCap = lNomCoolingCap * CurveValue(lCoolCapFTCurve,ChillSupplySetPointTemp,lCondSupplyTemp)
-    IF (revisedEstimateAvailCap > 0.0d0) THEN
+    IF (revisedEstimateAvailCap > 0.0) THEN
       errorAvailCap = ABS((revisedEstimateAvailCap - lAvailableCoolingCapacity)/revisedEstimateAvailCap)
-      IF (errorAvailCap > 0.05d0) THEN ! if more than 5% error in estimate
+      IF (errorAvailCap > 0.05) THEN ! if more than 5% error in estimate
         CALL ShowRecurringWarningErrorAtEnd('GasAbsorberChillerModel:"'//TRIM(GasAbsorber(ChillNum)%Name)//  &
           '", poor Condenser Supply Estimate',GasAbsorber(ChillNum)%condErrCount,ReportMinOf=errorAvailCap,  &
           ReportMaxOf=errorAvailCap)
@@ -1688,7 +1688,7 @@ SUBROUTINE CalcGasAbsorberHeaterModel(ChillNum,MyLoad,Runflag)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER              :: ChillNum        ! Absorber number
-  REAL(r64)            :: MyLoad          ! operating load
+  REAL            :: MyLoad          ! operating load
   LOGICAL, INTENT(IN)  :: RunFlag         ! TRUE when Absorber operating
 ! FlowLock = 0  if mass flow rates may be changed by loop components
 ! FlowLock = 1  if mass flow rates may not be changed by loop components
@@ -1707,46 +1707,46 @@ SUBROUTINE CalcGasAbsorberHeaterModel(ChillNum,MyLoad,Runflag)
           ! Local copies of GasAbsorberSpecs Type
           ! all variables that are local copies of data structure
           ! variables are prefaced with an "l" for local.
-  REAL(r64)         :: lNomCoolingCap      ! W - design nominal capacity of Absorber
-  REAL(r64)         :: lNomHeatCoolRatio   ! ratio of heating to cooling capacity
-  REAL(r64)         :: lFuelHeatRatio      ! ratio of fuel input to heating output
-  REAL(r64)         :: lElecHeatRatio      ! ratio of electricity input to heating output
+  REAL         :: lNomCoolingCap      ! W - design nominal capacity of Absorber
+  REAL         :: lNomHeatCoolRatio   ! ratio of heating to cooling capacity
+  REAL         :: lFuelHeatRatio      ! ratio of fuel input to heating output
+  REAL         :: lElecHeatRatio      ! ratio of electricity input to heating output
   INTEGER           :: lHeatReturnNodeNum  ! absorber steam inlet node number, water side
   INTEGER           :: lHeatSupplyNodeNum  ! absorber steam outlet node number, water side
-  REAL(r64)         :: lMinPartLoadRat     ! min allowed operating frac full load
-  REAL(r64)         :: lMaxPartLoadRat     ! max allowed operating frac full load
-  REAL(r64)         :: lOptPartLoadRat     ! optimal operating frac full load
+  REAL         :: lMinPartLoadRat     ! min allowed operating frac full load
+  REAL         :: lMaxPartLoadRat     ! max allowed operating frac full load
+  REAL         :: lOptPartLoadRat     ! optimal operating frac full load
   INTEGER           :: lHeatCapFCoolCurve  ! Heating Capacity Function of Cooling Capacity Curve
   INTEGER           :: lFuelHeatFHPLRCurve ! Fuel Input to heat output ratio during heating only function
-  REAL(r64)         :: lFuelHeatingValue
+  REAL         :: lFuelHeatingValue
             ! Local copies of GasAbsorberReportVars Type
-  REAL(r64)    :: lHeatingLoad        ! heating load on the chiller
-  REAL(r64)    :: lHeatingEnergy      ! heating energy
-  REAL(r64)    :: lFuelUseRate        ! instantaneous use of gas for period
-  REAL(r64)    :: lFuelEnergy         ! variable to track total fuel used for a period
-  REAL(r64)    :: lCoolFuelUseRate    ! instantaneous use of gas for period for cooling
-  REAL(r64)    :: lHeatFuelUseRate    ! instantaneous use of gas for period for heating
-  REAL(r64)    :: lHeatFuelEnergy     ! variable to track total fuel used for a period for heating
-  REAL(r64)    :: lElectricPower      ! parasitic electric power used (was PumpingPower)
-  REAL(r64)    :: lElectricEnergy     ! track the total electricity used for a period (was PumpingEnergy)
-  REAL(r64)    :: lCoolElectricPower  ! parasitic electric power used  for cooling
-  REAL(r64)    :: lHeatElectricPower  ! parasitic electric power used  for heating
-  REAL(r64)    :: lHeatElectricEnergy ! track the total electricity used for a period for heating
-  REAL(r64)    :: lHotWaterReturnTemp ! reporting: hot water return (inlet) temperature
-  REAL(r64)    :: lHotWaterSupplyTemp ! reporting: hot water supply (outlet) temperature
-  REAL(r64)    :: lHotWaterMassFlowRate   ! reporting: hot water mass flow rate
-  REAL(r64)    :: lCoolPartLoadRatio      ! operating part load ratio (load/capacity for cooling)
-  REAL(r64)    :: lHeatPartLoadRatio      ! operating part load ratio (load/capacity for heating)
-  REAL(r64)    :: lAvailableHeatingCapacity    ! current heating capacity
-  REAL(r64)    :: lFractionOfPeriodRunning
-  Real(r64)    :: lHotWaterMassFlowRateMax  ! Maximum flow rate through the evaporator
+  REAL    :: lHeatingLoad        ! heating load on the chiller
+  REAL    :: lHeatingEnergy      ! heating energy
+  REAL    :: lFuelUseRate        ! instantaneous use of gas for period
+  REAL    :: lFuelEnergy         ! variable to track total fuel used for a period
+  REAL    :: lCoolFuelUseRate    ! instantaneous use of gas for period for cooling
+  REAL    :: lHeatFuelUseRate    ! instantaneous use of gas for period for heating
+  REAL    :: lHeatFuelEnergy     ! variable to track total fuel used for a period for heating
+  REAL    :: lElectricPower      ! parasitic electric power used (was PumpingPower)
+  REAL    :: lElectricEnergy     ! track the total electricity used for a period (was PumpingEnergy)
+  REAL    :: lCoolElectricPower  ! parasitic electric power used  for cooling
+  REAL    :: lHeatElectricPower  ! parasitic electric power used  for heating
+  REAL    :: lHeatElectricEnergy ! track the total electricity used for a period for heating
+  REAL    :: lHotWaterReturnTemp ! reporting: hot water return (inlet) temperature
+  REAL    :: lHotWaterSupplyTemp ! reporting: hot water supply (outlet) temperature
+  REAL    :: lHotWaterMassFlowRate   ! reporting: hot water mass flow rate
+  REAL    :: lCoolPartLoadRatio      ! operating part load ratio (load/capacity for cooling)
+  REAL    :: lHeatPartLoadRatio      ! operating part load ratio (load/capacity for heating)
+  REAL    :: lAvailableHeatingCapacity    ! current heating capacity
+  REAL    :: lFractionOfPeriodRunning
+  REAL    :: lHotWaterMassFlowRateMax  ! Maximum flow rate through the evaporator
   ! other local variables
-  REAL(r64)              :: HeatDeltaTemp       ! hot water temperature difference
-  REAL(r64)              :: HeatSupplySetPointTemp
+  REAL              :: HeatDeltaTemp       ! hot water temperature difference
+  REAL              :: HeatSupplySetPointTemp
   INTEGER      :: LoopNum
   INTEGER      :: LoopSideNum
-  REAL(r64)    :: Cp_HW  ! local fluid specific heat for hot water
-  REAL(r64)    :: rhoHW  ! local fluid density for hot water
+  REAL    :: Cp_HW  ! local fluid specific heat for hot water
+  REAL    :: rhoHW  ! local fluid density for hot water
 
 !  INTEGER, SAVE          :: ErrCount            ! error counter
 
@@ -1823,7 +1823,7 @@ SUBROUTINE CalcGasAbsorberHeaterModel(ChillNum,MyLoad,Runflag)
           !set node temperatures
     lHotWaterSupplyTemp = lHotWaterReturnTemp
     HeatDeltaTemp = 0.0
-    lFractionOfPeriodRunning = MIN(1.0d0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
+    lFractionOfPeriodRunning = MIN(1.0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
  ELSE
 
             !Determine available heating capacity using the current cooling load
@@ -1913,7 +1913,7 @@ SUBROUTINE CalcGasAbsorberHeaterModel(ChillNum,MyLoad,Runflag)
 
             ! calculate the fraction of the time period that the chiller would be running
             ! use maximum from heating and cooling sides
-  lFractionOfPeriodRunning = MIN(1.0d0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
+  lFractionOfPeriodRunning = MIN(1.0,MAX(lHeatPartLoadRatio,lCoolPartLoadRatio)/lMinPartLoadRat)
 
             !Calculate electric parasitics used
             ! for heating based on nominal capacity not available capacity
@@ -1974,7 +1974,7 @@ SUBROUTINE UpdateGasAbsorberCoolRecords(MyLoad,RunFlag,ChillNum)
 IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64),INTENT(IN)          :: MyLoad    ! current load
+  REAL,INTENT(IN)          :: MyLoad    ! current load
   LOGICAL, INTENT(IN)      :: RunFlag   ! TRUE if Absorber operating
   INTEGER, INTENT(IN)      :: ChillNum  ! Absorber number
 
@@ -2065,7 +2065,7 @@ SUBROUTINE UpdateGasAbsorberHeatRecords(MyLoad,RunFlag,ChillNum)
 IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL(r64),INTENT(IN)          :: MyLoad    ! current load
+  REAL,INTENT(IN)          :: MyLoad    ! current load
   LOGICAL, INTENT(IN)      :: RunFlag   ! TRUE if Absorber operating
   INTEGER, INTENT(IN)      :: ChillNum  ! Absorber number
 

@@ -53,57 +53,57 @@ PRIVATE ! Everything private unless explicitly made public
     INTEGER        :: OutletNodeNum        = 0  ! plant loop outlet node index
     INTEGER        :: FlowPriority         = LoopFlowStatus_Unknown ! how component affects overall loop flow determination
     INTEGER        :: HowLoadServed        = HowMet_Unknown  ! nature of component wrt to plant loop's loads
-    REAL(r64)      :: LowOutTempLimit      = 0.d0 ! low limit for outlet temp if MEETSLOADWITHNOMINALCAPACITYLOWOUTLIMIT
-    REAL(r64)      :: HiOutTempLimit       = 0.d0 ! hi limit for outlet temp if MEETSLOADWITHNOMINALCAPACITYHIOUTLIMIT
-    REAL(r64)      :: MassFlowRateRequest  = 0.d0 ! request filled by actuator, might not be satisfied if plant constrained [kg/s]
-    REAL(r64)      :: MassFlowRateMin      = 0.d0 ! filled by actuator, reports minimum (hardware) flow rate for component [kg/s]
-    REAL(r64)      :: MassFlowRateMax      = 0.d0 ! filled by actuator, reports maximum (hardware) flow rate for component [kg/s]
-    REAL(r64)      :: DesignVolumeFlowRate = 0.d0 ! filled by actuator,
-    REAL(r64)      :: MyLoad  =0.d0   ! fills internal variable for user's model to know current load request of supply equip [W]
-    REAL(r64)      :: MinLoad = 0.d0  ! filled by actuator, reports back size for load dispatch routines [W]
-    REAL(r64)      :: MaxLoad = 0.d0  ! filled by actuator, reports back size for load dispatch [W]
-    REAL(r64)      :: OptLoad = 0.d0  ! filled by actuator, reports back size for load dispatch [W]
-    REAL(r64)      :: InletRho = 0.d0 ! fills internal variable, current density for fluid type and inlet temperature [kg/m3]
-    REAL(r64)      :: InletCp  = 0.d0 ! fills internal Varaible, current specific heat for fluid type and inlet temperature [J/kg-C]
-    REAL(r64)      :: InletTemp = 0.d0 ! fills internal variable, current inlet fluid temperature [C]
-    REAL(r64)      :: InletMassFlowRate = 0.d0 ! fills internal variable, current inlet mass flow rate [kg/s]
-    REAL(r64)      :: OutletTemp = 0.d0 ! filled by actuator, componenent outlet temperature [C]
+    REAL      :: LowOutTempLimit      = 0. ! low limit for outlet temp if MEETSLOADWITHNOMINALCAPACITYLOWOUTLIMIT
+    REAL      :: HiOutTempLimit       = 0. ! hi limit for outlet temp if MEETSLOADWITHNOMINALCAPACITYHIOUTLIMIT
+    REAL      :: MassFlowRateRequest  = 0. ! request filled by actuator, might not be satisfied if plant constrained [kg/s]
+    REAL      :: MassFlowRateMin      = 0. ! filled by actuator, reports minimum (hardware) flow rate for component [kg/s]
+    REAL      :: MassFlowRateMax      = 0. ! filled by actuator, reports maximum (hardware) flow rate for component [kg/s]
+    REAL      :: DesignVolumeFlowRate = 0. ! filled by actuator,
+    REAL      :: MyLoad  =0.   ! fills internal variable for user's model to know current load request of supply equip [W]
+    REAL      :: MinLoad = 0.  ! filled by actuator, reports back size for load dispatch routines [W]
+    REAL      :: MaxLoad = 0.  ! filled by actuator, reports back size for load dispatch [W]
+    REAL      :: OptLoad = 0.  ! filled by actuator, reports back size for load dispatch [W]
+    REAL      :: InletRho = 0. ! fills internal variable, current density for fluid type and inlet temperature [kg/m3]
+    REAL      :: InletCp  = 0. ! fills internal Varaible, current specific heat for fluid type and inlet temperature [J/kg-C]
+    REAL      :: InletTemp = 0. ! fills internal variable, current inlet fluid temperature [C]
+    REAL      :: InletMassFlowRate = 0. ! fills internal variable, current inlet mass flow rate [kg/s]
+    REAL      :: OutletTemp = 0. ! filled by actuator, componenent outlet temperature [C]
   END TYPE PlantConnectionStruct
 
   TYPE AirConnectionStruct
     INTEGER        :: InletNodeNum       = 0     ! air inlet node index
     INTEGER        :: OutletNodeNum      = 0     ! air outlet node index
-    REAL(r64)      :: InletRho           = 0.d0  ! fills internal variable, current inlet air density [kg/m3]
-    REAL(r64)      :: InletCp            = 0.d0  ! fills internal variable, current inlet air specific heat [J/kg-c]
-    REAL(r64)      :: InletTemp          = 0.d0  ! fills internal variable, current inlet air temperature [C]
-    REAL(r64)      :: InletHumRat        = 0.d0  ! fills internal variable, current inlet air humidity ratio [kg/kg]
-    REAL(r64)      :: InletMassFlowRate  = 0.d0  ! fills internal variable, current inlet air mass flow rate [kg/s]
-    REAL(r64)      :: OutletTemp         = 0.d0  ! filled by actuator, component outlet temperature [C]
-    REAL(r64)      :: OutletHumRat       = 0.d0  ! filled by actuator, component outlet humidity ratio [kg/kg]
-    REAL(r64)      :: OutletMassFlowRate = 0.d0  ! filled by actuator, component outlet mass flow rate [kg/s]
+    REAL      :: InletRho           = 0.  ! fills internal variable, current inlet air density [kg/m3]
+    REAL      :: InletCp            = 0.  ! fills internal variable, current inlet air specific heat [J/kg-c]
+    REAL      :: InletTemp          = 0.  ! fills internal variable, current inlet air temperature [C]
+    REAL      :: InletHumRat        = 0.  ! fills internal variable, current inlet air humidity ratio [kg/kg]
+    REAL      :: InletMassFlowRate  = 0.  ! fills internal variable, current inlet air mass flow rate [kg/s]
+    REAL      :: OutletTemp         = 0.  ! filled by actuator, component outlet temperature [C]
+    REAL      :: OutletHumRat       = 0.  ! filled by actuator, component outlet humidity ratio [kg/kg]
+    REAL      :: OutletMassFlowRate = 0.  ! filled by actuator, component outlet mass flow rate [kg/s]
   END TYPE AirConnectionStruct
 
   TYPE WaterUseTankConnectionStruct ! data for interacting with water use storage system
     LOGICAL    :: SuppliedByWaterSystem           = .FALSE.
     INTEGER    :: SupplyTankID                    = 0 ! index "pointer" to WaterStorage structure
     INTEGER    :: SupplyTankDemandARRID           = 0 ! index "pointer" to demand array inside WaterStorage structure
-    REAL(r64)  :: SupplyVdotRequest               = 0.d0
+    REAL  :: SupplyVdotRequest               = 0.
     LOGICAL    :: CollectsToWaterSystem           = .FALSE.
     INTEGER    :: CollectionTankID                = 0 !index "pointer" to Storage TAnk array WaterStorage
     INTEGER    :: CollectionTankSupplyARRID       = 0 !index pointe to supply Vdot array in WaterStorage
-    REAL(r64)  :: CollectedVdot                   = 0.d0 !
+    REAL  :: CollectedVdot                   = 0. !
   END TYPE WaterUseTankConnectionStruct
 
   TYPE ZoneInternalGainsStruct
     LOGICAL   :: DeviceHasInternalGains      = .FALSE.
     INTEGER   :: ZoneNum                     = 0
-    REAL(r64) :: ConvectionGainRate          = 0.d0
-    REAL(r64) :: ReturnAirConvectionGainRate = 0.d0
-    REAL(r64) :: ThermalRadiationGainRate    = 0.d0
-    REAL(r64) :: LatentGainRate              = 0.d0
-    REAL(r64) :: ReturnAirLatentGainRate     = 0.d0
-    REAL(r64) :: CarbonDioxideGainRate       = 0.d0
-    REAL(r64) :: GenericContamGainRate       = 0.d0
+    REAL :: ConvectionGainRate          = 0.
+    REAL :: ReturnAirConvectionGainRate = 0.
+    REAL :: ThermalRadiationGainRate    = 0.
+    REAL :: LatentGainRate              = 0.
+    REAL :: ReturnAirLatentGainRate     = 0.
+    REAL :: CarbonDioxideGainRate       = 0.
+    REAL :: GenericContamGainRate       = 0.
   END TYPE ZoneInternalGainsStruct
 
   TYPE UserPlantComponentStruct
@@ -139,10 +139,10 @@ PRIVATE ! Everything private unless explicitly made public
     TYPE(PlantConnectionStruct), DIMENSION(:), ALLOCATABLE :: Loop ! collect data for each plant loop connection
     TYPE(WaterUseTankConnectionStruct)   :: Water
     TYPE(ZoneInternalGainsStruct)        :: Zone ! for skin losses
-    REAL(r64)  :: RemainingOutputToHeatingSP    = 0.d0 ! sensible load remaining for device, to heating setpoint [W]
-    REAL(r64)  :: RemainingOutputToCoolingSP    = 0.d0 ! sensible load remaining for device, negative means cooling [W]
-    REAL(r64)  :: RemainingOutputReqToHumidSP   = 0.d0 ! latent load remaining for device, to humidification setpoint [kg/s]
-    REAL(r64)  :: RemainingOutputReqToDehumidSP = 0.d0 ! latent load remaining for device, Negative means dehumidify [kg/s]
+    REAL  :: RemainingOutputToHeatingSP    = 0. ! sensible load remaining for device, to heating setpoint [W]
+    REAL  :: RemainingOutputToCoolingSP    = 0. ! sensible load remaining for device, negative means cooling [W]
+    REAL  :: RemainingOutputReqToHumidSP   = 0. ! latent load remaining for device, to humidification setpoint [kg/s]
+    REAL  :: RemainingOutputReqToDehumidSP = 0. ! latent load remaining for device, Negative means dehumidify [kg/s]
   END Type
 
   TYPE UserAirTerminalComponentStruct
@@ -156,10 +156,10 @@ PRIVATE ! Everything private unless explicitly made public
     TYPE(PlantConnectionStruct), DIMENSION(:), ALLOCATABLE :: Loop ! collect data for each plant loop connection
     TYPE(WaterUseTankConnectionStruct)   :: Water
     TYPE(ZoneInternalGainsStruct)        :: Zone ! for skin losses
-    REAL(r64)  :: RemainingOutputToHeatingSP    = 0.d0 ! sensible load remaining for device, to heating setpoint [W]
-    REAL(r64)  :: RemainingOutputToCoolingSP    = 0.d0 ! sensible load remaining for device, negative means cooling [W]
-    REAL(r64)  :: RemainingOutputReqToHumidSP   = 0.d0 ! latent load remaining for device, to humidification setpoint [kg/s]
-    REAL(r64)  :: RemainingOutputReqToDehumidSP = 0.d0 ! latent load remaining for device, Negative means dehumidify [kg/s]
+    REAL  :: RemainingOutputToHeatingSP    = 0. ! sensible load remaining for device, to heating setpoint [W]
+    REAL  :: RemainingOutputToCoolingSP    = 0. ! sensible load remaining for device, negative means cooling [W]
+    REAL  :: RemainingOutputReqToHumidSP   = 0. ! latent load remaining for device, to humidification setpoint [kg/s]
+    REAL  :: RemainingOutputReqToDehumidSP = 0. ! latent load remaining for device, Negative means dehumidify [kg/s]
   END TYPE
           ! MODULE VARIABLE DECLARATIONS:
   TYPE(UserPlantComponentStruct),             DIMENSION(:), ALLOCATABLE :: UserPlantComp
@@ -234,10 +234,10 @@ SUBROUTINE SimUserDefinedPlantComponent(LoopNum, LoopSideNum, EquipType,EquipNam
   CHARACTER(len=*), INTENT(IN) :: EquipName  ! user name for component
   INTEGER, INTENT(INOUT)       :: CompIndex
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL(r64), INTENT(IN)        :: MyLoad
-  REAL(r64), INTENT(OUT)       :: MinCap
-  REAL(r64), INTENT(OUT)       :: MaxCap
-  REAL(r64), INTENT(OUT)       :: OptCap
+  REAL, INTENT(IN)        :: MyLoad
+  REAL, INTENT(OUT)       :: MinCap
+  REAL, INTENT(OUT)       :: MaxCap
+  REAL, INTENT(OUT)       :: OptCap
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -394,8 +394,8 @@ SUBROUTINE SimCoilUserDefined(EquipName, CompIndex, AirLoopNum, HeatingActive, C
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: EnthInlet
-  REAL(r64)  :: EnthOutlet
+  REAL  :: EnthInlet
+  REAL  :: EnthOutlet
   INTEGER    :: CompNum
 
   IF (GetInput) THEN
@@ -511,8 +511,8 @@ SUBROUTINE SimZoneAirUserDefined(CompName,ZoneNum,SensibleOutputProvided,LatentO
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT    (IN) :: CompName            ! name of the packaged terminal heat pump
   INTEGER,          INTENT    (IN) :: ZoneNum             ! number of zone being served
-  REAL(r64),        INTENT   (OUT) :: SensibleOutputProvided   ! sensible capacity delivered to zone
-  REAL(r64),        INTENT   (OUT) :: LatentOutputProvided   ! Latent add/removal  (kg/s), dehumid = negative
+  REAL,        INTENT   (OUT) :: SensibleOutputProvided   ! sensible capacity delivered to zone
+  REAL,        INTENT   (OUT) :: LatentOutputProvided   ! Latent add/removal  (kg/s), dehumid = negative
   INTEGER,          INTENT (INOUT) :: CompIndex           ! index to zone hvac unit
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -526,10 +526,10 @@ SUBROUTINE SimZoneAirUserDefined(CompName,ZoneNum,SensibleOutputProvided,LatentO
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER    :: CompNum
   INTEGER    :: Loop
-  REAL(r64)  :: AirMassFlow
-  REAL(r64)  :: MinHumRat
-  REAL(r64)  :: SpecHumOut
-  REAL(r64)  :: SpecHumIn
+  REAL  :: AirMassFlow
+  REAL  :: MinHumRat
+  REAL  :: SpecHumOut
+  REAL  :: SpecHumIn
 
   IF (GetInput) THEN
     CALL GetUserDefinedComponents
@@ -608,9 +608,9 @@ SUBROUTINE SimZoneAirUserDefined(CompName,ZoneNum,SensibleOutputProvided,LatentO
                 - PsyHFnTdbW(Node(UserZoneAirHVAC(CompNum)%ZoneAir%InletNodeNum)%Temp,MinHumRat, 'SimZoneAirUserDefined'))
 
   SpecHumOut = Node(UserZoneAirHVAC(CompNum)%ZoneAir%OutletNodeNum)%HumRat &
-               / (1.0d0 + Node(UserZoneAirHVAC(CompNum)%ZoneAir%OutletNodeNum)%HumRat)
+               / (1.0 + Node(UserZoneAirHVAC(CompNum)%ZoneAir%OutletNodeNum)%HumRat)
   SpecHumIn  = Node(UserZoneAirHVAC(CompNum)%ZoneAir%InletNodeNum)%HumRat &
-              / (1.0d0 + Node(UserZoneAirHVAC(CompNum)%ZoneAir%InletNodeNum)%HumRat)
+              / (1.0 + Node(UserZoneAirHVAC(CompNum)%ZoneAir%InletNodeNum)%HumRat)
   LatentOutputProvided = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate, kg/s (dehumid = negative)
 
 
@@ -793,7 +793,7 @@ SUBROUTINE GetUserDefinedComponents
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
   INTEGER  :: CompLoop
   INTEGER  :: ConnectionLoop
@@ -824,7 +824,7 @@ SUBROUTINE GetUserDefinedComponents
   ALLOCATE(cNumericFieldNames(MaxNumNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(MaxNumNumbers))
-  rNumericArgs=0.0d0
+  rNumericArgs=0.0
   ALLOCATE(lNumericFieldBlanks(MaxNumNumbers))
   lNumericFieldBlanks=.false.
 
@@ -1874,7 +1874,7 @@ SUBROUTINE InitPlantUserComponent(CompNum, LoopNum, MyLoad)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: CompNum
   INTEGER, INTENT(IN) :: LoopNum
-  REAL(r64), INTENT(IN) ::MyLoad
+  REAL, INTENT(IN) ::MyLoad
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1891,8 +1891,8 @@ SUBROUTINE InitPlantUserComponent(CompNum, LoopNum, MyLoad)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   INTEGER  :: ConnectionNum
   LOGICAL  :: errFlag
-!  REAL(r64) :: rho
-!  REAL(r64) :: Cp
+!  REAL :: rho
+!  REAL :: Cp
 
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyFlag(NumUserPlantComps))

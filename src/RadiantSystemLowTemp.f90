@@ -84,8 +84,8 @@ INTEGER, PARAMETER :: CondCtrlNone      = 0 ! Condensation control--none, so sys
 INTEGER, PARAMETER :: CondCtrlSimpleOff = 1 ! Condensation control--simple off, system shuts off when condensation predicted
 INTEGER, PARAMETER :: CondCtrlVariedOff = 2 ! Condensation control--variable off, system modulates to keep running if possible
   ! Limit temperatures to indicate that a system cannot heat or cannot cool
-REAL(r64) :: LowTempHeating  = -200.0d0 ! Used to indicate that a user does not have a heating control temperature
-REAL(r64) :: HighTempCooling =  200.0d0 ! Used to indicate that a user does not have a cooling control temperature
+REAL :: LowTempHeating  = -200.0 ! Used to indicate that a user does not have a heating control temperature
+REAL :: HighTempCooling =  200.0 ! Used to indicate that a user does not have a cooling control temperature
 
   ! DERIVED TYPE DEFINITIONS:
 TYPE, PUBLIC :: HydronicRadiantSystemData
@@ -101,30 +101,30 @@ TYPE, PUBLIC :: HydronicRadiantSystemData
                   DIMENSION(:) :: SurfacePtr              ! Pointer to the surface(s) in the Surface derived type
   CHARACTER(len=MaxNameLength), &
      ALLOCATABLE, DIMENSION(:) :: SurfaceName             ! Name of surfaces that are the radiant system (can be one or more)
-  REAL(r64), ALLOCATABLE,   &
+  REAL, ALLOCATABLE,   &
                   DIMENSION(:) :: SurfaceFlowFrac         ! Fraction of flow/pipe length for a particular surface
-  REAL(r64)                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
-  REAL(r64)                    :: TubeDiameter      = 0.0 ! tube diameter for embedded tubing
-  REAL(r64)                    :: TubeLength        = 0.0 ! tube length embedded in radiant surface
+  REAL                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
+  REAL                    :: TubeDiameter      = 0.0 ! tube diameter for embedded tubing
+  REAL                    :: TubeLength        = 0.0 ! tube length embedded in radiant surface
   INTEGER                      :: ControlType       = 0   ! Control type for the system (MAT, MRT, Op temp, ODB, OWB)
   LOGICAL                      :: HeatingSystem = .false. ! .TRUE. when the system is able to heat (parameters are valid)
-  REAL(r64)                    :: WaterVolFlowMaxHeat=0.0 ! maximum water flow rate for heating, m3/s
-  REAL(r64)                    :: WaterFlowMaxHeat  = 0.0 ! maximum water flow rate for heating, kg/s
+  REAL                    :: WaterVolFlowMaxHeat=0.0 ! maximum water flow rate for heating, m3/s
+  REAL                    :: WaterFlowMaxHeat  = 0.0 ! maximum water flow rate for heating, kg/s
   INTEGER                      :: HotWaterInNode    = 0   ! hot water inlet node
   INTEGER                      :: HotWaterOutNode   = 0   ! hot water outlet node
-  REAL(r64)                    :: HotThrottlRange   = 0.0 ! Throttling range for heating [C]
+  REAL                    :: HotThrottlRange   = 0.0 ! Throttling range for heating [C]
   CHARACTER(len=MaxNameLength) :: HotSetptSched     = ' ' ! Schedule name for the zone setpoint temperature
   INTEGER                      :: HotSetptSchedPtr  = 0   ! Schedule index for the zone setpoint temperature
   INTEGER                      :: HWLoopNum         = 0
   INTEGER                      :: HWLoopSide        = 0
   INTEGER                      :: HWBranchNum       = 0
   INTEGER                      :: HWCompNum         = 0
-  REAL(r64)                    :: WaterVolFlowMaxCool=0.0 ! maximum water flow rate for cooling, m3/s
-  REAL(r64)                    :: WaterFlowMaxCool  = 0.0 ! maximum water flow rate for cooling, kg/s
+  REAL                    :: WaterVolFlowMaxCool=0.0 ! maximum water flow rate for cooling, m3/s
+  REAL                    :: WaterFlowMaxCool  = 0.0 ! maximum water flow rate for cooling, kg/s
   LOGICAL                      :: CoolingSystem =.false.  ! .TRUE. when the system is able to cool (parameters are valid)
   INTEGER                      :: ColdWaterInNode   = 0   ! cold water inlet node
   INTEGER                      :: ColdWaterOutNode  = 0   ! cold water outlet node
-  REAL(r64)                    :: ColdThrottlRange  = 0.0 ! Throttling range for cooling [C]
+  REAL                    :: ColdThrottlRange  = 0.0 ! Throttling range for cooling [C]
   CHARACTER(len=MaxNameLength) :: ColdSetptSched    = ' ' ! Schedule name for the zone setpoint temperature
   INTEGER                      :: ColdSetptSchedPtr = 0   ! Schedule index for the zone setpoint temperature
   INTEGER                      :: CWLoopNum         = 0
@@ -134,21 +134,21 @@ TYPE, PUBLIC :: HydronicRadiantSystemData
   INTEGER                      :: GlycolIndex       = 0   ! Index to Glycol (Water) Properties
   INTEGER                      :: CondErrCount      = 0   ! Error count for warning messages
   INTEGER                      :: CondCtrlType      = 1   ! Condensation control type (initialize to simple off)
-  REAL(r64)                    :: CondDewPtDeltaT   = 1.0 ! Diff between surface temperature and dew point for cond. shut-off
-  REAL(r64)                    :: CondCausedTimeOff = 0.0 ! Amount of time condensation did or could have turned system off
+  REAL                    :: CondDewPtDeltaT   = 1.0 ! Diff between surface temperature and dew point for cond. shut-off
+  REAL                    :: CondCausedTimeOff = 0.0 ! Amount of time condensation did or could have turned system off
   LOGICAL                      :: CondCausedShutDown = .FALSE. ! .TRUE. when condensation predicted at surface
   ! Other parameters
   LOGICAL                      :: EMSOverrideOnWaterMdot = .FALSE.
-  REAL(r64)                    :: EMSWaterMdotOverrideValue = 0.0D0
+  REAL                    :: EMSWaterMdotOverrideValue = 0.0
 
   ! Report data
-  REAL(r64)                    :: WaterInletTemp    = 0.0 ! water inlet temperature
-  REAL(r64)                    :: WaterOutletTemp   = 0.0 ! water outlet temperature
-  REAL(r64)                    :: WaterMassFlowRate = 0.0 ! water mass flow rate
-  REAL(r64)                    :: HeatPower         = 0.0 ! heating sent to panel in Watts
-  REAL(r64)                    :: HeatEnergy        = 0.0 ! heating sent to panel in Joules
-  REAL(r64)                    :: CoolPower         = 0.0 ! cooling sent to panel in Watts
-  REAL(r64)                    :: CoolEnergy        = 0.0 ! cooling sent to panel in Joules
+  REAL                    :: WaterInletTemp    = 0.0 ! water inlet temperature
+  REAL                    :: WaterOutletTemp   = 0.0 ! water outlet temperature
+  REAL                    :: WaterMassFlowRate = 0.0 ! water mass flow rate
+  REAL                    :: HeatPower         = 0.0 ! heating sent to panel in Watts
+  REAL                    :: HeatEnergy        = 0.0 ! heating sent to panel in Joules
+  REAL                    :: CoolPower         = 0.0 ! cooling sent to panel in Watts
+  REAL                    :: CoolEnergy        = 0.0 ! cooling sent to panel in Joules
 END TYPE HydronicRadiantSystemData
 
 TYPE, PUBLIC :: ConstantFlowRadiantSystemData
@@ -164,24 +164,24 @@ TYPE, PUBLIC :: ConstantFlowRadiantSystemData
                   DIMENSION(:) :: SurfacePtr            ! Pointer to the surface(s) in the Surface derived type
   CHARACTER(len=MaxNameLength), &
      ALLOCATABLE, DIMENSION(:) :: SurfaceName           ! Name of surfaces that are the radiant system (can be one or more)
-  REAL(r64),    ALLOCATABLE,   &
+  REAL,    ALLOCATABLE,   &
                   DIMENSION(:) :: SurfaceFlowFrac       ! Fraction of flow/pipe length for a particular surface
-  REAL(r64)                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
-  REAL(r64)                    :: TubeDiameter      = 0.0 ! tube diameter for embedded tubing
-  REAL(r64)                    :: TubeLength        = 0.0 ! tube length embedded in radiant surface
+  REAL                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
+  REAL                    :: TubeDiameter      = 0.0 ! tube diameter for embedded tubing
+  REAL                    :: TubeLength        = 0.0 ! tube length embedded in radiant surface
   INTEGER                      :: ControlType       = 0   ! Control type for the system (MAT, MRT, Op temp, ODB, OWB)
-  REAL(r64)                    :: WaterVolFlowMax   = 0.0 ! design nominal capacity of constant flow pump (volumetric flow rate)
-  REAL(r64)                    :: ColdDesignWaterMassFlowRate =0.d0
-  REAL(r64)                    :: HotDesignWaterMassFlowRate =0.d0
+  REAL                    :: WaterVolFlowMax   = 0.0 ! design nominal capacity of constant flow pump (volumetric flow rate)
+  REAL                    :: ColdDesignWaterMassFlowRate =0.
+  REAL                    :: HotDesignWaterMassFlowRate =0.
 
-  REAL(r64)                    :: WaterMassFlowRate = 0.0 ! current flow rate through system (calculated)
+  REAL                    :: WaterMassFlowRate = 0.0 ! current flow rate through system (calculated)
   CHARACTER(len=MaxNameLength) :: VolFlowSched      = ' ' ! schedule of maximum flow at the current time
   INTEGER                      :: VolFlowSchedPtr   = 0   ! index to the volumetric flow schedule
-  REAL(r64)                    :: NomPumpHead       = 0.0 ! nominal head of the constant flow pump
-  REAL(r64)                    :: NomPowerUse       = 0.0 ! nominal power use of the constant flow pump
-  REAL(r64)                    :: MotorEffic        = 0.0 ! efficiency of the pump motor
-  REAL(r64)                    :: PumpEffic         = 0.0 ! overall efficiency of the pump (calculated)
-  REAL(r64)                    :: FracMotorLossToFluid = 0.0 ! amount of heat generated by pump motor that is added to the fluid
+  REAL                    :: NomPumpHead       = 0.0 ! nominal head of the constant flow pump
+  REAL                    :: NomPowerUse       = 0.0 ! nominal power use of the constant flow pump
+  REAL                    :: MotorEffic        = 0.0 ! efficiency of the pump motor
+  REAL                    :: PumpEffic         = 0.0 ! overall efficiency of the pump (calculated)
+  REAL                    :: FracMotorLossToFluid = 0.0 ! amount of heat generated by pump motor that is added to the fluid
   LOGICAL                      :: HeatingSystem = .false. ! .TRUE. when the system is able to heat (parameters are valid)
   INTEGER                      :: HotWaterInNode    = 0   ! hot water inlet node
   INTEGER                      :: HotWaterOutNode   = 0   ! hot water outlet node
@@ -223,28 +223,28 @@ TYPE, PUBLIC :: ConstantFlowRadiantSystemData
   INTEGER                      :: GlycolIndex       = 0   ! Index to Glycol (Water) Properties
   INTEGER                      :: CondErrCount      = 0   ! Error count for warning messages
   INTEGER                      :: CondCtrlType      = 1   ! Condensation control type (initialize to simple off)
-  REAL(r64)                    :: CondDewPtDeltaT   = 1.0 ! Diff between surface temperature and dew point for cond. shut-off
-  REAL(r64)                    :: CondCausedTimeOff = 0.0 ! Amount of time condensation did or could have turned system off
+  REAL                    :: CondDewPtDeltaT   = 1.0 ! Diff between surface temperature and dew point for cond. shut-off
+  REAL                    :: CondCausedTimeOff = 0.0 ! Amount of time condensation did or could have turned system off
   LOGICAL                      :: CondCausedShutDown = .FALSE. ! .TRUE. when condensation predicted at surface
   ! Other parameters
   LOGICAL                      :: EMSOverrideOnWaterMdot = .FALSE.
-  REAL(r64)                    :: EMSWaterMdotOverrideValue = 0.0D0
+  REAL                    :: EMSWaterMdotOverrideValue = 0.0
 
   ! Report data
-  REAL(r64)                    :: WaterInletTemp     = 0.0 ! water inlet temperature
-  REAL(r64)                    :: WaterOutletTemp    = 0.0 ! water outlet temperature
-  REAL(r64)                    :: WaterInjectionRate = 0.0 ! water injection mass flow rate from main loop
-  REAL(r64)                    :: WaterRecircRate    = 0.0 ! water recirculation rate (outlet from radiant system recirculated)
-  REAL(r64)                    :: HeatPower          = 0.0 ! heating sent to panel in Watts
-  REAL(r64)                    :: HeatEnergy         = 0.0 ! heating sent to panel in Joules
-  REAL(r64)                    :: CoolPower          = 0.0 ! cooling sent to panel in Watts
-  REAL(r64)                    :: CoolEnergy         = 0.0 ! cooling sent to panel in Joules
-  REAL(r64)                    :: PumpPower          = 0.0 ! pump power in Watts
-  REAL(r64)                    :: PumpEnergy         = 0.0 ! pump energy consumption in Joules
-  REAL(r64)                    :: PumpMassFlowRate   = 0.0 ! mass flow rate through the radiant system in kg/sec
-  REAL(r64)                    :: PumpHeattoFluid    = 0.0 ! heat transfer rate from pump motor to fluid in Watts
-  REAL(r64)                    :: PumpHeattoFluidEnergy = 0.0  ! Pump Energy dissipated into fluid stream in Joules
-  REAL(r64)                    :: PumpInletTemp      = 0.0 ! inlet temperature of pump (inlet temperature from loop)
+  REAL                    :: WaterInletTemp     = 0.0 ! water inlet temperature
+  REAL                    :: WaterOutletTemp    = 0.0 ! water outlet temperature
+  REAL                    :: WaterInjectionRate = 0.0 ! water injection mass flow rate from main loop
+  REAL                    :: WaterRecircRate    = 0.0 ! water recirculation rate (outlet from radiant system recirculated)
+  REAL                    :: HeatPower          = 0.0 ! heating sent to panel in Watts
+  REAL                    :: HeatEnergy         = 0.0 ! heating sent to panel in Joules
+  REAL                    :: CoolPower          = 0.0 ! cooling sent to panel in Watts
+  REAL                    :: CoolEnergy         = 0.0 ! cooling sent to panel in Joules
+  REAL                    :: PumpPower          = 0.0 ! pump power in Watts
+  REAL                    :: PumpEnergy         = 0.0 ! pump energy consumption in Joules
+  REAL                    :: PumpMassFlowRate   = 0.0 ! mass flow rate through the radiant system in kg/sec
+  REAL                    :: PumpHeattoFluid    = 0.0 ! heat transfer rate from pump motor to fluid in Watts
+  REAL                    :: PumpHeattoFluidEnergy = 0.0  ! Pump Energy dissipated into fluid stream in Joules
+  REAL                    :: PumpInletTemp      = 0.0 ! inlet temperature of pump (inlet temperature from loop)
 END TYPE ConstantFlowRadiantSystemData
 
 TYPE,PUBLIC :: ElectricRadiantSystemData
@@ -260,20 +260,20 @@ TYPE,PUBLIC :: ElectricRadiantSystemData
                   DIMENSION(:) :: SurfacePtr              ! Pointer to the surface(s) in the Surface derived type
   CHARACTER(len=MaxNameLength), &
      ALLOCATABLE, DIMENSION(:) :: SurfaceName             ! Name of surfaces that are the radiant system (can be one or more)
-  REAL(r64),    ALLOCATABLE,   &
+  REAL,    ALLOCATABLE,   &
                   DIMENSION(:) :: SurfacePowerFrac        ! Fraction of total power input to surface
-  REAL(r64)                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
-  REAL(r64)                    :: MaxElecPower      = 0.0 ! Maximum electric power that can be supplied to surface, Watts
+  REAL                    :: TotalSurfaceArea  = 0.0 ! Total surface area for all surfaces that are part of this radiant system
+  REAL                    :: MaxElecPower      = 0.0 ! Maximum electric power that can be supplied to surface, Watts
   INTEGER                      :: ControlType       = 0   ! Control type for the system (MAT, MRT, Op temp, ODB, OWB)
-  REAL(r64)                    :: ThrottlRange      = 0.0 ! Throttling range for heating [C]
+  REAL                    :: ThrottlRange      = 0.0 ! Throttling range for heating [C]
   CHARACTER(len=MaxNameLength) :: SetptSched        = ' ' ! Schedule name for the zone setpoint temperature
   INTEGER                      :: SetptSchedPtr     = 0   ! Schedule index for the zone setpoint temperature
   ! Other parameters
   ! Report data
-  REAL(r64)                    :: ElecPower         = 0.0 ! heating sent to panel in Watts
-  REAL(r64)                    :: ElecEnergy        = 0.0 ! heating sent to panel in Joules
-  REAL(r64)                    :: HeatPower         = 0.0 ! heating sent to panel in Watts (same as ElecPower)
-  REAL(r64)                    :: HeatEnergy        = 0.0 ! heating sent to panel in Joules (same as ElecEnergy)
+  REAL                    :: ElecPower         = 0.0 ! heating sent to panel in Watts
+  REAL                    :: ElecEnergy        = 0.0 ! heating sent to panel in Joules
+  REAL                    :: HeatPower         = 0.0 ! heating sent to panel in Watts (same as ElecPower)
+  REAL                    :: HeatEnergy        = 0.0 ! heating sent to panel in Joules (same as ElecEnergy)
 END TYPE ElectricRadiantSystemData
 
 TYPE RadSysTypeData
@@ -298,13 +298,13 @@ INTEGER :: TotalNumOfRadSystems   =0 ! Total number of low temperature radiant s
 INTEGER :: OperatingMode          =0 ! Used to keep track of whether system is in heating or cooling mode
 INTEGER :: MaxCloNumOfSurfaces    =0 ! Used to set allocate size in CalcClo routine
 LOGICAL :: VarOffCond = .FALSE.      ! Set to true when in cooling for constant flow system + variable off condensation predicted
-REAL(r64) :: LoopReqTemp = 0.0       ! Temperature required at the inlet of the pump (from the loop) to meet control logic
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSysSrcAvg ! Average source over the time step for a particular radiant surface
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to SumHATsurf for all the walls in a zone with no source
+REAL :: LoopReqTemp = 0.0       ! Temperature required at the inlet of the pump (from the loop) to meet control logic
+REAL, ALLOCATABLE, DIMENSION(:) :: QRadSysSrcAvg ! Average source over the time step for a particular radiant surface
+REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to SumHATsurf for all the walls in a zone with no source
   ! Record keeping variables used to calculate QRadSysSrcAvg locally
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastQRadSysSrc       ! Need to keep the last value in case we are still iterating
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
+REAL, ALLOCATABLE, DIMENSION(:) :: LastQRadSysSrc       ! Need to keep the last value in case we are still iterating
+REAL, ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
+REAL, ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
   ! Autosizing variables
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlagHydr
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlagCFlo
@@ -356,7 +356,7 @@ SUBROUTINE SimLowTempRadiantSystem(CompName,FirstHVACIteration,LoadMet,CompIndex
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: CompName            ! name of the low temperature radiant system
   LOGICAL,          INTENT(IN) :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL(r64),             INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
+  REAL,             INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
   INTEGER,          INTENT(INOUT) :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -493,8 +493,8 @@ SUBROUTINE GetLowTempRadiantSystem
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-!  REAL(r64),        PARAMETER :: FlowFractionTolerance = 0.0001 ! Smallest deviation from unity for the sum of all fractions
-  REAL(r64),        PARAMETER :: MinThrottlingRange = 0.5   ! Smallest throttling range allowed in degrees Celsius
+!  REAL,        PARAMETER :: FlowFractionTolerance = 0.0001 ! Smallest deviation from unity for the sum of all fractions
+  REAL,        PARAMETER :: MinThrottlingRange = 0.5   ! Smallest throttling range allowed in degrees Celsius
   CHARACTER(len=*), PARAMETER :: MeanAirTemperature = 'MeanAirTemperature'
   CHARACTER(len=*), PARAMETER :: MeanRadiantTemperature = 'MeanRadiantTemperature'
   CHARACTER(len=*), PARAMETER :: OperativeTemperature = 'OperativeTemperature'
@@ -526,11 +526,11 @@ SUBROUTINE GetLowTempRadiantSystem
   INTEGER                         :: MaxAlphas  ! Maximum number of alphas for these input keywords
   INTEGER                         :: MaxNumbers ! Maximum number of numbers for these input keywords
 !unused1208  INTEGER    :: NameConflict ! Used to see if a surface name matches the name of a surface list (not allowed)
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
+  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
   INTEGER                         :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                         :: NumArgs    ! Unused variable that is part of a subroutine call
   INTEGER                         :: NumNumbers ! Number of Numbers for each GetObjectItem call
-!unused1208  REAL(r64)  :: SumOfAllFractions   ! Summation of all of the fractions for splitting flow (must sum to 1)
+!unused1208  REAL  :: SumOfAllFractions   ! Summation of all of the fractions for splitting flow (must sum to 1)
   INTEGER                         :: SurfListNum ! Index within the SurfList derived type for a surface list name
   INTEGER                         :: SurfNum    ! DO loop counter for surfaces
 !unused1208  INTEGER    :: ZoneForSurface  ! Zone number that a particular surface is attached to
@@ -1480,7 +1480,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
   INTEGER, INTENT(IN) :: SystemType ! Type of radiant system: hydronic, constant flow, or electric
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: ZeroTol = 0.0000001d0        ! Smallest non-zero value allowed
+  REAL, PARAMETER :: ZeroTol = 0.0000001        ! Smallest non-zero value allowed
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1489,14 +1489,14 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)      :: CurrentFlowSchedule   ! Schedule value for flow fraction in a constant flow radiant system
+  REAL      :: CurrentFlowSchedule   ! Schedule value for flow fraction in a constant flow radiant system
   LOGICAL, SAVE  :: ErrorsFound = .FALSE. ! In one-time initializations
   CHARACTER(len=10) Errout                ! Message for errors
   LOGICAL, SAVE  :: FirstTime = .TRUE.    ! For one-time initializations
   INTEGER        :: RadNum                ! Number of the radiant system (DO loop counter)
   INTEGER        :: RadSurfNum            ! Number of the radiant system surface (DO loop counter)
   INTEGER        :: SurfNum               ! Intermediate variable for keeping track of the surface number
-  REAL(r64)      :: TotalEffic            ! Intermediate calculation variable for total pump efficiency
+  REAL      :: TotalEffic            ! Intermediate calculation variable for total pump efficiency
   INTEGER        :: WaterNodeIn           ! Node number for water inlet node
   INTEGER        :: ZoneNum               ! Intermediate variable for keeping track of the zone number
   LOGICAL, SAVE  :: MyEnvrnFlag=.true.
@@ -1505,8 +1505,8 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.           ! Initialization flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlagHydr
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlagCFlo
-  REAL(r64)  :: mdot ! local fluid mass flow rate
-  REAL(r64)  :: rho  ! local fluid density
+  REAL  :: mdot ! local fluid mass flow rate
+  REAL  :: rho  ! local fluid density
   LOGICAL    :: errFlag
           ! FLOW:
   IF (MyOneTimeFlag) THEN
@@ -1520,15 +1520,15 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
   IF (FirstTime) THEN
 
     ALLOCATE(ZeroSourceSumHATsurf(NumOfZones))
-    ZeroSourceSumHATsurf = 0.0D0
+    ZeroSourceSumHATsurf = 0.0
     ALLOCATE(QRadSysSrcAvg(TotSurfaces))
-    QRadSysSrcAvg = 0.0D0
+    QRadSysSrcAvg = 0.0
     ALLOCATE(LastQRadSysSrc(TotSurfaces))
-    LastQRadSysSrc = 0.0D0
+    LastQRadSysSrc = 0.0
     ALLOCATE(LastSysTimeElapsed(TotSurfaces))
-    LastSysTimeElapsed = 0.0D0
+    LastSysTimeElapsed = 0.0
     ALLOCATE(LastTimeStepSys(TotSurfaces))
-    LastTimeStepSys = 0.0D0
+    LastTimeStepSys = 0.0
     ALLOCATE(MySizeFlagHydr(NumOfHydrLowTempRadSys))
     ALLOCATE(MySizeFlagCFlo(NumOfCFloLowTempRadSys))
     ALLOCATE(MySizeFlagElec(NumOfElecLowTempRadSys))
@@ -1714,11 +1714,11 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
      !set design mass flow rates
       IF (HydrRadSys(RadSysNum)%HotWaterInNode > 0) THEN
         rho = GetDensityGlycol(PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidName, &
-                               60.d0, &
+                               60., &
                                PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidIndex, &
                                'InitLowTempRadiantSystem')
         HydrRadSys(RadSysNum)%WaterFlowMaxHeat = rho*HydrRadSys(RadSysNum)%WaterVolFlowMaxHeat
-        CALL InitComponentNodes(0.0d0, HydrRadSys(RadSysNum)%WaterFlowMaxHeat, &
+        CALL InitComponentNodes(0.0, HydrRadSys(RadSysNum)%WaterFlowMaxHeat, &
                             HydrRadSys(RadSysNum)%HotWaterInNode, &
                             HydrRadSys(RadSysNum)%HotWaterOutNode, &
                             HydrRadSys(RadSysNum)%HWLoopNum, &
@@ -1732,7 +1732,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
                                PlantLoop(HydrRadSys(RadSysNum)%CWLoopNum)%FluidIndex, &
                                'InitLowTempRadiantSystem')
         HydrRadSys(RadSysNum)%WaterFlowMaxCool = rho*HydrRadSys(RadSysNum)%WaterVolFlowMaxCool
-        CALL InitComponentNodes(0.0d0, HydrRadSys(RadSysNum)%WaterFlowMaxCool, &
+        CALL InitComponentNodes(0.0, HydrRadSys(RadSysNum)%WaterFlowMaxCool, &
                             HydrRadSys(RadSysNum)%ColdWaterInNode, &
                             HydrRadSys(RadSysNum)%ColdWaterOutNode, &
                             HydrRadSys(RadSysNum)%CWLoopNum, &
@@ -1751,11 +1751,11 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
             !set design mass flow rates
       IF (CFloRadSys(RadSysNum)%HotWaterInNode > 0) THEN
         rho = GetDensityGlycol(PlantLoop(CFloRadSys(RadSysNum)%HWLoopNum)%FluidName, &
-                               60.d0, &
+                               60., &
                                PlantLoop(CFloRadSys(RadSysNum)%HWLoopNum)%FluidIndex, &
                                'InitLowTempRadiantSystem')
         CFloRadSys(RadSysNum)%HotDesignWaterMassFlowRate = rho*CFloRadSys(RadSysNum)%WaterVolFlowMax
-        CALL InitComponentNodes(0.0d0, CFloRadSys(RadSysNum)%HotDesignWaterMassFlowRate, &
+        CALL InitComponentNodes(0.0, CFloRadSys(RadSysNum)%HotDesignWaterMassFlowRate, &
                             CFloRadSys(RadSysNum)%HotWaterInNode, &
                             CFloRadSys(RadSysNum)%HotWaterOutNode, &
                             CFloRadSys(RadSysNum)%HWLoopNum, &
@@ -1769,7 +1769,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
                                PlantLoop(CFloRadSys(RadSysNum)%CWLoopNum)%FluidIndex, &
                                'InitLowTempRadiantSystem')
         CFloRadSys(RadSysNum)%ColdDesignWaterMassFlowRate = rho*CFloRadSys(RadSysNum)%WaterVolFlowMax
-        CALL InitComponentNodes(0.0d0, CFloRadSys(RadSysNum)%ColdDesignWaterMassFlowRate, &
+        CALL InitComponentNodes(0.0, CFloRadSys(RadSysNum)%ColdDesignWaterMassFlowRate, &
                             CFloRadSys(RadSysNum)%ColdWaterInNode, &
                             CFloRadSys(RadSysNum)%ColdWaterOutNode, &
                             CFloRadSys(RadSysNum)%CWLoopNum, &
@@ -1790,11 +1790,11 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
   END IF
 
   IF (BeginEnvrnFlag .and. MyEnvrnFlag) THEN
-    ZeroSourceSumHATsurf = 0.0D0
-    QRadSysSrcAvg = 0.0D0
-    LastQRadSysSrc = 0.0D0
-    LastSysTimeElapsed = 0.0D0
-    LastTimeStepSys = 0.0D0
+    ZeroSourceSumHATsurf = 0.0
+    QRadSysSrcAvg = 0.0
+    LastQRadSysSrc = 0.0
+    LastSysTimeElapsed = 0.0
+    LastTimeStepSys = 0.0
     IF (NumOfHydrLowTempRadSys > 0) THEN
       HydrRadSys%HeatPower          = 0.0
       HydrRadSys%HeatEnergy         = 0.0
@@ -1807,7 +1807,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
       Do loop =1, NumOfHydrLowTempRadSys
         IF (MyPlantScanFlagHydr(loop)) CYCLE
         IF (HydrRadSys(loop)%HotWaterInNode > 0) THEN
-          CALL InitComponentNodes(0.0d0, HydrRadSys(loop)%WaterFlowMaxHeat, &
+          CALL InitComponentNodes(0.0, HydrRadSys(loop)%WaterFlowMaxHeat, &
                             HydrRadSys(loop)%HotWaterInNode, &
                             HydrRadSys(loop)%HotWaterOutNode, &
                             HydrRadSys(loop)%HWLoopNum, &
@@ -1816,7 +1816,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
                             HydrRadSys(loop)%HWCompNum  )
         ENDIF
         IF (HydrRadSys(loop)%ColdWaterInNode > 0) THEN
-          CALL InitComponentNodes(0.0d0, HydrRadSys(loop)%WaterFlowMaxCool, &
+          CALL InitComponentNodes(0.0, HydrRadSys(loop)%WaterFlowMaxCool, &
                             HydrRadSys(loop)%ColdWaterInNode, &
                             HydrRadSys(loop)%ColdWaterOutNode, &
                             HydrRadSys(loop)%CWLoopNum, &
@@ -1843,7 +1843,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
       Do loop =1, NumOfCFloLowTempRadSys
         IF (MyPlantScanFlagCFlo(loop)) CYCLE
         IF (CFloRadSys(loop)%HotWaterInNode > 0) THEN
-          CALL InitComponentNodes(0.0d0, CFloRadSys(loop)%HotDesignWaterMassFlowRate, &
+          CALL InitComponentNodes(0.0, CFloRadSys(loop)%HotDesignWaterMassFlowRate, &
                             CFloRadSys(loop)%HotWaterInNode, &
                             CFloRadSys(loop)%HotWaterOutNode, &
                             CFloRadSys(loop)%HWLoopNum, &
@@ -1852,7 +1852,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
                             CFloRadSys(loop)%HWCompNum  )
         ENDIF
         IF (CFloRadSys(loop)%ColdWaterInNode > 0) THEN
-          CALL InitComponentNodes(0.0d0, CFloRadSys(loop)%ColdDesignWaterMassFlowRate, &
+          CALL InitComponentNodes(0.0, CFloRadSys(loop)%ColdDesignWaterMassFlowRate, &
                             CFloRadSys(loop)%ColdWaterInNode, &
                             CFloRadSys(loop)%ColdWaterOutNode, &
                             CFloRadSys(loop)%CWLoopNum, &
@@ -1913,10 +1913,10 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
         ZeroSourceSumHATsurf(ZoneNum) = SumHATsurf(ZoneNum) ! Set this to figure what part of the load the radiant system meets
         DO RadSurfNum = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
           SurfNum                     = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-          QRadSysSrcAvg(SurfNum)      = 0.0D0  ! Initialize this variable to zero (radiant system defaults to off)
-          LastQRadSysSrc(SurfNum)     = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastSysTimeElapsed(SurfNum) = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastTimeStepSys(SurfNum)    = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
+          QRadSysSrcAvg(SurfNum)      = 0.0  ! Initialize this variable to zero (radiant system defaults to off)
+          LastQRadSysSrc(SurfNum)     = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastSysTimeElapsed(SurfNum) = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastTimeStepSys(SurfNum)    = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
         END DO
 
       CASE (ConstantFlowSystem)
@@ -1925,10 +1925,10 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
         ZeroSourceSumHATsurf(ZoneNum) = SumHATsurf(ZoneNum) ! Set this to figure what part of the load the radiant system meets
         DO RadSurfNum = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
           SurfNum                     = CFloRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-          QRadSysSrcAvg(SurfNum)      = 0.0D0  ! Initialize this variable to zero (radiant system defaults to off)
-          LastQRadSysSrc(SurfNum)     = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastSysTimeElapsed(SurfNum) = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastTimeStepSys(SurfNum)    = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
+          QRadSysSrcAvg(SurfNum)      = 0.0  ! Initialize this variable to zero (radiant system defaults to off)
+          LastQRadSysSrc(SurfNum)     = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastSysTimeElapsed(SurfNum) = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastTimeStepSys(SurfNum)    = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
         END DO
 
       CASE (ElectricSystem)
@@ -1937,10 +1937,10 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
         ZeroSourceSumHATsurf(ZoneNum) = SumHATsurf(ZoneNum) ! Set this to figure what part of the load the radiant system meets
         DO RadSurfNum = 1, ElecRadSys(RadSysNum)%NumOfSurfaces
           SurfNum                     = ElecRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-          QRadSysSrcAvg(SurfNum)      = 0.0D0  ! Initialize this variable to zero (radiant system defaults to off)
-          LastQRadSysSrc(SurfNum)     = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastSysTimeElapsed(SurfNum) = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
-          LastTimeStepSys(SurfNum)    = 0.0D0  ! At the start of a time step, reset to zero so average calculation can begin again
+          QRadSysSrcAvg(SurfNum)      = 0.0  ! Initialize this variable to zero (radiant system defaults to off)
+          LastQRadSysSrc(SurfNum)     = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastSysTimeElapsed(SurfNum) = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
+          LastTimeStepSys(SurfNum)    = 0.0  ! At the start of a time step, reset to zero so average calculation can begin again
         END DO
 
       CASE DEFAULT
@@ -1959,7 +1959,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
 
           ! Initialize the appropriate node data
       IF (HydrRadSys(RadSysNum)%HeatingSystem) THEN
-        mdot = 0.d0
+        mdot = 0.
         CALL SetComponentFlowRate ( mdot , &
                           HydrRadSys(RadSysNum)%HotWaterInNode, &
                           HydrRadSys(RadSysNum)%HotWaterOutNode, &
@@ -1969,7 +1969,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
                           HydrRadSys(RadSysNum)%HWCompNum  )
       END IF
       IF (HydrRadSys(RadSysNum)%CoolingSystem) THEN
-        mdot = 0.d0
+        mdot = 0.
         CALL SetComponentFlowRate ( mdot , &
                           HydrRadSys(RadSysNum)%ColdWaterInNode, &
                           HydrRadSys(RadSysNum)%ColdWaterOutNode, &
@@ -2085,8 +2085,8 @@ SUBROUTINE SizeLowTempRadiantSystem(RadSysNum,SystemType)
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  REAL(r64)           :: rho
-  REAL(r64)           :: Cp
+  REAL           :: rho
+  REAL           :: Cp
 
   ErrorsFound = .FALSE.
 
@@ -2129,12 +2129,12 @@ SUBROUTINE SizeLowTempRadiantSystem(RadSysNum,SystemType)
           IF ((CalcFinalZoneSizing(CurZoneEqNum)%DesHeatLoad *   &
                CalcFinalZoneSizing(CurZoneEqNum)%HeatSizingFactor) >= SmallLoad) THEN
             rho = GetDensityGlycol(PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidName, &
-                             60.d0, &
+                             60., &
                              PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidIndex, &
                              'SizeLowTempRadiantSystem')
 
             Cp  = GetSpecificHeatGlycol(PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidName, &
-                             60.d0, &
+                             60., &
                              PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidIndex, &
                              'SizeLowTempRadiantSystem')
 
@@ -2176,12 +2176,12 @@ SUBROUTINE SizeLowTempRadiantSystem(RadSysNum,SystemType)
           IF ((CalcFinalZoneSizing(CurZoneEqNum)%DesCoolLoad *   &
                  CalcFinalZoneSizing(CurZoneEqNum)%CoolSizingFactor) >= SmallLoad) THEN
             rho = GetDensityGlycol(PlantLoop(HydrRadSys(RadSysNum)%CWLoopNum)%FluidName, &
-                             5.d0, &
+                             5., &
                              PlantLoop(HydrRadSys(RadSysNum)%CWLoopNum)%FluidIndex, &
                              'SizeLowTempRadiantSystem')
 
             Cp  = GetSpecificHeatGlycol(PlantLoop(HydrRadSys(RadSysNum)%CWLoopNum)%FluidName, &
-                             5.d0, &
+                             5., &
                              PlantLoop(HydrRadSys(RadSysNum)%CWLoopNum)%FluidIndex, &
                              'SizeLowTempRadiantSystem')
 
@@ -2287,7 +2287,7 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: RadSysNum           ! name of the low temperature radiant system
-  REAL(r64),    INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
+  REAL,    INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -2298,20 +2298,20 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ActWaterFlow     ! actual water flow for heating or cooling [kg/sec]
+  REAL :: ActWaterFlow     ! actual water flow for heating or cooling [kg/sec]
   INTEGER   :: ControlNode      ! the hot water or cold water inlet node
-  REAL(r64) :: ControlTemp      ! temperature of whatever is controlling the radiant system
-  REAL(r64) :: MassFlowFrac     ! fraction of the maximum water flow rate as determined by the control algorithm
-  REAL(r64) :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL(r64) :: OffTempCool      ! temperature at which the flow rate throttles back to zero for cooling
-  REAL(r64) :: OffTempHeat      ! temperature at which the flow rate throttles back to zero for heating
-  REAL(r64) :: OpTemp           ! operative temperature (approximately the average of MAT and MRT) [Celsius]
-  REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]
-  REAL(r64) :: SetpointTemp     ! temperature "goal" for the radiant system [Celsius]
+  REAL :: ControlTemp      ! temperature of whatever is controlling the radiant system
+  REAL :: MassFlowFrac     ! fraction of the maximum water flow rate as determined by the control algorithm
+  REAL :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+  REAL :: OffTempCool      ! temperature at which the flow rate throttles back to zero for cooling
+  REAL :: OffTempHeat      ! temperature at which the flow rate throttles back to zero for heating
+  REAL :: OpTemp           ! operative temperature (approximately the average of MAT and MRT) [Celsius]
+  REAL :: QZnReq           ! heating or cooling needed by zone [Watts]
+  REAL :: SetpointTemp     ! temperature "goal" for the radiant system [Celsius]
   INTEGER   :: SurfNum          ! Surface number in the Surface derived type for a radiant system surface
   INTEGER   :: SurfNum2         ! Surface number in the Surface derived type for a radiant system surface
   INTEGER   :: ZoneNum          ! number of zone being served
-  REAL(r64) :: mdot             ! local temporary for fluid mass flow rate
+  REAL :: mdot             ! local temporary for fluid mass flow rate
 
           ! FLOW:
           ! initialize local variables
@@ -2327,12 +2327,12 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
           ! simulate the components with the no flow conditions
     DO SurfNum = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
       SurfNum2 = HydrRadSys(RadSysNum)%SurfacePtr(SurfNum)
-      QRadSysSource(SurfNum2) = 0.0D0
+      QRadSysSource(SurfNum2) = 0.0
       IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-        QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0    ! Also zero the other side of an interzone
+        QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0    ! Also zero the other side of an interzone
     END DO
     IF (HydrRadSys(RadSysNum)%HeatingSystem) THEN !
-      mdot = 0.d0
+      mdot = 0.
       CALL SetComponentFlowRate ( mdot , &
                           HydrRadSys(RadSysNum)%HotWaterInNode, &
                           HydrRadSys(RadSysNum)%HotWaterOutNode, &
@@ -2342,7 +2342,7 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
                           HydrRadSys(RadSysNum)%HWCompNum  )
     ENDIF
     IF (HydrRadSys(RadSysNum)%CoolingSystem) THEN
-      mdot = 0.d0
+      mdot = 0.
       CALL SetComponentFlowRate ( mdot , &
                           HydrRadSys(RadSysNum)%ColdWaterInNode, &
                           HydrRadSys(RadSysNum)%ColdWaterOutNode, &
@@ -2410,7 +2410,7 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
 
           ! Calculate and limit the water flow rate
     ActWaterFlow = MassFlowFrac*MaxWaterFlow
-    IF (ActWaterFlow < MassFlowTolerance) ActWaterFlow = 0.d0
+    IF (ActWaterFlow < MassFlowTolerance) ActWaterFlow = 0.
     IF (HydrRadSys(RadSysNum)%EMSOverrideOnWaterMdot) ActWaterFlow = HydrRadSys(RadSysNum)%EMSWaterMdotOverrideValue
 
     IF (OperatingMode == HeatingMode) THEN
@@ -2488,10 +2488,10 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: RadSysNum          ! Index for the low temperature radiant system under consideration
-  REAL(r64),    INTENT(INOUT) :: LoadMet            ! Load met by the low temperature radiant system, in Watts
+  REAL,    INTENT(INOUT) :: LoadMet            ! Load met by the low temperature radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CondDeltaTemp  = 1.0   ! How close the surface temperatures can get to the dewpoint temperature of a space
+  REAL, PARAMETER :: CondDeltaTemp  = 1.0   ! How close the surface temperatures can get to the dewpoint temperature of a space
                                             ! before the radiant cooling system shuts off the flow.
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2503,25 +2503,25 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CondSurfNum    ! Surface number (in radiant array) of
   INTEGER :: ConstrNum      ! Index for construction number in Construct derived type
-  REAL(r64) :: DewPointTemp   ! Dew-point temperature based on the zone air conditions
-  REAL(r64) :: EpsMdotCp      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
-  REAL(r64) :: FullWaterMassFlow ! Original water mass flow rate before reducing the flow for condensation concerns
-  REAL(r64) :: LowestRadSurfTemp ! Lowest surface temperature of a radiant system (when condensation is a concern)
-  REAL(r64) :: PredictedCondTemp ! Temperature at which condensation is predicted (includes user parameter)
+  REAL :: DewPointTemp   ! Dew-point temperature based on the zone air conditions
+  REAL :: EpsMdotCp      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
+  REAL :: FullWaterMassFlow ! Original water mass flow rate before reducing the flow for condensation concerns
+  REAL :: LowestRadSurfTemp ! Lowest surface temperature of a radiant system (when condensation is a concern)
+  REAL :: PredictedCondTemp ! Temperature at which condensation is predicted (includes user parameter)
   INTEGER :: RadSurfNum     ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER :: RadSurfNum2    ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER :: RadSurfNum3    ! DO loop counter for the surfaces that comprise a particular radiant system
-  REAL(r64) :: ReductionFrac ! Fraction that the flow should be reduced to avoid condensation
+  REAL :: ReductionFrac ! Fraction that the flow should be reduced to avoid condensation
   INTEGER :: SurfNum        ! Index for radiant surface in Surface derived type
   INTEGER :: SurfNum2       ! Index for radiant surface in Surface derived type
-  REAL(r64) :: SysWaterMassFlow ! System level water mass flow rate (includes effect of zone multiplier)
-  REAL(r64) :: WaterMassFlow  ! Water mass flow rate in the radiant system, kg/s
+  REAL :: SysWaterMassFlow ! System level water mass flow rate (includes effect of zone multiplier)
+  REAL :: WaterMassFlow  ! Water mass flow rate in the radiant system, kg/s
   INTEGER :: WaterNodeIn    ! Node number of the water entering the radiant system
-  REAL(r64) :: WaterTempIn    ! Temperature of the water entering the radiant system, in C
-  REAL(r64) :: ZeroFlowSurfTemp ! Temperature of radiant surface when flow is zero
+  REAL :: WaterTempIn    ! Temperature of the water entering the radiant system, in C
+  REAL :: ZeroFlowSurfTemp ! Temperature of radiant surface when flow is zero
   INTEGER :: ZoneNum        ! Zone pointer for this radiant system
 
-  REAL(r64) :: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl ! Coefficients to relate the inlet water temperature to the heat source
+  REAL :: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl ! Coefficients to relate the inlet water temperature to the heat source
                                                  ! For more info on Ca through Cl, see comments below
 
   INTEGER, SAVE :: CondensationErrorCount = 0   ! Counts the number of times the radiant systems are shutdown due to condensation
@@ -2554,9 +2554,9 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
           ! necessarily a "problem" so this exception is necessary in the code.
     DO RadSurfNum = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
       SurfNum                = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-      QRadSysSource(SurfNum) = 0.0D0
+      QRadSysSource(SurfNum) = 0.0
       IF (Surface(SurfNum)%ExtBoundCond > 0 .AND. Surface(SurfNum)%ExtBoundCond /= SurfNum) &
-        QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0D0    ! Also zero the other side of an interzone
+        QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0    ! Also zero the other side of an interzone
     END DO
 
   ELSE
@@ -2651,7 +2651,7 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
         Cl = Ch + ( ( Ci*(Cc+Cb*Cf) + Cj*(Cf+Ce*Cc) ) / ( 1. - Ce*Cb ) )
 
         QRadSysSource(SurfNum) = EpsMdotCp * (WaterTempIn - Ck) &
-                              /(1.d0 + (EpsMdotCp*Cl/Surface(SurfNum)%Area) )
+                              /(1. + (EpsMdotCp*Cl/Surface(SurfNum)%Area) )
 
       ELSE IF (SolutionAlgo == UseCondFD) THEN
 
@@ -2676,7 +2676,7 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
 
       IF ( ((OperatingMode==HeatingMode).AND.(QRadSysSource(SurfNum)<=0.0)) .OR. &
            ((OperatingMode==CoolingMode).AND.(QRadSysSource(SurfNum)>=0.0)) ) THEN
-        WaterMassFlow         = 0.d0
+        WaterMassFlow         = 0.
         IF (OperatingMode==HeatingMode) THEN
           CALL SetComponentFlowRate ( WaterMassFlow , &
                           HydrRadSys(RadSysNum)%HotWaterInNode, &
@@ -2699,9 +2699,9 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
 
         DO RadSurfNum2 = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
           SurfNum2 = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum2)
-          QRadSysSource(SurfNum2) = 0.0D0
+          QRadSysSource(SurfNum2) = 0.0
           IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
         END DO
         EXIT ! outer do loop
       END IF
@@ -2732,9 +2732,9 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
           HydrRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
           DO RadSurfNum3 = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
             SurfNum2 = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum3)
-            QRadSysSource(SurfNum2) = 0.0D0
+            QRadSysSource(SurfNum2) = 0.0
             IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-              QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+              QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
           END DO
           ! Produce a warning message so that user knows the system was shut-off due to potential for condensation
           IF (.not. WarmUpFlag) THEN
@@ -2803,9 +2803,9 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
         HydrRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
         DO RadSurfNum3 = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
           SurfNum2 = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum3)
-          QRadSysSource(SurfNum2) = 0.0D0
+          QRadSysSource(SurfNum2) = 0.0
           IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
         END DO
           ! Redo the heat balances since we have changed the heat source (set it to zero)
         CALL CalcHeatBalanceOutsideSurf(ZoneNum)
@@ -2891,9 +2891,9 @@ SUBROUTINE CalcLowTempHydrRadSysComps(RadSysNum,LoadMet)
               HydrRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
               DO RadSurfNum3 = 1, HydrRadSys(RadSysNum)%NumOfSurfaces
                 SurfNum2 = HydrRadSys(RadSysNum)%SurfacePtr(RadSurfNum3)
-                QRadSysSource(SurfNum2) = 0.0D0
+                QRadSysSource(SurfNum2) = 0.0
                 IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-                  QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+                  QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
               END DO
             END IF
           END DO
@@ -2990,10 +2990,10 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)    :: RadSysNum ! name of the low temperature radiant system
-  REAL(r64), INTENT(INOUT) :: LoadMet   ! load met by the radiant system, in Watts
+  REAL, INTENT(INOUT) :: LoadMet   ! load met by the radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: LowCpFluidValue = 100.d0 ! lowest allowed Cp fluid value (to avoid dividing by zero) [J/kg-K]
+  REAL, PARAMETER :: LowCpFluidValue = 100. ! lowest allowed Cp fluid value (to avoid dividing by zero) [J/kg-K]
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3002,28 +3002,28 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: CpFluid          ! Specific heat of the fluid in the radiant system
-  REAL(r64) :: InjectFlowRate   ! Calculated injection flow rate that will meet the inlet temperature requirement
+  REAL :: CpFluid          ! Specific heat of the fluid in the radiant system
+  REAL :: InjectFlowRate   ! Calculated injection flow rate that will meet the inlet temperature requirement
   LOGICAL   :: Iteration        ! FALSE when a normal solution, TRUE when it is a solution where we must also find the inlet temp
   INTEGER   :: LoopInNode       ! Node on the loop that is the inlet to the constant flow radiant system
-  REAL(r64) :: OffTempCool      ! temperature at which the cooling shuts down
-  REAL(r64) :: OffTempHeat      ! temperature at which the heating shuts down
-  REAL(r64) :: PumpPartLoadRat  ! Pump part load ratio (based on user schedule, or 1.0 for no schedule)
-  REAL(r64) :: PumpTempRise     ! Temperature rise of the fluid as it passes through the pump
-  REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]
-  REAL(r64) :: RadInTemp        ! "Desired" radiant system water inlet temperature [Celsius]
-  REAL(r64) :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
-  REAL(r64) :: SetpointTempHi   ! Current high point in setpoint temperature range
-  REAL(r64) :: SetpointTempLo   ! Current low point in setpoint temperature range
-  REAL(r64) :: ShaftPower       ! Amount of power expended at the pump shaft
+  REAL :: OffTempCool      ! temperature at which the cooling shuts down
+  REAL :: OffTempHeat      ! temperature at which the heating shuts down
+  REAL :: PumpPartLoadRat  ! Pump part load ratio (based on user schedule, or 1.0 for no schedule)
+  REAL :: PumpTempRise     ! Temperature rise of the fluid as it passes through the pump
+  REAL :: QZnReq           ! heating or cooling needed by zone [Watts]
+  REAL :: RadInTemp        ! "Desired" radiant system water inlet temperature [Celsius]
+  REAL :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
+  REAL :: SetpointTempHi   ! Current high point in setpoint temperature range
+  REAL :: SetpointTempLo   ! Current low point in setpoint temperature range
+  REAL :: ShaftPower       ! Amount of power expended at the pump shaft
   INTEGER   :: SurfNum          ! Surface number in the Surface derived type for a radiant system surface
   INTEGER   :: SurfNum2         ! Surface number in the Surface derived type for a radiant system surface
   LOGICAL   :: SysRunning       ! TRUE when the system is running
-  REAL(r64) :: SysWaterInTemp   ! Fluid temperature supplied from the loop
-  REAL(r64) :: WaterTempHi      ! Current high point in water temperature range
-  REAL(r64) :: WaterTempLo      ! Current low point in water temperature range
+  REAL :: SysWaterInTemp   ! Fluid temperature supplied from the loop
+  REAL :: WaterTempHi      ! Current high point in water temperature range
+  REAL :: WaterTempLo      ! Current low point in water temperature range
   INTEGER   :: ZoneNum          ! number of zone being served
-  REAL(r64) :: mdot             ! local temporary for water mass flow rate kg/s
+  REAL :: mdot             ! local temporary for water mass flow rate kg/s
 
           ! FLOW:
           ! initialize local variables
@@ -3043,7 +3043,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
       CASE (MRTControl)
         SetpointTemp = MRT(ZoneNum)
       CASE (OperativeControl)
-        SetpointTemp = 0.5d0*(MAT(ZoneNum)+MRT(ZoneNum))
+        SetpointTemp = 0.5*(MAT(ZoneNum)+MRT(ZoneNum))
       CASE (ODBControl)
         SetpointTemp = Zone(ZoneNum)%OutDryBulbTemp
       CASE (OWBControl)
@@ -3175,14 +3175,14 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
 
     DO SurfNum = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
       SurfNum2 = CFloRadSys(RadSysNum)%SurfacePtr(SurfNum)
-      QRadSysSource(SurfNum2) = 0.0D0
+      QRadSysSource(SurfNum2) = 0.0
       IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-        QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0    ! Also zero the other side of an interzone
+        QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0    ! Also zero the other side of an interzone
     END DO
 
     ! turn off flow requests made during init because it is not actually running
     IF (CFloRadSys(RadSysNum)%CWLoopNum > 0 ) THEN
-      mdot = 0.d0
+      mdot = 0.
       CALL SetComponentFlowRate(mdot, &
                           CFloRadSys(RadSysNum)%ColdWaterInNode, &
                           CFloRadSys(RadSysNum)%ColdWaterOutNode, &
@@ -3192,7 +3192,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
                           CFloRadSys(RadSysNum)%CWCompNum)
     ENDIF
     IF (CFloRadSys(RadSysNum)%HWLoopNum > 0 ) THEN
-      mdot = 0.d0
+      mdot = 0.
       CALL SetComponentFlowRate(mdot, &
                                 CFloRadSys(RadSysNum)%HotWaterInNode, &
                                 CFloRadSys(RadSysNum)%HotWaterOutNode, &
@@ -3217,10 +3217,10 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
     CFloRadSys(RadSysNum)%PumpHeattoFluid  = ShaftPower                                       &
                                             +( (CFloRadSys(RadSysNum)%PumpPower - ShaftPower) &
                                               * CFloRadSys(RadSysNum)%FracMotorLossToFluid )
-    IF (CFloRadSys(RadSysNum)%PumpMassFlowRate > 0.d0) THEN
+    IF (CFloRadSys(RadSysNum)%PumpMassFlowRate > 0.) THEN
       PumpTempRise = CFloRadSys(RadSysNum)%PumpHeattoFluid / (CFloRadSys(RadSysNum)%PumpMassFlowRate * CpFluid)
     ELSE
-      PumpTempRise = 0.d0
+      PumpTempRise = 0.
     ENDIF
 
     LoopReqTemp  = RadInTemp - PumpTempRise ! Temperature required at the inlet of the pump to meet the temperature request
@@ -3229,7 +3229,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
 
       ! in heating mode so shut down cold water flow request
       IF (CFloRadSys(RadSysNum)%CWLoopNum > 0 ) THEN
-        mdot = 0.d0
+        mdot = 0.
         CALL SetComponentFlowRate(mdot, &
                             CFloRadSys(RadSysNum)%ColdWaterInNode, &
                             CFloRadSys(RadSysNum)%ColdWaterOutNode, &
@@ -3252,7 +3252,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
         CALL CalcLowTempCFloRadSysComps(RadSysNum,LoopInNode,Iteration,LoadMet)
 
           ! We now have inlet and outlet temperatures--we still need to set the flow rates
-        IF ((SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) /= 0.d0) THEN ! protect divide by zero
+        IF ((SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) /= 0.) THEN ! protect divide by zero
           CFloRadSys(RadSysNum)%WaterInjectionRate =  ( CFloRadSys(RadSysNum)%WaterMassFlowRate                    &
                                                        *(RadInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp)        &
                                                        /(SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) ) &
@@ -3272,7 +3272,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
         CALL CalcLowTempCFloRadSysComps(RadSysNum,LoopInNode,Iteration,LoadMet)
 
           ! We now have inlet and outlet temperatures--we still need to set the flow rates
-        IF ((SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) /= 0.d0) THEN ! protect divide by zero
+        IF ((SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) /= 0.) THEN ! protect divide by zero
           CFloRadSys(RadSysNum)%WaterInjectionRate =  ( CFloRadSys(RadSysNum)%WaterMassFlowRate                    &
                                                        *(RadInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp)        &
                                                        /(SysWaterInTemp - CFloRadSys(RadSysNum)%WaterOutletTemp) ) &
@@ -3346,7 +3346,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
 
       ! in cooling mode so shut down heating water flow request
       IF (CFloRadSys(RadSysNum)%HWLoopNum > 0) THEN
-        mdot = 0.d0
+        mdot = 0.
         CALL SetComponentFlowRate(mdot, &
                                   CFloRadSys(RadSysNum)%HotWaterInNode, &
                                   CFloRadSys(RadSysNum)%HotWaterOutNode, &
@@ -3551,13 +3551,13 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
   LOGICAL, INTENT(IN) :: Iteration         ! FALSE for the regular solution, TRUE when we had to loop back
                                             ! through and figure out more information (i.e., did not know the
                                             ! inlet temperature directly)
-  REAL(r64),    INTENT(INOUT) :: LoadMet           ! Load met by the low temperature radiant system, in Watts
+  REAL,    INTENT(INOUT) :: LoadMet           ! Load met by the low temperature radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CondDeltaTemp  = 1.0   ! How close the surface temperatures can get to the dewpoint temperature of a space
+  REAL, PARAMETER :: CondDeltaTemp  = 1.0   ! How close the surface temperatures can get to the dewpoint temperature of a space
                                             ! before the radiant cooling system shuts off the flow.
-  REAL(r64), PARAMETER :: TempCheckLimit = 0.1d0   ! Maximum allowed temperature difference between outlet temperature calculations
-  REAL(r64), PARAMETER :: ZeroSystemResp = 0.1d0   ! Response below which the system response is really zero
+  REAL, PARAMETER :: TempCheckLimit = 0.1   ! Maximum allowed temperature difference between outlet temperature calculations
+  REAL, PARAMETER :: ZeroSystemResp = 0.1   ! Response below which the system response is really zero
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3567,33 +3567,33 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ConstrNum      ! Index for construction number in Construct derived type
-  REAL(r64) :: Cp             ! Intermediate calculational variable for specific heat of water
-  REAL(r64) :: DewPointTemp   ! Dew-point temperature based on the zone air conditions
-  REAL(r64) :: EpsMdotCp      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
-  REAL(r64) :: LoopTerm       ! Intermeidate calculation variable for determining the water inlet temperature
-  REAL(r64) :: Mdot           ! Intermediate calculation variable for mass flow rate in a surface within the radiant system
+  REAL :: Cp             ! Intermediate calculational variable for specific heat of water
+  REAL :: DewPointTemp   ! Dew-point temperature based on the zone air conditions
+  REAL :: EpsMdotCp      ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
+  REAL :: LoopTerm       ! Intermeidate calculation variable for determining the water inlet temperature
+  REAL :: Mdot           ! Intermediate calculation variable for mass flow rate in a surface within the radiant system
   INTEGER :: RadSurfNum     ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER :: RadSurfNum2    ! DO loop counter for the surfaces that comprise a particular radiant system
   INTEGER :: RadSurfNum3    ! DO loop counter for the surfaces that comprise a particular radiant system
-  REAL(r64) :: RecircTerm     ! Intermeidate calculation variable for determining the water inlet temperature
-  REAL(r64) :: SumFlowFracCkCm       ! Summation of surface flow fraction, Ck, and Cm product for each surface in the system
-  REAL(r64) :: SumFlowFracOneMinusCm ! Summation of surface flow fraction times (1-Cm) for each surface in the radiant system
+  REAL :: RecircTerm     ! Intermeidate calculation variable for determining the water inlet temperature
+  REAL :: SumFlowFracCkCm       ! Summation of surface flow fraction, Ck, and Cm product for each surface in the system
+  REAL :: SumFlowFracOneMinusCm ! Summation of surface flow fraction times (1-Cm) for each surface in the radiant system
   INTEGER :: SurfNum        ! Index for radiant surface in Surface derived type
   INTEGER :: SurfNum2       ! Index for radiant surface in Surface derived type
-  REAL(r64) :: TotalRadSysPower      ! Total heat source/sink to radiant system
-  REAL(r64) :: TwiCoeff       ! Intermeidate calculation variable for determining the water inlet temperature
-  REAL(r64) :: WaterMassFlow  ! Water mass flow rate in the radiant system, kg/s
+  REAL :: TotalRadSysPower      ! Total heat source/sink to radiant system
+  REAL :: TwiCoeff       ! Intermeidate calculation variable for determining the water inlet temperature
+  REAL :: WaterMassFlow  ! Water mass flow rate in the radiant system, kg/s
   INTEGER :: WaterNodeIn    ! Node number of the water entering the radiant system
-  REAL(r64) :: WaterOutletTempCheck ! Radiant system water outlet temperature (calculated from mixing all outlet streams together)
-  REAL(r64) :: WaterTempIn    ! Temperature of the water entering the radiant system, in C
+  REAL :: WaterOutletTempCheck ! Radiant system water outlet temperature (calculated from mixing all outlet streams together)
+  REAL :: WaterTempIn    ! Temperature of the water entering the radiant system, in C
   INTEGER :: ZoneNum        ! number of zone being served
-  REAL(r64) :: ZoneMult       ! Zone multiplier for this system
+  REAL :: ZoneMult       ! Zone multiplier for this system
 
-  REAL(r64) :: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl  ! Coefficients to relate the inlet water temperature to the heat source
+  REAL :: Ca,Cb,Cc,Cd,Ce,Cf,Cg,Ch,Ci,Cj,Ck,Cl  ! Coefficients to relate the inlet water temperature to the heat source
                                                   ! For more info on Ca through Cl, see comments below
 
-  REAL(r64), SAVE, DIMENSION(:), ALLOCATABLE :: Ckj, Cmj     ! Coefficients for individual surfaces within a radiant system
-  REAL(r64), SAVE, DIMENSION(:), ALLOCATABLE :: WaterTempOut ! Array of outlet water temperatures for
+  REAL, SAVE, DIMENSION(:), ALLOCATABLE :: Ckj, Cmj     ! Coefficients for individual surfaces within a radiant system
+  REAL, SAVE, DIMENSION(:), ALLOCATABLE :: WaterTempOut ! Array of outlet water temperatures for
                                                              ! each surface in the radiant system
 
   INTEGER, SAVE :: CondensationErrorCount = 0   ! Counts the number of times the radiant systems are shutdown due to condensation
@@ -3637,9 +3637,9 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
           ! necessarily a "problem" so this exception is necessary in the code.
     DO RadSurfNum = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
       SurfNum                = CFloRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-      QRadSysSource(SurfNum) = 0.0D0
+      QRadSysSource(SurfNum) = 0.0
       IF (Surface(SurfNum)%ExtBoundCond > 0 .AND. Surface(SurfNum)%ExtBoundCond /= SurfNum) &
-        QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0D0    ! Also zero the other side of an interzone
+        QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0    ! Also zero the other side of an interzone
     END DO
 
     CFloRadSys(RadSysNum)%WaterOutletTemp = CFloRadSys(RadSysNum)%WaterInletTemp
@@ -3856,9 +3856,9 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
         CFloRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
         DO RadSurfNum2 = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
           SurfNum2 = CFloRadSys(RadSysNum)%SurfacePtr(RadSurfNum2)
-          QRadSysSource(SurfNum2) = 0.0D0
+          QRadSysSource(SurfNum2) = 0.0
           IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+            QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
         END DO
         EXIT ! outer do loop
       END IF
@@ -3888,9 +3888,9 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
             CFloRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
             DO RadSurfNum3 = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
               SurfNum2 = CFloRadSys(RadSysNum)%SurfacePtr(RadSurfNum3)
-              QRadSysSource(SurfNum2) = 0.0D0
+              QRadSysSource(SurfNum2) = 0.0
               IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+                QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
             END DO
           ! Produce a warning message so that user knows the system was shut-off due to potential for condensation
             IF (.not. WarmupFlag) THEN
@@ -3946,9 +3946,9 @@ SUBROUTINE CalcLowTempCFloRadSysComps(RadSysNum,MainLoopNodeIn,Iteration,LoadMet
               CFloRadSys(RadSysNum)%WaterMassFlowRate = WaterMassFlow
               DO RadSurfNum3 = 1, CFloRadSys(RadSysNum)%NumOfSurfaces
                 SurfNum2 = CFloRadSys(RadSysNum)%SurfacePtr(RadSurfNum3)
-                QRadSysSource(SurfNum2) = 0.0D0
+                QRadSysSource(SurfNum2) = 0.0
                 IF (Surface(SurfNum2)%ExtBoundCond > 0 .AND. Surface(SurfNum2)%ExtBoundCond /= SurfNum2) &
-                  QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0D0   ! Also zero the other side of an interzone
+                  QRadSysSource(Surface(SurfNum2)%ExtBoundCond) = 0.0   ! Also zero the other side of an interzone
               END DO
           ! Produce a warning message so that user knows the system was shut-off due to potential for condensation
               IF (.not. WarmupFlag) THEN
@@ -4066,7 +4066,7 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: RadSysNum           ! name of the low temperature radiant system
-  REAL(r64),    INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
+  REAL,    INTENT(INOUT) :: LoadMet             ! load met by the radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4078,13 +4078,13 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ControlTemp    ! Temperature of the parameter that is controlling the radiant system
-  REAL(r64) :: HeatFrac       ! fraction of maximum electrical heat input to radiant system [dimensionless]
-  REAL(r64) :: OffTemp        ! Temperature above which the radiant system should be completely off [C]
-  REAL(r64) :: OpTemp         ! Operative temperature (approximately the average of MRT and MAT) [C]
-  REAL(r64) :: QZnReq         ! heating or cooling needed by zone [Watts]
+  REAL :: ControlTemp    ! Temperature of the parameter that is controlling the radiant system
+  REAL :: HeatFrac       ! fraction of maximum electrical heat input to radiant system [dimensionless]
+  REAL :: OffTemp        ! Temperature above which the radiant system should be completely off [C]
+  REAL :: OpTemp         ! Operative temperature (approximately the average of MRT and MAT) [C]
+  REAL :: QZnReq         ! heating or cooling needed by zone [Watts]
   INTEGER   :: RadSurfNum     ! number of surface that is the radiant system
-  REAL(r64) :: SetPtTemp      ! Setpoint temperature [C]
+  REAL :: SetPtTemp      ! Setpoint temperature [C]
   INTEGER   :: SurfNum        ! intermediate variable for surface number in Surface derived type
   INTEGER   :: ZoneNum        ! number of zone being served
 
@@ -4098,7 +4098,7 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
           ! Unit is off; set the heat source terms to zero
     DO RadSurfNum = 1, ElecRadSys(RadSysNum)%NumOfSurfaces
       SurfNum                = ElecRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-      QRadSysSource(SurfNum) = 0.0D0
+      QRadSysSource(SurfNum) = 0.0
       IF (Surface(SurfNum)%ExtBoundCond > 0 .AND. Surface(SurfNum)%ExtBoundCond /= SurfNum) &
         QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0  ! Also zero the other side of an interzone
     END DO
@@ -4117,7 +4117,7 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
       CASE (MRTControl)
         ControlTemp = MRT(ZoneNum)
       CASE (OperativeControl)
-        ControlTemp = (MAT(ZoneNum)+MRT(ZoneNum))/2.0d0
+        ControlTemp = (MAT(ZoneNum)+MRT(ZoneNum))/2.0
       CASE (ODBControl)
         ControlTemp = Zone(ZoneNum)%OutDryBulbTemp
       CASE (OWBControl)
@@ -4154,7 +4154,7 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
 
       DO RadSurfNum = 1, ElecRadSys(RadSysNum)%NumOfSurfaces
         SurfNum                = ElecRadSys(RadSysNum)%SurfacePtr(RadSurfNum)
-        QRadSysSource(SurfNum) = 0.0D0
+        QRadSysSource(SurfNum) = 0.0
         IF (Surface(SurfNum)%ExtBoundCond > 0 .AND. Surface(SurfNum)%ExtBoundCond /= SurfNum) &
           QRadSysSource(Surface(SurfNum)%ExtBoundCond) = 0.0  ! Also zero the other side of an interzone
       END DO
@@ -4221,16 +4221,16 @@ SUBROUTINE UpdateLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: BypassMassFlow     ! Local bypass for a constant flow radiant system (could have recirculation and/or bypass)
-  REAL(r64) :: CpWater            ! Specific heat of water
+  REAL :: BypassMassFlow     ! Local bypass for a constant flow radiant system (could have recirculation and/or bypass)
+  REAL :: CpWater            ! Specific heat of water
   INTEGER :: RadSurfNum         ! DO loop counter for radiant surfaces in the system
   INTEGER :: SurfNum            ! Surface index number for the current radiant system
   INTEGER :: WaterInletNode     ! Node number for the water side inlet of the radiant system
-  REAL(r64) :: TotalHeatSource    ! Total heat source or sink for a particular radiant system (sum of all surface source/sinks)
+  REAL :: TotalHeatSource    ! Total heat source or sink for a particular radiant system (sum of all surface source/sinks)
   INTEGER :: TotRadSurfaces     ! Total number of radiant surfaces in this system
-  REAL(r64) :: WaterMassFlow      ! Flow rate of water in the radiant system
+  REAL :: WaterMassFlow      ! Flow rate of water in the radiant system
   INTEGER :: WaterOutletNode    ! Node number for the water side outlet of the radiant system
-  REAL(r64) :: ZoneMult           ! Zone multiplier
+  REAL :: ZoneMult           ! Zone multiplier
   INTEGER :: ZoneNum            ! Zone for this radiant system
 
           ! FLOW:
@@ -4421,7 +4421,7 @@ SUBROUTINE UpdateLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
 END SUBROUTINE UpdateLowTempRadiantSystem
 
 
-REAL(r64) FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,WaterMassFlow,  &
+REAL FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,WaterMassFlow,  &
    FlowFraction,TubeLength,TubeDiameter,GlycolIndex)
 
           ! SUBROUTINE INFORMATION:
@@ -4461,27 +4461,27 @@ REAL(r64) FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,Wate
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: RadSysNum      ! Index number of radiant system under consideration !unused1208
   INTEGER, INTENT(IN) :: SystemType ! Type of radiant system: hydronic, constant flow, or electric
-  REAL(r64),    INTENT(IN) :: Temperature    ! Temperature of water entering the radiant system, in C
-  REAL(r64),    INTENT(IN) :: WaterMassFlow  ! Mass flow rate of water in the radiant system, in kg/s
-  REAL(r64),    INTENT(IN) :: FlowFraction   ! Mass flow rate fraction for this surface in the radiant system
-  REAL(r64),    INTENT(IN) :: TubeLength     ! Length of tubing in the radiant system, in m
-  REAL(r64),    INTENT(IN) :: TubeDiameter   ! Inside diameter of the tubing in the radiant system, in m
+  REAL,    INTENT(IN) :: Temperature    ! Temperature of water entering the radiant system, in C
+  REAL,    INTENT(IN) :: WaterMassFlow  ! Mass flow rate of water in the radiant system, in kg/s
+  REAL,    INTENT(IN) :: FlowFraction   ! Mass flow rate fraction for this surface in the radiant system
+  REAL,    INTENT(IN) :: TubeLength     ! Length of tubing in the radiant system, in m
+  REAL,    INTENT(IN) :: TubeDiameter   ! Inside diameter of the tubing in the radiant system, in m
   INTEGER, INTENT(INOUT) :: GlycolIndex ! Index for the fluid used in this radiant system
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64),    PARAMETER :: MaxLaminarRe = 2300.d0    ! Maximum Reynolds number for laminar flow
+  REAL,    PARAMETER :: MaxLaminarRe = 2300.    ! Maximum Reynolds number for laminar flow
   INTEGER, PARAMETER :: NumOfPropDivisions = 13
-  REAL(r64),    PARAMETER :: MaxExpPower = 50.d0       ! Maximum power after which EXP argument would be zero for DP variables
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
-                   (/1.85d0,6.85d0,11.85d0,16.85d0,21.85d0,26.85d0,31.85d0,36.85d0,41.85d0,46.85d0,  &
-                    51.85d0,56.85d0,61.85d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
-                   (/.001652d0,.001422d0,.001225d0,.00108d0,.000959d0,.000855d0,.000769d0,.000695d0,.000631d0,  &
-                     .000577d0,.000528d0,.000489d0,.000453d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
-                   (/.574d0,.582d0,.590d0,.598d0,.606d0,.613d0,.620d0,.628d0,.634d0,.640d0,.645d0,.650d0,.656d0/)
-  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
-                   (/12.22d0,10.26d0,8.81d0,7.56d0,6.62d0,5.83d0,5.20d0,4.62d0,4.16d0,3.77d0,3.42d0,3.15d0,2.88d0/)
+  REAL,    PARAMETER :: MaxExpPower = 50.       ! Maximum power after which EXP argument would be zero for DP variables
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
+                   (/1.85,6.85,11.85,16.85,21.85,26.85,31.85,36.85,41.85,46.85,  &
+                    51.85,56.85,61.85/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
+                   (/.001652,.001422,.001225,.00108,.000959,.000855,.000769,.000695,.000631,  &
+                     .000577,.000528,.000489,.000453/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
+                   (/.574,.582,.590,.598,.606,.613,.620,.628,.634,.640,.645,.650,.656/)
+  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
+                   (/12.22,10.26,8.81,7.56,6.62,5.83,5.20,4.62,4.16,3.77,3.42,3.15,2.88/)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4491,14 +4491,14 @@ REAL(r64) FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,Wate
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Index
-  REAL(r64) :: InterpFrac
-  REAL(r64) :: NuD
-  REAL(r64) :: ReD
-  REAL(r64) :: NTU
-  REAL(r64) :: CpWater
-  REAL(r64) :: Kactual
-  REAL(r64) :: MUactual
-  REAL(r64) :: PRactual
+  REAL :: InterpFrac
+  REAL :: NuD
+  REAL :: ReD
+  REAL :: NTU
+  REAL :: CpWater
+  REAL :: Kactual
+  REAL :: MUactual
+  REAL :: PRactual
 
 
           ! FLOW:
@@ -4531,7 +4531,7 @@ REAL(r64) FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,Wate
     SELECT CASE (OperatingMode)
     CASE (HeatingMode)
       CpWater  = GetSpecificHeatGlycol(PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidName, &
-                             60.d0, &
+                             60., &
                              PlantLoop(HydrRadSys(RadSysNum)%HWLoopNum)%FluidIndex, &
                              'CalcRadSysHXEffectTerm')
     CASE (CoolingMode)
@@ -4562,11 +4562,11 @@ REAL(r64) FUNCTION CalcRadSysHXEffectTerm(RadSysNum,SystemType, Temperature,Wate
           ! Calculate the Nusselt number based on what flow regime one is in
   IF (ReD >= MaxLaminarRe) THEN ! Turbulent flow --> use Colburn equation
 
-    NuD = 0.023d0*(ReD**(0.8d0))*(PRactual**(1.d0/3.d0))
+    NuD = 0.023*(ReD**(0.8))*(PRactual**(1./3.))
 
   ELSE    ! Laminar flow --> use constant surface temperature relation
 
-    NuD = 3.66d0
+    NuD = 3.66
 
   END IF
 
@@ -4621,7 +4621,7 @@ SUBROUTINE UpdateRadSysSourceValAvg(LowTempRadSysOn)
   LOGICAL, INTENT(OUT) :: LowTempRadSysOn ! .TRUE. if the radiant system has run this zone time step
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: CloseEnough = 0.01d0 ! Some arbitrarily small value to avoid zeros and numbers that are almost the same
+  REAL, PARAMETER :: CloseEnough = 0.01 ! Some arbitrarily small value to avoid zeros and numbers that are almost the same
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4640,7 +4640,7 @@ SUBROUTINE UpdateRadSysSourceValAvg(LowTempRadSysOn)
 
           ! If it was allocated, then we have to check to see if this was running at all...
   DO SurfNum = 1, TotSurfaces
-    IF (QRadSysSrcAvg(SurfNum) /= 0.0D0) THEN
+    IF (QRadSysSrcAvg(SurfNum) /= 0.0) THEN
       LowTempRadSysOn = .TRUE.
       EXIT !DO loop
     END IF
@@ -4667,7 +4667,7 @@ SUBROUTINE UpdateRadSysSourceValAvg(LowTempRadSysOn)
 END SUBROUTINE UpdateRadSysSourceValAvg
 
 
-REAL(r64) FUNCTION SumHATsurf(ZoneNum)
+REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -4698,7 +4698,7 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL(r64)           :: Area        ! Effective surface area
+  REAL           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0
@@ -4778,11 +4778,11 @@ SUBROUTINE ReportLowTempRadiantSystem(RadSysNum,SystemType)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: CpFluid            ! Specific heat of the fluid in the radiant system
+  REAL :: CpFluid            ! Specific heat of the fluid in the radiant system
   INTEGER :: RadSurfNum         ! DO loop counter for radiant surfaces in the system
   INTEGER :: SurfNum            ! Surface number (index) in Surface derived type
-  REAL(r64) :: TotalRadSysPower   ! Total source/sink power for the radiant system (sum of all surfaces of the system)
-  REAL(r64) :: ZoneMult           ! Total zone multiplier to apply to the system level variables
+  REAL :: TotalRadSysPower   ! Total source/sink power for the radiant system (sum of all surfaces of the system)
+  REAL :: ZoneMult           ! Total zone multiplier to apply to the system level variables
 
           ! FLOW:
   TotalRadSysPower = 0.0
@@ -4829,7 +4829,7 @@ SUBROUTINE ReportLowTempRadiantSystem(RadSysNum,SystemType)
       IF (HydrRadSys(RadSysNum)%CondCausedShutDown) THEN
         HydrRadSys(RadSysNum)%CondCausedTimeOff = TimeStepSys*SecInHour
       ELSE
-        HydrRadSys(RadSysNum)%CondCausedTimeOff = 0.0d0
+        HydrRadSys(RadSysNum)%CondCausedTimeOff = 0.0
       END IF
 
     CASE (ConstantFlowSystem)
@@ -4860,7 +4860,7 @@ SUBROUTINE ReportLowTempRadiantSystem(RadSysNum,SystemType)
                                           'ReportLowTempRadiantSystem')
 
           CFloRadSys(RadSysNum)%HeatPower     = TotalRadSysPower
-          IF (CFloRadSys(RadSysNum)%PumpMassFlowRate > 0.D0) THEN
+          IF (CFloRadSys(RadSysNum)%PumpMassFlowRate > 0.) THEN
             CFloRadSys(RadSysNum)%PumpInletTemp = CFloRadSys(RadSysNum)%WaterInletTemp &
                                                -( CFloRadSys(RadSysNum)%PumpHeattoFluid &
                                                  /(CFloRadSys(RadSysNum)%PumpMassFlowRate*CpFluid) )
@@ -4901,7 +4901,7 @@ SUBROUTINE ReportLowTempRadiantSystem(RadSysNum,SystemType)
       IF (CFloRadSys(RadSysNum)%CondCausedShutDown) THEN
         CFloRadSys(RadSysNum)%CondCausedTimeOff = TimeStepSys*SecInHour
       ELSE
-        CFloRadSys(RadSysNum)%CondCausedTimeOff = 0.0d0
+        CFloRadSys(RadSysNum)%CondCausedTimeOff = 0.0
       END IF
 
     CASE (ElectricSystem)

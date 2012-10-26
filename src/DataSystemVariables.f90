@@ -95,9 +95,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
   LOGICAL :: ReportDetailedWarmupConvergence=.false.  ! True when the detailed warmup convergence is requested
   LOGICAL :: UpdateDataDuringWarmupExternalInterface=.false.   ! variable sets in the external interface.
                                                                ! This update the value during the warmup added for FMI
-  REAL(r64)   :: Elapsed_Time=0.0d0          ! For showing elapsed time at end of run
-  REAL(r64)   :: Time_Start=0.0d0            ! Call to CPU_Time for start time of simulation
-  REAL(r64)   :: Time_Finish=0.0d0           ! Call to CPU_Time for end time of simulation
+  REAL   :: Elapsed_Time=0.0          ! For showing elapsed time at end of run
+  REAL   :: Time_Start=0.0            ! Call to CPU_Time for start time of simulation
+  REAL   :: Time_Finish=0.0           ! Call to CPU_Time for end time of simulation
   CHARACTER(len=15)  :: cMinReportFrequency = ' '   ! String for minimum reporting frequency
   INTEGER            :: MinReportFrequency = -2     ! Frequency var turned into integer during get report var input.
   LOGICAL :: SortedIDD=.true.   ! after processing, use sorted IDD to obtain Defs, etc.

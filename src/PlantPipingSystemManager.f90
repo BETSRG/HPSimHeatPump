@@ -545,7 +545,7 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
                 PipingSystemDomains(DomainNum)%Mesh%X%RegionMeshCount = PipingSystemDomains(DomainNum)%Mesh%X%RegionMeshCount + 1
                 PipingSystemDomains(DomainNum)%Mesh%X%GeometricSeriesCoefficient = rNumericArgs(5)
             ELSE
-                PipingSystemDomains(DomainNum)%Mesh%X%GeometricSeriesCoefficient = 1.0d0
+                PipingSystemDomains(DomainNum)%Mesh%X%GeometricSeriesCoefficient = 1.0
             END IF
         CASE DEFAULT
             CALL IssueSevereInputFieldError(RoutineName, ObjName_ug_GeneralDomain, cAlphaArgs(1), cAlphaFieldNames(2), &
@@ -567,7 +567,7 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
                 PipingSystemDomains(DomainNum)%Mesh%Y%RegionMeshCount = PipingSystemDomains(DomainNum)%Mesh%Y%RegionMeshCount + 1
                 PipingSystemDomains(DomainNum)%Mesh%Y%GeometricSeriesCoefficient = rNumericArgs(7)
             ELSE
-                PipingSystemDomains(DomainNum)%Mesh%Y%GeometricSeriesCoefficient = 1.0d0
+                PipingSystemDomains(DomainNum)%Mesh%Y%GeometricSeriesCoefficient = 1.0
             END IF
         CASE DEFAULT
             CALL IssueSevereInputFieldError(RoutineName, ObjName_ug_GeneralDomain, cAlphaArgs(1), cAlphaFieldNames(3), &
@@ -589,7 +589,7 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
                 PipingSystemDomains(DomainNum)%Mesh%Z%RegionMeshCount = PipingSystemDomains(DomainNum)%Mesh%Z%RegionMeshCount + 1
                 PipingSystemDomains(DomainNum)%Mesh%Z%GeometricSeriesCoefficient = rNumericArgs(9)
             ELSE
-                PipingSystemDomains(DomainNum)%Mesh%Z%GeometricSeriesCoefficient = 1.0d0
+                PipingSystemDomains(DomainNum)%Mesh%Z%GeometricSeriesCoefficient = 1.0
             END IF
         CASE DEFAULT
             CALL IssueSevereInputFieldError(RoutineName, ObjName_ug_GeneralDomain, cAlphaArgs(1), cAlphaFieldNames(4), &
@@ -602,8 +602,8 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
         PipingSystemDomains(DomainNum)%GroundProperties%SpecificHeat = rNumericArgs(12)
 
         !Moisture properties, validated min/max by IP, and converted to a fraction for computation here
-        PipingSystemDomains(DomainNum)%Moisture%Theta_Liq = rNumericArgs(13) / 100.0d0
-        PipingSystemDomains(DomainNum)%Moisture%Theta_Sat = rNumericArgs(14) / 100.0d0
+        PipingSystemDomains(DomainNum)%Moisture%Theta_Liq = rNumericArgs(13) / 100.0
+        PipingSystemDomains(DomainNum)%Moisture%Theta_Sat = rNumericArgs(14) / 100.0
 
         !Farfield model parameters, validated min/max by IP
         PipingSystemDomains(DomainNum)%Farfield%AverageGroundTemperature = rNumericArgs(15)
@@ -642,14 +642,14 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
             ! get dimensions for meshing
             CurIndex = 18
             PipingSystemDomains(DomainNum)%BasementZone%Width = rNumericArgs(CurIndex)
-            IF (PipingSystemDomains(DomainNum)%BasementZone%Width <= 0.0d0) THEN
+            IF (PipingSystemDomains(DomainNum)%BasementZone%Width <= 0.0) THEN
                 CALL IssueSevereInputFieldError(RoutineName,ObjName_ug_GeneralDomain,cAlphaArgs(1),cNumericFieldNames(CurIndex), &
                                            rNumericArgs(CurIndex), 'Basement width must be a positive nonzero value.', ErrorsFound)
             END IF
 
             CurIndex = 19
             PipingSystemDomains(DomainNum)%BasementZone%Depth = rNumericArgs(CurIndex)
-            IF (PipingSystemDomains(DomainNum)%BasementZone%Depth <= 0.0d0) THEN
+            IF (PipingSystemDomains(DomainNum)%BasementZone%Depth <= 0.0) THEN
                 CALL IssueSevereInputFieldError(RoutineName,ObjName_ug_GeneralDomain,cAlphaArgs(1),cNumericFieldNames(CurIndex), &
                                            rNumericArgs(CurIndex), 'Basement depth must be a positive nonzero value.', ErrorsFound)
             END IF
@@ -1039,7 +1039,7 @@ SUBROUTINE InitPipingSystems(DomainNum, CircuitNum)
     INTEGER :: CircCtr
     INTEGER :: SegCtr
     INTEGER :: SegmentIndex
-    REAL(r64) :: rho
+    REAL :: rho
 
     !Do any one-time initializations
     IF (PipingSystemCircuits(CircuitNum)%NeedToFindOnPlantLoop) THEN
@@ -1261,7 +1261,7 @@ SUBROUTINE IssueSevereRealInputFieldError(RoutineName, ObjectName, InstanceName,
     CHARACTER(LEN=*), INTENT(IN)     :: ObjectName
     CHARACTER(LEN=*), INTENT(IN)     :: InstanceName
     CHARACTER(LEN=*), INTENT(IN)     :: FieldName
-    REAL(r64),        INTENT(IN)     :: FieldEntry
+    REAL,        INTENT(IN)     :: FieldEntry
     CHARACTER(LEN=*), INTENT(IN)     :: Condition
     LOGICAL,          INTENT(IN OUT) :: ErrorsFound
 
@@ -1412,7 +1412,7 @@ LOGICAL FUNCTION Real_IsInRange(r, lower, upper) RESULT(RetVal)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
       ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN) :: r, lower, upper
+    REAL, INTENT(IN) :: r, lower, upper
 
     IF ((r >= lower) .AND. (r <= upper)) THEN
         RetVal = .TRUE.
@@ -1426,7 +1426,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION Real_ConstrainTo(r, MinVal, MaxVal) RESULT(RetVal)
+REAL FUNCTION Real_ConstrainTo(r, MinVal, MaxVal) RESULT(RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -1443,7 +1443,7 @@ REAL(r64) FUNCTION Real_ConstrainTo(r, MinVal, MaxVal) RESULT(RetVal)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
       ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL(r64), INTENT(IN) :: r, MinVal, MaxVal
+    REAL, INTENT(IN) :: r, MinVal, MaxVal
 
     RetVal = MIN(r, MaxVal)
     RetVal = MAX(r, MinVal)
@@ -1505,7 +1505,7 @@ LOGICAL FUNCTION MeshPartitionArray_Contains(meshes, value) RESULT(RetVal)
 
       ! FUNCTION ARGUMENT DEFINITIONS:
     TYPE(MeshPartition), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: meshes
-    REAL(r64), INTENT(IN) :: value
+    REAL, INTENT(IN) :: value
 
       ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     INTEGER :: meshnum
@@ -1525,7 +1525,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION RadialCellInfo_XY_CrossSectArea(r) RESULT (RetVal)
+REAL FUNCTION RadialCellInfo_XY_CrossSectArea(r) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -1544,7 +1544,7 @@ REAL(r64) FUNCTION RadialCellInfo_XY_CrossSectArea(r) RESULT (RetVal)
       ! FUNCTION ARGUMENT DEFINITIONS:
     TYPE(RadialCellInformation), INTENT(IN) :: r
 
-    RetVal = 3.14159d0 * ((r%OuterRadius**2) - (r%InnerRadius**2))
+    RetVal = 3.14159 * ((r%OuterRadius**2) - (r%InnerRadius**2))
 
     RETURN
 
@@ -1659,7 +1659,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION BaseThermalPropertySet_Diffusivity(p) RESULT(RetVal)
+REAL FUNCTION BaseThermalPropertySet_Diffusivity(p) RESULT(RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -1722,7 +1722,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION RadialSizing_Thickness(r) RESULT (RetVal)
+REAL FUNCTION RadialSizing_Thickness(r) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -1741,7 +1741,7 @@ REAL(r64) FUNCTION RadialSizing_Thickness(r) RESULT (RetVal)
       ! FUNCTION ARGUMENT DEFINITIONS:
     TYPE(RadialSizing), INTENT(IN) :: r
 
-    RetVal = (r%OuterDia - r%InnerDia) / 2.0d0
+    RetVal = (r%OuterDia - r%InnerDia) / 2.0
 
     RETURN
 
@@ -1839,13 +1839,13 @@ LOGICAL FUNCTION IsConverged_CurrentToPrevIteration(DomainNum) RESULT (RetVal)
     INTEGER, INTENT(IN) :: DomainNum
 
       ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: LocalMax
-    REAL(r64) :: ThisCellMax
+    REAL :: LocalMax
+    REAL :: ThisCellMax
     INTEGER :: X
     INTEGER :: Y
     INTEGER :: Z
 
-    LocalMax = 0.0d0
+    LocalMax = 0.0
     DO Z = LBOUND(PipingSystemDomains(DomainNum)%Cells,3), UBOUND(PipingSystemDomains(DomainNum)%Cells,3)
         DO Y = LBOUND(PipingSystemDomains(DomainNum)%Cells,2), UBOUND(PipingSystemDomains(DomainNum)%Cells,2)
             DO X = LBOUND(PipingSystemDomains(DomainNum)%Cells,1), UBOUND(PipingSystemDomains(DomainNum)%Cells,1)
@@ -1883,14 +1883,14 @@ LOGICAL FUNCTION IsConverged_PipeCurrentToPrevIteration(CircuitNum, CellToCheck,
       ! FUNCTION ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: CircuitNum
     TYPE(CartesianCell), INTENT(IN) :: CellToCheck
-    REAL(r64), INTENT(IN OUT) :: MaxDivAmount
+    REAL, INTENT(IN OUT) :: MaxDivAmount
 
       ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     INTEGER :: RadialCtr
-    REAL(r64) :: ThisCellMax
+    REAL :: ThisCellMax
     TYPE(RadialCellInformation) :: radCell
 
-    MaxDivAmount = 0.0d0
+    MaxDivAmount = 0.0
     DO RadialCtr = LBOUND(CellToCheck%PipeCellData%Soil,1), UBOUND(CellToCheck%PipeCellData%Soil,1)
         radCell = CellToCheck%PipeCellData%Soil(RadialCtr)
         ThisCellMax = ABS(radCell%MyBase%Temperature - radCell%MyBase%Temperature_PrevIteration)
@@ -2117,8 +2117,8 @@ LOGICAL FUNCTION CheckForOutOfRangeTemps(DomainNum) RESULT (RetVal)
 
       ! FUNCTION ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: DomainNum
-    REAL(r64) :: MaxLimit
-    REAL(r64) :: MinLimit
+    REAL :: MaxLimit
+    REAL :: MinLimit
 
     MaxLimit = PipingSystemDomains(DomainNum)%SimControls%MaximumTemperatureLimit
     MinLimit = PipingSystemDomains(DomainNum)%SimControls%MinimumTemperatureLimit
@@ -2132,7 +2132,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION Width(c) RESULT (RetVal)
+REAL FUNCTION Width(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2159,7 +2159,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION Height(c) RESULT (RetVal)
+REAL FUNCTION Height(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2186,7 +2186,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION Depth(c) RESULT (RetVal)
+REAL FUNCTION Depth(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2213,7 +2213,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION XNormalArea(c) RESULT (RetVal)
+REAL FUNCTION XNormalArea(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2240,7 +2240,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION YNormalArea(c) RESULT (RetVal)
+REAL FUNCTION YNormalArea(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2267,7 +2267,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION ZNormalArea(c) RESULT (RetVal)
+REAL FUNCTION ZNormalArea(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2294,7 +2294,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION Volume(c) RESULT (RetVal)
+REAL FUNCTION Volume(c) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2402,7 +2402,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION NormalArea(c, Direction) RESULT (RetVal)
+REAL FUNCTION NormalArea(c, Direction) RESULT (RetVal)
 
       ! FUNCTION INFORMATION:
       !       AUTHOR         Edwin Lee
@@ -2496,23 +2496,23 @@ SUBROUTINE CartesianPipeCellInformation_ctor(c, GridCellWidth, PipeSizes, NumRad
 
       ! SUBROUTINE ARGUMENT DEFINITIONS:
     TYPE(CartesianPipeCellInformation), INTENT(IN OUT) :: c
-    REAL(r64), INTENT(IN) :: GridCellWidth
+    REAL, INTENT(IN) :: GridCellWidth
     TYPE(RadialSizing), INTENT(IN) :: PipeSizes
     INTEGER, INTENT(IN) :: NumRadialNodes
-    REAL(r64), INTENT(IN) :: CellDepth
-    REAL(r64), INTENT(IN) :: InsulationThickness
-    REAL(r64), INTENT(IN) :: RadialGridExtent
+    REAL, INTENT(IN) :: CellDepth
+    REAL, INTENT(IN) :: InsulationThickness
+    REAL, INTENT(IN) :: RadialGridExtent
     LOGICAL, INTENT(IN) :: SimHasInsulation
 
       ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: InsulationInnerRadius
-    REAL(r64) :: InsulationOuterRadius
-    REAL(r64) :: InsulationCentroid
-    REAL(r64) :: PipeOuterRadius
-    REAL(r64) :: PipeInnerRadius
-    REAL(r64) :: MinimumSoilRadius
-    REAL(r64) :: ThisSliceInnerRadius
-    REAL(r64) :: Rval
+    REAL :: InsulationInnerRadius
+    REAL :: InsulationOuterRadius
+    REAL :: InsulationCentroid
+    REAL :: PipeOuterRadius
+    REAL :: PipeInnerRadius
+    REAL :: MinimumSoilRadius
+    REAL :: ThisSliceInnerRadius
+    REAL :: Rval
     INTEGER :: RadialCellCtr
 
      !'calculate pipe radius
@@ -2524,13 +2524,13 @@ SUBROUTINE CartesianPipeCellInformation_ctor(c, GridCellWidth, PipeSizes, NumRad
     CALL FluidCellInformation_ctor(c%Fluid, PipeInnerRadius, CellDepth)
 
     !'then the pipe cell
-    CALL RadialCellInformation_ctor(c%Pipe, (PipeOuterRadius + PipeInnerRadius) / 2.0d0, PipeInnerRadius, PipeOuterRadius)
+    CALL RadialCellInformation_ctor(c%Pipe, (PipeOuterRadius + PipeInnerRadius) / 2.0, PipeInnerRadius, PipeOuterRadius)
 
     !'then the insulation if we have it
     IF (InsulationThickness > 0) THEN
         InsulationInnerRadius = PipeOuterRadius
         InsulationOuterRadius = InsulationInnerRadius + InsulationThickness
-        InsulationCentroid = (InsulationInnerRadius + InsulationOuterRadius) / 2.0d0
+        InsulationCentroid = (InsulationInnerRadius + InsulationOuterRadius) / 2.0
         CALL RadialCellInformation_ctor(c%Insulation, InsulationCentroid, InsulationInnerRadius, InsulationOuterRadius)
     END IF
 
@@ -2548,7 +2548,7 @@ SUBROUTINE CartesianPipeCellInformation_ctor(c, GridCellWidth, PipeSizes, NumRad
     ALLOCATE(c%Soil(0:NumRadialNodes - 1))
 
     !first set Rval to the minimum soil radius plus half a slice thickness for the innermost radial node
-    Rval = MinimumSoilRadius + (c%RadialSliceWidth / 2.0d0)
+    Rval = MinimumSoilRadius + (c%RadialSliceWidth / 2.0)
     ThisSliceInnerRadius = MinimumSoilRadius
     CALL RadialCellInformation_ctor(c%Soil(0), Rval, ThisSliceInnerRadius, ThisSliceInnerRadius + c%RadialSliceWidth)
 
@@ -2560,7 +2560,7 @@ SUBROUTINE CartesianPipeCellInformation_ctor(c, GridCellWidth, PipeSizes, NumRad
     END DO
 
     !'also assign the interface cell surrounding the radial system
-    c%InterfaceVolume = (1.0d0 - (3.1415926535d0 / 4.0d0)) * (GridCellWidth ** 2) * CellDepth
+    c%InterfaceVolume = (1.0 - (3.1415926535 / 4.0)) * (GridCellWidth ** 2) * CellDepth
 
     RETURN
 
@@ -2586,9 +2586,9 @@ SUBROUTINE RadialCellInformation_ctor(c, m_RadialCentroid, m_MinRadius, m_MaxRad
 
       ! SUBROUTINE ARGUMENT DEFINITIONS:
     TYPE(RadialCellInformation), INTENT(IN OUT) :: c
-    REAL(r64), INTENT(IN) :: m_RadialCentroid
-    REAL(r64), INTENT(IN) :: m_MinRadius
-    REAL(r64), INTENT(IN) :: m_MaxRadius
+    REAL, INTENT(IN) :: m_RadialCentroid
+    REAL, INTENT(IN) :: m_MinRadius
+    REAL, INTENT(IN) :: m_MaxRadius
 
     c%RadialCentroid = m_RadialCentroid
     c%InnerRadius = m_MinRadius
@@ -2618,11 +2618,11 @@ SUBROUTINE FluidCellInformation_ctor(c, m_PipeInnerRadius, m_CellDepth)
 
       ! SUBROUTINE ARGUMENT DEFINITIONS:
     TYPE(FluidCellInformation), INTENT(IN OUT) :: c
-    REAL(r64), INTENT(IN) :: m_PipeInnerRadius
-    REAL(r64), INTENT(IN) :: m_CellDepth
+    REAL, INTENT(IN) :: m_PipeInnerRadius
+    REAL, INTENT(IN) :: m_CellDepth
 
     c%PipeInnerRadius = m_PipeInnerRadius
-    c%Volume = 3.1415926535d0 * (m_PipeInnerRadius ** 2) * m_CellDepth
+    c%Volume = 3.1415926535 * (m_PipeInnerRadius ** 2) * m_CellDepth
 
     RETURN
 
@@ -2666,9 +2666,9 @@ SUBROUTINE DevelopMesh(DomainNum)
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:) :: XRegions
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:) :: YRegions
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:) :: ZRegions
-    REAL(r64),        ALLOCATABLE, DIMENSION(:) :: XBoundaryPoints
-    REAL(r64),        ALLOCATABLE, DIMENSION(:) :: YBoundaryPoints
-    REAL(r64),        ALLOCATABLE, DIMENSION(:) :: ZBoundaryPoints
+    REAL,        ALLOCATABLE, DIMENSION(:) :: XBoundaryPoints
+    REAL,        ALLOCATABLE, DIMENSION(:) :: YBoundaryPoints
+    REAL,        ALLOCATABLE, DIMENSION(:) :: ZBoundaryPoints
     INTEGER :: RegionListCount
     INTEGER :: BoundaryListCount
     LOGICAL :: XPartitionsExist
@@ -2827,18 +2827,18 @@ SUBROUTINE CreatePartitionCenterList(DomainNum)
     INTEGER, INTENT(IN) :: DomainNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL(r64) :: BasementCellFraction = 0.001d0 !the fraction of domain extent to use for the basement cells
+    REAL :: BasementCellFraction = 0.001 !the fraction of domain extent to use for the basement cells
                                                 !actual dimension shouldn't matter for calculation purposes
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: BasementDistFromBottom
+    REAL :: BasementDistFromBottom
     INTEGER :: CircuitCtr
     INTEGER :: CircuitIndex
     INTEGER :: PipeCtr
     INTEGER :: PreviousUbound
     TYPE(MeshPartition), ALLOCATABLE, DIMENSION(:) :: PreviousEntries
-    REAL(r64) :: PipeCellWidth
-    REAL(r64) :: SurfCellWidth !Basement surface...
+    REAL :: PipeCellWidth
+    REAL :: SurfCellWidth !Basement surface...
     TYPE(PipeSegmentInfo) :: ThisSegment
 
     !'NOTE: pipe location y values have already been corrected to be measured from the bottom surface
@@ -2972,7 +2972,7 @@ FUNCTION CreatePartitionRegionList(DomainNum, ThesePartitionCenters, PartitionsE
     INTEGER, INTENT(IN) :: DomainNum
     TYPE(MeshPartition), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: ThesePartitionCenters
     INTEGER, INTENT(IN) :: PartitionsUbound
-    REAL(r64), INTENT(IN) :: DirExtentMax
+    REAL, INTENT(IN) :: DirExtentMax
     LOGICAL, INTENT(IN) :: PartitionsExist
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -2980,10 +2980,10 @@ FUNCTION CreatePartitionRegionList(DomainNum, ThesePartitionCenters, PartitionsE
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     INTEGER :: Index
-    REAL(r64) :: ThisCellWidthBy2
+    REAL :: ThisCellWidthBy2
     INTEGER :: ThisPartitionType !From Enum: RegionType
-    REAL(r64) :: CellLeft
-    REAL(r64) :: CellRight
+    REAL :: CellLeft
+    REAL :: CellRight
     INTEGER :: SubIndex
 
           ! FUNCTION RETURN VALUE
@@ -2996,7 +2996,7 @@ FUNCTION CreatePartitionRegionList(DomainNum, ThesePartitionCenters, PartitionsE
     !'loop across all partitions
     DO Index = LBOUND(ThesePartitionCenters, 1), UBOUND(ThesePartitionCenters, 1)
 
-        ThisCellWidthBy2 = ThesePartitionCenters(Index)%TotalWidth / 2.0d0
+        ThisCellWidthBy2 = ThesePartitionCenters(Index)%TotalWidth / 2.0
         ThisPartitionType = ThesePartitionCenters(Index)%PartitionType
 
         !'use this half width to validate the region and add it to the collection
@@ -3004,7 +3004,7 @@ FUNCTION CreatePartitionRegionList(DomainNum, ThesePartitionCenters, PartitionsE
         CellRight = ThesePartitionCenters(Index)%rDimension + ThisCellWidthBy2
 
         !check to make sure this location is valid
-        IF (CellLeft < 0.0d0 .OR. CellRight > DirExtentMax) THEN
+        IF (CellLeft < 0.0 .OR. CellRight > DirExtentMax) THEN
             CALL ShowSevereError('PlantPipingSystems::'//RoutineName//': Invalid partition location in domain.')
             CALL ShowContinueError('Occurs during mesh development for domain='//TRIM(PipingSystemDomains(DomainNum)%Name))
             CALL ShowContinueError('A pipe or basement is located outside of the domain extents.')
@@ -3073,7 +3073,7 @@ INTEGER FUNCTION CreateRegionListCount(ThesePartitionRegions, DirExtentMax, Part
 
           ! FUNCTION ARGUMENT DEFINITIONS:
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: ThesePartitionRegions
-    REAL(r64), INTENT(IN) :: DirExtentMax
+    REAL, INTENT(IN) :: DirExtentMax
     LOGICAL, INTENT(IN) :: PartitionsExist
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
@@ -3132,7 +3132,7 @@ FUNCTION CreateRegionList(DomainNum, ThesePartitionRegions, DirExtentMax, &
           ! FUNCTION ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: DomainNum
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: ThesePartitionRegions
-    REAL(r64), INTENT(IN) :: DirExtentMax
+    REAL, INTENT(IN) :: DirExtentMax
     INTEGER, INTENT(IN) :: DirDirection
     INTEGER, INTENT(IN) :: RetValUBound
     LOGICAL, INTENT(IN) :: PartitionsExist
@@ -3145,7 +3145,7 @@ FUNCTION CreateRegionList(DomainNum, ThesePartitionRegions, DirExtentMax, &
 
     TYPE(GridRegion) :: ThisRegion
     TYPE(TempGridRegionData) :: PreviousRegion
-    REAL(r64) :: LeftRegionExtent
+    REAL :: LeftRegionExtent
     INTEGER :: PreviousUbound
     INTEGER :: Index
     INTEGER :: SubIndex
@@ -3313,19 +3313,19 @@ FUNCTION CreateBoundaryList(RegionList, DirExtentMax, DirDirection, RetValLbound
 
           ! FUNCTION ARGUMENT DEFINITIONS:
     TYPE(GridRegion), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: RegionList
-    REAL(r64), INTENT(IN) :: DirExtentMax
+    REAL, INTENT(IN) :: DirExtentMax
     INTEGER, INTENT(IN) :: DirDirection
     INTEGER, INTENT(IN) :: RetValLbound
     INTEGER, INTENT(IN) :: RetValUbound
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: StartingPointCounter
+    REAL :: StartingPointCounter
     INTEGER :: Index
     INTEGER :: Counter
     INTEGER :: CellWidthCtr
 
           ! FUNCTION RETURN VALUE
-    REAL(r64) :: RetVal(RetValLbound:RetValUbound)
+    REAL :: RetVal(RetValLbound:RetValUbound)
 
     Counter = -1
     DO Index = LBOUND(RegionList,1), UBOUND(RegionList,1)
@@ -3377,18 +3377,18 @@ SUBROUTINE CreateCellArray(DomainNum, XBoundaryPoints, YBoundaryPoints, &
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: DomainNum
-    REAL(r64), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: XBoundaryPoints
-    REAL(r64), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: YBoundaryPoints
-    REAL(r64), ALLOCATABLE, DIMENSION(:), INTENT(IN) :: ZBoundaryPoints
+    REAL, ALLOCATABLE, DIMENSION(:), INTENT(IN) :: XBoundaryPoints
+    REAL, ALLOCATABLE, DIMENSION(:), INTENT(IN) :: YBoundaryPoints
+    REAL, ALLOCATABLE, DIMENSION(:), INTENT(IN) :: ZBoundaryPoints
     INTEGER, INTENT(IN) :: MaxBasementXNodeIndex
     INTEGER, INTENT(IN) :: MinBasementYNodeIndex
 
           ! DERIVED TYPE DEFINITIONS:
     TYPE tCellExtents
         TYPE(MeshExtents) :: MyBase
-        REAL(r64)         :: Xmin
-        REAL(r64)         :: Ymin
-        REAL(r64)         :: Zmin
+        REAL         :: Xmin
+        REAL         :: Ymin
+        REAL         :: Zmin
     END TYPE tCellExtents
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -3405,35 +3405,35 @@ SUBROUTINE CreateCellArray(DomainNum, XBoundaryPoints, YBoundaryPoints, &
 
     INTEGER   :: X
     INTEGER   :: CellXIndex
-    REAL(r64) :: CellXMinValue
-    REAL(r64) :: CellXMaxValue
-    REAL(r64) :: CellXCenter
-    REAL(r64) :: CellWidth
+    REAL :: CellXMinValue
+    REAL :: CellXMaxValue
+    REAL :: CellXCenter
+    REAL :: CellWidth
 
     INTEGER   :: Y
     INTEGER   :: CellYIndex
-    REAL(r64) :: CellYMinValue
-    REAL(r64) :: CellYMaxValue
-    REAL(r64) :: CellYCenter
-    REAL(r64) :: CellHeight
+    REAL :: CellYMinValue
+    REAL :: CellYMaxValue
+    REAL :: CellYCenter
+    REAL :: CellHeight
 
     INTEGER   :: Z
     INTEGER   :: CellZIndex
-    REAL(r64) :: CellZMinValue
-    REAL(r64) :: CellZMaxValue
-    REAL(r64) :: CellZCenter
-    REAL(r64) :: CellDepth
+    REAL :: CellZMinValue
+    REAL :: CellZMaxValue
+    REAL :: CellZCenter
+    REAL :: CellDepth
 
     INTEGER :: PipeIndex
     INTEGER :: NumRadialCells
-    REAL(r64) :: InsulationThickness
+    REAL :: InsulationThickness
     INTEGER :: CircuitCtr
     INTEGER :: CircuitIndex
     INTEGER :: FoundOnCircuitIndex
 
     TYPE(RadialSizing) :: PipeSizing
     TYPE(PipeSegmentInfo) :: ThisSegment
-    REAL(r64) :: RadialMeshThickness
+    REAL :: RadialMeshThickness
     LOGICAL :: HasInsulation
 
     !'subtract 2 in each dimension:
@@ -3620,25 +3620,25 @@ SUBROUTINE SetupCellNeighbors(DomainNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: X, Y, Z
-    REAL(r64) :: ThisCellCentroidX
-    REAL(r64) :: ThisCellCentroidY
-    REAL(r64) :: ThisCellCentroidZ
-    REAL(r64) :: CellRightCentroidX
-    REAL(r64) :: CellRightLeftWallX
-    REAL(r64) :: CellLeftCentroidX
-    REAL(r64) :: CellLeftRightWallX
-    REAL(r64) :: LeftCellCentroidX
-    REAL(r64) :: LeftCellRightWallX
-    REAL(r64) :: RightCellCentroidX
-    REAL(r64) :: RightCellLeftWallX
-    REAL(r64) :: UpperCellCentroidY
-    REAL(r64) :: UpperCellLowerWallY
-    REAL(r64) :: LowerCellCentroidY
-    REAL(r64) :: LowerCellUpperWallY
-    REAL(r64) :: UpperZCellCentroidZ
-    REAL(r64) :: UpperZCellLowerWallZ
-    REAL(r64) :: LowerZCellCentroidZ
-    REAL(r64) :: LowerZCellUpperWallZ
+    REAL :: ThisCellCentroidX
+    REAL :: ThisCellCentroidY
+    REAL :: ThisCellCentroidZ
+    REAL :: CellRightCentroidX
+    REAL :: CellRightLeftWallX
+    REAL :: CellLeftCentroidX
+    REAL :: CellLeftRightWallX
+    REAL :: LeftCellCentroidX
+    REAL :: LeftCellRightWallX
+    REAL :: RightCellCentroidX
+    REAL :: RightCellLeftWallX
+    REAL :: UpperCellCentroidY
+    REAL :: UpperCellLowerWallY
+    REAL :: LowerCellCentroidY
+    REAL :: LowerCellUpperWallY
+    REAL :: UpperZCellCentroidZ
+    REAL :: UpperZCellLowerWallZ
+    REAL :: LowerZCellCentroidZ
+    REAL :: LowerZCellUpperWallZ
 
     DO X = LBOUND(PipingSystemDomains(DomainNum)%Cells, 1), UBOUND(PipingSystemDomains(DomainNum)%Cells, 1)
         DO Y = LBOUND(PipingSystemDomains(DomainNum)%Cells, 2), UBOUND(PipingSystemDomains(DomainNum)%Cells, 2)
@@ -3656,14 +3656,14 @@ SUBROUTINE SetupCellNeighbors(DomainNum)
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveX, CellRightCentroidX - ThisCellCentroidX, &
                                                                                          CellRightLeftWallX - ThisCellCentroidX, &
                                                                                          CellRightCentroidX - CellRightLeftWallX)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeX, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeX, 0.0, 0.0, 0.0)
                 ELSE IF (X == UBOUND(PipingSystemDomains(DomainNum)%Cells,1)) THEN
                     CellLeftCentroidX = PipingSystemDomains(DomainNum)%Cells(X - 1, Y, Z)%Centroid%X
                     CellLeftRightWallX = PipingSystemDomains(DomainNum)%Cells(X - 1, Y, Z)%X_max
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeX, ThisCellCentroidX - CellLeftCentroidX, &
                                                                                          ThisCellCentroidX - CellLeftRightWallX, &
                                                                                          CellLeftRightWallX - CellLeftCentroidX)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveX, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveX, 0.0, 0.0, 0.0)
                 ELSE
                     LeftCellCentroidX = PipingSystemDomains(DomainNum)%Cells(X - 1, Y, Z)%Centroid%X
                     LeftCellRightWallX = PipingSystemDomains(DomainNum)%Cells(X - 1, Y, Z)%X_max
@@ -3684,14 +3684,14 @@ SUBROUTINE SetupCellNeighbors(DomainNum)
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveY, UpperCellCentroidY - ThisCellCentroidY, &
                                                                                          UpperCellLowerWallY - ThisCellCentroidY, &
                                                                                          UpperCellCentroidY - UpperCellLowerWallY)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeY, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeY, 0.0, 0.0, 0.0)
                 ELSE IF (Y == UBOUND(PipingSystemDomains(DomainNum)%Cells, 2)) THEN
                     LowerCellCentroidY = PipingSystemDomains(DomainNum)%Cells(X, Y - 1, Z)%Centroid%Y
                     LowerCellUpperWallY = PipingSystemDomains(DomainNum)%Cells(X, Y - 1, Z)%Y_max
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeY, ThisCellCentroidY - LowerCellCentroidY, &
                                                                                          ThisCellCentroidY - LowerCellUpperWallY, &
                                                                                          LowerCellUpperWallY - LowerCellCentroidY)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveY, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveY, 0.0, 0.0, 0.0)
                 ELSE
                     UpperCellCentroidY = PipingSystemDomains(DomainNum)%Cells(X, Y + 1, Z)%Centroid%Y
                     LowerCellCentroidY = PipingSystemDomains(DomainNum)%Cells(X, Y - 1, Z)%Centroid%Y
@@ -3712,14 +3712,14 @@ SUBROUTINE SetupCellNeighbors(DomainNum)
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveZ, UpperZCellCentroidZ - ThisCellCentroidZ, &
                                                                                          UpperZCellLowerWallZ - ThisCellCentroidZ, &
                                                                                          UpperZCellCentroidZ - UpperZCellLowerWallZ)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeZ, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeZ, 0.0, 0.0, 0.0)
                 ELSE IF (Z == UBOUND(PipingSystemDomains(DomainNum)%Cells,3)) THEN
                     LowerZCellCentroidZ = PipingSystemDomains(DomainNum)%Cells(X, Y, Z - 1)%Centroid%Z
                     LowerZCellUpperWallZ = PipingSystemDomains(DomainNum)%Cells(X, Y, Z - 1)%Z_max
                     CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_NegativeZ, ThisCellCentroidZ - LowerZCellCentroidZ, &
                                                                                          ThisCellCentroidZ - LowerZCellUpperWallZ, &
                                                                                          LowerZCellUpperWallZ - LowerZCellCentroidZ)
-                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveZ, 0.0d0, 0.0d0, 0.0d0)
+                    CALL AddNeighborInformation(DomainNum, X,Y,Z, Direction_PositiveZ, 0.0, 0.0, 0.0)
                 ELSE
                     LowerZCellCentroidZ = PipingSystemDomains(DomainNum)%Cells(X, Y, Z - 1)%Centroid%Z
                     UpperZCellCentroidZ = PipingSystemDomains(DomainNum)%Cells(X, Y, Z + 1)%Centroid%Z
@@ -3770,9 +3770,9 @@ SUBROUTINE AddNeighborInformation(DomainNum, X, Y, Z, Direction, ThisCentroidToN
     INTEGER, INTENT(IN) :: Y
     INTEGER, INTENT(IN) :: Z
     INTEGER, INTENT(IN) :: Direction !From Enum: Direction
-    REAL(r64), INTENT(IN) :: ThisCentroidToNeighborCentroid
-    REAL(r64), INTENT(IN) :: ThisCentroidToNeighborWall
-    REAL(r64), INTENT(IN) :: ThisWallToNeighborCentroid
+    REAL, INTENT(IN) :: ThisCentroidToNeighborCentroid
+    REAL, INTENT(IN) :: ThisCentroidToNeighborWall
+    REAL, INTENT(IN) :: ThisWallToNeighborCentroid
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     TYPE(DirectionNeighbor_Dictionary), ALLOCATABLE, DIMENSION(:) :: PrevValues
@@ -3975,20 +3975,20 @@ SUBROUTINE GetCellWidths(DomainNum, g)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     TYPE(DistributionStructure) :: ThisMesh
-    REAL(r64) :: GridWidth
+    REAL :: GridWidth
     INTEGER :: NumCellsOnEachSide
-    REAL(r64) :: SummationTerm
+    REAL :: SummationTerm
     INTEGER :: I
-    REAL(r64) :: CellWidth
+    REAL :: CellWidth
     INTEGER :: SubIndex
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: RetVal
+    REAL, ALLOCATABLE, DIMENSION(:) :: RetVal
     INTEGER :: RetMaxIndex
 !write(outputfiledebug,*) ' regiontype=',g%RegionType
     !'determine which mesh "direction" we are going to be using
 
     ThisMesh%MeshDistribution =0 !From Enum: MeshDistribution
     ThisMesh%RegionMeshCount=0
-    ThisMesh%GeometricSeriesCoefficient  = 0.0d0
+    ThisMesh%GeometricSeriesCoefficient  = 0.0
 
     SELECT CASE (g%RegionType)
     CASE (RegionType_XDirection)
@@ -4029,7 +4029,7 @@ SUBROUTINE GetCellWidths(DomainNum, g)
         NumCellsOnEachSide = ThisMesh%RegionMeshCount / 2  !Already validated to be an even #
 
         !'calculate geometric series
-        SummationTerm = 0.0d0
+        SummationTerm = 0.0
         DO I = 1, NumCellsOnEachSide
             SummationTerm = SummationTerm + ThisMesh%GeometricSeriesCoefficient ** (I - 1)
         END DO
@@ -4178,7 +4178,7 @@ END SUBROUTINE
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION EvaluateFieldCellTemperature(DomainNum, ThisCell) RESULT(RetVal)
+REAL FUNCTION EvaluateFieldCellTemperature(DomainNum, ThisCell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4205,11 +4205,11 @@ REAL(r64) FUNCTION EvaluateFieldCellTemperature(DomainNum, ThisCell) RESULT(RetV
     TYPE(CartesianCell), INTENT(IN) :: ThisCell
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Beta
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: Resistance
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Beta
+    REAL :: NeighborTemp
+    REAL :: Resistance
     INTEGER :: DirectionCounter
     INTEGER :: CurDirection !From Enum: Direction
 
@@ -4244,7 +4244,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetVal)
+REAL FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4272,16 +4272,16 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     TYPE(CartesianCell), INTENT(IN) :: cell
 
           ! FUNCTION PARAMETER DEFINITIONS:
-    REAL(r64), PARAMETER :: AirDensity = 1.22521d0 !'[kg/m3]
-    REAL(r64), PARAMETER :: AirSpecificHeat = 1003d0 !'[J/kg-K]
+    REAL, PARAMETER :: AirDensity = 1.22521 !'[kg/m3]
+    REAL, PARAMETER :: AirSpecificHeat = 1003 !'[J/kg-K]
     !evapotranspiration parameters
-    REAL(r64), PARAMETER :: MeanSolarConstant = 0.08196d0  ! 1367 [W/m2], entered in [MJ/m2-minute]
-    REAL(r64), PARAMETER :: A_s  = 0.25d0 !?
-    REAL(r64), PARAMETER :: B_s  = 0.5d0  !?
-    REAL(r64), PARAMETER :: Absor_Corrected = 0.77d0
-    REAL(r64), PARAMETER :: Convert_Wm2_To_MJhrmin = 3600.0d0 / 1000000.0d0
-    REAL(r64), PARAMETER :: Convert_MJhrmin_To_Wm2 = 1.0d0 / Convert_Wm2_To_MJhrmin
-    REAL(r64), PARAMETER :: Rho_water = 998.0d0  ![kg/m3]
+    REAL, PARAMETER :: MeanSolarConstant = 0.08196  ! 1367 [W/m2], entered in [MJ/m2-minute]
+    REAL, PARAMETER :: A_s  = 0.25 !?
+    REAL, PARAMETER :: B_s  = 0.5  !?
+    REAL, PARAMETER :: Absor_Corrected = 0.77
+    REAL, PARAMETER :: Convert_Wm2_To_MJhrmin = 3600.0 / 1000000.0
+    REAL, PARAMETER :: Convert_MJhrmin_To_Wm2 = 1.0 / Convert_Wm2_To_MJhrmin
+    REAL, PARAMETER :: Rho_water = 998.0  ![kg/m3]
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4291,62 +4291,62 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     !declare some variables
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: ThisNormalArea
-    REAL(r64) :: IncidentHeatGain
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: NeighborTemp
+    REAL :: ThisNormalArea
+    REAL :: IncidentHeatGain
     INTEGER :: DirectionCounter
     INTEGER :: CurDirection
-    REAL(r64) :: AdiabaticMultiplier
-    REAL(r64) :: Beta
-    REAL(r64) :: Latitude_Degrees   !Latitude, degrees N
-    REAL(r64) :: StMeridian_Degrees !Standard meridian, degrees W -- note it is degrees E in DataEnvironment
-    REAL(r64) :: Longitude_Degrees  !Longitude, degrees W -- note it is degrees E in DataEnvironment
+    REAL :: AdiabaticMultiplier
+    REAL :: Beta
+    REAL :: Latitude_Degrees   !Latitude, degrees N
+    REAL :: StMeridian_Degrees !Standard meridian, degrees W -- note it is degrees E in DataEnvironment
+    REAL :: Longitude_Degrees  !Longitude, degrees W -- note it is degrees E in DataEnvironment
     !evapotranspiration calculated values
-    REAL(r64) :: Latitude_Radians
-    REAL(r64) :: DayOfYear
-    REAL(r64) :: HourOfDay
-    REAL(r64) :: CurSecondsIntoToday
-    REAL(r64) :: dr
-    REAL(r64) :: Declination
-    REAL(r64) :: b_sc
-    REAL(r64) :: Sc
-    REAL(r64) :: Hour_Angle
-    REAL(r64) :: X_sunset
-    REAL(r64) :: Sunset_Angle
-    REAL(r64) :: Altitude_Angle
-    REAL(r64) :: Solar_Angle_1
-    REAL(r64) :: Solar_Angle_2
-    REAL(r64) :: QRAD_A
-    REAL(r64) :: QRAD_SO
-    REAL(r64) :: Ratio_SO
-    REAL(r64), SAVE :: Last_Ratio_SO
-    REAL(r64) :: IncidentSolar_MJhrmin
-    REAL(r64) :: AbsorbedIncidentSolar_MJhrmin
-    REAL(r64) :: VaporPressureSaturated_kPa
-    REAL(r64) :: VaporPressureActual_kPa
-    REAL(r64) :: QRAD_NL
-    REAL(r64) :: NetIncidentRadiation_MJhr ![MJ/hr]
-    REAL(r64) :: NetIncidentRadiation_Wm2 ![W/m2]
-    REAL(r64) :: CN
-    REAL(r64) :: G_hr
-    REAL(r64) :: Cd
-    REAL(r64) :: Slope_S
-    REAL(r64) :: Pressure
-    REAL(r64) :: PsychrometricConstant
-    REAL(r64) :: EvapotransFluidLoss_mmhr
-    REAL(r64) :: EvapotransFluidLoss_mhr
-    REAL(r64) :: LatentHeatVaporization
-    REAL(r64) :: EvapotransHeatLoss_MJhrmin  ![MJ/m2-hr]
-    REAL(r64) :: EvapotransHeatLoss_Wm2       ![W/m2]
-    REAL(r64) :: CurAirTempK
-    REAL(r64) :: MyLatitude
-    REAL(r64) :: MyLongitude
-    REAL(r64) :: MyTimeZoneMeridian
-    REAL(r64) :: MyElevation
-    REAL(r64) :: GroundCoverCoefficient
+    REAL :: Latitude_Radians
+    REAL :: DayOfYear
+    REAL :: HourOfDay
+    REAL :: CurSecondsIntoToday
+    REAL :: dr
+    REAL :: Declination
+    REAL :: b_sc
+    REAL :: Sc
+    REAL :: Hour_Angle
+    REAL :: X_sunset
+    REAL :: Sunset_Angle
+    REAL :: Altitude_Angle
+    REAL :: Solar_Angle_1
+    REAL :: Solar_Angle_2
+    REAL :: QRAD_A
+    REAL :: QRAD_SO
+    REAL :: Ratio_SO
+    REAL, SAVE :: Last_Ratio_SO
+    REAL :: IncidentSolar_MJhrmin
+    REAL :: AbsorbedIncidentSolar_MJhrmin
+    REAL :: VaporPressureSaturated_kPa
+    REAL :: VaporPressureActual_kPa
+    REAL :: QRAD_NL
+    REAL :: NetIncidentRadiation_MJhr ![MJ/hr]
+    REAL :: NetIncidentRadiation_Wm2 ![W/m2]
+    REAL :: CN
+    REAL :: G_hr
+    REAL :: Cd
+    REAL :: Slope_S
+    REAL :: Pressure
+    REAL :: PsychrometricConstant
+    REAL :: EvapotransFluidLoss_mmhr
+    REAL :: EvapotransFluidLoss_mhr
+    REAL :: LatentHeatVaporization
+    REAL :: EvapotransHeatLoss_MJhrmin  ![MJ/m2-hr]
+    REAL :: EvapotransHeatLoss_Wm2       ![W/m2]
+    REAL :: CurAirTempK
+    REAL :: MyLatitude
+    REAL :: MyLongitude
+    REAL :: MyTimeZoneMeridian
+    REAL :: MyElevation
+    REAL :: GroundCoverCoefficient
 
     !retrieve information from E+ globals
     Latitude_Degrees   = Latitude
@@ -4409,7 +4409,7 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
             CASE (Direction_PositiveY)
                 ! convection at the surface
                 IF (WindSpeed .GT. 0.1) THEN
-                    Resistance = 208.0d0 / (AirDensity * AirSpecificHeat * WindSpeed * ThisNormalArea)
+                    Resistance = 208.0 / (AirDensity * AirSpecificHeat * WindSpeed * ThisNormalArea)
                     Numerator = Numerator + (Beta / Resistance) * PipingSystemDomains(DomainNum)%Cur%CurAirTemp
                     Denominator = Denominator + (Beta / Resistance)
                 ELSE
@@ -4423,10 +4423,10 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     END DO
 
     ! Initialize, this variable is used for both evapotranspiration and non-ET cases, [W]
-    IncidentHeatGain = 0.0d0
+    IncidentHeatGain = 0.0
 
     ! Latitude, converted to radians...positive for northern hemisphere, [radians]
-    Latitude_Radians = Pi / 180.0d0 * Latitude_Degrees
+    Latitude_Radians = Pi / 180.0 * Latitude_Degrees
 
     ! The day of year at this point in the simulation
     DayOfYear = INT( PipingSystemDomains(DomainNum)%Cur%CurSimTimeSeconds / SecsInDay )
@@ -4438,14 +4438,14 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     HourOfDay = INT( CurSecondsIntoToday / SecInHour )
 
     ! For convenience convert to Kelvin once
-    CurAirTempK = PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 273.15d0
+    CurAirTempK = PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 273.15
 
     ! Calculate some angles
-    dr   = 1.0d0 + 0.033d0 * COS(2.0d0 * Pi * DayOfYear / 365.0d0)
-    Declination = 0.409d0 * SIN(2.0d0 * Pi / 365.0d0 * DayOfYear - 1.39d0)
-    b_SC = 2.0d0 * Pi * (DayOfYear - 81.0d0)/364.0d0
-    Sc   = 0.1645d0 * SIN(2.0d0 * b_SC) - 0.1255d0 * COS(b_SC) - 0.025d0 * SIN(b_SC)
-    Hour_Angle = Pi / 12.0d0 * ( ( (HourOfDay - 0.5d0) + 0.06667d0 * (StMeridian_Degrees - Longitude_Degrees) + Sc) - 12.0d0)
+    dr   = 1.0 + 0.033 * COS(2.0 * Pi * DayOfYear / 365.0)
+    Declination = 0.409 * SIN(2.0 * Pi / 365.0 * DayOfYear - 1.39)
+    b_SC = 2.0 * Pi * (DayOfYear - 81.0)/364.0
+    Sc   = 0.1645 * SIN(2.0 * b_SC) - 0.1255 * COS(b_SC) - 0.025 * SIN(b_SC)
+    Hour_Angle = Pi / 12.0 * ( ( (HourOfDay - 0.5) + 0.06667 * (StMeridian_Degrees - Longitude_Degrees) + Sc) - 12.0)
     !Parentheses:              1 2 3                 3               3                                      3     2         1
 
     !For HOUR_INADAY-0.5 not HOUR_INADAY+0.5, as HOUR_INADAY from 0 to 1, it shows 1 not zero here.
@@ -4454,18 +4454,18 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     !and Lz = 0° for Greenwich, 330° for Cairo (Egypt), and 255° for Bangkok (Thailand),
 
     ! Calculate sunset something, and constrain to a minimum of 0.000001
-    X_sunset = 1.0d0 - TAN(Latitude_Radians)**2.0d0 * TAN(Declination)**2.0d0
-    X_sunset = MAX(X_sunset, 0.000001d0)
+    X_sunset = 1.0 - TAN(Latitude_Radians)**2.0 * TAN(Declination)**2.0
+    X_sunset = MAX(X_sunset, 0.000001)
 
     ! Find sunset angle
-    Sunset_angle = Pi / 2.0d0 - ATAN(-TAN(Latitude_Radians) * TAN(Declination) / X_sunset**0.5d0 )
+    Sunset_angle = Pi / 2.0 - ATAN(-TAN(Latitude_Radians) * TAN(Declination) / X_sunset**0.5 )
 
     ! Find the current sun angle
     Altitude_Angle = ASIN( SIN(Latitude_Radians) * SIN(Declination) + COS(Latitude_Radians) * COS(Declination) * COS(Hour_Angle) )
 
     ! Find solar angles
-    Solar_angle_1 = Hour_Angle - Pi / 24.0d0
-    Solar_angle_2 = Hour_Angle + Pi / 24.0d0
+    Solar_angle_1 = Hour_Angle - Pi / 24.0
+    Solar_angle_2 = Hour_Angle + Pi / 24.0
 
     ! Constrain solar angles
     IF(Solar_angle_1 .LT. -Sunset_angle ) Solar_angle_1 = -Sunset_angle
@@ -4478,31 +4478,31 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     IncidentSolar_MJhrmin = PipingSystemDomains(DomainNum)%Cur%CurIncidentSolar * Convert_Wm2_To_MJhrmin
 
     ! Calculate another Q term...
-    QRAD_a = 12.0d0 * 60.0d0 / Pi * MeanSolarConstant * dr * &
+    QRAD_a = 12.0 * 60.0 / Pi * MeanSolarConstant * dr * &
         (   (Solar_angle_2 - Solar_angle_1) * SIN(Latitude_Radians) * SIN(Declination)         &
           + COS(Latitude_Radians) * COS(Declination) * (SIN(Solar_angle_2)-SIN(Solar_angle_1)) &
         )
 
     ! Calculate another Q term...
-    QRAD_SO = ( A_s + B_s + 0.00002d0 * Elevation ) * QRAD_a
+    QRAD_SO = ( A_s + B_s + 0.00002 * Elevation ) * QRAD_a
 
     ! Correct the Qrad term ... better way??
-    IF (IncidentSolar_MJhrmin .LT. 0.01d0) THEN
+    IF (IncidentSolar_MJhrmin .LT. 0.01) THEN
         Ratio_SO = LAST_RATIO_SO
     ELSE
 
-        IF(QRAD_SO /= 0.d0)THEN
+        IF(QRAD_SO /= 0.)THEN
           Ratio_SO = IncidentSolar_MJhrmin / QRAD_SO
         ELSE
     ! I used logic below to choose value, divide by 0 = infinity, so value = 1, not sure if correct...
-          Ratio_SO = 1.d0
+          Ratio_SO = 1.
         END IF
 
     END IF
 
     ! Constrain Ratio_SO
-    Ratio_SO = MIN(Ratio_SO, 1.0d0)
-    Ratio_SO = MAX(Ratio_SO, 0.3d0)
+    Ratio_SO = MIN(Ratio_SO, 1.0)
+    Ratio_SO = MAX(Ratio_SO, 0.3)
 
     ! Store the previous
     LAST_RATIO_SO=Ratio_SO
@@ -4511,37 +4511,37 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     AbsorbedIncidentSolar_MJhrmin = ABSOR_CORRECTED * IncidentSolar_MJhrmin
 
     ! Calculate saturated vapor pressure, [kPa]
-    VaporPressureSaturated_kPa = 0.6108d0 * EXP(17.27d0 * PipingSystemDomains(DomainNum)%Cur%CurAirTemp / &
-                                                            (PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 237.3d0))
+    VaporPressureSaturated_kPa = 0.6108 * EXP(17.27 * PipingSystemDomains(DomainNum)%Cur%CurAirTemp / &
+                                                            (PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 237.3))
 
     ! Calculate actual vapor pressure, [kPa]
-    VaporPressureActual_kPa = VaporPressureSaturated_kPa * PipingSystemDomains(DomainNum)%Cur%CurRelativeHumidity / 100.0d0
+    VaporPressureActual_kPa = VaporPressureSaturated_kPa * PipingSystemDomains(DomainNum)%Cur%CurRelativeHumidity / 100.0
 
     ! Calculate another Q term, [MJ/m2-hr]
-    QRAD_NL = 2.042D-10 * CurAirTempK**4.0d0 * (0.34d0 - 0.14d0 * SQRT(VaporPressureActual_kPa)) * (1.35d0 * Ratio_SO - 0.35d0)
+    QRAD_NL = 2.042D-10 * CurAirTempK**4.0 * (0.34 - 0.14 * SQRT(VaporPressureActual_kPa)) * (1.35 * Ratio_SO - 0.35)
 
     ! Calculate another Q term, [MJ/hr]
     NetIncidentRadiation_MJhr = AbsorbedIncidentSolar_MJhrmin - QRAD_NL
 
     ! ?
-    Cn = 37.0d0
+    Cn = 37.0
 
     ! Check whether there was sun
     IF (NetIncidentRadiation_MJhr .LT. 0.0)THEN
-        G_hr = 0.5d0 * NetIncidentRadiation_MJhr
-        Cd = 0.96d0
+        G_hr = 0.5 * NetIncidentRadiation_MJhr
+        Cd = 0.96
     ELSE
-        G_hr = 0.1d0 * NetIncidentRadiation_MJhr
-        Cd = 0.24d0
+        G_hr = 0.1 * NetIncidentRadiation_MJhr
+        Cd = 0.24
     END IF
 
     ! Just For Check
     ! Lu Xing Sep 22 2009
 
-    Slope_S = 2503.0d0 * EXP( 17.27d0 * PipingSystemDomains(DomainNum)%Cur%CurAirTemp /     &
-                                (PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 237.3d0)   &
-                            )  / (PipingSystemDomains(DomainNum)%Cur%CurAirTemp+237.3d0)**2
-    Pressure = 98.0d0
+    Slope_S = 2503.0 * EXP( 17.27 * PipingSystemDomains(DomainNum)%Cur%CurAirTemp /     &
+                                (PipingSystemDomains(DomainNum)%Cur%CurAirTemp + 237.3)   &
+                            )  / (PipingSystemDomains(DomainNum)%Cur%CurAirTemp+237.3)**2
+    Pressure = 98.0
     PsychrometricConstant = 0.665E-3 * Pressure
 
     ! Evapotranspiration constant, [mm/hr]
@@ -4552,14 +4552,14 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
              / (Slope_s + PsychrometricConstant * (1 + Cd * PipingSystemDomains(DomainNum)%Cur%CurWindSpeed))
 
     ! Convert units, [m/hr]
-    EvapotransFluidLoss_mhr = EvapotransFluidLoss_mmhr / 1000.0d0
+    EvapotransFluidLoss_mhr = EvapotransFluidLoss_mmhr / 1000.0
 
     ! Calculate latent heat, [MJ/kg]
     ! Full formulation is cubic: L(T) = −0.0000614342 * T**3 + 0.00158927 * T**2 − 2.36418 * T + 2500.79[5]
     ! In: Cubic fit to Table 2.1,p.16, Textbook: R.R.Rogers & M.K. Yau, A Short Course in Cloud Physics, 3e,(1989), Pergamon press
     ! But a linear relation should suffice;
     ! note-for now using the previous time step temperature as an approximation to help ensure stability
-    LatentHeatVaporization = 2.501d0 - 2.361d-3 * cell%MyBase%Temperature_PrevTimeStep
+    LatentHeatVaporization = 2.501 - 2.361d-3 * cell%MyBase%Temperature_PrevTimeStep
 
     ! Calculate evapotranspiration heat loss, [MJ/m2-hr]
     EvapotransHeatLoss_MJhrmin = RHO_water * EvapotransFluidLoss_mhr * LatentHeatVaporization
@@ -4585,7 +4585,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION EvaluateAdiabaticSurfaceTemperature(DomainNum, cell) RESULT(RetVal)
+REAL FUNCTION EvaluateAdiabaticSurfaceTemperature(DomainNum, cell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4612,14 +4612,14 @@ REAL(r64) FUNCTION EvaluateAdiabaticSurfaceTemperature(DomainNum, cell) RESULT(R
     TYPE(CartesianCell), INTENT(IN) :: cell
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: NeighborTemp
+    REAL :: Beta
     INTEGER :: DirectionCounter
     INTEGER :: CurDirection
-    REAL(r64) :: AdiabaticMultiplier
+    REAL :: AdiabaticMultiplier
 
     Numerator = 0.0
     Denominator = 0.0
@@ -4670,7 +4670,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION EvaluateBasementCellTemperature(DomainNum, cell) RESULT(RetVal)
+REAL FUNCTION EvaluateBasementCellTemperature(DomainNum, cell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4697,12 +4697,12 @@ REAL(r64) FUNCTION EvaluateBasementCellTemperature(DomainNum, cell) RESULT(RetVa
     TYPE(CartesianCell), INTENT(IN) :: cell
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Beta
-    REAL(r64) :: Resistance
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: HeatFlux
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Beta
+    REAL :: Resistance
+    REAL :: NeighborTemp
+    REAL :: HeatFlux
 
     !Initialize
     Numerator = 0.0
@@ -4711,10 +4711,10 @@ REAL(r64) FUNCTION EvaluateBasementCellTemperature(DomainNum, cell) RESULT(RetVa
     SELECT CASE (cell%CellType)
     CASE (CellType_BasementWall, CellType_BasementFloor)
         !This is actually only a half-cell since the basement wall slices right through the middle in one direction
-        Beta = cell%MyBase%Beta / 2.0d0
+        Beta = cell%MyBase%Beta / 2.0
     CASE (CellType_BasementCorner)
         !This is actually only a three-quarter-cell since the basement wall slices right through the middle in both directions
-        Beta = cell%MyBase%Beta * 3.0d0/4.0d0
+        Beta = cell%MyBase%Beta * 3.0/4.0
     END SELECT
 
     !add effect from previous time step
@@ -4769,7 +4769,7 @@ END FUNCTION
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION GetBasementWallHeatFlux(DomainNum) RESULT (RetVal)
+REAL FUNCTION GetBasementWallHeatFlux(DomainNum) RESULT (RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4798,12 +4798,12 @@ REAL(r64) FUNCTION GetBasementWallHeatFlux(DomainNum) RESULT (RetVal)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: RunningSummation
+    REAL :: RunningSummation
     INTEGER :: SurfaceCounter
     INTEGER :: SurfacePointer
     INTEGER :: NumSurfaces
 
-    RunningSummation = 0.0d0
+    RunningSummation = 0.0
     NumSurfaces = SIZE(PipingSystemDomains(DomainNum)%BasementZone%WallSurfacePointers)
 
     DO SurfaceCounter = 1, NumSurfaces
@@ -4819,7 +4819,7 @@ END FUNCTION GetBasementWallHeatFlux
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION GetBasementFloorHeatFlux(DomainNum) RESULT (RetVal)
+REAL FUNCTION GetBasementFloorHeatFlux(DomainNum) RESULT (RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4848,12 +4848,12 @@ REAL(r64) FUNCTION GetBasementFloorHeatFlux(DomainNum) RESULT (RetVal)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: RunningSummation
+    REAL :: RunningSummation
     INTEGER :: SurfaceCounter
     INTEGER :: SurfacePointer
     INTEGER :: NumSurfaces
 
-    RunningSummation = 0.0d0
+    RunningSummation = 0.0
     NumSurfaces = SIZE(PipingSystemDomains(DomainNum)%BasementZone%FloorSurfacePointers)
 
     DO SurfaceCounter = 1, NumSurfaces
@@ -4895,10 +4895,10 @@ SUBROUTINE UpdateBasementSurfaceTemperatures(DomainNum)
     INTEGER, INTENT(IN) :: DomainNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL(r64), PARAMETER :: BigNumber = 10000.0d0
+    REAL, PARAMETER :: BigNumber = 10000.0
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: AvgTemp
+    REAL :: AvgTemp
     INTEGER :: OSCMIndex
 
     !First the wall
@@ -4907,7 +4907,7 @@ SUBROUTINE UpdateBasementSurfaceTemperatures(DomainNum)
     OSCM(OSCMIndex)%TConv   = AvgTemp
     OSCM(OSCMIndex)%HConv   = BigNumber
     OSCM(OSCMIndex)%TRad    = AvgTemp
-    OSCM(OSCMIndex)%HRad    = 0.0d0
+    OSCM(OSCMIndex)%HRad    = 0.0
 
     !Then the floor
     AvgTemp = GetAverageTempByType(DomainNum, CellType_BasementFloor)
@@ -4915,7 +4915,7 @@ SUBROUTINE UpdateBasementSurfaceTemperatures(DomainNum)
     OSCM(OSCMIndex)%TConv   = AvgTemp
     OSCM(OSCMIndex)%HConv   = BigNumber
     OSCM(OSCMIndex)%TRad    = AvgTemp
-    OSCM(OSCMIndex)%HRad    = 0.0d0
+    OSCM(OSCMIndex)%HRad    = 0.0
 
   RETURN
 
@@ -4923,7 +4923,7 @@ END SUBROUTINE UpdateBasementSurfaceTemperatures
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION GetAverageTempByType(DomainNum, CellType) RESULT (RetVal)
+REAL FUNCTION GetAverageTempByType(DomainNum, CellType) RESULT (RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -4953,12 +4953,12 @@ REAL(r64) FUNCTION GetAverageTempByType(DomainNum, CellType) RESULT (RetVal)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: RunningSummation
+    REAL :: RunningSummation
     INTEGER :: RunningCounter
     INTEGER :: X, Y, Z
 
-    RunningSummation = 0.0d0
-    RunningCounter = 0.0d0
+    RunningSummation = 0.0
+    RunningCounter = 0.0
 
     DO Z = LBOUND(PipingSystemDomains(DomainNum)%Cells,3), UBOUND(PipingSystemDomains(DomainNum)%Cells,3)
         DO Y = LBOUND(PipingSystemDomains(DomainNum)%Cells,2), UBOUND(PipingSystemDomains(DomainNum)%Cells,2)
@@ -4983,7 +4983,7 @@ END FUNCTION GetAverageTempByType
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION EvaluateFarfieldBoundaryTemperature(DomainNum, cell) RESULT(RetVal)
+REAL FUNCTION EvaluateFarfieldBoundaryTemperature(DomainNum, cell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -5010,13 +5010,13 @@ REAL(r64) FUNCTION EvaluateFarfieldBoundaryTemperature(DomainNum, cell) RESULT(R
     TYPE(CartesianCell), INTENT(IN) :: cell
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Beta
-    REAL(r64) :: Resistance
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Beta
+    REAL :: Resistance
     INTEGER :: DirectionCounter
     INTEGER :: CurDirection
-    REAL(r64) :: NeighborTemp
+    REAL :: NeighborTemp
 
     Numerator = 0.0
     Denominator = 0.0
@@ -5082,11 +5082,11 @@ SUBROUTINE EvaluateFarfieldCharacteristics(DomainNum, cell, direction, neighbort
     INTEGER, INTENT(IN) :: DomainNum
     TYPE(CartesianCell), INTENT(IN) :: cell
     INTEGER, INTENT(IN) :: direction
-    REAL(r64), INTENT(OUT) :: neighbortemp
-    REAL(r64), INTENT(OUT) :: resistance
+    REAL, INTENT(OUT) :: neighbortemp
+    REAL, INTENT(OUT) :: resistance
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: distance
+    REAL :: distance
 
     SELECT CASE (direction)
     CASE(Direction_NegativeX, Direction_PositiveX)
@@ -5106,7 +5106,7 @@ END SUBROUTINE
 !*********************************************************************************************!
 
 !*********************************************************************************************!
-REAL(r64) FUNCTION GetFarfieldTemp(DomainNum, cell) RESULT(RetVal)
+REAL FUNCTION GetFarfieldTemp(DomainNum, cell) RESULT(RetVal)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -5133,22 +5133,22 @@ REAL(r64) FUNCTION GetFarfieldTemp(DomainNum, cell) RESULT(RetVal)
     TYPE(CartesianCell), INTENT(IN) :: cell
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: z
-    REAL(r64) :: Term1
-    REAL(r64) :: Term2
-    REAL(r64) :: Diffusivity
-    REAL(r64) :: SecondsInYear
-    REAL(r64) :: KATemp
-    REAL(r64) :: KAAmp
-    REAL(r64) :: KAPhase
-    REAL(r64) :: CurTime
+    REAL :: z
+    REAL :: Term1
+    REAL :: Term2
+    REAL :: Diffusivity
+    REAL :: SecondsInYear
+    REAL :: KATemp
+    REAL :: KAAmp
+    REAL :: KAPhase
+    REAL :: CurTime
 
     KATemp  = PipingSystemDomains(DomainNum)%Farfield%AverageGroundTemperature
     KAAmp   = PipingSystemDomains(DomainNum)%Farfield%AverageGroundTemperatureAmplitude
     KAPhase = PipingSystemDomains(DomainNum)%Farfield%PhaseShiftOfMinGroundTemp
     CurTime = PipingSystemDomains(DomainNum)%Cur%CurSimTimeSeconds
 
-    SecondsInYear = SecsInDay * 365.0d0
+    SecondsInYear = SecsInDay * 365.0
     z = PipingSystemDomains(DomainNum)%Extents%Ymax - cell%Centroid%Y
     Diffusivity = BaseThermalPropertySet_Diffusivity(PipingSystemDomains(DomainNum)%GroundProperties)
 
@@ -5189,20 +5189,20 @@ SUBROUTINE PreparePipeCircuitSimulation(DomainNum, CircuitNum)
     INTEGER, INTENT(IN) :: CircuitNum
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL(r64), PARAMETER :: StagnantFluidConvCoeff = 200.0d0
+    REAL, PARAMETER :: StagnantFluidConvCoeff = 200.0
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Density
-    REAL(r64) :: Viscosity
-    REAL(r64) :: Conductivity
-    REAL(r64) :: Prandtl
-    REAL(r64) :: Area_c
-    REAL(r64) :: Velocity
-    REAL(r64) :: ConvCoefficient
-    REAL(r64) :: Reynolds
-    REAL(r64) :: ExponentTerm
-    REAL(r64) :: Nusselt
-    REAL(r64) :: SpecificHeat
+    REAL :: Density
+    REAL :: Viscosity
+    REAL :: Conductivity
+    REAL :: Prandtl
+    REAL :: Area_c
+    REAL :: Velocity
+    REAL :: ConvCoefficient
+    REAL :: Reynolds
+    REAL :: ExponentTerm
+    REAL :: Nusselt
+    REAL :: SpecificHeat
     INTEGER :: CellX
     INTEGER :: CellY
     INTEGER :: CellZ
@@ -5274,9 +5274,9 @@ SUBROUTINE PerformPipeCircuitSimulation(DomainNum, CircuitNum)
     INTEGER, INTENT(IN) :: CircuitNum
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: CircuitCrossTemp
-    REAL(r64) :: FlowRate
-    REAL(r64) :: EnteringTemp
+    REAL :: CircuitCrossTemp
+    REAL :: FlowRate
+    REAL :: EnteringTemp
     INTEGER :: SegmentCtr
     INTEGER :: SegmentCellCtr
     INTEGER :: StartingSegment
@@ -5426,12 +5426,12 @@ SUBROUTINE PerformPipeCellSimulation(DomainNum, CircuitNum, ThisCell, FlowRate, 
     INTEGER, INTENT(IN) :: DomainNum
     INTEGER, INTENT(IN) :: CircuitNum
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
-    REAL(r64), INTENT(IN) :: FlowRate
-    REAL(r64), INTENT(IN) :: EnteringTemp
+    REAL, INTENT(IN) :: FlowRate
+    REAL, INTENT(IN) :: EnteringTemp
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: Iter
-    REAL(r64) :: MaxDeviationAmount
+    REAL :: MaxDeviationAmount
 
     DO Iter = 1, PipingSystemCircuits(CircuitNum)%MaxIterationsPerTS
 
@@ -5508,19 +5508,19 @@ SUBROUTINE SimulateRadialToCartesianInterface(DomainNum, ThisCell)
                                                        Direction_PositiveX, Direction_PositiveY/)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
     INTEGER :: DirCtr
     INTEGER :: Dir
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: OutermostRadialCellOuterRadius
-    REAL(r64) :: OutermostRadialCellRadialCentroid
-    REAL(r64) :: OutermostRadialCellTemperature
+    REAL :: NeighborTemp
+    REAL :: OutermostRadialCellOuterRadius
+    REAL :: OutermostRadialCellRadialCentroid
+    REAL :: OutermostRadialCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
 
     !'retrieve beta
     Beta = ThisCell%MyBase%Beta
@@ -5534,7 +5534,7 @@ SUBROUTINE SimulateRadialToCartesianInterface(DomainNum, ThisCell)
     OutermostRadialCellRadialCentroid = ThisCell%PipeCellData%Soil(UBOUND(ThisCell%PipeCellData%Soil,1))%RadialCentroid
     OutermostRadialCellTemperature = ThisCell%PipeCellData%Soil(UBOUND(ThisCell%PipeCellData%Soil,1))%MyBase%Temperature
     Resistance = LOG(OutermostRadialCellOuterRadius / OutermostRadialCellRadialCentroid) / &
-                 (2.0d0 * Pi * Depth(ThisCell) * ThisCell%MyBase%Properties%Conductivity)
+                 (2.0 * Pi * Depth(ThisCell) * ThisCell%MyBase%Properties%Conductivity)
     Numerator = Numerator + (Beta / Resistance) * OutermostRadialCellTemperature
     Denominator = Denominator + (Beta / Resistance)
 
@@ -5588,26 +5588,26 @@ SUBROUTINE SimulateOuterMostRadialSoilSlice(DomainNum, CircuitNum, ThisCell)
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
     INTEGER :: MaxRadialIndex
-    REAL(r64) :: ThisRadialCellOuterRadius
-    REAL(r64) :: ThisRadialCellRadialCentroid
-    REAL(r64) :: ThisRadialCellConductivity
-    REAL(r64) :: ThisRadialCellInnerRadius
-    REAL(r64) :: ThisRadialCellTemperature_PrevTimeStep
-    REAL(r64) :: ThisRadialCellTemperature
-    REAL(r64) :: NextOuterRadialCellOuterRadius
-    REAL(r64) :: NextOuterRadialCellRadialCentroid
-    REAL(r64) :: NextOuterRadialCellConductivity
-    REAL(r64) :: NextOuterRadialCellInnerRadius
-    REAL(r64) :: NextOuterRadialCellTemperature
+    REAL :: ThisRadialCellOuterRadius
+    REAL :: ThisRadialCellRadialCentroid
+    REAL :: ThisRadialCellConductivity
+    REAL :: ThisRadialCellInnerRadius
+    REAL :: ThisRadialCellTemperature_PrevTimeStep
+    REAL :: ThisRadialCellTemperature
+    REAL :: NextOuterRadialCellOuterRadius
+    REAL :: NextOuterRadialCellRadialCentroid
+    REAL :: NextOuterRadialCellConductivity
+    REAL :: NextOuterRadialCellInnerRadius
+    REAL :: NextOuterRadialCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
-    Resistance = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
+    Resistance = 0.0
 
     !'convenience variables
     MaxRadialIndex = UBOUND(ThisCell%PipeCellData%Soil,1)
@@ -5693,39 +5693,39 @@ SUBROUTINE SimulateAllInteriorRadialSoilSlices(ThisCell)
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
     INTEGER :: rCtr
 
-    REAL(r64) :: ThisRadialCellOuterRadius
-    REAL(r64) :: ThisRadialCellRadialCentroid
-    REAL(r64) :: ThisRadialCellConductivity
-    REAL(r64) :: ThisRadialCellInnerRadius
-    REAL(r64) :: ThisRadialCellTemperature_PrevTimeStep
-    REAL(r64) :: ThisRadialCellTemperature
+    REAL :: ThisRadialCellOuterRadius
+    REAL :: ThisRadialCellRadialCentroid
+    REAL :: ThisRadialCellConductivity
+    REAL :: ThisRadialCellInnerRadius
+    REAL :: ThisRadialCellTemperature_PrevTimeStep
+    REAL :: ThisRadialCellTemperature
 
-    REAL(r64) :: InnerRadialCellOuterRadius
-    REAL(r64) :: InnerRadialCellRadialCentroid
-    REAL(r64) :: InnerRadialCellConductivity
-    REAL(r64) :: InnerRadialCellInnerRadius
-    REAL(r64) :: InnerRadialCellTemperature
+    REAL :: InnerRadialCellOuterRadius
+    REAL :: InnerRadialCellRadialCentroid
+    REAL :: InnerRadialCellConductivity
+    REAL :: InnerRadialCellInnerRadius
+    REAL :: InnerRadialCellTemperature
 
-    REAL(r64) :: OuterRadialCellOuterRadius
-    REAL(r64) :: OuterRadialCellRadialCentroid
-    REAL(r64) :: OuterRadialCellConductivity
-    REAL(r64) :: OuterRadialCellInnerRadius
-    REAL(r64) :: OuterRadialCellTemperature
+    REAL :: OuterRadialCellOuterRadius
+    REAL :: OuterRadialCellRadialCentroid
+    REAL :: OuterRadialCellConductivity
+    REAL :: OuterRadialCellInnerRadius
+    REAL :: OuterRadialCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
 
     DO rCtr = UBOUND(ThisCell%PipeCellData%Soil,1)-1, 1, -1
 
-        Numerator = 0.0d0
-        Denominator = 0.0d0
-        Resistance = 0.0d0
+        Numerator = 0.0
+        Denominator = 0.0
+        Resistance = 0.0
 
         !'convenience variables
         ThisRadialCellOuterRadius = ThisCell%PipeCellData%Soil(rCtr)%OuterRadius
@@ -5808,32 +5808,32 @@ SUBROUTINE SimulateInnerMostRadialSoilSlice(DomainNum, CircuitNum, ThisCell)
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
 
-    REAL(r64) :: ThisRadialCellOuterRadius
-    REAL(r64) :: ThisRadialCellRadialCentroid
-    REAL(r64) :: ThisRadialCellConductivity
-    REAL(r64) :: ThisRadialCellInnerRadius
-    REAL(r64) :: ThisRadialCellTemperature_PrevTimeStep
-    REAL(r64) :: ThisRadialCellTemperature
+    REAL :: ThisRadialCellOuterRadius
+    REAL :: ThisRadialCellRadialCentroid
+    REAL :: ThisRadialCellConductivity
+    REAL :: ThisRadialCellInnerRadius
+    REAL :: ThisRadialCellTemperature_PrevTimeStep
+    REAL :: ThisRadialCellTemperature
 
-    REAL(r64) :: InnerNeighborRadialCellOuterRadius
-    REAL(r64) :: InnerNeighborRadialCellRadialCentroid
-    REAL(r64) :: InnerNeighborRadialCellConductivity
-    REAL(r64) :: InnerNeighborRadialCellInnerRadius
-    REAL(r64) :: InnerNeighborRadialCellTemperature
+    REAL :: InnerNeighborRadialCellOuterRadius
+    REAL :: InnerNeighborRadialCellRadialCentroid
+    REAL :: InnerNeighborRadialCellConductivity
+    REAL :: InnerNeighborRadialCellInnerRadius
+    REAL :: InnerNeighborRadialCellTemperature
 
-    REAL(r64) :: OuterNeighborRadialCellOuterRadius
-    REAL(r64) :: OuterNeighborRadialCellRadialCentroid
-    REAL(r64) :: OuterNeighborRadialCellConductivity
-    REAL(r64) :: OuterNeighborRadialCellInnerRadius
-    REAL(r64) :: OuterNeighborRadialCellTemperature
+    REAL :: OuterNeighborRadialCellOuterRadius
+    REAL :: OuterNeighborRadialCellRadialCentroid
+    REAL :: OuterNeighborRadialCellConductivity
+    REAL :: OuterNeighborRadialCellInnerRadius
+    REAL :: OuterNeighborRadialCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
 
     !'convenience variables
     IF (PipingSystemCircuits(CircuitNum)%HasInsulation) THEN
@@ -5919,16 +5919,16 @@ SUBROUTINE SimulateRadialInsulationCell(ThisCell)
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
     TYPE(RadialCellInformation) :: PipeCell
     TYPE(RadialCellInformation) :: ThisInsulationCell
     TYPE(RadialCellInformation) :: NextInnerRadialCell
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
 
     !'convenience variables
     PipeCell = ThisCell%PipeCellData%Pipe
@@ -5991,38 +5991,38 @@ SUBROUTINE SimulateRadialPipeCell(DomainNum, CircuitNum, ThisCell, ConvectionCoe
     INTEGER, INTENT(IN) :: DomainNum
     INTEGER, INTENT(IN) :: CircuitNum
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
-    REAL(r64), INTENT(IN) :: ConvectionCoefficient
+    REAL, INTENT(IN) :: ConvectionCoefficient
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: Resistance
-    REAL(r64) :: Beta
-    REAL(r64) :: PipeConductionResistance
-    REAL(r64) :: ConvectiveResistance
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: Resistance
+    REAL :: Beta
+    REAL :: PipeConductionResistance
+    REAL :: ConvectiveResistance
 
-    REAL(r64) :: ThisPipeCellOuterRadius
-    REAL(r64) :: ThisPipeCellRadialCentroid
-    REAL(r64) :: ThisPipeCellConductivity
-    REAL(r64) :: ThisPipeCellInnerRadius
-    REAL(r64) :: ThisPipeCellTemperature_PrevTimeStep
-    REAL(r64) :: ThisPipeCellTemperature
+    REAL :: ThisPipeCellOuterRadius
+    REAL :: ThisPipeCellRadialCentroid
+    REAL :: ThisPipeCellConductivity
+    REAL :: ThisPipeCellInnerRadius
+    REAL :: ThisPipeCellTemperature_PrevTimeStep
+    REAL :: ThisPipeCellTemperature
 
-    REAL(r64) :: FluidCellOuterRadius
-    REAL(r64) :: FluidCellRadialCentroid
-    REAL(r64) :: FluidCellConductivity
-    REAL(r64) :: FluidCellInnerRadius
-    REAL(r64) :: FluidCellTemperature
+    REAL :: FluidCellOuterRadius
+    REAL :: FluidCellRadialCentroid
+    REAL :: FluidCellConductivity
+    REAL :: FluidCellInnerRadius
+    REAL :: FluidCellTemperature
 
-    REAL(r64) :: OuterNeighborRadialCellOuterRadius
-    REAL(r64) :: OuterNeighborRadialCellRadialCentroid
-    REAL(r64) :: OuterNeighborRadialCellConductivity
-    REAL(r64) :: OuterNeighborRadialCellInnerRadius
-    REAL(r64) :: OuterNeighborRadialCellTemperature
+    REAL :: OuterNeighborRadialCellOuterRadius
+    REAL :: OuterNeighborRadialCellRadialCentroid
+    REAL :: OuterNeighborRadialCellConductivity
+    REAL :: OuterNeighborRadialCellInnerRadius
+    REAL :: OuterNeighborRadialCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
-    Resistance = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
+    Resistance = 0.0
 
     !'convenience variables
     IF (PipingSystemCircuits(CircuitNum)%HasInsulation) THEN
@@ -6102,30 +6102,30 @@ SUBROUTINE SimulateFluidCell(ThisCell, FlowRate, ConvectionCoefficient, Entering
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     TYPE(CartesianCell), INTENT(IN OUT) :: ThisCell
-    REAL(r64), INTENT(IN) :: FlowRate
-    REAL(r64), INTENT(IN) :: ConvectionCoefficient
-    REAL(r64), INTENT(IN) :: EnteringFluidTemp
+    REAL, INTENT(IN) :: FlowRate
+    REAL, INTENT(IN) :: ConvectionCoefficient
+    REAL, INTENT(IN) :: EnteringFluidTemp
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: Beta
-    REAL(r64) :: Numerator
-    REAL(r64) :: Denominator
-    REAL(r64) :: TotalPipeResistance
-    REAL(r64) :: PipeConductionResistance
-    REAL(r64) :: ConvectiveResistance
-    REAL(r64) :: UpstreamResistance
-    REAL(r64) :: EnteringFluidConductance
+    REAL :: Beta
+    REAL :: Numerator
+    REAL :: Denominator
+    REAL :: TotalPipeResistance
+    REAL :: PipeConductionResistance
+    REAL :: ConvectiveResistance
+    REAL :: UpstreamResistance
+    REAL :: EnteringFluidConductance
 
-    REAL(r64) :: FluidCellTemperature_PrevTimeStep
-    REAL(r64) :: FluidCellSpecificHeat
-    REAL(r64) :: PipeCellOuterRadius
-    REAL(r64) :: PipeCellRadialCentroid
-    REAL(r64) :: PipeCellConductivity
-    REAL(r64) :: PipeCellInnerRadius
-    REAL(r64) :: PipeCellTemperature
+    REAL :: FluidCellTemperature_PrevTimeStep
+    REAL :: FluidCellSpecificHeat
+    REAL :: PipeCellOuterRadius
+    REAL :: PipeCellRadialCentroid
+    REAL :: PipeCellConductivity
+    REAL :: PipeCellInnerRadius
+    REAL :: PipeCellTemperature
 
-    Numerator = 0.0d0
-    Denominator = 0.0d0
+    Numerator = 0.0
+    Denominator = 0.0
 
     !'convenience variables
     FluidCellTemperature_PrevTimeStep = ThisCell%PipeCellData%Fluid%MyBase%Temperature_PrevTimeStep
@@ -6152,8 +6152,8 @@ SUBROUTINE SimulateFluidCell(ThisCell, FlowRate, ConvectionCoefficient, Entering
     Denominator = Denominator + (Beta / TotalPipeResistance)
 
     !'add effects from upstream flow
-    EnteringFluidConductance = 0.0d0
-    IF (FlowRate > 0.0d0) THEN
+    EnteringFluidConductance = 0.0
+    IF (FlowRate > 0.0) THEN
         UpstreamResistance = 1 / (FlowRate * FluidCellSpecificHeat)
         !EnteringFluidConductance = ( (1/UpstreamResistance) - (0.5*TotalPipeResistance) )
         Numerator = Numerator + (Beta / UpstreamResistance) * EnteringFluidTemp
@@ -6202,14 +6202,14 @@ SUBROUTINE DoOneTimeInitializations(DomainNum, CircuitNum)
     INTEGER :: Increment
     INTEGER :: ZIndex
     INTEGER :: PipeX, PipeY
-    REAL(r64) :: NeighborTemp
-    REAL(r64) :: Resistance
+    REAL :: NeighborTemp
+    REAL :: Resistance
     INTEGER :: DirectionCtr
     INTEGER :: CurDirection
-    REAL(r64) :: Dummy = 0.0d0
+    REAL :: Dummy = 0.0
     INTEGER :: TotalSegments
     INTEGER :: SegCtr2
-    REAL(r64) :: ThisCellTemp
+    REAL :: ThisCellTemp
 
     !'initialize cell properties
     DO Z = LBOUND(PipingSystemDomains(DomainNum)%Cells, 3), UBOUND(PipingSystemDomains(DomainNum)%Cells, 3)
@@ -6371,17 +6371,17 @@ SUBROUTINE DoStartOfTimeStepInitializations(DomainNum, CircuitNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: X, Y, Z
-    REAL(r64) :: Temperature
-    REAL(r64) :: Beta
-    REAL(r64) :: CellTemp
-    REAL(r64) :: CellRhoCp
+    REAL :: Temperature
+    REAL :: Beta
+    REAL :: CellTemp
+    REAL :: CellRhoCp
     INTEGER :: radialctr
     INTEGER :: rCtr
-    REAL(r64) :: FluidCp
-    REAL(r64) :: FluidDensity
-    REAL(r64) :: FluidConductivity
-    REAL(r64) :: FluidViscosity
-    REAL(r64) :: FluidPrandtl
+    REAL :: FluidCp
+    REAL :: FluidDensity
+    REAL :: FluidConductivity
+    REAL :: FluidViscosity
+    REAL :: FluidPrandtl
 
     !Update environmental conditions
     PipingSystemDomains(DomainNum)%Cur%CurAirTemp = OutDryBulbTemp
@@ -6409,7 +6409,7 @@ SUBROUTINE DoStartOfTimeStepInitializations(DomainNum, CircuitNum)
                                         'PipingSystemCircuit::DoStartOfTimeStepInitializations')
 
     !Doesn't anyone care about poor Ludwig Prandtl?
-    FluidPrandtl = 3.0d0
+    FluidPrandtl = 3.0
 
     !then assign these fluid properties to the current fluid property set for easy lookup as needed
     PipingSystemCircuits(CircuitNum)%CurFluidPropertySet = ExtendedFluidProperties(  &
@@ -6612,31 +6612,31 @@ SUBROUTINE EvaluateSoilRhoCp(DomainNum, CellTemp, rhoCp, InitOnly)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN) :: DomainNum
-    REAL(r64), INTENT(IN),OPTIONAL :: CellTemp
-    REAL(r64), INTENT(OUT),OPTIONAL :: rhoCp
+    REAL, INTENT(IN),OPTIONAL :: CellTemp
+    REAL, INTENT(OUT),OPTIONAL :: rhoCp
     LOGICAL, INTENT(IN), OPTIONAL :: InitOnly
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     !'static variables only calculated once per simulation run
-    REAL(r64), SAVE ::  Theta_ice
-    REAL(r64), SAVE ::  Theta_liq
-    REAL(r64), SAVE ::  Theta_sat
-    REAL(r64), SAVE ::  rho_ice
-    REAL(r64), SAVE ::  rho_liq
-    REAL(r64), SAVE ::  rhoCp_soil_liq_1
-    REAL(r64), SAVE ::  CP_liq
-    REAL(r64), SAVE ::  CP_ice
-    REAL(r64), SAVE ::  Lat_fus
-    REAL(r64), SAVE ::  Cp_transient
-    REAL(r64), SAVE ::  rhoCP_soil_liq
-    REAL(r64), SAVE ::  rhoCP_soil_transient
-    REAL(r64), SAVE ::  rhoCP_soil_ice
+    REAL, SAVE ::  Theta_ice
+    REAL, SAVE ::  Theta_liq
+    REAL, SAVE ::  Theta_sat
+    REAL, SAVE ::  rho_ice
+    REAL, SAVE ::  rho_liq
+    REAL, SAVE ::  rhoCp_soil_liq_1
+    REAL, SAVE ::  CP_liq
+    REAL, SAVE ::  CP_ice
+    REAL, SAVE ::  Lat_fus
+    REAL, SAVE ::  Cp_transient
+    REAL, SAVE ::  rhoCP_soil_liq
+    REAL, SAVE ::  rhoCP_soil_transient
+    REAL, SAVE ::  rhoCP_soil_ice
     !other variables
-    REAL(r64) :: frzAllIce
-    REAL(r64) :: frzIceTrans
-    REAL(r64) :: frzLiqTrans
-    REAL(r64) :: frzAllLiq
-    REAL(r64) :: rhoCP_soil
+    REAL :: frzAllIce
+    REAL :: frzIceTrans
+    REAL :: frzLiqTrans
+    REAL :: frzAllLiq
+    REAL :: rhoCP_soil
 
     !These vary by domain now, so we must be careful to retrieve them every time
     Theta_liq = PipingSystemDomains(DomainNum)%Moisture%Theta_Liq
@@ -6647,26 +6647,26 @@ SUBROUTINE EvaluateSoilRhoCp(DomainNum, CellTemp, rhoCp, InitOnly)
 
     IF (PRESENT(InitOnly)) THEN
         !'Cp (freezing) calculations
-        rho_ice = 917.d0 !'Kg / m3
-        rho_liq = 1000.d0 !'kg / m3
+        rho_ice = 917. !'Kg / m3
+        rho_liq = 1000. !'kg / m3
         rhoCp_soil_liq_1 = 1225000.0 / (1 - Theta_sat) !'J/m3K
         !'from(" An improved model for predicting soil thermal conductivity from water content at room temperature, Fig 4")
-        CP_liq = 4180.0d0 !'J / KgK
-        CP_ice = 2066.0d0 !'J / KgK
-        Lat_fus = 334000.d0 !'J / Kg
-        Cp_transient = Lat_fus / 0.4d0 + (0.5d0 * CP_ice - (CP_liq + CP_ice) / 2.d0 * 0.1d0) / 0.4d0
+        CP_liq = 4180.0 !'J / KgK
+        CP_ice = 2066.0 !'J / KgK
+        Lat_fus = 334000. !'J / Kg
+        Cp_transient = Lat_fus / 0.4 + (0.5 * CP_ice - (CP_liq + CP_ice) / 2. * 0.1) / 0.4
         !'from(" Numerical and experimental investigation of melting and freezing processes in phase change material storage")
-        rhoCP_soil_liq = rhoCp_soil_liq_1 * (1.d0 - Theta_sat) + rho_liq * CP_liq * Theta_liq
-        rhoCP_soil_transient = rhoCp_soil_liq_1 * (1.d0 - Theta_sat) + ((rho_liq + rho_ice)/2.0d0) * Cp_transient * Theta_ice
-        rhoCP_soil_ice = rhoCp_soil_liq_1 * (1.d0 - Theta_sat) + rho_ice * CP_ice * Theta_ice  !'!J / m3K
+        rhoCP_soil_liq = rhoCp_soil_liq_1 * (1. - Theta_sat) + rho_liq * CP_liq * Theta_liq
+        rhoCP_soil_transient = rhoCp_soil_liq_1 * (1. - Theta_sat) + ((rho_liq + rho_ice)/2.0) * Cp_transient * Theta_ice
+        rhoCP_soil_ice = rhoCp_soil_liq_1 * (1. - Theta_sat) + rho_ice * CP_ice * Theta_ice  !'!J / m3K
         RETURN
     END IF
 
     !'set some temperatures here for generalization -- these could be set in the input file
-    frzAllIce = -0.5d0
-    frzIceTrans = -0.4d0
-    frzLiqTrans = -0.1d0
-    frzAllLiq = 0.0d0
+    frzAllIce = -0.5
+    frzIceTrans = -0.4
+    frzLiqTrans = -0.1
+    frzAllLiq = 0.0
 
     !'calculate this cell's new Cp value based on the cell temperature
     IF (CellTemp >= frzAllLiq) THEN
@@ -6712,7 +6712,7 @@ SUBROUTINE SetAdditionalNeighborData(DomainNum, X, Y, Z, Direction, Resistance, 
     INTEGER, INTENT(IN) :: DomainNum
     INTEGER, INTENT(IN) :: X, Y, Z
     INTEGER, INTENT(IN) :: Direction
-    REAL(r64), INTENT(IN) :: Resistance
+    REAL, INTENT(IN) :: Resistance
     TYPE(CartesianCell), INTENT(IN) :: NeighborCell
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -6757,18 +6757,18 @@ SUBROUTINE EvaluateNeighborCharacteristics(DomainNum, ThisCell, CurDirection, &
     INTEGER, INTENT(IN) :: DomainNum
     TYPE(CartesianCell), INTENT(IN) :: ThisCell
     INTEGER, INTENT(IN) :: CurDirection
-    REAL(r64), INTENT(OUT) :: NeighborTemp
-    REAL(r64), INTENT(OUT) :: Resistance
+    REAL, INTENT(OUT) :: NeighborTemp
+    REAL, INTENT(OUT) :: Resistance
     INTEGER, INTENT(OUT), OPTIONAL :: NeighborX
     INTEGER, INTENT(OUT), OPTIONAL :: NeighborY
     INTEGER, INTENT(OUT), OPTIONAL :: NeighborZ
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: ThisCellLength
-    REAL(r64) :: NeighborCellLength
-    REAL(r64) :: ThisCellConductivity
-    REAL(r64) :: NeighborConductivity
-    REAL(r64) :: ThisNormalArea
+    REAL :: ThisCellLength
+    REAL :: NeighborCellLength
+    REAL :: ThisCellConductivity
+    REAL :: NeighborConductivity
+    REAL :: ThisNormalArea
     TYPE(NeighborInformation) :: TempNeighborInfo
 
     INTEGER :: NX, NY, NZ
@@ -6807,12 +6807,12 @@ SUBROUTINE EvaluateNeighborCharacteristics(DomainNum, ThisCell, CurDirection, &
     END SELECT
 
     !'split effects between the two cells so we can carefully calculate resistance values
-    ThisCellLength = 0.0d0
-    NeighborCellLength = 0.0d0
-    ThisCellConductivity = 10000.0D0
-    IF (ThisCell%MyBase%Properties%Conductivity > 0.0d0) ThisCellConductivity = ThisCell%MyBase%Properties%Conductivity
-    NeighborConductivity = 10000.0D0
-    IF (PipingSystemDomains(DomainNum)%Cells(NX, NY, NZ)%MyBase%Properties%Conductivity > 0.0d0) NeighborConductivity = &
+    ThisCellLength = 0.0
+    NeighborCellLength = 0.0
+    ThisCellConductivity = 10000.0
+    IF (ThisCell%MyBase%Properties%Conductivity > 0.0) ThisCellConductivity = ThisCell%MyBase%Properties%Conductivity
+    NeighborConductivity = 10000.0
+    IF (PipingSystemDomains(DomainNum)%Cells(NX, NY, NZ)%MyBase%Properties%Conductivity > 0.0) NeighborConductivity = &
                                                 PipingSystemDomains(DomainNum)%Cells(NX, NY, NZ)%MyBase%Properties%Conductivity
 
     !'calculate normal surface area

@@ -38,23 +38,23 @@ PRIVATE
   ! DERIVED TYPE DEFINITIONS
 TYPE, PUBLIC :: SplitterConditions  ! public because USEd by SimAirServingZones and the Direct Air Unit
   CHARACTER(len=MaxNameLength) :: SplitterName=' '  ! Name of the Splitter
-  REAL(r64)    :: InletTemp=0.0
-  REAL(r64)    :: InletHumRat=0.0
-  REAL(r64)    :: InletEnthalpy=0.0
-  REAL(r64)    :: InletPressure=0.0
+  REAL    :: InletTemp=0.0
+  REAL    :: InletHumRat=0.0
+  REAL    :: InletEnthalpy=0.0
+  REAL    :: InletPressure=0.0
   INTEGER      :: InletNode=0
-  REAL(r64)    :: InletMassFlowRate=0.0  !MassFlow through the Splitter being Simulated [kg/Sec]
-  REAL(r64)    :: InletMassFlowRateMaxAvail=0.0  !Max Avail MassFlow through the Splitter being Simulated [kg/Sec]
-  REAL(r64)    :: InletMassFlowRateMinAvail=0.0  !Min Avail MassFlow through the Splitter being Simulated [kg/Sec]
+  REAL    :: InletMassFlowRate=0.0  !MassFlow through the Splitter being Simulated [kg/Sec]
+  REAL    :: InletMassFlowRateMaxAvail=0.0  !Max Avail MassFlow through the Splitter being Simulated [kg/Sec]
+  REAL    :: InletMassFlowRateMinAvail=0.0  !Min Avail MassFlow through the Splitter being Simulated [kg/Sec]
   INTEGER      :: NumOutletNodes=0
   INTEGER, DIMENSION(:), ALLOCATABLE :: OutletNode
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRate
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRateMaxAvail
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRateMinAvail
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletTemp
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletHumRat
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletEnthalpy
-  REAL(r64), DIMENSION(:), ALLOCATABLE    :: OutletPressure
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRate
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRateMaxAvail
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletMassFlowRateMinAvail
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletTemp
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletHumRat
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletEnthalpy
+  REAL, DIMENSION(:), ALLOCATABLE    :: OutletPressure
 END TYPE SplitterConditions
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -238,7 +238,7 @@ SUBROUTINE GetSplitterInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
@@ -405,7 +405,7 @@ SUBROUTINE InitAirLoopSplitter(SplitterNum, FirstHVACIteration, FirstCall)
   INTEGER        :: InletNode
   INTEGER        :: OutletNode
   INTEGER        :: NodeNum
-  REAL(r64)      :: AirEnthalpy ! [J/kg]
+  REAL      :: AirEnthalpy ! [J/kg]
   LOGICAL,SAVE   :: MyEnvrnFlag=.true.
 
           ! FLOW:
@@ -414,12 +414,12 @@ SUBROUTINE InitAirLoopSplitter(SplitterNum, FirstHVACIteration, FirstCall)
   IF (BeginEnvrnFlag .and. MyEnvrnFlag) THEN
 
           ! Calculate the air density and enthalpy for standard conditions...
-      AirEnthalpy = PsyHFnTdbW(20.0d0,OutHumRat)
+      AirEnthalpy = PsyHFnTdbW(20.0,OutHumRat)
 
           ! Initialize the inlet node to s standard set of conditions so that the
           !  flows match around the loop & do not cause convergence problems.
       InletNode = SplitterCond(SplitterNum)%InletNode
-      Node(InletNode)%Temp      = 20.0d0
+      Node(InletNode)%Temp      = 20.0
       Node(InletNode)%HumRat    = OutHumRat
       Node(InletNode)%Enthalpy  = AirEnthalpy
       Node(InletNode)%Press     = OutBaroPress
@@ -641,7 +641,7 @@ SUBROUTINE UpdateSplitter(SplitterNum, SplitterInletChanged, FirstCall)
   LOGICAL, INTENT(IN)   :: FirstCall
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: FlowRateToler    = 0.01d0     ! Tolerance for mass flow rate convergence (in kg/s)
+  REAL, PARAMETER :: FlowRateToler    = 0.01     ! Tolerance for mass flow rate convergence (in kg/s)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na

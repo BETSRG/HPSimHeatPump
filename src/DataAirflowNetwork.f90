@@ -84,14 +84,14 @@ TYPE AirflowNetworkSimuProp ! Basic parameters for AirflowNetwork simulation
  CHARACTER(len=15)  :: HeightOption = ' '    ! Height Selection: "ExternalNode" or "OpeningHeight" at WPCCntr = "INPUT"
  INTEGER  :: MaxIteration = 500     ! Maximum number of iteration, defualt 500
  INTEGER  :: InitFlag = 0           ! Initialization flag
- REAL(r64)     :: RelTol = 1.0d-5        ! Relative airflow convergence
- REAL(r64)     :: AbsTol = 1.0d-5        ! Absolute airflow convergence
- REAL(r64)     :: ConvLimit = -0.5d0       ! Convergence acceleration limit
- REAL(r64)     :: MaxPressure = 500      ! Maximum pressure change in an element [Pa]
- REAL(r64)     :: Azimuth = 0.0d0          ! Azimuth Angle of Long Axis of Building, not used at WPCCntr = "INPUT"
- REAL(r64)     :: AspectRatio = 1.0d0      ! Ratio of Building Width Along Short Axis to Width Along Long Axis
+ REAL     :: RelTol = 1.0d-5        ! Relative airflow convergence
+ REAL     :: AbsTol = 1.0d-5        ! Absolute airflow convergence
+ REAL     :: ConvLimit = -0.5       ! Convergence acceleration limit
+ REAL     :: MaxPressure = 500      ! Maximum pressure change in an element [Pa]
+ REAL     :: Azimuth = 0.0          ! Azimuth Angle of Long Axis of Building, not used at WPCCntr = "INPUT"
+ REAL     :: AspectRatio = 1.0      ! Ratio of Building Width Along Short Axis to Width Along Long Axis
  INTEGER  :: NWind = 0              ! Number of wind directions
- REAL(r64)     :: DiffP = 1.0d-4         ! Minimum pressure difference
+ REAL     :: DiffP = 1.0d-4         ! Minimum pressure difference
  INTEGER  :: ExtLargeOpeningErrCount =0 ! Exterior large opening error count during HVAC system operation
  INTEGER  :: ExtLargeOpeningErrIndex =0 ! Exterior large opening error index during HVAC system operation
  INTEGER  :: OpenFactorErrCount =0   ! Large opening error count at Open factor > 1.0
@@ -104,16 +104,16 @@ TYPE MultizoneZoneProp ! Zone information
  CHARACTER(len=MaxNameLength)  :: ZoneName =' '    ! Name of Associated EnergyPlus Thermal Zone
  CHARACTER(len=20)  :: VentControl='NoVent' ! Ventilation Control Mode: "TEMPERATURE", "ENTHALPIC", "CONSTANT", or "NOVENT"
  CHARACTER(len=MaxNameLength)  :: VentSchName =' ' ! Name of ventilation temperature control schedule
- REAL(r64) :: Height =0.0d0             ! Nodal height
- REAL(r64) :: OpenFactor = 1.0d0     ! Limit Value on Multiplier for Modulating Venting Open Factor,
+ REAL :: Height =0.0             ! Nodal height
+ REAL :: OpenFactor = 1.0     ! Limit Value on Multiplier for Modulating Venting Open Factor,
                                      ! Not applicable if Vent Control Mode = CONSTANT or NOVENT
- REAL(r64) :: LowValueTemp = 0.0d0   ! Lower Value on Inside/Outside Temperature Difference for
+ REAL :: LowValueTemp = 0.0   ! Lower Value on Inside/Outside Temperature Difference for
                                      ! Modulating the Venting Open Factor with temp control
- REAL(r64) :: UpValueTemp = 100.0d0  ! Upper Value on Inside/Outside Temperature Difference for
+ REAL :: UpValueTemp = 100.0  ! Upper Value on Inside/Outside Temperature Difference for
                                      ! Modulating the Venting Open Factor with temp control
- REAL(r64) :: LowValueEnth = 0.0d0   ! Lower Value on Inside/Outside Temperature Difference for
+ REAL :: LowValueEnth = 0.0   ! Lower Value on Inside/Outside Temperature Difference for
                                      ! Modulating the Venting Open Factor with Enthalpic control
- REAL(r64) :: UpValueEnth = 300000.0d0  ! Upper Value on Inside/Outside Temperature Difference for
+ REAL :: UpValueEnth = 300000.0  ! Upper Value on Inside/Outside Temperature Difference for
                                      ! Modulating the Venting Open Factor with Enthalpic control
  INTEGER  :: ZoneNum = 0             ! Zone number associated with ZoneName
  INTEGER  :: VentSchNum = 0          ! Zone ventilation schedule number associated with ventilation schedule name
@@ -128,25 +128,25 @@ TYPE MultizoneSurfaceProp ! Surface information
  CHARACTER(len=MaxNameLength)  :: SurfName   =' '  ! Name of Associated EnergyPlus surface
  CHARACTER(len=MaxNameLength)  :: OpeningName=' ' ! Name of opening component, either simple or detailed large opening
  CHARACTER(len=MaxNameLength)  :: ExternalNodeName=' ' ! Name of external node, but not used at WPC="INPUT"
- REAL(r64)     :: Factor       =0.0d0       ! Crack Actual Value or Window Open Factor for Ventilation
+ REAL     :: Factor       =0.0       ! Crack Actual Value or Window Open Factor for Ventilation
  INTEGER  :: SurfNum      =0         ! Surface number
  INTEGER  :: NodeNums(2)  =0         ! Positive: Zone numbers; 0: External
- REAL(r64)     :: OpenFactor = 0.0d0        ! Surface factor
+ REAL     :: OpenFactor = 0.0        ! Surface factor
  LOGICAL       :: EMSOpenFactorActuated = .false.     ! True if EMS actuation is on
- REAL(r64)     :: EMSOpenFactor = 0.0d0        ! Surface factor value from EMS for override
- REAL(r64)     :: Height =     0.0d0        ! Surface Height
- REAL(r64)     :: Width =      0.0d0        ! Surface width
- REAL(r64)     :: CHeight =    0.0d0        ! Surface central height in z direction
+ REAL     :: EMSOpenFactor = 0.0        ! Surface factor value from EMS for override
+ REAL     :: Height =     0.0        ! Surface Height
+ REAL     :: Width =      0.0        ! Surface width
+ REAL     :: CHeight =    0.0        ! Surface central height in z direction
  CHARACTER(len=20)  :: VentControl='ZoneLevel' ! Ventilation Control Mode: TEMPERATURE, ENTHALPIC, CONSTANT, ZONELEVEL or NOVENT
  CHARACTER(len=MaxNameLength)  :: VentSchName=' ' ! ! Name of ventilation temperature control schedule
- REAL(r64)     :: ModulateFactor  =0.0d0    ! Limit Value on Multiplier for Modulating Venting Open Factor
- REAL(r64)     :: LowValueTemp = 0.0d0      ! Lower Value on Inside/Outside Temperature Difference for
+ REAL     :: ModulateFactor  =0.0    ! Limit Value on Multiplier for Modulating Venting Open Factor
+ REAL     :: LowValueTemp = 0.0      ! Lower Value on Inside/Outside Temperature Difference for
                                             ! Modulating the Venting Open Factor with temp control
- REAL(r64)     :: UpValueTemp = 100.0d0     ! Upper Value on Inside/Outside Temperature Difference for
+ REAL     :: UpValueTemp = 100.0     ! Upper Value on Inside/Outside Temperature Difference for
                                             ! Modulating the Venting Open Factor with temp control
- REAL(r64)     :: LowValueEnth = 0.0d0      ! Lower Value on Inside/Outside Temperature Difference for
+ REAL     :: LowValueEnth = 0.0      ! Lower Value on Inside/Outside Temperature Difference for
                                             ! Modulating the Venting Open Factor with Enthalpic control
- REAL(r64)     :: UpValueEnth = 300000.0d0  ! Upper Value on Inside/Outside Temperature Difference for
+ REAL     :: UpValueEnth = 300000.0  ! Upper Value on Inside/Outside Temperature Difference for
                                             ! Modulating the Venting Open Factor with Enthalpic control
  CHARACTER(len=MaxNameLength)  :: VentingSchName =' '  ! Name of ventilation temperature control schedule
  INTEGER  :: VentSchNum = 0          ! Zone ventilation schedule number associated with ventilation schedule name
@@ -158,43 +158,43 @@ TYPE MultizoneSurfaceProp ! Surface information
  INTEGER  :: ExtLargeOpeningErrIndex =0 ! Exterior large opening error index during HVAC system operation
  INTEGER  :: OpenFactorErrCount =0   ! Large opening error count at Open factor > 1.0
  INTEGER  :: OpenFactorErrIndex =0   ! Large opening error error index at Open factor > 1.0
- REAL(r64)     :: Multiplier   = 1.0d0      ! Window multiplier
+ REAL     :: Multiplier   = 1.0      ! Window multiplier
  LOGICAL  :: HybridVentClose = .FALSE. ! Hybrid ventilation window close control logical
  LOGICAL  :: HybridCtrlGlobal = .FALSE. ! Hybrid ventilation global control logical
  LOGICAL  :: HybridCtrlMaster = .FALSE. ! Hybrid ventilation global control master
- REAL(r64)     :: WindModifier   = 1.0d0 ! Wind modifier from hybrid ventilation control
+ REAL     :: WindModifier   = 1.0 ! Wind modifier from hybrid ventilation control
 END TYPE MultizoneSurfaceProp
 
 TYPE MultizoneCompDetOpeningProp ! Large detailed opening component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of large detailed opening component
- REAL(r64)     :: FlowCoef    = 0.0d0             ! Air Mass Flow Coefficient When Window or Door Is Closed
- REAL(r64)     :: FlowExpo    = 0.0d0             ! Air Mass Flow exponent When Window or Door Is Closed
+ REAL     :: FlowCoef    = 0.0             ! Air Mass Flow Coefficient When Window or Door Is Closed
+ REAL     :: FlowExpo    = 0.0             ! Air Mass Flow exponent When Window or Door Is Closed
  CHARACTER(len=32) :: TypeName = 'NonPivoted' ! Name of Large vertical opening type
  INTEGER  :: LVOType     = 0               ! Large vertical opening type number
- REAL(r64)     :: LVOValue    = 0.0d0             ! Extra crack length for LVO type 1 with multiple openable parts,
+ REAL     :: LVOValue    = 0.0             ! Extra crack length for LVO type 1 with multiple openable parts,
                                            ! or Height of pivoting axis for LVO type 2
  INTEGER  :: NumFac      = 0               ! Number of Opening Factor Values
- REAL(r64)     :: OpenFac1    = 0.0d0             ! Opening factor #1
- REAL(r64)     :: DischCoeff1 = 0.0d0             ! Discharge coefficient for opening factor #1
- REAL(r64)     :: WidthFac1   = 0.0d0             ! Width factor for for Opening factor #1
- REAL(r64)     :: HeightFac1  = 0.0d0             ! Height factor for opening factor #1
- REAL(r64)     :: StartHFac1  = 0.0d0             ! Start height factor for opening factor #1
- REAL(r64)     :: OpenFac2    = 0.0d0             ! Opening factor #2
- REAL(r64)     :: DischCoeff2 = 0.0d0             ! Discharge coefficient for opening factor #2
- REAL(r64)     :: WidthFac2   = 0.0d0             ! Width factor for for Opening factor #2
- REAL(r64)     :: HeightFac2  = 0.0d0             ! Height factor for opening factor #2
- REAL(r64)     :: StartHFac2  = 0.0d0             ! Start height factor for opening factor #2
- REAL(r64)     :: OpenFac3    = 0.0d0             ! Opening factor #3
- REAL(r64)     :: DischCoeff3 = 0.0d0             ! Discharge coefficient for opening factor #3
- REAL(r64)     :: WidthFac3   = 0.0d0             ! Width factor for for Opening factor #3
- REAL(r64)     :: HeightFac3  = 0.0d0             ! Height factor for opening factor #3
- REAL(r64)     :: StartHFac3  = 0.0d0             ! Start height factor for opening factor #3
- REAL(r64)     :: OpenFac4    = 0.0d0             ! Opening factor #4
- REAL(r64)     :: DischCoeff4 = 0.0d0             ! Discharge coefficient for opening factor #4
- REAL(r64)     :: WidthFac4   = 0.0d0             ! Width factor for for Opening factor #4
- REAL(r64)     :: HeightFac4  = 0.0d0             ! Height factor for opening factor #4
- REAL(r64)     :: StartHFac4  = 0.0d0             ! Start height factor for opening factor #4
- REAL(r64)     :: OpenFactor  = 0.0d0             ! Opening factor
+ REAL     :: OpenFac1    = 0.0             ! Opening factor #1
+ REAL     :: DischCoeff1 = 0.0             ! Discharge coefficient for opening factor #1
+ REAL     :: WidthFac1   = 0.0             ! Width factor for for Opening factor #1
+ REAL     :: HeightFac1  = 0.0             ! Height factor for opening factor #1
+ REAL     :: StartHFac1  = 0.0             ! Start height factor for opening factor #1
+ REAL     :: OpenFac2    = 0.0             ! Opening factor #2
+ REAL     :: DischCoeff2 = 0.0             ! Discharge coefficient for opening factor #2
+ REAL     :: WidthFac2   = 0.0             ! Width factor for for Opening factor #2
+ REAL     :: HeightFac2  = 0.0             ! Height factor for opening factor #2
+ REAL     :: StartHFac2  = 0.0             ! Start height factor for opening factor #2
+ REAL     :: OpenFac3    = 0.0             ! Opening factor #3
+ REAL     :: DischCoeff3 = 0.0             ! Discharge coefficient for opening factor #3
+ REAL     :: WidthFac3   = 0.0             ! Width factor for for Opening factor #3
+ REAL     :: HeightFac3  = 0.0             ! Height factor for opening factor #3
+ REAL     :: StartHFac3  = 0.0             ! Start height factor for opening factor #3
+ REAL     :: OpenFac4    = 0.0             ! Opening factor #4
+ REAL     :: DischCoeff4 = 0.0             ! Discharge coefficient for opening factor #4
+ REAL     :: WidthFac4   = 0.0             ! Width factor for for Opening factor #4
+ REAL     :: HeightFac4  = 0.0             ! Height factor for opening factor #4
+ REAL     :: StartHFac4  = 0.0             ! Start height factor for opening factor #4
+ REAL     :: OpenFactor  = 0.0             ! Opening factor
  INTEGER  :: WidthErrCount = 0             ! Width error count
  INTEGER  :: WidthErrIndex = 0             ! Width error index
  INTEGER  :: HeightErrCount = 0            ! Height error count
@@ -203,57 +203,57 @@ END TYPE MultizoneCompDetOpeningProp
 
 TYPE MultizoneCompSimpleOpeningProp ! Large simple opening component
  CHARACTER(len=MaxNameLength)  :: Name=' ' ! Name of large simple opening component
- REAL(r64)     :: FlowCoef     = 0.0d0            ! Air Mass Flow Coefficient When Window or Door Is Closed
- REAL(r64)     :: FlowExpo     = 0.0d0            ! Air Mass Flow exponent When Window or Door Is Closed
- REAL(r64)     :: MinRhoDiff   = 0.0d0            ! Minimum density difference for two-way flow
- REAL(r64)     :: DischCoeff   = 0.0d0            ! Discharge coefficient at full opening
- REAL(r64)     :: OpenFactor   = 0.0d0            ! Opening factor
+ REAL     :: FlowCoef     = 0.0            ! Air Mass Flow Coefficient When Window or Door Is Closed
+ REAL     :: FlowExpo     = 0.0            ! Air Mass Flow exponent When Window or Door Is Closed
+ REAL     :: MinRhoDiff   = 0.0            ! Minimum density difference for two-way flow
+ REAL     :: DischCoeff   = 0.0            ! Discharge coefficient at full opening
+ REAL     :: OpenFactor   = 0.0            ! Opening factor
 END TYPE MultizoneCompSimpleOpeningProp
 
 TYPE MultizoneCompHorOpeningProp ! Large horizontal opening component
  CHARACTER(len=MaxNameLength)  :: Name=' ' ! Name of large horizontal opening component
- REAL(r64)     :: FlowCoef     = 0.0d0            ! Air Mass Flow Coefficient When Window or Door Is Closed
- REAL(r64)     :: FlowExpo     = 0.0d0            ! Air Mass Flow exponent When Window or Door Is Closed
- REAL(r64)     :: Slope        = 0.0d0            ! Sloping plane angle
- REAL(r64)     :: DischCoeff   = 0.0d0            ! Discharge coefficient at full opening
+ REAL     :: FlowCoef     = 0.0            ! Air Mass Flow Coefficient When Window or Door Is Closed
+ REAL     :: FlowExpo     = 0.0            ! Air Mass Flow exponent When Window or Door Is Closed
+ REAL     :: Slope        = 0.0            ! Sloping plane angle
+ REAL     :: DischCoeff   = 0.0            ! Discharge coefficient at full opening
 END TYPE MultizoneCompHorOpeningProp
 
 TYPE MultizoneSurfaceCrackStdCndns ! Surface crack standard conditions
  CHARACTER(len=MaxNameLength)  :: Name =' '    ! Name of standard conditions component
- REAL(r64)     :: StandardT    = 0.0d0            ! Standard temperature for crack data
- REAL(r64)     :: StandardP    = 0.0d0            ! Standard borometric pressure for crack data
- REAL(r64)     :: StandardW    = 0.0d0            ! Standard humidity ratio for crack data
+ REAL     :: StandardT    = 0.0            ! Standard temperature for crack data
+ REAL     :: StandardP    = 0.0            ! Standard borometric pressure for crack data
+ REAL     :: StandardW    = 0.0            ! Standard humidity ratio for crack data
 END TYPE MultizoneSurfaceCrackStdCndns
 
 TYPE MultizoneSurfaceCrackProp ! Surface crack component
  CHARACTER(len=MaxNameLength)  :: Name =' '    ! Name of crack component
  CHARACTER(len=MaxNameLength)  :: ExternalNodeNames = ' ' ! Name of external node.Not requird for internal surface
- REAL(r64)     :: FlowCoef     = 0.0d0            ! Air Mass Flow Coefficient When Window or Door Is Closed
- REAL(r64)     :: FlowExpo     = 0.0d0            ! Air Mass Flow exponent When Window or Door Is Closed
- REAL(r64)     :: StandardT    = 0.0d0            ! Standard temperature for crack data
- REAL(r64)     :: StandardP    = 0.0d0            ! Standard borometric pressure for crack data
- REAL(r64)     :: StandardW    = 0.0d0            ! Standard humidity ratio for crack data
+ REAL     :: FlowCoef     = 0.0            ! Air Mass Flow Coefficient When Window or Door Is Closed
+ REAL     :: FlowExpo     = 0.0            ! Air Mass Flow exponent When Window or Door Is Closed
+ REAL     :: StandardT    = 0.0            ! Standard temperature for crack data
+ REAL     :: StandardP    = 0.0            ! Standard borometric pressure for crack data
+ REAL     :: StandardW    = 0.0            ! Standard humidity ratio for crack data
 END TYPE MultizoneSurfaceCrackProp
 
 TYPE MultizoneSurfaceELAProp ! Surface effective leakage area component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of effective leakage area component
- REAL(r64)     :: ELA          = 0.0d0            ! Effective leakage area
- REAL(r64)     :: DischCoeff   = 0.0d0            ! Discharge coefficient
- REAL(r64)     :: RefDeltaP    = 0.0d0            ! Reference pressure difference
- REAL(r64)     :: FlowExpo     = 0.0d0            ! Air Mass Flow exponent When Window or Door Is Closed
- REAL(r64)     :: TestDeltaP   = 0.0d0            ! Testing pressure difference
- REAL(r64)     :: TestDisCoef  = 0.0d0            ! Testing Discharge coefficient
+ REAL     :: ELA          = 0.0            ! Effective leakage area
+ REAL     :: DischCoeff   = 0.0            ! Discharge coefficient
+ REAL     :: RefDeltaP    = 0.0            ! Reference pressure difference
+ REAL     :: FlowExpo     = 0.0            ! Air Mass Flow exponent When Window or Door Is Closed
+ REAL     :: TestDeltaP   = 0.0            ! Testing pressure difference
+ REAL     :: TestDisCoef  = 0.0            ! Testing Discharge coefficient
 END TYPE MultizoneSurfaceELAProp
 
 TYPE MultizoneCompExhaustFanProp           ! Zone exhaust fan component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of exhaust fan component
- REAL(r64)     :: FlowRate     = 0.0d0     ! mass flow rate
+ REAL     :: FlowRate     = 0.0     ! mass flow rate
  INTEGER  :: SchedPtr     = 0              ! Schedule pointer
- REAL(r64)     :: FlowCoef     = 0.0d0     ! Air Mass Flow Coefficient
- REAL(r64)     :: FlowExpo     = 0.0d0     ! Air Mass Flow exponent
- REAL(r64)     :: StandardT    = 0.0d0     ! Standard temperature for crack data
- REAL(r64)     :: StandardP    = 0.0d0     ! Standard borometric pressure for crack data
- REAL(r64)     :: StandardW    = 0.0d0     ! Standard humidity ratio for crack data
+ REAL     :: FlowCoef     = 0.0     ! Air Mass Flow Coefficient
+ REAL     :: FlowExpo     = 0.0     ! Air Mass Flow exponent
+ REAL     :: StandardT    = 0.0     ! Standard temperature for crack data
+ REAL     :: StandardP    = 0.0     ! Standard borometric pressure for crack data
+ REAL     :: StandardW    = 0.0     ! Standard humidity ratio for crack data
  INTEGER  :: InletNode    = 0              ! Inlet node number
  INTEGER  :: OutletNode   = 0              ! Outlet node number
  INTEGER  :: EPlusZoneNum = 0              ! Zone number
@@ -262,8 +262,8 @@ END TYPE MultizoneCompExhaustFanProp
 TYPE MultizoneExternalNodeProp ! External node properties
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of external node
  CHARACTER(len=MaxNameLength)  :: WPCName = ' ' ! Wind Pressure Coefficient Values Object Name
- REAL(r64)     :: Orien        = 0.0d0     ! Orientation
- REAL(r64)     :: height       = 0.0d0     ! Nodal height
+ REAL     :: Orien        = 0.0     ! Orientation
+ REAL     :: height       = 0.0     ! Nodal height
  INTEGER  :: ExtNum       = 0              ! External node number
  INTEGER  :: CPVNum       = 0              ! CP Value number
  INTEGER  :: FacadeNum    = 0              ! Facade number
@@ -272,75 +272,75 @@ END TYPE MultizoneExternalNodeProp
 TYPE MultizoneCPArrayProp ! CP Array
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of CP array
  INTEGER  :: NumWindDir   = 0              ! Number of wind directions
- REAL(r64), DIMENSION(:), ALLOCATABLE :: WindDir    ! Wind direction
+ REAL, DIMENSION(:), ALLOCATABLE :: WindDir    ! Wind direction
 END TYPE MultizoneCPArrayProp
 
 TYPE MultizoneCPValueProp ! CP Value
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of CP Value
  CHARACTER(len=MaxNameLength)  :: CPArrayName = ' ' ! CP array Name
- REAL(r64), DIMENSION(:), ALLOCATABLE :: CPValue   ! CP Value
+ REAL, DIMENSION(:), ALLOCATABLE :: CPValue   ! CP Value
 END TYPE MultizoneCPValueProp
 
 TYPE DisSysNodeProp ! CP Value
  CHARACTER(len=MaxNameLength)  :: Name = ' '       ! Name of node
  CHARACTER(len=MaxNameLength)  :: EPlusName = ' '  ! EnergyPlus node name
  CHARACTER(len=MaxNameLength)  :: EPlusType  = ' ' ! EnergyPlus node type
- REAL(r64) :: Height = 0.0d0                        ! Nodal height
+ REAL :: Height = 0.0                        ! Nodal height
  INTEGER :: EPlusNodeNum = 0                 ! EPlus node number
 END TYPE DisSysNodeProp
 
 TYPE DisSysCompLeakProp ! duct leak component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of component leak
- REAL(r64)     :: FlowCoef = 0.0d0                  ! Air Mass Flow Coefficient
- REAL(r64)     :: FlowExpo = 0.0d0                  ! Air Mass Flow exponent
+ REAL     :: FlowCoef = 0.0                  ! Air Mass Flow Coefficient
+ REAL     :: FlowExpo = 0.0                  ! Air Mass Flow exponent
 END TYPE DisSysCompLeakProp
 
 TYPE DisSysCompELRProp ! effective leakage ratio component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of component leak
- REAL(r64)     :: ELR      = 0.0d0                  ! Value of effective leakage ratio
- REAL(r64)     :: FlowRate = 0.0d0                  ! Maximum airflow rate
- REAL(r64)     :: RefPres  = 0.0d0                  ! Reference pressure difference
- REAL(r64)     :: FlowExpo = 0.0d0                  ! Air Mass Flow exponent
+ REAL     :: ELR      = 0.0                  ! Value of effective leakage ratio
+ REAL     :: FlowRate = 0.0                  ! Maximum airflow rate
+ REAL     :: RefPres  = 0.0                  ! Reference pressure difference
+ REAL     :: FlowExpo = 0.0                  ! Air Mass Flow exponent
 END TYPE DisSysCompELRProp
 
 TYPE DisSysCompDuctProp ! Duct component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of duct component
- REAL(r64)     :: L           = 0.0d0               ! Duct length [m]
- REAL(r64)     :: D           = 0.0d0               ! Hydrolic diameter [m]
- REAL(r64)     :: A           = 0.0d0               ! Cross section area [m2]
- REAL(r64)     :: Rough       = 0.0d0               ! Surface roughness [m]
- REAL(r64)     :: TurDynCoef  = 0.0d0               ! Turbulent dynamic loss coefficient
- REAL(r64)     :: UThermal    = 0.0d0               ! Overall heat transmittance [W/m2.K]
- REAL(r64)     :: UMoisture   = 0.0d0               ! Overall moisture transmittance [kg/m2]
- REAL(r64)     :: MThermal    = 0.0d0               ! Thermal capacity [J/K]
- REAL(r64)     :: MMoisture   = 0.0d0               ! Mositure capacity [kg]
- REAL(r64)     :: LamDynCoef  = 0.0d0               ! Laminar dynamic loss coefficient
- REAL(r64)     :: LamFriCoef  = 0.0d0               ! Laminar friction loss coefficient
- REAL(r64)     :: InitLamCoef = 0.0d0               ! Coefficient of linear initialization
- REAL(r64)     :: RelRough    = 0.0d0               ! e/D: relative roughness,
- REAL(r64)     :: RelL        = 0.0d0               ! L/D: relative length,
- REAL(r64)     :: g           = 0.0d0               ! 1/sqrt(Darcy friction factor),
- REAL(r64)     :: A1          = 0.0d0               ! 1.14 - 0.868589*ln(e/D),
+ REAL     :: L           = 0.0               ! Duct length [m]
+ REAL     :: D           = 0.0               ! Hydrolic diameter [m]
+ REAL     :: A           = 0.0               ! Cross section area [m2]
+ REAL     :: Rough       = 0.0               ! Surface roughness [m]
+ REAL     :: TurDynCoef  = 0.0               ! Turbulent dynamic loss coefficient
+ REAL     :: UThermal    = 0.0               ! Overall heat transmittance [W/m2.K]
+ REAL     :: UMoisture   = 0.0               ! Overall moisture transmittance [kg/m2]
+ REAL     :: MThermal    = 0.0               ! Thermal capacity [J/K]
+ REAL     :: MMoisture   = 0.0               ! Mositure capacity [kg]
+ REAL     :: LamDynCoef  = 0.0               ! Laminar dynamic loss coefficient
+ REAL     :: LamFriCoef  = 0.0               ! Laminar friction loss coefficient
+ REAL     :: InitLamCoef = 0.0               ! Coefficient of linear initialization
+ REAL     :: RelRough    = 0.0               ! e/D: relative roughness,
+ REAL     :: RelL        = 0.0               ! L/D: relative length,
+ REAL     :: g           = 0.0               ! 1/sqrt(Darcy friction factor),
+ REAL     :: A1          = 0.0               ! 1.14 - 0.868589*ln(e/D),
 END TYPE DisSysCompDuctProp
 
 TYPE DisSysCompDamperProp ! Damper component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of damper component
- REAL(r64)     :: LTP         = 0.0d0               ! Value for laminar turbulent transition
- REAL(r64)     :: LamFlow     = 0.0d0               ! Laminar flow coefficient
- REAL(r64)     :: TurFlow     = 0.0d0               ! Turbulent flow coefficient
- REAL(r64)     :: FlowExpo    = 0.0d0               ! Air Mass Flow exponent
- REAL(r64)     :: FlowMin     = 0.0d0               ! Minimum control air mass rate
- REAL(r64)     :: FlowMax     = 0.0d0               ! Maximum control air mass rate
- REAL(r64)     :: A0          = 0.0d0               ! First polynomial coefficient of the control variable (constant coefficient)
- REAL(r64)     :: A1          = 0.0d0               ! Second polynomial coefficient of the control variable (linear coefficient)
- REAL(r64)     :: A2          = 0.0d0               ! Third polynomial coefficient of the control variable (quadratic coefficient)
- REAL(r64)     :: A3          = 0.0d0               ! Fourth polynomial coefficient of the control variable (cubic coefficient)
+ REAL     :: LTP         = 0.0               ! Value for laminar turbulent transition
+ REAL     :: LamFlow     = 0.0               ! Laminar flow coefficient
+ REAL     :: TurFlow     = 0.0               ! Turbulent flow coefficient
+ REAL     :: FlowExpo    = 0.0               ! Air Mass Flow exponent
+ REAL     :: FlowMin     = 0.0               ! Minimum control air mass rate
+ REAL     :: FlowMax     = 0.0               ! Maximum control air mass rate
+ REAL     :: A0          = 0.0               ! First polynomial coefficient of the control variable (constant coefficient)
+ REAL     :: A1          = 0.0               ! Second polynomial coefficient of the control variable (linear coefficient)
+ REAL     :: A2          = 0.0               ! Third polynomial coefficient of the control variable (quadratic coefficient)
+ REAL     :: A3          = 0.0               ! Fourth polynomial coefficient of the control variable (cubic coefficient)
 END TYPE DisSysCompDamperProp
 
 TYPE DisSysCompCVFProp ! Constant volume fan component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of detailed fan component
- REAL(r64)     :: FlowRate    = 0.0d0               ! Air volume flow rate
- REAL(r64)     :: Ctrl        = 0.0d0               ! Control ratio
+ REAL     :: FlowRate    = 0.0               ! Air volume flow rate
+ REAL     :: Ctrl        = 0.0               ! Control ratio
  INTEGER  :: FanTypeNum  = 0                 ! Fan type: Constant volume or ONOFF
  INTEGER  :: FanIndex    = 0                 ! Fan index
  INTEGER  :: InletNode   = 0                 ! Inlet node number
@@ -349,49 +349,49 @@ END TYPE DisSysCompCVFProp
 
 TYPE DisSysCompDetFanProp ! Detailed fan component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of constant volume fan component
- REAL(r64)     :: FlowCoef    = 0.0d0               ! Coefficient for linear initialization
- REAL(r64)     :: FlowExpo    = 0.0d0               ! Turbulent flow coefficient
- REAL(r64)     :: RhoAir      = 0.0d0               ! Reference air density
- REAL(r64)     :: Qfree       = 0.0d0               ! Free delivery flow at P=0
- REAL(r64)     :: Pshut       = 0.0d0               ! Shutoff pressure at Q=0
- REAL(r64)     :: TranRat     = 0.0d0               ! Flow coefficient at laminar/turbulent transition
+ REAL     :: FlowCoef    = 0.0               ! Coefficient for linear initialization
+ REAL     :: FlowExpo    = 0.0               ! Turbulent flow coefficient
+ REAL     :: RhoAir      = 0.0               ! Reference air density
+ REAL     :: Qfree       = 0.0               ! Free delivery flow at P=0
+ REAL     :: Pshut       = 0.0               ! Shutoff pressure at Q=0
+ REAL     :: TranRat     = 0.0               ! Flow coefficient at laminar/turbulent transition
  INTEGER  :: n                               ! Number of ranges for fan performance curve
- REAL(r64), DIMENSION(:), ALLOCATABLE :: Coeff        ! Coefficients of fan performance curve.
+ REAL, DIMENSION(:), ALLOCATABLE :: Coeff        ! Coefficients of fan performance curve.
                                              !Each range has a min flow rate and 4 coeffieincts
 END TYPE DisSysCompDetFanProp
 
 TYPE DisSysCompCoilProp ! Coil component
  CHARACTER(len=MaxNameLength)  :: Name = ' '       ! Name of coil component
  CHARACTER(len=MaxNameLength)  :: EPlusType = ' '  ! EnergyPlus coil type
- REAL(r64)     :: L           = 0.0d0               ! Air path length
- REAL(r64)     :: D           = 0.0d0               ! Air path hydraulic diameter
+ REAL     :: L           = 0.0               ! Air path length
+ REAL     :: D           = 0.0               ! Air path hydraulic diameter
 END TYPE DisSysCompCoilProp
 
 TYPE DisSysCompHXProp ! Coil component
  CHARACTER(len=MaxNameLength)  :: Name = ' '       ! Name of coil component
  CHARACTER(len=MaxNameLength)  :: EPlusType = ' '  ! EnergyPlus coil type
- REAL(r64)     :: L           = 0.0d0              ! Air path length
- REAL(r64)     :: D           = 0.0d0              ! Air path hydraulic diameter
+ REAL     :: L           = 0.0              ! Air path length
+ REAL     :: D           = 0.0              ! Air path hydraulic diameter
  LOGICAL  :: CoilParentExists  = .FALSE.           ! Is a coil component
 END TYPE DisSysCompHXProp
 
 TYPE DisSysCompTermUnitProp ! Turminal unit component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of coil component
  CHARACTER(len=MaxNameLength)  :: EPlusType = ' '  ! EnergyPlus coil type
- REAL(r64)     :: L           = 0.0d0               ! Air path length
- REAL(r64)     :: D           = 0.0d0               ! Air path hydraulic diameter
+ REAL     :: L           = 0.0               ! Air path length
+ REAL     :: D           = 0.0               ! Air path hydraulic diameter
 END TYPE DisSysCompTermUnitProp
 
 TYPE DisSysCompCPDProp ! Constant pressure drop component
  CHARACTER(len=MaxNameLength)  :: Name = ' ' ! Name of constant pressure drop component
- REAL(r64)     :: A           = 0.0d0               ! cross section area
- REAL(r64)     :: DP          = 0.0d0               ! Pressure difference across the component
+ REAL     :: A           = 0.0               ! cross section area
+ REAL     :: DP          = 0.0               ! Pressure difference across the component
 END TYPE DisSysCompCPDProp
 
 TYPE DisSysLinkageProp ! Distribution system linkage data
  CHARACTER(len=MaxNameLength)  :: LinkName =' '       ! Name of distribution system linkage
  CHARACTER(len=MaxNameLength),DIMENSION(2)  :: NodeNames  =' '  ! Names of nodes (limited to 2)
- REAL(r64),DIMENSION(2)                          :: NodeHeights=0.0d0  ! Node heights
+ REAL,DIMENSION(2)                          :: NodeHeights=0.0  ! Node heights
  CHARACTER(len=MaxNameLength)  :: CompName      =' '  ! Name of element
  INTEGER                       :: CompNum       =0    ! Element Number
  CHARACTER(len=MaxNameLength)  :: ZoneName      =' '  ! Name of zone
@@ -404,7 +404,7 @@ TYPE AirflowNetworkNodeProp ! AirflowNetwork nodal data
  CHARACTER(len=MaxNameLength)  :: Name = ' '  ! Provide a unique node name
  CHARACTER(len=20)  :: NodeType                = ' ' ! Provide node type "External", "Thermal Zone" or "Other"
  CHARACTER(len=MaxNameLength)  :: EPlusNode= ' ' ! EnergyPlus node name
- REAL(r64)     :: NodeHeight                       =0.0d0  ! Node height [m]
+ REAL     :: NodeHeight                       =0.0  ! Node height [m]
  INTEGER  :: NodeNum                          =0    ! Node number
  INTEGER  :: NodeTypeNum                      =0    ! Node type with integer number
                                                     ! 0: Calculated, 1: Given pressure;
@@ -429,7 +429,7 @@ END TYPE AirflowNetworkCompProp
 TYPE AirflowNetworkLinkageProp ! AirflowNetwork linkage data
  CHARACTER(len=MaxNameLength)  :: Name   =' '  ! Provide a unique linkage name
  CHARACTER(len=MaxNameLength),DIMENSION(2)  :: NodeNames  =' '  ! Names of nodes (limited to 2)
- REAL(r64),DIMENSION(2)                          :: NodeHeights=0.0d0  ! Node heights
+ REAL,DIMENSION(2)                          :: NodeHeights=0.0  ! Node heights
  CHARACTER(len=MaxNameLength)  :: CompName      =' '  ! Name of element
  INTEGER                       :: CompNum       =0    ! Element Number
  CHARACTER(len=MaxNameLength)  :: ZoneName      =' '  ! Name of zone
@@ -441,65 +441,65 @@ TYPE AirflowNetworkLinkageProp ! AirflowNetwork linkage data
 END TYPE AirflowNetworkLinkageProp
 
 TYPE AirflowNetworkNodeSimuData ! Node variable for simulation
- REAL(r64)     :: TZ =0.0d0         ! Temperature [C]
- REAL(r64)     :: WZ =0.0d0         ! Humidity ratio [kg/kg]
- REAL(r64)     :: PZ =0.0d0         ! Pressure [Pa]
- REAL(r64)     :: CO2Z =0.0d0       ! CO2 [ppm]
- REAL(r64)     :: GCZ =0.0d0        ! Generic contaminant [ppm]
+ REAL     :: TZ =0.0         ! Temperature [C]
+ REAL     :: WZ =0.0         ! Humidity ratio [kg/kg]
+ REAL     :: PZ =0.0         ! Pressure [Pa]
+ REAL     :: CO2Z =0.0       ! CO2 [ppm]
+ REAL     :: GCZ =0.0        ! Generic contaminant [ppm]
 END TYPE AirflowNetworkNodeSimuData
 
 TYPE AirflowNetworkLinkSimuData
- REAL(r64)     :: FLOW =     0.0d0  ! Mass flow rate [kg/s]
- REAL(r64)     :: FLOW2 =    0.0d0  ! Mass flow rate [kg/s] for two way flow
- REAL(r64)     :: DP =       0.0d0  ! Pressure difference across a component
- REAL(r64)     :: VolFLOW =  0.0d0  ! Mass flow rate [m3/s]
- REAL(r64)     :: VolFLOW2 = 0.0d0  ! Mass flow rate [m3/s] for two way flow
- REAL(r64)     :: DP1      = 0.0d0
+ REAL     :: FLOW =     0.0  ! Mass flow rate [kg/s]
+ REAL     :: FLOW2 =    0.0  ! Mass flow rate [kg/s] for two way flow
+ REAL     :: DP =       0.0  ! Pressure difference across a component
+ REAL     :: VolFLOW =  0.0  ! Mass flow rate [m3/s]
+ REAL     :: VolFLOW2 = 0.0  ! Mass flow rate [m3/s] for two way flow
+ REAL     :: DP1      = 0.0
 END TYPE AirflowNetworkLinkSimuData
 
 TYPE AirflowNetworkLinkReportData
- REAL(r64)     :: FLOW =     0.0d0  ! Mass flow rate [kg/s]
- REAL(r64)     :: FLOW2 =    0.0d0  ! Mass flow rate [kg/s] for two way flow
- REAL(r64)     :: VolFLOW =  0.0d0  ! Mass flow rate [m^3/s]
- REAL(r64)     :: VolFLOW2 = 0.0d0  ! Mass flow rate [m^3/s] for two way flow
- REAL(r64)     :: FLOWOFF =  0.0d0  ! Mass flow rate during OFF cycle [kg/s]
- REAL(r64)     :: FLOW2OFF = 0.0d0  ! Mass flow rate during OFF cycle [kg/s] for two way flow
- REAL(r64)     :: VolFLOWOFF =0.0d0 ! Mass flow rate during OFF cycle [m^3/s]
- REAL(r64)     :: VolFLOW2OFF=0.0d0 ! Mass flow rate during OFF cycle [m^3/s] for two way flow
- REAL(r64)     :: DP =       0.0d0  ! Average Pressure difference across a component
- REAL(r64)     :: DPON =     0.0d0  ! Pressure difference across a component with fan on
- REAL(r64)     :: DPOFF =    0.0d0  ! Pressure difference across a component with fan off
+ REAL     :: FLOW =     0.0  ! Mass flow rate [kg/s]
+ REAL     :: FLOW2 =    0.0  ! Mass flow rate [kg/s] for two way flow
+ REAL     :: VolFLOW =  0.0  ! Mass flow rate [m^3/s]
+ REAL     :: VolFLOW2 = 0.0  ! Mass flow rate [m^3/s] for two way flow
+ REAL     :: FLOWOFF =  0.0  ! Mass flow rate during OFF cycle [kg/s]
+ REAL     :: FLOW2OFF = 0.0  ! Mass flow rate during OFF cycle [kg/s] for two way flow
+ REAL     :: VolFLOWOFF =0.0 ! Mass flow rate during OFF cycle [m^3/s]
+ REAL     :: VolFLOW2OFF=0.0 ! Mass flow rate during OFF cycle [m^3/s] for two way flow
+ REAL     :: DP =       0.0  ! Average Pressure difference across a component
+ REAL     :: DPON =     0.0  ! Pressure difference across a component with fan on
+ REAL     :: DPOFF =    0.0  ! Pressure difference across a component with fan off
 END TYPE AirflowNetworkLinkReportData
 
 TYPE AirflowNetworkNodeReportData ! Node variable for simulation
- REAL(r64)     :: PZ    =0.0d0         ! Average Pressure [Pa]
- REAL(r64)     :: PZON  =0.0d0         ! Pressure with fan on [Pa]
- REAL(r64)     :: PZOFF =0.0d0         ! Pressure with fan off [Pa]
+ REAL     :: PZ    =0.0         ! Average Pressure [Pa]
+ REAL     :: PZON  =0.0         ! Pressure with fan on [Pa]
+ REAL     :: PZOFF =0.0         ! Pressure with fan off [Pa]
 END TYPE AirflowNetworkNodeReportData
 
 TYPE AirflowNetworkExchangeProp
- REAL(r64) :: MultiZoneSen = 0.0d0
- REAL(r64) :: MultiZoneLat = 0.0d0
- REAL(r64) :: LeakSen = 0.0d0
- REAL(r64) :: LeakLat = 0.0d0
- REAL(r64) :: CondSen = 0.0d0
- REAL(r64) :: DiffLat = 0.0d0
- REAL(r64) :: TotalSen = 0.0d0
- REAL(r64) :: TotalLat = 0.0d0
- REAL(r64) :: SumMCp = 0.0d0
- REAL(r64) :: SumMCpT = 0.0d0
- REAL(r64) :: SumMHr = 0.0d0
- REAL(r64) :: SumMHrW = 0.0d0
- REAL(r64) :: SumMMCp = 0.0d0
- REAL(r64) :: SumMMCpT = 0.0d0
- REAL(r64) :: SumMMHr = 0.0d0
- REAL(r64) :: SumMMHrW = 0.0d0
- REAL(r64) :: SumMHrCO = 0.0d0
- REAL(r64) :: SumMMHrCO = 0.0d0
- REAL(r64) :: TotalCO2 = 0.0d0
- REAL(r64) :: SumMHrGC = 0.0d0
- REAL(r64) :: SumMMHrGC = 0.0d0
- REAL(r64) :: TotalGC = 0.0d0
+ REAL :: MultiZoneSen = 0.0
+ REAL :: MultiZoneLat = 0.0
+ REAL :: LeakSen = 0.0
+ REAL :: LeakLat = 0.0
+ REAL :: CondSen = 0.0
+ REAL :: DiffLat = 0.0
+ REAL :: TotalSen = 0.0
+ REAL :: TotalLat = 0.0
+ REAL :: SumMCp = 0.0
+ REAL :: SumMCpT = 0.0
+ REAL :: SumMHr = 0.0
+ REAL :: SumMHrW = 0.0
+ REAL :: SumMMCp = 0.0
+ REAL :: SumMMCpT = 0.0
+ REAL :: SumMMHr = 0.0
+ REAL :: SumMMHrW = 0.0
+ REAL :: SumMHrCO = 0.0
+ REAL :: SumMMHrCO = 0.0
+ REAL :: TotalCO2 = 0.0
+ REAL :: SumMHrGC = 0.0
+ REAL :: SumMMHrGC = 0.0
+ REAL :: TotalGC = 0.0
 END TYPE AirflowNetworkExchangeProp
 
           ! MODULE VARIABLE DECLARATIONS:
@@ -581,10 +581,10 @@ INTEGER :: AirflowNetworkNumOfSurfaces = 0 ! The number of surfaces for multizon
 INTEGER :: AirflowNetworkNumOfZones    = 0 ! The number of zones for multizone calculation
 
 LOGICAL :: RollBackFlag = .FALSE.          ! Roll back flag when system time steo down shifting
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ANZT    ! Local zone air temperature for roll back use
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ANZW    ! Local zone air humidity ratio for roll back use
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ANCO    ! Local zone air CO2 for roll back use
-REAL(r64), ALLOCATABLE, DIMENSION(:) :: ANGC    ! Local zone air generic contaminant for roll back use
+REAL, ALLOCATABLE, DIMENSION(:) :: ANZT    ! Local zone air temperature for roll back use
+REAL, ALLOCATABLE, DIMENSION(:) :: ANZW    ! Local zone air humidity ratio for roll back use
+REAL, ALLOCATABLE, DIMENSION(:) :: ANCO    ! Local zone air CO2 for roll back use
+REAL, ALLOCATABLE, DIMENSION(:) :: ANGC    ! Local zone air generic contaminant for roll back use
 INTEGER :: AirflowNetworkNumOfExhFan = 0   ! Number of zone exhaust fans
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: AirflowNetworkZoneExhaustFan ! Logical to use zone exhaust fans
 LOGICAL :: AirflowNetworkFanActivated = .FALSE. ! Supply fan activation flag

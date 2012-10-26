@@ -46,14 +46,14 @@ CHARACTER(len=*), INTENT (IN)    :: CompName    ! the component Name
 CHARACTER(len=*), INTENT (IN)    :: CompType    ! Type of component
 INTEGER, INTENT (INOUT)          :: CompNum     ! Index of component in component array
 LOGICAL, INTENT (IN)             :: FirstHVACIteration  ! flag for 1st HVAV iteration in the time step
-REAL(r64), INTENT (IN)           :: QZnReq              ! zone load to be met
+REAL, INTENT (IN)           :: QZnReq              ! zone load to be met
 INTEGER, INTENT (IN)             :: ActuatedNode        ! node that controls unit output
-REAL(r64), INTENT (IN)           :: MaxFlow             ! maximum water flow
-REAL(r64), INTENT (IN)           :: MinFlow             ! minimum water flow
+REAL, INTENT (IN)           :: MaxFlow             ! maximum water flow
+REAL, INTENT (IN)           :: MinFlow             ! minimum water flow
 INTEGER, INTENT (IN), OPTIONAL   :: TempInNode  ! inlet node for output calculation
 INTEGER, INTENT (IN), OPTIONAL   :: TempOutNode ! outlet node for output calculation
-REAL(r64), INTENT (IN)           :: ControlOffset       ! really the tolerance
-REAL(r64), INTENT (IN), OPTIONAL :: AirMassFlow ! air mass flow rate
+REAL, INTENT (IN)           :: ControlOffset       ! really the tolerance
+REAL, INTENT (IN), OPTIONAL :: AirMassFlow ! air mass flow rate
 INTEGER, INTENT (IN), OPTIONAL   :: Action      ! 1=reverse; 2=normal
 INTEGER, INTENT (INOUT)          :: ControlCompTypeNum  ! Internal type num for CompType
 INTEGER, INTENT (INOUT)          :: CompErrIndex  ! for Recurring error call
@@ -90,12 +90,12 @@ CHARACTER(len=*), DIMENSION(NumComponents), PARAMETER :: ListOfComponents=(/  &
           ! DERIVED TYPE DEFINITIONS
 !Interval Half Type used for Controller
 TYPE IntervalHalf
-  REAL(r64)     ::MaxFlow
-  REAL(r64)     ::MinFlow
-  REAL(r64)     ::MaxResult
-  REAL(r64)     ::MinResult
-  REAL(r64)     ::MidFlow
-  REAL(r64)     ::MidResult
+  REAL     ::MaxFlow
+  REAL     ::MinFlow
+  REAL     ::MaxResult
+  REAL     ::MinResult
+  REAL     ::MidFlow
+  REAL     ::MidResult
   Logical  ::MaxFlowCalc
   Logical  ::MinFlowCalc
   Logical  ::MinFlowResult
@@ -103,20 +103,20 @@ TYPE IntervalHalf
 END TYPE IntervalHalf
 
 TYPE ZoneEquipControllerProps
-  REAL(r64)    :: SetPoint     ! Desired setpoint;
-  REAL(r64)    :: MaxSetPoint  ! The maximum setpoint; either user input or reset per time step by simulation
-  REAL(r64)    :: MinSetPoint  ! The minimum setpoint; either user input or reset per time step by simulation
-  REAL(r64)    :: SensedValue  ! The sensed control variable of any type
-  REAL(r64)    :: CalculatedSetPoint ! The Calculated SetPoint or new control actuated value
+  REAL    :: SetPoint     ! Desired setpoint;
+  REAL    :: MaxSetPoint  ! The maximum setpoint; either user input or reset per time step by simulation
+  REAL    :: MinSetPoint  ! The minimum setpoint; either user input or reset per time step by simulation
+  REAL    :: SensedValue  ! The sensed control variable of any type
+  REAL    :: CalculatedSetPoint ! The Calculated SetPoint or new control actuated value
 END TYPE ZoneEquipControllerProps
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER          :: Iter =0     ! Iteration limit for the interval halving process
-REAL(r64)        :: CpAir       ! specific heat of air (J/kg-C)
+REAL        :: CpAir       ! specific heat of air (J/kg-C)
 LOGICAL          :: Converged
-REAL(r64)        :: Denom       ! the denominator of the control signal
-REAL(r64)        :: LoadMet     ! Actual output of unit (watts)
+REAL        :: Denom       ! the denominator of the control signal
+REAL        :: LoadMet     ! Actual output of unit (watts)
 !INTEGER, SAVE    :: ErrCount=0  ! Number of times that the maximum iterations was exceeded
 !INTEGER, SAVE    :: ErrCount1=0 ! for recurring error
 LOGICAL          :: WaterCoilAirFlowControl ! True if controlling air flow through water coil, water flow fixed
@@ -188,9 +188,9 @@ Do While (.Not. Converged)
  Else If(ZoneInterHalf%MinFlowResult) Then
     ZoneInterHalf%MinResult = ZoneController%SensedValue
     ZoneInterHalf%MidFlow = (ZoneInterHalf%MaxFlow + &
-                                         ZoneInterHalf%MinFlow)/2.0d0
+                                         ZoneInterHalf%MinFlow)/2.0
     ZoneController%CalculatedSetPoint = (ZoneInterHalf%MaxFlow + &
-                                                     ZoneInterHalf%MinFlow)/2.0d0
+                                                     ZoneInterHalf%MinFlow)/2.0
     ZoneInterHalf%MinFlowResult = .False.
     ZoneInterHalf%NormFlowCalc = .True.
  ! Record the Mid results and check all possibilities and start interval halving procedure
@@ -271,20 +271,20 @@ Do While (.Not. Converged)
         Else If((ZoneController%SetPoint .lt. ZoneInterHalf%MaxResult) .and. &
             (ZoneController%SetPoint .ge. ZoneInterHalf%MidResult)) Then
           ZoneController%CalculatedSetPoint = (ZoneInterHalf%MaxFlow + &
-                                                         ZoneInterHalf%MidFlow)/2.0d0
+                                                         ZoneInterHalf%MidFlow)/2.0
           ZoneInterHalf%MinFlow = ZoneInterHalf%MidFlow
           ZoneInterHalf%MinResult = ZoneInterHalf%MidResult
           ZoneInterHalf%MidFlow = (ZoneInterHalf%MaxFlow + &
-                                               ZoneInterHalf%MidFlow)/2.0d0
+                                               ZoneInterHalf%MidFlow)/2.0
         ! If between the min and mid set to new flow and lower Max to mid
         Else If((ZoneController%SetPoint .lt. ZoneInterHalf%MidResult) .and. &
             (ZoneController%SetPoint .gt. ZoneInterHalf%MinResult)) Then
           ZoneController%CalculatedSetPoint = (ZoneInterHalf%MinFlow + &
-                                                         ZoneInterHalf%MidFlow)/2.0d0
+                                                         ZoneInterHalf%MidFlow)/2.0
           ZoneInterHalf%MaxFlow = ZoneInterHalf%MidFlow
           ZoneInterHalf%MaxResult = ZoneInterHalf%MidResult
           ZoneInterHalf%MidFlow = (ZoneInterHalf%MinFlow + &
-                                             ZoneInterHalf%MidFlow)/2.0d0
+                                             ZoneInterHalf%MidFlow)/2.0
 
         End IF ! End of the Conditional for the actual interval halving scheme itself
       EndIf  ! end of max > min check
@@ -323,12 +323,12 @@ Do While (.Not. Converged)
   ENDIF
 
  ! The denominator of the control signal should be no less than 100 watts
- Denom = SIGN( MAX( ABS(QZnReq), 100.d0), QZnReq)
+ Denom = SIGN( MAX( ABS(QZnReq), 100.), QZnReq)
  IF (PRESENT(Action)) THEN
    IF (Action .eq. iNormalAction) THEN
-     Denom = MAX(ABS(QZnReq),100.d0)
+     Denom = MAX(ABS(QZnReq),100.)
    ELSE IF (Action .eq. iReverseAction) THEN
-     Denom = -MAX(ABS(QZnReq),100.d0)
+     Denom = -MAX(ABS(QZnReq),100.)
    ELSE
      CALL ShowFatalError('ControlCompOutput: Illegal Action argument =['//trim(TrimSigDigits(Action))//']')
    END IF
@@ -340,7 +340,7 @@ Do While (.Not. Converged)
      ! simulate series piu reheat coil
      CALL SimulateWaterCoilComponents(CompName,FirstHVACIteration,CompNum)
      ! Calculate the control signal (the variable we are forcing to zero)
-     CpAir = PsyCpAirFnWTdb(Node(TempOutNode)%HumRat,0.5d0*(Node(TempOutNode)%Temp + Node(TempInNode)%Temp))
+     CpAir = PsyCpAirFnWTdb(Node(TempOutNode)%HumRat,0.5*(Node(TempOutNode)%Temp + Node(TempInNode)%Temp))
      LoadMet = CpAir*Node(TempOutNode)%MassFlowRate*(Node(TempOutNode)%Temp - Node(TempInNode)%Temp)
      ZoneController%SensedValue = (LoadMet - QZnReq) / Denom
 
@@ -348,7 +348,7 @@ Do While (.Not. Converged)
      ! simulate series piu reheat coil
      CALL SimulateWaterCoilComponents(CompName,FirstHVACIteration,CompNum)
      ! Calculate the control signal (the variable we are forcing to zero)
-     CpAir = PsyCpAirFnWTdb(Node(TempOutNode)%HumRat,0.5d0*(Node(TempOutNode)%Temp + Node(TempInNode)%Temp))
+     CpAir = PsyCpAirFnWTdb(Node(TempOutNode)%HumRat,0.5*(Node(TempOutNode)%Temp + Node(TempInNode)%Temp))
      LoadMet = CpAir*Node(TempOutNode)%MassFlowRate*(Node(TempOutNode)%Temp - Node(TempInNode)%Temp)
      ZoneController%SensedValue = (LoadMet - QZnReq) / Denom
 
@@ -439,17 +439,17 @@ Do While (.Not. Converged)
      CALL ShowWarningMessage ('ControlCompOutput: Maximum iterations exceeded for '//TRIM(CompType)//' = '//TRIM(CompName))
      CALL ShowContinueError('... Load met       = '//TRIM(TrimSigDigits(LoadMet,5))//' W.')
      CALL ShowContinueError('... Load requested = '//TRIM(TrimSigDigits(QZnReq,5))//' W.')
-     CALL ShowContinueError('... Error          = '//TRIM(TrimSigDigits(ABS((LoadMet-QZnReq)*100.d0/Denom),8))//' %.')
-     CALL ShowContinueError('... Tolerance      = '//TRIM(TrimSigDigits(ControlOffset*100.d0,8))//' %.')
+     CALL ShowContinueError('... Error          = '//TRIM(TrimSigDigits(ABS((LoadMet-QZnReq)*100./Denom),8))//' %.')
+     CALL ShowContinueError('... Tolerance      = '//TRIM(TrimSigDigits(ControlOffset*100.,8))//' %.')
      CALL ShowContinueError('... Error          = (Load met - Load requested) / MAXIMUM(Load requested, 100)')
      CALL ShowContinueErrorTimeStamp(' ')
      CALL ShowRecurringWarningErrorAtEnd('ControlCompOutput: Maximum iterations error for '//TRIM(CompType)//  &
-           ' = '//TRIM(CompName),CompErrIndex,ReportMaxOf=ABS((LoadMet-QZnReq)*100.d0/Denom),ReportMaxUnits='%',  &
-           ReportMinOf=ABS((LoadMet-QZnReq)*100.d0/Denom),ReportMinUnits='%')
+           ' = '//TRIM(CompName),CompErrIndex,ReportMaxOf=ABS((LoadMet-QZnReq)*100./Denom),ReportMaxUnits='%',  &
+           ReportMinOf=ABS((LoadMet-QZnReq)*100./Denom),ReportMinUnits='%')
    ENDIF
    CALL ShowRecurringWarningErrorAtEnd('ControlCompOutput: Maximum iterations error for '//TRIM(CompType)//  &
-           ' = '//TRIM(CompName),CompErrIndex,ReportMaxOf=ABS((LoadMet-QZnReq)*100.d0/Denom),ReportMaxUnits='%',  &
-           ReportMinOf=ABS((LoadMet-QZnReq)*100.d0/Denom),ReportMinUnits='%')
+           ' = '//TRIM(CompName),CompErrIndex,ReportMaxOf=ABS((LoadMet-QZnReq)*100./Denom),ReportMaxUnits='%',  &
+           ReportMinOf=ABS((LoadMet-QZnReq)*100./Denom),ReportMinUnits='%')
    EXIT  ! It will not converge this time
  ELSEIF (Iter > MaxIter*2) THEN
    EXIT
@@ -686,33 +686,33 @@ SUBROUTINE CalcPassiveExteriorBaffleGap(SurfPtrARR, VentArea, Cv, Cd, HdeltaNPL,
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN), DIMENSION(:) :: SurfPtrARR  ! Array of indexes pointing to Surface structure in DataSurfaces
-  REAL(r64), INTENT(IN)             :: VentArea    ! Area available for venting the gap [m2]
-  REAL(r64), INTENT(IN)             :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
-  REAL(r64), INTENT(IN)             :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
-  REAL(r64), INTENT(IN)             :: HdeltaNPL   ! Height difference from neutral pressure level [m]
-  REAL(r64), INTENT(IN)             :: SolAbs      ! solar absorptivity of baffle [--]
-  REAL(r64), INTENT(IN)             :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
-  REAL(r64), INTENT(IN)             :: Tilt        ! Tilt of gap [Degrees]
-  REAL(r64), INTENT(IN)             :: AspRat      ! aspect ratio of gap  Height/gap [--]
-  REAL(r64), INTENT(IN)             :: GapThick    ! Thickness of air space between baffle and underlying heat transfer surface
+  REAL, INTENT(IN)             :: VentArea    ! Area available for venting the gap [m2]
+  REAL, INTENT(IN)             :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
+  REAL, INTENT(IN)             :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
+  REAL, INTENT(IN)             :: HdeltaNPL   ! Height difference from neutral pressure level [m]
+  REAL, INTENT(IN)             :: SolAbs      ! solar absorptivity of baffle [--]
+  REAL, INTENT(IN)             :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
+  REAL, INTENT(IN)             :: Tilt        ! Tilt of gap [Degrees]
+  REAL, INTENT(IN)             :: AspRat      ! aspect ratio of gap  Height/gap [--]
+  REAL, INTENT(IN)             :: GapThick    ! Thickness of air space between baffle and underlying heat transfer surface
   INTEGER, INTENT(IN)               :: Roughness   ! Roughness index (1-6), see DataHeatBalance parameters
-  REAL(r64), INTENT(IN)             :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
-  REAL(r64), INTENT(INOUT)          :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
-  REAL(r64), INTENT(INOUT)          :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
-  REAL(r64), INTENT(OUT), OPTIONAL  :: HcGapRpt       !
-  REAL(r64), INTENT(OUT), OPTIONAL  :: HrGapRpt       !
-  REAL(r64), INTENT(OUT), OPTIONAL  :: IscRpt
-  REAL(r64), INTENT(OUT), OPTIONAL  :: MdotVentRpt
-  REAL(r64), INTENT(OUT), OPTIONAL  :: VdotWindRpt
-  REAL(r64), INTENT(OUT), OPTIONAL  :: VdotBouyRpt
+  REAL, INTENT(IN)             :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
+  REAL, INTENT(INOUT)          :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
+  REAL, INTENT(INOUT)          :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
+  REAL, INTENT(OUT), OPTIONAL  :: HcGapRpt       !
+  REAL, INTENT(OUT), OPTIONAL  :: HrGapRpt       !
+  REAL, INTENT(OUT), OPTIONAL  :: IscRpt
+  REAL, INTENT(OUT), OPTIONAL  :: MdotVentRpt
+  REAL, INTENT(OUT), OPTIONAL  :: VdotWindRpt
+  REAL, INTENT(OUT), OPTIONAL  :: VdotBouyRpt
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER  :: g          = 9.807d0      ! gravitational constant (m/s**2)
-  REAL(r64), PARAMETER  :: nu         = 15.66d-6   ! kinematic viscosity (m**2/s) for air at 300 K (Mills 1999 Heat Transfer)
-  REAL(r64), PARAMETER  :: k          = 0.0267d0     ! thermal conductivity (W/m K) for air at 300 K (Mills 1999 Heat Transfer)
-  REAL(r64), PARAMETER  :: Pr         = 0.71d0       ! Prandtl number for air
-  REAL(r64), PARAMETER  :: Sigma      = 5.6697d-08 ! Stefan-Boltzmann constant
-  REAL(r64), PARAMETER  :: KelvinConv = 273.15d0     ! Conversion from Celsius to Kelvin
+  REAL, PARAMETER  :: g          = 9.807      ! gravitational constant (m/s**2)
+  REAL, PARAMETER  :: nu         = 15.66d-6   ! kinematic viscosity (m**2/s) for air at 300 K (Mills 1999 Heat Transfer)
+  REAL, PARAMETER  :: k          = 0.0267     ! thermal conductivity (W/m K) for air at 300 K (Mills 1999 Heat Transfer)
+  REAL, PARAMETER  :: Pr         = 0.71       ! Prandtl number for air
+  REAL, PARAMETER  :: Sigma      = 5.6697d-08 ! Stefan-Boltzmann constant
+  REAL, PARAMETER  :: KelvinConv = 273.15     ! Conversion from Celsius to Kelvin
           ! INTERFACE BLOCK SPECIFICATIONS:
 
           ! DERIVED TYPE DEFINITIONS:
@@ -720,50 +720,50 @@ SUBROUTINE CalcPassiveExteriorBaffleGap(SurfPtrARR, VentArea, Cv, Cd, HdeltaNPL,
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   ! following arrays are used to temporarily hold results from multiple underlying surfaces
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HSkyARR  !
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HGroundARR
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HAirARR  !
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HPlenARR
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HExtARR  !
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LocalWindArr
+  REAL, ALLOCATABLE, DIMENSION(:) :: HSkyARR  !
+  REAL, ALLOCATABLE, DIMENSION(:) :: HGroundARR
+  REAL, ALLOCATABLE, DIMENSION(:) :: HAirARR  !
+  REAL, ALLOCATABLE, DIMENSION(:) :: HPlenARR
+  REAL, ALLOCATABLE, DIMENSION(:) :: HExtARR  !
+  REAL, ALLOCATABLE, DIMENSION(:) :: LocalWindArr
 
   ! local working variables
-  REAL(r64)  :: RhoAir     ! density of air
-  REAL(r64)  :: CpAir      ! specific heat of air
-  REAL(r64)  :: Tamb       ! outdoor drybulb
-  REAL(r64)  :: A          ! projected area of baffle from sum of underlying surfaces
-  REAL(r64)  :: HcPlen     ! surface convection heat transfer coefficient for plenum surfaces
+  REAL  :: RhoAir     ! density of air
+  REAL  :: CpAir      ! specific heat of air
+  REAL  :: Tamb       ! outdoor drybulb
+  REAL  :: A          ! projected area of baffle from sum of underlying surfaces
+  REAL  :: HcPlen     ! surface convection heat transfer coefficient for plenum surfaces
   INTEGER    :: thisSurf   ! do loop counter
   INTEGER    :: numSurfs   ! number of underlying HT surfaces associated with UTSC
-  REAL(r64)  :: TmpTsBaf   ! baffle temperature
+  REAL  :: TmpTsBaf   ! baffle temperature
   INTEGER    :: SurfPtr    ! index of surface in main surface structure
-  REAL(r64)  :: HMovInsul  ! dummy for call to InitExteriorConvectionCoeff
-  REAL(r64)  :: HExt       ! dummy for call to InitExteriorConvectionCoeff
+  REAL  :: HMovInsul  ! dummy for call to InitExteriorConvectionCoeff
+  REAL  :: HExt       ! dummy for call to InitExteriorConvectionCoeff
   INTEGER    :: ConstrNum  ! index of construction in main construction structure
-  REAL(r64)  :: AbsThermSurf ! thermal emmittance of underlying wall.
-  REAL(r64)  :: TsoK       ! underlying surface temperature in Kelvin
-  REAL(r64)  :: TsBaffK    ! baffle temperature in Kelvin  (lagged)
-  REAL(r64)  :: Vwind      ! localized, and area-weighted average for wind speed
-  REAL(r64)  :: HrSky      ! radiation coeff for sky, area-weighted average
-  REAL(r64)  :: HrGround   ! radiation coeff for ground, area-weighted average
-  REAL(r64)  :: HrAtm      ! radiation coeff for air (bulk atmosphere), area-weighted average
-  REAL(r64)  :: Isc        ! Incoming combined solar radiation, area-weighted average
-  REAL(r64)  :: HrPlen     ! radiation coeff for plenum surfaces, area-weighted average
-  REAL(r64)  :: Tso        ! temperature of underlying surface, area-weighted average
-  REAL(r64)  :: TmeanK       ! average of surface temps , for Beta in Grashoff no.
-  REAL(r64)  :: Gr          ! Grasshof number for natural convection calc
-  REAL(r64)  :: VdotWind    ! volume flow rate of nat. vent due to wind
-  REAL(r64)  :: VdotThermal ! Volume flow rate of nat. vent due to bouyancy
-  REAL(r64)  :: VdotVent    ! total volume flow rate of nat vent
-  REAL(r64)  :: MdotVent    ! total mass flow rate of nat vent
-  REAL(r64)  :: NuPlen      ! Nusselt No. for plenum Gap
-  REAL(r64)  :: LocalOutDryBulbTemp ! OutDryBulbTemp for here
-  REAL(r64)  :: LocalWetBulbTemp ! OutWetBulbTemp for here
-  REAL(r64)  :: LocalOutHumRat ! OutHumRat for here
+  REAL  :: AbsThermSurf ! thermal emmittance of underlying wall.
+  REAL  :: TsoK       ! underlying surface temperature in Kelvin
+  REAL  :: TsBaffK    ! baffle temperature in Kelvin  (lagged)
+  REAL  :: Vwind      ! localized, and area-weighted average for wind speed
+  REAL  :: HrSky      ! radiation coeff for sky, area-weighted average
+  REAL  :: HrGround   ! radiation coeff for ground, area-weighted average
+  REAL  :: HrAtm      ! radiation coeff for air (bulk atmosphere), area-weighted average
+  REAL  :: Isc        ! Incoming combined solar radiation, area-weighted average
+  REAL  :: HrPlen     ! radiation coeff for plenum surfaces, area-weighted average
+  REAL  :: Tso        ! temperature of underlying surface, area-weighted average
+  REAL  :: TmeanK       ! average of surface temps , for Beta in Grashoff no.
+  REAL  :: Gr          ! Grasshof number for natural convection calc
+  REAL  :: VdotWind    ! volume flow rate of nat. vent due to wind
+  REAL  :: VdotThermal ! Volume flow rate of nat. vent due to bouyancy
+  REAL  :: VdotVent    ! total volume flow rate of nat vent
+  REAL  :: MdotVent    ! total mass flow rate of nat vent
+  REAL  :: NuPlen      ! Nusselt No. for plenum Gap
+  REAL  :: LocalOutDryBulbTemp ! OutDryBulbTemp for here
+  REAL  :: LocalWetBulbTemp ! OutWetBulbTemp for here
+  REAL  :: LocalOutHumRat ! OutHumRat for here
   LOGICAL    :: ICSCollectorIsOn  =.FALSE.  ! ICS collector has OSCM on 
   INTEGER    :: CollectorNum         ! current solar collector index
-  REAL(r64)  :: ICSWaterTemp         ! ICS solar collector water temp
-  REAL(r64)  :: ICSULossbottom       ! ICS solar collector bottom loss Conductance
+  REAL  :: ICSWaterTemp         ! ICS solar collector water temp
+  REAL  :: ICSULossbottom       ! ICS solar collector bottom loss Conductance
   LOGICAL, SAVE  :: MyICSEnvrnFlag = .TRUE.  ! Local environment flag for ICS
     
 
@@ -825,8 +825,8 @@ SUBROUTINE CalcPassiveExteriorBaffleGap(SurfPtrARR, VentArea, Cv, Cd, HdeltaNPL,
 
   IF (ICSCollectorIsOn) THEN
    IF(BeginEnvrnFlag .AND. MyICSEnvrnFlag) THEN 
-     ICSULossbottom = 0.40d0
-     ICSWaterTemp = 20.0d0
+     ICSULossbottom = 0.40
+     ICSWaterTemp = 20.0
    ELSE 
      ICSULossbottom = Collector(CollectorNum)%UbLoss
      ICSWaterTemp = Collector(CollectorNum)%TempOfWater  
@@ -853,7 +853,7 @@ SUBROUTINE CalcPassiveExteriorBaffleGap(SurfPtrARR, VentArea, Cv, Cd, HdeltaNPL,
   HExt     = Sum(HExtARR*Surface(SurfPtrARR)%Area)    /A
   DEALLOCATE(HExtARR)
 
-  If (IsRain) HExt = 1000.0d0
+  If (IsRain) HExt = 1000.0
 
   Tso      = SUM(TH((SurfPtrARR),1,1)*Surface(SurfPtrARR)%Area)          /A
   Isc      = SUm(QRadSWOutIncident(SurfPtrARR)*Surface(SurfPtrARR)%Area) /A
@@ -870,14 +870,14 @@ SUBROUTINE CalcPassiveExteriorBaffleGap(SurfPtrARR, VentArea, Cv, Cd, HdeltaNPL,
   VdotWind = Cv * (VentArea / 2.) * Vwind
 
   IF (TaGap > Tamb) Then
-    VdotThermal = Cd * (VentArea / 2.d0)*(2.d0*g*HdeltaNPL*(TaGap - Tamb)/(TaGap + KelvinConv) )**0.5d0
+    VdotThermal = Cd * (VentArea / 2.)*(2.*g*HdeltaNPL*(TaGap - Tamb)/(TaGap + KelvinConv) )**0.5
   ELSEIF ( TaGap == Tamb) then
     VdotThermal = 0
   ELSE
     IF ((ABS(tilt) < 5.0 ) .OR. (ABS(Tilt - 180) < 5.0)) Then
       VdotThermal = 0.0   ! stable bouyancy situation
     ELSE
-      VdotThermal = Cd * (VentArea / 2.d0)*(2.d0*g*HdeltaNPL*(Tamb - TaGap )/(Tamb+ KelvinConv))**0.5d0
+      VdotThermal = Cd * (VentArea / 2.)*(2.*g*HdeltaNPL*(Tamb - TaGap )/(Tamb+ KelvinConv))**0.5
     ENDIF
   ENDIF
 
@@ -938,15 +938,15 @@ SUBROUTINE PassiveGapNusseltNumber(AspRat,Tilt ,Tso,Tsi, Gr, gNu)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
-  REAL(r64), INTENT(IN)                     :: AspRat            ! Aspect Ratio of Gap height to gap width
-  REAL(r64), INTENT(IN)                     :: Tilt              ! Tilt of gap, degrees
-  REAL(r64), INTENT(IN)                     :: tso               ! Temperature of gap surface closest to outside (K)
-  REAL(r64), INTENT(IN)                     :: tsi               ! Temperature of gap surface closest to zone (K)
-  REAL(r64), INTENT(IN)                     :: Gr                ! Gap gas Grashof number
-  REAL(r64), INTENT(OUT)                    :: gNu               ! Gap gas Nusselt number
+  REAL, INTENT(IN)                     :: AspRat            ! Aspect Ratio of Gap height to gap width
+  REAL, INTENT(IN)                     :: Tilt              ! Tilt of gap, degrees
+  REAL, INTENT(IN)                     :: tso               ! Temperature of gap surface closest to outside (K)
+  REAL, INTENT(IN)                     :: tsi               ! Temperature of gap surface closest to zone (K)
+  REAL, INTENT(IN)                     :: Gr                ! Gap gas Grashof number
+  REAL, INTENT(OUT)                    :: gNu               ! Gap gas Nusselt number
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER  :: Pr = 0.71d0          ! Prandtl number for air
+  REAL, PARAMETER  :: Pr = 0.71          ! Prandtl number for air
 
           ! INTERFACE BLOCK SPECIFICATIONS
 
@@ -954,11 +954,11 @@ SUBROUTINE PassiveGapNusseltNumber(AspRat,Tilt ,Tso,Tsi, Gr, gNu)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS
-  REAL(r64)                :: Ra                             ! Rayleigh number
-  REAL(r64)                :: gnu901,gnu902,gnu90,gnu601     ! Nusselt number temporary variables for
-  REAL(r64)                :: gnu602,gnu60,gnu601a,gnua,gnub !  different tilt and Ra ranges
-  REAL(r64)                :: cra,a,b,g,ang                  ! Temporary variables
-  REAL(r64)                :: tiltr
+  REAL                :: Ra                             ! Rayleigh number
+  REAL                :: gnu901,gnu902,gnu90,gnu601     ! Nusselt number temporary variables for
+  REAL                :: gnu602,gnu60,gnu601a,gnua,gnub !  different tilt and Ra ranges
+  REAL                :: cra,a,b,g,ang                  ! Temporary variables
+  REAL                :: tiltr
 
   tiltr = Tilt * DegToRadians
   Ra = Gr * Pr
@@ -970,37 +970,37 @@ SUBROUTINE PassiveGapNusseltNumber(AspRat,Tilt ,Tso,Tsi, Gr, gNu)
 
 
       if(ra <= 1.0d4) Then
-        gnu901 = 1.d0 + 1.7596678d-10 * ra**2.2984755d0   ! eq. 51
+        gnu901 = 1. + 1.7596678d-10 * ra**2.2984755   ! eq. 51
       endif
-      if(ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =      0.028154d0      * ra**0.4134d0      ! eq. 50
-      if(ra > 5.0e4)                   gnu901 =      0.0673838d0     * ra**(1.0d0/3.0d0)   ! eq. 49
+      if(ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =      0.028154      * ra**0.4134      ! eq. 50
+      if(ra > 5.0e4)                   gnu901 =      0.0673838     * ra**(1.0/3.0)   ! eq. 49
 
-      gnu902 = 0.242d0 * (ra/AspRat)**.272d0               ! eq. 52
+      gnu902 = 0.242 * (ra/AspRat)**.272               ! eq. 52
       gnu90 = MAX(gnu901,gnu902)
 
       if(tso > tsi)then   ! window heated from above
-        gnu = 1.0d0 + (gnu90-1.0d0)*sin(tiltr)                  ! eq. 53
+        gnu = 1.0 + (gnu90-1.0)*sin(tiltr)                  ! eq. 53
       else                ! window heated from below
-        if (Tilt >= 60.0d0) then
-          g       = 0.5d0 * (1.0d0+(ra/3160.d0)**20.6d0)**(-0.1d0)    ! eq. 47
-          gnu601a = 1.0d0 + (0.0936d0*(ra**0.314d0)/(1.0d0+g))**7   ! eq. 45
-          gnu601  = gnu601a**0.142857d0
+        if (Tilt >= 60.0) then
+          g       = 0.5 * (1.0+(ra/3160.)**20.6)**(-0.1)    ! eq. 47
+          gnu601a = 1.0 + (0.0936*(ra**0.314)/(1.0+g))**7   ! eq. 45
+          gnu601  = gnu601a**0.142857
 
           ! For any aspect ratio
-          gnu602  = (0.104d0+0.175d0/AspRat) * ra**0.283d0           ! eq. 46
+          gnu602  = (0.104+0.175/AspRat) * ra**0.283           ! eq. 46
           gnu60   = MAX(gnu601,gnu602)
 
           ! linear interpolation for layers inclined at angles between 60 and 90 deg
-          gnu     = ((90.0d0-Tilt)*gnu60 + (Tilt-60.0d0)*gnu90)/30.0d0
+          gnu     = ((90.0-Tilt)*gnu60 + (Tilt-60.0)*gnu90)/30.0
         endif
-        if (Tilt < 60.0d0) then                               ! eq. 42
+        if (Tilt < 60.0) then                               ! eq. 42
           cra  = ra*cos(tiltr)
-          a    = 1.0d0 - 1708.0d0/cra
-          b    = (cra/5830.0d0)**0.33333d0-1.0d0
-          gnua = (abs(a)+a)/2.0d0
-          gnub = (abs(b)+b)/2.0d0
-          ang  = 1708.0d0 * (sin(1.8d0*tiltr))**1.6d0
-          gnu  = 1.0d0 + 1.44d0*gnua*(1.0d0-ang/cra) + gnub
+          a    = 1.0 - 1708.0/cra
+          b    = (cra/5830.0)**0.33333-1.0
+          gnua = (abs(a)+a)/2.0
+          gnub = (abs(b)+b)/2.0
+          ang  = 1708.0 * (sin(1.8*tiltr))**1.6
+          gnu  = 1.0 + 1.44*gnua*(1.0-ang/cra) + gnub
         endif
       endif
       RETURN
@@ -1036,9 +1036,9 @@ SUBROUTINE CalcBasinHeaterPower(Capacity,SchedulePtr,SetPointTemp,Power)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER  ,INTENT(IN)  :: SchedulePtr    ! Pointer to basin heater schedule
-  REAL(r64),INTENT(IN)  :: Capacity       ! Basin heater capacity per degree C below setpoint (W/C)
-  REAL(r64),INTENT(IN)  :: SetPointTemp   ! setpoint temperature for basin heater operation (C)
-  REAL(r64),INTENT(OUT) :: Power          ! Basin heater power (W)
+  REAL,INTENT(IN)  :: Capacity       ! Basin heater capacity per degree C below setpoint (W/C)
+  REAL,INTENT(IN)  :: SetPointTemp   ! setpoint temperature for basin heater operation (C)
+  REAL,INTENT(OUT) :: Power          ! Basin heater power (W)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1050,19 +1050,19 @@ SUBROUTINE CalcBasinHeaterPower(Capacity,SchedulePtr,SetPointTemp,Power)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: BasinHeaterSch                  ! Schedule for basin heater operation
-  Power = 0.0d0
+  REAL  :: BasinHeaterSch                  ! Schedule for basin heater operation
+  Power = 0.0
   ! Operate basin heater anytime outdoor temperature is below setpoint and water is not flowing through the equipment
   ! IF schedule exists, basin heater performance can be scheduled OFF
   IF(SchedulePtr .GT. 0)THEN
     BasinHeaterSch     = GetCurrentScheduleValue(SchedulePtr)
-    IF(Capacity .GT. 0.0d0 .AND. BasinHeaterSch .GT. 0.0d0)THEN
-      Power = MAX(0.0d0,Capacity * (SetPointTemp-OutDryBulbTemp))
+    IF(Capacity .GT. 0.0 .AND. BasinHeaterSch .GT. 0.0)THEN
+      Power = MAX(0.0,Capacity * (SetPointTemp-OutDryBulbTemp))
     END IF
   ELSE
   ! IF schedule does not exist, basin heater operates anytime outdoor dry-bulb temp is below setpoint
-    IF(Capacity .GT. 0.0d0)THEN
-      Power = MAX(0.0d0,Capacity * (SetPointTemp-OutDryBulbTemp))
+    IF(Capacity .GT. 0.0)THEN
+      Power = MAX(0.0,Capacity * (SetPointTemp-OutDryBulbTemp))
     END IF
   END IF
 RETURN

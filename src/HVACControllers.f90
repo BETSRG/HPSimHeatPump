@@ -119,7 +119,7 @@ PRIVATE
 
 ! MODULE PARAMETER DEFINITIONS
   ! Number of significant digits to display in error messages for floating-point numbers
-  REAL(r64), PARAMETER    ::  SomeFloatingPoint  = 1.0d0
+  REAL, PARAMETER    ::  SomeFloatingPoint  = 1.0
   INTEGER, PARAMETER ::  NumSigDigits   = PRECISION(SomeFloatingPoint)
 
   ! Parameters for controls used here
@@ -148,7 +148,7 @@ PRIVATE
 ! DERIVED TYPE DEFINITIONS
   TYPE SolutionTrackerType
     LOGICAL      :: DefinedFlag   = .TRUE.    ! Flag set to TRUE when tracker is up-to-date. FALSE otherwise.
-    REAL(r64)    :: ActuatedValue = 0.0d0       ! Actuated value
+    REAL    :: ActuatedValue = 0.0       ! Actuated value
     INTEGER      :: Mode          = iModeNone ! Operational model of controller
   END TYPE SolutionTrackerType
 
@@ -186,27 +186,27 @@ PRIVATE
     ! --------------------
     ! Operational limits at min/max avail values for actuated variable and the corresponding sensed values
     ! --------------------
-    REAL(r64)    :: MaxAvailActuated = 0.0d0 ! kg/s, The maximum actuated variable currently available.
+    REAL    :: MaxAvailActuated = 0.0 ! kg/s, The maximum actuated variable currently available.
                                            ! Reset by simulation at each HVAC iteration
-    REAL(r64)    :: MaxAvailSensed   = 0.0d0 ! Sensed value at maximum available actuated variable
-    REAL(r64)    :: MinAvailActuated = 0.0d0 ! kg/s, The minimum actuated variable currently available.
+    REAL    :: MaxAvailSensed   = 0.0 ! Sensed value at maximum available actuated variable
+    REAL    :: MinAvailActuated = 0.0 ! kg/s, The minimum actuated variable currently available.
                                            ! Reset by simulation at each HVAC iteration
-    REAL(r64)    :: MinAvailSensed   = 0.0d0 ! Sensed value at maximum available actuated variable
+    REAL    :: MinAvailSensed   = 0.0 ! Sensed value at maximum available actuated variable
 
     ! --------------------
     ! User input min/max values for actuated variable
     ! --------------------
-    REAL(r64)    :: MaxVolFlowActuated = 0.0d0 ! m3/s, From User input the Max amount for the actuated variable
-    REAL(r64)    :: MinVolFlowActuated = 0.0d0 ! m3/s, From User input the Min amount for the actuated variable
-    REAL(r64)    :: MaxActuated = 0.0d0  ! kg/s, From User input the Max amount for the actuated variable
-    REAL(r64)    :: MinActuated = 0.0d0  ! kg/s, From User input the Min amount for the actuated variable
+    REAL    :: MaxVolFlowActuated = 0.0 ! m3/s, From User input the Max amount for the actuated variable
+    REAL    :: MinVolFlowActuated = 0.0 ! m3/s, From User input the Min amount for the actuated variable
+    REAL    :: MaxActuated = 0.0  ! kg/s, From User input the Max amount for the actuated variable
+    REAL    :: MinActuated = 0.0  ! kg/s, From User input the Min amount for the actuated variable
 
     ! --------------------
     ! Actuated variable
     ! --------------------
     INTEGER      :: ActuatedNode       = 0   ! The node that is acted upon by the controller
-    REAL(r64)    :: ActuatedValue      = 0.0d0 ! Value of actuated variable before change by the controller
-    REAL(r64)    :: NextActuatedValue  = 0.0d0 ! The new control actuated value
+    REAL    :: ActuatedValue      = 0.0 ! Value of actuated variable before change by the controller
+    REAL    :: NextActuatedValue  = 0.0 ! The new control actuated value
     INTEGER      :: ActuatedNodePlantLoopNum  = 0 ! the plant loop index for the actuated node DSU3
     INTEGER      :: ActuatedNodePlantLoopSide = 0 ! the plant loop side for the actuated node DSU3
     INTEGER      :: ActuatedNodePlantLoopBranchNum = 0 ! the plant loop branch num for actuated node DSU3
@@ -217,17 +217,17 @@ PRIVATE
     INTEGER      :: SensedNode = 0    ! The sensed node number from the grid
     LOGICAL      :: IsSetPointDefinedFlag = .FALSE. ! If TRUE indicates that the setpoint has been defined and can
                                                     ! be used to compute DeltaSensed
-    REAL(r64)    :: SetPointValue = 0.0d0 ! Desired setpoint; set in the SetPoint Manager or computed in Init() routine
-    REAL(r64)    :: SensedValue = 0.0d0 ! The sensed control variable of any type
-    REAL(r64)    :: DeltaSensed = 0.0d0 ! Difference of sensed to setpoint value for calculating proportional gain
-    REAL(r64)    :: Offset = 0.0d0      ! This is the tolerance or droop from the error
+    REAL    :: SetPointValue = 0.0 ! Desired setpoint; set in the SetPoint Manager or computed in Init() routine
+    REAL    :: SensedValue = 0.0 ! The sensed control variable of any type
+    REAL    :: DeltaSensed = 0.0 ! Difference of sensed to setpoint value for calculating proportional gain
+    REAL    :: Offset = 0.0      ! This is the tolerance or droop from the error
 
     ! --------------------
     ! Other controller inputs, not yet used
     ! --------------------
     CHARACTER(LEN=MaxNameLength) :: LimitType = ' '  ! Limit type as in HIGH or LOW
-    REAL(r64)    :: Range = 0.0d0  ! The range or hysteresis of the control limit
-    REAL(r64)    :: Limit = 0.0d0  ! The Limit value for a Limit Controller
+    REAL    :: Range = 0.0  ! The range or hysteresis of the control limit
+    REAL    :: Limit = 0.0  ! The Limit value for a Limit Controller
 
     ! --------------------
     ! Trace mechanism
@@ -662,7 +662,7 @@ SUBROUTINE GetControllerInput
   INTEGER       :: IOSTAT
   INTEGER       :: AirLoopNum            ! DO index for each air loop
   LOGICAL       :: ActuatorNodeNotFound  ! true if no water coil inlet node match for actuator node
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray
+  REAL, ALLOCATABLE, DIMENSION(:) :: NumArray
   CHARACTER(LEN=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
@@ -896,15 +896,15 @@ SUBROUTINE ResetController(ControlNum, FirstHVACIteration, DoWarmRestartFlag, Is
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: ActuatedNode
   INTEGER             :: SensedNode
-  REAL(r64)           :: NoFlowResetValue
+  REAL           :: NoFlowResetValue
 
   ActuatedNode = ControllerProps(ControlNum)%ActuatedNode
   SensedNode   = ControllerProps(ControlNum)%SensedNode
 
   ! Set again in ReportController() to ControllerProps(ControlNum)%NextActuatedValue
 !  IF (FirstHVACIteration) THEN
-!DSU3    Node(ActuatedNode)%MassFlowRate = 0.0d0
-    NoFlowResetValue = 0.0d0
+!DSU3    Node(ActuatedNode)%MassFlowRate = 0.0
+    NoFlowResetValue = 0.0
     CALL SetActuatedBranchFlowRate(NoFlowResetValue,  &
                          ControllerProps(ControlNum)%ActuatedNode ,      &
                          ControllerProps(ControlNum)%ActuatedNodePlantLoopNum, &
@@ -917,19 +917,19 @@ SUBROUTINE ResetController(ControlNum, FirstHVACIteration, DoWarmRestartFlag, Is
   ! Reset iteration counter and internal variables
   ControllerProps(ControlNum)%NumCalcCalls = 0
 
-  ControllerProps(ControlNum)%DeltaSensed   = 0.0d0
-  ControllerProps(ControlNum)%SensedValue   = 0.0d0
-  ControllerProps(ControlNum)%ActuatedValue = 0.0d0
+  ControllerProps(ControlNum)%DeltaSensed   = 0.0
+  ControllerProps(ControlNum)%SensedValue   = 0.0
+  ControllerProps(ControlNum)%ActuatedValue = 0.0
 
   ! Reset setpoint-related quantities
-  ControllerProps(ControlNum)%SetPointValue = 0.0d0
+  ControllerProps(ControlNum)%SetPointValue = 0.0
   ControllerProps(ControlNum)%IsSetPointDefinedFlag = .FALSE.
 
   ! MinAvailActuated and MaxAvailActuated set in InitController()
-  ControllerProps(ControlNum)%MinAvailActuated = 0.0d0
-  ControllerProps(ControlNum)%MinAvailSensed   = 0.0d0
-  ControllerProps(ControlNum)%MaxAvailActuated = 0.0d0
-  ControllerProps(ControlNum)%MaxAvailSensed   = 0.0d0
+  ControllerProps(ControlNum)%MinAvailActuated = 0.0
+  ControllerProps(ControlNum)%MinAvailSensed   = 0.0
+  ControllerProps(ControlNum)%MaxAvailActuated = 0.0
+  ControllerProps(ControlNum)%MaxAvailSensed   = 0.0
 
   ! Restart from previous solution if speculative warm restart flag set
   ! Keep same mode and next actuated value unchanged from last controller simulation.
@@ -960,8 +960,8 @@ SUBROUTINE ResetController(ControlNum, FirstHVACIteration, DoWarmRestartFlag, Is
   RootFinders(ControlNum)%CurrentMethodType = iMethodNone
 
   RootFinders(ControlNum)%CurrentPoint%DefinedFlag = .FALSE.
-  RootFinders(ControlNum)%CurrentPoint%X           = 0.0d0
-  RootFinders(ControlNum)%CurrentPoint%Y           = 0.0d0
+  RootFinders(ControlNum)%CurrentPoint%X           = 0.0
+  RootFinders(ControlNum)%CurrentPoint%Y           = 0.0
 
   RootFinders(ControlNum)%MinPoint%DefinedFlag   = .FALSE.
   RootFinders(ControlNum)%MaxPoint%DefinedFlag   = .FALSE.
@@ -1028,12 +1028,12 @@ SUBROUTINE InitController(ControlNum,FirstHVACIteration,IsConvergedFlag)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantIndexsFlag
   LOGICAL, SAVE       :: MySetPointCheckFlag = .TRUE.
   ! Supply Air Temp Setpoint when 'TemperatureAndHumidityRatio' control is used
-  REAL(r64), SAVE          :: HumidityControlTempSetPoint
+  REAL, SAVE          :: HumidityControlTempSetPoint
   ! Difference between SA dry-bulb and dew-point temperatures
-  REAL(r64)           :: ApproachTemp
+  REAL           :: ApproachTemp
   ! Desired dew point temperature setpoint for 'TemperatureAndHumidityRatio' control
-  REAL(r64)           :: DesiredDewPoint
-  REAL(r64)           :: rho !local fluid density
+  REAL           :: DesiredDewPoint
+  REAL           :: rho !local fluid density
 
 
   IF (MyOneTimeFlag) THEN
@@ -1421,7 +1421,7 @@ SUBROUTINE InitController(ControlNum,FirstHVACIteration,IsConvergedFlag)
     ControllerProps(ControlNum)%DeltaSensed = ControllerProps(ControlNum)%SensedValue &
                                               - ControllerProps(ControlNum)%SetPointValue
   ELSE
-    ControllerProps(ControlNum)%DeltaSensed = 0.0d0
+    ControllerProps(ControlNum)%DeltaSensed = 0.0
   ENDIF
 
   RETURN
@@ -1479,7 +1479,7 @@ SUBROUTINE SizeController(ControlNum)
     ENDDO
 
     IF (ControllerProps(ControlNum)%MaxVolFlowActuated < SmallWaterVolFlow) THEN
-      ControllerProps(ControlNum)%MaxVolFlowActuated = 0.0d0
+      ControllerProps(ControlNum)%MaxVolFlowActuated = 0.0
     END IF
     CALL ReportSizingOutput(ControllerProps(ControlNum)%ControllerType, ControllerProps(ControlNum)%ControllerName, &
                             'Maximum Actuated Flow [m3/s]', ControllerProps(ControlNum)%MaxVolFlowActuated)
@@ -1494,10 +1494,10 @@ SUBROUTINE SizeController(ControlNum)
     !   with a temperature tolerance that won't exceed the loop energy error tolerance (10 W).
     ! Finally we need to take into account the fact that somebody might change the energy tolerance.
     ControllerProps(ControlNum)%Offset = &
-      ( 0.001d0 / (2100.d0 * MAX(ControllerProps(ControlNum)%MaxVolFlowActuated,SmallWaterVolFlow)) ) &
-        * (HVACEnergyToler/10.0d0)
+      ( 0.001 / (2100. * MAX(ControllerProps(ControlNum)%MaxVolFlowActuated,SmallWaterVolFlow)) ) &
+        * (HVACEnergyToler/10.0)
     ! do not let the controller tolerance exceed 1/10 of the loop temperature tolerance.
-    ControllerProps(ControlNum)%Offset =  MIN(0.1d0*HVACTemperatureToler, ControllerProps(ControlNum)%Offset)
+    ControllerProps(ControlNum)%Offset =  MIN(0.1*HVACTemperatureToler, ControllerProps(ControlNum)%Offset)
     CALL ReportSizingOutput( &
       ControllerProps(ControlNum)%ControllerType, ControllerProps(ControlNum)%ControllerName, &
       'Controller Convergence Tolerance', ControllerProps(ControlNum)%Offset )
@@ -1594,7 +1594,7 @@ SUBROUTINE CalcSimpleController(ControlNum, FirstHVACIteration, IsConvergedFlag,
 
   ! Check to see if the component is running; if not converged and return.  This check will be done
   ! by looking at the component mass flow rate at the sensed node.
-  IF (Node(SensedNode)%MassFlowRate == 0.0d0) THEN
+  IF (Node(SensedNode)%MassFlowRate == 0.0) THEN
     CALL ExitCalcController( &
       ControlNum, &
       constant_zero, &
@@ -1773,7 +1773,7 @@ SUBROUTINE FindRootSimpleController(ControlNum, FirstHVACIteration, IsConvergedF
   INTEGER             :: PreviousSolutionIndex
   LOGICAL             :: PreviousSolutionDefinedFlag
   INTEGER             :: PreviousSolutionMode
-  REAL(r64)           :: PreviousSolutionValue
+  REAL           :: PreviousSolutionValue
 
 
   ! Obtain actuated and sensed nodes
@@ -2637,7 +2637,7 @@ SUBROUTINE ExitCalcController(ControlNum, NextActuatedValue, Mode, IsConvergedFl
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)     :: ControlNum
-  REAL(r64), INTENT(IN)        :: NextActuatedValue
+  REAL, INTENT(IN)        :: NextActuatedValue
   INTEGER, INTENT(IN)     :: Mode
   LOGICAL, INTENT(OUT)    :: IsConvergedFlag
   LOGICAL, INTENT(OUT)    :: IsUpToDateFlag
@@ -2975,11 +2975,11 @@ SUBROUTINE WriteAirLoopStatistics( FileUnit, ThisPrimaryAirSystem, ThisAirLoopSt
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                      :: AirLoopControlNum
   INTEGER                      :: NumWarmRestarts
-  REAL(r64)                    :: WarmRestartSuccessRatio
+  REAL                    :: WarmRestartSuccessRatio
   INTEGER                      :: NumCalls
   INTEGER                      :: TotIterations
   INTEGER                      :: MaxIterations
-  REAL(r64)                    :: AvgIterations
+  REAL                    :: AvgIterations
   INTEGER                      :: iModeNum
 
           ! FLOW

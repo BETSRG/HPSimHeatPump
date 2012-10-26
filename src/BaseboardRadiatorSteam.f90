@@ -55,31 +55,31 @@ CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Steam='ZoneHVAC:Baseboard:Radiant
     INTEGER :: FluidIndex               = 0  ! Fluid index for FluidProperties (Steam)
     INTEGER :: ControlCompTypeNum       = 0
     INTEGER :: CompErrIndex             = 0
-    REAL(r64) :: DegofSubCooling        =0.0 ! Temperature differences due to subcooling of the condensate [C]
-    REAL(r64) :: Offset                 =0.0 ! Control accuracy
-    REAL(r64) :: SteamMassFlowRate      =0.0 ! Mass flow rate of steam passing through the heater [kg/s]
-    REAL(r64) :: SteamMassFlowRateMax   =0.0 ! Maximum mass flow rate of steam [kg/s]
-    REAL(r64) :: SteamVolFlowRateMax    =0.0 ! Maximum volumetric flow rate of steam [m3/s]
-    REAL(r64) :: SteamOutletTemp        =0.0 ! Outlet steam temperature from the heater [C]
-    REAL(r64) :: SteamInletTemp         =0.0 ! Inlet steam temperature [C]
-    REAL(r64) :: SteamInletEnthalpy     =0.0 ! Enthalpy of the steam delivered from the boiler [J/kg]
-    REAL(r64) :: SteamOutletEnthalpy    =0.0 ! Enthalpy of the steam leaving the heater [J/kg]
-    REAL(r64) :: SteamInletPress        =0.0 ! Pressure of steam at the inlet of the heater [Pa]
-    REAL(r64) :: SteamOutletPress       =0.0 ! Pressure of steam at the outlet of the heater [Pa]
-    REAL(r64) :: SteamInletQuality      =0.0 ! Quality of steam at the inlet of the heater [Pa]
-    REAL(r64) :: SteamOutletQuality     =0.0 ! Quality of steam at the outlet of the heater [Pa]
-    REAL(r64) :: FracRadiant            =0.0 ! User defined fraction for radiant heat addition
-    REAL(r64) :: FracConvect            =0.0 ! Fraction for convective heat addition
-    REAL(r64) :: FracDistribPerson      =0.0 ! Fraction for radiant heat incident on people
-    REAL(r64),   ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
-    REAL(r64) :: TotPower               =0.0 ! Convective system impact rate that the heater actually meets [W]
-    REAL(r64) :: Power                  =0.0 ! Maximum heating rate [W]
-    REAL(r64) :: ConvPower              =0.0 ! Convective heating rate [W]
-    REAL(r64) :: RadPower               =0.0 ! Radiant heating rate [W]
-    REAL(r64) :: TotEnergy              =0.0 ! Convective system impact energy [J]
-    REAL(r64) :: Energy                 =0.0 ! Maximum heating energy [J]
-    REAL(r64) :: ConvEnergy             =0.0 ! Convective heating energy [J]
-    REAL(r64) :: RadEnergy              =0.0 ! Radiant heating energy [J]
+    REAL :: DegofSubCooling        =0.0 ! Temperature differences due to subcooling of the condensate [C]
+    REAL :: Offset                 =0.0 ! Control accuracy
+    REAL :: SteamMassFlowRate      =0.0 ! Mass flow rate of steam passing through the heater [kg/s]
+    REAL :: SteamMassFlowRateMax   =0.0 ! Maximum mass flow rate of steam [kg/s]
+    REAL :: SteamVolFlowRateMax    =0.0 ! Maximum volumetric flow rate of steam [m3/s]
+    REAL :: SteamOutletTemp        =0.0 ! Outlet steam temperature from the heater [C]
+    REAL :: SteamInletTemp         =0.0 ! Inlet steam temperature [C]
+    REAL :: SteamInletEnthalpy     =0.0 ! Enthalpy of the steam delivered from the boiler [J/kg]
+    REAL :: SteamOutletEnthalpy    =0.0 ! Enthalpy of the steam leaving the heater [J/kg]
+    REAL :: SteamInletPress        =0.0 ! Pressure of steam at the inlet of the heater [Pa]
+    REAL :: SteamOutletPress       =0.0 ! Pressure of steam at the outlet of the heater [Pa]
+    REAL :: SteamInletQuality      =0.0 ! Quality of steam at the inlet of the heater [Pa]
+    REAL :: SteamOutletQuality     =0.0 ! Quality of steam at the outlet of the heater [Pa]
+    REAL :: FracRadiant            =0.0 ! User defined fraction for radiant heat addition
+    REAL :: FracConvect            =0.0 ! Fraction for convective heat addition
+    REAL :: FracDistribPerson      =0.0 ! Fraction for radiant heat incident on people
+    REAL,   ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf
+    REAL :: TotPower               =0.0 ! Convective system impact rate that the heater actually meets [W]
+    REAL :: Power                  =0.0 ! Maximum heating rate [W]
+    REAL :: ConvPower              =0.0 ! Convective heating rate [W]
+    REAL :: RadPower               =0.0 ! Radiant heating rate [W]
+    REAL :: TotEnergy              =0.0 ! Convective system impact energy [J]
+    REAL :: Energy                 =0.0 ! Maximum heating energy [J]
+    REAL :: ConvEnergy             =0.0 ! Convective heating energy [J]
+    REAL :: RadEnergy              =0.0 ! Radiant heating energy [J]
     INTEGER   :: LoopNum                =0   ! plant loop index
     INTEGER   :: LoopSideNum            =0   ! plant loop side index
     INTEGER   :: BranchNum              =0   ! plant loop branch index
@@ -95,15 +95,15 @@ CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Steam='ZoneHVAC:Baseboard:Radiant
   INTEGER :: NumSteamBaseboards = 0
   INTEGER :: SteamIndex=0
 
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBSteamRadSource      ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: QBBSteamRadSrcAvg      ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf   ! Equal to the SumHATsurf for all the walls in a zone
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBSteamRadSource      ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: QBBSteamRadSrcAvg      ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf   ! Equal to the SumHATsurf for all the walls in a zone
                                                                  ! with no source
 
   ! Record keeping variables used to calculate QBBRadSrcAvg locally
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastQBBSteamRadSrc     ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed     ! Need to keep the last value in case we are still iterating
-  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys        ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastQBBSteamRadSrc     ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed     ! Need to keep the last value in case we are still iterating
+  REAL, ALLOCATABLE, DIMENSION(:) :: LastTimeStepSys        ! Need to keep the last value in case we are still iterating
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: MySizeFlag
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: CheckEquipName
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: SetLoopIndexFlag   ! get loop number flag
@@ -157,7 +157,7 @@ CONTAINS
     INTEGER, INTENT(IN)          :: ControlledZoneNum
     INTEGER, INTENT(INOUT)       :: CompIndex
     LOGICAL, INTENT(IN)          :: FirstHVACIteration
-    REAL(r64),    INTENT(OUT)    :: PowerMet
+    REAL,    INTENT(OUT)    :: PowerMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     INTEGER, PARAMETER :: MaxIter = 30
@@ -171,9 +171,9 @@ CONTAINS
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER      :: BaseboardNum           ! index of unit in baseboard array
     LOGICAL,SAVE :: GetInputFlag = .TRUE.  ! one time get input flag
-    REAL(r64)    :: QZnReq                 ! zone load not yet satisfied
-    REAL(r64)    :: MaxSteamFlow
-    REAL(r64)    :: MinSteamFlow
+    REAL    :: QZnReq                 ! zone load not yet satisfied
+    REAL    :: MaxSteamFlow
+    REAL    :: MinSteamFlow
 
     IF (GetInputFlag) THEN
       CALL GetSteamBaseboardInput
@@ -293,10 +293,10 @@ CONTAINS
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     CHARACTER(len=*), PARAMETER :: RoutineName='GetSteamBaseboardInput:'
-    REAL(r64), PARAMETER :: MaxFraction       = 1.0d0       ! Maximum limit of fractional values
-    REAL(r64), PARAMETER :: MinFraction       = 0.0d0       ! Minimum limit of fractional values
-    REAL(r64), PARAMETER :: MaxSteamFlowRate  = 10.0d0      ! Maximum limit of steam volume flow rate in m3/s
-    REAL(r64), PARAMETER :: MinSteamFlowRate  = 0.0d0       ! Minimum limit of steam volume flow rate in m3/s
+    REAL, PARAMETER :: MaxFraction       = 1.0       ! Maximum limit of fractional values
+    REAL, PARAMETER :: MinFraction       = 0.0       ! Minimum limit of fractional values
+    REAL, PARAMETER :: MaxSteamFlowRate  = 10.0      ! Maximum limit of steam volume flow rate in m3/s
+    REAL, PARAMETER :: MinSteamFlowRate  = 0.0       ! Minimum limit of steam volume flow rate in m3/s
 !    INTEGER,PARAMETER :: MaxDistribSurfaces   = 20          ! Maximum number of surfaces that a baseboard heater can radiate to
     INTEGER,PARAMETER :: MinDistribSurfaces   = 1           ! Minimum number of surfaces that a baseboard heater can radiate to
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -306,7 +306,7 @@ CONTAINS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL(r64) :: AllFracsSummed        ! Sum of the fractions radiant
+    REAL :: AllFracsSummed        ! Sum of the fractions radiant
     INTEGER   :: BaseboardNum          ! Baseboard number
     INTEGER   :: NumAlphas             ! Number of Alphas for each GetobjectItem call
     INTEGER   :: NumNumbers            ! Number of Numbers for each GetobjectItem call
@@ -395,8 +395,8 @@ CONTAINS
 
     SteamBaseboard(BaseboardNum)%Offset = rNumericArgs(3)
        ! Set default convergence tolerance
-    IF (SteamBaseboard(BaseboardNum)%Offset .LE. 0.0d0) THEN
-        SteamBaseboard(BaseboardNum)%Offset = 0.001d0
+    IF (SteamBaseboard(BaseboardNum)%Offset .LE. 0.0) THEN
+        SteamBaseboard(BaseboardNum)%Offset = 0.001
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Steam//'="'//trim(cAlphaArgs(1))// &
           '", '//trim(cNumericFieldNames(6))//' was less than the allowable minimum.')
         CALL ShowContinueError('...reset to default value=[0.001].')
@@ -421,9 +421,9 @@ CONTAINS
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Steam//'="'//trim(cAlphaArgs(1))// &
           '", Fraction Radiant was higher than the allowable maximum.')
         SteamBaseboard(BaseboardNum)%FracRadiant = MaxFraction
-        SteamBaseboard(BaseboardNum)%FracConvect = 0.0d0
+        SteamBaseboard(BaseboardNum)%FracConvect = 0.0
       ELSE
-        SteamBaseboard(BaseboardNum)%FracConvect = 1.0d0 - AllFracsSummed
+        SteamBaseboard(BaseboardNum)%FracConvect = 1.0 - AllFracsSummed
       END IF
         ! Fraction of radiant heat addition to the people within the radiant heating capacity specified by the user
     SteamBaseboard(BaseboardNum)%FracDistribPerson = rNumericArgs(5)
@@ -462,7 +462,7 @@ CONTAINS
      ALLOCATE(SteamBaseboard(BaseboardNum)%SurfacePtr(SteamBaseboard(BaseboardNum)%TotSurfToDistrib))
      SteamBaseboard(BaseboardNum)%SurfacePtr=0
      ALLOCATE(SteamBaseboard(BaseboardNum)%FracDistribToSurf(SteamBaseboard(BaseboardNum)%TotSurfToDistrib))
-     SteamBaseboard(BaseboardNum)%FracDistribToSurf=0.0d0
+     SteamBaseboard(BaseboardNum)%FracDistribToSurf=0.0
 
      AllFracsSummed = SteamBaseboard(BaseboardNum)%FracDistribPerson
      Do SurfNum = 1,SteamBaseboard(BaseboardNum)%TotSurfToDistrib
@@ -493,12 +493,12 @@ CONTAINS
      AllFracsSummed = AllFracsSummed + SteamBaseboard(BaseboardNum)%FracDistribToSurf(SurfNum)
      End DO ! surfaces
 
-    IF (AllFracsSummed > (MaxFraction + 0.01d0) ) THEN
+    IF (AllFracsSummed > (MaxFraction + 0.01) ) THEN
       CALL ShowSevereError('Fraction of radiation distributed to surfaces sums up to greater than 1 for '//TRIM(cAlphaArgs(1)))
       CALL ShowContinueError('Occurs in Baseboard Heater='//TRIM(cAlphaArgs(1)))
            ErrorsFound = .TRUE.
     END IF
-      IF ( (AllFracsSummed < (MaxFraction - 0.01d0)) .AND. &               ! User didn't distribute all of the
+      IF ( (AllFracsSummed < (MaxFraction - 0.01)) .AND. &               ! User didn't distribute all of the
            (SteamBaseboard(BaseboardNum)%FracRadiant > MinFraction) ) THEN ! radiation warn that some will be lost
         CALL ShowWarningError(RoutineName//cCMO_BBRadiator_Steam//'="'//trim(cAlphaArgs(1))// &
           '", Summed radiant fractions for people + surface groups < 1.0')
@@ -609,8 +609,8 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
   INTEGER    :: SteamInletNode
   INTEGER    :: ZoneNode
   INTEGER    :: ZoneNum
-  REAL(r64)  :: StartEnthSteam
-  REAL(r64)  :: SteamDensity
+  REAL  :: StartEnthSteam
+  REAL  :: SteamDensity
   LOGICAL    :: errFlag
 
        ! Do the one time initializations
@@ -620,17 +620,17 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
       ALLOCATE(MyEnvrnFlag(NumSteamBaseboards))
       ALLOCATE(MySizeFlag(NumSteamBaseboards))
       ALLOCATE(ZeroSourceSumHATsurf(NumofZones))
-               ZeroSourceSumHATsurf = 0.0D0
+               ZeroSourceSumHATsurf = 0.0
       ALLOCATE(QBBSteamRadSource(NumSteamBaseboards))
-               QBBSteamRadSource = 0.0D0
+               QBBSteamRadSource = 0.0
       ALLOCATE(QBBSteamRadSrcAvg(NumSteamBaseboards))
-               QBBSteamRadSrcAvg = 0.0D0
+               QBBSteamRadSrcAvg = 0.0
       ALLOCATE(LastQBBSteamRadSrc(NumSteamBaseboards))
-               LastQBBSteamRadSrc = 0.0D0
+               LastQBBSteamRadSrc = 0.0
       ALLOCATE(LastSysTimeElapsed(NumSteamBaseboards))
-               LastSysTimeElapsed = 0.0D0
+               LastSysTimeElapsed = 0.0
       ALLOCATE(LastTimeStepSys(NumSteamBaseboards))
-               LastTimeStepSys = 0.0D0
+               LastTimeStepSys = 0.0
       ALLOCATE(SetLoopIndexFlag(NumSteamBaseboards))
       MyEnvrnFlag      = .TRUE.
       MySizeFlag       = .TRUE.
@@ -678,14 +678,14 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
     IF (BeginEnvrnFlag .and. MyEnvrnFlag(BaseboardNum)) THEN
        ! Initialize
       SteamInletNode = SteamBaseboard(BaseboardNum)%SteamInletNode
-      Node(SteamInletNode)%Temp  = 100.0d0
-      Node(SteamInletNode)%Press = 101325.0d0
-      SteamDensity   = GetSatDensityRefrig ('STEAM',Node(SteamInletNode)%Temp,1.0d0,Node(SteamInletNode)%FluidIndex, &
+      Node(SteamInletNode)%Temp  = 100.0
+      Node(SteamInletNode)%Press = 101325.0
+      SteamDensity   = GetSatDensityRefrig ('STEAM',Node(SteamInletNode)%Temp,1.0,Node(SteamInletNode)%FluidIndex, &
                                           'InitSteamCoil')
-      StartEnthSteam = GetSatEnthalpyRefrig('STEAM',Node(SteamInletNode)%Temp,1.0d0,Node(SteamInletNode)%FluidIndex, &
+      StartEnthSteam = GetSatEnthalpyRefrig('STEAM',Node(SteamInletNode)%Temp,1.0,Node(SteamInletNode)%FluidIndex, &
                                           'InitSteamCoil')
       SteamBaseboard(BaseboardNum)%SteamMassFlowRateMax = SteamDensity * SteamBaseboard(BaseboardNum)%SteamVolFlowRateMax
-      CALL InitComponentNodes(0.d0,SteamBaseboard(BaseboardNum)%SteamMassFlowRateMax, &
+      CALL InitComponentNodes(0.,SteamBaseboard(BaseboardNum)%SteamMassFlowRateMax, &
                                    SteamBaseboard(BaseboardNum)%SteamInletNode,       &
                                    SteamBaseboard(BaseboardNum)%SteamOutletNode,      &
                                    SteamBaseboard(BaseboardNum)%LoopNum,              &
@@ -697,12 +697,12 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
       Node(SteamInletNode)%HumRat                       = 0.0
 
           ! Initializes radiant sources
-      ZeroSourceSumHATsurf      =0.0D0
-      QBBSteamRadSource         =0.0D0
-      QBBSteamRadSrcAvg         =0.0D0
-      LastQBBSteamRadSrc        =0.0D0
-      LastSysTimeElapsed        =0.0D0
-      LastTimeStepSys           =0.0D0
+      ZeroSourceSumHATsurf      =0.0
+      QBBSteamRadSource         =0.0
+      QBBSteamRadSrcAvg         =0.0
+      LastQBBSteamRadSrc        =0.0
+      LastSysTimeElapsed        =0.0
+      LastTimeStepSys           =0.0
 
       MyEnvrnFlag(BaseboardNum) = .FALSE.
     END IF
@@ -714,10 +714,10 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
     IF (BeginTimeStepFlag .AND. FirstHVACIteration) THEN
       ZoneNum = SteamBaseboard(BaseboardNum)%ZonePtr
       ZeroSourceSumHATsurf(ZoneNum)    = SumHATsurf(ZoneNum)
-      QBBSteamRadSrcAvg(BaseboardNum)  = 0.0D0
-      LastQBBSteamRadSrc(BaseboardNum) = 0.0D0
-      LastSysTimeElapsed(BaseboardNum) = 0.0D0
-      LastTimeStepSys(BaseboardNum)    = 0.0D0
+      QBBSteamRadSrcAvg(BaseboardNum)  = 0.0
+      LastQBBSteamRadSrc(BaseboardNum) = 0.0
+      LastSysTimeElapsed(BaseboardNum) = 0.0
+      LastTimeStepSys(BaseboardNum)    = 0.0
     END IF
 
        ! Do the every time step initializations
@@ -729,14 +729,14 @@ SUBROUTINE InitSteamBaseboard(BaseboardNum, ControlledZoneNumSub, FirstHVACItera
     SteamBaseboard(BaseboardNum)%SteamInletPress    = Node(SteamInletNode)%Press
     SteamBaseboard(BaseboardNum)%SteamInletQuality  = Node(SteamInletNode)%Quality
 
-    SteamBaseboard(BaseboardNum)%TotPower   = 0.0d0
-    SteamBaseboard(BaseboardNum)%Power      = 0.0d0
-    SteamBaseboard(BaseboardNum)%ConvPower  = 0.0d0
-    SteamBaseboard(BaseboardNum)%RadPower   = 0.0d0
-    SteamBaseboard(BaseboardNum)%TotEnergy  = 0.0d0
-    SteamBaseboard(BaseboardNum)%Energy     = 0.0d0
-    SteamBaseboard(BaseboardNum)%ConvEnergy = 0.0d0
-    SteamBaseboard(BaseboardNum)%RadEnergy  = 0.0d0
+    SteamBaseboard(BaseboardNum)%TotPower   = 0.0
+    SteamBaseboard(BaseboardNum)%Power      = 0.0
+    SteamBaseboard(BaseboardNum)%ConvPower  = 0.0
+    SteamBaseboard(BaseboardNum)%RadPower   = 0.0
+    SteamBaseboard(BaseboardNum)%TotEnergy  = 0.0
+    SteamBaseboard(BaseboardNum)%Energy     = 0.0
+    SteamBaseboard(BaseboardNum)%ConvEnergy = 0.0
+    SteamBaseboard(BaseboardNum)%RadEnergy  = 0.0
 
   RETURN
 
@@ -782,14 +782,14 @@ SUBROUTINE SizeSteamBaseboard(BaseboardNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: PltSizSteamNum      ! Index of plant sizing object for 1st steam loop
-  REAL(r64) :: DesCoilLoad         ! Design heating load in the zone
-  REAL(r64) :: SteamInletTemp      ! Inlet steam temperature in C
-  REAL(r64) :: EnthSteamInDry      ! Enthalpy of dry steam
-  REAL(r64) :: EnthSteamOutWet     ! Enthalpy of wet steam
-  REAL(r64) :: LatentHeatSteam     ! latent heat of steam
-  REAL(r64) :: SteamDensity        ! Density of steam
-  REAL(r64) :: Cp                  ! local fluid specific heat
-  REAL(r64) :: tmpSteamVolFlowRateMax ! local temporary design steam flow
+  REAL :: DesCoilLoad         ! Design heating load in the zone
+  REAL :: SteamInletTemp      ! Inlet steam temperature in C
+  REAL :: EnthSteamInDry      ! Enthalpy of dry steam
+  REAL :: EnthSteamOutWet     ! Enthalpy of wet steam
+  REAL :: LatentHeatSteam     ! latent heat of steam
+  REAL :: SteamDensity        ! Density of steam
+  REAL :: Cp                  ! local fluid specific heat
+  REAL :: tmpSteamVolFlowRateMax ! local temporary design steam flow
   LOGICAL   :: ErrorsFound         ! If errors detected in input
 
 
@@ -812,15 +812,15 @@ SUBROUTINE SizeSteamBaseboard(BaseboardNum)
           CALL CheckZoneSizing(cCMO_BBRadiator_Steam,SteamBaseboard(BaseboardNum)%EquipID)
                  DesCoilLoad = CalcFinalZoneSizing(CurZoneEqNum)%DesHeatLoad * CalcFinalZoneSizing(CurZoneEqNum)%HeatSizingFactor
           IF (DesCoilLoad >= SmallLoad) THEN
-            SteamInletTemp  = 100.0d0
-            EnthSteamInDry  = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,1.0d0,  &
+            SteamInletTemp  = 100.0
+            EnthSteamInDry  = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,1.0,  &
                                 SteamBaseboard(BaseboardNum)%FluidIndex,'SizeSteamBaseboard')
-            EnthSteamOutWet = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,0.0d0,  &
+            EnthSteamOutWet = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,0.0,  &
                               SteamBaseboard(BaseboardNum)%FluidIndex,'SizeSteamBaseboard')
             LatentHeatSteam = EnthSteamInDry - EnthSteamOutWet
-            SteamDensity    = GetSatDensityRefrig('STEAM',SteamInletTemp,1.0d0,  &
+            SteamDensity    = GetSatDensityRefrig('STEAM',SteamInletTemp,1.0,  &
                               SteamBaseboard(BaseboardNum)%FluidIndex,'SizeSteamBaseboard')
-            Cp = GetSatSpecificHeatRefrig('STEAM',SteamInletTemp,0.0d0,SteamBaseboard(BaseboardNum)%FluidIndex, &
+            Cp = GetSatSpecificHeatRefrig('STEAM',SteamInletTemp,0.0,SteamBaseboard(BaseboardNum)%FluidIndex, &
                                               'SizeSteamBaseboard')
 
             SteamBaseboard(BaseboardNum)%SteamVolFlowRateMax = DesCoilLoad / &
@@ -880,7 +880,7 @@ END SUBROUTINE SizeSteamBaseboard
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER                :: BaseboardNum
-    REAL(r64), INTENT(OUT) :: LoadMet
+    REAL, INTENT(OUT) :: LoadMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -892,17 +892,17 @@ END SUBROUTINE SizeSteamBaseboard
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER   :: ZoneNum
-    REAL(r64) :: RadHeat
-    REAL(r64) :: SteamBBHeat
-    REAL(r64) :: SteamInletTemp
-    REAL(r64) :: SteamOutletTemp
-    REAL(r64) :: SteamMassFlowRate
-    REAL(r64) :: SubCoolDeltaT
-    REAL(r64) :: QZnReq
-    REAL(r64) :: EnthSteamInDry
-    REAL(r64) :: EnthSteamOutWet
-    REAL(r64) :: LatentHeatSteam
-    REAL(r64) :: Cp
+    REAL :: RadHeat
+    REAL :: SteamBBHeat
+    REAL :: SteamInletTemp
+    REAL :: SteamOutletTemp
+    REAL :: SteamMassFlowRate
+    REAL :: SubCoolDeltaT
+    REAL :: QZnReq
+    REAL :: EnthSteamInDry
+    REAL :: EnthSteamOutWet
+    REAL :: LatentHeatSteam
+    REAL :: Cp
 
     ZoneNum = SteamBaseboard(BaseboardNum)%ZonePtr
     QZnReq  = ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToHeatSP
@@ -911,17 +911,17 @@ END SUBROUTINE SizeSteamBaseboard
     SteamMassFlowRate = Node(SteamBaseboard(BaseboardNum)%SteamInletNode)%MassFlowRate
     SubCoolDeltaT     = SteamBaseboard(BaseboardNum)%DegOfSubCooling
 
-    IF (QZnReq > 0.0d0 &
+    IF (QZnReq > 0.0 &
         .AND. .NOT. DeadbandOrSetback(ZoneNum) &
-        .AND. SteamMassFlowRate > 0.0d0 &
+        .AND. SteamMassFlowRate > 0.0 &
         .AND. GetCurrentScheduleValue(SteamBaseboard(BaseboardNum)%SchedPtr) > 0) THEN
        ! Unit is on
-    EnthSteamInDry  = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,1.0d0, &
+    EnthSteamInDry  = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,1.0, &
                       SteamBaseboard(BaseboardNum)%FluidIndex,'CalcSteamBaseboard')
-    EnthSteamOutWet = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,0.0d0, &
+    EnthSteamOutWet = GetSatEnthalpyRefrig('STEAM',SteamInletTemp,0.0, &
                       SteamBaseboard(BaseboardNum)%FluidIndex,'CalcSteamBaseboard')
     LatentHeatSteam = EnthSteamInDry-EnthSteamOutWet
-    Cp = GetSatSpecificHeatRefrig('STEAM',SteamInletTemp,0.0d0,SteamBaseboard(BaseboardNum)%FluidIndex, &
+    Cp = GetSatSpecificHeatRefrig('STEAM',SteamInletTemp,0.0,SteamBaseboard(BaseboardNum)%FluidIndex, &
                                   'CalcSteamBaseboard')
     SteamBBHeat = SteamMassFlowRate*(LatentHeatSteam+SubCoolDeltaT*Cp) ! Baseboard heating rate
     SteamOutletTemp = SteamInletTemp - SubCoolDeltaT ! Outlet temperature of steam
@@ -950,15 +950,15 @@ END SUBROUTINE SizeSteamBaseboard
               + (RadHeat * SteamBaseboard(BaseboardNum)%FracDistribPerson)
     SteamBaseboard(BaseboardNum)%SteamOutletEnthalpy = SteamBaseboard(BaseboardNum)%SteamInletEnthalpy &
                                                         - SteamBBHeat / SteamMassFlowRate
-    SteamBaseboard(BaseboardNum)%SteamOutletQuality  = 0.0d0
+    SteamBaseboard(BaseboardNum)%SteamOutletQuality  = 0.0
     ELSE
       SteamOutletTemp   = SteamInletTemp
-      SteamBBHeat       = 0.0d0
-      LoadMet           = 0.0d0
-      RadHeat           = 0.0d0
-      SteamMassFlowRate = 0.0d0
-      QBBSteamRadSource(BaseboardNum) = 0.0d0
-      SteamBaseboard(BaseboardNum)%SteamOutletQuality  = 0.0d0
+      SteamBBHeat       = 0.0
+      LoadMet           = 0.0
+      RadHeat           = 0.0
+      SteamMassFlowRate = 0.0
+      QBBSteamRadSource(BaseboardNum) = 0.0
+      SteamBaseboard(BaseboardNum)%SteamOutletQuality  = 0.0
       SteamBaseboard(BaseboardNum)%SteamOutletEnthalpy = SteamBaseboard(BaseboardNum)%SteamInletEnthalpy
     END IF
 
@@ -1106,7 +1106,7 @@ END SUBROUTINE SizeSteamBaseboard
 
        ! If it was allocated, then we have to check to see if this was running at all...
     DO BaseboardNum = 1, NumSteamBaseboards
-      IF (QBBSteamRadSrcAvg(BaseboardNum) /= 0.0D0) THEN
+      IF (QBBSteamRadSrcAvg(BaseboardNum) /= 0.0) THEN
           SteamBaseboardSysOn = .TRUE.
         EXIT !DO loop
       END IF
@@ -1156,7 +1156,7 @@ SUBROUTINE DistributeBBSteamRadGains
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64), PARAMETER :: SmallestArea = 0.001d0   ! Smallest area in meters squared (to avoid a divide by zero)
+  REAL, PARAMETER :: SmallestArea = 0.001   ! Smallest area in meters squared (to avoid a divide by zero)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1169,12 +1169,12 @@ SUBROUTINE DistributeBBSteamRadGains
   INTEGER   :: BaseboardNum    ! Counter for the baseboard
   INTEGER   :: SurfNum         ! Pointer to the Surface derived type
   INTEGER   :: ZoneNum         ! Pointer to the Zone derived type
-  REAL(R64) :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
+  REAL :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
 
           ! FLOW:
           ! Initialize arrays
-    QSteamBaseboardSurf     = 0.0D0
-    QSteamBaseboardToPerson = 0.0D0
+    QSteamBaseboardSurf     = 0.0
+    QSteamBaseboardToPerson = 0.0
 
     DO BaseboardNum = 1, NumSteamBaseboards
 
@@ -1261,7 +1261,7 @@ END SUBROUTINE DistributeBBSteamRadGains
     RETURN
   END SUBROUTINE ReportSteamBaseboard
 
-REAL(r64) FUNCTION SumHATsurf(ZoneNum)
+REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1292,7 +1292,7 @@ REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL(r64)           :: Area        ! Effective surface area
+  REAL           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0

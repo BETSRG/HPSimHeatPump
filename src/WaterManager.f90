@@ -217,13 +217,13 @@ SUBROUTINE GetWaterManagerInput
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
-  REAL(r64)                      :: tmpMax = 0.0
-  REAL(r64)                      :: tmpMin = 0.0
-  REAL(r64)                      :: tmpNumerator = 0.0
-  REAL(r64)                      :: tmpArea = 0.0
-  REAL(r64)                      :: tmpDenominator = 0.0
+  REAL                      :: tmpMax = 0.0
+  REAL                      :: tmpMin = 0.0
+  REAL                      :: tmpNumerator = 0.0
+  REAL                      :: tmpArea = 0.0
+  REAL                      :: tmpDenominator = 0.0
   INTEGER                        :: thisSurf = 0
   INTEGER                        :: NumIrrigation
 
@@ -260,7 +260,7 @@ If( (MyOneTimeFlag).AND. (.NOT.( WaterSystemGetInputCalled)) ) THEN  !big block 
   ALLOCATE(cNumericFieldNames(MaxNumNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(MaxNumNumbers))
-  rNumericArgs=0.0d0
+  rNumericArgs=0.0
   ALLOCATE(lNumericFieldBlanks(MaxNumNumbers))
   lNumericFieldBlanks=.false.
 
@@ -699,13 +699,13 @@ If( (MyOneTimeFlag).AND. (.NOT.( WaterSystemGetInputCalled)) ) THEN  !big block 
 
     ! If we later add a designannualirrigation and a nominalannualirrigation variable (for scaling) those
     ! would be assigned here... as with the Rainfall...
-    Irrigation%IrrigationThreshold=0.4d0
+    Irrigation%IrrigationThreshold=0.4
     IF (Irrigation%ModeID == IrrSmartSched .and. NumNumbers > 0) THEN
-      IF (rNumericArgs(1) > 100.d0 .or. rNumericArgs(1) < 0.0d0) THEN
+      IF (rNumericArgs(1) > 100. .or. rNumericArgs(1) < 0.0) THEN
         CALL ShowSevereError('Irrigation threshold for '//TRIM(cCurrentModuleObject)//' object has values > 100 or < 0.')
         errorsFound = .true.
       ELSE
-        Irrigation%IrrigationThreshold=rNumericArgs(1)/100.d0
+        Irrigation%IrrigationThreshold=rNumericArgs(1)/100.
       endif
     ENDIF
 
@@ -851,8 +851,8 @@ SUBROUTINE UpdatePrecipitation
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)  :: schedRate
-  REAL(r64)  :: ScaleFactor
+  REAL  :: schedRate
+  REAL  :: ScaleFactor
 
   If (RainFall%ModeID == RainSchedDesign) then
     schedRate = GetCurrentScheduleValue(RainFall%RainSchedID) ! m/hr
@@ -904,8 +904,8 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL(r64)  :: schedRate
-!REAL(r64)  :: ScaleFactor
+REAL  :: schedRate
+!REAL  :: ScaleFactor
 
 Irrigation%ScheduledAmount =  0.0
 
@@ -1003,25 +1003,25 @@ SUBROUTINE CalcWaterStorageTank(TankNum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: OrigVdotDemandRequest = 0.0
-  REAL(r64)    :: TotVdotDemandAvail = 0.0
-  REAL(r64)    :: OrigVolDemandRequest = 0.0
-  REAL(r64)    :: TotVolDemandAvail = 0.0
-  REAL(r64)    :: OrigVdotSupplyAvail = 0.0
-  REAL(r64)    :: TotVdotSupplyAvail = 0.0
-  REAL(r64)    :: TotVolSupplyAvail = 0.0
-!  REAL(r64)    :: TotVolSupplyAllow = 0.0
-  REAL(r64)    :: overflowVdot = 0.0
-  REAL(r64)    :: overflowVol = 0.0
-  REAL(r64)    :: overflowTwater = 0.0
-  REAL(r64)    :: NetVdotAdd = 0.0
-  REAL(r64)    :: NetVolAdd = 0.0
-  REAL(r64)    :: FillVolRequest = 0.0
-  REAL(r64)    :: TotVolAllowed = 0.0
-  REAL(r64)    :: AvailVolume = 0.0
-  REAL(r64)    :: underflowVdot = 0.0
-  REAL(r64)    :: VolumePredict = 0.0
-  REAL(r64)    :: OverFillVolume = 0.0
+  REAL    :: OrigVdotDemandRequest = 0.0
+  REAL    :: TotVdotDemandAvail = 0.0
+  REAL    :: OrigVolDemandRequest = 0.0
+  REAL    :: TotVolDemandAvail = 0.0
+  REAL    :: OrigVdotSupplyAvail = 0.0
+  REAL    :: TotVdotSupplyAvail = 0.0
+  REAL    :: TotVolSupplyAvail = 0.0
+!  REAL    :: TotVolSupplyAllow = 0.0
+  REAL    :: overflowVdot = 0.0
+  REAL    :: overflowVol = 0.0
+  REAL    :: overflowTwater = 0.0
+  REAL    :: NetVdotAdd = 0.0
+  REAL    :: NetVolAdd = 0.0
+  REAL    :: FillVolRequest = 0.0
+  REAL    :: TotVolAllowed = 0.0
+  REAL    :: AvailVolume = 0.0
+  REAL    :: underflowVdot = 0.0
+  REAL    :: VolumePredict = 0.0
+  REAL    :: OverFillVolume = 0.0
 
   If (BeginTimeStepFlag) then
     ! initializations are done in UpdateWaterManager
@@ -1526,8 +1526,8 @@ SUBROUTINE CalcRainCollector(RainColNum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)    :: LossFactor
-  REAL(r64)    :: VdotAvail
+  REAL    :: LossFactor
+  REAL    :: VdotAvail
 
 
  !If (.NOT.(IsRain)) Then ! is it raining now? No don't use this flag since precip schedule might differ from weather file
@@ -1612,9 +1612,9 @@ SUBROUTINE CalcGroundwaterWell(WellNum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: VdotDelivered
-!  REAL(r64) :: VdotRequest
-  REAL(r64) :: PumpPower
+  REAL :: VdotDelivered
+!  REAL :: VdotRequest
+  REAL :: PumpPower
 
 
   If (BeginTimeStepFlag) then
