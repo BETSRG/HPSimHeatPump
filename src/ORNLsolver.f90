@@ -149,17 +149,22 @@
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
+    !TWiC=TaiC-5 !RS: Debugging: Trying a different wet bulb value
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
-    CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress, TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+    CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
     
-    IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
-        TsiCmp = TaiE - 10 !Correct initial guess
+    IF ((TaiE*1.8+32)-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
+        TsiCmp = (TaiE*1.8+32) - 10 !Correct initial guess
     END IF
 
-    IF (TsoCmp-TaiC .LT. 10) THEN     ! VL_Magic_Number number 10 ....
-        TsoCmp = TaiC + 10 !Correct initial guess	! VL_Magic_Number
+    IF (TsoCmp-(TaiC*1.8+32) .LT. 10) THEN     ! VL_Magic_Number number 10 ....
+        TsoCmp = (TaiC*1.8+32) + 10 !Correct initial guess	! VL_Magic_Number
+    !ELSEIF (TaiC .LT. 0) THEN   !RS: Debugging: For the time when TaiC is negative
+    !    IF (TsoCmp-ABS(TaiC) .GT. 100) THEN !RS: Debugging: No idea here!
+    !        TsoCmp=TaiC+50
+    !    END IF
     END IF
 
     IF (TsoCmp .LE. TsiCmp) THEN
@@ -283,6 +288,9 @@
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RHiE=AirProp(3)               ! VL_Index_Replace
         RhoAiE=AirProp(7)             ! VL_Index_Replace
+        IF (RHiE .LT. 0) THEN   !RS: Debugging: Trying to avoid negative relative humidities
+            RHiE=0
+        END IF
 
         EvapIN(5)=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C   ! VL_Index_Replace
         EvapIN(6)=RHiE            !Air side inlet relative humidity                   ! VL_Index_Replace
