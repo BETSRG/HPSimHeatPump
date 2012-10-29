@@ -679,15 +679,21 @@
         IF (ErrorFlag .NE. NOERROR) THEN
             OUT(24)=ErrorFlag
             CALL Condenser_Helper_1
+            
+                !IF (.NOT. ALLOCATED(DisLnSeg)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
+                !    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
+                !    CALL InitCondenserCoil(CoilType)
+                !END IF
+                
             RETURN
         END IF
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
+    END IF
         
-    !ELSEIF (ALLOCATED(DisLnSeg)) THEN
-        !Everything okay
-    ELSEIF (.NOT. ALLOCATED(DisLnSeg)) THEN
+    !ELSEIF (.NOT. ALLOCATED(DisLnSeg)) THEN
+    IF (.NOT. ALLOCATED(DisLnSeg)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
     ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
     !ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
     !ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
@@ -3265,10 +3271,14 @@ END IF
 
     IF (IsSimpleCoil .EQ. 1) THEN
         DO I=1, NumOfCkts
-            DEALLOCATE(Ckt(I)%Tube(1)%Seg)
-            DEALLOCATE(Ckt(I)%Tube)
+            IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: These still aren't always allocated
+                DEALLOCATE(Ckt(I)%Tube(1)%Seg)
+                DEALLOCATE(Ckt(I)%Tube)
+            END IF
         END DO
-        DEALLOCATE(Ckt)
+        IF (ALLOCATED(DisLnSeg)) THEN   !RS: Debugging: This isn't always allocated
+            DEALLOCATE(Ckt)
+        END IF
         IF (ALLOCATED(DisLnSeg)) THEN
             DEALLOCATE(DisLnSeg) !Discharge line
         END IF

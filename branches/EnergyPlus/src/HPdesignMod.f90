@@ -305,9 +305,7 @@
 
         !Actual mass flow rate
         XMaC=CFMcnd*RhoAiC
-        !XMaC=CFMcnd*StdRhoAir   !RS: Debugging: Trying to see if StdRhoAir changes the iterating conditions at all
         XMaE=CFMevp*RhoAiE
-        !XMaE=CFMevp*StdRhoAir   !RS: Debugging: Trying to see if StdRhoAir changes the iterating conditions at all
 
         TSOCMP = ZERO3(TSAT1,CNDNSR,1E-3,CNDCON,STEP,DIFFER,IERROR)
         !CALL SolveRegulaFalsi(CNDCON, MaxIter, Flag, TSOCMP, CNDNSR, TSAT1, STEP,IError)
@@ -374,7 +372,7 @@
         END IF
         
         EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
-!        EvapIN(2)=CompIN(1)       !Compressor inlet pressure    !RS: Debugging: This line was commented out for some reason. Commenting back out for now
+        !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
         EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
         EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
         EvapIN(5)=(TAIIEI-32)/1.8 !Air side inlet temp. C
