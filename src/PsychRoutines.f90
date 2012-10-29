@@ -1212,7 +1212,7 @@ FUNCTION PsyRhFnTdbWPb(TDB,dW,PB,calledfrom) RESULT(RHValue)
     RETURN
 END FUNCTION PsyRhFnTdbWPb
 
-SUBROUTINE PsyRhFnTdbWPb2(TDB,dW,PB,RHValue,calledfrom)
+SUBROUTINE PsyRhFnTdbWPb2(TDBR,dWR,PBR,RHValueR,calledfrom)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard J. Liesen
@@ -1236,11 +1236,24 @@ SUBROUTINE PsyRhFnTdbWPb2(TDB,dW,PB,RHValue,calledfrom)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-      REAL, intent(in) :: TDB   ! dry-bulb temperature {C}
-      REAL, intent(in) :: dW     ! humidity ratio
-      REAL, intent(in) :: PB    ! barometric pressure {Pascals}
+      !REAL(r64), intent(in) :: TDB   ! dry-bulb temperature {C}
+      !REAL(r64), intent(in) :: dW     ! humidity ratio
+      !REAL(r64), intent(in) :: PB    ! barometric pressure {Pascals}
+      !character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
+      !REAL(r64)        :: RHValue ! relative humidity value (0.0-1.0)
+      
+      !RS: Debugging
+      
+      REAL(r64) :: TDB   ! dry-bulb temperature {C}
+      REAL(r64) :: dW     ! humidity ratio
+      REAL(r64) :: PB    ! barometric pressure {Pascals}
       character(len=*), intent(in), optional :: calledfrom  ! routine this function was called from (error messages)
-      REAL        :: RHValue ! relative humidity value (0.0-1.0)
+      REAL(r64)        :: RHValue ! relative humidity value (0.0-1.0)
+      
+      REAL, intent(in) :: TDBR
+      REAL, intent(in) :: dWR
+      REAL, intent(in) :: PBR
+      REAL  :: RHValueR
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1252,9 +1265,15 @@ SUBROUTINE PsyRhFnTdbWPb2(TDB,dW,PB,RHValue,calledfrom)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL U    ! Degree of Saturation
-      REAL PWS  ! Pressure -- saturated for pure water
-      REAL W   ! humidity ratio
+      REAL(r64) U    ! Degree of Saturation
+      REAL(r64) PWS  ! Pressure -- saturated for pure water
+      REAL(r64) W   ! humidity ratio
+      
+      !RS: Debugging
+      
+      TDB=TDBR
+      dW=dWR
+      PB=PBR
 
         IF (PRESENT(calledfrom)) THEN
           PWS=PsyPsatFnTemp(TDB,calledfrom)
@@ -1326,6 +1345,9 @@ SUBROUTINE PsyRhFnTdbWPb2(TDB,dW,PB,RHValue,calledfrom)
         ENDIF    ! RHValue in proper range
 
      ! RHValue is the result
+     
+     !RS: Debugging
+     RHValueR=RHValue
 
     RETURN
 END SUBROUTINE PsyRhFnTdbWPb2
