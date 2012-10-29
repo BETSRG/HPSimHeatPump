@@ -152,7 +152,8 @@
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
     CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress, TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
-
+    RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
+    
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
     END IF
