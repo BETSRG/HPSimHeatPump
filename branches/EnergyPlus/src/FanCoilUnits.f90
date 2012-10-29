@@ -89,14 +89,14 @@ TYPE FanCoilData
   REAL (r64)                   :: PLR = 0            ! Part Load Ratio, fraction of time step fancoil is on
   INTEGER                      :: MaxIterIndexH = 0  ! Maximum iterations exceeded for heating
   INTEGER                      :: MaxIterIndexC = 0  ! Maximum iterations exceeded for cooling
-  REAL                    :: FanAirVolFlow=0.0  ! m3/s
-  REAL                    :: MaxAirVolFlow=0.0  ! m3/s
-  REAL                    :: MaxAirMassFlow=0.0 ! kg/s
-  REAL                    :: LowSpeedRatio=0.0  ! Low speed fan supply air flow ratio
-  REAL                    :: MedSpeedRatio=0.0  ! Medium speed fan supply air flow ratio
+  REAL(r64)                    :: FanAirVolFlow=0.0  ! m3/s
+  REAL(r64)                    :: MaxAirVolFlow=0.0  ! m3/s
+  REAL(r64)                    :: MaxAirMassFlow=0.0 ! kg/s
+  REAL(r64)                    :: LowSpeedRatio=0.0  ! Low speed fan supply air flow ratio
+  REAL(r64)                    :: MedSpeedRatio=0.0  ! Medium speed fan supply air flow ratio
   REAL (r64)                   :: SpeedFanRatSel=0.0 ! Speed fan ratio determined by fan speed selection at each timestep
-  REAL                    :: OutAirVolFlow =0.0 ! m3/s
-  REAL                    :: OutAirMassFlow=0.0 ! kg/s
+  REAL(r64)                    :: OutAirVolFlow =0.0 ! m3/s
+  REAL(r64)                    :: OutAirMassFlow=0.0 ! kg/s
   INTEGER                      :: AirInNode     =0   ! inlet air node number
   INTEGER                      :: AirOutNode    =0   ! outlet air node number
   INTEGER                      :: OutsideAirNode=0   ! outside air node number
@@ -128,11 +128,11 @@ TYPE FanCoilData
   INTEGER                      :: CWCompNum           =0   ! index for plant component for chilled water coil
   INTEGER                      :: ControlCompTypeNum  = 0
   INTEGER                      :: CompErrIndex        = 0
-  REAL                    :: MaxColdWaterVolFlow =0.0 ! m3/s
-  REAL                    :: MaxColdWaterFlow    =0.0 ! kg/s
-  REAL                    :: MinColdWaterVolFlow =0.0 ! m3/s
-  REAL                    :: MinColdWaterFlow    =0.0 ! kg/s
-  REAL                    :: ColdControlOffset   =0.0 ! control tolerance
+  REAL(r64)                    :: MaxColdWaterVolFlow =0.0 ! m3/s
+  REAL(r64)                    :: MaxColdWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: MinColdWaterVolFlow =0.0 ! m3/s
+  REAL(r64)                    :: MinColdWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: ColdControlOffset   =0.0 ! control tolerance
   CHARACTER(len=MaxNameLength) :: HCoilName           =' ' ! name of heating coil
   INTEGER                      :: HCoilName_Index = 0
   CHARACTER(len=MaxNameLength) :: HCoilType    =' '  ! type of heating coil:
@@ -143,20 +143,20 @@ TYPE FanCoilData
   INTEGER                      :: HWLoopSide          =0   ! index for plant loop side for hot water coil
   INTEGER                      :: HWBranchNum         =0   ! index for plant branch for hot water coil
   INTEGER                      :: HWCompNum           =0   ! index for plant component for hot water coil
-  REAL                    :: MaxHotWaterVolFlow  =0.0 ! m3/s
-  REAL                    :: MaxHotWaterFlow     =0.0 ! kg/s
-  REAL                    :: MinHotWaterVolFlow  =0.0 ! m3/s
-  REAL                    :: MinHotWaterFlow     =0.0 ! kg/s
-  REAL                    :: HotControlOffset    =0.0 ! control tolerance
+  REAL(r64)                    :: MaxHotWaterVolFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MaxHotWaterFlow     =0.0 ! kg/s
+  REAL(r64)                    :: MinHotWaterVolFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MinHotWaterFlow     =0.0 ! kg/s
+  REAL(r64)                    :: HotControlOffset    =0.0 ! control tolerance
   ! Report data
-  REAL                    :: HeatPower           =0.0 ! unit heating output in watts
-  REAL                    :: HeatEnergy          =0.0 ! unit heating output in J
-  REAL                    :: TotCoolPower        =0.0 ! unit total cooling power output in watts
-  REAL                    :: TotCoolEnergy       =0.0 ! unit total cooling energy output in joules
-  REAL                    :: SensCoolPower       =0.0 ! unit sensible cooling power output in watts
-  REAL                    :: SensCoolEnergy      =0.0 ! unit sensible cooling energy output in joules
-  REAL                    :: ElecPower           =0.0 ! unit electric power consumption in watts
-  REAL                    :: ElecEnergy          =0.0 ! unit electiric energy consumption in joules
+  REAL(r64)                    :: HeatPower           =0.0 ! unit heating output in watts
+  REAL(r64)                    :: HeatEnergy          =0.0 ! unit heating output in J
+  REAL(r64)                    :: TotCoolPower        =0.0 ! unit total cooling power output in watts
+  REAL(r64)                    :: TotCoolEnergy       =0.0 ! unit total cooling energy output in joules
+  REAL(r64)                    :: SensCoolPower       =0.0 ! unit sensible cooling power output in watts
+  REAL(r64)                    :: SensCoolEnergy      =0.0 ! unit sensible cooling energy output in joules
+  REAL(r64)                    :: ElecPower           =0.0 ! unit electric power consumption in watts
+  REAL(r64)                    :: ElecEnergy          =0.0 ! unit electiric energy consumption in joules
 END TYPE FanCoilData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -212,8 +212,8 @@ SUBROUTINE SimFanCoilUnit(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOutput
   CHARACTER(len=*), INTENT (IN)  :: CompName            ! name of the fan coil unit
   INTEGER,          INTENT (IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT (IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL,        INTENT (OUT) :: PowerMet            ! Sensible power supplied (W)
-  REAL,        INTENT (OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL(r64),        INTENT (OUT) :: PowerMet            ! Sensible power supplied (W)
+  REAL(r64),        INTENT (OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT):: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -348,7 +348,7 @@ SUBROUTINE GetFanCoilUnits
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers         ! Numeric input items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers         ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks    ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks  ! Logical array, numeric field input BLANK = .true.
   INTEGER                              :: TotalArgs=0     ! Total number of alpha and numeric arguments (max) for a
@@ -455,8 +455,8 @@ DO FanCoilIndex = 1,Num4PipeFanCoils
          TRIM(TrimSigDigits(FanCoil(FanCoilNum)%MedSpeedRatio,5))//' ')
     CALL ShowContinueError('... Fan Coil Unit low speed supply air flow ratio and medium speed '//  &
          'supply air flow ratio set to default values')
-    FanCoil(FanCoilNum)%LowSpeedRatio = 1./3.
-    FanCoil(FanCoilNum)%MedSpeedRatio = 2./3.
+    FanCoil(FanCoilNum)%LowSpeedRatio = 1.d0/3.d0
+    FanCoil(FanCoilNum)%MedSpeedRatio = 2.d0/3.d0
   END IF
 
   FanCoil(FanCoilNum)%OutAirVolFlow = Numbers(4)
@@ -638,11 +638,11 @@ DO FanCoilIndex = 1,Num4PipeFanCoils
     END SELECT
   ENDIF
   ! Set defaults for convergence tolerance
-  IF (FanCoil(FanCoilNum)%ColdControlOffset .LE. 0.0) THEN
-    FanCoil(FanCoilNum)%ColdControlOffset = 0.001
+  IF (FanCoil(FanCoilNum)%ColdControlOffset .LE. 0.0d0) THEN
+    FanCoil(FanCoilNum)%ColdControlOffset = 0.001d0
   END IF
-  IF (FanCoil(FanCoilNum)%HotControlOffset .LE. 0.0) THEN
-    FanCoil(FanCoilNum)%HotControlOffset = 0.001
+  IF (FanCoil(FanCoilNum)%HotControlOffset .LE. 0.0d0) THEN
+    FanCoil(FanCoilNum)%HotControlOffset = 0.001d0
   END IF
 
   ! Fan Coil unit air inlet node must be the same as a zone exhaust node and the OA Mixer return node
@@ -796,13 +796,13 @@ SUBROUTINE InitFanCoilUnits(FanCoilNum)
   INTEGER             :: ColdConNode ! hot water control node number in fan coil loop
   INTEGER             :: OutsideAirNode ! outside air node number in fan coil loop
   INTEGER             :: AirRelNode ! relief air node number in fan coil loop
-  REAL           :: RhoAir ! air density at InNode
+  REAL(r64)           :: RhoAir ! air density at InNode
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   Integer             :: Loop
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
-  REAL           :: rho
+  REAL(r64)           :: rho
   LOGICAL             :: errFlag
 
           ! FLOW:
@@ -893,7 +893,7 @@ IF (BeginEnvrnFlag .AND. MyEnvrnFlag(FanCoilNum) .AND. .NOT. MyPlantScanFlag(Fan
   FanCoil(FanCoilNum)%MaxAirMassFlow = RhoAir*FanCoil(FanCoilNum)%MaxAirVolFlow
   FanCoil(FanCoilNum)%OutAirMassFlow = RhoAir*FanCoil(FanCoilNum)%OutAirVolFlow
   rho = GetDensityGlycol(PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidName, &
-                         60., &
+                         60.d0, &
                          PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidIndex, &
                          'InitFanCoilUnits')
 
@@ -1022,19 +1022,19 @@ SUBROUTINE SizeFanCoilUnit(FanCoilNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
-  REAL           :: CoilInTemp    ! design inlet air temperature for coil [C]
-  REAL           :: CoilOutTemp   ! design outlet air temperature for coil [C]
-  REAL           :: CoilOutHumRat ! design inlet air humidity ratio for coil [kg/kg]
-  REAL           :: CoilInHumRat  ! design outlet air humidity ratio for coil [kg/kg]
+  REAL(r64)           :: CoilInTemp    ! design inlet air temperature for coil [C]
+  REAL(r64)           :: CoilOutTemp   ! design outlet air temperature for coil [C]
+  REAL(r64)           :: CoilOutHumRat ! design inlet air humidity ratio for coil [kg/kg]
+  REAL(r64)           :: CoilInHumRat  ! design outlet air humidity ratio for coil [kg/kg]
   LOGICAL             :: ErrorsFound   ! TRUE if errors foind during sizing
-  REAL           :: DesCoilLoad   ! coil load used for sizing [W]
-  REAL           :: FCOAFrac      ! design outside air fraction for the fan coil unit 
+  REAL(r64)           :: DesCoilLoad   ! coil load used for sizing [W]
+  REAL(r64)           :: FCOAFrac      ! design outside air fraction for the fan coil unit 
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   CHARACTER(len=MaxNameLength) :: CoolingCoilName
   CHARACTER(len=MaxNameLength) :: CoolingCoilType
-  REAL   :: rho
-  REAL   :: Cp
+  REAL(r64)   :: rho
+  REAL(r64)   :: Cp
 
 
 
@@ -1120,12 +1120,12 @@ SUBROUTINE SizeFanCoilUnit(FanCoilNum)
       IF (PltSizHeatNum > 0) THEN
         CALL CheckZoneSizing(FanCoil(FanCoilNum)%UnitType, FanCoil(FanCoilNum)%Name)
         IF (FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow > 0.0) THEN
-          FCOAFrac = MIN(FanCoil(FanCoilNum)%OutAirVolFlow / FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow, 1.0)
+          FCOAFrac = MIN(FanCoil(FanCoilNum)%OutAirVolFlow / FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow, 1.0d0)
         ELSE
           FCOAFrac = 0.0
         END IF
         CoilInTemp = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutTempAtHeatPeak + &
-                     (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak
+                     (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak
         CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%HeatDesTemp
         CoilOutHumRat =FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat 
         DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
@@ -1133,13 +1133,13 @@ SUBROUTINE SizeFanCoilUnit(FanCoilNum)
                           * (CoilOutTemp-CoilInTemp)
         IF (DesCoilLoad >= SmallLoad) THEN
           rho = GetDensityGlycol( PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidName, &
-                         60., &
+                         60.d0, &
                          PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidIndex, &
                          'SizeFanCoilUnit')
 
 
           Cp  = GetSpecificHeatGlycol(PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidName, &
-                         60., &
+                         60.d0, &
                          PlantLoop(FanCoil(FanCoilNum)%HWLoopNum)%FluidIndex, &
                          'SizeFanCoilUnit')
 
@@ -1182,18 +1182,18 @@ SUBROUTINE SizeFanCoilUnit(FanCoilNum)
       IF (PltSizCoolNum > 0) THEN
         CALL CheckZoneSizing(FanCoil(FanCoilNum)%UnitType, FanCoil(FanCoilNum)%Name)
         IF (FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow > 0.0) THEN
-          FCOAFrac = MIN(FanCoil(FanCoilNum)%OutAirVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0)
+          FCOAFrac = MIN(FanCoil(FanCoilNum)%OutAirVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0d0)
         ELSE
           FCOAFrac = 0.0
         END IF
         CoilInTemp = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutTempAtCoolPeak + &
-                       (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtCoolPeak
+                       (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtCoolPeak
         CoilInHumRat = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutHumRatAtCoolPeak + &
-                        (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtCoolPeak
+                        (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtCoolPeak
         CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%CoolDesTemp
         CoilOutHumRat = FinalZoneSizing(CurZoneEqNum)%CoolDesHumRat
         IF (CoilOutHumRat > CoilInHumRat) THEN
-          IF (CoilInHumRat > 0.016) THEN
+          IF (CoilInHumRat > 0.016d0) THEN
             CoilOutHumRat = 0.5*CoilInHumRat
           ELSE
             CoilOutHumRat = CoilInHumRat
@@ -1204,12 +1204,12 @@ SUBROUTINE SizeFanCoilUnit(FanCoilNum)
         IF (DesCoilLoad >= SmallLoad) THEN
 
           rho = GetDensityGlycol( PlantLoop(FanCoil(FanCoilNum)%CWLoopNum)%FluidName, &
-                         5., &
+                         5.d0, &
                          PlantLoop(FanCoil(FanCoilNum)%CWLoopNum)%FluidIndex, &
                          'SizeFanCoilUnit')
 
           Cp  = GetSpecificHeatGlycol(PlantLoop(FanCoil(FanCoilNum)%CWLoopNum)%FluidName, &
-                         5., &
+                         5.d0, &
                          PlantLoop(FanCoil(FanCoilNum)%CWLoopNum)%FluidIndex, &
                          'SizeFanCoilUnit')
 
@@ -1299,8 +1299,8 @@ SUBROUTINE Sim4PipeFanCoil(FanCoilNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
   LOGICAL, INTENT (IN)     :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
   INTEGER, INTENT (INOUT)  :: FanCoilNum         ! number of the current fan coil unit being simulated
   INTEGER, INTENT (IN)     :: ZoneNum            ! number of zone being served
-  REAL, INTENT (OUT)  :: PowerMet           ! Sensible power supplied (W)
-  REAL, INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
+  REAL(r64), INTENT (OUT)  :: PowerMet           ! Sensible power supplied (W)
+  REAL(r64), INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: MaxIter = 25 ! maximum number of iterations for controlling output
@@ -1316,49 +1316,49 @@ SUBROUTINE Sim4PipeFanCoil(FanCoilNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL    :: QZnReq           ! heating or cooling needed by zone [watts]
-REAL    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
-REAL    :: QUnitOutMax      ! heating or sens. cooling provided by fan coil unit (running during an entire timestep)
-REAL    :: PLR              ! Part Load Ratio, fraction of time step fancoil is on
+REAL(r64)    :: QZnReq           ! heating or cooling needed by zone [watts]
+REAL(r64)    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
+REAL(r64)    :: QUnitOutMax      ! heating or sens. cooling provided by fan coil unit (running during an entire timestep)
+REAL(r64)    :: PLR              ! Part Load Ratio, fraction of time step fancoil is on
 LOGICAL      :: UnitOn           ! TRUE if unit is on
 INTEGER      :: ControlNode      ! the hot water or cold water inlet node
-REAL    :: ControlOffset    ! tolerance for output control
-REAL    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-REAL    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+REAL(r64)    :: ControlOffset    ! tolerance for output control
+REAL(r64)    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+REAL(r64)    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
 INTEGER      :: OutletNode       ! unit air outlet node
 INTEGER      :: InletNode        ! unit air inlet node
-REAL    :: QTotUnitOut      ! total unit output [watts]
-REAL    :: AirMassFlow      ! air mass flow rate [kg/sec]
-REAL    :: QUnitOutNoHC     ! unit output with no active heating or cooling [W]
-REAL    :: QCoilHeatSP      ! coil load to the heating setpoint [W]
-REAL    :: QCoilCoolSP      ! coil load to the cooling setpoint [W]
-REAL    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
-REAL    :: SpecHumOut       ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-REAL    :: SpecHumIn        ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+REAL(r64)    :: QTotUnitOut      ! total unit output [watts]
+REAL(r64)    :: AirMassFlow      ! air mass flow rate [kg/sec]
+REAL(r64)    :: QUnitOutNoHC     ! unit output with no active heating or cooling [W]
+REAL(r64)    :: QCoilHeatSP      ! coil load to the heating setpoint [W]
+REAL(r64)    :: QCoilCoolSP      ! coil load to the cooling setpoint [W]
+REAL(r64)    :: LatentOutput     ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+REAL(r64)    :: SpecHumOut       ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+REAL(r64)    :: SpecHumIn        ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
 REAL (r64)   :: Error            ! Error between QZnReq and QUnitOut
-REAL    :: AbsError         ! Absolute error between QZnReq and QUnitOut [W]   !FB
+REAL(r64)    :: AbsError         ! Absolute error between QZnReq and QUnitOut [W]   !FB
 INTEGER      :: Iter             ! iteration counter
 REAL (r64)   :: Relax
 REAL (r64)   :: DelPLR
-REAL    :: mdot
+REAL(r64)    :: mdot
 
 
           ! FLOW
-FanElecPower = 0.0
+FanElecPower = 0.0d0
 ! initialize local variables
 UnitOn = .TRUE.
 ControlNode = 0
-QUnitOut = 0.0
-QUnitOutMax = 0.0
-PLR = 0.0
-LatentOutput = 0.0
-QUnitOutNoHC = 0.0
-QCoilHeatSP = 0.0
-QCoilCoolSP = 0.0
-QZnReq = 0.0
-ControlOffset = 0.0
-MaxWaterFlow = 0.0
-MinWaterFlow = 0.0
+QUnitOut = 0.0d0
+QUnitOutMax = 0.0d0
+PLR = 0.0d0
+LatentOutput = 0.0d0
+QUnitOutNoHC = 0.0d0
+QCoilHeatSP = 0.0d0
+QCoilCoolSP = 0.0d0
+QZnReq = 0.0d0
+ControlOffset = 0.0d0
+MaxWaterFlow = 0.0d0
+MinWaterFlow = 0.0d0
 OutletNode = FanCoil(FanCoilNum)%AirOutNode
 InletNode = FanCoil(FanCoilNum)%AirInNode
 AirMassFlow = Node(InletNode)%MassFlowRate
@@ -1377,7 +1377,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
     ! zero the hot & cold water flows
 !    Node(FanCoil(FanCoilNum)%ColdControlNode)%MassFlowRate = 0.0
 !    Node(FanCoil(FanCoilNum)%HotControlNode)%MassFlowRate = 0.0
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%ColdControlNode, &
                                 FanCoil(FanCoilNum)%ColdPlantOutletNode, &
@@ -1385,7 +1385,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
                                 FanCoil(FanCoilNum)%CWLoopSide, &
                                 FanCoil(FanCoilNum)%CWBranchNum, &
                                 FanCoil(FanCoilNum)%CWCompNum)
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%HotControlNode, &
                                 FanCoil(FanCoilNum)%HotPlantOutletNode, &
@@ -1456,12 +1456,12 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
       QUnitOut = QUnitOutNoHC
     END IF
 
-    SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
-    SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
+    SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
+    SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
     LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
     QTotUnitOut = AirMassFlow * (Node(OutletNode)%Enthalpy - Node(InletNode)%Enthalpy)
     ! report variables
-    FanCoil(FanCoilNum)%HeatPower = MAX(0.0,QUnitOut)
+    FanCoil(FanCoilNum)%HeatPower = MAX(0.0d0,QUnitOut)
     FanCoil(FanCoilNum)%SensCoolPower = ABS(MIN(constant_zero,QUnitOut))
     FanCoil(FanCoilNum)%TotCoolPower = ABS(MIN(constant_zero,QTotUnitOut))
     FanCoil(FanCoilNum)%ElecPower = FanElecPower
@@ -1488,7 +1488,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
       END IF
       IF (ABS(QUnitOutMax) .lt. ABS(QZnReq)) THEN
         FanCoil(FanCoilNum)%SpeedFanSel = 3
-        FanCoil(FanCoilNum)%SpeedFanRatSel = 1.0
+        FanCoil(FanCoilNum)%SpeedFanRatSel = 1.0d0
         Node(InletNode)%MassFlowRateMax = FanCoil(FanCoilNum)%MaxAirMassFlow
       END IF
       ELSE
@@ -1498,7 +1498,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
       !  zero the hot & cold water flows
 !      Node(FanCoil(FanCoilNum)%ColdControlNode)%MassFlowRate = 0.0
 !      Node(FanCoil(FanCoilNum)%HotControlNode)%MassFlowRate = 0.0
-      mdot = 0.
+      mdot = 0.d0
       CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%ColdControlNode, &
                                 FanCoil(FanCoilNum)%ColdPlantOutletNode, &
@@ -1506,7 +1506,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
                                 FanCoil(FanCoilNum)%CWLoopSide, &
                                 FanCoil(FanCoilNum)%CWBranchNum, &
                                 FanCoil(FanCoilNum)%CWCompNum)
-      mdot = 0.
+      mdot = 0.d0
       CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%HotControlNode, &
                                 FanCoil(FanCoilNum)%HotPlantOutletNode, &
@@ -1535,11 +1535,11 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
         ! get the maximum output of the fcu
         CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOutMax)
         ! calculate the PLR, if load greater than output, PLR = 1 (output = max)
-        If(QUnitOutMax .Ne. 0.0) PLR = ABS(QZnReq/QUnitOutMax)
-        if (PLR .gt. 1.0) PLR = 1.0
+        If(QUnitOutMax .Ne. 0.0d0) PLR = ABS(QZnReq/QUnitOutMax)
+        if (PLR .gt. 1.0d0) PLR = 1.0
 
         ! adjust the PLR to meet the cooling load calling Calc4PipeFanCoil repeatedly with the PLR adjusted
-        do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0 )
+        do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0d0 )
           ! the water flow rate is at the maximum flow rate time the PLR
       !    Node(FanCoil(FanCoilNum)%ColdControlNode)%MassFlowRate = PLR * FanCoil(FanCoilNum)%MaxColdWaterFlow
           mdot = PLR * FanCoil(FanCoilNum)%MaxColdWaterFlow
@@ -1555,10 +1555,10 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
           AbsError = QZnReq - QUnitOut
           DelPLR = (QZnReq-QUnitOut)/QUnitOutMax
           PLR = PLR + Relax * DelPLR
-          PLR = MAX(0.0,MIN(1.0,PLR))
+          PLR = MAX(0.0d0,MIN(1.0d0,PLR))
           Iter = Iter + 1
-          IF (Iter == 32) Relax = 0.5
-          IF (Iter == 65) Relax = 0.25
+          IF (Iter == 32) Relax = 0.5d0
+          IF (Iter == 65) Relax = 0.25d0
         END DO
 
         ! warning if not converged
@@ -1596,11 +1596,11 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
         ! get the maximum output of the fcu
         CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOutMax)
         ! calculate the PLR, if load greater than output, PLR = 1 (output = max)
-        If(QUnitOutMax .Ne. 0.0) PLR = ABS (QZnReq/QUnitOutMax)
-        if (PLR .gt. 1.0) PLR = 1.0
+        If(QUnitOutMax .Ne. 0.0d0) PLR = ABS (QZnReq/QUnitOutMax)
+        if (PLR .gt. 1.0d0) PLR = 1.0d0
 
         ! adjust the PLR to meet the heating load calling Calc4PipeFanCoil repeatedly with the PLR adjusted
-        do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0 )
+        do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0d0 )
           ! the water flow rate is at the maximum flow rate time the PLR
       !    Node(FanCoil(FanCoilNum)%HotControlNode)%MassFlowRate = PLR * FanCoil(FanCoilNum)%MaxHotWaterFlow
 
@@ -1618,10 +1618,10 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
           AbsError = QZnReq - QUnitOut
           DelPLR = (QZnReq-QUnitOut)/QUnitOutMax
           PLR = PLR + Relax * DelPLR
-          PLR = MAX(0.0,MIN(1.0,PLR))
+          PLR = MAX(0.0d0,MIN(1.0d0,PLR))
           Iter = Iter + 1
-          IF (Iter == 32) Relax = 0.5
-          IF (Iter == 65) Relax = 0.25
+          IF (Iter == 32) Relax = 0.5d0
+          IF (Iter == 65) Relax = 0.25d0
         END DO
 
         ! warning if not converged
@@ -1647,20 +1647,20 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
 
       ELSE
         ! no action, zero the air flow rate, the unit is off
-        Node(InletNode)%MassFlowRate = 0.0
-        Node(OutletNode)%MassFlowRate = 0.0
+        Node(InletNode)%MassFlowRate = 0.0d0
+        Node(OutletNode)%MassFlowRate = 0.0d0
         FanCoil(FanCoilNum)%SpeedFanSel = 0
-        PLR = 0.0
+        PLR = 0.0d0
         CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOut,PLR)
       END IF
 
       AirMassFlow = Node(InletNode)%MassFlowRate
-      SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
-      SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
+      SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
+      SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
       LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
       QTotUnitOut = AirMassFlow * (Node(OutletNode)%Enthalpy - Node(InletNode)%Enthalpy)
       ! report variables
-      FanCoil(FanCoilNum)%HeatPower = MAX(0.0,QUnitOut)
+      FanCoil(FanCoilNum)%HeatPower = MAX(0.0d0,QUnitOut)
       FanCoil(FanCoilNum)%SensCoolPower = ABS(MIN(constant_zero,QUnitOut))
       FanCoil(FanCoilNum)%TotCoolPower = ABS(MIN(constant_zero,QTotUnitOut))
       FanCoil(FanCoilNum)%ElecPower = FanElecPower
@@ -1676,7 +1676,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
     !  zero the hot & cold water flows
 !    Node(FanCoil(FanCoilNum)%ColdControlNode)%MassFlowRate = 0.0
 !    Node(FanCoil(FanCoilNum)%HotControlNode)%MassFlowRate = 0.0
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%ColdControlNode, &
                                 FanCoil(FanCoilNum)%ColdPlantOutletNode, &
@@ -1684,7 +1684,7 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
                                 FanCoil(FanCoilNum)%CWLoopSide, &
                                 FanCoil(FanCoilNum)%CWBranchNum, &
                                 FanCoil(FanCoilNum)%CWCompNum)
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate(mdot , &
                                 FanCoil(FanCoilNum)%HotControlNode, &
                                 FanCoil(FanCoilNum)%HotPlantOutletNode, &
@@ -1712,20 +1712,20 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
       ! get the maximum output of the fcu
       CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOutMax)
       ! calculate the PLR, if load greater than output, PLR = 1 (output = max)
-      If(QUnitOutMax .Ne. 0.0) PLR = ABS(QZnReq/QUnitOutMax)
-      if (PLR .gt. 1.0) PLR = 1.0
+      If(QUnitOutMax .Ne. 0.0d0) PLR = ABS(QZnReq/QUnitOutMax)
+      if (PLR .gt. 1.0d0) PLR = 1.0d0
 
       ! adjust the PLR to meet the cooling load calling Calc4PipeFanCoil repeatedly with the PLR adjusted
-      do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0 )
+      do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0d0 )
         CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOut, PLR)
         Error = (QZnReq - QUnitOut)/QZnReq
         AbsError = QZnReq - QUnitOut
         DelPLR = (QZnReq-QUnitOut)/QUnitOutMax
         PLR = PLR + Relax * DelPLR
-        PLR = MAX(0.0,MIN(1.0,PLR))
+        PLR = MAX(0.0d0,MIN(1.0d0,PLR))
         Iter = Iter + 1
-        IF (Iter == 32) Relax = 0.5
-        IF (Iter == 65) Relax = 0.25
+        IF (Iter == 32) Relax = 0.5d0
+        IF (Iter == 65) Relax = 0.25d0
       END DO
 
       ! warning if not converged
@@ -1760,20 +1760,20 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
       ! get the maximum output of the fcu
       CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOutMax)
       ! calculate the PLR, if load greater than output, PLR = 1 (output = max)
-      If(QUnitOutMax .Ne. 0.0) PLR = ABS (QZnReq/QUnitOutMax)
-      if (PLR .gt. 1.0) PLR = 1.0
+      If(QUnitOutMax .Ne. 0.0d0) PLR = ABS (QZnReq/QUnitOutMax)
+      if (PLR .gt. 1.0d0) PLR = 1.0d0
 
       ! adjust the PLR to meet the heating load calling Calc4PipeFanCoil repeatedly with the PLR adjusted
-      do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0 )
+      do while (ABS(Error) > ControlOffset .and. ABS(AbsError) > SmallLoad .and. Iter < MaxIterCycl .and. PLR.ne.1.0d0 )
         CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOut, PLR)
         Error = (QZnReq - QUnitOut)/QZnReq
         AbsError = QZnReq - QUnitOut
         DelPLR = (QZnReq-QUnitOut)/QUnitOutMax
         PLR = PLR + Relax * DelPLR
-        PLR = MAX(0.0,MIN(1.0,PLR))
+        PLR = MAX(0.0d0,MIN(1.0d0,PLR))
         Iter = Iter + 1
-        IF (Iter == 32) Relax = 0.5
-        IF (Iter == 65) Relax = 0.25
+        IF (Iter == 32) Relax = 0.5d0
+        IF (Iter == 65) Relax = 0.25d0
       END DO
 
       ! warning if not converged
@@ -1799,21 +1799,21 @@ SELECT CASE (FanCoil(FanCoilNum)%CapCtrlMeth_Num)
 
     ELSE
       ! no action, zero the air flow rate, the unit is off
-      Node(InletNode)%MassFlowRate = 0.0
-      Node(OutletNode)%MassFlowRate = 0.0
+      Node(InletNode)%MassFlowRate = 0.0d0
+      Node(OutletNode)%MassFlowRate = 0.0d0
       FanCoil(FanCoilNum)%SpeedFanSel = 0
-      PLR = 0.0
+      PLR = 0.0d0
       CALL Calc4PipeFanCoil (FanCoilNum,FirstHVACIteration,QUnitOut,PLR)
     END IF
 
     AirMassFlow = Node(InletNode)%MassFlowRate
-    SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
-    SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
+    SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
+    SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
     LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 
     QTotUnitOut = AirMassFlow * (Node(OutletNode)%Enthalpy - Node(InletNode)%Enthalpy)
     ! report variables
-    FanCoil(FanCoilNum)%HeatPower = MAX(0.0,QUnitOut)
+    FanCoil(FanCoilNum)%HeatPower = MAX(0.0d0,QUnitOut)
     FanCoil(FanCoilNum)%SensCoolPower = ABS(MIN(constant_zero,QUnitOut))
     FanCoil(FanCoilNum)%TotCoolPower = ABS(MIN(constant_zero,QTotUnitOut))
     FanCoil(FanCoilNum)%ElecPower = FanElecPower
@@ -1855,8 +1855,8 @@ USE Psychrometrics, ONLY:PsyHFnTdbW
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)  :: FanCoilNum         ! Unit index in fan coil array
   LOGICAL, INTENT (IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
-  REAL, INTENT (INOUT), OPTIONAL :: PLR                 ! Part Load Ratio, fraction of time step fancoil is on
-  REAL,    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
+  REAL(r64), INTENT (INOUT), OPTIONAL :: PLR                 ! Part Load Ratio, fraction of time step fancoil is on
+  REAL(r64),    INTENT (OUT) :: LoadMet            ! load met by unit (watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1870,7 +1870,7 @@ USE Psychrometrics, ONLY:PsyHFnTdbW
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: OutletNode       ! unit air outlet node
 INTEGER :: InletNode        ! unit air inlet node
-REAL    :: AirMassFlow      ! total mass flow through the unit
+REAL(r64)    :: AirMassFlow      ! total mass flow through the unit
 REAL (r64)   :: PartLoad         ! if PLR present PartLoad = PLR
 REAL (r64)   :: OASchedValue     ! value of OASchedValue, =1 if not schedule
           ! FLOW
@@ -1893,7 +1893,7 @@ IF (GetCurrentScheduleValue(FanCoil(FanCoilNum)%SchedPtr) .gt. 0.0)   &
 IF (FanCoil(FanCoilNum)%SchedOutAirPtr > 0) THEN
   OASchedValue = GetCurrentScheduleValue(FanCoil(FanCoilNum)%SchedOutAirPtr)
 ELSE
-  OASchedValue = 1.0
+  OASchedValue = 1.0D0
 END IF
 
 ! Don't let the outside air flow be > supply air flow and get the value of the schedule for the OA
@@ -1921,11 +1921,11 @@ IF(FanCoil(FanCoilNum)%CapCtrlMeth_Num .eq. CCM_CycFan)THEN
        FanCoil(FanCoilNum)%FanIndex,FanCoil(FanCoilNum)%MedSpeedRatio)
   ELSE
     CALL SimulateFanComponents(FanCoil(FanCoilNum)%FanName,FirstHVACIteration,  &
-       FanCoil(FanCoilNum)%FanIndex, 1.0)
+       FanCoil(FanCoilNum)%FanIndex, 1.0d0)
   END IF
   IF(FanCoil(FanCoilNum)%CCoilType_Num == CCoil_HXAssist) THEN
     CALL SimHXAssistedCoolingCoil(FanCoil(FanCoilNum)%CCoilName,FirstHVACIteration,On,  &
-                                  0.0,FanCoil(FanCoilNum)%CCoilName_Index,ContFanCycCoil)
+                                  0.0d0,FanCoil(FanCoilNum)%CCoilName_Index,ContFanCycCoil)
   ELSE
     CALL SimulateWaterCoilComponents(FanCoil(FanCoilNum)%CCoilName,FirstHVACIteration,&
                                      FanCoil(FanCoilNum)%CCoilName_Index,FanOpMode = 1,PartLoadRatio = PLR)
@@ -1938,7 +1938,7 @@ ELSE
   CALL SimulateFanComponents(FanCoil(FanCoilNum)%FanName,FirstHVACIteration,FanCoil(FanCoilNum)%FanIndex)
   IF(FanCoil(FanCoilNum)%CCoilType_Num == CCoil_HXAssist) THEN
     CALL SimHXAssistedCoolingCoil(FanCoil(FanCoilNum)%CCoilName,FirstHVACIteration,On,  &
-                                   0.0,FanCoil(FanCoilNum)%CCoilName_Index,ContFanCycCoil)
+                                   0.0d0,FanCoil(FanCoilNum)%CCoilName_Index,ContFanCycCoil)
   ELSE
     CALL SimulateWaterCoilComponents(FanCoil(FanCoilNum)%CCoilName,FirstHVACIteration,FanCoil(FanCoilNum)%CCoilName_Index)
   END IF
@@ -1988,7 +1988,7 @@ SUBROUTINE ReportFanCoilUnit(FanCoilNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- REAL :: ReportingConstant
+ REAL(r64) :: ReportingConstant
 
           ! FLOW
 ReportingConstant=TimeStepSys * SecInHour

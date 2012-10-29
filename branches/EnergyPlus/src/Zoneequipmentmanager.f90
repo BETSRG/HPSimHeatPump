@@ -48,7 +48,7 @@ PRIVATE ! Everything private unless explicitly made public
     END TYPE SimulationOrder
 
   !MODULE VARIABLE DECLARATIONS:
-    REAL, ALLOCATABLE, DIMENSION(:) :: AvgData ! scratch array for storing averaged data
+    REAL(r64), ALLOCATABLE, DIMENSION(:) :: AvgData ! scratch array for storing averaged data
     TYPE(SimulationOrder), ALLOCATABLE, DIMENSION(:)  :: PrioritySimOrder
     INTEGER, ALLOCATABLE, DIMENSION(:) :: DefaultSimOrder
     INTEGER :: NumOfTimeStepInDay ! number of zone time steps in a day
@@ -457,15 +457,15 @@ SUBROUTINE SizeZoneEquipment
   INTEGER :: SupplyAirNode     ! node number of zone supply air node
   INTEGER :: ZoneNode          ! node number of controlled zone
   INTEGER :: ReturnNode        ! node number of controlled zone return node
-  REAL    :: DeltaTemp         ! difference between supply air temp and zone temp [C]
-  REAL    :: CpAir             ! heat capacity of air [J/kg-C]
-  REAL    :: SysOutputProvided ! system sensible output [W]
-  REAL    :: LatOutputProvided ! system latent output [kg/s]
-  REAL    :: Temp              ! inlet temperature [C]
-  REAL    :: HumRat            ! inlet humidity ratio [kg water/kg dry air]
-  REAL    :: Enthalpy          ! inlet specific enthalpy [J/kg]
-  REAL    :: MassFlowRate      ! inlet mass flow rate [kg/s]
-  REAL    :: RetTemp           ! zone return temperature [C]
+  REAL(r64)    :: DeltaTemp         ! difference between supply air temp and zone temp [C]
+  REAL(r64)    :: CpAir             ! heat capacity of air [J/kg-C]
+  REAL(r64)    :: SysOutputProvided ! system sensible output [W]
+  REAL(r64)    :: LatOutputProvided ! system latent output [kg/s]
+  REAL(r64)    :: Temp              ! inlet temperature [C]
+  REAL(r64)    :: HumRat            ! inlet humidity ratio [kg water/kg dry air]
+  REAL(r64)    :: Enthalpy          ! inlet specific enthalpy [J/kg]
+  REAL(r64)    :: MassFlowRate      ! inlet mass flow rate [kg/s]
+  REAL(r64)    :: RetTemp           ! zone return temperature [C]
 
   IF (MyOneTimeFlag) THEN
     CALL SetUpZoneSizingArrays
@@ -502,7 +502,7 @@ SUBROUTINE SizeZoneEquipment
       CpAir = PsyCpAirFnWTdb(HumRat,Temp)
       IF ( ABS(DeltaTemp) > SmallTempDiff ) THEN
 !!!PH/WFB/LKL (UCDV model)        MassFlowRate = SysOutputProvided / (CpAir*DeltaTemp)
-        MassFlowRate = MAX( SysOutputProvided/(CpAir*DeltaTemp), 0.0)
+        MassFlowRate = MAX( SysOutputProvided/(CpAir*DeltaTemp), 0.0d0)
       ELSE
         MassFlowRate = 0.0
       ENDIF
@@ -627,10 +627,10 @@ SUBROUTINE SetUpZoneSizingArrays
   INTEGER :: ZoneSizNum  ! zone sizing input index
   INTEGER :: NumOfTimeStepInDay ! number of zone time steps in a day
   INTEGER :: TimeStepIndex      ! zone time step index
-  REAL    :: TotPeopleInZone    ! total (maximum) number of people in a zone
+  REAL(r64)    :: TotPeopleInZone    ! total (maximum) number of people in a zone
   INTEGER :: PeopleNum          ! index of People structure
-  REAL    :: OAFromPeople = 0.0 ! min OA calculated from zone occupancy [m3/s]
-  REAL    :: OAFromArea = 0.0   ! min OA calculated from zone area and OA flow per area [m3/s]
+  REAL(r64)    :: OAFromPeople = 0.0 ! min OA calculated from zone occupancy [m3/s]
+  REAL(r64)    :: OAFromArea = 0.0   ! min OA calculated from zone area and OA flow per area [m3/s]
   INTEGER :: ZoneIndex          ! index of Zone Sizing zone name in zone array
   INTEGER :: ZoneSizIndex       ! zone sizing do loop index
   LOGICAL :: ErrorsFound=.false.! Set to true if errors in input, fatal at end of routine
@@ -1032,7 +1032,7 @@ SUBROUTINE SetUpZoneSizingArrays
     ! setup CalcFinalZoneSizing structure for use with EMS, some as sensors, some as actuators
     IF (AnyEnergyManagementSystemInModel) Then !
 
-      !actuate  REAL             :: DesHeatMassFlow          = 0.0   ! zone design heating air mass flow rate [kg/s]
+      !actuate  REAL(r64)             :: DesHeatMassFlow          = 0.0d0   ! zone design heating air mass flow rate [kg/s]
       CALL SetupEMSInternalVariable('Final Zone Design Heating Air Mass Flow Rate', FinalZoneSizing(CtrlZoneNum)%ZoneName, &
                                     '[kg/s]', FinalZoneSizing(CtrlZoneNum)%DesHeatMassFlow )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Heating Air Mass Flow Rate', &
@@ -1042,7 +1042,7 @@ SUBROUTINE SetUpZoneSizingArrays
                             '[kg/s]', CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatMassOn, &
                             CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatMassFlow )
 
-      !actuate  REAL             :: DesCoolMassFlow          = 0.0   ! zone design cooling air mass flow rate [kg/s]
+      !actuate  REAL(r64)             :: DesCoolMassFlow          = 0.0d0   ! zone design cooling air mass flow rate [kg/s]
       CALL SetupEMSInternalVariable('Final Zone Design Cooling Air Mass Flow Rate', FinalZoneSizing(CtrlZoneNum)%ZoneName, &
                                     '[kg/s]', FinalZoneSizing(CtrlZoneNum)%DesCoolMassFlow )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Cooling Air Mass Flow Rate', &
@@ -1052,7 +1052,7 @@ SUBROUTINE SetUpZoneSizingArrays
                             '[kg/s]',  CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolMassOn, &
                             CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolMassFlow )
 
-      !actuate  REAL             :: DesHeatLoad              = 0.0   ! zone design heating load [W]
+      !actuate  REAL(r64)             :: DesHeatLoad              = 0.0d0   ! zone design heating load [W]
       CALL SetupEMSInternalVariable('Final Zone Design Heating Load', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[W]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesHeatLoad )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Heating Load', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, '[W]', &
@@ -1061,7 +1061,7 @@ SUBROUTINE SetUpZoneSizingArrays
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatLoadOn, &
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatLoad )
 
-      !actuate  REAL             :: DesCoolLoad              = 0.0   ! zone design cooling load [W]
+      !actuate  REAL(r64)             :: DesCoolLoad              = 0.0d0   ! zone design cooling load [W]
       CALL SetupEMSInternalVariable('Final Zone Design Cooling Load', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[W]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesCoolLoad )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Cooling Load', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, '[W]', &
@@ -1070,18 +1070,18 @@ SUBROUTINE SetUpZoneSizingArrays
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolLoadOn, &
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolLoad )
 
-      !sensor?  REAL             :: DesHeatDens              = 0.0   ! zone design heating air density [kg/m3]
+      !sensor?  REAL(r64)             :: DesHeatDens              = 0.0d0   ! zone design heating air density [kg/m3]
       CALL SetupEMSInternalVariable('Final Zone Design Heating Air Density', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[kg/m3]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesHeatDens )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Heating Air Density', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, &
                                     '[kg/m3]', CalcFinalZoneSizing(CtrlZoneNum)%DesHeatDens )
-      !sensor?  REAL             :: DesCoolDens              = 0.0   ! zone design cooling air density [kg/m3]
+      !sensor?  REAL(r64)             :: DesCoolDens              = 0.0d0   ! zone design cooling air density [kg/m3]
       CALL SetupEMSInternalVariable('Final Zone Design Cooling Air Density', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[kg/m3]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesCoolDens )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Cooling Air Density', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, &
                                     '[kg/m3]', CalcFinalZoneSizing(CtrlZoneNum)%DesCoolDens )
 
-      !actuate  REAL             :: DesHeatVolFlow           = 0.0   ! zone design heating air volume flow rate [m3/s]
+      !actuate  REAL(r64)             :: DesHeatVolFlow           = 0.0d0   ! zone design heating air volume flow rate [m3/s]
       CALL SetupEMSInternalVariable('Final Zone Design Heating Volume Flow', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[m3/s]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesHeatVolFlow )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Heating Volume Flow', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, &
@@ -1090,7 +1090,7 @@ SUBROUTINE SetUpZoneSizingArrays
                             CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatVolOn, &
                             CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatVolFlow )
 
-      !actuate  REAL             :: DesCoolVolFlow           = 0.0   ! zone design cooling air volume flow rate [m3/s]
+      !actuate  REAL(r64)             :: DesCoolVolFlow           = 0.0d0   ! zone design cooling air volume flow rate [m3/s]
       CALL SetupEMSInternalVariable('Final Zone Design Cooling Volume Flow', FinalZoneSizing(CtrlZoneNum)%ZoneName, '[m3/s]', &
                                     FinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow )
       CALL SetupEMSInternalVariable('Intermediate Zone Design Cooling Volume Flow', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, &
@@ -1099,8 +1099,8 @@ SUBROUTINE SetUpZoneSizingArrays
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolVolOn, &
                         CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolVolFlow )
 
-      !actuate  REAL          :: DesHeatVolFlowMax        = 0.0   ! zone design heating maximum air volume flow rate [m3/s]
-      !actuate  REAL          :: DesCoolVolFlowMin        = 0.0   ! zone design cooling minimum air volume flow rate [m3/s]
+      !actuate  REAL(r64)          :: DesHeatVolFlowMax        = 0.0d0   ! zone design heating maximum air volume flow rate [m3/s]
+      !actuate  REAL(r64)          :: DesCoolVolFlowMin        = 0.0d0   ! zone design cooling minimum air volume flow rate [m3/s]
 
       CALL SetupEMSInternalVariable('Zone Outdoor Air Design Volume Flow Rate', CalcFinalZoneSizing(CtrlZoneNum)%ZoneName, &
                                     '[m3/s]', CalcFinalZoneSizing(CtrlZoneNum)%MinOA )
@@ -1154,7 +1154,7 @@ SUBROUTINE SetUpZoneSizingArrays
         CALL ShowContinueError('Detected in module Zoneequipmentmanager, subroutine SetUpZoneSizingArrays.')
         CALL ShowFatalError('Program terminated')
     END IF
-    IF (FinalZoneSizing(CtrlZoneNum)%ZoneADEffCooling > 0.0 .OR. FinalZoneSizing(CtrlZoneNum)%ZoneADEffHeating > 0.0) THEN
+    IF (FinalZoneSizing(CtrlZoneNum)%ZoneADEffCooling > 0.0d0 .OR. FinalZoneSizing(CtrlZoneNum)%ZoneADEffHeating > 0.0d0) THEN
       FinalZoneSizing(CtrlZoneNum)%MinOA = FinalZoneSizing(CtrlZoneNum)%MinOA / Min(FinalZoneSizing(CtrlZoneNum)%ZoneADEffCooling, &
                                                  FinalZoneSizing(CtrlZoneNum)%ZoneADEffHeating)
       CalcFinalZoneSizing(CtrlZoneNum)%MinOA = FinalZoneSizing(CtrlZoneNum)%MinOA
@@ -1300,22 +1300,22 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
   INTEGER :: CtrlZoneNum ! controlled zone index
   INTEGER :: TimeStepInDay ! zone time step in day
   INTEGER :: I                  ! write statement index
-!  REAL    :: HourFrac           ! fractional hour
+!  REAL(r64)    :: HourFrac           ! fractional hour
   INTEGER :: HourCounter        ! Hour Counter
   INTEGER :: TimeStepCounter    ! Time Step Counter
   INTEGER :: Minutes            ! Current Minutes Counter
   INTEGER :: HourPrint          ! Hour to print (timestamp)
-  REAL    :: OAFrac             ! outside air fraction
+  REAL(r64)    :: OAFrac             ! outside air fraction
   INTEGER :: TimeStepAtPeak     ! time step number at heat or cool peak
   INTEGER :: TimeStepAtPeakF    ! time step number at heat or cool peak (final)
   INTEGER :: DDNum              ! Design Day index
   INTEGER :: DDNumF             ! Design Day index (final)
-  REAL    :: TotCoolSizMult     ! combines user cooling design flow input with zone sizing multiplier
-  REAL    :: TotHeatSizMult     ! combines user heating design flow input with zone sizing multiplier
-  REAL    :: MinOAMass          ! zone minimum outside air mass flow rate kg/s
-  REAL    :: MaxOfMinCoolVolFlow  ! max of the user specified design cooling minimum flows and min OA flow [m3/s]
-  REAL    :: MaxOfMinCoolMassFlow ! max of the user specified design cooling minimum flows and min OA flow [kg/s]
-  REAL    :: MaxHeatVolFlow     ! max of user specified design heating max flow [m3/s]
+  REAL(r64)    :: TotCoolSizMult     ! combines user cooling design flow input with zone sizing multiplier
+  REAL(r64)    :: TotHeatSizMult     ! combines user heating design flow input with zone sizing multiplier
+  REAL(r64)    :: MinOAMass          ! zone minimum outside air mass flow rate kg/s
+  REAL(r64)    :: MaxOfMinCoolVolFlow  ! max of the user specified design cooling minimum flows and min OA flow [m3/s]
+  REAL(r64)    :: MaxOfMinCoolMassFlow ! max of the user specified design cooling minimum flows and min OA flow [kg/s]
+  REAL(r64)    :: MaxHeatVolFlow     ! max of user specified design heating max flow [m3/s]
   CHARACTER(len=8) :: HrMinString   ! store hour/minute string before assigning to peak string array
 
   SELECT CASE (CallIndicator)
@@ -1462,7 +1462,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
               / CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesHeatDens
           OAFrac = CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%MinOA &
                      / MAX(CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesHeatVolFlow,SmallMassFlow)
-          OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+          OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
           TimeStepAtPeak = CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%TimeStepNumAtHeatMax
           CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesHeatCoilInTemp = &
               OAFrac*DesDayWeath(CurOverallSimDay)%Temp(TimeStepAtPeak) + &
@@ -1497,7 +1497,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
               / CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesCoolDens
           OAFrac = CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%MinOA &
                      / MAX(CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesCoolVolFlow,SmallMassFlow)
-          OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+          OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
           TimeStepAtPeak = CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%TimeStepNumAtCoolMax
           CalcZoneSizing(CtrlZoneNum,CurOverallSimDay)%DesCoolCoilInTemp = &
               OAFrac*DesDayWeath(CurOverallSimDay)%Temp(TimeStepAtPeak) + &
@@ -1581,27 +1581,27 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
       IF (AnyEnergyManagementSystemInModel) THEN
         DO CtrlZoneNum = 1,NumOfZones
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatMassOn ) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatMassFlow > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatMassFlow > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesHeatMassFlow = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatMassFlow
           ENDIF
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolMassOn) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolMassFlow > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolMassFlow > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesCoolMassFlow = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolMassFlow
           ENDIF
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatLoadOn) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatLoad
           ENDIF
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolLoadOn) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolLoad
           ENDIF
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesHeatVolOn) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatVolFlow > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesHeatVolFlow > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesHeatVolFlow = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesHeatVolFlow
           ENDIF
           IF (CalcFinalZoneSizing(CtrlZoneNum)%EMSOverrideDesCoolVolOn) THEN
-            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow > 0.0) &
+            IF (CalcFinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow > 0.0D0) &
               CalcFinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow = CalcFinalZoneSizing(CtrlZoneNum)%EMSValueDesCoolVolFlow
           ENDIF
         ENDDO
@@ -1609,12 +1609,12 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
 
       DO CtrlZoneNum=1,NumOfZones
         IF (.not. ZoneEquipConfig(CtrlZoneNum)%IsControlled) CYCLE
-        IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad) <= 1.*10**-8) THEN    !RS: Debugging: 102612
+        IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad) <= 1.d-8) THEN
           CALL ShowWarningError('Calculated design cooling load for zone='//  &
                             TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
           CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')
         ENDIF
-        IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad) <= 1.*10**-8) THEN
+        IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad) <= 1.d-8) THEN
           CALL ShowWarningError('Calculated design heating load for zone='//  &
                             TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
           CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')
@@ -1840,7 +1840,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
           TotCoolSizMult = FinalZoneSizing(CtrlZoneNum)%CoolSizingFactor
         END IF
         ! If the cooling sizing multiplier is not 1, adjust the cooling design data
-        IF (ABS(TotCoolSizMult-1.0) > .00001) THEN
+        IF (ABS(TotCoolSizMult-1.0d0) > .00001d0) THEN
           IF (FinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow > 0.0) THEN
             TimeStepAtPeak = FinalZoneSizing(CtrlZoneNum)%TimeStepNumAtCoolMax
             DDNum = FinalZoneSizing(CtrlZoneNum)%CoolDDNum
@@ -1852,7 +1852,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
             FinalZoneSizing(CtrlZoneNum)%CoolLoadSeq = CalcFinalZoneSizing(CtrlZoneNum)%CoolLoadSeq * TotCoolSizMult
             OAFrac = FinalZoneSizing(CtrlZoneNum)%MinOA &
                        / FinalZoneSizing(CtrlZoneNum)%DesCoolVolFlow
-            OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+            OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
             FinalZoneSizing(CtrlZoneNum)%DesCoolCoilInTemp = OAFrac*DesDayWeath(DDNum)%Temp(TimeStepAtPeak) + &
                                                       (1.-OAFrac)*FinalZoneSizing(CtrlZoneNum)%ZoneTempAtCoolPeak
             FinalZoneSizing(CtrlZoneNum)%DesCoolCoilInHumRat = &
@@ -1875,7 +1875,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
               ZoneSizing(CtrlZoneNum,DDNum)%CoolLoadSeq = CalcZoneSizing(CtrlZoneNum,DDNum)%CoolLoadSeq * TotCoolSizMult
               OAFrac = ZoneSizing(CtrlZoneNum,DDNum)%MinOA &
                          / ZoneSizing(CtrlZoneNum,DDNum)%DesCoolVolFlow
-              OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+              OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
               ZoneSizing(CtrlZoneNum,DDNum)%DesCoolCoilInTemp = OAFrac*DesDayWeath(DDNum)%Temp(TimeStepAtPeak) + &
                                                         (1.-OAFrac)*ZoneSizing(CtrlZoneNum,DDNum)%ZoneTempAtCoolPeak
               ZoneSizing(CtrlZoneNum,DDNum)%DesCoolCoilInHumRat = &
@@ -1988,7 +1988,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
             FinalZoneSizing(CtrlZoneNum)%HeatLoadSeq = CalcFinalZoneSizing(CtrlZoneNum)%HeatLoadSeq * TotHeatSizMult
             OAFrac = FinalZoneSizing(CtrlZoneNum)%MinOA &
                        / FinalZoneSizing(CtrlZoneNum)%DesHeatVolFlow
-            OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+            OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
             FinalZoneSizing(CtrlZoneNum)%DesHeatCoilInTemp = OAFrac*DesDayWeath(DDNum)%Temp(TimeStepAtPeak) + &
                                                       (1.-OAFrac)*FinalZoneSizing(CtrlZoneNum)%ZoneTempAtHeatPeak
             FinalZoneSizing(CtrlZoneNum)%DesHeatCoilInHumRat = &
@@ -2011,7 +2011,7 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
               ZoneSizing(CtrlZoneNum,DDNum)%HeatLoadSeq = CalcZoneSizing(CtrlZoneNum,DDNum)%HeatLoadSeq * TotHeatSizMult
               OAFrac = ZoneSizing(CtrlZoneNum,DDNum)%MinOA &
                          / ZoneSizing(CtrlZoneNum,DDNum)%DesHeatVolFlow
-              OAFrac = MIN(1.0,MAX(0.0,OAFrac))
+              OAFrac = MIN(1.0d0,MAX(0.0d0,OAFrac))
               ZoneSizing(CtrlZoneNum,DDNum)%DesHeatCoilInTemp = OAFrac*DesDayWeath(DDNum)%Temp(TimeStepAtPeak) + &
                                                         (1.-OAFrac)*ZoneSizing(CtrlZoneNum,DDNum)%ZoneTempAtHeatPeak
               ZoneSizing(CtrlZoneNum,DDNum)%DesHeatCoilInHumRat = &
@@ -2193,12 +2193,12 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   LOGICAL,SAVE :: MyOneTimeFlag = .TRUE.
   LOGICAL      :: ErrorFlag
 
-  REAL :: SysOutputProvided ! sensible output delivered by zone equipment (W)
-  REAL :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
+  REAL(r64) :: SysOutputProvided ! sensible output delivered by zone equipment (W)
+  REAL(r64) :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
   !REAL :: SysOutputProvided
   !REAL :: LatOutputProvided
-  REAL :: AirSysOutput
-  REAL :: NonAirSysOutput
+  REAL(r64) :: AirSysOutput
+  REAL(r64) :: NonAirSysOutput
 
        ! Determine flow rate and temperature of supply air based on type of damper
 
@@ -2264,11 +2264,11 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
 
        DO EquipTypeNum = 1, ZoneEquipList(ControlledZoneNum)%NumOfEquipTypes
 
-         UnbalExhMassFlow = 0.
-         PlenumInducedMassFlow = 0.0
+         UnbalExhMassFlow = 0.d0
+         PlenumInducedMassFlow = 0.0d0
          EquipPtr=PrioritySimOrder(EquipTypeNum)%EquipPtr
-         SysOutputProvided = 0.
-         LatOutputProvided = 0.
+         SysOutputProvided = 0.d0
+         LatOutputProvided = 0.d0
 
          SELECT CASE (PrioritySimOrder(EquipTypeNum)%EquipType_Num)
 
@@ -2330,7 +2330,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
 
              SysDepZoneLoads(ActualZoneNum) = SysDepZoneLoads(ActualZoneNum) + SysOutputProvided
 
-             SysOutputProvided = 0.0 ! Reset to 0.0 since this equipment is controlled based on zone humidity level (not
+             SysOutputProvided = 0.0d0 ! Reset to 0.0 since this equipment is controlled based on zone humidity level (not
                                        ! temperature) SysOutputProvided amount was already sent above to
                                        ! next Predict-Correct series of calcs via SysDepZoneLoads
 
@@ -2365,7 +2365,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                   ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
 
              NonAirSystemResponse(ActualZoneNum) = NonAirSystemResponse(ActualZoneNum) + SysOutputProvided
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(BBSteam_Num) ! 'ZoneHVAC:Baseboard:RadiantConvective:Steam'
              CALL SimSteamBaseboard(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum,       &
@@ -2373,7 +2373,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                   ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
 
              NonAirSystemResponse(ActualZoneNum) = NonAirSystemResponse(ActualZoneNum) + SysOutputProvided
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(BBWaterConvective_Num)  ! 'ZoneHVAC:Baseboard:Convective:Water'
              CALL SimBaseboard(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum,       &
@@ -2381,20 +2381,20 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                   ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
 
              NonAirSystemResponse(ActualZoneNum) = NonAirSystemResponse(ActualZoneNum) + SysOutputProvided
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(BBElectricConvective_Num)  ! 'ZoneHVAC:Baseboard:Convective:Electric'
              CALL SimElectricBaseBoard(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
                                   ControlledZoneNum, SysOutputProvided, ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
 
              NonAirSystemResponse(ActualZoneNum) = NonAirSystemResponse(ActualZoneNum) + SysOutputProvided
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(HiTempRadiant_Num) ! 'ZoneHVAC:HighTemperatureRadiant'
              CALL SimHighTempRadiantSystem(PrioritySimOrder(EquipTypeNum)%EquipName, &
                                            FirstHVACIteration, SysOutputProvided,    &
                                            ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
-             LatOutputProvided = 0.0 ! This baseboard currently sends its latent heat gain directly to predictor/corrector
+             LatOutputProvided = 0.0d0 ! This baseboard currently sends its latent heat gain directly to predictor/corrector
                                        ! via SumLatentHTRadSys... so setting LatOutputProvided = 0.0
 
            CASE (LoTempRadiant_Num) ! 'ZoneHVAC:LowTemperatureRadiant:VariableFlow', 'ZoneHVAC:LowTemperatureRadiant:ConstantFlow'
@@ -2402,7 +2402,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              CALL SimLowTempRadiantSystem(PrioritySimOrder(EquipTypeNum)%EquipName, &
                                           FirstHVACIteration, SysOutputProvided,    &
                                           ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(ZoneExhaustFan_Num)  ! 'Fan:ZoneExhaust'
 
@@ -2452,7 +2452,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                   ZoneEquipList(CurZoneEqNum)%EquipIndex(EquipPtr))
 
              NonAirSystemResponse(ActualZoneNum) = NonAirSystemResponse(ActualZoneNum) + SysOutputProvided
-             LatOutputProvided = 0.0 ! This baseboard does not add/remove any latent heat
+             LatOutputProvided = 0.0d0 ! This baseboard does not add/remove any latent heat
 
            CASE(RefrigerationAirChillerSet_Num)  ! 'ZoneHVAC:RefrigerationChillerSet'
              CALL SimAirChillerSet(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &
@@ -2715,8 +2715,8 @@ SUBROUTINE InitSystemOutputRequired(ZoneNum, SysOutputProvided, LatOutputProvide
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)      :: ZoneNum
-  REAL, INTENT(INOUT) :: SysOutputProvided
-  REAL, INTENT(INOUT) :: LatOutputProvided
+  REAL(r64), INTENT(INOUT) :: SysOutputProvided
+  REAL(r64), INTENT(INOUT) :: LatOutputProvided
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2764,8 +2764,8 @@ SUBROUTINE InitSystemOutputRequired(ZoneNum, SysOutputProvided, LatOutputProvide
       ZoneSysMoistureDemand(ZoneNum)%SequencedOutputRequiredToDehumidSP = & ! array assignment
                           ZoneSysMoistureDemand(ZoneNum)%OutputRequiredToDehumidifyingSP
 
-    SysOutputProvided = 0.0 ! sensible provided by a piece of zone equipment
-    LatOutputProvided = 0.0 ! latent provided by a piece of zone equipment
+    SysOutputProvided = 0.0d0 ! sensible provided by a piece of zone equipment
+    LatOutputProvided = 0.0d0 ! latent provided by a piece of zone equipment
 
     CurDeadbandOrSetback(ZoneNum) = DeadbandOrSetback(ZoneNum)
 
@@ -2801,8 +2801,8 @@ SUBROUTINE UpdateSystemOutputRequired(ZoneNum, SysOutputProvided, LatOutputProvi
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum
-  REAL, INTENT(IN) :: SysOutputProvided ! sensible output provided by zone equipment (W)
-  REAL, INTENT(IN) :: LatOutputProvided ! latent output provided by zone equipment (kg/s)
+  REAL(r64), INTENT(IN) :: SysOutputProvided ! sensible output provided by zone equipment (W)
+  REAL(r64), INTENT(IN) :: LatOutputProvided ! latent output provided by zone equipment (kg/s)
   INTEGER , INTENT(IN), OPTIONAL  :: EquipPriorityNum  ! index in PrioritySimOrder for this update
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2938,13 +2938,13 @@ SUBROUTINE CalcZoneMassBalance
   INTEGER :: RetNode  ! return air node number
   INTEGER :: ZoneNode ! zone air node number
   INTEGER :: AirLoopNum
-  REAL :: TotInletAirMassFlowRate
-  REAL :: TotInletAirMassFlowRateMax
-  REAL :: TotInletAirMassFlowRateMaxAvail
-  REAL :: TotInletAirMassFlowRateMin
-  REAL :: TotInletAirMassFlowRateMinAvail
-  REAL :: TotExhaustAirMassFlowRate
-  REAL :: TotSupplyAirMassFlowRate
+  REAL(r64) :: TotInletAirMassFlowRate
+  REAL(r64) :: TotInletAirMassFlowRateMax
+  REAL(r64) :: TotInletAirMassFlowRateMaxAvail
+  REAL(r64) :: TotInletAirMassFlowRateMin
+  REAL(r64) :: TotInletAirMassFlowRateMinAvail
+  REAL(r64) :: TotExhaustAirMassFlowRate
+  REAL(r64) :: TotSupplyAirMassFlowRate
 
    DO ZoneNum = 1, NumOfZones
 
@@ -2989,11 +2989,11 @@ SUBROUTINE CalcZoneMassBalance
        RetNode = ZoneEquipConfig(ZoneNum)%ReturnAirNode
        If(RetNode > 0) Then
           Node(RetNode)%MassFlowRate = &
-            MAX(Node(ZoneNode)%MassFlowRate - TotExhaustAirMassFlowRate, 0.0)
+            MAX(Node(ZoneNode)%MassFlowRate - TotExhaustAirMassFlowRate, 0.0d0)
           IF (AirLoopNum > 0) THEN
             IF ( .NOT. PrimaryAirSystem(AirLoopNum)%OASysExists) THEN
               Node(RetNode)%MassFlowRate = &
-                MAX(Node(ZoneNode)%MassFlowRate - (TotExhaustAirMassFlowRate - ZoneEquipConfig(ZoneNum)%ZoneExh), 0.0)
+                MAX(Node(ZoneNode)%MassFlowRate - (TotExhaustAirMassFlowRate - ZoneEquipConfig(ZoneNum)%ZoneExh), 0.0d0)
             END IF
           END IF
           Node(RetNode)%MassFlowRateMax = Node(ZoneNode)%MassFlowRateMax
@@ -3051,7 +3051,7 @@ SUBROUTINE CalcZoneMassBalance
 !         ! sometimes models for ZoneHVAC have input a return node, but no air loop HVAC.
 !         ! this block was tried but caused problems such as UA coil sizing issues and water coil controller problems
 !         !  CR 7967, no air loop HVAC, but there is a return air node that never gets used or set
-!         Node(RetNode)%MassFlowRate = 0.
+!         Node(RetNode)%MassFlowRate = 0.d0
 !       ENDIF
      END DO
 
@@ -3103,24 +3103,24 @@ SUBROUTINE CalcZoneMassBalance
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: qretair          ! Heat to return air from lights
-  REAL      :: cpair            ! Air heat capacity [J/kg-K]
-  REAL      :: TempRetAir       ! Return air temperature [C]
-  REAL      :: TempZoneAir      ! Zone air temperature [C]
+  REAL(r64)      :: qretair          ! Heat to return air from lights
+  REAL(r64)      :: cpair            ! Air heat capacity [J/kg-K]
+  REAL(r64)      :: TempRetAir       ! Return air temperature [C]
+  REAL(r64)      :: TempZoneAir      ! Zone air temperature [C]
   INTEGER        :: ZoneNum          ! Controlled zone number
   INTEGER        :: ActualZoneNum    ! Zone number
   INTEGER        :: ZoneNode         ! Node number of controlled zone
   INTEGER        :: ReturnNode       ! Node number of controlled zone's return air
   INTEGER        :: SurfNum          ! Surface number
-  REAL      :: MassFlowRA       ! Return air mass flow [kg/s]
-  REAL      :: FlowThisTS       ! Window gap air mass flow [kg/s]
-  REAL      :: WinGapFlowtoRA   ! Mass flow to return air from all airflow windows in zone [kg/s]
-  REAL      :: WinGapFlowTtoRA  ! Sum of mass flow times outlet temp for all airflow windows in zone [(kg/s)-C]
-  REAL      :: WinGapTtoRA      ! Temp of outlet flow mixture to return air from all airflow windows in zone [C]
-  REAL      :: H2OHtOfVap       ! Heat of vaporization of water (W/kg)
-  REAL      :: RhoAir           ! Density of air (Kg/m3)
-  REAL      :: ZoneMult         ! zone multiplier
-  REAL      :: SumRetAirLatentGainRate
+  REAL(r64)      :: MassFlowRA       ! Return air mass flow [kg/s]
+  REAL(r64)      :: FlowThisTS       ! Window gap air mass flow [kg/s]
+  REAL(r64)      :: WinGapFlowtoRA   ! Mass flow to return air from all airflow windows in zone [kg/s]
+  REAL(r64)      :: WinGapFlowTtoRA  ! Sum of mass flow times outlet temp for all airflow windows in zone [(kg/s)-C]
+  REAL(r64)      :: WinGapTtoRA      ! Temp of outlet flow mixture to return air from all airflow windows in zone [C]
+  REAL(r64)      :: H2OHtOfVap       ! Heat of vaporization of water (W/kg)
+  REAL(r64)      :: RhoAir           ! Density of air (Kg/m3)
+  REAL(r64)      :: ZoneMult         ! zone multiplier
+  REAL(r64)      :: SumRetAirLatentGainRate
 
    DO ZoneNum = 1, NumOfZones
     IF (.not. ZoneEquipConfig(ZoneNum)%IsControlled) CYCLE

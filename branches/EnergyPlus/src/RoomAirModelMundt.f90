@@ -33,24 +33,24 @@ MODULE MundtSimMgr
     PRIVATE
 
           ! MODULE PARAMETER DEFINITIONS:
-    REAL , PARAMETER                    :: CpAir    = 1005.0   ! Specific heat of air
-    REAL , PARAMETER                    :: MinSlope = 0.001     ! Bound on result from Mundt model
-    REAL , PARAMETER                    :: MaxSlope = 5.0       ! Bound on result from Mundt Model
+    REAL(r64) , PARAMETER                    :: CpAir    = 1005.0d0   ! Specific heat of air
+    REAL(r64) , PARAMETER                    :: MinSlope = 0.001d0     ! Bound on result from Mundt model
+    REAL(r64) , PARAMETER                    :: MaxSlope = 5.0d0       ! Bound on result from Mundt Model
 
           ! MODULE DERIVED TYPE DEFINITIONS:
     TYPE DefineLinearModelNode
         CHARACTER(Len=MaxNameLength)    :: AirNodeName    =' '  ! Name of air nodes
         INTEGER                         :: ClassType      =0    ! Type of air nodes
-        REAL                       :: Height         =0.0  ! Z coordinates [m] node's Control Vol. center
-        REAL                       :: Temp           =0.0  ! Surface temperature BC
+        REAL(r64)                       :: Height         =0.0  ! Z coordinates [m] node's Control Vol. center
+        REAL(r64)                       :: Temp           =0.0  ! Surface temperature BC
         LOGICAL, ALLOCATABLE, DIMENSION(:)  :: SurfMask         ! Limit of 60 surfaces at current sizing
     END TYPE DefineLinearModelNode
 
     TYPE DefineSurfaceSettings
-        REAL                       :: Area           =0.0  !m2
-        REAL                       :: Temp           =0.0  !surface temperature BC
-        REAL                       :: Hc             =0.0  !convective film coeff BC
-        REAL                       :: TMeanAir       =0.0  !effective near-surface air temp from air model solution
+        REAL(r64)                       :: Area           =0.0  !m2
+        REAL(r64)                       :: Temp           =0.0  !surface temperature BC
+        REAL(r64)                       :: Hc             =0.0  !convective film coeff BC
+        REAL(r64)                       :: TMeanAir       =0.0  !effective near-surface air temp from air model solution
     END TYPE DefineSurfaceSettings
 
     TYPE DefineZoneData
@@ -79,14 +79,14 @@ MODULE MundtSimMgr
     INTEGER, DIMENSION(:), ALLOCATABLE                          :: RoomNodeIDS      ! ids of the first NumRoomNode Air Nodes
     INTEGER, DIMENSION(:), ALLOCATABLE                          :: ID1dSurf         ! numbers used to identify surfaces
     INTEGER                                                     :: MundtZoneNum    =0 ! index of zones using Mundt model
-    REAL                                                   :: ZoneHeight      =0.0 ! zone height
-    REAL                                                   :: ZoneFloorArea   =0.0 ! zone floor area
-    REAL                                                   :: QventCool       =0.0 ! heat gain due to ventilation
-    REAL                                                   :: ConvIntGain     =0.0 ! heat gain due to internal gains
-    REAL                                                   :: SupplyAirTemp   =0.0 ! supply air temperature
-    REAL                                                   :: SupplyAirVolumeRate =0.0 ! supply air volume flowrate
-    REAL                                                   :: ZoneAirDensity  =0.0  ! zone air density
-    REAL                                                   :: QsysCoolTot     =0.0  ! zone sensible cooling load
+    REAL(r64)                                                   :: ZoneHeight      =0.0 ! zone height
+    REAL(r64)                                                   :: ZoneFloorArea   =0.0 ! zone floor area
+    REAL(r64)                                                   :: QventCool       =0.0 ! heat gain due to ventilation
+    REAL(r64)                                                   :: ConvIntGain     =0.0 ! heat gain due to internal gains
+    REAL(r64)                                                   :: SupplyAirTemp   =0.0 ! supply air temperature
+    REAL(r64)                                                   :: SupplyAirVolumeRate =0.0 ! supply air volume flowrate
+    REAL(r64)                                                   :: ZoneAirDensity  =0.0  ! zone air density
+    REAL(r64)                                                   :: QsysCoolTot     =0.0  ! zone sensible cooling load
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE MundtSimMgr
 
@@ -162,7 +162,7 @@ SUBROUTINE ManageMundtModel(ZoneNum)
     CALL GetSurfHBDataForMundtModel(ZoneNum)
 
     ! use the Mundt model only for cooling case
-    IF ((SupplyAirVolumeRate.GT.0.0001).AND.(QsysCoolTot.GT.0.0001)) THEN
+    IF ((SupplyAirVolumeRate.GT.0.0001d0).AND.(QsysCoolTot.GT.0.0001d0)) THEN
 
         ! setup Mundt model
         CALL SetupMundtModel(ZoneNum)
@@ -421,16 +421,16 @@ SUBROUTINE GetSurfHBDataForMundtModel(ZoneNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER                         :: SurfNum               ! index for surfaces
     INTEGER                         :: NodeNum               ! index for air nodes
-    REAL                       :: SumSysMCp             ! zone sum of air system MassFlowRate*Cp
-    REAL                       :: SumSysMCpT            ! zone sum of air system MassFlowRate*Cp*T
-    REAL                       :: MassFlowRate          ! mass flowrate
-    REAL                       :: NodeTemp              ! node temperature
-    REAL                       :: CpAir                 ! specific heat
+    REAL(r64)                       :: SumSysMCp             ! zone sum of air system MassFlowRate*Cp
+    REAL(r64)                       :: SumSysMCpT            ! zone sum of air system MassFlowRate*Cp*T
+    REAL(r64)                       :: MassFlowRate          ! mass flowrate
+    REAL(r64)                       :: NodeTemp              ! node temperature
+    REAL(r64)                       :: CpAir                 ! specific heat
     INTEGER                         :: ZoneNode              ! index number for specified zone node
-    REAL                       :: ZoneMassFlowRate      ! zone mass flowrate
+    REAL(r64)                       :: ZoneMassFlowRate      ! zone mass flowrate
     INTEGER                         :: ZoneEquipConfigNum    ! index number for zone equipment configuration
-    REAL                       :: ZoneMult              ! total zone multiplier
-    REAL                       :: RetAirConvGain
+    REAL(r64)                       :: ZoneMult              ! total zone multiplier
+    REAL(r64)                       :: RetAirConvGain
 
           ! FLOW:
 
@@ -452,7 +452,7 @@ SUBROUTINE GetSurfHBDataForMundtModel(ZoneNum)
     ZoneAirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, MAT(ZoneNum), PsyWFnTdpPb(MAT(ZoneNum), OutBaroPress))
     ZoneMassFlowRate = Node(ZoneNode)%MassFlowRate
     SupplyAirVolumeRate=ZoneMassFlowRate/ZoneAirDensity
-    IF (ZoneMassFlowRate.LE.0.0001) THEN
+    IF (ZoneMassFlowRate.LE.0.0001d0) THEN
         ! system is off
         QsysCoolTot = 0.0
     ELSE
@@ -627,16 +627,16 @@ SUBROUTINE CalcMundtModel(ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL                           :: TAirFoot         ! air temperature at the floor
-    REAL                           :: TAirCeil         ! air temperature at the ceiling
-    REAL                           :: TLeaving         ! air temperature leaving zone (= return air temp)
-    REAL                           :: TControlPoint    ! air temperature at thermostat
-    REAL                           :: Slope            ! vertical air temperature gradient (slope) from Mundt equations
-    REAL                           :: QequipConvFloor  ! convective gain at the floor due to internal heat sources
-    REAL                           :: QSensInfilFloor  ! convective gain at the floor due to infiltration
-    REAL                           :: FloorSumHAT      ! sum of hci*area*temp at the floor
-    REAL                           :: FloorSumHA       ! sum of hci*area at the floor
-    REAL                           :: TThisNode        ! dummy variable for air node temp
+    REAL(r64)                           :: TAirFoot         ! air temperature at the floor
+    REAL(r64)                           :: TAirCeil         ! air temperature at the ceiling
+    REAL(r64)                           :: TLeaving         ! air temperature leaving zone (= return air temp)
+    REAL(r64)                           :: TControlPoint    ! air temperature at thermostat
+    REAL(r64)                           :: Slope            ! vertical air temperature gradient (slope) from Mundt equations
+    REAL(r64)                           :: QequipConvFloor  ! convective gain at the floor due to internal heat sources
+    REAL(r64)                           :: QSensInfilFloor  ! convective gain at the floor due to infiltration
+    REAL(r64)                           :: FloorSumHAT      ! sum of hci*area*temp at the floor
+    REAL(r64)                           :: FloorSumHA       ! sum of hci*area at the floor
+    REAL(r64)                           :: TThisNode        ! dummy variable for air node temp
     INTEGER                             :: NodeNum          ! index for air nodes
     INTEGER                             :: SurfNum          ! index for surfaces
     INTEGER                             :: SurfCounted      ! number of surfaces assciated with an air node
@@ -741,7 +741,7 @@ SUBROUTINE SetNodeResult(NodeID, TempResult)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN)                 :: NodeID       ! node ID
-    REAL,    INTENT(IN)                 :: TempResult   ! temperature for the specified air node
+    REAL(r64),    INTENT(IN)                 :: TempResult   ! temperature for the specified air node
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -790,7 +790,7 @@ SUBROUTINE SetSurfTmeanAir(SurfID, TeffAir)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN)                 :: SurfID   ! surface ID
-    REAL,    INTENT(IN)                 :: TeffAir  ! temperature of air node adjacent to the specified surface
+    REAL(r64),    INTENT(IN)                 :: TeffAir  ! temperature of air node adjacent to the specified surface
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -859,15 +859,15 @@ SUBROUTINE SetSurfHBDataForMundtModel(ZoneNum)
     INTEGER                         :: SurfFirst    ! index number of the first surface in the zone
     INTEGER                         :: NumOfSurfs   ! number of surfaces in the zone
     INTEGER                         :: ZoneNodeNum  ! index number of the zone node
-    REAL                       :: DeltaTemp    ! dummy variable for temperature difference
-    REAL                       :: TRoomAverage ! dummy variable for mean air temperature
+    REAL(r64)                       :: DeltaTemp    ! dummy variable for temperature difference
+    REAL(r64)                       :: TRoomAverage ! dummy variable for mean air temperature
           ! FLOW:
 
     ! get surface info
     SurfFirst  = ZoneData(ZoneNum)%SurfFirst
     NumOfSurfs = ZoneData(ZoneNum)%NumOfSurfs
 
-    IF ((SupplyAirVolumeRate.GT.0.0001).AND.(QsysCoolTot.GT.0.0001)) THEN ! Controlled zone when the system is on
+    IF ((SupplyAirVolumeRate.GT.0.0001d0).AND.(QsysCoolTot.GT.0.0001d0)) THEN ! Controlled zone when the system is on
 
         IF (AirModel(ZoneNum)%TempCoupleScheme.EQ.DirectCoupling) THEN
             ! Use direct coupling scheme to report air temperatures back to surface/system domains

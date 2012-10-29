@@ -85,8 +85,8 @@ TYPE UnitVentilatorData
   INTEGER                      :: FanAvailSchedPtr    =0   ! index to fan availability schedule
   INTEGER                      :: ControlCompTypeNum =0
   INTEGER                      :: CompErrIndex       =0
-  REAL                    :: MaxAirVolFlow       =0.0 ! m3/s
-  REAL                    :: MaxAirMassFlow      =0.0 ! kg/s
+  REAL(r64)                    :: MaxAirVolFlow       =0.0 ! m3/s
+  REAL(r64)                    :: MaxAirMassFlow      =0.0 ! kg/s
   INTEGER                      :: OAControlType       =0   ! type of control; options are VARIABLE PERCENT and FIXED TEMPERATURE
   CHARACTER(len=MaxNameLength) :: MinOASchedName      =' ' ! schedule of fraction for minimum outside air (all controls)
   INTEGER                      :: MinOASchedPtr       =0   ! index to schedule
@@ -98,10 +98,10 @@ TYPE UnitVentilatorData
   INTEGER                      :: OutsideAirNode      =0   ! outside air node number
   INTEGER                      :: AirReliefNode       =0   ! relief air node number
   INTEGER                      :: OAMixerOutNode      =0   ! outlet node after the outside air mixer (inlet to coils if present)
-  REAL                    :: OutAirVolFlow       =0.0 ! m3/s
-  REAL                    :: OutAirMassFlow      =0.0 ! kg/s
-  REAL                    :: MinOutAirVolFlow    =0.0 ! m3/s
-  REAL                    :: MinOutAirMassFlow   =0.0 ! kg/s
+  REAL(r64)                    :: OutAirVolFlow       =0.0 ! m3/s
+  REAL(r64)                    :: OutAirMassFlow      =0.0 ! kg/s
+  REAL(r64)                    :: MinOutAirVolFlow    =0.0 ! m3/s
+  REAL(r64)                    :: MinOutAirMassFlow   =0.0 ! kg/s
   INTEGER                      :: CoilOption          =0 ! type of coil option; options are BOTH, HEATING, COOLING, AND NONE
   LOGICAL                      :: HCoilPresent        =.FALSE. ! .TRUE. if unit ventilator has a heating coil
   INTEGER                      :: HCoilType           =0   ! type of heating coil (water, gas, electric, etc.)
@@ -112,18 +112,18 @@ TYPE UnitVentilatorData
   INTEGER                      :: HCoil_FluidIndex    =0
   CHARACTER(len=MaxNameLength) :: HCoilSchedName      =' ' ! availability schedule for the heating coil
   INTEGER                      :: HCoilSchedPtr       =0   ! index to schedule
-  REAL                    :: HCoilSchedValue     =0.0
-  REAL                    :: MaxVolHotWaterFlow  =0.0 ! m3/s
-  REAL                    :: MaxVolHotSteamFlow  =0.0 ! m3/s
-  REAL                    :: MaxHotWaterFlow     =0.0 ! kg/s
-  REAL                    :: MaxHotSteamFlow=0.0
-  REAL                    :: MinHotSteamFlow =0.0
-  REAL                    :: MinVolHotWaterFlow  =0.0 ! m3/s
-  REAL                    :: MinVolHotSteamFlow  =0.0 ! m3/s
-  REAL                    :: MinHotWaterFlow     =0.0 ! kg/s
+  REAL(r64)                    :: HCoilSchedValue     =0.0
+  REAL(r64)                    :: MaxVolHotWaterFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MaxVolHotSteamFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MaxHotWaterFlow     =0.0 ! kg/s
+  REAL(r64)                    :: MaxHotSteamFlow=0.0
+  REAL(r64)                    :: MinHotSteamFlow =0.0
+  REAL(r64)                    :: MinVolHotWaterFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MinVolHotSteamFlow  =0.0 ! m3/s
+  REAL(r64)                    :: MinHotWaterFlow     =0.0 ! kg/s
   INTEGER                      :: HotControlNode      =0   ! hot water control node
   INTEGER                      :: HotCoilOutNodeNum   =0   ! outlet of coil
-  REAL                    :: HotControlOffset    =0.0 ! control tolerance
+  REAL(r64)                    :: HotControlOffset    =0.0 ! control tolerance
   INTEGER                      :: HWLoopNum           =0   ! index for plant loop with hot water coil
   INTEGER                      :: HWLoopSide          =0   ! index for plant loop side for hot water coil
   INTEGER                      :: HWBranchNum         =0   ! index for plant branch for hot water coil
@@ -141,14 +141,14 @@ TYPE UnitVentilatorData
                                                            ! 'CoilSystem:Cooling:Water:HeatExchangerAssisted'
   CHARACTER(len=MaxNameLength) :: CCoilSchedName      =' ' ! availability schedule for the cooling coil
   INTEGER                      :: CCoilSchedPtr       =0   ! index to schedule
-  REAL                    :: CCoilSchedValue     =0.0
-  REAL                    :: MaxVolColdWaterFlow =0.0 ! m3/s
-  REAL                    :: MaxColdWaterFlow    =0.0 ! kg/s
-  REAL                    :: MinVolColdWaterFlow =0.0 ! m3/s
-  REAL                    :: MinColdWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: CCoilSchedValue     =0.0
+  REAL(r64)                    :: MaxVolColdWaterFlow =0.0 ! m3/s
+  REAL(r64)                    :: MaxColdWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: MinVolColdWaterFlow =0.0 ! m3/s
+  REAL(r64)                    :: MinColdWaterFlow    =0.0 ! kg/s
   INTEGER                      :: ColdControlNode     =0   ! chilled water control node
   INTEGER                      :: ColdCoilOutNodeNum  =0   ! chilled water coil out node
-  REAL                    :: ColdControlOffset   =0.0 ! control tolerance
+  REAL(r64)                    :: ColdControlOffset   =0.0 ! control tolerance
   INTEGER                      :: CWLoopNum           =0   ! index for plant loop with chilled water coil
   INTEGER                      :: CWLoopSide          =0   ! index for plant loop side for chilled water coil
   INTEGER                      :: CWBranchNum         =0   ! index for plant branch for chilled water coil
@@ -156,14 +156,14 @@ TYPE UnitVentilatorData
 
 
   ! Report data
-  REAL                    :: HeatPower           =0.0 ! unit heating output in watts
-  REAL                    :: HeatEnergy          =0.0 ! unit heating output in J
-  REAL                    :: TotCoolPower        =0.0
-  REAL                    :: TotCoolEnergy       =0.0
-  REAL                    :: SensCoolPower       =0.0
-  REAL                    :: SensCoolEnergy      =0.0
-  REAL                    :: ElecPower           =0.0
-  REAL                    :: ElecEnergy          =0.0
+  REAL(r64)                    :: HeatPower           =0.0 ! unit heating output in watts
+  REAL(r64)                    :: HeatEnergy          =0.0 ! unit heating output in J
+  REAL(r64)                    :: TotCoolPower        =0.0
+  REAL(r64)                    :: TotCoolEnergy       =0.0
+  REAL(r64)                    :: SensCoolPower       =0.0
+  REAL(r64)                    :: SensCoolEnergy      =0.0
+  REAL(r64)                    :: ElecPower           =0.0
+  REAL(r64)                    :: ElecEnergy          =0.0
   CHARACTER(len=MaxNameLength) :: AvailManagerListName = ' ' ! Name of an availability manager list object
   LOGICAL                      :: AvailManagerListFound = .FALSE. ! True if availability manager list name is specified
                                                                   ! for unit ventilator object
@@ -174,8 +174,8 @@ TYPE (UnitVentilatorData), ALLOCATABLE, DIMENSION(:) :: UnitVent
   ! MODULE VARIABLE DECLARATIONS:
 LOGICAL :: HCoilOn         =.FALSE. ! TRUE if the heating coil (gas or electric especially) should be running
 INTEGER :: NumOfUnitVents  =0       ! Number of unit ventilators in the input file
-REAL    :: OAMassFlowRate  =0.0     ! Outside air mass flow rate for the unit ventilator
-REAL    :: QZnReq          =0.0     ! heating or cooling needed by zone [watts]
+REAL(r64)    :: OAMassFlowRate  =0.0     ! Outside air mass flow rate for the unit ventilator
+REAL(r64)    :: QZnReq          =0.0     ! heating or cooling needed by zone [watts]
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
 LOGICAL,SAVE :: GetUnitVentilatorInputFlag = .TRUE.  ! First time, input is "gotten"
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
@@ -225,8 +225,8 @@ SUBROUTINE SimUnitVentilator(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOut
   CHARACTER(len=*), INTENT(IN)  :: CompName            ! name of the fan coil unit
   INTEGER,          INTENT(IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL,        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
-  REAL,        INTENT (OUT) :: LatOutputProvided  ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL(r64),        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
+  REAL(r64),        INTENT (OUT) :: LatOutputProvided  ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT) :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -355,11 +355,11 @@ SUBROUTINE GetUnitVentilatorInput
   CHARACTER(len=MaxNameLength)   :: cCoolingCoilType    ! Cooling coil object type
   CHARACTER(len=MaxNameLength)   :: cHeatingCoilType    ! Heating coil object type
   INTEGER                        :: FanIndex            ! index to fan used for flow checks
-  REAL                      :: FanVolFlow          ! volumetric flow rate of fan
+  REAL(r64)                      :: FanVolFlow          ! volumetric flow rate of fan
   CHARACTER(len=MaxNameLength)   :: CurrentModuleObject
   CHARACTER(len=MaxNameLength), &
                    ALLOCATABLE, DIMENSION(:) :: Alphas                       ! Alpha items for object
-  REAL, ALLOCATABLE, DIMENSION(:)       :: Numbers                      ! Numeric items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:)       :: Numbers                      ! Numeric items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:)  :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:)  :: cNumericFields ! Numeric field names
   LOGICAL, ALLOCATABLE, DIMENSION(:)  :: lAlphaBlanks                        ! Logical array, alpha field input BLANK = .true.
@@ -723,7 +723,7 @@ SUBROUTINE GetUnitVentilatorInput
         UnitVent(UnitVentNum)%HotControlOffset = Numbers(4)
         ! Set default convergence tolerance
         IF (UnitVent(UnitVentNum)%HotControlOffset .LE. 0.0) THEN
-          UnitVent(UnitVentNum)%HotControlOffset = 0.001
+          UnitVent(UnitVentNum)%HotControlOffset = 0.001d0
         END IF
         SELECT CASE(UnitVent(UnitVentNum)%HCoilType)
 
@@ -826,7 +826,7 @@ SUBROUTINE GetUnitVentilatorInput
         UnitVent(UnitVentNum)%ColdControlOffset = Numbers(5)
         ! Set default convergence tolerance
         IF (UnitVent(UnitVentNum)%ColdControlOffset .LE. 0.0) THEN
-          UnitVent(UnitVentNum)%ColdControlOffset = 0.001
+          UnitVent(UnitVentNum)%ColdControlOffset = 0.001d0
         END IF
         SELECT CASE(UnitVent(UnitVentNum)%CCoilType)
 
@@ -1026,10 +1026,10 @@ SUBROUTINE InitUnitVentilator(UnitVentNum,FirstHVACIteration, ZoneNum)
   INTEGER        :: InNode             ! inlet node number in unit ventilator loop
   INTEGER        :: OutNode            ! outlet node number in unit ventilator loop
   INTEGER        :: OutsideAirNode     ! outside air node number in unit ventilator loop
-  REAL      :: RhoAir             ! air density at InNode
-  REAL      :: TempSteamIn
-  REAL      :: SteamDensity
-  REAL      :: rho  ! local fluid density
+  REAL(r64)      :: RhoAir             ! air density at InNode
+  REAL(r64)      :: TempSteamIn
+  REAL(r64)      :: SteamDensity
+  REAL(r64)      :: rho  ! local fluid density
   LOGICAL        :: errFlag
   LOGICAL        :: SetMassFlowRateToZero ! TRUE when mass flow rates need to be set to zero
   INTEGER        :: AvailStatus           ! Availability status set by system availability manager
@@ -1152,7 +1152,7 @@ END IF
     IF (UnitVent(UnitVentNum)%HCoilType == Heating_WaterCoilType) THEN
 
       rho = GetDensityGlycol( PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidName, &
-                             60., &
+                             60.d0, &
                              PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidIndex, &
                              'InitUnitVentilator')
 
@@ -1171,7 +1171,7 @@ END IF
     END IF
     IF (UnitVent(UnitVentNum)%HCoilType == Heating_SteamCoilType) THEN
       TempSteamIn= 100.00
-      SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,UnitVent(UnitVentNum)%HCoil_FluidIndex,'InitUnitVentilator')
+      SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,UnitVent(UnitVentNum)%HCoil_FluidIndex,'InitUnitVentilator')
       UnitVent(UnitVentNum)%MaxHotSteamFlow = SteamDensity*UnitVent(UnitVentNum)%MaxVolHotSteamFlow
       UnitVent(UnitVentNum)%MinHotSteamFlow = SteamDensity*UnitVent(UnitVentNum)%MinVolHotSteamFlow
 
@@ -1188,7 +1188,7 @@ END IF
 
     IF (UnitVent(UnitVentNum)%CCoilPresent) THEN ! Only initialize these if a cooling coil is actually present
       rho = GetDensityGlycol( PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidName, &
-                             5., &
+                             5.d0, &
                              PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidIndex, &
                              'InitUnitVentilator')
 
@@ -1335,18 +1335,18 @@ SUBROUTINE SizeUnitVentilator(UnitVentNum)
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
   LOGICAL             :: ErrorsFound
-  REAL           :: CoilInTemp
-  REAL           :: CoilOutTemp
-  REAL           :: CoilOutHumRat
-  REAL           :: CoilInHumRat
-  REAL           :: CoilInEnthalpy
-  REAL           :: CoilOutEnthalpy
-  REAL           :: DesCoilLoad
-  REAL           :: TempSteamIn
-  REAL           :: EnthSteamInDry
-  REAL           :: EnthSteamOutWet
-  REAL           :: LatentHeatSteam
-  REAL           :: SteamDensity
+  REAL(r64)           :: CoilInTemp
+  REAL(r64)           :: CoilOutTemp
+  REAL(r64)           :: CoilOutHumRat
+  REAL(r64)           :: CoilInHumRat
+  REAL(r64)           :: CoilInEnthalpy
+  REAL(r64)           :: CoilOutEnthalpy
+  REAL(r64)           :: DesCoilLoad
+  REAL(r64)           :: TempSteamIn
+  REAL(r64)           :: EnthSteamInDry
+  REAL(r64)           :: EnthSteamOutWet
+  REAL(r64)           :: LatentHeatSteam
+  REAL(r64)           :: SteamDensity
   INTEGER             :: RefrigIndex
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
@@ -1354,8 +1354,8 @@ SUBROUTINE SizeUnitVentilator(UnitVentNum)
   INTEGER             :: CoilSteamOutletNode=0
   CHARACTER(len=MaxNameLength) :: CoolingCoilName
   CHARACTER(len=MaxNameLength) :: CoolingCoilType
-  REAL           :: rho
-  REAL           :: Cp
+  REAL(r64)           :: rho
+  REAL(r64)           :: Cp
   INTEGER             :: DummyWaterIndex = 1
 
 
@@ -1438,11 +1438,11 @@ SUBROUTINE SizeUnitVentilator(UnitVentNum)
                               * (CoilOutTemp-CoilInTemp)
 
             rho = GetDensityGlycol(PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidIndex, &
                                      'SizeUnitVentilator')
             Cp = GetSpecificHeatGlycol(PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(UnitVent(UnitVentNum)%HWLoopNum)%FluidIndex, &
                                      'SizeUnitVentilator')
 
@@ -1483,10 +1483,10 @@ SUBROUTINE SizeUnitVentilator(UnitVentNum)
                               * (CoilOutTemp-CoilInTemp)
 
             TempSteamIn= 100.00
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,RefrigIndex,'SizeUnitVentilator')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,RefrigIndex,'SizeUnitVentilator')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,RefrigIndex,'SizeUnitVentilator')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,RefrigIndex,'SizeUnitVentilator')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,RefrigIndex,'SizeUnitVentilator')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,RefrigIndex,'SizeUnitVentilator')
             Cp = GetSpecificHeatGlycol('WATER', PlantSizData(PltSizHeatNum)%ExitTemp, DummyWaterIndex, 'SizeUnitVentilator')
 
             UnitVent(UnitVentNum)%MaxVolHotSteamFlow = DesCoilLoad/(SteamDensity*(LatentHeatSteam + &
@@ -1540,18 +1540,18 @@ SUBROUTINE SizeUnitVentilator(UnitVentNum)
           DesCoilLoad = FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow &
                           * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
           rho = GetDensityGlycol(PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidName, &
-                                    5., &
+                                    5.d0, &
                                      PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidIndex, &
                                      'SizeUnitVentilator')
           Cp = GetSpecificHeatGlycol(PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidName, &
-                                    5., &
+                                    5.d0, &
                                      PlantLoop(UnitVent(UnitVentNum)%CWLoopNum)%FluidIndex, &
                                      'SizeUnitVentilator')
 
           UnitVent(UnitVentNum)%MaxVolColdWaterFlow = DesCoilLoad / &
                                                      ( PlantSizData(PltSizCoolNum)%DeltaT * &
                                                      Cp * rho )
-          IF(UnitVent(UnitVentNum)%MaxVolColdWaterFlow .LT. 0.)THEN
+          IF(UnitVent(UnitVentNum)%MaxVolColdWaterFlow .LT. 0.d0)THEN
             CALL ShowContinueError('Autosizing of water flow resulted in negative value.')
             CALL ShowContinueError('Occurs in ' // cMO_UnitVentilator // ' Object=' &
                                //TRIM(UnitVent(UnitVentNum)%Name))
@@ -1675,13 +1675,13 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
   INTEGER, INTENT(INOUT) :: UnitVentNum        ! number of the current fan coil unit being simulated
   INTEGER, INTENT(IN)    :: ZoneNum            ! number of zone being served
   LOGICAL, INTENT(IN)    :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
-  REAL, INTENT(OUT)   :: PowerMet           ! Sensible power supplied (W)
-  REAL, INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
+  REAL(r64), INTENT(OUT)   :: PowerMet           ! Sensible power supplied (W)
+  REAL(r64), INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: LowTempDiff = 0.1      ! Smallest allowed temperature difference for comparisons
+  REAL(r64), PARAMETER :: LowTempDiff = 0.1d0      ! Smallest allowed temperature difference for comparisons
                                             ! (below this value the temperatures are assumed equal)
-  REAL, PARAMETER :: LowOAFracDiff = 0.01   ! Smallest allowed outside air fraction difference for comparison
+  REAL(r64), PARAMETER :: LowOAFracDiff = 0.01d0   ! Smallest allowed outside air fraction difference for comparison
                                             ! (below this value the fractions are assumed equal)
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1691,29 +1691,29 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: AirMassFlow      ! air mass flow rate [kg/sec]
+  REAL(r64)    :: AirMassFlow      ! air mass flow rate [kg/sec]
   INTEGER :: AirRelNode       ! outside air relief node
   INTEGER :: ControlNode      ! the hot water or cold water inlet node
-  REAL    :: ControlOffset    ! tolerance for output control
+  REAL(r64)    :: ControlOffset    ! tolerance for output control
   INTEGER :: InletNode        ! unit air inlet node
-  REAL    :: MaxOAFrac        ! maximum possible outside air fraction
-  REAL    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL    :: MinOAFrac        ! minimum possible outside air fraction
-  REAL    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+  REAL(r64)    :: MaxOAFrac        ! maximum possible outside air fraction
+  REAL(r64)    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+  REAL(r64)    :: MinOAFrac        ! minimum possible outside air fraction
+  REAL(r64)    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
   INTEGER :: OutletNode       ! unit air outlet node
   INTEGER :: OutsideAirNode   ! outside air node
-  REAL    :: QTotUnitOut      ! total unit output [watts]
-  REAL    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
-  REAL    :: Tdesired         ! desired temperature after mixing inlet and outdoor air [degrees C]
-  REAL    :: Tinlet           ! temperature of air coming into the unit ventilator [degrees C]
-  REAL    :: Toutdoor         ! temperature of outdoor air being introduced into the unit ventilator [degrees C]
-  REAL    :: MaxSteamFlow
-  REAL    :: MinSteamFlow
-  REAL    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
-  REAL    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL(r64)    :: QTotUnitOut      ! total unit output [watts]
+  REAL(r64)    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
+  REAL(r64)    :: Tdesired         ! desired temperature after mixing inlet and outdoor air [degrees C]
+  REAL(r64)    :: Tinlet           ! temperature of air coming into the unit ventilator [degrees C]
+  REAL(r64)    :: Toutdoor         ! temperature of outdoor air being introduced into the unit ventilator [degrees C]
+  REAL(r64)    :: MaxSteamFlow
+  REAL(r64)    :: MinSteamFlow
+  REAL(r64)    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+  REAL(r64)    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL(r64)    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
   INTEGER      :: AvailStatus    ! Availability status set by system availability manager
-  REAL    :: mdot
+  REAL(r64)    :: mdot
 
  SELECT CASE (UnitVent(UnitVentNum)%CoilOption)
  CASE (BothOption)
@@ -1796,11 +1796,11 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
 
 
           ! FLOW:
-  FanElecPower = 0.0
+  FanElecPower = 0.0d0
           ! initialize local variables
   ControlNode    = 0
-  QUnitOut       = 0.0
-  LatentOutput   = 0.0
+  QUnitOut       = 0.0d0
+  LatentOutput   = 0.0d0
   ControlOffset  = 0.0
   MaxWaterFlow   = 0.0
   MinWaterFlow   = 0.0
@@ -1827,7 +1827,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
     AirMassFlow                               = Node(OutletNode)%MassFlowRate
     HCoilOn                                   = .FALSE.
     IF (UnitVent(UnitVentNum)%HotControlNode > 0) THEN
-      mdot = 0.
+      mdot = 0.d0
       Call SetComponentFlowRate( mdot, &
                             UnitVent(UnitVentNum)%HotControlNode, &
                             UnitVent(UnitVentNum)%HotCoilOutNodeNum, &
@@ -1837,7 +1837,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
                             UnitVent(UnitVentNum)%HWCompNum)
     ENDIF
     IF (UnitVent(UnitVentNum)%ColdControlNode > 0) THEN
-      mdot = 0.
+      mdot = 0.d0
       Call SetComponentFlowRate( mdot, &
                             UnitVent(UnitVentNum)%ColdControlNode, &
                             UnitVent(UnitVentNum)%ColdCoilOutNodeNum, &
@@ -1878,7 +1878,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
       Else
          MinOAFrac = 0.0
       End If
-      MinOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
+      MinOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
 
 
 
@@ -1903,7 +1903,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
       CASE (VariablePercent)
           ! This algorithm is probably a bit simplistic in that it just bounces
           ! back and forth between the maximum outside air and the minimum.  In
-          ! REALity, a system *might* vary between the two based on the load in
+          ! REAL(r64)ity, a system *might* vary between the two based on the load in
           ! the zone.
           Tinlet    = Node(InletNode)%Temp
           Toutdoor  = Node(OutsideAirNode)%Temp
@@ -2089,7 +2089,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
       Else
          MinOAFrac = 0.0
       End If
-      MinOAFrac = MIN(1.0,MAX(0.0,MinOAFrac))
+      MinOAFrac = MIN(1.0d0,MAX(0.0d0,MinOAFrac))
 
 
       IF ( (.NOT.UnitVent(UnitVentNum)%CCoilPresent) .OR. &
@@ -2109,7 +2109,7 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
         CASE (VariablePercent)
           ! This algorithm is probably a bit simplistic in that it just bounces
           ! back and forth between the maximum outside air and the minimum.  In
-          ! REALity, a system *might* vary between the two based on the load in
+          ! REAL(r64)ity, a system *might* vary between the two based on the load in
           ! the zone.  This simple flow control might cause some overcooling but
           ! chances are that if there is a cooling load and the zone temperature
           ! gets above the outside temperature that overcooling won't be significant.
@@ -2250,16 +2250,16 @@ SUBROUTINE CalcUnitVentilator(UnitVentNum,ZoneNum,FirstHVACIteration,PowerMet,La
 
   END IF    ! ...end of unit ON/OFF IF-THEN block
 
-  SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
-  SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
+  SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
+  SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
   LatentOutput = AirMassFlow * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 
   QTotUnitOut = AirMassFlow * (Node(OutletNode)%Enthalpy - Node(InletNode)%Enthalpy)
 
           ! Report variables...
-  UnitVent(UnitVentNum)%HeatPower     = MAX(0.0,QUnitOut)
-  UnitVent(UnitVentNum)%SensCoolPower = ABS(MIN(0.0,QUnitOut))
-  UnitVent(UnitVentNum)%TotCoolPower  = ABS(MIN(0.0,QTotUnitOut))
+  UnitVent(UnitVentNum)%HeatPower     = MAX(0.0d0,QUnitOut)
+  UnitVent(UnitVentNum)%SensCoolPower = ABS(MIN(0.0d0,QUnitOut))
+  UnitVent(UnitVentNum)%TotCoolPower  = ABS(MIN(0.0d0,QTotUnitOut))
   UnitVent(UnitVentNum)%ElecPower     = FanElecPower
 
   PowerMet = QUnitOut
@@ -2306,7 +2306,7 @@ SUBROUTINE CalcUnitVentilatorComponents(UnitVentNum,FirstHVACIteration,LoadMet)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: UnitVentNum        ! Unit index in unit ventilator array
   LOGICAL, INTENT(IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
-  REAL,    INTENT(OUT) :: LoadMet            ! load met by unit (watts)
+  REAL(r64),    INTENT(OUT) :: LoadMet            ! load met by unit (watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2318,12 +2318,12 @@ SUBROUTINE CalcUnitVentilatorComponents(UnitVentNum,FirstHVACIteration,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: AirMassFlow     ! total mass flow through the unit
-  REAL      :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as unit inlet)
+  REAL(r64)      :: AirMassFlow     ! total mass flow through the unit
+  REAL(r64)      :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as unit inlet)
   INTEGER        :: HCoilInAirNode  ! inlet node number for fan exit/coil inlet
   INTEGER        :: InletNode       ! unit air inlet node
   INTEGER        :: OutletNode      ! unit air outlet node
-  REAL      :: QCoilReq        ! Heat addition required from an electric/gas heating coil
+  REAL(r64)      :: QCoilReq        ! Heat addition required from an electric/gas heating coil
   LOGICAL        :: UnitVentTurnFansOn   ! TurnFansOn Availalability status as set by SAM
   LOGICAL        :: UnitVentTurnFansOff  ! TurnFansOff Availalability status as set by SAM
 
@@ -2352,7 +2352,7 @@ SUBROUTINE CalcUnitVentilatorComponents(UnitVentNum,FirstHVACIteration,LoadMet)
   IF (UnitVent(UnitVentNum)%CCoilPresent) THEN
     IF(UnitVent(UnitVentNum)%CCoilType == Cooling_CoilHXAssisted) THEN
       CALL SimHXAssistedCoolingCoil(UnitVent(UnitVentNum)%CCoilName,FirstHVACIteration,On,  &
-                 0.0,UnitVent(UnitVentNum)%CCoil_Index,ContFanCycCoil)
+                 0.0d0,UnitVent(UnitVentNum)%CCoil_Index,ContFanCycCoil)
     ELSE
       CALL SimulateWaterCoilComponents(UnitVent(UnitVentNum)%CCoilName,FirstHVACIteration,  &
                                        UnitVent(UnitVentNum)%CCoil_Index)
@@ -2468,7 +2468,7 @@ SUBROUTINE SimUnitVentOAMixer(UnitVentNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER        :: AirRelNode         ! relief air node number in unit ventilator loop
   INTEGER        :: InletNode          ! inlet node number for unit ventilator loop
-  REAL      :: OAFraction         ! Outside air fraction of inlet air
+  REAL(r64)      :: OAFraction         ! Outside air fraction of inlet air
   INTEGER        :: OAMixOutNode       ! outside air mixer outlet node for unit ventilator loop
   INTEGER        :: OutsideAirNode     ! outside air node number in unit ventilator loop
 

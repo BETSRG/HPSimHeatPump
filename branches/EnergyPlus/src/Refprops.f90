@@ -224,8 +224,8 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=25) :: String3
   CHARACTER(len=25) :: String4
   
-  !INTEGER, PARAMETER :: r64=KIND(1.0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  !REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   REAL, DIMENSION(251) :: TmpNumbers    !Brings in data from Input files
     !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 

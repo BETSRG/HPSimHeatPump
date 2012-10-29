@@ -71,8 +71,8 @@ TYPE UnitHeaterData
   INTEGER                      :: FanAvailSchedPtr   =0   ! index to fan availability schedule
   INTEGER                      :: ControlCompTypeNum =0
   INTEGER                      :: CompErrIndex       =0
-  REAL                    :: MaxAirVolFlow      =0.0 ! m3/s
-  REAL                    :: MaxAirMassFlow     =0.0 ! kg/s
+  REAL(r64)                    :: MaxAirVolFlow      =0.0 ! m3/s
+  REAL(r64)                    :: MaxAirMassFlow     =0.0 ! kg/s
   CHARACTER(len=MaxNameLength) :: FanControlType     =' ' ! type of control; options are VARIABLE PERCENT and FIXED TEMPERATURE
   INTEGER                      :: FanOutletNode      =0   ! outlet node number for fan exit
                                                           ! (assumes fan is upstream of heating coil)
@@ -82,16 +82,16 @@ TYPE UnitHeaterData
   INTEGER                      :: HCoil_Index        =0   !
   INTEGER                      :: HCoil_PlantTypeNum =0  !
   INTEGER                      :: HCoil_FluidIndex   =0
-  REAL                    :: MaxVolHotWaterFlow =0.0 ! m3/s
-  REAL                    :: MaxVolHotSteamFlow =0.0 ! m3/s
-  REAL                    :: MaxHotWaterFlow    =0.0 ! kg/s
-  REAL                    :: MaxHotSteamFlow    =0.0 ! m3/s
-  REAL                    :: MinVolHotWaterFlow =0.0 ! m3/s
-  REAL                    :: MinVolHotSteamFlow =0.0 ! m3/s
-  REAL                    :: MinHotWaterFlow    =0.0 ! kg/s
-  REAL                    :: MinHotSteamFlow    =0.0 ! kg/s
+  REAL(r64)                    :: MaxVolHotWaterFlow =0.0 ! m3/s
+  REAL(r64)                    :: MaxVolHotSteamFlow =0.0 ! m3/s
+  REAL(r64)                    :: MaxHotWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: MaxHotSteamFlow    =0.0 ! m3/s
+  REAL(r64)                    :: MinVolHotWaterFlow =0.0 ! m3/s
+  REAL(r64)                    :: MinVolHotSteamFlow =0.0 ! m3/s
+  REAL(r64)                    :: MinHotWaterFlow    =0.0 ! kg/s
+  REAL(r64)                    :: MinHotSteamFlow    =0.0 ! kg/s
   INTEGER                      :: HotControlNode     =0   ! hot water control node, inlet of coil
-  REAL                    :: HotControlOffset   =0.0 ! control tolerance
+  REAL(r64)                    :: HotControlOffset   =0.0 ! control tolerance
   INTEGER                      :: HotCoilOutNodeNum  =0   ! outlet of coil
   INTEGER                      :: HWLoopNum          =0   ! index for plant loop with hot plant coil
   INTEGER                      :: HWLoopSide         =0   ! index for plant loop side for hot plant coil
@@ -99,10 +99,10 @@ TYPE UnitHeaterData
   INTEGER                      :: HWCompNum          =0   ! index for plant component for hot plant coil
 
   ! Report data
-  REAL                    :: HeatPower          =0.0 ! unit heating output in watts
-  REAL                    :: HeatEnergy         =0.0 ! unit heating output in J
-  REAL                    :: ElecPower          =0.0 !
-  REAL                    :: ElecEnergy         =0.0 !
+  REAL(r64)                    :: HeatPower          =0.0 ! unit heating output in watts
+  REAL(r64)                    :: HeatEnergy         =0.0 ! unit heating output in J
+  REAL(r64)                    :: ElecPower          =0.0 !
+  REAL(r64)                    :: ElecEnergy         =0.0 !
   CHARACTER(len=MaxNameLength) :: AvailManagerListName = ' ' ! Name of an availability manager list object
   LOGICAL                      :: AvailManagerListFound = .FALSE. ! True if availability manager list name is specified
                                                                   ! for unit heater object
@@ -114,7 +114,7 @@ TYPE (UnitHeaterData), ALLOCATABLE, DIMENSION(:) :: UnitHeat
   ! MODULE VARIABLE DECLARATIONS:
 LOGICAL :: HCoilOn          ! TRUE if the heating coil (gas or electric especially) should be running
 INTEGER :: NumOfUnitHeats   ! Number of unit heaters in the input file
-REAL    :: QZnReq           ! heating or cooling needed by zone [watts]
+REAL(r64)    :: QZnReq           ! heating or cooling needed by zone [watts]
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
@@ -158,8 +158,8 @@ SUBROUTINE SimUnitHeater(CompName,ZoneNum,FirstHVACIteration,PowerMet,LatOutputP
   CHARACTER(len=*), INTENT(IN)  :: CompName            ! name of the fan coil unit
   INTEGER,          INTENT(IN)  :: ZoneNum             ! number of zone being served
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL,        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
-  REAL,        INTENT (OUT) :: LatOutputProvided  ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL(r64),        INTENT(OUT) :: PowerMet            ! Sensible power supplied (W)
+  REAL(r64),        INTENT (OUT) :: LatOutputProvided  ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
   INTEGER,          INTENT(INOUT) :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -285,11 +285,11 @@ SUBROUTINE GetUnitHeaterInput
   INTEGER                        :: UnitHeatNum         ! Item to be "gotten"
   CHARACTER(len=*), PARAMETER :: RoutineName='GetUnitHeaterInput: ' ! include trailing blank space
 !  LOGICAL                        :: FanErrFlag          ! Error flag used in GetFanIndex call
-  REAL                      :: FanVolFlow          ! Fan volumetric flow rate
+  REAL(r64)                      :: FanVolFlow          ! Fan volumetric flow rate
   CHARACTER(len=MaxNameLength)   :: CurrentModuleObject
   CHARACTER(len=MaxNameLength), &
                    ALLOCATABLE, DIMENSION(:)  :: Alphas     ! Alpha items for object
-  REAL, ALLOCATABLE, DIMENSION(:)        :: Numbers    ! Numeric items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:)        :: Numbers    ! Numeric items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:)  :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:)  :: cNumericFields ! Numeric field names
   LOGICAL, ALLOCATABLE, DIMENSION(:)  :: lAlphaBlanks     ! Logical array, alpha field input BLANK = .true.
@@ -489,7 +489,7 @@ SUBROUTINE GetUnitHeaterInput
     UnitHeat(UnitHeatNum)%HotControlOffset = Numbers(4)
     ! Set default convergence tolerance
     IF (UnitHeat(UnitHeatNum)%HotControlOffset .LE. 0.0) THEN
-      UnitHeat(UnitHeatNum)%HotControlOffset = 0.001
+      UnitHeat(UnitHeatNum)%HotControlOffset = 0.001d0
     END IF
 
     IF (.NOT. lAlphaBlanks(10)) THEN
@@ -638,11 +638,11 @@ SUBROUTINE InitUnitHeater(UnitHeatNum, ZoneNum)
   INTEGER        :: HotConNode         ! hot water control node number in unit heater loop
   INTEGER        :: InNode             ! inlet node number in unit heater loop
   INTEGER        :: OutNode            ! outlet node number in unit heater loop
-  REAL      :: RhoAir             ! air density at InNode
-  REAL      :: TempSteamIn
-  REAL      :: SteamDensity
+  REAL(r64)      :: RhoAir             ! air density at InNode
+  REAL(r64)      :: TempSteamIn
+  REAL(r64)      :: SteamDensity
 !  INTEGER        :: RefrigIndex
-  REAL      :: rho  ! local fluid density
+  REAL(r64)      :: rho  ! local fluid density
   LOGICAL        :: errFlag
   INTEGER        :: AvailStatus    ! Availability status set by system availability manager
   LOGICAL        :: SetMassFlowRateToZero = .FALSE. ! TRUE when mass flow rates need to be set to zero
@@ -721,7 +721,7 @@ SUBROUTINE InitUnitHeater(UnitHeatNum, ZoneNum)
 
     IF (UnitHeat(UnitHeatNum)%HCoilType == WaterCoil) THEN
       rho = GetDensityGlycol( PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidName, &
-                             60., &
+                             60.d0, &
                              PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidIndex, &
                              'InitUnitHeater')
 
@@ -738,7 +738,7 @@ SUBROUTINE InitUnitHeater(UnitHeatNum, ZoneNum)
     END IF
     IF (UnitHeat(UnitHeatNum)%HCoilType == SteamCoil) THEN
       TempSteamIn= 100.00
-      SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,UnitHeat(UnitHeatNum)%HCoil_FluidIndex,'InitUnitHeater')
+      SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,UnitHeat(UnitHeatNum)%HCoil_FluidIndex,'InitUnitHeater')
       UnitHeat(UnitHeatNum)%MaxHotSteamFlow = SteamDensity*UnitHeat(UnitHeatNum)%MaxVolHotSteamFlow
       UnitHeat(UnitHeatNum)%MinHotSteamFlow = SteamDensity*UnitHeat(UnitHeatNum)%MinVolHotSteamFlow
 
@@ -854,19 +854,19 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   LOGICAL             :: ErrorsFound
-  REAL           :: DesCoilLoad
-  REAL           :: TempSteamIn
-  REAL           :: EnthSteamInDry
-  REAL           :: EnthSteamOutWet
-  REAL           :: LatentHeatSteam
-  REAL           :: SteamDensity
+  REAL(r64)           :: DesCoilLoad
+  REAL(r64)           :: TempSteamIn
+  REAL(r64)           :: EnthSteamInDry
+  REAL(r64)           :: EnthSteamOutWet
+  REAL(r64)           :: LatentHeatSteam
+  REAL(r64)           :: SteamDensity
   INTEGER             :: RefrigIndex
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0
   INTEGER             :: CoilSteamOutletNode=0
-  REAL           :: Cp ! local temporary for fluid specific heat
-  REAL           :: rho ! local temporary for fluid density
+  REAL(r64)           :: Cp ! local temporary for fluid specific heat
+  REAL(r64)           :: rho ! local temporary for fluid density
 
 
 
@@ -905,11 +905,11 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
           IF (DesCoilLoad >= SmallLOad) THEN
 
             rho = GetDensityGlycol(PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidIndex, &
                                      'SizeUnitHeater')
             Cp = GetSpecificHeatGlycol(PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(UnitHeat(UnitHeatNum)%HWLoopNum)%FluidIndex, &
                                      'SizeUnitHeater')
 
@@ -944,10 +944,10 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
           DesCoilLoad = FinalZoneSizing(CurZoneEqNum)%DesHeatLoad
           IF (DesCoilLoad >= SmallLOad) THEN
             TempSteamIn= 100.00
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,RefrigIndex,'SizeUnitHeater')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,RefrigIndex,'SizeUnitHeater')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,RefrigIndex,'SizeUnitHeater')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,RefrigIndex,'SizeUnitHeater')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,RefrigIndex,'SizeUnitHeater')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,RefrigIndex,'SizeUnitHeater')
             UnitHeat(UnitHeatNum)%MaxVolHotSteamFlow = DesCoilLoad/(SteamDensity*(LatentHeatSteam + &
               PlantSizData(PltSizHeatNum)%DeltaT*CPHW(PlantSizData(PltSizHeatNum)%ExitTemp)))
           ELSE
@@ -1029,8 +1029,8 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
   INTEGER, INTENT(INOUT) :: UnitHeatNum        ! number of the current fan coil unit being simulated
   INTEGER, INTENT(IN)    :: ZoneNum            ! number of zone being served
   LOGICAL, INTENT(IN)    :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
-  REAL,    INTENT(OUT)   :: PowerMet        ! Sensible power supplied (W)
-  REAL, INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
+  REAL(r64),    INTENT(OUT)   :: PowerMet        ! Sensible power supplied (W)
+  REAL(r64), INTENT (OUT)  :: LatOutputProvided  ! Latent power supplied (kg/s), negative = dehumidification
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1043,23 +1043,23 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ControlNode      ! the hot water inlet node
-  REAL    :: ControlOffset    ! tolerance for output control
+  REAL(r64)    :: ControlOffset    ! tolerance for output control
   INTEGER :: InletNode        ! unit air inlet node
-  REAL    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+  REAL(r64)    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
+  REAL(r64)    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
   INTEGER :: OutletNode       ! unit air outlet node
-  REAL    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
-  REAL    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
-  REAL    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
-  REAL    :: mdot  ! local temporary for fluid mass flow rate
+  REAL(r64)    :: QUnitOut         ! heating or sens. cooling provided by fan coil unit [watts]
+  REAL(r64)    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
+  REAL(r64)    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL(r64)    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL(r64)    :: mdot  ! local temporary for fluid mass flow rate
   INTEGER      :: AvailStatus    ! Availability status set by system availability manager
           ! FLOW:
-  FanElecPower = 0.0
+  FanElecPower = 0.0d0
   AvailStatus  = NoAction
           ! initialize local variables
-  QUnitOut      = 0.0
-  LatentOutput  = 0.0
+  QUnitOut      = 0.0d0
+  LatentOutput  = 0.0d0
   MaxWaterFlow  = 0.0
   MinWaterFlow  = 0.0
   InletNode     = UnitHeat(UnitHeatNum)%AirInNode
@@ -1082,7 +1082,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
           !         OR child fan being forced OFF by sys avail manager
     HCoilOn                               = .FALSE.
     IF (UnitHeat(UnitHeatNum)%HCoilType == WaterCoil) THEN
-      mdot = 0. ! try to turn off
+      mdot = 0.d0 ! try to turn off
 
       CALL SetComponentFlowRate( mdot, &
                                  UnitHeat(UnitHeatNum)%HotControlNode, &
@@ -1093,7 +1093,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
                                  UnitHeat(UnitHeatNum)%HWCompNum )
     END IF
     IF (UnitHeat(UnitHeatNum)%HCoilType == SteamCoil) THEN
-      mdot = 0. ! try to turn off
+      mdot = 0.d0 ! try to turn off
 
       CALL SetComponentFlowRate( mdot, &
                                  UnitHeat(UnitHeatNum)%HotControlNode, &
@@ -1114,7 +1114,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
           !         because there is no load on the unit heater
       HCoilOn                               = .FALSE.
       IF (UnitHeat(UnitHeatNum)%HCoilType == WaterCoil) THEN
-        mdot = 0. ! try to turn off
+        mdot = 0.d0 ! try to turn off
 
         CALL SetComponentFlowRate( mdot, &
                                    UnitHeat(UnitHeatNum)%HotControlNode, &
@@ -1125,7 +1125,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
                                    UnitHeat(UnitHeatNum)%HWCompNum )
       END IF
       IF (UnitHeat(UnitHeatNum)%HCoilType == SteamCoil) THEN
-        mdot = 0. ! try to turn off
+        mdot = 0.d0 ! try to turn off
 
         CALL SetComponentFlowRate( mdot, &
                                    UnitHeat(UnitHeatNum)%HotControlNode, &
@@ -1145,7 +1145,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
 
       HCoilOn = .FALSE.
       IF (UnitHeat(UnitHeatNum)%HCoilType == WaterCoil) THEN
-        mdot = 0. ! try to turn off
+        mdot = 0.d0 ! try to turn off
 
         IF (UnitHeat(UnitHeatNum)%HWLoopNum > 0) THEN
           CALL SetComponentFlowRate( mdot, &
@@ -1158,7 +1158,7 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
         ENDIF
       END IF
       IF (UnitHeat(UnitHeatNum)%HCoilType == SteamCoil) THEN
-        mdot = 0. ! try to turn off
+        mdot = 0.d0 ! try to turn off
         IF (UnitHeat(UnitHeatNum)%HWLoopNum > 0) THEN
           CALL SetComponentFlowRate( mdot, &
                                    UnitHeat(UnitHeatNum)%HotControlNode, &
@@ -1210,15 +1210,15 @@ SUBROUTINE CalcUnitHeater(UnitHeatNum,ZoneNum,FirstHVACIteration,PowerMet,LatOut
 
   END IF    ! ...end of unit ON/OFF IF-THEN block
 
-  SpecHumOut = Node(OutletNode)%HumRat / (1.0 + Node(OutletNode)%HumRat)
-  SpecHumIn  = Node(InletNode)%HumRat / (1.0 + Node(InletNode)%HumRat)
+  SpecHumOut = Node(OutletNode)%HumRat / (1.0d0 + Node(OutletNode)%HumRat)
+  SpecHumIn  = Node(InletNode)%HumRat / (1.0d0 + Node(InletNode)%HumRat)
   LatentOutput = Node(OutletNode)%MassFlowRate * (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 
   QUnitOut = Node(OutletNode)%MassFlowRate * (PsyHFnTdbW(Node(OutletNode)%Temp,Node(InletNode)%HumRat)  &
                                             - PsyHFnTdbW(Node(InletNode)%Temp,Node(InletNode)%HumRat))
 
           ! Report variables...
-  UnitHeat(UnitHeatNum)%HeatPower = MAX(0.0,QUnitOut)
+  UnitHeat(UnitHeatNum)%HeatPower = MAX(0.0d0,QUnitOut)
   UnitHeat(UnitHeatNum)%ElecPower = FanElecPower
 
   PowerMet = QUnitOut
@@ -1261,7 +1261,7 @@ SUBROUTINE CalcUnitHeaterComponents(UnitHeatNum,FirstHVACIteration,LoadMet)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: UnitHeatNum        ! Unit index in unit heater array
   LOGICAL, INTENT(IN)  :: FirstHVACIteration ! flag for 1st HVAV iteration in the time step
-  REAL,    INTENT(OUT) :: LoadMet            ! load met by unit (watts)
+  REAL(r64),    INTENT(OUT) :: LoadMet            ! load met by unit (watts)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1273,12 +1273,12 @@ SUBROUTINE CalcUnitHeaterComponents(UnitHeatNum,FirstHVACIteration,LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: AirMassFlow     ! total mass flow through the unit
-  REAL      :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as unit inlet)
+  REAL(r64)      :: AirMassFlow     ! total mass flow through the unit
+  REAL(r64)      :: CpAirZn         ! specific heat of dry air at zone conditions (zone conditions same as unit inlet)
   INTEGER        :: HCoilInAirNode  ! inlet node number for fan exit/coil inlet
   INTEGER        :: InletNode       ! unit air inlet node
   INTEGER        :: OutletNode      ! unit air outlet node
-  REAL      :: QCoilReq        ! Heat addition required from an electric/gas heating coil
+  REAL(r64)      :: QCoilReq        ! Heat addition required from an electric/gas heating coil
   LOGICAL        :: UnitHeatTurnFansOn   ! TurnFansOn Availalability status as set by SAM
   LOGICAL        :: UnitHeatTurnFansOff  ! TurnFansOff Availalability status as set by SAM
 

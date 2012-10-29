@@ -64,28 +64,28 @@ TYPE BoilerSpecs
   INTEGER        :: CompNum              = 0        ! plant loop component connection
   LOGICAL        :: Available            = .FALSE. ! TRUE if machine available in current time step
   LOGICAL        :: ON                   = .FALSE. ! TRUE: simulate the machine at it's operating part load ratio
-  REAL      :: NomCap               = 0.0   ! W - design nominal capacity of Boiler
-  REAL      :: Effic                = 0.0   ! boiler efficiency at design conditions
-  REAL      :: TempDesBoilerOut     = 0.0   ! C - Boiler design outlet temperature
+  REAL(r64)      :: NomCap               = 0.0d0   ! W - design nominal capacity of Boiler
+  REAL(r64)      :: Effic                = 0.0d0   ! boiler efficiency at design conditions
+  REAL(r64)      :: TempDesBoilerOut     = 0.0d0   ! C - Boiler design outlet temperature
   LOGICAL        :: ConstantFlow         = .FALSE. ! True if this is a Constant Flow Chiller
   LOGICAL        :: VariableFlow         = .FALSE. ! True if this is a Variable Flow Chiller
   LOGICAL        :: VariableFlowSetToLoop= .FALSE. ! True if the setpoint is missing at the outlet node
   LOGICAL        :: VariableFlowErrDone  = .FALSE.  ! true if setpoint warning issued
-  REAL      :: VolFlowRate          = 0.0   ! m3/s - Boiler water design volumetric flow rate
-  REAL      :: DesMassFlowRate      = 0.0   ! kg/s - Boiler water design mass flow rate
-  REAL      :: MassFlowRate         = 0.0   ! kg/s - Boiler water mass flow rate
-  REAL      :: SizFac               = 0.0     ! sizing factor
+  REAL(r64)      :: VolFlowRate          = 0.0d0   ! m3/s - Boiler water design volumetric flow rate
+  REAL(r64)      :: DesMassFlowRate      = 0.0d0   ! kg/s - Boiler water design mass flow rate
+  REAL(r64)      :: MassFlowRate         = 0.0d0   ! kg/s - Boiler water mass flow rate
+  REAL(r64)      :: SizFac               = 0.0     ! sizing factor
   INTEGER        :: BoilerInletNodeNum   = 0       ! Node number at the boiler inlet
   INTEGER        :: BoilerOutletNodeNum  = 0       ! Node number at the boiler outlet
-  REAL      :: MinPartLoadRat       = 0.0   ! Minimum allowed operating part load ratio
-  REAL      :: MaxPartLoadRat       = 0.0   ! Maximum allowed operating part load ratio
-  REAL      :: OptPartLoadRat       = 0.0   ! Optimal operating part load ratio
-  REAL      :: OperPartLoadRat      = 0.0   ! Actual operating part load ratio
+  REAL(r64)      :: MinPartLoadRat       = 0.0d0   ! Minimum allowed operating part load ratio
+  REAL(r64)      :: MaxPartLoadRat       = 0.0d0   ! Maximum allowed operating part load ratio
+  REAL(r64)      :: OptPartLoadRat       = 0.0d0   ! Optimal operating part load ratio
+  REAL(r64)      :: OperPartLoadRat      = 0.0d0   ! Actual operating part load ratio
   INTEGER        :: CurveTempMode        = BoilerTempModeNotSet ! water temp to use in curve, switch between entering and leaving
   INTEGER        :: EfficiencyCurvePtr   = 0       ! Index to efficiency curve
   INTEGER        :: EfficiencyCurveType  = 0       ! Type of efficiency curve
-  REAL      :: TempUpLimitBoilerOut = 0.0   ! C - Boiler outlet maximum temperature limit
-  REAL      :: ParasiticElecLoad    = 0.0   ! W - Parasitic electric power (e.g. forced draft fan)
+  REAL(r64)      :: TempUpLimitBoilerOut = 0.0d0   ! C - Boiler outlet maximum temperature limit
+  REAL(r64)      :: ParasiticElecLoad    = 0.0d0   ! W - Parasitic electric power (e.g. forced draft fan)
   INTEGER        :: EffCurveOutputError  = 0       ! efficiency curve output <=0 recurring warning error counter
   INTEGER        :: EffCurveOutputIndex  = 0       ! efficiency curve output <=0 recurring warning error message index
   INTEGER        :: CalculatedEffError   = 0       ! calculated efficiency >1.1 recurring warning error counter
@@ -93,27 +93,27 @@ TYPE BoilerSpecs
 END TYPE BoilerSpecs
 
 TYPE ReportVars
-  REAL      :: BoilerLoad               = 0.0 ! W - Boiler operating load
-  REAL      :: BoilerEnergy             = 0.0 ! J - Boiler energy integrated over time
-  REAL      :: FuelUsed                 = 0.0 ! W - Boiler fuel used
-  REAL      :: FuelConsumed             = 0.0 ! J - Boiler Fuel consumed integrated over time
-  REAL      :: BoilerInletTemp          = 0.0 ! C - Boiler inlet temperature
-  REAL      :: BoilerOutletTemp         = 0.0 ! C - Boiler outlet temperature
-  REAL      :: Mdot                     = 0.0 ! kg/s - Boiler mass flow rate
-  REAL      :: ParasiticElecPower       = 0.0 ! W - Parasitic Electrical Power (e.g. forced draft fan)
-  REAL      :: ParasiticElecConsumption = 0.0 ! J - Parasitic Electrical Consumption (e.g. forced draft fan)
-  REAL      :: BoilerPLR                = 0.0 !     Boiler operating part-load ratio
+  REAL(r64)      :: BoilerLoad               = 0.0d0 ! W - Boiler operating load
+  REAL(r64)      :: BoilerEnergy             = 0.0d0 ! J - Boiler energy integrated over time
+  REAL(r64)      :: FuelUsed                 = 0.0d0 ! W - Boiler fuel used
+  REAL(r64)      :: FuelConsumed             = 0.0d0 ! J - Boiler Fuel consumed integrated over time
+  REAL(r64)      :: BoilerInletTemp          = 0.0d0 ! C - Boiler inlet temperature
+  REAL(r64)      :: BoilerOutletTemp         = 0.0d0 ! C - Boiler outlet temperature
+  REAL(r64)      :: Mdot                     = 0.0d0 ! kg/s - Boiler mass flow rate
+  REAL(r64)      :: ParasiticElecPower       = 0.0d0 ! W - Parasitic Electrical Power (e.g. forced draft fan)
+  REAL(r64)      :: ParasiticElecConsumption = 0.0d0 ! J - Parasitic Electrical Consumption (e.g. forced draft fan)
+  REAL(r64)      :: BoilerPLR                = 0.0d0 !     Boiler operating part-load ratio
 END TYPE ReportVars
 
 
   ! MODULE VARIABLE DECLARATIONS:
 INTEGER          :: NumBoilers               = 0     !     Number of boilers
-REAL        :: FuelUsed                 = 0.0 ! W - Boiler fuel used
-REAL        :: ParasiticElecPower       = 0.0 ! W - Parasitic electrical power (e.g. forced draft fan)
-REAL        :: BoilerLoad               = 0.0 ! W - Boiler Load
-REAL        :: BoilerMassFlowRate       = 0.0 ! kg/s - Boiler mass flow rate
-REAL        :: BoilerOutletTemp         = 0.0 ! W - Boiler outlet temperature
-REAL        :: BoilerPLR                = 0.0 !     Boiler operating part-load ratio
+REAL(r64)        :: FuelUsed                 = 0.0d0 ! W - Boiler fuel used
+REAL(r64)        :: ParasiticElecPower       = 0.0d0 ! W - Parasitic electrical power (e.g. forced draft fan)
+REAL(r64)        :: BoilerLoad               = 0.0d0 ! W - Boiler Load
+REAL(r64)        :: BoilerMassFlowRate       = 0.0d0 ! kg/s - Boiler mass flow rate
+REAL(r64)        :: BoilerOutletTemp         = 0.0d0 ! W - Boiler outlet temperature
+REAL(r64)        :: BoilerPLR                = 0.0d0 !     Boiler operating part-load ratio
 
 TYPE (BoilerSpecs), ALLOCATABLE, DIMENSION(:)  :: Boiler         ! boiler data - dimension to number of machines
 TYPE (ReportVars),  ALLOCATABLE, DIMENSION(:)  :: BoilerReport   ! report vars - dimension to number of machines
@@ -163,12 +163,12 @@ SUBROUTINE SimBoiler(BoilerType,BoilerName,EquipFlowCtrl, CompIndex,RunFlag, &
   INTEGER, INTENT(INOUT)       :: CompIndex       ! boiler counter/identifier
   LOGICAL, INTENT(IN)          :: RunFlag         ! if TRUE run boiler simulation--boiler is ON
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip   ! If not zero, calculate the max load for operating conditions
-  REAL, INTENT(INOUT)     :: MyLoad          ! W - Actual demand boiler must satisfy--calculated by load dist. routine
-  REAL, INTENT(OUT)       :: MinCap          ! W - minimum boiler operating capacity
-  REAL, INTENT(OUT)       :: MaxCap          ! W - maximum boiler operating capacity
-  REAL, INTENT(OUT)       :: OptCap          ! W - optimal boiler operating capacity
+  REAL(r64), INTENT(INOUT)     :: MyLoad          ! W - Actual demand boiler must satisfy--calculated by load dist. routine
+  REAL(r64), INTENT(OUT)       :: MinCap          ! W - minimum boiler operating capacity
+  REAL(r64), INTENT(OUT)       :: MaxCap          ! W - maximum boiler operating capacity
+  REAL(r64), INTENT(OUT)       :: OptCap          ! W - optimal boiler operating capacity
   LOGICAL, INTENT(IN)          :: GetSizingFactor ! TRUE when just the sizing factor is requested
-  REAL, INTENT(OUT)       :: SizingFactor    ! sizing factor
+  REAL(r64), INTENT(OUT)       :: SizingFactor    ! sizing factor
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -363,7 +363,7 @@ SUBROUTINE GetBoilerInput
       END SELECT
 
       Boiler(BoilerNum)%NomCap              = rNumericArgs(1)
-      IF (rNumericArgs(1) == 0.0) THEN
+      IF (rNumericArgs(1) == 0.0d0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
         CALL ShowContinueError('Invalid '//TRIM(cNumericFieldNames(1))//'='//TRIM(RoundSigDigits(rNumericArgs(1),2)) )
         CALL ShowContinueError('...'//TRIM(cNumericFieldNames(1))//' must be greater than 0.0')
@@ -371,7 +371,7 @@ SUBROUTINE GetBoilerInput
       ENDIF
 
       Boiler(BoilerNum)%Effic               = rNumericArgs(2)
-      IF (rNumericArgs(2) == 0.0) THEN
+      IF (rNumericArgs(2) == 0.0d0) THEN
         CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
         CALL ShowContinueError('Invalid '//TRIM(cNumericFieldNames(2))//'='//TRIM(RoundSigDigits(rNumericArgs(2),3)) )
         CALL ShowSevereError('...'//TRIM(cNumericFieldNames(2))//' must be greater than 0.0')
@@ -447,13 +447,13 @@ SUBROUTINE GetBoilerInput
 
       Boiler(BoilerNum)%TempUpLimitBoilerOut = rNumericArgs(8)
       ! default to 99.9C if upper temperature limit is left blank.
-      IF(Boiler(BoilerNum)%TempUpLimitBoilerOut .LE. 0.0)THEN
-        Boiler(BoilerNum)%TempUpLimitBoilerOut = 99.9
+      IF(Boiler(BoilerNum)%TempUpLimitBoilerOut .LE. 0.0d0)THEN
+        Boiler(BoilerNum)%TempUpLimitBoilerOut = 99.9d0
       END IF
 
       Boiler(BoilerNum)%ParasiticElecLoad    = rNumericArgs(9)
       Boiler(BoilerNum)%SizFac               = rNumericArgs(10)
-      IF (Boiler(BoilerNum)%SizFac == 0.0) Boiler(BoilerNum)%SizFac = 1.0
+      IF (Boiler(BoilerNum)%SizFac == 0.0) Boiler(BoilerNum)%SizFac = 1.0d0
 
       Boiler(BoilerNum)%BoilerInletNodeNum   = &
                GetOnlySingleNode(cAlphaArgs(5),ErrorsFound,TRIM(cCurrentModuleObject),cAlphaArgs(1),NodeType_Water, &
@@ -560,7 +560,7 @@ SUBROUTINE InitBoiler(BoilerNum)
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE. ! one time flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag            ! environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
-  REAL :: rho
+  REAL(r64) :: rho
   LOGICAL   :: FatalError
   LOGICAL :: errFlag
           ! FLOW:
@@ -606,7 +606,7 @@ SUBROUTINE InitBoiler(BoilerNum)
                'InitBoiler')
     Boiler(BoilerNum)%DesMassFlowRate = Boiler(BoilerNum)%VolFlowRate * rho
 
-    CALL InitComponentNodes(0.,Boiler(BoilerNum)%DesMassFlowRate,     &
+    CALL InitComponentNodes(0.d0,Boiler(BoilerNum)%DesMassFlowRate,     &
                                  Boiler(BoilerNum)%BoilerInletNodeNum,  &
                                  Boiler(BoilerNum)%BoilerOutletNodeNum,  &
                                  Boiler(BoilerNum)%LoopNum,             &
@@ -720,10 +720,10 @@ SUBROUTINE SizeBoiler(BoilerNum)
   INTEGER                      :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   LOGICAL                      :: ErrorsFound   ! If errors detected in input
   CHARACTER(len=MaxNameLength) :: equipName     ! Name of boiler object
-  REAL                    :: rho
-  REAL                    :: Cp
-  REAL           :: tmpNomCap ! local nominal capacity cooling power
-  REAL           :: tmpBoilerVolFlowRate ! local boiler design volume flow rate
+  REAL(r64)                    :: rho
+  REAL(r64)                    :: Cp
+  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
+  REAL(r64)           :: tmpBoilerVolFlowRate ! local boiler design volume flow rate
 
 
   PltSizNum = 0
@@ -751,7 +751,7 @@ SUBROUTINE SizeBoiler(BoilerNum)
                                                     * PlantSizData(PltSizNum)%DesVolFlowRate
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%NomCap = tmpNomCap
       ELSE
-        tmpNomCap = 0.
+        tmpNomCap = 0.d0
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%NomCap = tmpNomCap
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Boiler:HotWater', Boiler(BoilerNum)%Name, &
@@ -769,7 +769,7 @@ SUBROUTINE SizeBoiler(BoilerNum)
         tmpBoilerVolFlowRate = PlantSizData(PltSizNum)%DesVolFlowRate * Boiler(BoilerNum)%SizFac
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%VolFlowRate = tmpBoilerVolFlowRate
       ELSE
-        tmpBoilerVolFlowRate = 0.0
+        tmpBoilerVolFlowRate = 0.0d0
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%VolFlowRate = tmpBoilerVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Boiler:HotWater', Boiler(BoilerNum)%Name, &
@@ -833,7 +833,7 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: BoilerNum       ! boiler identifier
-  REAL              :: MyLoad          ! W - hot water demand to be met by boiler
+  REAL(r64)              :: MyLoad          ! W - hot water demand to be met by boiler
   LOGICAL                :: RunFlag         ! TRUE if boiler operating
   INTEGER, INTENT(IN)    :: EquipFlowCtrl   ! Flow control mode for the equipment
 
@@ -844,28 +844,28 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL       :: BoilerEFF             ! boiler efficiency
-  REAL       :: BoilerNomCap          ! W - boiler nominal capacity
-  REAL       :: BoilerMaxPLR          ! boiler maximum part load ratio
-  REAL       :: BoilerMinPLR          ! boiler minimum part load ratio
-  REAL       :: TheorFuelUse          ! Theoretical (stoichiometric) fuel use
-  REAL       :: OperPLR               ! operating part load ratio
-  REAL       :: BoilerDeltaTemp       ! C - boiler inlet to outlet temperature difference
-  REAL       :: TempUpLimitBout       ! C - boiler high temperature limit
+  REAL(r64)       :: BoilerEFF             ! boiler efficiency
+  REAL(r64)       :: BoilerNomCap          ! W - boiler nominal capacity
+  REAL(r64)       :: BoilerMaxPLR          ! boiler maximum part load ratio
+  REAL(r64)       :: BoilerMinPLR          ! boiler minimum part load ratio
+  REAL(r64)       :: TheorFuelUse          ! Theoretical (stoichiometric) fuel use
+  REAL(r64)       :: OperPLR               ! operating part load ratio
+  REAL(r64)       :: BoilerDeltaTemp       ! C - boiler inlet to outlet temperature difference
+  REAL(r64)       :: TempUpLimitBout       ! C - boiler high temperature limit
   INTEGER         :: BoilerInletNode       ! Boiler inlet node number
   INTEGER         :: BoilerOutletNode      ! Boiler outlet node number
   INTEGER         :: LoopNum               ! Plant loop with boiler
   INTEGER         :: LoopSideNum           ! Plant loop side with boiler (supply, demand)
-  REAL       :: BoilerMassFlowRateMax ! Max Design Boiler Mass Flow Rate converted from Volume Flow Rate
-  REAL       :: ParasiticElecLoad     ! Boiler parasitic electric power at full load
-  REAL       :: EffCurveOutput        ! Output of boiler efficiency curve
-  REAL       :: Cp
+  REAL(r64)       :: BoilerMassFlowRateMax ! Max Design Boiler Mass Flow Rate converted from Volume Flow Rate
+  REAL(r64)       :: ParasiticElecLoad     ! Boiler parasitic electric power at full load
+  REAL(r64)       :: EffCurveOutput        ! Output of boiler efficiency curve
+  REAL(r64)       :: Cp
 
           !FLOW
 
-  BoilerLoad            = 0.0
-  ParasiticElecPower    = 0.0
-  BoilerMassFlowRate    = 0.0
+  BoilerLoad            = 0.0d0
+  ParasiticElecPower    = 0.0d0
+  BoilerMassFlowRate    = 0.0d0
   BoilerInletNode       = Boiler(BoilerNum)%BoilerInletNodeNum
   BoilerOutletNode      = Boiler(BoilerNum)%BoilerOutletNodeNum
   BoilerNomCap          = Boiler(BoilerNum)%NomCap
@@ -887,7 +887,7 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
     !If the specified load is 0.0 or the boiler should not run then we leave this subroutine. Before leaving
     !if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     !will not shut down the branch
-  IF(MyLoad <= 0.0 .OR. .NOT. RunFlag) THEN
+  IF(MyLoad <= 0.0d0 .OR. .NOT. RunFlag) THEN
     IF(EquipFlowCtrl == ControlType_SeriesActive) BoilerMassFlowRate = Node(BoilerInletNode)%MassFlowrate
     RETURN
   END IF
@@ -906,10 +906,10 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
                                                Boiler(BoilerNum)%BranchNum,   &
                                                Boiler(BoilerNum)%CompNum)
 
-      IF ((BoilerMassFlowRate /= 0.0) .AND. (MyLoad > 0.)) THEN
+      IF ((BoilerMassFlowRate /= 0.0D0) .AND. (MyLoad > 0.d0)) THEN
         BoilerDeltaTemp = BoilerLoad/BoilerMassFlowRate/Cp
       ELSE
-        BoilerDeltaTemp = 0.0
+        BoilerDeltaTemp = 0.0D0
       ENDIF
 
       BoilerOutletTemp = BoilerDeltaTemp + Node(BoilerInletNode)%Temp
@@ -927,13 +927,13 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
       BoilerOutletTemp = BoilerDeltaTemp + Node(BoilerInletNode)%Temp
 
-      IF((BoilerDeltaTemp > 0.0) .AND. (BoilerLoad > 0.) ) THEN
+      IF((BoilerDeltaTemp > 0.0d0) .AND. (BoilerLoad > 0.d0) ) THEN
         BoilerMassFlowRate = BoilerLoad/Cp/BoilerDeltaTemp
 
         BoilerMassFlowRate = MIN(BoilerMassFlowRateMax, BoilerMassFlowRate)
 
       ELSE
-        BoilerMassFlowRate =0.0
+        BoilerMassFlowRate =0.0d0
       END IF
       CALL SetComponentFlowRate(BoilerMassFlowRate, BoilerInletNode, BoilerOutletNode, &
                                                Boiler(BoilerNum)%LoopNum,     &
@@ -947,14 +947,14 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
         ! Set the boiler flow rate from inlet node and then check performance
     BoilerMassFlowRate = Node(BoilerInletNode)%MassFlowRate
 
-    IF ((MyLoad > 0.) .AND. (BoilerMassFlowRate > 0.)) THEN ! this boiler has a heat load
+    IF ((MyLoad > 0.d0) .AND. (BoilerMassFlowRate > 0.d0)) THEN ! this boiler has a heat load
       BoilerLoad = MyLoad
       IF (BoilerLoad > BoilerNomCap*BoilerMaxPLR) BoilerLoad = BoilerNomCap*BoilerMaxPLR
       IF (BoilerLoad < BoilerNomCap*BoilerMinPLR) BoilerLoad = BoilerNomCap*BoilerMinPLR
       BoilerOutletTemp = Node(BoilerInletNode)%Temp + BoilerLoad /(BoilerMassFlowRate * Cp)
       BoilerDeltaTemp = BoilerOutletTemp-Node(BoilerInletNode)%Temp
     ELSE
-      BoilerLoad = 0.0
+      BoilerLoad = 0.0d0
       BoilerOutletTemp = Node(BoilerInletNode)%Temp
     ENDIF
 
@@ -962,8 +962,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
         ! Limit BoilerOutletTemp.  If > max temp, trip boiler off
   IF(BoilerOutletTemp > TempUpLimitBout) THEN
-      BoilerDeltaTemp  = 0.0
-      BoilerLoad       = 0.0
+      BoilerDeltaTemp  = 0.0d0
+      BoilerLoad       = 0.0d0
       BoilerOutletTemp = Node(BoilerInletNode)%Temp
   END IF
 
@@ -995,12 +995,12 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
       EffCurveOutput = CurveValue(Boiler(BoilerNum)%EfficiencyCurvePtr,OperPLR)
     END IF
   ELSE
-    EffCurveOutput = 1.0
+    EffCurveOutput = 1.0d0
   END IF
 
     ! warn if efficiency curve produces zero or negative results
-  IF(.NOT. WarmupFlag .AND. EffCurveOutput .LE. 0.0)THEN
-    IF(BoilerLoad .GT. 0.0)THEN
+  IF(.NOT. WarmupFlag .AND. EffCurveOutput .LE. 0.0d0)THEN
+    IF(BoilerLoad .GT. 0.0d0)THEN
       IF(Boiler(BoilerNum)%EffCurveOutputError .LT. 1)THEN
         Boiler(BoilerNum)%EffCurveOutputError = Boiler(BoilerNum)%EffCurveOutputError + 1
         CALL ShowWarningError('Boiler:HotWater "'//TRIM(Boiler(BoilerNum)%Name)//'"')
@@ -1026,12 +1026,12 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
             , Boiler(BoilerNum)%EffCurveOutputIndex, EffCurveOutput, EffCurveOutput)
       END IF
     END If
-    EffCurveOutput = 0.01
+    EffCurveOutput = 0.01d0
   END IF
 
     ! warn if overall efficiency greater than 1.1
-  IF(.NOT. WarmupFlag .AND. EffCurveOutput*BoilerEff .GT. 1.1)THEN
-    IF(BoilerLoad .GT. 0.0 .AND. Boiler(BoilerNum)%EfficiencyCurvePtr .GT. 0)THEN
+  IF(.NOT. WarmupFlag .AND. EffCurveOutput*BoilerEff .GT. 1.1d0)THEN
+    IF(BoilerLoad .GT. 0.0d0 .AND. Boiler(BoilerNum)%EfficiencyCurvePtr .GT. 0)THEN
       IF(Boiler(BoilerNum)%CalculatedEffError .LT. 1)THEN
         Boiler(BoilerNum)%CalculatedEffError = Boiler(BoilerNum)%CalculatedEffError + 1
         CALL ShowWarningError('Boiler:HotWater "'//TRIM(Boiler(BoilerNum)%Name)//'"')
@@ -1058,12 +1058,12 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
             , Boiler(BoilerNum)%CalculatedEffIndex, EffCurveOutput*BoilerEff, EffCurveOutput*BoilerEff)
       END IF
     END If
-    EffCurveOutput = 1.1
+    EffCurveOutput = 1.1d0
   END IF
 
     ! calculate fuel used based on normalized boiler efficiency curve (=1 when no curve used)
   FuelUsed=TheorFuelUse/EffCurveOutput
-  IF(BoilerLoad .GT. 0.0)ParasiticElecPower=ParasiticElecLoad*OperPLR
+  IF(BoilerLoad .GT. 0.0d0)ParasiticElecPower=ParasiticElecLoad*OperPLR
 
   RETURN
 END SUBROUTINE CalcBoilerModel
@@ -1091,7 +1091,7 @@ SUBROUTINE UpdateBoilerRecords(MyLoad,RunFlag, Num)
 IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: MyLoad        !boiler operating load
+  REAL(r64), INTENT(IN) :: MyLoad        !boiler operating load
   LOGICAL,   INTENT(IN) :: RunFlag       !boiler on when TRUE
   INTEGER,   INTENT(IN) :: Num           !boiler number
 
@@ -1107,7 +1107,7 @@ IMPLICIT NONE
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER               :: BoilerInletNode   ! Boiler inlet node number
   INTEGER               :: BoilerOutletNode  ! Boiler outlet node number
-  REAL             :: ReportingConstant ! constant for converting power to energy
+  REAL(r64)             :: ReportingConstant ! constant for converting power to energy
 
   ReportingConstant = TimeStepSys * SecInHour
 
@@ -1120,10 +1120,10 @@ IMPLICIT NONE
     CALL SafeCopyPlantNode(BoilerInletNode, BoilerOutletNode)
     Node(BoilerOutletNode)%Temp           = Node(BoilerInletNode)%Temp
     BoilerReport(Num)%BoilerOutletTemp    = Node(BoilerInletNode)%Temp
-    BoilerReport(Num)%BoilerLoad          = 0.0
-    BoilerReport(Num)%FuelUsed            = 0.0
-    BoilerReport(Num)%ParasiticElecPower  = 0.0
-    BoilerReport(Num)%BoilerPLR           = 0.0
+    BoilerReport(Num)%BoilerLoad          = 0.0d0
+    BoilerReport(Num)%FuelUsed            = 0.0d0
+    BoilerReport(Num)%ParasiticElecPower  = 0.0d0
+    BoilerReport(Num)%BoilerPLR           = 0.0d0
 
   ELSE
           !set node temperatures

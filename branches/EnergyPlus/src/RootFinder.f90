@@ -80,7 +80,7 @@ MODULE RootFinder
   !
   ! TYPE(RootFinderDataType)  :: RF
   ! INTEGER                   :: IterationCount
-  ! REAL                 :: X, Y
+  ! REAL(r64)                 :: X, Y
   ! LOGICAL                   :: IsDoneFlag
   !
   ! CALL SetupRootFinder(   &
@@ -224,9 +224,9 @@ SUBROUTINE SetupRootFinder( RootFinderData, SlopeType, MethodType, TolX, ATolX, 
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData     ! Data used by root finding algorithm
   INTEGER, INTENT(IN)                     :: SlopeType          ! Either iSlopeIncreasing or iSlopeDecreasing
   INTEGER, INTENT(IN)                     :: MethodType         ! Any of the iMethod<name> code but iMethodNone
-  REAL, INTENT(IN)                        :: TolX               ! Relative tolerance for X variables
-  REAL, INTENT(IN)                        :: ATolX              ! Absolute tolerance for X variables
-  REAL, INTENT(IN)                        :: ATolY              ! Absolute tolerance for Y variables
+  REAL(r64), INTENT(IN)                        :: TolX               ! Relative tolerance for X variables
+  REAL(r64), INTENT(IN)                        :: ATolX              ! Absolute tolerance for X variables
+  REAL(r64), INTENT(IN)                        :: ATolY              ! Absolute tolerance for Y variables
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -317,8 +317,8 @@ SUBROUTINE ResetRootFinder( RootFinderData, XMin, XMax )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: XMin           ! Minimum X value allowed
-  REAL, INTENT(IN)                        :: XMax           ! Maximum X value allowed
+  REAL(r64), INTENT(IN)                        :: XMin           ! Minimum X value allowed
+  REAL(r64), INTENT(IN)                        :: XMax           ! Maximum X value allowed
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -407,8 +407,8 @@ SUBROUTINE InitializeRootFinder( RootFinderData, XMin, XMax )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: XMin           ! Minimum X value allowed
-  REAL, INTENT(IN)                        :: XMax           ! Maximum X value allowed
+  REAL(r64), INTENT(IN)                        :: XMin           ! Minimum X value allowed
+  REAL(r64), INTENT(IN)                        :: XMax           ! Maximum X value allowed
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -420,8 +420,8 @@ SUBROUTINE InitializeRootFinder( RootFinderData, XMin, XMax )
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL                               :: SavedXCandidate
-  REAL                               :: XMinReset
+  REAL(r64)                               :: SavedXCandidate
+  REAL(r64)                               :: XMinReset
           ! FLOW:
   XMinReset = XMin
   IF ( XMin > XMax) THEN
@@ -536,8 +536,8 @@ SUBROUTINE IterateRootFinder( RootFinderData, X, Y, IsDoneFlag )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value of current iterate
-  REAL, INTENT(IN)                        :: Y              ! Y value of current iterate
+  REAL(r64), INTENT(IN)                        :: X              ! X value of current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value of current iterate
   LOGICAL, INTENT(OUT), OPTIONAL          :: IsDoneFlag     ! If TRUE indicates that the iteration should be stopped
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -906,7 +906,7 @@ LOGICAL FUNCTION CheckRootFinderCandidate( RootFinderData, X )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)    :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -960,7 +960,7 @@ LOGICAL FUNCTION CheckMinMaxRange( RootFinderData, X )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)    :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1024,7 +1024,7 @@ LOGICAL FUNCTION CheckLowerUpperBracket( RootFinderData, X )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)    :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1185,7 +1185,7 @@ LOGICAL FUNCTION CheckNonSingularity( RootFinderData )
   ! points.
   !
   ! NOTE: Requesting exactly the same value is obtained by setting SafetyFactor = 0.0
-  REAL, PARAMETER                         :: SafetyFactor = 0.1
+  REAL(r64), PARAMETER                         :: SafetyFactor = 0.1d0
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1194,8 +1194,8 @@ LOGICAL FUNCTION CheckNonSingularity( RootFinderData )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL   :: DeltaY     ! Difference between min and max Y-values
-  REAL   :: ATolY      ! Absolute tolerance used to detected equal min and max Y-values
+  REAL(r64)   :: DeltaY     ! Difference between min and max Y-values
+  REAL(r64)   :: ATolY      ! Absolute tolerance used to detected equal min and max Y-values
 
           ! FLOW:
 
@@ -1389,7 +1389,7 @@ LOGICAL FUNCTION CheckRootFinderConvergence( RootFinderData, Y )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)    :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: Y              ! Y value for current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value for current iterate
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1442,7 +1442,7 @@ LOGICAL FUNCTION CheckIncrementRoundOff( RootFinderData, X )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)    :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                   :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                   :: X              ! X value for current iterate
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1454,8 +1454,8 @@ LOGICAL FUNCTION CheckIncrementRoundOff( RootFinderData, X )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL       :: DeltaX             ! Increment in X since last iterate
-  REAL       :: TolX               ! Tolerance to satisfy for X increment
+  REAL(r64)       :: DeltaX             ! Increment in X since last iterate
+  REAL(r64)       :: TolX               ! Tolerance to satisfy for X increment
           ! FLOW:
 
   CheckIncrementRoundOff = .FALSE.
@@ -1511,9 +1511,9 @@ LOGICAL FUNCTION CheckBracketRoundOff( RootFinderData )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL       :: DeltaUL            ! Distance between lower and upper points
-  REAL       :: TypUL              ! Typical value for values lying within lower/upper interval
-  REAL       :: TolUL              ! Tolerance to satisfy for lower-upper distance
+  REAL(r64)       :: DeltaUL            ! Distance between lower and upper points
+  REAL(r64)       :: TypUL              ! Typical value for values lying within lower/upper interval
+  REAL(r64)       :: TolUL              ! Tolerance to satisfy for lower-upper distance
           ! FLOW:
 
   ! Check for round-off error in Lower/Upper interval
@@ -1523,7 +1523,7 @@ LOGICAL FUNCTION CheckBracketRoundOff( RootFinderData )
     TolUL   = RootFinderData%Controls%TolX * ABS(TypUL) + RootFinderData%Controls%ATolX
 
     ! Halve tolerance to reflect the fact that solution can be anywhere between the lower and upper points.
-    IF ( ABS(DeltaUL) <= 0.5 * ABS(TolUL) ) THEN
+    IF ( ABS(DeltaUL) <= 0.5d0 * ABS(TolUL) ) THEN
         CheckBracketRoundOff = .TRUE.
         RETURN
     END IF
@@ -1566,8 +1566,8 @@ SUBROUTINE UpdateMinMax( RootFinderData, X, Y )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
-  REAL, INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1636,8 +1636,8 @@ SUBROUTINE UpdateBracket( RootFinderData, X, Y )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
-  REAL, INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1836,8 +1836,8 @@ SUBROUTINE UpdateHistory( RootFinderData, X, Y )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
-  REAL, INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1932,8 +1932,8 @@ SUBROUTINE UpdateRootFinder( RootFinderData, X, Y )
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(INOUT) :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(IN)                        :: X              ! X value for current iterate
-  REAL, INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
+  REAL(r64), INTENT(IN)                        :: X              ! X value for current iterate
+  REAL(r64), INTENT(IN)                        :: Y              ! Y value for current iterate, F(X)=Y
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2022,7 +2022,7 @@ SUBROUTINE SortHistory( N, History )
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                       :: I, J
-  REAL                     :: XTemp, YTemp
+  REAL(r64)                     :: XTemp, YTemp
           ! FLOW:
 
   ! Nothing to do if only one point stored in history
@@ -2097,7 +2097,7 @@ SUBROUTINE AdvanceRootFinder( RootFinderData )
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL                               :: XNext = 0.0
+  REAL(r64)                               :: XNext = 0.0
 
           ! FLOW:
 
@@ -2228,7 +2228,7 @@ LOGICAL FUNCTION BracketRoot( RootFinderData, XNext )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)       :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(OUT)                          :: XNext          ! Next value
+  REAL(r64), INTENT(OUT)                          :: XNext          ! Next value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2276,7 +2276,7 @@ LOGICAL FUNCTION BracketRoot( RootFinderData, XNext )
 END FUNCTION BracketRoot
 
 
-REAL FUNCTION BisectionMethod( RootFinderData )
+REAL(r64) FUNCTION BisectionMethod( RootFinderData )
           ! FUNCTION INFORMATION:
           !       AUTHOR         Dimitri Curtil (LBNL)
           !       DATE WRITTEN   February 2006
@@ -2329,7 +2329,7 @@ REAL FUNCTION BisectionMethod( RootFinderData )
 END FUNCTION BisectionMethod
 
 
-REAL FUNCTION FalsePositionMethod( RootFinderData )
+REAL(r64) FUNCTION FalsePositionMethod( RootFinderData )
           ! FUNCTION INFORMATION:
           !       AUTHOR         Dimitri Curtil (LBNL)
           !       DATE WRITTEN   February 2006
@@ -2375,8 +2375,8 @@ REAL FUNCTION FalsePositionMethod( RootFinderData )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                     :: XCandidate
-  REAL                     :: Num, Den
+  REAL(r64)                     :: XCandidate
+  REAL(r64)                     :: Num, Den
 
           ! FLOW:
 
@@ -2403,7 +2403,7 @@ REAL FUNCTION FalsePositionMethod( RootFinderData )
 END FUNCTION FalsePositionMethod
 
 
-REAL FUNCTION SecantMethod( RootFinderData )
+REAL(r64) FUNCTION SecantMethod( RootFinderData )
           ! FUNCTION INFORMATION:
           !       AUTHOR         Dimitri Curtil (LBNL)
           !       DATE WRITTEN   February 2006
@@ -2450,7 +2450,7 @@ REAL FUNCTION SecantMethod( RootFinderData )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                     :: XCandidate
+  REAL(r64)                     :: XCandidate
 
           ! FLOW:
 
@@ -2508,7 +2508,7 @@ LOGICAL FUNCTION SecantFormula( RootFinderData, XNext )
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   TYPE(RootFinderDataType), INTENT(IN)       :: RootFinderData ! Data used by root finding algorithm
-  REAL, INTENT(OUT)                          :: XNext          ! Result from Secant formula if possible to compute
+  REAL(r64), INTENT(OUT)                          :: XNext          ! Result from Secant formula if possible to compute
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2520,8 +2520,8 @@ LOGICAL FUNCTION SecantFormula( RootFinderData, XNext )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                     :: Num
-  REAL                     :: Den
+  REAL(r64)                     :: Num
+  REAL(r64)                     :: Den
 
           ! FLOW:
 
@@ -2541,7 +2541,7 @@ LOGICAL FUNCTION SecantFormula( RootFinderData, XNext )
 END FUNCTION SecantFormula
 
 
-REAL FUNCTION BrentMethod( RootFinderData )
+REAL(r64) FUNCTION BrentMethod( RootFinderData )
           ! FUNCTION INFORMATION:
           !       AUTHOR         Dimitri Curtil (LBNL)
           !       DATE WRITTEN   March 2006
@@ -2590,9 +2590,9 @@ REAL FUNCTION BrentMethod( RootFinderData )
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                     :: XCandidate
-  REAL                     :: A, FA, B, FB, C, FC
-  REAL                     :: R, S, T, P, Q
+  REAL(r64)                     :: XCandidate
+  REAL(r64)                     :: A, FA, B, FB, C, FC
+  REAL(r64)                     :: R, S, T, P, Q
           ! FLOW:
 
   ! Only attempt Brent's method if enough history points are available
@@ -2624,11 +2624,11 @@ REAL FUNCTION BrentMethod( RootFinderData )
       S = FB/FA
       T = FA/FC
 
-      P = S*(T*(R-T)*(C-B)-(1.0-R)*(B-A))
-      Q = (T-1.0)*(R-1.0)*(S-1.0)
+      P = S*(T*(R-T)*(C-B)-(1.0d0-R)*(B-A))
+      Q = (T-1.0d0)*(R-1.0d0)*(S-1.0d0)
 
       ! Only accept correction if it is small enough (75% of previous increment)
-      IF ( ABS(P) <= 0.75*ABS(Q*RootFinderData%Increment%X) ) THEN
+      IF ( ABS(P) <= 0.75d0*ABS(Q*RootFinderData%Increment%X) ) THEN
         RootFinderData%CurrentMethodType = iMethodBrent
         XCandidate = B + P/Q
 

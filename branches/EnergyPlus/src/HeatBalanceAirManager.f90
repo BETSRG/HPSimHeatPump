@@ -277,14 +277,14 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank=' '
   CHARACTER(len=*), PARAMETER :: fmta='(A)'
-  REAL,        PARAMETER :: VentilTempLimit = 100. ! degrees Celsius
-  REAL,        PARAMETER :: MixingTempLimit = 100. ! degrees Celsius
-  REAL,        PARAMETER :: VentilWSLimit = 40. ! m/s
+  REAL(r64),        PARAMETER :: VentilTempLimit = 100.d0 ! degrees Celsius
+  REAL(r64),        PARAMETER :: MixingTempLimit = 100.d0 ! degrees Celsius
+  REAL(r64),        PARAMETER :: VentilWSLimit = 40.d0 ! m/s
   CHARACTER(len=*), PARAMETER :: RoutineName='GetSimpleAirModelInputs: ' ! include trailing blank space
   ! Refrigeration Door Mixing Protection types, factors used to moderate mixing flow.
-  REAL, PARAMETER :: RefDoorNone = 0.0
-  REAL, PARAMETER :: RefDoorAirCurtain = 0.5
-  REAL, PARAMETER :: RefDoorStripCurtain =0.9
+  REAL(r64), PARAMETER :: RefDoorNone = 0.0d0
+  REAL(r64), PARAMETER :: RefDoorAirCurtain = 0.5d0
+  REAL(r64), PARAMETER :: RefDoorStripCurtain =0.9d0
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
@@ -292,8 +292,8 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL, ALLOCATABLE, DIMENSION(:,:) :: SVals1
-  REAL, ALLOCATABLE, DIMENSION(:,:) :: SVals2
+  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: SVals1
+  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: SVals2
   INTEGER                         :: NumAlpha, NumNumber
   INTEGER                         :: IOStat
   INTEGER                         :: i
@@ -316,8 +316,8 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
   INTEGER :: Item1
   LOGICAL :: ErrFlag
   INTEGER :: ZLItem
-  REAL, ALLOCATABLE, DIMENSION(:) :: TotInfilVentFlow
-  REAL, ALLOCATABLE, DIMENSION(:) :: TotMixingFlow
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotInfilVentFlow
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotMixingFlow
   INTEGER :: ConnectTest
   INTEGER :: ConnectionNumber
   INTEGER :: NumbNum
@@ -2541,8 +2541,8 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
         RefDoorMixing(ZoneNumA)%Protection = RefDoorNone
         RefDoorMixing(ZoneNumA)%MateZonePtr = 0
         RefDoorMixing(ZoneNumA)%EMSRefDoorMixingOn = .FALSE.
-        RefDoorMixing(ZoneNumA)%EMSRefDoorFlowRate = 0.0
-        RefDoorMixing(ZoneNumA)%VolRefDoorFlowRate = 0.0
+        RefDoorMixing(ZoneNumA)%EMSRefDoorFlowRate = 0.0D0
+        RefDoorMixing(ZoneNumA)%VolRefDoorFlowRate = 0.0D0
         RefDoorMixing(ZoneNumA)%DoorProtTypeName = " "
       END IF !First refrigeration mixing in this zone
 
@@ -2564,8 +2564,8 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
         RefDoorMixing(ZoneNumB)%Protection = RefDoorNone
         RefDoorMixing(ZoneNumB)%MateZonePtr = 0
         RefDoorMixing(ZoneNumB)%EMSRefDoorMixingOn = .FALSE.
-        RefDoorMixing(ZoneNumB)%EMSRefDoorFlowRate = 0.0
-        RefDoorMixing(ZoneNumB)%VolRefDoorFlowRate = 0.0
+        RefDoorMixing(ZoneNumB)%EMSRefDoorFlowRate = 0.0D0
+        RefDoorMixing(ZoneNumB)%VolRefDoorFlowRate = 0.0D0
         RefDoorMixing(ZoneNumB)%DoorProtTypeName = " "
       END IF !First refrigeration mixing in this zone
 
@@ -2615,7 +2615,7 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
 
       NumbNum = 1
       IF (lNumericFieldBlanks(NumbNum)) THEN
-        RefDoorMixing(ZoneNumA)%DoorHeight(ConnectionNumber)= 3.0 ! default height of 3 meters
+        RefDoorMixing(ZoneNumA)%DoorHeight(ConnectionNumber)= 3.0d0 ! default height of 3 meters
         CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//  &
             TRIM(cNumericFieldNames(NumbNum))//  &
             ' is blank and the default value of 3.0 will be used.')
@@ -3416,7 +3416,7 @@ SUBROUTINE InitSimpleMixingConvectiveHeatGains
         IF(.NOT. RefDoorMixing(NZ)%RefDoorMixFlag)CYCLE
         IF ((RefDoorMixing(NZ)%ZonePtr .EQ. NZ)) THEN
           DO J = 1,RefDoorMixing(NZ)%NumRefDoorConnections
-            RefDoorMixing(NZ)%VolRefDoorFlowRate(J)=0.0
+            RefDoorMixing(NZ)%VolRefDoorFlowRate(J)=0.0d0
             IF (RefDoorMixing(NZ)%EMSRefDoorMixingOn(J)) &
                RefDoorMixing(NZ)%VolRefDoorFlowRate(J) = RefDoorMixing(NZ)%EMSRefDoorFlowRate(J)
           END DO
@@ -3479,9 +3479,9 @@ SUBROUTINE CalcHeatBalanceAir
   CALL ManageHVAC   !RS: This is a possible location for where to join in the HPSim code
 
   ! Do Final Temperature Calculations for Heat Balance before next Time step
-  SumHmAW=0.0
-  SumHmARa=0.0
-  SumHmARaW=0.0
+  SumHmAW=0.0D0
+  SumHmARa=0.0D0
+  SumHmARaW=0.0D0
 
   RETURN
 
@@ -3529,7 +3529,7 @@ SUBROUTINE ReportZoneMeanAirTemp
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: ZoneLoop                ! Counter for the # of zones (nz)
   INTEGER  :: TempControlledZoneID    ! index for zone in TempConrolled Zone structure
-  REAL     :: thisMRTFraction         ! temp working value for radiative fraction/weight
+  REAL(r64)     :: thisMRTFraction         ! temp working value for radiative fraction/weight
 
   DO ZoneLoop = 1, NumOfZones
           ! The mean air temperature is actually ZTAV which is the average
@@ -3537,7 +3537,7 @@ SUBROUTINE ReportZoneMeanAirTemp
           ! entire zone time step.
     ZnAirRpt(ZoneLoop)%MeanAirTemp = ZTAV(ZoneLoop)
     ZnAirRpt(ZoneLoop)%MeanAirHumRat = ZoneAirHumRatAvg(ZoneLoop)
-    ZnAirRpt(ZoneLoop)%OperativeTemp = 0.5*(ZTAV(ZoneLoop)+MRT(ZoneLoop))
+    ZnAirRpt(ZoneLoop)%OperativeTemp = 0.5d0*(ZTAV(ZoneLoop)+MRT(ZoneLoop))
     ZnAirRpt(ZoneLoop)%MeanAirDewpointTemp = PsyTdpFnWPb(ZnAirRpt(ZoneLoop)%MeanAirHumRat,OutBaroPress)
 
     ! if operative temperature control is being used, then radiative fraction/weighting
@@ -3553,7 +3553,7 @@ SUBROUTINE ReportZoneMeanAirTemp
           ELSE
             thisMRTFraction = TempControlledZone(TempControlledZoneID)%FixedRadiativeFraction
           ENDIF
-          ZnAirRpt(ZoneLoop)%ThermOperativeTemp = (1.0-thisMRTFraction) * ZTAV(ZoneLoop) +   &
+          ZnAirRpt(ZoneLoop)%ThermOperativeTemp = (1.0d0-thisMRTFraction) * ZTAV(ZoneLoop) +   &
                                                         thisMRTFraction * MRT(ZoneLoop)
         ENDIF
       ENDIF

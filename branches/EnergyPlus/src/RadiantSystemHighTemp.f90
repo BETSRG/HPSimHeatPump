@@ -61,32 +61,32 @@ TYPE HighTempRadiantSystemData
   INTEGER                        :: SchedPtr          =0   ! index to schedule
   CHARACTER(len=MaxNameLength)   :: ZoneName          =' ' ! Name of zone the system is serving
   INTEGER                        :: ZonePtr           =0   ! Point to this zone in the Zone derived type
-  REAL                      :: MaxPowerCapac     =0.0 ! Maximum capacity of the radiant heater in Watts
+  REAL(r64)                      :: MaxPowerCapac     =0.0 ! Maximum capacity of the radiant heater in Watts
   CHARACTER(len=MaxNameLength)   :: HeaterType        =' ' ! Type of heater (gas or electric)
-  REAL                      :: CombustionEffic   =0.0 ! Combustion efficiency (only valid for a gas heater)
-  REAL                      :: FracRadiant       =0.0 ! Fraction of heater power that is given off as radiant heat
-  REAL                      :: FracLatent        =0.0 ! Fraction of heater power that is given off as latent heat
-  REAL                      :: FracLost          =0.0 ! Fraction of heater power that is lost to the outside environment
-  REAL                      :: FracConvect       =0.0 ! Fraction of heater power that is given off as convective heat
+  REAL(r64)                      :: CombustionEffic   =0.0 ! Combustion efficiency (only valid for a gas heater)
+  REAL(r64)                      :: FracRadiant       =0.0 ! Fraction of heater power that is given off as radiant heat
+  REAL(r64)                      :: FracLatent        =0.0 ! Fraction of heater power that is given off as latent heat
+  REAL(r64)                      :: FracLost          =0.0 ! Fraction of heater power that is lost to the outside environment
+  REAL(r64)                      :: FracConvect       =0.0 ! Fraction of heater power that is given off as convective heat
                                                            ! (by definition this is 1 minus the sum of all other fractions)
   CHARACTER(len=MaxNameLength)   :: ControlType       =' ' ! Control type for the system (MAT, MRT, or op temp)
-  REAL                      :: ThrottlRange      =0.0 ! Throttling range for heating [C]
+  REAL(r64)                      :: ThrottlRange      =0.0 ! Throttling range for heating [C]
   CHARACTER(len=MaxNameLength)   :: SetptSched        =' ' ! Schedule name for the zone setpoint temperature
   INTEGER                        :: SetptSchedPtr     =0   ! Schedule index for the zone setpoint temperature
-  REAL                      :: FracDistribPerson =0.0 ! Fraction of fraction radiant incident on a "person" in the space
+  REAL(r64)                      :: FracDistribPerson =0.0 ! Fraction of fraction radiant incident on a "person" in the space
   INTEGER                        :: TotSurfToDistrib  =0   ! Total number of surfaces the heater sends radiation to
   CHARACTER(len=MaxNameLength), &
            ALLOCATABLE, DIMENSION(:) :: SurfaceName       ! Surface name in the list of surfaces heater sends radiation to
   INTEGER, ALLOCATABLE, DIMENSION(:) :: SurfacePtr        ! Surface number in the list of surfaces heater sends radiation to
-  REAL,    ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf ! Fraction of fraction radiant incident on the surface
+  REAL(r64),    ALLOCATABLE, DIMENSION(:) :: FracDistribToSurf ! Fraction of fraction radiant incident on the surface
   ! Other parameters
   ! Report data
-  REAL                    :: ElecPower           =0.0 ! system electric consumption in Watts
-  REAL                    :: ElecEnergy          =0.0 ! system electric consumption in Joules
-  REAL                    :: GasPower            =0.0 ! system gas consumption in Watts
-  REAL                    :: GasEnergy           =0.0 ! system gas consumption in Joules
-  REAL                    :: HeatPower           =0.0 ! actual heating sent to zone (convective and radiative) in Watts
-  REAL                    :: HeatEnergy          =0.0 ! actual heating sent to zone (convective and radiative) in Joules
+  REAL(r64)                    :: ElecPower           =0.0 ! system electric consumption in Watts
+  REAL(r64)                    :: ElecEnergy          =0.0 ! system electric consumption in Joules
+  REAL(r64)                    :: GasPower            =0.0 ! system gas consumption in Watts
+  REAL(r64)                    :: GasEnergy           =0.0 ! system gas consumption in Joules
+  REAL(r64)                    :: HeatPower           =0.0 ! actual heating sent to zone (convective and radiative) in Watts
+  REAL(r64)                    :: HeatEnergy          =0.0 ! actual heating sent to zone (convective and radiative) in Joules
 END TYPE HighTempRadiantSystemData
 
 TYPE(HighTempRadiantSystemData), DIMENSION(:), ALLOCATABLE :: HighTempRadSys
@@ -94,13 +94,13 @@ TYPE(HighTempRadiantSystemData), DIMENSION(:), ALLOCATABLE :: HighTempRadSys
   ! MODULE VARIABLE DECLARATIONS:
   ! Standard, run-of-the-mill variables...
 INTEGER :: NumOfHighTempRadSys=0 ! Number of hydronic low tempererature radiant systems
-REAL, ALLOCATABLE, DIMENSION(:) :: QHTRadSource ! Need to keep the last value in case we are still iterating
-REAL, ALLOCATABLE, DIMENSION(:) :: QHTRadSrcAvg ! Need to keep the last value in case we are still iterating
-REAL, ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: QHTRadSource ! Need to keep the last value in case we are still iterating
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: QHTRadSrcAvg ! Need to keep the last value in case we are still iterating
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZeroSourceSumHATsurf ! Equal to the SumHATsurf for all the walls in a zone with no source
   ! Record keeping variables used to calculate QHTRadSrcAvg locally
-REAL, ALLOCATABLE, DIMENSION(:) :: LastQHTRadSrc        ! Need to keep the last value in case we are still iterating
-REAL, ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
-REAL, ALLOCATABLE, DIMENSION(:):: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastQHTRadSrc        ! Need to keep the last value in case we are still iterating
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastSysTimeElapsed   ! Need to keep the last value in case we are still iterating
+REAL(r64), ALLOCATABLE, DIMENSION(:):: LastTimeStepSys      ! Need to keep the last value in case we are still iterating
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
@@ -148,7 +148,7 @@ SUBROUTINE SimHighTempRadiantSystem(CompName,FirstHVACIteration,LoadMet,CompInde
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN)  :: CompName            ! name of the low temperature radiant system
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
-  REAL,             INTENT(OUT) :: LoadMet             ! load met by the radiant system, in Watts
+  REAL(r64),             INTENT(OUT) :: LoadMet             ! load met by the radiant system, in Watts
   INTEGER,          INTENT(INOUT):: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -248,11 +248,11 @@ SUBROUTINE GetHighTempRadiantSystem
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
-  REAL,             PARAMETER :: MaxCombustionEffic = 1.00  ! Limit the combustion efficiency to perfection
-  REAL,             PARAMETER :: MaxFraction = 1.0          ! Limit the highest allowed fraction for heat transfer parts
-  REAL,             PARAMETER :: MinCombustionEffic = 0.01  ! Limit the minimum combustion efficiency
-  REAL,             PARAMETER :: MinFraction = 0.0          ! Limit the lowest allowed fraction for heat transfer parts
-  REAL,             PARAMETER :: MinThrottlingRange = 0.5   ! Smallest throttling range allowed in degrees Celsius
+  REAL(r64),             PARAMETER :: MaxCombustionEffic = 1.00d0  ! Limit the combustion efficiency to perfection
+  REAL(r64),             PARAMETER :: MaxFraction = 1.0d0          ! Limit the highest allowed fraction for heat transfer parts
+  REAL(r64),             PARAMETER :: MinCombustionEffic = 0.01d0  ! Limit the minimum combustion efficiency
+  REAL(r64),             PARAMETER :: MinFraction = 0.0d0          ! Limit the lowest allowed fraction for heat transfer parts
+  REAL(r64),             PARAMETER :: MinThrottlingRange = 0.5d0   ! Smallest throttling range allowed in degrees Celsius
 !  INTEGER,          PARAMETER :: MaxDistribSurfaces = 20    ! Maximum number of surfaces that a radiant heater can radiate to
   CHARACTER(len=*), PARAMETER   :: RoutineName='GetHighTempRadiantSystem: ' ! include trailing blank space
 
@@ -263,7 +263,7 @@ SUBROUTINE GetHighTempRadiantSystem
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: AllFracsSummed  ! Sum of the fractions radiant, latent, and lost (must be <= 1)
+  REAL(r64)  :: AllFracsSummed  ! Sum of the fractions radiant, latent, and lost (must be <= 1)
   LOGICAL    :: ErrorsFound=.false.  ! Set to true if errors in input, fatal at end of routine
   INTEGER    :: IOStatus   ! Used in GetObjectItem
   INTEGER    :: Item       ! Item to be "gotten"
@@ -496,12 +496,12 @@ SUBROUTINE GetHighTempRadiantSystem
     END DO  ! ...end of DO loop through surfaces that the heater radiates to.
 
           ! Error trap if the fractions add up to greater than 1.0
-    IF (AllFracsSummed > (MaxFraction + 0.01) ) THEN
+    IF (AllFracsSummed > (MaxFraction + 0.01d0) ) THEN
       CALL ShowSevereError('Fraction of radiation distributed to surfaces sums up to greater than 1 for '//TRIM(cAlphaArgs(1)))
       CALL ShowContinueError('Occurs for '//TRIM(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1)))
       ErrorsFound = .TRUE.
     END IF
-    IF (AllFracsSummed < (MaxFraction - 0.01) ) THEN ! User didn't distribute all of the radiation warn that some will be lost
+    IF (AllFracsSummed < (MaxFraction - 0.01d0) ) THEN ! User didn't distribute all of the radiation warn that some will be lost
       CALL ShowWarningError('Fraction of radiation distributed to surfaces sums up to less than 1 for '//TRIM(cAlphaArgs(1)))
       CALL ShowContinueError('As a result, some of the radiant energy delivered by the high temp radiant heater will be lost.')
       CALL ShowContinueError('Occurs for '//TRIM(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1)))
@@ -595,17 +595,17 @@ SUBROUTINE InitHighTempRadiantSystem(FirstHVACIteration,RadSysNum)
           ! FLOW:
   IF (FirstTime) THEN
     ALLOCATE(ZeroSourceSumHATsurf(NumOfZones))
-    ZeroSourceSumHATsurf = 0.0
+    ZeroSourceSumHATsurf = 0.0D0
     ALLOCATE(QHTRadSource(NumOfHighTempRadSys))
-    QHTRadSource = 0.0
+    QHTRadSource = 0.0D0
     ALLOCATE(QHTRadSrcAvg(NumOfHighTempRadSys))
-    QHTRadSrcAvg = 0.0
+    QHTRadSrcAvg = 0.0D0
     ALLOCATE(LastQHTRadSrc(NumOfHighTempRadSys))
-    LastQHTRadSrc = 0.0
+    LastQHTRadSrc = 0.0D0
     ALLOCATE(LastSysTimeElapsed(NumOfHighTempRadSys))
-    LastSysTimeElapsed = 0.0
+    LastSysTimeElapsed = 0.0D0
     ALLOCATE(LastTimeStepSys(NumOfHighTempRadSys))
-    LastTimeStepSys = 0.0
+    LastTimeStepSys = 0.0D0
     ALLOCATE(MySizeFlag(NumOfHighTempRadSys))
     MySizeFlag = .TRUE.
     FirstTime       = .FALSE.
@@ -628,12 +628,12 @@ SUBROUTINE InitHighTempRadiantSystem(FirstHVACIteration,RadSysNum)
   END IF
 
   IF (BeginEnvrnFlag .and. MyEnvrnFlag) THEN
-    ZeroSourceSumHATsurf       =0.0
-    QHTRadSource               =0.0
-    QHTRadSrcAvg               =0.0
-    LastQHTRadSrc              =0.0
-    LastSysTimeElapsed         =0.0
-    LastTimeStepSys            =0.0
+    ZeroSourceSumHATsurf       =0.0D0
+    QHTRadSource               =0.0D0
+    QHTRadSrcAvg               =0.0D0
+    LastQHTRadSrc              =0.0D0
+    LastSysTimeElapsed         =0.0D0
+    LastTimeStepSys            =0.0D0
     MyEnvrnFlag=.false.
   ENDIF
   IF (.not. BeginEnvrnFlag) THEN
@@ -643,10 +643,10 @@ SUBROUTINE InitHighTempRadiantSystem(FirstHVACIteration,RadSysNum)
   IF (BeginTimeStepFlag .AND. FirstHVACIteration) THEN ! This is the first pass through in a particular time step
     ZoneNum = HighTempRadSys(RadSysNum)%ZonePtr
     ZeroSourceSumHATsurf(ZoneNum) = SumHATsurf(ZoneNum) ! Set this to figure out what part of the load the radiant system meets
-    QHTRadSrcAvg(RadSysNum)       = 0.0  ! Initialize this variable to zero (radiant system defaults to off)
-    LastQHTRadSrc(RadSysNum)      = 0.0  ! At the beginning of a time step, reset to zero so average calculation can start again
-    LastSysTimeElapsed(RadSysNum) = 0.0  ! At the beginning of a time step, reset to zero so average calculation can start again
-    LastTimeStepSys(RadSysNum)    = 0.0  ! At the beginning of a time step, reset to zero so average calculation can start again
+    QHTRadSrcAvg(RadSysNum)       = 0.0D0  ! Initialize this variable to zero (radiant system defaults to off)
+    LastQHTRadSrc(RadSysNum)      = 0.0D0  ! At the beginning of a time step, reset to zero so average calculation can start again
+    LastSysTimeElapsed(RadSysNum) = 0.0D0  ! At the beginning of a time step, reset to zero so average calculation can start again
+    LastTimeStepSys(RadSysNum)    = 0.0D0  ! At the beginning of a time step, reset to zero so average calculation can start again
   END IF
 
   RETURN
@@ -765,11 +765,11 @@ SUBROUTINE CalcHighTempRadiantSystem(RadSysNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: HeatFrac       ! fraction of maximum energy input to radiant system [dimensionless]
-  REAL    :: OffTemp        ! Temperature above which the radiant system should be completely off [C]
-  REAL    :: OpTemp         ! Operative temperature [C]
-!  REAL    :: QZnReq         ! heating or cooling needed by zone [Watts]
-  REAL    :: SetPtTemp      ! Setpoint temperature [C]
+  REAL(r64)    :: HeatFrac       ! fraction of maximum energy input to radiant system [dimensionless]
+  REAL(r64)    :: OffTemp        ! Temperature above which the radiant system should be completely off [C]
+  REAL(r64)    :: OpTemp         ! Operative temperature [C]
+!  REAL(r64)    :: QZnReq         ! heating or cooling needed by zone [Watts]
+  REAL(r64)    :: SetPtTemp      ! Setpoint temperature [C]
   INTEGER :: ZoneNum        ! number of zone being served
 
           ! FLOW:
@@ -781,7 +781,7 @@ SUBROUTINE CalcHighTempRadiantSystem(RadSysNum)
 
           ! Unit is off or has no load upon it; set the flow rates to zero and then
           ! simulate the components with the no flow conditions
-    QHTRadSource(RadSysNum) = 0.0
+    QHTRadSource(RadSysNum) = 0.0D0
 
   ELSE    ! Unit might be on-->this section is intended to control the output of the
           ! high temperature radiant heater (temperature controlled)
@@ -801,8 +801,8 @@ SUBROUTINE CalcHighTempRadiantSystem(RadSysNum)
         OpTemp   = 0.5*(MAT(ZoneNum)+MRT(ZoneNum))
         HeatFrac = (OffTemp - OpTemp)/HighTempRadSys(RadSysNum)%ThrottlRange
     END SELECT
-    IF (HeatFrac < 0.0) HeatFrac = 0.0
-    IF (HeatFrac > 1.0) HeatFrac = 1.0
+    IF (HeatFrac < 0.0) HeatFrac = 0.0d0
+    IF (HeatFrac > 1.0) HeatFrac = 1.0d0
 
           ! Set the heat source for the high temperature electric radiant system
     QHTRadSource(RadSysNum) = HeatFrac*HighTempRadSys(RadSysNum)%MaxPowerCapac
@@ -874,14 +874,14 @@ SUBROUTINE CalcHighTempRadiantSystemSP(FirstHVACIteration,RadSysNum)
   REAL          :: HeatFracMax    ! maximum range of heat fraction
   REAL          :: HeatFracMin    ! minimum range of heat fraction
   INTEGER       :: IterNum        ! iteration number
-  REAL     :: SetPtTemp      ! Setpoint temperature [C]
+  REAL(r64)     :: SetPtTemp      ! Setpoint temperature [C]
   INTEGER       :: ZoneNum        ! number of zone being served
-  REAL     :: ZoneTemp       ! zone temperature (MAT, MRT, or Operative Temperature, depending on control type) [C]
+  REAL(r64)     :: ZoneTemp       ! zone temperature (MAT, MRT, or Operative Temperature, depending on control type) [C]
 
           ! FLOW:
           ! initialize local variables
   ZoneNum                 = HighTempRadSys(RadSysNum)%ZonePtr
-  QHTRadSource(RadSysNum) = 0.0
+  QHTRadSource(RadSysNum) = 0.0D0
 
   IF (GetCurrentScheduleValue(HighTempRadSys(RadSysNum)%SchedPtr) > 0) THEN
 
@@ -1019,7 +1019,7 @@ SUBROUTINE UpdateHighTempRadiantSystem(RadSysNum,LoadMet)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: RadSysNum ! Index for the low temperature radiant system under consideration within the derived types
-  REAL,    INTENT(OUT) :: LoadMet   ! load met by the radiant system, in Watts
+  REAL(r64),    INTENT(OUT) :: LoadMet   ! load met by the radiant system, in Watts
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1134,7 +1134,7 @@ SUBROUTINE UpdateHTRadSourceValAvg(HighTempRadSysOn)
 
           ! If it was allocated, then we have to check to see if this was running at all...
   DO RadSysNum = 1, NumOfHighTempRadSys
-    IF (QHTRadSrcAvg(RadSysNum) /= 0.0) THEN
+    IF (QHTRadSrcAvg(RadSysNum) /= 0.0D0) THEN
       HighTempRadSysOn = .TRUE.
       EXIT !DO loop
     END IF
@@ -1188,7 +1188,7 @@ SUBROUTINE DistributeHTRadGains
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: SmallestArea = 0.001   ! Smallest area in meters squared (to avoid a divide by zero)
+  REAL(r64), PARAMETER :: SmallestArea = 0.001d0   ! Smallest area in meters squared (to avoid a divide by zero)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1201,15 +1201,15 @@ SUBROUTINE DistributeHTRadGains
   INTEGER :: RadSysNum  ! Counter for the radiant systems
   INTEGER :: SurfNum    ! Pointer to the Surface derived type
   INTEGER :: ZoneNum    ! Pointer to the Zone derived type
-  REAL :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
+  REAL(R64) :: ThisSurfIntensity ! temporary for W/m2 term for rad on a surface
 
 
           ! FLOW:
           ! Initialize arrays
-  SumConvHTRadSys   = 0.0
-  SumLatentHTRadSys = 0.0
-  QHTRadSysSurf     = 0.0
-  QHTRadSysToPerson = 0.0
+  SumConvHTRadSys   = 0.0D0
+  SumLatentHTRadSys = 0.0D0
+  QHTRadSysSurf     = 0.0D0
+  QHTRadSysToPerson = 0.0D0
 
   DO RadSysNum = 1, NumOfHighTempRadSys
 
@@ -1302,7 +1302,7 @@ SUBROUTINE ReportHighTempRadiantSystem(RadSysNum)
   INTEGER, INTENT(IN) :: RadSysNum  ! Index for the low temperature radiant system under consideration within the derived types
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: NotOperating = -9999.   ! Some unreasonable value that should clue the user in that this is not running
+  REAL(r64), PARAMETER :: NotOperating = -9999.d0   ! Some unreasonable value that should clue the user in that this is not running
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1335,7 +1335,7 @@ SUBROUTINE ReportHighTempRadiantSystem(RadSysNum)
 END SUBROUTINE ReportHighTempRadiantSystem
 
 
-REAL FUNCTION SumHATsurf(ZoneNum)
+REAL(r64) FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1366,7 +1366,7 @@ REAL FUNCTION SumHATsurf(ZoneNum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: SurfNum     ! Surface number
-  REAL           :: Area        ! Effective surface area
+  REAL(r64)           :: Area        ! Effective surface area
 
           ! FLOW:
   SumHATsurf = 0.0

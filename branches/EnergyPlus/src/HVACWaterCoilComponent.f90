@@ -48,9 +48,9 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 INTEGER, PARAMETER :: MaxPolynomOrder = 4
 INTEGER, PARAMETER :: MaxOrderedPairs = 60
 
-REAL, PARAMETER :: PolyConvgTol = 1.*10**-05    !RS: Debugging: 102612
-REAL, PARAMETER :: MinWaterMassFlowFrac = 0.000001
-REAL, PARAMETER :: MinAirMassFlow = 0.001
+REAL(r64), PARAMETER :: PolyConvgTol = 1.D-05
+REAL(r64), PARAMETER :: MinWaterMassFlowFrac = 0.000001d0
+REAL(r64), PARAMETER :: MinAirMassFlow = 0.001d0
 
 ! coil types in this module
 INTEGER, PARAMETER :: WaterCoil_SimpleHeating    = TypeOf_CoilWaterSimpleHeating
@@ -93,98 +93,98 @@ TYPE WaterCoilEquipConditions
   CHARACTER(len=MaxNameLength) :: Schedule       = ' ' ! WaterCoil Operation Schedule
   INTEGER      :: SchedPtr                       = 0   ! Pointer to the correct schedule
   LOGICAL      :: RequestingAutoSize             = .false.  ! True if this coil has appropriate autosize fields
-  REAL    :: InletAirMassFlowRate           = 0.0 ! MassFlow through the WaterCoil being Simulated [kg/s]
-  REAL    :: OutletAirMassFlowRate          = 0.0 ! MassFlow throught the WaterCoil being Simulated[kg/s]
-  REAL    :: InletAirTemp                   = 0.0 ! Inlet Air Temperature Operating Condition [C]
-  REAL    :: OutletAirTemp                  = 0.0 ! Outlet Air Temperature Operating Condition [C]
-  REAL    :: InletAirHumRat                 = 0.0 ! Inlet Air Humidity Ratio Operating Condition
-  REAL    :: OutletAirHumRat                = 0.0 ! Outlet Air Humidity Ratio Calculated Condition
-  REAL    :: InletAirEnthalpy               = 0.0 ! Inlet Air enthalpy [J/kg]
-  REAL    :: OutletAirEnthalpy              = 0.0 ! Outlet Air enthalpy [J/kg]
-  REAL    :: TotWaterCoilLoad               = 0.0 ! Total Load on the Coil [W]
-  REAL    :: SenWaterCoilLoad               = 0.0 ! Sensible Load on the Coil [W]
-  REAL    :: TotWaterHeatingCoilEnergy      = 0.0 ! Total Heating Coil energy of the Coil [J]
-  REAL    :: TotWaterCoolingCoilEnergy      = 0.0 ! Total Cooling Coil energy of the Coil [J]
-  REAL    :: SenWaterCoolingCoilEnergy      = 0.0 ! Sensible Cooling Coil energy of the Coil [J]
-  REAL    :: TotWaterHeatingCoilRate        = 0.0 ! Total Heating Coil Rate on the Coil [W]
-  REAL    :: TotWaterCoolingCoilRate        = 0.0 ! Total Cooling Coil Rate on the Coil [W]
-  REAL    :: SenWaterCoolingCoilRate        = 0.0 ! Sensible Cooling Coil Rate on the Coil [W]
-  REAL    :: UACoil                         = 0.0 ! WaterCoil UA Value
-  REAL    :: LeavingRelHum                  = 0.0 ! Simple Coil Latent Model requires User input for leaving RH
-  REAL    :: DesiredOutletTemp              = 0.0 !
-  REAL    :: DesiredOutletHumRat            = 0.0 !
-  REAL    :: InletWaterTemp                 = 0.0 ! Inlet Water Temperature [C]
-  REAL    :: OutletWaterTemp                = 0.0 ! Outlet Water Temperature [C]
-  REAL    :: InletWaterMassFlowRate         = 0.0 ! Inlet Water Mass Flow Rate [Kg/s]
-  REAL    :: OutletWaterMassFlowRate        = 0.0 ! Outlet Water Mass Flow Rate [Kg/s]
-  REAL    :: MaxWaterVolFlowRate            = 0.0 ! Maximum water Volume flow rate [m3/s]
-  REAL    :: MaxWaterMassFlowRate           = 0.0 ! Maximum water mass flow rate [Kg/s]
-  REAL    :: InletWaterEnthalpy             = 0.0 ! Inlet Water Enthalpy
-  REAL    :: OutletWaterEnthalpy            = 0.0 ! Outlet Water Enthalpy
+  REAL(r64)    :: InletAirMassFlowRate           = 0.0 ! MassFlow through the WaterCoil being Simulated [kg/s]
+  REAL(r64)    :: OutletAirMassFlowRate          = 0.0 ! MassFlow throught the WaterCoil being Simulated[kg/s]
+  REAL(r64)    :: InletAirTemp                   = 0.0 ! Inlet Air Temperature Operating Condition [C]
+  REAL(r64)    :: OutletAirTemp                  = 0.0 ! Outlet Air Temperature Operating Condition [C]
+  REAL(r64)    :: InletAirHumRat                 = 0.0 ! Inlet Air Humidity Ratio Operating Condition
+  REAL(r64)    :: OutletAirHumRat                = 0.0 ! Outlet Air Humidity Ratio Calculated Condition
+  REAL(r64)    :: InletAirEnthalpy               = 0.0 ! Inlet Air enthalpy [J/kg]
+  REAL(r64)    :: OutletAirEnthalpy              = 0.0 ! Outlet Air enthalpy [J/kg]
+  REAL(r64)    :: TotWaterCoilLoad               = 0.0 ! Total Load on the Coil [W]
+  REAL(r64)    :: SenWaterCoilLoad               = 0.0 ! Sensible Load on the Coil [W]
+  REAL(r64)    :: TotWaterHeatingCoilEnergy      = 0.0 ! Total Heating Coil energy of the Coil [J]
+  REAL(r64)    :: TotWaterCoolingCoilEnergy      = 0.0 ! Total Cooling Coil energy of the Coil [J]
+  REAL(r64)    :: SenWaterCoolingCoilEnergy      = 0.0 ! Sensible Cooling Coil energy of the Coil [J]
+  REAL(r64)    :: TotWaterHeatingCoilRate        = 0.0 ! Total Heating Coil Rate on the Coil [W]
+  REAL(r64)    :: TotWaterCoolingCoilRate        = 0.0 ! Total Cooling Coil Rate on the Coil [W]
+  REAL(r64)    :: SenWaterCoolingCoilRate        = 0.0 ! Sensible Cooling Coil Rate on the Coil [W]
+  REAL(r64)    :: UACoil                         = 0.0 ! WaterCoil UA Value
+  REAL(r64)    :: LeavingRelHum                  = 0.0 ! Simple Coil Latent Model requires User input for leaving RH
+  REAL(r64)    :: DesiredOutletTemp              = 0.0 !
+  REAL(r64)    :: DesiredOutletHumRat            = 0.0 !
+  REAL(r64)    :: InletWaterTemp                 = 0.0 ! Inlet Water Temperature [C]
+  REAL(r64)    :: OutletWaterTemp                = 0.0 ! Outlet Water Temperature [C]
+  REAL(r64)    :: InletWaterMassFlowRate         = 0.0 ! Inlet Water Mass Flow Rate [Kg/s]
+  REAL(r64)    :: OutletWaterMassFlowRate        = 0.0 ! Outlet Water Mass Flow Rate [Kg/s]
+  REAL(r64)    :: MaxWaterVolFlowRate            = 0.0 ! Maximum water Volume flow rate [m3/s]
+  REAL(r64)    :: MaxWaterMassFlowRate           = 0.0 ! Maximum water mass flow rate [Kg/s]
+  REAL(r64)    :: InletWaterEnthalpy             = 0.0 ! Inlet Water Enthalpy
+  REAL(r64)    :: OutletWaterEnthalpy            = 0.0 ! Outlet Water Enthalpy
   !These are the additional Geometry and Design Variables for Detailed Flat Fin Coil
-  REAL    :: TubeOutsideSurfArea            = 0.0 !Tube Primary Surface Area
-  REAL    :: TotTubeInsideArea              = 0.0 !Total Tube inside Surface Area
-  REAL    :: FinSurfArea                    = 0.0 !Fin Surface Area
-  REAL    :: MinAirFlowArea                 = 0.0 !
-  REAL    :: CoilDepth                      = 0.0 !
-  REAL    :: FinDiam                        = 0.0 !Fin Diameter or the Coil Height
-  REAL    :: FinThickness                   = 0.0 !
-  REAL    :: TubeInsideDiam                 = 0.0 !Inner diameter of Tubes
-  REAL    :: TubeOutsideDiam                = 0.0 !Outer Diameter of the Tubes
-  REAL    :: TubeThermConductivity          = 0.0 !
-  REAL    :: FinThermConductivity           = 0.0 !
-  REAL    :: FinSpacing                     = 0.0 !Fin Spacing or Distance
-  REAL    :: TubeDepthSpacing               = 0.0 !
+  REAL(r64)    :: TubeOutsideSurfArea            = 0.0 !Tube Primary Surface Area
+  REAL(r64)    :: TotTubeInsideArea              = 0.0 !Total Tube inside Surface Area
+  REAL(r64)    :: FinSurfArea                    = 0.0 !Fin Surface Area
+  REAL(r64)    :: MinAirFlowArea                 = 0.0 !
+  REAL(r64)    :: CoilDepth                      = 0.0 !
+  REAL(r64)    :: FinDiam                        = 0.0 !Fin Diameter or the Coil Height
+  REAL(r64)    :: FinThickness                   = 0.0 !
+  REAL(r64)    :: TubeInsideDiam                 = 0.0 !Inner diameter of Tubes
+  REAL(r64)    :: TubeOutsideDiam                = 0.0 !Outer Diameter of the Tubes
+  REAL(r64)    :: TubeThermConductivity          = 0.0 !
+  REAL(r64)    :: FinThermConductivity           = 0.0 !
+  REAL(r64)    :: FinSpacing                     = 0.0 !Fin Spacing or Distance
+  REAL(r64)    :: TubeDepthSpacing               = 0.0 !
   INTEGER      :: NumofTubeRows                  = 0   !
   INTEGER      :: NumofTubesperRow               = 0   !
   !BEGIN calculated parameters for detailed flat fin coil
-  REAL    :: EffectiveFinDiam               = 0.0 !
-  REAL    :: TotCoilOutsideSurfArea         = 0.0 !
-  REAL    :: CoilEffectiveInsideDiam        = 0.0 !
-  REAL    :: GeometryCoef1                  = 0.0 !
-  REAL    :: GeometryCoef2                  = 0.0 !
-  REAL    :: DryFinEfficncyCoef(5)          = 0.0 !
-  REAL    :: SatEnthlCurveConstCoef         = 0.0 !
-  REAL    :: SatEnthlCurveSlope             = 0.0 !
-  REAL    :: EnthVsTempCurveAppxSlope       = 0.0 !
-  REAL    :: EnthVsTempCurveConst           = 0.0 !
-  REAL    :: MeanWaterTempSaved             = 0.0 !
-  REAL    :: InWaterTempSaved               = 0.0 !
-  REAL    :: OutWaterTempSaved              = 0.0 !
-  REAL    :: SurfAreaWetSaved               = 0.0 !
-  REAL    :: SurfAreaWetFraction            = 0.0 !
+  REAL(r64)    :: EffectiveFinDiam               = 0.0 !
+  REAL(r64)    :: TotCoilOutsideSurfArea         = 0.0 !
+  REAL(r64)    :: CoilEffectiveInsideDiam        = 0.0 !
+  REAL(r64)    :: GeometryCoef1                  = 0.0 !
+  REAL(r64)    :: GeometryCoef2                  = 0.0 !
+  REAL(r64)    :: DryFinEfficncyCoef(5)          = 0.0 !
+  REAL(r64)    :: SatEnthlCurveConstCoef         = 0.0 !
+  REAL(r64)    :: SatEnthlCurveSlope             = 0.0 !
+  REAL(r64)    :: EnthVsTempCurveAppxSlope       = 0.0 !
+  REAL(r64)    :: EnthVsTempCurveConst           = 0.0 !
+  REAL(r64)    :: MeanWaterTempSaved             = 0.0 !
+  REAL(r64)    :: InWaterTempSaved               = 0.0 !
+  REAL(r64)    :: OutWaterTempSaved              = 0.0 !
+  REAL(r64)    :: SurfAreaWetSaved               = 0.0 !
+  REAL(r64)    :: SurfAreaWetFraction            = 0.0 !
   !END calculated parameters for detailed flat fin coil
   ! Design Input Variables to the Design Detailed Simple inputs model
-  REAL    :: DesInletWaterTemp         = 0.0 ! Entering water temperature at Design(C)
-  REAL    :: DesAirVolFlowRate         = 0.0 ! Entering Air Volume Flow Rate Design( m3/s)
-  REAL    :: DesInletAirTemp           = 0.0 ! Entering air dry bulb temperature at Design(C)
-  REAL    :: DesInletAirHumRat         = 0.0 ! Entering air humidity ratio at design conditions
-  REAL    :: DesTotWaterCoilLoad       = 0.0 ! Total heat transfer rate at Design(Watt)
-  REAL    :: DesSenWaterCoilLoad       = 0.0 ! Sensible heat transfer rate at Design(Watt)
+  REAL(r64)    :: DesInletWaterTemp         = 0.0 ! Entering water temperature at Design(C)
+  REAL(r64)    :: DesAirVolFlowRate         = 0.0 ! Entering Air Volume Flow Rate Design( m3/s)
+  REAL(r64)    :: DesInletAirTemp           = 0.0 ! Entering air dry bulb temperature at Design(C)
+  REAL(r64)    :: DesInletAirHumRat         = 0.0 ! Entering air humidity ratio at design conditions
+  REAL(r64)    :: DesTotWaterCoilLoad       = 0.0 ! Total heat transfer rate at Design(Watt)
+  REAL(r64)    :: DesSenWaterCoilLoad       = 0.0 ! Sensible heat transfer rate at Design(Watt)
   !BEGIN calculated parameters for Design Detailed Simple inputs model
-  REAL    :: DesAirMassFlowRate        = 0.0 ! Design Air MassFlow through the WaterCoil [kg/Sec]
-  REAL    :: UACoilTotal               = 0.0 ! Overall external dry UA (W/C)
-  REAL    :: UACoilInternal            = 0.0 ! Overall internal UA(W/C)
-  REAL    :: UACoilExternal            = 0.0 ! Overall external heat transfer coefficient(W/C)
-  REAL    :: UACoilInternalDes         = 0.0 ! Overall design internal UA(W/C)
-  REAL    :: UACoilExternalDes         = 0.0 ! Overall design external heat transfer coefficient(W/C)
-  REAL    :: DesOutletAirTemp          = 0.0 ! Leaving air temperature at rating(C)
-  REAL    :: DesOutletAirHumRat        = 0.0 ! Humidity ratio of air leaving at design capacity.
-  REAL    :: DesOutletWaterTemp        = 0.0 ! Temp of Liquid Leaving the Coil at design Capacity
+  REAL(r64)    :: DesAirMassFlowRate        = 0.0 ! Design Air MassFlow through the WaterCoil [kg/Sec]
+  REAL(r64)    :: UACoilTotal               = 0.0 ! Overall external dry UA (W/C)
+  REAL(r64)    :: UACoilInternal            = 0.0 ! Overall internal UA(W/C)
+  REAL(r64)    :: UACoilExternal            = 0.0 ! Overall external heat transfer coefficient(W/C)
+  REAL(r64)    :: UACoilInternalDes         = 0.0 ! Overall design internal UA(W/C)
+  REAL(r64)    :: UACoilExternalDes         = 0.0 ! Overall design external heat transfer coefficient(W/C)
+  REAL(r64)    :: DesOutletAirTemp          = 0.0 ! Leaving air temperature at rating(C)
+  REAL(r64)    :: DesOutletAirHumRat        = 0.0 ! Humidity ratio of air leaving at design capacity.
+  REAL(r64)    :: DesOutletWaterTemp        = 0.0 ! Temp of Liquid Leaving the Coil at design Capacity
   INTEGER      :: HeatExchType              = 0   ! Heat exchanger configuration, default to Cross Flow
   INTEGER      :: CoolingCoilAnalysisMode   = 0   ! Mode Of analysis, Simple=1 and Detailed =2
                                                   !    Simple= AllWet-AllDry, Detailed= PartWet-PartDry
-  REAL    :: UACoilInternalPerUnitArea = 0.0 ! Internal overall heat transfer coefficient(W/m2 C)
-  REAL    :: UAWetExtPerUnitArea       = 0.0 ! External overall heat transfer coefficient(W/m2 C)
-  REAL    :: UADryExtPerUnitArea       = 0.0 ! External overall heat transfer coefficient(W/m2 C)
-  REAL    :: SurfAreaWetFractionSaved  = 0.0 ! Previous saved value, for numerical efficiency.
+  REAL(r64)    :: UACoilInternalPerUnitArea = 0.0 ! Internal overall heat transfer coefficient(W/m2 C)
+  REAL(r64)    :: UAWetExtPerUnitArea       = 0.0 ! External overall heat transfer coefficient(W/m2 C)
+  REAL(r64)    :: UADryExtPerUnitArea       = 0.0 ! External overall heat transfer coefficient(W/m2 C)
+  REAL(r64)    :: SurfAreaWetFractionSaved  = 0.0 ! Previous saved value, for numerical efficiency.
   !END calculated parameters for Design Inputs Detailed coil
 
   ! variables for simple heating coil with variable UA
-  REAL    :: UACoilVariable                 = 0. ! WaterCoil UA value when variable (simple heating coil only)
-  REAL    :: RatioAirSideToWaterSideConvect = 1. !"r" value for coil,
-  REAL    :: AirSideNominalConvect          = 0. ! nominal rating point air side convection term (fin_effic*(hc*A))
-  REAL    :: LiquidSideNominalConvect       = 0. ! nominal rating point water side convection term (hc*A)
+  REAL(r64)    :: UACoilVariable                 = 0.d0 ! WaterCoil UA value when variable (simple heating coil only)
+  REAL(r64)    :: RatioAirSideToWaterSideConvect = 1.d0 !"r" value for coil,
+  REAL(r64)    :: AirSideNominalConvect          = 0.d0 ! nominal rating point air side convection term (fin_effic*(hc*A))
+  REAL(r64)    :: LiquidSideNominalConvect       = 0.d0 ! nominal rating point water side convection term (hc*A)
 
   INTEGER      :: Control                        = 0   !Const Vol =1;  Variable Vol = 2
   INTEGER      :: AirInletNodeNum                = 0   !
@@ -201,8 +201,8 @@ TYPE WaterCoilEquipConditions
   CHARACTER(len=MaxNameLength) :: CondensateCollectName = ' ' ! name of water source e.g. water storage tank
   INTEGER ::CondensateTankID                      = 0 !index "pointer" to Storage TAnk array WaterStorage
   INTEGER ::CondensateTankSupplyARRID             = 0 !index pointe to supply Vdot array in WaterStorage
-  REAL   :: CondensateVdot = 0.0 ! rate of water condensation from air stream [m3/s]
-  REAL   :: CondensateVol  = 0.0 ! amount of water condensed from air stream [m3]
+  REAL(r64)   :: CondensateVdot = 0.0d0 ! rate of water condensation from air stream [m3/s]
+  REAL(r64)   :: CondensateVol  = 0.0d0 ! amount of water condensed from air stream [m3]
   !end variables for water system interactions
 
   !COIL:Water:SimpleHeating Coil Performance Input Method
@@ -288,9 +288,9 @@ SUBROUTINE SimulateWaterCoilComponents(CompName,FirstHVACIteration,CompIndex, QA
   CHARACTER(len=*), INTENT(IN) :: CompName
   LOGICAL, INTENT (IN):: FirstHVACIteration
   INTEGER, INTENT(INOUT)  :: CompIndex
-  REAL, OPTIONAL, INTENT(INOUT)  :: QActual
+  REAL(r64), OPTIONAL, INTENT(INOUT)  :: QActual
   INTEGER, OPTIONAL, INTENT(IN)  :: FanOpMode
-  REAL, OPTIONAL, INTENT(IN)  :: PartLoadRatio
+  REAL(r64), OPTIONAL, INTENT(IN)  :: PartLoadRatio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -304,7 +304,7 @@ SUBROUTINE SimulateWaterCoilComponents(CompName,FirstHVACIteration,CompIndex, QA
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  :: CoilNum      ! The WaterCoil that you are currently loading input into
   INTEGER  :: OpMode       ! fan operating mode
-  REAL     :: PartLoadFrac ! part-load fraction of heating coil
+  REAL(r64)     :: PartLoadFrac ! part-load fraction of heating coil
 
           ! FLOW:
 
@@ -348,7 +348,7 @@ SUBROUTINE SimulateWaterCoilComponents(CompName,FirstHVACIteration,CompIndex, QA
   IF(PRESENT(PartLoadRatio))THEN
     PartLoadFrac = PartLoadRatio
   ELSE
-    PartLoadFrac = 1.0
+    PartLoadFrac = 1.0d0
   END IF
 
   ! Calculate the Correct WaterCoil Model with the current CoilNum
@@ -433,7 +433,7 @@ SUBROUTINE GetWaterCoilInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
     INTEGER :: MaxNums=0               ! Maximum number of numeric input fields
@@ -654,7 +654,7 @@ SUBROUTINE GetWaterCoilInput
         WaterCoil(CoilNum)%FinDiam              = NumArray(7)
         IF (WaterCoil(CoilNum)%FinDiam == Autosize) WaterCoil(CoilNum)%RequestingAutosize=.true.
         WaterCoil(CoilNum)%FinThickness         = NumArray(8)
-        IF ( WaterCoil(CoilNum)%FinThickness .LE. 0.0 ) THEN
+        IF ( WaterCoil(CoilNum)%FinThickness .LE. 0.0d0 ) THEN
              CALL ShowSevereError(TRIM(CurrentModuleObject)//': '//TRIM(cNumericFields(8))// &
                          ' must be > 0.0, for '//TRIM(cAlphaFields(1))//' = '//TRIM(WaterCoil(CoilNum)%Name))
             ErrorsFound = .TRUE.
@@ -662,13 +662,13 @@ SUBROUTINE GetWaterCoilInput
         WaterCoil(CoilNum)%TubeInsideDiam       = NumArray(9)
         WaterCoil(CoilNum)%TubeOutsideDiam      = NumArray(10)
         WaterCoil(CoilNum)%TubeThermConductivity= NumArray(11)
-        IF ( WaterCoil(CoilNum)%TubeThermConductivity .LE. 0.0 ) THEN
+        IF ( WaterCoil(CoilNum)%TubeThermConductivity .LE. 0.0d0 ) THEN
              CALL ShowSevereError(TRIM(CurrentModuleObject)//': '//TRIM(cNumericFields(11))// &
                          ' must be > 0.0, for '//TRIM(cAlphaFields(1))//' = '//TRIM(WaterCoil(CoilNum)%Name))
             ErrorsFound = .TRUE.
         END IF
         WaterCoil(CoilNum)%FinThermConductivity = NumArray(12)
-        IF ( WaterCoil(CoilNum)%FinThermConductivity .LE. 0.0 ) THEN
+        IF ( WaterCoil(CoilNum)%FinThermConductivity .LE. 0.0d0 ) THEN
              CALL ShowSevereError(TRIM(CurrentModuleObject)//': '//TRIM(cNumericFields(12))// &
                          ' must be > 0.0, for '//TRIM(cAlphaFields(1))//' = '//TRIM(WaterCoil(CoilNum)%Name))
             ErrorsFound = .TRUE.
@@ -918,11 +918,11 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
   LOGICAL, INTENT (IN):: FirstHVACIteration !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  :: SmallNo = 1.*10**-9 ! SmallNo number in place of zero !RS: Debugging: 102612
-  REAL, PARAMETER  :: LargeNo =1.*10**20  ! Large number in place of infinity
+  REAL(r64), PARAMETER  :: SmallNo = 1.d-9 ! SmallNo number in place of zero
+  REAL(r64), PARAMETER  :: LargeNo =1.d20  ! Large number in place of infinity
   INTEGER, PARAMETER           :: itmax =10
   INTEGER, PARAMETER           :: MaxIte = 500        ! Maximum number of iterations
-  REAL, PARAMETER  :: Acc =  0.0001       ! Accuracy of result
+  REAL(r64), PARAMETER  :: Acc =  0.0001d0       ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -931,83 +931,83 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL DesInletAirEnth               ! Entering air enthalpy at rating (J/kg)
-  REAL DesOutletAirEnth              ! Leaving air enthalpy at rating(J/kg)
-  REAL DesAirApparatusDewPtEnth      ! Air enthalpy at apparatus dew point at rating(J/kg)
-  REAL DesSatEnthAtWaterInTemp       ! Saturated enthalpy at entering liquid temp(J/kg)
-  REAL CapacitanceAir                ! Air-side capacity rate(W/C)
-  REAL DesAirTempApparatusDewPt      ! Temperature apparatus dew point at design capacity
-  REAL DesAirHumRatApparatusDewPt    ! Humdity Ratio at apparatus dew point at design capacity
-  REAL DesByPassFactor               ! ByPass Factor at design condition
-  REAL SlopeTempVsHumRatio           ! Ratio temperature difference to humidity difference
+  REAL(r64) DesInletAirEnth               ! Entering air enthalpy at rating (J/kg)
+  REAL(r64) DesOutletAirEnth              ! Leaving air enthalpy at rating(J/kg)
+  REAL(r64) DesAirApparatusDewPtEnth      ! Air enthalpy at apparatus dew point at rating(J/kg)
+  REAL(r64) DesSatEnthAtWaterInTemp       ! Saturated enthalpy at entering liquid temp(J/kg)
+  REAL(r64) CapacitanceAir                ! Air-side capacity rate(W/C)
+  REAL(r64) DesAirTempApparatusDewPt      ! Temperature apparatus dew point at design capacity
+  REAL(r64) DesAirHumRatApparatusDewPt    ! Humdity Ratio at apparatus dew point at design capacity
+  REAL(r64) DesByPassFactor               ! ByPass Factor at design condition
+  REAL(r64) SlopeTempVsHumRatio           ! Ratio temperature difference to humidity difference
                                           ! between entering and leaving air states
-  REAL TempApparatusDewPtEstimate    ! Estimate of TAdp from SlopeTempVsHumRatio
-  REAL Y1         ! Previous values of dependent variable in ITERATE
-  REAL X1         ! Previous values of independent variable in ITERATE
-  REAL error      ! Deviation of dependent variable in iteration
+  REAL(r64) TempApparatusDewPtEstimate    ! Estimate of TAdp from SlopeTempVsHumRatio
+  REAL(r64) Y1         ! Previous values of dependent variable in ITERATE
+  REAL(r64) X1         ! Previous values of independent variable in ITERATE
+  REAL(r64) error      ! Deviation of dependent variable in iteration
   INTEGER iter    ! Iteration counter
   INTEGER icvg    ! Iteration convergence flag
-  REAL ResultX    ! Output variable from ITERATE function.
+  REAL(r64) ResultX    ! Output variable from ITERATE function.
   INTEGER :: Ipass  ! loop index for App_Dewpoint_Loop
-  REAL :: TOutNew = 0.0       ! reset outlet air temperature for Coil:Cooling:Water
-  REAL :: WOutNew = 0.0       ! reset outlet air humidity ratio for Coil:Cooling:Water
+  REAL(r64) :: TOutNew = 0.0       ! reset outlet air temperature for Coil:Cooling:Water
+  REAL(r64) :: WOutNew = 0.0       ! reset outlet air humidity ratio for Coil:Cooling:Water
 
   INTEGER             :: AirInletNode
   INTEGER             :: WaterInletNode
   INTEGER             :: WaterOutletNode
 
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: DesCpAir         ! CPAir at Design Inlet Air Temp
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: DesUARangeCheck  ! Value for range check based on Design Inlet Air Humidity Ratio
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: DesCpAir         ! CPAir at Design Inlet Air Temp
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: DesUARangeCheck  ! Value for range check based on Design Inlet Air Humidity Ratio
 
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyCoilReportFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: PlantLoopScanFlag
 
-  REAL, DIMENSION(5) :: CoefSeries
-  REAL :: FinDiamVar
-  REAL :: TubeToFinDiamRatio
+  REAL(r64), DIMENSION(5) :: CoefSeries
+  REAL(r64) :: FinDiamVar
+  REAL(r64) :: TubeToFinDiamRatio
 
-  REAL           :: RhoAirStd     ! density of air at standard conditions
-  REAL           :: CpAirStd      ! specific heat of air at std conditions
+  REAL(r64)           :: RhoAirStd     ! density of air at standard conditions
+  REAL(r64)           :: CpAirStd      ! specific heat of air at std conditions
   INTEGER             :: SolFla              ! Flag of solver
-  REAL           :: UA0                 ! lower bound for UA
-  REAL           :: UA1                 ! upper bound for UA
-  REAL           :: UA
-  REAL, DIMENSION(4)  :: Par
+  REAL(r64)           :: UA0                 ! lower bound for UA
+  REAL(r64)           :: UA1                 ! upper bound for UA
+  REAL(r64)           :: UA
+  REAL(r64), DIMENSION(4)  :: Par
 
   LOGICAL :: NoSatCurveIntersect = .FALSE. ! TRUE if failed to find appatatus dew-point
   LOGICAL :: BelowInletWaterTemp = .FALSE. ! TRUE if apparatus dew-point below design inlet water temperature
   LOGICAL :: CBFTooLarge = .FALSE.         ! TRUE if the coil bypass factor is unrealistically large
   LOGICAL :: NoExitCondReset = .FALSE.     ! TRUE if exit condition reset is not to be done
 
-  REAL :: RatedLatentCapacity = 0.0 ! latent cooling capacity at the rating point [W]
-  REAL :: RatedSHR = 0.0            ! sensible heat ratio at the rating point
-  REAL :: CapacitanceWater = 0.0    ! capacitance of the water stream [W/K]
-  REAL :: CMin             = 0.0    ! minimum capacitance of 2 streams [W/K]
-  REAL :: CoilEffectiveness = 0.0   ! effectiveness of the coil (rated)
-  REAL :: SurfaceArea = 0.0         ! heat exchanger surface area, [m2]
-  REAL :: UATotal = 0.0             ! heat exchanger UA total, [W/C]
+  REAL(r64) :: RatedLatentCapacity = 0.0 ! latent cooling capacity at the rating point [W]
+  REAL(r64) :: RatedSHR = 0.0            ! sensible heat ratio at the rating point
+  REAL(r64) :: CapacitanceWater = 0.0    ! capacitance of the water stream [W/K]
+  REAL(r64) :: CMin             = 0.0    ! minimum capacitance of 2 streams [W/K]
+  REAL(r64) :: CoilEffectiveness = 0.0   ! effectiveness of the coil (rated)
+  REAL(r64) :: SurfaceArea = 0.0         ! heat exchanger surface area, [m2]
+  REAL(r64) :: UATotal = 0.0             ! heat exchanger UA total, [W/C]
   LOGICAL,SAVE,DIMENSION(2) :: RptCoilHeaderFlag=.true.
-  REAL :: x_a ! result of Eq.70 in Wetter 1999
-  REAL :: x_w ! result of Eq.72 in Wetter 1999
-  REAL :: AirConvectTerm ! result of Eq.71 in Wetter 1999
-  REAL :: WaterConvectTerm ! result of Eq.73 in Wetter 1999
-  REAL :: WaterConvSensitivity ! "s" in Wetter 1999, temperature sensitivity in water side convection
+  REAL(r64) :: x_a ! result of Eq.70 in Wetter 1999
+  REAL(r64) :: x_w ! result of Eq.72 in Wetter 1999
+  REAL(r64) :: AirConvectTerm ! result of Eq.71 in Wetter 1999
+  REAL(r64) :: WaterConvectTerm ! result of Eq.73 in Wetter 1999
+  REAL(r64) :: WaterConvSensitivity ! "s" in Wetter 1999, temperature sensitivity in water side convection
 
-  REAL :: DesUACoilExternalEnth     ! enthalpy based UAExternal for wet coil surface {kg/s}
-  REAL :: LogMeanEnthDiff           ! long mean enthalpy difference {J/kg}
-  REAL :: LogMeanTempDiff           ! long mean temperature difference {C}
+  REAL(r64) :: DesUACoilExternalEnth     ! enthalpy based UAExternal for wet coil surface {kg/s}
+  REAL(r64) :: LogMeanEnthDiff           ! long mean enthalpy difference {J/kg}
+  REAL(r64) :: LogMeanTempDiff           ! long mean temperature difference {C}
 
-  REAL :: DesOutletWaterTemp
-  REAL :: DesSatEnthAtWaterOutTemp
-  REAL :: DesEnthAtWaterOutTempAirInHumRat
-  REAL :: DesEnthWaterOut
-  REAL :: Cp ! local fluid specific heat
-  REAL :: rho ! local fluid density
+  REAL(r64) :: DesOutletWaterTemp
+  REAL(r64) :: DesSatEnthAtWaterOutTemp
+  REAL(r64) :: DesEnthAtWaterOutTempAirInHumRat
+  REAL(r64) :: DesEnthWaterOut
+  REAL(r64) :: Cp ! local fluid specific heat
+  REAL(r64) :: rho ! local fluid density
   LOGICAL   :: errFlag
-  REAL :: EnthCorrFrac = 0.0        ! enthalpy correction factor
-  REAL :: TempCorrFrac = 0.0        ! temperature correction factor
+  REAL(r64) :: EnthCorrFrac = 0.0        ! enthalpy correction factor
+  REAL(r64) :: TempCorrFrac = 0.0        ! temperature correction factor
           ! FLOW:
 
   IF (MyOneTimeFlag) THEN
@@ -1073,11 +1073,11 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
     WaterInletNode = WaterCoil(CoilNum)%WaterInletNodeNum
     WaterOutletNode = WaterCoil(CoilNum)%WaterOutletNodeNum
 
-    DesCpAir(CoilNum) = PsyCpAirFnWTdb(0.0,WaterCoil(CoilNum)%DesInletAirTemp)
-    DesUARangeCheck(CoilNum) = (-1568.6*WaterCoil(CoilNum)%DesInletAirHumRat + 20.157)
+    DesCpAir(CoilNum) = PsyCpAirFnWTdb(0.0d0,WaterCoil(CoilNum)%DesInletAirTemp)
+    DesUARangeCheck(CoilNum) = (-1568.6d0*WaterCoil(CoilNum)%DesInletAirHumRat + 20.157d0)
 
     IF (WaterCoil(CoilNum)%WaterCoilType == CoilType_Cooling) THEN   ! 'Cooling'
-      Node(WaterInletNode)%Temp          = 5.0
+      Node(WaterInletNode)%Temp          = 5.0d0
 
       Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
                                  Node(WaterInletNode)%Temp,                      &
@@ -1091,7 +1091,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
     END IF
 
     IF (WaterCoil(CoilNum)%WaterCoilType == CoilType_Heating) THEN  ! 'Heating'
-      Node(WaterInletNode)%Temp          = 60.0
+      Node(WaterInletNode)%Temp          = 60.0d0
 
       Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
                                  Node(WaterInletNode)%Temp,                      &
@@ -1123,19 +1123,19 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
           ! check for very small heating capacity
           IF (WaterCoil(CoilNum)%DesTotWaterCoilLoad > SmallLoad) THEN
             RhoAirStd = StdRhoAir
-            CpAirStd = PsyCpAirFnWTdb(0.0,20.0)
+            CpAirStd = PsyCpAirFnWTdb(0.0d0,20.0d0)
             Par(1) = WaterCoil(CoilNum)%DesTotWaterCoilLoad
             Par(2) = REAL(CoilNum,r64)
             Par(3) = REAL(ContFanCycCoil,r64) !fan operating mode
             Par(4) = 1.0 ! part-load ratio
             WaterCoil(CoilNum)%InletAirTemp = WaterCoil(CoilNum)%DesInletAirTemp
-            WaterCoil(CoilNum)%InletAirHumRat = 0.008
+            WaterCoil(CoilNum)%InletAirHumRat = 0.008d0
             WaterCoil(CoilNum)%InletWaterTemp = WaterCoil(CoilNum)%DesInletWaterTemp
             WaterCoil(CoilNum)%InletWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             WaterCoil(CoilNum)%InletAirMassFlowRate = WaterCoil(CoilNum)%DesTotWaterCoilLoad / (CpAirStd *  &
                                                        (WaterCoil(CoilNum)%DesOutletAirTemp - WaterCoil(CoilNum)%DesInletAirTemp))
             ! set the lower and upper limits on the UA
-            UA0 = .001 * WaterCoil(CoilNum)%DesTotWaterCoilLoad
+            UA0 = .001d0 * WaterCoil(CoilNum)%DesTotWaterCoilLoad
             UA1 = WaterCoil(CoilNum)%DesTotWaterCoilLoad
             ! Invert the simple heating coil model: given the design inlet conditions and the design load, find the design UA
             CALL SolveRegulaFalsi(Acc, MaxIte, SolFla, UA, SimpleHeatingCoilUAResidual, UA0, UA1, Par)
@@ -1157,7 +1157,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
       END IF
       MyUAAndFlowCalcFlag(CoilNum) = .FALSE.
       !fill values for variable UA
-      CpAirStd = PsyCpAirFnWTdb(0.0,20.0)
+      CpAirStd = PsyCpAirFnWTdb(0.0d0,20.0d0)
       WaterCoil(CoilNum)%DesAirMassFlowRate = StdRhoAir * WaterCoil(CoilNum)%DesAirVolFlowRate
       WaterCoil(CoilNum)%LiquidSideNominalConvect = WaterCoil(CoilNum)%UACoil &
                                   * (WaterCoil(CoilNum)%RatioAirSideToWaterSideConvect + 1)&
@@ -1170,7 +1170,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
     WaterCoil(CoilNum)%MaxWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
 
-    Call InitComponentNodes(0.,WaterCoil(CoilNum)%MaxWaterMassFlowRate, &
+    Call InitComponentNodes(0.d0,WaterCoil(CoilNum)%MaxWaterMassFlowRate, &
                                  WaterCoil(CoilNum)%WaterInletNodeNum,    &
                                  WaterCoil(CoilNum)%WaterOutletNodeNum,   &
                                  WaterCoil(CoilNum)%WaterLoopNum,         &
@@ -1180,7 +1180,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
   ! effective fin diameter for detailed flat fin coil
     IF (WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN  ! 'DETAILED FLAT FIN'
-      WaterCoil(CoilNum)%EffectiveFinDiam = SQRT(4. * WaterCoil(CoilNum)%FinDiam * &
+      WaterCoil(CoilNum)%EffectiveFinDiam = SQRT(4.d0 * WaterCoil(CoilNum)%FinDiam * &
                                WaterCoil(CoilNum)%CoilDepth                        &
                                 / (Pi * WaterCoil(CoilNum)%NumOfTubeRows *           &
                                       WaterCoil(CoilNum)%NumOfTubesPerRow))
@@ -1191,7 +1191,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
                                    WaterCoil(CoilNum)%FinSurfArea
   !   Effective Tube Inside Diameter - the model assumes that the coil
   !   can be simulated as a tube with an equivalent hydraulic diameter.
-      WaterCoil(CoilNum)%CoilEffectiveInsideDiam = 4. * WaterCoil(CoilNum)%MinAirFlowArea * &
+      WaterCoil(CoilNum)%CoilEffectiveInsideDiam = 4.d0 * WaterCoil(CoilNum)%MinAirFlowArea * &
                                       WaterCoil(CoilNum)%CoilDepth /  &
                                       WaterCoil(CoilNum)%TotCoilOutsideSurfArea
   !   Ratio of tube outside diameter to effective fin diameter should always
@@ -1201,13 +1201,13 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
         CALL ShowWarningError('InitWaterCoil: Detailed Flat Fin Coil, TubetoFinDiamRatio > 1.0, ['//  &
               TRIM(RoundSigDigits(TubeToFinDiamRatio,4))//']')
         ! reset tube depth spacing and recalc dependent parameters
-        WaterCoil(CoilNum)%TubeDepthSpacing = WaterCoil(CoilNum)%TubeDepthSpacing * (TubeToFinDiamRatio**2 + 0.1)
+        WaterCoil(CoilNum)%TubeDepthSpacing = WaterCoil(CoilNum)%TubeDepthSpacing * (TubeToFinDiamRatio**2 + 0.1d0)
         WaterCoil(CoilNum)%CoilDepth = WaterCoil(CoilNum)%TubeDepthSpacing * WaterCoil(CoilNum)%NumofTubeRows
-        WaterCoil(CoilNum)%EffectiveFinDiam = SQRT(4. * WaterCoil(CoilNum)%FinDiam * &
+        WaterCoil(CoilNum)%EffectiveFinDiam = SQRT(4.d0 * WaterCoil(CoilNum)%FinDiam * &
                                                 WaterCoil(CoilNum)%CoilDepth                        &
                                                 / (Pi * WaterCoil(CoilNum)%NumOfTubeRows *           &
                                                 WaterCoil(CoilNum)%NumOfTubesPerRow))
-        WaterCoil(CoilNum)%CoilEffectiveInsideDiam = 4. * WaterCoil(CoilNum)%MinAirFlowArea * &
+        WaterCoil(CoilNum)%CoilEffectiveInsideDiam = 4.d0 * WaterCoil(CoilNum)%MinAirFlowArea * &
                                                        WaterCoil(CoilNum)%CoilDepth /  &
                                                        WaterCoil(CoilNum)%TotCoilOutsideSurfArea
         TubeToFinDiamRatio = WaterCoil(CoilNum)%TubeOutsideDiam / WaterCoil(CoilNum)%EffectiveFinDiam
@@ -1222,20 +1222,20 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
       WaterCoil(CoilNum)%DryFinEfficncyCoef = CoefSeries
 
-      FinDiamVar = 0.5 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam)
+      FinDiamVar = 0.5d0 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam)
 
-      WaterCoil(CoilNum)%GeometryCoef1 = 0.159 * (WaterCoil(CoilNum)%FinThickness / &
-                             WaterCoil(CoilNum)%CoilEffectiveInsideDiam)**(-0.065)   &
-                             * (WaterCoil(CoilNum)%FinThickness/FinDiamVar)**0.141
-      WaterCoil(CoilNum)%GeometryCoef2 = -0.323 * (WaterCoil(CoilNum)%FinSpacing/FinDiamVar)**0.049 * &
-                       (WaterCoil(CoilNum)%EffectiveFinDiam/WaterCoil(CoilNum)%TubeDepthSpacing)**0.549 *  &
-                       (WaterCoil(CoilNum)%FinThickness/WaterCoil(CoilNum)%FinSpacing)**(-.028)
+      WaterCoil(CoilNum)%GeometryCoef1 = 0.159d0 * (WaterCoil(CoilNum)%FinThickness / &
+                             WaterCoil(CoilNum)%CoilEffectiveInsideDiam)**(-0.065d0)   &
+                             * (WaterCoil(CoilNum)%FinThickness/FinDiamVar)**0.141d0
+      WaterCoil(CoilNum)%GeometryCoef2 = -0.323d0 * (WaterCoil(CoilNum)%FinSpacing/FinDiamVar)**0.049d0 * &
+                       (WaterCoil(CoilNum)%EffectiveFinDiam/WaterCoil(CoilNum)%TubeDepthSpacing)**0.549d0 *  &
+                       (WaterCoil(CoilNum)%FinThickness/WaterCoil(CoilNum)%FinSpacing)**(-.028d0)
 
       ! Set some initial values for simulation
-      WaterCoil(CoilNum)%SatEnthlCurveConstCoef   = -10.57
-      WaterCoil(CoilNum)%SatEnthlCurveSlope       =   3.3867
-      WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope =   3.3867
-      WaterCoil(CoilNum)%EnthVsTempCurveConst     = -10.57
+      WaterCoil(CoilNum)%SatEnthlCurveConstCoef   = -10.57d0
+      WaterCoil(CoilNum)%SatEnthlCurveSlope       =   3.3867d0
+      WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope =   3.3867d0
+      WaterCoil(CoilNum)%EnthVsTempCurveConst     = -10.57d0
       ! Set Saved Values to Zero
       WaterCoil(CoilNum)%SurfAreaWetSaved   = 0.0
       WaterCoil(CoilNum)%MeanWaterTempSaved = 0.0
@@ -1386,7 +1386,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
             ! Iterating to calculate Apparatus Dew Point Temperature at Design Condition
             error = DesAirTempApparatusDewPt-TempApparatusDewPtEstimate
-            Call ITERATE (ResultX,0.01, DesAirTempApparatusDewPt,error,X1,Y1,iter,icvg)
+            Call ITERATE (ResultX,0.01d0, DesAirTempApparatusDewPt,error,X1,Y1,iter,icvg)
             DesAirTempApparatusDewPt = ResultX
 
             ! If converged, exit loop
@@ -1412,9 +1412,9 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
           DesByPassFactor = (DesOutletAirEnth-DesAirApparatusDewPtEnth)/(DesInletAirEnth-DesAirApparatusDewPtEnth)
 
           ! Check for bypass factor for unsuitable value. Note that bypass factor is never used in the coil calculation
-          If((DesByPassFactor .GT. 0.5) .or. (DesByPassFactor .LT. 0.0))Then
+          If((DesByPassFactor .GT. 0.5d0) .or. (DesByPassFactor .LT. 0.0))Then
             CBFTooLarge = .TRUE.
-            DesByPassFactor=0.37
+            DesByPassFactor=0.37d0
           End if
 
           IF (DesEnthWaterOut > DesInletAirEnth) THEN
@@ -1424,7 +1424,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
             CALL ShowContinueError('To correct this condition the design chilled water flow rate will be increased from ' // &
                                    TRIM(RoundSigDigits(WaterCoil(CoilNum)%MaxWaterVolFlowRate,5)))
             EnthCorrFrac = (DesEnthWaterOut - DesInletAirEnth) / (DesEnthWaterOut - DesSatEnthAtWaterInTemp)
-            WaterCoil(CoilNum)%MaxWaterVolFlowRate = (1.0 + 2.0 * EnthCorrFrac) * WaterCoil(CoilNum)%MaxWaterVolFlowRate
+            WaterCoil(CoilNum)%MaxWaterVolFlowRate = (1.0d0 + 2.0 * EnthCorrFrac) * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             CALL ShowContinueError('to ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%MaxWaterVolFlowRate,5)) // ' m3/s')
             WaterCoil(CoilNum)%MaxWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             DesOutletWaterTemp = WaterCoil(CoilNum)%DesInletWaterTemp &
@@ -1444,7 +1444,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
             LogMeanEnthDiff = ((DesInletAirEnth - DesEnthWaterOut) - (DesOutletAirEnth - DesSatEnthAtWaterInTemp)) / &
                                 LOG((DesInletAirEnth - DesEnthWaterOut)/(DesOutletAirEnth - DesSatEnthAtWaterInTemp))
           ELSE
-            LogMeanEnthDiff = 2000.0 ! UA will be 1/2 the design coil load
+            LogMeanEnthDiff = 2000.0d0 ! UA will be 1/2 the design coil load
           END IF
           DesUACoilExternalEnth = WaterCoil(CoilNum)%DesTotWaterCoilLoad/LogMeanEnthDiff
           WaterCoil(CoilNum)%UACoilExternal = DesUACoilExternalEnth *  &
@@ -1452,7 +1452,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
           IF (Ipass == 1 .AND. (NoSatCurveIntersect .OR. CBFTooLarge .OR. BelowInletWaterTemp) ) THEN
             ! reset outlet conditions to 90% relative humidity at the same outlet enthalpy
-            TOutNew = TdbFnHRhPb(DesOutletAirEnth,0.9,StdBaroPress)
+            TOutNew = TdbFnHRhPb(DesOutletAirEnth,0.9d0,StdBaroPress)
             WOutNew  = PsyWFnTdbH(TOutNew,DesOutletAirEnth)
             IF (WOutNew >= WaterCoil(CoilNum)%DesInletAirHumRat .or. TOutNew > WaterCoil(CoilNum)%DesOutletAirTemp) THEN
               NoExitCondReset = .TRUE.
@@ -1460,9 +1460,9 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
             CYCLE Inlet_Conditions_Loop
           END IF
 
-          WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.30
+          WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.30d0
           ! Overall heat transfer coefficient
-          WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+          WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
 
 
         ELSE ! dry coil
@@ -1475,7 +1475,7 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
                                    TRIM(RoundSigDigits(WaterCoil(CoilNum)%MaxWaterVolFlowRate,5)))
             TempCorrFrac = (DesOutletWaterTemp - WaterCoil(CoilNum)%DesInletAirTemp) /   &
                (DesOutletWaterTemp - WaterCoil(CoilNum)%DesInletWaterTemp)
-            WaterCoil(CoilNum)%MaxWaterVolFlowRate = (1.0 + 2.0 * TempCorrFrac) * WaterCoil(CoilNum)%MaxWaterVolFlowRate
+            WaterCoil(CoilNum)%MaxWaterVolFlowRate = (1.0d0 + 2.0 * TempCorrFrac) * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             CALL ShowContinueError('to ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%MaxWaterVolFlowRate,5)) // ' m3/s')
             WaterCoil(CoilNum)%MaxWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             DesOutletWaterTemp = WaterCoil(CoilNum)%DesInletWaterTemp &
@@ -1491,11 +1491,11 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
                                (WaterCoil(CoilNum)%DesOutletAirTemp - WaterCoil(CoilNum)%DesInletWaterTemp))
             WaterCoil(CoilNum)%UACoilExternal = WaterCoil(CoilNum)%DesTotWaterCoilLoad / LogMeanTempDiff
           ELSE
-            WaterCoil(CoilNum)%UACoilExternal = WaterCoil(CoilNum)%DesTotWaterCoilLoad / 2.0 ! make the UA large
+            WaterCoil(CoilNum)%UACoilExternal = WaterCoil(CoilNum)%DesTotWaterCoilLoad / 2.0d0 ! make the UA large
           END IF
-          WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.30
+          WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.30d0
           ! Overall heat transfer coefficient
-          WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+          WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
           EXIT Inlet_Conditions_Loop
 
         END IF
@@ -1524,18 +1524,18 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
       WaterCoil(CoilNum)%InletWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
       WaterCoil(CoilNum)%InletAirMassFlowRate = WaterCoil(CoilNum)%DesAirMassFlowRate
       ! set the lower and upper limits on the UA
-      UA0 = 0.1 * WaterCoil(CoilNum)%UACoilExternal
-      UA1 = 10.0 * WaterCoil(CoilNum)%UACoilExternal
+      UA0 = 0.1d0 * WaterCoil(CoilNum)%UACoilExternal
+      UA1 = 10.0d0 * WaterCoil(CoilNum)%UACoilExternal
       ! Invert the simple cooling coil model: given the design inlet conditions and the design load, find the design UA
-      CALL SolveRegulaFalsi(0.001, MaxIte, SolFla, UA, SimpleCoolingCoilUAResidual, UA0, UA1, Par)
+      CALL SolveRegulaFalsi(0.001d0, MaxIte, SolFla, UA, SimpleCoolingCoilUAResidual, UA0, UA1, Par)
       ! if the numerical inversion failed, issue error messages.
       IF (SolFla == -1) THEN
         CALL ShowSevereError('Calculation of cooling coil design UA failed for coil '//TRIM(WaterCoil(CoilNum)%Name))
         CALL ShowContinueError('  Iteration limit exceeded in calculating coil UA')
         ! CALL ShowFatalError('Preceeding error causes program termination')
-        WaterCoil(CoilNum)%UACoilExternal = UA0*10.0
-        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.3
-        WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+        WaterCoil(CoilNum)%UACoilExternal = UA0*10.0d0
+        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.3d0
+        WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
         WaterCoil(CoilNum)%TotCoilOutsideSurfArea=EstimateHEXSurfaceArea(CoilNum)
         WaterCoil(CoilNum)%UACoilInternalPerUnitArea=WaterCoil(CoilNum)%UACoilInternal/  &
                                                          WaterCoil(CoilNum)%TotCoilOutsideSurfArea
@@ -1546,9 +1546,9 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
         CALL ShowSevereError('Calculation of cooling coil design UA failed for coil '//TRIM(WaterCoil(CoilNum)%Name))
         CALL ShowContinueError('  Bad starting values for UA')
         ! CALL ShowFatalError('Preceeding error causes program termination')
-        WaterCoil(CoilNum)%UACoilExternal = UA0*10.0
-        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.3
-        WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+        WaterCoil(CoilNum)%UACoilExternal = UA0*10.0d0
+        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilExternal*3.3d0
+        WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
         WaterCoil(CoilNum)%TotCoilOutsideSurfArea=EstimateHEXSurfaceArea(CoilNum)
         WaterCoil(CoilNum)%UACoilInternalPerUnitArea=WaterCoil(CoilNum)%UACoilInternal/  &
                                                          WaterCoil(CoilNum)%TotCoilOutsideSurfArea
@@ -1573,13 +1573,13 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
     ! Calculate rated Total, latent, sensible capacity, SHR, effectiveness
     IF (WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_SimpleHeating) THEN
-      WaterCoil(CoilNum)%InletAirTemp = 16.6
-      WaterCoil(CoilNum)%InletAirHumRat = PsyWFnTdbRhPb(16.6,0.5,StdBaroPress)
-      WaterCoil(CoilNum)%InletWaterTemp =82.2
+      WaterCoil(CoilNum)%InletAirTemp = 16.6d0
+      WaterCoil(CoilNum)%InletAirHumRat = PsyWFnTdbRhPb(16.6d0,0.5d0,StdBaroPress)
+      WaterCoil(CoilNum)%InletWaterTemp =82.2d0
     ELSE
-      WaterCoil(CoilNum)%InletAirTemp = 26.67
-      WaterCoil(CoilNum)%InletAirHumRat = PsyWFnTdbTwbPb(26.67,19.44,StdBaroPress)
-      WaterCoil(CoilNum)%InletWaterTemp = 6.67
+      WaterCoil(CoilNum)%InletAirTemp = 26.67d0
+      WaterCoil(CoilNum)%InletAirHumRat = PsyWFnTdbTwbPb(26.67d0,19.44d0,StdBaroPress)
+      WaterCoil(CoilNum)%InletWaterTemp = 6.67d0
     END IF
     WaterCoil(CoilNum)%InletAirEnthalpy = PsyHFnTdbW(WaterCoil(CoilNum)%InletAirTemp,WaterCoil(CoilNum)%InletAirHumRat)
     WaterCoil(CoilNum)%InletWaterMassFlowRate = WaterCoil(CoilNum)%MaxWaterMassFlowRate
@@ -1594,23 +1594,23 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
 
     CapacitanceWater = WaterCoil(CoilNum)%InletWaterMassFlowRate* Cp
     CMin = MIN(CapacitanceAir,CapacitanceWater)
-    IF (CMin > 0.0) THEN
+    IF (CMin > 0.0d0) THEN
       IF (WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_Cooling) THEN
-        CALL CoolingCoil(CoilNum, FirstHVACIteration, DesignCalc,ContFanCycCoil,1.0)
+        CALL CoolingCoil(CoilNum, FirstHVACIteration, DesignCalc,ContFanCycCoil,1.0d0)
         CoilEffectiveness = (WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%OutletAirTemp) / &
                               (WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%InletWaterTemp) * &
                               (CapacitanceAir / CMin)
         RatedLatentCapacity = WaterCoil(CoilNum)%TotWaterCoolingCoilRate - WaterCoil(CoilNum)%SenWaterCoolingCoilRate
         RatedSHR = WaterCoil(CoilNum)%SenWaterCoolingCoilRate / WaterCoil(CoilNum)%TotWaterCoolingCoilRate
       ELSE IF (WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_DetFlatFinCooling) THEN
-        CALL CalcDetailFlatFinCoolingCoil(CoilNum, DesignCalc,ContFanCycCoil,1.0)
+        CALL CalcDetailFlatFinCoolingCoil(CoilNum, DesignCalc,ContFanCycCoil,1.0d0)
         CoilEffectiveness = (WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%OutletAirTemp) / &
                               (WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%InletWaterTemp) * &
                               (CapacitanceAir / CMin)
         RatedLatentCapacity = WaterCoil(CoilNum)%TotWaterCoolingCoilRate - WaterCoil(CoilNum)%SenWaterCoolingCoilRate
         RatedSHR = WaterCoil(CoilNum)%SenWaterCoolingCoilRate / WaterCoil(CoilNum)%TotWaterCoolingCoilRate
       ELSE IF (WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_SimpleHeating) THEN
-        CALL CalcSimpleHeatingCoil(CoilNum, ContFanCycCoil, 1.0, DesignCalc)
+        CALL CalcSimpleHeatingCoil(CoilNum, ContFanCycCoil, 1.0d0, DesignCalc)
         CoilEffectiveness = (WaterCoil(CoilNum)%OutletAirTemp - WaterCoil(CoilNum)%InletAirTemp) / &
                               (WaterCoil(CoilNum)%InletWaterTemp - WaterCoil(CoilNum)%InletAirTemp) * &
                               (CapacitanceAir / CMin)
@@ -1720,23 +1720,23 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
   IF ((WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_SimpleHeating) .AND. &
      .NOT. ( MyUAAndFlowCalcFlag(CoilNum)) ) THEN    !update Coil UA based on inlet mass flows and temps
 
-     x_a = 1. + 4.769D-3*(WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%DesInletAirTemp)
-     IF (WaterCoil(CoilNum)%DesAirMassFlowRate > 0.) THEN
-       AirConvectTerm  = x_a * ((WaterCoil(CoilNum)%InletAirMassFlowRate/WaterCoil(CoilNum)%DesAirMassFlowRate)**0.8) &
+     x_a = 1.d0 + 4.769D-3*(WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%DesInletAirTemp)
+     IF (WaterCoil(CoilNum)%DesAirMassFlowRate > 0.d0) THEN
+       AirConvectTerm  = x_a * ((WaterCoil(CoilNum)%InletAirMassFlowRate/WaterCoil(CoilNum)%DesAirMassFlowRate)**0.8d0) &
                        * WaterCoil(CoilNum)%AirSideNominalConvect
      ELSE
-       AirConvectTerm  = 0.
+       AirConvectTerm  = 0.d0
      ENDIF
-     WaterConvSensitivity = 0.014 / (1. + 0.014*WaterCoil(CoilNum)%DesInletWaterTemp)
-     x_w = 1. + WaterConvSensitivity *(WaterCoil(CoilNum)%InletWaterTemp - WaterCoil(CoilNum)%DesInletWaterTemp)
-     IF (WaterCoil(CoilNum)%MaxWaterMassFlowRate > 0.0) THEN
-       WaterConvectTerm =  x_w * ((WaterCoil(CoilNum)%InletWaterMassFlowRate/WaterCoil(CoilNum)%MaxWaterMassFlowRate)**0.85) &
+     WaterConvSensitivity = 0.014d0 / (1.d0 + 0.014d0*WaterCoil(CoilNum)%DesInletWaterTemp)
+     x_w = 1.d0 + WaterConvSensitivity *(WaterCoil(CoilNum)%InletWaterTemp - WaterCoil(CoilNum)%DesInletWaterTemp)
+     IF (WaterCoil(CoilNum)%MaxWaterMassFlowRate > 0.0d0) THEN
+       WaterConvectTerm =  x_w * ((WaterCoil(CoilNum)%InletWaterMassFlowRate/WaterCoil(CoilNum)%MaxWaterMassFlowRate)**0.85d0) &
                          * WaterCoil(CoilNum)%LiquidSideNominalConvect
      ELSE
-       WaterConvectTerm = 0.
+       WaterConvectTerm = 0.d0
      ENDIF
-     IF ((AirConvectTerm > 0.) .AND. (WaterConvectTerm > 0. )) Then
-       WaterCoil(CoilNum)%UACoilVariable =1. / ( (1./WaterConvectTerm) + (1. / AirConvectTerm) )
+     IF ((AirConvectTerm > 0.d0) .AND. (WaterConvectTerm > 0.d0 )) Then
+       WaterCoil(CoilNum)%UACoilVariable =1.d0 / ( (1.d0/WaterConvectTerm) + (1.d0 / AirConvectTerm) )
      ELSE
        ! use nominal UA since variable UA cannot be calculated
        WaterCoil(CoilNum)%UACoilVariable = WaterCoil(CoilNum)%UACoil
@@ -1746,29 +1746,29 @@ SUBROUTINE InitWaterCoil(CoilNum,FirstHVACIteration)
   !update Coil UA based on inlet mass flows and temps
   IF ( WaterCoil(CoilNum)%WaterCoilType_Num == WaterCoil_Cooling .and. .not. MyCoilDesignFlag(CoilNum) ) THEN
 
-     x_a = 1. + 4.769D-3*(WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%DesInletAirTemp)
-     IF (WaterCoil(CoilNum)%DesAirMassFlowRate > 0.) THEN
+     x_a = 1.d0 + 4.769D-3*(WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%DesInletAirTemp)
+     IF (WaterCoil(CoilNum)%DesAirMassFlowRate > 0.d0) THEN
        WaterCoil(CoilNum)%UACoilExternal  = x_a *   &
-             ((WaterCoil(CoilNum)%InletAirMassFlowRate/WaterCoil(CoilNum)%DesAirMassFlowRate)**0.8) &
+             ((WaterCoil(CoilNum)%InletAirMassFlowRate/WaterCoil(CoilNum)%DesAirMassFlowRate)**0.8d0) &
                        * WaterCoil(CoilNum)%UACoilExternalDes
      ELSE
        WaterCoil(CoilNum)%UACoilExternal = WaterCoil(CoilNum)%UACoilExternalDes
      ENDIF
-     WaterConvSensitivity = 0.014 / (1. + 0.014*WaterCoil(CoilNum)%DesInletWaterTemp)
-     x_w = 1. + WaterConvSensitivity *(WaterCoil(CoilNum)%InletWaterTemp - WaterCoil(CoilNum)%DesInletWaterTemp)
-     IF (WaterCoil(CoilNum)%MaxWaterMassFlowRate > 0.0) THEN
+     WaterConvSensitivity = 0.014d0 / (1.d0 + 0.014d0*WaterCoil(CoilNum)%DesInletWaterTemp)
+     x_w = 1.d0 + WaterConvSensitivity *(WaterCoil(CoilNum)%InletWaterTemp - WaterCoil(CoilNum)%DesInletWaterTemp)
+     IF (WaterCoil(CoilNum)%MaxWaterMassFlowRate > 0.0d0) THEN
        WaterCoil(CoilNum)%UACoilInternal =  x_w *   &
-          ((WaterCoil(CoilNum)%InletWaterMassFlowRate/WaterCoil(CoilNum)%MaxWaterMassFlowRate)**0.85) &
+          ((WaterCoil(CoilNum)%InletWaterMassFlowRate/WaterCoil(CoilNum)%MaxWaterMassFlowRate)**0.85d0) &
                          * WaterCoil(CoilNum)%UACoilInternalDes
      ELSE
        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilInternalDes
      ENDIF
      IF (WaterCoil(CoilNum)%UACoilInternal > 0.0 .and. WaterCoil(CoilNum)%UACoilExternal > 0.0) THEN
-       WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+       WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
      ELSE
        WaterCoil(CoilNum)%UACoilInternal = WaterCoil(CoilNum)%UACoilInternalDes
        WaterCoil(CoilNum)%UACoilExternal = WaterCoil(CoilNum)%UACoilExternalDes
-       WaterCoil(CoilNum)%UACoilTotal = 1.0/(1./WaterCoil(CoilNum)%UACoilExternal+1./WaterCoil(CoilNum)%UACoilInternal)
+       WaterCoil(CoilNum)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal+1.d0/WaterCoil(CoilNum)%UACoilInternal)
      END IF
      WaterCoil(CoilNum)%UACoilInternalPerUnitArea = WaterCoil(CoilNum)%UACoilInternal/  &
                                                       WaterCoil(CoilNum)%TotCoilOutsideSurfArea
@@ -1819,7 +1819,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte = 500        ! Maximum number of iterations
-  REAL, PARAMETER :: Acc =  0.0001       ! Accuracy of result
+  REAL(r64), PARAMETER :: Acc =  0.0001d0       ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1832,28 +1832,28 @@ SUBROUTINE SizeWaterCoil(CoilNum)
   INTEGER             :: PltSizCoolNum ! index of plant sizing object for 1st cooling loop
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  REAL           :: CoilInTemp
-  REAL           :: CoilOutTemp
-  REAL           :: CoilOutHumRat
-  REAL           :: CoilInHumRat
-  REAL           :: DesCoilLoad
-  REAL           :: DesMassFlow
-  REAL           :: DesVolFlow
-  REAL           :: MinFlowFrac
-  REAL           :: FCOAFrac
-  REAL           :: OutAirFrac
-  REAL           :: CoilDesWaterDeltaT  ! water delta T used to calculate the design water flow rate
-  REAL           :: RhoAirStd     ! density of air at standard conditions
-  REAL           :: CpAirStd      ! specific heat of air at std conditions
+  REAL(r64)           :: CoilInTemp
+  REAL(r64)           :: CoilOutTemp
+  REAL(r64)           :: CoilOutHumRat
+  REAL(r64)           :: CoilInHumRat
+  REAL(r64)           :: DesCoilLoad
+  REAL(r64)           :: DesMassFlow
+  REAL(r64)           :: DesVolFlow
+  REAL(r64)           :: MinFlowFrac
+  REAL(r64)           :: FCOAFrac
+  REAL(r64)           :: OutAirFrac
+  REAL(r64)           :: CoilDesWaterDeltaT  ! water delta T used to calculate the design water flow rate
+  REAL(r64)           :: RhoAirStd     ! density of air at standard conditions
+  REAL(r64)           :: CpAirStd      ! specific heat of air at std conditions
   INTEGER             :: SolFla              ! Flag of solver
-  REAL           :: UA0                 ! lower bound for UA
-  REAL           :: UA1                 ! upper bound for UA
-  REAL           :: UA
-  REAL, DIMENSION(4)  :: Par
+  REAL(r64)           :: UA0                 ! lower bound for UA
+  REAL(r64)           :: UA1                 ! upper bound for UA
+  REAL(r64)           :: UA
+  REAL(r64), DIMENSION(4)  :: Par
   LOGICAL             :: LoopErrorsFound
-  REAL           :: Cp  !
-  REAL           :: rho !
-  REAL           :: DesWaterVolFlow = 0.0
+  REAL(r64)           :: Cp  !
+  REAL(r64)           :: rho !
+  REAL(r64)           :: DesWaterVolFlow = 0.0D0
 
   ErrorsFound = .FALSE.
   PltSizCoolNum = 0
@@ -1866,7 +1866,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
   MinFlowFrac = 0.0
   DesMassFlow = 0.0
   RhoAirStd = StdRhoAir
-  CpAirStd = PsyCpAirFnWTdb(0.0,20.0)
+  CpAirStd = PsyCpAirFnWTdb(0.0d0,20.0d0)
   CoilDesWaterDeltaT = 0.0
   LoopErrorsFound = .FALSE.
   DesVolFlow = 0.0
@@ -1879,7 +1879,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
   ENDIF
 
   Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       5.0,                      &
+                       5.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -1937,16 +1937,16 @@ SUBROUTINE SizeWaterCoil(CoilNum)
               CoilInTemp = FinalSysSizing(CurSysNum)%CoolMixTemp
               CoilInHumRat = FinalSysSizing(CurSysNum)%CoolMixHumRat
             ELSE ! thereis precooling of the OA stream
-              IF (DesVolFlow > 0.0) THEN
+              IF (DesVolFlow > 0.0d0) THEN
                 OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / DesVolFlow
               ELSE
-                OutAirFrac = 1.0
+                OutAirFrac = 1.0d0
               END IF
-              OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+              OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
               CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolTemp + &
-                         (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
+                         (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
               CoilInHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolHumRat + &
-                         (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
+                         (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
             END IF
             CoilOutHumRat = FinalSysSizing(CurSysNum)%CoolSupHumRat
             CoilOutTemp = FinalSysSizing(CurSysNum)%CoolSupTemp
@@ -1957,7 +1957,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             CALL ShowContinueError('    Wair,in =  ' // TRIM(RoundSigDigits(CoilInHumRat,6)))
             CALL ShowContinueError('    Wair,out = ' // TRIM(RoundSigDigits(CoilOutHumRat,6)))
             IF (CoilInHumRat > .016) THEN
-              CoilOutHumRat = 0.5*CoilInHumRat
+              CoilOutHumRat = 0.5d0*CoilInHumRat
             ELSE
               CoilOutHumRat = CoilInHumRat
             END IF
@@ -1967,7 +1967,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           DesCoilLoad = WaterCoil(CoilNum)%InletAirMassFlowRate  &
                           * (PsyHFnTdbW(CoilInTemp, CoilInHumRat)-PsyHFnTdbW(CoilOutTemp, CoilOutHumRat))
           IF (CurOASysNum > 0) THEN
-            CoilDesWaterDeltaT = 0.5 * PlantSizData(PltSizCoolNum)%DeltaT
+            CoilDesWaterDeltaT = 0.5d0 * PlantSizData(PltSizCoolNum)%DeltaT
           ELSE
             CoilDesWaterDeltaT = PlantSizData(PltSizCoolNum)%DeltaT
           END IF
@@ -2031,12 +2031,12 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             IF (PrimaryAirSystem(CurSysNum)%NumOACoolCoils == 0) THEN ! there is no precooling of the OA stream
               WaterCoil(CoilNum)%DesInletAirtemp = FinalSysSizing(CurSysNum)%CoolMixTemp
             ELSE ! thereis precooling of the OA stream
-              IF (DesVolFlow > 0.0) THEN
+              IF (DesVolFlow > 0.0d0) THEN
                 OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / DesVolFlow
               ELSE
-                OutAirFrac = 1.0
+                OutAirFrac = 1.0d0
               END IF
-              OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+              OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
               WaterCoil(CoilNum)%DesInletAirtemp = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolTemp + &
                          (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
             END IF
@@ -2073,12 +2073,12 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             IF (PrimaryAirSystem(CurSysNum)%NumOACoolCoils == 0) THEN ! there is no precooling of the OA stream
               WaterCoil(CoilNum)%DesInletAirHumRat = FinalSysSizing(CurSysNum)%CoolMixHumRat
             ELSE ! there is precooling of the OA stream
-              IF (DesVolFlow > 0.0) THEN
+              IF (DesVolFlow > 0.0d0) THEN
                 OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / DesVolFlow
               ELSE
-                OutAirFrac = 1.0
+                OutAirFrac = 1.0d0
               END IF
-              OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+              OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
               WaterCoil(CoilNum)%DesInletAirHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolHumRat + &
                          (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
             END IF
@@ -2101,7 +2101,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             CALL ShowContinueError('    Wair,in =  ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%DesInletAirHumRat,6)))
             CALL ShowContinueError('    Wair,out = ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%DesOutletAirHumRat,6)))
             IF (WaterCoil(CoilNum)%DesInletAirHumRat > .016) THEN
-              WaterCoil(CoilNum)%DesOutletAirHumRat = 0.5*WaterCoil(CoilNum)%DesInletAirHumRat
+              WaterCoil(CoilNum)%DesOutletAirHumRat = 0.5d0*WaterCoil(CoilNum)%DesInletAirHumRat
             ELSE
               WaterCoil(CoilNum)%DesOutletAirHumRat = WaterCoil(CoilNum)%DesInletAirHumRat
             END IF
@@ -2114,7 +2114,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
         END IF
 
         IF (WaterCoil(CoilNum)%NumofTubesperRow == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
-          WaterCoil(CoilNum)%NumofTubesperRow = INT(13750. * WaterCoil(CoilNum)%MaxWaterVolFlowRate) + 1
+          WaterCoil(CoilNum)%NumofTubesperRow = INT(13750.d0 * WaterCoil(CoilNum)%MaxWaterVolFlowRate) + 1
           WaterCoil(CoilNum)%NumofTubesperRow = MAX(3, WaterCoil(CoilNum)%NumofTubesperRow)
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Number of Tubes per Row',REAL(WaterCoil(CoilNum)%NumofTubesperRow,r64))
@@ -2136,7 +2136,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
                 WaterCoil(CoilNum)%InletAirMassFlowRate = RhoAirStd*FinalSysSizing(CurSysNum)%DesMainVolFlow
             END SELECT
           END IF
-          WaterCoil(CoilNum)%FinDiam = 0.335 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%FinDiam = 0.335d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Fin Diameter [m]',WaterCoil(CoilNum)%FinDiam)
         END IF
@@ -2157,11 +2157,11 @@ SUBROUTINE SizeWaterCoil(CoilNum)
                 WaterCoil(CoilNum)%InletAirMassFlowRate = RhoAirStd*FinalSysSizing(CurSysNum)%DesMainVolFlow
             END SELECT
           END IF
-          WaterCoil(CoilNum)%MinAirFlowArea = 0.44 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%MinAirFlowArea = 0.44d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Minimum Airflow Area [m2]',WaterCoil(CoilNum)%MinAirFlowArea)
         END IF
-        IF(WaterCoil(CoilNum)%MinAirFlowArea .LE. 0.0 .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed)THEN
+        IF(WaterCoil(CoilNum)%MinAirFlowArea .LE. 0.0D0 .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed)THEN
           CALL ShowSevereError('Coil:Cooling:Water:DetailedGeometry: "'//TRIM(WaterCoil(CoilNum)%Name)//'"')
           CALL ShowContinueError('Coil Minimum Airflow Area must be greater than 0. Coil area = '// &
                                  TRIM(TrimSigDigits(WaterCoil(CoilNum)%MinAirFlowArea,6)))
@@ -2184,25 +2184,25 @@ SUBROUTINE SizeWaterCoil(CoilNum)
                 WaterCoil(CoilNum)%InletAirMassFlowRate = RhoAirStd*FinalSysSizing(CurSysNum)%DesMainVolFlow
             END SELECT
           END IF
-          WaterCoil(CoilNum)%FinSurfArea = 78.5 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%FinSurfArea = 78.5d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Fin Surface Area [m2]',WaterCoil(CoilNum)%FinSurfArea)
         END IF
         IF (WaterCoil(CoilNum)%TotTubeInsideArea == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
 
-          WaterCoil(CoilNum)%TotTubeInsideArea = 4.4 * WaterCoil(CoilNum)%TubeInsideDiam * &
+          WaterCoil(CoilNum)%TotTubeInsideArea = 4.4d0 * WaterCoil(CoilNum)%TubeInsideDiam * &
                                                    WaterCoil(CoilNum)%NumofTubeRows * WaterCoil(CoilNum)%NumofTubesperRow
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Total Tube Inside Area [m2]',WaterCoil(CoilNum)%TotTubeInsideArea)
         END IF
         IF (WaterCoil(CoilNum)%TubeOutsideSurfArea == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
 
-            WaterCoil(CoilNum)%TubeOutsideSurfArea = 4.1 * WaterCoil(CoilNum)%TubeOutsideDiam * &
+            WaterCoil(CoilNum)%TubeOutsideSurfArea = 4.1d0 * WaterCoil(CoilNum)%TubeOutsideDiam * &
                                                    WaterCoil(CoilNum)%NumofTubeRows * WaterCoil(CoilNum)%NumofTubesperRow
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Tube Outside Surface Area [m2]',WaterCoil(CoilNum)%TubeOutsideSurfArea)
         END IF
-        IF ( (WaterCoil(CoilNum)%FinSurfArea + WaterCoil(CoilNum)%TubeOutsideSurfArea) .LE. 0.0 &
+        IF ( (WaterCoil(CoilNum)%FinSurfArea + WaterCoil(CoilNum)%TubeOutsideSurfArea) .LE. 0.0d0 &
               .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
           CALL ShowSevereError('Coil:Cooling:Water:DetailedGeometry: "'//TRIM(WaterCoil(CoilNum)%Name)//'"')
           CALL ShowContinueError('Coil Fin Surface Area plus Coil Tube Outside Surface Area must be greater than 0.'// &
@@ -2291,12 +2291,12 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             WaterCoil(CoilNum)%DesInletAirtemp = FinalZoneSizing(CurZoneEqNum)%ZoneTempAtCoolPeak
           ELSE IF (ZoneEqFanCoil) THEN
             IF (FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow > 0.0) THEN
-              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0)
+              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0d0)
             ELSE
               FCOAFrac = 0.0
             END IF
             WaterCoil(CoilNum)%DesInletAirtemp = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutTempAtCoolPeak + &
-                           (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtCoolPeak
+                           (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtCoolPeak
           ELSE
             WaterCoil(CoilNum)%DesInletAirtemp = FinalZoneSizing(CurZoneEqNum)%DesCoolCoilInTemp
           END IF
@@ -2310,7 +2310,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           IF (TermUnitIU) THEN
 
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       5.0,                      &
+                       5.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -2347,12 +2347,12 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             WaterCoil(CoilNum)%DesInletAirHumRat = FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtCoolPeak
           ELSE IF (ZoneEqFanCoil) THEN
             IF (FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow > 0.0) THEN
-              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0)
+              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, 1.0d0)
             ELSE
               FCOAFrac = 0.0
             END IF
             WaterCoil(CoilNum)%DesInletAirHumRat = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutHumRatAtCoolPeak + &
-                           (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtCoolPeak
+                           (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtCoolPeak
           ELSE
             WaterCoil(CoilNum)%DesInletAirHumRat = FinalZoneSizing(CurZoneEqNum)%DesCoolCoilInHumRat
           END IF
@@ -2372,8 +2372,8 @@ SUBROUTINE SizeWaterCoil(CoilNum)
                                   '", Cooling Coil has leaving humidity ratio > entering humidity ratio.')
             CALL ShowContinueError('    Wair,in =  ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%DesInletAirHumRat,6)))
             CALL ShowContinueError('    Wair,out = ' // TRIM(RoundSigDigits(WaterCoil(CoilNum)%DesOutletAirHumRat,6)))
-            IF (WaterCoil(CoilNum)%DesInletAirHumRat > .016) THEN
-              WaterCoil(CoilNum)%DesOutletAirHumRat = 0.5*WaterCoil(CoilNum)%DesInletAirHumRat
+            IF (WaterCoil(CoilNum)%DesInletAirHumRat > .016d0) THEN
+              WaterCoil(CoilNum)%DesOutletAirHumRat = 0.5d0*WaterCoil(CoilNum)%DesInletAirHumRat
             ELSE
               WaterCoil(CoilNum)%DesOutletAirHumRat = WaterCoil(CoilNum)%DesInletAirHumRat
             END IF
@@ -2386,7 +2386,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
         END IF
 
         IF (WaterCoil(CoilNum)%NumofTubesperRow == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
-          WaterCoil(CoilNum)%NumofTubesperRow = INT(13750. * WaterCoil(CoilNum)%MaxWaterVolFlowRate) + 1
+          WaterCoil(CoilNum)%NumofTubesperRow = INT(13750.d0 * WaterCoil(CoilNum)%MaxWaterVolFlowRate) + 1
           WaterCoil(CoilNum)%NumofTubesperRow = MAX(3, WaterCoil(CoilNum)%NumofTubesperRow)
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Number of Tubes per Row',REAL(WaterCoil(CoilNum)%NumofTubesperRow,r64))
@@ -2399,7 +2399,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
            WaterCoil(CoilNum)%InletAirMassFlowRate = MAX(FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, &
                                                       FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow) / RhoAirStd
           END IF
-          WaterCoil(CoilNum)%FinDiam = 0.335 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%FinDiam = 0.335d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Fin Diameter [m]',WaterCoil(CoilNum)%FinDiam)
         END IF
@@ -2411,7 +2411,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
            WaterCoil(CoilNum)%InletAirMassFlowRate = MAX(FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, &
                                                       FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow) / RhoAirStd
           END IF
-          WaterCoil(CoilNum)%MinAirFlowArea = 0.44 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%MinAirFlowArea = 0.44d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Minimum Airflow Area [m2]',WaterCoil(CoilNum)%MinAirFlowArea)
         END IF
@@ -2422,20 +2422,20 @@ SUBROUTINE SizeWaterCoil(CoilNum)
            WaterCoil(CoilNum)%InletAirMassFlowRate = MAX(FinalZoneSizing(CurZoneEqNum)%DesCoolMassFlow, &
                                                       FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow) / RhoAirStd
           END IF
-          WaterCoil(CoilNum)%FinSurfArea = 78.5 * WaterCoil(CoilNum)%InletAirMassFlowRate
+          WaterCoil(CoilNum)%FinSurfArea = 78.5d0 * WaterCoil(CoilNum)%InletAirMassFlowRate
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Fin Surface Area [m2]',WaterCoil(CoilNum)%FinSurfArea)
         END IF
         IF (WaterCoil(CoilNum)%TotTubeInsideArea == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
 
-          WaterCoil(CoilNum)%TotTubeInsideArea = 4.4 * WaterCoil(CoilNum)%TubeInsideDiam * &
+          WaterCoil(CoilNum)%TotTubeInsideArea = 4.4d0 * WaterCoil(CoilNum)%TubeInsideDiam * &
                                                    WaterCoil(CoilNum)%NumofTubeRows * WaterCoil(CoilNum)%NumofTubesperRow
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Total Tube Inside Area [m2]',WaterCoil(CoilNum)%TotTubeInsideArea)
         END IF
         IF (WaterCoil(CoilNum)%TubeOutsideSurfArea == AutoSize .AND. WaterCoil(CoilNum)%WaterCoilModel == CoilModel_Detailed) THEN
 
-            WaterCoil(CoilNum)%TubeOutsideSurfArea = 4.1 * WaterCoil(CoilNum)%TubeOutsideDiam * &
+            WaterCoil(CoilNum)%TubeOutsideSurfArea = 4.1d0 * WaterCoil(CoilNum)%TubeOutsideDiam * &
                                                    WaterCoil(CoilNum)%NumofTubeRows * WaterCoil(CoilNum)%NumofTubesperRow
           CALL ReportSizingOutput('Coil:Cooling:Water:DetailedGeometry',WaterCoil(CoilNum)%Name,&
                                   'Tube Outside Surface Area [m2]',WaterCoil(CoilNum)%TubeOutsideSurfArea)
@@ -2500,24 +2500,24 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           DesMassFlow = RhoAirStd*DesVolFlow
           ! get the outside air fraction
           IF (CurOASysNum > 0) THEN
-            OutAirFrac = 1.0
+            OutAirFrac = 1.0d0
           ELSE IF (FinalSysSizing(CurSysNum)%HeatOAOption == MinOA) THEN
-            IF (DesVolFlow > 0.0) THEN
+            IF (DesVolFlow > 0.0d0) THEN
               OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / DesVolFlow
             ELSE
-              OutAirFrac = 1.0
+              OutAirFrac = 1.0d0
             END IF
-            OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+            OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
           ELSE
-            OutAirFrac = 1.0
+            OutAirFrac = 1.0d0
           END IF
           ! coil input temperature
           IF (CurOASysNum == 0 .AND. PrimaryAirSystem(CurSysNum)%NumOAHeatCoils > 0) THEN
             CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PreheatTemp + &
-                           (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                           (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
           ELSE
             CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%HeatOutTemp + &
-                           (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                           (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
           END IF
           ! coil load
           IF (CurOASysNum > 0) THEN
@@ -2528,7 +2528,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           IF (DesCoilLoad >= SmallLoad) THEN
 
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       60.0,                      &
+                       60.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -2576,28 +2576,28 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           DesMassFlow = RhoAirStd*DesVolFlow
           ! get the outside air fraction
           IF (CurOASysNum > 0) THEN
-            OutAirFrac = 1.0
+            OutAirFrac = 1.0d0
           ELSE IF (FinalSysSizing(CurSysNum)%HeatOAOption == MinOA) THEN
-            IF (DesVolFlow > 0.0) THEN
+            IF (DesVolFlow > 0.0d0) THEN
               OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / DesVolFlow
             ELSE
-              OutAirFrac = 1.0
+              OutAirFrac = 1.0d0
             END IF
-            OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+            OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
           ELSE
-            OutAirFrac = 1.0
+            OutAirFrac = 1.0d0
           END IF
           ! coil inlet temperature
           IF (CurOASysNum == 0 .AND. PrimaryAirSystem(CurSysNum)%NumOAHeatCoils > 0) THEN
             CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PreheatTemp + &
-                           (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                           (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
             CoilInHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PreheatHumRat + &
-                             (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetHumRat
+                             (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetHumRat
           ELSE
             CoilInTemp = OutAirFrac*FinalSysSizing(CurSysNum)%HeatOutTemp + &
-                           (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
+                           (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetTemp
             CoilInHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%HeatOutHumRat + &
-                           (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetHumRat
+                           (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%HeatRetHumRat
           END IF
           ! coil load
           IF (CurOASysNum > 0) THEN
@@ -2609,7 +2609,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             Par(1) = DesCoilLoad
             Par(2) = REAL(CoilNum,r64)
             Par(3) = REAL(ContFanCycCoil,r64) !fan operating mode
-            Par(4) = 1.0 ! part-load ratio
+            Par(4) = 1.0d0 ! part-load ratio
             WaterCoil(CoilNum)%InletAirTemp = CoilInTemp
             WaterCoil(CoilNum)%InletAirHumRat = CoilInHumRat
             WaterCoil(CoilNum)%InletWaterTemp = PlantSizData(PltSizHeatNum)%ExitTemp
@@ -2621,7 +2621,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             WaterCoil(CoilNum)%InletWaterMassFlowRate = rho * WaterCoil(CoilNum)%MaxWaterVolFlowRate
             WaterCoil(CoilNum)%InletAirMassFlowRate = DesMassFlow
             ! set the lower and upper limits on the UA
-            UA0 = .001 * DesCoilLoad
+            UA0 = .001d0 * DesCoilLoad
             UA1 = DesCoilLoad
             ! Invert the simple heating coil model: given the design inlet conditions and the design load,
             ! find the design UA.
@@ -2698,7 +2698,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           IF (TermUnitSingDuct .OR. TermUnitPIU .OR. TermUnitIU) THEN
             WaterCoil(CoilNum)%MaxWaterVolFlowRate = TermUnitSizing(CurZoneEqNum)%MaxHWVolFlow
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       60.0,                      &
+                       60.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -2712,7 +2712,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           ELSE IF (ZoneEqFanCoil) THEN
             WaterCoil(CoilNum)%MaxWaterVolFlowRate = ZoneEqSizing(CurZoneEqNum)%MaxHWVolFlow
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       60.0,                      &
+                       60.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -2729,11 +2729,11 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             CoilOutTemp = FinalZoneSizing(CurZoneEqNum)%HeatDesTemp
             CoilOutHumRat = FinalZoneSizing(CurZoneEqNum)%HeatDesHumRat
             DesMassFlow = FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow
-            DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
+            DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5d0*(CoilInTemp+CoilOutTemp)) &
                           * DesMassFlow * (CoilOutTemp-CoilInTemp)
             IF (DesCoilLoad >= SmallLoad) THEN
               Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                       60.0,                      &
+                       60.0d0,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'SizeWaterCoil')
 
@@ -2769,9 +2769,9 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           IF (TermUnitPIU) THEN
             MinFlowFrac = TermUnitSizing(CurZoneEqNum)%MinFlowFrac
             CoilInTemp = FinalZoneSizing(CurZoneEqNum)%DesHeatCoilInTempTU * MinFlowFrac + &
-                         FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak * (1. - MinFlowFrac)
+                         FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak * (1.d0 - MinFlowFrac)
             CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%DesHeatCoilInHumRatTU * MinFlowFrac + &
-                         FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtHeatPeak * (1. - MinFlowFrac)
+                         FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtHeatPeak * (1.d0 - MinFlowFrac)
           ELSE IF (TermUnitIU) THEN
             CoilInTemp = FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak
             CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtHeatPeak
@@ -2780,14 +2780,14 @@ SUBROUTINE SizeWaterCoil(CoilNum)
             CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%DesHeatCoilInHumRatTU
           ELSE IF (ZoneEqFanCoil) THEN
             IF (FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow > 0.0) THEN
-              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow, 1.0)
+              FCOAFrac = MIN(ZoneEqSizing(CurZoneEqNum)%OAVolFlow / FinalZoneSizing(CurZoneEqNum)%DesHeatMassFlow, 1.0d0)
             ELSE
               FCOAFrac = 0.0
             END IF
             CoilInTemp = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutTempAtHeatPeak + &
-                           (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak
+                           (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneTempAtHeatPeak
             CoilInHumRat = FCOAFrac*FinalZoneSizing(CurZoneEqNum)%OutHumRatAtHeatPeak + &
-                           (1.0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtHeatPeak
+                           (1.0d0-FCOAFrac)*FinalZoneSizing(CurZoneEqNum)%ZoneHumRatAtHeatPeak
           ELSE
             CoilInTemp = FinalZoneSizing(CurZoneEqNum)%DesHeatCoilInTemp
             CoilInHumRat = FinalZoneSizing(CurZoneEqNum)%DesHeatCoilInHumRat
@@ -2795,7 +2795,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           IF (TermUnitSingDuct .OR. TermUnitPIU .OR. TermUnitIU) THEN
             DesMassFlow = RhoAirStd * TermUnitSizing(CurZoneEqNum)%AirVolFlow * TermUnitSizing(CurZoneEqNum)%ReheatMult
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                     60.0,                      &
+                     60.0d0,                      &
                      PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                      'SizeWaterCoil')
 
@@ -2810,7 +2810,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
           ELSE IF (ZoneEqFanCoil) THEN                                                    
             DesMassFlow = RhoAirStd * FinalZoneSizing(CurZoneEqNum)%DesHeatVolFlow
             Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
-                     60.0,                      &
+                     60.0d0,                      &
                      PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                      'SizeWaterCoil')
 
@@ -2848,7 +2848,7 @@ SUBROUTINE SizeWaterCoil(CoilNum)
                      'SizeWaterCoil')
             WaterCoil(CoilNum)%InletWaterMassFlowRate = rho * DesWaterVolFlow
             ! set the lower and upper limits on the UA
-            UA0 = .001 * DesCoilLoad
+            UA0 = .001d0 * DesCoilLoad
             UA1 = DesCoilLoad
             ! Invert the simple heating coil model: given the design inlet conditions and the design load,
             ! find the design UA.
@@ -2991,7 +2991,7 @@ Subroutine CalcSimpleHeatingCoil(CoilNum, FanOpMode, PartLoadRatio, CalcMode)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
    INTEGER, INTENT(IN) :: CoilNum        ! index to heating coil
    INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-   REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+   REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
    INTEGER, INTENT(IN) :: CalcMode ! 1 = design calc; 2 = simulation calculation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3004,21 +3004,21 @@ Subroutine CalcSimpleHeatingCoil(CoilNum, FanOpMode, PartLoadRatio, CalcMode)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL WaterMassFlowRate
-      REAL AirMassFlow  ! [kg/sec]
-      REAL TempAirIn    ! [C]
-      REAL TempAirOut   ! [C]
-      REAL Win
-      REAL TempWaterIn
-      REAL TempWaterOut
-      REAL UA
-      REAL CapacitanceAir
-      REAL CapacitanceWater
-      REAL CapacitanceMin
-      REAL CapacitanceMax
-      REAL HeatingCoilLoad
-      REAL NTU, ETA, A, CapRatio, E1, E2, Effec
-      REAL Cp
+      REAL(r64) WaterMassFlowRate
+      REAL(r64) AirMassFlow  ! [kg/sec]
+      REAL(r64) TempAirIn    ! [C]
+      REAL(r64) TempAirOut   ! [C]
+      REAL(r64) Win
+      REAL(r64) TempWaterIn
+      REAL(r64) TempWaterOut
+      REAL(r64) UA
+      REAL(r64) CapacitanceAir
+      REAL(r64) CapacitanceWater
+      REAL(r64) CapacitanceMin
+      REAL(r64) CapacitanceMax
+      REAL(r64) HeatingCoilLoad
+      REAL(r64) NTU, ETA, A, CapRatio, E1, E2, Effec
+      REAL(r64) Cp
       Integer Control
 
    UA           = WaterCoil(CoilNum)%UACoilVariable
@@ -3043,7 +3043,7 @@ Subroutine CalcSimpleHeatingCoil(CoilNum, FanOpMode, PartLoadRatio, CalcMode)
    END IF
 
   IF (WaterMassFlowRate .GT. MassFlowTolerance) THEN     ! If the coil is operating
-    CapacitanceAir=PsyCpAirFnWTdb(Win,0.5*(TempAirIn+TempWaterIn))*AirMassFlow
+    CapacitanceAir=PsyCpAirFnWTdb(Win,0.5d0*(TempAirIn+TempWaterIn))*AirMassFlow
     Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
              TempWaterIn,                      &
              PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
@@ -3067,22 +3067,22 @@ Subroutine CalcSimpleHeatingCoil(CoilNum, FanOpMode, PartLoadRatio, CalcMode)
         CALL ShowFatalError('UA is zero for COIL:Heating:Water '//TRIM(WaterCoil(CoilNum)%Name))
       END IF
       NTU=UA/CapacitanceMin
-      ETA=NTU**0.22
+      ETA=NTU**0.22d0
       CapRatio=CapacitanceMin/CapacitanceMax
       A=CapRatio*NTU/ETA
 
-      IF(A .GT. 20.0) Then
-        A=ETA*1.0/CapRatio
+      IF(A .GT. 20.0d0) Then
+        A=ETA*1.0d0/CapRatio
       Else
         E1=EXP(-A)
-        A=ETA*(1.-E1)/CapRatio
+        A=ETA*(1.d0-E1)/CapRatio
       End If
 
-      IF(A.GT.20.) Then
+      IF(A.GT.20.d0) Then
         Effec=1.0
       Else
         E2=EXP(-A)
-        Effec=1.-E2
+        Effec=1.d0-E2
       End IF
 
       TempAirOut=TempAirIn+Effec*CapacitanceMin*(TempWaterIn-TempAirIn)/CapacitanceAir
@@ -3165,17 +3165,17 @@ SUBROUTINE CalcDetailFlatFinCoolingCoil(CoilNum,CalcMode,FanOpMode,PartLoadRatio
     INTEGER, INTENT(IN) :: CoilNum
     INTEGER, INTENT(IN) :: CalcMode
     INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-    REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+    REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
     INTEGER, PARAMETER :: MaxCoolCoilErrs = 5
 
-    REAL, PARAMETER :: AirViscosity = 1.846d-5      ! Dynamic Viscosity of Air in kg/(m.s)
-    REAL, PARAMETER :: ConvK = 1.0d-3               ! Unit conversion factor
-    REAL, PARAMETER :: unity = 1.0
-    REAL, PARAMETER :: zero = 0.0
-    REAL, PARAMETER :: TubeFoulFactor = 5.0d-2      ! Inside tube fouling factor for water, in m2K/kW
+    REAL(r64), PARAMETER :: AirViscosity = 1.846d-5      ! Dynamic Viscosity of Air in kg/(m.s)
+    REAL(r64), PARAMETER :: ConvK = 1.0d-3               ! Unit conversion factor
+    REAL(r64), PARAMETER :: unity = 1.0d0
+    REAL(r64), PARAMETER :: zero = 0.0d0
+    REAL(r64), PARAMETER :: TubeFoulFactor = 5.0d-2      ! Inside tube fouling factor for water, in m2K/kW
                                                          ! Changed from m2K/W to m2K/kW for consistency with the
                                                          ! other parameters in "TubeFoulThermResis" calculation
 
@@ -3194,80 +3194,80 @@ SUBROUTINE CalcDetailFlatFinCoolingCoil(CoilNum,CalcMode,FanOpMode,PartLoadRatio
     LOGICAL :: CoilPartWetConvg
     LOGICAL :: WaterTempConvg
 
-    REAL :: AirEnthAtRsdInletWaterTemp
-    REAL :: AirExitEnthlAtCoilSurfTemp
-    REAL :: AirExitCoilSurfTemp
-    REAL :: AirReynoldsNo
-    REAL :: AirEnthAtWetDryIntrfcSurfTemp
-    REAL :: AirSideDrySurfFilmCoef
-    REAL :: AirSideWetSurfFilmCoef
-    REAL :: AirWetDryInterfcTemp
-    REAL :: CoilToAirThermResistDrySurf
-    REAL :: CoilToAirThermResistWetSurf
-    REAL :: DryAirSpecHeat
-    REAL :: DryCoilCoeff1
-    REAL :: DryCoilCoeff
-    REAL :: DryCoilEfficiency
-    REAL :: DryFinEfficncy
-    REAL :: DryCoilInThermResist
-    REAL :: DrySideEffectiveWaterTemp
-    REAL :: EnterAirDewPoint
-    REAL :: EnterAirHumRatDiff
-    REAL :: WetDryInterSurfTempErrorLast
-    REAL :: WetDryInterSurfTempError
-    REAL :: expon
-    REAL :: FilmCoefEqnFactor
-    REAL :: FilmCoefReynldsCorrelatnFact
-    REAL :: FinToTotSurfAreaRatio
-    REAL :: InCoilSurfTemp
-    REAL :: InsdToOutsdThermResistRatio
-    REAL :: InSurfTempSatAirEnthl
-    REAL :: K1
-    REAL :: MeanWaterTemp
-    REAL :: MoistAirSpecificHeat
-    REAL :: OutCoilSurfTemp
-    REAL :: OutSurfTempSatAirEnthl
-    REAL :: RaisedInletWaterTemp
-    REAL :: RsdInletWaterTempSatAirHumRat
-    REAL :: ScaledAirMassFlowRate
-    REAL :: ScaledCoilAirThermResistWetSurf
-    REAL :: ScaledWaterSpecHeat
-    REAL :: ScaledWaterToTubeThermResist
-    REAL :: SensToTotEnthDiffRatio
-    REAL :: SurfAreaWet
-    REAL :: TubeFoulThermResist
-    REAL :: TubeWaterVel
-    REAL :: UACoilAllWet
-    REAL :: UACoilPartWet
-    REAL :: UADryCoil
-    REAL :: WaterToTubeThermResist
-    REAL :: WetAreaChange
-    REAL :: WetAreaLast
-    REAL :: WetCoilCoeff
-    REAL :: WetCoilFinEfficncy
-    REAL :: WetDryInterfcAirEnthl
-    REAL :: WetDryInterfcSurfTemp
-    REAL :: WetDryInterfcWaterTemp
-    REAL :: WetFinEfficncy
-    REAL :: WetSideEffctvWaterTemp
-    REAL :: y
-    REAL :: TempAirIn
-    REAL :: TempAirOut
-    REAL :: InletAirHumRat
-    REAL :: OutletAirHumRat
-    REAL :: InletAirEnthalpy
-    REAL :: OutletAirEnthalpy
-    REAL :: WaterMassFlowRate
-    REAL :: AirMassFlow
-    REAL :: TempWaterIn
-    REAL :: TempWaterOut
-    REAL :: TotWaterCoilLoad
-    REAL :: SenWaterCoilLoad
-    REAL :: AirDensity
-    REAL :: AirVelocity
-    REAL :: denom
-    REAL :: rho
-    REAL :: Cp
+    REAL(r64) :: AirEnthAtRsdInletWaterTemp
+    REAL(r64) :: AirExitEnthlAtCoilSurfTemp
+    REAL(r64) :: AirExitCoilSurfTemp
+    REAL(r64) :: AirReynoldsNo
+    REAL(r64) :: AirEnthAtWetDryIntrfcSurfTemp
+    REAL(r64) :: AirSideDrySurfFilmCoef
+    REAL(r64) :: AirSideWetSurfFilmCoef
+    REAL(r64) :: AirWetDryInterfcTemp
+    REAL(r64) :: CoilToAirThermResistDrySurf
+    REAL(r64) :: CoilToAirThermResistWetSurf
+    REAL(r64) :: DryAirSpecHeat
+    REAL(r64) :: DryCoilCoeff1
+    REAL(r64) :: DryCoilCoeff
+    REAL(r64) :: DryCoilEfficiency
+    REAL(r64) :: DryFinEfficncy
+    REAL(r64) :: DryCoilInThermResist
+    REAL(r64) :: DrySideEffectiveWaterTemp
+    REAL(r64) :: EnterAirDewPoint
+    REAL(r64) :: EnterAirHumRatDiff
+    REAL(r64) :: WetDryInterSurfTempErrorLast
+    REAL(r64) :: WetDryInterSurfTempError
+    REAL(r64) :: expon
+    REAL(r64) :: FilmCoefEqnFactor
+    REAL(r64) :: FilmCoefReynldsCorrelatnFact
+    REAL(r64) :: FinToTotSurfAreaRatio
+    REAL(r64) :: InCoilSurfTemp
+    REAL(r64) :: InsdToOutsdThermResistRatio
+    REAL(r64) :: InSurfTempSatAirEnthl
+    REAL(r64) :: K1
+    REAL(r64) :: MeanWaterTemp
+    REAL(r64) :: MoistAirSpecificHeat
+    REAL(r64) :: OutCoilSurfTemp
+    REAL(r64) :: OutSurfTempSatAirEnthl
+    REAL(r64) :: RaisedInletWaterTemp
+    REAL(r64) :: RsdInletWaterTempSatAirHumRat
+    REAL(r64) :: ScaledAirMassFlowRate
+    REAL(r64) :: ScaledCoilAirThermResistWetSurf
+    REAL(r64) :: ScaledWaterSpecHeat
+    REAL(r64) :: ScaledWaterToTubeThermResist
+    REAL(r64) :: SensToTotEnthDiffRatio
+    REAL(r64) :: SurfAreaWet
+    REAL(r64) :: TubeFoulThermResist
+    REAL(r64) :: TubeWaterVel
+    REAL(r64) :: UACoilAllWet
+    REAL(r64) :: UACoilPartWet
+    REAL(r64) :: UADryCoil
+    REAL(r64) :: WaterToTubeThermResist
+    REAL(r64) :: WetAreaChange
+    REAL(r64) :: WetAreaLast
+    REAL(r64) :: WetCoilCoeff
+    REAL(r64) :: WetCoilFinEfficncy
+    REAL(r64) :: WetDryInterfcAirEnthl
+    REAL(r64) :: WetDryInterfcSurfTemp
+    REAL(r64) :: WetDryInterfcWaterTemp
+    REAL(r64) :: WetFinEfficncy
+    REAL(r64) :: WetSideEffctvWaterTemp
+    REAL(r64) :: y
+    REAL(r64) :: TempAirIn
+    REAL(r64) :: TempAirOut
+    REAL(r64) :: InletAirHumRat
+    REAL(r64) :: OutletAirHumRat
+    REAL(r64) :: InletAirEnthalpy
+    REAL(r64) :: OutletAirEnthalpy
+    REAL(r64) :: WaterMassFlowRate
+    REAL(r64) :: AirMassFlow
+    REAL(r64) :: TempWaterIn
+    REAL(r64) :: TempWaterOut
+    REAL(r64) :: TotWaterCoilLoad
+    REAL(r64) :: SenWaterCoilLoad
+    REAL(r64) :: AirDensity
+    REAL(r64) :: AirVelocity
+    REAL(r64) :: denom
+    REAL(r64) :: rho
+    REAL(r64) :: Cp
 
    ! Set derived type variables to shorter local variables
     TempAirIn    = WaterCoil(CoilNum)%InletAirTemp
@@ -3311,7 +3311,7 @@ SUBROUTINE CalcDetailFlatFinCoolingCoil(CoilNum,CalcMode,FanOpMode,PartLoadRatio
                               //TRIM(TrimSigDigits(2.5*WaterCoil(CoilNum)%MinAirFlowArea/AirDensity,6)))
        CALL ShowContinueError('Coil:Cooling:Water:DetailedGeometry could be resized/autosized to handle capacity')
        CoilWarningOnceFlag(CoilNum) = .False.
-    Else IF(AirMassFlow > (44.7*WaterCoil(CoilNum)%MinAirFlowArea/AirDensity)) THEN
+    Else IF(AirMassFlow > (44.7d0*WaterCoil(CoilNum)%MinAirFlowArea/AirDensity)) THEN
        CALL ShowSevereError('Coil:Cooling:Water:DetailedGeometry in Coil ='//TRIM(WaterCoil(coilNum)%Name))
        CALL ShowContinueError('Air Flow Rate Velocity is > 100MPH (44.7m/s) and simulation cannot continue')
        CALL ShowContinueError('Air Mass Flow Rate[kg/s]='//TRIM(TrimSigDigits(AirMassFlow,6)))
@@ -3345,20 +3345,20 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
                            PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                           'CalcDetailFlatFinCoolingCoil')
     !      water flow velocity - assuming number of water circuits = NumOfTubesPerRow
-    TubeWaterVel = WaterMassFlowRate * 4. / (WaterCoil(CoilNum)%NumOfTubesPerRow *  &
+    TubeWaterVel = WaterMassFlowRate * 4.d0 / (WaterCoil(CoilNum)%NumOfTubesPerRow *  &
                    rho * Pi * WaterCoil(CoilNum)%TubeInsideDiam *  &
                    WaterCoil(CoilNum)%TubeInsideDiam)
     !      air mass flow rate per unit area
-    ScaledAirMassFlowRate = (1. + InletAirHumRat) * AirMassFlow/WaterCoil(CoilNum)%MinAirFlowArea
+    ScaledAirMassFlowRate = (1.d0 + InletAirHumRat) * AirMassFlow/WaterCoil(CoilNum)%MinAirFlowArea
     !      air flow Reynold's Number
     AirReynoldsNo = WaterCoil(CoilNum)%CoilEffectiveInsideDiam * ScaledAirMassFlowRate / AirViscosity
     !
     !       heat transfer coefficients and resistance components:
     !              inside (water)
-    WaterToTubeThermResist = WaterCoil(CoilNum)%TubeInsideDiam**0.2/(WaterCoil(CoilNum)%TotTubeInsideArea &
-                             * 1.429 * TubeWaterVel**0.8)
+    WaterToTubeThermResist = WaterCoil(CoilNum)%TubeInsideDiam**0.2d0/(WaterCoil(CoilNum)%TotTubeInsideArea &
+                             * 1.429d0 * TubeWaterVel**0.8d0)
     !              metal and fouling
-    TubeFoulThermResist = (0.5 * (WaterCoil(CoilNum)%TubeOutsideDiam - WaterCoil(CoilNum)%TubeInsideDiam) &
+    TubeFoulThermResist = (0.5d0 * (WaterCoil(CoilNum)%TubeOutsideDiam - WaterCoil(CoilNum)%TubeInsideDiam) &
                              / (ConvK * WaterCoil(CoilNum)%TubeThermConductivity) + TubeFoulFactor) /       &
                              WaterCoil(CoilNum)%TotTubeInsideArea
     !
@@ -3366,9 +3366,9 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
     FilmCoefEqnFactor = WaterCoil(CoilNum)%GeometryCoef1 * AirReynoldsNo**WaterCoil(CoilNum)%GeometryCoef2
     !       (1.23 is 1/Prandt(air)**(2/3))
-    AirSideDrySurfFilmCoef = 1.23 * FilmCoefEqnFactor * MoistAirSpecificHeat * &
+    AirSideDrySurfFilmCoef = 1.23d0 * FilmCoefEqnFactor * MoistAirSpecificHeat * &
                                      ScaledAirMassFlowRate
-    FilmCoefReynldsCorrelatnFact = 1.425 + AirReynoldsNo * (-0.51d-3 +  &
+    FilmCoefReynldsCorrelatnFact = 1.425d0 + AirReynoldsNo * (-0.51d-3 +  &
                                      AirReynoldsNo * 0.263d-6)
     !
     !       NOTE: the equation for FilmCoefReynldsCorrelatnFact generates valid results over
@@ -3382,14 +3382,14 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
 
     AirSideWetSurfFilmCoef = FilmCoefReynldsCorrelatnFact * AirSideDrySurfFilmCoef
     !--                     need wet fin efficiency for outside
-    RaisedInletWaterTemp = TempWaterIn + 0.5
+    RaisedInletWaterTemp = TempWaterIn + 0.5d0
 
     ! By this statement the Inlet Air enthalpy will never be equal to AirEnthAtRsdInletWaterTemp
-    If((RaisedInletWaterTemp-TempAirIn) .LT. 0.000001) Then
-      RaisedInletWaterTemp=TempWaterIn+0.3
+    If((RaisedInletWaterTemp-TempAirIn) .LT. 0.000001d0) Then
+      RaisedInletWaterTemp=TempWaterIn+0.3d0
     End If
     IF (TempAirIn < RaisedInletWaterTemp) THEN
-      RaisedInletWaterTemp=TempAirIn - .3
+      RaisedInletWaterTemp=TempAirIn - .3d0
     ENDIF
 
     RsdInletWaterTempSatAirHumRat = PsyWFnTdbRhPb(RaisedInletWaterTemp, unity, OutBaroPress, 'CalcDetailFlatFinCoolingCoil')
@@ -3400,8 +3400,8 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
                                   (InletAirEnthalpy - AirEnthAtRsdInletWaterTemp)
 
     EnterAirHumRatDiff = InletAirHumRat - RsdInletWaterTempSatAirHumRat
-    DryFinEfficncy = 0.5 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam) * &
-                       SQRT(2. * AirSideWetSurfFilmCoef / (ConvK * WaterCoil(CoilNum)%FinThermConductivity * &
+    DryFinEfficncy = 0.5d0 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam) * &
+                       SQRT(2.d0 * AirSideWetSurfFilmCoef / (ConvK * WaterCoil(CoilNum)%FinThermConductivity * &
                        WaterCoil(CoilNum)%FinThickness))
     IF (EnterAirHumRatDiff .LT. 0) THEN
     !       note that this condition indicates dry coil
@@ -3410,34 +3410,34 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     END IF
 
     IF (EnterAirHumRatDiff > 1.0) EnterAirHumRatDiff =1.0
-    IF (EnterAirHumRatDiff < 0.00001) EnterAirHumRatDiff =0.00001
+    IF (EnterAirHumRatDiff < 0.00001d0) EnterAirHumRatDiff =0.00001d0
 
     IF (DryFinEfficncy > 1.0) DryFinEfficncy=1.0
-    IF (DryFinEfficncy < 0.00001) DryFinEfficncy=0.00001
+    IF (DryFinEfficncy < 0.00001d0) DryFinEfficncy=0.00001d0
 
-    IF (TempAirIn .GT. 48./1.8) THEN
-       WetFinEfficncy=EXP(-0.41718) * SensToTotEnthDiffRatio**(0.09471) * &
-                      EnterAirHumRatDiff**(0.0108) * DryFinEfficncy**(-0.50303)
+    IF (TempAirIn .GT. 48.d0/1.8d0) THEN
+       WetFinEfficncy=EXP(-0.41718d0) * SensToTotEnthDiffRatio**(0.09471d0) * &
+                      EnterAirHumRatDiff**(0.0108d0) * DryFinEfficncy**(-0.50303d0)
     ELSE
-       WetFinEfficncy=EXP(-0.3574) * SensToTotEnthDiffRatio**(0.16081) * &
-                      EnterAirHumRatDiff**(0.01995) * DryFinEfficncy**(-0.52951)
+       WetFinEfficncy=EXP(-0.3574d0) * SensToTotEnthDiffRatio**(0.16081d0) * &
+                      EnterAirHumRatDiff**(0.01995d0) * DryFinEfficncy**(-0.52951d0)
     END IF
 
-      IF (WetFinEfficncy > 1.0) WetFinEfficncy=0.99
-      IF (WetFinEfficncy < 0.0) WetFinEfficncy=0.001
+      IF (WetFinEfficncy > 1.0) WetFinEfficncy=0.99d0
+      IF (WetFinEfficncy < 0.0) WetFinEfficncy=0.001d0
     !
     !       wet coil fin efficiency
     !
 
-    WetCoilFinEfficncy = 1. + FinToTotSurfAreaRatio * (WetFinEfficncy - 1.)
+    WetCoilFinEfficncy = 1.d0 + FinToTotSurfAreaRatio * (WetFinEfficncy - 1.d0)
     !
     !       wet coil outside thermal resistance = [1/UA] (wet coil)
     !
     CoilToAirThermResistWetSurf = MoistAirSpecificHeat / (WaterCoil(CoilNum)%TotCoilOutsideSurfArea *  &
                                         AirSideWetSurfFilmCoef * WetCoilFinEfficncy)
     !--                     and dry fin efficiency
-    DryFinEfficncy = 0.5 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam) *  &
-                       SQRT(2. * AirSideDrySurfFilmCoef / (ConvK * WaterCoil(CoilNum)%FinThermConductivity * &
+    DryFinEfficncy = 0.5d0 * (WaterCoil(CoilNum)%EffectiveFinDiam - WaterCoil(CoilNum)%TubeOutsideDiam) *  &
+                       SQRT(2.d0 * AirSideDrySurfFilmCoef / (ConvK * WaterCoil(CoilNum)%FinThermConductivity * &
                        WaterCoil(CoilNum)%FinThickness))
     !
     !      NOTE: The same caveats on the validity of the FilmCoefReynldsCorrelatnFact equation
@@ -3455,11 +3455,11 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
       DryCoilEfficiency = DryCoilEfficiency + WaterCoil(CoilNum)%DryFinEfficncyCoef(CoefPointer) *  &
                              DryFinEfficncy**(CoefPointer-1)
     END DO ! CoefPointer
-    DryCoilEfficiency = 1. + FinToTotSurfAreaRatio * (DryCoilEfficiency - 1.)
+    DryCoilEfficiency = 1.d0 + FinToTotSurfAreaRatio * (DryCoilEfficiency - 1.d0)
     !
     !       dry coil outside thermal resistance = [1/UA] (dry coil)
     !
-    CoilToAirThermResistDrySurf = 1. / (WaterCoil(CoilNum)%TotCoilOutsideSurfArea * AirSideDrySurfFilmCoef * &
+    CoilToAirThermResistDrySurf = 1.d0 / (WaterCoil(CoilNum)%TotCoilOutsideSurfArea * AirSideDrySurfFilmCoef * &
                                   DryCoilEfficiency)
     !
     !       definitions made to simplify some of the expressions used below
@@ -3469,7 +3469,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
                        'CalcDetailFlatFinCoolingCoil')
     ScaledWaterSpecHeat = WaterMassFlowRate * Cp * ConvK /  &
                           AirMassFlow
-    DryCoilCoeff1 = 1.0 / (AirMassFlow * MoistAirSpecificHeat) - 1.0/  &
+    DryCoilCoeff1 = 1.0d0 / (AirMassFlow * MoistAirSpecificHeat) - 1.0d0/  &
                     (WaterMassFlowRate * Cp * ConvK)
     !
     !       perform initialisations for all wet solution
@@ -3485,22 +3485,22 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
     DO WHILE (WaterTempConvgLoop .LT. 8 .and. .not. WaterTempConvg)
       WaterTempConvgLoop = WaterTempConvgLoop + 1
-      ScaledWaterToTubeThermResist = WaterToTubeThermResist/(1. + 0.0146 * &
+      ScaledWaterToTubeThermResist = WaterToTubeThermResist/(1.d0 + 0.0146d0 * &
                                      WetSideEffctvWaterTemp)
       ScaledCoilAirThermResistWetSurf = CoilToAirThermResistWetSurf / WaterCoil(CoilNum)%SatEnthlCurveSlope
-      UACoilAllWet = 1.0 / (WaterCoil(CoilNum)%SatEnthlCurveSlope * (TubeFoulThermResist +  &
+      UACoilAllWet = 1.0d0 / (WaterCoil(CoilNum)%SatEnthlCurveSlope * (TubeFoulThermResist +  &
                      ScaledWaterToTubeThermResist + ScaledCoilAirThermResistWetSurf))
     !
     !       prevents floating point error when taking exponential
     !       of a very large number
     !
-      expon = UACoilAllWet * (1.0 / AirMassFlow - WaterCoil(CoilNum)%SatEnthlCurveSlope / &
+      expon = UACoilAllWet * (1.0d0 / AirMassFlow - WaterCoil(CoilNum)%SatEnthlCurveSlope / &
               (WaterMassFlowRate * Cp * ConvK))
       IF (expon < 20) THEN  !CR7189 changed from ABS(expon) < 20
         !       negative expon can happen, but lead to tiny WetCoilCoef that aren't a problem
         WetCoilCoeff = EXP(expon)
         ! following appears similar to eq. 320 in Eng Ref but neglects K1 term
-        TempWaterOut =((1.0 - WetCoilCoeff) * (InletAirEnthalpy - WaterCoil(CoilNum)%SatEnthlCurveConstCoef) + &
+        TempWaterOut =((1.0d0 - WetCoilCoeff) * (InletAirEnthalpy - WaterCoil(CoilNum)%SatEnthlCurveConstCoef) + &
                          WetCoilCoeff * TempWaterIn *   &
                         (WaterCoil(CoilNum)%SatEnthlCurveSlope - ScaledWaterSpecHeat)) / &
                         (WaterCoil(CoilNum)%SatEnthlCurveSlope - WetCoilCoeff * ScaledWaterSpecHeat)
@@ -3514,7 +3514,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !      above is inverted form of WaterMassFlowRate*cpw*(TempWaterOut-TempWaterIn) = UA(LMHD)
     !      note simplification that hsat = WaterCoil(CoilNum)%SatEnthlCurveConstCoef +  &
     !                                      WaterCoil(CoilNum)%SatEnthlCurveSlope*WetSideEffctvWaterTemp
-      MeanWaterTemp = 0.5 * (TempWaterIn + TempWaterOut)
+      MeanWaterTemp = 0.5d0 * (TempWaterIn + TempWaterOut)
       OutletAirEnthalpy = InletAirEnthalpy - (TempWaterOut - TempWaterIn) * ScaledWaterSpecHeat
 
       InsdToOutsdThermResistRatio = (TubeFoulThermResist + ScaledWaterToTubeThermResist) / &
@@ -3528,7 +3528,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
                             (InletAirEnthalpy - WaterCoil(CoilNum)%SatEnthlCurveConstCoef) * &
                             InsdToOutsdThermResistRatio)
 
-      IF (abs(MeanWaterTemp - WetSideEffctvWaterTemp) .GT. 0.01) THEN
+      IF (abs(MeanWaterTemp - WetSideEffctvWaterTemp) .GT. 0.01d0) THEN
          WetSideEffctvWaterTemp = MeanWaterTemp
          InSurfTempSatAirEnthl = PsyHFnTdbRhPb(InCoilSurfTemp, unity, OutBaroPress, 'CalcDetailFlatFinCoolingCoil') * ConvK
          OutSurfTempSatAirEnthl = PsyHFnTdbRhPb(OutCoilSurfTemp, unity, OutBaroPress, 'CalcDetailFlatFinCoolingCoil') *ConvK
@@ -3586,7 +3586,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
       WaterCoil(CoilNum)%SurfAreaWetFraction = 0
       WetDryInterfcWaterTemp = TempWaterIn
       TempWaterOut = WaterCoil(CoilNum)%OutWaterTempSaved + (TempWaterIn - WaterCoil(CoilNum)%InWaterTempSaved)
-      WetAreaLast = 0.05 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea
+      WetAreaLast = 0.05d0 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea
     !
     !      General case - must be part-wet/part-dry - initialise
     !      accordingly with some non-zero wet area
@@ -3595,7 +3595,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
       IF (WaterCoil(CoilNum)%SurfAreaWetSaved .ne. 0.0) THEN
          SurfAreaWet = WaterCoil(CoilNum)%SurfAreaWetSaved
       ELSE
-         SurfAreaWet = 0.8 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea * (EnterAirDewPoint - &
+         SurfAreaWet = 0.8d0 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea * (EnterAirDewPoint - &
                         InCoilSurfTemp) / (OutCoilSurfTemp - InCoilSurfTemp)
       END IF
       WetDryInterfcWaterTemp = TempWaterIn + EnterAirDewPoint - &
@@ -3611,11 +3611,11 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
     !      effective water temp on dry side of coil
     !
-      DrySideEffectiveWaterTemp = 0.5 * (TempWaterOut + WetDryInterfcWaterTemp)
+      DrySideEffectiveWaterTemp = 0.5d0 * (TempWaterOut + WetDryInterfcWaterTemp)
     !
     !      tube inside thermal resistance
     !
-      DryCoilInThermResist = WaterToTubeThermResist / (1.0 + 0.0146 * DrySideEffectiveWaterTemp)
+      DryCoilInThermResist = WaterToTubeThermResist / (1.0d0 + 0.0146d0 * DrySideEffectiveWaterTemp)
     !
     !      overall UA, from water to air, of dry portion of coil
     !
@@ -3624,7 +3624,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
               (TubeFoulThermResist + DryCoilInThermResist + CoilToAirThermResistDrySurf))
 
     ! This is a numerical trap for a very small number in the EXP function that is approaching zero
-      If((UADryCoil*DryCoilCoeff1) .lt. -60.0) Then
+      If((UADryCoil*DryCoilCoeff1) .lt. -60.0d0) Then
          DryCoilCoeff = 0.0
       Else
          DryCoilCoeff = EXP(UADryCoil*DryCoilCoeff1)
@@ -3642,17 +3642,17 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
     !      tube inside thermal resistance
     !
-        ScaledWaterToTubeThermResist = WaterToTubeThermResist / (1.0 + 0.0146 * WetSideEffctvWaterTemp)
+        ScaledWaterToTubeThermResist = WaterToTubeThermResist / (1.0d0 + 0.0146d0 * WetSideEffctvWaterTemp)
         ScaledCoilAirThermResistWetSurf = CoilToAirThermResistWetSurf / &
                                                   WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope
     !
     !      overall UA, from water to air, of wet portion of coil
     !
-        UACoilAllWet = 1.0 / (WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope * (TubeFoulThermResist + &
+        UACoilAllWet = 1.0d0 / (WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope * (TubeFoulThermResist + &
                        ScaledWaterToTubeThermResist +   &
                        ScaledCoilAirThermResistWetSurf))
         UACoilPartWet = WaterCoil(CoilNum)%SurfAreaWetFraction * UACoilAllWet
-        expon=UACoilPartWet * (1.0 / AirMassFlow - WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope / &
+        expon=UACoilPartWet * (1.0d0 / AirMassFlow - WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope / &
               (WaterMassFlowRate * Cp * ConvK))
     !
     !        prevents floating point error when taking exponential
@@ -3750,29 +3750,29 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
 
       IF (SurfAreaWet .EQ. 0) THEN
-        MeanWaterTemp = 0.5 * (TempWaterOut + WetDryInterfcWaterTemp)
+        MeanWaterTemp = 0.5d0 * (TempWaterOut + WetDryInterfcWaterTemp)
         IF (EnterAirDewPoint .GT. WetDryInterfcSurfTemp) THEN
-          SurfAreaWet = 0.5 * WetAreaLast
-        ELSE IF (ABS(MeanWaterTemp - DrySideEffectiveWaterTemp) .LE. .00002) THEN
+          SurfAreaWet = 0.5d0 * WetAreaLast
+        ELSE IF (ABS(MeanWaterTemp - DrySideEffectiveWaterTemp) .LE. .00002d0) THEN
             CoilPartWetConvg = .TRUE.
         END IF
-      ELSE IF(ABS(WetDryInterSurfTempError) .GT. .00002 .OR. ABS(SurfAreaWet - WetAreaLast) / &
-              WaterCoil(CoilNum)%TotCoilOutsideSurfArea .GT. .00001)THEN
+      ELSE IF(ABS(WetDryInterSurfTempError) .GT. .00002d0 .OR. ABS(SurfAreaWet - WetAreaLast) / &
+              WaterCoil(CoilNum)%TotCoilOutsideSurfArea .GT. .00001d0)THEN
         IF (WetAreaLast .EQ. 0) THEN
           WetAreaLast = SurfAreaWet
-          SurfAreaWet = SurfAreaWet + 0.4 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea * WetDryInterSurfTempError / &
+          SurfAreaWet = SurfAreaWet + 0.4d0 * WaterCoil(CoilNum)%TotCoilOutsideSurfArea * WetDryInterSurfTempError / &
                         (OutCoilSurfTemp - InCoilSurfTemp)
         ELSE IF (WetDryInterSurfTempError .ne. WetDryInterSurfTempErrorLast) THEN
           WetAreaChange = SurfAreaWet - WetAreaLast
           WetAreaLast = SurfAreaWet
-          SurfAreaWet = SurfAreaWet - 0.8 * WetDryInterSurfTempError * WetAreaChange / &
+          SurfAreaWet = SurfAreaWet - 0.8d0 * WetDryInterSurfTempError * WetAreaChange / &
                         (WetDryInterSurfTempError - WetDryInterSurfTempErrorLast)
         END IF
         IF (SurfAreaWet .GE. WaterCoil(CoilNum)%TotCoilOutsideSurfArea) THEN
           SurfAreaWet = WaterCoil(CoilNum)%TotCoilOutsideSurfArea
-          MeanWaterTemp = 0.5 * (TempWaterIn + WetDryInterfcWaterTemp)
+          MeanWaterTemp = 0.5d0 * (TempWaterIn + WetDryInterfcWaterTemp)
           IF (WetAreaLast .EQ. WaterCoil(CoilNum)%TotCoilOutsideSurfArea .and. abs(MeanWaterTemp - &
-              WetSideEffctvWaterTemp) .LE. .00002) THEN
+              WetSideEffctvWaterTemp) .LE. .00002d0) THEN
             CoilPartWetConvg = .TRUE.
           END IF
         END IF
@@ -3782,17 +3782,17 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
           WetDryInterfcWaterTemp = TempWaterIn
         END IF
         InSurfTempSatAirEnthl = PsyHFnTdbRhPb(InCoilSurfTemp, unity, OutBaroPress, 'CalcDetailFlatFinCoolingCoil') * ConvK
-        IF ((EnterAirDewPoint - InCoilSurfTemp) .GE. .0001) THEN
+        IF ((EnterAirDewPoint - InCoilSurfTemp) .GE. .0001d0) THEN
           AirEnthAtWetDryIntrfcSurfTemp = PsyHFnTdbRhPb(EnterAirDewPoint, unity, OutBaroPress, &
                                                                'CalcDetailFlatFinCoolingCoil')*ConvK
           WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope = (AirEnthAtWetDryIntrfcSurfTemp - &
                                              InSurfTempSatAirEnthl) / &
                                              (EnterAirDewPoint - InCoilSurfTemp)
         ELSE
-           AirEnthAtWetDryIntrfcSurfTemp = PsyHFnTdbRhPb(InCoilSurfTemp + 0.0001, unity, &
+           AirEnthAtWetDryIntrfcSurfTemp = PsyHFnTdbRhPb(InCoilSurfTemp + 0.0001d0, unity, &
                                                OutBaroPress, 'CalcDetailFlatFinCoolingCoil') * ConvK
            WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope = (AirEnthAtWetDryIntrfcSurfTemp - &
-                                      InSurfTempSatAirEnthl) / 0.0001
+                                      InSurfTempSatAirEnthl) / 0.0001d0
         END IF
         WaterCoil(CoilNum)%EnthVsTempCurveConst = InSurfTempSatAirEnthl - WaterCoil(CoilNum)%EnthVsTempCurveAppxSlope * &
                                        InCoilSurfTemp
@@ -3831,7 +3831,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !       coil effectiveness
       expon = WaterCoil(CoilNum)%SurfAreaWetFraction / (CoilToAirThermResistWetSurf * AirMassFlow)
       y = 0.0
-      IF (expon .LT. 20.) y=EXP(-expon)
+      IF (expon .LT. 20.d0) y=EXP(-expon)
       AirExitEnthlAtCoilSurfTemp = WetDryInterfcAirEnthl - (WetDryInterfcAirEnthl - &
                                    OutletAirEnthalpy) / (1. - y)
       AirExitCoilSurfTemp=AirExitEnthlAtCoilSurfTemp/ConvK  ! TEmporary calc
@@ -3839,7 +3839,7 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
     !
     !       Implementation of epsilon*NTU method
       TempAirOut = AirExitCoilSurfTemp + (AirWetDryInterfcTemp - AirExitCoilSurfTemp) * y
-      OutletAirHumRat = PsyWFnTdbH(TempAirOut, 1000. * OutletAirEnthalpy, 'CalcDetailFlatFinCoolingCoil')
+      OutletAirHumRat = PsyWFnTdbH(TempAirOut, 1000.d0 * OutletAirEnthalpy, 'CalcDetailFlatFinCoolingCoil')
       SenWaterCoilLoad = AirMassFlow * (PsyCpAirFnWTdb(InletAirHumRat, TempAirIn, 'CalcDetailFlatFinCoolingCoil') * TempAirIn - &
                             PsyCpAirFnWTdb(OutletAirHumRat, TempAirOut, 'CalcDetailFlatFinCoolingCoil') * &
                             TempAirOut) * ConvK
@@ -3852,11 +3852,11 @@ IF(((GetCurrentScheduleValue(WaterCoil(CoilNum)%SchedPtr) .gt. 0.0) .AND. (Water
 
 
    ! Set the outlet conditions
-  WaterCoil(CoilNum)%TotWaterCoolingCoilRate  = TotWaterCoilLoad * 1000.0
-  WaterCoil(CoilNum)%SenWaterCoolingCoilRate  = SenWaterCoilLoad * 1000.0
+  WaterCoil(CoilNum)%TotWaterCoolingCoilRate  = TotWaterCoilLoad * 1000.0d0
+  WaterCoil(CoilNum)%SenWaterCoolingCoilRate  = SenWaterCoilLoad * 1000.0d0
   WaterCoil(CoilNum)%OutletAirTemp     = TempAirOut
   WaterCoil(CoilNum)%OutletWaterTemp   = TempWaterOut
-  WaterCoil(CoilNum)%OutletAirEnthalpy = OutletAirEnthalpy * 1000.0
+  WaterCoil(CoilNum)%OutletAirEnthalpy = OutletAirEnthalpy * 1000.0d0
   WaterCoil(CoilNum)%OutletAirHumRat   = OutletAirHumRat
    !The CoolingCoilLoad is the change in the enthalpy of the water
   WaterCoil(CoilNum)%OutletWaterEnthalpy = WaterCoil(CoilNum)%InletWaterEnthalpy + &
@@ -3929,7 +3929,7 @@ SUBROUTINE CoolingCoil(CoilNum, FirstHVACIteration, CalcMode,FanOpMode,PartLoadR
         Logical, intent(in) :: FirstHVACIteration
         Integer, intent(in) :: CalcMode
         INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-        REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+        REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3941,15 +3941,15 @@ SUBROUTINE CoolingCoil(CoilNum, FirstHVACIteration, CalcMode,FanOpMode,PartLoadR
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL     :: AirInletCoilSurfTemp  ! Coil surface temperature at air entrance(C)
-      REAL     :: AirDewPointTemp       ! Temperature dew point at operating condition
-      REAL     :: OutletAirTemp         ! Outlet air temperature at operating condition
-      REAL     :: OutletAirHumRat       ! Outlet air humidity ratio at operating condition
-      REAL     :: OutletWaterTemp       ! Outlet water temperature at operating condtitons
-      REAL     :: TotWaterCoilLoad      ! Total heat transfer rate(W)
-      REAL     :: SenWaterCoilLoad      ! Sensible heat transfer rate
-      REAL     :: SurfAreaWetFraction   ! Fraction of surface area wet
-      REAL     :: AirMassFlowRate       ! Air mass flow rate for the calculation
+      REAL(r64)     :: AirInletCoilSurfTemp  ! Coil surface temperature at air entrance(C)
+      REAL(r64)     :: AirDewPointTemp       ! Temperature dew point at operating condition
+      REAL(r64)     :: OutletAirTemp         ! Outlet air temperature at operating condition
+      REAL(r64)     :: OutletAirHumRat       ! Outlet air humidity ratio at operating condition
+      REAL(r64)     :: OutletWaterTemp       ! Outlet water temperature at operating condtitons
+      REAL(r64)     :: TotWaterCoilLoad      ! Total heat transfer rate(W)
+      REAL(r64)     :: SenWaterCoilLoad      ! Sensible heat transfer rate
+      REAL(r64)     :: SurfAreaWetFraction   ! Fraction of surface area wet
+      REAL(r64)     :: AirMassFlowRate       ! Air mass flow rate for the calculation
 
      AirInletCoilSurfTemp=0.0  ! Coil surface temperature at air entrance(C)
      AirDewPointTemp=0.0       ! Temperature dew point at operating condition
@@ -4111,11 +4111,11 @@ SUBROUTINE CoilCompletelyDry (CoilNum,WaterTempIn, AirTempIn,CoilUA,  &
 
           ! FUNCTION ARGUMENT DEFINITIONS:
        Integer, intent(in) :: CoilNum      !
-       REAL, intent(in)    :: WaterTempIn  ! Entering water temperature
-       REAL, intent(in)    :: AirTempIn    ! Entering air dry bulb temperature
-       REAL, intent(in)    :: CoilUA       ! Overall heat transfer coefficient
+       REAL(r64), intent(in)    :: WaterTempIn  ! Entering water temperature
+       REAL(r64), intent(in)    :: AirTempIn    ! Entering air dry bulb temperature
+       REAL(r64), intent(in)    :: CoilUA       ! Overall heat transfer coefficient
        INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-       REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+       REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4127,15 +4127,15 @@ SUBROUTINE CoilCompletelyDry (CoilNum,WaterTempIn, AirTempIn,CoilUA,  &
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-       REAL :: OutletWaterTemp   ! Leaving water temperature
-       REAL :: OutletAirTemp     ! Leaving air dry bulb temperature
-       REAL :: OutletAirHumRat   ! Leaving air humidity ratio
-       REAL :: Q                 ! Heat transfer rate
-       REAL :: CapacitanceAir    ! Air-side capacity rate(W/C)
-       REAL :: CapacitanceWater  ! Water-side capacity rate(W/C)
-       REAL :: AirMassFlow
-       REAL :: WaterMassFlowRate
-       REAL :: Cp
+       REAL(r64) :: OutletWaterTemp   ! Leaving water temperature
+       REAL(r64) :: OutletAirTemp     ! Leaving air dry bulb temperature
+       REAL(r64) :: OutletAirHumRat   ! Leaving air humidity ratio
+       REAL(r64) :: Q                 ! Heat transfer rate
+       REAL(r64) :: CapacitanceAir    ! Air-side capacity rate(W/C)
+       REAL(r64) :: CapacitanceWater  ! Water-side capacity rate(W/C)
+       REAL(r64) :: AirMassFlow
+       REAL(r64) :: WaterMassFlowRate
+       REAL(r64) :: Cp
 
        !  adjust mass flow rates for cycling fan cycling coil operation
        IF(FanOpMode .EQ. CycFanCycCoil)THEN
@@ -4219,20 +4219,20 @@ SUBROUTINE CoilCompletelyWet (CoilNum,WaterTempIn, AirTempIn,AirHumRat,UAInterna
 
           ! FUNCTION ARGUMENT DEFINITIONS:
       Integer, intent(in) :: CoilNum          ! Number of Coil
-      REAL, intent(in) :: WaterTempIn         ! Water temperature IN to this function (C)
-      REAL, intent(in) :: AirTempIn           ! Air dry bulb temperature IN to this function(C)
-      REAL, intent(in) :: AirHumRat           ! Air Humidity Ratio IN to this funcation (C)
-      REAL, intent(in) :: UAInternalTotal     ! Internal overall heat transfer coefficient(W/m2 C)
-      REAL, intent(in) :: UAExternalTotal     ! External overall heat transfer coefficient(W/m2 C)
-      REAL     ::  OutletWaterTemp       ! Leaving water temperature (C)
-      REAL     ::  OutletAirTemp         ! Leaving air dry bulb temperature(C)
-      REAL     ::  OutletAirHumRat       ! Leaving air humidity ratio
-      REAL     ::  TotWaterCoilLoad      ! Total heat transfer rate(W)
-      REAL     ::  SenWaterCoilLoad      ! Sensible heat transfer rate(W)
-      REAL     ::  AirInletCoilSurfTemp  ! Surface temperature at air entrance(C)
-      REAL     ::  SurfAreaWetFraction   ! Fraction of surface area wet
+      REAL(r64), intent(in) :: WaterTempIn         ! Water temperature IN to this function (C)
+      REAL(r64), intent(in) :: AirTempIn           ! Air dry bulb temperature IN to this function(C)
+      REAL(r64), intent(in) :: AirHumRat           ! Air Humidity Ratio IN to this funcation (C)
+      REAL(r64), intent(in) :: UAInternalTotal     ! Internal overall heat transfer coefficient(W/m2 C)
+      REAL(r64), intent(in) :: UAExternalTotal     ! External overall heat transfer coefficient(W/m2 C)
+      REAL(r64)     ::  OutletWaterTemp       ! Leaving water temperature (C)
+      REAL(r64)     ::  OutletAirTemp         ! Leaving air dry bulb temperature(C)
+      REAL(r64)     ::  OutletAirHumRat       ! Leaving air humidity ratio
+      REAL(r64)     ::  TotWaterCoilLoad      ! Total heat transfer rate(W)
+      REAL(r64)     ::  SenWaterCoilLoad      ! Sensible heat transfer rate(W)
+      REAL(r64)     ::  AirInletCoilSurfTemp  ! Surface temperature at air entrance(C)
+      REAL(r64)     ::  SurfAreaWetFraction   ! Fraction of surface area wet
       INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-      REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+      REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -4245,32 +4245,32 @@ SUBROUTINE CoilCompletelyWet (CoilNum,WaterTempIn, AirTempIn,AirHumRat,UAInterna
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL AirSideResist                    ! Air-side resistance to heat transfer(m2 C/W)
-      REAL WaterSideResist                  ! Liquid-side resistance to heat transfer(m2 C/W)
-      REAL EnteringAirDewPt                 ! Entering air dew point(C)
-      REAL UACoilTotalEnth                  ! Overall enthalpy heat transfer coefficient(kg/s)
-      REAL CapacityRateAirWet               ! Air-side capacity rate(kg/s)
-      REAL CapacityRateWaterWet             ! Liquid-side capacity rate(kg/s)
-      REAL ResistRatio                      ! Ratio of resistances
-      REAL EnthAirOutlet                    ! Outlet air enthalpy
-      REAL EnthSatAirInletWaterTemp         ! Saturated enthalpy of air at entering water temperature(J/kg)
-      REAL EnthSatAirOutletWaterTemp        ! Saturated enthalpy of air at exit water temperature(J/kg)
-      REAL EnthSatAirCoilSurfaceEntryTemp   ! Saturated enthalpy of air at entering surface temperature(J/kg)
-      REAL EnthSatAirCoilSurfaceExitTemp    ! Saturated enthalpy of air at exit surface temperature(J/kg)
-      REAL EnthAirInlet                     ! Enthalpy of air at inlet
-      REAL IntermediateCpSat                ! Coefficient for equation below(J/kg C)
+      REAL(r64) AirSideResist                    ! Air-side resistance to heat transfer(m2 C/W)
+      REAL(r64) WaterSideResist                  ! Liquid-side resistance to heat transfer(m2 C/W)
+      REAL(r64) EnteringAirDewPt                 ! Entering air dew point(C)
+      REAL(r64) UACoilTotalEnth                  ! Overall enthalpy heat transfer coefficient(kg/s)
+      REAL(r64) CapacityRateAirWet               ! Air-side capacity rate(kg/s)
+      REAL(r64) CapacityRateWaterWet             ! Liquid-side capacity rate(kg/s)
+      REAL(r64) ResistRatio                      ! Ratio of resistances
+      REAL(r64) EnthAirOutlet                    ! Outlet air enthalpy
+      REAL(r64) EnthSatAirInletWaterTemp         ! Saturated enthalpy of air at entering water temperature(J/kg)
+      REAL(r64) EnthSatAirOutletWaterTemp        ! Saturated enthalpy of air at exit water temperature(J/kg)
+      REAL(r64) EnthSatAirCoilSurfaceEntryTemp   ! Saturated enthalpy of air at entering surface temperature(J/kg)
+      REAL(r64) EnthSatAirCoilSurfaceExitTemp    ! Saturated enthalpy of air at exit surface temperature(J/kg)
+      REAL(r64) EnthAirInlet                     ! Enthalpy of air at inlet
+      REAL(r64) IntermediateCpSat                ! Coefficient for equation below(J/kg C)
                                             ! EnthSat1-EnthSat2 = IntermediateCpSat*(TSat1-TSat2)
                                             ! (all water and surface temperatures are
                                             ! related to saturated air enthalpies for
                                             ! wet surface heat transfer calculations)
-      REAL,Parameter::SmallNo = 1.*10**-9       ! smallNo used in place of 0
-      REAL :: AirMassFlow
-      REAL :: WaterMassFlowRate
-      REAL :: Cp
+      REAL(r64),Parameter::SmallNo = 1.d-9       ! smallNo used in place of 0
+      REAL(r64) :: AirMassFlow
+      REAL(r64) :: WaterMassFlowRate
+      REAL(r64) :: Cp
 
       SurfAreaWetFraction = 1.
-      AirSideResist = 1./MAX(UAExternalTotal,SmallNo)
-      WaterSideResist = 1./MAX(UAInternalTotal,SmallNo)
+      AirSideResist = 1.d0/MAX(UAExternalTotal,SmallNo)
+      WaterSideResist = 1.d0/MAX(UAInternalTotal,SmallNo)
 
       !  adjust mass flow rates for cycling fan cycling coil operation
         IF(FanOpMode .EQ. CycFanCycCoil)THEN
@@ -4304,7 +4304,7 @@ SUBROUTINE CoilCompletelyWet (CoilNum,WaterTempIn, AirTempIn,AirHumRat,UAInterna
 
          ! Determine air and water enthalpy outlet conditions by modeling
          ! coil as counterflow enthalpy heat exchanger
-       UACoilTotalEnth = 1./(IntermediateCpSat*WaterSideResist+AirSideResist*PsyCpAirFnWTdb(0.0,AirTempIn))
+       UACoilTotalEnth = 1.d0/(IntermediateCpSat*WaterSideResist+AirSideResist*PsyCpAirFnWTdb(0.0d0,AirTempIn))
        CapacityRateAirWet = AirMassFlow
        Cp =  GetSpecificHeatGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
                                   WaterTempIn,                      &
@@ -4317,7 +4317,7 @@ SUBROUTINE CoilCompletelyWet (CoilNum,WaterTempIn, AirTempIn,AirHumRat,UAInterna
          ! Calculate entering and leaving external surface conditions from
          ! air and water conditions and the ratio of resistances
        ResistRatio=(WaterSideResist)/(WaterSideResist+  &
-                                      PsyCpAirFnWTdb(0.0,AirTempIn)/IntermediateCpSat*AirSideResist)
+                                      PsyCpAirFnWTdb(0.0d0,AirTempIn)/IntermediateCpSat*AirSideResist)
        EnthSatAirCoilSurfaceEntryTemp = EnthSatAirOutletWaterTemp + ResistRatio* &
                                                (EnthAirInlet-EnthSatAirOutletWaterTemp)
        EnthSatAirCoilSurfaceExitTemp = EnthSatAirInletWaterTemp + ResistRatio* &
@@ -4376,18 +4376,18 @@ SUBROUTINE CoilPartWetPartDry(CoilNum,FirstHVACIteration,InletWaterTemp, InletAi
 
           ! FUNCTION ARGUMENT DEFINITIONS:
       Integer, intent(in) :: CoilNum                ! Number of Coil
-      REAL, intent(in)    :: InletWaterTemp         ! Entering liquid temperature(C)
-      REAL, intent(in)    :: InletAirTemp           ! Entering air dry bulb temperature(C)
-      REAL, intent(in)    :: AirDewPointTemp        ! Entering air dew point(C)
+      REAL(r64), intent(in)    :: InletWaterTemp         ! Entering liquid temperature(C)
+      REAL(r64), intent(in)    :: InletAirTemp           ! Entering air dry bulb temperature(C)
+      REAL(r64), intent(in)    :: AirDewPointTemp        ! Entering air dew point(C)
       Logical, intent(in) :: FirstHVACIteration     ! Saving Old values
       INTEGER, INTENT(IN) :: FanOpMode      ! fan operating mode
-      REAL,    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
-      REAL           :: OutletWaterTemp        ! Leaving liquid temperature(C)
-      REAL           :: OutletAirTemp          ! Leaving air dry bulb temperature(C)
-      REAL           :: OutletAirHumRat        ! Leaving air humidity ratio
-      REAL           :: TotWaterCoilLoad       ! Total heat transfer rate (W)
-      REAL           :: SenWaterCoilLoad       ! Sensible heat transfer rate (W)
-      REAL           :: SurfAreaWetFraction    ! Fraction of surface area wet
+      REAL(r64),    INTENT(IN) :: PartLoadRatio  ! part-load ratio of heating coil
+      REAL(r64)           :: OutletWaterTemp        ! Leaving liquid temperature(C)
+      REAL(r64)           :: OutletAirTemp          ! Leaving air dry bulb temperature(C)
+      REAL(r64)           :: OutletAirHumRat        ! Leaving air humidity ratio
+      REAL(r64)           :: TotWaterCoilLoad       ! Total heat transfer rate (W)
+      REAL(r64)           :: SenWaterCoilLoad       ! Sensible heat transfer rate (W)
+      REAL(r64)           :: SurfAreaWetFraction    ! Fraction of surface area wet
 
           ! FUNCTION PARAMETER DEFINITIONS:
       Integer, Parameter:: itmax = 60
@@ -4399,27 +4399,27 @@ SUBROUTINE CoilPartWetPartDry(CoilNum,FirstHVACIteration,InletWaterTemp, InletAi
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL DryCoilHeatTranfer              ! Heat transfer rate for dry coil(W)
-      REAL WetCoilTotalHeatTransfer        ! Total heat transfer rate for wet coil(W)
-      REAL WetCoilSensibleHeatTransfer     ! Sensible heat transfer rate for wet coil(W)
-      REAL SurfAreaWet                     ! Air-side area of wet coil(m2)
-      REAL SurfAreaDry                     ! Air-side area of dry coil(m2)
-      REAL DryCoilUA                       ! Overall heat transfer coefficient for dry coil(W/C)
-      REAL WetDryInterfcWaterTemp          ! Liquid temperature at wet/dry boundary(C)
-      REAL WetDryInterfcAirTemp            ! Air temperature at wet/dry boundary(C)
-      REAL WetDryInterfcSurfTemp           ! Surface temperature at wet/dry boundary(C)
-      REAL EstimateWetDryInterfcWaterTemp  ! Estimated liquid temperature at wet/dry boundary(C)
-      REAL EstimateSurfAreaWetFraction     ! Initial Estimate for Fraction of Surface Wet with condensation
-      REAL WetPartUAInternal               ! UA of Wet Coil Internal
-      REAL WetPartUAExternal               ! UA of Dry Coil External
-      REAL WetDryInterfcHumRat             ! Humidity Ratio at interface of the wet dry transition
-      REAL X1T                             ! Variables used in the two iteration in this subroutine.
-      REAL NewSurfAreaWetFrac              ! Variables used in the two iteration in this subroutine.
-      REAL ResultXT                        ! Variables used in the two iteration in this subroutine.
-      REAL Y1T                             ! Variables used in the two iterations in this subroutine.
-      REAL errorT                          ! Error in interation for First If loop
-      REAL error                           ! Deviation of dependent variable in iteration
-      REAL SurfAreaFracPrevious, ErrorPrevious,SurfAreaFracLast,ErrorLast
+      REAL(r64) DryCoilHeatTranfer              ! Heat transfer rate for dry coil(W)
+      REAL(r64) WetCoilTotalHeatTransfer        ! Total heat transfer rate for wet coil(W)
+      REAL(r64) WetCoilSensibleHeatTransfer     ! Sensible heat transfer rate for wet coil(W)
+      REAL(r64) SurfAreaWet                     ! Air-side area of wet coil(m2)
+      REAL(r64) SurfAreaDry                     ! Air-side area of dry coil(m2)
+      REAL(r64) DryCoilUA                       ! Overall heat transfer coefficient for dry coil(W/C)
+      REAL(r64) WetDryInterfcWaterTemp          ! Liquid temperature at wet/dry boundary(C)
+      REAL(r64) WetDryInterfcAirTemp            ! Air temperature at wet/dry boundary(C)
+      REAL(r64) WetDryInterfcSurfTemp           ! Surface temperature at wet/dry boundary(C)
+      REAL(r64) EstimateWetDryInterfcWaterTemp  ! Estimated liquid temperature at wet/dry boundary(C)
+      REAL(r64) EstimateSurfAreaWetFraction     ! Initial Estimate for Fraction of Surface Wet with condensation
+      REAL(r64) WetPartUAInternal               ! UA of Wet Coil Internal
+      REAL(r64) WetPartUAExternal               ! UA of Dry Coil External
+      REAL(r64) WetDryInterfcHumRat             ! Humidity Ratio at interface of the wet dry transition
+      REAL(r64) X1T                             ! Variables used in the two iteration in this subroutine.
+      REAL(r64) NewSurfAreaWetFrac              ! Variables used in the two iteration in this subroutine.
+      REAL(r64) ResultXT                        ! Variables used in the two iteration in this subroutine.
+      REAL(r64) Y1T                             ! Variables used in the two iterations in this subroutine.
+      REAL(r64) errorT                          ! Error in interation for First If loop
+      REAL(r64) error                           ! Deviation of dependent variable in iteration
+      REAL(r64) SurfAreaFracPrevious, ErrorPrevious,SurfAreaFracLast,ErrorLast
       Integer iter     ! Iteration counter
       Integer icvg     ! Iteration convergence flag
       INTEGER icvgT    ! Iteration Convergence Flag for First If loop
@@ -4471,7 +4471,7 @@ SUBROUTINE CoilPartWetPartDry(CoilNum,FirstHVACIteration,InletWaterTemp, InletAi
         SurfAreaDry = WaterCoil(CoilNum)%TotCoilOutsideSurfArea-SurfAreaWet
 
            ! Calculating UA values for the Dry Part of the Coil
-        DryCoilUA = SurfAreaDry/(1./WaterCoil(CoilNum)%UACoilInternalPerUnitArea+1./WaterCoil(CoilNum)%UADryExtPerUnitArea)
+        DryCoilUA = SurfAreaDry/(1.d0/WaterCoil(CoilNum)%UACoilInternalPerUnitArea+1./WaterCoil(CoilNum)%UADryExtPerUnitArea)
 
            ! Calculating UA Value for the Wet part of the Coil
         WetPartUAExternal = WaterCoil(CoilNum)%UAWetExtPerUnitArea*SurfAreaWet
@@ -4497,7 +4497,7 @@ SUBROUTINE CoilPartWetPartDry(CoilNum,FirstHVACIteration,InletWaterTemp, InletAi
 
               ! Iterating to calculate the actual wet dry interface water temperature.
             errorT = EstimateWetDryInterfcWaterTemp - WetDryInterfcWaterTemp
-          Call ITERATE (ResultXT,0.001, WetDryInterfcWaterTemp,errorT,X1T,Y1T,itT,icvgT)
+          Call ITERATE (ResultXT,0.001d0, WetDryInterfcWaterTemp,errorT,X1T,Y1T,itT,icvgT)
             WetDryInterfcWaterTemp = ResultXT
 
             ! IF convergence is achieved then exit the itT to itmax Do loop.
@@ -4542,8 +4542,8 @@ SUBROUTINE CoilPartWetPartDry(CoilNum,FirstHVACIteration,InletWaterTemp, InletAi
 
           ! Surface temperature not converged.  Repeat calculations with new
           ! estimate of fraction wet surface area.
-        IF(SurfAreaWetFraction  > 1.0) SurfAreaWetFraction = 1.0
-        IF(SurfAreaWetFraction <= 0.0) SurfAreaWetFraction = 0.0098
+        IF(SurfAreaWetFraction  > 1.0d0) SurfAreaWetFraction = 1.0d0
+        IF(SurfAreaWetFraction <= 0.0d0) SurfAreaWetFraction = 0.0098d0
 
      End Do  ! End do for the overall iteration
 
@@ -4589,17 +4589,17 @@ FUNCTION CalcCoilUAbyEffectNTU (CoilNum,CapacityStream1,EnergyInStreamOne,   &
 
           ! FUNCTION ARGUMENT DEFINITIONS:
       Integer, Intent(in) :: CoilNum
-      REAL, intent(in)    :: CapacityStream1        ! Capacity rate of stream1.(W/C)
-      REAL, intent(in)    :: EnergyInStreamOne      ! Inlet state of stream1.(C)
-      REAL, intent(in)    :: CapacityStream2        ! Capacity rate of stream2.(W/C)
-      REAL, intent(in)    :: EnergyInStreamTwo      ! Inlet state of stream2.(C)
-      REAL, intent(in)    :: DesTotalHeatTransfer   ! Heat transfer rate(W)
-      REAL           :: CalcCoilUAbyEffectNTU  ! Overall heat transfer coefficient(W/C)
+      REAL(r64), intent(in)    :: CapacityStream1        ! Capacity rate of stream1.(W/C)
+      REAL(r64), intent(in)    :: EnergyInStreamOne      ! Inlet state of stream1.(C)
+      REAL(r64), intent(in)    :: CapacityStream2        ! Capacity rate of stream2.(W/C)
+      REAL(r64), intent(in)    :: EnergyInStreamTwo      ! Inlet state of stream2.(C)
+      REAL(r64), intent(in)    :: DesTotalHeatTransfer   ! Heat transfer rate(W)
+      REAL(r64)           :: CalcCoilUAbyEffectNTU  ! Overall heat transfer coefficient(W/C)
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
-      REAL, Parameter:: SmallNo=1.*10**-9   !RS: Debugging: 102612
-      REAL, Parameter:: LargeNo=1.*10**9
+      REAL(r64), Parameter:: SmallNo=1.d-9
+      REAL(r64), Parameter:: LargeNo=1.d9
       Integer, Parameter:: itmax=12
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -4609,14 +4609,14 @@ FUNCTION CalcCoilUAbyEffectNTU (CoilNum,CapacityStream1,EnergyInStreamOne,   &
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL MaxHeatTransfer       ! Maximum heat transfer from inlet conditions (W)
-      REAL EstimatedHeatTransfer ! Estimated heat transfer in iteration(W)
-      REAL CoilUA                ! Estimated heat transfer coefficient(W/C)
-      REAL error                 ! Deviation of dependent variable in iteration
-      REAL X1,Y1 , ResultX       ! Previous values of independent variable in iteration
-      REAL EnergyOutStreamOne ! Intermediate Variable used
-      REAL EnergyOutStreamTwo ! Intermediate variable used
-      REAL DesTotalHeatTransferCheck ! Check value to keep design total heat transfer in range
+      REAL(r64) MaxHeatTransfer       ! Maximum heat transfer from inlet conditions (W)
+      REAL(r64) EstimatedHeatTransfer ! Estimated heat transfer in iteration(W)
+      REAL(r64) CoilUA                ! Estimated heat transfer coefficient(W/C)
+      REAL(r64) error                 ! Deviation of dependent variable in iteration
+      REAL(r64) X1,Y1 , ResultX       ! Previous values of independent variable in iteration
+      REAL(r64) EnergyOutStreamOne ! Intermediate Variable used
+      REAL(r64) EnergyOutStreamTwo ! Intermediate variable used
+      REAL(r64) DesTotalHeatTransferCheck ! Check value to keep design total heat transfer in range
       INTEGER iter   ! Iteration index
       INTEGER icvg   ! Iteration convergence flag
 
@@ -4638,7 +4638,7 @@ FUNCTION CalcCoilUAbyEffectNTU (CoilNum,CapacityStream1,EnergyInStreamOne,   &
          ! Design Heat Transfer cannot exceed Max heat Transfer , setting it value such that effectiveness<1.0
         IF((DesTotalHeatTransfer).GT.(MaxHeatTransfer)) Then
             ! Pegging value so that effectiveness is less than 1.
-            DesTotalHeatTransferCheck= 0.9*MaxHeatTransfer
+            DesTotalHeatTransferCheck= 0.9d0*MaxHeatTransfer
 
            ! Estimate CalcCoilUAbyEffectNTU
           CoilUA = ABS(DesTotalHeatTransferCheck/(EnergyInStreamOne-EnergyInStreamTwo))
@@ -4667,7 +4667,7 @@ FUNCTION CalcCoilUAbyEffectNTU (CoilNum,CapacityStream1,EnergyInStreamOne,   &
                   Else
                    error = ABS(EstimatedHeatTransfer) - ABS(DesTotalHeatTransfer)
                 END If
-           Call ITERATE (ResultX,0.01, CoilUA,error,X1,Y1,iter,icvg)
+           Call ITERATE (ResultX,0.01d0, CoilUA,error,X1,Y1,iter,icvg)
                 CoilUA = ResultX
          ! If converged, leave loop
         IF (icvg .EQ. 1)   Exit
@@ -4717,18 +4717,18 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
 
           ! FUNCTION ARGUMENT DEFINITIONS:
       Integer, intent(in) :: CoilNum
-      REAL, intent(in) :: CapacityStream1              ! Capacity rate of stream1(W/C)
-      REAL, intent(in) :: EnergyInStreamOne   ! Inlet state of stream1 (C)
-      REAL, intent(in) :: CapacityStream2              ! Capacity rate of stream2 (W/C)
-      REAL, intent(in) :: EnergyInStreamTwo   ! Inlet state of stream2 (C)
-      REAL, intent(in) :: CoilUA                       ! Heat transfer rateW)
-      REAL        :: EnergyOutStreamOne  ! Outlet state of stream1 (C)
-      REAL        :: EnergyOutStreamTwo  ! Outlet state of stream2 (C)
+      REAL(r64), intent(in) :: CapacityStream1              ! Capacity rate of stream1(W/C)
+      REAL(r64), intent(in) :: EnergyInStreamOne   ! Inlet state of stream1 (C)
+      REAL(r64), intent(in) :: CapacityStream2              ! Capacity rate of stream2 (W/C)
+      REAL(r64), intent(in) :: EnergyInStreamTwo   ! Inlet state of stream2 (C)
+      REAL(r64), intent(in) :: CoilUA                       ! Heat transfer rateW)
+      REAL(r64)        :: EnergyOutStreamOne  ! Outlet state of stream1 (C)
+      REAL(r64)        :: EnergyOutStreamTwo  ! Outlet state of stream2 (C)
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
-      REAL,Parameter:: LargeNo = 1.*10**10   ! value used in place of infinity  !RS: Debugging: 102612
-      REAL,Parameter:: SmallNo = 1.*10**-15  ! value used in place of zero
+      REAL(r64),Parameter:: LargeNo = 1.d10   ! value used in place of infinity
+      REAL(r64),Parameter:: SmallNo = 1.d-15  ! value used in place of zero
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4737,13 +4737,13 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL MinimumCapacityStream    ! Minimum capacity rate of the streams(W/C)
-      REAL MaximumCapacityStream    ! Maximum capacity rate of the streams(W/C)
-      REAL RatioStreamCapacity      ! Ratio of minimum to maximum capacity rate
-      REAL NTU             ! Number of transfer units
-      REAL :: effectiveness=0.0   ! Heat exchanger effectiveness
-      REAL MaxHeatTransfer ! Maximum heat transfer possible(W)
-      REAL  e, eta, b, d   ! Intermediate variables in effectivness equation
+      REAL(r64) MinimumCapacityStream    ! Minimum capacity rate of the streams(W/C)
+      REAL(r64) MaximumCapacityStream    ! Maximum capacity rate of the streams(W/C)
+      REAL(r64) RatioStreamCapacity      ! Ratio of minimum to maximum capacity rate
+      REAL(r64) NTU             ! Number of transfer units
+      REAL(r64) :: effectiveness=0.0   ! Heat exchanger effectiveness
+      REAL(r64) MaxHeatTransfer ! Maximum heat transfer possible(W)
+      REAL(r64)  e, eta, b, d   ! Intermediate variables in effectivness equation
 
 
          ! NTU and MinimumCapacityStream/MaximumCapacityStream (RatioStreamCapacity) calculations
@@ -4751,14 +4751,14 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
       MaximumCapacityStream = MAX(CapacityStream1,CapacityStream2)
 
 
-      IF(ABS(MaximumCapacityStream) .le. 1.*10**-6) THEN ! .EQ. 0.) THEN    !RS: Debugging: 102612
+      IF(ABS(MaximumCapacityStream) .le. 1.d-6) THEN ! .EQ. 0.) THEN
         RatioStreamCapacity = 1.
       ELSE
         RatioStreamCapacity = MinimumCapacityStream/MaximumCapacityStream
       ENDIF
 
 
-      IF(ABS(MinimumCapacityStream) .le. 1.*10**-6) THEN ! .EQ. 0.) THEN
+      IF(ABS(MinimumCapacityStream) .le. 1.d-6) THEN ! .EQ. 0.) THEN
         NTU = LargeNo
       ELSE
         NTU = CoilUA/MinimumCapacityStream
@@ -4772,7 +4772,7 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
       ELSE IF(RatioStreamCapacity .LT. SmallNo) THEN
          ! MinimumCapacityStream/MaximumCapacityStream = 0 and effectiveness is independent of configuration
          ! 20 is the Limit Chosen for Exponential Function, beyond which there is float point error.
-        If(NTU > 20.) THEN
+        If(NTU > 20.d0) THEN
           effectiveness = 1.0
         Else
           effectiveness = 1.0 - EXP(-NTU)
@@ -4781,35 +4781,35 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
       ELSE IF (WaterCoil(CoilNum)%HeatExchType .EQ. CounterFlow) THEN
 
           ! Counterflow Heat Exchanger Configuration
-        IF (ABS(RatioStreamCapacity-1.) .LT. SmallNo) THEN
+        IF (ABS(RatioStreamCapacity-1.d0) .LT. SmallNo) THEN
           effectiveness = NTU/(NTU+1.0)
         ELSE
-          If(NTU*(1.-RatioStreamCapacity) > 20.0) Then
+          If(NTU*(1.d0-RatioStreamCapacity) > 20.0d0) Then
             e = 0.0
           Else
-            e=EXP(-NTU*(1.-RatioStreamCapacity))
+            e=EXP(-NTU*(1.d0-RatioStreamCapacity))
           End If
-          effectiveness = (1.-e)/(1.-RatioStreamCapacity*e)
+          effectiveness = (1.d0-e)/(1.d0-RatioStreamCapacity*e)
         ENDIF
 
        ELSE IF (WaterCoil(CoilNum)%HeatExchType .EQ. CrossFlow) THEN
          ! Cross flow, both streams unmixed
-        eta = NTU**(-0.22)
-        If((NTU*RatioStreamCapacity*eta)>20.) Then
-          b=1.0/(RatioStreamCapacity*eta)
-          If(b>20.)  THEN
-            effectiveness=1.
+        eta = NTU**(-0.22d0)
+        If((NTU*RatioStreamCapacity*eta)>20.d0) Then
+          b=1.0d0/(RatioStreamCapacity*eta)
+          If(b>20.d0)  THEN
+            effectiveness=1.d0
           Else
-            effectiveness = 1.0 - EXP(-b)
+            effectiveness = 1.0d0 - EXP(-b)
             If(effectiveness.LT.0) effectiveness=0
           End If
         Else
-          d=((EXP(-NTU*RatioStreamCapacity*eta)-1.)/(RatioStreamCapacity*eta))
-          If(d .LT. -20.0 .OR. d .GT. 0.0) Then
-            effectiveness=1.0
+          d=((EXP(-NTU*RatioStreamCapacity*eta)-1.d0)/(RatioStreamCapacity*eta))
+          If(d .LT. -20.0d0 .OR. d .GT. 0.0d0) Then
+            effectiveness=1.0d0
           Else
-            effectiveness = 1.0 - EXP((EXP(-NTU*RatioStreamCapacity*eta)-1.)/(RatioStreamCapacity*eta))
-            If(effectiveness.LT.0.0) effectiveness=0.0
+            effectiveness = 1.0d0 - EXP((EXP(-NTU*RatioStreamCapacity*eta)-1.d0)/(RatioStreamCapacity*eta))
+            If(effectiveness.LT.0.0d0) effectiveness=0.0d0
           End if
         End if
 
@@ -4857,17 +4857,17 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
 
           ! FUNCTION ARGUMENT DEFINITIONS:
       Integer, intent(in) :: CoilNum        !
-      REAL, intent(in) :: AirTempIn      ! Entering air dry bulb temperature(C)
-      REAL, intent(in) :: EnthAirInlet      ! Entering air enthalpy(J/kg)
-      REAL, intent(in) :: EnthAirOutlet     ! Leaving air enthalpy(J/kg)
-      REAL, intent(in) :: UACoilExternal    ! Heat transfer coefficient for external surface (W/C)
-      REAL        :: OutletAirTemp     ! Leaving air dry bulb temperature(C)
-      REAL        :: OutletAirHumRat   ! Leaving air humidity ratio
-      REAL        :: SenWaterCoilLoad  ! Sensible heat transfer rate(W)
+      REAL(r64), intent(in) :: AirTempIn      ! Entering air dry bulb temperature(C)
+      REAL(r64), intent(in) :: EnthAirInlet      ! Entering air enthalpy(J/kg)
+      REAL(r64), intent(in) :: EnthAirOutlet     ! Leaving air enthalpy(J/kg)
+      REAL(r64), intent(in) :: UACoilExternal    ! Heat transfer coefficient for external surface (W/C)
+      REAL(r64)        :: OutletAirTemp     ! Leaving air dry bulb temperature(C)
+      REAL(r64)        :: OutletAirHumRat   ! Leaving air humidity ratio
+      REAL(r64)        :: SenWaterCoilLoad  ! Sensible heat transfer rate(W)
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
-      REAL, Parameter:: SmallNo=1.*10**-9 ! SmallNo value used in place of zero !RS: Debugging: 102612
+      REAL(r64), Parameter:: SmallNo=1.d-9 ! SmallNo value used in place of zero
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4876,12 +4876,12 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL CapacitanceAir         ! Air capacity rate(W/C)
-      REAL NTU                    ! Number of heat transfer units
-      REAL effectiveness          ! Heat exchanger effectiveness
-      REAL EnthAirCondensateTemp  ! Saturated air enthalpy at temperature of condensate(J/kg)
-      REAL TempCondensation       ! Temperature of condensate(C)
-      REAL TempAirDewPoint        ! Temperature air dew point
+      REAL(r64) CapacitanceAir         ! Air capacity rate(W/C)
+      REAL(r64) NTU                    ! Number of heat transfer units
+      REAL(r64) effectiveness          ! Heat exchanger effectiveness
+      REAL(r64) EnthAirCondensateTemp  ! Saturated air enthalpy at temperature of condensate(J/kg)
+      REAL(r64) TempCondensation       ! Temperature of condensate(C)
+      REAL(r64) TempAirDewPoint        ! Temperature air dew point
 
 
           ! Determine the temperature effectiveness, assuming the temperature
@@ -4892,15 +4892,15 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
 
           ! Calculating NTU from UA and Capacitance.
 !del      NTU = UACoilExternal/MAX(CapacitanceAir,SmallNo)
-!del      effectiveness = 1 - EXP(-MAX(0.0,NTU))
+!del      effectiveness = 1 - EXP(-MAX(0.0d0,NTU))
           ! Calculating NTU from UA and Capacitance.
-      IF (UACoilExternal > 0.0) THEN
-        IF (CapacitanceAir > 0.0) THEN
+      IF (UACoilExternal > 0.0d0) THEN
+        IF (CapacitanceAir > 0.0d0) THEN
           NTU = UACoilExternal/CapacitanceAir
         ELSE
-          NTU = 0.0
+          NTU = 0.0d0
         END IF
-        effectiveness = 1.0 - EXP(-NTU)
+        effectiveness = 1.0d0 - EXP(-NTU)
       ELSE
         effectiveness = 0.0
       END IF
@@ -4917,7 +4917,7 @@ SUBROUTINE CoilOutletStreamCondition(CoilNum, CapacityStream1,EnergyInStreamOne,
 
       TempAirDewPoint=PsyTdpFnWPb(WaterCoil(CoilNum)%InletAirHumRat,OutBaroPress)
 
-      If((TempAirDewPoint-TempCondensation).GT.0.1)Then
+      If((TempAirDewPoint-TempCondensation).GT.0.1d0)Then
 
            ! Calculate Outlet Air Temperature using effectivness
            OutletAirTemp = AirTempIn-(AirTempIn-TempCondensation)*effectiveness
@@ -5055,11 +5055,11 @@ SUBROUTINE ReportWaterCoil(CoilNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: rhoWater
-  REAL :: Tavg
-  REAL :: SpecHumOut
-  REAL :: SpecHumIn
-  REAL :: ReportingConstant
+  REAL(r64) :: rhoWater
+  REAL(r64) :: Tavg
+  REAL(r64) :: SpecHumOut
+  REAL(r64) :: SpecHumIn
+  REAL(r64) :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
  ! report the WaterCoil energy from this component
@@ -5073,17 +5073,17 @@ SUBROUTINE ReportWaterCoil(CoilNum)
     ! calculate and report condensation rates  (how much water extracted from the air stream)
     ! water volumetric flow of water in m3/s for water system interactions
     !  put here to catch all types of DX coils
-    Tavg =( WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%OutletAirTemp)/2.0
+    Tavg =( WaterCoil(CoilNum)%InletAirTemp - WaterCoil(CoilNum)%OutletAirTemp)/2.0d0
 
 
     rhoWater = GetDensityGlycol(PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidName,  &
                        Tavg,                      &
                        PlantLoop(WaterCoil(CoilNum)%WaterLoopNum)%FluidIndex, &
                        'ReportWaterCoil')
-    SpecHumIn = WaterCoil(CoilNum)%InletAirHumRat / ( 1.0 + WaterCoil(CoilNum)%InletAirHumRat) !eq. 9b ASHRAE HOF 2001 page 6.8
-    SpecHumOut = WaterCoil(CoilNum)%OutletAirHumRat / ( 1.0 + WaterCoil(CoilNum)%OutletAirHumRat )
+    SpecHumIn = WaterCoil(CoilNum)%InletAirHumRat / ( 1.0d0 + WaterCoil(CoilNum)%InletAirHumRat) !eq. 9b ASHRAE HOF 2001 page 6.8
+    SpecHumOut = WaterCoil(CoilNum)%OutletAirHumRat / ( 1.0d0 + WaterCoil(CoilNum)%OutletAirHumRat )
     !  mdot * del HumRat / rho water
-    WaterCoil(CoilNum)%CondensateVdot = MAX(0.0, (WaterCoil(CoilNum)%InletAirMassFlowRate * (SpecHumIn - SpecHumOut) / rhoWater) )
+    WaterCoil(CoilNum)%CondensateVdot = MAX(0.0d0, (WaterCoil(CoilNum)%InletAirMassFlowRate * (SpecHumIn - SpecHumOut) / rhoWater) )
     WaterCoil(CoilNum)%CondensateVol = WaterCoil(CoilNum)%CondensateVdot *ReportingConstant
 
     WaterStorage(WaterCoil(CoilNum)%CondensateTankID)%VdotAvailSupply(WaterCoil(CoilNum)%CondensateTankSupplyARRID) &
@@ -5124,8 +5124,8 @@ SUBROUTINE CalcDryFinEffCoef(OutTubeEffFinDiamRatio,PolynomCoef)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL OutTubeEffFinDiamRatio
-    REAL, DIMENSION(:) :: PolynomCoef
+    REAL(r64) OutTubeEffFinDiamRatio
+    REAL(r64), DIMENSION(:) :: PolynomCoef
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5137,15 +5137,15 @@ SUBROUTINE CalcDryFinEffCoef(OutTubeEffFinDiamRatio,PolynomCoef)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL, DIMENSION(2,MaxOrderedPairs) :: OrderedPair
-    REAL FAI,FED
-    REAL FEDnumerator
+    REAL(r64), DIMENSION(2,MaxOrderedPairs) :: OrderedPair
+    REAL(r64) FAI,FED
+    REAL(r64) FEDnumerator
     INTEGER I,IE1,IE2,IE3,IE4,IE5,IE6
-    REAL R1,R1I1,R1K1,R2,R2I0,R2I1,R2K0,R2K1,RO
+    REAL(r64) R1,R1I1,R1K1,R2,R2I0,R2I1,R2K0,R2K1,RO
 
-    FAI = 0.02
+    FAI = 0.02d0
     DO I = 1, 60
-      FAI = FAI + 0.035
+      FAI = FAI + 0.035d0
       R1 = FAI / (1. - OutTubeEffFinDiamRatio)
       R2 = R1 * OutTubeEffFinDiamRatio
       RO = 2. * OutTubeEffFinDiamRatio / (FAI * (1. + OutTubeEffFinDiamRatio))
@@ -5198,13 +5198,13 @@ SUBROUTINE CalcIBesselFunc(BessFuncArg,BessFuncOrd,IBessFunc,ErrorCode)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL :: BessFuncArg
+    REAL(r64) :: BessFuncArg
     INTEGER :: BessFuncOrd
-    REAL :: IBessFunc
+    REAL(r64) :: IBessFunc
     INTEGER :: ErrorCode
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: ErrorTol = 1.0d-06
+    REAL(r64), PARAMETER :: ErrorTol = 1.0d-06
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -5215,9 +5215,9 @@ SUBROUTINE CalcIBesselFunc(BessFuncArg,BessFuncOrd,IBessFunc,ErrorCode)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: LoopCount
 
-    REAL :: FI
-    REAL :: FK
-    REAL :: TERM
+    REAL(r64) :: FI
+    REAL(r64) :: FK
+    REAL(r64) :: TERM
 
     ErrorCode=0
     IBessFunc=1.
@@ -5229,20 +5229,20 @@ SUBROUTINE CalcIBesselFunc(BessFuncArg,BessFuncOrd,IBessFunc,ErrorCode)
     ELSE IF (BessFuncArg .LT. 0.) THEN
       ErrorCode = 2
       RETURN
-    ELSE IF (BessFuncArg .GT. 12. .AND. BessFuncArg .GT. BessFuncOrd) THEN
-      IF (BessFuncArg .GT. 90.) THEN
+    ELSE IF (BessFuncArg .GT. 12.d0 .AND. BessFuncArg .GT. BessFuncOrd) THEN
+      IF (BessFuncArg .GT. 90.d0) THEN
         ErrorCode = 4
-        IBessFunc = 10.**30
+        IBessFunc = 10.d0**30
         RETURN
       ENDIF
       TERM = 1.
       IBessFunc = 1.
       DO LoopCount = 1, 30  !Start of 1st LoopCount Loop
         IF (ABS(TERM) .LE. ABS(ErrorTol * IBessFunc)) THEN
-          IBessFunc = IBessFunc * EXP(BessFuncArg) / SQRT(2. * PI * BessFuncArg)
+          IBessFunc = IBessFunc * EXP(BessFuncArg) / SQRT(2.d0 * PI * BessFuncArg)
           RETURN
         ENDIF
-        TERM = TERM * 0.125 / BessFuncArg * ((2 * LoopCount - 1)**2 - &
+        TERM = TERM * 0.125d0 / BessFuncArg * ((2 * LoopCount - 1)**2 - &
                4 * BessFuncOrd * BessFuncOrd) / REAL(LoopCount,r64)
         IBessFunc = IBessFunc + TERM
       END DO  ! End of 1st LoopCount loop
@@ -5252,12 +5252,12 @@ SUBROUTINE CalcIBesselFunc(BessFuncArg,BessFuncOrd,IBessFunc,ErrorCode)
     IF (BessFuncOrd .GT. 0) THEN
       DO LoopCount = 1, BessFuncOrd !Start of 2nd LoopCount Loop
         FI = LoopCount
-        IF (ABS(TERM) .LT. 1.*10**-30 * FI / (BessFuncArg * 2.)) THEN   !RS: Debugging: 102612
+        IF (ABS(TERM) .LT. 1.d-30 * FI / (BessFuncArg * 2.)) THEN
           ErrorCode = 3
           IBessFunc = 0.
           RETURN
         ENDIF
-        TERM = TERM * BessFuncArg / (2. * FI)
+        TERM = TERM * BessFuncArg / (2.d0 * FI)
       END DO !End of 2nd LoopCount loop
     ENDIF
 
@@ -5265,7 +5265,7 @@ SUBROUTINE CalcIBesselFunc(BessFuncArg,BessFuncOrd,IBessFunc,ErrorCode)
     DO LoopCount = 1,1000 !Start of 3rd LoopCount Loop
       IF (ABS(TERM) .LE. ABS(IBessFunc * ErrorTol)) RETURN
       FK = LoopCount * (BessFuncOrd + LoopCount)
-      TERM = TERM * (BessFuncArg**2 / (4. * FK))
+      TERM = TERM * (BessFuncArg**2 / (4.d0 * FK))
       IBessFunc = IBessFunc + TERM
     END DO !End of  3rd LoopCount loop
     RETURN
@@ -5313,13 +5313,13 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL    :: BessFuncArg
+    REAL(r64)    :: BessFuncArg
     INTEGER :: BessFuncOrd
-    REAL    :: KBessFunc
+    REAL(r64)    :: KBessFunc
     INTEGER :: ErrorCode
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: GJMAX = 1.0d+38
+    REAL(r64), PARAMETER :: GJMAX = 1.0d+38
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -5331,13 +5331,13 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
     INTEGER :: LoopCount
     LOGICAL :: StopLoop
 
-    REAL :: FACT
-    REAL :: G0
-    REAL :: G1
-    REAL :: GJ
-    REAL :: HJ
-    REAL, DIMENSION(12) :: T
-    REAL :: X2J
+    REAL(r64) :: FACT
+    REAL(r64) :: G0
+    REAL(r64) :: G1
+    REAL(r64) :: GJ
+    REAL(r64) :: HJ
+    REAL(r64), DIMENSION(12) :: T
+    REAL(r64) :: X2J
 
 
     KBessFunc=0.
@@ -5350,7 +5350,7 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
     ELSE IF (BessFuncArg.LE.0.) THEN
       ErrorCode=2
       RETURN
-    ELSE IF(BessFuncArg.GT.85.) THEN
+    ELSE IF(BessFuncArg.GT.85.d0) THEN
       ErrorCode=3
       KBessFunc=0.
       RETURN
@@ -5361,7 +5361,7 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
   !     Use polynomial approximation if BessFuncArg > 1.
 
     IF (BessFuncArg.GT.1.) THEN
-      T(1)=1./BessFuncArg
+      T(1)=1.d0/BessFuncArg
       DO LoopCount = 2,12
         T(LoopCount)=T(LoopCount-1)/BessFuncArg
       END DO !End of LoopCount Loop
@@ -5369,10 +5369,10 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
 
   !     Compute K0 using polynomial approximation
 
-        G0=EXP(-BessFuncArg)*(1.2533141-.1566642*T(1)+.08811128*T(2)-.09139095    &
-           *T(3)+.1344596*T(4)-.2299850*T(5)+.3792410*T(6)-.5247277  &
-           *T(7)+.5575368*T(8)-.4262633*T(9)+.2184518*T(10)          &
-           -.06680977*T(11)+.009189383*T(12))*SQRT(1./BessFuncArg)
+        G0=EXP(-BessFuncArg)*(1.2533141d0-.1566642d0*T(1)+.08811128d0*T(2)-.09139095d0    &
+           *T(3)+.1344596d0*T(4)-.2299850d0*T(5)+.3792410d0*T(6)-.5247277d0  &
+           *T(7)+.5575368d0*T(8)-.4262633d0*T(9)+.2184518d0*T(10)          &
+           -.06680977d0*T(11)+.009189383d0*T(12))*SQRT(1.d0/BessFuncArg)
         IF (BessFuncOrd .EQ. 0) THEN
           KBessFunc=G0
           RETURN
@@ -5381,10 +5381,10 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
 
   !     Compute K1 using polynomial approximation
 
-      G1=EXP(-BessFuncArg)*(1.2533141+.4699927*T(1)-.1468583*T(2)+.1280427*T(3)    &
-         -.1736432*T(4)+.2847618*T(5)-.4594342*T(6)+.6283381*T(7)     &
-         -.6632295*T(8)+.5050239*T(9)-.2581304*T(10)+.07880001*T(11)  &
-         -.01082418*T(12))*SQRT(1./BessFuncArg)
+      G1=EXP(-BessFuncArg)*(1.2533141d0+.4699927d0*T(1)-.1468583d0*T(2)+.1280427d0*T(3)    &
+         -.1736432d0*T(4)+.2847618d0*T(5)-.4594342d0*T(6)+.6283381d0*T(7)     &
+         -.6632295d0*T(8)+.5050239d0*T(9)-.2581304d0*T(10)+.07880001d0*T(11)  &
+         -.01082418d0*T(12))*SQRT(1.d0/BessFuncArg)
       IF (BessFuncOrd .EQ. 1) THEN
         KBessFunc=G1
         RETURN
@@ -5397,7 +5397,7 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
 
   !     Compute K0 using series expansion
 
-        G0=-(.5772157+LOG(BessFuncArg/2.))
+        G0=-(.5772157d0+LOG(BessFuncArg/2.d0))
         X2J=1.
         FACT=1.
         HJ=0.
@@ -5405,7 +5405,7 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
           X2J=X2J*BessFuncArg**2/4.
           FACT=FACT*(1./REAL(LoopCount,r64))**2
           HJ=HJ+1./REAL(LoopCount,r64)
-          G0=G0+X2J*FACT*(HJ-(.5772157+LOG(BessFuncArg/2.)))
+          G0=G0+X2J*FACT*(HJ-(.5772157d0+LOG(BessFuncArg/2.d0)))
         END DO !End of LoopCount Loop
         IF (BessFuncOrd.EQ.0) THEN
           KBessFunc=G0
@@ -5418,12 +5418,12 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
       X2J=BessFuncArg/2.
       FACT=1.
       HJ=1.
-      G1=1./BessFuncArg+X2J*(.5+(.5772157+LOG(BessFuncArg/2.))-HJ)
+      G1=1./BessFuncArg+X2J*(.5d0+(.5772157d0+LOG(BessFuncArg/2.d0))-HJ)
       DO LoopCount = 2,8
         X2J=X2J*BessFuncArg**2/4.
         FACT=FACT*(1./REAL(LoopCount,r64))**2
         HJ=HJ+1./REAL(LoopCount,r64)
-        G1=G1+X2J*FACT*(.5+((.5772157+LOG(BessFuncArg/2.))-HJ)*REAL(LoopCount,r64))
+        G1=G1+X2J*FACT*(.5d0+((.5772157d0+LOG(BessFuncArg/2.d0))-HJ)*REAL(LoopCount,r64))
       END DO !End of LoopCount Loop
       IF (BessFuncOrd.EQ.1) THEN
         KBessFunc=G1
@@ -5436,7 +5436,7 @@ SUBROUTINE CalcKBesselFunc(BessFuncArg,BessFuncOrd,KBessFunc,ErrorCode)
     LoopCount = 2
     StopLoop = .FALSE.
     DO WHILE (LoopCount .LE. BessFuncOrd .AND. .NOT. StopLoop)
-      GJ=2.*(REAL(LoopCount,r64)-1.)*G1/BessFuncArg+G0
+      GJ=2.d0*(REAL(LoopCount,r64)-1.)*G1/BessFuncArg+G0
       IF (GJ-GJMAX .GT. 0.0) THEN
         ErrorCode=4
         GJ=GJMAX
@@ -5470,8 +5470,8 @@ SUBROUTINE CalcPolynomCoef(OrderedPair,PolynomCoef)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, DIMENSION(MaxPolynomOrder+1) :: PolynomCoef
-    REAL, DIMENSION(2,MaxOrderedPairs) :: OrderedPair
+    REAL(r64), DIMENSION(MaxPolynomOrder+1) :: PolynomCoef
+    REAL(r64), DIMENSION(2,MaxOrderedPairs) :: OrderedPair
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5484,14 +5484,14 @@ SUBROUTINE CalcPolynomCoef(OrderedPair,PolynomCoef)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     LOGICAL :: Converged
-    REAL, DIMENSION(2,10) :: OrdPairSum
-    REAL, DIMENSION(10,10) :: OrdPairSumMatrix
-    REAL B
+    REAL(r64), DIMENSION(2,10) :: OrdPairSum
+    REAL(r64), DIMENSION(10,10) :: OrdPairSumMatrix
+    REAL(r64) B
     INTEGER I,II,J
     INTEGER :: PolynomOrder
     INTEGER :: CurrentOrder
     INTEGER :: CurrentOrdPair
-    REAL S1,S2
+    REAL(r64) S1,S2
 
     OrdPairSum(1,1) = MaxOrderedPairs
     OrdPairSum(1,2:3) = 0.
@@ -5546,7 +5546,7 @@ SUBROUTINE CalcPolynomCoef(OrderedPair,PolynomCoef)
              (S1 - OrderedPair(2, CurrentOrdPair))
       END DO !End of CurrentOrdPair loop
       B = MaxOrderedPairs - (PolynomOrder + 1)
-      IF(S2 .GT. 0.0001) S2 = SQRT(S2 / B)
+      IF(S2 .GT. 0.0001d0) S2 = SQRT(S2 / B)
       DO CurrentOrder = 1, PolynomOrder + 1
         PolynomCoef(CurrentOrder) = OrdPairSumMatrix(CurrentOrder, (PolynomOrder + 2))
       END DO !End of CurrentOrder loop
@@ -5596,9 +5596,9 @@ FUNCTION SimpleHeatingCoilUAResidual(UA, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: UA ! UA of coil
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64), INTENT(IN)  :: UA ! UA of coil
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5612,10 +5612,10 @@ FUNCTION SimpleHeatingCoilUAResidual(UA, Par) RESULT (Residuum)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex
   INTEGER :: FanOpMode
-  REAL    :: PartLoadRatio
+  REAL(r64)    :: PartLoadRatio
 
   CoilIndex = INT(Par(2))
-  IF(Par(3) .EQ. 1.0) THEN
+  IF(Par(3) .EQ. 1.0d0) THEN
     FanOpMode = CycFanCycCoil
   ELSE
     FanOpMode = ContFanCycCoil
@@ -5652,9 +5652,9 @@ FUNCTION SimpleCoolingCoilUAResidual(UA, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: UA ! UA of coil
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64), INTENT(IN)  :: UA ! UA of coil
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5668,18 +5668,18 @@ FUNCTION SimpleCoolingCoilUAResidual(UA, Par) RESULT (Residuum)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex
   INTEGER :: FanOpMode
-  REAL    :: PartLoadRatio
+  REAL(r64)    :: PartLoadRatio
 
   CoilIndex = INT(Par(2))
-  IF(Par(3) .EQ. 1.0) THEN
+  IF(Par(3) .EQ. 1.0d0) THEN
     FanOpMode = CycFanCycCoil
   ELSE
     FanOpMode = ContFanCycCoil
   END IF
   PartLoadRatio = Par(4)
   WaterCoil(CoilIndex)%UACoilExternal = UA
-  WaterCoil(CoilIndex)%UACoilInternal = WaterCoil(CoilIndex)%UACoilExternal*3.3
-  WaterCoil(CoilIndex)%UACoilTotal = 1.0/(1./WaterCoil(CoilIndex)%UACoilExternal+1./WaterCoil(CoilIndex)%UACoilInternal)
+  WaterCoil(CoilIndex)%UACoilInternal = WaterCoil(CoilIndex)%UACoilExternal*3.3d0
+  WaterCoil(CoilIndex)%UACoilTotal = 1.0d0/(1.d0/WaterCoil(CoilIndex)%UACoilExternal+1.d0/WaterCoil(CoilIndex)%UACoilInternal)
   WaterCoil(CoilIndex)%TotCoilOutsideSurfArea=EstimateHEXSurfaceArea(CoilIndex)
   WaterCoil(CoilIndex)%UACoilInternalPerUnitArea=WaterCoil(CoilIndex)%UACoilInternal/  &
                                                  WaterCoil(CoilIndex)%TotCoilOutsideSurfArea
@@ -5720,20 +5720,20 @@ Subroutine CoilAreaFracIter(NewSurfAreaWetFrac, SurfAreaFracCurrent,ErrorCurrent
        Implicit None
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-       REAL, intent(Out):: NewSurfAreaWetFrac    ! Out Value of variable
-       REAL, intent(in) :: SurfAreaFracCurrent   ! Driver Value
-       REAL, intent(in) :: ErrorCurrent          ! Objective Function
-       REAL, intent(inout) :: ErrorPrevious          ! First Previous value of error
-       REAL, intent(inout) :: ErrorLast              ! Second Previous value of error
-       REAL, intent(inout) :: SurfAreaFracPrevious   ! First Previous value of Surf Area Fraction
-       REAL, intent(inout) :: SurfAreaFracLast       ! Second Previous value of Surf Area Fraction
+       REAL(r64), intent(Out):: NewSurfAreaWetFrac    ! Out Value of variable
+       REAL(r64), intent(in) :: SurfAreaFracCurrent   ! Driver Value
+       REAL(r64), intent(in) :: ErrorCurrent          ! Objective Function
+       REAL(r64), intent(inout) :: ErrorPrevious          ! First Previous value of error
+       REAL(r64), intent(inout) :: ErrorLast              ! Second Previous value of error
+       REAL(r64), intent(inout) :: SurfAreaFracPrevious   ! First Previous value of Surf Area Fraction
+       REAL(r64), intent(inout) :: SurfAreaFracLast       ! Second Previous value of Surf Area Fraction
        Integer, intent(in) :: IterNum             ! Number of Iterations
        Integer, intent(inout)   :: icvg                ! Iteration convergence flag
 
           ! FUNCTION PARAMETER DEFINITIONS:
-       REAL, Parameter:: Tolerance =1.*10**-5         ! Relative error tolerance    !RS: Debugging: 102612
-       REAL, Parameter:: PerturbSurfAreaFrac= 0.1 ! Perturbation applied to Surf Fraction to initialize iteration
-       REAL, Parameter:: SmallNum= 1.*10**-9          ! Small Number
+       REAL(r64), Parameter:: Tolerance =1.d-5         ! Relative error tolerance
+       REAL(r64), Parameter:: PerturbSurfAreaFrac= 0.1d0 ! Perturbation applied to Surf Fraction to initialize iteration
+       REAL(r64), Parameter:: SmallNum= 1.d-9          ! Small Number
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -5742,12 +5742,12 @@ Subroutine CoilAreaFracIter(NewSurfAreaWetFrac, SurfAreaFracCurrent,ErrorCurrent
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-       REAL :: check                          ! Validity Check for moving to Quad Solution
-       REAL :: QuadCoefThree                  ! Term under radical in quadratic solution
-       REAL :: QuadCoefOne            ! Term under radical in quadratic solution
-       REAL :: QuadCoefTwo            ! Term under radical in quadratic solution
-       REAL :: Slope                  ! Slope for linear fit
-       REAL :: SurfAreaFracOther      ! Intermediate Value of Surf Area
+       REAL(r64) :: check                          ! Validity Check for moving to Quad Solution
+       REAL(r64) :: QuadCoefThree                  ! Term under radical in quadratic solution
+       REAL(r64) :: QuadCoefOne            ! Term under radical in quadratic solution
+       REAL(r64) :: QuadCoefTwo            ! Term under radical in quadratic solution
+       REAL(r64) :: Slope                  ! Slope for linear fit
+       REAL(r64) :: SurfAreaFracOther      ! Intermediate Value of Surf Area
        Integer :: mode                ! Linear/ perturbation option
 
         ! Convergence Check  by comparing previous and current value of surf area fraction
@@ -5772,7 +5772,7 @@ Subroutine CoilAreaFracIter(NewSurfAreaWetFrac, SurfAreaFracCurrent,ErrorCurrent
 
         ! FirstGuess Set of Points provided by perturbation
         IF (ABS(SurfAreaFracCurrent) .GT. SmallNum) THEN
-          NewSurfAreaWetFrac = SurfAreaFracCurrent*(1.+PerturbSurfAreaFrac)
+          NewSurfAreaWetFrac = SurfAreaFracCurrent*(1.d0+PerturbSurfAreaFrac)
         ELSE
           NewSurfAreaWetFrac = PerturbSurfAreaFrac
         ENDIF
@@ -5821,8 +5821,8 @@ Subroutine CoilAreaFracIter(NewSurfAreaWetFrac, SurfAreaFracCurrent,ErrorCurrent
         ! Calculating Third Coefficients for Quadratic Curve Fit
         QuadCoefOne=ErrorCurrent-(QuadCoefTwo+QuadCoefThree*SurfAreaFracCurrent)*SurfAreaFracCurrent
 
-        ! Check for validity of coefficients , if not REAL ,Then fit is linear
-        IF (ABS(QuadCoefThree) .LT. 1.*10**-10) THEN    !RS: Debugging: 102612
+        ! Check for validity of coefficients , if not REAL(r64) ,Then fit is linear
+        IF (ABS(QuadCoefThree) .LT. 1.D-10) THEN
           mode=2  ! going to Linear mode, due to colinear points.
           GO TO 10
         ENDIF
@@ -5830,13 +5830,13 @@ Subroutine CoilAreaFracIter(NewSurfAreaWetFrac, SurfAreaFracCurrent,ErrorCurrent
         ! If value of Quadratic coefficients not suitable enought due to round off errors
         ! to predict new point go to linear fit and acertain new values for the coefficients.
         IF (ABS((QuadCoefOne+(QuadCoefTwo+QuadCoefThree*SurfAreaFracPrevious)* &
-                  SurfAreaFracPrevious-ErrorPrevious)/ErrorPrevious) .GT. 1.*10**-4) THEN
+                  SurfAreaFracPrevious-ErrorPrevious)/ErrorPrevious) .GT. 1.D-4) THEN
            mode=2 ! go to linear mode
            GO TO 10
         ENDIF
 
         ! Validity Check for Imaginary roots, In this case go back to linear fit.
-        check=QuadCoefTwo**2-4.0*QuadCoefOne*QuadCoefThree
+        check=QuadCoefTwo**2-4.0d0*QuadCoefOne*QuadCoefThree
         ! Imaginary Root Exist
         IF (check .LT. 0) THEN
            mode=2
@@ -5916,7 +5916,7 @@ SUBROUTINE CheckWaterCoilSchedule(CompType,CompName,Value,CompIndex)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: CompType !unused1208
   CHARACTER(len=*), INTENT(IN) :: CompName
-  REAL, INTENT(OUT)            :: Value
+  REAL(r64), INTENT(OUT)            :: Value
   INTEGER, INTENT(INOUT)       :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -5994,7 +5994,7 @@ FUNCTION GetCoilMaxWaterFlowRate(CoilType,CoilName,ErrorsFound) RESULT(MaxWaterF
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
+  REAL(r64)                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -6032,7 +6032,7 @@ FUNCTION GetCoilMaxWaterFlowRate(CoilType,CoilName,ErrorsFound) RESULT(MaxWaterF
                          '" Name="'//TRIM(CoilName)//'"')
     CALL ShowContinueError('... Max Water Flow rate returned as -1000.')
     ErrorsFound=.true.
-    MaxWaterFlowRate=-1000.
+    MaxWaterFlowRate=-1000.d0
   ENDIF
 
   RETURN
@@ -6352,7 +6352,7 @@ SUBROUTINE SetCoilDesFlow(CoilType,CoilName,CoilDesFlow, ErrorsFound)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL, INTENT(IN)        :: CoilDesFlow  ! coil volumetric air flow rate [m3/s]
+  REAL(r64), INTENT(IN)        :: CoilDesFlow  ! coil volumetric air flow rate [m3/s]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6476,15 +6476,15 @@ FUNCTION TdbFnHRhPb(H,RH,PB) RESULT(T)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
             ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, intent(in) :: H      ! specific enthalpy {J/kg}
-  REAL, intent(in) :: RH     ! relative humidity value (0.0-1.0)
-  REAL, intent(in) :: PB     ! barometric pressure {Pascals}
-  REAL        :: T      ! result=> humidity ratio
+  REAL(r64), intent(in) :: H      ! specific enthalpy {J/kg}
+  REAL(r64), intent(in) :: RH     ! relative humidity value (0.0-1.0)
+  REAL(r64), intent(in) :: PB     ! barometric pressure {Pascals}
+  REAL(r64)        :: T      ! result=> humidity ratio
 
           ! FUNCTION PARAMETER DEFINITIONS:
   INTEGER, PARAMETER           :: itmax =10
   INTEGER, PARAMETER           :: MaxIte = 500        ! Maximum number of iterations
-  REAL, PARAMETER         :: Acc =  1.0       ! Accuracy of result
+  REAL(r64), PARAMETER         :: Acc =  1.0d0       ! Accuracy of result
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -6494,15 +6494,15 @@ FUNCTION TdbFnHRhPb(H,RH,PB) RESULT(T)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER                  :: SolFla             ! Flag of solver
-  REAL                :: T0                 ! lower bound for Tprov [C]
-  REAL                :: T1                 ! upper bound for Tprov [C]
-  REAL                :: Tprov =0.0         ! provisional value of drybulb temperature [C]
-  REAL, DIMENSION(3)  :: Par                ! Par(1) = desired enthaply H [J/kg]
+  REAL(r64)                :: T0                 ! lower bound for Tprov [C]
+  REAL(r64)                :: T1                 ! upper bound for Tprov [C]
+  REAL(r64)                :: Tprov =0.0         ! provisional value of drybulb temperature [C]
+  REAL(r64), DIMENSION(3)  :: Par                ! Par(1) = desired enthaply H [J/kg]
                                                  ! Par(2) = desired relative humidity (0.0 - 1.0)
                                                  ! Par(3) = barometric pressure [N/m2 (Pascals)]
 
-  T0 = 1.0
-  T1 = 50.0
+  T0 = 1.0d0
+  T1 = 50.0d0
   Par(1) = H
   Par(2) = Rh
   Par(3) = Pb
@@ -6549,11 +6549,11 @@ FUNCTION EnthalpyResidual(Tprov, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)  :: Tprov                      ! test value of Tdb [C]
-  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = desired enthaply H [J/kg]
+  REAL(r64), INTENT(IN)  :: Tprov                      ! test value of Tdb [C]
+  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = desired enthaply H [J/kg]
                                                        ! Par(2) = desired relative humidity (0.0 - 1.0)
                                                        ! Par(3) = barometric pressure [N/m2 (Pascals)]
-  REAL         :: Residuum ! residual to be minimized to zero
+  REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -6603,12 +6603,12 @@ FUNCTION EstimateHEXSurfaceArea(CoilNum) RESULT(SurfaceArea)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)    :: CoilNum         ! coil number, [-]
-  REAL              :: SurfaceArea     ! Heat exchanger surface area, [m2]
+  REAL(r64)              :: SurfaceArea     ! Heat exchanger surface area, [m2]
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: OverallFinEfficiency = 0.92  ! Assumes aluminum fins, 12 fins per inch, fins
+  REAL(r64), PARAMETER :: OverallFinEfficiency = 0.92d0  ! Assumes aluminum fins, 12 fins per inch, fins
                                                          ! area of about 90% of external surface area Ao.
-  REAL, PARAMETER :: AreaRatio = 0.07       ! Heat exchanger Inside to Outside surface area ratio
+  REAL(r64), PARAMETER :: AreaRatio = 0.07d0       ! Heat exchanger Inside to Outside surface area ratio
                                                    ! design values range from (Ai/Ao) = 0.06 to 0.08
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -6618,27 +6618,27 @@ FUNCTION EstimateHEXSurfaceArea(CoilNum) RESULT(SurfaceArea)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: UOverallHeatTransferCoef      ! over all heat transfer coefficient for coil [W/m2C]
-  REAL :: hAirTubeOutside               ! Air side heat transfer coefficient [W/m2C]
-  REAL :: hWaterTubeInside              ! water (tube) side heat transfer coefficient [W/m2C]
+  REAL(r64) :: UOverallHeatTransferCoef      ! over all heat transfer coefficient for coil [W/m2C]
+  REAL(r64) :: hAirTubeOutside               ! Air side heat transfer coefficient [W/m2C]
+  REAL(r64) :: hWaterTubeInside              ! water (tube) side heat transfer coefficient [W/m2C]
 
-  WaterCoil(CoilNum)%UACoilTotal = 1./(1./WaterCoil(CoilNum)%UACoilExternal &
-                                 + 1./WaterCoil(CoilNum)%UACoilInternal)
+  WaterCoil(CoilNum)%UACoilTotal = 1.d0/(1.d0/WaterCoil(CoilNum)%UACoilExternal &
+                                 + 1.d0/WaterCoil(CoilNum)%UACoilInternal)
 
       ! Tube side water convection heat transfer coefficient of the cooling coil is calculated for
       ! inside tube diameter of 0.0122m (~0.5 inch nominal diameter) and water velocity 2.0 m/s:
-  hWaterTubeInside = 1429.*(2.**0.8)*(0.0122**(-0.2))
+  hWaterTubeInside = 1429.d0*(2.d0**0.8d0)*(0.0122d0**(-0.2d0))
 
       ! Constant value air side heat transfer coefficient is assumed. This coefficient has sensible
-      ! (58. [W/m2C]) and latent (82. [W/m2C]) heat transfer coefficient components.
-  hAirTubeOutside = 58. + 82.
+      ! (58.d0 [W/m2C]) and latent (82.d0 [W/m2C]) heat transfer coefficient components.
+  hAirTubeOutside = 58.d0 + 82.d0
 
       ! Estimate the overall heat transfer coefficient, UOverallHeatTransferCoef in [W/(m2C)].
       ! Neglecting tube wall and fouling resistance, the overall U value can be estimated as:
       ! 1/UOverallHeatTransferCoef = 1/(hi*AreaRatio) + 1/(ho*OverallFinEfficiency)
 
-  UOverallHeatTransferCoef = 1./(1./(hWaterTubeInside*AreaRatio) &
-                           + 1./(hAirTubeOutside*OverallFinEfficiency))
+  UOverallHeatTransferCoef = 1.d0/(1.d0/(hWaterTubeInside*AreaRatio) &
+                           + 1.d0/(hAirTubeOutside*OverallFinEfficiency))
 
       ! the heat exchanger surface area is calculated as follows:
   SurfaceArea=WaterCoil(CoilNum)%UACoilTotal/UOverallHeatTransferCoef

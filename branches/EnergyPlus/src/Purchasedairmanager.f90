@@ -78,7 +78,7 @@ PRIVATE ! Everything private unless explicitly made public
     INTEGER, PARAMETER :: Deadband                  = 3
   ! Delta humidity ratio limit, 0.00025 equals delta between 45F dewpoint and 46F dewpoint
   ! used to prevent dividing by near zero
-    REAL, PARAMETER :: SmallDeltaHumRat = 0.00025
+    REAL(r64), PARAMETER :: SmallDeltaHumRat = 0.00025
 
   ! DERIVED TYPE DEFINITIONS:
     TYPE ZonePurchasedAir
@@ -90,25 +90,25 @@ PRIVATE ! Everything private unless explicitly made public
       INTEGER   :: ZoneExhaustAirNodeNum   = 0          ! Node number of zone exhaust air node for purchased air
       INTEGER   :: ZoneRecircAirNodeNum    = 0          ! Node number of recirculation air node for purchased air
                                                         !   same as exhaust node if specified, otherwise zone return node
-      REAL :: MaxHeatSuppAirTemp      = 0.0      ! Maximum supply air temperature for heating [C]
-      REAL :: MinCoolSuppAirTemp      = 0.0      ! Minimum supply air temperature for cooling [C]
-      REAL :: MaxHeatSuppAirHumRat    = 0.0      ! Maximum supply heating air humidity ratio [kg water/kg dry air]
-      REAL :: MinCoolSuppAirHumRat    = 0.0      ! Minimum supply cooling air humidity ratio [kg water/kg dry air]
+      REAL(r64) :: MaxHeatSuppAirTemp      = 0.0d0      ! Maximum supply air temperature for heating [C]
+      REAL(r64) :: MinCoolSuppAirTemp      = 0.0d0      ! Minimum supply air temperature for cooling [C]
+      REAL(r64) :: MaxHeatSuppAirHumRat    = 0.0d0      ! Maximum supply heating air humidity ratio [kg water/kg dry air]
+      REAL(r64) :: MinCoolSuppAirHumRat    = 0.0d0      ! Minimum supply cooling air humidity ratio [kg water/kg dry air]
       INTEGER   :: HeatingLimit            = 0          ! Heating capacity limit type - NoLimit, LimitFlowRate, LimitCapacity,
                                                         !       or LimitFlowRateAndCapacity
-      REAL :: MaxHeatVolFlowRate      = 0.0      ! Maximum heating supply air flow[m3/s]
-      REAL :: MaxHeatSensCap          = 0.0      ! Maximum heating sensible capacity [W]
+      REAL(r64) :: MaxHeatVolFlowRate      = 0.0d0      ! Maximum heating supply air flow[m3/s]
+      REAL(r64) :: MaxHeatSensCap          = 0.0d0      ! Maximum heating sensible capacity [W]
       INTEGER   :: CoolingLimit            = 0          ! Cooling capacity limit type - NoLimit, LimitFlowRate, LimitCapacity,
                                                         !       or LimitFlowRateAndCapacity
-      REAL :: MaxCoolVolFlowRate      = 0.0      ! Maximum cooling supply air flow [m3/s]
-      REAL :: MaxCoolTotCap           = 0.0      ! Maximum cooling total capacity [W]
+      REAL(r64) :: MaxCoolVolFlowRate      = 0.0d0      ! Maximum cooling supply air flow [m3/s]
+      REAL(r64) :: MaxCoolTotCap           = 0.0d0      ! Maximum cooling total capacity [W]
       CHARACTER(len=MaxNameLength) :: HeatSched   = ' ' ! Heating availablity schedule
       INTEGER   :: HeatSchedPtr            = 0          ! Index to heating availability schedule
       CHARACTER(len=MaxNameLength) :: CoolSched   = ' ' ! Cooling availability schedule
       INTEGER   :: CoolSchedPtr            = 0          ! Index to the cooling availability schedule
       INTEGER   :: DehumidCtrlType         = 0          ! Dehumidification control type - ConstantSensibleHeatRatio,
                                                         !      Humidistat, or ConstantSupplyHumidityRatio
-      REAL :: CoolSHR                 = 0.0      ! Cooling sensible heat ratio
+      REAL(r64) :: CoolSHR                 = 0.0d0      ! Cooling sensible heat ratio
       INTEGER   :: HumidCtrlType           = 0          ! Humidification control type - None,
                                                         !      Humidistat, or ConstantSupplyHumidityRatio
       INTEGER   :: OARequirementsPtr       = 0          ! Index to DesignSpecification:OutdoorAir object
@@ -119,39 +119,39 @@ PRIVATE ! Everything private unless explicitly made public
       LOGICAL   :: OutdoorAir              = .false.    ! Is there outdoor air?
       INTEGER   :: OutdoorAirNodeNum       = 0          ! Node number of the outdoor air inlet node
       INTEGER   :: HtRecType               = 0          ! Outdoor air heat recovery type - None, Sensible, Enthalpy
-      REAL :: HtRecSenEff             = 0.0      ! Sensible heat recovery effectiveness
-      REAL :: HtRecLatEff             = 0.0      ! Latent heat recovery effectiveness
+      REAL(r64) :: HtRecSenEff             = 0.0d0      ! Sensible heat recovery effectiveness
+      REAL(r64) :: HtRecLatEff             = 0.0d0      ! Latent heat recovery effectiveness
 
-      REAL :: ZoneFloorArea           = 0.0      ! Zone floor area to use for OA calculations
+      REAL(r64) :: ZoneFloorArea           = 0.0d0      ! Zone floor area to use for OA calculations
       INTEGER   :: ZoneOutdoorAirMethod    = 0          ! Outdoor air method
-      REAL :: OAFlowPerPerson         = 0.0      ! OA per person [m3/s-person]
-      REAL :: OAFlowPerArea           = 0.0      ! OA per zone area [m3/s-m2]
-      REAL :: OAFlowPerZone           = 0.0      ! OA per zone [m3/s]
-      REAL :: OAFlowACH               = 0.0      ! Terminal unit requirement for ACH (air changes per hour)
+      REAL(r64) :: OAFlowPerPerson         = 0.0d0      ! OA per person [m3/s-person]
+      REAL(r64) :: OAFlowPerArea           = 0.0d0      ! OA per zone area [m3/s-m2]
+      REAL(r64) :: OAFlowPerZone           = 0.0d0      ! OA per zone [m3/s]
+      REAL(r64) :: OAFlowACH               = 0.0d0      ! Terminal unit requirement for ACH (air changes per hour)
                                                         !   [m3/s - set in GetInput]
       INTEGER   :: OAFlowFracSchPtr        = 0          ! Fraction schedule applied to total OA requirement
 
-      REAL :: MaxHeatMassFlowRate     = 0.0      ! The maximum heating air mass flow rate [kg/s]
-      REAL :: MaxCoolMassFlowRate     = 0.0      ! The maximum cooling air mass flow rate [kg/s]
+      REAL(r64) :: MaxHeatMassFlowRate     = 0.0d0      ! The maximum heating air mass flow rate [kg/s]
+      REAL(r64) :: MaxCoolMassFlowRate     = 0.0d0      ! The maximum cooling air mass flow rate [kg/s]
       LOGICAL   :: EMSOverrideMdotOn       = .FALSE.    ! if true, then EMS is calling to override supply mass flow rate
-      REAL :: EMSValueMassFlowRate    = 0.0      ! Value EMS is directing to use for supply mass flow rate [kg/s]
+      REAL(r64) :: EMSValueMassFlowRate    = 0.0d0      ! Value EMS is directing to use for supply mass flow rate [kg/s]
       LOGICAL   :: EMSOverrideOAMdotOn     = .FALSE.    ! if true, then EMS is calling to override OA mass flow rate
-      REAL :: EMSValueOAMassFlowRate  = 0.0      ! Value EMS is directing to use for OA mass flow rate [kg/s]
+      REAL(r64) :: EMSValueOAMassFlowRate  = 0.0d0      ! Value EMS is directing to use for OA mass flow rate [kg/s]
       LOGICAL   :: EMSOverrideSupplyTempOn = .FALSE.    ! if true, then EMS is calling to override supply temperature
-      REAL :: EMSValueSupplyTemp      = 0.0      ! Value EMS is directing to use for supply temperature [C]
+      REAL(r64) :: EMSValueSupplyTemp      = 0.0d0      ! Value EMS is directing to use for supply temperature [C]
       LOGICAL   :: EMSOverrideSupplyHumRatOn = .FALSE.  ! if true, then EMS is calling to override supply humidity ratio
-      REAL :: EMSValueSupplyHumRat    = 0.0      ! Value EMS is directing to use for supply humidity ratio [kg-H2O/kg-dryair]
-      REAL :: MinOAMassFlowRate       = 0.0      ! The minimum required outdoor air mass flow rate [kg/s]
-      REAL :: OutdoorAirMassFlowRate  = 0.0      ! The outdoor air mass flow rate [kg/s]
+      REAL(r64) :: EMSValueSupplyHumRat    = 0.0d0      ! Value EMS is directing to use for supply humidity ratio [kg-H2O/kg-dryair]
+      REAL(r64) :: MinOAMassFlowRate       = 0.0d0      ! The minimum required outdoor air mass flow rate [kg/s]
+      REAL(r64) :: OutdoorAirMassFlowRate  = 0.0d0      ! The outdoor air mass flow rate [kg/s]
       ! Intermediate results
-      REAL :: HtRecSenOutput           = 0.0      ! Sensible heating/cooling rate from heat recovery (<0 means cooling) [W]
-      REAL :: HtRecLatOutput           = 0.0      ! Latent heating/cooling rate from heat recovery (<0 means cooling or dehumidfying) [W]
-      REAL :: OASenOutput              = 0.0      ! Outdoor air sensible output relative to zone conditions [W], <0 means OA is cooler than zone air
-      REAL :: OALatOutput              = 0.0      ! Outdoor air latent output relative to zone conditions [W], <0 means OA is drier than zone air
-      REAL :: SenOutputToZone          = 0.0      ! Ideal Loads System sensible output to zone [W], <0 means supply is cooler than zone air
-      REAL :: LatOutputToZone          = 0.0      ! Ideal Loads System latent heat output to zone [W], <0 means supply is drier than zone air
-      REAL :: SenCoilLoad              = 0.0      ! Ideal Loads System sensible load on "coils" (<0 means cooling) [W]
-      REAL :: LatCoilLoad              = 0.0      ! Ideal Loads System latent load on "coils" (<0 means cooling or dehumidfying) [W]
+      REAL(r64) :: HtRecSenOutput           = 0.0d0      ! Sensible heating/cooling rate from heat recovery (<0 means cooling) [W]
+      REAL(r64) :: HtRecLatOutput           = 0.0d0      ! Latent heating/cooling rate from heat recovery (<0 means cooling or dehumidfying) [W]
+      REAL(r64) :: OASenOutput              = 0.0d0      ! Outdoor air sensible output relative to zone conditions [W], <0 means OA is cooler than zone air
+      REAL(r64) :: OALatOutput              = 0.0d0      ! Outdoor air latent output relative to zone conditions [W], <0 means OA is drier than zone air
+      REAL(r64) :: SenOutputToZone          = 0.0d0      ! Ideal Loads System sensible output to zone [W], <0 means supply is cooler than zone air
+      REAL(r64) :: LatOutputToZone          = 0.0d0      ! Ideal Loads System latent heat output to zone [W], <0 means supply is drier than zone air
+      REAL(r64) :: SenCoilLoad              = 0.0d0      ! Ideal Loads System sensible load on "coils" (<0 means cooling) [W]
+      REAL(r64) :: LatCoilLoad              = 0.0d0      ! Ideal Loads System latent load on "coils" (<0 means cooling or dehumidfying) [W]
       INTEGER   :: OAFlowMaxCoolOutputError = 0          ! Counter for OAFlow > Max Cooling Flow error
       INTEGER   :: OAFlowMaxHeatOutputError = 0          ! Counter for OAFlow > Max Heating Flow error
       INTEGER   :: SaturationOutputError    = 0          ! Counter for OAFlow > Max Heating Flow error
@@ -160,56 +160,56 @@ PRIVATE ! Everything private unless explicitly made public
       INTEGER   :: SaturationOutputIndex    = 0          ! Recurring warning index for OAFlow > Max Heating Flow error
 
       ! Output variables
-      REAL :: SenHeatEnergy           = 0.0      ! Sensible heating energy consumed [J]
-      REAL :: LatHeatEnergy           = 0.0      ! Latent   heating energy consumed [J]
-      REAL :: TotHeatEnergy           = 0.0      ! Total    heating energy consumed [J]
-      REAL :: SenCoolEnergy           = 0.0      ! Sensible cooling energy consumed [J]
-      REAL :: LatCoolEnergy           = 0.0      ! Latent   cooling energy consumed [J]
-      REAL :: TotCoolEnergy           = 0.0      ! Total    cooling energy consumed [J]
-      REAL :: ZoneSenHeatEnergy       = 0.0      ! Sensible heating energy supplied to the zone [J]
-      REAL :: ZoneLatHeatEnergy       = 0.0      ! Latent   heating energy supplied to the zone [J]
-      REAL :: ZoneTotHeatEnergy       = 0.0      ! Total    heating energy supplied to the zone [J]
-      REAL :: ZoneSenCoolEnergy       = 0.0      ! Sensible cooling energy supplied to the zone [J]
-      REAL :: ZoneLatCoolEnergy       = 0.0      ! Latent   cooling energy supplied to the zone [J]
-      REAL :: ZoneTotCoolEnergy       = 0.0      ! Total    cooling energy supplied to the zone [J]
-      REAL :: OASenHeatEnergy         = 0.0      ! Sensible heating energy required for OA to equal zone air [J]
-      REAL :: OALatHeatEnergy         = 0.0      ! Latent   heating energy required for OA to equal zone air [J]
-      REAL :: OATotHeatEnergy         = 0.0      ! Total    heating energy required for OA to equal zone air [J]
-      REAL :: OASenCoolEnergy         = 0.0      ! Sensible cooling energy required for OA to equal zone air [J]
-      REAL :: OALatCoolEnergy         = 0.0      ! Latent   cooling energy required for OA to equal zone air [J]
-      REAL :: OATotCoolEnergy         = 0.0      ! Total    cooling energy required for OA to equal zone air [J]
-      REAL :: HtRecSenHeatEnergy      = 0.0      ! Sensible heating energy from heat reocovery [J]
-      REAL :: HtRecLatHeatEnergy      = 0.0      ! Latent   heating energy from heat reocovery [J]
-      REAL :: HtRecTotHeatEnergy      = 0.0      ! Total    heating energy from heat reocovery [J]
-      REAL :: HtRecSenCoolEnergy      = 0.0      ! Sensible cooling energy from heat reocovery [J]
-      REAL :: HtRecLatCoolEnergy      = 0.0      ! Latent   cooling energy from heat reocovery [J]
-      REAL :: HtRecTotCoolEnergy      = 0.0      ! Total    cooling energy from heat reocovery [J]
-      REAL :: SenHeatRate             = 0.0      ! Sensible heating rate consumed [W]
-      REAL :: LatHeatRate             = 0.0      ! Latent   heating rate consumed [W]
-      REAL :: TotHeatRate             = 0.0      ! Total    heating rate consumed [W]
-      REAL :: SenCoolRate             = 0.0      ! Sensible cooling rate consumed [W]
-      REAL :: LatCoolRate             = 0.0      ! Latent   cooling rate consumed [W]
-      REAL :: TotCoolRate             = 0.0      ! Total    cooling rate consumed [W]
-      REAL :: ZoneSenHeatRate         = 0.0      ! Sensible heating rate supplied to the zone [W]
-      REAL :: ZoneLatHeatRate         = 0.0      ! Latent   heating rate supplied to the zone [W]
-      REAL :: ZoneTotHeatRate         = 0.0      ! Total    heating rate supplied to the zone [W]
-      REAL :: ZoneSenCoolRate         = 0.0      ! Sensible cooling rate supplied to the zone [W]
-      REAL :: ZoneLatCoolRate         = 0.0      ! Latent   cooling rate supplied to the zone [W]
-      REAL :: ZoneTotCoolRate         = 0.0      ! Total    cooling rate supplied to the zone [W]
-      REAL :: OASenHeatRate           = 0.0      ! Sensible heating rate required for OA to equal zone air [W]
-      REAL :: OALatHeatRate           = 0.0      ! Latent   heating rate required for OA to equal zone air [W]
-      REAL :: OATotHeatRate           = 0.0      ! Total    heating rate required for OA to equal zone air [W]
-      REAL :: OASenCoolRate           = 0.0      ! Sensible cooling rate required for OA to equal zone air [W]
-      REAL :: OALatCoolRate           = 0.0      ! Latent   cooling rate required for OA to equal zone air [W]
-      REAL :: OATotCoolRate           = 0.0      ! Total    cooling rate required for OA to equal zone air [W]
-      REAL :: HtRecSenHeatRate        = 0.0      ! Sensible heating rate from heat reocovery [W]
-      REAL :: HtRecLatHeatRate        = 0.0      ! Latent   heating rate from heat reocovery [W]
-      REAL :: HtRecTotHeatRate        = 0.0      ! Total    heating rate from heat reocovery [W]
-      REAL :: HtRecSenCoolRate        = 0.0      ! Sensible cooling rate from heat reocovery [W]
-      REAL :: HtRecLatCoolRate        = 0.0      ! Latent   cooling rate from heat reocovery [W]
-      REAL :: HtRecTotCoolRate        = 0.0      ! Total    cooling rate from heat reocovery [W]
-      REAL :: TimeEconoActive         = 0.0      ! Time economizer is active [hrs]
-      REAL :: TimeHtRecActive         = 0.0      ! Time heat reocovery is active [hrs]
+      REAL(r64) :: SenHeatEnergy           = 0.0d0      ! Sensible heating energy consumed [J]
+      REAL(r64) :: LatHeatEnergy           = 0.0d0      ! Latent   heating energy consumed [J]
+      REAL(r64) :: TotHeatEnergy           = 0.0d0      ! Total    heating energy consumed [J]
+      REAL(r64) :: SenCoolEnergy           = 0.0d0      ! Sensible cooling energy consumed [J]
+      REAL(r64) :: LatCoolEnergy           = 0.0d0      ! Latent   cooling energy consumed [J]
+      REAL(r64) :: TotCoolEnergy           = 0.0d0      ! Total    cooling energy consumed [J]
+      REAL(r64) :: ZoneSenHeatEnergy       = 0.0d0      ! Sensible heating energy supplied to the zone [J]
+      REAL(r64) :: ZoneLatHeatEnergy       = 0.0d0      ! Latent   heating energy supplied to the zone [J]
+      REAL(r64) :: ZoneTotHeatEnergy       = 0.0d0      ! Total    heating energy supplied to the zone [J]
+      REAL(r64) :: ZoneSenCoolEnergy       = 0.0d0      ! Sensible cooling energy supplied to the zone [J]
+      REAL(r64) :: ZoneLatCoolEnergy       = 0.0d0      ! Latent   cooling energy supplied to the zone [J]
+      REAL(r64) :: ZoneTotCoolEnergy       = 0.0d0      ! Total    cooling energy supplied to the zone [J]
+      REAL(r64) :: OASenHeatEnergy         = 0.0d0      ! Sensible heating energy required for OA to equal zone air [J]
+      REAL(r64) :: OALatHeatEnergy         = 0.0d0      ! Latent   heating energy required for OA to equal zone air [J]
+      REAL(r64) :: OATotHeatEnergy         = 0.0d0      ! Total    heating energy required for OA to equal zone air [J]
+      REAL(r64) :: OASenCoolEnergy         = 0.0d0      ! Sensible cooling energy required for OA to equal zone air [J]
+      REAL(r64) :: OALatCoolEnergy         = 0.0d0      ! Latent   cooling energy required for OA to equal zone air [J]
+      REAL(r64) :: OATotCoolEnergy         = 0.0d0      ! Total    cooling energy required for OA to equal zone air [J]
+      REAL(r64) :: HtRecSenHeatEnergy      = 0.0d0      ! Sensible heating energy from heat reocovery [J]
+      REAL(r64) :: HtRecLatHeatEnergy      = 0.0d0      ! Latent   heating energy from heat reocovery [J]
+      REAL(r64) :: HtRecTotHeatEnergy      = 0.0d0      ! Total    heating energy from heat reocovery [J]
+      REAL(r64) :: HtRecSenCoolEnergy      = 0.0d0      ! Sensible cooling energy from heat reocovery [J]
+      REAL(r64) :: HtRecLatCoolEnergy      = 0.0d0      ! Latent   cooling energy from heat reocovery [J]
+      REAL(r64) :: HtRecTotCoolEnergy      = 0.0d0      ! Total    cooling energy from heat reocovery [J]
+      REAL(r64) :: SenHeatRate             = 0.0d0      ! Sensible heating rate consumed [W]
+      REAL(r64) :: LatHeatRate             = 0.0d0      ! Latent   heating rate consumed [W]
+      REAL(r64) :: TotHeatRate             = 0.0d0      ! Total    heating rate consumed [W]
+      REAL(r64) :: SenCoolRate             = 0.0d0      ! Sensible cooling rate consumed [W]
+      REAL(r64) :: LatCoolRate             = 0.0d0      ! Latent   cooling rate consumed [W]
+      REAL(r64) :: TotCoolRate             = 0.0d0      ! Total    cooling rate consumed [W]
+      REAL(r64) :: ZoneSenHeatRate         = 0.0d0      ! Sensible heating rate supplied to the zone [W]
+      REAL(r64) :: ZoneLatHeatRate         = 0.0d0      ! Latent   heating rate supplied to the zone [W]
+      REAL(r64) :: ZoneTotHeatRate         = 0.0d0      ! Total    heating rate supplied to the zone [W]
+      REAL(r64) :: ZoneSenCoolRate         = 0.0d0      ! Sensible cooling rate supplied to the zone [W]
+      REAL(r64) :: ZoneLatCoolRate         = 0.0d0      ! Latent   cooling rate supplied to the zone [W]
+      REAL(r64) :: ZoneTotCoolRate         = 0.0d0      ! Total    cooling rate supplied to the zone [W]
+      REAL(r64) :: OASenHeatRate           = 0.0d0      ! Sensible heating rate required for OA to equal zone air [W]
+      REAL(r64) :: OALatHeatRate           = 0.0d0      ! Latent   heating rate required for OA to equal zone air [W]
+      REAL(r64) :: OATotHeatRate           = 0.0d0      ! Total    heating rate required for OA to equal zone air [W]
+      REAL(r64) :: OASenCoolRate           = 0.0d0      ! Sensible cooling rate required for OA to equal zone air [W]
+      REAL(r64) :: OALatCoolRate           = 0.0d0      ! Latent   cooling rate required for OA to equal zone air [W]
+      REAL(r64) :: OATotCoolRate           = 0.0d0      ! Total    cooling rate required for OA to equal zone air [W]
+      REAL(r64) :: HtRecSenHeatRate        = 0.0d0      ! Sensible heating rate from heat reocovery [W]
+      REAL(r64) :: HtRecLatHeatRate        = 0.0d0      ! Latent   heating rate from heat reocovery [W]
+      REAL(r64) :: HtRecTotHeatRate        = 0.0d0      ! Total    heating rate from heat reocovery [W]
+      REAL(r64) :: HtRecSenCoolRate        = 0.0d0      ! Sensible cooling rate from heat reocovery [W]
+      REAL(r64) :: HtRecLatCoolRate        = 0.0d0      ! Latent   cooling rate from heat reocovery [W]
+      REAL(r64) :: HtRecTotCoolRate        = 0.0d0      ! Total    cooling rate from heat reocovery [W]
+      REAL(r64) :: TimeEconoActive         = 0.0d0      ! Time economizer is active [hrs]
+      REAL(r64) :: TimeHtRecActive         = 0.0d0      ! Time heat reocovery is active [hrs]
     END TYPE ZonePurchasedAir
 
 
@@ -261,8 +261,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       CHARACTER(len=*), INTENT(IN) :: PurchAirName
-      REAL, INTENT(INOUT) :: SysOutputProvided
-      REAL, INTENT(OUT)   :: MoistOutputProvided ! Moisture output provided (kg/s), dehumidification = negative
+      REAL(r64), INTENT(INOUT) :: SysOutputProvided
+      REAL(r64), INTENT(OUT)   :: MoistOutputProvided ! Moisture output provided (kg/s), dehumidification = negative
       LOGICAL, INTENT(IN) :: FirstHVACIteration
       INTEGER, INTENT(IN) :: ControlledZoneNum
       INTEGER, INTENT(IN) :: ActualZoneNum
@@ -641,56 +641,56 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
 
            ! initialize the calculated and report values
-          PurchAir(PurchAirNum)%MaxHeatMassFlowRate  = 0.0
-          PurchAir(PurchAirNum)%MaxCoolMassFlowRate  = 0.0
-          PurchAir(PurchAirNum)%SenHeatEnergy        = 0.0
-          PurchAir(PurchAirNum)%LatHeatEnergy        = 0.0
-          PurchAir(PurchAirNum)%TotHeatEnergy        = 0.0
-          PurchAir(PurchAirNum)%SenCoolEnergy        = 0.0
-          PurchAir(PurchAirNum)%LatCoolEnergy        = 0.0
-          PurchAir(PurchAirNum)%TotCoolEnergy        = 0.0
-          PurchAir(PurchAirNum)%ZoneSenHeatEnergy    = 0.0
-          PurchAir(PurchAirNum)%ZoneLatHeatEnergy    = 0.0
-          PurchAir(PurchAirNum)%ZoneTotHeatEnergy    = 0.0
-          PurchAir(PurchAirNum)%ZoneSenCoolEnergy    = 0.0
-          PurchAir(PurchAirNum)%ZoneLatCoolEnergy    = 0.0
-          PurchAir(PurchAirNum)%ZoneTotCoolEnergy    = 0.0
-          PurchAir(PurchAirNum)%OASenHeatEnergy      = 0.0
-          PurchAir(PurchAirNum)%OALatHeatEnergy      = 0.0
-          PurchAir(PurchAirNum)%OATotHeatEnergy      = 0.0
-          PurchAir(PurchAirNum)%OASenCoolEnergy      = 0.0
-          PurchAir(PurchAirNum)%OALatCoolEnergy      = 0.0
-          PurchAir(PurchAirNum)%OATotCoolEnergy      = 0.0
-          PurchAir(PurchAirNum)%HtRecSenHeatEnergy   = 0.0
-          PurchAir(PurchAirNum)%HtRecLatHeatEnergy   = 0.0
-          PurchAir(PurchAirNum)%HtRecTotHeatEnergy   = 0.0
-          PurchAir(PurchAirNum)%HtRecSenCoolEnergy   = 0.0
-          PurchAir(PurchAirNum)%HtRecLatCoolEnergy   = 0.0
-          PurchAir(PurchAirNum)%HtRecTotCoolEnergy   = 0.0
-          PurchAir(PurchAirNum)%SenHeatRate          = 0.0
-          PurchAir(PurchAirNum)%LatHeatRate          = 0.0
-          PurchAir(PurchAirNum)%TotHeatRate          = 0.0
-          PurchAir(PurchAirNum)%SenCoolRate          = 0.0
-          PurchAir(PurchAirNum)%LatCoolRate          = 0.0
-          PurchAir(PurchAirNum)%TotCoolRate          = 0.0
-          PurchAir(PurchAirNum)%ZoneSenHeatRate      = 0.0
-          PurchAir(PurchAirNum)%ZoneLatHeatRate      = 0.0
-          PurchAir(PurchAirNum)%ZoneTotHeatRate      = 0.0
-          PurchAir(PurchAirNum)%ZoneSenCoolRate      = 0.0
-          PurchAir(PurchAirNum)%ZoneLatCoolRate      = 0.0
-          PurchAir(PurchAirNum)%ZoneTotCoolRate      = 0.0
-          PurchAir(PurchAirNum)%OASenHeatRate        = 0.0
-          PurchAir(PurchAirNum)%OALatHeatRate        = 0.0
-          PurchAir(PurchAirNum)%OATotHeatRate        = 0.0
-          PurchAir(PurchAirNum)%OASenCoolRate        = 0.0
-          PurchAir(PurchAirNum)%OALatCoolRate        = 0.0
-          PurchAir(PurchAirNum)%OATotCoolRate        = 0.0
-          PurchAir(PurchAirNum)%HtRecSenHeatRate     = 0.0
-          PurchAir(PurchAirNum)%HtRecLatHeatRate     = 0.0
-          PurchAir(PurchAirNum)%HtRecTotHeatRate     = 0.0
-          PurchAir(PurchAirNum)%HtRecSenCoolRate     = 0.0
-          PurchAir(PurchAirNum)%HtRecLatCoolRate     = 0.0
-          PurchAir(PurchAirNum)%HtRecTotCoolRate     = 0.0
+          PurchAir(PurchAirNum)%MaxHeatMassFlowRate  = 0.0d0
+          PurchAir(PurchAirNum)%MaxCoolMassFlowRate  = 0.0d0
+          PurchAir(PurchAirNum)%SenHeatEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%LatHeatEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%TotHeatEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%SenCoolEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%LatCoolEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%TotCoolEnergy        = 0.0d0
+          PurchAir(PurchAirNum)%ZoneSenHeatEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%ZoneLatHeatEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%ZoneTotHeatEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%ZoneSenCoolEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%ZoneLatCoolEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%ZoneTotCoolEnergy    = 0.0d0
+          PurchAir(PurchAirNum)%OASenHeatEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%OALatHeatEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%OATotHeatEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%OASenCoolEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%OALatCoolEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%OATotCoolEnergy      = 0.0d0
+          PurchAir(PurchAirNum)%HtRecSenHeatEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%HtRecLatHeatEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%HtRecTotHeatEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%HtRecSenCoolEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%HtRecLatCoolEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%HtRecTotCoolEnergy   = 0.0d0
+          PurchAir(PurchAirNum)%SenHeatRate          = 0.0d0
+          PurchAir(PurchAirNum)%LatHeatRate          = 0.0d0
+          PurchAir(PurchAirNum)%TotHeatRate          = 0.0d0
+          PurchAir(PurchAirNum)%SenCoolRate          = 0.0d0
+          PurchAir(PurchAirNum)%LatCoolRate          = 0.0d0
+          PurchAir(PurchAirNum)%TotCoolRate          = 0.0d0
+          PurchAir(PurchAirNum)%ZoneSenHeatRate      = 0.0d0
+          PurchAir(PurchAirNum)%ZoneLatHeatRate      = 0.0d0
+          PurchAir(PurchAirNum)%ZoneTotHeatRate      = 0.0d0
+          PurchAir(PurchAirNum)%ZoneSenCoolRate      = 0.0d0
+          PurchAir(PurchAirNum)%ZoneLatCoolRate      = 0.0d0
+          PurchAir(PurchAirNum)%ZoneTotCoolRate      = 0.0d0
+          PurchAir(PurchAirNum)%OASenHeatRate        = 0.0d0
+          PurchAir(PurchAirNum)%OALatHeatRate        = 0.0d0
+          PurchAir(PurchAirNum)%OATotHeatRate        = 0.0d0
+          PurchAir(PurchAirNum)%OASenCoolRate        = 0.0d0
+          PurchAir(PurchAirNum)%OALatCoolRate        = 0.0d0
+          PurchAir(PurchAirNum)%OATotCoolRate        = 0.0d0
+          PurchAir(PurchAirNum)%HtRecSenHeatRate     = 0.0d0
+          PurchAir(PurchAirNum)%HtRecLatHeatRate     = 0.0d0
+          PurchAir(PurchAirNum)%HtRecTotHeatRate     = 0.0d0
+          PurchAir(PurchAirNum)%HtRecSenCoolRate     = 0.0d0
+          PurchAir(PurchAirNum)%HtRecLatCoolRate     = 0.0d0
+          PurchAir(PurchAirNum)%HtRecTotCoolRate     = 0.0d0
 
         END DO
       END IF
@@ -926,7 +926,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                                           Zone(ActualZoneNum)%Volume
           PurchAir(PurchAirNum)%OAFlowFracSchPtr = OARequirements(PurchAir(PurchAirNum)%OARequirementsPtr)%OAFlowFracSchPtr
           PurchAir(PurchAirNum)%OAFlowACH = OARequirements(PurchAir(PurchAirNum)%OARequirementsPtr)%OAFlowACH * &
-                                          Zone(ActualZoneNum)%Volume / 3600.
+                                          Zone(ActualZoneNum)%Volume / 3600.d0
         ! Apply zone multipliers and zone list multipliers
           PurchAir(PurchAirNum)%OAFlowPerPerson = &
               PurchAir(PurchAirNum)%OAFlowPerPerson * Zone(ActualZoneNum)%Multiplier * Zone(ActualZoneNum)%ListMultiplier
@@ -955,13 +955,13 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
             (PurchAir(PurchAirNum)%HeatingLimit == LimitFlowRateAndCapacity)) THEN
           PurchAir(PurchAirNum)%MaxHeatMassFlowRate = StdRhoAir * PurchAir(PurchAirNum)%MaxHeatVolFlowRate
         ELSE
-          PurchAir(PurchAirNum)%MaxHeatMassFlowRate = 0.0
+          PurchAir(PurchAirNum)%MaxHeatMassFlowRate = 0.0d0
         END IF
         IF ((PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRate) .OR. &
             (PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRateAndCapacity)) THEN
           PurchAir(PurchAirNum)%MaxCoolMassFlowRate = StdRhoAir * PurchAir(PurchAirNum)%MaxCoolVolFlowRate
         ELSE
-          PurchAir(PurchAirNum)%MaxCoolMassFlowRate = 0.0
+          PurchAir(PurchAirNum)%MaxCoolMassFlowRate = 0.0d0
         END IF
         MyEnvrnFlag(PurchAirNum) = .FALSE.
       END IF
@@ -1047,11 +1047,11 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL           :: MixedAirTemp
-      REAL           :: OutletTemp
-      REAL           :: MixedAirHumRat
-      REAL           :: OutletHumRat
-      REAL           :: DesignLoad
+      REAL(r64)           :: MixedAirTemp
+      REAL(r64)           :: OutletTemp
+      REAL(r64)           :: MixedAirHumRat
+      REAL(r64)           :: OutletHumRat
+      REAL(r64)           :: DesignLoad
 
 
       IF ((PurchAir(PurchAirNum)%MaxHeatVolFlowRate == AutoSize) .AND. &
@@ -1063,7 +1063,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
           CALL CheckZoneSizing(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name)
           PurchAir(PurchAirNum)%MaxHeatVolFlowRate = FinalZoneSizing(CurZoneEqNum)%DesHeatVolFlow
           IF (PurchAir(PurchAirNum)%MaxHeatVolFlowRate < SmallAirVolFlow) THEN
-            PurchAir(PurchAirNum)%MaxHeatVolFlowRate = 0.0
+            PurchAir(PurchAirNum)%MaxHeatVolFlowRate = 0.0d0
           END IF
           CALL ReportSizingOutput(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name, &
                               'Maximum Heating Air Flow Rate [m3/s]', PurchAir(PurchAirNum)%MaxHeatVolFlowRate )
@@ -1081,7 +1081,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
           CALL CheckZoneSizing(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name)
           PurchAir(PurchAirNum)%MaxCoolVolFlowRate = FinalZoneSizing(CurZoneEqNum)%DesCoolVolFlow
           IF (PurchAir(PurchAirNum)%MaxCoolVolFlowRate < SmallAirVolFlow) THEN
-            PurchAir(PurchAirNum)%MaxCoolVolFlowRate = 0.0
+            PurchAir(PurchAirNum)%MaxCoolVolFlowRate = 0.0d0
           END IF
           CALL ReportSizingOutput(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name, &
                               'Maximum Cooling Air Flow Rate [m3/s]', PurchAir(PurchAirNum)%MaxCoolVolFlowRate )
@@ -1104,7 +1104,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                           * (OutletTemp-MixedAirTemp)
           PurchAir(PurchAirNum)%MaxHeatSensCap = DesignLoad
           IF (PurchAir(PurchAirNum)%MaxHeatSensCap < SmallLoad) THEN
-            PurchAir(PurchAirNum)%MaxHeatSensCap = 0.0
+            PurchAir(PurchAirNum)%MaxHeatSensCap = 0.0d0
           END IF
           CALL ReportSizingOutput(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name, &
                               'Maximum Sensible Heating Capacity [W]', PurchAir(PurchAirNum)%MaxHeatSensCap )
@@ -1128,7 +1128,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                       -PsyHFnTdbW(OutletTemp, OutletHumRat, 'SizePurchasedAir'))
           PurchAir(PurchAirNum)%MaxCoolTotCap = DesignLoad
           IF (PurchAir(PurchAirNum)%MaxCoolTotCap < SmallLoad) THEN
-            PurchAir(PurchAirNum)%MaxCoolTotCap = 0.0
+            PurchAir(PurchAirNum)%MaxCoolTotCap = 0.0d0
           END IF
           CALL ReportSizingOutput(TRIM(PurchAir(PurchAirNum)%cObjectName), PurchAir(PurchAirNum)%Name, &
                               'Maximum Total Cooling Capacity [W]', PurchAir(PurchAirNum)%MaxCoolTotCap )
@@ -1187,8 +1187,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
         IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-         REAL, INTENT(INOUT) :: SysOutputProvided ! Sensible output provided [W] cooling = negative
-         REAL, INTENT(OUT)   :: MoistOutputProvided ! Moisture output provided [kg/s] dehumidification = negative
+         REAL(r64), INTENT(INOUT) :: SysOutputProvided ! Sensible output provided [W] cooling = negative
+         REAL(r64), INTENT(OUT)   :: MoistOutputProvided ! Moisture output provided [kg/s] dehumidification = negative
          INTEGER, INTENT(IN) :: ActualZoneNum
          INTEGER, INTENT(IN) :: ControlledZoneNum
          INTEGER, INTENT(IN) :: PurchAirNum
@@ -1209,44 +1209,44 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
          INTEGER   :: OANodeNum         ! Outdoor air inlet node
          INTEGER   :: RecircNodeNum     ! Return air or zone exhaust node
          INTEGER   :: OperatingMode     ! current operating mode, Off, Heat, Cool, or Deadband
-         REAL :: SupplyMassFlowRate  ! System supply air mass flow rate [kg/s]
-         REAL :: SupplyMassFlowRateForHumid  ! System supply air mass flow rate required to meet humdification load [kg/s]
-         REAL :: SupplyMassFlowRateForDehum  ! System supply air mass flow rate required to meet dehumidification load [kg/s]
-         REAL :: SupplyMassFlowRateForCool   ! System supply air mass flow rate required to meet sensible cooling load[kg/s]
-         REAL :: SupplyMassFlowRateForHeat   ! System supply air mass flow rate required to meet sensible heating load[kg/s]
-         REAL :: SupplyHumRatForHumid ! Supply air humidity ratio require to meet the humidification load [kgH2O/kgAir]
-         REAL :: SupplyHumRatForDehum ! Supply air humidity ratio require to meet the dehumidification load [kgH2O/kgAir]
-         REAL :: OAMassFlowRate    ! Outdoor air mass flow rate [kg/s]
-         REAL :: OAVolFlowRate     ! Outdoor air volume flow rate at standard density [m3/s]
-         REAL :: MinOASensOutput   ! Minimum Outdoor air sensible output [W], <0 means OA is cooler than zone air
-         REAL :: MinOALatOutput    ! Minimum Outdoor air moisture load [kg/s]
-         REAL :: SensOutput        ! Sensible output [W] (psitive means heating, negative means cooling)
-         REAL :: HeatSensOutput    ! Heating sensible output [W]
-         REAL :: CoolSensOutput    ! Cooling sensible output [W] (positive value menas cooling)
-         REAL :: LatOutput         ! Latent output [W] (positive value means hudmification, negative means dehumidification)
-         REAL :: CoolLatOutput     ! Cooling latent output [W] (positive value means dehumidification)
-         REAL :: CoolTotOutput     ! Cooling total output [W] (positive value means cooling)
-         REAL :: DeltaT            ! Delta temperature - reused in multiple places
-         REAL :: DeltaHumRat       ! Delta humidity ratio - reused in multiple places
-         REAL :: QZnHeatSP         ! Load required to meet heating setpoint [W] (>0 is a heating load)
-         REAL :: QZnCoolSP         ! Load required to meet cooling setpoint [W] (<0 is a cooling load)
-         REAL :: MdotZnHumidSP     ! Load required to meet humidifying setpoint [kg H2O/s] (>0 = a humidify load)
-         REAL :: MdotZnDehumidSP   ! Load required to meet dehumidifying setpoint [kg H2O/s] (<0 = a dehumidify load)
+         REAL(r64) :: SupplyMassFlowRate  ! System supply air mass flow rate [kg/s]
+         REAL(r64) :: SupplyMassFlowRateForHumid  ! System supply air mass flow rate required to meet humdification load [kg/s]
+         REAL(r64) :: SupplyMassFlowRateForDehum  ! System supply air mass flow rate required to meet dehumidification load [kg/s]
+         REAL(r64) :: SupplyMassFlowRateForCool   ! System supply air mass flow rate required to meet sensible cooling load[kg/s]
+         REAL(r64) :: SupplyMassFlowRateForHeat   ! System supply air mass flow rate required to meet sensible heating load[kg/s]
+         REAL(r64) :: SupplyHumRatForHumid ! Supply air humidity ratio require to meet the humidification load [kgH2O/kgAir]
+         REAL(r64) :: SupplyHumRatForDehum ! Supply air humidity ratio require to meet the dehumidification load [kgH2O/kgAir]
+         REAL(r64) :: OAMassFlowRate    ! Outdoor air mass flow rate [kg/s]
+         REAL(r64) :: OAVolFlowRate     ! Outdoor air volume flow rate at standard density [m3/s]
+         REAL(r64) :: MinOASensOutput   ! Minimum Outdoor air sensible output [W], <0 means OA is cooler than zone air
+         REAL(r64) :: MinOALatOutput    ! Minimum Outdoor air moisture load [kg/s]
+         REAL(r64) :: SensOutput        ! Sensible output [W] (psitive means heating, negative means cooling)
+         REAL(r64) :: HeatSensOutput    ! Heating sensible output [W]
+         REAL(r64) :: CoolSensOutput    ! Cooling sensible output [W] (positive value menas cooling)
+         REAL(r64) :: LatOutput         ! Latent output [W] (positive value means hudmification, negative means dehumidification)
+         REAL(r64) :: CoolLatOutput     ! Cooling latent output [W] (positive value means dehumidification)
+         REAL(r64) :: CoolTotOutput     ! Cooling total output [W] (positive value means cooling)
+         REAL(r64) :: DeltaT            ! Delta temperature - reused in multiple places
+         REAL(r64) :: DeltaHumRat       ! Delta humidity ratio - reused in multiple places
+         REAL(r64) :: QZnHeatSP         ! Load required to meet heating setpoint [W] (>0 is a heating load)
+         REAL(r64) :: QZnCoolSP         ! Load required to meet cooling setpoint [W] (<0 is a cooling load)
+         REAL(r64) :: MdotZnHumidSP     ! Load required to meet humidifying setpoint [kg H2O/s] (>0 = a humidify load)
+         REAL(r64) :: MdotZnDehumidSP   ! Load required to meet dehumidifying setpoint [kg H2O/s] (<0 = a dehumidify load)
          LOGICAL   :: UnitOn
          LOGICAL   :: HeatOn            ! Flag for heating and humidification availbility schedule, true if heating is on
          LOGICAL   :: CoolOn            ! Flag for cooling and dehumidification availbility schedule, true if cooling is on
          LOGICAL   :: EconoOn           ! Flag for economizer operation, true if economizer is on
-         REAL :: SupplyTemp        ! Supply inlet to zone dry bulb temperature [C]
-         REAL :: SupplyHumRat      ! Supply inlet to zone humidity ratio [kg H2O/kg Air]
-         REAL :: SupplyHumRatOrig  ! Supply inlet to zone humidity ratio before saturation check [kg H2O/kg Air]
-         REAL :: SupplyHumRatSat   ! Supply inlet to zone humidity ratio saturation at SupplyTemp [kg H2O/kg Air]
-         REAL :: SupplyEnthalpy    ! Supply inlet to zone enthalpy [J/kg]
-         REAL :: MixedAirTemp      ! Mixed air dry bulb temperature [C]
-         REAL :: MixedAirHumRat    ! Mixed air humidity ratio [kg H2O/kg Air]
-         REAL :: MixedAirEnthalpy  ! Mixed air enthalpy [J/kg]
-         REAL :: CpAir        ! Specific heat [J/kg-C] reused in multiple places
-!         REAL :: SpecHumOut   ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-!         REAL :: SpecHumIn    ! Specific humidity ratio of inlet [zone] air (kg moisture / kg moist air)
+         REAL(r64) :: SupplyTemp        ! Supply inlet to zone dry bulb temperature [C]
+         REAL(r64) :: SupplyHumRat      ! Supply inlet to zone humidity ratio [kg H2O/kg Air]
+         REAL(r64) :: SupplyHumRatOrig  ! Supply inlet to zone humidity ratio before saturation check [kg H2O/kg Air]
+         REAL(r64) :: SupplyHumRatSat   ! Supply inlet to zone humidity ratio saturation at SupplyTemp [kg H2O/kg Air]
+         REAL(r64) :: SupplyEnthalpy    ! Supply inlet to zone enthalpy [J/kg]
+         REAL(r64) :: MixedAirTemp      ! Mixed air dry bulb temperature [C]
+         REAL(r64) :: MixedAirHumRat    ! Mixed air humidity ratio [kg H2O/kg Air]
+         REAL(r64) :: MixedAirEnthalpy  ! Mixed air enthalpy [J/kg]
+         REAL(r64) :: CpAir        ! Specific heat [J/kg-C] reused in multiple places
+!         REAL(r64) :: SpecHumOut   ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+!         REAL(r64) :: SpecHumIn    ! Specific humidity ratio of inlet [zone] air (kg moisture / kg moist air)
 
            ! Sign convention: SysOutputProvided <0 Supply air is heated on entering zone (zone is cooled)
            !                  SysOutputProvided >0 Supply air is cooled on entering zone (zone is heated)
@@ -1254,18 +1254,18 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
          ZoneNodeNum = ZoneEquipConfig(ControlledZoneNum)%ZoneNode
          OANodeNum = PurchAir(PurchAirNum)%OutdoorAirNodeNum
          RecircNodeNum = PurchAir(PurchAirNum)%ZoneRecircAirNodeNum
-         SupplyMassFlowRate = 0.0
-         OAMassFlowRate = 0.0
-         PurchAir(PurchAirNum)%MinOAMassFlowRate = 0.0
-         PurchAir(PurchAirNum)%TimeEconoActive = 0.0
-         PurchAir(PurchAirNum)%TimeHtRecActive = 0.0
-         SysOutputProvided = 0.0
-         MoistOutputProvided = 0.0
-         CoolSensOutput = 0.0
-         CoolLatOutput = 0.0
-         CoolTotOutput = 0.0
-         HeatSensOutput = 0.0
-         LatOutput = 0.0
+         SupplyMassFlowRate = 0.0d0
+         OAMassFlowRate = 0.0d0
+         PurchAir(PurchAirNum)%MinOAMassFlowRate = 0.0d0
+         PurchAir(PurchAirNum)%TimeEconoActive = 0.0d0
+         PurchAir(PurchAirNum)%TimeHtRecActive = 0.0d0
+         SysOutputProvided = 0.0d0
+         MoistOutputProvided = 0.0d0
+         CoolSensOutput = 0.0d0
+         CoolLatOutput = 0.0d0
+         CoolTotOutput = 0.0d0
+         HeatSensOutput = 0.0d0
+         LatOutput = 0.0d0
 
 
             ! default unit to ON
@@ -1310,8 +1310,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                MinOASensOutput = OAMassFlowRate * CpAir * (Node(OANodeNum)%Temp - Node(ZoneNodeNum)%Temp)
                MinOALatOutput  = OAMassFlowRate * (Node(OANodeNum)%HumRat - Node(ZoneNodeNum)%HumRat)
              ELSE
-               MinOASensOutput = 0.0
-               MinOALatOutput  = 0.0
+               MinOASensOutput = 0.0d0
+               MinOALatOutput  = 0.0d0
              ENDIF
              SupplyMassFlowRate = OAMassFlowRate
 
@@ -1363,8 +1363,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                      SupplyMassFlowRate = QZnCoolSP/CPAir/DeltaT
                      IF (((PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRate) .OR. &
                           (PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRateAndCapacity)) &
-                          .AND. (PurchAir(PurchAirNum)%MaxCoolMassFlowRate .GT. 0.0)) THEN
-                       SupplyMassFlowRate = MIN(MAX(SupplyMassFlowRate,0.0),PurchAir(PurchAirNum)%MaxCoolMassFlowRate)
+                          .AND. (PurchAir(PurchAirNum)%MaxCoolMassFlowRate .GT. 0.0d0)) THEN
+                       SupplyMassFlowRate = MIN(MAX(SupplyMassFlowRate,0.0d0),PurchAir(PurchAirNum)%MaxCoolMassFlowRate)
                      END IF
                      IF (SupplyMassFlowRate > OAMassFlowRate) THEN
                        EconoOn = .TRUE.
@@ -1378,7 +1378,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
              ! Determine supply mass flow rate
                  ! Mass flow rate to meet sensible load, at Minimum Cooling Supply Air Temperature
-             SupplyMassFlowRateForCool = 0.0
+             SupplyMassFlowRateForCool = 0.0d0
              IF (CoolOn) THEN
                CpAir = PsyCpAirFnWTdb(ZoneAirHumRat(ActualZoneNum),Node(ZoneNodeNum)%Temp, 'CalcPurchAirLoads')
                DeltaT = (PurchAir(PurchAirNum)%MinCoolSuppAirTemp - Node(ZoneNodeNum)%Temp)
@@ -1388,12 +1388,12 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              ENDIF
 
                  ! Mass flow rate to meet dehumidification load, if applicable, at Minimum Cooling Supply Humidity Ratio
-             SupplyMassFlowRateForDehum = 0.0
+             SupplyMassFlowRateForDehum = 0.0d0
              IF (CoolOn) THEN
                IF (PurchAir(PurchAirNum)%DehumidCtrlType .EQ. Humidistat) THEN
                  MdotZnDehumidSP= ZoneSysMoistureDemand(ActualZoneNum)%OutputRequiredToDehumidifyingSP
                  DeltaHumRat = (PurchAir(PurchAirNum)%MinCoolSuppAirHumRat - Node(ZoneNodeNum)%HumRat)
-                 IF ((DeltaHumRat < -SmallDeltaHumRat) .AND. (MdotZnDehumidSP .LT. 0.0)) THEN
+                 IF ((DeltaHumRat < -SmallDeltaHumRat) .AND. (MdotZnDehumidSP .LT. 0.0d0)) THEN
                    SupplyMassFlowRateForDehum = MdotZnDehumidSP/DeltaHumRat
                  ENDIF
                ENDIF
@@ -1402,14 +1402,14 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                  ! Mass flow rate to meet humidification load, if applicable, at Maximum Heating Supply Humidity Ratio
                  ! This section is the cooling section, so humidification should activate only if humidification control = humidistat
                  !   and if dehumidification control = humidistat or none
-             SupplyMassFlowRateForHumid = 0.0
+             SupplyMassFlowRateForHumid = 0.0d0
              IF (HeatOn) THEN
                IF (PurchAir(PurchAirNum)%HumidCtrlType .EQ. Humidistat) THEN
                  IF ((PurchAir(PurchAirNum)%DehumidCtrlType .EQ. Humidistat) .OR. &
                      (PurchAir(PurchAirNum)%DehumidCtrlType .EQ. None)) THEN
                    MdotZnHumidSP = ZoneSysMoistureDemand(ActualZoneNum)%OutputRequiredToHumidifyingSP
                    DeltaHumRat = (PurchAir(PurchAirNum)%MaxHeatSuppAirHumRat - Node(ZoneNodeNum)%HumRat)
-                   IF ((DeltaHumRat > SmallDeltaHumRat) .AND. (MdotZnHumidSP .GT. 0.0)) THEN
+                   IF ((DeltaHumRat > SmallDeltaHumRat) .AND. (MdotZnHumidSP .GT. 0.0d0)) THEN
                      SupplyMassFlowRateForHumid = MdotZnHumidSP/DeltaHumRat
                    ENDIF
                  ENDIF
@@ -1417,20 +1417,20 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              ENDIF
 
                  ! Supply mass flow is greatest of these, but limit to cooling max flow rate, if applicable
-             SupplyMassFlowRate = MAX(0.0, OAMassFlowRate, SupplyMassFlowRateForCool, &
+             SupplyMassFlowRate = MAX(0.0d0, OAMassFlowRate, SupplyMassFlowRateForCool, &
                                      SupplyMassFlowRateForDehum, SupplyMassFlowRateForHumid)
              ! EMS override point  Purch air massflow rate..... but only if unit is on, i.e. SupplyMassFlowRate>0.0
-             IF ((PurchAir(PurchAirNum)%EMSOverrideMdotOn) .AND. (SupplyMassFlowRate > 0.0)) THEN
+             IF ((PurchAir(PurchAirNum)%EMSOverrideMdotOn) .AND. (SupplyMassFlowRate > 0.0d0)) THEN
                SupplyMassFlowRate = PurchAir(PurchAirNum)%EMSValueMassFlowRate
                OAMassFlowRate = MIN(OAMassFlowRate,SupplyMassFlowRate)
              ENDIF
              IF (((PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRate) .OR. &
                   (PurchAir(PurchAirNum)%CoolingLimit == LimitFlowRateAndCapacity)) &
-                  .AND. (PurchAir(PurchAirNum)%MaxCoolMassFlowRate .GT. 0.0)) THEN
+                  .AND. (PurchAir(PurchAirNum)%MaxCoolMassFlowRate .GT. 0.0d0)) THEN
                SupplyMassFlowRate = MIN(SupplyMassFlowRate,PurchAir(PurchAirNum)%MaxCoolMassFlowRate)
              END IF
 
-             IF (SupplyMassFlowRate <= VerySmallMassFlow) SupplyMassFlowRate = 0.0
+             IF (SupplyMassFlowRate <= VerySmallMassFlow) SupplyMassFlowRate = 0.0d0
 
              ! Calculate mixed air conditions
              CALL CalcPurchAirMixedAir(PurchAirNum, OAMassFlowRate, SupplyMassFlowRate, &
@@ -1439,7 +1439,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              ! Calculate supply air conditions using final massflow rate, imposing capacity limits if specified
              ! If capacity limits are exceeded, keep massflow rate where it is and adjust supply temp
              ! In general, in the cooling section, don't let SupplyTemp be set to something that results in heating
-             IF (SupplyMassFlowRate .GT. 0.0) THEN
+             IF (SupplyMassFlowRate .GT. 0.0d0) THEN
                ! Calculate supply temp at SupplyMassFlowRate and recheck limit on Minimum Cooling Supply Air Temperature
                CpAir = PsyCpAirFnWTdb(ZoneAirHumRat(ActualZoneNum),Node(ZoneNodeNum)%Temp, 'CalcPurchAirLoads')
                SupplyTemp = QZnCoolSP/(CPAir*SupplyMassFlowRate) + Node(ZoneNodeNum)%Temp
@@ -1477,7 +1477,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                    CoolTotOutput = CoolSensOutput/PurchAir(PurchAirNum)%CoolSHR
                    SupplyEnthalpy = MixedAirEnthalpy - CoolTotOutput/SupplyMassFlowRate
                    !  Limit for overdrying (avoid Pysch errors which occur if SupplyEnthalpy is too low for SupplyTemp)
-                   SupplyEnthalpy = MAX(SupplyEnthalpy,PsyHFnTdbW(SupplyTemp,0.00001, 'CalcPurchAirLoads'))
+                   SupplyEnthalpy = MAX(SupplyEnthalpy,PsyHFnTdbW(SupplyTemp,0.00001D0, 'CalcPurchAirLoads'))
                    SupplyHumRat = MIN(SupplyHumRat,PsyWFnTdbH(SupplyTemp,SupplyEnthalpy, 'CalcPurchAirLoads'))
                    ! Apply min cooling humidity ratio limit
                    SupplyHumRat = MAX(SupplyHumRat, PurchAir(PurchAirNum)%MinCoolSuppAirHumRat)
@@ -1511,7 +1511,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
                !   Limit supply humidity ratio to saturation at supply outlet temp
                SupplyHumRatOrig = SupplyHumRat
-               SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0,OutBaroPress, 'CalcPurchAirLoads')
+               SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0d0,OutBaroPress, 'CalcPurchAirLoads')
                SupplyHumRat = MIN(SupplyHumRatOrig,SupplyHumRatSat)
                SupplyEnthalpy = PsyHFnTdbW(SupplyTemp,SupplyHumRat, 'CalcPurchAirLoads')
 
@@ -1536,7 +1536,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                          ! This is the cooling mode, so SupplyTemp can't be more than MixedAirTemp
                          SupplyTemp = MIN(SupplyTemp,MixedAirTemp)
                          !  Limit for overdrying (avoid Pysch errors which occur if SupplyEnthalpy is too low for SupplyTemp)
-                         SupplyEnthalpy = MAX(SupplyEnthalpy,PsyHFnTdbW(SupplyTemp,0.00001, 'CalcPurchAirLoads'))
+                         SupplyEnthalpy = MAX(SupplyEnthalpy,PsyHFnTdbW(SupplyTemp,0.00001D0, 'CalcPurchAirLoads'))
                          SupplyHumRat = PsyWFnTdbH(SupplyTemp,SupplyEnthalpy, 'CalcPurchAirLoads')
                        CASE(Humidistat)
                          ! Keep supply temp and adjust humidity ratio to reduce load
@@ -1560,7 +1560,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                      ! Limit supply humidity ratio to saturation at supply outlet temp
                      ! If saturation exceeded, then honor capacity limit and set to dew point at supplyenthalpy
                      SupplyHumRatOrig = SupplyHumRat
-                     SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0,OutBaroPress, 'CalcPurchAirLoads')
+                     SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0d0,OutBaroPress, 'CalcPurchAirLoads')
                      IF (SupplyHumRatSat < SupplyHumRatOrig) THEN
                        SupplyTemp = PsyTsatFnHPb(SupplyEnthalpy,OutBaroPress,'CalcPurchAirLoads')
                        ! This is the cooling mode, so SupplyTemp can't be more than MixedAirTemp
@@ -1588,8 +1588,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                SupplyEnthalpy = MixedAirEnthalpy
                SupplyHumRat   = MixedAirHumRat
                SupplyTemp     = MixedAirTemp
-               CoolSensOutput = 0.0
-               CoolTotOutput  = 0.0
+               CoolSensOutput = 0.0d0
+               CoolTotOutput  = 0.0d0
              END IF
                                      ! Heating or no-load operation
            ELSE  ! Heating or no-load case
@@ -1631,7 +1631,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
              ! Determine supply mass flow rate
                  ! Mass flow rate to meet sensible load, at Minimum Cooling Supply Air Temperature
-             SupplyMassFlowRateForHeat = 0.0
+             SupplyMassFlowRateForHeat = 0.0d0
              IF ((HeatOn) .AND. (OperatingMode == Heat)) THEN
                CpAir = PsyCpAirFnWTdb(ZoneAirHumRat(ActualZoneNum),Node(ZoneNodeNum)%Temp, 'CalcPurchAirLoads')
                DeltaT = (PurchAir(PurchAirNum)%MaxHeatSuppAirTemp - Node(ZoneNodeNum)%Temp)
@@ -1644,7 +1644,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                  ! This section is the heating/deadband section, so dehumidification should activate
                  !   only if dehumidification control = humidistat
                  !   and if humidification control = humidistat or none or if operating in deadband mode
-             SupplyMassFlowRateForDehum = 0.0
+             SupplyMassFlowRateForDehum = 0.0d0
              IF (CoolOn) THEN
                IF (PurchAir(PurchAirNum)%DehumidCtrlType .EQ. Humidistat) THEN
                  IF ((PurchAir(PurchAirNum)%HumidCtrlType .EQ. Humidistat) .OR. &
@@ -1652,7 +1652,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                      (OperatingMode == Deadband)) THEN
                    MdotZnDehumidSP= ZoneSysMoistureDemand(ActualZoneNum)%OutputRequiredToDehumidifyingSP
                    DeltaHumRat = (PurchAir(PurchAirNum)%MinCoolSuppAirHumRat - Node(ZoneNodeNum)%HumRat)
-                   IF ((DeltaHumRat < -SmallDeltaHumRat) .AND. (MdotZnDehumidSP .LT. 0.0)) THEN
+                   IF ((DeltaHumRat < -SmallDeltaHumRat) .AND. (MdotZnDehumidSP .LT. 0.0d0)) THEN
                      SupplyMassFlowRateForDehum = MdotZnDehumidSP/DeltaHumRat
                    ENDIF
                  ENDIF
@@ -1660,32 +1660,32 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              ENDIF
 
                  ! Mass flow rate to meet humidification load, if applicable, at Maximum Heating Supply Humidity Ratio
-             SupplyMassFlowRateForHumid = 0.0
+             SupplyMassFlowRateForHumid = 0.0d0
              IF (HeatOn) THEN
                IF (PurchAir(PurchAirNum)%HumidCtrlType .EQ. Humidistat) THEN
                  MdotZnHumidSP = ZoneSysMoistureDemand(ActualZoneNum)%OutputRequiredToHumidifyingSP
                  DeltaHumRat = (PurchAir(PurchAirNum)%MaxHeatSuppAirHumRat - Node(ZoneNodeNum)%HumRat)
-                 IF ((DeltaHumRat > SmallDeltaHumRat) .AND. (MdotZnHumidSP .GT. 0.0)) THEN
+                 IF ((DeltaHumRat > SmallDeltaHumRat) .AND. (MdotZnHumidSP .GT. 0.0d0)) THEN
                    SupplyMassFlowRateForHumid = MdotZnHumidSP/DeltaHumRat
                  ENDIF
                ENDIF
              ENDIF
 
                  ! Supply mass flow is greatest of these, but limit to heating max flow rate, if applicable
-             SupplyMassFlowRate = MAX(0.0, OAMassFlowRate, SupplyMassFlowRateForHeat, &
+             SupplyMassFlowRate = MAX(0.0d0, OAMassFlowRate, SupplyMassFlowRateForHeat, &
                                      SupplyMassFlowRateForDehum, SupplyMassFlowRateForHumid)
              ! EMS override point  Purch air massflow rate..... but only if unit is on, i.e. SupplyMassFlowRate>0.0
-             IF ((PurchAir(PurchAirNum)%EMSOverrideMdotOn) .AND. (SupplyMassFlowRate > 0.0)) THEN
+             IF ((PurchAir(PurchAirNum)%EMSOverrideMdotOn) .AND. (SupplyMassFlowRate > 0.0d0)) THEN
                SupplyMassFlowRate = PurchAir(PurchAirNum)%EMSValueMassFlowRate
                OAMassFlowRate = MIN(OAMassFlowRate,SupplyMassFlowRate)
              ENDIF
              IF (((PurchAir(PurchAirNum)%HeatingLimit == LimitFlowRate) .OR. &
                   (PurchAir(PurchAirNum)%HeatingLimit == LimitFlowRateAndCapacity)) &
-                  .AND. (PurchAir(PurchAirNum)%MaxHeatMassFlowRate .GT. 0.0)) THEN
+                  .AND. (PurchAir(PurchAirNum)%MaxHeatMassFlowRate .GT. 0.0d0)) THEN
                SupplyMassFlowRate = MIN(SupplyMassFlowRate,PurchAir(PurchAirNum)%MaxHeatMassFlowRate)
              END IF
 
-             IF (SupplyMassFlowRate <= VerySmallMassFlow) SupplyMassFlowRate = 0.0
+             IF (SupplyMassFlowRate <= VerySmallMassFlow) SupplyMassFlowRate = 0.0d0
 
 
              ! Calculate mixed air conditions
@@ -1694,7 +1694,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
              ! Calculate supply air conditions using final massflow rate, imposing capacity limits if specified
              ! If capacity limits are exceeded, keep massflow rate where it is and adjust supply temp
-             IF (SupplyMassFlowRate .GT. 0.0) THEN
+             IF (SupplyMassFlowRate .GT. 0.0d0) THEN
                IF ((HeatOn) .AND. (OperatingMode == Heat)) THEN
                  ! Calculate supply temp at SupplyMassFlowRate and check limit on Maximum Heating Supply Air Temperature
                  CpAir = PsyCpAirFnWTdb(ZoneAirHumRat(ActualZoneNum),Node(ZoneNodeNum)%Temp, 'CalcPurchAirLoads')
@@ -1793,36 +1793,36 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
                  !   Limit supply humidity ratio to saturation at supply outlet temp
                SupplyHumRatOrig = SupplyHumRat
-               SupplyHumRat = MIN(SupplyHumRat,PsyWFnTdbRhPb(SupplyTemp,1.0,OutBaroPress, 'CalcPurchAirLoads'))
+               SupplyHumRat = MIN(SupplyHumRat,PsyWFnTdbRhPb(SupplyTemp,1.0d0,OutBaroPress, 'CalcPurchAirLoads'))
                SupplyEnthalpy = PsyHFnTdbW(SupplyTemp,SupplyHumRat, 'CalcPurchAirLoads')
 
              ELSE ! SupplyMassFlowRate is zero
                SupplyEnthalpy = MixedAirEnthalpy
                SupplyHumRat   = MixedAirHumRat
                SupplyTemp     = MixedAirTemp
-               HeatSensOutput = 0.0
+               HeatSensOutput = 0.0d0
              END IF
 
            END IF ! Cooling or heating required
 
              ! EMS override point  Purch air supply temp and humidty ratio ..... but only if unit is on, SupplyMassFlowRate>0.0
-           IF ((PurchAir(PurchAirNum)%EMSOverrideSupplyTempOn) .AND. (SupplyMassFlowRate > 0.0)) THEN
+           IF ((PurchAir(PurchAirNum)%EMSOverrideSupplyTempOn) .AND. (SupplyMassFlowRate > 0.0d0)) THEN
              SupplyTemp = PurchAir(PurchAirNum)%EMSValueSupplyTemp
            ENDIF
-           IF ((PurchAir(PurchAirNum)%EMSOverrideSupplyHumRatOn) .AND. (SupplyMassFlowRate > 0.0)) THEN
+           IF ((PurchAir(PurchAirNum)%EMSOverrideSupplyHumRatOn) .AND. (SupplyMassFlowRate > 0.0d0)) THEN
              SupplyHumRat = PurchAir(PurchAirNum)%EMSValueSupplyHumRat
            ENDIF
 
-           IF (SupplyMassFlowRate > 0.0) THEN
+           IF (SupplyMassFlowRate > 0.0d0) THEN
              ! compute coil loads
              IF ((SupplyHumRat == MixedAirHumRat) .AND. (SupplyTemp == MixedAirTemp)) THEN
                ! If no change in humrat or temp, then set loads to zero
-               PurchAir(PurchAirNum)%SenCoilLoad = 0.0
-               PurchAir(PurchAirNum)%LatCoilLoad = 0.0
+               PurchAir(PurchAirNum)%SenCoilLoad = 0.0d0
+               PurchAir(PurchAirNum)%LatCoilLoad = 0.0d0
              ELSE IF ((SupplyHumRat == MixedAirHumRat) .AND. (SupplyTemp .NE. MixedAirTemp)) THEN
                ! If no change in humrat, then set latent load to zero and use enthalpies to calculate sensible load
                PurchAir(PurchAirNum)%SenCoilLoad = SupplyMassFlowRate * (SupplyEnthalpy - MixedAirEnthalpy)
-               PurchAir(PurchAirNum)%LatCoilLoad = 0.0
+               PurchAir(PurchAirNum)%LatCoilLoad = 0.0d0
              ELSE
                CpAir = PsyCpAirFnWTdb(MixedAirHumRat,MixedAirTemp)
                PurchAir(PurchAirNum)%SenCoilLoad = SupplyMassFlowRate * CpAir * (SupplyTemp - MixedAirTemp)
@@ -1831,26 +1831,26 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              END IF
 
              ! Apply heating and cooling availability schedules to sensible load
-             IF (((PurchAir(PurchAirNum)%SenCoilLoad > 0.0) .AND. .NOT. HeatOn) &
+             IF (((PurchAir(PurchAirNum)%SenCoilLoad > 0.0d0) .AND. .NOT. HeatOn) &
                                   .OR.                                                       &
-                 ((PurchAir(PurchAirNum)%SenCoilLoad < 0.0) .AND. .NOT. CoolOn)) THEN
+                 ((PurchAir(PurchAirNum)%SenCoilLoad < 0.0d0) .AND. .NOT. CoolOn)) THEN
                ! Coil is off
-               PurchAir(PurchAirNum)%SenCoilLoad = 0.0
+               PurchAir(PurchAirNum)%SenCoilLoad = 0.0d0
                SupplyTemp = MixedAirTemp
              END IF
 
              ! Apply heating and cooling availability schedules to latent load
-             IF (((PurchAir(PurchAirNum)%LatCoilLoad > 0.0) .AND. .NOT. HeatOn) &
+             IF (((PurchAir(PurchAirNum)%LatCoilLoad > 0.0d0) .AND. .NOT. HeatOn) &
                                   .OR.                                                       &
-                 ((PurchAir(PurchAirNum)%LatCoilLoad < 0.0) .AND. .NOT. CoolOn)) THEN
+                 ((PurchAir(PurchAirNum)%LatCoilLoad < 0.0d0) .AND. .NOT. CoolOn)) THEN
                ! Coil is off
-               PurchAir(PurchAirNum)%LatCoilLoad = 0.0
+               PurchAir(PurchAirNum)%LatCoilLoad = 0.0d0
                SupplyHumRat = MixedAirHumRat
              END IF
 
              ! Double-check if saturation exceeded, then thow warning, shouldn't happen here, don't reset, just warn
              SupplyHumRatOrig = SupplyHumRat
-             SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0,OutBaroPress, 'CalcPurchAirLoads')
+             SupplyHumRatSat  = PsyWFnTdbRhPb(SupplyTemp,1.0d0,OutBaroPress, 'CalcPurchAirLoads')
              DeltaHumRat = SupplyHumRatOrig - SupplyHumRatSat
              IF (DeltaHumRat > SmallDeltaHumRat) THEN
                IF (PurchAir(PurchAirNum)%SaturationOutputError < 1) THEN
@@ -1885,8 +1885,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                PurchAir(PurchAirNum)%OALatOutput = OAMassFlowRate * (Node(OANodeNum)%Enthalpy - Node(ZoneNodeNum)%Enthalpy) &
                                                        - PurchAir(PurchAirNum)%OASenOutput
              ELSE
-               PurchAir(PurchAirNum)%OASenOutput = 0.0
-               PurchAir(PurchAirNum)%OALatOutput = 0.0
+               PurchAir(PurchAirNum)%OASenOutput = 0.0d0
+               PurchAir(PurchAirNum)%OALatOutput = 0.0d0
              ENDIF
              IF (Contaminant%CO2Simulation) THEN
                IF (PurchAir(PurchAirNum)%OutdoorAir) THEN
@@ -1905,15 +1905,15 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                End If
              END IF
            ELSE ! SupplyMassFlowRate = 0.0
-             SysOutputProvided  = 0.0
-             MoistOutputProvided  = 0.0
+             SysOutputProvided  = 0.0d0
+             MoistOutputProvided  = 0.0d0
 
-             PurchAir(PurchAirNum)%SenOutputToZone = 0.0
-             PurchAir(PurchAirNum)%LatOutputToZone = 0.0
-             PurchAir(PurchAirNum)%SenCoilLoad = 0.0
-             PurchAir(PurchAirNum)%LatCoilLoad = 0.0
-             PurchAir(PurchAirNum)%OASenOutput = 0.0
-             PurchAir(PurchAirNum)%OALatOutput = 0.0
+             PurchAir(PurchAirNum)%SenOutputToZone = 0.0d0
+             PurchAir(PurchAirNum)%LatOutputToZone = 0.0d0
+             PurchAir(PurchAirNum)%SenCoilLoad = 0.0d0
+             PurchAir(PurchAirNum)%LatCoilLoad = 0.0d0
+             PurchAir(PurchAirNum)%OASenOutput = 0.0d0
+             PurchAir(PurchAirNum)%OALatOutput = 0.0d0
 
              IF (Contaminant%CO2Simulation) THEN
                Node(InNodeNum)%CO2        = Node(ZoneNodeNum)%CO2
@@ -1931,10 +1931,10 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
 
          ELSE ! purchased air OFF
 
-           SysOutputProvided  = 0.0
-           MoistOutputProvided  = 0.0
-           SupplyMassFlowRate = 0.0
-           OAMassFlowRate     = 0.0
+           SysOutputProvided  = 0.0d0
+           MoistOutputProvided  = 0.0d0
+           SupplyMassFlowRate = 0.0d0
+           OAMassFlowRate     = 0.0d0
            Node(InNodeNum)%Temp         = Node(ZoneNodeNum)%Temp
            Node(InNodeNum)%HumRat       = Node(ZoneNodeNum)%HumRat
            Node(InNodeNum)%Enthalpy     = Node(ZoneNodeNum)%Enthalpy
@@ -1945,18 +1945,18 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
              Node(InNodeNum)%GenContam  = Node(ZoneNodeNum)%GenContam
            END IF
 
-           Node(InNodeNum)%MassFlowRate = 0.0
-           IF (PurchAir(PurchAirNum)%OutdoorAir) Node(OANodeNum)%MassFlowRate = 0.0
-           PurchAir(PurchAirNum)%SenHeatRate = 0.0
-           PurchAir(PurchAirNum)%SenCoolRate = 0.0
-           PurchAir(PurchAirNum)%TotCoolRate = 0.0
+           Node(InNodeNum)%MassFlowRate = 0.0d0
+           IF (PurchAir(PurchAirNum)%OutdoorAir) Node(OANodeNum)%MassFlowRate = 0.0d0
+           PurchAir(PurchAirNum)%SenHeatRate = 0.0d0
+           PurchAir(PurchAirNum)%SenCoolRate = 0.0d0
+           PurchAir(PurchAirNum)%TotCoolRate = 0.0d0
 
-           PurchAir(PurchAirNum)%SenOutputToZone = 0.0
-           PurchAir(PurchAirNum)%LatOutputToZone = 0.0
-           PurchAir(PurchAirNum)%SenCoilLoad = 0.0
-           PurchAir(PurchAirNum)%LatCoilLoad = 0.0
-           PurchAir(PurchAirNum)%OASenOutput = 0.0
-           PurchAir(PurchAirNum)%OALatOutput = 0.0
+           PurchAir(PurchAirNum)%SenOutputToZone = 0.0d0
+           PurchAir(PurchAirNum)%LatOutputToZone = 0.0d0
+           PurchAir(PurchAirNum)%SenCoilLoad = 0.0d0
+           PurchAir(PurchAirNum)%LatCoilLoad = 0.0d0
+           PurchAir(PurchAirNum)%OASenOutput = 0.0d0
+           PurchAir(PurchAirNum)%OALatOutput = 0.0d0
 
          END IF
  
@@ -1994,7 +1994,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
               ! SUBROUTINE ARGUMENT DEFINITIONS:
         INTEGER, INTENT(IN)      :: PurchAirNum    ! index to ideal loads unit
         INTEGER, INTENT(IN)      :: ActualZoneNum  ! index to actual zone number
-        REAL, INTENT(OUT)   :: OAMassFlowRate ! outside air mass flow rate [kg/s] from volume flow using std density
+        REAL(r64), INTENT(OUT)   :: OAMassFlowRate ! outside air mass flow rate [kg/s] from volume flow using std density
 
               ! FUNCTION PARAMETER DEFINITIONS:
               ! na
@@ -2006,14 +2006,14 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
               ! na
 
               ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-        REAL :: PeopleOAFlow          ! amount of OA based on occupants [m3/s]
-        REAL :: OAVolumeFlowRate      ! outside air flow rate (m3/s - standard density, direct from user inputs)
+        REAL(r64) :: PeopleOAFlow          ! amount of OA based on occupants [m3/s]
+        REAL(r64) :: OAVolumeFlowRate      ! outside air flow rate (m3/s - standard density, direct from user inputs)
 
         IF (PurchAir(PurchAirNum)%OutdoorAir) THEN
            ! initialize OA flow rates
-          PeopleOAFlow     = 0.0
-          OAVolumeFlowRate = 0.0
-          OAMassFlowRate   = 0.0
+          PeopleOAFlow     = 0.0d0
+          OAVolumeFlowRate = 0.0d0
+          OAMassFlowRate   = 0.0d0
 
           ! Calculate people outdoor air flow rate based on demand controlled ventilation type
           SELECT CASE(PurchAir(PurchAirNum)%DCVType)
@@ -2049,7 +2049,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                                + PurchAir(PurchAirNum)%OAFlowACH
               END IF
             CASE DEFAULT
-              OAVolumeFlowRate = 0.0
+              OAVolumeFlowRate = 0.0d0
           END SELECT
 
           ! Apply the Outdoor Air Flow Rate Fraction Schedule
@@ -2065,10 +2065,10 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
             OAMassFlowRate = Max(OAMassFlowRate, ZoneSysContDemand(ActualZoneNum)%OutputRequiredToCO2SP)
           END IF
 
-          IF (OAMassFlowRate <= VerySmallMassFlow) OAMassFlowRate = 0.0
+          IF (OAMassFlowRate <= VerySmallMassFlow) OAMassFlowRate = 0.0d0
 
         ELSE !No outdoor air
-          OAMassFlowRate = 0.0
+          OAMassFlowRate = 0.0d0
         END IF
         PurchAir(PurchAirNum)%MinOAMassFlowRate = OAMassFlowRate
 
@@ -2102,11 +2102,11 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
               ! SUBROUTINE ARGUMENT DEFINITIONS:
         INTEGER, INTENT(IN)      :: PurchAirNum        ! index to ideal loads unit
         INTEGER, INTENT(IN)      :: OperatingMode      ! current operating mode, Off, Heating, Cooling, or Deadband
-        REAL, INTENT(IN)    :: OAMassFlowRate     ! outside air mass flow rate [kg/s]
-        REAL, INTENT(IN)    :: SupplyMassFlowRate ! supply air mass flow rate [kg/s]
-        REAL, INTENT(OUT)   :: MixedAirTemp       ! Mixed air dry bulb temperature [C]
-        REAL, INTENT(OUT)   :: MixedAirHumRat     ! Mixed air humidity ratio [kg H2O/kg Air]
-        REAL, INTENT(OUT)   :: MixedAirEnthalpy   ! Mixed air enthalpy [J/kg]
+        REAL(r64), INTENT(IN)    :: OAMassFlowRate     ! outside air mass flow rate [kg/s]
+        REAL(r64), INTENT(IN)    :: SupplyMassFlowRate ! supply air mass flow rate [kg/s]
+        REAL(r64), INTENT(OUT)   :: MixedAirTemp       ! Mixed air dry bulb temperature [C]
+        REAL(r64), INTENT(OUT)   :: MixedAirHumRat     ! Mixed air humidity ratio [kg H2O/kg Air]
+        REAL(r64), INTENT(OUT)   :: MixedAirEnthalpy   ! Mixed air enthalpy [J/kg]
 
               ! SUBROUTINE PARAMETER DEFINITIONS:
               ! na
@@ -2120,24 +2120,24 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
               ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
          INTEGER   :: RecircNodeNum     ! Zone return air node
          INTEGER   :: OANodeNum         ! Outdoor air inlet node
-         REAL :: RecircTemp        ! Recirculated air from zone dry bulb temperature [C]
-         REAL :: RecircHumRat      ! Recirculated air from zone humidity ratio [kg H2O/kg Air]
-         REAL :: RecircEnthalpy    ! Recirculated air from zone enthalpy [J/kg]
-         REAL :: RecircMassFlowRate ! Recirculated air mass flow rate [kg/s]
-         REAL :: OAInletTemp       ! Outdoor air inlet dry bulb temperature [C]
-         REAL :: OAInletHumRat     ! Outdoor air inlet humidity ratio [kg H2O/kg Air]
-         REAL :: OAInletEnthalpy   ! Outdoor air inlet enthalpy [J/kg]
-         REAL :: OAAfterHtRecTemp     ! Outdoor air after heat recovery to mixing box dry bulb temperature [C]
-         REAL :: OAAfterHtRecHumRat   ! Outdoor air after heat recovery to mixing box humidity ratio [kg H2O/kg Air]
-         REAL :: OAAfterHtRecEnthalpy ! Outdoor air after heat recovery to mixing box enthalpy [J/kg]
+         REAL(r64) :: RecircTemp        ! Recirculated air from zone dry bulb temperature [C]
+         REAL(r64) :: RecircHumRat      ! Recirculated air from zone humidity ratio [kg H2O/kg Air]
+         REAL(r64) :: RecircEnthalpy    ! Recirculated air from zone enthalpy [J/kg]
+         REAL(r64) :: RecircMassFlowRate ! Recirculated air mass flow rate [kg/s]
+         REAL(r64) :: OAInletTemp       ! Outdoor air inlet dry bulb temperature [C]
+         REAL(r64) :: OAInletHumRat     ! Outdoor air inlet humidity ratio [kg H2O/kg Air]
+         REAL(r64) :: OAInletEnthalpy   ! Outdoor air inlet enthalpy [J/kg]
+         REAL(r64) :: OAAfterHtRecTemp     ! Outdoor air after heat recovery to mixing box dry bulb temperature [C]
+         REAL(r64) :: OAAfterHtRecHumRat   ! Outdoor air after heat recovery to mixing box humidity ratio [kg H2O/kg Air]
+         REAL(r64) :: OAAfterHtRecEnthalpy ! Outdoor air after heat recovery to mixing box enthalpy [J/kg]
          LOGICAL   :: HeatRecOn
-         REAL :: CpAir             ! Specific heat [J/kg-C] reused in multiple places
+         REAL(r64) :: CpAir             ! Specific heat [J/kg-C] reused in multiple places
 
              ! Initializations
          OANodeNum     = PurchAir(PurchAirNum)%OutdoorAirNodeNum
          RecircNodeNum = PurchAir(PurchAirNum)%ZoneRecircAirNodeNum
 
-         RecircMassFlowRate = 0.0
+         RecircMassFlowRate = 0.0d0
          RecircTemp      = Node(RecircNodeNum)%Temp
          RecircHumRat    = Node(RecircNodeNum)%HumRat
          RecircEnthalpy  = Node(RecircNodeNum)%Enthalpy
@@ -2149,16 +2149,16 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
            OAAfterHtRecHumRat   = OAInletHumRat
            OAAfterHtRecEnthalpy = OAInletEnthalpy
          ELSE
-           OAInletTemp     = 0.0
-           OAInletHumRat   = 0.0
-           OAInletEnthalpy = 0.0
+           OAInletTemp     = 0.0d0
+           OAInletHumRat   = 0.0d0
+           OAInletEnthalpy = 0.0d0
            OAAfterHtRecTemp     = OAInletTemp
            OAAfterHtRecHumRat   = OAInletHumRat
            OAAfterHtRecEnthalpy = OAInletEnthalpy
          ENDIF
          HeatRecOn = .FALSE.
 
-         IF (PurchAir(PurchAirNum)%OutdoorAir .AND. (OAMassFlowRate > 0.0)) THEN
+         IF (PurchAir(PurchAirNum)%OutdoorAir .AND. (OAMassFlowRate > 0.0d0)) THEN
              ! Determine if heat recovery is beneficial
              IF ((PurchAir(PurchAirNum)%HtRecType == Sensible) ) THEN
                IF ((OperatingMode == Heat) .AND. (RecircTemp > OAInletTemp)) HeatRecOn = .TRUE.
@@ -2191,7 +2191,7 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
                ! Mixed air temperature is calculated from the mixed air enthalpy and humidity ratio.
                MixedAirTemp = PsyTdbFnHW(MixedAirEnthalpy,MixedAirHumRat, 'CalcPurchAirMixedAir')
              ELSE
-               RecircMassFlowRate   = 0.0
+               RecircMassFlowRate   = 0.0d0
                MixedAirEnthalpy = OAAfterHtRecEnthalpy
                MixedAirHumRat   = OAAfterHtRecHumRat
                MixedAirTemp     = OAAfterHtRecTemp
@@ -2208,8 +2208,8 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
            MixedAirTemp     = RecircTemp
            MixedAirHumRat   = RecircHumRat
            MixedAirEnthalpy = RecircEnthalpy
-           PurchAir(PurchAirNum)%HtRecSenOutput = 0.0
-           PurchAir(PurchAirNum)%HtRecLatOutput = 0.0
+           PurchAir(PurchAirNum)%HtRecSenOutput = 0.0d0
+           PurchAir(PurchAirNum)%HtRecLatOutput = 0.0d0
          END IF
         ! If exhaust node is specified, then set massflow on exhaust node, otherwise return node sets its own massflow
         IF (PurchAir(PurchAirNum)%ZoneExhaustAirNodeNum .GT. 0) THEN
@@ -2295,54 +2295,54 @@ SUBROUTINE SimPurchasedAir(PurchAirName, SysOutputProvided, MoistOutputProvided,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL :: ReportingConstant
+      REAL(r64) :: ReportingConstant
 
           ! Sort out heating and cooling rates
-      PurchAir(PurchAirNum)%SenHeatRate = MAX(PurchAir(PurchAirNum)%SenCoilLoad,0.0)
-      PurchAir(PurchAirNum)%SenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%SenCoilLoad,0.0))
-      PurchAir(PurchAirNum)%LatHeatRate = MAX(PurchAir(PurchAirNum)%LatCoilLoad,0.0)
-      PurchAir(PurchAirNum)%LatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%LatCoilLoad,0.0))
+      PurchAir(PurchAirNum)%SenHeatRate = MAX(PurchAir(PurchAirNum)%SenCoilLoad,0.0d0)
+      PurchAir(PurchAirNum)%SenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%SenCoilLoad,0.0d0))
+      PurchAir(PurchAirNum)%LatHeatRate = MAX(PurchAir(PurchAirNum)%LatCoilLoad,0.0d0)
+      PurchAir(PurchAirNum)%LatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%LatCoilLoad,0.0d0))
       PurchAir(PurchAirNum)%TotHeatRate = PurchAir(PurchAirNum)%SenHeatRate + PurchAir(PurchAirNum)%LatHeatRate
       PurchAir(PurchAirNum)%TotCoolRate = PurchAir(PurchAirNum)%SenCoolRate + PurchAir(PurchAirNum)%LatCoolRate
 
-      PurchAir(PurchAirNum)%ZoneSenHeatRate = MAX(PurchAir(PurchAirNum)%SenOutputToZone,0.0)
-      PurchAir(PurchAirNum)%ZoneSenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%SenOutputToZone,0.0))
-      PurchAir(PurchAirNum)%ZoneLatHeatRate = MAX(PurchAir(PurchAirNum)%LatOutputToZone,0.0)
-      PurchAir(PurchAirNum)%ZoneLatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%LatOutputToZone,0.0))
+      PurchAir(PurchAirNum)%ZoneSenHeatRate = MAX(PurchAir(PurchAirNum)%SenOutputToZone,0.0d0)
+      PurchAir(PurchAirNum)%ZoneSenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%SenOutputToZone,0.0d0))
+      PurchAir(PurchAirNum)%ZoneLatHeatRate = MAX(PurchAir(PurchAirNum)%LatOutputToZone,0.0d0)
+      PurchAir(PurchAirNum)%ZoneLatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%LatOutputToZone,0.0d0))
       PurchAir(PurchAirNum)%ZoneTotHeatRate = PurchAir(PurchAirNum)%ZoneSenHeatRate + PurchAir(PurchAirNum)%ZoneLatHeatRate
       PurchAir(PurchAirNum)%ZoneTotCoolRate = PurchAir(PurchAirNum)%ZoneSenCoolRate + PurchAir(PurchAirNum)%ZoneLatCoolRate
 
          ! Sort out outdoor air "loads"
          ! OASenOutput = Outdoor air sensible output relative to zone conditions [W], <0 means OA is cooler than zone air
          ! OALatOutput  = Outdoor air latent output relative to zone conditions [W], <0 means OA is drier than zone air
-      IF (PurchAir(PurchAirNum)%SenCoilLoad > 0.0) THEN ! Heating is active
-        PurchAir(PurchAirNum)%OASenHeatRate = ABS(MIN(PurchAir(PurchAirNum)%OASenOutput,0.0))
+      IF (PurchAir(PurchAirNum)%SenCoilLoad > 0.0d0) THEN ! Heating is active
+        PurchAir(PurchAirNum)%OASenHeatRate = ABS(MIN(PurchAir(PurchAirNum)%OASenOutput,0.0d0))
       ELSE
-        PurchAir(PurchAirNum)%OASenHeatRate = 0.0
+        PurchAir(PurchAirNum)%OASenHeatRate = 0.0d0
       END IF
-      IF (PurchAir(PurchAirNum)%SenCoilLoad < 0.0) THEN ! Cooling is active
-        PurchAir(PurchAirNum)%OASenCoolRate = MAX(PurchAir(PurchAirNum)%OASenOutput,0.0)
+      IF (PurchAir(PurchAirNum)%SenCoilLoad < 0.0d0) THEN ! Cooling is active
+        PurchAir(PurchAirNum)%OASenCoolRate = MAX(PurchAir(PurchAirNum)%OASenOutput,0.0d0)
       ELSE
-        PurchAir(PurchAirNum)%OASenCoolRate = 0.0
+        PurchAir(PurchAirNum)%OASenCoolRate = 0.0d0
       END IF
-      IF (PurchAir(PurchAirNum)%LatCoilLoad > 0.0) THEN ! Humidification is active
-        PurchAir(PurchAirNum)%OALatHeatRate =  ABS(MIN(PurchAir(PurchAirNum)%OALatOutput,0.0))
+      IF (PurchAir(PurchAirNum)%LatCoilLoad > 0.0d0) THEN ! Humidification is active
+        PurchAir(PurchAirNum)%OALatHeatRate =  ABS(MIN(PurchAir(PurchAirNum)%OALatOutput,0.0d0))
       ELSE
-        PurchAir(PurchAirNum)%OALatHeatRate = 0.0
+        PurchAir(PurchAirNum)%OALatHeatRate = 0.0d0
       END IF
-      IF (PurchAir(PurchAirNum)%LatCoilLoad < 0.0) THEN ! Dehumidification is active
-        PurchAir(PurchAirNum)%OALatCoolRate = MAX(PurchAir(PurchAirNum)%OALatOutput,0.0)
+      IF (PurchAir(PurchAirNum)%LatCoilLoad < 0.0d0) THEN ! Dehumidification is active
+        PurchAir(PurchAirNum)%OALatCoolRate = MAX(PurchAir(PurchAirNum)%OALatOutput,0.0d0)
       ELSE
-        PurchAir(PurchAirNum)%OALatCoolRate = 0.0
+        PurchAir(PurchAirNum)%OALatCoolRate = 0.0d0
       ENDIF
 
       PurchAir(PurchAirNum)%OATotHeatRate = PurchAir(PurchAirNum)%OASenHeatRate + PurchAir(PurchAirNum)%OALatHeatRate
       PurchAir(PurchAirNum)%OATotCoolRate = PurchAir(PurchAirNum)%OASenCoolRate + PurchAir(PurchAirNum)%OALatCoolRate
 
-      PurchAir(PurchAirNum)%HtRecSenHeatRate = MAX(PurchAir(PurchAirNum)%HtRecSenOutput,0.0)
-      PurchAir(PurchAirNum)%HtRecSenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%HtRecSenOutput,0.0))
-      PurchAir(PurchAirNum)%HtRecLatHeatRate = MAX(PurchAir(PurchAirNum)%HtRecLatOutput,0.0)
-      PurchAir(PurchAirNum)%HtRecLatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%HtRecLatOutput,0.0))
+      PurchAir(PurchAirNum)%HtRecSenHeatRate = MAX(PurchAir(PurchAirNum)%HtRecSenOutput,0.0d0)
+      PurchAir(PurchAirNum)%HtRecSenCoolRate = ABS(MIN(PurchAir(PurchAirNum)%HtRecSenOutput,0.0d0))
+      PurchAir(PurchAirNum)%HtRecLatHeatRate = MAX(PurchAir(PurchAirNum)%HtRecLatOutput,0.0d0)
+      PurchAir(PurchAirNum)%HtRecLatCoolRate = ABS(MIN(PurchAir(PurchAirNum)%HtRecLatOutput,0.0d0))
       PurchAir(PurchAirNum)%HtRecTotHeatRate = PurchAir(PurchAirNum)%HtRecSenHeatRate+PurchAir(PurchAirNum)%HtRecLatHeatRate
       PurchAir(PurchAirNum)%HtRecTotCoolRate = PurchAir(PurchAirNum)%HtRecSenCoolRate+PurchAir(PurchAirNum)%HtRecLatCoolRate
 
@@ -2404,7 +2404,7 @@ FUNCTION GetPurchasedAirOutAirMassFlow(PurchAirNum) RESULT(OutAirMassFlow)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)  :: PurchAirNum          !
-  REAL             :: OutAirMassFlow
+  REAL(r64)             :: OutAirMassFlow
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

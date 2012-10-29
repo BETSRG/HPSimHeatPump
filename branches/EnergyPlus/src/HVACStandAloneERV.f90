@@ -69,39 +69,39 @@ TYPE StandAloneERVData
   INTEGER                      :: ExhaustAirFanIndex    =0   ! index to exhaust air fan
   INTEGER                      :: ExhaustAirFanSchPtr   =0   ! index to exhaust air fan schedule
   INTEGER                      :: ExhaustAirFanType_Num =0   ! paramter equivalent of fan type
-  REAL                    :: SupplyAirVolFlow      =0.0 ! volumetric flow rate through the supply side of the ERV
-  REAL                    :: ExhaustAirVolFlow     =0.0 ! volumetric flow rate through the exhaust side of the ERV
+  REAL(r64)                    :: SupplyAirVolFlow      =0.0 ! volumetric flow rate through the supply side of the ERV
+  REAL(r64)                    :: ExhaustAirVolFlow     =0.0 ! volumetric flow rate through the exhaust side of the ERV
   CHARACTER(len=MaxNameLength) :: ControllerName        =' ' ! name of the controller for the stand alone ERV
   LOGICAL                      :: ControllerNameDefined = .TRUE. ! controller for the stand alone ERV is defined
   INTEGER                      :: ControlledZoneNum     = 0  ! index to controlled zone for stand alone ERV
   INTEGER                      :: ControllerIndex       = 0  ! Pointer for updates by routines this module calls.
-  REAL                    :: MaxSupAirMassFlow     =0.0 ! air mass flow rate through the supply side of the ERV
-  REAL                    :: MaxExhAirMassFlow     =0.0 ! air mass flow rate through the exhaust side of the ERV
-  REAL                    :: HighRHOAFlowRatio      =1.0 ! ratio of outside air flow to max outside air flow
-  REAL                    :: DesignSAFanVolFlowRate = 0.0 ! SA fan volumetric flow rate
-  REAL                    :: DesignEAFanVolFlowRate = 0.0 ! EA fan volumetric flow rate
-  REAL                    :: DesignSAFanMassFlowRate = 0.0 ! SA fan mass flow rate
-  REAL                    :: DesignEAFanMassFlowRate = 0.0 ! EA fan mass flow rate
-  REAL                    :: AirVolFlowPerFloorArea = 0.0  ! Air flow rate per unit floor area, used for autosizing
-  REAL                    :: AirVolFlowPerOccupant  = 0.0  ! Air flow rate per occupant, used for autosizing
+  REAL(r64)                    :: MaxSupAirMassFlow     =0.0 ! air mass flow rate through the supply side of the ERV
+  REAL(r64)                    :: MaxExhAirMassFlow     =0.0 ! air mass flow rate through the exhaust side of the ERV
+  REAL(r64)                    :: HighRHOAFlowRatio      =1.0 ! ratio of outside air flow to max outside air flow
+  REAL(r64)                    :: DesignSAFanVolFlowRate = 0.0 ! SA fan volumetric flow rate
+  REAL(r64)                    :: DesignEAFanVolFlowRate = 0.0 ! EA fan volumetric flow rate
+  REAL(r64)                    :: DesignSAFanMassFlowRate = 0.0 ! SA fan mass flow rate
+  REAL(r64)                    :: DesignEAFanMassFlowRate = 0.0 ! EA fan mass flow rate
+  REAL(r64)                    :: AirVolFlowPerFloorArea = 0.0  ! Air flow rate per unit floor area, used for autosizing
+  REAL(r64)                    :: AirVolFlowPerOccupant  = 0.0  ! Air flow rate per occupant, used for autosizing
   INTEGER                      :: EconomizerOASchedPtr        = 0    ! schedule to modify outdoor air
   LOGICAL                      :: FlowError              = .TRUE. ! used for one-time warning message for flow imbalance (Init)
 
   ! report variables
-  REAL        :: ElecUseRate       =0.0 ! total electric use rate (power) for supply/exhaust fans & generic HX parasitics [W]
-  REAL        :: ElecUseEnergy     =0.0 ! electric energy use for supply fan, exhaust fan, and generic HX parasitics [J]
-  REAL        :: SensCoolingEnergy =0.0 ! sensible cooling energy delivered by the ERV supply air to the zone [J]
-  REAL        :: SensCoolingRate   =0.0 ! rate of sensible cooling delivered to the zone [W]
-  REAL        :: LatCoolingEnergy  =0.0 ! latent cooling energy delivered by the ERV supply air to the zone [J]
-  REAL        :: LatCoolingRate    =0.0 ! rate of latent cooling delivered to the zone [W]
-  REAL        :: TotCoolingEnergy  =0.0 ! total cooling energy delivered by the ERV supply air to the zone [J]
-  REAL        :: TotCoolingRate    =0.0 ! rate of total cooling delivered to the zone [W]
-  REAL        :: SensHeatingEnergy =0.0 ! sensible heating energy delivered by the ERV supply air to the zone [J]
-  REAL        :: SensHeatingRate   =0.0 ! rate of sensible heating delivered to the zone [W]
-  REAL        :: LatHeatingEnergy  =0.0 ! latent heating energy delivered by the ERV supply air to the zone [J]
-  REAL        :: LatHeatingRate    =0.0 ! rate of latent heating delivered to the zone [W]
-  REAL        :: TotHeatingEnergy  =0.0 ! total heating energy delivered by the ERV supply air to the zone [J]
-  REAL        :: TotHeatingRate    =0.0 ! rate of total heating delivered to the zone [W]
+  REAL(r64)        :: ElecUseRate       =0.0 ! total electric use rate (power) for supply/exhaust fans & generic HX parasitics [W]
+  REAL(r64)        :: ElecUseEnergy     =0.0 ! electric energy use for supply fan, exhaust fan, and generic HX parasitics [J]
+  REAL(r64)        :: SensCoolingEnergy =0.0 ! sensible cooling energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: SensCoolingRate   =0.0 ! rate of sensible cooling delivered to the zone [W]
+  REAL(r64)        :: LatCoolingEnergy  =0.0 ! latent cooling energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: LatCoolingRate    =0.0 ! rate of latent cooling delivered to the zone [W]
+  REAL(r64)        :: TotCoolingEnergy  =0.0 ! total cooling energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: TotCoolingRate    =0.0 ! rate of total cooling delivered to the zone [W]
+  REAL(r64)        :: SensHeatingEnergy =0.0 ! sensible heating energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: SensHeatingRate   =0.0 ! rate of sensible heating delivered to the zone [W]
+  REAL(r64)        :: LatHeatingEnergy  =0.0 ! latent heating energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: LatHeatingRate    =0.0 ! rate of latent heating delivered to the zone [W]
+  REAL(r64)        :: TotHeatingEnergy  =0.0 ! total heating energy delivered by the ERV supply air to the zone [J]
+  REAL(r64)        :: TotHeatingRate    =0.0 ! rate of total heating delivered to the zone [W]
 
 END TYPE StandAloneERVData
 
@@ -171,8 +171,8 @@ SUBROUTINE SimStandAloneERV(CompName,ZoneNum,FirstHVACIteration,SensLoadMet,LatL
   CHARACTER(len=*), INTENT (IN)  :: CompName            ! name of the Stand Alone ERV unit
 ! ZoneNum not used at this time, future modifications may require zone information
   INTEGER,          INTENT (IN)  :: ZoneNum             ! number of zone being served unused1208
-  REAL,        INTENT (OUT) :: SensLoadMet         ! net sensible load supplied by the ERV unit to the zone (W)
-  REAL,        INTENT (OUT) :: LatLoadMet          ! net latent load supplied by ERV unit to the zone (kg/s),
+  REAL(r64),        INTENT (OUT) :: SensLoadMet         ! net sensible load supplied by the ERV unit to the zone (W)
+  REAL(r64),        INTENT (OUT) :: LatLoadMet          ! net latent load supplied by ERV unit to the zone (kg/s),
                                                         ! dehumid = negative
   INTEGER,          INTENT(INOUT):: CompIndex           ! pointer to correct component
 
@@ -288,7 +288,7 @@ SUBROUTINE GetStandAloneERV
   INTEGER                        :: StandAloneERVNum   ! current Stand Alone ERV number
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                           DIMENSION(:) :: Alphas     ! Alpha items for object
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers    ! Numeric items for object
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaBlanks
@@ -311,7 +311,7 @@ SUBROUTINE GetStandAloneERV
   INTEGER                         :: NumERVCtrlrs            ! total number of CONTROLLER:STAND ALONE ERV objects
   INTEGER                         :: ERVControllerNum        ! index to ERV controller
   INTEGER                         :: WhichERV                ! used in controller GetInput
-  REAL                       :: AirFlowRate             ! used to find zone with humidistat
+  REAL(r64)                       :: AirFlowRate             ! used to find zone with humidistat
   INTEGER                         :: NodeNumber              ! used to find zone with humidistat
   INTEGER                         :: HStatZoneNum            ! used to find zone with humidistat
   INTEGER                         :: NumHstatZone            ! index to humidity controlled zones
@@ -319,10 +319,10 @@ SUBROUTINE GetStandAloneERV
   LOGICAL                         :: ZoneNodeFound = .FALSE. ! used to find zone with humidistat
   LOGICAL                         :: HStatFound = .FALSE.    ! used to find zone with humidistat
   LOGICAL                         :: ErrFlag                 ! Error flag used in mining calls
-  REAL                       :: SAFanVolFlowRate        ! supply air fan volumetric flow rate [m3/s]
-  REAL                       :: EAFanVolFlowRate        ! exhaust air fan volumetric flow rate [m3/s]
-  REAL                       :: HXSupAirFlowRate        ! HX supply air flow rate [m3/s]
-  REAL                       :: HighRHOARatio           ! local variable for HighRHOAFlowRatio
+  REAL(r64)                       :: SAFanVolFlowRate        ! supply air fan volumetric flow rate [m3/s]
+  REAL(r64)                       :: EAFanVolFlowRate        ! exhaust air fan volumetric flow rate [m3/s]
+  REAL(r64)                       :: HXSupAirFlowRate        ! HX supply air flow rate [m3/s]
+  REAL(r64)                       :: HighRHOARatio           ! local variable for HighRHOAFlowRatio
   LOGICAL                         :: ZoneInletNodeFound      ! used for warning when zone node not listed in equipment connections
   LOGICAL                         :: ZoneExhaustNodeFound    ! used for warning when zone node not listed in equipment connections
   INTEGER                         :: ZoneInletCZN            ! used for warning when zone node not listed in equipment connections
@@ -637,15 +637,15 @@ SUBROUTINE GetStandAloneERV
       ENDIF
     ENDIF
     IF (StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow /= AutoSize) THEN
-      IF (StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow <= 0.0) THEN
+      IF (StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow <= 0.0d0) THEN
         CALL ShowSevereError(TRIM(CurrentModuleObject)//' = '//TRIM(StandAloneERV(StandAloneERVNum)%Name)//  &
             ' has a '//TRIM(cNumericFields(1))//' <= 0.0, it must be >0.0')
         CALL ShowContinueError('... Entered value='//TRIM(RoundSigDigits(StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow,2)))
         ErrorsFound=.TRUE.
       ENDIF
     ELSE
-      IF(StandAloneERV(StandAloneERVNum)%AirVolFlowPerFloorArea .EQ. 0.0 .AND. &
-         StandAloneERV(StandAloneERVNum)%AirVolFlowPerOccupant .EQ. 0.0)THEN
+      IF(StandAloneERV(StandAloneERVNum)%AirVolFlowPerFloorArea .EQ. 0.0d0 .AND. &
+         StandAloneERV(StandAloneERVNum)%AirVolFlowPerOccupant .EQ. 0.0d0)THEN
         CALL ShowSevereError(TRIM(CurrentModuleObject)//' "'//TRIM(StandAloneERV(StandAloneERVNum)%Name)//'"')
         CALL ShowContinueError('... Autosizing '//TRIM(cNumericFields(1))//' requires at least one input for '// &
                                TRIM(cNumericFields(3))//' or '//TRIM(cNumericFields(4))//'.')
@@ -893,7 +893,7 @@ SUBROUTINE GetStandAloneERV
     CALL SetOAControllerData(OutAirNum, Errorsfound,Bypasstype = 'MINIMUMFLOWWITHBYPASS')
 
 !   Initialize to zero in case high humidity control is NOT used and a schedule is entered
-    HighRHOARatio = 0.0
+    HighRHOARatio = 0.0d0
 !   READ Modify Air Flow Data
 !   High humidity control option is YES, read in additional data
     IF(SameString(Alphas(6),'Yes'))THEN
@@ -950,13 +950,13 @@ SUBROUTINE GetStandAloneERV
       CALL ShowContinueError('... '//TRIM(cAlphaFields(6))//' is assumed to be "No" and the simulation continues.')
     END IF ! IF(SameString(Alphas(6),'Yes'))THEN
 
-    IF(Numbers(5) .LE. 0.0 .AND. NumNumbers .GT. 4)THEN
+    IF(Numbers(5) .LE. 0.0d0 .AND. NumNumbers .GT. 4)THEN
 
       CALL ShowWarningError(TRIM(CurrentModuleObject)//' "'//TRIM(Alphas(1))//'"')
       CALL ShowContinueError('... '//TRIM(cNumericFields(5))//' must be greater than 0.')
       CALL ShowContinueError('... '//TRIM(cNumericFields(5))//' is reset to 1 and the simulation continues.')
 
-      HighRHOARatio = 1.0
+      HighRHOARatio = 1.0d0
 
     ELSE IF(NumNumbers .GT. 4)THEN
 
@@ -964,7 +964,7 @@ SUBROUTINE GetStandAloneERV
 
     ELSE
 
-      HighRHOARatio = 1.0
+      HighRHOARatio = 1.0d0
 
     END IF
 
@@ -986,7 +986,7 @@ SUBROUTINE GetStandAloneERV
       IF (.not. ErrFlag) THEN
         SAFanVolFlowRate =    &
              GetFanDesignVolumeFlowRate(cFanTypes(SAFanTypeNum),StandAloneERV(WhichERV)%SupplyAirFanName,ErrFlag)
-        IF (HighRHOARatio .GT. 1.0 .and. StandAloneERV(WhichERV)%SupplyAirVolFlow/=AutoSize .AND. SAFanVolFlowRate/=AutoSize) THEN
+        IF (HighRHOARatio .GT. 1.0d0 .and. StandAloneERV(WhichERV)%SupplyAirVolFlow/=AutoSize .AND. SAFanVolFlowRate/=AutoSize) THEN
           IF (StandAloneERV(WhichERV)%SupplyAirVolFlow*HighRHOARatio > SAFanVolFlowRate) THEN
             CALL ShowWarningError(TRIM(CurrentModuleObject)//' "'//TRIM(Alphas(1))//'"')
             CALL ShowContinueError('... A '//TRIM(cNumericFields(5))//' was entered as ' &
@@ -1014,7 +1014,7 @@ SUBROUTINE GetStandAloneERV
       IF (.not. ErrFlag) THEN
         EAFanVolFlowRate =    &
              GetFanDesignVolumeFlowRate(cFanTypes(EAFanTypeNum),StandAloneERV(WhichERV)%ExhaustAirFanName,ErrFlag)
-        IF (HighRHOARatio .GT. 1.0 .and. StandAloneERV(WhichERV)%ExhaustAirVolFlow /= AutoSize .AND. &
+        IF (HighRHOARatio .GT. 1.0d0 .and. StandAloneERV(WhichERV)%ExhaustAirVolFlow /= AutoSize .AND. &
             EAFanVolFlowRate /= AutoSize) THEN
           IF (StandAloneERV(WhichERV)%ExhaustAirVolFlow*HighRHOARatio > EAFanVolFlowRate) THEN
             CALL ShowWarningError('ZoneHVAC:EnergyRecoveryVentilator:Controller "'//TRIM(Alphas(1))//'"')
@@ -1134,7 +1134,7 @@ SUBROUTINE InitStandAloneERV(StandAloneERVNum,FirstHVACIteration)
   INTEGER             :: SupInNode      ! supply air inlet node number
   INTEGER             :: ExhInNode      ! exhaust air inlet node number
   INTEGER             :: SupInletNode   ! supply air inlet node number for Stand Alone ERV 'StandAloneERVNum'
-  REAL           :: RhoAir      ! air density at SupInNode, standard conditions (dry air @ 20C,actual elevation pressure)
+  REAL(r64)           :: RhoAir      ! air density at SupInNode, standard conditions (dry air @ 20C,actual elevation pressure)
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE,SAVE, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE,SAVE, DIMENSION(:) :: MySizeFlag
@@ -1316,10 +1316,10 @@ SUBROUTINE SizeStandAloneERV(StandAloneERVNum)
   INTEGER                      :: ActualZoneNum     ! Actual zone node number
   CHARACTER(len=MaxNameLength) :: ZoneName          ! Name of zone
   INTEGER                      :: PeopleNum         ! Index to people object
-  REAL                    :: NumberOfPeople    ! Maximum number of people in zone
+  REAL(r64)                    :: NumberOfPeople    ! Maximum number of people in zone
   INTEGER                      :: PeopleSchPtr      ! Pointer to people schedule
-  REAL                    :: MaxPeopleSch      ! maximum people schedule value
-  REAL                    :: FloorArea         ! Floor area of zone (m2)
+  REAL(r64)                    :: MaxPeopleSch      ! maximum people schedule value
+  REAL(r64)                    :: FloorArea         ! Floor area of zone (m2)
   LOGICAL                      :: ErrorsFound       ! Used for warning messages
 
   IF (StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow == AutoSize) THEN
@@ -1372,7 +1372,7 @@ SUBROUTINE SizeStandAloneERV(StandAloneERVNum)
                       StandAloneERV(StandAloneERVNum)%SupplyAirFanName, &
                       StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow* &
                       StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio, &
-                      0.0)
+                      0.0d0)
 
       StandAloneERV(StandAloneERVNum)%DesignSAFanVolFlowRate = StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow * &
                                                                StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio
@@ -1412,7 +1412,7 @@ SUBROUTINE SizeStandAloneERV(StandAloneERVNum)
                     StandAloneERV(StandAloneERVNum)%SupplyAirFanName, &
                     StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow* &
                     StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio, &
-                    0.0)
+                    0.0d0)
     StandAloneERV(StandAloneERVNum)%DesignSAFanVolFlowRate = StandAloneERV(StandAloneERVNum)%SupplyAirVolFlow * &
                                                              StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio
     CALL ReportSizingOutput(TRIM(cFanTypes(StandAloneERV(StandAloneERVNum)%SupplyAirFanType_Num)), &
@@ -1479,7 +1479,7 @@ SUBROUTINE SizeStandAloneERV(StandAloneERVNum)
                       StandAloneERV(StandAloneERVNum)%ExhaustAirFanName, &
                       StandAloneERV(StandAloneERVNum)%ExhaustAirVolFlow* &
                       StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio, &
-                      0.0)
+                      0.0d0)
 
       CALL ReportSizingOutput(TRIM(cFanTypes(StandAloneERV(StandAloneERVNum)%ExhaustAirFanType_Num)), &
                               StandAloneERV(StandAloneERVNum)%ExhaustAirFanName, &
@@ -1499,7 +1499,7 @@ SUBROUTINE SizeStandAloneERV(StandAloneERVNum)
                       StandAloneERV(StandAloneERVNum)%ExhaustAirFanName, &
                       StandAloneERV(StandAloneERVNum)%ExhaustAirVolFlow* &
                       StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio, &
-                      0.0)
+                      0.0d0)
       StandAloneERV(StandAloneERVNum)%DesignEAFanVolFlowRate = StandAloneERV(StandAloneERVNum)%ExhaustAirVolFlow* &
                                                                StandAloneERV(StandAloneERVNum)%HighRHOAFlowRatio
 
@@ -1544,8 +1544,8 @@ SUBROUTINE CalcStandAloneERV(StandAloneERVNum,FirstHVACIteration,SensLoadMet,Lat
             ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)  :: StandAloneERVNum   ! Unit index in ERV data structure
   LOGICAL, INTENT (IN)  :: FirstHVACIteration ! flag for 1st HVAC iteration in the time step
-  REAL,    INTENT (OUT) :: SensLoadMet        ! sensible zone load met by unit (W)
-  REAL,    INTENT (OUT) :: LatentMassLoadMet  ! latent zone load met by unit (kg/s), dehumid = negative
+  REAL(r64),    INTENT (OUT) :: SensLoadMet        ! sensible zone load met by unit (W)
+  REAL(r64),    INTENT (OUT) :: LatentMassLoadMet  ! latent zone load met by unit (kg/s), dehumid = negative
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1560,11 +1560,11 @@ SUBROUTINE CalcStandAloneERV(StandAloneERVNum,FirstHVACIteration,SensLoadMet,Lat
   INTEGER :: SupOutletNode    ! unit supply air outlet node
   INTEGER :: ExhaustInletNode ! unit exhaust air inlet node
   INTEGER :: SupInletNode     ! unit supply air inlet node
-  REAL :: AirMassFlow      ! total mass flow through supply side of the ERV (supply air outlet node)
-  REAL :: MinHumRatio      ! minimum humidity ratio for calculating sensible load met
+  REAL(r64) :: AirMassFlow      ! total mass flow through supply side of the ERV (supply air outlet node)
+  REAL(r64) :: MinHumRatio      ! minimum humidity ratio for calculating sensible load met
                                 ! (so enthalpy routines work without error)
-  REAL :: TotLoadMet       ! total zone load met by unit (W)
-  REAL :: LatLoadMet       ! latent zone load met by unit (W)
+  REAL(r64) :: TotLoadMet       ! total zone load met by unit (W)
+  REAL(r64) :: LatLoadMet       ! latent zone load met by unit (W)
   LOGICAL :: HXUnitOn           ! flag to operate heat exchanger heat recovery
   LOGICAL :: EconomizerFlag     ! economizer signal from OA controller
   LOGICAL :: HighHumCtrlFlag    ! high humditiy control signal from OA controller
@@ -1572,8 +1572,8 @@ SUBROUTINE CalcStandAloneERV(StandAloneERVNum,FirstHVACIteration,SensLoadMet,Lat
 !  INTEGER :: ExhaustNodeNum    ! index to exhaust nodes in controlled zones
 !  INTEGER :: SupplyNodeNum     ! index to supply nodes in controlled zone
 !  LOGICAL :: ExhaustNodeFound  ! used in controlled zone exhaust node search
-  REAL :: TotalExhaustMassFlow ! total exhaust air mass flow rate in controlled zone
-  REAL :: TotalSupplyMassFlow  ! total supply air mass flow rate in controlled zone
+  REAL(r64) :: TotalExhaustMassFlow ! total exhaust air mass flow rate in controlled zone
+  REAL(r64) :: TotalSupplyMassFlow  ! total supply air mass flow rate in controlled zone
 
   SupInletNode = StandAloneERV(StandAloneERVNum)%SupplyAirInletNode
   SupOutletNode = StandAloneERV(StandAloneERVNum)%SupplyAirOutletNode
@@ -1735,7 +1735,7 @@ SUBROUTINE ReportStandAloneERV(StandAloneERVNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: ReportingConstant
+  REAL(r64) :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
   StandAloneERV(StandAloneERVNum)%ElecUseEnergy = StandAloneERV(StandAloneERVNum)%ElecUseRate*ReportingConstant
@@ -1782,7 +1782,7 @@ FUNCTION GetSupplyAirFlowRate(ERVType,ERVCtrlName,ErrorsFound) RESULT(AirFlowRat
   CHARACTER(len=*), INTENT(IN) :: ERVType      ! must be "ZoneHVAC:EnergyRecoveryVentilator"
   CHARACTER(len=*), INTENT(IN) :: ERVCtrlName  ! must match a controller name in the ERV data structure
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: AirFlowRate  ! returned supply air flow rate of the ERV unit
+  REAL(r64)                    :: AirFlowRate  ! returned supply air flow rate of the ERV unit
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

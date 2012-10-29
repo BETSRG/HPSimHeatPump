@@ -126,8 +126,8 @@ SUBROUTINE SimPVGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFlag,PVL
 
           ! USE STATEMENTS:
   USE InputProcessor, ONLY: FindItemInList
-!unuse909  USE DataEnvironment, ONLY : EnvironmentName, DayOfYear
-!unuse909  USE DataGlobals, ONLY: BeginEnvrnFlag, EndEnvrnFlag
+!unused0909  USE DataEnvironment, ONLY : EnvironmentName, DayOfYear
+!unused0909  USE DataGlobals, ONLY: BeginEnvrnFlag, EndEnvrnFlag
   USE DataGlobalConstants, ONLY: iGeneratorPV
   USE General, ONLY: TrimSigDigits
 
@@ -139,7 +139,7 @@ SUBROUTINE SimPVGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFlag,PVL
   CHARACTER(len=*), INTENT(IN)  :: GeneratorName   ! user specified name of Generator
   INTEGER, INTENT(INOUT)        :: GeneratorIndex
   LOGICAL ,         INTENT(IN)  :: RunFlag         ! is PV ON or OFF as determined by schedules in ElecLoadCenter
-  REAL  ,      INTENT(IN)  :: PVLoad  ! electrical load on the PV (not really used... PV models assume "full on" !unused1208
+  REAL(r64)  ,      INTENT(IN)  :: PVLoad  ! electrical load on the PV (not really used... PV models assume "full on" !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na)
@@ -240,10 +240,10 @@ SUBROUTINE GetPVGeneratorResults(GeneratorType,GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator !unused1208
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower
-  REAL, INTENT(OUT)        :: ThermalEnergy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -265,8 +265,8 @@ SUBROUTINE GetPVGeneratorResults(GeneratorType,GeneratorIndex, &
     ! get result for thermal power generation
     Call GetPVTThermalPowerProduction(GeneratorIndex, ThermalPower, ThermalEnergy)
   ELSE
-    ThermalPower  = 0.0
-    ThermalEnergy = 0.0
+    ThermalPower  = 0.0D0
+    ThermalEnergy = 0.0D0
   ENDIF
 
   RETURN
@@ -300,7 +300,7 @@ SUBROUTINE GetPVInput
                             SameString
   USE DataIPShortCuts
   USE DataGlobals,     ONLY: DegToRadians, KelvinConv
-!unuse909  USE DataEnvironment, ONLY: Longitude, TimeZoneMeridian
+!unused0909  USE DataEnvironment, ONLY: Longitude, TimeZoneMeridian
   USE DataSurfaces,    ONLY: Surface, TotSurfaces, ExternalEnvironment,  &
                              SurfaceClass_Shading, SurfaceClass_Detached_F, SurfaceClass_Detached_B
   USE DataHeatBalance
@@ -391,7 +391,7 @@ SUBROUTINE GetPVInput
       END IF
 
       ! check surface orientation, warn if upside down
-      IF (( Surface(SurfNum)%Tilt < -95.0 ) .OR. (Surface(SurfNum)%Tilt > 95.0)) THEN
+      IF (( Surface(SurfNum)%Tilt < -95.0D0 ) .OR. (Surface(SurfNum)%Tilt > 95.0D0)) THEN
         CALL ShowWarningError('Suspected input problem with '//TRIM(cAlphaFieldNames(2))//' = '//TRIM(cAlphaArgs(2)) )
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1)) )
         CALL ShowContinueError( 'Surface used for solar collector faces down')
@@ -766,8 +766,8 @@ SUBROUTINE CalcSimplePV(thisPV, RunFlag)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER   :: thisSurf ! working index ptr to Surface arrays
-    REAL :: Eff      ! working variable for solar electric efficiency
-!unused1208    REAL :: ArrayEnergy !working variable for PV energy this system time step
+    REAL(r64) :: Eff      ! working variable for solar electric efficiency
+!unused1208    REAL(r64) :: ArrayEnergy !working variable for PV energy this system time step
     !first get surface index to use as a pointer
     thisSurf = PVArray(thisPV)%SurfacePtr
 
@@ -870,13 +870,13 @@ SUBROUTINE ReportPV(PVnum)
   SELECT CASE (PVArray(PVNum)%CellIntegrationMode)
   ! SurfaceSink is not multiplied...
   CASE (iSurfaceOutsideFaceCellIntegration)
-    QPVSysSource(PVArray(PVNum)%SurfacePtr) = -1.0 * PVArray(PVNum)%SurfaceSink
+    QPVSysSource(PVArray(PVNum)%SurfacePtr) = -1.0D0 * PVArray(PVNum)%SurfaceSink
 
   CASE (iTranspiredCollectorCellIntegration)
-    CALL SetUTSCQdotSource(PVArray(PVNum)%UTSCPtr, -1.0 * PVArray(PVNum)%SurfaceSink )
+    CALL SetUTSCQdotSource(PVArray(PVNum)%UTSCPtr, -1.0D0 * PVArray(PVNum)%SurfaceSink )
 
   CASE ( iExteriorVentedCavityCellIntegration)
-    CALL SetVentedModuleQdotSource(PVArray(PVNum)%ExtVentCavPtr, -1.0 * PVArray(PVNum)%SurfaceSink )
+    CALL SetVentedModuleQdotSource(PVArray(PVNum)%ExtVentCavPtr, -1.0D0 * PVArray(PVNum)%SurfaceSink )
 
   CASE (iPVTSolarCollectorCellIntegration)
     ! CALL SetPVTQdotSource(PVArray(PVNum)%ExtVentCavPtr,  -1 * PVArray(PVNum)%SurfaceSink )
@@ -941,7 +941,7 @@ SUBROUTINE CalcSandiaPV(PVNum, runFlag)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: thisSurf ! working variable for indexing surfaces
 !unused1208    INTEGER :: thisMod  ! working variable for indexing module parameters
-    REAL    :: Ee
+    REAL(r64)    :: Ee
 
     thisSurf = PVarray(PVNum)%SurfacePtr
 
@@ -1052,14 +1052,14 @@ SUBROUTINE CalcSandiaPV(PVNum, runFlag)
 
 
      ! Calculate Vx function:
-      PVarray(PVNum)%SNLPVCalc%Vx = PVarray(PVNum)%SNLPVCalc%Voc/2.0
+      PVarray(PVNum)%SNLPVCalc%Vx = PVarray(PVNum)%SNLPVCalc%Voc/2.0d0
 
      ! Calculate Ixx function:
       PVarray(PVNum)%SNLPVCalc%Ixx = SandiaIxx(PVarray(PVNum)%SNLPVCalc%Tcell,Ee,PVArray(PVNum)%SNLPVmodule%Ixx0, &
                             PVArray(PVNum)%SNLPVmodule%aImp,PVArray(PVNum)%SNLPVmodule%c_6, &
                             PVArray(PVNum)%SNLPVmodule%c_7)
      ! Calculate Vxx :
-      PVarray(PVNum)%SNLPVCalc%Vxx = 0.5*(PVarray(PVNum)%SNLPVCalc%Voc+PVarray(PVNum)%SNLPVCalc%Vmp)
+      PVarray(PVNum)%SNLPVCalc%Vxx = 0.5d0*(PVarray(PVNum)%SNLPVCalc%Voc+PVarray(PVNum)%SNLPVCalc%Vmp)
 
      ! Calculate Pmp, single module: power at maximum powerpoint
       PVarray(PVNum)%SNLPVCalc%Pmp = PVarray(PVNum)%SNLPVCalc%Imp * PVarray(PVNum)%SNLPVCalc%Vmp ! W
@@ -1090,7 +1090,7 @@ SUBROUTINE CalcSandiaPV(PVNum, runFlag)
       PVarray(PVNum)%SNLPVCalc%Voc=0.0
       PVarray(PVNum)%SNLPVCalc%Tcell=PVArray(PVNum)%SNLPVinto%Tamb
       PVarray(PVNum)%SNLPVCalc%Tback=PVArray(PVNum)%SNLPVinto%Tamb
-      PVarray(PVNum)%SNLPVCalc%AMa=999.0
+      PVarray(PVNum)%SNLPVCalc%AMa=999.0d0
       PVarray(PVNum)%SNLPVCalc%F1=0.0
       PVarray(PVNum)%SNLPVCalc%F2=0.0
       PVarray(PVNum)%SNLPVCalc%Ix=0.0
@@ -1158,7 +1158,7 @@ SUBROUTINE InitTRNSYSPV(PVNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL,SAVE        :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
-  REAL    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL(r64)    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
 
   ! perform the one time initializations
   IF (MyOneTimeFlag) THEN
@@ -1188,11 +1188,11 @@ SUBROUTINE InitTRNSYSPV(PVNum)
     PVarray(PVNum)%TRNSYSPVcalc%TimeElapsed = TimeElapsed
   END IF
 
-  IF (ANY(QRadSWOutIncident > 0.0)) THEN
+  IF (ANY(QRadSWOutIncident > 0.0D0)) THEN
    !  Determine the amount of radiation incident on each PV
     PVarray(PVNum)%TRNSYSPVcalc%Insolation = QRadSWOutIncident(PVarray(PVNum)%SurfacePtr)  ![W/m2]
   ELSE
-    PVarray(PVNum)%TRNSYSPVcalc%Insolation = 0.0
+    PVarray(PVNum)%TRNSYSPVcalc%Insolation = 0.0D0
   ENDIF
 
   RETURN
@@ -1236,12 +1236,12 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
   LOGICAL, INTENT(IN) :: RunFlag !BTG added intent    !flag tells whether the PV is ON or OFF
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: EPS=0.001
-  REAL, PARAMETER :: ERR=0.001
-  REAL, PARAMETER :: MinInsolation=30.0
+  REAL(r64), PARAMETER :: EPS=0.001d0
+  REAL(r64), PARAMETER :: ERR=0.001d0
+  REAL(r64), PARAMETER :: MinInsolation=30.0d0
   INTEGER, PARAMETER :: CCMAX=10
   INTEGER, PARAMETER :: KMAX=100
-  REAL, PARAMETER :: EtaIni = 0.10   !initial value of eta
+  REAL(r64), PARAMETER :: EtaIni = 0.10d0   !initial value of eta
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1250,13 +1250,13 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL,SAVE :: PVTimeStep      !internal timestep (in seconds) for cell temperature mode 3
-  REAL :: DummyErr        !
-  REAL :: ETA,Tambient,EtaOld,ILRef,AARef,IORef,SeriesResistance,IL,AA,IO,ISCG1,ISC,VOCG1,VOC
-  REAL :: VLEFT,VRIGHT,VM,IM,PM,IA,ISCA,VA,VOCA,PA
+  REAL(r64),SAVE :: PVTimeStep      !internal timestep (in seconds) for cell temperature mode 3
+  REAL(r64) :: DummyErr        !
+  REAL(r64) :: ETA,Tambient,EtaOld,ILRef,AARef,IORef,SeriesResistance,IL,AA,IO,ISCG1,ISC,VOCG1,VOC
+  REAL(r64) :: VLEFT,VRIGHT,VM,IM,PM,IA,ISCA,VA,VOCA,PA
   INTEGER :: CC,K
-  REAL :: CellTemp  ! cell temperature in Kelvin
-  REAL :: CellTempC       !cell temperature in degrees C
+  REAL(r64) :: CellTemp  ! cell temperature in Kelvin
+  REAL(r64) :: CellTempC       !cell temperature in degrees C
   LOGICAL, SAVE :: FirstTime=.true.
 !unused1208  INTEGER :: thisZone
 
@@ -1275,7 +1275,7 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
   IF ((PVarray(PVNum)%TRNSYSPVcalc%Insolation .GT. MinInsolation).AND.(RunFlag)) THEN
 
 ! set initial values for eta iteration loop
-    DummyErr = 2.0*ERR
+    DummyErr = 2.0d0*ERR
     CC = 1
     EtaOld = EtaIni
 
@@ -1291,13 +1291,13 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
            PVarray(PVNum)%TRNSYSPVModule%NOCTInsolation/    &
            (PVarray(PVNum)%TRNSYSPVModule%NOCTCellTemp-PVarray(PVNum)%TRNSYSPVModule%NOCTAmbTemp)
         CellTemp = Tambient+(PVarray(PVNum)%TRNSYSPVcalc%Insolation*PVarray(PVNum)%TRNSYSPVModule%TauAlpha/  &
-           PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef)*(1.0-ETA/PVarray(PVNum)%TRNSYSPVModule%TauAlpha)
+           PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef)*(1.0d0-ETA/PVarray(PVNum)%TRNSYSPVModule%TauAlpha)
       CASE (iDecoupledUllebergDynamicCellIntegration)
          !  cell temperature based on energy balance with thermal capacity effects
         CellTemp = Tambient+(PVarray(PVNum)%TRNSYSPVcalc%LastCellTempK-Tambient)*  &
            EXP(-PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef/PVarray(PVNum)%TRNSYSPVModule%HeatCapacity*PVTimeStep)  + &
            (PVarray(PVNum)%TRNSYSPVModule%TauAlpha-ETA)*PVarray(PVNum)%TRNSYSPVcalc%Insolation /    &
-           PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef*(1.0-EXP(-PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef /   &
+           PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef*(1.0d0-EXP(-PVarray(PVNum)%TRNSYSPVModule%HeatLossCoef /   &
               PVarray(PVNum)%TRNSYSPVModule%HeatCapacity*PVTimeStep))
       CASE (iSurfaceOutsideFaceCellIntegration)
         CellTemp = TempSurfOut(PVArray(PVNum)%SurfacePtr) + KelvinConv
@@ -1317,11 +1317,11 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
       AARef = (PVarray(PVNum)%TRNSYSPVModule%TempCoefVoc*PVarray(PVNum)%TRNSYSPVModule%RefTemperature-  &
          PVarray(PVNum)%TRNSYSPVModule%RefVoc+PVarray(PVNum)%TRNSYSPVModule%SemiConductorBandgap*    &
          PVarray(PVNum)%TRNSYSPVModule%CellsInSeries)/(PVarray(PVNum)%TRNSYSPVModule%TempCoefIsc *   &
-         PVarray(PVNum)%TRNSYSPVModule%RefTemperature/ILRef-3.0)
+         PVarray(PVNum)%TRNSYSPVModule%RefTemperature/ILRef-3.0d0)
       IORef = ILRef*EXP(-PVarray(PVNum)%TRNSYSPVModule%RefVoc/AARef)
 
 !  series resistance
-      SeriesResistance = (AARef*LOG(1.0-PVarray(PVNum)%TRNSYSPVModule%Imp/ILRef)-  &
+      SeriesResistance = (AARef*LOG(1.0d0-PVarray(PVNum)%TRNSYSPVModule%Imp/ILRef)-  &
                           PVarray(PVNum)%TRNSYSPVModule%Vmp+PVarray(PVNum)%TRNSYSPVModule%RefVoc) /   &
                              PVarray(PVNum)%TRNSYSPVModule%Imp
 
@@ -1331,7 +1331,7 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
       AA = AARef*CellTemp/PVarray(PVNum)%TRNSYSPVModule%RefTemperature
       IO = IORef*(CellTemp/PVarray(PVNum)%TRNSYSPVModule%RefTemperature)**3*  &
          EXP(PVarray(PVNum)%TRNSYSPVModule%SemiConductorBandgap*    &
-         PVarray(PVNum)%TRNSYSPVModule%CellsInSeries/AARef*(1.0-PVarray(PVNum)%TRNSYSPVModule%RefTemperature/CellTemp))
+         PVarray(PVNum)%TRNSYSPVModule%CellsInSeries/AARef*(1.0d0-PVarray(PVNum)%TRNSYSPVModule%RefTemperature/CellTemp))
 
 
 !  compute short curcuit current and open circuit voltage
@@ -1341,7 +1341,7 @@ SUBROUTINE CalcTRNSYSPV(PVNum,RunFlag)
       CALL NEWTON(ISC,FUN,FI,ISC,constant_zero,IO,IL,SeriesResistance,AA,ISCG1,EPS)
 
 !   NEWTON --> VOC  (STARTVALUE: VOCG1 - BASED ON IM=0.0)
-      VOCG1 = (LOG(IL/IO)+1.0)*AA
+      VOCG1 = (LOG(IL/IO)+1.0d0)*AA
       CALL NEWTON(VOC,FUN,FV,constant_zero,VOC,IO,IL,SeriesResistance,AA,VOCG1,EPS)
 
 !  maximum power point tracking
@@ -1453,11 +1453,11 @@ SUBROUTINE POWER(IO,IL,RSER,AA,EPS,II,VV,PP)
           ! na
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL :: IO    !passed in from CalcPV
-  REAL :: IL    !passed in from CalcPV
-  REAL :: RSer  !passed in from CalcPV
-  REAL :: AA    !passed in from CalcPV
-  REAL :: EPS   !passed in from CalcPV
+  REAL(r64) :: IO    !passed in from CalcPV
+  REAL(r64) :: IL    !passed in from CalcPV
+  REAL(r64) :: RSer  !passed in from CalcPV
+  REAL(r64) :: AA    !passed in from CalcPV
+  REAL(r64) :: EPS   !passed in from CalcPV
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1469,13 +1469,13 @@ SUBROUTINE POWER(IO,IL,RSER,AA,EPS,II,VV,PP)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: II    !current [A]
-  REAL :: VV    !voltage [V]
-  REAL :: PP    !power [W]
-  REAL :: IG1
+  REAL(r64) :: II    !current [A]
+  REAL(r64) :: VV    !voltage [V]
+  REAL(r64) :: PP    !power [W]
+  REAL(r64) :: IG1
 
 ! NEWTON --> II (STARTVALUE: IG1 BASED ON SIMPLIFIED I(I,V) EQUATION)
-  IG1 = IL-IO*EXP(VV/AA-1.0)
+  IG1 = IL-IO*EXP(VV/AA-1.0d0)
   CALL NEWTON(II,FUN,FI,II,VV,IO,IL,RSER,AA,IG1,EPS)
   PP = II*VV
   RETURN
@@ -1506,9 +1506,9 @@ SUBROUTINE NEWTON(XX,FXX,DER,II,VV,IO,IL,RSER,AA,XS,EPS)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, EXTERNAL :: FXX
-  REAL, EXTERNAL :: DER
-  REAL XX,II,VV,IO,IL,RSER,AA,XS,EPS
+  REAL(r64), EXTERNAL :: FXX
+  REAL(r64), EXTERNAL :: DER
+  REAL(r64) XX,II,VV,IO,IL,RSER,AA,XS,EPS
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: CCMAX=10
@@ -1522,7 +1522,7 @@ SUBROUTINE NEWTON(XX,FXX,DER,II,VV,IO,IL,RSER,AA,XS,EPS)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER COUNT
-  REAL ERR,X0
+  REAL(r64) ERR,X0
 
   COUNT = 0
   XX  = XS
@@ -1570,8 +1570,8 @@ SUBROUTINE SEARCH(A,B,P,K,IO,IL,RSER,AA,EPS,KMAX)
   INTEGER K, KMAX
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: DELTA=1.*10**-3    !RS: Debugging: 102612
-  REAL, PARAMETER :: EPSILON=1.*10**-3
+  REAL(r64), PARAMETER :: DELTA=1.d-3
+  REAL(r64), PARAMETER :: EPSILON=1.d-3
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1580,22 +1580,22 @@ SUBROUTINE SEARCH(A,B,P,K,IO,IL,RSER,AA,EPS,KMAX)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL A,B,C,D,H,P,RONE,RTWO,YP,YA,YB,YC,YD
-  REAL IO,IL,RSER,AA,EPS,IM,PM
+  REAL(r64) A,B,C,D,H,P,RONE,RTWO,YP,YA,YB,YC,YD
+  REAL(r64) IO,IL,RSER,AA,EPS,IM,PM
 
-  RONE=(SQRT(5.0)-1.)/2.
+  RONE=(SQRT(5.0d0)-1.d0)/2.d0
   RTWO=RONE*RONE
   H=B-A
   CALL POWER(IO,IL,RSER,AA,EPS,IM,A,PM)
-  YA=-1.0*PM
+  YA=-1.0d0*PM
   CALL POWER(IO,IL,RSER,AA,EPS,IM,B,PM)
-  YB=-1.0*PM
+  YB=-1.0d0*PM
   C=A+RTWO*H
   D=A+RONE*H
   CALL POWER(IO,IL,RSER,AA,EPS,IM,C,PM)
-  YC=-1.0*PM
+  YC=-1.0d0*PM
   CALL POWER(IO,IL,RSER,AA,EPS,IM,D,PM)
-  YD=-1.0*PM
+  YD=-1.0d0*PM
   K=1
   DO WHILE (ABS(YB-YA).GT.EPSILON .OR. H.GT.DELTA)
     IF (YC.LT.YD) THEN
@@ -1606,7 +1606,7 @@ SUBROUTINE SEARCH(A,B,P,K,IO,IL,RSER,AA,EPS,KMAX)
       H=B-A
       C=A+RTWO*H
       CALL POWER(IO,IL,RSER,AA,EPS,IM,C,PM)
-      YC=-1.0*PM
+      YC=-1.0d0*PM
     ELSE
       A=C
       YA=YC
@@ -1615,7 +1615,7 @@ SUBROUTINE SEARCH(A,B,P,K,IO,IL,RSER,AA,EPS,KMAX)
       H=B-A
       D=A+RONE*H
       CALL POWER(IO,IL,RSER,AA,EPS,IM,D,PM)
-      YD=-1.0*PM
+      YD=-1.0d0*PM
     ENDIF
     K=K+1
   END DO
@@ -1633,7 +1633,7 @@ SUBROUTINE SEARCH(A,B,P,K,IO,IL,RSER,AA,EPS,KMAX)
   END SUBROUTINE SEARCH
 
 
-REAL FUNCTION FUN(II,VV,IL,IO,RSER,AA)
+REAL(r64) FUNCTION FUN(II,VV,IL,IO,RSER,AA)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Ø. Ulleberg, IFE Norway for Hydrogems
@@ -1658,7 +1658,7 @@ REAL FUNCTION FUN(II,VV,IL,IO,RSER,AA)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL II,VV,IL,IO,RSER,AA
+  REAL(r64) II,VV,IL,IO,RSER,AA
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1672,9 +1672,9 @@ REAL FUNCTION FUN(II,VV,IL,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  IF (((VV+II*RSER)/AA) < 700.0) THEN
+  IF (((VV+II*RSER)/AA) < 700.0D0) THEN
 
-    FUN = II-IL+IO*(EXP((VV+II*RSER)/AA)-1.0)-((VV+II*RSER)/ShuntResistance)
+    FUN = II-IL+IO*(EXP((VV+II*RSER)/AA)-1.0d0)-((VV+II*RSER)/ShuntResistance)
   ELSE
 
     Call ShowSevereError('EquivalentOneDiode Photovoltaic model failed to find maximum power point')
@@ -1690,7 +1690,7 @@ REAL FUNCTION FUN(II,VV,IL,IO,RSER,AA)
 END FUNCTION FUN
 
 
-REAL FUNCTION FI(II,VV,IO,RSER,AA)
+REAL(r64) FUNCTION FI(II,VV,IO,RSER,AA)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Ø. Ulleberg, IFE Norway for Hydrogems
@@ -1715,7 +1715,7 @@ REAL FUNCTION FI(II,VV,IO,RSER,AA)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL II,VV,IO,RSER,AA
+  REAL(r64) II,VV,IO,RSER,AA
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1728,9 +1728,9 @@ REAL FUNCTION FI(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  IF (((VV+II*RSER)/AA) < 700.0) THEN
+  IF (((VV+II*RSER)/AA) < 700.0D0) THEN
 
-    FI = 1.0+IO*EXP((VV+II*RSER)/AA)*RSER/AA+(RSER/ShuntResistance)
+    FI = 1.0d0+IO*EXP((VV+II*RSER)/AA)*RSER/AA+(RSER/ShuntResistance)
 
   ELSE
 
@@ -1748,7 +1748,7 @@ REAL FUNCTION FI(II,VV,IO,RSER,AA)
 END FUNCTION FI
 
 
-REAL FUNCTION FV(II,VV,IO,RSER,AA)
+REAL(r64) FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Ø. Ulleberg, IFE Norway for Hydrogems
@@ -1773,7 +1773,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL II,VV,IO,RSER,AA
+  REAL(r64) II,VV,IO,RSER,AA
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1787,9 +1787,9 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  IF (((VV+II*RSER)/AA) < 700.0) THEN
+  IF (((VV+II*RSER)/AA) < 700.0D0) THEN
 
-    FV = IO*EXP((VV+II*RSER)/AA)/AA+(1.0/ShuntResistance)
+    FV = IO*EXP((VV+II*RSER)/AA)/AA+(1.0d0/ShuntResistance)
 
   ELSE
 
@@ -1812,7 +1812,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 !
 ! Begin supporting routines for Sandia PV model
 ! -------------------------------------------------------------------------------
-  REAL FUNCTION SandiaModuleTemperature(Ibc,Idc,Ws,Ta,fd,a,b)
+  REAL(r64) FUNCTION SandiaModuleTemperature(Ibc,Idc,Ws,Ta,fd,a,b)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   unknown
@@ -1839,13 +1839,13 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Ibc ! beam radiation on collector plane, W/m2
-    REAL, INTENT(IN) :: Idc ! Diffuse radiation on collector plane, W/m2
-    REAL, INTENT(IN) :: Ws  ! wind speed, m/s
-    REAL, INTENT(IN) :: Ta  ! ambient temperature, degC
-    REAL, INTENT(IN) :: fd  ! fraction of Idc used (empirical constant)
-    REAL, INTENT(IN) :: a   ! empirical constant
-    REAL, INTENT(IN) :: b   ! empirical constant
+    REAL(r64), INTENT(IN) :: Ibc ! beam radiation on collector plane, W/m2
+    REAL(r64), INTENT(IN) :: Idc ! Diffuse radiation on collector plane, W/m2
+    REAL(r64), INTENT(IN) :: Ws  ! wind speed, m/s
+    REAL(r64), INTENT(IN) :: Ta  ! ambient temperature, degC
+    REAL(r64), INTENT(IN) :: fd  ! fraction of Idc used (empirical constant)
+    REAL(r64), INTENT(IN) :: a   ! empirical constant
+    REAL(r64), INTENT(IN) :: b   ! empirical constant
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1859,7 +1859,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
 
-     REAL  :: E ! total irradiance working variable
+     REAL(r64)  :: E ! total irradiance working variable
 
      E = Ibc + fd * Idc
 
@@ -1868,7 +1868,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
   END Function SandiaModuleTemperature
     ! -------------------------------------------------------------------------------
     ! -------------------------------------------------------------------------------
-  REAL Function SandiaTcellFromTmodule(Tm,Ibc,Idc,fd,DT0)
+  REAL(r64) Function SandiaTcellFromTmodule(Tm,Ibc,Idc,fd,DT0)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   unknown
@@ -1895,11 +1895,11 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tm  ! module temperature (deg C)
-    REAL, INTENT(IN) :: Ibc ! beam radiation on collector plane, W/m2
-    REAL, INTENT(IN) :: Idc ! Diffuse radiation on collector plane, W/m2
-    REAL, INTENT(IN) :: fd  ! fraction of Idc used (empirical constant)
-    REAL, INTENT(IN) :: DT0 ! (Tc-Tm) at E=1000 W/m2 (empirical constant known as delta T), deg C
+    REAL(r64), INTENT(IN) :: Tm  ! module temperature (deg C)
+    REAL(r64), INTENT(IN) :: Ibc ! beam radiation on collector plane, W/m2
+    REAL(r64), INTENT(IN) :: Idc ! Diffuse radiation on collector plane, W/m2
+    REAL(r64), INTENT(IN) :: fd  ! fraction of Idc used (empirical constant)
+    REAL(r64), INTENT(IN) :: DT0 ! (Tc-Tm) at E=1000 W/m2 (empirical constant known as delta T), deg C
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1912,17 +1912,17 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-     REAL  :: E ! total irradiance working variable
+     REAL(r64)  :: E ! total irradiance working variable
 
      E = Ibc + fd * Idc
 
-     SandiaTcellFromTmodule = Tm + (E / 1000.0) * DT0
+     SandiaTcellFromTmodule = Tm + (E / 1000.0d0) * DT0
 
      RETURN
   END FUNCTION SandiaTcellFromTmodule
 ! -------------------------------------------------------------------------------
 
-  REAL Function SandiaCellTemperature(Ibc,Idc,Ws,Ta,fd,a,b,DT0)
+  REAL(r64) Function SandiaCellTemperature(Ibc,Idc,Ws,Ta,fd,a,b,DT0)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   unknown
@@ -1949,14 +1949,14 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Ibc  ! beam radiation on collector plane W/m2
-    REAL, INTENT(IN) :: Idc  ! Diffuse radiation on collector plane W/m2
-    REAL, INTENT(IN) :: Ws   ! wind speed, m/s
-    REAL, INTENT(IN) :: Ta   ! ambient temperature, degC
-    REAL, INTENT(IN) :: fd   ! fraction of Idc used (empirical constant)
-    REAL, INTENT(IN) :: a    ! empirical constant
-    REAL, INTENT(IN) :: b    ! empirical constant
-    REAL, INTENT(IN) :: DT0  ! (Tc-Tm) at E=1000 W/m2 (empirical constant known as dTc), deg C
+    REAL(r64), INTENT(IN) :: Ibc  ! beam radiation on collector plane W/m2
+    REAL(r64), INTENT(IN) :: Idc  ! Diffuse radiation on collector plane W/m2
+    REAL(r64), INTENT(IN) :: Ws   ! wind speed, m/s
+    REAL(r64), INTENT(IN) :: Ta   ! ambient temperature, degC
+    REAL(r64), INTENT(IN) :: fd   ! fraction of Idc used (empirical constant)
+    REAL(r64), INTENT(IN) :: a    ! empirical constant
+    REAL(r64), INTENT(IN) :: b    ! empirical constant
+    REAL(r64), INTENT(IN) :: DT0  ! (Tc-Tm) at E=1000 W/m2 (empirical constant known as dTc), deg C
 
            ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1969,19 +1969,19 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-    REAL ::  E  ! irradiance working variable
-    REAL ::  Tm
+    REAL(r64) ::  E  ! irradiance working variable
+    REAL(r64) ::  Tm
 
     E  = Ibc + fd * Idc
 
     Tm = E * Exp(a + b * Ws) + Ta
 
-    SandiaCellTemperature = Tm + (E / 1000.0) * DT0 ! E0=1000.0 W/m2
+    SandiaCellTemperature = Tm + (E / 1000.0d0) * DT0 ! E0=1000.0 W/m2
 
   END FUNCTION SandiaCellTemperature
 ! -------------------------------------------------------------------------------
 
-  REAL Function SandiaEffectiveIrradiance(Tc,Isc,Isc0,aIsc)
+  REAL(r64) Function SandiaEffectiveIrradiance(Tc,Isc,Isc0,aIsc)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2004,10 +2004,10 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
 
-    REAL, INTENT(IN) ::  Tc   ! cell temperature (deg C)
-    REAL, INTENT(IN) ::  Isc  ! short-circuit current under operating conditions (A)
-    REAL, INTENT(IN) ::  Isc0 ! reference Isc at Tc=25 C, Ic=1000 W/m2 (A)
-    REAL, INTENT(IN) ::  aIsc ! Isc temperature coefficient (degC^-1)
+    REAL(r64), INTENT(IN) ::  Tc   ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) ::  Isc  ! short-circuit current under operating conditions (A)
+    REAL(r64), INTENT(IN) ::  Isc0 ! reference Isc at Tc=25 C, Ic=1000 W/m2 (A)
+    REAL(r64), INTENT(IN) ::  aIsc ! Isc temperature coefficient (degC^-1)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2021,12 +2021,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-        SandiaEffectiveIrradiance = Isc / (1.0+aIsc*(Tc - 25.0))/Isc0
+        SandiaEffectiveIrradiance = Isc / (1.0d0+aIsc*(Tc - 25.0d0))/Isc0
 
   END FUNCTION SandiaEffectiveIrradiance
 
 ! -------------------------------------------------------------------------------
-  REAL Function AbsoluteAirMass(SolZen, Altitude)
+  REAL(r64) Function AbsoluteAirMass(SolZen, Altitude)
                 ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2048,8 +2048,8 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: SolZen   ! solar zenith angle (deg)
-    REAL, INTENT(IN) :: Altitude ! site altitude (m)
+    REAL(r64), INTENT(IN) :: SolZen   ! solar zenith angle (deg)
+    REAL(r64), INTENT(IN) :: Altitude ! site altitude (m)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2062,22 +2062,22 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-    REAL :: AM ! air mass working variable
+    REAL(r64) :: AM ! air mass working variable
 
-    IF (SolZen.LT.89.9) THEN
-        AM = (Cos(SolZen * 0.01745329) + 0.5057 &
-              * (96.08 - SolZen)**(-1.634))**(-1.0)
+    IF (SolZen.LT.89.9d0) THEN
+        AM = (Cos(SolZen * 0.01745329d0) + 0.5057d0 &
+              * (96.08d0 - SolZen)**(-1.634d0))**(-1.0d0)
 
-        AbsoluteAirMass = Exp(-0.0001184 * Altitude) * AM
+        AbsoluteAirMass = Exp(-0.0001184d0 * Altitude) * AM
     ELSE
-        AbsoluteAirMass = 999.
+        AbsoluteAirMass = 999.d0
         ! should maybe add a show warning msg.
     ENDIF
 
   END FUNCTION AbsoluteAirMass
 ! -------------------------------------------------------------------------------
 
-  REAL Function SandiaF1(AMa,a0,a1,a2,a3,a4)
+  REAL(r64) Function SandiaF1(AMa,a0,a1,a2,a3,a4)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2103,12 +2103,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: AMa  ! absolute air mass
-    REAL, INTENT(IN) :: a0   ! empirical constant, module-specific
-    REAL, INTENT(IN) :: a1   ! empirical constant, module-specific
-    REAL, INTENT(IN) :: a2   ! empirical constant, module-specific
-    REAL, INTENT(IN) :: a3   ! empirical constant, module-specific
-    REAL, INTENT(IN) :: a4   ! empirical constant, module-specific
+    REAL(r64), INTENT(IN) :: AMa  ! absolute air mass
+    REAL(r64), INTENT(IN) :: a0   ! empirical constant, module-specific
+    REAL(r64), INTENT(IN) :: a1   ! empirical constant, module-specific
+    REAL(r64), INTENT(IN) :: a2   ! empirical constant, module-specific
+    REAL(r64), INTENT(IN) :: a3   ! empirical constant, module-specific
+    REAL(r64), INTENT(IN) :: a4   ! empirical constant, module-specific
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2121,7 +2121,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-    REAL :: F1 !working variable for function result
+    REAL(r64) :: F1 !working variable for function result
 
     F1 = a0 + a1*AMa + a2*AMa**2 + a3*AMa**3 + a4*AMa**4
 
@@ -2133,7 +2133,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
   END FUNCTION SandiaF1
 ! -------------------------------------------------------------------------------
-  REAL FUNCTION SandiaF2(IncAng,b0,b1,b2,b3,b4,b5)
+  REAL(r64) FUNCTION SandiaF2(IncAng,b0,b1,b2,b3,b4,b5)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2158,13 +2158,13 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: IncAng ! incidence angle (deg)
-    REAL, INTENT(IN) :: b0 ! empirical module-specific constants
-    REAL, INTENT(IN) :: b1 ! empirical module-specific constants
-    REAL, INTENT(IN) :: b2 ! empirical module-specific constants
-    REAL, INTENT(IN) :: b3 ! empirical module-specific constants
-    REAL, INTENT(IN) :: b4 ! empirical module-specific constants
-    REAL, INTENT(IN) :: b5 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: IncAng ! incidence angle (deg)
+    REAL(r64), INTENT(IN) :: b0 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: b1 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: b2 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: b3 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: b4 ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: b5 ! empirical module-specific constants
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2176,7 +2176,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-    REAL :: F2 ! working variable for function result
+    REAL(r64) :: F2 ! working variable for function result
 
     F2 = b0+b1*IncAng+b2*IncAng**2+b3*IncAng**3+b4*IncAng**4 &
              + b5*IncAng**5
@@ -2190,7 +2190,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
   END FUNCTION SandiaF2
 ! -------------------------------------------------------------------------------
 
-  REAL Function SandiaImp(Tc,Ee,Imp0,aImp,C0,C1)
+  REAL(r64) Function SandiaImp(Tc,Ee,Imp0,aImp,C0,C1)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2215,12 +2215,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc   ! cell temperature (degC)
-    REAL, INTENT(IN) :: Ee   ! effective irradiance (W/m2)
-    REAL, INTENT(IN) :: Imp0 ! current at MPP at SRC (1000 W/m2, 25 C) (A)
-    REAL, INTENT(IN) :: aImp ! Imp temperature coefficient (degC^-1)
-    REAL, INTENT(IN) :: c0   ! empirical module-specific constants
-    REAL, INTENT(IN) :: c1   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: Tc   ! cell temperature (degC)
+    REAL(r64), INTENT(IN) :: Ee   ! effective irradiance (W/m2)
+    REAL(r64), INTENT(IN) :: Imp0 ! current at MPP at SRC (1000 W/m2, 25 C) (A)
+    REAL(r64), INTENT(IN) :: aImp ! Imp temperature coefficient (degC^-1)
+    REAL(r64), INTENT(IN) :: c0   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: c1   ! empirical module-specific constants
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2233,12 +2233,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-     SandiaImp = Imp0*(C0*Ee+C1*Ee**2)*(1.0+aImp*(Tc-25))
+     SandiaImp = Imp0*(C0*Ee+C1*Ee**2)*(1.0d0+aImp*(Tc-25))
      ! why hardwire T0 at 25.0?  can this change? seems okay, fewer args
    End Function
 ! -------------------------------------------------------------------------------
 
-   REAL Function SandiaIsc(Tc,Isc0,Ibc,Idc,F1,F2,fd,aIsc)
+   REAL(r64) Function SandiaIsc(Tc,Isc0,Ibc,Idc,F1,F2,fd,aIsc)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <date_written>
@@ -2263,14 +2263,14 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc   ! cell temperature (deg C)
-    REAL, INTENT(IN) :: Isc0 ! Isc at Tc=25 C, Ic=1000 W/m2 (A)
-    REAL, INTENT(IN) :: Ibc  ! beam radiation on collector plane (W/m2)
-    REAL, INTENT(IN) :: Idc  ! Diffuse radiation on collector plane (W/m2)
-    REAL, INTENT(IN) :: F1   ! Sandia F1 function for air mass effects
-    REAL, INTENT(IN) :: F2   ! Sandia F2 function of incidence angle
-    REAL, INTENT(IN) :: fd   ! module-specific empirical constant
-    REAL, INTENT(IN) :: aIsc ! Isc temperature coefficient (degC^-1)
+    REAL(r64), INTENT(IN) :: Tc   ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) :: Isc0 ! Isc at Tc=25 C, Ic=1000 W/m2 (A)
+    REAL(r64), INTENT(IN) :: Ibc  ! beam radiation on collector plane (W/m2)
+    REAL(r64), INTENT(IN) :: Idc  ! Diffuse radiation on collector plane (W/m2)
+    REAL(r64), INTENT(IN) :: F1   ! Sandia F1 function for air mass effects
+    REAL(r64), INTENT(IN) :: F2   ! Sandia F2 function of incidence angle
+    REAL(r64), INTENT(IN) :: fd   ! module-specific empirical constant
+    REAL(r64), INTENT(IN) :: aIsc ! Isc temperature coefficient (degC^-1)
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2286,14 +2286,14 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
     ! SandiaIsc=Isc0*((Ibc*F1*F2+fd*Idc)/1000.0)*(1.0+aIsc*(Tc-25.0))
     ! Barkers original (above) changed to match publish eq. (1) in reference
-    SandiaIsc=Isc0*F1*((Ibc*F2+fd*Idc)/1000.0)*(1.0+aIsc*(Tc-25.0))
+    SandiaIsc=Isc0*F1*((Ibc*F2+fd*Idc)/1000.0d0)*(1.0d0+aIsc*(Tc-25.0d0))
 
     ! why hardwire E0 at 1000.0 ?, can this change? seems okay
 
   End Function SandiaIsc
 ! -------------------------------------------------------------------------------
 
-  REAL Function SandiaIx(Tc,Ee,Ix0,aIsc,aImp,C4,C5)
+  REAL(r64) Function SandiaIx(Tc,Ee,Ix0,aIsc,aImp,C4,C5)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2315,13 +2315,13 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc   ! cell temperature (deg C)
-    REAL, INTENT(IN) :: Ee   ! effective irradiance
-    REAL, INTENT(IN) :: Ix0  ! Ix at SRC (1000 W/m2, 25 C) (A)
-    REAL, INTENT(IN) :: aIsc ! Isc temp coefficient (/C)
-    REAL, INTENT(IN) :: aImp ! Imp temp coefficient (/C)
-    REAL, INTENT(IN) :: c4   ! empirical module-specific constants
-    REAL, INTENT(IN) :: c5   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: Tc   ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) :: Ee   ! effective irradiance
+    REAL(r64), INTENT(IN) :: Ix0  ! Ix at SRC (1000 W/m2, 25 C) (A)
+    REAL(r64), INTENT(IN) :: aIsc ! Isc temp coefficient (/C)
+    REAL(r64), INTENT(IN) :: aImp ! Imp temp coefficient (/C)
+    REAL(r64), INTENT(IN) :: c4   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: c5   ! empirical module-specific constants
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2335,12 +2335,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
     SandiaIx=Ix0*(C4*Ee+C5*Ee**2) &
-                 *(1.0+((aIsc+aImp)/2.0*(Tc-25.0)))
+                 *(1.0d0+((aIsc+aImp)/2.0d0*(Tc-25.0d0)))
 
   END FUNCTION SandiaIx
 ! -------------------------------------------------------------------------------
 
-  REAL FUNCTION SandiaIxx(Tc,Ee,Ixx0,aImp,C6,C7)
+  REAL(r64) FUNCTION SandiaIxx(Tc,Ee,Ixx0,aImp,C6,C7)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
           !       DATE WRITTEN   <unknown>
@@ -2362,12 +2362,12 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc   ! cell temperature (deg C)
-    REAL, INTENT(IN) :: Ee   ! effective irradiance (W/m2 ?)
-    REAL, INTENT(IN) :: Ixx0 ! Ixx at SRC (1000 W/m2, 25 C) (A)
-    REAL, INTENT(IN) :: aImp ! Imp temp coefficient (/C)
-    REAL, INTENT(IN) :: c6   ! empirical module-specific constants
-    REAL, INTENT(IN) :: c7   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: Tc   ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) :: Ee   ! effective irradiance (W/m2 ?)
+    REAL(r64), INTENT(IN) :: Ixx0 ! Ixx at SRC (1000 W/m2, 25 C) (A)
+    REAL(r64), INTENT(IN) :: aImp ! Imp temp coefficient (/C)
+    REAL(r64), INTENT(IN) :: c6   ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: c7   ! empirical module-specific constants
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2381,11 +2381,11 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-    SandiaIxx=Ixx0*(C6*Ee+C7*Ee**2)*(1.0+aImp*(Tc-25.0))
+    SandiaIxx=Ixx0*(C6*Ee+C7*Ee**2)*(1.0d0+aImp*(Tc-25.0d0))
 
   END FUNCTION SandiaIxx
 ! -------------------------------------------------------------------------------
-  REAL Function SandiaVmp(Tc,Ee,Vmp0,NcellSer,DiodeFactor, &
+  REAL(r64) Function SandiaVmp(Tc,Ee,Vmp0,NcellSer,DiodeFactor, &
                          BVmp0,mBVmp,C2,C3)
               ! FUNCTION INFORMATION:
           !       AUTHOR         G. Barker
@@ -2408,15 +2408,15 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc ! cell temperature (deg C)
-    REAL, INTENT(IN) :: Ee ! effective irradiance
-    REAL, INTENT(IN) :: Vmp0 ! Vmp at SRC (1000 W/m2, 25 C) (V)
-    REAL, INTENT(IN) :: NcellSer ! # cells in series
-    REAL, INTENT(IN) :: DiodeFactor ! module-specIFic empirical constant
-    REAL, INTENT(IN) :: BVmp0  ! Vmp temperature coefficient (V/C)
-    REAL, INTENT(IN) :: mBVmp  ! change in BVmp with irradiance
-    REAL, INTENT(IN) :: c2    ! empirical module-specific constants
-    REAL, INTENT(IN) :: c3    ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: Tc ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) :: Ee ! effective irradiance
+    REAL(r64), INTENT(IN) :: Vmp0 ! Vmp at SRC (1000 W/m2, 25 C) (V)
+    REAL(r64), INTENT(IN) :: NcellSer ! # cells in series
+    REAL(r64), INTENT(IN) :: DiodeFactor ! module-specIFic empirical constant
+    REAL(r64), INTENT(IN) :: BVmp0  ! Vmp temperature coefficient (V/C)
+    REAL(r64), INTENT(IN) :: mBVmp  ! change in BVmp with irradiance
+    REAL(r64), INTENT(IN) :: c2    ! empirical module-specific constants
+    REAL(r64), INTENT(IN) :: c3    ! empirical module-specific constants
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2429,17 +2429,17 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-    REAL :: dTc
-    REAL :: BVmpEe
+    REAL(r64) :: dTc
+    REAL(r64) :: BVmpEe
 
     IF (Ee.GT.0.0) THEN
       ! following is equation 8 in King et al. nov. 2003
       dTc = DiodeFactor*((1.38066d-23*(Tc+KelvinConv))/1.60218d-19)
 
-      BVmpEe = BVmp0 + mBVmp * (1.0 - Ee)
+      BVmpEe = BVmp0 + mBVmp * (1.0d0 - Ee)
 
       SandiaVmp = Vmp0+C2*NcellSer*dTc*Log(Ee)+ &
-                    C3*NcellSer*(dTc*Log(Ee))**2+BVmpEe*(Tc-25.0)
+                    C3*NcellSer*(dTc*Log(Ee))**2+BVmpEe*(Tc-25.0d0)
     ELSE
       SandiaVmp = 0
     ENDIF
@@ -2447,7 +2447,7 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
   END FUNCTION SandiaVmp
 ! -------------------------------------------------------------------------------
 
-  REAL FUNCTION SandiaVoc(Tc,Ee,Voc0,NcellSer,DiodeFactor,  &
+  REAL(r64) FUNCTION SandiaVoc(Tc,Ee,Voc0,NcellSer,DiodeFactor,  &
                         BVoc0,mBVoc)
           ! FUNCTION INFORMATION:
           !       AUTHOR         G Barker
@@ -2470,13 +2470,13 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Tc  ! cell temperature (deg C)
-    REAL, INTENT(IN) :: Ee  ! effective irradiance
-    REAL, INTENT(IN) :: Voc0  ! Voc at SRC (1000 W/m2, 25 C) (V)
-    REAL, INTENT(IN) :: NcellSer ! # cells in series
-    REAL, INTENT(IN) :: DiodeFactor ! module-specIFic empirical constant
-    REAL, INTENT(IN) :: BVoc0  ! Voc temperature coefficient (V/C)
-    REAL, INTENT(IN) :: mBVoc  ! change in BVoc with irradiance
+    REAL(r64), INTENT(IN) :: Tc  ! cell temperature (deg C)
+    REAL(r64), INTENT(IN) :: Ee  ! effective irradiance
+    REAL(r64), INTENT(IN) :: Voc0  ! Voc at SRC (1000 W/m2, 25 C) (V)
+    REAL(r64), INTENT(IN) :: NcellSer ! # cells in series
+    REAL(r64), INTENT(IN) :: DiodeFactor ! module-specIFic empirical constant
+    REAL(r64), INTENT(IN) :: BVoc0  ! Voc temperature coefficient (V/C)
+    REAL(r64), INTENT(IN) :: mBVoc  ! change in BVoc with irradiance
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2490,14 +2490,14 @@ REAL FUNCTION FV(II,VV,IO,RSER,AA)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
 
-     REAL :: dTc !working variable
-     REAL :: BVocEe !working variable
+     REAL(r64) :: dTc !working variable
+     REAL(r64) :: BVocEe !working variable
 
      IF (Ee.GT.0.0) THEN
         dTc=DiodeFactor*((1.38066d-23*(Tc + KelvinConv))/1.60218d-19)
-        BVocEe = BVoc0 + mBVoc * (1.0 - Ee)
+        BVocEe = BVoc0 + mBVoc * (1.0d0 - Ee)
 
-        SandiaVoc=Voc0+NcellSer*dTc*Log(Ee)+BVocEe*(Tc-25.0)
+        SandiaVoc=Voc0+NcellSer*dTc*Log(Ee)+BVocEe*(Tc-25.0d0)
      ELSE
         SandiaVoc = 0.0
      ENDIF
@@ -2530,7 +2530,7 @@ SUBROUTINE SetVentedModuleQdotSource(VentModNum, QSource)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER , INTENT(IN)  :: VentModNum
-  REAL    , INTENT(IN)  :: QSource  ! source term in Watts
+  REAL(r64)    , INTENT(IN)  :: QSource  ! source term in Watts
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2644,7 +2644,7 @@ SUBROUTINE GetExtVentedCavityTsColl(VentModNum, TsColl)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: VentModNum
-  REAL   , INTENT(OUT) :: TsColl
+  REAL(r64)   , INTENT(OUT) :: TsColl
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

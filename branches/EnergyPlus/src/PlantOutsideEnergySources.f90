@@ -36,11 +36,11 @@ TYPE OutsideEnergySourceSpecs
   CHARACTER(len=MaxNameLength) :: SecndryLoopID      = ' '  ! secondary chiller loop (cond loop) ID
   CHARACTER(len=MaxNameLength) :: ScheduleID         = ' '  ! equipment availability schedule
   CHARACTER(len=MaxNameLength) :: Name               = ' '  ! user identifier
-  REAL                    :: NomCap             = 0. ! design nominal capacity of district service
+  REAL(r64)                    :: NomCap             = 0.d0 ! design nominal capacity of district service
   INTEGER                      :: InletNodeNum       = 0    ! Node number on the inlet side of the plant
   INTEGER                      :: OutletNodeNum      = 0    ! Node number on the inlet side of the plant
-  REAL                    :: EnergyTransfer     = 0. ! cooling energy provided in time step
-  REAL                    :: EnergyRate         = 0. ! cooling power
+  REAL(r64)                    :: EnergyTransfer     = 0.d0 ! cooling energy provided in time step
+  REAL(r64)                    :: EnergyRate         = 0.d0 ! cooling power
   INTEGER                      :: EnergyType         = 0    ! flag for district heating OR cooling
   INTEGER                      :: MassFlowReSimIndex = 0
   !loop topology variables
@@ -55,10 +55,10 @@ TYPE OutsideEnergySourceSpecs
 END TYPE OutsideEnergySourceSpecs
 
 TYPE ReportVars
-  REAL         :: MassFlowRate   =0.0
-  REAL         :: InletTemp      =0.0
-  REAL         :: OutletTemp     =0.0
-  REAL         :: EnergyTransfer =0.0
+  REAL(r64)         :: MassFlowRate   =0.0
+  REAL(r64)         :: InletTemp      =0.0
+  REAL(r64)         :: OutletTemp     =0.0
+  REAL(r64)         :: EnergyTransfer =0.0
 END TYPE ReportVars
 
   !MODULE VARIABLE DECLARATIONS:
@@ -106,10 +106,10 @@ SUBROUTINE SimOutsideEnergy(EnergyType,EquipName,EquipFlowCtrl,CompIndex,RunFlag
   INTEGER, INTENT(INOUT)       :: CompIndex
   LOGICAL, INTENT(IN)          :: RunFlag
   LOGICAL, INTENT(IN)          :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyLoad
-  REAL, INTENT(INOUT)     :: MinCap
-  REAL, INTENT(INOUT)     :: MaxCap
-  REAL, INTENT(INOUT)     :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyLoad
+  REAL(r64), INTENT(INOUT)     :: MinCap
+  REAL(r64), INTENT(INOUT)     :: MaxCap
+  REAL(r64), INTENT(INOUT)     :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -124,9 +124,9 @@ SUBROUTINE SimOutsideEnergy(EnergyType,EquipName,EquipFlowCtrl,CompIndex,RunFlag
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE   :: GetInputFlag = .true. ! Get input once and once only
   INTEGER         :: EqNum
-  REAL       :: InletTemp
-  REAL       :: OutletTemp
-  REAL       :: MassFlowRate
+  REAL(r64)       :: InletTemp
+  REAL(r64)       :: OutletTemp
+  REAL(r64)       :: MassFlowRate
           !FLOW
 
           !GET INPUT
@@ -395,18 +395,18 @@ SUBROUTINE InitSimVars(EnergySourceNum,MassFlowRate,InletTemp,OutletTemp, FirstH
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)    :: EnergySourceNum  ! Which item being initialized
-  REAL, INTENT(INOUT) :: MassFlowRate
-  REAL, INTENT(INOUT) :: InletTemp
-  REAL, INTENT(INOUT) :: OutletTemp
+  REAL(r64), INTENT(INOUT) :: MassFlowRate
+  REAL(r64), INTENT(INOUT) :: InletTemp
+  REAL(r64), INTENT(INOUT) :: OutletTemp
   LOGICAL,   INTENT(IN)    :: FirstHVACIteration
-  REAL, INTENT(IN)    :: MyLoad
+  REAL(r64), INTENT(IN)    :: MyLoad
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER     :: TempTypeFlag
-  REAL   :: TempPlantMdot = 0. ! local copy of plant flow
+  REAL(r64)   :: TempPlantMdot = 0.d0 ! local copy of plant flow
   INTEGER     :: LoopNum
   INTEGER     :: LoopSideNum
   INTEGER     :: BranchIndex
@@ -474,10 +474,10 @@ SUBROUTINE InitSimVars(EnergySourceNum,MassFlowRate,InletTemp,OutletTemp, FirstH
 
   ! determine the flow to request, hold in temporary variable
   IF (FirstHVACIteration) THEN
-    IF (ABS(MyLoad) > 0.) THEN 
+    IF (ABS(MyLoad) > 0.d0) THEN 
       TempPlantMdot = PlantLoop(LoopNum)%MaxMassFlowRate
     ELSE
-      TempPlantMdot = 0. ! expect no flow needed
+      TempPlantMdot = 0.d0 ! expect no flow needed
     ENDIF
   ELSE
    TempPlantMdot = EnergySourceReport(EnergySourceNum)%MassFlowRate ! last value 
@@ -522,10 +522,10 @@ SUBROUTINE  SimDistrictEnergy(RunFlag,DistrictEqNum,MyLoad,MassFlowRate, InletTe
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL               :: RunFlag
   INTEGER               :: DistrictEqNum
-  REAL, INTENT(INOUT) :: MyLoad
-  REAL, INTENT(IN) :: MassFlowRate
-  REAL, INTENT(IN) :: InletTemp
-  REAL, INTENT(INOUT) :: OutletTemp
+  REAL(r64), INTENT(INOUT) :: MyLoad
+  REAL(r64), INTENT(IN) :: MassFlowRate
+  REAL(r64), INTENT(IN) :: InletTemp
+  REAL(r64), INTENT(INOUT) :: OutletTemp
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -543,9 +543,9 @@ SUBROUTINE  SimDistrictEnergy(RunFlag,DistrictEqNum,MyLoad,MassFlowRate, InletTe
   INTEGER     :: CompIndex
   INTEGER     :: InletNode
   INTEGER     :: OutletNode
-  REAL   :: LoopMinTemp
-  REAL   :: LoopMaxTemp
-  REAL   :: Cp ! local cp at current temp
+  REAL(r64)   :: LoopMinTemp
+  REAL(r64)   :: LoopMaxTemp
+  REAL(r64)   :: Cp ! local cp at current temp
 
           !FLOW
 
@@ -567,13 +567,13 @@ SUBROUTINE  SimDistrictEnergy(RunFlag,DistrictEqNum,MyLoad,MassFlowRate, InletTe
   ENDIF 
 
   IF (EnergySource(DistrictEqNum)%EnergyType == EnergyType_DistrictCooling) THEN
-    IF ( MyLoad > 0. ) MyLoad = 0.
+    IF ( MyLoad > 0.d0 ) MyLoad = 0.d0
   ELSEIF (EnergySource(DistrictEqNum)%EnergyType == EnergyType_DistrictHeating) THEN
-    IF ( MyLoad < 0. ) MyLoad = 0.
+    IF ( MyLoad < 0.d0 ) MyLoad = 0.d0
   ENDIF
 
   ! determine outlet temp based on inlet temp, cp, and myload
-  IF ((MassFlowRate > 0.) .AND. RunFlag ) THEN
+  IF ((MassFlowRate > 0.d0) .AND. RunFlag ) THEN
     OutletTemp = (MyLoad + MassFlowRate * cp * InletTemp) / (MassFlowRate * cp)
     !apply loop limits on temperature result to keep in check
     OutletTemp = MAX(OutletTemp, LoopMinTemp)
@@ -581,7 +581,7 @@ SUBROUTINE  SimDistrictEnergy(RunFlag,DistrictEqNum,MyLoad,MassFlowRate, InletTe
     
   ELSE
     OutletTemp = InletTemp
-    MyLoad = 0.
+    MyLoad = 0.d0
   ENDIF 
 
   RETURN
@@ -616,10 +616,10 @@ SUBROUTINE UpdateRecords(MyLoad,EqNum,MassFlowRate,OutletTemp)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL,INTENT(IN)   :: MyLoad
+  REAL(r64),INTENT(IN)   :: MyLoad
   INTEGER, INTENT(IN)    :: EqNum
-  REAL, INTENT(IN) :: MassFlowRate
-  REAL, INTENT(IN) :: OutletTemp
+  REAL(r64), INTENT(IN) :: MassFlowRate
+  REAL(r64), INTENT(IN) :: OutletTemp
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

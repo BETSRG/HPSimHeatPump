@@ -33,7 +33,7 @@ PUBLIC ! Data module -- everything public
 
           ! MODULE PARAMETER DEFINITIONS:
 ! Parameters for tolerance
-REAL, PARAMETER :: MassFlowTolerance  = .0000001  ! minimum significant mass flow rate (kg/s)
+REAL(r64), PARAMETER :: MassFlowTolerance  = .0000001d0  ! minimum significant mass flow rate (kg/s)
 
 ! Pressure Curve Type: None, pressure, or generic curve (if generic it will be a postive value which is the curve manager index)
 INTEGER,          PARAMETER    :: PressureCurve_Error       = -1
@@ -57,12 +57,12 @@ CHARACTER(len=*), PARAMETER, DIMENSION(0:4), PUBLIC :: cControlType=  &
           ! DERIVED TYPE DEFINITIONS:
 TYPE PlantPressureCurveData
   CHARACTER(len=MaxNameLength) :: Name                    = ' '
-  REAL                    :: EquivDiameter           = 0.0   !- An effective diameter for calculation of Re & e/D [m]
-  REAL                    :: MinorLossCoeff          = 0.0   !- K factor                                          [-]
-  REAL                    :: EquivLength             = 0.0   !- An effective length to apply friction calculation [m]
-  REAL                    :: EquivRoughness          = 0.0   !- An effective roughness (e) to calculate e/D       [m]
+  REAL(r64)                    :: EquivDiameter           = 0.0d0   !- An effective diameter for calculation of Re & e/D [m]
+  REAL(r64)                    :: MinorLossCoeff          = 0.0d0   !- K factor                                          [-]
+  REAL(r64)                    :: EquivLength             = 0.0d0   !- An effective length to apply friction calculation [m]
+  REAL(r64)                    :: EquivRoughness          = 0.0d0   !- An effective roughness (e) to calculate e/D       [m]
   LOGICAL                      :: ConstantFpresent        = .FALSE. !- Signal for if a constant value of f was entered
-  REAL                    :: ConstantF               = 0.0   !- Constant value of f (if applicable)               [-]
+  REAL(r64)                    :: ConstantF               = 0.0d0   !- Constant value of f (if applicable)               [-]
 END TYPE PlantPressureCurveData
 
           ! MODULE VARIABLE DECLARATIONS:

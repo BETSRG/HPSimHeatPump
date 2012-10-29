@@ -52,34 +52,34 @@ MODULE Humidifiers
     INTEGER                      :: EquipIndex        =0   ! Pointer to Humidifier in list of humidifiers
     CHARACTER(len=MaxNameLength) :: Sched             =' ' ! name of availability schedule
     INTEGER                      :: SchedPtr          =0   ! index of availability schedule
-    REAL                    :: NomCapVol         =0.0 ! nominal capacity [m3/s of water]
-    REAL                    :: NomCap            =0.0 ! nominal capacity [kg/s of water]
-    REAL                    :: NomPower          =0.0 ! power consumption at full output [watts]
-    REAL                    :: FanPower          =0.0 ! nominal fan power [watts]
-    REAL                    :: StandbyPower      =0.0 ! standby power consumption [watts]
+    REAL(r64)                    :: NomCapVol         =0.0 ! nominal capacity [m3/s of water]
+    REAL(r64)                    :: NomCap            =0.0 ! nominal capacity [kg/s of water]
+    REAL(r64)                    :: NomPower          =0.0 ! power consumption at full output [watts]
+    REAL(r64)                    :: FanPower          =0.0 ! nominal fan power [watts]
+    REAL(r64)                    :: StandbyPower      =0.0 ! standby power consumption [watts]
     INTEGER                      :: AirInNode         =0   ! air inlet node of humidifier
     INTEGER                      :: AirOutNode        =0   ! air outlet node of humidifier
-    REAL                    :: AirInTemp         =0.0 ! inlet air temperature [C]
-    REAL                    :: AirInHumRat       =0.0 ! inlet air humidity ratio [kg water / kg air]
-    REAL                    :: AirInEnthalpy     =0.0 ! inlet air specific enthalpy [J/kg]
-    REAL                    :: AirInMassFlowRate =0.0  ! inlet air mass flow rate [kg/s]
-    REAL                    :: AirOutTemp        =0.0 ! outlet air temperature [C]
-    REAL                    :: AirOutHumRat      =0.0 ! outlet air humidity ratio [kg water / kg air]
-    REAL                    :: AirOutEnthalpy    =0.0 ! outlet air specific enthalpy [J/kg]
-    REAL                    :: AirOutMassFlowRate=0.0 ! outlet air mass flow rate [kg/s]
-    REAL                    :: HumRatSet         =0.0 ! humidity ratio setpoint [kg water / kg air]
-    REAL                    :: WaterAdd          =0.0 ! water output (and consumption) [kg/s]
-    REAL                    :: ElecUseEnergy     =0.0 ! electricity consumption [J]
-    REAL                    :: ElecUseRate       =0.0 ! electricity consumption [W]
-    REAL                    :: WaterCons         =0.0 ! water consumption in cubic meters
-    REAL                    :: WaterConsRate     =0.0 ! water consumption rate in m3/s
+    REAL(r64)                    :: AirInTemp         =0.0 ! inlet air temperature [C]
+    REAL(r64)                    :: AirInHumRat       =0.0 ! inlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: AirInEnthalpy     =0.0 ! inlet air specific enthalpy [J/kg]
+    REAL(r64)                    :: AirInMassFlowRate =0.0  ! inlet air mass flow rate [kg/s]
+    REAL(r64)                    :: AirOutTemp        =0.0 ! outlet air temperature [C]
+    REAL(r64)                    :: AirOutHumRat      =0.0 ! outlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: AirOutEnthalpy    =0.0 ! outlet air specific enthalpy [J/kg]
+    REAL(r64)                    :: AirOutMassFlowRate=0.0 ! outlet air mass flow rate [kg/s]
+    REAL(r64)                    :: HumRatSet         =0.0 ! humidity ratio setpoint [kg water / kg air]
+    REAL(r64)                    :: WaterAdd          =0.0 ! water output (and consumption) [kg/s]
+    REAL(r64)                    :: ElecUseEnergy     =0.0 ! electricity consumption [J]
+    REAL(r64)                    :: ElecUseRate       =0.0 ! electricity consumption [W]
+    REAL(r64)                    :: WaterCons         =0.0 ! water consumption in cubic meters
+    REAL(r64)                    :: WaterConsRate     =0.0 ! water consumption rate in m3/s
     LOGICAL                      :: SuppliedByWaterSystem = .FALSE. ! true means there is storage tank, otherwise mains
     INTEGER                      :: WaterTankID       = 0  ! index pointer to water storage tank
     INTEGER                      :: WaterTankDemandARRID = 0 ! index pointer to WaterStorage Demand arrays.
-    REAL                    :: TankSupplyVdot    = 0.0
-    REAL                    :: TankSupplyVol     = 0.0
-    REAL                    :: StarvedSupplyVdot = 0.0
-    REAL                    :: StarvedSupplyVol  = 0.0
+    REAL(r64)                    :: TankSupplyVdot    = 0.0
+    REAL(r64)                    :: TankSupplyVol     = 0.0
+    REAL(r64)                    :: StarvedSupplyVdot = 0.0
+    REAL(r64)                    :: StarvedSupplyVol  = 0.0
   END TYPE HumidifierData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -142,7 +142,7 @@ SUBROUTINE SimHumidifier(CompName,FirstHVACIteration,CompIndex)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: HumNum                 ! index of humidifier unit being simulated
   LOGICAL,SAVE :: GetInputFlag = .TRUE.  ! First time, input is "gotten"
-  REAL    :: WaterAddNeeded         ! output in kg/s needed from humidifier to meet humidity setpoint
+  REAL(r64)    :: WaterAddNeeded         ! output in kg/s needed from humidifier to meet humidity setpoint
 
 
   IF (GetInputFlag) THEN
@@ -258,7 +258,7 @@ SUBROUTINE GetHumidifierInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   INTEGER                              :: TotalArgs=0       ! Total number of alpha and numeric arguments (max) for a
@@ -442,10 +442,10 @@ SUBROUTINE InitHumidifier(HumNum)
   INTEGER             :: NumHum
   INTEGER             :: RefrigerantIndex ! refiferant index
   INTEGER             :: WaterIndex       ! fluid type index  
-  REAL           :: NominalPower     ! Nominal power input to humidifier, W
-  REAL           :: WaterSpecHeat    ! specific heat of water , J/kgK
-  REAL           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg
-  REAL           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg    
+  REAL(r64)           :: NominalPower     ! Nominal power input to humidifier, W
+  REAL(r64)           :: WaterSpecHeat    ! specific heat of water , J/kgK
+  REAL(r64)           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg
+  REAL(r64)           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg    
 
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
@@ -557,8 +557,8 @@ SUBROUTINE SizeHumidifier(HumNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: CalledFrom='Humidifier:SizeHumidifier'
-  REAL, PARAMETER        :: Tref   =  20.0 ! Reference temp of water for rated capacity calac [C]
-  REAL, PARAMETER        :: TSteam = 100.0 ! saturated steam temperatur generated by Humidifier [C]
+  REAL(r64), PARAMETER        :: Tref   =  20.0d0 ! Reference temp of water for rated capacity calac [C]
+  REAL(r64), PARAMETER        :: TSteam = 100.0d0 ! saturated steam temperatur generated by Humidifier [C]
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -570,10 +570,10 @@ SUBROUTINE SizeHumidifier(HumNum)
   INTEGER             :: NumHum
   INTEGER             :: RefrigerantIndex ! refiferant index
   INTEGER             :: WaterIndex       ! fluid type index  
-  REAL           :: NominalPower     ! Nominal power input to humidifier, W
-  REAL           :: WaterSpecHeatAvg ! specific heat of water, J/kgK
-  REAL           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg
-  REAL           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg
+  REAL(r64)           :: NominalPower     ! Nominal power input to humidifier, W
+  REAL(r64)           :: WaterSpecHeatAvg ! specific heat of water, J/kgK
+  REAL(r64)           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg
+  REAL(r64)           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg
        
     
   IF (Humidifier(HumNum)%HumType_Code == Humidifier_Steam_Electric) THEN         
@@ -581,9 +581,9 @@ SUBROUTINE SizeHumidifier(HumNum)
         
       RefrigerantIndex = FindRefrigerant('STEAM')
       WaterIndex = FindGlycol('WATER')          
-      SteamSatEnthalpy = GetSatEnthalpyRefrig('STEAM',TSteam,1.0,RefrigerantIndex,CalledFrom)
-      WaterSatEnthalpy = GetSatEnthalpyRefrig('STEAM',TSteam,0.0,RefrigerantIndex,CalledFrom)
-      WaterSpecHeatAvg = 0.5*(GetSpecificHeatGlycol('WATER',TSteam,WaterIndex,CalledFrom) + &
+      SteamSatEnthalpy = GetSatEnthalpyRefrig('STEAM',TSteam,1.0d0,RefrigerantIndex,CalledFrom)
+      WaterSatEnthalpy = GetSatEnthalpyRefrig('STEAM',TSteam,0.0d0,RefrigerantIndex,CalledFrom)
+      WaterSpecHeatAvg = 0.5d0*(GetSpecificHeatGlycol('WATER',TSteam,WaterIndex,CalledFrom) + &
                                 GetSpecificHeatGlycol('WATER',Tref,WaterIndex,CalledFrom))
         
       NominalPower = Humidifier(HumNum)%NomCap &
@@ -593,7 +593,7 @@ SUBROUTINE SizeHumidifier(HumNum)
         Humidifier(HumNum)%NomPower = NominalPower
         CALL ReportSizingOutput('Humidifier:Steam:Electric',Humidifier(HumNum)%Name, &
                                 'Rated Power [W]', Humidifier(HumNum)%NomPower)                      
-      ELSEIF (Humidifier(HumNum)%NomPower >= 0.0 .and. Humidifier(HumNum)%NomCap > 0.0) THEN 
+      ELSEIF (Humidifier(HumNum)%NomPower >= 0.0d0 .and. Humidifier(HumNum)%NomCap > 0.0d0) THEN 
         IF (Humidifier(HumNum)%NomPower <  NominalPower) THEN
           CALL ShowWarningError('Humidifier:Steam:Electric: specified Rated Power is less than nominal Rated '// &
                                 ' Power for electric steam humidifier = '//TRIM(Humidifier(HumNum)%Name)//'. ')
@@ -635,7 +635,7 @@ SUBROUTINE ControlHumidifier(HumNum,WaterAddNeeded)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: HumNum  ! number of the current humidifier being simulated
-  REAL, INTENT(OUT)    :: WaterAddNeeded ! moisture addition rate needed to meet minimum humidity ratio setpoint [kg/s]
+  REAL(r64), INTENT(OUT)    :: WaterAddNeeded ! moisture addition rate needed to meet minimum humidity ratio setpoint [kg/s]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -648,8 +648,8 @@ SUBROUTINE ControlHumidifier(HumNum,WaterAddNeeded)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: UnitOn       ! unit on flag
-  REAL :: AirMassFlowRate ! air mass flow rate [kg/s]
-  REAL :: HumRatSatIn     ! humidity ratio at saturation at the inlet temperature  [kg H2O / kg dry air]
+  REAL(r64) :: AirMassFlowRate ! air mass flow rate [kg/s]
+  REAL(r64) :: HumRatSatIn     ! humidity ratio at saturation at the inlet temperature  [kg H2O / kg dry air]
 
 
   AirMassFlowRate = 0.0
@@ -659,7 +659,7 @@ SUBROUTINE ControlHumidifier(HumNum,WaterAddNeeded)
   IF (AirMassFlowRate .LE. SmallMassFlow) UnitOn = .FALSE.
   IF (GetCurrentScheduleValue(Humidifier(HumNum)%SchedPtr) .LE. 0.0)  UnitOn = .FALSE.
   IF (Humidifier(HumNum)%AirInHumRat .GE. Humidifier(HumNum)%HumRatSet)  UnitOn = .FALSE.
-  HumRatSatIn = PsyWFnTdbRhPb(Humidifier(HumNum)%AirInTemp,1.0,OutBaroPress, 'ControlHumidifier')
+  HumRatSatIn = PsyWFnTdbRhPb(Humidifier(HumNum)%AirInTemp,1.0d0,OutBaroPress, 'ControlHumidifier')
   IF (Humidifier(HumNum)%AirInHumRat .GE. HumRatSatIn) UnitOn = .FALSE.
   IF (UnitOn) THEN
     ! AirMassFlowRate*AirInHumRat + WaterAddNeeded = AirMassFlowRate*HumRatSet
@@ -698,7 +698,7 @@ SUBROUTINE CalcElecSteamHumidifier(HumNum,WaterAddNeeded)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: HumNum  ! number of the current humidifier being simulated
-  REAL, INTENT(IN)    :: WaterAddNeeded ! moisture addition rate set by controller [kg/s]
+  REAL(r64), INTENT(IN)    :: WaterAddNeeded ! moisture addition rate set by controller [kg/s]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -711,25 +711,25 @@ SUBROUTINE CalcElecSteamHumidifier(HumNum,WaterAddNeeded)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: AirMassFlowRate     ! air mass flow rate [kg/s]
-  REAL :: HumRatSatOut        ! humidity ratio at saturation at the outlet temperature [kg H2O / kg dry air]
-  REAL :: HumRatSatIn         ! humidity ratio at saturation at the inlet temperature  [kg H2O / kg dry air]
-  REAL :: WaterAddRate        ! moisture addition rate by humidifier [kg/s]
-  REAL :: WaterAddNeededMax   ! moisture addition rate set by controller, limited by humidifier capacity
-  REAL :: AirOutEnthalpy      ! outlet air enthalpy [J/kg]
-  REAL :: AirOutHumRat        ! outlet air humidity ratio [kg H2O / kg dry air]
-  REAL :: AirOutTemp          ! outlet air temperature [C]
-  REAL :: WaterInEnthalpy     ! enthalpy of the inlet steam [J/kg]
-  REAL :: HumRatSatApp        ! the approximate humidity ratio where the line drawn between inlet and desired outlet conditions
+  REAL(r64) :: AirMassFlowRate     ! air mass flow rate [kg/s]
+  REAL(r64) :: HumRatSatOut        ! humidity ratio at saturation at the outlet temperature [kg H2O / kg dry air]
+  REAL(r64) :: HumRatSatIn         ! humidity ratio at saturation at the inlet temperature  [kg H2O / kg dry air]
+  REAL(r64) :: WaterAddRate        ! moisture addition rate by humidifier [kg/s]
+  REAL(r64) :: WaterAddNeededMax   ! moisture addition rate set by controller, limited by humidifier capacity
+  REAL(r64) :: AirOutEnthalpy      ! outlet air enthalpy [J/kg]
+  REAL(r64) :: AirOutHumRat        ! outlet air humidity ratio [kg H2O / kg dry air]
+  REAL(r64) :: AirOutTemp          ! outlet air temperature [C]
+  REAL(r64) :: WaterInEnthalpy     ! enthalpy of the inlet steam [J/kg]
+  REAL(r64) :: HumRatSatApp        ! the approximate humidity ratio where the line drawn between inlet and desired outlet conditions
                               ! crosses the saturation line.
-  REAL :: WaterDens           ! density of liquid water [kg/m3]
+  REAL(r64) :: WaterDens           ! density of liquid water [kg/m3]
 
 
   AirMassFlowRate = Humidifier(HumNum)%AirInMassFlowRate
-  HumRatSatIn = PsyWFnTdbRhPb(Humidifier(HumNum)%AirInTemp,1.0,OutBaroPress, 'CalcElecSteamHumidifier')
+  HumRatSatIn = PsyWFnTdbRhPb(Humidifier(HumNum)%AirInTemp,1.0d0,OutBaroPress, 'CalcElecSteamHumidifier')
   HumRatSatOut = 0.0
   HumRatSatApp = 0.0
-  WaterInEnthalpy = 2676125.  ! At 100 C
+  WaterInEnthalpy = 2676125.d0  ! At 100 C
   WaterDens = RhoH2O(InitConvTemp)
   WaterAddNeededMax = MIN(WaterAddNeeded,Humidifier(HumNum)%NomCap)
   IF (WaterAddNeededMax.GT.0.0) THEN
@@ -742,7 +742,7 @@ SUBROUTINE CalcElecSteamHumidifier(HumNum,WaterAddNeeded)
     AirOutEnthalpy=(AirMassFlowRate*Humidifier(HumNum)%AirInEnthalpy + WaterAddNeededMax*WaterInEnthalpy)/AirMassFlowRate
     AirOutHumRat = (AirMassFlowRate*Humidifier(HumNum)%AirInHumRat + WaterAddNeededMax) / AirMassFlowRate
     AirOutTemp = PsyTdbFnHW(AirOutEnthalpy,AirOutHumrat, 'CalcElecSteamHumidifier')
-    HumRatSatOut = PsyWFnTdbRhPb(AirOutTemp,1.0,OutBaroPress, 'CalcElecSteamHumidifier')
+    HumRatSatOut = PsyWFnTdbRhPb(AirOutTemp,1.0d0,OutBaroPress, 'CalcElecSteamHumidifier')
     IF (AirOutHumRat .LE. HumRatSatOut) THEN
       ! If the outlet condition is below the saturation curve, the desired moisture addition rate can be met.
       WaterAddRate = WaterAddNeededMax
@@ -768,7 +768,7 @@ SUBROUTINE CalcElecSteamHumidifier(HumNum,WaterAddNeeded)
       ! This point isn't quite on the saturation curve since we made a linear approximation of the curve,
       ! but the temperature should be very close to the correct outlet temperature. We will use this temperature
       ! as the outlet temperature and move to the saturation curve for the outlet humidity and enthalpy
-      AirOutHumRat = PsyWFnTdbRhPb(AirOutTemp,1.0,OutBaroPress, 'CalcElecSteamHumidifier')
+      AirOutHumRat = PsyWFnTdbRhPb(AirOutTemp,1.0d0,OutBaroPress, 'CalcElecSteamHumidifier')
       AirOutEnthalpy = PsyHFnTdbW(AirOutTemp,AirOutHumRat, 'CalcElecSteamHumidifier')
       WaterAddRate = AirMassFlowRate * (AirOutHumRat - Humidifier(HumNum)%AirInHumRat)
     END IF
@@ -838,9 +838,9 @@ SUBROUTINE UpdateReportWaterSystem(HumNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: AvailTankVdot
-  REAL  :: TankSupplyVdot
-  REAL  :: StarvedVdot
+  REAL(r64)  :: AvailTankVdot
+  REAL(r64)  :: TankSupplyVdot
+  REAL(r64)  :: StarvedVdot
 
 
   ! set demand request in WaterStorage if needed.

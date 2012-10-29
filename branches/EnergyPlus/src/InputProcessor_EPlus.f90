@@ -63,8 +63,8 @@ MODULE InputProcessor
  CHARACTER(len=1), PARAMETER :: Blank=' '
  CHARACTER(len=*), PARAMETER :: AlphaNum='ANan'     ! Valid indicators for Alpha or Numeric fields (A or N)
  CHARACTER(len=*), PARAMETER :: fmta='(A)'
- REAL, PARAMETER :: DefAutoSizeValue=AutoSize
- REAL, PARAMETER :: DefAutoCalculateValue=AutoCalculate
+ REAL(r64), PARAMETER :: DefAutoSizeValue=AutoSize
+ REAL(r64), PARAMETER :: DefAutoCalculateValue=AutoCalculate
 
           ! DERIVED TYPE DEFINITIONS
  TYPE RangeCheckDef
@@ -72,16 +72,16 @@ MODULE InputProcessor
    INTEGER :: FieldNumber                          =0         ! which field number this is
    CHARACTER(len=MaxFieldNameLength) :: FieldName =Blank       ! Name of the field
    CHARACTER(len=32), DIMENSION(2) :: MinMaxString =Blank       ! appropriate Min/Max Strings
-   REAL, DIMENSION(2) :: MinMaxValue          =0.0       ! appropriate Min/Max Values
+   REAL(r64), DIMENSION(2) :: MinMaxValue          =0.0       ! appropriate Min/Max Values
    INTEGER, DIMENSION(2) :: WhichMinMax            =0         !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
    LOGICAL :: DefaultChk                           =.false.   ! true when default has been entered
-   REAL  :: Default                           =0.0       ! Default value
+   REAL(r64)  :: Default                           =0.0       ! Default value
    LOGICAL :: DefAutoSize                          =.false.   ! Default value is "autosize"
    LOGICAL :: AutoSizable                          =.false.   ! True if this field can be autosized
-   REAL  :: AutoSizeValue                     =0.0       ! Value to return for autosize field
+   REAL(r64)  :: AutoSizeValue                     =0.0       ! Value to return for autosize field
    LOGICAL :: DefAutoCalculate                     =.false.   ! Default value is "autocalculate"
    LOGICAL :: AutoCalculatable                     =.false.   ! True if this field can be autocalculated
-   REAL  :: AutoCalculateValue                =0.0       ! Value to return for autocalculate field
+   REAL(r64)  :: AutoCalculateValue                =0.0       ! Value to return for autocalculate field
  END TYPE
 
  TYPE ObjectsDefinition
@@ -132,7 +132,7 @@ MODULE InputProcessor
    INTEGER :: ObjectDefPtr                     =0   ! Which Object Def is this
    CHARACTER(len=MaxAlphaArgLength), ALLOCATABLE, DIMENSION(:) :: Alphas ! Storage for the alphas
    LOGICAL, ALLOCATABLE, DIMENSION(:) :: AlphBlank  ! Set to true if this field was blank on input
-   REAL, ALLOCATABLE, DIMENSION(:) :: Numbers       ! Storage for the numbers
+   REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers       ! Storage for the numbers
    LOGICAL, ALLOCATABLE, DIMENSION(:) :: NumBlank   ! Set to true if this field was blank on input
  END TYPE
 
@@ -471,7 +471,7 @@ SUBROUTINE ProcessInput
    ALLOCATE(cNumericFieldNames(MaxNumericIDFDefArgsFound))
    cNumericFieldNames=Blank
    ALLOCATE(rNumericArgs(MaxNumericIDFDefArgsFound))
-   rNumericArgs=0.0
+   rNumericArgs=0.0d0
    ALLOCATE(lNumericFieldBlanks(MaxNumericIDFDefArgsFound))
    lNumericFieldBlanks=.false.
 
@@ -838,7 +838,7 @@ SUBROUTINE AddObjectDefandParse(ProposedObject,CurPos,EndofFile,ErrorsFound)
   CHARACTER(len=32) MinMaxString ! Set from ReadInputLine
   CHARACTER(len=MaxObjectNameLength) AlphDefaultString
   INTEGER WhichMinMax   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
-  REAL Value  ! Value returned by ReadInputLine (either min, max, default, autosize or autocalculate)
+  REAL(r64) Value  ! Value returned by ReadInputLine (either min, max, default, autosize or autocalculate)
   LOGICAL MinMaxError  ! Used to see if min, max, defaults have been set appropriately (True if error)
   INTEGER,SAVE   :: MaxANArgs=7700  ! Current count of Max args to object  (9/2010)
   LOGICAL ErrorsFoundFlag
@@ -2471,7 +2471,7 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
   INTEGER, INTENT(IN) :: Number
   CHARACTER(len=*), INTENT(OUT), DIMENSION(:) :: Alphas
   INTEGER, INTENT(OUT) :: NumAlphas
-  REAL, INTENT(OUT), DIMENSION(:) :: Numbers
+  REAL(r64), INTENT(OUT), DIMENSION(:) :: Numbers
   INTEGER, INTENT(OUT) :: NumNumbers
   INTEGER, INTENT(OUT) :: Status
   LOGICAL, INTENT(OUT), DIMENSION(:), OPTIONAL :: AlphaBlank
@@ -2494,7 +2494,7 @@ SUBROUTINE GetObjectItem(Object,Number,Alphas,NumAlphas,Numbers,NumNumbers,Statu
   CHARACTER(len=MaxObjectNameLength) ObjectWord
   CHARACTER(len=MaxObjectNameLength) UCObject
   CHARACTER(len=MaxObjectNameLength), SAVE, ALLOCATABLE, DIMENSION(:) :: AlphaArgs
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: NumberArgs
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: NumberArgs
   LOGICAL, SAVE, ALLOCATABLE, DIMENSION(:) :: AlphaArgsBlank
   LOGICAL, SAVE, ALLOCATABLE, DIMENSION(:) :: NumberArgsBlank
   INTEGER MaxAlphas,MaxNumbers
@@ -2785,7 +2785,7 @@ SUBROUTINE GetObjectItemfromFile(Which,ObjectWord,AlphaArgs,NumAlpha,NumericArgs
   CHARACTER(len=*), INTENT(OUT) :: ObjectWord
   CHARACTER(len=*), INTENT(OUT), DIMENSION(:), OPTIONAL :: AlphaArgs
   INTEGER, INTENT(OUT) :: NumAlpha
-  REAL, INTENT(OUT), DIMENSION(:), OPTIONAL :: NumericArgs
+  REAL(r64), INTENT(OUT), DIMENSION(:), OPTIONAL :: NumericArgs
   INTEGER, INTENT(OUT) :: NumNumeric
   LOGICAL, INTENT(OUT), DIMENSION(:), OPTIONAL :: AlphaBlanks
   LOGICAL, INTENT(OUT), DIMENSION(:), OPTIONAL :: NumericBlanks
@@ -2870,7 +2870,7 @@ SUBROUTINE ReadInputLine(UnitNumber,CurPos,BlankLine,InputLineLength,EndofFile, 
   LOGICAL, INTENT(INOUT), OPTIONAL :: MinMax
   INTEGER, INTENT(INOUT), OPTIONAL :: WhichMinMax   !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
   CHARACTER(len=*), INTENT(INOUT), OPTIONAL :: MinMaxString
-  REAL, INTENT(INOUT), OPTIONAL :: Value
+  REAL(r64), INTENT(INOUT), OPTIONAL :: Value
   LOGICAL, INTENT(INOUT), OPTIONAL :: Default
   CHARACTER(len=*), INTENT(INOUT), OPTIONAL :: DefString
   LOGICAL, INTENT(INOUT), OPTIONAL :: AutoSizable
@@ -3182,7 +3182,7 @@ SUBROUTINE ExtendObjectDefinition(ObjectNum,NumNewArgsLimit)
 !  LOGICAL :: MaxArgsChanged
   LOGICAL, DIMENSION(:), ALLOCATABLE :: AorN
   LOGICAL, DIMENSION(:), ALLOCATABLE :: TempLogical
-  REAL, DIMENSION(:), ALLOCATABLE :: TempReals
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: TempReals
   CHARACTER(len=MaxFieldNameLength), DIMENSION(:), ALLOCATABLE :: TempFieldCharacter
   CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE :: TempCharacter
   CHARACTER(len=32) :: charout
@@ -3377,7 +3377,7 @@ FUNCTION ProcessNumber(String,ErrorFlag) RESULT(rProcessNumber)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: String
   LOGICAL, INTENT(OUT)         :: ErrorFlag
-  REAL :: rProcessNumber
+  REAL(r64) :: rProcessNumber
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER  :: ValidNumerics='0123456789.+-EeDd'//CHAR(9)
@@ -3390,7 +3390,7 @@ FUNCTION ProcessNumber(String,ErrorFlag) RESULT(rProcessNumber)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL Temp
+  REAL(r64) Temp
   INTEGER IoStatus
   INTEGER VerNumber
   INTEGER StringLen
@@ -3459,7 +3459,7 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
   CHARACTER(len=*), INTENT(IN)  :: UCInputLine ! part of input line starting \min or \max
   INTEGER, INTENT(OUT)          :: WhichMinMax  !=0 (none/invalid), =1 \min, =2 \min>, =3 \max, =4 \max<
   CHARACTER(len=*), INTENT(OUT) :: MinMaxString
-  REAL, INTENT(OUT)             :: Value
+  REAL(r64), INTENT(OUT)             :: Value
   CHARACTER(len=*), INTENT(OUT) :: DefaultString
   INTEGER, INTENT(OUT)          :: ErrLevel
 
@@ -3518,7 +3518,7 @@ SUBROUTINE ProcessMinMaxDefLine(UCInputLine,WhichMinMax,MinMaxString,Value,Defau
   CASE DEFAULT
     WhichMinMax=0  ! invalid field
     MinMaxString=Blank
-    Value=-999999.
+    Value=-999999.d0
 
   END SELECT
 
@@ -4055,7 +4055,7 @@ SUBROUTINE InternalRangeCheck(Value,FieldNumber,WhichObject,PossibleAlpha,AutoSi
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)             :: Value
+  REAL(r64), INTENT(IN)             :: Value
   INTEGER, INTENT(IN)          :: FieldNumber
   INTEGER, INTENT(IN)          :: WhichObject
   CHARACTER(len=*), INTENT(IN) :: PossibleAlpha

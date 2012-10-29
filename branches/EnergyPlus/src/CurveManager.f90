@@ -149,46 +149,46 @@ CHARACTER(len=*), PARAMETER, PUBLIC, DIMENSION(NumAllCurveTypes) :: cCurveTypes=
   ! DERIVED TYPE DEFINITIONS
 Type TriQuadraticCurveDataStruct
    ! this structure is for 27 coefficient full triquadratic (!)
-  REAL :: CoeffA0 = 0.0
-  REAL :: CoeffA1 = 0.0
-  REAL :: CoeffA2 = 0.0
-  REAL :: CoeffA3 = 0.0
-  REAL :: CoeffA4 = 0.0
-  REAL :: CoeffA5 = 0.0
-  REAL :: CoeffA6 = 0.0
-  REAL :: CoeffA7 = 0.0
-  REAL :: CoeffA8 = 0.0
-  REAL :: CoeffA9 = 0.0
-  REAL :: CoeffA10 = 0.0
-  REAL :: CoeffA11 = 0.0
-  REAL :: CoeffA12 = 0.0
-  REAL :: CoeffA13 = 0.0
-  REAL :: CoeffA14 = 0.0
-  REAL :: CoeffA15 = 0.0
-  REAL :: CoeffA16 = 0.0
-  REAL :: CoeffA17 = 0.0
-  REAL :: CoeffA18 = 0.0
-  REAL :: CoeffA19 = 0.0
-  REAL :: CoeffA20 = 0.0
-  REAL :: CoeffA21 = 0.0
-  REAL :: CoeffA22 = 0.0
-  REAL :: CoeffA23 = 0.0
-  REAL :: CoeffA24 = 0.0
-  REAL :: CoeffA25 = 0.0
-  REAL :: CoeffA26 = 0.0
+  REAL(r64) :: CoeffA0 = 0.0D0
+  REAL(r64) :: CoeffA1 = 0.0D0
+  REAL(r64) :: CoeffA2 = 0.0D0
+  REAL(r64) :: CoeffA3 = 0.0D0
+  REAL(r64) :: CoeffA4 = 0.0D0
+  REAL(r64) :: CoeffA5 = 0.0D0
+  REAL(r64) :: CoeffA6 = 0.0D0
+  REAL(r64) :: CoeffA7 = 0.0D0
+  REAL(r64) :: CoeffA8 = 0.0D0
+  REAL(r64) :: CoeffA9 = 0.0D0
+  REAL(r64) :: CoeffA10 = 0.0D0
+  REAL(r64) :: CoeffA11 = 0.0D0
+  REAL(r64) :: CoeffA12 = 0.0D0
+  REAL(r64) :: CoeffA13 = 0.0D0
+  REAL(r64) :: CoeffA14 = 0.0D0
+  REAL(r64) :: CoeffA15 = 0.0D0
+  REAL(r64) :: CoeffA16 = 0.0D0
+  REAL(r64) :: CoeffA17 = 0.0D0
+  REAL(r64) :: CoeffA18 = 0.0D0
+  REAL(r64) :: CoeffA19 = 0.0D0
+  REAL(r64) :: CoeffA20 = 0.0D0
+  REAL(r64) :: CoeffA21 = 0.0D0
+  REAL(r64) :: CoeffA22 = 0.0D0
+  REAL(r64) :: CoeffA23 = 0.0D0
+  REAL(r64) :: CoeffA24 = 0.0D0
+  REAL(r64) :: CoeffA25 = 0.0D0
+  REAL(r64) :: CoeffA26 = 0.0D0
 END TYPE TriQuadraticCurveDataStruct
 
 Type TableDataStruct
-  REAL :: NormalPoint = 1.0
-  REAL, DIMENSION(:), ALLOCATABLE :: X1
-  REAL, DIMENSION(:), ALLOCATABLE :: X2
-  REAL, DIMENSION(:), ALLOCATABLE :: Y
+  REAL(r64) :: NormalPoint = 1.0D0
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X1
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X2
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: Y
 End Type TableDataStruct
 
 Type PerfCurveTableDataStruct
-  REAL, DIMENSION(:), ALLOCATABLE :: X1
-  REAL, DIMENSION(:), ALLOCATABLE :: X2
-  REAL, DIMENSION(:,:), ALLOCATABLE :: Y
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X1
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X2
+  REAL(r64), DIMENSION(:,:), ALLOCATABLE :: Y
 End Type PerfCurveTableDataStruct
 
 TYPE PerfomanceCurveData
@@ -203,56 +203,56 @@ TYPE PerfomanceCurveData
   INTEGER                      :: NumIVHighErrorIndex=0   ! Index to table object error message for too many IV's
   INTEGER                      :: X1SortOrder=1       ! sort order for table data for X1
   INTEGER                      :: X2SortOrder=1       ! sort order for table data for X2
-  REAL                    :: Coeff1       =0.0   ! constant coefficient
-  REAL                    :: Coeff2       =0.0   ! linear coeff (1st independent variable)
-  REAL                    :: Coeff3       =0.0   ! quadratic coeff (1st independent variable)
-  REAL                    :: Coeff4       =0.0   ! linear coeff (2nd ind var) or cubic coeff
-  REAL                    :: Coeff5       =0.0   ! quadratic coeff (2nd independent variable)
-  REAL                    :: Coeff6       =0.0   ! cross coeff (1st & 2nd ind var)
-  REAL                    :: Coeff7       =0.0   ! cubic coeff for bicubic (1st ind var)
-  REAL                    :: Coeff8       =0.0   ! cubic coeff for bicubic (2nd ind var)
-  REAL                    :: Coeff9       =0.0   ! cross coeff for bicubic (1st quadratic & 2nd linear)
-  REAL                    :: Coeff10      =0.0   ! cross coeff for bicubic (1st linear & 2nd quadratic)
-  REAL                    :: Var1Max      =0.0   ! maximum of 1st independent variable
-  REAL                    :: Var1Min      =0.0   ! minimum of 1st independent variable
-  REAL                    :: Var2Max      =0.0   ! maximum of 2nd independent variable
-  REAL                    :: Var2Min      =0.0   ! minimum of 2nd independent variable
-  REAL                    :: Var3Max      =0.0   ! maximum of 3rd independent variable
-  REAL                    :: Var3Min      =0.0   ! minimum of 3rd independent variable
-  REAL                    :: Var4Max      =0.0   ! maximum of 4th independent variable
-  REAL                    :: Var4Min      =0.0   ! minimum of 4th independent variable
-  REAL                    :: Var5Max      =0.0   ! maximum of 5th independent variable
-  REAL                    :: Var5Min      =0.0   ! minimum of 5th independent variable
-  REAL                    :: CurveMin     =0.0   ! minimum value of curve output
-  REAL                    :: CurveMax     =0.0   ! maximum value of curve output
+  REAL(r64)                    :: Coeff1       =0.0D0   ! constant coefficient
+  REAL(r64)                    :: Coeff2       =0.0D0   ! linear coeff (1st independent variable)
+  REAL(r64)                    :: Coeff3       =0.0D0   ! quadratic coeff (1st independent variable)
+  REAL(r64)                    :: Coeff4       =0.0D0   ! linear coeff (2nd ind var) or cubic coeff
+  REAL(r64)                    :: Coeff5       =0.0D0   ! quadratic coeff (2nd independent variable)
+  REAL(r64)                    :: Coeff6       =0.0D0   ! cross coeff (1st & 2nd ind var)
+  REAL(r64)                    :: Coeff7       =0.0D0   ! cubic coeff for bicubic (1st ind var)
+  REAL(r64)                    :: Coeff8       =0.0D0   ! cubic coeff for bicubic (2nd ind var)
+  REAL(r64)                    :: Coeff9       =0.0D0   ! cross coeff for bicubic (1st quadratic & 2nd linear)
+  REAL(r64)                    :: Coeff10      =0.0D0   ! cross coeff for bicubic (1st linear & 2nd quadratic)
+  REAL(r64)                    :: Var1Max      =0.0D0   ! maximum of 1st independent variable
+  REAL(r64)                    :: Var1Min      =0.0D0   ! minimum of 1st independent variable
+  REAL(r64)                    :: Var2Max      =0.0D0   ! maximum of 2nd independent variable
+  REAL(r64)                    :: Var2Min      =0.0D0   ! minimum of 2nd independent variable
+  REAL(r64)                    :: Var3Max      =0.0D0   ! maximum of 3rd independent variable
+  REAL(r64)                    :: Var3Min      =0.0D0   ! minimum of 3rd independent variable
+  REAL(r64)                    :: Var4Max      =0.0D0   ! maximum of 4th independent variable
+  REAL(r64)                    :: Var4Min      =0.0D0   ! minimum of 4th independent variable
+  REAL(r64)                    :: Var5Max      =0.0D0   ! maximum of 5th independent variable
+  REAL(r64)                    :: Var5Min      =0.0D0   ! minimum of 5th independent variable
+  REAL(r64)                    :: CurveMin     =0.0D0   ! minimum value of curve output
+  REAL(r64)                    :: CurveMax     =0.0D0   ! maximum value of curve output
   LOGICAL                      :: CurveMinPresent = .FALSE. ! If TRUE, then cap minimum curve output
   LOGICAL                      :: CurveMaxPresent = .FALSE. ! if TRUE, then cap maximum curve output
   TYPE(TriQuadraticCurveDataStruct),DIMENSION(:), ALLOCATABLE :: Tri2ndOrder   ! structure for triquadratic curve data
   LOGICAL                      :: EMSOverrideOn = .FALSE. ! if TRUE, then EMS is calling to override curve value
-  REAL                    :: EMSOverrideCurveValue = 0.0 ! Value of curve result EMS is directing to use
+  REAL(r64)                    :: EMSOverrideCurveValue = 0.0D0 ! Value of curve result EMS is directing to use
 ! report variables
-  REAL                    :: CurveOutput = 0.0     ! curve output or result
-  REAL                    :: CurveInput1 = 0.0     ! curve input #1 (e.g., x or X1 variable)
-  REAL                    :: CurveInput2 = 0.0     ! curve input #1 (e.g., y or X2 variable)
-  REAL                    :: CurveInput3 = 0.0     ! curve input #1 (e.g., z or X3 variable)
-  REAL                    :: CurveInput4 = 0.0     ! curve input #1 (e.g., X4 variable)
-  REAL                    :: CurveInput5 = 0.0     ! curve input #1 (e.g., X5 variable)
+  REAL(r64)                    :: CurveOutput = 0.0D0     ! curve output or result
+  REAL(r64)                    :: CurveInput1 = 0.0D0     ! curve input #1 (e.g., x or X1 variable)
+  REAL(r64)                    :: CurveInput2 = 0.0D0     ! curve input #1 (e.g., y or X2 variable)
+  REAL(r64)                    :: CurveInput3 = 0.0D0     ! curve input #1 (e.g., z or X3 variable)
+  REAL(r64)                    :: CurveInput4 = 0.0D0     ! curve input #1 (e.g., X4 variable)
+  REAL(r64)                    :: CurveInput5 = 0.0D0     ! curve input #1 (e.g., X5 variable)
 END TYPE PerfomanceCurveData
 
 TYPE TableLookupData
   INTEGER                      :: NumIndependentVars =0 ! Curve type (see parameter definitions above)
   INTEGER                      :: InterpolationOrder =0 ! number of points to interpolate (table data only)
   INTEGER                      :: NumX1Vars    =0     ! Number of variables for independent variable #1
-  REAL, DIMENSION(:), ALLOCATABLE :: X1Var
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X1Var
   INTEGER                      :: NumX2Vars    =0     ! Number of variables for independent variable #2
-  REAL, DIMENSION(:), ALLOCATABLE :: X2Var
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X2Var
   INTEGER                      :: NumX3Vars    =0     ! Number of variables for independent variable #3
-  REAL, DIMENSION(:), ALLOCATABLE :: X3Var
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X3Var
   INTEGER                      :: NumX4Vars    =0     ! Number of variables for independent variable #4
-  REAL, DIMENSION(:), ALLOCATABLE :: X4Var
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X4Var
   INTEGER                      :: NumX5Vars    =0     ! Number of variables for independent variable #5
-  REAL, DIMENSION(:), ALLOCATABLE :: X5Var
-  REAL, DIMENSION(:,:,:,:,:), ALLOCATABLE :: TableLookupZData
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: X5Var
+  REAL(r64), DIMENSION(:,:,:,:,:), ALLOCATABLE :: TableLookupZData
 END TYPE TableLookupData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -337,7 +337,7 @@ SUBROUTINE ResetPerformanceCurveOutput
   RETURN
 END SUBROUTINE ResetPerformanceCurveOutput
 
-REAL FUNCTION CurveValue(CurveIndex,Var1,Var2,Var3, Var4, Var5)
+REAL(r64) FUNCTION CurveValue(CurveIndex,Var1,Var2,Var3, Var4, Var5)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad, FSEC
@@ -363,11 +363,11 @@ REAL FUNCTION CurveValue(CurveIndex,Var1,Var2,Var3, Var4, Var5)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT (IN)           :: CurveIndex  ! index of curve in curve array
-  REAL, INTENT (IN)           :: Var1        ! 1st independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var5        ! 5th independent variable
+  REAL(r64), INTENT (IN)           :: Var1        ! 1st independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var5        ! 5th independent variable
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -491,7 +491,7 @@ INTEGER :: CurveIndex ! do loop index
 INTEGER :: CurveNum   ! current curve number
 CHARACTER(len=MaxNameLength), &
                    DIMENSION(13) :: Alphas  ! Alpha items for object
-REAL, DIMENSION(10000)        :: Numbers ! Numeric items for object
+REAL(r64), DIMENSION(10000)        :: Numbers ! Numeric items for object
 INTEGER                         :: NumAlphas  ! Number of Alphas for each GetObjectItem call
 INTEGER                         :: NumNumbers ! Number of Numbers for each GetObjectItem call
 INTEGER                         :: IOStatus   ! Used in GetObjectItem
@@ -508,18 +508,18 @@ INTEGER   :: TableDataIndex=0   ! Loop counter for table data
 INTEGER   :: NumTableEntries=0  ! Number of data pairs in table data
 INTEGER   :: NumXVar
 INTEGER   :: NumX2Var
-REAL, ALLOCATABLE, DIMENSION(:):: XVar
-REAL, ALLOCATABLE, DIMENSION(:):: X2Var
+REAL(r64), ALLOCATABLE, DIMENSION(:):: XVar
+REAL(r64), ALLOCATABLE, DIMENSION(:):: X2Var
 INTEGER :: VarIndex
 INTEGER :: TempVarIndex
 INTEGER :: TempVarIndex1
-REAL :: MinTableData
-REAL :: MaxTableDataValue
+REAL(r64) :: MinTableData
+REAL(r64) :: MaxTableDataValue
 INTEGER   :: NextXVar
 LOGICAL :: FoundNewData
-REAL, ALLOCATABLE, DIMENSION(:) :: TempArray1
-REAL, ALLOCATABLE, DIMENSION(:) :: TempArray2
-REAL, ALLOCATABLE, DIMENSION(:) :: TempArray3
+Real(r64), ALLOCATABLE, DIMENSION(:) :: TempArray1
+Real(r64), ALLOCATABLE, DIMENSION(:) :: TempArray2
+Real(r64), ALLOCATABLE, DIMENSION(:) :: TempArray3
 
 CHARACTER(len=MaxNameLength) :: FileName  ! name of external table data file
 INTEGER,EXTERNAL   :: GetNewUnitNumber
@@ -1679,12 +1679,12 @@ DO CurveIndex=1,NumOneVarTab
   END SELECT
 
   IF(lNumericFieldBlanks(1))THEN
-    PerfCurve(CurveNum)%Var1Min = 99999999999.
+    PerfCurve(CurveNum)%Var1Min = 99999999999.D0
   ELSE
     PerfCurve(CurveNum)%Var1Min = Numbers(1)
   END IF
   IF(lNumericFieldBlanks(2))THEN
-    PerfCurve(CurveNum)%Var1Max = -99999999999.
+    PerfCurve(CurveNum)%Var1Max = -99999999999.D0
   ELSE
     PerfCurve(CurveNum)%Var1Max = Numbers(2)
   END IF
@@ -1713,15 +1713,15 @@ DO CurveIndex=1,NumOneVarTab
   ! read this value first to allow normalization of min/max table output fields
   IF(.NOT. lNumericFieldBlanks(5))THEN
     TableData(TableNum)%NormalPoint = Numbers(5)
-    IF(Numbers(5) .EQ. 0.0)THEN
+    IF(Numbers(5) .EQ. 0.0D0)THEN
       CALL ShowSevereError('GetTableInput: For '//TRIM(CurrentModuleObject)//': '//TRIM(Alphas(1)))
       CALL ShowContinueError('...'//TRIM(cNumericFieldNames(5))// &
                              ' ['//TRIM(RoundSigDigits(Numbers(5),6))//'] is not a valid choice.')
       CALL ShowContinueError('...Setting Normalization Reference to 1 and the simulation continues.')
-      TableData(TableNum)%NormalPoint = 1.0
+      TableData(TableNum)%NormalPoint = 1.0D0
     END IF
   ELSE
-    TableData(TableNum)%NormalPoint = 1.0
+    TableData(TableNum)%NormalPoint = 1.0D0
   END IF
 
   IF(.NOT. lNumericFieldBlanks(3))THEN
@@ -1754,13 +1754,13 @@ DO CurveIndex=1,NumOneVarTab
   TempTableData = TableData
   DO WHILE (NumXVar .LE. MaxTableNums)
 
-    MinTableData = 999999.0
+    MinTableData = 999999.0D0
     MinTableData = MINVAL(TempTableData(TableNum)%X1)
     DO VarIndex = 1, MaxTableNums
       IF(TempTableData(TableNum)%X1(VarIndex) .EQ. MinTableData)THEN
         TableData(TableNum)%X1(NumXVar) = TempTableData(TableNum)%X1(VarIndex)
         TableData(TableNum)%Y(NumXVar)  = TempTableData(TableNum)%Y(VarIndex)
-        TempTableData(TableNum)%X1(VarIndex) = 999999.0
+        TempTableData(TableNum)%X1(VarIndex) = 999999.0D0
         NumXVar = NumXVar + 1
       END IF
     END DO
@@ -1896,15 +1896,15 @@ DO CurveIndex=1,NumTwoVarTab
 
   IF(.NOT. lNumericFieldBlanks(7))THEN
     TableData(TableNum)%NormalPoint = Numbers(7)
-    IF(Numbers(7) .EQ. 0.0)THEN
+    IF(Numbers(7) .EQ. 0.0D0)THEN
       CALL ShowSevereError('GetTableInput: For '//TRIM(CurrentModuleObject)//': '//TRIM(Alphas(1)))
       CALL ShowContinueError('...'//TRIM(cNumericFieldNames(7))// &
                              ' ['//TRIM(RoundSigDigits(Numbers(7),6))//'] is not a valid choice.')
       CALL ShowContinueError('...Setting Normalization Reference to 1 and the simulation continues.')
-      TableData(TableNum)%NormalPoint = 1.0
+      TableData(TableNum)%NormalPoint = 1.0D0
     END IF
   ELSE
-    TableData(TableNum)%NormalPoint = 1.0
+    TableData(TableNum)%NormalPoint = 1.0D0
   END IF
 
   IF(.NOT. lNumericFieldBlanks(5))THEN
@@ -1943,14 +1943,14 @@ DO CurveIndex=1,NumTwoVarTab
    Temp2TableData = TableData
    DO WHILE (NumXVar .LE. MaxTableNums)
 
-     MinTableData = 999999.0
+     MinTableData = 999999.0D0
      MinTableData = MINVAL(TempTableData(TableNum)%X1)
      DO VarIndex = 1, MaxTableNums
        IF(TempTableData(TableNum)%X1(VarIndex) .EQ. MinTableData)THEN
          TableData(TableNum)%X1(NumXVar) = TempTableData(TableNum)%X1(VarIndex)
          TableData(TableNum)%X2(NumXVar) = TempTableData(TableNum)%X2(VarIndex)
          TableData(TableNum)%Y(NumXVar)  = TempTableData(TableNum)%Y(VarIndex)
-         TempTableData(TableNum)%X1(VarIndex) = 999999.0
+         TempTableData(TableNum)%X1(VarIndex) = 999999.0D0
          NumXVar = NumXVar + 1
        END IF
      END DO
@@ -1961,7 +1961,7 @@ DO CurveIndex=1,NumTwoVarTab
 
 
      DO TempVarIndex = NumXVar-1, NextXVar, -1
-       MaxTableDataValue = -999999.0
+       MaxTableDataValue = -999999.0D0
        DO TempVarIndex1 = NextXVar, NumXVar-1
          IF(Temp2TableData(TableNum)%X2(TempVarIndex1) .GT. MaxTableDataValue)THEN
            MaxTableDataValue = Temp2TableData(TableNum)%X2(TempVarIndex1)
@@ -1974,7 +1974,7 @@ DO CurveIndex=1,NumTwoVarTab
              Temp2TableData(TableNum)%X2(TempVarIndex1)
            TableData(TableNum)%Y(TempVarIndex) = &
              Temp2TableData(TableNum)%Y(TempVarIndex1)
-           Temp2TableData(TableNum)%X2(TempVarIndex1) = -999999.0
+           Temp2TableData(TableNum)%X2(TempVarIndex1) = -999999.0D0
          EXIT
        END DO
      END DO
@@ -2012,9 +2012,9 @@ DO CurveIndex=1,NumTwoVarTab
      ALLOCATE(PerfCurveTableData(TableNum)%X1(NumXVar))
      ALLOCATE(PerfCurveTableData(TableNum)%X2(NumX2Var))
      ALLOCATE(PerfCurveTableData(TableNum)%Y(NumXVar,NumX2Var))
-     PerfCurveTableData(TableNum)%X1 = -9999999.0
-     PerfCurveTableData(TableNum)%X2 = -9999999.0
-     PerfCurveTableData(TableNum)%Y = -9999999.0
+     PerfCurveTableData(TableNum)%X1 = -9999999.0D0
+     PerfCurveTableData(TableNum)%X2 = -9999999.0D0
+     PerfCurveTableData(TableNum)%Y = -9999999.0D0
      DO VarIndex = 1, NumXVar
        PerfCurveTableData(TableNum)%X1(VarIndex) = XVar(VarIndex)
        DO TempVarIndex = 1, NumX2Var
@@ -2141,15 +2141,15 @@ DO CurveIndex=1,NumMultVarLookup
 
   IF(.NOT. lNumericFieldBlanks(2))THEN
     TableData(TableNum)%NormalPoint = Numbers(2)
-    IF(Numbers(2) .EQ. 0.0)THEN
+    IF(Numbers(2) .EQ. 0.0D0)THEN
       CALL ShowSevereError('GetTableInput: For '//TRIM(CurrentModuleObject)//': '//TRIM(Alphas(1)))
       CALL ShowContinueError('...'//TRIM(cNumericFieldNames(2))// &
                              ' ['//TRIM(RoundSigDigits(Numbers(2),6))//'] is not a valid choice.')
       CALL ShowContinueError('...Setting Normalization Reference to 1 and the simulation continues.')
-      TableData(TableNum)%NormalPoint = 1.0
+      TableData(TableNum)%NormalPoint = 1.0D0
     END IF
   ELSE
-    TableData(TableNum)%NormalPoint = 1.0
+    TableData(TableNum)%NormalPoint = 1.0D0
   END IF
   PerfCurve(CurveNum)%Var1Min = Numbers(3)
   PerfCurve(CurveNum)%Var1Max = Numbers(4)
@@ -2523,7 +2523,7 @@ CHARACTER(len=MaxNameLength) :: CurrentModuleObject
 LOGICAL, INTENT(IN)          :: ReadFromFile
 CHARACTER(len=MaxNameLength) :: FileName
 CHARACTER(len=MaxNameLength), DIMENSION(:) ::  Alphas
-REAL, DIMENSION(:)     :: Numbers
+REAL(r64), DIMENSION(:)     :: Numbers
 INTEGER, INTENT(IN)         :: NumNumbers
 LOGICAL, INTENT(INOUT)      :: ErrorsFound
 
@@ -2546,7 +2546,7 @@ INTEGER            :: DataSetCount       ! counter for number of lines read (use
 INTEGER            :: ReadStat           ! File read status
 LOGICAL            :: EOFonFile          ! True if EOF during file read
 INTEGER            :: I, J, NumDataSets  ! Do loop indexes and data set counter
-REAL          :: Var3, Var4, Var5   ! Temp variables for processing table lookup data
+REAL(r64)          :: Var3, Var4, Var5   ! Temp variables for processing table lookup data
 INTEGER            :: Var3Index, Var4Index, Var5Index, NumIVars, TotalDataSets
 INTEGER            :: NumbersOffset, BaseOffset
 LOGICAL, SAVE      :: WriteHeaderOnce = .TRUE. ! eio header file write flag
@@ -3389,10 +3389,10 @@ FUNCTION DLAG(XX,YY,X,Y,Z,NX,NY,M,IEXTX,IEXTY)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL :: DLAG
-REAL :: XX, YY
-REAL, DIMENSION(:) :: X, Y
-REAL, DIMENSION(:,:) :: Z
+REAL(r64) :: DLAG
+REAL(r64) :: XX, YY
+REAL(r64), DIMENSION(:) :: X, Y
+REAL(r64), DIMENSION(:,:) :: Z
 !DIMENSION Z(ID,NY),X(NX),Y(NY),XLAG(100)
 INTEGER   :: NX, NY, IEXTX, IEXTY, M
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3407,8 +3407,8 @@ INTEGER   :: NX, NY, IEXTX, IEXTY, M
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:!
 LOGICAL   :: QUITX, QUITY
 INTEGER   :: I, ISXPT, IEXPT, J, ISYPT, IEYPT, K, L, M1
-REAL :: MIDX, MIDY
-REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
+REAL(r64) :: MIDX, MIDY
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
 
 !       INITIALIZE
 !
@@ -3434,7 +3434,7 @@ REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
 !       if the interpolation point is less than or greater than the X data then linearly extrapolate
 !       linear extrapolation uses only 2 points (M1=2)
         DO I = 1, NX
-          IF(XX-X(I) .LT. 0.0)THEN
+          IF(XX-X(I) .LT. 0.0D0)THEN
             MIDX=I                    ! found X point just greater than interpolation point
             IF (MIDX .EQ. 1) THEN
               IEXTX=-1                ! extrapolating at the lower bound of x
@@ -3448,7 +3448,7 @@ REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
               IEXPT=NX                ! limit ending point to upper boundary of X array
             END IF
             EXIT
-          ELSE IF(XX-X(I) .EQ. 0.0)THEN ! interpolation point is equal to element in X array
+          ELSE IF(XX-X(I) .EQ. 0.0D0)THEN ! interpolation point is equal to element in X array
             QUITX=.TRUE.              ! exact interpolation point found in X array, do not interpolate
             EXIT
           ELSE IF(I .EQ. NX)THEN      ! interpolation point is greater than max X value
@@ -3464,7 +3464,7 @@ REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
         IF (M1 .GT. NY) M1=NY         ! limit to number of Y points if necessary
 
         DO J=1,NY
-          IF(YY-Y(J) .LT. 0.0)THEN
+          IF(YY-Y(J) .LT. 0.0D0)THEN
             MIDY=J                    ! found Y point just greater than interpolation point
             IF (MIDY .LE. 1) THEN
               IEXTY=-1                ! extrapolating at the lower bound of y
@@ -3478,7 +3478,7 @@ REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
               IEYPT=NY                ! limit ending point to upper boundary of Y array
             END IF
             EXIT
-          ELSE IF(YY-Y(J) .EQ. 0.0)THEN ! interpolation point is equal to element in Y array
+          ELSE IF(YY-Y(J) .EQ. 0.0D0)THEN ! interpolation point is equal to element in Y array
             QUITY=.TRUE.              ! exact interpolation point found in Y array, do not interpolate
             EXIT
           ELSE IF(J .EQ. NY)THEN      ! interpolation point is greater than max Y value
@@ -3512,7 +3512,7 @@ REAL, ALLOCATABLE, DIMENSION(:) :: XLAG, YLAG
      RETURN
 END FUNCTION DLAG
 
-REAL FUNCTION PerformanceCurveObject(CurveIndex,Var1,Var2,Var3,Var4) RESULT(CurveValue)
+REAL(r64) FUNCTION PerformanceCurveObject(CurveIndex,Var1,Var2,Var3,Var4) RESULT(CurveValue)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Fred Buhl
@@ -3541,10 +3541,10 @@ REAL FUNCTION PerformanceCurveObject(CurveIndex,Var1,Var2,Var3,Var4) RESULT(Curv
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT (IN)           :: CurveIndex  ! index of curve in curve array
-  REAL, INTENT (IN)           :: Var1        ! 1st independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
+  REAL(r64), INTENT (IN)           :: Var1        ! 1st independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3557,18 +3557,18 @@ REAL FUNCTION PerformanceCurveObject(CurveIndex,Var1,Var2,Var3,Var4) RESULT(Curv
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-REAL :: V1 ! 1st independent variable after limits imposed
-REAL :: V2 ! 2nd independent variable after limits imposed
-REAL :: V3 ! 3rd independent variable after limits imposed
-REAL :: V4 ! 4th independent variable after limits imposed
-REAL :: CoeffZ1 ! cpw22Aug2010 Coefficient Z1 in exponential skew normal curve
-REAL :: CoeffZ2 ! cpw22Aug2010 Coefficient Z2 in exponential skew normal curve
-REAL :: CoeffZ3 ! cpw22Aug2010 Coefficient Z3 in exponential skew normal curve
-REAL :: CurveValueNumer ! cpw22Aug2010 Numerator in in exponential skew normal curve
-REAL :: CurveValueDenom ! cpw22Aug2010 Numerator in in exponential skew normal curve
-REAL :: CurveValueExp ! cpw22Aug2010 Exponential term in sigmoid curve
+REAL(r64) :: V1 ! 1st independent variable after limits imposed
+REAL(r64) :: V2 ! 2nd independent variable after limits imposed
+REAL(r64) :: V3 ! 3rd independent variable after limits imposed
+REAL(r64) :: V4 ! 4th independent variable after limits imposed
+REAL(r64) :: CoeffZ1 ! cpw22Aug2010 Coefficient Z1 in exponential skew normal curve
+REAL(r64) :: CoeffZ2 ! cpw22Aug2010 Coefficient Z2 in exponential skew normal curve
+REAL(r64) :: CoeffZ3 ! cpw22Aug2010 Coefficient Z3 in exponential skew normal curve
+REAL(r64) :: CurveValueNumer ! cpw22Aug2010 Numerator in in exponential skew normal curve
+REAL(r64) :: CurveValueDenom ! cpw22Aug2010 Numerator in in exponential skew normal curve
+REAL(r64) :: CurveValueExp ! cpw22Aug2010 Exponential term in sigmoid curve
 #ifdef nointrinsicERF
-REAL, EXTERNAL :: ERF
+REAL(r64), EXTERNAL :: ERF
 #endif
 
 V1 = MAX(MIN(Var1,PerfCurve(CurveIndex)%Var1Max),PerfCurve(CurveIndex)%Var1Min)
@@ -3683,10 +3683,10 @@ SELECT CASE (PerfCurve(CurveIndex)%CurveType)
               - PerfCurve(CurveIndex)%Coeff1) / PerfCurve(CurveIndex)%Coeff2
     CoeffZ3 = -PerfCurve(CurveIndex)%Coeff1 / PerfCurve(CurveIndex)%Coeff2
 
-!    CurveValueNumer = EXP(-0.5 * CoeffZ1**2) * (1. + SIGN(1.0,CoeffZ2) * ErfFunction(ABS(CoeffZ2)/SQRT(2.0)))
-!    CurveValueDenom = EXP(-0.5 * CoeffZ3**2) * (1. + SIGN(1.0,CoeffZ3) * ErfFunction(ABS(CoeffZ3)/SQRT(2.0)))
-    CurveValueNumer = EXP(-0.5 * CoeffZ1**2) * (1. + SIGN(1.0,CoeffZ2) * ERF(ABS(CoeffZ2)/SQRT(2.0)))
-    CurveValueDenom = EXP(-0.5 * CoeffZ3**2) * (1. + SIGN(1.0,CoeffZ3) * ERF(ABS(CoeffZ3)/SQRT(2.0)))
+!    CurveValueNumer = EXP(-0.5d0 * CoeffZ1**2) * (1.d0 + SIGN(1.0d0,CoeffZ2) * ErfFunction(ABS(CoeffZ2)/SQRT(2.0d0)))
+!    CurveValueDenom = EXP(-0.5d0 * CoeffZ3**2) * (1.d0 + SIGN(1.0d0,CoeffZ3) * ErfFunction(ABS(CoeffZ3)/SQRT(2.0d0)))
+    CurveValueNumer = EXP(-0.5d0 * CoeffZ1**2) * (1.d0 + SIGN(1.0d0,CoeffZ2) * ERF(ABS(CoeffZ2)/SQRT(2.0d0)))
+    CurveValueDenom = EXP(-0.5d0 * CoeffZ3**2) * (1.d0 + SIGN(1.0d0,CoeffZ3) * ERF(ABS(CoeffZ3)/SQRT(2.0d0)))
     CurveValue =  CurveValueNumer / CurveValueDenom
 
   !cpw22Aug2010 Added Sigmoid curve
@@ -3694,7 +3694,7 @@ SELECT CASE (PerfCurve(CurveIndex)%CurveType)
 
     CurveValueExp = EXP((PerfCurve(CurveIndex)%Coeff3 - V1) / PerfCurve(CurveIndex)%Coeff4)
     CurveValue = PerfCurve(CurveIndex)%Coeff1 + PerfCurve(CurveIndex)%Coeff2 &
-                 / (1.0 + CurveValueExp**PerfCurve(CurveIndex)%Coeff5)
+                 / (1.0d0 + CurveValueExp**PerfCurve(CurveIndex)%Coeff5)
 
   !cpw22Aug2010 Added Rectangular Hyperbola Type 1 curve
   CASE(RectangularHyperbola1)
@@ -3724,7 +3724,7 @@ SELECT CASE (PerfCurve(CurveIndex)%CurveType)
 
   CASE DEFAULT
 
-    CurveValue = 0.0
+    CurveValue = 0.0d0
 
 END SELECT
 
@@ -3735,7 +3735,7 @@ RETURN
 
 END FUNCTION PerformanceCurveObject
 
-REAL FUNCTION PerformanceTableObject(CurveIndex,Var1,Var2,Var3) RESULT(TableValue)
+REAL(r64) FUNCTION PerformanceTableObject(CurveIndex,Var1,Var2,Var3) RESULT(TableValue)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad, FSEC
@@ -3760,9 +3760,9 @@ REAL FUNCTION PerformanceTableObject(CurveIndex,Var1,Var2,Var3) RESULT(TableValu
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT (IN)           :: CurveIndex  ! index of curve in curve array
-  REAL, INTENT (IN)           :: Var1        ! 1st independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
+  REAL(r64), INTENT (IN)           :: Var1        ! 1st independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3775,13 +3775,13 @@ REAL FUNCTION PerformanceTableObject(CurveIndex,Var1,Var2,Var3) RESULT(TableValu
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-REAL :: V1 ! 1st independent variable after limits imposed
-REAL :: V2 ! 2nd independent variable after limits imposed
-REAL :: V3 ! 3rd independent variable after limits imposed
-REAL :: TempX1Low
-REAL :: TempX1High
-REAL :: TempX2Low
-REAL :: TempX2High
+REAL(r64) :: V1 ! 1st independent variable after limits imposed
+REAL(r64) :: V2 ! 2nd independent variable after limits imposed
+REAL(r64) :: V3 ! 3rd independent variable after limits imposed
+Real(r64) :: TempX1Low
+Real(r64) :: TempX1High
+Real(r64) :: TempX2Low
+Real(r64) :: TempX2High
 !INTEGER   :: ATempX1LowPtr(1)
 !INTEGER   :: ATempX1HighPtr(1)
 !INTEGER   :: ATempX2LowPtr(1)
@@ -3790,10 +3790,10 @@ INTEGER   :: TempX1LowPtr
 INTEGER   :: TempX1HighPtr
 INTEGER   :: TempX2LowPtr
 INTEGER   :: TempX2HighPtr
-REAL :: X1Frac
-REAL :: X2Frac
-REAL :: X1ValLow
-REAL :: X1ValHigh
+Real(r64) :: X1Frac
+Real(r64) :: X2Frac
+Real(r64) :: X1ValLow
+Real(r64) :: X1ValHigh
 !INTEGER   :: MaxSizeArray
 INTEGER :: X1Val
 INTEGER :: X2Val
@@ -3916,7 +3916,7 @@ SELECT CASE(TableLookup(TableIndex)%NumIndependentVars)
     END IF
 
   CASE DEFAULT
-    TableValue = 0.0
+    TableValue = 0.0D0
     CALL ShowSevereError('Errors found in table output calculation for '//TRIM(PerfCurve(CurveIndex)%Name))
     CALL ShowContinueError('...Possible causes are selection of Interpolation Method or Type or Number' // &
                            ' of Independent Variables or Points.')
@@ -3930,7 +3930,7 @@ RETURN
 
 END FUNCTION PerformanceTableObject
 
-REAL FUNCTION TableLookupObject(CurveIndex,Var1,Var2,Var3,Var4,Var5) RESULT(TableValue)
+REAL(r64) FUNCTION TableLookupObject(CurveIndex,Var1,Var2,Var3,Var4,Var5) RESULT(TableValue)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad, FSEC
@@ -3955,11 +3955,11 @@ REAL FUNCTION TableLookupObject(CurveIndex,Var1,Var2,Var3,Var4,Var5) RESULT(Tabl
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT (IN)           :: CurveIndex  ! index of curve in curve array
-  REAL, INTENT (IN)           :: Var1        ! 1st independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
-  REAL, INTENT (IN), OPTIONAL :: Var5        ! 5th independent variable
+  REAL(r64), INTENT (IN)           :: Var1        ! 1st independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var3        ! 3rd independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var4        ! 4th independent variable
+  REAL(r64), INTENT (IN), OPTIONAL :: Var5        ! 5th independent variable
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3972,26 +3972,26 @@ REAL FUNCTION TableLookupObject(CurveIndex,Var1,Var2,Var3,Var4,Var5) RESULT(Tabl
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-REAL :: V1 ! 1st independent variable after limits imposed
-REAL :: V2 ! 2nd independent variable after limits imposed
-REAL :: V3 ! 3rd independent variable after limits imposed
-REAL :: V4 ! 4th independent variable after limits imposed
-REAL :: V5 ! 5th independent variable after limits imposed
+REAL(r64) :: V1 ! 1st independent variable after limits imposed
+REAL(r64) :: V2 ! 2nd independent variable after limits imposed
+REAL(r64) :: V3 ! 3rd independent variable after limits imposed
+REAL(r64) :: V4 ! 4th independent variable after limits imposed
+REAL(r64) :: V5 ! 5th independent variable after limits imposed
 
 INTEGER :: NX, NY, NV3, NV4, NV5
 INTEGER :: TableIndex
-!REAL, ALLOCATABLE, DIMENSION(:)     :: ONEDVALS
-REAL, ALLOCATABLE, DIMENSION(:,:)   :: TWODVALS
-REAL, ALLOCATABLE, DIMENSION(:,:,:) :: THREEDVALS
-REAL, ALLOCATABLE, DIMENSION(:) :: VALSX, VALSY, VALSV3, VALSV4, VALSV5
-!REAL, ALLOCATABLE, DIMENSION(:,:,:) :: HPVAL
-!REAL, ALLOCATABLE, DIMENSION(:,:,:,:) :: HPVALS
-!REAL, ALLOCATABLE, DIMENSION(:,:,:,:,:) :: DVLTRN
-!REAL, ALLOCATABLE, DIMENSION(:,:,:,:,:) :: FiveDArray
-!REAL, ALLOCATABLE, DIMENSION(:,:,:,:) :: FourDArray
-!REAL, ALLOCATABLE, DIMENSION(:,:,:) :: ThreeDArray
-!REAL, ALLOCATABLE, DIMENSION(:,:) :: TwoDArray
-!REAL, ALLOCATABLE, DIMENSION(:) :: OneDArray
+!REAL(r64), ALLOCATABLE, DIMENSION(:)     :: ONEDVALS
+REAL(r64), ALLOCATABLE, DIMENSION(:,:)   :: TWODVALS
+REAL(r64), ALLOCATABLE, DIMENSION(:,:,:) :: THREEDVALS
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: VALSX, VALSY, VALSV3, VALSV4, VALSV5
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:) :: HPVAL
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:,:) :: HPVALS
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:,:,:) :: DVLTRN
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:,:,:) :: FiveDArray
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:,:) :: FourDArray
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:,:) :: ThreeDArray
+!REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: TwoDArray
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OneDArray
 INTEGER :: IV3, IV4, IV5, IEXTX, IEXTY, IEXTV3, IEXTV4, IEXTV5, NUMPT
 
 TableIndex = PerfCurve(CurveIndex)%TableIndex
@@ -4010,7 +4010,7 @@ IF (PRESENT(Var2)) THEN
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Excess number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 2.0, 2.0)
+          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 2.0D0, 2.0D0)
   END IF
 ELSE
   IF(TableLookup(TableIndex)%NumIndependentVars .GT. 1)THEN
@@ -4023,7 +4023,7 @@ ELSE
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Insufficient number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 1.0, 1.0)
+          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 1.0D0, 1.0D0)
   END IF
   V2 = 0.0
 END IF
@@ -4040,7 +4040,7 @@ IF (PRESENT(Var3)) THEN
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Excess number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 3.0, 3.0)
+          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 3.0D0, 3.0D0)
   END IF
 ELSE
   IF(TableLookup(TableIndex)%NumIndependentVars .GT. 2)THEN
@@ -4053,7 +4053,7 @@ ELSE
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Insufficient number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 2.0, 2.0)
+          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 2.0D0, 2.0D0)
   END IF
   V3 = 0.0
 END IF
@@ -4070,7 +4070,7 @@ IF (PRESENT(Var4)) THEN
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Excess number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 4.0, 4.0)
+          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 4.0D0, 4.0D0)
   END IF
 ELSE
   IF(TableLookup(TableIndex)%NumIndependentVars .GT. 3)THEN
@@ -4083,7 +4083,7 @@ ELSE
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Insufficient number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 3.0, 3.0)
+          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 3.0D0, 3.0D0)
   END IF
   V4 = 0.0
 END IF
@@ -4100,7 +4100,7 @@ IF (PRESENT(Var5)) THEN
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Excess number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 5.0, 5.0)
+          , PerfCurve(CurveIndex)%NumIVHighErrorIndex, 5.0D0, 5.0D0)
   END IF
 ELSE
   IF(TableLookup(TableIndex)%NumIndependentVars .GT. 4)THEN
@@ -4113,7 +4113,7 @@ ELSE
     CALL ShowRecurringWarningErrorAtEnd(TRIM(cCurveTypes(PerfCurve(CurveIndex)%ObjectType))//  &
           ' "'//TRIM(PerfCurve(CurveIndex)%Name)//'":'//&
           ' Insufficient number of independent variables warning continues...' &
-          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 4.0, 4.0)
+          , PerfCurve(CurveIndex)%NumIVLowErrorIndex, 4.0D0, 4.0D0)
   END IF
   V5 = 0.0
 END IF
@@ -4160,7 +4160,7 @@ END IF
           IF(NV3 .EQ. 1)THEN
             TableValue = TWODVALS(1,1)
           ELSE
-            TableValue = DLAG(V3,1.0,VALSV3,VALSV3,TWODVALS,NV3,1,NUMPT,IEXTV3,IEXTV4)
+            TableValue = DLAG(V3,1.0D0,VALSV3,VALSV3,TWODVALS,NV3,1,NUMPT,IEXTV3,IEXTV4)
           END IF
           DEALLOCATE(TWODVALS)
           DEALLOCATE(VALSX)
@@ -4228,7 +4228,7 @@ END IF
           IF(NV5 .EQ. 1)THEN
             TableValue = TWODVALS(1,1)
           ELSE
-            TableValue = DLAG(V5,1.0,VALSV5,VALSV5,TWODVALS,NV5,1,NUMPT,IEXTV5,IEXTV4)
+            TableValue = DLAG(V5,1.0D0,VALSV5,VALSV5,TWODVALS,NV5,1,NUMPT,IEXTV5,IEXTV4)
           END IF
           DEALLOCATE(TWODVALS)
           DEALLOCATE(THREEDVALS)
@@ -4238,7 +4238,7 @@ END IF
           DEALLOCATE(VALSV4)
           DEALLOCATE(VALSV5)
         CASE DEFAULT
-          TableValue = 0.0
+          TableValue = 0.0D0
           CALL ShowSevereError('Errors found in table output calculation for '//TRIM(PerfCurve(CurveIndex)%Name))
           CALL ShowContinueError('...Possible causes are selection of Interpolation Method or Type or Number' // &
                                  ' of Independent Variables or Points.')
@@ -4309,9 +4309,9 @@ SUBROUTINE SolveRegression(CurveNum, TableType, CurveName, RawDataX, RawDataY, R
  INTEGER                      :: CurveNum        ! index to performance curve
  Character(len=MaxNameLength) :: TableType       ! tabular data object type
  Character(len=MaxNameLength) :: CurveName       ! performance curve name
- REAL, DIMENSION(:)      :: RawDataX        ! table data X values (1st independent variable)
- REAL, DIMENSION(:)      :: RawDataY        ! table data Y values (dependent variables)
- REAL, OPTIONAL, DIMENSION(:) :: RawDataX2  ! table data X2 values (2nd independent variable)
+ Real(R64), DIMENSION(:)      :: RawDataX        ! table data X values (1st independent variable)
+ Real(R64), DIMENSION(:)      :: RawDataY        ! table data Y values (dependent variables)
+ Real(R64), OPTIONAL, DIMENSION(:) :: RawDataX2  ! table data X2 values (2nd independent variable)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4323,42 +4323,42 @@ SUBROUTINE SolveRegression(CurveNum, TableType, CurveName, RawDataX, RawDataY, R
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL :: X, X2, Y, V, U, T, Z  ! linear algebra equation coefficients
+Real(r64) :: X, X2, Y, V, U, T, Z  ! linear algebra equation coefficients
 INTEGER   :: MatrixSize            ! square matrix array size (MatrixSize,MatrixSize)
 INTEGER   :: LoopCount             ! loop counter
 INTEGER   :: N, i, j, k            ! loop variables
-REAL :: C                     ! intermediate calculation of a constant in matrix solution
-REAL :: sX                    ! sum of the X
-REAL :: sX2                   ! sum of the X^2
-REAL :: sX3                   ! sum of the X^3
-REAL :: sY                    ! sum of the Y
-REAL :: sY2                   ! sum of the Y^2
-REAL :: sV                    ! sum of the V
-REAL :: sV2                   ! sum of the V^2
-REAL :: sU                    ! sum of the U
-REAL :: sU2                   ! sum of the U^2
-REAL :: sT                    ! sum of the T
-REAL :: sT2                   ! sum of the T^2
-REAL :: sXY                   ! sum of the XY
-REAL :: sXV                   ! sum of the XV
-REAL :: sXU                   ! sum of the XU
-REAL :: sXT                   ! sum of the XT
-REAL :: sYV                   ! sum of the TV
-REAL :: sYU                   ! sum of the YU
-REAL :: sYT                   ! sum of the YT
-REAL :: sVU                   ! sum of the VU
-REAL :: sVT                   ! sum of the VT
-REAL :: sUT                   ! sum of the UT
-REAL :: Results1              ! regression coefficient #1
-REAL :: Results2              ! regression coefficient #2
-REAL :: Results3              ! regression coefficient #3
-REAL :: Results4              ! regression coefficient #4
-REAL :: Results5              ! regression coefficient #5
-REAL :: Results6              ! regression coefficient #6
-REAL :: MinX, MaxX, MinX2, MaxX2, MinY, MaxY    ! equation variable min/max statistics
-REAL :: Mean, RSquared, StandardError, Est      ! statistical parameters
-REAL,ALLOCATABLE,DIMENSION(:) :: Results        ! performance curve coefficients
-REAL,ALLOCATABLE,DIMENSION(:,:) :: A            ! linear algebra matrix
+Real(r64) :: C                     ! intermediate calculation of a constant in matrix solution
+Real(r64) :: sX                    ! sum of the X
+Real(r64) :: sX2                   ! sum of the X^2
+Real(r64) :: sX3                   ! sum of the X^3
+Real(r64) :: sY                    ! sum of the Y
+Real(r64) :: sY2                   ! sum of the Y^2
+Real(r64) :: sV                    ! sum of the V
+Real(r64) :: sV2                   ! sum of the V^2
+Real(r64) :: sU                    ! sum of the U
+Real(r64) :: sU2                   ! sum of the U^2
+Real(r64) :: sT                    ! sum of the T
+Real(r64) :: sT2                   ! sum of the T^2
+Real(r64) :: sXY                   ! sum of the XY
+Real(r64) :: sXV                   ! sum of the XV
+Real(r64) :: sXU                   ! sum of the XU
+Real(r64) :: sXT                   ! sum of the XT
+Real(r64) :: sYV                   ! sum of the TV
+Real(r64) :: sYU                   ! sum of the YU
+Real(r64) :: sYT                   ! sum of the YT
+Real(r64) :: sVU                   ! sum of the VU
+Real(r64) :: sVT                   ! sum of the VT
+Real(r64) :: sUT                   ! sum of the UT
+Real(r64) :: Results1              ! regression coefficient #1
+Real(r64) :: Results2              ! regression coefficient #2
+Real(r64) :: Results3              ! regression coefficient #3
+Real(r64) :: Results4              ! regression coefficient #4
+Real(r64) :: Results5              ! regression coefficient #5
+Real(r64) :: Results6              ! regression coefficient #6
+Real(r64) :: MinX, MaxX, MinX2, MaxX2, MinY, MaxY    ! equation variable min/max statistics
+Real(r64) :: Mean, RSquared, StandardError, Est      ! statistical parameters
+Real(r64),ALLOCATABLE,DIMENSION(:) :: Results        ! performance curve coefficients
+Real(r64),ALLOCATABLE,DIMENSION(:,:) :: A            ! linear algebra matrix
 Character(len=MaxNameLength) :: StrCurve             ! string representation of curve type
 LOGICAL, SAVE :: WriteHeaderOnce = .TRUE.
 LOGICAL :: EchoTableDataToEio            ! logical set equal to global and used to report to eio file
@@ -4409,42 +4409,42 @@ IF(SIZE(RawDataX) .LT. (MatrixSize))THEN
 END IF
 
 ALLOCATE(Results(MatrixSize))
-Results = 0.0
+Results = 0.0D0
 ALLOCATE(A(MatrixSize,MatrixSize))
 !   ' Sum data
    N = 0
-   sX = 0.0
-   SX2 = 0.0
-   SY = 0.0
-   SY2 = 0.0
-   SV = 0.0
-   SV2 = 0.0
-   SU = 0.0
-   SU2 = 0.0
-   ST = 0.0
-   ST2 = 0.0
-   SXY = 0.0
-   SXV = 0.0
-   SXU = 0.0
-   SXT = 0.0
-   SYV = 0.0
-   SYU = 0.0
-   SYT = 0.0
-   SVU = 0.0
-   SVT = 0.0
-   SUT = 0.0
-   Results = 0.0
-   Results1 = 0.0
-   Results2 = 0.0
-   Results3 = 0.0
-   Results4 = 0.0
-   Results5 = 0.0
-   Results6 = 0.0
-   X2 = 0.0
-   Y  = 0.0
-   V  = 0.0
-   U  = 0.0
-   T  = 0.0
+   sX = 0.0d0
+   SX2 = 0.0d0
+   SY = 0.0d0
+   SY2 = 0.0d0
+   SV = 0.0d0
+   SV2 = 0.0d0
+   SU = 0.0d0
+   SU2 = 0.0d0
+   ST = 0.0d0
+   ST2 = 0.0d0
+   SXY = 0.0d0
+   SXV = 0.0d0
+   SXU = 0.0d0
+   SXT = 0.0d0
+   SYV = 0.0d0
+   SYU = 0.0d0
+   SYT = 0.0d0
+   SVU = 0.0d0
+   SVT = 0.0d0
+   SUT = 0.0d0
+   Results = 0.0d0
+   Results1 = 0.0d0
+   Results2 = 0.0d0
+   Results3 = 0.0d0
+   Results4 = 0.0d0
+   Results5 = 0.0d0
+   Results6 = 0.0d0
+   X2 = 0.0D0
+   Y  = 0.0D0
+   V  = 0.0D0
+   U  = 0.0D0
+   T  = 0.0D0
    DO LoopCount = 1, SIZE(RawDataX)
      X = RawDataX(LoopCount)
      IF(Present(RawDataX2))X2 = RawDataX2(LoopCount)
@@ -4579,7 +4579,7 @@ END DO
 
 !   Forward Eliminiation
 DO i = 1, MatrixSize - 1
-   If (A(i, i) .EQ. 0.0) Then
+   If (A(i, i) .EQ. 0.0D0) Then
      CALL ShowSevereError('SolveRegression: Zero value on the diagonal.')
      CALL ShowContinueError('Setting interpolation type equal to LinearInterpolationOfTable and simulation continues.')
      PerfCurve(CurveNum)%InterpolationType = LinearInterpolationOfTable
@@ -4598,7 +4598,7 @@ DO i = 1, MatrixSize - 1
 END DO
 
 !    ' Back Substitution
-   If (A(MatrixSize, MatrixSize) .EQ. 0.0) Then
+   If (A(MatrixSize, MatrixSize) .EQ. 0.0D0) Then
      CALL ShowSevereError('SolveRegression: Zero value on the diagonal end point.')
      CALL ShowContinueError('Setting interpolation type equal to LinearInterpolationOfTable and simulation continues.')
      PerfCurve(CurveNum)%InterpolationType = LinearInterpolationOfTable
@@ -4617,15 +4617,15 @@ END DO
    END DO
 
 !  calculate the regression statistics
-   sX = 0.0
-   sX2 = 0.0
-   sX3 = 0.0
-   MinX = 9999999.0
-   MaxX = -9999999.0
-   MinX2 = 9999999.0
-   MaxX2 = -9999999.0
-   MinY = 9999999.0
-   MaxY = -9999999.0
+   sX = 0.0D0
+   sX2 = 0.0D0
+   sX3 = 0.0D0
+   MinX = 9999999.0D0
+   MaxX = -9999999.0D0
+   MinX2 = 9999999.0D0
+   MaxX2 = -9999999.0D0
+   MinY = 9999999.0D0
+   MaxY = -9999999.0D0
    DO LoopCount = 1, N
     X = RawDataX(LoopCount)
      IF(Present(RawDataX2))X2 = RawDataX2(LoopCount)
@@ -4671,15 +4671,15 @@ END DO
      sX2 = sX2 + (Z-Mean) * (Z-Mean)
      sX3 = sX3 + (Z-Est) * (Z-Est)
    END DO
-   IF(sX2 .NE. 0.0)THEN
+   IF(sX2 .NE. 0.0D0)THEN
      RSquared = sX / sX2
    ELSE
-     RSquared = 0.0
+     RSquared = 0.0D0
    END IF
    IF(N .GT. MatrixSize)THEN
      StandardError = SQRT(sX3/(N-MatrixSize))
    ELSE
-     StandardError = 0.0
+     StandardError = 0.0D0
    END IF
 
 SELECT CASE(PerfCurve(CurveNum)%InterpolationType)
@@ -4852,13 +4852,13 @@ SUBROUTINE Interpolate_Lagrange(DataPoint,FunctionArray,Ordinate,ISPT,IEPT,ALAG)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL, INTENT(IN)   :: DataPoint       ! point used for interpolating output (x)
-REAL, DIMENSION(:) :: FunctionArray   ! array of output data (Y's)
-REAL, DIMENSION(:) :: Ordinate        ! array of input data (X's)
+REAL(r64), INTENT(IN)   :: DataPoint       ! point used for interpolating output (x)
+REAL(r64), DIMENSION(:) :: FunctionArray   ! array of output data (Y's)
+REAL(r64), DIMENSION(:) :: Ordinate        ! array of input data (X's)
 !        DIMENSION FunctionAry(IEPT),Ordinate(IEPT)
 INTEGER, INTENT(IN)     :: ISPT            ! the starting point in the interpolated array
 INTEGER, INTENT(IN)     :: IEPT            ! the ending point in the interpolated array
-REAL, INTENT(OUT)  :: ALAG            ! the interpolated output (y or F(x) in equation above)
+REAL(r64), INTENT(OUT)  :: ALAG            ! the interpolated output (y or F(x) in equation above)
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -4869,10 +4869,10 @@ REAL, INTENT(OUT)  :: ALAG            ! the interpolated output (y or F(x) in eq
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL :: Lagrange    ! intermediate variable
+REAL(r64) :: Lagrange    ! intermediate variable
 INTEGER   :: J, K        ! loop coungters
 
-   ALAG = 0.0
+   ALAG = 0.0D0
    DO J=ISPT,IEPT
      Lagrange=1.0
      DO K=ISPT,IEPT
@@ -5255,12 +5255,12 @@ SUBROUTINE GetCurveMinMaxValues(CurveIndex,Var1Min,Var1Max,Var2Min,Var2Max, Var3
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)           :: CurveIndex  ! index of curve in curve array
-  REAL, INTENT (OUT)             :: Var1Min     ! Minimum values of 1st independent variable
-  REAL, INTENT (OUT)             :: Var1Max     ! Maximum values of 1st independent variable
-  REAL, INTENT (OUT), OPTIONAL   :: Var2Min     ! Minimum values of 2nd independent variable
-  REAL, INTENT (OUT), OPTIONAL   :: Var2Max     ! Maximum values of 2nd independent variable
-  REAL, INTENT (OUT), OPTIONAL   :: Var3Min     ! Minimum values of 2nd independent variable
-  REAL, INTENT (OUT), OPTIONAL   :: Var3Max     ! Maximum values of 2nd independent variable
+  REAL(r64), INTENT (OUT)             :: Var1Min     ! Minimum values of 1st independent variable
+  REAL(r64), INTENT (OUT)             :: Var1Max     ! Maximum values of 1st independent variable
+  REAL(r64), INTENT (OUT), OPTIONAL   :: Var2Min     ! Minimum values of 2nd independent variable
+  REAL(r64), INTENT (OUT), OPTIONAL   :: Var2Max     ! Maximum values of 2nd independent variable
+  REAL(r64), INTENT (OUT), OPTIONAL   :: Var3Min     ! Minimum values of 2nd independent variable
+  REAL(r64), INTENT (OUT), OPTIONAL   :: Var3Max     ! Maximum values of 2nd independent variable
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -5309,8 +5309,8 @@ SUBROUTINE SetCurveOutputMinMaxValues(CurveIndex,ErrorsFound,CurveMin,CurveMax)
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)              :: CurveIndex  ! index of curve in curve array
   LOGICAL, INTENT (INOUT)           :: ErrorsFound ! TRUE when errors occur
-  REAL, INTENT (IN), OPTIONAL :: CurveMin ! Minimum value of curve output
-  REAL, INTENT (IN), OPTIONAL :: CurveMax ! Maximum values of curve output
+  REAL(r64), INTENT (IN), OPTIONAL :: CurveMin ! Minimum value of curve output
+  REAL(r64), INTENT (IN), OPTIONAL :: CurveMax ! Maximum values of curve output
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5386,7 +5386,7 @@ SUBROUTINE GetPressureSystemInput()
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                         ::  NumPressure
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: Alphas  ! Alpha items for object
-  REAL, DIMENSION(5)         :: Numbers ! Numeric items for object
+  REAL(r64), DIMENSION(5)         :: Numbers ! Numeric items for object
   INTEGER                         :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                         :: NumNumbers ! Number of Numbers for each GetObjectItem call
   INTEGER                         :: IOStatus   ! Used in GetObjectItem
@@ -5413,7 +5413,7 @@ SUBROUTINE GetPressureSystemInput()
     PressureCurve(CurveNum)%EquivLength    = Numbers(3)
     PressureCurve(CurveNum)%EquivRoughness = Numbers(4)
     IF (NumNumbers > 4 .AND. .NOT. lNumericFieldBlanks(5)) THEN
-      IF (Numbers(5) .NE. 0.0) THEN
+      IF (Numbers(5) .NE. 0.0d0) THEN
         PressureCurve(CurveNum)%ConstantFpresent   = .TRUE.
         PressureCurve(CurveNum)%ConstantF          = Numbers(5)
       END IF
@@ -5542,7 +5542,7 @@ RETURN
 END SUBROUTINE GetPressureCurveTypeAndIndex
 
 
-REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosity)
+REAL(r64) FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosity)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -5567,9 +5567,9 @@ REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosit
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)      ::  PressureCurveIndex
-  REAL, INTENT(IN)    ::  MassFlow
-  REAL, INTENT(IN)    ::  Density
-  REAL, INTENT(IN)    ::  Viscosity
+  REAL(r64), INTENT(IN)    ::  MassFlow
+  REAL(r64), INTENT(IN)    ::  Density
+  REAL(r64), INTENT(IN)    ::  Viscosity
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5581,17 +5581,17 @@ REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosit
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                ::  Diameter
-  REAL                ::  MinorLossCoeff
-  REAL                ::  Length
-  REAL                ::  Roughness
+  REAL(r64)                ::  Diameter
+  REAL(r64)                ::  MinorLossCoeff
+  REAL(r64)                ::  Length
+  REAL(r64)                ::  Roughness
   LOGICAL                  ::  IsConstFPresent
-  REAL                ::  ConstantF
-  REAL                ::  FrictionFactor
-  REAL                ::  CrossSectArea
-  REAL                ::  Velocity
-  REAL                ::  ReynoldsNumber
-  REAL                ::  RoughnessRatio
+  REAL(r64)                ::  ConstantF
+  REAL(r64)                ::  FrictionFactor
+  REAL(r64)                ::  CrossSectArea
+  REAL(r64)                ::  Velocity
+  REAL(r64)                ::  ReynoldsNumber
+  REAL(r64)                ::  RoughnessRatio
 
   !Retrieve data from structure
   Diameter        = PressureCurve(PressureCurveIndex)%EquivDiameter
@@ -5602,14 +5602,14 @@ REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosit
   ConstantF       = PressureCurve(PressureCurveIndex)%ConstantF
 
   !Intermediate calculations
-  CrossSectArea         =  (Pi / 4.0) * Diameter**2
+  CrossSectArea         =  (Pi / 4.0d0) * Diameter**2
   Velocity              =  MassFlow / (Density * CrossSectArea)
   ReynoldsNumber        =  Density * Diameter * Velocity / Viscosity !assuming mu here
   RoughnessRatio        =  Roughness / Diameter
 
   !If we don't have any flow then exit out
   IF (MassFlow .LT. MassFlowTolerance) THEN
-    PressureCurveValue = 0.0
+    PressureCurveValue = 0.0d0
     RETURN
   END IF
 
@@ -5621,11 +5621,11 @@ REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosit
   END IF
 
   !Pressure drop calculation
-  PressureCurveValue  =  (FrictionFactor * (Length / Diameter) + MinorLossCoeff) * (Density * Velocity**2) / 2.0
+  PressureCurveValue  =  (FrictionFactor * (Length / Diameter) + MinorLossCoeff) * (Density * Velocity**2) / 2.0d0
 
 END FUNCTION PressureCurveValue
 
-REAL FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
+REAL(r64) FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Edwin Lee
@@ -5649,8 +5649,8 @@ REAL FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)    ::  ReynoldsNumber
-  REAL, INTENT(IN)    ::  RoughnessRatio
+  REAL(r64), INTENT(IN)    ::  ReynoldsNumber
+  REAL(r64), INTENT(IN)    ::  RoughnessRatio
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5662,28 +5662,28 @@ REAL FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                    ::  Term1, Term2, Term3
+  REAL(r64)                    ::  Term1, Term2, Term3
   CHARACTER(len=MaxNameLength) ::  RR, Re
   LOGICAL, SAVE                ::  FrictionFactorErrorHasOccurred = .FALSE.
 
   !Check for no flow before calculating values
-  IF (ReynoldsNumber .EQ. 0.0) THEN
-    CalculateMoodyFrictionFactor = 0.0
+  IF (ReynoldsNumber .EQ. 0.0d0) THEN
+    CalculateMoodyFrictionFactor = 0.0d0
     RETURN
   END IF
 
   !Check for no roughness also here
-  IF (RoughnessRatio .EQ. 0.0) THEN
-    CalculateMoodyFrictionFactor = 0.0
+  IF (RoughnessRatio .EQ. 0.0d0) THEN
+    CalculateMoodyFrictionFactor = 0.0d0
     RETURN
   END IF
 
   !Calculate the friction factor
-  Term1 = (RoughnessRatio/3.7)**(1.11)
-  Term2 = 6.9/ReynoldsNumber
-  Term3 = -1.8 * LOG10(Term1 + Term2)
-  IF (Term3 .NE. 0.0) THEN
-    CalculateMoodyFrictionFactor = Term3 ** (-2.0)
+  Term1 = (RoughnessRatio/3.7d0)**(1.11d0)
+  Term2 = 6.9d0/ReynoldsNumber
+  Term3 = -1.8d0 * LOG10(Term1 + Term2)
+  IF (Term3 .NE. 0.0d0) THEN
+    CalculateMoodyFrictionFactor = Term3 ** (-2.0d0)
   ELSE
     IF (.NOT. FrictionFactorErrorHasOccurred) THEN
       RR=RoundSigDigits(RoughnessRatio,7)
@@ -5695,7 +5695,7 @@ REAL FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
       CALL ShowContinueError('This issue will occur only one time.  The friction factor has been reset to 0.04 for calculations')
       FrictionFactorErrorHasOccurred = .TRUE.
     END IF
-    CalculateMoodyFrictionFactor = 0.04
+    CalculateMoodyFrictionFactor = 0.04d0
   END IF
 
   RETURN

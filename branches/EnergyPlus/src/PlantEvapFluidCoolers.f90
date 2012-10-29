@@ -68,36 +68,36 @@ TYPE EvapFluidCoolerspecs
   INTEGER                      :: PerformanceInputMethod_Num = 0
   LOGICAL    :: Available                  = .TRUE. ! need an array of logicals--load identifiers of available equipment
   LOGICAL    :: ON                         = .TRUE. ! Simulate the machine at it's operating part load ratio
-  REAL  :: DesignWaterFlowRate           = 0.0 ! Design water flow rate through the evaporative fluid cooler [m3/s]
-  REAL  :: DesignSprayWaterFlowRate      = 0.0 ! Design spray water flow rate through the evaporative fluid cooler [m3/s]
-  REAL  :: DesWaterMassFlowRate          = 0.0 ! Design water flow rate through the evaporative fluid cooler [kg/s]
-  REAL  :: HighSpeedAirFlowRate          = 0.0 ! Air flow rate through evaporative fluid cooler at high speed [m3/s]
-  REAL  :: HighSpeedFanPower             = 0.0 ! Fan power at high fan speed [W]
-  REAL  :: HighSpeedEvapFluidCoolerUA    = 0.0 ! UA of evaporative fluid cooler at high fan speed [W/C]
-  REAL  :: LowSpeedAirFlowRate           = 0.0 ! Air flow rate through evaporative fluid cooler at low speed [m3/s]
-  REAL  :: LowSpeedFanPower              = 0.0 ! Fan power at low fan speed [W]
-  REAL  :: LowSpeedEvapFluidCoolerUA     = 0.0 ! UA of evaporative fluid cooler at low fan speed [W/C]
-  REAL  :: DesignEnteringWaterTemp       = 0.0 ! Entering water temperature at design conditions
-  REAL  :: DesignEnteringAirTemp         = 0.0 ! Design inlet air dry-bulb temperature (C)
-  REAL  :: DesignEnteringAirWetbulbTemp  = 0.0 ! Design inlet air wet-bulb temperature (C)
-  REAL  :: EvapFluidCoolerMassFlowRateMultiplier     = 0.0 ! Maximum evaporative fluid cooler flow rate is
+  REAL(r64)  :: DesignWaterFlowRate           = 0.0 ! Design water flow rate through the evaporative fluid cooler [m3/s]
+  REAL(r64)  :: DesignSprayWaterFlowRate      = 0.0 ! Design spray water flow rate through the evaporative fluid cooler [m3/s]
+  REAL(r64)  :: DesWaterMassFlowRate          = 0.0 ! Design water flow rate through the evaporative fluid cooler [kg/s]
+  REAL(r64)  :: HighSpeedAirFlowRate          = 0.0 ! Air flow rate through evaporative fluid cooler at high speed [m3/s]
+  REAL(r64)  :: HighSpeedFanPower             = 0.0 ! Fan power at high fan speed [W]
+  REAL(r64)  :: HighSpeedEvapFluidCoolerUA    = 0.0 ! UA of evaporative fluid cooler at high fan speed [W/C]
+  REAL(r64)  :: LowSpeedAirFlowRate           = 0.0 ! Air flow rate through evaporative fluid cooler at low speed [m3/s]
+  REAL(r64)  :: LowSpeedFanPower              = 0.0 ! Fan power at low fan speed [W]
+  REAL(r64)  :: LowSpeedEvapFluidCoolerUA     = 0.0 ! UA of evaporative fluid cooler at low fan speed [W/C]
+  REAL(r64)  :: DesignEnteringWaterTemp       = 0.0 ! Entering water temperature at design conditions
+  REAL(r64)  :: DesignEnteringAirTemp         = 0.0 ! Design inlet air dry-bulb temperature (C)
+  REAL(r64)  :: DesignEnteringAirWetbulbTemp  = 0.0 ! Design inlet air wet-bulb temperature (C)
+  REAL(r64)  :: EvapFluidCoolerMassFlowRateMultiplier     = 0.0 ! Maximum evaporative fluid cooler flow rate is
                                                                 ! this multiplier times design flow rate
-  REAL  :: HighSpeedStandardDesignCapacity = 0.0 ! Standard Design Capacity of the evaporative fluid cooler [W]
+  REAL(r64)  :: HighSpeedStandardDesignCapacity = 0.0 ! Standard Design Capacity of the evaporative fluid cooler [W]
                                                       ! with entering water at 35C (95F),
                                                       !  leaving water at 29.44C (85F), entering air at 25.56C (78F) wet-bulb
                                                       !  temp and 35C (95F) dry-bulb temp, and water flow
                                                       !  rate of 5.382E-8 m3/s per watt (3 gpm/ton)
-  REAL  :: LowSpeedStandardDesignCapacity = 0.0  ! Standard Design Capacity of the evaporative fluid cooler [W]
+  REAL(r64)  :: LowSpeedStandardDesignCapacity = 0.0  ! Standard Design Capacity of the evaporative fluid cooler [W]
                                                       ! with entering water at 35C (95F),
                                                       !  leaving water at 29.44C (85F), entering air at 25.56C (78F) wet-bulb
                                                       !  temp and 35C (95F) dry-bulb temp, and water flow
                                                       !  rate of 5.382E-8 m3/s per watt (3 gpm/ton)
-  REAL  :: HighSpeedUserSpecifiedDesignCapacity = 0.0 ! User specified design capacity [W]
-  REAL  :: LowSpeedUserSpecifiedDesignCapacity  = 0.0 ! User specified design capacity for at low speed for
+  REAL(r64)  :: HighSpeedUserSpecifiedDesignCapacity = 0.0 ! User specified design capacity [W]
+  REAL(r64)  :: LowSpeedUserSpecifiedDesignCapacity  = 0.0 ! User specified design capacity for at low speed for
                                                            ! two speed fluid cooler[W]
-  REAL  :: Concentration = 0.0 ! fluid/glycol concentration - percent
+  REAL(r64)  :: Concentration = 0.0 ! fluid/glycol concentration - percent
   INTEGER    :: FluidIndex    = 0   ! Index to Property arrays
-  REAL  :: SizFac                                !  sizing factor
+  REAL(r64)  :: SizFac                                !  sizing factor
   INTEGER    :: WaterInletNodeNum               = 0   ! Node number on the water inlet side of the evaporative fluid cooler
   INTEGER    :: WaterOutletNodeNum              = 0   ! Node number on the water outlet side of the evaporative fluid cooler
   INTEGER    :: OutdoorAirInletNodeNum          = 0   ! Node number of outdoor air inlet for the evaporative fluid cooler
@@ -119,7 +119,7 @@ TYPE EvapFluidCoolerspecs
   !fluid bypass
   INTEGER    :: CapacityControl                 = 0   ! Type of capacity control for single speed cooling tower:
                                                       !  0 - FanCycling, 1 - FluidBypass
-  REAL  :: BypassFraction                  = 0.0 ! Fraction of fluid bypass as a ratio of total fluid flow
+  REAL(r64)  :: BypassFraction                  = 0.0 ! Fraction of fluid bypass as a ratio of total fluid flow
                                                       !  through the tower sump
 
 
@@ -129,9 +129,9 @@ TYPE EvapFluidCoolerspecs
   INTEGER    :: SchedIDBlowdown       = 0              ! index "pointer" to schedule of blowdown in [m3/s]
   INTEGER    :: WaterTankID           = 0              ! index "pointer" to WaterStorage structure
   INTEGER    :: WaterTankDemandARRID  = 0              ! index "pointer" to demand array inside WaterStorage structure
-  REAL  :: UserEvapLossFactor    = 0.0            ! simple model [%/Delt C]
-  REAL  :: DriftLossFraction     = 0.0
-  REAL  :: ConcentrationRatio    = 0.0            ! ratio of solids in blowdown vs make up water
+  REAL(r64)  :: UserEvapLossFactor    = 0.0            ! simple model [%/Delt C]
+  REAL(r64)  :: DriftLossFraction     = 0.0
+  REAL(r64)  :: ConcentrationRatio    = 0.0            ! ratio of solids in blowdown vs make up water
   LOGICAL    :: SuppliedByWaterSystem = .false.
 
 
@@ -146,35 +146,35 @@ TYPE EvapFluidCoolerspecs
 END TYPE EvapFluidCoolerspecs
 
 TYPE EvapFluidCoolerInletConds
-  REAL :: WaterTemp      = 0.0  ! Evaporative fluid cooler water inlet temperature (C)
-  REAL :: AirTemp        = 0.0  ! Evaporative fluid cooler air inlet dry-bulb temperature (C)
-  REAL :: AirWetBulb     = 0.0  ! Evaporative fluid cooler air inlet wet-bulb temperature (C)
-  REAL :: AirPress       = 0.0  ! Evaporative fluid cooler air barometric pressure
-  REAL :: AirHumRat      = 0.0  ! Evaporative fluid cooler air inlet humidity ratio (kg/kg)
+  REAL(r64) :: WaterTemp      = 0.0  ! Evaporative fluid cooler water inlet temperature (C)
+  REAL(r64) :: AirTemp        = 0.0  ! Evaporative fluid cooler air inlet dry-bulb temperature (C)
+  REAL(r64) :: AirWetBulb     = 0.0  ! Evaporative fluid cooler air inlet wet-bulb temperature (C)
+  REAL(r64) :: AirPress       = 0.0  ! Evaporative fluid cooler air barometric pressure
+  REAL(r64) :: AirHumRat      = 0.0  ! Evaporative fluid cooler air inlet humidity ratio (kg/kg)
 END TYPE EvapFluidCoolerInletConds
 
 TYPE ReportVars
-  REAL    :: InletWaterTemp         = 0.0  ! Evaporative fluid cooler inlet water temperature (C)
-  REAL    :: OutletWaterTemp        = 0.0  ! Evaporative fluid cooler outlet water temperature (C)
-  REAL    :: WaterMassFlowRate      = 0.0  ! Evaporative fluid cooler water mass flow rate (m3/s)
-  REAL    :: Qactual                = 0.0  ! Evaporative fluid cooler heat rejection rate (W)
-  REAL    :: FanPower               = 0.0  ! Evaporative fluid cooler fan power (W)
-  REAL    :: FanEnergy              = 0.0  ! Evaporative fluid cooler fan energy consumption (J)
-  REAL    :: AirFlowRatio           = 0.0  ! Air flow ratio through variable speed evaporative fluid cooler
-  REAL    :: WaterAmountUsed        = 0.0  ! Evaporative fluid cooler make up water usage (m3)
-  REAL    :: EvaporationVdot        = 0.0  !
-  REAL    :: EvaporationVol         = 0.0  !
-  REAL    :: DriftVdot              = 0.0  !
-  REAL    :: DriftVol               = 0.0  !
-  REAL    :: BlowdownVdot           = 0.0  !
-  REAL    :: BlowdownVol            = 0.0  !
-  REAL    :: MakeUpVdot             = 0.0  !
-  REAL    :: MakeUpVol              = 0.0  !
-  REAL    :: TankSupplyVdot         = 0.0  !
-  REAL    :: TankSupplyVol          = 0.0  !
-  REAL    :: StarvedMakeUpVdot      = 0.0  !
-  REAL    :: StarvedMakeUpVol       = 0.0  !
-  REAL    :: BypassFraction         = 0.0  ! Added for fluid bypass
+  REAL(r64)    :: InletWaterTemp         = 0.0  ! Evaporative fluid cooler inlet water temperature (C)
+  REAL(r64)    :: OutletWaterTemp        = 0.0  ! Evaporative fluid cooler outlet water temperature (C)
+  REAL(r64)    :: WaterMassFlowRate      = 0.0  ! Evaporative fluid cooler water mass flow rate (m3/s)
+  REAL(r64)    :: Qactual                = 0.0  ! Evaporative fluid cooler heat rejection rate (W)
+  REAL(r64)    :: FanPower               = 0.0  ! Evaporative fluid cooler fan power (W)
+  REAL(r64)    :: FanEnergy              = 0.0  ! Evaporative fluid cooler fan energy consumption (J)
+  REAL(r64)    :: AirFlowRatio           = 0.0  ! Air flow ratio through variable speed evaporative fluid cooler
+  REAL(r64)    :: WaterAmountUsed        = 0.0  ! Evaporative fluid cooler make up water usage (m3)
+  REAL(r64)    :: EvaporationVdot        = 0.0  !
+  REAL(r64)    :: EvaporationVol         = 0.0  !
+  REAL(r64)    :: DriftVdot              = 0.0  !
+  REAL(r64)    :: DriftVol               = 0.0  !
+  REAL(r64)    :: BlowdownVdot           = 0.0  !
+  REAL(r64)    :: BlowdownVol            = 0.0  !
+  REAL(r64)    :: MakeUpVdot             = 0.0  !
+  REAL(r64)    :: MakeUpVol              = 0.0  !
+  REAL(r64)    :: TankSupplyVdot         = 0.0  !
+  REAL(r64)    :: TankSupplyVol          = 0.0  !
+  REAL(r64)    :: StarvedMakeUpVdot      = 0.0  !
+  REAL(r64)    :: StarvedMakeUpVol       = 0.0  !
+  REAL(r64)    :: BypassFraction         = 0.0  ! Added for fluid bypass
 END TYPE ReportVars
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -184,20 +184,20 @@ INTEGER           :: NumSimpleEvapFluidCoolers          = 0      ! Number of sim
 !   across sim, update, and report routines.  Simulation manager must be careful
 !   in models with multiple evaporative fluid coolers.
 
-REAL         :: InletWaterTemp           = 0.0    ! CW temperature at evaporative fluid cooler inlet
-REAL         :: OutletWaterTemp          = 0.0    ! CW temperature at evaporative fluid cooler outlet
+REAL(r64)         :: InletWaterTemp           = 0.0    ! CW temperature at evaporative fluid cooler inlet
+REAL(r64)         :: OutletWaterTemp          = 0.0    ! CW temperature at evaporative fluid cooler outlet
 INTEGER           :: WaterInletNode           = 0      ! Node number at evaporative fluid cooler inlet
 INTEGER           :: WaterOutletNode          = 0      ! Node number at evaporative fluid cooler outlet
-REAL         :: WaterMassFlowRate        = 0.0    ! WaterMassFlowRate through evaporative fluid cooler
-!DSU this is plant level stuff now REAL   :: EvapFluidCoolerMassFlowRateMax     = 0.0    ! Max Hardware Mass Flow Rate
-!DSU this is plant level stuff now REAL   :: EvapFluidCoolerMassFlowRateMin     = 0.0    ! Min Hardware Mass Flow Rate
-!DSU this is plant level stuff now REAL   :: LoopMassFlowRateMaxAvail = 0.0    ! Max Loop Mass Flow Rate available
-!DSU this is plant level stuff now REAL   :: LoopMassFlowRateMinAvail = 0.0    ! Min Loop Mass Flow Rate available
-REAL         :: Qactual                  = 0.0    ! Evaporative fluid cooler heat transfer
-REAL         :: FanPower                 = 0.0    ! Evaporative fluid cooler fan power used
-REAL         :: AirFlowRateRatio         = 0.0    ! Ratio of air flow rate through VS evaporative fluid cooler
+REAL(r64)         :: WaterMassFlowRate        = 0.0    ! WaterMassFlowRate through evaporative fluid cooler
+!DSU this is plant level stuff now REAL(r64)   :: EvapFluidCoolerMassFlowRateMax     = 0.0    ! Max Hardware Mass Flow Rate
+!DSU this is plant level stuff now REAL(r64)   :: EvapFluidCoolerMassFlowRateMin     = 0.0    ! Min Hardware Mass Flow Rate
+!DSU this is plant level stuff now REAL(r64)   :: LoopMassFlowRateMaxAvail = 0.0    ! Max Loop Mass Flow Rate available
+!DSU this is plant level stuff now REAL(r64)   :: LoopMassFlowRateMinAvail = 0.0    ! Min Loop Mass Flow Rate available
+REAL(r64)         :: Qactual                  = 0.0    ! Evaporative fluid cooler heat transfer
+REAL(r64)         :: FanPower                 = 0.0    ! Evaporative fluid cooler fan power used
+REAL(r64)         :: AirFlowRateRatio         = 0.0    ! Ratio of air flow rate through VS evaporative fluid cooler
                                                        ! to design air flow rate
-REAL         :: WaterUsage               = 0.0    ! Evaporative fluid cooler water usage (m3/s)
+REAL(r64)         :: WaterUsage               = 0.0    ! Evaporative fluid cooler water usage (m3/s)
 
 
 TYPE (EvapFluidCoolerspecs),      ALLOCATABLE, DIMENSION(:) :: SimpleEvapFluidCooler       ! dimension to number of machines
@@ -267,11 +267,11 @@ SUBROUTINE SimEvapFluidCoolers(EvapFluidCoolerType,EvapFluidCoolerName, CompInde
   INTEGER,INTENT(INOUT)       :: CompIndex
   LOGICAL,INTENT(INOUT)       :: RunFlag
   LOGICAL, INTENT(IN)         :: InitLoopEquip
-  REAL,INTENT(INOUT)     :: OptCap
-  REAL,INTENT(INOUT)     :: MaxCap
-  REAL,INTENT(INOUT)     :: MinCap
+  REAL(r64),INTENT(INOUT)     :: OptCap
+  REAL(r64),INTENT(INOUT)     :: MaxCap
+  REAL(r64),INTENT(INOUT)     :: MinCap
   LOGICAL, INTENT(IN)         :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL,INTENT(INOUT)     :: SizingFactor     ! sizing factor
+  REAL(r64),INTENT(INOUT)     :: SizingFactor     ! sizing factor
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -441,7 +441,7 @@ SUBROUTINE GetEvapFluidCoolerInput
     LOGICAL                   :: IsNotOK                   ! Flag to verify name
     LOGICAL                   :: IsBlank                   ! Flag for blank name
     LOGICAL, SAVE             :: ErrorsFound=.false.       ! Logical flag set .true. if errors found while getting input data
-    REAL, DIMENSION(19)  :: NumArray                  ! Numeric input data array
+    REAL(r64), DIMENSION(19)  :: NumArray                  ! Numeric input data array
     CHARACTER(len=MaxNameLength),DIMENSION(13) :: AlphArray  ! Character string input data array
     CHARACTER(len=MaxNameLength) :: FluidName
 
@@ -484,7 +484,7 @@ SUBROUTINE GetEvapFluidCoolerInput
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name                     = AlphArray(1)
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType = TRIM(cCurrentModuleObject)
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType_Num = EvapFluidCooler_SingleSpeed
-    SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerMassFlowRateMultiplier = 2.5
+    SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerMassFlowRateMultiplier = 2.5d0
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%WaterInletNodeNum        = &
                GetOnlySingleNode(AlphArray(2),ErrorsFound,TRIM(cCurrentModuleObject),AlphArray(1), &
                NodeType_Water,NodeConnectionType_Inlet, 1, ObjectIsNotParent)
@@ -553,7 +553,7 @@ SUBROUTINE GetEvapFluidCoolerInput
     ENDIF
 
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = NumArray(11)             !  N11  \field Sizing Factor
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac <= 0.0) SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = 1.0
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac <= 0.0) SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = 1.0d0
 
     ! begin water use and systems get input
     IF (SameString(AlphArray(7),'LossFactor')) THEN
@@ -571,20 +571,20 @@ SUBROUTINE GetEvapFluidCoolerInput
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = NumArray(12) !  N12 , \field Evaporation Loss Factor
     IF ((NumNums < 12) .and. (SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor == 0.0) ) Then
       ! assume Evaporation loss factor not entered and should be calculated
-      IF ((OutRelHumValue.GE.0.1).AND.(OutRelHumValue.LE.0.7)) THEN
+      IF ((OutRelHumValue.GE.0.1d0).AND.(OutRelHumValue.LE.0.7d0)) THEN
         !Use correlation by B.A. Qureshi and S.M. Zubair if within these limits
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = &
-                                   (113 - 8.417 * OutRelHumValue + 1.6147 * OutDryBulbTemp) * 1E-5
+                                   (113 - 8.417d0 * OutRelHumValue + 1.6147d0 * OutDryBulbTemp) * 1E-5
       ELSE  ! Inlet conditions are out of the limit of correlation; An approximate default value of loss factor is used
-        SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = 0.2
+        SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = 0.2d0
       ENDIF
     ENDIF
 
-    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = NumArray(13)/100.0  !  N13, \field Drift Loss Percent
+    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = NumArray(13)/100.0d0  !  N13, \field Drift Loss Percent
 
     If ((NumNums < 13) .and. (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction == 0.0) ) Then
       ! assume Drift loss not entered and should be defaulted
-      SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = 0.008 /100.0
+      SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = 0.008d0 /100.0d0
     endif
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = NumArray(14) !  N14, \field Blowdown Concentration Ratio
 
@@ -596,7 +596,7 @@ SUBROUTINE GetEvapFluidCoolerInput
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%BlowdownMode  = BlowdownByConcentration
       If ((NumNums < 14) .and.(SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio == 0.0) ) THEN
         ! assume Concetration ratio was omitted and should be defaulted
-            SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = 3.0
+            SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = 3.0d0
       endif
     ELSE
       CALL ShowSevereError('Invalid, '//TRIM(cAlphaFieldNames(8))//' = '//TRIM(AlphArray(8)))
@@ -623,20 +623,20 @@ SUBROUTINE GetEvapFluidCoolerInput
 
 !   Check various inputs to ensure that all the required variables are specified.
 
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignSprayWaterFlowRate <= 0.0) THEN
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignSprayWaterFlowRate <= 0.0d0) THEN
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//' "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
               '". Evaporative fluid cooler input requires a design spray water flow rate greater than zero '//  &
                  'for all performance input methods.')
       ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate .NE. AutoSize) THEN
       CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
         trim(cNumericFieldNames(1))//'", entered value <= 0.0, but must be > 0 for '//  &
         trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
       ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower .NE. AutoSize) THEN
       CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
         trim(cNumericFieldNames(2))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -646,14 +646,14 @@ SUBROUTINE GetEvapFluidCoolerInput
 
     IF (SameString(AlphArray(4),'UFACTORTIMESAREAANDDESIGNWATERFLOWRATE')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_UFactor
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(5))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(6))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -662,7 +662,7 @@ SUBROUTINE GetEvapFluidCoolerInput
       ENDIF
     ELSEIF(SameString(AlphArray(4),'STANDARDDESIGNCAPACITY')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_StandardDesignCapacity
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(4))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
@@ -670,32 +670,32 @@ SUBROUTINE GetEvapFluidCoolerInput
       ENDIF
     ELSEIF(SameString(AlphArray(4),'USERSPECIFIEDDESIGNCAPACITY')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_UserSpecifiedDesignCapacity
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(6))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedUserSpecifiedDesignCapacity <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedUserSpecifiedDesignCapacity <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(7))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
          ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp <= 0.0d0) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = "'//TRIM(AlphArray(1))//'", invalid data for "'//   &
           TRIM(cNumericFieldNames(8))//'", entered value <= 0.0, but must be >0 for '//  &
           TRIM(cAlphaFieldNames(4))//' = "'//TRIM(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirTemp <= 0.0d0) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = "'//TRIM(AlphArray(1))//'", invalid data for "'//   &
           TRIM(cNumericFieldNames(9))//'", entered value <= 0.0, but must be >0 for '//  &
           TRIM(cAlphaFieldNames(4))//' = "'//TRIM(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirWetbulbTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirWetbulbTemp <= 0.0d0) THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = "'//TRIM(AlphArray(1))//'", invalid data for "'//   &
           TRIM(cNumericFieldNames(10))//'", entered value <= 0.0, but must be >0 for '//  &
           TRIM(cAlphaFieldNames(4))//' = "'//TRIM(AlphArray(4))//'".')
@@ -801,7 +801,7 @@ SUBROUTINE GetEvapFluidCoolerInput
     ENDIF
 
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = NumArray(16)             !  N16  \field Sizing Factor
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac <= 0.0) SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = 1.0
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac <= 0.0d0) SimpleEvapFluidCooler(EvapFluidCoolerNum)%SizFac = 1.0d0
 
     ! begin water use and systems get input
     IF (SameString(AlphArray(6),'LossFactor')) THEN
@@ -819,18 +819,18 @@ SUBROUTINE GetEvapFluidCoolerInput
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = NumArray(17) !  N17 , \field Evaporation Loss Factor
     If ((NumNums < 17) .and. (SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor == 0.0) ) Then
       ! assume Evaporation loss factor not entered and should be calculated
-      IF ((OutRelHumValue.GE.0.1).AND. (OutRelHumValue.LE.0.7)) THEN
+      IF ((OutRelHumValue.GE.0.1d0).AND. (OutRelHumValue.LE.0.7d0)) THEN
         !Use correlation by B.A. Qureshi and S.M. Zubair if within these limits
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = &
-                                   (113 - 8.417 * OutRelHumValue + 1.6147 * OutDryBulbTemp) * 1E-5
+                                   (113 - 8.417d0 * OutRelHumValue + 1.6147d0 * OutDryBulbTemp) * 1E-5
       ELSE  ! Inlet conditions are out of the limit of correlation; An approximate default value of loss factor is used
-        SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = 0.2
+        SimpleEvapFluidCooler(EvapFluidCoolerNum)%UserEvapLossFactor = 0.2d0
       ENDIF
     ENDIF
-    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = NumArray(18) / 100.0  !  N18, \field Drift Loss Percent
+    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = NumArray(18) / 100.0d0  !  N18, \field Drift Loss Percent
    IF ((NumNums < 18) .and. (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction == 0.0) ) Then
     ! assume Drift loss not entered and should be defaulted
-    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = 0.008 /100.0
+    SimpleEvapFluidCooler(EvapFluidCoolerNum)%DriftLossFraction = 0.008d0 /100.0d0
    ENDIF
 
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = NumArray(19) !  N19, \field Blowdown Concentration Ratio
@@ -844,7 +844,7 @@ SUBROUTINE GetEvapFluidCoolerInput
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%BlowdownMode  = BlowdownByConcentration
       If ((NumNums < 19) .and.(SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio == 0.0) ) THEN
         ! assume Concetration ratio was omitted and should be defaulted
-            SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = 3.0
+            SimpleEvapFluidCooler(EvapFluidCoolerNum)%ConcentrationRatio = 3.0d0
       endif
     ELSE
       CALL ShowSevereError('Invalid '//TRIM(cAlphaFieldNames(7))//' = '//TRIM(AlphArray(7)))
@@ -871,20 +871,20 @@ SUBROUTINE GetEvapFluidCoolerInput
 
 !   Check various inputs to ensure that all the required variables are specified.
 
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignSprayWaterFlowRate <= 0.0) THEN
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignSprayWaterFlowRate <= 0.0d0) THEN
       CALL ShowSevereError(TRIM(cCurrentModuleObject)//' "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
               '". Evaporative fluid cooler input requires a design spray water flow rate greater than zero '//  &
                  'for all performance input methods.')
       ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate .NE. AutoSize) THEN
        CALL ShowSevereError(TRIM(cCurrentModuleObject)//'= "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
              '". Evaporative fluid cooler input requires design air flow rate at high fan speed to be '//  &
                  'greater than zero for all performance input methods.')
        ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate .NE. AutoSize) THEN
        CALL ShowSevereError(TRIM(cCurrentModuleObject)//'= "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
              '". Evaporative fluid cooler input requires design air flow rate at low fan speed to be '//  &
@@ -901,14 +901,14 @@ SUBROUTINE GetEvapFluidCoolerInput
          ' air flow rate at high fan speed.')
       ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower .NE. AutoSize) THEN
       CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
         trim(cNumericFieldNames(2))//'", entered value <= 0.0, but must be > 0 for '//  &
         trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
       ErrorsFound=.true.
     ENDIF
-    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower <= 0.0 .AND. &
+    IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower <= 0.0d0 .AND. &
         SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower .NE. AutoSize) THEN
       CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
         trim(cNumericFieldNames(4))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -926,14 +926,14 @@ SUBROUTINE GetEvapFluidCoolerInput
 
     IF (SameString(AlphArray(4),'UFACTORTIMESAREAANDDESIGNWATERFLOWRATE')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_UFactor
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(8))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(9))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -948,7 +948,7 @@ SUBROUTINE GetEvapFluidCoolerInput
          ' U-factor Times Area Value at High Fan Speed.')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(10))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -957,13 +957,13 @@ SUBROUTINE GetEvapFluidCoolerInput
       ENDIF
     ELSEIF(SameString(AlphArray(4),'STANDARDDESIGNCAPACITY')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_StandardDesignCapacity
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(6))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedStandardDesignCapacity <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedStandardDesignCapacity <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(7))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
@@ -977,7 +977,7 @@ SUBROUTINE GetEvapFluidCoolerInput
       END IF
     ELSEIF(SameString(AlphArray(4),'USERSPECIFIEDDESIGNCAPACITY')) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num           = PIM_UserSpecifiedDesignCapacity
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0 .AND. &
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate <= 0.0d0 .AND. &
           SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate .NE. AutoSize) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(10))//'", entered value <= 0.0, but must be > 0 for '//  &
@@ -990,14 +990,14 @@ SUBROUTINE GetEvapFluidCoolerInput
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedUserSpecifiedDesignCapacity <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedUserSpecifiedDesignCapacity <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(12))//'", entered value <= 0.0, but must be > 0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA .NE. 0.0) THEN
-        IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA > 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA .NE. 0.0d0) THEN
+        IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA > 0.0d0) THEN
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
                                '". UserSpecifiedDesignCapacity performance input method and evaporative fluid cooler UA '// &
                                   'at high fan speed have been specified.')
@@ -1010,8 +1010,8 @@ SUBROUTINE GetEvapFluidCoolerInput
                                'UserSpecifiedDesignCapacity performance input method is used.')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA .NE. 0.0) THEN
-        IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA > 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA .NE. 0.0d0) THEN
+        IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA > 0.0d0) THEN
           CALL ShowSevereError(TRIM(cCurrentModuleObject)//' = "'//TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//&
                  '". UserSpecifiedDesignCapacity performance input method and evaporative fluid cooler UA at '// &
                  ' low fan speed have been specified.')
@@ -1031,19 +1031,19 @@ SUBROUTINE GetEvapFluidCoolerInput
                                  'the High-Speed User Specified Design Dapacity.')
         ErrorsFound=.true.
       END IF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(13))//'", entered value <= 0.0, but must be >0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirTemp <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(14))//'", entered value <= 0.0, buy must be >0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
         ErrorsFound=.true.
       ENDIF
-      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirWetbulbTemp <= 0.0) THEN
+      IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirWetbulbTemp <= 0.0d0) THEN
         CALL ShowSevereError(trim(cCurrentModuleObject)//' = "'//trim(AlphArray(1))//'", invalid data for "'//   &
           trim(cNumericFieldNames(15))//'", entered value <= 0.0, but must be >0 for '//  &
           trim(cAlphaFieldNames(4))//' = "'//trim(AlphArray(4))//'".')
@@ -1306,7 +1306,7 @@ SUBROUTINE InitEvapFluidCooler(EvapFluidCoolerNum, RunFlag)
   INTEGER   :: LoopSideNum
   INTEGER   :: BranchIndex
   INTEGER   :: CompIndex
-  REAL :: rho           ! local density of fluid
+  REAL(r64) :: rho           ! local density of fluid
 !  LOGICAL   :: FatalError
 
   ! Do the one time initializations
@@ -1380,7 +1380,7 @@ SUBROUTINE InitEvapFluidCooler(EvapFluidCoolerNum, RunFlag)
                                 'InitEvapFluidCooler')
     SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesWaterMassFlowRate =   &
            SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate * rho
-    CALL InitComponentNodes(0.0,  SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesWaterMassFlowRate , &
+    CALL InitComponentNodes(0.0D0,  SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesWaterMassFlowRate , &
                                     SimpleEvapFluidCooler(EvapFluidCoolerNum)%WaterInletNodeNum,     &
                                     SimpleEvapFluidCooler(EvapFluidCoolerNum)%WaterOutletNodeNum,    &
                                     SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum,               &
@@ -1474,7 +1474,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER          :: MaxIte = 500        ! Maximum number of iterations
-  REAL, PARAMETER        :: Acc    = 0.0001   ! Accuracy of result
+  REAL(r64), PARAMETER        :: Acc    = 0.0001d0   ! Accuracy of result
   CHARACTER(len=*), PARAMETER :: CalledFrom = 'SizeEvapFluidCooler'
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1486,24 +1486,24 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizCondNum            ! Plant Sizing index for condenser loop
   INTEGER             :: SolFla                   ! Flag of solver
-  REAL           :: DesEvapFluidCoolerLoad   ! Design evaporative fluid cooler load [W]
-  REAL           :: UA0                      ! Lower bound for UA [W/C]
-  REAL           :: UA1                      ! Upper bound for UA [W/C]
-  REAL           :: UA                       ! Calculated UA value [W/C]
-  REAL           :: OutWaterTempAtUA0        ! Water outlet temperature at UA0
-  REAL           :: OutWaterTempAtUA1        ! Water outlet temperature at UA1
-  REAL           :: DesignEnteringAirWetBulb ! Intermediate variable to check that design exit
+  REAL(r64)           :: DesEvapFluidCoolerLoad   ! Design evaporative fluid cooler load [W]
+  REAL(r64)           :: UA0                      ! Lower bound for UA [W/C]
+  REAL(r64)           :: UA1                      ! Upper bound for UA [W/C]
+  REAL(r64)           :: UA                       ! Calculated UA value [W/C]
+  REAL(r64)           :: OutWaterTempAtUA0        ! Water outlet temperature at UA0
+  REAL(r64)           :: OutWaterTempAtUA1        ! Water outlet temperature at UA1
+  REAL(r64)           :: DesignEnteringAirWetBulb ! Intermediate variable to check that design exit
                                                   ! temperature specified in the plant:sizing object
                                                   ! is higher than the design entering air wet-bulb temp
                                                   ! when autosize feature is used
-  REAL, DIMENSION(6)      :: Par             ! Parameter array need for RegulaFalsi routine
+  REAL(r64), DIMENSION(6)      :: Par             ! Parameter array need for RegulaFalsi routine
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL                    :: Cp              ! local specific heat for fluid
-  REAL                    :: rho             ! local density for fluid
-  REAL           :: tmpDesignWaterFlowRate ! local temporary for water volume flow rate
-  REAL           :: tmpHighSpeedFanPower  !local temporary for high speed fan power
-  REAL           :: tmpHighSpeedAirFlowRate ! local temporary for high speed air flow rate
-  REAL           :: tmpHighSpeedEvapFluidCoolerUA ! local temporary for high speed cooler UA
+  REAL(r64)                    :: Cp              ! local specific heat for fluid
+  REAL(r64)                    :: rho             ! local density for fluid
+  REAL(r64)           :: tmpDesignWaterFlowRate ! local temporary for water volume flow rate
+  REAL(r64)           :: tmpHighSpeedFanPower  !local temporary for high speed fan power
+  REAL(r64)           :: tmpHighSpeedAirFlowRate ! local temporary for high speed air flow rate
+  REAL(r64)           :: tmpHighSpeedEvapFluidCoolerUA ! local temporary for high speed cooler UA
 
 
   DesEvapFluidCoolerLoad = 0.0
@@ -1525,7 +1525,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
                                          tmpDesignWaterFlowRate
 
       ELSE
-        tmpDesignWaterFlowRate = 0.
+        tmpDesignWaterFlowRate = 0.d0
         IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate = &
                                          tmpDesignWaterFlowRate
       ENDIF
@@ -1541,7 +1541,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
     ! Check when the user specified Condenser/Evaporative Fluid Cooler water design setpoint
     ! temperature is less than design inlet air wet bulb temperature
     IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num == PIM_UFactor) THEN
-      DesignEnteringAirWetBulb = 25.6
+      DesignEnteringAirWetBulb = 25.6d0
     ELSE
       DesignEnteringAirWetBulb = SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringAirWetBulbTemp
     ENDIF
@@ -1575,7 +1575,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
                                'SizeEvapFluidCooler')
       DesEvapFluidCoolerLoad = rho * Cp &
                                  * tmpDesignWaterFlowRate * PlantSizData(PltSizCondNum)%DeltaT
-      SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity = DesEvapFluidCoolerLoad/1.25
+      SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity = DesEvapFluidCoolerLoad/1.25d0
     ELSE
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity = 0.0
     ENDIF
@@ -1604,14 +1604,14 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
   IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower == AutoSize) THEN
     ! We assume the nominal fan power is 0.0105 times the design load
     IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num == PIM_StandardDesignCapacity) THEN
-      tmpHighSpeedFanPower = 0.0105 * SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity
+      tmpHighSpeedFanPower = 0.0105d0 * SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity
       IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower =   tmpHighSpeedFanPower
     ELSEIF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%PerformanceInputMethod_Num == PIM_UserSpecifiedDesignCapacity) THEN
-      tmpHighSpeedFanPower = 0.0105 * SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedUserSpecifiedDesignCapacity
+      tmpHighSpeedFanPower = 0.0105d0 * SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedUserSpecifiedDesignCapacity
       IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower =  tmpHighSpeedFanPower
     ELSE
       IF (DesEvapFluidCoolerLoad .GT. 0) THEN
-        tmpHighSpeedFanPower =  0.0105 * DesEvapFluidCoolerLoad
+        tmpHighSpeedFanPower =  0.0105d0 * DesEvapFluidCoolerLoad
         IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower = tmpHighSpeedFanPower
       ELSEIF (PltSizCondNum > 0) THEN
         IF (PlantSizData(PltSizCondNum)%DesVolFlowRate >= SmallWaterVolFlow) THEN
@@ -1624,10 +1624,10 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
                                      PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidIndex, &
                                      'SizeEvapFluidCooler')
           DesEvapFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * PlantSizData(PltSizCondNum)%DeltaT
-          tmpHighSpeedFanPower = 0.0105 * DesEvapFluidCoolerLoad
+          tmpHighSpeedFanPower = 0.0105d0 * DesEvapFluidCoolerLoad
           IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower = tmpHighSpeedFanPower
         ELSE
-          tmpHighSpeedFanPower = 0.
+          tmpHighSpeedFanPower = 0.d0
           IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower = tmpHighSpeedFanPower
         ENDIF
       ELSE
@@ -1650,7 +1650,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
   IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate == AutoSize) THEN
 ! Plant Sizing Object is not required to AUTOSIZE this field since its simply a multiple of another field.
 
-    tmpHighSpeedAirFlowRate = tmpHighSpeedFanPower * 0.5  * (101325./StdBaroPress) / 190.
+    tmpHighSpeedAirFlowRate = tmpHighSpeedFanPower * 0.5d0  * (101325.d0/StdBaroPress) / 190.d0
     IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate = tmpHighSpeedAirFlowRate
 
     IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType_Num == EvapFluidCooler_SingleSpeed) THEN
@@ -1672,7 +1672,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
       IF (PlantSizData(PltSizCondNum)%DesVolFlowRate >= SmallWaterVolFlow) THEN
         ! This conditional statement is to trap when the user specified Condenser/Evaporative Fluid Cooler water design setpoint
         ! temperature is less than design inlet air wet bulb temperature of 25.6 C
-        IF ( PlantSizData(PltSizCondNum)%ExitTemp <= 25.6 ) THEN
+        IF ( PlantSizData(PltSizCondNum)%ExitTemp <= 25.6d0 ) THEN
           CALL ShowSevereError('Error when autosizing the UA value for Evaporative Fluid Cooler = '//&
                                   TRIM(SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name)//'.')
           CALL ShowContinueError('Design Loop Exit Temperature ('// &
@@ -1700,12 +1700,12 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
         Par(3) = rho * tmpDesignWaterFlowRate   ! Design water mass flow rate
         Par(4) = tmpHighSpeedAirFlowRate      ! Design air volume flow rate
         Par(5) = Cp
-        UA0 = 0.0001 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
+        UA0 = 0.0001d0 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
         UA1 = DesEvapFluidCoolerLoad            ! Assume deltaT = 1K
         SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp = PlantSizData(PltSizCondNum)%ExitTemp +   &
                                                                    PlantSizData(PltSizCondNum)%DeltaT
-        SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.
-        SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6
+        SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.d0
+        SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6d0
         SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress   = StdBaroPress
         SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirHumRat  =   &
            PsyWFnTdbTwbPb(SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp,     &
@@ -1762,9 +1762,9 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
         tmpHighSpeedEvapFluidCoolerUA = UA
         IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA = &
                                                                             tmpHighSpeedEvapFluidCoolerUA
-        SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity = DesEvapFluidCoolerLoad/1.25
+        SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity = DesEvapFluidCoolerLoad/1.25d0
       ELSE
-        tmpHighSpeedEvapFluidCoolerUA = 0.
+        tmpHighSpeedEvapFluidCoolerUA = 0.d0
         IF (PlantSizesOkayToFinalize) SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA = &
                                                                             tmpHighSpeedEvapFluidCoolerUA
       ENDIF
@@ -1795,20 +1795,20 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
                              PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidIndex,&
                              'SizeEvapFluidCooler')
       Cp = GetSpecificHeatGlycol(PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidName,  &
-                                 35.,                      &
+                                 35.d0,                      &
                                  PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidIndex, &
                                  'SizeEvapFluidCooler')
-      DesEvapFluidCoolerLoad = SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity * (1.25)
+      DesEvapFluidCoolerLoad = SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedStandardDesignCapacity * (1.25d0)
       Par(1) = DesEvapFluidCoolerLoad
       Par(2) = REAL(EvapFluidCoolerNum,r64)
       Par(3) = rho * SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignWaterFlowRate ! Design water mass flow rate
       Par(4) = SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate        ! Design air volume flow rate
       Par(5) = Cp
-      UA0 = 0.0001 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001d0 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesEvapFluidCoolerLoad            ! Assume deltaT = 1K
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  = 35.   ! 95F design inlet water temperature
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.   ! 95F design inlet air dry-bulb temp
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6  ! 78F design inlet air wet-bulb temp
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  = 35.d0   ! 95F design inlet water temperature
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.d0   ! 95F design inlet air dry-bulb temp
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6d0  ! 78F design inlet air wet-bulb temp
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress   = StdBaroPress
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirHumRat  =   &
          PsyWFnTdbTwbPb(SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp,  &
@@ -1860,7 +1860,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
       Par(3) = rho * tmpDesignWaterFlowRate ! Design water mass flow rate
       Par(4) = tmpHighSpeedAirFlowRate        ! Design air volume flow rate
       Par(5) = Cp
-      UA0 = 0.0001 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001d0 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesEvapFluidCoolerLoad            ! Assume deltaT = 1K
 
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  =   &
@@ -1941,7 +1941,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
 
   IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate == AutoSize .AND. PlantSizesOkayToFinalize ) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate =   &
-         0.5*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate
+         0.5d0*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate
       CALL ReportSizingOutput(SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType,   &
          SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name, &
         'Air Flow Rate at Low Fan Speed [m3/s]', SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate)
@@ -1949,7 +1949,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
 
   IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower == AutoSize .AND. PlantSizesOkayToFinalize ) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower =   &
-         0.16*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower
+         0.16d0*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedFanPower
       CALL ReportSizingOutput(SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType,   &
          SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name, &
                               'Fan Power at Low Fan Speed [W]', SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedFanPower)
@@ -1957,7 +1957,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
 
   IF (SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA == AutoSize .AND. PlantSizesOkayToFinalize ) THEN
       SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedEvapFluidCoolerUA =   &
-         0.6*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA
+         0.6d0*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedEvapFluidCoolerUA
       CALL ReportSizingOutput(SimpleEvapFluidCooler(EvapFluidCoolerNum)%EvapFluidCoolerType,   &
                               SimpleEvapFluidCooler(EvapFluidCoolerNum)%Name, &
                              'U-Factor Times Area Value at Low Fan Speed [W/C]', &
@@ -1978,17 +1978,17 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
                                  SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp,                      &
                                  PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidIndex, &
                                  'SizeEvapFluidCooler')
-      DesEvapFluidCoolerLoad = SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedStandardDesignCapacity * (1.25)
+      DesEvapFluidCoolerLoad = SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedStandardDesignCapacity * (1.25d0)
       Par(1) = DesEvapFluidCoolerLoad
       Par(2) = REAL(EvapFluidCoolerNum,r64)
       Par(3) = rho * tmpDesignWaterFlowRate ! Design water mass flow rate
       Par(4) = SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate  ! Air volume flow rate at low fan speed
       Par(5) = Cp
-      UA0 = 0.0001 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001d0 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesEvapFluidCoolerLoad            ! Assume deltaT = 1K
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  = 35.   ! 95F design inlet water temperature
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.   ! 95F design inlet air dry-bulb temp
-      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6  ! 78F design inlet air wet-bulb temp
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  = 35.d0   ! 95F design inlet water temperature
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp    = 35.d0   ! 95F design inlet air dry-bulb temp
+      SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb = 25.6d0  ! 78F design inlet air wet-bulb temp
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress   = StdBaroPress
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirHumRat  =   &
          PsyWFnTdbTwbPb(SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirTemp,  &
@@ -2035,7 +2035,7 @@ SUBROUTINE SizeEvapFluidCooler(EvapFluidCoolerNum)
       Par(3) = rho * tmpDesignWaterFlowRate ! Design water mass flow rate
       Par(4) = SimpleEvapFluidCooler(EvapFluidCoolerNum)%LowSpeedAirFlowRate     ! Air volume flow rate at low fan speed
       Par(5) = Cp
-      UA0 = 0.0001 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
+      UA0 = 0.0001d0 * DesEvapFluidCoolerLoad ! Assume deltaT = 10000K (limit)
       UA1 = DesEvapFluidCoolerLoad            ! Assume deltaT = 1K
       SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%WaterTemp  =   &
          SimpleEvapFluidCooler(EvapFluidCoolerNum)%DesignEnteringWaterTemp
@@ -2171,8 +2171,8 @@ SUBROUTINE CalcSingleSpeedEvapFluidCooler(EvapFluidCoolerNum)
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER  :: MaxIteration = 100          ! Maximum fluid bypass iteration calculations
   CHARACTER(len=3), PARAMETER :: MaxItChar  = '100'
-  REAL, PARAMETER :: BypassFractionThreshold = 0.01   !Threshold to stop bypass iteration
-  REAL, PARAMETER :: OWTLowerLimit = 0.0      ! The limit of evaporative fluid cooler exit fluid temperature used
+  REAL(r64), PARAMETER :: BypassFractionThreshold = 0.01d0   !Threshold to stop bypass iteration
+  REAL(r64), PARAMETER :: OWTLowerLimit = 0.0d0      ! The limit of evaporative fluid cooler exit fluid temperature used
                                                      ! in the fluid bypass calculation to avoid fluid freezing. For water,
                                                      ! it is 0 degreeC and for glycols, it can be much lower. The fluid type
                                                      ! is stored at the loop. Current choices are Water and Steam,
@@ -2185,22 +2185,22 @@ SUBROUTINE CalcSingleSpeedEvapFluidCooler(EvapFluidCoolerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL              :: AirFlowRate
-  REAL              :: UAdesign            ! UA value at design conditions (entered by user or calculated)
-  REAL              :: InletWaterTemp
-  REAL              :: FanModeFrac
-  REAL              :: FanPowerOn
-  REAL              :: CpWater
-  REAL              :: TempSetPoint
+  REAL(r64)              :: AirFlowRate
+  REAL(r64)              :: UAdesign            ! UA value at design conditions (entered by user or calculated)
+  REAL(r64)              :: InletWaterTemp
+  REAL(r64)              :: FanModeFrac
+  REAL(r64)              :: FanPowerOn
+  REAL(r64)              :: CpWater
+  REAL(r64)              :: TempSetPoint
 
   !Added variables for fluid bypass
   INTEGER                :: NumIteration
   INTEGER                :: CapacityControl                  ! Capacity Control (0 - FanCycling, 1 - FluidBypass)
   INTEGER                :: BypassFlag                       ! Flag indicator for fluid bypass (0 - no bypass, 1 - bypass)
-  REAL              :: BypassFraction                   ! Fluid bypass fraction
-  REAL              :: BypassFraction2                  ! Fluid bypass fraction
-  REAL              :: BypassFractionPrev
-  REAL              :: OutletWaterTempPrev
+  REAL(r64)              :: BypassFraction                   ! Fluid bypass fraction
+  REAL(r64)              :: BypassFraction2                  ! Fluid bypass fraction
+  REAL(r64)              :: BypassFractionPrev
+  REAL(r64)              :: OutletWaterTempPrev
   INTEGER                :: LoopNum
   INTEGER                :: LoopSideNum
 
@@ -2408,16 +2408,16 @@ SUBROUTINE CalcTwoSpeedEvapFluidCooler(EvapFluidCoolerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL              :: AirFlowRate
-  REAL              :: UAdesign            ! UA value at design conditions (entered by user) [W/C]
-  REAL              :: InletWaterTemp
-  REAL              :: OutletWaterTemp1stStage
-  REAL              :: OutletWaterTemp2ndStage
-  REAL              :: FanModeFrac
-  REAL              :: FanPowerLow
-  REAL              :: FanPowerHigh
-  REAL              :: CpWater
-  REAL              :: TempSetPoint
+  REAL(r64)              :: AirFlowRate
+  REAL(r64)              :: UAdesign            ! UA value at design conditions (entered by user) [W/C]
+  REAL(r64)              :: InletWaterTemp
+  REAL(r64)              :: OutletWaterTemp1stStage
+  REAL(r64)              :: OutletWaterTemp2ndStage
+  REAL(r64)              :: FanModeFrac
+  REAL(r64)              :: FanPowerLow
+  REAL(r64)              :: FanPowerHigh
+  REAL(r64)              :: CpWater
+  REAL(r64)              :: TempSetPoint
   INTEGER                :: LoopNum
   INTEGER                :: LoopSideNum
 
@@ -2471,7 +2471,7 @@ SUBROUTINE CalcTwoSpeedEvapFluidCooler(EvapFluidCoolerNum)
           IF((OutletWaterTemp2ndStage .LE. TempSetPoint).AND. UAdesign .GT. 0.0)THEN
 !           Setpoint was met with pump ON and fan ON 2nd stage, calculate fan mode fraction
             FanModeFrac     = (TempSetPoint-OutletWaterTemp1stStage)/(OutletWaterTemp2ndStage-OutletWaterTemp1stStage)
-            FanPower      = (FanModeFrac * FanPowerHigh) + (1.-FanModeFrac)*FanPowerLow
+            FanPower      = (FanModeFrac * FanPowerHigh) + (1.d0-FanModeFrac)*FanPowerLow
             OutletWaterTemp = TempSetPoint
           ELSE
 !           Setpoint was not met, evaporative fluid cooler ran at full capacity
@@ -2522,17 +2522,17 @@ SUBROUTINE SimSimpleEvapFluidCooler(EvapFluidCoolerNum,WaterMassFlowRate,AirFlow
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: EvapFluidCoolerNum
-  REAL              :: WaterMassFlowRate
-  REAL              :: AirFlowRate
-  REAL              :: UAdesign
-  REAL              :: OutletWaterTemp
+  REAL(r64)              :: WaterMassFlowRate
+  REAL(r64)              :: AirFlowRate
+  REAL(r64)              :: UAdesign
+  REAL(r64)              :: OutletWaterTemp
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER   :: IterMax           = 50        ! Maximum number of iterations allowed
-  REAL, PARAMETER :: WetBulbTolerance  = 0.00001 ! Maximum error for exiting wet-bulb temperature between iterations
+  REAL(r64), PARAMETER :: WetBulbTolerance  = 0.00001d0 ! Maximum error for exiting wet-bulb temperature between iterations
                                                         ! [delta K/K]
-  REAL, PARAMETER :: DeltaTwbTolerance = 0.001   ! Maximum error (tolerance) in DeltaTwb for iteration convergence [C]
+  REAL(r64), PARAMETER :: DeltaTwbTolerance = 0.001d0   ! Maximum error (tolerance) in DeltaTwb for iteration convergence [C]
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -2542,29 +2542,29 @@ SUBROUTINE SimSimpleEvapFluidCooler(EvapFluidCoolerNum,WaterMassFlowRate,AirFlow
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER            :: Iter                 ! Number of iterations completed
-  REAL          :: MdotCpWater          ! Water mass flow rate times the heat capacity [W/K]
-  REAL          :: InletAirTemp         ! Dry-bulb temperature of air entering the evaporative fluid cooler [C]
-  REAL          :: CpWater              ! Heat capacity of water [J/kg/K]
-  REAL          :: CpAir                ! Heat capacity of air [J/kg/K]
-  REAL          :: AirDensity           ! Density of air [kg/m3]
-  REAL          :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
-  REAL          :: effectiveness        ! Effectiveness of the heat exchanger [-]
-  REAL          :: UAactual             ! UA value at actual conditions [W/C]
-  REAL          :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
-  REAL          :: InletAirWetBulb      ! Wetbulb temp of entering moist air [C]
-  REAL          :: OutletAirEnthalpy    ! Enthalpy of exiting moist air [J/kg]
-  REAL          :: OutletAirWetBulb     ! Wetbulb temp of exiting moist air [C]
-  REAL          :: OutletAirWetBulbLast ! temporary Wetbulb temp of exiting moist air [C]
-  REAL          :: AirCapacity          ! MdotCp of air through the evaporative fluid cooler
-  REAL          :: CapacityRatioMin     ! Minimum capacity of airside and waterside
-  REAL          :: CapacityRatioMax     ! Maximum capacity of airside and waterside
-  REAL          :: CapacityRatio        ! Ratio of minimum to maximum capacity
-  REAL          :: NumTransferUnits     ! Number of transfer Units [NTU]
-  REAL          :: WetBulbError         ! Calculated error for exiting wet-bulb temperature between iterations [delta K/K]
-  REAL          :: CpAirside            ! Delta enthalpy of the evaporative fluid cooler air /
+  REAL(r64)          :: MdotCpWater          ! Water mass flow rate times the heat capacity [W/K]
+  REAL(r64)          :: InletAirTemp         ! Dry-bulb temperature of air entering the evaporative fluid cooler [C]
+  REAL(r64)          :: CpWater              ! Heat capacity of water [J/kg/K]
+  REAL(r64)          :: CpAir                ! Heat capacity of air [J/kg/K]
+  REAL(r64)          :: AirDensity           ! Density of air [kg/m3]
+  REAL(r64)          :: AirMassFlowRate      ! Mass flow rate of air [kg/s]
+  REAL(r64)          :: effectiveness        ! Effectiveness of the heat exchanger [-]
+  REAL(r64)          :: UAactual             ! UA value at actual conditions [W/C]
+  REAL(r64)          :: InletAirEnthalpy     ! Enthalpy of entering moist air [J/kg]
+  REAL(r64)          :: InletAirWetBulb      ! Wetbulb temp of entering moist air [C]
+  REAL(r64)          :: OutletAirEnthalpy    ! Enthalpy of exiting moist air [J/kg]
+  REAL(r64)          :: OutletAirWetBulb     ! Wetbulb temp of exiting moist air [C]
+  REAL(r64)          :: OutletAirWetBulbLast ! temporary Wetbulb temp of exiting moist air [C]
+  REAL(r64)          :: AirCapacity          ! MdotCp of air through the evaporative fluid cooler
+  REAL(r64)          :: CapacityRatioMin     ! Minimum capacity of airside and waterside
+  REAL(r64)          :: CapacityRatioMax     ! Maximum capacity of airside and waterside
+  REAL(r64)          :: CapacityRatio        ! Ratio of minimum to maximum capacity
+  REAL(r64)          :: NumTransferUnits     ! Number of transfer Units [NTU]
+  REAL(r64)          :: WetBulbError         ! Calculated error for exiting wet-bulb temperature between iterations [delta K/K]
+  REAL(r64)          :: CpAirside            ! Delta enthalpy of the evaporative fluid cooler air /
                                              ! delta air wet-bulb temp [J/kg/K]
-  REAL          :: Qactual              ! Actual heat transfer rate between evaporative fluid cooler water and air [W]
-  REAL          :: DeltaTwb             ! Absolute value of difference between inlet and outlet air wet-bulb temp [C]
+  REAL(r64)          :: Qactual              ! Actual heat transfer rate between evaporative fluid cooler water and air [W]
+  REAL(r64)          :: DeltaTwb             ! Absolute value of difference between inlet and outlet air wet-bulb temp [C]
 
   ! set inlet and outlet node numbers, and initialize some local variables
 
@@ -2591,7 +2591,7 @@ SUBROUTINE SimSimpleEvapFluidCooler(EvapFluidCoolerNum,WaterMassFlowRate,AirFlow
                                    InletWaterTemp,                                   &
                                    PlantLoop(SimpleEvapFluidCooler(EvapFluidCoolerNum)%LoopNum)%FluidIndex,         &
                                    'SimSimpleEvapFluidCooler')
-  InletAirEnthalpy  = PsyHFnTdbRhPb(InletAirWetBulb, 1.0, SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress)
+  InletAirEnthalpy  = PsyHFnTdbRhPb(InletAirWetBulb, 1.0d0, SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress)
 
   ! initialize exiting wet bulb temperature before iterating on final solution
   OutletAirWetBulb = InletAirWetBulb + 6.0
@@ -2601,7 +2601,7 @@ SUBROUTINE SimSimpleEvapFluidCooler(EvapFluidCoolerNum,WaterMassFlowRate,AirFlow
   Iter = 0
   DO WHILE ((WetBulbError.GT.WetBulbTolerance) .AND. (Iter.LE.IterMax) .AND. (DeltaTwb.GT.DeltaTwbTolerance))
     Iter = Iter + 1
-    OutletAirEnthalpy = PsyHFnTdbRhPb(OutletAirWetBulb,1.0,SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress)
+    OutletAirEnthalpy = PsyHFnTdbRhPb(OutletAirWetBulb,1.0d0,SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress)
     ! calculate the airside specific heat and capacity
     CpAirside   =   (OutletAirEnthalpy - InletAirEnthalpy)/(OutletAirWetBulb-InletAirWetBulb)
     AirCapacity = AirMassFlowRate * CpAirside
@@ -2613,11 +2613,11 @@ SUBROUTINE SimSimpleEvapFluidCooler(EvapFluidCoolerNum,WaterMassFlowRate,AirFlow
     UAactual = UAdesign*CpAirside/CpAir
     NumTransferUnits = UAactual/CapacityRatioMin
     ! calculate heat exchanger effectiveness
-    IF (CapacityRatio.LE.0.995)THEN
-      effectiveness = (1.-EXP(-1.0*NumTransferUnits*(1.0-CapacityRatio)))/ &
-                     (1.0-CapacityRatio*EXP(-1.0*NumTransferUnits*(1.0-CapacityRatio)))
+    IF (CapacityRatio.LE.0.995d0)THEN
+      effectiveness = (1.d0-EXP(-1.0d0*NumTransferUnits*(1.0d0-CapacityRatio)))/ &
+                     (1.0d0-CapacityRatio*EXP(-1.0d0*NumTransferUnits*(1.0d0-CapacityRatio)))
     ELSE
-      effectiveness = NumTransferUnits/(1.+NumTransferUnits)
+      effectiveness = NumTransferUnits/(1.d0+NumTransferUnits)
     ENDIF
     ! calculate water to air heat transfer and store last exiting WB temp of air
     Qactual = effectiveness * CapacityRatioMin * (InletWaterTemp-InletAirWetBulb)
@@ -2666,13 +2666,13 @@ FUNCTION SimpleEvapFluidCoolerUAResidual(UA, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: UA                         ! UA of evaporative fluid cooler
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design evaporative fluid cooler load [W]
+    REAL(r64), INTENT(IN)  :: UA                         ! UA of evaporative fluid cooler
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design evaporative fluid cooler load [W]
                                                     ! par(2) = Evaporative fluid cooler number
                                                     ! par(3) = design water mass flow rate [kg/s]
                                                     ! par(4) = design air volume flow rate [m3/s]
                                                     ! par(5) = water specific heat [J/(kg*C)]
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2685,8 +2685,8 @@ FUNCTION SimpleEvapFluidCoolerUAResidual(UA, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: EvapFluidCoolerIndex            ! index of this evaporative fluid cooler
-  REAL    :: OutWaterTemp                    ! outlet water temperature [C]
-  REAL    :: CoolingOutput                   ! Evaporative fluid cooler cooling output [W]
+  REAL(r64)    :: OutWaterTemp                    ! outlet water temperature [C]
+  REAL(r64)    :: CoolingOutput                   ! Evaporative fluid cooler cooling output [W]
 
   EvapFluidCoolerIndex = INT(Par(2))
   CALL SimSimpleEvapFluidCooler(EvapFluidCoolerIndex,Par(3),Par(4),UA,OutWaterTemp)
@@ -2738,24 +2738,24 @@ SUBROUTINE CalculateWaterUseage(EvapFluidCoolerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: AirDensity
-  REAL :: AirMassFlowRate
-  REAL :: AvailTankVdot
-  REAL :: BlowDownVdot      =0.0
-  REAL :: DriftVdot         =0.0
-  REAL :: EvapVdot          =0.0
-  REAL :: InletAirEnthalpy
-  REAL :: InSpecificHumRat
-  REAL :: OutSpecificHumRat
-  REAL :: TairAvg
-  REAL :: MakeUpVdot
-  REAL :: OutletAirEnthalpy
-  REAL :: OutletAirHumRatSat
-  REAL :: OutletAirTSat
-  REAL :: StarvedVdot
-  REAL :: TankSupplyVdot
-  REAL :: rho
-  REAL :: AverageWaterTemp
+  REAL(r64) :: AirDensity
+  REAL(r64) :: AirMassFlowRate
+  REAL(r64) :: AvailTankVdot
+  REAL(r64) :: BlowDownVdot      =0.0
+  REAL(r64) :: DriftVdot         =0.0
+  REAL(r64) :: EvapVdot          =0.0
+  REAL(r64) :: InletAirEnthalpy
+  REAL(r64) :: InSpecificHumRat
+  REAL(r64) :: OutSpecificHumRat
+  REAL(r64) :: TairAvg
+  REAL(r64) :: MakeUpVdot
+  REAL(r64) :: OutletAirEnthalpy
+  REAL(r64) :: OutletAirHumRatSat
+  REAL(r64) :: OutletAirTSat
+  REAL(r64) :: StarvedVdot
+  REAL(r64) :: TankSupplyVdot
+  REAL(r64) :: rho
+  REAL(r64) :: AverageWaterTemp
 
   AverageWaterTemp = (InletWaterTemp + OutletWaterTemp) / 2.0
 
@@ -2767,7 +2767,7 @@ SUBROUTINE CalculateWaterUseage(EvapFluidCoolerNum)
     AirMassFlowRate     = AirFlowRateRatio*SimpleEvapFluidCooler(EvapFluidCoolerNum)%HighSpeedAirFlowRate*AirDensity
     InletAirEnthalpy    =   &
        PsyHFnTdbRhPb(SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirWetBulb,  &
-          1.0,  &
+          1.0d0,  &
           SimpleEvapFluidCoolerInlet(EvapFluidCoolerNum)%AirPress)
 
     IF  (AirMassFlowRate > 0.0) Then
@@ -2906,7 +2906,7 @@ SUBROUTINE UpdateEvapFluidCooler(EvapFluidCoolerNum)
           ! na
 
           ! USE STATEMENTS:
-!unuse909  USE DataEnvironment, ONLY: EnvironmentName, CurMnDy
+!unused0909  USE DataEnvironment, ONLY: EnvironmentName, CurMnDy
   USE General, ONLY: TrimSigDigits
 !  USE FluidProperties, ONLY : GetDensityGlycol
 !  USE DataPlant, ONLY: PlantLoop
@@ -2919,7 +2919,7 @@ SUBROUTINE UpdateEvapFluidCooler(EvapFluidCoolerNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER ::  LowTempFmt="(' ',F6.2)"
-  REAL, PARAMETER :: TempAllowance = 0.02    ! Minimum difference b/w fluid cooler water outlet temp and
+  REAL(r64), PARAMETER :: TempAllowance = 0.02d0    ! Minimum difference b/w fluid cooler water outlet temp and
                                                     ! minimum condenser loop temp [C]
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2931,10 +2931,10 @@ SUBROUTINE UpdateEvapFluidCooler(EvapFluidCoolerNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=25)      :: CharErrOut
   CHARACTER(len=25)      :: CharLowOutletTemp
-  REAL              :: TempDifference
+  REAL(r64)              :: TempDifference
   INTEGER                :: LoopNum
   INTEGER                :: LoopSideNum
-  REAL              :: LoopMinTemp
+  REAL(r64)              :: LoopMinTemp
 
   ! set node information
 
@@ -3091,7 +3091,7 @@ SUBROUTINE ReportEvapFluidCooler(RunFlag, EvapFluidCoolerNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: ReportingConstant
+  REAL(r64) :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
 

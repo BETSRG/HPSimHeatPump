@@ -82,7 +82,7 @@ END TYPE
 TYPE BranchData
   CHARACTER(len=MaxNameLength)   :: Name              = Blank ! Name for this Branch
   CHARACTER(len=MaxNameLength)   :: AssignedLoopName  = Blank ! Loop Name for this branch
-  REAL                      :: MaxFlowRate       = 0.0   ! Max Flow Rate of the Branch
+  REAL(r64)                      :: MaxFlowRate       = 0.0   ! Max Flow Rate of the Branch
   INTEGER                        :: PressureCurveType = 0     ! Integer index of pressure curve type
   INTEGER                        :: PressureCurveIndex= 0     ! Integer index of pressure curve
   INTEGER                        :: FluidType         = NodeType_Unknown ! Fluid type (see DataLoopNode)
@@ -393,7 +393,7 @@ SUBROUTINE GetBranchData(LoopName,BranchName,BranchMaxFlow,PressCurveType,PressC
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: LoopName            ! Loop Name of this Branch
   CHARACTER(len=*), INTENT(IN) :: BranchName          ! Requested Branch Name
-  REAL, INTENT(OUT)            :: BranchMaxFlow       ! Max Flow Rate for Branch
+  REAL(r64), INTENT(OUT)            :: BranchMaxFlow       ! Max Flow Rate for Branch
   INTEGER, INTENT(OUT) :: PressCurveType  ! Index of a pressure curve object
   INTEGER, INTENT(OUT) :: PressCurveIndex  ! Index of a pressure curve object
   INTEGER, INTENT(INOUT)       :: NumComps            ! Number of Components on Branch
@@ -546,7 +546,7 @@ SUBROUTINE GetInternalBranchData(LoopName,BranchName,BranchMaxFlow,PressCurveTyp
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: LoopName            ! Loop Name for Branch
   CHARACTER(len=*), INTENT(IN) :: BranchName          ! Requested Branch Name
-  REAL, INTENT(OUT)            :: BranchMaxFlow       ! Max Flow Rate for Branch
+  REAL(r64), INTENT(OUT)            :: BranchMaxFlow       ! Max Flow Rate for Branch
   INTEGER, INTENT(OUT) :: PressCurveType         ! Index of pressure curve object
   INTEGER, INTENT(OUT) :: PressCurveIndex         ! Index of pressure curve object
   INTEGER, INTENT(INOUT)       :: NumComps            ! Number of Components on Branch
@@ -819,7 +819,7 @@ SUBROUTINE GetLoopMixer(LoopName,ConnectorListName,MixerName,IsMixer,OutletNodeN
   TYPE (ComponentData), ALLOCATABLE, &
          DIMENSION(:)  :: BComponents   ! Branch Component Data
   INTEGER NumComps                      ! Number of Components on this Branch
-  REAL MaxFlowRate                      ! Branch Max Flow Rate
+  REAL(r64) MaxFlowRate                      ! Branch Max Flow Rate
   INTEGER :: PressCurveType
   INTEGER :: PressCurveIndex
   LOGICAL :: errFlag                     ! Error flag from RegisterNodeConnection
@@ -974,7 +974,7 @@ SUBROUTINE GetLoopSplitter(LoopName,ConnectorListName,SplitterName,IsSplitter,In
   TYPE (ComponentData), ALLOCATABLE, &
          DIMENSION(:)  :: BComponents   ! Branch Component Data
   INTEGER NumComps                      ! Number of Components on this Branch
-  REAL MaxFlowRate                      ! Branch Max Flow Rate
+  REAL(r64) MaxFlowRate                      ! Branch Max Flow Rate
   INTEGER :: PressCurveType
   INTEGER :: PressCurveIndex
   LOGICAL :: errFlag                     ! Error flag from RegisterNodeConnection
@@ -1295,7 +1295,7 @@ SUBROUTINE GetBranchInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                  DIMENSION(:):: Alphas   ! Used to retrieve names from IDF
   INTEGER NumNumbers                     ! Used to retrieve numbers from IDF
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
@@ -1546,7 +1546,7 @@ SUBROUTINE GetBranchListInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                  DIMENSION(:):: Alphas   ! Used to retrieve names from IDF
   INTEGER NumNumbers
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers ! Not used in this object
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers ! Not used in this object
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
@@ -1716,7 +1716,7 @@ SUBROUTINE GetConnectorListInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                  DIMENSION(:):: Alphas   ! Used to retrieve names from IDF
   INTEGER NumNumbers                     ! Used to retrieve numbers from IDF
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
@@ -1983,7 +1983,7 @@ SUBROUTINE GetSplitterInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                  DIMENSION(:):: Alphas   ! Used to retrieve names from IDF
   INTEGER NumNumbers                     ! Used to retrieve numbers from IDF
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
@@ -2239,7 +2239,7 @@ SUBROUTINE GetMixerInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, &
                  DIMENSION(:):: Alphas   ! Used to retrieve names from IDF
   INTEGER NumNumbers                     ! Used to retrieve numbers from IDF
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers ! Used to retrieve numbers from IDF
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(len=MaxNameLength+40),ALLOCATABLE, DIMENSION(:) :: cNumericFields
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
@@ -2466,7 +2466,7 @@ SUBROUTINE FindPlantLoopBranchConnection(BranchListName,FoundPlantLoopName,Found
   CHARACTER(len=*), INTENT(INOUT) :: FoundPlantLoopName
   INTEGER, INTENT(INOUT)          :: FoundPlantLoopNum
   CHARACTER(len=*), INTENT(INOUT) :: FoundSupplyDemand
-  REAL, INTENT(INOUT)        :: FoundVolFlowRate
+  REAL(r64), INTENT(INOUT)        :: FoundVolFlowRate
   LOGICAL, INTENT(INOUT)          :: MatchedPlantLoop
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2484,7 +2484,7 @@ SUBROUTINE FindPlantLoopBranchConnection(BranchListName,FoundPlantLoopName,Found
   INTEGER NumParams
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas
   INTEGER NumAlphas
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers
   INTEGER NumNumbers
   INTEGER IOSTAT
 
@@ -2551,7 +2551,7 @@ SUBROUTINE FindCondenserLoopBranchConnection(BranchListName,FoundCondLoopName,Fo
   CHARACTER(len=*), INTENT(INOUT) :: FoundCondLoopName
   INTEGER, INTENT(INOUT)          :: FoundCondLoopNum
   CHARACTER(len=*), INTENT(INOUT) :: FoundSupplyDemand
-  REAL, INTENT(INOUT)        :: FoundVolFlowRate
+  REAL(r64), INTENT(INOUT)        :: FoundVolFlowRate
   LOGICAL, INTENT(INOUT)          :: MatchedCondLoop
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2569,7 +2569,7 @@ SUBROUTINE FindCondenserLoopBranchConnection(BranchListName,FoundCondLoopName,Fo
   INTEGER NumParams
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas
   INTEGER NumAlphas
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers
   INTEGER NumNumbers
   INTEGER IOSTAT
 
@@ -2636,7 +2636,7 @@ SUBROUTINE FindAirLoopBranchConnection(BranchListName,FoundAirLoopName,FoundAirL
   CHARACTER(len=*), INTENT(INOUT) :: FoundAirLoopName
   INTEGER, INTENT(INOUT)          :: FoundAirLoopNum
   CHARACTER(len=*), INTENT(INOUT) :: FoundAir
-  REAL, INTENT(INOUT)        :: FoundVolFlowRate
+  REAL(r64), INTENT(INOUT)        :: FoundVolFlowRate
   LOGICAL, INTENT(INOUT)          :: MatchedAirLoop
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2654,7 +2654,7 @@ SUBROUTINE FindAirLoopBranchConnection(BranchListName,FoundAirLoopName,FoundAirL
   INTEGER NumParams
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas
   INTEGER NumAlphas
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers
   INTEGER NumNumbers
   INTEGER IOSTAT
 
@@ -2726,7 +2726,7 @@ SUBROUTINE FindAirPlantCondenserLoopFromBranchList(BranchListName,LoopType,LoopS
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    CHARACTER(len=MaxNameLength) :: FoundLoopName
    INTEGER :: FoundLoopNum
-   REAL :: FoundLoopVolFlowRate
+   REAL(r64) :: FoundLoopVolFlowRate
 
    LoopSupplyDemandAir=Blank
    FoundLoopName=Blank

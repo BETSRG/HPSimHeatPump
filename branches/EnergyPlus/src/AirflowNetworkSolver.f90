@@ -51,48 +51,48 @@ PRIVATE ! Everything private unless explicitly made public
 INTEGER, PARAMETER :: NrInt=20 ! Number of intervals for a large opening
 
 ! Common block AFEDAT
-REAL, ALLOCATABLE, DIMENSION(:) :: AFECTL
-REAL, ALLOCATABLE, DIMENSION(:) :: AFLOW2
-REAL, ALLOCATABLE, DIMENSION(:) :: AFLOW
-REAL, ALLOCATABLE, DIMENSION(:) :: PS
-REAL, ALLOCATABLE, DIMENSION(:) :: PW
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: AFECTL
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: AFLOW2
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: AFLOW
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: PS
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: PW
 
 
 ! Common block CONTRL
-REAL, PRIVATE :: PB=0.0
+REAL(r64), PRIVATE :: PB=0.0d0
 INTEGER, PRIVATE :: LIST=0
 
 
 ! Common block ZONL
-REAL, ALLOCATABLE, DIMENSION(:) :: RHOZ
-REAL, ALLOCATABLE, DIMENSION(:) :: SQRTDZ
-REAL, ALLOCATABLE, DIMENSION(:) :: VISCZ
-REAL, ALLOCATABLE, DIMENSION(:) :: SUMAF
-REAL, ALLOCATABLE, DIMENSION(:) :: TZ              ! Temperature [C]
-REAL, ALLOCATABLE, DIMENSION(:) :: WZ              ! Humidity ratio [kg/kg]
-REAL, ALLOCATABLE, DIMENSION(:) :: PZ  ! Pressure [Pa]
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RHOZ
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SQRTDZ
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: VISCZ
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SUMAF
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: TZ              ! Temperature [C]
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: WZ              ! Humidity ratio [kg/kg]
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: PZ  ! Pressure [Pa]
 
 ! Other array variables
 INTEGER, ALLOCATABLE, DIMENSION(:) :: ID
 INTEGER, ALLOCATABLE, DIMENSION(:) :: IK
-REAL, ALLOCATABLE, DIMENSION(:) :: AD
-REAL, ALLOCATABLE, DIMENSION(:) :: AU
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: AD
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: AU
 
 #ifdef SKYLINE_MATRIX_REMOVE_ZERO_COLUMNS
 INTEGER, ALLOCATABLE, DIMENSION(:) :: newIK   !noel
-REAL, ALLOCATABLE, DIMENSION(:) :: newAU !noel
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: newAU !noel
 #endif
 
-!REAL, ALLOCATABLE, DIMENSION(:) :: AL
-REAL, ALLOCATABLE, DIMENSION(:) :: SUMF
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: AL
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SUMF
 INTEGER :: Unit11=0
 INTEGER :: Unit21=0
 
 ! Large opening variables
-REAL, ALLOCATABLE, DIMENSION(:) :: DpProf    ! Differential pressure profile for Large Openings [Pa]
-REAL, ALLOCATABLE, DIMENSION(:) :: RhoProfF  ! Density profile in FROM zone [kg/m3]
-REAL, ALLOCATABLE, DIMENSION(:) :: RhoProfT  ! Density profile in TO zone [kg/m3]
-REAL, ALLOCATABLE, DIMENSION(:,:) :: DpL     ! Array of stack pressures in link
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: DpProf    ! Differential pressure profile for Large Openings [Pa]
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RhoProfF  ! Density profile in FROM zone [kg/m3]
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RhoProfT  ! Density profile in TO zone [kg/m3]
+REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: DpL     ! Array of stack pressures in link
 
 PUBLIC SETSKY
 PUBLIC AIRMOV
@@ -195,7 +195,7 @@ INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit numb
    ALLOCATE(RhoProfT(N*(NrInt+2)))
    ALLOCATE(DpL(2,AirflowNetworkNumOfLinks))
 
-   PB = 101325.0
+   PB = 101325.0d0
 !   LIST = 5
    LIST = 0
    If (LIST .GE. 1) then
@@ -500,13 +500,13 @@ END SUBROUTINE InitAirflowNetworkData
         N = AirflowNetworkLinkageData(I)%NodeNums(1)
         M = AirflowNetworkLinkageData(I)%NodeNums(2)
         IF(AFLOW(I).GT.0.0) THEN
-          PS(I) = 9.80*( RHOZ(N)*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
+          PS(I) = 9.80d0*( RHOZ(N)*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
                     +AirflowNetworkLinkageData(I)%NodeHeights(2)*(RHOZ(M)-RHOZ(N)) )
         ELSE IF(AFLOW(I).LT.0.0) THEN
-          PS(I) = 9.80*( RHOZ(M)*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
+          PS(I) = 9.80d0*( RHOZ(M)*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
                      +AirflowNetworkLinkageData(I)%NodeHeights(1)*(RHOZ(M)-RHOZ(N)) )
         ELSE
-          PS(I) = 4.90*( (RHOZ(N)+RHOZ(M))*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
+          PS(I) = 4.90d0*( (RHOZ(N)+RHOZ(M))*(AirflowNetworkNodeData(N)%NodeHeight-AirflowNetworkNodeData(M)%NodeHeight) &
             + (AirflowNetworkLinkageData(I)%NodeHeights(1)+AirflowNetworkLinkageData(I)%NodeHeights(2))*(RHOZ(M)-RHOZ(N)))
         END IF
  20   CONTINUE
@@ -613,9 +613,9 @@ END SUBROUTINE InitAirflowNetworkData
           INTEGER, INTENT(INOUT)  :: IK(NetworkNumOfNodes+1) ! pointer to the top of column/row "K"
           INTEGER, INTENT(INOUT)  :: ITER  ! number of iterations
           !noel GNU says AU is being indexed beyound bounds
-          !REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
+          !REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -646,9 +646,9 @@ END SUBROUTINE InitAirflowNetworkData
           !     CEF     - convergence enhancement factor.
 !
           INTEGER  N, NNZE, NSYM, LFLAG, CONVG, ACCEL
-          REAL PCF(NetworkNumOfNodes), CEF(NetworkNumOfNodes)
-          REAL C, SSUMF, SSUMAF, ACC0, ACC1
-          REAL CCF(NetworkNumOfNodes)
+          REAL(r64) PCF(NetworkNumOfNodes), CEF(NetworkNumOfNodes)
+          REAL(r64) C, SSUMF, SSUMAF, ACC0, ACC1
+          REAL(r64) CCF(NetworkNumOfNodes)
 
       ! FLOW:
       ACC1 = 0.0
@@ -736,7 +736,7 @@ END SUBROUTINE InitAirflowNetworkData
         IF(ACCEL.EQ.1) THEN
           ACCEL = 0
         ELSE
-          IF(ITER.GT.2 .AND. ACC1.GT.0.5*ACC0) ACCEL = 1
+          IF(ITER.GT.2 .AND. ACC1.GT.0.5d0*ACC0) ACCEL = 1
         END IF
         DO 80 N=1,NetworkNumOfNodes
           IF(AirflowNetworkNodeData(N)%NodeTypeNum.EQ.1) CYCLE
@@ -845,8 +845,8 @@ END SUBROUTINE InitAirflowNetworkData
        LOGICAL allZero ! noel
        LOGICAL, save :: firsttime=.true. ! noel
 #endif
-       REAL     X(4)
-       REAL DP, F(2), DF(2)
+       REAL(r64)     X(4)
+       REAL(r64) DP, F(2), DF(2)
 
       ! FLOW:
       DO 10 N=1,NetworkNumOfNodes
@@ -1064,13 +1064,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1086,15 +1086,15 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL     RhozNorm, VisczNorm, expn, Ctl, coef
+         REAL(r64)     CDM, FL, FT
+         REAL(r64)     RhozNorm, VisczNorm, expn, Ctl, coef
          INTEGER  CompNum
 
       ! FLOW:
       ! Crack standard condition: T=20C, p=101325 Pa and 0 g/kg
       CompNum = AirflowNetworkCompData(J)%TypeNum
-      RhozNorm = PsyRhoAirFnPbTdbW(101325.0,20.0,0.0)
-      VisczNorm = 1.71432d-5+4.828d-8*20.0
+      RhozNorm = PsyRhoAirFnPbTdbW(101325.0d0,20.0d0,0.0d0)
+      VisczNorm = 1.71432d-5+4.828d-8*20.0d0
       expn = DisSysCompLeakData(CompNum)%FlowExpo
       coef = DisSysCompLeakData(CompNum)%FlowCoef
 
@@ -1108,10 +1108,10 @@ END SUBROUTINE InitAirflowNetworkData
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
-          ctl = (RhozNorm/RHOZ(N))**(expn-1.0)*(VisczNorm/VISCZ(N))**(2.0*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N))**(expn-1.0d0)*(VisczNorm/VISCZ(N))**(2.0d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(N)/VISCZ(N)*ctl
         ELSE
-          ctl = (RhozNorm/RHOZ(M))**(expn-1.0)*(VisczNorm/VISCZ(M))**(2.0*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M))**(expn-1.0d0)*(VisczNorm/VISCZ(M))**(2.0d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(M)/VISCZ(M)*ctl
         END IF
         F(1) = -DF(1)*PDROP
@@ -1119,11 +1119,11 @@ END SUBROUTINE InitAirflowNetworkData
         ! Standard calculation.
         IF(PDROP.GE.0.0) THEN
           ! Flow in positive direction for laminar flow.
-          ctl = (RhozNorm/RHOZ(N))**(expn-1.0)*(VisczNorm/VISCZ(N))**(2.0*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N))**(expn-1.0d0)*(VisczNorm/VISCZ(N))**(2.0d0*expn-1.0d0)
           CDM = Coef*RHOZ(N)/VISCZ(N)*ctl
           FL = CDM*PDROP
           ! Flow in positive direction for turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = Coef*SQRTDZ(N)*SQRT(PDROP)
           ELSE
             FT = Coef*SQRTDZ(N)*(PDROP**expn)
@@ -1133,7 +1133,7 @@ END SUBROUTINE InitAirflowNetworkData
           CDM = Coef*RHOZ(M)/VISCZ(M)
           FL = CDM*PDROP
           ! Flow in negative direction for turbulent flow
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = -Coef*SQRTDZ(M)*SQRT(-PDROP)
           ELSE
             FT = -Coef*SQRTDZ(M)*(-PDROP)**expn
@@ -1183,13 +1183,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1205,8 +1205,8 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL     RhozNorm, VisczNorm, expn, Ctl, coef, Corr, VisAve, Tave, RhoCor
+         REAL(r64)     CDM, FL, FT
+         REAL(r64)     RhozNorm, VisczNorm, expn, Ctl, coef, Corr, VisAve, Tave, RhoCor
          INTEGER  CompNum
 
       ! FLOW:
@@ -1218,8 +1218,8 @@ END SUBROUTINE InitAirflowNetworkData
       VisczNorm = 1.71432d-5+4.828d-8*MultizoneSurfaceCrackData(CompNum)%StandardT
 
       expn = MultizoneSurfaceCrackData(CompNum)%FlowExpo
-      VisAve = (VISCZ(N)+VISCZ(M))/2.0
-      Tave = (TZ(N)+TZ(M))/2.0
+      VisAve = (VISCZ(N)+VISCZ(M))/2.0d0
+      Tave = (TZ(N)+TZ(M))/2.0d0
       IF(PDROP.GE.0.0) THEN
          coef = MultizoneSurfaceCrackData(CompNum)%FlowCoef/SQRTDZ(N)*Corr
       ELSE
@@ -1231,11 +1231,11 @@ END SUBROUTINE InitAirflowNetworkData
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(N)/VISCZ(N)*ctl
         ELSE
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(M)/VISCZ(M)*ctl
         END IF
         F(1) = -DF(1)*PDROP
@@ -1245,11 +1245,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in positive direction.
           ! Laminar flow.
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(N)/VISCZ(N)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = Coef*SQRTDZ(N)*SQRT(PDROP)*ctl
           ELSE
             FT = Coef*SQRTDZ(N)*(PDROP**expn)*ctl
@@ -1258,11 +1258,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in negative direction.
           ! Laminar flow.
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(M)/VISCZ(M)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = -Coef*SQRTDZ(M)*SQRT(-PDROP)*ctl
           ELSE
             FT = -Coef*SQRTDZ(M)*(-PDROP)**expn*ctl
@@ -1314,13 +1314,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1340,27 +1340,27 @@ END SUBROUTINE InitAirflowNetworkData
           !     FL      - friction factor for laminar flow.
           !     FT      - friction factor for turbulent flow.
 
-         REAL     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
+         REAL(r64)     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
          INTEGER  CompNum
-         REAL     ed, ld, g, AA1
+         REAL(r64)     ed, ld, g, AA1
 !
-      DATA C,EPS / 0.868589, 0.001 /
+      DATA C,EPS / 0.868589d0, 0.001d0 /
 
       ! FLOW:
       CompNum = AirflowNetworkCompData(J)%TypeNum
       ed = DisSysCompDuctData(CompNum)%Rough/DisSysCompDuctData(CompNum)%D
       ld = DisSysCompDuctData(CompNum)%L/DisSysCompDuctData(CompNum)%D
-      g  = 1.14 - 0.868589*LOG(ed)
+      g  = 1.14d0 - 0.868589d0*LOG(ed)
       AA1 = g
 
       NF = 1
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
-          DF(1) = (2.*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
+          DF(1) = (2.d0*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
                   (VISCZ(N)*DisSysCompDuctData(CompNum)%InitLamCoef*ld)
         ELSE
-          DF(1) = (2.*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
+          DF(1) = (2.d0*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
                   (VISCZ(M)*DisSysCompDuctData(CompNum)%InitLamCoef*ld)
         END IF
         F(1) = -DF(1)*PDROP
@@ -1370,17 +1370,17 @@ END SUBROUTINE InitAirflowNetworkData
         IF(PDROP.GE.0.0) THEN
           ! Flow in positive direction.
           ! Laminar flow coefficient !=0
-          IF(DisSysCompDuctData(CompNum)%LamFriCoef.GE.0.001) THEN
-            A2 = DisSysCompDuctData(CompNum)%LamFriCoef/(2.0*RHOZ(N)*DisSysCompDuctData(CompNum)%A* &
+          IF(DisSysCompDuctData(CompNum)%LamFriCoef.GE.0.001d0) THEN
+            A2 = DisSysCompDuctData(CompNum)%LamFriCoef/(2.0d0*RHOZ(N)*DisSysCompDuctData(CompNum)%A* &
                  DisSysCompDuctData(CompNum)%A)
             A1 = (VISCZ(N)*DisSysCompDuctData(CompNum)%LamDynCoef*ld)/ &
-                 (2.0*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)
+                 (2.0d0*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)
             A0 = -PDROP
-            CDM = SQRT(A1*A1-4.0*A2*A0)
-            FL = (CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.0d0*A2*A0)
+            FL = (CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
+            CDM = (2.d0*RHOZ(N)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
                   (VISCZ(N)*DisSysCompDuctData(CompNum)%LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
@@ -1388,14 +1388,14 @@ END SUBROUTINE InitAirflowNetworkData
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(2.*RHOZ(N)*PDROP)*DisSysCompDuctData(CompNum)%A
+            S2 = SQRT(2.d0*RHOZ(N)*PDROP)*DisSysCompDuctData(CompNum)%A
             FTT = S2 / SQRT(ld/g**2+DisSysCompDuctData(CompNum)%TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(N)*DisSysCompDuctData(CompNum)%A)/(FT*DisSysCompDuctData(CompNum)%Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(N)*DisSysCompDuctData(CompNum)%A)/(FT*DisSysCompDuctData(CompNum)%Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+DisSysCompDuctData(CompNum)%TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
@@ -1407,17 +1407,17 @@ END SUBROUTINE InitAirflowNetworkData
         ELSE
           ! Flow in negative direction.
           ! Laminar flow coefficient !=0
-          IF(DisSysCompDuctData(CompNum)%LamFriCoef.GE.0.001) THEN
-            A2 = DisSysCompDuctData(CompNum)%LamFriCoef/(2.*RHOZ(M)*DisSysCompDuctData(CompNum)%A* &
+          IF(DisSysCompDuctData(CompNum)%LamFriCoef.GE.0.001d0) THEN
+            A2 = DisSysCompDuctData(CompNum)%LamFriCoef/(2.d0*RHOZ(M)*DisSysCompDuctData(CompNum)%A* &
                  DisSysCompDuctData(CompNum)%A)
             A1 = (VISCZ(M)*DisSysCompDuctData(CompNum)%LamDynCoef*ld)/ &
-                 (2.*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)
+                 (2.d0*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)
             A0 = PDROP
             CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = -(CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            FL = -(CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
+            CDM = (2.d0*RHOZ(M)*DisSysCompDuctData(CompNum)%A*DisSysCompDuctData(CompNum)%D)/ &
                   (VISCZ(M)*DisSysCompDuctData(CompNum)%LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
@@ -1425,14 +1425,14 @@ END SUBROUTINE InitAirflowNetworkData
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(-2.*RHOZ(M)*PDROP)*DisSysCompDuctData(CompNum)%A
+            S2 = SQRT(-2.d0*RHOZ(M)*PDROP)*DisSysCompDuctData(CompNum)%A
             FTT = S2 / SQRT(ld/g**2+DisSysCompDuctData(CompNum)%TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(M)*DisSysCompDuctData(CompNum)%A)/(FT*DisSysCompDuctData(CompNum)%Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(M)*DisSysCompDuctData(CompNum)%A)/(FT*DisSysCompDuctData(CompNum)%Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+ DisSysCompDuctData(CompNum)%TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
@@ -1448,7 +1448,7 @@ END SUBROUTINE InitAirflowNetworkData
           DF(1) = CDM
         ELSE
           F(1) = FT
-          DF(1) = 0.5*FT/PDROP
+          DF(1) = 0.5d0*FT/PDROP
         END IF
       END IF
 !
@@ -1487,13 +1487,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1517,12 +1517,12 @@ END SUBROUTINE InitAirflowNetworkData
           !     DF0     - derivative factor at the bottom of the door.
           !     DFH     - derivative factor at the top of the door.
 !
-         REAL DPMID
-         REAL     C, DF0, DFH, DRHO, GDRHO, F0, FH, Y, SQRT2
+         REAL(r64) DPMID
+         REAL(r64)     C, DF0, DFH, DRHO, GDRHO, F0, FH, Y, SQRT2
          INTEGER  CompNum
-         REAL FlowCoef,FlowExpo,MinRhoDiff,DischCoeff,Width,Height,OpenFactor
+         REAL(r64) FlowCoef,FlowExpo,MinRhoDiff,DischCoeff,Width,Height,OpenFactor
 !
-      DATA SQRT2 / 1.414214 /
+      DATA SQRT2 / 1.414214d0 /
 
       ! FLOW:
       CompNum = AirflowNetworkCompData(J)%TypeNum
@@ -1530,12 +1530,12 @@ END SUBROUTINE InitAirflowNetworkData
       DischCoeff = MultizoneCompSimpleOpeningData(CompNum)%DischCoeff
       Width = MultizoneSurfaceData(i)%Width
       Height = MultizoneSurfaceData(i)%Height
-      FlowCoef = MultizoneCompSimpleOpeningData(CompNum)%FlowCoef*2.0*(Width+Height)
+      FlowCoef = MultizoneCompSimpleOpeningData(CompNum)%FlowCoef*2.0d0*(Width+Height)
       FlowExpo = MultizoneCompSimpleOpeningData(CompNum)%FlowExpo
       OpenFactor = MultizoneSurfaceData(I)%OpenFactor
       If (OpenFactor > 0.0) then
         Width = Width*OpenFactor
-        If (Surface(MultizoneSurfaceData(I)%SurfNum)%Tilt .LT. 90.) then
+        If (Surface(MultizoneSurfaceData(I)%SurfNum)%Tilt .LT. 90.d0) then
           Height = Height*Surface(MultizoneSurfaceData(I)%SurfNum)%SinTilt
         End If
       End If
@@ -1555,14 +1555,14 @@ END SUBROUTINE InitAirflowNetworkData
 
       NF = 1
       DRHO = RHOZ(N)-RHOZ(M)
-      GDRHO = 9.8*DRHO
+      GDRHO = 9.8d0*DRHO
       IF(LIST.GE.4) WRITE(Unit21,903) ' DOR:',I,N,M,PDROP,ABS(DRHO),MinRhoDiff
       IF(OpenFactor .eq. 0.0) THEN
         CALL GenericCrack(FlowCoef,FlowExpo,LFLAG,PDROP,N,M,F,DF,NF)
         Return
       end if
       IF(ABS(DRHO).LT.MinRhoDiff .OR. LFLAG.EQ.1) THEN
-        DPMID = PDROP-0.5*Height*GDRHO
+        DPMID = PDROP-0.5d0*Height*GDRHO
         ! Initialization or identical temps: treat as one-way flow.
         CALL GenericCrack(FlowCoef,FlowExpo,LFLAG,DPMID,N,M,F,DF,NF)
         IF(LIST.GE.4) WRITE(Unit21,900) ' Drs:',DPMID,F(1),DF(1)
@@ -1573,11 +1573,11 @@ END SUBROUTINE InitAirflowNetworkData
         ! F0 = lower flow, FH = upper flow.
         C = SQRT2*Width*DischCoeff
         DF0 = C*SQRT(ABS(PDROP))/ABS(GDRHO)
-!        F0 = 0.666667*C*SQRT(ABS(GDRHO*Y))*ABS(Y)
-        F0 = (2.0/3.0)*C*SQRT(ABS(GDRHO*Y))*ABS(Y)
+!        F0 = 0.666667d0*C*SQRT(ABS(GDRHO*Y))*ABS(Y)
+        F0 = (2.0d0/3.0d0)*C*SQRT(ABS(GDRHO*Y))*ABS(Y)
         DFH = C*SQRT(ABS((Height-Y)/GDRHO))
-!        FH = 0.666667*DFH*ABS(GDRHO*(Height-Y))
-        FH = (2.0/3.0)*DFH*ABS(GDRHO*(Height-Y))
+!        FH = 0.666667d0*DFH*ABS(GDRHO*(Height-Y))
+        FH = (2.0d0/3.0d0)*DFH*ABS(GDRHO*(Height-Y))
         IF(LIST.GE.4) WRITE(Unit21,900) ' DrF:',F0,DF0,FH,DFH
         IF(Y.LE.0.0) THEN
           ! One-way flow (negative).
@@ -1655,13 +1655,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1689,7 +1689,7 @@ END SUBROUTINE InitAirflowNetworkData
         else
           F(1) = Node(DisSysCompCVFData(CompNum)%InletNode)%MassFlowrate*DisSysCompCVFData(CompNum)%Ctrl
           If (MultiSpeedHPIndicator .EQ. 2) Then
-            F(1) = LoopSystemOnMassFlowrate*LoopCompCycRatio+LoopSystemOffMassFlowrate*(1.0-LoopCompCycRatio)
+            F(1) = LoopSystemOnMassFlowrate*LoopCompCycRatio+LoopSystemOffMassFlowrate*(1.0d0-LoopCompCycRatio)
           End If
         End If
       Else
@@ -1737,13 +1737,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: JA    ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1762,11 +1762,11 @@ END SUBROUTINE InitAirflowNetworkData
           !     PRISE   - pressure rise (negative of pressure drop) (Pa).
 !
          INTEGER  J, K, L
-         REAL     DPDF, PRISE, BX, BY, CX, CY, CCY, DX, DY, TOL
+         REAL(r64)     DPDF, PRISE, BX, BY, CX, CY, CCY, DX, DY, TOL
          INTEGER  CompNum, NumCur
-         REAL     FlowCoef, FlowExpo
+         REAL(r64)     FlowCoef, FlowExpo
 
-      DATA TOL / 0.00001 /
+      DATA TOL / 0.00001d0 /
 
       ! FLOW:
       CompNum = AirflowNetworkCompData(JA)%TypeNum
@@ -1790,7 +1790,7 @@ END SUBROUTINE InitAirflowNetworkData
       IF(LIST.GE.4) WRITE(Unit21,901) ' fan:',I,PDROP,PRISE,AFECTL(I),DisSysCompDetFanData(CompNum)%TranRat
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear approximation.
-        F(1) = -DisSysCompDetFanData(CompNum)%Qfree*AFECTL(I)*(1.0-PRISE/DisSysCompDetFanData(CompNum)%Pshut)
+        F(1) = -DisSysCompDetFanData(CompNum)%Qfree*AFECTL(I)*(1.0d0-PRISE/DisSysCompDetFanData(CompNum)%Pshut)
         DPDF = -DisSysCompDetFanData(CompNum)%Pshut/DisSysCompDetFanData(CompNum)%Qfree
         IF(LIST.GE.4) WRITE(Unit21,901) ' fni:',JA,DisSysCompDetFanData(CompNum)%Qfree, &
                                                DisSysCompDetFanData(CompNum)%Pshut
@@ -1831,17 +1831,17 @@ END SUBROUTINE InitAirflowNetworkData
           IF(BY*CY .GT. 0.0) GOTO 60
    50     DX = CX
           DY = CY
-          IF(CY*CCY.GT.0.0) BY = 0.5*BY
+          IF(CY*CCY.GT.0.0) BY = 0.5d0*BY
           GO TO 70
    60     BX = CX
           BY = CY
-          IF(CY*CCY.GT.0.0) DY = 0.5*DY
+          IF(CY*CCY.GT.0.0) DY = 0.5d0*DY
    70     CONTINUE
           IF(LIST.GE.4) WRITE(Unit21,901) ' fpi:',J,BX,CX,DX,BY,DY
           IF(DX-BX.LT.TOL*CX) GO TO 80
           IF(DX-BX.LT.TOL) GO TO 80
           GO TO 40
-   80   CX = 0.5*(BX+DX)
+   80   CX = 0.5d0*(BX+DX)
    90   F(1) = CX
         DPDF = DisSysCompDetFanData(CompNum)%Coeff(K+2)+CX*(2.*DisSysCompDetFanData(CompNum)%Coeff(K+3)+ &
                CX*3.*DisSysCompDetFanData(CompNum)%Coeff(K+4))
@@ -1852,7 +1852,7 @@ END SUBROUTINE InitAirflowNetworkData
       IF(AFECTL(I).GE.DisSysCompDetFanData(CompNum)%TranRat) THEN
         DF(1) = -AFECTL(I)/DPDF
       ELSE
-        DF(1) = -1.0/DPDF
+        DF(1) = -1.0d0/DPDF
       END IF
   901 FORMAT(A5,I3,5E14.6)
 
@@ -1890,13 +1890,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1959,13 +1959,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1981,7 +1981,7 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     C
+         REAL(r64)     C
          INTEGER  CompNum
 
       ! FLOW:
@@ -2048,13 +2048,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2070,16 +2070,16 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL FlowCoef,FlowExpo
+         REAL(r64)     CDM, FL, FT
+         REAL(r64) FlowCoef,FlowExpo
          INTEGER CompNum
 
       ! FLOW:
       ! Get component properties
       CompNum  = AirflowNetworkCompData(J)%TypeNum
       FlowExpo = MultizoneSurfaceELAData(CompNum)%FlowExpo
-      FlowCoef = MultizoneSurfaceELAData(CompNum)%ELA*MultizoneSurfaceELAData(CompNum)%DischCoeff*(2)**0.5* &
-                 MultizoneSurfaceELAData(CompNum)%RefDeltaP**(0.5-FlowExpo)
+      FlowCoef = MultizoneSurfaceELAData(CompNum)%ELA*MultizoneSurfaceELAData(CompNum)%DischCoeff*(2)**0.5d0* &
+                 MultizoneSurfaceELAData(CompNum)%RefDeltaP**(0.5d0-FlowExpo)
 
       NF = 1
       IF(LFLAG.EQ.1) THEN
@@ -2109,7 +2109,7 @@ END SUBROUTINE InitAirflowNetworkData
           CDM = FlowCoef*RHOZ(M)/VISCZ(M)
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(FlowExpo .EQ.0.5) THEN
+          IF(FlowExpo .EQ.0.5d0) THEN
             FT = -FlowCoef*SQRTDZ(M)*SQRT(-PDROP)
           ELSE
             FT = -FlowCoef*SQRTDZ(M)*(-PDROP)**FlowExpo
@@ -2161,13 +2161,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2183,8 +2183,8 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL FlowCoef
+         REAL(r64)     CDM, FL, FT
+         REAL(r64) FlowCoef
          INTEGER CompNum
 
       ! FLOW:
@@ -2273,13 +2273,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(INOUT) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(INOUT) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2295,7 +2295,7 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     Co
+         REAL(r64)     Co
          INTEGER  CompNum,K
 
       ! FLOW:
@@ -2306,8 +2306,8 @@ END SUBROUTINE InitAirflowNetworkData
 
       NF = 1
       if (PDROP .EQ. 0.0) then
-         F(1) = SQRT(2.0*RHOZ(N))*DisSysCompCPDData(CompNum)%A*DisSysCompCPDData(CompNum)%DP**0.5
-         DF(1) = 0.5*F(1)/DisSysCompCPDData(CompNum)%DP
+         F(1) = SQRT(2.0d0*RHOZ(N))*DisSysCompCPDData(CompNum)%A*DisSysCompCPDData(CompNum)%DP**0.5d0
+         DF(1) = 0.5d0*F(1)/DisSysCompCPDData(CompNum)%DP
       else
          DO k=1,NetworkNumOfLinks
             if (AirflowNetworkLinkageData(k)%NodeNums(2) .EQ. N) then
@@ -2353,13 +2353,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2375,13 +2375,13 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
+         REAL(r64)     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
          INTEGER  CompNum
-         REAL     ed, ld, g, AA1, rough,area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
+         REAL(r64)     ed, ld, g, AA1, rough,area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
 
-      DATA C,EPS / 0.868589, 0.001 /
-      DATA rough/0.0001/
-      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0,64.0,0.0001,0.0001/
+      DATA C,EPS / 0.868589d0, 0.001d0 /
+      DATA rough/0.0001d0/
+      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0d0,64.0d0,0.0001d0,0.0001d0/
 
       ! FLOW:
       ! Get component properties
@@ -2389,16 +2389,16 @@ END SUBROUTINE InitAirflowNetworkData
       ed = Rough/DisSysCompDuctData(CompNum)%D
       area = (DisSysCompCoilData(CompNum)%D)**2*PI
       ld = DisSysCompCoilData(CompNum)%L/DisSysCompCoilData(CompNum)%D
-      g  = 1.14 - 0.868589*LOG(ed)
+      g  = 1.14d0 - 0.868589d0*LOG(ed)
       AA1 = g
 
       NF = 1
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
-          DF(1) = (2.*RHOZ(N)*area*DisSysCompCoilData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(N)*area*DisSysCompCoilData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
         ELSE
-          DF(1) = (2.*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
         END IF
         F(1) = -DF(1)*PDROP
         IF(LIST.GE.4) WRITE(Unit21,901) ' dwi:',I,InitLamCoef,F(1),DF(1)
@@ -2407,29 +2407,29 @@ END SUBROUTINE InitAirflowNetworkData
         IF(PDROP.GE.0.0) THEN
           ! Flow in positive direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
-            A2 = LamFriCoef/(2.0*RHOZ(N)*Area*Area)
-            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.*RHOZ(N)*Area*DisSysCompCoilData(CompNum)%D)
+          IF(LamFriCoef.GE.0.001d0) THEN
+            A2 = LamFriCoef/(2.0d0*RHOZ(N)*Area*Area)
+            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.d0*RHOZ(N)*Area*DisSysCompCoilData(CompNum)%D)
             A0 = -PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = (CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = (CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(N)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(N)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = FL*DisSysCompCoilData(CompNum)%D/(VISCZ(N)*Area)
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(2.*RHOZ(N)*PDROP)*Area
+            S2 = SQRT(2.d0*RHOZ(N)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(N)*Area)/(FT*Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(N)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
@@ -2441,29 +2441,29 @@ END SUBROUTINE InitAirflowNetworkData
         ELSE
           ! Flow in negative direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
-            A2 = LamFriCoef/(2.*RHOZ(M)*Area*Area)
-            A1 = (VISCZ(M)*LamDynCoef*ld)/(2.*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)
+          IF(LamFriCoef.GE.0.001d0) THEN
+            A2 = LamFriCoef/(2.d0*RHOZ(M)*Area*Area)
+            A1 = (VISCZ(M)*LamDynCoef*ld)/(2.d0*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)
             A0 = PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = -(CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = -(CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(M)*Area*DisSysCompCoilData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = -FL*DisSysCompCoilData(CompNum)%D/(VISCZ(M)*Area)
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(-2.*RHOZ(M)*PDROP)*Area
+            S2 = SQRT(-2.d0*RHOZ(M)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(M)*Area)/(FT*Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(M)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
@@ -2479,7 +2479,7 @@ END SUBROUTINE InitAirflowNetworkData
           DF(1) = CDM
         ELSE
           F(1) = FT
-          DF(1) = 0.5*FT/PDROP
+          DF(1) = 0.5d0*FT/PDROP
         END IF
       END IF
 !
@@ -2517,13 +2517,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2539,13 +2539,13 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
+         REAL(r64)     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
          INTEGER  CompNum
-         REAL     ed, ld, g, AA1, rough,Area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
+         REAL(r64)     ed, ld, g, AA1, rough,Area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
 
-      DATA C,EPS / 0.868589, 0.001 /
-      DATA rough/0.0001/
-      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0,64.0,0.0001,0.0001/
+      DATA C,EPS / 0.868589d0, 0.001d0 /
+      DATA rough/0.0001d0/
+      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0d0,64.0d0,0.0001d0,0.0001d0/
 
       ! FLOW:
       ! Get component properties
@@ -2553,16 +2553,16 @@ END SUBROUTINE InitAirflowNetworkData
       ed = Rough/DisSysCompTermUnitData(CompNum)%D
       Area = (DisSysCompTermUnitData(CompNum)%D)**2*PI
       ld = DisSysCompTermUnitData(CompNum)%L/DisSysCompTermUnitData(CompNum)%D
-      g  = 1.14 - 0.868589*LOG(ed)
+      g  = 1.14d0 - 0.868589d0*LOG(ed)
       AA1 = g
 
       NF = 1
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
-          DF(1) = (2.*RHOZ(N)*area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(N)*area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
         ELSE
-          DF(1) = (2.*RHOZ(M)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(M)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
         END IF
         F(1) = -DF(1)*PDROP
         IF(LIST.GE.4) WRITE(Unit21,901) ' dwi:',I,InitLamCoef,F(1),DF(1)
@@ -2571,28 +2571,28 @@ END SUBROUTINE InitAirflowNetworkData
         IF(PDROP.GE.0.0) THEN
           ! Flow in positive direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
-            A2 = LamFriCoef/(2.*RHOZ(N)*Area*Area)
-            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.*RHOZ(N)*Area*DisSysCompTermUnitData(CompNum)%D)
+          IF(LamFriCoef.GE.0.001d0) THEN
+            A2 = LamFriCoef/(2.d0*RHOZ(N)*Area*Area)
+            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.d0*RHOZ(N)*Area*DisSysCompTermUnitData(CompNum)%D)
             A0 = -PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = (CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = (CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(N)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(N)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = FL*DisSysCompTermUnitData(CompNum)%D/(VISCZ(N)*Area)
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(2.*RHOZ(N)*PDROP)*Area
+            S2 = SQRT(2.d0*RHOZ(N)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(N)*Area)/(FT*Rough)
-              D = 1.0 + g*B
+              B = (9.3d0*VISCZ(N)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
               g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
@@ -2605,29 +2605,29 @@ END SUBROUTINE InitAirflowNetworkData
         ELSE
           ! Flow in negative direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
-            A2 = LamFriCoef/(2.*RHOZ(M)*Area*Area)
+          IF(LamFriCoef.GE.0.001d0) THEN
+            A2 = LamFriCoef/(2.d0*RHOZ(M)*Area*Area)
             A1 = (VISCZ(M)*LamDynCoef*ld)/(2.*RHOZ(M)*Area*DisSysCompTermUnitData(CompNum)%D)
             A0 = PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = -(CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = -(CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(M)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(M)*Area*DisSysCompTermUnitData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = -FL*DisSysCompTermUnitData(CompNum)%D/(VISCZ(M)*Area)
           IF(LIST.GE.4) WRITE(Unit21,901) ' dwl:',I,PDROP,FL,CDM,RE
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(-2.*RHOZ(M)*PDROP)*Area
+            S2 = SQRT(-2.d0*RHOZ(M)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,S2,FTT,g
             DO
               FT = FTT
-              B = (9.3*VISCZ(M)*Area)/(FT*Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(M)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(LIST.GE.4) WRITE(Unit21,901) ' dwt:',I,B,FTT,g
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
@@ -2643,7 +2643,7 @@ END SUBROUTINE InitAirflowNetworkData
           DF(1) = CDM
         ELSE
           F(1) = FT
-          DF(1) = 0.5*FT/PDROP
+          DF(1) = 0.5d0*FT/PDROP
         END IF
       END IF
 !
@@ -2680,13 +2680,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2702,8 +2702,8 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL     RhozNorm, VisczNorm, expn, Ctl, coef, Corr, VisAve, Tave, RhoCor
+         REAL(r64)     CDM, FL, FT
+         REAL(r64)     RhozNorm, VisczNorm, expn, Ctl, coef, Corr, VisAve, Tave, RhoCor
          INTEGER  CompNum,InletNode
 
     ! FLOW:
@@ -2724,8 +2724,8 @@ END SUBROUTINE InitAirflowNetworkData
       VisczNorm = 1.71432d-5+4.828d-8*MultizoneCompExhaustFanData(CompNum)%StandardT
 
       expn = MultizoneCompExhaustFanData(CompNum)%FlowExpo
-      VisAve = (VISCZ(N)+VISCZ(M))/2.0
-      Tave = (TZ(N)+TZ(M))/2.0
+      VisAve = (VISCZ(N)+VISCZ(M))/2.0d0
+      Tave = (TZ(N)+TZ(M))/2.0d0
       IF(PDROP.GE.0.0) THEN
          coef = MultizoneCompExhaustFanData(CompNum)%FlowCoef/SQRTDZ(N)*Corr
       ELSE
@@ -2737,11 +2737,11 @@ END SUBROUTINE InitAirflowNetworkData
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(N)/VISCZ(N)*ctl
         ELSE
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(M)/VISCZ(M)*ctl
         END IF
         F(1) = -DF(1)*PDROP
@@ -2751,11 +2751,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in positive direction.
           ! Laminar flow.
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(N)/VISCZ(N)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = Coef*SQRTDZ(N)*SQRT(PDROP)*ctl
           ELSE
             FT = Coef*SQRTDZ(N)*(PDROP**expn)*ctl
@@ -2764,11 +2764,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in negative direction.
           ! Laminar flow.
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(M)/VISCZ(M)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = -Coef*SQRTDZ(M)*SQRT(-PDROP)*ctl
           ELSE
             FT = -Coef*SQRTDZ(M)*(-PDROP)**expn*ctl
@@ -2819,13 +2819,13 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2841,13 +2841,13 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
+         REAL(r64)     A0, A1, A2, B, C, D, EPS, S2, CDM, FL, FT, FTT, RE
          INTEGER  CompNum
-         REAL     ed, ld, g, AA1, rough,area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
+         REAL(r64)     ed, ld, g, AA1, rough,area,InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef
 
-      DATA C,EPS / 0.868589, 0.001 /
-      DATA rough/0.0001/
-      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0,64.0,0.0001,0.0001/
+      DATA C,EPS / 0.868589d0, 0.001d0 /
+      DATA rough/0.0001d0/
+      DATA InitLamCoef,LamDynCoef,LamFriCoef,TurDynCoef/128.0d0,64.0d0,0.0001d0,0.0001d0/
 
       ! FLOW:
       ! Get component properties
@@ -2855,16 +2855,16 @@ END SUBROUTINE InitAirflowNetworkData
       ed = Rough/DisSysCompHXData(CompNum)%D
       area = (DisSysCompHXData(CompNum)%D)**2*PI
       ld = DisSysCompHXData(CompNum)%L/DisSysCompHXData(CompNum)%D
-      g  = 1.14 - 0.868589*LOG(ed)
+      g  = 1.14d0 - 0.868589d0*LOG(ed)
       AA1 = g
 
       NF = 1
       IF(LFLAG.EQ.1) THEN
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
-          DF(1) = (2.*RHOZ(N)*area*DisSysCompHXData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(N)*area*DisSysCompHXData(CompNum)%D)/(VISCZ(N)*InitLamCoef*ld)
         ELSE
-          DF(1) = (2.*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
+          DF(1) = (2.d0*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(M)*InitLamCoef*ld)
         END IF
         F(1) = -DF(1)*PDROP
       ELSE
@@ -2872,27 +2872,27 @@ END SUBROUTINE InitAirflowNetworkData
         IF(PDROP.GE.0.0) THEN
           ! Flow in positive direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
+          IF(LamFriCoef.GE.0.001d0) THEN
             A2 = LamFriCoef/(2.*RHOZ(N)*Area*Area)
-            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.*RHOZ(N)*Area*DisSysCompHXData(CompNum)%D)
+            A1 = (VISCZ(N)*LamDynCoef*ld)/(2.d0*RHOZ(N)*Area*DisSysCompHXData(CompNum)%D)
             A0 = -PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = (CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = (CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(N)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(N)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(N)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = FL*DisSysCompHXData(CompNum)%D/(VISCZ(N)*Area)
           ! Turbulent flow; test when Re>10.
           IF(RE.GE.10.) THEN
-            S2 = SQRT(2.*RHOZ(N)*PDROP)*Area
+            S2 = SQRT(2.d0*RHOZ(N)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             DO
               FT = FTT
-              B = (9.3*VISCZ(N)*Area)/(FT*Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(N)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
             ENDDO
@@ -2903,27 +2903,27 @@ END SUBROUTINE InitAirflowNetworkData
         ELSE
           ! Flow in negative direction.
           ! Laminar flow coefficient !=0
-          IF(LamFriCoef.GE.0.001) THEN
-            A2 = LamFriCoef/(2.*RHOZ(M)*Area*Area)
-            A1 = (VISCZ(M)*LamDynCoef*ld)/(2.*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)
+          IF(LamFriCoef.GE.0.001d0) THEN
+            A2 = LamFriCoef/(2.d0*RHOZ(M)*Area*Area)
+            A1 = (VISCZ(M)*LamDynCoef*ld)/(2.d0*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)
             A0 = PDROP
-            CDM = SQRT(A1*A1-4.*A2*A0)
-            FL = -(CDM-A1)/(2.*A2)
-            CDM = 1.0/CDM
+            CDM = SQRT(A1*A1-4.d0*A2*A0)
+            FL = -(CDM-A1)/(2.d0*A2)
+            CDM = 1.0d0/CDM
           ELSE
-            CDM = (2.*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
+            CDM = (2.d0*RHOZ(M)*Area*DisSysCompHXData(CompNum)%D)/(VISCZ(M)*LamDynCoef*ld)
             FL = CDM*PDROP
           END IF
           RE = -FL*DisSysCompHXData(CompNum)%D/(VISCZ(M)*Area)
           ! Turbulent flow; test when Re>10.
-          IF(RE.GE.10.) THEN
-            S2 = SQRT(-2.*RHOZ(M)*PDROP)*Area
+          IF(RE.GE.10.d0) THEN
+            S2 = SQRT(-2.d0*RHOZ(M)*PDROP)*Area
             FTT = S2 / SQRT(ld/g**2+TurDynCoef)
             DO
               FT = FTT
-              B = (9.3*VISCZ(M)*Area)/(FT*Rough)
-              D = 1.0 + g*B
-              g = g - (g-AA1+C*LOG(D))/(1.0+C*B/D)
+              B = (9.3d0*VISCZ(M)*Area)/(FT*Rough)
+              D = 1.0d0 + g*B
+              g = g - (g-AA1+C*LOG(D))/(1.0d0+C*B/D)
               FTT = S2 / SQRT(ld/g**2+TurDynCoef)
               IF(ABS(FTT-FT)/FTT .LT. EPS) EXIT
             ENDDO
@@ -2938,7 +2938,7 @@ END SUBROUTINE InitAirflowNetworkData
           DF(1) = CDM
         ELSE
           F(1) = FT
-          DF(1) = 0.5*FT/PDROP
+          DF(1) = 0.5d0*FT/PDROP
         END IF
       END IF
 
@@ -2975,17 +2975,17 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN)     :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: I     ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT)    :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT)    :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-          REAL, PARAMETER :: PI = 3.14159265358979323846
+          REAL(r64), PARAMETER :: PI = 3.14159265358979323846d0
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2997,30 +2997,30 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     RhozAver, expn, coef
+         REAL(r64)     RhozAver, expn, coef
          INTEGER  CompNum
-         REAL     Width            ! Opening width
-         REAL     Height           ! Opening height
-         REAL     Fact             ! Opening factor
-         REAL     Slope            ! Opening slope
-         REAL     DischCoeff       ! Discharge coefficient
-         REAL     fma12            ! massflow in direction "from-to" [kg/s]
-         REAL     fma21            ! massflow in direction "to-from" [kg/s]
-         REAL     dp1fma12         ! derivative d fma12 / d Dp [kg/s/Pa]
-         REAL     dp1fma21         ! derivative d fma21 / d Dp [kg/s/Pa]
-         REAL     PurgedP          ! Purge pressure [Pa]
-         REAL     BuoFlow          ! Buoyancy flow rate [Pa]
-         REAL     BuoFlowMax       ! Maximum buoyancy flow rate [Pa]
-         REAL     dPBuoFlow        ! Derivative of buoyancy flow rate [kg/s/Pa]
-         REAL     DH               ! Hydraulic diameter [m]
-         REAL     Cshape           ! Shape factor [dimensionless]
-         REAL     OpenArea         ! Opening area [m2]
+         REAL(r64)     Width            ! Opening width
+         REAL(r64)     Height           ! Opening height
+         REAL(r64)     Fact             ! Opening factor
+         REAL(r64)     Slope            ! Opening slope
+         REAL(r64)     DischCoeff       ! Discharge coefficient
+         REAL(r64)     fma12            ! massflow in direction "from-to" [kg/s]
+         REAL(r64)     fma21            ! massflow in direction "to-from" [kg/s]
+         REAL(r64)     dp1fma12         ! derivative d fma12 / d Dp [kg/s/Pa]
+         REAL(r64)     dp1fma21         ! derivative d fma21 / d Dp [kg/s/Pa]
+         REAL(r64)     PurgedP          ! Purge pressure [Pa]
+         REAL(r64)     BuoFlow          ! Buoyancy flow rate [Pa]
+         REAL(r64)     BuoFlowMax       ! Maximum buoyancy flow rate [Pa]
+         REAL(r64)     dPBuoFlow        ! Derivative of buoyancy flow rate [kg/s/Pa]
+         REAL(r64)     DH               ! Hydraulic diameter [m]
+         REAL(r64)     Cshape           ! Shape factor [dimensionless]
+         REAL(r64)     OpenArea         ! Opening area [m2]
 
 
       ! FLOW:
       ! Get information on the horizontal opening
       CompNum = AirflowNetworkCompData(J)%TypeNum
-      RhozAver = (RHOZ(N)+RHOZ(M))/2.0
+      RhozAver = (RHOZ(N)+RHOZ(M))/2.0d0
       Width = MultizoneSurfaceData(I)%Width
       Height = MultizoneSurfaceData(I)%Height
       fact = MultizoneSurfaceData(I)%OpenFactor
@@ -3028,9 +3028,9 @@ END SUBROUTINE InitAirflowNetworkData
       coef = MultizoneCompHorOpeningData(CompNum)%FlowCoef
       slope = MultizoneCompHorOpeningData(CompNum)%slope
       DischCoeff = MultizoneCompHorOpeningData(CompNum)%DischCoeff
-      Cshape = 0.942*Width/Height
-      OpenArea = Width*Height*fact*sin(slope*PI/180.0)*(1.0+cos(slope*PI/180.0))
-      DH = 4.0*(Width*Height)/2.0/(Width+Height)*fact
+      Cshape = 0.942d0*Width/Height
+      OpenArea = Width*Height*fact*sin(slope*PI/180.0d0)*(1.0d0+cos(slope*PI/180.0d0))
+      DH = 4.0d0*(Width*Height)/2.0/(Width+Height)*fact
 
       ! Check which zone is higher
 
@@ -3040,30 +3040,30 @@ END SUBROUTINE InitAirflowNetworkData
       end if
 
 
-      fma12     = 0.0
-      fma21     = 0.0
-      dp1fma12  = 0.0
-      dp1fma21  = 0.0
-      BuoFlow   = 0.0
-      dPBuoFlow = 0.0
+      fma12     = 0.0d0
+      fma21     = 0.0d0
+      dp1fma12  = 0.0d0
+      dp1fma21  = 0.0d0
+      BuoFlow   = 0.0d0
+      dPBuoFlow = 0.0d0
 
       If (AirflowNetworkLinkageData(I)%NodeHeights(1) > AirflowNetworkLinkageData(I)%NodeHeights(2)) Then
       ! Node N is upper zone
         If (RHOZ(N) > RHOZ(M)) Then
-          BuoFlowMax = RhozAver*0.055*SQRT(9.81*abs(RHOZ(N)-RHOZ(M))*DH**5/RhozAver)
-          PurgedP = Cshape*Cshape*9.81*ABS(RHOZ(N)-RHOZ(M))*DH**5/(2.0*(OpenArea)**2)
+          BuoFlowMax = RhozAver*0.055d0*SQRT(9.81*abs(RHOZ(N)-RHOZ(M))*DH**5/RhozAver)
+          PurgedP = Cshape*Cshape*9.81d0*ABS(RHOZ(N)-RHOZ(M))*DH**5/(2.0d0*(OpenArea)**2)
           If (abs(PDROP) .LE. PurgedP) Then
-            BuoFlow = BuoFlowMax*(1.0-abs(PDROP)/PurgedP)
+            BuoFlow = BuoFlowMax*(1.0d0-abs(PDROP)/PurgedP)
             dPBuoFlow = BuoFlowMax/PurgedP
           End If
         End If
       Else
       ! Node M is upper zone
         If (RHOZ(N) < RHOZ(M)) Then
-          BuoFlowMax = RhozAver*0.055*SQRT(9.81*abs(RHOZ(N)-RHOZ(M))*DH**5/RhozAver)
-          PurgedP = Cshape*Cshape*9.81*ABS(RHOZ(N)-RHOZ(M))*DH**5/(2.0*(OpenArea)**2)
+          BuoFlowMax = RhozAver*0.055d0*SQRT(9.81d0*abs(RHOZ(N)-RHOZ(M))*DH**5/RhozAver)
+          PurgedP = Cshape*Cshape*9.81d0*ABS(RHOZ(N)-RHOZ(M))*DH**5/(2.0d0*(OpenArea)**2)
           If (abs(PDROP) .LE. PurgedP) Then
-            BuoFlow = BuoFlowMax*(1.0-abs(PDROP)/PurgedP)
+            BuoFlow = BuoFlowMax*(1.0d0-abs(PDROP)/PurgedP)
             dPBuoFlow = BuoFlowMax/PurgedP
           End If
         End If
@@ -3075,16 +3075,16 @@ END SUBROUTINE InitAirflowNetworkData
          dp1fma12 = 0.0
          dp1fma21 = 0.0
       ELSE IF (PDROP.GT.0.0) THEN
-         fma12 = RHOZ(N)*OpenArea*fact*DischCoeff*SQRT(2.0*PDROP/RhozAver)+BuoFlow
-         dp1fma12 = RHOZ(N)*OpenArea*DischCoeff/SQRT(2.0*PDROP*RhozAver)+dPBuoFlow
-         If (BuoFlow .gt. 0.0) Then
+         fma12 = RHOZ(N)*OpenArea*fact*DischCoeff*SQRT(2.0d0*PDROP/RhozAver)+BuoFlow
+         dp1fma12 = RHOZ(N)*OpenArea*DischCoeff/SQRT(2.0d0*PDROP*RhozAver)+dPBuoFlow
+         If (BuoFlow .gt. 0.0d0) Then
            fma21 = BuoFlow
            dp1fma21 = dPBuoFlow
          End If
       ELSE ! PDROP.LT.0.0
-         fma21 = RHOZ(M)*OpenArea*fact*DischCoeff*SQRT(2.0*ABS(PDROP)/RhozAver)+BuoFlow
-         dp1fma21 = -RHOZ(M)*OpenArea*DischCoeff/SQRT(2.0*ABS(PDROP)*RhozAver)+dPBuoFlow
-         If (BuoFlow .gt. 0.0) Then
+         fma21 = RHOZ(M)*OpenArea*fact*DischCoeff*SQRT(2.0d0*ABS(PDROP)/RhozAver)+BuoFlow
+         dp1fma21 = -RHOZ(M)*OpenArea*DischCoeff/SQRT(2.0d0*ABS(PDROP)*RhozAver)+dPBuoFlow
+         If (BuoFlow .gt. 0.0d0) Then
            fma12 = BuoFlow
            dp1fma12 = dPBuoFlow
          End If
@@ -3128,15 +3128,15 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-          REAL, INTENT(INOUT)  :: Coef     ! Flow coefficient
-          REAL, INTENT(IN)  :: Expn     ! Flow exponent
+          REAL(r64), INTENT(INOUT)  :: Coef     ! Flow coefficient
+          REAL(r64), INTENT(IN)  :: Expn     ! Flow exponent
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3152,15 +3152,15 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL     CDM, FL, FT
-         REAL     RhozNorm, VisczNorm, Ctl, VisAve, Tave, RhoCor
+         REAL(r64)     CDM, FL, FT
+         REAL(r64)     RhozNorm, VisczNorm, Ctl, VisAve, Tave, RhoCor
 
       ! FLOW:
       ! Calculate normal density and viscocity at Crack standard condition: T=20C, p=101325 Pa and 0 g/kg
-      RhozNorm = PsyRhoAirFnPbTdbW(101325.0,20.0,0.0)
-      VisczNorm = 1.71432d-5+4.828d-8*20.0
-      VisAve = (VISCZ(N)+VISCZ(M))/2.0
-      Tave = (TZ(N)+TZ(M))/2.0
+      RhozNorm = PsyRhoAirFnPbTdbW(101325.0d0,20.0d0,0.0d0)
+      VisczNorm = 1.71432d-5+4.828d-8*20.0d0
+      VisAve = (VISCZ(N)+VISCZ(M))/2.0d0
+      Tave = (TZ(N)+TZ(M))/2.0d0
       IF(PDROP.GE.0.0) THEN
          coef = Coef/SQRTDZ(N)
       ELSE
@@ -3172,11 +3172,11 @@ END SUBROUTINE InitAirflowNetworkData
         ! Initialization by linear relation.
         IF(PDROP.GE.0.0) THEN
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(N)/VISCZ(N)*ctl
         ELSE
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           DF(1) = Coef*RHOZ(M)/VISCZ(M)*ctl
         END IF
         F(1) = -DF(1)*PDROP
@@ -3186,11 +3186,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in positive direction.
           ! Laminar flow.
           RhoCor = (TZ(N)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(N)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(N)/VISCZ(N)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = Coef*SQRTDZ(N)*SQRT(PDROP)*ctl
           ELSE
             FT = Coef*SQRTDZ(N)*(PDROP**expn)*ctl
@@ -3199,11 +3199,11 @@ END SUBROUTINE InitAirflowNetworkData
           ! Flow in negative direction.
           ! Laminar flow.
           RhoCor = (TZ(M)+KelvinConv)/(Tave+KelvinConv)
-          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0)*(VisczNorm/VisAve)**(2.*expn-1.0)
+          ctl = (RhozNorm/RHOZ(M)/RhoCor)**(expn-1.0d0)*(VisczNorm/VisAve)**(2.d0*expn-1.0d0)
           CDM = Coef*RHOZ(M)/VISCZ(M)*ctl
           FL = CDM*PDROP
           ! Turbulent flow.
-          IF(expn .EQ. 0.5) THEN
+          IF(expn .EQ. 0.5d0) THEN
             FT = -Coef*SQRTDZ(M)*SQRT(-PDROP)*ctl
           ELSE
             FT = -Coef*SQRTDZ(M)*(-PDROP)**expn*ctl
@@ -3262,10 +3262,10 @@ END SUBROUTINE InitAirflowNetworkData
           INTEGER, INTENT(IN)  :: NEQ   ! number of equations
           INTEGER, INTENT(IN)  :: NSYM  ! symmetry:  0 = symmetric matrix, 1 = non-symmetric
           ! noel, GNU says the AU is indexed above its upper bound
-          !REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AL(IK(NetworkNumOfNodes+1)-1) ! the lower triangle of [A] before and after factoring
+          !REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AL(IK(NetworkNumOfNodes+1)-1) ! the lower triangle of [A] before and after factoring
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3283,10 +3283,10 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
          INTEGER  JHK, JHK1, LHK, LHK1, IMIN, IMIN1
          INTEGER  JHJ, JHJ1, IC, I, J, K
-         REAL  T1, T2, SDOT, SUMD
+         REAL(r64)  T1, T2, SDOT, SUMD
 
       ! FLOW:
-      AD(1) = 1.0/AD(1)
+      AD(1) = 1.0d0/AD(1)
       JHK = 1
       DO 100 K=2,NEQ
         SUMD = 0.0
@@ -3346,7 +3346,7 @@ END SUBROUTINE InitAirflowNetworkData
    80       END DO
           END IF
         END IF
-        If (AD(K)-SUMD .EQ. 0.) Then
+        If (AD(K)-SUMD .EQ. 0.d0) Then
           CALL ShowSevereError('AirflowNetworkSolver: L-U factorization in Subroutine FACSKY.')
           CALL ShowContinueError('The denominator used in L-U factorizationis equal to 0.0 at node = ' &
                                 //TRIM(AirflowNetworkNodeData(K)%Name)//'.')
@@ -3359,7 +3359,7 @@ END SUBROUTINE InitAirflowNetworkData
                                  //' for further investigation.')
           CALL ShowFatalError('Preceding condition causes termination.')
         End If
-        AD(K) = 1.0/(AD(K)-SUMD)
+        AD(K) = 1.0d0/(AD(K)-SUMD)
         JHK = JHK1
   100 END DO
 !
@@ -3399,11 +3399,11 @@ END SUBROUTINE InitAirflowNetworkData
           INTEGER, INTENT(IN)  :: NEQ   ! number of equations
           INTEGER, INTENT(IN)  :: NSYM  ! symmetry:  0 = symmetric matrix, 1 = non-symmetric
           ! noel, GNU says the AU is indexed above its upper bound
-          !REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(IN) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(IN) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
-          REAL, INTENT(IN) :: AL(IK(NetworkNumOfNodes+1)-1) ! the lower triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: B(NetworkNumOfNodes) ! "B" vector (input); "X" vector (output).
+          !REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(IN) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(IN) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
+          REAL(r64), INTENT(IN) :: AL(IK(NetworkNumOfNodes+1)-1) ! the lower triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: B(NetworkNumOfNodes) ! "B" vector (input); "X" vector (output).
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3421,7 +3421,7 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
       INTEGER  I, JHK, JHK1, K, LHK
-      REAL  SDOT, T1
+      REAL(r64)  SDOT, T1
 
       ! FLOW:
       JHK = 1
@@ -3498,11 +3498,11 @@ END SUBROUTINE InitAirflowNetworkData
           INTEGER, INTENT(IN)  :: LM(2) ! location matrix
           INTEGER, INTENT(IN)  :: IK(NetworkNumOfNodes+1) ! pointer to the top of column/row "K"
           INTEGER, INTENT(IN)  :: FLAG  ! mode of operation
-          REAL, INTENT(IN)     :: X(4)  ! element array (row-wise sequence)
+          REAL(r64), INTENT(IN)     :: X(4)  ! element array (row-wise sequence)
           ! noel, GNU says the AU is indexed above its upper bound
-          !REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
-          REAL, INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
+          !REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)) ! the upper triangle of [A] before and after factoring
+          REAL(r64), INTENT(INOUT) :: AD(NetworkNumOfNodes)  ! the main diagonal of [A] before and after factoring
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3558,7 +3558,7 @@ END SUBROUTINE InitAirflowNetworkData
           !       RE-ENGINEERED  This subroutine is revised from DUMPVD developed by George Walton, NIST
 
           ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine prints the contents of the REAL "V" vector
+          ! This subroutine prints the contents of the REAL(r64) "V" vector
 
           ! METHODOLOGY EMPLOYED:
           ! na
@@ -3574,7 +3574,7 @@ END SUBROUTINE InitAirflowNetworkData
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           CHARACTER(*), INTENT(IN):: S  ! Description
-          REAL, INTENT(IN)     :: V(*) ! Output values
+          REAL(r64), INTENT(IN)     :: V(*) ! Output values
           INTEGER, INTENT(IN)  :: N  ! Array size
           INTEGER, INTENT(IN)  :: UOUT ! Output file unit
 
@@ -3617,7 +3617,7 @@ END SUBROUTINE InitAirflowNetworkData
           !       RE-ENGINEERED  This subroutine is revised from DUMPVR developed by George Walton, NIST
 
           ! PURPOSE OF THIS SUBROUTINE:
-          ! This subroutine prints the contents of the REAL "V" vector
+          ! This subroutine prints the contents of the REAL(r64) "V" vector
 
           ! METHODOLOGY EMPLOYED:
           ! na
@@ -3633,7 +3633,7 @@ END SUBROUTINE InitAirflowNetworkData
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           CHARACTER(*), INTENT(IN):: S  ! Description
-          REAL, INTENT(IN)     :: V(*) ! Output values
+          REAL(r64), INTENT(IN)     :: V(*) ! Output values
           INTEGER, INTENT(IN)  :: N  ! Array size
           INTEGER, INTENT(IN)  :: UOUT ! Output file unit
 
@@ -3716,17 +3716,17 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: J     ! Component number
           INTEGER, INTENT(IN)  :: LFLAG ! Initialization flag.If = 1, use laminar relationship
-          REAL, INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
+          REAL(r64), INTENT(IN) :: PDROP ! Total pressure drop across a component (P1 - P2) [Pa]
           INTEGER, INTENT(IN)  :: IL    ! Linkage number
           INTEGER, INTENT(IN)  :: N     ! Node 1 number
           INTEGER, INTENT(IN)  :: M     ! Node 2 number
           INTEGER, INTENT(OUT) :: NF    ! Number of flows, either 1 or 2
-          REAL, INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
-          REAL, INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
+          REAL(r64), INTENT(OUT) :: F(2)  ! Airflow through the component [kg/s]
+          REAL(r64), INTENT(OUT) :: DF(2) ! Partial derivative:  DF/DP
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-          REAL, PARAMETER :: RealMax=0.1d+37
-          REAL, PARAMETER :: RealMin=1d-37
+          REAL(r64), PARAMETER :: RealMax=0.1d+37
+          REAL(r64), PARAMETER :: RealMin=1d-37
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -3739,22 +3739,22 @@ END SUBROUTINE InitAirflowNetworkData
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
       INTEGER  CompNum
-      REAL Width,Height
+      REAL(r64) Width,Height
 
-      REAL  fma12    ! massflow in direction "from-to" [kg/s]
-      REAL  fma21    ! massflow in direction "to-from" [kg/s]
-      REAL  dp1fma12 ! derivative d fma12 / d Dp [kg/s/Pa]
-      REAL  dp1fma21 ! derivative d fma21 / d Dp [kg/s/Pa]
-      REAL  DpProfNew(NrInt+2) ! Differential pressure profile for Large Openings, taking into account fixed
+      REAL(r64)  fma12    ! massflow in direction "from-to" [kg/s]
+      REAL(r64)  fma21    ! massflow in direction "to-from" [kg/s]
+      REAL(r64)  dp1fma12 ! derivative d fma12 / d Dp [kg/s/Pa]
+      REAL(r64)  dp1fma21 ! derivative d fma21 / d Dp [kg/s/Pa]
+      REAL(r64)  DpProfNew(NrInt+2) ! Differential pressure profile for Large Openings, taking into account fixed
                                            ! pressures and actual zone pressures at reference height
-      REAL fact ! Actual opening factor
-      REAL DifLim ! Limit for the pressure difference where laminarization takes place [Pa]
-      REAL Cfact,FvVeloc
+      REAL(r64) fact ! Actual opening factor
+      REAL(r64) DifLim ! Limit for the pressure difference where laminarization takes place [Pa]
+      REAL(r64) Cfact,FvVeloc
 
-      REAL ActLh,ActLw,Lextra,Axishght,ActCD,Cs,expn,Type
-      REAL Interval,fmasum,dfmasum,Prefact,EvalHghts(NrInt+2)
-      REAL h2,h4,alpha,rholink,c1,c2
-      REAL DpZeroOffset,area,WFact,HFact
+      REAL(r64) ActLh,ActLw,Lextra,Axishght,ActCD,Cs,expn,Type
+      REAL(r64) Interval,fmasum,dfmasum,Prefact,EvalHghts(NrInt+2)
+      REAL(r64) h2,h4,alpha,rholink,c1,c2
+      REAL(r64) DpZeroOffset,area,WFact,HFact
       INTEGER i,Loc,iNum
 
       ! FLOW:
@@ -4024,7 +4024,7 @@ END SUBROUTINE InitAirflowNetworkData
       ! Open LO, type 1
       IF ((Cfact.NE.0).AND.(type.EQ.1))  THEN
         DpZeroOffset=DifLim*1d-3
-        Prefact=ActLw*ActCd*Interval*SQRT(2.0)
+        Prefact=ActLw*ActCd*Interval*SQRT(2.0d0)
         DO 200 i=2,NrInt+1
           IF (DpProfNew(i).GT.0) THEN
             IF (Abs(DpProfNew(i)).LE.DpZeroOffset) THEN
@@ -4032,7 +4032,7 @@ END SUBROUTINE InitAirflowNetworkData
               fmasum=DpProfNew(i)*dfmasum
             ELSE
               fmasum=SQRT(RhoProfF(Loc+i)*DpProfNew(i))
-              dfmasum=0.5*fmasum/DpProfNew(i)
+              dfmasum=0.5d0*fmasum/DpProfNew(i)
             ENDIF
             fma12=fma12+fmasum
             dp1fma12=dp1fma12+dfmasum
@@ -4042,7 +4042,7 @@ END SUBROUTINE InitAirflowNetworkData
               fmasum=DpProfNew(i)*dfmasum
             ELSE
               fmasum=SQRT(-RhoProfT(Loc+i)*DpProfNew(i))
-              dfmasum=0.5*fmasum/DpProfNew(i)
+              dfmasum=0.5d0*fmasum/DpProfNew(i)
             ENDIF
             fma21=fma21+fmasum
             dp1fma21=dp1fma21+dfmasum
@@ -4062,7 +4062,7 @@ END SUBROUTINE InitAirflowNetworkData
         DpZeroOffset=DifLim*1d-3
         ! New definition for opening factors for LVO type 2: opening angle = 90 degrees --> opening factor = 1.0
         ! should be PIOvr2 in below?
-        alpha=fact*3.14159/2.
+        alpha=fact*3.14159d0/2.d0
         h2=Axishght*(1-COS(alpha))
         h4=Axishght+(ActLh-Axishght)*COS(alpha)
         EvalHghts(1)=0
@@ -4088,25 +4088,25 @@ END SUBROUTINE InitAirflowNetworkData
           IF ((EvalHghts(i).LE.h2).OR.(EvalHghts(i).GE.h4)) THEN
             IF (Abs(DpProfNew(i)).LE.DpZeroOffset) THEN
               dfmasum=ActCd*ActLw*Interval*SQRT(2.0*rholink* &
-              DpZeroOffset)/DpZeroOffset*DSIGN(1,DpProfNew(i))
+              DpZeroOffset)/DpZeroOffset*DSIGN(1d0,DpProfNew(i))
               fmasum=DpProfNew(i)*dfmasum
             ELSE
               fmasum=ActCd*ActLw*Interval*SQRT(2.0*rholink*ABS(DpProfNew(i)))
-              dfmasum=0.5*fmasum/DpProfNew(i)
+              dfmasum=0.5d0*fmasum/DpProfNew(i)
             ENDIF
           ELSE
             ! triangular opening at the side of LO
             c1=ActCd*ActLw*Interval*SQRT(2.0*rholink)
             c2=2*ActCd*ABS((Axishght-Evalhghts(i)))*TAN(alpha)* &
-              Interval*SQRT(2.0*rholink)
+              Interval*SQRT(2.0d0*rholink)
             IF ((c1.NE.0).AND.(c2.NE.0)) THEN
               IF (Abs(DpProfNew(i)).LE.DpZeroOffset) THEN
                 dfmasum=SQRT(DpZeroOffset/(1/c1/c1+1/c2/c2))/ &
-                        DpZeroOffset*DSIGN(1,DpProfNew(i))
+                        DpZeroOffset*DSIGN(1d0,DpProfNew(i))
                 fmasum=DpProfNew(i)*dfmasum
               ELSE
                 fmasum=SQRT(ABS(DpProfNew(i))/(1/c1/c1+1/c2/c2))
-                dfmasum=0.5*fmasum/DpProfNew(i)
+                dfmasum=0.5d0*fmasum/DpProfNew(i)
               ENDIF
             ELSE
               fmasum=0
@@ -4146,9 +4146,9 @@ END SUBROUTINE InitAirflowNetworkData
               rholink=RhoProfT(Loc+i)
             ENDIF
             rholink=rholink/nrInt
-            rholink=1.2
+            rholink=1.2d0
 401       CONTINUE
-          FvVeloc=(Fma21+fma12)*(2.**ExpN)*SQRT(1.2)/(rhoLink*Cs)
+          FvVeloc=(Fma21+fma12)*(2.d0**ExpN)*SQRT(1.2d0)/(rhoLink*Cs)
         else
           FvVeloc=0.0
         end if
@@ -4212,18 +4212,18 @@ END SUBROUTINE InitAirflowNetworkData
           ! SUBROUTINE ARGUMENT DEFINITIONS:
           INTEGER, INTENT(IN)  :: IL       ! Linkage number
           INTEGER, INTENT(IN)  :: Pprof    ! Opening number
-          REAL, INTENT(IN)     :: G        ! gravitation field strength [N/kg]
-          REAL, INTENT(IN) :: DpF(2) ! Stack pressures at start heights of Layers
+          REAL(r64), INTENT(IN)     :: G        ! gravitation field strength [N/kg]
+          REAL(r64), INTENT(IN) :: DpF(2) ! Stack pressures at start heights of Layers
                                                  ! in the FROM zone (starting at linkheight) [Pa]
-          REAL, INTENT(IN) :: DpT(2) ! Stack pressures at start heights of Layers
-          REAL, INTENT(IN)     :: BetaF(2) ! Density gradients in the FROM zone (starting at linkheight) [Kg/m3/m]
-          REAL, INTENT(IN)     :: BetaT(2) ! Density gradients in the TO zone (starting at linkheight) [Kg/m3/m]
-          REAL, INTENT(IN)     :: RhoStF(2) ! Density at the start heights of Layers in the FROM zone
+          REAL(r64), INTENT(IN) :: DpT(2) ! Stack pressures at start heights of Layers
+          REAL(r64), INTENT(IN)     :: BetaF(2) ! Density gradients in the FROM zone (starting at linkheight) [Kg/m3/m]
+          REAL(r64), INTENT(IN)     :: BetaT(2) ! Density gradients in the TO zone (starting at linkheight) [Kg/m3/m]
+          REAL(r64), INTENT(IN)     :: RhoStF(2) ! Density at the start heights of Layers in the FROM zone
                                             ! (starting at linkheight) [Kg/m3]
-          REAL, INTENT(IN)     :: RhoStT(2) ! Density at the start heights of Layers in the TO zone
+          REAL(r64), INTENT(IN)     :: RhoStT(2) ! Density at the start heights of Layers in the TO zone
                                             ! (starting at linkheight) [Kg/m3]
-          REAL, INTENT(IN)     :: ActLh    ! Actual height of opening [m]
-          REAL, INTENT(IN)     :: OwnHeightFactor ! Cosine of deviation angle of the opening plane from the vertical direction
+          REAL(r64), INTENT(IN)     :: ActLh    ! Actual height of opening [m]
+          REAL(r64), INTENT(IN)     :: OwnHeightFactor ! Cosine of deviation angle of the opening plane from the vertical direction
           INTEGER, INTENT(IN)  :: From     ! Number of FROM zone
           INTEGER, INTENT(IN)  :: To       ! Number of To zone
 
@@ -4240,13 +4240,13 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL zF(2),zT(2) ! Startheights of layers in FROM-, TO-zone
-      REAL zStF(2),zStT(2) ! Startheights of layers within the LO, starting with the actual startheight of the LO.
+      REAL(r64) zF(2),zT(2) ! Startheights of layers in FROM-, TO-zone
+      REAL(r64) zStF(2),zStT(2) ! Startheights of layers within the LO, starting with the actual startheight of the LO.
                            ! The values in the arrays DpF, DpT, BetaF, BetaT, RhoStF, RhoStT are calculated at these heights.
-      REAL hghtsFR, hghtsTR
-      REAL hghtsF(NrInt+2),hghtsT(NrInt+2) ! Heights of evaluation points for pressure and density profiles
-      REAL Interval ! Distance between two evaluation points
-      REAL delzF,delzT ! Interval between actual evaluation point and startheight of actual layer in FROM-, TO-zone
+      REAL(r64) hghtsFR, hghtsTR
+      REAL(r64) hghtsF(NrInt+2),hghtsT(NrInt+2) ! Heights of evaluation points for pressure and density profiles
+      REAL(r64) Interval ! Distance between two evaluation points
+      REAL(r64) delzF,delzT ! Interval between actual evaluation point and startheight of actual layer in FROM-, TO-zone
       INTEGER AnzLayF,AnzLayT ! Number of layers in FROM-, TO-zone
       INTEGER lF,lT ! Actual index for DpF/T, BetaF/T, RhoStF/T, zStF/T
       INTEGER n,i,k
@@ -4259,8 +4259,8 @@ END SUBROUTINE InitAirflowNetworkData
       Interval=ActLh*OwnHeightFactor/NrInt
 
       DO 400 n=1,NrInt
-        hghtsF(n+1)=AirflowNetworkLinkageData(il)%NodeHeights(1)+Interval*(n-0.5)
-        hghtsT(n+1)=AirflowNetworkLinkageData(il)%NodeHeights(2)+Interval*(n-0.5)
+        hghtsF(n+1)=AirflowNetworkLinkageData(il)%NodeHeights(1)+Interval*(n-0.5d0)
+        hghtsT(n+1)=AirflowNetworkLinkageData(il)%NodeHeights(2)+Interval*(n-0.5d0)
 400   CONTINUE
       hghtsF(1)=AirflowNetworkLinkageData(il)%NodeHeights(1)
       hghtsT(1)=AirflowNetworkLinkageData(il)%NodeHeights(2)
@@ -4356,8 +4356,8 @@ END SUBROUTINE InitAirflowNetworkData
       RhoProfT(i+Pprof)=RhoStT(lT)+BetaT(lT)*delzT
 
       DpProf(i+Pprof)=DpF(lF)-DpT(lT) &
-          -G*(RhoStF(lF)*delzF+BetaF(lF)*delzF**2/2.0) &
-          +G*(RhoStT(lT)*delzT+BetaT(lT)*delzT**2/2.0)
+          -G*(RhoStF(lF)*delzF+BetaF(lF)*delzF**2/2.0d0) &
+          +G*(RhoStT(lT)*delzT+BetaT(lT)*delzT**2/2.0d0)
  900  CONTINUE
 
       RETURN
@@ -4391,8 +4391,8 @@ END SUBROUTINE InitAirflowNetworkData
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-          REAL, PARAMETER :: PI = 3.14159265358979323846
-          REAL, PARAMETER :: PSea=101325.0
+          REAL(r64), PARAMETER :: PI = 3.14159265358979323846d0
+          REAL(r64), PARAMETER :: PSea=101325.0d0
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4403,48 +4403,48 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!      REAL RhoOut ! air density outside [kg/m3]
-      REAL G ! gravity field strength [N/kg]
-      REAL RhoL1,RhoL2 ! Air density [kg/m3]
-      REAL Pbz ! Pbarom at entrance level [Pa]
-      REAL RhoDrL(2,NumOfLinksMultiZone) ! dry air density on both sides of the link [kg/m3]
-      REAL TempL1,TempL2 ! Temp in From and To zone at link level [C]
-!      REAL Tout ! outside temperature [C]
-      REAL Xhl1,Xhl2 ! Humidity in From and To zone at link level [kg/kg]
-!      REAL Xhout ! outside humidity [kg/kg]
-      REAL Hfl(NumOfLinksMultiZone) ! Own height factor for large (slanted) openings
+!      REAL(r64) RhoOut ! air density outside [kg/m3]
+      REAL(r64) G ! gravity field strength [N/kg]
+      REAL(r64) RhoL1,RhoL2 ! Air density [kg/m3]
+      REAL(r64) Pbz ! Pbarom at entrance level [Pa]
+      REAL(r64) RhoDrL(2,NumOfLinksMultiZone) ! dry air density on both sides of the link [kg/m3]
+      REAL(r64) TempL1,TempL2 ! Temp in From and To zone at link level [C]
+!      REAL(r64) Tout ! outside temperature [C]
+      REAL(r64) Xhl1,Xhl2 ! Humidity in From and To zone at link level [kg/kg]
+!      REAL(r64) Xhout ! outside humidity [kg/kg]
+      REAL(r64) Hfl(NumOfLinksMultiZone) ! Own height factor for large (slanted) openings
       INTEGER Nl ! number of links
 
-      REAL DpF(2),DpP,DpT(2)
-      REAL H
-      REAL RhoStF(2),RhoStT(2),RhoDrDummi
-      REAL BetaStF(2),BetaStT(2)
-      REAL T,X,HSt(2)
-      REAL TzFrom,XhzFrom
-      REAL TzTo, XhzTo
-      REAL ActLh,ActLOwnh
-      REAL Pref
-      REAL PzFrom,PzTo
-      REAL RhoLd(2),RhoStd
+      REAL(r64) DpF(2),DpP,DpT(2)
+      REAL(r64) H
+      REAL(r64) RhoStF(2),RhoStT(2),RhoDrDummi
+      REAL(r64) BetaStF(2),BetaStT(2)
+      REAL(r64) T,X,HSt(2)
+      REAL(r64) TzFrom,XhzFrom
+      REAL(r64) TzTo, XhzTo
+      REAL(r64) ActLh,ActLOwnh
+      REAL(r64) Pref
+      REAL(r64) PzFrom,PzTo
+      REAL(r64) RhoLd(2),RhoStd
       INTEGER From,To,Fromz,Toz,Ltyp
       INTEGER I,ll,j,k,Pprof
       INTEGER ilayptr,OpenNum
 
-      REAL RhoREF, CONV
+      REAL(r64) RhoREF, CONV
 
       ! FLOW:
       RhoREF = PsyRhoAirFnPbTdbW(Psea,OutDryBulbTemp,OutHumRat)
 
-      CONV=Latitude*2.*PI/360.
-      G=9.780373*(1.+.0052891*(SIN(CONV))**2-.0000059*(SIN(2.*CONV))**2)
+      CONV=Latitude*2.d0*PI/360.d0
+      G=9.780373d0*(1.d0+.0052891d0*(SIN(CONV))**2-.0000059d0*(SIN(2.d0*CONV))**2)
 
-      Hfl = 1.0
+      Hfl = 1.0d0
       Pbz = OutBaroPress
       Nl = NumOfLinksMultiZone
       OpenNum=0
-      RhoLd(1)=1.2
-      RhoLd(2)=1.2
-      RhoStd=1.2
+      RhoLd(1)=1.2d0
+      RhoLd(2)=1.2d0
+      RhoStd=1.2d0
 
       DO 40 I=1,Nl
         ! Check surface tilt
@@ -4639,12 +4639,12 @@ END SUBROUTINE InitAirflowNetworkData
 
         ! IF AIR FLOWS from "From" to "To"
         Pref=Pbz+Pzfrom+DpF(1)
-        DpP=psz(Pref,RhoLd(1),0.0,0.0,H,G)
+        DpP=psz(Pref,RhoLd(1),0.0d0,0.0d0,H,G)
         DpL(1,I)=(DpF(1)-DpT(1)+DpP)
 
         ! IF AIR FLOWS from "To" to "From"
         Pref=Pbz+Pzto+DpT(1)
-        DpP=-psz(Pref,RhoLd(2),0.0,0.0,-H,G)
+        DpP=-psz(Pref,RhoLd(2),0.0d0,0.0d0,-H,G)
         DpL(2,I)=(DpF(1)-DpT(1)+DpP)
 
         IF (Ltyp.EQ.CompTypeNum_DOP) THEN
@@ -4659,7 +4659,7 @@ END SUBROUTINE InitAirflowNetworkData
 
     END SUBROUTINE PStack
 
-     REAL FUNCTION psz(Pz0,Rho0,beta,z0,z,g)
+     REAL(r64) FUNCTION psz(Pz0,Rho0,beta,z0,z,g)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Lixing Gu
@@ -4683,12 +4683,12 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-          REAL, INTENT(IN)     :: Pz0   ! Pressure at altitude z0 [Pa]
-          REAL, INTENT(IN)     :: Rho0  ! density at altitude z0 [kg/m3]
-          REAL, INTENT(IN)     :: beta  ! density gradient [kg/m4]
-          REAL, INTENT(IN)     :: z0    ! reference altitude [m]
-          REAL, INTENT(IN)     :: z     ! altitude[m]
-          REAL, INTENT(IN)     :: g     ! gravity field strength [N/kg]
+          REAL(r64), INTENT(IN)     :: Pz0   ! Pressure at altitude z0 [Pa]
+          REAL(r64), INTENT(IN)     :: Rho0  ! density at altitude z0 [kg/m3]
+          REAL(r64), INTENT(IN)     :: beta  ! density gradient [kg/m4]
+          REAL(r64), INTENT(IN)     :: z0    ! reference altitude [m]
+          REAL(r64), INTENT(IN)     :: z     ! altitude[m]
+          REAL(r64), INTENT(IN)     :: g     ! gravity field strength [N/kg]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4703,12 +4703,12 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL dz,rho
+      REAL(r64) dz,rho
 
       ! FLOW:
       dz=z-z0
-      rho=(Rho0+beta*dz/2.0)
-      Psz=-Pz0*(1.-EXP(-dz*rho*g/Pz0)) ! Differential pressure from z to z0 [Pa]
+      rho=(Rho0+beta*dz/2.0d0)
+      Psz=-Pz0*(1.d0-EXP(-dz*rho*g/Pz0)) ! Differential pressure from z to z0 [Pa]
 
       RETURN
       END FUNCTION psz
@@ -4737,16 +4737,16 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-          REAL, INTENT(IN)                 :: g     ! gravity field strength [N/kg]
-          REAL, INTENT(INOUT)  :: Rho   ! Density link level (initialized with rho zone) [kg/m3]
-          REAL, INTENT(IN)                 :: Z     ! Height of the link above the zone reference [m]
-          REAL, INTENT(INOUT)              :: T     ! temperature at link level [C]
-          REAL, INTENT(INOUT)              :: X     ! absolute humidity at link level [kg/kg]
-          REAL, INTENT(OUT)    :: Dp    ! Stackpressure to the linklevel [Pa]
+          REAL(r64), INTENT(IN)                 :: g     ! gravity field strength [N/kg]
+          REAL(r64), INTENT(INOUT)  :: Rho   ! Density link level (initialized with rho zone) [kg/m3]
+          REAL(r64), INTENT(IN)                 :: Z     ! Height of the link above the zone reference [m]
+          REAL(r64), INTENT(INOUT)              :: T     ! temperature at link level [C]
+          REAL(r64), INTENT(INOUT)              :: X     ! absolute humidity at link level [kg/kg]
+          REAL(r64), INTENT(OUT)    :: Dp    ! Stackpressure to the linklevel [Pa]
           INTEGER, INTENT(IN)              :: zone  ! Zone number
-          REAL, INTENT(IN)     :: Pz    ! Zone Pressure (reflevel) [Pa]
-          REAL, INTENT(IN)                 :: Pbz   ! Barometric pressure at entrance level [Pa]
-          REAL, INTENT(OUT)                :: RhoDr ! Air density of dry air on the link level used
+          REAL(r64), INTENT(IN)     :: Pz    ! Zone Pressure (reflevel) [Pa]
+          REAL(r64), INTENT(IN)                 :: Pbz   ! Barometric pressure at entrance level [Pa]
+          REAL(r64), INTENT(OUT)                :: RhoDr ! Air density of dry air on the link level used
                                                     ! for the concentration routine [kg/m3]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4762,13 +4762,13 @@ END SUBROUTINE InitAirflowNetworkData
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL H         ! Start Height of the layer
-      REAL BetaT     ! Temperature gradient of this layer
-      REAL BetaXfct  ! Humidity gradient factor of this layer
-      REAL BetaCfct  ! Concentration 1 gradient factor of this layer
-      REAL X0
-      REAL P,Htop,Hbot
-      REAL Rho0,Rho1,Betarho
+      REAL(r64) H         ! Start Height of the layer
+      REAL(r64) BetaT     ! Temperature gradient of this layer
+      REAL(r64) BetaXfct  ! Humidity gradient factor of this layer
+      REAL(r64) BetaCfct  ! Concentration 1 gradient factor of this layer
+      REAL(r64) X0
+      REAL(r64) P,Htop,Hbot
+      REAL(r64) Rho0,Rho1,Betarho
       INTEGER :: L=0
       INTEGER :: ilayptr=0
 
@@ -4783,7 +4783,7 @@ END SUBROUTINE InitAirflowNetworkData
         BetaXfct=0.0
         BetaCfct=0.0
         BetaRho=0.0
-        Hbot=0.0
+        Hbot=0.0d0
 
         DO WHILE (H.LT.0.0)
           ! loop until H>0 ; The start of the layer is above 0
@@ -4859,7 +4859,7 @@ END SUBROUTINE InitAirflowNetworkData
         BetaXfct=0.0
         BetaCfct=0.0
         BetaRho=0.0
-        Htop=0.0
+        Htop=0.0d0
         DO WHILE (H.GT.0.0)
           ! loop until H<0 ; The start of the layer is below the zone refplane
           L=L-9

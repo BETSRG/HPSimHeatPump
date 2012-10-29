@@ -72,9 +72,9 @@ INTEGER, PARAMETER   :: CriteriaType_Temperature      = 2
 INTEGER, PARAMETER   :: CriteriaType_HeatTransferRate = 3
 
 ! Criteria percentage limits for determining re-simulation of connected loop sides
-REAL, PARAMETER :: CriteriaDelta_MassFlowRate     = 0.001
-REAL, PARAMETER :: CriteriaDelta_Temperature      = 0.010
-REAL, PARAMETER :: CriteriaDelta_HeatTransferRate = 0.100
+REAL(r64), PARAMETER :: CriteriaDelta_MassFlowRate     = 0.001d0
+REAL(r64), PARAMETER :: CriteriaDelta_Temperature      = 0.010d0
+REAL(r64), PARAMETER :: CriteriaDelta_HeatTransferRate = 0.100d0
 
 ! Parameters for loop flow request priority,
 !     used in logic to deal with Node%MassFlowRequest for determining overall loop flow rate
@@ -135,8 +135,8 @@ INTEGER, PARAMETER :: NonIntegrated            = 2
 INTEGER, PARAMETER :: None                     = 3
 
 ! Parameters for tolerance
-REAL, PARAMETER :: LoopDemandtol          = .1    ! minimum significant loop cooling or heating demand
-REAL, PARAMETER :: DeltaTemptol           = .0001 ! minimum significant loop temperature difference
+REAL(r64), PARAMETER :: LoopDemandtol          = .1d0    ! minimum significant loop cooling or heating demand
+REAL(r64), PARAMETER :: DeltaTemptol           = .0001d0 ! minimum significant loop temperature difference
 
 ! Parameters for Component/Equipment Types  (ref: TypeOf in CompData)
 INTEGER, PARAMETER :: LoopType_NoLoop    = 0
@@ -628,10 +628,10 @@ TYPE LoopSidePumpInformation
   INTEGER                          :: BranchNum             = 0
   INTEGER                          :: CompNum               = 0
   INTEGER                          :: PumpOutletNode        = 0
-  REAL                        :: PumpFlowRate          = 0.0
-  REAL                        :: CurrentMinAvail       = 0.0
-  REAL                        :: CurrentMaxAvail       = 0.0
-  REAL                        :: PumpHeatToFluid       = 0.0
+  REAL(r64)                        :: PumpFlowRate          = 0.0d0
+  REAL(r64)                        :: CurrentMinAvail       = 0.0d0
+  REAL(r64)                        :: CurrentMaxAvail       = 0.0d0
+  REAL(r64)                        :: PumpHeatToFluid       = 0.0d0
 END TYPE LoopSidePumpInformation
 
 TYPE EquipListPtrData
@@ -663,11 +663,11 @@ TYPE CompData
   CHARACTER(len=MaxNameLength)     :: NodeNameOut           = ' '     ! Component outlet node name
   INTEGER                          :: NodeNumIn             = 0       ! Component inlet node number
   INTEGER                          :: NodeNumOut            = 0       ! Component outlet node number
-  REAL                        :: MyLoad                = 0.0   ! Distributed Load
-  REAL                        :: MaxLoad               = 0.0   ! Maximum load
-  REAL                        :: MinLoad               = 0.0   ! Minimum Load
-  REAL                        :: OptLoad               = 0.0   ! Optimal Load
-  REAL                        :: SizFac                = 0.0   ! Sizing Fraction
+  REAL(r64)                        :: MyLoad                = 0.0d0   ! Distributed Load
+  REAL(r64)                        :: MaxLoad               = 0.0d0   ! Maximum load
+  REAL(r64)                        :: MinLoad               = 0.0d0   ! Minimum Load
+  REAL(r64)                        :: OptLoad               = 0.0d0   ! Optimal Load
+  REAL(r64)                        :: SizFac                = 0.0d0   ! Sizing Fraction
   INTEGER                          :: CurOpSchemeType       = UnknownStatusOpSchemeType  !updated pointer to
                                                                       ! Plant()%OpScheme(CurOpSchemeType)...
   INTEGER                          :: NumOpSchemes          = 0       ! number of schemes held in the pointer array
@@ -675,29 +675,29 @@ TYPE CompData
                                                                 ! Plantloop()%loopside()%branch()%comp()%Opscheme(curopschemeptr)
   TYPE(OpSchemePtrData), &
        ALLOCATABLE, DIMENSION(:)   :: OpScheme                     ! Pointers to component on lists
-  REAL                        :: EquipDemand           = 0.0   ! Component load request based on inlet temp and outlet SP
+  REAL(r64)                        :: EquipDemand           = 0.0d0   ! Component load request based on inlet temp and outlet SP
   LOGICAL                          :: EMSLoadOverrideOn     = .FALSE. ! EMS is calling to override load dispatched to component
-  REAL                        :: EMSLoadOverrideValue  = 0.0   ! EMS value to use for load when overridden [W] always positive.
+  REAL(r64)                        :: EMSLoadOverrideValue  = 0.0d0   ! EMS value to use for load when overridden [W] always positive.
   INTEGER                          :: HowLoadServed         = HowMet_Unknown ! nature of component in terms of how it can meet load
-  REAL                        :: MinOutletTemp         = 0.0     ! Component exit lower limit temperature
-  REAL                        :: MaxOutletTemp         = 0.0     ! Component exit upper limit temperature
+  REAL(r64)                        :: MinOutletTemp         = 0.0     ! Component exit lower limit temperature
+  REAL(r64)                        :: MaxOutletTemp         = 0.0     ! Component exit upper limit temperature
   LOGICAL                          :: FreeCoolCntrlShutDown = .FALSE. ! true if component was shut down because of free cooling
-  REAL                        :: FreeCoolCntrlMinCntrlTemp   = 0.  ! current control temp value for free cooling controls
+  REAL(r64)                        :: FreeCoolCntrlMinCntrlTemp   = 0.D0  ! current control temp value for free cooling controls
   INTEGER                          :: FreeCoolCntrlMode     = 0 ! type of sensor used for free cooling controls
   INTEGER                          :: FreeCoolCntrlNodeNum  = 0 ! chiller condenser inlet node number for free cooling controls
   INTEGER                          :: IndexInLoopSidePumps  = 0       ! If I'm a pump, this tells my index in PL(:)%LS(:)%Pumps
-  REAL                        :: TempDesCondIn         = 0
-  REAL                        :: TempDesEvapOut        = 0
+  REAL(r64)                        :: TempDesCondIn         = 0
+  REAL(r64)                        :: TempDesEvapOut        = 0
 END TYPE CompData
 
 TYPE BranchData
   CHARACTER(len=MaxNameLength)     :: Name                  = ' '     ! Name of the branch
   INTEGER                          :: ControlType           = 0
-  REAL                        :: MinVolFlowRate        = 0.0
-  REAL                        :: MaxVolFlowRate        = 0.0
-  REAL                        :: RequestedMassFlow     = 0.0
+  REAL(r64)                        :: MinVolFlowRate        = 0.0d0
+  REAL(r64)                        :: MaxVolFlowRate        = 0.0d0
+  REAL(r64)                        :: RequestedMassFlow     = 0.0d0
   LOGICAL                          :: HasConstantSpeedBranchPump = .FALSE. ! true if branch has a constant speed branch pump
-  REAL                        :: ConstantSpeedBranchMassFlow = 0. ! nominal flow rate if constant speed branch pump on
+  REAL(r64)                        :: ConstantSpeedBranchMassFlow = 0.d0 ! nominal flow rate if constant speed branch pump on
   INTEGER                          :: BranchLevel           = 0
   INTEGER                          :: FlowErrCount          = 0       ! For recurring error counting
   INTEGER                          :: FlowErrIndex          = 0       ! For recurring error index
@@ -706,16 +706,16 @@ TYPE BranchData
   INTEGER                          :: NodeNumOut            = 0       ! Component outlet node number
   LOGICAL                          :: IsByPass              = .FALSE.
   INTEGER                          :: PumpIndex             = 0
-  REAL                        :: PumpSizFac            = 1.0
+  real(r64)                        :: PumpSizFac            = 1.0d0
   LOGICAL                          :: EMSCtrlOverrideOn     = .FALSE. ! if true, EMS is calling to override branch operation avail
-  REAL                        :: EMSCtrlOverrideValue  = 0.0   ! value set by EMS system for branch override controls
+  REAL(r64)                        :: EMSCtrlOverrideValue  = 0.0d0   ! value set by EMS system for branch override controls
   TYPE(CompData), &
        ALLOCATABLE, DIMENSION(:)   :: Comp                            ! Component type list
   LOGICAL                          :: HasPressureComponents = .FALSE.
-  REAL                        :: PressureDrop          = 0.0
+  REAL(r64)                        :: PressureDrop          = 0.0d0
   INTEGER                          :: PressureCurveType     = 0       ! Either none, pressure curve, or generic curve
   INTEGER                          :: PressureCurveIndex    = 0       ! Curve: index for pressure drop calculations
-  REAL                        :: PressureEffectiveK    = 0.0
+  REAL(r64)                        :: PressureEffectiveK    = 0.0d0
 END TYPE BranchData
 
 TYPE EquipListCompData
@@ -728,7 +728,7 @@ TYPE EquipListCompData
   INTEGER                          :: LoopSideNumPtr      ! pointer to the comp location in the data structure
   INTEGER                          :: BranchNumPtr        ! pointer to the comp location in the data structure
   INTEGER                          :: CompNumPtr         ! pointer to the comp location in the data structure
-  REAL                        :: SetPointFlowRate       = 0.0   ! COMP SETPOINT CTRL ONLY--load calculation comp flow rate
+  REAL(r64)                        :: SetPointFlowRate       = 0.0d0   ! COMP SETPOINT CTRL ONLY--load calculation comp flow rate
   CHARACTER(len=MaxNameLength)     :: DemandNodeName     = ' '     ! COMP SETPOINT CTRL ONLY--The name of each item in the list
   INTEGER                          :: DemandNodeNum        ! COMP SETPOINT CTRL ONLY--The 'keyWord' identifying each item in list
   CHARACTER(len=MaxNameLength)     :: SetPointNodeName   = ' '     ! COMP SETPOINT CTRL ONLY--The name of each item in the list
@@ -737,8 +737,8 @@ END TYPE EquipListCompData
 
 TYPE EquipOpList                          ! DSU
   CHARACTER(len=MaxNameLength)     :: Name                  = ' '    ! The name of each item in the list
-  REAL                        :: RangeUpperLimit       = 0.0    ! for range based controls
-  REAL                        :: RangeLowerLimit       = 0.0    ! for range based controls
+  REAL(r64)                        :: RangeUpperLimit       = 0.0d0    ! for range based controls
+  REAL(r64)                        :: RangeLowerLimit       = 0.0d0    ! for range based controls
   INTEGER                          :: NumComps              = 0      ! ALLOCATABLE to the schedule (for valid schedules)
   TYPE(EquipListCompData), &
        ALLOCATABLE, DIMENSION(:)   :: Comp                ! Component type list
@@ -771,24 +771,24 @@ END TYPE ConnectedLoopData                      ! DSU
 ! two-way common pipe variables
 !TYPE TwoWayCommonPipeData
 !  LOGICAL   :: SetpointOnSecondarySide  ! true if control point is demand inlet, otherwise supply inlet
-!  REAL :: CurSecCPLegFlow    !Mass flow rate in primary common pipe leg
-!  REAL :: CurPriCPLegFlow    !Mass flow rate in secondary common pipe leg
-!  REAL :: CurSectoPriFlow    !Secondary side to Primary side Mass flow rate
-!  REAL :: CurPritoSecFlow    !Primary side to Secondary side Mass flow rate
-!  REAL :: CurSecOutTemp      !Secondary outlet temperature
-!  REAL :: CurPriOutTemp      !Primary outlet temperature
-!  REAL :: CurPriInTemp       !Primary inlet temperature
-!  REAL :: CurSecInTemp       !Secondary inlet temperature
+!  REAL(r64) :: CurSecCPLegFlow    !Mass flow rate in primary common pipe leg
+!  REAL(r64) :: CurPriCPLegFlow    !Mass flow rate in secondary common pipe leg
+!  REAL(r64) :: CurSectoPriFlow    !Secondary side to Primary side Mass flow rate
+!  REAL(r64) :: CurPritoSecFlow    !Primary side to Secondary side Mass flow rate
+!  REAL(r64) :: CurSecOutTemp      !Secondary outlet temperature
+!  REAL(r64) :: CurPriOutTemp      !Primary outlet temperature
+!  REAL(r64) :: CurPriInTemp       !Primary inlet temperature
+!  REAL(r64) :: CurSecInTemp       !Secondary inlet temperature
 !  !new/missing?
-!  REAL :: mdotPriRequest     ! primary total flow request
+!  REAL(r64) :: mdotPriRequest     ! primary total flow request
 !
 !
 !END TYPE TwoWayCommonPipeData
 
 INTEGER, PARAMETER :: NumConvergenceHistoryTerms = 5
 TYPE PlantConvergencePoint
-  REAL, DIMENSION(NumConvergenceHistoryTerms) :: MassFlowRateHistory
-  REAL, DIMENSION(NumConvergenceHistoryTerms) :: TemperatureHistory
+  REAL(r64), DIMENSION(NumConvergenceHistoryTerms) :: MassFlowRateHistory
+  REAL(r64), DIMENSION(NumConvergenceHistoryTerms) :: TemperatureHistory
 END TYPE
 
 TYPE HalfLoopData
@@ -798,17 +798,17 @@ TYPE HalfLoopData
   LOGICAL                          :: SimNonZoneEquipNeeded = .TRUE.  ! Plant requests resimulate non zone Equip
   LOGICAL                          :: SimElectLoadCentrNeeded = .TRUE. ! Plant requests resimulate generators
   LOGICAL                          :: OncePerTimeStepOperations = .TRUE.
-  REAL                        :: TimeElapsed           = 0.    ! store time for dynamic updates for last time
-  REAL                        :: FlowRequest           = 0.0   ! Flow request in the half loop
-  REAL                        :: FlowRequestTemperature = 0.0  ! Average Flow request outlet Temp in the half loop
+  REAL(r64)                        :: TimeElapsed           = 0.d0    ! store time for dynamic updates for last time
+  REAL(r64)                        :: FlowRequest           = 0.0d0   ! Flow request in the half loop
+  REAL(r64)                        :: FlowRequestTemperature = 0.0d0  ! Average Flow request outlet Temp in the half loop
   ! It's necessary to hold the values here since AIR and GROUND SPs aren't associated with either a node or a SP manager
-  REAL                        :: TempSetPoint          = SensedNodeFlagValue    ! Loop temperature setpoint
-  REAL                        :: TempSetPointHi        = SensedNodeFlagValue    ! High Loop temperature setpoint
-  REAL                        :: TempSetPointLO        = SensedNodeFlagValue    ! Low Loop temperature setpoint
-  REAL                        :: TempInterfaceTankOutlet  = 0.0   ! Used by interface manager in common pipe simulation
+  REAL(r64)                        :: TempSetPoint          = SensedNodeFlagValue    ! Loop temperature setpoint
+  REAL(r64)                        :: TempSetPointHi        = SensedNodeFlagValue    ! High Loop temperature setpoint
+  REAL(r64)                        :: TempSetPointLO        = SensedNodeFlagValue    ! Low Loop temperature setpoint
+  REAL(r64)                        :: TempInterfaceTankOutlet  = 0.0d0   ! Used by interface manager in common pipe simulation
                                                                       ! This is the temperature at the loop outlet linterface
                                                                       ! with half-loop capacitance and pump heat accounted for.
-  REAL                        :: LastTempInterfaceTankOutlet  = 0.0
+  REAL(r64)                        :: LastTempInterfaceTankOutlet  = 0.0d0
   CHARACTER(len=MaxNameLength)     :: BranchList            = ' '     ! Branch list name for the half loop
   CHARACTER(len=MaxNameLength)     :: ConnectList           = ' '     ! Connector list name for the half loop
   INTEGER                          :: TotalBranches         = 0       ! Total number of branches on the half loop
@@ -824,12 +824,12 @@ TYPE HalfLoopData
   LOGICAL                          :: BranchPumpsExist      = .FALSE. ! logical flag indication branch pumps exist on half loop
   TYPE(LoopSidePumpInformation), &
        ALLOCATABLE, DIMENSION(:)   :: Pumps
-  REAL                        :: TotalPumpHeat         = 0.0   ! [W] total heat addition by the pumps to place in "tank"
+  REAL(r64)                        :: TotalPumpHeat         = 0.0d0   ! [W] total heat addition by the pumps to place in "tank"
   LOGICAL                          :: ByPassExists          = .FALSE.
   LOGICAL                          :: InletNodeSetPt        = .FALSE.
   LOGICAL                          :: OutletNodeSetPt       = .FALSE.
   LOGICAL                          :: EMSCtrl               = .FALSE.
-  REAL                        :: EMSValue
+  REAL(r64)                        :: EMSValue
   LOGICAL                          :: FlowRestrictionFlag   = .FALSE. ! Max available flow at the outlet of the half loop
                                                                       ! is less than max available flow at inlet
   INTEGER                          :: FlowLock              = 0       !DSU
@@ -844,15 +844,15 @@ TYPE HalfLoopData
        ALLOCATABLE, DIMENSION(:)   :: Mixer                           ! Data for splitter on branch (if any)
   LOGICAL                          :: HasPressureComponents = .FALSE.
   LOGICAL                          :: HasParallelPressComps = .FALSE.
-  REAL                        :: PressureDrop          = 0.0
-  REAL                        :: PressureEffectiveK    = 0.0
+  REAL(r64)                        :: PressureDrop          = 0.0d0
+  REAL(r64)                        :: PressureEffectiveK    = 0.0d0
   INTEGER                          :: errCount_LoadWasntDist= 0
   INTEGER                          :: errIndex_LoadWasntDist= 0
   INTEGER                          :: errCount_LoadRemains  = 0
   INTEGER                          :: errIndex_LoadRemains  = 0
-  REAL                        :: LoopSideInlet_TankTemp = 0.0
-  TYPE(PlantConvergencePoint)      :: InletNode = PlantConvergencePoint(0.0,0.0)
-  TYPE(PlantConvergencePoint)      :: OutletNode = PlantConvergencePoint(0.0,0.0)
+  REAL(r64)                        :: LoopSideInlet_TankTemp = 0.0d0
+  TYPE(PlantConvergencePoint)      :: InletNode = PlantConvergencePoint(0.0d0,0.0d0)
+  TYPE(PlantConvergencePoint)      :: OutletNode = PlantConvergencePoint(0.0d0,0.0d0)
 END TYPE HalfLoopData
 
 TYPE PlantLoopData
@@ -868,18 +868,18 @@ TYPE PlantLoopData
 
   INTEGER                          :: TempSetPointNodeNum   = 0       ! Node Number for Loop Temp SP associated with SP manager
   INTEGER                          :: MaxBranch             = 0       ! Max branches in the loop
-  REAL                        :: MinTemp               = 0.0   ! Minimum temperature allowed in the loop
-  REAL                        :: MaxTemp               = 0.0   ! Maximum temperature allowed in the loop
+  REAL(r64)                        :: MinTemp               = 0.0d0   ! Minimum temperature allowed in the loop
+  REAL(r64)                        :: MaxTemp               = 0.0d0   ! Maximum temperature allowed in the loop
   INTEGER                          :: MinTempErrIndex       = 0       ! for recurring too cold errors
   INTEGER                          :: MaxTempErrIndex       = 0       ! for recurring too hot errors
-  REAL                        :: MinVolFlowRate        = 0.0   ! Minimum flow rate allowed in the loop
-  REAL                        :: MaxVolFlowRate        = 0.0   ! Maximum flow rate allowed in the loop
-  REAL                        :: MinMassFlowRate        = 0.0   ! Minimum flow rate allowed in the loop
-  REAL                        :: MaxMassFlowRate        = 0.0   ! Maximum flow rate allowed in the loop
-  REAL                        :: Volume                = 0.0   ! Volume of the fluid in the loop
-  REAL                        :: Mass                  = 0.0   ! Mass of the fluid in the loop
+  REAL(r64)                        :: MinVolFlowRate        = 0.0d0   ! Minimum flow rate allowed in the loop
+  REAL(r64)                        :: MaxVolFlowRate        = 0.0d0   ! Maximum flow rate allowed in the loop
+  REAL(r64)                        :: MinMassFlowRate        = 0.0d0   ! Minimum flow rate allowed in the loop
+  REAL(r64)                        :: MaxMassFlowRate        = 0.0d0   ! Maximum flow rate allowed in the loop
+  REAL(r64)                        :: Volume                = 0.0d0   ! Volume of the fluid in the loop
+  REAL(r64)                        :: Mass                  = 0.0d0   ! Mass of the fluid in the loop
   LOGICAL                          :: EMSCtrl               = .FALSE.
-  REAL                        :: EMSValue              = 0.0
+  REAL(r64)                        :: EMSValue              = 0.0d0
   ! Loop Inlet and Outlet Nodes
   TYPE(HalfLoopData), &
        ALLOCATABLE, DIMENSION(:)   :: LoopSide                        ! Half loop data (Demand side or Supply Side)
@@ -903,14 +903,14 @@ TYPE PlantLoopData
   INTEGER                          :: EconPlacement         = 0 !DSU review, should move these out of here
   INTEGER                          :: EconBranch            = 0 !DSU review, should move these out of here
   INTEGER                          :: EconComp              = 0 !DSU review, should move these out of here
-  REAL                        :: EconControlTempDiff   = 0.0 !DSU review, should move these out of here
+  REAL(r64)                        :: EconControlTempDiff   = 0.0d0 !DSU review, should move these out of here
   LOGICAL                          :: LoopHasConnectionComp = .FALSE.
   INTEGER                          :: TypeOfLoop = 0
   INTEGER                          :: PressureSimType       = 1
   LOGICAL                          :: HasPressureComponents = .FALSE.
-  REAL                        :: PressureDrop          = 0.0
+  REAL(r64)                        :: PressureDrop          = 0.0d0
   LOGICAL                          :: UsePressureForPumpCalcs = .FALSE.
-  REAL                        :: PressureEffectiveK    = 0.0
+  REAL(r64)                        :: PressureEffectiveK    = 0.0d0
 END TYPE PlantLoopData
 
 TYPE ComponentData
@@ -946,25 +946,25 @@ TYPE PlantAvailMgrData
 END TYPE PlantAvailMgrData
 
 TYPE LoopSideReportVars
-  REAL                        :: LoopSetPtDemandAtInlet = 0.0
-  REAL                        :: ThisSideLoadAlterations = 0.0
+  REAL(r64)                        :: LoopSetPtDemandAtInlet = 0.0d0
+  REAL(r64)                        :: ThisSideLoadAlterations = 0.0d0
 END TYPE
 
 TYPE ReportVars
   ! Whole loop descriptions
-  REAL                        :: CoolingDemand         = 0.   ! Plant Loop Cooling Demand, W
-  REAL                        :: HeatingDemand         = 0.   ! Plant Loop Heating Demand[W]
-  REAL                        :: DemandNotDispatched   = 0.   ! Plant Loop Demand that was not distributed [W]
-  REAL                        :: UnmetDemand           = 0.   ! Plant Loop Unmet Demand [W]
+  REAL(r64)                        :: CoolingDemand         = 0.d0   ! Plant Loop Cooling Demand, W
+  REAL(r64)                        :: HeatingDemand         = 0.d0   ! Plant Loop Heating Demand[W]
+  REAL(r64)                        :: DemandNotDispatched   = 0.d0   ! Plant Loop Demand that was not distributed [W]
+  REAL(r64)                        :: UnmetDemand           = 0.d0   ! Plant Loop Unmet Demand [W]
 
   ! Loop side data
   TYPE(LoopSideReportVars), DIMENSION(2) :: LoopSide
 
-  REAL                        :: BypassFrac            = 0.   ! Debug Variable
-  REAL                        :: InletNodeFlowrate     = 0.   ! Debug Variable
-  REAL                        :: InletNodeTemperature  = 0.   ! Debug Variable
-  REAL                        :: OutletNodeFlowrate    = 0.   ! Debug Variable
-  REAL                        :: OutletNodeTemperature = 0.   ! Debug Variable
+  REAL(r64)                        :: BypassFrac            = 0.d0   ! Debug Variable
+  REAL(r64)                        :: InletNodeFlowrate     = 0.d0   ! Debug Variable
+  REAL(r64)                        :: InletNodeTemperature  = 0.d0   ! Debug Variable
+  REAL(r64)                        :: OutletNodeFlowrate    = 0.d0   ! Debug Variable
+  REAL(r64)                        :: OutletNodeTemperature = 0.d0   ! Debug Variable
   INTEGER                          :: LastLoopSideSimulated = 0
 END TYPE ReportVars
 
@@ -985,7 +985,7 @@ TYPE MeterData
   INTEGER                          :: ReportVarIndex        = 0
   INTEGER                          :: ReportVarIndexType    = 0
   INTEGER                          :: ReportVarType         = 0
-  REAL                        :: CurMeterReading       = 0.0
+  REAL(r64)                        :: CurMeterReading       = 0.0d0
 END TYPE MeterData
 
 TYPE SubSubcomponentData  !data for an individual component
@@ -1000,20 +1000,20 @@ TYPE SubSubcomponentData  !data for an individual component
   LOGICAL                          :: MeteredVarsFound      = .FALSE.
   INTEGER                          :: NumMeteredVars        = 0
   INTEGER                          :: EnergyTransComp       = 0       !1=EnergyTransfer, 0=No EnergyTransfer - Reporting flag
-  REAL                        :: TotPlantSupplyElec    = 0.0
-  REAL                        :: PlantSupplyElecEff    = 0.0
-  REAL                        :: PeakPlantSupplyElecEff= 0.0
-  REAL                        :: TotPlantSupplyGas     = 0.0
-  REAL                        :: PlantSupplyGasEff     = 0.0
-  REAL                        :: PeakPlantSupplyGasEff = 0.0
-  REAL                        :: TotPlantSupplyPurch   = 0.0
-  REAL                        :: PlantSupplyPurchEff   = 0.0
-  REAL                        :: PeakPlantSupplyPurchEff=0.0
-  REAL                        :: TotPlantSupplyOther   = 0.0
-  REAL                        :: PlantSupplyOtherEff   = 0.0
-  REAL                        :: PeakPlantSupplyOtherEff=0.0
-  REAL                        :: Capacity              = 0.0
-  REAL                        :: Efficiency            = 0.0
+  REAL(r64)                        :: TotPlantSupplyElec    = 0.0d0
+  REAL(r64)                        :: PlantSupplyElecEff    = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyElecEff= 0.0d0
+  REAL(r64)                        :: TotPlantSupplyGas     = 0.0d0
+  REAL(r64)                        :: PlantSupplyGasEff     = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyGasEff = 0.0d0
+  REAL(r64)                        :: TotPlantSupplyPurch   = 0.0d0
+  REAL(r64)                        :: PlantSupplyPurchEff   = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyPurchEff=0.0d0
+  REAL(r64)                        :: TotPlantSupplyOther   = 0.0d0
+  REAL(r64)                        :: PlantSupplyOtherEff   = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyOtherEff=0.0d0
+  REAL(r64)                        :: Capacity              = 0.0d0
+  REAL(r64)                        :: Efficiency            = 0.0d0
   INTEGER                          :: OpMode                = 0
   TYPE(MeterData),ALLOCATABLE, &
                    DIMENSION(:)    :: MeteredVar                      ! Index of energy output report data
@@ -1034,23 +1034,23 @@ TYPE SubcomponentData  !data for an individual component
   LOGICAL                          :: ON                    = .TRUE.  ! TRUE = designated component or operation scheme available
   INTEGER                          :: NumMeteredVars        = 0
   INTEGER                          :: EnergyTransComp       = 0       ! 1=EnergyTransfer, 0=No EnergyTransfer - Reporting flag
-  REAL                        :: Capacity              = 0.0
-  REAL                        :: Efficiency            = 0.0
+  REAL(r64)                        :: Capacity              = 0.0d0
+  REAL(r64)                        :: Efficiency            = 0.0d0
   INTEGER                          :: OpMode                = 0
-  REAL                        :: TotPlantSupplyElec    = 0.0
-  REAL                        :: PlantSupplyElecEff    = 0.0
-  REAL                        :: PeakPlantSupplyElecEff= 0.0
-  REAL                        :: TotPlantSupplyGas     = 0.0
-  REAL                        :: PlantSupplyGasEff     = 0.0
-  REAL                        :: PeakPlantSupplyGasEff = 0.0
-  REAL                        :: TotPlantSupplyPurch   = 0.0
-  REAL                        :: PlantSupplyPurchEff   = 0.0
-  REAL                        :: PeakPlantSupplyPurchEff=0.0
-  REAL                        :: TotPlantSupplyOther   = 0.0
-  REAL                        :: PlantSupplyOtherEff   = 0.0
-  REAL                        :: PeakPlantSupplyOtherEff=0.0
+  REAL(r64)                        :: TotPlantSupplyElec    = 0.0d0
+  REAL(r64)                        :: PlantSupplyElecEff    = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyElecEff= 0.0d0
+  REAL(r64)                        :: TotPlantSupplyGas     = 0.0d0
+  REAL(r64)                        :: PlantSupplyGasEff     = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyGasEff = 0.0d0
+  REAL(r64)                        :: TotPlantSupplyPurch   = 0.0d0
+  REAL(r64)                        :: PlantSupplyPurchEff   = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyPurchEff=0.0d0
+  REAL(r64)                        :: TotPlantSupplyOther   = 0.0d0
+  REAL(r64)                        :: PlantSupplyOtherEff   = 0.0d0
+  REAL(r64)                        :: PeakPlantSupplyOtherEff=0.0d0
   INTEGER                          :: AirSysToPlantPtr      = 0       ! 0=No plant connection, >0 = index to AirSysToPlant array
-  REAL                        :: LoopLoadFrac          = 0.0
+  REAL(r64)                        :: LoopLoadFrac          = 0.0d0
   TYPE(MeterData), &
          ALLOCATABLE, DIMENSION(:) :: MeteredVar                      !Index of energy output report data
   Type (SubSubcomponentData), &
@@ -1075,11 +1075,11 @@ TYPE ReportCompData
   INTEGER                          :: NodeNumOut            = 0       ! Component outlet node number
   INTEGER                          :: NumMeteredVars        = 0
   INTEGER                          :: NumSubComps           = 0
-  REAL                        :: LoopLoadFrac          = 0.0   ! Fraction of loop load met by component
-  REAL                        :: TotPlantSupplyElec    = 0.0
-  REAL                        :: TotPlantSupplyGas     = 0.0
-  REAL                        :: TotPlantSupplyPurch   = 0.0
-  REAL                        :: TotPlantSupplyOther   = 0.0
+  REAL(r64)                        :: LoopLoadFrac          = 0.0d0   ! Fraction of loop load met by component
+  REAL(r64)                        :: TotPlantSupplyElec    = 0.0d0
+  REAL(r64)                        :: TotPlantSupplyGas     = 0.0d0
+  REAL(r64)                        :: TotPlantSupplyPurch   = 0.0d0
+  REAL(r64)                        :: TotPlantSupplyOther   = 0.0d0
   TYPE(PlantConnection)            :: ConnectPlant                    ! Index of energy output report data
   TYPE(MeterData), &
        ALLOCATABLE, DIMENSION(:)   :: MeteredVar                      ! Index of energy output report data
@@ -1102,13 +1102,13 @@ TYPE ReportLoopData
   CHARACTER(len=MaxNameLength)     :: NodeNameIn            = ' '     ! Node name for the inlet to this loop
   INTEGER                          :: NodeNumOut            = 0       ! Node number for the outlet to this loop
   CHARACTER(len=MaxNameLength)     :: NodeNameOut           = ' '     ! Node name for the outlet to this loop
-  REAL                        :: Electric              = 0.0
-  REAL                        :: Gas                   = 0.0
-  REAL                        :: Purchased             = 0.0
-  REAL                        :: OtherEnergy           = 0.0
+  REAL(r64)                        :: Electric              = 0.0d0
+  REAL(r64)                        :: Gas                   = 0.0d0
+  REAL(r64)                        :: Purchased             = 0.0d0
+  REAL(r64)                        :: OtherEnergy           = 0.0d0
   INTEGER                          :: TotalBranches         = 0       ! Total number of branches on the loop
-  REAL                        :: LoopVentLoad          = 0.0
-  REAL                        :: VentLoadFrac          = 0.0
+  REAL(r64)                        :: LoopVentLoad          = 0.0d0
+  REAL(r64)                        :: VentLoadFrac          = 0.0d0
   TYPE (ReportBranchData), &
          ALLOCATABLE, DIMENSION(:) :: Branch                          ! Branch data
 END TYPE ReportLoopData
@@ -1128,7 +1128,7 @@ END TYPE
 INTEGER                            :: NumPipes              = 0       ! Total number of pipes
 INTEGER                            :: NumPlantPipes         = 0       ! Total number of plant pipes
 INTEGER                            :: NumCondPipes          = 0       ! Total number of condenser pipes
-REAL                          :: EconLoadMet           = 0.0   ! Load met by Economizer
+REAL(r64)                          :: EconLoadMet           = 0.0d0   ! Load met by Economizer
 INTEGER                            :: TotNumLoops           = 0       ! number of plant and condenser loops
 INTEGER                            :: TotNumHalfLoops       = 0       ! number of half loops (2 * TotNumLoops)
 LOGICAL                            :: PlantSizeNotComplete  = .TRUE.
@@ -1150,14 +1150,14 @@ INTEGER :: PlantManageSubIterations = 0 ! tracks plant iterations to characteriz
 INTEGER :: PlantManageHalfLoopCalls = 0 ! tracks number of half loop calls
 
 ! two-way common pipe variables
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecCPLegFlow    !Mass flow rate in primary common pipe leg
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriCPLegFlow    !Mass flow rate in secondary common pipe leg
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSectoPriFlow    !Secondary side to Primary side Mass flow rate
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPritoSecFlow    !Primary side to Secondary side Mass flow rate
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecOutTemp      !Secondary outlet temperature
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriOutTemp      !Primary outlet temperature
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriInTemp       !Primary inlet temperature
-!REAL,SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecInTemp       !Secondary inlet temperature
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecCPLegFlow    !Mass flow rate in primary common pipe leg
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriCPLegFlow    !Mass flow rate in secondary common pipe leg
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSectoPriFlow    !Secondary side to Primary side Mass flow rate
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPritoSecFlow    !Primary side to Secondary side Mass flow rate
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecOutTemp      !Secondary outlet temperature
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriOutTemp      !Primary outlet temperature
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurPriInTemp       !Primary inlet temperature
+!REAL(r64),SAVE,ALLOCATABLE,DIMENSION(:)    :: CurSecInTemp       !Secondary inlet temperature
 
 TYPE (PipeData),          ALLOCATABLE, DIMENSION(:) :: Pipe
 TYPE (PlantLoopData),     ALLOCATABLE, DIMENSION(:) :: PlantLoop
@@ -1218,8 +1218,8 @@ INTEGER,             INTENT(OUT)  :: LoopNum
 INTEGER,             INTENT(OUT)  :: LoopSideNum
 INTEGER,             INTENT(OUT)  :: BranchNum
 INTEGER,             INTENT(OUT)  :: CompNum
-REAL, OPTIONAL, INTENT(IN)   :: LowLimitTemp
-REAL, OPTIONAL, INTENT(IN)   :: HighLimitTemp
+REAL(r64), OPTIONAL, INTENT(IN)   :: LowLimitTemp
+REAL(r64), OPTIONAL, INTENT(IN)   :: HighLimitTemp
 INTEGER,  OPTIONAL,  INTENT(OUT)  :: CountMatchPlantLoops
 INTEGER,  OPTIONAL,  INTENT(IN)   :: InletNodeNumber
 LOGICAL, OPTIONAL,   INTENT(INOUT):: errFlag

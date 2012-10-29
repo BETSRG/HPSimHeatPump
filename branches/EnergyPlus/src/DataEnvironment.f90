@@ -33,9 +33,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
 
           ! MODULE PARAMETER DEFINITIONS:
-REAL, PARAMETER :: EarthRadius = 6356000. ! Radius of the Earth (m)
-REAL, PARAMETER :: AtmosphericTempGradient = 0.0065 ! Standard atmospheric air temperature gradient (K/m)
-REAL, PARAMETER :: SunIsUpValue = .00001 ! if Cos Zenith Angle of the sun is >= this value, the sun is "up"
+REAL(r64), PARAMETER :: EarthRadius = 6356000.d0 ! Radius of the Earth (m)
+REAL(r64), PARAMETER :: AtmosphericTempGradient = 0.0065d0 ! Standard atmospheric air temperature gradient (K/m)
+REAL(r64), PARAMETER :: SunIsUpValue = .00001d0 ! if Cos Zenith Angle of the sun is >= this value, the sun is "up"
 
           ! DERIVED TYPE DEFINITIONS:
           ! na
@@ -44,81 +44,81 @@ REAL, PARAMETER :: SunIsUpValue = .00001 ! if Cos Zenith Angle of the sun is >= 
           ! na
 
           ! MODULE VARIABLE DECLARATIONS:
-REAL :: BeamSolarRad            ! Current beam normal solar irradiance
+REAL(r64) :: BeamSolarRad            ! Current beam normal solar irradiance
 LOGICAL   :: EMSBeamSolarRadOverrideOn = .FALSE. ! EMS flag for beam normal solar irradiance
-REAL :: EMSBeamSolarRadOverrideValue ! EMS override value for beam normal solar irradiance
+REAL(r64) :: EMSBeamSolarRadOverrideValue ! EMS override value for beam normal solar irradiance
 INTEGER   :: DayOfMonth              ! Current day of the month
 INTEGER   :: DayOfMonthTomorrow      ! Tomorrow's day of the month
 INTEGER   :: DayOfWeek               ! Current day of the week (Sunday=1, Monday=2, ...)
 INTEGER   :: DayOfWeekTomorrow       ! Tomorrow's day of the week (Sunday=1, Monday=2, ...)
 INTEGER   :: DayOfYear               ! Current day of the year (01JAN=1, 02JAN=2, ...)
 INTEGER   :: DayOfYear_Schedule      ! Schedule manager always assumes leap years...
-REAL :: DifSolarRad             ! Current sky diffuse solar horizontal irradiance
+REAL(r64) :: DifSolarRad             ! Current sky diffuse solar horizontal irradiance
 LOGICAL   :: EMSDifSolarRadOverrideOn = .FALSE. ! EMS flag for sky diffuse solar horizontal irradiance
-REAL :: EMSDifSolarRadOverrideValue ! EMS override value for sky diffuse solar horizontal irradiance
+REAL(r64) :: EMSDifSolarRadOverrideValue ! EMS override value for sky diffuse solar horizontal irradiance
 INTEGER   :: DSTIndicator            ! Daylight Saving Time Indicator (1=yes, 0=no) for Today
-REAL :: Elevation               ! Elevation of this building site
+REAL(r64) :: Elevation               ! Elevation of this building site
 LOGICAL   :: EndMonthFlag            ! Set to true on last day of month
-REAL :: GndReflectanceForDayltg ! Ground visible reflectance for use in daylighting calc
-REAL :: GndReflectance          ! Ground visible reflectance from input
-REAL :: GndSolarRad             ! Current ground reflected radiation
-REAL :: GroundTemp              ! Current ground temperature {C}
-REAL :: GroundTempKelvin        ! Current ground temperature {K}
-REAL :: GroundTempFC            ! Current ground temperature defined for F or C factor method {C}
-REAL :: GroundTemp_Surface      ! Current surface ground temperature {C}
-REAL :: GroundTemp_Deep         ! Current deep ground temperature
-REAL, DIMENSION(12)    :: PubGroundTempSurface ! All 12 Surf Gnd Temps (assigned in Weather Mgr, used in PlantPipeHeatTransfer)
+REAL(r64) :: GndReflectanceForDayltg ! Ground visible reflectance for use in daylighting calc
+REAL(r64) :: GndReflectance          ! Ground visible reflectance from input
+REAL(r64) :: GndSolarRad             ! Current ground reflected radiation
+REAL(r64) :: GroundTemp              ! Current ground temperature {C}
+REAL(r64) :: GroundTempKelvin        ! Current ground temperature {K}
+REAL(r64) :: GroundTempFC            ! Current ground temperature defined for F or C factor method {C}
+REAL(r64) :: GroundTemp_Surface      ! Current surface ground temperature {C}
+REAL(r64) :: GroundTemp_Deep         ! Current deep ground temperature
+REAL(r64), DIMENSION(12)    :: PubGroundTempSurface ! All 12 Surf Gnd Temps (assigned in Weather Mgr, used in PlantPipeHeatTransfer)
 LOGICAL :: PubGroundTempSurfFlag   ! Flag for if Surf Ground Temps Exist in idf  (assigned, used same as PubGroundTempSurface)
 INTEGER   :: HolidayIndex            ! Indicates whether current day is a holiday and if so what type
                                      ! HolidayIndex=(0-no holiday, 1-holiday type 1, ...)
 INTEGER   :: HolidayIndexTomorrow    ! Tomorrow's Holiday Index
 LOGICAL   :: IsRain                  ! Surfaces are wet for this time interval
 LOGICAL   :: IsSnow                  ! Snow on the ground for this time interval
-REAL :: Latitude                ! Latitude of building location
-REAL :: Longitude               ! Longitude of building location
+REAL(r64) :: Latitude                ! Latitude of building location
+REAL(r64) :: Longitude               ! Longitude of building location
 INTEGER   :: Month                   ! Current calendar month
 INTEGER   :: MonthTomorrow           ! Tomorrow's calendar month
-REAL :: OutBaroPress            ! Current outdoor air barometric pressure
-REAL :: OutDryBulbTemp          ! Current outdoor air dry bulb temperature
+REAL(r64) :: OutBaroPress            ! Current outdoor air barometric pressure
+REAL(r64) :: OutDryBulbTemp          ! Current outdoor air dry bulb temperature
 LOGICAL   :: EMSOutDryBulbOverrideOn = .FALSE. ! EMS flag for outdoor air dry bulb temperature
-REAL :: EMSOutDryBulbOverrideValue ! EMS override value for outdoor air dry bulb temperature
-REAL :: OutHumRat               ! Current outdoor air humidity ratio
-REAL :: OutRelHum               ! Current outdoor relative humidity [%]
-REAL :: OutRelHumValue          ! Current outdoor relative humidity value [0.0-1.0]
+REAL(r64) :: EMSOutDryBulbOverrideValue ! EMS override value for outdoor air dry bulb temperature
+REAL(r64) :: OutHumRat               ! Current outdoor air humidity ratio
+REAL(r64) :: OutRelHum               ! Current outdoor relative humidity [%]
+REAL(r64) :: OutRelHumValue          ! Current outdoor relative humidity value [0.0-1.0]
 LOGICAL   :: EMSOutRelHumOverrideOn = .FALSE. ! EMS flag for outdoor relative humidity value
-REAL :: EMSOutRelHumOverrideValue ! EMS override value for outdoor relative humidity value
-REAL :: OutEnthalpy             ! Current outdoor enthalpy
-REAL :: OutAirDensity           ! Current outdoor air density
-REAL :: OutWetBulbTemp          ! Current outdoor air wet bulb temperature
-REAL :: OutDewPointTemp         ! Current outdoor dewpoint temperature
+REAL(r64) :: EMSOutRelHumOverrideValue ! EMS override value for outdoor relative humidity value
+REAL(r64) :: OutEnthalpy             ! Current outdoor enthalpy
+REAL(r64) :: OutAirDensity           ! Current outdoor air density
+REAL(r64) :: OutWetBulbTemp          ! Current outdoor air wet bulb temperature
+REAL(r64) :: OutDewPointTemp         ! Current outdoor dewpoint temperature
 LOGICAL   :: EMSOutDewPointTempOverrideOn = .FALSE. ! EMS flag for outdoor dewpoint temperature
-REAL :: EMSOutDewPointTempOverrideValue ! EMS override value for outdoor dewpoint temperature
-REAL :: SkyTemp                 ! Current sky temperature {C}
-REAL :: SkyTempKelvin           ! Current sky temperature {K}
-REAL :: LiquidPrecipitation     ! Current liquid precipitation amount (rain) {mm}
+REAL(r64) :: EMSOutDewPointTempOverrideValue ! EMS override value for outdoor dewpoint temperature
+REAL(r64) :: SkyTemp                 ! Current sky temperature {C}
+REAL(r64) :: SkyTempKelvin           ! Current sky temperature {K}
+REAL(r64) :: LiquidPrecipitation     ! Current liquid precipitation amount (rain) {mm}
 LOGICAL   :: SunIsUp                 ! True when Sun is over horizon, False when not
-REAL :: WindDir                 ! Current outdoor air wind direction
+REAL(r64) :: WindDir                 ! Current outdoor air wind direction
 LOGICAL   :: EMSWindDirOverrideOn = .FALSE. ! EMS flag for outdoor air wind direction
-REAL :: EMSWindDirOverrideValue ! EMS override value for outdoor air wind direction
-REAL :: WindSpeed               ! Current outdoor air wind speed
+REAL(r64) :: EMSWindDirOverrideValue ! EMS override value for outdoor air wind direction
+REAL(r64) :: WindSpeed               ! Current outdoor air wind speed
 LOGICAL   :: EMSWindSpeedOverrideOn = .FALSE. ! EMS flag for outdoor air wind speed
-REAL :: EMSWindSpeedOverrideValue ! EMS override value for outdoor air wind speed
-REAL :: WaterMainsTemp          ! Current water mains temperature
+REAL(r64) :: EMSWindSpeedOverrideValue ! EMS override value for outdoor air wind speed
+REAL(r64) :: WaterMainsTemp          ! Current water mains temperature
 INTEGER   :: Year                    ! Current calendar year of the simulation
 INTEGER   :: YearTomorrow            ! Tomorrow's calendar year of the simulation
-REAL, DIMENSION(3)  :: SOLCOS   ! Solar direction cosines at current time step
-REAL :: CloudFraction           ! Fraction of sky covered by clouds
-REAL :: HISKF                   ! Exterior horizontal illuminance from sky (lux).
-REAL :: HISUNF                  ! Exterior horizontal beam illuminance (lux)
-REAL :: HISUNFnorm              ! Exterior beam normal illuminance (lux)
-REAL :: PDIRLW                  ! Luminous efficacy (lum/W) of beam solar radiation
-REAL :: PDIFLW                  ! Luminous efficacy (lum/W) of sky diffuse solar radiation
-REAL :: SkyClearness            ! Sky clearness (see subr. DayltgLuminousEfficacy)
-REAL :: SkyBrightness           ! Sky brightness (see subr. DayltgLuminousEfficacy)
-REAL :: StdBaroPress =101325. ! Standard "atmospheric pressure" based on elevation (ASHRAE HOF p6.1)
-REAL :: StdRhoAir               ! Standard "rho air" set in WeatherManager - based on StdBaroPress
-REAL :: TimeZoneNumber          ! Time Zone Number of building location
-REAL :: TimeZoneMeridian        ! Standard Meridian of TimeZone
+REAL(r64), DIMENSION(3)  :: SOLCOS   ! Solar direction cosines at current time step
+REAL(r64) :: CloudFraction           ! Fraction of sky covered by clouds
+REAL(r64) :: HISKF                   ! Exterior horizontal illuminance from sky (lux).
+REAL(r64) :: HISUNF                  ! Exterior horizontal beam illuminance (lux)
+REAL(r64) :: HISUNFnorm              ! Exterior beam normal illuminance (lux)
+REAL(r64) :: PDIRLW                  ! Luminous efficacy (lum/W) of beam solar radiation
+REAL(r64) :: PDIFLW                  ! Luminous efficacy (lum/W) of sky diffuse solar radiation
+REAL(r64) :: SkyClearness            ! Sky clearness (see subr. DayltgLuminousEfficacy)
+REAL(r64) :: SkyBrightness           ! Sky brightness (see subr. DayltgLuminousEfficacy)
+REAL(r64) :: StdBaroPress =101325.d0 ! Standard "atmospheric pressure" based on elevation (ASHRAE HOF p6.1)
+REAL(r64) :: StdRhoAir               ! Standard "rho air" set in WeatherManager - based on StdBaroPress
+REAL(r64) :: TimeZoneNumber          ! Time Zone Number of building location
+REAL(r64) :: TimeZoneMeridian        ! Standard Meridian of TimeZone
 CHARACTER(len=MaxNameLength*2) :: EnvironmentName ! Current environment name (longer for weather file names)
 CHARACTER(len=20)  :: CurMnDyHr    ! Current Month/Day/Hour timestamp info
 CHARACTER(len=5)   :: CurMnDy      ! Current Month/Day timestamp info
@@ -130,18 +130,18 @@ INTEGER :: TotalOverallSimDays     ! Count of all possible simulation days in al
 INTEGER :: MaxNumberSimYears       ! Maximum number of simulation years requested in all RunPeriod statements
 INTEGER :: RunPeriodStartDayOfWeek ! Day of week of the first day of the run period. (or design day - day of week)
 
-REAL :: CosSolarDeclinAngle     ! Cosine of the solar declination angle
-REAL :: EquationOfTime          ! Value of the equation of time formula
-REAL :: SinLatitude             ! Sine of Latitude
-REAL :: CosLatitude             ! Cosine of Latitude
-REAL :: SinSolarDeclinAngle     ! Sine of the solar declination angle
+REAL(r64) :: CosSolarDeclinAngle     ! Cosine of the solar declination angle
+REAL(r64) :: EquationOfTime          ! Value of the equation of time formula
+REAL(r64) :: SinLatitude             ! Sine of Latitude
+REAL(r64) :: CosLatitude             ! Cosine of Latitude
+REAL(r64) :: SinSolarDeclinAngle     ! Sine of the solar declination angle
 
-REAL :: WeatherFileWindModCoeff = 1.5863  ! =(WindBLHeight/WindSensorHeight)**WindExp for conditions at the weather station
-REAL :: WeatherFileTempModCoeff = 0.0     ! =AtmosphericTempGradient*EarthRadius*SensorHeight/(EarthRadius+SensorHeight)
+REAL(r64) :: WeatherFileWindModCoeff = 1.5863d0  ! =(WindBLHeight/WindSensorHeight)**WindExp for conditions at the weather station
+REAL(r64) :: WeatherFileTempModCoeff = 0.0d0     ! =AtmosphericTempGradient*EarthRadius*SensorHeight/(EarthRadius+SensorHeight)
 
-REAL :: SiteWindExp = 0.22                ! Exponent for the wind velocity profile at the site
-REAL :: SiteWindBLHeight = 370.           ! Boundary layer height for the wind velocity profile at the site (m)
-REAL :: SiteTempGradient = 0.0065         ! Air temperature gradient coefficient (K/m)
+REAL(r64) :: SiteWindExp = 0.22d0                ! Exponent for the wind velocity profile at the site
+REAL(r64) :: SiteWindBLHeight = 370.d0           ! Boundary layer height for the wind velocity profile at the site (m)
+REAL(r64) :: SiteTempGradient = 0.0065d0         ! Air temperature gradient coefficient (K/m)
 
 LOGICAL :: GroundTempObjInput=.false.         ! Ground temperature object input
 LOGICAL :: GroundTemp_SurfaceObjInput=.false. ! Surface ground temperature object input
@@ -189,15 +189,15 @@ FUNCTION OutDryBulbTempAt(Z) RESULT(LocalOutDryBulbTemp)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Z                     ! Height above ground (m)
-  REAL        :: LocalOutDryBulbTemp   ! Return result for function (C)
+  REAL(r64), INTENT(IN) :: Z                     ! Height above ground (m)
+  REAL(r64)        :: LocalOutDryBulbTemp   ! Return result for function (C)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: BaseTemp                          ! Base temperature at Z = 0 (C)
+  REAL(r64) :: BaseTemp                          ! Base temperature at Z = 0 (C)
 
   BaseTemp = OutDryBulbTemp + WeatherFileTempModCoeff
 
-  IF (SiteTempGradient == 0.0) THEN
+  IF (SiteTempGradient == 0.0d0) THEN
     LocalOutDryBulbTemp = OutDryBulbTemp
   ELSE IF (Z <= 0.0) THEN
     LocalOutDryBulbTemp = BaseTemp
@@ -229,11 +229,11 @@ FUNCTION OutWetBulbTempAt(Z) RESULT(LocalOutWetBulbTemp)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Z                     ! Height above ground (m)
-  REAL        :: LocalOutWetBulbTemp   ! Return result for function (C)
+  REAL(r64), INTENT(IN) :: Z                     ! Height above ground (m)
+  REAL(r64)        :: LocalOutWetBulbTemp   ! Return result for function (C)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: BaseTemp                          ! Base temperature at Z = 0 (C)
+  REAL(r64) :: BaseTemp                          ! Base temperature at Z = 0 (C)
 
   BaseTemp = OutWetBulbTemp + WeatherFileTempModCoeff
 
@@ -270,15 +270,15 @@ FUNCTION OutDewPointTempAt(Z) RESULT(LocalOutDewPointTemp)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Z                     ! Height above ground (m)
-  REAL        :: LocalOutDewPointTemp  ! Return result for function (C)
+  REAL(r64), INTENT(IN) :: Z                     ! Height above ground (m)
+  REAL(r64)        :: LocalOutDewPointTemp  ! Return result for function (C)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: BaseTemp                          ! Base temperature at Z = 0 (C)
+  REAL(r64) :: BaseTemp                          ! Base temperature at Z = 0 (C)
 
   BaseTemp = OutDewPointTemp + WeatherFileTempModCoeff
 
-  IF (SiteTempGradient == 0.0) THEN
+  IF (SiteTempGradient == 0.0d0) THEN
     LocalOutDewPointTemp = OutDewPointTemp
   ELSE IF (Z <= 0.0) THEN
     LocalOutDewPointTemp = BaseTemp
@@ -311,12 +311,12 @@ FUNCTION WindSpeedAt(Z) RESULT(LocalWindSpeed)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Z                ! Height above ground (m)
-  REAL        :: LocalWindSpeed   ! Return result for function (m/s)
+  REAL(r64), INTENT(IN) :: Z                ! Height above ground (m)
+  REAL(r64)        :: LocalWindSpeed   ! Return result for function (m/s)
 
   IF (Z <= 0.0) THEN
-    LocalWindSpeed = 0.0
-  ELSE IF (SiteWindExp == 0.0) THEN
+    LocalWindSpeed = 0.0d0
+  ELSE IF (SiteWindExp == 0.0d0) THEN
     LocalWindSpeed = WindSpeed
   ELSE
     !  [Met] - at meterological Station, Height of measurement is usually 10m above ground
@@ -350,24 +350,24 @@ FUNCTION OutBaroPressAt(Z) RESULT(LocalAirPressure)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Z                ! Height above ground (m)
-  REAL             :: LocalAirPressure ! Return result for function (Pa)
+  REAL(r64), INTENT(IN) :: Z                ! Height above ground (m)
+  REAL(r64)             :: LocalAirPressure ! Return result for function (Pa)
 
             ! FNCTION PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: StdGravity    = 9.80665   ! The acceleration of gravity at the sea level (m/s2)
-    REAL, PARAMETER :: AirMolarMass  = 0.028964  ! Molar mass of Earth's air (kg/mol)
-    REAL, PARAMETER :: GasConstant   = 8.31432   ! Molar gas constant (J/Mol-K)
-    REAL, PARAMETER :: TempGradient  = -0.0065   ! Molecular-scale temperature gradient (K/m)
-    REAL, PARAMETER :: GeopotentialH = 0.0       ! Geopotential height (zero within 11km from the sea level) (m)
+    REAL(r64), PARAMETER :: StdGravity    = 9.80665d0   ! The acceleration of gravity at the sea level (m/s2)
+    REAL(r64), PARAMETER :: AirMolarMass  = 0.028964d0  ! Molar mass of Earth's air (kg/mol)
+    REAL(r64), PARAMETER :: GasConstant   = 8.31432d0   ! Molar gas constant (J/Mol-K)
+    REAL(r64), PARAMETER :: TempGradient  = -0.0065d0   ! Molecular-scale temperature gradient (K/m)
+    REAL(r64), PARAMETER :: GeopotentialH = 0.0d0       ! Geopotential height (zero within 11km from the sea level) (m)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: BaseTemp                         ! Base temperature at Z
+  REAL(r64) :: BaseTemp                         ! Base temperature at Z
 
   BaseTemp = OutDryBulbTempAt(Z) + KelvinConv
 
   IF (Z <= 0.0) THEN
-    LocalAirPressure = 0.0
-  ELSE IF (SiteTempGradient == 0.0) THEN
+    LocalAirPressure = 0.0d0
+  ELSE IF (SiteTempGradient == 0.0d0) THEN
     LocalAirPressure = OutBaroPress
   ELSE
     LocalAirPressure = StdBaroPress * (BaseTemp / (BaseTemp + TempGradient * (Z - GeopotentialH)))** &
@@ -402,9 +402,9 @@ SUBROUTINE SetOutBulbTempAt(NumItems, Heights, DryBulb, WetBulb)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: NumItems
-  REAL, INTENT(IN), DIMENSION(:) :: Heights
-  REAL, INTENT(INOUT), DIMENSION(:) :: DryBulb
-  REAL, INTENT(INOUT), DIMENSION(:) :: WetBulb
+  REAL(r64), INTENT(IN), DIMENSION(:) :: Heights
+  REAL(r64), INTENT(INOUT), DIMENSION(:) :: DryBulb
+  REAL(r64), INTENT(INOUT), DIMENSION(:) :: WetBulb
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -417,21 +417,21 @@ SUBROUTINE SetOutBulbTempAt(NumItems, Heights, DryBulb, WetBulb)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   integer :: i    ! Loop Control
-  REAL :: BaseDryTemp, BaseWetTemp         ! Base temperature at Z = 0 (C)
-  REAL :: Z ! Centroid value
+  REAL(r64) :: BaseDryTemp, BaseWetTemp         ! Base temperature at Z = 0 (C)
+  REAL(r64) :: Z ! Centroid value
 
 
   BaseDryTemp = OutDryBulbTemp + WeatherFileTempModCoeff
   BaseWetTemp = OutWetBulbTemp + WeatherFileTempModCoeff
 
 
-  IF (SiteTempGradient == 0.0) THEN
+  IF (SiteTempGradient == 0.0d0) THEN
      DryBulb = OutDryBulbTemp
      WetBulb = OutWetBulbTemp
   ELSE
      DO i=1, NumItems
         Z = Heights(i)
-        IF (Z <= 0.0) THEN
+        IF (Z <= 0.0d0) THEN
            DryBulb(i) = BaseDryTemp
            WetBulb(i) = BaseWetTemp
         ELSE

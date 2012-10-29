@@ -79,8 +79,8 @@ INTEGER, PARAMETER :: WP_SkyTAlgorithmA        = 4 ! place holder
 INTEGER, PARAMETER :: GregorianToJulian        = 1 ! JGDate argument for Gregorian to Julian Date conversion
 INTEGER, PARAMETER :: JulianToGregorian        = 2 ! JGDate argument for Julian to Gregorian Date conversion
 
-REAL,  PARAMETER :: Sigma=5.6697d-8 ! Stefan-Boltzmann constant
-REAL,  PARAMETER :: TKelvin=KelvinConv  ! conversion from Kelvin to Celsius
+REAL(r64),  PARAMETER :: Sigma=5.6697d-8 ! Stefan-Boltzmann constant
+REAL(r64),  PARAMETER :: TKelvin=KelvinConv  ! conversion from Kelvin to Celsius
 
 CHARACTER(len=*),  PARAMETER :: Blank=' '
 CHARACTER(len=*),  PARAMETER, DIMENSION(7) :: DaysOfWeek=(/"SUNDAY   ","MONDAY   ","TUESDAY  ", &
@@ -127,14 +127,14 @@ END TYPE EnvironmentData
 
 TYPE DesignDayData
   CHARACTER(len=MaxNameLength) :: Title = Blank     ! Environment name
-  REAL :: MaxDryBulb               = 0.0     ! Maximum Dry-Bulb Temperature (C)
-  REAL :: DailyDBRange             = 0.0     ! Daily Temperature Range (deltaC)
-  REAL :: HumIndValue              = 0.0     ! Humidity Indicating Value at Max Dry-bulb Temperature
+  REAL(r64) :: MaxDryBulb               = 0.0     ! Maximum Dry-Bulb Temperature (C)
+  REAL(r64) :: DailyDBRange             = 0.0     ! Daily Temperature Range (deltaC)
+  REAL(r64) :: HumIndValue              = 0.0     ! Humidity Indicating Value at Max Dry-bulb Temperature
   INTEGER   :: HumIndType               = 0       ! Humidity Indicating type  (see Parameters)
-  REAL :: PressBarom               = 0.0     ! Atmospheric/Barometric Pressure (Pascals)
-  REAL :: WindSpeed                = 0.0     ! Wind Speed (m/s)
-  REAL :: WindDir                  = 0.0     ! Wind Direction (degrees clockwise from North, N=0, E=90, S=180, W=270)
-  REAL :: SkyClear                 = 0.0     ! Sky Clearness (0 to 1)
+  REAL(r64) :: PressBarom               = 0.0     ! Atmospheric/Barometric Pressure (Pascals)
+  REAL(r64) :: WindSpeed                = 0.0     ! Wind Speed (m/s)
+  REAL(r64) :: WindDir                  = 0.0     ! Wind Direction (degrees clockwise from North, N=0, E=90, S=180, W=270)
+  REAL(r64) :: SkyClear                 = 0.0     ! Sky Clearness (0 to 1)
   INTEGER :: RainInd                    = 0       ! Rain Indicator (1 = raining and surfaces are wet, else 0)
   INTEGER :: SnowInd                    = 0       ! Snow Indicator (1 = snow on ground, else  0)
   INTEGER :: DayOfMonth                 = 0       ! Day of Month ( 1 - 31 )
@@ -148,9 +148,9 @@ TYPE DesignDayData
                                                   !    relative humidity (%) or wet-bulb range multipliers per HumIndType
   INTEGER :: BeamSolarSchPtr            = 0       ! Schedule pointer to a day schedule for beam solar
   INTEGER :: DiffuseSolarSchPtr         = 0       ! Schedule pointer to a day schedule for diffuse solar
-  REAL :: TauB                     = 0.0     ! beam pseudo optical depth for ASHRAE tau model
-  REAL :: TauD                     = 0.0     ! diffuse pseudo optical depth for ASHRAE tau model
-  REAL :: DailyWBRange             = 0.0     ! daily range of wetbulb (deltaC)
+  REAL(r64) :: TauB                     = 0.0     ! beam pseudo optical depth for ASHRAE tau model
+  REAL(r64) :: TauD                     = 0.0     ! diffuse pseudo optical depth for ASHRAE tau model
+  REAL(r64) :: DailyWBRange             = 0.0     ! daily range of wetbulb (deltaC)
 END TYPE DesignDayData
 
 TYPE RunPeriodData
@@ -188,9 +188,9 @@ TYPE DayWeatherVariables                ! Derived Type for Storing Weather "Head
   INTEGER :: DayOfWeek                  = 0       ! Day of week for weather data
   INTEGER :: DaylightSavingIndex        = 0       ! Daylight Saving Time Period indicator (0=no,1=yes)
   INTEGER :: HolidayIndex               = 0       ! Holiday indicator (0=no holiday, non-zero=holiday type)
-  REAL    :: SinSolarDeclinAngle        = 0.0     ! Sine of the solar declination angle
-  REAL    :: CosSolarDeclinAngle        = 0.0     ! Cosine of the solar declination angle
-  REAL    :: EquationOfTime             = 0.0     ! Value of the equation of time formula
+  REAL(r64)    :: SinSolarDeclinAngle        = 0.0     ! Sine of the solar declination angle
+  REAL(r64)    :: CosSolarDeclinAngle        = 0.0     ! Cosine of the solar declination angle
+  REAL(r64)    :: EquationOfTime             = 0.0     ! Value of the equation of time formula
 END TYPE DayWeatherVariables
 
 TYPE SpecialDayData
@@ -239,22 +239,22 @@ END TYPE
 TYPE MissingData          ! This Derived type carries the default missing data
                           ! for those data elements that would be best replaced
                           ! with the previous hour's data for missing data.
-  REAL :: DryBulb      =0.0 ! Dry Bulb Temperature (C)
-  REAL :: DewPoint     =0.0 ! Dew Point Temperature (C)
+  REAL(r64) :: DryBulb      =0.0 ! Dry Bulb Temperature (C)
+  REAL(r64) :: DewPoint     =0.0 ! Dew Point Temperature (C)
   INTEGER   :: RelHumid     =0   ! Relative Humidity (%)
-  REAL :: StnPres      =0.0 ! Atmospheric Pressure (Pa)
+  REAL(r64) :: StnPres      =0.0 ! Atmospheric Pressure (Pa)
   INTEGER   :: WindDir      =0   ! Wind Direction (deg)
-  REAL :: WindSpd      =0.0 ! Wind Speed/Velocity (m/s)
+  REAL(r64) :: WindSpd      =0.0 ! Wind Speed/Velocity (m/s)
   INTEGER   :: TotSkyCvr    =0   ! Total Sky Cover (tenths)
   INTEGER   :: OpaqSkyCvr   =0   ! Opaque Sky Cover (tenths)
-  REAL :: Visibility   =0.0 ! Visibility (km)
+  REAL(r64) :: Visibility   =0.0 ! Visibility (km)
   INTEGER   :: Ceiling      =0   ! Ceiling Height (m)
   INTEGER   :: PrecipWater  =0   ! Precipitable Water (mm)
-  REAL :: AerOptDepth  =0.0 ! Aerosol Optical Depth
+  REAL(r64) :: AerOptDepth  =0.0 ! Aerosol Optical Depth
   INTEGER   :: SnowDepth    =0   ! Snow Depth (cm)
   INTEGER   :: DaysLastSnow =0   ! Number of Days since last snow
-  REAL :: Albedo       =0.0 ! Albedo
-  REAL :: LiquidPrecip =0.0 ! Rain/Liquid Precipitation (mm)
+  REAL(r64) :: Albedo       =0.0 ! Albedo
+  REAL(r64) :: LiquidPrecip =0.0 ! Rain/Liquid Precipitation (mm)
 END TYPE
 
 TYPE MissingDataCounts    ! This Derived type carries the counts of missing data
@@ -340,25 +340,25 @@ Character(len=100) :: LocationTitle=Blank   ! Location Title from input File
 LOGICAL :: LocationGathered=.false.        ! flag to show if Location exists on Input File (we assume one is there and
                                            ! correct on weather file)
 CHARACTER(len=100) :: WeatherFileLocationTitle=Blank ! Location Title from Weather File
-REAL  :: WeatherFileLatitude  = 0.0
-REAL  :: WeatherFileLongitude = 0.0
-REAL  :: WeatherFileTimeZone  = 0.0
-REAL  :: WeatherFileElevation = 0.0
+REAL(r64)  :: WeatherFileLatitude  = 0.0
+REAL(r64)  :: WeatherFileLongitude = 0.0
+REAL(r64)  :: WeatherFileTimeZone  = 0.0
+REAL(r64)  :: WeatherFileElevation = 0.0
 INTEGER :: WeatherFileUnitNumber           ! File unit number for the weather file
-REAL, DIMENSION(12) :: GroundTemps=(/18.,18.,18.,18.,18.,18.,18.,18.,18.,18.,18.,18./)         ! Ground Temperatures
-REAL, DIMENSION(12) :: GroundTempsFC = 0.                                     ! Ground Temperatures for F or C factor method
-REAL, DIMENSION(12) :: SurfaceGroundTemps=(/13.,13.,13.,13.,13.,13.,13.,13.,13.,13.,13.,13./)  ! Surface Ground Temperatures
-REAL, DIMENSION(12) :: DeepGroundTemps=(/16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16./)     ! Deep Ground Temperatures
-REAL, DIMENSION(12) :: GroundReflectances=(/.2,.2,.2,.2,.2,.2,.2,.2,.2,.2,.2,.2/)   !User Specified Ground Reflectances
-REAL :: SnowGndRefModifier=1.0           ! Modifier to ground reflectance during snow
-REAL :: SnowGndRefModifierForDayltg=1.0  ! Modifier to ground reflectance during snow for daylighting
+REAL(r64), DIMENSION(12) :: GroundTemps=(/18.,18.,18.,18.,18.,18.,18.,18.,18.,18.,18.,18./)         ! Ground Temperatures
+REAL(r64), DIMENSION(12) :: GroundTempsFC = 0.                                     ! Ground Temperatures for F or C factor method
+REAL(r64), DIMENSION(12) :: SurfaceGroundTemps=(/13.,13.,13.,13.,13.,13.,13.,13.,13.,13.,13.,13./)  ! Surface Ground Temperatures
+REAL(r64), DIMENSION(12) :: DeepGroundTemps=(/16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16.,16./)     ! Deep Ground Temperatures
+REAL(r64), DIMENSION(12) :: GroundReflectances=(/.2,.2,.2,.2,.2,.2,.2,.2,.2,.2,.2,.2/)   !User Specified Ground Reflectances
+REAL(r64) :: SnowGndRefModifier=1.0           ! Modifier to ground reflectance during snow
+REAL(r64) :: SnowGndRefModifierForDayltg=1.0  ! Modifier to ground reflectance during snow for daylighting
 INTEGER :: WaterMainsTempsMethod = 0          ! Water mains temperature calculation method
 INTEGER :: WaterMainsTempsSchedule = 0        ! Water mains temperature schedule
-REAL :: WaterMainsTempsAnnualAvgAirTemp = 0.0 ! Annual average outdoor air temperature (C)
-REAL :: WaterMainsTempsMaxDiffAirTemp = 0.0   ! Maximum difference in monthly average outdoor air temperatures (deltaC)
+REAL(r64) :: WaterMainsTempsAnnualAvgAirTemp = 0.0 ! Annual average outdoor air temperature (C)
+REAL(r64) :: WaterMainsTempsMaxDiffAirTemp = 0.0   ! Maximum difference in monthly average outdoor air temperatures (deltaC)
 LOGICAL :: wthFCGroundTemps=.false.
-REAL :: RainAmount=0.0
-REAL :: SnowAmount=0.0
+REAL(r64) :: RainAmount=0.0d0
+REAL(r64) :: SnowAmount=0.0d0
 
 TYPE (DayWeatherVariables) :: TodayVariables=       &  ! Today's daily weather variables
     DayWeatherVariables(               & ! Derived Type for Storing Weather "Header" Data
@@ -429,60 +429,60 @@ INTEGER :: NumWPSkyTemperatures=0   ! Number of WeatherProperty:SkyTemperature i
 
 LOGICAL,   ALLOCATABLE, DIMENSION (:,:) :: TodayIsRain         ! Rain indicator, true=rain
 LOGICAL,   ALLOCATABLE, DIMENSION (:,:) :: TodayIsSnow         ! Snow indicator, true=snow
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayRainAmount     ! ficitious indicator of Rain
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodaySnowAmount     ! ficitious indicator of Snow
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutDryBulbTemp   ! Dry bulb temperature of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutWetBulbTemp   ! Wet bulb temperature of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutDewPointTemp  ! Dew Point Temperature of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutBaroPress     ! Barometric pressure of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutHumRat        ! Humidity ratio of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayOutRelHum        ! Relative Humidity of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayWindSpeed        ! Wind speed of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayWindDir          ! Wind direction of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodaySkyTemp          ! Sky temperature
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayHorizIRSky       ! Horizontal IR from Sky
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayBeamSolarRad     ! Direct normal solar irradiance
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayDifSolarRad      ! Sky diffuse horizontal solar irradiance
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayAlbedo           ! Albedo
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TodayLiquidPrecip     ! Liquid Precipitation Depth
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayRainAmount     ! ficitious indicator of Rain
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodaySnowAmount     ! ficitious indicator of Snow
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutDryBulbTemp   ! Dry bulb temperature of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutWetBulbTemp   ! Wet bulb temperature of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutDewPointTemp  ! Dew Point Temperature of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutBaroPress     ! Barometric pressure of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutHumRat        ! Humidity ratio of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayOutRelHum        ! Relative Humidity of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayWindSpeed        ! Wind speed of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayWindDir          ! Wind direction of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodaySkyTemp          ! Sky temperature
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayHorizIRSky       ! Horizontal IR from Sky
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayBeamSolarRad     ! Direct normal solar irradiance
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayDifSolarRad      ! Sky diffuse horizontal solar irradiance
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayAlbedo           ! Albedo
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TodayLiquidPrecip     ! Liquid Precipitation Depth
 
 LOGICAL,   ALLOCATABLE, DIMENSION (:,:) :: TomorrowIsRain         ! Rain indicator, true=rain
 LOGICAL,   ALLOCATABLE, DIMENSION (:,:) :: TomorrowIsSnow         ! Snow indicator, true=snow
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowRainAmount     ! ficitious indicator of Rain
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowSnowAmount     ! ficitious indicator of Snow
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutDryBulbTemp   ! Dry bulb temperature of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutDewPointTemp  ! Dew Point Temperature of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutBaroPress     ! Barometric pressure of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutRelHum        ! Relative Humidity of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowWindSpeed        ! Wind speed of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowWindDir          ! Wind direction of outside air
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowSkyTemp          ! Sky temperature
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowHorizIRSky       ! Horizontal IR from Sky
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowBeamSolarRad     ! Direct normal solar irradiance
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowDifSolarRad      ! Sky diffuse horizontal solar irradiance
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowAlbedo           ! Albedo
-REAL, ALLOCATABLE, DIMENSION (:,:) :: TomorrowLiquidPrecip     ! Liquid Precipitation Depth
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowRainAmount     ! ficitious indicator of Rain
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowSnowAmount     ! ficitious indicator of Snow
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutDryBulbTemp   ! Dry bulb temperature of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutDewPointTemp  ! Dew Point Temperature of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutBaroPress     ! Barometric pressure of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowOutRelHum        ! Relative Humidity of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowWindSpeed        ! Wind speed of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowWindDir          ! Wind direction of outside air
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowSkyTemp          ! Sky temperature
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowHorizIRSky       ! Horizontal IR from Sky
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowBeamSolarRad     ! Direct normal solar irradiance
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowDifSolarRad      ! Sky diffuse horizontal solar irradiance
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowAlbedo           ! Albedo
+REAL(r64), ALLOCATABLE, DIMENSION (:,:) :: TomorrowLiquidPrecip     ! Liquid Precipitation Depth
 
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: DDDBRngModifier        ! Design Day Dry-bulb Temperature Range Modifier
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: DDHumIndModifier       ! Design Day relative humidity values
+REAL(r64), ALLOCATABLE, DIMENSION (:,:,:) :: DDDBRngModifier        ! Design Day Dry-bulb Temperature Range Modifier
+REAL(r64), ALLOCATABLE, DIMENSION (:,:,:) :: DDHumIndModifier       ! Design Day relative humidity values
                                                                     !   or wet-bulb modifiers (per HumIndType)
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: DDBeamSolarValues       ! Design Day Beam Solar Values
-REAL, ALLOCATABLE, DIMENSION (:,:,:) :: DDDiffuseSolarValues    ! Design Day Relative Humidity Values
+REAL(r64), ALLOCATABLE, DIMENSION (:,:,:) :: DDBeamSolarValues       ! Design Day Beam Solar Values
+REAL(r64), ALLOCATABLE, DIMENSION (:,:,:) :: DDDiffuseSolarValues    ! Design Day Relative Humidity Values
 
 INTEGER :: RptIsRain=0            ! Rain Report Value
 INTEGER :: RptIsSnow=0            ! Snow Report Value
 INTEGER :: RptDayType=0           ! DayType Report Value
 
 
-REAL :: HrAngle      =0.0 ! Current Hour Angle
-REAL :: SolarAltitudeAngle =0.0     ! Angle of Solar Altitude (degrees)
-REAL :: SolarAzimuthAngle  =0.0     ! Angle of Solar Azimuth (degrees)
-REAL :: HorizIRSky         =0.0     ! Horizontal Infrared Radiation Intensity (W/m2)
-REAL :: TimeStepFraction =0.0 ! Fraction of hour each time step represents
+REAL(r64) :: HrAngle      =0.0 ! Current Hour Angle
+REAL(r64) :: SolarAltitudeAngle =0.0     ! Angle of Solar Altitude (degrees)
+REAL(r64) :: SolarAzimuthAngle  =0.0     ! Angle of Solar Azimuth (degrees)
+REAL(r64) :: HorizIRSky         =0.0     ! Horizontal Infrared Radiation Intensity (W/m2)
+REAL(r64) :: TimeStepFraction =0.0D0 ! Fraction of hour each time step represents
 INTEGER :: NumMissing=0  ! Number of hours of missing data
 LOGICAL :: StripCR=.false.  ! If true, strip last character (<cr> off each EPW line)
-REAL, ALLOCATABLE, DIMENSION(:) :: Interpolation       ! Interpolation values based on Number of Time Steps in Hour
-REAL, ALLOCATABLE, DIMENSION(:) :: SolarInterpolation  ! Solar Interpolation values based on
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: Interpolation       ! Interpolation values based on Number of Time Steps in Hour
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SolarInterpolation  ! Solar Interpolation values based on
                                                                    !      Number of Time Steps in Hour
 INTEGER, DIMENSION(12) :: EndDayOfMonth=(/31,28,31,30,31,30,31,31,30,31,30,31/)
 LOGICAL :: ErrorInWeatherFile = .false.   ! Set to TRUE when there is a problem with dates
@@ -724,12 +724,12 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
   CHARACTER(len=3) :: AlpUseRain
   CHARACTER(len=3) :: AlpUseSnow
   CHARACTER(len=100) :: kindOfRunPeriod
-  REAL :: GrossApproxAvgDryBulb
+  REAL(r64) :: GrossApproxAvgDryBulb
 
   IF (GetInputFlag) THEN
 
     CALL SetUpInterpolationValues
-    TimeStepFraction=1./REAL(NumOfTimeStepInHour,r64)
+    TimeStepFraction=1.d0/REAL(NumOfTimeStepInHour,r64)
 
     CALL OpenWeatherFile(ErrorsFound)   ! moved here because of possibility of special days on EPW file
     CALL CloseWeatherFile
@@ -863,14 +863,14 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
           IF (DoDesDaySim) THEN
             CALL ShowWarningError(RoutineName//'Adaptive Comfort being reported during design day.')
             GrossApproxAvgDryBulb=(DesDayInput(Envrn)%MaxDryBulb+  &
-               (DesDayInput(Envrn)%MaxDryBulb-DesDayInput(Envrn)%DailyDBRange))/2.0
+               (DesDayInput(Envrn)%MaxDryBulb-DesDayInput(Envrn)%DailyDBRange))/2.0d0
             IF (AdaptiveComfortRequested_ASH55) CALL CalcThermalComfortAdaptiveASH55(.true.,.false.,GrossApproxAvgDryBulb)
             IF (AdaptiveComfortRequested_CEN15251) CALL CalcThermalComfortAdaptiveCEN15251(.true.,.false.,GrossApproxAvgDryBulb)
           ENDIF
         ELSE
           IF (DoWeathSim .or. DoDesDaySim) THEN
-            IF (AdaptiveComfortRequested_ASH55) CALL CalcThermalComfortAdaptiveASH55(.true.,.true.,0.0)
-            IF (AdaptiveComfortRequested_CEN15251) CALL CalcThermalComfortAdaptiveCEN15251(.true.,.true.,0.0)
+            IF (AdaptiveComfortRequested_ASH55) CALL CalcThermalComfortAdaptiveASH55(.true.,.true.,0.0d0)
+            IF (AdaptiveComfortRequested_CEN15251) CALL CalcThermalComfortAdaptiveCEN15251(.true.,.true.,0.0d0)
           ENDIF
         ENDIF
       ENDIF
@@ -1886,14 +1886,14 @@ SUBROUTINE InitializeWeather(PrintEnvrnStamp)
     NumMissing=0   ! Only used in Weather file environments
                    ! Start over missing values with each environment
     Missing%StnPres      = StdBaroPress  ! Initial "missing" value
-    Missing%DryBulb      = 6.       ! Initial "missing" value
-    Missing%DewPoint     = 3.       ! Initial "missing" value
-    Missing%RelHumid     = 50       ! Initial "missing" value
-    Missing%WindSpd      = 2.5      ! Initial "missing" value
+    Missing%DryBulb      = 6.d0       ! Initial "missing" value
+    Missing%DewPoint     = 3.d0       ! Initial "missing" value
+    Missing%RelHumid     = 50d0       ! Initial "missing" value
+    Missing%WindSpd      = 2.5d0      ! Initial "missing" value
     Missing%WindDir      = 180        ! Initial "missing" value
     Missing%TotSkyCvr    = 5          ! Initial "missing" value
     Missing%OpaqSkyCvr   = 5          ! Initial "missing" value
-    Missing%Visibility   = 777.7    ! Initial "missing" value
+    Missing%Visibility   = 777.7d0    ! Initial "missing" value
     Missing%Ceiling      = 77777      ! Initial "missing" value
     Missing%PrecipWater  = 0          ! Initial "missing" value
     Missing%AerOptDepth  = 0          ! Initial "missing" value
@@ -2256,8 +2256,8 @@ SUBROUTINE SetCurrentWeather
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER,SAVE :: NextHour
-  REAL TempVal
-  REAL TempDPVal
+  REAL(r64) TempVal
+  REAL(r64) TempDPVal
 
           ! FLOW:
 
@@ -2278,7 +2278,7 @@ SUBROUTINE SetCurrentWeather
   WRITE(CurMnDy,MnDyFmt) Month,DayOfMonth
 
   WeightNow=Interpolation(TimeStep)
-  WeightPreviousHour = 1.0-WeightNow
+  WeightPreviousHour = 1.0d0-WeightNow
 
   CurrentTime=(HourOfDay-1)+TimeStep*(TimeStepFraction)
   SimTimeSteps = (DayOfSim-1)*24*NumOfTimeStepInHour + (HourOfDay-1)*NumOfTimeStepInHour + TimeStep
@@ -2305,9 +2305,9 @@ SUBROUTINE SetCurrentWeather
   OutDewPointTemp= TodayOutDewPointTemp(HourOfDay,TimeStep)
   IF (EMSOutDewPointTempOverrideOn) OutDewPointTemp = EMSOutDewPointTempOverrideValue
   OutRelHum      = TodayOutRelHum(HourOfDay,TimeStep)
-  OutRelHumValue = OutRelHum/100.
+  OutRelHumValue = OutRelHum/100.d0
   IF (EMSOutRelHumOverrideOn) THEN
-    OutRelHumValue = EMSOutRelHumOverrideValue/ 100.
+    OutRelHumValue = EMSOutRelHumOverrideValue/ 100.d0
     OutRelHum = EMSOutRelHumOverrideValue
   ENDIF
 
@@ -2339,7 +2339,7 @@ SUBROUTINE SetCurrentWeather
   LiquidPrecipitation = TodayLiquidPrecip(HourOfDay,TimeStep)
 
   IF (UseRainValues) THEN
-    IsRain=TodayIsRain(HourOfDay,TimeStep) !.or. LiquidPrecipitation >= .8)  ! > .8 mm
+    IsRain=TodayIsRain(HourOfDay,TimeStep) !.or. LiquidPrecipitation >= .8d0)  ! > .8 mm
   ELSE
     IsRain=.false.
   ENDIF
@@ -2350,11 +2350,11 @@ SUBROUTINE SetCurrentWeather
   ENDIF
 
   IF (IsSnow) THEN
-    GndReflectance = MAX(MIN(GndReflectance*SnowGndRefModifier,1.0),0.0)
-    GndReflectanceForDayltg = MAX(MIN(GndReflectanceForDayltg*SnowGndRefModifierForDayltg,1.0),0.0)
+    GndReflectance = MAX(MIN(GndReflectance*SnowGndRefModifier,1.0d0),0.0d0)
+    GndReflectanceForDayltg = MAX(MIN(GndReflectanceForDayltg*SnowGndRefModifierForDayltg,1.0d0),0.0d0)
   ENDIF
 
-  GndSolarRad=MAX((BeamSolarRad*SOLCOS(3) + DifSolarRad)*GndReflectance,0.0)
+  GndSolarRad=MAX((BeamSolarRad*SOLCOS(3) + DifSolarRad)*GndReflectance,0.0D0)
 
   IF (.not. SunIsUp) THEN
     DifSolarRad    = 0.0
@@ -2481,24 +2481,24 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
   TYPE HourlyWeatherData
     LOGICAL, DIMENSION(24) :: IsRain      = .false. ! Rain indicator, true=rain
     LOGICAL, DIMENSION(24) :: IsSnow      = .false. ! Snow indicator, true=snow
-    REAL, DIMENSION(24) :: OutDryBulbTemp = 0.0     ! Hourly dry bulb temperature of outside air
-    REAL, DIMENSION(24) :: OutDewPointTemp= 0.0     ! Hourly Dew Point Temperature of outside air
-    REAL, DIMENSION(24) :: OutBaroPress   = 0.0     ! Hourly barometric pressure of outside air
-    REAL, DIMENSION(24) :: OutRelHum      = 0.0     ! Hourly relative humidity
-    REAL, DIMENSION(24) :: WindSpeed      = 0.0     ! Hourly wind speed of outside air
-    REAL, DIMENSION(24) :: WindDir        = 0.0     ! Hourly wind direction of outside air
-    REAL, DIMENSION(24) :: SkyTemp        = 0.0     ! Hourly sky temperature
-    REAL, DIMENSION(24) :: HorizIRSky     = 0.0     ! Hourly Horizontal Infrared Radiation Intensity
-    REAL, DIMENSION(24) :: BeamSolarRad   = 0.0     ! Hourly direct normal solar irradiance
-    REAL, DIMENSION(24) :: DifSolarRad    = 0.0     ! Hourly sky diffuse horizontal solar irradiance
-    REAL, DIMENSION(24) :: Albedo         = 0.0     ! Albedo
-    REAL, DIMENSION(24) :: LiquidPrecip   = 0.0     ! Liquid Precipitation
+    REAL(r64), DIMENSION(24) :: OutDryBulbTemp = 0.0     ! Hourly dry bulb temperature of outside air
+    REAL(r64), DIMENSION(24) :: OutDewPointTemp= 0.0     ! Hourly Dew Point Temperature of outside air
+    REAL(r64), DIMENSION(24) :: OutBaroPress   = 0.0     ! Hourly barometric pressure of outside air
+    REAL(r64), DIMENSION(24) :: OutRelHum      = 0.0     ! Hourly relative humidity
+    REAL(r64), DIMENSION(24) :: WindSpeed      = 0.0     ! Hourly wind speed of outside air
+    REAL(r64), DIMENSION(24) :: WindDir        = 0.0     ! Hourly wind direction of outside air
+    REAL(r64), DIMENSION(24) :: SkyTemp        = 0.0     ! Hourly sky temperature
+    REAL(r64), DIMENSION(24) :: HorizIRSky     = 0.0     ! Hourly Horizontal Infrared Radiation Intensity
+    REAL(r64), DIMENSION(24) :: BeamSolarRad   = 0.0     ! Hourly direct normal solar irradiance
+    REAL(r64), DIMENSION(24) :: DifSolarRad    = 0.0     ! Hourly sky diffuse horizontal solar irradiance
+    REAL(r64), DIMENSION(24) :: Albedo         = 0.0     ! Albedo
+    REAL(r64), DIMENSION(24) :: LiquidPrecip   = 0.0     ! Liquid Precipitation
   END TYPE
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Hour
   INTEGER TS
   INTEGER WYear,WMonth,WDay,WHour,WMinute
-  REAL DryBulb,DewPoint,RelHum,AtmPress,ETHoriz,ETDirect,IRHoriz,GLBHoriz,  &
+  REAL(r64) DryBulb,DewPoint,RelHum,AtmPress,ETHoriz,ETDirect,IRHoriz,GLBHoriz,  &
        DirectRad,DiffuseRad,GLBHorizIllum,DirectNrmIllum,DiffuseHorizIllum,ZenLum,WindDir,WindSpeed,  &
        TotalSkyCover,OpaqueSkyCover,Visibility,CeilHeight,PrecipWater,    &
        AerosolOptDepth,SnowDepth,DaysSinceLastSnow,Albedo,LiquidPrecip
@@ -2510,8 +2510,8 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
   INTEGER Item
 
   TYPE (HourlyWeatherData) Wthr
-  REAL A,B,C,AVSC
-  REAL SkyTemp
+  REAL(r64) A,B,C,AVSC
+  REAL(r64) SkyTemp
   INTEGER, SAVE :: CurDayOfWeek
   LOGICAL, SAVE :: UseDayOfWeek
   LOGICAL SkipThisDay  ! Used when LeapYear is/is not in effect
@@ -2520,34 +2520,34 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
   INTEGER NumRewinds
   CHARACTER(len=40) BadRecord
   LOGICAL ErrorsFound
-  REAL,SAVE :: CurTime
-  REAL HourRep
+  REAL(r64),SAVE :: CurTime
+  REAL(r64) HourRep
   INTEGER OSky
-  REAL TDewK
-  REAL ESky
+  REAL(r64) TDewK
+  REAL(r64) ESky
   LOGICAL ErrorFound
   CHARACTER(len=20) ErrOut
   LOGICAL,SAVE :: LastHourSet  ! for Interpolation
   INTEGER NxtHour
-  REAL WtNow
-  REAL WtPrevHour
-  REAL WgtHourNow
-  REAL WgtPrevHour
-  REAL WgtNextHour
-  REAL, SAVE :: LastHrOutDryBulbTemp
-  REAL, SAVE :: LastHrOutDewPointTemp
-  REAL, SAVE :: LastHrOutBaroPress
-  REAL, SAVE :: LastHrOutRelHum
-  REAL, SAVE :: LastHrWindSpeed
-  REAL, SAVE :: LastHrWindDir
-  REAL, SAVE :: LastHrSkyTemp
-  REAL, SAVE :: LastHrHorizIRSky
-  REAL, SAVE :: LastHrBeamSolarRad
-  REAL, SAVE :: LastHrDifSolarRad
-  REAL, SAVE :: LastHrAlbedo
-  REAL, SAVE :: LastHrLiquidPrecip
-  REAL, SAVE :: NextHrBeamSolarRad
-  REAL, SAVE :: NextHrDifSolarRad
+  REAL(r64) WtNow
+  REAL(r64) WtPrevHour
+  REAL(r64) WgtHourNow
+  REAL(r64) WgtPrevHour
+  REAL(r64) WgtNextHour
+  REAL(r64), SAVE :: LastHrOutDryBulbTemp
+  REAL(r64), SAVE :: LastHrOutDewPointTemp
+  REAL(r64), SAVE :: LastHrOutBaroPress
+  REAL(r64), SAVE :: LastHrOutRelHum
+  REAL(r64), SAVE :: LastHrWindSpeed
+  REAL(r64), SAVE :: LastHrWindDir
+  REAL(r64), SAVE :: LastHrSkyTemp
+  REAL(r64), SAVE :: LastHrHorizIRSky
+  REAL(r64), SAVE :: LastHrBeamSolarRad
+  REAL(r64), SAVE :: LastHrDifSolarRad
+  REAL(r64), SAVE :: LastHrAlbedo
+  REAL(r64), SAVE :: LastHrLiquidPrecip
+  REAL(r64), SAVE :: NextHrBeamSolarRad
+  REAL(r64), SAVE :: NextHrDifSolarRad
   LOGICAL :: RecordDateMatch
   INTEGER :: JDay5Start,JDay5End,Loop,TWeekDay
 
@@ -2561,7 +2561,7 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 !     Must position file to proper day
 !     File already position to first data record
 !          Set Current Day of Week to "start of Data Period"
-    CurTime=1./REAL(NumIntervalsPerHour,r64)
+    CurTime=1.d0/REAL(NumIntervalsPerHour,r64)
     CurDayOfWeek=DataPeriods(1)%WeekDay-1
     WYear=0
     WMonth=0
@@ -2624,26 +2624,26 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
         ENDIF
         ! Do the range checks on the first set of fields -- no others.
         ErrorsFound=.false.
-        IF (DryBulb >= 99.9) &
+        IF (DryBulb >= 99.9d0) &
           CALL RangeCheck(ErrorsFound,'DryBulb Temperature','WeatherFile','Severe','>= -70',(Drybulb>=-70.), &
                         '<= 70',(DryBulb <=70.),RoundSigDigits(DryBulb,2))
-        IF (Dewpoint < 99.9) &
+        IF (Dewpoint < 99.9d0) &
           CALL RangeCheck(ErrorsFound,'DewPoint Temperature','WeatherFile','Severe','>= -70',(Dewpoint>=-70.), &
                         '<= 70',(Dewpoint <=70.),RoundSigDigits(Dewpoint,2))
-        IF (RelHum < 999.) &
+        IF (RelHum < 999.d0) &
           CALL RangeCheck(ErrorsFound,'Relative Humidity','WeatherFile','Severe','> 0',(RelHum>=0.), &
                         '<= 110',(RelHum<=110.),RoundSigDigits(RelHum,0))
-        IF (AtmPress < 999999.) &
+        IF (AtmPress < 999999.d0) &
           CALL RangeCheck(ErrorsFound,'Atmospheric Pressure','WeatherFile','Severe','> 31000',(AtmPress>31000.), &
                           '<=120000',(AtmPress<=120000.),RoundSigDigits(AtmPress,0))
-        IF (DirectRad < 9999.) &
+        IF (DirectRad < 9999.d0) &
           CALL RangeCheck(ErrorsFound,'Direct Radiation','WeatherFile','Severe','>= 0',(DirectRad>=0.))
-        IF (DiffuseRad < 9999.) &
+        IF (DiffuseRad < 9999.d0) &
           CALL RangeCheck(ErrorsFound,'Diffuse Radiation','WeatherFile','Severe','>= 0',(DiffuseRad>=0.))
-        IF (WindDir < 999.) &
+        IF (WindDir < 999.d0) &
           CALL RangeCheck(ErrorsFound,'Wind Direction','WeatherFile','Severe','>=0',(WindDir>=0.), &
                         '<=360',(WindDir<=360.),RoundSigDigits(WindDir,0))
-        IF (WindSpeed < 999.) &
+        IF (WindSpeed < 999.d0) &
           CALL RangeCheck(ErrorsFound,'Wind Speed','WeatherFile','Severe','>=0',(WindSpeed>=0.), &
                         '<=40',(WindSpeed<=40.),RoundSigDigits(WindSpeed,2))
         IF (ErrorsFound) THEN
@@ -2774,45 +2774,45 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
         ENDIF
 
 !         Set possible missing values
-        IF (ETHoriz < 0.0) ETHoriz=9999.
-        IF (ETDirect < 0.0) ETDirect=9999.
-        IF (IRHoriz <= 0.0) IRHoriz=9999.
-        IF (GLBHoriz < 0.0) GLBHoriz=9999.
+        IF (ETHoriz < 0.0) ETHoriz=9999.d0
+        IF (ETDirect < 0.0) ETDirect=9999.d0
+        IF (IRHoriz <= 0.0) IRHoriz=9999.d0
+        IF (GLBHoriz < 0.0) GLBHoriz=9999.d0
         IF (DisplayWeatherMissingDataWarnings) THEN
-          IF (DirectRad >= 9999.) THEN
+          IF (DirectRad >= 9999.d0) THEN
             Missed%DirectRad=Missed%DirectRad+1
           ENDIF
-          IF (DiffuseRad >= 9999.) THEN
+          IF (DiffuseRad >= 9999.d0) THEN
             Missed%DiffuseRad=Missed%DirectRad+1
           ENDIF
-          IF (DirectRad < 0.0) THEN
-            DirectRad=9999.
+          IF (DirectRad < 0.0d0) THEN
+            DirectRad=9999.d0
             OutOfRange%DirectRad=OutOfRange%DirectRad+1
           ENDIF
-          IF (DiffuseRad < 0.0) THEN
-            DiffuseRad=9999.
+          IF (DiffuseRad < 0.0d0) THEN
+            DiffuseRad=9999.d0
             OutOfRange%DiffuseRad=OutOfRange%DiffuseRad+1
           ENDIF
         ENDIF
-        IF (GLBHorizIllum < 0.0) GLBHorizIllum=999999.
-        IF (DirectNrmIllum < 0.0) DirectNrmIllum=999999.
-        IF (DiffuseHorizIllum < 0.0) DiffuseHorizIllum=999999.
-        IF (ZenLum < 0.0) ZenLum=99999.
-        IF (AtmPress < 0.0) AtmPress=999999.
-        IF (WindSpeed < 0.0) WindSpeed=999.
-        IF (WindDir < -360. .or. WindDir > 360.) WindDir=999.
-        IF (TotalSkyCover < 0.0) TotalSkyCover=99.
-        IF (RelHum < 0.0) RelHum=999.
-        IF (OpaqueSkyCover < 0.0) OpaqueSkyCover=99.
-        IF (Visibility < 0.0) Visibility=9999.
-        IF (CeilHeight < 0.0) CeilHeight=9999.
+        IF (GLBHorizIllum < 0.0d0) GLBHorizIllum=999999.d0
+        IF (DirectNrmIllum < 0.0d0) DirectNrmIllum=999999.d0
+        IF (DiffuseHorizIllum < 0.0d0) DiffuseHorizIllum=999999.d0
+        IF (ZenLum < 0.0d0) ZenLum=99999.d0
+        IF (AtmPress < 0.0d0) AtmPress=999999.d0
+        IF (WindSpeed < 0.0d0) WindSpeed=999.d0
+        IF (WindDir < -360.d0 .or. WindDir > 360.d0) WindDir=999.d0
+        IF (TotalSkyCover < 0.0d0) TotalSkyCover=99.d0
+        IF (RelHum < 0.0d0) RelHum=999.d0
+        IF (OpaqueSkyCover < 0.0d0) OpaqueSkyCover=99.d0
+        IF (Visibility < 0.0d0) Visibility=9999.d0
+        IF (CeilHeight < 0.0d0) CeilHeight=9999.d0
         IF (PresWeathObs < 0) PresWeathObs=9.
-        IF (PrecipWater < 0.0) PrecipWater=999.
-        IF (AerosolOptDepth < 0.0) AerosolOptDepth=999.
-        IF (SnowDepth < 0.0) SnowDepth=999.
-        IF (DaysSinceLastSnow < 0.0) DaysSinceLastSnow=99.
-        IF (Albedo < 0.0) Albedo=999.
-        IF (LiquidPrecip < 0.0) LiquidPrecip=999.
+        IF (PrecipWater < 0.0d0) PrecipWater=999.d0
+        IF (AerosolOptDepth < 0.0d0) AerosolOptDepth=999.d0
+        IF (SnowDepth < 0.0d0) SnowDepth=999.d0
+        IF (DaysSinceLastSnow < 0.0d0) DaysSinceLastSnow=99.d0
+        IF (Albedo < 0.0d0) Albedo=999.d0
+        IF (LiquidPrecip < 0.0d0) LiquidPrecip=999.d0
 
         IF (Hour == 1 .and. CurTimeStep == 1) THEN
           IF (WMonth == 2 .and. WDay == 29 .and. (.not. CurrentYearIsLeapYear .or. .not. WFAllowsLeapYears)) THEN
@@ -2846,61 +2846,61 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 
         ! Check out missing values
 
-        IF (DryBulb >= 99.9) THEN
+        IF (DryBulb >= 99.9d0) THEN
           DryBulb=Missing%DryBulb
           Missed%DryBulb=Missed%DryBulb+1
         ENDIF
-        IF (DryBulb <= -70. .or. DryBulb >= 70.) THEN
+        IF (DryBulb <= -70.d0 .or. DryBulb >= 70.d0) THEN
           OutOfRange%DryBulb=OutOfRange%DryBulb+1
         ENDIF
 
-        IF (DewPoint >= 99.9) THEN
+        IF (DewPoint >= 99.9d0) THEN
           DewPoint=Missing%DewPoint
           Missed%DewPoint=Missed%DewPoint+1
         ENDIF
-        IF (DewPoint <= -70. .or. DewPoint >= 70.) THEN
+        IF (DewPoint <= -70.d0 .or. DewPoint >= 70.d0) THEN
           OutOfRange%DewPoint=OutOfRange%DewPoint+1
         ENDIF
 
-        IF (RelHum >= 999.) THEN
+        IF (RelHum >= 999.d0) THEN
           RelHum=Missing%RelHumid
           Missed%RelHumid=Missed%RelHumid+1
         ENDIF
-        IF (RelHum < 0. .or. RelHum > 110.) THEN
+        IF (RelHum < 0.d0 .or. RelHum > 110.d0) THEN
           OutOfRange%RelHumid=OutOfRange%RelHumid+1
         ENDIF
 
-        IF (AtmPress >= 999999.) THEN
+        IF (AtmPress >= 999999.d0) THEN
           AtmPress=Missing%StnPres
           Missed%StnPres=Missed%StnPres+1
         ENDIF
-        IF (AtmPress <= 31000. .or. AtmPress > 120000.) THEN
+        IF (AtmPress <= 31000.d0 .or. AtmPress > 120000.d0) THEN
           OutOfRange%StnPres=OutOfRange%StnPres+1
           AtmPress=Missing%StnPres
         ENDIF
 
-        IF (WindDir >= 999.) THEN
+        IF (WindDir >= 999.d0) THEN
           WindDir=Missing%WindDir
           Missed%WindDir=Missed%WindDir+1
         ENDIF
-        IF (WindDir < 0. .or. WindDir > 360.) THEN
+        IF (WindDir < 0.d0 .or. WindDir > 360.d0) THEN
           OutOfRange%WindDir=OutOfRange%WindDir+1
         ENDIF
 
-        IF (WindSpeed >= 999.) THEN
+        IF (WindSpeed >= 999.d0) THEN
           WindSpeed=Missing%WindSpd
           Missed%WindSpd=Missed%WindSpd+1
         ENDIF
-        IF (WindSpeed < 0. .or. WindSpeed > 40.) THEN
+        IF (WindSpeed < 0.d0 .or. WindSpeed > 40.d0) THEN
           OutOfRange%WindSpd=OutOfRange%WindSpd+1
         ENDIF
 
-        IF (TotalSkyCover >= 99.) THEN
+        IF (TotalSkyCover >= 99.d0) THEN
           TotalSkyCover=Missing%TotSkyCvr
           Missed%TotSkyCvr=Missed%TotSkyCvr+1
         ENDIF
 
-        IF (OpaqueSkyCover >= 99.) THEN
+        IF (OpaqueSkyCover >= 99.d0) THEN
           OpaqueSkyCover=Missing%OpaqSkyCvr
           Missed%OpaqSkyCvr=Missed%OpaqSkyCvr+1
         ENDIF
@@ -2927,20 +2927,20 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 !         Missed%AerOptDepth=Missed%AerOptDepth+1
 !        ENDIF
 
-        IF (SnowDepth >= 999.) THEN
+        IF (SnowDepth >= 999.d0) THEN
           SnowDepth=Missing%SnowDepth
           Missed%SnowDepth=Missed%SnowDepth+1
         ENDIF
 
-        IF (Albedo >= 999.) THEN
+        IF (Albedo >= 999.d0) THEN
           Albedo=Missing%Albedo
           Missed%Albedo=Missed%Albedo+1
         ENDIF
 
-        IF (LiquidPrecip >= 999.) THEN
+        IF (LiquidPrecip >= 999.d0) THEN
           LiquidPrecip=Missing%LiquidPrecip
           Missed%LiquidPrecip=Missed%LiquidPrecip+1
-          LiquidPrecip=0.0
+          LiquidPrecip=0.0d0
         ENDIF
 
 
@@ -2953,7 +2953,7 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
         TomorrowOutDewPointTemp(Hour,CurTimeStep)=DewPoint
         TomorrowOutBaroPress(Hour,CurTimeStep)=AtmPress
         TomorrowOutRelHum(Hour,CurTimeStep)=RelHum
-        RelHum=RelHum*.01
+        RelHum=RelHum*.01d0
         TomorrowWindSpeed(Hour,CurTimeStep)=WindSpeed
         TomorrowWindDir(Hour,CurTimeStep)=WindDir
         TomorrowLiquidPrecip(Hour,CurTimeStep)=LiquidPrecip
@@ -2961,14 +2961,14 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 
         IF (Environment(Envrn)%WP_Type1 == 0) THEN
           ! Calculate sky temperature, use IRHoriz if not missing
-          IF (IRHoriz >= 9999.) THEN
+          IF (IRHoriz >= 9999.d0) THEN
             ! Missing, use sky cover
             OSky=OpaqueSkyCover
             TDewK=MIN(DryBulb,DewPoint)+TKelvin
-            ESky= (.787 +.764*LOG((TDewK)/TKelvin))*(1. + .0224*OSky - 0.0035*(OSky**2) + .00028*(OSky**3))
-            SkyTemp=(DryBulb+TKelvin)*(ESky**.25)-TKelvin
+            ESky= (.787d0 +.764d0*LOG((TDewK)/TKelvin))*(1.d0 + .0224d0*OSky - 0.0035d0*(OSky**2) + .00028d0*(OSky**3))
+            SkyTemp=(DryBulb+TKelvin)*(ESky**.25d0)-TKelvin
           ELSE  ! Valid IR from Sky
-            SkyTemp=(IRHoriz/Sigma)**.25 -TKelvin
+            SkyTemp=(IRHoriz/Sigma)**.25d0 -TKelvin
           ENDIF
         ELSE
           SkyTemp=0.0  ! dealt with later
@@ -2976,25 +2976,25 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 
         TomorrowSkyTemp(Hour,CurTimeStep)=SkyTemp
 
-        IF (ETHoriz >= 9999.) ETHoriz=0.0
-        IF (ETDirect >= 9999.) ETDirect=0.0
-        IF (GLBHoriz >= 9999.) GLBHoriz=0.0
-        IF (DirectRad >= 9999.) DirectRad=0.0
-        IF (DiffuseRad >= 9999.) DiffuseRad=0.0
-        IF (GLBHorizIllum >= 999900.) GLBHorizIllum=0.0
-        IF (DirectNrmIllum >= 999900.) DirectNrmIllum=0.0
-        IF (DiffuseHorizIllum >= 999900.) DiffuseHorizIllum=0.0
-        IF (ZenLum >= 99990.) ZenLum=0.0
+        IF (ETHoriz >= 9999.d0) ETHoriz=0.0d0
+        IF (ETDirect >= 9999.d0) ETDirect=0.0d0
+        IF (GLBHoriz >= 9999.d0) GLBHoriz=0.0d0
+        IF (DirectRad >= 9999.d0) DirectRad=0.0d0
+        IF (DiffuseRad >= 9999.d0) DiffuseRad=0.0d0
+        IF (GLBHorizIllum >= 999900.d0) GLBHorizIllum=0.0d0
+        IF (DirectNrmIllum >= 999900.d0) DirectNrmIllum=0.0d0
+        IF (DiffuseHorizIllum >= 999900.d0) DiffuseHorizIllum=0.0d0
+        IF (ZenLum >= 99990.d0) ZenLum=0.0d0
         IF (IgnoreSolarRadiation) THEN
-          GLBHoriz=0.0
-          DirectRad=0.0
-          DiffuseRad=0.0
+          GLBHoriz=0.0d0
+          DirectRad=0.0d0
+          DiffuseRad=0.0d0
         ENDIF
         IF (IgnoreBeamRadiation) THEN
-          DirectRad=0.0
+          DirectRad=0.0d0
         ENDIF
         IF (IgnoreDiffuseRadiation) THEN
-          DiffuseRad=0.0
+          DiffuseRad=0.0d0
         ENDIF
 
         TomorrowBeamSolarRad(Hour,CurTimeStep)=DirectRad
@@ -3009,16 +3009,16 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
         ELSE
           TomorrowIsRain(Hour,CurTimeStep) = .false.
         ENDIF
-        TomorrowIsSnow(Hour,CurTimeStep) = (SnowDepth > 0.0)
+        TomorrowIsSnow(Hour,CurTimeStep) = (SnowDepth > 0.0d0)
 
          ! default if rain but none on weather file
         IF (TomorrowIsRain(Hour,CurTimeStep) .and.   &
             TomorrowLiquidPrecip(Hour,CurTimeStep) == 0.0)   &
-            TomorrowLiquidPrecip(Hour,CurTimeStep)=2.0     ! 2mm in an hour ~ .08 inch
+            TomorrowLiquidPrecip(Hour,CurTimeStep)=2.0d0     ! 2mm in an hour ~ .08 inch
 
         Missing%DryBulb=DryBulb
         Missing%DewPoint=DewPoint
-        Missing%RelHumid=RelHum*100.
+        Missing%RelHumid=RelHum*100.d0
         Missing%StnPres=AtmPress
         Missing%WindDir=WindDir
         Missing%WindSpd=WindSpeed
@@ -3093,26 +3093,26 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
       DO TS=1,NumOfTimeStepInHour
 
         WtNow=Interpolation(TS)
-        WtPrevHour = 1.0-WtNow
+        WtPrevHour = 1.0d0-WtNow
 
         ! Do Solar "weighting"
 
         WgtHourNow=SolarInterpolation(TS)
 
         IF (NumOfTimeStepInHour == 1) THEN
-          WgtNextHour=1.0-WgtHourNow
-          WgtPrevHour=0.0
+          WgtNextHour=1.0d0-WgtHourNow
+          WgtPrevHour=0.0d0
         ELSE
-          IF (WgtHourNow == 1.0) THEN
+          IF (WgtHourNow == 1.0d0) THEN
             !  It's at the half hour
-            WgtNextHour=0.0
-            WgtPrevHour=0.0
-          ELSEIF (TS*TimeStepFraction < .5) THEN
-            WgtNextHour=0.0
-            WgtPrevHour=1.0-WgtHourNow
+            WgtNextHour=0.0d0
+            WgtPrevHour=0.0d0
+          ELSEIF (TS*TimeStepFraction < .5d0) THEN
+            WgtNextHour=0.0d0
+            WgtPrevHour=1.0d0-WgtHourNow
           ELSE  ! After the half hour
-            WgtPrevHour=0.0
-            WgtNextHour=1.0-WgtHourNow
+            WgtPrevHour=0.0d0
+            WgtNextHour=1.0d0-WgtHourNow
           ENDIF
         ENDIF
 
@@ -3143,7 +3143,7 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
 
         TomorrowLiquidPrecip(Hour,TS)   = LastHrLiquidPrecip*WtPrevHour        &
                                           + Wthr%LiquidPrecip(Hour)*WtNow
-        TomorrowIsRain(Hour,TS)         = (TomorrowLiquidPrecip(Hour,TS) >= .8)  !Wthr%IsRain(Hour)
+        TomorrowIsRain(Hour,TS)         = (TomorrowLiquidPrecip(Hour,TS) >= .8d0)  !Wthr%IsRain(Hour)
         TomorrowIsSnow(Hour,TS)         = Wthr%IsSnow(Hour)
       ENDDO  ! End of TS Loop
 
@@ -3296,34 +3296,34 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
   INTEGER, INTENT(OUT)   :: WDay
   INTEGER, INTENT(OUT)   :: Whour
   INTEGER, INTENT(OUT)   :: WMinute
-  REAL, INTENT(OUT) :: RField1            !       DryBulb
-  REAL, INTENT(OUT) :: RField2            !       DewPoint
-  REAL, INTENT(OUT) :: RField3            !       RelHum
-  REAL, INTENT(OUT) :: RField4            !       AtmPress
-  REAL, INTENT(OUT) :: RField5            !       ETHoriz
-  REAL, INTENT(OUT) :: RField6            !       ETDirect
-  REAL, INTENT(OUT) :: RField7            !       IRHoriz
-  REAL, INTENT(OUT) :: RField8            !       GLBHoriz
-  REAL, INTENT(OUT) :: RField9            !       DirectRad
-  REAL, INTENT(OUT) :: RField10           !       DiffuseRad
-  REAL, INTENT(OUT) :: RField11           !       GLBHorizIllum
-  REAL, INTENT(OUT) :: RField12           !       DirectNrmIllum
-  REAL, INTENT(OUT) :: RField13           !       DiffuseHorizIllum
-  REAL, INTENT(OUT) :: RField14           !       ZenLum
-  REAL, INTENT(OUT) :: RField15           !       WindDir
-  REAL, INTENT(OUT) :: RField16           !       WindSpeed
-  REAL, INTENT(OUT) :: RField17           !       TotalSkyCover
-  REAL, INTENT(OUT) :: RField18           !       OpaqueSkyCover
-  REAL, INTENT(OUT) :: RField19           !       Visibility
-  REAL, INTENT(OUT) :: RField20           !       CeilHeight
+  REAL(r64), INTENT(OUT) :: RField1            !       DryBulb
+  REAL(r64), INTENT(OUT) :: RField2            !       DewPoint
+  REAL(r64), INTENT(OUT) :: RField3            !       RelHum
+  REAL(r64), INTENT(OUT) :: RField4            !       AtmPress
+  REAL(r64), INTENT(OUT) :: RField5            !       ETHoriz
+  REAL(r64), INTENT(OUT) :: RField6            !       ETDirect
+  REAL(r64), INTENT(OUT) :: RField7            !       IRHoriz
+  REAL(r64), INTENT(OUT) :: RField8            !       GLBHoriz
+  REAL(r64), INTENT(OUT) :: RField9            !       DirectRad
+  REAL(r64), INTENT(OUT) :: RField10           !       DiffuseRad
+  REAL(r64), INTENT(OUT) :: RField11           !       GLBHorizIllum
+  REAL(r64), INTENT(OUT) :: RField12           !       DirectNrmIllum
+  REAL(r64), INTENT(OUT) :: RField13           !       DiffuseHorizIllum
+  REAL(r64), INTENT(OUT) :: RField14           !       ZenLum
+  REAL(r64), INTENT(OUT) :: RField15           !       WindDir
+  REAL(r64), INTENT(OUT) :: RField16           !       WindSpeed
+  REAL(r64), INTENT(OUT) :: RField17           !       TotalSkyCover
+  REAL(r64), INTENT(OUT) :: RField18           !       OpaqueSkyCover
+  REAL(r64), INTENT(OUT) :: RField19           !       Visibility
+  REAL(r64), INTENT(OUT) :: RField20           !       CeilHeight
   INTEGER, INTENT(OUT)   :: WObs               !       PresWeathObs
   INTEGER, DIMENSION(9), INTENT(OUT) ::WCodesArr       !       PresWeathConds
-  REAL, INTENT(OUT) :: RField22           !       PrecipWater
-  REAL, INTENT(OUT) :: RField23           !       AerosolOptDepth
-  REAL, INTENT(OUT) :: RField24           !       SnowDepth
-  REAL, INTENT(OUT) :: RField25           !       DaysSinceLastSnow
-  REAL, INTENT(OUT) :: RField26           !       Albedo
-  REAL, INTENT(OUT) :: RField27           !       LiquidPrecip
+  REAL(r64), INTENT(OUT) :: RField22           !       PrecipWater
+  REAL(r64), INTENT(OUT) :: RField23           !       AerosolOptDepth
+  REAL(r64), INTENT(OUT) :: RField24           !       SnowDepth
+  REAL(r64), INTENT(OUT) :: RField25           !       DaysSinceLastSnow
+  REAL(r64), INTENT(OUT) :: RField26           !       Albedo
+  REAL(r64), INTENT(OUT) :: RField27           !       LiquidPrecip
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=10), PARAMETER :: ValidDigits='0123456789'
@@ -3337,13 +3337,13 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
   CHARACTER(len=LEN(Line)) :: SaveLine
   INTEGER Pos
   CHARACTER(len=20) PresWeathCodes
-  REAL RYear
-  REAL RMonth
-  REAL RDay
-  REAL RHour
-  REAL RMinute
+  REAL(r64) RYear
+  REAL(r64) RMonth
+  REAL(r64) RDay
+  REAL(r64) RHour
+  REAL(r64) RMinute
   CHARACTER(len=32) DateError
-  REAL       :: RField21
+  REAL(r64)       :: RField21
   INTEGER Count
   INTEGER, SAVE :: LCount=0
   LOGICAL :: DateInError
@@ -3422,7 +3422,7 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
     IF (Pos /= 1) THEN
       READ(Line(1:Pos-1),*,err=901) RField22
     ELSE
-      RField22=999.0
+      RField22=999.0d0
     ENDIF
     Line=Line(Pos+1:)
     Pos=INDEX(Line,',')
@@ -3430,7 +3430,7 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
       IF (Pos /= 1) THEN
         READ(Line(1:Pos-1),*,err=901) RField23
       ELSE
-        RField23=999.0
+        RField23=999.0d0
       ENDIF
       Line=Line(Pos+1:)
       Pos=INDEX(Line,',')
@@ -3438,7 +3438,7 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
         IF (Pos /= 1) THEN
           READ(Line(1:Pos-1),*,err=901) RField24
         ELSE
-          RField24=999.0
+          RField24=999.0d0
         ENDIF
         Line=Line(Pos+1:)
         Pos=INDEX(Line,',')
@@ -3446,7 +3446,7 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
           IF (Pos /= 1) THEN
             READ(Line(1:Pos-1),*,err=901) RField25
           ELSE
-            RField25=999.0
+            RField25=999.0d0
           ENDIF
           Line=Line(Pos+1:)
           Pos=INDEX(Line,',')
@@ -3454,7 +3454,7 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
             IF (Pos /= 1) THEN
               READ(Line(1:Pos-1),*,err=901) RField26
             ELSE
-              RField26=999.0
+              RField26=999.0d0
             ENDIF
             Line=Line(Pos+1:)
             Pos=INDEX(Line,',')
@@ -3462,42 +3462,42 @@ SUBROUTINE InterpretWeatherDataLine(Line,ErrorFound,WYear,WMonth,WDay,Whour,WMin
               IF (Pos /= 1) THEN
                 READ(Line(1:Pos-1),*,err=901) RField27
               ELSE
-                RField27=999.0
+                RField27=999.0d0
               ENDIF
               Line=Line(Pos+1:)
               Pos=INDEX(Line,',')
             ELSE
-              RField27=999.0
+              RField27=999.0d0
             ENDIF
           ELSE
-            RField26=999.0
-            RField27=999.0
+            RField26=999.0d0
+            RField27=999.0d0
           ENDIF
         ELSE
           READ(Line,*,err=901) RField25
-          RField26=999.0
-          RField27=999.0
+          RField26=999.0d0
+          RField27=999.0d0
         ENDIF
       ELSE
         READ(Line,*,err=901) RField24
-        RField25=999.0
-        RField26=999.0
-        RField27=999.0
+        RField25=999.0d0
+        RField26=999.0d0
+        RField27=999.0d0
       ENDIF
     ELSE
       READ(Line,*,err=901) RField23
-      RField24=999.0
-      RField25=999.0
-      RField26=999.0
-      RField27=999.0
+      RField24=999.0d0
+      RField25=999.0d0
+      RField26=999.0d0
+      RField27=999.0d0
     ENDIF
   ELSE
     READ(Line,*,err=901) RField22
-    RField23=999.0
-    RField24=999.0
-    RField25=999.0
-    RField26=999.0
-    RField27=999.0
+    RField23=999.0d0
+    RField24=999.0d0
+    RField25=999.0d0
+    RField26=999.0d0
+    RField27=999.0d0
   ENDIF
 !  READ(Line,*,err=903,end=903) RField22,RField23,RField24,RField25
 
@@ -3587,8 +3587,8 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   INTEGER, INTENT(IN) :: EnvrnNum  ! Environment number passed into the routine
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: GlobalSolarConstant=1367.
-  REAL, PARAMETER :: ZHGlobalSolarConstant=1355.
+  REAL(r64), PARAMETER :: GlobalSolarConstant=1367.d0
+  REAL(r64), PARAMETER :: ZHGlobalSolarConstant=1355.d0
   CHARACTER(len=*), PARAMETER :: EnvDDHdFormat="('! <Environment:Design Day Data>, Max Dry-Bulb Temp {C}, ',  &
                                                       & 'Temp Range {dC}, Temp Range Ind Type, ',  &
                                                       & 'Hum Ind Value at Max Temp, Hum Ind Type,Pressure {Pa}, ',  &
@@ -3601,72 +3601,72 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   CHARACTER(len=*), PARAMETER :: DDayMiscFormat="('Environment:Design_Day_Misc,',I3,',')"
   CHARACTER(len=*), PARAMETER :: fmta='(A)'
   CHARACTER(len=*), PARAMETER :: MnDyFmt="(I2.2,'/',I2.2)"
-  REAL, PARAMETER :: ZhangHuangModCoeff_C0=.5598  !37.6865
-  REAL, PARAMETER :: ZhangHuangModCoeff_C1=.4982  !13.9263
-  REAL, PARAMETER :: ZhangHuangModCoeff_C2=-.6762 !-20.2354
-  REAL, PARAMETER :: ZhangHuangModCoeff_C3=.02842 !0.9695
-  REAL, PARAMETER :: ZhangHuangModCoeff_C4=-.00317 !-0.2046
-  REAL, PARAMETER :: ZhangHuangModCoeff_C5=.014    !-0.0980
-  REAL, PARAMETER :: ZhangHuangModCoeff_D=-17.853  !-10.8568
-  REAL, PARAMETER :: ZhangHuangModCoeff_K=.843  !49.3112
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C0=.5598d0  !37.6865d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C1=.4982d0  !13.9263d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C2=-.6762d0 !-20.2354d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C3=.02842d0 !0.9695d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C4=-.00317d0 !-0.2046d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_C5=.014d0    !-0.0980d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_D=-17.853d0  !-10.8568d0
+  REAL(r64), PARAMETER :: ZhangHuangModCoeff_K=.843d0  !49.3112d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
           ! DERIVED TYPE DEFINITIONS:
   TYPE HourlyWeatherData
-    REAL, DIMENSION(24) :: BeamSolarRad   = 0.0     ! Hourly direct normal solar irradiance
-    REAL, DIMENSION(24) :: DifSolarRad    = 0.0     ! Hourly sky diffuse horizontal solar irradiance
+    REAL(r64), DIMENSION(24) :: BeamSolarRad   = 0.0     ! Hourly direct normal solar irradiance
+    REAL(r64), DIMENSION(24) :: DifSolarRad    = 0.0     ! Hourly sky diffuse horizontal solar irradiance
   END TYPE
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER  Hour
   INTEGER  TS
-  REAL     A             ! Apparent solar irradiation at air mass = 0
-  REAL     AVSC          ! Annual variation in the solar constant
-  REAL     B             ! Atmospheric extinction coefficient
-  REAL     C             ! ASHRAE diffuse radiation factor
-  REAL     ETR           ! radiation of an extraterrestrial normal surface, W/m2
-  REAL     HO            ! Radiation on an extraterrestial horizontal surface
-  REAL     KT            ! Radiation ratio
-  REAL SUNCOS(3)         ! Sun direction cosines
+  REAL(r64)     A             ! Apparent solar irradiation at air mass = 0
+  REAL(r64)     AVSC          ! Annual variation in the solar constant
+  REAL(r64)     B             ! Atmospheric extinction coefficient
+  REAL(r64)     C             ! ASHRAE diffuse radiation factor
+  REAL(r64)     ETR           ! radiation of an extraterrestrial normal surface, W/m2
+  REAL(r64)     HO            ! Radiation on an extraterrestial horizontal surface
+  REAL(r64)     KT            ! Radiation ratio
+  REAL(r64) SUNCOS(3)         ! Sun direction cosines
   INTEGER CurrentYear
   INTEGER OSky                ! Opaque Sky Cover (tenths)
-  REAL HumidityRatio     ! Humidity Ratio -- when constant for day
-  REAL TDewK             ! Dewpoint in Kelvin
-  REAL ESky              ! Emissivitity of Sky
-  REAL CosZenith         ! Cosine of Zenith Angle of Sun
-  REAL TotHoriz          ! Total Radiation on Horizontal Surface
-  REAL GndReflet         ! Ground Reflectivity
-  REAL CurTime           ! For Solar Calcs
-  REAL WetBulb           ! For calculating
-  REAL DBRange           ! working copy of dry-bulb daily range, C (or 1 if input is difference)
-  REAL WBRange           ! working copy of wet-bulb daily range. C (or 1 if input is difference)
+  REAL(r64) HumidityRatio     ! Humidity Ratio -- when constant for day
+  REAL(r64) TDewK             ! Dewpoint in Kelvin
+  REAL(r64) ESky              ! Emissivitity of Sky
+  REAL(r64) CosZenith         ! Cosine of Zenith Angle of Sun
+  REAL(r64) TotHoriz          ! Total Radiation on Horizontal Surface
+  REAL(r64) GndReflet         ! Ground Reflectivity
+  REAL(r64) CurTime           ! For Solar Calcs
+  REAL(r64) WetBulb           ! For calculating
+  REAL(r64) DBRange           ! working copy of dry-bulb daily range, C (or 1 if input is difference)
+  REAL(r64) WBRange           ! working copy of wet-bulb daily range. C (or 1 if input is difference)
 
   INTEGER, DIMENSION(8) :: Date0
   LOGICAL, SAVE :: PrintDDHeader
   CHARACTER(len=3) AlpUseRain
   CHARACTER(len=3) AlpUseSnow
-  REAL ::  LastHrBeamSolarRad     ! Direct normal solar irradiance
-  REAL ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
-  REAL ::  NextHrBeamSolarRad     ! Direct normal solar irradiance
-  REAL ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
+  REAL(r64) ::  LastHrBeamSolarRad     ! Direct normal solar irradiance
+  REAL(r64) ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
+  REAL(r64) ::  NextHrBeamSolarRad     ! Direct normal solar irradiance
+  REAL(r64) ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
   LOGICAL :: ConstantHumidityRatio
-  REAL OutHumRat
-  REAL WgtHourNow
-  REAL WgtPrevHour
-  REAL WgtNextHour
+  REAL(r64) OutHumRat
+  REAL(r64) WgtHourNow
+  REAL(r64) WgtPrevHour
+  REAL(r64) WgtNextHour
   CHARACTER(len=75) :: StringOut
   TYPE (HourlyWeatherData) :: Wthr
   LOGICAL :: SaveWarmupFlag
-  REAL :: GloHorzRad
-  REAL :: ClearnessIndex_kt
-  REAL :: ClearnessIndex_ktc
-  REAL :: ClearnessIndex_kds
-  REAL :: SinSolarAltitude
-  REAL :: TotSkyCover
+  REAL(r64) :: GloHorzRad
+  REAL(r64) :: ClearnessIndex_kt
+  REAL(r64) :: ClearnessIndex_ktc
+  REAL(r64) :: ClearnessIndex_kds
+  REAL(r64) :: SinSolarAltitude
+  REAL(r64) :: TotSkyCover
   INTEGER :: Hour1Ago,Hour3Ago
-  REAL :: BeamRad, DiffRad     ! working calculated beam and diffuse rad, W/m2
+  REAL(r64) :: BeamRad, DiffRad     ! working calculated beam and diffuse rad, W/m2
 !     For reporting purposes, set year to current system year
 
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
@@ -3694,7 +3694,7 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
    EnvironmentStartEnd=TRIM(CurMnDy)//' - '//TRIM(CurMnDy)
 
    ! Check that barometric pressure is within range
-   IF (ABS((DesDayInput(EnvrnNum)%PressBarom-StdBaroPress)/StdBaroPress) > .1) THEN  ! 10% off
+   IF (ABS((DesDayInput(EnvrnNum)%PressBarom-StdBaroPress)/StdBaroPress) > .1d0) THEN  ! 10% off
      !CALL ShowWarningError('SetUpDesignDay: Entered DesignDay Barometric Pressure='//  &
      !                      TRIM(RoundSigDigits(DesDayInput(EnvrnNum)%PressBarom,0))//   &
      !                      ' differs by more than 10% from Standard Barometric Pressure='//  &
@@ -3813,7 +3813,7 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
    ! humidity for the day will be constant, using the drybulb (max) and humidity indicator temperature to
    ! set the values.  For the scheduled values, these are already set in the DDxxx array.
 
-   CurrentTime=25.0
+   CurrentTime=25.0d0
 
    SELECT CASE(DesDayInput(Envrn)%HumIndType)
 
@@ -3863,10 +3863,10 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
 
    IF (DesDayInput(EnvrnNum)%SnowInd == 0) THEN
      TomorrowIsSnow(:,:)=.false.
-     GndReflet=.2
+     GndReflet=.2d0
    ELSE  ! Snow
      TomorrowIsSnow(:,:)=.true.
-     GndReflet = .7
+     GndReflet = .7d0
    ENDIF
 
    ! Some values are constant
@@ -3964,12 +3964,12 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
 
        IF (Environment(EnvrnNum)%WP_Type1 == 0) THEN
          TDewK=MIN(TomorrowOutDryBulbTemp(Hour,TS),TomorrowOutDewPointTemp(Hour,TS))+TKelvin
-         ESky= (.787 +.764*LOG((TDewK)/TKelvin))*(1. + .0224*OSky - 0.0035*(OSky**2) + .00028*(OSky**3))
+         ESky= (.787d0 +.764d0*LOG((TDewK)/TKelvin))*(1.d0 + .0224d0*OSky - 0.0035d0*(OSky**2) + .00028d0*(OSky**3))
          TomorrowHorizIRSky(Hour,TS)=Esky*Sigma*(TomorrowOutDryBulbTemp(Hour,TS)+TKelvin)**4
-         TomorrowSkyTemp(Hour,TS)=(TomorrowOutDryBulbTemp(Hour,TS)+TKelvin)*(ESky**.25)-TKelvin
+         TomorrowSkyTemp(Hour,TS)=(TomorrowOutDryBulbTemp(Hour,TS)+TKelvin)*(ESky**.25d0)-TKelvin
        ELSE
          TDewK=MIN(TomorrowOutDryBulbTemp(Hour,TS),TomorrowOutDewPointTemp(Hour,TS))+TKelvin
-         ESky= (.787 +.764*LOG((TDewK)/TKelvin))*(1. + .0224*OSky - 0.0035*(OSky**2) + .00028*(OSky**3))
+         ESky= (.787d0 +.764d0*LOG((TDewK)/TKelvin))*(1.d0 + .0224d0*OSky - 0.0035d0*(OSky**2) + .00028d0*(OSky**3))
          TomorrowHorizIRSky(Hour,TS)=Esky*Sigma*(TomorrowOutDryBulbTemp(Hour,TS)+TKelvin)**4
        ENDIF
 
@@ -3988,8 +3988,8 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
                                          DesignDay(EnvrnNum)%CosSolarDeclinAngle,SUNCOS)
        CosZenith=SUNCOS(3)
        IF (CosZenith < SunIsUpValue) THEN
-         BeamRad = 0.
-         DiffRad = 0.
+         BeamRad = 0.d0
+         DiffRad = 0.d0
        ELSE
          SinSolarAltitude=SUNCOS(3)
 
@@ -3999,12 +3999,12 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
            TotHoriz = DesDayInput(EnvrnNum)%SkyClear * A * (C + CosZenith) * EXP( -B / CosZenith)
            HO=GlobalSolarConstant*AVSC*CosZenith
            KT=TotHoriz/HO
-           KT=MIN(KT,.75)
-           DiffRad = TotHoriz * (1.0045 + KT * (.04349 + KT * (-3.5227 + 2.6313 * KT)))
-           IF (DesDayInput(EnvrnNum)%SkyClear .GT. 0.70) DiffRad = TotHoriz*C/(C+CosZenith)
+           KT=MIN(KT,.75d0)
+           DiffRad = TotHoriz * (1.0045d0 + KT * (.04349d0 + KT * (-3.5227d0 + 2.6313d0 * KT)))
+           IF (DesDayInput(EnvrnNum)%SkyClear .GT. 0.70d0) DiffRad = TotHoriz*C/(C+CosZenith)
            BeamRad = (TotHoriz-DiffRad)/CosZenith
-           DiffRad = MAX(0.0,DiffRad)
-           BeamRad = MAX(0.0,BeamRad)
+           DiffRad = MAX(0.0d0,DiffRad)
+           BeamRad = MAX(0.0d0,BeamRad)
 
          CASE (ASHRAE_Tau)
            ETR = GlobalSolarConstant*AVSC      ! extraterrestrial normal irrad, W/m2
@@ -4013,7 +4013,7 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
 
          CASE (Zhang_Huang)
            Hour3Ago = MOD( Hour+20, 24)+1       ! hour 3 hours before
-           TotSkyCover=MAX( 1.0-DesDayInput(EnvrnNum)%SkyClear, 0.0)
+           TotSkyCover=MAX( 1.0d0-DesDayInput(EnvrnNum)%SkyClear, 0.0d0)
            GloHorzRad = ( ZHGlobalSolarConstant * SinSolarAltitude * (ZhangHuangModCoeff_C0 &
                + ZhangHuangModCoeff_C1 * TotSkyCover &
                + ZhangHuangModCoeff_C2 * (TotSkyCover)**2 &
@@ -4021,23 +4021,23 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
                + ZhangHuangModCoeff_C4 * TomorrowOutRelHum(Hour,TS) &
                + ZhangHuangModCoeff_C5 * TomorrowWindSpeed(Hour,TS)) + ZhangHuangModCoeff_D ) &
                / ZhangHuangModCoeff_K
-           GloHorzRad = MAX( GloHorzRad,0.0)
+           GloHorzRad = MAX( GloHorzRad,0.0d0)
            ClearnessIndex_kt=GloHorzRad/(GlobalSolarConstant * SinSolarAltitude)
 !          ClearnessIndex_kt=DesDayInput(EnvrnNum)%SkyClear
-           ClearnessIndex_Ktc = 0.4268 + 0.1934 * SinSolarAltitude
+           ClearnessIndex_Ktc = 0.4268d0 + 0.1934d0 * SinSolarAltitude
            IF (ClearnessIndex_Kt < ClearnessIndex_Ktc) THEN
-             ClearnessIndex_Kds = (3.996 -3.862*SinSolarAltitude +1.54*SinSolarAltitude**2)* &
+             ClearnessIndex_Kds = (3.996d0 -3.862d0*SinSolarAltitude +1.54d0*SinSolarAltitude**2)* &
                    ClearnessIndex_Kt**3
            ELSE
-             ClearnessIndex_Kds = ClearnessIndex_Kt - (1.107 + 0.03569 * SinSolarAltitude + 1.681 * &
-                   SinSolarAltitude**2) * (1.-ClearnessIndex_Kt)**3
+             ClearnessIndex_Kds = ClearnessIndex_Kt - (1.107d0 + 0.03569d0 * SinSolarAltitude + 1.681d0 * &
+                   SinSolarAltitude**2) * (1.d0-ClearnessIndex_Kt)**3
            ENDIF
            ! Calculate direct normal radiation, W/m2
            BeamRad = ZHGlobalSolarConstant * SinSolarAltitude * ClearnessIndex_Kds * &
-                ((1. - ClearnessIndex_Kt) / (1. - ClearnessIndex_Kds))
+                ((1.d0 - ClearnessIndex_Kt) / (1.d0 - ClearnessIndex_Kds))
            ! Calculation diffuse horizontal radiation, W/m2
            DiffRad = ZHGlobalSolarConstant * SinSolarAltitude * &
-                ((ClearnessIndex_Kt - ClearnessIndex_Kds) / (1. - ClearnessIndex_Kds))
+                ((ClearnessIndex_Kt - ClearnessIndex_Kds) / (1.d0 - ClearnessIndex_Kds))
 
          CASE DEFAULT
        END SELECT
@@ -4045,8 +4045,8 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
      END IF
 
      ! override result to 0 per environment var (for testing)
-     IF (IgnoreSolarRadiation .or. IgnoreBeamRadiation) BeamRad = 0.0
-     IF (IgnoreSolarRadiation .or. IgnoreDiffuseRadiation) DiffRad = 0.0;
+     IF (IgnoreSolarRadiation .or. IgnoreBeamRadiation) BeamRad = 0.0d0
+     IF (IgnoreSolarRadiation .or. IgnoreDiffuseRadiation) DiffRad = 0.0d0;
 
      TomorrowBeamSolarRad( Hour,TS) = BeamRad
      TomorrowDifSolarRad( Hour,TS)  = DiffRad
@@ -4108,7 +4108,7 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
 END SUBROUTINE SetUpDesignDay
 
 !------------------------------------------------------------------------------
-REAL FUNCTION AirMass(CosZen)
+REAL(r64) FUNCTION AirMass(CosZen)
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         C Barnaby
@@ -4133,7 +4133,7 @@ REAL FUNCTION AirMass(CosZen)
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: CosZen    ! COS( solar zenith), 0 - 1
+    REAL(r64), INTENT(IN) :: CosZen    ! COS( solar zenith), 0 - 1
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4146,17 +4146,17 @@ REAL FUNCTION AirMass(CosZen)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL :: SunAltD
+    REAL(r64) :: SunAltD
 
-    IF (CosZen <= 0.001) THEN
-        AirMass = 37.07837343   ! limit value calc'd with Excel
+    IF (CosZen <= 0.001d0) THEN
+        AirMass = 37.07837343d0   ! limit value calc'd with Excel
                                 !  value increases little as CosZen -> 0
-    ELSE IF (CosZen >= 1.) THEN
-        AirMass = 1.
+    ELSE IF (CosZen >= 1.d0) THEN
+        AirMass = 1.d0
     ELSE
         ! note: COS( Zen) = SIN( Alt)
         SunAltD = ASIN( CosZen) / DegToRadians      ! altitude, degrees
-        AirMass = 1./(CosZen + 0.50572 * (6.07995 + SunAltD)**(-1.6364))
+        AirMass = 1.d0/(CosZen + 0.50572d0 * (6.07995d0 + SunAltD)**(-1.6364d0))
     END IF
 END FUNCTION AirMass
 !------------------------------------------------------------------------------
@@ -4183,13 +4183,13 @@ SUBROUTINE ASHRAETauModel( ETR, CosZen, TauB, TauD, IDirN, IDifH, IGlbH)
     IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT( IN) :: ETR       ! extraterrestrial normal irradiance, W/m2
-    REAL, INTENT( IN) :: CosZen    ! COS( solar zenith angle), 0 - 1
-    REAL, INTENT( IN) :: TauB      ! beam tau factor
-    REAL, INTENT( IN) :: TauD      ! dif tau factor
-    REAL, INTENT(OUT) :: IDirN     ! returned: direct (beam) irradiance on normal surface, W/m2
-    REAL, INTENT(OUT) :: IDifH     ! returned: diffuse irradiance on horiz surface, W/m2
-    REAL, INTENT(OUT) :: IGlbH     ! returned: global irradiance on horiz surface, W/m2
+    REAL(r64), INTENT( IN) :: ETR       ! extraterrestrial normal irradiance, W/m2
+    REAL(r64), INTENT( IN) :: CosZen    ! COS( solar zenith angle), 0 - 1
+    REAL(r64), INTENT( IN) :: TauB      ! beam tau factor
+    REAL(r64), INTENT( IN) :: TauD      ! dif tau factor
+    REAL(r64), INTENT(OUT) :: IDirN     ! returned: direct (beam) irradiance on normal surface, W/m2
+    REAL(r64), INTENT(OUT) :: IDifH     ! returned: diffuse irradiance on horiz surface, W/m2
+    REAL(r64), INTENT(OUT) :: IGlbH     ! returned: global irradiance on horiz surface, W/m2
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4202,16 +4202,16 @@ SUBROUTINE ASHRAETauModel( ETR, CosZen, TauB, TauD, IDirN, IDifH, IGlbH)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-    REAL AB, AD    ! air mass exponents
-    REAL M         ! air mass
+    REAL(r64) AB, AD    ! air mass exponents
+    REAL(r64) M         ! air mass
 
     IF (CosZen < SunIsUpValue .OR. TauB <= 0. .OR. TauD <= 0.) THEN
         IDirN = 0.
         IDifH = 0.
         IGlbH = 0.
     ELSE
-        AB = 1.219 - 0.043*TauB - 0.151*TauD - 0.204*TauB*TauD
-        AD = 0.202 + 0.852*TauB - 0.007*Taud - 0.357*TauB*TauD
+        AB = 1.219d0 - 0.043d0*TauB - 0.151d0*TauD - 0.204d0*TauB*TauD
+        AD = 0.202d0 + 0.852d0*TauB - 0.007d0*Taud - 0.357d0*TauB*TauD
         M = AirMass( CosZen)
         IDirN = ETR * EXP( -TauB * M**AB)
         IDifH = ETR * EXP( -TauD * M**AD)
@@ -4265,58 +4265,58 @@ SUBROUTINE AllocateWeatherData
   ALLOCATE(TodayIsSnow(24,NumOfTimeStepInHour))
   TodayIsSnow=.false.
   ALLOCATE(TodayOutDryBulbTemp(24,NumOfTimeStepInHour))
-  TodayOutDryBulbTemp=0.0
+  TodayOutDryBulbTemp=0.0d0
   ALLOCATE(TodayOutDewPointTemp(24,NumOfTimeStepInHour))
-  TodayOutDewPointTemp=0.0
+  TodayOutDewPointTemp=0.0d0
   ALLOCATE(TodayOutBaroPress(24,NumOfTimeStepInHour))
-  TodayOutBaroPress=0.0
+  TodayOutBaroPress=0.0d0
   ALLOCATE(TodayOutRelHum(24,NumOfTimeStepInHour))
-  TodayOutRelHum=0.0
+  TodayOutRelHum=0.0d0
   ALLOCATE(TodayWindSpeed(24,NumOfTimeStepInHour))
-  TodayWindSpeed=0.0
+  TodayWindSpeed=0.0d0
   ALLOCATE(TodayWindDir(24,NumOfTimeStepInHour))
-  TodayWindDir=0.0
+  TodayWindDir=0.0d0
   ALLOCATE(TodaySkyTemp(24,NumOfTimeStepInHour))
-  TodaySkyTemp=0.0
+  TodaySkyTemp=0.0d0
   ALLOCATE(TodayHorizIRSky(24,NumOfTimeStepInHour))
-  TodayHorizIRSky=0.0
+  TodayHorizIRSky=0.0d0
   ALLOCATE(TodayBeamSolarRad(24,NumOfTimeStepInHour))
-  TodayBeamSolarRad=0.0
+  TodayBeamSolarRad=0.0d0
   ALLOCATE(TodayDifSolarRad(24,NumOfTimeStepInHour))
-  TodayDifSolarRad=0.0
+  TodayDifSolarRad=0.0d0
   ALLOCATE(TodayAlbedo(24,NumOfTimeStepInHour))
-  TodayAlbedo=0.0
+  TodayAlbedo=0.0d0
   ALLOCATE(TodayLiquidPrecip(24,NumOfTimeStepInHour))
-  TodayLiquidPrecip=0.0
+  TodayLiquidPrecip=0.0d0
 
   ALLOCATE(TomorrowIsRain(24,NumOfTimeStepInHour))
   TomorrowIsRain=.false.
   ALLOCATE(TomorrowIsSnow(24,NumOfTimeStepInHour))
   TomorrowIsSnow=.false.
   ALLOCATE(TomorrowOutDryBulbTemp(24,NumOfTimeStepInHour))
-  TomorrowOutDryBulbTemp=0.0
+  TomorrowOutDryBulbTemp=0.0d0
   ALLOCATE(TomorrowOutDewPointTemp(24,NumOfTimeStepInHour))
-  TomorrowOutDewPointTemp=0.0
+  TomorrowOutDewPointTemp=0.0d0
   ALLOCATE(TomorrowOutBaroPress(24,NumOfTimeStepInHour))
-  TomorrowOutBaroPress=0.0
+  TomorrowOutBaroPress=0.0d0
   ALLOCATE(TomorrowOutRelHum(24,NumOfTimeStepInHour))
-  TomorrowOutRelHum=0.0
+  TomorrowOutRelHum=0.0d0
   ALLOCATE(TomorrowWindSpeed(24,NumOfTimeStepInHour))
-  TomorrowWindSpeed=0.0
+  TomorrowWindSpeed=0.0d0
   ALLOCATE(TomorrowWindDir(24,NumOfTimeStepInHour))
-  TomorrowWindDir=0.0
+  TomorrowWindDir=0.0d0
   ALLOCATE(TomorrowSkyTemp(24,NumOfTimeStepInHour))
-  TomorrowSkyTemp=0.0
+  TomorrowSkyTemp=0.0d0
   ALLOCATE(TomorrowHorizIRSky(24,NumOfTimeStepInHour))
-  TomorrowHorizIRSky=0.0
+  TomorrowHorizIRSky=0.0d0
   ALLOCATE(TomorrowBeamSolarRad(24,NumOfTimeStepInHour))
-  TomorrowBeamSolarRad=0.0
+  TomorrowBeamSolarRad=0.0d0
   ALLOCATE(TomorrowDifSolarRad(24,NumOfTimeStepInHour))
-  TomorrowDifSolarRad=0.0
+  TomorrowDifSolarRad=0.0d0
   ALLOCATE(TomorrowAlbedo(24,NumOfTimeStepInHour))
-  TomorrowAlbedo=0.0
+  TomorrowAlbedo=0.0d0
   ALLOCATE(TomorrowLiquidPrecip(24,NumOfTimeStepInHour))
-  TomorrowLiquidPrecip=0.0
+  TomorrowLiquidPrecip=0.0d0
 
   RETURN
 
@@ -4359,35 +4359,35 @@ SUBROUTINE CalculateDailySolarCoeffs(DayOfYear,A,B,C,AnnVarSolConstant,EquationO
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: DayOfYear              ! Day of year (1 - 366)
-  REAL, INTENT(OUT)   :: A                      ! ASHRAE "A" - Apparent solar irradiation at air mass = 0 [W/M**2]
-  REAL, INTENT(OUT)   :: B                      ! ASHRAE "B" - Atmospheric extinction coefficient
-  REAL, INTENT(OUT)   :: C                      ! ASHRAE "C" - Diffuse radiation factor
-  REAL, INTENT(OUT)   :: AnnVarSolConstant      ! Annual variation in the solar constant
-  REAL, INTENT(OUT)   :: EquationOfTime         ! Equation of Time
-  REAL, INTENT(OUT)   :: SineSolarDeclination   ! Sine of Solar Declination
-  REAL, INTENT(OUT)   :: CosineSolarDeclination ! Cosine of Solar Declination
+  REAL(r64), INTENT(OUT)   :: A                      ! ASHRAE "A" - Apparent solar irradiation at air mass = 0 [W/M**2]
+  REAL(r64), INTENT(OUT)   :: B                      ! ASHRAE "B" - Atmospheric extinction coefficient
+  REAL(r64), INTENT(OUT)   :: C                      ! ASHRAE "C" - Diffuse radiation factor
+  REAL(r64), INTENT(OUT)   :: AnnVarSolConstant      ! Annual variation in the solar constant
+  REAL(r64), INTENT(OUT)   :: EquationOfTime         ! Equation of Time
+  REAL(r64), INTENT(OUT)   :: SineSolarDeclination   ! Sine of Solar Declination
+  REAL(r64), INTENT(OUT)   :: CosineSolarDeclination ! Cosine of Solar Declination
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: DayCorrection=PI*2./366.
-  REAL, PARAMETER, DIMENSION(9) :: SineSolDeclCoef = &  !Fitted coefficients of Fourier series
-        (/ .00561800, .0657911, -.392779,   .00064440,-.00618495, & ! Sine of declination coefficients
-          -.00010101,-.00007951,-.00011691, .00002096 /)
-  REAL, PARAMETER, DIMENSION(9) :: EqOfTimeCoef = &  !Fitted coefficients of Fourier Series
-        (/ .00021971,-.122649,   .00762856,-.156308,  -.0530028,  & ! Equation of Time coefficients
-          -.00388702,-.00123978,-.00270502,-.00167992 /)
-  REAL, PARAMETER, DIMENSION(9) :: ASHRAE_A_Coef = &  !Fitted coefficients of Fourier Series
-        (/  1161.6685, 1.1554, 77.3575, -0.5359, -3.7622,         & ! ASHRAE A Factor coefficients
-            0.9875, -3.3924, -1.7445, 1.1198 /)
+  REAL(r64), PARAMETER :: DayCorrection=PI*2.d0/366.d0
+  REAL(r64), PARAMETER, DIMENSION(9) :: SineSolDeclCoef = &  !Fitted coefficients of Fourier series
+        (/ .00561800d0, .0657911d0, -.392779d0,   .00064440d0,-.00618495d0, & ! Sine of declination coefficients
+          -.00010101d0,-.00007951d0,-.00011691d0, .00002096d0 /)
+  REAL(r64), PARAMETER, DIMENSION(9) :: EqOfTimeCoef = &  !Fitted coefficients of Fourier Series
+        (/ .00021971d0,-.122649d0,   .00762856d0,-.156308d0,  -.0530028d0,  & ! Equation of Time coefficients
+          -.00388702d0,-.00123978d0,-.00270502d0,-.00167992d0 /)
+  REAL(r64), PARAMETER, DIMENSION(9) :: ASHRAE_A_Coef = &  !Fitted coefficients of Fourier Series
+        (/  1161.6685d0, 1.1554d0, 77.3575d0, -0.5359d0, -3.7622d0,         & ! ASHRAE A Factor coefficients
+            0.9875d0, -3.3924d0, -1.7445d0, 1.1198d0 /)
 ! English (original) units:
 !              368.49341,.366502,24.538624,-.169983,-1.193417,            &
 !              .313261,-1.076093,-.543376,.355197 ,                       &
 
-  REAL, PARAMETER, DIMENSION(9) :: ASHRAE_B_Coef = &  !Fitted coefficients of Fourier Series
-        (/ .171631,-.00400448,-.0344923,.00000209,.00325428,         & ! ASHRAE B Factor coefficients
-          -.00085429,.00229562,.0009034,-.0011867 /)
-  REAL, PARAMETER, DIMENSION(9) :: ASHRAE_C_Coef = &  !Fitted coefficients of Fourier Series
-        (/ .0905151,-.00322522,-.0407966,.000104164,.00745899,        & ! ASHRAE C Factor coefficients
-          -.00086461,.0013111,.000808275,-.00170515 /)
+  REAL(r64), PARAMETER, DIMENSION(9) :: ASHRAE_B_Coef = &  !Fitted coefficients of Fourier Series
+        (/ .171631d0,-.00400448d0,-.0344923d0,.00000209d0,.00325428d0,         & ! ASHRAE B Factor coefficients
+          -.00085429d0,.00229562d0,.0009034d0,-.0011867d0 /)
+  REAL(r64), PARAMETER, DIMENSION(9) :: ASHRAE_C_Coef = &  !Fitted coefficients of Fourier Series
+        (/ .0905151d0,-.00322522d0,-.0407966d0,.000104164d0,.00745899d0,        & ! ASHRAE C Factor coefficients
+          -.00086461d0,.0013111d0,.000808275d0,-.00170515d0 /)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4396,9 +4396,9 @@ SUBROUTINE CalculateDailySolarCoeffs(DayOfYear,A,B,C,AnnVarSolConstant,EquationO
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    X     ! Day of Year in Radians (Computed from Input DayOfYear)
-  REAL    CosX  ! COS(X)
-  REAL    SinX ! SIN(X)
+  REAL(r64)    X     ! Day of Year in Radians (Computed from Input DayOfYear)
+  REAL(r64)    CosX  ! COS(X)
+  REAL(r64)    SinX ! SIN(X)
 
 
   X=DayCorrection*DayOfYear   ! Convert Julian date (Day of Year) to angle X
@@ -4428,7 +4428,7 @@ SUBROUTINE CalculateDailySolarCoeffs(DayOfYear,A,B,C,AnnVarSolConstant,EquationO
                    EqOfTimeCoef(8)*(2.*(SinX*CosX*2.)*(CosX**2 - SinX**2)) + &
                    EqOfTimeCoef(9)*((CosX**2 - SinX**2)**2 - (SinX*CosX*2.)**2)
 
-  AnnVarSolConstant=1.000047 + .000352615*SinX + .0334454*CosX
+  AnnVarSolConstant=1.000047d0 + .000352615d0*SinX + .0334454d0*CosX
 
   A = ASHRAE_A_Coef(1) + &
                    ASHRAE_A_Coef(2)*SinX +  &
@@ -4497,11 +4497,11 @@ SUBROUTINE CalculateSunDirectionCosines(TimeValue,EqOfTime,SinSolDeclin,CosSolDe
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)  :: TimeValue       ! Current Time of Day
-  REAL, INTENT(IN)  :: EqOfTime        ! Equation of Time
-  REAL, INTENT(IN)  :: SinSolDeclin    ! Sine of Solar Declination
-  REAL, INTENT(IN)  :: CosSolDeclin    ! Cosine of Solar Declination
-  REAL, INTENT(OUT) :: SUNCOS(3)
+  REAL(r64), INTENT(IN)  :: TimeValue       ! Current Time of Day
+  REAL(r64), INTENT(IN)  :: EqOfTime        ! Equation of Time
+  REAL(r64), INTENT(IN)  :: SinSolDeclin    ! Sine of Solar Declination
+  REAL(r64), INTENT(IN)  :: CosSolDeclin    ! Cosine of Solar Declination
+  REAL(r64), INTENT(OUT) :: SUNCOS(3)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4513,11 +4513,11 @@ SUBROUTINE CalculateSunDirectionCosines(TimeValue,EqOfTime,SinSolDeclin,CosSolDe
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-         REAL  COSH  ! Cosine of hour angle
-         REAL  H     ! Hour angle (before noon = +)
+         REAL(r64)  COSH  ! Cosine of hour angle
+         REAL(r64)  H     ! Hour angle (before noon = +)
 
 !                                      COMPUTE THE HOUR ANGLE
-      H=(15.*(12.-(TimeValue+EqOfTime))+(TimeZoneMeridian-Longitude))*DegToRadians
+      H=(15.d0*(12.d0-(TimeValue+EqOfTime))+(TimeZoneMeridian-Longitude))*DegToRadians
       COSH=COS(H)
 !                                      COMPUTE THE COSINE OF THE
 !                                      SOLAR ZENITH ANGLE.
@@ -4529,8 +4529,8 @@ SUBROUTINE CalculateSunDirectionCosines(TimeValue,EqOfTime,SinSolDeclin,CosSolDe
         SUNCOS(2)=SinSolDeclin*CosLatitude-CosSolDeclin*SinLatitude*COSH
         SUNCOS(1)=CosSolDeclin*SIN(H)
       ELSE                             ! Sun is down, set to 0.0
-        SUNCOS(1)=0.0
-        SUNCOS(2)=0.0
+        SUNCOS(1)=0.0d0
+        SUNCOS(2)=0.0d0
       ENDIF
 
   RETURN
@@ -4561,7 +4561,7 @@ SUBROUTINE DetermineSunUpDown(SunDirectionCosines)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(OUT), DIMENSION(3) :: SunDirectionCosines
+  REAL(r64), INTENT(OUT), DIMENSION(3) :: SunDirectionCosines
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4573,14 +4573,14 @@ SUBROUTINE DetermineSunUpDown(SunDirectionCosines)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL H       ! Hour angle (before noon = +)
-  REAL SinAltitude,SolarAltitude,SolarAzimuth,SolarZenith
-  REAL CosAzimuth,CosZenith
-!  REAL HAngle
+  REAL(r64) H       ! Hour angle (before noon = +)
+  REAL(r64) SinAltitude,SolarAltitude,SolarAzimuth,SolarZenith
+  REAL(r64) CosAzimuth,CosZenith
+!  REAL(r64) HAngle
 
           ! COMPUTE THE HOUR ANGLE
 
-  HrAngle = (15.*(12.-(CurrentTime+TodayVariables%EquationOfTime))+(TimeZoneMeridian-Longitude))
+  HrAngle = (15.d0*(12.d0-(CurrentTime+TodayVariables%EquationOfTime))+(TimeZoneMeridian-Longitude))
   H=HrAngle*DegToRadians
 
           ! Compute the Cosine of the Solar Zenith (Altitude) Angle.
@@ -4591,21 +4591,21 @@ SUBROUTINE DetermineSunUpDown(SunDirectionCosines)
   SolarAltitude=ASIN(SinAltitude)
   CosAzimuth=-(SinLatitude*CosZenith-TodayVariables%SinSolarDeclinAngle)/(CosLatitude*SIN(SolarZenith))
   ! Following because above can yield invalid cos value.  (e.g. at south pole)
-  CosAzimuth=MAX(CosAzimuth,-1.0)
-  CosAzimuth=MIN(1.0,CosAzimuth)
+  CosAzimuth=MAX(CosAzimuth,-1.0d0)
+  CosAzimuth=MIN(1.0d0,CosAzimuth)
   SolarAzimuth=ACOS(CosAzimuth)
 
   SolarAltitudeAngle=SolarAltitude/DegToRadians
   SolarAzimuthAngle=SolarAzimuth/DegToRadians
-  IF (HrAngle < 0.0) THEN
-    SolarAzimuthAngle=360.-SolarAzimuthAngle
+  IF (HrAngle < 0.0d0) THEN
+    SolarAzimuthAngle=360.d0-SolarAzimuthAngle
   ENDIF
 
   SunDirectionCosines(3) = CosZenith
   IF (CosZenith < SunIsUpValue) THEN
     SunIsUp=.false.
-    SunDirectionCosines(2)=0.0
-    SunDirectionCosines(1)=0.0
+    SunDirectionCosines(2)=0.0d0
+    SunDirectionCosines(1)=0.0d0
   ELSE
     SunIsUp=.true.
     SunDirectionCosines(2) = TodayVariables%SinSolarDeclinAngle*CosLatitude   &
@@ -4867,10 +4867,10 @@ SUBROUTINE ResolveLocationInformation(ErrorsFound)
   IF (Environment(NumOfEnvrn)%KindOfEnvrn == ksRunPeriodWeather .and. WeatherFileExists) THEN
     IF (LocationGathered) THEN
       ! See if "matching" location
-      IF (ABS(Latitude-WeatherFileLatitude)    > 1.   .or.  &
-          ABS(Longitude-WeatherFileLongitude)    > 1. .or.  &
-          ABS(TimeZoneNumber-WeatherFileTimeZone) > 0.0 .or.  &
-          ABS(Elevation-WeatherFileElevation)/Max(Elevation,1.) > .10) THEN
+      IF (ABS(Latitude-WeatherFileLatitude)    > 1.d0   .or.  &
+          ABS(Longitude-WeatherFileLongitude)    > 1.d0 .or.  &
+          ABS(TimeZoneNumber-WeatherFileTimeZone) > 0.0d0 .or.  &
+          ABS(Elevation-WeatherFileElevation)/Max(Elevation,1.d0) > .10d0) THEN
         CALL ShowWarningError('Weather file location will be used rather than entered Location object.')
         CALL ShowContinueError('..Location object='//TRIM(LocationTitle))
         CALL ShowContinueError('..Weather File Location='//TRIM(WeatherFileLocationTitle))
@@ -4879,7 +4879,7 @@ SUBROUTINE ResolveLocationInformation(ErrorsFound)
            trim(RoundSigDigits(ABS(Longitude-WeatherFileLongitude),2))//'] degrees.')
         CALL ShowContinueError('..Time Zone difference=['//  &
            trim(RoundSigDigits(ABS(TimeZoneNumber-WeatherFileTimeZone),1))//'] hour(s), Elevation difference=['//   &
-           trim(RoundSigDigits(ABS((Elevation-WeatherFileElevation)/Max(Elevation,1.))*100.0,2))//'] percent,'//  &
+           trim(RoundSigDigits(ABS((Elevation-WeatherFileElevation)/Max(Elevation,1.d0))*100.0,2))//'] percent,'//  &
               ' ['//trim(RoundSigDigits(ABS(Elevation-WeatherFileElevation),2))//'] meters.')
       ENDIF
     ENDIF
@@ -4896,8 +4896,8 @@ SUBROUTINE ResolveLocationInformation(ErrorsFound)
   END IF
 
   IF (.not. ErrorsFound) THEN
-    StdBaroPress=101.325*(1.-2.25577d-05*Elevation)**5.2559
-    StdBaroPress=StdBaroPress*1000.
+    StdBaroPress=101.325d0*(1.d0-2.25577d-05*Elevation)**5.2559d0
+    StdBaroPress=StdBaroPress*1000.d0
     StdRhoAir=PsyRhoAirFnPbTdbW(StdBaroPress,constant_twenty,constant_zero)
     ! Write Final Location Information to the initialization output file
     Write(OutputFileInits,LocHdFormat)
@@ -4953,8 +4953,8 @@ SUBROUTINE CheckLocationValidity
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   LOGICAL :: LocationError  ! Set to true if there is a problem detected
-  REAL    :: StdTimeMerid   ! Standard time meridian
-  REAL    :: Diffcalc       ! Difference between Standard Time Meridian and TimeZone
+  REAL(r64)    :: StdTimeMerid   ! Standard time meridian
+  REAL(r64)    :: Diffcalc       ! Difference between Standard Time Meridian and TimeZone
   
     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -4964,23 +4964,23 @@ SUBROUTINE CheckLocationValidity
 
   LocationError = .FALSE.
 
-  IF ( (Latitude .EQ. -999.) .AND. (Longitude .EQ. -999.) &
-                             .AND. (TimeZoneNumber .NE. -999.) ) THEN
+  IF ( (Latitude .EQ. -999.d0) .AND. (Longitude .EQ. -999.d0) &
+                             .AND. (TimeZoneNumber .NE. -999.d0) ) THEN
     CALL ShowSevereError('No location specified')
     LocationError=.TRUE.
   END IF
 
-  IF ( (Latitude .LT. -90.) .OR. (Latitude .GT. 90.) ) THEN
+  IF ( (Latitude .LT. -90.d0) .OR. (Latitude .GT. 90.d0) ) THEN
     CALL ShowSevereError('Latitude must be between -90 and 90; Entered='//TRIM(RoundSigDigits(Latitude,2)))
     LocationError=.TRUE.
   END IF
 
-  IF ( (Longitude .LT. -180.) .OR. (Longitude .GT. 180.) ) THEN
+  IF ( (Longitude .LT. -180.d0) .OR. (Longitude .GT. 180.d0) ) THEN
     CALL ShowSevereError('Longitude must be between -180 and 180; Entered='//TRIM(RoundSigDigits(Longitude,2)))
     LocationError=.TRUE.
   END IF
 
-  IF ( (TimeZoneNumber < -12.00) .OR. (TimeZoneNumber > 14.00) ) THEN
+  IF ( (TimeZoneNumber < -12.00d0) .OR. (TimeZoneNumber > 14.00d0) ) THEN
     CALL ShowSevereError('Time Zone must be between -12 and +14; Entered='//TRIM(RoundSigDigits(TimeZoneNumber,2)))
     LocationError=.TRUE.
   END IF
@@ -4998,11 +4998,11 @@ SUBROUTINE CheckLocationValidity
           ! different, notify the user.  If StdTimeMerid couldn't be calculated,
           ! produce an error message.
 
-  IF (StdTimeMerid >= -12.0 .and. StdTimeMerid <= 12.0) THEN
+  IF (StdTimeMerid >= -12.0d0 .and. StdTimeMerid <= 12.0d0) THEN
     IF (TimeZoneNumber .NE. StdTimeMerid) THEN
       DiffCalc=ABS(TimeZoneNumber-StdTimeMerid)
-      IF (DiffCalc > 1. .and. DiffCalc < 24.) THEN
-        IF (DiffCalc < 3.) THEN
+      IF (DiffCalc > 1.d0 .and. DiffCalc < 24.d0) THEN
+        IF (DiffCalc < 3.d0) THEN
           CALL ShowWarningError('Standard Time Meridian and Time Zone differ by more than 1, '// &
              'Difference="'//TRIM(RoundSigDigits(DiffCalc,1))//'"')
           CALL ShowContinueError('Solar Positions may be incorrect')
@@ -5029,15 +5029,15 @@ SUBROUTINE CheckLocationValidity
     CALL ShowFatalError('Due to previous error condition, simulation terminated')
   ENDIF
 
-  IF (TimeZoneNumber <= 12.00) THEN
-    TimeZoneMeridian=TimeZoneNumber*15.
+  IF (TimeZoneNumber <= 12.00d0) THEN
+    TimeZoneMeridian=TimeZoneNumber*15.d0
   ELSE
-    TimeZoneMeridian=TimeZoneNumber*15.-360.
+    TimeZoneMeridian=TimeZoneNumber*15.d0-360.d0
   ENDIF
   SinLatitude=SIN(DegToRadians*Latitude)
   CosLatitude=COS(DegToRadians*Latitude)
 
-  IF (Latitude == 0.0 .and. Longitude == 0.0 .and. TimeZoneNumber == 0.0) THEN
+  IF (Latitude == 0.0d0 .and. Longitude == 0.0d0 .and. TimeZoneNumber == 0.0d0) THEN
     CALL ShowWarningError('Did you realize that you have Latitude=0.0, Longitude=0.0 and TimeZone=0.0?'//  &
                           '  Your building site is in the middle of the Atlantic Ocean.')
   ENDIF
@@ -5227,7 +5227,7 @@ SUBROUTINE ReportWeatherAndTimeInformation(PrintEnvrnStamp)
           ! na
 
           ! USE STATEMENTS:
-!unuse909  USE DataSystemVariables, ONLY: ReportDuringWarmup
+!unused0909  USE DataSystemVariables, ONLY: ReportDuringWarmup
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -6264,7 +6264,7 @@ SUBROUTINE GetSpecialDayPeriodData(ErrorsFound)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength), DIMENSION(3) :: AlphArray
   INTEGER NumAlphas
-  REAL, DIMENSION(1) :: Duration
+  REAL(r64), DIMENSION(1) :: Duration
   INTEGER NumNumbers
   INTEGER NumSpecDays
   INTEGER Count
@@ -6560,11 +6560,11 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
            'WetBulbProfileMultiplierSchedule []'/)
 
 
-!  REAL, PARAMETER, DIMENSION(24) :: DefaultTempRangeMult=(/ .87,.92,.96,.99,1.0,.98,.93,  &
-!                   .84,.71,.56,.39,.23, .11,.03,.00,.03,.10,.21,.34,.47,.58,.68,.76,.82 /)
+!  REAL(r64), PARAMETER, DIMENSION(24) :: DefaultTempRangeMult=(/ .87d0,.92d0,.96d0,.99d0,1.0d0,.98d0,.93d0,  &
+!                   .84d0,.71d0,.56d0,.39d0,.23d0, .11d0,.03d0,.00d0,.03d0,.10d0,.21d0,.34d0,.47d0,.58d0,.68d0,.76d0,.82d0 /)
   ! Below are the 2009 fractions, HOF, Chap 14, Table 6
-  REAL, PARAMETER, DIMENSION(24) :: DefaultTempRangeMult=(/ .88,.92,.95,.98,1.0,.98,.91,  &
-                   .74,.55,.38,.23,.13, .05,0.00,0.00,.06,.14,.24,.39,.50,.59,.68,.75,.82 /)
+  REAL(r64), PARAMETER, DIMENSION(24) :: DefaultTempRangeMult=(/ .88d0,.92d0,.95d0,.98d0,1.0d0,.98d0,.91d0,  &
+                   .74d0,.55d0,.38d0,.23d0,.13d0, .05d0,0.00d0,0.00d0,.06d0,.14d0,.24d0,.39d0,.50d0,.59d0,.68d0,.75d0,.82d0 /)
 
          ! INTERFACE BLOCK SPECIFICATIONS:
          ! na
@@ -6581,10 +6581,10 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
   LOGICAL :: IsBlank               ! Flag for blank name
   INTEGER :: HrLoop
   INTEGER :: TSLoop
-  REAL LastHrValue
-  REAL WNow
-  REAL WPrev
-  REAL testval
+  REAL(r64) LastHrValue
+  REAL(r64) WNow
+  REAL(r64) WPrev
+  REAL(r64) testval
   LOGICAL errflag
   INTEGER DDLoop
   CHARACTER(len=MaxNameLength) :: envTitle
@@ -6593,13 +6593,13 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
 
    ALLOCATE (DesDayInput(TotDesDays))! Allocate the array to the # of DD's
    ALLOCATE (DDDBRngModifier(TotDesDays,24,NumOfTimeStepInHour))
-   DDDBRngModifier=0.0
+   DDDBRngModifier=0.0d0
    ALLOCATE (DDHumIndModifier(TotDesDays,24,NumOfTimeStepInHour))
-   DDHumIndModifier=0.0
+   DDHumIndModifier=0.0d0
    ALLOCATE (DDBeamSolarValues(TotDesDays,24,NumOfTimeStepInHour))
-   DDBeamSolarValues=0.0
+   DDBeamSolarValues=0.0d0
    ALLOCATE (DDDiffuseSolarValues(TotDesDays,24,NumOfTimeStepInHour))
-   DDDiffuseSolarValues=0.0
+   DDDiffuseSolarValues=0.0d0
 
    IF (ReverseDD .and. TotDesDays <=1) THEN
      CALL ShowSevereError('GetDesignDayData: Reverse Design Day requested but # Design Days <=1')
@@ -6640,7 +6640,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
     DesDayInput(EnvrnNum)%DailyDBRange = rNumericArgs(4)     ! Daily dry-bulb temperature range (deltaC)
     DesDayInput(EnvrnNum)%PressBarom = rNumericArgs(9)       ! Atmospheric/Barometric Pressure (Pascals)
     DesDayInput(EnvrnNum)%WindSpeed = rNumericArgs(10)        ! Wind Speed (m/s)
-    DesDayInput(EnvrnNum)%WindDir = MOD(rNumericArgs(11),360.)! Wind Direction
+    DesDayInput(EnvrnNum)%WindDir = MOD(rNumericArgs(11),360.d0)! Wind Direction
                                                                ! (degrees clockwise from North, N=0, E=90, S=180, W=270)
     DesDayInput(EnvrnNum)%Month=Int(rNumericArgs(1))        ! Month of Year ( 1 - 12 )
     DesDayInput(EnvrnNum)%DayOfMonth=Int(rNumericArgs(2))   ! Day of Month ( 1 - 31 )
@@ -6685,7 +6685,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
       errflag=.false.
       DesDayInput(EnvrnNum)%HumIndType=DDHumIndType_Wetbulb
       CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(5))//' - Wet-Bulb',TRIM(cCurrentModuleObject),'Severe','>= -70',  &
-                     (DesDayInput(EnvrnNum)%HumIndValue>=-70.),'<= 70',(DesDayInput(EnvrnNum)%HumIndValue <=70.))
+                     (DesDayInput(EnvrnNum)%HumIndValue>=-70.d0),'<= 70',(DesDayInput(EnvrnNum)%HumIndValue <=70.d0))
       IF (errflag) THEN
         CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
         ErrorsFound=.true.
@@ -6702,7 +6702,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
       errflag=.false.
       DesDayInput(EnvrnNum)%HumIndType=DDHumIndType_Dewpoint
       CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(5))//' - Dew-Point',TRIM(cCurrentModuleObject),'Severe','>= -70',  &
-                     (DesDayInput(EnvrnNum)%HumIndValue>=-70.),'<= 70',(DesDayInput(EnvrnNum)%HumIndValue <=70.))
+                     (DesDayInput(EnvrnNum)%HumIndValue>=-70.d0),'<= 70',(DesDayInput(EnvrnNum)%HumIndValue <=70.d0))
       IF (errflag) THEN
         CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
         ErrorsFound=.true.
@@ -6719,7 +6719,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
       errflag=.false.
       DesDayInput(EnvrnNum)%HumIndType=DDHumIndType_HumRatio
       CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(5))//' - Humidity-Ratio',TRIM(cCurrentModuleObject),'Severe','>= 0',  &
-                     (DesDayInput(EnvrnNum)%HumIndValue>=0.),'<= .03',(DesDayInput(EnvrnNum)%HumIndValue <=.03))
+                     (DesDayInput(EnvrnNum)%HumIndValue>=0.d0),'<= .03',(DesDayInput(EnvrnNum)%HumIndValue <=.03d0))
       IF (errflag) THEN
         CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
         ErrorsFound=.true.
@@ -6736,7 +6736,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
       errflag=.false.
       DesDayInput(EnvrnNum)%HumIndType=DDHumIndType_Enthalpy
       CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(5))//' - Enthalpy','SizingPeriod:DesignDay','Severe','>= 0.0',  &
-                     (DesDayInput(EnvrnNum)%HumIndValue>=0.),'<= 130000',(DesDayInput(EnvrnNum)%HumIndValue <=130000.))
+                     (DesDayInput(EnvrnNum)%HumIndValue>=0.d0),'<= 130000',(DesDayInput(EnvrnNum)%HumIndValue <=130000.d0))
       IF (errflag) THEN
         CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
         ErrorsFound=.true.
@@ -6815,7 +6815,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
 
            CASE (DDHumIndType_WBProfMul)
              ! multiplier: use schedule value, check 0 <= v <= 1
-             IF ( .not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%HumIndSchPtr,0.0,'>=',1.0,'<=')) THEN
+             IF ( .not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%HumIndSchPtr,0.0d0,'>=',1.0d0,'<=')) THEN
                CALL ShowSevereError(TRIM(cCurrentModuleObject)//': '//TRIM(DesDayInput(EnvrnNum)%Title))
                CALL ShowContinueError('..invalid '//TRIM(cAlphaFieldNames(6))//'='//TRIM(cAlphaArgs(6)))
                CALL ShowContinueError('..Specified Wet-bulb Profile Range Multiplier Values are not within [0.0, 1.0]')
@@ -6823,7 +6823,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
         ENDIF
 
            CASE (DDHumIndType_WBProfDif)
-            IF (.not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%HumIndSchPtr,0.0,'>=')) THEN
+            IF (.not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%HumIndSchPtr,0.0d0,'>=')) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//': '//TRIM(DesDayInput(EnvrnNum)%Title))
               CALL ShowContinueError('..invalid '//TRIM(cAlphaFieldNames(6))//'='//TRIM(cAlphaArgs(6)))
               CALL ShowSevereError('Some Wet-bulb Profile Difference Values are < 0.0 [would make max larger].')
@@ -6863,7 +6863,7 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
         CALL ShowContinueError('  Conditions for day will be set to Relative Humidity = 100%')
         IF (DesDayInput(EnvrnNum)%HumIndType == DDHumIndType_Dewpoint) THEN
           ! dew-point
-          testval=PsyWFnTdbRhPb(DesDayInput(EnvrnNum)%MaxDryBulb,1.0,DesDayInput(EnvrnNum)%PressBarom)
+          testval=PsyWFnTdbRhPb(DesDayInput(EnvrnNum)%MaxDryBulb,1.0d0,DesDayInput(EnvrnNum)%PressBarom)
           DesDayInput(EnvrnNum)%HumIndValue=PsyTdpFnWPb(testval,DesDayInput(EnvrnNum)%PressBarom)
         ELSE
           ! wet-bulb
@@ -6899,8 +6899,8 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
     IF (DesDayInput(EnvrnNum)%DBTempRangeType /= DDDBRangeType_Difference) THEN
       testval=DesDayInput(EnvrnNum)%MaxDryBulb-DesDayInput(EnvrnNum)%DailyDBRange
       errflag=.false.
-      CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(3)),TRIM(cCurrentModuleObject),'Severe','>= -70',(testval>=-70.), &
-                        '<= 70',(testval <=70.))
+      CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(3)),TRIM(cCurrentModuleObject),'Severe','>= -70',(testval>=-70.d0), &
+                        '<= 70',(testval <=70.d0))
       IF (errflag) THEN
         CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
         ErrorsFound=.true.
@@ -6917,14 +6917,14 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
         ELSE
           CALL GetSingleDayScheduleValues(DesDayInput(EnvrnNum)%TempRangeSchPtr,DDDBRngModifier(EnvrnNum,:,:))
           IF (cAlphaArgs(3) == 'MultiplierSchedule') THEN
-            IF ( .not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%TempRangeSchPtr,0.0,'>=',1.0,'<=')) THEN
+            IF ( .not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%TempRangeSchPtr,0.0d0,'>=',1.0d0,'<=')) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//': '//TRIM(DesDayInput(EnvrnNum)%Title))
               CALL ShowContinueError('..invalid '//TRIM(cAlphaFieldNames(4))//'='//TRIM(cAlphaArgs(4)))
               CALL ShowContinueError('..Specified Dry-bulb Range Multiplier Values are not within [0.0, 1.0]')
               ErrorsFound=.true.
             ENDIF
           ELSE  ! delta, must be > 0.0
-            IF (.not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%TempRangeSchPtr,0.0,'>=')) THEN
+            IF (.not. CheckDayScheduleValueMinMax(DesDayInput(EnvrnNum)%TempRangeSchPtr,0.0d0,'>=')) THEN
               CALL ShowSevereError(TRIM(cCurrentModuleObject)//': '//TRIM(DesDayInput(EnvrnNum)%Title))
               CALL ShowContinueError('..invalid '//TRIM(cAlphaFieldNames(4))//'='//TRIM(cAlphaArgs(4)))
               CALL ShowSevereError('Some Dry-bulb Range Difference Values are < 0.0 [would make max larger].')
@@ -6934,8 +6934,8 @@ SUBROUTINE GetDesignDayData(TotDesDays,ErrorsFound)
           testval=MAXVAL(DDDBRngModifier(EnvrnNum,:,:))
           testval=DesDayInput(EnvrnNum)%MaxDryBulb-testval
           errflag=.false.
-          CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(4)),TRIM(cCurrentModuleObject),'Severe','>= -70',(testval>=-70.), &
-                           '<= 70',(testval <=70.))
+          CALL RangeCheck(errflag,TRIM(cAlphaFieldNames(4)),TRIM(cCurrentModuleObject),'Severe','>= -70',(testval>=-70.d0), &
+                           '<= 70',(testval <=70.d0))
           IF (errflag) THEN
             CALL ShowContinueError(TRIM(cCurrentModuleObject)//': Occured in '//TRIM(DesDayInput(EnvrnNum)%Title))
             ErrorsFound=.true.
@@ -7146,7 +7146,7 @@ SUBROUTINE GetLocationInfo(ErrorsFound)
   INTEGER :: LocNumProp  ! Number of properties being passed
   INTEGER :: IOStat           ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: LocNames ! Temp Array to transfer location info
-  REAL, DIMENSION(4) :: LocProps !Temporary array to transfer location info
+  REAL(r64), DIMENSION(4) :: LocProps !Temporary array to transfer location info
   INTEGER NumLocations
 
          ! FLOW:
@@ -7421,7 +7421,7 @@ SUBROUTINE GetGroundTemps(ErrorsFound)
   INTEGER :: IOStat      ! IO Status when calling get input subroutine
   Integer :: I           ! Loop counter variable
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: GndAlphas ! Construction Alpha names defined
-  REAL, DIMENSION(12) :: GndProps !Temporary array to transfer ground temperatures
+  REAL(r64), DIMENSION(12) :: GndProps !Temporary array to transfer ground temperatures
   LOGICAL :: GenErrorMessage=.false.
 
      ! FLOW:
@@ -7440,7 +7440,7 @@ SUBROUTINE GetGroundTemps(ErrorsFound)
     !Assign the ground temps to the variable
     Do I=1,12
       GroundTemps(I) = GndProps(I)
-      IF (GroundTemps(I) < 15. .or. GroundTemps(I) > 25.) GenErrorMessage=.true.
+      IF (GroundTemps(I) < 15.d0 .or. GroundTemps(I) > 25.d0) GenErrorMessage=.true.
     End Do
 
     GroundTempObjInput=.true.
@@ -7449,7 +7449,7 @@ SUBROUTINE GetGroundTemps(ErrorsFound)
     CALL ShowSevereError(TRIM(cCurrentModuleObject)//': Too many objects entered. Only one allowed.')
     ErrorsFound=.true.
   ELSE
-    GroundTemps=18.
+    GroundTemps=18.d0
   ENDIF
 
   IF (GenErrorMessage) THEN
@@ -7518,7 +7518,7 @@ SUBROUTINE GetGroundTemps(ErrorsFound)
     CALL ShowSevereError(TRIM(cCurrentModuleObject)//': Too many objects entered. Only one allowed.')
     ErrorsFound=.true.
   ELSE
-    SurfaceGroundTemps=13.
+    SurfaceGroundTemps=13.d0
   ENDIF
 
   ! Write Final Ground Temp Information to the initialization output file
@@ -7612,7 +7612,7 @@ SUBROUTINE GetGroundReflectances(ErrorsFound)
   INTEGER :: IOStat      ! IO Status when calling get input subroutine
   Integer :: I           ! Loop counter variable
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: GndAlphas ! Construction Alpha names defined
-  REAL, ALLOCATABLE, DIMENSION(:) :: GndProps                          !Temporary array to transfer ground reflectances
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: GndProps                          !Temporary array to transfer ground reflectances
 
      ! FLOW:
   cCurrentModuleObject='Site:GroundReflectance'
@@ -7693,7 +7693,7 @@ SUBROUTINE GetSnowGroundRefModifiers(ErrorsFound)
   INTEGER :: IOStat      ! IO Status when calling get input subroutine
   Integer :: I           ! Loop counter variable
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: GndAlphas ! Construction Alpha names defined
-  REAL, ALLOCATABLE, DIMENSION(:) :: GndProps                          !Temporary array to transfer ground reflectances
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: GndProps                          !Temporary array to transfer ground reflectances
 
      ! FLOW:
   cCurrentModuleObject='Site:GroundReflectance:SnowModifier'
@@ -7724,10 +7724,10 @@ SUBROUTINE GetSnowGroundRefModifiers(ErrorsFound)
   720 Format(' Site:GroundReflectance:SnowModifier',2(', ',F7.3))
 
   Write(OutputFileInits,'(A)') '! <Site:GroundReflectance:Snow>, Months From Jan to Dec {dimensionless}'
-  Write(OutputFileInits,721) ' Site:GroundReflectance:Snow',(MAX(MIN(GroundReflectances(I)*SnowGndRefModifier,1.0),0.0),I=1,12)
+  Write(OutputFileInits,721) ' Site:GroundReflectance:Snow',(MAX(MIN(GroundReflectances(I)*SnowGndRefModifier,1.0d0),0.0d0),I=1,12)
   Write(OutputFileInits,'(A)') '! <Site:GroundReflectance:Snow:Daylighting>, Months From Jan to Dec {dimensionless}'
   Write(OutputFileInits,721) ' Site:GroundReflectance:Snow:Daylighting',  &
-                              (MAX(MIN(GroundReflectances(I)*SnowGndRefModifierForDayltg,1.0),0.0),I=1,12)
+                              (MAX(MIN(GroundReflectances(I)*SnowGndRefModifierForDayltg,1.0d0),0.0d0),I=1,12)
   721 Format(A,12(', ',F5.2))
   RETURN
 
@@ -7764,7 +7764,7 @@ SUBROUTINE GetWaterMainsTemperatures(ErrorsFound)
   INTEGER                                   :: NumNums   ! Number of elements in the numeric array
   INTEGER                                   :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(2) :: AlphArray ! Character string data
-  REAL, DIMENSION(2)                        :: NumArray  ! Numeric data
+  REAL(r64), DIMENSION(2)                        :: NumArray  ! Numeric data
   
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -7848,11 +7848,11 @@ SUBROUTINE CalcWaterMainsTemp()
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Tavg    ! Annual Average Outdoor Air Temperature (F)
-  REAL :: Tdiff   ! Maximum difference in monthly average outdoor air temperatures (deltaF)
-  REAL :: Ratio   ! Value used in correlation
-  REAL :: Lag     ! Value used in correlation
-  REAL :: Offset  ! Value used in correlation
+  REAL(r64) :: Tavg    ! Annual Average Outdoor Air Temperature (F)
+  REAL(r64) :: Tdiff   ! Maximum difference in monthly average outdoor air temperatures (deltaF)
+  REAL(r64) :: Ratio   ! Value used in correlation
+  REAL(r64) :: Lag     ! Value used in correlation
+  REAL(r64) :: Offset  ! Value used in correlation
 
      ! FLOW:
   SELECT CASE (WaterMainsTempsMethod)
@@ -7862,23 +7862,23 @@ SUBROUTINE CalcWaterMainsTemp()
 
     CASE (CorrelationMethod)
       ! Convert C to F
-      Tavg = WaterMainsTempsAnnualAvgAirTemp * (9.0 / 5.0) + 32.0
-      Tdiff = WaterMainsTempsMaxDiffAirTemp * (9.0 / 5.0)
+      Tavg = WaterMainsTempsAnnualAvgAirTemp * (9.0d0 / 5.0d0) + 32.0d0
+      Tdiff = WaterMainsTempsMaxDiffAirTemp * (9.0d0 / 5.0d0)
 
-      Ratio = 0.4 + 0.01 * (Tavg - 44.0)
-      Lag = 35.0 - 1.0 * (Tavg - 44.0)
-      Offset = 6.0
+      Ratio = 0.4d0 + 0.01d0 * (Tavg - 44.0d0)
+      Lag = 35.0d0 - 1.0d0 * (Tavg - 44.0d0)
+      Offset = 6.0d0
 
-      WaterMainsTemp = Tavg + Offset + Ratio * (Tdiff / 2.0) *   &
-         SIN((0.986 * (DayOfYear - 15.0 - Lag) - 90.0) * DegToRadians)
+      WaterMainsTemp = Tavg + Offset + Ratio * (Tdiff / 2.0d0) *   &
+         SIN((0.986d0 * (DayOfYear - 15.0d0 - Lag) - 90.0d0) * DegToRadians)
 
-      IF (WaterMainsTemp < 32.0) WaterMainsTemp = 32.0
+      IF (WaterMainsTemp < 32.0d0) WaterMainsTemp = 32.0d0
 
       ! Convert F to C
-      WaterMainsTemp = (WaterMainsTemp - 32.0) * (5.0 / 9.0)
+      WaterMainsTemp = (WaterMainsTemp - 32.0d0) * (5.0d0 / 9.0d0)
 
     CASE DEFAULT
-      WaterMainsTemp = 10.0  ! 50 F
+      WaterMainsTemp = 10.0d0  ! 50 F
 
   END SELECT
 
@@ -7916,11 +7916,11 @@ SUBROUTINE GetWeatherStation(ErrorsFound)
   INTEGER                                   :: NumNums   ! Number of elements in the numeric array
   INTEGER                                   :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray ! Character string data
-  REAL, DIMENSION(4)                        :: NumArray  ! Numeric data
-  REAL :: WeatherFileWindSensorHeight  ! Height of the wind sensor at the weather station, i.e., weather file
-  REAL :: WeatherFileWindExp           ! Exponent for the wind velocity profile at the weather station
-  REAL :: WeatherFileWindBLHeight      ! Boundary layer height for the wind velocity profile at the weather station (m)
-  REAL :: WeatherFileTempSensorHeight  ! Height of the air temperature sensor at the weather station (m)
+  REAL(r64), DIMENSION(4)                        :: NumArray  ! Numeric data
+  REAL(r64) :: WeatherFileWindSensorHeight  ! Height of the wind sensor at the weather station, i.e., weather file
+  REAL(r64) :: WeatherFileWindExp           ! Exponent for the wind velocity profile at the weather station
+  REAL(r64) :: WeatherFileWindBLHeight      ! Boundary layer height for the wind velocity profile at the weather station (m)
+  REAL(r64) :: WeatherFileTempSensorHeight  ! Height of the air temperature sensor at the weather station (m)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -7930,10 +7930,10 @@ SUBROUTINE GetWeatherStation(ErrorsFound)
   NumObjects = GetNumObjectsFound(TRIM(cCurrentModuleObject))
 
   ! Default conditions for a weather station in an open field at a height of 10 m. (These should match the IDD defaults.)
-  WeatherFileWindSensorHeight = 10.0
-  WeatherFileWindExp = 0.14
-  WeatherFileWindBLHeight = 270.0
-  WeatherFileTempSensorHeight = 1.5
+  WeatherFileWindSensorHeight = 10.0d0
+  WeatherFileWindExp = 0.14d0
+  WeatherFileWindBLHeight = 270.0d0
+  WeatherFileTempSensorHeight = 1.5d0
 
   IF (NumObjects == 1) THEN
     CALL GetObjectItem(TRIM(cCurrentModuleObject),1,AlphArray,NumAlphas,NumArray,NumNums,IOStat)
@@ -8008,10 +8008,10 @@ SUBROUTINE DayltgCurrentExtHorizIllum
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL   :: SDIRH                   ! Exterior horizontal beam irradiance (W/m2)
-REAL   :: SDIFH                   ! Exterior horizontal sky diffuse irradiance (W/m2)
-!REAL   :: PDIRLW                  ! Luminous efficacy (lum/W) of beam solar radiation
-!REAL   :: PDIFLW                  ! Luminous efficacy (lum/W) of sky diffuse solar radiation
+REAL(r64)   :: SDIRH                   ! Exterior horizontal beam irradiance (W/m2)
+REAL(r64)   :: SDIFH                   ! Exterior horizontal sky diffuse irradiance (W/m2)
+!REAL(r64)   :: PDIRLW                  ! Luminous efficacy (lum/W) of beam solar radiation
+!REAL(r64)   :: PDIFLW                  ! Luminous efficacy (lum/W) of sky diffuse solar radiation
 
 !              DIRECT AND DIFFUSE HORIZONTAL SOLAR IRRADIANCE (W/M2).
 !              SOLCOS(3), below, is the cosine of the solar zenith angle.
@@ -8020,7 +8020,7 @@ REAL   :: SDIFH                   ! Exterior horizontal sky diffuse irradiance (
         SDIRH  = BeamSolarRad * SOLCOS(3)
         SDIFH  = DifSolarRad
 !              Fraction of sky covered by clouds
-        CloudFraction = (SDIFH/(SDIRH+SDIFH+0.0001))**2
+        CloudFraction = (SDIFH/(SDIRH+SDIFH+0.0001d0))**2
 !
 !              Luminous efficacy of sky diffuse solar and beam solar (lumens/W);
 !              Horizontal illuminance from sky and horizontal beam illuminance (lux)
@@ -8031,16 +8031,16 @@ REAL   :: SDIFH                   ! Exterior horizontal sky diffuse irradiance (
         HISUNF = SDIRH * PDIRLW
         HISUNFnorm = BeamSolarRad * PDIRLW
       ELSE
-        SDIRH = 0.
-        SDIFH = 0.
-        CloudFraction = 0.
-        PDIFLW = 0.
-        PDIRLW = 0.
-        HISKF = 0.
-        HISUNF = 0.
-        HISUNFnorm = 0.
-        SkyClearness = 0.
-        SkyBrightness = 0.
+        SDIRH = 0.d0
+        SDIFH = 0.d0
+        CloudFraction = 0.d0
+        PDIFLW = 0.d0
+        PDIRLW = 0.d0
+        HISKF = 0.d0
+        HISUNF = 0.d0
+        HISUNFnorm = 0.d0
+        SkyClearness = 0.d0
+        SkyBrightness = 0.d0
       END IF
 
       RETURN
@@ -8076,25 +8076,25 @@ SUBROUTINE DayltgLuminousEfficacy (DiffLumEff,DirLumEff)
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL, PARAMETER, DIMENSION(8) :: ADiffLumEff=  &         ! Diffuse luminous efficacy coefficients
-      (/97.24, 107.22, 104.97, 102.39, 100.71, 106.42, 141.88, 152.23/)
-REAL, PARAMETER, DIMENSION(8) :: BDiffLumEff=  &
-      (/-0.46, 1.15,   2.96,   5.59,   5.94,   3.83,   1.90,   0.35  /)
-REAL, PARAMETER, DIMENSION(8) :: CDiffLumEff=  &
-      (/12.00, 0.59,   -5.53,  -13.95, -22.75, -36.15, -53.24, -45.27/)
-REAL, PARAMETER, DIMENSION(8) :: DDiffLumEff=  &
-      (/-8.91, -3.95,  -8.77,  -13.90, -23.74, -28.83, -14.03, -7.98 /)
-REAL, PARAMETER, DIMENSION(8) :: ADirLumEff=   &         ! Direct luminous efficacy coefficients
-      (/57.20, 98.99,  109.83, 110.34, 106.36, 107.19, 105.75, 101.18/)
-REAL, PARAMETER, DIMENSION(8) :: BDirLumEff=   &
-      (/-4.55, -3.46,  -4.90,  -5.84,  -3.97,  -1.25,  0.77,   1.58  /)
-REAL, PARAMETER, DIMENSION(8) :: CDirLumEff=   &
-      (/-2.98, -1.21,  -1.71,  -1.99,  -1.75,  -1.51,  -1.26,  -1.10 /)
-REAL, PARAMETER, DIMENSION(8) :: DDirLumEff=   &
-      (/117.12,12.38,  -8.81,  -4.56,  -6.16,  -26.73, -34.44, -8.29 /)
-REAL, PARAMETER, DIMENSION(12) :: ExtraDirNormIll=  &     ! Monthly exterrestrial direct normal illuminance (lum/m2)
-      (/131153.,130613.,128992.,126816.,124731.,123240., &
-        122652.,123120.,124576.,126658.,128814.,130471./)
+REAL(r64), PARAMETER, DIMENSION(8) :: ADiffLumEff=  &         ! Diffuse luminous efficacy coefficients
+      (/97.24d0, 107.22d0, 104.97d0, 102.39d0, 100.71d0, 106.42d0, 141.88d0, 152.23d0/)
+REAL(r64), PARAMETER, DIMENSION(8) :: BDiffLumEff=  &
+      (/-0.46d0, 1.15d0,   2.96d0,   5.59d0,   5.94d0,   3.83d0,   1.90d0,   0.35d0  /)
+REAL(r64), PARAMETER, DIMENSION(8) :: CDiffLumEff=  &
+      (/12.00d0, 0.59d0,   -5.53d0,  -13.95d0, -22.75d0, -36.15d0, -53.24d0, -45.27d0/)
+REAL(r64), PARAMETER, DIMENSION(8) :: DDiffLumEff=  &
+      (/-8.91d0, -3.95d0,  -8.77d0,  -13.90d0, -23.74d0, -28.83d0, -14.03d0, -7.98d0 /)
+REAL(r64), PARAMETER, DIMENSION(8) :: ADirLumEff=   &         ! Direct luminous efficacy coefficients
+      (/57.20d0, 98.99d0,  109.83d0, 110.34d0, 106.36d0, 107.19d0, 105.75d0, 101.18d0/)
+REAL(r64), PARAMETER, DIMENSION(8) :: BDirLumEff=   &
+      (/-4.55d0, -3.46d0,  -4.90d0,  -5.84d0,  -3.97d0,  -1.25d0,  0.77d0,   1.58d0  /)
+REAL(r64), PARAMETER, DIMENSION(8) :: CDirLumEff=   &
+      (/-2.98d0, -1.21d0,  -1.71d0,  -1.99d0,  -1.75d0,  -1.51d0,  -1.26d0,  -1.10d0 /)
+REAL(r64), PARAMETER, DIMENSION(8) :: DDirLumEff=   &
+      (/117.12d0,12.38d0,  -8.81d0,  -4.56d0,  -6.16d0,  -26.73d0, -34.44d0, -8.29d0 /)
+REAL(r64), PARAMETER, DIMENSION(12) :: ExtraDirNormIll=  &     ! Monthly exterrestrial direct normal illuminance (lum/m2)
+      (/131153.d0,130613.d0,128992.d0,126816.d0,124731.d0,123240.d0, &
+        122652.d0,123120.d0,124576.d0,126658.d0,128814.d0,130471.d0/)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -8103,15 +8103,15 @@ REAL, PARAMETER, DIMENSION(12) :: ExtraDirNormIll=  &     ! Monthly exterrestria
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL   :: DirLumEff               ! Luminous efficacy of beam solar radiation (lum/W)
-REAL   :: DiffLumEff              ! Luminous efficacy of sky diffuse solar radiation (lum/W)
-REAL   :: SunZenith               ! Solar zenith angle (radians)
-REAL   :: SunAltitude             ! Solar altitude angle (radians)
-REAL   :: SinSunAltitude          ! Sine of the solar altitude angle
-REAL   :: Zeta
+REAL(r64)   :: DirLumEff               ! Luminous efficacy of beam solar radiation (lum/W)
+REAL(r64)   :: DiffLumEff              ! Luminous efficacy of sky diffuse solar radiation (lum/W)
+REAL(r64)   :: SunZenith               ! Solar zenith angle (radians)
+REAL(r64)   :: SunAltitude             ! Solar altitude angle (radians)
+REAL(r64)   :: SinSunAltitude          ! Sine of the solar altitude angle
+REAL(r64)   :: Zeta
 INTEGER     :: ISkyClearness           ! Sky clearness bin
-REAL   :: AirMass                 ! Relative optical air mass
-REAL   :: AtmosMoisture           ! Atmospheric moisture (cm of precipitable water)
+REAL(r64)   :: AirMass                 ! Relative optical air mass
+REAL(r64)   :: AtmosMoisture           ! Atmospheric moisture (cm of precipitable water)
 
 
           ! FLOW:
@@ -8128,38 +8128,38 @@ REAL   :: AtmosMoisture           ! Atmospheric moisture (cm of precipitable wat
 !              DifSolarRad is the diffuse horizontal irradiance.
 !              BeamSolarRad is the direct normal irradiance.
 !
-      Zeta = 1.041*SunZenith**3
-      SkyClearness = ( (DifSolarRad + BeamSolarRad)/(DifSolarRad + 0.0001) + Zeta )/(1.+Zeta)
-      AirMass = (1.-0.1*Elevation/1000.) / (SinSunAltitude + 0.15/(SunAltitude/DegToRadians + 3.885)**1.253)
+      Zeta = 1.041d0*SunZenith**3
+      SkyClearness = ( (DifSolarRad + BeamSolarRad)/(DifSolarRad + 0.0001d0) + Zeta )/(1.+Zeta)
+      AirMass = (1.d0-0.1d0*Elevation/1000.d0) / (SinSunAltitude + 0.15d0/(SunAltitude/DegToRadians + 3.885d0)**1.253d0)
 !
 !              In the following, 93.73 is the extraterrestrial luminous efficacy
 !
-      SkyBrightness = (DifSolarRad * 93.73)* AirMass / ExtraDirNormIll(Month)
+      SkyBrightness = (DifSolarRad * 93.73d0)* AirMass / ExtraDirNormIll(Month)
 !
-      IF(SkyClearness.LE.1.065) THEN
+      IF(SkyClearness.LE.1.065d0) THEN
          ISkyClearness = 1
-      ELSE IF(SkyClearness.GT.1.065.AND.SkyClearness.LE.1.23) THEN
+      ELSE IF(SkyClearness.GT.1.065d0.AND.SkyClearness.LE.1.23d0) THEN
          ISkyClearness = 2
-      ELSE IF(SkyClearness.GT.1.23.AND.SkyClearness.LE.1.50) THEN
+      ELSE IF(SkyClearness.GT.1.23d0.AND.SkyClearness.LE.1.50d0) THEN
          ISkyClearness = 3
-      ELSE IF(SkyClearness.GT.1.50.AND.SkyClearness.LE.1.95) THEN
+      ELSE IF(SkyClearness.GT.1.50d0.AND.SkyClearness.LE.1.95d0) THEN
          ISkyClearness = 4
-      ELSE IF(SkyClearness.GT.1.95.AND.SkyClearness.LE.2.80) THEN
+      ELSE IF(SkyClearness.GT.1.95d0.AND.SkyClearness.LE.2.80d0) THEN
          ISkyClearness = 5
-      ELSE IF(SkyClearness.GT.2.80.AND.SkyClearness.LE.4.50) THEN
+      ELSE IF(SkyClearness.GT.2.80d0.AND.SkyClearness.LE.4.50d0) THEN
          ISkyClearness = 6
-      ELSE IF(SkyClearness.GT.4.50.AND.SkyClearness.LE.6.20) THEN
+      ELSE IF(SkyClearness.GT.4.50d0.AND.SkyClearness.LE.6.20d0) THEN
          ISkyClearness = 7
       ELSE
          ISkyClearness = 8
       END IF
 !
-      AtmosMoisture = EXP (0.07*OutDewPointTemp - 0.075)
+      AtmosMoisture = EXP (0.07d0*OutDewPointTemp - 0.075d0)
 !
 !              Sky diffuse luminous efficacy
 !
       IF(SkyBrightness.LE.0.) THEN
-         DiffLumEff = 0.
+         DiffLumEff = 0.d0
       ELSE
          DiffLumEff = ADiffLumEff(ISkyClearness) + BDiffLumEff(ISkyClearness)*AtmosMoisture + &
                       CDiffLumEff(ISkyClearness)*SOLCOS(3) + &
@@ -8168,18 +8168,18 @@ REAL   :: AtmosMoisture           ! Atmospheric moisture (cm of precipitable wat
 !
 !              Direct normal luminous efficacy
 !
-      IF(SkyBrightness.LE.0.) THEN
-         DirLumEff = 0.
+      IF(SkyBrightness.LE.0.d0) THEN
+         DirLumEff = 0.d0
       ELSE
-         DirLumEff = MAX(0.,ADirLumEff(ISkyClearness) + BDirLumEff(ISkyClearness)*AtmosMoisture + &
-                       CDirLumEff(ISkyClearness)*EXP(5.73*SunZenith-5.) + &
+         DirLumEff = MAX(0.d0,ADirLumEff(ISkyClearness) + BDirLumEff(ISkyClearness)*AtmosMoisture + &
+                       CDirLumEff(ISkyClearness)*EXP(5.73d0*SunZenith-5.d0) + &
                        DDirLumEff(ISkyClearness)*SkyBrightness)
       ENDIF
 
       RETURN
 END SUBROUTINE DayltgLuminousEfficacy
 
-REAL Function GetSTM(Longitude)
+REAL(r64) Function GetSTM(Longitude)
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
           !       DATE WRITTEN   August 2003
@@ -8204,7 +8204,7 @@ REAL Function GetSTM(Longitude)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Longitude  ! Longitude from user input
+  REAL(r64), INTENT(IN) :: Longitude  ! Longitude from user input
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -8216,30 +8216,30 @@ REAL Function GetSTM(Longitude)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-      REAL longl(-12:12)  ! Lower Longitude value for a Time Zone
-      REAL longh(-12:12)  ! Upper Longitude value for a Time Zone
+      REAL(r64) longl(-12:12)  ! Lower Longitude value for a Time Zone
+      REAL(r64) longh(-12:12)  ! Upper Longitude value for a Time Zone
       INTEGER i  ! Loop variable
-      REAL temp  ! temporary value used to determine time zone
-      REAL tz    ! resultant tz meridian
+      REAL(r64) temp  ! temporary value used to determine time zone
+      REAL(r64) tz    ! resultant tz meridian
 !
-      longl(0)=-7.5
-      longh(0)=7.5
+      longl(0)=-7.5d0
+      longh(0)=7.5d0
       do i=1,12
-        longl(i)=longl(i-1)+15.
-        longh(i)=longh(i-1)+15.
+        longl(i)=longl(i-1)+15.d0
+        longh(i)=longh(i-1)+15.d0
       enddo
       do i=1,12
-        longl(-i)=longl(-i+1)-15.
-        longh(-i)=longh(-i+1)-15.
+        longl(-i)=longl(-i+1)-15.d0
+        longh(-i)=longh(-i+1)-15.d0
       enddo
       temp=Longitude
-      temp=mod(temp,360.)
+      temp=mod(temp,360.d0)
 
-      if (temp > 180.) temp=temp-180.
+      if (temp > 180.d0) temp=temp-180.d0
       do i=-12,12
         if (temp > longl(i) .and. temp <= longh(i)) then
           tz=i
-          tz=mod(tz,24.)
+          tz=mod(tz,24.d0)
           GetSTM=tz
           exit
         endif
@@ -8292,7 +8292,7 @@ SUBROUTINE ProcessEPWHeader(HeaderString,Line,ErrorsFound)
   INTEGER :: Count
   CHARACTER(len=20) WMO
   INTEGER Pos
-  REAL Number
+  REAL(r64) Number
   LOGICAL IOStatus
   INTEGER PMonth,Pday,PWeekDay,PYear,DateType
   INTEGER NumHdArgs
@@ -8641,7 +8641,7 @@ SUBROUTINE ProcessEPWHeader(HeaderString,Line,ErrorsFound)
             endif
             Line=Line(Pos+1:)
           enddo
-          GroundTempsFC=0.0
+          GroundTempsFC=0.0d0
           actcount=0
           do count=1,12 ! take the first set of ground temperatures.
             Pos=INDEX(Line,',')
@@ -9411,20 +9411,20 @@ SUBROUTINE SetupInterpolationValues
   INTEGER halfpoint
   INTEGER hpoint
   INTEGER tloop
-  REAL tweight
-  REAL tweight1
+  REAL(r64) tweight
+  REAL(r64) tweight1
 
   ALLOCATE(Interpolation(NumOfTimeStepInHour))
   ALLOCATE(SolarInterpolation(NumOfTimeStepInHour))
-  Interpolation=0.0
-  SolarInterpolation=0.0
+  Interpolation=0.0d0
+  SolarInterpolation=0.0d0
   halfpoint=0
 
   do tloop=1,NumOfTimeStepInHour
     IF (NumOfTimeStepInHour == 1) THEN
-      tweight=1.0
+      tweight=1.0d0
     ELSE
-      tweight = MIN(1.0,(REAL(tloop,r64)/REAL(NumOfTimeStepInHour,r64)))
+      tweight = MIN(1.0d0,(REAL(tloop,r64)/REAL(NumOfTimeStepInHour,r64)))
     END IF
 
     Interpolation(tloop)=tweight
@@ -9434,8 +9434,8 @@ SUBROUTINE SetupInterpolationValues
   if (mod(NumOfTimeStepInHour,2) == 0) then
     ! even number of time steps.
     halfpoint=NumOfTimeStepInHour/2
-    SolarInterpolation(halfpoint)=1.0
-    tweight=1./REAL(NumOfTimeStepInHour,r64)
+    SolarInterpolation(halfpoint)=1.0d0
+    tweight=1.d0/REAL(NumOfTimeStepInHour,r64)
     hpoint=1
     do tloop=halfpoint+1,NumOfTimeStepInHour
       SolarInterpolation(tloop)=1.0-hpoint*tweight
@@ -9448,16 +9448,16 @@ SUBROUTINE SetupInterpolationValues
     enddo
   else  ! odd number of time steps
     if (NumOfTimeStepInHour == 1) then
-      SolarInterpolation(1)=.5
+      SolarInterpolation(1)=.5d0
     elseif (NumOfTimeStepInHour == 3) then
-      tweight=1./real(NumOfTimeStepInHour,r64)
-      SolarInterpolation(1)=5.0/6.0
-      SolarInterpolation(2)=5.0/6.0
-      SolarInterpolation(3)=.5
+      tweight=1.d0/real(NumOfTimeStepInHour,r64)
+      SolarInterpolation(1)=5.0d0/6.0d0
+      SolarInterpolation(2)=5.0d0/6.0d0
+      SolarInterpolation(3)=.5d0
     else
-      tweight=1./real(NumOfTimeStepInHour,r64)
+      tweight=1.d0/real(NumOfTimeStepInHour,r64)
       halfpoint=NumOfTimeStepInHour/2
-      tweight1=1.0-tweight/2.
+      tweight1=1.0d0-tweight/2.d0
       SolarInterpolation(halfpoint)=tweight1
       SolarInterpolation(halfpoint+1)=tweight1
       hpoint=1

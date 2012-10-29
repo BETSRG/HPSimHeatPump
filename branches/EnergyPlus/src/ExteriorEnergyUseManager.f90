@@ -54,29 +54,29 @@ INTEGER, PARAMETER, PUBLIC :: AstroClockOverride = 2 !exterior lights controlled
 TYPE, PUBLIC :: ExteriorLightUsage
   CHARACTER(len=MaxNameLength) :: Name = ' '             ! Descriptive name -- will show on reporting
   INTEGER                      :: SchedPtr = 0           ! Can be scheduled
-  REAL                    :: DesignLevel = 0.0      ! Consumption in Watts
-  REAL                    :: Power = 0.0            ! Power = DesignLevel * ScheduleValue
-  REAL                    :: CurrentUse = 0.0       ! Use for this time step
+  REAL(r64)                    :: DesignLevel = 0.0      ! Consumption in Watts
+  REAL(r64)                    :: Power = 0.0            ! Power = DesignLevel * ScheduleValue
+  REAL(r64)                    :: CurrentUse = 0.0       ! Use for this time step
   INTEGER                      :: ControlMode = 1        ! Control mode Schedule Only or Astronomical Clock plus schedule
 
   LOGICAL                      :: ManageDemand = .FALSE. ! Flag to indicate whether to use demand limiting
-  REAL                    :: DemandLimit = 0.0      ! Demand limit set by demand manager [W]
+  REAL(r64)                    :: DemandLimit = 0.0      ! Demand limit set by demand manager [W]
   LOGICAL                      :: PowerActuatorOn  = .FALSE.       ! EMS flag
-  REAL                    :: PowerActuatorValue     ! EMS value
-  REAL                    :: SumConsumption = 0.0   ! sum of electric consumption [J] for reporting
-  REAL                    :: SumTimeNotZeroCons = 0.0 ! sum of time of positive electric consumption [hr]
+  REAL(r64)                    :: PowerActuatorValue     ! EMS value
+  REAL(r64)                    :: SumConsumption = 0.0   ! sum of electric consumption [J] for reporting
+  REAL(r64)                    :: SumTimeNotZeroCons = 0.0 ! sum of time of positive electric consumption [hr]
 END TYPE
 
 TYPE, PUBLIC :: ExteriorEquipmentUsage
   CHARACTER(len=MaxNameLength) :: Name = ' '             ! Descriptive name -- will show on reporting
   INTEGER                      :: FuelType = 0
   INTEGER                      :: SchedPtr = 0           ! Can be scheduled
-  REAL                    :: DesignLevel = 0.0      ! Design Consumption (Watts, except for Water Equipment)
-  REAL                    :: Power = 0.0            ! Power = DesignLevel * ScheduleValue
-  REAL                    :: CurrentUse = 0.0       ! Use for this time step
+  REAL(r64)                    :: DesignLevel = 0.0      ! Design Consumption (Watts, except for Water Equipment)
+  REAL(r64)                    :: Power = 0.0            ! Power = DesignLevel * ScheduleValue
+  REAL(r64)                    :: CurrentUse = 0.0       ! Use for this time step
 
   LOGICAL                      :: ManageDemand = .FALSE. ! Flag to indicate whether to use demand limiting
-  REAL                    :: DemandLimit = 0.0      ! Demand limit set by demand manager [W]
+  REAL(r64)                    :: DemandLimit = 0.0      ! Demand limit set by demand manager [W]
 END TYPE
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -199,9 +199,9 @@ SUBROUTINE GetExteriorEnergyUseInput
   CHARACTER(len=MaxNameLength)   :: EndUseSubcategoryName
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
-  REAL    :: SchMax           ! Max value of schedule for item
-  REAL    :: SchMin           ! Min value of schedule for item
-  REAL    :: sumDesignLevel = 0 !for predefined report of design level total
+  REAL(r64)    :: SchMax           ! Max value of schedule for item
+  REAL(r64)    :: SchMin           ! Min value of schedule for item
+  REAL(r64)    :: sumDesignLevel = 0 !for predefined report of design level total
   
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -675,7 +675,7 @@ SUBROUTINE ReportExteriorEnergyUse
         ExteriorLights(Item)%SumConsumption = ExteriorLights(Item)%SumConsumption + ExteriorLights(Item)%CurrentUse
         !for tabular report, accumulate the time when each ExteriorLights has consumption
         !(using a very small threshold instead of zero)
-        IF (ExteriorLights(Item)%CurrentUse > 0.01) THEN
+        IF (ExteriorLights(Item)%CurrentUse > 0.01d0) THEN
           ExteriorLights(Item)%SumTimeNotZeroCons = ExteriorLights(Item)%SumTimeNotZeroCons + TimeStepZone
         END IF
       ENDIF

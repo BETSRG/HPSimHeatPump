@@ -40,34 +40,34 @@ TYPE TDDPipeData
   INTEGER                        :: Dome = 0                ! Pointer to the dome object
   INTEGER                        :: Diffuser = 0            ! Pointer to the diffuser object
   INTEGER                        :: Construction = 0        ! Pointer to the construction object
-  REAL                      :: Diameter = 0.0          ! Pipe diameter
-  REAL                      :: TotLength = 0.0         ! Total length of pipe, including exterior
-  REAL                      :: Reff = 0.0              ! Effective R value between TDD:DOME and TDD:DIFFUSER
+  REAL(r64)                      :: Diameter = 0.0          ! Pipe diameter
+  REAL(r64)                      :: TotLength = 0.0         ! Total length of pipe, including exterior
+  REAL(r64)                      :: Reff = 0.0              ! Effective R value between TDD:DOME and TDD:DIFFUSER
   INTEGER                        :: NumOfTZones = 0         ! Number of transition zone
   INTEGER, ALLOCATABLE, DIMENSION(:) :: TZone                   ! Pointers to transition zones
-  REAL, ALLOCATABLE, DIMENSION(:)    :: TZoneLength             ! Length of pipe in each transition zone
+  REAL(r64), ALLOCATABLE, DIMENSION(:)    :: TZoneLength             ! Length of pipe in each transition zone
 
   ! Calculated variables
-  REAL                      :: AspectRatio = 0.0       ! Aspect ratio, length / diameter
-  REAL                      :: ReflectVis = 0.0        ! Visible reflectance of surface
-  REAL                      :: ReflectSol = 0.0        ! Solar reflectance of surface
-  REAL, DIMENSION(NumOfAngles)   :: PipeTransVisBeam = 0.0  ! Table of beam visible transmittance vs. cosine angle
-  REAL, DIMENSION(NumOfAngles)   :: PipeTransSolBeam = 0.0  ! Table of beam solar transmittance vs. cosine angle
-  REAL                      :: TransSolIso = 0.0       ! Diffuse isotropic solar transmittance (constant)
-  REAL                      :: TransSolHorizon = 0.0   ! Diffuse horizon solar transmittance (constant)
-  REAL                      :: ExtLength = 0.0         ! Exterior exposed length of pipe
-  REAL, ALLOCATABLE, DIMENSION(:) :: TZoneHeatGain     ! convection gain to transition zones
+  REAL(r64)                      :: AspectRatio = 0.0       ! Aspect ratio, length / diameter
+  REAL(r64)                      :: ReflectVis = 0.0        ! Visible reflectance of surface
+  REAL(r64)                      :: ReflectSol = 0.0        ! Solar reflectance of surface
+  REAL(r64), DIMENSION(NumOfAngles)   :: PipeTransVisBeam = 0.0  ! Table of beam visible transmittance vs. cosine angle
+  REAL(r64), DIMENSION(NumOfAngles)   :: PipeTransSolBeam = 0.0  ! Table of beam solar transmittance vs. cosine angle
+  REAL(r64)                      :: TransSolIso = 0.0       ! Diffuse isotropic solar transmittance (constant)
+  REAL(r64)                      :: TransSolHorizon = 0.0   ! Diffuse horizon solar transmittance (constant)
+  REAL(r64)                      :: ExtLength = 0.0         ! Exterior exposed length of pipe
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TZoneHeatGain     ! convection gain to transition zones
 
   ! Report variables
-  REAL                      :: TransmittedSolar = 0.0  ! Solar transmitted by the TDD [W]
-  REAL                      :: PipeAbsorbedSolar = 0.0 ! Solar absorbed in the walls of the pipe [W]
-  REAL                      :: HeatGain = 0.0          ! Solar heat gain [W]
-  REAL                      :: HeatLoss = 0.0          ! Solar heat loss [W]
+  REAL(r64)                      :: TransmittedSolar = 0.0  ! Solar transmitted by the TDD [W]
+  REAL(r64)                      :: PipeAbsorbedSolar = 0.0 ! Solar absorbed in the walls of the pipe [W]
+  REAL(r64)                      :: HeatGain = 0.0          ! Solar heat gain [W]
+  REAL(r64)                      :: HeatLoss = 0.0          ! Solar heat loss [W]
 
-  REAL                      :: TransVisBeam = 0.0      ! TDD visible transmittance
-  REAL                      :: TransSolBeam = 0.0      ! TDD beam solar transmittance
-  REAL                      :: TransVisDiff = 0.0      ! TDD diffuse visible transmittance
-  REAL                      :: TransSolDiff = 0.0      ! TDD diffuse solar transmittance
+  REAL(r64)                      :: TransVisBeam = 0.0      ! TDD visible transmittance
+  REAL(r64)                      :: TransSolBeam = 0.0      ! TDD beam solar transmittance
+  REAL(r64)                      :: TransVisDiff = 0.0      ! TDD diffuse visible transmittance
+  REAL(r64)                      :: TransSolDiff = 0.0      ! TDD diffuse solar transmittance
 END TYPE TDDPipeData
 
 TYPE ShelfData
@@ -79,9 +79,9 @@ TYPE ShelfData
   INTEGER                        :: Construction = 0        ! Pointer to the outside shelf construction object
 
   ! Calculated variables
-  REAL                      :: OutReflectVis = 0.0     ! Outside shelf visible reflectance
-  REAL                      :: OutReflectSol = 0.0     ! Outside shelf solar reflectance
-  REAL                      :: ViewFactor = 0.0        ! Outside shelf view factor to window
+  REAL(r64)                      :: OutReflectVis = 0.0     ! Outside shelf visible reflectance
+  REAL(r64)                      :: OutReflectSol = 0.0     ! Outside shelf solar reflectance
+  REAL(r64)                      :: ViewFactor = 0.0        ! Outside shelf view factor to window
 
   ! Report variables
 

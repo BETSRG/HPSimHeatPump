@@ -50,69 +50,69 @@ PRIVATE
 
           !MODULE PARAMETER DEFINITIONS:
 
-REAL, PRIVATE, PARAMETER :: sigma=5.6697d-8    ! Stefan-Boltzmann constant
-REAL,  PARAMETER :: TKelvin=KelvinConv  ! conversion from Kelvin to Celsius
+REAL(r64), PRIVATE, PARAMETER :: sigma=5.6697d-8    ! Stefan-Boltzmann constant
+REAL(r64),  PARAMETER :: TKelvin=KelvinConv  ! conversion from Kelvin to Celsius
 INTEGER, PRIVATE, PARAMETER :: nume=107           ! Number of wavelength values in solar spectrum
 INTEGER, PRIVATE, PARAMETER :: numt3=81           ! Number of wavelength values in the photopic response
 
-REAL,    PRIVATE, PARAMETER, DIMENSION(8) :: AirProps=  &
+REAL(r64),    PRIVATE, PARAMETER, DIMENSION(8) :: AirProps=  &
 !               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
-             (/ 1.29, -0.4*10**-2, 2.41*10**-2, 7.6*10**-5, 1.73*10**-5, 1.0*10**-7, 0.72,   1.8*10**-3  /)
+             (/ 1.29d0, -0.4d-2, 2.41d-2, 7.6d-5, 1.73d-5, 1.0d-7, 0.72d0,   1.8d-3  /)
 ! Air mass 1.5 terrestrial solar global spectral irradiance (W/m2-micron)
 ! on a 37 degree tilted surface; corresponds
 ! to wavelengths (microns) in following data block (ISO 9845-1 and ASTM E 892;
 ! derived from Optics5 data file ISO-9845GlobalNorm.std, 10-14-99)
-REAL, PRIVATE, PARAMETER, DIMENSION(nume) :: wle= &   ! Solar spectrum wavelength values (microns)
-    (/0.3000,0.3050,0.3100,0.3150,0.3200,0.3250,0.3300,0.3350,0.3400,0.3450, &
-      0.3500,0.3600,0.3700,0.3800,0.3900,0.4000,0.4100,0.4200,0.4300,0.4400, &
-      0.4500,0.4600,0.4700,0.4800,0.4900,0.5000,0.5100,0.5200,0.5300,0.5400, &
-      0.5500,0.5700,0.5900,0.6100,0.6300,0.6500,0.6700,0.6900,0.7100,0.7180, &
-      0.7244,0.7400,0.7525,0.7575,0.7625,0.7675,0.7800,0.8000,0.8160,0.8237, &
-      0.8315,0.8400,0.8600,0.8800,0.9050,0.9150,0.9250,0.9300,0.9370,0.9480, &
-      0.9650,0.9800,0.9935,1.0400,1.0700,1.1000,1.1200,1.1300,1.1370,1.1610, &
-      1.1800,1.2000,1.2350,1.2900,1.3200,1.3500,1.3950,1.4425,1.4625,1.4770, &
-      1.4970,1.5200,1.5390,1.5580,1.5780,1.5920,1.6100,1.6300,1.6460,1.6780, &
-      1.7400,1.8000,1.8600,1.9200,1.9600,1.9850,2.0050,2.0350,2.0650,2.1000, &
-      2.1480,2.1980,2.2700,2.3600,2.4500,2.4940,2.5370 /)
+REAL(r64), PRIVATE, PARAMETER, DIMENSION(nume) :: wle= &   ! Solar spectrum wavelength values (microns)
+    (/0.3000d0,0.3050d0,0.3100d0,0.3150d0,0.3200d0,0.3250d0,0.3300d0,0.3350d0,0.3400d0,0.3450d0, &
+      0.3500d0,0.3600d0,0.3700d0,0.3800d0,0.3900d0,0.4000d0,0.4100d0,0.4200d0,0.4300d0,0.4400d0, &
+      0.4500d0,0.4600d0,0.4700d0,0.4800d0,0.4900d0,0.5000d0,0.5100d0,0.5200d0,0.5300d0,0.5400d0, &
+      0.5500d0,0.5700d0,0.5900d0,0.6100d0,0.6300d0,0.6500d0,0.6700d0,0.6900d0,0.7100d0,0.7180d0, &
+      0.7244d0,0.7400d0,0.7525d0,0.7575d0,0.7625d0,0.7675d0,0.7800d0,0.8000d0,0.8160d0,0.8237d0, &
+      0.8315d0,0.8400d0,0.8600d0,0.8800d0,0.9050d0,0.9150d0,0.9250d0,0.9300d0,0.9370d0,0.9480d0, &
+      0.9650d0,0.9800d0,0.9935d0,1.0400d0,1.0700d0,1.1000d0,1.1200d0,1.1300d0,1.1370d0,1.1610d0, &
+      1.1800d0,1.2000d0,1.2350d0,1.2900d0,1.3200d0,1.3500d0,1.3950d0,1.4425d0,1.4625d0,1.4770d0, &
+      1.4970d0,1.5200d0,1.5390d0,1.5580d0,1.5780d0,1.5920d0,1.6100d0,1.6300d0,1.6460d0,1.6780d0, &
+      1.7400d0,1.8000d0,1.8600d0,1.9200d0,1.9600d0,1.9850d0,2.0050d0,2.0350d0,2.0650d0,2.1000d0, &
+      2.1480d0,2.1980d0,2.2700d0,2.3600d0,2.4500d0,2.4940d0,2.5370d0 /)
 
-REAL, PRIVATE, PARAMETER, DIMENSION(nume) :: e=  &  ! Solar spectrum values corresponding to wle
-    (/   0.0,   9.5,  42.3, 107.8, 181.0, 246.0, 395.3, 390.1, 435.3, 438.9, &
-       483.7, 520.3, 666.2, 712.5, 720.7,1013.1,1158.2,1184.0,1071.9,1302.0, &
-      1526.0,1599.6,1581.0,1628.3,1539.2,1548.7,1586.5,1484.9,1572.4,1550.7, &
-      1561.5,1501.5,1395.5,1485.3,1434.1,1419.9,1392.3,1130.0,1316.7,1010.3, &
-      1043.2,1211.2,1193.9,1175.5, 643.1,1030.7,1131.1,1081.6, 849.2, 785.0, &
-       916.4, 959.9, 978.9, 933.2, 748.5, 667.5, 690.3, 403.6, 258.3, 313.6, &
-       526.8, 646.4, 746.8, 690.5, 637.5, 412.6, 108.9, 189.1, 132.2, 339.0, &
-       460.0, 423.6, 480.5, 413.1, 250.2,  32.5,   1.6,  55.7, 105.1, 105.5, &
-       182.1, 262.2, 274.2, 275.0, 244.6, 247.4, 228.7, 244.5, 234.8, 220.5, &
-       171.5,  30.7,   2.0,   1.2,  21.2,  91.1,  26.8,  99.5,  60.4,  89.1, &
-        82.2,  71.5,  70.2,  62.0,  21.2,  18.5,   3.2 /)
+REAL(r64), PRIVATE, PARAMETER, DIMENSION(nume) :: e=  &  ! Solar spectrum values corresponding to wle
+    (/   0.0d0,   9.5d0,  42.3d0, 107.8d0, 181.0d0, 246.0d0, 395.3d0, 390.1d0, 435.3d0, 438.9d0, &
+       483.7d0, 520.3d0, 666.2d0, 712.5d0, 720.7d0,1013.1d0,1158.2d0,1184.0d0,1071.9d0,1302.0d0, &
+      1526.0d0,1599.6d0,1581.0d0,1628.3d0,1539.2d0,1548.7d0,1586.5d0,1484.9d0,1572.4d0,1550.7d0, &
+      1561.5d0,1501.5d0,1395.5d0,1485.3d0,1434.1d0,1419.9d0,1392.3d0,1130.0d0,1316.7d0,1010.3d0, &
+      1043.2d0,1211.2d0,1193.9d0,1175.5d0, 643.1d0,1030.7d0,1131.1d0,1081.6d0, 849.2d0, 785.0d0, &
+       916.4d0, 959.9d0, 978.9d0, 933.2d0, 748.5d0, 667.5d0, 690.3d0, 403.6d0, 258.3d0, 313.6d0, &
+       526.8d0, 646.4d0, 746.8d0, 690.5d0, 637.5d0, 412.6d0, 108.9d0, 189.1d0, 132.2d0, 339.0d0, &
+       460.0d0, 423.6d0, 480.5d0, 413.1d0, 250.2d0,  32.5d0,   1.6d0,  55.7d0, 105.1d0, 105.5d0, &
+       182.1d0, 262.2d0, 274.2d0, 275.0d0, 244.6d0, 247.4d0, 228.7d0, 244.5d0, 234.8d0, 220.5d0, &
+       171.5d0,  30.7d0,   2.0d0,   1.2d0,  21.2d0,  91.1d0,  26.8d0,  99.5d0,  60.4d0,  89.1d0, &
+        82.2d0,  71.5d0,  70.2d0,  62.0d0,  21.2d0,  18.5d0,   3.2d0 /)
 
 ! Phototopic response function and corresponding wavelengths (microns)
 ! (CIE 1931 observer; ISO/CIE 10527, CIE Standard Calorimetric Observers;
 ! derived from Optics5 data file "CIE 1931 Color Match from E308.txt", which is
 ! the same as WINDOW4 file Cie31t.dat)
-REAL, PRIVATE, PARAMETER, DIMENSION(numt3) :: wlt3=  &  ! Wavelength values for photopic response
-    (/.380,.385,.390,.395,.400,.405,.410,.415,.420,.425, &
-      .430,.435,.440,.445,.450,.455,.460,.465,.470,.475, &
-      .480,.485,.490,.495,.500,.505,.510,.515,.520,.525, &
-      .530,.535,.540,.545,.550,.555,.560,.565,.570,.575, &
-      .580,.585,.590,.595,.600,.605,.610,.615,.620,.625, &
-      .630,.635,.640,.645,.650,.655,.660,.665,.670,.675, &
-      .680,.685,.690,.695,.700,.705,.710,.715,.720,.725, &
-      .730,.735,.740,.745,.750,.755,.760,.765,.770,.775, &
-      .780 /)
+REAL(r64), PRIVATE, PARAMETER, DIMENSION(numt3) :: wlt3=  &  ! Wavelength values for photopic response
+    (/.380d0,.385d0,.390d0,.395d0,.400d0,.405d0,.410d0,.415d0,.420d0,.425d0, &
+      .430d0,.435d0,.440d0,.445d0,.450d0,.455d0,.460d0,.465d0,.470d0,.475d0, &
+      .480d0,.485d0,.490d0,.495d0,.500d0,.505d0,.510d0,.515d0,.520d0,.525d0, &
+      .530d0,.535d0,.540d0,.545d0,.550d0,.555d0,.560d0,.565d0,.570d0,.575d0, &
+      .580d0,.585d0,.590d0,.595d0,.600d0,.605d0,.610d0,.615d0,.620d0,.625d0, &
+      .630d0,.635d0,.640d0,.645d0,.650d0,.655d0,.660d0,.665d0,.670d0,.675d0, &
+      .680d0,.685d0,.690d0,.695d0,.700d0,.705d0,.710d0,.715d0,.720d0,.725d0, &
+      .730d0,.735d0,.740d0,.745d0,.750d0,.755d0,.760d0,.765d0,.770d0,.775d0, &
+      .780d0 /)
 
-REAL, PRIVATE, PARAMETER, DIMENSION(numt3) :: y30=  &   ! Photopic response corresponding to wavelengths in wlt3
-    (/0.0000,0.0001,0.0001,0.0002,0.0004,0.0006,0.0012,0.0022,0.0040,0.0073, &
-      0.0116,0.0168,0.0230,0.0298,0.0380,0.0480,0.0600,0.0739,0.0910,0.1126, &
-      0.1390,0.1693,0.2080,0.2586,0.3230,0.4073,0.5030,0.6082,0.7100,0.7932, &
-      0.8620,0.9149,0.9540,0.9803,0.9950,1.0000,0.9950,0.9786,0.9520,0.9154, &
-      0.8700,0.8163,0.7570,0.6949,0.6310,0.5668,0.5030,0.4412,0.3810,0.3210, &
-      0.2650,0.2170,0.1750,0.1382,0.1070,0.0816,0.0610,0.0446,0.0320,0.0232, &
-      0.0170,0.0119,0.0082,0.0158,0.0041,0.0029,0.0021,0.0015,0.0010,0.0007, &
-      0.0005,0.0004,0.0002,0.0002,0.0001,0.0001,0.0001,0.0000,0.0000,0.0000, &
-      0.0000 /)
+REAL(r64), PRIVATE, PARAMETER, DIMENSION(numt3) :: y30=  &   ! Photopic response corresponding to wavelengths in wlt3
+    (/0.0000d0,0.0001d0,0.0001d0,0.0002d0,0.0004d0,0.0006d0,0.0012d0,0.0022d0,0.0040d0,0.0073d0, &
+      0.0116d0,0.0168d0,0.0230d0,0.0298d0,0.0380d0,0.0480d0,0.0600d0,0.0739d0,0.0910d0,0.1126d0, &
+      0.1390d0,0.1693d0,0.2080d0,0.2586d0,0.3230d0,0.4073d0,0.5030d0,0.6082d0,0.7100d0,0.7932d0, &
+      0.8620d0,0.9149d0,0.9540d0,0.9803d0,0.9950d0,1.0000d0,0.9950d0,0.9786d0,0.9520d0,0.9154d0, &
+      0.8700d0,0.8163d0,0.7570d0,0.6949d0,0.6310d0,0.5668d0,0.5030d0,0.4412d0,0.3810d0,0.3210d0, &
+      0.2650d0,0.2170d0,0.1750d0,0.1382d0,0.1070d0,0.0816d0,0.0610d0,0.0446d0,0.0320d0,0.0232d0, &
+      0.0170d0,0.0119d0,0.0082d0,0.0158d0,0.0041d0,0.0029d0,0.0021d0,0.0015d0,0.0010d0,0.0007d0, &
+      0.0005d0,0.0004d0,0.0002d0,0.0002d0,0.0001d0,0.0001d0,0.0001d0,0.0000d0,0.0000d0,0.0000d0, &
+      0.0000d0 /)
 
 
           ! MODULE VARIABLE DECLARATIONS:
@@ -120,91 +120,91 @@ REAL, PRIVATE, PARAMETER, DIMENSION(numt3) :: y30=  &   ! Photopic response corr
 INTEGER   :: ngllayer                     ! Number of glass layers
 INTEGER   :: nglface                      ! Number of glass faces
 INTEGER   :: nglfacep                     ! Number of glass faces, + 2 if shade layer present
-REAL :: tout                         ! Outside air temperature (K)
-REAL :: tin                          ! Inside air temperature (previous timestep) (K)
-REAL :: tilt                         ! Window tilt (deg)
-REAL :: tiltr                        ! Window tilt (radians)
-REAL :: hcin                         ! Convective inside air film conductance (W/m2-K)
-REAL :: hcout                        ! Convective outside air film conductance (W/m2-K)
-REAL :: Ebout                        ! Sigma*(outside air temp)**4 (W/m2)
-REAL :: Outir                        ! IR radiance of window's exterior surround (W/m2)
-REAL :: Rmir                         ! IR radiance of window's interior surround (W/m2)
-REAL :: rtot                         ! Total thermal resistance of window (m2-K/W)
-REAL :: gcon(5,5,3) =0.0             ! Gas thermal conductivity coefficients for each gap
-REAL :: gvis(5,5,3) =0.0             ! Gas viscosity coefficients for each gap
-REAL :: gcp(5,5,3)  =0.0             ! Gas specific-heat coefficients for each gap
-REAL :: gwght(5,5)  =0.0             ! Gas molecular weights for each gap
-REAL :: gfract(5,5) =0.0             ! Gas fractions for each gap
+REAL(r64) :: tout                         ! Outside air temperature (K)
+REAL(r64) :: tin                          ! Inside air temperature (previous timestep) (K)
+REAL(r64) :: tilt                         ! Window tilt (deg)
+REAL(r64) :: tiltr                        ! Window tilt (radians)
+REAL(r64) :: hcin                         ! Convective inside air film conductance (W/m2-K)
+REAL(r64) :: hcout                        ! Convective outside air film conductance (W/m2-K)
+REAL(r64) :: Ebout                        ! Sigma*(outside air temp)**4 (W/m2)
+REAL(r64) :: Outir                        ! IR radiance of window's exterior surround (W/m2)
+REAL(r64) :: Rmir                         ! IR radiance of window's interior surround (W/m2)
+REAL(r64) :: rtot                         ! Total thermal resistance of window (m2-K/W)
+REAL(r64) :: gcon(5,5,3) =0.0             ! Gas thermal conductivity coefficients for each gap
+REAL(r64) :: gvis(5,5,3) =0.0             ! Gas viscosity coefficients for each gap
+REAL(r64) :: gcp(5,5,3)  =0.0             ! Gas specific-heat coefficients for each gap
+REAL(r64) :: gwght(5,5)  =0.0             ! Gas molecular weights for each gap
+REAL(r64) :: gfract(5,5) =0.0             ! Gas fractions for each gap
 INTEGER   :: gnmix(5)    =0               ! Number of gases in gap
-REAL :: gap(5)      =0.0             ! Gap width (m)
-REAL :: thick(5)    =0.0             ! Glass layer thickness (m)
-REAL :: scon(5)     =0.0             ! Glass layer conductance--conductivity/thickness (W/m2-K)
-REAL :: tir(10)     =0.0             ! Front and back IR transmittance for each glass layer
-REAL :: emis(10)    =0.0             ! Front and back IR emissivity for each glass layer
-REAL :: rir(10)     =0.0             ! Front and back IR reflectance for each glass layer
+REAL(r64) :: gap(5)      =0.0             ! Gap width (m)
+REAL(r64) :: thick(5)    =0.0             ! Glass layer thickness (m)
+REAL(r64) :: scon(5)     =0.0             ! Glass layer conductance--conductivity/thickness (W/m2-K)
+REAL(r64) :: tir(10)     =0.0             ! Front and back IR transmittance for each glass layer
+REAL(r64) :: emis(10)    =0.0             ! Front and back IR emissivity for each glass layer
+REAL(r64) :: rir(10)     =0.0             ! Front and back IR reflectance for each glass layer
                                           !  (program calculates from tir and emis)
-REAL :: AbsRadGlassFace(10) =0.0     ! Solar radiation and IR radiation from internal
+REAL(r64) :: AbsRadGlassFace(10) =0.0     ! Solar radiation and IR radiation from internal
                                                   !  gains absorbed by glass face
-REAL :: thetas(10)          =0.0   ! Glass surface temperatures (K)
-REAL :: thetasPrev(10)      =0.0   ! Previous-iteration glass surface temperatures (K)
-REAL :: fvec(10)            =0.0   ! Glass face heat balance function
-REAL :: fjac(10,10)         =0.0   ! Glass face heat balance Jacobian
-REAL :: dtheta(5)           =0.0     ! Glass layer temperature difference factor [K]
-REAL :: zir(10,10)          =0.0     ! IR transfer matrix
-REAL :: ziri(10,10)         =0.0     ! Inverse of IR transfer matrix
-REAL :: ddeldt(10,10)       =0.0     ! Matrix of derivatives of residuals wrt temperature
-REAL :: dtddel(10,10)       =0.0     ! Inverse of matrix of derivatives of
+REAL(r64) :: thetas(10)          =0.0D0   ! Glass surface temperatures (K)
+REAL(r64) :: thetasPrev(10)      =0.0D0   ! Previous-iteration glass surface temperatures (K)
+REAL(r64) :: fvec(10)            =0.0D0   ! Glass face heat balance function
+REAL(r64) :: fjac(10,10)         =0.0D0   ! Glass face heat balance Jacobian
+REAL(r64) :: dtheta(5)           =0.0     ! Glass layer temperature difference factor [K]
+REAL(r64) :: zir(10,10)          =0.0     ! IR transfer matrix
+REAL(r64) :: ziri(10,10)         =0.0     ! Inverse of IR transfer matrix
+REAL(r64) :: ddeldt(10,10)       =0.0     ! Matrix of derivatives of residuals wrt temperature
+REAL(r64) :: dtddel(10,10)       =0.0     ! Inverse of matrix of derivatives of
                                           !   residuals wrt temperature
-REAL :: qf(10)              =0.0     ! IR heat flux at each face [W/m2]
-REAL :: hf(10)              =0.0     ! Component of convective flux at each face
-REAL :: der(10,5)           =0.0     ! Derivative of IR sources wrt surface temperature
-REAL :: dhf(10,5)           =0.0     ! Derivative of heat flux wrt surface temperature
-REAL :: sour(10)            =0.0     ! IR source term at each face [W/m2]
-REAL :: delta(5)            =0.0     ! Residual at each glass layer [W/m2]
-REAL :: hcgap(5)            =0.0     ! Convective gap conductance
-REAL :: hrgap(5)            =0.0     ! Radiative gap conductance
-REAL :: rgap(6)             =0.0     ! Convective plus radiative gap resistance
+REAL(r64) :: qf(10)              =0.0     ! IR heat flux at each face [W/m2]
+REAL(r64) :: hf(10)              =0.0     ! Component of convective flux at each face
+REAL(r64) :: der(10,5)           =0.0     ! Derivative of IR sources wrt surface temperature
+REAL(r64) :: dhf(10,5)           =0.0     ! Derivative of heat flux wrt surface temperature
+REAL(r64) :: sour(10)            =0.0     ! IR source term at each face [W/m2]
+REAL(r64) :: delta(5)            =0.0     ! Residual at each glass layer [W/m2]
+REAL(r64) :: hcgap(5)            =0.0     ! Convective gap conductance
+REAL(r64) :: hrgap(5)            =0.0     ! Radiative gap conductance
+REAL(r64) :: rgap(6)             =0.0     ! Convective plus radiative gap resistance
                                           !   (inverse of hcgap + hrgap)
-REAL :: rs(6)               =0.0     ! Outside film convective resistance, gap resistances,
+REAL(r64) :: rs(6)               =0.0     ! Outside film convective resistance, gap resistances,
                                           !   inside air film convective resistance
-REAL :: arhs(6)             =0.0
-REAL :: A23P,A32P,A45P,A54P,A67P,A76P ! Intermediate variables in glass face
-REAL :: A23,A45,A67                  ! heat balance equations
+REAL(r64) :: arhs(6)             =0.0
+REAL(r64) :: A23P,A32P,A45P,A54P,A67P,A76P ! Intermediate variables in glass face
+REAL(r64) :: A23,A45,A67                  ! heat balance equations
 
-REAL :: wlt(MaxSpectralDataElements,5)      =0.0     ! Spectral data wavelengths for each glass layer in a glazing system
+REAL(r64) :: wlt(MaxSpectralDataElements,5)      =0.0     ! Spectral data wavelengths for each glass layer in a glazing system
    ! Following data, Spectral data for each layer for each wavelength in wlt
-REAL :: t(MaxSpectralDataElements,5)        =0.0     ! normal transmittance
-REAL :: rff(MaxSpectralDataElements,5)      =0.0     ! normal front reflectance
-REAL :: rbb(MaxSpectralDataElements,5)      =0.0     ! normal back reflectance
-REAL :: tPhi(MaxSpectralDataElements,5)     =0.0     ! transmittance at angle of incidence
-REAL :: rfPhi(MaxSpectralDataElements,5)    =0.0     ! front reflectance at angle of incidence
-REAL :: rbPhi(MaxSpectralDataElements,5)    =0.0     ! back reflectance at angle of incidence
-REAL :: tadjPhi(MaxSpectralDataElements,5)  =0.0     ! transmittance at angle of incidence
-REAL :: rfadjPhi(MaxSpectralDataElements,5) =0.0     ! front reflectance at angle of incidence
-REAL :: rbadjPhi(MaxSpectralDataElements,5) =0.0     ! back reflectance at angle of incidence
+REAL(r64) :: t(MaxSpectralDataElements,5)        =0.0     ! normal transmittance
+REAL(r64) :: rff(MaxSpectralDataElements,5)      =0.0     ! normal front reflectance
+REAL(r64) :: rbb(MaxSpectralDataElements,5)      =0.0     ! normal back reflectance
+REAL(r64) :: tPhi(MaxSpectralDataElements,5)     =0.0     ! transmittance at angle of incidence
+REAL(r64) :: rfPhi(MaxSpectralDataElements,5)    =0.0     ! front reflectance at angle of incidence
+REAL(r64) :: rbPhi(MaxSpectralDataElements,5)    =0.0     ! back reflectance at angle of incidence
+REAL(r64) :: tadjPhi(MaxSpectralDataElements,5)  =0.0     ! transmittance at angle of incidence
+REAL(r64) :: rfadjPhi(MaxSpectralDataElements,5) =0.0     ! front reflectance at angle of incidence
+REAL(r64) :: rbadjPhi(MaxSpectralDataElements,5) =0.0     ! back reflectance at angle of incidence
 
 INTEGER   :: numpt(5)            =0       ! Number of spectral data wavelengths for each layer; =2 if no spectra data for a layer
-REAL :: stPhi(nume)         =0.0     ! Glazing system transmittance at angle of incidence for each wavelength in wle
-REAL :: srfPhi(nume)        =0.0     ! Glazing system front reflectance at angle of incidence for each wavelength in wle
-REAL :: srbPhi(nume)        =0.0     ! Glazing system back reflectance at angle of incidence for each wavelenth in wle
-REAL :: saPhi(nume,5)       =0.0     ! For each layer, glazing system absorptance at angle of incidence
+REAL(r64) :: stPhi(nume)         =0.0     ! Glazing system transmittance at angle of incidence for each wavelength in wle
+REAL(r64) :: srfPhi(nume)        =0.0     ! Glazing system front reflectance at angle of incidence for each wavelength in wle
+REAL(r64) :: srbPhi(nume)        =0.0     ! Glazing system back reflectance at angle of incidence for each wavelenth in wle
+REAL(r64) :: saPhi(nume,5)       =0.0     ! For each layer, glazing system absorptance at angle of incidence
                                           ! for each wavelenth in wle
-REAL :: top(5,5)            =0.0     ! Transmittance matrix for subr. op
-REAL :: rfop(5,5)           =0.0     ! Front reflectance matrix for subr. op
-REAL :: rbop(5,5)           =0.0     ! Back transmittance matrix for subr. op
-REAL :: IndepVarCurveFit(10)=0.0     ! Values of independent variable (cos of inc. angle) for curve fit
-REAL :: DepVarCurveFit(10)  =0.0     ! Values of dependent variable corresponding to IndepVarCurveFit values
-REAL :: CoeffsCurveFit(6)   =0.0     ! Polynomial coefficients from curve fit
-REAL :: tsolPhi(10)         =0.0     ! Glazing system solar transmittance for each angle of incidence
-REAL :: rfsolPhi(10)        =0.0     ! Glazing system solar front reflectance for each angle of incidence
-REAL :: rbsolPhi(10)        =0.0     ! Glazing system solar back reflectance for each angle of incidence
-REAL :: solabsPhi(10,5)     =0.0     ! Glazing system solar absorptance for each angle of incidence
-REAL :: solabsBackPhi(10,5) =0.0     ! Glazing system back solar absorptance for each angle of incidence
-REAL :: solabsShadePhi(10)  =0.0     ! Glazing system interior shade solar absorptance for each angle of incidence
-REAL :: tvisPhi(10)         =0.0     ! Glazing system visible transmittance for each angle of incidence
-REAL :: rfvisPhi(10)        =0.0     ! Glazing system visible front reflectance for each angle of incidence
-REAL :: rbvisPhi(10)        =0.0     ! Glazing system visible back reflectance for each angle of incidence
-REAL :: CosPhiIndepVar(10)  =0.0     ! Cos of incidence angles at 10-deg increments for curve fits
+REAL(r64) :: top(5,5)            =0.0     ! Transmittance matrix for subr. op
+REAL(r64) :: rfop(5,5)           =0.0     ! Front reflectance matrix for subr. op
+REAL(r64) :: rbop(5,5)           =0.0     ! Back transmittance matrix for subr. op
+REAL(r64) :: IndepVarCurveFit(10)=0.0     ! Values of independent variable (cos of inc. angle) for curve fit
+REAL(r64) :: DepVarCurveFit(10)  =0.0     ! Values of dependent variable corresponding to IndepVarCurveFit values
+REAL(r64) :: CoeffsCurveFit(6)   =0.0     ! Polynomial coefficients from curve fit
+REAL(r64) :: tsolPhi(10)         =0.0     ! Glazing system solar transmittance for each angle of incidence
+REAL(r64) :: rfsolPhi(10)        =0.0     ! Glazing system solar front reflectance for each angle of incidence
+REAL(r64) :: rbsolPhi(10)        =0.0     ! Glazing system solar back reflectance for each angle of incidence
+REAL(r64) :: solabsPhi(10,5)     =0.0     ! Glazing system solar absorptance for each angle of incidence
+REAL(r64) :: solabsBackPhi(10,5) =0.0     ! Glazing system back solar absorptance for each angle of incidence
+REAL(r64) :: solabsShadePhi(10)  =0.0     ! Glazing system interior shade solar absorptance for each angle of incidence
+REAL(r64) :: tvisPhi(10)         =0.0     ! Glazing system visible transmittance for each angle of incidence
+REAL(r64) :: rfvisPhi(10)        =0.0     ! Glazing system visible front reflectance for each angle of incidence
+REAL(r64) :: rbvisPhi(10)        =0.0     ! Glazing system visible back reflectance for each angle of incidence
+REAL(r64) :: CosPhiIndepVar(10)  =0.0     ! Cos of incidence angles at 10-deg increments for curve fits
 
           ! SUBROUTINE SPECIFICATIONS FOR MODULE WindowManager:
 PUBLIC  InitGlassOpticalCalculations
@@ -311,97 +311,97 @@ LOGICAL           :: BlindOn                 ! True if IntBlind, ExtBlind or BGB
 LOGICAL           :: ShadeOn                 ! True if IntShade, ExtShade or BGShade is true
 INTEGER           :: BlNum                   ! Blind number
 INTEGER           :: ScNum                   ! Screen number
-REAL         :: sabsPhi(nume)           ! Glazing system absorptance for a glass layer
+REAL(r64)         :: sabsPhi(nume)           ! Glazing system absorptance for a glass layer
                                              !  and angle of incidence, for each wavelength
                                              !   glass layer for an angle of incidence, for each wavelength
-REAL         :: solabsDiff(5)           ! Glazing system layer solar absorptance for each glass layer
-REAL         :: solabsPhiLay(10)        ! Glazing system solar absorptance for a layer at each incidence angle
-REAL         :: tsolPhiFit(10)          ! Glazing system solar transmittance from fit at each incidence angle
-REAL         :: tvisPhiFit(10)          ! Glazing system visible transmittance from fit at each incidence angle
-REAL         :: tBareSolPhi(10,5)       ! Isolated glass solar transmittance for each incidence angle
-REAL         :: t1,t2                   ! = tBareSolPhi(,1)(,2)
-REAL         :: tBareVisPhi(10,5)       ! Isolated glass visible transmittance for each incidence angle
-REAL         :: t1v,t2v                 ! = tBareVisPhi(,1)(,2)
-REAL         :: rfBareSolPhi(10,5)      ! Isolated glass front solar reflectance for each incidence angle
-REAL         :: rfBareVisPhi(10,5)      ! Isolated glass front visible reflectance for each incidence angle
-REAL         :: rbBareSolPhi(10,5)      ! Isolated glass back solar reflectance for each incidence angle
-REAL         :: rbBareVisPhi(10,5)      ! Isolated glass back visible reflectance for each incidence angle
-REAL         :: afBareSolPhi(10,5)      ! Isolated glass front solar absorptance for each incidence angle
-REAL         :: af1,af2                 ! = afBareSolPhi(,1)(,2)
-REAL         :: rbmf2                   ! Isolated glass #2 front beam reflectance
-REAL         :: abBareSolPhi(10,5)      ! Isolated glass back solar absorptance for each incidence angle
-REAL         :: ab1,ab2                 ! = abBareSolPhi(,1)(,2)
-REAL         :: td1,td2,td3             ! Isolated glass diffuse solar transmittance
-REAL         :: td1v,td2v,td3v          ! Isolated glass diffuse visible transmittance
-REAL         :: rf1,rf2,rf3             ! Isolated glass diffuse solar front reflectance
-REAL         :: rf1v,rf2v,rf3v          ! Isolated glass diffuse visible front reflectance
-REAL         :: rb1,rb2,rb3             ! Isolated glass diffuse solar back reflectance
-REAL         :: rb1v,rb2v,rb3v          ! Isolated glass diffuse visible back reflectance
-REAL         :: afd1,afd2,afd3          ! Isolated glass diffuse solar front absorptance
-REAL         :: abd1,abd2,abd3          ! Isolated glass diffuse solar back absorptance
-REAL         :: TauShIR                 ! IR transmittance of isolated shade
-REAL         :: EpsShIR                 ! IR absorptance of isolated shade
-REAL         :: RhoShIR                 ! IR reflectance of isolated shade
-REAL         :: EpsGlIR                 ! IR absorptance of front or back of isolated glass
-REAL         :: RhoGlIR                 ! IR reflectance of inside face of inside glass
+REAL(r64)         :: solabsDiff(5)           ! Glazing system layer solar absorptance for each glass layer
+REAL(r64)         :: solabsPhiLay(10)        ! Glazing system solar absorptance for a layer at each incidence angle
+REAL(r64)         :: tsolPhiFit(10)          ! Glazing system solar transmittance from fit at each incidence angle
+REAL(r64)         :: tvisPhiFit(10)          ! Glazing system visible transmittance from fit at each incidence angle
+REAL(r64)         :: tBareSolPhi(10,5)       ! Isolated glass solar transmittance for each incidence angle
+REAL(r64)         :: t1,t2                   ! = tBareSolPhi(,1)(,2)
+REAL(r64)         :: tBareVisPhi(10,5)       ! Isolated glass visible transmittance for each incidence angle
+REAL(r64)         :: t1v,t2v                 ! = tBareVisPhi(,1)(,2)
+REAL(r64)         :: rfBareSolPhi(10,5)      ! Isolated glass front solar reflectance for each incidence angle
+REAL(r64)         :: rfBareVisPhi(10,5)      ! Isolated glass front visible reflectance for each incidence angle
+REAL(r64)         :: rbBareSolPhi(10,5)      ! Isolated glass back solar reflectance for each incidence angle
+REAL(r64)         :: rbBareVisPhi(10,5)      ! Isolated glass back visible reflectance for each incidence angle
+REAL(r64)         :: afBareSolPhi(10,5)      ! Isolated glass front solar absorptance for each incidence angle
+REAL(r64)         :: af1,af2                 ! = afBareSolPhi(,1)(,2)
+REAL(r64)         :: rbmf2                   ! Isolated glass #2 front beam reflectance
+REAL(r64)         :: abBareSolPhi(10,5)      ! Isolated glass back solar absorptance for each incidence angle
+REAL(r64)         :: ab1,ab2                 ! = abBareSolPhi(,1)(,2)
+REAL(r64)         :: td1,td2,td3             ! Isolated glass diffuse solar transmittance
+REAL(r64)         :: td1v,td2v,td3v          ! Isolated glass diffuse visible transmittance
+REAL(r64)         :: rf1,rf2,rf3             ! Isolated glass diffuse solar front reflectance
+REAL(r64)         :: rf1v,rf2v,rf3v          ! Isolated glass diffuse visible front reflectance
+REAL(r64)         :: rb1,rb2,rb3             ! Isolated glass diffuse solar back reflectance
+REAL(r64)         :: rb1v,rb2v,rb3v          ! Isolated glass diffuse visible back reflectance
+REAL(r64)         :: afd1,afd2,afd3          ! Isolated glass diffuse solar front absorptance
+REAL(r64)         :: abd1,abd2,abd3          ! Isolated glass diffuse solar back absorptance
+REAL(r64)         :: TauShIR                 ! IR transmittance of isolated shade
+REAL(r64)         :: EpsShIR                 ! IR absorptance of isolated shade
+REAL(r64)         :: RhoShIR                 ! IR reflectance of isolated shade
+REAL(r64)         :: EpsGlIR                 ! IR absorptance of front or back of isolated glass
+REAL(r64)         :: RhoGlIR                 ! IR reflectance of inside face of inside glass
 INTEGER           :: NGlass                  ! Number of glass layers in a construction
 INTEGER           :: IGlass                  ! Glass layer counter
 INTEGER           :: LayNum                  ! Layer number for a glass layer
 INTEGER           :: LayPtr                  ! Material number corresponding to LayNum
 INTEGER           :: IPhi                    ! Incidence angle counter
-REAL         :: Phi                     ! Incidence angle (deg)
-REAL         :: CosPhi                  ! Cosine of incidence angle
+REAL(r64)         :: Phi                     ! Incidence angle (deg)
+REAL(r64)         :: CosPhi                  ! Cosine of incidence angle
 INTEGER           :: ILam                    ! Wavelength counter
-REAL         :: tsolDiff                ! Glazing system diffuse solar transmittance
-REAL         :: tvisDiff                ! Glazing system diffuse visible transmittance
+REAL(r64)         :: tsolDiff                ! Glazing system diffuse solar transmittance
+REAL(r64)         :: tvisDiff                ! Glazing system diffuse visible transmittance
 INTEGER           :: IGlassBack              ! Glass layer number counted from back of window
-REAL         :: ShadeAbs                ! Solar absorptance of isolated shade
-REAL         :: ash                     ! = ShadeAbs
-REAL         :: afsh                    ! Diffuse solar front absorptance of isolated blind
-REAL         :: afshGnd,afshSky         ! Ground and sky diffuse solar front absorptance of isolated blind
-REAL         :: absh                    ! Diffuse solar back absorptance of isolated blind
-REAL         :: ShadeTrans              ! Solar transmittance of isolated shade/blind
-REAL         :: ShadeTransGnd           ! Diffuse-diffuse transmittance of isolated vertical blind with
+REAL(r64)         :: ShadeAbs                ! Solar absorptance of isolated shade
+REAL(r64)         :: ash                     ! = ShadeAbs
+REAL(r64)         :: afsh                    ! Diffuse solar front absorptance of isolated blind
+REAL(r64)         :: afshGnd,afshSky         ! Ground and sky diffuse solar front absorptance of isolated blind
+REAL(r64)         :: absh                    ! Diffuse solar back absorptance of isolated blind
+REAL(r64)         :: ShadeTrans              ! Solar transmittance of isolated shade/blind
+REAL(r64)         :: ShadeTransGnd           ! Diffuse-diffuse transmittance of isolated vertical blind with
                                              ! horizontal slats for isotropic ground solar
-REAL         :: ShadeTransSky           ! Diffuse-diffuse transmittance of isolated vertical blind with
+REAL(r64)         :: ShadeTransSky           ! Diffuse-diffuse transmittance of isolated vertical blind with
                                              ! horizontal slats for isotropic sky solar
-REAL         :: tsh                     ! = ShadeTrans
-REAL         :: tshGnd,tshSky           ! = ShadeTransGnd,ShadeTransSky
-REAL         :: tsh2                    ! = tsh**2
-REAL         :: ShadeRefl               ! Solar reflectance of isolated shade
-REAL         :: ShadeReflGnd            ! Front blind reflectance for ground diffuse solar
-REAL         :: ShadeReflSky            ! Front blind reflectance for sky diffuse solar
-REAL         :: rsh                     ! = ShadeRefl
-REAL         :: rfsh                    ! Diffuse solar front reflectance of isolated blind
-REAL         :: rfshGnd,rfshSky         ! Ground and sky diffuse solar front reflectance of isolated blind
-REAL         :: rbsh                    ! Diffuse solar back reflectance of isolated blind
-REAL         :: ShadeReflFac            ! Shade/blind solar reflection factor
-REAL         :: ShadeTransVis           ! Visible transmittance of isolated shade/blind
-REAL         :: tshv                    ! = ShadeTransVis
-REAL         :: tshv2                   ! = tshv**2
-REAL         :: ShadeReflVis            ! Visible reflectance of isolated shade
-REAL         :: rshv                    ! = ShadeReflVis
-REAL         :: rfshv                   ! Diffuse visible front reflectance of isolated blind
-REAL         :: rbshv                   ! Diffuse visible back reflectance of isolated blind
-REAL         :: ShadeReflFacVis         ! Shade/blind visible reflection factor
+REAL(r64)         :: tsh                     ! = ShadeTrans
+REAL(r64)         :: tshGnd,tshSky           ! = ShadeTransGnd,ShadeTransSky
+REAL(r64)         :: tsh2                    ! = tsh**2
+REAL(r64)         :: ShadeRefl               ! Solar reflectance of isolated shade
+REAL(r64)         :: ShadeReflGnd            ! Front blind reflectance for ground diffuse solar
+REAL(r64)         :: ShadeReflSky            ! Front blind reflectance for sky diffuse solar
+REAL(r64)         :: rsh                     ! = ShadeRefl
+REAL(r64)         :: rfsh                    ! Diffuse solar front reflectance of isolated blind
+REAL(r64)         :: rfshGnd,rfshSky         ! Ground and sky diffuse solar front reflectance of isolated blind
+REAL(r64)         :: rbsh                    ! Diffuse solar back reflectance of isolated blind
+REAL(r64)         :: ShadeReflFac            ! Shade/blind solar reflection factor
+REAL(r64)         :: ShadeTransVis           ! Visible transmittance of isolated shade/blind
+REAL(r64)         :: tshv                    ! = ShadeTransVis
+REAL(r64)         :: tshv2                   ! = tshv**2
+REAL(r64)         :: ShadeReflVis            ! Visible reflectance of isolated shade
+REAL(r64)         :: rshv                    ! = ShadeReflVis
+REAL(r64)         :: rfshv                   ! Diffuse visible front reflectance of isolated blind
+REAL(r64)         :: rbshv                   ! Diffuse visible back reflectance of isolated blind
+REAL(r64)         :: ShadeReflFacVis         ! Shade/blind visible reflection factor
 INTEGER           :: SpecDataNum             ! Spectral data set number
 INTEGER           :: numptDAT                ! Number of wavelengths in a spectral data set
 INTEGER           :: ISlatAng                ! Slat angle counter
 LOGICAL           :: StormWinConst           ! True if a construction with a storm window
 LOGICAL           :: Triangle                ! True if window is triangular
 LOGICAL           :: Rectangle               ! True if window is rectangular
-REAL         :: W1(3),W2(3),W3(3)       ! Window vertices (m)
-REAL         :: W21(3),W23(3)           ! W1-W2, W3-W2, resp. (m)
+REAL(r64)         :: W1(3),W2(3),W3(3)       ! Window vertices (m)
+REAL(r64)         :: W21(3),W23(3)           ! W1-W2, W3-W2, resp. (m)
 LOGICAL           :: lSimpleGlazingSystem = .FALSE. ! true if using simple glazing system block model
-REAL         :: SimpleGlazingSHGC = 0.0  ! value of SHGC for simple glazing system block model
-REAL         :: SimpleGlazingU    = 0.0  ! value of U-factor for simple glazing system block model
+REAL(r64)         :: SimpleGlazingSHGC = 0.0D0  ! value of SHGC for simple glazing system block model
+REAL(r64)         :: SimpleGlazingU    = 0.0D0  ! value of U-factor for simple glazing system block model
 LOGICAL           :: BGFlag = .FALSE.        ! True if between-glass shade or blind
-REAL         :: tmpTrans = 0.0        ! solar transmittance calculated from spectral data
-REAL         :: tmpTransVis = 0.0     ! visible transmittance calculated from spectral data
-REAL         :: tmpReflectSolBeamFront = 0.0
-REAL         :: tmpReflectSolBeamBack =0.0
-REAL         :: tmpReflectVisBeamFront = 0.0
-REAL         :: tmpReflectVisBeamBack = 0.0
+REAL(r64)         :: tmpTrans = 0.0D0        ! solar transmittance calculated from spectral data
+REAL(r64)         :: tmpTransVis = 0.0D0     ! visible transmittance calculated from spectral data
+REAL(r64)         :: tmpReflectSolBeamFront = 0.0D0
+REAL(r64)         :: tmpReflectSolBeamBack =0.0D0
+REAL(r64)         :: tmpReflectVisBeamFront = 0.0D0
+REAL(r64)         :: tmpReflectVisBeamBack = 0.0D0
 
 
 CALL W5InitGlassParameters
@@ -514,16 +514,16 @@ DO ConstrNum = 1,TotConstructs
       TauShIR = Material(ShadeLayPtr)%TransThermal
     ENDIF
     EpsShIR = Material(ShadeLayPtr)%AbsorpThermal
-    RhoShIR = MAX(0.0,1.-TauShIR-EpsShIR)
+    RhoShIR = MAX(0.0d0,1.d0-TauShIR-EpsShIR)
     IF(ExtShade .OR. ExtScreen) THEN  ! Exterior shade or screen
       EpsGlIR = Material(Construct(ConstrNum)%LayerPoint(2))%AbsorpThermalFront
     ELSE               ! Interior shade
       EpsGlIR = Material(Construct(ConstrNum)%LayerPoint(TotLay-1))%AbsorpThermalBack
     END IF
-    RhoGlIR = MAX(0.0,1.-EpsGlIR)
-    Construct(ConstrNum)%ShadeAbsorpThermal = EpsShIR*(1.+TauShIR*RhoGlIR/(1.-RhoShIR*RhoGlIR))
+    RhoGlIR = MAX(0.0d0,1.d0-EpsGlIR)
+    Construct(ConstrNum)%ShadeAbsorpThermal = EpsShIR*(1.d0+TauShIR*RhoGlIR/(1.d0-RhoShIR*RhoGlIR))
     IF(IntShade) Construct(ConstrNum)%InsideAbsorpThermal = &
-                      Construct(ConstrNum)%InsideAbsorpThermal*TauShIR/(1.-RhoShIR*RhoGlIR)
+                      Construct(ConstrNum)%InsideAbsorpThermal*TauShIR/(1.d0-RhoShIR*RhoGlIR)
   END IF
 
   ! From the individual glass layer properties, get the glazing system optical properties
@@ -637,9 +637,9 @@ DO ConstrNum = 1,TotConstructs
   ! effect of inter-reflection among glass layers) at each incidence angle.
 
   DO IPhi = 1,10
-    Phi = REAL(IPhi-1,r64)*10.
+    Phi = REAL(IPhi-1,r64)*10.d0
     CosPhi = COS(Phi*DegToRadians)
-    if (abs(CosPhi) < .0001) CosPhi=0.0
+    if (abs(CosPhi) < .0001d0) CosPhi=0.0d0
 
     ! For each wavelength, get glass layer properties at this angle of incidence
     ! from properties at normal incidence
@@ -661,8 +661,8 @@ DO ConstrNum = 1,TotConstructs
         rfBareVisPhi(IPhi,IGlass) = rfPhi(2,IGlass)
         rbBareSolPhi(IPhi,IGlass) = rbPhi(1,IGlass)
         rbBareVisPhi(IPhi,IGlass) = rbPhi(2,IGlass)
-        afBareSolPhi(IPhi,IGlass) = MAX(0.0,1.-(tBareSolPhi(IPhi,IGlass)+rfBareSolPhi(IPhi,IGlass)))
-        abBareSolPhi(IPhi,IGlass) = MAX(0.0,1.-(tBareSolPhi(IPhi,IGlass)+rbBareSolPhi(IPhi,IGlass)))
+        afBareSolPhi(IPhi,IGlass) = MAX(0.0d0,1.d0-(tBareSolPhi(IPhi,IGlass)+rfBareSolPhi(IPhi,IGlass)))
+        abBareSolPhi(IPhi,IGlass) = MAX(0.0d0,1.d0-(tBareSolPhi(IPhi,IGlass)+rbBareSolPhi(IPhi,IGlass)))
       END IF
     END DO
 
@@ -670,7 +670,7 @@ DO ConstrNum = 1,TotConstructs
     ! stPhi, srfPhi, srbPhi and saPhi at this angle of incidence.
     ! In the following the argument "1" indicates that spectral average solar values
     ! should be used for layers without spectral data.
-    CALL SystemSpectralPropertiesAtPhi(1,NGlass,0.0,2.54)
+    CALL SystemSpectralPropertiesAtPhi(1,NGlass,0.0d0,2.54d0)
 
     ! Get solar properties of system by integrating over solar irradiance spectrum.
     ! For now it is assumed that the exterior and interior irradiance spectra are the same.
@@ -692,7 +692,7 @@ DO ConstrNum = 1,TotConstructs
     ! case the spectral average visible properties will be used for the layers
     ! without spectral data, as indicated by the argument "2".
 
-    if (lquasi) CALL SystemSpectralPropertiesAtPhi(2,NGlass,0.37,0.78)
+    if (lquasi) CALL SystemSpectralPropertiesAtPhi(2,NGlass,0.37d0,0.78d0)
     CALL VisibleSprectrumAverage(stPhi,  tvisPhi(IPhi))
     CALL VisibleSprectrumAverage(srfPhi, rfvisPhi(IPhi))
     CALL VisibleSprectrumAverage(srbPhi, rbvisPhi(IPhi))
@@ -738,9 +738,9 @@ DO ConstrNum = 1,TotConstructs
       Construct(ConstrNum)%rbBareSolDiff(IGlass) = DiffuseAverage(rbBareSolPhi(1:10,IGlass))
       Construct(ConstrNum)%rbBareVisDiff(IGlass) = DiffuseAverage(rbBareVisPhi(1:10,IGlass))
       Construct(ConstrNum)%afBareSolDiff(IGlass) =  &
-        MAX(0.0,1.-(Construct(ConstrNum)%tBareSolDiff(IGlass)+Construct(ConstrNum)%rfBareSolDiff(IGlass)))
+        MAX(0.0d0,1.d0-(Construct(ConstrNum)%tBareSolDiff(IGlass)+Construct(ConstrNum)%rfBareSolDiff(IGlass)))
       Construct(ConstrNum)%abBareSolDiff(IGlass) =  &
-        MAX(0.0,1.-(Construct(ConstrNum)%tBareSolDiff(IGlass)+Construct(ConstrNum)%rbBareSolDiff(IGlass)))
+        MAX(0.0d0,1.d0-(Construct(ConstrNum)%tBareSolDiff(IGlass)+Construct(ConstrNum)%rbBareSolDiff(IGlass)))
     END IF
   END DO
 
@@ -807,9 +807,9 @@ DO ConstrNum = 1,TotConstructs
   ! The glazing system properties include the effect of inter-reflection among glass layers,
   ! but exclude the effect of a shade or blind if present in the construction.
   DO IPhi = 1,10
-    Phi = REAL(IPhi-1,r64)*10.
+    Phi = REAL(IPhi-1,r64)*10.d0
     CosPhi = COS(Phi*DegToRadians)
-    if (abs(CosPhi) < .0001) CosPhi=0.0
+    if (abs(CosPhi) < .0001d0) CosPhi=0.0
 
     ! For each wavelength, get glass layer properties at this angle of incidence
     ! from properties at normal incidence
@@ -824,7 +824,7 @@ DO ConstrNum = 1,TotConstructs
 
     ! For each wavelength in the solar spectrum, calculate system properties
     ! stPhi, srfPhi, srbPhi and saPhi at this angle of incidence
-    CALL SystemSpectralPropertiesAtPhi(1,NGlass,0.0,2.54)
+    CALL SystemSpectralPropertiesAtPhi(1,NGlass,0.0d0,2.54d0)
 
     ! Get back absorptance properties of system by integrating over solar irradiance spectrum.
     ! For now it is assumed that the exterior and interior irradiance spectra are the same.
@@ -918,11 +918,11 @@ DO ConstrNum = 1,TotConstructs
       ! Correction factors for inter-reflections between glass and shading device
 
       IF(ExtShade .OR. ExtBlind .OR. ExtScreen) THEN
-        ShadeReflFac    = 1. / (1.-ShadeRefl*Construct(ConstrNum)%ReflectSolDiffFront)
-        ShadeReflFacVis = 1. / (1.-ShadeReflVis*Construct(ConstrNum)%ReflectVisDiffFront)
+        ShadeReflFac    = 1.d0 / (1.d0-ShadeRefl*Construct(ConstrNum)%ReflectSolDiffFront)
+        ShadeReflFacVis = 1.d0 / (1.d0-ShadeReflVis*Construct(ConstrNum)%ReflectVisDiffFront)
       ELSE IF(IntShade .OR. IntBlind) THEN
-        ShadeReflFac    = 1. / (1.-ShadeRefl*Construct(ConstrNum)%ReflectSolDiffBack)
-        ShadeReflFacVis = 1. / (1.-ShadeReflVis*Construct(ConstrNum)%ReflectVisDiffBack)
+        ShadeReflFac    = 1.d0 / (1.d0-ShadeRefl*Construct(ConstrNum)%ReflectSolDiffBack)
+        ShadeReflFacVis = 1.d0 / (1.d0-ShadeReflVis*Construct(ConstrNum)%ReflectVisDiffBack)
       END IF
 
       IF(ExtShade .OR. ExtBlind .OR. ExtScreen) THEN  ! Exterior shade or blind
@@ -937,7 +937,7 @@ DO ConstrNum = 1,TotConstructs
             tsolPhi(IPhi) = ShadeTrans * ShadeReflFac * tsolDiff
             tvisPhi(IPhi) = ShadeTransVis * ShadeReflFacVis * tvisDiff
             solabsShadePhi(IPhi) = ShadeAbs * &
-              (1. + ShadeTrans*ShadeReflFac*Construct(ConstrNum)%ReflectSolDiffFront)
+              (1.d0 + ShadeTrans*ShadeReflFac*Construct(ConstrNum)%ReflectSolDiffFront)
           END DO
         END IF
 
@@ -969,7 +969,7 @@ DO ConstrNum = 1,TotConstructs
         END IF
         IF(ExtShade .OR. ExtScreen) THEN
           Construct(ConstrNum)%AbsDiffShade = ShadeAbs * &
-            (1. + ShadeTrans*ShadeReflFac*Construct(ConstrNum)%ReflectSolDiffFront)
+            (1.d0 + ShadeTrans*ShadeReflFac*Construct(ConstrNum)%ReflectSolDiffFront)
           Construct(ConstrNum)%TransDiff    = tsolDiff * ShadeReflFac * ShadeTrans
           Construct(ConstrNum)%TransDiffVis = tvisDiff * ShadeReflFacVis * ShadeTransVis
           Construct(ConstrNum)%ReflectSolDiffFront = ShadeRefl + (ShadeTrans**2) * &
@@ -1173,7 +1173,7 @@ DO ConstrNum = 1,TotConstructs
               af2 = afBareSolPhi(IPhi,2)
               ab1 = abBareSolPhi(IPhi,1)
               ab2 = abBareSolPhi(IPhi,2)
-              rbmf2 = MAX(0.0,1.-(t2+af2))
+              rbmf2 = MAX(0.0d0,1.d0-(t2+af2))
 
               tsolPhi(IPhi) = t1*t2*(tsh + tsh*rf3*rsh + rsh*td2*rb1*td2*tsh + rsh*rb2*tsh)*td3
               tvisPhi(IPhi) = t1v*t2v*(tshv + tshv*rf3v*rshv + rshv*td2v*rb1v*td2v*tshv + rshv*rb2v*tshv)*td3v
@@ -1350,11 +1350,11 @@ DO ConstrNum = 1,TotConstructs
 
     ! To check goodness of fit
     DO IPhi = 1,10
-      tsolPhiFit(IPhi) = 0.
-      tvisPhiFit(IPhi) = 0.
-      Phi = REAL(IPhi-1,r64)*10.
+      tsolPhiFit(IPhi) = 0.d0
+      tvisPhiFit(IPhi) = 0.d0
+      Phi = REAL(IPhi-1,r64)*10.d0
       CosPhi = COS(Phi*DegToRadians)
-      if (abs(CosPhi) < .0001) CosPhi=0.0
+      if (abs(CosPhi) < .0001d0) CosPhi=0.0
       DO CoefNum = 1,6
         tsolPhiFit(IPhi) = tsolPhiFit(IPhi) + Construct(ConstrNum)%TransSolBeamCoef(CoefNum)* &
                            CosPhi**CoefNum
@@ -1398,16 +1398,16 @@ DO SurfNum = 1,TotSurfaces
       IF(IntShade) THEN
         TauShIR = Material(ShadeLayPtr)%TransThermal
         EpsShIR = Material(ShadeLayPtr)%AbsorpThermal
-        RhoShIR = MAX(0.,1.-TauShIR-EpsShIR)
-        SurfaceWindow(SurfNum)%EffShBlindEmiss(1) = EpsShIR*(1.+RhoGlIR*TauShIR/(1.-RhoGlIR*RhoShIR))
-        SurfaceWindow(SurfNum)%EffGlassEmiss(1)   = EpsGlIR*TauShIR/(1.-RhoGlIR*RhoShIR)
+        RhoShIR = MAX(0.d0,1.d0-TauShIR-EpsShIR)
+        SurfaceWindow(SurfNum)%EffShBlindEmiss(1) = EpsShIR*(1.d0+RhoGlIR*TauShIR/(1.d0-RhoGlIR*RhoShIR))
+        SurfaceWindow(SurfNum)%EffGlassEmiss(1)   = EpsGlIR*TauShIR/(1.d0-RhoGlIR*RhoShIR)
       END IF
       IF(IntBlind) THEN
         TauShIR = Blind(BlNum)%IRFrontTrans(ISlatAng)
         EpsShIR = Blind(BlNum)%IRBackEmiss(ISlatAng)
-        RhoShIR = MAX(0.,1.-TauShIR-EpsShIR)
-        SurfaceWindow(SurfNum)%EffShBlindEmiss(ISlatAng) = EpsShIR*(1.+RhoGlIR*TauShIR/(1.-RhoGlIR*RhoShIR))
-        SurfaceWindow(SurfNum)%EffGlassEmiss(ISlatAng)   = EpsGlIR*TauShIR/(1.-RhoGlIR*RhoShIR)
+        RhoShIR = MAX(0.d0,1.d0-TauShIR-EpsShIR)
+        SurfaceWindow(SurfNum)%EffShBlindEmiss(ISlatAng) = EpsShIR*(1.d0+RhoGlIR*TauShIR/(1.d0-RhoGlIR*RhoShIR))
+        SurfaceWindow(SurfNum)%EffGlassEmiss(ISlatAng)   = EpsGlIR*TauShIR/(1.d0-RhoGlIR*RhoShIR)
       END IF
            ! Loop over remaining slat angles only if blind with movable slats
       IF(IntShade) EXIT  ! Loop over remaining slat angles only if blind
@@ -1509,12 +1509,12 @@ INTEGER           :: ConstrNum               ! Construction number
 INTEGER           :: SurfNum                 ! Surface number
 INTEGER           :: IPhi                    ! Angle of incidence counter
 INTEGER           :: FrDivNum                ! Pointer to frame/divider
-REAL         :: FrWidth                 ! Window frame width {m}
-REAL         :: FrEdgeWidth             ! Frame edge width {m}
-REAL         :: DivWidth                ! Window divider width {m}
-REAL         :: DivEdgeWidth            ! Divider edge width {m}
-REAL         :: GlHeight                ! Height of glazed part of window {m}
-REAL         :: GlWidth                 ! Width of glazed part of window {m}
+REAL(r64)         :: FrWidth                 ! Window frame width {m}
+REAL(r64)         :: FrEdgeWidth             ! Frame edge width {m}
+REAL(r64)         :: DivWidth                ! Window divider width {m}
+REAL(r64)         :: DivEdgeWidth            ! Divider edge width {m}
+REAL(r64)         :: GlHeight                ! Height of glazed part of window {m}
+REAL(r64)         :: GlWidth                 ! Width of glazed part of window {m}
 INTEGER           :: NumHorDividers          ! Number of horizontal divider elements
 INTEGER           :: NumVertDividers         ! Number of vertical divider elements
 INTEGER           :: BaseSurfNum             ! Base surface number
@@ -1702,12 +1702,12 @@ SUBROUTINE SystemSpectralPropertiesAtPhi(iquasi,ngllayer,wlbot,wltop)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL         :: sabsPhi(5)              ! System solar absorptance in each glass layer for
+REAL(r64)         :: sabsPhi(5)              ! System solar absorptance in each glass layer for
                                              !   particular angle of incidence
 INTEGER           :: in,i                    ! Glass layer counter
 INTEGER           :: iwl,j                   ! Wavelength counter
-REAL         :: wl                      ! Wavelength
-REAL         :: wlbot,wltop             ! Lowest and highest wavelength considered
+REAL(r64)         :: wl                      ! Wavelength
+REAL(r64)         :: wlbot,wltop             ! Lowest and highest wavelength considered
 INTEGER           :: ngllayer                  ! Number of glass layers in construction
 INTEGER           :: iquasi                  ! When there is no spectral data, this is the wavelength
                                              !   index to use in tPhi, rfPhi and rbPhi
@@ -1792,13 +1792,13 @@ SUBROUTINE SystemPropertiesAtLambdaAndPhi (n, tt, rft, rbt, aft)
 
 INTEGER, INTENT(IN) :: n                       ! Number of glass layers
 INTEGER             :: i,j                     ! Glass layer counters
-REAL           :: denom,denom1,denom2     ! Intermediate variables
-REAL, INTENT(OUT)   :: tt                      ! System transmittance
-REAL, INTENT(OUT)   :: rft,rbt                 ! System front and back reflectance
-REAL           :: t0,rb0,rf0              ! Transmittance, back reflectance and front
+REAL(r64)           :: denom,denom1,denom2     ! Intermediate variables
+REAL(r64), INTENT(OUT)   :: tt                      ! System transmittance
+REAL(r64), INTENT(OUT)   :: rft,rbt                 ! System front and back reflectance
+REAL(r64)           :: t0,rb0,rf0              ! Transmittance, back reflectance and front
                                                !   reflectance variables
-REAL           :: af,ab                   ! Front and back absorptance variables
-REAL, INTENT(OUT)   :: aft(5)                  ! System absorptance of each glass layer
+REAL(r64)           :: af,ab                   ! Front and back absorptance variables
+REAL(r64), INTENT(OUT)   :: aft(5)                  ! System absorptance of each glass layer
 
           ! FLOW
 
@@ -1874,11 +1874,11 @@ SUBROUTINE SolarSprectrumAverage(p, psol)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL         :: up,down                 ! Intermediate variables
+REAL(r64)         :: up,down                 ! Intermediate variables
 INTEGER           :: i                       ! Wavelength counter
-REAL         :: esol                    ! Solar spectrum value times delta wavelength
-REAL         :: p(nume)                 ! Quantity to be weighted by solar spectrum
-REAL         :: psol                    ! Quantity p weighted by solar spectrum
+REAL(r64)         :: esol                    ! Solar spectrum value times delta wavelength
+REAL(r64)         :: p(nume)                 ! Quantity to be weighted by solar spectrum
+REAL(r64)         :: psol                    ! Quantity p weighted by solar spectrum
 
           ! FLOW
 
@@ -1920,13 +1920,13 @@ SUBROUTINE VisibleSprectrumAverage(p, pvis)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL         :: up,down                 ! Intermediate variables
+REAL(r64)         :: up,down                 ! Intermediate variables
 INTEGER           :: i                       ! Wavelength counter
-REAL         :: p(nume)                 ! Quantity to be weighted by solar spectrum
-REAL         :: pvis                    ! Quantity p weighted by solar spectrum and photopic
+REAL(r64)         :: p(nume)                 ! Quantity to be weighted by solar spectrum
+REAL(r64)         :: pvis                    ! Quantity p weighted by solar spectrum and photopic
                                              !   response curve
-REAL         :: y30ils1,y30new          ! Photopic response variables
-REAL         :: evis                    ! Solar spectrum value times photopic response
+REAL(r64)         :: y30ils1,y30new          ! Photopic response variables
+REAL(r64)         :: evis                    ! Solar spectrum value times photopic response
                                              !   times delta wavelength
           ! FLOW
 
@@ -1937,10 +1937,10 @@ REAL         :: evis                    ! Solar spectrum value times photopic re
 
       do i=1,nume
         ! Restrict to visible range
-        if (wle(i) >= 0.37 .and. wle(i) <= 0.78) then
+        if (wle(i) >= 0.37d0 .and. wle(i) <= 0.78d0) then
           call Interpolate(wlt3, y30, numt3, wle(i), y30new)
-          evis = e(i-1) * 0.5 * (y30new+y30ils1) * (wle(i)-wle(i-1))
-          up = up + 0.5*(p(i) + p(i-1)) * evis
+          evis = e(i-1) * 0.5d0 * (y30new+y30ils1) * (wle(i)-wle(i-1))
+          up = up + 0.5d0*(p(i) + p(i-1)) * evis
           down = down + evis
           y30ils1 = y30new
         endif
@@ -1974,11 +1974,11 @@ SUBROUTINE Interpolate (x, y, npts, xin, yout)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER           :: npts                    ! Number of data pairs
-REAL         :: x(npts)                 ! Array of data points for independent variable
-REAL         :: y(npts)                 ! Array of data points for dependent variable
+REAL(r64)         :: x(npts)                 ! Array of data points for independent variable
+REAL(r64)         :: y(npts)                 ! Array of data points for dependent variable
 INTEGER           :: i                       ! Counter
-REAL         :: xin                     ! Given value of x
-REAL         :: yout                    ! Interpolated value of y at xin
+REAL(r64)         :: xin                     ! Given value of x
+REAL(r64)         :: yout                    ! Interpolated value of y at xin
 
           ! FLOW
 
@@ -2052,16 +2052,16 @@ SUBROUTINE CalcWindowHeatBalance (SurfNum,HextConvCoeff,SurfInsideTemp,SurfOutsi
   USE Psychrometrics,               ONLY:PsyCpAirFnWTdb,PsyTdpFnWPb
   USE DataHeatBalSurface  ,         ONLY : QConvOutReport,QdotConvOutRep,QdotConvOutRepPerArea,&
                                            QRadOutReport, QdotRadOutRep, QdotRadOutRepPerArea
-!unuse909  USE DataEnvironment, ONLY: CurMnDyHr
+!unused0909  USE DataEnvironment, ONLY: CurMnDyHr
   USE InputProcessor, ONLY: SameString
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT(IN)              :: SurfNum         ! Surface number
-REAL, INTENT(IN)                 :: HextConvCoeff   ! Outside air film conductance coefficient
-REAL, INTENT(INOUT)  :: SurfInsideTemp  ! Inside window surface temperature
-REAL, INTENT(INOUT)  :: SurfOutsideTemp ! Outside surface temperature (C)
+REAL(r64), INTENT(IN)                 :: HextConvCoeff   ! Outside air film conductance coefficient
+REAL(r64), INTENT(INOUT)  :: SurfInsideTemp  ! Inside window surface temperature
+REAL(r64), INTENT(INOUT)  :: SurfOutsideTemp ! Outside surface temperature (C)
                                                         ! (temperature of innermost face) [C]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2093,37 +2093,37 @@ INTEGER   :: IMix                         ! Gas number in a mixture of gases
 INTEGER   :: ICoeff                       ! Gas property index (1,2,3)
 INTEGER   :: ShadeFlag                    ! Flag indicating whether shade or blind is on, and shade/blind position
 INTEGER   :: k                            ! Layer counter
-!REAL :: tsky                         ! Sky temperature [K]
+!REAL(r64) :: tsky                         ! Sky temperature [K]
 INTEGER   :: ShadeLayPtr                  ! Material number corresponding to a shade layer
-REAL :: dth1,dth2,dth3,dth4          ! Temperature difference across glass layers [K]
-REAL :: EffShBlEmiss                 ! Effective interior shade or blind emissivity
-REAL :: EffGlEmiss                   ! Effective inside glass emissivity when interior shade or blind
-REAL :: RoomHumRat                   ! Room air humidity ratio
-REAL :: RoomDewPoint                 ! Room air dewpoint temperature (C)
-REAL :: InsideGlassTemp              ! Temperature of room side of innermost glass layer (C)
-REAL :: Tleft, Tright                ! For airflow windows, temperature of the glass faces adjacent
+REAL(r64) :: dth1,dth2,dth3,dth4          ! Temperature difference across glass layers [K]
+REAL(r64) :: EffShBlEmiss                 ! Effective interior shade or blind emissivity
+REAL(r64) :: EffGlEmiss                   ! Effective inside glass emissivity when interior shade or blind
+REAL(r64) :: RoomHumRat                   ! Room air humidity ratio
+REAL(r64) :: RoomDewPoint                 ! Room air dewpoint temperature (C)
+REAL(r64) :: InsideGlassTemp              ! Temperature of room side of innermost glass layer (C)
+REAL(r64) :: Tleft, Tright                ! For airflow windows, temperature of the glass faces adjacent
                                           !  to the airflow gap (C)
 INTEGER   :: ZoneEquipConfigNum
 INTEGER   :: NodeNum
-REAL :: SumSysMCp                    ! Zone sum of air system MassFlowRate*Cp
-REAL :: SumSysMCpT                   ! Zone sum of air system MassFlowRate*Cp*T
-REAL :: MassFlowRate
-REAL :: NodeTemp
-REAL :: CpAir
-REAL :: RefAirTemp ! reference air temperatures
+REAL(r64) :: SumSysMCp                    ! Zone sum of air system MassFlowRate*Cp
+REAL(r64) :: SumSysMCpT                   ! Zone sum of air system MassFlowRate*Cp*T
+REAL(r64) :: MassFlowRate
+REAL(r64) :: NodeTemp
+REAL(r64) :: CpAir
+REAL(r64) :: RefAirTemp ! reference air temperatures
 
 ! New variables for thermochromic windows calc
-REAL :: locTCSpecTemp                ! The temperature corresponding to the specified optical properties of the TC layer
-REAL :: locTCLayerTemp               ! TC layer temperature at each time step. C
+REAL(r64) :: locTCSpecTemp                ! The temperature corresponding to the specified optical properties of the TC layer
+REAL(r64) :: locTCLayerTemp               ! TC layer temperature at each time step. C
 LOGICAL   :: locTCFlag =.False.           ! True if this surface is a TC window
-REAL :: deltaTemp(100) = 0.0
+REAL(r64) :: deltaTemp(100) = 0.0
 INTEGER   :: i
 INTEGER   :: iMinDT(1) = 0
 INTEGER   :: IDConst(100) = 0
-REAL :: dT0 = 0.0
-REAL :: dT1 = 0.0
-REAL :: SurfOutsideEmiss ! temporary for result of outside surface emissivity
-REAL :: Tsout ! temporary for result of outside surface temp in Kelvin
+REAL(r64) :: dT0 = 0.0
+REAL(r64) :: dT1 = 0.0
+REAL(r64) :: SurfOutsideEmiss ! temporary for result of outside surface emissivity
+REAL(r64) :: Tsout ! temporary for result of outside surface temp in Kelvin
 
 ConstrNum = Surface(SurfNum)%Construction
 IF(SurfaceWindow(SurfNum)%StormWinFlag > 0) ConstrNum = Surface(SurfNum)%StormWinConstruction
@@ -2210,7 +2210,7 @@ SELECT CASE (Surface(SurfNum)%TAirRef)
             SumSysMCpT = SumSysMCpT + MassFlowRate * CpAir * NodeTemp
         END DO
         ! a weighted average of the inlet temperatures.
-        IF (SumSysMCp > 0.0) THEN
+        IF (SumSysMCp > 0.0d0) THEN
           RefAirTemp = SumSysMCpT/SumSysMCp
         ELSE
           RefAirTemp = NodeTemp
@@ -2229,7 +2229,7 @@ Tin = RefAirTemp + TKelvin  ! Inside air temperature
 ! of window layer heat balance solution.
 IF (Surface(SurfNum)%IntConvCoeff == 0) THEN  !
   IF(hcin <= LowHConvLimit) then  ! may be redundent now, check is also in HeatBalanceConvectionCoeffs.f90
-    !  hcin = 3.076  !BG this is rather high value and abrupt change. changed to set to lower limit
+    !  hcin = 3.076d0  !BG this is rather high value and abrupt change. changed to set to lower limit
     hcin = LowHConvLimit
     HConvIn(SurfNum) = hcin ! store for accurate reporting.
   ENDIF
@@ -2243,8 +2243,8 @@ rmir = SurfaceWindow(SurfNum)%IRfromParentZone + QHTRadSysSurf(SurfNum) + QHWBas
 ! absorbed at each face. Assumes equal split between faces of short-wave absorbed in glass layer.
 
 DO IGlass = 1,TotGlassLay
-  AbsRadGlassFace(2*IGlass-1) = QRadSWwinAbs(SurfNum,IGlass)/2.
-  AbsRadGlassFace(2*IGlass)   = QRadSWwinAbs(SurfNum,IGlass)/2.
+  AbsRadGlassFace(2*IGlass-1) = QRadSWwinAbs(SurfNum,IGlass)/2.d0
+  AbsRadGlassFace(2*IGlass)   = QRadSWwinAbs(SurfNum,IGlass)/2.d0
 END DO
 
 ! IR from zone internal gains (lights, equipment and people) absorbed on zone-side face
@@ -2418,7 +2418,7 @@ IF(SurfNumAdj > 0) THEN  ! Interzone window
             SumSysMCp = SumSysMCp + MassFlowRate * CpAir
             SumSysMCpT = SumSysMCpT + MassFlowRate * CpAir * NodeTemp
         END DO
-        IF (SumSysMCp > 0.0) THEN
+        IF (SumSysMCp > 0.0d0) THEN
           ! a weighted average of the inlet temperatures.
           RefAirTemp = SumSysMCpT/SumSysMCp
         ELSE
@@ -2456,7 +2456,7 @@ ELSE  ! Exterior window (ExtBoundCond = 0)
   END IF
   Ebout = sigma * tout**4
   outir = Surface(SurfNum)%ViewFactorSkyIR *   &
-     (AirSkyRadSplit(SurfNum)*sigma*SkyTempKelvin**4 + (1.-AirSkyRadSplit(SurfNum))*Ebout) +   &
+     (AirSkyRadSplit(SurfNum)*sigma*SkyTempKelvin**4 + (1.d0-AirSkyRadSplit(SurfNum))*Ebout) +   &
       Surface(SurfNum)%ViewFactorGroundIR * Ebout
 
 END IF
@@ -2570,11 +2570,11 @@ QdotConvOutRep(SurfNum)        = - Surface(SurfNum)%Area * hcout *(Tsout - Tout)
 QdotConvOutRepPerArea(SurfNum) = - hcout *(Tsout - Tout)
 QConvOutReport(SurfNum)        = QdotConvOutRep(SurfNum)* SecInHour * TimeStepZone
 
-QdotRadOutRep(SurfNum) = - Surface(SurfNum)%Area * SurfOutsideEmiss *((1.0-AirSkyRadSplit(SurfNum)) + &
+QdotRadOutRep(SurfNum) = - Surface(SurfNum)%Area * SurfOutsideEmiss *((1.0d0-AirSkyRadSplit(SurfNum)) + &
                                  Surface(SurfNum)%ViewFactorGroundIR) * sigma * (Tsout**4 - tout**4) &
                           -  Surface(SurfNum)%Area *SurfOutsideEmiss * Surface(SurfNum)%ViewFactorSkyIR  &
                                 * sigma * (Tsout**4 - SkyTempKelvin**4)
-QdotRadOutRepPerArea(SurfNum) =- SurfOutsideEmiss *((1.0-AirSkyRadSplit(SurfNum)) + Surface(SurfNum)%ViewFactorGroundIR) &
+QdotRadOutRepPerArea(SurfNum) =- SurfOutsideEmiss *((1.0d0-AirSkyRadSplit(SurfNum)) + Surface(SurfNum)%ViewFactorGroundIR) &
                           * sigma * (Tsout**4 - tout**4) &
                           - SurfOutsideEmiss * Surface(SurfNum)%ViewFactorSkyIR  * sigma * (Tsout**4 - SkyTempKelvin**4)
 QRadOutReport(SurfNum) =  QdotRadOutRep(SurfNum) * SecInHour * TimeStepZone
@@ -2607,11 +2607,11 @@ SUBROUTINE WindowHeatBalanceEquations(SurfNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER           :: SurfNum                      ! Surface number
-REAL         :: hgap(5)                      ! Gap gas conductance
-REAL  :: gr                           ! Gap gas Grashof number
-REAL  :: con                          ! Gap gas conductivity
-REAL  :: pr                           ! Gap gas Prandtl number
-REAL  :: nu                           ! Gap gas Nusselt number
+REAL(r64)         :: hgap(5)                      ! Gap gas conductance
+REAL(r64)  :: gr                           ! Gap gas Grashof number
+REAL(r64)  :: con                          ! Gap gas conductivity
+REAL(r64)  :: pr                           ! Gap gas Prandtl number
+REAL(r64)  :: nu                           ! Gap gas Nusselt number
 
            ! FLOW
 
@@ -2780,7 +2780,7 @@ SUBROUTINE SolveForWindowTemperatures(SurfNum)
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: MaxIterations = 100   ! Maximum allowed number of iterations (increased 9/01 from 15 to 50,
                                               !   increased 11/02 from 50 to 100)
-  REAL, PARAMETER    :: errtemptol = 0.02     ! Tolerance on errtemp for convergence (increased from 0.01, 3/4/03)
+  REAL(r64), PARAMETER    :: errtemptol = 0.02d0     ! Tolerance on errtemp for convergence (increased from 0.01, 3/4/03)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2793,87 +2793,87 @@ SUBROUTINE SolveForWindowTemperatures(SurfNum)
 
 INTEGER           :: ZoneNum               ! Zone number corresponding to SurfNum
 INTEGER           :: i                     ! Counter
-REAL         :: hgap(5)               ! Gap gas conductance (W/m2-K)
-REAL  :: gr                    ! Grashof number of gas in a gap
-REAL  :: con                   ! Gap gas conductivity
-REAL  :: pr                    ! Gap gas Prandtl number
-REAL  :: nu                    ! Gap gas Nusselt number
-REAL         :: hr(10)                ! Radiative conductance (W/m2-K)
-REAL         :: d                     ! +1 if number of row interchanges is even,
+REAL(r64)         :: hgap(5)               ! Gap gas conductance (W/m2-K)
+REAL(r64)  :: gr                    ! Grashof number of gas in a gap
+REAL(r64)  :: con                   ! Gap gas conductivity
+REAL(r64)  :: pr                    ! Gap gas Prandtl number
+REAL(r64)  :: nu                    ! Gap gas Nusselt number
+REAL(r64)         :: hr(10)                ! Radiative conductance (W/m2-K)
+REAL(r64)         :: d                     ! +1 if number of row interchanges is even,
                                            ! -1 if odd (in LU decomposition)
 INTEGER           :: indx(10)              ! Vector of row permutations in LU decomposition
-REAL  :: Aface(10,10)          ! Coefficient in equation Aface*thetas = Bface
-REAL  :: Bface(10)             ! Coefficient in equation Aface*thetas = Bface
+REAL(r64)  :: Aface(10,10)          ! Coefficient in equation Aface*thetas = Bface
+REAL(r64)  :: Bface(10)             ! Coefficient in equation Aface*thetas = Bface
 
 INTEGER           :: iter                  ! Iteration number
-REAL         :: hrprev(10)            ! Value of hr from previous iteration
-REAL         :: errtemp               ! Absolute value of sum of face temperature differences
+REAL(r64)         :: hrprev(10)            ! Value of hr from previous iteration
+REAL(r64)         :: errtemp               ! Absolute value of sum of face temperature differences
                                            !   between iterations, divided by number of faces
-REAL         :: VGap                  ! Air velocity in gap between glass and shade/blind (m/s)
-REAL         :: VAirflowGap           ! Air velocity in airflow gap between glass panes (m/s)
-REAL         :: VGapPrev              ! Value of VGap from previous iteration
-REAL         :: TGapNew               ! Average air temp in gap between glass and shade/blind (K)
-REAL         :: TAirFlowGapNew        ! Average air temp in airflow gap between glass panes (K)
-REAL         :: TGapOutlet            ! Temperature of air leaving gap between glass and shade/blind (K)
-REAL         :: TAirflowGapOutlet     ! Temperature of air leaving airflow gap between glass panes (K)
-REAL         :: TAirflowGapOutletC    ! Temperature of air leaving airflow gap between glass panes (C)
-REAL         :: TGapNewBG(2)          ! For between-glass shade/blind, average gas temp in gaps on either
+REAL(r64)         :: VGap                  ! Air velocity in gap between glass and shade/blind (m/s)
+REAL(r64)         :: VAirflowGap           ! Air velocity in airflow gap between glass panes (m/s)
+REAL(r64)         :: VGapPrev              ! Value of VGap from previous iteration
+REAL(r64)         :: TGapNew               ! Average air temp in gap between glass and shade/blind (K)
+REAL(r64)         :: TAirFlowGapNew        ! Average air temp in airflow gap between glass panes (K)
+REAL(r64)         :: TGapOutlet            ! Temperature of air leaving gap between glass and shade/blind (K)
+REAL(r64)         :: TAirflowGapOutlet     ! Temperature of air leaving airflow gap between glass panes (K)
+REAL(r64)         :: TAirflowGapOutletC    ! Temperature of air leaving airflow gap between glass panes (C)
+REAL(r64)         :: TGapNewBG(2)          ! For between-glass shade/blind, average gas temp in gaps on either
                                            !  side of shade/blind (K)
-REAL         :: hcv                   ! Convection coefficient from gap glass or shade/blind to gap air (W/m2-K)
-REAL         :: hcvAirflowGap         ! Convection coefficient from airflow gap glass to airflow gap air (W/m2-K)
-REAL         :: hcvPrev               ! Value of hcv from previous iteration
-REAL         :: hcvBG(2)              ! For between-glass shade/blind, convection coefficient from gap glass or
+REAL(r64)         :: hcv                   ! Convection coefficient from gap glass or shade/blind to gap air (W/m2-K)
+REAL(r64)         :: hcvAirflowGap         ! Convection coefficient from airflow gap glass to airflow gap air (W/m2-K)
+REAL(r64)         :: hcvPrev               ! Value of hcv from previous iteration
+REAL(r64)         :: hcvBG(2)              ! For between-glass shade/blind, convection coefficient from gap glass or
                                            !  shade/blind to gap gas on either side of shade/blind (W/m2-K)
-REAL         :: ConvHeatFlowNatural   ! Convective heat flow from gap between glass and interior shade or blind (W)
-REAL         :: ConvHeatFlowForced    ! Convective heat flow from forced airflow gap (W)
-REAL         :: ShGlReflFacIR         ! Factor for long-wave inter-reflection between shade/blind and adjacent glass
-REAL         :: RhoGlIR1,RhoGlIR2     ! Long-wave reflectance of glass surface facing shade/blind; 1=exterior shade/blind,
+REAL(r64)         :: ConvHeatFlowNatural   ! Convective heat flow from gap between glass and interior shade or blind (W)
+REAL(r64)         :: ConvHeatFlowForced    ! Convective heat flow from forced airflow gap (W)
+REAL(r64)         :: ShGlReflFacIR         ! Factor for long-wave inter-reflection between shade/blind and adjacent glass
+REAL(r64)         :: RhoGlIR1,RhoGlIR2     ! Long-wave reflectance of glass surface facing shade/blind; 1=exterior shade/blind,
                                            !  2=interior shade/blind
-REAL         :: RhoShIR1,RhoShIR2     ! Long-wave reflectance of shade/blind surface facing glass; 1=interior shade/blind,
+REAL(r64)         :: RhoShIR1,RhoShIR2     ! Long-wave reflectance of shade/blind surface facing glass; 1=interior shade/blind,
                                            !  2=exterior shade/blind
-REAL         :: EpsShIR1,EpsShIR2     ! Long-wave emissivity of shade/blind surface facing glass; 1=interior shade/blind,
+REAL(r64)         :: EpsShIR1,EpsShIR2     ! Long-wave emissivity of shade/blind surface facing glass; 1=interior shade/blind,
                                            !  2=exterior shade/blind
-REAL         :: TauShIR               ! Long-wave transmittance of isolated shade/blind
-REAL         :: sconsh                ! shade/blind conductance (W/m2-K)
+REAL(r64)         :: TauShIR               ! Long-wave transmittance of isolated shade/blind
+REAL(r64)         :: sconsh                ! shade/blind conductance (W/m2-K)
 INTEGER           :: ShadeFlag             ! Shading flag
-REAL         :: ShadeAbsFac1,ShadeAbsFac2 ! Fractions for apportioning absorbed radiation to shade/blind faces
-REAL         :: AbsRadShadeFace(2)    ! Solar radiation, short-wave radiation from lights, and long-wave
+REAL(r64)         :: ShadeAbsFac1,ShadeAbsFac2 ! Fractions for apportioning absorbed radiation to shade/blind faces
+REAL(r64)         :: AbsRadShadeFace(2)    ! Solar radiation, short-wave radiation from lights, and long-wave
                                            !  radiation from lights and zone equipment absorbed by faces of shade/blind (W/m2)
-REAL         :: ShadeArea             ! shade/blind area (m2)
-REAL         :: CondHeatGainGlass     ! Conduction through inner glass layer, outside to inside (W)
-REAL         :: CondHeatGainShade     ! Conduction through shade/blind, outside to inside (W)
-REAL         :: NetIRHeatGainGlass    ! Net IR heat gain to zone from shade/blind side of glass when interior
+REAL(r64)         :: ShadeArea             ! shade/blind area (m2)
+REAL(r64)         :: CondHeatGainGlass     ! Conduction through inner glass layer, outside to inside (W)
+REAL(r64)         :: CondHeatGainShade     ! Conduction through shade/blind, outside to inside (W)
+REAL(r64)         :: NetIRHeatGainGlass    ! Net IR heat gain to zone from shade/blind side of glass when interior
                                            !  shade/blind is present. Zero if shade/blind has zero IR transmittance (W)
-REAL         :: NetIRHeatGainShade    ! Net IR heat gain to zone from interior shade/blind (W)
-REAL         :: ConvHeatGainFrZoneSideOfShade ! Convective heat gain to zone from side of interior shade facing zone (W)
-REAL         :: ConvHeatGainFrZoneSideOfGlass ! Convective heat gain to zone from side of glass facing zone when
+REAL(r64)         :: NetIRHeatGainShade    ! Net IR heat gain to zone from interior shade/blind (W)
+REAL(r64)         :: ConvHeatGainFrZoneSideOfShade ! Convective heat gain to zone from side of interior shade facing zone (W)
+REAL(r64)         :: ConvHeatGainFrZoneSideOfGlass ! Convective heat gain to zone from side of glass facing zone when
                                                    !  no interior shade/blind is present (W)
-REAL         :: IncidentSolar         ! Solar incident on outside of window (W)
+REAL(r64)         :: IncidentSolar         ! Solar incident on outside of window (W)
 INTEGER          :: ConstrNum, ConstrNumSh ! Construction number, bare and with shading device
-REAL         :: TransDiff             ! Diffuse shortwave transmittance
-REAL         :: RhoIR(10)             ! Face IR reflectance
-REAL         :: FacRhoIR25            ! Intermediate variable
-REAL         :: FacRhoIR63            ! Intermediate variable
-REAL         :: RhoIRfp               ! Intermediate variable
-REAL         :: RhoIRbp               ! Intermediate variable
-REAL         :: FacRhoIR2fp           ! Intermediate variable
-REAL         :: FacRhoIR3bp           ! Intermediate variable
-REAL         :: FacRhoIR2fpRhoIR63    ! Intermediate variable
-REAL         :: FacRhoIR3bpRhoIR25    ! Intermediate variable
-REAL         :: FacRhoIR47            ! Intermediate variable
-REAL         :: FacRhoIR85            ! Intermediate variable
-REAL         :: FacRhoIR4fp           ! Intermediate variable
-REAL         :: FacRhoIR5bp           ! Intermediate variable
-REAL         :: FacRhoIR4fpRhoIR85    ! Intermediate variable
-REAL         :: FacRhoIR5bpRhoIR47    ! Intermediate variable
-REAL         :: ConvHeatGainToZoneAir ! Convective heat gain to zone air from window gap airflow (W)
-REAL         :: TotAirflowGap         ! Total volumetric airflow through window gap (m3/s)
-REAL         :: CpAirOutlet           ! Heat capacity of air from window gap (J/kg-K)
-REAL         :: CpAirZone             ! Heat capacity of zone air (J/kg-K)
-REAL         :: InletAirHumRat        ! Humidity ratio of air from window gap entering fan
-!!unused REAL         :: RhoAir                ! Density of air from window gap entering fan (kg/m3)
-!!unused REAL         :: MassFlow              ! Mass flow of air from window gap entering fan (kg/s)
-REAL         :: ZoneTemp              ! Zone air temperature (C)
+REAL(r64)         :: TransDiff             ! Diffuse shortwave transmittance
+REAL(r64)         :: RhoIR(10)             ! Face IR reflectance
+REAL(r64)         :: FacRhoIR25            ! Intermediate variable
+REAL(r64)         :: FacRhoIR63            ! Intermediate variable
+REAL(r64)         :: RhoIRfp               ! Intermediate variable
+REAL(r64)         :: RhoIRbp               ! Intermediate variable
+REAL(r64)         :: FacRhoIR2fp           ! Intermediate variable
+REAL(r64)         :: FacRhoIR3bp           ! Intermediate variable
+REAL(r64)         :: FacRhoIR2fpRhoIR63    ! Intermediate variable
+REAL(r64)         :: FacRhoIR3bpRhoIR25    ! Intermediate variable
+REAL(r64)         :: FacRhoIR47            ! Intermediate variable
+REAL(r64)         :: FacRhoIR85            ! Intermediate variable
+REAL(r64)         :: FacRhoIR4fp           ! Intermediate variable
+REAL(r64)         :: FacRhoIR5bp           ! Intermediate variable
+REAL(r64)         :: FacRhoIR4fpRhoIR85    ! Intermediate variable
+REAL(r64)         :: FacRhoIR5bpRhoIR47    ! Intermediate variable
+REAL(r64)         :: ConvHeatGainToZoneAir ! Convective heat gain to zone air from window gap airflow (W)
+REAL(r64)         :: TotAirflowGap         ! Total volumetric airflow through window gap (m3/s)
+REAL(r64)         :: CpAirOutlet           ! Heat capacity of air from window gap (J/kg-K)
+REAL(r64)         :: CpAirZone             ! Heat capacity of zone air (J/kg-K)
+REAL(r64)         :: InletAirHumRat        ! Humidity ratio of air from window gap entering fan
+!!unused REAL(r64)         :: RhoAir                ! Density of air from window gap entering fan (kg/m3)
+!!unused REAL(r64)         :: MassFlow              ! Mass flow of air from window gap entering fan (kg/s)
+REAL(r64)         :: ZoneTemp              ! Zone air temperature (C)
 Integer           :: InsideFaceIndex       ! intermediate variable for index of inside face in thetas
 
 iter = 0
@@ -2904,14 +2904,14 @@ IF(ShadeFlag==IntShadeOn.OR.ShadeFlag==ExtShadeOn.OR.ShadeFlag==IntBlindOn.OR.Sh
   TauShIR = tir(nglface+1)
   EpsShIR1 = emis(nglface+1)
   EpsShIR2 = emis(nglface+2)
-  RhoShIR1 = MAX(0.,1.-TauShIR-EpsShIR1)
-  RhoShIR2 = MAX(0.,1.-TauShIR-EpsShIR2)
+  RhoShIR1 = MAX(0.d0,1.d0-TauShIR-EpsShIR1)
+  RhoShIR2 = MAX(0.d0,1.d0-TauShIR-EpsShIR2)
   IF(ShadeFlag == IntShadeOn .OR. ShadeFlag == IntBlindOn) THEN
-    RhoGlIR2 = 1.-emis(2*ngllayer)
-    ShGlReflFacIR = 1.-RhoGlIR2*RhoShIR1
+    RhoGlIR2 = 1.d0-emis(2*ngllayer)
+    ShGlReflFacIR = 1.d0-RhoGlIR2*RhoShIR1
   ELSE IF(ShadeFlag == ExtShadeOn .OR. ShadeFlag == ExtBlindOn .OR. ShadeFlag == ExtScreenOn) THEN
-    RhoGlIR1 = 1.-emis(1)
-    ShGlReflFacIR = 1.-RhoGlIR1*RhoShIR2
+    RhoGlIR1 = 1.d0-emis(1)
+    ShGlReflFacIR = 1.d0-RhoGlIR1*RhoShIR2
   END IF
 END IF  ! End of check if shade or blind is on
 
@@ -2924,7 +2924,7 @@ VGapPrev=0.0
 
 ! Calculate radiative conductances
 
-errtemp=errtemptol*2.0
+errtemp=errtemptol*2.0d0
 
 DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
 
@@ -2961,8 +2961,8 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
      ShadeFlag==ExtScreenOn) THEN
     CALL ExtOrIntShadeNaturalFlow(SurfNum,iter,VGap,TGapNew,TGapOutlet,hcv,ConvHeatFlowNatural)
     IF(iter >= 1) THEN
-      hcv =  0.5*(hcvPrev + hcv)
-      VGap = 0.5*(VGapPrev + VGap)
+      hcv =  0.5d0*(hcvPrev + hcv)
+      VGap = 0.5d0*(VGapPrev + VGap)
     END IF
     hcvPrev = hcv
     VGapPrev = VGap
@@ -3102,14 +3102,14 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
 
       IF(ShadeFlag == BGShadeOn .OR. ShadeFlag == BGBlindOn) THEN
         DO i = 1,6
-          RhoIR(i) = MAX(0.0,1.-tir(i)-emis(i))
+          RhoIR(i) = MAX(0.0d0,1.d0-tir(i)-emis(i))
         END DO
-        FacRhoIR25  = 1.-RhoIr(2)*RhoIR(5)
-        FacRhoIR63  = 1.-RhoIr(6)*RhoIR(3)
+        FacRhoIR25  = 1.d0-RhoIr(2)*RhoIR(5)
+        FacRhoIR63  = 1.d0-RhoIr(6)*RhoIR(3)
         RhoIRfp     = RhoIR(5) + (tir(5)**2)*RhoIR(3)/FacRhoIR63
         RhoIRbp     = RhoIR(6) + (tir(5)**2)*RhoIR(2)/FacRhoIR25
-        FacRhoIR2fp = 1.-RhoIRfp*RhoIR(2)
-        FacRhoIR3bp = 1.-RhoIRbp*RhoIR(3)
+        FacRhoIR2fp = 1.d0-RhoIRfp*RhoIR(2)
+        FacRhoIR3bp = 1.d0-RhoIRbp*RhoIR(3)
         FacRhoIR2fpRhoIR63 = FacRhoIR2fp * FacRhoIR63
         FacRhoIR3bpRhoIR25 = FacRhoIR3bp * FacRhoIR25
         Aface(2,2)  = scon(1) + hcvBG(1) + hr(2)*(1-RhoIRfp*(emis(2)+RhoIR(2)))/FacRhoIR2fp
@@ -3139,7 +3139,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
       call NusseltNumber(SurfNum,thetas(2),thetas(3),1,gr,pr,nu)
       hgap(1) = con/gap(1)*nu
       IF(SurfaceWindow(SurfNum)%EdgeGlCorrFac > 1.0) THEN ! Edge of glass correction
-        hrgap(1) = 0.5*ABS(A23)*(thetas(2)+thetas(3))**3
+        hrgap(1) = 0.5d0*ABS(A23)*(thetas(2)+thetas(3))**3
         hgap(1) = hgap(1) * SurfaceWindow(SurfNum)%EdgeGlCorrFac + &
                   hrgap(1) * (SurfaceWindow(SurfNum)%EdgeGlCorrFac - 1.)
       END IF
@@ -3148,7 +3148,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
       call NusseltNumber(SurfNum,thetas(4),thetas(5),2,gr,pr,nu)
       hgap(2) = con/gap(2)*nu
       IF(SurfaceWindow(SurfNum)%EdgeGlCorrFac > 1.0) THEN ! Edge of glass correction
-        hrgap(2) = 0.5*ABS(A45)*(thetas(4)+thetas(5))**3
+        hrgap(2) = 0.5d0*ABS(A45)*(thetas(4)+thetas(5))**3
         hgap(2) = hgap(2) * SurfaceWindow(SurfNum)%EdgeGlCorrFac + &
                   hrgap(2) * (SurfaceWindow(SurfNum)%EdgeGlCorrFac - 1.)
       END IF
@@ -3221,7 +3221,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
 
       IF(ShadeFlag == BGShadeOn .OR. ShadeFlag == BGBlindOn) THEN
         DO i = 1,8
-          RhoIR(i) = MAX(0.0,1.-tir(i)-emis(i))
+          RhoIR(i) = MAX(0.0d0,1.d0-tir(i)-emis(i))
         END DO
         FacRhoIR47  = 1-RhoIr(4)*RhoIR(7)
         FacRhoIR85  = 1-RhoIr(8)*RhoIR(5)
@@ -3258,7 +3258,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
       call NusseltNumber(SurfNum,thetas(2),thetas(3),1,gr,pr,nu)
       hgap(1) = con/gap(1)*nu
       IF(SurfaceWindow(SurfNum)%EdgeGlCorrFac > 1.0) THEN ! Edge of glass correction
-        hrgap(1) = 0.5*ABS(A23)*(thetas(2)+thetas(3))**3
+        hrgap(1) = 0.5d0*ABS(A23)*(thetas(2)+thetas(3))**3
         hgap(1) = hgap(1) * SurfaceWindow(SurfNum)%EdgeGlCorrFac + &
                   hrgap(1) * (SurfaceWindow(SurfNum)%EdgeGlCorrFac - 1.)
       END IF
@@ -3267,7 +3267,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
       call NusseltNumber(SurfNum,thetas(4),thetas(5),2,gr,pr,nu)
       hgap(2) = con/gap(2)*nu
       IF(SurfaceWindow(SurfNum)%EdgeGlCorrFac > 1.0) THEN ! Edge of glass correction
-        hrgap(2) = 0.5*ABS(A45)*(thetas(4)+thetas(5))**3
+        hrgap(2) = 0.5d0*ABS(A45)*(thetas(4)+thetas(5))**3
         hgap(2) = hgap(2) * SurfaceWindow(SurfNum)%EdgeGlCorrFac + &
                   hrgap(2) * (SurfaceWindow(SurfNum)%EdgeGlCorrFac - 1.)
       END IF
@@ -3276,7 +3276,7 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
       call NusseltNumber(SurfNum,thetas(6),thetas(7),3,gr,pr,nu)
       hgap(3) = con/gap(3)*nu
       IF(SurfaceWindow(SurfNum)%EdgeGlCorrFac > 1.0) THEN ! Edge of glass correction
-        hrgap(3) = 0.5*ABS(A67)*(thetas(6)+thetas(7))**3
+        hrgap(3) = 0.5d0*ABS(A67)*(thetas(6)+thetas(7))**3
         hgap(3) = hgap(3) * SurfaceWindow(SurfNum)%EdgeGlCorrFac + &
                   hrgap(3) * (SurfaceWindow(SurfNum)%EdgeGlCorrFac - 1.)
       END IF
@@ -3358,9 +3358,9 @@ DO WHILE (iter < MaxIterations .AND. errtemp > errtemptol)
   DO i = 1,nglfacep
     thetasPrev(i) = thetas(i)
     IF(iter < MaxIterations/4) THEN
-      thetas(i) = 0.5*thetas(i) + 0.5*Bface(i)
+      thetas(i) = 0.5d0*thetas(i) + 0.5d0*Bface(i)
     ELSE
-      thetas(i) = 0.75*thetas(i) + 0.25*Bface(i)
+      thetas(i) = 0.75d0*thetas(i) + 0.25d0*Bface(i)
     END IF
   END DO
 
@@ -3487,10 +3487,10 @@ IF(errtemp < 10*errtemptol) THEN
   END IF
   IF(SunIsUp) THEN
     WinSysSolTransmittance(SurfNum) = WinTransSolar(SurfNum) / &
-      (QRadSWOutIncident(SurfNum)*(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea)+0.0001)
+      (QRadSWOutIncident(SurfNum)*(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea)+0.0001d0)
     WinSysSolAbsorptance(SurfNum)   = (QRadSWwinAbsTot(SurfNum)+WinShadingAbsorbedSolar(SurfNum)) / &
-      (QRadSWOutIncident(SurfNum)*(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea)+0.0001)
-    WinSysSolReflectance(SurfNum)   = 1.0 - WinSysSolTransmittance(SurfNum) - WinSysSolAbsorptance(SurfNum)
+      (QRadSWOutIncident(SurfNum)*(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea)+0.0001d0)
+    WinSysSolReflectance(SurfNum)   = 1.0d0 - WinSysSolTransmittance(SurfNum) - WinSysSolAbsorptance(SurfNum)
   ELSE
     WinSysSolTransmittance(SurfNum) = 0.0
     WinSysSolAbsorptance(SurfNum)   = 0.0
@@ -3554,11 +3554,11 @@ SUBROUTINE ExtOrIntShadeNaturalFlow(SurfNum,iter,VGap,TGapNew,TGapOutlet,hcv,QCo
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT (IN) :: SurfNum             ! Surface number
 INTEGER, INTENT (IN) :: iter                ! Iteration number for glass heat balance calculation
-REAL, INTENT (OUT)   :: VGap                ! Air velocity in glass-shade/blind gap (m/s)
-REAL, INTENT (INOUT)   :: TGapNew           ! Current-iteration average air temp in glass-shade/blind gap (K)
-REAL, INTENT (OUT)   :: TGapOutlet          ! Temperature of air leaving glass-shade/blind gap at top for upward
-REAL, INTENT (OUT)   :: hcv                 ! Convection coefficient from gap glass or shade to gap air (W/m2-K)
-REAL, INTENT (OUT)   :: QConvGap            ! Convective heat gain from glass-shade/blind gap for interior shade (W)
+REAL(r64), INTENT (OUT)   :: VGap                ! Air velocity in glass-shade/blind gap (m/s)
+REAL(r64), INTENT (INOUT)   :: TGapNew           ! Current-iteration average air temp in glass-shade/blind gap (K)
+REAL(r64), INTENT (OUT)   :: TGapOutlet          ! Temperature of air leaving glass-shade/blind gap at top for upward
+REAL(r64), INTENT (OUT)   :: hcv                 ! Convection coefficient from gap glass or shade to gap air (W/m2-K)
+REAL(r64), INTENT (OUT)   :: QConvGap            ! Convective heat gain from glass-shade/blind gap for interior shade (W)
                                             !   air flow or bottom for downward air flow (K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3576,37 +3576,37 @@ REAL, INTENT (OUT)   :: QConvGap            ! Convective heat gain from glass-sh
 INTEGER              :: ConstrNumSh         ! Shaded construction number
 INTEGER              :: MatNumSh            ! Material number of shade/blind layer
 INTEGER              :: nglassfaces         ! Number of glass faces in contruction
-REAL            :: TGapInlet           ! Temperature of air entering glass-shade/blind gap at bottom for upward
+REAL(r64)            :: TGapInlet           ! Temperature of air entering glass-shade/blind gap at bottom for upward
                                             !   air flow or top for downward air flow (K)
-REAL     :: TGlassFace          ! Temperature of glass surface facing glass-shade/blind gap (K)
-REAL     :: TShadeFace          ! Temperature of shade surface facing glass-shade/blind gap (K)
-REAL            :: hGapStill           ! Still-air glass-shade/blind gap conduction/convection coeff (W/m2-K)
-REAL            :: TGapOld             ! Previous-iteration average air temp in glass-shade/blind gap (K)
-REAL            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
-REAL            :: GapDepth            ! Distance from shade to glass (m)
-REAL            :: RhoAir              ! Density of glass-shade/blind gap air at a temperature of TGapOld (kg/m3)
-REAL            :: RhoTRef             ! Density of glass-shade/blind air at reference temp = KelvinConv (kg/m3)
-REAL            :: ViscAir             ! Viscosity of glass-shade/blind gap air at a temperature of TGapOld (kg/m3)
-REAL            :: AGap                ! Cross sectional area of glass-shade/blind gap (m2); for vertical window, this
+REAL(r64)     :: TGlassFace          ! Temperature of glass surface facing glass-shade/blind gap (K)
+REAL(r64)     :: TShadeFace          ! Temperature of shade surface facing glass-shade/blind gap (K)
+REAL(r64)            :: hGapStill           ! Still-air glass-shade/blind gap conduction/convection coeff (W/m2-K)
+REAL(r64)            :: TGapOld             ! Previous-iteration average air temp in glass-shade/blind gap (K)
+REAL(r64)            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
+REAL(r64)            :: GapDepth            ! Distance from shade to glass (m)
+REAL(r64)            :: RhoAir              ! Density of glass-shade/blind gap air at a temperature of TGapOld (kg/m3)
+REAL(r64)            :: RhoTRef             ! Density of glass-shade/blind air at reference temp = KelvinConv (kg/m3)
+REAL(r64)            :: ViscAir             ! Viscosity of glass-shade/blind gap air at a temperature of TGapOld (kg/m3)
+REAL(r64)            :: AGap                ! Cross sectional area of glass-shade/blind gap (m2); for vertical window, this
                                             !   is in horizontal plane normal to window.
-REAL            :: ATopGap, ABotGap    ! Area of the top and bottom openings (m2)
-REAL            :: ALeftGap, ARightGap ! Area of the left and right openings (m2)
-REAL            :: AHolesGap           ! Area of the holes in the shade (assumed homogeneously
+REAL(r64)            :: ATopGap, ABotGap    ! Area of the top and bottom openings (m2)
+REAL(r64)            :: ALeftGap, ARightGap ! Area of the left and right openings (m2)
+REAL(r64)            :: AHolesGap           ! Area of the holes in the shade (assumed homogeneously
                                             !   distributed) (m2)
-REAL            :: ATopLRH,ABotLRH     ! Intermediate variables
-REAL            :: AEqInlet, AEqOutlet ! Equivalent inlet and outlet opening areas (m2)
-REAL            :: Zinlet, Zoutlet     ! Inlet and outlet pressure loss factors
-REAL            :: AVGap               ! Coeff. of VGap**2 term in pressure balance equation
-REAL            :: BVGap               ! Coeff. of VGap term in pressure balance equation
-REAL            :: CVGap               ! VGap-independent term in pressure balance equation
-REAL            :: GapHeightChar       ! Characteristic height of the gap air temperature profile (m)
-REAL            :: TAve                ! Average of TGlass and TShade (K)
-!REAL            :: AirProps(8)         ! Air properties
+REAL(r64)            :: ATopLRH,ABotLRH     ! Intermediate variables
+REAL(r64)            :: AEqInlet, AEqOutlet ! Equivalent inlet and outlet opening areas (m2)
+REAL(r64)            :: Zinlet, Zoutlet     ! Inlet and outlet pressure loss factors
+REAL(r64)            :: AVGap               ! Coeff. of VGap**2 term in pressure balance equation
+REAL(r64)            :: BVGap               ! Coeff. of VGap term in pressure balance equation
+REAL(r64)            :: CVGap               ! VGap-independent term in pressure balance equation
+REAL(r64)            :: GapHeightChar       ! Characteristic height of the gap air temperature profile (m)
+REAL(r64)            :: TAve                ! Average of TGlass and TShade (K)
+!REAL(r64)            :: AirProps(8)         ! Air properties
 INTEGER              :: TotGaps             ! Glass/glass gaps + glass-shade/blind gap
-REAL     :: con                 ! Gap conductivity and derivative
-REAL     :: gr                  ! glass-shade/blind gap Grashof number
-REAL     :: pr                  ! glass-shade/blind gap Prandtl number
-REAL     :: nu                  ! glass-shade/blind gap Nusselt number
+REAL(r64)     :: con                 ! Gap conductivity and derivative
+REAL(r64)     :: gr                  ! glass-shade/blind gap Grashof number
+REAL(r64)     :: pr                  ! glass-shade/blind gap Prandtl number
+REAL(r64)     :: nu                  ! glass-shade/blind gap Nusselt number
 INTEGER              :: ShadeFlag           ! Shading flag
 INTEGER              :: BlNum               ! Blind number
 
@@ -3631,10 +3631,10 @@ ELSE ! Exterior shade, screen or blind
   TGlassFace = thetas(1)
   TShadeFace = thetas(nglassfaces+2)
 END IF
-TAve = 0.5*(TGlassFace + TShadeFace)
+TAve = 0.5d0*(TGlassFace + TShadeFace)
 
 IF(iter == 0) THEN
-  TGapOld = 0.5*(TAve + TGapInlet)
+  TGapOld = 0.5d0*(TAve + TGapInlet)
 ELSE
   TGapOld = TGapNew
 END IF
@@ -3647,9 +3647,9 @@ hGapStill = con/gap(TotGaps)*nu
 ! For near-horizontal windows (i.e., no more than 5 deg from horizontal) assume
 ! there is no air flow thru gap
 
-IF(ABS(Surface(SurfNum)%SinTilt) < 0.0872) THEN
+IF(ABS(Surface(SurfNum)%SinTilt) < 0.0872d0) THEN
   VGap = 0.
-  hcv = 2.*hGapStill
+  hcv = 2.d0*hGapStill
   QConvGap = 0.
   TGapNew = TAve
   TGapOutlet = TAve
@@ -3684,12 +3684,12 @@ ViscAir = AirProps(5) + AirProps(6)*(TGapOld-TKelvin)
 ! The factor 12 in the next line is based on the solution of steady laminar flow between fixed
 ! parallel plates given in Sec. 6.9.1 of Fundamentals of Fluid Mechanics, Munson/Young/Okishi, Third Edition
 ! Update, John Wiley & Sons, 1998; ISO 15099 has 8 for this factor, which is for flow through a tube.
-BVGap = 12.*ViscAir*GapHeight/(GapDepth**2)
+BVGap = 12.d0*ViscAir*GapHeight/(GapDepth**2)
 ! Adding 0.000001 and 0.000002 in the following gives ATopLRH = ABotLRH =
 ! 0.25*(ALeftGap + ARightGap + AHolesGap) when ABotGap = ATopGap = 0.0 (shade/blind sealed at
 ! bottom and top but possibly open at left side, right side and/or in-shade/blind)
-ATopLRH = 0.5*((ATopGap+0.000001)/(ABotGap+ATopGap+0.000002))*(ALeftGap + ARightGap + AHolesGap)
-ABotLRH = 0.5*((ABotGap+0.000001)/(ABotGap+ATopGap+0.000002))*(ALeftGap + ARightGap + AHolesGap)
+ATopLRH = 0.5d0*((ATopGap+0.000001d0)/(ABotGap+ATopGap+0.000002d0))*(ALeftGap + ARightGap + AHolesGap)
+ABotLRH = 0.5d0*((ABotGap+0.000001d0)/(ABotGap+ATopGap+0.000002d0))*(ALeftGap + ARightGap + AHolesGap)
 IF(TGapOld > TGapInlet) THEN
   AEqInlet  = ABotGap + ATopLRH
   AEqOutlet = ATopGap + ABotLRH
@@ -3701,21 +3701,21 @@ END IF
 ! very large value of Zoutlet for AEqInlet = 0; this gives VGap close to zero, as required
 ! when there is no inlet and/or outlet for air. This then reduces to the
 ! case of a completely sealed shade, in which hcv = 2*hGapStill and QConvGap = 0.
-Zinlet  = (AGap/(0.6*AEqInlet+0.000001)-1.)**2
-Zoutlet = (AGap/(0.6*AEqOutlet+0.000001)-1.)**2
-AVGap = 0.5*RhoAir*(1+Zinlet+Zoutlet)
+Zinlet  = (AGap/(0.6d0*AEqInlet+0.000001d0)-1.d0)**2
+Zoutlet = (AGap/(0.6d0*AEqOutlet+0.000001d0)-1.d0)**2
+AVGap = 0.5d0*RhoAir*(1+Zinlet+Zoutlet)
 RhoTRef = AirProps(1)*TKelvin
-CVGap = RhoTRef*9.81*GapHeight*Surface(SurfNum)%SinTilt* &
+CVGap = RhoTRef*9.81d0*GapHeight*Surface(SurfNum)%SinTilt* &
   (TGapOld-TGapInlet)/(TGapOld*TGapInlet)
 
 ! Solution of quadratic equation in VGap
-VGap = (SQRT(BVGap**2 + ABS(4.*AVGap*CVGap)) - BVGap)/(2.*AVGap)
-hcv = 2.*hGapStill + 4.*VGap
-GapHeightChar = RhoAir * 1008. * GapDepth * VGap/(2.*hcv)
+VGap = (SQRT(BVGap**2 + ABS(4.d0*AVGap*CVGap)) - BVGap)/(2.d0*AVGap)
+hcv = 2.d0*hGapStill + 4.d0*VGap
+GapHeightChar = RhoAir * 1008.d0 * GapDepth * VGap/(2.d0*hcv)
 ! The following avoids divide by zero and exponential underflow
 IF(GapHeightChar == 0.0) THEN
   TGapOutlet = TAve
-ELSE IF((GapHeight/GapHeightChar) > 15.) THEN
+ELSE IF((GapHeight/GapHeightChar) > 15.d0) THEN
   TGapOutlet = TAve
 ELSE
   TGapOutlet = TAve - (TAve-TGapInlet)*EXP(-GapHeight/GapHeightChar)
@@ -3725,10 +3725,10 @@ TGapNew = TAve - (GapHeightChar/GapHeight) * (TGapOutlet-TGapInlet)
 ! Convective heat flow from gap to room air for interior shade or blind
 IF(ShadeFlag == IntShadeOn .OR. ShadeFlag == IntBlindOn) THEN
   RhoAir = AirProps(1) + AirProps(2)*(TGapNew-TKelvin)
-  QConvGap = RhoAir * AGap * VGap * 1008. * (TGapOutlet - TGapInlet)
+  QConvGap = RhoAir * AGap * VGap * 1008.d0 * (TGapOutlet - TGapInlet)
   ! Exclude convection to gap due to divider, if present; divider convection handled
   ! separately in CalcWinFrameAndDividerTemps
-  QConvGap = QConvGap * 0.5 * (1. + Surface(SurfNum)%Area/(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea))
+  QConvGap = QConvGap * 0.5d0 * (1.d0 + Surface(SurfNum)%Area/(Surface(SurfNum)%Area+SurfaceWindow(SurfNum)%DividerArea))
 END IF
 
 RETURN
@@ -3769,9 +3769,9 @@ SUBROUTINE BetweenGlassShadeNaturalFlow(SurfNum,iter,VGap,TGapNew,hcv)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT (IN) :: SurfNum             ! Surface number
 INTEGER, INTENT (IN) :: iter                ! Iteration number for glass heat balance calculation
-REAL, INTENT (OUT)   :: VGap                ! Gas velocity in gaps (m/s)
-REAL, INTENT (INOUT) :: TGapNew(2)          ! Current-iteration average gas temp in gaps (K)
-REAL, INTENT (OUT)   :: hcv(2)              ! Convection coefficient from gap glass or shade to gap gas (W/m2-K)
+REAL(r64), INTENT (OUT)   :: VGap                ! Gas velocity in gaps (m/s)
+REAL(r64), INTENT (INOUT) :: TGapNew(2)          ! Current-iteration average gas temp in gaps (K)
+REAL(r64), INTENT (OUT)   :: hcv(2)              ! Convection coefficient from gap glass or shade to gap gas (W/m2-K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3787,36 +3787,36 @@ INTEGER              :: ConstrNumSh         ! Shaded construction number
 INTEGER              :: MatNumSh            ! Material number of shade/blind layer
 INTEGER              :: nglassfaces         ! Number of glass faces in contruction
                                             ! In the following, "gaps" refer to the gaps on either side of the shade/blind
-REAL     :: TGlassFace(2)       ! Temperature of glass surfaces facing gaps (K)
-REAL     :: TShadeFace(2)       ! Temperature of shade surfaces facing gaps (K)
-REAL            :: hGapStill(2)        ! Still-air conduction/convection coeffs for the gaps (W/m2-K)
-REAL            :: TGapOld(2)          ! Previous-iteration average gas temp in gaps (K)
-REAL            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
-REAL            :: GapDepth            ! Distance from shade/blind to glass; assumed same for both gaps (m)
-REAL            :: RhoGas(2)           ! Density of gap gas at a temperature of TGapOld (kg/m3)
-REAL            :: RhoTRef             ! Density of gap gas at reference temp = KelvinConvK (kg/m3)
-REAL            :: ViscGas(2)          ! Viscosity of gap gas at a temperature of TGapOld (kg/m3)
-REAL            :: RhoGasZero          ! Gas density at KelvinConvK
-REAL            :: ViscGasZero         ! Gas viscosity at KelvinConvK (not used)
-REAL            :: AGap                ! Cross sectional area of gaps (m2); for vertical window, this
+REAL(r64)     :: TGlassFace(2)       ! Temperature of glass surfaces facing gaps (K)
+REAL(r64)     :: TShadeFace(2)       ! Temperature of shade surfaces facing gaps (K)
+REAL(r64)            :: hGapStill(2)        ! Still-air conduction/convection coeffs for the gaps (W/m2-K)
+REAL(r64)            :: TGapOld(2)          ! Previous-iteration average gas temp in gaps (K)
+REAL(r64)            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
+REAL(r64)            :: GapDepth            ! Distance from shade/blind to glass; assumed same for both gaps (m)
+REAL(r64)            :: RhoGas(2)           ! Density of gap gas at a temperature of TGapOld (kg/m3)
+REAL(r64)            :: RhoTRef             ! Density of gap gas at reference temp = KelvinConvK (kg/m3)
+REAL(r64)            :: ViscGas(2)          ! Viscosity of gap gas at a temperature of TGapOld (kg/m3)
+REAL(r64)            :: RhoGasZero          ! Gas density at KelvinConvK
+REAL(r64)            :: ViscGasZero         ! Gas viscosity at KelvinConvK (not used)
+REAL(r64)            :: AGap                ! Cross sectional area of gaps (m2); for vertical window, this
                                             !   is in horizontal plane normal to window.
-REAL            :: ATopGap, ABotGap    ! Area of the top and bottom openings of shade/blind (m2)
-REAL            :: ALeftGap, ARightGap ! Area of the left and right openings of shade/blind (m2)
-REAL            :: AHolesGap           ! Area of the holes in the shade/blind (assumed homogeneously
+REAL(r64)            :: ATopGap, ABotGap    ! Area of the top and bottom openings of shade/blind (m2)
+REAL(r64)            :: ALeftGap, ARightGap ! Area of the left and right openings of shade/blind (m2)
+REAL(r64)            :: AHolesGap           ! Area of the holes in the shade/blind (assumed homogeneously
                                             !   distributed) (m2)
-REAL            :: ATopLRH,ABotLRH     ! Intermediate variables
-REAL            :: AEqInlet, AEqOutlet ! Equivalent inlet and outlet opening areas (m2)
-REAL            :: Zinlet, Zoutlet     ! Inlet and outlet pressure loss factors
-REAL            :: AVGap               ! Coeff. of VGap**2 term in pressure balance equation
-REAL            :: BVGap               ! Coeff. of VGap term in pressure balance equation
-REAL            :: CVGap               ! VGap-independent term in pressure balance equation
-REAL            :: GapHeightChar(2)    ! Characteristic height of the gap gas temperature profile (m)
-REAL            :: EpsChar(2)          ! EXP(-GapHeight/GapHeightChar(IGap))
-REAL            :: TAve(2)             ! Average of TGlass and TShade for the gaps (K)
-REAL     :: con                 ! Gap gas conductivity and derivative
-REAL     :: gr                  ! Gap gas Grashof number
-REAL     :: pr                  ! Gap gas Prandtl number
-REAL     :: nu                  ! Gap gas Nusselt number
+REAL(r64)            :: ATopLRH,ABotLRH     ! Intermediate variables
+REAL(r64)            :: AEqInlet, AEqOutlet ! Equivalent inlet and outlet opening areas (m2)
+REAL(r64)            :: Zinlet, Zoutlet     ! Inlet and outlet pressure loss factors
+REAL(r64)            :: AVGap               ! Coeff. of VGap**2 term in pressure balance equation
+REAL(r64)            :: BVGap               ! Coeff. of VGap term in pressure balance equation
+REAL(r64)            :: CVGap               ! VGap-independent term in pressure balance equation
+REAL(r64)            :: GapHeightChar(2)    ! Characteristic height of the gap gas temperature profile (m)
+REAL(r64)            :: EpsChar(2)          ! EXP(-GapHeight/GapHeightChar(IGap))
+REAL(r64)            :: TAve(2)             ! Average of TGlass and TShade for the gaps (K)
+REAL(r64)     :: con                 ! Gap gas conductivity and derivative
+REAL(r64)     :: gr                  ! Gap gas Grashof number
+REAL(r64)     :: pr                  ! Gap gas Prandtl number
+REAL(r64)     :: nu                  ! Gap gas Nusselt number
 INTEGER              :: ShadeFlag           ! Shading flag
 INTEGER              :: BlNum               ! Blind number
 INTEGER              :: IGap                ! Gap counter; 1 = gap on outer side of shade/blind, 2 = gap on inner side.
@@ -3844,7 +3844,7 @@ ELSE                                                 ! Triple glazing
 END IF
 
 DO IGap = 1,2
-  TAve(IGap) = 0.5*(TGlassFace(IGap) + TShadeFace(IGap))
+  TAve(IGap) = 0.5d0*(TGlassFace(IGap) + TShadeFace(IGap))
   IF(iter == 0) THEN
     TGapOld(IGap) = TAve(IGap)
   ELSE
@@ -3859,10 +3859,10 @@ END DO
 ! For near-horizontal windows (i.e., no more than 5 deg from horizontal) assume
 ! there is no air flow thru gap
 
-IF(ABS(Surface(SurfNum)%SinTilt) < 0.0872) THEN
+IF(ABS(Surface(SurfNum)%SinTilt) < 0.0872d0) THEN
   VGap = 0.
   DO IGap = 1,2
-    hcv(IGap) = 2.*hGapStill(IGap)
+    hcv(IGap) = 2.d0*hGapStill(IGap)
     TGapNew(IGap) = TAve(IGap)
   END DO
   RETURN
@@ -3893,12 +3893,12 @@ DO IGap = 1,2
   CALL WindowGasPropertiesAtTemp(TGapOld(IGap),IGap+IGapInc,RhoGas(IGap),ViscGas(IGap))
 END DO
 
-BVGap = 12.*(ViscGas(1)+ViscGas(2))*GapHeight/(GapDepth**2)
+BVGap = 12.d0*(ViscGas(1)+ViscGas(2))*GapHeight/(GapDepth**2)
 ! Adding 0.000001 and 0.000002 in the following gives ATopLRH = ABotLRH =
 ! 0.25*(ALeftGap + ARightGap + AHolesGap) when ABotGap = ATopGap = 0.0 (shade/blind sealed at
 ! bottom and top but possibly open at left side, right side and/or in shade/blind)
-ATopLRH = 0.5*((ATopGap+0.000001)/(ABotGap+ATopGap+0.000002))*(ALeftGap + ARightGap + AHolesGap)
-ABotLRH = 0.5*((ABotGap+0.000001)/(ABotGap+ATopGap+0.000002))*(ALeftGap + ARightGap + AHolesGap)
+ATopLRH = 0.5d0*((ATopGap+0.000001d0)/(ABotGap+ATopGap+0.000002d0))*(ALeftGap + ARightGap + AHolesGap)
+ABotLRH = 0.5d0*((ABotGap+0.000001d0)/(ABotGap+ATopGap+0.000002d0))*(ALeftGap + ARightGap + AHolesGap)
 AEqInlet  = ABotGap + ATopLRH
 AEqOutlet = ATopGap + ABotLRH
 
@@ -3906,12 +3906,12 @@ AEqOutlet = ATopGap + ABotLRH
 ! very large value of Zoutlet for AEqInlet = 0; this gives VGap close to zero, as required
 ! when there is no inlet and/or outlet for air. This then reduces to the
 ! case of a completely sealed shade, in which hcv = 2*hGapStill and QConvGap = 0.
-Zinlet  = (AGap/(0.6*AEqInlet+0.000001)-1.)**2
-Zoutlet = (AGap/(0.6*AEqOutlet+0.000001)-1.)**2
-AVGap = 0.5*(RhoGas(1)+RhoGas(2))*(1.+Zinlet+Zoutlet)
+Zinlet  = (AGap/(0.6d0*AEqInlet+0.000001d0)-1.d0)**2
+Zoutlet = (AGap/(0.6d0*AEqOutlet+0.000001d0)-1.d0)**2
+AVGap = 0.5d0*(RhoGas(1)+RhoGas(2))*(1.d0+Zinlet+Zoutlet)
 CALL WindowGasPropertiesAtTemp(TKelvin,1+IGapInc,RhoGasZero,ViscGasZero)
 RhoTRef = RhoGasZero*TKelvin
-CVGap = RhoTRef*9.81*GapHeight*Surface(SurfNum)%SinTilt* &
+CVGap = RhoTRef*9.81d0*GapHeight*Surface(SurfNum)%SinTilt* &
   (TGapOld(1)-TGapOld(2))/(TGapOld(1)*TGapOld(2))
 
 ! Solution of quadratic equation in VGap
@@ -3919,12 +3919,12 @@ CVGap = RhoTRef*9.81*GapHeight*Surface(SurfNum)%SinTilt* &
 VGap = (SQRT(BVGap**2 + ABS(4*AVGap*CVGap)) - BVGap)/(2*AVGap)
 
 DO IGap = 1,2
-  hcv(IGap) = 2.*hGapStill(IGap) + 4.*VGap
-  GapHeightChar(IGap) = RhoGas(IGap) * 1008. * GapDepth * VGap/(2.*hcv(IGap))
+  hcv(IGap) = 2.d0*hGapStill(IGap) + 4.d0*VGap
+  GapHeightChar(IGap) = RhoGas(IGap) * 1008.d0 * GapDepth * VGap/(2.d0*hcv(IGap))
      ! The following avoids divide by zero and exponential underflow
   IF(GapHeightChar(IGap) == 0.0) THEN
     EpsChar(IGap) = 0.0
-  ELSE IF((GapHeight/GapHeightChar(IGap)) > 15.) THEN
+  ELSE IF((GapHeight/GapHeightChar(IGap)) > 15.d0) THEN
     EpsChar(IGap) = 0.0
   ELSE
     EpsChar(IGap) = EXP(-GapHeight/GapHeightChar(IGap))
@@ -3974,12 +3974,12 @@ SUBROUTINE BetweenGlassForcedFlow(SurfNum,iter,VGap,TGapNew,TGapOutlet,hcv,QConv
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT (IN) :: SurfNum             ! Surface number
 INTEGER, INTENT (IN) :: iter                ! Iteration number for glass heat balance calculation
-REAL, INTENT (OUT)   :: VGap                ! Air velocity in airflow gap (m/s)
-REAL, INTENT (INOUT) :: TGapNew             ! Current-iteration average air temp in airflow gap (K)
-REAL, INTENT (INOUT) :: TGapOutlet          ! Temperature of air leaving glass-shade/blind gap at top for upward
+REAL(r64), INTENT (OUT)   :: VGap                ! Air velocity in airflow gap (m/s)
+REAL(r64), INTENT (INOUT) :: TGapNew             ! Current-iteration average air temp in airflow gap (K)
+REAL(r64), INTENT (INOUT) :: TGapOutlet          ! Temperature of air leaving glass-shade/blind gap at top for upward
                                             !   air flow or bottom for downward air flow (K)
-REAL, INTENT (INOUT) :: QConvGap            ! Convective heat gain from air flow gap (W)
-REAL, INTENT (OUT)   :: hcv                 ! Convection coefficient from gap glass faces to gap air (W/m2-K)
+REAL(r64), INTENT (INOUT) :: QConvGap            ! Convective heat gain from air flow gap (W)
+REAL(r64), INTENT (OUT)   :: hcv                 ! Convection coefficient from gap glass faces to gap air (W/m2-K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3994,24 +3994,24 @@ REAL, INTENT (OUT)   :: hcv                 ! Convection coefficient from gap gl
 INTEGER              :: ConstrNum           ! Construction number of surface
 INTEGER              :: NGlass              ! Number of glass layers in construction
 INTEGER              :: GapNum              ! Number of airflow gap
-REAL            :: TGapInlet           ! Temperature of air entering glass-shade/blind gap at bottom for upward
+REAL(r64)            :: TGapInlet           ! Temperature of air entering glass-shade/blind gap at bottom for upward
                                             !   air flow or top for downward air flow (K)
-REAL     :: TGlassFace1         ! Temperature of left-hand glass surface facing airflow gap (K)
-REAL     :: TGlassFace2         ! Temperature of right-hand glass surface facing airflow gap (K)
-REAL            :: hGapStill           ! Still-air gap conduction/convection coeff (W/m2-K)
-REAL            :: TGapOld             ! Previous-iteration average air temp in airflow gap (K)
-REAL            :: GapHeight           ! Vertical length of airflow gap (m)
-REAL            :: GapDepth            ! Thickness of airflow gap (m)
-REAL            :: RhoAir              ! Density of airflow gap air at a temperature of TGapOld (kg/m3)
-REAL            :: AGap                ! Cross sectional area of airflow gap (m2); for vertical window, this
+REAL(r64)     :: TGlassFace1         ! Temperature of left-hand glass surface facing airflow gap (K)
+REAL(r64)     :: TGlassFace2         ! Temperature of right-hand glass surface facing airflow gap (K)
+REAL(r64)            :: hGapStill           ! Still-air gap conduction/convection coeff (W/m2-K)
+REAL(r64)            :: TGapOld             ! Previous-iteration average air temp in airflow gap (K)
+REAL(r64)            :: GapHeight           ! Vertical length of airflow gap (m)
+REAL(r64)            :: GapDepth            ! Thickness of airflow gap (m)
+REAL(r64)            :: RhoAir              ! Density of airflow gap air at a temperature of TGapOld (kg/m3)
+REAL(r64)            :: AGap                ! Cross sectional area of airflow gap (m2); for vertical window, this
                                             !   is in horizontal plane normal to window.
-REAL            :: GapHeightChar       ! Characteristic height of the airflow gap air temperature profile (m)
-REAL            :: TAve                ! Average of TGlassFace1 and TGlassFace2 (K)
-!REAL            :: AirProps(8)         ! Air properties
-REAL     :: con                 ! Gap conductivity and derivative
-REAL     :: gr                  ! Gap air Grashof number
-REAL     :: pr                  ! Gap air Prandtl number
-REAL     :: nu                  ! Gap air Nusselt number
+REAL(r64)            :: GapHeightChar       ! Characteristic height of the airflow gap air temperature profile (m)
+REAL(r64)            :: TAve                ! Average of TGlassFace1 and TGlassFace2 (K)
+!REAL(r64)            :: AirProps(8)         ! Air properties
+REAL(r64)     :: con                 ! Gap conductivity and derivative
+REAL(r64)     :: gr                  ! Gap air Grashof number
+REAL(r64)     :: pr                  ! Gap air Prandtl number
+REAL(r64)     :: nu                  ! Gap air Nusselt number
 
 ! Air properties
 !               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
@@ -4022,7 +4022,7 @@ NGlass = Construct(ConstrNum)%TotGlassLayers
 TGlassFace1 = thetas(2*NGlass-2)
 TGlassFace2 = thetas(2*NGlass-1)
 GapNum = NGlass - 1
-TAve = 0.5*(TGlassFace1 + TGlassFace2)
+TAve = 0.5d0*(TGlassFace1 + TGlassFace2)
 
 IF(SurfaceWindow(SurfNum)%AirFlowSource == AirFlowWindow_Source_IndoorAir) THEN
   TGapInlet = tin        ! Source is inside air
@@ -4044,13 +4044,13 @@ GapHeight = Surface(SurfNum)%Height
 GapDepth = Material(Construct(ConstrNum)%LayerPoint(2*NGlass-2))%Thickness
 AGap = GapDepth * Surface(SurfNum)%Width
 VGap = SurfaceWindow(SurfNum)%AirFlowThisTS/GapDepth
-hcv = 2.*hGapStill + 4.*VGap
+hcv = 2.d0*hGapStill + 4.d0*VGap
 RhoAir  = AirProps(1) + AirProps(2)*(TGapOld-TKelvin)
-GapHeightChar = RhoAir * 1008. * GapDepth * VGap/(2.*hcv)
+GapHeightChar = RhoAir * 1008.d0 * GapDepth * VGap/(2.d0*hcv)
     ! The following avoids divide by zero and exponential underflow
 IF(GapHeightChar == 0.0) THEN
   TGapOutlet = TAve
-ELSE IF((GapHeight/GapHeightChar) > 15.) THEN
+ELSE IF((GapHeight/GapHeightChar) > 15.d0) THEN
   TGapOutlet = TAve
 ELSE
   TGapOutlet = TAve - (TAve-TGapInlet)*EXP(-GapHeight/GapHeightChar)
@@ -4058,7 +4058,7 @@ END IF
 TGapNew = TAve - (GapHeightChar/GapHeight) * (TGapOutlet-TGapInlet)
     ! Convective heat flow from gap [W]
 RhoAir = AirProps(1) + AirProps(2)*(TGapNew-TKelvin)
-QConvGap = RhoAir * AGap * VGap * 1008. * (TGapOutlet - TGapInlet)
+QConvGap = RhoAir * AGap * VGap * 1008.d0 * (TGapOutlet - TGapInlet)
 
 RETURN
 END SUBROUTINE BetweenGlassForcedFlow
@@ -4099,11 +4099,11 @@ SUBROUTINE BetweenGlassShadeForcedFlow(SurfNum,iter,VGap,TGapNew,TGapOutletAve,h
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER, INTENT (IN) :: SurfNum             ! Surface number
 INTEGER, INTENT (IN) :: iter                ! Iteration number for glass heat balance calculation
-REAL, INTENT (INOUT) :: VGap                ! Air velocity in each gap (m/s)
-REAL, INTENT (INOUT) :: TGapNew(2)          ! Current-iteration average gas temp in gaps (K)
-REAL            :: TGapOutletAve       ! Average of TGapOutlet(1) and TGapOutlet(2) (K)
-REAL, INTENT (INOUT) :: hcv(2)              ! Convection coefficient from gap glass or shade to gap gas (W/m2-K)
-REAL, INTENT (INOUT) :: QConvTot            ! Sum of convective heat flow from gaps (W)
+REAL(r64), INTENT (INOUT) :: VGap                ! Air velocity in each gap (m/s)
+REAL(r64), INTENT (INOUT) :: TGapNew(2)          ! Current-iteration average gas temp in gaps (K)
+REAL(r64)            :: TGapOutletAve       ! Average of TGapOutlet(1) and TGapOutlet(2) (K)
+REAL(r64), INTENT (INOUT) :: hcv(2)              ! Convection coefficient from gap glass or shade to gap gas (W/m2-K)
+REAL(r64), INTENT (INOUT) :: QConvTot            ! Sum of convective heat flow from gaps (W)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4118,28 +4118,28 @@ REAL, INTENT (INOUT) :: QConvTot            ! Sum of convective heat flow from g
 INTEGER              :: ConstrNumSh         ! Shaded construction number
 INTEGER              :: MatNumSh            ! Material number of shade/blind layer
                                             ! In the following, "gaps" refer to the gaps on either side of the shade/blind
-REAL     :: TGlassFace(2)       ! Temperature of glass surfaces facing gaps (K)
-REAL     :: TShadeFace(2)       ! Temperature of shade surfaces facing gaps (K)
-REAL            :: hGapStill(2)        ! Still-air conduction/convection coeffs for the gaps (W/m2-K)
-REAL            :: TGapOld(2)          ! Previous-iteration average gas temp in gaps (K)
-REAL            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
-REAL            :: GapDepth            ! Distance from shade/blind to glass; assumed same for both gaps (m)
-REAL            :: RhoAir(2)           ! Density of gap air (kg/m3)
-REAL            :: AGap                ! Cross sectional area of each gap (m2); for vertical window, this
+REAL(r64)     :: TGlassFace(2)       ! Temperature of glass surfaces facing gaps (K)
+REAL(r64)     :: TShadeFace(2)       ! Temperature of shade surfaces facing gaps (K)
+REAL(r64)            :: hGapStill(2)        ! Still-air conduction/convection coeffs for the gaps (W/m2-K)
+REAL(r64)            :: TGapOld(2)          ! Previous-iteration average gas temp in gaps (K)
+REAL(r64)            :: GapHeight           ! Vertical length of glass-shade/blind gap (m)
+REAL(r64)            :: GapDepth            ! Distance from shade/blind to glass; assumed same for both gaps (m)
+REAL(r64)            :: RhoAir(2)           ! Density of gap air (kg/m3)
+REAL(r64)            :: AGap                ! Cross sectional area of each gap (m2); for vertical window, this
                                             !   is in horizontal plane normal to window.
-REAL            :: TGapInlet           ! Gap inlet air temperature (K)
-REAL            :: TGapOutlet(2)       ! Gap outlet air temperature (K)
-REAL            :: QConvGap(2)         ! Convective heat flow from each gap (W)
-REAL            :: GapHeightChar(2)    ! Characteristic height of the gap air temperature profile (m)
-REAL            :: TAve(2)             ! Average of TGlass and TShade for the gaps (K)
-REAL     :: con                 ! Gap air conductivity and derivative
-REAL     :: gr                  ! Gap air Grashof number
-REAL     :: pr                  ! Gap air Prandtl number
-REAL     :: nu                  ! Gap air Nusselt number
+REAL(r64)            :: TGapInlet           ! Gap inlet air temperature (K)
+REAL(r64)            :: TGapOutlet(2)       ! Gap outlet air temperature (K)
+REAL(r64)            :: QConvGap(2)         ! Convective heat flow from each gap (W)
+REAL(r64)            :: GapHeightChar(2)    ! Characteristic height of the gap air temperature profile (m)
+REAL(r64)            :: TAve(2)             ! Average of TGlass and TShade for the gaps (K)
+REAL(r64)     :: con                 ! Gap air conductivity and derivative
+REAL(r64)     :: gr                  ! Gap air Grashof number
+REAL(r64)     :: pr                  ! Gap air Prandtl number
+REAL(r64)     :: nu                  ! Gap air Nusselt number
 INTEGER              :: ShadeFlag           ! Shading flag
 INTEGER              :: IGap                ! Gap counter; 1 = gap on outer side of shade/blind, 2 = gap on inner side.
 INTEGER              :: IGapInc             ! Gap increment; =0, double glass, =1, triple glass
-!REAL            :: AirProps(8)         ! Air properties
+!REAL(r64)            :: AirProps(8)         ! Air properties
 
 ! Air properties
 !               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
@@ -4174,10 +4174,10 @@ GapHeight = Surface(SurfNum)%Height
 GapDepth = gap(1+IGapInc)
 AGap = GapDepth * Surface(SurfNum)%Width
           ! Factor of 2 below assumes gaps on either side of shade/blind have same depth
-VGap = SurfaceWindow(SurfNum)%AirFlowThisTS/(2.*GapDepth)
+VGap = SurfaceWindow(SurfNum)%AirFlowThisTS/(2.d0*GapDepth)
 
 DO IGap = 1,2
-  TAve(IGap) = 0.5*(TGlassFace(IGap) + TShadeFace(IGap))
+  TAve(IGap) = 0.5d0*(TGlassFace(IGap) + TShadeFace(IGap))
   IF(iter == 0) THEN
     TGapOld(IGap) = TAve(IGap)
   ELSE
@@ -4188,14 +4188,14 @@ DO IGap = 1,2
   CALL NusseltNumber(SurfNum,TGlassFace(IGap),TShadeFace(IGap),IGap+IGapInc,gr,pr,nu)
   hGapStill(IGap) = con/gap(IGap+IGapInc)*nu
           ! Shade/blind or glass surface to air convection coefficient
-  hcv(IGap) = 2.*hGapStill(IGap) + 4.*VGap
+  hcv(IGap) = 2.d0*hGapStill(IGap) + 4.d0*VGap
   RhoAir(IGap) = AirProps(1) + AirProps(2)*(TGapOld(IGap)-TKelvin)
-  hcv(IGap) = 2.*hGapStill(IGap) + 4.*VGap
-  GapHeightChar(IGap) = RhoAir(IGap) * 1008. * GapDepth * VGap/(2.*hcv(IGap))
+  hcv(IGap) = 2.d0*hGapStill(IGap) + 4.d0*VGap
+  GapHeightChar(IGap) = RhoAir(IGap) * 1008.d0 * GapDepth * VGap/(2.d0*hcv(IGap))
           ! The following avoids divide by zero and exponential underflow
   IF(GapHeightChar(IGap) == 0.0) THEN
     TGapOutlet(IGap) = TAve(IGap)
-  ELSE IF((GapHeight/GapHeightChar(IGap)) > 15.) THEN
+  ELSE IF((GapHeight/GapHeightChar(IGap)) > 15.d0) THEN
     TGapOutlet(IGap) = TAve(IGap)
   ELSE
     TGapOutlet(IGap) = TAve(IGap) - (TAve(IGap)-TGapInlet)*EXP(-GapHeight/GapHeightChar(IGap))
@@ -4203,7 +4203,7 @@ DO IGap = 1,2
   TGapNew(IGap) = TAve(IGap) - (GapHeightChar(IGap)/GapHeight) * (TGapOutlet(IGap)-TGapInlet)
     ! Convective heat flow from gap [W]
   RhoAir(IGap) = AirProps(1) + AirProps(2)*(TGapNew(IGap)-TKelvin)
-  QConvGap(IGap) = RhoAir(IGap) * AGap * VGap * 1008. * (TGapOutlet(IGap) - TGapInlet)
+  QConvGap(IGap) = RhoAir(IGap) * AGap * VGap * 1008.d0 * (TGapOutlet(IGap) - TGapInlet)
 END DO
 
 QConvTot = QConvGap(1) + QConvGap(2)
@@ -4234,11 +4234,11 @@ SUBROUTINE LUdecomposition(ajac,n,indx,d)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL  :: ajac(10,10)                  ! As input: matrix to be decomposed;
+  REAL(r64)  :: ajac(10,10)                  ! As input: matrix to be decomposed;
                                                     !   as output: decomposed matrix
   INTEGER           :: n                            ! Dimension of matrix
   INTEGER           :: indx(10)                     ! Vector of row permutations
-  REAL         :: d                            ! +1 if even number of row interchange is even, -1
+  REAL(r64)         :: d                            ! +1 if even number of row interchange is even, -1
                                                     !   if odd
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4254,10 +4254,10 @@ SUBROUTINE LUdecomposition(ajac,n,indx,d)
   INTEGER           :: i,j,k                        ! Counters
   INTEGER           :: imax                         ! Temporary variable
                                                     !   as output: decomposed matrix
-  REAL  :: vv(500)                      ! Stores the implicit scaling of each row
-  REAL  :: aamax                        ! Absolute value of largest element of matrix
-  REAL  :: dum                          ! Temporary variable
-  REAL  :: sum                          ! Sum of products of matrix elements
+  REAL(r64)  :: vv(500)                      ! Stores the implicit scaling of each row
+  REAL(r64)  :: aamax                        ! Absolute value of largest element of matrix
+  REAL(r64)  :: dum                          ! Temporary variable
+  REAL(r64)  :: sum                          ! Sum of products of matrix elements
 
            ! FLOW
 
@@ -4335,11 +4335,11 @@ SUBROUTINE LUsolution(a,n,indx,b)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL  :: a(10,10)                     ! Matrix and vector in a.x = b;
+  REAL(r64)  :: a(10,10)                     ! Matrix and vector in a.x = b;
                                                     !   b is also output as the solution, x
   INTEGER           :: n                            ! Dimension of a and b
   INTEGER           :: indx(10)                     ! Vector of row permutations
-  REAL  :: b(10)                        ! Matrix and vector in a.x = b;
+  REAL(r64)  :: b(10)                        ! Matrix and vector in a.x = b;
                                                     !   b is also output as the solution, x
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4354,7 +4354,7 @@ SUBROUTINE LUsolution(a,n,indx,b)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER           :: i,j                          ! Counters
   INTEGER           :: ii,ll                        ! Intermediate variables
-  REAL  :: sum                          ! Summation variable
+  REAL(r64)  :: sum                          ! Summation variable
 
           ! FLOW
 
@@ -4409,17 +4409,17 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)         :: tleft             ! Temperature of gap surface closest to outside (K)
-  REAL, INTENT(IN)         :: tright            ! Temperature of gap surface closest to zone (K)
+  REAL(r64), INTENT(IN)         :: tleft             ! Temperature of gap surface closest to outside (K)
+  REAL(r64), INTENT(IN)         :: tright            ! Temperature of gap surface closest to zone (K)
   INTEGER, INTENT(IN)                  :: IGap              ! Gap number
-  REAL  , INTENT(OUT)      :: con               ! Gap gas conductance (W/m2-K)
-  REAL  , INTENT(OUT)      :: pr                ! Gap gas Prandtl number
-  REAL  , INTENT(OUT)      :: gr                ! Gap gas Grashof number
+  REAL(r64)  , INTENT(OUT)      :: con               ! Gap gas conductance (W/m2-K)
+  REAL(r64)  , INTENT(OUT)      :: pr                ! Gap gas Prandtl number
+  REAL(r64)  , INTENT(OUT)      :: gr                ! Gap gas Grashof number
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER          :: pres = 1.0d5      ! Gap gas pressure (Pa)
-  REAL, PARAMETER          :: gaslaw = 8314.51  ! Molar gas constant (J/kMol-K)
+  REAL(r64), PARAMETER          :: pres = 1.0d5      ! Gap gas pressure (Pa)
+  REAL(r64), PARAMETER          :: gaslaw = 8314.51d0  ! Molar gas constant (J/kMol-K)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4428,33 +4428,33 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: tmean             ! Average gap gas temperature (K)
+  REAL(r64)    :: tmean             ! Average gap gas temperature (K)
   INTEGER                  :: IMix,i,j          ! Counters of gases in a mixture
   INTEGER                  :: NMix              ! Number of gases in a mixture
-  REAL                :: molmix            ! Molecular weight of mixture
-  REAL                :: kprime(10)        ! Monotonic thermal conductivity
-  REAL                :: kdblprm(10)       ! Conductivity term accounting for additional energy moved by
+  REAL(r64)                :: molmix            ! Molecular weight of mixture
+  REAL(r64)                :: kprime(10)        ! Monotonic thermal conductivity
+  REAL(r64)                :: kdblprm(10)       ! Conductivity term accounting for additional energy moved by
                                                 !  the diffusional transport of internal energy in polyatomic gases.
-  REAL                :: kpmix,kdpmix      ! Monotonic thermal conductivity of mixture
-  REAL                :: mukpdwn(10)       ! Denominator term
-  REAL                :: kpdown(10),kdpdown(10) ! Denominator terms
-  REAL                :: kmix              ! For accumulating conductance of gas mixture
-  REAL                :: mumix             ! For accumulating viscosity of gas mixture
-  REAL                :: visc              ! Dynamic viscosity of mixture at tmean (g/m-s)
-  REAL                :: cp                ! Specific heat of mixture at tmean (J/m3-K)
-  REAL                :: dens              ! Density of mixture at tmean (kg/m3)
-  REAL                :: cpmixm            ! Gives cp when divided by molmix
-  REAL                :: phimup            ! Numerator factor
-  REAL                :: downer            ! Denominator factor
-  REAL                :: psiup             ! Numerator factor
-  REAL                :: psiterm           ! Factor
-  REAL                :: phikup            ! Numerator factor
-  REAL                :: rhomix            ! Density of gas mixture (kg/m3)
-  REAL                :: frct(10)          ! Fraction of each gas in a mixture
-  REAL                :: fvis(10)          ! Viscosity of each gas in a mixture (g/m-s)
-  REAL                :: fcon(10)          ! Conductance of each gas in a mixture (W/m2-K)
-  REAL                :: fdens(10)         ! Density of each gas in a mixture (kg/m3)
-  REAL                :: fcp(10)           ! Specific heat of each gas in a mixture (J/m3-K)
+  REAL(r64)                :: kpmix,kdpmix      ! Monotonic thermal conductivity of mixture
+  REAL(r64)                :: mukpdwn(10)       ! Denominator term
+  REAL(r64)                :: kpdown(10),kdpdown(10) ! Denominator terms
+  REAL(r64)                :: kmix              ! For accumulating conductance of gas mixture
+  REAL(r64)                :: mumix             ! For accumulating viscosity of gas mixture
+  REAL(r64)                :: visc              ! Dynamic viscosity of mixture at tmean (g/m-s)
+  REAL(r64)                :: cp                ! Specific heat of mixture at tmean (J/m3-K)
+  REAL(r64)                :: dens              ! Density of mixture at tmean (kg/m3)
+  REAL(r64)                :: cpmixm            ! Gives cp when divided by molmix
+  REAL(r64)                :: phimup            ! Numerator factor
+  REAL(r64)                :: downer            ! Denominator factor
+  REAL(r64)                :: psiup             ! Numerator factor
+  REAL(r64)                :: psiterm           ! Factor
+  REAL(r64)                :: phikup            ! Numerator factor
+  REAL(r64)                :: rhomix            ! Density of gas mixture (kg/m3)
+  REAL(r64)                :: frct(10)          ! Fraction of each gas in a mixture
+  REAL(r64)                :: fvis(10)          ! Viscosity of each gas in a mixture (g/m-s)
+  REAL(r64)                :: fcon(10)          ! Conductance of each gas in a mixture (W/m2-K)
+  REAL(r64)                :: fdens(10)         ! Density of each gas in a mixture (kg/m3)
+  REAL(r64)                :: fcp(10)           ! Specific heat of each gas in a mixture (J/m3-K)
 
 
       NMix = gnmix(IGap)
@@ -4463,7 +4463,7 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
         frct(IMix) = gfract(IGap,IMix)
       END DO
 
-      tmean = 0.5*(tleft+tright)
+      tmean = 0.5d0*(tleft+tright)
 
       fcon(1)  = gcon(IGap,1,1) + gcon(IGap,1,2)*tmean + gcon(IGap,1,3)*tmean**2
       fvis(1)  = gvis(IGap,1,1) + gvis(IGap,1,2)*tmean + gvis(IGap,1,3)*tmean**2
@@ -4479,7 +4479,7 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
       elseif (NMix >1) then                        ! Multiple gases; calculate mixture properties
         molmix = frct(1)*gwght(IGap,1)                   ! initialize eq. 56
         cpmixm = molmix*fcp(1)                           ! initialize eq. 58
-        kprime(1)  = 3.75*(gaslaw/gwght(IGap,1))*fvis(1) ! eq. 67
+        kprime(1)  = 3.75d0*(gaslaw/gwght(IGap,1))*fvis(1) ! eq. 67
         kdblprm(1) = fcon(1)-kprime(1)                   ! eq. 67
 
         ! Initialize summations for eqns 60-66
@@ -4498,7 +4498,7 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
           fdens(i) = pres*gwght(IGap,i)/(gaslaw*tmean)
           molmix   = molmix+frct(i)*gwght(IGap,i)         ! eq. 56
           cpmixm   = cpmixm+frct(i)*fcp(i)*gwght(IGap,i)  ! eq. 58-59
-          kprime(i)  = 3.75*gaslaw/gwght(IGap,i)*fvis(i)  ! eq. 67
+          kprime(i)  = 3.75d0*gaslaw/gwght(IGap,i)*fvis(i)  ! eq. 67
           kdblprm(i) = fcon(i)-kprime(i)                  ! eq. 68
           mukpdwn(i) = 1.0                                ! initialize denomonator of eq. 60
           kpdown(i)  = 1.0                                ! initialize denomonator of eq. 63
@@ -4508,19 +4508,19 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
         do i = 1,NMix
           do j = 1,NMix
                         ! numerator of equation 61
-            phimup = (1.0 + (fvis(i)/fvis(j))**0.5*(gwght(IGap,j)/gwght(IGap,i))**0.25)**2
+            phimup = (1.0d0 + (fvis(i)/fvis(j))**0.5d0*(gwght(IGap,j)/gwght(IGap,i))**0.25d0)**2
                         ! denomonator of eq. 61, 64 and 66
-            downer = 2. * sqrt(2.) * (1+(gwght(IGap,i)/gwght(IGap,j)))**0.5
+            downer = 2.d0 * sqrt(2.d0) * (1+(gwght(IGap,i)/gwght(IGap,j)))**0.5d0
                         ! calculate the denominator of eq. 60
             if (i /= j) mukpdwn(i) = mukpdwn(i) + phimup/downer*frct(j)/frct(i)
                         ! numerator of eq. 64; psiterm is the multiplied term in backets
-            psiup   = (1. + (kprime(i)/kprime(j))**0.5*(gwght(IGap,i)/gwght(IGap,j))**0.25)**2
-            psiterm = 1. + 2.41*(gwght(IGap,i)-gwght(IGap,j))*(gwght(IGap,i)-0.142*gwght(IGap,j))  &
+            psiup   = (1.d0 + (kprime(i)/kprime(j))**0.5d0*(gwght(IGap,i)/gwght(IGap,j))**0.25d0)**2
+            psiterm = 1.d0 + 2.41d0*(gwght(IGap,i)-gwght(IGap,j))*(gwght(IGap,i)-0.142d0*gwght(IGap,j))  &
                            /(gwght(IGap,i) + gwght(IGap,j))**2
                         ! using the common denominator, downer, calculate the denominator for eq. 63
             if (i.ne.j) kpdown(i) = kpdown(i) + psiup*(psiterm/downer)*(frct(j)/frct(i))
                         ! calculate the numerator of eq. 66
-            phikup = (1.+(kprime(i)/kprime(j))**0.5 * (gwght(IGap,i)/gwght(IGap,j))**0.25)**2
+            phikup = (1.d0+(kprime(i)/kprime(j))**0.5d0 * (gwght(IGap,i)/gwght(IGap,j))**0.25d0)**2
                         ! using the common denominator, downer, calculate the denomonator for eq. 65
             if (i.ne.j) kdpdown(i) = kdpdown(i) + (phikup/downer)*(frct(j)/frct(i))
           end do
@@ -4542,7 +4542,7 @@ SUBROUTINE WindowGasConductance(tleft,tright,IGap,con,pr,gr)
       endif  ! End of check if single or multiple gases in gap
 
       pr = cp * visc / con
-      gr = 9.807 * gap(IGap)**3 * ABS(tleft-tright) * dens**2 / (tmean * visc**2)
+      gr = 9.807d0 * gap(IGap)**3 * ABS(tleft-tright) * dens**2 / (tmean * visc**2)
 
       RETURN
 
@@ -4575,14 +4575,14 @@ SUBROUTINE WindowGasPropertiesAtTemp(tmean,IGap,dens,visc)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)         :: tmean             ! Temperature of gas in gap (K)
+  REAL(r64), INTENT(IN)         :: tmean             ! Temperature of gas in gap (K)
   INTEGER, INTENT(IN)      :: IGap              ! Gap number
-  REAL, INTENT(OUT)        :: dens              ! Gap gas density at tmean (kg/m3)
-  REAL, INTENT(OUT)        :: visc              ! Gap gas dynamic viscosity at tmean (g/m-s)
+  REAL(r64), INTENT(OUT)        :: dens              ! Gap gas density at tmean (kg/m3)
+  REAL(r64), INTENT(OUT)        :: visc              ! Gap gas dynamic viscosity at tmean (g/m-s)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER          :: pres = 1.0d5      ! Gap gas pressure (Pa)
-  REAL, PARAMETER          :: gaslaw = 8314.51  ! Molar gas constant (J/kMol-K)
+  REAL(r64), PARAMETER          :: pres = 1.0d5      ! Gap gas pressure (Pa)
+  REAL(r64), PARAMETER          :: gaslaw = 8314.51d0  ! Molar gas constant (J/kMol-K)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4593,15 +4593,15 @@ SUBROUTINE WindowGasPropertiesAtTemp(tmean,IGap,dens,visc)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                  :: IMix,i,j          ! Counters of gases in a mixture
   INTEGER                  :: NMix              ! Number of gases in a mixture
-  REAL                :: molmix            ! Molecular weight of mixture
-  REAL                :: mukpdwn(10)       ! Denominator term
-  REAL                :: mumix             ! For accumulating viscosity of gas mixture
-  REAL                :: phimup            ! Numerator factor
-  REAL                :: downer            ! Denominator factor
-  REAL                :: rhomix            ! Density of gas mixture (kg/m3)
-  REAL                :: frct(10)          ! Fraction of each gas in a mixture
-  REAL                :: fvis(10)          ! Viscosity of each gas in a mixture (g/m-s)
-  REAL                :: fdens(10)         ! Density of each gas in a mixture (kg/m3)
+  REAL(r64)                :: molmix            ! Molecular weight of mixture
+  REAL(r64)                :: mukpdwn(10)       ! Denominator term
+  REAL(r64)                :: mumix             ! For accumulating viscosity of gas mixture
+  REAL(r64)                :: phimup            ! Numerator factor
+  REAL(r64)                :: downer            ! Denominator factor
+  REAL(r64)                :: rhomix            ! Density of gas mixture (kg/m3)
+  REAL(r64)                :: frct(10)          ! Fraction of each gas in a mixture
+  REAL(r64)                :: fvis(10)          ! Viscosity of each gas in a mixture (g/m-s)
+  REAL(r64)                :: fdens(10)         ! Density of each gas in a mixture (kg/m3)
 
       NMix = gnmix(IGap)
 
@@ -4633,9 +4633,9 @@ SUBROUTINE WindowGasPropertiesAtTemp(tmean,IGap,dens,visc)
         do i = 1,NMix
           do j = 1,NMix
                         ! numerator of equation 61
-            phimup = (1.0 + (fvis(i)/fvis(j))**0.5*(gwght(IGap,j)/gwght(IGap,i))**0.25)**2
+            phimup = (1.0d0 + (fvis(i)/fvis(j))**0.5d0*(gwght(IGap,j)/gwght(IGap,i))**0.25d0)**2
                         ! denomonator of eq. 61, 64 and 66
-            downer = 2. * sqrt(2.) * (1+(gwght(IGap,i)/gwght(IGap,j)))**0.5
+            downer = 2.d0 * sqrt(2.d0) * (1+(gwght(IGap,i)/gwght(IGap,j)))**0.5d0
                         ! calculate the denominator of eq. 60
             if (i /= j) mukpdwn(i) = mukpdwn(i) + phimup/downer*frct(j)/frct(i)
           end do
@@ -4680,11 +4680,11 @@ SUBROUTINE StartingWindowTemps(SurfNum,AbsRadShade)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER           :: SurfNum           ! Surface number
-REAL         :: AbsRadShade(2)    ! Short-wave radiation absorbed by shade/blind faces
+REAL(r64)         :: AbsRadShade(2)    ! Short-wave radiation absorbed by shade/blind faces
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL,PARAMETER  :: hrad = 5.3          ! Typical radiative conductance (W/m2-K)
-REAL,PARAMETER  :: resgap = 0.21       ! Typical gap resistance (m2-K/W)
+REAL(r64),PARAMETER  :: hrad = 5.3d0          ! Typical radiative conductance (W/m2-K)
+REAL(r64),PARAMETER  :: resgap = 0.21d0       ! Typical gap resistance (m2-K/W)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4696,12 +4696,12 @@ REAL,PARAMETER  :: resgap = 0.21       ! Typical gap resistance (m2-K/W)
 
 INTEGER         :: i                   ! Face counter
 INTEGER         :: ShadeFlag           ! Shading flag
-REAL       :: rguess(11)          ! Combined radiative/convective resistance (m2-K/W) of
+REAL(r64)       :: rguess(11)          ! Combined radiative/convective resistance (m2-K/W) of
                                        ! inside or outside air film, or gap
-REAL       :: restot              ! Total window resistance including outside
+REAL(r64)       :: restot              ! Total window resistance including outside
                                        !   and inside air films (m2-K/W)
-REAL       :: temdiff             ! Inside/outside air temperature difference (K)
-REAL       :: ressum              ! Resistance sum (m2-K/W)
+REAL(r64)       :: temdiff             ! Inside/outside air temperature difference (K)
+REAL(r64)       :: ressum              ! Resistance sum (m2-K/W)
 INTEGER         :: StormWinFlagPrevDay ! Previous time step value (day) of storm window flag
 INTEGER         :: StormWinFlagThisDay ! Current time step value (day) of storm window flag
 INTEGER         :: nglfacePrevDay      ! Previous time step value (dya) of number of glass faces (may differ
@@ -4791,10 +4791,10 @@ INTEGER         :: nglfacePrevDay      ! Previous time step value (dya) of numbe
           ! The factor 16.0 below is based on a combined convective/radiative heat transfer
           ! coefficient on either side of the shade/blind of 8.0 W/m2-K -- about 1.4 Btu/h-ft2-F.
         if(nglface==4) then  ! double glazing
-          thetas(nglface+1) = 0.5*(thetas(2)+thetas(3)) + (AbsRadShade(1)+AbsRadShade(2))/16.0
+          thetas(nglface+1) = 0.5*(thetas(2)+thetas(3)) + (AbsRadShade(1)+AbsRadShade(2))/16.0d0
           thetas(nglface+2) = thetas(nglface+1)
         else                 ! triple glazing
-          thetas(nglface+1) = 0.5*(thetas(4)+thetas(5)) + (AbsRadShade(1)+AbsRadShade(2))/16.0
+          thetas(nglface+1) = 0.5*(thetas(4)+thetas(5)) + (AbsRadShade(1)+AbsRadShade(2))/16.0d0
           thetas(nglface+2) = thetas(nglface+1)
         end if
       end if
@@ -4830,13 +4830,13 @@ SUBROUTINE NusseltNumber (SurfNum,tso,tsi,IGap,gr,pr,gnu)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)         :: tso               ! Temperature of gap surface closest to outside (K)
-  REAL, INTENT(IN)         :: tsi               ! Temperature of gap surface closest to zone (K)
+  REAL(r64), INTENT(IN)         :: tso               ! Temperature of gap surface closest to outside (K)
+  REAL(r64), INTENT(IN)         :: tsi               ! Temperature of gap surface closest to zone (K)
   INTEGER, INTENT(IN)                  :: SurfNum           ! Surface number
   INTEGER, INTENT(IN)                  :: IGap              ! Gap number
-  REAL, INTENT(IN)         :: pr                ! Gap gas Prandtl number
-  REAL, INTENT(IN)         :: gr                ! Gap gas Grashof number
-  REAL, INTENT(OUT)        :: gnu               ! Gap gas Nusselt number
+  REAL(r64), INTENT(IN)         :: pr                ! Gap gas Prandtl number
+  REAL(r64), INTENT(IN)         :: gr                ! Gap gas Grashof number
+  REAL(r64), INTENT(OUT)        :: gnu               ! Gap gas Nusselt number
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4845,58 +4845,58 @@ SUBROUTINE NusseltNumber (SurfNum,tso,tsi,IGap,gr,pr,gnu)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: asp                            ! Aspect ratio: window height to gap width
-  REAL  :: ra                             ! Rayleigh number
-  REAL  :: gnu901,gnu902,gnu90,gnu601     ! Nusselt number temporary variables for
-  REAL  :: gnu602,gnu60,gnu601a,gnua,gnub !  different tilt and Ra ranges
-  REAL  :: cra,a,b,g,ang                  ! Temporary variables
+  REAL(r64)  :: asp                            ! Aspect ratio: window height to gap width
+  REAL(r64)  :: ra                             ! Rayleigh number
+  REAL(r64)  :: gnu901,gnu902,gnu90,gnu601     ! Nusselt number temporary variables for
+  REAL(r64)  :: gnu602,gnu60,gnu601a,gnua,gnub !  different tilt and Ra ranges
+  REAL(r64)  :: cra,a,b,g,ang                  ! Temporary variables
 
 
       IF(SurfNum > 0) THEN
         asp = Surface(SurfNum)%Height/gap(IGap)
       ELSE  ! SurfNum = 0 when NusseltNumber is called from CalcNominalWindowCond, which applies to a
             ! particular construction. So window height is not known and we assume 5 ft (1.524 m)
-        asp = 1.524/gap(IGap)
+        asp = 1.524d0/gap(IGap)
       END IF
 
       tiltr = tilt * DegToRadians
       ra = gr*pr
                              !!fw if (ra > 2.0e6): error that outside range of Rayleigh number?
 
-      if(ra <= 1.0d4)                  gnu901 = 1. + 1.7596678d-10 * ra**2.2984755   ! eq. 51
-      if(ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =        0.028154      * ra**0.4134      ! eq. 50
-      if(ra > 5.0d4)                   gnu901 =        0.0673838     * ra**(1.0/3.0)   ! eq. 49
+      if(ra <= 1.0d4)                  gnu901 = 1.d0 + 1.7596678d-10 * ra**2.2984755d0   ! eq. 51
+      if(ra > 1.0d4 .and. ra <= 5.0d4) gnu901 =        0.028154d0      * ra**0.4134d0      ! eq. 50
+      if(ra > 5.0d4)                   gnu901 =        0.0673838d0     * ra**(1.0d0/3.0d0)   ! eq. 49
 
-      gnu902 = 0.242 * (ra/asp)**.272               ! eq. 52
+      gnu902 = 0.242d0 * (ra/asp)**.272d0               ! eq. 52
       gnu90 = MAX(gnu901,gnu902)
 
       if(tso > tsi)then   ! window heated from above
-        gnu = 1.0 + (gnu90-1.0)*sin(tiltr)                  ! eq. 53
+        gnu = 1.0d0 + (gnu90-1.0d0)*sin(tiltr)                  ! eq. 53
       else                ! window heated from below
-        if (tilt >= 60.0) then
-          if (ra >= .001) then
-            g       = 0.5 * (1.0+(ra/3160.)**20.6)**(-0.1)    ! eq. 47
+        if (tilt >= 60.0d0) then
+          if (ra >= .001d0) then
+            g       = 0.5d0 * (1.0d0+(ra/3160.d0)**20.6d0)**(-0.1d0)    ! eq. 47
           else
-            g       = 0.5
+            g       = 0.5d0
           endif
-          gnu601a = 1.0 + (0.0936*(ra**0.314)/(1.0+g))**7   ! eq. 45
-          gnu601  = gnu601a**0.142857
+          gnu601a = 1.0d0 + (0.0936d0*(ra**0.314d0)/(1.0d0+g))**7   ! eq. 45
+          gnu601  = gnu601a**0.142857d0
 
           ! For any aspect ratio
-          gnu602  = (0.104+0.175/asp) * ra**0.283           ! eq. 46
+          gnu602  = (0.104d0+0.175d0/asp) * ra**0.283d0           ! eq. 46
           gnu60   = MAX(gnu601,gnu602)
 
           ! linear interpolation for layers inclined at angles between 60 and 90 deg
-          gnu     = ((90.0-tilt)*gnu60 + (tilt-60.0)*gnu90)/30.0
+          gnu     = ((90.0d0-tilt)*gnu60 + (tilt-60.0d0)*gnu90)/30.0d0
         endif
-        if (tilt < 60.0) then                               ! eq. 42
+        if (tilt < 60.0d0) then                               ! eq. 42
           cra  = ra*cos(tiltr)
-          a    = 1.0 - 1708.0/cra
-          b    = (cra/5830.0)**0.33333-1.0
-          gnua = (abs(a)+a)/2.0
-          gnub = (abs(b)+b)/2.0
-          ang  = 1708.0 * (sin(1.8*tiltr))**1.6
-          gnu  = 1.0 + 1.44*gnua*(1.0-ang/cra) + gnub
+          a    = 1.0d0 - 1708.0d0/cra
+          b    = (cra/5830.0d0)**0.33333d0-1.0d0
+          gnua = (abs(a)+a)/2.0d0
+          gnub = (abs(b)+b)/2.0d0
+          ang  = 1708.0d0 * (sin(1.8d0*tiltr))**1.6d0
+          gnu  = 1.0d0 + 1.44d0*gnua*(1.0d0-ang/cra) + gnub
         endif
       endif
       RETURN
@@ -4937,108 +4937,108 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
-    REAL, INTENT(IN)   :: cs                      ! Cosine of incidence angle
-    REAL, INTENT(IN)   :: tf0                     ! Transmittance at zero incidence angle
-    REAL, INTENT(IN)   :: rf0                     ! Front reflectance at zero incidence angle
-    REAL, INTENT(IN)   :: rb0                     ! Back reflectance at zero incidence angle
-    REAL, INTENT(OUT)  :: tfp                     ! Transmittance at cs
-    REAL, INTENT(OUT)  :: rfp                     ! Front reflectance at cs
-    REAL, INTENT(OUT)  :: rbp                     ! Back reflectance at cs
+    REAL(r64), INTENT(IN)   :: cs                      ! Cosine of incidence angle
+    REAL(r64), INTENT(IN)   :: tf0                     ! Transmittance at zero incidence angle
+    REAL(r64), INTENT(IN)   :: rf0                     ! Front reflectance at zero incidence angle
+    REAL(r64), INTENT(IN)   :: rb0                     ! Back reflectance at zero incidence angle
+    REAL(r64), INTENT(OUT)  :: tfp                     ! Transmittance at cs
+    REAL(r64), INTENT(OUT)  :: rfp                     ! Front reflectance at cs
+    REAL(r64), INTENT(OUT)  :: rbp                     ! Back reflectance at cs
     LOGICAL, INTENT(IN)     :: SimpleGlazingSystem     ! .TRUE. if simple block model being used
-    REAL, INTENT(IN)   :: SimpleGlazingSHGC       ! SHGC value to use in alternate model for simple glazing system
-    REAL, INTENT(IN)   :: SimpleGlazingU          ! U-factor value to use in alternate model for simple glazing system
+    REAL(r64), INTENT(IN)   :: SimpleGlazingSHGC       ! SHGC value to use in alternate model for simple glazing system
+    REAL(r64), INTENT(IN)   :: SimpleGlazingU          ! U-factor value to use in alternate model for simple glazing system
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tfp1,tfp2                   ! Transmittance at cs for each polarization
-  REAL :: rfp1,rfp2                   ! Front reflectance at cs for each polarization
-  REAL :: rbp1,rbp2                   ! Back reflectance at cs for each polarization
-  REAL :: betaf,betab                 ! Intermediate variables
-  REAL :: t0f,t0b,r0f,r0b,abf,abb     ! Intermediate variables
-  REAL :: ngf,ngb                     ! Front and back index of refraction
-  REAL :: cgf,cgb                     ! Intermediate variables
-  REAL :: rpf1,rpb1,tpf1,tpb1         ! Front and back air/glass interface reflectivity
+  REAL(r64) :: tfp1,tfp2                   ! Transmittance at cs for each polarization
+  REAL(r64) :: rfp1,rfp2                   ! Front reflectance at cs for each polarization
+  REAL(r64) :: rbp1,rbp2                   ! Back reflectance at cs for each polarization
+  REAL(r64) :: betaf,betab                 ! Intermediate variables
+  REAL(r64) :: t0f,t0b,r0f,r0b,abf,abb     ! Intermediate variables
+  REAL(r64) :: ngf,ngb                     ! Front and back index of refraction
+  REAL(r64) :: cgf,cgb                     ! Intermediate variables
+  REAL(r64) :: rpf1,rpb1,tpf1,tpb1         ! Front and back air/glass interface reflectivity
                                            !  and transmittivity for first polarization
-  REAL :: rpf2,rpb2,tpf2,tpb2         ! Front and back air/glass interface reflectivity
+  REAL(r64) :: rpf2,rpb2,tpf2,tpb2         ! Front and back air/glass interface reflectivity
                                            !  and transmittivity for second polarization
-  REAL :: tcl,rcl                     ! Transmittance and reflectance for clear glass
-  REAL :: tbnz,rbnz                   ! Transmittance and reflectance for bronze glass
-  REAL :: expmabfdivcgf
-  REAL :: expm2abfdivcgf
-  REAL :: expmabbdivcgb
-  REAL :: TransCurveA ! result for curve A for Transmission as a function of angle
-  REAL :: TransCurveB ! result for curve B for Transmission as a function of angle
-  REAL :: TransCurveC ! result for curve C for Transmission as a function of angle
-  REAL :: TransCurveD ! result for curve D for Transmission as a function of angle
-  REAL :: TransCurveE ! result for curve E for Transmission as a function of angle
-  REAL :: TransCurveF ! result for curve F for Transmission as a function of angle
-  REAL :: TransCurveG ! result for curve G for Transmission as a function of angle
-  REAL :: TransCurveH ! result for curve H for Transmission as a function of angle
-  REAL :: TransCurveI ! result for curve I for Transmission as a function of angle
-  REAL :: TransCurveJ ! result for curve J for Transmission as a function of angle
-  REAL :: ReflectCurveA ! result for curve A for Reflectance as a function of angle
-  REAL :: ReflectCurveB ! result for curve B for Reflectance as a function of angle
-  REAL :: ReflectCurveC ! result for curve C for Reflectance as a function of angle
-  REAL :: ReflectCurveD ! result for curve D for Reflectance as a function of angle
-  REAL :: ReflectCurveE ! result for curve E for Reflectance as a function of angle
-  REAL :: ReflectCurveF ! result for curve F for Reflectance as a function of angle
-  REAL :: ReflectCurveG ! result for curve G for Reflectance as a function of angle
-  REAL :: ReflectCurveH ! result for curve H for Reflectance as a function of angle
-  REAL :: ReflectCurveI ! result for curve I for Reflectance as a function of angle
-  REAL :: ReflectCurveJ ! result for curve J for Reflectance as a function of angle
+  REAL(r64) :: tcl,rcl                     ! Transmittance and reflectance for clear glass
+  REAL(r64) :: tbnz,rbnz                   ! Transmittance and reflectance for bronze glass
+  REAL(r64) :: expmabfdivcgf
+  REAL(r64) :: expm2abfdivcgf
+  REAL(r64) :: expmabbdivcgb
+  REAL(r64) :: TransCurveA ! result for curve A for Transmission as a function of angle
+  REAL(r64) :: TransCurveB ! result for curve B for Transmission as a function of angle
+  REAL(r64) :: TransCurveC ! result for curve C for Transmission as a function of angle
+  REAL(r64) :: TransCurveD ! result for curve D for Transmission as a function of angle
+  REAL(r64) :: TransCurveE ! result for curve E for Transmission as a function of angle
+  REAL(r64) :: TransCurveF ! result for curve F for Transmission as a function of angle
+  REAL(r64) :: TransCurveG ! result for curve G for Transmission as a function of angle
+  REAL(r64) :: TransCurveH ! result for curve H for Transmission as a function of angle
+  REAL(r64) :: TransCurveI ! result for curve I for Transmission as a function of angle
+  REAL(r64) :: TransCurveJ ! result for curve J for Transmission as a function of angle
+  REAL(r64) :: ReflectCurveA ! result for curve A for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveB ! result for curve B for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveC ! result for curve C for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveD ! result for curve D for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveE ! result for curve E for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveF ! result for curve F for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveG ! result for curve G for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveH ! result for curve H for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveI ! result for curve I for Reflectance as a function of angle
+  REAL(r64) :: ReflectCurveJ ! result for curve J for Reflectance as a function of angle
 
-  REAL :: TransCurveFGHI ! average of curves F, G, H, and I
-  REAL :: ReflectCurveFGHI ! average of curves F, G, H, and I
-  REAL :: TransCurveFH ! average of curves F and H
-  REAL :: ReflectCurveFH ! average of curves F and H
-  REAL :: TransCurveBDCD ! average of curves B, D, C, and D (again)
-  REAL :: ReflectCurveBDCD ! average of curves B, D, C, and D (again)
-  REAL :: TransTmp ! temporary value for normalized transmission (carry out of if blocks)
-  REAL :: ReflectTmp ! temporary value for normalized reflectance (carry out of if blocks)
-  REAL :: testval    ! temporary value for calculations
+  REAL(r64) :: TransCurveFGHI ! average of curves F, G, H, and I
+  REAL(r64) :: ReflectCurveFGHI ! average of curves F, G, H, and I
+  REAL(r64) :: TransCurveFH ! average of curves F and H
+  REAL(r64) :: ReflectCurveFH ! average of curves F and H
+  REAL(r64) :: TransCurveBDCD ! average of curves B, D, C, and D (again)
+  REAL(r64) :: ReflectCurveBDCD ! average of curves B, D, C, and D (again)
+  REAL(r64) :: TransTmp ! temporary value for normalized transmission (carry out of if blocks)
+  REAL(r64) :: ReflectTmp ! temporary value for normalized reflectance (carry out of if blocks)
+  real(r64) :: testval    ! temporary value for calculations
            ! FLOW
 
   IF (SimpleGlazingSystem) Then ! use alternate angular dependence model for block model of simple glazing input
 
-    TransCurveA = 1.4703D-02*cs**4 + 1.4858*cs**3   - 3.852*cs**2 + 3.3549*cs   - 1.4739D-03
-    TransCurveB = 5.5455D-01*cs**4 + 3.563D-02*cs**3 - 2.4157*cs**2 + 2.8305*cs   - 2.0373D-03
-    TransCurveC = 7.7087D-01*cs**4 - 6.3831D-01*cs**3 - 1.5755*cs**2 + 2.4482*cs   - 2.042D-03
-    TransCurveD = 3.4624D-01*cs**4 + 3.9626D-01*cs**3 - 2.5819*cs**2 + 2.845*cs   - 2.8036D-04
-    TransCurveE = 2.8825*cs**4   - 5.8734*cs**3   + 2.4887*cs**2 + 1.510*cs   - 2.5766D-03
-    TransCurveF = 3.0254*cs**4   - 6.3664*cs**3   + 3.1371*cs**2 + 1.213*cs   - 1.3667D-03
-    TransCurveG = 3.2292*cs**4   - 6.844*cs**3   + 3.5351*cs**2 + 1.0881*cs   - 2.8905D-03
-    TransCurveH = 3.3341*cs**4   - 7.1306*cs**3   + 3.8287*cs**2 + 9.7663D-01*cs - 2.9521D-03
-    TransCurveI = 3.1464*cs**4   - 6.8549*cs**3   + 3.9311*cs**2 + 7.85950D-01*cs - 2.9344E-03
-    TransCurveJ = 3.744*cs**4   - 8.8364*cs**3   + 6.0178*cs**2 + 8.4071D-02*cs + 4.825D-04
-    TransCurveFGHI = (TransCurveF + TransCurveG + TransCurveH + TransCurveI) / 4.0
-    TransCurveFH = (TransCurveF + TransCurveH) / 2.0
-    TransCurveBDCD = (TransCurveB + TransCurveD + TransCurveC + TransCurveD) / 4.0
+    TransCurveA = 1.4703D-02*cs**4 + 1.4858D0*cs**3   - 3.852D0*cs**2 + 3.3549D0*cs   - 1.4739D-03
+    TransCurveB = 5.5455D-01*cs**4 + 3.563D-02*cs**3 - 2.4157D0*cs**2 + 2.8305D0*cs   - 2.0373D-03
+    TransCurveC = 7.7087D-01*cs**4 - 6.3831D-01*cs**3 - 1.5755D0*cs**2 + 2.4482D0*cs   - 2.042D-03
+    TransCurveD = 3.4624D-01*cs**4 + 3.9626D-01*cs**3 - 2.5819D0*cs**2 + 2.845D0*cs   - 2.8036D-04
+    TransCurveE = 2.8825D0*cs**4   - 5.8734D0*cs**3   + 2.4887D0*cs**2 + 1.510D0*cs   - 2.5766D-03
+    TransCurveF = 3.0254D0*cs**4   - 6.3664D0*cs**3   + 3.1371D0*cs**2 + 1.213D0*cs   - 1.3667D-03
+    TransCurveG = 3.2292D0*cs**4   - 6.844D0*cs**3   + 3.5351D0*cs**2 + 1.0881D0*cs   - 2.8905D-03
+    TransCurveH = 3.3341D0*cs**4   - 7.1306D0*cs**3   + 3.8287D0*cs**2 + 9.7663D-01*cs - 2.9521D-03
+    TransCurveI = 3.1464D0*cs**4   - 6.8549D0*cs**3   + 3.9311D0*cs**2 + 7.85950D-01*cs - 2.9344E-03
+    TransCurveJ = 3.744D0*cs**4   - 8.8364D0*cs**3   + 6.0178D0*cs**2 + 8.4071D-02*cs + 4.825D-04
+    TransCurveFGHI = (TransCurveF + TransCurveG + TransCurveH + TransCurveI) / 4.0D0
+    TransCurveFH = (TransCurveF + TransCurveH) / 2.0D0
+    TransCurveBDCD = (TransCurveB + TransCurveD + TransCurveC + TransCurveD) / 4.0D0
 
     ReflectCurveA =  1.6322D+01*cs**4 - 5.7819D+01*cs**3 + 7.9244D+01*cs**2 - 5.0081D+01*cs + 1.3335D+01
     ReflectCurveB =  4.0478D+01*cs**4 - 1.1934D+02*cs**3 + 1.3477D+02*cs**2 - 7.0973D+01*cs + 1.6112D+01
     ReflectCurveC =  5.749D+01*cs**4 - 1.6451D+02*cs**3 + 1.780D+02*cs**2 - 8.8748D+01*cs + 1.8839D+01
-    ReflectCurveD =  5.7139*cs**4   - 1.6666D+01*cs**3 + 1.8627D+01*cs**2 - 9.7561*cs   + 3.0743
-    ReflectCurveE = -5.4884D-01*cs**4 - 6.4976*cs**3   + 2.11990D+01*cs**2 - 2.0971D+01*cs + 7.8138
-    ReflectCurveF =  4.2902*cs**4   - 1.2671D+01*cs**3 + 1.4656D+01*cs**2 - 8.1534*cs   + 2.8711
+    ReflectCurveD =  5.7139D0*cs**4   - 1.6666D+01*cs**3 + 1.8627D+01*cs**2 - 9.7561D0*cs   + 3.0743D0
+    ReflectCurveE = -5.4884D-01*cs**4 - 6.4976D0*cs**3   + 2.11990D+01*cs**2 - 2.0971D+01*cs + 7.8138D0
+    ReflectCurveF =  4.2902D0*cs**4   - 1.2671D+01*cs**3 + 1.4656D+01*cs**2 - 8.1534D0*cs   + 2.8711D0
     ReflectCurveG =  2.174D+01*cs**4 - 6.4436D+01*cs**3 + 7.4893D+01*cs**2 - 4.1792D+01*cs + 1.0624D+01
-    ReflectCurveH =  4.3405*cs**4   - 1.280D+01*cs**3 + 1.4777D+01*cs**2 - 8.2034*cs   + 2.8793
+    ReflectCurveH =  4.3405D0*cs**4   - 1.280D+01*cs**3 + 1.4777D+01*cs**2 - 8.2034D0*cs   + 2.8793D0
     ReflectCurveI =  4.1357D+01*cs**4 - 1.1775D+02*cs**3 + 1.2756D+02*cs**2 - 6.4373D+01*cs + 1.426D+01
-    ReflectCurveJ =  4.4901*cs**4   - 1.2658D+01*cs**3 + 1.3969D+01*cs**2 - 7.501 *cs  + 2.6928
-    ReflectCurveFGHI = (ReflectCurveF + ReflectCurveG + ReflectCurveH + ReflectCurveI) / 4.0
-    ReflectCurveFH = (ReflectCurveF + ReflectCurveH) / 2.0
-    ReflectCurveBDCD = (ReflectCurveB + ReflectCurveD + ReflectCurveC + ReflectCurveD) / 4.0
+    ReflectCurveJ =  4.4901D0*cs**4   - 1.2658D+01*cs**3 + 1.3969D+01*cs**2 - 7.501D0 *cs  + 2.6928D0
+    ReflectCurveFGHI = (ReflectCurveF + ReflectCurveG + ReflectCurveH + ReflectCurveI) / 4.0D0
+    ReflectCurveFH = (ReflectCurveF + ReflectCurveH) / 2.0D0
+    ReflectCurveBDCD = (ReflectCurveB + ReflectCurveD + ReflectCurveC + ReflectCurveD) / 4.0D0
 
-    If (SimpleGlazingU < 1.4195) THEN ! cell 1, 2, or 3
-      IF (SimpleGlazingSHGC > 0.45) THEN
+    If (SimpleGlazingU < 1.4195D0) THEN ! cell 1, 2, or 3
+      IF (SimpleGlazingSHGC > 0.45D0) THEN
         ! cell # 1
         ! Curve E
         TransTmp   = TransCurveE
         ReflectTmp = ReflectCurveE
 
-      ELSEIF ((0.35 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45)) THEN
+      ELSEIF ((0.35D0 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45D0)) THEN
         ! cell # 2
         ! 2 way interpolation between Curve E and Curve J
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.35, 0.45, TransCurveJ, TransCurveE)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.35, 0.45, ReflectCurveJ, ReflectCurveE)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.35D0, 0.45D0, TransCurveJ, TransCurveE)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.35D0, 0.45D0, ReflectCurveJ, ReflectCurveE)
 
       ELSEIF (SimpleGlazingSHGC < 0.35) THEN
         ! cell # 3
@@ -5048,89 +5048,89 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
 
       ENDIF
 
-    ELSEIF ((1.4195 <= SimpleGlazingU) .AND. (SimpleGlazingU <= 1.7034)) THEN ! cell 4, 5 , 6, 7, 8, 9, or 10
-      IF (SimpleGlazingSHGC > 0.55) THEN
+    ELSEIF ((1.4195D0 <= SimpleGlazingU) .AND. (SimpleGlazingU <= 1.7034D0)) THEN ! cell 4, 5 , 6, 7, 8, 9, or 10
+      IF (SimpleGlazingSHGC > 0.55D0) THEN
         ! cell # 4
         ! Curve E
         TransTmp   = TransCurveE
         ReflectTmp = ReflectCurveE
 
-      ELSEIF ((0.5 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55)) THEN
+      ELSEIF ((0.5D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55D0)) THEN
         ! cell # 5
         ! 4 way interpolation between Curve E , Curve E, Curve E and Curve FGHI
 
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034 , 0.50, 0.55, &
+                                1.4195D0,  1.7034D0 , 0.50D0, 0.55D0, &
                                 TransCurveE, TransCurveE, TransCurveFGHI, TransCurveE)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034,  0.50, 0.55, &
+                                1.4195D0,  1.7034D0,  0.50D0, 0.55D0, &
                                 ReflectCurveE, ReflectCurveE, ReflectCurveFGHI, ReflectCurveE)
 
-      ELSEIF ((0.45 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.5))  THEN
+      ELSEIF ((0.45D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.5D0))  THEN
         ! cell # 6
         ! 2 way interpolation between Curve E and Curve FGHI
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, TransCurveE, TransCurveFGHI)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, ReflectCurveE, ReflectCurveFGHI)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, TransCurveE, TransCurveFGHI)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, ReflectCurveE, ReflectCurveFGHI)
 
-      ELSEIF ((0.35 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45))  THEN
+      ELSEIF ((0.35D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45D0))  THEN
         ! cell # 7
         ! 4 way interpolation between Curve E , Curve FGHI, Curve J and Curve FGHI
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034, 0.35, 0.45, &
+                                1.4195D0,  1.7034D0, 0.35D0, 0.45D0, &
                                 TransCurveJ, TransCurveE, TransCurveFGHI, TransCurveFGHI)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034, 0.35, 0.45, &
+                                1.4195D0,  1.7034D0, 0.35D0, 0.45D0, &
                                 ReflectCurveJ, ReflectCurveE, ReflectCurveFGHI, ReflectCurveFGHI)
 
-      ELSEIF ((0.3 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.35))  THEN
+      ELSEIF ((0.3D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.35D0))  THEN
         ! cell # 8
         ! 2 way interpolation between Curve J and Curve FGHI
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, TransCurveJ, TransCurveFGHI)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, ReflectCurveJ, ReflectCurveFGHI)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, TransCurveJ, TransCurveFGHI)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, ReflectCurveJ, ReflectCurveFGHI)
 
-      ELSEIF ((0.25 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3))  THEN
+      ELSEIF ((0.25D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3D0))  THEN
         ! cell # 9
         ! 4 way interpolation between Curve J, Curve FGHI, Curve J and Curve FH
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034, 0.25, 0.3, &
+                                1.4195D0,  1.7034D0, 0.25D0, 0.3D0, &
                                 TransCurveJ, TransCurveJ, TransCurveFH, TransCurveFGHI)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                1.4195,  1.7034, 0.25, 0.3, &
+                                1.4195D0,  1.7034D0, 0.25D0, 0.3D0, &
                                 ReflectCurveJ, ReflectCurveJ, ReflectCurveFH, ReflectCurveFGHI)
 
-      ELSEIF (SimpleGlazingSHGC <= 0.25) THEN
+      ELSEIF (SimpleGlazingSHGC <= 0.25D0) THEN
         ! cell # 10
         ! 2 way interpolation between Curve J and Curve FH
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, TransCurveJ, TransCurveFH)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195, 1.7034, ReflectCurveJ, ReflectCurveFH)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, TransCurveJ, TransCurveFH)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 1.4195D0, 1.7034D0, ReflectCurveJ, ReflectCurveFH)
 
       ENDIF
-    ELSEIF ((1.7034 < SimpleGlazingU) .AND. (SimpleGlazingU < 3.4068)) THEN ! cell 11, 12, 13, 14, or 15
-      IF (SimpleGlazingSHGC > 0.55) THEN
+    ELSEIF ((1.7034D0 < SimpleGlazingU) .AND. (SimpleGlazingU < 3.4068D0)) THEN ! cell 11, 12, 13, 14, or 15
+      IF (SimpleGlazingSHGC > 0.55D0) THEN
         ! cell # 11
         ! Curve E
         TransTmp   = TransCurveE
         ReflectTmp = ReflectCurveE
 
-      ELSEIF ((0.5 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55)) THEN
+      ELSEIF ((0.5D0 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55D0)) THEN
         ! cell # 12
         ! 2 way interpolation between Curve E and Curve FGHI
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.5, 0.55, TransCurveFGHI, TransCurveE)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.5, 0.55, ReflectCurveFGHI, ReflectCurveE)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.5D0, 0.55D0, TransCurveFGHI, TransCurveE)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.5D0, 0.55D0, ReflectCurveFGHI, ReflectCurveE)
 
-      ELSEIF ((0.3 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC < 0.5))  THEN
+      ELSEIF ((0.3D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC < 0.5D0))  THEN
         ! cell # 13
         ! Curve FGHI
         TransTmp   = TransCurveFGHI
         ReflectTmp = ReflectCurveFGHI
 
-      ELSEIF ((0.25 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3))  THEN
+      ELSEIF ((0.25D0 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3D0))  THEN
         ! cell # 14
         ! 2 way interpolation between Curve FGHI and Curve FH
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.25, 0.30, TransCurveFH, TransCurveFGHI)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.25, 0.30, ReflectCurveFH, ReflectCurveFGHI)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.25D0, 0.30D0, TransCurveFH, TransCurveFGHI)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.25D0, 0.30D0, ReflectCurveFH, ReflectCurveFGHI)
 
-      ELSEIF (SimpleGlazingSHGC < 0.25) THEN
+      ELSEIF (SimpleGlazingSHGC < 0.25D0) THEN
         ! cell # 15
         !Curve FH
         TransTmp   = TransCurveFH
@@ -5138,97 +5138,97 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
 
       ENDIF
 
-    ELSEIF ((3.4068 <= SimpleGlazingU) .AND. (SimpleGlazingU <= 4.5424)) THEN ! cell 16, 17, 18, 19, 20, 21, 22, or 23
-      IF (SimpleGlazingSHGC > 0.65) THEN
+    ELSEIF ((3.4068D0 <= SimpleGlazingU) .AND. (SimpleGlazingU <= 4.5424D0)) THEN ! cell 16, 17, 18, 19, 20, 21, 22, or 23
+      IF (SimpleGlazingSHGC > 0.65D0) THEN
         ! cell # 16
         ! 2 way interpolation between Curve E and Curve A
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, TransCurveE, TransCurveA)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, ReflectCurveE, ReflectCurveA)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, TransCurveE, TransCurveA)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, ReflectCurveE, ReflectCurveA)
 
-      ELSEIF ((0.6 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.65)) THEN
+      ELSEIF ((0.6D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.65D0)) THEN
         ! cell # 17
         ! 4 way interpolation between Curve E , Curve E, Curve A, and Curve BDCD
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.6, 0.65, &
+                                3.4068D0,  4.5424D0, 0.6D0, 0.65D0, &
                                 TransCurveE, TransCurveE, TransCurveBDCD, TransCurveA)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.6, 0.65, &
+                                3.4068D0,  4.5424D0, 0.6D0, 0.65D0, &
                                 ReflectCurveE, ReflectCurveE, ReflectCurveBDCD, ReflectCurveA)
 
-      ELSEIF ((0.55 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.6))  THEN
+      ELSEIF ((0.55D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.6D0))  THEN
         ! cell # 18
         ! 2 way interpolation between Curve E and Curve BDCD
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, TransCurveE, TransCurveBDCD)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, ReflectCurveE, ReflectCurveBDCD)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, TransCurveE, TransCurveBDCD)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, ReflectCurveE, ReflectCurveBDCD)
 
-      ELSEIF ((0.5 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55))  THEN
+      ELSEIF ((0.5D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.55D0))  THEN
         ! cell # 19
         ! 4 way interpolation between Curve E , Curve FGHI, Curve BDCD and Curve BDCD
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.5, 0.55, &
+                                3.4068D0,  4.5424D0, 0.5D0, 0.55D0, &
                                 TransCurveFGHI, TransCurveE, TransCurveBDCD, TransCurveBDCD)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.5, 0.55, &
+                                3.4068D0,  4.5424D0, 0.5D0, 0.55D0, &
                                 ReflectCurveFGHI, ReflectCurveE, ReflectCurveBDCD, ReflectCurveBDCD)
 
-      ELSEIF ((0.45 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.5))  THEN
+      ELSEIF ((0.45D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.5D0))  THEN
         ! cell # 20
         ! 2 way interpolation between Curve FGHI and Curve BDCD
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, TransCurveFGHI, TransCurveBDCD)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, ReflectCurveFGHI, ReflectCurveBDCD)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, TransCurveFGHI, TransCurveBDCD)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, ReflectCurveFGHI, ReflectCurveBDCD)
 
-      ELSEIF ((0.3 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45))  THEN
+      ELSEIF ((0.3D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45D0))  THEN
         ! cell # 21
         ! 4 way interpolation between Curve FGHI, Curve FGHI, Curve BDCD, and Curve D
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.3, 0.45,                        &
+                                3.4068D0,  4.5424D0, 0.3D0, 0.45D0,                        &
                                 TransCurveFGHI, TransCurveFGHI, TransCurveD, TransCurveBDCD)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.3, 0.45,                        &
+                                3.4068D0,  4.5424D0, 0.3D0, 0.45D0,                        &
                                 ReflectCurveFGHI, ReflectCurveFGHI, ReflectCurveD, ReflectCurveBDCD)
 
-      ELSEIF ((0.25 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3))  THEN
+      ELSEIF ((0.25D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.3D0))  THEN
         ! cell # 22
         ! 4 way interpolation between Curve FGHI, Curve FH, Curve D, and Curve D
         TransTmp   = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.25, 0.3,                        &
+                                3.4068D0,  4.5424D0, 0.25D0, 0.3D0,                        &
                                 TransCurveFH, TransCurveFGHI, TransCurveD, TransCurveD)
         ReflectTmp = InterpolateBetweenFourValues(SimpleGlazingU, SimpleGlazingSHGC, &
-                                3.4068,  4.5424, 0.25, 0.3,                        &
+                                3.4068D0,  4.5424D0, 0.25D0, 0.3D0,                        &
                                 ReflectCurveFH, ReflectCurveFGHI, ReflectCurveD, ReflectCurveD)
 
-      ELSEIF (SimpleGlazingSHGC <= 0.25) THEN
+      ELSEIF (SimpleGlazingSHGC <= 0.25D0) THEN
         ! cell # 23
         ! 2 way interpolation between Curve FH and Curve D
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, TransCurveFH, TransCurveD)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068, 4.5424, ReflectCurveFH, ReflectCurveD)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, TransCurveFH, TransCurveD)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingU, 3.4068D0, 4.5424D0, ReflectCurveFH, ReflectCurveD)
 
       ENDIF
-    ELSEIF (SimpleGlazingU > 4.5424) THEN ! cell 24, 25, 26, 27, or 28
-      IF (SimpleGlazingSHGC > 0.65) THEN
+    ELSEIF (SimpleGlazingU > 4.5424D0) THEN ! cell 24, 25, 26, 27, or 28
+      IF (SimpleGlazingSHGC > 0.65D0) THEN
         ! cell # 24
         ! Curve A
         TransTmp   = TransCurveA
         ReflectTmp = ReflectCurveA
-      ELSEIF ((0.6 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.65)) THEN
+      ELSEIF ((0.6D0 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.65D0)) THEN
         ! cell # 25
         ! 2 way interpolation between Curve A and Curve BDCD
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.6, 0.65, TransCurveBDCD, TransCurveA)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.6, 0.65, ReflectCurveBDCD, ReflectCurveA)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.6D0, 0.65D0, TransCurveBDCD, TransCurveA)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.6D0, 0.65D0, ReflectCurveBDCD, ReflectCurveA)
 
-      ELSEIF ((0.45 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC < 0.6))  THEN
+      ELSEIF ((0.45D0 < SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC < 0.6D0))  THEN
         ! cell # 26
         ! Curve BDCD
         TransTmp   = TransCurveBDCD
         ReflectTmp = ReflectCurveBDCD
 
-      ELSEIF ((0.3 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45))  THEN
+      ELSEIF ((0.3D0 <= SimpleGlazingSHGC) .AND. (SimpleGlazingSHGC <= 0.45D0))  THEN
         ! cell # 27
         ! 2 way interpolation between Curve BDCD and Curve D
-        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.3, 0.45, TransCurveD, TransCurveBDCD)
-        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.3, 0.45, ReflectCurveD, ReflectCurveBDCD)
+        TransTmp   = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.3D0, 0.45D0, TransCurveD, TransCurveBDCD)
+        ReflectTmp = InterpolateBetweenTwoValues(SimpleGlazingSHGC, 0.3D0, 0.45D0, ReflectCurveD, ReflectCurveBDCD)
 
-      ELSEIF (SimpleGlazingSHGC < 0.3) THEN
+      ELSEIF (SimpleGlazingSHGC < 0.3D0) THEN
         ! cell # 28
         ! Curve D
         TransTmp   = TransCurveD
@@ -5237,37 +5237,37 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
       ENDIF
     ENDIF
 
-    IF ( cs == 1.0) Then ! at 0 deg incident, TransTmp should be 1.0
-      TransTmp = 1.0
+    IF ( cs == 1.0D0) Then ! at 0 deg incident, TransTmp should be 1.0
+      TransTmp = 1.0D0
     ENDIF
 
     ! now apply normalization factors to zero incidence angle properties
     tfp = tf0 * TransTmp
-    IF (tfp < 0.0) tfp = 0.0
-    IF (tfp > 1.0) tfp = 1.0
+    IF (tfp < 0.0D0) tfp = 0.0D0
+    IF (tfp > 1.0D0) tfp = 1.0D0
     rfp = rf0 * ReflectTmp
 
-    IF (rfp < 0.0) rfp = 0.0
-    IF (rfp > 1.0) rfp = 1.0
+    IF (rfp < 0.0D0) rfp = 0.0D0
+    IF (rfp > 1.0D0) rfp = 1.0D0
 
     rbp = rb0 * ReflectTmp
-    IF (rbp < 0.0) rbp = 0.0
-    IF (rbp > 1.0) rbp = 1.0
+    IF (rbp < 0.0D0) rbp = 0.0D0
+    IF (rbp > 1.0D0) rbp = 1.0D0
 
-    IF ( cs == 0.0 ) THEN ! at 90 degree incident, reflectance should be 1.0
-      rfp = 1.0
-      rbp = 1.0
+    IF ( cs == 0.0D0 ) THEN ! at 90 degree incident, reflectance should be 1.0
+      rfp = 1.0D0
+      rbp = 1.0D0
     ENDIF
 
 !   older model, was in Version 3.1
 !    IncidenceAngle = ACOS(cs)
-!    CoefFuncSHGC   = 0.768 +0.817*SimpleGlazingSHGC**4
+!    CoefFuncSHGC   = 0.768d0 +0.817d0*SimpleGlazingSHGC**4
 !
 !    tfp = tf0 * cs * (1 + CoefFuncSHGC*(Sin(IncidenceAngle)**3))
 !
-!    f1     = (((2.403*cs - 6.192)*cs + 5.625)*cs - 2.095) * cs + 1
-!    f2     = (((-1.188* cs + 2.022)* cs + 0.137) * cs - 1.71) * cs
-!    Rfit_o = 0.7413 - (0.7396 * SQRT(SimpleGlazingSHGC))
+!    f1     = (((2.403d0*cs - 6.192d0)*cs + 5.625d0)*cs - 2.095d0) * cs + 1
+!    f2     = (((-1.188d0* cs + 2.022d0)* cs + 0.137d0) * cs - 1.71d0) * cs
+!    Rfit_o = 0.7413d0 - (0.7396d0 * SQRT(SimpleGlazingSHGC))
 !
 !    rfp = rf0 * (f1 + f2*SQRT(SimpleGlazingSHGC))/Rfit_o
 !    rbp = rfp  ! uncoated assumption, back equal front
@@ -5290,7 +5290,7 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
 
     testval=safedivide(abs(r0f-r0b),(r0f+r0b))
 
-    IF (testval.LT.0.001) THEN
+    IF (testval.LT.0.001d0) THEN
          ! UNCOATED GLASS
       t0f=r0f*tf0
       t0b=r0b*tf0
@@ -5338,18 +5338,18 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
       rbp  = 0.5*(rbp1+rbp2)
     ELSE
         ! COATED GLASS
-      IF (tf0.GT.0.645) THEN
+      IF (tf0.GT.0.645d0) THEN
             ! Use clear glass angular distribution.
             ! Normalized clear glass transmittance and reflectance distribution
-        IF(cs > 0.999) THEN        ! Angle of incidence = 0 deg
+        IF(cs > 0.999d0) THEN        ! Angle of incidence = 0 deg
           tcl = 1.0
           rcl = 0.0
-        ELSE IF(cs < 0.001) THEN   ! Angle of incidence = 90 deg
+        ELSE IF(cs < 0.001d0) THEN   ! Angle of incidence = 90 deg
           tcl = 0.0
           rcl = 1.0
         ELSE
-          tcl =  -0.0015 + ( 3.355+(-3.840+( 1.460  +0.0288*cs)*cs)*cs)*cs
-          rcl =   0.999  + (-0.563+( 2.043+(-2.532  +1.054 *cs)*cs)*cs)*cs-tcl
+          tcl =  -0.0015d0 + ( 3.355d0+(-3.840d0+( 1.460d0  +0.0288d0*cs)*cs)*cs)*cs
+          rcl =   0.999d0  + (-0.563d0+( 2.043d0+(-2.532d0  +1.054d0 *cs)*cs)*cs)*cs-tcl
         END IF
         tfp = tf0*tcl
         rfp = rf0*(1.-rcl)+rcl
@@ -5357,19 +5357,19 @@ SUBROUTINE TransAndReflAtPhi(cs,tf0,rf0,rb0,tfp,rfp,rbp,SimpleGlazingSystem, Sim
       ELSE
            ! Use bronze glass angular distribution.
            ! Normalized bronze tinted glass transmittance and reflectance distribution
-        IF(cs > 0.999) THEN        ! Angle of incidence = 0 deg
+        IF(cs > 0.999d0) THEN        ! Angle of incidence = 0 deg
           tbnz = 1.0
           rbnz = 0.0
-        ELSE IF(cs < 0.001) THEN   ! Angle of incidence = 90 deg
+        ELSE IF(cs < 0.001d0) THEN   ! Angle of incidence = 90 deg
           tbnz = 0.0
           rbnz = 1.0
         ELSE
-          tbnz = -0.002  + ( 2.813+(-2.341+(-0.05725+0.599 *cs)*cs)*cs)*cs
-          rbnz =  0.997  + (-1.868+( 6.513+(-7.862  +3.225 *cs)*cs)*cs)*cs-tbnz
+          tbnz = -0.002d0  + ( 2.813d0+(-2.341d0+(-0.05725d0+0.599d0 *cs)*cs)*cs)*cs
+          rbnz =  0.997d0  + (-1.868d0+( 6.513d0+(-7.862d0  +3.225d0 *cs)*cs)*cs)*cs-tbnz
         END IF
         tfp = tf0*tbnz
-        rfp = rf0*(1.-rbnz)+rbnz
-        rbp = rb0*(1.-rbnz)+rbnz
+        rfp = rf0*(1.d0-rbnz)+rbnz
+        rbp = rb0*(1.d0-rbnz)+rbnz
       END IF
     END IF
 
@@ -5402,12 +5402,12 @@ FUNCTION InterpolateBetweenTwoValues(X, X0, X1, F0, F1 ) RESULT (InterpResult)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL , INTENT(IN) :: X
-  REAL , INTENT(IN) :: X0
-  REAL , INTENT(IN) :: X1
-  REAL , INTENT(IN) :: F0
-  REAL , INTENT(IN) :: F1
-  REAL              :: InterpResult
+  REAL(r64) , INTENT(IN) :: X
+  REAL(r64) , INTENT(IN) :: X0
+  REAL(r64) , INTENT(IN) :: X1
+  REAL(r64) , INTENT(IN) :: F0
+  REAL(r64) , INTENT(IN) :: F1
+  REAL(r64)              :: InterpResult
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5448,17 +5448,17 @@ FUNCTION InterpolateBetweenFourValues(X, Y, X1, X2, Y1, Y2, Fx1y1, Fx1y2, Fx2y1,
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL , INTENT(IN) :: X
-  REAL , INTENT(IN) :: Y
-  REAL , INTENT(IN) :: X1
-  REAL , INTENT(IN) :: X2
-  REAL , INTENT(IN) :: Y1
-  REAL , INTENT(IN) :: Y2
-  REAL , INTENT(IN) :: Fx1y1
-  REAL , INTENT(IN) :: Fx1y2
-  REAL , INTENT(IN) :: Fx2y1
-  REAL , INTENT(IN) :: Fx2y2
-  REAL              :: InterpResult
+  REAL(r64) , INTENT(IN) :: X
+  REAL(r64) , INTENT(IN) :: Y
+  REAL(r64) , INTENT(IN) :: X1
+  REAL(r64) , INTENT(IN) :: X2
+  REAL(r64) , INTENT(IN) :: Y1
+  REAL(r64) , INTENT(IN) :: Y2
+  REAL(r64) , INTENT(IN) :: Fx1y1
+  REAL(r64) , INTENT(IN) :: Fx1y2
+  REAL(r64) , INTENT(IN) :: Fx2y1
+  REAL(r64) , INTENT(IN) :: Fx2y2
+  REAL(r64)              :: InterpResult
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5506,11 +5506,11 @@ SUBROUTINE W5LsqFit(IndepVar,DepVar,N,N1,N2,CoeffsCurve)
    IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL              :: IndepVar(10)               ! Independent variables
-REAL              :: DepVar(10)                 ! Dependent variables
+REAL(r64)              :: IndepVar(10)               ! Independent variables
+REAL(r64)              :: DepVar(10)                 ! Dependent variables
 INTEGER                :: N                          ! Order of polynomial
 INTEGER                :: N1,N2                      ! First and last data points used
-REAL              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
+REAL(r64)              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5523,10 +5523,10 @@ REAL              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-REAL  :: A(6,6)                     ! Least squares derivative matrix
-REAL  :: B(6)                       ! Least squares derivative vector
-REAL  :: D(16,6)                    ! Powers of independent variable
-REAL  :: ACON, SUM                  ! Intermediate variables
+REAL(r64)  :: A(6,6)                     ! Least squares derivative matrix
+REAL(r64)  :: B(6)                       ! Least squares derivative vector
+REAL(r64)  :: D(16,6)                    ! Powers of independent variable
+REAL(r64)  :: ACON, SUM                  ! Intermediate variables
 INTEGER           :: I, J, K, L, M, KP1, LP1, NM1 ! Loop parameters
 
            ! FLOW
@@ -5615,11 +5615,11 @@ SUBROUTINE W5LsqFit2 (IndepVar,DepVar,N,N1,N2,CoeffsCurve)
    IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL              :: IndepVar(19)               ! Independent variables
-REAL              :: DepVar(19)                 ! Dependent variables
+REAL(r64)              :: IndepVar(19)               ! Independent variables
+REAL(r64)              :: DepVar(19)                 ! Dependent variables
 INTEGER                :: N                          ! Order of polynomial
 INTEGER                :: N1,N2                      ! First and last data points used
-REAL              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
+REAL(r64)              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5631,10 +5631,10 @@ REAL              :: CoeffsCurve(6)             ! Polynomial coeffients from fit
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL :: A(6,6)                     ! Least squares derivative matrix
-REAL :: B(6)                       ! Least squares derivative vector
-REAL :: D(16,6)                    ! Powers of independent variable
-REAL :: ACON, SUM                  ! Intermediate variables
+REAL(r64) :: A(6,6)                     ! Least squares derivative matrix
+REAL(r64) :: B(6)                       ! Least squares derivative vector
+REAL(r64) :: D(16,6)                    ! Powers of independent variable
+REAL(r64) :: ACON, SUM                  ! Intermediate variables
 INTEGER          :: I, J, K, L, M, KP1, LP1, NM1 ! Loop parameters
 
 
@@ -5697,7 +5697,7 @@ RETURN
 END SUBROUTINE W5LsqFit2
 !***********************************************************************
 
-REAL FUNCTION DiffuseAverage(PropertyValue)
+REAL(r64) FUNCTION DiffuseAverage(PropertyValue)
 
         ! FUNCTION INFORMATION:
         !       AUTHOR         Fred Winkelmann
@@ -5718,7 +5718,7 @@ REAL FUNCTION DiffuseAverage(PropertyValue)
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL         :: PropertyValue(10)        ! Property value at angles of incidence
+REAL(r64)         :: PropertyValue(10)        ! Property value at angles of incidence
                                               ! 0,10,20,...,80,90 degress
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -5731,23 +5731,23 @@ REAL         :: PropertyValue(10)        ! Property value at angles of incidence
           ! na
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL, PARAMETER   :: DPhiR = 10.*DegToRadians ! Half of 10-deg incidence angle increment (radians)
+REAL(r64), PARAMETER   :: DPhiR = 10.d0*DegToRadians ! Half of 10-deg incidence angle increment (radians)
 INTEGER           :: IPhi                     ! Incidence angle counter
 
         ! FLOW
 
-DiffuseAverage = 0.0
+DiffuseAverage = 0.0d0
 DO IPhi = 1,9
-  DiffuseAverage = DiffuseAverage + 0.5*DPhiR*  &
-    (PropertyValue(IPhi)*SIN(2.*(IPhi-1)*DPhiR) + PropertyValue(IPhi+1)*SIN(2.*IPhi*DPhiR))
+  DiffuseAverage = DiffuseAverage + 0.5d0*DPhiR*  &
+    (PropertyValue(IPhi)*SIN(2.d0*(IPhi-1)*DPhiR) + PropertyValue(IPhi+1)*SIN(2.d0*IPhi*DPhiR))
 END DO
-IF (DiffuseAverage < 0.0) DiffuseAverage=0.0
+IF (DiffuseAverage < 0.0d0) DiffuseAverage=0.0d0
 
 RETURN
 END FUNCTION DiffuseAverage
 !*************************************************************************************
 
-REAL FUNCTION DiffuseAverageProfAngGnd(Property)
+REAL(r64) FUNCTION DiffuseAverageProfAngGnd(Property)
 
         ! FUNCTION INFORMATION:
         !       AUTHOR         Fred Winkelmann
@@ -5767,7 +5767,7 @@ USE General, ONLY: InterpProfAng
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL         :: Property(37)     ! Property value vs. profile angle
+REAL(r64)         :: Property(37)     ! Property value vs. profile angle
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5779,30 +5779,30 @@ REAL         :: Property(37)     ! Property value vs. profile angle
           ! na
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL         :: Phi              ! Profile angle (radians)
-REAL         :: DPhi             ! Phi increment
+REAL(r64)         :: Phi              ! Profile angle (radians)
+REAL(r64)         :: DPhi             ! Phi increment
 INTEGER           :: IPhi             ! Phi index
-REAL         :: Sum,SumDenom     ! Sums
+REAL(r64)         :: Sum,SumDenom     ! Sums
 
 Sum = 0.
 SumDenom = 0.
-DPhi = 5.*DegToRadians
+DPhi = 5.d0*DegToRadians
 
 ! Integrate from -90 to 0 deg
 DO IPhi = 1,18
-  Phi = -PiOvr2 + (IPhi-0.5)*DPhi
+  Phi = -PiOvr2 + (IPhi-0.5d0)*DPhi
   Sum = Sum + COS(Phi)*DPhi*InterpProfAng(Phi,Property)
   SumDenom = SumDenom + COS(Phi)*Dphi
 END DO
 
 DiffuseAverageProfAngGnd = Sum/SumDenom
-IF (DiffuseAverageProfAngGnd < 0.0) DiffuseAverageProfAngGnd=0.0
+IF (DiffuseAverageProfAngGnd < 0.0d0) DiffuseAverageProfAngGnd=0.0d0
 
 RETURN
 END FUNCTION DiffuseAverageProfAngGnd
 !*************************************************************************************
 
-REAL FUNCTION DiffuseAverageProfAngSky(Property)
+REAL(r64) FUNCTION DiffuseAverageProfAngSky(Property)
 
         ! FUNCTION INFORMATION:
         !       AUTHOR         Fred Winkelmann
@@ -5822,7 +5822,7 @@ USE General, ONLY: InterpProfAng
 IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-REAL         :: Property(37)     ! Property value vs. profile angle
+REAL(r64)         :: Property(37)     ! Property value vs. profile angle
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5834,24 +5834,24 @@ REAL         :: Property(37)     ! Property value vs. profile angle
           ! na
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL         :: Phi              ! Profile angle (radians)
-REAL         :: DPhi             ! Phi increment
+REAL(r64)         :: Phi              ! Profile angle (radians)
+REAL(r64)         :: DPhi             ! Phi increment
 INTEGER           :: IPhi             ! Phi index
-REAL         :: Sum,SumDenom     ! Sums
+REAL(r64)         :: Sum,SumDenom     ! Sums
 
 Sum = 0.
 SumDenom = 0.
-DPhi = 5.*DegToRadians
+DPhi = 5.d0*DegToRadians
 
 ! Integrate from 0 to 90 deg
 DO IPhi = 19,36
-  Phi = -PiOvr2 + (IPhi-0.5)*DPhi
+  Phi = -PiOvr2 + (IPhi-0.5d0)*DPhi
   Sum = Sum + COS(Phi)*DPhi*InterpProfAng(Phi,Property)
   SumDenom = SumDenom + COS(Phi)*Dphi
 END DO
 
 DiffuseAverageProfAngSky = Sum/SumDenom
-IF (DiffuseAverageProfAngSky < 0.0) DiffuseAverageProfAngSky=0.0
+IF (DiffuseAverageProfAngSky < 0.0d0) DiffuseAverageProfAngSky=0.0d0
 
 RETURN
 END FUNCTION DiffuseAverageProfAngSky
@@ -5882,11 +5882,11 @@ SUBROUTINE CalcWinFrameAndDividerTemps(SurfNum,tout,tin,HOutConv,HInConv,outir,C
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER           :: SurfNum              ! Surface number
-REAL         :: tout                 ! Outside air temperature (K)
-REAL  :: tin                  ! Inside air temperature (K)
-REAL         :: HOutConv             ! Outside convective air film conductance (W/m2-K)
-REAL         :: HInConv              ! Inside convective air film conductance (W/m2-K)
-REAL         :: outir                ! Exterior IR irradiance from sky and ground
+REAL(r64)         :: tout                 ! Outside air temperature (K)
+REAL(r64)  :: tin                  ! Inside air temperature (K)
+REAL(r64)         :: HOutConv             ! Outside convective air film conductance (W/m2-K)
+REAL(r64)         :: HInConv              ! Inside convective air film conductance (W/m2-K)
+REAL(r64)         :: outir                ! Exterior IR irradiance from sky and ground
 INTEGER           :: ConstrNum            ! Construction number of window
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -5899,51 +5899,51 @@ INTEGER           :: ConstrNum            ! Construction number of window
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL         :: HInRad               ! Inside radiative conductance (W/m2-K)
-REAL         :: HOutRad              ! Outside radiative conductance (W/m2-K)
+REAL(r64)         :: HInRad               ! Inside radiative conductance (W/m2-K)
+REAL(r64)         :: HOutRad              ! Outside radiative conductance (W/m2-K)
 INTEGER           :: FrDivNum             ! Frame/divider number
-REAL         :: TInRad               ! Inside radiative temperature (K)
-REAL         :: TInRadFr             ! Effective inside radiative temperature for frame (K)
-REAL         :: TInRadDiv            ! Effective inside radiative temperature for divider (K)
-REAL         :: TOutRad              ! Outside radiative temperature (K)
-REAL         :: TOutRadFr            ! Effective outside radiative temperature for frame (K)
-REAL         :: TOutRadDiv           ! Effective outside radiative temperature for divider (K)
+REAL(r64)         :: TInRad               ! Inside radiative temperature (K)
+REAL(r64)         :: TInRadFr             ! Effective inside radiative temperature for frame (K)
+REAL(r64)         :: TInRadDiv            ! Effective inside radiative temperature for divider (K)
+REAL(r64)         :: TOutRad              ! Outside radiative temperature (K)
+REAL(r64)         :: TOutRadFr            ! Effective outside radiative temperature for frame (K)
+REAL(r64)         :: TOutRadDiv           ! Effective outside radiative temperature for divider (K)
 INTEGER           :: ShadeFlag            ! Window shading flag
-REAL         :: FrameCon             ! Frame conductance (W/m2-K)
+REAL(r64)         :: FrameCon             ! Frame conductance (W/m2-K)
 
-REAL         :: Afac,Bfac,Dfac,Efac  ! Intermediate calculation variables
+REAL(r64)         :: Afac,Bfac,Dfac,Efac  ! Intermediate calculation variables
 INTEGER           :: DivType              ! Divider type
-REAL         :: DivCon               ! Divider conductance (W/m2-K)
-REAL         :: DivEmisIn            ! Inside divider emissivity
-REAL         :: DivEmisOut           ! Outside divider emissivity
+REAL(r64)         :: DivCon               ! Divider conductance (W/m2-K)
+REAL(r64)         :: DivEmisIn            ! Inside divider emissivity
+REAL(r64)         :: DivEmisOut           ! Outside divider emissivity
 
-REAL         :: ProjCorrFrOut        ! Outside correction factor for absorbed radiation
+REAL(r64)         :: ProjCorrFrOut        ! Outside correction factor for absorbed radiation
                                           !   for frame with outside projection
-REAL         :: ProjCorrFrIn         ! Inside correction factor for absorbed radiation
+REAL(r64)         :: ProjCorrFrIn         ! Inside correction factor for absorbed radiation
                                           !   for frame with inside projection
-REAL         :: HOutConvFr           ! Effective outside convective coeff for frame
+REAL(r64)         :: HOutConvFr           ! Effective outside convective coeff for frame
                                           !   with outside projection (W/m2-K)
-REAL         :: HOutConvDiv          ! Effective outside convective coeff for divider
+REAL(r64)         :: HOutConvDiv          ! Effective outside convective coeff for divider
                                           !   with outside projection (W/m2-K)
-REAL         :: HInConvFr            ! Effective inside convective coeff for frame
+REAL(r64)         :: HInConvFr            ! Effective inside convective coeff for frame
                                           !   with inside projection (W/m2-K)
-REAL         :: HInConvDiv           ! Effective inside convective coeff for divider
+REAL(r64)         :: HInConvDiv           ! Effective inside convective coeff for divider
                                           !   with inside projection (W/m2-K)
-REAL         :: EmisGlassOut         ! Outside surface emissivity of window glazing
-REAL         :: EmisGlassIn          ! Inside surface emissivity of window glazing
+REAL(r64)         :: EmisGlassOut         ! Outside surface emissivity of window glazing
+REAL(r64)         :: EmisGlassIn          ! Inside surface emissivity of window glazing
 INTEGER           :: TotGlassLayers       ! Total number of glass layers
 INTEGER           :: TotLayers            ! Total number of layers in unshaded construction
-REAL         :: DivTempOut           ! Outside surface divider temperature (K)
-REAL         :: FrameHeatGain        ! Heat gain to zone from frame (W)
-REAL         :: ProjCorrWinHeatGain  ! Inside projection correction to IR from divider to zone
+REAL(r64)         :: DivTempOut           ! Outside surface divider temperature (K)
+REAL(r64)         :: FrameHeatGain        ! Heat gain to zone from frame (W)
+REAL(r64)         :: ProjCorrWinHeatGain  ! Inside projection correction to IR from divider to zone
                                           !   for window heat gain calculation
-REAL         :: DividerConduction    ! Conduction through divider from outside to inside face (W)
-REAL         :: DividerConvHeatGain  ! Convective heat gain from divider to zone (W)
-REAL         :: DividerRadHeatGain   ! Convective IR radiative gain from divider to zone (W)
-REAL         :: DividerHeatGain      ! Heat gain from divider to zone (W)
+REAL(r64)         :: DividerConduction    ! Conduction through divider from outside to inside face (W)
+REAL(r64)         :: DividerConvHeatGain  ! Convective heat gain from divider to zone (W)
+REAL(r64)         :: DividerRadHeatGain   ! Convective IR radiative gain from divider to zone (W)
+REAL(r64)         :: DividerHeatGain      ! Heat gain from divider to zone (W)
 
-TInRad =  (SurfaceWindow(SurfNum)%IRfromParentZone/sigma)**0.25
-TOutRad = (outir/sigma)**0.25
+TInRad =  (SurfaceWindow(SurfNum)%IRfromParentZone/sigma)**0.25d0
+TOutRad = (outir/sigma)**0.25d0
 ShadeFlag = SurfaceWindow(SurfNum)%ShadingFlag
 FrDivNum = Surface(SurfNum)%FrameDivider
 TotLayers = Construct(ConstrNum)%TotLayers
@@ -5962,29 +5962,29 @@ IF(SurfaceWindow(SurfNum)%FrameArea > 0.0) THEN
   ! window and is assumed not to shadow long- or short-wave radiation incident on the frame elements.
   ProjCorrFrOut = SurfaceWindow(SurfNum)%ProjCorrFrOut
   ProjCorrFrIn = SurfaceWindow(SurfNum)%ProjCorrFrIn
-  TOutRadFr = TOutRad * ((1.+0.5*ProjCorrFrOut)/(1.+ProjCorrFrOut))**0.25
-  TInRadFr  = TInRad * ((1.+0.5*ProjCorrFrIn)/(1.+ProjCorrFrIn))**0.25
+  TOutRadFr = TOutRad * ((1.d0+0.5d0*ProjCorrFrOut)/(1.d0+ProjCorrFrOut))**0.25d0
+  TInRadFr  = TInRad * ((1.d0+0.5d0*ProjCorrFrIn)/(1.d0+ProjCorrFrIn))**0.25d0
   FrameCon = SurfaceWindow(SurfNum)%FrameConductance
-  HInRad = 0.5 * SurfaceWindow(SurfNum)%FrameEmis * sigma * &
+  HInRad = 0.5d0 * SurfaceWindow(SurfNum)%FrameEmis * sigma * &
              (TInRadFr + SurfaceWindow(SurfNum)%FrameTempSurfIn + TKelvin)**3
   HInConvFr = 0.0
-  HOutRad = 0.5 * SurfaceWindow(SurfNum)%FrameEmis * sigma * &
+  HOutRad = 0.5d0 * SurfaceWindow(SurfNum)%FrameEmis * sigma * &
               (TOutRadFr + SurfaceWindow(SurfNum)%FrameTempSurfOut + TKelvin)**3
   HOutConvFr = HOutConv
   IF(FrameDivider(FrDivNum)%FrameProjectionOut > 0.0) THEN
-    HOutRad = HOutRad * (1.+ProjCorrFrOut)
-    HOutConvFr = HOutConv * (1.+ProjCorrFrOut)
+    HOutRad = HOutRad * (1.d0+ProjCorrFrOut)
+    HOutConvFr = HOutConv * (1.d0+ProjCorrFrOut)
     ! Add long-wave from outside window surface absorbed by frame outside projection
     SurfaceWindow(SurfNum)%FrameQRadOutAbs = SurfaceWindow(SurfNum)%FrameQRadOutAbs + &
-      0.5 * SurfaceWindow(SurfNum)%ProjCorrFrOut * FrameDivider(FrDivNum)%FrameEmis * &
+      0.5d0 * SurfaceWindow(SurfNum)%ProjCorrFrOut * FrameDivider(FrDivNum)%FrameEmis * &
       EmisGlassOut * sigma * SurfaceWindow(SurfNum)%ThetaFace(1)**4
   END IF
   IF(FrameDivider(FrDivNum)%FrameProjectionIn > 0.0) THEN
-    HInRad = HInRad * (1.+ProjCorrFrIn)
-    HInConvFr = HInConv * (1.+ProjCorrFrIn)
+    HInRad = HInRad * (1.d0+ProjCorrFrIn)
+    HInConvFr = HInConv * (1.d0+ProjCorrFrIn)
     ! Add long-wave from inside window surface absorbed by frame inside projection
     SurfaceWindow(SurfNum)%FrameQRadInAbs = SurfaceWindow(SurfNum)%FrameQRadInAbs + &
-      0.5 * SurfaceWindow(SurfNum)%ProjCorrFrIn * FrameDivider(FrDivNum)%FrameEmis * &
+      0.5d0 * SurfaceWindow(SurfNum)%ProjCorrFrIn * FrameDivider(FrDivNum)%FrameEmis * &
       EmisGlassIn * sigma * SurfaceWindow(SurfNum)%ThetaFace(2*TotGlassLayers)**4
   END IF
   Afac = (HOutRad*TOutRadFr + HOutConvFr*tout + SurfaceWindow(SurfNum)%FrameQRadOutAbs) / &
@@ -5993,7 +5993,7 @@ IF(SurfaceWindow(SurfNum)%FrameArea > 0.0) THEN
   Dfac = (HInRad*TInRadFr + HInConvFr*tin + SurfaceWindow(SurfNum)%FrameQRadInAbs) / &
            (HInRad + FrameCon + HInConvFr)
   Efac = FrameCon / (HInRad + FrameCon + HInConvFr)
-  SurfaceWindow(SurfNum)%FrameTempSurfIn = (Dfac + Efac*Afac)/(1. - Efac*Bfac) - TKelvin
+  SurfaceWindow(SurfNum)%FrameTempSurfIn = (Dfac + Efac*Afac)/(1.d0 - Efac*Bfac) - TKelvin
   SurfaceWindow(SurfNum)%FrameTempSurfOut = Afac +   &
                            Bfac*(SurfaceWindow(SurfNum)%FrameTempSurfIn+TKelvin) - TKelvin
   ! Heat gain to zone from frame
@@ -6002,7 +6002,7 @@ IF(SurfaceWindow(SurfNum)%FrameArea > 0.0) THEN
 !  ( SurfaceWindow(SurfNum)%FrameEmis*(sigma*(SurfaceWindow(SurfNum)%FrameTempSurfIn+TKelvin)**4 - rmir) + &
 !    hcin*(SurfaceWindow(SurfNum)%FrameTempSurfIn+TKelvin - tin) )
 
-  FrameHeatGain = SurfaceWindow(SurfNum)%FrameArea * (1.+SurfaceWindow(SurfNum)%ProjCorrFrIn) * &
+  FrameHeatGain = SurfaceWindow(SurfNum)%FrameArea * (1.d0+SurfaceWindow(SurfNum)%ProjCorrFrIn) * &
   ( hcin*(SurfaceWindow(SurfNum)%FrameTempSurfIn+TKelvin - tin) )
 
 
@@ -6033,20 +6033,20 @@ IF(SurfaceWindow(SurfNum)%DividerArea > 0.0 .AND. SurfaceWindow(SurfNum)%StormWi
   END IF
 
   TOutRadDiv = TOutRad* &
-    ((1.+SurfaceWindow(SurfNum)%ProjCorrDivOut)/(1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivOut))**0.25
+    ((1.d0+SurfaceWindow(SurfNum)%ProjCorrDivOut)/(1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivOut))**0.25d0
   TInRadDiv = TInRad* &
-    ((1.+SurfaceWindow(SurfNum)%ProjCorrDivIn)/(1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivIn))**0.25
-  HInRad = 0.5 * DivEmisIn * sigma * &
+    ((1.d0+SurfaceWindow(SurfNum)%ProjCorrDivIn)/(1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivIn))**0.25d0
+  HInRad = 0.5d0 * DivEmisIn * sigma * &
              (TInRadDiv + SurfaceWindow(SurfNum)%DividerTempSurfIn + TKelvin)**3
-  HOutRad = 0.5 * DivEmisOut * sigma * &
+  HOutRad = 0.5d0 * DivEmisOut * sigma * &
               (TOutRadDiv + SurfaceWindow(SurfNum)%DividerTempSurfOut + TKelvin)**3
   HOutConvDiv = HOutConv
 
   IF(FrameDivider(FrDivNum)%DividerProjectionOut > 0.0) THEN
-    HOutRad = HOutRad * (1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivOut)
+    HOutRad = HOutRad * (1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivOut)
     IF(SurfaceWindow(SurfNum)%ShadingFlag == ExtShadeOn) HOutConvDiv =  &
       SurfaceWindow(SurfNum)%ConvCoeffWithShade
-    HOutConvDiv = HOutConvDiv * (1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivOut)
+    HOutConvDiv = HOutConvDiv * (1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivOut)
     ! Add long-wave from outside window surface absorbed by divider outside projection
     SurfaceWindow(SurfNum)%DividerQRadOutAbs = SurfaceWindow(SurfNum)%DividerQRadOutAbs + &
       SurfaceWindow(SurfNum)%ProjCorrDivOut * FrameDivider(FrDivNum)%DividerEmis * &
@@ -6056,10 +6056,10 @@ IF(SurfaceWindow(SurfNum)%DividerArea > 0.0 .AND. SurfaceWindow(SurfNum)%StormWi
   HInConvDiv = HInConv
 
   IF(FrameDivider(FrDivNum)%DividerProjectionIn > 0.0) THEN
-    HInRad = HInRad *  (1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivIn)
+    HInRad = HInRad *  (1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivIn)
     IF(SurfaceWindow(SurfNum)%ShadingFlag == IntShadeOn) HInConvDiv =  &
       SurfaceWindow(SurfNum)%ConvCoeffWithShade
-    HInConvDiv = HInConvDiv * (1.+2.*SurfaceWindow(SurfNum)%ProjCorrDivIn)
+    HInConvDiv = HInConvDiv * (1.d0+2.d0*SurfaceWindow(SurfNum)%ProjCorrDivIn)
     ! Add long-wave from inside window surface absorbed by divider inside projection
     SurfaceWindow(SurfNum)%DividerQRadInAbs = SurfaceWindow(SurfNum)%DividerQRadInAbs + &
       SurfaceWindow(SurfNum)%ProjCorrDivIn * FrameDivider(FrDivNum)%DividerEmis * &
@@ -6075,7 +6075,7 @@ IF(SurfaceWindow(SurfNum)%DividerArea > 0.0 .AND. SurfaceWindow(SurfNum)%StormWi
   SurfaceWindow(SurfNum)%DividerTempSurfOut = Afac + Bfac*(SurfaceWindow(SurfNum)%DividerTempSurfIn &
                                                       + TKelvin) - TKelvin
   ! Contribution of divider to window heat gain
-  ProjCorrWinHeatGain = 1. + 2.*SurfaceWindow(SurfNum)%ProjCorrDivIn
+  ProjCorrWinHeatGain = 1.d0 + 2.d0*SurfaceWindow(SurfNum)%ProjCorrDivIn
   DividerConduction = SurfaceWindow(SurfNum)%DividerArea * DivCon * &
     (SurfaceWindow(SurfNum)%DividerTempSurfOut - SurfaceWindow(SurfNum)%DividerTempSurfin)
   IF (DividerConduction > 0.0) THEN
@@ -6189,11 +6189,11 @@ SUBROUTINE CalcNominalWindowCond (ConstrNum,WinterSummerFlag,NominalConductance,
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER           :: ConstrNum                    ! Construction number
 INTEGER           :: WinterSummerFlag             ! 1=winter, 2=summer
-REAL         :: NominalConductance           ! Nominal center-of-glass conductance, including air films
-REAL         :: SHGC                         ! Nominal center-of-glass solar heat gain coefficient for
+REAL(r64)         :: NominalConductance           ! Nominal center-of-glass conductance, including air films
+REAL(r64)         :: SHGC                         ! Nominal center-of-glass solar heat gain coefficient for
                                                   !   normal incidence beam solar radiation
-REAL         :: TSolNorm                     ! Overall beam solar transmittance at normal incidence
-REAL         :: TVisNorm                     ! Overall beam visible transmittance at normal incidence
+REAL(r64)         :: TSolNorm                     ! Overall beam solar transmittance at normal incidence
+REAL(r64)         :: TVisNorm                     ! Overall beam visible transmittance at normal incidence
 INTEGER           :: ErrFlag                      ! Error flag
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -6216,62 +6216,62 @@ INTEGER           :: IGap                         ! Gap layer number (1,2,...)
 INTEGER           :: IMix                         ! Gas component loop index for gap gas mixture
 INTEGER           :: ICoeff                       ! Gas property coefficient index
 
-REAL         :: BeamSolarInc                 ! Incident beam radiation at zero angle of incidence (W/m2)
-REAL         :: hOutRad,hInRad               ! Radiative conductance of outside and inside airfilm [W/m2-K]
-REAL         :: rOut, rIn                    ! Combined radiative and conductive outside and inside film
+REAL(r64)         :: BeamSolarInc                 ! Incident beam radiation at zero angle of incidence (W/m2)
+REAL(r64)         :: hOutRad,hInRad               ! Radiative conductance of outside and inside airfilm [W/m2-K]
+REAL(r64)         :: rOut, rIn                    ! Combined radiative and conductive outside and inside film
                                                   !   resistance [m2-K/W]
-REAL         :: hgap(5)                      ! Conductive gap conductance [W/m2-K]
-REAL         :: hGapTot(5)                   ! Combined radiative and conductive gap conductance [W/m2-K]
-REAL         :: Rbare                        ! Nominal center-of-glass resistance without air films [m2-K/W]
+REAL(r64)         :: hgap(5)                      ! Conductive gap conductance [W/m2-K]
+REAL(r64)         :: hGapTot(5)                   ! Combined radiative and conductive gap conductance [W/m2-K]
+REAL(r64)         :: Rbare                        ! Nominal center-of-glass resistance without air films [m2-K/W]
 INTEGER           :: ShadeFlag                    ! Shading flag
-REAL         :: ShadeRes                     ! Thermal resistance of shade
+REAL(r64)         :: ShadeRes                     ! Thermal resistance of shade
 INTEGER           :: MatOutside                   ! Material number of outside layer of construction
 INTEGER           :: MatInside                    ! Material number of inside layer of construction
 INTEGER           :: MatShade                     ! Material number of shade layer
-REAL         :: AbsBeamNorm(5)               ! Beam absorptance at normal incidence for each glass layer
-REAL         :: AbsBeamShadeNorm             ! Shade solar absorptance at normal incidence
+REAL(r64)         :: AbsBeamNorm(5)               ! Beam absorptance at normal incidence for each glass layer
+REAL(r64)         :: AbsBeamShadeNorm             ! Shade solar absorptance at normal incidence
 INTEGER           :: ConstrNum1                   ! Construction counter
 INTEGER           :: ConstrNumBare                ! Construction without shading device
 INTEGER           :: BlNum                        ! Blind number
 INTEGER           :: ScNum                        ! Screen number
 LOGICAL           :: VarSlats                     ! True if slats in blind are variable angle
-REAL         :: SlatAng                      ! Slat angle (rad)
+REAL(r64)         :: SlatAng                      ! Slat angle (rad)
 INTEGER           :: LayPtrSh                     ! Layer pointer of blind
-REAL         :: TBmBm,TBmBmVis               ! Bare glass normal incidence beam-beam transmittance
-REAL         :: TBlBmBm                      ! Normal incidence blind beam-beam transmittance
-REAL         :: TScBmBm, TScBmBmVis          ! Screen incident beam-beam transmittance
-REAL         :: TBmBmBl,TBmBmBlVis           ! TBmBm * TBlBmBm, TBmBmVis * TBlBmBm
-REAL         :: RGlDiffBack,RGlDiffBackVis   ! Bare glass back sol/vis reflectance
-REAL         :: RGlDiffFront,RGlDiffFrontVis ! Bare glass front sol/vis reflectance
-REAL         :: RhoBlFront,RhoBlFrontVis     ! Blind normal front beam-diffuse sol/vis reflectance
-REAL         :: RhoBlBack,RhoBlBackVis       ! Blind normal back beam-diffuse sol/vis reflectance
-REAL         :: RScBack,RScBackVis           ! Screen back beam-diffuse sol/vis reflectance (same as front)
-REAL         :: AbsBlFront                   ! Blind normal front beam solar absorptance
-REAL         :: AbsBlBack                    ! Blind normal back beam solar absorptance
-REAL         :: RhoBlDiffFront,RhoBlDiffFrontVis ! Blind front diffuse-diffuse sol/vis reflectance
-REAL         :: AbsBlDiffFront               ! Blind front diffuse solar absorptance
-REAL         :: AbsBlDiffBack                ! Blind back diffuse solar absorptance
-REAL         :: RGlFront,RGlFrontVis         ! Bare glass normal front beam sol/vis reflectance
-REAL         :: RhoBlDiffBack,RhoBlDiffBackVis ! Blind back diffuse-diffuse sol/vis reflectance
-REAL         :: RScDifBack,RScDifBackVis     ! Screen back diffuse-diffuse sol/vis reflectance (doesn't change with sun angle)
-REAL         :: TBlBmDif,TBlBmDifVis         ! Blind front normal beam-diffuse sol/vis transmittance
-REAL         :: TBlDifDif,TBlDifDifVis       ! Blind front diffuse-diffuse sol/vis transmittance
-REAL         :: TScBmDif,TScBmDifVis         ! Screen front beam-diffuse sol/vis transmittance
-REAL         :: TDif,TDifVis                 ! Bare glass diffuse sol/vis transmittance
-REAL         :: AGlDiffBack                  ! Back diffuse solar absorptance of a glass layer
+REAL(r64)         :: TBmBm,TBmBmVis               ! Bare glass normal incidence beam-beam transmittance
+REAL(r64)         :: TBlBmBm                      ! Normal incidence blind beam-beam transmittance
+REAL(r64)         :: TScBmBm, TScBmBmVis          ! Screen incident beam-beam transmittance
+REAL(r64)         :: TBmBmBl,TBmBmBlVis           ! TBmBm * TBlBmBm, TBmBmVis * TBlBmBm
+REAL(r64)         :: RGlDiffBack,RGlDiffBackVis   ! Bare glass back sol/vis reflectance
+REAL(r64)         :: RGlDiffFront,RGlDiffFrontVis ! Bare glass front sol/vis reflectance
+REAL(r64)         :: RhoBlFront,RhoBlFrontVis     ! Blind normal front beam-diffuse sol/vis reflectance
+REAL(r64)         :: RhoBlBack,RhoBlBackVis       ! Blind normal back beam-diffuse sol/vis reflectance
+REAL(r64)         :: RScBack,RScBackVis           ! Screen back beam-diffuse sol/vis reflectance (same as front)
+REAL(r64)         :: AbsBlFront                   ! Blind normal front beam solar absorptance
+REAL(r64)         :: AbsBlBack                    ! Blind normal back beam solar absorptance
+REAL(r64)         :: RhoBlDiffFront,RhoBlDiffFrontVis ! Blind front diffuse-diffuse sol/vis reflectance
+REAL(r64)         :: AbsBlDiffFront               ! Blind front diffuse solar absorptance
+REAL(r64)         :: AbsBlDiffBack                ! Blind back diffuse solar absorptance
+REAL(r64)         :: RGlFront,RGlFrontVis         ! Bare glass normal front beam sol/vis reflectance
+REAL(r64)         :: RhoBlDiffBack,RhoBlDiffBackVis ! Blind back diffuse-diffuse sol/vis reflectance
+REAL(r64)         :: RScDifBack,RScDifBackVis     ! Screen back diffuse-diffuse sol/vis reflectance (doesn't change with sun angle)
+REAL(r64)         :: TBlBmDif,TBlBmDifVis         ! Blind front normal beam-diffuse sol/vis transmittance
+REAL(r64)         :: TBlDifDif,TBlDifDifVis       ! Blind front diffuse-diffuse sol/vis transmittance
+REAL(r64)         :: TScBmDif,TScBmDifVis         ! Screen front beam-diffuse sol/vis transmittance
+REAL(r64)         :: TDif,TDifVis                 ! Bare glass diffuse sol/vis transmittance
+REAL(r64)         :: AGlDiffBack                  ! Back diffuse solar absorptance of a glass layer
 
 ErrFlag = 0
 TotLay = Construct(ConstrNum)%TotLayers
 TotGlassLay = Construct(ConstrNum)%TotGlassLayers
 ngllayer = TotGlassLay
 nglface  = 2*ngllayer
-tilt = 90.   ! Assume vertical window
+tilt = 90.d0   ! Assume vertical window
 
 IF(WinterSummerFlag == 1) THEN  ! Winter
   ! LKL Oct 2007:  According to Window5, Winter environmental conditions are:
-  tin = 294.15   ! Inside air temperature (69.8F, 21.C)
-  tout = 255.15  ! Outside air temperature (-.4F, -18C)
-  hcout = 26.    ! Outside convective film conductance for 5.5 m/s (12.3 mph) wind speed
+  tin = 294.15d0   ! Inside air temperature (69.8F, 21.C)
+  tout = 255.15d0  ! Outside air temperature (-.4F, -18C)
+  hcout = 26.d0    ! Outside convective film conductance for 5.5 m/s (12.3 mph) wind speed
                  ! (the value used in Window 5)
 !  tin = 294.26   ! Inside air temperature (70F, 21.1C)
 !  tout = 255.35  ! Outside air temperature (0F, -17.8C)
@@ -6280,11 +6280,11 @@ IF(WinterSummerFlag == 1) THEN  ! Winter
   BeamSolarInc = 0.0
 ELSE  ! Summer
   ! LKL Oct 2007: According to Window5, Summer environmental conditions are:
-  !tin = 297.05   ! Inside air temperature (75.2F, 24C)
+  !tin = 297.05d0   ! Inside air temperature (75.2F, 24C)
   ! BG Feb. 2009: According to Window5 Expert Christian Kohler, it is exactly 24C or 297.15
-  tin = 297.15
-  tout = 305.15  ! Outside air temperature (89.6F, 32C)
-  hcout = 15.    ! Outside convective film conductance for 2.8 m/s (6.2 mph) wind speed
+  tin = 297.15d0
+  tout = 305.15d0  ! Outside air temperature (89.6F, 32C)
+  hcout = 15.d0    ! Outside convective film conductance for 2.8 m/s (6.2 mph) wind speed
                  ! (the value used in Window 5)
 !  tin = 297.05   ! Inside air temperature (75F, 23.9C)
 !  !tout = 308.15  ! Outside air temperature (95F, 35.0C)
@@ -6292,7 +6292,7 @@ ELSE  ! Summer
 !  tout = 304.82  ! Outside air temperature (89F, 31.7C)
 !  hcout = 18.86  ! Outside convective film conductance for 3.35 m/s (7.5 mph) wind speed
 !                 ! (average of Window 4 0 m/s and 6.71 m/s values)
-  BeamSolarInc = 783.0
+  BeamSolarInc = 783.0d0
 END IF
 
 ! IR incident on inside of glazing (inside surround assumed to be
@@ -6312,18 +6312,18 @@ IF(Material(MatOutside)%Group == 2) THEN       ! Exterior shade present
   MatShade = MatOutside
   ShadeFlag = ExtShadeOn
   ! Set glazing outside convection coefficient to Window 4 still-air value
-  hcout = 12.25
+  hcout = 12.25d0
 ELSE IF(Material(MatOutside)%Group == 7) THEN  ! Exterior screen present
   MatShade = MatOutside
   ScNum = Material(MatShade)%ScreenDataPtr
 ! Orphaned constructs with exterior screen are ignored
   IF(ScNum .GT. 0)ShadeFlag = ExtScreenOn
-  hcout = 12.25
+  hcout = 12.25d0
 ELSE IF(Material(MatOutside)%Group == 5) THEN  ! Exterior blind present
   MatShade = MatOutside
   ShadeFlag = ExtBlindOn
   BlNum = Material(MatShade)%BlindDataPtr
-  hcout = 12.25
+  hcout = 12.25d0
 ELSE IF(Material(MatInside)%Group == 2) THEN   ! Interior shade present
   MatShade = MatInside
   ShadeFlag = IntShadeOn
@@ -6344,11 +6344,11 @@ IF(ShadeFlag==BGShadeOn.OR.ShadeFlag==BGBlindOn) THEN
   RETURN
 END IF
 
-TSolNorm = POLYF(1.0,Construct(ConstrNum)%TransSolBeamCoef(1:6))
-TVisNorm = POLYF(1.0,Construct(ConstrNum)%TransVisBeamCoef(1:6))
+TSolNorm = POLYF(1.0d0,Construct(ConstrNum)%TransSolBeamCoef(1:6))
+TVisNorm = POLYF(1.0d0,Construct(ConstrNum)%TransVisBeamCoef(1:6))
 AbsBeamShadeNorm = 0.0
 IF(ShadeFlag == IntShadeOn .OR. ShadeFlag == ExtShadeOn) THEN  ! Exterior or interior shade on
-  AbsBeamShadeNorm = POLYF(1.0,Construct(ConstrNum)%AbsBeamShadeCoef(1:6))
+  AbsBeamShadeNorm = POLYF(1.0d0,Construct(ConstrNum)%AbsBeamShadeCoef(1:6))
 ! Exterior blind or screen or interior blind on
 ELSE IF(ShadeFlag == IntBlindOn .OR. ShadeFlag == ExtBlindOn .OR. ShadeFlag == ExtScreenOn) THEN
   ! Find unshaded construction that goes with this construction w/blind or screen
@@ -6378,8 +6378,8 @@ ELSE IF(ShadeFlag == IntBlindOn .OR. ShadeFlag == ExtBlindOn .OR. ShadeFlag == E
     RETURN
   END IF
 
-  TBmBm       = POLYF(1.0,Construct(ConstrNumBare)%TransSolBeamCoef(1:6))
-  TBmBmVis    = POLYF(1.0,Construct(ConstrNumBare)%TransVisBeamCoef(1:6))
+  TBmBm       = POLYF(1.0d0,Construct(ConstrNumBare)%TransSolBeamCoef(1:6))
+  TBmBmVis    = POLYF(1.0d0,Construct(ConstrNumBare)%TransVisBeamCoef(1:6))
   IF(ShadeFlag == ExtScreenOn)THEN
 !   Don't need to call subroutine, use normal incident properties (SUBROUTINE CalcNominalWindowCond)
 !   Last call to CalcScreenTransmittance(ISurf) was done at direct normal angle (0,0) in CalcWindowScreenProperties
@@ -6393,8 +6393,8 @@ ELSE IF(ShadeFlag == IntBlindOn .OR. ShadeFlag == ExtBlindOn .OR. ShadeFlag == E
     RScBackVis    = SurfaceScreens(ScNum)%ReflectScreenVis
     RScDifBack    = SurfaceScreens(ScNum)%DifReflect
     RScDifBackVis = SurfaceScreens(ScNum)%DifReflectVis
-    RGlFront      = POLYF(1.0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
-    RGlFrontVis   = POLYF(1.0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
+    RGlFront      = POLYF(1.0d0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
+    RGlFrontVis   = POLYF(1.0d0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
     RGlDiffFront  = Construct(ConstrNumBare)%ReflectSolDiffFront
     RGlDiffFrontVis = Construct(ConstrNumBare)%ReflectVisDiffFront
     TSolNorm = TScBmBm * (TBmBm + TDif*RGlFront*RScBack/(1-RGlDiffFront*RScDifBack)) +  &
@@ -6405,54 +6405,54 @@ ELSE IF(ShadeFlag == IntBlindOn .OR. ShadeFlag == ExtBlindOn .OR. ShadeFlag == E
     VarSlats = .FALSE.
     IF(Blind(BlNum)%SlatAngleType == VariableSlats) VarSlats = .TRUE.
     SlatAng = Blind(BlNum)%SlatAngle * DegToRadians
-    TBlBmBm     = BlindBeamBeamTrans(0.0,SlatAng,Blind(BlNum)%SlatWidth,Blind(BlNum)%SlatSeparation, &
+    TBlBmBm     = BlindBeamBeamTrans(0.0d0,SlatAng,Blind(BlNum)%SlatWidth,Blind(BlNum)%SlatSeparation, &
                                      Blind(BlNum)%SlatThickness)
     TBmBmBl     = TBmBm * TBlBmBm
     TBmBmBlVis  = TBmBmVis * TBlBmBm
-    TBlBmDif    = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamDiffTrans)
-    TBlBmDifVis = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%VisFrontBeamDiffTrans)
+    TBlBmDif    = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamDiffTrans)
+    TBlBmDifVis = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%VisFrontBeamDiffTrans)
     TDif        = Construct(ConstrNumBare)%TransDiff
     TDifVis     = Construct(ConstrNumBare)%TransDiffVis
     IF(ShadeFlag == IntBlindOn) THEN
       RGlDiffBack = Construct(ConstrNumBare)%ReflectSolDiffBack
       RGlDiffBackVis = Construct(ConstrNumBare)%ReflectVisDiffBack
-      RhoBlFront = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamDiffRefl)
-      RhoBlFrontVis = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%VisFrontBeamDiffRefl)
-      AbsBlFront = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamAbs)
+      RhoBlFront = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamDiffRefl)
+      RhoBlFrontVis = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%VisFrontBeamDiffRefl)
+      AbsBlFront = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamAbs)
       RhoBlDiffFront = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffDiffRefl)
       RhoBlDiffFrontVis = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%VisFrontDiffDiffRefl)
       AbsBlDiffFront = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffAbs)
       AbsBeamShadeNorm = TBmBm * (AbsBlFront + &
-        RhoBlFront*RGlDiffBAck*AbsBlDiffFront/(1.-RhoBlDiffFront*RGlDiffBack))
+        RhoBlFront*RGlDiffBAck*AbsBlDiffFront/(1.d0-RhoBlDiffFront*RGlDiffBack))
       TBlDifDif     = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolFrontDiffDiffTrans)
       TBlDifDifVis  = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%VisFrontDiffDiffTrans)
-      TSolNorm = TBmBm*( TBlBmBm + TBlBmDif + TBlDifDif*RhoBlFront*RGlDiffBack/(1.-RhoBlDiffFront*RGlDiffBack) )
+      TSolNorm = TBmBm*( TBlBmBm + TBlBmDif + TBlDifDif*RhoBlFront*RGlDiffBack/(1.d0-RhoBlDiffFront*RGlDiffBack) )
 !     use of TBlBmBm here is correct, visible and IR transmittance are the same (reference deleted CR6925 on 3/20/2006)
       TVisNorm = TBmBmVis*( TBlBmBm + TBlBmDifVis + TBlDifDifVis*RhoBlFrontVis*RGlDiffBackVis/ &
-                            (1.-RhoBlDiffFrontVis*RGlDiffBackVis) )
+                            (1.d0-RhoBlDiffFrontVis*RGlDiffBackVis) )
     END IF ! (IntBlind)
     IF(ShadeFlag == ExtBlindOn) THEN
-      TBlBmBm = BlindBeamBeamTrans(0.0,SlatAng,Blind(BlNum)%SlatWidth,Blind(BlNum)%SlatSeparation, &
+      TBlBmBm = BlindBeamBeamTrans(0.0d0,SlatAng,Blind(BlNum)%SlatWidth,Blind(BlNum)%SlatSeparation, &
                                   Blind(BlNum)%SlatThickness)
-      RGlFront = POLYF(1.0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
-      RGlFrontVis = POLYF(1.0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
-      AbsBlFront = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamAbs)
-      AbsBlBack = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamAbs)
+      RGlFront = POLYF(1.0d0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
+      RGlFrontVis = POLYF(1.0d0,Construct(ConstrNumBare)%ReflSolBeamFrontCoef(1:6))
+      AbsBlFront = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolFrontBeamAbs)
+      AbsBlBack = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamAbs)
       AbsBlDiffBack = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolBackDiffAbs)
       RGlDiffFront = Construct(ConstrNumBare)%ReflectSolDiffFront
       RGlDiffFrontVis = Construct(ConstrNumBare)%ReflectVisDiffFront
       RhoBlDiffBack = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%SolBackDiffDiffRefl)
       RhoBlDiffBackVis = InterpSlatAng(SlatAng,VarSlats,Blind(BlNum)%VisBackDiffDiffRefl)
-      RhoBlBack = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamDiffRefl)
-      RhoBlBackVis = InterpProfSlatAng(0.0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamDiffRefl)
+      RhoBlBack = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamDiffRefl)
+      RhoBlBackVis = InterpProfSlatAng(0.0d0,SlatAng,VarSlats,Blind(BlNum)%SolBackBeamDiffRefl)
       AbsBeamShadeNorm = AbsBlFront + AbsBlBack * RGlFront * TBlBmBm &
-        + (AbsBlDiffBack*RGlDiffFront/(1.-RhoBlDiffBack*RGlDiffFront)) * &
+        + (AbsBlDiffBack*RGlDiffFront/(1.d0-RhoBlDiffBack*RGlDiffFront)) * &
           (RGlFront*TBlBmBm*RhoBlBack + TBlBmDif)
       RGlDiffFront = Construct(ConstrNumBare)%ReflectSolDiffFront
       TSolNorm = TBlBmBm * (TBmBm + TDif*RGlFront*RhoBlBack/(1-RGlDiffFront*RhoBlDiffBack)) +  &
-                              TBlBmDif*TDif/(1.-RGlDiffFront*RhoBlDiffBack)
+                              TBlBmDif*TDif/(1.d0-RGlDiffFront*RhoBlDiffBack)
       TVisNorm = TBlBmBm * (TBmBmVis + TDifVis*RGlFrontVis*RhoBlBackVis/(1-RGlDiffFrontVis*RhoBlDiffBackVis)) +  &
-                              TBlBmDifVis*TDifVis/(1.-RGlDiffFrontVis*RhoBlDiffBackVis)
+                              TBlBmDifVis*TDifVis/(1.d0-RGlDiffFrontVis*RhoBlDiffBackVis)
     END IF ! (ExtBlind)
   END IF ! (Screen or Blind)
 END IF ! (Shade, Blind, or Screen)
@@ -6482,22 +6482,22 @@ DO Lay = 1,TotLay
     emis(2*IGlass) =   Material(LayPtr)%AbsorpThermalBack
     tir(2*IGlass-1) =  Material(LayPtr)%TransThermal
     tir(2*IGlass) =    Material(LayPtr)%TransThermal
-    AbsBeamNorm(IGlass) = POLYF(1.0,Construct(ConstrNum)%AbsBeamCoef(IGlass,1:6))
+    AbsBeamNorm(IGlass) = POLYF(1.0d0,Construct(ConstrNum)%AbsBeamCoef(IGlass,1:6))
     IF(ShadeFlag == IntBlindOn) THEN       ! Interior blind on
-      AbsBeamNorm(IGlass) = POLYF(1.0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
+      AbsBeamNorm(IGlass) = POLYF(1.0d0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
       AGlDiffBack = Construct(ConstrNumBare)%AbsDiffBack(IGlass)
-      AbsBeamNorm(IGlass) = AbsBeamNorm(IGlass) + TBmBm*AGlDiffBack*RhoBlFront/(1.-RhoBlFront*RGlDiffBack)
+      AbsBeamNorm(IGlass) = AbsBeamNorm(IGlass) + TBmBm*AGlDiffBack*RhoBlFront/(1.d0-RhoBlFront*RGlDiffBack)
     ELSE IF(ShadeFlag == ExtBlindOn) THEN  ! Exterior blind on
-      AbsBeamNorm(IGlass) = POLYF(1.0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
+      AbsBeamNorm(IGlass) = POLYF(1.0d0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
       AbsBeamNorm(IGlass) = TBlBmBm*AbsBeamNorm(IGlass) + (TBlBmBm*RGlFront*RhoBlBack + TBlBmDif) *  &
-                                Construct(ConstrNumBare)%AbsDiff(IGlass)/(1.-RGlDiffFront*RhoBlDiffBack)
+                                Construct(ConstrNumBare)%AbsDiff(IGlass)/(1.d0-RGlDiffFront*RhoBlDiffBack)
     ELSE IF(ShadeFlag == ExtScreenOn) THEN  ! Exterior screen on
-      AbsBeamNorm(IGlass) = POLYF(1.0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
+      AbsBeamNorm(IGlass) = POLYF(1.0d0,Construct(ConstrNumBare)%AbsBeamCoef(IGlass,1:6))
       AbsBeamNorm(IGlass) = TScBmBm*AbsBeamNorm(IGlass) + (TScBmBm*RGlFront*RScBack + TScBmDif) *  &
-                                Construct(ConstrNumBare)%AbsDiff(IGlass)/(1.-RGlDiffFront*RScDifBack)
+                                Construct(ConstrNumBare)%AbsDiff(IGlass)/(1.d0-RGlDiffFront*RScDifBack)
     END IF
-    AbsRadGlassFace(2*IGlass-1) = 0.5*BeamSolarInc*AbsBeamNorm(IGlass)
-    AbsRadGlassFace(2*IGlass)   = 0.5*BeamSolarInc*AbsBeamNorm(IGlass)
+    AbsRadGlassFace(2*IGlass-1) = 0.5d0*BeamSolarInc*AbsBeamNorm(IGlass)
+    AbsRadGlassFace(2*IGlass)   = 0.5d0*BeamSolarInc*AbsBeamNorm(IGlass)
   END IF
   IF(Material(LayPtr)%Group == WindowGas .OR. Material(LayPtr)%Group == WindowGasMixture ) THEN  ! Gap layer
     IGap = IGap + 1
@@ -6541,60 +6541,60 @@ CALL WindowTempsForNominalCond(ConstrNum,hgap)
 ! Get center-of-glass conductance and solar heat gain coefficient
 ! including inside and outside air films
 
-hOutRad = emis(1)*sigma*0.5*(tout+thetas(1))**3
-rOut = 1.0/(hOutRad + hcout)
-hInRad = emis(nglface)*sigma*0.5*(tin+thetas(nglface))**3
-rIn = 1.0/(hInRad + hcin)
+hOutRad = emis(1)*sigma*0.5d0*(tout+thetas(1))**3
+rOut = 1.0d0/(hOutRad + hcout)
+hInRad = emis(nglface)*sigma*0.5d0*(tin+thetas(nglface))**3
+rIn = 1.0d0/(hInRad + hcin)
 
 IF (.not. (ShadeFlag == IntShadeOn .OR. ShadeFlag == IntBlindOn)) AbsBeamShadeNorm=0.0
 
 SELECT CASE(ngllayer)
 
   CASE(1)
-    Rbare = 1.0/scon(1)
+    Rbare = 1.0D0/scon(1)
     Rtot = rOut + Rbare + rIn
     SHGC = AbsBeamNorm(1) * (rOut + (0.5/scon(1)))/Rtot ! BG changed for CR7682 (solar absorbed in middle of layer)
     SHGC = SHGC + AbsBeamShadeNorm
     SHGC = SHGC + TSolNorm
 
   CASE(2)
-    hGapTot(1) = hgap(1) + ABS(A23)*0.5*(thetas(2)+thetas(3))**3
-    Rbare = 1.0/scon(1) + 1.0/hGapTot(1) + 1.0/scon(2)
+    hGapTot(1) = hgap(1) + ABS(A23)*0.5d0*(thetas(2)+thetas(3))**3
+    Rbare = 1.0D0/scon(1) + 1.0D0/hGapTot(1) + 1.0D0/scon(2)
     Rtot = rOut + Rbare + rIn
-    SHGC = AbsBeamNorm(1)*(rOut + 0.5/scon(1))/Rtot &
-           + AbsBeamNorm(2)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 0.5/scon(2) )/Rtot !CR7682
+    SHGC = AbsBeamNorm(1)*(rOut + 0.5D0/scon(1))/Rtot &
+           + AbsBeamNorm(2)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 0.5D0/scon(2) )/Rtot !CR7682
     SHGC = SHGC + AbsBeamShadeNorm
     SHGC = SHGC + TSolNorm
 
   CASE(3)
-    hGapTot(1) = hgap(1) + ABS(A23)*0.5*(thetas(2)+thetas(3))**3
-    hGapTot(2) = hgap(2) + ABS(A45)*0.5*(thetas(4)+thetas(5))**3
-    Rbare = 1.0/scon(1) + 1.0/hGapTot(1) + 1.0/scon(2) + 1.0/hGapTot(2) + 1.0/scon(3)
+    hGapTot(1) = hgap(1) + ABS(A23)*0.5d0*(thetas(2)+thetas(3))**3
+    hGapTot(2) = hgap(2) + ABS(A45)*0.5d0*(thetas(4)+thetas(5))**3
+    Rbare = 1.0D0/scon(1) + 1.0D0/hGapTot(1) + 1.0D0/scon(2) + 1.0D0/hGapTot(2) + 1.0D0/scon(3)
     Rtot = rOut + Rbare + rIn
-    SHGC = AbsBeamNorm(1)*(rOut + 0.5/scon(1))/Rtot  &
-          + AbsBeamNorm(2)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 0.5/scon(2) )/Rtot   &
-          + AbsBeamNorm(3)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 1.0/scon(2) + 1.0/hGapTot(2) + 0.5/scon(3) )/Rtot
+    SHGC = AbsBeamNorm(1)*(rOut + 0.5D0/scon(1))/Rtot  &
+          + AbsBeamNorm(2)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 0.5D0/scon(2) )/Rtot   &
+          + AbsBeamNorm(3)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 1.0D0/scon(2) + 1.0D0/hGapTot(2) + 0.5D0/scon(3) )/Rtot
     SHGC = SHGC + AbsBeamShadeNorm
     SHGC = SHGC + TSolNorm
 
   CASE(4)
-    hGapTot(1) = hgap(1) + ABS(A23)*0.5*(thetas(2)+thetas(3))**3
-    hGapTot(2) = hgap(2) + ABS(A45)*0.5*(thetas(4)+thetas(5))**3
-    hGapTot(3) = hgap(3) + ABS(A67)*0.5*(thetas(6)+thetas(7))**3
-    Rbare = 1.0/scon(1) + 1.0/hGapTot(1) + 1.0/scon(2) + 1.0/hGapTot(2) + 1.0/scon(3) +  &
-                         1.0/hGapTot(3) + 1.0/scon(4)
+    hGapTot(1) = hgap(1) + ABS(A23)*0.5d0*(thetas(2)+thetas(3))**3
+    hGapTot(2) = hgap(2) + ABS(A45)*0.5d0*(thetas(4)+thetas(5))**3
+    hGapTot(3) = hgap(3) + ABS(A67)*0.5d0*(thetas(6)+thetas(7))**3
+    Rbare = 1.0D0/scon(1) + 1.0D0/hGapTot(1) + 1.0D0/scon(2) + 1.0D0/hGapTot(2) + 1.0D0/scon(3) +  &
+                         1.0D0/hGapTot(3) + 1.0D0/scon(4)
     Rtot = rOut + Rbare + rIn
-    SHGC = AbsBeamNorm(1)*(rOut + 0.5/scon(1))/Rtot &
-           + AbsBeamNorm(2)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 0.5/scon(2) )/Rtot   &
-           + AbsBeamNorm(3)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 1.0/scon(2) + 1.0/hGapTot(2) + 0.5/scon(3) )/Rtot &
-           + AbsBeamNorm(4)*(rOut + 1.0/scon(1) + 1.0/hgapTot(1) + 1.0/scon(2) + 1.0/hGapTot(2) + 1.0/scon(3) &
-                              + 1.0/hGapTot(3) + 0.5/scon(4) )/Rtot  !CR7682
+    SHGC = AbsBeamNorm(1)*(rOut + 0.5D0/scon(1))/Rtot &
+           + AbsBeamNorm(2)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 0.5D0/scon(2) )/Rtot   &
+           + AbsBeamNorm(3)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 1.0D0/scon(2) + 1.0D0/hGapTot(2) + 0.5D0/scon(3) )/Rtot &
+           + AbsBeamNorm(4)*(rOut + 1.0D0/scon(1) + 1.0D0/hgapTot(1) + 1.0D0/scon(2) + 1.0D0/hGapTot(2) + 1.0D0/scon(3) &
+                              + 1.0D0/hGapTot(3) + 0.5D0/scon(4) )/Rtot  !CR7682
     SHGC = SHGC + AbsBeamShadeNorm
     SHGC = SHGC + TSolNorm
 
  END SELECT
 
-NominalConductance = 1.0/(rOut + Rbare + rIn)
+NominalConductance = 1.0D0/(rOut + Rbare + rIn)
 
 RETURN
 END SUBROUTINE CalcNominalWindowCond
@@ -6643,16 +6643,16 @@ SUBROUTINE WindowTempsForNominalCond(ConstrNum,hgap)
           ! REFERENCES:
           ! na
   USE Psychrometrics, ONLY: PsyRhoAirFnPbTdbW
-!unuse909  USE DataEnvironment, ONLY: StdBaroPress
+!unused0909  USE DataEnvironment, ONLY: StdBaroPress
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 INTEGER           :: ConstrNum             ! Construction number
-REAL         :: hgap(5)               ! Gap gas conductive conductance (W/m2-K)
+REAL(r64)         :: hgap(5)               ! Gap gas conductive conductance (W/m2-K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 INTEGER, PARAMETER :: MaxIterations = 100   ! Maximum allowed number of iterations
-REAL, PARAMETER    :: errtemptol = 0.02     ! Tolerance on errtemp for convergence
+REAL(r64), PARAMETER    :: errtemptol = 0.02d0     ! Tolerance on errtemp for convergence
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -6662,33 +6662,33 @@ REAL, PARAMETER    :: errtemptol = 0.02     ! Tolerance on errtemp for convergen
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER    :: i                     ! Counter
-REAL  :: gr                    ! Grashof number of gas in a gap
-REAL  :: con                   ! Gap gas conductivity
-REAL  :: pr                    ! Gap gas Prandtl number
-REAL  :: nu                    ! Gap gas Nusselt number
-REAL  :: hr(10)                ! Radiative conductance (W/m2-K)
-REAL  :: hrprev(10)            ! Value of hr from previous iteration
-REAL  :: hcinprev              ! Value of hcin from previous iteration
-REAL  :: d                     ! +1 if number of row interchanges is even,
+REAL(r64)  :: gr                    ! Grashof number of gas in a gap
+REAL(r64)  :: con                   ! Gap gas conductivity
+REAL(r64)  :: pr                    ! Gap gas Prandtl number
+REAL(r64)  :: nu                    ! Gap gas Nusselt number
+REAL(r64)  :: hr(10)                ! Radiative conductance (W/m2-K)
+REAL(r64)  :: hrprev(10)            ! Value of hr from previous iteration
+REAL(r64)  :: hcinprev              ! Value of hcin from previous iteration
+REAL(r64)  :: d                     ! +1 if number of row interchanges is even,
                                     ! -1 if odd (in LU decomposition)
 INTEGER    :: indx(10)              ! Vector of row permutations in LU decomposition
-REAL  :: Aface(10,10)            ! Coefficient in equation Aface*thetas = Bface
-REAL  :: Bface(10)             ! Coefficient in equation Aface*thetas = Bface
+REAL(r64)  :: Aface(10,10)            ! Coefficient in equation Aface*thetas = Bface
+REAL(r64)  :: Bface(10)             ! Coefficient in equation Aface*thetas = Bface
 INTEGER    :: iter                  ! Iteration number
-REAL  :: errtemp               ! Absolute value of sum of face temperature differences
+REAL(r64)  :: errtemp               ! Absolute value of sum of face temperature differences
                                            !   between iterations, divided by number of faces
-REAL  :: TmeanFilm  ! mean film temperature
-REAL  :: TmeanFilmKelvin !  mean film temperature for property evaluation
-REAL  :: rho     ! density of (apparently dry) air [kg/m3]
-REAL  :: g       ! acceleration due to gravity [m/s2]
-REAL  :: Height  ! window cavity height [m]
-REAL  :: Cp      ! specific heat of air [J/kg-K]
-REAL  :: lambda  ! thermal conductivity of air [W/m-K]
-REAL  :: mu      ! dynamic viscosity of air [kg/m-s]
-REAL  :: RaH     ! Rayleigh number for cavity height [ Non dim]
-REAL  :: tiltDeg ! glazing tilt in degrees
-REAL  :: sineTilt ! sine of glazing tilt
-REAL  :: Nuint    ! Nusselt number for interior surface convection
+REAL(r64)  :: TmeanFilm  ! mean film temperature
+REAL(r64)  :: TmeanFilmKelvin !  mean film temperature for property evaluation
+REAL(r64)  :: rho     ! density of (apparently dry) air [kg/m3]
+REAL(r64)  :: g       ! acceleration due to gravity [m/s2]
+REAL(r64)  :: Height  ! window cavity height [m]
+REAL(r64)  :: Cp      ! specific heat of air [J/kg-K]
+REAL(r64)  :: lambda  ! thermal conductivity of air [W/m-K]
+REAL(r64)  :: mu      ! dynamic viscosity of air [kg/m-s]
+REAL(r64)  :: RaH     ! Rayleigh number for cavity height [ Non dim]
+REAL(r64)  :: tiltDeg ! glazing tilt in degrees
+REAL(r64)  :: sineTilt ! sine of glazing tilt
+REAL(r64)  :: Nuint    ! Nusselt number for interior surface convection
 
 iter = 0
 
@@ -6696,9 +6696,9 @@ iter = 0
 CALL StartingWinTempsForNominalCond
 
 ! Calculate radiative conductance
-errtemp=errtemptol*2.0
+errtemp=errtemptol*2.0d0
 
-TiltDeg= 90.0
+TiltDeg= 90.0D0
 
 sineTilt = SIN(tiltDeg*DegToRadians)  !degrees as arg
 
@@ -6718,30 +6718,30 @@ DO WHILE (iter < MaxIterations .and. errtemp > errtemptol)
     hcinprev = hcin
   endif
   ! CR7670 BG this next correlation was used for hcin but is not "standard" for windows
-  !  hcin = 1.31*((ABS(thetas(nglface)-tin))**0.3333)
+  !  hcin = 1.31d0*((ABS(thetas(nglface)-tin))**0.3333d0)
   ! Begin calculating for ISO 15099 method.
   ! mean film temperature
-  TmeanFilmKelvin = tin + 0.25*(thetas(nglface) - tin) ! eq. 133 in ISO 15099
-  TmeanFilm = TmeanFilmKelvin - 273.15
+  TmeanFilmKelvin = tin + 0.25D0*(thetas(nglface) - tin) ! eq. 133 in ISO 15099
+  TmeanFilm = TmeanFilmKelvin - 273.15D0
   ! the following properties are constants or linear relations for "standard" type reporting
-  rho    = PsyRhoAirFnPbTdbW(101325.0, TmeanFilm, 0.0, 'WindowTempsForNominalCond') ! dry air assumption
-  g      = 9.81
-  Height = 1.0 ! standard window rating practice is to use 1 meter (rather than actual)
+  rho    = PsyRhoAirFnPbTdbW(101325.0D0, TmeanFilm, 0.0D0, 'WindowTempsForNominalCond') ! dry air assumption
+  g      = 9.81D0
+  Height = 1.0D0 ! standard window rating practice is to use 1 meter (rather than actual)
 
   lambda = 2.873D-3 + 7.76D-5   * TmeanFilmKelvin ! Table B.1 in ISO 15099
   mu     = 3.723D-6 + 4.94D-8   * TmeanFilmKelvin ! Table B.2 in ISO 15099
-  Cp     = 1002.737 + 1.2324D-2 * TmeanFilmKelvin ! Table B.3 in ISO 15099
+  Cp     = 1002.737D0 + 1.2324D-2 * TmeanFilmKelvin ! Table B.3 in ISO 15099
 
   RaH = ( rho**2 * Height**3 * g * Cp*(ABS(thetas(nglface)-tin) ) ) &
            / (TmeanFilmKelvin * mu * lambda) ! eq 132 in ISO 15099
 
-  Nuint = 0.56*(RaH * sineTilt)**0.25  ! eq. 135 in ISO 15099 (only need this one because tilt is 90 deg
+  Nuint = 0.56D0*(RaH * sineTilt)**0.25D0  ! eq. 135 in ISO 15099 (only need this one because tilt is 90 deg
 
   hcin  = Nuint * lambda / Height
 
   ! End calculations for ISO 15099 method.
 
-  if(iter >= 1) hcin = 0.5*(hcinprev+hcin)
+  if(iter >= 1) hcin = 0.5D0*(hcinprev+hcin)
 
   iter = iter + 1
 
@@ -6881,7 +6881,7 @@ DO WHILE (iter < MaxIterations .and. errtemp > errtemptol)
   END DO
 
   DO i = 1,nglface
-    thetas(i) = 0.5*(thetas(i) + Bface(i))
+    thetas(i) = 0.5d0*(thetas(i) + Bface(i))
   END DO
 
 END DO
@@ -6921,12 +6921,12 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL,PARAMETER    :: hrad = 5.3                  ! Typical radiative conductance (W/m2-K)
-REAL,PARAMETER    :: hcinStartValue = 3.2        ! Starting value for inside air film convective
+REAL(r64),PARAMETER    :: hrad = 5.3d0                  ! Typical radiative conductance (W/m2-K)
+REAL(r64),PARAMETER    :: hcinStartValue = 3.2d0        ! Starting value for inside air film convective
                                                  !   conductance (estimated for typical double glazing
                                                  !   using 1.31(dT**0.333), where dT =
                                                  !   room air temp - inside surface temp = 14.2K)
-REAL,PARAMETER    :: resgap = 0.21               ! Typical gap resistance (m2-K/W)
+REAL(r64),PARAMETER    :: resgap = 0.21d0               ! Typical gap resistance (m2-K/W)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -6936,12 +6936,12 @@ REAL,PARAMETER    :: resgap = 0.21               ! Typical gap resistance (m2-K/
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER           :: i                           ! Face counter
-REAL         :: rguess(11)                  ! Combined radiative/convective resistance (m2-K/W) of
+REAL(r64)         :: rguess(11)                  ! Combined radiative/convective resistance (m2-K/W) of
                                                  ! inside or outside air film, or gap
-REAL         :: restot                      ! Total window resistance including outside
+REAL(r64)         :: restot                      ! Total window resistance including outside
                                                  !   and inside air films (m2-K/W)
-REAL         :: temdiff                     ! Inside/outside air temperature difference (K)
-REAL         :: ressum                      ! Resistance sum (m2-K/W)
+REAL(r64)         :: temdiff                     ! Inside/outside air temperature difference (K)
+REAL(r64)         :: ressum                      ! Resistance sum (m2-K/W)
 
       rguess(1) = 1./(hcout+hrad)
       rguess(nglface+1) = 1./(hcinStartValue+hrad)
@@ -6957,7 +6957,7 @@ REAL         :: ressum                      ! Resistance sum (m2-K/W)
       enddo
 
       temdiff = tin - tout
-      if(abs(temdiff)<0.5) temdiff = 2.0
+      if(abs(temdiff)<0.5d0) temdiff = 2.0d0
       ressum = 0.
 
       do i = 1,nglface
@@ -7016,22 +7016,22 @@ SUBROUTINE ReportGlass
   INTEGER Layer
   INTEGER BlNum                      ! Blind number
   INTEGER I
-  REAL NominalConductanceWinter      ! Nominal center-of-glass conductance of a window construction
+  REAL(r64) NominalConductanceWinter      ! Nominal center-of-glass conductance of a window construction
                                      ! for ASHRAE winter conditions (W/m2-K):
                                      ! Inside air temperature = 21.1C (70F)
                                      ! Outside air temperature = -17.8C (0F)
                                      ! Windspeed = 6.71 m/s (15 mph)
                                      ! No solar radiation
-  REAL NominalConductanceSummer      ! Nominal center-of-glass conductance of a window construction
+  REAL(r64) NominalConductanceSummer      ! Nominal center-of-glass conductance of a window construction
                                      ! for ASHRAE summer conditions (W/m2-K):
                                      ! Inside air temperature = 23.9C (75F)
                                      ! Outside air temperature = 35.0C (95F)
                                      ! Windspeed = 3.35 m/s (7.5 mph)
                                      ! 783 W/m2 (248 Btu/h-ft2) incident beam solar radiation normal to glazing
-  REAL SHGCWinter, SHGCSummer        ! Center-of-glass solar heat gain coefficient for ASHRAE
+  REAL(r64) SHGCWinter, SHGCSummer        ! Center-of-glass solar heat gain coefficient for ASHRAE
                                      ! winter and summer conditions
-  REAL TransSolNorm                  ! Window construction solar transmittance at normal incidence
-  REAL TransVisNorm                  ! Window construction visible transmittance at normal incidence
+  REAL(r64) TransSolNorm                  ! Window construction solar transmittance at normal incidence
+  REAL(r64) TransVisNorm                  ! Window construction visible transmittance at normal incidence
   INTEGER ErrFlag                    ! Error flag
   CHARACTER(len=3) SolarDiffusing    ! 'Yes' if glass is solar diffusing; otherwise 'No' (clear glass)
   CHARACTER(len=MaxNameLength) :: SpectralDataName
@@ -7268,11 +7268,11 @@ SUBROUTINE CalcWindowBlindProperties
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-      REAL  bld_pr(15)           ! Slat properties
-      REAL  st_lay(16)           ! Solar-optical blind/glazing system properties
-      REAL  sun_el               ! Solar profile angle (radians)
-      REAL  sun_el_deg(37)       ! Solar profile angle (deg) corresponding to sun_el values
-      REAL  bld_el               ! Slat angle (elevation of slat normal vector in plane
+      REAL(r64)  bld_pr(15)           ! Slat properties
+      REAL(r64)  st_lay(16)           ! Solar-optical blind/glazing system properties
+      REAL(r64)  sun_el               ! Solar profile angle (radians)
+      REAL(r64)  sun_el_deg(37)       ! Solar profile angle (deg) corresponding to sun_el values
+      REAL(r64)  bld_el               ! Slat angle (elevation of slat normal vector in plane
                                       !  perpendicular to window and containing the slat normal vector) (radians)
       INTEGER    ISolVis              ! 1 = do solar and IR calculation; 2 = do visible calculation
       INTEGER    IProfAng             ! Profile angle index
@@ -7330,8 +7330,8 @@ DO BlindNum = 1,TotBlinds
         Blind(BlindNum)%SolFrontDiffDiffRefl(ISlatAng)  = st_lay(10)
         Blind(BlindNum)%SolBackDiffDiffTrans(ISlatAng)  = st_lay(11)
         Blind(BlindNum)%SolBackDiffDiffRefl(ISlatAng)   = st_lay(12)
-        Blind(BlindNum)%SolFrontDiffAbs(ISlatAng)       = MAX(0.0,1.-st_lay(9)-st_lay(10))
-        Blind(BlindNum)%SolBackDiffAbs(ISlatAng)        = MAX(0.0,1.-st_lay(11)-st_lay(12))
+        Blind(BlindNum)%SolFrontDiffAbs(ISlatAng)       = MAX(0.0d0,1.d0-st_lay(9)-st_lay(10))
+        Blind(BlindNum)%SolBackDiffAbs(ISlatAng)        = MAX(0.0d0,1.d0-st_lay(11)-st_lay(12))
         Blind(BlindNum)%IRFrontTrans(ISlatAng)          = st_lay(13)
         Blind(BlindNum)%IRFrontEmiss(ISlatAng)          = st_lay(14)
         !Blind(BlindNum)%IRBackTrans(ISlatAng)           = st_lay(15)
@@ -7354,8 +7354,8 @@ DO BlindNum = 1,TotBlinds
     ! (for MaxSlatAngs = 19). If blind has fixed slat angle, calculate properties at that angle only.
 
     DO IProfAng = 1,37
-      sun_el = -Pi/2. + (Pi/36.)*(IProfAng-1)
-      sun_el_deg(IProfAng) = 57.2958 * sun_el
+      sun_el = -Pi/2.d0 + (Pi/36.d0)*(IProfAng-1)
+      sun_el_deg(IProfAng) = 57.2958d0 * sun_el
 
       DO ISlatAng = 1,MaxSlatAngs
         st_lay = 0.
@@ -7378,8 +7378,8 @@ DO BlindNum = 1,TotBlinds
           Blind(BlindNum)%SolFrontBeamDiffRefl(IProfAng,ISlatAng)  = st_lay(6)
           Blind(BlindNum)%SolBackBeamDiffTrans(IProfAng,ISlatAng)  = st_lay(7)
           Blind(BlindNum)%SolBackBeamDiffRefl(IProfAng,ISlatAng)   = st_lay(8)
-          Blind(BlindNum)%SolFrontBeamAbs(IProfAng,ISlatAng) = MAX(0.0,1.-st_lay(6)-st_lay(1)-st_lay(5))
-          Blind(BlindNum)%SolBackBeamAbs(IProfAng,ISlatAng)  = MAX(0.0,1.-st_lay(7)-st_lay(3)-st_lay(8))
+          Blind(BlindNum)%SolFrontBeamAbs(IProfAng,ISlatAng) = MAX(0.0d0,1.d0-st_lay(6)-st_lay(1)-st_lay(5))
+          Blind(BlindNum)%SolBackBeamAbs(IProfAng,ISlatAng)  = MAX(0.0d0,1.d0-st_lay(7)-st_lay(3)-st_lay(8))
 
         ELSE                   ! Fill blind beam visible properties
           Blind(BlindNum)%VisFrontBeamBeamTrans(IProfAng,ISlatAng) = st_lay(1)
@@ -7464,16 +7464,16 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
   INTEGER :: ConstrNumSh      ! Index to shaded constuction
   INTEGER :: MatNum           ! Index to material number
   INTEGER :: I, J             ! Integration loop counters
-  REAL    :: SumTrans         ! Integration variable for transmittance
-  REAL    :: SumTransVis      ! Integration variable for visible transmittance
-  REAL    :: SumReflect       ! Integration variable for reflectance
-  REAL    :: SumReflectVis    ! Integration variable for visible reflectance
-  REAL    :: SumArea          ! Integration variable for area of quarter hemisphere
-  REAL    :: SkyArea          ! Area of integration
-  REAL    :: SunAzimuth       ! Azimuth angle of sun during integration
-  REAL    :: SunAltitude      ! Altitude angle of sun during integration
-  REAL    :: RelativeAzimuth  ! Relative azimuth angle of sun with respect to surface outward normal
-  REAL    :: RelativeAltitude ! Relative altitude angle of sun with respect to surface outward normal
+  REAL(r64)    :: SumTrans         ! Integration variable for transmittance
+  REAL(r64)    :: SumTransVis      ! Integration variable for visible transmittance
+  REAL(r64)    :: SumReflect       ! Integration variable for reflectance
+  REAL(r64)    :: SumReflectVis    ! Integration variable for visible reflectance
+  REAL(r64)    :: SumArea          ! Integration variable for area of quarter hemisphere
+  REAL(r64)    :: SkyArea          ! Area of integration
+  REAL(r64)    :: SunAzimuth       ! Azimuth angle of sun during integration
+  REAL(r64)    :: SunAltitude      ! Altitude angle of sun during integration
+  REAL(r64)    :: RelativeAzimuth  ! Relative azimuth angle of sun with respect to surface outward normal
+  REAL(r64)    :: RelativeAltitude ! Relative altitude angle of sun with respect to surface outward normal
   INTEGER :: ShadingType    ! Type of shading device
   INTEGER, EXTERNAL :: GetNewUnitNumber ! Function to identify next available unit number
   INTEGER :: ScreenTransUnitNo ! Unit number of screen transmittance data file
@@ -7530,8 +7530,8 @@ DO SurfNum = 1, TotSurfaces
 !     The properties calculated at zero sun angle are then used elsewhere prior to the start of the actual simulation.
       DO J = N, 1, -1
         DO I = M, 1, -1
-          SunAzimuth  = (90.0/N)*(J-1)*(Pi/180.0)
-          SunAltitude = (90.0/M)*(I-1)*(Pi/180.0)
+          SunAzimuth  = (90.0d0/N)*(J-1)*(Pi/180.0d0)
+          SunAltitude = (90.0d0/M)*(I-1)*(Pi/180.0d0)
           SkyArea = SIN(SunAltitude) * COS(SunAltitude)
 !         Integrate transmittance using coordiante transform
           RelativeAzimuth = ASIN(SIN(SunAltitude)*COS(SunAzimuth))  ! phi prime
@@ -7547,9 +7547,9 @@ DO SurfNum = 1, TotSurfaces
 
       ! Reflectance of overall screen including openings and scattered transmittance
       SurfaceScreens(ScreenNum)%ReflectScreen    = SurfaceScreens(ScreenNum)%ReflectCylinder * &
-                       (1.0 - (SurfaceScreens(ScreenNum)%BmBmTrans+SurfaceScreens(ScreenNum)%BmDifTrans))
+                       (1.0d0 - (SurfaceScreens(ScreenNum)%BmBmTrans+SurfaceScreens(ScreenNum)%BmDifTrans))
       SurfaceScreens(ScreenNum)%ReflectScreenVis = SurfaceScreens(ScreenNum)%ReflectCylinderVis * &
-                       (1.0 - (SurfaceScreens(ScreenNum)%BmBmTransVis+SurfaceScreens(ScreenNum)%BmDifTransVis))
+                       (1.0d0 - (SurfaceScreens(ScreenNum)%BmBmTransVis+SurfaceScreens(ScreenNum)%BmDifTransVis))
 
       IF(SumArea .NE. 0)THEN
         SurfaceScreens(ScreenNum)%DifDifTrans        = SumTrans/SumArea
@@ -7557,7 +7557,7 @@ DO SurfNum = 1, TotSurfaces
         SurfaceScreens(ScreenNum)%DifReflect         = SumReflect/SumArea
         SurfaceScreens(ScreenNum)%DifReflectVis      = SumReflectVis/SumArea
       END IF
-      SurfaceScreens(ScreenNum)%DifScreenAbsorp     = MAX(0.0,(1.0 - SurfaceScreens(ScreenNum)%DifDifTrans - &
+      SurfaceScreens(ScreenNum)%DifScreenAbsorp     = MAX(0.0d0,(1.0d0 - SurfaceScreens(ScreenNum)%DifDifTrans - &
                                                                 SurfaceScreens(ScreenNum)%DifReflect))
 
       Material(MatNum)%AbsorpThermalBack   = SurfaceScreens(ScreenNum)%DifScreenAbsorp
@@ -7681,9 +7681,9 @@ SUBROUTINE BlindOpticsDiffuse (BlindNum,ISolVis,c,b_el,p)
 
       INTEGER, INTENT(IN)    ::  BlindNum             ! Blind number
       INTEGER, INTENT(IN)    ::  Isolvis              ! 1 = solar and IR calculation; 2 = visible calculation
-      REAL, INTENT(IN)       ::  c(15)                ! Slat properties
-      REAL, INTENT(IN)       ::  b_el                 ! Slat elevation (radians)
-      REAL, INTENT(OUT)      ::  p(16)                ! Blind properties
+      REAL(r64), INTENT(IN)       ::  c(15)                ! Slat properties
+      REAL(r64), INTENT(IN)       ::  b_el                 ! Slat elevation (radians)
+      REAL(r64), INTENT(OUT)      ::  p(16)                ! Blind properties
 
           ! SUBROUTINE PARAMETER DEFINITIONS:na
           ! INTERFACE BLOCK SPECIFICATIONS:na
@@ -7691,27 +7691,27 @@ SUBROUTINE BlindOpticsDiffuse (BlindNum,ISolVis,c,b_el,p)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-      REAL       ri,rib               ! Front and back IR slat reflectance
-      REAL       phib                 ! Elevation of slat normal vector (radians)
-      REAL       phis                 ! Source elevation (radians)
-      REAL       delphis              ! Angle increment for integration over source distribution (radians)
-      REAL       fEdgeSource(10)      ! Slat edge correction factor vs source elevation
-      REAL       fEdgeA(2)            ! Average slat edge correction factor for upper and lower quadrants
+      REAL(r64)       ri,rib               ! Front and back IR slat reflectance
+      REAL(r64)       phib                 ! Elevation of slat normal vector (radians)
+      REAL(r64)       phis                 ! Source elevation (radians)
+      REAL(r64)       delphis              ! Angle increment for integration over source distribution (radians)
+      REAL(r64)       fEdgeSource(10)      ! Slat edge correction factor vs source elevation
+      REAL(r64)       fEdgeA(2)            ! Average slat edge correction factor for upper and lower quadrants
                                            !  seen by window blind
-      REAL       gamma                ! phib - phis
+      REAL(r64)       gamma                ! phib - phis
       INTEGER         Iphis                ! Source elevation counter
       INTEGER         IUpDown              ! =1 for source in upper quadrant, =2 for source in lower quadrant
-      REAL       fEdge,fEdge1         ! Slat edge correction factor
-      REAL       J(6)                 ! Slat section radiosity vector
-      REAL       G(6)                 ! Slat section irradiance vector
-      REAL       Q(6)                 ! Slat section radiance vector
-      REAL       F(6,6)               ! View factor array
-      REAL       X(4,4)               ! Exchange matrix
-      REAL       Xinv(4,4)            ! Inverse of exchange matrix
+      REAL(r64)       fEdge,fEdge1         ! Slat edge correction factor
+      REAL(r64)       J(6)                 ! Slat section radiosity vector
+      REAL(r64)       G(6)                 ! Slat section irradiance vector
+      REAL(r64)       Q(6)                 ! Slat section radiance vector
+      REAL(r64)       F(6,6)               ! View factor array
+      REAL(r64)       X(4,4)               ! Exchange matrix
+      REAL(r64)       Xinv(4,4)            ! Inverse of exchange matrix
       INTEGER         k,m                  ! Array indices
       INTEGER         indx(4)              ! LU decomposition indices
-      REAL       BlindIRreflFront     ! Blind front IR reflectance
-      REAL       BlindIRreflBack      ! Blind back IR reflectance
+      REAL(r64)       BlindIRreflFront     ! Blind front IR reflectance
+      REAL(r64)       BlindIRreflBack      ! Blind back IR reflectance
 
 
   ! The slat input properties are:
@@ -7813,12 +7813,12 @@ SUBROUTINE BlindOpticsDiffuse (BlindNum,ISolVis,c,b_el,p)
             fEdgeSource(Iphis) = 0.
             fEdge1 = 0
             gamma = phib - phis
-            IF(ABS(SIN(gamma))>0.01) THEN
+            IF(ABS(SIN(gamma))>0.01d0) THEN
               IF((phib > 0.0 .AND. phib <= PiOvr2 .AND. phis <= phib) .OR. &
                  (phib > PiOvr2 .AND. phib <= Pi .AND. phis > -(Pi-phib))) &
                   fEdge1 = Blind(BlindNum)%SlatThickness * ABS(SIN(gamma)) / &
                 ((Blind(BlindNum)%SlatSeparation + Blind(BlindNum)%SlatThickness/ABS(SIN(phib)))*COS(phis))
-              fEdgeSource(Iphis) = MIN(1.0,ABS(fEdge1))
+              fEdgeSource(Iphis) = MIN(1.0d0,ABS(fEdge1))
             END IF
           END DO
           fEdgeA(IUpDown) = DiffuseAverage(fEdgeSource)
@@ -7923,14 +7923,14 @@ IF(ISolVis == 1) THEN
       end do
 
 !     Front diffuse-diffuse IR transmittance (transmittance of slat edge assumed zero)
-      p(13) = G(2)*(1.-fEdge)
+      p(13) = G(2)*(1.d0-fEdge)
 
 !     Front diffuse-diffuse IR reflectance (edge of slat is assumed to have same IR
 !     reflectance as front side of slat, ri)
-      BlindIRreflFront = G(1)*(1.-fEdge) + fEdge*ri
+      BlindIRreflFront = G(1)*(1.d0-fEdge) + fEdge*ri
 
 !     Front IR emissivity
-      p(14) = MAX(0.0001,1.0-p(13)-BlindIRreflFront)
+      p(14) = MAX(0.0001d0,1.0d0-p(13)-BlindIRreflFront)
 
 !-----------Calculate diffuse IR properties for the BACK side of the blind
 
@@ -7963,10 +7963,10 @@ IF(ISolVis == 1) THEN
       end do
 
 !     Back diffuse-diffuse IR reflectance
-      BlindIRreflBack = G(2)*(1.-fEdge) + fEdge*ri
+      BlindIRreflBack = G(2)*(1.d0-fEdge) + fEdge*ri
 
 !     Back IR emissivity
-      p(15) = MAX(0.0001,1.0-p(13)-BlindIRreflBack)
+      p(15) = MAX(0.0001d0,1.0d0-p(13)-BlindIRreflBack)
 
 END IF ! End of IR properties calculation
 
@@ -8009,10 +8009,10 @@ SUBROUTINE BlindOpticsBeam (BlindNum,c,b_el,s_el,p)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       INTEGER, INTENT(IN) :: BlindNum          ! Blind number
-      REAL, INTENT(IN)    :: c(15)             ! Slat properties (equivalent to BLD_PR)
-      REAL, INTENT(IN)    :: b_el              ! Slat elevation (radians)
-      REAL, INTENT(IN)    :: s_el              ! Solar profile angle (radians)
-      REAL, INTENT(OUT)   :: p(16)             ! Blind properties (equivalent to ST_LAY)
+      REAL(r64), INTENT(IN)    :: c(15)             ! Slat properties (equivalent to BLD_PR)
+      REAL(r64), INTENT(IN)    :: b_el              ! Slat elevation (radians)
+      REAL(r64), INTENT(IN)    :: s_el              ! Solar profile angle (radians)
+      REAL(r64), INTENT(OUT)   :: p(16)             ! Blind properties (equivalent to ST_LAY)
 
   ! The slat input properties are:
   ! c(1)    0. (unused)
@@ -8058,16 +8058,16 @@ SUBROUTINE BlindOpticsBeam (BlindNum,c,b_el,s_el,p)
           ! DERIVED TYPE DEFINITIONS:na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL phib                   ! Elevation angle of normal vector to front of slat (0 to pi radians)
-      REAL phis                   ! Elevation angle of source vector; same as "profile angle" (-pi/2 to pi/2 radians)
-      REAL Gamma                  ! phib - phis (radians)
-      REAL J(6)                   ! Slat surface section radiosity vector
-      REAL G(6)                   ! Slat surface section irradiance vector
-      REAL Q(6)                   ! Slat surface section source vector
-      REAL F(6,6)                 ! View factor array
-      REAL X(4,4)                 ! X*J = Q
-      REAL Xinv(4,4)              ! J = Xinv*Q
-      REAL fEdge,fEdge1           ! Slat edge correction factor
+      REAL(r64) phib                   ! Elevation angle of normal vector to front of slat (0 to pi radians)
+      REAL(r64) phis                   ! Elevation angle of source vector; same as "profile angle" (-pi/2 to pi/2 radians)
+      REAL(r64) Gamma                  ! phib - phis (radians)
+      REAL(r64) J(6)                   ! Slat surface section radiosity vector
+      REAL(r64) G(6)                   ! Slat surface section irradiance vector
+      REAL(r64) Q(6)                   ! Slat surface section source vector
+      REAL(r64) F(6,6)                 ! View factor array
+      REAL(r64) X(4,4)                 ! X*J = Q
+      REAL(r64) Xinv(4,4)              ! J = Xinv*Q
+      REAL(r64) fEdge,fEdge1           ! Slat edge correction factor
       INTEGER i,k,m               ! Array indices
       INTEGER indx(4)             ! Indices for LU decomposition
 
@@ -8101,12 +8101,12 @@ SUBROUTINE BlindOpticsBeam (BlindNum,c,b_el,s_el,p)
         fEdge  = 0.
         fEdge1 = 0.
         gamma = phib - phis
-        IF(ABS(SIN(gamma))>0.01) THEN
+        IF(ABS(SIN(gamma))>0.01d0) THEN
           IF((phib > 0.0 .AND. phib <= PiOvr2 .AND. phis <= phib) .OR. &
              (phib > PiOvr2 .AND. phib <= Pi .AND. phis > -(Pi-phib))) &
           fEdge1 = Blind(BlindNum)%SlatThickness * ABS(SIN(gamma)) / &
             ((Blind(BlindNum)%SlatSeparation + Blind(BlindNum)%SlatThickness/ABS(SIN(phib)))*COS(phis))
-          fEdge = MIN(1.0,ABS(fEdge1))
+          fEdge = MIN(1.0d0,ABS(fEdge1))
         END IF
 
 !       Direct-to-direct transmittance (portion of beam that passes between slats without
@@ -8211,28 +8211,28 @@ SUBROUTINE ViewFac(s,h,phib,phis,F)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-      REAL, INTENT(IN)    ::  s                ! Slat width (m)
-      REAL, INTENT(IN)    ::  h                ! Distance between faces of adjacent slats (m)
-      REAL, INTENT(IN)    ::  phib             ! Elevation angle of normal to slat (radians)
-      REAL, INTENT(IN)    ::  phis             ! Profile angle of radiation source (radians)
-      REAL, INTENT(OUT)   ::  F(6,6)           ! View factor array
+      REAL(r64), INTENT(IN)    ::  s                ! Slat width (m)
+      REAL(r64), INTENT(IN)    ::  h                ! Distance between faces of adjacent slats (m)
+      REAL(r64), INTENT(IN)    ::  phib             ! Elevation angle of normal to slat (radians)
+      REAL(r64), INTENT(IN)    ::  phis             ! Profile angle of radiation source (radians)
+      REAL(r64), INTENT(OUT)   ::  F(6,6)           ! View factor array
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL     ::  L(6),L3,L5       ! Length of slat sections: L1 = L2 = h; L3, L5 = length
+      REAL(r64)     ::  L(6),L3,L5       ! Length of slat sections: L1 = L2 = h; L3, L5 = length
                                          !  of upper slat sections; L4, L6 = length of lower slat
                                          !  slat sections (m)
-      REAL     ::  d1,d2,d3,d4,d5,d6 ! Slat geometry variables (m)
-      REAL     ::  h2               ! h**2
-      REAL     ::  ht               ! 2*h
-      REAL     ::  w                ! Slat geometry variable (m)
-      REAL     ::  a                ! Intermediate variable (m)
-      REAL     ::  co               ! Cosine of source profile angle
+      REAL(r64)     ::  d1,d2,d3,d4,d5,d6 ! Slat geometry variables (m)
+      REAL(r64)     ::  h2               ! h**2
+      REAL(r64)     ::  ht               ! 2*h
+      REAL(r64)     ::  w                ! Slat geometry variable (m)
+      REAL(r64)     ::  a                ! Intermediate variable (m)
+      REAL(r64)     ::  co               ! Cosine of source profile angle
       INTEGER       ::  i,j              ! View factor array indices
 
       h2=h**2
       ht=2*h
       co=cos(phis)
-      if (abs(co) < 0.001) co=0.
+      if (abs(co) < 0.001d0) co=0.
       w=ht
       if (co.ne.0.) w=s*cos(phib-phis)/co
       L3=s*h/abs(w)
@@ -8240,12 +8240,12 @@ SUBROUTINE ViewFac(s,h,phib,phis,F)
       L5=s-L3
       a=ht*cos(phib)
       ! MAX(0.,...) in the following prevents small negative argument for sqrt
-      d1=sqrt(MAX(0.,s*s+h2+a*s))
-      d2=sqrt(MAX(0.,s*s+h2-a*s))
-      d3=sqrt(MAX(0.,L3*L3+h2+a*L3))
-      d4=sqrt(MAX(0.,L3*L3+h2-a*L3))
-      d5=sqrt(MAX(0.,L5*L5+h2-a*L5))
-      d6=sqrt(MAX(0.,L5*L5+h2+a*L5))
+      d1=sqrt(MAX(0.d0,s*s+h2+a*s))
+      d2=sqrt(MAX(0.d0,s*s+h2-a*s))
+      d3=sqrt(MAX(0.d0,L3*L3+h2+a*L3))
+      d4=sqrt(MAX(0.d0,L3*L3+h2-a*L3))
+      d5=sqrt(MAX(0.d0,L5*L5+h2-a*L5))
+      d6=sqrt(MAX(0.d0,L5*L5+h2+a*L5))
       do i=1,6
         F(i,i)=0.
       end do
@@ -8305,8 +8305,8 @@ SUBROUTINE InvertMatrix(a, y, indx, np, n)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       INTEGER, INTENT(IN)      :: np, n       ! Dimension of matrix
-      REAL, INTENT(IN)         :: a(np,np)    ! Matrix to be inverted
-      REAL, INTENT(OUT)        :: y(np,np)    ! Inverse of matrix a
+      REAL(r64), INTENT(IN)         :: a(np,np)    ! Matrix to be inverted
+      REAL(r64), INTENT(OUT)        :: y(np,np)    ! Inverse of matrix a
       INTEGER, INTENT(OUT)     :: indx(np)    ! Index vector for LU decomposition
 
           ! SUBROUTINE LOCAL VARIABLE DEFINITIONS:
@@ -8353,7 +8353,7 @@ SUBROUTINE LUDCMP(A,N,NP,INDX,D)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       integer np,n
-      REAL :: A(NP,NP) ! matrix
+      REAL(r64) :: A(NP,NP) ! matrix
       integer INDX(N)
       INTEGER   D
 
@@ -8367,7 +8367,7 @@ SUBROUTINE LUDCMP(A,N,NP,INDX,D)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL VV(100),sum,aamax,dum
+      REAL(r64) VV(100),sum,aamax,dum
       INTEGER   I,J,K,imax
 
       D=1
@@ -8467,7 +8467,7 @@ SUBROUTINE LUBKSB(A,N,NP,INDX,B)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
       integer n,np
-      REAL A(NP,NP),B(N)
+      REAL(r64) A(NP,NP),B(N)
       INTEGER INDX(N)
           ! na
 
@@ -8484,7 +8484,7 @@ SUBROUTINE LUBKSB(A,N,NP,INDX,B)
           ! na
 
       integer j,i,ii,LL
-      REAL sum
+      REAL(r64) sum
 
       II=0
 

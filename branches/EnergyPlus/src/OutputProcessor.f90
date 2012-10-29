@@ -48,8 +48,8 @@ INTEGER, PARAMETER :: ReportVDD_Yes  =1    ! Report the variable dictionaries in
 INTEGER, PARAMETER :: ReportVDD_IDF  =2    ! Report the variable dictionaries in "IDF format"
 
 
-REAL, PARAMETER    :: MinSetValue    = 99999999999999.
-REAL, PARAMETER    :: MaxSetValue    =-99999999999999.
+REAL(r64), PARAMETER    :: MinSetValue    = 99999999999999.d0
+REAL(r64), PARAMETER    :: MaxSetValue    =-99999999999999.d0
 INTEGER, PARAMETER :: IMinSetValue   = 999999
 INTEGER, PARAMETER :: IMaxSetValue   =-999999
 
@@ -99,17 +99,17 @@ INTEGER, PARAMETER :: RT_IPUnits_OtherJ=0
 
           ! DERIVED TYPE DEFINITIONS:
 TYPE TimeSteps
-  REAL, POINTER :: TimeStep    ! Pointer to the Actual Time Step Variable (Zone or HVAC)
-  REAL     :: CurMinute   ! Current minute (decoded from real Time Step Value)
+  REAL(r64), POINTER :: TimeStep    ! Pointer to the Actual Time Step Variable (Zone or HVAC)
+  REAL(r64)     :: CurMinute   ! Current minute (decoded from real Time Step Value)
 END TYPE TimeSteps
 
 TYPE RealVariables
-  REAL, POINTER      :: Which         ! The POINTER to the actual variable holding the value
-  REAL          :: Value         =0.0 ! Current Value of the variable (to resolution of Zone Time Step)
-  REAL          :: TSValue       =0.0 ! Value of this variable at the Zone Time Step
-  REAL          :: EITSValue     =0.0 ! Value of this variable at the Zone Time Step for external interface
-  REAL          :: StoreValue    =0.0 ! At end of Zone Time Step, value is placed here for later reporting
-  REAL          :: NumStored     =0   ! Number of hours stored
+  REAL(r64), POINTER      :: Which         ! The POINTER to the actual variable holding the value
+  REAL(r64)          :: Value         =0.0 ! Current Value of the variable (to resolution of Zone Time Step)
+  REAL(r64)          :: TSValue       =0.0 ! Value of this variable at the Zone Time Step
+  REAL(r64)          :: EITSValue     =0.0 ! Value of this variable at the Zone Time Step for external interface
+  REAL(r64)          :: StoreValue    =0.0 ! At end of Zone Time Step, value is placed here for later reporting
+  REAL(r64)          :: NumStored     =0   ! Number of hours stored
   INTEGER            :: StoreType     =0   ! Variable Type (Summed/Non-Static or Average/Static)
   LOGICAL            :: Stored        =.false. ! True when value is stored
   LOGICAL            :: Report        =.false. ! User has requested reporting of this variable in the IDF
@@ -117,9 +117,9 @@ TYPE RealVariables
   LOGICAL            :: thistsStored      =.false. ! if stored for this zone timestep
   INTEGER            :: thisTScount   =0
   INTEGER            :: ReportFreq    =0   ! How often to report this variable
-  REAL          :: MaxValue      =-9999. ! Maximum reporting (only for Averaged variables, and those greater than Time Step)
+  REAL(r64)          :: MaxValue      =-9999.d0 ! Maximum reporting (only for Averaged variables, and those greater than Time Step)
   INTEGER            :: MaxValueDate  =0   ! Date stamp of maximum
-  REAL          :: MinValue      =9999. ! Minimum reporting (only for Averaged variables, and those greater than Time Step)
+  REAL(r64)          :: MinValue      =9999.d0 ! Minimum reporting (only for Averaged variables, and those greater than Time Step)
   INTEGER            :: MinValueDate  =0     ! Date stamp of minimum
   INTEGER            :: ReportID      =0     ! Report variable ID number
   CHARACTER(len=16)  :: ReportIDChr   =BlankString ! Report variable ID number (character -- for printing)
@@ -131,11 +131,11 @@ END TYPE RealVariables
 
 TYPE IntegerVariables
   INTEGER, POINTER   :: Which         ! The POINTER to the actual variable holding the value
-  REAL          :: Value         =0.0 ! Current Value of the variable (to resolution of Zone Time Step)
-  REAL          :: TSValue       =0.0 ! Value of this variable at the Zone Time Step
-  REAL          :: EITSValue     =0.0 ! Value of this variable at the Zone Time Step for external interface
-  REAL          :: StoreValue    =0.0 ! At end of Zone Time Step, value is placed here for later reporting
-  REAL          :: NumStored     =0.0 ! Number of hours stored
+  REAL(r64)          :: Value         =0.0 ! Current Value of the variable (to resolution of Zone Time Step)
+  REAL(r64)          :: TSValue       =0.0 ! Value of this variable at the Zone Time Step
+  REAL(r64)          :: EITSValue     =0.0 ! Value of this variable at the Zone Time Step for external interface
+  REAL(r64)          :: StoreValue    =0.0 ! At end of Zone Time Step, value is placed here for later reporting
+  REAL(r64)          :: NumStored     =0.0 ! Number of hours stored
   INTEGER            :: StoreType     =0   ! Variable Type (Summed/Non-Static or Average/Static)
   LOGICAL            :: Stored        =.false. ! True when value is stored
   LOGICAL            :: Report        =.false. ! User has requested reporting of this variable in the IDF
@@ -195,7 +195,7 @@ END TYPE
 
 TYPE MeterArrayType
   INTEGER               :: NumOnMeters   =0 ! Number of OnMeter Entries for variable
-  INTEGER               :: RepVariable   =0 ! Backwards pointer to REAL Variable
+  INTEGER               :: RepVariable   =0 ! Backwards pointer to REAL(r64) Variable
   INTEGER, DIMENSION(6) :: OnMeters      =0 ! Forward pointer to Meter Numbers
   INTEGER               :: NumOnCustomMeters   =0 ! Number of OnCustomMeter Entries for variable
   INTEGER, ALLOCATABLE, DIMENSION(:) :: OnCustomMeters ! Forward pointer to Custom Meter Numbers
@@ -211,45 +211,45 @@ TYPE MeterType
   INTEGER                       :: RT_forIPUnits=0  ! Resource type number for IP Units (tabular) reporting
   INTEGER                       :: TypeOfMeter =MeterType_Normal ! type of meter
   INTEGER                       :: SourceMeter =0  ! for custom decrement meters, this is the meter number for the subtraction
-  REAL                     :: TSValue     =0.0  ! TimeStep Value
-  REAL                     :: CurTSValue  =0.0  ! Current TimeStep Value (internal access)
+  REAL(r64)                     :: TSValue     =0.0  ! TimeStep Value
+  REAL(r64)                     :: CurTSValue  =0.0  ! Current TimeStep Value (internal access)
   LOGICAL                       :: RptTS       =.false.  ! Report at End of TimeStep (Zone)
   LOGICAL                       :: RptTSFO     =.false.  ! Report at End of TimeStep (Zone) -- meter file only
   INTEGER                       :: TSRptNum    =0  ! Report Number for TS Values
   CHARACTER(len=16)             :: TSRptNumChr =BlankString  ! Report Number for TS Values (character -- for printing)
-  REAL                     :: HRValue     =0.0  ! Hourly Value
+  REAL(r64)                     :: HRValue     =0.0  ! Hourly Value
   LOGICAL                       :: RptHR       =.false.  ! Report at End of Hour
   LOGICAL                       :: RptHRFO     =.false.  ! Report at End of Hour -- meter file only
-  REAL                     :: HRMaxVal    =-99999.  ! Maximum Value (Hour)
+  REAL(r64)                     :: HRMaxVal    =-99999.d0  ! Maximum Value (Hour)
   INTEGER                       :: HRMaxValDate=0  ! Date stamp of maximum
-  REAL                     :: HRMinVal    =99999.  ! Minimum Value (Hour)
+  REAL(r64)                     :: HRMinVal    =99999.d0  ! Minimum Value (Hour)
   INTEGER                       :: HRMinValDate=0  ! Date stamp of minimum
   INTEGER                       :: HRRptNum    =0  ! Report Number for HR Values
   CHARACTER(len=16)             :: HRRptNumChr =BlankString   ! Report Number for HR Values (character -- for printing)
-  REAL                     :: DYValue     =0.0  ! Daily Value
+  REAL(r64)                     :: DYValue     =0.0  ! Daily Value
   LOGICAL                       :: RptDY       =.false.  ! Report at End of Day
   LOGICAL                       :: RptDYFO     =.false.  ! Report at End of Day -- meter file only
-  REAL                     :: DYMaxVal    =-99999.  ! Maximum Value (Day)
+  REAL(r64)                     :: DYMaxVal    =-99999.d0  ! Maximum Value (Day)
   INTEGER                       :: DYMaxValDate=0  ! Date stamp of maximum
-  REAL                     :: DYMinVal    =99999.  ! Minimum Value (Day)
+  REAL(r64)                     :: DYMinVal    =99999.d0  ! Minimum Value (Day)
   INTEGER                       :: DYMinValDate=0  ! Date stamp of minimum
   INTEGER                       :: DYRptNum    =0  ! Report Number for DY Values
   CHARACTER(len=16)             :: DYRptNumChr =BlankString   ! Report Number for DY Values (character -- for printing)
-  REAL                     :: MNValue     =0.0  ! Monthly Value
+  REAL(r64)                     :: MNValue     =0.0  ! Monthly Value
   LOGICAL                       :: RptMN       =.false.  ! Report at End of Month
   LOGICAL                       :: RptMNFO     =.false.  ! Report at End of Month -- meter file only
-  REAL                     :: MNMaxVal    =-99999.  ! Maximum Value (Month)
+  REAL(r64)                     :: MNMaxVal    =-99999.d0  ! Maximum Value (Month)
   INTEGER                       :: MNMaxValDate=0  ! Date stamp of maximum
-  REAL                     :: MNMinVal    =99999.  ! Minimum Value (Month)
+  REAL(r64)                     :: MNMinVal    =99999.d0  ! Minimum Value (Month)
   INTEGER                       :: MNMinValDate=0  ! Date stamp of minimum
   INTEGER                       :: MNRptNum    =0  ! Report Number for MN Values
   CHARACTER(len=16)             :: MNRptNumChr =BlankString   ! Report Number for MN Values (character -- for printing)
-  REAL                     :: SMValue     =0.0  ! Simulation Value
+  REAL(r64)                     :: SMValue     =0.0  ! Simulation Value
   LOGICAL                       :: RptSM       =.false.  ! Report at End of Environment/Simulation
   LOGICAL                       :: RptSMFO     =.false.  ! Report at End of Environment/Simulation -- meter file only
-  REAL                     :: SMMaxVal    =-99999.  ! Maximum Value (Sim)
+  REAL(r64)                     :: SMMaxVal    =-99999.d0  ! Maximum Value (Sim)
   INTEGER                       :: SMMaxValDate=0  ! Date stamp of maximum
-  REAL                     :: SMMinVal    =99999.  ! Minimum Value (Sim)
+  REAL(r64)                     :: SMMinVal    =99999.d0  ! Minimum Value (Sim)
   INTEGER                       :: SMMinValDate=0  ! Date stamp of minimum
   INTEGER                       :: SMRptNum    =0  ! Report Number for SM Values
   CHARACTER(len=16)             :: SMRptNumChr =BlankString   ! Report Number for SM Values (character -- for printing)
@@ -332,7 +332,7 @@ INTEGER                               :: NumVarMeterArrays =0  ! Current number 
 TYPE (MeterType),         &
   DIMENSION(:), ALLOCATABLE           :: EnergyMeters
 INTEGER                               :: NumEnergyMeters =0  ! Current number of Energy Meters
-REAL, DIMENSION(:), ALLOCATABLE       :: MeterValue          ! This holds the current timestep value for each meter.
+REAL(r64), DIMENSION(:), ALLOCATABLE       :: MeterValue          ! This holds the current timestep value for each meter.
 
 INTEGER                               :: TimeStepStampReportNbr    ! TimeStep and Hourly Report number
 CHARACTER(len=3)                      :: TimeStepStampReportChr    ! TimeStep and Hourly Report number (character -- for printing)
@@ -346,7 +346,7 @@ LOGICAL                               :: TrackingMonthlyVariables = .false.  ! R
 INTEGER                               :: RunPeriodStampReportNbr   ! RunPeriod Report number
 CHARACTER(len=3)                      :: RunPeriodStampReportChr   ! RunPeriod Report number (character -- for printing)
 LOGICAL                               :: TrackingRunPeriodVariables = .false.  ! Requested RunPeriod Report Variables
-REAL                             :: SecondsPerTimeStep     ! Seconds from NumTimeStepInHour
+REAL(r64)                             :: SecondsPerTimeStep     ! Seconds from NumTimeStepInHour
 LOGICAL                               :: ErrorsLogged=.false.
 LOGICAL                               :: ProduceVariableDictionary=.false.
 
@@ -518,7 +518,7 @@ SUBROUTINE InitializeOutput
 
   OutputInitialized=.true.
 
-  SecondsPerTimeStep=REAL(MinutesPerTimeStep,r64)*60.0
+  SecondsPerTimeStep=REAL(MinutesPerTimeStep,r64)*60.0d0
 
   CALL InitializeMeters
 
@@ -552,7 +552,7 @@ SUBROUTINE SetupTimePointers(IndexKey,TimeStep)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: IndexKey  ! Which timestep is being set up, 'Zone'=1, 'HVAC'=2
-  REAL, TARGET, INTENT(IN)     :: TimeStep  ! The timestep variable.  Used to get the address
+  REAL(r64), TARGET, INTENT(IN)     :: TimeStep  ! The timestep variable.  Used to get the address
                                         ! for the pointer in the derived type.
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3262,7 +3262,7 @@ SUBROUTINE UpdateMeterValues(TimeStepValue,NumOnMeters,OnMeters,NumOnCustomMeter
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)                  :: TimeStepValue  ! Value of this variable at the current time step.
+  REAL(r64), INTENT(IN)                  :: TimeStepValue  ! Value of this variable at the current time step.
   INTEGER, INTENT(IN)               :: NumOnMeters    ! Number of meters this variable is "on".
   INTEGER, INTENT(IN), DIMENSION(:) :: OnMeters       ! Which meters this variable is on (index values)
   INTEGER, INTENT(IN), OPTIONAL               :: NumOnCustomMeters  ! Number of custom meters this variable is "on".
@@ -3400,11 +3400,11 @@ SUBROUTINE SetMinMax(TestValue,TimeStamp,CurMaxValue,CurMaxValDate,CurMinValue,C
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)       :: TestValue      ! Candidate new value
+  REAL(r64), INTENT(IN)       :: TestValue      ! Candidate new value
   INTEGER, INTENT(IN)    :: TimeStamp      ! TimeStamp to be stored if applicable
-  REAL, INTENT(INOUT)    :: CurMaxValue    ! Current Maximum Value
+  REAL(r64), INTENT(INOUT)    :: CurMaxValue    ! Current Maximum Value
   INTEGER, INTENT(INOUT) :: CurMaxValDate  ! Current Maximum Value Date Stamp
-  REAL, INTENT(INOUT)    :: CurMinValue    ! Current Minimum Value
+  REAL(r64), INTENT(INOUT)    :: CurMinValue    ! Current Minimum Value
   INTEGER, INTENT(INOUT) :: CurMinValDate  ! Current Minimum Value Date Stamp
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3457,8 +3457,8 @@ SUBROUTINE ReportTSMeters(StartMinute,EndMinute,PrintESOTimeStamp)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)       :: StartMinute ! Start Minute for TimeStep
-  REAL, INTENT(IN)       :: EndMinute   ! End Minute for TimeStep
+  REAL(r64), INTENT(IN)       :: StartMinute ! Start Minute for TimeStep
+  REAL(r64), INTENT(IN)       :: EndMinute   ! End Minute for TimeStep
   LOGICAL, INTENT(INOUT) :: PrintESOTimeStamp ! True if the ESO Time Stamp also needs to be printed
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3474,8 +3474,8 @@ SUBROUTINE ReportTSMeters(StartMinute,EndMinute,PrintESOTimeStamp)
   INTEGER Loop  ! Loop Control
   LOGICAL PrintTimeStamp
   INTEGER CurDayType
-  REAL :: rDummy1=0.0
-  REAL :: rDummy2=0.0
+  REAL(r64) :: rDummy1=0.0
+  REAL(r64) :: rDummy2=0.0
   INTEGER :: iDummy1=0
   INTEGER :: iDummy2=0
   CHARACTER(len=16) :: cReportID
@@ -3571,8 +3571,8 @@ SUBROUTINE ReportHRMeters
   INTEGER Loop  ! Loop Control
   LOGICAL PrintTimeStamp
   INTEGER CurDayType
-  REAL :: rDummy1=0.0
-  REAL :: rDummy2=0.0
+  REAL(r64) :: rDummy1=0.0
+  REAL(r64) :: rDummy2=0.0
   INTEGER :: iDummy1=0
   INTEGER :: iDummy2=0
   CHARACTER(len=16) :: cReportID
@@ -3797,7 +3797,7 @@ SUBROUTINE ReportSMMeters
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: convertJtoGJ = 1.0/1000000000.0
+  REAL(r64), PARAMETER :: convertJtoGJ = 1.0d0/1000000000.0d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -4268,8 +4268,8 @@ INTEGER FUNCTION WriteTimeStampFormatData (unitNumber, reportingInterval, report
     INTEGER, INTENT(IN), OPTIONAL :: Month          ! the month of the reporting interval
     INTEGER, INTENT(IN), OPTIONAL :: DayOfMonth     ! The day of the reporting interval
     INTEGER, INTENT(IN), OPTIONAL :: Hour           ! The hour of the reporting interval
-    REAL, INTENT(IN), OPTIONAL :: EndMinute      ! The last minute in the reporting interval
-    REAL, INTENT(IN), OPTIONAL :: StartMinute    ! The starting minute of the reporting interval
+    REAL(r64), INTENT(IN), OPTIONAL :: EndMinute      ! The last minute in the reporting interval
+    REAL(r64), INTENT(IN), OPTIONAL :: StartMinute    ! The starting minute of the reporting interval
     INTEGER, INTENT(IN), OPTIONAL :: DST            ! A flag indicating whether daylight savings time is observed
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: DayType  ! The day tied for the data (e.g., Monday)
 
@@ -4695,13 +4695,13 @@ SUBROUTINE WriteReportRealData (reportID, creportID, timeIndex, repValue, storeT
     INTEGER, INTENT(IN) :: reportID            ! The variable's report ID
     CHARACTER(len=*), INTENT(IN) :: creportID  ! variable ID in characters
     INTEGER, INTENT(IN) :: timeIndex           ! An index that points to the timestamp
-    REAL, INTENT(IN) :: repValue             ! The variable's value
+    REAL(r64), INTENT(IN) :: repValue             ! The variable's value
     INTEGER, INTENT(IN)  :: storeType          ! Averaged or Sum
-    REAL, INTENT(IN) :: numOfItemsStored  ! The number of items (hours or timesteps) of data stored
+    REAL(r64), INTENT(IN) :: numOfItemsStored  ! The number of items (hours or timesteps) of data stored
     INTEGER, INTENT(IN) :: reportingInterval   ! The variable's reporting interval (e.g., daily)
-    REAL, INTENT(IN) :: maxValue          ! The variable's maximum value during the reporting interval
+    REAL(r64), INTENT(IN) :: maxValue          ! The variable's maximum value during the reporting interval
     INTEGER, INTENT(IN) :: maxValueDate        ! The date the maximum value occurred
-    REAL, INTENT(IN) :: minValue          ! The variable's minimum value during the reporting interval
+    REAL(r64), INTENT(IN) :: minValue          ! The variable's minimum value during the reporting interval
     INTEGER, INTENT(IN) :: minValueDate        ! The date the minimum value occurred
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4717,7 +4717,7 @@ SUBROUTINE WriteReportRealData (reportID, creportID, timeIndex, repValue, storeT
     CHARACTER(len=32) :: NumberOut    ! Character for producing "number out"
     CHARACTER(len=55) :: MaxOut       ! Character for Max out string
     CHARACTER(len=55) :: MinOut       ! Character for Min out string
-    REAL :: repVal             ! The variable's value
+    REAL(r64) :: repVal             ! The variable's value
 
     repVal=repValue
     IF (storeType == AveragedVar) repVal=repVal/numOfItemsStored
@@ -4798,7 +4798,7 @@ SUBROUTINE WriteCumulativeReportMeterData (reportID, creportID, timeIndex, repVa
     INTEGER, INTENT(IN) :: reportID      ! The variable's report ID
     CHARACTER(len=*), INTENT(IN) :: creportID  ! variable ID in characters
     INTEGER, INTENT(IN) :: timeIndex     ! An index that points to the timestamp
-    REAL, INTENT(IN) :: repValue       ! The variable's value
+    REAL(r64), INTENT(IN) :: repValue       ! The variable's value
     LOGICAL, INTENT(IN) :: meterOnlyFlag ! A flag that indicates if the data should be written to standard output
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4872,11 +4872,11 @@ SUBROUTINE WriteReportMeterData (reportID, creportID, timeIndex, repValue, repor
     INTEGER, INTENT(IN) :: reportID          ! The variable's report ID
     CHARACTER(len=*), INTENT(IN) :: creportID  ! variable ID in characters
     INTEGER, INTENT(IN) :: timeIndex         ! An index that points to the timestamp
-    REAL, INTENT(IN) :: repValue           ! The variable's value
+    REAL(r64), INTENT(IN) :: repValue           ! The variable's value
     INTEGER, INTENT(IN) :: reportingInterval ! The variable's reporting interval (e.g., hourly)
-    REAL, INTENT(IN) :: maxValue        ! The variable's maximum value during the reporting interval
+    REAL(r64), INTENT(IN) :: maxValue        ! The variable's maximum value during the reporting interval
     INTEGER, INTENT(IN) :: maxValueDate      ! The date of the maximum value
-    REAL, INTENT(IN) :: minValue        ! The variable's minimum value during the reporting interval
+    REAL(r64), INTENT(IN) :: minValue        ! The variable's minimum value during the reporting interval
     INTEGER, INTENT(IN) :: minValueDate      ! The date the minimum value occurred
     LOGICAL, INTENT(IN) :: meterOnlyFlag     ! Indicates whether the data is for the meter file only
 
@@ -4996,7 +4996,7 @@ SUBROUTINE WriteRealData (reportID, creportID, timeIndex, repValue)
     INTEGER, INTENT(IN) :: reportID  ! The variable's reporting ID
     CHARACTER(len=*), INTENT(IN) :: creportID  ! variable ID in characters
     INTEGER, INTENT(IN) :: timeIndex ! An index that points to the timestamp for the variable
-    REAL, INTENT(IN) :: repValue   ! The variable's value
+    REAL(r64), INTENT(IN) :: repValue   ! The variable's value
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
     ! na
@@ -5126,9 +5126,9 @@ SUBROUTINE WriteReportIntegerData (reportID, reportIDString, timeIndex, repValue
     INTEGER, INTENT(IN) :: reportID                     ! The variable's reporting ID
     CHARACTER(len=*), INTENT(IN) :: reportIDString      ! The variable's reporting ID (character)
     INTEGER, INTENT(IN) :: timeIndex                    ! An index that points to this timestamp for this data
-    REAL, INTENT(IN) :: repValue                      ! The variable's value
+    REAL(r64), INTENT(IN) :: repValue                      ! The variable's value
     INTEGER, INTENT(IN)  :: storeType                   ! Type of item (averaged or summed)
-    REAL, INTENT(IN), OPTIONAL :: numOfItemsStored ! The number of items (hours or timesteps) of data stored
+    REAL(r64), INTENT(IN), OPTIONAL :: numOfItemsStored ! The number of items (hours or timesteps) of data stored
     INTEGER, INTENT(IN), OPTIONAL :: reportingInterval  ! The reporting interval (e.g., monthly)
     INTEGER, INTENT(IN), OPTIONAL :: maxValue           ! The variable's maximum value during the reporting interval
     INTEGER, INTENT(IN), OPTIONAL :: maxValueDate       ! The date the maximum value occurred
@@ -5148,8 +5148,8 @@ SUBROUTINE WriteReportIntegerData (reportID, reportIDString, timeIndex, repValue
     CHARACTER(len=32) :: NumberOut    ! Character for producing "number out"
     CHARACTER(len=55) :: MaxOut       ! Character for Max out string
     CHARACTER(len=55) :: MinOut       ! Character for Min out string
-    REAL :: rmaxValue, rminValue
-    REAL :: repVal             ! The variable's value
+    real(r64) :: rmaxValue, rminValue
+    REAL(r64) :: repVal             ! The variable's value
 
     repVal=repValue
     IF (storeType == AveragedVar) repVal=repVal/numOfItemsStored
@@ -5221,11 +5221,11 @@ SUBROUTINE WriteIntegerData (reportID, reportIDString, timeIndex, IntegerValue, 
   CHARACTER(len=*), INTENT(IN) :: reportIDString   ! the reporting ID of the data (character)
   INTEGER, INTENT(IN) :: timeIndex ! an index that points to the data's timestamp
   INTEGER, INTENT(IN), OPTIONAL :: IntegerValue   ! the value of the data
-  REAL, INTENT(IN), OPTIONAL :: RealValue   ! the value of the data
+  REAL(r64), INTENT(IN), OPTIONAL :: RealValue   ! the value of the data
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=32) :: NumberOut       ! Character for producing "number out"
-  REAL :: repValue  ! for SQLite
+  REAL(r64) :: repValue  ! for SQLite
 
   IF (PRESENT(IntegerValue)) THEN
     WRITE(NumberOut,*) IntegerValue
@@ -5419,7 +5419,7 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
   CHARACTER(len=*), INTENT(IN)           :: VariableName    ! String Name of variable (with units)
   CHARACTER(len=*), INTENT(IN)           :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
   CHARACTER(len=*), INTENT(IN)           :: VariableTypeKey ! State, Average=1, NonState, Sum=2
-  REAL, INTENT(IN), TARGET          :: ActualVariable  ! Actual Variable, used to set up pointer
+  REAL(r64), INTENT(IN), TARGET          :: ActualVariable  ! Actual Variable, used to set up pointer
   CHARACTER(len=*), INTENT(IN)           :: KeyedValue      ! Associated Key for this variable
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this freqency
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ResourceTypeKey ! Meter Resource Type (Electricity, Gas, etc)
@@ -5458,7 +5458,7 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
   INTEGER Item
   CHARACTER(len=16)             :: MtrUnits    ! Units for Meter
   LOGICAL :: ThisOneOnTheList
-  CHARACTER(len=UnitsStringLength) :: UnitsString = BlankString ! Units for Variable (no brackets)
+  CHARACTER(len=UnitsStringLength) :: UnitsString =BlankString ! Units for Variable (no brackets)
   INTEGER                      :: localIndexGroupKey
 
   IF (.not. OutputInitialized) CALL InitializeOutput
@@ -5868,7 +5868,7 @@ SUBROUTINE SetupRealOutputVariable_IntKey(VariableName,ActualVariable,IndexTypeK
   CHARACTER(len=*), INTENT(IN)           :: VariableName    ! String Name of variable
   CHARACTER(len=*), INTENT(IN)           :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
   CHARACTER(len=*), INTENT(IN)           :: VariableTypeKey ! State, Average=1, NonState, Sum=2
-  REAL, INTENT(IN), TARGET          :: ActualVariable  ! Actual Variable, used to set up pointer
+  REAL(r64), INTENT(IN), TARGET          :: ActualVariable  ! Actual Variable, used to set up pointer
   INTEGER, INTENT(IN)                    :: KeyedValue      ! Associated Key for this variable
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this freqency
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ResourceTypeKey ! Meter Resource Type (Electricity, Gas, etc)
@@ -5956,19 +5956,19 @@ SUBROUTINE UpdateDataandReport(IndexTypeKey)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Loop              ! Loop Variable
   INTEGER :: IndexType         ! Translate Zone=>1, HVAC=>2
-  REAL :: CurVal          ! Current value for real variables
-  REAL :: ICurVal         ! Current value for integer variables
+  REAL(r64) :: CurVal          ! Current value for real variables
+  REAL(r64) :: ICurVal         ! Current value for integer variables
   INTEGER :: MDHM              ! Month,Day,Hour,Minute
   LOGICAL :: TimePrint         ! True if the time needs to be printed
-  REAL :: StartMinute     ! StartMinute for UpdateData call
-  REAL :: MinuteNow       ! What minute it is now
+  REAL(r64) :: StartMinute     ! StartMinute for UpdateData call
+  REAL(r64) :: MinuteNow       ! What minute it is now
   LOGICAL :: ReportNow         ! True if this variable should be reported now
   INTEGER :: CurDayType        ! What kind of day it is (weekday (sunday, etc) or holiday)
   INTEGER,SAVE :: LHourP      =-1      ! Helps set hours for timestamp output
-  REAL,SAVE :: LStartMin =-1.0  ! Helps set minutes for timestamp output
-  REAL,SAVE :: LEndMin   =-1.0  ! Helps set minutes for timestamp output
+  REAL(r64),SAVE :: LStartMin =-1.0d0  ! Helps set minutes for timestamp output
+  REAL(r64),SAVE :: LEndMin   =-1.0d0  ! Helps set minutes for timestamp output
   LOGICAL,SAVE :: EndTimeStepFlag =.false.   ! True when it's the end of the Zone Time Step
-  REAL :: rxTime  ! (MinuteNow-StartMinute)/REAL(MinutesPerTimeStep,r64) - for execution time
+  REAL(r64) :: rxTime  ! (MinuteNow-StartMinute)/REAL(MinutesPerTimeStep,r64) - for execution time
 
   IndexType=IndexTypeKey
   IF (IndexType /= ZoneTSReporting .and. IndexType /= HVACTSReporting) THEN
@@ -6045,8 +6045,8 @@ SUBROUTINE UpdateDataandReport(IndexTypeKey)
 
       IF (RVar%ReportFreq == ReportEach) THEN
         IF (TimePrint) THEN
-          IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001    &
-              .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001) THEN
+          IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001d0    &
+              .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001d0) THEN
             CurDayType=DayOfWeek
             IF (HolidayIndex > 0) THEN
               CurDayType=7+HolidayIndex
@@ -6114,8 +6114,8 @@ SUBROUTINE UpdateDataandReport(IndexTypeKey)
 
       IF (IVar%ReportFreq == ReportEach) THEN
         IF (TimePrint) THEN
-          IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001    &
-              .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001) THEN
+          IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001d0    &
+              .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001d0) THEN
             CurDayType=DayOfWeek
             IF (HolidayIndex > 0) THEN
               CurDayType=7+HolidayIndex
@@ -6179,8 +6179,8 @@ SUBROUTINE UpdateDataandReport(IndexTypeKey)
 
         IF (RVar%ReportFreq == ReportTimeStep) THEN
           IF (TimePrint) THEN
-            IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001    &
-                .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001) THEN
+            IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001d0    &
+                .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001d0) THEN
               CurDayType=DayOfWeek
               IF (HolidayIndex > 0) THEN
                 CurDayType=7+HolidayIndex
@@ -6223,8 +6223,8 @@ SUBROUTINE UpdateDataandReport(IndexTypeKey)
 
         IF (IVar%ReportFreq == ReportTimeStep) THEN
           IF (TimePrint) THEN
-            IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001    &
-                .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001) THEN
+            IF (LHourP /= HourOfDay .or. ABS(LStartMin-StartMinute) > .001d0    &
+                .or. ABS(LEndMin-TimeValue(IndexType)%CurMinute) > .001d0) THEN
               CurDayType=DayOfWeek
               IF (HolidayIndex > 0) THEN
                 CurDayType=7+HolidayIndex
@@ -6634,7 +6634,7 @@ SUBROUTINE UpdateMeterReporting
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER Loop
   CHARACTER(len=MaxNameLength), DIMENSION(2) :: Alphas
-  REAL, DIMENSION(1)                         :: Numbers
+  REAL(r64), DIMENSION(1)                         :: Numbers
   INTEGER NumAlpha
   INTEGER NumNumbers
   INTEGER IOStat
@@ -7245,7 +7245,7 @@ FUNCTION GetCurrentMeterValue(MeterNumber) RESULT(CurrentMeterValue)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: MeterNumber ! Which Meter Number (from GetMeterIndex)
-  REAL           :: CurrentMeterValue
+  REAL(r64)           :: CurrentMeterValue
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -7297,7 +7297,7 @@ FUNCTION GetInstantMeterValue(MeterNumber,IndexType) RESULT(InstantMeterValue)
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: MeterNumber ! Which Meter Number (from GetMeterIndex)
   INTEGER, INTENT(IN) :: IndexType ! Whether this is zone of HVAC
-  REAL           :: InstantMeterValue
+  REAL(r64)           :: InstantMeterValue
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -7419,7 +7419,7 @@ FUNCTION GetInternalVariableValue(varType, keyVarIndex) RESULT (resultVal)
 
           ! PURPOSE OF THIS FUNCTION:
           ! This function returns the current value of the Internal Variable assigned to
-          ! the varType and keyVarIndex.  Values may be accessed for REAL and integer
+          ! the varType and keyVarIndex.  Values may be accessed for REAL(r64) and integer
           ! report variables and meter variables.  The variable type (varType) may be
           ! determined by calling subroutine and GetVariableKeyCountandType.  The
           ! index (keyVarIndex) may be determined by calling subroutine GetVariableKeys.
@@ -7441,7 +7441,7 @@ FUNCTION GetInternalVariableValue(varType, keyVarIndex) RESULT (resultVal)
   INTEGER, INTENT(IN)      :: keyVarIndex  ! Array index
   INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=real, 3=meter
 
-  REAL                :: resultVal    ! value returned
+  REAL(r64)                :: resultVal    ! value returned
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -7454,7 +7454,7 @@ FUNCTION GetInternalVariableValue(varType, keyVarIndex) RESULT (resultVal)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  REAL, external :: GetCurrentMeterValue
+  REAL(r64), external :: GetCurrentMeterValue
 
           ! Select based on variable type:  integer, real, or meter
   SELECT CASE (varType)
@@ -7508,7 +7508,7 @@ FUNCTION GetInternalVariableValueExternalInterface(varType, keyVarIndex) RESULT 
 
           ! PURPOSE OF THIS FUNCTION:
           ! This function returns the last zone-timestep value of the Internal Variable assigned to
-          ! the varType and keyVarIndex.  Values may be accessed for REAL and integer
+          ! the varType and keyVarIndex.  Values may be accessed for REAL(r64) and integer
           ! report variables and meter variables.  The variable type (varType) may be
           ! determined by calling subroutine and GetVariableKeyCountandType.  The
           ! index (keyVarIndex) may be determined by calling subroutine GetVariableKeys.
@@ -7528,9 +7528,9 @@ FUNCTION GetInternalVariableValueExternalInterface(varType, keyVarIndex) RESULT 
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)      :: keyVarIndex  ! Array index
-  INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL, 3=meter
+  INTEGER, INTENT(IN)      :: varType      ! 1=integer, 2=REAL(r64), 3=meter
 
-  REAL                :: resultVal    ! value returned
+  REAL(r64)                :: resultVal    ! value returned
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -7543,9 +7543,9 @@ FUNCTION GetInternalVariableValueExternalInterface(varType, keyVarIndex) RESULT 
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
           ! na
-  REAL, external :: GetCurrentMeterValue
+  REAL(r64), external :: GetCurrentMeterValue
 
-          ! Select based on variable type:  integer, REAL, or meter
+          ! Select based on variable type:  integer, REAL(r64), or meter
   SELECT CASE (varType)
 
     CASE (0)  ! Variable not a found variable
@@ -7563,7 +7563,7 @@ FUNCTION GetInternalVariableValueExternalInterface(varType, keyVarIndex) RESULT 
       ! must use %EITSValue, %This is the last-zonetimestep value
       resultVal = REAL(IVar%EITSValue,r64)
 
-    CASE (2)  ! REAL
+    CASE (2)  ! REAL(r64)
       IF (keyVarIndex  .GT. NumOfRVariable) THEN
         CALL ShowFatalError('GetInternalVariableValueExternalInterface: passed index beyond range of array.')
       ENDIF

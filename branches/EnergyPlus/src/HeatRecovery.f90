@@ -47,8 +47,8 @@ MODULE HeatRecovery
   PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: KELVZERO = 273.16
-  REAL, PARAMETER :: SMALL = 1.*10**-10 !RS: Debugging: 102612
+  REAL(r64), PARAMETER :: KELVZERO = 273.16d0
+  REAL(r64), PARAMETER :: SMALL = 1.d-10
 
 ! Heat exchanger performance data type
   INTEGER, PARAMETER :: BALANCEDHX_PERFDATATYPE1 = 1
@@ -81,20 +81,20 @@ MODULE HeatRecovery
                                            ! 2: PARALLEL_FLOW
                                            ! 3: CROSS_FLOW_BOTH_UNMIXED
     INTEGER :: EconoLockOut       =0       ! 1: Yes;  0: No
-    REAL    :: hARatio            =0.0     ! ratio of supply side h*A to secondary side h*A
-    REAL    :: NomSupAirVolFlow   =0.0     ! nominal supply air volume flow rate (m3/s)
-    REAL    :: NomSupAirInTemp    =0.0     ! nominal supply air inlet temperature (C)
-    REAL    :: NomSupAirOutTemp   =0.0     ! nominal supply air outlet temperature (C)
-    REAL    :: NomSecAirVolFlow   =0.0     ! nominal secondary air volume flow rate (m3/s)
-    REAL    :: NomSecAirInTemp    =0.0     ! nominal secondary air inlet temperature (C)
-    REAL    :: NomElecPower       =0.0     ! nominal electric power consumption [W]
+    REAL(r64)    :: hARatio            =0.0     ! ratio of supply side h*A to secondary side h*A
+    REAL(r64)    :: NomSupAirVolFlow   =0.0     ! nominal supply air volume flow rate (m3/s)
+    REAL(r64)    :: NomSupAirInTemp    =0.0     ! nominal supply air inlet temperature (C)
+    REAL(r64)    :: NomSupAirOutTemp   =0.0     ! nominal supply air outlet temperature (C)
+    REAL(r64)    :: NomSecAirVolFlow   =0.0     ! nominal secondary air volume flow rate (m3/s)
+    REAL(r64)    :: NomSecAirInTemp    =0.0     ! nominal secondary air inlet temperature (C)
+    REAL(r64)    :: NomElecPower       =0.0     ! nominal electric power consumption [W]
 
     ! values describing nominal condition (derived from input parameters)
-    REAL    :: UA0                =0.0     ! (Uavg*A) at nominal condition
-    REAL    :: mTSup0             =0.0     ! product mDot*Tabs, supply  air, nominal cond.
-    REAL    :: mTSec0             =0.0     ! product mDot*Tabs, exhaust air, nominal cond
-    REAL    :: NomSupAirMassFlow  =0.0     ! nominal supply air mass flow rate (kg/s)
-    REAL    :: NomSecAirMassFlow  =0.0     ! nominal secondary air mass flow rate (kg/s)
+    REAL(r64)    :: UA0                =0.0     ! (Uavg*A) at nominal condition
+    REAL(r64)    :: mTSup0             =0.0     ! product mDot*Tabs, supply  air, nominal cond.
+    REAL(r64)    :: mTSec0             =0.0     ! product mDot*Tabs, exhaust air, nominal cond
+    REAL(r64)    :: NomSupAirMassFlow  =0.0     ! nominal supply air mass flow rate (kg/s)
+    REAL(r64)    :: NomSecAirMassFlow  =0.0     ! nominal secondary air mass flow rate (kg/s)
 
     ! Nodes
     INTEGER :: SupInletNode       =0       ! supply air inlet node number
@@ -103,70 +103,70 @@ MODULE HeatRecovery
     INTEGER :: SecOutletNode      =0       ! secondary air outlet node number
 
     ! inlet conditions
-    REAL    :: SupInTemp          =0.0     ! supply air inlet temperature (C)
-    REAL    :: SupInHumRat        =0.0     ! supply air inlet humidity ratio (kg water/kg dry air)
-    REAL    :: SupInEnth          =0.0     ! supply air inlet enthalpy (J/kg)
-    REAL    :: SupInMassFlow      =0.0     ! supply air inlet mass flow rate (kg/s)
-    REAL    :: SecInTemp          =0.0     ! secondary air inlet temperature (C)
-    REAL    :: SecInHumRat        =0.0     ! secondary air inlet humidity ratio (kg water/kg dry air)
-    REAL    :: SecInEnth          =0.0     ! secondary air inlet enthalpy (J/kg)
-    REAL    :: SecInMassFlow      =0.0     ! secondary air inlet mass flow rate (kg/s)
+    REAL(r64)    :: SupInTemp          =0.0     ! supply air inlet temperature (C)
+    REAL(r64)    :: SupInHumRat        =0.0     ! supply air inlet humidity ratio (kg water/kg dry air)
+    REAL(r64)    :: SupInEnth          =0.0     ! supply air inlet enthalpy (J/kg)
+    REAL(r64)    :: SupInMassFlow      =0.0     ! supply air inlet mass flow rate (kg/s)
+    REAL(r64)    :: SecInTemp          =0.0     ! secondary air inlet temperature (C)
+    REAL(r64)    :: SecInHumRat        =0.0     ! secondary air inlet humidity ratio (kg water/kg dry air)
+    REAL(r64)    :: SecInEnth          =0.0     ! secondary air inlet enthalpy (J/kg)
+    REAL(r64)    :: SecInMassFlow      =0.0     ! secondary air inlet mass flow rate (kg/s)
 
     ! balanced desiccant inputs
     INTEGER :: PerfDataIndex    =0            ! Performance data index allocating performance data number to heat exchanger
-    REAL    :: FaceArea         =0.0          ! face area of balanced desiccant heat exchangers to determine face velocity [m2]
+    REAL(r64)    :: FaceArea         =0.0          ! face area of balanced desiccant heat exchangers to determine face velocity [m2]
     LOGICAL :: UnbalancedWarningFlag = .TRUE. ! Used to print one-time warning when unbalanced flow exists (then set to FALSE)
 
     ! generic hx performance inputs
-    REAL    :: HeatEffectSensible100=0.0           ! heating sensible effectiveness at 100% rated air flow
-    REAL    :: HeatEffectSensible75 =0.0           ! heating sensible effectiveness at 75% rated air flow
-    REAL    :: HeatEffectLatent100  =0.0           ! heating latent effectiveness at 100% rated air flow
-    REAL    :: HeatEffectLatent75   =0.0           ! heating latent effectiveness at 75% rated air flow
-    REAL    :: CoolEffectSensible100=0.0           ! cooling sensible effectiveness at 100% rated air flow
-    REAL    :: CoolEffectSensible75 =0.0           ! cooling sensible effectiveness at 75% rated air flow
-    REAL    :: CoolEffectLatent100  =0.0           ! cooling latent effectiveness at 100% rated air flow
-    REAL    :: CoolEffectLatent75   =0.0           ! cooling latent effectiveness at 75% rated air flow
+    REAL(r64)    :: HeatEffectSensible100=0.0           ! heating sensible effectiveness at 100% rated air flow
+    REAL(r64)    :: HeatEffectSensible75 =0.0           ! heating sensible effectiveness at 75% rated air flow
+    REAL(r64)    :: HeatEffectLatent100  =0.0           ! heating latent effectiveness at 100% rated air flow
+    REAL(r64)    :: HeatEffectLatent75   =0.0           ! heating latent effectiveness at 75% rated air flow
+    REAL(r64)    :: CoolEffectSensible100=0.0           ! cooling sensible effectiveness at 100% rated air flow
+    REAL(r64)    :: CoolEffectSensible75 =0.0           ! cooling sensible effectiveness at 75% rated air flow
+    REAL(r64)    :: CoolEffectLatent100  =0.0           ! cooling latent effectiveness at 100% rated air flow
+    REAL(r64)    :: CoolEffectLatent75   =0.0           ! cooling latent effectiveness at 75% rated air flow
     INTEGER :: HeatExchEconoMode    =0             ! generic heat exchanger economize mode option
                                                    ! 1 = None, 2 = Bypass, 3 = Stop Rotary HX Rotation
     INTEGER :: ExchConfigNum        = 0            ! parameter equivalent of HX configuration, plate or rotary
 
     ! frost control parameters
     Character(len=MaxNameLength) :: FrostControlType=' ' ! type of frost control used if any
-    REAL    :: ThresholdTemperature      =0.0            ! threshold temperature for frost control
-    REAL    :: InitialDefrostTime        =0.0            ! initial defrost time
-    REAL    :: RateofDefrostTimeIncrease =0.0            ! rate of change of defrost time
-    REAL    :: DefrostFraction           =0.0            ! fraction of time HX is in frost control mode
+    REAL(r64)    :: ThresholdTemperature      =0.0            ! threshold temperature for frost control
+    REAL(r64)    :: InitialDefrostTime        =0.0            ! initial defrost time
+    REAL(r64)    :: RateofDefrostTimeIncrease =0.0            ! rate of change of defrost time
+    REAL(r64)    :: DefrostFraction           =0.0            ! fraction of time HX is in frost control mode
     LOGICAL :: ControlToTemperatureSetpoint=.FALSE.      ! temperature control flag for generic HX
 
     ! outlet conditions
-    REAL    :: SupOutTemp       =0.0       ! supply air outlet temperature (C)
-    REAL    :: SupOutHumRat     =0.0       ! supply air outlet humidity ratio (kg water/kg dry air)
-    REAL    :: SupOutEnth       =0.0       ! supply air outlet enthalpy (J/kg)
-    REAL    :: SupOutMassFlow   =0.0       ! supply air outlet mass flow rate (kg/s)
-    REAL    :: SecOutTemp       =0.0       ! secondary air outlet temperature (C)
-    REAL    :: SecOutHumRat     =0.0       ! secondary air outlet humidity ratio (kg water/kg dry air)
-    REAL    :: SecOutEnth       =0.0       ! secondary air outlet enthalpy (J/kg)
-    REAL    :: SecOutMassFlow   =0.0       ! secondary air outlet mass flow rate (kg/s)
+    REAL(r64)    :: SupOutTemp       =0.0       ! supply air outlet temperature (C)
+    REAL(r64)    :: SupOutHumRat     =0.0       ! supply air outlet humidity ratio (kg water/kg dry air)
+    REAL(r64)    :: SupOutEnth       =0.0       ! supply air outlet enthalpy (J/kg)
+    REAL(r64)    :: SupOutMassFlow   =0.0       ! supply air outlet mass flow rate (kg/s)
+    REAL(r64)    :: SecOutTemp       =0.0       ! secondary air outlet temperature (C)
+    REAL(r64)    :: SecOutHumRat     =0.0       ! secondary air outlet humidity ratio (kg water/kg dry air)
+    REAL(r64)    :: SecOutEnth       =0.0       ! secondary air outlet enthalpy (J/kg)
+    REAL(r64)    :: SecOutMassFlow   =0.0       ! secondary air outlet mass flow rate (kg/s)
 
     ! report values
-    REAL    :: SensHeatingRate  =0.0       ! rate of sensible heat being added to the supply (primary) air [W]
-    REAL    :: SensHeatingEnergy=0.0       ! sensible heat added to the supply (primary) air [J]
-    REAL    :: LatHeatingRate   =0.0       ! rate of latent heat being added to the supply (primary) air [W]
-    REAL    :: LatHeatingEnergy =0.0       ! latent heat added to the supply (primary) air [J]
-    REAL    :: TotHeatingRate   =0.0       ! rate of total heat being added to the supply (primary) air [W]
-    REAL    :: TotHeatingEnergy =0.0       ! total heat added to the supply (primary) air [J]
-    REAL    :: SensCoolingRate  =0.0       ! rate of sensible heat being removed from the supply (primary) air [W]
-    REAL    :: SensCoolingEnergy=0.0       ! sensible heat removed from the supply (primary) air [J]
-    REAL    :: LatCoolingRate   =0.0       ! rate of latent heat being removed from the supply (primary) air [W]
-    REAL    :: LatCoolingEnergy =0.0       ! latent heat removed from the supply (primary) air [J]
-    REAL    :: TotCoolingRate   =0.0       ! rate of total heat being removed from the supply (primary) air [W]
-    REAL    :: TotCoolingEnergy =0.0       ! total heat removed from the supply (primary) air [J]
-    REAL    :: ElecUseEnergy    =0.0       ! electricity consumption [J]
-    REAL    :: ElecUseRate      =0.0       ! electricity consumption rate [W]
-    REAL    :: SensEffectiveness=0.0       ! heat exchanger sensible effectiveness [-]
-    REAL    :: LatEffectiveness =0.0       ! heat exchanger latent effectiveness [-]
-    REAL    :: SupBypassMassFlow=0.0       ! supply air mass flow rate bypassing the heat exchanger [kg/s]
-    REAL    :: SecBypassMassFlow=0.0       ! secondary air mass flow rate bypassing the heat exchanger [kg/s]
+    REAL(r64)    :: SensHeatingRate  =0.0       ! rate of sensible heat being added to the supply (primary) air [W]
+    REAL(r64)    :: SensHeatingEnergy=0.0       ! sensible heat added to the supply (primary) air [J]
+    REAL(r64)    :: LatHeatingRate   =0.0       ! rate of latent heat being added to the supply (primary) air [W]
+    REAL(r64)    :: LatHeatingEnergy =0.0       ! latent heat added to the supply (primary) air [J]
+    REAL(r64)    :: TotHeatingRate   =0.0       ! rate of total heat being added to the supply (primary) air [W]
+    REAL(r64)    :: TotHeatingEnergy =0.0       ! total heat added to the supply (primary) air [J]
+    REAL(r64)    :: SensCoolingRate  =0.0       ! rate of sensible heat being removed from the supply (primary) air [W]
+    REAL(r64)    :: SensCoolingEnergy=0.0       ! sensible heat removed from the supply (primary) air [J]
+    REAL(r64)    :: LatCoolingRate   =0.0       ! rate of latent heat being removed from the supply (primary) air [W]
+    REAL(r64)    :: LatCoolingEnergy =0.0       ! latent heat removed from the supply (primary) air [J]
+    REAL(r64)    :: TotCoolingRate   =0.0       ! rate of total heat being removed from the supply (primary) air [W]
+    REAL(r64)    :: TotCoolingEnergy =0.0       ! total heat removed from the supply (primary) air [J]
+    REAL(r64)    :: ElecUseEnergy    =0.0       ! electricity consumption [J]
+    REAL(r64)    :: ElecUseRate      =0.0       ! electricity consumption rate [W]
+    REAL(r64)    :: SensEffectiveness=0.0       ! heat exchanger sensible effectiveness [-]
+    REAL(r64)    :: LatEffectiveness =0.0       ! heat exchanger latent effectiveness [-]
+    REAL(r64)    :: SupBypassMassFlow=0.0       ! supply air mass flow rate bypassing the heat exchanger [kg/s]
+    REAL(r64)    :: SecBypassMassFlow=0.0       ! secondary air mass flow rate bypassing the heat exchanger [kg/s]
     INTEGER :: LowFlowErrCount       =0         ! Counter for recurring warning message
     INTEGER :: LowFlowErrIndex       =0         ! Index to recurring warning message
     INTEGER :: UnBalancedErrCount    =0         ! Counter for recurring warning message
@@ -178,61 +178,61 @@ MODULE HeatRecovery
   ! User Input data
     CHARACTER(len=MaxNameLength) :: Name                   =' '  ! unique name of balanced desiccant performance data type object
     CHARACTER(len=MaxNameLength) :: PerfType               =' '  ! Type of performance data set
-    REAL                    :: NomSupAirVolFlow       =0.0  ! nominal supply air volumetric flow rate m^3/s
-    REAL                    :: NomProcAirFaceVel      =0.0  ! nominal process air face velocity m/s
-    REAL                    :: NomElecPower           =0.0  ! nominal electric power consumption [W]
+    REAL(r64)                    :: NomSupAirVolFlow       =0.0  ! nominal supply air volumetric flow rate m^3/s
+    REAL(r64)                    :: NomProcAirFaceVel      =0.0  ! nominal process air face velocity m/s
+    REAL(r64)                    :: NomElecPower           =0.0  ! nominal electric power consumption [W]
 
  ! regeneration outlet temperature equation coefficients and limits
-    REAL                    :: B1                     =0.0  ! constant coefficient for outlet regeneration temprature equation
-    REAL                    :: B2                     =0.0  ! regen inlet humrat coeff for outlet regen temperature equation
-    REAL                    :: B3                     =0.0  ! regen inlet temp coeff for outlet regen temprature equation
-    REAL                    :: B4                     =0.0  ! (regen in humrat/regen in temp) coeff for outlet regen temp eq
-    REAL                    :: B5                     =0.0  ! process inlet humrat coeff for outlet regen temp equation
-    REAL                    :: B6                     =0.0  ! process inlet temp coeff for outlet regen temp equation
-    REAL                    :: B7                     =0.0  ! (process in humrat/proc in temp) coeff for outlet regen temp eq
-    REAL                    :: B8                     =0.0  ! process, regen face velocity coeff for outlet regen temp eq
-    REAL                    :: T_MinRegenAirInTemp    =0.0  ! min allowable regen inlet air temperature [C]
-    REAL                    :: T_MaxRegenAirInTemp    =0.0  ! max allowable regen inlet air temperature [C]
-    REAL                    :: T_MinRegenAirInHumRat  =0.0  ! min allowable regen inlet air humidity ratio [kg water / kg air]
-    REAL                    :: T_MaxRegenAirInHumRat  =0.0  ! max allowable regen inlet air humidity ratio [kg water / kg air]
-    REAL                    :: T_MinProcAirInTemp     =0.0  ! min allowable process inlet air temperature [C]
-    REAL                    :: T_MaxProcAirInTemp     =0.0  ! max allowable process inlet air temperature [C]
-    REAL                    :: T_MinProcAirInHumRat   =0.0  ! min allowable process inlet air humidity ratio [kg water/kg air]
-    REAL                    :: T_MaxProcAirInHumRat   =0.0  ! max allowable process inlet air humidity ratio [kg water/kg air]
-    REAL                    :: T_MinFaceVel           =0.0  ! min allowable process, regen face velocity [m/s]
-    REAL                    :: T_MaxFaceVel           =0.0  ! max allowable process, regen face velocity [m/s]
-    REAL                    :: MinRegenAirOutTemp     =0.0  ! min allowable regen outlet air temperature [C]
-    REAL                    :: MaxRegenAirOutTemp     =0.0  ! max allowable regen outlet air temperature [C]
-    REAL                    :: T_MinRegenAirInRelHum  =0.0  ! min allowable regen inlet air relative humidity [%]
-    REAL                    :: T_MaxRegenAirInRelHum  =0.0  ! max allowable regen inlet air relative humidity [%]
-    REAL                    :: T_MinProcAirInRelHum   =0.0  ! min allowable process inlet air relative humidity [%]
-    REAL                    :: T_MaxProcAirInRelHum   =0.0  ! max allowable process inlet air relative humidity [%]
+    REAL(r64)                    :: B1                     =0.0  ! constant coefficient for outlet regeneration temprature equation
+    REAL(r64)                    :: B2                     =0.0  ! regen inlet humrat coeff for outlet regen temperature equation
+    REAL(r64)                    :: B3                     =0.0  ! regen inlet temp coeff for outlet regen temprature equation
+    REAL(r64)                    :: B4                     =0.0  ! (regen in humrat/regen in temp) coeff for outlet regen temp eq
+    REAL(r64)                    :: B5                     =0.0  ! process inlet humrat coeff for outlet regen temp equation
+    REAL(r64)                    :: B6                     =0.0  ! process inlet temp coeff for outlet regen temp equation
+    REAL(r64)                    :: B7                     =0.0  ! (process in humrat/proc in temp) coeff for outlet regen temp eq
+    REAL(r64)                    :: B8                     =0.0  ! process, regen face velocity coeff for outlet regen temp eq
+    REAL(r64)                    :: T_MinRegenAirInTemp    =0.0  ! min allowable regen inlet air temperature [C]
+    REAL(r64)                    :: T_MaxRegenAirInTemp    =0.0  ! max allowable regen inlet air temperature [C]
+    REAL(r64)                    :: T_MinRegenAirInHumRat  =0.0  ! min allowable regen inlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: T_MaxRegenAirInHumRat  =0.0  ! max allowable regen inlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: T_MinProcAirInTemp     =0.0  ! min allowable process inlet air temperature [C]
+    REAL(r64)                    :: T_MaxProcAirInTemp     =0.0  ! max allowable process inlet air temperature [C]
+    REAL(r64)                    :: T_MinProcAirInHumRat   =0.0  ! min allowable process inlet air humidity ratio [kg water/kg air]
+    REAL(r64)                    :: T_MaxProcAirInHumRat   =0.0  ! max allowable process inlet air humidity ratio [kg water/kg air]
+    REAL(r64)                    :: T_MinFaceVel           =0.0  ! min allowable process, regen face velocity [m/s]
+    REAL(r64)                    :: T_MaxFaceVel           =0.0  ! max allowable process, regen face velocity [m/s]
+    REAL(r64)                    :: MinRegenAirOutTemp     =0.0  ! min allowable regen outlet air temperature [C]
+    REAL(r64)                    :: MaxRegenAirOutTemp     =0.0  ! max allowable regen outlet air temperature [C]
+    REAL(r64)                    :: T_MinRegenAirInRelHum  =0.0  ! min allowable regen inlet air relative humidity [%]
+    REAL(r64)                    :: T_MaxRegenAirInRelHum  =0.0  ! max allowable regen inlet air relative humidity [%]
+    REAL(r64)                    :: T_MinProcAirInRelHum   =0.0  ! min allowable process inlet air relative humidity [%]
+    REAL(r64)                    :: T_MaxProcAirInRelHum   =0.0  ! max allowable process inlet air relative humidity [%]
 
  ! regeneration outlet humidity ratio equation coefficients and limits
-    REAL                    :: C1                     =0.0  ! constant coeff for outlet regen humidity ratio equation
-    REAL                    :: C2                     =0.0  ! regen inlet humrat coeff for outlet regen humidity ratio eq
-    REAL                    :: C3                     =0.0  ! regen inlet temp coeff for outlet regen humidity ratio equation
-    REAL                    :: C4                     =0.0  ! (regen in humrat/regen in temp) coeff for outlet regen humrat eq
-    REAL                    :: C5                     =0.0  ! process inlet humrat coeff for outlet regen humidity ratio eq
-    REAL                    :: C6                     =0.0  ! process inlet temp coeff for outlet regen humidity ratio eq
-    REAL                    :: C7                     =0.0  ! (proc in humrat/proc in temp) coeff for outlet regen humrat eq
-    REAL                    :: C8                     =0.0  ! process, regen face velocity coeff for outlet regen humrat eq
-    REAL                    :: H_MinRegenAirInTemp    =0.0  ! min allowable regen inlet air temperature [C]
-    REAL                    :: H_MaxRegenAirInTemp    =0.0  ! max allowable regen inlet air temperature [C]
-    REAL                    :: H_MinRegenAirInHumRat  =0.0  ! min allowable regen inlet air humidity ratio [kg water / kg air]
-    REAL                    :: H_MaxRegenAirInHumRat  =0.0  ! max allowable regen inlet air humidity ratio [kg water / kg air]
-    REAL                    :: H_MinProcAirInTemp     =0.0  ! min allowable process inlet air temperature [C]
-    REAL                    :: H_MaxProcAirInTemp     =0.0  ! max allowable process inlet air temperature [C]
-    REAL                    :: H_MinProcAirInHumRat   =0.0  ! min allowable process inlet air humidity ratio [kg water/kg air]
-    REAL                    :: H_MaxProcAirInHumRat   =0.0  ! max allowable process inlet air humidity ratio [kg water/kg air]
-    REAL                    :: H_MinFaceVel           =0.0  ! min allowable process, regen face velocity [m/s]
-    REAL                    :: H_MaxFaceVel           =0.0  ! max allowable process, regen face velocity [m/s]
-    REAL                    :: MinRegenAirOutHumRat   =0.0  ! min allowable regen outlet air temperature [C]
-    REAL                    :: MaxRegenAirOutHumRat   =0.0  ! max allowable regen outlet air temperature [C]
-    REAL                    :: H_MinRegenAirInRelHum  =0.0  ! min allowable regen inlet air relative humidity [%]
-    REAL                    :: H_MaxRegenAirInRelHum  =0.0  ! max allowable regen inlet air relative humidity [%]
-    REAL                    :: H_MinProcAirInRelHum   =0.0  ! min allowable process inlet air relative humidity [%]
-    REAL                    :: H_MaxProcAirInRelHum   =0.0  ! max allowable process inlet air relative humidity [%]
+    REAL(r64)                    :: C1                     =0.0  ! constant coeff for outlet regen humidity ratio equation
+    REAL(r64)                    :: C2                     =0.0  ! regen inlet humrat coeff for outlet regen humidity ratio eq
+    REAL(r64)                    :: C3                     =0.0  ! regen inlet temp coeff for outlet regen humidity ratio equation
+    REAL(r64)                    :: C4                     =0.0  ! (regen in humrat/regen in temp) coeff for outlet regen humrat eq
+    REAL(r64)                    :: C5                     =0.0  ! process inlet humrat coeff for outlet regen humidity ratio eq
+    REAL(r64)                    :: C6                     =0.0  ! process inlet temp coeff for outlet regen humidity ratio eq
+    REAL(r64)                    :: C7                     =0.0  ! (proc in humrat/proc in temp) coeff for outlet regen humrat eq
+    REAL(r64)                    :: C8                     =0.0  ! process, regen face velocity coeff for outlet regen humrat eq
+    REAL(r64)                    :: H_MinRegenAirInTemp    =0.0  ! min allowable regen inlet air temperature [C]
+    REAL(r64)                    :: H_MaxRegenAirInTemp    =0.0  ! max allowable regen inlet air temperature [C]
+    REAL(r64)                    :: H_MinRegenAirInHumRat  =0.0  ! min allowable regen inlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: H_MaxRegenAirInHumRat  =0.0  ! max allowable regen inlet air humidity ratio [kg water / kg air]
+    REAL(r64)                    :: H_MinProcAirInTemp     =0.0  ! min allowable process inlet air temperature [C]
+    REAL(r64)                    :: H_MaxProcAirInTemp     =0.0  ! max allowable process inlet air temperature [C]
+    REAL(r64)                    :: H_MinProcAirInHumRat   =0.0  ! min allowable process inlet air humidity ratio [kg water/kg air]
+    REAL(r64)                    :: H_MaxProcAirInHumRat   =0.0  ! max allowable process inlet air humidity ratio [kg water/kg air]
+    REAL(r64)                    :: H_MinFaceVel           =0.0  ! min allowable process, regen face velocity [m/s]
+    REAL(r64)                    :: H_MaxFaceVel           =0.0  ! max allowable process, regen face velocity [m/s]
+    REAL(r64)                    :: MinRegenAirOutHumRat   =0.0  ! min allowable regen outlet air temperature [C]
+    REAL(r64)                    :: MaxRegenAirOutHumRat   =0.0  ! max allowable regen outlet air temperature [C]
+    REAL(r64)                    :: H_MinRegenAirInRelHum  =0.0  ! min allowable regen inlet air relative humidity [%]
+    REAL(r64)                    :: H_MaxRegenAirInRelHum  =0.0  ! max allowable regen inlet air relative humidity [%]
+    REAL(r64)                    :: H_MinProcAirInRelHum   =0.0  ! min allowable process inlet air relative humidity [%]
+    REAL(r64)                    :: H_MaxProcAirInRelHum   =0.0  ! max allowable process inlet air relative humidity [%]
 
    ! for model bound checking
     ! regen inlet relative humidity for temperature equation
@@ -242,7 +242,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: RegenInRelHumTempBuffer1     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenInRelHumTempBuffer2     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenInRelHumTempBuffer3     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
-    REAL                    :: RegenInRelHumTempLast        = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: RegenInRelHumTempLast        = 0.0  !- last value of regen outlet humidity ratio
 
     ! process inlet relative humidity for temperature equation
     LOGICAL                      :: PrintProcInRelHumTempMess   = .FALSE. !- flag to print regen in RH error message for temp eq
@@ -251,7 +251,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: ProcInRelHumTempBuffer1     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: ProcInRelHumTempBuffer2     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: ProcInRelHumTempBuffer3     = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
-    REAL                    :: ProcInRelHumTempLast        = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: ProcInRelHumTempLast        = 0.0  !- last value of regen outlet humidity ratio
 
     ! regen inlet relative humidity for humidity ratio equation
     LOGICAL                      :: PrintRegenInRelHumHumRatMess = .FALSE. !- flag to print regen in RH error message for temp eq
@@ -260,7 +260,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: RegenInRelHumHumRatBuffer1   = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenInRelHumHumRatBuffer2   = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenInRelHumHumRatBuffer3   = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
-    REAL                    :: RegenInRelHumHumRatLast      = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: RegenInRelHumHumRatLast      = 0.0  !- last value of regen outlet humidity ratio
 
     ! process inlet relative humidity for humidity ratio equation
     LOGICAL                      :: PrintProcInRelHumHumRatMess  = .FALSE. !- flag to print regen in RH error message for temp eq
@@ -269,7 +269,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: ProcInRelHumHumRatBuffer1    = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: ProcInRelHumHumRatBuffer2    = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: ProcInRelHumHumRatBuffer3    = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
-    REAL                    :: ProcInRelHumHumRatLast       = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: ProcInRelHumHumRatLast       = 0.0  !- last value of regen outlet humidity ratio
 
     ! regen outlet temp variables
     LOGICAL                      :: PrintT_RegenInTempMessage    = .FALSE. !- flag to print regen in temp error message for temp eq
@@ -296,7 +296,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: RegenOutHumRatFailedBuffer1  = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenOutHumRatFailedBuffer2  = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
     CHARACTER(len=400)           :: RegenOutHumRatFailedBuffer3  = ' '  !- buffer for RegenOutHumRat warn mess on following timstep
-    REAL                    :: RegenOutHumRatFailedLast     = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: RegenOutHumRatFailedLast     = 0.0  !- last value of regen outlet humidity ratio
 
     ! used when regen and process mass flow rates are not equal to within 2%
     LOGICAL                      :: PrintImbalancedMassFlowMess  = .FALSE. !- flag for imbalanced regen and process mass flow rate
@@ -305,7 +305,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: ImbalancedMassFlowBuffer1    = ' '  !- buffer for imbalanced regen and process mass flow rate
     CHARACTER(len=400)           :: ImbalancedMassFlowBuffer2    = ' '  !- buffer for imbalanced regen and process mass flow rate
     CHARACTER(len=400)           :: ImbalancedMassFlowBuffer3    = ' '  !- buffer for imbalanced regen and process mass flow rate
-    REAL                    :: ABSImbalancedFlow            = 0.0  !- last value of heat exchanger mass flow rate imbalance
+    REAL(r64)                    :: ABSImbalancedFlow            = 0.0  !- last value of heat exchanger mass flow rate imbalance
 
     ! regen outlet temp eqn
     INTEGER                      :: T_RegenInTempErrorCount      = 0    !- counter if regen inlet temp limits are exceeded
@@ -327,7 +327,7 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: RegenOutTempFailedBuffer1 = ' '  !- buffer for RegenOutTemp warn messages on following timestep
     CHARACTER(len=400)           :: RegenOutTempFailedBuffer2 = ' '  !- buffer for RegenOutTemp warn messages on following timestep
     CHARACTER(len=400)           :: RegenOutTempFailedBuffer3 = ' '  !- buffer for RegenOutTemp warn messages on following timestep
-    REAL                    :: RegenOutTempFailedLast    = 0.0  !- last value of regen outlet temp
+    REAL(r64)                    :: RegenOutTempFailedLast    = 0.0  !- last value of regen outlet temp
 
 
     ! regen outlet hum rat eqn
@@ -350,63 +350,63 @@ MODULE HeatRecovery
     CHARACTER(len=400)           :: T_RegenInTempBuffer1     = ' '  !- buffer for T_RegenInTemp warn message on following timestep
     CHARACTER(len=400)           :: T_RegenInTempBuffer2     = ' '  !- buffer for T_RegenInTemp warn message on following timestep
     CHARACTER(len=400)           :: T_RegenInTempBuffer3     = ' '  !- buffer for T_RegenInTemp warn message on following timestep
-    REAL                    :: T_RegenInTempLast        = 0.0  !- last value of regen inlet temp
+    REAL(r64)                    :: T_RegenInTempLast        = 0.0  !- last value of regen inlet temp
                                                                     !- T_RegenInHumRat = Regen inlet humidity ratio
     CHARACTER(len=400)           :: T_RegenInHumRatBuffer1   = ' '  !- buffer for T_RegenInHumRat warn messag on following timestep
     CHARACTER(len=400)           :: T_RegenInHumRatBuffer2   = ' '  !- buffer for T_RegenInHumRat warn messag on following timestep
     CHARACTER(len=400)           :: T_RegenInHumRatBuffer3   = ' '  !- buffer for T_RegenInHumRat warn messag on following timestep
-    REAL                    :: T_RegenInHumRatLast      = 0.0  !- last value of regen inlet humidity ratio
+    REAL(r64)                    :: T_RegenInHumRatLast      = 0.0  !- last value of regen inlet humidity ratio
                                                                     !- T_ProcInTemp = Process inlet temperature
     CHARACTER(len=400)           :: T_ProcInTempBuffer1      = ' '  !- buffer for T_ProcInTemp warning messag on following timestep
     CHARACTER(len=400)           :: T_ProcInTempBuffer2      = ' '  !- buffer for T_ProcInTemp warning messag on following timestep
     CHARACTER(len=400)           :: T_ProcInTempBuffer3      = ' '  !- buffer for T_ProcInTemp warning messag on following timestep
-    REAL                    :: T_ProcInTempLast         = 0.0  !- last value of process inlet temp
+    REAL(r64)                    :: T_ProcInTempLast         = 0.0  !- last value of process inlet temp
                                                                     !- T_ProcInHumRat = Process inlet humidity ratio
     CHARACTER(len=400)           :: T_ProcInHumRatBuffer1    = ' '  !- buffer for T_ProcInHumRat warn message on following timestep
     CHARACTER(len=400)           :: T_ProcInHumRatBuffer2    = ' '  !- buffer for T_ProcInHumRat warn message on following timestep
     CHARACTER(len=400)           :: T_ProcInHumRatBuffer3    = ' '  !- buffer for T_ProcInHumRat warn message on following timestep
-    REAL                    :: T_ProcInHumRatLast       = 0.0  !- last value of process inlet humidity ratio
+    REAL(r64)                    :: T_ProcInHumRatLast       = 0.0  !- last value of process inlet humidity ratio
                                                                     !- T_FaceVel = Process and regen face velocity
     CHARACTER(len=400)           :: T_FaceVelBuffer1         = ' '  !- buffer for T_FaceVel warning messages on following time step
     CHARACTER(len=400)           :: T_FaceVelBuffer2         = ' '  !- buffer for T_FaceVel warning messages on following time step
     CHARACTER(len=400)           :: T_FaceVelBuffer3         = ' '  !- buffer for T_FaceVel warning messages on following time step
-    REAL                    :: T_FaceVelLast            = 0.0  !- last value of process and regen face velocity
+    REAL(r64)                    :: T_FaceVelLast            = 0.0  !- last value of process and regen face velocity
                                                                     !- T_RegenOutTemp = Regen outlet temperature
     CHARACTER(len=400)           :: RegenOutTempBuffer1      = ' '  !- buffer for RegenOutTemp warn messages on following timestep
     CHARACTER(len=400)           :: RegenOutTempBuffer2      = ' '  !- buffer for RegenOutTemp warn messages on following timestep
     CHARACTER(len=400)           :: RegenOutTempBuffer3      = ' '  !- buffer for RegenOutTemp warn messages on following timestep
-    REAL                    :: RegenOutTempLast         = 0.0  !- last value of regen outlet temp
+    REAL(r64)                    :: RegenOutTempLast         = 0.0  !- last value of regen outlet temp
 
     ! regen outlet humidity ratio variables                         !- H_RegenInTemp = Regen inlet temperature
     CHARACTER(len=400)           :: H_RegenInTempBuffer1     = ' '  !- buffer for H_RegenInTemp warn message on following time step
     CHARACTER(len=400)           :: H_RegenInTempBuffer2     = ' '  !- buffer for H_RegenInTemp warn message on following time step
     CHARACTER(len=400)           :: H_RegenInTempBuffer3     = ' '  !- buffer for H_RegenInTemp warn message on following time step
-    REAL                    :: H_RegenInTempLast        = 0.0  !- last value of regen inlet temp
+    REAL(r64)                    :: H_RegenInTempLast        = 0.0  !- last value of regen inlet temp
                                                                     !- H_RegenInHumRat = Regen inlet humidity ratio
     CHARACTER(len=400)           :: H_RegenInHumRatBuffer1   = ' '  !- buffer for H_RegenInHumRat warn messag on following timestep
     CHARACTER(len=400)           :: H_RegenInHumRatBuffer2   = ' '  !- buffer for H_RegenInHumRat warn messag on following timestep
     CHARACTER(len=400)           :: H_RegenInHumRatBuffer3   = ' '  !- buffer for H_RegenInHumRat warn messag on following timestep
-    REAL                    :: H_RegenInHumRatLast      = 0.0  !- last value of regen inlet humidity ratio
+    REAL(r64)                    :: H_RegenInHumRatLast      = 0.0  !- last value of regen inlet humidity ratio
                                                                     !- H_ProcInTemp = Process inlet temperature
     CHARACTER(len=400)           :: H_ProcInTempBuffer1      = ' '  !- buffer for H_ProcInTemp warn messages on following time step
     CHARACTER(len=400)           :: H_ProcInTempBuffer2      = ' '  !- buffer for H_ProcInTemp warn messages on following time step
     CHARACTER(len=400)           :: H_ProcInTempBuffer3      = ' '  !- buffer for H_ProcInTemp warn messages on following time step
-    REAL                    :: H_ProcInTempLast         = 0.0  !- last value of process inlet temp
+    REAL(r64)                    :: H_ProcInTempLast         = 0.0  !- last value of process inlet temp
                                                                     !- H_ProcInHumRat = Process inlet humidity ratio
     CHARACTER(len=400)           :: H_ProcInHumRatBuffer1    = ' '  !- buffer for H_ProcInHumRat warn message on following timestep
     CHARACTER(len=400)           :: H_ProcInHumRatBuffer2    = ' '  !- buffer for H_ProcInHumRat warn message on following timestep
     CHARACTER(len=400)           :: H_ProcInHumRatBuffer3    = ' '  !- buffer for H_ProcInHumRat warn message on following timestep
-    REAL                    :: H_ProcInHumRatLast       = 0.0  !- last value of process inlet humidity ratio
+    REAL(r64)                    :: H_ProcInHumRatLast       = 0.0  !- last value of process inlet humidity ratio
                                                                     !- H_FaceVel = Process and regen face velocity
     CHARACTER(len=400)           :: H_FaceVelBuffer1         = ' '  !- buffer for H_FaceVel warning messages on following time step
     CHARACTER(len=400)           :: H_FaceVelBuffer2         = ' '  !- buffer for H_FaceVel warning messages on following time step
     CHARACTER(len=400)           :: H_FaceVelBuffer3         = ' '  !- buffer for H_FaceVel warning messages on following time step
-    REAL                    :: H_FaceVelLast            = 0.0  !- last value of process and regen face velocity
+    REAL(r64)                    :: H_FaceVelLast            = 0.0  !- last value of process and regen face velocity
                                                                     !- H_RegenOutTemp = Regen outlet temperature
     CHARACTER(len=400)           :: RegenOutHumRatBuffer1    = ' '  !- buffer for RegenOutHumRat warn message on following timestep
     CHARACTER(len=400)           :: RegenOutHumRatBuffer2    = ' '  !- buffer for RegenOutHumRat warn message on following timestep
     CHARACTER(len=400)           :: RegenOutHumRatBuffer3    = ' '  !- buffer for RegenOutHumRat warn message on following timestep
-    REAL                    :: RegenOutHumRatLast       = 0.0  !- last value of regen outlet humidity ratio
+    REAL(r64)                    :: RegenOutHumRatLast       = 0.0  !- last value of regen outlet humidity ratio
   END TYPE BalancedDesDehumPerfData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -415,9 +415,9 @@ MODULE HeatRecovery
   INTEGER :: NumAirToAirGenericExchs     =0 ! number of air to air generic heat exchangers
   INTEGER :: NumDesiccantBalancedExchs   =0 ! number of desiccant balanced heat exchangers
   INTEGER :: NumDesBalExchsPerfDataType1 =0 ! number of desiccant balanced heat exchanger performance data maps
-  REAL    :: FullLoadOutAirTemp          =0.0 ! Used with desiccant HX empirical model, water coils use inlet node condition
+  REAL(r64)    :: FullLoadOutAirTemp          =0.0 ! Used with desiccant HX empirical model, water coils use inlet node condition
                                               ! DX coils use DXCoilFullLoadOutAirTemp when coil is ON otherwise inlet node
-  REAL    :: FullLoadOutAirHumRat        =0.0 ! Used with desiccant HX empirical model, water coils use inlet node condition
+  REAL(r64)    :: FullLoadOutAirHumRat        =0.0 ! Used with desiccant HX empirical model, water coils use inlet node condition
                                               ! DX coils use DXCoilFullLoadOutAirHumRat when coil is ON otherwise inlet node
   LOGICAL :: GetInputFlag            = .TRUE. ! First time, input is "gotten"
   LOGICAL :: CalledFromParentObject  = .TRUE. ! Indicates that HX is called from parent object (this object is not on a branch)
@@ -501,7 +501,7 @@ SUBROUTINE SimHeatRecovery(CompName,FirstHVACIteration,CompIndex,FanOpMode,HXPar
   LOGICAL,             INTENT (IN)   :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
   INTEGER,             INTENT(INOUT) :: CompIndex           ! Pointer to Component
   INTEGER,             INTENT (IN)   :: FanOpMode           ! Supply air fan operating mode
-  REAL, OPTIONAL, INTENT (IN)   :: HXPartLoadRatio     ! Part load ratio requested of DX compressor
+  REAL(r64), OPTIONAL, INTENT (IN)   :: HXPartLoadRatio     ! Part load ratio requested of DX compressor
   LOGICAL,   OPTIONAL, INTENT (IN)   :: HXUnitEnable        ! Flag to operate heat exchanger
   INTEGER,   OPTIONAL, INTENT (IN)   :: CompanionCoilIndex  ! index of companion cooling coil
   LOGICAL,   OPTIONAL, INTENT (IN)   :: RegenInletIsOANode  ! flag to determine if supply inlet is OA node, if so air flow cycles
@@ -520,8 +520,8 @@ SUBROUTINE SimHeatRecovery(CompName,FirstHVACIteration,CompIndex,FanOpMode,HXPar
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: HeatExchNum               ! index of unit being simulated
   LOGICAL      :: HXUnitOn                  ! flag to enable heat exchanger
-!unuse509  INTEGER      :: FanModeOperation          ! supply air fan operating mode
-  REAL    :: PartLoadRatio             ! Part load ratio requested of DX compressor
+!unused0509  INTEGER      :: FanModeOperation          ! supply air fan operating mode
+  REAL(r64)    :: PartLoadRatio             ! Part load ratio requested of DX compressor
   LOGICAL      :: RegInIsOANode             ! local variable to set RegenInletIsOANode optional argument
   INTEGER      :: CompanionCoilNum          ! Index to companion cooling coil
 
@@ -1330,8 +1330,8 @@ SUBROUTINE GetHeatRecoveryInput
         ErrorsFound = .TRUE.
       END IF
 
-      BalDesDehumPerfData(PerfDataNum)%H_MinRegenAirInRelHum = rNumericArgs(48)/100.0
-      BalDesDehumPerfData(PerfDataNum)%H_MaxRegenAirInRelHum = rNumericArgs(49)/100.0
+      BalDesDehumPerfData(PerfDataNum)%H_MinRegenAirInRelHum = rNumericArgs(48)/100.0d0
+      BalDesDehumPerfData(PerfDataNum)%H_MaxRegenAirInRelHum = rNumericArgs(49)/100.0d0
       IF(BalDesDehumPerfData(PerfDataNum)%H_MinRegenAirInRelHum .GE. BalDesDehumPerfData(PerfDataNum)%H_MaxRegenAirInRelHum)THEN
         CALL ShowSevereError(TRIM(cCurrentModuleObject)//' "'//TRIM(BalDesDehumPerfData(PerfDataNum)%Name)//'"')
         CALL ShowContinueError('Error found in min/max boundary for the regen outlet air humidity ratio equation.')
@@ -1520,12 +1520,12 @@ SUBROUTINE InitHeatRecovery(ExchNum, CompanionCoilIndex)
   INTEGER             :: ExIndex       ! do loop index
   INTEGER             :: SupInNode     ! supply air inlet node number
   INTEGER             :: SecInNode     ! secondary air inlet node number
-  REAL           :: CMIN0         ! minimum capacity flow
-  REAL           :: CMAX0         ! maximum capacity flow
-  REAL           :: Eps0          ! effectiveness at rated conditions
-  REAL           :: NTU0          ! NTU at rated conditions
-  REAL           :: RhoAir        ! air density at outside pressure & standard temperature and humidity
-  REAL           :: CpAir         ! heat capacity of air
+  REAL(r64)           :: CMIN0         ! minimum capacity flow
+  REAL(r64)           :: CMAX0         ! maximum capacity flow
+  REAL(r64)           :: Eps0          ! effectiveness at rated conditions
+  REAL(r64)           :: NTU0          ! NTU at rated conditions
+  REAL(r64)           :: RhoAir        ! air density at outside pressure & standard temperature and humidity
+  REAL(r64)           :: CpAir         ! heat capacity of air
                                        ! of humidity ratio and temperature
   LOGICAL,SAVE        :: MyEnvrnFlag=.TRUE.
   LOGICAL,SAVE        :: MyOneTimeAllocate=.TRUE.
@@ -1534,7 +1534,7 @@ SUBROUTINE InitHeatRecovery(ExchNum, CompanionCoilIndex)
   INTEGER             :: ErrStat       ! error status returned by CalculateNTUfromEpsAndZ
   LOGICAL             :: FatalError    ! fatal error flag
   LOGICAL             :: LocalWarningError ! warning error flag
-  REAL           :: Z             ! Min/max flow ratio
+  REAL(r64)           :: Z             ! Min/max flow ratio
 !  LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
 
   IF(MyOneTimeAllocate)THEN
@@ -1560,7 +1560,7 @@ END IF
     !I believe that all of these initializations should be taking place at the SCFM conditions
     RhoAir = StdRhoAir
 !    RhoAir = PsyRhoAirFnPbTdbW(101325.0,20.0,0.0)  do we want standard air density at sea level for generic ERVs per ARI 1060?
-    CpAir = PsyCpAirFnWTdb(0.0,20.0)
+    CpAir = PsyCpAirFnWTdb(0.0d0,20.0d0)
     DO ExIndex=1,NumHeatExchangers
 
       SELECT CASE(ExchCond(ExIndex)%ExchTypeNum)
@@ -1882,7 +1882,7 @@ SUBROUTINE SizeHeatRecovery(ExchNum)
 
         IF (CurOASysNum > 0) THEN
           ! size to outdoor air volume flow rate if available
-          IF(FinalSysSizing(CurSysNum)%DesOutAirVolFlow .GT. 0.)THEN
+          IF(FinalSysSizing(CurSysNum)%DesOutAirVolFlow .GT. 0.d0)THEN
             ExchCond(ExchNum)%NomSupAirVolFlow = FinalSysSizing(CurSysNum)%DesOutAirVolFlow
           ELSE
             ! ELSE size to supply air duct flow rate
@@ -1991,33 +1991,33 @@ SUBROUTINE CalcAirToAirPlateHeatExch(ExNum, HXUnitOn, EconomizerFlag, HighHumCtr
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL      :: UnitOn              ! unit on flag
-  REAL    :: SupByPassMassFlow   ! supply air mass flow rate bypassing unit [kg/s]
-  REAL    :: UnitSupMassFlow     ! supply air mass flow rate passing through the unit [kg/s]
-  REAL    :: SecByPassMassFlow   ! secondary air mass flow rate bypassing unit [kg/s]
-  REAL    :: UnitSecMassFlow     ! secondary air mass flow rate passing through the unit [kg/s]
-  REAL    :: QuotSup             ! ratio of supply nominal m*T to actual m*T
-  REAL    :: QuotExh             ! ratio of secondary nominal m*T to actual m*T
-  REAL    :: Deno                ! denominator of UA calculation
-  REAL    :: CSup                ! supply air capacitance rate [J/C/s]
-  REAL    :: CSec                ! secondary air capacitance rate [J/C/s]
-  REAL    :: CMin                ! minimum air capacitance rate [J/C/s]
-  REAL    :: Z                   ! Ratio of minimum air capacitance rate to maximum air capacitance rate
-  REAL    :: NTU                 ! Number of heat transfer units
-  REAL    :: Eps                 ! epsilon, the unit effectiveness
-  REAL    :: UA                  ! present UA
-  REAL    :: TempSupOut          ! unit supply outlet temperature [C]
-  REAL    :: HumRatSupOut        ! unit supply outlet humidity ratio [kg water / kg dry air]
-  REAL    :: EnthSupOut          ! unit supply outlet enthalpy [J/kg]
-  REAL    :: TempSupOutSat       ! unit supply outlet temperature at saturation (at EnthSupOut) [C]
-  REAL    :: QTrans              ! heat transferred in the heat exchanger [W]
-  REAL    :: ElecCons            ! electricity consumption rate [W]
-  REAL    :: TempSecOut          ! unit secondary outlet temperature [C]
-  REAL    :: HumRatSecOut        ! unit secondary outlet humidity ratio [kg water / kg dry air]
-  REAL    :: EnthSecOut          ! unit secondary outlet enthalpy [J/kgC]
-  REAL    :: TempSecOutSat       ! unit secondary outlet temperature at saturation (at EnthsSecOut) [C]
-  REAL    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
-  REAL    :: LatHeatRecRate      ! latent heat recovery rate to supply air (heating [humidify] +, cooling [dehumidify] -)
-  REAL    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: SupByPassMassFlow   ! supply air mass flow rate bypassing unit [kg/s]
+  REAL(r64)    :: UnitSupMassFlow     ! supply air mass flow rate passing through the unit [kg/s]
+  REAL(r64)    :: SecByPassMassFlow   ! secondary air mass flow rate bypassing unit [kg/s]
+  REAL(r64)    :: UnitSecMassFlow     ! secondary air mass flow rate passing through the unit [kg/s]
+  REAL(r64)    :: QuotSup             ! ratio of supply nominal m*T to actual m*T
+  REAL(r64)    :: QuotExh             ! ratio of secondary nominal m*T to actual m*T
+  REAL(r64)    :: Deno                ! denominator of UA calculation
+  REAL(r64)    :: CSup                ! supply air capacitance rate [J/C/s]
+  REAL(r64)    :: CSec                ! secondary air capacitance rate [J/C/s]
+  REAL(r64)    :: CMin                ! minimum air capacitance rate [J/C/s]
+  REAL(r64)    :: Z                   ! Ratio of minimum air capacitance rate to maximum air capacitance rate
+  REAL(r64)    :: NTU                 ! Number of heat transfer units
+  REAL(r64)    :: Eps                 ! epsilon, the unit effectiveness
+  REAL(r64)    :: UA                  ! present UA
+  REAL(r64)    :: TempSupOut          ! unit supply outlet temperature [C]
+  REAL(r64)    :: HumRatSupOut        ! unit supply outlet humidity ratio [kg water / kg dry air]
+  REAL(r64)    :: EnthSupOut          ! unit supply outlet enthalpy [J/kg]
+  REAL(r64)    :: TempSupOutSat       ! unit supply outlet temperature at saturation (at EnthSupOut) [C]
+  REAL(r64)    :: QTrans              ! heat transferred in the heat exchanger [W]
+  REAL(r64)    :: ElecCons            ! electricity consumption rate [W]
+  REAL(r64)    :: TempSecOut          ! unit secondary outlet temperature [C]
+  REAL(r64)    :: HumRatSecOut        ! unit secondary outlet humidity ratio [kg water / kg dry air]
+  REAL(r64)    :: EnthSecOut          ! unit secondary outlet enthalpy [J/kgC]
+  REAL(r64)    :: TempSecOutSat       ! unit secondary outlet temperature at saturation (at EnthsSecOut) [C]
+  REAL(r64)    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: LatHeatRecRate      ! latent heat recovery rate to supply air (heating [humidify] +, cooling [dehumidify] -)
+  REAL(r64)    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
   LOGICAL      :: EconomizerActiveFlag  ! local representing the economizer status when PRESENT
   LOGICAL      :: HighHumCtrlActiveFlag ! local representing high humidity control when PRESENT
 
@@ -2039,8 +2039,8 @@ SUBROUTINE CalcAirToAirPlateHeatExch(ExNum, HXUnitOn, EconomizerFlag, HighHumCtr
 
   IF((EconomizerActiveFlag .OR. HighHumCtrlActiveFlag) .AND. &
       ExchCond(ExNum)%EconoLockOut .EQ. EconoLockOut_Yes)THEN
-    UnitSupMassFlow = 0.0 ! set HX supply flow to 0, all supply air will go through supply bypass
-    UnitSecMassFlow = 0.0 ! set HX secondary flow to 0, all secondary air will got through secondary bypass
+    UnitSupMassFlow = 0.0d0 ! set HX supply flow to 0, all supply air will go through supply bypass
+    UnitSecMassFlow = 0.0d0 ! set HX secondary flow to 0, all secondary air will got through secondary bypass
     UnitOn = .FALSE.        ! turn off HX calculations when in economizer mode
   ELSE
     ! if economizer operation is not allowed, air always passes through HX
@@ -2049,8 +2049,8 @@ SUBROUTINE CalcAirToAirPlateHeatExch(ExNum, HXUnitOn, EconomizerFlag, HighHumCtr
     UnitSecMassFlow = MIN(ExchCond(ExNum)%NomSecAirMassFlow,ExchCond(ExNum)%SecInMassFlow)
   END IF
 
-  SupByPassMassFlow =  MAX(0.0,ExchCond(ExNum)%SupInMassFlow - UnitSupMassFlow)
-  SecByPassMassFlow =  MAX(0.0,ExchCond(ExNum)%SecInMassFlow - UnitSecMassFlow)
+  SupByPassMassFlow =  MAX(0.0d0,ExchCond(ExNum)%SupInMassFlow - UnitSupMassFlow)
+  SecByPassMassFlow =  MAX(0.0d0,ExchCond(ExNum)%SecInMassFlow - UnitSecMassFlow)
   IF (GetCurrentScheduleValue(ExchCond(ExNum)%SchedPtr) .LE. 0.0) UnitOn = .FALSE.
   IF (ExchCond(ExNum)%SupInMassFlow .LE. SmallMassFlow) UnitOn = .FALSE.
   IF (ExchCond(ExNum)%SecInMassFlow .LE. SmallMassFlow) UnitOn = .FALSE.
@@ -2063,8 +2063,8 @@ SUBROUTINE CalcAirToAirPlateHeatExch(ExNum, HXUnitOn, EconomizerFlag, HighHumCtr
                        UnitSupMassFlow * ( ExchCond(ExNum)%SupInTemp + KELVZERO) )
     QuotExh = SafeDiv( ExchCond(ExNum)%mTSec0, &
                        UnitSecMassFlow * ( ExchCond(ExNum)%SecInTemp + KELVZERO) )
-    Deno = QuotSup**0.78 + ExchCond(ExNum)%hARatio * QuotExh**0.78
-    UA = ExchCond(ExNum)%UA0 * ( ExchCond(ExNum)%hARatio + 1. ) / Deno
+    Deno = QuotSup**0.78d0 + ExchCond(ExNum)%hARatio * QuotExh**0.78d0
+    UA = ExchCond(ExNum)%UA0 * ( ExchCond(ExNum)%hARatio + 1.d0 ) / Deno
     ! calculate the NTU
     CSup = UnitSupMassFlow * PsyCpAirFnWTdb(ExchCond(ExNum)%SupInHumRat,ExchCond(ExNum)%SupInTemp)
     CSec = UnitSecMassFlow * PsyCpAirFnWTdb(ExchCond(ExNum)%SecInHumRat,ExchCond(ExNum)%SecInTemp)
@@ -2204,7 +2204,7 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
   LOGICAL, OPTIONAL, INTENT (IN) :: HighHumCtrlFlag ! high humidity control flag passed by airloop or OA sys
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  ::  ErrorTol = 0.001         !error tolerence
+  REAL(r64), PARAMETER  ::  ErrorTol = 0.001d0         !error tolerence
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2217,36 +2217,36 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
   LOGICAL :: UnitOn               ! unit on flag
   LOGICAL :: FrostControlFlag     ! unit is in frost control mode when TRUE
   INTEGER :: SupOutNode
-  REAL    :: Error               ! iteration loop error variable
-  REAL    :: Iter                ! iteration counter
-  REAL    :: ControlFraction     ! fraction of effectiveness when rotary HX speed or plate bypass modulation is used for
+  REAL(r64)    :: Error               ! iteration loop error variable
+  REAL(r64)    :: Iter                ! iteration counter
+  REAL(r64)    :: ControlFraction     ! fraction of effectiveness when rotary HX speed or plate bypass modulation is used for
                                  ! temperature control
-  REAL    :: RhoSup              ! supply air density at actual pressure, temperature and humidity conditions [kg/m3]
-  REAL    :: RhoSec              ! secondary air density at actual pressure, temperature and humidity conditions [kg/m3]
-  REAL    :: RhoStd              ! standard air density at actual pressure, 20C dry-bulb temp and 0.0 absolute humidity [kg/m3]
-  REAL    :: CSup                ! supply air heat capacity rate [W/K]
-  REAL    :: CSec                ! secondary air heat capacity rate [W/K]
-  REAL    :: CMin                ! minimum air heat capacity rate [W/K]
-  REAL    :: QSensTrans          ! sensible heat transferred by the heat exchanger [W]
-  REAL    :: QTotTrans           ! total heat (sensible + latent) transferred by the heat exchanger [W]
-  REAL    :: TempSecOutSat       ! secondary air outlet temperature at saturation (at EnthsSecOut) [C]
-  REAL    :: HXSecAirVolFlowRate ! air volume flow rate of the secondary air stream through the heat exchanger [m3/sec]
-  REAL    :: HXSupAirVolFlowRate ! air volume flow rate of the supply air stream through the heat exchanger [m3/sec]
-  REAL    :: HXAvgAirVolFlowRate ! average air volume flow rate through the heat exchanger [m3/sec]
-  REAL    :: HXAirVolFlowRatio   ! ratio of avg actual air volume flow through HX to nominal HX air volume flow [-]
-  REAL    :: HXTempSetPoint      ! setpoint temperature at supply outlet node of HX when ControlToTemperatureSetpoint = Yes
-  REAL    :: MassFlowSecIn       ! secondary air mass flow rate at HX inlet
-!  REAL    :: MassFlowSecOut      ! secondary air mass flow rate at HX outlet
-  REAL    :: MassFlowSupIn       ! supply air mass flow rate at HX inlet
-  REAL    :: MassFlowSupOut      ! supply air mass flow rate through HX core outlet
-  REAL    :: MassFlowSupBypass   ! supply air bypass mass flow rate around HX core
-  REAL    :: TempSupIn           ! supply side temperature of air entering HX
-  REAL    :: TempSupOut          ! supply side temperature of air leaving HX core
-  REAL    :: HumRatSupIn         ! supply side humidity ratio of air entering HX
-  REAL    :: TempSecIn           ! secondary side temperature of air entering HX
-  REAL    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
-  REAL    :: LatHeatRecRate      ! latent heat recovery rate to supply air (heating [humidify] +, cooling [dehumidify] -)
-  REAL    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: RhoSup              ! supply air density at actual pressure, temperature and humidity conditions [kg/m3]
+  REAL(r64)    :: RhoSec              ! secondary air density at actual pressure, temperature and humidity conditions [kg/m3]
+  REAL(r64)    :: RhoStd              ! standard air density at actual pressure, 20C dry-bulb temp and 0.0 absolute humidity [kg/m3]
+  REAL(r64)    :: CSup                ! supply air heat capacity rate [W/K]
+  REAL(r64)    :: CSec                ! secondary air heat capacity rate [W/K]
+  REAL(r64)    :: CMin                ! minimum air heat capacity rate [W/K]
+  REAL(r64)    :: QSensTrans          ! sensible heat transferred by the heat exchanger [W]
+  REAL(r64)    :: QTotTrans           ! total heat (sensible + latent) transferred by the heat exchanger [W]
+  REAL(r64)    :: TempSecOutSat       ! secondary air outlet temperature at saturation (at EnthsSecOut) [C]
+  REAL(r64)    :: HXSecAirVolFlowRate ! air volume flow rate of the secondary air stream through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXSupAirVolFlowRate ! air volume flow rate of the supply air stream through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXAvgAirVolFlowRate ! average air volume flow rate through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXAirVolFlowRatio   ! ratio of avg actual air volume flow through HX to nominal HX air volume flow [-]
+  REAL(r64)    :: HXTempSetPoint      ! setpoint temperature at supply outlet node of HX when ControlToTemperatureSetpoint = Yes
+  REAL(r64)    :: MassFlowSecIn       ! secondary air mass flow rate at HX inlet
+!  REAL(r64)    :: MassFlowSecOut      ! secondary air mass flow rate at HX outlet
+  REAL(r64)    :: MassFlowSupIn       ! supply air mass flow rate at HX inlet
+  REAL(r64)    :: MassFlowSupOut      ! supply air mass flow rate through HX core outlet
+  REAL(r64)    :: MassFlowSupBypass   ! supply air bypass mass flow rate around HX core
+  REAL(r64)    :: TempSupIn           ! supply side temperature of air entering HX
+  REAL(r64)    :: TempSupOut          ! supply side temperature of air leaving HX core
+  REAL(r64)    :: HumRatSupIn         ! supply side humidity ratio of air entering HX
+  REAL(r64)    :: TempSecIn           ! secondary side temperature of air entering HX
+  REAL(r64)    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: LatHeatRecRate      ! latent heat recovery rate to supply air (heating [humidify] +, cooling [dehumidify] -)
+  REAL(r64)    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
   LOGICAL      :: EconomizerActiveFlag  ! local representing the economizer status when PRESENT
   LOGICAL      :: HighHumCtrlActiveFlag ! local representing high humidity control when PRESENT
 
@@ -2305,12 +2305,12 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
   IF (ExchCond(ExNum)%SupInMassFlow .LE. SmallMassFlow) UnitOn = .FALSE.
   IF (ExchCond(ExNum)%SecInMassFlow .LE. SmallMassFlow) UnitOn = .FALSE.
   IF (.NOT. HXUnitOn) UnitOn = .FALSE.
-  IF(ExchCond(ExNum)%NomSupAirVolFlow == 0.)UnitOn = .FALSE.
+  IF(ExchCond(ExNum)%NomSupAirVolFlow == 0.d0)UnitOn = .FALSE.
 
   IF (UnitOn) THEN
     ! Unit is on.
     ! In the future, use actual node pressures in the following air density calls
-    RhoStd = PsyRhoAirFnPbTdbW(OutBaroPress,20.0, 0.0)
+    RhoStd = PsyRhoAirFnPbTdbW(OutBaroPress,20.0d0, 0.0d0)
     HXSupAirVolFlowRate = ExchCond(ExNum)%SupOutMassFlow/RhoStd ! volume flow using standard density
     HXSecAirVolFlowRate = ExchCond(ExNum)%SecOutMassFlow/RhoStd
     ! Limit unbalanced volumetric flow ratio to 2:1
@@ -2334,10 +2334,10 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
       END IF
     END IF
     ! Calculate average volumetric flow rate of the two air streams
-    HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0
+    HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0d0
     HXAirVolFlowRatio = HXAvgAirVolFlowRate/ExchCond(ExNum)%NomSupAirVolFlow
     ! Average air volume flow rate must be between 50% and 130% of nominal supply air volume flow
-    IF (HXAirVolFlowRatio .GT. 1.3 .OR. HXAirVolFlowRatio .LT. 0.5) THEN
+    IF (HXAirVolFlowRatio .GT. 1.3d0 .OR. HXAirVolFlowRatio .LT. 0.5d0) THEN
       IF(.NOT. WarmupFlag .AND. .NOT. FirstHVACIteration)THEN
          ExchCond(ExNum)%LowFlowErrCount = ExchCond(ExNum)%LowFlowErrCount + 1
          IF (ExchCond(ExNum)%LowFlowErrCount .EQ. 1) THEN
@@ -2365,18 +2365,18 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
      ! Use heating effectiveness values
       ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%HeatEffectSensible75 + &
                      (ExchCond(ExNum)%HeatEffectSensible100 - ExchCond(ExNum)%HeatEffectSensible75)* &
-                     (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+                     (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
       ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%HeatEffectLatent75 + &
                     (ExchCond(ExNum)%HeatEffectLatent100 - ExchCond(ExNum)%HeatEffectLatent75)* &
-                    (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+                    (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
     ELSE
       ! Use cooling effectiveness values
       ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%CoolEffectSensible75 + &
                      (ExchCond(ExNum)%CoolEffectSensible100 - ExchCond(ExNum)%CoolEffectSensible75)* &
-                     (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+                     (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
       ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%CoolEffectLatent75 + &
                      (ExchCond(ExNum)%CoolEffectLatent100 - ExchCond(ExNum)%CoolEffectLatent75)* &
-                     (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+                     (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
     END IF
 
 !     Keep effectiveness between 0 and 1.0 ??
@@ -2416,7 +2416,7 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
 !     IF secondary inlet temperature is above the supply inlet temperature, control to SP
       IF(ExchCond(ExNum)%SecInTemp .GT. ExchCond(ExNum)%SupInTemp .AND. &
         (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp).NE.0.0)THEN
-          ControlFraction = MAX(0.0,MIN(1.0,(ExchCond(ExNum)%SupInTemp - HXTempSetPoint)/ &
+          ControlFraction = MAX(0.0d0,MIN(1.0d0,(ExchCond(ExNum)%SupInTemp - HXTempSetPoint)/ &
                                 (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp)))
       ELSE
 !     ELSE fully bypass HX to maintain supply outlet temp as high as possible
@@ -2440,9 +2440,9 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
         DO WHILE ((ABS(Error).GT.ErrorTol .AND. Iter.lt.10 .AND. ControlFraction.LT.1.0) &
                   .OR. Iter .eq. 1)
           MassFlowSupOut = MassFlowSupIn*ControlFraction
-          MassFlowSupBypass = MassFlowSupIn*(1.-ControlFraction)
+          MassFlowSupBypass = MassFlowSupIn*(1.d0-ControlFraction)
           HXSupAirVolFlowRate = MassFlowSupOut/RhoSup
-          HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0
+          HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0d0
           HXAirVolFlowRatio = HXAvgAirVolFlowRate/ExchCond(ExNum)%NomSupAirVolFlow
           CSup = MassFlowSupOut * PsyCpAirFnWTdb(HumRatSupIn,TempSupIn)
           CMin = MIN(CSup,CSec)
@@ -2450,18 +2450,18 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
 !          Use heating effectiveness values
             ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%HeatEffectSensible75 + &
              (ExchCond(ExNum)%HeatEffectSensible100 - ExchCond(ExNum)%HeatEffectSensible75)* &
-             (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+             (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
             ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%HeatEffectLatent75 + &
              (ExchCond(ExNum)%HeatEffectLatent100 - ExchCond(ExNum)%HeatEffectLatent75)* &
-             (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+             (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
           ELSE
 !          Use cooling effectiveness values
             ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%CoolEffectSensible75 + &
              (ExchCond(ExNum)%CoolEffectSensible100 - ExchCond(ExNum)%CoolEffectSensible75)* &
-             (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+             (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
             ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%CoolEffectLatent75 + &
              (ExchCond(ExNum)%CoolEffectLatent100 - ExchCond(ExNum)%CoolEffectLatent75)* &
-             (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+             (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
           END IF
           IF(CSup .EQ. 0.0)THEN
 !          IF CSup = 0, then supply air mass flow rate = 0 and HX is fully bypassed. Fix divide by 0 error below DO loop.
@@ -2475,7 +2475,7 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
           Error =  (TempSupOut - HXTempSetPoint)
 !         IF supply inlet temp = supply outlet temp, fully bypass HX - ELSE control to SP
           IF(TempSupIn .NE. TempSupOut)THEN
-            ControlFraction = MAX(0.0,MIN(1.0,ControlFraction * (TempSupIn - HXTempSetPoint)/&
+            ControlFraction = MAX(0.0d0,MIN(1.0d0,ControlFraction * (TempSupIn - HXTempSetPoint)/&
                             (TempSupIn - TempSupOut)))
           ELSE IF(ABS(TempSupOut - HXTempSetPoint) .LT. ErrorTol)THEN
 !           IF TempSupIn = TempSupOut then TempSecIn = TempSupIn (ControlFraction = ?)
@@ -2485,7 +2485,7 @@ SUBROUTINE CalcAirToAirGenericHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Econ
 !           or HX is fully bypassed (ControlFraction = 0) which actually should be caught in IF(CSup .EQ. 0.0)THEN above.
             ControlFraction = 0.0
             MassFlowSupOut = MassFlowSupIn*ControlFraction
-            MassFlowSupBypass = MassFlowSupIn*(1.-ControlFraction)
+            MassFlowSupBypass = MassFlowSupIn*(1.d0-ControlFraction)
             CSup = 1.0
             CMin = 0.0
             EXIT
@@ -2635,14 +2635,14 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
   LOGICAL, INTENT (IN)   :: HXUnitOn               ! flag to simulate heat exchager heat recovery
   LOGICAL, INTENT (IN)   :: FirstHVACIteration     ! First HVAC iteration flag
   INTEGER, INTENT (IN)   :: FanOpMode              ! Supply air fan operating mode (1=cycling, 2=constant)
-  REAL, INTENT (IN) :: PartLoadRatio          ! Part load ratio requested of DX compressor
+  REAL(r64), INTENT (IN) :: PartLoadRatio          ! Part load ratio requested of DX compressor
   INTEGER, INTENT (IN)   :: CompanionCoilIndex     ! index of companion cooling coil
   LOGICAL, INTENT (IN)   :: RegenInletIsOANode     ! Flag to determine if regen side inlet is OANode, if so this air stream cycles
   LOGICAL, OPTIONAL, INTENT (IN) :: EconomizerFlag ! economizer flag pass by air loop or OA sys
   LOGICAL, OPTIONAL, INTENT (IN) :: HighHumCtrlFlag ! high humidity control flag passed by airloop or OA sys
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  ::  ErrorTol = 0.001         !error tolerence
+  REAL(r64), PARAMETER  ::  ErrorTol = 0.001d0         !error tolerence
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2653,47 +2653,47 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           !
   LOGICAL :: UnitOn              ! unit on flag
-  REAL    :: RhoStd              ! standard air density at actual pressure, 20C dry-bulb temp and 0.0 absolute humidity [kg/m3]
-  REAL    :: CSup                ! supply air heat capacity rate [W/K]
-  REAL    :: CSec                ! secondary air heat capacity rate [W/K]
-  REAL    :: TempSecOutSat       ! secondary air outlet temperature at saturation (at EnthsSecOut) [C]
-  REAL    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
-  REAL    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
-  REAL    :: ProcessSensHeatRecRate ! process sensible heat recovery rate (heating +, cooling -)
-  REAL    :: ProcessTotHeatRecRate  ! process total heat recovery rate (heating +, cooling -)
-  REAL    :: ProcessLatHeatRecRate  ! process latent heat recovery rate (heating [humidify] +, cooling [dehumidify] -)
-  REAL    :: SupInMassFlow       ! Supply side HX mass flow rate
-  REAL    :: SecInMassFlow       ! Secondary side HX mass flow rate
+  REAL(r64)    :: RhoStd              ! standard air density at actual pressure, 20C dry-bulb temp and 0.0 absolute humidity [kg/m3]
+  REAL(r64)    :: CSup                ! supply air heat capacity rate [W/K]
+  REAL(r64)    :: CSec                ! secondary air heat capacity rate [W/K]
+  REAL(r64)    :: TempSecOutSat       ! secondary air outlet temperature at saturation (at EnthsSecOut) [C]
+  REAL(r64)    :: SensHeatRecRate     ! sensible heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: TotHeatRecRate      ! total heat recovery rate to supply air (heating +, cooling -)
+  REAL(r64)    :: ProcessSensHeatRecRate ! process sensible heat recovery rate (heating +, cooling -)
+  REAL(r64)    :: ProcessTotHeatRecRate  ! process total heat recovery rate (heating +, cooling -)
+  REAL(r64)    :: ProcessLatHeatRecRate  ! process latent heat recovery rate (heating [humidify] +, cooling [dehumidify] -)
+  REAL(r64)    :: SupInMassFlow       ! Supply side HX mass flow rate
+  REAL(r64)    :: SecInMassFlow       ! Secondary side HX mass flow rate
 
-  REAL :: Coeff1                 ! coefficient1 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff2                 ! coefficient2 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff3                 ! coefficient3 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff4                 ! coefficient4 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff5                 ! coefficient5 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff6                 ! coefficient6 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff7                 ! coefficient7 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: Coeff8                 ! coefficient8 to empirical model (used for both temperature and humidity ratio equations)
-  REAL :: BalFaceVelActual       ! operating face velocity [m/s]
-  REAL :: FullLoadSupOutTemp     ! empirical model supply outlet temperature [C]
-  REAL :: FullLoadSupOutHumRat   ! empirical model supply outlet humidity ratio [kg/kg]
-  REAL :: FullLoadDeltaT         ! empirical model heat exchanger delta temperature [C]
-  REAL :: FullLoadDeltaW         ! empirical model heat exchanger delta humidity ratio [kg/kg]
-  REAL :: T_RegenInTemp          ! empirical model supply (regen) inlet temperature for temperature equation [C]
-  REAL :: T_RegenInHumRat        ! empirical model supply (regen) inlet humidity ratio for temperature equation [kg/kg]
-  REAL :: T_ProcInTemp           ! empirical model secondary (process) inlet temperature for temperature equation [C]
-  REAL :: T_ProcInHumRat         ! empirical model secondary (process) inlet humidity ratio for temperature equation [kg/kg]
-  REAL :: T_FaceVel              ! empirical model face velocity for temperature equation [m/s]
-  REAL :: H_RegenInTemp          ! empirical model supply (regen) inlet temperature for humidity ratio equation [C]
-  REAL :: H_RegenInHumRat        ! empirical model supply (regen) inlet humidity ratio for humidity ratio equation [kg/kg]
-  REAL :: H_ProcInTemp           ! empirical model secondary (process) inlet temperature for humidity ratio equation [C]
-  REAL :: H_ProcInHumRat         ! empirical model secondary (process) inlet humidity ratio for humidity ratio equation [kg/kg]
-  REAL :: H_FaceVel              ! empirical model face velocity for humidity ratio equation [m/s]
-  REAL :: MaxHumRatNeeded        ! maximum humidity ratio setpoint for balanced desiccant HX [kg/kg]
-  REAL :: MinHumRatNeeded        ! minimum humidity ratio setpoint for balanced desiccant HX [kg/kg]
-  REAL :: HXPartLoadRatio        ! local heat exchanger part-load ratio
-  REAL :: TestSaturationEnthalpy ! enthalpy used to test for regeneration outlet condition over saturation curve (J/kg)
+  REAL(r64) :: Coeff1                 ! coefficient1 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff2                 ! coefficient2 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff3                 ! coefficient3 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff4                 ! coefficient4 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff5                 ! coefficient5 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff6                 ! coefficient6 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff7                 ! coefficient7 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: Coeff8                 ! coefficient8 to empirical model (used for both temperature and humidity ratio equations)
+  REAL(r64) :: BalFaceVelActual       ! operating face velocity [m/s]
+  REAL(r64) :: FullLoadSupOutTemp     ! empirical model supply outlet temperature [C]
+  REAL(r64) :: FullLoadSupOutHumRat   ! empirical model supply outlet humidity ratio [kg/kg]
+  REAL(r64) :: FullLoadDeltaT         ! empirical model heat exchanger delta temperature [C]
+  REAL(r64) :: FullLoadDeltaW         ! empirical model heat exchanger delta humidity ratio [kg/kg]
+  REAL(r64) :: T_RegenInTemp          ! empirical model supply (regen) inlet temperature for temperature equation [C]
+  REAL(r64) :: T_RegenInHumRat        ! empirical model supply (regen) inlet humidity ratio for temperature equation [kg/kg]
+  REAL(r64) :: T_ProcInTemp           ! empirical model secondary (process) inlet temperature for temperature equation [C]
+  REAL(r64) :: T_ProcInHumRat         ! empirical model secondary (process) inlet humidity ratio for temperature equation [kg/kg]
+  REAL(r64) :: T_FaceVel              ! empirical model face velocity for temperature equation [m/s]
+  REAL(r64) :: H_RegenInTemp          ! empirical model supply (regen) inlet temperature for humidity ratio equation [C]
+  REAL(r64) :: H_RegenInHumRat        ! empirical model supply (regen) inlet humidity ratio for humidity ratio equation [kg/kg]
+  REAL(r64) :: H_ProcInTemp           ! empirical model secondary (process) inlet temperature for humidity ratio equation [C]
+  REAL(r64) :: H_ProcInHumRat         ! empirical model secondary (process) inlet humidity ratio for humidity ratio equation [kg/kg]
+  REAL(r64) :: H_FaceVel              ! empirical model face velocity for humidity ratio equation [m/s]
+  REAL(r64) :: MaxHumRatNeeded        ! maximum humidity ratio setpoint for balanced desiccant HX [kg/kg]
+  REAL(r64) :: MinHumRatNeeded        ! minimum humidity ratio setpoint for balanced desiccant HX [kg/kg]
+  REAL(r64) :: HXPartLoadRatio        ! local heat exchanger part-load ratio
+  REAL(r64) :: TestSaturationEnthalpy ! enthalpy used to test for regeneration outlet condition over saturation curve (J/kg)
   CHARACTER(len=32), SAVE :: ThisSub = 'CalcDesiccantBalancedHeatExch:'! Used to pass to Psyc routines
-  REAL :: AverageMassFlowRate    ! average of supply (regen) and secondary (process) mass flow rates [kg/s]
+  REAL(r64) :: AverageMassFlowRate    ! average of supply (regen) and secondary (process) mass flow rates [kg/s]
   LOGICAL   :: EconomizerActiveFlag   ! local representing the economizer status when PRESENT
   LOGICAL   :: HighHumCtrlActiveFlag  ! local representing high humidity control when PRESENT
 
@@ -2712,7 +2712,7 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
   ExchCond(ExNum)%SecOutEnth   = ExchCond(ExNum)%SecInEnth
   ExchCond(ExNum)%SupOutMassFlow = ExchCond(ExNum)%SupInMassFlow
   ExchCond(ExNum)%SecOutMassFlow = ExchCond(ExNum)%SecInMassFlow
-  AverageMassFlowRate = (ExchCond(ExNum)%SupOutMassFlow + ExchCond(ExNum)%SecOutMassFlow) / 2.0
+  AverageMassFlowRate = (ExchCond(ExNum)%SupOutMassFlow + ExchCond(ExNum)%SecOutMassFlow) / 2.0d0
 
   IF(PRESENT(EconomizerFlag))THEN
     EconomizerActiveFlag = EconomizerFlag
@@ -2776,7 +2776,7 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
       T_RegenInHumRat = ExchCond(ExNum)%SupInHumRat
 
       ! Must use the same density used to convert volumetric flow rate to mass flow rate to get back to velocity
-      RhoStd           = StdRhoAir  !PsyRhoAirFnPbTdbW(StdBaroPress,20.0, 0.0)
+      RhoStd           = StdRhoAir  !PsyRhoAirFnPbTdbW(StdBaroPress,20.0d0, 0.0d0)
       BalFaceVelActual = SupInMassFlow / (RhoStd*ExchCond(ExNum)%FaceArea)
 
       T_FaceVel = BalFaceVelActual
@@ -2883,8 +2883,8 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
           END IF
         END IF
 
-        HXPartLoadRatio = MAX(0.0,HXPartLoadRatio)
-        HXPartLoadRatio = MIN(1.0,HXPartLoadRatio)
+        HXPartLoadRatio = MAX(0.0d0,HXPartLoadRatio)
+        HXPartLoadRatio = MIN(1.0d0,HXPartLoadRatio)
 
       ELSE IF (CompanionCoilIndex .GT. 0) THEN
         HXPartLoadRatio = DXCoilPartLoadRatio(CompanionCoilIndex)
@@ -2893,11 +2893,11 @@ SUBROUTINE CalcDesiccantBalancedHeatExch(ExNum, HXUnitOn, FirstHVACIteration, Fa
       IF(FanOpMode .EQ. CycFanCycCoil .OR. RegenInletIsOANode)THEN
 !       Supply (regen) air stream mass flow rate is cycling and proportional to PLR, outlet conditions are full load conditions
         ExchCond(ExNum)%SupOutTemp   = ExchCond(ExNum)%SupInTemp + FullLoadDeltaT
-        ExchCond(ExNum)%SupOutHumRat = MIN(1.0,MAX(1.*10**-5,ExchCond(ExNum)%SupInHumRat + FullLoadDeltaW)) !RS: Debugging: 102612
+        ExchCond(ExNum)%SupOutHumRat = MIN(1.0d0,MAX(1.d-5,ExchCond(ExNum)%SupInHumRat + FullLoadDeltaW))
       ELSE
 !       Supply (regen) air stream mass flow rate is constant and outlet conditions are averaged
         ExchCond(ExNum)%SupOutTemp   = ExchCond(ExNum)%SupInTemp + (FullLoadDeltaT * HXPartLoadRatio)
-        ExchCond(ExNum)%SupOutHumRat = MIN(1.0,MAX(1.*10**-5,ExchCond(ExNum)%SupInHumRat + (FullLoadDeltaW * HXPartLoadRatio)))
+        ExchCond(ExNum)%SupOutHumRat = MIN(1.0d0,MAX(1.d-5,ExchCond(ExNum)%SupInHumRat + (FullLoadDeltaW * HXPartLoadRatio)))
       END IF
 
 !     for a balanced flow HX, use average mass flow rate and actual node conditions to calculate CSup and CSec
@@ -3003,7 +3003,7 @@ SUBROUTINE FrostControl(ExNum)
   INTEGER, INTENT (IN) :: ExNum ! number of the current heat exchanger being simulated
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  ::  ErrorTol = 0.001         ! error tolerence for iteration loop
+  REAL(r64), PARAMETER  ::  ErrorTol = 0.001d0         ! error tolerence for iteration loop
           ! na
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -3013,29 +3013,29 @@ SUBROUTINE FrostControl(ExNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: DFFraction          ! fraction of timestep ERV is in frost control mode
-  REAL    :: RhoSup              ! density of supply air [kg/m3]
-  REAL    :: RhoSec              ! density of secondary air [kg/m3]
-  REAL    :: Error               ! iteration loop error variable
-  REAL    :: Iter                ! iteration counter
-  REAL    :: CSup                ! mdot Cp of supply air [W/K]
-  REAL    :: CSec                ! mdot Cp of secondary air [W/K]
-  REAL    :: CMin                ! minimum mdot Cp of supply or secondary air [W/K]
-  REAL    :: QTotTrans           ! total heat transfer by ERV [W]
-  REAL    :: QSensTrans          ! sensible heat transfer by ERV [W]
-  REAL    :: HXSecAirVolFlowRate ! air volume flow rate of the secondary air stream through the heat exchanger [m3/sec]
-  REAL    :: HXSupAirVolFlowRate ! air volume flow rate of the supply air stream through the heat exchanger [m3/sec]
-  REAL    :: HXAvgAirVolFlowRate ! average air volume flow rate through the heat exchanger [m3/sec]
-  REAL    :: HXAirVolFlowRatio   ! nominal to actual air volume flow ratio
-  REAL    :: MassFlowSupIn       ! supply air mass flow rate at HX inlet
-  REAL    :: MassFlowSupOut      ! supply air mass flow rate through HX core outlet
-  REAL    :: MassFlowSupBypass   ! supply air bypass mass flow rate around HX core
-  REAL    :: TempSupIn           ! supply side temperature of air entering HX
-  REAL    :: TempSupOut          ! supply side temperature of air leaving HX core
-  REAL    :: HumRatSupIn         ! supply side humidity ratio of air entering HX
-  REAL    :: TempSecIn           ! secondary side temperature of air entering HX
-  REAL    :: TempSecOut          ! secondary side temperature of air leaving HX core
-  REAL    :: TempThreshold       ! threshold temperature below which frost control is active
+  REAL(r64)    :: DFFraction          ! fraction of timestep ERV is in frost control mode
+  REAL(r64)    :: RhoSup              ! density of supply air [kg/m3]
+  REAL(r64)    :: RhoSec              ! density of secondary air [kg/m3]
+  REAL(r64)    :: Error               ! iteration loop error variable
+  REAL(r64)    :: Iter                ! iteration counter
+  REAL(r64)    :: CSup                ! mdot Cp of supply air [W/K]
+  REAL(r64)    :: CSec                ! mdot Cp of secondary air [W/K]
+  REAL(r64)    :: CMin                ! minimum mdot Cp of supply or secondary air [W/K]
+  REAL(r64)    :: QTotTrans           ! total heat transfer by ERV [W]
+  REAL(r64)    :: QSensTrans          ! sensible heat transfer by ERV [W]
+  REAL(r64)    :: HXSecAirVolFlowRate ! air volume flow rate of the secondary air stream through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXSupAirVolFlowRate ! air volume flow rate of the supply air stream through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXAvgAirVolFlowRate ! average air volume flow rate through the heat exchanger [m3/sec]
+  REAL(r64)    :: HXAirVolFlowRatio   ! nominal to actual air volume flow ratio
+  REAL(r64)    :: MassFlowSupIn       ! supply air mass flow rate at HX inlet
+  REAL(r64)    :: MassFlowSupOut      ! supply air mass flow rate through HX core outlet
+  REAL(r64)    :: MassFlowSupBypass   ! supply air bypass mass flow rate around HX core
+  REAL(r64)    :: TempSupIn           ! supply side temperature of air entering HX
+  REAL(r64)    :: TempSupOut          ! supply side temperature of air leaving HX core
+  REAL(r64)    :: HumRatSupIn         ! supply side humidity ratio of air entering HX
+  REAL(r64)    :: TempSecIn           ! secondary side temperature of air entering HX
+  REAL(r64)    :: TempSecOut          ! secondary side temperature of air leaving HX core
+  REAL(r64)    :: TempThreshold       ! threshold temperature below which frost control is active
 
 
   ExchCond(ExNum)%SupOutMassFlow = ExchCond(ExNum)%SupInMassFlow
@@ -3055,14 +3055,14 @@ SUBROUTINE FrostControl(ExNum)
 
     HXSupAirVolFlowRate = ExchCond(ExNum)%SupOutMassFlow/RhoSup
     HXSecAirVolFlowRate = ExchCond(ExNum)%SecOutMassFlow/RhoSec
-    HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0
+    HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0d0
     HXAirVolFlowRatio = HXAvgAirVolFlowRate/ExchCond(ExNum)%NomSupAirVolFlow
     ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%HeatEffectSensible75 + &
       (ExchCond(ExNum)%HeatEffectSensible100 - ExchCond(ExNum)%HeatEffectSensible75)* &
-      (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+      (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
     ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%HeatEffectLatent75 + &
       (ExchCond(ExNum)%HeatEffectLatent100 - ExchCond(ExNum)%HeatEffectLatent75)* &
-      (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+      (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
     ExchCond(ExNum)%SupOutTemp = ExchCond(ExNum)%SupInTemp + &
       ExchCond(ExNum)%SensEffectiveness*CMin/CSup*(ExchCond(ExNum)%SecInTemp-ExchCond(ExNum)%SupInTemp)
     ExchCond(ExNum)%SupOutHumRat = ExchCond(ExNum)%SupInHumRat + &
@@ -3091,11 +3091,11 @@ SUBROUTINE FrostControl(ExNum)
 !   exhaust air temperature above the threshold temperature. Assume that
 !   sensible and latent effectiveness decrease proportionally with rotary HX speed.
 
-    DFFraction = MAX(0.0,MIN(1.0,SafeDiv((TempThreshold - ExchCond(ExNum)%SecOutTemp), &
+    DFFraction = MAX(0.0d0,MIN(1.0d0,SafeDiv((TempThreshold - ExchCond(ExNum)%SecOutTemp), &
                                  (ExchCond(ExNum)%SecInTemp - ExchCond(ExNum)%SecOutTemp))))
     IF (ExchCond(ExNum)%ExchConfigNum == ROTARY) THEN
-      ExchCond(ExNum)%SensEffectiveness = (1.-DFFraction) * ExchCond(ExNum)%SensEffectiveness
-      ExchCond(ExNum)%LatEffectiveness = (1.-DFFraction) * ExchCond(ExNum)%LatEffectiveness
+      ExchCond(ExNum)%SensEffectiveness = (1.d0-DFFraction) * ExchCond(ExNum)%SensEffectiveness
+      ExchCond(ExNum)%LatEffectiveness = (1.d0-DFFraction) * ExchCond(ExNum)%LatEffectiveness
     ELSE ! HX is a plate heat exchanger, bypass air to eliminate frost
       Error = 1.0
       Iter = 0
@@ -3107,11 +3107,11 @@ SUBROUTINE FrostControl(ExNum)
       TempSecIn = ExchCond(ExNum)%SecInTemp
 
       DO WHILE (ABS(Error) .GT. ErrorTol .AND. Iter .lt. 10)
-        MassFlowSupOut = MassFlowSupIn*(1.-DFFraction)
+        MassFlowSupOut = MassFlowSupIn*(1.d0-DFFraction)
         MassFlowSupBypass = MassFlowSupIn*DFFraction
         HXSupAirVolFlowRate = MassFlowSupOut/RhoSup
         HXSecAirVolFlowRate = ExchCond(ExNum)%SecOutMassFlow/RhoSec
-        HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0
+        HXAvgAirVolFlowRate = (HXSecAirVolFlowRate + HXSupAirVolFlowRate)/2.0d0
         HXAirVolFlowRatio = HXAvgAirVolFlowRate/ExchCond(ExNum)%NomSupAirVolFlow
         CSup = MassFlowSupOut * PsyCpAirFnWTdb(HumRatSupIn,TempSupIn)
         CMin = MIN(CSup,CSec)
@@ -3119,18 +3119,18 @@ SUBROUTINE FrostControl(ExNum)
 !         Use heating effectiveness values
           ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%HeatEffectSensible75 + &
               (ExchCond(ExNum)%HeatEffectSensible100 - ExchCond(ExNum)%HeatEffectSensible75)* &
-              (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+              (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
           ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%HeatEffectLatent75 + &
               (ExchCond(ExNum)%HeatEffectLatent100 - ExchCond(ExNum)%HeatEffectLatent75)* &
-              (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+              (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
         ELSE
 !         Use cooling effectiveness values
           ExchCond(ExNum)%SensEffectiveness = ExchCond(ExNum)%CoolEffectSensible75 + &
               (ExchCond(ExNum)%CoolEffectSensible100 - ExchCond(ExNum)%CoolEffectSensible75)* &
-              (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+              (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
           ExchCond(ExNum)%LatEffectiveness = ExchCond(ExNum)%CoolEffectLatent75 + &
               (ExchCond(ExNum)%CoolEffectLatent100 - ExchCond(ExNum)%CoolEffectLatent75)* &
-              (HXAirVolFlowRatio - 0.75)/(1. - 0.75)
+              (HXAirVolFlowRatio - 0.75d0)/(1.d0 - 0.75d0)
         END IF
 !         calculation of local variable Csup can be 0, gaurd against divide by 0.
           TempSupOut = TempSupIn + &
@@ -3140,7 +3140,7 @@ SUBROUTINE FrostControl(ExNum)
           TempSecOut = TempSecIn + QSensTrans / CSec
           Error =  (TempSecOut - TempThreshold)
 !         recalculate DFFraction until convergence, gaurd against divide by 0 (unlikely).
-          DFFraction = MAX(0.0,MIN(1.0,DFFraction * SafeDiv((TempSecIn - TempSecOut),(TempSecIn - TempThreshold))))
+          DFFraction = MAX(0.0d0,MIN(1.0d0,DFFraction * SafeDiv((TempSecIn - TempSecOut),(TempSecIn - TempThreshold))))
           Iter = Iter + 1
       END DO
       ExchCond(ExNum)%SupInMassFlow = MassFlowSupIn
@@ -3191,24 +3191,24 @@ SUBROUTINE FrostControl(ExNum)
 ! Directing exhaust outlet air back across the HX core on the supply side
 ! Assume no heat exchange when in frost control mode, full heat exchange otherwise
 !
-     DFFraction = MAX(0.0,MIN((ExchCond(ExNum)%InitialDefrostTime + &
+     DFFraction = MAX(0.0d0,MIN((ExchCond(ExNum)%InitialDefrostTime + &
                   ExchCond(ExNum)%RateofDefrostTimeIncrease * &
-                  (TempThreshold-ExchCond(ExNum)%SupInTemp)),1.0))
+                  (TempThreshold-ExchCond(ExNum)%SupInTemp)),1.0d0))
 
 !    Calculate derated heat transfer using outlet air conditions assuming no defrost (calculated earlier)
 !    and (1-DefrostFraction)
-     QSensTrans = (1.-DFFraction) * CSup * (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp)
-     QTotTrans = (1.-DFFraction) * ExchCond(ExNum)%SupOutMassFlow * (ExchCond(ExNum)%SupInEnth - ExchCond(ExNum)%SupOutEnth)
+     QSensTrans = (1.d0-DFFraction) * CSup * (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp)
+     QTotTrans = (1.d0-DFFraction) * ExchCond(ExNum)%SupOutMassFlow * (ExchCond(ExNum)%SupInEnth - ExchCond(ExNum)%SupOutEnth)
 
-     ExchCond(ExNum)%SupOutMassFlow = (1.-DFFraction) * ExchCond(ExNum)%SupInMassFlow + &
+     ExchCond(ExNum)%SupOutMassFlow = (1.d0-DFFraction) * ExchCond(ExNum)%SupInMassFlow + &
                                        DFFraction    * ExchCond(ExNum)%SecInMassFlow
 
 !    Blend supply outlet condition of HX core with exhaust air inlet to get final supply air outlet conditions
-     ExchCond(ExNum)%SupOutTemp = ((1.-DFFraction) * ExchCond(ExNum)%SupInMassFlow * ExchCond(ExNum)%SupOutTemp + &
+     ExchCond(ExNum)%SupOutTemp = ((1.d0-DFFraction) * ExchCond(ExNum)%SupInMassFlow * ExchCond(ExNum)%SupOutTemp + &
                                   DFFraction * ExchCond(ExNum)%SecInMassFlow * ExchCond(ExNum)%SecInTemp) / &
                                   ExchCond(ExNum)%SupOutMassFlow
 
-     ExchCond(ExNum)%SupOutHumRat = ((1.-DFFraction) * ExchCond(ExNum)%SupInMassFlow * ExchCond(ExNum)%SupOutHumRat + &
+     ExchCond(ExNum)%SupOutHumRat = ((1.d0-DFFraction) * ExchCond(ExNum)%SupInMassFlow * ExchCond(ExNum)%SupOutHumRat + &
                                   DFFraction * ExchCond(ExNum)%SecInMassFlow * ExchCond(ExNum)%SecInHumRat) / &
                                   ExchCond(ExNum)%SupOutMassFlow
 
@@ -3217,8 +3217,8 @@ SUBROUTINE FrostControl(ExNum)
 
 
 !    Derate effectiveness based on frost control time fraction for reporting purposes
-     ExchCond(ExNum)%SensEffectiveness = (1.-DFFraction) * ExchCond(ExNum)%SensEffectiveness
-     ExchCond(ExNum)%LatEffectiveness = (1.-DFFraction) * ExchCond(ExNum)%LatEffectiveness
+     ExchCond(ExNum)%SensEffectiveness = (1.d0-DFFraction) * ExchCond(ExNum)%SensEffectiveness
+     ExchCond(ExNum)%LatEffectiveness = (1.d0-DFFraction) * ExchCond(ExNum)%LatEffectiveness
 
 !    Secondary air outlet conditions are previously calculated as the conditions when not
 !    in defrost, and this is what we want to report so no changes here.
@@ -3226,8 +3226,8 @@ SUBROUTINE FrostControl(ExNum)
 !    Average SupInMassFlow and SecOutMassFlow rates have been reduced due to frost control
 !      Equipment attached to the supply inlet node may have problems with our setting the
 !      mass flow rate in the next statement. This is done only to simulate exhaust air recirc.
-     Node(ExchCond(ExNum)%SupInletNode)%MassFlowRate = ExchCond(ExNum)%SupInMassFlow * (1.-DFFraction)
-     ExchCond(ExNum)%SecOutMassFlow = ExchCond(ExNum)%SecOutMassFlow * (1.-DFFraction)
+     Node(ExchCond(ExNum)%SupInletNode)%MassFlowRate = ExchCond(ExNum)%SupInMassFlow * (1.d0-DFFraction)
+     ExchCond(ExNum)%SecOutMassFlow = ExchCond(ExNum)%SecOutMassFlow * (1.d0-DFFraction)
 
   END IF  ! End of IF (Exhaust Air Recirculation)
 
@@ -3236,13 +3236,13 @@ SUBROUTINE FrostControl(ExNum)
 !   Perform frost control by bypassing the supply air around the HX core during the defrost
 !   time period. HX heat transfer is reduced proportionally to (1 - defrosttimefraction)
 
-    DFFraction = MAX(0.0,MIN((ExchCond(ExNum)%InitialDefrostTime + &
+    DFFraction = MAX(0.0d0,MIN((ExchCond(ExNum)%InitialDefrostTime + &
                  ExchCond(ExNum)%RateofDefrostTimeIncrease * &
-                 (TempThreshold-ExchCond(ExNum)%SupInTemp)),1.0))
+                 (TempThreshold-ExchCond(ExNum)%SupInTemp)),1.0d0))
 
 !   Calculate derated heat transfer based on defrost time
-    QSensTrans = (1.-DFFraction) * CSup * (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp)
-    QTotTrans = (1.-DFFraction) * ExchCond(ExNum)%SupOutMassFlow * (ExchCond(ExNum)%SupInEnth - ExchCond(ExNum)%SupOutEnth)
+    QSensTrans = (1.d0-DFFraction) * CSup * (ExchCond(ExNum)%SupInTemp - ExchCond(ExNum)%SupOutTemp)
+    QTotTrans = (1.d0-DFFraction) * ExchCond(ExNum)%SupOutMassFlow * (ExchCond(ExNum)%SupInEnth - ExchCond(ExNum)%SupOutEnth)
 
 !   Calculate the air conditions leaving heat exchanger unit
 !   Heat exchanger effectiveness is not derated, HX is fully bypassed during frost control
@@ -3386,7 +3386,7 @@ SUBROUTINE ReportHeatRecovery(ExNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: ReportingConstant
+  REAL(r64) :: ReportingConstant
 
   ReportingConstant = TimeStepSys*SecInHour
   ExchCond(ExNum)%ElecUseEnergy = ExchCond(ExNum)%ElecUseRate*ReportingConstant
@@ -3426,7 +3426,7 @@ FUNCTION SafeDiv(a, b) RESULT (c)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: a, b
+  REAL(r64), INTENT(IN) :: a, b
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3438,7 +3438,7 @@ FUNCTION SafeDiv(a, b) RESULT (c)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: c
+  REAL(r64) :: c
 
   IF (ABS(b) < SMALL) THEN
     c = a / SIGN(SMALL, b)
@@ -3479,15 +3479,15 @@ SUBROUTINE CalculateEpsFromNTUandZ(NTU, Z, FlowArr, Eps)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)     :: NTU     ! number of transfer units
-  REAL, INTENT(IN)     :: Z       ! capacity rate ratio
+  REAL(r64), INTENT(IN)     :: NTU     ! number of transfer units
+  REAL(r64), INTENT(IN)     :: Z       ! capacity rate ratio
   INTEGER, INTENT(IN)  :: FlowArr ! flow arrangement
                                   ! 1: COUNTER FLOW
                                   ! 2: PARALLEL FLOW
                                   ! 3: CROSS FLOW BOTH UNMIXED
                                   ! 4: CROSS FLOW, Cmax MIXED, Cmin UNMIXED
                                   !    (coil with one row)
-  REAL, INTENT(OUT)    :: Eps     ! heat exchanger effectiveness
+  REAL(r64), INTENT(OUT)    :: Eps     ! heat exchanger effectiveness
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3499,7 +3499,7 @@ SUBROUTINE CalculateEpsFromNTUandZ(NTU, Z, FlowArr, Eps)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Temp   ! temporary variable
+  REAL(r64) :: Temp   ! temporary variable
 
   ! check input validity
   IF (Z.LT.0.0 .OR. Z.GT.1.0) THEN
@@ -3510,24 +3510,24 @@ SUBROUTINE CalculateEpsFromNTUandZ(NTU, Z, FlowArr, Eps)
   IF (NTU < SMALL) THEN
     Eps = 0.
   ELSE IF (Z < SMALL) THEN ! Eps independent of flow arrangement
-    Eps = 1. - exp(-NTU)
+    Eps = 1.d0 - exp(-NTU)
   ELSE
     SELECT CASE (FlowArr)
       CASE (Counter_Flow)   ! COUNTER FLOW
-        IF (ABS(Z - 1.0) < SMALL) THEN
-          Eps = NTU/(NTU+1.0)
+        IF (ABS(Z - 1.0d0) < SMALL) THEN
+          Eps = NTU/(NTU+1.0d0)
         ELSE
-          Temp = EXP(-NTU*(1.-Z))
-          Eps = (1.-Temp) / (1.-Z*Temp)
+          Temp = EXP(-NTU*(1.d0-Z))
+          Eps = (1.d0-Temp) / (1.d0-Z*Temp)
         END IF
       CASE (Parallel_Flow)   ! PARALLEL FLOW
-        Temp = (1.+Z)
-        Eps = (1. - EXP(-NTU*Temp)) / Temp
+        Temp = (1.d0+Z)
+        Eps = (1.d0 - EXP(-NTU*Temp)) / Temp
       CASE (Cross_Flow_Both_Unmixed)   ! CROSS FLOW BOTH UNMIXED
-        Temp = Z * NTU**(-0.22)
-        Eps = 1. - EXP( ( EXP(-NTU*Temp) -1.)/Temp )
+        Temp = Z * NTU**(-0.22d0)
+        Eps = 1.d0 - EXP( ( EXP(-NTU*Temp) -1.)/Temp )
       CASE (Cross_Flow_Other)   ! CROSS FLOW, Cmax MIXED, Cmin UNMIXED
-        Eps = (1. - EXP(-Z * (1.-EXP(-NTU)) ) ) / Z
+        Eps = (1.d0 - EXP(-Z * (1.d0-EXP(-NTU)) ) ) / Z
       CASE DEFAULT
         CALL ShowFatalError('HeatRecovery: Illegal flow arrangement in CalculateEpsFromNTUandZ, Value='//  &
                                         TRIM(RoundSigDigits(FlowArr)))
@@ -3567,15 +3567,15 @@ SUBROUTINE CalculateNTUfromEpsAndZ(NTU, Err, Z, FlowArr, Eps)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)     :: Eps     ! heat exchanger effectiveness
-  REAL, INTENT(IN)     :: Z       ! capacity rate ratio
+  REAL(r64), INTENT(IN)     :: Eps     ! heat exchanger effectiveness
+  REAL(r64), INTENT(IN)     :: Z       ! capacity rate ratio
   INTEGER, INTENT(IN)  :: FlowArr ! flow arrangement
                                   ! 1: COUNTER FLOW
                                   ! 2: PARALLEL FLOW
                                   ! 3: CROSS FLOW BOTH UNMIXED
                                   ! 4: CROSS FLOW, Cmax MIXED, Cmin UNMIXED
                                   !    (coil with one row)
-  REAL, INTENT(OUT)     :: NTU    ! number of transfer units
+  REAL(r64), INTENT(OUT)     :: NTU    ! number of transfer units
   INTEGER, INTENT(INOUT)  :: Err    ! error indicator
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3597,17 +3597,17 @@ SUBROUTINE CalculateNTUfromEpsAndZ(NTU, Err, Z, FlowArr, Eps)
   END IF
 
   IF (FlowArr == Parallel_Flow) THEN
-    IF ( Eps<0.0 .OR. Eps>1./(1.+Z) ) THEN
+    IF ( Eps<0.0 .OR. Eps>1.d0/(1.d0+Z) ) THEN
       Err = 2
       RETURN
     END IF
   ELSE IF (FlowArr == Cross_Flow_Other) THEN
-    IF ( Eps<0.0 .OR. Eps>(1.-EXP(-Z))/Z ) THEN
+    IF ( Eps<0.0 .OR. Eps>(1.d0-EXP(-Z))/Z ) THEN
       Err = 3
       RETURN
     END IF
     ! check product (Eps*Z)
-    IF (Eps*Z < 0.0 .OR. Eps*Z > 1.-EXP(Z*(SMALL-1.)) ) THEN
+    IF (Eps*Z < 0.0 .OR. Eps*Z > 1.d0-EXP(Z*(SMALL-1.d0)) ) THEN
       Err = 4
       RETURN
     END IF
@@ -3622,22 +3622,22 @@ SUBROUTINE CalculateNTUfromEpsAndZ(NTU, Err, Z, FlowArr, Eps)
   IF (Eps < SMALL) THEN ! no effectiveness. Set NTU = 0
   NTU = 0.
   ELSE IF (Z < SMALL) THEN ! Eps independent of flow arrangement
-    NTU = - LOG(1.-Eps)
+    NTU = - LOG(1.d0-Eps)
   ELSE
     ! calculate based on configuration
     SELECT CASE (FlowArr)
       CASE (Counter_Flow)   ! COUNTER FLOW
-        IF (ABS(Z - 1.0) < SMALL) THEN
-          NTU = Eps / (1. - Eps)
+        IF (ABS(Z - 1.0d0) < SMALL) THEN
+          NTU = Eps / (1.d0 - Eps)
         ELSE
-          NTU = 1. / (Z-1.) * LOG( (1.-Eps)/(1.-Eps*Z) )
+          NTU = 1.d0 / (Z-1.d0) * LOG( (1.d0-Eps)/(1.d0-Eps*Z) )
         END IF
       CASE (Parallel_Flow)   ! PARALLEL FLOW
-        NTU = - LOG( -Eps - Eps * Z + 1.) / (Z+1.)
+        NTU = - LOG( -Eps - Eps * Z + 1.d0) / (Z+1.d0)
       CASE (Cross_Flow_Both_Unmixed)   ! CROSS FLOW BOTH UNMIXED
         NTU = GetNTUforCrossFlowBothUnmixed(Eps, Z)
       CASE (Cross_Flow_Other)   ! CROSS FLOW, Cmax MIXED, Cmin UNMIXED
-        NTU = -LOG(1. + LOG(1.-eps*Z)/Z )
+        NTU = -LOG(1.d0 + LOG(1.d0-eps*Z)/Z )
       CASE DEFAULT
         CALL ShowFatalError('HeatRecovery: Illegal flow arrangement in CalculateNTUfromEpsAndZ, Value='//  &
                                         TRIM(RoundSigDigits(FlowArr)))
@@ -3677,13 +3677,13 @@ FUNCTION GetNTUforCrossFlowBothUnmixed(Eps, Z) RESULT (NTU)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)     :: Eps     ! heat exchanger effectiveness
-  REAL, INTENT(IN)     :: Z       ! capacity rate ratio
+  REAL(r64), INTENT(IN)     :: Eps     ! heat exchanger effectiveness
+  REAL(r64), INTENT(IN)     :: Z       ! capacity rate ratio
 
-  REAL            :: NTU     ! result variable; number of transfer units
+  REAL(r64)            :: NTU     ! result variable; number of transfer units
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL, PARAMETER  :: Acc =  0.0001       ! Accuracy of result
+  REAL(r64), PARAMETER  :: Acc =  0.0001d0       ! Accuracy of result
   INTEGER, PARAMETER    :: MaxIte = 500        ! Maximum number of iterations
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -3695,9 +3695,9 @@ FUNCTION GetNTUforCrossFlowBothUnmixed(Eps, Z) RESULT (NTU)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
   INTEGER    :: SolFla              ! Flag of solver
-  REAL  :: NTU0 = 0.           ! lower bound for NTU
-  REAL  :: NTU1 = 50.          ! upper bound for NTU
-  REAL, DIMENSION(2) :: Par
+  REAL(r64)  :: NTU0 = 0.           ! lower bound for NTU
+  REAL(r64)  :: NTU1 = 50.          ! upper bound for NTU
+  REAL(r64), DIMENSION(2) :: Par
 
   Par(1) = Eps
   Par(2) = Z
@@ -3743,9 +3743,9 @@ FUNCTION GetResidCrossFlowBothUnmixed(NTU, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: NTU ! number of transfer units
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = Eps, par(2) = Z
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64), INTENT(IN)  :: NTU ! number of transfer units
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = Eps, par(2) = Z
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3758,8 +3758,8 @@ FUNCTION GetResidCrossFlowBothUnmixed(NTU, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-    Residuum = 1.0- EXP( ( EXP(-NTU**0.78 * Par(2)) - 1.0) /  &
-      Par(2)*NTU**0.22) - Par(1)
+    Residuum = 1.0d0- EXP( ( EXP(-NTU**0.78d0 * Par(2)) - 1.0d0) /  &
+      Par(2)*NTU**0.22d0) - Par(1)
 
 RETURN
 
@@ -3799,11 +3799,11 @@ SUBROUTINE CheckModelBoundsTempEq(ExchNum, T_RegenInTemp, T_RegenInHumRat, T_Pro
   ! SUBROUTINE ARGUMENT DEFINITIONS
    ! regen outlet temp equation
   INTEGER, INTENT(IN)    :: ExchNum ! number of the current heat exchanger being simulated
-  REAL,    INTENT(INOUT) :: T_RegenInTemp             ! current regen inlet temperature (C) for regen outlet temp eqn
-  REAL,    INTENT(INOUT) :: T_RegenInHumRat           ! current regen inlet hum rat for regen outlet temp eqn
-  REAL,    INTENT(INOUT) :: T_ProcInTemp              ! current process inlet temperature (C) for regen outlet temp eqn
-  REAL,    INTENT(INOUT) :: T_ProcInHumRat            ! current process inlet hum rat for regen outlet temp eqn
-  REAL,    INTENT(INOUT) :: T_FaceVel                 ! current process and regen face velocity (m/s)
+  REAL(r64),    INTENT(INOUT) :: T_RegenInTemp             ! current regen inlet temperature (C) for regen outlet temp eqn
+  REAL(r64),    INTENT(INOUT) :: T_RegenInHumRat           ! current regen inlet hum rat for regen outlet temp eqn
+  REAL(r64),    INTENT(INOUT) :: T_ProcInTemp              ! current process inlet temperature (C) for regen outlet temp eqn
+  REAL(r64),    INTENT(INOUT) :: T_ProcInHumRat            ! current process inlet hum rat for regen outlet temp eqn
+  REAL(r64),    INTENT(INOUT) :: T_FaceVel                 ! current process and regen face velocity (m/s)
   LOGICAL, INTENT(IN)    :: FirstHVACIteration        ! First HVAC iteration flag
 
   ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3820,9 +3820,9 @@ SUBROUTINE CheckModelBoundsTempEq(ExchNum, T_RegenInTemp, T_RegenInHumRat, T_Pro
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: CharValue          = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
 
 
@@ -4147,11 +4147,11 @@ SUBROUTINE CheckModelBoundsHumRatEq(ExchNum, H_RegenInTemp, H_RegenInHumRat, H_P
   ! SUBROUTINE ARGUMENT DEFINITIONS:
    ! regen outlet humidity ratio equation
   INTEGER, INTENT(IN)    :: ExchNum                   ! number of the current heat exchanger being simulated
-  REAL,    INTENT(INOUT) :: H_RegenInTemp             ! current regen inlet temperature (C) for regen outlet hum rat eqn
-  REAL,    INTENT(INOUT) :: H_RegenInHumRat           ! current regen inlet hum rat for regen outlet hum rat eqn
-  REAL,    INTENT(INOUT) :: H_ProcInTemp              ! current process inlet temperature (C) for regen outlet hum rat eqn
-  REAL,    INTENT(INOUT) :: H_ProcInHumRat            ! current process inlet hum rat for regen outlet hum rat eqn
-  REAL,    INTENT(INOUT) :: H_FaceVel                 ! current process and regen face velocity (m/s)
+  REAL(r64),    INTENT(INOUT) :: H_RegenInTemp             ! current regen inlet temperature (C) for regen outlet hum rat eqn
+  REAL(r64),    INTENT(INOUT) :: H_RegenInHumRat           ! current regen inlet hum rat for regen outlet hum rat eqn
+  REAL(r64),    INTENT(INOUT) :: H_ProcInTemp              ! current process inlet temperature (C) for regen outlet hum rat eqn
+  REAL(r64),    INTENT(INOUT) :: H_ProcInHumRat            ! current process inlet hum rat for regen outlet hum rat eqn
+  REAL(r64),    INTENT(INOUT) :: H_FaceVel                 ! current process and regen face velocity (m/s)
   LOGICAL, INTENT(IN)    :: FirstHVACIteration        ! First HVAC iteration flag
 
       ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4168,9 +4168,9 @@ SUBROUTINE CheckModelBoundsHumRatEq(ExchNum, H_RegenInTemp, H_RegenInHumRat, H_P
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: CharValue          = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
 
 
@@ -4493,8 +4493,8 @@ SUBROUTINE CheckModelBoundOutput_Temp(ExchNum, RegenInTemp, RegenOutTemp, FirstH
 
   ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)   :: ExchNum            ! number of the current heat exchanger being simulated
-  REAL,    INTENT (IN)   :: RegenInTemp        ! current regen inlet temp passed to eqn
-  REAL,    INTENT(INOUT) :: RegenOutTemp       ! current regen outlet temp from eqn
+  REAL(r64),    INTENT (IN)   :: RegenInTemp        ! current regen inlet temp passed to eqn
+  REAL(r64),    INTENT(INOUT) :: RegenOutTemp       ! current regen outlet temp from eqn
   LOGICAL, INTENT (IN)   :: FirstHVACIteration ! First HVAC iteration flag
 
         ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4511,9 +4511,9 @@ SUBROUTINE CheckModelBoundOutput_Temp(ExchNum, RegenInTemp, RegenOutTemp, FirstH
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: CharValue          = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
 
 
@@ -4665,8 +4665,8 @@ SUBROUTINE CheckModelBoundOutput_HumRat(ExchNum, RegenInHumRat, RegenOutHumRat, 
 
   ! SUBROUTINE ARGUMENT DEFINITIONS
   INTEGER, INTENT(IN)    :: ExchNum            ! number of the current heat exchanger being simulated
-  REAL,    INTENT(IN)    :: RegenInHumRat      ! current regen inlet hum rat passed to eqn
-  REAL,    INTENT(INOUT) :: RegenOutHumRat     ! current regen outlet hum rat from eqn
+  REAL(r64),    INTENT(IN)    :: RegenInHumRat      ! current regen inlet hum rat passed to eqn
+  REAL(r64),    INTENT(INOUT) :: RegenOutHumRat     ! current regen outlet hum rat from eqn
   LOGICAL, INTENT (IN)   :: FirstHVACIteration ! First HVAC iteration flag
 
          ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4683,9 +4683,9 @@ SUBROUTINE CheckModelBoundOutput_HumRat(ExchNum, RegenInHumRat, RegenOutHumRat, 
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: CharValue          = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
 
 
@@ -4837,10 +4837,10 @@ SUBROUTINE CheckModelBoundsRH_TempEq(ExchNum, T_RegenInTemp, T_RegenInHumRat, T_
 
   ! SUBROUTINE ARGUMENT DEFINITIONS
   INTEGER, INTENT(IN) :: ExchNum            ! number of the current heat exchanger being simulated
-  REAL,    INTENT(IN) :: T_RegenInTemp      ! current regen inlet temperature passed to eqn
-  REAL,    INTENT(IN) :: T_RegenInHumRat    ! current regen inlet hum rat passed to eqn
-  REAL,    INTENT(IN) :: T_ProcInTemp       ! current process inlet temperature passed to eqn
-  REAL,    INTENT(IN) :: T_ProcInHumRat     ! current regen outlet hum rat from eqn
+  REAL(r64),    INTENT(IN) :: T_RegenInTemp      ! current regen inlet temperature passed to eqn
+  REAL(r64),    INTENT(IN) :: T_RegenInHumRat    ! current regen inlet hum rat passed to eqn
+  REAL(r64),    INTENT(IN) :: T_ProcInTemp       ! current process inlet temperature passed to eqn
+  REAL(r64),    INTENT(IN) :: T_ProcInHumRat     ! current regen outlet hum rat from eqn
   LOGICAL, INTENT(IN) :: FirstHVACIteration ! first HVAC iteration flag
 
          ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -4853,14 +4853,14 @@ SUBROUTINE CheckModelBoundsRH_TempEq(ExchNum, T_RegenInTemp, T_RegenInHumRat, T_
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- REAL                :: RegenInletRH       = 0.0     ! Regeneration inlet air relative humidity
- REAL                :: ProcInletRH        = 0.0     ! Process inlet air relative humidity
+ REAL(r64)                :: RegenInletRH       = 0.0     ! Regeneration inlet air relative humidity
+ REAL(r64)                :: ProcInletRH        = 0.0     ! Process inlet air relative humidity
  CHARACTER(len=32)        :: OutputChar         = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
     IF(WarmupFlag .OR. FirstHVACIteration)RETURN
 
@@ -4952,7 +4952,7 @@ SUBROUTINE CheckModelBoundsRH_TempEq(ExchNum, T_RegenInTemp, T_RegenInHumRat, T_
       END IF
 
       RegenInletRH = PsyRhFnTdbWPb(T_RegenInTemp, T_RegenInHumRat,OutBaroPress)
-      ProcInletRH  = MIN(1.0,PsyRhFnTdbWPb(T_ProcInTemp,  T_ProcInHumRat, OutBaroPress))
+      ProcInletRH  = MIN(1.0d0,PsyRhFnTdbWPb(T_ProcInTemp,  T_ProcInHumRat, OutBaroPress))
 
       ! checking if regeneration inlet relative humidity is within model boundaries
       IF(RegenInletRH .LT. BalDesDehumPerfData(ExchCond(ExchNum)%PerfDataIndex)%T_MinRegenAirInRelHum .OR. &
@@ -5031,10 +5031,10 @@ SUBROUTINE CheckModelBoundsRH_HumRatEq(ExchNum, H_RegenInTemp, H_RegenInHumRat, 
 
   ! SUBROUTINE ARGUMENT DEFINITIONS
   INTEGER, INTENT(IN) :: ExchNum            ! number of the current heat exchanger being simulated
-  REAL,    INTENT(IN) :: H_RegenInTemp      ! current regen inlet temperature passed to eqn
-  REAL,    INTENT(IN) :: H_RegenInHumRat    ! current regen inlet hum rat passed to eqn
-  REAL,    INTENT(IN) :: H_ProcInTemp       ! current process inlet temperature passed to eqn
-  REAL,    INTENT(IN) :: H_ProcInHumRat     ! current process inlet hum rat passed to eqn
+  REAL(r64),    INTENT(IN) :: H_RegenInTemp      ! current regen inlet temperature passed to eqn
+  REAL(r64),    INTENT(IN) :: H_RegenInHumRat    ! current regen inlet hum rat passed to eqn
+  REAL(r64),    INTENT(IN) :: H_ProcInTemp       ! current process inlet temperature passed to eqn
+  REAL(r64),    INTENT(IN) :: H_ProcInHumRat     ! current process inlet hum rat passed to eqn
   LOGICAL, INTENT(IN) :: FirstHVACIteration ! first HVAC iteration flag
 
          ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -5047,14 +5047,14 @@ SUBROUTINE CheckModelBoundsRH_HumRatEq(ExchNum, H_RegenInTemp, H_RegenInHumRat, 
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- REAL                :: RegenInletRH       = 0.0     ! Regeneration inlet air relative humidity
- REAL                :: ProcInletRH        = 0.0     ! Process inlet air relative humidity
+ REAL(r64)                :: RegenInletRH       = 0.0     ! Regeneration inlet air relative humidity
+ REAL(r64)                :: ProcInletRH        = 0.0     ! Process inlet air relative humidity
  CHARACTER(len=32)        :: OutputChar         = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharLo       = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharHi       = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
     IF(WarmupFlag .OR. FirstHVACIteration)RETURN
 
@@ -5146,7 +5146,7 @@ SUBROUTINE CheckModelBoundsRH_HumRatEq(ExchNum, H_RegenInTemp, H_RegenInHumRat, 
       END IF
 
       RegenInletRH = PsyRhFnTdbWPb(H_RegenInTemp, H_RegenInHumRat,OutBaroPress)
-      ProcInletRH  = MIN(1.0,PsyRhFnTdbWPb(H_ProcInTemp,  H_ProcInHumRat, OutBaroPress))
+      ProcInletRH  = MIN(1.0d0,PsyRhFnTdbWPb(H_ProcInTemp,  H_ProcInHumRat, OutBaroPress))
 
       ! checking if regeneration inlet relative humidity is within model boundaries
       IF(RegenInletRH .LT. BalDesDehumPerfData(ExchCond(ExchNum)%PerfDataIndex)%H_MinRegenAirInRelHum .OR. &
@@ -5219,8 +5219,8 @@ SUBROUTINE CheckForBalancedFlow(ExchNum, ProcessInMassFlow, RegenInMassFlow, Fir
 
   ! SUBROUTINE ARGUMENT DEFINITIONS
   INTEGER, INTENT(IN) :: ExchNum            ! number of the current heat exchanger being simulated
-  REAL,    INTENT(IN) :: ProcessInMassFlow  ! current process inlet air mass flow rate (m3/s)
-  REAL,    INTENT(IN) :: RegenInMassFlow    ! current regeneration inlet air mass flow rate (m3/s)
+  REAL(r64),    INTENT(IN) :: ProcessInMassFlow  ! current process inlet air mass flow rate (m3/s)
+  REAL(r64),    INTENT(IN) :: RegenInMassFlow    ! current regeneration inlet air mass flow rate (m3/s)
   LOGICAL, INTENT(IN) :: FirstHVACIteration ! first HVAC iteration flag
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -5235,11 +5235,11 @@ SUBROUTINE CheckForBalancedFlow(ExchNum, ProcessInMassFlow, RegenInMassFlow, Fir
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
  CHARACTER(len=32)        :: OutputCharProc     = ' '     ! character string for warning messages
  CHARACTER(len=32)        :: OutputCharRegen    = ' '     ! character string for warning messages
- REAL,SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
- REAL    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
- REAL,SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
+ REAL(r64),SAVE    :: TimeStepSysLast    = 0.0     ! last system time step (used to check for downshifting)
+ REAL(r64)    :: CurrentEndTime     = 0.0     ! end time of time step for current simulation time step
+ REAL(r64),SAVE    :: CurrentEndTimeLast = 0.0     ! end time of time step for last simulation time step
                                                           ! current end time is compared with last to see if time step changed
- REAL                :: ABSImbalancedFlow            ! absolute value of process and regeneration air flow imbalance fraction
+ REAL(r64)                :: ABSImbalancedFlow            ! absolute value of process and regeneration air flow imbalance fraction
     IF(WarmupFlag .OR. FirstHVACIteration)RETURN
 
 !   calculate end time of current time step
@@ -5279,7 +5279,7 @@ SUBROUTINE CheckForBalancedFlow(ExchNum, ProcessInMassFlow, RegenInMassFlow, Fir
 
       ! checking if regeneration inlet relative humidity is within model boundaries
       ABSImbalancedFlow = ABS(RegenInMassFlow - ProcessInMassFlow)/RegenInMassFlow
-      IF(ABSImbalancedFlow .GT. 0.02)THEN
+      IF(ABSImbalancedFlow .GT. 0.02d0)THEN
         BalDesDehumPerfData(ExchCond(ExchNum)%PerfDataIndex)%ABSImbalancedFlow   = ABSImbalancedFlow
         OutputCharRegen=RoundSigDigits(RegenInMassFlow,6)
         OutputCharProc=RoundSigDigits(ProcessInMassFlow,6)
@@ -5560,7 +5560,7 @@ FUNCTION GetSupplyAirFlowRate(HXName,ErrorsFound)
           ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=MaxNameLength), INTENT(IN) :: HXName                 ! must match HX names for the ExchCond type
   LOGICAL, INTENT(INOUT)                   :: ErrorsFound            ! set to true if problem
-  REAL                                :: GetSupplyAirFlowRate  ! air flow rate returned
+  REAL(r64)                                :: GetSupplyAirFlowRate  ! air flow rate returned
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -5682,8 +5682,8 @@ SUBROUTINE SetHeatExchangerData(HXNum, ErrorsFound, HXName, SupplyAirVolFlow, Se
   INTEGER, INTENT(IN)         :: HXNum               ! Index of HX
   LOGICAL, INTENT(INOUT)      :: ErrorsFound         ! Set to true if certain errors found
   CHARACTER(len=*),INTENT(IN) :: HXName              ! Name of HX
-  REAL, OPTIONAL              :: SupplyAirVolFlow    ! HX supply air flow rate    [m3/s]
-  REAL, OPTIONAL              :: SecondaryAirVolFlow ! HX secondary air flow rate [m3/s]
+  REAL(r64), OPTIONAL              :: SupplyAirVolFlow    ! HX supply air flow rate    [m3/s]
+  REAL(r64), OPTIONAL              :: SecondaryAirVolFlow ! HX secondary air flow rate [m3/s]
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

@@ -45,11 +45,11 @@ INTEGER, PARAMETER    :: MaxSetBackCount = 3
 
           ! DERIVED TYPE DEFINITIONS:
 TYPE Energy
-  REAL:: TotDemand  = 0.0
-  REAL:: Elec       = 0.0
-  REAL:: Gas        = 0.0
-  REAL:: Purch      = 0.0
-  REAL:: Other      = 0.0
+  REAL(r64):: TotDemand  = 0.0
+  REAL(r64):: Elec       = 0.0
+  REAL(r64):: Gas        = 0.0
+  REAL(r64):: Purch      = 0.0
+  REAL(r64):: Other      = 0.0
 END TYPE Energy
 
 TYPE CoilType
@@ -73,123 +73,123 @@ TYPE(SummarizeLoads) , ALLOCATABLE, DIMENSION(:)  :: Vent
 
           ! MODULE VARIABLE DECLARATIONS:
 !Ventilation Report Variables
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxCoolingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxCoolingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxOvercoolingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxHeatingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxHeatingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxOverheatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxNoLoadHeatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxNoLoadCoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxCoolingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxCoolingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxOvercoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxHeatingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxHeatingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxOverheatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxNoLoadHeatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxNoLoadCoolingByVent
 
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxCoolingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxCoolingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxOvercoolingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxHeatingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxHeatingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxOverheatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxNoLoadHeatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: RemMaxNoLoadCoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxCoolingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxCoolingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxOvercoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxHeatingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxHeatingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxOverheatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxNoLoadHeatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: RemMaxNoLoadCoolingByVent
 
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxCoolingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxCoolingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxOvercoolingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxHeatingLoadMetByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxHeatingLoadAddedByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxOverheatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxNoLoadHeatingByVent
-REAL, ALLOCATABLE, DIMENSION(:) :: LastMaxNoLoadCoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxCoolingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxCoolingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxOvercoolingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxHeatingLoadMetByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxHeatingLoadAddedByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxOverheatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxNoLoadHeatingByVent
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LastMaxNoLoadCoolingByVent
 
 ! Sep 2011 - extracting code to separate area for
 ! "Vent Energy" reporting.
-!REAL, ALLOCATABLE, DIMENSION(:) :: CoolingDemandMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: CoolingDemandAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: HeatingDemandMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: HeatingDemandAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OvercoolingByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OverheatingByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: NoLoadHeatingByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: NoLoadCoolingByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentLoadNoSysEffectThisTimeStep
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: CoolingDemandMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: CoolingDemandAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: HeatingDemandMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: HeatingDemandAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OvercoolingByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OverheatingByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: NoLoadHeatingByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: NoLoadCoolingByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentLoadNoSysEffectThisTimeStep
 !
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyElectricDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyGasDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyPurchasedDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyOtherDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyElectricIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyGasIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyPurchasedIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyOtherIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyCostReducedBySysOp
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergyCostofOverHeatOverCool
-!REAL, ALLOCATABLE, DIMENSION(:) :: VentEnergySavingsReducedBySysOp
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyElectricDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyGasDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyPurchasedDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyOtherDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyElectricIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyGasIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyPurchasedIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyOtherIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyCostReducedBySysOp
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergyCostofOverHeatOverCool
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: VentEnergySavingsReducedBySysOp
 !
-!REAL, ALLOCATABLE, DIMENSION(:) :: TotVentEnergyCoolingIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: TotVentEnergyCoolingDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: TotVentEnergyHeatingIncrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: TotVentEnergyHeatingDecrease
-!REAL, ALLOCATABLE, DIMENSION(:) :: ElecCoolingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: GasCoolingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: PurchCoolingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OtherCoolingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: ElecCoolingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: GasCoolingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: PurchCoolingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OtherCoolingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: ElecheatingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: GasHeatingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: PurchHeatingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OtherHeatingEnergyAddedByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: ElecHeatingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: GasHeatingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: PurchHeatingEnergyMetByVent
-!REAL, ALLOCATABLE, DIMENSION(:) :: OtherHeatingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotVentEnergyCoolingIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotVentEnergyCoolingDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotVentEnergyHeatingIncrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: TotVentEnergyHeatingDecrease
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: ElecCoolingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: GasCoolingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: PurchCoolingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OtherCoolingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: ElecCoolingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: GasCoolingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: PurchCoolingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OtherCoolingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: ElecheatingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: GasHeatingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: PurchHeatingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OtherHeatingEnergyAddedByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: ElecHeatingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: GasHeatingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: PurchHeatingEnergyMetByVent
+!REAL(r64), ALLOCATABLE, DIMENSION(:) :: OtherHeatingEnergyMetByVent
 
 
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotZoneLoadHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotZoneLoadCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysOALoadHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysOALoadCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotZoneLoadHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotZoneLoadCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysOALoadHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysOALoadCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotCLNG
 
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotH2OHOT
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotH2OCOLD
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotGas
-REAL, ALLOCATABLE, DIMENSION(:) :: SysTotSteam
-
-
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHumidHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHumidElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysEvapCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysEvapElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHeatExHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHeatExCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: DesDehumidCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: DesDehumidElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotH2OHOT
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotH2OCOLD
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotGas
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysTotSteam
 
 
-REAL, ALLOCATABLE, DIMENSION(:) :: SysFANCompHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysFANCompElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysCCCompCLNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysCCCompH2OCOLD
-REAL, ALLOCATABLE, DIMENSION(:) :: SysCCCompElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompH2OHOT
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompElec
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompElecRes
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompHTNG
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompGas
-REAL, ALLOCATABLE, DIMENSION(:) :: SysHCCompSteam
-REAL, ALLOCATABLE, DIMENSION(:) :: SysDomesticH20
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHumidHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHumidElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysEvapCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysEvapElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHeatExHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHeatExCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: DesDehumidCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: DesDehumidElec
 
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAMassFlow        ! zone mech vent mass flow rate {kg/s}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAMass            ! zone mech vent total mass for time {kg}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAVolFlowStdRho   ! zone mech vent volume flow rate at standard density {m3/s}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAVolStdRho       ! zone mech vent total volume OA at standard density {m3/s}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAVolFlowCrntRho  ! zone mech vent volume flow rate at current density {m3/s}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneOAVolCrntRho      ! zone mech vent total volume OA at current density {m3/s}
-REAL, ALLOCATABLE, DIMENSION(:) :: ZoneMechACH           ! zone mech vent air changes per hour {ACH}
+
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysFANCompHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysFANCompElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysCCCompCLNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysCCCompH2OCOLD
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysCCCompElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompH2OHOT
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompElec
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompElecRes
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompHTNG
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompGas
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysHCCompSteam
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: SysDomesticH20
+
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAMassFlow        ! zone mech vent mass flow rate {kg/s}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAMass            ! zone mech vent total mass for time {kg}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAVolFlowStdRho   ! zone mech vent volume flow rate at standard density {m3/s}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAVolStdRho       ! zone mech vent total volume OA at standard density {m3/s}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAVolFlowCrntRho  ! zone mech vent volume flow rate at current density {m3/s}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneOAVolCrntRho      ! zone mech vent total volume OA at current density {m3/s}
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: ZoneMechACH           ! zone mech vent air changes per hour {ACH}
 
 
 LOGICAL :: AirLoopLoadsReportEnabled=.true.
@@ -4201,11 +4201,11 @@ SUBROUTINE ReportSystemEnergyUse
     INTEGER     ::  AirDistHeatInletNodeNum
     INTEGER     ::  EnergyType
     INTEGER     ::  ActualZoneNum
-    REAL   ::  CompEnergyUse
-    REAL   ::  ZoneLoad
-    REAL   ::  CompLoad
-    REAL   ::  ADUCoolFlowrate
-    REAL   ::  ADUHeatFlowrate
+    REAL(r64)   ::  CompEnergyUse
+    REAL(r64)   ::  ZoneLoad
+    REAL(r64)   ::  CompLoad
+    REAL(r64)   ::  ADUCoolFlowrate
+    REAL(r64)   ::  ADUHeatFlowrate
     LOGICAL     ::  CompLoadFlag
 
 IF (.not. AirLoopLoadsReportEnabled) RETURN
@@ -4365,9 +4365,9 @@ SysEvapElec         = 0.0
 
         ! Set for cooling or heating path
       IF(AirDistCoolInletNodeNum > 0 .AND. AirDistHeatInletNodeNum == 0)THEN
-        ADUCoolFlowrate = MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitCool(ZoneInNum)%InNode)%MassFlowRate,0.0)
+        ADUCoolFlowrate = MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitCool(ZoneInNum)%InNode)%MassFlowRate,0.0d0)
       ELSEIF(AirDistHeatInletNodeNum > 0 .AND. AirDistCoolInletNodeNum == 0)THEN
-        ADUHeatFlowrate = MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitHeat(ZoneInNum)%InNode)%MassFlowRate,0.0)
+        ADUHeatFlowrate = MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitHeat(ZoneInNum)%InNode)%MassFlowRate,0.0d0)
       ELSE
         ADUCoolFlowrate = 0.0
         ADUHeatFlowrate = 0.0
@@ -4522,13 +4522,13 @@ SUBROUTINE CalcSystemEnergyUse(CompLoadFlag,AirLoopNum,CompType,EnergyType,CompL
     CHARACTER(len=*), INTENT(IN)    :: CompType
     INTEGER, INTENT(IN)     ::  AirLoopNum
     INTEGER, INTENT(IN)     ::  EnergyType
-    REAL, INTENT(IN)        ::  CompLoad
-    REAL, INTENT(IN)        ::  CompEnergy
+    REAL(r64), INTENT(IN)        ::  CompLoad
+    REAL(r64), INTENT(IN)        ::  CompEnergy
     LOGICAL, INTENT(IN)     ::  CompLoadFlag
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: SmallLoad = 0.1  !(W)
-    REAL, PARAMETER :: KJperJ = 0.001   !kilojoules per joules
+    REAL(r64), PARAMETER :: SmallLoad = 0.1d0  !(W)
+    REAL(r64), PARAMETER :: KJperJ = 0.001d0   !kilojoules per joules
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4636,7 +4636,7 @@ SELECT CASE(CompType)
   CASE ('COIL:USERDEFINED')
 
     IF(CompLoadFlag) THEN
-      IF (CompLoad < 0.) THEN
+      IF (CompLoad < 0.d0) THEN
         SysCCCompCLNG(AirLoopNum) = SysCCCompCLNG(AirLoopNum) + ABS(CompLoad)
       ELSE
         SysHCCompHTNG(AirLoopNum) = SysHCCompHTNG(AirLoopNum) + ABS(CompLoad)
@@ -4650,7 +4650,7 @@ SELECT CASE(CompType)
       CASE (iRT_Steam)
             SysHCCompSteam(AirLoopNum)     = SysHCCompSteam(AirLoopNum) + CompEnergy
       CASE (iRT_Electricity)
-        IF (CompLoad < 0.) THEN
+        IF (CompLoad < 0.d0) THEN
           SysCCCompElec(AirLoopNum) = SysCCCompElec(AirLoopNum) + CompEnergy
         ELSE
           SysHCCompElec(AirLoopNum)      = SysHCCompElec(AirLoopNum) + CompEnergy
@@ -4842,8 +4842,8 @@ SUBROUTINE ReportMaxVentilationLoads
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: SmallLoad = 0.1  !(W)
-    REAL, PARAMETER :: KJperJ = 0.001   !kilojoules per joules
+    REAL(r64), PARAMETER :: SmallLoad = 0.1d0  !(W)
+    REAL(r64), PARAMETER :: KJperJ = 0.001d0   !kilojoules per joules
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4860,27 +4860,27 @@ SUBROUTINE ReportMaxVentilationLoads
     INTEGER     ::  AirDistCoolInletNodeNum
     INTEGER     ::  AirDistHeatInletNodeNum
 
-    REAL   ::  AirSysEnthReturnAir      !enthalpy of the return air (mixing box inlet node, return side)
-    REAL   ::  AirSysEnthMixedAir       !enthalpy of the mixed air (mixing box outlet node, mixed air side)
-    REAL   ::  AirSysZoneVentLoad       !ventilation load attributed to a particular zone from primary air system
-    REAL   ::  ADUCoolFlowrate
-    REAL   ::  ADUHeatFlowrate
-    REAL   ::  AirSysTotalMixFlowRate   !Mixed air flow
-    REAL   ::  AirSysOutAirFlow         ! outside air flow rate for zone from primary air system
+    REAL(r64)   ::  AirSysEnthReturnAir      !enthalpy of the return air (mixing box inlet node, return side)
+    REAL(r64)   ::  AirSysEnthMixedAir       !enthalpy of the mixed air (mixing box outlet node, mixed air side)
+    REAL(r64)   ::  AirSysZoneVentLoad       !ventilation load attributed to a particular zone from primary air system
+    REAL(r64)   ::  ADUCoolFlowrate
+    REAL(r64)   ::  ADUHeatFlowrate
+    REAL(r64)   ::  AirSysTotalMixFlowRate   !Mixed air flow
+    REAL(r64)   ::  AirSysOutAirFlow         ! outside air flow rate for zone from primary air system
 
-    REAL   ::  ZFAUEnthReturnAir !Zone forced Air unit enthalpy of the return air
-    REAL   ::  ZFAUEnthMixedAir  !Zone forced Air unit enthalpy of the mixed air
-    REAL   ::  ZFAUFlowRate
-    REAL   ::  ZFAUZoneVentLoad !ventilation load attributed to a particular zone from zone forced air units
-    REAL   ::  ZFAUOutAirFlow   !outside air flow rate for zone from zone forced air units.
+    REAL(r64)   ::  ZFAUEnthReturnAir !Zone forced Air unit enthalpy of the return air
+    REAL(r64)   ::  ZFAUEnthMixedAir  !Zone forced Air unit enthalpy of the mixed air
+    REAL(r64)   ::  ZFAUFlowRate
+    REAL(r64)   ::  ZFAUZoneVentLoad !ventilation load attributed to a particular zone from zone forced air units
+    REAL(r64)   ::  ZFAUOutAirFlow   !outside air flow rate for zone from zone forced air units.
     INTEGER     ::  ZoneInletAirNode
 
-    REAL   ::  ZoneVentLoad        !ventilation load attributed to a particular zone
-    REAL   ::  ZoneLoad            !ventilation load attributed to a particular zone
-    REAL   ::  OutAirFlow        !Total outside air flow
-    REAL   ::  ZoneFlowFrac      !fraction of mixed air flowing to a zone
-    REAL   ::  ZoneVolume        !Volume of zone
-    REAL   ::  currentZoneAirDensity ! current zone air density (outside barometric pressure)
+    REAL(r64)   ::  ZoneVentLoad        !ventilation load attributed to a particular zone
+    REAL(r64)   ::  ZoneLoad            !ventilation load attributed to a particular zone
+    REAL(r64)   ::  OutAirFlow        !Total outside air flow
+    REAL(r64)   ::  ZoneFlowFrac      !fraction of mixed air flowing to a zone
+    REAL(r64)   ::  ZoneVolume        !Volume of zone
+    REAL(r64)   ::  currentZoneAirDensity ! current zone air density (outside barometric pressure)
 
     INTEGER     ::  ActualZoneNum
     INTEGER     ::  OutAirNode
@@ -4949,7 +4949,7 @@ SUBROUTINE ReportMaxVentilationLoads
 
         ZoneInletAirNode =   &
            GetWindowACZoneInletAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
-        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0)
+        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0d0)
         MixedAirNode  =   &
            GetWindowACMixedAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
         ReturnAirNode =   &
@@ -4970,7 +4970,7 @@ SUBROUTINE ReportMaxVentilationLoads
 
         ZoneInletAirNode =   &
            GetPTUnitZoneInletAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
-        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0)
+        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0d0)
         MixedAirNode  =   &
            GetPTUnitMixedAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
         ReturnAirNode =   &
@@ -4992,7 +4992,7 @@ SUBROUTINE ReportMaxVentilationLoads
 
         ZoneInletAirNode =   &
            GetFanCoilZoneInletAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
-        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0)
+        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0d0)
         MixedAirNode  =   &
            GetFanCoilMixedAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
         ReturnAirNode =   &
@@ -5015,7 +5015,7 @@ SUBROUTINE ReportMaxVentilationLoads
         ZoneInletAirNode =   &
            GetUnitVentilatorZoneInletAirNode(   &
               ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
-        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0)
+        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0d0)
         MixedAirNode  =   &
            GetUnitVentilatorMixedAirNode(   &
               ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
@@ -5045,7 +5045,7 @@ SUBROUTINE ReportMaxVentilationLoads
         ZoneInletAirNode =   &
            GetStandAloneERVZoneInletAirNode(   &
               ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
-        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0)
+        If (ZoneInletAirNode > 0) ZFAUFlowRate =  MAX(Node(ZoneInletAirNode)%MassFlowRate,0.0d0)
         MixedAirNode  = ZoneInletAirNode
         ReturnAirNode =   &
            GetStandAloneERVReturnAirNode( ZoneEquipList(ZoneEquipConfig(CtrlZoneNum)%EquipListIndex)%EquipIndex(thisZoneEquipNum) )
@@ -5075,10 +5075,10 @@ SUBROUTINE ReportMaxVentilationLoads
          ! Set for cooling or heating path
         IF(AirDistCoolInletNodeNum > 0 .AND. AirDistHeatInletNodeNum == 0)THEN
           ADUCoolFlowrate = ADUCoolFlowrate & ! CR7244 need to accumulate flow across multiple inlets
-                            + MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitCool(ZoneInNum)%InNode)%MassFlowRate,0.0)
+                            + MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitCool(ZoneInNum)%InNode)%MassFlowRate,0.0d0)
         ELSEIF(AirDistHeatInletNodeNum > 0 .AND. AirDistCoolInletNodeNum == 0)THEN
           ADUHeatFlowrate = ADUHeatFlowrate & ! CR7244 need to accumulate flow across multiple inlets
-                            + MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitHeat(ZoneInNum)%InNode)%MassFlowRate,0.0)
+                            + MAX(Node(ZoneEquipConfig(CtrlZoneNum)%AirDistUnitHeat(ZoneInNum)%InNode)%MassFlowRate,0.0d0)
         ELSE
         ! do nothing (already inits)  ! CR7244 need to accumulate flow across multiple inlets
           !ADUCoolFlowrate = 0.0
@@ -5134,7 +5134,7 @@ SUBROUTINE ReportMaxVentilationLoads
 
     ! determine volumetric values from mass flow using current air density for zone (adjusted for elevation)
     currentZoneAirDensity =   PsyRhoAirFnPbTdbW(OutBaroPress, MAT(ActualZoneNum), ZoneAirHumRatAvg(ActualZoneNum))
-    IF (currentZoneAirDensity > 0.0) ZoneOAVolFlowCrntRho(CtrlZoneNum)  = ZoneOAMassFlow(CtrlZoneNum) / currentZoneAirDensity
+    IF (currentZoneAirDensity > 0.0D0) ZoneOAVolFlowCrntRho(CtrlZoneNum)  = ZoneOAMassFlow(CtrlZoneNum) / currentZoneAirDensity
     ZoneOAVolCrntRho(CtrlZoneNum)  = ZoneOAVolFlowCrntRho(CtrlZoneNum) * TimeStepSys* SecInHour
     if (ZoneVolume > 0.0)  ZoneMechACH(CtrlZoneNum)    = (ZoneOAVolCrntRho(CtrlZoneNum) / TimeStepSys)/ZoneVolume
 
@@ -5252,9 +5252,9 @@ SUBROUTINE ReportVentilationEnergyUse(InitVentReportFlag)
     LOGICAL, INTENT(INOUT) ::  InitVentReportFlag
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-!    REAL, PARAMETER     :: SmallLoad = 0.1  !(W)
-!    REAL, PARAMETER     :: KJperJ = 0.001   !kilojoules per joules
-!    REAL, PARAMETER     :: smallflow = 0.00001 !(kg/s)
+!    REAL(r64), PARAMETER     :: SmallLoad = 0.1d0  !(W)
+!    REAL(r64), PARAMETER     :: KJperJ = 0.001d0   !kilojoules per joules
+!    REAL(r64), PARAMETER     :: smallflow = 0.00001d0 !(kg/s)
 !    INTEGER, PARAMETER  :: EnergyTransParam = 1
 !    INTEGER, PARAMETER  :: ZoneEquipListParam = 2
 !    INTEGER, PARAMETER  :: MainBranch       = 1
@@ -5302,21 +5302,21 @@ SUBROUTINE ReportVentilationEnergyUse(InitVentReportFlag)
 !    INTEGER     ::  ADUCoolInNode
 !    INTEGER     ::  EnergyType
 !!    INTEGER     ::  ActualZoneNum
-!    REAL   ::  TotSysDemand
-!    REAL   ::  SystemMdot
-!    REAL   ::  CompEnergyUse
-!    REAL   ::  AvailEnergyTrans
-!    REAL   ::  CompLoad
-!    REAL   ::  Eff
-!    REAL   ::  PeakEff
-!    REAL   ::  ElecEff
-!    REAL   ::  GasEff
-!    REAL   ::  PurchEff
-!    REAL   ::  OtherEff
-!    REAL   ::  PeakElecEff
-!    REAL   ::  PeakGasEff
-!    REAL   ::  PeakPurchEff
-!    REAL   ::  PeakOtherEff
+!    REAL(r64)   ::  TotSysDemand
+!    REAL(r64)   ::  SystemMdot
+!    REAL(r64)   ::  CompEnergyUse
+!    REAL(r64)   ::  AvailEnergyTrans
+!    REAL(r64)   ::  CompLoad
+!    REAL(r64)   ::  Eff
+!    REAL(r64)   ::  PeakEff
+!    REAL(r64)   ::  ElecEff
+!    REAL(r64)   ::  GasEff
+!    REAL(r64)   ::  PurchEff
+!    REAL(r64)   ::  OtherEff
+!    REAL(r64)   ::  PeakElecEff
+!    REAL(r64)   ::  PeakGasEff
+!    REAL(r64)   ::  PeakPurchEff
+!    REAL(r64)   ::  PeakOtherEff
 !    LOGICAL     ::  DecSysVentLoad = .TRUE.
 !    LOGICAL,SAVE::  AirLoopAllocDone = .FALSE.
 !    LOGICAL     ::  ReportFlag

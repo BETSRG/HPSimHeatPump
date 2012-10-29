@@ -53,12 +53,12 @@ PUBLIC ! Everything in data only module is public
   INTEGER, ALLOCATABLE, DIMENSION  (:)    :: PosZ_Door
   INTEGER, ALLOCATABLE, DIMENSION  (:)    :: PosZ_Internal
   ! Convection coeficients for the various surfaces
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: Hceiling
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: HWall
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: HFloor
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: HInternal
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: HWindow
-  REAL, ALLOCATABLE, DIMENSION  (:)       :: HDoor
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: Hceiling
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: HWall
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: HFloor
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: HInternal
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: HWindow
+  REAL(r64), ALLOCATABLE, DIMENSION  (:)       :: HDoor
 
 !     NOTICE
 !

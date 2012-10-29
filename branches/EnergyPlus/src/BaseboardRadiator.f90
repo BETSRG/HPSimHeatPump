@@ -40,7 +40,7 @@ IMPLICIT NONE         ! Enforce explicit typing of all variables
 PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
-  REAL, PARAMETER :: SimpConvAirFlowSpeed = 0.5 !m/s
+  REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 !m/s
   CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Water = 'ZoneHVAC:Baseboard:Convective:Water'
 
   ! DERIVED TYPE DEFINITIONS
@@ -54,22 +54,22 @@ PRIVATE ! Everything private unless explicitly made public
     INTEGER      :: WaterOutletNode           = 0
     INTEGER      :: ControlCompTypeNum        = 0
     INTEGER      :: CompErrIndex              = 0
-    REAL    :: UA                        =0.0
-    REAL    :: WaterMassFlowRate         =0.0
-    REAL    :: WaterVolFlowRateMax       =0.0  ! m3/s
-    REAL    :: WaterMassFlowRateMax      =0.0  ! kg/s
-    REAL    :: Offset                    =0.0
-    REAL    :: AirMassFlowRate           =0.0  ! kg/s
-    REAL    :: DesAirMassFlowRate        =0.0  ! kg/s
-    REAL    :: WaterInletTemp            =0.0
-    REAL    :: WaterOutletTemp           =0.0
-    REAL    :: WaterInletEnthalpy        =0.0
-    REAL    :: WaterOutletEnthalpy       =0.0
-    REAL    :: AirInletTemp              =0.0
-    REAL    :: AirInletHumRat            =0.0
-    REAL    :: AirOutletTemp             =0.0
-    REAL    :: Power                     =0.0
-    REAL    :: Energy                    =0.0
+    REAL(r64)    :: UA                        =0.0
+    REAL(r64)    :: WaterMassFlowRate         =0.0
+    REAL(r64)    :: WaterVolFlowRateMax       =0.0  ! m3/s
+    REAL(r64)    :: WaterMassFlowRateMax      =0.0  ! kg/s
+    REAL(r64)    :: Offset                    =0.0
+    REAL(r64)    :: AirMassFlowRate           =0.0  ! kg/s
+    REAL(r64)    :: DesAirMassFlowRate        =0.0  ! kg/s
+    REAL(r64)    :: WaterInletTemp            =0.0
+    REAL(r64)    :: WaterOutletTemp           =0.0
+    REAL(r64)    :: WaterInletEnthalpy        =0.0
+    REAL(r64)    :: WaterOutletEnthalpy       =0.0
+    REAL(r64)    :: AirInletTemp              =0.0
+    REAL(r64)    :: AirInletHumRat            =0.0
+    REAL(r64)    :: AirOutletTemp             =0.0
+    REAL(r64)    :: Power                     =0.0
+    REAL(r64)    :: Energy                    =0.0
     INTEGER      :: LoopNum                   =0  ! plant loop index
     INTEGER      :: LoopSideNum               =0  ! plant loop side index
     INTEGER      :: BranchNum                 =0  ! plant loop branch index
@@ -133,7 +133,7 @@ CONTAINS
     INTEGER, INTENT(IN) :: ActualZoneNum
     INTEGER, INTENT(IN) :: ControlledZoneNum
     LOGICAL, INTENT(IN) :: FirstHVACIteration
-    REAL, INTENT(OUT)   :: PowerMet
+    REAL(r64), INTENT(OUT)   :: PowerMet
     INTEGER, INTENT(INOUT) :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -149,10 +149,10 @@ CONTAINS
 
     INTEGER        :: BaseboardNum ! index of unit in baseboard array
     LOGICAL,SAVE   :: GetInputFlag = .TRUE. ! one time get input flag
-    REAL      :: QZnReq       ! zone load not yet satisfied
-    REAL      :: MaxWaterFlow
-    REAL      :: MinWaterFlow
-    REAL      :: DummyMdot
+    REAL(r64)      :: QZnReq       ! zone load not yet satisfied
+    REAL(r64)      :: MaxWaterFlow
+    REAL(r64)      :: MinWaterFlow
+    REAL(r64)      :: DummyMdot
 
 
     IF (GetInputFlag) THEN
@@ -200,14 +200,14 @@ CONTAINS
     Baseboard(BaseboardNum)%Power             = 0.0
     Baseboard(BaseboardNum)%WaterMassFlowRate = 0.0
     ! init hot water flow rate to zero
-    DummyMdot = 0.
+    DummyMdot = 0.d0
     CALL SetActuatedBranchFlowRate(DummyMdot,Baseboard(BaseboardNum)%WaterInletNode,  &
                                    Baseboard(BaseboardNum)%LoopNum,Baseboard(BaseboardNum)%LoopSideNum, &
                                    Baseboard(BaseboardNum)%BranchNum, .FALSE. )
 
   ELSE
     ! init hot water flow rate to zero
-    DummyMdot = 0.
+    DummyMdot = 0.d0
     CALL SetActuatedBranchFlowRate(DummyMdot,Baseboard(BaseboardNum)%WaterInletNode,  &
                                    Baseboard(BaseboardNum)%LoopNum,Baseboard(BaseboardNum)%LoopSideNum, &
                                    Baseboard(BaseboardNum)%BranchNum, .TRUE. )
@@ -358,8 +358,8 @@ CONTAINS
         Baseboard(BaseboardNum)%WaterVolFlowRateMax = rNumericArgs(2)
         Baseboard(BaseboardNum)%Offset              = rNumericArgs(3)
         ! Set default convergence tolerance
-        IF (Baseboard(BaseboardNum)%Offset .LE. 0.0) THEN
-          Baseboard(BaseboardNum)%Offset = 0.001
+        IF (Baseboard(BaseboardNum)%Offset .LE. 0.0d0) THEN
+          Baseboard(BaseboardNum)%Offset = 0.001d0
         END IF
       END DO
 
@@ -451,9 +451,9 @@ SUBROUTINE InitBaseboard(BaseboardNum, ControlledZoneNumSub)
   LOGICAL,SAVE   :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   Integer        :: Loop
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
-  REAL      :: RhoAirStdInit
-  REAL      :: rho ! local fluid density
-  REAL      :: Cp  ! local fluid specific heat
+  REAL(r64)      :: RhoAirStdInit
+  REAL(r64)      :: rho ! local fluid density
+  REAL(r64)      :: Cp  ! local fluid specific heat
   LOGICAL        :: errFlag
 
   IF (Baseboard(BaseboardNum)%ZonePtr <= 0) &
@@ -511,14 +511,14 @@ SUBROUTINE InitBaseboard(BaseboardNum, ControlledZoneNumSub)
                            PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidIndex,&
                            'BaseboardRadiator:InitBaseboard')
     Baseboard(BaseboardNum)%WaterMassFlowRateMax = rho * Baseboard(BaseboardNum)%WaterVolFlowRateMax
-    CALL InitComponentNodes(0.,Baseboard(BaseboardNum)%WaterMassFlowRateMax, &
+    CALL InitComponentNodes(0.d0,Baseboard(BaseboardNum)%WaterMassFlowRateMax, &
                                  Baseboard(BaseboardNum)%WaterInletNode,       &
                                  Baseboard(BaseboardNum)%WaterOutletNode,       &
                                  Baseboard(BaseboardNum)%LoopNum,              &
                                  Baseboard(BaseboardNum)%LoopSideNum,          &
                                  Baseboard(BaseboardNum)%BranchNum,            &
                                  Baseboard(BaseboardNum)%CompNum)
-    Node(WaterInletNode)%Temp          = 60.0
+    Node(WaterInletNode)%Temp          = 60.0d0
     Cp =  GetSpecificHeatGlycol(PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidName,  &
                                 Node(WaterInletNode)%Temp,                      &
                                 PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidIndex, &
@@ -530,7 +530,7 @@ SUBROUTINE InitBaseboard(BaseboardNum, ControlledZoneNumSub)
     ! pick a mass flow rate that depends on the max water mass flow rate. 0.42 gives an air to water
     ! capacity ratio of 1 to 10 at max water flow.
     IF (Baseboard(BaseboardNum)%AirMassFlowRate <= 0.0) THEN
-      Baseboard(BaseboardNum)%AirMassFlowRate = 0.42*Baseboard(BaseboardNum)%WaterMassFlowRateMax
+      Baseboard(BaseboardNum)%AirMassFlowRate = 0.42d0*Baseboard(BaseboardNum)%WaterMassFlowRateMax
     END IF
     MyEnvrnFlag(BaseboardNum) = .FALSE.
   END IF
@@ -583,7 +583,7 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
   Integer, Intent(IN) :: BaseboardNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: Acc =  0.0001       ! Accuracy of result
+  REAL(r64), PARAMETER :: Acc =  0.0001d0       ! Accuracy of result
   INTEGER, PARAMETER          :: MaxIte = 500        ! Maximum number of iterations
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -596,16 +596,16 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
   INTEGER             :: WaterInletNode
   INTEGER             :: PltSizNum       ! do loop index for plant sizing
   INTEGER             :: PltSizHeatNum   ! index of plant sizing object for 1st heating loop
-  REAL           :: DesCoilLoad
+  REAL(r64)           :: DesCoilLoad
   INTEGER             :: SolFla          ! Flag of solver
-  REAL           :: UA0             ! lower bound for UA
-  REAL           :: UA1             ! upper bound for UA
-  REAL           :: UA
-  REAL, DIMENSION(2)  :: Par
+  REAL(r64)           :: UA0             ! lower bound for UA
+  REAL(r64)           :: UA1             ! upper bound for UA
+  REAL(r64)           :: UA
+  REAL(r64), DIMENSION(2)  :: Par
   LOGICAL             :: ErrorsFound     ! If errors detected in input
-  REAL           :: rho             ! local fluid density
-  REAL           :: Cp              ! local fluid specific heat
-  REAL           :: tmpWaterVolFlowRateMax ! local design plant fluid flow rate
+  REAL(r64)           :: rho             ! local fluid density
+  REAL(r64)           :: Cp              ! local fluid specific heat
+  REAL(r64)           :: tmpWaterVolFlowRateMax ! local design plant fluid flow rate
 
   PltSizHeatNum = 0
   PltSizNum = 0
@@ -624,7 +624,7 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
         DesCoilLoad = CalcFinalZoneSizing(CurZoneEqNum)%DesHeatLoad * CalcFinalZoneSizing(CurZoneEqNum)%HeatSizingFactor
         IF (DesCoilLoad >= SmallLoad) THEN
           Cp =  GetSpecificHeatGlycol(PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidName,  &
-                                     60.0,                      &
+                                     60.0d0,                      &
                                      PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidIndex, &
                                      'SizeBaseboard')
           rho = GetDensityGlycol(PlantLoop(Baseboard(BaseboardNum)%LoopNum)%FluidName,  &
@@ -635,7 +635,7 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
                                                           ( PlantSizData(PltSizHeatNum)%DeltaT * Cp * rho )
         ELSE
 
-          Baseboard(BaseboardNum)%WaterVolFlowRateMax = 0.
+          Baseboard(BaseboardNum)%WaterVolFlowRateMax = 0.d0
 
         END IF
         CALL ReportSizingOutput(cCMO_BBRadiator_Water,Baseboard(BaseboardNum)%EquipID,&
@@ -656,13 +656,13 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
         IF (DesCoilLoad >= SmallLoad) THEN
           ! pick an air  mass flow rate that will give a heating capacity of twice the design load
           ! when effectiveness = 1.
-          Baseboard(BaseboardNum)%DesAirMassFlowRate = 2.*DesCoilLoad / (1000. * &
+          Baseboard(BaseboardNum)%DesAirMassFlowRate = 2.d0*DesCoilLoad / (1000.d0 * &
             (Baseboard(BaseboardNum)%WaterInletTemp - Baseboard(BaseboardNum)%AirInletTemp))
           ! pass along the coil number and the design load to the residual calculation
           Par(1) = DesCoilLoad
           Par(2) = BaseboardNum
           ! set the lower and upper limits on the UA
-          UA0 = .001 * DesCoilLoad
+          UA0 = .001d0 * DesCoilLoad
           UA1 = DesCoilLoad
           ! Invert the baseboard model: given the design inlet conditions and the design load,
           ! find the design UA.
@@ -739,7 +739,7 @@ END SUBROUTINE SizeBaseboard
     IMPLICIT NONE
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER      :: BaseboardNum
-    REAL    :: LoadMet
+    REAL(r64)    :: LoadMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -752,25 +752,25 @@ END SUBROUTINE SizeBaseboard
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: ZoneNum
-    REAL :: WaterInletTemp
-    REAL :: AirInletTemp
-    REAL :: CpAir
-    REAL :: CpWater
-    REAL :: AirMassFlowRate
-    REAL :: WaterMassFlowRate
-    REAL :: CapacitanceAir
-    REAL :: CapacitanceWater
-    REAL :: CapacitanceMax
-    REAL :: CapacitanceMin
-    REAL :: CapacityRatio
-    REAL :: NTU
-    REAL :: Effectiveness
-    REAL :: WaterOutletTemp
-    REAL :: AirOutletTemp
-    REAL :: AA
-    REAL :: BB
-    REAL :: CC
-    REAL :: QZnReq
+    REAL(r64) :: WaterInletTemp
+    REAL(r64) :: AirInletTemp
+    REAL(r64) :: CpAir
+    REAL(r64) :: CpWater
+    REAL(r64) :: AirMassFlowRate
+    REAL(r64) :: WaterMassFlowRate
+    REAL(r64) :: CapacitanceAir
+    REAL(r64) :: CapacitanceWater
+    REAL(r64) :: CapacitanceMax
+    REAL(r64) :: CapacitanceMin
+    REAL(r64) :: CapacityRatio
+    REAL(r64) :: NTU
+    REAL(r64) :: Effectiveness
+    REAL(r64) :: WaterOutletTemp
+    REAL(r64) :: AirOutletTemp
+    REAL(r64) :: AA
+    REAL(r64) :: BB
+    REAL(r64) :: CC
+    REAL(r64) :: QZnReq
 
     ZoneNum = Baseboard(BaseboardNum)%ZonePtr
     QZnReq  = ZoneSysEnergyDemand(ZoneNum)%RemainingOutputReqToHeatSP
@@ -788,23 +788,23 @@ END SUBROUTINE SizeBaseboard
                            'SimHWConvective')
     CpAir = PsyCpAirFnWTdb(Baseboard(BaseboardNum)%AirInletHumRat,AirInletTemp)
 
-    IF (Baseboard(BaseboardNum)%DesAirMassFlowRate > 0.0) THEN  ! If UA is autosized, assign design condition
+    IF (Baseboard(BaseboardNum)%DesAirMassFlowRate > 0.0d0) THEN  ! If UA is autosized, assign design condition
         AirMassFlowRate = Baseboard(BaseboardNum)%DesAirMassFlowRate
     ELSE
         AirMassFlowRate = Baseboard(BaseboardNum)%AirMassFlowRate
             ! pick a mass flow rate that depends on the max water mass flow rate. 0.42 gives an air to water
             ! capacity ratio of 1 to 10 at max water flow.
         IF (AirMassFlowRate <= 0.0) &
-            AirMassFlowRate = 0.42*Baseboard(BaseboardNum)%WaterMassFlowRateMax
+            AirMassFlowRate = 0.42d0*Baseboard(BaseboardNum)%WaterMassFlowRateMax
     END IF
 
     WaterMassFlowRate = Node(Baseboard(BaseboardNum)%WaterInletNode)%MassFlowRate
     CapacitanceAir = CpAir * AirMassFlowRate
 
-     IF (QZnReq > 0.0 &
+     IF (QZnReq > 0.0d0 &
        .AND. (.NOT. DeadbandOrSetback(ZoneNum) .OR. MySizeFlag(BaseboardNum)) &
        .AND. (GetCurrentScheduleValue(Baseboard(BaseboardNum)%SchedPtr) > 0 .OR. MySizeFlag(BaseboardNum)) &
-       .AND. (WaterMassFlowRate > 0.0) ) THEN
+       .AND. (WaterMassFlowRate > 0.0d0) ) THEN
       CapacitanceWater = CpWater * WaterMassFlowRate
       CapacitanceMax = MAX(CapacitanceAir,CapacitanceWater)
       CapacitanceMin = MIN(CapacitanceAir,CapacitanceWater)
@@ -814,13 +814,13 @@ END SUBROUTINE SizeBaseboard
       ! Effectiveness = 1. - EXP((1./CapacityRatio)*(NTU)**0.22*(EXP(-CapacityRatio*(NTU)**0.78)-1.))
       ! To prevent possible underflows (numbers smaller than the computer can handle) we must break
       ! the calculation up into steps and check the size of the exponential arguments.
-      AA = -CapacityRatio*(NTU)**0.78
+      AA = -CapacityRatio*(NTU)**0.78d0
       IF (AA.LT.EXP_LowerLimit) THEN
         BB = 0.0
       ELSE
         BB = EXP(AA)
       END IF
-      CC = (1./CapacityRatio)*(NTU)**0.22*(BB-1.)
+      CC = (1./CapacityRatio)*(NTU)**0.22d0*(BB-1.)
       IF (CC.LT.EXP_LowerLimit) THEN
         Effectiveness = 1.0
       ELSE
@@ -985,9 +985,9 @@ FUNCTION HWBaseboardUAResidual(UA, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: UA ! UA of coil
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64), INTENT(IN)  :: UA ! UA of coil
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = design coil load [W]
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1000,7 +1000,7 @@ FUNCTION HWBaseboardUAResidual(UA, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: BaseboardIndex
-  REAL    :: LoadMet
+  REAL(r64)    :: LoadMet
 
   BaseboardIndex = INT(Par(2))
   Baseboard(BaseboardIndex)%UA = UA
@@ -1177,7 +1177,7 @@ PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
   CHARACTER(len=*), PARAMETER :: cCMO_BBRadiator_Electric = 'ZoneHVAC:Baseboard:Convective:Electric'
-  REAL, PARAMETER :: SimpConvAirFlowSpeed = 0.5 !m/s
+  REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 !m/s
 
   ! DERIVED TYPE DEFINITIONS
   TYPE BaseboardParams
@@ -1185,15 +1185,15 @@ PRIVATE ! Everything private unless explicitly made public
     CHARACTER(len=MaxNameLength) :: EquipType =' '
     CHARACTER(len=MaxNameLength) :: Schedule  =' '
     INTEGER      :: SchedPtr                       = 0
-    REAL    :: NominalCapacity                =0.0
-    REAL    :: BaseBoardEfficiency            =0.0
-    REAL    :: AirInletTemp                   =0.0
-    REAL    :: AirInletHumRat                 =0.0
-    REAL    :: AirOutletTemp                  =0.0
-    REAL    :: Power                          =0.0
-    REAL    :: Energy                         =0.0
-    REAL    :: ElecUseLoad                    =0.0
-    REAL    :: ElecUseRate                    =0.0
+    REAL(r64)    :: NominalCapacity                =0.0
+    REAL(r64)    :: BaseBoardEfficiency            =0.0
+    REAL(r64)    :: AirInletTemp                   =0.0
+    REAL(r64)    :: AirInletHumRat                 =0.0
+    REAL(r64)    :: AirOutletTemp                  =0.0
+    REAL(r64)    :: Power                          =0.0
+    REAL(r64)    :: Energy                         =0.0
+    REAL(r64)    :: ElecUseLoad                    =0.0
+    REAL(r64)    :: ElecUseRate                    =0.0
   END TYPE BaseboardParams
 
   !MODULE VARIABLE DECLARATIONS:
@@ -1243,7 +1243,7 @@ CONTAINS
     CHARACTER(len=*), INTENT(IN) :: EquipName
     INTEGER, INTENT(IN) :: ActualZoneNum
     INTEGER, INTENT(IN) :: ControlledZoneNum
-    REAL, INTENT(OUT)   :: PowerMet
+    REAL(r64), INTENT(OUT)   :: PowerMet
     INTEGER, INTENT(INOUT) :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1259,7 +1259,7 @@ CONTAINS
 
     INTEGER        :: BaseboardNum ! index of unit in baseboard array
     LOGICAL,SAVE   :: GetInputFlag = .TRUE. ! one time get input flag
-    REAL      :: QZnReq       ! zone load not yet satisfied
+    REAL(r64)      :: QZnReq       ! zone load not yet satisfied
 
 
     IF (GetInputFlag) THEN
@@ -1612,14 +1612,14 @@ SUBROUTINE SimElectricConvective(BaseboardNum, LoadMet)
           ! REFERENCES:
 
           ! USE STATEMENTS:
-!unuse909    USE DataEnvironment, ONLY: OutBaroPress
+!unused0909    USE DataEnvironment, ONLY: OutBaroPress
     USE DataLoopNode,   ONLY: Node
     USE Psychrometrics, ONLY: PsyCpAirFnWTdb
 
     IMPLICIT NONE
           ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(IN)      :: BaseboardNum
-    REAL, INTENT(IN)    :: LoadMet
+    REAL(r64), INTENT(IN)    :: LoadMet
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1631,13 +1631,13 @@ SUBROUTINE SimElectricConvective(BaseboardNum, LoadMet)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL :: AirInletTemp
-    REAL :: CpAir
-    REAL :: AirMassFlowRate
-    REAL :: CapacitanceAir
-    REAL :: Effic
-    REAL :: AirOutletTemp
-    REAL :: QBBCap
+    REAL(r64) :: AirInletTemp
+    REAL(r64) :: CpAir
+    REAL(r64) :: AirMassFlowRate
+    REAL(r64) :: CapacitanceAir
+    REAL(r64) :: Effic
+    REAL(r64) :: AirOutletTemp
+    REAL(r64) :: QBBCap
 
 
     AirInletTemp = Baseboard(BaseboardNum)%AirInletTemp

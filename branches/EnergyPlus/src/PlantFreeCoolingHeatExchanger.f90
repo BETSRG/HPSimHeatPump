@@ -52,9 +52,9 @@ PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
 ! zero load tolerance used in equipment operation decisions (Watts)
-REAL, PARAMETER                         :: zeroloadtol = 1.0
+REAL(r64), PARAMETER                         :: zeroloadtol = 1.0d0
 !zero capacity tolerance used in heat exchanger cal (kg/s * J/kg/K)
-REAL, PARAMETER                         :: zerocaptol  = .00001
+REAL(r64), PARAMETER                         :: zerocaptol  = .00001d0
 ! free cooling HX type string
 CHARACTER(len=*), PARAMETER :: ThisType = 'HeatExchanger:Hydronic'
 CHARACTER(len=*), PARAMETER :: ThisTypeUC = 'HEATEXCHANGER:HYDRONIC'
@@ -94,11 +94,11 @@ TYPE FreeCoolHXData
   CHARACTER(len=MaxNameLength) :: ControlMode           = Blank  ! use specified control mode (Wetbulb, drybulb etc.)
   INTEGER                      :: ControlMode_Num       =0       ! number equivalend for control node
   INTEGER                      :: HeatXMode             =0       ! heat exchange mode (ideal, NTU-effectiveness)
-  REAL                    :: UA                    =0.0     ! UA for heat exchanger (ignored in ideal mode)
-  REAL                    :: CondenserSideFlowRate =0.0     ! volumetric flow rate through condenser side of unit
-  REAL                    :: CondDesignMassFlowRate =0.   ! kg/s
-  REAL                    :: PlantSideFlowRate     =0.0     ! volumetric flow rate through plant side of unit
-  REAL                    :: PlantDesignMassFlowRate =0.  ! kg/s
+  REAL(r64)                    :: UA                    =0.0     ! UA for heat exchanger (ignored in ideal mode)
+  REAL(r64)                    :: CondenserSideFlowRate =0.0     ! volumetric flow rate through condenser side of unit
+  REAL(r64)                    :: CondDesignMassFlowRate =0.d0   ! kg/s
+  REAL(r64)                    :: PlantSideFlowRate     =0.0     ! volumetric flow rate through plant side of unit
+  REAL(r64)                    :: PlantDesignMassFlowRate =0.d0  ! kg/s
   ! records
   INTEGER                      :: ScheduleNum           =0       ! Loop schedule number
   INTEGER                      :: ComponentSchedNum     =0       ! HX schedule number
@@ -117,14 +117,14 @@ TYPE FreeCoolHXData
 !  TYPE (Locator)               :: PlantLocThisEquip      =Locator(0,0,0,0)  ! Location on plant side - this heat exchanger
 !  TYPE (Locator)               :: CondLocThisEquip       =Locator(0,0,0,0)  ! Location on cond side - this heat exchanger
   ! Report data
-  REAL                    :: CondInletTemp          =0.0    ! condenser inlet temperature
-  REAL                    :: CondOutletTemp         =0.0    ! condenser outlet temperature
-  REAL                    :: PlantInletTemp         =0.0    ! plant inlet temperature
-  REAL                    :: PlantOutletTemp        =0.0    ! plant outlet temperature
-  REAL                    :: CondMassFlowRate       =0.0    ! condenser mass flow rate
-  REAL                    :: PlantMassFlowRate      =0.0    ! plant mass flow rate
-  REAL                    :: HeatTransRate          =0.0    ! total heat transfer rate, Watts
-  REAL                    :: HeatTransEnergy        =0.0    ! total heat transfer energy, Joules
+  REAL(r64)                    :: CondInletTemp          =0.0    ! condenser inlet temperature
+  REAL(r64)                    :: CondOutletTemp         =0.0    ! condenser outlet temperature
+  REAL(r64)                    :: PlantInletTemp         =0.0    ! plant inlet temperature
+  REAL(r64)                    :: PlantOutletTemp        =0.0    ! plant outlet temperature
+  REAL(r64)                    :: CondMassFlowRate       =0.0    ! condenser mass flow rate
+  REAL(r64)                    :: PlantMassFlowRate      =0.0    ! plant mass flow rate
+  REAL(r64)                    :: HeatTransRate          =0.0    ! total heat transfer rate, Watts
+  REAL(r64)                    :: HeatTransEnergy        =0.0    ! total heat transfer energy, Joules
   !loop topology variables
   INTEGER                      :: CondLoopNum            =0 ! condenser side plant loop number
   INTEGER                      :: CondLoopSideNum        =0 ! condenser side plant loop side number
@@ -220,10 +220,10 @@ SUBROUTINE SimFreeCoolingHeatExchanger(CompName,CompIndex,FirstHVACIteration,Ini
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE :: GetInputFlag = .TRUE.    ! First time, input is "gotten"
-  REAL     :: DryBulb                  ! Outside drybulb temp
-  REAL     :: WetBulb                  ! Outside wetbulb temp
-  REAL     :: SchedSetpoint            ! scheduled setpoint temp
-  REAL     :: CondTemp                 ! condenser inlet temperature
+  REAL(r64)     :: DryBulb                  ! Outside drybulb temp
+  REAL(r64)     :: WetBulb                  ! Outside wetbulb temp
+  REAL(r64)     :: SchedSetpoint            ! scheduled setpoint temp
+  REAL(r64)     :: CondTemp                 ! condenser inlet temperature
 !  LOGICAL       :: SetCoupled               ! status flag for checking purposes
   INTEGER       :: Item
   INTEGER       :: FreeCoolNum           ! index in local derived types
@@ -691,12 +691,12 @@ SUBROUTINE InitFreeCoolingHeatExchanger(FreeCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER             :: Num                     ! counter
-  REAL           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes
+  REAL(r64)           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes
 
   LOGICAL, SAVE       :: OneTimeFlag=.TRUE.
   LOGICAL, ALLOCATABLE, DIMENSION(:), SAVE :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE, DIMENSION(:), SAVE :: MyEnvrnFlag
-  REAL   :: rho
+  REAL(r64)   :: rho
   LOGICAL :: errFlag
   INTEGER :: ThisTypeOfNum
 
@@ -814,7 +814,7 @@ SUBROUTINE InitFreeCoolingHeatExchanger(FreeCoolNum)
 
       FreeCool(Num)%CondDesignMassFlowRate = FreeCool(Num)%CondenserSideFlowRate * rho
 
-      CALL InitComponentNodes(0., FreeCool(Num)%CondDesignMassFlowRate, &
+      CALL InitComponentNodes(0.d0, FreeCool(Num)%CondDesignMassFlowRate, &
                              FreeCool(Num)%CondInletNodeNum, &
                              FreeCool(Num)%CondOutletNodeNum, &
                              FreeCool(Num)%CondLoopNum, &
@@ -828,7 +828,7 @@ SUBROUTINE InitFreeCoolingHeatExchanger(FreeCoolNum)
 
       FreeCool(Num)%PlantDesignMassFlowRate = FreeCool(Num)%PlantSideFlowRate * rho
 
-      CALL InitComponentNodes(0., FreeCool(Num)%PlantDesignMassFlowRate, &
+      CALL InitComponentNodes(0.d0, FreeCool(Num)%PlantDesignMassFlowRate, &
                              FreeCool(Num)%PlantInletNodeNum, &
                              FreeCool(Num)%PlantOutletNodeNum, &
                              FreeCool(Num)%PlantLoopNum, &
@@ -904,23 +904,23 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: PlantFluidCp        ! Specific heat of Plant side fluid
-  REAL    :: PlantMassFlowRate   ! Flow rate of Plant side fluid
-  REAL    :: PlantCapRate        ! Capacity rate (mdot*Cp) of Plant side fluid
-  REAL    :: PlantInletTemp      ! Plant side inlet temperature
-  REAL    :: CondFluidCp         ! Specific heat of condenser side fluid
+  REAL(r64)    :: PlantFluidCp        ! Specific heat of Plant side fluid
+  REAL(r64)    :: PlantMassFlowRate   ! Flow rate of Plant side fluid
+  REAL(r64)    :: PlantCapRate        ! Capacity rate (mdot*Cp) of Plant side fluid
+  REAL(r64)    :: PlantInletTemp      ! Plant side inlet temperature
+  REAL(r64)    :: CondFluidCp         ! Specific heat of condenser side fluid
 
-  REAL    :: CondMassFlowRate    ! Flow rate of condenser side fluid
-  REAL    :: CondCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
-  REAL    :: CondInletTemp       ! condenser side inlet temperature
-  REAL    :: MinCapRate          ! minimum capacity rate
-  REAL    :: CapRatio            ! capacity ratio (min/max)
-  REAL    :: Effectiveness       ! heat exchanger effectiveness
-  REAL    :: NTU                 ! dimensionless NTU calculated from UA
-  REAL    :: ChillerLoad         ! current load on chiller (Myload)
+  REAL(r64)    :: CondMassFlowRate    ! Flow rate of condenser side fluid
+  REAL(r64)    :: CondCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
+  REAL(r64)    :: CondInletTemp       ! condenser side inlet temperature
+  REAL(r64)    :: MinCapRate          ! minimum capacity rate
+  REAL(r64)    :: CapRatio            ! capacity ratio (min/max)
+  REAL(r64)    :: Effectiveness       ! heat exchanger effectiveness
+  REAL(r64)    :: NTU                 ! dimensionless NTU calculated from UA
+  REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL  :: mdot
+  REAL(r64)  :: mdot
   LOGICAL :: ChillerShutDown = .FALSE. 
 
 
@@ -959,7 +959,7 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
   ELSE IF( .NOT. ChillerShutDown .AND. FreeCool(FreeCoolNum)%CouplingOn )THEN
     ! set the heat exchanger plant inlet  flow rate to 0.0
     ! this will allow the plant loop flow resolvers to set flow rate properly
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate( mdot , &
                                 FreeCool(FreeCoolNum)%PlantInletNodeNum, &
                                 FreeCool(FreeCoolNum)%PlantOutletNodeNum, &
@@ -969,7 +969,7 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
                                 FreeCool(FreeCoolNum)%PlantCompNum)
 
     ! set the heat exchanger condenser inlet side flow rate to 0.0
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate( mdot , &
                                 FreeCool(FreeCoolNum)%CondInletNodeNum, &
                                 FreeCool(FreeCoolNum)%CondOutletNodeNum, &
@@ -986,7 +986,7 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
   ELSE IF(.NOT. FreeCool(FreeCoolNum)%CouplingOn )THEN
 
     ! set the heat exchanger plant inlet  flow rate to 0.0
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate( mdot , &
                                 FreeCool(FreeCoolNum)%PlantInletNodeNum, &
                                 FreeCool(FreeCoolNum)%PlantOutletNodeNum, &
@@ -996,7 +996,7 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
                                 FreeCool(FreeCoolNum)%PlantCompNum)
 
     ! set the heat exchanger condenser inlet side flow rate to 0.0
-    mdot = 0.
+    mdot = 0.d0
     CALL SetComponentFlowRate( mdot , &
                                 FreeCool(FreeCoolNum)%CondInletNodeNum, &
                                 FreeCool(FreeCoolNum)%CondOutletNodeNum, &
@@ -1040,8 +1040,8 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
       CapRatio = MinCapRate/MAX(CondCapRate, PlantCapRate)
       NTU = FreeCool(FreeCoolNum)%UA/MinCapRate
 
-      Effectiveness = 1.0 - EXP( (NTU**0.22/CapRatio) * &
-                  (EXP(-CapRatio*NTU**0.78) - 1.0) )
+      Effectiveness = 1.0 - EXP( (NTU**0.22d0/CapRatio) * &
+                  (EXP(-CapRatio*NTU**0.78d0) - 1.0) )
     ELSE
       ! must be in ideal mode
       Effectiveness = 1.0
@@ -1101,12 +1101,12 @@ SUBROUTINE UpdateFreeCoolingHeatExchanger(FreeCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: CondFluidCp         ! Specific heat of condenser side fluid
-  REAL    :: CondMassFlowRate    ! Flow rate of condenser side fluid
-  REAL    :: PlantFluidCp        ! Specific heat of Plant side fluid
-  REAL    :: PlantMassFlowRate   ! Flow rate of Plant side fluid
-  REAL    :: CondInletTemp       ! condenser side inlet temperature
-  REAL    :: PlantInletTemp      ! Plant side inlet temperature
+  REAL(r64)    :: CondFluidCp         ! Specific heat of condenser side fluid
+  REAL(r64)    :: CondMassFlowRate    ! Flow rate of condenser side fluid
+  REAL(r64)    :: PlantFluidCp        ! Specific heat of Plant side fluid
+  REAL(r64)    :: PlantMassFlowRate   ! Flow rate of Plant side fluid
+  REAL(r64)    :: CondInletTemp       ! condenser side inlet temperature
+  REAL(r64)    :: PlantInletTemp      ! Plant side inlet temperature
 
 
   ! flow rates

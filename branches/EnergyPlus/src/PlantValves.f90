@@ -47,12 +47,12 @@ TYPE TemperValveData
     INTEGER :: PltPumpOutletNodeNum = 0   ! node number for the pump outlet (for flow rate)
   ! Calculated and from elsewhere
     LOGICAL :: Init                 = .true. ! flag for initializationL true means do the initializations
-    REAL    :: FlowDivFract         = 0.0 ! Fraction of flow sent down diversion path
-    REAL    :: Stream2SourceTemp    = 0.0 ! Temperature [C] of stream 2 being mixed
-    REAL    :: InletTemp            = 0.0 ! Temperature [C] of inlet to valve
-    REAL    :: SetpointTemp         = 0.0 ! setpoint Temperatures [C] at control node.
-    REAL    :: MixedMassFlowRate    = 0.0 ! Flow rate downstream of mixer [kg/s]
-    REAL    :: DivertedFlowRate     = 0.0 ! flow rate through tempering valve's diversion path [kg/s]
+    REAL(r64)    :: FlowDivFract         = 0.0 ! Fraction of flow sent down diversion path
+    REAL(r64)    :: Stream2SourceTemp    = 0.0 ! Temperature [C] of stream 2 being mixed
+    REAL(r64)    :: InletTemp            = 0.0 ! Temperature [C] of inlet to valve
+    REAL(r64)    :: SetpointTemp         = 0.0 ! setpoint Temperatures [C] at control node.
+    REAL(r64)    :: MixedMassFlowRate    = 0.0 ! Flow rate downstream of mixer [kg/s]
+    REAL(r64)    :: DivertedFlowRate     = 0.0 ! flow rate through tempering valve's diversion path [kg/s]
    !loop topology variables
    INTEGER       :: LoopNum         =0
    INTEGER       :: LoopSideNum     =0
@@ -106,10 +106,10 @@ SUBROUTINE SimPlantValves(CompTypeNum,CompName,CompNum,RunFlag,InitLoopEquip,  &
   INTEGER                      :: CompNum
   LOGICAL, INTENT(IN)          :: RunFlag !unused1208
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyLoad !unused1208
-  REAL, INTENT(OUT)       :: MinCap
-  REAL, INTENT(OUT)       :: MaxCap
-  REAL, INTENT(OUT)       :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyLoad !unused1208
+  REAL(r64), INTENT(OUT)       :: MinCap
+  REAL(r64), INTENT(OUT)       :: MaxCap
+  REAL(r64), INTENT(OUT)       :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -218,7 +218,7 @@ SUBROUTINE GetPlantValvesInput
   INTEGER                        :: Item    ! Item to be "gotten"
   CHARACTER(len=MaxNameLength), &
                     DIMENSION(6) :: Alphas  ! Alpha items for object
-  REAL, DIMENSION(1)             :: Numbers ! Numeric items for object
+  REAL(r64), DIMENSION(1)             :: Numbers ! Numeric items for object
   INTEGER                        :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers ! Number of Numbers for each GetObjectItem call
   INTEGER                        :: IOStatus   ! Used in GetObjectItem
@@ -520,7 +520,7 @@ SUBROUTINE InitPlantValves(CompTypeNum,CompNum, FirstHVACIteration)
 
     IF ((InletNode > 0) .AND. (OutletNode > 0)) THEN
     !   Node(InletNode)%Temp = 0.0
-       Call InitComponentNodes(0., Node(PumpOutNode)%MassFlowRateMax, &
+       Call InitComponentNodes(0.d0, Node(PumpOutNode)%MassFlowRateMax, &
                                TemperValve(CompNum)%PltInletNodeNum, &
                                TemperValve(CompNum)%PltOutletNodeNum, &
                                TemperValve(CompNum)%LoopNum, &
@@ -600,9 +600,9 @@ SUBROUTINE CalcPlantValves(CompTypeNum,CompNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Tin  ! local working variable for Inlet Temperature (C)
-  REAL :: Tset ! local working variable for Setpoint Temperature (C)
-  REAL :: Ts2  ! local Working Variable for Stream 2 outlet Temperature (C)
+  REAL(r64) :: Tin  ! local working variable for Inlet Temperature (C)
+  REAL(r64) :: Tset ! local working variable for Setpoint Temperature (C)
+  REAL(r64) :: Ts2  ! local Working Variable for Stream 2 outlet Temperature (C)
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
 
@@ -688,7 +688,7 @@ SUBROUTINE UpdatePlantValves(CompTypeNum,CompNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL   :: mdot !local fluid mass flow rate
+  REAL(r64)   :: mdot !local fluid mass flow rate
 
   SELECT CASE (CompTypeNum)
 
@@ -711,7 +711,7 @@ SUBROUTINE UpdatePlantValves(CompTypeNum,CompNum)
 
       TemperValve(CompNum)%DivertedFlowRate = mdot
     ELSE
-      TemperValve(CompNum)%DivertedFlowRate = 0.
+      TemperValve(CompNum)%DivertedFlowRate = 0.d0
     ENDIF
   CASE DEFAULT
 

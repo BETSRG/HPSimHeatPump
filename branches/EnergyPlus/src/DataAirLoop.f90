@@ -59,7 +59,7 @@ TYPE DefinePriAirSysAvailMgrs
   INTEGER                                               :: AvailStatus      =0   ! system availability status
   INTEGER                                               :: StartTime        =0   ! cycle on time (in SimTimeSteps)
   INTEGER                                               :: StopTime         =0   ! cycle off time (in SimTimeSteps)
-  REAL                                             :: ReqSupplyFrac    =0.0 ! required system flow rate (as a fraction)
+  REAL(r64)                                             :: ReqSupplyFrac    =0.0 ! required system flow rate (as a fraction)
   CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE :: AvailManagerName ! name of each availability manager
   INTEGER,DIMENSION(:),ALLOCATABLE                      :: AvailManagerType ! type of availability manager
   INTEGER, DIMENSION(:), ALLOCATABLE                    :: AvailManagerNum  ! index for availability manager
@@ -104,21 +104,21 @@ TYPE AirLoopControlData ! Derived type for air control information
 END TYPE AirLoopControlData
 
 TYPE AirLoopFlowData ! Derived type for air loop flow information
-  REAL :: ZoneExhaust    =0.0 ! total of zone exhaust air mass flow rate for this loop [kg/s]
-  REAL :: DesSupply      =0.0 ! design supply air mass flow rate for loop [kg/s]
-  REAL :: SysToZoneDesFlowRatio =0.0 ! System design flow divided by the sum of the zone design flows
-  REAL :: TotReturn      =0.0 ! the return air mass flow rate for this loop [kg/s]
-  REAL :: ReqSupplyFrac  =1.0 ! required flow (as a fraction of DesSupply) set by a manager
-  REAL :: MinOutAir      =0.0 ! minimum outside air mass flow rate [kg/s]
-  REAL :: MaxOutAir      =0.0 ! maximum outside air mass flow rate [kg/s]
-  REAL :: OAMinFrac      =0.0 ! minimum outside air flow fraction this time step
-  REAL :: Previous       =0.0 ! Previous mass air flow rate for this loop [kg/s]
-  REAL :: SupFlow        =0.0 ! supply air flow rate [kg/s]
-  REAL :: RetFlow        =0.0 ! return air flow rate [kg/s]
-  REAL :: RetFlow0       =0.0 ! sum of zone return flows before adjusting for total loop exhaust
-  REAL :: RecircFlow     =0.0 ! sum of zone plenum recirculated flows
-  REAL :: FanPLR         =0.0 ! Operating PLR of air loop fan
-  REAL :: OAFrac         =0.0 ! fraction of outside air to mixed air mass flow rate
+  REAL(r64) :: ZoneExhaust    =0.0 ! total of zone exhaust air mass flow rate for this loop [kg/s]
+  REAL(r64) :: DesSupply      =0.0 ! design supply air mass flow rate for loop [kg/s]
+  REAL(r64) :: SysToZoneDesFlowRatio =0.0 ! System design flow divided by the sum of the zone design flows
+  REAL(r64) :: TotReturn      =0.0 ! the return air mass flow rate for this loop [kg/s]
+  REAL(r64) :: ReqSupplyFrac  =1.0 ! required flow (as a fraction of DesSupply) set by a manager
+  REAL(r64) :: MinOutAir      =0.0 ! minimum outside air mass flow rate [kg/s]
+  REAL(r64) :: MaxOutAir      =0.0 ! maximum outside air mass flow rate [kg/s]
+  REAL(r64) :: OAMinFrac      =0.0 ! minimum outside air flow fraction this time step
+  REAL(r64) :: Previous       =0.0 ! Previous mass air flow rate for this loop [kg/s]
+  REAL(r64) :: SupFlow        =0.0 ! supply air flow rate [kg/s]
+  REAL(r64) :: RetFlow        =0.0 ! return air flow rate [kg/s]
+  REAL(r64) :: RetFlow0       =0.0 ! sum of zone return flows before adjusting for total loop exhaust
+  REAL(r64) :: RecircFlow     =0.0 ! sum of zone plenum recirculated flows
+  REAL(r64) :: FanPLR         =0.0 ! Operating PLR of air loop fan
+  REAL(r64) :: OAFrac         =0.0 ! fraction of outside air to mixed air mass flow rate
   LOGICAL :: FlowError   =.FALSE. ! error flag for flow error message
 END TYPE AirLoopFlowData
 
@@ -139,13 +139,13 @@ END TYPE OAControllerData
  TYPE (OAControllerData), ALLOCATABLE, DIMENSION(:) :: OAControllerInfo
 
  INTEGER :: LoopFanOperationMode      = 0   ! OnOff fan operation mode
- REAL    :: LoopSystemOnMassFlowrate  = 0.0 ! Loop mass flow rate during on cycle using an OnOff fan
- REAL    :: LoopSystemOffMassFlowrate = 0.0 ! Loop mass flow rate during off cycle using an OnOff fan
- REAL    :: LoopOnOffFanPartLoadRatio = 0.0 ! OnOff fan part load ratio
- REAL    :: LoopHeatingCoilMaxRTF     = 0.0 ! Maximum run time fraction for electric or gas heating coil in an HVAC Air Loop
- REAL    :: LoopONOffFanRTF           = 0.0 ! OnOff fan run time fraction in an HVAC Air Loop
- REAL    :: LoopDXCoilRTF             = 0.0 ! OnOff fan run time fraction in an HVAC Air Loop
- REAL    :: LoopCompCycRatio          = 0.0 ! Loop compressor cycling ratio for multispeed heat pump
+ REAL(r64)    :: LoopSystemOnMassFlowrate  = 0.0 ! Loop mass flow rate during on cycle using an OnOff fan
+ REAL(r64)    :: LoopSystemOffMassFlowrate = 0.0 ! Loop mass flow rate during off cycle using an OnOff fan
+ REAL(r64)    :: LoopOnOffFanPartLoadRatio = 0.0 ! OnOff fan part load ratio
+ REAL(r64)    :: LoopHeatingCoilMaxRTF     = 0.0 ! Maximum run time fraction for electric or gas heating coil in an HVAC Air Loop
+ REAL(r64)    :: LoopONOffFanRTF           = 0.0 ! OnOff fan run time fraction in an HVAC Air Loop
+ REAL(r64)    :: LoopDXCoilRTF             = 0.0 ! OnOff fan run time fraction in an HVAC Air Loop
+ REAL(r64)    :: LoopCompCycRatio          = 0.0 ! Loop compressor cycling ratio for multispeed heat pump
  LOGICAL :: AirLoopInputsFilled   = .FALSE. ! Set to TRUE after first pass through air loop
 
 !     NOTICE

@@ -62,62 +62,62 @@ Type UTSCDataStruct
   INTEGER, ALLOCATABLE, DIMENSION(:)  :: ZoneNode      ! Air system node "pointer", should have zone node
   INTEGER                      :: Layout           = 0 ! 'Square' or 'Triangle'
   INTEGER                      :: Correlation      = 0 ! which heat exchanger effectiveness model
-  REAL                    :: HoleDia          = 0. ! Diameter of Perforations in Collector [m]
-  REAL                    :: Pitch            = 0. ! Distance between Perforations in Collector [m]
-  REAL                    :: LWEmitt          = 0. ! Thermal Emissivity of Collector Surface [dimensionless]
-  REAL                    :: SolAbsorp        = 0. ! Solar Absorbtivity of Collector Surface [dimensionless]
+  REAL(r64)                    :: HoleDia          = 0. ! Diameter of Perforations in Collector [m]
+  REAL(r64)                    :: Pitch            = 0. ! Distance between Perforations in Collector [m]
+  REAL(r64)                    :: LWEmitt          = 0. ! Thermal Emissivity of Collector Surface [dimensionless]
+  REAL(r64)                    :: SolAbsorp        = 0. ! Solar Absorbtivity of Collector Surface [dimensionless]
   INTEGER                      :: CollRoughness    = 1  ! surface roughness for exterior convection calcs.
-  REAL                    :: PlenGapThick     = 0. ! Depth of Plenum Behind Collector [m]
-  REAL                    :: PlenCrossArea    = 0. ! cross section area of plenum behind collector [m2]
+  REAL(r64)                    :: PlenGapThick     = 0. ! Depth of Plenum Behind Collector [m]
+  REAL(r64)                    :: PlenCrossArea    = 0. ! cross section area of plenum behind collector [m2]
   INTEGER                      :: NumSurfs         = 0  ! a single collector can have multiple surfaces underneath it
   INTEGER, ALLOCATABLE, DIMENSION(:) ::SurfPtrs    != 0  ! array of pointers for participating underlying surfaces
-  REAL                    :: Height           = 0. ! Overall Height of Collector  [m]
-  REAL                    :: AreaRatio        = 0. ! Ratio of actual surface are to projected surface area [dimensionless]
-  REAL                    :: CollectThick     = 0. ! Thickness of collector absorber plate material.  [m]
-  REAL                    :: Cv               = 0. ! volume-based effectiveness of openings for wind-driven vent when Passive
-  REAL                    :: Cd               = 0. ! discharge coefficient of openings for bouyancy-driven vent when Passive
+  REAL(r64)                    :: Height           = 0. ! Overall Height of Collector  [m]
+  REAL(r64)                    :: AreaRatio        = 0. ! Ratio of actual surface are to projected surface area [dimensionless]
+  REAL(r64)                    :: CollectThick     = 0. ! Thickness of collector absorber plate material.  [m]
+  REAL(r64)                    :: Cv               = 0. ! volume-based effectiveness of openings for wind-driven vent when Passive
+  REAL(r64)                    :: Cd               = 0. ! discharge coefficient of openings for bouyancy-driven vent when Passive
   INTEGER                      :: NumOASysAttached = 0  ! =1 if no splitter, other wise set by Splitter object
   INTEGER                      :: FreeHeatSetpointSchedPtr = 0 ! used for controlling seperately from usual setpoint managers.
   INTEGER                      :: VsucErrIndex     = 0
  ! data from elswhere and calculated
-  REAL                    :: ActualArea       = 0. ! Overall Area of Collect with surface corrugations.
-  REAL                    :: ProjArea         = 0. ! Overall Area of Collector projected, as if flat [m2]
+  REAL(r64)                    :: ActualArea       = 0. ! Overall Area of Collect with surface corrugations.
+  REAL(r64)                    :: ProjArea         = 0. ! Overall Area of Collector projected, as if flat [m2]
   TYPE (vector)                :: Centroid         = vector(0.,0.,0.)  ! computed centroid
-  REAL                    :: Porosity         = 0. ! fraction of absorber plate [--]
+  REAL(r64)                    :: Porosity         = 0. ! fraction of absorber plate [--]
   LOGICAL                      :: isOn             = .false.  ! .true. means "on" or "ACTIVE" , .false means "off" or "PASSIVE
-  REAL                    :: Tplen            = 0. ! modeled drybulb temperature for air between collector and wall [C]
-  REAL                    :: Tcoll            = 0. ! modeled surface temperature for collector [C]
-  REAL                    :: TplenLast        = 22.5 ! Old Value for modeled drybulb temp if air between collector and wall [C]
-  REAL                    :: TcollLast        = 22.0 ! Old value for modeled surface temperature for collector [C]
-  REAL                    :: HrPlen           = 0  ! Modeled radiation coef for OSCM [W/m2-C]
-  REAL                    :: HcPlen           = 0. ! Modeled Convection coef for OSCM [W/m2-C]
-  REAL                    :: MdotVent         = 0. ! air mass flow exchanging with ambient when passive.
-  REAL                    :: HdeltaNPL        = 0. ! lenth scale for bouyancy-driven vent when Passive [m]
-  REAL                    :: TairHX           = 0. ! air drybulb of air leaving collector when Active [C]
-  REAL                    :: InletMDot        = 0. ! flow rate from outdoor mixer controller
-  REAL                    :: InletTempDB      = 0.
-  REAL                    :: Tilt             = 0. ! Tilt from area weighted average of underlying surfaces
-  REAL                    :: Azimuth          = 0. ! Azimuth from area weighted average of underlying surfaces
-  REAL                    :: QdotSource       = 0. ! Source/sink term
+  REAL(r64)                    :: Tplen            = 0. ! modeled drybulb temperature for air between collector and wall [C]
+  REAL(r64)                    :: Tcoll            = 0. ! modeled surface temperature for collector [C]
+  REAL(r64)                    :: TplenLast        = 22.5d0 ! Old Value for modeled drybulb temp if air between collector and wall [C]
+  REAL(r64)                    :: TcollLast        = 22.0d0 ! Old value for modeled surface temperature for collector [C]
+  REAL(r64)                    :: HrPlen           = 0  ! Modeled radiation coef for OSCM [W/m2-C]
+  REAL(r64)                    :: HcPlen           = 0. ! Modeled Convection coef for OSCM [W/m2-C]
+  REAL(r64)                    :: MdotVent         = 0. ! air mass flow exchanging with ambient when passive.
+  REAL(r64)                    :: HdeltaNPL        = 0. ! lenth scale for bouyancy-driven vent when Passive [m]
+  REAL(r64)                    :: TairHX           = 0. ! air drybulb of air leaving collector when Active [C]
+  REAL(r64)                    :: InletMDot        = 0. ! flow rate from outdoor mixer controller
+  REAL(r64)                    :: InletTempDB      = 0.
+  REAL(r64)                    :: Tilt             = 0. ! Tilt from area weighted average of underlying surfaces
+  REAL(r64)                    :: Azimuth          = 0. ! Azimuth from area weighted average of underlying surfaces
+  REAL(r64)                    :: QdotSource       = 0. ! Source/sink term
   ! reporting data
-  REAL                    :: Isc              = 0. ! total incident solar on collector [W]
-  REAL                    :: HXeff            = 0. ! heat exchanger effectiveness [--]
-  REAL                    :: Vsuction         = 0. ! Average suction face velocity [m/s]
-  REAL                    :: PassiveACH       = 0. ! air changes per hour when passive [1/hr]
-  REAL                    :: PassiveMdotVent  = 0. ! Total Nat Vent air change rate  [kg/s]
-  REAL                    :: PassiveMdotWind  = 0. ! Nat Vent air change rate from Wind-driven [kg/s]
-  REAL                    :: PassiveMdotTherm = 0. ! Nat. Vent air change rate from bouyancy-driven flow [kg/s]
-  REAL                    :: PlenumVelocity   = 0. ! effective velocity inside plenum [m/s]
-  REAL                    :: SupOutTemp       = 0. ! supply air outlet temperature [C]
-  REAL                    :: SupOutHumRat     = 0. ! supply air outlet humidity ratio [kg water/kg dry air]
-  REAL                    :: SupOutEnth       = 0. ! supply air outlet enthalpy [J/kg]
-  REAL                    :: SupOutMassFlow   = 0. ! supply air outlet mass flow rate [kg/s]
-  REAL                    :: SensHeatingRate  = 0. ! rate of sensible heat being added to the supply (primary) air [W]
-  REAL                    :: SensHeatingEnergy= 0. ! sensible heat added to the supply (primary) air [J]
-  REAL                    :: SensCoolingRate  = 0. ! rate of sensible heat being removed from the supply (primary) air [W]
-  REAL                    :: SensCoolingEnergy= 0. ! sensible heat removed from the supply (primary) air [J]
-  REAL                    :: UTSCEfficiency   = 0. ! Total Efficiency (with wall) SensHeatingRate/IncidentRadiation[--]
-  REAL                    :: UTSCCollEff      = 0. ! Collector-only Efficiency [--]
+  REAL(r64)                    :: Isc              = 0. ! total incident solar on collector [W]
+  REAL(r64)                    :: HXeff            = 0. ! heat exchanger effectiveness [--]
+  REAL(r64)                    :: Vsuction         = 0. ! Average suction face velocity [m/s]
+  REAL(r64)                    :: PassiveACH       = 0. ! air changes per hour when passive [1/hr]
+  REAL(r64)                    :: PassiveMdotVent  = 0. ! Total Nat Vent air change rate  [kg/s]
+  REAL(r64)                    :: PassiveMdotWind  = 0. ! Nat Vent air change rate from Wind-driven [kg/s]
+  REAL(r64)                    :: PassiveMdotTherm = 0. ! Nat. Vent air change rate from bouyancy-driven flow [kg/s]
+  REAL(r64)                    :: PlenumVelocity   = 0. ! effective velocity inside plenum [m/s]
+  REAL(r64)                    :: SupOutTemp       = 0. ! supply air outlet temperature [C]
+  REAL(r64)                    :: SupOutHumRat     = 0. ! supply air outlet humidity ratio [kg water/kg dry air]
+  REAL(r64)                    :: SupOutEnth       = 0. ! supply air outlet enthalpy [J/kg]
+  REAL(r64)                    :: SupOutMassFlow   = 0. ! supply air outlet mass flow rate [kg/s]
+  REAL(r64)                    :: SensHeatingRate  = 0. ! rate of sensible heat being added to the supply (primary) air [W]
+  REAL(r64)                    :: SensHeatingEnergy= 0. ! sensible heat added to the supply (primary) air [J]
+  REAL(r64)                    :: SensCoolingRate  = 0. ! rate of sensible heat being removed from the supply (primary) air [W]
+  REAL(r64)                    :: SensCoolingEnergy= 0. ! sensible heat removed from the supply (primary) air [J]
+  REAL(r64)                    :: UTSCEfficiency   = 0. ! Total Efficiency (with wall) SensHeatingRate/IncidentRadiation[--]
+  REAL(r64)                    :: UTSCCollEff      = 0. ! Collector-only Efficiency [--]
 End Type UTSCDataStruct
 
           ! MODULE VARIABLE DECLARATIONS:
@@ -289,7 +289,7 @@ SUBROUTINE GetTranspiredCollectorInput
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: Alphas   ! Alpha items for extensible
                                                                      ! Solar Collectors:Unglazed Transpired object
   INTEGER                        :: Item    ! Item to be "gotten"
-  REAL,  DIMENSION(11)           :: Numbers    ! Numeric items for object
+  REAL(r64),  DIMENSION(11)           :: Numbers    ! Numeric items for object
   INTEGER                        :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers ! Number of Numbers for each GetObjectItem call
   INTEGER                        :: MaxNumAlphas !argumenet for call to GetObjectDefMaxArgs
@@ -301,16 +301,16 @@ SUBROUTINE GetTranspiredCollectorInput
   INTEGER                        :: AlphaOffset !local temp var
   CHARACTER(len=MaxNameLength)   :: Roughness
   INTEGER                        :: thisSurf  ! do loop counter
-  REAL                      :: AvgAzimuth ! temp for error checking
-  REAL                      :: AvgTilt    ! temp for error checking
+  REAL(r64)                      :: AvgAzimuth ! temp for error checking
+  REAL(r64)                      :: AvgTilt    ! temp for error checking
   INTEGER                        :: SurfID  ! local surface "pointer"
-  REAL                      :: TiltRads ! average tilt of collector in radians
-  REAL                      :: tempHdeltaNPL ! temporary variable for bouyancy length scale
+  REAL(r64)                      :: TiltRads ! average tilt of collector in radians
+  REAL(r64)                      :: tempHdeltaNPL ! temporary variable for bouyancy length scale
   INTEGER                        :: numUTSCSplitter !
  CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: AlphasSplit   ! Alpha items for extensible
                                                                          ! Solar Collectors:Unglazed Transpired object
   INTEGER                        :: ItemSplit    ! Item to be "gotten"
-  REAL , DIMENSION(1) :: NumbersSplit    ! Numeric items for object
+  REAL(r64) , DIMENSION(1) :: NumbersSplit    ! Numeric items for object
   INTEGER                        :: NumAlphasSplit  ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbersSplit ! Number of Numbers for each GetObjectItem call
   INTEGER                        :: MaxNumAlphasSplit !argumenet for call to GetObjectDefMaxArgs
@@ -548,7 +548,7 @@ SUBROUTINE GetTranspiredCollectorInput
             CYCLE
         ENDIF
       ! check surface orientation, warn if upside down
-      IF (( Surface(found)%Tilt < -95.0 ) .OR. (Surface(found)%Tilt > 95.0)) THEN
+      IF (( Surface(found)%Tilt < -95.0D0 ) .OR. (Surface(found)%Tilt > 95.0D0)) THEN
         CALL ShowWarningError('Suspected input problem with collector surface = '//TRIM(Alphas(thisSurf + AlphaOffset)) )
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//' = '//TRIM(UTSC(Item)%Name) )
         CALL ShowContinueError( 'Surface used for solar collector faces down')
@@ -571,11 +571,11 @@ SUBROUTINE GetTranspiredCollectorInput
                 /SUM(Surface(UTSC(Item)%SurfPtrs)%Area)
     DO thisSurf = 1, UTSC(Item)%NumSurfs
        SurfID = UTSC(Item)%SurfPtrs(thisSurf)
-       If (ABS(Surface(SurfID)%Azimuth - AvgAzimuth) > 15. ) Then
+       If (ABS(Surface(SurfID)%Azimuth - AvgAzimuth) > 15.d0 ) Then
             Call ShowWarningError('Surface '//TRIM(Surface(SurfID)%name)//' has Azimuth different from others in '// &
             'the group associated with '//TRIM(CurrentModuleObject)//' ='//TRIM(UTSC(Item)%Name))
        ENDIF
-       IF (ABS(Surface(SurfID)%Tilt - AvgTilt) > 10. ) Then
+       IF (ABS(Surface(SurfID)%Tilt - AvgTilt) > 10.d0 ) Then
             Call ShowWarningError('Surface '//TRIM(Surface(SurfID)%name)//' has Tilt different from others in '// &
             'the group associated with '//TRIM(CurrentModuleObject)//' ='//TRIM(UTSC(Item)%Name))
        ENDIF
@@ -627,12 +627,12 @@ SUBROUTINE GetTranspiredCollectorInput
     !  need to update this for slots as well as holes
     SELECT CASE (UTSC(Item)%Layout)
     CASE(Layout_Triangle)  ! 'TRIANGLE'
-      UTSC(Item)%Porosity      = 0.907*(UTSC(Item)%HoleDia / UTSC(Item)%Pitch)**2.       !Kutscher equation, Triangle layout
+      UTSC(Item)%Porosity      = 0.907d0*(UTSC(Item)%HoleDia / UTSC(Item)%Pitch)**2.       !Kutscher equation, Triangle layout
     CASE(Layout_Square)  ! 'SQUARE'
-      UTSC(Item)%Porosity      = (PI/4.)*(UTSC(Item)%HoleDia**2.)/(UTSC(Item)%Pitch**2.) !Waterloo equation, square layout
+      UTSC(Item)%Porosity      = (PI/4.d0)*(UTSC(Item)%HoleDia**2.)/(UTSC(Item)%Pitch**2.) !Waterloo equation, square layout
     END SELECT
     TiltRads                 = ABS(AvgTilt) * DegToRadians
-    TempHdeltaNPL            = SIN(TiltRads)*UTSC(Item)%Height / 4.0
+    TempHdeltaNPL            = SIN(TiltRads)*UTSC(Item)%Height / 4.0d0
     UTSC(Item)%HdeltaNPL     = MAX(tempHdeltaNPL, UTSC(Item)%PlenGapThick)
 
 
@@ -744,13 +744,13 @@ SUBROUTINE InitTranspiredCollector(UTSCNum)
         CASE(Correlation_Kutscher1994)  ! Kutscher1994
            UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch
         CASE(Correlation_VanDeckerHollandsBrunger2001)  ! VanDeckerHollandsBrunger2001
-           UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch/1.6
+           UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch/1.6d0
         END SELECT
       ENDIF
       IF (UTSC(thisUTSC)%layout == Layout_Square) THEN
         SELECT CASE (UTSC(thisUTSC)%Correlation)
         CASE(Correlation_Kutscher1994)  ! Kutscher1994
-           UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch * 1.6
+           UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch * 1.6d0
         CASE(Correlation_VanDeckerHollandsBrunger2001)  ! VanDeckerHollandsBrunger2001
            UTSC(thisUTSC)%Pitch = UTSC(thisUTSC)%Pitch
         END SELECT
@@ -792,8 +792,8 @@ SUBROUTINE InitTranspiredCollector(UTSCNum)
   END IF
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag(UTSCNum)) THEN
-    UTSC(UTSCNum)%TplenLast = 22.5
-    UTSC(UTSCNum)%TcollLast = 22.0
+    UTSC(UTSCNum)%TplenLast = 22.5d0
+    UTSC(UTSCNum)%TcollLast = 22.0d0
     MyEnvrnFlag(UTSCNum) = .FALSE.
   ENDIF
   IF (.NOT. BeginEnvrnFlag) THEN
@@ -851,14 +851,14 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
   INTEGER, INTENT(IN)    :: UTSCNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  :: g          = 9.81           ! gravity constant (m/s**2)
-  REAL, PARAMETER  :: nu         = 15.66d-6       ! kinematic viscosity (m**2/s) for air at 300 K
+  REAL(r64), PARAMETER  :: g          = 9.81d0           ! gravity constant (m/s**2)
+  REAL(r64), PARAMETER  :: nu         = 15.66d-6       ! kinematic viscosity (m**2/s) for air at 300 K
                                                               ! (Mills 1999 Heat Transfer)
-  REAL, PARAMETER  :: k          = 0.0267         ! thermal conductivity (W/m K) for air at 300 K
+  REAL(r64), PARAMETER  :: k          = 0.0267d0         ! thermal conductivity (W/m K) for air at 300 K
                                                               ! (Mills 1999 Heat Transfer)
-  REAL, PARAMETER  :: Pr         = 0.71           ! Prandtl number for air
-  REAL, PARAMETER  :: Sigma      = 5.6697d-08     ! Stefan-Boltzmann constant
-!  REAL, PARAMETER  :: KelvinConv = KelvinConv         ! Conversion from Celsius to Kelvin
+  REAL(r64), PARAMETER  :: Pr         = 0.71d0           ! Prandtl number for air
+  REAL(r64), PARAMETER  :: Sigma      = 5.6697d-08     ! Stefan-Boltzmann constant
+!  REAL(r64), PARAMETER  :: KelvinConv = KelvinConv         ! Conversion from Celsius to Kelvin
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
 
@@ -868,68 +868,68 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
   ! following arrays are used to temporarily hold results from multiple underlying surfaces
-  REAL, ALLOCATABLE, DIMENSION(:) :: HSkyARR  !
-  REAL, ALLOCATABLE, DIMENSION(:) :: HGroundARR
-  REAL, ALLOCATABLE, DIMENSION(:) :: HAirARR  !
-  REAL, ALLOCATABLE, DIMENSION(:) :: HPlenARR
-  REAL, ALLOCATABLE, DIMENSION(:) :: LocalWindArr
-!  REAL, ALLOCATABLE, DIMENSION(:) :: IscARR
-!  REAL, ALLOCATABLE, DIMENSION(:) :: TsoARR
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HSkyARR  !
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HGroundARR
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HAirARR  !
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: HPlenARR
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: LocalWindArr
+!  REAL(r64), ALLOCATABLE, DIMENSION(:) :: IscARR
+!  REAL(r64), ALLOCATABLE, DIMENSION(:) :: TsoARR
 
   ! working variables
 !unused  INTEGER    :: InletNode  !
-  REAL  :: RhoAir     ! density of air
-  REAL  :: CpAir      ! specific heat of air
-  REAL  :: holeArea   ! area of perforations, includes corrugation of surface
-  REAL  :: Tamb       ! outdoor drybulb
-  REAL  :: A          ! projected area of collector, from sum of underlying surfaces
-  REAL  :: Vholes     ! mean velocity of air as it passes through collector holes
-  REAL  :: Vsuction   ! mean velocity of air as is approaches the collector
-  REAL  :: Vplen      ! mean velocity of air inside plenum
-  REAL  :: HcPlen     ! surface convection heat transfer coefficient for plenum surfaces
-  REAL  :: D          ! hole diameter
-  REAL  :: ReD        ! Reynolds number for holes
-  REAL  :: P          ! pitch, distance betweeen holes
-  REAL  :: Por        ! porosity, area fraction of collector that is open because of holes
-  REAL  :: Mdot       ! mass flow rate of suction air
-  REAL  :: QdotSource ! energy flux for source/sink inside collector surface (for hybrid PV UTSC)
+  REAL(r64)  :: RhoAir     ! density of air
+  REAL(r64)  :: CpAir      ! specific heat of air
+  REAL(r64)  :: holeArea   ! area of perforations, includes corrugation of surface
+  REAL(r64)  :: Tamb       ! outdoor drybulb
+  REAL(r64)  :: A          ! projected area of collector, from sum of underlying surfaces
+  REAL(r64)  :: Vholes     ! mean velocity of air as it passes through collector holes
+  REAL(r64)  :: Vsuction   ! mean velocity of air as is approaches the collector
+  REAL(r64)  :: Vplen      ! mean velocity of air inside plenum
+  REAL(r64)  :: HcPlen     ! surface convection heat transfer coefficient for plenum surfaces
+  REAL(r64)  :: D          ! hole diameter
+  REAL(r64)  :: ReD        ! Reynolds number for holes
+  REAL(r64)  :: P          ! pitch, distance betweeen holes
+  REAL(r64)  :: Por        ! porosity, area fraction of collector that is open because of holes
+  REAL(r64)  :: Mdot       ! mass flow rate of suction air
+  REAL(r64)  :: QdotSource ! energy flux for source/sink inside collector surface (for hybrid PV UTSC)
   INTEGER    :: thisSurf   ! do loop counter
   INTEGER    :: numSurfs   ! number of underlying HT surfaces associated with UTSC
   INTEGER    :: Roughness  ! parameters for surface roughness, defined in DataHeatBalance
-  REAL  :: SolAbs     ! solar absorptivity of collector
-  REAL  :: AbsExt     ! thermal emmittance of collector
-  REAL  :: TempExt    ! collector temperature
+  REAL(r64)  :: SolAbs     ! solar absorptivity of collector
+  REAL(r64)  :: AbsExt     ! thermal emmittance of collector
+  REAL(r64)  :: TempExt    ! collector temperature
   INTEGER    :: SurfPtr    ! index of surface in main surface structure
-  REAL  :: HMovInsul  ! dummy for call to InitExteriorConvectionCoeff
-  REAL  :: HExt       ! dummy for call to InitExteriorConvectionCoeff
+  REAL(r64)  :: HMovInsul  ! dummy for call to InitExteriorConvectionCoeff
+  REAL(r64)  :: HExt       ! dummy for call to InitExteriorConvectionCoeff
   INTEGER    :: ConstrNum  ! index of construction in main construction structure
-  REAL  :: AbsThermSurf ! thermal emmittance of underlying wall.
-  REAL  :: TsoK       ! underlying surface temperature in Kelvin
-  REAL  :: TscollK    ! collector temperature in Kelvin  (lagged)
-  REAL  :: AreaSum    ! sum of contributing surfaces for area-weighted averages.
-  REAL  :: Vwind      ! localized, and area-weighted average for wind speed
-  REAL  :: HrSky      ! radiation coeff for sky, area-weighted average
-  REAL  :: HrGround   ! radiation coeff for ground, area-weighted average
-  REAL  :: HrAtm      ! radiation coeff for air (bulk atmosphere), area-weighted average
-  REAL  :: Isc        ! Incoming combined solar radiation, area-weighted average
-  REAL  :: HrPlen     ! radiation coeff for plenum surfaces, area-weighted average
-  REAL  :: Tso        ! temperature of underlying surface, area-weighted average
-  REAL  :: HcWind     ! convection coeff for high speed wind situations
-  REAL  :: NuD        ! nusselt number for Reynolds based on hole
-  REAL  :: U          ! overall heat exchanger coefficient
-  REAL  :: HXeff      ! effectiveness for heat exchanger
-  REAL  :: t          ! collector thickness
-  REAL  :: ReS        ! Reynolds number based on suction velocity and pitch
-  REAL  :: ReW        ! Reynolds number based on Wind and pitch
-  REAL  :: ReB        ! Reynolds number based on hole velocity and pitch
-  REAL  :: ReH        ! Reynolds number based on hole velocity and diameter
-  REAL  :: Tscoll     ! temperature of collector
-  REAL  :: TaHX       ! leaving air temperature from heat exchanger (entering plenum)
-  REAL  :: Taplen     ! Air temperature in plen and outlet node.
-  REAL  :: SensHeatingRate ! Rate at which the system is heating outdoor air
+  REAL(r64)  :: AbsThermSurf ! thermal emmittance of underlying wall.
+  REAL(r64)  :: TsoK       ! underlying surface temperature in Kelvin
+  REAL(r64)  :: TscollK    ! collector temperature in Kelvin  (lagged)
+  REAL(r64)  :: AreaSum    ! sum of contributing surfaces for area-weighted averages.
+  REAL(r64)  :: Vwind      ! localized, and area-weighted average for wind speed
+  REAL(r64)  :: HrSky      ! radiation coeff for sky, area-weighted average
+  REAL(r64)  :: HrGround   ! radiation coeff for ground, area-weighted average
+  REAL(r64)  :: HrAtm      ! radiation coeff for air (bulk atmosphere), area-weighted average
+  REAL(r64)  :: Isc        ! Incoming combined solar radiation, area-weighted average
+  REAL(r64)  :: HrPlen     ! radiation coeff for plenum surfaces, area-weighted average
+  REAL(r64)  :: Tso        ! temperature of underlying surface, area-weighted average
+  REAL(r64)  :: HcWind     ! convection coeff for high speed wind situations
+  REAL(r64)  :: NuD        ! nusselt number for Reynolds based on hole
+  REAL(r64)  :: U          ! overall heat exchanger coefficient
+  REAL(r64)  :: HXeff      ! effectiveness for heat exchanger
+  REAL(r64)  :: t          ! collector thickness
+  REAL(r64)  :: ReS        ! Reynolds number based on suction velocity and pitch
+  REAL(r64)  :: ReW        ! Reynolds number based on Wind and pitch
+  REAL(r64)  :: ReB        ! Reynolds number based on hole velocity and pitch
+  REAL(r64)  :: ReH        ! Reynolds number based on hole velocity and diameter
+  REAL(r64)  :: Tscoll     ! temperature of collector
+  REAL(r64)  :: TaHX       ! leaving air temperature from heat exchanger (entering plenum)
+  REAL(r64)  :: Taplen     ! Air temperature in plen and outlet node.
+  REAL(r64)  :: SensHeatingRate ! Rate at which the system is heating outdoor air
 !  INTEGER, SAVE    :: VsucErrCount=0 !  warning message counter
 !  CHARACTER(len=MaxNameLength) :: VsucErrString !  warning message counter string
-  REAL  :: AlessHoles ! Area for Kutscher's relation
+  REAL(r64)  :: AlessHoles ! Area for Kutscher's relation
 
   !Active UTSC calculation
   ! first do common things for both correlations
@@ -957,15 +957,15 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
 
   Vsuction   = UTSC(UTSCNum)%InletMDot/RhoAir/A
 
-  IF ((Vsuction < 0.001) .or. (Vsuction > 0.08)) THEN  ! warn that collector is not sized well
+  IF ((Vsuction < 0.001d0) .or. (Vsuction > 0.08d0)) THEN  ! warn that collector is not sized well
     IF (UTSC(UTSCNum)%VsucErrIndex == 0) THEN
        Call ShowWarningMessage('Solar Collector:Unglazed Transpired="'//Trim(UTSC(UTSCNum)%Name)// &
          '", Suction velocity is outside of range for a good design')
        Call ShowContinueErrorTimeStamp('Suction velocity ='//Trim(RoundSigDigits(Vsuction,4)) )
-       If (Vsuction < 0.003) THEN
+       If (Vsuction < 0.003d0) THEN
          CALL ShowContinueError('Velocity is low -- suggest decreasing area of transpired collector')
        ENDIF
-       If (Vsuction > 0.08) THEN
+       If (Vsuction > 0.08d0) THEN
          CALL ShowContinueError('Velocity is high -- suggest increasing area of transpired collector')
        ENDIF
        CALL ShowContinueError('Occasional suction velocity messages are not unexpected when simulating actual conditions')
@@ -975,7 +975,7 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
          ReportMinOf=VSuction,ReportMinUnits='[m/s]',ReportMaxOf=VSuction,ReportMaxUnits='[m/s]')
   ENDIF
 
-  HcPlen     = 5.62 + 3.92*Vplen
+  HcPlen     = 5.62d0 + 3.92d0*Vplen
 
   D          = UTSC(UTSCNum)%holeDia
 
@@ -1041,8 +1041,8 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
   Isc      = SUM(QRadSWOutIncident(UTSC(UTSCNum)%SurfPtrs)*Surface(UTSC(UTSCNum)%SurfPtrs)%Area) /AreaSum
   Tso      = SUM(TH((UTSC(UTSCNum)%SurfPtrs),1,1)*Surface(UTSC(UTSCNum)%SurfPtrs)%Area) /AreaSum
 
-  IF (Vwind > 5.0) THEN
-    Hcwind = 5.62 +3.9*(Vwind - 5.0)  !McAdams forced convection correlation
+  IF (Vwind > 5.0d0) THEN
+    Hcwind = 5.62d0 +3.9d0*(Vwind - 5.0d0)  !McAdams forced convection correlation
   ELSE
     Hcwind = 0.0
   ENDIF
@@ -1058,9 +1058,9 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
 
     AlessHoles = A - holeArea
 
-    NuD   = 2.75*( (((P/D)**(-1.2))*(ReD**0.43)) + (0.011 * Por * ReD*((Vwind/Vsuction)**0.48) ))
+    NuD   = 2.75d0*( (((P/D)**(-1.2d0))*(ReD**0.43d0)) + (0.011d0 * Por * ReD*((Vwind/Vsuction)**0.48d0) ))
     U     = k * NuD/ D
-    HXeff = 1 - exp(-1.*((U * AlessHoles)/ (mdot * CpAir)) )
+    HXeff = 1 - exp(-1.d0*((U * AlessHoles)/ (mdot * CpAir)) )
 
   CASE(Correlation_VanDeckerHollandsBrunger2001)  ! VanDeckerHollandsBrunger2001
     t     = UTSC(UTSCNum)%CollectThick
@@ -1070,13 +1070,13 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
     ReH   = (Vsuction * D)/(nu * Por)
     IF (ReD > 0.0) THEN
       If (ReW > 0.0) THEN
-        HXeff = (1. - (1. + ReS * MAX(1.733 * ReW**(-0.5), 0.02136) )**(-1.0) ) &
-                * (1. - (1. + 0.2273 * (ReB**0.5))**(- 1.0) ) &
-                * EXP( -0.01895*(P/D) - (20.62/ReH) * (t/D) )
+        HXeff = (1.d0 - (1.d0 + ReS * MAX(1.733d0 * ReW**(-0.5d0), 0.02136d0) )**(-1.0) ) &
+                * (1.d0 - (1.d0 + 0.2273d0 * (ReB**0.5d0))**(- 1.0) ) &
+                * EXP( -0.01895d0*(P/D) - (20.62d0/ReH) * (t/D) )
       ELSE
-        HXeff = (1. - (1. + ReS *  0.02136 )**(-1.0) ) &
-                * (1. - (1. + 0.2273 * ReB**0.5)**(- 1.0) ) &
-                * EXP( -0.01895*(P/D) - (20.62/ReH) * (t/D) )
+        HXeff = (1.d0 - (1.d0 + ReS *  0.02136d0 )**(-1.0) ) &
+                * (1.d0 - (1.d0 + 0.2273d0 * ReB**0.5d0)**(- 1.0) ) &
+                * EXP( -0.01895d0*(P/D) - (20.62d0/ReH) * (t/D) )
       ENDIF
     ELSE
       HXeff = 0.0
@@ -1086,11 +1086,11 @@ SUBROUTINE CalcActiveTranspiredCollector(UTSCnum)
   !now calculate collector temperature
 
   Tscoll = (Isc*SolAbs + HrAtm*Tamb + HrSky*SkyTemp + HrGround*Tamb + HrPlen*Tso + Hcwind*Tamb &
-            + (Mdot*CpAir / A ) * Tamb - (Mdot*CpAir / A )*(1. - HXeff)*Tamb + QdotSource) &
+            + (Mdot*CpAir / A ) * Tamb - (Mdot*CpAir / A )*(1.d0 - HXeff)*Tamb + QdotSource) &
             /(HrAtm + HrSky + HrGround + Hrplen + Hcwind + (Mdot*CpAir / A )*HXeff)
 
   ! Heat exchanger leaving temperature
-  TaHX  = HXeff*Tscoll + (1.-HXeff)*Tamb
+  TaHX  = HXeff*Tscoll + (1.d0-HXeff)*Tamb
 
   !now calculate plenum air temperature
 
@@ -1181,25 +1181,25 @@ SUBROUTINE CalcPassiveTranspiredCollector(UTSCNum)
                                   VdotWindRpt, VdotBouyRpt)
       USE DataPrecisionGlobals
       INTEGER, INTENT(IN), DIMENSION(:)    :: SurfPtrARR  ! Array of indexes pointing to Surface structure in DataSurfaces
-      REAL, INTENT(IN)                :: VentArea    ! Area available for venting the gap [m2]
-      REAL, INTENT(IN)                :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
-      REAL, INTENT(IN)                :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
-      REAL, INTENT(IN)                :: HdeltaNPL   ! Height difference from neutral pressure level [m]
-      REAL, INTENT(IN)                :: SolAbs      ! solar absorptivity of baffle [--]
-      REAL, INTENT(IN)                :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
-      REAL, INTENT(IN)                :: Tilt        ! Tilt of gap [Degrees]
-      REAL, INTENT(IN)                :: AspRat      ! aspect ratio of gap  Height/gap [--]
-      REAL, INTENT(IN)                :: GapThick    ! Thickness of air space between baffle and underlying surface
+      REAL(r64), INTENT(IN)                :: VentArea    ! Area available for venting the gap [m2]
+      REAL(r64), INTENT(IN)                :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
+      REAL(r64), INTENT(IN)                :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
+      REAL(r64), INTENT(IN)                :: HdeltaNPL   ! Height difference from neutral pressure level [m]
+      REAL(r64), INTENT(IN)                :: SolAbs      ! solar absorptivity of baffle [--]
+      REAL(r64), INTENT(IN)                :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
+      REAL(r64), INTENT(IN)                :: Tilt        ! Tilt of gap [Degrees]
+      REAL(r64), INTENT(IN)                :: AspRat      ! aspect ratio of gap  Height/gap [--]
+      REAL(r64), INTENT(IN)                :: GapThick    ! Thickness of air space between baffle and underlying surface
       INTEGER, INTENT(IN)                  :: Roughness   ! Roughness index (1-6), see DataHeatBalance parameters
-      REAL, INTENT(IN)                :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
-      REAL, INTENT(INOUT)             :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
-      REAL, INTENT(INOUT)             :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
-      REAL, INTENT(OUT), OPTIONAL     :: HcGapRpt       !
-      REAL, INTENT(OUT), OPTIONAL     :: HrGapRpt       !
-      REAL, INTENT(OUT), OPTIONAL     :: IscRpt
-      REAL, INTENT(OUT), OPTIONAL     :: MdotVentRpt
-      REAL, INTENT(OUT), OPTIONAL     :: VdotWindRpt
-      REAL, INTENT(OUT), OPTIONAL     :: VdotBouyRpt
+      REAL(r64), INTENT(IN)                :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
+      REAL(r64), INTENT(INOUT)             :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
+      REAL(r64), INTENT(INOUT)             :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
+      REAL(r64), INTENT(OUT), OPTIONAL     :: HcGapRpt       !
+      REAL(r64), INTENT(OUT), OPTIONAL     :: HrGapRpt       !
+      REAL(r64), INTENT(OUT), OPTIONAL     :: IscRpt
+      REAL(r64), INTENT(OUT), OPTIONAL     :: MdotVentRpt
+      REAL(r64), INTENT(OUT), OPTIONAL     :: VdotWindRpt
+      REAL(r64), INTENT(OUT), OPTIONAL     :: VdotBouyRpt
     END SUBROUTINE CalcPassiveExteriorBaffleGap
   END INTERFACE
           ! DERIVED TYPE DEFINITIONS:
@@ -1207,20 +1207,20 @@ SUBROUTINE CalcPassiveTranspiredCollector(UTSCNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   ! local working variables
-  REAL  :: AspRat      ! Aspect Ratio of gap
-  REAL  :: TmpTscoll
-  REAL  :: TmpTaplen
-  REAL  :: RhoAir
-  REAL  :: holeArea
-  REAL  :: Tamb
-  REAL  :: HrPlen
-  REAL  :: HcPlen
-  REAL  :: Isc
-  REAL  :: MdotVent
-  REAL  :: VdotWind
-  REAL  :: VdotThermal
-  REAL  :: Twbamb
-  REAL  :: OutHumRatAmb
+  REAL(r64)  :: AspRat      ! Aspect Ratio of gap
+  REAL(r64)  :: TmpTscoll
+  REAL(r64)  :: TmpTaplen
+  REAL(r64)  :: RhoAir
+  REAL(r64)  :: holeArea
+  REAL(r64)  :: Tamb
+  REAL(r64)  :: HrPlen
+  REAL(r64)  :: HcPlen
+  REAL(r64)  :: Isc
+  REAL(r64)  :: MdotVent
+  REAL(r64)  :: VdotWind
+  REAL(r64)  :: VdotThermal
+  REAL(r64)  :: Twbamb
+  REAL(r64)  :: OutHumRatAmb
 
 
   Tamb       = SUM(Surface(UTSC(UTSCNum)%SurfPtrs)%OutDryBulbTemp * Surface(UTSC(UTSCNum)%SurfPtrs)%Area) &
@@ -1261,7 +1261,7 @@ SUBROUTINE CalcPassiveTranspiredCollector(UTSCNum)
   UTSC(UTSCNum)%SupOutMassFlow    = 0.0
   UTSC(UTSCNum)%SensHeatingRate   = 0.0
   UTSC(UTSCNum)%SensHeatingEnergy = 0.0
-  UTSC(UTSCNum)%PassiveACH        = (MdotVent/RhoAir) *(1./(UTSC(UTSCNum)%ProjArea*UTSC(UTSCNum)%PlenGapThick))*SecInHour
+  UTSC(UTSCNum)%PassiveACH        = (MdotVent/RhoAir) *(1.d0/(UTSC(UTSCNum)%ProjArea*UTSC(UTSCNum)%PlenGapThick))*SecInHour
   UTSC(UTSCNum)%PassiveMdotVent   = MdotVent
   UTSC(UTSCNum)%PassiveMdotWind   = VdotWind * RhoAir
   UTSC(UTSCNum)%PassiveMdotTherm  = VdotThermal * RhoAir
@@ -1383,7 +1383,7 @@ SUBROUTINE SetUTSCQdotSource(UTSCNum, QSource)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER , INTENT(IN)  :: UTSCNum
-  REAL    , INTENT(IN)  :: QSource  ! source term in Watts
+  REAL(r64)    , INTENT(IN)  :: QSource  ! source term in Watts
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1502,7 +1502,7 @@ SUBROUTINE GetUTSCTsColl(UTSCNum, TsColl)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)  :: UTSCNum
-  REAL, INTENT(OUT) :: TsColl
+  REAL(r64), INTENT(OUT) :: TsColl
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

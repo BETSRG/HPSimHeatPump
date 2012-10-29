@@ -82,11 +82,11 @@ SUBROUTINE EvalOutsideMovableInsulation(SurfNum,HMovInsul,RoughIndexMovInsul,Abs
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER, INTENT(IN)  :: SurfNum            ! DO loop counter for surfaces
-  REAL,    INTENT(OUT) :: HMovInsul          ! Resistance or "h" value of movable insulation
+  REAL(r64),    INTENT(OUT) :: HMovInsul          ! Resistance or "h" value of movable insulation
   INTEGER, INTENT(OUT) :: RoughIndexMovInsul ! Roughness index of movable insulation
-  REAL,    INTENT(OUT) :: AbsExt             ! Absorptivity of outer most layer
+  REAL(r64),    INTENT(OUT) :: AbsExt             ! Absorptivity of outer most layer
 
-  REAL    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
+  REAL(r64)    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
 
           ! FLOW:
   MovInsulSchedVal = GetCurrentScheduleValue(Surface(SurfNum)%SchedMovInsulExt)
@@ -108,10 +108,10 @@ SUBROUTINE EvalOutsideMovableInsulation(SurfNum,HMovInsul,RoughIndexMovInsul,Abs
       END IF
     END IF
 
-    HMovInsul          = 1.0/( MovInsulSchedVal &
+    HMovInsul          = 1.0d0/( MovInsulSchedVal &
                               *Material(Surface(SurfNum)%MaterialMovInsulExt)%Resistance )
     RoughIndexMovInsul = Material(Surface(SurfNum)%MaterialMovInsulExt)%Roughness
-    AbsExt             = MAX(0.0, 1.0-Material(Surface(SurfNum)%MaterialMovInsulExt)%Trans &
+    AbsExt             = MAX(0.0d0, 1.0d0-Material(Surface(SurfNum)%MaterialMovInsulExt)%Trans &
                                      -Material(Surface(SurfNum)%MaterialMovInsulExt)%ReflectSolBeamFront)
 
   END IF
@@ -159,9 +159,9 @@ SUBROUTINE EvalInsideMovableInsulation(SurfNum,HMovInsul,AbsInt)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER, INTENT(IN)  :: SurfNum            ! DO loop counter for surfaces
-  REAL,    INTENT(OUT) :: HMovInsul          ! Resistance or "h" value of movable insulation
-  REAL,    INTENT(OUT) :: AbsInt             ! Inside solar absorptance of movable insulation
-  REAL    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
+  REAL(r64),    INTENT(OUT) :: HMovInsul          ! Resistance or "h" value of movable insulation
+  REAL(r64),    INTENT(OUT) :: AbsInt             ! Inside solar absorptance of movable insulation
+  REAL(r64)    :: MovInsulSchedVal   ! Value of the movable insulation schedule for current time
 
           ! FLOW:
   MovInsulSchedVal = GetCurrentScheduleValue(Surface(SurfNum)%SchedMovInsulExt)

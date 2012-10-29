@@ -36,7 +36,7 @@ Use DataMoistureBalance, ONLY: TempOutsideAirFD,RhoVaporAirOut,RhoVaporAirIn,HCo
                                HSkyFD,HGrndFD,HAirFD
 USE DataInterfaces
 !USE UtilityRoutines
-!unuse909USE DataMoistureBalanceEMPD, ONLY: MoistEMPDNew, MoistEMPDFlux
+!unused0909USE DataMoistureBalanceEMPD, ONLY: MoistEMPDNew, MoistEMPDFlux
 
           ! Use statements for access to subroutines in other modules
 USE InputProcessor
@@ -223,7 +223,7 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL,PARAMETER     :: Eps = 1.*10**-10       ! Small number   !RS: Debugging: 102612
+  REAL(r64),PARAMETER     :: Eps = 1.d-10       ! Small number
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -234,22 +234,22 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER          :: ConstrNum ! Construction index
   INTEGER          :: NZ        ! DO loop counter for zones
-  REAL :: QIC       ! Intermediate calculation variable
-  REAL :: QOC       ! Intermediate calculation variable
+  REAL(r64) :: QIC       ! Intermediate calculation variable
+  REAL(r64) :: QOC       ! Intermediate calculation variable
   INTEGER          :: SurfNum   ! DO loop counter for surfaces
   INTEGER          :: Term      ! DO loop counter for conduction equation terms
-  REAL :: TSC       ! Intermediate calculation variable
+  REAL(r64) :: TSC       ! Intermediate calculation variable
   INTEGER          :: ZoneNum   ! Counter for zone loop initialization
 
   ! RJH DElight Modification Begin
-  REAL :: dPowerReducFac ! Return value Electric Lighting Power Reduction Factor for current Zone and Timestep
-  REAL :: dHISKFFC ! double value for argument passing
-  REAL :: dHISUNFFC ! double value for argument passing
-  REAL :: dSOLCOS1 ! double value for argument passing
-  REAL :: dSOLCOS2 ! double value for argument passing
-  REAL :: dSOLCOS3 ! double value for argument passing
-  REAL :: dLatitude ! double value for argument passing
-  REAL :: dCloudFraction ! double value for argument passing
+  REAL(r64) :: dPowerReducFac ! Return value Electric Lighting Power Reduction Factor for current Zone and Timestep
+  REAL(r64) :: dHISKFFC ! double value for argument passing
+  REAL(r64) :: dHISUNFFC ! double value for argument passing
+  REAL(r64) :: dSOLCOS1 ! double value for argument passing
+  REAL(r64) :: dSOLCOS2 ! double value for argument passing
+  REAL(r64) :: dSOLCOS3 ! double value for argument passing
+  REAL(r64) :: dLatitude ! double value for argument passing
+  REAL(r64) :: dCloudFraction ! double value for argument passing
   INTEGER :: iErrorFlag  ! Error Flag for warning/errors returned from DElight
   INTEGER, EXTERNAL :: GetNewUnitNumber  ! External  function to "get" a unit number
   INTEGER :: iDElightErrorFile      ! Unit number for reading DElight Error File (eplusout.delightdfdmp)
@@ -258,7 +258,7 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
   CHARACTER(len=200) cErrorMsg      ! Each DElight Error Message can be up to 200 characters long
   LOGICAL :: bEndofErrFile          ! End of Error File flag
   INTEGER :: iDElightRefPt          ! Reference Point number for reading DElight Dump File (eplusout.delighteldmp)
-  REAL :: dRefPtIllum          ! tmp var for reading RefPt illuminance
+  REAL(r64) :: dRefPtIllum          ! tmp var for reading RefPt illuminance
   ! RJH DElight Modification End
   logical, save :: firsttime=.true.
   INTEGER :: MapNum
@@ -323,7 +323,7 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
   IF (SunIsUp .AND. DifSolarRad > 0.0) THEN
     CALL AnisoSkyViewFactors
   ELSE
-    AnisoSkyMult = 0.0
+    AnisoSkyMult = 0.0d0
   ENDIF
 
   ! Set shading flag for exterior windows (except flags related to daylighting) and
@@ -364,10 +364,10 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
     ZoneDaylight(NZ)%DaylIllumAtRefPt = 0.0
     ZoneDaylight(NZ)%GlareIndexAtRefPt = 0.0
     ZoneDaylight(NZ)%ZonePowerReductionFactor = 1.0
-    ZoneDaylight(NZ)%InterReflIllFrIntWins = 0.0             ! inter-reflected illuminance from interior windows
+    ZoneDaylight(NZ)%InterReflIllFrIntWins = 0.0d0             ! inter-reflected illuminance from interior windows
     IF (ZoneDaylight(NZ)%TotalDaylRefPoints /= 0) THEN
-      ZoneDaylight(NZ)%TimeExceedingGlareIndexSPAtRefPt = 0.0
-      ZoneDaylight(NZ)%TimeExceedingDaylightIlluminanceSPAtRefPt = 0.0
+      ZoneDaylight(NZ)%TimeExceedingGlareIndexSPAtRefPt = 0.0d0
+      ZoneDaylight(NZ)%TimeExceedingDaylightIlluminanceSPAtRefPt = 0.0d0
     ENDIF
 
     IF(SunIsUp .AND. ZoneDaylight(NZ)%TotalDaylRefPoints /= 0) THEN
@@ -560,9 +560,9 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
     ConstrNum = Surface(SurfNum)%Construction
     IF (Construct(ConstrNum)%NumCTFTerms > 1) THEN ! COMPUTE CONSTANT PORTION OF CONDUCTIVE FLUXES.
 
-      QIC = 0.0
-      QOC = 0.0
-      TSC = 0.0
+      QIC = 0.0D0
+      QOC = 0.0D0
+      TSC = 0.0D0
       DO Term = 1, Construct(ConstrNum)%NumCTFTerms
 
           ! Sign convention for the various terms in the following two equations
@@ -618,12 +618,12 @@ SUBROUTINE InitSurfaceHeatBalance  ! Surface Heat Balance Initialization Manager
   RadSysToHBTinCoef   = 0.0
   RadSysToHBQsrcCoef  = 0.0
 
-  QRadSysSource = 0.0
+  QRadSysSource = 0.0D0
 
-  QHTRadSysSurf = 0.0
-  QHWBaseboardSurf = 0.0
-  QSteamBaseboardSurf = 0.0
-  QElecBaseboardSurf = 0.0
+  QHTRadSysSurf = 0.0D0
+  QHWBaseboardSurf = 0.0D0
+  QSteamBaseboardSurf = 0.0D0
+  QElecBaseboardSurf = 0.0D0
 
   if (firsttime) CALL DisplayString('Completed Initializing Surface Heat Balance')
   firsttime=.false.
@@ -671,14 +671,14 @@ SUBROUTINE GatherForPredefinedReport
   CHARACTER(len=MaxNameLength) :: surfName
   INTEGER                      :: curCons
   INTEGER                      :: zonePt
-  REAL                    :: mult
-  REAL                    :: curAzimuth
-  REAL                    :: curTilt
+  REAL(r64)                    :: mult
+  REAL(r64)                    :: curAzimuth
+  REAL(r64)                    :: curTilt
   INTEGER                      :: iSurf
-  REAL                    :: windowArea
-  REAL                    :: frameWidth
-  REAL                    :: frameArea
-  REAL                    :: dividerArea
+  REAL(r64)                    :: windowArea
+  REAL(r64)                    :: frameWidth
+  REAL(r64)                    :: frameArea
+  REAL(r64)                    :: dividerArea
   !counts for object count report
   INTEGER, DIMENSION(20)       :: numSurfaces
   INTEGER, DIMENSION(20)       :: numExtSurfaces
@@ -686,31 +686,31 @@ SUBROUTINE GatherForPredefinedReport
   LOGICAL                      :: isExterior
 
   ! the following variables are for the CalcNominalWindowCond call but only SHGCSummer is needed
-  REAL :: nomCond
-  REAL :: SHGCSummer
-  REAL :: TransSolNorm
-  REAL :: TransVisNorm
-  REAL :: nomUfact
+  REAL(r64) :: nomCond
+  REAL(r64) :: SHGCSummer
+  REAL(r64) :: TransSolNorm
+  REAL(r64) :: TransVisNorm
+  REAL(r64) :: nomUfact
   INTEGER :: ErrFlag
   INTEGER :: curWSC
   !following variables are totals for fenestration table
-  REAL :: windowAreaWMult = 0.0
-  REAL :: fenTotArea = 0.0
-  REAL :: fenTotAreaNorth = 0.0
-  REAL :: fenTotAreaNonNorth = 0.0
-  REAL :: ufactArea = 0.0
-  REAL :: ufactAreaNorth = 0.0
-  REAL :: ufactAreaNonNorth = 0.0
-  REAL :: shgcArea = 0.0
-  REAL :: shgcAreaNorth = 0.0
-  REAL :: shgcAreaNonNorth   = 0.0
-  REAL :: vistranArea = 0.0
-  REAL :: vistranAreaNorth = 0.0
-  REAL :: vistranAreaNonNorth   = 0.0
-  REAL :: intFenTotArea = 0.0
-  REAL :: intUfactArea = 0.0
-  REAL :: intShgcArea = 0.0
-  REAL :: intVistranArea = 0.0
+  REAL(r64) :: windowAreaWMult = 0.0
+  REAL(r64) :: fenTotArea = 0.0
+  REAL(r64) :: fenTotAreaNorth = 0.0
+  REAL(r64) :: fenTotAreaNonNorth = 0.0
+  REAL(r64) :: ufactArea = 0.0
+  REAL(r64) :: ufactAreaNorth = 0.0
+  REAL(r64) :: ufactAreaNonNorth = 0.0
+  REAL(r64) :: shgcArea = 0.0
+  REAL(r64) :: shgcAreaNorth = 0.0
+  REAL(r64) :: shgcAreaNonNorth   = 0.0
+  REAL(r64) :: vistranArea = 0.0
+  REAL(r64) :: vistranAreaNorth = 0.0
+  REAL(r64) :: vistranAreaNonNorth   = 0.0
+  REAL(r64) :: intFenTotArea = 0.0
+  REAL(r64) :: intUfactArea = 0.0
+  REAL(r64) :: intShgcArea = 0.0
+  REAL(r64) :: intVistranArea = 0.0
   LOGICAL   :: isNorth
 
   numSurfaces=0
@@ -735,14 +735,14 @@ SUBROUTINE GatherForPredefinedReport
           CALL PreDefTableEntry(pdchOpAzimuth,surfName,curAzimuth)
           curTilt = Surface(iSurf)%Tilt
           CALL PreDefTableEntry(pdchOpTilt,surfName,curTilt)
-          IF ((curTilt >= 60.) .AND. (curTilt < 180.)) THEN
-            IF ((curAzimuth >= 315.) .OR. (curAzimuth < 45.)) THEN
+          IF ((curTilt >= 60.d0) .AND. (curTilt < 180.d0)) THEN
+            IF ((curAzimuth >= 315.d0) .OR. (curAzimuth < 45.d0)) THEN
               CALL PreDefTableEntry(pdchOpDir,surfName,'N')
-            ELSE IF ((curAzimuth >= 45.) .AND. (curAzimuth < 135.)) THEN
+            ELSE IF ((curAzimuth >= 45.d0) .AND. (curAzimuth < 135.d0)) THEN
               CALL PreDefTableEntry(pdchOpDir,surfName,'E')
-            ELSE IF ((curAzimuth >= 135.) .AND. (curAzimuth < 225.)) THEN
+            ELSE IF ((curAzimuth >= 135.d0) .AND. (curAzimuth < 225.d0)) THEN
               CALL PreDefTableEntry(pdchOpDir,surfName,'S')
-            ELSE IF ((curAzimuth >= 225.) .AND. (curAzimuth < 315.)) THEN
+            ELSE IF ((curAzimuth >= 225.d0) .AND. (curAzimuth < 315.d0)) THEN
               CALL PreDefTableEntry(pdchOpDir,surfName,'W')
             ENDIF
           END IF
@@ -759,7 +759,7 @@ SUBROUTINE GatherForPredefinedReport
           frameDivNum = Surface(iSurf)%FrameDivider
           IF  (frameDivNum /= 0) THEN
             frameWidth = FrameDivider(frameDivNum)%FrameWidth
-            frameArea = (Surface(iSurf)%Height + 2.0*frameWidth)*(Surface(iSurf)%Width + 2.0*frameWidth) &
+            frameArea = (Surface(iSurf)%Height + 2.0d0*frameWidth)*(Surface(iSurf)%Width + 2.0d0*frameWidth) &
                         - (Surface(iSurf)%Height * Surface(iSurf)%Width)
             windowArea = windowArea + frameArea
             dividerArea = FrameDivider(frameDivNum)%DividerWidth * &
@@ -794,15 +794,15 @@ SUBROUTINE GatherForPredefinedReport
           isNorth = .FALSE.
           curTilt = Surface(iSurf)%Tilt
           CALL PreDefTableEntry(pdchFenTilt,surfName,curTilt)
-          IF ((curTilt >= 60.) .AND. (curTilt < 180.)) THEN
-            IF ((curAzimuth >= 315.) .OR. (curAzimuth < 45.)) THEN
+          IF ((curTilt >= 60.d0) .AND. (curTilt < 180.d0)) THEN
+            IF ((curAzimuth >= 315.d0) .OR. (curAzimuth < 45.d0)) THEN
               CALL PreDefTableEntry(pdchFenDir,surfName,'N')
               isNorth = .TRUE.
-            ELSE IF ((curAzimuth >= 45.) .AND. (curAzimuth < 135.)) THEN
+            ELSE IF ((curAzimuth >= 45.d0) .AND. (curAzimuth < 135.d0)) THEN
               CALL PreDefTableEntry(pdchFenDir,surfName,'E')
-            ELSE IF ((curAzimuth >= 135.) .AND. (curAzimuth < 225.)) THEN
+            ELSE IF ((curAzimuth >= 135.d0) .AND. (curAzimuth < 225.d0)) THEN
               CALL PreDefTableEntry(pdchFenDir,surfName,'S')
-            ELSE IF ((curAzimuth >= 225.) .AND. (curAzimuth < 315.)) THEN
+            ELSE IF ((curAzimuth >= 225.d0) .AND. (curAzimuth < 315.d0)) THEN
               CALL PreDefTableEntry(pdchFenDir,surfName,'W')
             ENDIF
           END IF
@@ -1078,11 +1078,11 @@ SUBROUTINE AllocateSurfaceHeatBalArrays  ! Heat Balance Array Allocation done at
 
 ! Use the total number of surfaces to allocate variables to avoid a surface number limit
   ALLOCATE (CTFConstInPart(TotSurfaces))
-  CTFConstInPart=0.0
+  CTFConstInPart=0.0d0
   ALLOCATE (CTFConstOutPart(TotSurfaces))
-  CTFConstOutPart=0.0
+  CTFConstOutPart=0.0d0
   ALLOCATE (CTFTsrcConstPart(TotSurfaces))
-  CTFTsrcConstPart=0.0
+  CTFTsrcConstPart=0.0d0
   ALLOCATE (TempEffBulkAir(TotSurfaces))
   TempEffBulkAir=23.0
   ALLOCATE (HConvIn(TotSurfaces))
@@ -1090,15 +1090,15 @@ SUBROUTINE AllocateSurfaceHeatBalArrays  ! Heat Balance Array Allocation done at
   ALLOCATE (HcExtSurf(TotSurfaces))
   HcExtSurf=0.0
   ALLOCATE (HAirExtSurf(TotSurfaces))
-  HAirExtSurf=0.0
+  HAirExtSurf=0.0d0
   ALLOCATE (HSkyExtSurf(TotSurfaces))
-  HSkyExtSurf=0.0
+  HSkyExtSurf=0.0d0
   ALLOCATE (HGrdExtSurf(TotSurfaces))
-  HGrdExtSurf=0.0
+  HGrdExtSurf=0.0d0
   ALLOCATE (TempSurfIn(TotSurfaces))
-  TempSurfIn=0.0
+  TempSurfIn=0.0d0
   ALLOCATE (TempSurfInTmp(TotSurfaces))
-  TempSurfInTmp=0.0
+  TempSurfInTmp=0.0d0
   ALLOCATE (QRadSWOutAbs(TotSurfaces))
   QRadSWOutAbs=0.0
   ALLOCATE (QRadSWInAbs(TotSurfaces))
@@ -1119,116 +1119,116 @@ SUBROUTINE AllocateSurfaceHeatBalArrays  ! Heat Balance Array Allocation done at
   SUMH=0
 
   ALLOCATE (TH(TotSurfaces,MaxCTFTerms,2))
-  TH=0.0
+  TH=0.0d0
   ALLOCATE (TempSurfOut(TotSurfaces))
-  TempSurfOut = 0.
+  TempSurfOut = 0.d0
   ALLOCATE (TempSurfInRep(TotSurfaces))
-  TempSurfInRep = 0.
+  TempSurfInRep = 0.d0
   ALLOCATE (QConvInReport(TotSurfaces))
-  QConvInReport = 0.
+  QConvInReport = 0.d0
   ALLOCATE (QdotConvInRepPerArea(TotSurfaces))
-  QdotConvInRepPerArea = 0.
+  QdotConvInRepPerArea = 0.d0
   ALLOCATE (QdotConvInRep(TotSurfaces))
-  QdotConvInRep = 0.
+  QdotConvInRep = 0.d0
 
   ALLOCATE ( QRadNetSurfInReport(TotSurfaces))
-  QRadNetSurfInReport   = 0.
+  QRadNetSurfInReport   = 0.d0
   ALLOCATE ( QdotRadNetSurfInRep(TotSurfaces))
-  QdotRadNetSurfInRep   = 0.
+  QdotRadNetSurfInRep   = 0.d0
   ALLOCATE  ( QdotRadNetSurfInRepPerArea(TotSurfaces))
-  QdotRadNetSurfInRepPerArea  = 0.
+  QdotRadNetSurfInRepPerArea  = 0.d0
 
   ALLOCATE ( QRadSolarInReport(TotSurfaces))
-  QRadSolarInReport   = 0.
+  QRadSolarInReport   = 0.d0
   ALLOCATE ( QdotRadSolarInRep(TotSurfaces))
-  QdotRadSolarInRep   = 0.
+  QdotRadSolarInRep   = 0.d0
   ALLOCATE  ( QdotRadSolarInRepPerArea(TotSurfaces))
-  QdotRadSolarInRepPerArea  = 0.
+  QdotRadSolarInRepPerArea  = 0.d0
 
   ALLOCATE ( QRadLightsInReport(TotSurfaces))
-  QRadLightsInReport   = 0.
+  QRadLightsInReport   = 0.d0
   ALLOCATE ( QdotRadLightsInRep(TotSurfaces))
-  QdotRadLightsInRep   = 0.
+  QdotRadLightsInRep   = 0.d0
   ALLOCATE  ( QdotRadLightsInRepPerArea(TotSurfaces))
-  QdotRadLightsInRepPerArea  = 0.
+  QdotRadLightsInRepPerArea  = 0.d0
 
   ALLOCATE ( QRadIntGainsInReport(TotSurfaces))
-  QRadIntGainsInReport   = 0.
+  QRadIntGainsInReport   = 0.d0
   ALLOCATE ( QdotRadIntGainsInRep(TotSurfaces))
-  QdotRadIntGainsInRep   = 0.
+  QdotRadIntGainsInRep   = 0.d0
   ALLOCATE  ( QdotRadIntGainsInRepPerArea(TotSurfaces))
-  QdotRadIntGainsInRepPerArea  = 0.
+  QdotRadIntGainsInRepPerArea  = 0.d0
 
   ALLOCATE ( QRadHVACInReport(TotSurfaces))
-  QRadHVACInReport   = 0.
+  QRadHVACInReport   = 0.d0
   ALLOCATE ( QdotRadHVACInRep(TotSurfaces))
-  QdotRadHVACInRep   = 0.
+  QdotRadHVACInRep   = 0.d0
   ALLOCATE  ( QdotRadHVACInRepPerArea(TotSurfaces))
-  QdotRadHVACInRepPerArea  = 0.
+  QdotRadHVACInRepPerArea  = 0.d0
 
   ALLOCATE (QConvOutReport(TotSurfaces))
-  QConvOutReport = 0.
+  QConvOutReport = 0.d0
   ALLOCATE (QdotConvOutRepPerArea(TotSurfaces))
-  QdotConvOutRepPerArea = 0.
+  QdotConvOutRepPerArea = 0.d0
   ALLOCATE (QdotConvOutRep(TotSurfaces))
-  QdotConvOutRep = 0.
+  QdotConvOutRep = 0.d0
 
   ALLOCATE (QdotRadOutRep(TotSurfaces))
-  QdotRadOutRep = 0.
+  QdotRadOutRep = 0.d0
   ALLOCATE (QdotRadOutRepPerArea(TotSurfaces))
-  QdotRadOutRepPerArea = 0.
+  QdotRadOutRepPerArea = 0.d0
   ALLOCATE (QRadOutReport(TotSurfaces))
-  QRadOutReport = 0.
+  QRadOutReport = 0.d0
 
 
   ALLOCATE (OpaqSurfInsFaceConduction(TotSurfaces))
-  OpaqSurfInsFaceConduction=0.
+  OpaqSurfInsFaceConduction=0.d0
   ALLOCATE(OpaqSurfInsFaceConductionFlux(TotSurfaces))
-  OpaqSurfInsFaceConductionFlux = 0.
+  OpaqSurfInsFaceConductionFlux = 0.d0
   ALLOCATE (OpaqSurfInsFaceCondGainRep(TotSurfaces))
-  OpaqSurfInsFaceCondGainRep=0.
+  OpaqSurfInsFaceCondGainRep=0.d0
   ALLOCATE (OpaqSurfInsFaceCondLossRep(TotSurfaces))
-  OpaqSurfInsFaceCondLossRep=0.
+  OpaqSurfInsFaceCondLossRep=0.d0
   ALLOCATE (OpaqSurfInsFaceConductionEnergy(TotSurfaces))
-  OpaqSurfInsFaceConductionEnergy = 0.
+  OpaqSurfInsFaceConductionEnergy = 0.d0
 
   ALLOCATE(SWOutAbsTotalReport(TotSurfaces))
-  SWOutAbsTotalReport=0.0
+  SWOutAbsTotalReport=0.0d0
   ALLOCATE(SWOutAbsEnergyReport(TotSurfaces))
-  SWOutAbsEnergyReport=0.0
+  SWOutAbsEnergyReport=0.0d0
 
   ALLOCATE (OpaqSurfOutsideFaceConduction(TotSurfaces))
-  OpaqSurfOutsideFaceConduction       = 0.
+  OpaqSurfOutsideFaceConduction       = 0.d0
   ALLOCATE(OpaqSurfOutsideFaceConductionFlux(TotSurfaces))
-  OpaqSurfOutsideFaceConductionFlux   = 0.
+  OpaqSurfOutsideFaceConductionFlux   = 0.d0
   ALLOCATE (OpaqSurfExtFaceCondGainRep(TotSurfaces))
-  OpaqSurfExtFaceCondGainRep          = 0.
+  OpaqSurfExtFaceCondGainRep          = 0.d0
   ALLOCATE (OpaqSurfExtFaceCondLossRep(TotSurfaces))
-  OpaqSurfExtFaceCondLossRep          = 0.
+  OpaqSurfExtFaceCondLossRep          = 0.d0
   ALLOCATE (OpaqSurfOutsideFaceConductionEnergy(TotSurfaces))
-  OpaqSurfOutsideFaceConductionEnergy = 0.
+  OpaqSurfOutsideFaceConductionEnergy = 0.d0
 
   ALLOCATE (OpaqSurfAvgFaceCondGainRep(TotSurfaces))
-  OpaqSurfAvgFaceCondGainRep      = 0.
+  OpaqSurfAvgFaceCondGainRep      = 0.d0
   ALLOCATE (OpaqSurfAvgFaceCondLossRep(TotSurfaces))
-  OpaqSurfAvgFaceCondLossRep      = 0.
+  OpaqSurfAvgFaceCondLossRep      = 0.d0
   ALLOCATE (OpaqSurfAvgFaceConduction(TotSurfaces))
-  OpaqSurfAvgFaceConduction       = 0.
+  OpaqSurfAvgFaceConduction       = 0.d0
   ALLOCATE ( OpaqSurfAvgFaceConductionFlux(TotSurfaces))
-  OpaqSurfAvgFaceConductionFlux   = 0.
+  OpaqSurfAvgFaceConductionFlux   = 0.d0
   ALLOCATE (OpaqSurfAvgFaceConductionEnergy(TotSurfaces))
-  OpaqSurfAvgFaceConductionEnergy = 0.
+  OpaqSurfAvgFaceConductionEnergy = 0.d0
 
   ALLOCATE ( OpaqSurfStorageGainRep(TotSurfaces))
-  OpaqSurfStorageGainRep  = 0.
+  OpaqSurfStorageGainRep  = 0.d0
   ALLOCATE ( OpaqSurfStorageCondLossRep(TotSurfaces))
-  OpaqSurfStorageCondLossRep  = 0.
+  OpaqSurfStorageCondLossRep  = 0.d0
   ALLOCATE ( OpaqSurfStorageConduction(TotSurfaces))
-  OpaqSurfStorageConduction  = 0.
+  OpaqSurfStorageConduction  = 0.d0
   ALLOCATE ( OpaqSurfStorageConductionFlux(TotSurfaces))
-  OpaqSurfStorageConductionFlux  = 0.
+  OpaqSurfStorageConductionFlux  = 0.d0
   ALLOCATE ( OpaqSurfStorageConductionEnergy(TotSurfaces))
-  OpaqSurfStorageConductionEnergy = 0.
+  OpaqSurfStorageConductionEnergy = 0.d0
 
   ALLOCATE (OpaqSurfInsFaceBeamSolAbsorbed(TotSurfaces))
   OpaqSurfInsFaceBeamSolAbsorbed=0.0
@@ -1252,7 +1252,7 @@ SUBROUTINE AllocateSurfaceHeatBalArrays  ! Heat Balance Array Allocation done at
   ALLOCATE (NetLWRadToSurf(TotSurfaces))
   NetLWRadToSurf = 0.0
   ALLOCATE (QRadSWLightsInAbs(TotSurfaces))
-  QRadSWLightsInAbs = 0.
+  QRadSWLightsInAbs = 0.d0
 
   ALLOCATE (RadSysTiHBConstCoef(TotSurfaces))
   RadSysTiHBConstCoef = 0.0
@@ -1267,25 +1267,25 @@ SUBROUTINE AllocateSurfaceHeatBalArrays  ! Heat Balance Array Allocation done at
   ALLOCATE (RadSysToHBQsrcCoef(TotSurfaces))
   RadSysToHBQsrcCoef = 0.0
   ALLOCATE(QRadSysSource(TotSurfaces))
-  QRadSysSource = 0.0
+  QRadSysSource = 0.0D0
   ALLOCATE (TCondFDSourceNode(TotSurfaces))
-  TcondFDSourceNode = 15.
+  TcondFDSourceNode = 15.D0
   ALLOCATE(QHTRadSysSurf(TotSurfaces))
-  QHTRadSysSurf = 0.0
+  QHTRadSysSurf = 0.0D0
   ALLOCATE(QHWBaseboardSurf(TotSurfaces))
-  QHWBaseboardSurf = 0.0
+  QHWBaseboardSurf = 0.0D0
   ALLOCATE(QSteamBaseboardSurf(TotSurfaces))
-  QSteamBaseboardSurf = 0.0
+  QSteamBaseboardSurf = 0.0D0
   ALLOCATE(QElecBaseboardSurf(TotSurfaces))
-  QElecBaseboardSurf = 0.0
+  QElecBaseboardSurf = 0.0D0
 
   ! allocate term used as sink for PV electricity
   ALLOCATE(QPVSysSource(TotSurfaces))
-  QPVSysSource = 0.0
+  QPVSysSource = 0.0D0
 
 !Allocate the moisture balance arrays
   ALLOCATE(TempOutsideAirFD(TotSurfaces))
-  TempOutsideAirFD=0.0
+  TempOutsideAirFD=0.0D0
   ALLOCATE(RhoVaporAirOut(TotSurfaces))
   RhoVaporAirOut=0.0
   ALLOCATE(RhoVaporSurfIn(TotSurfaces))
@@ -1558,87 +1558,87 @@ SUBROUTINE InitThermalAndFluxHistories
           ! FLOW:
 
           ! First do the "bulk" initializations of arrays sized to NumOfZones
-  MRT        = 23.  ! module level array
-  MAT        = 23.  ! DataHeatBalFanSys array
-  ZT         = 23.
-  ZTAV       = 23.
-  XMAT       = 23.  ! DataHeatBalFanSys array
-  XM2T       = 23.  ! DataHeatBalFanSys array
-  XM3T       = 23.  ! DataHeatBalFanSys array
-  XM4T       = 23.
-  DSXMAT     = 23.  ! DataHeatBalFanSys array
-  DSXM2T     = 23.  ! DataHeatBalFanSys array
-  DSXM3T     = 23.  ! DataHeatBalFanSys array
-  DSXM4T     = 23.
-  ZoneTMX    = 23.  ! DataHeatBalFanSys array
-  ZoneTM2    = 23.  ! DataHeatBalFanSys array
+  MRT        = 23.D0  ! module level array
+  MAT        = 23.d0  ! DataHeatBalFanSys array
+  ZT         = 23.d0
+  ZTAV       = 23.D0
+  XMAT       = 23.d0  ! DataHeatBalFanSys array
+  XM2T       = 23.d0  ! DataHeatBalFanSys array
+  XM3T       = 23.d0  ! DataHeatBalFanSys array
+  XM4T       = 23.d0
+  DSXMAT     = 23.d0  ! DataHeatBalFanSys array
+  DSXM2T     = 23.d0  ! DataHeatBalFanSys array
+  DSXM3T     = 23.d0  ! DataHeatBalFanSys array
+  DSXM4T     = 23.d0
+  ZoneTMX    = 23.d0  ! DataHeatBalFanSys array
+  ZoneTM2    = 23.d0  ! DataHeatBalFanSys array
   !Initialize the Zone Humidity Ratio here so that it is available for EMPD implementations
   ZoneAirHumRatAvg = OutHumRat
   ZoneAirHumRat=OutHumRat
   ZoneAirHumRatOld=OutHumRat
-  SumHmAW= 0.0
-  SumHmARa= 0.0
-  SumHmARaW= 0.0
+  SumHmAW= 0.0D0
+  SumHmARa= 0.0D0
+  SumHmARaW= 0.0D0
 
           ! "Bulk" initializations of arrays sized to TotSurfaces
-  SUMH          = 0.     ! module level array
-  TempSurfIn    = 23. ! module level array
-  TempSurfInTmp = 23. ! module level array
-  HConvIn       = 3.076 ! module level array
-  HcExtSurf      = 0.
-  HAirExtSurf      = 0.
-  HSkyExtSurf      = 0.
-  HGrdExtSurf      = 0.
-  TempSurfOut   = 0.
-  TempSurfInRep = 0.
-  QConvInReport = 0.
-  QdotConvInRep = 0.
-  QdotConvInRepPerArea = 0.
-  QRadNetSurfInReport  = 0.
-  QdotRadNetSurfInRep  = 0.
-  QdotRadNetSurfInRepPerArea = 0.
-  QRadSolarInReport = 0.
-  QdotRadSolarInRep = 0.
-  QdotRadSolarInRepPerArea = 0.
-  QRadLightsInReport = 0.
-  QdotRadLightsInRep = 0.
-  QdotRadLightsInRepPerArea = 0.
-  QRadIntGainsInReport = 0.
-  QdotRadIntGainsInRep = 0.
-  QdotRadIntGainsInRepPerArea = 0.
-  QRadHVACInReport = 0.
-  QdotRadHVACInRep = 0.
-  QdotRadHVACInRepPerArea = 0.
-  QConvOutReport = 0.
-  QdotConvOutRep = 0.
-  QdotConvOutRepPerArea = 0.
-  QRadOutReport = 0.
-  QdotRadOutRep = 0.
+  SUMH          = 0.d0     ! module level array
+  TempSurfIn    = 23.d0 ! module level array
+  TempSurfInTmp = 23.d0 ! module level array
+  HConvIn       = 3.076d0 ! module level array
+  HcExtSurf      = 0.d0
+  HAirExtSurf      = 0.d0
+  HSkyExtSurf      = 0.d0
+  HGrdExtSurf      = 0.d0
+  TempSurfOut   = 0.d0
+  TempSurfInRep = 0.d0
+  QConvInReport = 0.d0
+  QdotConvInRep = 0.d0
+  QdotConvInRepPerArea = 0.d0
+  QRadNetSurfInReport  = 0.d0
+  QdotRadNetSurfInRep  = 0.d0
+  QdotRadNetSurfInRepPerArea = 0.d0
+  QRadSolarInReport = 0.d0
+  QdotRadSolarInRep = 0.d0
+  QdotRadSolarInRepPerArea = 0.d0
+  QRadLightsInReport = 0.d0
+  QdotRadLightsInRep = 0.d0
+  QdotRadLightsInRepPerArea = 0.d0
+  QRadIntGainsInReport = 0.d0
+  QdotRadIntGainsInRep = 0.d0
+  QdotRadIntGainsInRepPerArea = 0.d0
+  QRadHVACInReport = 0.d0
+  QdotRadHVACInRep = 0.d0
+  QdotRadHVACInRepPerArea = 0.d0
+  QConvOutReport = 0.d0
+  QdotConvOutRep = 0.d0
+  QdotConvOutRepPerArea = 0.d0
+  QRadOutReport = 0.d0
+  QdotRadOutRep = 0.d0
   QdotRadOutRepPerArea = 0.0
-  OpaqSurfInsFaceConduction = 0.
-  OpaqSurfInsFaceConductionFlux = 0.
-  OpaqSurfInsFaceConductionEnergy = 0.
-  OpaqSurfInsFaceBeamSolAbsorbed = 0.
-  TempEffBulkAir=23.0
-  TempTstatAir=23.0
+  OpaqSurfInsFaceConduction = 0.d0
+  OpaqSurfInsFaceConductionFlux = 0.d0
+  OpaqSurfInsFaceConductionEnergy = 0.d0
+  OpaqSurfInsFaceBeamSolAbsorbed = 0.d0
+  TempEffBulkAir=23.0d0
+  TempTstatAir=23.0d0
 
           ! "Bulk" initializations of temperature arrays with dimensions (TotSurface,MaxCTFTerms,2)
-  TH        = 23. ! module level array
-  THM       = 23. ! module level array
-  TsrcHist  = 23.
-  TsrcHistM = 23.
-  QH        = 0.0
-  QHM       = 0.0
-  QsrcHist  = 0.0
-  QsrcHistM = 0.0
+  TH        = 23.D0 ! module level array
+  THM       = 23.D0 ! module level array
+  TsrcHist  = 23.D0
+  TsrcHistM = 23.D0
+  QH        = 0.0D0
+  QHM       = 0.0D0
+  QsrcHist  = 0.0D0
+  QsrcHistM = 0.0D0
 
           ! Initialize window frame and divider temperatures
-  SurfaceWindow%FrameTempSurfIn = 23.
-  SurfaceWindow%FrameTempSurfInOld = 23.
-  SurfaceWindow%FrameTempSurfOut = 23.
-  SurfaceWindow%DividerTempSurfIn = 23.
-  SurfaceWindow%DividerTempSurfInOld = 23.
-  SurfaceWindow%DividerTempSurfOut = 23.
+  SurfaceWindow%FrameTempSurfIn = 23.d0
+  SurfaceWindow%FrameTempSurfInOld = 23.d0
+  SurfaceWindow%FrameTempSurfOut = 23.d0
+  SurfaceWindow%DividerTempSurfIn = 23.d0
+  SurfaceWindow%DividerTempSurfInOld = 23.d0
+  SurfaceWindow%DividerTempSurfOut = 23.d0
 
           ! Initialize previous-timestep shading indicators
   SurfaceWindow%ExtIntShadePrevTS = 0
@@ -1741,10 +1741,10 @@ SUBROUTINE InitSolarHeatGains
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: AbsExt             ! Absorptivity of outer most layer (or movable insulation if present)
+  REAL(r64) :: AbsExt             ! Absorptivity of outer most layer (or movable insulation if present)
   INTEGER   :: ConstrNum          ! Index for the Construct derived type
   INTEGER   :: ConstrNumSh        ! Shaded window construction
-  REAL :: HMovInsul          ! Resistance or "h" value of movable insulation (from EvalOutsideMovableInsulation, not used)
+  REAL(r64) :: HMovInsul          ! Resistance or "h" value of movable insulation (from EvalOutsideMovableInsulation, not used)
   INTEGER   :: RoughIndexMovInsul ! Roughness index of movable insulation
   INTEGER   :: SurfNum            ! DO loop counter for surfaces
   INTEGER   :: SurfNum2           ! TDD:DOME object number
@@ -1752,77 +1752,77 @@ SUBROUTINE InitSolarHeatGains
   INTEGER   :: ShelfNum           ! Daylighting shelf object number
   INTEGER   :: InShelfSurf        ! Inside daylighting shelf surface number
   INTEGER   :: OutShelfSurf       ! Outside daylighting shelf surface number
-  REAL :: ShelfSolarRad      ! Shelf diffuse solar radiation
+  REAL(r64) :: ShelfSolarRad      ! Shelf diffuse solar radiation
   INTEGER   :: ShadeFlag          ! Window shading flag
-  REAL :: SwitchFac          ! Switching factor for switchable glazing
+  REAL(r64) :: SwitchFac          ! Switching factor for switchable glazing
   INTEGER   :: ZoneNum            ! DO loop counter for zones
-  REAL :: BeamSolar          ! Local variable for BeamSolarRad
-  REAL :: SkySolarInc        ! Sky diffuse solar incident on a surface
-  REAL :: GndSolarInc        ! Ground diffuse solar incident on a surface
+  REAL(r64) :: BeamSolar          ! Local variable for BeamSolarRad
+  REAL(r64) :: SkySolarInc        ! Sky diffuse solar incident on a surface
+  REAL(r64) :: GndSolarInc        ! Ground diffuse solar incident on a surface
   INTEGER   :: TotGlassLay        ! Number of glass layers
-  REAL :: AbsDiffWin(MaxSolidWinLayers) ! Diffuse solar absorptance of glass layers
-  REAL :: AbsDiffWinGnd(MaxSolidWinLayers) ! Ground diffuse solar absorptance of glass layers
-  REAL :: AbsDiffWinSky(MaxSolidWinLayers) ! Sky diffuse solar absorptance of glass layers
+  REAL(r64) :: AbsDiffWin(MaxSolidWinLayers) ! Diffuse solar absorptance of glass layers
+  REAL(r64) :: AbsDiffWinGnd(MaxSolidWinLayers) ! Ground diffuse solar absorptance of glass layers
+  REAL(r64) :: AbsDiffWinSky(MaxSolidWinLayers) ! Sky diffuse solar absorptance of glass layers
   INTEGER   :: Lay                ! Layer number
-  REAL :: DividerAbs         ! Window divider solar absorptance
-  REAL :: DividerRefl        ! Window divider solar reflectance
+  REAL(r64) :: DividerAbs         ! Window divider solar absorptance
+  REAL(r64) :: DividerRefl        ! Window divider solar reflectance
   INTEGER   :: MatNumGl           ! Outer glass layer material number
   INTEGER   :: MatNumGlSh         ! Outer glass layer material number, switched construction
-  REAL :: TransGl,ReflGl,AbsGl ! Outer glass solar transmittance, reflectance, absorptance
-  REAL :: TransGlSh,ReflGlSh,AbsGlSh ! Outer glass solar trans, refl, absorptance if switched
-  REAL :: TransDiffGl        ! Diffuse solar transmittance
-  REAL :: TransDiffGlSh      ! Diffuse solar transmittance, switched construction
+  REAL(r64) :: TransGl,ReflGl,AbsGl ! Outer glass solar transmittance, reflectance, absorptance
+  REAL(r64) :: TransGlSh,ReflGlSh,AbsGlSh ! Outer glass solar trans, refl, absorptance if switched
+  REAL(r64) :: TransDiffGl        ! Diffuse solar transmittance
+  REAL(r64) :: TransDiffGlSh      ! Diffuse solar transmittance, switched construction
   INTEGER   :: FrDivNum           ! Frame/divider number
-  REAL :: FrArea,DivArea     ! Frame, divider area (m2)
-  REAL :: FrWidth, DivWidth  ! Frame, divider width (m)
-  REAL :: FrProjOut, DivProjOut ! Frame, divider outside projection (m)
-  REAL :: FrProjIn, DivProjIn ! Frame, divider outside projection (m)
-  REAL :: PhiWin,ThWin       ! Altitude and azimuth angle of outward window normal (radians)
-  REAL :: PhiSun,ThSun       ! Altitude and azimuth angle of sun (radians)
-  REAL :: CosInc             ! Cosine of incidence angle of beam solar on glass
-  REAL :: CosIncAngHorProj   ! Cosine of incidence angle of sun on horizontal faces of a frame or
+  REAL(r64) :: FrArea,DivArea     ! Frame, divider area (m2)
+  REAL(r64) :: FrWidth, DivWidth  ! Frame, divider width (m)
+  REAL(r64) :: FrProjOut, DivProjOut ! Frame, divider outside projection (m)
+  REAL(r64) :: FrProjIn, DivProjIn ! Frame, divider outside projection (m)
+  REAL(r64) :: PhiWin,ThWin       ! Altitude and azimuth angle of outward window normal (radians)
+  REAL(r64) :: PhiSun,ThSun       ! Altitude and azimuth angle of sun (radians)
+  REAL(r64) :: CosInc             ! Cosine of incidence angle of beam solar on glass
+  REAL(r64) :: CosIncAngHorProj   ! Cosine of incidence angle of sun on horizontal faces of a frame or
                              !   divider projection
-  REAL :: CosIncAngVertProj  ! Cosine of incidence angle of sun on vertical faces of a frame or
+  REAL(r64) :: CosIncAngVertProj  ! Cosine of incidence angle of sun on vertical faces of a frame or
                              !   divider projection
-  REAL :: FracSunLit         ! Fraction of window sunlit this time step
-  REAL :: BeamFaceInc        ! Beam solar incident window plane this time step (W/m2)
-  REAL :: DifSolarFaceInc    ! Diffuse solar incident on window plane this time step (W/m2)
-  REAL :: FrIncSolarOut      ! Total solar incident on outside offrame including solar
+  REAL(r64) :: FracSunLit         ! Fraction of window sunlit this time step
+  REAL(r64) :: BeamFaceInc        ! Beam solar incident window plane this time step (W/m2)
+  REAL(r64) :: DifSolarFaceInc    ! Diffuse solar incident on window plane this time step (W/m2)
+  REAL(r64) :: FrIncSolarOut      ! Total solar incident on outside offrame including solar
                              !   on frame projection (W/m2)
-  REAL :: FrIncSolarIn       ! Total solar incident on inside offrame including solar
+  REAL(r64) :: FrIncSolarIn       ! Total solar incident on inside offrame including solar
                              !   on frame projection (W/m2)
 
-  REAL :: DivIncSolarOutBm   ! Beam solar incident on outside of divider including beam on divider
+  REAL(r64) :: DivIncSolarOutBm   ! Beam solar incident on outside of divider including beam on divider
                              !   projection (W/m2)
-  REAL :: DivIncSolarOutDif  ! Diffuse solar incident on outside of divider including diffuse on divider
+  REAL(r64) :: DivIncSolarOutDif  ! Diffuse solar incident on outside of divider including diffuse on divider
                              !   projection (W/m2)
-  REAL :: DivIncSolarInBm    ! Beam solar incident on inside of divider including beam on divider
+  REAL(r64) :: DivIncSolarInBm    ! Beam solar incident on inside of divider including beam on divider
                              !   projection (W/m2)
-  REAL :: DivIncSolarInDif   ! Diffuse solar incident on inside of divider including diffuse on divider
+  REAL(r64) :: DivIncSolarInDif   ! Diffuse solar incident on inside of divider including diffuse on divider
                              !   projection (W/m2)
-  REAL :: BeamFrHorFaceInc   ! Beam solar on frame's horizontal projection faces (W/m2)
-  REAL :: BeamFrVertFaceInc  ! Beam solar on frame's vertical projection faces (W/m2)
-  REAL :: BeamDivHorFaceInc  ! Beam solar on divider's horizontal outside projection faces (W/m2)
-  REAL :: BeamDivVertFaceInc ! Beam solar on divider's vertical outside projection faces (W/m2)
-  REAL :: BeamDivHorFaceIncIn  ! Beam solar on divider's horizontal inside projection faces (W/m2)
-  REAL :: BeamDivVertFaceIncIn ! Beam solar on divider's vertical inside projection faces (W/m2)
+  REAL(r64) :: BeamFrHorFaceInc   ! Beam solar on frame's horizontal projection faces (W/m2)
+  REAL(r64) :: BeamFrVertFaceInc  ! Beam solar on frame's vertical projection faces (W/m2)
+  REAL(r64) :: BeamDivHorFaceInc  ! Beam solar on divider's horizontal outside projection faces (W/m2)
+  REAL(r64) :: BeamDivVertFaceInc ! Beam solar on divider's vertical outside projection faces (W/m2)
+  REAL(r64) :: BeamDivHorFaceIncIn  ! Beam solar on divider's horizontal inside projection faces (W/m2)
+  REAL(r64) :: BeamDivVertFaceIncIn ! Beam solar on divider's vertical inside projection faces (W/m2)
   INTEGER   :: BlNum              ! Blind number
-  REAL :: ProfAng            ! Solar profile angle (rad)
-  REAL :: SlatAng            ! Slat angle (rad)
-  REAL :: TBlBmBm            ! Blind beam-beam solar transmittance
-  REAL :: TBlBmDif           ! Blind diffuse-diffuse solar transmittance
-  REAL :: ACosTlt            ! Absolute value of cosine of surface tilt angle
-  REAL :: AbsDiffBlindGnd    ! System blind front ground diffuse solar absorptance at a particular slat angle
-  REAL :: AbsDiffBlindSky    ! System blind front sky diffuse solar absorptance at a particular slat angle
-  REAL :: AbsDiffGlassLayGnd ! System glass layer ground diffuse solar absorptance with blind on
-  REAL :: AbsDiffGlassLaySky ! System glass layer sky diffuse solar absorptance with blind on
+  REAL(r64) :: ProfAng            ! Solar profile angle (rad)
+  REAL(r64) :: SlatAng            ! Slat angle (rad)
+  REAL(r64) :: TBlBmBm            ! Blind beam-beam solar transmittance
+  REAL(r64) :: TBlBmDif           ! Blind diffuse-diffuse solar transmittance
+  REAL(r64) :: ACosTlt            ! Absolute value of cosine of surface tilt angle
+  REAL(r64) :: AbsDiffBlindGnd    ! System blind front ground diffuse solar absorptance at a particular slat angle
+  REAL(r64) :: AbsDiffBlindSky    ! System blind front sky diffuse solar absorptance at a particular slat angle
+  REAL(r64) :: AbsDiffGlassLayGnd ! System glass layer ground diffuse solar absorptance with blind on
+  REAL(r64) :: AbsDiffGlassLaySky ! System glass layer sky diffuse solar absorptance with blind on
   INTEGER   :: OtherZoneNum       ! Adjacent zone number
 
           ! Always initialize the shortwave quantities
 
   QRadSWOutAbs = 0.0
   QRadSWInAbs  = 0.0
-  QRadSWLightsInAbs = 0.
+  QRadSWLightsInAbs = 0.d0
   QRadSWwinAbs = 0.0
   InitialDifSolInAbs = 0.0
   InitialDifSolInTrans = 0.0
@@ -1833,8 +1833,8 @@ SUBROUTINE InitSolarHeatGains
   InitialDifSolInAbsReport = 0.0
   InitialDifSolInTransReport = 0.0
   SWInAbsTotalReport = 0.0
-  SWOutAbsTotalReport = 0.
-  SWOutAbsEnergyReport = 0.
+  SWOutAbsTotalReport = 0.d0
+  SWOutAbsEnergyReport = 0.d0
   QRadSWOutIncident = 0.0
   QRadSWOutIncidentBeam = 0.0
   BmIncInsSurfIntensRep = 0.0
@@ -1906,13 +1906,13 @@ SUBROUTINE InitSolarHeatGains
   WinHeatGain = 0.0
   WinHeatGainRep = 0.0
   WinHeatLossRep = 0.0
-  WinGainConvGlazToZoneRep        = 0.0
-  WinGainIRGlazToZoneRep          = 0.0
-  WinLossSWZoneToOutWinRep        = 0.0
-  WinGainFrameDividerToZoneRep    = 0.0
-  WinGainConvGlazShadGapToZoneRep = 0.0
-  WinGainConvShadeToZoneRep       = 0.0
-  WinGainIRShadeToZoneRep         = 0.0
+  WinGainConvGlazToZoneRep        = 0.0D0
+  WinGainIRGlazToZoneRep          = 0.0D0
+  WinLossSWZoneToOutWinRep        = 0.0D0
+  WinGainFrameDividerToZoneRep    = 0.0D0
+  WinGainConvGlazShadGapToZoneRep = 0.0D0
+  WinGainConvShadeToZoneRep       = 0.0D0
+  WinGainIRShadeToZoneRep         = 0.0D0
   WinGapConvHtFlowRep = 0.0
   OpaqSurfInsFaceCondGainRep = 0.0
   OpaqSurfInsFaceCondLossRep = 0.0
@@ -1922,9 +1922,9 @@ SUBROUTINE InitSolarHeatGains
   ZoneOpaqSurfInsFaceCond = 0.0
   ZoneOpaqSurfInsFaceCondGainRep = 0.0
   ZoneOpaqSurfInsFaceCondLossRep = 0.0
-  ZoneOpaqSurfExtFaceCond        = 0.
-  ZoneOpaqSurfExtFaceCondGainRep = 0.
-  ZoneOpaqSurfExtFaceCondLossRep = 0.
+  ZoneOpaqSurfExtFaceCond        = 0.d0
+  ZoneOpaqSurfExtFaceCondGainRep = 0.d0
+  ZoneOpaqSurfExtFaceCondLossRep = 0.d0
   WinShadingAbsorbedSolar = 0.0
   WinSysSolTransmittance = 0.0
   WinSysSolReflectance = 0.0
@@ -1948,8 +1948,8 @@ SUBROUTINE InitSolarHeatGains
   ZoneWinHeatLossRepEnergy = 0.0
   ZnOpqSurfInsFaceCondGnRepEnrg = 0.0
   ZnOpqSurfInsFaceCondLsRepEnrg = 0.0
-  ZnOpqSurfExtFaceCondGnRepEnrg = 0.
-  ZnOpqSurfExtFaceCondLsRepEnrg = 0.
+  ZnOpqSurfExtFaceCondGnRepEnrg = 0.d0
+  ZnOpqSurfExtFaceCondLsRepEnrg = 0.d0
   WinShadingAbsorbedSolarEnergy = 0.0
   BmIncInsSurfAmountRepEnergy = 0.0
   IntBmIncInsSurfAmountRepEnergy = 0.0
@@ -2577,11 +2577,11 @@ SUBROUTINE InitIntSolarDistribution
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: AbsExt             ! Solar absorptance of outermost layer (or movable insulation if present)
-  REAL    :: AbsInt         ! Inside opaque surface solar absorptance
-  REAL    :: AbsIntSurf    ! Inside opaque surface solar absorptance
-  REAL    :: AbsIntSurfVis   ! Inside opaque surface visible absorptance
-  REAL    :: HMovInsul          ! Resistance or "h" value of movable insulation (from EvalOutsideMovableInsulation, not used)
+  REAL(r64)    :: AbsExt             ! Solar absorptance of outermost layer (or movable insulation if present)
+  REAL(r64)    :: AbsInt         ! Inside opaque surface solar absorptance
+  REAL(r64)    :: AbsIntSurf    ! Inside opaque surface solar absorptance
+  REAL(r64)    :: AbsIntSurfVis   ! Inside opaque surface visible absorptance
+  REAL(r64)    :: HMovInsul          ! Resistance or "h" value of movable insulation (from EvalOutsideMovableInsulation, not used)
   INTEGER :: OtherZoneNum       ! DO loop counter for zones
   INTEGER :: RoughIndexMovInsul ! Roughness index of movable insulation
   INTEGER :: ConstrNum          ! Construction number
@@ -2591,25 +2591,25 @@ SUBROUTINE InitIntSolarDistribution
   INTEGER :: SurfNumAdjZone     ! Surface number in adjacent zone for interzone surfaces
   INTEGER :: IGlass             ! Glass layer counter
   INTEGER :: ShadeFlag          ! Shading flag
-  REAL    :: DividerThermAbs    ! Window divider thermal absorptance
-  REAL    :: DividerSolAbs      ! Window divider solar absorptance
-  REAL    :: DividerSolRefl        ! Window divider solar reflectance
+  REAL(r64)    :: DividerThermAbs    ! Window divider thermal absorptance
+  REAL(r64)    :: DividerSolAbs      ! Window divider solar absorptance
+  REAL(r64)    :: DividerSolRefl        ! Window divider solar reflectance
   INTEGER :: MatNumGl           ! Glass layer material number
   INTEGER :: MatNumSh           ! Shade layer material number
-  REAL    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
+  REAL(r64)    :: TransGl,ReflGl,AbsGl ! Glass layer solar transmittance, reflectance, absorptance
   INTEGER :: BlNum              ! Blind number
   INTEGER :: TotGlassLayers     ! Number of glass layers in a window construction
-  REAL    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
-  REAL    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
-  REAL    :: EffBlEmiss         ! Blind emissivity (thermal absorptance) as part of glazing system
+  REAL(r64)    :: BlAbsDiffBk        ! Glass layer back diffuse solar absorptance when blind in place
+  REAL(r64)    :: AbsDiffBkBl        ! Blind diffuse back solar absorptance as part of glazing system
+  REAL(r64)    :: EffBlEmiss         ! Blind emissivity (thermal absorptance) as part of glazing system
 
           ! FLOW:
 
   IF (.NOT. ALLOCATED(QS)) ALLOCATE(QS(NumOfZones))
   IF (.NOT. ALLOCATED(QSLights)) ALLOCATE(QSLights(NumOfZones))
 
-  QS = 0.
-  QSLights = 0.
+  QS = 0.d0
+  QSLights = 0.d0
 
           ! COMPUTE TOTAL SHORT-WAVE RADIATION ORIGINATING IN ZONE.
           ! Note: If sun is not up, QS is only internal gains
@@ -2981,18 +2981,18 @@ SUBROUTINE ComputeIntThermalAbsorpFactors
   INTEGER          ConstrNumSh      ! Shaded construction number
   INTEGER          FirstZoneSurf    ! Index of first surface in current zone
   INTEGER          LastZoneSurf     ! Index of last surface in current zone
-  REAL SUM1             ! Intermediate calculation value
-  REAL SUM2             ! Intermediate calculation value
+  REAL(r64) SUM1             ! Intermediate calculation value
+  REAL(r64) SUM2             ! Intermediate calculation value
   INTEGER          SurfNum          ! DO loop counter for zone surfaces
   INTEGER          ZoneNum          ! Loop counter for Zones
   INTEGER          ShadeFlag        ! Window shading flag
-  REAL        HMovInsul        ! Conductance of movable insulation
+  REAL(r64)        HMovInsul        ! Conductance of movable insulation
   INTEGER          RoughIndexMovInsul ! Roughness index of movable insulation
-  REAL        AbsExt           ! Solar absorptance of movable insulation
-  REAL        DividerThermAbs  ! Window divider thermal absorptance
+  REAL(r64)        AbsExt           ! Solar absorptance of movable insulation
+  REAL(r64)        DividerThermAbs  ! Window divider thermal absorptance
   INTEGER          MatNumSh         ! Shade layer material number
-  REAL        TauShIR          ! Shade or blind IR transmittance
-  REAL        EffShDevEmiss    ! Effective emissivity of shade or blind
+  REAL(r64)        TauShIR          ! Shade or blind IR transmittance
+  REAL(r64)        EffShDevEmiss    ! Effective emissivity of shade or blind
 
 
   IF (.NOT. ALLOCATED(ITABSF)) THEN
@@ -3027,8 +3027,8 @@ SUBROUTINE ComputeIntThermalAbsorpFactors
 
   DO ZoneNum=1,NumOfZones
 
-    SUM1 = 0.0
-    SUM2 = 0.0
+    SUM1 = 0.0D0
+    SUM2 = 0.0D0
 
     FirstZoneSurf=Zone(ZoneNum)%SurfaceFirst
     LastZoneSurf=Zone(ZoneNum)%SurfaceLast
@@ -3128,7 +3128,7 @@ SUBROUTINE ComputeIntSWAbsorpFactors
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: SmallestAreaAbsProductAllowed = 0.01   ! Avoid a division by zero of the user has entered a bunch
+  REAL(r64), PARAMETER :: SmallestAreaAbsProductAllowed = 0.01d0   ! Avoid a division by zero of the user has entered a bunch
                                                             ! of surfaces with zero absorptivity on the inside
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -3141,24 +3141,24 @@ SUBROUTINE ComputeIntSWAbsorpFactors
   INTEGER          ConstrNum        ! DO loop counter for constructions
   INTEGER          FirstZoneSurf    ! Index of first surface in current zone
   INTEGER          LastZoneSurf     ! Index of last surface in current zone
-  REAL SUM1             ! Intermediate calculation value for solar absorbed and transmitted
+  REAL(r64) SUM1             ! Intermediate calculation value for solar absorbed and transmitted
                                     !   by windows (including shade, blind or insulation, if present)
   INTEGER          SurfNum          ! DO loop counter for zone surfaces
   INTEGER          ZoneNum          ! Loop counter for Zones
   INTEGER          ShadeFlag        ! Shading flag
   INTEGER          ConstrNumSh      ! Shaded construction number
-  REAL        SwitchFac        ! Switching factor
+  REAL(r64)        SwitchFac        ! Switching factor
   INTEGER          Lay              ! Layer number
-  REAL        AbsDiffLayWin    ! Window layer short-wave absorptance
-  REAL        AbsDiffTotWin    ! Sum of window layer short-wave absorptances
-  REAL        TransDiffWin     ! Window diffuse short-wave transmittance
-  REAL        DiffAbsShade     ! Diffuse short-wave shade or blind absorptance
-  REAL        AbsIntSurf, AbsInt ! Inside surface short-wave absorptance
-  REAL        HMovInsul        ! Conductance of movable insulation
-  REAL        DividerAbs       ! Window divider solar absorptance
+  REAL(r64)        AbsDiffLayWin    ! Window layer short-wave absorptance
+  REAL(r64)        AbsDiffTotWin    ! Sum of window layer short-wave absorptances
+  REAL(r64)        TransDiffWin     ! Window diffuse short-wave transmittance
+  REAL(r64)        DiffAbsShade     ! Diffuse short-wave shade or blind absorptance
+  REAL(r64)        AbsIntSurf, AbsInt ! Inside surface short-wave absorptance
+  REAL(r64)        HMovInsul        ! Conductance of movable insulation
+  REAL(r64)        DividerAbs       ! Window divider solar absorptance
   INTEGER          MatNumgl         ! Glass material number
-  REAL        TransGl,ReflGl,AbsGl ! Glass layer short-wave transmittance, reflectance, absorptance
-  REAL        DividerRefl      ! Window divider short-wave reflectance
+  REAL(r64)        TransGl,ReflGl,AbsGl ! Glass layer short-wave transmittance, reflectance, absorptance
+  REAL(r64)        DividerRefl      ! Window divider short-wave reflectance
 
   LOGICAL, SAVE :: FirstTime = .TRUE.   ! First time through routine
   LOGICAL, ALLOCATABLE, DIMENSION(:), SAVE :: FirstCalcZone ! for error message
@@ -3179,7 +3179,7 @@ SUBROUTINE ComputeIntSWAbsorpFactors
 
   DO ZoneNum = 1, NumOfZones
 
-    SUM1 = 0.0
+    SUM1 = 0.0D0
 
     FirstZoneSurf=Zone(ZoneNum)%SurfaceFirst
     LastZoneSurf=Zone(ZoneNum)%SurfaceLast
@@ -3342,7 +3342,7 @@ SUBROUTINE ComputeDifSolExcZonesWIZWindows(NumberOfZones)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL, ALLOCATABLE, DIMENSION(:,:), SAVE :: D
+      REAL(r64), ALLOCATABLE, DIMENSION(:,:), SAVE :: D
       INTEGER SurfNum,IZ,JZ,KZ,LZ,MZ,NZ
 
       IF (.not. ALLOCATED(FractDifShortZtoZ)) THEN
@@ -3387,7 +3387,7 @@ SUBROUTINE ComputeDifSolExcZonesWIZWindows(NumberOfZones)
       DO NZ = 1, NumberOfZones
         DO MZ = 1, NumberOfZones
           IF (MZ == NZ) CYCLE
-          IF (FractDifShortZtoZ(MZ,NZ) > 0.0) THEN
+          IF (FractDifShortZtoZ(MZ,NZ) > 0.0d0) THEN
             RecDifShortFromZ(NZ) = .TRUE.
             EXIT
           ENDIF
@@ -3494,17 +3494,17 @@ SUBROUTINE InitEMSControlledSurfaceProperties
   ! first, loop over materials
   DO MaterNum=1,TotMaterials
     IF (Material(MaterNum)%AbsorpSolarEMSOverrideOn) THEN
-      Material(MaterNum)%AbsorpSolar = MAX(MIN(Material(MaterNum)%AbsorpSolarEMSOverride, 0.9999), 0.0001)
+      Material(MaterNum)%AbsorpSolar = MAX(MIN(Material(MaterNum)%AbsorpSolarEMSOverride, 0.9999d0), 0.0001d0)
     ELSE
       Material(MaterNum)%AbsorpSolar = Material(MaterNum)%AbsorpSolarInput
     ENDIF
     IF (Material(MaterNum)%AbsorpThermalEMSOverrideOn) THEN
-      Material(MaterNum)%AbsorpThermal =  MAX(MIN(Material(MaterNum)%AbsorpThermalEMSOverride, 0.9999), 0.0001)
+      Material(MaterNum)%AbsorpThermal =  MAX(MIN(Material(MaterNum)%AbsorpThermalEMSOverride, 0.9999d0), 0.0001d0)
     ELSE
       Material(MaterNum)%AbsorpThermal = Material(MaterNum)%AbsorpThermalInput
     ENDIF
     IF (Material(MaterNum)%AbsorpVisibleEMSOverrideOn) THEN
-      Material(MaterNum)%AbsorpVisible = MAX(MIN(Material(MaterNum)%AbsorpVisibleEMSOverride, 0.9999), 0.0001)
+      Material(MaterNum)%AbsorpVisible = MAX(MIN(Material(MaterNum)%AbsorpVisibleEMSOverride, 0.9999d0), 0.0001d0)
     ELSE
       Material(MaterNum)%AbsorpVisible = Material(MaterNum)%AbsorpVisibleInput
     ENDIF
@@ -3861,32 +3861,32 @@ SUBROUTINE UpdateThermalHistories
   INTEGER          :: SurfNum         ! Surface number DO loop counter
   INTEGER          :: ZoneNum         ! Zone number DO loop counter
 
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: QExt1    ! Heat flux at the exterior surface during first time step/series
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: QInt1    ! Heat flux at the interior surface during first time step/series
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: TempInt1 ! Temperature of interior surface during first time step/series
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: TempExt1 ! Temperature of exterior surface during first time step/series
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: Qsrc1    ! Heat source/sink (during first time step/series)
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: Tsrc1    ! Temperature at source/sink (during first time step/series)
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: SumTime  ! Amount of time that has elapsed from start of master history to
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: QExt1    ! Heat flux at the exterior surface during first time step/series
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: QInt1    ! Heat flux at the interior surface during first time step/series
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: TempInt1 ! Temperature of interior surface during first time step/series
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: TempExt1 ! Temperature of exterior surface during first time step/series
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: Qsrc1    ! Heat source/sink (during first time step/series)
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: Tsrc1    ! Temperature at source/sink (during first time step/series)
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: SumTime  ! Amount of time that has elapsed from start of master history to
                                                                 ! the current time step
 
   LOGICAL, SAVE :: FirstTimeFlag=.true.
           ! FLOW:
   IF (FirstTimeFlag) THEN
     ALLOCATE(QExt1(TotSurfaces))
-    QExt1 = 0.0
+    QExt1 = 0.0D0
     ALLOCATE(QInt1(TotSurfaces))
-    QInt1 = 0.0
+    QInt1 = 0.0D0
     ALLOCATE(TempInt1(TotSurfaces))
-    TempInt1 = 0.0
+    TempInt1 = 0.0D0
     ALLOCATE(TempExt1(TotSurfaces))
-    TempExt1 = 0.0
+    TempExt1 = 0.0D0
     ALLOCATE(SumTime(TotSurfaces))
-    SumTime = 0.0
+    SumTime = 0.0D0
     ALLOCATE(Qsrc1(TotSurfaces))
-    Qsrc1 = 0.0
+    Qsrc1 = 0.0D0
     ALLOCATE(Tsrc1(TotSurfaces))
-    Tsrc1 = 0.0
+    Tsrc1 = 0.0D0
     FirstTimeFlag=.false.
   END IF
 
@@ -4113,10 +4113,10 @@ SUBROUTINE CalculateZoneMRT(ZoneToResimulate)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE                         :: FirstTime = .TRUE.   ! Flag for first time calculations
-  REAL                             :: SumAET               ! Intermediate calculational variable (area*emissivity*T) sum
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: SurfaceAE            ! Product of area and emissivity for each surface
+  REAL(r64)                             :: SumAET               ! Intermediate calculational variable (area*emissivity*T) sum
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: SurfaceAE            ! Product of area and emissivity for each surface
   INTEGER                               :: SurfNum              ! Surface number
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: ZoneAESum            ! Sum of area times emissivity for all zone surfaces
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: ZoneAESum            ! Sum of area times emissivity for all zone surfaces
   INTEGER                               :: ZoneNum              ! Zone number
 
           ! FLOW:
@@ -4142,7 +4142,7 @@ SUBROUTINE CalculateZoneMRT(ZoneToResimulate)
         SumAET = SumAET + SurfaceAE(SurfNum)*TempSurfIn(SurfNum)
       END IF
     END DO
-    IF (ZoneAESum(ZoneNum) > 0.01) THEN
+    IF (ZoneAESum(ZoneNum) > 0.01d0) THEN
       MRT(ZoneNum) = SumAET/ZoneAESum(ZoneNum)
     ELSE
       IF (FirstTime) THEN
@@ -4258,9 +4258,9 @@ SUBROUTINE ReportSurfaceHeatBalance
       OpaqSurfOutsideFaceConductionEnergy   = OpaqSurfOutsideFaceConduction(SurfNum) * SecInHour * TimeStepZone
       ZoneOpaqSurfExtFaceCond(Surface(SurfNum)%Zone) = ZoneOpaqSurfExtFaceCond(Surface(SurfNum)%Zone) + &
               OpaqSurfOutsideFaceConduction(SurfNum)
-      OpaqSurfExtFaceCondGainRep(SurfNum) = 0.
-      OpaqSurfExtFaceCondLossRep(SurfNum) = 0.
-      IF(OpaqSurfOutsideFaceConduction(SurfNum) >= 0.) THEN
+      OpaqSurfExtFaceCondGainRep(SurfNum) = 0.d0
+      OpaqSurfExtFaceCondLossRep(SurfNum) = 0.d0
+      IF(OpaqSurfOutsideFaceConduction(SurfNum) >= 0.d0) THEN
         OpaqSurfExtFaceCondGainRep(SurfNum) = OpaqSurfOutsideFaceConduction(SurfNum)
       ELSE
         OpaqSurfExtFaceCondLossRep(SurfNum) = -OpaqSurfOutsideFaceConduction(SurfNum)
@@ -4268,13 +4268,13 @@ SUBROUTINE ReportSurfaceHeatBalance
 
       ! do average surface conduction updates
 
-      OpaqSurfAvgFaceConduction(SurfNum) = (OpaqSurfInsFaceConduction(SurfNum) - OpaqSurfOutsideFaceConduction(SurfNum)) / 2.
+      OpaqSurfAvgFaceConduction(SurfNum) = (OpaqSurfInsFaceConduction(SurfNum) - OpaqSurfOutsideFaceConduction(SurfNum)) / 2.d0
       OpaqSurfAvgFaceConductionFlux(SurfNum) = (OpaqSurfInsFaceConductionFlux(SurfNum) &
-                                                - OpaqSurfOutsideFaceConductionFlux(SurfNum)) / 2.
+                                                - OpaqSurfOutsideFaceConductionFlux(SurfNum)) / 2.d0
       OpaqSurfAvgFaceConductionEnergy(SurfNum) = OpaqSurfAvgFaceConduction(SurfNum) * SecInHour * TimeStepZone
-      OpaqSurfAvgFaceCondGainRep(SurfNum) = 0.
-      OpaqSurfAvgFaceCondLossRep(SurfNum) = 0.
-      IF (OpaqSurfAvgFaceConduction(SurfNum) >= 0.) THEN
+      OpaqSurfAvgFaceCondGainRep(SurfNum) = 0.d0
+      OpaqSurfAvgFaceCondLossRep(SurfNum) = 0.d0
+      IF (OpaqSurfAvgFaceConduction(SurfNum) >= 0.d0) THEN
         OpaqSurfAvgFaceCondGainRep(SurfNum) = OpaqSurfAvgFaceConduction(SurfNum)
       ELSE
         OpaqSurfAvgFaceCondLossRep(SurfNum) = - OpaqSurfAvgFaceConduction(SurfNum)
@@ -4284,9 +4284,9 @@ SUBROUTINE ReportSurfaceHeatBalance
       OpaqSurfStorageConductionFlux(SurfNum) = - (OpaqSurfInsFaceConductionFlux(SurfNum) + OpaqSurfOutsideFaceConductionFlux(SurfNum))
       OpaqSurfStorageConduction(SurfNum) = - (OpaqSurfInsFaceConduction(SurfNum) + OpaqSurfOutsideFaceConduction(SurfNum))
       OpaqSurfStorageConductionEnergy(SurfNum) = OpaqSurfStorageConduction(SurfNum) * SecInHour * TimeStepZone
-      OpaqSurfStorageGainRep(SurfNum) = 0.
-      OpaqSurfStorageCondLossRep(SurfNum) = 0.
-      IF (OpaqSurfStorageConduction(SurfNum) >= 0. ) THEN
+      OpaqSurfStorageGainRep(SurfNum) = 0.d0
+      OpaqSurfStorageCondLossRep(SurfNum) = 0.d0
+      IF (OpaqSurfStorageConduction(SurfNum) >= 0.d0 ) THEN
         OpaqSurfStorageGainRep(SurfNum) = OpaqSurfStorageConduction(SurfNum)
       ELSE
         OpaqSurfStorageCondLossRep(SurfNum) = - OpaqSurfStorageConduction(SurfNum)
@@ -4397,19 +4397,19 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: AbsThermSurf        ! Thermal absoptance of the exterior surface
+  REAL(r64)    :: AbsThermSurf        ! Thermal absoptance of the exterior surface
   INTEGER :: ConstrNum           ! Construction index for the current surface
-  REAL    :: HGround             ! "Convection" coefficient from ground to surface
-  REAL    :: HMovInsul           ! "Convection" coefficient of movable insulation
-  REAL    :: HSky                ! "Convection" coefficient from sky to surface
-  REAL    :: HAir                ! "Convection" coefficient from air to surface (radiation)
-  REAL  :: ConstantTempCoef      ! Temperature Coefficient as input or modified using sine wave  COP mod
+  REAL(r64)    :: HGround             ! "Convection" coefficient from ground to surface
+  REAL(r64)    :: HMovInsul           ! "Convection" coefficient of movable insulation
+  REAL(r64)    :: HSky                ! "Convection" coefficient from sky to surface
+  REAL(r64)    :: HAir                ! "Convection" coefficient from air to surface (radiation)
+  REAL(r64)  :: ConstantTempCoef      ! Temperature Coefficient as input or modified using sine wave  COP mod
   INTEGER :: RoughSurf           ! Roughness index of the exterior surface
   INTEGER :: SurfNum             ! Surface number DO loop counter
-  REAL    :: TempExt             ! Exterior temperature boundary condition
+  REAL(r64)    :: TempExt             ! Exterior temperature boundary condition
   INTEGER :: ZoneNum             ! Zone number the current surface is attached to
   INTEGER :: OPtr
-  REAL    :: RhoVaporSat         ! Local temporary saturated vapor density for checking
+  REAL(r64)    :: RhoVaporSat         ! Local temporary saturated vapor density for checking
 
           ! FUNCTION DEFINITIONS:
           ! na
@@ -4476,11 +4476,11 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
       IF (SolutionAlgo == UseHAMT) THEN
       ! Set variables used in the HAMT moisture balance
         TempOutsideAirFD(SurfNum)= GroundTemp
-        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(GroundTemp,1.0,'HBSurfMan:Ground:HAMT')
+        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(GroundTemp,1.0d0,'HBSurfMan:Ground:HAMT')
         HConvExtFD(Surfnum)=HighHConvLimit
 
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,GroundTemp,  &
-             PsyWFnTdbRhPb(GroundTemp,1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTemp'))+  &
+             PsyWFnTdbRhPb(GroundTemp,1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTemp'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,GroundTemp))
 
         HSkyFD(SurfNum) = HSky
@@ -4492,10 +4492,10 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
       IF (SolutionAlgo == UseCondFD .or. SolutionAlgo == UseCondFDSimple) THEN
       ! Set variables used in the FD moisture balance
         TempOutsideAirFD(SurfNum)= GroundTemp
-        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnC(GroundTemp,1.0,'HBSurfMan:Ground:CondFD')
+        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnd0C(GroundTemp,1.0d0,'HBSurfMan:Ground:CondFD')
         HConvExtFD(Surfnum)=HighHConvLimit
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,GroundTemp,  &
-             PsyWFnTdbRhPb(GroundTemp,1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTemp'))+  &
+             PsyWFnTdbRhPb(GroundTemp,1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTemp'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,GroundTemp))
         HSkyFD(SurfNum) = HSky
         HGrndFD(SurfNum) = HGround
@@ -4513,11 +4513,11 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
       IF (SolutionAlgo == UseHAMT) THEN
       ! Set variables used in the HAMT moisture balance
         TempOutsideAirFD(SurfNum)= GroundTempFC
-        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(GroundTempFC,1.0,'HBSurfMan:GroundFC:HAMT')
+        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(GroundTempFC,1.0d0,'HBSurfMan:GroundFC:HAMT')
         HConvExtFD(Surfnum)=HighHConvLimit
 
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,GroundTempFC,  &
-             PsyWFnTdbRhPb(GroundTempFC,1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTempFC'))+  &
+             PsyWFnTdbRhPb(GroundTempFC,1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTempFC'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,GroundTempFC))
 
         HSkyFD(SurfNum) = HSky
@@ -4528,10 +4528,10 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
       IF (SolutionAlgo == UseCondFD .or. SolutionAlgo == UseCondFDSimple) THEN
       ! Set variables used in the FD moisture balance
         TempOutsideAirFD(SurfNum)= GroundTempFC
-        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnC(GroundTempFC,1.0,'HBSurfMan:GroundFC:CondFD')
+        RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnd0C(GroundTempFC,1.0d0,'HBSurfMan:GroundFC:CondFD')
         HConvExtFD(Surfnum)=HighHConvLimit
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,GroundTempFC,  &
-             PsyWFnTdbRhPb(GroundTempFC,1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTempFC'))+  &
+             PsyWFnTdbRhPb(GroundTempFC,1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:GroundTempFC'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,GroundTempFC))
         HSkyFD(SurfNum) = HSky
         HGrndFD(SurfNum) = HGround
@@ -4583,7 +4583,7 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           RhoVaporAirOut(SurfNum)=PsyRhovFnTdbWPb(TempOutsideAirFD(SurfNum),OutHumRat,OutBaroPress)
           HConvExtFD(SurfNum)=HighHConvLimit
           HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum),  &
-               PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,  &
+               PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0D0,OutBaroPress,  &
                   'CalcHeatBalanceOutsideSurf:OtherSideCoefNoCalcExt'))+  &
                RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
           HSkyFD(SurfNum) = HSky
@@ -4631,7 +4631,7 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
         RhoVaporAirOut(SurfNum)=PsyRhovFnTdbWPb(TempOutsideAirFD(SurfNum),OutHumRat,OutBaroPress)
         HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum),  &
-             PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:OtherSideCoefCalcExt'))+  &
+             PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:OtherSideCoefCalcExt'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
         HSkyFD(SurfNum) = HSkyExtSurf(SurfNum)
         HGrndFD(SurfNum)= HGrdExtSurf(SurfNum)
@@ -4670,11 +4670,11 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
         RhoVaporAirOut(SurfNum)=PsyRhovFnTdbWPb(TempOutsideAirFD(SurfNum),OutHumRat,OutBaroPress)
         HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
         HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum),  &
-             PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:OSCM'))+  &
+             PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:OSCM'))+  &
              RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
         HSkyFD(SurfNum) = OSCM(OPtr)%Hrad !CR 8046, use sky term for surface to baffle IR
-        HGrndFD(SurfNum)= 0.0 !CR 8046, null out and use only sky term for surface to baffle IR
-        HAirFD(SurfNum) = 0.0 !CR 8046, null out and use only sky term for surface to baffle IR
+        HGrndFD(SurfNum)= 0.0D0 !CR 8046, null out and use only sky term for surface to baffle IR
+        HAirFD(SurfNum) = 0.0D0 !CR 8046, null out and use only sky term for surface to baffle IR
       ENDIF
 
       ! Call the outside surface temp calculation and pass the necessary terms
@@ -4733,10 +4733,10 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           IF (SolutionAlgo == UseHAMT) THEN
             ! Set variables used in the HAMT moisture balance
             TempOutsideAirFD(SurfNum)= TempExt
-            RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(TempOutsideAirFD(SurfNum),1.0,'HBSurfMan:Rain:HAMT')
+            RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRh(TempOutsideAirFD(SurfNum),1.0d0,'HBSurfMan:Rain:HAMT')
             HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
             HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum), &
-                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvWetSurf'))+  &
+                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvWetSurf'))+  &
                 RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
             HSkyFD(SurfNum) = HSkyExtSurf(SurfNum)
             HGrndFD(SurfNum)= HGrdExtSurf(SurfNum)
@@ -4747,10 +4747,10 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           IF (SolutionAlgo == UseCondFD .or. SolutionAlgo == UseCondFDSimple) THEN
             ! Set variables used in the FD moisture balance
             TempOutsideAirFD(SurfNum)= TempExt
-            RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnC(TempOutsideAirFD(SurfNum),1.0,'HBSurfMan:Rain:CondFD')
+            RhoVaporAirOut(SurfNum)=PsyRhovFnTdbRhLBnd0C(TempOutsideAirFD(SurfNum),1.0d0,'HBSurfMan:Rain:CondFD')
             HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
             HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum), &
-                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvWetSurf'))+  &
+                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvWetSurf'))+  &
                 RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
             HSkyFD(SurfNum) = HSkyExtSurf(SurfNum)
             HGrndFD(SurfNum)= HGrdExtSurf(SurfNum)
@@ -4767,10 +4767,10 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
             RhoVaporAirOut(SurfNum)=PsyRhovFnTdbWPb(TempOutsideAirFD(SurfNum),OutHumRat,OutBaroPress)
             HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
             HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum), &
-                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvDrySurf'))+  &
+                PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:extEnvDrySurf'))+  &
                 RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
              !  check for saturation conditions of air
-            RhoVaporSat=PsyRhovFnTdbRh(TempOutsideAirFD(SurfNum),1.0,'HBSurfMan:DrySurf:CondFD')
+            RhoVaporSat=PsyRhovFnTdbRh(TempOutsideAirFD(SurfNum),1.0d0,'HBSurfMan:DrySurf:CondFD')
             IF(RhoVaporAirOut(SurfNum) .gt. RhoVaporSat) RhoVaporAirOut(SurfNum)=RhoVaporSat
             HSkyFD(SurfNum) = HSkyExtSurf(SurfNum)
             HGrndFD(SurfNum)= HGrdExtSurf(SurfNum)
@@ -4793,7 +4793,7 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           RhoVaporAirOut(SurfNum)=PsyRhovFnTdbWPb(TempOutsideAirFD(SurfNum),OutHumRat,OutBaroPress)
           HConvExtFD(SurfNum)=HcExtSurf(SurfNum)
           HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum), &
-              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:nowind'))+  &
+              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:nowind'))+  &
               RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
           HSkyFD(SurfNum) = HSkyExtSurf(SurfNum)
           HGrndFD(SurfNum)= HGrdExtSurf(SurfNum)
@@ -4819,7 +4819,7 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           RhoVaporAirOut(SurfNum)=RhoVaporAirIn(SurfNum)
           HConvExtFD(SurfNum)=HConvIn(SurfNum)
           HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum),  &
-              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:interior/other'))+  &
+              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:interior/other'))+  &
               RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
           HSkyFD(SurfNum) = 0.0
           HGrndFD(SurfNum) = 0.0
@@ -4838,7 +4838,7 @@ SUBROUTINE CalcHeatBalanceOutsideSurf(ZoneToResimulate)
           RhoVaporAirOut(SurfNum)=RhoVaporAirIn(Surface(SurfNum)%ExtBoundCond)
           HConvExtFD(SurfNum)=HConvIn(Surface(SurfNum)%ExtBoundCond)
           HMassConvExtFD(SurfNum)=HConvExtFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,TempOutsideAirFD(SurfNum),  &
-              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0,OutBaroPress,'CalcHeatBalanceOutsideSurf:IZPart'))+  &
+              PsyWFnTdbRhPb(TempOutsideAirFD(SurfNum),1.0d0,OutBaroPress,'CalcHeatBalanceOutsideSurf:IZPart'))+  &
               RhoVaporAirOut(SurfNum))*PsyCpAirFnWTdb(OutHumRat,TempOutsideAirFD(SurfNum)))
           HSkyFD(SurfNum) = 0.0
           HGrndFD(SurfNum) = 0.0
@@ -4944,10 +4944,10 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
   INTEGER, INTENT(IN), OPTIONAL :: ZoneToResimulate  ! if passed in, then only calculate surfaces that have this zone
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: Sigma = 5.6697d-08          ! Stefan-Boltzmann constant
-  REAL, PARAMETER :: IterDampConst = 5.0         ! Damping constant for inside surface temperature iterations
+  REAL(r64), PARAMETER :: Sigma = 5.6697d-08          ! Stefan-Boltzmann constant
+  REAL(r64), PARAMETER :: IterDampConst = 5.0d0         ! Damping constant for inside surface temperature iterations
   INTEGER,   PARAMETER :: ItersReevalConvCoeff = 30   ! Number of iterations between inside convection coefficient reevaluations
-  REAL, PARAMETER :: MaxAllowedDelTemp = 0.002   ! Convergence criteria for inside surface temperatures
+  REAL(r64), PARAMETER :: MaxAllowedDelTemp = 0.002d0   ! Convergence criteria for inside surface temperatures
   INTEGER,   PARAMETER :: MaxIterations = 500         ! Maximum number of iterations allowed for inside surface temps
   INTEGER,   PARAMETER :: IterationsForCondFDRelaxChange = 5 ! number of iterations for inside temps that triggers a change
                                                               ! in the CondFD relaxation factor.
@@ -4960,23 +4960,23 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL        :: AbsInt          ! Solar absorptance of inside movable insulation
+  REAL(r64)        :: AbsInt          ! Solar absorptance of inside movable insulation
   INTEGER          :: ConstrNum       ! Construction index for the current surface
   LOGICAL          :: Converged       ! .true. if inside heat balance has converged
-  REAL        :: F1              ! Intermediate calculation value
-  REAL        :: HMovInsul       ! "Convection" coefficient of movable insulation
-  REAL :: MaxDelTemp      ! Maximum change in surface temperature for any
+  REAL(r64)        :: F1              ! Intermediate calculation value
+  REAL(r64)        :: HMovInsul       ! "Convection" coefficient of movable insulation
+  REAL(r64) :: MaxDelTemp      ! Maximum change in surface temperature for any
                                       !  opaque surface from one iteration to the next
   INTEGER          :: SurfNum         ! Surface number
   INTEGER          :: ZoneNum         ! Zone number the current surface is attached to
   INTEGER          :: ConstrNumSh     ! Shaded construction number for a window
   INTEGER          :: RoughSurf       ! Outside surface roughness
-  REAL        :: EmisOut         ! Glass outside surface emissivity
+  REAL(r64)        :: EmisOut         ! Glass outside surface emissivity
 
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: TempInsOld ! Holds previous iteration's value for convergence check
-  REAL        :: RhoVaporSat     ! Local temporary saturated vapor density for checking
-  REAL :: TempSurfOutTmp  ! Local Temporary Surface temperature for the outside surface face
-  REAL        :: TempSurfInSat   ! Local temperary surface dew point temperature
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: TempInsOld ! Holds previous iteration's value for convergence check
+  REAL(r64)        :: RhoVaporSat     ! Local temporary saturated vapor density for checking
+  REAL(r64) :: TempSurfOutTmp  ! Local Temporary Surface temperature for the outside surface face
+  REAL(r64)        :: TempSurfInSat   ! Local temperary surface dew point temperature
   LOGICAL, SAVE    :: FirstTime = .TRUE. ! Used for trapping errors or other problems
   INTEGER          :: OtherSideSurfNum   ! Surface number index for other side of an interzone partition
   INTEGER, SAVE    :: MinIterations   ! Minimum number of iterations for the inside heat balance
@@ -4985,22 +4985,22 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
   INTEGER, SAVE    :: ErrCount=0
   INTEGER          :: PipeNum         ! TDD pipe object number
   INTEGER          :: SurfNum2        ! TDD:DIFFUSER object number
-  REAL        :: Ueff            ! 1 / effective R value between TDD:DOME and TDD:DIFFUSER
+  REAL(r64)        :: Ueff            ! 1 / effective R value between TDD:DOME and TDD:DIFFUSER
 
   INTEGER           :: ZoneEquipConfigNum
 !  LOGICAL           :: ControlledZoneAirFlag
   INTEGER           :: NodeNum
-  REAL         :: SumSysMCp             ! Zone sum of air system MassFlowRate*Cp
-  REAL         :: SumSysMCpT            ! Zone sum of air system MassFlowRate*Cp*T
-  REAL         :: MassFlowRate
-  REAL         :: NodeTemp
-  REAL         :: CpAir
-  REAL, SAVE, ALLOCATABLE, DIMENSION(:) :: RefAirTemp ! reference air temperatures
+  REAL(r64)         :: SumSysMCp             ! Zone sum of air system MassFlowRate*Cp
+  REAL(r64)         :: SumSysMCpT            ! Zone sum of air system MassFlowRate*Cp*T
+  REAL(r64)         :: MassFlowRate
+  REAL(r64)         :: NodeTemp
+  REAL(r64)         :: CpAir
+  REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: RefAirTemp ! reference air temperatures
   LOGICAL, SAVE     :: MyEnvrnFlag=.true.
 !  LOGICAL, SAVE     :: DoThisLoop
   INTEGER, SAVE     :: InsideSurfErrCount=0
-  REAL :: Wsurf ! Moisture ratio for HAMT
-  REAL :: RhoAirZone ! Zone moisture density for HAMT
+  REAL(r64) :: Wsurf ! Moisture ratio for HAMT
+  REAL(r64) :: RhoAirZone ! Zone moisture density for HAMT
   INTEGER :: OtherSideZoneNum ! Zone Number index for other side of an interzone partition HAMT
   INTEGER,SAVE :: WarmupSurfTemp
   LOGICAL :: PartialResimulate
@@ -5020,9 +5020,9 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
     ENDIF
   ENDIF
   IF (BeginEnvrnFlag .and. MyEnvrnFlag) THEN
-    TempInsOld=23.0
-    RefAirTemp=23.0
-    TempEffBulkAir=23.0
+    TempInsOld=23.0d0
+    RefAirTemp=23.0d0
+    TempEffBulkAir=23.0d0
     WarmupSurfTemp=0
     MyEnvrnFlag=.false.
   ENDIF
@@ -5046,20 +5046,20 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
         ENDIF
       ENDIF
       IF (PartialResimulate) THEN
-         WinHeatGain(Surfnum)                     = 0.0
-         WinHeatGainRep(Surfnum)                  = 0.0
-         WinHeatLossRep(Surfnum)                  = 0.0
-         WinGainConvGlazToZoneRep(Surfnum)        = 0.0
-         WinGainIRGlazToZoneRep(Surfnum)          = 0.0
-         WinLossSWZoneToOutWinRep(Surfnum)        = 0.0
-         WinGainFrameDividertoZoneRep(Surfnum)    = 0.0
-         WinGainConvGlazShadGapToZoneRep(Surfnum) = 0.0
-         WinGainConvShadeToZoneRep(Surfnum)       = 0.0
-         WinGainIRShadeToZoneRep(Surfnum)         = 0.0
-         SurfaceWindow(Surfnum)%FrameQRadOutAbs   = 0.0
-         SurfaceWindow(Surfnum)%FrameQRadInAbs    = 0.0
-         SurfaceWindow(Surfnum)%DividerQRadOutAbs = 0.0
-         SurfaceWindow(Surfnum)%DividerQRadInAbs  = 0.0
+         WinHeatGain(Surfnum)                     = 0.0d0
+         WinHeatGainRep(Surfnum)                  = 0.0d0
+         WinHeatLossRep(Surfnum)                  = 0.0d0
+         WinGainConvGlazToZoneRep(Surfnum)        = 0.0D0
+         WinGainIRGlazToZoneRep(Surfnum)          = 0.0D0
+         WinLossSWZoneToOutWinRep(Surfnum)        = 0.0D0
+         WinGainFrameDividertoZoneRep(Surfnum)    = 0.0D0
+         WinGainConvGlazShadGapToZoneRep(Surfnum) = 0.0D0
+         WinGainConvShadeToZoneRep(Surfnum)       = 0.0D0
+         WinGainIRShadeToZoneRep(Surfnum)         = 0.0D0
+         SurfaceWindow(Surfnum)%FrameQRadOutAbs   = 0.0d0
+         SurfaceWindow(Surfnum)%FrameQRadInAbs    = 0.0d0
+         SurfaceWindow(Surfnum)%DividerQRadOutAbs = 0.0d0
+         SurfaceWindow(Surfnum)%DividerQRadInAbs  = 0.0d0
       ENDIF
 
       SELECT CASE (Surface(SurfNum)%TAirRef)
@@ -5088,7 +5088,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
                 SumSysMCpT = SumSysMCpT + MassFlowRate * CpAir * NodeTemp
             END DO
             ! a weighted average of the inlet temperatures.
-            IF (SumSysMCp > 0.) THEN ! protect div by zero
+            IF (SumSysMCp > 0.d0) THEN ! protect div by zero
               RefAirTemp(SurfNum)     = SumSysMCpT/SumSysMCp  ! BG changed 02-16-2005 to add index (SurfNum)
             ELSE
               RefAirTemp(SurfNum)     = NodeTemp
@@ -5106,20 +5106,20 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
   ! CalcWindowHeatBalance is called, then, multiple times and these need to be initialized before each call to
   ! CalcWindowHeatBalance.
   IF (.not. PartialResimulate) THEN
-    WinHeatGain                     = 0.0
-    WinHeatGainRep                  = 0.0
-    WinHeatLossRep                  = 0.0
-    WinGainConvGlazToZoneRep        = 0.0
-    WinGainIRGlazToZoneRep          = 0.0
-    WinLossSWZoneToOutWinRep        = 0.0
-    WinGainFrameDividertoZoneRep    = 0.0
-    WinGainConvGlazShadGapToZoneRep = 0.0
-    WinGainConvShadeToZoneRep       = 0.0
-    WinGainIRShadeToZoneRep         = 0.0
-    SurfaceWindow%FrameQRadOutAbs   = 0.0
-    SurfaceWindow%FrameQRadInAbs    = 0.0
-    SurfaceWindow%DividerQRadOutAbs = 0.0
-    SurfaceWindow%DividerQRadInAbs  = 0.0
+    WinHeatGain                     = 0.0d0
+    WinHeatGainRep                  = 0.0d0
+    WinHeatLossRep                  = 0.0d0
+    WinGainConvGlazToZoneRep        = 0.0D0
+    WinGainIRGlazToZoneRep          = 0.0D0
+    WinLossSWZoneToOutWinRep        = 0.0D0
+    WinGainFrameDividertoZoneRep    = 0.0D0
+    WinGainConvGlazShadGapToZoneRep = 0.0D0
+    WinGainConvShadeToZoneRep       = 0.0D0
+    WinGainIRShadeToZoneRep         = 0.0D0
+    SurfaceWindow%FrameQRadOutAbs   = 0.0d0
+    SurfaceWindow%FrameQRadInAbs    = 0.0d0
+    SurfaceWindow%DividerQRadOutAbs = 0.0d0
+    SurfaceWindow%DividerQRadInAbs  = 0.0d0
   ENDIF
 
   Converged = .FALSE.
@@ -5166,7 +5166,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
        !calculate the inside surface moisture transfer conditions
       RhoVaporAirIn(SurfNum)=PsyRhovFnTdbWPb(MAT(ZoneNum),ZoneAirHumRat(ZoneNum),OutBaroPress)
        !check for saturation conditions of air
-      RhoVaporSat=PsyRhovFnTdbRh(MAT(ZoneNum),1.0,'HB,SurfMan:InsideSurf')
+      RhoVaporSat=PsyRhovFnTdbRh(MAT(ZoneNum),1.0d0,'HB,SurfMan:InsideSurf')
       IF (RhoVaporAirIn(SurfNum) .GT. RhoVaporSat) RhoVaporAirIn(SurfNum)=RhoVaporSat
       HConvInFD(SurfNum)=HConvIn(SurfNum)
       HMassConvInFD(SurfNum)=HConvInFD(SurfNum)/((PsyRhoAirFnPbTdbW(OutBaroPress,MAT(ZoneNum),ZoneAirHumRat(ZoneNum))+ &
@@ -5410,7 +5410,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
             ! Absorbed shortwave radiation is treated similar to a regular window, but only 1 glass layer is allowed.
             !   = QRadSWwinAbs(SurfNum,1)/2.0
             TempSurfInTmp(SurfNum) = ( QRadThermInAbs(SurfNum)             & ! LW radiation from internal sources
-                                      +QRadSWwinAbs(SurfNum,1)/2.0       & ! SW radiation from internal sources and solar
+                                      +QRadSWwinAbs(SurfNum,1)/2.0d0       & ! SW radiation from internal sources and solar
                                       +HConvIn(SurfNum)*RefAirTemp(SurfNum) & ! Convection from surface to zone air
                                       +NetLWRadToSurf(SurfNum)             & ! Net radiant exchange with other zone surfaces
                                       +IterDampConst                       &
@@ -5475,7 +5475,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
                 ELSEIF (Surface(SurfNum)%ExtWind) THEN  ! Window is exposed to wind (and possibly rain)
 
                   ! Calculate exterior heat transfer coefficients with windspeed (windspeed is calculated internally in subroutine)
-                  CALL InitExteriorConvectionCoeff(SurfNum,0.0,RoughSurf,EmisOut,TH(SurfNum,1,1), &
+                  CALL InitExteriorConvectionCoeff(SurfNum,0.0d0,RoughSurf,EmisOut,TH(SurfNum,1,1), &
                     HcExtSurf(SurfNum),HSkyExtSurf(SurfNum),HGrdExtSurf(SurfNum),HAirExtSurf(SurfNum))
 
                   IF (IsRain) THEN  ! Raining: since wind exposed, outside window surface gets wet
@@ -5485,7 +5485,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
                 ELSE  ! Not Wind exposed
 
                   ! Calculate exterior heat transfer coefficients for windspeed = 0
-                  CALL InitExteriorConvectionCoeff(SurfNum,0.0,RoughSurf,EmisOut,TH(SurfNum,1,1), &
+                  CALL InitExteriorConvectionCoeff(SurfNum,0.0d0,RoughSurf,EmisOut,TH(SurfNum,1,1), &
                     HcExtSurf(SurfNum),HSkyExtSurf(SurfNum),HGrdExtSurf(SurfNum),HAirExtSurf(SurfNum))
 
                 END IF
@@ -5766,8 +5766,8 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
 !Feb2012      IF ((InsideSurfIterations > IterationsForCondFDRelaxChange) .and. (.NOT. Converged) .AND.   &
 !Feb2012          (.NOT. CondFDVariableProperties) ) THEN
 !Feb2012          ! adjust relaxation factor down, assume large number of iterations is result of instability
-!Feb2012        CondFDRelaxFactor = CondFDRelaxFactor * 0.9
-!Feb2012        IF (CondFDRelaxFactor < 0.2) CondFDRelaxFactor = 0.2
+!Feb2012        CondFDRelaxFactor = CondFDRelaxFactor * 0.9d0
+!Feb2012        IF (CondFDRelaxFactor < 0.2d0) CondFDRelaxFactor = 0.2d0
 
   ! resets relaxation factor to speed up iterations when under-relaxatation is not needed.
       IF (InsideSurfIterations <=1) THEN
@@ -5775,8 +5775,8 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
       ENDIF
       IF ((InsideSurfIterations > IterationsForCondFDRelaxChange) .and. .not. Converged) THEN
           ! adjust relaxation factor down, assume large number of iterations is result of instability
-        CondFDRelaxFactor = CondFDRelaxFactor * 0.9
-        IF (CondFDRelaxFactor < 0.1) CondFDRelaxFactor = 0.1
+        CondFDRelaxFactor = CondFDRelaxFactor * 0.9d0
+        IF (CondFDRelaxFactor < 0.1d0) CondFDRelaxFactor = 0.1d0
       ENDIF
 
     ENDIF
@@ -5863,7 +5863,7 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
                       PsyRhoAirFnPbTdbW(OutBaroPress,  &
                                         TempSurfInTmp(SurfNum),  &
                                         PsyWFnTdbRhPb(TempSurfInTmp(SurfNum),  &
-                                                      PsyRhFnTdbRhovLBnC(TempSurfInTmp(SurfNum),  &
+                                                      PsyRhFnTdbRhovLBnd0C(TempSurfInTmp(SurfNum),  &
                                                                            RhoVaporAirIn(SurfNum)),  &
                                                       OutBaroPress))
          SumHmARaW(ZoneNum)= SumHmARaW(ZoneNum)+HMassConvInFD(SurfNum)*Surface(SurfNum)%Area*RhoVaporSurfIn(SurfNum)
@@ -5873,17 +5873,17 @@ USE DataInterfaces,               ONLY: ShowContinueErrorTimeStamp, ShowWarningM
 
 ! Calculate ZoneWinHeatGain/Loss
   IF (.not. PartialResimulate) THEN
-    ZoneWinHeatGain         =0.
-    ZoneWinHeatGainRep      =0.
-    ZoneWinHeatGainRepEnergy=0.
-    ZoneWinHeatLossRep      =0.
-    ZoneWinHeatLossRepEnergy=0.
+    ZoneWinHeatGain         =0.d0
+    ZoneWinHeatGainRep      =0.d0
+    ZoneWinHeatGainRepEnergy=0.d0
+    ZoneWinHeatLossRep      =0.d0
+    ZoneWinHeatLossRepEnergy=0.d0
   ELSE
-    ZoneWinHeatGain(ZoneToResimulate)         =0.
-    ZoneWinHeatGainRep(ZoneToResimulate)      =0.
-    ZoneWinHeatGainRepEnergy(ZoneToResimulate)=0.
-    ZoneWinHeatLossRep(ZoneToResimulate)      =0.
-    ZoneWinHeatLossRepEnergy(ZoneToResimulate)=0.
+    ZoneWinHeatGain(ZoneToResimulate)         =0.d0
+    ZoneWinHeatGainRep(ZoneToResimulate)      =0.d0
+    ZoneWinHeatGainRepEnergy(ZoneToResimulate)=0.d0
+    ZoneWinHeatLossRep(ZoneToResimulate)      =0.d0
+    ZoneWinHeatLossRepEnergy(ZoneToResimulate)=0.d0
   ENDIF
 
   DO SurfNum=1,TotSurfaces
@@ -5964,7 +5964,7 @@ SUBROUTINE CalcOutsideSurfTemp(SurfNum,ZoneNum,ConstrNum,HMovInsul,TempExt)
   USE DataMoistureBalance,       ONLY: TempOutsideAirFD,RhoVaporAirOut,RhoVaporAirIn,HConvExtFD,HMassConvExtFD, &
                                        HConvInFD,HMassConvInFD,RhoVaporSurfIn, &
                                        HSkyFD,HGrndFD,HAirFD
-!unuse909  USE DataMoistureBalanceEMPD,   ONLY: MoistEMPDNew, MoistEMPDFlux
+!unused0909  USE DataMoistureBalanceEMPD,   ONLY: MoistEMPDNew, MoistEMPDFlux
   USE DataDaylightingDevices
   USE DaylightingDevices,        ONLY: FindTDDPipe
   USE Psychrometrics
@@ -5977,8 +5977,8 @@ SUBROUTINE CalcOutsideSurfTemp(SurfNum,ZoneNum,ConstrNum,HMovInsul,TempExt)
   INTEGER, INTENT(IN) :: SurfNum      ! Surface number DO loop counter
   INTEGER, INTENT(IN) :: ZoneNum      ! Zone number the current surface is attached to
   INTEGER, INTENT(IN) :: ConstrNum    ! Construction index for the current surface
-  REAL, INTENT(IN) :: HMovInsul    ! "Convection" coefficient of movable insulation
-  REAL, INTENT(IN) :: TempExt      ! Exterior temperature boundary condition
+  REAL(r64), INTENT(IN) :: HMovInsul    ! "Convection" coefficient of movable insulation
+  REAL(r64), INTENT(IN) :: TempExt      ! Exterior temperature boundary condition
           ! FUNCTION DEFINITIONS:
           ! na
 
@@ -5987,16 +5987,16 @@ SUBROUTINE CalcOutsideSurfTemp(SurfNum,ZoneNum,ConstrNum,HMovInsul,TempExt)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: F1         ! Intermediate calculation variable
-  REAL :: F2         ! Intermediate calculation variable
+  REAL(r64) :: F1         ! Intermediate calculation variable
+  REAL(r64) :: F2         ! Intermediate calculation variable
   LOGICAL :: MovInsulPresent     ! .true. if movable insulation is currently present for surface
   LOGICAL :: QuickConductionSurf ! .true. if the cross CTF term is relatively large
   INTEGER :: PipeNum             ! TDD pipe object number
   INTEGER :: SurfNum2            ! TDD:DIFFUSER object number
   INTEGER :: ZoneNum2            ! TDD:DIFFUSER zone number
-  REAL    :: Ueff                ! 1 / effective R value between TDD:DOME and TDD:DIFFUSER
-  REAL    :: RadTemp             ! local value for Effective radiation temperature for OtherSideConditions model
-  REAL    :: HRad                ! local value for effective (linearized) radiation coefficient
+  REAL(r64)    :: Ueff                ! 1 / effective R value between TDD:DOME and TDD:DIFFUSER
+  REAL(r64)    :: RadTemp             ! local value for Effective radiation temperature for OtherSideConditions model
+  REAL(r64)    :: HRad                ! local value for effective (linearized) radiation coefficient
 
           ! FLOW:
 
@@ -6013,7 +6013,7 @@ SUBROUTINE CalcOutsideSurfTemp(SurfNum,ZoneNum,ConstrNum,HMovInsul,TempExt)
           ! requires the inside heat balance to be accounted for in the heat balance
           ! while a "slow" surface can used the last time step's value for inside
           ! surface temperature.
-      IF (Construct(ConstrNum)%CTFCross(0) > 0.01) THEN
+      IF (Construct(ConstrNum)%CTFCross(0) > 0.01d0) THEN
         QuickConductionSurf = .TRUE.
         F1 = Construct(ConstrNum)%CTFCross(0)/( Construct(ConstrNum)%CTFInside(0)+HConvIn(SurfNum) )
       ELSE
@@ -6039,13 +6039,13 @@ SUBROUTINE CalcOutsideSurfTemp(SurfNum,ZoneNum,ConstrNum,HMovInsul,TempExt)
           ! Similar to opaque surface but inside conditions of TDD:DIFFUSER are used, and no embedded sources/sinks.
           ! Absorbed shortwave radiation is treated similar to a regular window, but only 1 glass layer is allowed.
           !   QRadSWOutAbs(SurfNum) does not apply for TDD:DOME, must use QRadSWwinAbs(SurfNum,1)/2.0 instead.
-          TH(SurfNum,1,1) = ( QRadSWwinAbs(SurfNum,1)/2.0                     & ! Instead of QRadSWOutAbs(SurfNum)
+          TH(SurfNum,1,1) = ( QRadSWwinAbs(SurfNum,1)/2.0d0                     & ! Instead of QRadSWOutAbs(SurfNum)
                              +(HcExtSurf(SurfNum)+HAirExtSurf(SurfNum))*TempExt &
                              +HSkyExtSurf(SurfNum)*SkyTemp                      &
                              +HGrdExtSurf(SurfNum)*OutDryBulbTemp               &  ! ODB used to approx ground surface temp
                              !+Construct(ConstrNum)%CTFSourceOut(0)     &   TDDs cannot be radiant systems
                              ! *QsrcHist(SurfNum,1)                     &
-                             +F1*( QRadSWwinAbs(SurfNum2,1)/2.0               & ! Use TDD:DIFFUSER surface
+                             +F1*( QRadSWwinAbs(SurfNum2,1)/2.0d0               & ! Use TDD:DIFFUSER surface
                                   +QRadThermInAbs(SurfNum2)                     & ! Use TDD:DIFFUSER surface
                                   !+Construct(ConstrNum)%CTFSourceIn(0) &   TDDs cannot be radiant systems
                                   ! *QsrcHist(SurfNum,1)                &
@@ -6229,7 +6229,7 @@ SUBROUTINE CalcExteriorVentedCavity(SurfNum)
   USE DataEnvironment , ONLY: SkyTemp,  SunIsUp, OutBaroPress, OutEnthalpy, IsRain
   USE Psychrometrics  , ONLY: PsyRhoAirFnPbTdbW, PsyCpAirFnWTdb, PsyWFnTdbTwbPb
   USE DataSurfaces    , ONLY: Surface, ExtVentedCavity, TotExtVentCav, OSCM
-!unuse909  USE DataHVACGlobals , ONLY: TimeStepSys
+!unused0909  USE DataHVACGlobals , ONLY: TimeStepSys
   USE ConvectionCoefficients, ONLY: InitExteriorConvectionCoeff
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
@@ -6246,25 +6246,25 @@ SUBROUTINE CalcExteriorVentedCavity(SurfNum)
                                   VdotWindRpt, VdotBouyRpt)
       USE DataPrecisionGlobals
       INTEGER, INTENT(IN), DIMENSION(:) :: SurfPtrARR  ! Array of indexes pointing to Surface structure in DataSurfaces
-      REAL, INTENT(IN)             :: VentArea    ! Area available for venting the gap [m2]
-      REAL, INTENT(IN)             :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
-      REAL, INTENT(IN)             :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
-      REAL, INTENT(IN)             :: HdeltaNPL   ! Height difference from neutral pressure level [m]
-      REAL, INTENT(IN)             :: SolAbs      ! solar absorptivity of baffle [--]
-      REAL, INTENT(IN)             :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
-      REAL, INTENT(IN)             :: Tilt        ! Tilt of gap [Degrees]
-      REAL, INTENT(IN)             :: AspRat      ! aspect ratio of gap  Height/gap [--]
-      REAL, INTENT(IN)             :: GapThick    ! Thickness of air space between baffle and underlying surface
+      REAL(r64), INTENT(IN)             :: VentArea    ! Area available for venting the gap [m2]
+      REAL(r64), INTENT(IN)             :: Cv          ! Oriface coefficient for volume-based discharge, wind-driven [--]
+      REAL(r64), INTENT(IN)             :: Cd          ! oriface coefficient for discharge,  bouyancy-driven [--]
+      REAL(r64), INTENT(IN)             :: HdeltaNPL   ! Height difference from neutral pressure level [m]
+      REAL(r64), INTENT(IN)             :: SolAbs      ! solar absorptivity of baffle [--]
+      REAL(r64), INTENT(IN)             :: AbsExt      ! thermal absorptance/emittance of baffle material [--]
+      REAL(r64), INTENT(IN)             :: Tilt        ! Tilt of gap [Degrees]
+      REAL(r64), INTENT(IN)             :: AspRat      ! aspect ratio of gap  Height/gap [--]
+      REAL(r64), INTENT(IN)             :: GapThick    ! Thickness of air space between baffle and underlying surface
       INTEGER, INTENT(IN)               :: Roughness   ! Roughness index (1-6), see DataHeatBalance parameters
-      REAL, INTENT(IN)             :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
-      REAL, INTENT(INOUT)          :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
-      REAL, INTENT(INOUT)          :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
-      REAL, INTENT(OUT), OPTIONAL  :: HcGapRpt       !
-      REAL, INTENT(OUT), OPTIONAL  :: HrGapRpt       !
-      REAL, INTENT(OUT), OPTIONAL  :: IscRpt
-      REAL, INTENT(OUT), OPTIONAL  :: MdotVentRpt
-      REAL, INTENT(OUT), OPTIONAL  :: VdotWindRpt
-      REAL, INTENT(OUT), OPTIONAL  :: VdotBouyRpt
+      REAL(r64), INTENT(IN)             :: QdotSource  ! Source/sink term, e.g. electricity exported from solar cell [W]
+      REAL(r64), INTENT(INOUT)          :: TsBaffle    ! Temperature of baffle (both sides) use lagged value on input [C]
+      REAL(r64), INTENT(INOUT)          :: TaGap       ! Temperature of air gap (assumed mixed) use lagged value on input [C]
+      REAL(r64), INTENT(OUT), OPTIONAL  :: HcGapRpt       !
+      REAL(r64), INTENT(OUT), OPTIONAL  :: HrGapRpt       !
+      REAL(r64), INTENT(OUT), OPTIONAL  :: IscRpt
+      REAL(r64), INTENT(OUT), OPTIONAL  :: MdotVentRpt
+      REAL(r64), INTENT(OUT), OPTIONAL  :: VdotWindRpt
+      REAL(r64), INTENT(OUT), OPTIONAL  :: VdotBouyRpt
     END SUBROUTINE CalcPassiveExteriorBaffleGap
   END INTERFACE
           ! DERIVED TYPE DEFINITIONS:
@@ -6272,22 +6272,22 @@ SUBROUTINE CalcExteriorVentedCavity(SurfNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   ! local working variables
-  REAL  :: AspRat      ! Aspect Ratio of gap
-  REAL  :: TmpTscoll
-  REAL  :: TmpTaplen
-  REAL  :: RhoAir
-  REAL  :: holeArea
-  REAL  :: HrPlen
-  REAL  :: HcPlen
-  REAL  :: Isc
-  REAL  :: MdotVent
-  REAL  :: VdotWind
-  REAL  :: VdotThermal
+  REAL(r64)  :: AspRat      ! Aspect Ratio of gap
+  REAL(r64)  :: TmpTscoll
+  REAL(r64)  :: TmpTaplen
+  REAL(r64)  :: RhoAir
+  REAL(r64)  :: holeArea
+  REAL(r64)  :: HrPlen
+  REAL(r64)  :: HcPlen
+  REAL(r64)  :: Isc
+  REAL(r64)  :: MdotVent
+  REAL(r64)  :: VdotWind
+  REAL(r64)  :: VdotThermal
   INTEGER    :: CavNum  ! do loop counter
   INTEGER    :: iter  ! do loop counter
   INTEGER    :: thisOSCM
-  REAL  :: TempExt
-  REAL  :: OutHumRatExt
+  REAL(r64)  :: TempExt
+  REAL(r64)  :: OutHumRatExt
 
   CavNum     = Surface(SurfNum)%ExtCavNum
 
@@ -6299,7 +6299,7 @@ SUBROUTINE CalcExteriorVentedCavity(SurfNum)
 
   holeArea   = ExtVentedCavity(CavNum)%ActualArea*ExtVentedCavity(CavNum)%Porosity
 
-  AspRat     = ExtVentedCavity(CavNum)%HdeltaNPL * 2.0 / ExtVentedCavity(CavNum)%PlenGapThick
+  AspRat     = ExtVentedCavity(CavNum)%HdeltaNPL * 2.0d0 / ExtVentedCavity(CavNum)%PlenGapThick
   TmpTscoll  = ExtVentedCavity(CavNum)%TbaffleLast
   TmpTaplen  = ExtVentedCavity(CavNum)%TairLast
 
@@ -6321,7 +6321,7 @@ SUBROUTINE CalcExteriorVentedCavity(SurfNum)
   ExtVentedCavity(CavNum)%Tbaffle           = TmpTscoll
   ExtVentedCavity(CavNum)%HrPlen            = HrPlen
   ExtVentedCavity(CavNum)%HcPlen            = HcPlen
-  ExtVentedCavity(CavNum)%PassiveACH        = (MdotVent/RhoAir) *(1.0/(ExtVentedCavity(CavNum)%ProjArea &
+  ExtVentedCavity(CavNum)%PassiveACH        = (MdotVent/RhoAir) *(1.0d0/(ExtVentedCavity(CavNum)%ProjArea &
                                                                       *ExtVentedCavity(CavNum)%PlenGapThick))*SecInHour
   ExtVentedCavity(CavNum)%PassiveMdotVent   = MdotVent
   ExtVentedCavity(CavNum)%PassiveMdotWind   = VdotWind * RhoAir

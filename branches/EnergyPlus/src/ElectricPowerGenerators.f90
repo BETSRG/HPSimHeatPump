@@ -134,7 +134,7 @@ SUBROUTINE GetGeneratorFuelSupplyInput
   INTEGER                     :: NumNums    ! Number of elements in the numeric array
   INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(25)  :: AlphArray !character string data
-  REAL,                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
+  REAL(r64),                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
   LOGICAL, SAVE :: ErrorsFound=.false.  ! error flag
   LOGICAL       :: IsNotOK              ! Flag to verify name
   LOGICAL       :: IsBlank              ! Flag for blank name
@@ -238,7 +238,7 @@ IF (MyOneTimeFlag) then
       ENDDO
 
       ! check for molar fractions summing to 1.0.
-      IF (ABS(SUM(FuelSupply(FuelSupNum)%ConstitMolalFract)-1.0) > .0001) THEN
+      IF (ABS(SUM(FuelSupply(FuelSupNum)%ConstitMolalFract)-1.0) > .0001d0) THEN
         CALL showSevereError(TRIM(cCurrentModuleObject)//' molar fractions do not sum to 1.0')
         CALL ShowContinueError('Sum was='//TRIM(RoundSigDigits(SUM(FuelSupply(FuelSupNum)%ConstitMolalFract),5)))
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//' = '//TRIM(AlphArray(1)))
@@ -302,23 +302,23 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: NumHardCodedConstituents  !number of gases included in data
-  REAL :: LHVfuel ! lower heating value of fuel, working var
-  REAL :: HHVfuel ! higher heating value of fuel, working var
-  REAL :: O2Stoic ! stochiometric oxygen coef in chemical equation (15)
-  REAL :: CO2ProdStoic ! product gases carbon dioxide coeff
-  REAL :: H20ProdStoic ! product gases water coeff
+  REAL(r64) :: LHVfuel ! lower heating value of fuel, working var
+  REAL(r64) :: HHVfuel ! higher heating value of fuel, working var
+  REAL(r64) :: O2Stoic ! stochiometric oxygen coef in chemical equation (15)
+  REAL(r64) :: CO2ProdStoic ! product gases carbon dioxide coeff
+  REAL(r64) :: H20ProdStoic ! product gases water coeff
   INTEGER   :: i  ! loop index
   Character(Len=maxnamelength) :: thisName ! working string var
   INTEGER   :: thisGasID  ! working index in Gas phase data structure
   INTEGER   :: CO2dataID  ! hard wired to CO2 index in gas data struct
   INTEGER   :: WaterDataID ! hard wired to Water index in gas data struct
-  REAL :: LHVi  !working var for lower heating value calc
-  REAL :: HHVi  !working var for higher heating value calc
+  REAL(r64) :: LHVi  !working var for lower heating value calc
+  REAL(r64) :: HHVi  !working var for higher heating value calc
 !  INTEGER   :: thisConstituent
-  REAL :: MWfuel
-!unused  REAL :: DelfHfuel
-!unused  REAL :: h_i
-!unused  REAL :: LHV
+  REAL(r64) :: MWfuel
+!unused  REAL(r64) :: DelfHfuel
+!unused  REAL(r64) :: h_i
+!unused  REAL(r64) :: LHV
 
   NumHardCodedConstituents = 14
 
@@ -329,150 +329,150 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! Carbon Dioxide (CO2) Temp K 298-1200 (Chase 1998)
   GasPhaseThermoChemistryData(1)%ConstituentName                  = 'CarbonDioxide'
   GasPhaseThermoChemistryData(1)%ConstituentFormula               = 'CO2'
-  GasPhaseThermoChemistryData(1)%StdRefMolarEnthOfForm = -393.5224  !KJ/mol
+  GasPhaseThermoChemistryData(1)%StdRefMolarEnthOfForm = -393.5224d0  !KJ/mol
   GasPhaseThermoChemistryData(1)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(1)%ShomateA =  24.99735
-  GasPhaseThermoChemistryData(1)%ShomateB =  55.18696
-  GasPhaseThermoChemistryData(1)%ShomateC = -33.69137
-  GasPhaseThermoChemistryData(1)%ShomateD =  7.948387
-  GasPhaseThermoChemistryData(1)%ShomateE = -0.136638
-  GasPhaseThermoChemistryData(1)%ShomateF = -403.6075
-  GasPhaseThermoChemistryData(1)%ShomateG =  228.2431
-  GasPhaseThermoChemistryData(1)%ShomateH = -393.5224
-  GasPhaseThermoChemistryData(1)%NumCarbons = 1.0
-  GasPhaseThermoChemistryData(1)%NumHydrogens = 0.0
-  GasPhaseThermoChemistryData(1)%NumOxygens   = 2.0
-  GasPhaseThermoChemistryData(1)%MolecularWeight = 44.01
+  GasPhaseThermoChemistryData(1)%ShomateA =  24.99735d0
+  GasPhaseThermoChemistryData(1)%ShomateB =  55.18696d0
+  GasPhaseThermoChemistryData(1)%ShomateC = -33.69137d0
+  GasPhaseThermoChemistryData(1)%ShomateD =  7.948387d0
+  GasPhaseThermoChemistryData(1)%ShomateE = -0.136638d0
+  GasPhaseThermoChemistryData(1)%ShomateF = -403.6075d0
+  GasPhaseThermoChemistryData(1)%ShomateG =  228.2431d0
+  GasPhaseThermoChemistryData(1)%ShomateH = -393.5224d0
+  GasPhaseThermoChemistryData(1)%NumCarbons = 1.0d0
+  GasPhaseThermoChemistryData(1)%NumHydrogens = 0.0d0
+  GasPhaseThermoChemistryData(1)%NumOxygens   = 2.0d0
+  GasPhaseThermoChemistryData(1)%MolecularWeight = 44.01d0
 
 
   ! Nitrogen (N2) Temp (K) 298-6000
   GasPhaseThermoChemistryData(2)%ConstituentName                  = 'Nitrogen'
   GasPhaseThermoChemistryData(2)%ConstituentFormula               = 'N2'
-  GasPhaseThermoChemistryData(2)%StdRefMolarEnthOfForm = 0.0 !
+  GasPhaseThermoChemistryData(2)%StdRefMolarEnthOfForm = 0.0d0 !
   GasPhaseThermoChemistryData(2)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(2)%ShomateA = 26.092
-  GasPhaseThermoChemistryData(2)%ShomateB = 8.218801
-  GasPhaseThermoChemistryData(2)%ShomateC = -1.976141
-  GasPhaseThermoChemistryData(2)%ShomateD = 0.159274
-  GasPhaseThermoChemistryData(2)%ShomateE = 0.044434
-  GasPhaseThermoChemistryData(2)%ShomateF = -7.98923
-  GasPhaseThermoChemistryData(2)%ShomateG = 221.02
-  GasPhaseThermoChemistryData(2)%ShomateH = 0.000
-  GasPhaseThermoChemistryData(2)%NumCarbons = 0.0
-  GasPhaseThermoChemistryData(2)%NumHydrogens = 0.0
-  GasPhaseThermoChemistryData(2)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(2)%MolecularWeight = 28.01
+  GasPhaseThermoChemistryData(2)%ShomateA = 26.092d0
+  GasPhaseThermoChemistryData(2)%ShomateB = 8.218801d0
+  GasPhaseThermoChemistryData(2)%ShomateC = -1.976141d0
+  GasPhaseThermoChemistryData(2)%ShomateD = 0.159274d0
+  GasPhaseThermoChemistryData(2)%ShomateE = 0.044434d0
+  GasPhaseThermoChemistryData(2)%ShomateF = -7.98923d0
+  GasPhaseThermoChemistryData(2)%ShomateG = 221.02d0
+  GasPhaseThermoChemistryData(2)%ShomateH = 0.000d0
+  GasPhaseThermoChemistryData(2)%NumCarbons = 0.0d0
+  GasPhaseThermoChemistryData(2)%NumHydrogens = 0.0d0
+  GasPhaseThermoChemistryData(2)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(2)%MolecularWeight = 28.01d0
 
   ! Oxygen (O2) Temp (K) 298-6000
   GasPhaseThermoChemistryData(3)%ConstituentName                  =  'Oxygen'
   GasPhaseThermoChemistryData(3)%ConstituentFormula               =  'O2'
-  GasPhaseThermoChemistryData(3)%StdRefMolarEnthOfForm =  0.0
+  GasPhaseThermoChemistryData(3)%StdRefMolarEnthOfForm =  0.0d0
   GasPhaseThermoChemistryData(3)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(3)%ShomateA = 29.659
-  GasPhaseThermoChemistryData(3)%ShomateB = 6.137261
-  GasPhaseThermoChemistryData(3)%ShomateC = -1.186521
-  GasPhaseThermoChemistryData(3)%ShomateD = 0.095780
-  GasPhaseThermoChemistryData(3)%ShomateE = -0.219663
-  GasPhaseThermoChemistryData(3)%ShomateF = -9.861391
-  GasPhaseThermoChemistryData(3)%ShomateG = 237.948
-  GasPhaseThermoChemistryData(3)%ShomateH = 0.0
-  GasPhaseThermoChemistryData(3)%NumCarbons = 0.0
-  GasPhaseThermoChemistryData(3)%NumHydrogens = 0.0
-  GasPhaseThermoChemistryData(3)%NumOxygens   = 2.0
-  GasPhaseThermoChemistryData(3)%MolecularWeight = 32.00
+  GasPhaseThermoChemistryData(3)%ShomateA = 29.659d0
+  GasPhaseThermoChemistryData(3)%ShomateB = 6.137261d0
+  GasPhaseThermoChemistryData(3)%ShomateC = -1.186521d0
+  GasPhaseThermoChemistryData(3)%ShomateD = 0.095780d0
+  GasPhaseThermoChemistryData(3)%ShomateE = -0.219663d0
+  GasPhaseThermoChemistryData(3)%ShomateF = -9.861391d0
+  GasPhaseThermoChemistryData(3)%ShomateG = 237.948d0
+  GasPhaseThermoChemistryData(3)%ShomateH = 0.0d0
+  GasPhaseThermoChemistryData(3)%NumCarbons = 0.0d0
+  GasPhaseThermoChemistryData(3)%NumHydrogens = 0.0d0
+  GasPhaseThermoChemistryData(3)%NumOxygens   = 2.0d0
+  GasPhaseThermoChemistryData(3)%MolecularWeight = 32.00d0
 
   ! Water (H2O) Temp K 300-1700
   ! need lower temperature range for Shomate coef for Water Vapor..
   GasPhaseThermoChemistryData(4)%ConstituentName                  =  'Water'
   GasPhaseThermoChemistryData(4)%ConstituentFormula               =  'H2O'
-  GasPhaseThermoChemistryData(4)%StdRefMolarEnthOfForm =   -241.8264 !KJ/mol
+  GasPhaseThermoChemistryData(4)%StdRefMolarEnthOfForm =   -241.8264d0 !KJ/mol
   GasPhaseThermoChemistryData(4)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(4)%ShomateA =   29.0373
-  GasPhaseThermoChemistryData(4)%ShomateB =    10.2573
-  GasPhaseThermoChemistryData(4)%ShomateC =    2.81048
-  GasPhaseThermoChemistryData(4)%ShomateD =   -0.95914
-  GasPhaseThermoChemistryData(4)%ShomateE =    0.11725
-  GasPhaseThermoChemistryData(4)%ShomateF = -250.569
-  GasPhaseThermoChemistryData(4)%ShomateG =  223.3967
-  GasPhaseThermoChemistryData(4)%ShomateH = -241.8264
-  GasPhaseThermoChemistryData(4)%NumCarbons = 0.0
-  GasPhaseThermoChemistryData(4)%NumHydrogens = 2.0
-  GasPhaseThermoChemistryData(4)%NumOxygens   = 1.0
-  GasPhaseThermoChemistryData(4)%MolecularWeight = 18.02
+  GasPhaseThermoChemistryData(4)%ShomateA =   29.0373d0
+  GasPhaseThermoChemistryData(4)%ShomateB =    10.2573d0
+  GasPhaseThermoChemistryData(4)%ShomateC =    2.81048d0
+  GasPhaseThermoChemistryData(4)%ShomateD =   -0.95914d0
+  GasPhaseThermoChemistryData(4)%ShomateE =    0.11725d0
+  GasPhaseThermoChemistryData(4)%ShomateF = -250.569d0
+  GasPhaseThermoChemistryData(4)%ShomateG =  223.3967d0
+  GasPhaseThermoChemistryData(4)%ShomateH = -241.8264d0
+  GasPhaseThermoChemistryData(4)%NumCarbons = 0.0d0
+  GasPhaseThermoChemistryData(4)%NumHydrogens = 2.0d0
+  GasPhaseThermoChemistryData(4)%NumOxygens   = 1.0d0
+  GasPhaseThermoChemistryData(4)%MolecularWeight = 18.02d0
 
   ! Argon (Ar)  Temp K 298-600
 
   GasPhaseThermoChemistryData(5)%ConstituentName                  =  'Argon'
   GasPhaseThermoChemistryData(5)%ConstituentFormula               =  'Ar'
-  GasPhaseThermoChemistryData(5)%StdRefMolarEnthOfForm =   0.0
+  GasPhaseThermoChemistryData(5)%StdRefMolarEnthOfForm =   0.0d0
   GasPhaseThermoChemistryData(5)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(5)%ShomateA =  20.786
+  GasPhaseThermoChemistryData(5)%ShomateA =  20.786d0
   GasPhaseThermoChemistryData(5)%ShomateB =   2.825911d-07
   GasPhaseThermoChemistryData(5)%ShomateC =  -1.464191d-07
   GasPhaseThermoChemistryData(5)%ShomateD =   1.092131d-08
   GasPhaseThermoChemistryData(5)%ShomateE =  -3.661371d-08
-  GasPhaseThermoChemistryData(5)%ShomateF =  -6.19735
-  GasPhaseThermoChemistryData(5)%ShomateG = 179.999
-  GasPhaseThermoChemistryData(5)%ShomateH =   0.0
-  GasPhaseThermoChemistryData(5)%NumCarbons = 0.0
-  GasPhaseThermoChemistryData(5)%NumHydrogens = 0.0
-  GasPhaseThermoChemistryData(5)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(5)%MolecularWeight = 39.95
+  GasPhaseThermoChemistryData(5)%ShomateF =  -6.19735d0
+  GasPhaseThermoChemistryData(5)%ShomateG = 179.999d0
+  GasPhaseThermoChemistryData(5)%ShomateH =   0.0d0
+  GasPhaseThermoChemistryData(5)%NumCarbons = 0.0d0
+  GasPhaseThermoChemistryData(5)%NumHydrogens = 0.0d0
+  GasPhaseThermoChemistryData(5)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(5)%MolecularWeight = 39.95d0
 
   ! Hydrogen (H2) Temp K 298-1000
   GasPhaseThermoChemistryData(6)%ConstituentName                  = 'Hydrogen'
   GasPhaseThermoChemistryData(6)%ConstituentFormula               = 'H2'
-  GasPhaseThermoChemistryData(6)%StdRefMolarEnthOfForm =  0.0
+  GasPhaseThermoChemistryData(6)%StdRefMolarEnthOfForm =  0.0d0
   GasPhaseThermoChemistryData(6)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(6)%ShomateA =   33.066178
-  GasPhaseThermoChemistryData(6)%ShomateB =  -11.363417
-  GasPhaseThermoChemistryData(6)%ShomateC =   11.432816
-  GasPhaseThermoChemistryData(6)%ShomateD =   -2.772874
-  GasPhaseThermoChemistryData(6)%ShomateE =   -0.158558
-  GasPhaseThermoChemistryData(6)%ShomateF =   -9.980797
-  GasPhaseThermoChemistryData(6)%ShomateG =  172.707974
-  GasPhaseThermoChemistryData(6)%ShomateH =    0.0
-  GasPhaseThermoChemistryData(6)%NumCarbons = 0.0
-  GasPhaseThermoChemistryData(6)%NumHydrogens = 2.0
-  GasPhaseThermoChemistryData(6)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(6)%MolecularWeight = 2.02
+  GasPhaseThermoChemistryData(6)%ShomateA =   33.066178d0
+  GasPhaseThermoChemistryData(6)%ShomateB =  -11.363417d0
+  GasPhaseThermoChemistryData(6)%ShomateC =   11.432816d0
+  GasPhaseThermoChemistryData(6)%ShomateD =   -2.772874d0
+  GasPhaseThermoChemistryData(6)%ShomateE =   -0.158558d0
+  GasPhaseThermoChemistryData(6)%ShomateF =   -9.980797d0
+  GasPhaseThermoChemistryData(6)%ShomateG =  172.707974d0
+  GasPhaseThermoChemistryData(6)%ShomateH =    0.0d0
+  GasPhaseThermoChemistryData(6)%NumCarbons = 0.0d0
+  GasPhaseThermoChemistryData(6)%NumHydrogens = 2.0d0
+  GasPhaseThermoChemistryData(6)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(6)%MolecularWeight = 2.02d0
 
   ! Methane (CH4) Temp K 298-1300
   GasPhaseThermoChemistryData(7)%ConstituentName                  =  'Methane'
   GasPhaseThermoChemistryData(7)%ConstituentFormula               =  'CH4'
-  GasPhaseThermoChemistryData(7)%StdRefMolarEnthOfForm =   -74.8731  !KJ/mol (Chase 1998)
+  GasPhaseThermoChemistryData(7)%StdRefMolarEnthOfForm =   -74.8731d0  !KJ/mol (Chase 1998)
   GasPhaseThermoChemistryData(7)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(7)%ShomateA =  -0.703029
-  GasPhaseThermoChemistryData(7)%ShomateB = 108.4773
-  GasPhaseThermoChemistryData(7)%ShomateC = -42.52157
-  GasPhaseThermoChemistryData(7)%ShomateD =   5.862788
-  GasPhaseThermoChemistryData(7)%ShomateE =   0.678565
-  GasPhaseThermoChemistryData(7)%ShomateF = -76.84376
-  GasPhaseThermoChemistryData(7)%ShomateG = 158.7163
-  GasPhaseThermoChemistryData(7)%ShomateH = -74.87310
-  GasPhaseThermoChemistryData(7)%NumCarbons = 1.0
-  GasPhaseThermoChemistryData(7)%NumHydrogens = 4.0
-  GasPhaseThermoChemistryData(7)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(7)%MolecularWeight = 16.04
+  GasPhaseThermoChemistryData(7)%ShomateA =  -0.703029d0
+  GasPhaseThermoChemistryData(7)%ShomateB = 108.4773d0
+  GasPhaseThermoChemistryData(7)%ShomateC = -42.52157d0
+  GasPhaseThermoChemistryData(7)%ShomateD =   5.862788d0
+  GasPhaseThermoChemistryData(7)%ShomateE =   0.678565d0
+  GasPhaseThermoChemistryData(7)%ShomateF = -76.84376d0
+  GasPhaseThermoChemistryData(7)%ShomateG = 158.7163d0
+  GasPhaseThermoChemistryData(7)%ShomateH = -74.87310d0
+  GasPhaseThermoChemistryData(7)%NumCarbons = 1.0d0
+  GasPhaseThermoChemistryData(7)%NumHydrogens = 4.0d0
+  GasPhaseThermoChemistryData(7)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(7)%MolecularWeight = 16.04d0
 
 
   ! Ethane (C2H6)
   GasPhaseThermoChemistryData(8)%ConstituentName                  =  'Ethane'
   GasPhaseThermoChemistryData(8)%ConstituentFormula               =  'C2H6'
-  GasPhaseThermoChemistryData(8)%StdRefMolarEnthOfForm =  -83.8605 ! -83.8 !KJ/mol (Pittam and Pilcher 1972)
+  GasPhaseThermoChemistryData(8)%StdRefMolarEnthOfForm =  -83.8605d0 ! -83.8 !KJ/mol (Pittam and Pilcher 1972)
   GasPhaseThermoChemistryData(8)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(8)%ShomateA = -3.03849
-  GasPhaseThermoChemistryData(8)%ShomateB = 199.202
-  GasPhaseThermoChemistryData(8)%ShomateC = -84.9812
-  GasPhaseThermoChemistryData(8)%ShomateD = 11.0348
-  GasPhaseThermoChemistryData(8)%ShomateE = 0.30348
-  GasPhaseThermoChemistryData(8)%ShomateF = -90.0633
-  GasPhaseThermoChemistryData(8)%ShomateG = -999.
-  GasPhaseThermoChemistryData(8)%ShomateH = -83.8605
-  GasPhaseThermoChemistryData(8)%NumCarbons = 2.0
-  GasPhaseThermoChemistryData(8)%NumHydrogens = 6.0
-  GasPhaseThermoChemistryData(8)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(8)%MolecularWeight = 30.07
+  GasPhaseThermoChemistryData(8)%ShomateA = -3.03849d0
+  GasPhaseThermoChemistryData(8)%ShomateB = 199.202d0
+  GasPhaseThermoChemistryData(8)%ShomateC = -84.9812d0
+  GasPhaseThermoChemistryData(8)%ShomateD = 11.0348d0
+  GasPhaseThermoChemistryData(8)%ShomateE = 0.30348d0
+  GasPhaseThermoChemistryData(8)%ShomateF = -90.0633d0
+  GasPhaseThermoChemistryData(8)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(8)%ShomateH = -83.8605d0
+  GasPhaseThermoChemistryData(8)%NumCarbons = 2.0d0
+  GasPhaseThermoChemistryData(8)%NumHydrogens = 6.0d0
+  GasPhaseThermoChemistryData(8)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(8)%MolecularWeight = 30.07d0
   GasPhaseThermoChemistryData(8)%NASA_A1 = 0.14625388d+01
   GasPhaseThermoChemistryData(8)%NASA_A2 = 0.15494667d-01
   GasPhaseThermoChemistryData(8)%NASA_A3 = 0.05780507d-04
@@ -484,20 +484,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! Propane (C3H8)
   GasPhaseThermoChemistryData(9)%ConstituentName                  =  'Propane'
   GasPhaseThermoChemistryData(9)%ConstituentFormula               =  'C3H8'
-  GasPhaseThermoChemistryData(9)%StdRefMolarEnthOfForm = -103.855 !  -104.7 !kJ/mol  (Pittam and Pilcher 1972)
+  GasPhaseThermoChemistryData(9)%StdRefMolarEnthOfForm = -103.855d0 !  -104.7 !kJ/mol  (Pittam and Pilcher 1972)
   GasPhaseThermoChemistryData(9)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(9)%ShomateA = -23.1747
-  GasPhaseThermoChemistryData(9)%ShomateB = 363.742
-  GasPhaseThermoChemistryData(9)%ShomateC = -222.981
-  GasPhaseThermoChemistryData(9)%ShomateD = 56.253
-  GasPhaseThermoChemistryData(9)%ShomateE = 0.61164
-  GasPhaseThermoChemistryData(9)%ShomateF = -109.206
-  GasPhaseThermoChemistryData(9)%ShomateG = -999.
-  GasPhaseThermoChemistryData(9)%ShomateH = -103.855
-  GasPhaseThermoChemistryData(9)%NumCarbons = 3.0
-  GasPhaseThermoChemistryData(9)%NumHydrogens = 8.0
-  GasPhaseThermoChemistryData(9)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(9)%MolecularWeight = 44.10
+  GasPhaseThermoChemistryData(9)%ShomateA = -23.1747d0
+  GasPhaseThermoChemistryData(9)%ShomateB = 363.742d0
+  GasPhaseThermoChemistryData(9)%ShomateC = -222.981d0
+  GasPhaseThermoChemistryData(9)%ShomateD = 56.253d0
+  GasPhaseThermoChemistryData(9)%ShomateE = 0.61164d0
+  GasPhaseThermoChemistryData(9)%ShomateF = -109.206d0
+  GasPhaseThermoChemistryData(9)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(9)%ShomateH = -103.855d0
+  GasPhaseThermoChemistryData(9)%NumCarbons = 3.0d0
+  GasPhaseThermoChemistryData(9)%NumHydrogens = 8.0d0
+  GasPhaseThermoChemistryData(9)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(9)%MolecularWeight = 44.10d0
   GasPhaseThermoChemistryData(9)%NASA_A1 = 0.08969208d+01
   GasPhaseThermoChemistryData(9)%NASA_A2 = 0.02668986d+00
   GasPhaseThermoChemistryData(9)%NASA_A3 = 0.05431425d-04
@@ -510,20 +510,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! Butane (C4H10)
   GasPhaseThermoChemistryData(10)%ConstituentName                  =  'Butane'
   GasPhaseThermoChemistryData(10)%ConstituentFormula               =  'C4H10'
-  GasPhaseThermoChemistryData(10)%StdRefMolarEnthOfForm =   -133.218 ! -125.6 !kJ/mol  (Pittam and Pilcher 1972)
+  GasPhaseThermoChemistryData(10)%StdRefMolarEnthOfForm =   -133.218d0 ! -125.6 !kJ/mol  (Pittam and Pilcher 1972)
   GasPhaseThermoChemistryData(10)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(10)%ShomateA = -5.24343
-  GasPhaseThermoChemistryData(10)%ShomateB = 426.442
-  GasPhaseThermoChemistryData(10)%ShomateC = -257.955
-  GasPhaseThermoChemistryData(10)%ShomateD = 66.535
-  GasPhaseThermoChemistryData(10)%ShomateE = -0.26994
-  GasPhaseThermoChemistryData(10)%ShomateF = -149.365
-  GasPhaseThermoChemistryData(10)%ShomateG = -999.
-  GasPhaseThermoChemistryData(10)%ShomateH = -133.218
-  GasPhaseThermoChemistryData(10)%NumCarbons = 4.0
-  GasPhaseThermoChemistryData(10)%NumHydrogens = 10.0
-  GasPhaseThermoChemistryData(10)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(10)%MolecularWeight = 58.12
+  GasPhaseThermoChemistryData(10)%ShomateA = -5.24343d0
+  GasPhaseThermoChemistryData(10)%ShomateB = 426.442d0
+  GasPhaseThermoChemistryData(10)%ShomateC = -257.955d0
+  GasPhaseThermoChemistryData(10)%ShomateD = 66.535d0
+  GasPhaseThermoChemistryData(10)%ShomateE = -0.26994d0
+  GasPhaseThermoChemistryData(10)%ShomateF = -149.365d0
+  GasPhaseThermoChemistryData(10)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(10)%ShomateH = -133.218d0
+  GasPhaseThermoChemistryData(10)%NumCarbons = 4.0d0
+  GasPhaseThermoChemistryData(10)%NumHydrogens = 10.0d0
+  GasPhaseThermoChemistryData(10)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(10)%MolecularWeight = 58.12d0
   GasPhaseThermoChemistryData(10)%NASA_A1 = -0.02256618d+02
   GasPhaseThermoChemistryData(10)%NASA_A2 =  0.05881732d+00
   GasPhaseThermoChemistryData(10)%NASA_A3 = -0.04525782d-03
@@ -535,20 +535,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! Pentane (C5H12)
   GasPhaseThermoChemistryData(11)%ConstituentName                  =  'Pentane'
   GasPhaseThermoChemistryData(11)%ConstituentFormula               =  'C5H12'
-  GasPhaseThermoChemistryData(11)%StdRefMolarEnthOfForm =  -146.348 ! -146.8 !kJ/mol (Good 1970)
+  GasPhaseThermoChemistryData(11)%StdRefMolarEnthOfForm =  -146.348d0 ! -146.8 !kJ/mol (Good 1970)
   GasPhaseThermoChemistryData(11)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(11)%ShomateA = -34.9431
-  GasPhaseThermoChemistryData(11)%ShomateB = 576.777
-  GasPhaseThermoChemistryData(11)%ShomateC = -338.353
-  GasPhaseThermoChemistryData(11)%ShomateD = 76.8232
-  GasPhaseThermoChemistryData(11)%ShomateE = 1.00948
-  GasPhaseThermoChemistryData(11)%ShomateF = -155.348
-  GasPhaseThermoChemistryData(11)%ShomateG = -999.
-  GasPhaseThermoChemistryData(11)%ShomateH = -146.348
-  GasPhaseThermoChemistryData(11)%NumCarbons = 5.0
-  GasPhaseThermoChemistryData(11)%NumHydrogens = 12.0
-  GasPhaseThermoChemistryData(11)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(11)%MolecularWeight = 72.15
+  GasPhaseThermoChemistryData(11)%ShomateA = -34.9431d0
+  GasPhaseThermoChemistryData(11)%ShomateB = 576.777d0
+  GasPhaseThermoChemistryData(11)%ShomateC = -338.353d0
+  GasPhaseThermoChemistryData(11)%ShomateD = 76.8232d0
+  GasPhaseThermoChemistryData(11)%ShomateE = 1.00948d0
+  GasPhaseThermoChemistryData(11)%ShomateF = -155.348d0
+  GasPhaseThermoChemistryData(11)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(11)%ShomateH = -146.348d0
+  GasPhaseThermoChemistryData(11)%NumCarbons = 5.0d0
+  GasPhaseThermoChemistryData(11)%NumHydrogens = 12.0d0
+  GasPhaseThermoChemistryData(11)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(11)%MolecularWeight = 72.15d0
   GasPhaseThermoChemistryData(11)%NASA_A1 =  0.01877907d+02
   GasPhaseThermoChemistryData(11)%NASA_A2 =  0.04121645d+00
   GasPhaseThermoChemistryData(11)%NASA_A3 =  0.12532337d-04
@@ -560,20 +560,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! Hexane  (C6H14)
   GasPhaseThermoChemistryData(12)%ConstituentName                  =  'Hexane'
   GasPhaseThermoChemistryData(12)%ConstituentFormula               =  'C6H14'
-  GasPhaseThermoChemistryData(12)%StdRefMolarEnthOfForm =   -166.966 ! -167.2 !kJ/mol (Prosen and Rossini 1945)
+  GasPhaseThermoChemistryData(12)%StdRefMolarEnthOfForm =   -166.966d0 ! -167.2 !kJ/mol (Prosen and Rossini 1945)
   GasPhaseThermoChemistryData(12)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(12)%ShomateA = -46.7786
-  GasPhaseThermoChemistryData(12)%ShomateB = 711.187
-  GasPhaseThermoChemistryData(12)%ShomateC = -438.39
-  GasPhaseThermoChemistryData(12)%ShomateD = 103.784
-  GasPhaseThermoChemistryData(12)%ShomateE = 1.23887
-  GasPhaseThermoChemistryData(12)%ShomateF = -176.813
-  GasPhaseThermoChemistryData(12)%ShomateG = -999.
-  GasPhaseThermoChemistryData(12)%ShomateH = -166.966
-  GasPhaseThermoChemistryData(12)%NumCarbons = 6.0
-  GasPhaseThermoChemistryData(12)%NumHydrogens = 14.0
-  GasPhaseThermoChemistryData(12)%NumOxygens   = 0.0
-  GasPhaseThermoChemistryData(12)%MolecularWeight = 86.18
+  GasPhaseThermoChemistryData(12)%ShomateA = -46.7786d0
+  GasPhaseThermoChemistryData(12)%ShomateB = 711.187d0
+  GasPhaseThermoChemistryData(12)%ShomateC = -438.39d0
+  GasPhaseThermoChemistryData(12)%ShomateD = 103.784d0
+  GasPhaseThermoChemistryData(12)%ShomateE = 1.23887d0
+  GasPhaseThermoChemistryData(12)%ShomateF = -176.813d0
+  GasPhaseThermoChemistryData(12)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(12)%ShomateH = -166.966d0
+  GasPhaseThermoChemistryData(12)%NumCarbons = 6.0d0
+  GasPhaseThermoChemistryData(12)%NumHydrogens = 14.0d0
+  GasPhaseThermoChemistryData(12)%NumOxygens   = 0.0d0
+  GasPhaseThermoChemistryData(12)%MolecularWeight = 86.18d0
   GasPhaseThermoChemistryData(12)%NASA_A1 =  0.01836174d+02
   GasPhaseThermoChemistryData(12)%NASA_A2 =  0.05098461d+00
   GasPhaseThermoChemistryData(12)%NASA_A3 =  0.12595857d-04
@@ -586,20 +586,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
  ! No Shomate coefficients???
   GasPhaseThermoChemistryData(13)%ConstituentName                  =  'Methanol'
   GasPhaseThermoChemistryData(13)%ConstituentFormula               =  'CH3OH'
-  GasPhaseThermoChemistryData(13)%StdRefMolarEnthOfForm =  -201.102 ! -201.0 !kJ/mol (Hine and Arata 1976)
+  GasPhaseThermoChemistryData(13)%StdRefMolarEnthOfForm =  -201.102d0 ! -201.0 !kJ/mol (Hine and Arata 1976)
   GasPhaseThermoChemistryData(13)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(13)%ShomateA = 14.1952
-  GasPhaseThermoChemistryData(13)%ShomateB = 97.7218
-  GasPhaseThermoChemistryData(13)%ShomateC = -9.73279
-  GasPhaseThermoChemistryData(13)%ShomateD = -12.8461
-  GasPhaseThermoChemistryData(13)%ShomateE = 0.15819
-  GasPhaseThermoChemistryData(13)%ShomateF = -209.037
-  GasPhaseThermoChemistryData(13)%ShomateG = -999.
-  GasPhaseThermoChemistryData(13)%ShomateH = -201.102
-  GasPhaseThermoChemistryData(13)%NumCarbons = 1.0
-  GasPhaseThermoChemistryData(13)%NumHydrogens = 4.0
-  GasPhaseThermoChemistryData(13)%NumOxygens   = 1.0
-  GasPhaseThermoChemistryData(13)%MolecularWeight = 32.04
+  GasPhaseThermoChemistryData(13)%ShomateA = 14.1952d0
+  GasPhaseThermoChemistryData(13)%ShomateB = 97.7218d0
+  GasPhaseThermoChemistryData(13)%ShomateC = -9.73279d0
+  GasPhaseThermoChemistryData(13)%ShomateD = -12.8461d0
+  GasPhaseThermoChemistryData(13)%ShomateE = 0.15819d0
+  GasPhaseThermoChemistryData(13)%ShomateF = -209.037d0
+  GasPhaseThermoChemistryData(13)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(13)%ShomateH = -201.102d0
+  GasPhaseThermoChemistryData(13)%NumCarbons = 1.0d0
+  GasPhaseThermoChemistryData(13)%NumHydrogens = 4.0d0
+  GasPhaseThermoChemistryData(13)%NumOxygens   = 1.0d0
+  GasPhaseThermoChemistryData(13)%MolecularWeight = 32.04d0
   GasPhaseThermoChemistryData(13)%NASA_A1 =  0.02660115d+02
   GasPhaseThermoChemistryData(13)%NASA_A2 =  0.07341508d-01
   GasPhaseThermoChemistryData(13)%NASA_A3 =  0.07170050d-04
@@ -612,20 +612,20 @@ SUBROUTINE SetupFuelConstituentData(FuelSupplyNum, ErrorsFound)
   ! No Shomate coefficients???
   GasPhaseThermoChemistryData(14)%ConstituentName                  =  'Ethanol'
   GasPhaseThermoChemistryData(14)%ConstituentFormula               =  'C2H5OH'
-  GasPhaseThermoChemistryData(14)%StdRefMolarEnthOfForm = -234.441 !  -235.3 !kJ/mol (Green 1960)
+  GasPhaseThermoChemistryData(14)%StdRefMolarEnthOfForm = -234.441d0 !  -235.3 !kJ/mol (Green 1960)
   GasPhaseThermoChemistryData(14)%ThermoMode = NISTShomate
-  GasPhaseThermoChemistryData(14)%ShomateA = -8.87256
-  GasPhaseThermoChemistryData(14)%ShomateB = 282.389
-  GasPhaseThermoChemistryData(14)%ShomateC = -178.85
-  GasPhaseThermoChemistryData(14)%ShomateD = 46.3528
-  GasPhaseThermoChemistryData(14)%ShomateE = 0.48364
-  GasPhaseThermoChemistryData(14)%ShomateF = -241.239
-  GasPhaseThermoChemistryData(14)%ShomateG = -999.
-  GasPhaseThermoChemistryData(14)%ShomateH = -234.441
-  GasPhaseThermoChemistryData(14)%NumCarbons = 2.0
-  GasPhaseThermoChemistryData(14)%NumHydrogens = 6.0
-  GasPhaseThermoChemistryData(14)%NumOxygens   = 1.0
-  GasPhaseThermoChemistryData(14)%MolecularWeight = 46.07
+  GasPhaseThermoChemistryData(14)%ShomateA = -8.87256d0
+  GasPhaseThermoChemistryData(14)%ShomateB = 282.389d0
+  GasPhaseThermoChemistryData(14)%ShomateC = -178.85d0
+  GasPhaseThermoChemistryData(14)%ShomateD = 46.3528d0
+  GasPhaseThermoChemistryData(14)%ShomateE = 0.48364d0
+  GasPhaseThermoChemistryData(14)%ShomateF = -241.239d0
+  GasPhaseThermoChemistryData(14)%ShomateG = -999.d0
+  GasPhaseThermoChemistryData(14)%ShomateH = -234.441d0
+  GasPhaseThermoChemistryData(14)%NumCarbons = 2.0d0
+  GasPhaseThermoChemistryData(14)%NumHydrogens = 6.0d0
+  GasPhaseThermoChemistryData(14)%NumOxygens   = 1.0d0
+  GasPhaseThermoChemistryData(14)%MolecularWeight = 46.07d0
   GasPhaseThermoChemistryData(14)%NASA_A1 =  0.18461027d+01
   GasPhaseThermoChemistryData(14)%NASA_A2 =  0.20475008d-01
   GasPhaseThermoChemistryData(14)%NASA_A3 =  0.39904089d-05
@@ -962,13 +962,13 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
   INTEGER, INTENT(IN)         :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)         :: RunFlagElectCenter  ! TRUE when Generator operating per electric load center request
   LOGICAL, INTENT(IN)         :: RunFlagPlant        ! TRUE when generator operating per Plant request (always false)
-  REAL   , INTENT(IN)    :: ElecLoadRequest     ! Generator Electrical power demand
-  REAL   , INTENT(IN)    :: ThermalLoadRequest  ! cogenerator Thermal power demand
-  REAL,    INTENT(OUT)   :: ElecLoadProvided  ! power allowed
+  REAL(r64)   , INTENT(IN)    :: ElecLoadRequest     ! Generator Electrical power demand
+  REAL(r64)   , INTENT(IN)    :: ThermalLoadRequest  ! cogenerator Thermal power demand
+  REAL(r64),    INTENT(OUT)   :: ElecLoadProvided  ! power allowed
   INTEGER, INTENT(OUT)        :: OperatingMode  ! operating mode
-  REAL   , INTENT(OUT)   :: PLRforSubtimestepStartUp ! part load ratio for switch to normal from start up
+  REAL(r64)   , INTENT(OUT)   :: PLRforSubtimestepStartUp ! part load ratio for switch to normal from start up
                                                          ! this is the part in normal mode
-  REAL   , INTENT(OUT)   :: PLRforSubtimestepShutDown ! part load ratio for switch from cool down to other
+  REAL(r64)   , INTENT(OUT)   :: PLRforSubtimestepShutDown ! part load ratio for switch from cool down to other
                                                       ! this is the part in cool down mode.
   LOGICAL, INTENT(IN)         :: FirstHVACIteration ! True is this is first HVAC iteration
 
@@ -984,17 +984,17 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: RunFlag ! true if generator supposed to run
   INTEGER :: DynaCntrlNum !index in GeneratorDynamics structure for this generator          ! na
-  REAL    :: CurrentFractionalDay !working var, time in decimal days
-  REAL    :: EndingFractionalDay  !working var, time is decimal days
-  REAL    :: LastSystemTimeStepFractionalDay ! working var, time is decimal days
-  REAL    :: MaxPel !working variable for max allowed by transient constraint
-  REAL    :: MinPel !working variabel for min allowed by transient constraint
-  REAL    :: PelInput !holds initial value of IN var
-  REAL    :: Pel !
+  REAL(r64)    :: CurrentFractionalDay !working var, time in decimal days
+  REAL(r64)    :: EndingFractionalDay  !working var, time is decimal days
+  REAL(r64)    :: LastSystemTimeStepFractionalDay ! working var, time is decimal days
+  REAL(r64)    :: MaxPel !working variable for max allowed by transient constraint
+  REAL(r64)    :: MinPel !working variabel for min allowed by transient constraint
+  REAL(r64)    :: PelInput !holds initial value of IN var
+  REAL(r64)    :: Pel !
   INTEGER      :: newOpMode
-  REAL    :: schedVal
-!  REAL    :: PelDiff
-  REAL    :: ElectLoadForThermalRequest
+  REAL(r64)    :: schedVal
+!  REAL(r64)    :: PelDiff
+  REAL(r64)    :: ElectLoadForThermalRequest
   LOGICAL :: ConstrainedMaxP ! true if request was altered because of max power limit
   LOGICAL :: ConstrainedMinP ! true if request was altered because of min power limit
   LOGICAL :: ConstrainedIncreasingPdot ! true if request was altered because of power rate of change up
@@ -1005,9 +1005,9 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
 !  INTEGER :: OutletCWnode        = 0 ! cooling water outlet node ID
   INTEGER :: InletCWnode         = 0 ! cooling water inlet node ID
   LOGICAL :: InternalFlowControl = .FALSE.
-  REAL :: TcwIn             = 0.0 ! inlet cooling water temperature (C)
-  REAL :: TrialMdotcw       = 0.0 ! test or estimate of what the plant flows are going to be (kg/s)
-  REAL :: LimitMinMdotcw    = 0.0 ! lower limit for cooling water flow for generatior operation (kg/s)
+  REAL(r64) :: TcwIn             = 0.0D0 ! inlet cooling water temperature (C)
+  REAL(r64) :: TrialMdotcw       = 0.0D0 ! test or estimate of what the plant flows are going to be (kg/s)
+  REAL(r64) :: LimitMinMdotcw    = 0.0D0 ! lower limit for cooling water flow for generatior operation (kg/s)
 
   ! inits
   PLRforSubtimestepStartUp  = 1.0
@@ -1156,7 +1156,7 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
                             + (INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime))))/HoursInDay
          EndingFractionalDay = GeneratorDynamics(DynaCntrlNum)%FractionalDayofLastStartUp  &
                                + GeneratorDynamics(DynaCntrlNum)%StartUpTimeDelay/HoursInDay
-         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001)  &
+         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001d0)  &
                 .or. (CurrentFractionalDay > EndingFractionalDay)) THEN
            newOpMode = OpModeNormal
            PLRStartUp = .true.
@@ -1237,7 +1237,7 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
                             + (INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime))))/HoursInDay
          EndingFractionalDay = GeneratorDynamics(DynaCntrlNum)%FractionalDayofLastShutDown  &
                                + GeneratorDynamics(DynaCntrlNum)%CoolDownDelay/HoursInDay - ( TimeStepSys/HoursInDay )
-         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001)  & ! CurrentFractionalDay == EndingFractionalDay
+         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001d0)  & ! CurrentFractionalDay == EndingFractionalDay
                 .or. (CurrentFractionalDay > EndingFractionalDay)) THEN
            newOpMode = opModeOFF
            PLRShutDown = .true.
@@ -1258,7 +1258,7 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
                             + (INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime))))/HoursInDay
          EndingFractionalDay = GeneratorDynamics(DynaCntrlNum)%FractionalDayofLastShutDown  &
                                + GeneratorDynamics(DynaCntrlNum)%CoolDownDelay/HoursInDay - ( TimeStepSys /HoursInDay )
-         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001)  & ! CurrentFractionalDay == EndingFractionalDay
+         IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001d0)  & ! CurrentFractionalDay == EndingFractionalDay
                 .or. (CurrentFractionalDay > EndingFractionalDay)) THEN
            newOpMode = OpModeStandby
            PLRShutDown = .true.
@@ -1282,7 +1282,7 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
                             + (INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime))))/HoursInDay
            EndingFractionalDay = GeneratorDynamics(DynaCntrlNum)%FractionalDayofLastShutDown  &
                                + GeneratorDynamics(DynaCntrlNum)%CoolDownDelay/HoursInDay - ( TimeStepSys/HoursInDay )
-           IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001)  & ! CurrentFractionalDay == EndingFractionalDay
+           IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001d0)  & ! CurrentFractionalDay == EndingFractionalDay
                 .or. (CurrentFractionalDay < EndingFractionalDay)) THEN
 
              newOpMode = opModeCoolDown
@@ -1331,7 +1331,7 @@ SUBROUTINE ManageGeneratorControlState(GeneratorType, GeneratorName, GeneratorNu
                             + (INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime))))/HoursInDay
              EndingFractionalDay = GeneratorDynamics(DynaCntrlNum)%FractionalDayofLastShutDown  &
                                + GeneratorDynamics(DynaCntrlNum)%CoolDownDelay/HoursInDay
-             IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001)  & ! CurrentFractionalDay == EndingFractionalDay
+             IF (( ABS(CurrentFractionalDay - EndingFractionalDay) < 0.000001d0)  & ! CurrentFractionalDay == EndingFractionalDay
                 .or. (CurrentFractionalDay > EndingFractionalDay)) THEN
                newOpMode = opModeNormal
                  ! possible PLR on start up.
@@ -1522,8 +1522,8 @@ SUBROUTINE ManageGeneratorFuelFlow(GeneratorType, GeneratorName, GeneratorNum,Ru
   CHARACTER(len=*), INTENT(IN) :: GeneratorName     ! user specified name of Generator
   INTEGER, INTENT(IN)    :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when Generator operating
-  REAL  , INTENT(IN)     :: FuelFlowRequest    ! Generator demand mdot kg/ s
-  REAL,    INTENT(OUT)   :: FuelFlowProvided   ! allowed after constraints kg/s
+  REAL(r64)  , INTENT(IN)     :: FuelFlowRequest    ! Generator demand mdot kg/ s
+  REAL(r64),    INTENT(OUT)   :: FuelFlowProvided   ! allowed after constraints kg/s
   LOGICAL, INTENT(OUT)   :: ConstrainedIncreasingMdot ! true if request was altered because of fuel rate of change up
   LOGICAL, INTENT(OUT)   :: ConstrainedDecreasingMdot ! true if request was altered because of fuel rate of change down
 
@@ -1537,9 +1537,9 @@ SUBROUTINE ManageGeneratorFuelFlow(GeneratorType, GeneratorName, GeneratorNum,Ru
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- REAL    :: MdotFuel
- REAL    :: MaxMdot
- REAL    :: MinMdot
+ REAL(r64)    :: MdotFuel
+ REAL(r64)    :: MaxMdot
+ REAL(r64)    :: MinMdot
  INTEGER :: DynaCntrlNum
 
  ConstrainedIncreasingMdot = .false.
@@ -1578,7 +1578,7 @@ RETURN
 
 END SUBROUTINE ManageGeneratorFuelFlow
 
-REAL FUNCTION FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, TcwIn, FirstHVACIteration)
+REAL(r64) FUNCTION FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, TcwIn, FirstHVACIteration)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         B. Griffith
@@ -1605,8 +1605,8 @@ REAL FUNCTION FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, Tc
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN) :: GeneratorNum ! ID of generator
-  REAL, INTENT(IN) :: Pnetss ! power net steady state
-  REAL, INTENT(IN) :: TcwIn ! temperature of cooling water at inlet
+  REAL(r64), INTENT(IN) :: Pnetss ! power net steady state
+  REAL(r64), INTENT(IN) :: TcwIn ! temperature of cooling water at inlet
   LOGICAL,   INTENT(IN) :: FirstHVACIteration ! true if this is
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1618,7 +1618,7 @@ REAL FUNCTION FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, Tc
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: MdotCW
+  REAL(r64) :: MdotCW
   INTEGER   :: InletNode
   INTEGER   :: OutletNode
 
@@ -1629,7 +1629,7 @@ REAL FUNCTION FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, Tc
   Mdotcw = CurveValue(MicroCHP(GeneratorNum)%A42Model%WaterFlowCurveID, Pnetss, TcwIn)
 
   ! now apply constraints
-  Mdotcw  = MAX(0.0, Mdotcw)
+  Mdotcw  = MAX(0.0D0, Mdotcw)
 
   !make sure plant can provide, utility call may change flow
   IF (MicroCHP(GeneratorNum)%CWLoopNum > 0) THEN ! protect early calls
@@ -1749,8 +1749,8 @@ SUBROUTINE SimMicroCHPGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFl
   INTEGER, INTENT(INOUT) :: GeneratorIndex
   LOGICAL , INTENT(IN)   :: RunFlagElectCenter  ! simulate Generator when TRUE
   LOGICAL , INTENT(IN)   :: RunFlagPlant  ! simulate generator when true.
-  REAL, INTENT(IN)  :: MyElectricLoad      ! demand on electric generator
-  REAL, INTENT(IN)       :: MyThermalLoad           ! thermal demand on cogenerator
+  REAL(r64), INTENT(IN)  :: MyElectricLoad      ! demand on electric generator
+  REAL(r64), INTENT(IN)       :: MyThermalLoad           ! thermal demand on cogenerator
   LOGICAL , INTENT(IN)   :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1853,7 +1853,7 @@ SUBROUTINE GetMicroCHPGeneratorInput
   INTEGER                     :: NumNums      ! Number of elements in the numeric array
   INTEGER                     :: IOStat       ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(25)  :: AlphArray !character string data
-  REAL,                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
+  REAL(r64),                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
   LOGICAL, SAVE :: ErrorsFound=.false.  ! error flag
   LOGICAL       :: IsNotOK              ! Flag to verify name
   LOGICAL       :: IsBlank              ! Flag for blank name
@@ -1930,14 +1930,14 @@ If (myonetimeflag) then
     MicroCHPParamInput(CHPParamNum)%UAskin            = NumArray(8) !N8 Skin Loss UA_loss
     MicroCHPParamInput(CHPParamNum)%RadiativeFraction = NumArray(9) !N9 radiative fraction for skin losses
     MicroCHPParamInput(CHPParamNum)%MCeng             = NumArray(10) ! N10 Aggregated Thermal Mass of Generator MC_eng
-    IF (MicroCHPParamInput(CHPParamNum)%MCeng <= 0.) THEN
+    IF (MicroCHPParamInput(CHPParamNum)%MCeng <= 0.d0) THEN
       CALL ShowSevereError('Invalid, '//TRIM(cNumericFieldNames(10))//' = '//TRIM(RoundSigDigits(NumArray(10), 5)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError('Thermal mass must be greater than zero')
       ErrorsFound = .TRUE.
     ENDIF
     MicroCHPParamInput(CHPParamNum)%MCcw  = NumArray(11) ! Aggregated Thermal Mass of Heat Recovery MC_cw
-    IF (MicroCHPParamInput(CHPParamNum)%MCcw  <= 0.) THEN
+    IF (MicroCHPParamInput(CHPParamNum)%MCcw  <= 0.d0) THEN
       CALL ShowSevereError('Invalid, '//TRIM(cNumericFieldNames(11))//' = '//TRIM(RoundSigDigits(NumArray(11), 5)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError('Thermal mass must be greater than zero')
@@ -2062,8 +2062,8 @@ If (myonetimeflag) then
        CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
        ErrorsFound = .true.
     ENDIF
-    MicroCHP(GeneratorNum)%A42Model%TengLast      = 20.0  ! inits
-    MicroCHP(GeneratorNum)%A42Model%TempCWOutLast = 20.0  ! inits
+    MicroCHP(GeneratorNum)%A42Model%TengLast      = 20.0D0  ! inits
+    MicroCHP(GeneratorNum)%A42Model%TempCWOutLast = 20.0D0  ! inits
 
   ENDDO
 
@@ -2216,14 +2216,14 @@ SUBROUTINE InitMicroCHPNoNormalizeGenerators(GeneratorNum, FirstHVACIteration)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: DynaCntrlNum = 0
-  REAL    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL(r64)    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.           ! Initialization flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! Used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
 
   LOGICAL :: errFlag
-  REAL  :: mdot ! local temporary for mass flow rate
-  REAL  :: rho  ! local temporary for fluid density
+  REAL(r64)  :: mdot ! local temporary for mass flow rate
+  REAL(r64)  :: rho  ! local temporary for fluid density
 
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyEnvrnFlag(NumMicroCHPs))
@@ -2275,16 +2275,16 @@ SUBROUTINE InitMicroCHPNoNormalizeGenerators(GeneratorNum, FirstHVACIteration)
                                                                MicroCHP(GeneratorNum)%A42Model%MaxElecPower ,    &
                                                                Node(MicroCHP(GeneratorNum)%PlantInletNodeID)%Temp )
     ELSEIF (MicroCHP(GeneratorNum)%CWLoopSideNum == SupplySide) THEN
-      IF (PlantLoop(MicroCHP(GeneratorNum)%CWLoopNum)%MaxMassFlowRate > 0.) THEN
+      IF (PlantLoop(MicroCHP(GeneratorNum)%CWLoopNum)%MaxMassFlowRate > 0.d0) THEN
         MicroCHP(GeneratorNum)%PlantMassFlowRateMax = PlantLoop(MicroCHP(GeneratorNum)%CWLoopNum)%MaxMassFlowRate
       ELSEIF(PlantLoop(MicroCHP(GeneratorNum)%CWLoopNum)%PlantSizNum > 0) THEN
         MicroCHP(GeneratorNum)%PlantMassFlowRateMax = PlantSizData(MicroCHP(GeneratorNum)%CWLoopNum)%DesVolFlowRate * rho
       ELSE
-        MicroCHP(GeneratorNum)%PlantMassFlowRateMax =  2. !
+        MicroCHP(GeneratorNum)%PlantMassFlowRateMax =  2.d0 !
       ENDIF
 
     ELSEIF (MicroCHP(GeneratorNum)%CWLoopSideNum == DemandSide) THEN
-      MicroCHP(GeneratorNum)%PlantMassFlowRateMax =  2. ! would like to use plant loop max but not ready yet
+      MicroCHP(GeneratorNum)%PlantMassFlowRateMax =  2.d0 ! would like to use plant loop max but not ready yet
     ENDIF
 
     CALL RegisterPlantCompDesignFlow(MicroCHP(GeneratorNum)%PlantInletNodeID,MicroCHP(GeneratorNum)%PlantMassFlowRateMax / rho )
@@ -2318,7 +2318,7 @@ SUBROUTINE InitMicroCHPNoNormalizeGenerators(GeneratorNum, FirstHVACIteration)
     GeneratorDynamics(DynaCntrlNum)%FuelMdotLastTimestep = 0.0
     GeneratorDynamics(DynaCntrlNum)%PelLastTimeStep = 0.0
 
-    CALL InitComponentNodes( 0., MicroCHP(GeneratorNum)%PlantMassFlowRateMax, &
+    CALL InitComponentNodes( 0.d0, MicroCHP(GeneratorNum)%PlantMassFlowRateMax, &
                                  MicroCHP(GeneratorNum)%PlantInletNodeID,  &
                                  MicroCHP(GeneratorNum)%PlantOutletNodeID, &
                                  MicroCHP(GeneratorNum)%CWLoopNum, &
@@ -2407,8 +2407,8 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
   INTEGER, INTENT(IN)     :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)     :: RunFlagElectCenter ! TRUE when Generator operating
   LOGICAL, INTENT(IN)    :: RunFlagPlant       !
-  REAL , INTENT(IN)  :: MyElectricload          ! Generator demand
-  REAL  , INTENT(IN)     :: MyThermalLoad
+  REAL(r64) , INTENT(IN)  :: MyElectricload          ! Generator demand
+  REAL(r64)  , INTENT(IN)     :: MyThermalLoad
   LOGICAL, INTENT(IN)     :: FirstHVACIteration
 
 
@@ -2422,37 +2422,37 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: AllowedLoad               = 0.0
+  REAL(r64)    :: AllowedLoad               = 0.0
   INTEGER :: CurrentOpMode             = 0
-  REAL    :: PLRforSubtimestepStartUp  = 1.0
-  REAL    :: PLRforSubtimestepShutDown = 0.0
+  REAL(r64)    :: PLRforSubtimestepStartUp  = 1.0
+  REAL(r64)    :: PLRforSubtimestepShutDown = 0.0
   LOGICAL :: RunFlag                   = .false.
   INTEGER :: DynaCntrlNum              = 0
-  REAL    :: Pnetss = 0.0
-  REAL    :: Pstandby = 0.0 ! power draw during standby, positive here means negative production
-  REAL    :: Pcooler  = 0.0 ! power draw during cool down, positive here means negative production
-!  REAL    :: Pnet   = 0.0
-  REAL    :: NdotFuel = 0.0
+  REAL(r64)    :: Pnetss = 0.0
+  REAL(r64)    :: Pstandby = 0.0 ! power draw during standby, positive here means negative production
+  REAL(r64)    :: Pcooler  = 0.0 ! power draw during cool down, positive here means negative production
+!  REAL(r64)    :: Pnet   = 0.0
+  REAL(r64)    :: NdotFuel = 0.0
 
   LOGICAL :: ConstrainedIncreasingNdot = .false.
   LOGICAL :: ConstrainedDecreasingNdot = .false.
   INTEGER :: I       = 0
-  REAL    :: dt      = 0.0
-  REAL    :: ElecEff = 0.0
-  REAL    :: MdotAir = 0.0
-  REAL    :: Qgenss  = 0.0
-  REAL    :: Mdotcw  = 0.0
-  REAL    :: TcwIn   = 0.0
-  REAL    ::  Tcwout = 0.0
-  REAL    :: MdotFuel = 0.0
-  REAL    :: MdotFuelAllowed = 0.0
-  REAL    :: MdotFuelMax = 0.0
-  REAL    :: MdotFuelWarmup = 0.0
-  REAL    :: Pmax    = 0.0
-  REAL    :: Qgross  = 0.0
-  REAL    :: Teng    = 0.0
-  REAL    :: ThermEff = 0.0
-  REAL    :: Cp = 0. ! local fluid specific heat
+  REAL(r64)    :: dt      = 0.0
+  REAL(r64)    :: ElecEff = 0.0
+  REAL(r64)    :: MdotAir = 0.0
+  REAL(r64)    :: Qgenss  = 0.0
+  REAL(r64)    :: Mdotcw  = 0.0
+  REAL(r64)    :: TcwIn   = 0.0
+  REAL(r64)    ::  Tcwout = 0.0
+  REAL(r64)    :: MdotFuel = 0.0
+  REAL(r64)    :: MdotFuelAllowed = 0.0
+  REAL(r64)    :: MdotFuelMax = 0.0
+  REAL(r64)    :: MdotFuelWarmup = 0.0
+  REAL(r64)    :: Pmax    = 0.0
+  REAL(r64)    :: Qgross  = 0.0
+  REAL(r64)    :: Teng    = 0.0
+  REAL(r64)    :: ThermEff = 0.0
+  REAL(r64)    :: Cp = 0.d0 ! local fluid specific heat
 
   LOGICAL :: EnergyBalOK ! check for balance to exit loop
 
@@ -2521,7 +2521,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
         Mdotcw = FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, TcwIn, FirstHVACIteration)
       ENDIF
       ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pnetss, Mdotcw , TcwIn )
-      ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+      ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
 
       IF ( ElecEff > 0.0) THEN ! trap divide by bad thing
         Qgross   = Pnetss/ElecEff     !W
@@ -2529,7 +2529,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
         Qgross = 0.0
       ENDIF
       ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pnetss, Mdotcw , TcwIN )
-      ThermEff  = MAX(0.0, ThermEff) !protect against bad curve result
+      ThermEff  = MAX(0.0D0, ThermEff) !protect against bad curve result
 
       Qgenss   = ThermEff * Qgross !W
 
@@ -2551,18 +2551,18 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
             Mdotcw = FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, TcwIn, FirstHVACIteration)
           ENDIF
           ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pnetss,  Mdotcw, TcwIN)
-          ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+          ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
         ENDDO
 
         ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pnetss, Mdotcw, TcwIN )
-        ThermEff  = MAX(0.0, ThermEff) !protect against bad curve result
+        ThermEff  = MAX(0.0D0, ThermEff) !protect against bad curve result
         Qgenss   = ThermEff * Qgross !W
 
       ENDIf
       Pnetss   = 0.0 ! no actually power produced here.
       NdotFuel = MdotFuel / FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%KmolPerSecToKgPerSec
       MdotAir = CurveValue(MicroCHP(GeneratorNum)%A42Model%AirFlowCurveID, MdotFuel)
-      MdotAir  = MAX(0.0, MdotAir) !protect against bad curve result
+      MdotAir  = MAX(0.0D0, MdotAir) !protect against bad curve result
 
     ELSEIF ( MicroCHP(GeneratorNum)%A42Model%WarmUpByEngineTemp) THEN
     ! Stirling engine mode warm up
@@ -2574,7 +2574,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
       TcwIn    = Node(MicroCHP(GeneratorNum)%PlantInletNodeID)%Temp  !C
       Mdotcw   = Node(MicroCHP(GeneratorNum)%PlantInletNodeID)%MassFlowRate  !kg/s
       ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pmax, Mdotcw, TcwIN)
-      ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+      ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
       IF ( ElecEff > 0.0) THEN ! trap divide by bad thing
          Qgross   = Pmax/ElecEff     !W
       ELSE
@@ -2616,7 +2616,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
       MdotFuel = MdotFuelWarmup
       NdotFuel = MdotFuel / FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%KmolPerSecToKgPerSec
       MdotAir = CurveValue(MicroCHP(GeneratorNum)%A42Model%AirFlowCurveID, MdotFuelWarmup)
-      MdotAir  = MAX(0.0, MdotAir) !protect against bad curve result
+      MdotAir  = MAX(0.0D0, MdotAir) !protect against bad curve result
       Qgross   = NdotFuel * (FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%LHV  * 1000.0 *1000.0)
       ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pmax, Mdotcw, TcwIN)
       Qgenss   = ThermEff * Qgross !W
@@ -2640,7 +2640,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
     ENDIF
 
     ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pnetss, Mdotcw, TcwIN )
-    ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+    ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
 
     IF ( ElecEff > 0.0) THEN ! trap divide by bad thing
       Qgross   = Pnetss/ElecEff     !W
@@ -2649,7 +2649,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
     ENDIF
 
     ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pnetss, Mdotcw, TcwIN)
-    ThermEff  = MAX(0.0, ThermEff) !protect against bad curve result
+    ThermEff  = MAX(0.0D0, ThermEff) !protect against bad curve result
     Qgenss   = ThermEff * Qgross !W
     MdotFuel = Qgross / (FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%LHV  * 1000.0 *1000.0) &
        *  FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%KmolPerSecToKgPerSec
@@ -2668,18 +2668,18 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
           Mdotcw = FuncDetermineCWMdotForInternalFlowControl(GeneratorNum, Pnetss, TcwIn, FirstHVACIteration)
         ENDIF
         ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pnetss, Mdotcw, TcwIN )
-        ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+        ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
       ENDDO
 
       ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pnetss,Mdotcw , TcwIN )
-      ThermEff  = MAX(0.0, ThermEff) !protect against bad curve result
+      ThermEff  = MAX(0.0D0, ThermEff) !protect against bad curve result
       Qgenss   = ThermEff * Qgross !W
 
     ENDIF
 
     NdotFuel = MdotFuel / FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%KmolPerSecToKgPerSec
     MdotAir = CurveValue(MicroCHP(GeneratorNum)%A42Model%AirFlowCurveID, MdotFuel)
-    MdotAir  = MAX(0.0, MdotAir) !protect against bad curve result
+    MdotAir  = MAX(0.0D0, MdotAir) !protect against bad curve result
     IF (PLRforSubtimestepStartUp < 1.0) THEN
       Pnetss = AllowedLoad
     ENDIF
@@ -2713,7 +2713,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
       TcwIn    = Node(MicroCHP(GeneratorNum)%PlantInletNodeID)%Temp  !C
       Mdotcw   = Node(MicroCHP(GeneratorNum)%PlantInletNodeID)%MassFlowRate  !kg/s
       ElecEff  = CurveValue(MicroCHP(GeneratorNum)%A42Model%ElecEffCurveID, Pmax, Mdotcw, TcwIN)
-      ElecEff  = MAX(0.0, ElecEff) !protect against bad curve result
+      ElecEff  = MAX(0.0D0, ElecEff) !protect against bad curve result
       IF ( ElecEff > 0.0) THEN ! trap divide by bad thing
          Qgross   = Pmax/ElecEff     !W
       ELSE
@@ -2750,10 +2750,10 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
       MdotFuel = MdotFuelWarmup
       NdotFuel = MdotFuel / FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%KmolPerSecToKgPerSec
       MdotAir = CurveValue(MicroCHP(GeneratorNum)%A42Model%AirFlowCurveID, MdotFuelWarmup)
-      MdotAir  = MAX(0.0, MdotAir) !protect against bad curve result
+      MdotAir  = MAX(0.0D0, MdotAir) !protect against bad curve result
       Qgross   = NdotFuel * (FuelSupply(MicroCHP(GeneratorNum)%FuelSupplyID)%LHV  * 1000.0 *1000.0)
       ThermEff = CurveValue(MicroCHP(GeneratorNum)%A42Model%ThermalEffCurveID, Pmax, Mdotcw, TcwIN)
-      ThermEff  = MAX(0.0, ThermEff) !protect against bad curve result
+      ThermEff  = MAX(0.0D0, ThermEff) !protect against bad curve result
       Qgenss   = ThermEff * Qgross !W
     ENDIF
 
@@ -2799,7 +2799,7 @@ SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel(GeneratorNum,RunFlagElectCenter
 
 END SUBROUTINE CalcMicroCHPNoNormalizeGeneratorModel
 
-REAL FUNCTION FuncDetermineEngineTemp(Tcwout, MCeng, UAHX, UAskin, Troom, Qgenss, TengLast, time)
+REAL(r64) FUNCTION FuncDetermineEngineTemp(Tcwout, MCeng, UAHX, UAskin, Troom, Qgenss, TengLast, time)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         B. Griffith
@@ -2823,14 +2823,14 @@ REAL FUNCTION FuncDetermineEngineTemp(Tcwout, MCeng, UAHX, UAskin, Troom, Qgenss
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Tcwout ! hot water leaving temp
-  REAL, INTENT(IN) :: MCeng  ! Fictitious mass and heat capacity of engine
-  REAL, INTENT(IN) :: UAHX   ! Heat exchanger UA
-  REAL, INTENT(IN) :: UAskin ! Skin losses UA
-  REAL, INTENT(IN) :: Troom  ! surrounding zone temperature C
-  REAL, INTENT(IN) :: Qgenss ! steady state generator heat generation
-  REAL, INTENT(IN) :: TengLast ! engine temp at previous time step
-  REAL, INTENT(IN) :: time ! elapsed time since previous evaluation
+  REAL(r64), INTENT(IN) :: Tcwout ! hot water leaving temp
+  REAL(r64), INTENT(IN) :: MCeng  ! Fictitious mass and heat capacity of engine
+  REAL(r64), INTENT(IN) :: UAHX   ! Heat exchanger UA
+  REAL(r64), INTENT(IN) :: UAskin ! Skin losses UA
+  REAL(r64), INTENT(IN) :: Troom  ! surrounding zone temperature C
+  REAL(r64), INTENT(IN) :: Qgenss ! steady state generator heat generation
+  REAL(r64), INTENT(IN) :: TengLast ! engine temp at previous time step
+  REAL(r64), INTENT(IN) :: time ! elapsed time since previous evaluation
 
 
 
@@ -2844,8 +2844,8 @@ REAL FUNCTION FuncDetermineEngineTemp(Tcwout, MCeng, UAHX, UAskin, Troom, Qgenss
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: a
-  REAL :: b
+  REAL(r64) :: a
+  REAL(r64) :: b
 
   a = (  ( UAHX * Tcwout / MCeng) + ( UAskin * Troom /  MCeng )  + (  Qgenss / MCeng ) )
   b = ( ( -1.0 * UAHX / MCeng )  + ( -1.0 * UAskin / MCeng ) )
@@ -2856,7 +2856,7 @@ REAL FUNCTION FuncDetermineEngineTemp(Tcwout, MCeng, UAHX, UAskin, Troom, Qgenss
 
 END FUNCTION FuncDetermineEngineTemp
 
-REAL FUNCTION FuncDetermineCoolantWaterExitTemp(Tcwin, MCcw, UAHX, MdotCpcw, Teng, TcwoutLast, time)
+REAL(r64) FUNCTION FuncDetermineCoolantWaterExitTemp(Tcwin, MCcw, UAHX, MdotCpcw, Teng, TcwoutLast, time)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         B. Griffith
@@ -2880,13 +2880,13 @@ REAL FUNCTION FuncDetermineCoolantWaterExitTemp(Tcwin, MCcw, UAHX, MdotCpcw, Ten
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: Tcwin ! hot water inlet temp
-  REAL, INTENT(IN) :: MCcw  ! Fictitious mass and heat capacity of coolant hx
-  REAL, INTENT(IN) :: UAHX   ! Heat exchanger UA
-  REAL, INTENT(IN) :: MdotCpcw ! mass flow and specific heat of coolant water
-  REAL, INTENT(IN) :: Teng  ! engine mass temperature C
-  REAL, INTENT(IN) :: TcwoutLast ! coolant water leaving temp at previous time step
-  REAL, INTENT(IN) :: time ! elapsed time since previous evaluation
+  REAL(r64), INTENT(IN) :: Tcwin ! hot water inlet temp
+  REAL(r64), INTENT(IN) :: MCcw  ! Fictitious mass and heat capacity of coolant hx
+  REAL(r64), INTENT(IN) :: UAHX   ! Heat exchanger UA
+  REAL(r64), INTENT(IN) :: MdotCpcw ! mass flow and specific heat of coolant water
+  REAL(r64), INTENT(IN) :: Teng  ! engine mass temperature C
+  REAL(r64), INTENT(IN) :: TcwoutLast ! coolant water leaving temp at previous time step
+  REAL(r64), INTENT(IN) :: time ! elapsed time since previous evaluation
 
 
 
@@ -2900,8 +2900,8 @@ REAL FUNCTION FuncDetermineCoolantWaterExitTemp(Tcwin, MCcw, UAHX, MdotCpcw, Ten
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: a
-  REAL :: b
+  REAL(r64) :: a
+  REAL(r64) :: b
 
   a =  ( MdotCpcw * Tcwin / MCcw) + ( UAHX * Teng /  MCcw )
   b = ( ( -1.0 * MdotCpcw / MCcw )  + ( -1.0 * UAHX / MCcw ) )
@@ -2938,17 +2938,17 @@ Logical FUNCTION CheckMicroCHPThermalBalance(NomHeatGen, Tcwin, Tcwout, Teng, Tr
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN) :: NomHeatGen ! nominal heat generation rate for scaling
-  REAL, INTENT(IN) :: Tcwin ! hot water inlet temp
-  REAL, INTENT(IN) :: Tcwout ! hot water leaving temp
-  REAL, INTENT(IN) :: Teng  ! engine mass temperature C
-  REAL, INTENT(IN) :: Troom  ! surrounding zone temperature C
-  REAL, INTENT(IN) :: UAHX   ! Heat exchanger UA
-  REAL, INTENT(IN) :: UAskin ! Skin losses UA
-  REAL, INTENT(IN) :: Qgenss ! steady state generator heat generation
-  REAL, INTENT(IN) :: MCeng  ! Fictitious mass and heat capacity of engine
-  REAL, INTENT(IN) :: MCcw  ! Fictitious mass and heat capacity of coolant hx
-  REAL, INTENT(IN) :: MdotCpcw ! mass flow and specific heat of coolant water
+  REAL(r64), INTENT(IN) :: NomHeatGen ! nominal heat generation rate for scaling
+  REAL(r64), INTENT(IN) :: Tcwin ! hot water inlet temp
+  REAL(r64), INTENT(IN) :: Tcwout ! hot water leaving temp
+  REAL(r64), INTENT(IN) :: Teng  ! engine mass temperature C
+  REAL(r64), INTENT(IN) :: Troom  ! surrounding zone temperature C
+  REAL(r64), INTENT(IN) :: UAHX   ! Heat exchanger UA
+  REAL(r64), INTENT(IN) :: UAskin ! Skin losses UA
+  REAL(r64), INTENT(IN) :: Qgenss ! steady state generator heat generation
+  REAL(r64), INTENT(IN) :: MCeng  ! Fictitious mass and heat capacity of engine
+  REAL(r64), INTENT(IN) :: MCcw  ! Fictitious mass and heat capacity of coolant hx
+  REAL(r64), INTENT(IN) :: MdotCpcw ! mass flow and specific heat of coolant water
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2960,13 +2960,13 @@ Logical FUNCTION CheckMicroCHPThermalBalance(NomHeatGen, Tcwin, Tcwout, Teng, Tr
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL  :: a ! working variable, "a" term in generic ODE
-  REAL  :: b ! working variable "b" term in generic ODE
-  REAL  :: DTengDTime ! derivative of engine temp wrt time
-  REAL  :: DCoolOutTDtime ! derivative of coolant exit temp wrt time
-  REAL  :: magImbalEng ! energy imbalance for engine control volume
-  REAL  :: magImbalCooling ! energy imbalance for coolant control volume
-  REAL  :: threshold ! criteria for when to call energy balance okay
+  REAL(r64)  :: a ! working variable, "a" term in generic ODE
+  REAL(r64)  :: b ! working variable "b" term in generic ODE
+  REAL(r64)  :: DTengDTime ! derivative of engine temp wrt time
+  REAL(r64)  :: DCoolOutTDtime ! derivative of coolant exit temp wrt time
+  REAL(r64)  :: magImbalEng ! energy imbalance for engine control volume
+  REAL(r64)  :: magImbalCooling ! energy imbalance for coolant control volume
+  REAL(r64)  :: threshold ! criteria for when to call energy balance okay
   !first compute derivatives using a + bT
 
   a = (  ( UAHX * Tcwout / MCeng) + ( UAskin * Troom /  MCeng )  + (  Qgenss / MCeng ) )
@@ -3031,7 +3031,7 @@ SUBROUTINE FigureMicroCHPZoneGains
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !  INTEGER :: thisZone ! index in Zone structure array
-  REAL    :: TotalZoneHeatGain
+  REAL(r64)    :: TotalZoneHeatGain
   INTEGER :: CHPnum
 !  INTEGER :: ZoneNum
   LOGICAL, SAVE :: MyEnvrnFlag = .TRUE.
@@ -3049,8 +3049,8 @@ SUBROUTINE FigureMicroCHPZoneGains
   ENDDO
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
-    MicroCHP%Report%SkinLossConvect = 0.
-    MicroCHP%Report%SkinLossRadiat  = 0.
+    MicroCHP%Report%SkinLossConvect = 0.d0
+    MicroCHP%Report%SkinLossRadiat  = 0.d0
     MyEnvrnFlag = .FALSE.
   END IF
 
@@ -3104,8 +3104,8 @@ SUBROUTINE CalcUpdateHeatRecovery(Num, FirstHVACIteration)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: InNodeNum
   INTEGER :: OutNodeNum
-  REAL :: Cp ! local Specific heat of fluid
-!  REAL :: mdot !local mass flow rate
+  REAL(r64) :: Cp ! local Specific heat of fluid
+!  REAL(r64) :: mdot !local mass flow rate
 
   ! now update water outlet node Changing to Kg/s!
   OutNodeNum = MicroCHP(Num)%PlantOutletNodeID
@@ -3162,10 +3162,10 @@ SUBROUTINE SimMicroCHPPlantHeatRecovery(CompType,CompName,CompNum,RunFlag,InitLo
   LOGICAL, INTENT(IN)          :: RunFlag
   !INTEGER, INTENT(IN)          :: FlowLock !DSU
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyThermalLoad
-  REAL, INTENT(OUT)       :: MinCap
-  REAL, INTENT(OUT)       :: MaxCap
-  REAL, INTENT(OUT)       :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyThermalLoad
+  REAL(r64), INTENT(OUT)       :: MinCap
+  REAL(r64), INTENT(OUT)       :: MaxCap
+  REAL(r64), INTENT(OUT)       :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3255,7 +3255,7 @@ SUBROUTINE UpdateMicroCHPGeneratorRecords(Num)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: Cp ! local fluid specific heat
+  REAL(r64)    :: Cp ! local fluid specific heat
 
           ! na
   MicroCHP(Num)%Report%Mode              = MicroCHP(Num)%A42Model%OpMode
@@ -3359,10 +3359,10 @@ SUBROUTINE GetMicroCHPGeneratorResults(GeneratorType, GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower  ! heat power
-  REAL, INTENT(OUT)        :: ThermalEnergy ! heat energy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower  ! heat power
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy ! heat energy
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -3504,7 +3504,7 @@ SUBROUTINE SimFuelCellGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFl
   CHARACTER(len=*), INTENT(IN) :: GeneratorName     ! user specified name of Generator
   INTEGER, INTENT(INOUT) :: GeneratorIndex
   LOGICAL , INTENT(IN)   :: RunFlag                 ! simulate Generator when TRUE
-  REAL, INTENT(IN)       :: MyLoad                  ! demand on electric generator
+  REAL(r64), INTENT(IN)       :: MyLoad                  ! demand on electric generator
   LOGICAL, INTENT (IN)   :: FirstHVACIteration
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -3603,7 +3603,7 @@ SUBROUTINE GetFuelCellGeneratorInput
   INTEGER                     :: NumNums    ! Number of elements in the numeric array
   INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(25)  :: AlphArray !character string data
-  REAL,                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
+  REAL(r64),                        DIMENSION(200)  :: NumArray  !numeric data TODO deal with allocatable for extensible
   LOGICAL, SAVE :: ErrorsFound=.false.  ! error flag
   LOGICAL       :: IsNotOK              ! Flag to verify name
   LOGICAL       :: IsBlank              ! Flag for blank name
@@ -3940,24 +3940,24 @@ If (myonetimeflag) then
       FuelCell(thisFuelCell)%AirSup%NumConstituents = NumAirConstit
 
       FuelCell(thisFuelCell)%AirSup%ConstitName(1)       = 'Nitrogen'
-      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(1) = 0.7728
+      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(1) = 0.7728d0
 
       FuelCell(thisFuelCell)%AirSup%ConstitName(2)       = 'Oxygen'
-      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(2) = 0.2073
+      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(2) = 0.2073d0
 
       FuelCell(thisFuelCell)%AirSup%ConstitName(3)       = 'Water'
-      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(3) = 0.0104
+      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(3) = 0.0104d0
 
       FuelCell(thisFuelCell)%AirSup%ConstitName(4)       = 'Argon'
-      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(4) = 0.0092
+      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(4) = 0.0092d0
 
       FuelCell(thisFuelCell)%AirSup%ConstitName(5)       = 'CarbonDioxide'
-      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(5) = 0.0003
+      FuelCell(thisFuelCell)%AirSup%ConstitMolalFract(5) = 0.0003d0
 
     ENDIF
 
     ! check for molar fractions summing to 1.0.
-    IF (ABS(SUM(FuelCell(thisFuelCell)%AirSup%ConstitMolalFract)-1.0) > .0001) THEN
+    IF (ABS(SUM(FuelCell(thisFuelCell)%AirSup%ConstitMolalFract)-1.0) > .0001d0) THEN
 
       CALL showSevereError(TRIM(cCurrentModuleObject)//' molar fractions do not sum to 1.0' )
       CALL ShowContinueError('..Sum was='//TRIM(RoundSigDigits(SUM(FuelCell(thisFuelCell)%AirSup%ConstitMolalFract),1)))
@@ -4585,62 +4585,62 @@ SUBROUTINE CalcFuelCellGeneratorModel(GeneratorNum,RunFlag,MyLoad,FirstHVACItera
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)    :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when Generator operating
-  REAL  , INTENT(IN)     :: myload          ! Generator demand
+  REAL(r64)  , INTENT(IN)     :: myload          ! Generator demand
   LOGICAL, INTENT(IN)    :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER   :: KJtoJ = 1000.        !convert Kjoules to joules
+  REAL(r64), PARAMETER   :: KJtoJ = 1000.d0        !convert Kjoules to joules
 
           ! DERIVED TYPE DEFINITIONS
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL , save     :: PpcuLosses ! losses in inverter [W]
-  REAL :: Pel     ! DC power generated in Fuel Cell Power Module
-  REAL :: Pdemand
-  REAL :: Eel
-  REAL :: Tavg  ! working average temperature
+  REAL(r64) , save     :: PpcuLosses ! losses in inverter [W]
+  REAL(r64) :: Pel     ! DC power generated in Fuel Cell Power Module
+  REAL(r64) :: Pdemand
+  REAL(r64) :: Eel
+  REAL(r64) :: Tavg  ! working average temperature
   LOGICAL   :: constrainedFCPM = .false. ! true if power prod is constrained for some reason
   LOGICAL   :: ConstrainedFCPMTrans = .false.
-  REAL :: PelDiff !
+  REAL(r64) :: PelDiff !
   INTEGER   :: iter ! loop index over repeating set of inter dependent calculaitons
-  REAL :: NdotO2 ! molar rate coeff working varible
-  REAL :: CpWater ! heat capacity of water in molar units
-  REAL :: WaterEnthOfForm  ! Standard molar enthalpy of formation
-  REAL :: NdotFuel !fuel flow rate
-  REAL :: NdotStoicAir ! Air to match fuel molar rate coeff, working variable
-  REAL :: NdotExcessAir ! Air in excess of match for fuel
-  REAL :: NdotCO2ProdGas ! CO2 from reaction
-  REAL :: NdotH20ProdGas ! Water from reaction
-  REAL :: NdotCO2 !temp CO2 molar rate coef product gas stream
-  REAL :: NdotN2  !temp Nitrogen rate coef product gas stream
-  REAL :: Ndot02  !temp Oxygen rate coef product gas stream
-  REAL :: NdotH20 !temp Water rate coef product gas stream
-  REAL :: NdotAr  !tmep Argon rate coef product gas stream
-  REAL :: Cp      !temp Heat Capacity, used in thermochemistry units of (J/mol K)
-  REAL :: Hmolfuel   !temp enthalpy of fuel mixture in KJ/mol
-  REAL :: Hmolair    !temp enthalpy of air mixture in KJ/mol
-  REAL :: HmolProdGases !  enthalpy of product gas mixture in KJ/mol
-  REAL :: HLiqWater ! temp enthalpy of liquid water in KJ/mol   No Formation
-  REAL :: HGasWater ! temp enthalpy of gaseous water in KJ/mol  No Formation
+  REAL(r64) :: NdotO2 ! molar rate coeff working varible
+  REAL(r64) :: CpWater ! heat capacity of water in molar units
+  REAL(r64) :: WaterEnthOfForm  ! Standard molar enthalpy of formation
+  REAL(r64) :: NdotFuel !fuel flow rate
+  REAL(r64) :: NdotStoicAir ! Air to match fuel molar rate coeff, working variable
+  REAL(r64) :: NdotExcessAir ! Air in excess of match for fuel
+  REAL(r64) :: NdotCO2ProdGas ! CO2 from reaction
+  REAL(r64) :: NdotH20ProdGas ! Water from reaction
+  REAL(r64) :: NdotCO2 !temp CO2 molar rate coef product gas stream
+  REAL(r64) :: NdotN2  !temp Nitrogen rate coef product gas stream
+  REAL(r64) :: Ndot02  !temp Oxygen rate coef product gas stream
+  REAL(r64) :: NdotH20 !temp Water rate coef product gas stream
+  REAL(r64) :: NdotAr  !tmep Argon rate coef product gas stream
+  REAL(r64) :: Cp      !temp Heat Capacity, used in thermochemistry units of (J/mol K)
+  REAL(r64) :: Hmolfuel   !temp enthalpy of fuel mixture in KJ/mol
+  REAL(r64) :: Hmolair    !temp enthalpy of air mixture in KJ/mol
+  REAL(r64) :: HmolProdGases !  enthalpy of product gas mixture in KJ/mol
+  REAL(r64) :: HLiqWater ! temp enthalpy of liquid water in KJ/mol   No Formation
+  REAL(r64) :: HGasWater ! temp enthalpy of gaseous water in KJ/mol  No Formation
   INTEGER   :: thisGas !loop index
-  REAL :: MagofImbalance ! error signal to control exiting loop and targeting product enthalpy
-  REAL :: tmpTotProdGasEnthalphy !
-  REAL :: Acc  ! accuracy control for SolveRegulaFalsi
+  REAL(r64) :: MagofImbalance ! error signal to control exiting loop and targeting product enthalpy
+  REAL(r64) :: tmpTotProdGasEnthalphy !
+  REAL(r64) :: Acc  ! accuracy control for SolveRegulaFalsi
   INTEGER   :: MaxIter !iteration control for SolveRegulaFalsi
   INTEGER   :: SolverFlag !feed back flag from SolveRegulaFalsi
-  REAL, Dimension(3) :: Par  ! parameters passed in to SolveRegulaFalsi
+  REAL(r64), Dimension(3) :: Par  ! parameters passed in to SolveRegulaFalsi
                              ! Par(1) = generator number index in structure
                              ! Par(2) = targeted enthalpy (W)
                              ! Par(3) = molar flow rate of product gases (kmol/s)
-  REAL :: tmpTprodGas
-!unused  REAL :: LHV  !Lower Heating Value
+  REAL(r64) :: tmpTprodGas
+!unused  REAL(r64) :: LHV  !Lower Heating Value
   LOGICAL   :: ConstrainedStorage ! contrained overall elect because of storage
-  REAL :: PgridExtra !extra electric power that should go into storage but can't
-  REAL :: Pstorage ! power into storage (+),  power from storage (-)
-  REAL :: PintoInverter ! power into inverter after storage interactions
-  REAL :: PoutofInverter ! power out of inverter after losses and including storage
-  REAL :: PacAncillariesTotal ! total AC ancillaries
+  REAL(r64) :: PgridExtra !extra electric power that should go into storage but can't
+  REAL(r64) :: Pstorage ! power into storage (+),  power from storage (-)
+  REAL(r64) :: PintoInverter ! power into inverter after storage interactions
+  REAL(r64) :: PoutofInverter ! power out of inverter after losses and including storage
+  REAL(r64) :: PacAncillariesTotal ! total AC ancillaries
 
 !! begin controls block to be moved out to GeneratorDynamics module
           !If no loop demand or Generator OFF, return
@@ -4750,14 +4750,14 @@ DO iter=1, 20
     Eel = CurveValue(FuelCell(GeneratorNum)%FCPM%EffCurveID, Pel/FuelCell(GeneratorNum)%FCPM%NomPel)  &
                *FuelCell(GeneratorNum)%FCPM%NomEff &
          * (1 - FuelCell(GeneratorNum)%FCPM%NumCycles * FuelCell(GeneratorNum)%FCPM%CyclingDegradRat) &
-         * (1 - MAX((FuelCell(GeneratorNum)%FCPM%NumRunHours-FuelCell(GeneratorNum)%FCPM%ThreshRunHours), 0.0) &
+         * (1 - MAX((FuelCell(GeneratorNum)%FCPM%NumRunHours-FuelCell(GeneratorNum)%FCPM%ThreshRunHours), 0.0d0) &
                    *FuelCell(GeneratorNum)%FCPM%OperateDegradRat)
 
   ELSEIF  (FuelCell(GeneratorNum)%FCPM%EffMode == DirectCurveMode ) THEN
    !Equation (8) in FuelCell Spec
     Eel = CurveValue(FuelCell(GeneratorNum)%FCPM%EffCurveID, Pel) &
          * (1 - FuelCell(GeneratorNum)%FCPM%NumCycles * FuelCell(GeneratorNum)%FCPM%CyclingDegradRat) &
-         * (1 - MAX((FuelCell(GeneratorNum)%FCPM%NumRunHours-FuelCell(GeneratorNum)%FCPM%ThreshRunHours), 0.0) &
+         * (1 - MAX((FuelCell(GeneratorNum)%FCPM%NumRunHours-FuelCell(GeneratorNum)%FCPM%ThreshRunHours), 0.0d0) &
                    *FuelCell(GeneratorNum)%FCPM%OperateDegradRat )
   ENDIF
 
@@ -5248,11 +5248,11 @@ SUBROUTINE ManageElectStorInteractions(Num,Pdemand, PpcuLosses, &
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: Num ! Generator number, index for structure
-  REAL   , INTENT(IN)  :: Pdemand !
-  REAL   , INTENT(IN)  :: PpcuLosses
+  REAL(r64)   , INTENT(IN)  :: Pdemand !
+  REAL(r64)   , INTENT(IN)  :: PpcuLosses
   Logical, INTENT(OUT) :: Constrained
-  REAL   , INTENT(OUT) :: Pstorage
-  REAL   , INTENT(OUT) :: PgridOverage  !electricity that can't be stored and needs to go out
+  REAL(r64)   , INTENT(OUT) :: Pstorage
+  REAL(r64)   , INTENT(OUT) :: PgridOverage  !electricity that can't be stored and needs to go out
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5264,8 +5264,8 @@ SUBROUTINE ManageElectStorInteractions(Num,Pdemand, PpcuLosses, &
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: tmpPdraw ! power draw from storage, working var
-  REAL    :: tmpPcharge ! power charge to storage, working var
+  REAL(r64)    :: tmpPdraw ! power draw from storage, working var
+  REAL(r64)    :: tmpPcharge ! power charge to storage, working var
   Logical :: drawing ! true if drawing power
   Logical :: charging ! true if charging
 
@@ -5330,7 +5330,7 @@ SUBROUTINE ManageElectStorInteractions(Num,Pdemand, PpcuLosses, &
      ENDIF
 
         !losses go into QairIntake
-        FuelCell(Num)%ElecStorage%QairIntake  = tmpPcharge * (1.0 - FuelCell(Num)%ElecStorage%EnergeticEfficCharge)
+        FuelCell(Num)%ElecStorage%QairIntake  = tmpPcharge * (1.0d0 - FuelCell(Num)%ElecStorage%EnergeticEfficCharge)
 
 
     ELSEIF (FuelCell(Num)%ElecStorage%StorageModelMode == LeadAcidBatterManwellMcGowan) THEN
@@ -5377,7 +5377,7 @@ SUBROUTINE ManageElectStorInteractions(Num,Pdemand, PpcuLosses, &
         Constrained = .true.
       ENDIF
         !losses go into QairIntake
-      FuelCell(Num)%ElecStorage%QairIntake  = tmpPdraw * (1.0/FuelCell(Num)%ElecStorage%EnergeticEfficDischarge - 1.0)
+      FuelCell(Num)%ElecStorage%QairIntake  = tmpPdraw * (1.0d0/FuelCell(Num)%ElecStorage%EnergeticEfficDischarge - 1.0d0)
     ELSEIF (FuelCell(Num)%ElecStorage%StorageModelMode == LeadAcidBatterManwellMcGowan) THEN
       CALL ShowWarningError('ManageElectStorInteractions: Not yet implemented: Lead Acid Battery By Manwell and McGowan 1993 ')
 
@@ -5446,10 +5446,10 @@ FUNCTION FuelCellProductGasEnthResidual(TprodGas, Par) RESULT (Residuum)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)  :: TprodGas ! temperature, this is "x" being searched
-  REAL, INTENT(IN), Dimension(:), optional :: Par ! par(1) = Generator Number
+  REAL(r64), INTENT(IN)  :: TprodGas ! temperature, this is "x" being searched
+  REAL(r64), INTENT(IN), Dimension(:), optional :: Par ! par(1) = Generator Number
                                         ! par(2) = Desired Enthalpy
-  REAL                      :: Residuum ! F(x)
+  REAL(r64)                      :: Residuum ! F(x)
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
 
@@ -5461,9 +5461,9 @@ FUNCTION FuelCellProductGasEnthResidual(TprodGas, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   Integer  :: GeneratorNum
-  REAL     :: thisHmolalProdGases
-  REAL     :: desiredHprodGases
-  REAL     :: NdotProdGases
+  REAL(r64)     :: thisHmolalProdGases
+  REAL(r64)     :: desiredHprodGases
+  REAL(r64)     :: NdotProdGases
 
   GeneratorNum      = floor(PAR(1))
   desiredHprodGases = PAR(2)
@@ -5502,8 +5502,8 @@ SUBROUTINE FigureAirHeatCap(GeneratorNum, FluidTemp, Cp)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5515,21 +5515,21 @@ SUBROUTINE FigureAirHeatCap(GeneratorNum, FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempCp
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempCp
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
 
 
   ! loop through fuel constituents and sum up Cp
@@ -5601,8 +5601,8 @@ SUBROUTINE FigureAirEnthalpy(GeneratorNum, FluidTemp, Hair)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Hair         ! (kJ/mol)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Hair         ! (kJ/mol)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5614,25 +5614,25 @@ SUBROUTINE FigureAirEnthalpy(GeneratorNum, FluidTemp, Hair)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempHair
-  REAL  :: HairI
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempHair
+  REAL(r64)  :: HairI
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: F ! shomate coeff
-  REAL :: H ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
-  REAL :: A6 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: F ! shomate coeff
+  REAL(r64) :: H ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
+  REAL(r64) :: A6 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -5704,8 +5704,8 @@ SUBROUTINE FigureFuelHeatCap(GeneratorNum, FluidTemp, Cp)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5717,21 +5717,21 @@ SUBROUTINE FigureFuelHeatCap(GeneratorNum, FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempCp
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempCp
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -5799,8 +5799,8 @@ SUBROUTINE FigureFuelEnthalpy(GeneratorNum, FluidTemp, Hfuel)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Hfuel        ! kJ/mol
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Hfuel        ! kJ/mol
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5812,25 +5812,25 @@ SUBROUTINE FigureFuelEnthalpy(GeneratorNum, FluidTemp, Hfuel)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempHfuel
-  REAL  :: HfuelI
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempHfuel
+  REAL(r64)  :: HfuelI
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: F ! shomate coeff
-  REAL :: H ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
-  REAL :: A6 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: F ! shomate coeff
+  REAL(r64) :: H ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
+  REAL(r64) :: A6 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -5902,8 +5902,8 @@ SUBROUTINE FigureProductGasesEnthalpy(GeneratorNum, FluidTemp, HProdGases)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   HProdGases   ! kJ/mol
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   HProdGases   ! kJ/mol
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -5915,24 +5915,24 @@ SUBROUTINE FigureProductGasesEnthalpy(GeneratorNum, FluidTemp, HProdGases)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempHprodGases
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempHprodGases
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: F ! shomate coeff
-  REAL :: H ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
-  REAL :: A6 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: F ! shomate coeff
+  REAL(r64) :: H ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
+  REAL(r64) :: A6 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -6015,8 +6015,8 @@ SUBROUTINE FigureProductGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6028,21 +6028,21 @@ SUBROUTINE FigureProductGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempCp
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempCp
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -6124,8 +6124,8 @@ SUBROUTINE FigureAuxilHeatGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6137,21 +6137,21 @@ SUBROUTINE FigureAuxilHeatGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempCp
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempCp
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -6233,8 +6233,8 @@ SUBROUTINE FigureHXleavingGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
   INTEGER, INTENT(IN)  ::   GeneratorNum ! ID of generator FuelCell data structure
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6246,21 +6246,21 @@ SUBROUTINE FigureHXleavingGasHeatCap(GeneratorNum, FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL  :: Tkel ! temp for NASA eq. in Kelvin
-  REAL  :: tempCp
+  REAL(r64)  :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64)  :: Tkel ! temp for NASA eq. in Kelvin
+  REAL(r64)  :: tempCp
   INTEGER   :: thisConstit !loop index
   INTEGER   :: gasID !look up into Gas structure
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: A1 ! NASA poly coeff
-  REAL :: A2 ! NASA poly coeff
-  REAL :: A3 ! NASA poly coeff
-  REAL :: A4 ! NASA poly coeff
-  REAL :: A5 ! NASA poly coeff
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: A1 ! NASA poly coeff
+  REAL(r64) :: A2 ! NASA poly coeff
+  REAL(r64) :: A3 ! NASA poly coeff
+  REAL(r64) :: A4 ! NASA poly coeff
+  REAL(r64) :: A5 ! NASA poly coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
   Tkel = (FluidTemp +KelvinConv)
@@ -6329,8 +6329,8 @@ SUBROUTINE FigureGaseousWaterEnthalpy(FluidTemp, HGasWater)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   HGasWater    ! kJ/mol
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   HGasWater    ! kJ/mol
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6342,14 +6342,14 @@ SUBROUTINE FigureGaseousWaterEnthalpy(FluidTemp, HGasWater)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: F ! shomate coeff
-!  REAL :: H ! shomate coeff
+  REAL(r64) :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: F ! shomate coeff
+!  REAL(r64) :: H ! shomate coeff
 
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
@@ -6390,8 +6390,8 @@ SUBROUTINE FigureLiquidWaterEnthalpy(FluidTemp, HLiqWater)
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   HLiqWater    ! kJ/mol
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   HLiqWater    ! kJ/mol
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6403,14 +6403,14 @@ SUBROUTINE FigureLiquidWaterEnthalpy(FluidTemp, HLiqWater)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
-  REAL :: F ! shomate coeff
-  REAL :: H ! shomate coeff
+  REAL(r64) :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
+  REAL(r64) :: F ! shomate coeff
+  REAL(r64) :: H ! shomate coeff
 
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
@@ -6464,8 +6464,8 @@ SUBROUTINE FigureLiquidWaterHeatCap(FluidTemp, Cp)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
-  REAL,    INTENT(IN)  ::   FluidTemp    ! degree C
-  REAL,    INTENT(OUT) ::   Cp           !  (J/mol*K)
+  REAL(r64),    INTENT(IN)  ::   FluidTemp    ! degree C
+  REAL(r64),    INTENT(OUT) ::   Cp           !  (J/mol*K)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6477,12 +6477,12 @@ SUBROUTINE FigureLiquidWaterHeatCap(FluidTemp, Cp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
-  REAL :: A ! shomate coeff
-  REAL :: B ! shomate coeff
-  REAL :: C ! shomate coeff
-  REAL :: D ! shomate coeff
-  REAL :: E ! shomate coeff
+  REAL(r64) :: Tsho ! temp for Shomate eq  in (Kelvin/1000)
+  REAL(r64) :: A ! shomate coeff
+  REAL(r64) :: B ! shomate coeff
+  REAL(r64) :: C ! shomate coeff
+  REAL(r64) :: D ! shomate coeff
+  REAL(r64) :: E ! shomate coeff
 
   Tsho = (FluidTemp +KelvinConv) / 1000.0
 
@@ -6522,10 +6522,10 @@ SUBROUTINE FigureLHVofFuel(Num,NdotFuel, NdotCO2,  NdotH20, LHV)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: Num
-  REAL   , INTENT(IN) :: NdotFuel
-  REAL   , INTENT(IN) :: NdotCO2
-  REAL   , INTENT(IN) :: NdotH20
-  REAL   , INTENT(OUT):: LHV
+  REAL(r64)   , INTENT(IN) :: NdotFuel
+  REAL(r64)   , INTENT(IN) :: NdotCO2
+  REAL(r64)   , INTENT(IN) :: NdotH20
+  REAL(r64)   , INTENT(OUT):: LHV
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -6536,11 +6536,11 @@ SUBROUTINE FigureLHVofFuel(Num,NdotFuel, NdotCO2,  NdotH20, LHV)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: DelfHfuel
-  REAL  :: DelfHCO2
-  REAL  :: DelfHH20
+  REAL(r64)  :: DelfHfuel
+  REAL(r64)  :: DelfHCO2
+  REAL(r64)  :: DelfHH20
   INTEGER ::I
-  REAL  :: h_i
+  REAL(r64)  :: h_i
   INTEGER :: CO2dataID
   INTEGER :: WaterDataID
   INTEGER :: thisGasID
@@ -6596,7 +6596,7 @@ SUBROUTINE FigureACAncillaries(GeneratorNum, PacAncill)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)   :: GeneratorNum
-  REAL,    INTENT(OUT)  :: PacAncill
+  REAL(r64),    INTENT(OUT)  :: PacAncill
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6662,8 +6662,8 @@ SUBROUTINE FigurePowerConditioningLosses(GeneratorNum, Pdemand, PpcuLosses)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)   :: GeneratorNum
-  REAL,    INTENT(IN)   :: Pdemand
-  REAL,    INTENT(OUT)  :: PpcuLosses
+  REAL(r64),    INTENT(IN)   :: Pdemand
+  REAL(r64),    INTENT(OUT)  :: PpcuLosses
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -6675,9 +6675,9 @@ SUBROUTINE FigurePowerConditioningLosses(GeneratorNum, Pdemand, PpcuLosses)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: lastPpcuLosses !used in iterative solution
+  REAL(r64)    :: lastPpcuLosses !used in iterative solution
   INTEGER :: iter
-  REAL    :: Pel
+  REAL(r64)    :: Pel
 
   IF (FuelCell(GeneratorNum)%Inverter%EffMode ==  InverterEffConstant) THEN
 
@@ -6733,9 +6733,9 @@ SUBROUTINE FigureTransientConstraints(GeneratorNum, Pel, Constrained, PelDiff)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)      :: GeneratorNum !index number for accessing correct generator
-  REAL,    INTENT(INOUT)   :: Pel         ! DC power control setting for power module
+  REAL(r64),    INTENT(INOUT)   :: Pel         ! DC power control setting for power module
   LOGICAL, INTENT(OUT)     :: Constrained ! true if transient constraints kick in
-  REAL,    INTENT(OUT)     :: PelDiff     ! if constrained then this is the difference, positive
+  REAL(r64),    INTENT(OUT)     :: PelDiff     ! if constrained then this is the difference, positive
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -6746,12 +6746,12 @@ SUBROUTINE FigureTransientConstraints(GeneratorNum, Pel, Constrained, PelDiff)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!unused  REAL  :: CurrentHours
-  REAL  :: CurrentFractionalDay !working var, time in decimal days
-  REAL  :: EndingFractionalDay  !working var, time is decimal days
-  REAL  :: MaxPel !working variable for max allowed by transient constraint
-  REAL  :: MinPel !working variabel for min allowed by transient constraint
-  REAL  :: PelInput !hold initial value of inout var
+!unused  REAL(r64)  :: CurrentHours
+  REAL(r64)  :: CurrentFractionalDay !working var, time in decimal days
+  REAL(r64)  :: EndingFractionalDay  !working var, time is decimal days
+  REAL(r64)  :: MaxPel !working variable for max allowed by transient constraint
+  REAL(r64)  :: MinPel !working variabel for min allowed by transient constraint
+  REAL(r64)  :: PelInput !hold initial value of inout var
 
   PelInput = Pel
 
@@ -6916,39 +6916,39 @@ SUBROUTINE CalcFuelCellGenHeatRecovery(Num)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: eHX ! fixed effectiveness
-  REAL  :: MdotWater
+  REAL(r64)  :: eHX ! fixed effectiveness
+  REAL(r64)  :: MdotWater
   INTEGER  :: inNodeNum
-  REAL  :: MWwater
-  REAL  :: NdotWater
-  REAL  :: TwaterIn
-  REAL  :: CpWaterMol
-  REAL  :: NdotGas
-  REAL  :: TprodGasIn
-  REAL  :: CpProdGasMol
-  REAL  :: NdotCp
-  REAL  :: qHX
-  REAL  :: UAeff
-  REAL  :: TauxMix
-  REAL  :: NdotCpWater
-  REAL  :: NdotCpAuxMix
-  REAL  :: THXexh
-  REAL  :: TwaterOut
-  REAL  :: hgas
-  REAL  :: hwater
-  REAL  :: waterFract=0.0
-  REAL  :: NdotWaterVapor
-  REAL  :: TcondThresh
-  REAL  :: hxl1
-  REAL  :: hxl2
-  REAL  :: NdotWaterCond=0.0
-  REAL  :: hfpwater
+  REAL(r64)  :: MWwater
+  REAL(r64)  :: NdotWater
+  REAL(r64)  :: TwaterIn
+  REAL(r64)  :: CpWaterMol
+  REAL(r64)  :: NdotGas
+  REAL(r64)  :: TprodGasIn
+  REAL(r64)  :: CpProdGasMol
+  REAL(r64)  :: NdotCp
+  REAL(r64)  :: qHX
+  REAL(r64)  :: UAeff
+  REAL(r64)  :: TauxMix
+  REAL(r64)  :: NdotCpWater
+  REAL(r64)  :: NdotCpAuxMix
+  REAL(r64)  :: THXexh
+  REAL(r64)  :: TwaterOut
+  REAL(r64)  :: hgas
+  REAL(r64)  :: hwater
+  REAL(r64)  :: waterFract=0.0
+  REAL(r64)  :: NdotWaterVapor
+  REAL(r64)  :: TcondThresh
+  REAL(r64)  :: hxl1
+  REAL(r64)  :: hxl2
+  REAL(r64)  :: NdotWaterCond=0.0
+  REAL(r64)  :: hfpwater
   INTEGER    :: I
 
-  REAL  :: qSens
-  REAL  :: qLatent
+  REAL(r64)  :: qSens
+  REAL(r64)  :: qLatent
   INTEGER    :: loop
-  REAL  :: Cp
+  REAL(r64)  :: Cp
 
   SELECT CASE (FuelCell(Num)%ExhaustHX%HXmodelMode)
 
@@ -7080,7 +7080,7 @@ SUBROUTINE CalcFuelCellGenHeatRecovery(Num)
   CASE(Condensing) !method 4
     inNodeNum = FuelCell(Num)%ExhaustHX%WaterInNode
     MdotWater = FuelCell(Num)%ExhaustHX%WaterMassFlowRate
-    If (MdotWater /= 0.0) Then !
+    If (MdotWater /= 0.0D0) Then !
 
 
       MWwater   =   GasPhaseThermoChemistryData(4)%MolecularWeight
@@ -7171,11 +7171,11 @@ SUBROUTINE CalcFuelCellGenHeatRecovery(Num)
         qHX = 0.0
       ENDIF
     ELSE !no cooling water flow, model will blow up.
-      qHX       = 0.0
+      qHX       = 0.0D0
       THXexh    = FuelCell(Num)%AuxilHeat%TauxMix
       TwaterOut = FuelCell(Num)%ExhaustHX%WaterInletTemp
-      NdotWaterCond = 0.0
-      waterFract = -9999.0 ! not defined
+      NdotWaterCond = 0.0D0
+      waterFract = -9999.0D0 ! not defined
 
     ENDIF
     !init input from Auxiliary heater
@@ -7277,10 +7277,10 @@ SUBROUTINE SimFuelCellPlantHeatRecovery(CompType,CompName,CompTypeNum,CompNum,Ru
   LOGICAL, INTENT(IN)          :: RunFlag
  ! INTEGER, INTENT(IN)          :: FlowLock !DSU
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)          :: MyLoad !unused1208
-  REAL, INTENT(OUT)            :: MinCap
-  REAL, INTENT(OUT)            :: MaxCap
-  REAL, INTENT(OUT)            :: OptCap
+  REAL(r64), INTENT(INOUT)          :: MyLoad !unused1208
+  REAL(r64), INTENT(OUT)            :: MinCap
+  REAL(r64), INTENT(OUT)            :: MaxCap
+  REAL(r64), INTENT(OUT)            :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -7400,10 +7400,10 @@ SUBROUTINE InitFuelCellGenerators(FCnum )
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyWarmupFlag ! flag for init after warmup complete
   INTEGER             :: inNode  ! inlet index in Node array
   INTEGER             :: outNode ! outlet, index in Node array
-  REAL    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
+  REAL(r64)    :: TimeElapsed         ! Fraction of the current hour that has elapsed (h)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
-  REAL   :: mdot ! local temporary mass flow rate
-  REAL   :: rho  ! local temporary fluid density
+  REAL(r64)   :: mdot ! local temporary mass flow rate
+  REAL(r64)   :: rho  ! local temporary fluid density
   LOGICAL     :: errFlag
 
           ! FLOW:
@@ -7451,7 +7451,7 @@ IF (BeginEnvrnFlag .and. MyEnvrnFlag(FCnum) .AND. .NOT. MyPlantScanFlag(FCnum)) 
   Node(inNode)%Temp  = InitHRTemp
   Node(outNode)%Temp  = InitHRTemp
 
-  CALL InitComponentNodes( 0., FuelCell(FCnum)%ExhaustHX%WaterMassFlowRateDesign, &
+  CALL InitComponentNodes( 0.d0, FuelCell(FCnum)%ExhaustHX%WaterMassFlowRateDesign, &
                                  inNode, outNode, &
                                  FuelCell(FCnum)%CWLoopNum, &
                                  FuelCell(FCnum)%CWLoopSideNum, &
@@ -7554,7 +7554,7 @@ SUBROUTINE FigureFuelCellZoneGains
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !unused  INTEGER :: thisZone ! index in Zone structure array
-  REAL    :: TotalZoneHeatGain ! working variable for zone gain [w]
+  REAL(r64)    :: TotalZoneHeatGain ! working variable for zone gain [w]
 !  INTEGER :: ZoneNum
   INTEGER :: FCnum ! number of fuel cell
   LOGICAL, SAVE :: MyEnvrnFlag = .TRUE.
@@ -7605,8 +7605,8 @@ SUBROUTINE FigureFuelCellZoneGains
   ENDDO ! over number of Fuel cells
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
-    FuelCell%Report%SkinLossConvect = 0.
-    FuelCell%Report%SkinLossRadiat  = 0.
+    FuelCell%Report%SkinLossConvect = 0.d0
+    FuelCell%Report%SkinLossRadiat  = 0.d0
     MyEnvrnFlag = .FALSE.
   END IF
 
@@ -7712,7 +7712,7 @@ SUBROUTINE CalcUpdateHeatRecovery(Num, FirstHVACIteration)
 
 !  IF (FirstHVACIteration) Then
 !    Node(InNodeNum)%MassFlowRateMaxAvail     = FuelCell(Num)%ExhaustHX%WaterMassFlowRateDesign
-!    Node(InNodeNum)%MassFlowRateMinAvail     = 0.0
+!    Node(InNodeNum)%MassFlowRateMinAvail     = 0.0D0
 !    Node(InNodeNum)%MassFlowRate             = Max(FuelCell(Num)%ExhaustHX%WaterMassFlowRateDesign,   &
 !                                                   Node(InNodeNum)%MassFlowRateMin)
 !    Node(InNodeNum)%MassFlowRate             = Min(FuelCell(Num)%ExhaustHX%WaterMassFlowRateDesign,   &
@@ -7887,10 +7887,10 @@ SUBROUTINE GetFuelCellGeneratorResults(GeneratorType, GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower  ! heat power
-  REAL, INTENT(OUT)        :: ThermalEnergy ! heat energy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower  ! heat power
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy ! heat energy
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -7962,53 +7962,53 @@ TYPE ICEngineGeneratorSpecs
        CHARACTER(len=MaxNameLength) :: TypeOf         = 'Generator:InternalCombustionEngine' ! Type of Generator
        INTEGER                      :: CompType_Num   = iGeneratorICEngine
        CHARACTER(len=MaxNameLength) :: FuelType       = ' ' ! Type of Fuel - DIESEL, GASOLINE, GAS
-       REAL         :: RatedPowerOutput          = 0.0 ! W - design nominal capacity of Generator
+       REAL(r64)         :: RatedPowerOutput          = 0.0 ! W - design nominal capacity of Generator
        INTEGER           :: ElectricCircuitNode       = 0   ! Electric Circuit Node
-       REAL         :: MinPartLoadRat            = 0.0 ! (IC ENGINE MIN) min allowed operating frac full load
-       REAL         :: MaxPartLoadRat            = 0.0 ! (IC ENGINE MAX) max allowed operating frac full load
-       REAL         :: OptPartLoadRat            = 0.0 ! (IC ENGINE BEST) optimal operating frac full load
-       REAL         :: ElecOutputFuelRat         = 0.0 !(RELDC) Ratio of Generator output to Fuel Energy Input
+       REAL(r64)         :: MinPartLoadRat            = 0.0 ! (IC ENGINE MIN) min allowed operating frac full load
+       REAL(r64)         :: MaxPartLoadRat            = 0.0 ! (IC ENGINE MAX) max allowed operating frac full load
+       REAL(r64)         :: OptPartLoadRat            = 0.0 ! (IC ENGINE BEST) optimal operating frac full load
+       REAL(r64)         :: ElecOutputFuelRat         = 0.0 !(RELDC) Ratio of Generator output to Fuel Energy Input
        INTEGER           :: ElecOutputFuelCurve       = 0   !Curve Index for generator output to Fuel Energy Input Coeff Poly Fit
-       REAL         :: RecJacHeattoFuelRat       = 0.0 !(RJACDC) Ratio of Recoverable Jacket Heat to Fuel Energy Input
+       REAL(r64)         :: RecJacHeattoFuelRat       = 0.0 !(RJACDC) Ratio of Recoverable Jacket Heat to Fuel Energy Input
        INTEGER           :: RecJacHeattoFuelCurve     = 0   !Curve Index for Ratio of Recoverable Jacket Heat to
                                                             ! Fuel Energy Input Coeff Poly Fit
-       REAL         :: RecLubeHeattoFuelRat      = 0.0 !(RLUBDC) Ratio of Recoverable Lube Oil Heat to Fuel Energy Input
+       REAL(r64)         :: RecLubeHeattoFuelRat      = 0.0 !(RLUBDC) Ratio of Recoverable Lube Oil Heat to Fuel Energy Input
        INTEGER           :: RecLubeHeattoFuelCurve    = 0   !Curve Index for Ratio of Recoverable Lube Oil Heat to
                                                             ! Fuel Energy Input Coef Poly Fit
-       REAL         :: TotExhausttoFuelRat       = 0.0 !(REXDC) Total Exhaust heat Input to Fuel Energy Input
+       REAL(r64)         :: TotExhausttoFuelRat       = 0.0 !(REXDC) Total Exhaust heat Input to Fuel Energy Input
        INTEGER           :: TotExhausttoFuelCurve     = 0   !Curve Index for Total Exhaust heat Input to Fuel Energy Input
                                                             ! Coeffs Poly Fit
-       REAL         :: ExhaustTemp               = 0.0 !(TEXDC) Exhaust Gas Temp to Fuel Energy Input
+       REAL(r64)         :: ExhaustTemp               = 0.0 !(TEXDC) Exhaust Gas Temp to Fuel Energy Input
        INTEGER           :: ExhaustTempCurve          = 0   !Curve Index for Exhaust Gas Temp to Fuel Energy Input Coeffs Poly Fit
-       REAL         :: UA                        = 0.0 !(UACDC) exhaust gas Heat Exchanger UA to Capacity
-       REAL,DIMENSION(2) :: UACoef                    = 0.0 !Heat Exchanger UA Coeffs Poly Fit
-       REAL         :: MaxExhaustperPowerOutput  = 0.0 !MAX EXHAUST FLOW PER W DSL POWER OUTPUT COEFF
-       REAL         :: DesignMinExitGasTemp      = 0.0 !Steam Saturation Temperature
-       REAL         :: FuelHeatingValue          = 0.0 ! Heating Value of Fuel in kJ/kg
-       REAL         :: DesignHeatRecVolFlowRate  = 0.0 ! m3/s, Design Water mass flow rate through heat recovery loop
-       REAL         :: DesignHeatRecMassFlowRate = 0.0 ! kg/s, Design Water mass flow rate through heat recovery loop
+       REAL(r64)         :: UA                        = 0.0 !(UACDC) exhaust gas Heat Exchanger UA to Capacity
+       REAL(r64),DIMENSION(2) :: UACoef                    = 0.0 !Heat Exchanger UA Coeffs Poly Fit
+       REAL(r64)         :: MaxExhaustperPowerOutput  = 0.0 !MAX EXHAUST FLOW PER W DSL POWER OUTPUT COEFF
+       REAL(r64)         :: DesignMinExitGasTemp      = 0.0 !Steam Saturation Temperature
+       REAL(r64)         :: FuelHeatingValue          = 0.0 ! Heating Value of Fuel in kJ/kg
+       REAL(r64)         :: DesignHeatRecVolFlowRate  = 0.0 ! m3/s, Design Water mass flow rate through heat recovery loop
+       REAL(r64)         :: DesignHeatRecMassFlowRate = 0.0 ! kg/s, Design Water mass flow rate through heat recovery loop
        LOGICAL           :: HeatRecActive             = .false. ! True if Heat Rec Design Vol Flow Rate > 0
        INTEGER           :: HeatRecInletNodeNum       = 0   ! Node number on the heat recovery inlet side of the condenser
        INTEGER           :: HeatRecOutletNodeNum      = 0   ! Node number on the heat recovery outlet side of the condenser
-       REAL         :: HeatRecInletTemp          = 0.0 ! Inlet Temperature of the heat recovery fluid
-       REAL         :: HeatRecOutletTemp         = 0.0 ! Outlet Temperature of the heat recovery fluid
-       REAL         :: HeatRecMdotDesign         = 0.0 ! reporting: Heat Recovery Loop Mass flow rate
-       REAL         :: HeatRecMdotActual         = 0.0 !
-       REAL         :: QTotalHeatRecovered       = 0.0 ! total heat recovered (W)
-       REAL         :: QJacketRecovered          = 0.0 ! heat recovered from jacket (W)
-       REAL         :: QLubeOilRecovered         = 0.0 ! heat recovered from lube (W)
-       REAL         :: QExhaustRecovered         = 0.0 ! exhaust gas heat recovered (W)
-       REAL         :: FuelEnergyUseRate         = 0.0 ! Fuel Energy used (W)
-       REAL         :: TotalHeatEnergyRec        = 0.0 ! total heat recovered (J)
-       REAL         :: JacketEnergyRec           = 0.0 ! heat recovered from jacket (J)
-       REAL         :: LubeOilEnergyRec          = 0.0 ! heat recovered from lube (J)
-       REAL         :: ExhaustEnergyRec          = 0.0 ! exhaust gas heat recovered (J)
-       REAL         :: FuelEnergy                = 0.0 ! Fuel Energy used (J)
-       REAL         :: FuelMdot                  = 0.0 ! Fuel Amount used (Kg/s)
-       REAL         :: ExhaustStackTemp          = 0.0 ! Exhaust Stack Temperature (C)
-       REAL         :: ElecPowerGenerated        = 0.0 ! Electric Power Generated (W)
-       REAL         :: ElecEnergyGenerated       = 0.0 ! Amount of Electric Energy Generated (J)
-       REAL         :: HeatRecMaxTemp            = 0.0 !Max Temp that can be produced in heat recovery
+       REAL(r64)         :: HeatRecInletTemp          = 0.0 ! Inlet Temperature of the heat recovery fluid
+       REAL(r64)         :: HeatRecOutletTemp         = 0.0 ! Outlet Temperature of the heat recovery fluid
+       REAL(r64)         :: HeatRecMdotDesign         = 0.0 ! reporting: Heat Recovery Loop Mass flow rate
+       REAL(r64)         :: HeatRecMdotActual         = 0.0 !
+       REAL(r64)         :: QTotalHeatRecovered       = 0.0 ! total heat recovered (W)
+       REAL(r64)         :: QJacketRecovered          = 0.0 ! heat recovered from jacket (W)
+       REAL(r64)         :: QLubeOilRecovered         = 0.0 ! heat recovered from lube (W)
+       REAL(r64)         :: QExhaustRecovered         = 0.0 ! exhaust gas heat recovered (W)
+       REAL(r64)         :: FuelEnergyUseRate         = 0.0 ! Fuel Energy used (W)
+       REAL(r64)         :: TotalHeatEnergyRec        = 0.0 ! total heat recovered (J)
+       REAL(r64)         :: JacketEnergyRec           = 0.0 ! heat recovered from jacket (J)
+       REAL(r64)         :: LubeOilEnergyRec          = 0.0 ! heat recovered from lube (J)
+       REAL(r64)         :: ExhaustEnergyRec          = 0.0 ! exhaust gas heat recovered (J)
+       REAL(r64)         :: FuelEnergy                = 0.0 ! Fuel Energy used (J)
+       REAL(r64)         :: FuelMdot                  = 0.0 ! Fuel Amount used (Kg/s)
+       REAL(r64)         :: ExhaustStackTemp          = 0.0 ! Exhaust Stack Temperature (C)
+       REAL(r64)         :: ElecPowerGenerated        = 0.0 ! Electric Power Generated (W)
+       REAL(r64)         :: ElecEnergyGenerated       = 0.0 ! Amount of Electric Energy Generated (J)
+       REAL(r64)         :: HeatRecMaxTemp            = 0.0 !Max Temp that can be produced in heat recovery
        INTEGER           :: HRLoopNum                 = 0   ! cooling water plant loop index number, for heat recovery
        INTEGER           :: HRLoopSideNum             = 0   ! cooling water plant loop side index, for heat recovery
        INTEGER           :: HRBranchNum               = 0   ! cooling water plant loop branch index, for heat recovery
@@ -8017,23 +8017,23 @@ TYPE ICEngineGeneratorSpecs
 END TYPE ICEngineGeneratorSpecs
 
 TYPE ReportVars
-  REAL    :: PowerGen                   = 0.0 ! reporting: power (W)
-  REAL    :: EnergyGen                  = 0.0 ! reporting: energy (J)
-  REAL    :: QJacketRecovered           = 0.0 ! reporting: Heat Recovered from Jacket (W)
-  REAL    :: QLubeOilRecovered          = 0.0 ! reporting: Heat Recovered from Lubricant (W)
-  REAL    :: QExhaustRecovered          = 0.0 ! reporting: exhaust gas heat recovered (W)
-  REAL    :: QTotalHeatRecovered        = 0.0 ! reporting: Total Heat Recovered (W)
-  REAL    :: TotalHeatEnergyRec         = 0.0 ! reporting: total heat recovered (J)
-  REAL    :: JacketEnergyRec            = 0.0 ! reporting: heat recovered from jacket (J)
-  REAL    :: LubeOilEnergyRec           = 0.0 ! reporting: heat recovered from lube (J)
-  REAL    :: ExhaustEnergyRec           = 0.0 ! reporting: exhaust gas heat recovered (J)
-  REAL    :: FuelEnergy                 = 0.0 ! reporting: Fuel Energy used (J)
-  REAL    :: FuelEnergyUseRate          = 0.0 ! reporting: Fuel Energy used (W)
-  REAL    :: FuelMdot                   = 0.0 ! reporting: Fuel used (Kg/s)
-  REAL    :: ExhaustStackTemp           = 0.0 ! reporting: Exhaust Stack Temperature (C)
-  REAL    :: HeatRecInletTemp           = 0.0 ! reporting: Heat Recovery Loop Inlet Temperature (C)
-  REAL    :: HeatRecOutletTemp          = 0.0 ! reporting: Heat Recovery Loop Outlet Temperature (C)
-  REAL    :: HeatRecMdot                = 0.0 ! reporting: Heat Recovery Loop Mass flow rate (kg/s)
+  REAL(r64)    :: PowerGen                   = 0.0 ! reporting: power (W)
+  REAL(r64)    :: EnergyGen                  = 0.0 ! reporting: energy (J)
+  REAL(r64)    :: QJacketRecovered           = 0.0 ! reporting: Heat Recovered from Jacket (W)
+  REAL(r64)    :: QLubeOilRecovered          = 0.0 ! reporting: Heat Recovered from Lubricant (W)
+  REAL(r64)    :: QExhaustRecovered          = 0.0 ! reporting: exhaust gas heat recovered (W)
+  REAL(r64)    :: QTotalHeatRecovered        = 0.0 ! reporting: Total Heat Recovered (W)
+  REAL(r64)    :: TotalHeatEnergyRec         = 0.0 ! reporting: total heat recovered (J)
+  REAL(r64)    :: JacketEnergyRec            = 0.0 ! reporting: heat recovered from jacket (J)
+  REAL(r64)    :: LubeOilEnergyRec           = 0.0 ! reporting: heat recovered from lube (J)
+  REAL(r64)    :: ExhaustEnergyRec           = 0.0 ! reporting: exhaust gas heat recovered (J)
+  REAL(r64)    :: FuelEnergy                 = 0.0 ! reporting: Fuel Energy used (J)
+  REAL(r64)    :: FuelEnergyUseRate          = 0.0 ! reporting: Fuel Energy used (W)
+  REAL(r64)    :: FuelMdot                   = 0.0 ! reporting: Fuel used (Kg/s)
+  REAL(r64)    :: ExhaustStackTemp           = 0.0 ! reporting: Exhaust Stack Temperature (C)
+  REAL(r64)    :: HeatRecInletTemp           = 0.0 ! reporting: Heat Recovery Loop Inlet Temperature (C)
+  REAL(r64)    :: HeatRecOutletTemp          = 0.0 ! reporting: Heat Recovery Loop Outlet Temperature (C)
+  REAL(r64)    :: HeatRecMdot                = 0.0 ! reporting: Heat Recovery Loop Mass flow rate (kg/s)
 END TYPE ReportVars
 
           ! MODULE VARIABLE DECLARATIONS:
@@ -8085,7 +8085,7 @@ SUBROUTINE SimICEngineGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFl
   CHARACTER(len=*), INTENT(IN) :: GeneratorName     ! user specified name of Generator
   INTEGER, INTENT(INOUT) :: GeneratorIndex
   LOGICAL , INTENT(IN)   :: RunFlag                 ! simulate Generator when TRUE
-  REAL, INTENT(IN)       :: MyLoad                  ! demand on electric generator
+  REAL(r64), INTENT(IN)       :: MyLoad                  ! demand on electric generator
   LOGICAL, INTENT (IN)   :: FirstHVACIteration
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -8163,10 +8163,10 @@ SUBROUTINE GetICEGeneratorResults(GeneratorType, GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower  ! heat power
-  REAL, INTENT(OUT)        :: ThermalEnergy ! heat energy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower  ! heat power
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy ! heat energy
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -8220,10 +8220,10 @@ SUBROUTINE SimICEPlantHeatRecovery(CompType,CompName,CompTypeNum,CompNum,RunFlag
   LOGICAL, INTENT(IN)          :: RunFlag
   !INTEGER, INTENT(IN)          :: FlowLock !DSU
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyLoad
-  REAL, INTENT(OUT)       :: MinCap
-  REAL, INTENT(OUT)       :: MaxCap
-  REAL, INTENT(OUT)       :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyLoad
+  REAL(r64), INTENT(OUT)       :: MinCap
+  REAL(r64), INTENT(OUT)       :: MaxCap
+  REAL(r64), INTENT(OUT)       :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -8313,7 +8313,7 @@ SUBROUTINE GetICEngineGeneratorInput
   INTEGER                     :: NumNums    ! Number of elements in the numeric array
   INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(10)  :: AlphArray !character string data
-  REAL,                        DIMENSION(11)  :: NumArray  !numeric data
+  REAL(r64),                        DIMENSION(11)  :: NumArray  !numeric data
   LOGICAL, SAVE :: ErrorsFound=.false.  ! error flag
   LOGICAL       :: IsNotOK              ! Flag to verify name
   LOGICAL       :: IsBlank              ! Flag for blank name
@@ -8580,13 +8580,13 @@ SUBROUTINE CalcICEngineGeneratorModel(GeneratorNum,RunFlag,MyLoad,FirstHVACItera
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)     :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)     :: RunFlag         ! TRUE when Generator operating
-  REAL  , INTENT(IN) :: myload          ! Generator demand
+  REAL(r64)  , INTENT(IN) :: myload          ! Generator demand
   LOGICAL, INTENT(IN)     :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER   :: ExhaustCP = 1.047    !Exhaust Gas Specific Heat (J/kg-K)
-  REAL, PARAMETER   :: KJtoJ = 1000.        !convert Kjoules to joules
-  REAL, PARAMETER   :: ReferenceTemp = 25.0 !Reference temperature by which lower heating
+  REAL(r64), PARAMETER   :: ExhaustCP = 1.047d0    !Exhaust Gas Specific Heat (J/kg-K)
+  REAL(r64), PARAMETER   :: KJtoJ = 1000.d0        !convert Kjoules to joules
+  REAL(r64), PARAMETER   :: ReferenceTemp = 25.0d0 !Reference temperature by which lower heating
                                                    ! value is reported.  This should be subtracted
                                                    ! off of when calculated exhaust energies.
 
@@ -8595,40 +8595,40 @@ SUBROUTINE CalcICEngineGeneratorModel(GeneratorNum,RunFlag,MyLoad,FirstHVACItera
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL         :: MinPartLoadRat      ! min allowed operating frac full load
-  REAL         :: MaxPartLoadRat      ! max allowed operating frac full load
-  REAL         :: PLR                 ! Generator operating part load ratio
-  REAL         :: RatedPowerOutput    ! Generator nominal capacity (W)
-  REAL         :: ElecPowerGenerated  ! Generator output (W)
-  REAL         :: ElectricEnergyGen   ! Generator output (J)
+  REAL(r64)         :: MinPartLoadRat      ! min allowed operating frac full load
+  REAL(r64)         :: MaxPartLoadRat      ! max allowed operating frac full load
+  REAL(r64)         :: PLR                 ! Generator operating part load ratio
+  REAL(r64)         :: RatedPowerOutput    ! Generator nominal capacity (W)
+  REAL(r64)         :: ElecPowerGenerated  ! Generator output (W)
+  REAL(r64)         :: ElectricEnergyGen   ! Generator output (J)
 
 ! Special variables for IC ENGINE Generator
-  REAL    :: MaxExhaustperPowerOutput !curve fit parameter
-  REAL    :: ElecOutputFuelRat      !(RELDC) Ratio of generator output to Fuel Energy Input
-  REAL    :: RecJacHeattoFuelRat  !(RJACDC) Ratio of Recoverable Jacket Heat to Fuel Energy Input
-  REAL    :: RecLubeHeattoFuelRat !(RLUBDC) Ratio of Recoverable Lube Oil Heat to Fuel Energy Input
-  REAL    :: TotExhausttoFuelRat  !(REXDC) Total Exhaust Energy Input to Fuel Energy Input
-  REAL    :: ExhaustTemp          !(TEX) Exhaust Gas Temp
-  REAL    :: UA                   !(UACDC) exhaust gas Heat Exchanger UA
-  REAL    :: FuelEnergyUseRate    ! IC ENGINE fuel use rate (W)
-  REAL    :: FuelEnergyUsed       ! IC ENGINE fuel use (J)
-  REAL    :: QTotalHeatRecovered
-  REAL    :: QJacketRec                 ! water jacket heat recovered (W)
-  REAL    :: QLubeOilRec                ! lube oil cooler heat recovered (W)
-  REAL    :: QExhaustRec                ! exhaust gas heat recovered (W)
-  REAL    :: JacketEnergyRec            ! water jacket heat recovered (J)
-  REAL    :: LubeOilEnergyRec           ! lube oil cooler heat recovered (J)
-  REAL    :: ExhaustEnergyRec           ! exhaust gas heat recovered (J)
-  REAL    :: QExhaustTotal   ! total engine exhaust heat (W)
-  REAL    :: ExhaustGasFlow       ! exhaust gas mass flow rate (kg/s)
-  REAL    :: ExhaustStackTemp     ! engine stack temp. (C)
-  REAL    :: DesignMinExitGasTemp   ! design engine stact saturated steam temp. (C)
-  REAL    :: FuelHeatingValue     !Heating Value of Fuel in kJ/kg
+  REAL(r64)    :: MaxExhaustperPowerOutput !curve fit parameter
+  REAL(r64)    :: ElecOutputFuelRat      !(RELDC) Ratio of generator output to Fuel Energy Input
+  REAL(r64)    :: RecJacHeattoFuelRat  !(RJACDC) Ratio of Recoverable Jacket Heat to Fuel Energy Input
+  REAL(r64)    :: RecLubeHeattoFuelRat !(RLUBDC) Ratio of Recoverable Lube Oil Heat to Fuel Energy Input
+  REAL(r64)    :: TotExhausttoFuelRat  !(REXDC) Total Exhaust Energy Input to Fuel Energy Input
+  REAL(r64)    :: ExhaustTemp          !(TEX) Exhaust Gas Temp
+  REAL(r64)    :: UA                   !(UACDC) exhaust gas Heat Exchanger UA
+  REAL(r64)    :: FuelEnergyUseRate    ! IC ENGINE fuel use rate (W)
+  REAL(r64)    :: FuelEnergyUsed       ! IC ENGINE fuel use (J)
+  REAL(r64)    :: QTotalHeatRecovered
+  REAL(r64)    :: QJacketRec                 ! water jacket heat recovered (W)
+  REAL(r64)    :: QLubeOilRec                ! lube oil cooler heat recovered (W)
+  REAL(r64)    :: QExhaustRec                ! exhaust gas heat recovered (W)
+  REAL(r64)    :: JacketEnergyRec            ! water jacket heat recovered (J)
+  REAL(r64)    :: LubeOilEnergyRec           ! lube oil cooler heat recovered (J)
+  REAL(r64)    :: ExhaustEnergyRec           ! exhaust gas heat recovered (J)
+  REAL(r64)    :: QExhaustTotal   ! total engine exhaust heat (W)
+  REAL(r64)    :: ExhaustGasFlow       ! exhaust gas mass flow rate (kg/s)
+  REAL(r64)    :: ExhaustStackTemp     ! engine stack temp. (C)
+  REAL(r64)    :: DesignMinExitGasTemp   ! design engine stact saturated steam temp. (C)
+  REAL(r64)    :: FuelHeatingValue     !Heating Value of Fuel in kJ/kg
   INTEGER :: HeatRecInNode        !Heat Recovery Fluid Inlet Node Num
-  REAL    :: HeatRecInTemp        !Heat Recovery Fluid Inlet Temperature (C)
-  REAL    :: HeatRecMdot          !Heat Recovery Fluid Mass FlowRate (kg/s)
-  REAL    :: HeatRecCp            !Specific Heat of the Heat Recovery Fluid (J/kg-K)
-  REAL    :: HRecRatio              !When Max Temp is reached the amount of recovered heat has to be reduced.
+  REAL(r64)    :: HeatRecInTemp        !Heat Recovery Fluid Inlet Temperature (C)
+  REAL(r64)    :: HeatRecMdot          !Heat Recovery Fluid Mass FlowRate (kg/s)
+  REAL(r64)    :: HeatRecCp            !Specific Heat of the Heat Recovery Fluid (J/kg-K)
+  REAL(r64)    :: HRecRatio              !When Max Temp is reached the amount of recovered heat has to be reduced.
                                     ! and this assumption uses this ratio to accomplish this task.
 
 
@@ -8678,7 +8678,7 @@ SUBROUTINE CalcICEngineGeneratorModel(GeneratorNum,RunFlag,MyLoad,FirstHVACItera
 
      ! CALCULATE POWER GENERATED AND PLR
   ElecPowerGenerated = MIN(MyLoad,RatedPowerOutput)
-  ElecPowerGenerated = MAX(ElecPowerGenerated,0.0)
+  ElecPowerGenerated = MAX(ElecPowerGenerated,0.0d0)
   PLR = MIN(ElecPowerGenerated/RatedPowerOutput, MaxPartLoadRat)
   PLR = MAX(PLR, MinPartLoadRat)
   ElecPowerGenerated = PLR*RatedPowerOutput
@@ -8731,7 +8731,7 @@ SUBROUTINE CalcICEngineGeneratorModel(GeneratorNum,RunFlag,MyLoad,FirstHVACItera
       ExhaustStackTemp = DesignMinExitGasTemp + (ExhaustTemp - DesignMinExitGasTemp) / &
                            EXP(UA/(MAX(ExhaustGasFlow, MaxExhaustperPowerOutput * RatedPowerOutput) * ExhaustCP))
 
-      QExhaustRec = MAX(ExhaustGasFlow*ExhaustCP*(ExhaustTemp-ExhaustStackTemp),0.0)
+      QExhaustRec = MAX(ExhaustGasFlow*ExhaustCP*(ExhaustTemp-ExhaustStackTemp),0.0d0)
     ELSE
       QExhaustRec =0.0
     END IF
@@ -8808,9 +8808,9 @@ IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,INTENT(IN)          :: Num              ! HR Component number
-  REAL, INTENT(IN)            :: EnergyRecovered  ! Amount of heat recovered
-  REAL,INTENT(IN)             :: HeatRecMdot
-  REAL,INTENT(INOUT)             :: HRecRatio        ! Max Heat recovery ratio
+  REAL(r64), INTENT(IN)            :: EnergyRecovered  ! Amount of heat recovered
+  REAL(r64),INTENT(IN)             :: HeatRecMdot
+  REAL(r64),INTENT(INOUT)             :: HRecRatio        ! Max Heat recovery ratio
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -8821,10 +8821,10 @@ IMPLICIT NONE
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                  :: HeatRecInNode
   INTEGER                  :: HeatRecOutNode
-  REAL                :: MinHeatRecMdot
-  REAL                :: HeatRecInTemp
-  REAL                :: HeatRecOutTemp
-  REAL                :: HeatRecCp
+  REAL(r64)                :: MinHeatRecMdot
+  REAL(r64)                :: HeatRecInTemp
+  REAL(r64)                :: HeatRecOutTemp
+  REAL(r64)                :: HeatRecCp
 
   !Load inputs to local structure
   HeatRecInNode = ICEngineGenerator(Num)%HeatRecInletNodeNum
@@ -8915,7 +8915,7 @@ SUBROUTINE InitICEngineGenerators(GeneratorNum,RunFlag,MyLoad,FirstHVACIteration
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,     INTENT(IN)  :: GeneratorNum    ! Generator number
   LOGICAL,     INTENT(IN)  :: RunFlag         ! TRUE when Generator operating
-  REAL  , INTENT(IN)  :: MyLoad          ! Generator demand
+  REAL(r64)  , INTENT(IN)  :: MyLoad          ! Generator demand
   LOGICAL,     INTENT(IN)  :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -8935,8 +8935,8 @@ SUBROUTINE InitICEngineGenerators(GeneratorNum,RunFlag,MyLoad,FirstHVACIteration
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! Used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeAndNodeInitFlag
-  REAL  :: mdot
-  REAL  :: rho
+  REAL(r64)  :: mdot
+  REAL(r64)  :: rho
   LOGICAL    :: errFlag
 
           ! FLOW:
@@ -8983,7 +8983,7 @@ SUBROUTINE InitICEngineGenerators(GeneratorNum,RunFlag,MyLoad,FirstHVACIteration
     ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate = rho * ICEngineGenerator(GeneratorNum)%DesignHeatRecVolFlowRate
     ICEngineGenerator(GeneratorNum)%HeatRecMdotDesign = ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate
 
-    CALL InitComponentNodes(0.0,  ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
+    CALL InitComponentNodes(0.0D0,  ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  ICEngineGenerator(GeneratorNum)%HRLoopNum, &
@@ -9002,7 +9002,7 @@ SUBROUTINE InitICEngineGenerators(GeneratorNum,RunFlag,MyLoad,FirstHVACIteration
     Node(HeatRecInletNode) %Temp = 20.0
     Node(HeatRecOutletNode)%Temp = 20.0
    ! set the node max and min mass flow rates
-    Call InitComponentNodes(0.0,  ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
+    Call InitComponentNodes(0.0D0,  ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  ICEngineGenerator(GeneratorNum)%HRLoopNum, &
@@ -9022,7 +9022,7 @@ SUBROUTINE InitICEngineGenerators(GeneratorNum,RunFlag,MyLoad,FirstHVACIteration
       IF (RunFlag) THEN
         mdot =  ICEngineGenerator(GeneratorNum)%DesignHeatRecMassFlowRate
       ELSE
-        mdot = 0.
+        mdot = 0.d0
       ENDIF
       CALL SetComponentFlowRate(mdot, &
                                    ICEngineGenerator(GeneratorNum)%HeatRecInletNodeNum, &
@@ -9171,74 +9171,74 @@ TYPE CTGeneratorSpecs
        CHARACTER(len=MaxNameLength) :: TypeOf         = 'Generator:CombustionTurbine' ! Type of Generator
        INTEGER           :: CompType_Num              = iGeneratorCombTurbine
        CHARACTER(len=MaxNameLength) :: FuelType             ! Type of Fuel - DIESEL, GASOLINE, GAS
-       REAL         :: RatedPowerOutput          = 0.0 ! W - design nominal capacity of Generator
+       REAL(r64)         :: RatedPowerOutput          = 0.0 ! W - design nominal capacity of Generator
        INTEGER           :: ElectricCircuitNode       = 0   ! Electric Circuit Node
-       REAL         :: MinPartLoadRat            = 0.0 ! (CT MIN) min allowed operating frac full load
-       REAL         :: MaxPartLoadRat            = 0.0 ! (CT MAX) max allowed operating frac full load
-       REAL         :: OptPartLoadRat            = 0.0 ! (CT BEST) optimal operating frac full load
-       REAL         :: FuelEnergyUseRate         = 0.0 !(EFUEL) rate of Fuel Energy Required to run COMBUSTION turbine (W)
-       REAL         :: FuelEnergy                = 0.0 !Amount of Fuel Energy Required to run COMBUSTION turbine (J)
+       REAL(r64)         :: MinPartLoadRat            = 0.0 ! (CT MIN) min allowed operating frac full load
+       REAL(r64)         :: MaxPartLoadRat            = 0.0 ! (CT MAX) max allowed operating frac full load
+       REAL(r64)         :: OptPartLoadRat            = 0.0 ! (CT BEST) optimal operating frac full load
+       REAL(r64)         :: FuelEnergyUseRate         = 0.0 !(EFUEL) rate of Fuel Energy Required to run COMBUSTION turbine (W)
+       REAL(r64)         :: FuelEnergy                = 0.0 !Amount of Fuel Energy Required to run COMBUSTION turbine (J)
        INTEGER           :: PLBasedFuelInputCurve     = 0   !(FUL1GC) Curve Index for Part Load Ratio Based Fuel Input
                                                             ! Coefficients Poly Fit
        INTEGER           :: TempBasedFuelInputCurve   = 0   !(FUL2GC) Curve Index for Ambient Temperature Based Fuel Input
                                                             ! Coeff Poly Fit
-       REAL         :: ExhaustFlow               = 0.0 !(FEX) Exhaust Gas Flow Rate cubic meters per second???
+       REAL(r64)         :: ExhaustFlow               = 0.0 !(FEX) Exhaust Gas Flow Rate cubic meters per second???
        INTEGER           :: ExhaustFlowCurve          = 0   !(FEXGC) Curve Index for Exhaust Gas Flow Rate Input Coef Poly Fit
-       REAL         :: ExhaustTemp               = 0.0 !(TEX) Exhaust Gas Temperature in C
+       REAL(r64)         :: ExhaustTemp               = 0.0 !(TEX) Exhaust Gas Temperature in C
        INTEGER           :: PLBasedExhaustTempCurve   = 0   !(TEX1GC) Curve Index for Part Load Ratio Based Exhaust Temp Input
                                                             ! Coeffs Poly Fit
        INTEGER           :: TempBasedExhaustTempCurve = 0   !(TEX2GC) Curve Index for Ambient Temperature Based Exhaust Gas Temp to
                                                             ! Fuel Energy Input Coeffs Poly Fit
-       REAL         :: QLubeOilRecovered         = 0.0 !(ELUBE) Recovered Lube Oil Energy (W)
-       REAL         :: QExhaustRecovered         = 0.0 !(EEX) Recovered Exhaust heat  (W)
-       REAL         :: QTotalHeatRecovered       = 0.0 !total heat recovered (W)
-       REAL         :: LubeOilEnergyRec          = 0.0 ! Recovered Lube Oil Energy (J)
-       REAL         :: ExhaustEnergyRec          = 0.0 ! Recovered Exhaust heat  (J)
-       REAL         :: TotalHeatEnergyRec        = 0.0 !total heat recovered (J)
+       REAL(r64)         :: QLubeOilRecovered         = 0.0 !(ELUBE) Recovered Lube Oil Energy (W)
+       REAL(r64)         :: QExhaustRecovered         = 0.0 !(EEX) Recovered Exhaust heat  (W)
+       REAL(r64)         :: QTotalHeatRecovered       = 0.0 !total heat recovered (W)
+       REAL(r64)         :: LubeOilEnergyRec          = 0.0 ! Recovered Lube Oil Energy (J)
+       REAL(r64)         :: ExhaustEnergyRec          = 0.0 ! Recovered Exhaust heat  (J)
+       REAL(r64)         :: TotalHeatEnergyRec        = 0.0 !total heat recovered (J)
        INTEGER           :: QLubeOilRecoveredCurve    = 0   !(ELUBEGC) Curve Index for Recoverable Lube Oil heat Input Coef Poly Fit
-       REAL         :: UA                        = 0.0 !(UACGC) exhaust gas Heat Exchanger UA
-       REAL,DIMENSION(2) :: UACoef                    = 0.0 !Heat Exchanger UA  Coeffs Poly Fit
-       REAL         :: MaxExhaustperCTPower      = 0.0 !MAX EXHAUST FLOW PER W POWER OUTPUT COEFF
-       REAL         :: DesignHeatRecVolFlowRate  = 0.0 ! m3/s, Design Water mass flow rate through heat recovery loop
-       REAL         :: DesignHeatRecMassFlowRate = 0.0 ! kg/s, Design Water mass flow rate through heat recovery loop
-       REAL         :: DesignMinExitGasTemp      = 0.0 !Steam Saturation Temperature (C)
-       REAL         :: DesignAirInletTemp        = 0.0 !Design Turbine Air Inlet Temperature (C)
-       REAL         :: ExhaustStackTemp          = 0.0 !turbine exhaust gas temp (C)
+       REAL(r64)         :: UA                        = 0.0 !(UACGC) exhaust gas Heat Exchanger UA
+       REAL(r64),DIMENSION(2) :: UACoef                    = 0.0 !Heat Exchanger UA  Coeffs Poly Fit
+       REAL(r64)         :: MaxExhaustperCTPower      = 0.0 !MAX EXHAUST FLOW PER W POWER OUTPUT COEFF
+       REAL(r64)         :: DesignHeatRecVolFlowRate  = 0.0 ! m3/s, Design Water mass flow rate through heat recovery loop
+       REAL(r64)         :: DesignHeatRecMassFlowRate = 0.0 ! kg/s, Design Water mass flow rate through heat recovery loop
+       REAL(r64)         :: DesignMinExitGasTemp      = 0.0 !Steam Saturation Temperature (C)
+       REAL(r64)         :: DesignAirInletTemp        = 0.0 !Design Turbine Air Inlet Temperature (C)
+       REAL(r64)         :: ExhaustStackTemp          = 0.0 !turbine exhaust gas temp (C)
        LOGICAL           :: HeatRecActive             = .false. ! true when design max flow rate > 0
        INTEGER           :: HeatRecInletNodeNum       = 0   ! Node number on the heat recovery inlet side of the condenser
        INTEGER           :: HeatRecOutletNodeNum      = 0   ! Node number on the heat recovery outlet side of the condenser
-       REAL         :: HeatRecInletTemp          = 0.0 !Inlet Temperature of the heat recovery fluid
-       REAL         :: HeatRecOutletTemp         = 0.0 !Outlet Temperature of the heat recovery fluid
-       REAL         :: HeatRecMdot               = 0.0 ! reporting: Heat Recovery Loop Mass flow rate
+       REAL(r64)         :: HeatRecInletTemp          = 0.0 !Inlet Temperature of the heat recovery fluid
+       REAL(r64)         :: HeatRecOutletTemp         = 0.0 !Outlet Temperature of the heat recovery fluid
+       REAL(r64)         :: HeatRecMdot               = 0.0 ! reporting: Heat Recovery Loop Mass flow rate
        INTEGER           :: HRLoopNum                 = 0   ! cooling water plant loop index number, for heat recovery
        INTEGER           :: HRLoopSideNum             = 0   ! cooling water plant loop side index, for heat recovery
        INTEGER           :: HRBranchNum               = 0   ! cooling water plant loop branch index, for heat recovery
        INTEGER           :: HRCompNum                 = 0   ! cooling water plant loop component index, for heat recovery
 
-       REAL         :: FuelMdot                  = 0.0 ! reporting: Fuel Amount used (kg/s)
-       REAL         :: FuelHeatingValue          = 0.0 !Heating Value for Fuel in (kJ/kg)
-       REAL         :: ElecPowerGenerated        = 0.0 ! reporting: power generated (W)
-       REAL         :: ElecEnergyGenerated       = 0.0 ! reporting: power generated (W)
-       REAL         :: HeatRecMaxTemp            = 0.0 !Max Temp that can be produced in heat recovery
+       REAL(r64)         :: FuelMdot                  = 0.0 ! reporting: Fuel Amount used (kg/s)
+       REAL(r64)         :: FuelHeatingValue          = 0.0 !Heating Value for Fuel in (kJ/kg)
+       REAL(r64)         :: ElecPowerGenerated        = 0.0 ! reporting: power generated (W)
+       REAL(r64)         :: ElecEnergyGenerated       = 0.0 ! reporting: power generated (W)
+       REAL(r64)         :: HeatRecMaxTemp            = 0.0 !Max Temp that can be produced in heat recovery
        INTEGER           :: OAInletNode               = 0   ! optional inlet node index pointer for outdoor air for compustion
 END TYPE CTGeneratorSpecs
 
 TYPE ReportVars
-  REAL    :: PowerGen                = 0.0 ! reporting: power (W)
-  REAL    :: EnergyGen               = 0.0 ! reporting: power (W)
-  REAL    :: QTotalHeatRecovered     = 0.0 ! reporting: total Heat Recovered (W)
-  REAL    :: QLubeOilRecovered       = 0.0 ! reporting: Heat Recovered from Lubricant (W)
-  REAL    :: QExhaustRecovered       = 0.0 ! reporting: Heat Recovered from exhaust (W)
-  REAL    :: TotalHeatEnergyRec      = 0.0 ! reporting: total Heat Recovered (W)
-  REAL    :: LubeOilEnergyRec        = 0.0 ! reporting: Heat Recovered from Lubricant (W)
-  REAL    :: ExhaustEnergyRec        = 0.0 ! reporting: Heat Recovered from exhaust (W)
-  REAL    :: FuelEnergyUseRate       = 0.0 ! reporting: Fuel Energy use rate (W)
-  REAL    :: FuelEnergy              = 0.0 ! reporting: Fuel Energy used (J)
-  REAL    :: FuelMdot                = 0.0 ! reporting: Fuel Amount used (kg/s)
-  REAL    :: ExhaustStackTemp        = 0.0 ! reporting: Exhaust Stack Temperature (C)
-  REAL    :: HeatRecInletTemp        = 0.0 ! reporting: Heat Recovery Loop Inlet Temperature (C)
-  REAL    :: HeatRecOutletTemp       = 0.0 ! reporting: Heat Recovery Loop Outlet Temperature (C)
-  REAL    :: HeatRecMdot             = 0.0 ! reporting: Heat Recovery Loop Mass flow rate (kg/s)
+  REAL(r64)    :: PowerGen                = 0.0 ! reporting: power (W)
+  REAL(r64)    :: EnergyGen               = 0.0 ! reporting: power (W)
+  REAL(r64)    :: QTotalHeatRecovered     = 0.0 ! reporting: total Heat Recovered (W)
+  REAL(r64)    :: QLubeOilRecovered       = 0.0 ! reporting: Heat Recovered from Lubricant (W)
+  REAL(r64)    :: QExhaustRecovered       = 0.0 ! reporting: Heat Recovered from exhaust (W)
+  REAL(r64)    :: TotalHeatEnergyRec      = 0.0 ! reporting: total Heat Recovered (W)
+  REAL(r64)    :: LubeOilEnergyRec        = 0.0 ! reporting: Heat Recovered from Lubricant (W)
+  REAL(r64)    :: ExhaustEnergyRec        = 0.0 ! reporting: Heat Recovered from exhaust (W)
+  REAL(r64)    :: FuelEnergyUseRate       = 0.0 ! reporting: Fuel Energy use rate (W)
+  REAL(r64)    :: FuelEnergy              = 0.0 ! reporting: Fuel Energy used (J)
+  REAL(r64)    :: FuelMdot                = 0.0 ! reporting: Fuel Amount used (kg/s)
+  REAL(r64)    :: ExhaustStackTemp        = 0.0 ! reporting: Exhaust Stack Temperature (C)
+  REAL(r64)    :: HeatRecInletTemp        = 0.0 ! reporting: Heat Recovery Loop Inlet Temperature (C)
+  REAL(r64)    :: HeatRecOutletTemp       = 0.0 ! reporting: Heat Recovery Loop Outlet Temperature (C)
+  REAL(r64)    :: HeatRecMdot             = 0.0 ! reporting: Heat Recovery Loop Mass flow rate (kg/s)
 END TYPE ReportVars
 
 
@@ -9289,7 +9289,7 @@ SUBROUTINE SimCTGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFlag, My
   CHARACTER(len=*), INTENT(IN) :: GeneratorName     ! user specified name of Generator
   INTEGER, INTENT(INOUT) :: GeneratorIndex
   LOGICAL , INTENT(IN)   :: RunFlag                 ! simulate Generator when TRUE
-  REAL, INTENT(IN)       :: MyLoad                  ! generator demand
+  REAL(r64), INTENT(IN)       :: MyLoad                  ! generator demand
   LOGICAL, INTENT (IN)   :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -9373,10 +9373,10 @@ SUBROUTINE SimCTPlantHeatRecovery(CompType,CompName,CompTypeNum,CompNum,RunFlag,
   LOGICAL, INTENT(IN)          :: RunFlag
   !INTEGER, INTENT(IN)          :: FlowLock !unused1208 !DSU
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyLoad
-  REAL, INTENT(OUT)       :: MinCap
-  REAL, INTENT(OUT)       :: MaxCap
-  REAL, INTENT(OUT)       :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyLoad
+  REAL(r64), INTENT(OUT)       :: MinCap
+  REAL(r64), INTENT(OUT)       :: MaxCap
+  REAL(r64), INTENT(OUT)       :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -9452,7 +9452,7 @@ SUBROUTINE GetCTGeneratorInput
   INTEGER                     :: NumNums    ! Number of elements in the numeric array
   INTEGER                     :: IOStat     ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(12)   :: AlphArray !character string data
-  REAL,                        DIMENSION(12)  :: NumArray  !numeric data
+  REAL(r64),                        DIMENSION(12)  :: NumArray  !numeric data
   LOGICAL, SAVE :: ErrorsFound=.false.   ! error flag
   LOGICAL       :: IsNotOK               ! Flag to verify name
   LOGICAL       :: IsBlank               ! Flag for blank name
@@ -9740,23 +9740,23 @@ SUBROUTINE CalcCTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
 
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL   , INTENT(IN)    :: MyLoad          ! Generator demand
+  REAL(r64)   , INTENT(IN)    :: MyLoad          ! Generator demand
   INTEGER, INTENT(IN)    :: GeneratorNum    ! Generator number
   LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when Generator operating
   LOGICAL, INTENT(IN)    :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER   :: ExhaustCP = 1.047    !Exhaust Gas Specific Heat (J/kg-K)
-  REAL, PARAMETER   :: KJtoJ = 1000.        !convert Kjoules to joules
+  REAL(r64), PARAMETER   :: ExhaustCP = 1.047d0    !Exhaust Gas Specific Heat (J/kg-K)
+  REAL(r64), PARAMETER   :: KJtoJ = 1000.d0        !convert Kjoules to joules
 
           ! INTERFACE BLOCK SPECIFICATIONS
             ! INTERFACE
 
-            !  REAL FUNCTION CurveValue(CurveIndex,Var1,Var2)
+            !  REAL(r64) FUNCTION CurveValue(CurveIndex,Var1,Var2)
             !
             !    INTEGER, INTENT (IN)        :: CurveIndex  ! index of curve in curve array
-            !    REAL, INTENT (IN)           :: Var1        ! 1st independent variable
-            !    REAL, INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
+            !    REAL(r64), INTENT (IN)           :: Var1        ! 1st independent variable
+            !    REAL(r64), INTENT (IN), OPTIONAL :: Var2        ! 2nd independent variable
             !
             !  END FUNCTION CurveValue
             !
@@ -9766,37 +9766,37 @@ SUBROUTINE CalcCTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL         :: MinPartLoadRat      ! min allowed operating frac full load
-  REAL         :: MaxPartLoadRat      ! max allowed operating frac full load
-  REAL         :: RatedPowerOutput    ! Generator nominal capacity (W)
-  REAL         :: ElecPowerGenerated  ! Generator output (W)
-  REAL         :: ElectricEnergyGen   ! Generator output (J)
+  REAL(r64)         :: MinPartLoadRat      ! min allowed operating frac full load
+  REAL(r64)         :: MaxPartLoadRat      ! max allowed operating frac full load
+  REAL(r64)         :: RatedPowerOutput    ! Generator nominal capacity (W)
+  REAL(r64)         :: ElecPowerGenerated  ! Generator output (W)
+  REAL(r64)         :: ElectricEnergyGen   ! Generator output (J)
 
 ! Special variables for CT Generator
-  REAL    :: MaxExhaustperCTPower   !MAX EXHAUST FLOW PER W POWER OUTPUT COEFF
-  REAL    :: PLR                    ! Generator operating part load ratio
-  REAL    :: FuelUseRate            !(EFUEL) rate of Fuel Energy Required to run COMBUSTION turbine (W)
-  REAL    :: FuelEnergyUsed         !Amount of Fuel Energy Required to run COMBUSTION turbine (J)
-  REAL    :: ExhaustFlow            !(FEX) Exhaust Gas Flow Rate cubic meters per second???
-  REAL    :: ExhaustTemp            !(TEX) Exhaust Gas Temperature in C
-  REAL    :: UA             !(UACGC) Heat Exchanger UA to Capacity
-  REAL    :: AmbientDeltaT          !(ATAIR) Difference between ambient actual and ambient design temperatures
-  REAL    :: DesignAirInletTemp     ! design turbine inlet temperature (C)
-  REAL    :: QLubeOilRec          ! recovered lube oil heat (W)
-  REAL    :: QExhaustRec          ! recovered exhaust heat (W)
-  REAL    :: LubeOilEnergyRec     ! recovered lube oil heat (J)
-  REAL    :: ExhaustEnergyRec     ! recovered exhaust heat (J)
-  REAL    :: MinHeatRecMdot       ! Heat Recovery Flow Rate if minimal heat recovery is accomplished
-  REAL    :: DesignMinExitGasTemp     ! design engine stact saturated steam temp. (C)
-  REAL    :: ExhaustStackTemp       ! turbine stack temp. (C)
+  REAL(r64)    :: MaxExhaustperCTPower   !MAX EXHAUST FLOW PER W POWER OUTPUT COEFF
+  REAL(r64)    :: PLR                    ! Generator operating part load ratio
+  REAL(r64)    :: FuelUseRate            !(EFUEL) rate of Fuel Energy Required to run COMBUSTION turbine (W)
+  REAL(r64)    :: FuelEnergyUsed         !Amount of Fuel Energy Required to run COMBUSTION turbine (J)
+  REAL(r64)    :: ExhaustFlow            !(FEX) Exhaust Gas Flow Rate cubic meters per second???
+  REAL(r64)    :: ExhaustTemp            !(TEX) Exhaust Gas Temperature in C
+  REAL(r64)    :: UA             !(UACGC) Heat Exchanger UA to Capacity
+  REAL(r64)    :: AmbientDeltaT          !(ATAIR) Difference between ambient actual and ambient design temperatures
+  REAL(r64)    :: DesignAirInletTemp     ! design turbine inlet temperature (C)
+  REAL(r64)    :: QLubeOilRec          ! recovered lube oil heat (W)
+  REAL(r64)    :: QExhaustRec          ! recovered exhaust heat (W)
+  REAL(r64)    :: LubeOilEnergyRec     ! recovered lube oil heat (J)
+  REAL(r64)    :: ExhaustEnergyRec     ! recovered exhaust heat (J)
+  REAL(r64)    :: MinHeatRecMdot       ! Heat Recovery Flow Rate if minimal heat recovery is accomplished
+  REAL(r64)    :: DesignMinExitGasTemp     ! design engine stact saturated steam temp. (C)
+  REAL(r64)    :: ExhaustStackTemp       ! turbine stack temp. (C)
   INTEGER :: HeatRecInNode          !Heat Recovery Fluid Inlet Node Num
 !notused  INTEGER :: HeatRecOutNode         !Heat Recovery Fluid Outlet Node Num
-  REAL    :: HeatRecInTemp          !Heat Recovery Fluid Inlet Temperature (C)
-  REAL    :: HeatRecOutTemp         !Heat Recovery Fluid Outlet Temperature (C)
-  REAL    :: HeatRecMdot            !Heat Recovery Fluid Mass FlowRate (kg/s)
-  REAL    :: HeatRecCp              !Specific Heat of the Heat Recovery Fluid (J/kg-K)
-  REAL    :: FuelHeatingValue       !Heating Value of Fuel in (kJ/kg)
-  REAL    :: HRecRatio              !When Max Temp is reached the amount of recovered heat has to be reduced.
+  REAL(r64)    :: HeatRecInTemp          !Heat Recovery Fluid Inlet Temperature (C)
+  REAL(r64)    :: HeatRecOutTemp         !Heat Recovery Fluid Outlet Temperature (C)
+  REAL(r64)    :: HeatRecMdot            !Heat Recovery Fluid Mass FlowRate (kg/s)
+  REAL(r64)    :: HeatRecCp              !Specific Heat of the Heat Recovery Fluid (J/kg-K)
+  REAL(r64)    :: FuelHeatingValue       !Heating Value of Fuel in (kJ/kg)
+  REAL(r64)    :: HRecRatio              !When Max Temp is reached the amount of recovered heat has to be reduced.
                                     ! and this assumption uses this ratio to accomplish this task.
 
           !  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
@@ -9848,7 +9848,7 @@ SUBROUTINE CalcCTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
 
     ! CALCULATE POWER GENERATED AND PLR
   ElecPowerGenerated = MIN(MyLoad,RatedPowerOutput)
-  ElecPowerGenerated = MAX(ElecPowerGenerated,0.0)
+  ElecPowerGenerated = MAX(ElecPowerGenerated,0.0d0)
   PLR = MIN(ElecPowerGenerated/RatedPowerOutput, MaxPartLoadRat)
   PLR = MAX(PLR, MinPartLoadRat)
   ElecPowerGenerated = PLR*RatedPowerOutput
@@ -9879,7 +9879,7 @@ SUBROUTINE CalcCTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
 !Use Curve fit to determine Exhaust Temperature.  This curve calculates the exhaust temperature (C) by
 !multiplying the exhaust temperature (C) for a particular part load as given by PLBasedExhaustTempCurve
 !a correction factor based on the deviation from design temperature, TempBasedExhaustTempCurve
-  IF ((PLR > 0.0) .AND. ( (ExhaustFlow > 0.0) .or. (MaxExhaustperCTPower > 0.0))) THEN
+  IF ((PLR > 0.0) .AND. ( (ExhaustFlow > 0.0D0) .or. (MaxExhaustperCTPower > 0.0D0))) THEN
 
     ExhaustTemp = CurveValue(CTGenerator(GeneratorNum)%PLBasedExhaustTempCurve, PLR)  * &
                   CurveValue(CTGenerator(GeneratorNum)%TempBasedExhaustTempCurve, AmbientDeltaT)
@@ -9891,7 +9891,7 @@ SUBROUTINE CalcCTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
     ExhaustStackTemp = DesignMinExitGasTemp + (ExhaustTemp - DesignMinExitGasTemp) / &
                          EXP(UA/(MAX(ExhaustFlow, MaxExhaustperCTPower * RatedPowerOutput) * ExhaustCP))
 
-    QExhaustRec = MAX(ExhaustFlow*ExhaustCP*(ExhaustTemp-ExhaustStackTemp),0.0)
+    QExhaustRec = MAX(ExhaustFlow*ExhaustCP*(ExhaustTemp-ExhaustStackTemp),0.0d0)
   ELSE
     ExhaustStackTemp = CTGenerator(GeneratorNum)%DesignMinExitGasTemp
     QExhaustRec = 0.0
@@ -10002,7 +10002,7 @@ SUBROUTINE InitCTGenerators(GeneratorNum, RunFlag, MyLoad, FirstHVACIteration)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,     INTENT(IN)  :: GeneratorNum    ! Generator number
   LOGICAL,     INTENT(IN)  :: RunFlag         ! TRUE when Generator operating
-  REAL  , INTENT(IN)  :: MyLoad          ! Generator demand
+  REAL(r64)  , INTENT(IN)  :: MyLoad          ! Generator demand
   LOGICAL,     INTENT(IN) :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -10022,8 +10022,8 @@ SUBROUTINE InitCTGenerators(GeneratorNum, RunFlag, MyLoad, FirstHVACIteration)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! Used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeAndNodeInitFlag
-  REAL  :: mdot
-  REAL  :: rho
+  REAL(r64)  :: mdot
+  REAL(r64)  :: rho
   LOGICAL    :: errFlag
 
             ! FLOW:
@@ -10070,7 +10070,7 @@ SUBROUTINE InitCTGenerators(GeneratorNum, RunFlag, MyLoad, FirstHVACIteration)
 
     CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate = rho * CTGenerator(GeneratorNum)%DesignHeatRecVolFlowRate
 
-    CALL InitComponentNodes(0.0,  CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
+    CALL InitComponentNodes(0.0D0,  CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  CTGenerator(GeneratorNum)%HRLoopNum, &
@@ -10089,7 +10089,7 @@ SUBROUTINE InitCTGenerators(GeneratorNum, RunFlag, MyLoad, FirstHVACIteration)
     Node(HeatRecInletNode) %Temp = 20.0
     Node(HeatRecOutletNode)%Temp = 20.0
    ! set the node max and min mass flow rates
-    CALL InitComponentNodes(0.0,  CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
+    CALL InitComponentNodes(0.0D0,  CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  CTGenerator(GeneratorNum)%HRLoopNum, &
@@ -10109,7 +10109,7 @@ SUBROUTINE InitCTGenerators(GeneratorNum, RunFlag, MyLoad, FirstHVACIteration)
       IF (RunFlag) THEN
         mdot =  CTGenerator(GeneratorNum)%DesignHeatRecMassFlowRate
       ELSE
-        mdot = 0.
+        mdot = 0.d0
       ENDIF
       CALL SetComponentFlowRate(mdot, &
                                    CTGenerator(GeneratorNum)%HeatRecInletNodeNum, &
@@ -10228,10 +10228,10 @@ SUBROUTINE GetCTGeneratorResults(GeneratorType, GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower  ! heat power
-  REAL, INTENT(OUT)        :: ThermalEnergy ! heat energy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower  ! heat power
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy ! heat energy
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -10307,79 +10307,79 @@ CHARACTER(len=*), PARAMETER :: Blank = ' '
 TYPE MTGeneratorSpecs
 !      User inputs
        CHARACTER(len=MaxNameLength) :: Name       = ' '   ! User identifier (name)
-       REAL  :: RefElecPowerOutput           = 0.0 ! Reference Electrical Power Output from generator (W)
-       REAL  :: MinElecPowerOutput           = 0.0 ! Minimum Electrical Power Output (W)
-       REAL  :: MaxElecPowerOutput           = 0.0 ! Maximum Electrical Power Output (W)
-       REAL  :: RefThermalPowerOutput        = 0.0 ! Reference Electrical Power Output from generator (W)
-       REAL  :: MinThermalPowerOutput        = 0.0 ! Minimum Electrical Power Output (W)
-       REAL  :: MaxThermalPowerOutput        = 0.0 ! Maximum Electrical Power Output (W)
+       REAL(r64)  :: RefElecPowerOutput           = 0.0d0 ! Reference Electrical Power Output from generator (W)
+       REAL(r64)  :: MinElecPowerOutput           = 0.0d0 ! Minimum Electrical Power Output (W)
+       REAL(r64)  :: MaxElecPowerOutput           = 0.0d0 ! Maximum Electrical Power Output (W)
+       REAL(r64)  :: RefThermalPowerOutput        = 0.0d0 ! Reference Electrical Power Output from generator (W)
+       REAL(r64)  :: MinThermalPowerOutput        = 0.0d0 ! Minimum Electrical Power Output (W)
+       REAL(r64)  :: MaxThermalPowerOutput        = 0.0d0 ! Maximum Electrical Power Output (W)
 
-       REAL  :: RefElecEfficiencyLHV         = 0.0 ! Reference Electrical Efficiency based on fuel LHV
-       REAL  :: RefCombustAirInletTemp       = 0.0 ! Reference Combustion Air Inlet Temperature (C)
-       REAL  :: RefCombustAirInletHumRat     = 0.0 ! Reference Combustion Air Inlet Humidity Ratio (kg/kg)
-       REAL  :: RefElevation                 = 0.0 ! Reference Elevation (m)
+       REAL(r64)  :: RefElecEfficiencyLHV         = 0.0d0 ! Reference Electrical Efficiency based on fuel LHV
+       REAL(r64)  :: RefCombustAirInletTemp       = 0.0d0 ! Reference Combustion Air Inlet Temperature (C)
+       REAL(r64)  :: RefCombustAirInletHumRat     = 0.0d0 ! Reference Combustion Air Inlet Humidity Ratio (kg/kg)
+       REAL(r64)  :: RefElevation                 = 0.0d0 ! Reference Elevation (m)
        INTEGER    :: ElecPowFTempElevCurveNum     = 0     ! Curve index for Electrical Power as a function of temp and elev.
        INTEGER    :: ElecEffFTempCurveNum         = 0     ! Curve index for Electrical Efficiency function of temp
        INTEGER    :: ElecEffFPLRCurveNum          = 0     ! Curve index for Electrical Efficiency as a function of PLR
-       REAL  :: FuelHigherHeatingValue       = 0.0 ! Higher Heating Value for Fuel (kJ/kg)
-       REAL  :: FuelLowerHeatingValue        = 0.0 ! Lower Heating Value for Fuel (kJ/kg)
-       REAL  :: StandbyPower                 = 0.0 ! Standby Power entered by user (W)
-       REAL  :: AncillaryPower               = 0.0 ! Ancillary Power entered by user (W)
+       REAL(r64)  :: FuelHigherHeatingValue       = 0.0d0 ! Higher Heating Value for Fuel (kJ/kg)
+       REAL(r64)  :: FuelLowerHeatingValue        = 0.0d0 ! Lower Heating Value for Fuel (kJ/kg)
+       REAL(r64)  :: StandbyPower                 = 0.0d0 ! Standby Power entered by user (W)
+       REAL(r64)  :: AncillaryPower               = 0.0d0 ! Ancillary Power entered by user (W)
        INTEGER    :: AncillaryPowerFuelCurveNum   = 0     ! Index to ancillary power modifer curve (function of fuel input)
        INTEGER    :: HeatRecInletNodeNum          = 0     ! Heat Recovery Water Inlet Node number
        INTEGER    :: HeatRecOutletNodeNum         = 0     ! Heat Recovery Water Outlet Node number
-       REAL  :: RefThermalEffLHV             = 0.0 ! Reference Thermal Efficiency (LHV Basis)
-       REAL  :: RefInletWaterTemp            = 0.0 ! Reference Inlet Water Temperature for heat recovery (C)
+       REAL(r64)  :: RefThermalEffLHV             = 0.0d0 ! Reference Thermal Efficiency (LHV Basis)
+       REAL(r64)  :: RefInletWaterTemp            = 0.0d0 ! Reference Inlet Water Temperature for heat recovery (C)
        LOGICAL    :: InternalFlowControl          = .FALSE. !  A9, \field Heat Recovery Water Flow Operating Mode
        LOGICAL    :: PlantFlowControl             = .TRUE.  !  Default = Plant Control
-       REAL  :: RefHeatRecVolFlowRate        = 0.0 ! Reference Heat Recovery Water Flow Rate (m3/s)
+       REAL(r64)  :: RefHeatRecVolFlowRate        = 0.0d0 ! Reference Heat Recovery Water Flow Rate (m3/s)
        INTEGER    :: HeatRecFlowFTempPowCurveNum  = 0     ! Curve index for Heat Recovery Water Flow Rate function of temp & power
        INTEGER    :: ThermEffFTempElevCurveNum    = 0     ! Curve index for Thermal Efficiency function of temp & elevation
        INTEGER    :: HeatRecRateFPLRCurveNum      = 0     ! Curve index for Heat Recovery Rate function of part-load ratio
        INTEGER    :: HeatRecRateFTempCurveNum     = 0     ! Curve index for Heat Recovery Rate function of inlet water temp
        INTEGER    :: HeatRecRateFWaterFlowCurveNum = 0    ! Curve index for Heat Recovery Rate function of water flow rate
-       REAL  :: HeatRecMinVolFlowRate        = 0.0 ! Minimum Heat Recovery Water volume Flow Rate (m3/s)
-       REAL  :: HeatRecMaxVolFlowRate        = 0.0 ! Maximum Heat Recovery Water volume Flow Rate (m3/s)
-       REAL  :: HeatRecMaxWaterTemp          = 0.0 ! Maximum Heat Recovery Water Temperature (C)
+       REAL(r64)  :: HeatRecMinVolFlowRate        = 0.0d0 ! Minimum Heat Recovery Water volume Flow Rate (m3/s)
+       REAL(r64)  :: HeatRecMaxVolFlowRate        = 0.0d0 ! Maximum Heat Recovery Water volume Flow Rate (m3/s)
+       REAL(r64)  :: HeatRecMaxWaterTemp          = 0.0d0 ! Maximum Heat Recovery Water Temperature (C)
        INTEGER    :: CombustionAirInletNodeNum    = 0     ! Combustion Air Inlet Node number
        INTEGER    :: CombustionAirOutletNodeNum   = 0     ! Combustion Air Outlet (Exhaust) Node number
        LOGICAL    :: ExhAirCalcsActive            = .FALSE. ! Flag to enable exhaust air calculations
-       REAL  :: RefExhaustAirMassFlowRate    = 0.0   ! Reference Exhaust Air Mass Flow Rate (kg/s)
-       REAL  :: ExhaustAirMassFlowRate       = 0.0   ! Actual Exhaust Air Mass Flow Rate (kg/s)
+       REAL(r64)  :: RefExhaustAirMassFlowRate    = 0.0   ! Reference Exhaust Air Mass Flow Rate (kg/s)
+       REAL(r64)  :: ExhaustAirMassFlowRate       = 0.0   ! Actual Exhaust Air Mass Flow Rate (kg/s)
        INTEGER    :: ExhFlowFTempCurveNum         = 0     ! Curve index for Exhaust Air Flow Rate function of inlet air temp
        INTEGER    :: ExhFlowFPLRCurveNum          = 0     ! Curve index for Exhaust Air Flow Rate function of part-load ratio
-       REAL  :: NomExhAirOutletTemp          = 0.0   ! Nominal Exhaust Air Outlet Temperature (C)
+       REAL(r64)  :: NomExhAirOutletTemp          = 0.0   ! Nominal Exhaust Air Outlet Temperature (C)
        INTEGER    :: ExhAirTempFTempCurveNum      = 0     ! Curve index for Exhaust Air Temperature function of inlet air temp
        INTEGER    :: ExhAirTempFPLRCurveNum       = 0     ! Curve index for Exhaust Air Temperature function of part-load ratio
-       REAL  :: ExhaustAirTemperature        = 0.0   ! Combustion exhaust air temperature (C)
-       REAL  :: ExhaustAirHumRat             = 0.0   ! Combustion exhaust air humidity ratio (kg/kg)
+       REAL(r64)  :: ExhaustAirTemperature        = 0.0d0   ! Combustion exhaust air temperature (C)
+       REAL(r64)  :: ExhaustAirHumRat             = 0.0   ! Combustion exhaust air humidity ratio (kg/kg)
 
 !      Other required variables/calculated values
        INTEGER    :: CompType_Num                 = iGeneratorMicroturbine
-       REAL  :: RefCombustAirInletDensity    = 0.0 ! Reference combustion air inlet density (kg/m3)
-       REAL  :: MinPartLoadRat               = 0.0 ! Min allowed operating frac full load
-       REAL  :: MaxPartLoadRat               = 0.0 ! Max allowed operating frac full load
-       REAL  :: FuelEnergyUseRateHHV         = 0.0 ! Rate of Fuel Energy required to run microturbine, HHV basis (W)
-       REAL  :: FuelEnergyUseRateLHV         = 0.0 ! Rate of Fuel Energy required to run microturbine, LHV basis (W)
-       REAL  :: QHeatRecovered               = 0.0 ! Recovered exhaust energy rate to heat water  (W)
-       REAL  :: ExhaustEnergyRec             = 0.0 ! Recovered exhaust energy to heat water (J)
-       REAL  :: DesignHeatRecMassFlowRate    = 0.0 ! Design Water mass flow rate through heat recovery loop (kg/s)
+       REAL(r64)  :: RefCombustAirInletDensity    = 0.0d0 ! Reference combustion air inlet density (kg/m3)
+       REAL(r64)  :: MinPartLoadRat               = 0.0d0 ! Min allowed operating frac full load
+       REAL(r64)  :: MaxPartLoadRat               = 0.0d0 ! Max allowed operating frac full load
+       REAL(r64)  :: FuelEnergyUseRateHHV         = 0.0d0 ! Rate of Fuel Energy required to run microturbine, HHV basis (W)
+       REAL(r64)  :: FuelEnergyUseRateLHV         = 0.0d0 ! Rate of Fuel Energy required to run microturbine, LHV basis (W)
+       REAL(r64)  :: QHeatRecovered               = 0.0d0 ! Recovered exhaust energy rate to heat water  (W)
+       REAL(r64)  :: ExhaustEnergyRec             = 0.0d0 ! Recovered exhaust energy to heat water (J)
+       REAL(r64)  :: DesignHeatRecMassFlowRate    = 0.0d0 ! Design Water mass flow rate through heat recovery loop (kg/s)
        LOGICAL    :: HeatRecActive                = .FALSE. ! TRUE when heat recovery water inlet and outlet nodes are defined
-       REAL  :: HeatRecInletTemp             = 0.0 ! Inlet Temperature of the heat recovery fluid (C)
-       REAL  :: HeatRecOutletTemp            = 0.0 ! Outlet Temperature of the heat recovery fluid (C)
-       REAL  :: HeatRecMinMassFlowRate       = 0.0 ! Minimum heat recovery water mass flow rate (kg/s)
-       REAL  :: HeatRecMaxMassFlowRate       = 0.0 ! Maximum heat recovery water mass flow rate (kg/s)
-       REAL  :: HeatRecMdot                  = 0.0 ! Heat Recovery Loop Mass flow rate (kg/s)
+       REAL(r64)  :: HeatRecInletTemp             = 0.0d0 ! Inlet Temperature of the heat recovery fluid (C)
+       REAL(r64)  :: HeatRecOutletTemp            = 0.0d0 ! Outlet Temperature of the heat recovery fluid (C)
+       REAL(r64)  :: HeatRecMinMassFlowRate       = 0.0d0 ! Minimum heat recovery water mass flow rate (kg/s)
+       REAL(r64)  :: HeatRecMaxMassFlowRate       = 0.0d0 ! Maximum heat recovery water mass flow rate (kg/s)
+       REAL(r64)  :: HeatRecMdot                  = 0.0d0 ! Heat Recovery Loop Mass flow rate (kg/s)
        INTEGER    :: HRLoopNum                    = 0     ! cooling water plant loop index number, for heat recovery
        INTEGER    :: HRLoopSideNum                = 0     ! cooling water plant loop side index, for heat recovery
        INTEGER    :: HRBranchNum                  = 0     ! cooling water plant loop branch index, for heat recovery
        INTEGER    :: HRCompNum                    = 0     ! cooling water plant loop component index, for heat recovery
 
-       REAL  :: FuelMdot                     = 0.0 ! Fuel Amount used (kg/s)
-       REAL  :: ElecPowerGenerated           = 0.0 ! Electric power generated (W)
+       REAL(r64)  :: FuelMdot                     = 0.0d0 ! Fuel Amount used (kg/s)
+       REAL(r64)  :: ElecPowerGenerated           = 0.0d0 ! Electric power generated (W)
 
-       REAL  :: StandbyPowerRate             = 0.0 ! Standby power rate this time step (W)
-       REAL  :: AncillaryPowerRate           = 0.0 ! Ancillary power rate this time step (W)
+       REAL(r64)  :: StandbyPowerRate             = 0.0d0 ! Standby power rate this time step (W)
+       REAL(r64)  :: AncillaryPowerRate           = 0.0d0 ! Ancillary power rate this time step (W)
 
 !     Warning message variables
        INTEGER    :: PowerFTempElevErrorIndex     = 0   ! Index to power as a function of temp/elevation warning message
@@ -10420,24 +10420,24 @@ TYPE MTGeneratorSpecs
 END TYPE MTGeneratorSpecs
 
 TYPE ReportVars
-  REAL :: PowerGen                = 0.0 ! Reporting: Electric power produced (W)
-  REAL :: EnergyGen               = 0.0 ! Reporting: Electric energy produced (J)
-  REAL :: QHeatRecovered          = 0.0 ! Reporting: Heat recovered from exhaust to heat water (W)
-  REAL :: ExhaustEnergyRec        = 0.0 ! Reporting: Heat recovered from exhaust to heat water (J)
-  REAL :: FuelEnergyUseRateHHV    = 0.0 ! Reporting: Fuel Energy use rate, HHV basis (W)
-  REAL :: FuelEnergyHHV           = 0.0 ! Reporting: Fuel Energy used (J)
-  REAL :: FuelMdot                = 0.0 ! Reporting: Fuel Amount used (kg/s)
-  REAL :: ElectricEfficiencyLHV   = 0.0 ! Reporting: Electric efficiency LHV (-)
-  REAL :: ThermalEfficiencyLHV    = 0.0 ! Reporting: Thermal (heat recovery to water) efficiency LHV (-)
-  REAL :: HeatRecInletTemp        = 0.0 ! Reporting: Heat Recovery Loop Inlet Temperature (C)
-  REAL :: HeatRecOutletTemp       = 0.0 ! Reporting: Heat Recovery Loop Outlet Temperature (C)
-  REAL :: HeatRecMdot             = 0.0 ! Reporting: Heat Recovery Loop Mass flow rate (kg/s)
-  REAL :: AncillaryPowerRate      = 0.0 ! Reporting: Ancillary power use rate (W)
-  REAL :: AncillaryEnergy         = 0.0 ! Reporting: Ancillary energy use (J)
-  REAL :: StandbyPowerRate        = 0.0 ! Reporting: Standby power use rate (W)
-  REAL :: StandbyEnergy           = 0.0 ! Reporting: Standby energy use (J)
-  REAL  :: ExhAirMassFlowRate       = 0.0   ! Actual Exhaust Air Mass Flow Rate (kg/s)
-  REAL  :: ExhAirTemperature        = 0.0   ! Combustion exhaust air temperature (C)
+  REAL(r64) :: PowerGen                = 0.0d0 ! Reporting: Electric power produced (W)
+  REAL(r64) :: EnergyGen               = 0.0d0 ! Reporting: Electric energy produced (J)
+  REAL(r64) :: QHeatRecovered          = 0.0d0 ! Reporting: Heat recovered from exhaust to heat water (W)
+  REAL(r64) :: ExhaustEnergyRec        = 0.0d0 ! Reporting: Heat recovered from exhaust to heat water (J)
+  REAL(r64) :: FuelEnergyUseRateHHV    = 0.0d0 ! Reporting: Fuel Energy use rate, HHV basis (W)
+  REAL(r64) :: FuelEnergyHHV           = 0.0d0 ! Reporting: Fuel Energy used (J)
+  REAL(r64) :: FuelMdot                = 0.0d0 ! Reporting: Fuel Amount used (kg/s)
+  REAL(r64) :: ElectricEfficiencyLHV   = 0.0d0 ! Reporting: Electric efficiency LHV (-)
+  REAL(r64) :: ThermalEfficiencyLHV    = 0.0d0 ! Reporting: Thermal (heat recovery to water) efficiency LHV (-)
+  REAL(r64) :: HeatRecInletTemp        = 0.0d0 ! Reporting: Heat Recovery Loop Inlet Temperature (C)
+  REAL(r64) :: HeatRecOutletTemp       = 0.0d0 ! Reporting: Heat Recovery Loop Outlet Temperature (C)
+  REAL(r64) :: HeatRecMdot             = 0.0d0 ! Reporting: Heat Recovery Loop Mass flow rate (kg/s)
+  REAL(r64) :: AncillaryPowerRate      = 0.0d0 ! Reporting: Ancillary power use rate (W)
+  REAL(r64) :: AncillaryEnergy         = 0.0d0 ! Reporting: Ancillary energy use (J)
+  REAL(r64) :: StandbyPowerRate        = 0.0d0 ! Reporting: Standby power use rate (W)
+  REAL(r64) :: StandbyEnergy           = 0.0d0 ! Reporting: Standby energy use (J)
+  REAL(r64)  :: ExhAirMassFlowRate       = 0.0   ! Actual Exhaust Air Mass Flow Rate (kg/s)
+  REAL(r64)  :: ExhAirTemperature        = 0.0   ! Combustion exhaust air temperature (C)
 END TYPE ReportVars
 
 
@@ -10493,7 +10493,7 @@ SUBROUTINE SimMTGenerator(GeneratorType,GeneratorName,GeneratorIndex,RunFlag,MyL
   CHARACTER(len=*), INTENT(IN) :: GeneratorName      ! User-specified name of generator
   INTEGER, INTENT(INOUT)       :: GeneratorIndex     ! Index to microturbine generator
   LOGICAL, INTENT(IN)          :: RunFlag            ! Simulate generator when TRUE
-  REAL, INTENT(IN)        :: MyLoad             ! Generator demand (W)
+  REAL(r64), INTENT(IN)        :: MyLoad             ! Generator demand (W)
   LOGICAL, INTENT (IN)         :: FirstHVACIteration ! Simulation flag for First HVAC (system) iteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -10580,10 +10580,10 @@ SUBROUTINE SimMTPlantHeatRecovery(CompType,CompName,CompTypeNum,CompNum,RunFlag,
   LOGICAL, INTENT(IN)          :: RunFlag !unused1208
  ! INTEGER, INTENT(IN)          :: FlowLock !unused1208 !DSU
   LOGICAL, INTENT(INOUT)       :: InitLoopEquip
-  REAL, INTENT(INOUT)     :: MyLoad !unused1208
-  REAL, INTENT(OUT)       :: MinCap
-  REAL, INTENT(OUT)       :: MaxCap
-  REAL, INTENT(OUT)       :: OptCap
+  REAL(r64), INTENT(INOUT)     :: MyLoad !unused1208
+  REAL(r64), INTENT(OUT)       :: MinCap
+  REAL(r64), INTENT(OUT)       :: MaxCap
+  REAL(r64), INTENT(OUT)       :: OptCap
   LOGICAL, INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -10669,24 +10669,24 @@ SUBROUTINE GetMTGeneratorInput
   LOGICAL, SAVE :: ErrorsFound=.FALSE.      ! Error flag... trips fatal error message at end of get input
   LOGICAL       :: IsNotOK                  ! Flag to verify name
   LOGICAL       :: IsBlank                  ! Flag for blank name
-  REAL     :: ElectOutFTempElevOutput  ! Output of Electrical Power Output Modifier Curve (function of temp and elev)
-  REAL     :: ElecEfficFTempOutput     ! Output of Electrical Efficiency Modifier Curve (function of temp)
-  REAL     :: ElecEfficFPLROutput      ! Output of Electrical Efficiency Modifier Curve (function of PLR)
-  REAL     :: AncillaryPowerOutput     ! Output of Ancillary Power Modifer Curve (function of temps and fuel flow)
-  REAL     :: RefFuelUseMdot           ! Fuel mass flow rate at reference conditions (kg/s)
-  REAL     :: RefBaroPressure          ! Reference barometric pressure, adjusted for reference elevation (Pa)
-  REAL     :: ThermalEffTempElevOutput ! Output of Thermal Efficiency Modifier Curve (function of temp and elevation)
-  REAL     :: HeatRecRateFPLROutput    ! Output of Heat Recovery Rate Modifier Curve (function of PLR)
-  REAL     :: HeatRecRateFTempOutput   ! Output of Heat Recovery Rate Modifier Curve (function of inlet water temp)
-  REAL     :: HeatRecRateFFlowOutput   ! Output of Heat Recovery Rate Modifier Curve (function of water flow rate)
-  REAL     :: ExhFlowFTempOutput       ! Output of Exhaust Air Flow Modifier Curve (function of inlet air temp)
-  REAL     :: ExhFlowFPLROutput        ! Output of Exhaust Air Flow Modifier Curve (function of PLR)
-  REAL     :: ExhAirTempFTempOutput    ! Output of Exhaust Air Temperature Modifier Curve (function of inlet air temp)
-  REAL     :: ExhOutAirTempFPLROutput  ! Output of Exhaust Air Temperature Modifier Curve (function of PLR)
-  REAL     :: Var1Min= 0.0           ! Minimum value for variable 1, value obtained from a curve object
-  REAL     :: Var1Max= 0.0           ! Maximum value for variable 1, value obtained from a curve object
+  REAL(r64)     :: ElectOutFTempElevOutput  ! Output of Electrical Power Output Modifier Curve (function of temp and elev)
+  REAL(r64)     :: ElecEfficFTempOutput     ! Output of Electrical Efficiency Modifier Curve (function of temp)
+  REAL(r64)     :: ElecEfficFPLROutput      ! Output of Electrical Efficiency Modifier Curve (function of PLR)
+  REAL(r64)     :: AncillaryPowerOutput     ! Output of Ancillary Power Modifer Curve (function of temps and fuel flow)
+  REAL(r64)     :: RefFuelUseMdot           ! Fuel mass flow rate at reference conditions (kg/s)
+  REAL(r64)     :: RefBaroPressure          ! Reference barometric pressure, adjusted for reference elevation (Pa)
+  REAL(r64)     :: ThermalEffTempElevOutput ! Output of Thermal Efficiency Modifier Curve (function of temp and elevation)
+  REAL(r64)     :: HeatRecRateFPLROutput    ! Output of Heat Recovery Rate Modifier Curve (function of PLR)
+  REAL(r64)     :: HeatRecRateFTempOutput   ! Output of Heat Recovery Rate Modifier Curve (function of inlet water temp)
+  REAL(r64)     :: HeatRecRateFFlowOutput   ! Output of Heat Recovery Rate Modifier Curve (function of water flow rate)
+  REAL(r64)     :: ExhFlowFTempOutput       ! Output of Exhaust Air Flow Modifier Curve (function of inlet air temp)
+  REAL(r64)     :: ExhFlowFPLROutput        ! Output of Exhaust Air Flow Modifier Curve (function of PLR)
+  REAL(r64)     :: ExhAirTempFTempOutput    ! Output of Exhaust Air Temperature Modifier Curve (function of inlet air temp)
+  REAL(r64)     :: ExhOutAirTempFPLROutput  ! Output of Exhaust Air Temperature Modifier Curve (function of PLR)
+  REAL(r64)     :: Var1Min= 0.0d0           ! Minimum value for variable 1, value obtained from a curve object
+  REAL(r64)     :: Var1Max= 0.0d0           ! Maximum value for variable 1, value obtained from a curve object
 
-  REAL,                   DIMENSION(19) :: NumArray      ! Numeric data array
+  REAL(r64),                   DIMENSION(19) :: NumArray      ! Numeric data array
 
   CHARACTER(len=MaxNameLength),DIMENSION(20) :: AlphArray ! Character string data array
   CHARACTER(len=MaxNameLength)               :: FuelType  ! Type of fuel used for generator
@@ -10721,7 +10721,7 @@ SUBROUTINE GetMTGeneratorInput
     MTGenerator(GeneratorNum)%Name               = AlphArray(1)
 
     MTGenerator(GeneratorNum)%RefElecPowerOutput = NumArray(1)
-    IF (MTGenerator(GeneratorNum)%RefElecPowerOutput .LE. 0.0) THEN
+    IF (MTGenerator(GeneratorNum)%RefElecPowerOutput .LE. 0.0d0) THEN
       CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(1))//'='//TRIM(RoundSigDigits(NumArray(1),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(1))//' must be greater than 0.')
@@ -10731,7 +10731,7 @@ SUBROUTINE GetMTGeneratorInput
     MTGenerator(GeneratorNum)%MinElecPowerOutput     = NumArray(2)
     MTGenerator(GeneratorNum)%MaxElecPowerOutput     = NumArray(3)
 
-    IF (MTGenerator(GeneratorNum)%MinElecPowerOutput .LT. 0.0) THEN
+    IF (MTGenerator(GeneratorNum)%MinElecPowerOutput .LT. 0.0d0) THEN
       CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(2))//'='//TRIM(RoundSigDigits(NumArray(2),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(2))//' must be greater than 0.')
@@ -10741,7 +10741,7 @@ SUBROUTINE GetMTGeneratorInput
     IF (lNumericFieldBlanks(3)) THEN
        MTGenerator(GeneratorNum)%MaxElecPowerOutput = MTGenerator(GeneratorNum)%RefElecPowerOutput
     ELSE
-      IF (MTGenerator(GeneratorNum)%MaxElecPowerOutput .LE. 0.0) THEN
+      IF (MTGenerator(GeneratorNum)%MaxElecPowerOutput .LE. 0.0d0) THEN
         CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(3))//'='//TRIM(RoundSigDigits(NumArray(3),2)))
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
         CALL ShowContinueError(TRIM(cNumericFieldNames(3))//' must be greater than 0.')
@@ -10771,7 +10771,7 @@ SUBROUTINE GetMTGeneratorInput
 
     MTGenerator(GeneratorNum)%RefElecEfficiencyLHV     = NumArray(4)
 
-    IF (MTGenerator(GeneratorNum)%RefElecEfficiencyLHV .LE. 0.0) THEN
+    IF (MTGenerator(GeneratorNum)%RefElecEfficiencyLHV .LE. 0.0d0) THEN
        CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(4))//'='//TRIM(RoundSigDigits(NumArray(4),2)))
        CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
        CALL ShowContinueError(TRIM(cNumericFieldNames(4))//' must be greater than 0.')
@@ -10782,14 +10782,14 @@ SUBROUTINE GetMTGeneratorInput
     MTGenerator(GeneratorNum)%RefCombustAirInletHumRat = NumArray(6)
     MTGenerator(GeneratorNum)%RefElevation             = NumArray(7)
 
-    IF (MTGenerator(GeneratorNum)%RefCombustAirInletHumRat .LE. 0.0) THEN
+    IF (MTGenerator(GeneratorNum)%RefCombustAirInletHumRat .LE. 0.0d0) THEN
        CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(6))//'='//TRIM(RoundSigDigits(NumArray(6),2)))
        CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
        CALL ShowContinueError(TRIM(cNumericFieldNames(6))//' must be greater than 0.')
        ErrorsFound = .TRUE.
     ELSE
 !      Barometric pressure adjusted for elevation
-       RefBaroPressure = 101325.0 * (1.-2.25577D-05*MTGenerator(GeneratorNum)%RefElevation)**5.2559
+       RefBaroPressure = 101325.0d0 * (1.d0-2.25577D-05*MTGenerator(GeneratorNum)%RefElevation)**5.2559d0
        MTGenerator(GeneratorNum)%RefCombustAirInletDensity = PsyRhoAirFnPbTdbW(RefBaroPressure, &
                   MTGenerator(GeneratorNum)%RefCombustAirInletTemp,MTGenerator(GeneratorNum)%RefCombustAirInletHumRat)
     END IF
@@ -10808,7 +10808,7 @@ SUBROUTINE GetMTGeneratorInput
         ElectOutFTempElevOutput = CurveValue(MTGenerator(GeneratorNum)%ElecPowFTempElevCurveNum, &
                                          MTGenerator(GeneratorNum)%RefCombustAirInletTemp, &
                                          MTGenerator(GeneratorNum)%RefElevation)
-        IF (ABS(ElectOutFTempElevOutput-1.0) .GT. 0.1) THEN
+        IF (ABS(ElectOutFTempElevOutput-1.0d0) .GT. 0.1d0) THEN
          CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
          CALL ShowContinueError(TRIM(cAlphaFieldNames(2))//' = '//TRIM(AlphArray(2)))
          CALL ShowContinueError('...Curve output at reference conditions should equal 1 (+-10%).')
@@ -10843,7 +10843,7 @@ SUBROUTINE GetMTGeneratorInput
         ! Check electrical efficiency at reference combustion inlet temp
         ElecEfficFTempOutput = CurveValue(MTGenerator(GeneratorNum)%ElecEffFTempCurveNum, &
                                         MTGenerator(GeneratorNum)%RefCombustAirInletTemp)
-        IF (ABS(ElecEfficFTempOutput-1.0) .GT. 0.1) THEN
+        IF (ABS(ElecEfficFTempOutput-1.0d0) .GT. 0.1d0) THEN
           CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
           CALL ShowContinueError(TRIM(cAlphaFieldNames(3))//' = '//TRIM(AlphArray(3)))
           CALL ShowContinueError('... Curve output at reference condition should equal 1 (+-10%).')
@@ -10874,8 +10874,8 @@ SUBROUTINE GetMTGeneratorInput
 
       CASE('QUADRATIC', 'CUBIC')
         ! Check electrical efficiency at PLR = 1
-        ElecEfficFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ElecEffFPLRCurveNum, 1.0)
-        IF (ABS(ElecEfficFPLROutput-1.0) .GT. 0.1) THEN
+        ElecEfficFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ElecEffFPLRCurveNum, 1.0d0)
+        IF (ABS(ElecEfficFPLROutput-1.0d0) .GT. 0.1d0) THEN
           CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
           CALL ShowContinueError(TRIM(cAlphaFieldNames(4))//' = '//TRIM(AlphArray(4)))
           CALL ShowContinueError('... Curve output at a part-load ratio of 1 should equal 1 (+-10%).')
@@ -10929,14 +10929,14 @@ SUBROUTINE GetMTGeneratorInput
     MTGenerator(GeneratorNum)%FuelHigherHeatingValue = NumArray(8)
     MTGenerator(GeneratorNum)%FuelLowerHeatingValue  = NumArray(9)
 
-    IF(MTGenerator(GeneratorNum)%FuelLowerHeatingValue .LE. 0.0)THEN
+    IF(MTGenerator(GeneratorNum)%FuelLowerHeatingValue .LE. 0.0d0)THEN
       CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(9))//'='//TRIM(RoundSigDigits(NumArray(9),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(9))//' must be greater than 0.')
       ErrorsFound=.TRUE.
     END IF
 
-    IF(MTGenerator(GeneratorNum)%FuelHigherHeatingValue .LE. 0.0)THEN
+    IF(MTGenerator(GeneratorNum)%FuelHigherHeatingValue .LE. 0.0d0)THEN
       CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(8))//'='//TRIM(RoundSigDigits(NumArray(8),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(8))//' must be greater than 0.')
@@ -10953,21 +10953,21 @@ SUBROUTINE GetMTGeneratorInput
     END IF
 
     MTGenerator(GeneratorNum)%StandbyPower   = NumArray(10)
-    IF( MTGenerator(GeneratorNum)%StandbyPower .LT. 0.0)THEN
+    IF( MTGenerator(GeneratorNum)%StandbyPower .LT. 0.0d0)THEN
       CALL ShowWarningError('Invalid '//TRIM(cNumericFieldNames(10))//'='//TRIM(RoundSigDigits(NumArray(10),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(10))//' must be greater than 0.')
       CALL ShowContinueError('Resetting to 0 and the simulation continues.')
-      MTGenerator(GeneratorNum)%StandbyPower = 0.0
+      MTGenerator(GeneratorNum)%StandbyPower = 0.0d0
     END IF
 
     MTGenerator(GeneratorNum)%AncillaryPower = NumArray(11)
-    IF( MTGenerator(GeneratorNum)%AncillaryPower .LT. 0.0)THEN
+    IF( MTGenerator(GeneratorNum)%AncillaryPower .LT. 0.0d0)THEN
       CALL ShowWarningError('Invalid '//TRIM(cNumericFieldNames(11))//'='//TRIM(RoundSigDigits(NumArray(11),2)))
       CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
       CALL ShowContinueError(TRIM(cNumericFieldNames(11))//' must be greater than 0.')
       CALL ShowContinueError('Resetting to 0 and the simulation continues.')
-      MTGenerator(GeneratorNum)%AncillaryPower = 0.0
+      MTGenerator(GeneratorNum)%AncillaryPower = 0.0d0
     END IF
 
     MTGenerator(GeneratorNum)%AncillaryPowerFuelCurveNum = GetCurveIndex(AlphArray(6)) ! Convert curve name to number
@@ -10982,13 +10982,13 @@ SUBROUTINE GetMTGeneratorInput
 
       CASE('QUADRATIC')
 
-      IF (MTGenerator(GeneratorNum)%FuelLowerHeatingValue.GT.0.0 .AND. &
-         MTGenerator(GeneratorNum)%RefElecEfficiencyLHV.GT.0.0) THEN
+      IF (MTGenerator(GeneratorNum)%FuelLowerHeatingValue.GT.0.0d0 .AND. &
+         MTGenerator(GeneratorNum)%RefElecEfficiencyLHV.GT.0.0d0) THEN
 
         RefFuelUseMdot = (MTGenerator(GeneratorNum)%RefElecPowerOutput / MTGenerator(GeneratorNum)%RefElecEfficiencyLHV) / &
-                      (MTGenerator(GeneratorNum)%FuelLowerHeatingValue  * 1000.0)
+                      (MTGenerator(GeneratorNum)%FuelLowerHeatingValue  * 1000.0d0)
         AncillaryPowerOutput = CurveValue(MTGenerator(GeneratorNum)%AncillaryPowerFuelCurveNum, RefFuelUseMdot)
-        IF (ABS(AncillaryPowerOutput-1.0) .GT. 0.1) THEN
+        IF (ABS(AncillaryPowerOutput-1.0d0) .GT. 0.1d0) THEN
           CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
           CALL ShowContinueError(TRIM(cAlphaFieldNames(6))//' = '//TRIM(AlphArray(6)))
           CALL ShowContinueError('... Curve output at reference conditions should equal 1 (+-10%).')
@@ -11048,11 +11048,11 @@ SUBROUTINE GetMTGeneratorInput
       MTGenerator(GeneratorNum)%HeatRecActive=.TRUE.
 
       MTGenerator(GeneratorNum)%RefThermalEffLHV  = NumArray(12)
-      IF( MTGenerator(GeneratorNum)%RefThermalEffLHV .LT. 0.0)THEN
+      IF( MTGenerator(GeneratorNum)%RefThermalEffLHV .LT. 0.0d0)THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(12))//' must be >= 0.')
         CALL ShowContinueError('Resetting to 0 and the simulation continues.')
-        MTGenerator(GeneratorNum)%RefThermalEffLHV = 0.0
+        MTGenerator(GeneratorNum)%RefThermalEffLHV = 0.0d0
       END IF
 
       ! Next store thermal power output ranges using nominal thermal to electrical efficiency ratio and electrical power data
@@ -11079,7 +11079,7 @@ SUBROUTINE GetMTGeneratorInput
 
       MTGenerator(GeneratorNum)%RefHeatRecVolFlowRate = NumArray(14)
 
-      IF(MTGenerator(GeneratorNum)%RefHeatRecVolFlowRate .LE. 0.0)THEN
+      IF(MTGenerator(GeneratorNum)%RefHeatRecVolFlowRate .LE. 0.0d0)THEN
         CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(14))//'='//TRIM(RoundSigDigits(NumArray(14),2)))
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
         CALL ShowContinueError(TRIM(cNumericFieldNames(14))//' must be greater than 0.')
@@ -11097,7 +11097,7 @@ SUBROUTINE GetMTGeneratorInput
 !          NEED TO FIGURE OUT WHAT TO USE FOR Pnet............Shirey
 !
 !    HeatRecFlowFTempPowCurveOutput = CurveValue(MTGenerator(GeneratorNum)%HeatRecFlowFTempPowCurveNum, Pnet)
-!    IF(ABS(HeatRecFlowFTempPowCurveOutput-1.0) .GT. 0.1)THEN !
+!    IF(ABS(HeatRecFlowFTempPowCurveOutput-1.0d0) .GT. 0.1d0)THEN !
 !      CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
 !      CALL ShowContinueError('Heat Recovery Water Flow Rate Modifier Curve (function of temp and power) = '//TRIM(AlphArray(10)))
 !      CALL ShowContinueError('... Curve ouput at a reference conditions should equal 1 (+-10%).')
@@ -11128,7 +11128,7 @@ SUBROUTINE GetMTGeneratorInput
                                                 MTGenerator(GeneratorNum)%RefCombustAirInletTemp, &
                                                 MTGenerator(GeneratorNum)%RefElevation)
 
-          IF (ABS(ThermalEffTempElevOutput-1.0) .GT. 0.1) THEN
+          IF (ABS(ThermalEffTempElevOutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(11))//' = '  //TRIM(AlphArray(11)))
             CALL ShowContinueError('... Curve output at reference conditions should equal 1 (+-10%).')
@@ -11158,9 +11158,9 @@ SUBROUTINE GetMTGeneratorInput
 
         CASE('QUADRATIC', 'CUBIC')
 
-          HeatRecRateFPLROutput = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFPLRCurveNum, 1.0)
+          HeatRecRateFPLROutput = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFPLRCurveNum, 1.0d0)
 
-          IF (ABS(HeatRecRateFPLROutput-1.0) .GT. 0.1) THEN
+          IF (ABS(HeatRecRateFPLROutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(12))//' = '//TRIM(AlphArray(12)))
             CALL ShowContinueError('... Curve output at a part-load ratio of 1 should equal 1 (+-10%).')
@@ -11188,7 +11188,7 @@ SUBROUTINE GetMTGeneratorInput
           HeatRecRateFTempOutput = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFTempCurveNum, &
                                               MTGenerator(GeneratorNum)%RefInletWaterTemp)
 
-          IF (ABS(HeatRecRateFTempOutput-1.0) .GT. 0.1) THEN
+          IF (ABS(HeatRecRateFTempOutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(13))//' = ' //TRIM(AlphArray(13)))
             CALL ShowContinueError('... Curve output at reference condition should equal 1 (+-10%).')
@@ -11218,7 +11218,7 @@ SUBROUTINE GetMTGeneratorInput
           HeatRecRateFFlowOutput = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFWaterFlowCurveNum, &
                                               MTGenerator(GeneratorNum)%RefHeatRecVolFlowRate)
 
-          IF (ABS(HeatRecRateFFlowOutput-1.0) .GT. 0.1) THEN
+          IF (ABS(HeatRecRateFFlowOutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(14))//' = ' //TRIM(AlphArray(14)))
             CALL ShowContinueError('... Curve output at reference condition should equal 1 (+-10%).')
@@ -11239,19 +11239,19 @@ SUBROUTINE GetMTGeneratorInput
       END IF
 
       MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate = NumArray(15)
-      IF (MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate .LT. 0.0)THEN
+      IF (MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate .LT. 0.0d0)THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(15))//' must be >= 0.')
         CALL ShowContinueError('Resetting to 0 and the simulation continues.')
-        MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate = 0.0
+        MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate = 0.0d0
       END IF
 
       MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate = NumArray(16)
-      IF (MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate .LT. 0.0)THEN
+      IF (MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate .LT. 0.0d0)THEN
         CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
         CALL ShowContinueError(TRIM(cNumericFieldNames(16))//' must be >= 0.')
         CALL ShowContinueError('Resetting to 0 and the simulation continues.')
-        MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate = 0.0
+        MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate = 0.0d0
       END IF
 
       IF (MTGenerator(GeneratorNum)%HeatRecMaxVolFlowRate .LT. MTGenerator(GeneratorNum)%HeatRecMinVolFlowRate) THEN
@@ -11324,7 +11324,7 @@ SUBROUTINE GetMTGeneratorInput
 
       MTGenerator(GeneratorNum)%ExhAirCalcsActive = .TRUE.
       MTGenerator(GeneratorNum)%RefExhaustAirMassFlowRate = NumArray(18)
-      IF (MTGenerator(GeneratorNum)%RefExhaustAirMassFlowRate .LE. 0.0 .AND. &
+      IF (MTGenerator(GeneratorNum)%RefExhaustAirMassFlowRate .LE. 0.0d0 .AND. &
           .NOT. lNumericFieldBlanks(18)) THEN
         CALL ShowSevereError('Invalid '//TRIM(cNumericFieldNames(18))//'='//TRIM(RoundSigDigits(NumArray(18),2)))
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//'='//TRIM(AlphArray(1)))
@@ -11342,7 +11342,7 @@ SUBROUTINE GetMTGeneratorInput
           ExhFlowFTempOutput = CurveValue(MTGenerator(GeneratorNum)%ExhFlowFTempCurveNum, &
                                           MTGenerator(GeneratorNum)%RefCombustAirInletTemp)
 
-          IF (ABS(ExhFlowFTempOutput-1.0) .GT. 0.1) THEN
+          IF (ABS(ExhFlowFTempOutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(17))//' = ' //TRIM(AlphArray(17)))
             CALL ShowContinueError('... Curve output at reference condition should equal 1 (+-10%).')
@@ -11369,9 +11369,9 @@ SUBROUTINE GetMTGeneratorInput
 
         CASE('QUADRATIC', 'CUBIC')
 
-          ExhFlowFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ExhFlowFPLRCurveNum, 1.0)
+          ExhFlowFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ExhFlowFPLRCurveNum, 1.0d0)
 
-          IF (ABS(ExhFlowFPLROutput-1.0) .GT. 0.1) THEN
+          IF (ABS(ExhFlowFPLROutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(18))//' = ' //TRIM(AlphArray(18)))
             CALL ShowContinueError('... Curve output at a part-load ratio of 1 should equal 1 (+-10%).')
@@ -11401,7 +11401,7 @@ SUBROUTINE GetMTGeneratorInput
           ExhAirTempFTempOutput = CurveValue(MTGenerator(GeneratorNum)%ExhAirTempFTempCurveNum, &
                                                 MTGenerator(GeneratorNum)%RefCombustAirInletTemp)
 
-          IF (ABS(ExhAirTempFTempOutput-1.0) .GT. 0.1) THEN
+          IF (ABS(ExhAirTempFTempOutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(19))//' = ' //TRIM(AlphArray(19)))
             CALL ShowContinueError('... Curve output at reference condition should equal 1 (+-10%).')
@@ -11428,9 +11428,9 @@ SUBROUTINE GetMTGeneratorInput
 
         CASE('QUADRATIC', 'CUBIC')
 
-          ExhOutAirTempFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ExhAirTempFPLRCurveNum, 1.0)
+          ExhOutAirTempFPLROutput = CurveValue(MTGenerator(GeneratorNum)%ExhAirTempFPLRCurveNum, 1.0d0)
 
-          IF (ABS(ExhOutAirTempFPLROutput-1.0) .GT. 0.1) THEN
+          IF (ABS(ExhOutAirTempFPLROutput-1.0d0) .GT. 0.1d0) THEN
             CALL ShowWarningError(TRIM(cCurrentModuleObject)//' "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
             CALL ShowContinueError(TRIM(cAlphaFieldNames(20))//' = ' //TRIM(AlphArray(20)))
             CALL ShowContinueError('... Curve output at a part-load ratio of 1 should equal 1 (+-10%).')
@@ -11510,7 +11510,7 @@ SUBROUTINE GetMTGeneratorInput
 
      END IF
 
-     IF (MTGenerator(GeneratorNum)%StandbyPower .GT. 0.0) THEN ! Report Standby Power if entered by user
+     IF (MTGenerator(GeneratorNum)%StandbyPower .GT. 0.0d0) THEN ! Report Standby Power if entered by user
        CALL SetupOutputVariable('Generator Standby Electric Power [W]', &
             MTGeneratorReport(GeneratorNum)%StandbyPowerRate,'System','Average',MTGenerator(GeneratorNum)%Name)
 
@@ -11519,7 +11519,7 @@ SUBROUTINE GetMTGeneratorInput
                            ResourceTypeKey='Electricity',EndUseKey='Cogeneration',GroupKey='Plant')
      END IF
 
-     IF (MTGenerator(GeneratorNum)%AncillaryPower .GT. 0.0) THEN ! Report Ancillary Power if entered by user
+     IF (MTGenerator(GeneratorNum)%AncillaryPower .GT. 0.0d0) THEN ! Report Ancillary Power if entered by user
        CALL SetupOutputVariable('Generator Ancillary Electric Power [W]', &
             MTGeneratorReport(GeneratorNum)%AncillaryPowerRate,'System','Average',MTGenerator(GeneratorNum)%Name)
 
@@ -11575,7 +11575,7 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: GenNum
   LOGICAL, INTENT(IN) :: RunFlag !
-  REAL, INTENT(IN) :: MyLoad ! electrical load in W
+  REAL(r64), INTENT(IN) :: MyLoad ! electrical load in W
   Logical, INTENT(IN) :: FirstHVACIteration
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -11596,8 +11596,8 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeAndNodeInitFlag
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.           ! Initialization flag
-  REAL           :: rho ! local temporary fluid density
-  REAL           :: DesiredMassFlowRate
+  REAL(r64)           :: rho ! local temporary fluid density
+  REAL(r64)           :: DesiredMassFlowRate
   LOGICAL             :: errFlag
 
           ! FLOW:
@@ -11645,7 +11645,7 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
     MTGenerator(GenNum)%DesignHeatRecMassFlowRate = rho * MTGenerator(GenNum)%RefHeatRecVolFlowRate
     MTGenerator(GenNum)%HeatRecMaxMassFlowRate = rho * MTGenerator(GenNum)%HeatRecMaxVolFlowRate
 
-    CALL InitComponentNodes(0.0,  MTGenerator(GenNum)%HeatRecMaxMassFlowRate,  &
+    CALL InitComponentNodes(0.0D0,  MTGenerator(GenNum)%HeatRecMaxMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  MTGenerator(GenNum)%HRLoopNum, &
@@ -11664,7 +11664,7 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
   ! Do the Begin Environment initializations
   IF (BeginEnvrnFlag .and. MyEnvrnFlag(GenNum)) THEN
       ! set the node max and min mass flow rates
-    CALL InitComponentNodes(0.0,  MTGenerator(GenNum)%HeatRecMaxMassFlowRate,  &
+    CALL InitComponentNodes(0.0D0,  MTGenerator(GenNum)%HeatRecMaxMassFlowRate,  &
                                  HeatRecInletNode,        &
                                  HeatRecOutletNode,       &
                                  MTGenerator(GenNum)%HRLoopNum, &
@@ -11672,8 +11672,8 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
                                  MTGenerator(GenNum)%HRBranchNum, &
                                  MTGenerator(GenNum)%HRCompNum )
 
-    Node(HeatRecInletNode) %Temp = 20.0 ! Set the node temperature, assuming freeze control
-    Node(HeatRecOutletNode)%Temp = 20.0
+    Node(HeatRecInletNode) %Temp = 20.0d0 ! Set the node temperature, assuming freeze control
+    Node(HeatRecOutletNode)%Temp = 20.0d0
 
     MyEnvrnFlag(GenNum) = .FALSE.
   END IF ! end environmental inits
@@ -11686,7 +11686,7 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
   IF (FirstHVACIteration) THEN
 
     IF (.NOT. RunFlag) THEN
-      DesiredMassFlowRate = 0.
+      DesiredMassFlowRate = 0.d0
 
     ELSEIF (RunFlag .AND. MTGenerator(GenNum)%InternalFlowControl) THEN
       ! assume dispatch power in MyLoad is what gets produced (future, reset during calc routine and iterate)
@@ -11791,16 +11791,16 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
   IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)  :: MyLoad                    ! Generator demand (W)
+  REAL(r64), INTENT(IN)  :: MyLoad                    ! Generator demand (W)
   INTEGER, INTENT(IN)    :: GeneratorNum              ! Generator number
   LOGICAL, INTENT(IN)    :: RunFlag                   ! TRUE when generator is being asked to operate
   LOGICAL, INTENT(IN)    :: FirstHVACIteration !unused1208
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER   :: KJtoJ = 1000.0          ! Convert kilojoules to joules
+  REAL(r64), PARAMETER   :: KJtoJ = 1000.0d0          ! Convert kilojoules to joules
   INTEGER,   PARAMETER   :: MaxAncPowerIter = 50      ! Maximum number of iteration (subroutine ancillary power iteration loop)
-  REAL, PARAMETER   :: AncPowerDiffToler = 5.0 ! Tolerance for Ancillary Power Difference (W)
-  REAL, PARAMETER   :: RelaxFactor = 0.7       ! Relaxation factor for iteration loop
+  REAL(r64), PARAMETER   :: AncPowerDiffToler = 5.0d0 ! Tolerance for Ancillary Power Difference (W)
+  REAL(r64), PARAMETER   :: RelaxFactor = 0.7d0       ! Relaxation factor for iteration loop
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           !  na
@@ -11809,54 +11809,54 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: MinPartLoadRat          ! Min allowed operating fraction at full load
-  REAL :: MaxPartLoadRat          ! Max allowed operating fraction at full load
-  REAL :: ReferencePowerOutput    ! Generator reference capacity (W)
-  REAL :: RefElecEfficiency       ! Reference electrical efficiency
-  REAL :: OperatingElecEfficiency ! Actual operating efficiency
-  REAL :: ElecEfficiencyFTemp     ! Electrical efficiency as a function of temperature curve output
-  REAL :: ElecEfficiencyFPLR      ! Electrical efficiency as a function of PLR curve output
-  REAL :: ThermalEffFTempElev     ! Thermal efficiency as a function of air temperature and elevation
-  REAL :: PLR                     ! Generator operating part load ratio
-  REAL :: PowerFTempElev          ! Power ratio as a function of inlet air temperature and elevation
-  REAL :: CombustionAirInletTemp  ! Combustion air inlet temperature (C)
-  REAL :: CombustionAirInletPress ! Barometric pressure of combustion inlet air (Pa)
-  REAL :: CombustionAirInletW     ! Combustion air inlet humidity ratio (kg/kg)
-  REAL :: ExhFlowFTemp            ! Exhaust air flow rate as a function of temperature curve output
-  REAL :: ExhFlowFPLR             ! Exhaust air flow rate as a function of part-load ratio curve output
-  REAL :: ExhAirMassFlowRate      ! Actual exhaust air mass flow rate (accounting for temp and PLR modifier curves)
-  REAL :: ExhAirTempFTemp         ! Exhaust air temperature as a function of inlet air temp curve output
-  REAL :: ExhAirTempFPLR          ! Exhaust air temperature as a function of part-load ratio curve output
-  REAL :: ExhaustAirTemp          ! Actual exhaust air temperature (accounting for temp and PLR modifier curves)
-  REAL :: CpAir                   ! Heat capacity of air (J/kg-C)
-  REAL :: H2OHtOfVap              ! Heat of vaporization of water (J/kg)
-  REAL :: ActualElevation         ! Actual elevation of the microturbine (m)
-  REAL :: AirDensity              ! Density of air at actual combustion inlet air conditions (kg/m3)
+  REAL(r64) :: MinPartLoadRat          ! Min allowed operating fraction at full load
+  REAL(r64) :: MaxPartLoadRat          ! Max allowed operating fraction at full load
+  REAL(r64) :: ReferencePowerOutput    ! Generator reference capacity (W)
+  REAL(r64) :: RefElecEfficiency       ! Reference electrical efficiency
+  REAL(r64) :: OperatingElecEfficiency ! Actual operating efficiency
+  REAL(r64) :: ElecEfficiencyFTemp     ! Electrical efficiency as a function of temperature curve output
+  REAL(r64) :: ElecEfficiencyFPLR      ! Electrical efficiency as a function of PLR curve output
+  REAL(r64) :: ThermalEffFTempElev     ! Thermal efficiency as a function of air temperature and elevation
+  REAL(r64) :: PLR                     ! Generator operating part load ratio
+  REAL(r64) :: PowerFTempElev          ! Power ratio as a function of inlet air temperature and elevation
+  REAL(r64) :: CombustionAirInletTemp  ! Combustion air inlet temperature (C)
+  REAL(r64) :: CombustionAirInletPress ! Barometric pressure of combustion inlet air (Pa)
+  REAL(r64) :: CombustionAirInletW     ! Combustion air inlet humidity ratio (kg/kg)
+  REAL(r64) :: ExhFlowFTemp            ! Exhaust air flow rate as a function of temperature curve output
+  REAL(r64) :: ExhFlowFPLR             ! Exhaust air flow rate as a function of part-load ratio curve output
+  REAL(r64) :: ExhAirMassFlowRate      ! Actual exhaust air mass flow rate (accounting for temp and PLR modifier curves)
+  REAL(r64) :: ExhAirTempFTemp         ! Exhaust air temperature as a function of inlet air temp curve output
+  REAL(r64) :: ExhAirTempFPLR          ! Exhaust air temperature as a function of part-load ratio curve output
+  REAL(r64) :: ExhaustAirTemp          ! Actual exhaust air temperature (accounting for temp and PLR modifier curves)
+  REAL(r64) :: CpAir                   ! Heat capacity of air (J/kg-C)
+  REAL(r64) :: H2OHtOfVap              ! Heat of vaporization of water (J/kg)
+  REAL(r64) :: ActualElevation         ! Actual elevation of the microturbine (m)
+  REAL(r64) :: AirDensity              ! Density of air at actual combustion inlet air conditions (kg/m3)
 
-  REAL :: ElecPowerGenerated      ! Generator electric power output (W)
-  REAL :: FullLoadPowerOutput     ! Generator full-load power output at actual inlet conditions and elevation (W)
+  REAL(r64) :: ElecPowerGenerated      ! Generator electric power output (W)
+  REAL(r64) :: FullLoadPowerOutput     ! Generator full-load power output at actual inlet conditions and elevation (W)
 
-  REAL :: FuelUseEnergyRateLHV    ! Rate of fuel energy required to run microturbine, LHV basis (W)
-  REAL :: QHeatRecToWater         ! Recovered waste heat to water (W)
-  REAL :: MinHeatRecMdot          ! Heat recovery flow rate if minimal heat recovery is accomplished (kg/s)
+  REAL(r64) :: FuelUseEnergyRateLHV    ! Rate of fuel energy required to run microturbine, LHV basis (W)
+  REAL(r64) :: QHeatRecToWater         ! Recovered waste heat to water (W)
+  REAL(r64) :: MinHeatRecMdot          ! Heat recovery flow rate if minimal heat recovery is accomplished (kg/s)
   INTEGER   :: HeatRecInNode           ! Heat recovery fluid inlet node number
-  REAL :: HeatRecInTemp           ! Heat recovery fluid inlet temperature (C)
-  REAL :: HeatRecOutTemp          ! Heat recovery fluid outlet temperature (C)
-  REAL :: HeatRecMdot             ! Heat recovery fluid mass flow rate (kg/s)
-  REAL :: HeatRecVolFlowRate      ! Heat recovery fluid flow rate (m3/s)
-  REAL :: HeatRecCp               ! Specific heat of the heat recovery fluid (J/kg-K)
-  REAL :: HeatRecRateFPLR         ! Heat recovery rate as a function of PLR curve output
-  REAL :: HeatRecRateFTemp        ! Heat recovery rate as a function of inlet water temp curve output
-  REAL :: HeatRecRateFFlow        ! Heat recovery rate as a function of water flow rate curve output
-  REAL :: FuelHigherHeatingValue  ! Higher heating value (HHV) of fuel (kJ/kg)
-  REAL :: FuelLowerHeatingValue   ! Lower heating value (LLV) of fuel kJ/kg)
-  REAL :: HRecRatio               ! When maximum temperature is reached the amount of recovered heat has to be reduced
-  REAL :: AncillaryPowerRate      ! Ancillary power used by pump (if not specified in manufacturers data)
-  REAL :: AncillaryPowerRateLast  ! Ancillary power used by pump from last iteration (iteration loop within this subroutine)
-  REAL :: AncillaryPowerRateDiff  ! Difference between ancillary power rate and ancillary power rate last (last iteration)
-  REAL :: AnciPowerFMdotFuel      ! Ancillary power as a function of fuel flow curve output
+  REAL(r64) :: HeatRecInTemp           ! Heat recovery fluid inlet temperature (C)
+  REAL(r64) :: HeatRecOutTemp          ! Heat recovery fluid outlet temperature (C)
+  REAL(r64) :: HeatRecMdot             ! Heat recovery fluid mass flow rate (kg/s)
+  REAL(r64) :: HeatRecVolFlowRate      ! Heat recovery fluid flow rate (m3/s)
+  REAL(r64) :: HeatRecCp               ! Specific heat of the heat recovery fluid (J/kg-K)
+  REAL(r64) :: HeatRecRateFPLR         ! Heat recovery rate as a function of PLR curve output
+  REAL(r64) :: HeatRecRateFTemp        ! Heat recovery rate as a function of inlet water temp curve output
+  REAL(r64) :: HeatRecRateFFlow        ! Heat recovery rate as a function of water flow rate curve output
+  REAL(r64) :: FuelHigherHeatingValue  ! Higher heating value (HHV) of fuel (kJ/kg)
+  REAL(r64) :: FuelLowerHeatingValue   ! Lower heating value (LLV) of fuel kJ/kg)
+  REAL(r64) :: HRecRatio               ! When maximum temperature is reached the amount of recovered heat has to be reduced
+  REAL(r64) :: AncillaryPowerRate      ! Ancillary power used by pump (if not specified in manufacturers data)
+  REAL(r64) :: AncillaryPowerRateLast  ! Ancillary power used by pump from last iteration (iteration loop within this subroutine)
+  REAL(r64) :: AncillaryPowerRateDiff  ! Difference between ancillary power rate and ancillary power rate last (last iteration)
+  REAL(r64) :: AnciPowerFMdotFuel      ! Ancillary power as a function of fuel flow curve output
   INTEGER   :: AncPowerCalcIterIndex   ! Index for subroutine iteration loop if Ancillary Power (function of fuel flow) is used
-  REAL :: rho                     ! local fluid density
+  REAL(r64) :: rho                     ! local fluid density
 
 
 !   Load local variables from data structure (for code readability)
@@ -11866,22 +11866,22 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
     RefElecEfficiency    = MTGenerator(GeneratorNum)%RefElecEfficiencyLHV
 
 !   Initialize variables
-    MTGenerator(GeneratorNum)%ElecPowerGenerated     = 0.0
-    MTGenerator(GeneratorNum)%HeatRecInletTemp       = 0.0
-    MTGenerator(GeneratorNum)%HeatRecOutletTemp      = 0.0
-    MTGenerator(GeneratorNum)%HeatRecMdot            = 0.0
-    MTGenerator(GeneratorNum)%QHeatRecovered         = 0.0
-    MTGenerator(GeneratorNum)%ExhaustEnergyRec       = 0.0
-    MTGenerator(GeneratorNum)%FuelEnergyUseRateHHV   = 0.0
-    MTGenerator(GeneratorNum)%FuelMdot               = 0.0
-    MTGenerator(GeneratorNum)%AncillaryPowerRate     = 0.0
-    MTGenerator(GeneratorNum)%StandbyPowerRate       = 0.0
-    MTGenerator(GeneratorNum)%FuelEnergyUseRateLHV   = 0.0
-    MTGenerator(GeneratorNum)%ExhaustAirMassFlowRate = 0.0
-    MTGenerator(GeneratorNum)%ExhaustAirTemperature  = 0.0
-    MTGenerator(GeneratorNum)%ExhaustAirHumRat       = 0.0
-    ExhAirTempFTemp                                  = 0.0
-    QHeatRecToWater                                  = 0.0
+    MTGenerator(GeneratorNum)%ElecPowerGenerated     = 0.0d0
+    MTGenerator(GeneratorNum)%HeatRecInletTemp       = 0.0d0
+    MTGenerator(GeneratorNum)%HeatRecOutletTemp      = 0.0d0
+    MTGenerator(GeneratorNum)%HeatRecMdot            = 0.0d0
+    MTGenerator(GeneratorNum)%QHeatRecovered         = 0.0d0
+    MTGenerator(GeneratorNum)%ExhaustEnergyRec       = 0.0d0
+    MTGenerator(GeneratorNum)%FuelEnergyUseRateHHV   = 0.0d0
+    MTGenerator(GeneratorNum)%FuelMdot               = 0.0d0
+    MTGenerator(GeneratorNum)%AncillaryPowerRate     = 0.0d0
+    MTGenerator(GeneratorNum)%StandbyPowerRate       = 0.0d0
+    MTGenerator(GeneratorNum)%FuelEnergyUseRateLHV   = 0.0d0
+    MTGenerator(GeneratorNum)%ExhaustAirMassFlowRate = 0.0d0
+    MTGenerator(GeneratorNum)%ExhaustAirTemperature  = 0.0d0
+    MTGenerator(GeneratorNum)%ExhaustAirHumRat       = 0.0d0
+    ExhAirTempFTemp                                  = 0.0d0
+    QHeatRecToWater                                  = 0.0d0
 
     IF (MTGenerator(GeneratorNum)%HeatRecActive) THEN
       HeatRecInNode = MTGenerator(GeneratorNum)%HeatRecInletNodeNum
@@ -11892,9 +11892,9 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
                                  'CalcMTGeneratorModel')
       HeatRecMdot = Node(HeatRecInNode)%MassFlowRate
     ELSE
-      HeatRecInTemp=0.0
-      HeatRecCp=0.0
-      HeatRecMdot=0.0
+      HeatRecInTemp=0.0d0
+      HeatRecCp=0.0d0
+      HeatRecMdot=0.0d0
     END IF
 
 !   Set combustion inlet air temperature, humidity ratio and pressure local variables
@@ -11908,7 +11908,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       CombustionAirInletW = Node(MTGenerator(GeneratorNum)%CombustionAirInletNodeNum)%HumRat
       CombustionAirInletPress = Node(MTGenerator(GeneratorNum)%CombustionAirInletNodeNum)%Press
       ActualElevation = Elevation ! from DataEnvironment
-      IF (Node(MTGenerator(GeneratorNum)%CombustionAirInletNodeNum)%Height .GT. 0.0) THEN
+      IF (Node(MTGenerator(GeneratorNum)%CombustionAirInletNodeNum)%Height .GT. 0.0d0) THEN
         ActualElevation = Elevation +  Node(MTGenerator(GeneratorNum)%CombustionAirInletNodeNum)%Height
       END IF
 !     Initialize combustion outlet air conditions to inlet air conditions (all node properties)
@@ -11918,8 +11918,8 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
     END IF
 
 !   If no loop demand or generator OFF, set some variables and then return
-!    IF (.NOT. Runflag .OR. MyLoad .LE. 0.0) THEN
-    IF (MyLoad .LE. 0.0) THEN
+!    IF (.NOT. Runflag .OR. MyLoad .LE. 0.0d0) THEN
+    IF (MyLoad .LE. 0.0d0) THEN
       MTGenerator(GeneratorNum)%HeatRecInletTemp      = HeatRecInTemp
       MTGenerator(GeneratorNum)%HeatRecOutletTemp     = HeatRecInTemp
       IF (Runflag) THEN
@@ -11934,7 +11934,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
     PowerFTempElev = CurveValue(MTGenerator(GeneratorNum)%ElecPowFTempElevCurveNum, CombustionAirInletTemp, Elevation)
 
 !   Warn user if power modifier curve output is less than 0
-    IF (PowerFTempElev .LT. 0.0) THEN
+    IF (PowerFTempElev .LT. 0.0d0) THEN
       IF (MTGenerator(GeneratorNum)%PowerFTempElevErrorCount .LT. 1) THEN
         MTGenerator(GeneratorNum)%PowerFTempElevErrorCount = MTGenerator(GeneratorNum)%PowerFTempElevErrorCount + 1
         CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -11949,7 +11949,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
           ' Electrical Power Modifier curve is less than zero warning continues...' &
           , MTGenerator(GeneratorNum)%PowerFTempElevErrorIndex, PowerFTempElev, PowerFTempElev)
       END IF
-      PowerFTempElev = 0.0
+      PowerFTempElev = 0.0d0
     END IF
 
 !   Calculate available full-load power output. cannot exceed maximum full-load power output.
@@ -11959,7 +11959,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
 
     AncillaryPowerRate     = MTGenerator(GeneratorNum)%AncillaryPower
     AncillaryPowerRateLast = AncillaryPowerRate
-    AncillaryPowerRateDiff = AncPowerDiffToler + 1.0 ! Initialize to force through DO WHILE Loop at least once
+    AncillaryPowerRateDiff = AncPowerDiffToler + 1.0d0 ! Initialize to force through DO WHILE Loop at least once
     AncPowerCalcIterIndex  = 0 ! Initialize iteration index (counter)
 
     DO WHILE (AncillaryPowerRateDiff .GT. AncPowerDiffToler .AND. AncPowerCalcIterIndex .LE. MaxAncPowerIter)
@@ -11967,14 +11967,14 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       AncPowerCalcIterIndex = AncPowerCalcIterIndex + 1 ! Increment iteration loop counter
 
 !     Calculate operating power output (gross)
-      ElecPowerGenerated = MIN( MAX(0.0,MyLoad + AncillaryPowerRate), FullLoadPowerOutput )
+      ElecPowerGenerated = MIN( MAX(0.0d0,MyLoad + AncillaryPowerRate), FullLoadPowerOutput )
 
 !     Calculate PLR, but must be between the minPLR and maxPLR
-      IF (FullLoadPowerOutput .GT. 0.0) THEN
+      IF (FullLoadPowerOutput .GT. 0.0d0) THEN
         PLR = MIN(ElecPowerGenerated/FullLoadPowerOutput, MaxPartLoadRat)
         PLR = MAX(PLR, MinPartLoadRat)
       ELSE
-        PLR = 0.0
+        PLR = 0.0d0
       END IF
 
 !     Recalculate ElecPowerGenerated based on "final" PLR
@@ -11984,7 +11984,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       ElecEfficiencyFTemp = CurveValue(MTGenerator(GeneratorNum)%ElecEffFTempCurveNum, CombustionAirInletTemp)
 
 !     Warn user if efficiency modifier curve output is less than 0
-      IF (ElecEfficiencyFTemp .LT. 0.0) THEN
+      IF (ElecEfficiencyFTemp .LT. 0.0d0) THEN
         IF (MTGenerator(GeneratorNum)%EffFTempErrorCount .LT. 1) THEN
           MTGenerator(GeneratorNum)%EffFTempErrorCount = MTGenerator(GeneratorNum)%EffFTempErrorCount + 1
           CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -11998,14 +11998,14 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Electrical Efficiency Modifier (function of temperature) output is less than zero warning continues...' &
             , MTGenerator(GeneratorNum)%EffFTempErrorIndex, ElecEfficiencyFTemp, ElecEfficiencyFTemp)
         END IF
-        ElecEfficiencyFTemp = 0.0
+        ElecEfficiencyFTemp = 0.0d0
       END IF
 
 !     Calculate efficiency modifier curve output (function of PLR)
       ElecEfficiencyFPLR  = CurveValue(MTGenerator(GeneratorNum)%ElecEffFPLRCurveNum, PLR)
 
 !     Warn user if efficiency modifier curve output is less than 0
-      IF (ElecEfficiencyFPLR .LT. 0.0) THEN
+      IF (ElecEfficiencyFPLR .LT. 0.0d0) THEN
         IF (MTGenerator(GeneratorNum)%EffFPLRErrorCount .LT. 1) THEN
           MTGenerator(GeneratorNum)%EffFPLRErrorCount = MTGenerator(GeneratorNum)%EffFPLRErrorCount + 1
           CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12019,18 +12019,18 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Electrical Efficiency Modifier (function of part-load ratio) output is less than zero warning'// &
             ' continues...', MTGenerator(GeneratorNum)%EffFPLRErrorIndex, ElecEfficiencyFPLR, ElecEfficiencyFPLR)
         END IF
-        ElecEfficiencyFPLR = 0.0
+        ElecEfficiencyFPLR = 0.0d0
       END IF
 
 !     Calculate operating electrical efficiency
       OperatingElecEfficiency = RefElecEfficiency * ElecEfficiencyFTemp * ElecEfficiencyFPLR
 
 !     Calculate fuel use (W = J/s), LHV basis
-      IF (OperatingElecEfficiency .GT. 0.0) THEN
+      IF (OperatingElecEfficiency .GT. 0.0d0) THEN
         FuelUseEnergyRateLHV = ElecPowerGenerated / OperatingElecEfficiency
       ELSE
-        FuelUseEnergyRateLHV = 0.0  ! If fuel use rate is zero, then
-        ElecPowerGenerated   = 0.0  !  electric power generated must be zero.
+        FuelUseEnergyRateLHV = 0.0d0  ! If fuel use rate is zero, then
+        ElecPowerGenerated   = 0.0d0  !  electric power generated must be zero.
       END IF
 
 !     Set fuel heating values
@@ -12044,7 +12044,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       IF (MTGenerator(GeneratorNum)%AncillaryPowerFuelCurveNum .GT. 0) THEN
         AnciPowerFMdotFuel = CurveValue(MTGenerator(GeneratorNum)%AncillaryPowerFuelCurveNum, MTGenerator(GeneratorNum)%FuelMdot)
 !       Warn user if ancillary power modifier curve output is less than 0
-        IF (AnciPowerFMdotFuel .LT. 0.0) THEN
+        IF (AnciPowerFMdotFuel .LT. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%AnciPowerFMdotFuelErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%AnciPowerFMdotFuelErrorCount = MTGenerator(GeneratorNum)%AnciPowerFMdotFuelErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12058,17 +12058,17 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
               ' Ancillary Power Modifier (function of fuel input) output is less than zero warning'// &
               ' continues...', MTGenerator(GeneratorNum)%AnciPowerFMdotFuelErrorIndex, AnciPowerFMdotFuel, AnciPowerFMdotFuel)
           END IF
-          AnciPowerFMdotFuel = 0.0
+          AnciPowerFMdotFuel = 0.0d0
         END IF
       ELSE
-        AnciPowerFMdotFuel = 1.0
+        AnciPowerFMdotFuel = 1.0d0
       END IF
 
       AncillaryPowerRateLast = AncillaryPowerRate
 
       IF (MTGenerator(GeneratorNum)%AncillaryPowerFuelCurveNum .GT. 0) THEN
           AncillaryPowerRate = RelaxFactor * MTGenerator(GeneratorNum)%AncillaryPower * AnciPowerFMdotFuel - &
-                               (1.0 - RelaxFactor) * AncillaryPowerRateLast
+                               (1.0d0 - RelaxFactor) * AncillaryPowerRateLast
       END IF
 
       AncillaryPowerRateDiff = ABS(AncillaryPowerRate - AncillaryPowerRateLast)
@@ -12102,7 +12102,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
     MTGenerator(GeneratorNum)%FuelEnergyUseRateLHV  = FuelUseEnergyRateLHV ! Move to data structure for reporting calculations
 
 !   When generator operates, standby losses are 0
-    MTGenerator(GeneratorNum)%StandbyPowerRate = 0.0
+    MTGenerator(GeneratorNum)%StandbyPowerRate = 0.0d0
 
 !   Calculate heat recovery if active
     IF (MTGenerator(GeneratorNum)%HeatRecActive) THEN
@@ -12110,7 +12110,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       IF (MTGenerator(GeneratorNum)%ThermEffFTempElevCurveNum .GT. 0) THEN
          ThermalEffFTempElev = CurveValue(MTGenerator(GeneratorNum)%ThermEffFTempElevCurveNum, CombustionAirInletTemp, Elevation)
 !       Warn user if power modifier curve output is less than 0
-        IF (ThermalEffFTempElev .LT. 0.0) THEN
+        IF (ThermalEffFTempElev .LT. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%ThermEffFTempElevErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%ThermEffFTempElevErrorCount = MTGenerator(GeneratorNum)%ThermEffFTempElevErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12125,10 +12125,10 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
               ' Electrical Power Modifier curve is less than zero warning continues...' &
               , MTGenerator(GeneratorNum)%ThermEffFTempElevErrorIndex, ThermalEffFTempElev, ThermalEffFTempElev)
           END IF
-          ThermalEffFTempElev = 0.0
+          ThermalEffFTempElev = 0.0d0
         END IF
       ELSE
-         ThermalEffFTempElev = 1.0  ! If no curve provided, assume multiplier factor = 1.0
+         ThermalEffFTempElev = 1.0d0  ! If no curve provided, assume multiplier factor = 1.0
       END IF
 
       QHeatRecToWater = FuelUseEnergyRateLHV * MTGenerator(GeneratorNum)%RefThermalEffLHV * ThermalEffFTempElev
@@ -12137,7 +12137,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       IF (MTGenerator(GeneratorNum)%HeatRecRateFPLRCurveNum .GT. 0) THEN
         HeatRecRateFPLR  = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFPLRCurveNum, PLR)
 !       Warn user if heat recovery modifier curve output is less than 0
-        IF (HeatRecRateFPLR .LT. 0.0) THEN
+        IF (HeatRecRateFPLR .LT. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%HeatRecRateFPLRErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%HeatRecRateFPLRErrorCount = MTGenerator(GeneratorNum)%HeatRecRateFPLRErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12151,16 +12151,16 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
               ' Heat Recovery Rate Modifier (function of part-load ratio) output is less than zero warning'// &
               ' continues...', MTGenerator(GeneratorNum)%HeatRecRateFPLRErrorIndex, HeatRecRateFPLR, HeatRecRateFPLR)
           END IF
-          HeatRecRateFPLR = 0.0
+          HeatRecRateFPLR = 0.0d0
         END IF
       ELSE
-        HeatRecRateFPLR = 1.0  ! If no curve provided, assume multiplier factor = 1.0
+        HeatRecRateFPLR = 1.0d0  ! If no curve provided, assume multiplier factor = 1.0
       END IF
 
 !     Calculate heat recovery rate modifier curve output (function of inlet water temp)
       IF (MTGenerator(GeneratorNum)%HeatRecRateFTempCurveNum .GT. 0) THEN
         HeatRecRateFTemp  = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFTempCurveNum, HeatRecInTemp)
-        IF (HeatRecRateFTemp .LT. 0.0) THEN
+        IF (HeatRecRateFTemp .LT. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%HeatRecRateFTempErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%HeatRecRateFTempErrorCount = MTGenerator(GeneratorNum)%HeatRecRateFTempErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12174,10 +12174,10 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
                  ' Heat Recovery Rate Modifier (function of inlet water temp) output is less than zero warning continues...' &
                  , MTGenerator(GeneratorNum)%HeatRecRateFTempErrorIndex, HeatRecRateFTemp, HeatRecRateFTemp)
           END IF
-          HeatRecRateFTemp = 0.0
+          HeatRecRateFTemp = 0.0d0
         END IF
       ELSE
-        HeatRecRateFTemp = 1.0  ! If no curve provided, assume multiplier factor = 1.0
+        HeatRecRateFTemp = 1.0d0  ! If no curve provided, assume multiplier factor = 1.0
       END IF
 
 !     Calculate heat recovery rate modifier curve output (function of water [volumetric] flow rate)
@@ -12189,7 +12189,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
 
         HeatRecVolFlowRate = HeatRecMdot / rho
         HeatRecRateFFlow  = CurveValue(MTGenerator(GeneratorNum)%HeatRecRateFWaterFlowCurveNum,HeatRecVolFlowRate)
-        IF (HeatRecRateFFlow .LT. 0.0) THEN
+        IF (HeatRecRateFFlow .LT. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%HeatRecRateFFlowErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%HeatRecRateFFlowErrorCount = MTGenerator(GeneratorNum)%HeatRecRateFFlowErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12203,48 +12203,48 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
               ' Heat Recovery Rate Modifier (function of water flow rate) output is less than zero warning continues...' &
               , MTGenerator(GeneratorNum)%HeatRecRateFFlowErrorIndex, HeatRecRateFFlow, HeatRecRateFFlow)
           END IF
-          HeatRecRateFFlow = 0.0
+          HeatRecRateFFlow = 0.0d0
         END IF
       ELSE
-        HeatRecRateFFlow = 1.0  ! If no curve provided, assume multiplier factor = 1.0
+        HeatRecRateFFlow = 1.0d0  ! If no curve provided, assume multiplier factor = 1.0
       END IF
 
       QHeatRecToWater = QHeatRecToWater * HeatRecRateFPLR * HeatRecRateFTemp * HeatRecRateFFlow
 
 !     Check for divide by zero
-      IF ((HeatRecMdot .GT. 0.0) .AND. (HeatRecCp .GT. 0.0)) THEN
+      IF ((HeatRecMdot .GT. 0.0d0) .AND. (HeatRecCp .GT. 0.0d0)) THEN
         HeatRecOutTemp =  HeatRecInTemp + QHeatRecToWater/ (HeatRecMdot * HeatRecCp)
       ELSE
-        HeatRecMdot     = 0.0
+        HeatRecMdot     = 0.0d0
         HeatRecOutTemp  = HeatRecInTemp
-        QHeatRecToWater = 0.0
+        QHeatRecToWater = 0.0d0
       END IF
 
 !     Now verify the maximum heat recovery temperature was not exceeded
-      HRecRatio = 1.0
-      MinHeatRecMdot=0.0
+      HRecRatio = 1.0d0
+      MinHeatRecMdot=0.0d0
       IF (HeatRecOutTemp > MTGenerator(GeneratorNum)%HeatRecMaxWaterTemp) THEN
 
         IF (MTGenerator(GeneratorNum)%HeatRecMaxWaterTemp /= HeatRecInTemp) THEN
           MinHeatRecMdot = QHeatRecToWater/(HeatRecCp * (MTGenerator(GeneratorNum)%HeatRecMaxWaterTemp - HeatRecInTemp))
-          IF (MinHeatRecMdot < 0.0) MinHeatRecMdot = 0.0
+          IF (MinHeatRecMdot < 0.0d0) MinHeatRecMdot = 0.0d0
         END IF
 
 !       Recalculate outlet water temperature with minimum flow rate (will normally match the max water outlet temp,
 !       unless the inlet water temp is greater than the max outlet temp)
-        IF ((MinHeatRecMdot .GT. 0.0) .AND. (HeatRecCp .GT. 0.0)) THEN
+        IF ((MinHeatRecMdot .GT. 0.0d0) .AND. (HeatRecCp .GT. 0.0d0)) THEN
           HeatRecOutTemp = QHeatRecToWater/(MinHeatRecMdot * HeatRecCp) + HeatRecInTemp
           HRecRatio = HeatRecMdot/MinHeatRecMdot
         ELSE
           HeatRecOutTemp = HeatRecInTemp
-          HRecRatio = 0.0
+          HRecRatio = 0.0d0
         END IF
         QHeatRecToWater = QHeatRecToWater*HRecRatio ! Scale heat recovery rate using HRecRatio. Don't adjust flow rate.
 
       END IF
 
 !     Check water mass flow rate against minimum
-      IF (MTGenerator(GeneratorNum)%HeatRecMinMassFlowRate .GT. HeatRecMdot .AND. HeatRecMdot .GT. 0.0) THEN
+      IF (MTGenerator(GeneratorNum)%HeatRecMinMassFlowRate .GT. HeatRecMdot .AND. HeatRecMdot .GT. 0.0d0) THEN
         IF (MTGenerator(GeneratorNum)%HRMinFlowErrorCount .LT. 1) THEN
           MTGenerator(GeneratorNum)%HRMinFlowErrorCount = MTGenerator(GeneratorNum)%HRMinFlowErrorCount + 1
           CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12260,7 +12260,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       END IF
 
 !     Check water mass flow rate against maximum
-      IF (HeatRecMdot .GT. MTGenerator(GeneratorNum)%HeatRecMaxMassFlowRate .AND. HeatRecMdot .GT. 0.0) THEN
+      IF (HeatRecMdot .GT. MTGenerator(GeneratorNum)%HeatRecMaxMassFlowRate .AND. HeatRecMdot .GT. 0.0d0) THEN
         IF (MTGenerator(GeneratorNum)%HRMaxFlowErrorCount .LT. 1) THEN
           MTGenerator(GeneratorNum)%HRMaxFlowErrorCount = MTGenerator(GeneratorNum)%HRMaxFlowErrorCount + 1
           CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12289,7 +12289,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       IF (MTGenerator(GeneratorNum)%ExhFlowFTempCurveNum .NE. 0) THEN  ! Exhaust Flow Rate versus Inlet Air Temp
         ExhFlowFTemp = CurveValue(MTGenerator(GeneratorNum)%ExhFlowFTempCurveNum,CombustionAirInletTemp)
 !       Warn user if exhaust modifier curve output is less than or equal to 0
-        IF (ExhFlowFTemp .LE. 0.0) THEN
+        IF (ExhFlowFTemp .LE. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%ExhFlowFTempErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%ExhFlowFTempErrorCount = MTGenerator(GeneratorNum)%ExhFlowFTempErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12303,16 +12303,16 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Exhaust Air Flow Rate Modifier (function of temperature) output is less than or equal to zero warning continues...'&
             , MTGenerator(GeneratorNum)%ExhFlowFTempErrorIndex, ExhFlowFTemp, ExhFlowFTemp)
           END IF
-          ExhFlowFTemp = 0.0
+          ExhFlowFTemp = 0.0d0
         END IF
       ELSE
-        ExhFlowFTemp = 1.0 ! No curve input means modifier = 1.0 always
+        ExhFlowFTemp = 1.0d0 ! No curve input means modifier = 1.0 always
       END IF
 
       IF (MTGenerator(GeneratorNum)%ExhFlowFPLRCurveNum .NE. 0) THEN  ! Exhaust Flow Rate versus Part-Load Ratio
         ExhFlowFPLR = CurveValue(MTGenerator(GeneratorNum)%ExhFlowFPLRCurveNum,PLR)
 !       Warn user if exhaust modifier curve output is less than or equal to 0
-        IF (ExhFlowFPLR .LE. 0.0) THEN
+        IF (ExhFlowFPLR .LE. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%ExhFlowFPLRErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%ExhFlowFPLRErrorCount = MTGenerator(GeneratorNum)%ExhFlowFPLRErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12326,20 +12326,20 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Exhaust Air Flow Rate Modifier (function of part-load ratio) output is less than or equal to zero warning'&
              //' continues...', MTGenerator(GeneratorNum)%ExhFlowFPLRErrorIndex, ExhFlowFPLR, ExhFlowFPLR)
           END IF
-          ExhFlowFPLR = 0.0
+          ExhFlowFPLR = 0.0d0
         END IF
       ELSE
-        ExhFlowFPLR = 1.0 ! No curve input means modifier = 1.0 always
+        ExhFlowFPLR = 1.0d0 ! No curve input means modifier = 1.0 always
       END IF
 
 !     Calculate exhaust air mass flow, accounting for temperature and PLR modifier factors
       ExhAirMassFlowRate = MTGenerator(GeneratorNum)%RefExhaustAirMassFlowRate * ExhFlowFTemp * ExhFlowFPLR
 !     Adjust for difference in air density at reference conditions versus actual inlet air conditions
       AirDensity = PsyRhoAirFnPbTdbW(CombustionAirInletPress,CombustionAirInletTemp,CombustionAirInletW)
-      IF (MTGenerator(GeneratorNum)%RefCombustAirInletDensity .GE. 0.0) THEN
-        ExhAirMassFlowRate = MAX(0.0,ExhAirMassFlowRate*AirDensity/MTGenerator(GeneratorNum)%RefCombustAirInletDensity)
+      IF (MTGenerator(GeneratorNum)%RefCombustAirInletDensity .GE. 0.0d0) THEN
+        ExhAirMassFlowRate = MAX(0.0d0,ExhAirMassFlowRate*AirDensity/MTGenerator(GeneratorNum)%RefCombustAirInletDensity)
       ELSE
-        ExhAirMassFlowRate = 0.0
+        ExhAirMassFlowRate = 0.0d0
       END IF
       MTGenerator(GeneratorNum)%ExhaustAirMassFlowRate = ExhAirMassFlowRate
 
@@ -12347,7 +12347,7 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
       IF (MTGenerator(GeneratorNum)%ExhAirTempFTempCurveNum .NE. 0) THEN  ! Exhaust Air Temp versus Inlet Air Temp
         ExhAirTempFTemp = CurveValue(MTGenerator(GeneratorNum)%ExhAirTempFTempCurveNum,CombustionAirInletTemp)
 !       Warn user if exhaust modifier curve output is less than or equal to 0
-        IF (ExhAirTempFTemp .LE. 0.0) THEN
+        IF (ExhAirTempFTemp .LE. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%ExhTempFTempErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%ExhTempFTempErrorCount = MTGenerator(GeneratorNum)%ExhTempFTempErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12361,16 +12361,16 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Exhaust Air Temperature Modifier (function of temperature) output is less than or equal to zero'//&
             ' warning continues...', MTGenerator(GeneratorNum)%ExhTempFTempErrorIndex, ExhAirTempFTemp, ExhAirTempFTemp)
           END IF
-          ExhAirTempFTemp = 0.0
+          ExhAirTempFTemp = 0.0d0
         END IF
       ELSE
-        ExhAirTempFTemp = 1.0 ! No curve input means modifier = 1.0 always
+        ExhAirTempFTemp = 1.0d0 ! No curve input means modifier = 1.0 always
       END IF
 
       IF (MTGenerator(GeneratorNum)%ExhAirTempFPLRCurveNum .NE. 0) THEN  ! Exhaust Air Temp versus Part-Load Ratio
         ExhAirTempFPLR = CurveValue(MTGenerator(GeneratorNum)%ExhAirTempFPLRCurveNum,PLR)
 !       Warn user if exhaust modifier curve output is less than or equal to 0
-        IF (ExhAirTempFPLR .LE. 0.0) THEN
+        IF (ExhAirTempFPLR .LE. 0.0d0) THEN
           IF (MTGenerator(GeneratorNum)%ExhTempFPLRErrorCount .LT. 1) THEN
             MTGenerator(GeneratorNum)%ExhTempFPLRErrorCount = MTGenerator(GeneratorNum)%ExhTempFPLRErrorCount + 1
             CALL ShowWarningError('GENERATOR:MICROTURBINE "'//TRIM(MTGenerator(GeneratorNum)%Name)//'"')
@@ -12384,13 +12384,13 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
             ' Exhaust Air Temperature Modifier (function of part-load ratio) output is less than or equal to zero warning' &
              //' continues...', MTGenerator(GeneratorNum)%ExhTempFPLRErrorIndex, ExhAirTempFPLR, ExhAirTempFPLR)
           END IF
-          ExhAirTempFPLR = 0.0
+          ExhAirTempFPLR = 0.0d0
         END IF
       ELSE
-        ExhAirTempFPLR = 1.0 ! No curve input means modifier = 1.0 always
+        ExhAirTempFPLR = 1.0d0 ! No curve input means modifier = 1.0 always
       END IF
 
-      IF (ExhAirMassFlowRate .LE. 0.0) THEN
+      IF (ExhAirMassFlowRate .LE. 0.0d0) THEN
         MTGenerator(GeneratorNum)%ExhaustAirTemperature = CombustionAirInletTemp
         MTGenerator(GeneratorNum)%ExhaustAirHumRat = CombustionAirInletW
       ELSE
@@ -12398,16 +12398,16 @@ SUBROUTINE CalcMTGeneratorModel(GeneratorNum,Runflag,MyLoad,FirstHVACIteration)
         ExhaustAirTemp = MTGenerator(GeneratorNum)%NomExhAirOutletTemp * ExhAirTempFTemp * ExhAirTempFPLR
         MTGenerator(GeneratorNum)%ExhaustAirTemperature = ExhaustAirTemp
 !       Adjust exhaust air temperature if heat recovery to water is being done
-        IF (QHeatRecToWater .GT. 0.0) THEN
+        IF (QHeatRecToWater .GT. 0.0d0) THEN
           CpAir = PsyCpAirFnWTdb(CombustionAirInletW,CombustionAirInletTemp)
-          IF (CpAir .GT. 0.0) THEN
+          IF (CpAir .GT. 0.0d0) THEN
             MTGenerator(GeneratorNum)%ExhaustAirTemperature = ExhaustAirTemp - QHeatRecToWater / (CpAir * ExhAirMassFlowRate)
           END IF
         END IF
 !       Calculate exhaust air humidity ratio
-        H2OHtOfVap = PsyHfgAirFnWTdb(1.0,16.0,'CalcMTGeneratorModel') ! W not used, passing 1.0 as dummy.
+        H2OHtOfVap = PsyHfgAirFnWTdb(1.0d0,16.0d0,'CalcMTGeneratorModel') ! W not used, passing 1.0 as dummy.
                                                                           ! Assume fuel is at 16C (ASHRAE HOF)
-        IF (H2OHtOfVap .GT. 0.0) THEN
+        IF (H2OHtOfVap .GT. 0.0d0) THEN
           MTGenerator(GeneratorNum)%ExhaustAirHumRat = CombustionAirInletW + MTGenerator(GeneratorNum)%FuelMdot * &
                                                        ((FuelHigherHeatingValue-FuelLowerHeatingValue)*KJtoJ/H2OHtOfVap) / &
                                                        ExhAirMassFlowRate
@@ -12541,12 +12541,12 @@ SUBROUTINE UpdateMTGeneratorRecords(Num)
   MTGeneratorReport(Num)%FuelEnergyUseRateHHV    = MTGenerator(Num)%FuelEnergyUseRateHHV
   MTGeneratorReport(Num)%FuelEnergyHHV           = MTGenerator(Num)%FuelEnergyUseRateHHV*TimeStepSys*SecInHour
   MTGeneratorReport(Num)%FuelMdot                = MTGenerator(Num)%FuelMdot
-  IF (MTGenerator(Num)%FuelEnergyUseRateLHV .GT. 0.0) THEN
+  IF (MTGenerator(Num)%FuelEnergyUseRateLHV .GT. 0.0d0) THEN
     MTGeneratorReport(Num)%ElectricEfficiencyLHV   = MTGenerator(Num)%ElecPowerGenerated / MTGenerator(Num)%FuelEnergyUseRateLHV
     MTGeneratorReport(Num)%ThermalEfficiencyLHV    = MTGenerator(Num)%QHeatRecovered / MTGenerator(Num)%FuelEnergyUseRateLHV
   ELSE
-    MTGeneratorReport(Num)%ElectricEfficiencyLHV   = 0.0
-    MTGeneratorReport(Num)%ThermalEfficiencyLHV    = 0.0
+    MTGeneratorReport(Num)%ElectricEfficiencyLHV   = 0.0d0
+    MTGeneratorReport(Num)%ThermalEfficiencyLHV    = 0.0d0
   END IF
   MTGeneratorReport(Num)%HeatRecInletTemp        = MTGenerator(Num)%HeatRecInletTemp
   MTGeneratorReport(Num)%HeatRecOutletTemp       = MTGenerator(Num)%HeatRecOutletTemp
@@ -12588,10 +12588,10 @@ SUBROUTINE GetMTGeneratorResults(GeneratorType, GeneratorIndex, &
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: GeneratorType   ! type of Generator !unused1208
   INTEGER, INTENT(IN)           :: GeneratorIndex
-  REAL, INTENT(OUT)        :: GeneratorPower  ! electrical power
-  REAL, INTENT(OUT)        :: GeneratorEnergy ! electrical energy
-  REAL, INTENT(OUT)        :: ThermalPower  ! heat power
-  REAL, INTENT(OUT)        :: ThermalEnergy ! heat energy
+  REAL(r64), INTENT(OUT)        :: GeneratorPower  ! electrical power
+  REAL(r64), INTENT(OUT)        :: GeneratorEnergy ! electrical energy
+  REAL(r64), INTENT(OUT)        :: ThermalPower  ! heat power
+  REAL(r64), INTENT(OUT)        :: ThermalEnergy ! heat energy
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

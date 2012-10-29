@@ -33,7 +33,7 @@ USE DataLoopNode
 USE DataGlobals
 USE DataHVACGlobals
 USE DataInterfaces
-!unuse909USE DataEnvironment, ONLY: CurMnDy, EnvironmentName
+!unused0909USE DataEnvironment, ONLY: CurMnDy, EnvironmentName
 
 IMPLICIT NONE   ! Enforce explicit typing of all variables
 
@@ -63,7 +63,7 @@ TYPE HXAssistedCoilParameters
   INTEGER                      :: HXAssistedCoilInletNodeNum=0  ! Inlet node to HXAssistedCoolingCoil compound object
   INTEGER                      :: HXAssistedCoilOutletNodeNum=0 ! Outlet node to HXAssistedCoolingCoil compound object
   INTEGER                      :: HXExhaustAirInletNodeNum   =0   ! Inlet node number for air-to-air heat exchanger
-  REAL                    :: MassFlowRate               =0.0 ! Mass flow rate through HXAssistedCoolingCoil compound object
+  REAL(r64)                    :: MassFlowRate               =0.0 ! Mass flow rate through HXAssistedCoolingCoil compound object
   INTEGER                      :: MaxIterCounter             =0   ! used in warning messages
   INTEGER                      :: MaxIterIndex               =0   ! used in warning messages
 END TYPE HXAssistedCoilParameters
@@ -71,8 +71,8 @@ END TYPE HXAssistedCoilParameters
   ! MODULE VARIABLE DECLARATIONS:
 INTEGER :: TotalNumHXAssistedCoils=0                            ! The total number of HXAssistedCoolingCoil compound objects
 TYPE (HXAssistedCoilParameters), ALLOCATABLE, DIMENSION(:) :: HXAssistedCoil
-REAL, PUBLIC, ALLOCATABLE, DIMENSION(:) :: HXAssistedCoilOutletTemp   ! Outlet temperature from this compound object
-REAL, PUBLIC, ALLOCATABLE, DIMENSION(:) :: HXAssistedCoilOutletHumRat ! Outlet humidity ratio from this compound object
+REAL(r64), PUBLIC, ALLOCATABLE, DIMENSION(:) :: HXAssistedCoilOutletTemp   ! Outlet temperature from this compound object
+REAL(r64), PUBLIC, ALLOCATABLE, DIMENSION(:) :: HXAssistedCoilOutletHumRat ! Outlet humidity ratio from this compound object
                                                               ! PUBLIC so others can access this information
 LOGICAL     :: GetCoilsInputFlag = .True. ! Flag to allow input data to be retrieved from idf on first call to this subroutine
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
@@ -147,14 +147,14 @@ SUBROUTINE SimHXAssistedCoolingCoil(HXAssistedCoilName,FirstHVACIteration,CompOp
   LOGICAL,             INTENT(IN) :: FirstHVACIteration  ! FirstHVACIteration flag
   CHARACTER(len=*),    INTENT(IN) :: HXAssistedCoilName  ! Name of HXAssistedCoolingCoil
   INTEGER,             INTENT(IN) :: CompOp              ! compressor operation; 1=on, 0=off
-  REAL,           INTENT(IN) :: PartLoadRatio       ! Part load ratio of Coil:DX:CoolingBypassFactorEmpirical
+  REAL(r64),           INTENT(IN) :: PartLoadRatio       ! Part load ratio of Coil:DX:CoolingBypassFactorEmpirical
                                                          ! (not used for Coil:Water:DetailedFlatCooling)
   INTEGER,             INTENT(INOUT) :: CompIndex
   INTEGER,             INTENT(IN) :: FanOpMode         ! Allows the parent object to control fan operation
   LOGICAL,   OPTIONAL, INTENT(IN) :: HXUnitEnable      ! flag to enable heat exchanger heat recovery
-  REAL, OPTIONAL, INTENT(IN) :: OnOffAFR          ! Ratio of compressor ON air mass flow rate to AVERAGE over time step
+  REAL(r64), OPTIONAL, INTENT(IN) :: OnOffAFR          ! Ratio of compressor ON air mass flow rate to AVERAGE over time step
   LOGICAL,   OPTIONAL, INTENT(IN) :: EconomizerFlag    ! OA sys or air loop economizer status
-  REAL, OPTIONAL, INTENT(INOut) :: QTotOut        ! the total cooling output of unit
+  REAL(r64), OPTIONAL, INTENT(INOut) :: QTotOut        ! the total cooling output of unit
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
@@ -167,9 +167,9 @@ SUBROUTINE SimHXAssistedCoolingCoil(HXAssistedCoilName,FirstHVACIteration,CompOp
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER          :: HXAssistedCoilNum     ! Index for HXAssistedCoolingCoil
-  REAL        :: AirFlowRatio          ! Ratio of compressor ON air mass flow rate to AVEARAGE over time step
+  REAL(r64)        :: AirFlowRatio          ! Ratio of compressor ON air mass flow rate to AVEARAGE over time step
   LOGICAL          :: HXUnitOn              ! flag to enable heat exchanger
-  REAL        :: AirMassFlow           ! HX System air mass flow rate
+  REAL(r64)        :: AirMassFlow           ! HX System air mass flow rate
   INTEGER          :: InletNodeNum          ! HX System inlet node number
   INTEGER          :: OutletNodeNum         ! HX System outlet node number
 
@@ -312,7 +312,7 @@ SUBROUTINE GetHXAssistedCoolingCoilInput
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
+    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
     INTEGER :: MaxNums=0                ! Maximum number of numeric input fields
@@ -784,11 +784,11 @@ SUBROUTINE CalcHXAssistedCoolingCoil(HXAssistedCoilNum,FirstHVACIteration,CompOp
   INTEGER,   INTENT(IN)    :: HXAssistedCoilNum  ! Index number for HXAssistedCoolingCoil
   LOGICAL,   INTENT(IN)    :: FirstHVACIteration ! FirstHVACIteration flag
   INTEGER,   INTENT(IN)    :: CompOp             ! compressor operation; 1=on, 0=off
-  REAL, INTENT(IN)    :: PartLoadRatio      ! Cooling coil part load ratio
+  REAL(r64), INTENT(IN)    :: PartLoadRatio      ! Cooling coil part load ratio
                                                  ! (used only for Coil:DX:CoolingBypassFactorEmpirical)
   LOGICAL,   INTENT(IN)    :: HXUnitOn           ! Flag to enable heat exchanger
   INTEGER,   INTENT(IN)    :: FanOpMode          ! Allows parent object to control fan operation
-  REAL, OPTIONAL, INTENT(IN) :: OnOffAirFlow  ! Ratio of compressor ON air mass flow to AVERAGE over time step
+  REAL(r64), OPTIONAL, INTENT(IN) :: OnOffAirFlow  ! Ratio of compressor ON air mass flow to AVERAGE over time step
   LOGICAL,   OPTIONAL, INTENT(IN) :: EconomizerFlag ! OA (or airloop) econommizer status
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -801,9 +801,9 @@ SUBROUTINE CalcHXAssistedCoolingCoil(HXAssistedCoilNum,FirstHVACIteration,CompOp
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL, SAVE  :: CoilOutputTempLast         ! Exiting cooling coil temperature from last iteration
-  REAL        :: AirMassFlow                ! Inlet air mass flow rate
-  REAL        :: Error                      ! Error (exiting coil temp from last iteration minus current coil exiting temp)
+  REAL(r64), SAVE  :: CoilOutputTempLast         ! Exiting cooling coil temperature from last iteration
+  REAL(r64)        :: AirMassFlow                ! Inlet air mass flow rate
+  REAL(r64)        :: Error                      ! Error (exiting coil temp from last iteration minus current coil exiting temp)
   INTEGER          :: Iter                       ! Number of iterations
   INTEGER          :: CompanionCoilIndexNum      ! Index to DX coil
 
@@ -993,7 +993,7 @@ SUBROUTINE CheckHXAssistedCoolingCoilSchedule(CompType,CompName,Value,CompIndex)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: CompType !unused1208
   CHARACTER(len=*), INTENT(IN) :: CompName
-  REAL, INTENT(OUT)            :: Value
+  REAL(r64), INTENT(OUT)            :: Value
   INTEGER, INTENT(INOUT)       :: CompIndex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1079,7 +1079,7 @@ FUNCTION GetCoilCapacity(CoilType,CoilName,ErrorsFound) RESULT(CoilCapacity)
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: CoilCapacity ! returned capacity of matched coil
+  REAL(r64)                    :: CoilCapacity ! returned capacity of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -1805,7 +1805,7 @@ FUNCTION GetCoilMaxWaterFlowRate(CoilType,CoilName,ErrorsFound) RESULT(MaxWaterF
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
+  REAL(r64)                    :: MaxWaterFlowRate  ! returned max water flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na

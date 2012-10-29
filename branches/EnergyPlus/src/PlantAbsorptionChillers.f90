@@ -48,38 +48,38 @@ TYPE BLASTAbsorberSpecs
     CHARACTER(len=MaxNameLength) :: Name     = ' '       ! user identifier
     LOGICAL           :: Available           = .false.   ! need an array of logicals--load identifiers of available equipment
     LOGICAL           :: ON                  = .false.   ! simulate the machine at it's operating part load ratio
-    REAL         :: NomCap              = 0.0     ! W - design nominal capacity of Absorber
-    REAL         :: NomPumpPower        = 0.0     ! W - design nominal capacity of Absorber
+    REAL(r64)         :: NomCap              = 0.0d0     ! W - design nominal capacity of Absorber
+    REAL(r64)         :: NomPumpPower        = 0.0d0     ! W - design nominal capacity of Absorber
     LOGICAL           :: ConstantFlow        = .false.   ! True if this is a Constant Flow Chiller
     LOGICAL           :: VariableFlow        = .false.   ! True if this is a Variable Flow Chiller
     LOGICAL           :: VariableFlowSetToLoop = .FALSE.  ! True if the setpoint is missing at the outlet node
     LOGICAL           :: VariableFlowErrDone  = .FALSE.  ! true if setpoint warning issued
-    REAL         :: EvapVolFlowRate     = 0.0     ! m3/s - design water volumetric flow rate through the evaporator
-    REAL         :: CondVolFlowRate     = 0.0     ! m3/s - design water volumetric flow rate through the condenser
-    REAL         :: EvapMassFlowRateMax = 0.0     ! Max Design Evaporator Mass Flow Rate converted from Volume Flow Rate
-    REAL         :: CondMassFlowRateMax = 0.0     ! Max Design Condeneser Mass Flow Rate [kg/s]
-    REAL         :: GenMassFlowRateMax  = 0.0     ! Max Design Generator Mass Flow Rate converted from Volume Flow Rate
-    REAL         :: SizFac              = 0.0     ! Sizing factor
+    REAL(r64)         :: EvapVolFlowRate     = 0.0d0     ! m3/s - design water volumetric flow rate through the evaporator
+    REAL(r64)         :: CondVolFlowRate     = 0.0d0     ! m3/s - design water volumetric flow rate through the condenser
+    REAL(r64)         :: EvapMassFlowRateMax = 0.0d0     ! Max Design Evaporator Mass Flow Rate converted from Volume Flow Rate
+    REAL(r64)         :: CondMassFlowRateMax = 0.0d0     ! Max Design Condeneser Mass Flow Rate [kg/s]
+    REAL(r64)         :: GenMassFlowRateMax  = 0.0d0     ! Max Design Generator Mass Flow Rate converted from Volume Flow Rate
+    REAL(r64)         :: SizFac              = 0.0d0     ! Sizing factor
     INTEGER           :: EvapInletNodeNum    = 0         ! Node number on the inlet side of the plant
     INTEGER           :: EvapOutletNodeNum   = 0         ! Node number on the outlet side of the plant
     INTEGER           :: CondInletNodeNum    = 0         ! Node number on the inlet side of the condenser
     INTEGER           :: CondOutletNodeNum   = 0         ! Node number on the outlet side of the condenser
     INTEGER           :: GeneratorInletNodeNum  = 0      ! absorber steam inlet node number, water side
     INTEGER           :: GeneratorOutletNodeNum = 0      ! absorber steam outlet node number, water side
-    REAL         :: MinPartLoadRat      = 0.0     ! (BLAST MIN) min allowed operating frac full load
-    REAL         :: MaxPartLoadRat      = 0.0     ! (BLAST MAX) max allowed operating frac full load
-    REAL         :: OptPartLoadRat      = 0.0     ! (BLAST BEST) optimal operating frac full load
-    REAL         :: TempDesCondIn       = 0.0     ! C - (BLAST ADJTC(1)The design secondary loop fluid
+    REAL(r64)         :: MinPartLoadRat      = 0.0d0     ! (BLAST MIN) min allowed operating frac full load
+    REAL(r64)         :: MaxPartLoadRat      = 0.0d0     ! (BLAST MAX) max allowed operating frac full load
+    REAL(r64)         :: OptPartLoadRat      = 0.0d0     ! (BLAST BEST) optimal operating frac full load
+    REAL(r64)         :: TempDesCondIn       = 0.0d0     ! C - (BLAST ADJTC(1)The design secondary loop fluid
                                                          ! temperature at the Absorber condenser side inlet
-    REAL,DIMENSION(3) :: SteamLoadCoef  = 0.0     ! (BLAST RPWRC() ) coeff of full load poly. fit
-    REAL,DIMENSION(3) :: PumpPowerCoef  = 0.0     ! coeff of pumping power poly. fit
-    REAL         :: TempLowLimitEvapOut = 0.0     ! C - low temperature shut off
+    REAL(r64),DIMENSION(3) :: SteamLoadCoef  = 0.0d0     ! (BLAST RPWRC() ) coeff of full load poly. fit
+    REAL(r64),DIMENSION(3) :: PumpPowerCoef  = 0.0d0     ! coeff of pumping power poly. fit
+    REAL(r64)         :: TempLowLimitEvapOut = 0.0d0     ! C - low temperature shut off
     INTEGER           :: ErrCount2           = 0         ! error counter
     INTEGER           :: GenHeatSourceType   = 0         ! Generator heat source type, NodeType_Steam=3 or NodeType_Water=2
-    REAL         :: GeneratorVolFlowRate = 0.0    ! m3/s - hot water volumetric flow rate through generator
-    REAL         :: GeneratorSubCool    = 0.0     ! amount of subcooling in steam generator
+    REAL(r64)         :: GeneratorVolFlowRate = 0.0d0    ! m3/s - hot water volumetric flow rate through generator
+    REAL(r64)         :: GeneratorSubCool    = 0.0d0     ! amount of subcooling in steam generator
     INTEGER           :: SteamFluidIndex     = 0         ! index to generator fluid type
-    REAL         :: GeneratorDeltaTemp  = -99999. ! C - generator fluid temperature difference (water only)
+    REAL(r64)         :: GeneratorDeltaTemp  = -99999.d0 ! C - generator fluid temperature difference (water only)
     INTEGER           :: CWLoopNum     = 0  ! chilled water plant loop index number
     INTEGER           :: CWLoopSideNum = 0  ! chilled water plant loop side index
     INTEGER           :: CWBranchNum   = 0  ! chilled water plant loop branch index
@@ -96,43 +96,43 @@ TYPE BLASTAbsorberSpecs
 END TYPE BLASTAbsorberSpecs
 
 TYPE ReportVars
-  REAL    :: PumpingPower        = 0.0  ! reporting: electric pumping power
-  REAL    :: QGenerator          = 0.0  ! reporting: steam heat transfer rate
-  REAL    :: QEvap               = 0.0  ! reporting: evaporator heat transfer rate
-  REAL    :: QCond               = 0.0  ! reporting: condensor heat transfer rate
-  REAL    :: PumpingEnergy       = 0.0  ! reporting: electric pumping power
-  REAL    :: GeneratorEnergy     = 0.0  ! reporting: steam heat transfer rate
-  REAL    :: EvapEnergy          = 0.0  ! reporting: evaporator heat transfer rate
-  REAL    :: CondEnergy          = 0.0  ! reporting: condensor heat transfer rate
-  REAL    :: CondInletTemp       = 0.0  ! reporting: condenser inlet temperature
-  REAL    :: EvapInletTemp       = 0.0  ! reporting: evaporator inlet temperature
-  REAL    :: CondOutletTemp      = 0.0  ! reporting: condenser outlet temperature
-  REAL    :: EvapOutletTemp      = 0.0  ! reporting: evaporator outlet temperature
-  REAL    :: Evapmdot            = 0.0  ! reporting: evaporator mass flow rate
-  REAL    :: Condmdot            = 0.0  ! reporting: condenser mass flow rate
-  REAL    :: Genmdot             = 0.0  ! reporting: generatore mass flow rate when connected to plant
-  REAL    :: SteamMdot           = 0.0  ! reporting: steam mass flow rate
-  REAL    :: ActualCOP           = 0.0  ! reporting: coefficient of performance = QEvap/QGenerator
+  REAL(r64)    :: PumpingPower        = 0.0d0  ! reporting: electric pumping power
+  REAL(r64)    :: QGenerator          = 0.0d0  ! reporting: steam heat transfer rate
+  REAL(r64)    :: QEvap               = 0.0d0  ! reporting: evaporator heat transfer rate
+  REAL(r64)    :: QCond               = 0.0d0  ! reporting: condensor heat transfer rate
+  REAL(r64)    :: PumpingEnergy       = 0.0d0  ! reporting: electric pumping power
+  REAL(r64)    :: GeneratorEnergy     = 0.0d0  ! reporting: steam heat transfer rate
+  REAL(r64)    :: EvapEnergy          = 0.0d0  ! reporting: evaporator heat transfer rate
+  REAL(r64)    :: CondEnergy          = 0.0d0  ! reporting: condensor heat transfer rate
+  REAL(r64)    :: CondInletTemp       = 0.0d0  ! reporting: condenser inlet temperature
+  REAL(r64)    :: EvapInletTemp       = 0.0d0  ! reporting: evaporator inlet temperature
+  REAL(r64)    :: CondOutletTemp      = 0.0d0  ! reporting: condenser outlet temperature
+  REAL(r64)    :: EvapOutletTemp      = 0.0d0  ! reporting: evaporator outlet temperature
+  REAL(r64)    :: Evapmdot            = 0.0d0  ! reporting: evaporator mass flow rate
+  REAL(r64)    :: Condmdot            = 0.0d0  ! reporting: condenser mass flow rate
+  REAL(r64)    :: Genmdot             = 0.0d0  ! reporting: generatore mass flow rate when connected to plant
+  REAL(r64)    :: SteamMdot           = 0.0d0  ! reporting: steam mass flow rate
+  REAL(r64)    :: ActualCOP           = 0.0d0  ! reporting: coefficient of performance = QEvap/QGenerator
 END TYPE ReportVars
 
           ! MODULE VARIABLE DECLARATIONS:
 INTEGER        :: NumBLASTAbsorbers   = 0      ! number of Absorption Chillers specified in input
 
-REAL      :: CondMassFlowRate    = 0.0  ! Kg/s - condenser mass flow rate, water side
-REAL      :: EvapMassFlowRate    = 0.0  ! Kg/s - evaporator mass flow rate, water side
-REAL      :: SteamMassFlowRate   = 0.0  ! Kg/s - steam mass flow rate, water side
-REAL      :: CondOutletTemp      = 0.0  ! C - condenser outlet temperature, water side
-REAL      :: EvapOutletTemp      = 0.0  ! C - evaporator outlet temperature, water side
-REAL      :: GenOutletTemp       = 0.0  ! C - generator fluid outlet temperature
-REAL      :: SteamOutletEnthalpy = 0.0  ! J/kg - generator fluid outlet enthalpy
-REAL      :: PumpingPower        = 0.0  ! W - rate of Absorber energy use
-REAL      :: PumpingEnergy       = 0.0  ! J - Absorber energy use
-REAL      :: QGenerator          = 0.0  ! W - rate of Absorber steam use
-REAL      :: GeneratorEnergy     = 0.0  ! J - Absorber steam use
-REAL      :: QEvaporator         = 0.0  ! W - rate of heat transfer to the evaporator coil
-REAL      :: EvaporatorEnergy    = 0.0  ! J - heat transfer to the evaporator coil
-REAL      :: QCondenser          = 0.0  ! W - rate of heat transfer to the condenser coil
-REAL      :: CondenserEnergy     = 0.0  ! J - heat transfer to the condenser coil
+REAL(r64)      :: CondMassFlowRate    = 0.0d0  ! Kg/s - condenser mass flow rate, water side
+REAL(r64)      :: EvapMassFlowRate    = 0.0d0  ! Kg/s - evaporator mass flow rate, water side
+REAL(r64)      :: SteamMassFlowRate   = 0.0d0  ! Kg/s - steam mass flow rate, water side
+REAL(r64)      :: CondOutletTemp      = 0.0d0  ! C - condenser outlet temperature, water side
+REAL(r64)      :: EvapOutletTemp      = 0.0d0  ! C - evaporator outlet temperature, water side
+REAL(r64)      :: GenOutletTemp       = 0.0d0  ! C - generator fluid outlet temperature
+REAL(r64)      :: SteamOutletEnthalpy = 0.0d0  ! J/kg - generator fluid outlet enthalpy
+REAL(r64)      :: PumpingPower        = 0.0d0  ! W - rate of Absorber energy use
+REAL(r64)      :: PumpingEnergy       = 0.0d0  ! J - Absorber energy use
+REAL(r64)      :: QGenerator          = 0.0d0  ! W - rate of Absorber steam use
+REAL(r64)      :: GeneratorEnergy     = 0.0d0  ! J - Absorber steam use
+REAL(r64)      :: QEvaporator         = 0.0d0  ! W - rate of heat transfer to the evaporator coil
+REAL(r64)      :: EvaporatorEnergy    = 0.0d0  ! J - heat transfer to the evaporator coil
+REAL(r64)      :: QCondenser          = 0.0d0  ! W - rate of heat transfer to the condenser coil
+REAL(r64)      :: CondenserEnergy     = 0.0d0  ! J - heat transfer to the condenser coil
 
 TYPE (BLASTAbsorberSpecs), ALLOCATABLE, DIMENSION(:)  :: BLASTAbsorber  !dimension to number of machines
 
@@ -186,14 +186,14 @@ SUBROUTINE SimBLASTAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl,LoopNum,Loop
   LOGICAL , INTENT(IN)   :: RunFlag             ! simulate Absorber when TRUE
   LOGICAL , INTENT(IN)   :: FirstIteration      ! initialize variables when TRUE
   LOGICAL, INTENT(INOUT) :: InitLoopEquip       ! If not zero, calculate the max load for operating conditions
-  REAL, INTENT(INOUT)    :: MyLoad         ! loop demand component will meet
-  REAL, INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
-  REAL, INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
-  REAL, INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
+  REAL(r64), INTENT(INOUT)    :: MyLoad         ! loop demand component will meet
+  REAL(r64), INTENT(INOUT)     :: MinCap           ! Minimum operating capacity of chiller [W]
+  REAL(r64), INTENT(INOUT)     :: MaxCap           ! Maximum operating capacity of chiller [W]
+  REAL(r64), INTENT(INOUT)     :: OptCap           ! Optimal operating capacity of chiller [W]
   INTEGER, INTENT(INOUT)       :: CompIndex        ! Chiller number pointer
   LOGICAL, INTENT(IN)          :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL, INTENT(INOUT)     :: SizingFactor     ! sizing factor
-  REAL, INTENT(INOUT)     :: TempCondInDesign
+  REAL(r64), INTENT(INOUT)     :: SizingFactor     ! sizing factor
+  REAL(r64), INTENT(INOUT)     :: TempCondInDesign
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -251,9 +251,9 @@ SUBROUTINE SimBLASTAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl,LoopNum,Loop
       MaxCap = BLASTAbsorber(ChillNum)%NomCap*BLASTAbsorber(ChillNum)%MaxPartLoadRat
       OptCap = BLASTAbsorber(ChillNum)%NomCap*BLASTAbsorber(ChillNum)%OptPartLoadRat
     ELSE
-      MinCap = 0.
-      MaxCap = 0.
-      OptCap = 0.
+      MinCap = 0.d0
+      MaxCap = 0.d0
+      OptCap = 0.d0
     ENDIF
     IF (GetSizingFactor) THEN
       SizingFactor = BLASTAbsorber(ChillNum)%SizFac
@@ -513,13 +513,13 @@ SUBROUTINE GetBLASTAbsorberInput
     IF(NumNums .GT. 16)THEN
       BLASTAbsorber(AbsorberNum)%GeneratorSubCool = rNumericArgs(17)
     ELSE
-      BLASTAbsorber(AbsorberNum)%GeneratorSubCool = 1.0
+      BLASTAbsorber(AbsorberNum)%GeneratorSubCool = 1.0d0
     END IF
 
     IF(NumNums .GT. 17)THEN
       BLASTAbsorber(AbsorberNum)%SizFac = rNumericArgs(18)
     ELSE
-      BLASTAbsorber(AbsorberNum)%SizFac = 1.0
+      BLASTAbsorber(AbsorberNum)%SizFac = 1.0d0
     END IF
 
   END DO
@@ -625,7 +625,7 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: ChillNum     ! number of the current electric chiller being simulated
   LOGICAL, INTENT(IN)  :: RunFlag      ! TRUE when chiller operating
-  REAL, INTENT(IN):: MyLoad
+  REAL(r64), INTENT(IN):: MyLoad
   LOGICAL, INTENT(IN)  :: FirstHVACIteration      ! initialize variables when TRUE
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -649,19 +649,19 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
   INTEGER   :: CompCtr            ! Component counter
   LOGICAL   :: errFlag
   LOGICAL   :: FatalError
-  REAL :: rho ! local fluid density
-  REAL :: CpWater ! local specific heat
-  REAL :: SteamDensity        ! density of generator steam (when connected to a steam loop)
-  REAL :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
-  REAL :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
-  REAL :: HfgSteam            ! latent heat of steam at constant pressure
-  REAL :: SteamDeltaT         ! amount of sub-cooling of steam condensate
+  REAL(r64) :: rho ! local fluid density
+  REAL(r64) :: CpWater ! local specific heat
+  REAL(r64) :: SteamDensity        ! density of generator steam (when connected to a steam loop)
+  REAL(r64) :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
+  REAL(r64) :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
+  REAL(r64) :: HfgSteam            ! latent heat of steam at constant pressure
+  REAL(r64) :: SteamDeltaT         ! amount of sub-cooling of steam condensate
   INTEGER   :: GeneratorInletNode      ! generator inlet node number, steam/water side
-  REAL :: SteamOutletTemp
+  REAL(r64) :: SteamOutletTemp
   INTEGER   :: DummyWaterIndex = 1
-  REAL :: mdotEvap ! local fluid mass flow rate thru evaporator
-  REAL :: mdotCond ! local fluid mass flow rate thru condenser
-  REAL :: mdotGen ! local fluid mass flow rate thru generator
+  REAL(r64) :: mdotEvap ! local fluid mass flow rate thru evaporator
+  REAL(r64) :: mdotCond ! local fluid mass flow rate thru condenser
+  REAL(r64) :: mdotGen ! local fluid mass flow rate thru generator
 
           ! FLOW:
 
@@ -794,7 +794,7 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
 
     BLASTAbsorber(ChillNum)%EvapMassFlowRateMax = BLASTAbsorber(ChillNum)%EvapVolFlowRate * rho
 
-    CALL InitComponentNodes(0., BLASTAbsorber(ChillNum)%EvapMassFlowRateMax, &
+    CALL InitComponentNodes(0.d0, BLASTAbsorber(ChillNum)%EvapMassFlowRateMax, &
                               BLASTAbsorber(ChillNum)%EvapInletNodeNum, &
                               BLASTAbsorber(ChillNum)%EvapOutletNodeNum, &
                               BLASTAbsorber(ChillNum)%CWLoopNum, &
@@ -809,7 +809,7 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
 
     BLASTAbsorber(ChillNum)%CondMassFlowRateMax = rho * BLASTAbsorber(ChillNum)%CondVolFlowRate
 
-    CALL InitComponentNodes(0., BLASTAbsorber(ChillNum)%CondMassFlowRateMax, &
+    CALL InitComponentNodes(0.d0, BLASTAbsorber(ChillNum)%CondMassFlowRateMax, &
                             CondInletNode, CondOutletNode, &
                             BLASTAbsorber(ChillNum)%CDLoopNum, &
                             BLASTAbsorber(ChillNum)%CDLoopSideNum, &
@@ -832,16 +832,16 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
         QGenerator = (BLASTAbsorber(ChillNum)%SteamLoadCoef(1) + BLASTAbsorber(ChillNum)%SteamLoadCoef(2) + &
                       BLASTAbsorber(ChillNum)%SteamLoadCoef(3)) * BLASTAbsorber(ChillNum)%NomCap
         GeneratorInletNode = BLASTAbsorber(ChillNum)%GeneratorInletNodeNum
-        EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0, &
+        EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0d0, &
                                                  BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                                  'CALC Chiller:Absorption '//TRIM(BLASTAbsorber(ChillNum)%Name))
-        EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0, &
+        EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0d0, &
                                                  BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                                  'CALC Chiller:Absorption '//TRIM(BLASTAbsorber(ChillNum)%Name))
         SteamDeltaT       = BLASTAbsorber(ChillNum)%GeneratorSubCool
         SteamOutletTemp   = Node(GeneratorInletNode)%Temp - SteamDeltaT
         HfgSteam          = EnthSteamOutDry - EnthSteamOutWet
-        SteamDensity      = GetSatDensityRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0, &
+        SteamDensity      = GetSatDensityRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0d0, &
                                                  BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                                 'CALC Chiller:Absorption '//TRIM(BLASTAbsorber(ChillNum)%Name))
         CpWater           = GetDensityGlycol('WATER', SteamOutletTemp, DummyWaterIndex,  &
@@ -850,7 +850,7 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
       ENDIF
 
 
-      CALL InitComponentNodes(0., BLASTAbsorber(ChillNum)%GenMassFlowRateMax, &
+      CALL InitComponentNodes(0.d0, BLASTAbsorber(ChillNum)%GenMassFlowRateMax, &
                               BLASTAbsorber(ChillNum)%GeneratorInletNodeNum, &
                               BLASTAbsorber(ChillNum)%GeneratorOutletNodeNum, &
                               BLASTAbsorber(ChillNum)%GenLoopNum, &
@@ -877,28 +877,28 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
   ENDIF
 
   IF (FirstHVACIteration) THEN
-    IF ((MyLoad < 0.) .AND. RunFlag)  THEN
+    IF ((MyLoad < 0.d0) .AND. RunFlag)  THEN
       mdotEvap = BLASTAbsorber(ChillNum)%EvapMassFlowRateMax
       mdotCond = BLASTAbsorber(ChillNum)%CondMassFlowRateMax
       mdotGen  = BLASTAbsorber(ChillNum)%GenMassFlowRateMax
     ELSE
-      mdotEvap = 0.
-      mdotCond = 0.
-      mdotGen  = 0.
+      mdotEvap = 0.d0
+      mdotCond = 0.d0
+      mdotGen  = 0.d0
     ENDIF
   ELSE
-    IF ((MyLoad < 0.) .AND. RunFlag)  THEN
-      IF (BLASTAbsorberReport(ChillNum)%Evapmdot > 0.) THEN
+    IF ((MyLoad < 0.d0) .AND. RunFlag)  THEN
+      IF (BLASTAbsorberReport(ChillNum)%Evapmdot > 0.d0) THEN
         mdotEvap = BLASTAbsorberReport(ChillNum)%Evapmdot
       ELSE
         mdotEvap = BLASTAbsorber(ChillNum)%EvapMassFlowRateMax
       ENDIF
-      IF (BLASTAbsorberReport(ChillNum)%Condmdot > 0.) THEN
+      IF (BLASTAbsorberReport(ChillNum)%Condmdot > 0.d0) THEN
         mdotCond = BLASTAbsorberReport(ChillNum)%Condmdot
       ELSE
         mdotCond = BLASTAbsorber(ChillNum)%CondMassFlowRateMax
       ENDIF
-      IF (BLASTAbsorberReport(ChillNum)%Genmdot > 0.) THEN
+      IF (BLASTAbsorberReport(ChillNum)%Genmdot > 0.d0) THEN
         mdotGen  = BLASTAbsorberReport(ChillNum)%Genmdot
       ELSE
         mdotGen  = BLASTAbsorber(ChillNum)%GenMassFlowRateMax
@@ -990,26 +990,26 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
   INTEGER             :: PltSizCondNum       ! Plant Sizing index for condenser loop
   INTEGER             :: PltSizSteamNum      ! Plant Sizing index for steam heating loop
   INTEGER             :: PltSizHeatingNum    ! Plant Sizing index for how water heating loop
-  REAL           :: SteamInputRatNom    ! nominal energy input ratio (steam or hot water)
-  REAL           :: SteamDensity        ! density of generator steam (when connected to a steam loop)
-  REAL           :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
-  REAL           :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
-  REAL           :: HfgSteam            ! latent heat of steam at constant pressure
-  REAL           :: SteamDeltaT         ! amount of sub-cooling of steam condensate
-  REAL           :: SteamMassFlowRate   ! steam mass flow rate through generator
-  REAL           :: CpWater             ! specific heat of generator fluid (when connected to a hot water loop)
-  REAL           :: RhoWater            ! density of water
-  REAL           :: GeneratorOutletTemp ! outlet temperature of generator
+  REAL(r64)           :: SteamInputRatNom    ! nominal energy input ratio (steam or hot water)
+  REAL(r64)           :: SteamDensity        ! density of generator steam (when connected to a steam loop)
+  REAL(r64)           :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
+  REAL(r64)           :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
+  REAL(r64)           :: HfgSteam            ! latent heat of steam at constant pressure
+  REAL(r64)           :: SteamDeltaT         ! amount of sub-cooling of steam condensate
+  REAL(r64)           :: SteamMassFlowRate   ! steam mass flow rate through generator
+  REAL(r64)           :: CpWater             ! specific heat of generator fluid (when connected to a hot water loop)
+  REAL(r64)           :: RhoWater            ! density of water
+  REAL(r64)           :: GeneratorOutletTemp ! outlet temperature of generator
   LOGICAL             :: ErrorsFound         ! If errors detected in input
   LOGICAL             :: LoopErrorsFound     !
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL           :: rho ! local fluid density
-  REAL           :: Cp  ! local specific heat
-  REAL           :: tmpNomCap ! local nominal capacity cooling power
-  REAL           :: tmpNomPumpPower ! local nominal pump power
-  REAL           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
-  REAL           :: tmpCondVolFlowRate ! local condenser design volume flow rate
-  REAL           :: tmpGeneratorVolFlowRate ! local generator design volume flow rate
+  REAL(r64)           :: rho ! local fluid density
+  REAL(r64)           :: Cp  ! local specific heat
+  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
+  REAL(r64)           :: tmpNomPumpPower ! local nominal pump power
+  REAL(r64)           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
+  REAL(r64)           :: tmpCondVolFlowRate ! local condenser design volume flow rate
+  REAL(r64)           :: tmpGeneratorVolFlowRate ! local generator design volume flow rate
   INTEGER             :: DummWaterIndex = 1
 
   PltSizNum = 0
@@ -1080,7 +1080,7 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
         IF (PlantSizesOkayToFinalize)  BLASTAbsorber(ChillNum)%NomCap = tmpNomCap
 
       ELSE
-        tmpNomCap = 0.
+        tmpNomCap = 0.d0
         IF (PlantSizesOkayToFinalize)  BLASTAbsorber(ChillNum)%NomCap = tmpNomCap
 
       END IF
@@ -1096,12 +1096,12 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
   IF (BLASTAbsorber(ChillNum)%NomPumpPower  == AutoSize) THEN
     IF (PlantSizesOkayToFinalize) THEN
      ! the DOE-2 EIR for single stage absorption chiller
-      BLASTAbsorber(ChillNum)%NomPumpPower = 0.0045 * BLASTAbsorber(ChillNum)%NomCap
+      BLASTAbsorber(ChillNum)%NomPumpPower = 0.0045d0 * BLASTAbsorber(ChillNum)%NomCap
 
       CALL ReportSizingOutput('Chiller:Absorption', BLASTAbsorber(ChillNum)%Name, &
                               'Nominal Pumping Power [W]', BLASTAbsorber(ChillNum)%NomPumpPower)
     ELSE
-      tmpNomPumpPower = 0.0045 * tmpNomCap
+      tmpNomPumpPower = 0.0045d0 * tmpNomCap
     ENDIF
   END IF
 
@@ -1111,7 +1111,7 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
         tmpEvapVolFlowRate = PlantSizData(PltSizNum)%DesVolFlowRate * BLASTAbsorber(ChillNum)%SizFac
         IF (PlantSizesOkayToFinalize) BLASTAbsorber(ChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       ELSE
-        tmpEvapVolFlowRate = 0.
+        tmpEvapVolFlowRate = 0.d0
         IF (PlantSizesOkayToFinalize)   BLASTAbsorber(ChillNum)%EvapVolFlowRate = tmpEvapVolFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Absorption', BLASTAbsorber(ChillNum)%Name, &
@@ -1141,12 +1141,12 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
                                    PlantLoop(BLASTAbsorber(ChillNum)%CDLoopNum)%FluidIndex, &
                                    'SizeAbsorpChiller')
         tmpCondVolFlowRate = tmpNomCap * &
-                    (1.0 + SteamInputRatNom + tmpNomPumpPower/tmpNomCap) / &
+                    (1.0d0 + SteamInputRatNom + tmpNomPumpPower/tmpNomCap) / &
                     ( PlantSizData(PltSizCondNum)%DeltaT * Cp * rho )
         IF (PlantSizesOkayToFinalize)  BLASTAbsorber(ChillNum)%CondVolFlowRate = tmpCondVolFlowRate
       ELSE
-        tmpCondVolFlowRate = 0.0
-        IF (PlantSizesOkayToFinalize)  BLASTAbsorber(ChillNum)%CondVolFlowRate = 0.0
+        tmpCondVolFlowRate = 0.0d0
+        IF (PlantSizesOkayToFinalize)  BLASTAbsorber(ChillNum)%CondVolFlowRate = 0.0d0
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Absorption', BLASTAbsorber(ChillNum)%Name, &
                                                              'Design Condenser Water Flow Rate [m3/s]', &
@@ -1171,7 +1171,7 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
                                    PlantSizData(PltSizHeatingNum)%ExitTemp, &
                                    PlantLoop(BLASTAbsorber(ChillNum)%GenLoopNum)%FluidIndex, &
                                    'SizeAbsorpChiller')
-          SteamDeltaT = MAX(0.5,PlantSizData(PltSizHeatingNum)%DeltaT)
+          SteamDeltaT = MAX(0.5d0,PlantSizData(PltSizHeatingNum)%DeltaT)
           RhoWater = GetDensityGlycol(PlantLoop(BLASTAbsorber(ChillNum)%GenLoopNum)%FluidName, &
                                    (PlantSizData(PltSizHeatingNum)%ExitTemp - SteamDeltaT), &
                                    PlantLoop(BLASTAbsorber(ChillNum)%GenLoopNum)%FluidIndex, &
@@ -1191,15 +1191,15 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
           ENDIF
 
         ELSE
-          SteamDensity = GetSatDensityRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0, &
+          SteamDensity = GetSatDensityRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0d0, &
                                               BLASTAbsorber(ChillNum)%SteamFluidIndex,'SizeAbsorptionChiller')
           SteamDeltaT         = PlantSizData(PltSizSteamNum)%DeltaT
           GeneratorOutletTemp = PlantSizData(PltSizSteamNum)%ExitTemp - SteamDeltaT
 
-          EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0, &
+          EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0d0, &
                                                    BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                                   'Chiller:Absorption'//TRIM(BLASTAbsorber(ChillNum)%Name))
-          EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,0.0, &
+          EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,0.0d0, &
                                                    BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                                   'Chiller:Absorption'//TRIM(BLASTAbsorber(ChillNum)%Name))
           CpWater =  GetSpecificHeatGlycol('WATER', GeneratorOutletTemp, DummWaterIndex,  'SizeAbsorpChiller')
@@ -1222,9 +1222,9 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
         END IF
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          BLASTAbsorber(ChillNum)%GeneratorVolFlowRate = 0.0
+          BLASTAbsorber(ChillNum)%GeneratorVolFlowRate = 0.0d0
         ELSE
-          tmpGeneratorVolFlowRate = 0.
+          tmpGeneratorVolFlowRate = 0.d0
         ENDIF
       END IF
     ELSE
@@ -1246,7 +1246,7 @@ SUBROUTINE SizeAbsorpChiller(ChillNum)
 
   IF(BLASTAbsorber(ChillNum)%GeneratorDeltaTemp == AutoSize)THEN
     IF(PltSizHeatingNum > 0 .AND. BLASTAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water) THEN
-      BLASTAbsorber(ChillNum)%GeneratorDeltaTemp = MAX(0.5,PlantSizData(PltSizHeatingNum)%DeltaT)
+      BLASTAbsorber(ChillNum)%GeneratorDeltaTemp = MAX(0.5d0,PlantSizData(PltSizHeatingNum)%DeltaT)
     ELSE IF(BLASTAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water)THEN
       Cp =  GetSpecificHeatGlycol(PlantLoop(BLASTAbsorber(ChillNum)%GenLoopNum)%FluidName, &
                                    InitConvTemp, &
@@ -1315,7 +1315,7 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER                :: ChillNum        ! Absorber number
-  REAL              :: MyLoad          ! operating load
+  REAL(r64)              :: MyLoad          ! operating load
   LOGICAL                :: FirstIteration  ! TRUE when first iteration of timestep !unused1208
   LOGICAL, INTENT(IN)    :: RunFlag         ! TRUE when Absorber operating
   INTEGER, INTENT(IN)    :: EquipFlowCtrl   ! Flow control mode for the equipment
@@ -1329,42 +1329,42 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL, DIMENSION(3)     :: SteamLoadFactor     ! coefficients to poly curve fit
-  REAL, DIMENSION(3)     :: ElectricLoadFactor  ! coefficients to poly curve fit
-  REAL              :: MinPartLoadRat      ! min allowed operating frac full load
-  REAL              :: MaxPartLoadRat      ! max allowed operating frac full load
-  REAL              :: TempCondIn          ! C - (BLAST ADJTC(1)The design secondary loop fluid
-  REAL              :: TempCondInDesign    ! C - (BLAST ADJTC(1)The design secondary loop fluid
-  REAL              :: EvapInletTemp       ! C - evaporator inlet temperature, water side
-  REAL              :: CondInletTemp       ! C - condenser inlet temperature, water side
-  REAL              :: TempEvapOut         ! C - evaporator outlet temperature, water side
-  REAL              :: TempEvapOutSetpoint   ! C - evaporator outlet temperature setpoint
-  REAL              :: AbsorberNomCap      ! Absorber nominal capacity
-  REAL              :: NomPumpPower        ! Absorber nominal pumping power
-  REAL              :: PartLoadRat         ! part load ratio for efficiency calc
-  REAL              :: OperPartLoadRat     ! Operating part load ratio
-  REAL              :: EvapDeltaTemp       ! C - evaporator temperature difference, water side
-  REAL              :: TempLowLimitEout    ! C - Evaporator low temp. limit cut off
-  REAL              :: SteamInputRat       ! energy input ratio
-  REAL              :: ElectricInputRat    ! energy input ratio
+  REAL(r64), DIMENSION(3)     :: SteamLoadFactor     ! coefficients to poly curve fit
+  REAL(r64), DIMENSION(3)     :: ElectricLoadFactor  ! coefficients to poly curve fit
+  REAL(r64)              :: MinPartLoadRat      ! min allowed operating frac full load
+  REAL(r64)              :: MaxPartLoadRat      ! max allowed operating frac full load
+  REAL(r64)              :: TempCondIn          ! C - (BLAST ADJTC(1)The design secondary loop fluid
+  REAL(r64)              :: TempCondInDesign    ! C - (BLAST ADJTC(1)The design secondary loop fluid
+  REAL(r64)              :: EvapInletTemp       ! C - evaporator inlet temperature, water side
+  REAL(r64)              :: CondInletTemp       ! C - condenser inlet temperature, water side
+  REAL(r64)              :: TempEvapOut         ! C - evaporator outlet temperature, water side
+  REAL(r64)              :: TempEvapOutSetpoint   ! C - evaporator outlet temperature setpoint
+  REAL(r64)              :: AbsorberNomCap      ! Absorber nominal capacity
+  REAL(r64)              :: NomPumpPower        ! Absorber nominal pumping power
+  REAL(r64)              :: PartLoadRat         ! part load ratio for efficiency calc
+  REAL(r64)              :: OperPartLoadRat     ! Operating part load ratio
+  REAL(r64)              :: EvapDeltaTemp       ! C - evaporator temperature difference, water side
+  REAL(r64)              :: TempLowLimitEout    ! C - Evaporator low temp. limit cut off
+  REAL(r64)              :: SteamInputRat       ! energy input ratio
+  REAL(r64)              :: ElectricInputRat    ! energy input ratio
   INTEGER                :: EvapInletNode       ! evaporator inlet node number, water side
   INTEGER                :: EvapOutletNode      ! evaporator outlet node number, water side
   INTEGER                :: CondInletNode       ! condenser inlet node number, water side
   INTEGER                :: CondOutletNode      ! condenser outlet node number, water side
   INTEGER                :: GeneratorInletNode      ! generator inlet node number, steam/water side
   INTEGER                :: GeneratorOutletNode     ! generator outlet node number, steam/water side
-  REAL              :: EnthSteamOutDry     ! enthalpy of dry steam at generator inlet
-  REAL              :: EnthSteamOutWet     ! enthalpy of wet steam at generator inlet
-  REAL              :: HfgSteam            ! heat of vaporization of steam
+  REAL(r64)              :: EnthSteamOutDry     ! enthalpy of dry steam at generator inlet
+  REAL(r64)              :: EnthSteamOutWet     ! enthalpy of wet steam at generator inlet
+  REAL(r64)              :: HfgSteam            ! heat of vaporization of steam
   LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironFlag
   LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironSteamFlag
   LOGICAL, SAVE :: OneTimeFlag = .true.
-  REAL              :: FRAC
+  REAL(r64)              :: FRAC
 !  LOGICAL,SAVE           :: PossibleSubCooling
-  REAL              :: CpFluid             ! local specific heat of fluid
-  REAL              :: SteamDeltaT
-  REAL              :: SteamDensity
-  REAL              :: SteamOutletTemp
+  REAL(r64)              :: CpFluid             ! local specific heat of fluid
+  REAL(r64)              :: SteamDeltaT
+  REAL(r64)              :: SteamDensity
+  REAL(r64)              :: SteamOutletTemp
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
   INTEGER :: DummyWaterIndex = 1
@@ -1435,11 +1435,11 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
     If(BLASTAbsorber(ChillNum)%ConstantFlow)Then
       EvapMassFlowRate = Node(EvapInletNode)%MassFlowRate
 
-      IF (EvapMassFlowRate /= 0.0) THEN
+      IF (EvapMassFlowRate /= 0.0D0) THEN
 
         EvapDeltaTemp = QEvaporator/EvapMassFlowRate / CpFluid
       ELSE
-        EvapDeltaTemp = 0.0
+        EvapDeltaTemp = 0.0D0
       ENDIF
       EvapOutletTemp = EvapInletTemp - EvapDeltaTemp
 
@@ -1562,7 +1562,7 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
   OperPartLoadRat = QEvaporator/AbsorberNomCap
 
   IF(OperPartLoadRat .LT. PartLoadRat) THEN
-    FRAC = MIN(1.0,OperPartLoadRat/MinPartLoadRat)
+    FRAC = MIN(1.0d0,OperPartLoadRat/MinPartLoadRat)
   ELSE
     FRAC = 1.0
   END IF
@@ -1597,8 +1597,8 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
   ELSE
 
     CondOutletTemp = CondInletTemp
-    CondMassFlowRate = 0.
-    QCondenser = 0.
+    CondMassFlowRate = 0.d0
+    QCondenser = 0.d0
     RETURN
     ! V7 plant upgrade, no longer fatal here anymore, set some things and return
   END IF
@@ -1623,7 +1623,7 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
                                 BLASTAbsorber(ChillNum)%GenBranchNum,   &
                                 BLASTAbsorber(ChillNum)%GenCompNum)
 
-      IF(SteamMassFlowRate .LE. 0.0)THEN
+      IF(SteamMassFlowRate .LE. 0.0d0)THEN
         GenOutletTemp       = Node(GeneratorInletNode)%Temp
         SteamOutletEnthalpy = Node(GeneratorInletNode)%Enthalpy
       ELSE
@@ -1633,10 +1633,10 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
 
     ELSE ! using a steam plant for the generator
 
-      EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0, &
+      EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0d0, &
                                              BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                             'CALC Chiller:Absorption '//TRIM(BLASTAbsorber(ChillNum)%Name))
-      EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0, &
+      EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0d0, &
                                              BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                             'CALC Chiller:Absorption '//TRIM(BLASTAbsorber(ChillNum)%Name))
       SteamDeltaT       = BLASTAbsorber(ChillNum)%GeneratorSubCool
@@ -1652,12 +1652,12 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
                                 BLASTAbsorber(ChillNum)%GenBranchNum,   &
                                 BLASTAbsorber(ChillNum)%GenCompNum)
 
-      IF(SteamMassFlowRate .LE. 0.0)THEN
+      IF(SteamMassFlowRate .LE. 0.0d0)THEN
         GenOutletTemp = Node(GeneratorInletNode)%Temp
         SteamOutletEnthalpy = Node(GeneratorInletNode)%Enthalpy
       ELSE
         GenOutletTemp = Node(GeneratorInletNode)%Temp - SteamDeltaT
-        SteamOutletEnthalpy = GetSatEnthalpyRefrig('STEAM',GenOutletTemp,0.0, &
+        SteamOutletEnthalpy = GetSatEnthalpyRefrig('STEAM',GenOutletTemp,0.0d0, &
                                             BLASTAbsorber(ChillNum)%SteamFluidIndex, &
                                          'Chiller:Absorption'//TRIM(BLASTAbsorber(ChillNum)%Name))
         SteamOutletEnthalpy = SteamOutletEnthalpy - CpFluid*SteamDeltaT
@@ -1701,7 +1701,7 @@ SUBROUTINE UpdateBLASTAbsorberRecords(MyLoad,RunFlag, Num)
   IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)      :: MyLoad    ! current load
+  REAL(r64), INTENT(IN)      :: MyLoad    ! current load
   LOGICAL,   INTENT(IN)      :: RunFlag   ! TRUE if Absorber operating
   INTEGER,   INTENT(IN)      :: Num       ! Absorber number
 
@@ -1845,26 +1845,26 @@ PRIVATE
           ! DERIVED TYPE DEFINITIONS:
 TYPE IndirectAbsorberSpecs
     CHARACTER(len=MaxNameLength) :: Name = ' '    ! user identifier
-    REAL  :: NomCap                 = 0.0  ! W - design nominal capacity of Absorber
-    REAL  :: NomPumpPower           = 0.0  ! W - design nominal capacity of Absorber
-    REAL  :: EvapVolFlowRate        = 0.0  ! m3/s - design nominal water volumetric flow rate through the evaporator
-    REAL  :: CondVolFlowRate        = 0.0  ! m3/s - design nominal water volumetric flow rate through the condenser
-    REAL  :: EvapMassFlowRateMax    = 0.0  ! kg/s - Max Design Evaporator Mass Flow Rate converted from Volume Flow Rate
-    REAL  :: CondMassFlowRateMax    = 0.0     ! Max Design Condeneser Mass Flow Rate [kg/s]
-    REAL  :: GenMassFlowRateMax     = 0.0  ! kg/s - Max Design Generator Mass Flow Rate converted from Volume Flow Rate
-    REAL  :: MinPartLoadRat         = 0.0  ! (BLAST MIN) min allowed operating frac full load
-    REAL  :: MaxPartLoadRat         = 0.0  ! (BLAST MAX) max allowed operating frac full load
-    REAL  :: OptPartLoadRat         = 0.0  ! (BLAST BEST) optimal operating frac full load
-    REAL  :: TempDesCondIn          = 0.0  ! C - (BLAST ADJTC(1)The design secondary loop fluid
+    REAL(r64)  :: NomCap                 = 0.0d0  ! W - design nominal capacity of Absorber
+    REAL(r64)  :: NomPumpPower           = 0.0d0  ! W - design nominal capacity of Absorber
+    REAL(r64)  :: EvapVolFlowRate        = 0.0d0  ! m3/s - design nominal water volumetric flow rate through the evaporator
+    REAL(r64)  :: CondVolFlowRate        = 0.0d0  ! m3/s - design nominal water volumetric flow rate through the condenser
+    REAL(r64)  :: EvapMassFlowRateMax    = 0.0d0  ! kg/s - Max Design Evaporator Mass Flow Rate converted from Volume Flow Rate
+    REAL(r64)  :: CondMassFlowRateMax    = 0.0d0     ! Max Design Condeneser Mass Flow Rate [kg/s]
+    REAL(r64)  :: GenMassFlowRateMax     = 0.0d0  ! kg/s - Max Design Generator Mass Flow Rate converted from Volume Flow Rate
+    REAL(r64)  :: MinPartLoadRat         = 0.0d0  ! (BLAST MIN) min allowed operating frac full load
+    REAL(r64)  :: MaxPartLoadRat         = 0.0d0  ! (BLAST MAX) max allowed operating frac full load
+    REAL(r64)  :: OptPartLoadRat         = 0.0d0  ! (BLAST BEST) optimal operating frac full load
+    REAL(r64)  :: TempDesCondIn          = 0.0d0  ! C - (BLAST ADJTC(1)The design secondary loop fluid
                                                   ! temperature at the Absorber condenser side inlet
-    REAL  :: MinCondInletTemp       = 0.0  ! C - minimum condenser inlet temperature for chiller operation
-    REAL  :: MinGeneratorInletTemp  = 0.0  ! C - minimum generator inlet temperature for chiller operation
-    REAL  :: TempLowLimitEvapOut    = 0.0  ! C - low temperature shut off
-    REAL  :: GeneratorVolFlowRate   = 0.0  ! m3/s - hot water volumetric flow rate through generator
-    REAL  :: GeneratorSubCool       = 0.0  ! C - amount of subcooling in steam generator
-    REAL  :: LoopSubCool            = 0.0  ! C - amount of subcooling in steam generator
-    REAL  :: GeneratorDeltaTemp     = -99999. ! C - generator fluid temperature difference (water only)
-    REAL  :: SizFac                 = 0.0     ! Sizing factor
+    REAL(r64)  :: MinCondInletTemp       = 0.0d0  ! C - minimum condenser inlet temperature for chiller operation
+    REAL(r64)  :: MinGeneratorInletTemp  = 0.0d0  ! C - minimum generator inlet temperature for chiller operation
+    REAL(r64)  :: TempLowLimitEvapOut    = 0.0d0  ! C - low temperature shut off
+    REAL(r64)  :: GeneratorVolFlowRate   = 0.0d0  ! m3/s - hot water volumetric flow rate through generator
+    REAL(r64)  :: GeneratorSubCool       = 0.0d0  ! C - amount of subcooling in steam generator
+    REAL(r64)  :: LoopSubCool            = 0.0d0  ! C - amount of subcooling in steam generator
+    REAL(r64)  :: GeneratorDeltaTemp     = -99999.d0 ! C - generator fluid temperature difference (water only)
+    REAL(r64)  :: SizFac                 = 0.0d0     ! Sizing factor
     INTEGER    :: EvapInletNodeNum       = 0      ! Node number on the inlet side of the plant
     INTEGER    :: EvapOutletNodeNum      = 0      ! Node number on the outlet side of the plant
     INTEGER    :: CondInletNodeNum       = 0      ! Node number on the inlet side of the condenser
@@ -1907,47 +1907,47 @@ TYPE IndirectAbsorberSpecs
 END TYPE IndirectAbsorberSpecs
 
 TYPE ReportVars
-  REAL    :: PumpingPower         = 0.0    ! reporting: W - electric pumping power
-  REAL    :: QGenerator           = 0.0    ! reporting: W - steam heat transfer rate
-  REAL    :: QEvap                = 0.0    ! reporting: W - evaporator heat transfer rate
-  REAL    :: QCond                = 0.0    ! reporting: W - condensor heat transfer rate
-  REAL    :: PumpingEnergy        = 0.0    ! reporting: J - electric pumping power
-  REAL    :: GeneratorEnergy      = 0.0    ! reporting: J - steam heat transfer rate
-  REAL    :: EvapEnergy           = 0.0    ! reporting: J - evaporator heat transfer rate
-  REAL    :: CondEnergy           = 0.0    ! reporting: J - condensor heat transfer rate
-  REAL    :: CondInletTemp        = 0.0    ! reporting: C - condenser inlet temperature
-  REAL    :: EvapInletTemp        = 0.0    ! reporting: C - evaporator inlet temperature
-  REAL    :: CondOutletTemp       = 0.0    ! reporting: C - condenser outlet temperature
-  REAL    :: EvapOutletTemp       = 0.0    ! reporting: C - evaporator outlet temperature
-  REAL    :: Evapmdot             = 0.0    ! reporting: kg/ - evaporator mass flow rate
-  REAL    :: Condmdot             = 0.0    ! reporting: kg/ - condenser mass flow rate
-  REAL    :: Genmdot              = 0.0    ! reporting: generatore mass flow rate when connected to plant
-  REAL    :: SteamMdot            = 0.0    ! reporting: kg/s - steam mass flow rate
-  REAL    :: ActualCOP            = 0.0    ! reporting: coefficient of performance = QEvap/QGenerator
-  REAL    :: ChillerPartLoadRatio = 0.0    ! reporting: part-load ratio
-  REAL    :: ChillerCyclingFrac   = 0.0    ! reporting: chiller on/off cycling fraction
-  REAL    :: LoopLoss             = 0.0    ! reporting: W - loop loss from absorber outlet to condensate pump inlet
+  REAL(r64)    :: PumpingPower         = 0.0d0    ! reporting: W - electric pumping power
+  REAL(r64)    :: QGenerator           = 0.0d0    ! reporting: W - steam heat transfer rate
+  REAL(r64)    :: QEvap                = 0.0d0    ! reporting: W - evaporator heat transfer rate
+  REAL(r64)    :: QCond                = 0.0d0    ! reporting: W - condensor heat transfer rate
+  REAL(r64)    :: PumpingEnergy        = 0.0d0    ! reporting: J - electric pumping power
+  REAL(r64)    :: GeneratorEnergy      = 0.0d0    ! reporting: J - steam heat transfer rate
+  REAL(r64)    :: EvapEnergy           = 0.0d0    ! reporting: J - evaporator heat transfer rate
+  REAL(r64)    :: CondEnergy           = 0.0d0    ! reporting: J - condensor heat transfer rate
+  REAL(r64)    :: CondInletTemp        = 0.0d0    ! reporting: C - condenser inlet temperature
+  REAL(r64)    :: EvapInletTemp        = 0.0d0    ! reporting: C - evaporator inlet temperature
+  REAL(r64)    :: CondOutletTemp       = 0.0d0    ! reporting: C - condenser outlet temperature
+  REAL(r64)    :: EvapOutletTemp       = 0.0d0    ! reporting: C - evaporator outlet temperature
+  REAL(r64)    :: Evapmdot             = 0.0d0    ! reporting: kg/ - evaporator mass flow rate
+  REAL(r64)    :: Condmdot             = 0.0d0    ! reporting: kg/ - condenser mass flow rate
+  REAL(r64)    :: Genmdot              = 0.0d0    ! reporting: generatore mass flow rate when connected to plant
+  REAL(r64)    :: SteamMdot            = 0.0d0    ! reporting: kg/s - steam mass flow rate
+  REAL(r64)    :: ActualCOP            = 0.0d0    ! reporting: coefficient of performance = QEvap/QGenerator
+  REAL(r64)    :: ChillerPartLoadRatio = 0.0d0    ! reporting: part-load ratio
+  REAL(r64)    :: ChillerCyclingFrac   = 0.0d0    ! reporting: chiller on/off cycling fraction
+  REAL(r64)    :: LoopLoss             = 0.0d0    ! reporting: W - loop loss from absorber outlet to condensate pump inlet
 END TYPE ReportVars
 
           ! MODULE VARIABLE DECLARATIONS:
 INTEGER        :: NumIndirectAbsorbers = 0        ! number of Absorption Chillers specified in input
-REAL      :: CondMassFlowRate     = 0.0    ! Kg/s - condenser mass flow rate, water side
-REAL      :: EvapMassFlowRate     = 0.0    ! Kg/s - evaporator mass flow rate, water side
-REAL      :: GenMassFlowRate      = 0.0    ! Kg/s - steam mass flow rate, water side
-REAL      :: CondOutletTemp       = 0.0    ! C - condenser outlet temperature, water side
-REAL      :: EvapOutletTemp       = 0.0    ! C - evaporator outlet temperature, water side
-REAL      :: GenOutletTemp        = 0.0    ! C - generator fluid outlet temperature
-REAL      :: SteamOutletEnthalpy  = 0.0    ! J/kg - generator fluid outlet enthalpy
-REAL      :: PumpingPower         = 0.0    ! W - rate of Absorber energy use
-REAL      :: PumpingEnergy        = 0.0    ! J - Absorber energy use
-REAL      :: QGenerator           = 0.0    ! W - rate of Absorber steam use
-REAL      :: GeneratorEnergy      = 0.0    ! J - Absorber steam use
-REAL      :: QEvaporator          = 0.0    ! W - rate of heat transfer to the evaporator coil
-REAL      :: EvaporatorEnergy     = 0.0    ! J - heat transfer to the evaporator coil
-REAL      :: QCondenser           = 0.0    ! W - rate of heat transfer to the condenser coil
-REAL      :: CondenserEnergy      = 0.0    ! J - heat transfer to the condenser coil
-REAL      :: EnergyLossToEnvironment = 0.0 ! J - piping energy loss from generator outlet to pump inlet
-REAL      :: ChillerONOFFCyclingFrac = 0.0 ! fraction of time chiller is on
+REAL(r64)      :: CondMassFlowRate     = 0.0d0    ! Kg/s - condenser mass flow rate, water side
+REAL(r64)      :: EvapMassFlowRate     = 0.0d0    ! Kg/s - evaporator mass flow rate, water side
+REAL(r64)      :: GenMassFlowRate      = 0.0d0    ! Kg/s - steam mass flow rate, water side
+REAL(r64)      :: CondOutletTemp       = 0.0d0    ! C - condenser outlet temperature, water side
+REAL(r64)      :: EvapOutletTemp       = 0.0d0    ! C - evaporator outlet temperature, water side
+REAL(r64)      :: GenOutletTemp        = 0.0d0    ! C - generator fluid outlet temperature
+REAL(r64)      :: SteamOutletEnthalpy  = 0.0d0    ! J/kg - generator fluid outlet enthalpy
+REAL(r64)      :: PumpingPower         = 0.0d0    ! W - rate of Absorber energy use
+REAL(r64)      :: PumpingEnergy        = 0.0d0    ! J - Absorber energy use
+REAL(r64)      :: QGenerator           = 0.0d0    ! W - rate of Absorber steam use
+REAL(r64)      :: GeneratorEnergy      = 0.0d0    ! J - Absorber steam use
+REAL(r64)      :: QEvaporator          = 0.0d0    ! W - rate of heat transfer to the evaporator coil
+REAL(r64)      :: EvaporatorEnergy     = 0.0d0    ! J - heat transfer to the evaporator coil
+REAL(r64)      :: QCondenser           = 0.0d0    ! W - rate of heat transfer to the condenser coil
+REAL(r64)      :: CondenserEnergy      = 0.0d0    ! J - heat transfer to the condenser coil
+REAL(r64)      :: EnergyLossToEnvironment = 0.0d0 ! J - piping energy loss from generator outlet to pump inlet
+REAL(r64)      :: ChillerONOFFCyclingFrac = 0.0d0 ! fraction of time chiller is on
 
 TYPE (IndirectAbsorberSpecs), ALLOCATABLE, DIMENSION(:)  :: IndirectAbsorber  !dimension to number of machines
 
@@ -2000,14 +2000,14 @@ SUBROUTINE SimIndirectAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl,LoopNum,L
   LOGICAL,          INTENT(IN)    :: RunFlag        ! simulate Absorber when TRUE
   LOGICAL,          INTENT(IN)    :: FirstIteration ! initialize variables when TRUE
   LOGICAL,          INTENT(INOUT) :: InitLoopEquip  ! If not zero, calculate the max load for operating conditions
-  REAL,        INTENT(INOUT) :: MyLoad         ! loop demand component will meet
-  REAL,        INTENT(INOUT) :: MinCap         ! W - minimum operating capacity of Absorber
-  REAL,        INTENT(INOUT) :: MaxCap         ! W - maximum operating capacity of Absorber
-  REAL,        INTENT(INOUT) :: OptCap         ! W - optimal operating capacity of Absorber
+  REAL(r64),        INTENT(INOUT) :: MyLoad         ! loop demand component will meet
+  REAL(r64),        INTENT(INOUT) :: MinCap         ! W - minimum operating capacity of Absorber
+  REAL(r64),        INTENT(INOUT) :: MaxCap         ! W - maximum operating capacity of Absorber
+  REAL(r64),        INTENT(INOUT) :: OptCap         ! W - optimal operating capacity of Absorber
   INTEGER,          INTENT(INOUT) :: CompIndex        ! Chiller number pointer
   LOGICAL,          INTENT(IN)    :: GetSizingFactor  ! TRUE when just the sizing factor is requested
-  REAL,        INTENT(OUT)   :: SizingFactor     ! sizing factor
-  REAL,        INTENT(OUT)   :: TempCondInDesign
+  REAL(r64),        INTENT(OUT)   :: SizingFactor     ! sizing factor
+  REAL(r64),        INTENT(OUT)   :: TempCondInDesign
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2067,9 +2067,9 @@ SUBROUTINE SimIndirectAbsorber(AbsorberType,AbsorberName,EquipFlowCtrl,LoopNum,L
       MaxCap = IndirectAbsorber(ChillNum)%NomCap*IndirectAbsorber(ChillNum)%MaxPartLoadRat
       OptCap = IndirectAbsorber(ChillNum)%NomCap*IndirectAbsorber(ChillNum)%OptPartLoadRat
     ELSE
-      MinCap = 0.
-      MaxCap = 0.
-      OptCap = 0.
+      MinCap = 0.d0
+      MaxCap = 0.d0
+      OptCap = 0.d0
     ENDIF
     IF (GetSizingFactor) THEN
       ChillNum = FindItemInList(AbsorberName,IndirectAbsorber%Name,NumIndirectAbsorbers)
@@ -2416,25 +2416,25 @@ SUBROUTINE GetIndirectAbsorberInput
     IF(NumNums .GT. 11)THEN
       IndirectAbsorber(AbsorberNum)%MinGeneratorInletTemp = rNumericArgs(12)
     ELSE
-      IndirectAbsorber(AbsorberNum)%MinGeneratorInletTemp = 0.0
+      IndirectAbsorber(AbsorberNum)%MinGeneratorInletTemp = 0.0d0
     END IF
 
     IF(NumNums .GT. 12)THEN
       IndirectAbsorber(AbsorberNum)%GeneratorSubCool = rNumericArgs(13)
     ELSE
-      IndirectAbsorber(AbsorberNum)%GeneratorSubCool = 0.0
+      IndirectAbsorber(AbsorberNum)%GeneratorSubCool = 0.0d0
     END IF
 
     IF(NumNums .GT. 13)THEN
       IndirectAbsorber(AbsorberNum)%LoopSubCool = rNumericArgs(14)
     ELSE
-      IndirectAbsorber(AbsorberNum)%LoopSubCool = 0.0
+      IndirectAbsorber(AbsorberNum)%LoopSubCool = 0.0d0
     END IF
 
     IF(NumNums .GT. 14)THEN
       IndirectAbsorber(AbsorberNum)%SizFac = rNumericArgs(15)
     ELSE
-      IndirectAbsorber(AbsorberNum)%SizFac = 1.0
+      IndirectAbsorber(AbsorberNum)%SizFac = 1.0d0
     END IF
 
 
@@ -2547,7 +2547,7 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: ChillNum     ! number of the current electric chiller being simulated
   LOGICAL, INTENT(IN)  :: RunFlag      ! TRUE when chiller operating
-  REAL, INTENT(IN):: MyLoad ! requested load
+  REAL(r64), INTENT(IN):: MyLoad ! requested load
   LOGICAL, INTENT(IN)  :: FirstHVACIteration      ! initialize variables when TRUE
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2571,19 +2571,19 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
   INTEGER :: CompCtr            ! Component counter
   LOGICAL :: errFlag
   LOGICAL   :: FatalError
-  REAL :: rho ! local fluid density
-  REAL :: CpWater ! local specific heat
-  REAL :: SteamDensity        ! density of generator steam (when connected to a steam loop)
-  REAL :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
-  REAL :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
-  REAL :: HfgSteam            ! latent heat of steam at constant pressure
-  REAL :: SteamDeltaT         ! amount of sub-cooling of steam condensate
+  REAL(r64) :: rho ! local fluid density
+  REAL(r64) :: CpWater ! local specific heat
+  REAL(r64) :: SteamDensity        ! density of generator steam (when connected to a steam loop)
+  REAL(r64) :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
+  REAL(r64) :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
+  REAL(r64) :: HfgSteam            ! latent heat of steam at constant pressure
+  REAL(r64) :: SteamDeltaT         ! amount of sub-cooling of steam condensate
   INTEGER   :: GeneratorInletNode      ! generator inlet node number, steam/water side
-  REAL :: SteamOutletTemp
+  REAL(r64) :: SteamOutletTemp
   INTEGER   :: DummyWaterIndex = 1
-  REAL :: mdotEvap ! local fluid mass flow rate thru evaporator
-  REAL :: mdotCond ! local fluid mass flow rate thru condenser
-  REAL :: mdotGen ! local fluid mass flow rate thru generator
+  REAL(r64) :: mdotEvap ! local fluid mass flow rate thru evaporator
+  REAL(r64) :: mdotCond ! local fluid mass flow rate thru condenser
+  REAL(r64) :: mdotGen ! local fluid mass flow rate thru generator
 
           ! FLOW:
 
@@ -2716,7 +2716,7 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
 
     IndirectAbsorber(ChillNum)%EvapMassFlowRateMax = IndirectAbsorber(ChillNum)%EvapVolFlowRate * rho
 
-    CALL InitComponentNodes(0., IndirectAbsorber(ChillNum)%EvapMassFlowRateMax, &
+    CALL InitComponentNodes(0.d0, IndirectAbsorber(ChillNum)%EvapMassFlowRateMax, &
                               IndirectAbsorber(ChillNum)%EvapInletNodeNum, &
                               IndirectAbsorber(ChillNum)%EvapOutletNodeNum, &
                               IndirectAbsorber(ChillNum)%CWLoopNum, &
@@ -2731,7 +2731,7 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
 
     IndirectAbsorber(ChillNum)%CondMassFlowRateMax = rho * IndirectAbsorber(ChillNum)%CondVolFlowRate
 
-    CALL InitComponentNodes(0., IndirectAbsorber(ChillNum)%CondMassFlowRateMax, &
+    CALL InitComponentNodes(0.d0, IndirectAbsorber(ChillNum)%CondMassFlowRateMax, &
                             CondInletNode, CondOutletNode, &
                             IndirectAbsorber(ChillNum)%CDLoopNum, &
                             IndirectAbsorber(ChillNum)%CDLoopSideNum, &
@@ -2751,13 +2751,13 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
         IndirectAbsorber(ChillNum)%GenMassFlowRateMax   = rho * IndirectAbsorber(ChillNum)%GeneratorVolFlowRate
 
       ELSE
-        SteamDensity      = GetSatDensityRefrig('STEAM',Node(IndirectAbsorber(ChillNum)%GeneratorInletNodeNum)%Temp,1.0, &
+        SteamDensity      = GetSatDensityRefrig('STEAM',Node(IndirectAbsorber(ChillNum)%GeneratorInletNodeNum)%Temp,1.0d0, &
                                                  IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                 'CALC Chiller:Absorption:Indirect '//TRIM(IndirectAbsorber(ChillNum)%Name))
         IndirectAbsorber(ChillNum)%GenMassFlowRateMax   = SteamDensity*IndirectAbsorber(ChillNum)%GeneratorVolFlowRate
       END IF
 
-      CALL InitComponentNodes(0., IndirectAbsorber(ChillNum)%GenMassFlowRateMax, &
+      CALL InitComponentNodes(0.d0, IndirectAbsorber(ChillNum)%GenMassFlowRateMax, &
                               IndirectAbsorber(ChillNum)%GeneratorInletNodeNum, &
                               IndirectAbsorber(ChillNum)%GeneratorOutletNodeNum, &
                               IndirectAbsorber(ChillNum)%GenLoopNum, &
@@ -2781,28 +2781,28 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
   ENDIF
 
   IF (FirstHVACIteration) THEN
-    IF ((MyLoad < 0.) .AND. RunFlag)  THEN
+    IF ((MyLoad < 0.d0) .AND. RunFlag)  THEN
       mdotEvap = IndirectAbsorber(ChillNum)%EvapMassFlowRateMax
       mdotCond = IndirectAbsorber(ChillNum)%CondMassFlowRateMax
       mdotGen  = IndirectAbsorber(ChillNum)%GenMassFlowRateMax
     ELSE
-      mdotEvap = 0.
-      mdotCond = 0.
-      mdotGen  = 0.
+      mdotEvap = 0.d0
+      mdotCond = 0.d0
+      mdotGen  = 0.d0
     ENDIF
   ELSE
-    IF ((MyLoad < 0.) .AND. RunFlag)  THEN
-      IF (IndirectAbsorberReport(ChillNum)%Evapmdot > 0.) THEN
+    IF ((MyLoad < 0.d0) .AND. RunFlag)  THEN
+      IF (IndirectAbsorberReport(ChillNum)%Evapmdot > 0.d0) THEN
         mdotEvap = IndirectAbsorberReport(ChillNum)%Evapmdot
       ELSE
         mdotEvap = IndirectAbsorber(ChillNum)%EvapMassFlowRateMax
       ENDIF
-      IF (IndirectAbsorberReport(ChillNum)%Condmdot > 0.) THEN
+      IF (IndirectAbsorberReport(ChillNum)%Condmdot > 0.d0) THEN
         mdotCond = IndirectAbsorberReport(ChillNum)%Condmdot
       ELSE
         mdotCond = IndirectAbsorber(ChillNum)%CondMassFlowRateMax
       ENDIF
-      IF (IndirectAbsorberReport(ChillNum)%Genmdot > 0.) THEN
+      IF (IndirectAbsorberReport(ChillNum)%Genmdot > 0.d0) THEN
         mdotGen  = IndirectAbsorberReport(ChillNum)%Genmdot
       ELSE
         mdotGen  = IndirectAbsorber(ChillNum)%GenMassFlowRateMax
@@ -2895,26 +2895,26 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
   INTEGER             :: PltSizCondNum       ! Plant Sizing index for condenser loop
   INTEGER             :: PltSizSteamNum      ! Plant Sizing index for steam heating loop
   INTEGER             :: PltSizHeatingNum    ! Plant Sizing index for how water heating loop
-  REAL           :: SteamInputRatNom    ! nominal energy input ratio (steam or hot water)
-  REAL           :: SteamDensity        ! density of generator steam (when connected to a steam loop)
-  REAL           :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
-  REAL           :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
-  REAL           :: HfgSteam            ! latent heat of steam at constant pressure
-  REAL           :: SteamDeltaT         ! amount of sub-cooling of steam condensate
-  REAL           :: SteamMassFlowRate   ! steam mass flow rate through generator
-  REAL           :: CpWater             ! specific heat of generator fluid (when connected to a hot water loop)
-  REAL           :: RhoWater            ! density of water (kg/m3)
-  REAL           :: GeneratorOutletTemp ! outlet temperature of generator
+  REAL(r64)           :: SteamInputRatNom    ! nominal energy input ratio (steam or hot water)
+  REAL(r64)           :: SteamDensity        ! density of generator steam (when connected to a steam loop)
+  REAL(r64)           :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
+  REAL(r64)           :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
+  REAL(r64)           :: HfgSteam            ! latent heat of steam at constant pressure
+  REAL(r64)           :: SteamDeltaT         ! amount of sub-cooling of steam condensate
+  REAL(r64)           :: SteamMassFlowRate   ! steam mass flow rate through generator
+  REAL(r64)           :: CpWater             ! specific heat of generator fluid (when connected to a hot water loop)
+  REAL(r64)           :: RhoWater            ! density of water (kg/m3)
+  REAL(r64)           :: GeneratorOutletTemp ! outlet temperature of generator
   LOGICAL             :: ErrorsFound         ! If errors detected in input
   LOGICAL             :: LoopErrorsFound     !
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL           :: rho ! local fluid density
-  REAL           :: Cp  ! local specific heat
-  REAL           :: tmpNomCap ! local nominal capacity cooling power
-  REAL           :: tmpNomPumpPower ! local nominal pump power
-  REAL           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
-  REAL           :: tmpCondVolFlowRate ! local condenser design volume flow rate
-  REAL           :: tmpGeneratorVolFlowRate ! local generator design volume flow rate
+  REAL(r64)           :: rho ! local fluid density
+  REAL(r64)           :: Cp  ! local specific heat
+  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
+  REAL(r64)           :: tmpNomPumpPower ! local nominal pump power
+  REAL(r64)           :: tmpEvapVolFlowRate ! local evaporator design volume flow rate
+  REAL(r64)           :: tmpCondVolFlowRate ! local condenser design volume flow rate
+  REAL(r64)           :: tmpGeneratorVolFlowRate ! local generator design volume flow rate
   INTEGER             :: DummWaterIndex = 1
 
   PltSizNum = 0
@@ -2930,9 +2930,9 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
   tmpGeneratorVolFlowRate = IndirectAbsorber(ChillNum)%GeneratorVolFlowRate
 
   IF(IndirectAbsorber(ChillNum)%GeneratorInputCurvePtr .GT. 0)THEN
-    SteamInputRatNom = CurveValue(IndirectAbsorber(ChillNum)%GeneratorInputCurvePtr,1.0)
+    SteamInputRatNom = CurveValue(IndirectAbsorber(ChillNum)%GeneratorInputCurvePtr,1.0d0)
   ELSE
-    SteamInputRatNom = 1.0
+    SteamInputRatNom = 1.0d0
   END IF
 
   ! find the appropriate Plant Sizing object
@@ -2994,9 +2994,9 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
         ENDIF
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          IndirectAbsorber(ChillNum)%NomCap = 0.
+          IndirectAbsorber(ChillNum)%NomCap = 0.d0
         ELSE
-          tmpNomCap = 0.
+          tmpNomCap = 0.d0
         ENDIF
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Absorption:Indirect', IndirectAbsorber(ChillNum)%Name, &
@@ -3011,12 +3011,12 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
   IF (IndirectAbsorber(ChillNum)%NomPumpPower  == AutoSize) THEN
     IF (PlantSizesOkayToFinalize) THEN
      ! the DOE-2 EIR for single stage absorption chiller
-      IndirectAbsorber(ChillNum)%NomPumpPower = 0.0045 * IndirectAbsorber(ChillNum)%NomCap
+      IndirectAbsorber(ChillNum)%NomPumpPower = 0.0045d0 * IndirectAbsorber(ChillNum)%NomCap
 
       CALL ReportSizingOutput('Chiller:Absorption:Indirect', IndirectAbsorber(ChillNum)%Name, &
                               'Nominal Pumping Power [W]', IndirectAbsorber(ChillNum)%NomPumpPower)
     ELSE
-      tmpNomPumpPower = 0.0045 * tmpNomCap
+      tmpNomPumpPower = 0.0045d0 * tmpNomCap
     ENDIF
   END IF
 
@@ -3030,9 +3030,9 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
         ENDIF
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          IndirectAbsorber(ChillNum)%EvapVolFlowRate = 0.
+          IndirectAbsorber(ChillNum)%EvapVolFlowRate = 0.d0
         ELSE
-          tmpEvapVolFlowRate = 0.
+          tmpEvapVolFlowRate = 0.d0
         ENDIF
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Absorption:Indirect', IndirectAbsorber(ChillNum)%Name, &
@@ -3066,18 +3066,18 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
                                    'SizeIndirectAbsorpChiller')
         IF (PlantSizesOkayToFinalize) THEN
           IndirectAbsorber(ChillNum)%CondVolFlowRate = IndirectAbsorber(ChillNum)%NomCap * &
-            (1.0 + SteamInputRatNom + IndirectAbsorber(ChillNum)%NomPumpPower/IndirectAbsorber(ChillNum)%NomCap) / &
+            (1.0d0 + SteamInputRatNom + IndirectAbsorber(ChillNum)%NomPumpPower/IndirectAbsorber(ChillNum)%NomCap) / &
             ( PlantSizData(PltSizCondNum)%DeltaT * Cp * rho )
         ELSE
           tmpCondVolFlowRate = tmpNomCap * &
-             (1.0 + SteamInputRatNom + tmpNomPumpPower/tmpNomCap) / &
+             (1.0d0 + SteamInputRatNom + tmpNomPumpPower/tmpNomCap) / &
              ( PlantSizData(PltSizCondNum)%DeltaT * Cp * rho )
         ENDIF
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          IndirectAbsorber(ChillNum)%CondVolFlowRate = 0.0
+          IndirectAbsorber(ChillNum)%CondVolFlowRate = 0.0d0
         ELSE
-          tmpCondVolFlowRate = 0.
+          tmpCondVolFlowRate = 0.d0
         ENDIF
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Chiller:Absorption:Indirect', IndirectAbsorber(ChillNum)%Name, &
@@ -3107,7 +3107,7 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
                                    PlantSizData(PltSizHeatingNum)%ExitTemp, &
                                    PlantLoop(IndirectAbsorber(ChillNum)%GenLoopNum)%FluidIndex, &
                                    'SizeIndirectAbsorpChiller')
-          SteamDeltaT = MAX(0.5,PlantSizData(PltSizHeatingNum)%DeltaT)
+          SteamDeltaT = MAX(0.5d0,PlantSizData(PltSizHeatingNum)%DeltaT)
 
           RhoWater = GetDensityGlycol(PlantLoop(IndirectAbsorber(ChillNum)%GenLoopNum)%FluidName, &
                                    (PlantSizData(PltSizHeatingNum)%ExitTemp - SteamDeltaT), &
@@ -3126,16 +3126,16 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
           ENDIF
 
         ELSE
-          SteamDensity = GetSatDensityRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0, &
+          SteamDensity = GetSatDensityRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0d0, &
                                               IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                   'SIZE Chiller:Absorption:Indirect'//TRIM(IndirectAbsorber(ChillNum)%Name))
           SteamDeltaT         = PlantSizData(PltSizSteamNum)%DeltaT
           GeneratorOutletTemp = PlantSizData(PltSizSteamNum)%ExitTemp - SteamDeltaT
 
-          EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0, &
+          EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,1.0d0, &
                                                    IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                   'SIZE Chiller:Absorption:Indirect'//TRIM(IndirectAbsorber(ChillNum)%Name))
-          EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,0.0, &
+          EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',PlantSizData(PltSizSteamNum)%ExitTemp,0.0d0, &
                                                    IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                   'SIZE Chiller:Absorption:Indirect'//TRIM(IndirectAbsorber(ChillNum)%Name))
           CpWater =  GetSpecificHeatGlycol('WATER', GeneratorOutletTemp, DummWaterIndex,  'SizeIndirectAbsorpChiller')
@@ -3161,9 +3161,9 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
         END IF
       ELSE
         IF (PlantSizesOkayToFinalize) THEN
-          IndirectAbsorber(ChillNum)%GeneratorVolFlowRate = 0.0
+          IndirectAbsorber(ChillNum)%GeneratorVolFlowRate = 0.0d0
         ELSE
-          tmpGeneratorVolFlowRate = 0.
+          tmpGeneratorVolFlowRate = 0.d0
         ENDIF
       END IF
     ELSE
@@ -3185,7 +3185,7 @@ SUBROUTINE SizeIndirectAbsorpChiller(ChillNum)
 
   IF(IndirectAbsorber(ChillNum)%GeneratorDeltaTemp == AutoSize)THEN
     IF(PltSizHeatingNum > 0 .AND. IndirectAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water) THEN
-      IndirectAbsorber(ChillNum)%GeneratorDeltaTemp = MAX(0.5,PlantSizData(PltSizHeatingNum)%DeltaT)
+      IndirectAbsorber(ChillNum)%GeneratorDeltaTemp = MAX(0.5d0,PlantSizData(PltSizHeatingNum)%DeltaT)
     ELSE IF(IndirectAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water)THEN
       rho = GetDensityGlycol(PlantLoop(IndirectAbsorber(ChillNum)%GenLoopNum)%FluidName, &
                                    InitConvTemp, &
@@ -3254,7 +3254,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,  INTENT(IN)   :: ChillNum        ! Absorber number
-  REAL,INTENT(IN)   :: MyLoad          ! operating load
+  REAL(r64),INTENT(IN)   :: MyLoad          ! operating load
   LOGICAL,  INTENT(IN)   :: RunFlag         ! TRUE when Absorber operating
   LOGICAL,  INTENT(IN)   :: FirstIteration  ! TRUE when first iteration of timestep !unused1208
   INTEGER,  INTENT(IN)   :: EquipFlowCtrl   ! Flow control mode for the equipment
@@ -3268,48 +3268,48 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL              :: MinPartLoadRat      ! min allowed operating frac full load
-  REAL              :: MaxPartLoadRat      ! max allowed operating frac full load
-  REAL              :: TempCondIn          ! C - (BLAST ADJTC(1)The design secondary loop fluid
-  REAL              :: EvapInletTemp       ! C - evaporator inlet temperature, water side
-  REAL              :: CondInletTemp       ! C - condenser inlet temperature, water side
-  REAL              :: TempEvapOut         ! C - evaporator outlet temperature, water side
-  REAL              :: TempEvapOutSetpoint   ! C - evaporator outlet temperature setpoint
-  REAL              :: AbsorberNomCap      ! Absorber nominal capacity
-  REAL              :: NomPumpPower        ! Absorber nominal pumping power
-  REAL              :: PartLoadRat         ! part load ratio for efficiency calc
-  REAL              :: OperPartLoadRat     ! Operating part load ratio
-  REAL              :: EvapDeltaTemp       ! C - evaporator temperature difference, water side
-  REAL              :: TempLowLimitEout    ! C - Evaporator low temp. limit cut off
-  REAL              :: HeatInputRat        ! genertaor heat input ratio
-  REAL              :: ElectricInputRat    ! energy input ratio
+  REAL(r64)              :: MinPartLoadRat      ! min allowed operating frac full load
+  REAL(r64)              :: MaxPartLoadRat      ! max allowed operating frac full load
+  REAL(r64)              :: TempCondIn          ! C - (BLAST ADJTC(1)The design secondary loop fluid
+  REAL(r64)              :: EvapInletTemp       ! C - evaporator inlet temperature, water side
+  REAL(r64)              :: CondInletTemp       ! C - condenser inlet temperature, water side
+  REAL(r64)              :: TempEvapOut         ! C - evaporator outlet temperature, water side
+  REAL(r64)              :: TempEvapOutSetpoint   ! C - evaporator outlet temperature setpoint
+  REAL(r64)              :: AbsorberNomCap      ! Absorber nominal capacity
+  REAL(r64)              :: NomPumpPower        ! Absorber nominal pumping power
+  REAL(r64)              :: PartLoadRat         ! part load ratio for efficiency calc
+  REAL(r64)              :: OperPartLoadRat     ! Operating part load ratio
+  REAL(r64)              :: EvapDeltaTemp       ! C - evaporator temperature difference, water side
+  REAL(r64)              :: TempLowLimitEout    ! C - Evaporator low temp. limit cut off
+  REAL(r64)              :: HeatInputRat        ! genertaor heat input ratio
+  REAL(r64)              :: ElectricInputRat    ! energy input ratio
   INTEGER                :: EvapInletNode       ! evaporator inlet node number, water side
   INTEGER                :: EvapOutletNode      ! evaporator outlet node number, water side
   INTEGER                :: CondInletNode       ! condenser inlet node number, water side
   INTEGER                :: CondOutletNode      ! condenser outlet node number, water side
   INTEGER                :: GeneratorInletNode  ! generator inlet node number, steam/water side
   INTEGER                :: GeneratorOutletNode ! generator outlet node number, steam/water side
-  REAL              :: EnthSteamOutDry     ! enthalpy of dry steam at generator inlet
-  REAL              :: EnthSteamOutWet     ! enthalpy of wet steam at generator inlet
-  REAL              :: HfgSteam            ! heat of vaporization of steam
+  REAL(r64)              :: EnthSteamOutDry     ! enthalpy of dry steam at generator inlet
+  REAL(r64)              :: EnthSteamOutWet     ! enthalpy of wet steam at generator inlet
+  REAL(r64)              :: HfgSteam            ! heat of vaporization of steam
   LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironFlag
   LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironSteamFlag
   LOGICAL, SAVE :: OneTimeFlag = .true.
-  REAL              :: FRAC                ! fraction of time step chiller cycles
+  REAL(r64)              :: FRAC                ! fraction of time step chiller cycles
   LOGICAL,SAVE           :: PossibleSubCooling  ! flag to determine if supply water temperature is below setpoint
-  REAL              :: CpFluid             ! specific heat of generator fluid
-  REAL              :: SteamDeltaT         ! temperature difference of fluid through generator
-  REAL              :: SteamDensity        ! density of steam
-  REAL              :: SteamOutletTemp     ! generator outlet temperature
-  REAL              :: CapacityfAbsorberTemp   ! performance curve output
-  REAL              :: CapacityfEvaporatorTemp ! performance curve output
-  REAL              :: CapacityfGeneratorTemp  ! performance curve output
-  REAL              :: HeatInputfCondTemp      ! performance curve output
-  REAL              :: HeatInputfEvapTemp      ! performance curve output
-  REAL              :: TempWaterAtmPress   ! temperature of condensed steam leaving generator (after condensate trap)
-  REAL              :: TempLoopOutToPump   ! temperature of condensed steam entering pump (includes loop losses)
-  REAL              :: EnthAtAtmPress      ! enthalpy  of condensed steam leaving generator (after condensate trap)
-  REAL              :: EnthPumpInlet       ! enthalpy of condensed steam entering pump (includes loop losses)
+  REAL(r64)              :: CpFluid             ! specific heat of generator fluid
+  REAL(r64)              :: SteamDeltaT         ! temperature difference of fluid through generator
+  REAL(r64)              :: SteamDensity        ! density of steam
+  REAL(r64)              :: SteamOutletTemp     ! generator outlet temperature
+  REAL(r64)              :: CapacityfAbsorberTemp   ! performance curve output
+  REAL(r64)              :: CapacityfEvaporatorTemp ! performance curve output
+  REAL(r64)              :: CapacityfGeneratorTemp  ! performance curve output
+  REAL(r64)              :: HeatInputfCondTemp      ! performance curve output
+  REAL(r64)              :: HeatInputfEvapTemp      ! performance curve output
+  REAL(r64)              :: TempWaterAtmPress   ! temperature of condensed steam leaving generator (after condensate trap)
+  REAL(r64)              :: TempLoopOutToPump   ! temperature of condensed steam entering pump (includes loop losses)
+  REAL(r64)              :: EnthAtAtmPress      ! enthalpy  of condensed steam leaving generator (after condensate trap)
+  REAL(r64)              :: EnthPumpInlet       ! enthalpy of condensed steam entering pump (includes loop losses)
   INTEGER :: LoopSideNum
   INTEGER :: LoopNum
   INTEGER :: DummyWaterIndex = 1
@@ -3323,19 +3323,19 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
   ENDIF
 
           !set module level inlet and outlet nodes
-  EvapMassFlowRate           = 0.0
-  CondMassFlowRate           = 0.0
-  GenMassFlowRate            = 0.0
-  QCondenser                 = 0.0
-  QEvaporator                = 0.0
-  QGenerator                 = 0.0
-  PumpingEnergy              = 0.0
-  CondenserEnergy            = 0.0
-  EvaporatorEnergy           = 0.0
-  GeneratorEnergy            = 0.0
-  PumpingPower               = 0.0
-  FRAC                       = 1.0
-  ChillerONOFFCyclingFrac    = 0.0
+  EvapMassFlowRate           = 0.0d0
+  CondMassFlowRate           = 0.0d0
+  GenMassFlowRate            = 0.0d0
+  QCondenser                 = 0.0d0
+  QEvaporator                = 0.0d0
+  QGenerator                 = 0.0d0
+  PumpingEnergy              = 0.0d0
+  CondenserEnergy            = 0.0d0
+  EvaporatorEnergy           = 0.0d0
+  GeneratorEnergy            = 0.0d0
+  PumpingPower               = 0.0d0
+  FRAC                       = 1.0d0
+  ChillerONOFFCyclingFrac    = 0.0d0
   EvapInletNode       = IndirectAbsorber(ChillNum)%EvapInletNodeNum
   EvapOutletNode      = IndirectAbsorber(ChillNum)%EvapOutletNodeNum
   CondInletNode       = IndirectAbsorber(ChillNum)%CondInletNodeNum
@@ -3345,7 +3345,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
 
 
 !  If no loop demand or Absorber OFF, return
-  IF(MyLoad >= 0.0 .OR. .NOT. RunFlag) THEN
+  IF(MyLoad >= 0.0d0 .OR. .NOT. RunFlag) THEN
    IF(EquipFlowCtrl == ControlType_SeriesActive) EvapMassFlowRate = Node(EvapInletNode)%MassFlowrate
    RETURN
   END IF
@@ -3416,25 +3416,25 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
   IF(IndirectAbsorber(ChillNum)%CapFCondenserTempPtr .GT. 0)THEN
     CapacityfAbsorberTemp = CurveValue(IndirectAbsorber(ChillNum)%CapFCondenserTempPtr, TempCondIn)
   ELSE
-    CapacityfAbsorberTemp = 1.0
+    CapacityfAbsorberTemp = 1.0d0
   END IF
   IF(IndirectAbsorber(ChillNum)%CapFEvaporatorTempPtr .GT. 0)THEN
     CapacityfEvaporatorTemp = CurveValue(IndirectAbsorber(ChillNum)%CapFEvaporatorTempPtr, TempEvapOut)
   ELSE
-    CapacityfEvaporatorTemp = 1.0
+    CapacityfEvaporatorTemp = 1.0d0
   END IF
   IF(IndirectAbsorber(ChillNum)%CapFGeneratorTempPtr .GT. 0)THEN
     IF(GeneratorInletNode .GT. 0)THEN
       IF(IndirectAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water)THEN
         CapacityfGeneratorTemp = CurveValue(IndirectAbsorber(ChillNum)%CapFGeneratorTempPtr, Node(GeneratorInletNode)%Temp)
       ELSE
-        CapacityfGeneratorTemp = 1.0
+        CapacityfGeneratorTemp = 1.0d0
       END IF
     ELSE
-      CapacityfGeneratorTemp = 1.0
+      CapacityfGeneratorTemp = 1.0d0
     END IF
   ELSE
-    CapacityfGeneratorTemp = 1.0
+    CapacityfGeneratorTemp = 1.0d0
   END IF
 
   AbsorberNomCap = AbsorberNomCap * CapacityfAbsorberTemp * CapacityfEvaporatorTemp * CapacityfGeneratorTemp
@@ -3449,10 +3449,10 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
      IF(IndirectAbsorber(ChillNum)%ConstantFlow)THEN
         EvapMassFlowRate = Node(EvapInletNode)%MassFlowRate
 
-        IF (EvapMassFlowRate /= 0.0) THEN
+        IF (EvapMassFlowRate /= 0.0D0) THEN
           EvapDeltaTemp = QEvaporator/EvapMassFlowRate/CpFluid
         ELSE
-          EvapDeltaTemp = 0.0
+          EvapDeltaTemp = 0.0D0
         ENDIF
         EvapOutletTemp = Node(EvapInletNode)%Temp - EvapDeltaTemp
 
@@ -3570,7 +3570,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
   IndirectAbsorberReport(ChillNum)%ChillerPartLoadRatio = OperPartLoadRat
 
   IF(OperPartLoadRat .LT. PartLoadRat) THEN
-    FRAC = MIN(1.0,OperPartLoadRat/MinPartLoadRat)
+    FRAC = MIN(1.0d0,OperPartLoadRat/MinPartLoadRat)
   ELSE
     FRAC = 1.0
   END IF
@@ -3581,15 +3581,15 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
     IF(IndirectAbsorber(ChillNum)%HeatInputFCondTempPtr .GT. 0)THEN
       HeatInputfCondTemp = CurveValue(IndirectAbsorber(ChillNum)%HeatInputFCondTempPtr, Node(GeneratorInletNode)%Temp)
     ELSE
-      HeatInputfCondTemp = 1.0
+      HeatInputfCondTemp = 1.0d0
     END IF
   ELSE
-    HeatInputfCondTemp  = 1.0
+    HeatInputfCondTemp  = 1.0d0
   END IF
   IF(IndirectAbsorber(ChillNum)%HeatInputFEvapTempPtr .GT. 0)THEN
     HeatInputfEvapTemp = CurveValue(IndirectAbsorber(ChillNum)%HeatInputFEvapTempPtr, Node(EvapOutletNode)%Temp)
   ELSE
-    HeatInputfEvapTemp = 1.0
+    HeatInputfEvapTemp = 1.0d0
   END IF
 
   !Calculate steam input ratio. Inlcude impact of generator and evaporator temperatures
@@ -3604,7 +3604,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
   IF(IndirectAbsorber(ChillNum)%PumpPowerCurvePtr .GT. 0)THEN
     ElectricInputRat = CurveValue(IndirectAbsorber(ChillNum)%PumpPowerCurvePtr,PartLoadRat)
   ELSE
-    ElectricInputRat = 1.0
+    ElectricInputRat = 1.0d0
   END IF
 
   QGenerator   = HeatInputRat * AbsorberNomCap * FRAC
@@ -3627,8 +3627,8 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
      CondOutletTemp = QCondenser/CondMassFlowRate/CpFluid + CondInletTemp
   ELSE
     CondOutletTemp = CondInletTemp
-    CondMassFlowRate = 0.
-    QCondenser = 0.
+    CondMassFlowRate = 0.d0
+    QCondenser = 0.d0
     RETURN
     !V7 plant upgrade, no longer fatal here anymore... set some things and return
   END IF
@@ -3654,7 +3654,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
                                 IndirectAbsorber(ChillNum)%GenBranchNum,   &
                                 IndirectAbsorber(ChillNum)%GenCompNum)
 
-      IF(GenMassFlowRate .LE. 0.0)THEN
+      IF(GenMassFlowRate .LE. 0.0d0)THEN
         GenOutletTemp       = Node(GeneratorInletNode)%Temp
         SteamOutletEnthalpy = Node(GeneratorInletNode)%Enthalpy
       ELSE
@@ -3664,10 +3664,10 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
 
     ELSE ! using a steam plant for the generator
 
-      EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0, &
+      EnthSteamOutDry   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,1.0d0, &
                                                 IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                'CALC Chiller:Absorption:Indirect '//TRIM(IndirectAbsorber(ChillNum)%Name))
-      EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0, &
+      EnthSteamOutWet   = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0d0, &
                                                 IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                'CALC Chiller:Absorption:Indirect '//TRIM(IndirectAbsorber(ChillNum)%Name))
       SteamDeltaT       = IndirectAbsorber(ChillNum)%GeneratorSubCool
@@ -3683,12 +3683,12 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
                                 IndirectAbsorber(ChillNum)%GenBranchNum,   &
                                 IndirectAbsorber(ChillNum)%GenCompNum)
 
-      IF(GenMassFlowRate .LE. 0.0)THEN
+      IF(GenMassFlowRate .LE. 0.0d0)THEN
         GenOutletTemp       = Node(GeneratorInletNode)%Temp
         SteamOutletEnthalpy = Node(GeneratorInletNode)%Enthalpy
       ELSE
         GenOutletTemp       = Node(GeneratorInletNode)%Temp - SteamDeltaT
-        SteamOutletEnthalpy = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0, &
+        SteamOutletEnthalpy = GetSatEnthalpyRefrig('STEAM',Node(GeneratorInletNode)%Temp,0.0d0, &
                                                 IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                'Loop Losses: Chiller:Absorption:Indirect'//TRIM(IndirectAbsorber(ChillNum)%Name))
         CpFluid           = GetSpecificHeatGlycol('WATER', Node(GeneratorInletNode)%Temp, DummyWaterIndex, &
@@ -3701,7 +3701,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
                                                IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                                'Loop Losses: Chiller:Absorption:Indirect'//TRIM(IndirectAbsorber(ChillNum)%Name))
 
-        EnthAtAtmPress = GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0, &
+        EnthAtAtmPress = GetSatEnthalpyRefrig('STEAM',TempWaterAtmPress,0.0d0, &
                                                IndirectAbsorber(ChillNum)%SteamFluidIndex, &
                                               'Loop Losses: Chiller:Absorption:Indirect '//TRIM(IndirectAbsorber(ChillNum)%Name))
 
@@ -3719,7 +3719,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
         GenOutletTemp       = TempLoopOutToPump
         SteamOutletEnthalpy = EnthPumpInlet
 
-      END IF ! IF(GenMassFlowRate .LE. 0.0)THEN
+      END IF ! IF(GenMassFlowRate .LE. 0.0d0)THEN
 
     END IF ! IF(IndirectAbsorber(ChillNum)%GenHeatSourceType == NodeType_Water)THEN
 
@@ -3783,7 +3783,7 @@ SUBROUTINE UpdateIndirectAbsorberRecords(MyLoad,RunFlag, Num)
   IMPLICIT NONE
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL,INTENT(IN)          :: MyLoad    ! current load
+  REAL(r64),INTENT(IN)          :: MyLoad    ! current load
   LOGICAL, INTENT(IN)      :: RunFlag   ! TRUE if Absorber operating
   INTEGER, INTENT(IN)      :: Num       ! Absorber number
 
@@ -3815,25 +3815,25 @@ SUBROUTINE UpdateIndirectAbsorberRecords(MyLoad,RunFlag, Num)
     CALL SafeCopyPlantNode(EvapInletNode , EvapOutletNode)
     CALL SafeCopyPlantNode(CondInletNode , CondOutletNode)
 
-    IndirectAbsorberReport(Num)%PumpingPower     = 0.0
-    IndirectAbsorberReport(Num)%QEvap            = 0.0
-    IndirectAbsorberReport(Num)%QCond            = 0.0
-    IndirectAbsorberReport(Num)%QGenerator       = 0.0
-    IndirectAbsorberReport(Num)%PumpingEnergy    = 0.0
-    IndirectAbsorberReport(Num)%EvapEnergy       = 0.0
-    IndirectAbsorberReport(Num)%CondEnergy       = 0.0
-    IndirectAbsorberReport(Num)%GeneratorEnergy  = 0.0
+    IndirectAbsorberReport(Num)%PumpingPower     = 0.0d0
+    IndirectAbsorberReport(Num)%QEvap            = 0.0d0
+    IndirectAbsorberReport(Num)%QCond            = 0.0d0
+    IndirectAbsorberReport(Num)%QGenerator       = 0.0d0
+    IndirectAbsorberReport(Num)%PumpingEnergy    = 0.0d0
+    IndirectAbsorberReport(Num)%EvapEnergy       = 0.0d0
+    IndirectAbsorberReport(Num)%CondEnergy       = 0.0d0
+    IndirectAbsorberReport(Num)%GeneratorEnergy  = 0.0d0
     IndirectAbsorberReport(Num)%EvapInletTemp    = Node(EvapInletNode)%Temp
     IndirectAbsorberReport(Num)%CondInletTemp    = Node(CondInletNode)%Temp
     IndirectAbsorberReport(Num)%CondOutletTemp   = Node(CondOutletNode)%Temp
     IndirectAbsorberReport(Num)%EvapOutletTemp   = Node(EvapOutletNode)%Temp
-    IndirectAbsorberReport(Num)%Evapmdot         = 0.0
-    IndirectAbsorberReport(Num)%Condmdot         = 0.0
-    IndirectAbsorberReport(Num)%Genmdot         = 0.0
-    IndirectAbsorberReport(Num)%ActualCOP        = 0.0
-    IndirectAbsorberReport(Num)%ChillerPartLoadRatio = 0.0
-    IndirectAbsorberReport(Num)%LoopLoss         = 0.0
-    IndirectAbsorberReport(Num)%ChillerCyclingFrac = 0.0
+    IndirectAbsorberReport(Num)%Evapmdot         = 0.0d0
+    IndirectAbsorberReport(Num)%Condmdot         = 0.0d0
+    IndirectAbsorberReport(Num)%Genmdot         = 0.0d0
+    IndirectAbsorberReport(Num)%ActualCOP        = 0.0d0
+    IndirectAbsorberReport(Num)%ChillerPartLoadRatio = 0.0d0
+    IndirectAbsorberReport(Num)%LoopLoss         = 0.0d0
+    IndirectAbsorberReport(Num)%ChillerCyclingFrac = 0.0d0
 
     IF(GeneratorInletNode .GT. 0)THEN
       CALL SafeCopyPlantNode(GeneratorInletNode , GeneratorOutletNode)
@@ -3867,7 +3867,7 @@ SUBROUTINE UpdateIndirectAbsorberRecords(MyLoad,RunFlag, Num)
     IF (QGenerator .NE. 0.0) THEN
       IndirectAbsorberReport(Num)%ActualCOP      = QEvaporator/QGenerator
     ELSE
-      IndirectAbsorberReport(Num)%ActualCOP      = 0.0
+      IndirectAbsorberReport(Num)%ActualCOP      = 0.0d0
     END IF
 
     IF(GeneratorInletNode .GT. 0)THEN

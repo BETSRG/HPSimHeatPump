@@ -46,20 +46,20 @@ TYPE DirectAirProps
   CHARACTER(len=MaxNameLength) :: Schedule =' '
   INTEGER :: ZoneSupplyAirNode             =0
   INTEGER :: SchedPtr                      =0
-  REAL    :: MaxAirVolFlowRate             =0.0 !Max Specified Volume Flow Rate of Sys [m3/sec]
-  REAL    :: AirMassFlowRateMax            =0.0 !Max mass flow [kg/sec]
-  REAL    :: InitMaxAvailMassFlow          =0.0 !The Initial max mass Flow to set the Control Flow Fraction
-  REAL    :: AirMassFlowFraction           =0.0
+  REAL(r64)    :: MaxAirVolFlowRate             =0.0 !Max Specified Volume Flow Rate of Sys [m3/sec]
+  REAL(r64)    :: AirMassFlowRateMax            =0.0 !Max mass flow [kg/sec]
+  REAL(r64)    :: InitMaxAvailMassFlow          =0.0 !The Initial max mass Flow to set the Control Flow Fraction
+  REAL(r64)    :: AirMassFlowFraction           =0.0
   Integer :: ZoneEquipAirInletNode         =0
   ! Simulation Data
-  REAL    :: SensOutputProvided                =0.0
+  REAL(r64)    :: SensOutputProvided                =0.0
   LOGICAL      :: EMSOverrideAirFlow            = .FALSE.  ! if true, EMS is calling to override flow rate
-  REAL    :: EMSMassFlowRateValue          = 0.0  ! value EMS is directing to use for flow rate [kg/s]
+  REAL(r64)    :: EMSMassFlowRateValue          = 0.0D0  ! value EMS is directing to use for flow rate [kg/s]
   !Reporting Variables
-  REAL    :: HeatRate                      =0.0
-  REAL    :: CoolRate                      =0.0
-  REAL    :: HeatEnergy                    =0.0
-  REAL    :: CoolEnergy                    =0.0
+  REAL(r64)    :: HeatRate                      =0.0
+  REAL(r64)    :: CoolRate                      =0.0
+  REAL(r64)    :: HeatEnergy                    =0.0
+  REAL(r64)    :: CoolEnergy                    =0.0
 END TYPE DirectAirProps
 
 
@@ -104,8 +104,8 @@ SUBROUTINE SimDirectAir(EquipName,ControlledZoneNum,FirstHVACIteration,SensOutpu
           ! SUBROUTINE ARGUMENT DEFINITIONS
     CHARACTER(len=*), INTENT(IN) :: EquipName
     INTEGER, INTENT(IN) :: ControlledZoneNum
-    REAL, INTENT(INOUT) :: SensOutputProvided
-    REAL, INTENT(OUT)   :: LatOutputProvided ! Latent output provided (kg/s), dehumidification = negative
+    REAL(r64), INTENT(INOUT) :: SensOutputProvided
+    REAL(r64), INTENT(OUT)   :: LatOutputProvided ! Latent output provided (kg/s), dehumidification = negative
     LOGICAL, INTENT (IN):: FirstHVACIteration
     INTEGER, INTENT(INOUT) :: CompIndex
 
@@ -207,7 +207,7 @@ SUBROUTINE GetDirectAirInput
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:    INTEGER :: BaseboardNum
-INTEGER :: NumNums  ! Number of REAL numbers returned by GetObjectItem
+INTEGER :: NumNums  ! Number of REAL(r64) numbers returned by GetObjectItem
 INTEGER :: NumAlphas ! Number of alphanumerics returned by GetObjectItem
 INTEGER :: DirectAirNum
 INTEGER :: IOSTAT
@@ -564,8 +564,8 @@ SUBROUTINE CalcDirectAir(DirectAirNum,ControlledZoneNum,SensOutputProvided,LatOu
           ! SUBROUTINE ARGUMENT DEFINITIONS
     INTEGER, INTENT(IN) :: DirectAirNum
     INTEGER, INTENT(IN) :: ControlledZoneNum
-    REAL, INTENT(INOUT) :: SensOutputProvided
-    REAL, INTENT(OUT)   :: LatOutputProvided ! Latent output provided, kg/s, dehumidification = negative
+    REAL(r64), INTENT(INOUT) :: SensOutputProvided
+    REAL(r64), INTENT(OUT)   :: LatOutputProvided ! Latent output provided, kg/s, dehumidification = negative
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -576,9 +576,9 @@ SUBROUTINE CalcDirectAir(DirectAirNum,ControlledZoneNum,SensOutputProvided,LatOu
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL :: MassFlowRate ! Air mass flow rate in kg/s
-    REAL :: SpecHumOut   ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-    REAL :: SpecHumIn    ! Specific humidity ratio of inlet [zone] air (kg moisture / kg moist air)
+    REAL(r64) :: MassFlowRate ! Air mass flow rate in kg/s
+    REAL(r64) :: SpecHumOut   ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+    REAL(r64) :: SpecHumIn    ! Specific humidity ratio of inlet [zone] air (kg moisture / kg moist air)
 
         ! Sign convention: SysSensOutputProvided <0 Zone is cooled
         !                  SysSensOutputProvided >0 Zone is heated
@@ -601,15 +601,15 @@ SUBROUTINE CalcDirectAir(DirectAirNum,ControlledZoneNum,SensOutputProvided,LatOu
                                             Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat))
 
     SpecHumOut = Node(DirectAir(DirectAirNum)%ZoneSupplyAirNode)%HumRat / &
-                 (1.0 + Node(DirectAir(DirectAirNum)%ZoneSupplyAirNode)%HumRat)
+                 (1.0d0 + Node(DirectAir(DirectAirNum)%ZoneSupplyAirNode)%HumRat)
     SpecHumIn  = Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat / &
-                 (1.0 + Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat)
+                 (1.0d0 + Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat)
 
     LatOutputProvided = MassFlowRate * (SpecHumOut - SpecHumIn) ! Latent rate, kg/s
 
   ELSE
-    SensOutputProvided = 0.0
-    LatOutputProvided  = 0.0
+    SensOutputProvided = 0.0d0
+    LatOutputProvided  = 0.0d0
   END IF
 
   DirectAir(DirectAirNum)%SensOutputProvided = SensOutputProvided
@@ -638,10 +638,10 @@ SUBROUTINE ReportDirectAir(DirectAirNum)
   INTEGER :: DirectAirNum
 
 !report the Direct Air Output
- DirectAir(DirectAirNum)%HeatRate = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0)
- DirectAir(DirectAirNum)%CoolRate = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0))
- DirectAir(DirectAirNum)%HeatEnergy = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0)*TimeStepSys*SecInHour
- DirectAir(DirectAirNum)%CoolEnergy = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0)*TimeStepSys*SecInHour)
+ DirectAir(DirectAirNum)%HeatRate = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)
+ DirectAir(DirectAirNum)%CoolRate = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0))
+ DirectAir(DirectAirNum)%HeatEnergy = MAX(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)*TimeStepSys*SecInHour
+ DirectAir(DirectAirNum)%CoolEnergy = ABS(MIN(DirectAir(DirectAirNum)%SensOutputProvided,0.0d0)*TimeStepSys*SecInHour)
 
 
   RETURN

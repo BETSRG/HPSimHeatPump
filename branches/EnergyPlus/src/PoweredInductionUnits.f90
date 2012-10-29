@@ -62,16 +62,16 @@ TYPE PowIndUnitData
   INTEGER                      :: UnitType_Num       = 0   ! index for type of unit
   CHARACTER(len=MaxNameLength) :: Sched              =' '  ! availability schedule
   INTEGER                      :: SchedPtr           =0    ! index to schedule
-  REAL                    :: MaxTotAirVolFlow   =0.0  ! m3/s  (series)
-  REAL                    :: MaxTotAirMassFlow  =0.0  ! kg/s  (series)
-  REAL                    :: MaxPriAirVolFlow   =0.0  ! m3/s
-  REAL                    :: MaxPriAirMassFlow  =0.0  ! kg/s
-  REAL                    :: MinPriAirFlowFrac  =0.0  ! minimum primary air flow fraction
-  REAL                    :: MinPriAirMassFlow  =0.0  ! kg/s
-  REAL                    :: MaxSecAirVolFlow   =0.0  ! m3/s (parallel)
-  REAL                    :: MaxSecAirMassFlow  =0.0  ! kg/s (parallel)
-  REAL                    :: FanOnFlowFrac      =0.0  ! frac of primary air flow at which fan turns on (parallel)
-  REAL                    :: FanOnAirMassFlow   =0.0  ! primary air mass flow rate at which fan turns on (parallel)
+  REAL(r64)                    :: MaxTotAirVolFlow   =0.0  ! m3/s  (series)
+  REAL(r64)                    :: MaxTotAirMassFlow  =0.0  ! kg/s  (series)
+  REAL(r64)                    :: MaxPriAirVolFlow   =0.0  ! m3/s
+  REAL(r64)                    :: MaxPriAirMassFlow  =0.0  ! kg/s
+  REAL(r64)                    :: MinPriAirFlowFrac  =0.0  ! minimum primary air flow fraction
+  REAL(r64)                    :: MinPriAirMassFlow  =0.0  ! kg/s
+  REAL(r64)                    :: MaxSecAirVolFlow   =0.0  ! m3/s (parallel)
+  REAL(r64)                    :: MaxSecAirMassFlow  =0.0  ! kg/s (parallel)
+  REAL(r64)                    :: FanOnFlowFrac      =0.0  ! frac of primary air flow at which fan turns on (parallel)
+  REAL(r64)                    :: FanOnAirMassFlow   =0.0  ! primary air mass flow rate at which fan turns on (parallel)
   INTEGER                      :: PriAirInNode       =0    ! unit primary air inlet node number
   INTEGER                      :: SecAirInNode       =0    ! unit secondary air inlet node number
   INTEGER                      :: OutAirNode         =0    ! unit air outlet node number
@@ -89,17 +89,17 @@ TYPE PowIndUnitData
   CHARACTER(len=MaxNameLength) :: HCoil              =' '  ! name of heating coil component
   INTEGER                      :: HCoil_Index        =0    ! index to this heating coil
   INTEGER                      :: HCoil_FluidIndex   =0
-  REAL                    :: MaxVolHotWaterFlow =0.0  ! m3/s
-  REAL                    :: MaxVolHotSteamFlow =0.0   ! m3/s
-  REAL                    :: MaxHotWaterFlow    =0.0   ! kg/s
-  REAL                    :: MaxHotSteamFlow    =0.0   ! kg/s
-  REAL                    :: MinVolHotWaterFlow =0.0   ! m3/s
-  REAL                    :: MinHotSteamFlow    =0.0   ! kg/s
-  REAL                    :: MinVolHotSteamFlow =0.0   ! m3/s
-  REAL                    :: MinHotWaterFlow    =0.0   ! kg/s
+  REAL(r64)                    :: MaxVolHotWaterFlow =0.0  ! m3/s
+  REAL(r64)                    :: MaxVolHotSteamFlow =0.0   ! m3/s
+  REAL(r64)                    :: MaxHotWaterFlow    =0.0   ! kg/s
+  REAL(r64)                    :: MaxHotSteamFlow    =0.0   ! kg/s
+  REAL(r64)                    :: MinVolHotWaterFlow =0.0   ! m3/s
+  REAL(r64)                    :: MinHotSteamFlow    =0.0   ! kg/s
+  REAL(r64)                    :: MinVolHotSteamFlow =0.0   ! m3/s
+  REAL(r64)                    :: MinHotWaterFlow    =0.0   ! kg/s
   INTEGER                      :: HotControlNode     =0     ! hot water control node
   INTEGER                      :: HotCoilOutNodeNum  =0   ! outlet of coil
-  REAL                    :: HotControlOffset   =0.0   ! control tolerance
+  REAL(r64)                    :: HotControlOffset   =0.0   ! control tolerance
   INTEGER                      :: HWLoopNum          =0   ! index for plant loop with hot plant coil
   INTEGER                      :: HWLoopSide         =0   ! index for plant loop side for hot plant coil
   INTEGER                      :: HWBranchNum        =0   ! index for plant branch for hot plant coil
@@ -108,10 +108,10 @@ TYPE PowIndUnitData
   INTEGER                      :: ADUNum             =0     ! index of corresponding air distribution unit
   LOGICAL                      :: InducesPlenumAir   =.FALSE.  ! True if secondary air comes from the plenum
   ! Report data
-  REAL                    :: HeatingRate        =0.0   ! unit heat addition rate to zone [W]
-  REAL                    :: HeatingEnergy      =0.0   ! unit heat addition to zone [J]
-  REAL                    :: SensCoolRate       =0.0   ! unit sensible heat removal rate from zone [W]
-  REAL                    :: SensCoolEnergy     =0.0   ! unit sensible heat removal from zone [J]
+  REAL(r64)                    :: HeatingRate        =0.0   ! unit heat addition rate to zone [W]
+  REAL(r64)                    :: HeatingEnergy      =0.0   ! unit heat addition to zone [J]
+  REAL(r64)                    :: SensCoolRate       =0.0   ! unit sensible heat removal rate from zone [W]
+  REAL(r64)                    :: SensCoolEnergy     =0.0   ! unit sensible heat removal from zone [J]
 END TYPE PowIndUnitData
 
   ! MODULE VARIABLE DECLARATIONS:
@@ -427,8 +427,8 @@ DO PIUIndex = 1,NumSeriesPIUs
   PIU(PIUNum)%MinVolHotWaterFlow = rNumericArgs(5)
   PIU(PIUNum)%HotControlOffset   = rNumericArgs(6)
   ! Set default convergence tolerance
-  IF (PIU(PIUNum)%HotControlOffset .LE. 0.0) THEN
-    PIU(PIUNum)%HotControlOffset = 0.001
+  IF (PIU(PIUNum)%HotControlOffset .LE. 0.0d0) THEN
+    PIU(PIUNum)%HotControlOffset = 0.001d0
   END IF
 
   ! Add fan to component sets array
@@ -576,8 +576,8 @@ DO PIUIndex = 1,NumParallelPIUs
   PIU(PIUNum)%MinVolHotWaterFlow = rNumericArgs(6)
   PIU(PIUNum)%HotControlOffset   = rNumericArgs(7)
   ! Set default convergence tolerance
-  IF (PIU(PIUNum)%HotControlOffset .LE. 0.0) THEN
-    PIU(PIUNum)%HotControlOffset = 0.001
+  IF (PIU(PIUNum)%HotControlOffset .LE. 0.0d0) THEN
+    PIU(PIUNum)%HotControlOffset = 0.001d0
   END IF
 
   ! Add fan to component sets array
@@ -694,14 +694,14 @@ SUBROUTINE InitPIU(PIUNum,FirstHVACIteration)
   INTEGER             :: SecNode         ! secondary air inlet node number
   INTEGER             :: HotConNode      ! hot water control node number in PIU
   INTEGER             :: OutletNode      ! unit air outlet node number
-  REAL           :: RhoAir          ! air density at outside pressure and standard temperature and humidity
+  REAL(r64)           :: RhoAir          ! air density at outside pressure and standard temperature and humidity
   LOGICAL,SAVE             :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MySizeFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL,SAVE        :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   Integer             :: Loop  ! Loop checking control variable
-  REAL           :: rho  !local plant fluid density
+  REAL(r64)           :: rho  !local plant fluid density
   LOGICAL             :: errFlag
 
           ! FLOW:
@@ -763,7 +763,7 @@ SUBROUTINE InitPIU(PIUNum,FirstHVACIteration)
     IF (HotConNode.GT.0) THEN
      !plant upgrade note? why no separate handling of steam coil? add it ?
       rho = GetDensityGlycol( PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidName, &
-                             60., &
+                             60.d0, &
                              PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidIndex, &
                              'InitPIU')
 
@@ -838,7 +838,7 @@ IF (FirstHVACIteration) THEN
       Node(PriNode)%MassFlowRate .GT. 0.0) THEN
     IF (PIU(PIUNum)%UnitType.EQ.'AirTerminal:SingleDuct:SeriesPIU:Reheat') THEN
       Node(PriNode)%MassFlowRate = PIU(PIUNum)%MaxPriAirMassFlow
-      Node(SecNode)%MassFlowRate = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MaxPriAirMassFlow )
+      Node(SecNode)%MassFlowRate = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MaxPriAirMassFlow )
     ELSE
       Node(PriNode)%MassFlowRate = PIU(PIUNum)%MaxPriAirMassFlow
       Node(SecNode)%MassFlowRate = PIU(PIUNum)%MaxSecAirMassFlow
@@ -853,8 +853,8 @@ IF (FirstHVACIteration) THEN
     IF (PIU(PIUNum)%UnitType.EQ.'AirTerminal:SingleDuct:SeriesPIU:Reheat') THEN
       Node(PriNode)%MassFlowRateMaxAvail = PIU(PIUNum)%MaxPriAirMassFlow
       Node(PriNode)%MassFlowRateMinAvail = PIU(PIUNum)%MinPriAirMassFlow
-      Node(SecNode)%MassFlowRateMaxAvail = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MinPriAirMassFlow )
-      Node(SecNode)%MassFlowRateMinAvail = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MaxPriAirMassFlow )
+      Node(SecNode)%MassFlowRateMaxAvail = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MinPriAirMassFlow )
+      Node(SecNode)%MassFlowRateMinAvail = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PIU(PIUNum)%MaxPriAirMassFlow )
     ELSE
       Node(PriNode)%MassFlowRateMaxAvail = PIU(PIUNum)%MaxPriAirMassFlow
       Node(PriNode)%MassFlowRateMinAvail = PIU(PIUNum)%MinPriAirMassFlow
@@ -921,24 +921,24 @@ SUBROUTINE SizePIU(PIUNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizNum     ! do loop index for plant sizing
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
-  REAL           :: CoilInTemp
-  REAL           :: CoilOutTemp
-  REAL           :: CoilOutHumRat
-  REAL           :: DesCoilLoad
-  REAL           :: DesMassFlow
+  REAL(r64)           :: CoilInTemp
+  REAL(r64)           :: CoilOutTemp
+  REAL(r64)           :: CoilOutHumRat
+  REAL(r64)           :: DesCoilLoad
+  REAL(r64)           :: DesMassFlow
 
-  REAL           :: TempSteamIn
-  REAL           :: EnthSteamInDry
-  REAL           :: EnthSteamOutWet
-  REAL           :: LatentHeatSteam
-  REAL           :: SteamDensity
+  REAL(r64)           :: TempSteamIn
+  REAL(r64)           :: EnthSteamInDry
+  REAL(r64)           :: EnthSteamOutWet
+  REAL(r64)           :: LatentHeatSteam
+  REAL(r64)           :: SteamDensity
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0
   INTEGER             :: CoilSteamOutletNode=0
   LOGICAL             :: ErrorsFound
-  REAL           :: rho
-  REAL           :: Cp
+  REAL(r64)           :: rho
+  REAL(r64)           :: Cp
   INTEGER             :: DummyWaterIndex = 1
 
   PltSizHeatNum = 0
@@ -1055,11 +1055,11 @@ SUBROUTINE SizePIU(PIUNum)
                             * DesMassFlow * (CoilOutTemp-CoilInTemp)
 
             rho = GetDensityGlycol(PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidIndex, &
                                      'SizePIU')
             Cp = GetSpecificHeatGlycol(PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidName, &
-                                    60., &
+                                    60.d0, &
                                      PlantLoop(PIU(PIUNum)%HWLoopNum)%FluidIndex, &
                                      'SizePIU')
 
@@ -1095,10 +1095,10 @@ SUBROUTINE SizePIU(PIUNum)
             DesCoilLoad = PsyCpAirFnWTdb(CoilOutHumRat, 0.5*(CoilInTemp+CoilOutTemp)) &
                             * DesMassFlow * (CoilOutTemp-CoilInTemp)
             TempSteamIn= 100.00
-            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
-            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
+            EnthSteamInDry =  GetSatEnthalpyRefrig('STEAM',TempSteamIn,1.0d0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
+            EnthSteamOutWet=  GetSatEnthalpyRefrig('STEAM',TempSteamIn,0.0d0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
             LatentHeatSteam=EnthSteamInDry-EnthSteamOutWet
-            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
+            SteamDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,PIU(PIUNum)%HCoil_FluidIndex,'SizePIU')
             Cp = GetSpecificHeatGlycol('WATER', PlantSizData(PltSizHeatNum)%ExitTemp, DummyWaterIndex, 'SizePIU')
             PIU(PIUNum)%MaxVolHotSteamFlow =DesCoilLoad/(SteamDensity*(LatentHeatSteam + &
               PlantSizData(PltSizHeatNum)%DeltaT * Cp))
@@ -1199,35 +1199,35 @@ SUBROUTINE CalcSeriesPIU(PIUNum,ZoneNum,ZoneNode,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL    :: QZnReq            ! heating or cooling needed by zone [Watts]
-REAL    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
-REAL    :: QActualHeating    ! the heating load seen by the reheat coil [W]
-REAL    :: PowerMet          ! power supplied
+REAL(r64)    :: QZnReq            ! heating or cooling needed by zone [Watts]
+REAL(r64)    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
+REAL(r64)    :: QActualHeating    ! the heating load seen by the reheat coil [W]
+REAL(r64)    :: PowerMet          ! power supplied
 LOGICAL :: UnitOn            ! TRUE if unit is on
 LOGICAL :: PriOn             ! TRUE if primary air available
 LOGICAL :: HCoilOn           ! TRUE if heating coil is on
 INTEGER :: ControlNode       ! the hot water or cold water inlet node
-REAL    :: ControlOffset     ! tolerance for output control
-REAL    :: MaxWaterFlow      ! maximum water flow for heating or cooling [kg/s]
-REAL    :: MinWaterFlow      ! minimum water flow for heating or cooling [kg/s]
+REAL(r64)    :: ControlOffset     ! tolerance for output control
+REAL(r64)    :: MaxWaterFlow      ! maximum water flow for heating or cooling [kg/s]
+REAL(r64)    :: MinWaterFlow      ! minimum water flow for heating or cooling [kg/s]
 INTEGER :: OutletNode        ! unit air outlet node
 INTEGER :: PriNode           ! unit primary air inlet node
 INTEGER :: SecNode           ! unit secondary air inlet node
 INTEGER :: HCoilInAirNode    ! air inlet node of reheat coil
-REAL    :: QCoilReq          ! required heating coil outlet to meet zone load
-REAL    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
-REAL    :: PriAirMassFlowMax ! max primary air mass flow rate [kg/s]
-REAL    :: PriAirMassFlowMin ! min primary air mass flow rate [kg/s]
-REAL    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
-REAL    :: CpAirZn           ! zone air specific heat [J/kg-C]
-REAL    :: FanDeltaTemp      ! fan temperature rise [C]
-REAL    :: OutletTempNeeded  ! unit outlet temperature needed to meet cooling load
-REAL    :: MixTempNeeded     ! mixer outlet temperature needed to meet cooling load
-REAL    :: MinSteamFlow
-REAL    :: MaxSteamFlow
-REAL    :: rho !local plant fluid density
-REAL    :: Cp  ! local plant specific Heat
-REAL    :: mdot ! local plant fluid flow rate kg/s
+REAL(r64)    :: QCoilReq          ! required heating coil outlet to meet zone load
+REAL(r64)    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
+REAL(r64)    :: PriAirMassFlowMax ! max primary air mass flow rate [kg/s]
+REAL(r64)    :: PriAirMassFlowMin ! min primary air mass flow rate [kg/s]
+REAL(r64)    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
+REAL(r64)    :: CpAirZn           ! zone air specific heat [J/kg-C]
+REAL(r64)    :: FanDeltaTemp      ! fan temperature rise [C]
+REAL(r64)    :: OutletTempNeeded  ! unit outlet temperature needed to meet cooling load
+REAL(r64)    :: MixTempNeeded     ! mixer outlet temperature needed to meet cooling load
+REAL(r64)    :: MinSteamFlow
+REAL(r64)    :: MaxSteamFlow
+REAL(r64)    :: rho !local plant fluid density
+REAL(r64)    :: Cp  ! local plant specific Heat
+REAL(r64)    :: mdot ! local plant fluid flow rate kg/s
 
           ! FLOW
 
@@ -1281,11 +1281,11 @@ IF (UnitOn) THEN
   ELSE IF (CurDeadBandOrSetback(ZoneNum) .OR. ABS(QZnReq).LT.SmallLoad) THEN
     ! in deadband or very small load: set primary air flow to the minimum
     PriAirMassFlow = PriAirMassFlowMin
-    SecAirMassFlow = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
+    SecAirMassFlow = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
   ELSE IF (QZnReq.GT.0.0) THEN
     ! heating: set primary air flow to the minimum
     PriAirMassFlow = PriAirMassFlowMin
-    SecAirMassFlow = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
+    SecAirMassFlow = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
   ELSE
     ! cooling: set the primary air flow rate to meet the load.
     ! First calculate the fan temperature rise
@@ -1308,7 +1308,7 @@ IF (UnitOn) THEN
                          MAX(SmallTempDiff, Node(SecNode)%Temp - Node(PriNode)%Temp)
       PriAirMassFlow = MIN(MAX(PriAirMassFlow,PriAirMassFlowMin),PriAirMassFlowMax)
     END IF
-    SecAirMassFlow = MAX( 0.0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
+    SecAirMassFlow = MAX( 0.0d0, PIU(PIUNum)%MaxTotAirMassFlow - PriAirMassFlow )
   END IF
 ELSE
   ! unit is off ; no flow
@@ -1339,7 +1339,7 @@ SELECT CASE(PIU(PIUNum)%HCoilType_Num)
   CASE(HCoilType_SimpleHeating) ! COIL:WATER:SIMPLEHEATING
     IF ( .NOT. HCoilOn) THEN
       !call the reheat coil with the NO FLOW condition
-      mdot = 0.
+      mdot = 0.d0
       Call SetComponentFlowRate(mdot, &
                                  PIU(PIUNum)%HotControlNode, &
                                  PIU(PIUNum)%HotCoilOutNodeNum, &
@@ -1397,7 +1397,7 @@ END SELECT
 
 PowerMet = Node(OutletNode)%MassFlowRate * (PsyHFnTdbW(Node(OutletNode)%Temp,Node(ZoneNode)%HumRat)  &
                                           - PsyHFnTdbW(Node(ZoneNode)%Temp,Node(ZoneNode)%HumRat))
-PIU(PIUNum)%HeatingRate = MAX(0.0,PowerMet)
+PIU(PIUNum)%HeatingRate = MAX(0.0d0,PowerMet)
 PIU(PIUNum)%SensCoolRate = ABS(MIN(constant_zero,PowerMet))
 IF (Node(OutletNode)%MassFlowRate .EQ. 0.0) THEN
   Node(PriNode)%MassFlowRate = 0.0
@@ -1473,31 +1473,31 @@ SUBROUTINE CalcParallelPIU(PIUNum,ZoneNum,ZoneNode,FirstHVACIteration)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL    :: QZnReq            ! heating or cooling needed by zone [Watts]
-REAL    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
-REAL    :: QActualHeating    ! the heating load seen by the reheat coil [W]
-REAL    :: PowerMet          ! power supplied
+REAL(r64)    :: QZnReq            ! heating or cooling needed by zone [Watts]
+REAL(r64)    :: QToHeatSetPt      ! [W]  remaining load to heating setpoint
+REAL(r64)    :: QActualHeating    ! the heating load seen by the reheat coil [W]
+REAL(r64)    :: PowerMet          ! power supplied
 LOGICAL :: UnitOn            ! TRUE if unit is on
 LOGICAL :: PriOn             ! TRUE if primary air available
 LOGICAL :: HCoilOn           ! TRUE if heating coil is on
 INTEGER :: ControlNode       ! the hot water or cold water inlet node
-REAL    :: ControlOffset     ! tolerance for output control
-REAL    :: MaxWaterFlow      ! maximum water flow for heating or cooling [kg/s]
-REAL    :: MinWaterFlow      ! minimum water flow for heating or cooling [kg/s]
+REAL(r64)    :: ControlOffset     ! tolerance for output control
+REAL(r64)    :: MaxWaterFlow      ! maximum water flow for heating or cooling [kg/s]
+REAL(r64)    :: MinWaterFlow      ! minimum water flow for heating or cooling [kg/s]
 INTEGER :: OutletNode        ! unit air outlet node
 INTEGER :: PriNode           ! unit primary air inlet node
 INTEGER :: SecNode           ! unit secondary air inlet node
 INTEGER :: HCoilInAirNode    ! air inlet node of reheat coil
-REAL    :: QCoilReq          ! required heating coil outlet to meet zone load
-REAL    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
-REAL    :: PriAirMassFlowMax ! max primary air mass flow rate [kg/s]
-REAL    :: PriAirMassFlowMin ! min primary air mass flow rate [kg/s]
-REAL    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
-REAL    :: CpAirZn           ! zone air specific heat [J/kg-C]
-REAL    :: FanDeltaTemp      ! fan temperature rise [C]
+REAL(r64)    :: QCoilReq          ! required heating coil outlet to meet zone load
+REAL(r64)    :: PriAirMassFlow    ! primary air mass flow rate [kg/s]
+REAL(r64)    :: PriAirMassFlowMax ! max primary air mass flow rate [kg/s]
+REAL(r64)    :: PriAirMassFlowMin ! min primary air mass flow rate [kg/s]
+REAL(r64)    :: SecAirMassFlow    ! secondary air mass flow rate [kg/s]
+REAL(r64)    :: CpAirZn           ! zone air specific heat [J/kg-C]
+REAL(r64)    :: FanDeltaTemp      ! fan temperature rise [C]
 !unusedREAL(r64)    :: MaxSteamFlow
 !unusedREAL(r64)    :: MinSteamFlow
-REAL    :: mdot ! local fluid flow rate kg/s
+REAL(r64)    :: mdot ! local fluid flow rate kg/s
 
           ! FLOW
 
@@ -1604,7 +1604,7 @@ SELECT CASE(PIU(PIUNum)%HCoilType_Num)
   CASE(HCoilType_SimpleHeating)  ! COIL:WATER:SIMPLEHEATING
     IF ( .NOT. HCoilOn) THEN
       !call the reheat coil with the NO FLOW condition
-      mdot = 0.
+      mdot = 0.d0
       Call SetComponentFlowRate(mdot, &
                                  PIU(PIUNum)%HotControlNode, &
                                  PIU(PIUNum)%HotCoilOutNodeNum, &
@@ -1658,7 +1658,7 @@ SELECT CASE(PIU(PIUNum)%HCoilType_Num)
 END SELECT
 PowerMet = Node(OutletNode)%MassFlowRate * (PsyHFnTdbW(Node(OutletNode)%Temp,Node(ZoneNode)%HumRat)  &
                                           - PsyHFnTdbW(Node(ZoneNode)%Temp,Node(ZoneNode)%HumRat))
-PIU(PIUNum)%HeatingRate = MAX(0.0,PowerMet)
+PIU(PIUNum)%HeatingRate = MAX(0.0d0,PowerMet)
 PIU(PIUNum)%SensCoolRate = ABS(MIN(constant_zero,PowerMet))
 IF (Node(OutletNode)%MassFlowRate .EQ. 0.0) THEN
   Node(PriNode)%MassFlowRate = 0.0

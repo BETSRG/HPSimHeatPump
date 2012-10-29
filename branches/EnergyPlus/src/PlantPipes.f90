@@ -99,7 +99,7 @@ SUBROUTINE SimPipes(CompType,PipeName,CompIndex, MaxVolFlowRate,InitLoopEquip,Fi
   CHARACTER(len=*)      :: PipeName
   INTEGER,INTENT(INOUT) :: CompIndex
   LOGICAL, INTENT(IN)   :: FirstHVACIteration
-  REAL, INTENT(IN) :: MaxVolFlowRate
+  REAL(r64), INTENT(IN) :: MaxVolFlowRate
   LOGICAL, INTENT(IN)   :: InitLoopEquip
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -166,7 +166,7 @@ SUBROUTINE SimPipes(CompType,PipeName,CompIndex, MaxVolFlowRate,InitLoopEquip,Fi
   END IF
 
   IF (BeginEnvrnFlag .AND. LocalPipe(PipeNum)%EnvrnFlag) THEN
-    CALL InitComponentNodes( 0., PlantLoop(LocalPipe(PipeNum)%LoopNum)%MaxMassFlowRate, &
+    CALL InitComponentNodes( 0.d0, PlantLoop(LocalPipe(PipeNum)%LoopNum)%MaxMassFlowRate, &
                                  LocalPipe(PipeNum)%InletNodeNum, &
                                  LocalPipe(PipeNum)%OutletNodeNum, &
                                  LocalPipe(PipeNum)%LoopNum, & 
@@ -359,7 +359,7 @@ SUBROUTINE InitializePipes(PipeType,PipeName,PipeNum,MaxVolFlowRate)
   INTEGER, INTENT(IN)          :: PipeType  ! Type of Pipe
   CHARACTER(len=*), INTENT(IN) :: PipeName  ! Name of Pipe
   INTEGER, INTENT(INOUT)       :: PipeNum   ! Index into pipe structure for name
-  REAL, INTENT(IN)        :: MaxVolFlowRate  ! unused at present time
+  REAL(r64), INTENT(IN)        :: MaxVolFlowRate  ! unused at present time
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na

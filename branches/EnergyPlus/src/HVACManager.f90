@@ -60,7 +60,7 @@ INTEGER :: RepIterAir = 0
 
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CrossMixingReportFlag ! TRUE when Cross Mixing is active based on controls
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: MixingReportFlag      ! TRUE when Mixing is active based on controls
-REAL,    ALLOCATABLE, DIMENSION(:) :: VentMCP               ! product of mass rate and Cp for each Venitlation object
+REAL(r64),    ALLOCATABLE, DIMENSION(:) :: VentMCP               ! product of mass rate and Cp for each Venitlation object
 
 
           !SUBROUTINE SPECIFICATIONS FOR MODULE PrimaryPlantLoops
@@ -150,8 +150,8 @@ SUBROUTINE ManageHVAC
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
         ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL              :: PriorTimeStep                !magnitude of time step for previous history terms
-  REAL              :: ZoneTempChange                  !change in zone air temperature from timestep t-1 to t
+  REAL(r64)              :: PriorTimeStep                !magnitude of time step for previous history terms
+  REAL(r64)              :: ZoneTempChange                  !change in zone air temperature from timestep t-1 to t
   Integer                :: NodeNum
   LOGICAL                :: ReportDebug
   LOGICAL,SAVE           :: TriggerGetAFN = .TRUE.
@@ -177,16 +177,16 @@ SUBROUTINE ManageHVAC
   ! save for use with thermal comfort control models (Fang, Pierce, and KSU)
   ZTAVComf = ZTAV
   ZoneAirHumRatAvgComf = ZoneAirHumRatAvg
-  ZTAV = 0.0
-  ZoneAirHumRatAvg = 0.0
+  ZTAV = 0.0D0
+  ZoneAirHumRatAvg = 0.0D0
   PrintedWarmup=.false.
   IF (Contaminant%CO2Simulation) Then
     OutdoorCO2 = GetCurrentScheduleValue(Contaminant%CO2OutdoorSchedPtr)
-    ZoneAirCO2Avg = 0.0
+    ZoneAirCO2Avg = 0.0D0
   END IF
   IF (Contaminant%GenericContamSimulation) Then
     OutdoorGC = GetCurrentScheduleValue(Contaminant%GenericContamOutdoorSchedPtr)
-    IF (ALLOCATED(ZoneAirGCAvg)) ZoneAirGCAvg = 0.0
+    IF (ALLOCATED(ZoneAirGCAvg)) ZoneAirGCAvg = 0.0D0
   END IF
 
   IF (BeginEnvrnFlag .AND. MyEnvrnFlag) THEN
@@ -270,7 +270,7 @@ SUBROUTINE ManageHVAC
   IF (ZoneTempChange > MaxZoneTempDiff .and. .not. KickOffSimulation)  THEN
     !determine value of adaptive system time step
     ! model how many system timesteps we want in zone timestep
-    ZTempTrendsNumSysSteps = INT(ZoneTempChange / MaxZoneTempDiff + 1.0 ) ! add 1 for truncation
+    ZTempTrendsNumSysSteps = INT(ZoneTempChange / MaxZoneTempDiff + 1.0D0 ) ! add 1 for truncation
     NumOfSysTimeSteps      = MIN( ZTempTrendsNumSysSteps , LimitNumSysSteps )
     !then determine timestep length for even distribution, protect div by zero
     IF (NumOfSysTimeSteps > 0) TimeStepSys =   TimeStepZone / NumOfSysTimeSteps
@@ -1133,7 +1133,7 @@ SUBROUTINE ResolveAirLoopFlowLimits
   INTEGER             :: TermInletNode
   INTEGER             :: SupplyIndex
   INTEGER             :: SupplyNode
-  REAL           :: FlowRatio
+  REAL(r64)           :: FlowRatio
 
   DO AirLoopIndex=1,NumPrimaryAirSys ! loop over the primary air loops
     DO SupplyIndex=1,AirToZoneNodeInfo(AirLoopIndex)%NumSupplyNodes ! loop over the air loop supply outlets
@@ -1142,14 +1142,14 @@ SUBROUTINE ResolveAirLoopFlowLimits
         ! node mass flow max avail to what air loop can supply
         SupplyNode = AirToZoneNodeInfo(AirLoopIndex)%AirLoopSupplyNodeNum(SupplyIndex)
         IF (Node(SupplyNode)%MassFlowRate > 0.0) THEN
-          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) > HVACFlowRateToler * 0.01) THEN
+          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) > HVACFlowRateToler * 0.01d0) THEN
             FlowRatio = Node(SupplyNode)%MassFlowRate / Node(SupplyNode)%MassFlowRateSetPoint
             DO ZonesCooledIndex=1,AirToZoneNodeInfo(AirLoopIndex)%NumZonesCooled
               TermInletNode = AirToZoneNodeInfo(AirLoopIndex)%TermUnitCoolInletNodes(ZonesCooledIndex)
               Node(TermInletNode)%MassFlowRateMaxAvail = Node(TermInletNode)%MassFlowRate * FlowRatio
             END DO
           END IF
-          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) < - HVACFlowRateToler * 0.01) THEN
+          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) < - HVACFlowRateToler * 0.01d0) THEN
             IF (Node(SupplyNode)%MassFlowRateSetPoint == 0.0) THEN
 !               CALL ShowFatalError('ResolveAirLoopFlowLimits: Node MassFlowRateSetPoint = 0.0, Node='//  &
 !                                   TRIM(NodeID(SupplyNode))//  &
@@ -1177,14 +1177,14 @@ SUBROUTINE ResolveAirLoopFlowLimits
         ! node mass flow max avail to what air loop can supply
         SupplyNode = AirToZoneNodeInfo(AirLoopIndex)%AirLoopSupplyNodeNum(SupplyIndex)
         IF (Node(SupplyNode)%MassFlowRate > 0.0) THEN
-          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) > HVACFlowRateToler * 0.01) THEN
+          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) > HVACFlowRateToler * 0.01d0) THEN
             FlowRatio = Node(SupplyNode)%MassFlowRate / Node(SupplyNode)%MassFlowRateSetPoint
             DO ZonesHeatedIndex=1,AirToZoneNodeInfo(AirLoopIndex)%NumZonesHeated
               TermInletNode = AirToZoneNodeInfo(AirLoopIndex)%TermUnitHeatInletNodes(ZonesHeatedIndex)
               Node(TermInletNode)%MassFlowRateMaxAvail = Node(TermInletNode)%MassFlowRate * FlowRatio
             END DO
           END IF
-          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) < - HVACFlowRateToler * 0.01) THEN
+          IF ( (Node(SupplyNode)%MassFlowRateSetPoint - Node(SupplyNode)%MassFlowRate) < - HVACFlowRateToler * 0.01d0) THEN
             IF (Node(SupplyNode)%MassFlowRateSetPoint == 0.0) THEN
               ! CALL ShowFatalError('ResolveAirLoopFlowLimits: Node MassFlowRateSetPoint = 0.0, Node='//  &
                                   ! TRIM(NodeID(SupplyNode))//  &
@@ -1491,7 +1491,7 @@ SUBROUTINE CalcAirFlowSimple
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: StdGravity    = 9.80665   ! The acceleration of gravity at the sea level (m/s2)
+    REAL(r64), PARAMETER :: StdGravity    = 9.80665d0   ! The acceleration of gravity at the sea level (m/s2)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1500,69 +1500,69 @@ SUBROUTINE CalcAirFlowSimple
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL MCP
-   REAL MCPxM
-   REAL MCPxN
-   REAL  TZM  ! Temperature of From Zone
-   REAL  TZN  ! Temperature of this zone
-   REAL TD                ! Delta Temp limit of Mixing statement
-   REAL Tavg  ! Average temperature in two zones exchanging air
-   REAL Wavg  ! Average humidity ratio in two zones exchanging air
+   REAL(r64) MCP
+   REAL(r64) MCPxM
+   REAL(r64) MCPxN
+   REAL(r64)  TZM  ! Temperature of From Zone
+   REAL(r64)  TZN  ! Temperature of this zone
+   REAL(r64) TD                ! Delta Temp limit of Mixing statement
+   REAL(r64) Tavg  ! Average temperature in two zones exchanging air
+   REAL(r64) Wavg  ! Average humidity ratio in two zones exchanging air
    INTEGER M              ! Index to From Zone
    INTEGER N              ! Index of this zone
    INTEGER J              ! Loop Counter
    INTEGER NZ             ! A pointer
    INTEGER I              ! Ventilation master object index
    INTEGER NH             ! Hybrid controlled zone number
-   REAL AirDensity        ! Density of air (kg/m^3)
-   REAL CpAir             ! Heat capacity of air (J/kg-C)
-   REAL OutletAirEnthalpy ! Enthlapy of outlet air (VENTILATION objects)
-   REAL :: TempExt
-   REAL :: WindExt
+   REAL(r64) AirDensity        ! Density of air (kg/m^3)
+   REAL(r64) CpAir             ! Heat capacity of air (J/kg-C)
+   REAL(r64) OutletAirEnthalpy ! Enthlapy of outlet air (VENTILATION objects)
+   REAL(r64) :: TempExt
+   REAL(r64) :: WindExt
    LOGICAL MixingLimitFlag
-   REAL :: MixingTmin
-   REAL :: MixingTmax
+   REAL(r64) :: MixingTmin
+   REAL(r64) :: MixingTmax
 
-   REAL :: IVF  !DESIGN INFILTRATION FLOW RATE (M**3/SEC)
-   REAL :: VVF  !DESIGN VENTILATION FLOW RATE (M**3/SEC)
-   REAL :: MCpI_temp
-   REAL :: VAMFL_temp
-   REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: ZMAT ! Zone air temperature
-   REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: ZHumRat  ! Zone air humidity ratio
-   REAL :: Cw   ! Opening effectivenss
-   REAL :: Cd   ! Discharge coefficent
-   REAL :: Angle   ! Angle between wind direction and effective angle
-   REAL :: Qw   ! Volumetric flow driven by wind
-   REAL :: Qst  ! Volumetric flow driven by stack effect
-   REAL :: MassFlowDiff
+   REAL(r64) :: IVF  !DESIGN INFILTRATION FLOW RATE (M**3/SEC)
+   REAL(r64) :: VVF  !DESIGN VENTILATION FLOW RATE (M**3/SEC)
+   REAL(r64) :: MCpI_temp
+   REAL(r64) :: VAMFL_temp
+   REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: ZMAT ! Zone air temperature
+   REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: ZHumRat  ! Zone air humidity ratio
+   REAL(r64) :: Cw   ! Opening effectivenss
+   REAL(r64) :: Cd   ! Discharge coefficent
+   REAL(r64) :: Angle   ! Angle between wind direction and effective angle
+   REAL(r64) :: Qw   ! Volumetric flow driven by wind
+   REAL(r64) :: Qst  ! Volumetric flow driven by stack effect
+   REAL(r64) :: MassFlowDiff
    !following variables used for refrigeration door mixing and all defined in EngRef
    INTEGER :: ZoneA
    INTEGER :: ZoneB
-   REAL :: TZoneA
-   REAL :: TZoneB
-   REAL :: HumRatZoneA
-   REAL :: HumRatZoneB
-   REAL :: AirDensityZoneA
-   REAL :: CpAirZoneA
-   REAL :: AirDensityZoneB
-   REAL :: CpAirZoneB
-   REAL :: AirDensityAvg
-   REAL :: MassFlowDryAir
-   REAL :: SchedDoorOpen
-   REAL :: DoorHeight
-   REAL :: DoorArea
-   REAL :: DoorProt
-   REAL :: FDens
-   REAL :: Fb
-   REAL :: FFlow
-   REAL :: MassFlowToA
-   REAL :: MassFlowToB
-   REAL :: MassFlowXCpToA
-   REAL :: MassFlowXCpToB
-   REAL :: MassFlowXCpXTempToA
-   REAL :: MassFlowXCpXTempToB
-   REAL :: MassFlowXHumRatToA
-   REAL :: MassFlowXHumRatToB
+   REAL(r64) :: TZoneA
+   REAL(r64) :: TZoneB
+   REAL(r64) :: HumRatZoneA
+   REAL(r64) :: HumRatZoneB
+   REAL(r64) :: AirDensityZoneA
+   REAL(r64) :: CpAirZoneA
+   REAL(r64) :: AirDensityZoneB
+   REAL(r64) :: CpAirZoneB
+   REAL(r64) :: AirDensityAvg
+   REAL(r64) :: MassFlowDryAir
+   REAL(r64) :: SchedDoorOpen
+   REAL(r64) :: DoorHeight
+   REAL(r64) :: DoorArea
+   REAL(r64) :: DoorProt
+   REAL(r64) :: FDens
+   REAL(r64) :: Fb
+   REAL(r64) :: FFlow
+   REAL(r64) :: MassFlowToA
+   REAL(r64) :: MassFlowToB
+   REAL(r64) :: MassFlowXCpToA
+   REAL(r64) :: MassFlowXCpToB
+   REAL(r64) :: MassFlowXCpXTempToA
+   REAL(r64) :: MassFlowXCpXTempToB
+   REAL(r64) :: MassFlowXHumRatToA
+   REAL(r64) :: MassFlowXHumRatToB
 !
    ! Allocate the ZMAT and ZHumRat arrays
    IF (.NOT. ALLOCATED(ZMAT)) ALLOCATE(ZMAT(NumOfZones))
@@ -1943,8 +1943,8 @@ SUBROUTINE CalcAirFlowSimple
 !            Per Jan 17, 2008 conference call, agreed to use average conditions for Rho, Cp and Hfg
 !             RhoAirM = PsyRhoAirFnPbTdbW(OutBaroPress,tzm,ZHumRat(m))
 !             MCP=Mixing(J)%DesiredAirFlowRate * PsyCpAirFnWTdb(ZHumRat(m),tzm) * RhoAirM
-          AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0,(ZHumRat(n)+ZHumRat(m))/2.0)
-          CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0,(tzn+tzm)/2.0) ! Use average conditions
+          AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0d0,(ZHumRat(n)+ZHumRat(m))/2.0d0)
+          CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0d0,(tzn+tzm)/2.0d0) ! Use average conditions
           MCP=Mixing(J)%DesiredAirFlowRate * CpAir * AirDensity
           MCPM(N)=MCPM(N)+MCP
           MCPTM(N)=MCPTM(N)+MCP*TZM
@@ -1965,8 +1965,8 @@ SUBROUTINE CalcAirFlowSimple
        IF (TZM > TZN+TD) THEN
 !             RhoAirM = PsyRhoAirFnPbTdbW(OutBaroPress,tzm,ZHumRat(m))
 !             MCP=Mixing(J)%DesiredAirFlowRate * PsyCpAirFnWTdb(ZHumRat(m),tzm) * RhoAirM
-         AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0,(ZHumRat(n)+ZHumRat(m))/2.0) ! Use avg conditions
-         CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0,(tzn+tzm)/2.0) ! Use average conditions
+         AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0d0,(ZHumRat(n)+ZHumRat(m))/2.0d0) ! Use avg conditions
+         CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0d0,(tzn+tzm)/2.0d0) ! Use average conditions
          MCP=Mixing(J)%DesiredAirFlowRate * CpAir * AirDensity
          MCPM(N)=MCPM(N)+MCP
          MCPTM(N)=MCPTM(N)+MCP*TZM
@@ -1985,8 +1985,8 @@ SUBROUTINE CalcAirFlowSimple
      IF (TD == 0.0) THEN
 !          RhoAirM = PsyRhoAirFnPbTdbW(OutBaroPress,tzm,ZHumRat(m))
 !          MCP=Mixing(J)%DesiredAirFlowRate * PsyCpAirFnWTdb(ZHumRat(m),tzm) * RhoAirM
-       AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0,(ZHumRat(n)+ZHumRat(m))/2.0) ! Use avg conditions
-       CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0,(tzn+tzm)/2.0) ! Use average conditions
+       AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,(tzn+tzm)/2.0d0,(ZHumRat(n)+ZHumRat(m))/2.0d0) ! Use avg conditions
+       CpAir = PsyCpAirFnWTdb((ZHumRat(n)+ZHumRat(m))/2.0d0,(tzn+tzm)/2.0d0) ! Use average conditions
        MCP=Mixing(J)%DesiredAirFlowRate * CpAir * AirDensity
        MCPM(N)=MCPM(N)+MCP
        MCPTM(N)=MCPTM(N)+MCP*TZM
@@ -2108,8 +2108,8 @@ SUBROUTINE CalcAirFlowSimple
          CrossMixingFlag(N) = .TRUE.
          CrossMixingFlag(M) = .TRUE.
 
-         Tavg = (tzn+tzm)/2.0
-         Wavg = (ZHumRat(n)+ZHumRat(m))/2.0
+         Tavg = (tzn+tzm)/2.0d0
+         Wavg = (ZHumRat(n)+ZHumRat(m))/2.0d0
          AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress,Tavg,Wavg)
          CpAir = PsyCpAirFnWTdb(Wavg,Tavg)
          MCPxN=MVFC(J) * CpAir * AirDensity
@@ -2154,41 +2154,41 @@ IF(TotRefDoorMixing > 0) THEN
        CpAirZoneA = PsyCpAirFnWTdb(HumRatZoneA,TZoneA)
        AirDensityZoneB = PsyRhoAirFnPbTdbW(OutBaroPress,TZoneB,HumRatZoneB)
        CpAirZoneB = PsyCpAirFnWTdb(HumRatZoneB,TZoneB)
-       Tavg = (TZoneA + TZoneB)/2.0
-       Wavg = (HumRatZoneA + HumRatZoneB)/2.0
+       Tavg = (TZoneA + TZoneB)/2.0d0
+       Wavg = (HumRatZoneA + HumRatZoneB)/2.0d0
        AirDensityAvg = PsyRhoAirFnPbTdbW(OutBaroPress,Tavg,Wavg)
 
        IF(RefDoorMixing(ZoneA)%EMSRefDoorMixingOn(J)) THEN
          MassFlowDryAir = RefDoorMixing(ZoneA)%VolRefDoorFlowRate(J) * AirDensityAvg
        ELSE
          SchedDoorOpen = GetCurrentScheduleValue(RefDoorMixing(ZoneA)%OpenSchedPtr(J))
-         IF(SchedDoorOpen == 0.)  CYCLE
+         IF(SchedDoorOpen == 0.d0)  CYCLE
          DoorHeight = RefDoorMixing(ZoneA)%DoorHeight(J)
          DoorArea   = RefDoorMixing(ZoneA)%DoorArea(J)
          DoorProt   = RefDoorMixing(ZoneA)%Protection(J)
          IF(AirDensityZoneA .GE. AirDensityZoneB) THEN
            ! Mass of dry air flow between zones is equal,
            ! but have to calc directionally to avoid sqrt(neg number)
-           FDens = (2./(1.+((AirDensityZoneA/AirDensityZoneB)**(1./3.))))**1.5
-           FB    = 0.221 * DoorArea * AirDensityZoneA * FDens * &
-                   SQRT((1.-AirDensityZoneB/AirDensityZoneA)*StdGravity*DoorHeight)
+           FDens = (2.d0/(1.d0+((AirDensityZoneA/AirDensityZoneB)**(1.d0/3.d0))))**1.5d0
+           FB    = 0.221d0 * DoorArea * AirDensityZoneA * FDens * &
+                   SQRT((1.d0-AirDensityZoneB/AirDensityZoneA)*StdGravity*DoorHeight)
          ELSE !ZoneADens < ZoneBDens
-           FDens = (2./(1.+((AirDensityZoneB/AirDensityZoneA)**(1./3.))))**1.5
-           FB    = 0.221 * DoorArea * AirDensityZoneB * FDens * &
-                   SQRT((1.-AirDensityZoneA/AirDensityZoneB)*StdGravity*DoorHeight)
+           FDens = (2.d0/(1.d0+((AirDensityZoneB/AirDensityZoneA)**(1.d0/3.d0))))**1.5d0
+           FB    = 0.221d0 * DoorArea * AirDensityZoneB * FDens * &
+                   SQRT((1.d0-AirDensityZoneA/AirDensityZoneB)*StdGravity*DoorHeight)
          END IF !ZoneADens .GE. ZoneBDens
          ! FFlow = Doorway flow factor, is determined by temperature difference
-         FFlow = 1.1
-         IF(DABS(TZoneA - TZoneB) > 11.)FFlow = 0.8
-         MassFlowDryAir = FB *SchedDoorOpen * FFlow * (1. - DoorProt)
+         FFlow = 1.1d0
+         IF(DABS(TZoneA - TZoneB) > 11.d0)FFlow = 0.8d0
+         MassFlowDryAir = FB *SchedDoorOpen * FFlow * (1.d0 - DoorProt)
          RefDoorMixing(ZoneA)%VolRefDoorFlowRate(J) = MassFlowDryAir/AirDensityAvg
          !Note - VolRefDoorFlowRate is used ONLY for reporting purposes, where it is
          !       used with the avg density to generate a reported mass flow
          !       Considering the small values typical for HumRat, this is not far off.
        END IF ! EMSRefDoorMixingOn
 
-       MassFlowToA = MassFlowDryAir * (1. + HumRatZoneB)
-       MassFlowToB = MassFlowDryAir * (1. + HumRatZoneA)
+       MassFlowToA = MassFlowDryAir * (1.d0 + HumRatZoneB)
+       MassFlowToB = MassFlowDryAir * (1.d0 + HumRatZoneA)
        MassFlowXCpToA = MassFlowToA * CpAirZoneB
        MassFlowXCpToB = MassFlowToB * CpAirZoneA
        MassFlowXCpXTempToA = MassFlowXCpToA * TZoneB
@@ -2229,39 +2229,39 @@ END IF !(TotRefrigerationDoorMixing > 0) THEN
 
        IVF=Infiltration(J)%DesignLevel*GetCurrentScheduleValue(Infiltration(J)%SchedPtr)
        ! CR68xx if calculated < 0.0, don't propagate
-       IF (IVF < 0.0) IVF=0.0
+       IF (IVF < 0.0) IVF=0.0D0
        MCpI_temp=IVF*AirDensity*CpAir*( Infiltration(J)%ConstantTermCoef &
                  + ABS(TempExt-ZMAT(NZ))*Infiltration(J)%TemperatureTermCoef &
                  + WindExt*(Infiltration(J)%VelocityTermCoef + WindExt*Infiltration(J)%VelocitySQTermCoef) )
 
-       IF (MCpI_temp < 0.0) MCpI_temp=0.0
+       IF (MCpI_temp < 0.0D0) MCpI_temp=0.0D0
      CASE (InfiltrationShermanGrimsrud)
        ! Sherman Grimsrud model as formulated in ASHRAE HoF
        WindExt = WindSpeed ! formulated to use wind at Meterological Station rather than local
        IVF=GetCurrentScheduleValue(Infiltration(J)%SchedPtr) &
-           * Infiltration(J)%LeakageArea / 1000.0          &
+           * Infiltration(J)%LeakageArea / 1000.0D0          &
            * SQRT( Infiltration(J)%BasicStackCoefficient * ABS(TempExt-ZMAT(NZ))  &
-                  + Infiltration(J)%BasicWindCoefficient * WindExt**2.0  )
-       IF (IVF < 0.0) IVF=0.0
+                  + Infiltration(J)%BasicWindCoefficient * WindExt**2.0D0  )
+       IF (IVF < 0.0D0) IVF=0.0D0
        MCpI_temp=IVF*AirDensity*CpAir
-       IF (MCpI_temp < 0.0) MCpI_temp=0.0
+       IF (MCpI_temp < 0.0) MCpI_temp=0.0D0
      CASE (InfiltrationAIM2)
        ! Walker Wilson model as formulated in ASHRAE HoF
        IVF=GetCurrentScheduleValue(Infiltration(J)%SchedPtr) &
            * SQRT(  ( Infiltration(J)%FlowCoefficient * Infiltration(J)%AIM2StackCoefficient &
                       * (ABS(TempExt-ZMAT(NZ)) )**Infiltration(J)%PressureExponent)**2       &
                       + (Infiltration(J)%FlowCoefficient * Infiltration(J)%AIM2WindCoefficient &
-                         * (Infiltration(J)%ShelterFactor * WindExt)**(2.0*Infiltration(J)%PressureExponent) )**2.0 )
-       IF (IVF < 0.0) IVF=0.0
+                         * (Infiltration(J)%ShelterFactor * WindExt)**(2.0D0*Infiltration(J)%PressureExponent) )**2.0D0 )
+       IF (IVF < 0.0D0) IVF=0.0D0
        MCpI_temp=IVF*AirDensity*CpAir
        IF (MCpI_temp < 0.0) MCpI_temp=0.0
      END SELECT
 
      IF (Infiltration(J)%EMSOverrideOn) THEN
        IVF= Infiltration(J)%EMSAirFlowRateValue
-       IF (IVF < 0.0) IVF=0.0
+       IF (IVF < 0.0D0) IVF=0.0D0
        MCpI_temp=IVF*AirDensity*CpAir
-       IF (MCpI_temp < 0.0) MCpI_temp=0.0
+       IF (MCpI_temp < 0.0D0) MCpI_temp=0.0D0
      ENDIF
 
      If (Infiltration(J)%QuadratureSum) Then
@@ -2290,7 +2290,7 @@ END IF !(TotRefrigerationDoorMixing > 0) THEN
          Do I=1,ZoneAirBalance(j)%NumOfERVs
            MassFlowDiff = Node(ZoneAirBalance(j)%ERVExhaustNode(I))%MassFlowRate - &
                           Node(ZoneAirBalance(j)%ERVInletNode(I))%MassFlowRate
-           If (MassFlowDiff > 0.) Then
+           If (MassFlowDiff > 0.d0) Then
              ZoneAirBalance(J)%ERVMassFlowRate = ZoneAirBalance(J)%ERVMassFlowRate + MassFlowDiff
            End If
          End Do
@@ -2362,18 +2362,18 @@ SUBROUTINE ReportAirHeatBalance
   INTEGER  :: ZoneA                   ! Mated zone number for pair pf zones sharing refrigeration door opening
   INTEGER  :: ZoneB                   ! Mated zone number for pair pf zones sharing refrigeration door opening
   INTEGER  :: VentNum                 ! Counter for ventilation statements
-  REAL ::  AirDensity                 ! Density of air (kg/m^3)
-  REAL :: CpAir                       ! Heat capacity of air (J/kg-C)
-  REAL :: ADSCorrectionFactor         ! Correction factor of air flow model values when ADS is simulated
-  REAL :: H2OHtOfVap                  ! Heat of vaporization of air
-  REAL :: TotalLoad                   ! Total loss or gain
+  REAL(r64) ::  AirDensity                 ! Density of air (kg/m^3)
+  REAL(r64) :: CpAir                       ! Heat capacity of air (J/kg-C)
+  REAL(r64) :: ADSCorrectionFactor         ! Correction factor of air flow model values when ADS is simulated
+  REAL(r64) :: H2OHtOfVap                  ! Heat of vaporization of air
+  REAL(r64) :: TotalLoad                   ! Total loss or gain
   INTEGER  :: MixNum                  ! Counter for MIXING and Cross Mixing statements
-  REAL,ALLOCATABLE,DIMENSION(:),SAVE :: MixSenLoad             ! Mixing sensible loss or gain
-  REAL,ALLOCATABLE,DIMENSION(:),SAVE :: MixLatLoad             ! Mixing latent loss or gain
+  REAL(r64),ALLOCATABLE,DIMENSION(:),SAVE :: MixSenLoad             ! Mixing sensible loss or gain
+  REAL(r64),ALLOCATABLE,DIMENSION(:),SAVE :: MixLatLoad             ! Mixing latent loss or gain
   INTEGER  :: J                       ! Index in a do-loop
   INTEGER :: VentZoneNum              ! Number of ventilation object per zone
-  REAL :: VentZoneMassflow       ! Total mass flow rate per zone
-  REAL :: VentZoneAirTemp        ! Average Zone inlet temperature
+  REAL(r64) :: VentZoneMassflow       ! Total mass flow rate per zone
+  REAL(r64) :: VentZoneAirTemp        ! Average Zone inlet temperature
   LOGICAL, SAVE :: FirstTime=.true.
 
   ! Ensure no airflownetwork and simple calculations
@@ -2406,13 +2406,13 @@ SUBROUTINE ReportAirHeatBalance
     IF (MAT(ZoneLoop) > Zone(ZoneLoop)%OutDryBulbTemp) THEN
 
       ZnAirRPT(ZoneLoop)%InfilHeatLoss = 0.001*MCPI(ZoneLoop)*(MAT(ZoneLoop)-Zone(ZoneLoop)%OutDryBulbTemp)* &
-                                      TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                      TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
       ZnAirRPT(ZoneLoop)%InfilHeatGain=0.0
 
     ELSE IF (MAT(ZoneLoop) <= Zone(ZoneLoop)%OutDryBulbTemp) THEN
 
       ZnAirRPT(ZoneLoop)%InfilHeatGain = 0.001*MCPI(ZoneLoop)*(Zone(ZoneLoop)%OutDryBulbTemp-MAT(ZoneLoop))* &
-                                      TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                      TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
       ZnAirRPT(ZoneLoop)%InfilHeatLoss =0.0
 
     END IF
@@ -2422,13 +2422,13 @@ SUBROUTINE ReportAirHeatBalance
     IF (ZoneAirHumRat(ZoneLoop) > OutHumRat) THEN
 
       ZnAirRPT(ZoneLoop)%InfilLatentLoss = 0.001*MCPI(ZoneLoop)/CpAir*(ZoneAirHumRat(ZoneLoop)-OutHumRat)*H2OHtOfVap* &
-                                      TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                      TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
       ZnAirRPT(ZoneLoop)%InfilLatentGain=0.0
 
     ELSE IF (ZoneAirHumRat(ZoneLoop) <= OutHumRat) THEN
 
       ZnAirRPT(ZoneLoop)%InfilLatentGain = 0.001*MCPI(ZoneLoop)/CpAir*(OutHumRat-ZoneAirHumRat(ZoneLoop))*H2OHtOfVap* &
-                                      TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                      TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
       ZnAirRPT(ZoneLoop)%InfilLatentLoss =0.0
 
     END IF
@@ -2501,11 +2501,11 @@ SUBROUTINE ReportAirHeatBalance
         H2OHtOfVap = PsyHfgAirFnWTdb(OutHumRat, Zone(ZoneLoop)%OutDryBulbTemp,'ReportAirHeatBalance:2')
         IF (ZoneAirHumRat(ZoneLoop) > OutHumRat) THEN
           ZnAirRPT(ZoneLoop)%VentilLatentLoss = 0.001*MCPV(ZoneLoop)/CpAir*(ZoneAirHumRat(ZoneLoop)-OutHumRat)*H2OHtOfVap* &
-                                        TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                        TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
           ZnAirRPT(ZoneLoop)%VentilLatentGain=0.0
         ELSE IF (ZoneAirHumRat(ZoneLoop) <= OutHumRat) THEN
           ZnAirRPT(ZoneLoop)%VentilLatentGain = 0.001*MCPV(ZoneLoop)/CpAir*(OutHumRat-ZoneAirHumRat(ZoneLoop))*H2OHtOfVap* &
-                                        TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                        TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
           ZnAirRPT(ZoneLoop)%VentilLatentLoss =0.0
         END IF
         ! Total ventilation losses and gains
@@ -2543,18 +2543,18 @@ SUBROUTINE ReportAirHeatBalance
 !        H2OHtOfVap = PsyHfgAirFnWTdb(ZoneAirHumRat(ZoneLoop), MAT(ZoneLoop))
 !        Per Jan 17, 2008 conference call, agreed to use average conditions for Rho, Cp and Hfg
 !           and to recalculate the report variable using end of time step temps and humrats
-        AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0, &
-                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0)
-        CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0,  &
-                                     (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0)
+        AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0d0, &
+                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0d0)
+        CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0d0,  &
+                                     (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0d0)
         ZnAirRpt(ZoneLoop)%MixVolume = ZnAirRpt(ZoneLoop)%MixVolume + &
                                        Mixing(MixNum)%DesiredAirFlowRate*TimeStepSys*SecInHour*ADSCorrectionFactor
         ZnAirRpt(ZoneLoop)%MixMass = ZnAirRpt(ZoneLoop)%MixMass + &
                                  Mixing(MixNum)%DesiredAirFlowRate * AirDensity * TimeStepSys * SecInHour * ADSCorrectionFactor
         MixSenLoad(ZoneLoop) = MixSenLoad(ZoneLoop)+Mixing(MixNum)%DesiredAirFlowRate * AirDensity *  CpAir * &
                                (MAT(ZoneLoop) - MAT(Mixing(MixNum)%FromZone))
-        H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0, &
-                                    (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0,'ReportAirHeatBalance:Mixing')
+        H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(Mixing(MixNum)%FromZone))/2.0d0, &
+                                    (MAT(ZoneLoop)+MAT(Mixing(MixNum)%FromZone))/2.0d0,'ReportAirHeatBalance:Mixing')
 !        MixLatLoad(ZoneLoop) = MixLatLoad(ZoneLoop)+MixingMassFlowZone(ZoneLoop)*(ZoneAirHumRat(ZoneLoop)- &
 !                     ZoneAirHumRat(Mixing(MixNum)%FromZone))*H2OHtOfVap
         MixLatLoad(ZoneLoop) = MixLatLoad(ZoneLoop)+ Mixing(MixNum)%DesiredAirFlowRate * AirDensity * &
@@ -2567,18 +2567,18 @@ SUBROUTINE ReportAirHeatBalance
 !        MixSenLoad(ZoneLoop) = MixSenLoad(ZoneLoop)+MCPM(ZoneLoop)*MAT(CrossMixing(MixNum)%FromZone)
 !        Per Jan 17, 2008 conference call, agreed to use average conditions for Rho, Cp and Hfg
 !           and to recalculate the report variable using end of time step temps and humrats
-        AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0, &
-                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0)
-        CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0,  &
-                                     (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0)
+        AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0d0, &
+                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0d0)
+        CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0d0,  &
+                                     (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0d0)
         ZnAirRpt(ZoneLoop)%MixVolume = ZnAirRpt(ZoneLoop)%MixVolume + &
                                        MVFC(MixNum)*TimeStepSys*SecInHour*ADSCorrectionFactor
         ZnAirRpt(ZoneLoop)%MixMass = ZnAirRpt(ZoneLoop)%MixMass + &
                                  MVFC(MixNum) * AirDensity * TimeStepSys * SecInHour * ADSCorrectionFactor
         MixSenLoad(ZoneLoop) = MixSenLoad(ZoneLoop)+ MVFC(MixNum) * AirDensity *  CpAir * &
                                (MAT(ZoneLoop) - MAT(CrossMixing(MixNum)%FromZone))
-        H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0, &
-                                    (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0,'ReportAirHeatBalance:XMixing')
+        H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(CrossMixing(MixNum)%FromZone))/2.0d0, &
+                                    (MAT(ZoneLoop)+MAT(CrossMixing(MixNum)%FromZone))/2.0d0,'ReportAirHeatBalance:XMixing')
 !       MixLatLoad(ZoneLoop) = MixLatLoad(ZoneLoop)+MixingMassFlowZone(ZoneLoop)*(ZoneAirHumRat(ZoneLoop)- &
 !                     ZoneAirHumRat(CrossMixing(MixNum)%FromZone))*H2OHtOfVap
         MixLatLoad(ZoneLoop) = MixLatLoad(ZoneLoop)+ MVFC(MixNum) * AirDensity * &
@@ -2597,14 +2597,14 @@ IF (TotRefDoorMixing .GT. 0) THEN
       DO J=1,RefDoorMixing(ZoneLoop)%NumRefDoorConnections
         !    Capture impact when zoneloop is the 'primary zone'
         !    that is, the zone of a pair with the lower zone number
-        IF(RefDoorMixing(ZoneLoop)%VolRefDoorFlowRate(J).GT. 0.) THEN
+        IF(RefDoorMixing(ZoneLoop)%VolRefDoorFlowRate(J).GT. 0.d0) THEN
           ZoneB = RefDoorMixing(ZoneLoop)%MateZonePtr(J)
-          AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(ZoneB))/2.0, &
-                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0)
-          CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0,  &
-                                     (MAT(ZoneLoop)+MAT(ZoneB))/2.0)
-          H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0, &
-                                    (MAT(ZoneLoop)+MAT(ZoneB))/2.0,'ReportAirHeatBalance:XMixing')
+          AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(ZoneB))/2.0d0, &
+                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0d0)
+          CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0d0,  &
+                                     (MAT(ZoneLoop)+MAT(ZoneB))/2.0d0)
+          H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneB))/2.0d0, &
+                                    (MAT(ZoneLoop)+MAT(ZoneB))/2.0d0,'ReportAirHeatBalance:XMixing')
           ZnAirRpt(ZoneLoop)%MixVolume = ZnAirRpt(ZoneLoop)%MixVolume + &
                                        RefDoorMixing(ZoneLoop)%VolRefDoorFlowRate(J)*&
                                        TimeStepSys*SecInHour*ADSCorrectionFactor
@@ -2624,13 +2624,13 @@ IF (TotRefDoorMixing .GT. 0) THEN
       IF(RefDoorMixing(ZoneA)%RefDoorMixFlag) THEN
         DO J=1,RefDoorMixing(ZoneA)%NumRefDoorConnections
           IF (RefDoorMixing(ZoneA)%MateZonePtr(J) .EQ. ZoneLoop) THEN
-            IF (RefDoorMixing(ZoneA)%VolRefDoorFlowRate(J).GT. 0.) THEN
-              AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(ZoneA))/2.0, &
-                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0)
-              CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0,  &
-                                     (MAT(ZoneLoop)+MAT(ZoneA))/2.0)
-              H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0, &
-                                    (MAT(ZoneLoop)+MAT(ZoneA))/2.0,'ReportAirHeatBalance:XMixing')
+            IF (RefDoorMixing(ZoneA)%VolRefDoorFlowRate(J).GT. 0.d0) THEN
+              AirDensity = PsyRhoAirFnPbTdbW(OutBaroPress, (MAT(ZoneLoop)+MAT(ZoneA))/2.0d0, &
+                                      (ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0d0)
+              CpAir      = PsyCpAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0d0,  &
+                                     (MAT(ZoneLoop)+MAT(ZoneA))/2.0d0)
+              H2OHtOfVap = PsyHfgAirFnWTdb((ZoneAirHumRat(ZoneLoop)+ZoneAirHumRat(ZoneA))/2.0d0, &
+                                    (MAT(ZoneLoop)+MAT(ZoneA))/2.0d0,'ReportAirHeatBalance:XMixing')
               ZnAirRpt(ZoneLoop)%MixVolume = ZnAirRpt(ZoneLoop)%MixVolume + &
                                        RefDoorMixing(ZoneA)%VolRefDoorFlowRate(J)*&
                                        TimeStepSys*SecInHour*ADSCorrectionFactor
@@ -2694,11 +2694,11 @@ END IF !(TotRefDoorMixing .GT. 0)
         H2OHtOfVap = PsyHfgAirFnWTdb(OutHumRat, Zone(ZoneLoop)%OutDryBulbTemp,'ReportAirHeatBalance:2')
         IF (ZoneAirHumRat(ZoneLoop) > OutHumRat) THEN
           ZnAirRPT(ZoneLoop)%OABalanceLatentLoss = 0.001*MdotOA(ZoneLoop)*(ZoneAirHumRat(ZoneLoop)-OutHumRat)*H2OHtOfVap* &
-                                        TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                        TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
           ZnAirRPT(ZoneLoop)%OABalanceLatentGain=0.0
         ELSE IF (ZoneAirHumRat(ZoneLoop) <= OutHumRat) THEN
           ZnAirRPT(ZoneLoop)%OABalanceLatentGain = 0.001*MdotOA(ZoneLoop)*(OutHumRat-ZoneAirHumRat(ZoneLoop))*H2OHtOfVap* &
-                                        TimeStepSys*SecInHour*1000.0*ADSCorrectionFactor
+                                        TimeStepSys*SecInHour*1000.0d0*ADSCorrectionFactor
           ZnAirRPT(ZoneLoop)%OABalanceLatentLoss =0.0
         END IF
         ! Total ventilation losses and gains
@@ -2779,7 +2779,7 @@ SUBROUTINE SetHeatToReturnAirFlag
   INTEGER      :: ZoneNum=0                  ! zone index
   INTEGER      :: LightNum                   ! Lights object index
   INTEGER      :: SurfNum                    ! Surface index
-  REAL    :: CycFanMaxVal = 0.0         ! max value of cycling fan schedule
+  REAL(r64)    :: CycFanMaxVal = 0.0         ! max value of cycling fan schedule
 
   IF (.not. AirLoopsSimOnce) RETURN
 
@@ -2818,7 +2818,7 @@ SUBROUTINE SetHeatToReturnAirFlag
       AirLoopNum = ZoneEquipConfig(ControlledZoneNum)%AirLoopNum
       IF (AirLoopNum > 0) THEN
         IF (AirLoopControlInfo(AirLoopNum)%CycFanSchedPtr > 0) THEN
-          CyclingFan = CheckScheduleValue(AirLoopControlInfo(AirLoopNum)%CycFanSchedPtr,0.0)
+          CyclingFan = CheckScheduleValue(AirLoopControlInfo(AirLoopNum)%CycFanSchedPtr,0.0d0)
         END IF
       END IF
       IF (ZoneEquipConfig(ControlledZoneNum)%ZonalSystemOnly .OR. CyclingFan) THEN
