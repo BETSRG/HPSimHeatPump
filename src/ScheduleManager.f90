@@ -71,8 +71,8 @@ MODULE ScheduleManager
   TYPE ScheduleTypeData
        CHARACTER(len=MaxNameLength) :: Name = Blank ! Schedule Type Name
        LOGICAL :: Limited                   = .false. ! True if this Schedule Type has limits
-       REAL :: Minimum   = 0.0     ! Minimum for limited schedule
-       REAL :: Maximum   = 0.0     ! Maximum for limited schedule
+       REAL(r64) :: Minimum   = 0.0     ! Minimum for limited schedule
+       REAL(r64) :: Maximum   = 0.0     ! Maximum for limited schedule
        LOGICAL :: IsReal                    = .true.  ! True if this is a "real" schedule, false if integer
        INTEGER :: UnitType = 0
   END TYPE
@@ -82,9 +82,9 @@ MODULE ScheduleManager
        INTEGER :: ScheduleTypePtr           = 0     ! Index of Schedule Type
        LOGICAL :: IntervalInterpolated   = .false. ! Indicator for interval interpolation. If not "interpolated", False.  Else True
        LOGICAL :: Used                   = .false. ! Indicator for this schedule being "used".
-       REAL, ALLOCATABLE, DIMENSION(:,:) :: TSValue     ! Value array by simulation timestep
-       REAL :: TSValMax               = 0.0   !maximum of all TSValue's
-       REAL :: TSValMin               = 0.0   !minimum of all TSValue's
+       REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: TSValue     ! Value array by simulation timestep
+       REAL(r64) :: TSValMax               = 0.0D0   !maximum of all TSValue's
+       REAL(r64) :: TSValMin               = 0.0D0   !minimum of all TSValue's
   END TYPE
 
   TYPE WeekScheduleData
@@ -99,11 +99,11 @@ MODULE ScheduleManager
        INTEGER :: WeekSchedulePointer(366)  = 0       ! one created for each day of possible simulation
        LOGICAL :: Used                   = .false. ! Indicator for this schedule being "used".
        LOGICAL :: MaxMinSet              = .false.    ! Max/min values have been stored for this schedule
-       REAL :: MaxValue             = 0.0     ! Maximum value for this schedule
-       REAL :: MinValue             = 0.0     ! Minimum value for this schedule
-       REAL :: CurrentValue         = 0.0     ! For Reporting
+       REAL(r64) :: MaxValue             = 0.0D0     ! Maximum value for this schedule
+       REAL(r64) :: MinValue             = 0.0D0     ! Minimum value for this schedule
+       REAL(r64) :: CurrentValue         = 0.0D0     ! For Reporting
        LOGICAL   :: EMSActuatedOn        = .FALSE. ! indicates if EMS computed
-       REAL :: EMSValue             = 0.0
+       REAL(r64) :: EMSValue             = 0.0D0
   END TYPE
 
 
@@ -216,7 +216,7 @@ SUBROUTINE ProcessScheduleInput
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericBlanks
   INTEGER NumAlphas
@@ -249,7 +249,7 @@ SUBROUTINE ProcessScheduleInput
   INTEGER NumConstantSchedules   ! Number of "constant" schedules
   INTEGER TS                     ! Counter for Num Of Time Steps in Hour
   INTEGER Hr                     ! Hour Counter
-  REAL, ALLOCATABLE, DIMENSION(:,:) :: MinuteValue  ! Temporary for processing interval schedules
+  REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: MinuteValue  ! Temporary for processing interval schedules
   LOGICAL, ALLOCATABLE, DIMENSION(:,:) :: SetMinuteValue  ! Temporary for processing interval schedules
   INTEGER NumFields
   INTEGER SCount
@@ -275,7 +275,7 @@ SUBROUTINE ProcessScheduleInput
   CHARACTER(len=25) ExtraField
   INTEGER UntilFld
   INTEGER xxcount
-!  REAL tempval
+!  REAL(r64) tempval
   LOGICAL :: FullYearSet=.false.
   CHARACTER(len=MaxNameLength) :: CurrentThrough=blank
   CHARACTER(len=MaxNameLength) :: LastFor=blank
@@ -283,7 +283,7 @@ SUBROUTINE ProcessScheduleInput
   integer kdy
   LOGICAL :: FileExists
   ! for SCHEDULE:FILE
-  REAL, ALLOCATABLE, DIMENSION(:) :: hourlyFileValues
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: hourlyFileValues
   INTEGER :: SchdFile
   INTEGER :: colCnt
   INTEGER :: rowCnt
@@ -292,13 +292,13 @@ SUBROUTINE ProcessScheduleInput
   INTEGER :: sepPos
   CHARACTER(len=1000) :: LineIn
   CHARACTER(len=MaxNameLength) :: subString
-  REAL :: columnValue
+  REAL(r64) :: columnValue
   INTEGER :: read_stat
   INTEGER :: iDay
   INTEGER :: hDay
   INTEGER :: jHour
   INTEGER :: kDayType
-  REAL    :: curHrVal
+  REAL(r64)    :: curHrVal
   LOGICAL :: errflag
   INTEGER :: sPos
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in getting objects
@@ -2208,7 +2208,7 @@ SUBROUTINE ReportScheduleDetails(LevelOfDetail)
 
 END SUBROUTINE ReportScheduleDetails
 
-REAL FUNCTION GetCurrentScheduleValue(ScheduleIndex)
+REAL(r64) FUNCTION GetCurrentScheduleValue(ScheduleIndex)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -2253,10 +2253,10 @@ REAL FUNCTION GetCurrentScheduleValue(ScheduleIndex)
 !  ENDIF
 
   IF (ScheduleIndex == -1) THEN
-    GetCurrentScheduleValue=1.0
+    GetCurrentScheduleValue=1.0d0
     RETURN
   ELSEIF (ScheduleIndex == 0) THEN
-    GetCurrentScheduleValue=0.0
+    GetCurrentScheduleValue=0.0d0
     RETURN
   ENDIF
 
@@ -2348,7 +2348,7 @@ SUBROUTINE UpdateScheduleValues
 
 END SUBROUTINE UpdateScheduleValues
 
-REAL FUNCTION LookUpScheduleValue(ScheduleIndex, ThisHour, ThisTimeStep, ThisDayOfYear)
+REAL(r64) FUNCTION LookUpScheduleValue(ScheduleIndex, ThisHour, ThisTimeStep, ThisDayOfYear)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Linda K. Lawrie
@@ -2399,10 +2399,10 @@ REAL FUNCTION LookUpScheduleValue(ScheduleIndex, ThisHour, ThisTimeStep, ThisDay
   ENDIF
 
   IF (ScheduleIndex == -1) THEN
-    LookUpScheduleValue=1.0
+    LookUpScheduleValue=1.0d0
     RETURN
   ELSEIF (ScheduleIndex == 0) THEN
-    LookUpScheduleValue=0.0
+    LookUpScheduleValue=0.0d0
     RETURN
   ENDIF
 
@@ -2690,7 +2690,7 @@ SUBROUTINE GetScheduleValuesForDay(ScheduleIndex,DayValues,JDay,CurDayofWeek)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: ScheduleIndex
-  REAL, INTENT(OUT)             :: DayValues(:,:)
+  REAL(r64), INTENT(OUT)             :: DayValues(:,:)
   INTEGER, INTENT(IN), OPTIONAL :: JDay
   INTEGER, INTENT(IN), OPTIONAL :: CurDayofWeek
 
@@ -2713,10 +2713,10 @@ SUBROUTINE GetScheduleValuesForDay(ScheduleIndex,DayValues,JDay,CurDayofWeek)
   ENDIF
 
   IF (ScheduleIndex == -1) THEN
-    DayValues(1:24,1:NumOfTimeStepInHour)=1.0
+    DayValues(1:24,1:NumOfTimeStepInHour)=1.0d0
     RETURN
   ELSEIF (ScheduleIndex == 0) THEN
-    DayValues(1:24,1:NumOfTimeStepInHour)=0.0
+    DayValues(1:24,1:NumOfTimeStepInHour)=0.0d0
     RETURN
   ENDIF
 
@@ -2771,7 +2771,7 @@ SUBROUTINE GetSingleDayScheduleValues(DayScheduleIndex,DayValues)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)           :: DayScheduleIndex  ! Index of the DaySchedule for values
-  REAL, INTENT(OUT)             :: DayValues(:,:)    ! Returned set of values
+  REAL(r64), INTENT(OUT)             :: DayValues(:,:)    ! Returned set of values
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2825,7 +2825,7 @@ SUBROUTINE ExternalInterfaceSetSchedule(ScheduleIndex, Value)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER    ScheduleIndex
-  REAL  Value             ! The new value for the schedule
+  REAL(r64)  Value             ! The new value for the schedule
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -2874,10 +2874,10 @@ SUBROUTINE ProcessIntervalFields(Untils,Numbers,NumUntils,NumNumbers,MinuteValue
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), DIMENSION(:), INTENT(IN) :: Untils
-  REAL, DIMENSION(:), INTENT(IN)             :: Numbers
+  REAL(r64), DIMENSION(:), INTENT(IN)             :: Numbers
   INTEGER, INTENT(IN)                        :: NumUntils
   INTEGER, INTENT(IN)                        :: NumNumbers
-  REAL, DIMENSION(24,60), INTENT(OUT)        :: MinuteValue
+  REAL(r64), DIMENSION(24,60), INTENT(OUT)        :: MinuteValue
   LOGICAL, DIMENSION(24,60), INTENT(OUT)     :: SetMinuteValue
   LOGICAL, INTENT(INOUT)                     :: ErrorsFound
   CHARACTER(len=*), INTENT(IN)               :: DayScheduleName  ! Name (used for errors)
@@ -3363,7 +3363,7 @@ LOGICAL FUNCTION dCheckScheduleValueMinMax1(ScheduleIndex,MinString,Minimum) !,M
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                    :: ScheduleIndex  ! Which Schedule being tested
   CHARACTER(len=*), INTENT(IN) :: MinString      ! Minimum indicator ('>', '>=')
-  REAL, INTENT(IN)             :: Minimum        ! Minimum desired value
+  REAL(r64), INTENT(IN)             :: Minimum        ! Minimum desired value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3378,8 +3378,8 @@ LOGICAL FUNCTION dCheckScheduleValueMinMax1(ScheduleIndex,MinString,Minimum) !,M
   INTEGER Loop  ! Loop Control variable
   INTEGER DayT  ! Day Type Loop control
   INTEGER WkSch ! Pointer for WeekSchedule value
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
 
@@ -3451,9 +3451,9 @@ LOGICAL FUNCTION dCheckScheduleValueMinMax2(ScheduleIndex,MinString,Minimum,MaxS
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                    :: ScheduleIndex  ! Which Schedule being tested
   CHARACTER(len=*), INTENT(IN) :: MinString      ! Minimum indicator ('>', '>=')
-  REAL, INTENT(IN)             :: Minimum        ! Minimum desired value
+  REAL(r64), INTENT(IN)             :: Minimum        ! Minimum desired value
   CHARACTER(len=*), INTENT(IN) :: MaxString      ! Maximum indicator ('<', ',=')
-  REAL, INTENT(IN)             :: Maximum        ! Maximum desired value
+  REAL(r64), INTENT(IN)             :: Maximum        ! Maximum desired value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3468,8 +3468,8 @@ LOGICAL FUNCTION dCheckScheduleValueMinMax2(ScheduleIndex,MinString,Minimum,MaxS
   INTEGER Loop  ! Loop Control variable
   INTEGER DayT  ! Day Type Loop control
   INTEGER WkSch ! Pointer for WeekSchedule value
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
   LOGICAL,SAVE :: RunOnceOnly = .TRUE.
@@ -3572,8 +3572,8 @@ LOGICAL FUNCTION rCheckScheduleValueMinMax1(ScheduleIndex,MinString,Minimum)
   INTEGER Loop  ! Loop Control variable
   INTEGER DayT  ! Day Type Loop control
   INTEGER WkSch ! Pointer for WeekSchedule value
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
 
@@ -3662,8 +3662,8 @@ LOGICAL FUNCTION rCheckScheduleValueMinMax2(ScheduleIndex,MinString,Minimum,MaxS
   INTEGER Loop  ! Loop Control variable
   INTEGER DayT  ! Day Type Loop control
   INTEGER WkSch ! Pointer for WeekSchedule value
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
 
@@ -3739,7 +3739,7 @@ LOGICAL FUNCTION rCheckScheduleValue(ScheduleIndex,Value)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                    :: ScheduleIndex  ! Which Schedule being tested
-  REAL, INTENT(IN)                       :: Value          ! Actual desired value
+  REAL(r64), INTENT(IN)                       :: Value          ! Actual desired value
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3862,9 +3862,9 @@ LOGICAL FUNCTION rCheckDayScheduleValueMinMax(ScheduleIndex,Minimum,MinString,Ma
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)                    :: ScheduleIndex  ! Which Day Schedule being tested
-  REAL, INTENT(IN)    :: Minimum        ! Minimum desired value
+  REAL(r64), INTENT(IN)    :: Minimum        ! Minimum desired value
   CHARACTER(len=*), INTENT(IN)           :: MinString      ! Minimum indicator ('>', '>=')
-  REAL, INTENT(IN), OPTIONAL             :: Maximum        ! Maximum desired value
+  REAL(r64), INTENT(IN), OPTIONAL             :: Maximum        ! Maximum desired value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: MaxString      ! Maximum indicator ('<', ',=')
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -3877,8 +3877,8 @@ LOGICAL FUNCTION rCheckDayScheduleValueMinMax(ScheduleIndex,Minimum,MinString,Ma
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
 
@@ -3959,8 +3959,8 @@ LOGICAL FUNCTION sCheckDayScheduleValueMinMax(ScheduleIndex,Minimum,MinString,Ma
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL MinValue ! For total minimum
-  REAL Maxvalue ! For total maximum
+  REAL(r64) MinValue ! For total minimum
+  REAL(r64) Maxvalue ! For total maximum
   LOGICAL :: MinValueOk
   LOGICAL :: MaxValueOk
 
@@ -4051,8 +4051,8 @@ FUNCTION HasFractionalScheduleValue(ScheduleIndex) RESULT(HasFractions)
   DayTLoop: DO DayT=1,MaxDayTypes
     DO Hour=1,24
       DO TStep=1,NumOfTimeStepInHour
-        IF (DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) > 0.0 .and.  &
-            DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) < 1.0) THEN
+        IF (DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) > 0.0d0 .and.  &
+            DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) < 1.0d0) THEN
           HasFractions=.true.
           EXIT DayTLoop
         ENDIF
@@ -4065,8 +4065,8 @@ FUNCTION HasFractionalScheduleValue(ScheduleIndex) RESULT(HasFractions)
       DayTLoop2: DO DayT=1,MaxDayTypes
         DO Hour=1,24
           DO TStep=1,NumOfTimeStepInHour
-            IF (DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) > 0.0 .and.  &
-                DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) < 1.0) THEN
+            IF (DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) > 0.0d0 .and.  &
+                DaySchedule(WeekSchedule(WkSch)%DaySchedulePointer(DayT))%TSValue(Hour,TStep) < 1.0d0) THEN
               HasFractions=.true.
               EXIT DayTLoop2
             ENDIF
@@ -4105,7 +4105,7 @@ FUNCTION GetScheduleMinValue(ScheduleIndex) RESULT(MinimumValue)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: ScheduleIndex  ! Which Schedule being tested
-  REAL            :: MinimumValue   ! Minimum value for schedule
+  REAL(r64)            :: MinimumValue   ! Minimum value for schedule
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4117,8 +4117,8 @@ FUNCTION GetScheduleMinValue(ScheduleIndex) RESULT(MinimumValue)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL MinValue
-  REAL MaxValue
+  REAL(r64) MinValue
+  REAL(r64) MaxValue
   INTEGER WkSch
   INTEGER DayT
   INTEGER Loop
@@ -4179,7 +4179,7 @@ FUNCTION GetScheduleMaxValue(ScheduleIndex) RESULT(MaximumValue)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: ScheduleIndex  ! Which Schedule being tested
-  REAL            :: MaximumValue   ! Maximum value for schedule
+  REAL(r64)            :: MaximumValue   ! Maximum value for schedule
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -4191,8 +4191,8 @@ FUNCTION GetScheduleMaxValue(ScheduleIndex) RESULT(MaximumValue)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL MinValue
-  REAL MaxValue
+  REAL(r64) MinValue
+  REAL(r64) MaxValue
   INTEGER WkSch
   INTEGER DayT
   INTEGER Loop
@@ -4526,10 +4526,10 @@ FUNCTION ScheduleAverageHoursPerWeek(ScheduleIndex,StartDayOfWeek) RESULT(Averag
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: ScheduleIndex  ! Which Schedule being tested
   INTEGER, INTENT(IN)  :: StartDayOfWeek ! Day of week for start of year
-  REAL            :: AverageHoursPerWeek   ! Average Hours Per Week
+  REAL(r64)            :: AverageHoursPerWeek   ! Average Hours Per Week
 
           ! FUNCTION PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: WeeksInYear=(366./7.)
+  REAL(r64), PARAMETER :: WeeksInYear=(366./7.)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4541,7 +4541,7 @@ FUNCTION ScheduleAverageHoursPerWeek(ScheduleIndex,StartDayOfWeek) RESULT(Averag
   INTEGER WkSch
   INTEGER DayT
   INTEGER Loop
-  REAL TotalHours
+  REAL(r64) TotalHours
 
   IF (ScheduleIndex < 1 .or. ScheduleIndex > NumSchedules) THEN
     CALL ShowFatalError('ScheduleAverageHoursPerWeek called with ScheduleIndex out of range')

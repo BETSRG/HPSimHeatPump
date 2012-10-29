@@ -47,12 +47,12 @@ CHARACTER(*), PARAMETER        :: Blank                   = ' '
           ! DERIVED TYPE DEFINITIONS:
 !TYPE, PUBLIC:: PlantPressureCurveData
 !  CHARACTER(len=MaxNameLength) :: Name                    = Blank
-!  REAL                    :: EquivDiameter           = 0.0   !- An effective diameter for calculation of Re & e/D [m]
-!  REAL                    :: MinorLossCoeff          = 0.0   !- K factor                                          [-]
-!  REAL                    :: EquivLength             = 0.0   !- An effective length to apply friction calculation [m]
-!  REAL                    :: EquivRoughness          = 0.0   !- An effective roughness (e) to calculate e/D       [m]
+!  REAL(r64)                    :: EquivDiameter           = 0.0d0   !- An effective diameter for calculation of Re & e/D [m]
+!  REAL(r64)                    :: MinorLossCoeff          = 0.0d0   !- K factor                                          [-]
+!  REAL(r64)                    :: EquivLength             = 0.0d0   !- An effective length to apply friction calculation [m]
+!  REAL(r64)                    :: EquivRoughness          = 0.0d0   !- An effective roughness (e) to calculate e/D       [m]
 !  LOGICAL                      :: ConstantFpresent        = .FALSE. !- Signal for if a constant value of f was entered
-!  REAL                    :: ConstantF               = 0.0   !- Constant value of f (if applicable)               [-]
+!  REAL(r64)                    :: ConstantF               = 0.0d0   !- Constant value of f (if applicable)               [-]
 !END TYPE PlantPressureCurveData
 !
 !          ! MODULE VARIABLE DECLARATIONS:
@@ -193,7 +193,7 @@ END SUBROUTINE SimPressureDropSystem
 !          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !  INTEGER                         ::  NumPressure
 !  CHARACTER(len=MaxNameLength),DIMENSION(1) :: Alphas  ! Alpha items for object
-!  REAL, DIMENSION(5)         :: Numbers ! Numeric items for object
+!  REAL(r64), DIMENSION(5)         :: Numbers ! Numeric items for object
 !  INTEGER                         :: NumAlphas  ! Number of Alphas for each GetObjectItem call
 !  INTEGER                         :: NumNumbers ! Number of Numbers for each GetObjectItem call
 !  INTEGER                         :: IOStatus   ! Used in GetObjectItem
@@ -220,7 +220,7 @@ END SUBROUTINE SimPressureDropSystem
 !    PressureCurve(CurveNum)%EquivLength    = Numbers(3)
 !    PressureCurve(CurveNum)%EquivRoughness = Numbers(4)
 !    IF (NumNumbers > 4 .AND. .NOT. lNumericFieldBlanks(5)) THEN
-!      IF (Numbers(5) .NE. 0.0) THEN
+!      IF (Numbers(5) .NE. 0.0d0) THEN
 !        PressureCurve(CurveNum)%ConstantFpresent   = .TRUE.
 !        PressureCurve(CurveNum)%ConstantF          = Numbers(5)
 !      END IF
@@ -534,17 +534,17 @@ SUBROUTINE BranchPressureDrop(LoopNum,LoopSideNum,BranchNum)
   INTEGER                     :: OutletNodeNum       !Component outlet node number
   INTEGER                     :: PressureCurveType   !Type of curve used to evaluate pressure drop
   INTEGER                     :: PressureCurveIndex  !Curve index for PerfCurve structure
-  REAL                   :: NodeMassFlow        !Nodal mass flow rate {kg/s}
-  REAL                   :: NodeTemperature     !Nodal temperature {C}
-  REAL                   :: NodeDensity         !Nodal density {kg/m3}
-  REAL                   :: NodeViscosity       !Nodal viscosity, assuming mu here (dynamic viscosity)
-  REAL                   :: BranchDeltaPress    !Pressure drop for component, {Pa}
+  REAL(r64)                   :: NodeMassFlow        !Nodal mass flow rate {kg/s}
+  REAL(r64)                   :: NodeTemperature     !Nodal temperature {C}
+  REAL(r64)                   :: NodeDensity         !Nodal density {kg/m3}
+  REAL(r64)                   :: NodeViscosity       !Nodal viscosity, assuming mu here (dynamic viscosity)
+  REAL(r64)                   :: BranchDeltaPress    !Pressure drop for component, {Pa}
   INTEGER, SAVE               :: ErrorCounter = 0    !For proper error handling
 
   !Exit early if need be
   IF (.NOT. PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%HasPressureComponents) THEN
-    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureDrop = 0.0
-    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = 0.0
+    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureDrop = 0.0d0
+    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = 0.0d0
     RETURN
   END IF
 
@@ -589,10 +589,10 @@ SUBROUTINE BranchPressureDrop(LoopNum,LoopSideNum,BranchNum)
   PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureDrop = BranchDeltaPress
 
   !Update the effective K-value for this branch
-  IF (NodeMassFlow .GT. 0.0) THEN
-    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = BranchDeltaPress / (NodeMassFlow**2.0)
+  IF (NodeMassFlow .GT. 0.0d0) THEN
+    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = BranchDeltaPress / (NodeMassFlow**2.0d0)
   ELSE
-    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = 0.0
+    PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK = 0.0d0
   END IF
 
   RETURN
@@ -601,7 +601,7 @@ END SUBROUTINE BranchPressureDrop
 
 !=================================================================================================!
 
-!REAL FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosity)
+!REAL(r64) FUNCTION PressureCurveValue(PressureCurveIndex, MassFlow, Density, Viscosity)
 !
 !          ! FUNCTION INFORMATION:
 !          !       AUTHOR         Edwin Lee
@@ -627,9 +627,9 @@ END SUBROUTINE BranchPressureDrop
 !
 !          ! FUNCTION ARGUMENT DEFINITIONS:
 !  INTEGER, INTENT(IN)      ::  PressureCurveIndex
-!  REAL, INTENT(IN)    ::  MassFlow
-!  REAL, INTENT(IN)    ::  Density
-!  REAL, INTENT(IN)    ::  Viscosity
+!  REAL(r64), INTENT(IN)    ::  MassFlow
+!  REAL(r64), INTENT(IN)    ::  Density
+!  REAL(r64), INTENT(IN)    ::  Viscosity
 !
 !          ! FUNCTION PARAMETER DEFINITIONS:
 !          ! na
@@ -641,17 +641,17 @@ END SUBROUTINE BranchPressureDrop
 !          ! na
 !
 !          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-!  REAL                ::  Diameter
-!  REAL                ::  MinorLossCoeff
-!  REAL                ::  Length
-!  REAL                ::  Roughness
+!  REAL(r64)                ::  Diameter
+!  REAL(r64)                ::  MinorLossCoeff
+!  REAL(r64)                ::  Length
+!  REAL(r64)                ::  Roughness
 !  LOGICAL                  ::  IsConstFPresent
-!  REAL                ::  ConstantF
-!  REAL                ::  FrictionFactor
-!  REAL                ::  CrossSectArea
-!  REAL                ::  Velocity
-!  REAL                ::  ReynoldsNumber
-!  REAL                ::  RoughnessRatio
+!  REAL(r64)                ::  ConstantF
+!  REAL(r64)                ::  FrictionFactor
+!  REAL(r64)                ::  CrossSectArea
+!  REAL(r64)                ::  Velocity
+!  REAL(r64)                ::  ReynoldsNumber
+!  REAL(r64)                ::  RoughnessRatio
 !
 !  !Retrieve data from structure
 !  Diameter        = PressureCurve(PressureCurveIndex)%EquivDiameter
@@ -662,14 +662,14 @@ END SUBROUTINE BranchPressureDrop
 !  ConstantF       = PressureCurve(PressureCurveIndex)%ConstantF
 !
 !  !Intermediate calculations
-!  CrossSectArea         =  (Pi / 4.0) * Diameter**2
+!  CrossSectArea         =  (Pi / 4.0d0) * Diameter**2
 !  Velocity              =  MassFlow / (Density * CrossSectArea)
 !  ReynoldsNumber        =  Density * Diameter * Velocity / Viscosity !assuming mu here
 !  RoughnessRatio        =  Roughness / Diameter
 !
 !  !If we don't have any flow then exit out
 !  IF (MassFlow .LT. MassFlowTol) THEN
-!    PressureCurveValue = 0.0
+!    PressureCurveValue = 0.0d0
 !    RETURN
 !  END IF
 !
@@ -681,13 +681,13 @@ END SUBROUTINE BranchPressureDrop
 !  END IF
 !
 !  !Pressure drop calculation
-!  PressureCurveValue  =  (FrictionFactor * (Length / Diameter) + MinorLossCoeff) * (Density * Velocity**2) / 2.0
+!  PressureCurveValue  =  (FrictionFactor * (Length / Diameter) + MinorLossCoeff) * (Density * Velocity**2) / 2.0d0
 !
 !END FUNCTION PressureCurveValue
 !
 !=================================================================================================!
 
-!REAL FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
+!REAL(r64) FUNCTION CalculateMoodyFrictionFactor(ReynoldsNumber, RoughnessRatio)
 !
 !          ! FUNCTION INFORMATION:
 !          !       AUTHOR         Edwin Lee
@@ -711,8 +711,8 @@ END SUBROUTINE BranchPressureDrop
 !  IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 !
 !          ! FUNCTION ARGUMENT DEFINITIONS:
-!  REAL, INTENT(IN)    ::  ReynoldsNumber
-!  REAL, INTENT(IN)    ::  RoughnessRatio
+!  REAL(r64), INTENT(IN)    ::  ReynoldsNumber
+!  REAL(r64), INTENT(IN)    ::  RoughnessRatio
 !
 !          ! FUNCTION PARAMETER DEFINITIONS:
 !          ! na
@@ -724,28 +724,28 @@ END SUBROUTINE BranchPressureDrop
 !          ! na
 !
 !          ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-!  REAL                    ::  Term1, Term2, Term3
+!  REAL(r64)                    ::  Term1, Term2, Term3
 !  CHARACTER(len=MaxNameLength) ::  RR, Re
 !  LOGICAL, SAVE                ::  FrictionFactorErrorHasOccurred = .FALSE.
 !
 !  !Check for no flow before calculating values
-!  IF (ReynoldsNumber .EQ. 0.0) THEN
-!    CalculateMoodyFrictionFactor = 0.0
+!  IF (ReynoldsNumber .EQ. 0.0d0) THEN
+!    CalculateMoodyFrictionFactor = 0.0d0
 !    RETURN
 !  END IF
 !
 !  !Check for no roughness also here
-!  IF (RoughnessRatio .EQ. 0.0) THEN
-!    CalculateMoodyFrictionFactor = 0.0
+!  IF (RoughnessRatio .EQ. 0.0d0) THEN
+!    CalculateMoodyFrictionFactor = 0.0d0
 !    RETURN
 !  END IF
 !
 !  !Calculate the friction factor
-!  Term1 = (RoughnessRatio/3.7)**(1.11)
-!  Term2 = 6.9/ReynoldsNumber
-!  Term3 = -1.8 * LOG10(Term1 + Term2)
-!  IF (Term3 .NE. 0.0) THEN
-!    CalculateMoodyFrictionFactor = Term3 ** (-2.0)
+!  Term1 = (RoughnessRatio/3.7d0)**(1.11d0)
+!  Term2 = 6.9d0/ReynoldsNumber
+!  Term3 = -1.8d0 * LOG10(Term1 + Term2)
+!  IF (Term3 .NE. 0.0d0) THEN
+!    CalculateMoodyFrictionFactor = Term3 ** (-2.0d0)
 !  ELSE
 !    IF (.NOT. FrictionFactorErrorHasOccurred) THEN
 !      RR=RoundSigDigits(RoughnessRatio,7)
@@ -757,7 +757,7 @@ END SUBROUTINE BranchPressureDrop
 !      CALL ShowContinueError('This issue will occur only one time.  The friction factor has been reset to 0.04 for calculations')
 !      FrictionFactorErrorHasOccurred = .TRUE.
 !    END IF
-!    CalculateMoodyFrictionFactor = 0.04
+!    CalculateMoodyFrictionFactor = 0.04d0
 !  END IF
 !
 !  RETURN
@@ -808,29 +808,29 @@ SUBROUTINE UpdatePressureDrop(LoopNum)
   INTEGER                  ::  LoopSideNum
   INTEGER                  ::  BranchNum
   INTEGER                  ::  NumBranches
-  REAL                ::  BranchPressureDrop
-  REAL                ::  LoopSidePressureDrop
-  REAL                ::  LoopPressureDrop
-  REAL, ALLOCATABLE, DIMENSION(:) ::  ParallelBranchPressureDrops
-  REAL, ALLOCATABLE, DIMENSION(:) ::  ParallelBranchInletPressures
+  REAL(r64)                ::  BranchPressureDrop
+  REAL(r64)                ::  LoopSidePressureDrop
+  REAL(r64)                ::  LoopPressureDrop
+  REAL(r64), ALLOCATABLE, DIMENSION(:) ::  ParallelBranchPressureDrops
+  REAL(r64), ALLOCATABLE, DIMENSION(:) ::  ParallelBranchInletPressures
   INTEGER                  ::  ParallelBranchCounter
-  REAL                ::  SplitterInletPressure
-  REAL                ::  MixerPressure
+  REAL(r64)                ::  SplitterInletPressure
+  REAL(r64)                ::  MixerPressure
   LOGICAL                  ::  FoundAPumpOnBranch
-  REAL                ::  EffectiveLoopKValue
-  REAL                ::  EffectiveLoopSideKValue
-  REAL                ::  TempVal_SumOfOneByRootK
+  REAL(r64)                ::  EffectiveLoopKValue
+  REAL(r64)                ::  EffectiveLoopSideKValue
+  REAL(r64)                ::  TempVal_SumOfOneByRootK
 
   !Exit if not needed
   IF (.NOT. PlantLoop(LoopNum)%HasPressureComponents) RETURN
 
   !Now go through and update the pressure drops as needed
   FoundAPumpOnBranch = .FALSE.
-  LoopPressureDrop = 0.0
+  LoopPressureDrop = 0.0d0
   DO LoopSideNum = DemandSide, SupplySide !Start at demand side outlet
 
     !Loop through all branches on this loop side
-    LoopSidePressureDrop = 0.0
+    LoopSidePressureDrop = 0.0d0
     NumBranches = SIZE(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch)
 
     !Split here based on a single branch loop or a splitter/mixer configuration
@@ -928,11 +928,11 @@ SUBROUTINE UpdatePressureDrop(LoopNum)
   PlantLoop(LoopNum)%PressureDrop = LoopPressureDrop
 
   !Now do effective K value calculations
-  EffectiveLoopKValue = 0.0
+  EffectiveLoopKValue = 0.0d0
 
   DO LoopSideNum = DemandSide, SupplySide
 
-    EffectiveLoopSideKValue = 0.0
+    EffectiveLoopSideKValue = 0.0d0
 
     !Always take the first branch K, it may be the only branch on this half loop
     EffectiveLoopSideKValue = EffectiveLoopSideKValue + PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(1)%PressureEffectiveK
@@ -941,20 +941,20 @@ SUBROUTINE UpdatePressureDrop(LoopNum)
     IF (SIZE(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch).EQ.1) CYCLE
 
     !Add parallel branches if necessary by adding them as SUM(1/(sqrt(K_i)))
-    TempVal_SumOfOneByRootK = 0.0
+    TempVal_SumOfOneByRootK = 0.0d0
     DO BranchNum = 2, SIZE(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch)-1
 
       !Only add this branch if the K value is non-zero
-      IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK .GT. 0.0) THEN
+      IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK .GT. 0.0d0) THEN
         TempVal_SumOfOneByRootK = TempVal_SumOfOneByRootK  &
-                                  + (1.0 / SQRT(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK))
+                                  + (1.0d0 / SQRT(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%PressureEffectiveK))
       END IF
 
     END DO
 
     !Add parallel branches if they are greater than zero, by taking the sum and performing (1/(SUM^2))
-    IF (TempVal_SumOfOneByRootK .GT. 0.0)   &
-       EffectiveLoopSideKValue = EffectiveLoopSideKValue + (1.0/(TempVal_SumOfOneByRootK ** 2))
+    IF (TempVal_SumOfOneByRootK .GT. 0.0d0)   &
+       EffectiveLoopSideKValue = EffectiveLoopSideKValue + (1.0d0/(TempVal_SumOfOneByRootK ** 2))
 
     !Always take the last branch K, it will be in series
     BranchNum = SIZE(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch)
@@ -1007,7 +1007,7 @@ SUBROUTINE DistributePressureOnBranch(LoopNum,LoopSideNum,BranchNum,BranchPressu
   INTEGER,   INTENT(IN)      ::  LoopNum
   INTEGER,   INTENT(IN)      ::  LoopSideNum
   INTEGER,   INTENT(IN)      ::  BranchNum
-  REAL, INTENT(INOUT)   ::  BranchPressureDrop
+  REAL(r64), INTENT(INOUT)   ::  BranchPressureDrop
   LOGICAL                    ::  PumpFound
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1022,11 +1022,11 @@ SUBROUTINE DistributePressureOnBranch(LoopNum,LoopSideNum,BranchNum,BranchPressu
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                  ::  CompNum
   INTEGER                  ::  NumCompsOnBranch
-  REAL                ::  TempBranchPressureDrop
+  REAL(r64)                ::  TempBranchPressureDrop
 
   !Initialize
-  TempBranchPressureDrop = 0.0
-  BranchPressureDrop = 0.0
+  TempBranchPressureDrop = 0.0d0
+  BranchPressureDrop = 0.0d0
   PumpFound = .FALSE.
   NumCompsOnBranch = SIZE(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp)
 
@@ -1038,7 +1038,7 @@ SUBROUTINE DistributePressureOnBranch(LoopNum,LoopSideNum,BranchNum,BranchPressu
   !If the last component on the branch is the pump, then check if a pressure drop is detected and set the flag and leave
   IF (PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(NumCompsOnBranch)%GeneralEquipType==GenEquipTypes_Pump)THEN
     PumpFound = .TRUE.
-    IF (TempBranchPressureDrop .NE. 0.0) THEN
+    IF (TempBranchPressureDrop .NE. 0.0d0) THEN
       CALL ShowSevereError('Error in plant pressure simulation for plant loop: '//PlantLoop(LoopNum)%Name)
       IF (LoopNum == DemandSide) THEN
         CALL ShowContinueError('Occurs for demand side, branch: '//PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Name)
@@ -1113,7 +1113,7 @@ SUBROUTINE PassPressureAcrossMixer(LoopNum,LoopSideNum,MixerPressure,NumBranches
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)      ::  LoopNum
   INTEGER,   INTENT(IN)      ::  LoopSideNum
-  REAL, INTENT(INOUT)   ::  MixerPressure
+  REAL(r64), INTENT(INOUT)   ::  MixerPressure
   INTEGER,   INTENT(IN)      ::  NumBranchesOnLoopSide
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1164,7 +1164,7 @@ SUBROUTINE PassPressureAcrossSplitter(LoopNum,LoopSideNum,SplitterInletPressure)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,   INTENT(IN)      ::  LoopNum
   INTEGER,   INTENT(IN)      ::  LoopSideNum
-  REAL, INTENT(INOUT)   ::  SplitterInletPressure
+  REAL(r64), INTENT(INOUT)   ::  SplitterInletPressure
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER         ::  InletBranchNum = 1
@@ -1346,7 +1346,7 @@ END SUBROUTINE PassPressureAcrossInterface
 !=================================================================================================!
 
 
-REAL FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
+REAL(r64) FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
                                              PumpSpeed, PumpImpellerDia, MinPhi, MaxPhi)  RESULT (ResolvedLoopMassFlowRate)
 
 
@@ -1382,19 +1382,19 @@ REAL FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER,    INTENT(IN)  ::  LoopNum         !- Index of which plant/condenser loop is being simulated
-  REAL,  INTENT(IN)  ::  SystemMassFlow  !- Initial "guess" at system mass flow rate [kg/s]
+  REAL(r64),  INTENT(IN)  ::  SystemMassFlow  !- Initial "guess" at system mass flow rate [kg/s]
   INTEGER,    INTENT(IN)  ::  PumpCurveNum    !- Pump curve to use when calling the curve manager for psi = f(phi)
-  REAL,  INTENT(IN)  ::  PumpSpeed       !- Pump rotational speed, [rps] (revs per second)
-  REAL,  INTENT(IN)  ::  PumpImpellerDia !- Nominal pump impeller diameter [m]
-  REAL,  INTENT(IN)  ::  MinPhi          !- Minimum allowable value of phi, requested by the pump manager from curve mgr
-  REAL,  INTENT(IN)  ::  MaxPhi          !- Maximum allowable value of phi, requested by the pump manager from curve mgr
+  REAL(r64),  INTENT(IN)  ::  PumpSpeed       !- Pump rotational speed, [rps] (revs per second)
+  REAL(r64),  INTENT(IN)  ::  PumpImpellerDia !- Nominal pump impeller diameter [m]
+  REAL(r64),  INTENT(IN)  ::  MinPhi          !- Minimum allowable value of phi, requested by the pump manager from curve mgr
+  REAL(r64),  INTENT(IN)  ::  MaxPhi          !- Maximum allowable value of phi, requested by the pump manager from curve mgr
 
           ! FUNCTION PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER   ::  RoutineName      = 'ResolvedLoopMassFlowRate: '
   INTEGER,          PARAMETER   ::  MaxIters         = 100
   CHARACTER(LEN=*), PARAMETER   ::  DummyFluidName   = ' '
-  REAL,        PARAMETER   ::  PressureConvergeCriteria = 0.1   !Pa
-  REAL,        PARAMETER   ::  ZeroTolerance    = 0.0001
+  REAL(r64),        PARAMETER   ::  PressureConvergeCriteria = 0.1d0   !Pa
+  REAL(r64),        PARAMETER   ::  ZeroTolerance    = 0.0001d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1403,29 +1403,29 @@ REAL FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL                     ::  PumpPressureRise
-  REAL                     ::  NodeTemperature
-  REAL                     ::  NodeDensity
-  REAL                     ::  SystemPressureDrop
-  REAL                     ::  PhiPump
-  REAL                     ::  PhiSystem
-  REAL                     ::  PsiPump
+  REAL(r64)                     ::  PumpPressureRise
+  Real(r64)                     ::  NodeTemperature
+  Real(r64)                     ::  NodeDensity
+  REAL(r64)                     ::  SystemPressureDrop
+  REAL(r64)                     ::  PhiPump
+  REAL(r64)                     ::  PhiSystem
+  REAL(r64)                     ::  PsiPump
   INTEGER                       ::  FluidIndex
   INTEGER                       ::  Iteration
-  REAL                     ::  LocalSystemMassFlow
-  REAL                     ::  LoopEffectiveK
+  REAL(r64)                     ::  LocalSystemMassFlow
+  REAL(r64)                     ::  LoopEffectiveK
   LOGICAL                       ::  Converged
   INTEGER, SAVE                 ::  ZeroKWarningCounter = 0
   INTEGER, SAVE                 ::  MaxIterWarningCounter = 0
-  REAL, DIMENSION(3)       ::  MassFlowIterativeHistory
-  REAL                     ::  MdotDeltaLatest
-  REAL                     ::  MdotDeltaPrevious
-  REAL                     ::  DampingFactor
+  REAL(r64), DIMENSION(3)       ::  MassFlowIterativeHistory
+  REAL(r64)                     ::  MdotDeltaLatest
+  REAL(r64)                     ::  MdotDeltaPrevious
+  REAL(r64)                     ::  DampingFactor
 
    !Get loop level data
   FluidIndex         = PlantLoop(LoopNum)%FluidIndex
   LoopEffectiveK     = PlantLoop(LoopNum)%PressureEffectiveK
-  SystemPressureDrop = LoopEffectiveK * SystemMassFlow **2.0
+  SystemPressureDrop = LoopEffectiveK * SystemMassFlow **2.0d0
 
   !Read data off the node data structure
   NodeTemperature = Node(PlantLoop(LoopNum)%LoopSide(SupplySide)%NodeNumIn)%Temp
@@ -1453,7 +1453,7 @@ REAL FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
 
   !Initialize the mass flow history array and damping factor
   MassFlowIterativeHistory = LocalSystemMassFlow
-  DampingFactor = 0.9
+  DampingFactor = 0.9d0
 
   !Start Convergence Loop
   DO Iteration = 1, MaxIters
@@ -1492,7 +1492,7 @@ REAL FUNCTION ResolveLoopFlowVsPressure(LoopNum, SystemMassFlow, PumpCurveNum, &
       MdotDeltaPrevious = ABS(MassFlowIterativeHistory(2) - MassFlowIterativeHistory(3))
       IF (MdotDeltaLatest < MdotDeltaPrevious) THEN
         !we are converging
-        !DampingFactor = MIN(DampingFactor * 1.1, 0.9)
+        !DampingFactor = MIN(DampingFactor * 1.1, 0.9d0)
       ELSE
         !we are stuck or diverging
         DampingFactor = DampingFactor * 0.9

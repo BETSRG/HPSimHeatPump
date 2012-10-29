@@ -308,9 +308,9 @@ SUBROUTINE ManageEMS(iCalledFrom, ProgramManagerToRun)
         EMSActuatorAvailable(EMSActuatorVariableNum)%IntValue = tmpInteger
       CASE (PntrLogical)
         EMSActuatorAvailable(EMSActuatorVariableNum)%Actuated = .TRUE.
-        IF (ErlVariable(ErlVariableNum)%Value%Number == 0.0) THEN
+        IF (ErlVariable(ErlVariableNum)%Value%Number == 0.0D0) THEN
           EMSActuatorAvailable(EMSActuatorVariableNum)%LogValue = .FALSE.
-        ELSEIF (ErlVariable(ErlVariableNum)%Value%Number == 1.0) THEN
+        ELSEIF (ErlVariable(ErlVariableNum)%Value%Number == 1.0D0) THEN
           EMSActuatorAvailable(EMSActuatorVariableNum)%LogValue = .TRUE.
         ELSE
           EMSActuatorAvailable(EMSActuatorVariableNum)%LogValue = .FALSE.
@@ -373,7 +373,7 @@ SUBROUTINE InitEMS (iCalledFrom)
   INTEGER  :: InternVarAvailNum  ! local index
   INTEGER  :: SensorNum ! local loop and index
   INTEGER  :: ErlVariableNum ! local index
-  REAL  :: tmpReal ! temporary local integer
+  REAL(r64)  :: tmpReal ! temporary local integer
 
   IF (GetEMSUserInput) THEN
     CALL SetupZoneInfoAsInternalDataAvail
@@ -531,7 +531,7 @@ SUBROUTINE GetEMSInput
   INTEGER                     :: AlphaNum
   INTEGER                     :: IOStat    ! IO Status when calling get input subroutine
 !  CHARACTER(len=MaxNameLength), DIMENSION(99) :: AlphArray  ! Character string data  ! 99 should really be some kind of constant
-!  REAL, DIMENSION(1)          :: NumArray  ! Numeric data
+!  REAL(r64), DIMENSION(1)          :: NumArray  ! Numeric data
   LOGICAL                     :: IsNotOK   ! Flag to verify name
   LOGICAL                     :: IsBlank   ! Flag for blank name
   LOGICAL                     :: ErrorsFound = .FALSE.
@@ -542,7 +542,7 @@ SUBROUTINE GetEMSInput
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
   INTEGER :: VarType
   INTEGER :: VarIndex
@@ -611,7 +611,7 @@ SUBROUTINE GetEMSInput
   ALLOCATE(cNumericFieldNames(MaxNumNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(MaxNumNumbers))
-  rNumericArgs=0.0
+  rNumericArgs=0.0d0
   ALLOCATE(lNumericFieldBlanks(MaxNumNumbers))
   lNumericFieldBlanks=.false.
 
@@ -1575,7 +1575,7 @@ SUBROUTINE UpdateEMSTrendVariables
   INTEGER   :: TrendNum = 0 ! local loop counter
   INTEGER   :: ErlVarNum = 0 !
   INTEGER   :: TrendDepth = 0
-  REAL :: currentVal = 0.0
+  REAL(r64) :: currentVal = 0.0D0
 
 
   ! checks with quick return if no updates needed.
@@ -2119,7 +2119,7 @@ SUBROUTINE SetupEMSRealActuator(cComponentTypeName, cUniqueIDName, cControlTypeN
   CHARACTER(len=*), INTENT(IN)  :: cControlTypeName
   CHARACTER(len=*), INTENT(IN)  :: cUnits
   LOGICAL, TARGET, INTENT(IN)   :: lEMSActuated
-  REAL, TARGET, INTENT(IN) :: rValue
+  REAL(r64), TARGET, INTENT(IN) :: rValue
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ActuatorVariableNum
@@ -2423,7 +2423,7 @@ SUBROUTINE SetupEMSRealInternalVariable(cDataTypeName, cUniqueIDName, cUnits,  r
   CHARACTER(len=*), INTENT(IN)  :: cDataTypeName
   CHARACTER(len=*), INTENT(IN)  :: cUniqueIDName
   CHARACTER(len=*), INTENT(IN)  :: cUnits
-  REAL, TARGET, INTENT(IN) :: rValue
+  REAL(r64), TARGET, INTENT(IN) :: rValue
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 

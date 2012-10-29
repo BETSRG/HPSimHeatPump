@@ -52,7 +52,7 @@ INTEGER, PARAMETER :: ParenthesisRight = 11 ! indicates right side parenthesis f
 TYPE TokenType
   ! structure for token information for parsing Erl code
   INTEGER                        :: Type        = 0   ! token type, eg. TokenNumber
-  REAL                      :: Number      = 0.0 ! May want to store all literals as a variable?
+  REAL(r64)                      :: Number      = 0.0D0 ! May want to store all literals as a variable?
   CHARACTER(len=2*MaxNameLength) :: String      = ''  ! Serves double duty, also saves string version of token for easy debugging
   INTEGER                        :: Operator    = 0   ! indentifies operator or function 1..64
   INTEGER                        :: Variable    = 0   ! points to a variable in ErlVariable structure
@@ -64,7 +64,7 @@ END TYPE TokenType
 TYPE RuntimeReportVarType
   CHARACTER(len=MaxNameLength) :: Name        = ''  ! name of custom Erl report variable
   INTEGER                      :: VariableNum = 0   ! pointer to Erl variable associated with custom report variable
-  REAL                    :: Value       = 0.0 ! Value registered with output processor for report variable
+  REAL(r64)                    :: Value       = 0.0D0 ! Value registered with output processor for report variable
 END TYPE RuntimeReportVarType
 
           ! MODULE VARIABLE TYPE DECLARATIONS:
@@ -152,16 +152,16 @@ SUBROUTINE InitializeRuntimeLanguage
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: tmpCurrentTime = 0.
-  REAL :: tmpMinutes     = 0.0
-  REAL :: tmpHours       = 0.0
-  REAL :: tmpCurEnvirNum = 0.0
+  REAL(r64) :: tmpCurrentTime = 0.d0
+  REAL(r64) :: tmpMinutes     = 0.0D0
+  REAL(r64) :: tmpHours       = 0.0D0
+  REAL(r64) :: tmpCurEnvirNum = 0.0D0
 
           ! FLOW:
   IF (InitializeOnce) THEN
 
-    False = SetErlValueNumber(0.0)
-    True = SetErlValueNumber(1.0)
+    False = SetErlValueNumber(0.0d0)
+    True = SetErlValueNumber(1.0d0)
 
     ! Create constant built-in variables
     NullVariableNum  = NewEMSVariable('NULL', 0)
@@ -214,18 +214,18 @@ SUBROUTINE InitializeRuntimeLanguage
     tmpCurrentTime = CurrentTime
   ENDIF
   ErlVariable(CurrentTimeVariableNum)%Value   = SetErlValueNumber(tmpCurrentTime)
-  tmpMinutes = ((tmpCurrentTime - REAL(HourOfDay-1,r64)) * 60.0) !- 1. ! off by 1
+  tmpMinutes = ((tmpCurrentTime - REAL(HourOfDay-1,r64)) * 60.0D0) !- 1.d0 ! off by 1
   ErlVariable(MinuteVariableNum)%Value   = SetErlValueNumber(tmpMinutes)
   ErlVariable(HolidayVariableNum)%Value  = SetErlValueNumber(REAL(HolidayIndex,r64))
   IF (SunIsUp) THEN
-    ErlVariable(SunIsUpVariableNum)%Value = SetErlValueNumber(1.0)
+    ErlVariable(SunIsUpVariableNum)%Value = SetErlValueNumber(1.0D0)
   ELSE
-    ErlVariable(SunIsUpVariableNum)%Value = SetErlValueNumber(0.0)
+    ErlVariable(SunIsUpVariableNum)%Value = SetErlValueNumber(0.0D0)
   ENDIF
   IF (IsRain) THEN
-    ErlVariable(IsRainingVariableNum)%Value = SetErlValueNumber(1.0)
+    ErlVariable(IsRainingVariableNum)%Value = SetErlValueNumber(1.0D0)
   ELSE
-    ErlVariable(IsRainingVariableNum)%Value = SetErlValueNumber(0.0)
+    ErlVariable(IsRainingVariableNum)%Value = SetErlValueNumber(0.0D0)
   ENDIF
   ErlVariable(SystemTimeStepVariableNum)%Value   = SetErlValueNumber(TimeStepSys)
 
@@ -302,7 +302,7 @@ SUBROUTINE BeginEnvrnInitializeRuntimeLanguage
     ENDDO
     IF (CycleThisVariable) CYCLE
 
-    ErlVariable(ErlVariableNum)%Value = SetErlValueNumber(0.0, &
+    ErlVariable(ErlVariableNum)%Value = SetErlValueNumber(0.0D0, &
                                          OrigValue = ErlVariable(ErlVariableNum)%Value)
 
   ENDDO
@@ -314,7 +314,7 @@ SUBROUTINE BeginEnvrnInitializeRuntimeLanguage
     EMSActuatorAvailable(EMSActuatorVariableNum)%Actuated  = .FALSE.
     SELECT CASE (EMSActuatorAvailable(EMSActuatorVariableNum)%PntrVarTypeUsed)
     CASE (PntrReal)
-      EMSActuatorAvailable(EMSActuatorVariableNum)%RealValue = 0.0
+      EMSActuatorAvailable(EMSActuatorVariableNum)%RealValue = 0.0D0
     CASE (PntrInteger)
       EMSActuatorAvailable(EMSActuatorVariableNum)%IntValue  = 0
     CASE (PntrLogical)
@@ -327,7 +327,7 @@ SUBROUTINE BeginEnvrnInitializeRuntimeLanguage
   !reinitialize trend variables so old data are purged
   DO TrendVarNum = 1, NumErlTrendVariables
     TrendDepth = TrendVariable(TrendVarNum)%LogDepth
-    TrendVariable(TrendVarNum)%TrendValARR(1:TrendDepth) = 0.0
+    TrendVariable(TrendVarNum)%TrendValARR(1:TrendDepth) = 0.0D0
   ENDDO
 
   RETURN
@@ -774,7 +774,7 @@ RECURSIVE FUNCTION EvaluateStack(StackNum) RESULT(ReturnValue)
   INTEGER :: InstructionNum
   INTEGER :: InstructionNum2
   INTEGER :: ExpressionNum
-  REAL :: ReturnValueActual  ! for testing
+  REAL(r64) :: ReturnValueActual  ! for testing
   INTEGER , SAVE :: VariableNum
   INTEGER :: WhileLoopExitCounter ! to avoid infinite loop in While loop
 
@@ -896,7 +896,7 @@ RECURSIVE FUNCTION EvaluateStack(StackNum) RESULT(ReturnValue)
     InstructionNum = InstructionNum + 1
   END DO  ! InstructionNum
 
-  ReturnValueActual = (4.91 + 632.) / (32. * (4. - 10.2))  ! must have extra periods
+  ReturnValueActual = (4.91d0 + 632.d0) / (32.d0 * (4.d0 - 10.2d0))  ! must have extra periods
 
   RETURN
 
@@ -1390,9 +1390,9 @@ SUBROUTINE ParseExpression(InString, StackNum, ExpressionNum, Line)
           Token(NumTokens)%Operator = FuncRhovFnTdbRh
           Token(NumTokens)%String = String(Pos:Pos + 11)
           Pos = Pos + 11
-        ELSEIF (SameString(String(Pos:Pos + 17) , '@RhovFnTdbRhLBnC')) THEN
+        ELSEIF (SameString(String(Pos:Pos + 17) , '@RhovFnTdbRhLBnd0C')) THEN
           IF (DeveloperFlag) write(OutputFileDebug,fmta) 'FUNCTION "'//trim(String(Pos:Pos+17))//'"'
-          Token(NumTokens)%Operator = FuncRhovFnTdbRhLBnC
+          Token(NumTokens)%Operator = FuncRhovFnTdbRhLBnd0C
           Token(NumTokens)%String = String(Pos:Pos + 17)
           Pos = Pos + 17
         ELSEIF (SameString(String(Pos:Pos + 12) , '@RhovFnTdbWPb')) THEN
@@ -1405,9 +1405,9 @@ SUBROUTINE ParseExpression(InString, StackNum, ExpressionNum, Line)
           Token(NumTokens)%Operator = FuncRhFnTdbRhov
           Token(NumTokens)%String = String(Pos:Pos + 11)
           Pos = Pos + 11
-        ELSEIF (SameString(String(Pos:Pos + 17) , '@RhFnTdbRhovLBnC')) THEN
+        ELSEIF (SameString(String(Pos:Pos + 17) , '@RhFnTdbRhovLBnd0C')) THEN
           IF (DeveloperFlag) write(OutputFileDebug,fmta) 'FUNCTION "'//trim(String(Pos:Pos+17))//'"'
-          Token(NumTokens)%Operator = FuncRhFnTdbRhovLBnC
+          Token(NumTokens)%Operator = FuncRhFnTdbRhovLBnd0C
           Token(NumTokens)%String = String(Pos:Pos + 17)
           Pos = Pos + 17
         ELSEIF (SameString(String(Pos:Pos + 10) , '@RhFnTdbWPb')) THEN
@@ -1973,11 +1973,11 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: thisTrend ! local temporary
   INTEGER :: thisIndex ! local temporary
-  REAL :: thisAverage ! local temporary
+  REAL(r64) :: thisAverage ! local temporary
   INTEGER :: loop ! local temporary
-  REAL :: thisSlope ! local temporary
-  REAL :: thisMax ! local temporary
-  REAL :: thisMin ! local temporary
+  REAL(r64) :: thisSlope ! local temporary
+  REAL(r64) :: thisMax ! local temporary
+  REAL(r64) :: thisMin ! local temporary
   INTEGER :: OperandNum
   CHARACTER(len = 1) :: SeedElementChar
   INTEGER            :: SeedElementInt
@@ -1985,11 +1985,11 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
   CHARACTER(len=MaxNameLength) :: SeedChar ! local temporary for random seed
   INTEGER, DIMENSION(:), ALLOCATABLE :: SeedIntARR ! local temporary for random seed
   INTEGER  :: Pos ! local temporary for string position.
-  REAL :: tmpRANDU1 ! local temporary for uniform random number
-  REAL :: tmpRANDU2 ! local temporary for uniform random number
-  REAL :: tmpRANDG ! local temporary for gaussian random number
-  REAL :: UnitCircleTest ! local temporary for Box-Muller algo
-  REAL :: TestValue ! local temporary
+  REAL(r64) :: tmpRANDU1 ! local temporary for uniform random number
+  REAL(r64) :: tmpRANDU2 ! local temporary for uniform random number
+  REAL(r64) :: tmpRANDG ! local temporary for gaussian random number
+  REAL(r64) :: UnitCircleTest ! local temporary for Box-Muller algo
+  REAL(R64) :: TestValue ! local temporary
   TYPE(ErlValueType), ALLOCATABLE, DIMENSION(:) :: Operand
 
           ! FLOW:
@@ -2015,7 +2015,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
       CASE (OperatorLiteral)
         ReturnValue = Operand(1)
       CASE (OperatorNegative)  ! unary minus sign.  parsing does not work yet
-        ReturnValue = SetErlValueNumber(-1.0 * Operand(1)%Number)
+        ReturnValue = SetErlValueNumber(-1.0D0 * Operand(1)%Number)
       CASE (OperatorDivide)
         IF ((Operand(1)%Type == ValueNumber) .AND. (Operand(2)%Type == ValueNumber)) THEN
           IF (Operand(2)%Number == 0.0) THEN
@@ -2144,7 +2144,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
       CASE (FuncRadToDeg)
         ReturnValue = SetErlValueNumber(Operand(1)%Number / DegToRadians)
       CASE (FuncExp)
-        IF (Operand(1)%Number < 700.0) THEN
+        IF (Operand(1)%Number < 700.0D0) THEN
           ReturnValue = SetErlValueNumber(EXP(Operand(1)%Number))
         ELSE
           ! throw Error
@@ -2153,7 +2153,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
                                 //Trim(TrimSigDigits(Operand(1)%Number, 4))
         ENDIF
       CASE (FuncLn)
-        IF (Operand(1)%Number > 0.0 ) THEN
+        IF (Operand(1)%Number > 0.0D0 ) THEN
           ReturnValue = SetErlValueNumber(LOG(Operand(1)%Number))
         ELSE
           ! throw error,
@@ -2175,12 +2175,12 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
         DO ! Box-Muller algorithm
           CALL RANDOM_NUMBER( tmpRANDU1 )
           CALL RANDOM_NUMBER( tmpRANDU2 )
-          tmpRANDU1 = 2.*tmpRANDU1 - 1.
-          tmpRANDU2 = 2.*tmpRANDU2 - 1.
-          UnitCircleTest = tmpRANDU1**2.  + tmpRANDU2**2.
-          IF (UnitCircleTest > 0. .AND. UnitCircleTest < 1.0) EXIT
+          tmpRANDU1 = 2.d0*tmpRANDU1 - 1.d0
+          tmpRANDU2 = 2.d0*tmpRANDU2 - 1.d0
+          UnitCircleTest = tmpRANDU1**2.d0  + tmpRANDU2**2.d0
+          IF (UnitCircleTest > 0.d0 .AND. UnitCircleTest < 1.0) EXIT
         ENDDO
-        tmpRANDG = SQRT(-2. * LOG(UnitCircleTest)/UnitCircleTest)
+        tmpRANDG = SQRT(-2.d0 * LOG(UnitCircleTest)/UnitCircleTest)
         tmpRANDG = tmpRANDG * tmpRANDU1 ! standard normal ran
         !  x     = ran      * sigma             + mean
         tmpRANDG = tmpRANDG * Operand(2)%Number + Operand(1)%Number
@@ -2201,7 +2201,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
         CALL RANDOM_SEED(size = SeedN)
         CALL RANDOM_SEED(put = SeedIntARR)
         DEALLOCATE(SeedIntARR)
-        ReturnValue = SetErlValueNumber(1.) !just return a "true"
+        ReturnValue = SetErlValueNumber(1.d0) !just return a "true"
       CASE (FuncRhoAirFnPbTdbW)
         ReturnValue = SetErlValueNumber( &             ! result =>   density of moist air (kg/m3)
                          PsyRhoAirFnPbTdbW(Operand(1)%Number, & ! pressure (Pa)
@@ -2257,9 +2257,9 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
                          PsyRhovFnTdbRh(Operand(1)%Number, & ! drybulb (C)
                                         Operand(2)%Number, & ! relative humidity value (0.0 - 1.0)
                                         'EMS Built-In Function') )
-      CASE (FuncRhovFnTdbRhLBnC)
+      CASE (FuncRhovFnTdbRhLBnd0C)
         ReturnValue =  SetErlValueNumber( &   ! result =>  Vapor density in air (kg/m3)
-                         PsyRhovFnTdbRhLBnC(Operand(1)%Number, & ! drybulb (C)
+                         PsyRhovFnTdbRhLBnd0C(Operand(1)%Number, & ! drybulb (C)
                                               Operand(2)%Number, & ! relative humidity value (0.0 - 1.0)
                                              'EMS Built-In Function') )
       CASE (FuncRhovFnTdbWPb)
@@ -2273,9 +2273,9 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
                         PsyRhFnTdbRhov(Operand(1)%Number, & ! drybulb (C)
                                        Operand(2)%Number, & ! vapor density in air (kg/m3)
                                        'EMS Built-In Function') )
-      CASE (FuncRhFnTdbRhovLBnC)
+      CASE (FuncRhFnTdbRhovLBnd0C)
         ReturnValue = SetErlValueNumber( &                              ! relative humidity value (0.0-1.0)
-                        PsyRhFnTdbRhovLBnC(Operand(1)%Number, & ! drybulb (C)
+                        PsyRhFnTdbRhovLBnd0C(Operand(1)%Number, & ! drybulb (C)
                                              Operand(2)%Number, & ! vapor density in air (kg/m3)
                                             'EMS Built-In Function') )
       CASE (FuncRhFnTdbWPb)
@@ -2332,11 +2332,11 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
 !                        PsyTsatFnPb(Operand(1)%Number, & ! pressure (Pa)
 !                                    'EMS Built-In Function') )
       CASE (FuncCpCW)
-        ReturnValue = SetErlValueNumber( &   ! result => specific heat of water (J/kg-K) = 4180.
+        ReturnValue = SetErlValueNumber( &   ! result => specific heat of water (J/kg-K) = 4180.d0
                         CPCW(Operand(1)%Number, & ! temperature (C) unused
                             'EMS Built-In Function') )
       CASE (FuncCpHW)
-        ReturnValue = SetErlValueNumber( &   ! result => specific heat of water (J/kg-K) = 4180.
+        ReturnValue = SetErlValueNumber( &   ! result => specific heat of water (J/kg-K) = 4180.d0
                         CPHW(Operand(1)%Number, & ! temperature (C) unused
                             'EMS Built-In Function') )
       CASE (FuncRhoH2O)
@@ -2413,7 +2413,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
           thisIndex = FLOOR(Operand(2)%Number)
           IF (thisIndex >= 1) THEN
             IF (thisIndex <= TrendVariable(thisTrend)%LogDepth) THEN
-              thisMax   = 0.0
+              thisMax   = 0.0D0
               IF (thisIndex == 1) THEN
                 thisMax = TrendVariable(thisTrend)%TrendValARR(1)
               ELSE
@@ -2444,7 +2444,7 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
           thisIndex = FLOOR(Operand(2)%Number)
           IF (thisIndex >= 1) THEN
             IF (thisIndex <= TrendVariable(thisTrend)%LogDepth) THEN
-              thisMin   = 0.0
+              thisMin   = 0.0D0
               IF (thisIndex == 1) THEN
                 thisMin = TrendVariable(thisTrend)%TrendValARR(1)
               ELSE
@@ -2484,8 +2484,8 @@ RECURSIVE FUNCTION EvaluateExpression(ExpressionNum) RESULT(ReturnValue)
                              *Sum(TrendVariable(thisTrend)%TrendValARR(1:thisIndex)) &
                            - thisIndex * Sum((TrendVariable(thisTrend)%TimeARR(1:thisIndex) &
                                  * TrendVariable(thisTrend)%TrendValARR(1:thisIndex))) ) &
-                      / ( Sum(TrendVariable(thisTrend)%TimeARR(1:thisIndex))**2.0 &
-                             -  thisIndex*Sum( TrendVariable(thisTrend)%TimeARR(1:thisIndex)**2.0) )
+                      / ( Sum(TrendVariable(thisTrend)%TimeARR(1:thisIndex))**2.0D0 &
+                             -  thisIndex*Sum( TrendVariable(thisTrend)%TimeARR(1:thisIndex)**2.0D0) )
               ReturnValue = SetErlValueNumber( thisSlope , Operand(1)) ! rate of change per hour
             ELSE
               ReturnValue%Type = ValueError
@@ -2577,8 +2577,8 @@ SUBROUTINE GetRuntimeLanguageUserInput
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER    :: GlobalNum
   INTEGER    :: StackNum
-!unuse909  INTEGER    :: NumPrograms
-!unuse909  INTEGER    :: NumFunctions
+!unused0909  INTEGER    :: NumPrograms
+!unused0909  INTEGER    :: NumFunctions
   INTEGER    :: ErrorNum
   INTEGER    :: NumAlphas ! Number of elements in the alpha array
   INTEGER    :: NumNums   ! Number of elements in the numeric array
@@ -2588,8 +2588,8 @@ SUBROUTINE GetRuntimeLanguageUserInput
   LOGICAL    :: ErrorsFound = .FALSE.
   INTEGER    :: VariableNum  ! temporary
   INTEGER    :: RuntimeReportVarNum
-!unuse909  INTEGER    :: Pos
-!unuse909  CHARACTER(len=MaxNameLength) :: VariableName
+!unused0909  INTEGER    :: Pos
+!unused0909  CHARACTER(len=MaxNameLength) :: VariableName
   LOGICAL    :: Found
   CHARACTER(len=MaxNameLength) :: FreqString = ' ' ! temporary
   CHARACTER(len=MaxNameLength) :: VarTypeString = ' ' ! temporary
@@ -2611,7 +2611,7 @@ SUBROUTINE GetRuntimeLanguageUserInput
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lNumericFieldBlanks
   LOGICAL, ALLOCATABLE, DIMENSION(:) :: lAlphaFieldBlanks
   CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:) :: cAlphaArgs
-  REAL,ALLOCATABLE, DIMENSION(:) :: rNumericArgs
+  REAL(r64),ALLOCATABLE, DIMENSION(:) :: rNumericArgs
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
   INTEGER  :: ConstructNum
   LOGICAL :: errFlag
@@ -2679,7 +2679,7 @@ SUBROUTINE GetRuntimeLanguageUserInput
   ALLOCATE(cNumericFieldNames(MaxNumNumbers))
   cNumericFieldNames=' '
   ALLOCATE(rNumericArgs(MaxNumNumbers))
-  rNumericArgs=0.0
+  rNumericArgs=0.0d0
   ALLOCATE(lNumericFieldBlanks(MaxNumNumbers))
   lNumericFieldBlanks=.false.
 
@@ -2942,9 +2942,9 @@ SUBROUTINE GetRuntimeLanguageUserInput
           TrendVariable(TrendNum)%LogDepth = NumTrendSteps
           !setup data arrays using NumTrendSteps
           ALLOCATE(TrendVariable(TrendNum)%TrendValARR(NumTrendSteps))
-          TrendVariable(TrendNum)%TrendValARR = 0.0 ! array init
+          TrendVariable(TrendNum)%TrendValARR = 0.0D0 ! array init
           ALLOCATE(TrendVariable(TrendNum)%tempTrendARR(NumTrendSteps))
-          TrendVariable(TrendNum)%tempTrendARR = 0.0 ! array init
+          TrendVariable(TrendNum)%tempTrendARR = 0.0D0 ! array init
           ALLOCATE(TrendVariable(TrendNum)%TimeARR(NumTrendSteps))
             !construct time data array for use with other calculations later
             ! current time is zero, each value in trend log array is one zone timestep further back in time
@@ -3402,7 +3402,7 @@ FUNCTION SetErlValueNumber(Number, OrigValue) RESULT(newValue)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
           ! na
-  REAL, INTENT(IN) :: Number
+  REAL(r64), INTENT(IN) :: Number
   TYPE(ErlValueType), OPTIONAL, Intent(IN) :: OrigValue
   TYPE(ErlValueType)  :: newValue
 
@@ -3861,9 +3861,9 @@ SUBROUTINE SetupPossibleOperators
   PossibleOperators(FuncRhovFnTdbRh)%NumOperands  =  2
   PossibleOperators(FuncRhovFnTdbRh)%Code         =  FuncRhovFnTdbRh
 
-  PossibleOperators(FuncRhovFnTdbRhLBnC)%Symbol       = '@RhovFnTdbRhLBnC'
-  PossibleOperators(FuncRhovFnTdbRhLBnC)%NumOperands  =  2
-  PossibleOperators(FuncRhovFnTdbRhLBnC)%Code         =  FuncRhovFnTdbRhLBnC
+  PossibleOperators(FuncRhovFnTdbRhLBnd0C)%Symbol       = '@RhovFnTdbRhLBnd0C'
+  PossibleOperators(FuncRhovFnTdbRhLBnd0C)%NumOperands  =  2
+  PossibleOperators(FuncRhovFnTdbRhLBnd0C)%Code         =  FuncRhovFnTdbRhLBnd0C
 
   PossibleOperators(FuncRhovFnTdbWPb)%Symbol       = '@RHOVFNTDBWPB'
   PossibleOperators(FuncRhovFnTdbWPb)%NumOperands  =  3
@@ -3873,9 +3873,9 @@ SUBROUTINE SetupPossibleOperators
   PossibleOperators(FuncRhFnTdbRhov)%NumOperands  =  2
   PossibleOperators(FuncRhFnTdbRhov)%Code         =  FuncRhFnTdbRhov
 
-  PossibleOperators(FuncRhFnTdbRhovLBnC)%Symbol       = '@RHFNTDBRHOVLBNC'
-  PossibleOperators(FuncRhFnTdbRhovLBnC)%NumOperands  =  2
-  PossibleOperators(FuncRhFnTdbRhovLBnC)%Code         =  FuncRhFnTdbRhovLBnC
+  PossibleOperators(FuncRhFnTdbRhovLBnd0C)%Symbol       = '@RHFNTDBRHOVLBND0C'
+  PossibleOperators(FuncRhFnTdbRhovLBnd0C)%NumOperands  =  2
+  PossibleOperators(FuncRhFnTdbRhovLBnd0C)%Code         =  FuncRhFnTdbRhovLBnd0C
 
   PossibleOperators(FuncRhFnTdbWPb)%Symbol       = '@RHFNTDBWPB'
   PossibleOperators(FuncRhFnTdbWPb)%NumOperands  =  3
@@ -3993,7 +3993,7 @@ SUBROUTINE ExternalInterfaceSetErlVariable(varNum, value)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)   :: varNum  ! The variable index to be written during run time
-  REAL, INTENT(IN) :: value   ! The real time value of the vairable to be set
+  REAL(r64), INTENT(IN) :: value   ! The real time value of the vairable to be set
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 

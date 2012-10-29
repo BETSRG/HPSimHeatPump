@@ -107,11 +107,11 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
                                                           ! (function of leaving chilled water temperature and
                                                           !  entering condenser fluid temperature)
   INTEGER, INTENT(IN)              :: EIRFPLRCurveIndex   ! Index for the EIR vs part-load ratio curve
-  REAL, INTENT(IN)            :: RefCap              ! Reference capacity of chiller [W]
-  REAL, INTENT(IN)            :: RefCOP              ! Reference coefficient of performance [W/W]
-  REAL, INTENT(IN)            :: MinUnLoadRat        ! Minimum unloading ratio
-  REAL, INTENT(IN), OPTIONAL  :: EvapVolFlowRate     ! Reference water volumetric flow rate through the evaporator [m3/s]
-  REAL, INTENT(IN), OPTIONAL  :: OpenMotorEff        ! Open chiller motor efficiency [fraction, 0 to 1]
+  REAL(r64), INTENT(IN)            :: RefCap              ! Reference capacity of chiller [W]
+  REAL(r64), INTENT(IN)            :: RefCOP              ! Reference coefficient of performance [W/W]
+  REAL(r64), INTENT(IN)            :: MinUnLoadRat        ! Minimum unloading ratio
+  REAL(r64), INTENT(IN), OPTIONAL  :: EvapVolFlowRate     ! Reference water volumetric flow rate through the evaporator [m3/s]
+  REAL(r64), INTENT(IN), OPTIONAL  :: OpenMotorEff        ! Open chiller motor efficiency [fraction, 0 to 1]
   INTEGER,   INTENT(IN), OPTIONAL  :: CondLoopNum         ! condenser water plant loop index number
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -119,13 +119,13 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
   INTEGER,   PARAMETER :: WaterCooled     = 2
   INTEGER,   PARAMETER :: EvapCooled      = 3
 
-  REAL, PARAMETER :: EvapOutletTemp  = 6.67        ! (44F)
-  REAL, PARAMETER :: Acc             = 0.0001      ! Accuracy of result
-  REAL, PARAMETER :: ConvFromSIToIP  = 3.412141633 ! Conversion from SI to IP [3.412 Btu/hr-W]
+  REAL(r64), PARAMETER :: EvapOutletTemp  = 6.67d0        ! (44F)
+  REAL(r64), PARAMETER :: Acc             = 0.0001d0      ! Accuracy of result
+  REAL(r64), PARAMETER :: ConvFromSIToIP  = 3.412141633D0 ! Conversion from SI to IP [3.412 Btu/hr-W]
   INTEGER,   PARAMETER :: NumOfReducedCap = 4             ! Number of reduced capacity test conditions (100%,75%,50%,and 25%)
   INTEGER,   PARAMETER :: IterMax         = 500           ! Maximum number of iterations
-  REAL, PARAMETER, DIMENSION(4) :: ReducedPLR = (/1.0, 0.75,0.50,0.25/)  ! Reduced Capacity part-load conditions
-  REAL, PARAMETER, DIMENSION(4) :: IPLVWeightingFactor = (/0.010, 0.42, 0.45, 0.12/) ! EER Weighting factors (IPLV)
+  REAL(r64), PARAMETER, DIMENSION(4) :: ReducedPLR = (/1.0D0, 0.75d0,0.50d0,0.25d0/)  ! Reduced Capacity part-load conditions
+  REAL(r64), PARAMETER, DIMENSION(4) :: IPLVWeightingFactor = (/0.010D0, 0.42D0, 0.45D0, 0.12D0/) ! EER Weighting factors (IPLV)
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -134,57 +134,57 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: AvailChillerCap                = 0.0   ! Chiller available capacity at current operating conditions [W]
-  REAL :: EnteringWaterTempReduced       = 0.0   ! Entering Condenser Water Temperature at reduced conditions [C]
-  REAL :: EnteringAirDrybulbTempReduced  = 0.0   ! Outdoor unit entering air dry-bulb temperature
+  REAL(r64) :: AvailChillerCap                = 0.0D0   ! Chiller available capacity at current operating conditions [W]
+  REAL(r64) :: EnteringWaterTempReduced       = 0.0D0   ! Entering Condenser Water Temperature at reduced conditions [C]
+  REAL(r64) :: EnteringAirDrybulbTempReduced  = 0.0D0   ! Outdoor unit entering air dry-bulb temperature
                                                         ! at reduced capacity [C]
-  REAL :: EnteringAirWetbulbTempReduced  = 0.0   ! Outdoor unit entering air wet-bulb temperature
+  REAL(r64) :: EnteringAirWetbulbTempReduced  = 0.0D0   ! Outdoor unit entering air wet-bulb temperature
                                                         ! at reduced capacity [C]
-  REAL :: CondenserInletTemp        = 0.0   ! Entering Condenser Temperature at reduced conditions [C]
-  REAL :: CondenserOutletTemp0      = 0.0   ! Lower bound for condenser outlet temperature [C]
-  REAL :: CondenserOutletTemp1      = 0.0   ! Upper bound for condenser outlet temperature [C]
-  REAL :: CondenserOutletTemp       = 0.0   ! Calculated condenser outlet temperature which corresponds 
+  REAL(r64) :: CondenserInletTemp        = 0.0D0   ! Entering Condenser Temperature at reduced conditions [C]
+  REAL(r64) :: CondenserOutletTemp0      = 0.0D0   ! Lower bound for condenser outlet temperature [C]
+  REAL(r64) :: CondenserOutletTemp1      = 0.0D0   ! Upper bound for condenser outlet temperature [C]
+  REAL(r64) :: CondenserOutletTemp       = 0.0D0   ! Calculated condenser outlet temperature which corresponds 
                                                    ! to EnteringWaterTempReduced above [C]
-  REAL :: Cp                        = 0.0   ! Water specific heat [J/(kg*C)]
-  REAL :: Rho                       = 0.0   ! Water density [kg/m3]
-  REAL :: IPLV                      = 0.0   ! Integerated Part Load Value in SI [W/W]
-  REAL :: EIR                       = 0.0   ! Inverse of COP at reduced capacity test conditions (100%, 75%, 50%, and 25%)
-  REAL :: Power                     = 0.0   ! Power at reduced capacity test conditions (100%, 75%, 50%, and 25%)
-  REAL :: COPReduced                = 0.0   ! COP at reduced capacity test conditions (100%, 75%, 50%, and 25%)
-  REAL :: LoadFactor                = 0.0   ! Fractional "on" time for last stage at the desired reduced capacity,
+  REAL(r64) :: Cp                        = 0.0D0   ! Water specific heat [J/(kg*C)]
+  REAL(r64) :: Rho                       = 0.0D0   ! Water density [kg/m3]
+  REAL(r64) :: IPLV                      = 0.0D0   ! Integerated Part Load Value in SI [W/W]
+  REAL(r64) :: EIR                       = 0.0D0   ! Inverse of COP at reduced capacity test conditions (100%, 75%, 50%, and 25%)
+  REAL(r64) :: Power                     = 0.0D0   ! Power at reduced capacity test conditions (100%, 75%, 50%, and 25%)
+  REAL(r64) :: COPReduced                = 0.0D0   ! COP at reduced capacity test conditions (100%, 75%, 50%, and 25%)
+  REAL(r64) :: LoadFactor                = 0.0D0   ! Fractional "on" time for last stage at the desired reduced capacity,
                                                    ! (dimensionless)
-  REAL :: DegradationCoeff          = 0.0   ! Degradation coeficient, (dimenssionless)
-  REAL :: ChillerCapFT              = 0.0   ! Chiller capacity fraction (evaluated as a function of temperature)
-  REAL :: ChillerEIRFT              = 0.0   ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
-  REAL :: ChillerEIRFPLR            = 0.0   ! Chiller EIR as a function of part-load ratio (PLR)
-  REAL :: PartLoadRatio             = 0.0   ! Part load ratio (PLR) at which chiller is operatign at reduced capacity
+  REAL(r64) :: DegradationCoeff          = 0.0D0   ! Degradation coeficient, (dimenssionless)
+  REAL(r64) :: ChillerCapFT              = 0.0D0   ! Chiller capacity fraction (evaluated as a function of temperature)
+  REAL(r64) :: ChillerEIRFT              = 0.0D0   ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
+  REAL(r64) :: ChillerEIRFPLR            = 0.0D0   ! Chiller EIR as a function of part-load ratio (PLR)
+  REAL(r64) :: PartLoadRatio             = 0.0D0   ! Part load ratio (PLR) at which chiller is operatign at reduced capacity
   INTEGER   :: RedCapNum                           ! Integer counter for reduced capacity
   INTEGER   :: SolFla                              ! Flag of solver
-  REAL, DIMENSION(11)  :: Par                 ! Parameter array need for RegulaFalsi routine
+  REAL(r64), DIMENSION(11)  :: Par                 ! Parameter array need for RegulaFalsi routine
   LOGICAL   :: CalcIPLV                  = .FALSE.  ! FALSE if the temp. and flow modifier curves are not inclusive of
                                                     ! AHRI test conditions
 
 ! Initialize local variables
-  AvailChillerCap                = 0.0
-  EnteringWaterTempReduced       = 0.0
-  EnteringAirDrybulbTempReduced  = 0.0
-  EnteringAirWetbulbTempReduced  = 0.0
-  CondenserInletTemp             = 0.0
-  CondenserOutletTemp0           = 0.0
-  CondenserOutletTemp1           = 0.0
-  CondenserOutletTemp            = 0.0
-  Cp                             = 0.0
-  Rho                            = 0.0
-  IPLV                           = 0.0
-  EIR                            = 0.0
-  Power                          = 0.0
-  COPReduced                     = 0.0
-  LoadFactor                     = 0.0
-  DegradationCoeff               = 0.0
-  ChillerCapFT                   = 0.0
-  ChillerEIRFT                   = 0.0
-  ChillerEIRFPLR                 = 0.0
-  PartLoadRatio                  = 0.0
+  AvailChillerCap                = 0.0D0
+  EnteringWaterTempReduced       = 0.0D0
+  EnteringAirDrybulbTempReduced  = 0.0D0
+  EnteringAirWetbulbTempReduced  = 0.0D0
+  CondenserInletTemp             = 0.0D0
+  CondenserOutletTemp0           = 0.0D0
+  CondenserOutletTemp1           = 0.0D0
+  CondenserOutletTemp            = 0.0D0
+  Cp                             = 0.0D0
+  Rho                            = 0.0D0
+  IPLV                           = 0.0D0
+  EIR                            = 0.0D0
+  Power                          = 0.0D0
+  COPReduced                     = 0.0D0
+  LoadFactor                     = 0.0D0
+  DegradationCoeff               = 0.0D0
+  ChillerCapFT                   = 0.0D0
+  ChillerEIRFT                   = 0.0D0
+  ChillerEIRFPLR                 = 0.0D0
+  PartLoadRatio                  = 0.0D0
 
   CalcIPLV                       = .FALSE.
 
@@ -196,23 +196,23 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
     DO RedCapNum = 1, NumOfReducedCap
        IF (CondenserType == WaterCooled) THEN
          ! get the entering water temperature for the reduced capacity test conditions
-         IF (ReducedPLR(RedCapNum) > 0.50 ) THEN
-             EnteringWaterTempReduced = 8.0 + 22.0 * ReducedPLR(RedCapNum)
+         IF (ReducedPLR(RedCapNum) > 0.50D0 ) THEN
+             EnteringWaterTempReduced = 8.0D0 + 22.0D0 * ReducedPLR(RedCapNum)
          ELSE
-             EnteringWaterTempReduced = 19.0
+             EnteringWaterTempReduced = 19.0D0
          ENDIF
          CondenserInletTemp = EnteringWaterTempReduced
        ELSEIF (CondenserType == AirCooled) THEN
          ! get the outdoor air dry bulb temperature for the reduced capacity test conditions
-         IF (ReducedPLR(RedCapNum) > 0.3125 ) THEN
-             EnteringAirDrybulbTempReduced = 3.0 + 32.0 * ReducedPLR(RedCapNum)
+         IF (ReducedPLR(RedCapNum) > 0.3125D0 ) THEN
+             EnteringAirDrybulbTempReduced = 3.0D0 + 32.0D0 * ReducedPLR(RedCapNum)
          ELSE
-             EnteringAirDrybulbTempReduced = 13.0
+             EnteringAirDrybulbTempReduced = 13.0D0
          ENDIF
          CondenserInletTemp = EnteringAirDrybulbTempReduced
        ELSE ! EvaporativelyCooled Condenser
          ! get the outdoor air wet bulb temperature for the reduced capacity test conditions
-         EnteringAirWetbulbTempReduced = 10.0 + 14.0 * ReducedPLR(RedCapNum)
+         EnteringAirWetbulbTempReduced = 10.0D0 + 14.0D0 * ReducedPLR(RedCapNum)
          CondenserInletTemp = EnteringAirWetbulbTempReduced
        ENDIF
        
@@ -254,8 +254,8 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
            Par(9) = RefCap
            Par(10) = RefCOP
            Par(11) = OpenMotorEff
-           CondenserOutletTemp0 = EnteringWaterTempReduced + 0.1
-           CondenserOutletTemp1 = EnteringWaterTempReduced + 10.0
+           CondenserOutletTemp0 = EnteringWaterTempReduced + 0.1D0
+           CondenserOutletTemp1 = EnteringWaterTempReduced + 10.0D0
            CALL SolveRegulaFalsi(Acc, IterMax, SolFla, CondenserOutletTemp, ReformEIRChillerCondInletTempResidual, &
                                  CondenserOutletTemp0, CondenserOutletTemp1, Par)
            IF (SolFla == -1) THEN
@@ -287,11 +287,11 @@ SUBROUTINE CalcChillerIPLV(ChillerName, ChillerType, RefCap, RefCOP, CondenserTy
        EIR = Power / (PartLoadRatio * AvailChillerCap)
 
        IF (ReducedPLR(RedCapNum) .GE. MinUnLoadRat) THEN
-         COPReduced = 1.0 / EIR
+         COPReduced = 1.0d0 / EIR
        ELSE
          LoadFactor = (ReducedPLR(RedCapNum) * RefCap) / (MinUnLoadRat * AvailChillerCap)
-         DegradationCoeff = 1.130 - 0.130 * LoadFactor
-         COPReduced = 1.0 / (DegradationCoeff * EIR)
+         DegradationCoeff = 1.130D0 - 0.130D0 * LoadFactor
+         COPReduced = 1.0d0 / (DegradationCoeff * EIR)
        ENDIF
        IPLV = IPLV + IPLVWeightingFactor(RedCapNum) * COPReduced
     END DO
@@ -329,8 +329,8 @@ FUNCTION ReformEIRChillerCondInletTempResidual(CondenserOutletTemp, Par) RESULT 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)  :: CondenserOutletTemp        ! Condenser outlet temperature (boundary condition or guess value) [C]
-  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1)  = Condenser inlet temperature at AHRI Standard 
+  REAL(r64), INTENT(IN)  :: CondenserOutletTemp        ! Condenser outlet temperature (boundary condition or guess value) [C]
+  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1)  = Condenser inlet temperature at AHRI Standard 
                                                        !           551/591 conditons[C]
                                                        ! par(2)  = Evaporator outlet temperature [C]
                                                        ! par(3)  = Water specific heat [J/(kg*C)]
@@ -343,7 +343,7 @@ FUNCTION ReformEIRChillerCondInletTempResidual(CondenserOutletTemp, Par) RESULT 
                                                        ! par(10) = Reference coefficient of performance [W/W]
                                                        ! par(11) = Open chiller motor efficiency [fraction, 0 to 1]
 
-  REAL              :: Residuum                   ! Residual to be minimized to zero
+  REAL(r64)              :: Residuum                   ! Residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -355,15 +355,15 @@ FUNCTION ReformEIRChillerCondInletTempResidual(CondenserOutletTemp, Par) RESULT 
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL    :: AvailChillerCap          = 0.0  ! Chiller available capacity at current operating conditions [W]
-  REAL    :: CondenserInletTemp       = 0.0  ! Calculated condenser inlet temperature [C]
-  REAL    :: EvapOutletTemp           = 0.0  ! Evaporator outlet temperature temperature [C]
-  REAL    :: QEvap                    = 0.0  ! Rate of heat transfer to the evaporator coil [W]
-  REAL    :: QCond                    = 0.0  ! Rate of heat transfer to the condenser coil [W]
-  REAL    :: Power                    = 0.0  ! Power at reduced capacity test conditions (100%, 75%, 50%, and 25%)
-  REAL    :: ReformEIRChillerCapFT    = 0.0  ! Chiller capacity fraction (evaluated as a function of temperature)
-  REAL    :: ReformEIRChillerEIRFT    = 0.0  ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
-  REAL    :: ReformEIRChillerEIRFPLR  = 0.0  ! Chiller EIR as a function of part-load ratio (PLR)
+  REAL(r64)    :: AvailChillerCap          = 0.0D0  ! Chiller available capacity at current operating conditions [W]
+  REAL(r64)    :: CondenserInletTemp       = 0.0D0  ! Calculated condenser inlet temperature [C]
+  REAL(r64)    :: EvapOutletTemp           = 0.0D0  ! Evaporator outlet temperature temperature [C]
+  REAL(r64)    :: QEvap                    = 0.0D0  ! Rate of heat transfer to the evaporator coil [W]
+  REAL(r64)    :: QCond                    = 0.0D0  ! Rate of heat transfer to the condenser coil [W]
+  REAL(r64)    :: Power                    = 0.0D0  ! Power at reduced capacity test conditions (100%, 75%, 50%, and 25%)
+  REAL(r64)    :: ReformEIRChillerCapFT    = 0.0D0  ! Chiller capacity fraction (evaluated as a function of temperature)
+  REAL(r64)    :: ReformEIRChillerEIRFT    = 0.0D0  ! Chiller electric input ratio (EIR = 1 / COP) as a function of temperature
+  REAL(r64)    :: ReformEIRChillerEIRFPLR  = 0.0D0  ! Chiller EIR as a function of part-load ratio (PLR)
 
     EvapOutletTemp = Par(2)
 
@@ -420,8 +420,8 @@ SUBROUTINE ReportChillerIPLV(ChillerName,ChillerType, IPLVValueSI,IPLVValueIP)
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     CHARACTER(len=*), INTENT(IN)   :: ChillerName  ! Name of Chiller for which IPLV is calculated
     INTEGER, INTENT(IN)            :: ChillerType  ! Type of Chiller - EIR or Reformulated EIR
-    REAL, INTENT(IN)          :: IPLVValueSI  ! IPLV value in SI units {W/W}
-    REAL, INTENT(IN)          :: IPLVValueIP  ! IPLV value in IP units {Btu/W-h}
+    REAL(r64), INTENT(IN)          :: IPLVValueSI  ! IPLV value in SI units {W/W}
+    REAL(r64), INTENT(IN)          :: IPLVValueIP  ! IPLV value in IP units {Btu/W-h}
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -510,13 +510,13 @@ SUBROUTINE CheckCurveLimitsForIPLV(ChillerName, ChillerType, CondenserType, CapF
   INTEGER, PARAMETER   :: EvapCooled    = 3
 
   ! Following parameters are taken from AHRI 551/591,2011 Table 3
-  REAL, PARAMETER :: HighEWTemp    = 30.0   ! Entering water temp in degrees C at full load capacity (85F)
-  REAL, PARAMETER :: LowEWTemp     = 19.0   ! Entering water temp in degrees C at minimum reduced capacity (65F)
-  REAL, PARAMETER :: OAHighEDBTemp = 35.0   ! Outdoor air dry-bulb temp in degrees C at full load capacity (95F)
-  REAL, PARAMETER :: OALowEDBTemp  = 13     ! Outdoor air dry-bulb temp in degrees C at minimum reduced capacity (55F)
-  REAL, PARAMETER :: OAHighEWBTemp = 24.0   ! Outdoor air wet-bulb temp in degrees C at full load capacity (75F)
-  REAL, PARAMETER :: OALowEWBTemp  = 13.50  ! Outdoor wet dry-bulb temp in degrees C at minimum reduced capacity (56.25F)
-  REAL, PARAMETER :: LeavingWaterTemp   = 6.67 ! Evaporator leaving water temperature in degrees C [44 F]
+  REAL(r64), PARAMETER :: HighEWTemp    = 30.0d0   ! Entering water temp in degrees C at full load capacity (85F)
+  REAL(r64), PARAMETER :: LowEWTemp     = 19.0d0   ! Entering water temp in degrees C at minimum reduced capacity (65F)
+  REAL(r64), PARAMETER :: OAHighEDBTemp = 35.0d0   ! Outdoor air dry-bulb temp in degrees C at full load capacity (95F)
+  REAL(r64), PARAMETER :: OALowEDBTemp  = 13d0     ! Outdoor air dry-bulb temp in degrees C at minimum reduced capacity (55F)
+  REAL(r64), PARAMETER :: OAHighEWBTemp = 24.0d0   ! Outdoor air wet-bulb temp in degrees C at full load capacity (75F)
+  REAL(r64), PARAMETER :: OALowEWBTemp  = 13.50d0  ! Outdoor wet dry-bulb temp in degrees C at minimum reduced capacity (56.25F)
+  REAL(r64), PARAMETER :: LeavingWaterTemp   = 6.67d0 ! Evaporator leaving water temperature in degrees C [44 F]
 
   CHARACTER(len=*), PARAMETER :: RoutineName = 'CheckCurveLimitsForIPLV: ' ! Include trailing blank space
 
@@ -529,23 +529,23 @@ SUBROUTINE CheckCurveLimitsForIPLV(ChillerName, ChillerType, CondenserType, CapF
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
  !  Minimum and Maximum independent variable limits from Total Cooling Capacity Function of Temperature Curve
-  REAL :: CapacityLWTempMin  = 0.0   ! Capacity modifier Min value (leaving water temp), from the Curve:Biquadratic object
-  REAL :: CapacityLWTempMax  = 0.0   ! Capacity modifier Max value (leaving water temp), from the Curve:Biquadratic object
-  REAL :: CapacityEnteringCondTempMin = 0.0   ! Capacity modifier Min value (entering cond temp),
+  REAL(r64) :: CapacityLWTempMin  = 0.0d0   ! Capacity modifier Min value (leaving water temp), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityLWTempMax  = 0.0d0   ! Capacity modifier Max value (leaving water temp), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityEnteringCondTempMin = 0.0d0   ! Capacity modifier Min value (entering cond temp),
                                                      ! from the Curve:Biquadratic object
-  REAL :: CapacityEnteringCondTempMax = 0.0   ! Capacity modifier Max value (entering cond temp),
+  REAL(r64) :: CapacityEnteringCondTempMax = 0.0d0   ! Capacity modifier Max value (entering cond temp),
                                                      ! from the Curve:Biquadratic object
 
 !  Minimum and Maximum independent variable limits from Energy Input Ratio (EIR) Function of Temperature Curve
-  REAL :: EIRLWTempMin  = 0.0   ! EIR modifier Min value (leaving water temp), from the Curve:Biquadratic object
-  REAL :: EIRLWTempMax  = 0.0   ! EIR modifier Max value (leaving water temp), from the Curve:Biquadratic object
-  REAL :: EIREnteringCondTempMin = 0.0   ! EIR modifier Min value (entering cond temp),
+  REAL(r64) :: EIRLWTempMin  = 0.0d0   ! EIR modifier Min value (leaving water temp), from the Curve:Biquadratic object
+  REAL(r64) :: EIRLWTempMax  = 0.0d0   ! EIR modifier Max value (leaving water temp), from the Curve:Biquadratic object
+  REAL(r64) :: EIREnteringCondTempMin = 0.0d0   ! EIR modifier Min value (entering cond temp),
                                                 ! from the Curve:Biquadratic object
-  REAL :: EIREnteringCondTempMax = 0.0   ! EIR modifier Max value (entering cond temp),
+  REAL(r64) :: EIREnteringCondTempMax = 0.0d0   ! EIR modifier Max value (entering cond temp),
                                                 ! from the Curve:Biquadratic object
 
-  REAL :: HighCondenserEnteringTempLimit = 0.0  ! High limit of entering condenser temperature
-  REAL :: LowCondenserEnteringTempLimit  = 0.0  ! Low limit of entering condenser temperature
+  REAL(r64) :: HighCondenserEnteringTempLimit = 0.0d0  ! High limit of entering condenser temperature
+  REAL(r64) :: LowCondenserEnteringTempLimit  = 0.0d0  ! Low limit of entering condenser temperature
 
   LOGICAL :: CapCurveIPLVLimitsExceeded = .FALSE.  ! Logical for capacity curve temperature limits being exceeded (IPLV calcs)
   LOGICAL :: EIRCurveIPLVLimitsExceeded = .FALSE.  ! Logical for EIR temperature limits being exceeded (IPLV calcs)
@@ -710,24 +710,24 @@ SUBROUTINE CalcDXCoilStandardRating(DXCoilName, DXCoilType, DXCoilType_Num, Rate
   INTEGER, INTENT(IN)              :: PLFFPLRCurveIndex   ! Index for the PLF vs part-load ratio curve
   INTEGER, INTENT(IN)              :: RegionNum           ! Region number for calculating HSPF of single speed DX heating coil
   INTEGER, INTENT(IN)              :: DefrostControl      ! defrost control; 1=timed, 2=on-demand
-  REAL, INTENT(IN)            :: RatedTotalCapacity  ! Reference capacity of DX coil [W]
-  REAL, INTENT(IN)            :: RatedCOP            ! Reference coefficient of performance [W/W]
-  REAL, INTENT(IN)            :: RatedAirVolFlowRate ! Reference air flow rate of DX coil [m3/s]
-  REAL, INTENT(IN)            :: FanPowerPerEvapAirFlowRateFromInput  ! Reference fan power per evap air flow rate [W]
-  REAL, INTENT(IN)            :: MinOATCompressor     ! Minimum OAT for heat pump compressor operation [C]
-  REAL, INTENT(IN)            :: OATempCompressorOn   ! The outdoor tempearture when the compressor is automatically turned
+  REAL(r64), INTENT(IN)            :: RatedTotalCapacity  ! Reference capacity of DX coil [W]
+  REAL(r64), INTENT(IN)            :: RatedCOP            ! Reference coefficient of performance [W/W]
+  REAL(r64), INTENT(IN)            :: RatedAirVolFlowRate ! Reference air flow rate of DX coil [m3/s]
+  REAL(r64), INTENT(IN)            :: FanPowerPerEvapAirFlowRateFromInput  ! Reference fan power per evap air flow rate [W]
+  REAL(r64), INTENT(IN)            :: MinOATCompressor     ! Minimum OAT for heat pump compressor operation [C]
+  REAL(r64), INTENT(IN)            :: OATempCompressorOn   ! The outdoor tempearture when the compressor is automatically turned
                                                            ! back on, if applicable, following automatic shut off. This field is
                                                            ! used only for HSPF calculation. [C]
   LOGICAL, INTENT(IN)              :: OATempCompressorOnOffBlank  ! Flag used to determine low tem[erature cut out factor
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   ! AHRI Standard 210/240-2008 Performance Test Conditions for Unitary Air-to-Air Air-Conditioning and Heat Pump Equipment
-  REAL, PARAMETER ::    CoolingCoilInletAirWetbulbTempRated = 19.44  ! 19.44C (67F)  Tests A and B
-  REAL, PARAMETER ::    OutdoorUnitInletAirDrybulbTemp = 27.78       ! 27.78C (82F)  Test B (for SEER)
-  REAL, PARAMETER ::    OutdoorUnitInletAirDrybulbTempRated = 35.0   ! 35.00C (95F)  Test A (rated capacity)
-  REAL, PARAMETER ::    AirMassFlowRatioRated = 1.0   ! AHRI test is at the design flow rate
+  REAL(r64), PARAMETER ::    CoolingCoilInletAirWetbulbTempRated = 19.44d0  ! 19.44C (67F)  Tests A and B
+  REAL(r64), PARAMETER ::    OutdoorUnitInletAirDrybulbTemp = 27.78d0       ! 27.78C (82F)  Test B (for SEER)
+  REAL(r64), PARAMETER ::    OutdoorUnitInletAirDrybulbTempRated = 35.0d0   ! 35.00C (95F)  Test A (rated capacity)
+  REAL(r64), PARAMETER ::    AirMassFlowRatioRated = 1.0d0   ! AHRI test is at the design flow rate
                                                              ! and hence AirMassFlowRatio is 1.0
-  REAL, PARAMETER ::    PLRforSEER = 0.5              ! Part-load ratio for SEER calculation (single speed DX cooling coils)
+  REAL(r64), PARAMETER ::    PLRforSEER = 0.5d0              ! Part-load ratio for SEER calculation (single speed DX cooling coils)
   INTEGER, PARAMETER :: NumOfReducedCap = 4  ! Number of reduced capacity test conditions (100%,75%,50%,and 25%)
 
   ! Defrost control  (heat pump only)
@@ -737,61 +737,61 @@ SUBROUTINE CalcDXCoilStandardRating(DXCoilName, DXCoilType, DXCoilType_Num, Rate
   INTEGER,   PARAMETER ::    TotalNumOfStandardDHRs = 16     ! Total number of standard design heating requirements
   INTEGER,   PARAMETER, DIMENSION(6) :: TotalNumOfTemperatureBins = (/9, 10, 13, 15, 18, 9/) ! Total number of temperature
                                                                                              ! bins for a region
-  REAL,   PARAMETER, DIMENSION(16):: StandardDesignHeatingRequirement = (/1465.36, 2930.71, 4396.07, 5861.42, &
-                                                                               7326.78, 8792.14, 10257.49, 11722.85, &
-                                                                               14653.56, 17584.27, 20514.98, 23445.70, &
-                                                                               26376.41, 29307.12, 32237.83, 38099.26/)
+  REAL(r64),   PARAMETER, DIMENSION(16):: StandardDesignHeatingRequirement = (/1465.36D0, 2930.71D0, 4396.07D0, 5861.42D0, &
+                                                                               7326.78D0, 8792.14D0, 10257.49D0, 11722.85D0, &
+                                                                               14653.56D0, 17584.27D0, 20514.98D0, 23445.70D0, &
+                                                                               26376.41D0, 29307.12D0, 32237.83D0, 38099.26D0/)
                                                                                ! Standardized DHRs from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(4) :: ReducedPLR = (/1.0, 0.75,0.50,0.25/)  ! Reduced Capacity part-load conditions
-  REAL, PARAMETER, DIMENSION(4) :: IEERWeightingFactor = (/0.020, 0.617, 0.238, 0.125/) ! EER Weighting factors (IEER)
+  REAL(r64), PARAMETER, DIMENSION(4) :: ReducedPLR = (/1.0D0, 0.75d0,0.50d0,0.25d0/)  ! Reduced Capacity part-load conditions
+  REAL(r64), PARAMETER, DIMENSION(4) :: IEERWeightingFactor = (/0.020D0, 0.617D0, 0.238D0, 0.125D0/) ! EER Weighting factors (IEER)
 
-  REAL, PARAMETER :: ConvFromSIToIP = 3.412141633 ! Conversion from SI to IP [3.412 Btu/hr-W]
-  REAL, PARAMETER :: DefaultFanPowerPerEvapAirFlowRate = 773.3 ! 365 W/1000 scfm or 773.3 W/(m3/s). The AHRI standard
+  REAL(r64), PARAMETER :: ConvFromSIToIP = 3.412141633D0 ! Conversion from SI to IP [3.412 Btu/hr-W]
+  REAL(r64), PARAMETER :: DefaultFanPowerPerEvapAirFlowRate = 773.3D0 ! 365 W/1000 scfm or 773.3 W/(m3/s). The AHRI standard
                                                       ! specifies a nominal/default fan electric power consumption per rated air
                                                       ! volume flow rate to account for indoor fan electric power consumption
                                                       ! when the standard tests are conducted on units that do not have an
                                                       ! indoor air circulting fan. Used if user doesn't enter a specific value.
 
-  REAL, PARAMETER :: CorrectionFactor = 0.77   ! A correction factor which tends to improve the agreement between 
+  REAL(r64), PARAMETER :: CorrectionFactor = 0.77D0   ! A correction factor which tends to improve the agreement between 
                                                       ! calculated and measured building loads, dimensionless. 
 
-  REAL, PARAMETER :: CyclicDegradationCoeff = 0.25
+  REAL(r64), PARAMETER :: CyclicDegradationCoeff = 0.25D0
 
-  REAL, PARAMETER, DIMENSION(6)  ::OutdoorDesignTemperature = (/2.78, -2.78, -8.33, -15.0, -23.33, -1.11/)
+  REAL(r64), PARAMETER, DIMENSION(6)  ::OutdoorDesignTemperature = (/2.78D0, -2.78D0, -8.33D0, -15.0D0, -23.33D0, -1.11D0/)
                                    ! Outdoor design temperature for a region from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::OutdoorBinTemperature    = (/16.67, 13.89, 11.11, 8.33, 5.56, 2.78, 0.00, &
-                                                                    -2.78, -5.56, -8.33, -11.11, -13.89, -16.67, &
-                                                                    -19.44, -22.22, -25.00, -27.78, -30.56 /)
+  REAL(r64), PARAMETER, DIMENSION(18) ::OutdoorBinTemperature    = (/16.67D0, 13.89D0, 11.11D0, 8.33D0, 5.56D0, 2.78D0, 0.00D0, &
+                                                                    -2.78D0, -5.56D0, -8.33D0, -11.11D0, -13.89D0, -16.67D0, &
+                                                                    -19.44D0, -22.22D0, -25.00D0, -27.78D0, -30.56D0 /)
                                    ! Outdoor bin temperatures from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionOneFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.291, 0.239, 0.194, 0.129, 0.081, 0.041, &
-                                                               0.019, 0.005, 0.001, 0.0, 0.0, 0.0, &
-                                                               0.0, 0.0, 0.0, 0.0, 0.0, 0.0 /)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionOneFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.291D0, 0.239D0, 0.194D0, 0.129D0, 0.081D0, 0.041D0, &
+                                                               0.019D0, 0.005D0, 0.001D0, 0.0D0, 0.0D0, 0.0D0, &
+                                                               0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0 /)
                                    ! Fractional bin hours for different bin temperatures for region one, from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionTwoFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.215, 0.189, 0.163, 0.143, 0.112, 0.088, &
-                                                               0.056, 0.024, 0.008, 0.002, 0.0, 0.0, 0.0, &
-                                                               0.0, 0.0, 0.0, 0.0, 0.0 /)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionTwoFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.215D0, 0.189D0, 0.163D0, 0.143D0, 0.112D0, 0.088D0, &
+                                                               0.056D0, 0.024D0, 0.008D0, 0.002D0, 0.0D0, 0.0D0, 0.0D0, &
+                                                               0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0 /)
                                    ! Fractional bin hours for different bin temperatures for region two, from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionThreeFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.153, 0.142, 0.138, 0.137, 0.135, 0.118, &
-                                                               0.092, 0.042, 0.021, 0.009, 0.005, 0.002, &
-                                                               0.001, 0.0, 0.0, 0.0, 0.0, 0.0/)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionThreeFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.153D0, 0.142D0, 0.138D0, 0.137D0, 0.135D0, 0.118D0, &
+                                                               0.092D0, 0.042D0, 0.021D0, 0.009D0, 0.005D0, 0.002D0, &
+                                                               0.001D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0/)
                                    ! Fractional bin hours for different bin temperatures for region three, from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionFourFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.132, 0.111, 0.103, 0.093, 0.1, 0.109, &
-                                                               0.126, 0.087, 0.055, 0.036, 0.026, 0.013, &
-                                                               0.006, 0.002, 0.001, 0.0, 0.0, 0.0/)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionFourFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.132D0, 0.111D0, 0.103D0, 0.093D0, 0.1D0, 0.109D0, &
+                                                               0.126D0, 0.087D0, 0.055D0, 0.036D0, 0.026D0, 0.013D0, &
+                                                               0.006D0, 0.002D0, 0.001D0, 0.0D0, 0.0D0, 0.0D0/)
                                    ! Fractional bin hours for different bin temperatures for region four, from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionFiveFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.106, 0.092, 0.086, 0.076, 0.078, 0.087, &
-                                                               0.102, 0.094, 0.074, 0.055, 0.047, 0.038, &
-                                                               0.029, 0.018, 0.01, 0.005, 0.002, 0.001/)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionFiveFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.106D0, 0.092D0, 0.086D0, 0.076D0, 0.078D0, 0.087D0, &
+                                                               0.102D0, 0.094D0, 0.074D0, 0.055D0, 0.047D0, 0.038D0, &
+                                                               0.029D0, 0.018D0, 0.01D0, 0.005D0, 0.002D0, 0.001D0/)
                                    ! Fractional bin hours for different bin temperatures for region five, from ANSI/AHRI 210/240
-  REAL, PARAMETER, DIMENSION(18) ::RegionSixFracBinHoursAtOutdoorBinTemp = &
-                                                             (/0.113, 0.206, 0.215, 0.204, 0.141, 0.076, &
-                                                               0.034, 0.008, 0.003, 0.0, 0.0, 0.0, 0.0, &
-                                                               0.0, 0.0, 0.0, 0.0, 0.0/)
+  REAL(r64), PARAMETER, DIMENSION(18) ::RegionSixFracBinHoursAtOutdoorBinTemp = &
+                                                             (/0.113D0, 0.206D0, 0.215D0, 0.204D0, 0.141D0, 0.076D0, &
+                                                               0.034D0, 0.008D0, 0.003D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0, &
+                                                               0.0D0, 0.0D0, 0.0D0, 0.0D0, 0.0D0/)
                                     ! Fractional bin hours for different bin temperatures for region six, from ANSI/AHRI 210/240
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -802,61 +802,61 @@ SUBROUTINE CalcDXCoilStandardRating(DXCoilName, DXCoilType, DXCoilType_Num, Rate
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL ::  OutdoorUnitInletAirDrybulbTempReduced  ! Outdoor unit entering air dry-bulb temperature at reduced capacity [C]
+  REAL(r64) ::  OutdoorUnitInletAirDrybulbTempReduced  ! Outdoor unit entering air dry-bulb temperature at reduced capacity [C]
 
 ! Inputs to be read from the idf file
-  REAL :: TotCoolingCapAHRI = 0.0         ! Total Cooling Coil capacity (gross) at AHRI test conditions [W]
-  REAL :: FanPowerPerEvapAirFlowRate=0.0  ! Fan power per air volume flow rate through the evaporator coil [W/(m3/s)]
+  REAL(r64) :: TotCoolingCapAHRI = 0.0D0         ! Total Cooling Coil capacity (gross) at AHRI test conditions [W]
+  REAL(r64) :: FanPowerPerEvapAirFlowRate=0.0D0  ! Fan power per air volume flow rate through the evaporator coil [W/(m3/s)]
 
 ! Intermediate values calculated from the inputs in the idf file
-  REAL :: TotCapTempModFac = 0.0    ! Total capacity modifier (function of entering wetbulb, outside drybulb) [-]
-  REAL :: TotCapFlowModFac = 0.0    ! Total capacity modifier (function of actual supply air flow vs rated flow) [-]
-  REAL :: EIRTempModFac = 0.0       ! EIR modifier (function of entering wetbulb, outside drybulb) [-]
-  REAL :: EIRFlowModFac = 0.0       ! EIR modifier (function of actual supply air flow vs rated flow) [-]
-  REAL :: NetCoolingCapAHRI = 0.0   ! Net Cooling Coil capacity at AHRI TestB conditions, accounting for supply fan heat [W]
-  REAL :: TotalElecPower = 0.0      ! Net power consumption (Cond Fan+Compressor+Indoor Fan) at AHRI test conditions [W]
-  REAL :: TotalElecPowerRated = 0.0 ! Net power consumption (Cond Fan+Compressor+Indoor Fan) at Rated test conditions [W]
-  REAL :: EIR= 0.0                  ! Energy Efficiency Ratio at AHRI test conditions for SEER [-]
-  REAL :: PartLoadFactor = 0.0      ! Part load factor, accounts for thermal lag at compressor startup [-]
-  REAL :: OATempCompressorOff = 0.0
+  REAL(r64) :: TotCapTempModFac = 0.0D0    ! Total capacity modifier (function of entering wetbulb, outside drybulb) [-]
+  REAL(r64) :: TotCapFlowModFac = 0.0D0    ! Total capacity modifier (function of actual supply air flow vs rated flow) [-]
+  REAL(r64) :: EIRTempModFac = 0.0D0       ! EIR modifier (function of entering wetbulb, outside drybulb) [-]
+  REAL(r64) :: EIRFlowModFac = 0.0D0       ! EIR modifier (function of actual supply air flow vs rated flow) [-]
+  REAL(r64) :: NetCoolingCapAHRI = 0.0D0   ! Net Cooling Coil capacity at AHRI TestB conditions, accounting for supply fan heat [W]
+  REAL(r64) :: TotalElecPower = 0.0D0      ! Net power consumption (Cond Fan+Compressor+Indoor Fan) at AHRI test conditions [W]
+  REAL(r64) :: TotalElecPowerRated = 0.0D0 ! Net power consumption (Cond Fan+Compressor+Indoor Fan) at Rated test conditions [W]
+  REAL(r64) :: EIR= 0.0D0                  ! Energy Efficiency Ratio at AHRI test conditions for SEER [-]
+  REAL(r64) :: PartLoadFactor = 0.0D0      ! Part load factor, accounts for thermal lag at compressor startup [-]
+  REAL(r64) :: OATempCompressorOff = 0.0D0
 
 ! Calculated and reported to the EIO file
-  REAL :: NetCoolingCapRated = 0.0 ! Net Cooling Coil capacity at Rated conditions, accounting for supply fan heat [W]
-  REAL :: SEER = 0.0             ! Seasonal Energy Efficiency Ratio in SI [W/W]
-  REAL :: EER = 0.0              ! Energy Efficiency Ratio in SI [W/W]
-  REAL :: IEER = 0.0             ! Integerated Energy Efficiency Ratio in SI [W/W]
-  REAL :: HSPF = 0.0             ! Heating Seasonal Performance Factor in SI [W/W]
+  REAL(r64) :: NetCoolingCapRated = 0.0D0 ! Net Cooling Coil capacity at Rated conditions, accounting for supply fan heat [W]
+  REAL(r64) :: SEER = 0.0D0             ! Seasonal Energy Efficiency Ratio in SI [W/W]
+  REAL(r64) :: EER = 0.0D0              ! Energy Efficiency Ratio in SI [W/W]
+  REAL(r64) :: IEER = 0.0D0             ! Integerated Energy Efficiency Ratio in SI [W/W]
+  REAL(r64) :: HSPF = 0.0d0             ! Heating Seasonal Performance Factor in SI [W/W]
 
-  REAL :: EERReduced = 0.0       ! EER at reduced capacity test conditions (100%, 75%, 50%, and 25%)
-  REAL :: ElecPowerReducedCap      ! Net power consumption (Cond Fan+Compressor) at reduced test condition [W]
-  REAL :: NetCoolingCapReduced     ! Net Cooling Coil capacity at reduced conditions, accounting for supply fan heat [W]
-  REAL :: LoadFactor               ! Fractional "on" time for last stage at the desired reduced capacity, (dimensionless)
-  REAL :: DegradationCoeff         ! Degradation coeficient, (dimenssionless)
-  REAL :: LowTempCutOutFactor = 0.0 ! Factor which corresponds to compressor operation depending on outdoor temperature
+  REAL(r64) :: EERReduced = 0.0d0       ! EER at reduced capacity test conditions (100%, 75%, 50%, and 25%)
+  REAL(r64) :: ElecPowerReducedCap      ! Net power consumption (Cond Fan+Compressor) at reduced test condition [W]
+  REAL(r64) :: NetCoolingCapReduced     ! Net Cooling Coil capacity at reduced conditions, accounting for supply fan heat [W]
+  REAL(r64) :: LoadFactor               ! Fractional "on" time for last stage at the desired reduced capacity, (dimensionless)
+  REAL(r64) :: DegradationCoeff         ! Degradation coeficient, (dimenssionless)
+  REAL(r64) :: LowTempCutOutFactor = 0.0d0 ! Factor which corresponds to compressor operation depending on outdoor temperature
 
-  REAL :: NetHeatingCapRated     = 0.0 ! Net Heating Coil capacity at Rated conditions, accounting for supply fan heat [W]
-  REAL :: ElecPowerRated         = 0.0 ! Total system power at Rated conditions, accounting for supply fan heat [W]
-  REAL :: NetHeatingCapH2Test    = 0.0 ! Net Heating Coil capacity at H2 test conditions, accounting for supply fan heat [W]
-  REAL :: ElecPowerH2Test        = 0.0 ! Total system power at H2 test conditions, accounting for supply fan heat [W]
-  REAL :: NetHeatingCapH3Test    = 0.0 ! Net Heating Coil capacity at H3 test conditions, accounting for supply fan heat [W]
-  REAL :: ElecPowerH3Test        = 0.0 ! Total system power at H3 test conditions, accounting for supply fan heat [W]
-  REAL :: FractionalBinHours     = 0.0 ! Fractional bin hours for the heating season  [-]
-  REAL :: BuildingLoad           = 0.0 ! Building space conditioning load corresponding to an outdoor bin temperature [W]
-  REAL :: HeatingModeLoadFactor  = 0.0 ! Heating mode load factor corresponding to an outdoor bin temperature  [-]
-  REAL :: NetHeatingCapReduced   = 0.0 ! Net Heating Coil capacity corresponding to an outdoor bin temperature [W]
-  REAL :: TotalBuildingLoad      = 0.0 ! Sum of building load over the entire heating season [W]
-  REAL :: TotalElectricalEnergy  = 0.0 ! Sum of electrical energy consumed by the heatpump over the heating season [W]
-  REAL :: DemandDeforstCredit    = 1.0 ! A factor to adjust HSPF if coil has demand defrost control  [-]
-  REAL :: CheckCOP               = 0.0 ! Checking COP at an outdoor bin temperature against unity [-]
-  REAL :: DesignHeatingRequirement      = 0.0 ! The amount of heating required to maintain a given indoor temperature
+  REAL(r64) :: NetHeatingCapRated     = 0.0d0 ! Net Heating Coil capacity at Rated conditions, accounting for supply fan heat [W]
+  REAL(r64) :: ElecPowerRated         = 0.0d0 ! Total system power at Rated conditions, accounting for supply fan heat [W]
+  REAL(r64) :: NetHeatingCapH2Test    = 0.0d0 ! Net Heating Coil capacity at H2 test conditions, accounting for supply fan heat [W]
+  REAL(r64) :: ElecPowerH2Test        = 0.0d0 ! Total system power at H2 test conditions, accounting for supply fan heat [W]
+  REAL(r64) :: NetHeatingCapH3Test    = 0.0d0 ! Net Heating Coil capacity at H3 test conditions, accounting for supply fan heat [W]
+  REAL(r64) :: ElecPowerH3Test        = 0.0d0 ! Total system power at H3 test conditions, accounting for supply fan heat [W]
+  REAL(r64) :: FractionalBinHours     = 0.0d0 ! Fractional bin hours for the heating season  [-]
+  REAL(r64) :: BuildingLoad           = 0.0d0 ! Building space conditioning load corresponding to an outdoor bin temperature [W]
+  REAL(r64) :: HeatingModeLoadFactor  = 0.0d0 ! Heating mode load factor corresponding to an outdoor bin temperature  [-]
+  REAL(r64) :: NetHeatingCapReduced   = 0.0d0 ! Net Heating Coil capacity corresponding to an outdoor bin temperature [W]
+  REAL(r64) :: TotalBuildingLoad      = 0.0d0 ! Sum of building load over the entire heating season [W]
+  REAL(r64) :: TotalElectricalEnergy  = 0.0d0 ! Sum of electrical energy consumed by the heatpump over the heating season [W]
+  REAL(r64) :: DemandDeforstCredit    = 1.0d0 ! A factor to adjust HSPF if coil has demand defrost control  [-]
+  REAL(r64) :: CheckCOP               = 0.0d0 ! Checking COP at an outdoor bin temperature against unity [-]
+  REAL(r64) :: DesignHeatingRequirement      = 0.0d0 ! The amount of heating required to maintain a given indoor temperature
                                                      ! at a particular outdoor design temperature.  [W]
-  REAL :: DesignHeatingRequirementMin   = 0.0 ! minimum design heating requirement [W]
-  REAL :: ElectricalPowerConsumption    = 0.0 ! Electrical power corresponding to an outdoor bin temperature [W]
-  REAL :: HeatPumpElectricalEnergy      = 0.0 ! Heatpump electrical energy corresponding to an outdoor bin temperature [W]
-  REAL :: TotalHeatPumpElectricalEnergy = 0.0 ! Sum of Heatpump electrical energy over the entire heating season [W]
-  REAL :: ResistiveSpaceHeatingElectricalEnergy = 0.0      ! resistance heating electrical energy corresponding to an
+  REAL(r64) :: DesignHeatingRequirementMin   = 0.0d0 ! minimum design heating requirement [W]
+  REAL(r64) :: ElectricalPowerConsumption    = 0.0d0 ! Electrical power corresponding to an outdoor bin temperature [W]
+  REAL(r64) :: HeatPumpElectricalEnergy      = 0.0d0 ! Heatpump electrical energy corresponding to an outdoor bin temperature [W]
+  REAL(r64) :: TotalHeatPumpElectricalEnergy = 0.0d0 ! Sum of Heatpump electrical energy over the entire heating season [W]
+  REAL(r64) :: ResistiveSpaceHeatingElectricalEnergy = 0.0d0      ! resistance heating electrical energy corresponding to an
                                                                   ! outdoor bin temperature [W]
-  REAL :: TotalResistiveSpaceHeatingElectricalEnergy = 0.0 ! Sum of resistance heating electrical energy over the
+  REAL(r64) :: TotalResistiveSpaceHeatingElectricalEnergy = 0.0d0 ! Sum of resistance heating electrical energy over the
                                                                   ! entire heating season [W]
 
   INTEGER   :: RedCapNum              ! Integer counter for reduced capacity
@@ -879,7 +879,7 @@ SELECT CASE(DXCoilType_Num)
 
   ! Calculate the Indoor fan electric power consumption.  The electric power consumption is estimated
   ! using either user supplied or AHRI default value for fan power per air volume flow rate
-  IF( FanPowerPerEvapAirFlowRateFromInput <= 0.0) THEN
+  IF( FanPowerPerEvapAirFlowRateFromInput <= 0.0D0) THEN
       FanPowerPerEvapAirFlowRate=DefaultFanPowerPerEvapAirFlowRate
   ELSE
       FanPowerPerEvapAirFlowRate=FanPowerPerEvapAirFlowRateFromInput
@@ -893,7 +893,7 @@ SELECT CASE(DXCoilType_Num)
       NetCoolingCapRated = RatedTotalCapacity * TotCapTempModFac * TotCapFlowModFac          &
                          - FanPowerPerEvapAirFlowRate * RatedAirVolFlowRate
   ELSE
-      NetCoolingCapRated = 0.0
+      NetCoolingCapRated = 0.0d0
   ENDIF
 
   ! SEER calculations:
@@ -905,10 +905,10 @@ SELECT CASE(DXCoilType_Num)
       EIRTempModFac = CurveValue(EIRFTempCurveIndex,CoolingCoilInletAirWetbulbTempRated,     &
                                    OutdoorUnitInletAirDrybulbTemp)
       EIRFlowModFac = CurveValue(EIRFFlowCurveIndex,AirMassFlowRatioRated)
-      IF ( RatedCOP > 0.0 ) THEN ! RatedCOP <= 0.0 is trapped in GetInput, but keep this as "safety"
+      IF ( RatedCOP > 0.0D0 ) THEN ! RatedCOP <= 0.0 is trapped in GetInput, but keep this as "safety"
            EIR = EIRTempModFac * EIRFlowModFac / RatedCOP
       ELSE
-           EIR = 0.0
+           EIR = 0.0d0
       ENDIF
       ! Calculate net cooling capacity
       NetCoolingCapAHRI = TotCoolingCapAHRI - FanPowerPerEvapAirFlowRate * RatedAirVolFlowRate
@@ -917,13 +917,13 @@ SELECT CASE(DXCoilType_Num)
       ! Calculate SEER value from the Energy Efficiency Ratio (EER) at the AHRI test conditions and the part load factor.
       ! First evaluate the Part Load Factor curve at PLR = 0.5 (AHRI Standard 210/240)
       PartLoadFactor = CurveValue(PLFFPLRCurveIndex,PLRforSEER)
-      IF ( TotalElecPower > 0.0 ) THEN
+      IF ( TotalElecPower > 0.0D0 ) THEN
            SEER = ( NetCoolingCapAHRI / TotalElecPower ) * PartLoadFactor
       ELSE
-           SEER = 0.0
+           SEER = 0.0d0
       ENDIF
   ELSE
-      SEER =0.0
+      SEER =0.0D0
   ENDIF
 
   ! EER calculations:
@@ -939,26 +939,26 @@ SELECT CASE(DXCoilType_Num)
       EIRTempModFac = CurveValue(EIRFTempCurveIndex,CoolingCoilInletAirWetbulbTempRated,     &
                       OutdoorUnitInletAirDrybulbTempRated)
       EIRFlowModFac = CurveValue(EIRFFlowCurveIndex,AirMassFlowRatioRated)
-      IF ( RatedCOP > 0.0 ) THEN
+      IF ( RatedCOP > 0.0D0 ) THEN
            ! RatedCOP <= 0.0 is trapped in GetInput, but keep this as "safety"
              EIR = EIRTempModFac * EIRFlowModFac / RatedCOP
       ELSE
-             EIR = 0.0
+             EIR = 0.0d0
       ENDIF
       TotalElecPowerRated = EIR * (RatedTotalCapacity * TotCapTempModFac * TotCapFlowModFac) &
                           + FanPowerPerEvapAirFlowRate * RatedAirVolFlowRate
-      IF ( TotalElecPowerRated > 0.0 ) THEN
+      IF ( TotalElecPowerRated > 0.0D0 ) THEN
            EER = NetCoolingCapRated / TotalElecPowerRated
       ELSE
-           EER = 0.0
+           EER = 0.0d0
       ENDIF
   ELSE
-      EER = 0.0
+      EER = 0.0D0
   ENDIF
 
   ! IEER calculations:
   IF ( CalcIEER ) THEN
-       IEER =0.0
+       IEER =0.0d0
        ! Calculate the net cooling capacity at the rated conditions (19.44C WB and 35.0C DB )
        TotCapFlowModFac = CurveValue(CapFFlowCurveIndex,AirMassFlowRatioRated)
        TotCapTempModFac = CurveValue(CapFTempCurveIndex,CoolingCoilInletAirWetbulbTempRated, &
@@ -970,10 +970,10 @@ SELECT CASE(DXCoilType_Num)
 
        DO RedCapNum = 1, NumOfReducedCap
           ! get the outdoor air dry bulb temperature for the reduced capacity test conditions
-          IF (ReducedPLR(RedCapNum) > 0.444 ) THEN
-              OutdoorUnitInletAirDrybulbTempReduced = 5.0 + 30.0 * ReducedPLR(RedCapNum)
+          IF (ReducedPLR(RedCapNum) > 0.444D0 ) THEN
+              OutdoorUnitInletAirDrybulbTempReduced = 5.0D0 + 30.0D0 * ReducedPLR(RedCapNum)
           ELSE
-              OutdoorUnitInletAirDrybulbTempReduced = 18.3
+              OutdoorUnitInletAirDrybulbTempReduced = 18.3D0
           ENDIF
           TotCapTempModFac = CurveValue(CapFTempCurveIndex,CoolingCoilInletAirWetbulbTempRated, &
                                         OutdoorUnitInletAirDrybulbTempReduced)
@@ -981,13 +981,13 @@ SELECT CASE(DXCoilType_Num)
                                - FanPowerPerEvapAirFlowRate * RatedAirVolFlowRate
           EIRTempModFac = CurveValue(EIRFTempCurveIndex,CoolingCoilInletAirWetbulbTempRated,   &
                                      OutdoorUnitInletAirDrybulbTempReduced)
-          IF ( RatedCOP > 0.0 ) THEN
+          IF ( RatedCOP > 0.0D0 ) THEN
                EIR = EIRTempModFac * EIRFlowModFac / RatedCOP
           ELSE
-               EIR = 0.0
+               EIR = 0.0d0
           ENDIF
           LoadFactor = ReducedPLR(RedCapNum) * NetCoolingCapRated / NetCoolingCapReduced
-          DegradationCoeff = 1.130 - 0.130 * LoadFactor
+          DegradationCoeff = 1.130D0 - 0.130D0 * LoadFactor
           ElecPowerReducedCap = DegradationCoeff * EIR * (RatedTotalCapacity &
                                    * TotCapTempModFac * TotCapFlowModFac)
           EERReduced = ( LoadFactor * NetCoolingCapReduced ) / ( LoadFactor*ElecPowerReducedCap + &
@@ -996,7 +996,7 @@ SELECT CASE(DXCoilType_Num)
        END DO
 
   ELSE
-       IEER = 0.0
+       IEER = 0.0D0
   ENDIF
     ! Writes the net rated cooling capacity, SEER, EER and IEER values to the EIO file and standard tabular output tables
   CALL ReportDXCoilRating( DXCoilType, DXCoilName, DXCoilType_Num, NetCoolingCapRated,      &
@@ -1011,7 +1011,7 @@ SELECT CASE(DXCoilType_Num)
 
   IF ( CalcHSPF ) THEN
 
-    HSPF = 0.0
+    HSPF = 0.0d0
 
     CALL CalculateDXHeatingCoilCapacityAndEIR (RatedTotalCapacity, RatedCOP, CapFFlowCurveIndex, CapFTempCurveIndex, &
                                                EIRFFlowCurveIndex, EIRFTempCurveIndex, RatedAirVolFlowRate, &
@@ -1021,7 +1021,7 @@ SELECT CASE(DXCoilType_Num)
     IF (RegionNum .EQ. 5) THEN
       DesignHeatingRequirementMin = NetHeatingCapRated
     ELSE
-      DesignHeatingRequirementMin = NetHeatingCapRated * 1.8* (18.33 - OutdoorDesignTemperature(RegionNum)) / 60.0
+      DesignHeatingRequirementMin = NetHeatingCapRated * 1.8D0* (18.33D0 - OutdoorDesignTemperature(RegionNum)) / 60.0D0
     ENDIF
 
     DO StandardDHRNum = 1, TotalNumOfStandardDHRs - 1
@@ -1059,55 +1059,55 @@ SELECT CASE(DXCoilType_Num)
         FractionalBinHours = RegionSixFracBinHoursAtOutdoorBinTemp(BinNumber)
       ENDIF
 
-      BuildingLoad = (18.33 - OutdoorBinTemperature(BinNumber)) / (18.33 - OutdoorDesignTemperature(RegionNum)) &
+      BuildingLoad = (18.33D0 - OutdoorBinTemperature(BinNumber)) / (18.33D0 - OutdoorDesignTemperature(RegionNum)) &
                              * CorrectionFactor * DesignHeatingRequirement
 
-      IF ((OutdoorBinTemperature(BinNumber) .LE. -8.33) .OR. (OutdoorBinTemperature(BinNumber) .GE. 7.22)) THEN
+      IF ((OutdoorBinTemperature(BinNumber) .LE. -8.33D0) .OR. (OutdoorBinTemperature(BinNumber) .GE. 7.22D0)) THEN
         NetHeatingCapReduced = NetHeatingCapH3Test + (NetHeatingCapRated - NetHeatingCapH3Test) * &
-                                                     (OutdoorBinTemperature(BinNumber) + 8.33)/ (16.67)
+                                                     (OutdoorBinTemperature(BinNumber) + 8.33D0)/ (16.67D0)
         ElectricalPowerConsumption = ElecPowerH3Test + (ElecPowerRated - ElecPowerH3Test) * &
-                                                       (OutdoorBinTemperature(BinNumber) + 8.33)/ (16.67)
+                                                       (OutdoorBinTemperature(BinNumber) + 8.33D0)/ (16.67D0)
       ELSE
         NetHeatingCapReduced = NetHeatingCapH3Test + (NetHeatingCapH2Test - NetHeatingCapH3Test) * &
-                                                     (OutdoorBinTemperature(BinNumber) + 8.33)/ (10.0)
+                                                     (OutdoorBinTemperature(BinNumber) + 8.33D0)/ (10.0D0)
         ElectricalPowerConsumption = ElecPowerH3Test + (ElecPowerH2Test - ElecPowerH3Test) * &
-                                                       (OutdoorBinTemperature(BinNumber) + 8.33)/ (10.0)
+                                                       (OutdoorBinTemperature(BinNumber) + 8.33D0)/ (10.0D0)
       ENDIF
 
-      IF (NetHeatingCapReduced .NE. 0.0) THEN
+      IF (NetHeatingCapReduced .NE. 0.0D0) THEN
         HeatingModeLoadFactor = BuildingLoad / NetHeatingCapReduced
       ENDIF
 
-      IF (HeatingModeLoadFactor .GT. 1.0) THEN
-        HeatingModeLoadFactor = 1.0
+      IF (HeatingModeLoadFactor .GT. 1.0D0) THEN
+        HeatingModeLoadFactor = 1.0D0
       ENDIF
 
       PartLoadFactor = 1 - CyclicDegradationCoeff * (1 - HeatingModeLoadFactor)
 
-      IF  (ElectricalPowerConsumption .NE. 0.0) THEN
+      IF  (ElectricalPowerConsumption .NE. 0.0D0) THEN
         CheckCOP = NetHeatingCapReduced/ElectricalPowerConsumption
       ENDIF
 
       OATempCompressorOff = MinOATCompressor
 
-      IF (CheckCOP .LT. 1.0) THEN
-        LowTempCutOutFactor = 0.0
+      IF (CheckCOP .LT. 1.0D0) THEN
+        LowTempCutOutFactor = 0.0D0
       ELSE
         IF(.NOT. OATempCompressorOnOffBlank) THEN
           IF (OutdoorBinTemperature(BinNumber) .LE. OATempCompressorOff) THEN
-            LowTempCutOutFactor = 0.0
+            LowTempCutOutFactor = 0.0D0
           ELSEIF (OutdoorBinTemperature(BinNumber) .GT. OATempCompressorOff .and. &
                 OutdoorBinTemperature(BinNumber) .LE. OATempCompressorOn) THEN
-            LowTempCutOutFactor = 0.5
+            LowTempCutOutFactor = 0.5D0
           ELSE
-            LowTempCutOutFactor = 1.0
+            LowTempCutOutFactor = 1.0D0
           ENDIF
         ELSE
-          LowTempCutOutFactor = 1.0
+          LowTempCutOutFactor = 1.0D0
         ENDIF
       ENDIF
 
-      IF (PartLoadFactor .NE. 0.0) THEN
+      IF (PartLoadFactor .NE. 0.0D0) THEN
         HeatPumpElectricalEnergy = (HeatingModeLoadFactor * ElectricalPowerConsumption * LowTempCutOutFactor) &
                                        * FractionalBinHours / PartLoadFactor
       ENDIF
@@ -1126,17 +1126,17 @@ SELECT CASE(DXCoilType_Num)
     TotalElectricalEnergy = TotalHeatPumpElectricalEnergy + TotalResistiveSpaceHeatingElectricalEnergy
 
     IF (DefrostControl .EQ. Timed) THEN
-      DemandDeforstCredit = 1.0   ! Timed defrost control
+      DemandDeforstCredit = 1.0D0   ! Timed defrost control
     ELSE
-      DemandDeforstCredit = 1.03   ! Demand defrost control
+      DemandDeforstCredit = 1.03D0   ! Demand defrost control
     ENDIF
 
-    IF (TotalElectricalEnergy .NE. 0.0) THEN
+    IF (TotalElectricalEnergy .NE. 0.0D0) THEN
       HSPF = TotalBuildingLoad * DemandDeforstCredit / TotalElectricalEnergy
     ENDIF
 
   ELSE
-    HSPF = 0.0
+    HSPF = 0.0d0
   ENDIF
     ! Writes the HSPF value to the EIO file and standard tabular output tables
   CALL ReportDXCoilRating( DXCoilType, DXCoilName, DXCoilType_Num, NetCoolingCapRated,      &
@@ -1182,38 +1182,38 @@ SUBROUTINE CalculateDXHeatingCoilCapacityAndEIR (RatedTotalCapacity, RatedCOP, C
   INTEGER, INTENT(IN)    :: CapFFlowCurveIndex  ! Index for the capacity as a function of flow fraction modifier curve
   INTEGER, INTENT(IN)    :: EIRFTempCurveIndex  ! Index for the EIR as a function of temperature modifier curve
   INTEGER, INTENT(IN)    :: EIRFFlowCurveIndex  ! Index for the EIR as a function of flow fraction modifier curve
-  REAL, INTENT(IN)  :: RatedTotalCapacity  ! Reference capacity of DX coil [W]
-  REAL, INTENT(IN)  :: RatedCOP            ! Reference coefficient of performance [W/W]
-  REAL, INTENT(IN)  :: RatedAirVolFlowRate ! Rated air volume flow rate [m3/s]
-  REAL, INTENT(IN)  :: FanPowerPerEvapAirFlowRateFromInput  ! Fan power per air volume flow rate [W/(m3/s)]
-  REAL, INTENT(OUT) :: NetHeatingCapRated  ! Net Heating Coil capacity at Rated conditions,
+  REAL(r64), INTENT(IN)  :: RatedTotalCapacity  ! Reference capacity of DX coil [W]
+  REAL(r64), INTENT(IN)  :: RatedCOP            ! Reference coefficient of performance [W/W]
+  REAL(r64), INTENT(IN)  :: RatedAirVolFlowRate ! Rated air volume flow rate [m3/s]
+  REAL(r64), INTENT(IN)  :: FanPowerPerEvapAirFlowRateFromInput  ! Fan power per air volume flow rate [W/(m3/s)]
+  REAL(r64), INTENT(OUT) :: NetHeatingCapRated  ! Net Heating Coil capacity at Rated conditions,
                                                 ! accounting for supply fan heat [W]
-  REAL, INTENT(OUT) :: NetHeatingCapH2Test ! Net Heating Coil capacity at H2 test conditions
+  REAL(r64), INTENT(OUT) :: NetHeatingCapH2Test ! Net Heating Coil capacity at H2 test conditions
                                                 ! accounting for supply fan heat [W]
-  REAL, INTENT(OUT) :: NetHeatingCapH3Test ! Net Heating Coil capacity at H3 test conditions
+  REAL(r64), INTENT(OUT) :: NetHeatingCapH3Test ! Net Heating Coil capacity at H3 test conditions
                                                 ! accounting for supply fan heat [W]
-  REAL, INTENT(OUT) :: ElecPowerRated      ! Total system power at Rated conditions
+  REAL(r64), INTENT(OUT) :: ElecPowerRated      ! Total system power at Rated conditions
                                                 ! accounting for supply fan heat [W]
-  REAL, INTENT(OUT) :: ElecPowerH2Test     ! Total system power at H2 test conditions
+  REAL(r64), INTENT(OUT) :: ElecPowerH2Test     ! Total system power at H2 test conditions
                                                 ! accounting for supply fan heat [W]
-  REAL, INTENT(OUT) :: ElecPowerH3Test     ! Total system power at H3 test conditions
+  REAL(r64), INTENT(OUT) :: ElecPowerH3Test     ! Total system power at H3 test conditions
                                                 ! accounting for supply fan heat [W]
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: AirMassFlowRatioRated = 1.0   ! AHRI test is at the design flow rate
-  REAL, PARAMETER :: DefaultFanPowerPerEvapAirFlowRate = 773.3 ! 365 W/1000 scfm or 773.3 W/(m3/s). The AHRI standard
+  REAL(r64), PARAMETER :: AirMassFlowRatioRated = 1.0d0   ! AHRI test is at the design flow rate
+  REAL(r64), PARAMETER :: DefaultFanPowerPerEvapAirFlowRate = 773.3D0 ! 365 W/1000 scfm or 773.3 W/(m3/s). The AHRI standard
                                                       ! specifies a nominal/default fan electric power consumption per rated air
                                                       ! volume flow rate to account for indoor fan electric power consumption
                                                       ! when the standard tests are conducted on units that do not have an
                                                       ! indoor air circulting fan. Used if user doesn't enter a specific value.
 
-  REAL, PARAMETER :: HeatingCoilInletAirDrybulbTempRated  = 21.11  ! Heating coil entering air dry-bulb temperature in 
+  REAL(r64), PARAMETER :: HeatingCoilInletAirDrybulbTempRated  = 21.11D0  ! Heating coil entering air dry-bulb temperature in 
                                                                           ! degrees C (70F) Test H1, H2 and H3 (Std. AHRI 210/240)
-  REAL, PARAMETER :: HeatingCoilOutdoorUnitInletAirDrybulbTempRated = 8.33  ! Outdoor air dry-bulb temp in degrees C (47F)
+  REAL(r64), PARAMETER :: HeatingCoilOutdoorUnitInletAirDrybulbTempRated = 8.33D0  ! Outdoor air dry-bulb temp in degrees C (47F)
                                                                                    ! Test H1 (Std. AHRI 210/240)
-  REAL, PARAMETER :: HeatingCoilOutdoorUnitInletAirDBTempH2Test = 1.67      ! Outdoor air dry-bulb temp in degrees C (35F)
+  REAL(r64), PARAMETER :: HeatingCoilOutdoorUnitInletAirDBTempH2Test = 1.67D0      ! Outdoor air dry-bulb temp in degrees C (35F)
                                                                                    ! Test H2 (Std. AHRI 210/240)
-  REAL, PARAMETER :: HeatingCoilOutdoorUnitInletAirDBTempH3Test = -8.33     ! Outdoor air dry-bulb temp in degrees C (17F)
+  REAL(r64), PARAMETER :: HeatingCoilOutdoorUnitInletAirDBTempH3Test = -8.33D0     ! Outdoor air dry-bulb temp in degrees C (17F)
                                                                                    ! Test H3 (Std. AHRI 210/240)
 
     ! INTERFACE BLOCK SPECIFICATIONS
@@ -1223,25 +1223,25 @@ SUBROUTINE CalculateDXHeatingCoilCapacityAndEIR (RatedTotalCapacity, RatedCOP, C
     ! na
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: TotalHeatingCapRated = 0.0   ! Heating Coil capacity at Rated conditions, without accounting supply fan heat [W]
-  REAL :: EIRRated = 0.0               ! EIR at Rated conditions [-]
-  REAL :: TotCapTempModFacRated = 0.0  ! Total capacity as a function of temerature modifier at rated conditions [-]
-  REAL :: EIRTempModFacRated = 0.0     ! EIR as a function of temerature modifier at rated conditions [-]
-  REAL :: TotalHeatingCapH2Test = 0.0  ! Heating Coil capacity at H2 test conditions, without accounting supply fan heat [W]
-  REAL :: TotalHeatingCapH3Test = 0.0  ! Heating Coil capacity at H3 test conditions, without accounting supply fan heat [W]
-  REAL :: CapTempModFacH2Test = 0.0    ! Total capacity as a function of temerature modifier at H2 test conditions [-]
-  REAL :: EIRTempModFacH2Test = 0.0    ! EIR as a function of temerature modifier at H2 test conditions [-]
-  REAL :: EIRH2Test = 0.0              ! EIR at H2 test conditions [-]
-  REAL :: CapTempModFacH3Test = 0.0    ! Total capacity as a function of temerature modifier at H3 test conditions [-]
-  REAL :: EIRTempModFacH3Test = 0.0    ! EIR as a function of temerature modifier at H3 test conditions [-]
-  REAL :: EIRH3Test = 0.0              ! EIR at H3 test conditions [-]
-  REAL :: TotCapFlowModFac = 0.0       ! Total capacity modifier (function of actual supply air flow vs rated flow)
-  REAL :: EIRFlowModFac = 0.0          ! EIR modifier (function of actual supply air flow vs rated flow)
-  REAL :: FanPowerPerEvapAirFlowRate = 0.0 ! Fan power per air volume flow rate [W/(m3/s)]
+  REAL(r64) :: TotalHeatingCapRated = 0.0d0   ! Heating Coil capacity at Rated conditions, without accounting supply fan heat [W]
+  REAL(r64) :: EIRRated = 0.0D0               ! EIR at Rated conditions [-]
+  REAL(r64) :: TotCapTempModFacRated = 0.0D0  ! Total capacity as a function of temerature modifier at rated conditions [-]
+  REAL(r64) :: EIRTempModFacRated = 0.0D0     ! EIR as a function of temerature modifier at rated conditions [-]
+  REAL(r64) :: TotalHeatingCapH2Test = 0.0d0  ! Heating Coil capacity at H2 test conditions, without accounting supply fan heat [W]
+  REAL(r64) :: TotalHeatingCapH3Test = 0.0d0  ! Heating Coil capacity at H3 test conditions, without accounting supply fan heat [W]
+  REAL(r64) :: CapTempModFacH2Test = 0.0D0    ! Total capacity as a function of temerature modifier at H2 test conditions [-]
+  REAL(r64) :: EIRTempModFacH2Test = 0.0d0    ! EIR as a function of temerature modifier at H2 test conditions [-]
+  REAL(r64) :: EIRH2Test = 0.0d0              ! EIR at H2 test conditions [-]
+  REAL(r64) :: CapTempModFacH3Test = 0.0d0    ! Total capacity as a function of temerature modifier at H3 test conditions [-]
+  REAL(r64) :: EIRTempModFacH3Test = 0.0d0    ! EIR as a function of temerature modifier at H3 test conditions [-]
+  REAL(r64) :: EIRH3Test = 0.0d0              ! EIR at H3 test conditions [-]
+  REAL(r64) :: TotCapFlowModFac = 0.0d0       ! Total capacity modifier (function of actual supply air flow vs rated flow)
+  REAL(r64) :: EIRFlowModFac = 0.0d0          ! EIR modifier (function of actual supply air flow vs rated flow)
+  REAL(r64) :: FanPowerPerEvapAirFlowRate = 0.0d0 ! Fan power per air volume flow rate [W/(m3/s)]
 
   ! Calculate the Indoor fan electric power consumption.  The electric power consumption is estimated
   ! using either user supplied or AHRI default value for fan power per air volume flow rate
-  IF( FanPowerPerEvapAirFlowRateFromInput <= 0.0) THEN
+  IF( FanPowerPerEvapAirFlowRateFromInput <= 0.0D0) THEN
       FanPowerPerEvapAirFlowRate=DefaultFanPowerPerEvapAirFlowRate
   ELSE
       FanPowerPerEvapAirFlowRate=FanPowerPerEvapAirFlowRateFromInput
@@ -1298,7 +1298,7 @@ SUBROUTINE CalculateDXHeatingCoilCapacityAndEIR (RatedTotalCapacity, RatedCOP, C
   TotalHeatingCapH3Test = RatedTotalCapacity * CapTempModFacH3Test * TotCapFlowModFac
   NetHeatingCapH3Test = TotalHeatingCapH3Test + FanPowerPerEvapAirFlowRate * RatedAirVolFlowRate
 
-  IF ( RatedCOP > 0.0 ) THEN ! RatedCOP <= 0.0 is trapped in GetInput, but keep this as "safety"
+  IF ( RatedCOP > 0.0D0 ) THEN ! RatedCOP <= 0.0 is trapped in GetInput, but keep this as "safety"
 
     EIRRated = EIRTempModFacRated * EIRFlowModFac / RatedCOP
 
@@ -1350,21 +1350,21 @@ SUBROUTINE ReportDXCoilRating(CompType,CompName,CompTypeNum, CoolCapVal,SEERValu
     CHARACTER(len=*), INTENT(IN) :: CompType     ! Type of component
     CHARACTER(len=*), INTENT(IN) :: CompName     ! Name of component
     INTEGER, INTENT(IN)          :: CompTypeNum  ! TypeNum of component
-    REAL, INTENT(IN)        :: SEERValueSI  ! SEER value in SI units {W/W}
-    REAL, INTENT(IN)        :: SEERValueIP  ! SEER value in IP units {Btu/W-h}
-    REAL, INTENT(IN)        :: CoolCapVal   ! Standard total (net) cooling capacity for AHRI Std. 210/240 {W}
+    REAL(r64), INTENT(IN)        :: SEERValueSI  ! SEER value in SI units {W/W}
+    REAL(r64), INTENT(IN)        :: SEERValueIP  ! SEER value in IP units {Btu/W-h}
+    REAL(r64), INTENT(IN)        :: CoolCapVal   ! Standard total (net) cooling capacity for AHRI Std. 210/240 {W}
                                                  !   or ANSI/AHRI Std. 340/360 {W}
-    REAL, INTENT(IN)        :: EERValueSI   ! EER value in SI units {W/W}
-    REAL, INTENT(IN)        :: EERValueIP   ! EER value in IP units {Btu/W-h}
-    REAL, INTENT(IN)        :: IEERValueSI  ! IEER value in SI units {W/W}
-    REAL, INTENT(IN)        :: IEERValueIP  ! IEER value in IP units {Btu/W-h}
+    REAL(r64), INTENT(IN)        :: EERValueSI   ! EER value in SI units {W/W}
+    REAL(r64), INTENT(IN)        :: EERValueIP   ! EER value in IP units {Btu/W-h}
+    REAL(r64), INTENT(IN)        :: IEERValueSI  ! IEER value in SI units {W/W}
+    REAL(r64), INTENT(IN)        :: IEERValueIP  ! IEER value in IP units {Btu/W-h}
 
-    REAL, INTENT(IN)        :: HighHeatingCapVal   ! High Temperature Heating Standard (Net) Rating Capacity
+    REAL(r64), INTENT(IN)        :: HighHeatingCapVal   ! High Temperature Heating Standard (Net) Rating Capacity
                                                         ! for AHRI Std. 210/240 {W}
-    REAL, INTENT(IN)        :: LowHeatingCapVal    ! Low Temperature Heating Standard (Net) Rating Capacity
+    REAL(r64), INTENT(IN)        :: LowHeatingCapVal    ! Low Temperature Heating Standard (Net) Rating Capacity
                                                         ! for AHRI Std. 210/240 {W}
-    REAL, INTENT(IN)        :: HSPFValueSI  ! IEER value in SI units {W/W}
-    REAL, INTENT(IN)        :: HSPFValueIP  ! IEER value in IP units {Btu/W-h}
+    REAL(r64), INTENT(IN)        :: HSPFValueSI  ! IEER value in SI units {W/W}
+    REAL(r64), INTENT(IN)        :: HSPFValueIP  ! IEER value in IP units {Btu/W-h}
     INTEGER, INTENT(IN)          :: RegionNum    ! Region Number for which HSPF is calculated
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1480,22 +1480,22 @@ SUBROUTINE CheckCurveLimitsForStandardRatings(DXCoilName, DXCoilType, DXCoilType
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
 
-  REAL, PARAMETER :: OAHighDBTemp=35.0   ! Outdoor air dry-bulb temp in degrees C (95F) for Test A
+  REAL(r64), PARAMETER :: OAHighDBTemp=35.0d0   ! Outdoor air dry-bulb temp in degrees C (95F) for Test A
                                                 !    (Rated Capacity Std. AHRI 210/240 & AHRI 340/360)
-  REAL, PARAMETER :: EAWetBulbTemp=19.44 ! Cooling coil entering air wet-bulb temperature in degrees C (67F) Tests A and B
+  REAL(r64), PARAMETER :: EAWetBulbTemp=19.44d0 ! Cooling coil entering air wet-bulb temperature in degrees C (67F) Tests A and B
                                                 !    (Std. AHRI 210/240 & AHRI 340/360)
-  REAL, PARAMETER :: OAMidDBTemp=27.78   ! Outdoor air dry-bulb temp in degrees C (82F) Test B
+  REAL(r64), PARAMETER :: OAMidDBTemp=27.78d0   ! Outdoor air dry-bulb temp in degrees C (82F) Test B
                                                 !    (For SEER Std. AHRI 210/240)
-  REAL, PARAMETER :: PLRforSEER = 0.50   ! Cooilng coil part-load ratio (For SEER Std. AHRI 210/240)
-  REAL, PARAMETER :: NominalFlowFraction = 1.0  ! Cooling coil flow fraction (fraction of rated flow rate)
+  REAL(r64), PARAMETER :: PLRforSEER = 0.50d0   ! Cooilng coil part-load ratio (For SEER Std. AHRI 210/240)
+  REAL(r64), PARAMETER :: NominalFlowFraction = 1.0d0  ! Cooling coil flow fraction (fraction of rated flow rate)
                                                        !   AHRI test AirMassFlowRatio is 1.0 (Std. AHRI 210/240 & AHRI 340/360)
-  REAL, PARAMETER :: OALowDBTemp=18.3    ! Outdoor air dry-bulb temp in degrees C (65F)
+  REAL(r64), PARAMETER :: OALowDBTemp=18.3d0    ! Outdoor air dry-bulb temp in degrees C (65F)
                                                 !    Std. AHRI AHRI 340/360 Dry-bulb Temp at reduced capacity, <= 0.444
-  REAL, PARAMETER :: HeatingHighDBTemp = 8.33 ! Outdoor air dry-bulb temp in degrees C (47F) Test H1
+  REAL(r64), PARAMETER :: HeatingHighDBTemp = 8.33d0 ! Outdoor air dry-bulb temp in degrees C (47F) Test H1
                                                      !    (Std. AHRI 210/240)
-  REAL, PARAMETER :: HeatingLowDBTemp = -8.33 ! Outdoor air dry-bulb temp in degrees C (17F) Test H3
+  REAL(r64), PARAMETER :: HeatingLowDBTemp = -8.33d0 ! Outdoor air dry-bulb temp in degrees C (17F) Test H3
                                                      !    (Std. AHRI 210/240)
-  REAL, PARAMETER :: HeatingIDTemp = 21.11    ! Heating coil entering air dry-bulb temperature in degrees C (70F)
+  REAL(r64), PARAMETER :: HeatingIDTemp = 21.11d0    ! Heating coil entering air dry-bulb temperature in degrees C (70F)
                                                      ! Test H1, H2 and H3   (Std. AHRI 210/240)
   CHARACTER(len=*), PARAMETER :: RoutineName='CheckCurveLimitsForStandardRatings: ' ! Include trailing blank space
 
@@ -1508,40 +1508,40 @@ SUBROUTINE CheckCurveLimitsForStandardRatings(DXCoilName, DXCoilType, DXCoilType
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
  !  Minimum and Maximum independent variable limits from Total Cooling Capacity Function of Temperature Curve
-  REAL :: CapacityWBTempMin= 0.0  ! Capacity modifier Min value (wet bulb temperature), from the Curve:Biquadratic object
-  REAL :: CapacityWBTempMax= 0.0  ! Capacity modifier Max value (wet bulb temperature), from the Curve:Biquadratic object
-  REAL :: CapacityDBTempMin= 0.0  ! Capacity modifier Min value (dry bulb temperature), from the Curve:Biquadratic object
-  REAL :: CapacityDBTempMax= 0.0  ! Capacity modifier Max value (dry bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityWBTempMin= 0.0d0  ! Capacity modifier Min value (wet bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityWBTempMax= 0.0d0  ! Capacity modifier Max value (wet bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityDBTempMin= 0.0d0  ! Capacity modifier Min value (dry bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: CapacityDBTempMax= 0.0d0  ! Capacity modifier Max value (dry bulb temperature), from the Curve:Biquadratic object
 
 !  Minimum and Maximum independent variable limits from Energy Input Ratio (EIR) Function of Temperature Curve
-  REAL :: EIRWBTempMin= 0.0  ! EIR modifier Min value (wet bulb temperature), from the Curve:Biquadratic object
-  REAL :: EIRWBTempMax= 0.0  ! EIR modifier Max value (wet bulb temperature), from the Curve:Biquadratic object
-  REAL :: EIRDBTempMin= 0.0  ! EIR modifier Min value (dry bulb temperature), from the Curve:Biquadratic object
-  REAL :: EIRDBTempMax= 0.0  ! EIR modifier Max value (dry bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: EIRWBTempMin= 0.0d0  ! EIR modifier Min value (wet bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: EIRWBTempMax= 0.0d0  ! EIR modifier Max value (wet bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: EIRDBTempMin= 0.0d0  ! EIR modifier Min value (dry bulb temperature), from the Curve:Biquadratic object
+  REAL(r64) :: EIRDBTempMax= 0.0d0  ! EIR modifier Max value (dry bulb temperature), from the Curve:Biquadratic object
 
 !  Minimum and Maximum independent variable limits from Part Load Fraction Correlation Curve
-  REAL :: PLFFPLRMin = 0.0    ! Maximum value for Part Load Ratio, from the corresponding curve object
-  REAL :: PLFFPLRMax = 0.0    ! Minimum value for Part Load Ratio, from the corresponding curve object
+  REAL(r64) :: PLFFPLRMin = 0.0d0    ! Maximum value for Part Load Ratio, from the corresponding curve object
+  REAL(r64) :: PLFFPLRMax = 0.0d0    ! Minimum value for Part Load Ratio, from the corresponding curve object
 
 !  Minimum and Maximum independent variable limits from Total Cooling Capacity Function of Flow Fraction Curve
-  REAL :: CapacityFlowRatioMin = 0.0 ! Minimum value for flow fraction, from the corresponding curve object
-  REAL :: CapacityFlowRatioMax = 0.0 ! Maximum value for flow fraction, from the corresponding curve object
+  REAL(r64) :: CapacityFlowRatioMin = 0.0d0 ! Minimum value for flow fraction, from the corresponding curve object
+  REAL(r64) :: CapacityFlowRatioMax = 0.0d0 ! Maximum value for flow fraction, from the corresponding curve object
 
 !  Minimum and Maximum independent variable limits from Energy Input Ratio Function of Flow Fraction Curve
-  REAL :: EIRFlowRatioMin = 0.0 ! Minimum value for flow fraction, from the corresponding curve object
-  REAL :: EIRFlowRatioMax = 0.0 ! Maximum value for flow fraction, from the corresponding curve object
+  REAL(r64) :: EIRFlowRatioMin = 0.0d0 ! Minimum value for flow fraction, from the corresponding curve object
+  REAL(r64) :: EIRFlowRatioMax = 0.0d0 ! Maximum value for flow fraction, from the corresponding curve object
 
  !  Minimum and Maximum independent variable limits from Total Cooling Capacity Function of Temperature Curve
-  REAL :: HeatingCapODBTempMin= 0.0  ! Capacity modifier Min value (outdoor dry bulb temperature)
-  REAL :: HeatingCapODBTempMax= 0.0  ! Capacity modifier Max value (outdoor dry bulb temperature)
-  REAL :: HeatingCapIDBTempMin= 0.0  ! Capacity modifier Min value (indoor dry bulb temperature)
-  REAL :: HeatingCapIDBTempMax= 0.0  ! Capacity modifier Max value (indoor dry bulb temperature)
+  REAL(r64) :: HeatingCapODBTempMin= 0.0d0  ! Capacity modifier Min value (outdoor dry bulb temperature)
+  REAL(r64) :: HeatingCapODBTempMax= 0.0d0  ! Capacity modifier Max value (outdoor dry bulb temperature)
+  REAL(r64) :: HeatingCapIDBTempMin= 0.0d0  ! Capacity modifier Min value (indoor dry bulb temperature)
+  REAL(r64) :: HeatingCapIDBTempMax= 0.0d0  ! Capacity modifier Max value (indoor dry bulb temperature)
 
 !  Minimum and Maximum independent variable limits from Energy Input Ratio (EIR) Function of Temperature Curve
-  REAL :: HeatingEIRODBTempMin= 0.0  ! EIR modifier Min value (outdoor dry bulb temperature)
-  REAL :: HeatingEIRODBTempMax= 0.0  ! EIR modifier Max value (outdoor dry bulb temperature)
-  REAL :: HeatingEIRIDBTempMin= 0.0  ! EIR modifier Min value (indoor dry bulb temperature)
-  REAL :: HeatingEIRIDBTempMax= 0.0  ! EIR modifier Max value (indoor dry bulb temperature)
+  REAL(r64) :: HeatingEIRODBTempMin= 0.0d0  ! EIR modifier Min value (outdoor dry bulb temperature)
+  REAL(r64) :: HeatingEIRODBTempMax= 0.0d0  ! EIR modifier Max value (outdoor dry bulb temperature)
+  REAL(r64) :: HeatingEIRIDBTempMin= 0.0d0  ! EIR modifier Min value (indoor dry bulb temperature)
+  REAL(r64) :: HeatingEIRIDBTempMax= 0.0d0  ! EIR modifier Max value (indoor dry bulb temperature)
 
   LOGICAL :: CapCurveHighOATLimitsExceeded = .FALSE. ! Logical for capacity curve temperature limits being exceeded (high temp)
   LOGICAL :: CapCurveFlowLimitsExceeded = .FALSE.    ! Logical for capacity curve flow fraction limits being exceeded

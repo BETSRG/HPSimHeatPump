@@ -51,33 +51,33 @@ INTEGER, PARAMETER :: AirWorkingFluid     = 2
 INTEGER, PARAMETER , PUBLIC :: CalledFromPlantLoopEquipMgr  = 101
 INTEGER, PARAMETER , PUBLIC :: CalledFromOutsideAirSystem = 102
 
-REAL, PARAMETER :: SimplePVTWaterSizeFactor = 1.905E-5  ! [ m3/s/m2 ] average of collectors in SolarCollectors.idf
+REAL(r64), PARAMETER :: SimplePVTWaterSizeFactor = 1.905E-5  ! [ m3/s/m2 ] average of collectors in SolarCollectors.idf
 
 
           ! DERIVED TYPE DEFINITIONS:
 
 TYPE SimplePVTModelStruct
   CHARACTER(len=MaxNameLength) :: Name               = '' !
-  REAL                    :: ThermalActiveFract = 0.0 ! fraction of surface area with active thermal collection
+  REAL(r64)                    :: ThermalActiveFract = 0.0D0 ! fraction of surface area with active thermal collection
   INTEGER                      :: ThermEfficMode     = 0  ! setting for how therm effic is determined
-  REAL                    :: ThermEffic         = 0.0 ! fixed or current Therm efficiency
+  REAL(r64)                    :: ThermEffic         = 0.0D0 ! fixed or current Therm efficiency
   INTEGER                      :: ThermEffSchedNum   = 0 ! pointer to schedule for therm effic (if any)
-  REAL                    :: SurfEmissivity     = 0.0  ! surface emittance in long wave IR
-  REAL                    :: LastCollectorTemp  = 0.0  ! store previous temperature
-  REAL                    :: CollectorTemp      = 0.0  ! average solar collector temp.
+  REAL(r64)                    :: SurfEmissivity     = 0.0D0  ! surface emittance in long wave IR
+  REAL(r64)                    :: LastCollectorTemp  = 0.0D0  ! store previous temperature
+  REAL(r64)                    :: CollectorTemp      = 0.0D0  ! average solar collector temp.
 END TYPE SimplePVTModelStruct
 
 TYPE PVTReportStruct
 
-  REAL :: ThermEfficiency       = 0.0 ! Thermal efficiency of solar energy conversion
-  REAL :: ThermPower            = 0.0 ! Heat gain or loss to collector fluid (W)
-  REAL :: ThermHeatGain         = 0.0 ! Heat gain to collector fluid (W)
-  REAL :: ThermHeatLoss         = 0.0 ! Heat loss from collector fluid (W)
-  REAL :: ThermEnergy           = 0.0 ! Energy gained (or lost) to collector fluid (J)
-  REAL :: MdotWorkFluid         = 0.0 ! working fluid mass flow rate (kg/s)
-  REAL :: TinletWorkFluid       = 0.0 ! working fluid inlet temp (C)
-  REAL :: ToutletWorkFluid      = 0.0 ! working fluid outlet temp (C)
-  REAL :: BypassStatus          = 0.0  ! 0 = no bypass, 1=full bypass
+  REAL(r64) :: ThermEfficiency       = 0.0D0 ! Thermal efficiency of solar energy conversion
+  REAL(r64) :: ThermPower            = 0.0D0 ! Heat gain or loss to collector fluid (W)
+  REAL(r64) :: ThermHeatGain         = 0.0D0 ! Heat gain to collector fluid (W)
+  REAL(r64) :: ThermHeatLoss         = 0.0D0 ! Heat loss from collector fluid (W)
+  REAL(r64) :: ThermEnergy           = 0.0D0 ! Energy gained (or lost) to collector fluid (J)
+  REAL(r64) :: MdotWorkFluid         = 0.0D0 ! working fluid mass flow rate (kg/s)
+  REAL(r64) :: TinletWorkFluid       = 0.0D0 ! working fluid inlet temp (C)
+  REAL(r64) :: ToutletWorkFluid      = 0.0D0 ! working fluid outlet temp (C)
+  REAL(r64) :: BypassStatus          = 0.0D0  ! 0 = no bypass, 1=full bypass
 END TYPE PVTReportStruct
 
 TYPE PVTCollectorStruct
@@ -105,10 +105,10 @@ TYPE PVTCollectorStruct
   INTEGER                      :: PlantOutletNodeNum = 0
   INTEGER                      :: HVACInletNodeNum   = 0
   INTEGER                      :: HVACOutletNodeNum  = 0
-  REAL                    :: DesignVolFlowRate  = 0.0
-  REAL                    :: MaxMassFlowRate    = 0.0
-  REAL                    :: MassFlowRate       = 0.0  !DSU
-  REAL                    :: AreaCol            = 0.0
+  REAL(r64)                    :: DesignVolFlowRate  = 0.0D0
+  REAL(r64)                    :: MaxMassFlowRate    = 0.0D0
+  REAL(r64)                    :: MassFlowRate       = 0.0D0  !DSU
+  REAL(r64)                    :: AreaCol            = 0.0D0
   LOGICAL                      :: BypassDamperOff    = .TRUE.
   LOGICAL                      :: CoolingUseful      = .FALSE.
   LOGICAL                      :: HeatingUseful      = .FALSE.
@@ -401,7 +401,7 @@ SUBROUTINE GetPVTcollectorsInput
          ErrorsFound=.true.
       END IF
 ! check surface orientation, warn if upside down
-      IF (( Surface(SurfNum)%Tilt < -95.0 ) .OR. (Surface(SurfNum)%Tilt > 95.0)) THEN
+      IF (( Surface(SurfNum)%Tilt < -95.0D0 ) .OR. (Surface(SurfNum)%Tilt > 95.0D0)) THEN
         CALL ShowWarningError('Suspected input problem with '//TRIM(cAlphaFieldNames(2))//' = '//TRIM(cAlphaArgs(2)) )
         CALL ShowContinueError('Entered in '//TRIM(cCurrentModuleObject)//' = '//TRIM(cAlphaArgs(1)) )
         CALL ShowContinueError( 'Surface used for solar collector faces down')
@@ -596,7 +596,7 @@ SUBROUTINE InitPVTcollectors(PVTnum, FirstHVACIteration)
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE. ! one time flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: SetLoopIndexFlag       ! get loop number flag
   LOGICAL :: errFlag
-  REAL :: rho ! local fluid density kg/s
+  REAL(r64) :: rho ! local fluid density kg/s
           ! FLOW:
 
   ! Do the one time initializations
@@ -690,23 +690,23 @@ SUBROUTINE InitPVTcollectors(PVTnum, FirstHVACIteration)
     CASE (LiquidWorkingFluid)
 
       rho = GetDensityGlycol(PlantLoop(PVT(PVTnum)%WLoopNum)%FluidName, &
-                               60., &
+                               60.d0, &
                                PlantLoop(PVT(PVTnum)%WLoopNum)%FluidIndex, &
                                'InitPVTcollectors')
 
       PVT(PVTnum)%MaxMassFlowRate = PVT(PVTnum)%DesignVolFlowRate * rho
 
-      CALL InitComponentNodes(0., PVT(PVTnum)%MaxMassFlowRate, &
+      CALL InitComponentNodes(0.d0, PVT(PVTnum)%MaxMassFlowRate, &
                                    InletNode, OutletNode,        &
                                    PVT(PVTnum)%WLoopNum,         &
                                    PVT(PVTnum)%WLoopSideNum,     &
                                    PVT(PVTnum)%WLoopBranchNum,   &
                                    PVT(PVTnum)%WLoopCompNum )
 
-      PVT(PVTnum)%Simple%LastCollectorTemp  = 23.0
+      PVT(PVTnum)%Simple%LastCollectorTemp  = 23.0D0
 
     CASE (AirWorkingFluid)
-      PVT(PVTnum)%Simple%LastCollectorTemp  = 23.0
+      PVT(PVTnum)%Simple%LastCollectorTemp  = 23.0D0
 
     END SELECT
 
@@ -725,7 +725,7 @@ SUBROUTINE InitPVTcollectors(PVTnum, FirstHVACIteration)
       ENDIF
     ELSE
       IF (FirstHVACIteration) THEN
-        PVT(PVTnum)%MassFlowRate        = 0.0  !DSU
+        PVT(PVTnum)%MassFlowRate        = 0.0D0  !DSU
       ENDIF
     ENDIF
     ! Should we declare a mass flow rate variable in the data structure instead of using node(outlet)%massflowrate ?  DSU
@@ -791,8 +791,8 @@ SUBROUTINE SizePVT(PVTnum)
   INTEGER                      :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   LOGICAL                      :: ErrorsFound   ! If errors detected in input
 !unused1208  CHARACTER(len=MaxNameLength) :: equipName     ! Name of boiler object
-  REAL                    :: DesVolFlow
-  REAL                    :: DesMassFlow
+  REAL(r64)                    :: DesVolFlow
+  REAL(r64)                    :: DesMassFlow
 
   PltSizNum = 0
   ErrorsFound = .FALSE.
@@ -814,7 +814,7 @@ SUBROUTINE SizePVT(PVTnum)
           IF (PlantSizData(PltSizNum)%DesVolFlowRate >= SmallWaterVolFlow) THEN
             DesVolFlow = PlantSizData(PltSizNum)%DesVolFlowRate
           ELSE
-            DesVolFlow = 0.0
+            DesVolFlow = 0.0d0
           END IF
           PVT(PVTnum)%DesignVolFlowRate = DesVolFlow
         ELSE
@@ -920,7 +920,7 @@ SUBROUTINE ControlPVTcollector(PVTnum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER   :: SurfNum      = 0
 !  INTEGER   :: PlantLoopNum = 0
-!  REAL :: mdot  = 0.0
+!  REAL(r64) :: mdot  = 0.0D0
 
   SurfNum     = PVT(PVTnum)%SurfNum
 
@@ -963,7 +963,7 @@ SUBROUTINE ControlPVTcollector(PVTnum)
       IF (QRadSWOutIncident(SurfNum) > MinIrradiance) THEN
         ! is heating wanted?
 
-      !  IF (mdot > 0.0) THEN
+      !  IF (mdot > 0.0D0) THEN
       !  If (PlantReport(PlantLoopNum)%HeatingDemand > 0.0) THEN
           PVT(PVTnum)%HeatingUseful   = .TRUE.
 !          PVT(PVTnum)%CoolingUseful   = .FALSE.
@@ -976,7 +976,7 @@ SUBROUTINE ControlPVTcollector(PVTnum)
 
       ELSE
         ! is cooling wanted?
-!        IF (mdot > 0.0) THEN
+!        IF (mdot > 0.0D0) THEN
       !  If (PlantReport(PlantLoopNum)%CoolingDemand > 0.0) THEN
 !          PVT(PVTnum)%CoolingUseful   = .TRUE.
 !          PVT(PVTnum)%HeatingUseful   = .FALSE.
@@ -1040,23 +1040,23 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
 
   INTEGER   :: InletNode    = 0
   INTEGER   :: OutletNode   = 0
-  REAL :: Eff          = 0.0
+  REAL(r64) :: Eff          = 0.0D0
   INTEGER   :: SurfNum      = 0
   INTEGER   :: RoughSurf    = 0
-  REAL :: HcExt        = 0.0
-  REAL :: HrSky        = 0.0
-  REAL :: HrGround     = 0.0
-  REAL :: HrAir        = 0.0
-  REAL :: Tcollector   = 0.0
-  REAL :: mdot         = 0.0
-  REAL :: Tinlet       = 0.0
-  REAL :: Winlet       = 0.0
-  REAL :: CpInlet      = 0.0
-  REAL :: PotentialOutletTemp = 0.0
-  REAL :: BypassFraction = 0.0
-  REAL :: PotentialHeatGain = 0.0
-  REAL :: WetBulbInlet = 0.0
-  REAL :: DewPointInlet = 0.0
+  REAL(r64) :: HcExt        = 0.0D0
+  REAL(r64) :: HrSky        = 0.0D0
+  REAL(r64) :: HrGround     = 0.0D0
+  REAL(r64) :: HrAir        = 0.0D0
+  REAL(r64) :: Tcollector   = 0.0D0
+  REAL(r64) :: mdot         = 0.0D0
+  REAL(r64) :: Tinlet       = 0.0D0
+  REAL(r64) :: Winlet       = 0.0D0
+  REAL(r64) :: CpInlet      = 0.0D0
+  REAL(r64) :: PotentialOutletTemp = 0.0D0
+  REAL(r64) :: BypassFraction = 0.0D0
+  REAL(r64) :: PotentialHeatGain = 0.0D0
+  REAL(r64) :: WetBulbInlet = 0.0D0
+  REAL(r64) :: DewPointInlet = 0.0D0
 
   ! flow
   SurfNum     = PVT(PVTnum)%SurfNum
@@ -1076,7 +1076,7 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
 
   IF (PVT(PVTnum)%PVTModelType ==  SimplePVTmodel) THEN
 
-    IF (PVT(PVTnum)%HeatingUseful .AND. PVT(PVTnum)%BypassDamperOff .AND. (mdot > 0.0)) THEN
+    IF (PVT(PVTnum)%HeatingUseful .AND. PVT(PVTnum)%BypassDamperOff .AND. (mdot > 0.0D0)) THEN
 
       SELECT CASE (PVT(PVTnum)%Simple%ThermEfficMode)
 
@@ -1093,7 +1093,7 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
       IF ( PVT(PVTnum)%WorkingFluidType == AirWorkingFluid ) THEN
         Winlet = Node(InletNode)%HumRat
         CpInlet = PsyCpAirFnWTdb(Winlet,Tinlet, 'CalcPVTcollectors')
-        IF (mdot*CpInlet > 0.0) THEN
+        IF (mdot*CpInlet > 0.0D0) THEN
           PotentialOutletTemp = Tinlet + PotentialHeatGain /(mdot * CpInlet)
         ELSE
           PotentialOutletTemp = Tinlet
@@ -1104,24 +1104,24 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
             BypassFraction = (Node(PVT(PVTnum)%HVACOutletNodeNum)%TempSetPoint - PotentialOutletTemp)  &
                              /(Tinlet - PotentialOutletTemp)
           ELSE
-            BypassFraction = 0.0
+            BypassFraction = 0.0D0
           ENDIF
-          BypassFraction = MAX(0.0, BypassFraction)
+          BypassFraction = MAX(0.0D0, BypassFraction)
           PotentialOutletTemp = Node(PVT(PVTnum)%HVACOutletNodeNum)%TempSetPoint
           PotentialHeatGain  = mdot * PsyCpAirFnWTdb(Winlet,Tinlet, 'CalcPVTcollectors') &
                               *(PotentialOutletTemp - Tinlet)
 
         ELSE
-          BypassFraction = 0.0
+          BypassFraction = 0.0D0
         ENDIF
       ELSEIf ( PVT(PVTnum)%WorkingFluidType == LiquidWorkingFluid ) THEN
         CpInlet = CPHW(Tinlet)
-        IF (mdot * CpInlet /= 0.0) THEN ! protect divide by zero
+        IF (mdot * CpInlet /= 0.0D0) THEN ! protect divide by zero
           PotentialOutletTemp = Tinlet + PotentialHeatGain/(mdot * CpInlet)
         ELSE
           PotentialOutletTemp = Tinlet
         ENDIF
-        BypassFraction = 0.0
+        BypassFraction = 0.0D0
 
       ENDIF
 
@@ -1129,16 +1129,16 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
       PVT(PVTnum)%Report%ThermHeatGain    = PotentialHeatGain
       PVT(PVTnum)%Report%ThermPower       = PVT(PVTnum)%Report%ThermHeatGain
       PVT(PVTnum)%Report%ThermEnergy      = PVT(PVTnum)%Report%ThermPower * TimeStepSys * SecInHour
-      PVT(PVTnum)%Report%ThermHeatLoss    = 0.0
+      PVT(PVTnum)%Report%ThermHeatLoss    = 0.0D0
       PVT(PVTnum)%Report%TinletWorkFluid  = Tinlet
       PVT(PVTnum)%Report%MdotWorkFluid    = mdot
       PVT(PVTnum)%Report%ToutletWorkFluid = PotentialOutletTemp
       PVT(PVTnum)%Report%BypassStatus     = BypassFraction
 
-    ELSEIF (PVT(PVTnum)%CoolingUseful .AND. PVT(PVTnum)%BypassDamperOff .AND. (mdot > 0.0 ) ) THEN
+    ELSEIF (PVT(PVTnum)%CoolingUseful .AND. PVT(PVTnum)%BypassDamperOff .AND. (mdot > 0.0D0 ) ) THEN
          !calculate cooling using energy balance
 
-      CALL InitExteriorConvectionCoeff(SurfNum,0.0,RoughSurf,PVT(PVTnum)%Simple%SurfEmissivity, &
+      CALL InitExteriorConvectionCoeff(SurfNum,0.0D0,RoughSurf,PVT(PVTnum)%Simple%SurfEmissivity, &
             PVT(PVTnum)%Simple%LastCollectorTemp, &
             HcExt,HrSky,HrGround,HrAir)
 
@@ -1151,15 +1151,15 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
         CpInlet = CPHW(Tinlet)
       ENDIF
 
-      Tcollector = ( 2.0 * mdot * CpInlet * Tinlet                &
+      Tcollector = ( 2.0D0 * mdot * CpInlet * Tinlet                &
                  + PVT(PVTnum)%AreaCol *(                           &
                       HrGround * OutDryBulbTemp                     &
                       + HrSky * SkyTemp                             &
                       + HrAir * Surface(SurfNum)%OutDryBulbTemp     &
                       + HcExt * Surface(SurfNum)%OutDryBulbTemp) )  &
-                 / (2.0 * mdot * CpInlet + PVT(PVTnum)%AreaCol *(HrGround + HrSky + HrAir + HcExt) )
+                 / (2.0D0 * mdot * CpInlet + PVT(PVTnum)%AreaCol *(HrGround + HrSky + HrAir + HcExt) )
 
-      PotentialOutletTemp = 2.0 * Tcollector - Tinlet
+      PotentialOutletTemp = 2.0D0 * Tcollector - Tinlet
       PVT(PVTnum)%Report%ToutletWorkFluid  =PotentialOutletTemp
       ! trap for air not being cooled below its wetbulb.
       IF ( PVT(PVTnum)%WorkingFluidType == AirWorkingFluid ) THEN
@@ -1169,9 +1169,9 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
             BypassFraction = (DewPointInlet - PotentialOutletTemp)  &
                              /(Tinlet - PotentialOutletTemp)
           ELSE
-            BypassFraction = 0.0
+            BypassFraction = 0.0D0
           ENDIF
-          BypassFraction = MAX(0.0, BypassFraction)
+          BypassFraction = MAX(0.0D0, BypassFraction)
           PotentialOutletTemp = DewPointInlet
 
         ENDIF
@@ -1181,23 +1181,23 @@ SUBROUTINE CalcPVTcollectors(PVTnum)
       PVT(PVTnum)%Report%TinletWorkFluid   = Tinlet
       PVT(PVTnum)%Report%ToutletWorkFluid  = PotentialOutletTemp
       PVT(PVTnum)%Report%ThermHeatLoss     = mdot * CpInlet *(Tinlet - PVT(PVTnum)%Report%ToutletWorkFluid)
-      PVT(PVTnum)%Report%ThermHeatGain     = 0.0
-      PVT(PVTnum)%Report%ThermPower        = -1.0 * PVT(PVTnum)%Report%ThermHeatLoss
+      PVT(PVTnum)%Report%ThermHeatGain     = 0.0D0
+      PVT(PVTnum)%Report%ThermPower        = -1.0D0 * PVT(PVTnum)%Report%ThermHeatLoss
       PVT(PVTnum)%Report%ThermEnergy       = PVT(PVTnum)%Report%ThermPower * TimeStepSys * SecInHour
-      PVT(PVTnum)%Report%ThermEfficiency   = 0.0
+      PVT(PVTnum)%Report%ThermEfficiency   = 0.0D0
       PVT(PVTnum)%Simple%LastCollectorTemp = Tcollector
-      PVT(PVTnum)%Report%BypassStatus      = 0.0
+      PVT(PVTnum)%Report%BypassStatus      = 0.0D0
 
     ELSEIF (.NOT. PVT(PVTnum)%BypassDamperOff) THEN ! bypassed, zero things out
 
       PVT(PVTnum)%Report%TinletWorkFluid  = Tinlet
       PVT(PVTnum)%Report%ToutletWorkFluid = Tinlet
-      PVT(PVTnum)%Report%ThermHeatLoss    = 0.0
-      PVT(PVTnum)%Report%ThermHeatGain    = 0.0
-      PVT(PVTnum)%Report%ThermPower       = 0.0
-      PVT(PVTnum)%Report%ThermEfficiency  = 0.0
-      PVT(PVTnum)%Report%ThermEnergy      = 0.0
-      PVT(PVTnum)%Report%BypassStatus     = 1.0
+      PVT(PVTnum)%Report%ThermHeatLoss    = 0.0D0
+      PVT(PVTnum)%Report%ThermHeatGain    = 0.0D0
+      PVT(PVTnum)%Report%ThermPower       = 0.0D0
+      PVT(PVTnum)%Report%ThermEfficiency  = 0.0D0
+      PVT(PVTnum)%Report%ThermEnergy      = 0.0D0
+      PVT(PVTnum)%Report%BypassStatus     = 1.0D0
 
     ENDIF
   ENDIF
@@ -1304,8 +1304,8 @@ SUBROUTINE GetPVTThermalPowerProduction(PVindex, ThermalPower, ThermalEnergy)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)  :: PVindex ! index of PV generator (not PVT collector)
-  REAL,  INTENT(OUT) :: ThermalPower
-  REAL,  INTENT(OUT) :: ThermalEnergy
+  REAL(r64),  INTENT(OUT) :: ThermalPower
+  REAL(r64),  INTENT(OUT) :: ThermalEnergy
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
 
@@ -1331,8 +1331,8 @@ SUBROUTINE GetPVTThermalPowerProduction(PVindex, ThermalPower, ThermalEnergy)
     ThermalPower  = PVT(PVTnum)%report%ThermPower
     ThermalEnergy = PVT(PVTnum)%report%ThermEnergy
   ELSE
-    ThermalPower  = 0.0
-    ThermalEnergy = 0.0
+    ThermalPower  = 0.0D0
+    ThermalEnergy = 0.0D0
   ENDIF
 
   RETURN

@@ -51,68 +51,68 @@ TYPE EvapConditions
   CHARACTER(len=MaxNameLength) :: EvapControlType = ' ' ! Type of Control for the EvapCooler
   CHARACTER(len=MaxNameLength) :: Schedule        = ' ' ! HeatingCoil Operation Schedule
   Integer      :: SchedPtr                        = 0   ! Pointer to the correct schedule
-  REAL    :: VolFlowRate                     = 0.0 !Volume Flow Rate in Evap Cooler needed for calculating SatEff
-  REAL    :: OutletTemp                      = 0.0 !
-  REAL    :: OuletWetBulbTemp                = 0.0 !
-  REAL    :: OutletHumRat                    = 0.0 !
-  REAL    :: OutletEnthalpy                  = 0.0 !
-  REAL    :: OutletPressure                  = 0.0 !
-  REAL    :: OutletMassFlowRate              = 0.0 !MassFlow through the EvapCooler being Simulated [kg/Sec]
-  REAL    :: OutletMassFlowRateMaxAvail      = 0.0 ! [kg/Sec]
-  REAL    :: OutletMassFlowRateMinAvail      = 0.0 ! [kg/Sec]
+  REAL(r64)    :: VolFlowRate                     = 0.0D0 !Volume Flow Rate in Evap Cooler needed for calculating SatEff
+  REAL(r64)    :: OutletTemp                      = 0.0D0 !
+  REAL(r64)    :: OuletWetBulbTemp                = 0.0D0 !
+  REAL(r64)    :: OutletHumRat                    = 0.0D0 !
+  REAL(r64)    :: OutletEnthalpy                  = 0.0D0 !
+  REAL(r64)    :: OutletPressure                  = 0.0D0 !
+  REAL(r64)    :: OutletMassFlowRate              = 0.0D0 !MassFlow through the EvapCooler being Simulated [kg/Sec]
+  REAL(r64)    :: OutletMassFlowRateMaxAvail      = 0.0D0 ! [kg/Sec]
+  REAL(r64)    :: OutletMassFlowRateMinAvail      = 0.0D0 ! [kg/Sec]
   LOGICAL      :: InitFlag                        = .FALSE. !
   INTEGER      :: InletNode                       = 0   !
   INTEGER      :: OutletNode                      = 0   !
   INTEGER      :: SecondaryInletNode              = 0   ! This is usually OA node feeding into the purge/secondary side
   INTEGER      :: TertiaryInletNode               = 0   ! This node is used to run building exhaust into purge side.
-  REAL    :: InletMassFlowRate               = 0.0 ! Inlet is primary process air node at inlet to cooler
-  REAL    :: InletMassFlowRateMaxAvail       = 0.0 !
-  REAL    :: InletMassFlowRateMinAvail       = 0.0 !
-  REAL    :: InletTemp                       = 0.0 !
-  REAL    :: InletWetBulbTemp                = 0.0 !
-  REAL    :: InletHumRat                     = 0.0 !
-  REAL    :: InletEnthalpy                   = 0.0 !
-  REAL    :: InletPressure                   = 0.0 !
-  REAL    :: SecInletMassFlowRate            = 0.0 ! Secondary inlet is for indirect coolers
-  REAL    :: SecInletMassFlowRateMaxAvail    = 0.0 !
-  REAL    :: SecInletMassFlowRateMinAvail    = 0.0 !
-  REAL    :: SecInletTemp                    = 0.0 !
-  REAL    :: SecInletWetBulbTemp             = 0.0 !
-  REAL    :: SecInletHumRat                  = 0.0 !
-  REAL    :: SecInletEnthalpy                = 0.0 !
-  REAL    :: SecInletPressure                = 0.0 !
-  REAL    :: PadDepth                        = 0.0 !
-  REAL    :: PadArea                         = 0.0 !
-  REAL    :: RecircPumpPower                 = 0.0 !
-  REAL    :: IndirectRecircPumpPower         = 0.0 !
-  REAL    :: IndirectPadDepth                = 0.0 !
-  REAL    :: IndirectPadArea                 = 0.0 !
-  REAL    :: IndirectVolFlowRate             = 0.0 !
-  REAL    :: IndirectFanEff                  = 0.0 !
-  REAL    :: IndirectFanDeltaPress           = 0.0 !
-  REAL    :: IndirectHXEffectiveness         = 0.0 !
-  REAL    :: DirectEffectiveness             = 0.0 ! input saturation effectiveness for constant effectiveness model
-  REAL    :: WetCoilMaxEfficiency            = 0.0 !
-  REAL    :: WetCoilFlowRatio                = 0.0 !
-  REAL    :: EvapCoolerEnergy                = 0.0 !
-  REAL    :: EvapCoolerPower                 = 0.0 !
+  REAL(r64)    :: InletMassFlowRate               = 0.0D0 ! Inlet is primary process air node at inlet to cooler
+  REAL(r64)    :: InletMassFlowRateMaxAvail       = 0.0D0 !
+  REAL(r64)    :: InletMassFlowRateMinAvail       = 0.0D0 !
+  REAL(r64)    :: InletTemp                       = 0.0D0 !
+  REAL(r64)    :: InletWetBulbTemp                = 0.0D0 !
+  REAL(r64)    :: InletHumRat                     = 0.0D0 !
+  REAL(r64)    :: InletEnthalpy                   = 0.0D0 !
+  REAL(r64)    :: InletPressure                   = 0.0D0 !
+  REAL(r64)    :: SecInletMassFlowRate            = 0.0D0 ! Secondary inlet is for indirect coolers
+  REAL(r64)    :: SecInletMassFlowRateMaxAvail    = 0.0D0 !
+  REAL(r64)    :: SecInletMassFlowRateMinAvail    = 0.0D0 !
+  REAL(r64)    :: SecInletTemp                    = 0.0D0 !
+  REAL(r64)    :: SecInletWetBulbTemp             = 0.0D0 !
+  REAL(r64)    :: SecInletHumRat                  = 0.0D0 !
+  REAL(r64)    :: SecInletEnthalpy                = 0.0D0 !
+  REAL(r64)    :: SecInletPressure                = 0.0D0 !
+  REAL(r64)    :: PadDepth                        = 0.0D0 !
+  REAL(r64)    :: PadArea                         = 0.0D0 !
+  REAL(r64)    :: RecircPumpPower                 = 0.0D0 !
+  REAL(r64)    :: IndirectRecircPumpPower         = 0.0D0 !
+  REAL(r64)    :: IndirectPadDepth                = 0.0D0 !
+  REAL(r64)    :: IndirectPadArea                 = 0.0D0 !
+  REAL(r64)    :: IndirectVolFlowRate             = 0.0D0 !
+  REAL(r64)    :: IndirectFanEff                  = 0.0D0 !
+  REAL(r64)    :: IndirectFanDeltaPress           = 0.0D0 !
+  REAL(r64)    :: IndirectHXEffectiveness         = 0.0D0 !
+  REAL(r64)    :: DirectEffectiveness             = 0.0D0 ! input saturation effectiveness for constant effectiveness model
+  REAL(r64)    :: WetCoilMaxEfficiency            = 0.0D0 !
+  REAL(r64)    :: WetCoilFlowRatio                = 0.0D0 !
+  REAL(r64)    :: EvapCoolerEnergy                = 0.0D0 !
+  REAL(r64)    :: EvapCoolerPower                 = 0.0D0 !
 
   INTEGER      :: EvapWaterSupplyMode             = WaterSupplyFromMains !  where does water come from
   CHARACTER(len=MaxNameLength) :: EvapWaterSupplyName = ' ' ! name of water source e.g. water storage tank
   INTEGER      :: EvapWaterSupTankID              = 0 !
   INTEGER      :: EvapWaterTankDemandARRID        = 0 !
-  REAL    :: DriftFraction                   = 0.0 ! excess water from drift as fraction of Evap Water Consumption rate
-  REAL    :: BlowDownRatio                   = 0.0 ! excess water use for blowdown as solids ratio to be maintained
+  REAL(r64)    :: DriftFraction                   = 0.0D0 ! excess water from drift as fraction of Evap Water Consumption rate
+  REAL(r64)    :: BlowDownRatio                   = 0.0D0 ! excess water use for blowdown as solids ratio to be maintained
 
-  REAL    :: EvapWaterConsumpRate            = 0.0 ! Evap Water Consumption rate in m3/sec
-  REAL    :: EvapWaterConsump                = 0.0 ! Evap Water Consumption in m3
-  REAL    :: EvapWaterStarvMakup             = 0.0 ! Evap water consumed but not really available from tank m3
-  REAL    :: SatEff                          = 0.0 !Reporting for Direct Stage and Ind Dry Saturation Efficiency
-  REAL    :: StageEff                        = 0.0 !Reporting for Indirect Total Stage Efficiency
-  REAL    :: DPBoundFactor                   = 0.0 ! in RDDSpecial efficency w.r.t. dewpoint
+  REAL(r64)    :: EvapWaterConsumpRate            = 0.0D0 ! Evap Water Consumption rate in m3/sec
+  REAL(r64)    :: EvapWaterConsump                = 0.0D0 ! Evap Water Consumption in m3
+  REAL(r64)    :: EvapWaterStarvMakup             = 0.0D0 ! Evap water consumed but not really available from tank m3
+  REAL(r64)    :: SatEff                          = 0.0D0 !Reporting for Direct Stage and Ind Dry Saturation Efficiency
+  REAL(r64)    :: StageEff                        = 0.0D0 !Reporting for Indirect Total Stage Efficiency
+  REAL(r64)    :: DPBoundFactor                   = 0.0D0 ! in RDDSpecial efficency w.r.t. dewpoint
   Integer      :: EvapControlNodeNum              = 0   ! need to control to avoid over cooling
-  REAL    :: DesiredOutletTemp               = 0.0 ! setpoint manager should set this
-  REAL    :: PartLoadFract                   = 0.0 ! reduces cooling performance and associated fan power
+  REAL(r64)    :: DesiredOutletTemp               = 0.0D0 ! setpoint manager should set this
+  REAL(r64)    :: PartLoadFract                   = 0.0D0 ! reduces cooling performance and associated fan power
   Integer      :: DewPointBoundFlag               = 0   ! report when indirect research special cooler is bound by dewpoint
                                                         ! rather than wetbulb-depression approach
 END TYPE EvapConditions
@@ -623,13 +623,13 @@ SUBROUTINE GetEvapInput
       EvapCond(EvapCoolNum)%IndirectFanDeltaPress   = rNumericArgs(6)
       EvapCond(EvapCoolNum)%DPBoundFactor           = rNumericArgs(7)
       IF (lNumericFieldBlanks(8)) THEN
-        EvapCond(EvapCoolNum)%DriftFraction   = 0.0
+        EvapCond(EvapCoolNum)%DriftFraction   = 0.0D0
       ELSE
         EvapCond(EvapCoolNum)%DriftFraction   = rNumericArgs(8)
       ENDIF
 
       IF (lNumericFieldBlanks(9)) THEN
-        EvapCond(EvapCoolNum)%BlowDownRatio   = 0.0
+        EvapCond(EvapCoolNum)%BlowDownRatio   = 0.0D0
       ELSE
         EvapCond(EvapCoolNum)%BlowDownRatio   = rNumericArgs(9)
       ENDIF
@@ -699,13 +699,13 @@ SUBROUTINE GetEvapInput
       EvapCond(EvapCoolNum)%RecircPumpPower     = rNumericArgs(2)
 
       IF (lNumericFieldBlanks(3)) THEN
-        EvapCond(EvapCoolNum)%DriftFraction   = 0.0
+        EvapCond(EvapCoolNum)%DriftFraction   = 0.0D0
       ELSE
         EvapCond(EvapCoolNum)%DriftFraction   = rNumericArgs(3)
       ENDIF
 
       IF (lNumericFieldBlanks(4)) THEN
-        EvapCond(EvapCoolNum)%BlowDownRatio   = 0.0
+        EvapCond(EvapCoolNum)%BlowDownRatio   = 0.0D0
       ELSE
         EvapCond(EvapCoolNum)%BlowDownRatio   = rNumericArgs(4)
       ENDIF
@@ -803,7 +803,7 @@ SUBROUTINE InitEvapCooler(EvapCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   Integer             :: InletNode
   Integer             :: SecInletNode   ! local index for secondary inlet node.
-  REAL           :: RhoAir !Air Density
+  REAL(r64)           :: RhoAir !Air Density
   Integer             :: ControlNode
   Integer             :: OutNode
   Integer             :: EvapUnitNum
@@ -974,9 +974,9 @@ SUBROUTINE SizeEvapCooler(EvapCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: CoolerOnOApath      = .FALSE.
   LOGICAL :: CoolerOnMainAirLoop = .FALSE.
-!unuse509  INTEGER :: OAsysIndex = 0
+!unused0509  INTEGER :: OAsysIndex = 0
   INTEGER :: AirSysBranchLoop = 0
-!unuse509  INTEGER :: OAsysLoop = 0
+!unused0509  INTEGER :: OAsysLoop = 0
 !unuse0509  INTEGER :: OAcompLoop = 0
   INTEGER :: BranchComp = 0
 
@@ -1008,7 +1008,7 @@ SUBROUTINE SizeEvapCooler(EvapCoolNum)
         EvapCond(EvapCoolNum)%IndirectVolFlowRate =FinalSysSizing(CurSysNum)%DesMainVolFlow
       ELSEIF (CoolerOnOApath) THEN
         EvapCond(EvapCoolNum)%IndirectVolFlowRate =MAX(FinalSysSizing(CurSysNum)%DesOutAirVolFlow, &
-                                                      0.5*FinalSysSizing(CurSysNum)%DesMainVolFlow)
+                                                      0.5D0*FinalSysSizing(CurSysNum)%DesMainVolFlow)
       ENDIF
 
     ELSE !zone equipment
@@ -1067,13 +1067,13 @@ SUBROUTINE CalcDirectEvapCooler(EvapCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      !REAL Variables
-      REAL  :: PadDepth    ! EvapCooler Pad Depth in Meters as input by the User
-      REAL  :: SatEff      ! Saturation Efficiency of the CelDek Pad
-      REAL  :: AirVel      ! The Calculated Air Velocity through the Pad
-      REAL  :: TEDB        ! Entering Dry Bulb Temperature
-      REAL  :: TEWB        ! Entering Wet Bulb Temperature
-      REAL  :: RhoWater
+      !REAL(r64) Variables
+      REAL(r64)  :: PadDepth    ! EvapCooler Pad Depth in Meters as input by the User
+      REAL(r64)  :: SatEff      ! Saturation Efficiency of the CelDek Pad
+      REAL(r64)  :: AirVel      ! The Calculated Air Velocity through the Pad
+      REAL(r64)  :: TEDB        ! Entering Dry Bulb Temperature
+      REAL(r64)  :: TEWB        ! Entering Wet Bulb Temperature
+      REAL(r64)  :: RhoWater
 
 
   ! If the Evaporative Cooler  is operating there should be some mass flow rate
@@ -1211,20 +1211,20 @@ SUBROUTINE CalcDryIndirectEvapCooler(EvapCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      !REAL Variables
-      REAL  :: PadDepth    ! EvapCooler Pad Depth in Meters as input by the User
-      REAL  :: SatEff      ! Saturation Efficiency of the CelDek Pad
-      REAL  :: AirVel      ! The Calculated Air Velocity through the Pad
-      REAL  :: TDBSec      ! Secondary leaving dry bulb
-      REAL  :: TWBSec      ! Secondary Leaving Wet Bulb
-      REAL  :: HumRatSec   ! Secondary leaving Humidity Ratio
-      REAL  :: EffHX       ! Effectiveness of Secondary Heat Exchanger
-      REAL  :: QHX         ! Q Across Sec HX
-      REAL  :: RhoWater
-      REAL  :: RhoAir      ! Density of the primary side air
-      REAL  :: CpAir       ! Cp of the primary side air
-      REAL  :: CFMAir
-      REAL  :: CFMSec
+      !REAL(r64) Variables
+      REAL(r64)  :: PadDepth    ! EvapCooler Pad Depth in Meters as input by the User
+      REAL(r64)  :: SatEff      ! Saturation Efficiency of the CelDek Pad
+      REAL(r64)  :: AirVel      ! The Calculated Air Velocity through the Pad
+      REAL(r64)  :: TDBSec      ! Secondary leaving dry bulb
+      REAL(r64)  :: TWBSec      ! Secondary Leaving Wet Bulb
+      REAL(r64)  :: HumRatSec   ! Secondary leaving Humidity Ratio
+      REAL(r64)  :: EffHX       ! Effectiveness of Secondary Heat Exchanger
+      REAL(r64)  :: QHX         ! Q Across Sec HX
+      REAL(r64)  :: RhoWater
+      REAL(r64)  :: RhoAir      ! Density of the primary side air
+      REAL(r64)  :: CpAir       ! Cp of the primary side air
+      REAL(r64)  :: CFMAir
+      REAL(r64)  :: CFMSec
 
 
   ! If the Evaporative Cooler  is operating there should be some mass flow rate
@@ -1300,7 +1300,7 @@ SUBROUTINE CalcDryIndirectEvapCooler(EvapCoolNum)
 
 !***************************************************************************
 !                  POWER OF THE SECONDARY AIR FAN
-      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0) THEN
+      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0D0) THEN
         EvapCond(EvapCoolNum)%EvapCoolerPower=EvapCond(EvapCoolNum)%EvapCoolerPower +      &
                                               EvapCond(EvapCoolNum)%IndirectFanDeltaPress* &
                                               EvapCond(EvapCoolNum)%IndirectVolFlowRate/   &
@@ -1397,16 +1397,16 @@ SUBROUTINE CalcWetIndirectEvapCooler(EvapCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      !REAL Variables
-      REAL  :: StageEff    ! Stage Efficiency of the Heat Exchanger
-      REAL  :: TEDB        ! Entering Dry Bulb Temperature
-      REAL  :: TEWB        ! Entering Wet Bulb Temperature
-      REAL  :: QHX         ! Q Across Sec HX in Watts or J/sec
-      REAL  :: RhoWater
-      REAL  :: RhoAir      ! Density of the primary side air
-      REAL  :: CFMAir
-      REAL  :: CFMSec
-      REAL  :: TWBSec  ! wet bulb of secondary air
+      !REAL(r64) Variables
+      REAL(r64)  :: StageEff    ! Stage Efficiency of the Heat Exchanger
+      REAL(r64)  :: TEDB        ! Entering Dry Bulb Temperature
+      REAL(r64)  :: TEWB        ! Entering Wet Bulb Temperature
+      REAL(r64)  :: QHX         ! Q Across Sec HX in Watts or J/sec
+      REAL(r64)  :: RhoWater
+      REAL(r64)  :: RhoAir      ! Density of the primary side air
+      REAL(r64)  :: CFMAir
+      REAL(r64)  :: CFMSec
+      REAL(r64)  :: TWBSec  ! wet bulb of secondary air
 
 
   ! If the Evaporative Cooler  is operating there should be some mass flow rate
@@ -1458,7 +1458,7 @@ SUBROUTINE CalcWetIndirectEvapCooler(EvapCoolNum)
 
 !***************************************************************************
 !                  POWER OF THE SECONDARY AIR FAN
-      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0) THEN
+      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0D0) THEN
         EvapCond(EvapCoolNum)%EvapCoolerPower=EvapCond(EvapCoolNum)%EvapCoolerPower +      &
                                               EvapCond(EvapCoolNum)%IndirectFanDeltaPress* &
                                               EvapCond(EvapCoolNum)%IndirectVolFlowRate/   &
@@ -1538,7 +1538,7 @@ Subroutine CalcResearchSpecialPartLoad(EvapCoolNum)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
-  REAL, PARAMETER :: MinAirMassFlow = 0.001
+  REAL(r64), PARAMETER :: MinAirMassFlow = 0.001d0
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
 
@@ -1548,13 +1548,13 @@ Subroutine CalcResearchSpecialPartLoad(EvapCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   CHARACTER(len=MaxNameLength)  :: CompName
-  REAL           :: FullOutput
-  REAL           :: ReqOutput
+  REAL(r64)           :: FullOutput
+  REAL(r64)           :: ReqOutput
   Integer             :: InletNode
   Integer             :: OutletNode
   Integer             :: ControlNode
-  REAL           :: PartLoadFrac
-  REAL           :: DesOutTemp
+  REAL(r64)           :: PartLoadFrac
+  REAL(r64)           :: DesOutTemp
       ! Set local variables
       ! Retrieve the load on the controlled zone
   OutletNode = EvapCond(EvapCoolNum)%OutletNode
@@ -1601,18 +1601,18 @@ Subroutine CalcResearchSpecialPartLoad(EvapCoolNum)
         ! Since we are cooling, we expect FullOutput to be < 0 and FullOutput < NoCoolOutput
         ! Check that this is the case; if not set PartLoadFrac = 0.0 (off) and return
         ! Calculate the part load fraction
-        If (FullOutput .EQ. 0.0) then
-          FullOutput = 0.00001
+        If (FullOutput .EQ. 0.0D0) then
+          FullOutput = 0.00001D0
         ENDIF
           PartLoadFrac = ReqOutput/FullOutput
-        IF(PartLoadFrac.GT.1.0) THEN
-          PartLoadFrac = 1.0
-        ELSEIF(PartLoadFrac < 0.0) THEN
-          PartLoadFrac = 0.0
+        IF(PartLoadFrac.GT.1.0D0) THEN
+          PartLoadFrac = 1.0D0
+        ELSEIF(PartLoadFrac < 0.0D0) THEN
+          PartLoadFrac = 0.0D0
         END IF
 
   ELSE ! No cooling
-    PartLoadFrac = 0.0
+    PartLoadFrac = 0.0D0
 
   ENDIF   ! End of the cooler running If block
   !Set the final results
@@ -1657,35 +1657,35 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  !REAL Variables
-  REAL  :: SecondaryInletWetBulbTemp ! entering wet bulb for secondary/purge side
-  REAL  :: SecondaryInletDewpointTemp ! entering dewpoint for secondary/purge side
-  REAL  :: StageEff    ! Stage Efficiency of the Heat Exchanger
-  REAL  :: TEDB        ! Entering Dry Bulb Temperature
-  REAL  :: TEWB        ! Entering Wet Bulb Temperature
-  REAL  :: QHX         ! Q Across Sec HX in Watts or J/sec
-  REAL  :: RhoWater
-  REAL  :: RhoAir      ! Density of the primary side air
-  REAL  :: CFMAir
+  !REAL(r64) Variables
+  REAL(r64)  :: SecondaryInletWetBulbTemp ! entering wet bulb for secondary/purge side
+  REAL(r64)  :: SecondaryInletDewpointTemp ! entering dewpoint for secondary/purge side
+  REAL(r64)  :: StageEff    ! Stage Efficiency of the Heat Exchanger
+  REAL(r64)  :: TEDB        ! Entering Dry Bulb Temperature
+  REAL(r64)  :: TEWB        ! Entering Wet Bulb Temperature
+  REAL(r64)  :: QHX         ! Q Across Sec HX in Watts or J/sec
+  REAL(r64)  :: RhoWater
+  REAL(r64)  :: RhoAir      ! Density of the primary side air
+  REAL(r64)  :: CFMAir
   Integer    :: TertNode  ! inlet node for relief (from bulding) to mix for purge
-  REAL  :: BoundTemp   ! temperature limit for outlet
-  REAL  :: PartLoad
-  REAL  :: TotalVolFlow
-  REAL  :: TertMdot
-  REAL  :: TertHumRate
-  REAL  :: TertTemp
-  REAL  :: TertRho
-  REAL  :: TertVdot
-  REAL  :: SecVdot
-  REAL  :: SecRho
-  REAL  :: SecMdot
-  REAL  :: PurgeMdot
-  REAL  :: PurgeHumRat
-  REAL  :: PurgeEnthalpy
-  REAL  :: PurgeTemp
-  REAL  :: BlowDownVdot      =0.0
-  REAL  :: DriftVdot         =0.0
-  REAL  :: EvapVdot          =0.0
+  REAL(r64)  :: BoundTemp   ! temperature limit for outlet
+  REAL(r64)  :: PartLoad
+  REAL(r64)  :: TotalVolFlow
+  REAL(r64)  :: TertMdot
+  REAL(r64)  :: TertHumRate
+  REAL(r64)  :: TertTemp
+  REAL(r64)  :: TertRho
+  REAL(r64)  :: TertVdot
+  REAL(r64)  :: SecVdot
+  REAL(r64)  :: SecRho
+  REAL(r64)  :: SecMdot
+  REAL(r64)  :: PurgeMdot
+  REAL(r64)  :: PurgeHumRat
+  REAL(r64)  :: PurgeEnthalpy
+  REAL(r64)  :: PurgeTemp
+  REAL(r64)  :: BlowDownVdot      =0.0
+  REAL(r64)  :: DriftVdot         =0.0
+  REAL(r64)  :: EvapVdot          =0.0
 
   ! If the Evaporative Cooler  is operating there should be some mass flow rate
   !  Also the evap cooler has to be scheduled to be available
@@ -1770,7 +1770,7 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
       TEDB = EvapCond(EvapCoolNum)%InletTemp
       PartLoad = EvapCond(EvapCoolNum)%PartLoadFract
 
-  IF (PartLoad .EQ. 1.0) THEN
+  IF (PartLoad .EQ. 1.0D0) THEN
   !                                 Tout = Tin -  (   0.7    (Tin  - Tpurge,wb,in)
         EvapCond(EvapCoolNum)%OutletTemp = TEDB - StageEff*(TEDB - SecondaryInletWetBulbTemp )
   !  now bound with secondary dewpoint.
@@ -1781,7 +1781,7 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
        EvapCond(EvapCoolNum)%OutletTemp = BoundTemp
        EvapCond(EvapCoolNum)%DewPointBoundFlag = 1
      ENDIF
-  ELSEIF ((partLoad .LT. 1.0) .AND. (partLoad .GT. 0.0)) THEN
+  ELSEIF ((partLoad .LT. 1.0D0) .AND. (partLoad .GT. 0.0D0)) THEN
     ! assume perfect control Use PLF for energy consumption
     IF (EvapCond(EvapCoolNum)%DesiredOutletTemp .LT. TEDB ) THEN
       EvapCond(EvapCoolNum)%OutletTemp = EvapCond(EvapCoolNum)%DesiredOutletTemp
@@ -1806,7 +1806,7 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
 
 !***************************************************************************
 !                  POWER OF THE SECONDARY AIR FAN with part load factor applied (assumes const efficiency)
-      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0) THEN
+      IF (EvapCond(EvapCoolNum)%IndirectFanEff > 0.0D0) THEN
         EvapCond(EvapCoolNum)%EvapCoolerPower=EvapCond(EvapCoolNum)%EvapCoolerPower +      &
                                               EvapCond(EvapCoolNum)%IndirectFanDeltaPress* &
                                               EvapCond(EvapCoolNum)%IndirectVolFlowRate/   &
@@ -1830,11 +1830,11 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
       RhoWater = RhoH2O(OutDryBulbTemp)
       EvapVdot=  (QHx)/(2500000.0 * RhoWater)
       DriftVdot = EvapVdot * EvapCond(EvapCoolNum)%DriftFraction
-      IF (EvapCond(EvapCoolNum)%BlowDownRatio > 0.0) THEN
+      IF (EvapCond(EvapCoolNum)%BlowDownRatio > 0.0D0) THEN
         BlowDownVdot =  EvapVdot / (EvapCond(EvapCoolNum)%BlowDownRatio - 1) - DriftVdot
         IF ( BlowDownVdot < 0.0 ) BlowDownVdot = 0.0
       ELSE
-        BlowDownVdot = 0.0
+        BlowDownVdot = 0.0D0
       ENDIF
       EvapCond(EvapCoolNum)%EvapWaterConsumpRate =  EvapVdot + DriftVdot + BlowDownVdot
       ! A numerical check to keep from having very tiny negative water consumption values being reported
@@ -1850,9 +1850,9 @@ SUBROUTINE CalcIndirectResearchSpecialEvapCooler(EvapCoolNum)
 
     EvapCond(EvapCoolNum)%OutletEnthalpy = EvapCond(EvapCoolNum)%InletEnthalpy
 
-    EvapCond(EvapCoolNum)%EvapCoolerEnergy     = 0.0
-    EvapCond(EvapCoolNum)%EvapCoolerPower      = 0.0
-    EvapCond(EvapCoolNum)%EvapWaterConsumpRate = 0.0
+    EvapCond(EvapCoolNum)%EvapCoolerEnergy     = 0.0D0
+    EvapCond(EvapCoolNum)%EvapCoolerPower      = 0.0D0
+    EvapCond(EvapCoolNum)%EvapWaterConsumpRate = 0.0D0
 
  End IF
 
@@ -1903,14 +1903,14 @@ SUBROUTINE CalcDirectResearchSpecialEvapCooler(EvapCoolNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: SatEff      ! Saturation Efficiency of the CelDek Pad
-  REAL  :: TEDB        ! Entering Dry Bulb Temperature
-  REAL  :: TEWB        ! Entering Wet Bulb Temperature
-  REAL  :: RhoWater
-  REAL  :: PartLoad
-  REAL  :: BlowDownVdot      =0.0
-  REAL  :: DriftVdot         =0.0
-  REAL  :: EvapVdot          =0.0
+  REAL(r64)  :: SatEff      ! Saturation Efficiency of the CelDek Pad
+  REAL(r64)  :: TEDB        ! Entering Dry Bulb Temperature
+  REAL(r64)  :: TEWB        ! Entering Wet Bulb Temperature
+  REAL(r64)  :: RhoWater
+  REAL(r64)  :: PartLoad
+  REAL(r64)  :: BlowDownVdot      =0.0
+  REAL(r64)  :: DriftVdot         =0.0
+  REAL(r64)  :: EvapVdot          =0.0
 
   ! If the Evaporative Cooler  is operating there should be some mass flow rate
   !  Also the evap cooler has to be scheduled to be available
@@ -1931,7 +1931,7 @@ SUBROUTINE CalcDirectResearchSpecialEvapCooler(EvapCoolNum)
         EvapCond(EvapCoolNum)%OutletHumRat = PsyWFnTdbTwbPb(EvapCond(EvapCoolNum)%OutletTemp,TEWB,OutBaroPress)
         EvapCond(EvapCoolNum)%OutletEnthalpy = PsyHFnTdbW(EvapCond(EvapCoolNum)%OutletTemp,  &
                                                EvapCond(EvapCoolNum)%OutletHumRat)
-      ELSEIF ((partLoad .LT. 1.0) .AND. (partLoad .GT. 0.0)) THEN
+      ELSEIF ((partLoad .LT. 1.0D0) .AND. (partLoad .GT. 0.0D0)) THEN
         ! assume perfect control Use PLF for energy consumption
         IF (EvapCond(EvapCoolNum)%DesiredOutletTemp .LT. TEDB ) THEN
           EvapCond(EvapCoolNum)%OutletTemp = EvapCond(EvapCoolNum)%DesiredOutletTemp
@@ -1971,11 +1971,11 @@ SUBROUTINE CalcDirectResearchSpecialEvapCooler(EvapCoolNum)
                   EvapCond(EvapCoolNum)%InletMassFlowRate/Rhowater
       DriftVdot = EvapVdot * EvapCond(EvapCoolNum)%DriftFraction
 
-      IF (EvapCond(EvapCoolNum)%BlowDownRatio > 0.0) THEN
-        BlowDownVdot =  EvapVdot / (EvapCond(EvapCoolNum)%BlowDownRatio - 1.0) - DriftVdot
-        IF ( BlowDownVdot < 0.0 ) BlowDownVdot = 0.0
+      IF (EvapCond(EvapCoolNum)%BlowDownRatio > 0.0D0) THEN
+        BlowDownVdot =  EvapVdot / (EvapCond(EvapCoolNum)%BlowDownRatio - 1.0D0) - DriftVdot
+        IF ( BlowDownVdot < 0.0D0 ) BlowDownVdot = 0.0D0
       ELSE
-        BlowDownVdot = 0.0
+        BlowDownVdot = 0.0D0
       ENDIF
 
       EvapCond(EvapCoolNum)%EvapWaterConsumpRate =  EvapVdot + DriftVdot + BlowDownVdot
@@ -1993,10 +1993,10 @@ SUBROUTINE CalcDirectResearchSpecialEvapCooler(EvapCoolNum)
     EvapCond(EvapCoolNum)%OutletHumRat = EvapCond(EvapCoolNum)%InletHumRat
 
     EvapCond(EvapCoolNum)%OutletEnthalpy = EvapCond(EvapCoolNum)%InletEnthalpy
-    EvapCond(EvapCoolNum)%EvapCoolerPower  = 0.0
-    EvapCond(EvapCoolNum)%EvapCoolerEnergy = 0.0
+    EvapCond(EvapCoolNum)%EvapCoolerPower  = 0.0D0
+    EvapCond(EvapCoolNum)%EvapCoolerEnergy = 0.0D0
 
-    EvapCond(EvapCoolNum)%EvapWaterConsumpRate = 0.0
+    EvapCond(EvapCoolNum)%EvapWaterConsumpRate = 0.0D0
 
   End IF
  ! all of the mass flowrates are not changed across the evap cooler
@@ -2057,7 +2057,7 @@ SUBROUTINE UpdateEvapCooler(EvapCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   Integer             :: OutletNode
   Integer             :: InletNode
-  REAL           :: AvailWaterRate = 0.0
+  REAL(r64)           :: AvailWaterRate = 0.0
 
    OutletNode = EvapCond(EvapCoolNum)%OutletNode
    InletNode  = EvapCond(EvapCoolNum)%InletNode

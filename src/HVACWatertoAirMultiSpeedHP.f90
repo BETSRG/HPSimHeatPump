@@ -20,19 +20,19 @@ PRIVATE ! Everything private unless explicitly made public
 
   !MODULE PARAMETER DEFINITIONS
 
-REAL, PARAMETER ::    RatedInletAirTemp   = 26.6667   ! 26.6667C or 80F
-REAL, PARAMETER ::    RatedInletWetbulbTemp = 19.44   ! 19.44 or 67F, cooling mode
-REAL, PARAMETER ::    RatedInletAirHumRat = 0.01125   ! Humidity ratio corresponding to 80F dry bulb/67F wet bulb
-REAL, PARAMETER ::    RatedInletWaterTemp = 29.4      ! 85 F cooling mode
-REAL, PARAMETER ::    RatedInletAirTempHeat = 21.11   ! 21.11C or 70F, heating mode
-REAL, PARAMETER ::    RatedInletWaterTempHeat = 21.11  ! 21.11C or 70F, heating mode
+REAL(r64), PARAMETER ::    RatedInletAirTemp   = 26.6667d0   ! 26.6667C or 80F
+REAL(r64), PARAMETER ::    RatedInletWetbulbTemp = 19.44d0   ! 19.44 or 67F, cooling mode
+REAL(r64), PARAMETER ::    RatedInletAirHumRat = 0.01125d0   ! Humidity ratio corresponding to 80F dry bulb/67F wet bulb
+REAL(r64), PARAMETER ::    RatedInletWaterTemp = 29.4d0      ! 85 F cooling mode
+REAL(r64), PARAMETER ::    RatedInletAirTempHeat = 21.11d0   ! 21.11C or 70F, heating mode
+REAL(r64), PARAMETER ::    RatedInletWaterTempHeat = 21.11d0  ! 21.11C or 70F, heating mode
 
 ! Airflow per total capacity range
-REAL, PARAMETER ::    MaxRatedVolFlowPerRatedTotCap = 0.00006041 ! m3/s per watt = 450 cfm/ton
-REAL, PARAMETER ::    MinRatedVolFlowPerRatedTotCap = 0.00004027 ! m3/s per watt = 300 cfm/ton
-REAL, PARAMETER ::    MaxHeatVolFlowPerRatedTotCap  = 0.00008056 ! m3/s per watt = 600 cfm/ton
-REAL, PARAMETER ::    MaxCoolVolFlowPerRatedTotCap  = 0.00006713 ! m3/s per watt = 500 cfm/ton
-REAL, PARAMETER ::    MinOperVolFlowPerRatedTotCap  = 0.00002684 ! m3/s per watt = 200 cfm/ton
+REAL(r64), PARAMETER ::    MaxRatedVolFlowPerRatedTotCap = 0.00006041d0 ! m3/s per watt = 450 cfm/ton
+REAL(r64), PARAMETER ::    MinRatedVolFlowPerRatedTotCap = 0.00004027d0 ! m3/s per watt = 300 cfm/ton
+REAL(r64), PARAMETER ::    MaxHeatVolFlowPerRatedTotCap  = 0.00008056d0 ! m3/s per watt = 600 cfm/ton
+REAL(r64), PARAMETER ::    MaxCoolVolFlowPerRatedTotCap  = 0.00006713d0 ! m3/s per watt = 500 cfm/ton
+REAL(r64), PARAMETER ::    MinOperVolFlowPerRatedTotCap  = 0.00002684d0 ! m3/s per watt = 200 cfm/ton
 
 ! Curve Types
 INTEGER, PARAMETER :: Linear      = 1
@@ -51,65 +51,65 @@ TYPE, PUBLIC :: WatertoAirMulSpedCoilData ! water-to-air variable speed coil
   INTEGER :: NumOfSpeeds    =2   ! Number of speeds
   INTEGER :: NormSpedLevel    =MaxSpedLevels   ! Nominal speed level
 
-  REAL :: RatedWaterVolFlowRate           =AUTOSIZE  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
-  REAL :: RatedWaterMassFlowRate          =AUTOSIZE  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
-  REAL :: RatedAirVolFlowRate             =AUTOSIZE  ! Rated/Ref Air Volumetric Flow Rate [m3/s]
-  REAL :: RatedCapHeat                    =AUTOSIZE  ! Rated/Ref Heating Capacity [W]
-  REAL :: RatedCapCoolTotal               =AUTOSIZE  ! Rated/Ref Total Cooling Capacity [W]
+  REAL(r64) :: RatedWaterVolFlowRate           =AUTOSIZE  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
+  REAL(r64) :: RatedWaterMassFlowRate          =AUTOSIZE  ! Rated/Ref Water Volumetric Flow Rate [m3/s]
+  REAL(r64) :: RatedAirVolFlowRate             =AUTOSIZE  ! Rated/Ref Air Volumetric Flow Rate [m3/s]
+  REAL(r64) :: RatedCapHeat                    =AUTOSIZE  ! Rated/Ref Heating Capacity [W]
+  REAL(r64) :: RatedCapCoolTotal               =AUTOSIZE  ! Rated/Ref Total Cooling Capacity [W]
 
-  REAL:: MaxONOFFCyclesperHour = 0.0 ! Maximum ON/OFF cycles per hour for the compressor (cycles/hour)
+  REAL(r64):: MaxONOFFCyclesperHour = 0.0 ! Maximum ON/OFF cycles per hour for the compressor (cycles/hour)
 
-  REAL:: Twet_Rated = 0.0      ! Nominal time for condensate to begin leaving the coil's
+  REAL(r64):: Twet_Rated = 0.0      ! Nominal time for condensate to begin leaving the coil's
                                                    ! condensate drain line (sec)
-  REAL:: Gamma_Rated = 0.0     ! Initial moisture evaporation rate divided by steady-state
+  REAL(r64):: Gamma_Rated = 0.0     ! Initial moisture evaporation rate divided by steady-state
                                                    ! AC latent capacity (dimensionless)
   INTEGER :: HOTGASREHEATFLG = 0    !whether to use hot gas reheat
-  REAL :: HPTimeConstant                  =0.0  ! Heat pump time constant [s]
+  REAL(r64) :: HPTimeConstant                  =0.0  ! Heat pump time constant [s]
 
   INTEGER:: PLFFPLR = 0     ! index of part load curve as a function of part load ratio
 
   CHARACTER(len=MaxNameLength) :: WatertoAirHPType=' ' ! Type of WatertoAirHP ie. Heating or Cooling
   INTEGER   :: WAHPPlantTypeOfNum              = 0     ! type of component in plant
   LOGICAL   :: Simflag                         =.false. ! Heat Pump Simulation Flag
-  REAL :: DesignWaterMassFlowRate         =0.0  ! design water mass flow rate [kg/s]
-  REAL :: DesignWaterVolFlowRate          =0.0  ! design water volumetric flow rate [m3/s]
-  REAL :: DesignAirMassFlowRate           =0.0  ! Design Air Mass Flow Rate [kg/s]
-  REAL :: DesignAirVolFlowRate            =0.0  ! Design Air Volumetric Flow Rate [m3/s]
-  REAL :: AirVolFlowRate                  =0.0  ! Air Volumetric Flow Rate[m3/s], real time
-  REAL :: AirMassFlowRate                 =0.0  ! Air Mass Flow Rate[kg/s], real time
-  REAL :: InletAirPressure                =0.0 !air inlet pressure [pa]
-  REAL :: InletAirDBTemp                  =0.0  ! Inlet Air Dry Bulb Temperature [C], real time
-  REAL :: InletAirHumRat                  =0.0  ! Inlet Air Humidity Ratio [kg/kg], real time
-  REAL :: InletAirEnthalpy                =0.0  ! Inlet Air Enthalpy [J/kg], real time
-  REAL :: OutletAirDBTemp                 =0.0  ! Outlet Air Dry Bulb Temperature [C], real time
-  REAL :: OutletAirHumRat                 =0.0  ! Outlet Air Humidity Ratio [kg/kg], real time
-  REAL :: OutletAirEnthalpy               =0.0  ! Outlet Air Enthalpy [J/kg], real time
-  REAL :: WaterVolFlowRate                =0.0  ! Water Volumetric Flow Rate [m3/s], real time
-  REAL :: WaterMassFlowRate               =0.0  ! Water Mass Flow Rate [kg/s], real time
-  REAL :: InletWaterTemp                  =0.0  ! Inlet Water Temperature [C]
-  REAL :: InletWaterEnthalpy              =0.0  ! Inlet Water Enthalpy [J/kg]
-  REAL :: OutletWaterTemp                 =0.0  ! Outlet Water Temperature [C]
-  REAL :: OutletWaterEnthalpy             =0.0  ! Outlet Water Enthalpy [J/kg]
-  REAL :: Power                           =0.0  ! Power Consumption [W]
-  REAL :: QLoadTotal                      =0.0  ! Load Side Total Heat Transfer Rate [W]
-  REAL :: QSensible                       =0.0  ! Sensible Load Side Heat Transfer Rate [W]
-  REAL :: QLatent                         =0.0  ! Latent Load Side Heat Transfer Rate [W]
-  REAL :: QSource                         =0.0  ! Source Side Heat Transfer Rate [W]
-  REAL :: QWasteHeat                      =0.0  ! Recoverable waste Heat Transfer Rate [W]
-  REAL :: Energy                          =0.0  ! Energy Consumption [J]
-  REAL :: EnergyLoadTotal                 =0.0  ! Load Side Total Heat Transferred [J]
-  REAL :: EnergySensible                  =0.0  ! Sensible Load Side Heat Transferred [J]
-  REAL :: EnergyLatent                    =0.0  ! Latent Load Side Heat Transferred [J]
-  REAL :: EnergySource                    =0.0  ! Source Side Heat Transferred [J]
-  REAL :: COP                             =0.0  ! Heat Pump Coefficient of Performance [-]
-  REAL :: RunFrac                         =0.0  ! Duty Factor
-  REAL :: PartLoadRatio                   =0.0  ! Part Load Ratio
+  REAL(r64) :: DesignWaterMassFlowRate         =0.0  ! design water mass flow rate [kg/s]
+  REAL(r64) :: DesignWaterVolFlowRate          =0.0  ! design water volumetric flow rate [m3/s]
+  REAL(r64) :: DesignAirMassFlowRate           =0.0  ! Design Air Mass Flow Rate [kg/s]
+  REAL(r64) :: DesignAirVolFlowRate            =0.0  ! Design Air Volumetric Flow Rate [m3/s]
+  REAL(r64) :: AirVolFlowRate                  =0.0  ! Air Volumetric Flow Rate[m3/s], real time
+  REAL(r64) :: AirMassFlowRate                 =0.0  ! Air Mass Flow Rate[kg/s], real time
+  REAL(r64) :: InletAirPressure                =0.0 !air inlet pressure [pa]
+  REAL(r64) :: InletAirDBTemp                  =0.0  ! Inlet Air Dry Bulb Temperature [C], real time
+  REAL(r64) :: InletAirHumRat                  =0.0  ! Inlet Air Humidity Ratio [kg/kg], real time
+  REAL(r64) :: InletAirEnthalpy                =0.0  ! Inlet Air Enthalpy [J/kg], real time
+  REAL(r64) :: OutletAirDBTemp                 =0.0  ! Outlet Air Dry Bulb Temperature [C], real time
+  REAL(r64) :: OutletAirHumRat                 =0.0  ! Outlet Air Humidity Ratio [kg/kg], real time
+  REAL(r64) :: OutletAirEnthalpy               =0.0  ! Outlet Air Enthalpy [J/kg], real time
+  REAL(r64) :: WaterVolFlowRate                =0.0  ! Water Volumetric Flow Rate [m3/s], real time
+  REAL(r64) :: WaterMassFlowRate               =0.0  ! Water Mass Flow Rate [kg/s], real time
+  REAL(r64) :: InletWaterTemp                  =0.0  ! Inlet Water Temperature [C]
+  REAL(r64) :: InletWaterEnthalpy              =0.0  ! Inlet Water Enthalpy [J/kg]
+  REAL(r64) :: OutletWaterTemp                 =0.0  ! Outlet Water Temperature [C]
+  REAL(r64) :: OutletWaterEnthalpy             =0.0  ! Outlet Water Enthalpy [J/kg]
+  REAL(r64) :: Power                           =0.0  ! Power Consumption [W]
+  REAL(r64) :: QLoadTotal                      =0.0  ! Load Side Total Heat Transfer Rate [W]
+  REAL(r64) :: QSensible                       =0.0  ! Sensible Load Side Heat Transfer Rate [W]
+  REAL(r64) :: QLatent                         =0.0  ! Latent Load Side Heat Transfer Rate [W]
+  REAL(r64) :: QSource                         =0.0  ! Source Side Heat Transfer Rate [W]
+  REAL(r64) :: QWasteHeat                      =0.0  ! Recoverable waste Heat Transfer Rate [W]
+  REAL(r64) :: Energy                          =0.0  ! Energy Consumption [J]
+  REAL(r64) :: EnergyLoadTotal                 =0.0  ! Load Side Total Heat Transferred [J]
+  REAL(r64) :: EnergySensible                  =0.0  ! Sensible Load Side Heat Transferred [J]
+  REAL(r64) :: EnergyLatent                    =0.0  ! Latent Load Side Heat Transferred [J]
+  REAL(r64) :: EnergySource                    =0.0  ! Source Side Heat Transferred [J]
+  REAL(r64) :: COP                             =0.0  ! Heat Pump Coefficient of Performance [-]
+  REAL(r64) :: RunFrac                         =0.0  ! Duty Factor
+  REAL(r64) :: PartLoadRatio                   =0.0  ! Part Load Ratio
 
-  REAL :: RatedPowerHeat                  =0.0  ! Rated/Ref Heating Power Consumption[W]
-  REAL :: RatedCOPHeat                    =0.0  ! Rated/Ref Heating COP [W/W]
-  REAL :: RatedCapCoolSens                =0.0  ! Rated/Ref Sensible Cooling Capacity [W]
-  REAL :: RatedPowerCool                  =0.0  ! Rated/Ref Cooling Power Consumption[W]
-  REAL :: RatedCOPCool                    =0.0  ! Rated/Ref Cooling COP [W/W]
+  REAL(r64) :: RatedPowerHeat                  =0.0  ! Rated/Ref Heating Power Consumption[W]
+  REAL(r64) :: RatedCOPHeat                    =0.0  ! Rated/Ref Heating COP [W/W]
+  REAL(r64) :: RatedCapCoolSens                =0.0  ! Rated/Ref Sensible Cooling Capacity [W]
+  REAL(r64) :: RatedPowerCool                  =0.0  ! Rated/Ref Cooling Power Consumption[W]
+  REAL(r64) :: RatedCOPCool                    =0.0  ! Rated/Ref Cooling COP [W/W]
 
   INTEGER      :: AirInletNodeNum              =0    ! Node Number of the Air Inlet
   INTEGER      :: AirOutletNodeNum             =0     ! Node Number of the Air Outlet
@@ -125,32 +125,32 @@ TYPE, PUBLIC :: WatertoAirMulSpedCoilData ! water-to-air variable speed coil
   INTEGER      :: CompanionCoolingCoilNum      =0           ! Heating coil companion cooling coil index
   INTEGER      :: CompanionHeatingCoilNum      =0           ! Cooling coil companion heating coil index
 
-  REAL :: FanDelayTime                    =0.0  ! Fan delay time, time delay for the HP's fan to
+  REAL(r64) :: FanDelayTime                    =0.0  ! Fan delay time, time delay for the HP's fan to
 
   ! beginning for multispeed coil type
   INTEGER       :: MSErrIndex(MaxSpedLevels) = 0                ! index flag for num speeds/recurring messages
-  REAL     :: MSRatedPercentTotCap(MaxSpedLevels) = 0.0    ! Percentage to the total cooling capacity for MS heat pump at the highest speed [dimensionless]
-  REAL     :: MSRatedTotCap(MaxSpedLevels) = 0.0           ! Rated cooling capacity for MS heat pump [W]
-  REAL     :: MSRatedSHR(MaxSpedLevels) = 0.0              ! Rated SHR for MS heat pump [dimensionless]
-  REAL     :: MSRatedCOP(MaxSpedLevels) = 0.0              ! Rated COP for MS heat pump [dimensionless]
+  REAL(r64)     :: MSRatedPercentTotCap(MaxSpedLevels) = 0.0    ! Percentage to the total cooling capacity for MS heat pump at the highest speed [dimensionless]
+  REAL(r64)     :: MSRatedTotCap(MaxSpedLevels) = 0.0           ! Rated cooling capacity for MS heat pump [W]
+  REAL(r64)     :: MSRatedSHR(MaxSpedLevels) = 0.0              ! Rated SHR for MS heat pump [dimensionless]
+  REAL(r64)     :: MSRatedCOP(MaxSpedLevels) = 0.0              ! Rated COP for MS heat pump [dimensionless]
 
-  REAL     :: MSRatedAirVolFlowPerRatedTotCap(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedAirVolFlowPerRatedTotCap(MaxSpedLevels) = 0.0
   ! Rated Air volume flow rate per total capacity through unit at rated conditions [m^3/w]
-  REAL     :: MSRatedAirVolFlowRate(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedAirVolFlowRate(MaxSpedLevels) = 0.0
   ! Air volume flow rate through unit at rated conditions [m3/s]
-  REAL     :: MSRatedAirMassFlowRate(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedAirMassFlowRate(MaxSpedLevels) = 0.0
   ! Air mass flow rate through unit at rated conditions [kg/s]
 
-  REAL     :: MSRatedWaterVolFlowPerRatedTotCap(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedWaterVolFlowPerRatedTotCap(MaxSpedLevels) = 0.0
   ! Rated water volume flow rate per total  capacity through unit at rated conditions [m^3/w]
-  REAL     :: MSRatedWaterVolFlowRate(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedWaterVolFlowRate(MaxSpedLevels) = 0.0
   ! Water volume flow rate through unit at rated conditions [m3/s]
-  REAL     :: MSRatedWaterMassFlowRate(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedWaterMassFlowRate(MaxSpedLevels) = 0.0
   ! Water mass flow rate through unit at rated conditions [kg/s]
 
-  REAL     :: MSRatedCBF(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSRatedCBF(MaxSpedLevels) = 0.0
   ! rated coil bypass factor
-  REAL     :: MSEffectiveAo(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSEffectiveAo(MaxSpedLevels) = 0.0
   ! effective heat transfer surface at each speed
 
   INTEGER       :: MSCCapFTemp(MaxSpedLevels) = 0
@@ -167,12 +167,12 @@ TYPE, PUBLIC :: WatertoAirMulSpedCoilData ! water-to-air variable speed coil
   ! index of energy input ratio modifier curve as a function of water flow fraction
   INTEGER       :: MSWasteHeat(MaxSpedLevels) = 0
   ! index of waste heat as a function of temperature
-  REAL     :: MSWasteHeatFrac(MaxSpedLevels) = 0.0
+  REAL(r64)     :: MSWasteHeatFrac(MaxSpedLevels) = 0.0
   ! Waste heat fraction
 
-  REAL:: SpeedNumReport = 0.0
+  REAL(r64):: SpeedNumReport = 0.0
   !speed number for output
-  REAL:: SpeedRatioReport = 0.0
+  REAL(r64):: SpeedRatioReport = 0.0
   !speed ratio for output between two neighboring speeds
   ! End of multispeed DX coil input
 
@@ -187,24 +187,24 @@ LOGICAL        :: GetCoilsInputFlag = .TRUE.       ! Flag set to make sure you g
 TYPE (WatertoAirMulSpedCoilData) , PUBLIC, ALLOCATABLE, DIMENSION(:) :: WtoADXCoil
 ! LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
 
-REAL :: SourceSideMassFlowRate =0.0 ! Source Side Mass flow rate [Kg/s]
-REAL :: SourceSideInletTemp    =0.0 ! Source Side Inlet Temperature [C]
-REAL :: SourceSideInletEnth    =0.0 ! Source Side Inlet Enthalpy [J/kg]
-REAL :: LoadSideMassFlowRate   =0.0 ! Load Side Mass flow rate [Kg/s]
-REAL :: LoadSideInletDBTemp    =0.0 ! Load Side Inlet Dry Bulb Temp [C]
-REAL :: LoadSideInletWBTemp    =0.0 ! Load Side Inlet Wet Bulb Temp [C]
-REAL :: LoadSideInletHumRat    =0.0 ! Load Side Outlet Humidity ratio
-REAL :: LoadSideInletEnth      =0.0 ! Load Side Inlet Enthalpy [J/kg]
-REAL :: LoadSideOutletDBTemp   =0.0 ! Load Side Outlet Dry Bulb Temp [C]
-REAL :: LoadSideOutletHumRat   =0.0 ! Load Side Outlet Humidity ratio
-REAL :: LoadSideOutletEnth     =0.0 ! Load Side Outlet Enthalpy [J/kg]
-REAL :: QSensible              =0.0 ! Load side sensible heat transfer rate [W]
-REAL :: QLoadTotal             =0.0 ! Load side total heat transfer rate [W]
-REAL :: QLatRated              =0.0 ! Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
-REAL :: QLatActual             =0.0 ! Actual Latent Capacity [W]
-REAL :: QSource                =0.0 ! Source side heat transfer rate [W]
-REAL :: Winput                 =0.0 ! Power Consumption [W]
-REAL :: PLRCorrLoadSideMdot    =0.0 ! Load Side Mdot corrected for Part Load Ratio of the unit
+REAL(r64) :: SourceSideMassFlowRate =0.0 ! Source Side Mass flow rate [Kg/s]
+REAL(r64) :: SourceSideInletTemp    =0.0 ! Source Side Inlet Temperature [C]
+REAL(r64) :: SourceSideInletEnth    =0.0 ! Source Side Inlet Enthalpy [J/kg]
+REAL(r64) :: LoadSideMassFlowRate   =0.0 ! Load Side Mass flow rate [Kg/s]
+REAL(r64) :: LoadSideInletDBTemp    =0.0 ! Load Side Inlet Dry Bulb Temp [C]
+REAL(r64) :: LoadSideInletWBTemp    =0.0 ! Load Side Inlet Wet Bulb Temp [C]
+REAL(r64) :: LoadSideInletHumRat    =0.0 ! Load Side Outlet Humidity ratio
+REAL(r64) :: LoadSideInletEnth      =0.0 ! Load Side Inlet Enthalpy [J/kg]
+REAL(r64) :: LoadSideOutletDBTemp   =0.0 ! Load Side Outlet Dry Bulb Temp [C]
+REAL(r64) :: LoadSideOutletHumRat   =0.0 ! Load Side Outlet Humidity ratio
+REAL(r64) :: LoadSideOutletEnth     =0.0 ! Load Side Outlet Enthalpy [J/kg]
+REAL(r64) :: QSensible              =0.0 ! Load side sensible heat transfer rate [W]
+REAL(r64) :: QLoadTotal             =0.0 ! Load side total heat transfer rate [W]
+REAL(r64) :: QLatRated              =0.0 ! Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
+REAL(r64) :: QLatActual             =0.0 ! Actual Latent Capacity [W]
+REAL(r64) :: QSource                =0.0 ! Source side heat transfer rate [W]
+REAL(r64) :: Winput                 =0.0 ! Power Consumption [W]
+REAL(r64) :: PLRCorrLoadSideMdot    =0.0 ! Load Side Mdot corrected for Part Load Ratio of the unit
 
 
   ! SUBROUTINE SPECIFICATIONS FOR MODULE
@@ -276,17 +276,17 @@ SUBROUTINE SimWatertoAirHPMulSpeed(CompName,CompIndex,&
   CHARACTER(len=*), INTENT(IN)      :: CompName                     ! Coil Name
   INTEGER, INTENT(INOUT)            :: CompIndex                    ! Index for Component name
   INTEGER, INTENT(IN)               :: CyclingScheme                ! Continuous fan OR cycling compressor
-  REAL, INTENT (INOUT)         :: MaxONOFFCyclesperHour        ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL, INTENT (INOUT)         :: HPTimeConstant               ! Heat pump time constant [s]
-  REAL, INTENT (INOUT)         :: FanDelayTime                 ! Fan delay time, time delay for the HP's fan to
+  REAL(r64), INTENT (INOUT)         :: MaxONOFFCyclesperHour        ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL(r64), INTENT (INOUT)         :: HPTimeConstant               ! Heat pump time constant [s]
+  REAL(r64), INTENT (INOUT)         :: FanDelayTime                 ! Fan delay time, time delay for the HP's fan to
                                                                     ! shut off after compressor cycle off  [s]
   INTEGER, INTENT(IN)               :: CompOp                       ! compressor on/off. 0 = off; 1= on
-  REAL, INTENT(IN)             :: PartLoadFrac
+  REAL(r64), INTENT(IN)             :: PartLoadFrac
   ! part-load ratio = load/total capacity, passed in by the parent object
-  REAL, OPTIONAL, INTENT(IN)   :: OnOffAirFlowRat              ! ratio of comp on to comp off air flow rate
-  REAL, INTENT(IN)             :: SensLoad                     ! Sensible demand load [W]
-  REAL, INTENT(IN)             :: LatentLoad                   ! Latent demand load [W]
-  REAL, INTENT(IN)             :: SpeedRatio                   ! compressor speed ratio
+  REAL(r64), OPTIONAL, INTENT(IN)   :: OnOffAirFlowRat              ! ratio of comp on to comp off air flow rate
+  REAL(r64), INTENT(IN)             :: SensLoad                     ! Sensible demand load [W]
+  REAL(r64), INTENT(IN)             :: LatentLoad                   ! Latent demand load [W]
+  REAL(r64), INTENT(IN)             :: SpeedRatio                   ! compressor speed ratio
   INTEGER, INTENT(IN)               :: SpeedNum                     ! compressor speed number
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -300,8 +300,8 @@ SUBROUTINE SimWatertoAirHPMulSpeed(CompName,CompIndex,&
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                      :: DXCoilNum                         ! The WatertoAirHP that you are currently loading input into
-  REAL                    :: OnOffAirFlowRatio                 ! ratio of comp on to comp off air flow rate
-  REAL                    :: RuntimeFrac                       ! run time fraction
+  REAL(r64)                    :: OnOffAirFlowRatio                 ! ratio of comp on to comp off air flow rate
+  REAL(r64)                    :: RuntimeFrac                       ! run time fraction
   INTEGER                      :: SpeedCal                          ! variable for error proof speed input
 
   ! Obtains and Allocates WatertoAirHP related parameters from input file
@@ -336,7 +336,7 @@ SUBROUTINE SimWatertoAirHPMulSpeed(CompName,CompIndex,&
   IF(PRESENT(OnOffAirFlowRat))THEN
     OnOffAirFlowRatio = OnOffAirFlowRat
   ELSE
-    OnOffAirFlowRatio = 1.0
+    OnOffAirFlowRatio = 1.0d0
   END IF
 
  !ERROR PROOF
@@ -429,12 +429,12 @@ SUBROUTINE GetMulSpeedWSHPInput
     LOGICAL       :: IsNotOK                ! Flag to verify name
     LOGICAL       :: IsBlank                ! Flag for blank name
     LOGICAL       :: errflag
-    REAL :: CurveVal                   ! Used to verify modifier curves equal 1 at rated conditions
+    REAL(r64) :: CurveVal                   ! Used to verify modifier curves equal 1 at rated conditions
     CHARACTER (len=MaxNameLength)  :: CurrentModuleObject                       ! for ease in getting objects
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: AlphArray        ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields     ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields   ! Numeric field names
-    REAL, ALLOCATABLE, DIMENSION(:) :: NumArray                            ! Numeric input items for object
+    REAL(r64), ALLOCATABLE, DIMENSION(:) :: NumArray                            ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks                        ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks                      ! Logical array, numeric field input BLANK = .true.
 
@@ -555,8 +555,8 @@ SUBROUTINE GetMulSpeedWSHPInput
           END IF
           ErrorsFound = .TRUE.
         ELSE
-            CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,1.0)
-            IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+            CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,1.0d0)
+            IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
               CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)&
                         //'="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
               CALL ShowContinueError('...'//TRIM(cAlphaFields(6))//' output is not equal to 1.0 '//  &
@@ -591,7 +591,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapFTemp(I),RatedInletWetbulbTemp,RatedInletWaterTemp)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="'&
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -626,8 +626,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)// &
                         '="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre ))//' output is not equal to 1.0 '//  &
@@ -636,8 +636,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName// &
                         trim(CurrentModuleObject)//'="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre ))//' output is not equal to 1.0 '//  &
@@ -671,8 +671,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -681,8 +681,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -717,7 +717,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRFTemp(I),RatedInletWetbulbTemp,RatedInletWaterTemp)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="'&
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -751,8 +751,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="'&
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -761,8 +761,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject) &
                         //'="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -796,8 +796,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -806,8 +806,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -843,7 +843,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSWasteHeat(I),RatedInletWaterTemp,RatedInletAirTemp)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="'&
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -991,8 +991,8 @@ SUBROUTINE GetMulSpeedWSHPInput
           END IF
           ErrorsFound = .TRUE.
         ELSE
-            CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,1.0)
-            IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+            CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,1.0d0)
+            IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
               CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="'&
                     //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
               CALL ShowContinueError('...'//TRIM(cAlphaFields(6))//' output is not equal to 1.0 '//  &
@@ -1026,7 +1026,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapFTemp(I),RatedInletAirTempHeat,RatedInletWaterTempHeat)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1060,8 +1060,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1070,8 +1070,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1104,8 +1104,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1114,8 +1114,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                             //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1150,7 +1150,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRFTemp(I),RatedInletAirTempHeat,RatedInletWaterTempHeat)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1183,8 +1183,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1193,8 +1193,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRAirFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject) &
                         //'="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1228,8 +1228,8 @@ SUBROUTINE GetMulSpeedWSHPInput
               SELECT CASE(GetCurveType(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I)))
 
               CASE('QUADRATIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)&
                         //'="'//trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1238,8 +1238,8 @@ SUBROUTINE GetMulSpeedWSHPInput
                 END IF
 
               CASE('CUBIC')
-                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSEIRWaterFFlow(I),1.0d0)
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1275,7 +1275,7 @@ SUBROUTINE GetMulSpeedWSHPInput
 
               CASE('BIQUADRATIC')
                 CurveVal = CurveValue(WtoADXCoil(DXCoilNum)%MSWasteHeat(I),RatedInletAirTempHeat,RatedInletWaterTempHeat)
-                IF(CurveVal .GT. 1.10 .OR. CurveVal .LT. 0.90) THEN
+                IF(CurveVal .GT. 1.10d0 .OR. CurveVal .LT. 0.90d0) THEN
                   CALL ShowWarningError(RoutineName//trim(CurrentModuleObject)//'="' &
                         //trim(WtoADXCoil(DXCoilNum)%Name)//'", curve values')
                   CALL ShowContinueError('...'//TRIM(cAlphaFields(AlfaFieldIncre))//' output is not equal to 1.0 '//  &
@@ -1421,15 +1421,15 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
   INTEGER, INTENT(IN) :: DXCoilNum                  ! Current DXCoilNum under simulation
-  REAL,    INTENT(IN) :: MaxONOFFCyclesperHour ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL,    INTENT(IN) :: HPTimeConstant        ! Heat pump time constant [s]
-  REAL,    INTENT(IN) :: FanDelayTime          ! Fan delay time, time delay for the HP's fan to
+  REAL(r64),    INTENT(IN) :: MaxONOFFCyclesperHour ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL(r64),    INTENT(IN) :: HPTimeConstant        ! Heat pump time constant [s]
+  REAL(r64),    INTENT(IN) :: FanDelayTime          ! Fan delay time, time delay for the HP's fan to
                                                     ! shut off after compressor cycle off  [s]
-  REAL, INTENT(IN) :: SensLoad                 ! Control zone sensible load[W]
-  REAL, INTENT(IN) :: LatentLoad               ! Control zone latent load[W]
+  REAL(r64), INTENT(IN) :: SensLoad                 ! Control zone sensible load[W]
+  REAL(r64), INTENT(IN) :: LatentLoad               ! Control zone latent load[W]
   INTEGER,   INTENT(IN) :: CyclingScheme            ! fan operating mode
-  REAL, INTENT(IN) :: OnOffAirFlowRatio        ! ratio of compressor on flow to average flow over time step
-  REAL, INTENT(IN) :: SpeedRatio               ! compressor speed ratio
+  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio        ! ratio of compressor on flow to average flow over time step
+  REAL(r64), INTENT(IN) :: SpeedRatio               ! compressor speed ratio
   INTEGER, INTENT(IN)   :: SpeedNum                 ! compressor speed number
 
 
@@ -1449,20 +1449,20 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeFlag  ! used for sizing PTHP inputs one time
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
-  REAL   :: rho                                    ! local fluid density
-  REAL   :: Cp                                     ! local fluid specific heat
+  REAL(r64)   :: rho                                    ! local fluid density
+  REAL(r64)   :: Cp                                     ! local fluid specific heat
   INTEGER :: SpeedCal                                   ! calculated speed level
   LOGICAL     :: errFlag
   LOGICAL :: ErrorsFound=.FALSE.                        ! TRUE when errors found, air loop initialization error
-  REAL :: RatedVolFlowPerRatedTotCap               ! Rated Air Volume Flow Rate divided by Rated Total Capacity [m3/s-W)
+  REAL(r64) :: RatedVolFlowPerRatedTotCap               ! Rated Air Volume Flow Rate divided by Rated Total Capacity [m3/s-W)
   INTEGER :: Mode                                       ! Performance mode for MultiMode DX coil; Always 1 for other coil types
-  REAL :: RatedHeatPumpIndoorAirTemp
+  REAL(r64) :: RatedHeatPumpIndoorAirTemp
   ! Indoor dry-bulb temperature to heat pump evaporator at rated conditions [C]
-  REAL :: RatedHeatPumpIndoorHumRat                ! Inlet humidity ratio to heat pump evaporator at rated conditions [kg/kg]
-  REAL :: WaterFlowScale                           ! water flow scaling factor match rated flow rate
+  REAL(r64) :: RatedHeatPumpIndoorHumRat                ! Inlet humidity ratio to heat pump evaporator at rated conditions [kg/kg]
+  REAL(r64) :: WaterFlowScale                           ! water flow scaling factor match rated flow rate
 
             ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL :: SmallDifferenceTest=0.00000001
+  REAL(r64) :: SmallDifferenceTest=0.00000001d0
   CHARACTER(len=*), PARAMETER :: RoutineName='InitMulSpeedWSHPCoil'
 
 
@@ -1548,8 +1548,8 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
 
     ! Multispeed Heating
     IF (WtoADXCoil(DXCoilNum)%WAHPPlantTypeOfNum==TypeOf_CoilVSWAHPHeatingEquationFit) THEN
-      RatedHeatPumpIndoorAirTemp = 21.11  ! 21.11C or 70F
-      RatedHeatPumpIndoorHumRat = 0.00881 ! Humidity ratio corresponding to 70F dry bulb/60F wet bulb
+      RatedHeatPumpIndoorAirTemp = 21.11d0  ! 21.11C or 70F
+      RatedHeatPumpIndoorHumRat = 0.00881d0 ! Humidity ratio corresponding to 70F dry bulb/60F wet bulb
       Do Mode = 1, WtoADXCoil(DXCoilNum)%NumOfSpeeds
 
         WtoADXCoil(DXCoilNum)%MSRatedAirMassFlowRate(Mode) = WtoADXCoil(DXCoilNum)%MSRatedAirVolFlowRate(Mode)* &
@@ -1650,7 +1650,7 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
     WtoADXCoil(DXCoilNum)%HPTimeConstant=HPTimeConstant
     WtoADXCoil(DXCoilNum)%FanDelayTime=FanDelayTime
 
-    CALL InitComponentNodes(0., WtoADXCoil(DXCoilNum)%DesignWaterMassFlowRate, &
+    CALL InitComponentNodes(0.d0, WtoADXCoil(DXCoilNum)%DesignWaterMassFlowRate, &
                                   WtoADXCoil(DXCoilNum)%WaterInletNodeNum,  &
                                   WtoADXCoil(DXCoilNum)%WaterOutletNodeNum , &
                                   WtoADXCoil(DXCoilNum)%LoopNum, &
@@ -1702,10 +1702,10 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
 !             PsyRhoAirFnPbTdbW(OutBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)
         !If air flow is less than 25% rated flow. Then set air flow to the 25% of rated conditions
         IF(WtoADXCoil(DXCoilNum)%AirMassFlowRate.LT.  &
-             0.25*WtoADXCoil(DXCoilNum)%DesignAirVolFlowRate*  &
+             0.25d0*WtoADXCoil(DXCoilNum)%DesignAirVolFlowRate*  &
                  PsyRhoAirFnPbTdbW(OutBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)) THEN
             WtoADXCoil(DXCoilNum)%AirMassFlowRate =   &
-              0.25*WtoADXCoil(DXCoilNum)%DesignAirVolFlowRate* &
+              0.25d0*WtoADXCoil(DXCoilNum)%DesignAirVolFlowRate* &
                   PsyRhoAirFnPbTdbW(OutBaroPress,Node(AirInletNode)%Temp,Node(AirInletNode)%HumRat)
         END IF
     ELSE !CYCLIC FAN, NOT CORRECTION, WILL BE PROCESSED IN THE FOLLOWING SUBROUTINES
@@ -1713,8 +1713,8 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
     END IF
 
   ELSE !heat pump is off
-    WtoADXCoil(DXCoilNum)%WaterMassFlowRate = 0.
-    WtoADXCoil(DXCoilNum)%AirMassFlowRate   = 0.
+    WtoADXCoil(DXCoilNum)%WaterMassFlowRate = 0.d0
+    WtoADXCoil(DXCoilNum)%AirMassFlowRate   = 0.d0
   ENDIF
 
   CALL SetComponentFlowRate(WtoADXCoil(DXCoilNum)%WaterMassFlowRate, &
@@ -1814,45 +1814,45 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: rhoair
-  REAL :: CpAir
-  REAL :: MixTemp
-  REAL :: MixHumRat
-  REAL :: MixEnth
-  REAL :: MixWetBulb
-  REAL :: SupTemp
-  REAL :: SupHumRat
-  REAL :: SupEnth
-  REAL :: OutTemp
-  REAL :: OutAirFrac
-  REAL :: VolFlowRate
-  REAL :: CoolCapAtPeak
-  REAL :: TotCapTempModFac
-  REAL :: SensCapAtPeak
-  REAL :: SensCapTempModFac
+  REAL(r64) :: rhoair
+  REAL(r64) :: CpAir
+  REAL(r64) :: MixTemp
+  REAL(r64) :: MixHumRat
+  REAL(r64) :: MixEnth
+  REAL(r64) :: MixWetBulb
+  REAL(r64) :: SupTemp
+  REAL(r64) :: SupHumRat
+  REAL(r64) :: SupEnth
+  REAL(r64) :: OutTemp
+  REAL(r64) :: OutAirFrac
+  REAL(r64) :: VolFlowRate
+  REAL(r64) :: CoolCapAtPeak
+  REAL(r64) :: TotCapTempModFac
+  REAL(r64) :: SensCapAtPeak
+  REAL(r64) :: SensCapTempModFac
   INTEGER   :: TimeStepNumAtMax
   INTEGER   :: DDNum
   INTEGER   :: PltSizNum
   LOGICAL   :: RatedCapCoolTotalAutosized
   LOGICAL   :: RatedCapCoolSensAutosized
   LOGICAL   :: ErrorsFound
-  REAL :: SystemCapacity
-  REAL :: rho
-  REAL :: cp
+  REAL(r64) :: SystemCapacity
+  REAL(r64) :: rho
+  REAL(r64) :: cp
   INTEGER   :: NormSpeed !norminal speed level
   INTEGER   :: UpperSpeed !highest speed level
   INTEGER   :: Mode !speed level
-  REAL :: rhoW !water density
-  REAL :: rhoA !air density
-  REAL :: SHR  !sensible heat transfer ratio
-  REAL :: RatedAirMassFlowRate  !rated air mass flow rate
-  REAL :: CBFRated  !bypass factor at the rated condition, considering difference in flow rates
-  REAL :: RatedInletEnth !rated inlet air enthalpy
-  REAL :: QLoadTotal1 !placeholder for calculating SHR
-  REAL :: QLoadTotal2 !placeholder for calculating SHR
-  REAL :: QLoadTotal  !placeholder for calculating SHR
-  REAL :: AirMassFlowRatio !air mass flow ratio
-  REAL :: WaterMassFlowRatio !water mass flow rate
+  REAL(r64) :: rhoW !water density
+  REAL(r64) :: rhoA !air density
+  REAL(r64) :: SHR  !sensible heat transfer ratio
+  REAL(r64) :: RatedAirMassFlowRate  !rated air mass flow rate
+  REAL(r64) :: CBFRated  !bypass factor at the rated condition, considering difference in flow rates
+  REAL(r64) :: RatedInletEnth !rated inlet air enthalpy
+  REAL(r64) :: QLoadTotal1 !placeholder for calculating SHR
+  REAL(r64) :: QLoadTotal2 !placeholder for calculating SHR
+  REAL(r64) :: QLoadTotal  !placeholder for calculating SHR
+  REAL(r64) :: AirMassFlowRatio !air mass flow ratio
+  REAL(r64) :: WaterMassFlowRatio !water mass flow rate
 
   UpperSpeed = WtoADXCoil(DXCoilNum)%NumOfSpeeds
   NormSpeed = WtoADXCoil(DXCoilNum)%NormSpedLevel
@@ -1922,13 +1922,13 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
             IF (VolFlowRate > 0.0) THEN
               OutAirFrac = FinalSysSizing(CurSysNum)%DesOutAirVolFlow / VolFlowRate
             ELSE
-              OutAirFrac = 1.0
+              OutAirFrac = 1.0d0
             END IF
-            OutAirFrac = MIN(1.0,MAX(0.0,OutAirFrac))
+            OutAirFrac = MIN(1.0d0,MAX(0.0d0,OutAirFrac))
             MixTemp = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolTemp + &
-                        (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
+                        (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetTemp
             MixHumRat = OutAirFrac*FinalSysSizing(CurSysNum)%PrecoolHumRat + &
-                          (1.0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
+                          (1.0d0-OutAirFrac)*FinalSysSizing(CurSysNum)%CoolRetHumRat
           END IF
         END IF
         OutTemp = FinalSysSizing(CurSysNum)%CoolOutTemp
@@ -1944,10 +1944,10 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
         IF(MixEnth .GT. SupEnth)THEN
           CoolCapAtPeak = rhoair * VolFlowRate * (MixEnth-SupEnth)
         ELSE
-          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0-SupEnth)
+          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0d0-SupEnth)
         END IF
-        CoolCapAtPeak = MAX(0.0, CoolCapAtPeak)
-        IF(TotCapTempModFac .GT. 0.0)THEN
+        CoolCapAtPeak = MAX(0.0d0, CoolCapAtPeak)
+        IF(TotCapTempModFac .GT. 0.0d0)THEN
           WtoADXCoil(DXCoilNum)%RatedCapCoolTotal = CoolCapAtPeak / TotCapTempModFac
         ELSE
           WtoADXCoil(DXCoilNum)%RatedCapCoolTotal = CoolCapAtPeak
@@ -1995,10 +1995,10 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
         IF(MixEnth .GT. SupEnth)THEN
           CoolCapAtPeak = rhoair * VolFlowRate * (MixEnth-SupEnth)
         ELSE
-          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0-SupEnth)
+          CoolCapAtPeak = rhoair * VolFlowRate * (48000.0d0-SupEnth)
         END IF
-        CoolCapAtPeak = MAX(0.0, CoolCapAtPeak)
-        IF(TotCapTempModFac .GT. 0.0)THEN
+        CoolCapAtPeak = MAX(0.0d0, CoolCapAtPeak)
+        IF(TotCapTempModFac .GT. 0.0d0)THEN
           WtoADXCoil(DXCoilNum)%RatedCapCoolTotal = CoolCapAtPeak / TotCapTempModFac
         ELSE
           WtoADXCoil(DXCoilNum)%RatedCapCoolTotal = CoolCapAtPeak
@@ -2020,14 +2020,14 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
     CALL PreDefTableEntry(pdchCoolCoilTotCap,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolTotal)
     CALL PreDefTableEntry(pdchCoolCoilLatCap,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolTotal &
                                  - WtoADXCoil(DXCoilNum)%RatedCapCoolSens)
-    IF (WtoADXCoil(DXCoilNum)%RatedCapCoolTotal /= 0.0) THEN
+    IF (WtoADXCoil(DXCoilNum)%RatedCapCoolTotal /= 0.0d0) THEN
       CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolSens &
                                    / WtoADXCoil(DXCoilNum)%RatedCapCoolTotal)
       CALL PreDefTableEntry(pdchCoolCoilNomEff,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedPowerCool &
                                    / WtoADXCoil(DXCoilNum)%RatedCapCoolTotal)
     ELSE
-      CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,0.0)
-      CALL PreDefTableEntry(pdchCoolCoilNomEff,WtoADXCoil(DXCoilNum)%Name,0.0)
+      CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,0.0d0)
+      CALL PreDefTableEntry(pdchCoolCoilNomEff,WtoADXCoil(DXCoilNum)%Name,0.0d0)
     ENDIF
 
   END IF
@@ -2068,11 +2068,11 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
                             'Nominal Heating Capacity [W]', &
                              WtoADXCoil(DXCoilNum)%RatedCapHeat)
     CALL PreDefTableEntry(pdchHeatCoilNomCap,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapHeat)
-    IF (WtoADXCoil(DXCoilNum)%RatedCapHeat /= 0.0) THEN
+    IF (WtoADXCoil(DXCoilNum)%RatedCapHeat /= 0.0d0) THEN
       CALL PreDefTableEntry(pdchHeatCoilNomEff,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedPowerHeat &
                              / WtoADXCoil(DXCoilNum)%RatedCapHeat)
     ELSE
-      CALL PreDefTableEntry(pdchHeatCoilNomEff,WtoADXCoil(DXCoilNum)%Name,0.0)
+      CALL PreDefTableEntry(pdchHeatCoilNomEff,WtoADXCoil(DXCoilNum)%Name,0.0d0)
     ENDIF
   END IF
 
@@ -2081,11 +2081,11 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
   IF (WtoADXCoil(DXCoilNum)%WaterToAirHPType == 'HEATING' .AND. &
       WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum .GT. 0)THEN
 
-    IF(WtoADXCoil(WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.0)THEN
+    IF(WtoADXCoil(WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.0D0)THEN
 
       IF(ABS(WtoADXCoil(WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal-&
            WtoADXCoil(DXCoilNum)%RatedCapHeat)/&
-           WtoADXCoil(WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.2) THEN
+           WtoADXCoil(WtoADXCoil(DXCoilNum)%CompanionCoolingCoilNum)%RatedCapCoolTotal .GT. 0.2d0) THEN
 
         CALL ShowWarningError('COIL:'//TRIM(WtoADXCoil(DXCoilNum)%WaterToAirHPType)// &
                             ':WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT "'//TRIM(WtoADXCoil(DXCoilNum)%Name)//'"')
@@ -2196,7 +2196,7 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
 ! Use 1/2 flow since both cooling and heating coil will save flow yet only 1 will operate at a time
   IF(WtoADXCoil(DXCoilNum)%RatedWaterVolFlowRate .GT. 0.0)THEN
     CALL RegisterPlantCompDesignFlow(WtoADXCoil(DXCoilNum)%WaterInletNodeNum,  &
-       0.5*WtoADXCoil(DXCoilNum)%RatedWaterVolFlowRate)
+       0.5d0*WtoADXCoil(DXCoilNum)%RatedWaterVolFlowRate)
   END IF
 
   IF (WtoADXCoil(DXCoilNum)%WAHPPlantTypeOfNum==TypeOf_CoilVSWAHPCoolingEquationFit .OR. &
@@ -2317,9 +2317,9 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
                      RatedAirMassFlowRate,CBFRated, &
                      WtoADXCoil(DXCoilNum)%MSRatedTotCap(NormSpeed),WtoADXCoil(DXCoilNum)%MSCCapFTemp(NormSpeed), &
                      WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(NormSpeed), WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(NormSpeed),&
-                     0.0,0,0, 0,&
+                     0.0d0,0,0, 0,&
                      QLoadTotal1, QLoadTotal2, QLoadTotal,SHR,RatedInletWaterTemp, &
-                     StdBaroPress, 0.0, 1)
+                     StdBaroPress, 0.0d0, 1)
 
      WtoADXCoil(DXCoilNum)%RatedCapCoolSens = WtoADXCoil(DXCoilNum)%RatedCapCoolTotal * SHR
  ELSE
@@ -2338,11 +2338,11 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
     CALL PreDefTableEntry(pdchCoolCoilSensCap,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolSens)
     CALL PreDefTableEntry(pdchCoolCoilLatCap,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolTotal &
                                  - WtoADXCoil(DXCoilNum)%RatedCapCoolSens)
-    IF (WtoADXCoil(DXCoilNum)%RatedCapCoolTotal /= 0.0) THEN
+    IF (WtoADXCoil(DXCoilNum)%RatedCapCoolTotal /= 0.0d0) THEN
       CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,WtoADXCoil(DXCoilNum)%RatedCapCoolSens &
                                  / WtoADXCoil(DXCoilNum)%RatedCapCoolTotal)
     ELSE
-      CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,0.0)
+      CALL PreDefTableEntry(pdchCoolCoilSHR,WtoADXCoil(DXCoilNum)%Name,0.0d0)
     ENDIF
 
   END IF
@@ -2368,9 +2368,9 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
         CALL ShowContinueError('Entering Air Wet-Bulb Temperature = '//TRIM(TrimSigDigits(MixWetBulb,3))//' C')
         CALL ShowContinueError('Entering Condenser Water Temperature used = 24.4444 C')
         CALL ShowContinueError('Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)')
-        CALL ShowContinueError('ratioTDB = '//TRIM(TrimSigDigits(((MixTemp+283.15)/273.15),3)))
-        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15)/273.15),3)))
-        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0+283.15)/273.15),3)))
+        CALL ShowContinueError('ratioTDB = '//TRIM(TrimSigDigits(((MixTemp+283.15d0)/273.15d0),3)))
+        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15d0)/273.15d0),3)))
+        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0d0+283.15d0)/273.15d0),3)))
         CALL ShowContinueError('Sensible Cooling Capacity Modifier = '//TRIM(TrimSigDigits(SensCapTempModFac,5)))
         CALL ShowContinueError('...Rated Sensible Cooling Capacity = Sensible Design Load / Sensible Cooling Capacity Modifier')
         CALL ShowContinueError('Total Cooling Capacity Modifier = '//TRIM(TrimSigDigits(TotCapTempModFac,5)))
@@ -2396,8 +2396,8 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
         CALL ShowContinueError('Entering Air Wet-Bulb Temperature = '//TRIM(TrimSigDigits(MixWetBulb,3))//' C')
         CALL ShowContinueError('Entering Condenser Water Temperature used = 24.4444 C')
         CALL ShowContinueError('Used design air and water flow rates (i.e., used 1 for ratioVL and ratioVS)')
-        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15)/273.15),3)))
-        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0+283.15)/273.15),3)))
+        CALL ShowContinueError('ratioTWB = '//TRIM(TrimSigDigits(((MixWetBulb+283.15d0)/273.15d0),3)))
+        CALL ShowContinueError('ratioTS  = '//TRIM(TrimSigDigits(((85.0d0+283.15d0)/273.15d0),3)))
         CALL ShowContinueError('Sensible Cooling Capacity Modifier = '//TRIM(TrimSigDigits(SensCapTempModFac,5)))
         CALL ShowContinueError('...Rated Sensible Cooling Capacity = Sensible Design Load / Sensible Cooling Capacity Modifier')
         CALL ShowContinueError('Carefully review the Load Side Total, Sensible, and Latent heat transfer rates')
@@ -2454,17 +2454,17 @@ SUBROUTINE  CalcMulSpeedWSHPCoilCooling(DXCoilNum,CyclingScheme, &
 
   INTEGER,   INTENT(IN) :: DXCoilNum              ! Heat Pump Number
   INTEGER,   INTENT(IN) :: CyclingScheme      ! Fan/Compressor cycling scheme indicator
-  REAL, INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
-  REAL, INTENT(IN) :: LatentDemand       ! Cooling Latent Demand [W]
+  REAL(r64), INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
+  REAL(r64), INTENT(IN) :: LatentDemand       ! Cooling Latent Demand [W]
   INTEGER,   INTENT(IN) :: CompOp             ! compressor operation flag
-  REAL, INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
-  REAL, INTENT(INOUT) :: RuntimeFrac     ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
-  REAL, INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
-  REAL, INTENT(IN) :: SpeedRatio         ! SpeedRatio varies between 1.0 (higher speed) and 0.0 (lower speed)
+  REAL(r64), INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
+  REAL(r64), INTENT(INOUT) :: RuntimeFrac     ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
+  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
+  REAL(r64), INTENT(IN) :: SpeedRatio         ! SpeedRatio varies between 1.0 (higher speed) and 0.0 (lower speed)
   INTEGER, INTENT(IN)  :: SpeedNum            ! Speed number, high bound
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  :: Tref=283.15      ! Reference Temperature for performance curves,10C [K]
+  REAL(r64), PARAMETER  :: Tref=283.15d0      ! Reference Temperature for performance curves,10C [K]
   CHARACTER(len=*), PARAMETER :: RoutineName='CalcMultiSpeedWtoADXCoilCooling'
 
 
@@ -2476,58 +2476,58 @@ SUBROUTINE  CalcMulSpeedWSHPCoilCooling(DXCoilNum,CyclingScheme, &
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: Twet_rated             ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-  REAL :: Gamma_rated            ! Gamma at rated conditions (coil air flow rate and air temperatures)
+  REAL(r64) :: Twet_rated             ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+  REAL(r64) :: Gamma_rated            ! Gamma at rated conditions (coil air flow rate and air temperatures)
 
-  REAL :: SHRss                  ! Sensible heat ratio at steady state
-  REAL :: SHReff                 ! Effective sensible heat ratio at part-load condition
-  REAL :: CpWater                ! Specific heat of water [J/kg_C]
-  REAL :: CpAir                  ! Specific heat of air [J/kg_C]
-  REAL :: ReportingConstant
+  REAL(r64) :: SHRss                  ! Sensible heat ratio at steady state
+  REAL(r64) :: SHReff                 ! Effective sensible heat ratio at part-load condition
+  REAL(r64) :: CpWater                ! Specific heat of water [J/kg_C]
+  REAL(r64) :: CpAir                  ! Specific heat of air [J/kg_C]
+  REAL(r64) :: ReportingConstant
 
   LOGICAL :: LatDegradModelSimFlag  ! Latent degradation model simulation flag
   INTEGER :: NumIteration           ! Iteration Counter
   INTEGER, SAVE :: Count=0          ! No idea what this is for.
   LOGICAL, SAVE    :: FirstTime = .true.
-  REAL, SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
-  REAL, SAVE  :: LoadSideInletWBTemp_Init ! rated conditions
-  REAL, SAVE  :: LoadSideInletHumRat_Init ! rated conditions
-  REAL, SAVE  :: LoadSideInletEnth_Init ! rated conditions
-  REAL, SAVE  :: CpAir_Init                ! rated conditions
-  REAL        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
-  REAL        :: LoadSideInletWBTemp_Unit ! calc conditions for unit
-  REAL        :: LoadSideInletHumRat_Unit ! calc conditions for unit
-  REAL        :: LoadSideInletEnth_Unit ! calc conditions for unit
-  REAL        :: CpAir_Unit                ! calc conditions for unit
-  REAL :: AirMassFlowRatio   ! airflow ratio at low speed
-  REAL :: WaterMassFlowRatio   ! airflow ratio at high speed
-  REAL :: TotCapAirFFModFac !air flow fraction modification
-  REAL :: TotCapWaterFFModFac !water flow fraction modification
-  REAL :: TotCapTempModFac !total capacity temperature correctio fraction
-  REAL :: EIRAirFFModFac !air flow fraction modification
-  REAL :: EIRWaterFFModFac !water flow fraction modification
-  REAL :: EIRTempModFac !total capacity temperature correctio fraction
-  REAL :: CBFSpeed !total capacity temperature correctio fraction
-  REAL :: SHR !total capacity temperature correctio fraction
-  REAL :: EIR !total capacity temperature correctio fraction
+  REAL(r64), SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
+  REAL(r64), SAVE  :: LoadSideInletWBTemp_Init ! rated conditions
+  REAL(r64), SAVE  :: LoadSideInletHumRat_Init ! rated conditions
+  REAL(r64), SAVE  :: LoadSideInletEnth_Init ! rated conditions
+  REAL(r64), SAVE  :: CpAir_Init                ! rated conditions
+  REAL(r64)        :: LoadSideInletDBTemp_Unit ! calc conditions for unit
+  REAL(r64)        :: LoadSideInletWBTemp_Unit ! calc conditions for unit
+  REAL(r64)        :: LoadSideInletHumRat_Unit ! calc conditions for unit
+  REAL(r64)        :: LoadSideInletEnth_Unit ! calc conditions for unit
+  REAL(r64)        :: CpAir_Unit                ! calc conditions for unit
+  REAL(r64) :: AirMassFlowRatio   ! airflow ratio at low speed
+  REAL(r64) :: WaterMassFlowRatio   ! airflow ratio at high speed
+  REAL(r64) :: TotCapAirFFModFac !air flow fraction modification
+  REAL(r64) :: TotCapWaterFFModFac !water flow fraction modification
+  REAL(r64) :: TotCapTempModFac !total capacity temperature correctio fraction
+  REAL(r64) :: EIRAirFFModFac !air flow fraction modification
+  REAL(r64) :: EIRWaterFFModFac !water flow fraction modification
+  REAL(r64) :: EIRTempModFac !total capacity temperature correctio fraction
+  REAL(r64) :: CBFSpeed !total capacity temperature correctio fraction
+  REAL(r64) :: SHR !total capacity temperature correctio fraction
+  REAL(r64) :: EIR !total capacity temperature correctio fraction
   INTEGER :: MaxSpeed           ! maximum speed level
   INTEGER :: SpeedCal           ! calculated speed level
-  REAL :: AoEff !effective air side surface area
-  REAL :: QLoadTotal1 !total capacity at low speed
-  REAL :: QLoadTotal2 !total capacity at high speed
-  REAL :: Winput1 !power consumption at low speed
-  REAL :: Winput2 !power consumption at high speed
-  REAL :: QWasteHeat !recoverable waste heat
-  REAL :: QWasteHeat1 !recoverable waste heat at low speed
-  REAL :: QWasteHeat2 !recoverable waste heat at high speed
-  REAL :: PLF  !part-load function
-  REAL :: MaxHumRat  !max possible humidity
-  REAL :: MaxOutletEnth !max possible outlet enthalpy
+  REAL(r64) :: AoEff !effective air side surface area
+  REAL(r64) :: QLoadTotal1 !total capacity at low speed
+  REAL(r64) :: QLoadTotal2 !total capacity at high speed
+  REAL(r64) :: Winput1 !power consumption at low speed
+  REAL(r64) :: Winput2 !power consumption at high speed
+  REAL(r64) :: QWasteHeat !recoverable waste heat
+  REAL(r64) :: QWasteHeat1 !recoverable waste heat at low speed
+  REAL(r64) :: QWasteHeat2 !recoverable waste heat at high speed
+  REAL(r64) :: PLF  !part-load function
+  REAL(r64) :: MaxHumRat  !max possible humidity
+  REAL(r64) :: MaxOutletEnth !max possible outlet enthalpy
 
   IF (FirstTime) THEN
     !Set indoor air conditions to the rated condition
-    LoadSideInletDBTemp_Init = 26.7
-    LoadSideInletHumRat_Init = 0.0111
+    LoadSideInletDBTemp_Init = 26.7d0
+    LoadSideInletHumRat_Init = 0.0111d0
     LoadSideInletEnth_Init = PsyHFnTdbW(LoadSideInletDBTemp_Init,LoadSideInletHumRat_Init,RoutineName//':Init')
     CpAir_Init = PsyCpAirFnWTdb(LoadSideInletHumRat_Init,LoadSideInletDBTemp_Init,RoutineName//':Init')
     FirstTime=.false.
@@ -2593,15 +2593,15 @@ SUBROUTINE  CalcMulSpeedWSHPCoilCooling(DXCoilNum,CyclingScheme, &
   WtoADXCoil(DXCoilNum)%RunFrac = 1.0
   IF((SpeedNum == 1) .AND. (PartLoadRatio < 1.0)) THEN
     PLF = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,PartLoadRatio)
-    IF (PLF < 0.7) THEN
-     PLF = 0.7
+    IF (PLF < 0.7d0) THEN
+     PLF = 0.7d0
     END IF
     ! calculate the run time fraction
     WtoADXCoil(DXCoilNum)%RunFrac = PartLoadRatio / PLF
     WtoADXCoil(DXCoilNum)%PartLoadRatio    = PartLoadRatio
 
     IF ( WtoADXCoil(DXCoilNum)%RunFrac > 1. ) THEN
-      WtoADXCoil(DXCoilNum)%RunFrac = 1.0 ! Reset coil runtime fraction to 1.0
+      WtoADXCoil(DXCoilNum)%RunFrac = 1.0d0 ! Reset coil runtime fraction to 1.0
     ELSE IF ( WtoADXCoil(DXCoilNum)%RunFrac < 0.0 ) THEN
       WtoADXCoil(DXCoilNum)%RunFrac = 0.0
     END IF
@@ -2653,9 +2653,9 @@ LOOP: DO
                          LoadSideMassFlowRate,CBFSpeed, &
                          WtoADXCoil(DXCoilNum)%MSRatedTotCap(SpeedCal),WtoADXCoil(DXCoilNum)%MSCCapFTemp(SpeedCal), &
                          WtoADXCoil(DXCoilNum)%MSCCapAirFFlow(SpeedCal), WtoADXCoil(DXCoilNum)%MSCCapWaterFFlow(SpeedCal),&
-                         0.0,0,0, 0,&
+                         0.0d0,0,0, 0,&
                          QLoadTotal1, QLoadTotal2, QLoadTotal,SHR,SourceSideInletTemp, &
-                         WtoADXCoil(DXCoilNum)%InletAirPressure, 0.0, 1)
+                         WtoADXCoil(DXCoilNum)%InletAirPressure, 0.0d0, 1)
 
         Winput = QLoadTotal * EIR
 
@@ -2752,7 +2752,7 @@ LOOP: DO
   LoadSideOutletEnth   = LoadSideInletEnth - QLoadTotal/LoadSideMassFlowRate
   LoadSideOutletDBTemp = LoadSideInletDBTemp - QSensible/(LoadSideMassFlowRate * CpAir)
 
-  MaxHumRat = PsyWFnTdbRhPb(LoadSideOutletDBTemp,0.9999,WtoADXCoil(DXCoilNum)%InletAirPressure,RoutineName)
+  MaxHumRat = PsyWFnTdbRhPb(LoadSideOutletDBTemp,0.9999d0,WtoADXCoil(DXCoilNum)%InletAirPressure,RoutineName)
   MaxOutletEnth = PsyHFnTdbW(LoadSideOutletDBTemp,MaxHumRat,RoutineName)
   IF(LoadSideOutletEnth > MaxOutletEnth) THEN
     LoadSideOutletEnth = MaxOutletEnth
@@ -2858,16 +2858,16 @@ SUBROUTINE  CalcMulSpeedWSHPCoilHeating(DXCoilNum,CyclingScheme,RuntimeFrac, &
 
   INTEGER,   INTENT(IN) :: DXCoilNum              ! Heat Pump Number
   INTEGER,   INTENT(IN) :: CyclingScheme      ! Fan/Compressor cycling scheme indicator
-  REAL, INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
+  REAL(r64), INTENT(IN) :: SensDemand         ! Cooling Sensible Demand [W] !unused1208
   INTEGER,   INTENT(IN) :: CompOp             ! compressor operation flag
-  REAL, INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
-  REAL, INTENT(INOUT) :: RuntimeFrac        ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
-  REAL, INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
-  REAL, INTENT(IN) :: SpeedRatio        ! SpeedRatio varies between 1.0 (higher speed) and 0.0 (lower speed)
+  REAL(r64), INTENT(IN) :: PartLoadRatio      ! compressor part load ratio
+  REAL(r64), INTENT(INOUT) :: RuntimeFrac        ! Runtime Fraction of compressor or percent on time (on-time/cycle time)
+  REAL(r64), INTENT(IN) :: OnOffAirFlowRatio  ! ratio of compressor on flow to average flow over time step
+  REAL(r64), INTENT(IN) :: SpeedRatio        ! SpeedRatio varies between 1.0 (higher speed) and 0.0 (lower speed)
   INTEGER, INTENT(IN)  :: SpeedNum      ! Speed number, high bound, i.e. SpeedNum - 1 is the other side
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER  :: Tref=283.15      ! Reference Temperature for performance curves,10C [K]
+  REAL(r64), PARAMETER  :: Tref=283.15d0      ! Reference Temperature for performance curves,10C [K]
   CHARACTER(len=*), PARAMETER :: RoutineName='CalcMulSpeedWSHPCoilHeating'
 
 
@@ -2878,29 +2878,29 @@ SUBROUTINE  CalcMulSpeedWSHPCoilHeating(DXCoilNum,CyclingScheme,RuntimeFrac, &
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: CpWater                ! Specific heat of water [J/kg_C]
-  REAL :: CpAir                  ! Specific heat of air [J/kg_C]
+  REAL(r64) :: CpWater                ! Specific heat of water [J/kg_C]
+  REAL(r64) :: CpAir                  ! Specific heat of air [J/kg_C]
 
-  REAL :: AirMassFlowRatio   ! airflow ratio at low speed
-  REAL :: WaterMassFlowRatio   ! airflow ratio at high speed
-  REAL :: TotCapAirFFModFac !air flow fraction modification
-  REAL :: TotCapWaterFFModFac !water flow fraction modification
-  REAL :: TotCapTempModFac !total capacity temperature correctio fraction
-  REAL :: EIRAirFFModFac !air flow fraction modification
-  REAL :: EIRWaterFFModFac !water flow fraction modification
-  REAL :: EIRTempModFac !total capacity temperature correctio fraction
-  REAL :: EIR !total capacity temperature correctio fraction
+  REAL(r64) :: AirMassFlowRatio   ! airflow ratio at low speed
+  REAL(r64) :: WaterMassFlowRatio   ! airflow ratio at high speed
+  REAL(r64) :: TotCapAirFFModFac !air flow fraction modification
+  REAL(r64) :: TotCapWaterFFModFac !water flow fraction modification
+  REAL(r64) :: TotCapTempModFac !total capacity temperature correctio fraction
+  REAL(r64) :: EIRAirFFModFac !air flow fraction modification
+  REAL(r64) :: EIRWaterFFModFac !water flow fraction modification
+  REAL(r64) :: EIRTempModFac !total capacity temperature correctio fraction
+  REAL(r64) :: EIR !total capacity temperature correctio fraction
   INTEGER :: MaxSpeed           ! maximum speed level
   INTEGER :: SpeedCal           ! calculated speed level
-  REAL :: QLoadTotal1      ! heating capacit at low speed
-  REAL :: QLoadTotal2      ! heating capacity at high speed
-  REAL :: Winput1          ! power consumption at low speed
-  REAL :: Winput2          ! power consumption at high speed
-  REAL :: QWasteHeat       !recoverable waste heat
-  REAL :: QWasteHeat1      !recoverable waste heat at low speed
-  REAL :: QWasteHeat2      !recoverable waste heat at high speed
-  REAL :: PLF  !part-load function
-  REAL :: ReportingConstant
+  REAL(r64) :: QLoadTotal1      ! heating capacit at low speed
+  REAL(r64) :: QLoadTotal2      ! heating capacity at high speed
+  REAL(r64) :: Winput1          ! power consumption at low speed
+  REAL(r64) :: Winput2          ! power consumption at high speed
+  REAL(r64) :: QWasteHeat       !recoverable waste heat
+  REAL(r64) :: QWasteHeat1      !recoverable waste heat at low speed
+  REAL(r64) :: QWasteHeat2      !recoverable waste heat at high speed
+  REAL(r64) :: PLF  !part-load function
+  REAL(r64) :: ReportingConstant
 
   MaxSpeed = WtoADXCoil(DXCoilNum)%NumofSpeeds
 
@@ -2947,15 +2947,15 @@ SUBROUTINE  CalcMulSpeedWSHPCoilHeating(DXCoilNum,CyclingScheme,RuntimeFrac, &
   WtoADXCoil(DXCoilNum)%RunFrac = 1.0
   IF((SpeedNum == 1) .AND. (PartLoadRatio < 1.0)) THEN
     PLF = CurveValue(WtoADXCoil(DXCoilNum)%PLFFPLR,PartLoadRatio)
-    IF (PLF < 0.7) THEN
-     PLF = 0.7
+    IF (PLF < 0.7d0) THEN
+     PLF = 0.7d0
     END IF
     ! calculate the run time fraction
     WtoADXCoil(DXCoilNum)%RunFrac = PartLoadRatio / PLF
     WtoADXCoil(DXCoilNum)%PartLoadRatio    = PartLoadRatio
 
     IF ( WtoADXCoil(DXCoilNum)%RunFrac > 1. ) THEN
-      WtoADXCoil(DXCoilNum)%RunFrac = 1.0 ! Reset coil runtime fraction to 1.0
+      WtoADXCoil(DXCoilNum)%RunFrac = 1.0d0 ! Reset coil runtime fraction to 1.0
     ELSE IF( WtoADXCoil(DXCoilNum)%RunFrac < 0.0 ) THEN
       WtoADXCoil(DXCoilNum)%RunFrac = 0.0
     END IF
@@ -3043,9 +3043,9 @@ SUBROUTINE  CalcMulSpeedWSHPCoilHeating(DXCoilNum,CyclingScheme,RuntimeFrac, &
   IF (CyclingScheme .EQ. ContFanCycCoil) THEN
     ! continuous fan, cycling compressor
     WtoADXCoil(DXCoilNum)%OutletAirEnthalpy = PartLoadRatio*LoadSideOutletEnth + &
-                                                  (1.-PartLoadRatio)*LoadSideInletEnth
+                                                  (1.d0-PartLoadRatio)*LoadSideInletEnth
     WtoADXCoil(DXCoilNum)%OutletAirHumRat   = PartLoadRatio*LoadsideOutletHumRat + &
-                                                  (1.-PartLoadRatio)*LoadSideInletHumRat
+                                                  (1.d0-PartLoadRatio)*LoadSideInletHumRat
     WtoADXCoil(DXCoilNum)%OutletAirDBTemp   = PsyTdbFnHW(WtoADXCoil(DXCoilNum)%OutletAirEnthalpy,  &
                                                                WtoADXCoil(DXCoilNum)%OutletAirHumRat,RoutineName)
     PLRCorrLoadSideMdot = LoadSideMassFlowRate
@@ -3125,7 +3125,7 @@ FUNCTION GetCoilCapacityMulSpeedWSHP(CoilType,CoilName,ErrorsFound) RESULT(CoilC
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: CoilCapacity ! returned capacity of matched coil
+  REAL(r64)                    :: CoilCapacity ! returned capacity of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3260,7 +3260,7 @@ FUNCTION GetCoilAirFlowRateMulSpeedWSHP(CoilType,CoilName,ErrorsFound) RESULT(Co
   CHARACTER(len=*), INTENT(IN) :: CoilType     ! must match coil types in this module
   CHARACTER(len=*), INTENT(IN) :: CoilName     ! must match coil names for the coil type
   LOGICAL, INTENT(INOUT)       :: ErrorsFound  ! set to true if problem
-  REAL                    :: CoilAirFlowRate ! returned air volume flow rate of matched coil
+  REAL(r64)                    :: CoilAirFlowRate ! returned air volume flow rate of matched coil
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3551,7 +3551,7 @@ SUBROUTINE UpdateMulSpeedWSHP(DXCoilNum)
   INTEGER              :: WaterInletNode
   INTEGER              :: AirOutletNode
   INTEGER              :: WaterOutletNode
-  REAL            :: ReportingConstant
+  REAL(r64)            :: ReportingConstant
 
 
   !WatertoAirHP(DXCoilNum)%Simflag=.FALSE.
@@ -3653,13 +3653,13 @@ FUNCTION CalcEffectiveSHR(DXCoilNum,SHRss, CyclingScheme, RTF, QLatRated, QLatAc
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN) :: DXCoilNum         ! Index number for cooling coil
   INTEGER, INTENT (IN) :: CyclingScheme ! Fan/compressor cycling scheme indicator
-  REAL, INTENT (IN) :: SHRss         ! Steady-state sensible heat ratio
-  REAL, INTENT (IN) :: RTF           ! Compressor run-time fraction
-  REAL, INTENT (IN) :: QLatRated     ! Rated latent capacity
-  REAL, INTENT (IN) :: QLatActual    ! Actual latent capacity
-  REAL, INTENT (IN) :: EnteringDB    ! Entering air dry-bulb temperature
-  REAL, INTENT (IN) :: EnteringWB    ! Entering air wet-bulb temperature
-  REAL            :: SHReff        ! Effective sensible heat ratio, includes degradation due to cycling effects
+  REAL(r64), INTENT (IN) :: SHRss         ! Steady-state sensible heat ratio
+  REAL(r64), INTENT (IN) :: RTF           ! Compressor run-time fraction
+  REAL(r64), INTENT (IN) :: QLatRated     ! Rated latent capacity
+  REAL(r64), INTENT (IN) :: QLatActual    ! Actual latent capacity
+  REAL(r64), INTENT (IN) :: EnteringDB    ! Entering air dry-bulb temperature
+  REAL(r64), INTENT (IN) :: EnteringWB    ! Entering air wet-bulb temperature
+  REAL(r64)            :: SHReff        ! Effective sensible heat ratio, includes degradation due to cycling effects
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3671,25 +3671,25 @@ FUNCTION CalcEffectiveSHR(DXCoilNum,SHRss, CyclingScheme, RTF, QLatRated, QLatAc
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: Twet                 ! Nominal time for condensate to begin leaving the coil's condensate drain line
+  REAL(r64) :: Twet                 ! Nominal time for condensate to begin leaving the coil's condensate drain line
                                     ! at the current operating conditions (sec)
-  REAL :: Gamma                ! Initial moisture evaporation rate divided by steady-state AC latent capacity
+  REAL(r64) :: Gamma                ! Initial moisture evaporation rate divided by steady-state AC latent capacity
                                     ! at the current operating conditions
-  REAL :: Twet_rated           ! Twet at rated conditions (coil air flow rate and air temperatures), sec
-  REAL :: Gamma_rated          ! Gamma at rated conditions (coil air flow rate and air temperatures)
-  REAL :: Twet_max             ! Maximum allowed value for Twet
-  REAL :: MaxONOFFCyclesperHour  ! Maximum cycling rate of heat pump [cycles/hr]
-  REAL :: HPTimeConstant       ! Heat pump time constant [s]
-  REAL :: FanDelayTime         ! Fan delay time, time delay for the HP's fan to
+  REAL(r64) :: Twet_rated           ! Twet at rated conditions (coil air flow rate and air temperatures), sec
+  REAL(r64) :: Gamma_rated          ! Gamma at rated conditions (coil air flow rate and air temperatures)
+  REAL(r64) :: Twet_max             ! Maximum allowed value for Twet
+  REAL(r64) :: MaxONOFFCyclesperHour  ! Maximum cycling rate of heat pump [cycles/hr]
+  REAL(r64) :: HPTimeConstant       ! Heat pump time constant [s]
+  REAL(r64) :: FanDelayTime         ! Fan delay time, time delay for the HP's fan to
                                     ! shut off after compressor cycle off  [s]
-  REAL :: Ton                  ! Coil on time (sec)
-  REAL :: Toff                 ! Coil off time (sec)
-  REAL :: Toffa                ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
-  REAL :: aa                   ! Intermediate variable
-  REAL :: To1                  ! Intermediate variable (first guess at To). To = time to the start of moisture removal
-  REAL :: To2                  ! Intermediate variable (second guess at To). To = time to the start of moisture removal
-  REAL :: Error                ! Error for iteration (DO) loop
-  REAL :: LHRmult              ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
+  REAL(r64) :: Ton                  ! Coil on time (sec)
+  REAL(r64) :: Toff                 ! Coil off time (sec)
+  REAL(r64) :: Toffa                ! Actual coil off time (sec). Equations valid for Toff <= (2.0 * Twet/Gamma)
+  REAL(r64) :: aa                   ! Intermediate variable
+  REAL(r64) :: To1                  ! Intermediate variable (first guess at To). To = time to the start of moisture removal
+  REAL(r64) :: To2                  ! Intermediate variable (second guess at To). To = time to the start of moisture removal
+  REAL(r64) :: Error                ! Error for iteration (DO) loop
+  REAL(r64) :: LHRmult              ! Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
 
    Twet_rated               = WtoADXCoil(DXCoilNum)%Twet_Rated
    Gamma_rated              = WtoADXCoil(DXCoilNum)%Gamma_Rated
@@ -3709,11 +3709,11 @@ FUNCTION CalcEffectiveSHR(DXCoilNum,SHRss, CyclingScheme, RTF, QLatRated, QLatAc
    Twet_max   = 9999.0 ! high limit for Twet
 
 !  Calculate the model parameters at the actual operating conditions
-   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.*10**-10),Twet_max)    !RS: Debugging: 102612
-   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7-19.4)*QLatActual+1.*10**-10)
+   Twet    = MIN(Twet_rated*QLatRated /(QLatActual+1.d-10),Twet_max)
+   Gamma   = Gamma_rated*QLatRated*(EnteringDB-EnteringWB)/((26.7d0-19.4d0)*QLatActual+1.d-10)
 
 !  Calculate the compressor on and off times using a converntional thermostat curve
-   Ton  = 3600./(4.*MaxONOFFCyclesperHour*(1.-RTF))   ! duration of cooling coil on-cycle (sec)
+   Ton  = 3600.d0/(4.d0*MaxONOFFCyclesperHour*(1.d0-RTF))   ! duration of cooling coil on-cycle (sec)
 
    IF ((CyclingScheme .EQ. CycFanCycCoil).AND.(FanDelayTime.NE.0.0)) THEN
     ! For CycFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
@@ -3722,23 +3722,23 @@ FUNCTION CalcEffectiveSHR(DXCoilNum,SHRss, CyclingScheme, RTF, QLatRated, QLatAc
    ELSE
     ! For ContFanCycCoil, moisture is evaporated from the cooling coil back to the air stream
     ! for the entire heat pump off-cycle.
-        Toff = 3600./(4.*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
+        Toff = 3600.d0/(4.d0*MaxONOFFCyclesperHour*RTF)        ! duration of cooling coil off-cycle (sec)
    END IF
 
 !  Cap Toff to meet the equation restriction
    IF(Gamma .GT. 0.0)THEN
-     Toffa = MIN(Toff, 2.*Twet/Gamma)
+     Toffa = MIN(Toff, 2.d0*Twet/Gamma)
    ELSE
      Toffa = Toff
    END IF
 
 !  Use sucessive substitution to solve for To
-   aa = (Gamma*Toffa) - (0.25/Twet)*(Gamma**2)*(Toffa**2)
+   aa = (Gamma*Toffa) - (0.25d0/Twet)*(Gamma**2)*(Toffa**2)
 
    To1 = aa+HPTimeConstant
    Error = 1.0
-   DO WHILE (Error .gt. 0.001)
-       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0)
+   DO WHILE (Error .gt. 0.001d0)
+       To2 = aa-HPTimeConstant*(EXP(-To1/HPTimeConstant)-1.0d0)
        Error = ABS((To2-To1)/To1)
        To1 = To2
    END DO
@@ -3746,9 +3746,9 @@ FUNCTION CalcEffectiveSHR(DXCoilNum,SHRss, CyclingScheme, RTF, QLatRated, QLatAc
 !  Adjust Sensible Heat Ratio (SHR) using Latent Heat Ratio (LHR) multiplier
 !  Floating underflow errors occur when -Ton/HPTimeConstant is a large negative number.
 !  Cap lower limit at -700 to avoid the underflow errors.
-   aa = EXP(MAX(-700.0,-Ton/HPTimeConstant))
+   aa = EXP(MAX(-700.0d0,-Ton/HPTimeConstant))
 !  Calculate latent heat ratio multiplier
-   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0))),0.0)
+   LHRmult = MAX(((Ton-To2)/(Ton+HPTimeConstant*(aa-1.0d0))),0.0d0)
 
 !  Calculate part-load or "effective" sensible heat ratio
    SHReff = 1.0-(1.0-SHRss)*LHRmult
@@ -3802,35 +3802,35 @@ SUBROUTINE CalcTotCapSHR_VSWSHP(InletDryBulb,InletHumRat,InletEnthalpy,InletWetB
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT (IN) :: InletDryBulb       ! inlet air dry bulb temperature [C]
-  REAL, INTENT (IN) :: InletHumRat        ! inlet air humidity ratio [kg water / kg dry air]
-  REAL, INTENT (IN) :: InletEnthalpy      ! inlet air specific enthalpy [J/kg]
-  REAL, INTENT (IN) :: InletWetBulb       ! inlet air wet bulb temperature [C]
-  REAL, INTENT (IN) :: AirMassFlowRatio   ! Ratio of actual air mass flow to nominal air mass flow
-  REAL, INTENT (IN) :: WaterMassFlowRatio   ! Ratio of actual water mass flow to nominal water mass flow
-  REAL, INTENT (IN) :: AirMassFlow        ! actual mass flow for capacity and SHR calculation
-  REAL, INTENT (IN) :: CBF                ! coil bypass factor
+  REAL(r64), INTENT (IN) :: InletDryBulb       ! inlet air dry bulb temperature [C]
+  REAL(r64), INTENT (IN) :: InletHumRat        ! inlet air humidity ratio [kg water / kg dry air]
+  REAL(r64), INTENT (IN) :: InletEnthalpy      ! inlet air specific enthalpy [J/kg]
+  REAL(r64), INTENT (IN) :: InletWetBulb       ! inlet air wet bulb temperature [C]
+  REAL(r64), INTENT (IN) :: AirMassFlowRatio   ! Ratio of actual air mass flow to nominal air mass flow
+  REAL(r64), INTENT (IN) :: WaterMassFlowRatio   ! Ratio of actual water mass flow to nominal water mass flow
+  REAL(r64), INTENT (IN) :: AirMassFlow        ! actual mass flow for capacity and SHR calculation
+  REAL(r64), INTENT (IN) :: CBF                ! coil bypass factor
   INTEGER, INTENT (IN) :: NumSpeeds            ! number of speeds for input
 
-  REAL, INTENT (IN) :: TotCapNom1         ! nominal total capacity at low speed [W]
+  REAL(r64), INTENT (IN) :: TotCapNom1         ! nominal total capacity at low speed [W]
   INTEGER, INTENT (IN) :: CCapFTemp1           ! capacity modifier curve index, function of entering wetbulb at low speed
   INTEGER, INTENT (IN) :: CCapAirFFlow1        ! capacity modifier curve, function of actual air flow vs rated flow at low speed
   INTEGER, INTENT (IN) :: CCapWaterFFlow1      ! capacity modifier curve, function of actual water flow vs rated flow at low speed
 
-  REAL, INTENT (IN) :: TotCapNom2         ! nominal total capacity at high speed [W]
+  REAL(r64), INTENT (IN) :: TotCapNom2         ! nominal total capacity at high speed [W]
   INTEGER, INTENT (IN) :: CCapFTemp2           ! capacity modifier curve index, function of entering wetbulb at high speed
   INTEGER, INTENT (IN) :: CCapAirFFlow2        ! capacity modifier curve, function of actual air flow vs rated flow at high speed
   INTEGER, INTENT (IN) :: CCapWaterFFlow2      ! capacity modifier curve, function of actual water flow vs rated flow at high speed
 
 
-  REAL, INTENT (OUT)   :: TotCap1           ! total capacity at the given conditions [W] at low speed
-  REAL, INTENT (OUT)   :: TotCap2           ! total capacity at the given conditions [W] at high speed
-  REAL, INTENT (OUT)   :: TotCapSpeed       ! integrated total capacity corresponding to the speed ratio
+  REAL(r64), INTENT (OUT)   :: TotCap1           ! total capacity at the given conditions [W] at low speed
+  REAL(r64), INTENT (OUT)   :: TotCap2           ! total capacity at the given conditions [W] at high speed
+  REAL(r64), INTENT (OUT)   :: TotCapSpeed       ! integrated total capacity corresponding to the speed ratio
 
-  REAL, INTENT (OUT)   :: SHR               ! sensible heat ratio at the given conditions
-  REAL, INTENT (IN) :: CondInletTemp      ! Condenser inlet temperature [C]
-  REAL, INTENT (IN) :: Pressure           ! air pressure [Pa]
-  REAL, INTENT (IN) :: SpeedRatio         ! from 0.0 to 1.0
+  REAL(r64), INTENT (OUT)   :: SHR               ! sensible heat ratio at the given conditions
+  REAL(r64), INTENT (IN) :: CondInletTemp      ! Condenser inlet temperature [C]
+  REAL(r64), INTENT (IN) :: Pressure           ! air pressure [Pa]
+  REAL(r64), INTENT (IN) :: SpeedRatio         ! from 0.0 to 1.0
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3843,40 +3843,40 @@ SUBROUTINE CalcTotCapSHR_VSWSHP(InletDryBulb,InletHumRat,InletEnthalpy,InletWetB
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: InletWetBulbCalc    ! calculated inlet wetbulb temperature used for finding dry coil point [C]
-  REAL :: InletHumRatCalc     ! calculated inlet humidity ratio used for finding dry coil point [kg water / kg dry air]
-  REAL :: TotCapTempModFac1
+  REAL(r64) :: InletWetBulbCalc    ! calculated inlet wetbulb temperature used for finding dry coil point [C]
+  REAL(r64) :: InletHumRatCalc     ! calculated inlet humidity ratio used for finding dry coil point [kg water / kg dry air]
+  REAL(r64) :: TotCapTempModFac1
   ! Total capacity modifier (function of entering wetbulb, outside water inlet temp) at low speed
-  REAL :: TotCapAirFlowModFac1
+  REAL(r64) :: TotCapAirFlowModFac1
   ! Total capacity modifier (function of actual supply air flow vs nominal flow) at low speed
-  REAL :: TotCapWaterFlowModFac1
+  REAL(r64) :: TotCapWaterFlowModFac1
   ! Total capacity modifier (function of actual supply water flow vs nominal flow) at low speed
-  REAL :: TotCapTempModFac2
+  REAL(r64) :: TotCapTempModFac2
   ! Total capacity modifier (function of entering wetbulb, outside water inlet temp) at high speed
-  REAL :: TotCapAirFlowModFac2
+  REAL(r64) :: TotCapAirFlowModFac2
   ! Total capacity modifier (function of actual supply air flow vs nominal flow) at high speed
-  REAL :: TotCapWaterFlowModFac2
+  REAL(r64) :: TotCapWaterFlowModFac2
   ! Total capacity modifier (function of actual supply water flow vs nominal flow) at high speed
-  REAL :: hDelta              ! Change in air enthalpy across the cooling coil [J/kg]
-  REAL :: hADP                ! Apparatus dew point enthalpy [J/kg]
-  REAL :: tADP                ! Apparatus dew point temperature [C]
-  REAL :: wADP                ! Apparatus dew point humidity ratio [kg/kg]
-  REAL :: hTinwADP            ! Enthalpy at inlet dry-bulb and wADP [J/kg]
-  REAL :: SHRCalc             ! temporary calculated value of SHR
-  REAL :: TotCapCalc          ! temporary calculated value of total capacity [W]
-  REAL :: TotCapCalc1          ! temporary calculated value of total capacity [W] at low speed
-  REAL :: TotCapCalc2          ! temporary calculated value of total capacity [W] at high speed
+  REAL(r64) :: hDelta              ! Change in air enthalpy across the cooling coil [J/kg]
+  REAL(r64) :: hADP                ! Apparatus dew point enthalpy [J/kg]
+  REAL(r64) :: tADP                ! Apparatus dew point temperature [C]
+  REAL(r64) :: wADP                ! Apparatus dew point humidity ratio [kg/kg]
+  REAL(r64) :: hTinwADP            ! Enthalpy at inlet dry-bulb and wADP [J/kg]
+  REAL(r64) :: SHRCalc             ! temporary calculated value of SHR
+  REAL(r64) :: TotCapCalc          ! temporary calculated value of total capacity [W]
+  REAL(r64) :: TotCapCalc1          ! temporary calculated value of total capacity [W] at low speed
+  REAL(r64) :: TotCapCalc2          ! temporary calculated value of total capacity [W] at high speed
   INTEGER :: Counter             ! Counter for dry evaporator iterations
   INTEGER :: MaxIter             ! Maximum number of iterations for dry evaporator calculations
-  REAL :: RF                  ! Relaxation factor for dry evaporator iterations
-  REAL :: Tolerance           ! Error tolerance for dry evaporator iterations
-  REAL :: werror              ! Deviation of humidity ratio in dry evaporator iteration loop
+  REAL(r64) :: RF                  ! Relaxation factor for dry evaporator iterations
+  REAL(r64) :: Tolerance           ! Error tolerance for dry evaporator iterations
+  REAL(r64) :: werror              ! Deviation of humidity ratio in dry evaporator iteration loop
   LOGICAL   :: LoopOn = .TRUE.     ! flag to control the loop iteration
 
   MaxIter = 30
-  RF = 0.4
+  RF = 0.4d0
   Counter = 0
-  Tolerance = 0.01
+  Tolerance = 0.01d0
   werror = 0.0
 
   InletWetBulbCalc = InletWetBulb
@@ -3910,23 +3910,23 @@ SUBROUTINE CalcTotCapSHR_VSWSHP(InletDryBulb,InletHumRat,InletEnthalpy,InletWetB
 
 !   Calculate apparatus dew point conditions using TotCap and CBF
     hDelta = TotCapCalc/AirMassFlow
-    hADP = InletEnthalpy - hDelta/(1.-CBF)
+    hADP = InletEnthalpy - hDelta/(1.d0-CBF)
     tADP = PsyTsatFnHPb(hADP,Pressure)
     wADP = PsyWFnTdbH(tADP,hADP)
     hTinwADP = PsyHFnTdbW(InletDryBulb,wADP)
-    SHRCalc = MIN((hTinwADP-hADP)/(InletEnthalpy-hADP),1.)
+    SHRCalc = MIN((hTinwADP-hADP)/(InletEnthalpy-hADP),1.d0)
 !
 !   Check for dry evaporator conditions (win < wadp)
 !
     IF (wADP .gt. InletHumRatCalc .or. (Counter .ge. 1 .and. Counter .lt. MaxIter)) THEN
-      If(InletHumRatCalc == 0.0)InletHumRatCalc=0.00001
+      If(InletHumRatCalc == 0.0)InletHumRatCalc=0.00001d0
       werror = (InletHumRatCalc - wADP)/InletHumRatCalc
 !
 !     Increase InletHumRatCalc at constant inlet air temp to find coil dry-out point. Then use the
 !     capacity at the dry-out point to determine exiting conditions from coil. This is required
 !     since the TotCapTempModFac doesn't work properly with dry-coil conditions.
 !
-      InletHumRatCalc = RF*wADP + (1.-RF)*InletHumRatCalc
+      InletHumRatCalc = RF*wADP + (1.d0-RF)*InletHumRatCalc
       InletWetBulbCalc = PsyTwbFnTdbWPb(InletDryBulb,InletHumRatCalc,Pressure)
       Counter = Counter + 1
       IF (ABS(werror) .gt. Tolerance) THEN
@@ -3942,7 +3942,7 @@ SUBROUTINE CalcTotCapSHR_VSWSHP(InletDryBulb,InletHumRat,InletEnthalpy,InletWetB
 ! END DO
 
 !  Calculate full load output conditions
-  IF (SHRCalc .gt. 1. .OR. Counter .gt. 0) SHRCalc = 1.
+  IF (SHRCalc .gt. 1.d0 .OR. Counter .gt. 0) SHRCalc = 1.d0
 
   SHR = SHRCalc
   TotCap1 = TotCapCalc1
@@ -3977,10 +3977,10 @@ FUNCTION AdjustCBF(CBFNom,AirMassFlowRateNom,AirMassFlowRate) RESULT(CBFAdj)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! FUNCTION ARGUMENT DEFINITIONS:
-  REAL, INTENT (IN) :: CBFNom                ! nominal coil bypass factor
-  REAL, INTENT (IN) :: AirMassFlowRateNom    ! nominal air mass flow rate [kg/s]
-  REAL, INTENT (IN) :: AirMassFlowRate       ! actual air mass flow rate [kg/s]
-  REAL         :: CBFAdj                ! the result - the adjusted coil bypass factor
+  REAL(r64), INTENT (IN) :: CBFNom                ! nominal coil bypass factor
+  REAL(r64), INTENT (IN) :: AirMassFlowRateNom    ! nominal air mass flow rate [kg/s]
+  REAL(r64), INTENT (IN) :: AirMassFlowRate       ! actual air mass flow rate [kg/s]
+  REAL(r64)         :: CBFAdj                ! the result - the adjusted coil bypass factor
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
@@ -3993,8 +3993,8 @@ FUNCTION AdjustCBF(CBFNom,AirMassFlowRateNom,AirMassFlowRate) RESULT(CBFAdj)
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: A0  ! intermediate variable
-  REAL :: ADiff  ! intermediate variable
+  REAL(r64) :: A0  ! intermediate variable
+  REAL(r64) :: ADiff  ! intermediate variable
 
   IF (CBFNom .gt. 0.0) THEN
      A0 = -log(CBFNom)*AirMassFlowRateNom
@@ -4043,17 +4043,17 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
           ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT (IN) :: UnitType
   CHARACTER(len=*), INTENT (IN) :: UnitName
-  REAL, INTENT (IN) :: InletAirTemp          ! inlet air temperature [C]
-  REAL, INTENT (IN) :: InletAirHumRat        ! inlet air humidity ratio [kg water / kg dry air]
-  REAL, INTENT (IN) :: TotCap                ! total cooling  capacity [Watts]
-  REAL, INTENT (IN) :: AirMassFlowRate       ! the air mass flow rate at the given capacity [kg/s]
-  REAL, INTENT (IN) :: SHR                   ! sensible heat ratio at the given capacity and flow rate
-  REAL         :: CBF                   ! the result - the coil bypass factor
+  REAL(r64), INTENT (IN) :: InletAirTemp          ! inlet air temperature [C]
+  REAL(r64), INTENT (IN) :: InletAirHumRat        ! inlet air humidity ratio [kg water / kg dry air]
+  REAL(r64), INTENT (IN) :: TotCap                ! total cooling  capacity [Watts]
+  REAL(r64), INTENT (IN) :: AirMassFlowRate       ! the air mass flow rate at the given capacity [kg/s]
+  REAL(r64), INTENT (IN) :: SHR                   ! sensible heat ratio at the given capacity and flow rate
+  REAL(r64)         :: CBF                   ! the result - the coil bypass factor
 
 
           ! FUNCTION PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER ::  RoutineName='CalcCBF'
-  REAL :: SmallDifferenceTest=0.00000001
+  REAL(r64) :: SmallDifferenceTest=0.00000001d0
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -4062,26 +4062,26 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
           ! na
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
-  REAL :: InletAirEnthalpy  ! Enthalpy of inlet air to evaporator at given conditions [J/kg]
-  REAL :: DeltaH            ! Enthalpy drop across evaporator at given conditions [J/kg]
-  REAL :: DeltaT            ! Temperature drop across evaporator at given conditions [C]
-  REAL :: DeltaHumRat       ! Humidity ratio drop across evaporator at given conditions [kg/kg]
-  REAL :: OutletAirTemp     ! Outlet dry-bulb temperature from evaporator at given conditions [C]
-  REAL :: OutletAirEnthalpy ! Enthalpy of outlet air at given conditions [J/kg]
-  REAL :: OutletAirHumRat   ! Outlet humidity ratio from evaporator at given conditions [kg/kg]
-  REAL :: OutletAirRH       ! relative humidity of the outlet air
-  REAL :: Error                ! Error term used in given coil bypass factor (CBF) calculations
-  REAL :: ErrorLast            ! Error term, from previous iteration
+  REAL(r64) :: InletAirEnthalpy  ! Enthalpy of inlet air to evaporator at given conditions [J/kg]
+  REAL(r64) :: DeltaH            ! Enthalpy drop across evaporator at given conditions [J/kg]
+  REAL(r64) :: DeltaT            ! Temperature drop across evaporator at given conditions [C]
+  REAL(r64) :: DeltaHumRat       ! Humidity ratio drop across evaporator at given conditions [kg/kg]
+  REAL(r64) :: OutletAirTemp     ! Outlet dry-bulb temperature from evaporator at given conditions [C]
+  REAL(r64) :: OutletAirEnthalpy ! Enthalpy of outlet air at given conditions [J/kg]
+  REAL(r64) :: OutletAirHumRat   ! Outlet humidity ratio from evaporator at given conditions [kg/kg]
+  REAL(r64) :: OutletAirRH       ! relative humidity of the outlet air
+  REAL(r64) :: Error                ! Error term used in given coil bypass factor (CBF) calculations
+  REAL(r64) :: ErrorLast            ! Error term, from previous iteration
   INTEGER :: Iter                 ! Iteration loop counter in CBF calculations
   INTEGER :: IterMax              ! Maximum number of iterations in CBF calculations
-  REAL :: ADPTemp              ! Apparatus dewpoint temperature used in CBF calculations [C]
-  REAL :: ADPHumRat            ! Apparatus dewpoint humidity used in CBF calculations [kg/kg]
-  REAL :: ADPEnthalpy          ! Air enthalpy at apparatus dew point [J/kg]
-  REAL :: DeltaADPTemp         ! Change in Apparatus Dew Point used in CBF calculations [C]
-  REAL :: SlopeAtConds          ! Slope (DeltaHumRat/DeltaT) at given conditions
-  REAL :: Slope                ! Calculated Slope used while hunting for Tadp
-  REAL :: Tolerance            ! Convergence tolerance for CBF calculations
-  REAL :: HTinHumRatOut        ! Air enthalpy at inlet air temp and outlet air humidity ratio [J/kg]
+  REAL(r64) :: ADPTemp              ! Apparatus dewpoint temperature used in CBF calculations [C]
+  REAL(r64) :: ADPHumRat            ! Apparatus dewpoint humidity used in CBF calculations [kg/kg]
+  REAL(r64) :: ADPEnthalpy          ! Air enthalpy at apparatus dew point [J/kg]
+  REAL(r64) :: DeltaADPTemp         ! Change in Apparatus Dew Point used in CBF calculations [C]
+  REAL(r64) :: SlopeAtConds          ! Slope (DeltaHumRat/DeltaT) at given conditions
+  REAL(r64) :: Slope                ! Calculated Slope used while hunting for Tadp
+  REAL(r64) :: Tolerance            ! Convergence tolerance for CBF calculations
+  REAL(r64) :: HTinHumRatOut        ! Air enthalpy at inlet air temp and outlet air humidity ratio [J/kg]
   LOGICAL :: CBFErrors=.false.    ! Set to true if errors in CBF calculation, fatal at end of routine
 
   DeltaH = 0.0
@@ -4096,7 +4096,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
 
   DeltaH = TotCap/AirMassFlowRate
   InletAirEnthalpy = PsyHFnTdbW(InletAirTemp,InletAirHumRat)
-  HTinHumRatOut = InletAirEnthalpy - (1.0-SHR)*DeltaH
+  HTinHumRatOut = InletAirEnthalpy - (1.0d0-SHR)*DeltaH
   OutletAirHumRat = PsyWFnTdbH(InletAirTemp,HTinHumRatOut)
   DeltaHumRat = InletAirHumRat - OutletAirHumRat
   OutletAirEnthalpy = InletAirEnthalpy - DeltaH
@@ -4104,7 +4104,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
 !  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
 !  Pressure will have to be pass into this subroutine to fix this one
   OutletAirRH = PsyRhFnTdbWPb(OutletAirTemp,OutletAirHumRat,StdBaroPress,'CalcCBF')
-  IF (OutletAirRH .ge. 1.0) THEN
+  IF (OutletAirRH .ge. 1.0d0) THEN
      CALL ShowSevereError ('For object = '//TRIM(UnitType)// ', name = "'//TRIM(UnitName)// '"')
      CALL ShowContinueError ('Calculated outlet air relative humidity greater than 1. The combination of')
      CALL ShowContinueError ('rated air volume flow rate, total cooling capacity and sensible heat ratio yields coil exiting')
@@ -4121,7 +4121,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
      CALL ShowContinueError('...Air Mass Flow Rate used in calculation     = '//TRIM(RoundSigDigits(AirMassFlowRate,6))//' kg/s')
      CALL ShowContinueError('...Air Volume Flow Rate used in calculation   = '// &
        TRIM(RoundSigDigits(AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName),6))//' m3/s')
-     IF(TotCap .GT. 0.)THEN
+     IF(TotCap .GT. 0.d0)THEN
        IF (((MinRatedVolFlowPerRatedTotCap - AirMassFlowRate/ &
             PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap) > SmallDifferenceTest).OR. &
            ((AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap &
@@ -4135,7 +4135,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
      CALL ShowFatalError ('Check and revise the input data for this coil before rerunning the simulation.')
   END IF
   DeltaT = InletAirTemp - OutletAirTemp
-  IF (DeltaT .LE. 0.0) THEN
+  IF (DeltaT .LE. 0.0d0) THEN
      CALL ShowSevereError ('For object = '//TRIM(UnitType)// ', name = "'//TRIM(UnitName)// '"')
      CALL ShowContinueError ('Calculated coil delta T is less than or equal to 0. The combination of')
      CALL ShowContinueError ('rated air volume flow rate, total cooling capacity and sensible heat ratio yields coil exiting')
@@ -4152,7 +4152,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
      CALL ShowContinueError('...Air Mass Flow Rate used in calculation     = '//TRIM(RoundSigDigits(AirMassFlowRate,6))//' kg/s')
      CALL ShowContinueError('...Air Volume Flow Rate used in calculation   = '// &
        TRIM(RoundSigDigits(AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName),6))//' m3/s')
-     IF(TotCap .GT. 0.)THEN
+     IF(TotCap .GT. 0.d0)THEN
        IF (((MinRatedVolFlowPerRatedTotCap - AirMassFlowRate/ &
             PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap) > SmallDifferenceTest).OR. &
            ((AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap &
@@ -4168,8 +4168,8 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
   ! Calculate slope at given conditions
   IF (DeltaT .gt. 0.0) SlopeAtConds = DeltaHumRat/DeltaT
 
-!  IF (SlopeAtConds .le. .0000001 .or. OutletAirHumRat .le. 0.) THEN
-  IF (SlopeAtConds .lt. 0.0 .or. OutletAirHumRat .le. 0.) THEN
+!  IF (SlopeAtConds .le. .0000001d0 .or. OutletAirHumRat .le. 0.) THEN
+  IF (SlopeAtConds .lt. 0.0d0 .or. OutletAirHumRat .le. 0.) THEN
 !   Invalid conditions, slope can't be less than zero (SHR > 1) or
 !   outlet air humidity ratio can't be less than zero.
     CALL ShowSevereError(TRIM(UnitType)//' "'//TRIM(UnitName)//'"')
@@ -4183,7 +4183,7 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
     CALL ShowContinueError('...Air Mass Flow Rate used in calculation     = '//TRIM(RoundSigDigits(AirMassFlowRate,6))//' kg/s')
      CALL ShowContinueError('...Air Volume Flow Rate used in calculation   = '// &
        TRIM(RoundSigDigits(AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName),6))//' m3/s')
-    IF(TotCap .GT. 0.)THEN
+    IF(TotCap .GT. 0.d0)THEN
        IF (((MinRatedVolFlowPerRatedTotCap - AirMassFlowRate/ &
             PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap) > SmallDifferenceTest).OR. &
            ((AirMassFlowRate/PsyRhoAirFnPbTdbW(StdBaroPress,InletAirTemp,InletAirHumRat,RoutineName)/TotCap &
@@ -4203,10 +4203,10 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
     ADPTemp = PsyTdpFnWPb(OutletAirHumRat,StdBaroPress)
 
     Tolerance = 1.         ! initial conditions for iteration
-    ErrorLast = 100.
+    ErrorLast = 100.d0
     Iter = 0
-    DeltaADPTemp = 5.0
-    DO WHILE ((Iter .le. IterMax).and.(Tolerance .gt. .001))
+    DeltaADPTemp = 5.0d0
+    DO WHILE ((Iter .le. IterMax).and.(Tolerance .gt. .001d0))
 !     Do for IterMax iterations or until the error gets below .1%
       IF (Iter .gt. 0) ADPTemp = ADPTemp + DeltaADPTemp
       Iter = Iter + 1
@@ -4221,8 +4221,8 @@ FUNCTION CalcCBF(UnitType,UnitName,InletAirTemp,InletAirHumRat,TotCap,AirMassFlo
 !     check for convergence (slopes are equal to within error tolerance)
 
       Error     = (Slope-SlopeAtConds)/SlopeAtConds
-      IF ((Error .gt. 0.).and.(ErrorLast .lt. 0.)) DeltaADPTemp = -DeltaADPTemp/2.
-      IF ((Error .lt. 0.).and.(ErrorLast .gt. 0.)) DeltaADPTemp = -DeltaADPTemp/2.
+      IF ((Error .gt. 0.).and.(ErrorLast .lt. 0.)) DeltaADPTemp = -DeltaADPTemp/2.d0
+      IF ((Error .lt. 0.).and.(ErrorLast .gt. 0.)) DeltaADPTemp = -DeltaADPTemp/2.d0
       ErrorLast = Error
 
       Tolerance = ABS(Error)

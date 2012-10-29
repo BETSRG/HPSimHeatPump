@@ -68,11 +68,11 @@ TYPE WarmupConvergence
                                              ! warmup (PassFlag(1)=Max Temp, PassFlag(2)=Min Temp, PassFlag(3)=Max Heat Load
                                              ! PassFlag(4)=Max Cool Load)
   ! Following are stored test values for temperature and loads convergence
-  REAL :: TestMaxTempValue      =0.0  ! Max Temperature convergence value=ABS(MaxTempPrevDay(ZoneNum)-MaxTempZone(ZoneNum))
-  REAL :: TestMinTempValue      =0.0  ! Min Temperature convergence value=ABS(MinTempPrevDay(ZoneNum)-MinTempZone(ZoneNum))
-  REAL :: TestMaxHeatLoadValue  =0.0  ! Max Heat Load convergence value=
+  REAL(r64) :: TestMaxTempValue      =0.0d0  ! Max Temperature convergence value=ABS(MaxTempPrevDay(ZoneNum)-MaxTempZone(ZoneNum))
+  REAL(r64) :: TestMinTempValue      =0.0d0  ! Min Temperature convergence value=ABS(MinTempPrevDay(ZoneNum)-MinTempZone(ZoneNum))
+  REAL(r64) :: TestMaxHeatLoadValue  =0.0d0  ! Max Heat Load convergence value=
                                              !  ABS((MaxHeatLoadZone(ZoneNum)-MaxHeatLoadPrevDay(ZoneNum))/MaxHeatLoadZone(ZoneNum))
-  REAL :: TestMaxCoolLoadValue  =0.0  ! Max Cool Load convergence value=
+  REAL(r64) :: TestMaxCoolLoadValue  =0.0d0  ! Max Cool Load convergence value=
                                              !  ABS((MaxCoolLoadZone(ZoneNum)-MaxCoolLoadPrevDay(ZoneNum))/MaxCoolLoadZone(ZoneNum))
 END TYPE
 
@@ -81,30 +81,30 @@ END TYPE
 
   !Real Variables for the Heat Balance Simulation
   !Variables used to determine warmup convergence
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxCoolLoadPrevDay   !Max cooling load from the previous day
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxCoolLoadZone      !Maximum zone cooling load from the current day
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxHeatLoadPrevDay   !Max heating load from the previous day
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxHeatLoadZone      !Maximum zone heating load from the current day
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxTempPrevDay       !Max temperature from the previous day
-REAL, ALLOCATABLE, DIMENSION(:) :: MaxTempZone          !Maximum zone temperature from the current day
-REAL, ALLOCATABLE, DIMENSION(:) :: MinTempPrevDay       !Min temperature from the previous day
-REAL, ALLOCATABLE, DIMENSION(:) :: MinTempZone          !Minimum zone temperature from the current day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxCoolLoadPrevDay   !Max cooling load from the previous day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxCoolLoadZone      !Maximum zone cooling load from the current day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxHeatLoadPrevDay   !Max heating load from the previous day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxHeatLoadZone      !Maximum zone heating load from the current day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxTempPrevDay       !Max temperature from the previous day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MaxTempZone          !Maximum zone temperature from the current day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MinTempPrevDay       !Min temperature from the previous day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: MinTempZone          !Minimum zone temperature from the current day
 
   !Variables used to report difference in temperature and load from the last two warmup days
-REAL, ALLOCATABLE, DIMENSION(:) :: WarmupTempDiff       !Temperature difference between the last two warmup days
-REAL, ALLOCATABLE, DIMENSION(:) :: WarmupLoadDiff       !Zone load differences between the last two warmup days
-REAL, ALLOCATABLE, DIMENSION(:) :: TempZoneSecPrevDay   !Zone air temperature from the second last warmup day
-REAL, ALLOCATABLE, DIMENSION(:) :: LoadZoneSecPrevDay   !Zone load from the second last warmup day
-REAL, ALLOCATABLE, DIMENSION(:) :: TempZonePrevDay      !Zone air temperature from the previous day
-REAL, ALLOCATABLE, DIMENSION(:) :: LoadZonePrevDay      !Zone load from the previuos day
-REAL, ALLOCATABLE, DIMENSION(:) :: TempZone             !Zone air temperature from the current warmup day
-REAL, ALLOCATABLE, DIMENSION(:) :: LoadZone             !Zone load from the current warmup day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: WarmupTempDiff       !Temperature difference between the last two warmup days
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: WarmupLoadDiff       !Zone load differences between the last two warmup days
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: TempZoneSecPrevDay   !Zone air temperature from the second last warmup day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LoadZoneSecPrevDay   !Zone load from the second last warmup day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: TempZonePrevDay      !Zone air temperature from the previous day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LoadZonePrevDay      !Zone load from the previuos day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: TempZone             !Zone air temperature from the current warmup day
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: LoadZone             !Zone load from the current warmup day
 
-REAL, ALLOCATABLE, DIMENSION(:,:) :: TempZoneRpt        !Zone air temperature to report (average over all warmup days)
-REAL, ALLOCATABLE, DIMENSION(:)   :: TempZoneRptStdDev  !Zone air temperature to report (std dev over all warmup days)
-REAL, ALLOCATABLE, DIMENSION(:,:) :: LoadZoneRpt        !Zone load to report (average over all warmup days)
-REAL, ALLOCATABLE, DIMENSION(:)   :: LoadZoneRptStdDev  !Zone load to report (std dev over all warmup days)
-REAL, ALLOCATABLE, DIMENSION(:,:) :: MaxLoadZoneRpt     !Maximum zone load for reporting calcs
+REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: TempZoneRpt        !Zone air temperature to report (average over all warmup days)
+REAL(r64), ALLOCATABLE, DIMENSION(:)   :: TempZoneRptStdDev  !Zone air temperature to report (std dev over all warmup days)
+REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: LoadZoneRpt        !Zone load to report (average over all warmup days)
+REAL(r64), ALLOCATABLE, DIMENSION(:)   :: LoadZoneRptStdDev  !Zone load to report (std dev over all warmup days)
+REAL(r64), ALLOCATABLE, DIMENSION(:,:) :: MaxLoadZoneRpt     !Maximum zone load for reporting calcs
 INTEGER :: CountWarmupDayPoints                              !Count of warmup timesteps (to achieve warmup)
 TYPE(WarmUpConvergence), ALLOCATABLE, DIMENSION(:)  :: WarmupConvergenceValues
 
@@ -526,7 +526,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     CHARACTER(len=MaxNameLength), DIMENSION(4) :: AlphaName
-    REAL, DIMENSION(5)         :: BuildingNumbers
+    REAL(r64), DIMENSION(5)         :: BuildingNumbers
     INTEGER                         :: NumAlpha, NumNumber
     INTEGER                         :: IOStat
     INTEGER                         :: NumObjects
@@ -574,33 +574,33 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
        TMP=INDEX(BuildingName,CHAR(3))
      END DO
         ! Building Azimuth (no validation)
-     BuildingAzimuth=MOD(BuildingNumbers(1),360.)
+     BuildingAzimuth=MOD(BuildingNumbers(1),360.d0)
         ! Terrain
      IF (AlphaName(2) == 'COUNTRY' .or. AlphaName(2) == '1') THEN
-       SiteWindExp = 0.14
-       SiteWindBLHeight = 270.
+       SiteWindExp = 0.14d0
+       SiteWindBLHeight = 270.d0
        AlphaName(2)='Country'
      ELSEIF (AlphaName(2) == 'SUBURBS' .or. AlphaName(2) == '2' .or. AlphaName(2) == 'SUBURB') THEN
-       SiteWindExp = 0.22
-       SiteWindBLHeight = 370.
+       SiteWindExp = 0.22d0
+       SiteWindBLHeight = 370.d0
        AlphaName(2)='Suburbs'
      ELSEIF (AlphaName(2) == 'CITY' .or. AlphaName(2) == '3') THEN
-       SiteWindExp = 0.33
-       SiteWindBLHeight = 460.
+       SiteWindExp = 0.33d0
+       SiteWindBLHeight = 460.d0
        AlphaName(2)='City'
      ELSEIF (AlphaName(2) == 'OCEAN') THEN
-       SiteWindExp = 0.10
-       SiteWindBLHeight = 210.
+       SiteWindExp = 0.10d0
+       SiteWindBLHeight = 210.d0
        AlphaName(2)='Ocean'
      ELSEIF (AlphaName(2) == 'URBAN') THEN
-       SiteWindExp = 0.22
-       SiteWindBLHeight = 370.
+       SiteWindExp = 0.22d0
+       SiteWindBLHeight = 370.d0
        AlphaName(2)='Urban'
      ELSE
        CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//': '//TRIM(cAlphaFieldNames(2))//  &
           ' invalid='//TRIM(AlphaName(2)))
-       SiteWindExp = 0.14
-       SiteWindBLHeight = 270.
+       SiteWindExp = 0.14d0
+       SiteWindBLHeight = 270.d0
        AlphaName(2)=TRIM(AlphaName(2))//'-invalid'
        ErrorsFound=.true.
      ENDIF
@@ -884,11 +884,11 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
 
      IF (NumNumber > 0) THEN
        MaxSurfaceTempLimit=BuildingNumbers(1)
-       MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5
+       MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5d0
        IF (MaxSurfaceTempLimit < MinSurfaceTempLimit) THEN
-       ELSEIF (MaxSurfaceTempLimit < 0.0) THEN
+       ELSEIF (MaxSurfaceTempLimit < 0.0d0) THEN
          MaxSurfaceTempLimit=DefaultSurfaceTempLimit
-         MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5
+         MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5d0
        ENDIF
      ENDIF
 
@@ -903,7 +903,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
      SolutionAlgo = UseCTF
      AlphaName(1)='ConductionTransferFunction'
      MaxSurfaceTempLimit=DefaultSurfaceTempLimit
-     MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5
+     MaxSurfaceTempLimitBeforeFatal=MaxSurfaceTempLimit*2.5d0
    ENDIF
 
    NumEMPDMat=GetNumObjectsFound('MaterialProperty:MoisturePenetrationDepth:Settings')
@@ -1037,7 +1037,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
                    AlphaBlank=lAlphaFieldBlanks,NumBlank=lNumericFieldBlanks,  &
                    AlphaFieldnames=cAlphaFieldNames,NumericFieldNames=cNumericFieldNames)
         ! Building Rotation for Appendix G
-     BuildingRotationAppendixG = MOD(BuildingNumbers(1),360.)
+     BuildingRotationAppendixG = MOD(BuildingNumbers(1),360.d0)
    END IF
 
    ! A new object is added by L. Gu, 12/09
@@ -1197,7 +1197,7 @@ SUBROUTINE GetSiteAtmosphereData(ErrorsFound)
   INTEGER                                   :: NumNums   ! Number of elements in the numeric array
   INTEGER                                   :: IOStat    ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray ! Character string data
-  REAL, DIMENSION(3)                   :: NumArray  ! Numeric data
+  REAL(r64), DIMENSION(3)                   :: NumArray  ! Numeric data
 
      ! FLOW:
   CurrentModuleObject='Site:HeightVariation'
@@ -1221,7 +1221,7 @@ SUBROUTINE GetSiteAtmosphereData(ErrorsFound)
   ! be overridden by a Site Atmospheric Variation Object.
            !SiteWindExp = 0.22
            !SiteWindBLHeight = 370.0
-    SiteTempGradient = 0.0065
+    SiteTempGradient = 0.0065d0
   END IF
 
   ! Write to the initialization output file
@@ -1296,7 +1296,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
   INTEGER :: MaterNum         ! Counter to keep track of the material number
   INTEGER :: MaterialNumAlpha ! Number of material alpha names being passed
   INTEGER :: MaterialNumProp  ! Number of material properties being passed
-  REAL, DIMENSION(27) :: MaterialProps !Temporary array to transfer material properties
+  REAL(r64), DIMENSION(27) :: MaterialProps !Temporary array to transfer material properties
   INTEGER :: RegMat   ! Regular Materials -- full property definition
   INTEGER :: RegRMat  ! Regular Materials -- R only property definition
   INTEGER :: AirMat   ! Air space materias in opaque constructions
@@ -1312,13 +1312,13 @@ SUBROUTINE GetMaterialData(ErrorsFound)
   LOGICAL :: IsBlank
   CHARACTER(len=MaxNameLength) :: TypeOfGas  ! Type of window gas fill (Air, Argon, Krypton, &
                                                  ! Xenon, or Custom
-  REAL    :: MinSlatAngGeom, MaxSlatAngGeom ! Minimum and maximum slat angle allowed by slat geometry (deg)
-  REAL    :: ReflectivitySol   ! Glass reflectivity, solar
-  REAL    :: ReflectivityVis   ! Glass reflectivity, visible
-  REAL    :: TransmittivitySol ! Glass transmittivity, solar
-  REAL    :: TransmittivityVis ! Glass transmittivity, visible
+  REAL(r64)    :: MinSlatAngGeom, MaxSlatAngGeom ! Minimum and maximum slat angle allowed by slat geometry (deg)
+  REAL(r64)    :: ReflectivitySol   ! Glass reflectivity, solar
+  REAL(r64)    :: ReflectivityVis   ! Glass reflectivity, visible
+  REAL(r64)    :: TransmittivitySol ! Glass transmittivity, solar
+  REAL(r64)    :: TransmittivityVis ! Glass transmittivity, visible
   LOGICAL      :: DoReport=.false.
-  REAL    :: DenomRGas         ! Denominator for WindowGas calculations of NominalR
+  REAL(r64)    :: DenomRGas         ! Denominator for WindowGas calculations of NominalR
 
   ! Added TH 1/9/2009 to read the thermochromic glazings
   INTEGER :: iTC = 0
@@ -1400,22 +1400,22 @@ SUBROUTINE GetMaterialData(ErrorsFound)
       Material(MaterNum)%AbsorpThermal = MaterialProps(5)
       Material(MaterNum)%AbsorpThermalInput = MaterialProps(5)
     ELSE
-      Material(MaterNum)%AbsorpThermal = .9
-      Material(MaterNum)%AbsorpThermalInput = .9
+      Material(MaterNum)%AbsorpThermal = .9d0
+      Material(MaterNum)%AbsorpThermalInput = .9d0
     ENDIF
     IF (MaterialNumProp >= 6) THEN
       Material(MaterNum)%AbsorpSolar   = MaterialProps(6)
       Material(MaterNum)%AbsorpSolarInput = MaterialProps(6)
     ELSE
-      Material(MaterNum)%AbsorpSolar   = .7
-      Material(MaterNum)%AbsorpSolarInput = .7
+      Material(MaterNum)%AbsorpSolar   = .7d0
+      Material(MaterNum)%AbsorpSolarInput = .7d0
     ENDIF
     IF (MaterialNumProp >= 7) THEN
       Material(MaterNum)%AbsorpVisible = MaterialProps(7)
       Material(MaterNum)%AbsorpVisibleInput = MaterialProps(7)
     ELSE
-      Material(MaterNum)%AbsorpVisible = .7
-      Material(MaterNum)%AbsorpVisibleInput = .7
+      Material(MaterNum)%AbsorpVisible = .7d0
+      Material(MaterNum)%AbsorpVisibleInput = .7d0
     ENDIF
 
     IF (Material(MaterNum)%Conductivity > 0.0) THEN
@@ -1434,14 +1434,14 @@ SUBROUTINE GetMaterialData(ErrorsFound)
 
     Material(MaterNum)%Group=RegularMaterial
     Material(MaterNum)%Name = '~FC_Concrete'
-    Material(MaterNum)%Thickness     = 0.15
-    Material(MaterNum)%Conductivity  = 1.95
-    Material(MaterNum)%Density       = 2240.0
-    Material(MaterNum)%SpecHeat      = 900.0
+    Material(MaterNum)%Thickness     = 0.15d0
+    Material(MaterNum)%Conductivity  = 1.95d0
+    Material(MaterNum)%Density       = 2240.0d0
+    Material(MaterNum)%SpecHeat      = 900.0d0
     Material(MaterNum)%Roughness = MediumRough
-    Material(MaterNum)%AbsorpSolar = 0.7
-    Material(MaterNum)%AbsorpThermal = 0.9
-    Material(MaterNum)%AbsorpVisible = 0.7
+    Material(MaterNum)%AbsorpSolar = 0.7d0
+    Material(MaterNum)%AbsorpThermal = 0.9d0
+    Material(MaterNum)%AbsorpVisible = 0.7d0
     NominalR(MaterNum) = Material(MaterNum)%Thickness / Material(MaterNum)%Conductivity
     Material(MaterNum)%Resistance = NominalR(MaterNum)
 
@@ -1478,22 +1478,22 @@ SUBROUTINE GetMaterialData(ErrorsFound)
       Material(MaterNum)%AbsorpThermal = MaterialProps(2)
       Material(MaterNum)%AbsorpThermalInput = MaterialProps(2)
     ELSE
-      Material(MaterNum)%AbsorpThermal = .9
-      Material(MaterNum)%AbsorpThermalInput = .9
+      Material(MaterNum)%AbsorpThermal = .9d0
+      Material(MaterNum)%AbsorpThermalInput = .9d0
     ENDIF
     IF (MaterialNumProp >= 3) THEN
       Material(MaterNum)%AbsorpSolar   = MaterialProps(3)
       Material(MaterNum)%AbsorpSolarInput   = MaterialProps(3)
     ELSE
-      Material(MaterNum)%AbsorpSolar   = .7
-      Material(MaterNum)%AbsorpSolarInput = .7
+      Material(MaterNum)%AbsorpSolar   = .7d0
+      Material(MaterNum)%AbsorpSolarInput = .7d0
     ENDIF
     IF (MaterialNumProp >= 4) THEN
       Material(MaterNum)%AbsorpVisible = MaterialProps(4)
       Material(MaterNum)%AbsorpVisibleInput = MaterialProps(4)
     ELSE
-      Material(MaterNum)%AbsorpVisible = .7
-      Material(MaterNum)%AbsorpVisibleInput = .7
+      Material(MaterNum)%AbsorpVisible = .7d0
+      Material(MaterNum)%AbsorpVisibleInput = .7d0
     ENDIF
 
     NominalR(MaterNum)=Material(MaterNum)%Resistance
@@ -1575,28 +1575,28 @@ SUBROUTINE GetMaterialData(ErrorsFound)
       Material(MaterNum)%Resistance    = MaterialProps(1)
       Material(MaterNum)%ROnly         = .true.
     ELSE
-      Material(MaterNum)%Resistance = .01
+      Material(MaterNum)%Resistance = .01d0
     ENDIF
     IF (MaterialNumProp >= 2) THEN
       Material(MaterNum)%AbsorpThermal = MaterialProps(2)
       Material(MaterNum)%AbsorpThermalInput =  MaterialProps(2)
     ELSE
-      Material(MaterNum)%AbsorpThermal = 0.9999
-      Material(MaterNum)%AbsorpThermalInput = 0.9999
+      Material(MaterNum)%AbsorpThermal = 0.9999d0
+      Material(MaterNum)%AbsorpThermalInput = 0.9999d0
     ENDIF
     IF (MaterialNumProp >= 3) THEN
       Material(MaterNum)%AbsorpSolar   = MaterialProps(3)
       Material(MaterNum)%AbsorpSolarInput = MaterialProps(3)
     ELSE
-      Material(MaterNum)%AbsorpSolar   = 1.
-      Material(MaterNum)%AbsorpSolarInput = 1.
+      Material(MaterNum)%AbsorpSolar   = 1.d0
+      Material(MaterNum)%AbsorpSolarInput = 1.d0
     ENDIF
     IF (MaterialNumProp >= 4) THEN
       Material(MaterNum)%AbsorpVisible = MaterialProps(4)
       Material(MaterNum)%AbsorpVisibleInput = MaterialProps(4)
     ELSE
-      Material(MaterNum)%AbsorpVisible = 1.
-      Material(MaterNum)%AbsorpVisibleInput = 1.
+      Material(MaterNum)%AbsorpVisible = 1.d0
+      Material(MaterNum)%AbsorpVisibleInput = 1.d0
     ENDIF
 
     NominalR(MaterNum)=Material(MaterNum)%Resistance
@@ -1830,22 +1830,22 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     ! index of refraction and extinction coefficient. With the alternative input the front and back
     ! properties are assumed to be the same.
 
-    ReflectivitySol = ((MaterialProps(2)-1.)/(MaterialProps(2)+1.))**2
-    ReflectivityVis = ((MaterialProps(4)-1.)/(MaterialProps(4)+1.))**2
+    ReflectivitySol = ((MaterialProps(2)-1.d0)/(MaterialProps(2)+1.d0))**2
+    ReflectivityVis = ((MaterialProps(4)-1.d0)/(MaterialProps(4)+1.d0))**2
     TransmittivitySol = EXP(-MaterialProps(3)*MaterialProps(1))
     TransmittivityVis = EXP(-MaterialProps(5)*MaterialProps(1))
-    Material(MaterNum)%Trans               = TransmittivitySol * ((1.-ReflectivitySol)**2) / &
-                                                (1.-(ReflectivitySol*TransmittivitySol)**2)
-    Material(MaterNum)%ReflectSolBeamFront = ReflectivitySol * (1. +  &
-                                                ((1.-ReflectivitySol)**2)*(TransmittivitySol**2) / &
-                                                (1.-(ReflectivitySol*TransmittivitySol)**2) )
+    Material(MaterNum)%Trans               = TransmittivitySol * ((1.d0-ReflectivitySol)**2) / &
+                                                (1.d0-(ReflectivitySol*TransmittivitySol)**2)
+    Material(MaterNum)%ReflectSolBeamFront = ReflectivitySol * (1.d0 +  &
+                                                ((1.d0-ReflectivitySol)**2)*(TransmittivitySol**2) / &
+                                                (1.d0-(ReflectivitySol*TransmittivitySol)**2) )
     Material(MaterNum)%ReflectSolBeamBack  = Material(MaterNum)%ReflectSolBeamFront
-    Material(MaterNum)%TransVis            = TransmittivityVis * ((1.-ReflectivityVis)**2) / &
-                                                (1.-(ReflectivityVis*TransmittivityVis)**2)
+    Material(MaterNum)%TransVis            = TransmittivityVis * ((1.d0-ReflectivityVis)**2) / &
+                                                (1.d0-(ReflectivityVis*TransmittivityVis)**2)
 
-    Material(MaterNum)%ReflectVisBeamFront = ReflectivityVis * (1. +  &
-                                                ((1.-ReflectivityVis)**2)*(TransmittivityVis**2) / &
-                                                (1.-(ReflectivityVis*TransmittivityVis)**2) )
+    Material(MaterNum)%ReflectVisBeamFront = ReflectivityVis * (1.d0 +  &
+                                                ((1.d0-ReflectivityVis)**2)*(TransmittivityVis**2) / &
+                                                (1.d0-(ReflectivityVis*TransmittivityVis)**2) )
     Material(MaterNum)%ReflectVisBeamBack  = Material(MaterNum)%ReflectSolBeamFront
     Material(MaterNum)%TransThermal        = MaterialProps(6)
     Material(MaterNum)%AbsorpThermalFront  = MaterialProps(7)
@@ -1973,7 +1973,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
 
     ! Nominal resistance of gap at room temperature
     IF(.not.ErrorsFound) THEN
-      DenomRGas=(Material(MaterNum)%GasCon(1,1) + Material(MaterNum)%GasCon(1,2)*300.0 + Material(MaterNum)%GasCon(1,3)*90000.0)
+      DenomRGas=(Material(MaterNum)%GasCon(1,1) + Material(MaterNum)%GasCon(1,2)*300.0d0 + Material(MaterNum)%GasCon(1,3)*90000.0d0)
       IF (DenomRGas > 0.0) THEN
         NominalR(MaterNum)=Material(MaterNum)%Thickness/DenomRGas
       ELSE
@@ -2087,7 +2087,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     Material(MaterNum)%TransThermal    = MaterialProps(6)
     Material(MaterNum)%Thickness       = MaterialProps(7)
     Material(MaterNum)%Conductivity    = MaterialProps(8)
-    Material(MaterNum)%AbsorpSolar     = MAX(0.,1.- Material(MaterNum)%Trans - Material(MaterNum)%ReflectShade)
+    Material(MaterNum)%AbsorpSolar     = MAX(0.d0,1.d0- Material(MaterNum)%Trans - Material(MaterNum)%ReflectShade)
     Material(MaterNum)%AbsorpSolarInput = Material(MaterNum)%AbsorpSolar
     Material(MaterNum)%WinShadeToGlassDist         = MaterialProps(9)
     Material(MaterNum)%WinShadeTopOpeningMult      = MaterialProps(10)
@@ -2191,13 +2191,13 @@ SUBROUTINE GetMaterialData(ErrorsFound)
         CALL ShowContinueError(TRIM(cNumericFieldNames(6))//' must be less than '//TRIM(cNumericFieldNames(5)))
       ELSE
 !       Calculate direct normal transmittance (open area fraction)
-        Material(MaterNum)%Trans = (1. - MaterialProps(6)/MaterialProps(5))**2
+        Material(MaterNum)%Trans = (1.d0 - MaterialProps(6)/MaterialProps(5))**2
       END IF
     ELSE
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(5))//' must be > 0.')
-      MaterialProps(5) = 0.000000001
+      MaterialProps(5) = 0.000000001d0
     END IF
 
     IF(MaterialProps(6) .LE. 0.0)THEN
@@ -2207,35 +2207,35 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     END IF
 
 !   Modify reflectance to account for the open area in the screen assembly
-    Material(MaterNum)%ReflectShade       = Material(MaterNum)%ReflectShade * (1. - Material(MaterNum)%Trans)
-    Material(MaterNum)%ReflectShadeVis    = Material(MaterNum)%ReflectShadeVis * (1. - Material(MaterNum)%Trans)
+    Material(MaterNum)%ReflectShade       = Material(MaterNum)%ReflectShade * (1.d0 - Material(MaterNum)%Trans)
+    Material(MaterNum)%ReflectShadeVis    = Material(MaterNum)%ReflectShadeVis * (1.d0 - Material(MaterNum)%Trans)
 
     Material(MaterNum)%WinShadeToGlassDist         = MaterialProps(7)
-    IF(Material(MaterNum)%WinShadeToGlassDist .LT. 0.001 .OR. Material(MaterNum)%WinShadeToGlassDist .GT. 1.0)THEN
+    IF(Material(MaterNum)%WinShadeToGlassDist .LT. 0.001d0 .OR. Material(MaterNum)%WinShadeToGlassDist .GT. 1.0d0)THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(7))//' must be greater than or equal to 0.001 and less than or equal to 1.')
     ENDIF
 
     Material(MaterNum)%WinShadeTopOpeningMult      = MaterialProps(8)
-    IF(Material(MaterNum)%WinShadeTopOpeningMult .LT. 0.0 .OR. Material(MaterNum)%WinShadeTopOpeningMult .GT. 1.0)THEN
+    IF(Material(MaterNum)%WinShadeTopOpeningMult .LT. 0.0d0 .OR. Material(MaterNum)%WinShadeTopOpeningMult .GT. 1.0d0)THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(8))//' must be greater than or equal to 0 and less than or equal to 1.')
     ENDIF
 
     Material(MaterNum)%WinShadeBottomOpeningMult   = MaterialProps(9)
-    IF(Material(MaterNum)%WinShadeBottomOpeningMult .LT. 0.0 .OR. Material(MaterNum)%WinShadeBottomOpeningMult .GT. 1.0)THEN
+    IF(Material(MaterNum)%WinShadeBottomOpeningMult .LT. 0.0d0 .OR. Material(MaterNum)%WinShadeBottomOpeningMult .GT. 1.0d0)THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(9))//' must be greater than or equal to 0 and less than or equal to 1.')
     ENDIF
 
     Material(MaterNum)%WinShadeLeftOpeningMult     = MaterialProps(10)
-    IF(Material(MaterNum)%WinShadeLeftOpeningMult .LT. 0.0 .OR. Material(MaterNum)%WinShadeLeftOpeningMult .GT. 1.0)THEN
+    IF(Material(MaterNum)%WinShadeLeftOpeningMult .LT. 0.0d0 .OR. Material(MaterNum)%WinShadeLeftOpeningMult .GT. 1.0d0)THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(10))//' must be greater than or equal to 0 and less than or equal to 1.')
     ENDIF
 
     Material(MaterNum)%WinShadeRightOpeningMult    = MaterialProps(11)
-    IF(Material(MaterNum)%WinShadeRightOpeningMult .LT. 0.0 .OR. Material(MaterNum)%WinShadeRightOpeningMult .GT. 1.0)THEN
+    IF(Material(MaterNum)%WinShadeRightOpeningMult .LT. 0.0d0 .OR. Material(MaterNum)%WinShadeRightOpeningMult .GT. 1.0d0)THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(11))//' must be greater than or equal to 0 and less than or equal to 1.')
     ENDIF
@@ -2256,15 +2256,15 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     Material(MaterNum)%ROnly           = .true.
 
 !   Calculate absorptance accounting for the open area in the screen assembly (used only in CreateShadedWindowConstruction)
-    Material(MaterNum)%AbsorpSolar        = MAX(0.,1.- Material(MaterNum)%Trans - Material(MaterNum)%ReflectShade)
+    Material(MaterNum)%AbsorpSolar        = MAX(0.d0,1.d0- Material(MaterNum)%Trans - Material(MaterNum)%ReflectShade)
     Material(MaterNum)%AbsorpSolarInput   = Material(MaterNum)%AbsorpSolar
-    Material(MaterNum)%AbsorpVisible      = MAX(0.,1.- Material(MaterNum)%TransVis - Material(MaterNum)%ReflectShadeVis)
+    Material(MaterNum)%AbsorpVisible      = MAX(0.d0,1.d0- Material(MaterNum)%TransVis - Material(MaterNum)%ReflectShadeVis)
     Material(MaterNum)%AbsorpVisibleInput = Material(MaterNum)%AbsorpVisible
-    Material(MaterNum)%AbsorpThermal      = Material(MaterNum)%AbsorpThermal * (1.0 - Material(MaterNum)%Trans)
+    Material(MaterNum)%AbsorpThermal      = Material(MaterNum)%AbsorpThermal * (1.0d0 - Material(MaterNum)%Trans)
     Material(MaterNum)%AbsorpThermalInput = Material(MaterNum)%AbsorpThermal
 
     IF (Material(MaterNum)%Conductivity > 0.0) THEN
-      NominalR(MaterNum)=(1.-Material(MaterNum)%Trans)*Material(MaterNum)%Thickness/Material(MaterNum)%Conductivity
+      NominalR(MaterNum)=(1.d0-Material(MaterNum)%Trans)*Material(MaterNum)%Thickness/Material(MaterNum)%Conductivity
     ELSE
       NominalR(MaterNum)=1.0
       CALL ShowWarningError('Conductivity for material="'//TRIM(Material(MaterNum)%Name)//'" must be greater than' &
@@ -2433,37 +2433,37 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     END IF
 
     ! Require that beam and diffuse properties be the same
-    IF(ABS(MaterialProps(9)-MaterialProps(6)) > 1.*10**-5) THEN !RS: Debugging: 102612
+    IF(ABS(MaterialProps(9)-MaterialProps(6)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(6))//' must equal '//TRIM(cNumericFieldNames(9)))
     END IF
 
-    IF(ABS(MaterialProps(10)-MaterialProps(7)) > 1.*10**-5) THEN
+    IF(ABS(MaterialProps(10)-MaterialProps(7)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(7))//' must equal '//TRIM(cNumericFieldNames(10)))
     END IF
 
-    IF(ABS(MaterialProps(11)-MaterialProps(8)) > 1.*10**-5) THEN
+    IF(ABS(MaterialProps(11)-MaterialProps(8)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(8))//' must equal '//TRIM(cNumericFieldNames(11)))
     END IF
 
-    IF(ABS(MaterialProps(15)-MaterialProps(12)) > 1.*10**-5) THEN
+    IF(ABS(MaterialProps(15)-MaterialProps(12)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(12))//' must equal '//TRIM(cNumericFieldNames(15)))
     END IF
 
-    IF(ABS(MaterialProps(16)-MaterialProps(13)) > 1.*10**-5) THEN
+    IF(ABS(MaterialProps(16)-MaterialProps(13)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(13))//' must equal '//TRIM(cNumericFieldNames(16)))
     END IF
 
-    IF(ABS(MaterialProps(17)-MaterialProps(14)) > 1.*10**-5) THEN
+    IF(ABS(MaterialProps(17)-MaterialProps(14)) > 1.d-5) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(14))//' must equal '//TRIM(cNumericFieldNames(17)))
@@ -2480,7 +2480,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
       CALL ShowContinueError(TRIM(cNumericFieldNames(18))//' + '//TRIM(cNumericFieldNames(20))//' not < 1.0')
     END IF
 
-    IF(Blind(Loop)%BlindToGlassDist < 0.5*Blind(Loop)%SlatWidth) THEN
+    IF(Blind(Loop)%BlindToGlassDist < 0.5d0*Blind(Loop)%SlatWidth) THEN
       ErrorsFound = .true.
       CALL ShowSevereError(TRIM(CurrentModuleObject)//'="'//trim(MaterialNames(1))//'", Illegal value combination.')
       CALL ShowContinueError(TRIM(cNumericFieldNames(21))//' is less than half of the '//    &
@@ -2493,7 +2493,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
     ELSE
       MinSlatAngGeom = 0.0
     END IF
-    MaxSlatAngGeom = 180.- MinSlatAngGeom
+    MaxSlatAngGeom = 180.d0- MinSlatAngGeom
 
     ! Error if input slat angle not in range allowed by slat geometry
     IF((Blind(Loop)%SlatSeparation + Blind(Loop)%SlatThickness) < Blind(Loop)%SlatWidth) THEN
@@ -2861,14 +2861,14 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
           :: SpecDataNames        ! Spectral data alpha names
   INTEGER :: SpecDataNumAlpha ! Number of spectral data alpha names being passed
   INTEGER :: SpecDataNumProp  ! Number of spectral data properties being passed
-  REAL, ALLOCATABLE, DIMENSION(:) :: SpecDataProps !Temporary array to transfer spectal data properties
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: SpecDataProps !Temporary array to transfer spectal data properties
   INTEGER :: Loop
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
   INTEGER :: LamNum            ! Wavelength number
   INTEGER :: TotLam            ! Total wavelengths
-  REAL    :: Lam               ! Wavelength (microns)
-  REAL    :: Tau,RhoF,RhoB     ! Transmittance, front reflectance, back reflectance
+  REAL(r64)    :: Lam               ! Wavelength (microns)
+  REAL(r64)    :: Tau,RhoF,RhoB     ! Transmittance, front reflectance, back reflectance
 
   INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
     
@@ -2927,7 +2927,7 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
       SpectralData(Loop)%Trans(LamNum)      = SpecDataProps(4*LamNum-2)
       ! Following is needed since angular calculation in subr TransAndReflAtPhi
       ! fails for Trans = 0.0
-      IF(SpectralData(Loop)%Trans(LamNum) < 0.001) SpectralData(Loop)%Trans(LamNum) = 0.001
+      IF(SpectralData(Loop)%Trans(LamNum) < 0.001d0) SpectralData(Loop)%Trans(LamNum) = 0.001d0
       SpectralData(Loop)%ReflFront(LamNum)  = SpecDataProps(4*LamNum-1)
       SpectralData(Loop)%ReflBack(LamNum)   = SpecDataProps(4*LamNum)
     END DO
@@ -2951,7 +2951,7 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
         END IF
       END IF
 
-      IF(Lam < 0.1 .OR. Lam > 4.0) THEN
+      IF(Lam < 0.1d0 .OR. Lam > 4.0d0) THEN
         ErrorsFound = .true.
         !CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
         !CALL ShowContinueError('... A wavelength is not in the range 0.1 to 4.0 microns; '//  &
@@ -2965,21 +2965,21 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
     ! TH 2/15/2011. CR 8343
     ! IGDB (International Glazing Database) does not meet the above strict restrictions.
     !  Relax rules to allow directly use of spectral data from IGDB
-      IF(Tau > 1.01) THEN
+      IF(Tau > 1.01d0) THEN
         ErrorsFound = .true.
         CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
         CALL ShowContinueError('... A transmittance is > 1.0; '//  &
            'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(Tau,4))//'].')
       END IF
 
-      IF(RhoF < 0.0 .OR. RhoF > 1.01 .OR. RhoB < 0.0 .OR. RhoB > 1.01) THEN
+      IF(RhoF < 0.0d0 .OR. RhoF > 1.01d0 .OR. RhoB < 0.0d0 .OR. RhoB > 1.01d0) THEN
         ErrorsFound = .true.
         CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
         CALL ShowContinueError('... A reflectance is < 0.0 or > 1.0; '//  &
            'at wavelength#='//trim(TrimSigDigits(LamNum))//', value=['//trim(TrimSigDigits(RhoF,4))//'].')
       END IF
 
-      IF((Tau + RhoF) > 1.01 .OR. (Tau + RhoB) > 1.01) THEN
+      IF((Tau + RhoF) > 1.01d0 .OR. (Tau + RhoB) > 1.01d0) THEN
         ErrorsFound = .true.
         CALL ShowSevereError(RoutineName//trim(CurrentModuleObject)//'="'//trim(SpecDataNames(1))//'" invalid value.')
         CALL ShowContinueError('... Transmittance + reflectance) > 1.0 for an entry; '//  &
@@ -3103,7 +3103,7 @@ SUBROUTINE GetConstructData(ErrorsFound)
   INTEGER :: IOStat            ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(0:MaxLayersInConstruct) &
           :: ConstructAlphas ! Construction Alpha names defined
-  REAL, DIMENSION(4) :: DummyProps !Temporary array to transfer construction properties
+  REAL(r64), DIMENSION(4) :: DummyProps !Temporary array to transfer construction properties
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
   INTEGER :: Loop
@@ -3528,7 +3528,7 @@ SUBROUTINE GetZoneData(ErrorsFound)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !  CHARACTER(len=MaxNameLength), DIMENSION(MaxZonesInList + 1) :: Alphas
-!  REAL, DIMENSION(8)              :: Numbers
+!  REAL(r64), DIMENSION(8)              :: Numbers
   INTEGER                         :: NumAlphas, NumNumbers
   INTEGER                         :: IOStatus
   INTEGER                         :: ZoneLoop
@@ -3938,16 +3938,16 @@ SUBROUTINE InitHeatBalance  ! Heat Balance Initialization Manager
     MaxCoolLoadPrevDay = 0.0
     MaxTempPrevDay = 0.0
     MinTempPrevDay = 0.0
-    MaxHeatLoadZone=-9999.
-    MaxCoolLoadZone=-9999.
-    MaxTempZone=-9999.
-    MinTempZone=1000.
-    TempZone=-9999.
-    LoadZone=-9999.
-    TempZonePrevDay=1000.
-    LoadZonePrevDay=-9999.
-    TempZoneSecPrevDay=1000.
-    TempZoneSecPrevDay=-9999.
+    MaxHeatLoadZone=-9999.d0
+    MaxCoolLoadZone=-9999.d0
+    MaxTempZone=-9999.d0
+    MinTempZone=1000.d0
+    TempZone=-9999.d0
+    LoadZone=-9999.d0
+    TempZonePrevDay=1000.d0
+    LoadZonePrevDay=-9999.d0
+    TempZoneSecPrevDay=1000.d0
+    TempZoneSecPrevDay=-9999.d0
     WarmupTempDiff=0.0
     WarmupLoadDiff=0.0
     TempZoneRpt=0.0
@@ -3956,9 +3956,9 @@ SUBROUTINE InitHeatBalance  ! Heat Balance Initialization Manager
     CountWarmupDayPoints=0
 
     DO Num=1,10
-      SurfaceWindow%ThetaFace(Num) = 296.15
+      SurfaceWindow%ThetaFace(Num) = 296.15d0
     ENDDO
-    SurfaceWindow%EffInsSurfTemp = 23.
+    SurfaceWindow%EffInsSurfTemp = 23.d0
 
   END IF
 
@@ -3979,10 +3979,10 @@ SUBROUTINE InitHeatBalance  ! Heat Balance Initialization Manager
   IF (BeginDayFlag) THEN
     IF (.NOT. WarmupFlag) THEN
       IF (DayOfSim == 1) THEN
-        MaxHeatLoadZone=-9999.
-        MaxCoolLoadZone=-9999.
-        MaxTempZone=-9999.
-        MinTempZone=1000.
+        MaxHeatLoadZone=-9999.d0
+        MaxCoolLoadZone=-9999.d0
+        MaxTempZone=-9999.d0
+        MinTempZone=1000.d0
       END IF
     END IF
     CALL PerformSolarCalculations
@@ -4035,33 +4035,33 @@ SUBROUTINE AllocateHeatBalArrays  ! Heat Balance Array Allocation
     ! Following used for Calculations
     !  Allocate variables in DataHeatBalSys
   ALLOCATE(SumConvHTRadSys(NumOfZones))
-  SumConvHTRadSys=0.0
+  SumConvHTRadSys=0.0D0
   ALLOCATE(SumLatentHTRadSys(NumOfZones))
-  SumLatentHTRadSys=0.0
+  SumLatentHTRadSys=0.0D0
   ALLOCATE(QHTRadSysToPerson(NumOfZones))
-  QHTRadSysToPerson=0.0
+  QHTRadSysToPerson=0.0D0
   ALLOCATE(QHWBaseboardToPerson(NumOfZones))
-  QHWBaseboardToPerson=0.0
+  QHWBaseboardToPerson=0.0D0
   ALLOCATE(QSteamBaseboardToPerson(NumOfZones))
-  QSteamBaseboardToPerson=0.0
+  QSteamBaseboardToPerson=0.0D0
   ALLOCATE(QElecBaseboardToPerson(NumOfZones))
-  QElecBaseboardToPerson=0.0
+  QElecBaseboardToPerson=0.0D0
   ALLOCATE(XMAT(NumOfZones))
-  XMAT = 23.0
+  XMAT = 23.0d0
   ALLOCATE(XM2T(NumOfZones))
-  XM2T = 23.0
+  XM2T = 23.0d0
   ALLOCATE(XM3T(NumOfZones))
-  XM3T = 23.0
+  XM3T = 23.0d0
   ALLOCATE(XM4T(NumOfZones))
-  XM4T = 23.0
+  XM4T = 23.0d0
   ALLOCATE(DSXMAT(NumOfZones))
-  DSXMAT = 23.0
+  DSXMAT = 23.0D0
   ALLOCATE(DSXM2T(NumOfZones))
-  DSXM2T = 23.0
+  DSXM2T = 23.0D0
   ALLOCATE(DSXM3T(NumOfZones))
-  DSXM3T = 23.0
+  DSXM3T = 23.0D0
   ALLOCATE(DSXM4T(NumOfZones))
-  DSXM4T = 23.0
+  DSXM4T = 23.0D0
   ALLOCATE(MCPI(NumOfZones))
   MCPI=0.0
   ALLOCATE(MCPTI(NumOfZones))
@@ -4085,34 +4085,34 @@ SUBROUTINE AllocateHeatBalArrays  ! Heat Balance Array Allocation
   ALLOCATE(VAMFL(NumOfZones))
   VAMFL=0.0
   ALLOCATE(ZTAV(NumOfZones))
-  ZTAV = 23.0
+  ZTAV = 23.0d0
   ALLOCATE(ZTAVComf(NumOfZones))
-  ZTAVComf = 23.0
+  ZTAVComf = 23.0d0
   ALLOCATE(ZT(NumOfZones))
-  ZT = 23.0
+  ZT = 23.0d0
   ALLOCATE(TempTstatAir(NumOfZones))
-  TempTstatAir = 23.0
+  TempTstatAir = 23.0d0
   ALLOCATE(MAT(NumOfZones))
-  MAT = 23.0
+  MAT = 23.0d0
   ALLOCATE(ZoneTMX(NumOfZones))
-  ZoneTMX = 23.0
+  ZoneTMX = 23.0d0
   ALLOCATE(ZoneTM2(NumOfZones))
-  ZoneTM2 = 23.0
+  ZoneTM2 = 23.0d0
 ! Allocate this zone air humidity ratio
   ALLOCATE(ZoneAirHumRatAvg(NumOfZones))
-  ZoneAirHumRatAvg=0.01
+  ZoneAirHumRatAvg=0.01d0
   ALLOCATE(ZoneAirHumRatAvgComf(NumOfZones))
-  ZoneAirHumRatAvgComf=0.01
+  ZoneAirHumRatAvgComf=0.01d0
   ALLOCATE(ZoneAirHumRat(NumOfZones))
-  ZoneAirHumRat=0.01
+  ZoneAirHumRat=0.01d0
   ALLOCATE(ZoneAirHumRatOld(NumOfZones))
-  ZoneAirHumRatOld=0.01
+  ZoneAirHumRatOld=0.01d0
   ALLOCATE(SumHmAW(NumOfZones))
-  SumHmAW=0.0
+  SumHmAW=0.0d0
   ALLOCATE(SumHmARa(NumOfZones))
-  SumHmARa=0.0
+  SumHmARa=0.0d0
   ALLOCATE(SumHmARaW(NumOfZones))
-  SumHmARaW=0.0
+  SumHmARaW=0.0d0
   ALLOCATE(MCPTE(NumOfZones))
   MCPTE=0.0
   ALLOCATE(MCPE(NumOfZones))
@@ -4156,13 +4156,13 @@ SUBROUTINE AllocateHeatBalArrays  ! Heat Balance Array Allocation
   ALLOCATE(MaxCoolLoadPrevDay(NumofZones))
            MaxCoolLoadPrevDay = 0.0
   ALLOCATE(MaxHeatLoadZone(NumofZones))
-           MaxHeatLoadZone = -9999.
+           MaxHeatLoadZone = -9999.d0
   ALLOCATE(MaxCoolLoadZone(NumofZones))
-           MaxCoolLoadZone = -9999.
+           MaxCoolLoadZone = -9999.d0
   ALLOCATE(MaxTempZone(NumofZones))
-           MaxTempZone = -9999.
+           MaxTempZone = -9999.d0
   ALLOCATE(MinTempZone(NumofZones))
-           MinTempZone = 1000.
+           MinTempZone = 1000.d0
   ALLOCATE(TempZonePrevDay(NumofZones))
            TempZonePrevDay = 0.0
   ALLOCATE(LoadZonePrevDay(NumofZones))
@@ -4338,7 +4338,7 @@ SUBROUTINE CheckWarmupConvergence
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: MinLoad = 100.     ! Minimum laods for convergence check
+  REAL(r64), PARAMETER :: MinLoad = 100.d0     ! Minimum laods for convergence check
                                                ! To avoid big percentage difference in low load situations
 
           ! INTERFACE BLOCK SPECIFICATIONS:
@@ -4453,10 +4453,10 @@ SUBROUTINE CheckWarmupConvergence
       MaxTempPrevDay(ZoneNum)=MaxTempZone(ZoneNum)
       MinTempPrevDay(ZoneNum)=MinTempZone(ZoneNum)
 
-      MaxHeatLoadZone(ZoneNum)=-9999.
-      MaxCoolLoadZone(ZoneNum)=-9999.
-      MaxTempZone(ZoneNum)=-9999.
-      MinTempZone(ZoneNum)=1000.
+      MaxHeatLoadZone(ZoneNum)=-9999.d0
+      MaxCoolLoadZone(ZoneNum)=-9999.d0
+      MaxTempZone(ZoneNum)=-9999.d0
+      MinTempZone(ZoneNum)=1000.d0
 
     END DO
 
@@ -4531,10 +4531,10 @@ SUBROUTINE ReportWarmupConvergence
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: ZoneNum
   LOGICAL,SAVE :: FirstWarmupWrite=.true.
-  REAL :: AverageZoneTemp
-  REAL :: AverageZoneLoad
-  REAL :: StdDevZoneTemp
-  REAL :: StdDevZoneLoad
+  REAL(r64) :: AverageZoneTemp
+  REAL(r64) :: AverageZoneLoad
+  REAL(r64) :: StdDevZoneTemp
+  REAL(r64) :: StdDevZoneLoad
   CHARACTER(len=15) :: EnvHeader
   INTEGER :: Num  ! loop control
 
@@ -4546,8 +4546,8 @@ SUBROUTINE ReportWarmupConvergence
         FirstWarmupWrite=.false.
       ENDIF
 
-      TempZoneRptStdDev=0.0
-      LoadZoneRptStdDev=0.0
+      TempZoneRptStdDev=0.0d0
+      LoadZoneRptStdDev=0.0d0
 
       IF (RunPeriodEnvironment) THEN
         EnvHeader='RunPeriod:'
@@ -4558,15 +4558,15 @@ SUBROUTINE ReportWarmupConvergence
       DO ZoneNum=1,NumofZones
         AverageZoneTemp=SUM(TempZoneRpt(1:CountWarmupDayPoints,ZoneNum))/REAL(CountWarmupDayPoints,r64)
         DO Num=1,CountWarmupDayPoints
-          IF (MaxLoadZoneRpt(Num,ZoneNum) > 1.*10**-4) THEN !RS: Debugging: 102612
+          IF (MaxLoadZoneRpt(Num,ZoneNum) > 1.d-4) THEN
             LoadZoneRpt(Num,ZoneNum)=LoadZoneRpt(Num,ZoneNum)/MaxLoadZoneRpt(Num,ZoneNum)
           ELSE
             LoadZoneRpt(Num,ZoneNum)=0.0
           ENDIF
         ENDDO
         AverageZoneLoad=SUM(LoadZoneRpt(1:CountWarmupDayPoints,ZoneNum))/REAL(CountWarmupDayPoints,r64)
-        StdDevZoneTemp=0.0
-        StdDevZoneLoad=0.0
+        StdDevZoneTemp=0.0d0
+        StdDevZoneLoad=0.0d0
         DO Num=1,CountWarmupDayPoints
           TempZoneRptStdDev(Num)=(TempZoneRpt(Num,ZoneNum)-AverageZoneTemp)**2
           LoadZoneRptStdDev(Num)=(LoadZoneRpt(Num,ZoneNum)-AverageZoneLoad)**2
@@ -4741,7 +4741,7 @@ SUBROUTINE GetFrameAndDividerData(ErrorsFound)
   INTEGER :: FrameDividerNum      ! Counter to keep track of the frame/divider number
   INTEGER :: FrameDividerNumAlpha ! Number of frame/divider alpha names being passed
   INTEGER :: FrameDividerNumProp  ! Number of frame/divider properties being passed
-  REAL, DIMENSION(23) :: FrameDividerProps !Temporary array to transfer frame/divider properties
+  REAL(r64), DIMENSION(23) :: FrameDividerProps !Temporary array to transfer frame/divider properties
   INTEGER :: Loop
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
@@ -4835,11 +4835,11 @@ SUBROUTINE GetFrameAndDividerData(ErrorsFound)
     END IF
 
 !    ! Warn if InsideSillDepth OR InsideReveal > 0.2meters to warn of inaccuracies
-!    IF(FrameDivider(FrameDividerNum)%InsideSillDepth > 0.2) THEN
+!    IF(FrameDivider(FrameDividerNum)%InsideSillDepth > 0.2d0) THEN
 !      CALL ShowWarningError(TRIM(CurrentModuleObject)//': In FrameAndDivider '//TRIM(FrameDivider(FrameDividerNum)%Name)// &
 !        ' '//TRIM(cNumericFieldNames(20))//' is greater than 0.2 meters, which could cause inaccuracies in zone cooling energy.')
 !    END IF
-!    IF(FrameDivider(FrameDividerNum)%InsideReveal > 0.2) THEN
+!    IF(FrameDivider(FrameDividerNum)%InsideReveal > 0.2d0) THEN
 !      CALL ShowWarningError(TRIM(CurrentModuleObject)//': In FrameAndDivider '//TRIM(FrameDivider(FrameDividerNum)%Name)// &
 !        ' '//TRIM(cNumericFieldNames(22))//' is greater than 0.2 meters, which could cause inaccuracies in zone cooling energy.')
 !    END IF
@@ -4944,47 +4944,47 @@ SUBROUTINE SearchWindow5DataFile(DesiredFileName,DesiredConstructionName,Constru
   INTEGER            :: MaterNum,MatNum     ! Material number
   INTEGER            :: FrDivNum            ! FrameDivider number
   LOGICAL            :: exists              ! True if Window5 data file exists
-  REAL          :: WinHeight(2),WinWidth(2)  ! Height, width for glazing system (m)
-  REAL          :: UValCenter(2)       ! Center of glass U-value (W/m2-K) for glazing system
-  REAL          :: SCCenter(2)         ! Center of glass shading coefficient for glazing system
-  REAL          :: SHGCCenter(2)       ! Center of glass solar heat gain coefficient for glazing system
-  REAL          :: TVisCenter(2)       ! Center of glass visible transmittance for glazing system
-  REAL          :: Tsol(11)            ! Solar transmittance vs incidence angle; diffuse trans.
-  REAL          :: AbsSol(5,11)        ! Solar absorptance vs inc. angle in each glass layer
-  REAL          :: Rfsol(11)           ! Front solar reflectance vs inc. angle
-  REAL          :: Rbsol(11)           ! Back solar reflectance vs inc. angle
-  REAL          :: Tvis(11)            ! Visible transmittance vs inc. angle
-  REAL          :: Rfvis(11)           ! Front visible reflectance vs inc. angle
-  REAL          :: Rbvis(11)           ! Back visible reflectance vs inc. angle
-  REAL          :: CosPhiIndepVar(10)  ! Cosine of incidence angle from 0 to 90 deg in 10 deg increments
+  REAL(r64)          :: WinHeight(2),WinWidth(2)  ! Height, width for glazing system (m)
+  REAL(r64)          :: UValCenter(2)       ! Center of glass U-value (W/m2-K) for glazing system
+  REAL(r64)          :: SCCenter(2)         ! Center of glass shading coefficient for glazing system
+  REAL(r64)          :: SHGCCenter(2)       ! Center of glass solar heat gain coefficient for glazing system
+  REAL(r64)          :: TVisCenter(2)       ! Center of glass visible transmittance for glazing system
+  REAL(r64)          :: Tsol(11)            ! Solar transmittance vs incidence angle; diffuse trans.
+  REAL(r64)          :: AbsSol(5,11)        ! Solar absorptance vs inc. angle in each glass layer
+  REAL(r64)          :: Rfsol(11)           ! Front solar reflectance vs inc. angle
+  REAL(r64)          :: Rbsol(11)           ! Back solar reflectance vs inc. angle
+  REAL(r64)          :: Tvis(11)            ! Visible transmittance vs inc. angle
+  REAL(r64)          :: Rfvis(11)           ! Front visible reflectance vs inc. angle
+  REAL(r64)          :: Rbvis(11)           ! Back visible reflectance vs inc. angle
+  REAL(r64)          :: CosPhiIndepVar(10)  ! Cosine of incidence angle from 0 to 90 deg in 10 deg increments
   INTEGER            :: IPhi                ! Incidence angle counter
-  REAL          :: Phi                 ! Incidence angle (deg)
-  REAL          :: CosPhi              ! Cosine of incidence angle
-  REAL          :: tsolFit(10)         ! Fitted solar transmittance vs incidence angle
-  REAL          :: tvisFit(10)         ! Fitted visible transmittance vs incidence angle
-  REAL          :: rfsolFit(10)        ! Fitted solar front reflectance vs incidence angle
-  REAL          :: solabsFit(10,5)     ! Fitted solar absorptance vs incidence angle for each glass layer
+  REAL(r64)          :: Phi                 ! Incidence angle (deg)
+  REAL(r64)          :: CosPhi              ! Cosine of incidence angle
+  REAL(r64)          :: tsolFit(10)         ! Fitted solar transmittance vs incidence angle
+  REAL(r64)          :: tvisFit(10)         ! Fitted visible transmittance vs incidence angle
+  REAL(r64)          :: rfsolFit(10)        ! Fitted solar front reflectance vs incidence angle
+  REAL(r64)          :: solabsFit(10,5)     ! Fitted solar absorptance vs incidence angle for each glass layer
   INTEGER,EXTERNAL   :: GetNewUnitNumber
   CHARACTER(len=20)  :: DividerType(2)      ! Divider type: DividedLite or Suspended
-  REAL          :: FrameWidth
-  REAL          :: MullionWidth
-  REAL          :: FrameProjectionOut
-  REAL          :: FrameProjectionIn
-  REAL          :: FrameConductance
-  REAL          :: FrEdgeToCenterGlCondRatio
-  REAL          :: FrameSolAbsorp
-  REAL          :: FrameVisAbsorp
-  REAL          :: FrameEmis
+  REAL(r64)          :: FrameWidth
+  REAL(r64)          :: MullionWidth
+  REAL(r64)          :: FrameProjectionOut
+  REAL(r64)          :: FrameProjectionIn
+  REAL(r64)          :: FrameConductance
+  REAL(r64)          :: FrEdgeToCenterGlCondRatio
+  REAL(r64)          :: FrameSolAbsorp
+  REAL(r64)          :: FrameVisAbsorp
+  REAL(r64)          :: FrameEmis
   INTEGER            :: HorDividers(2)      ! For divider: number horizontal for each glazing system
   INTEGER            :: VertDividers(2)     ! For divider: number vertical for each glazing system
-  REAL          :: DividerWidth(2)
-  REAL          :: DividerProjectionOut(2)
-  REAL          :: DividerProjectionIn(2)
-  REAL          :: DividerConductance(2)
-  REAL          :: DivEdgeToCenterGlCondRatio(2)
-  REAL          :: DividerSolAbsorp(2)
-  REAL          :: DividerVisAbsorp(2)
-  REAL          :: DividerEmis(2)
+  REAL(r64)          :: DividerWidth(2)
+  REAL(r64)          :: DividerProjectionOut(2)
+  REAL(r64)          :: DividerProjectionIn(2)
+  REAL(r64)          :: DividerConductance(2)
+  REAL(r64)          :: DivEdgeToCenterGlCondRatio(2)
+  REAL(r64)          :: DividerSolAbsorp(2)
+  REAL(r64)          :: DividerVisAbsorp(2)
+  REAL(r64)          :: DividerEmis(2)
   INTEGER :: endcol
   LOGICAL :: StripCR
   TYPE (FrameDividerProperties), ALLOCATABLE, DIMENSION(:) :: FrameDividerSave
@@ -5150,8 +5150,8 @@ END IF
             ' it has SHGC <= 0 in glazing system '//TRIM(TrimSigDigits(IGlSys)))
           ErrorsFound = .TRUE.
         END IF
-      WinHeight(IGlSys) = 0.001*WinHeight(IGlSys)
-      WinWidth(IGlSys)  = 0.001*WinWidth(IGlSys)
+      WinHeight(IGlSys) = 0.001d0*WinHeight(IGlSys)
+      WinWidth(IGlSys)  = 0.001d0*WinWidth(IGlSys)
     END DO
     DO LineNum = 1,11
       READ(W5DataFileNum,fmtA,IOSTAT=ReadStat) DataLine(LineNum)
@@ -5224,9 +5224,9 @@ END IF
           ErrorsFound = .TRUE.
         END IF
       END IF
-      FrameWidth         = 0.001*FrameWidth
-      FrameProjectionOut = 0.001*FrameProjectionOut
-      FrameProjectionIn  = 0.001*FrameProjectionIn
+      FrameWidth         = 0.001d0*FrameWidth
+      FrameProjectionOut = 0.001d0*FrameProjectionOut
+      FrameProjectionIn  = 0.001d0*FrameProjectionIn
     FileLineCount=FileLineCount+11
 
     READ(W5DataFileNum,fmtA,IOSTAT=ReadStat) NextLine
@@ -5297,10 +5297,10 @@ END IF
           ErrorsFound = .TRUE.
         END IF
       END IF
-      DividerWidth(IGlSys)         = 0.001*DividerWidth(IGlSys)
+      DividerWidth(IGlSys)         = 0.001d0*DividerWidth(IGlSys)
       IF(DividerType(IGlSys) == 'DIVIDEDLITE') THEN
-        DividerProjectionOut(IGlSys) = 0.001*DividerProjectionOut(IGlSys)
-        DividerProjectionIn(IGlSys)  = 0.001*DividerProjectionIn(IGlSys)
+        DividerProjectionOut(IGlSys) = 0.001d0*DividerProjectionOut(IGlSys)
+        DividerProjectionIn(IGlSys)  = 0.001d0*DividerProjectionIn(IGlSys)
       ELSE
         DividerProjectionOut(IGlSys) = 0.0
         DividerProjectionIn(IGlSys)  = 0.0
@@ -5445,7 +5445,7 @@ END IF
             '" has thickness of 0.0.  Will be set to thickness = .001 but inaccuracies may result.')
           CALL ShowContinueError('Line being read='//trim(NextLine))
           CALL ShowContinueError('Thickness field starts at column 26='//trim(NextLine(26:)))
-          Material(MaterNum)%Thickness=.001
+          Material(MaterNum)%Thickness=.001d0
         ENDIF
       END DO
     END DO
@@ -5472,7 +5472,7 @@ END IF
           Material(MaterNum)%Name = &
             'W5:'//TRIM(DesiredConstructionName)//':'//NumName(IGlSys)//':GAP'//NumName(IGap)
         END IF
-        Material(MaterNum)%Thickness = 0.001*Material(MaterNum)%Thickness
+        Material(MaterNum)%Thickness = 0.001d0*Material(MaterNum)%Thickness
         Material(MaterNum)%RoughNess = MediumRough  ! Unused
       END DO
     END DO
@@ -5498,7 +5498,7 @@ END IF
             Material(MaterNum)%GasCon(IGas,:),Material(MaterNum)%GasVis(IGas,:),Material(MaterNum)%GasCp(IGas,:)
             ! Nominal resistance of gap at room temperature (based on first gas in mixture)
             NominalR(MaterNum)=Material(MaterNum)%Thickness/(Material(MaterNum)%GasCon(1,1) + &
-              Material(MaterNum)%GasCon(1,2)*300.0 + Material(MaterNum)%GasCon(1,3)*90000.)
+              Material(MaterNum)%GasCon(1,2)*300.0d0 + Material(MaterNum)%GasCon(1,3)*90000.d0)
         END DO
       END DO
     END DO
@@ -5545,19 +5545,19 @@ END IF
       Construct(ConstrNum)%InsideAbsorpSolar   = 0.0
       Construct(ConstrNum)%OutsideAbsorpSolar  = 0.0
       Construct(ConstrNum)%DayltPropPtr        = 0
-      Construct(ConstrNum)%CTFCross            = 0.0
-      Construct(ConstrNum)%CTFFlux             = 0.0
-      Construct(ConstrNum)%CTFInside           = 0.0
-      Construct(ConstrNum)%CTFOutside          = 0.0
-      Construct(ConstrNum)%CTFSourceIn         = 0.0
-      Construct(ConstrNum)%CTFSourceOut        = 0.0
-      Construct(ConstrNum)%CTFTimeStep         = 0.0
-      Construct(ConstrNum)%CTFTSourceOut       = 0.0
-      Construct(ConstrNum)%CTFTSourceIn        = 0.0
-      Construct(ConstrNum)%CTFTSourceQ         = 0.0
-      Construct(ConstrNum)%CTFTUserOut         = 0.0
-      Construct(ConstrNum)%CTFTUserIn          = 0.0
-      Construct(ConstrNum)%CTFTUserSource      = 0.0
+      Construct(ConstrNum)%CTFCross            = 0.0D0
+      Construct(ConstrNum)%CTFFlux             = 0.0D0
+      Construct(ConstrNum)%CTFInside           = 0.0D0
+      Construct(ConstrNum)%CTFOutside          = 0.0D0
+      Construct(ConstrNum)%CTFSourceIn         = 0.0D0
+      Construct(ConstrNum)%CTFSourceOut        = 0.0D0
+      Construct(ConstrNum)%CTFTimeStep         = 0.0D0
+      Construct(ConstrNum)%CTFTSourceOut       = 0.0D0
+      Construct(ConstrNum)%CTFTSourceIn        = 0.0D0
+      Construct(ConstrNum)%CTFTSourceQ         = 0.0D0
+      Construct(ConstrNum)%CTFTUserOut         = 0.0D0
+      Construct(ConstrNum)%CTFTUserIn          = 0.0D0
+      Construct(ConstrNum)%CTFTUserSource      = 0.0D0
       Construct(ConstrNum)%NumHistories        = 0
       Construct(ConstrNum)%NumCTFTerms         = 0
       Construct(ConstrNum)%UValue              = 0.0
@@ -5764,9 +5764,9 @@ END IF
 
       ! For comparing fitted vs. input distribution in incidence angle
       DO IPhi = 1,10
-        Phi = REAL(IPhi-1,r64)*10.
+        Phi = REAL(IPhi-1,r64)*10.d0
         CosPhi = COS(Phi*DegToRadians)
-        if (abs(CosPhi) < .0001) CosPhi=0.0
+        if (abs(CosPhi) < .0001d0) CosPhi=0.0
         tsolFit(IPhi) = POLYF(CosPhi,Construct(ConstrNum)%TransSolBeamCoef(1:6))
         tvisFit(IPhi) = POLYF(CosPhi,Construct(ConstrNum)%TransVisBeamCoef(1:6))
         rfsolFit(IPhi)= POLYF(CosPhi,Construct(ConstrNum)%ReflSolBeamFrontCoef(1:6))
@@ -5786,8 +5786,8 @@ END IF
         ELSE IF(Material(MatNum)%Group == WindowGas .OR. Material(MatNum)%Group == WindowGasMixture) THEN
             ! If mixture, use conductivity of first gas in mixture
             NominalU(ConstrNum) = NominalU(ConstrNum) + Material(MatNum)%Thickness / &
-                (Material(MatNum)%GasCon(1,1) + Material(MatNum)%GasCon(1,2)*300.0 + &
-                 Material(MatNum)%GasCon(1,3)*90000.0)
+                (Material(MatNum)%GasCon(1,1) + Material(MatNum)%GasCon(1,2)*300.0d0 + &
+                 Material(MatNum)%GasCon(1,3)*90000.0d0)
         END IF
       END DO
 
@@ -5827,7 +5827,7 @@ END IF
         FrameDivider(FrDivNum)%FrameSolAbsorp            = FrameSolAbsorp
         FrameDivider(FrDivNum)%FrameVisAbsorp            = FrameVisAbsorp
         FrameDivider(FrDivNum)%FrameEmis                 = FrameEmis
-        FrameDivider(FrDivNum)%FrameEdgeWidth            = 0.06355  ! 2.5 in
+        FrameDivider(FrDivNum)%FrameEdgeWidth            = 0.06355d0  ! 2.5 in
         IF (SameString(MullionOrientation,'Vertical')) THEN
           FrameDivider(FrDivNum)%MullionOrientation      = Vertical
         ELSEIF (SameString(MullionOrientation,'Horizontal')) THEN
@@ -5848,7 +5848,7 @@ END IF
         FrameDivider(FrDivNum)%DividerSolAbsorp          = DividerSolAbsorp(IGlSys)
         FrameDivider(FrDivNum)%DividerVisAbsorp          = DividerVisAbsorp(IGlSys)
         FrameDivider(FrDivNum)%DividerEmis               = DividerEmis(IGlSys)
-        FrameDivider(FrDivNum)%DividerEdgeWidth          = 0.06355 ! 2.5 in
+        FrameDivider(FrDivNum)%DividerEdgeWidth          = 0.06355d0 ! 2.5 in
         IF(NGlSys == 1) THEN
           FrameDivider(FrDivNum)%Name = 'W5:'//TRIM(DesiredConstructionName)
         ELSE
@@ -5980,9 +5980,9 @@ SUBROUTINE CreateFCfactorConstructions(ConstrNum,ErrorsFound)
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
    !Thermal resistance of the inside air film, m2.K/W. Average of 0.14 (heat flow up) and 0.11 (heat flow down)
-  REAL,PARAMETER :: Rfilm_in = 0.125
+  REAL(r64),PARAMETER :: Rfilm_in = 0.125d0
     !Thermal resistance of the outside air film used in calculating the Ffactor, m2.K/W. 0.17/5.678
-  REAL,PARAMETER  :: Rfilm_out = 0.03
+  REAL(r64),PARAMETER  :: Rfilm_out = 0.03d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -5995,7 +5995,7 @@ SUBROUTINE CreateFCfactorConstructions(ConstrNum,ErrorsFound)
   INTEGER :: DummyNumProp      ! dummy variable for properties being passed
   INTEGER :: IOStat            ! IO Status when calling get input subroutine
   CHARACTER(len=MaxNameLength),DIMENSION(1) :: ConstructAlphas   ! Construction Alpha names defined
-  REAL, DIMENSION(4) :: DummyProps !Temporary array to transfer construction properties
+  REAL(r64), DIMENSION(4) :: DummyProps !Temporary array to transfer construction properties
   LOGICAL :: ErrorInName
   LOGICAL :: IsBlank
   INTEGER :: Loop
@@ -6003,17 +6003,17 @@ SUBROUTINE CreateFCfactorConstructions(ConstrNum,ErrorsFound)
   INTEGER :: TotFfactorConstructs  ! Number of slabs-on-grade or underground floor constructions defined with F factors
   INTEGER :: TotCfactorConstructs  ! Number of underground wall constructions defined with C factors
 
-  REAL :: Ffactor             !Ffactor in W/m-K, applies to deltaT of outside - indoor air temperature
-  REAL :: Cfactor             !Cfactor in W/m2-K, does not include soil or air films
-  REAL :: Area                !floor area in m2
-  REAL :: PerimeterExposed    !perimeter exposed in m
-  REAL :: Height              !Height of the underground wall in m
+  REAL(r64) :: Ffactor             !Ffactor in W/m-K, applies to deltaT of outside - indoor air temperature
+  REAL(r64) :: Cfactor             !Cfactor in W/m2-K, does not include soil or air films
+  REAL(r64) :: Area                !floor area in m2
+  REAL(r64) :: PerimeterExposed    !perimeter exposed in m
+  REAL(r64) :: Height              !Height of the underground wall in m
 
-  REAL :: Reff                !Effective thermal resistance, m2.K/W
-  REAL :: Rcon                !Concrete layer thermal resistance, m2.K/W
-  REAL :: Rfic                !Thermal resistance of the fictitious material, m2.K/W
+  REAL(r64) :: Reff                !Effective thermal resistance, m2.K/W
+  REAL(r64) :: Rcon                !Concrete layer thermal resistance, m2.K/W
+  REAL(r64) :: Rfic                !Thermal resistance of the fictitious material, m2.K/W
   INTEGER   :: MaterNum            !Material index
-  REAL :: Rsoilequ            !Effective R-value of soil for underground walls
+  REAL(r64) :: Rsoilequ            !Effective R-value of soil for underground walls
   INTEGER   :: iFCConcreteLayer    !Layer pointer to the materials array
 
   ! First get the concrete layer
@@ -6160,15 +6160,15 @@ SUBROUTINE CreateFCfactorConstructions(ConstrNum,ErrorsFound)
     MaterNum = FindIteminList('~FC_Insulation_' // RoundSigDigits(Loop+TotFfactorConstructs,0),Material%Name,TotMaterials)
     Construct(ConstrNum)%LayerPoint(1) = MaterNum
 
-    IF (Height <= 0.305) THEN      ! 1 ft
-      Rsoilequ = 4.88
-    ELSEIF (Height >= 3.048) THEN  ! 10 ft
-      Rsoilequ = 34.64
+    IF (Height <= 0.305d0) THEN      ! 1 ft
+      Rsoilequ = 4.88d0
+    ELSEIF (Height >= 3.048d0) THEN  ! 10 ft
+      Rsoilequ = 34.64d0
     ELSE  ! regression from ASHRAE 90.1-2007 TABLE C6.10.1 Effective R-Value of Soil, R2 = 0.9972
-      Rsoilequ = 2.592 + 10.736 * Height
+      Rsoilequ = 2.592d0 + 10.736d0 * Height
     ENDIF
 
-    Reff = 1.0/Cfactor + Rsoilequ    ! Cfactor does not include air films
+    Reff = 1.0d0/Cfactor + Rsoilequ    ! Cfactor does not include air films
 
     Rfic = Reff - Rcon
     IF (Rfic <=0 ) THEN
@@ -6334,53 +6334,53 @@ SUBROUTINE SetupSimpleWindowGlazingSystem(MaterNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: Riw = 0.0 ! thermal resistance of interior film coefficient under winter conditions (m2-K/W)
-  REAL :: Row = 0.0  ! theraml resistance of exterior film coefficient under winter conditions (m2-K/W)
-  REAL :: Rlw = 0.0  ! thermal resistance of block model layer (m2-K/W)
-  REAL :: Ris = 0.0  ! thermal resistance of interior film coefficient under summer conditions (m2-K/W)
-  REAL :: Ros = 0.0  ! theraml resistance of exterior film coefficient under summer conditions (m2-K/W)
-  REAL :: InflowFraction = 0.0  ! inward flowing fraction for SHGC, intermediate value non dimensional
-  REAL :: SolarAbsorb = 0.0  ! solar aborptance
+  REAL(r64) :: Riw = 0.0D0 ! thermal resistance of interior film coefficient under winter conditions (m2-K/W)
+  REAL(r64) :: Row = 0.0D0  ! theraml resistance of exterior film coefficient under winter conditions (m2-K/W)
+  REAL(r64) :: Rlw = 0.0D0  ! thermal resistance of block model layer (m2-K/W)
+  REAL(r64) :: Ris = 0.0D0  ! thermal resistance of interior film coefficient under summer conditions (m2-K/W)
+  REAL(r64) :: Ros = 0.0D0  ! theraml resistance of exterior film coefficient under summer conditions (m2-K/W)
+  REAL(r64) :: InflowFraction = 0.0d0  ! inward flowing fraction for SHGC, intermediate value non dimensional
+  REAL(r64) :: SolarAbsorb = 0.0d0  ! solar aborptance
   LOGICAL   :: ErrorsFound = .false.
-  REAL :: TsolLowSide = 0.0   ! intermediate solar transmission for interpolating
-  REAL :: TsolHiSide = 0.0   ! intermediate solar transmission for interpolating
-  REAL :: DeltaSHGCandTsol = 0.0  ! intermediate difference
-  REAL :: RLowSide   = 0.0
-  REAL :: RHiSide    = 0.0
+  REAL(r64) :: TsolLowSide = 0.0d0   ! intermediate solar transmission for interpolating
+  REAL(r64) :: TsolHiSide = 0.0d0   ! intermediate solar transmission for interpolating
+  REAL(r64) :: DeltaSHGCandTsol = 0.0d0  ! intermediate difference
+  REAL(r64) :: RLowSide   = 0.0d0
+  REAL(r64) :: RHiSide    = 0.0d0
 
 
   ! first fill out defaults
   Material(MaterNum)%GlassSpectralDataPtr = 0
   Material(MaterNum)%SolarDiffusing       = .FALSE.
   Material(MaterNum)%Roughness            = VerySmooth
-  Material(MaterNum)%TransThermal         = 0.0
-  Material(MaterNum)%AbsorpThermalBack    = 0.84
-  Material(MaterNum)%AbsorpThermalFront   = 0.84
+  Material(MaterNum)%TransThermal         = 0.0d0
+  Material(MaterNum)%AbsorpThermalBack    = 0.84d0
+  Material(MaterNum)%AbsorpThermalFront   = 0.84d0
   Material(MaterNum)%AbsorpThermal        = Material(MaterNum)%AbsorpThermalBack
 
   ! step 1. Determine U-factor without film coefficients
   ! Simple window model has its own correlation for film coefficients (m2-K/W) under Winter conditions as function of U-factor
-  IF ( Material(MaterNum)%SimpleWindowUfactor < 5.85 ) THEN
-    Riw = 1.0 / ( 0.359073 * Log( Material(MaterNum)%SimpleWindowUfactor ) + 6.949915)
+  IF ( Material(MaterNum)%SimpleWindowUfactor < 5.85d0 ) THEN
+    Riw = 1.0d0 / ( 0.359073d0 * Log( Material(MaterNum)%SimpleWindowUfactor ) + 6.949915d0)
   Else
-    Riw = 1.0 / (1.788041 *  Material(MaterNum)%SimpleWindowUfactor - 2.886625 )
+    Riw = 1.0d0 / (1.788041d0 *  Material(MaterNum)%SimpleWindowUfactor - 2.886625d0 )
   Endif
-  Row = 1.0 / (0.025342 * Material(MaterNum)%SimpleWindowUfactor + 29.163853 )
+  Row = 1.0d0 / (0.025342d0 * Material(MaterNum)%SimpleWindowUfactor + 29.163853d0 )
 
   ! determine 1/U without film coefficients
-  Rlw = (1.0/Material(MaterNum)%SimpleWindowUfactor) - Riw - Row
-  IF (Rlw <= 0.0) THEN ! U factor of film coefficients is better than user input.
-    Rlw = MAX(Rlw, 0.001)
+  Rlw = (1.0d0/Material(MaterNum)%SimpleWindowUfactor) - Riw - Row
+  IF (Rlw <= 0.0d0) THEN ! U factor of film coefficients is better than user input.
+    Rlw = MAX(Rlw, 0.001d0)
     CALL ShowWarningError('WindowMaterial:SimpleGlazingSystem: ' //Trim(Material(MaterNum)%Name)// &
           ' has U-factor higher than that provided by surface film resistances, Check value of U-factor')
   ENDIF
 
   ! Step 2. determine layer thickness.
 
-  IF ( (1.0 / Rlw) > 7.0 ) THEN
-    Material(MaterNum)%Thickness = 0.002
+  IF ( (1.0d0 / Rlw) > 7.0d0 ) THEN
+    Material(MaterNum)%Thickness = 0.002d0
   ELSE
-    Material(MaterNum)%Thickness = 0.05914 - (0.00714 / Rlw )
+    Material(MaterNum)%Thickness = 0.05914d0 - (0.00714d0 / Rlw )
   ENDIF
 
   ! Step 3. determine effective conductivity
@@ -6396,82 +6396,82 @@ SUBROUTINE SetupSimpleWindowGlazingSystem(MaterNum)
 
   !step 4. determine solar transmission (revised to 10-1-2009 version from LBNL.)
 
-  IF (Material(MaterNum)%SimpleWindowUfactor > 4.5) THEN
+  IF (Material(MaterNum)%SimpleWindowUfactor > 4.5d0) THEN
 
-    IF (Material(MaterNum)%SimpleWindowSHGC < 0.7206 ) THEN
+    IF (Material(MaterNum)%SimpleWindowSHGC < 0.7206d0 ) THEN
 
-      Material(MaterNum)%Trans = 0.939998  * Material(MaterNum)%SimpleWindowSHGC**2 &
-                                 + 0.20332 * Material(MaterNum)%SimpleWindowSHGC
+      Material(MaterNum)%Trans = 0.939998d0  * Material(MaterNum)%SimpleWindowSHGC**2 &
+                                 + 0.20332d0 * Material(MaterNum)%SimpleWindowSHGC
     ELSE ! >= 0.7206
 
-      Material(MaterNum)%Trans = 1.30415 * Material(MaterNum)%SimpleWindowSHGC - 0.30515
+      Material(MaterNum)%Trans = 1.30415d0 * Material(MaterNum)%SimpleWindowSHGC - 0.30515d0
 
     ENDIF
 
-  ELSEIF (Material(MaterNum)%SimpleWindowUfactor < 3.4) THEN
+  ELSEIF (Material(MaterNum)%SimpleWindowUfactor < 3.4d0) THEN
 
-    IF (Material(MaterNum)%SimpleWindowSHGC <= 0.15) THEN
-      Material(MaterNum)%Trans = 0.41040 * Material(MaterNum)%SimpleWindowSHGC
+    IF (Material(MaterNum)%SimpleWindowSHGC <= 0.15d0) THEN
+      Material(MaterNum)%Trans = 0.41040d0 * Material(MaterNum)%SimpleWindowSHGC
     ELSE ! > 0.15
-      Material(MaterNum)%Trans =  0.085775*(Material(MaterNum)%SimpleWindowSHGC**2) &
-                                  + 0.963954*Material(MaterNum)%SimpleWindowSHGC - 0.084958
+      Material(MaterNum)%Trans =  0.085775d0*(Material(MaterNum)%SimpleWindowSHGC**2) &
+                                  + 0.963954d0*Material(MaterNum)%SimpleWindowSHGC - 0.084958d0
     ENDIF
   ELSE ! interpolate. 3.4 <= Ufactor <= 4.5
 
-    IF (Material(MaterNum)%SimpleWindowSHGC < 0.7206 ) THEN
-      TsolHiSide = 0.939998    * Material(MaterNum)%SimpleWindowSHGC**2 &
-                                 + 0.20332 * Material(MaterNum)%SimpleWindowSHGC
+    IF (Material(MaterNum)%SimpleWindowSHGC < 0.7206d0 ) THEN
+      TsolHiSide = 0.939998d0    * Material(MaterNum)%SimpleWindowSHGC**2 &
+                                 + 0.20332d0 * Material(MaterNum)%SimpleWindowSHGC
     ELSE ! >= 0.7206
-      TsolHiSide = 1.30415 * Material(MaterNum)%SimpleWindowSHGC - 0.30515
+      TsolHiSide = 1.30415d0 * Material(MaterNum)%SimpleWindowSHGC - 0.30515d0
     ENDIF
 
-    IF (Material(MaterNum)%SimpleWindowSHGC <= 0.15) THEN
-      TsolLowSide = 0.41040 * Material(MaterNum)%SimpleWindowSHGC
+    IF (Material(MaterNum)%SimpleWindowSHGC <= 0.15d0) THEN
+      TsolLowSide = 0.41040d0 * Material(MaterNum)%SimpleWindowSHGC
     ELSE ! > 0.15
-      TsolLowSide =  0.085775*(Material(MaterNum)%SimpleWindowSHGC**2) &
-                                  + 0.963954*Material(MaterNum)%SimpleWindowSHGC - 0.084958
+      TsolLowSide =  0.085775d0*(Material(MaterNum)%SimpleWindowSHGC**2) &
+                                  + 0.963954d0*Material(MaterNum)%SimpleWindowSHGC - 0.084958d0
     ENDIF
 
-    Material(MaterNum)%Trans = ((Material(MaterNum)%SimpleWindowUfactor - 3.4) &
-                                  / (4.5 - 3.4) )   &
+    Material(MaterNum)%Trans = ((Material(MaterNum)%SimpleWindowUfactor - 3.4d0) &
+                                  / (4.5d0 - 3.4d0) )   &
                                   * (TsolHiSide - TsolLowSide)  + TsolLowSide
 
   ENDIF
-  If (Material(MaterNum)%Trans < 0.0) Material(MaterNum)%Trans = 0.0
+  If (Material(MaterNum)%Trans < 0.0d0) Material(MaterNum)%Trans = 0.0d0
 
   !step 5.  determine solar reflectances
 
   DeltaSHGCandTsol = Material(MaterNum)%SimpleWindowSHGC - Material(MaterNum)%Trans
 
-  IF (Material(MaterNum)%SimpleWindowUfactor > 4.5) THEN
+  IF (Material(MaterNum)%SimpleWindowUfactor > 4.5d0) THEN
 
-   Ris = 1.0 / (29.436546*DeltaSHGCandTsol**3.0 - 21.943415*DeltaSHGCandTsol**2 &
-         + 9.945872*DeltaSHGCandTsol + 7.426151 )
-   Ros = 1.0 / (2.225824*DeltaSHGCandTsol + 20.577080 )
-  ELSEIF (Material(MaterNum)%SimpleWindowUfactor < 3.4) THEN
+   Ris = 1.0d0 / (29.436546d0*DeltaSHGCandTsol**3.0d0 - 21.943415d0*DeltaSHGCandTsol**2 &
+         + 9.945872d0*DeltaSHGCandTsol + 7.426151d0 )
+   Ros = 1.0d0 / (2.225824d0*DeltaSHGCandTsol + 20.577080d0 )
+  ELSEIF (Material(MaterNum)%SimpleWindowUfactor < 3.4d0) THEN
 
-   Ris = 1.0 / (199.8208128*DeltaSHGCandTsol**3.0 - 90.639733*DeltaSHGCandTsol**2 &
-         + 19.737055*DeltaSHGCandTsol + 6.766575 )
-   Ros = 1.0 / (5.763355*DeltaSHGCandTsol + 20.541528 )
+   Ris = 1.0d0 / (199.8208128d0*DeltaSHGCandTsol**3.0d0 - 90.639733d0*DeltaSHGCandTsol**2 &
+         + 19.737055d0*DeltaSHGCandTsol + 6.766575d0 )
+   Ros = 1.0d0 / (5.763355d0*DeltaSHGCandTsol + 20.541528d0 )
   ELSE ! interpolate. 3.4 <= Ufactor <= 4.5
    !inside first
-   RLowSide = 1.0 / (199.8208128*DeltaSHGCandTsol**3.0 - 90.639733*DeltaSHGCandTsol**2 &
-         + 19.737055*DeltaSHGCandTsol + 6.766575 )
-   RHiSide  = 1.0 / (29.436546*DeltaSHGCandTsol**3 - 21.943415*DeltaSHGCandTsol**2 &
-         + 9.945872*DeltaSHGCandTsol + 7.426151 )
-   Ris = ((Material(MaterNum)%SimpleWindowUfactor - 3.4) &
-                                  / (4.5 - 3.4) )   &
+   RLowSide = 1.0d0 / (199.8208128d0*DeltaSHGCandTsol**3.0d0 - 90.639733d0*DeltaSHGCandTsol**2 &
+         + 19.737055d0*DeltaSHGCandTsol + 6.766575d0 )
+   RHiSide  = 1.0d0 / (29.436546d0*DeltaSHGCandTsol**3 - 21.943415d0*DeltaSHGCandTsol**2 &
+         + 9.945872d0*DeltaSHGCandTsol + 7.426151d0 )
+   Ris = ((Material(MaterNum)%SimpleWindowUfactor - 3.4d0) &
+                                  / (4.5d0 - 3.4d0) )   &
                                   * (RLowSide - RHiSide)  + RLowSide
    ! then outside
-   RLowSide = 1.0 / (5.763355*DeltaSHGCandTsol + 20.541528 )
-   RHiSide  = 1.0 / (2.225824*DeltaSHGCandTsol + 20.577080 )
-   Ros = ((Material(MaterNum)%SimpleWindowUfactor - 3.4) &
-                                  / (4.5 - 3.4) )   &
+   RLowSide = 1.0d0 / (5.763355d0*DeltaSHGCandTsol + 20.541528d0 )
+   RHiSide  = 1.0d0 / (2.225824d0*DeltaSHGCandTsol + 20.577080d0 )
+   Ros = ((Material(MaterNum)%SimpleWindowUfactor - 3.4d0) &
+                                  / (4.5d0 - 3.4d0) )   &
                                   * (RLowSide - RHiSide)  + RLowSide
 
   ENDIF
 
-  InflowFraction = (Ros + 0.5*Rlw)/(Ros + Rlw + Ris)
+  InflowFraction = (Ros + 0.5d0*Rlw)/(Ros + Rlw + Ris)
 
   SolarAbsorb = (Material(MaterNum)%SimpleWindowSHGC - Material(MaterNum)%Trans) / InflowFraction
   Material(MaterNum)%ReflectSolBeamBack  = 1.0 - Material(MaterNum)%Trans - SolarAbsorb
@@ -6480,18 +6480,18 @@ SUBROUTINE SetupSimpleWindowGlazingSystem(MaterNum)
   !step 6. determine visible properties.
   IF (Material(MaterNum)%SimpleWindowVTinputByUser) THEN
     Material(MaterNum)%TransVis = Material(MaterNum)%SimpleWindowVisTran
-    Material(MaterNum)%ReflectVisBeamBack  = - 0.7409 * Material(MaterNum)%TransVis**3  &
-                                             + 1.6531 * Material(MaterNum)%TransVis**2  &
-                                             - 1.2299 * Material(MaterNum)%TransVis + 0.4545
-    IF (Material(MaterNum)%TransVis + Material(MaterNum)%ReflectVisBeamBack >= 1.0) THEN
-      Material(MaterNum)%ReflectVisBeamBack = 0.999 - Material(MaterNum)%TransVis
+    Material(MaterNum)%ReflectVisBeamBack  = - 0.7409d0 * Material(MaterNum)%TransVis**3  &
+                                             + 1.6531d0 * Material(MaterNum)%TransVis**2  &
+                                             - 1.2299d0 * Material(MaterNum)%TransVis + 0.4545d0
+    IF (Material(MaterNum)%TransVis + Material(MaterNum)%ReflectVisBeamBack >= 1.0d0) THEN
+      Material(MaterNum)%ReflectVisBeamBack = 0.999d0 - Material(MaterNum)%TransVis
     ENDIF
 
-    Material(MaterNum)%ReflectVisBeamFront = - 0.0622 * Material(MaterNum)%TransVis**3  &
-                                             + 0.4277 * Material(MaterNum)%TransVis**2  &
-                                             - 0.4169 * Material(MaterNum)%TransVis + 0.2399
-    IF (Material(MaterNum)%TransVis + Material(MaterNum)%ReflectVisBeamFront >= 1.0) THEN
-      Material(MaterNum)%ReflectVisBeamFront = 0.999 - Material(MaterNum)%TransVis
+    Material(MaterNum)%ReflectVisBeamFront = - 0.0622d0 * Material(MaterNum)%TransVis**3  &
+                                             + 0.4277d0 * Material(MaterNum)%TransVis**2  &
+                                             - 0.4169d0 * Material(MaterNum)%TransVis + 0.2399d0
+    IF (Material(MaterNum)%TransVis + Material(MaterNum)%ReflectVisBeamFront >= 1.0d0) THEN
+      Material(MaterNum)%ReflectVisBeamFront = 0.999d0 - Material(MaterNum)%TransVis
     ENDIF
   ELSE
     Material(MaterNum)%TransVis = Material(MaterNum)%Trans

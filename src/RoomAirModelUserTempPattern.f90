@@ -170,13 +170,13 @@ SUBROUTINE InitTempDistModel(ZoneNum)
   ENDIF
 
   If (BeginEnvrnFlag .and. MyEnvrnFlag(ZoneNum) ) Then
-    AirPatternZoneInfo(ZoneNum)%TairMean = 23.0
-    AirPatternZoneInfo(ZoneNum)%Tstat    = 23.0
-    AirPatternZoneInfo(ZoneNum)%Tleaving = 23.0
-    AirPatternZoneInfo(ZoneNum)%Texhaust = 23.0
-    AirPatternZoneInfo(ZoneNum)%Gradient = 0.0
+    AirPatternZoneInfo(ZoneNum)%TairMean = 23.0d0
+    AirPatternZoneInfo(ZoneNum)%Tstat    = 23.0d0
+    AirPatternZoneInfo(ZoneNum)%Tleaving = 23.0d0
+    AirPatternZoneInfo(ZoneNum)%Texhaust = 23.0d0
+    AirPatternZoneInfo(ZoneNum)%Gradient = 0.0D0
     Do SurfNum = 1, AirPatternZoneInfo(ZoneNum)%totNumSurfs
-      AirPatternZoneInfo(ZoneNum)%Surf(SurfNum)%TadjacentAir = 23.0
+      AirPatternZoneInfo(ZoneNum)%Surf(SurfNum)%TadjacentAir = 23.0d0
     ENDDO
     MyEnvrnFlag(ZoneNum) =  .FALSE.
   endif
@@ -184,7 +184,7 @@ SUBROUTINE InitTempDistModel(ZoneNum)
   If (.not. BeginEnvrnFlag)  MyEnvrnFlag(ZoneNum) = .TRUE.
 
   ! init report variable
-  AirPatternZoneInfo(ZoneNum)%Gradient = 0.0
+  AirPatternZoneInfo(ZoneNum)%Gradient = 0.0D0
 
   RETURN
 
@@ -291,17 +291,17 @@ SUBROUTINE CalcTempDistModel(ZoneNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !unused    INTEGER    :: thisZoneInfo
-    REAL  :: AvailTest
+    REAL(r64)  :: AvailTest
     INTEGER    :: CurntPatternKey
     INTEGER    :: CurPatrnID
 !unused    INTEGER    :: thisZoneInfoSurf
 !unused    INTEGER    :: lowSideID
 !unused    INTEGER    :: highSideID
-!unused    REAL  :: thisZeta
-!unused    REAL  :: lowSideZeta
-!unused    REAL  :: hiSideZeta
-!unused    REAL  :: fractBtwn
-!unused    REAL  :: tmpDeltaTai
+!unused    REAL(r64)  :: thisZeta
+!unused    REAL(r64)  :: lowSideZeta
+!unused    REAL(r64)  :: hiSideZeta
+!unused    REAL(r64)  :: fractBtwn
+!unused    REAL(r64)  :: tmpDeltaTai
 
 
   !first determine availability
@@ -397,7 +397,7 @@ SUBROUTINE FigureSurfMapPattern(PattrnID, ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL     :: Tmean
+  REAL(r64)     :: Tmean
   INTEGER  :: found
   INTEGER  :: i
 
@@ -459,15 +459,15 @@ SUBROUTINE FigureHeightPattern(PattrnID, ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: Tmean !
+  REAL(r64)    :: Tmean !
   Integer :: lowSideID
   INTEGER :: highSideID
-  REAL    :: thisZeta
+  REAL(r64)    :: thisZeta
   INTEGER :: I
-  REAL    :: lowSideZeta
-  REAL    :: hiSideZeta
-  REAL    :: fractBtwn
-  REAL    :: tmpDeltaTai
+  REAL(r64)    :: lowSideZeta
+  REAL(r64)    :: hiSideZeta
+  REAL(r64)    :: fractBtwn
+  REAL(r64)    :: tmpDeltaTai
 
   tmpDeltaTai = 0.0
   Tmean = AirPatternZoneInfo(ZoneNum)%TairMean
@@ -551,16 +551,16 @@ SUBROUTINE FigureTwoGradInterpPattern(PattrnID, ZoneNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL  :: Tmean ! MAT deg C
-  REAL  :: Grad ! vertical temperature gradient C/m
-  REAL  :: DeltaT ! temperature difference
-  REAL  :: CoolLoad ! sensible cooling load
-  REAL  :: HeatLoad ! sensible heating load
-  REAL  :: ZetaTmean ! non-dimensional height for mean air temp
+  REAL(r64)  :: Tmean ! MAT deg C
+  REAL(r64)  :: Grad ! vertical temperature gradient C/m
+  REAL(r64)  :: DeltaT ! temperature difference
+  REAL(r64)  :: CoolLoad ! sensible cooling load
+  REAL(r64)  :: HeatLoad ! sensible heating load
+  REAL(r64)  :: ZetaTmean ! non-dimensional height for mean air temp
   INTEGER :: I ! do loop index
-  REAL  :: thisZeta !non-dimensional height
-  REAL  :: DeltaHeight ! height difference in m
-  REAL  :: tempDeltaTai ! temporary temperature difference
+  REAL(r64)  :: thisZeta !non-dimensional height
+  REAL(r64)  :: DeltaHeight ! height difference in m
+  REAL(r64)  :: tempDeltaTai ! temporary temperature difference
   LOGICAL, DIMENSION(:), ALLOCATABLE, SAVE :: SetupOutputFlag !flag to set up output variable one-time if 2-grad model used
   Logical, Save :: MyOneTimeFlag = .TRUE.
 
@@ -771,13 +771,13 @@ SUBROUTINE FigureConstGradPattern(PattrnID, ZoneNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
-  REAL     :: Tmean ! MAT
+  REAL(r64)     :: Tmean ! MAT
   INTEGER  :: i ! loop counter
-  REAL     :: grad ! vertical temperature gradient
-  REAL     :: ZetaTmean ! non-dimens. height for MAT, 0.5
-  REAL     :: thisZeta ! temporary non-dimens height
-  REAL     :: DeltaHeight ! temporary height difference
-  REAL     :: tempDeltaTai ! temporary Delta Tai
+  REAL(r64)     :: grad ! vertical temperature gradient
+  REAL(r64)     :: ZetaTmean ! non-dimens. height for MAT, 0.5
+  REAL(r64)     :: thisZeta ! temporary non-dimens height
+  REAL(r64)     :: DeltaHeight ! temporary height difference
+  REAL(r64)     :: tempDeltaTai ! temporary Delta Tai
 
   Tmean = AirPatternZoneInfo(ZoneNum)%TairMean
   Grad  = RoomAirPattern(PattrnID)%GradPatrn%Gradient
@@ -801,7 +801,7 @@ END SUBROUTINE FigureConstGradPattern
 
 
 !*****************************************************************************************
-  REAL FUNCTION FigureNDheightInZone(thisHBsurf)
+  REAL(r64) FUNCTION FigureNDheightInZone(thisHBsurf)
       ! FUNCTION INFORMATION:
           !       AUTHOR         B.Griffith
           !       DATE WRITTEN   aug 2005, Jan2004
@@ -834,7 +834,7 @@ END SUBROUTINE FigureConstGradPattern
     INTEGER, INTENT(IN) :: thisHBsurf  ! index in main Surface array
 
           ! FUNCTION PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: TolValue=.0001
+    REAL(r64), PARAMETER :: TolValue=.0001d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -845,20 +845,20 @@ END SUBROUTINE FigureConstGradPattern
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
     INTEGER  :: thisZone  !
-    REAL     :: ZoneZorig
-    REAL     :: ZoneCeilHeight
-    REAL     :: Zcm
-    REAL     :: SurfMinZ
-    REAL     :: SurfMaxZ
-    REAL     :: Zeta
-    REAL     :: FloorCount
-    REAL     :: ZFlrAvg
-    REAL     :: ZMax
-    REAL     :: ZMin
+    REAL(r64)     :: ZoneZorig
+    REAL(r64)     :: ZoneCeilHeight
+    REAL(r64)     :: Zcm
+    REAL(r64)     :: SurfMinZ
+    REAL(r64)     :: SurfMaxZ
+    REAL(r64)     :: Zeta
+    REAL(r64)     :: FloorCount
+    REAL(r64)     :: ZFlrAvg
+    REAL(r64)     :: ZMax
+    REAL(r64)     :: ZMin
     INTEGER  :: Count
     INTEGER  :: SurfNum
-    REAL     :: Z1
-    REAL     :: Z2
+    REAL(r64)     :: Z1
+    REAL(r64)     :: Z2
 
     ! Get the centroid height for the surface
     Zcm = Surface(thisHBsurf)%centroid%z
@@ -929,9 +929,9 @@ END SUBROUTINE FigureConstGradPattern
      Zeta = (Zcm - ZoneZorig)  / ZoneCeilHeight
     ! bound so that floors and ceiling are just in from endpoints.
 
-    If (Zeta > 0.99 ) Zeta  = 0.99
+    If (Zeta > 0.99d0 ) Zeta  = 0.99d0
 
-    If (Zeta < 0.01)  Zeta  = 0.01
+    If (Zeta < 0.01d0)  Zeta  = 0.01d0
 
     FigureNDheightInZone = zeta
 
@@ -989,22 +989,22 @@ END SUBROUTINE FigureConstGradPattern
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER                         :: SurfFirst    ! index number of the first surface in the zone
   INTEGER                         :: SurfLast
-  REAL      :: qretair          ! Heat to return air from lights
-  REAL      :: cpair            ! Air heat capacity [J/kg-K]
-  REAL      :: TempRetAir       ! Return air temperature [C]
-  REAL      :: TempZoneAir      ! Zone air temperature [C]
+  REAL(r64)      :: qretair          ! Heat to return air from lights
+  REAL(r64)      :: cpair            ! Air heat capacity [J/kg-K]
+  REAL(r64)      :: TempRetAir       ! Return air temperature [C]
+  REAL(r64)      :: TempZoneAir      ! Zone air temperature [C]
   INTEGER        :: ReturnNode       ! Node number of controlled zone's return air
   INTEGER        :: ZoneNode         ! Node number of controlled zone
   INTEGER        :: SurfNum          ! Surface number
-  REAL      :: MassFlowRA       ! Return air mass flow [kg/s]
-  REAL      :: FlowThisTS       ! Window gap air mass flow [kg/s]
-  REAL      :: WinGapFlowtoRA   ! Mass flow to return air from all airflow windows in zone [kg/s]
-  REAL      :: WinGapFlowTtoRA  ! Sum of mass flow times outlet temp for all airflow windows in zone [(kg/s)-C]
-  REAL      :: WinGapTtoRA      ! Temp of outlet flow mixture to return air from all airflow windows in zone [C]
-  REAL      :: H2OHtOfVap       ! Heat of vaporization of water (W/kg)
-  REAL      :: RhoAir           ! Density of air (Kg/m3)
-  REAL      :: ZoneMult
-  REAL      :: SumRetAirLatentGainRate
+  REAL(r64)      :: MassFlowRA       ! Return air mass flow [kg/s]
+  REAL(r64)      :: FlowThisTS       ! Window gap air mass flow [kg/s]
+  REAL(r64)      :: WinGapFlowtoRA   ! Mass flow to return air from all airflow windows in zone [kg/s]
+  REAL(r64)      :: WinGapFlowTtoRA  ! Sum of mass flow times outlet temp for all airflow windows in zone [(kg/s)-C]
+  REAL(r64)      :: WinGapTtoRA      ! Temp of outlet flow mixture to return air from all airflow windows in zone [C]
+  REAL(r64)      :: H2OHtOfVap       ! Heat of vaporization of water (W/kg)
+  REAL(r64)      :: RhoAir           ! Density of air (Kg/m3)
+  REAL(r64)      :: ZoneMult
+  REAL(r64)      :: SumRetAirLatentGainRate
 
           ! FLOW:
 

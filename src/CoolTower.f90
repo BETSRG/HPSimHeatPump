@@ -51,36 +51,36 @@ TYPE CoolTowerParams
     CHARACTER(len=MaxNameLength) :: CoolTWaterSupplyName = ' '  ! Name of water source
     INTEGER :: CoolTWaterSupTankID       = 0 ! Index to water storage tank
     INTEGER :: CoolTWaterTankDemandARRID = 0 ! Index to water storage demand
-    REAL :: TowerHeight             = 0.0 ! Effective cooltower height in m
-    REAL :: OutletArea              = 0.0 ! Outlet area where conditioned air comes in m2
-    REAL :: OutletVelocity          = 0.0 ! Outlet velocity of the cooltower in m/s
-    REAL :: MaxAirVolFlowRate       = 0.0 ! Maximum allowable airflow in m3/s
-    REAL :: AirMassFlowRate         = 0.0 ! Air mass flow rate in kg/s
-    REAL :: CoolTAirMass            = 0.0 ! Air mass in kg
-    REAL :: MinZoneTemp             = 0.0 ! Lower temperature limit to prevent over cooling in C
-    REAL :: FracWaterLoss           = 0.0 ! Fraction of estimated blowdown and drift water
-    REAL :: FracFlowSched           = 0.0 ! Fraction of airflow loss
-    REAL :: MaxWaterFlowRate        = 0.0 ! Maximum limit of water flow rate in m3/s
-    REAL :: ActualWaterFlowRate     = 0.0 ! Actual water mass flow rate in m3/s
-    REAL :: RatedPumpPower          = 0.0 ! Rated power consumption for water pump serving the cooltower in watts
-    REAL :: SenHeatLoss             = 0.0 ! Sensible heat loss in Joules
-    REAL :: SenHeatPower            = 0.0 ! Sensible heat loss rate in watts
-    REAL :: LatHeatLoss             = 0.0 ! Latent heat loss in Joules
-    REAL :: LatHeatPower            = 0.0 ! Latent heat loss rate in watts
-    REAL :: AirVolFlowRate          = 0.0 ! Air flow rate in m3/s
-    REAL :: CoolTAirVol             = 0.0 ! Air volume in m3
-    REAL :: ActualAirVolFlowRate    = 0.0 ! Actual air flow rate in m3/s
-    REAL :: InletDBTemp             = 0.0 ! Outdoor dry bulb temperature in C
-    REAL :: InletWBTemp             = 0.0 ! Outdoor wet bulb temperature in C
-    REAL :: InletHumRat             = 0.0 ! Outdoor humidity ratio
-    REAL :: OutletTemp              = 0.0 ! Dry bulb temperature at cooltower exit in C
-    REAL :: OutletHumRat            = 0.0 ! Humidity ratio at cooltower exit
-    REAL :: CoolTWaterConsumpRate   = 0.0 ! Total water consumption during the processes in m3/s
-    REAL :: CoolTWaterStarvMakeupRate = 0.0 ! Water provided from the mains (m3/s)
-    REAL :: CoolTWaterStarvMakeup   = 0.0 ! Water provided from the mains
-    REAL :: CoolTWaterConsump       = 0.0 ! Total water consumption in m3
-    REAL :: PumpElecPower           = 0.0 ! Pump power in watts
-    REAL :: PumpElecConsump         = 0.0 ! Pump energy consumption in Joules
+    REAL(r64) :: TowerHeight             = 0.0 ! Effective cooltower height in m
+    REAL(r64) :: OutletArea              = 0.0 ! Outlet area where conditioned air comes in m2
+    REAL(r64) :: OutletVelocity          = 0.0 ! Outlet velocity of the cooltower in m/s
+    REAL(r64) :: MaxAirVolFlowRate       = 0.0 ! Maximum allowable airflow in m3/s
+    REAL(r64) :: AirMassFlowRate         = 0.0 ! Air mass flow rate in kg/s
+    REAL(r64) :: CoolTAirMass            = 0.0 ! Air mass in kg
+    REAL(r64) :: MinZoneTemp             = 0.0 ! Lower temperature limit to prevent over cooling in C
+    REAL(r64) :: FracWaterLoss           = 0.0 ! Fraction of estimated blowdown and drift water
+    REAL(r64) :: FracFlowSched           = 0.0 ! Fraction of airflow loss
+    REAL(r64) :: MaxWaterFlowRate        = 0.0 ! Maximum limit of water flow rate in m3/s
+    REAL(r64) :: ActualWaterFlowRate     = 0.0 ! Actual water mass flow rate in m3/s
+    REAL(r64) :: RatedPumpPower          = 0.0 ! Rated power consumption for water pump serving the cooltower in watts
+    REAL(r64) :: SenHeatLoss             = 0.0 ! Sensible heat loss in Joules
+    REAL(r64) :: SenHeatPower            = 0.0 ! Sensible heat loss rate in watts
+    REAL(r64) :: LatHeatLoss             = 0.0 ! Latent heat loss in Joules
+    REAL(r64) :: LatHeatPower            = 0.0 ! Latent heat loss rate in watts
+    REAL(r64) :: AirVolFlowRate          = 0.0 ! Air flow rate in m3/s
+    REAL(r64) :: CoolTAirVol             = 0.0 ! Air volume in m3
+    REAL(r64) :: ActualAirVolFlowRate    = 0.0 ! Actual air flow rate in m3/s
+    REAL(r64) :: InletDBTemp             = 0.0 ! Outdoor dry bulb temperature in C
+    REAL(r64) :: InletWBTemp             = 0.0 ! Outdoor wet bulb temperature in C
+    REAL(r64) :: InletHumRat             = 0.0 ! Outdoor humidity ratio
+    REAL(r64) :: OutletTemp              = 0.0 ! Dry bulb temperature at cooltower exit in C
+    REAL(r64) :: OutletHumRat            = 0.0 ! Humidity ratio at cooltower exit
+    REAL(r64) :: CoolTWaterConsumpRate   = 0.0 ! Total water consumption during the processes in m3/s
+    REAL(r64) :: CoolTWaterStarvMakeupRate = 0.0 ! Water provided from the mains (m3/s)
+    REAL(r64) :: CoolTWaterStarvMakeup   = 0.0 ! Water provided from the mains
+    REAL(r64) :: CoolTWaterConsump       = 0.0 ! Total water consumption in m3
+    REAL(r64) :: PumpElecPower           = 0.0 ! Pump power in watts
+    REAL(r64) :: PumpElecConsump         = 0.0 ! Pump energy consumption in Joules
 
 END TYPE CoolTowerParams
 
@@ -188,14 +188,14 @@ SUBROUTINE GetCooltower
           ! SUBROUTINE PARAMETER DEFINITIONS:
   CHARACTER(len=*), PARAMETER :: Blank = ' '
   CHARACTER(len=*), PARAMETER :: CurrentModuleObject='ZoneCoolTower:Shower'
-  REAL, PARAMETER :: MaximumWaterFlowRate = 0.016667  ! Maximum limit of water flow rate in m3/s (1000 l/min)
-  REAL, PARAMETER :: MinimumWaterFlowRate = 0.0       ! Minimum limit of water flow rate
-  REAL, PARAMETER :: MaxHeight = 30.0      ! Maximum effective tower height in m
-  REAL, PARAMETER :: MinHeight = 1.0       ! Minimum effective tower height in m
-  REAL, PARAMETER :: MaxValue = 100.0      ! Maximum limit of outlet area, airflow, and temperature
-  REAL, PARAMETER :: MinValue = 0.0        ! Minimum limit of outlet area, airflow, and temperature
-  REAL, PARAMETER :: MaxFrac = 1.0         ! Maximum fraction
-  REAL, PARAMETER :: MinFrac = 0.0         ! Minimum fraction
+  REAL(r64), PARAMETER :: MaximumWaterFlowRate = 0.016667d0  ! Maximum limit of water flow rate in m3/s (1000 l/min)
+  REAL(r64), PARAMETER :: MinimumWaterFlowRate = 0.0d0       ! Minimum limit of water flow rate
+  REAL(r64), PARAMETER :: MaxHeight = 30.0d0      ! Maximum effective tower height in m
+  REAL(r64), PARAMETER :: MinHeight = 1.0d0       ! Minimum effective tower height in m
+  REAL(r64), PARAMETER :: MaxValue = 100.0d0      ! Maximum limit of outlet area, airflow, and temperature
+  REAL(r64), PARAMETER :: MinValue = 0.0d0        ! Minimum limit of outlet area, airflow, and temperature
+  REAL(r64), PARAMETER :: MaxFrac = 1.0d0         ! Maximum fraction
+  REAL(r64), PARAMETER :: MinFrac = 0.0d0         ! Minimum fraction
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -215,7 +215,7 @@ SUBROUTINE GetCooltower
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaArgs      ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-    REAL, ALLOCATABLE, DIMENSION(:) :: rNumericArgs          ! Numeric input items for object
+    REAL(r64), ALLOCATABLE, DIMENSION(:) :: rNumericArgs          ! Numeric input items for object
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
     LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
 
@@ -506,9 +506,9 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
           ! SUBROUTINE ARGUMENT DEFINITIONS:
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-REAL, PARAMETER :: MinWindSpeed = 0.1    ! Minimum limit of outdoor air wind speed in m/s
-REAL, PARAMETER :: MaxWindSpeed = 30.0   ! Maximum limit of outdoor air wind speed in m/s
-REAL, PARAMETER :: UCFactor = 60000.0    ! Unit conversion factor m3/s to l/min
+REAL(r64), PARAMETER :: MinWindSpeed = 0.1d0    ! Minimum limit of outdoor air wind speed in m/s
+REAL(r64), PARAMETER :: MaxWindSpeed = 30.0d0   ! Maximum limit of outdoor air wind speed in m/s
+REAL(r64), PARAMETER :: UCFactor = 60000.0d0    ! Unit conversion factor m3/s to l/min
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -519,19 +519,19 @@ REAL, PARAMETER :: UCFactor = 60000.0    ! Unit conversion factor m3/s to l/min
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: ZoneNum              ! Number of zone being served
 INTEGER :: CoolTowerNum         ! Number of coolter being served
-REAL, ALLOCATABLE, DIMENSION(:), SAVE :: CVF  ! Design flow rate in m3/s
-REAL :: AirMassFlowRate    ! Actual air mass flow rate in kg/s
-REAL :: AirSpecHeat        ! Specific heat of air
-REAL :: AirDensity         ! Density of air
-REAL :: RhoWater           ! Density of water
-REAL :: PumpPartLoadRat    ! Pump part load ratio (based on user schedule, or 1.0 for no schedule)
-REAL :: WaterFlowRate      ! Calculated water flow rate in m3/s
-REAL :: AirVolFlowRate     ! Calculated air volume flow rate in m3/s
-REAL :: InletHumRat        ! Humidity ratio of outdoor air
+REAL(r64), ALLOCATABLE, DIMENSION(:), SAVE :: CVF  ! Design flow rate in m3/s
+REAL(r64) :: AirMassFlowRate    ! Actual air mass flow rate in kg/s
+REAL(r64) :: AirSpecHeat        ! Specific heat of air
+REAL(r64) :: AirDensity         ! Density of air
+REAL(r64) :: RhoWater           ! Density of water
+REAL(r64) :: PumpPartLoadRat    ! Pump part load ratio (based on user schedule, or 1.0 for no schedule)
+REAL(r64) :: WaterFlowRate      ! Calculated water flow rate in m3/s
+REAL(r64) :: AirVolFlowRate     ! Calculated air volume flow rate in m3/s
+REAL(r64) :: InletHumRat        ! Humidity ratio of outdoor air
 !unused1208REAL(r64) :: InletEnthalpy      ! Enthalpy of outdoor air
-REAL :: OutletHumRat       ! Humidity ratio of air at the cooltower outlet
-REAL :: OutletTemp         ! Dry bulb temperature of air at the cooltower outlet
-REAL :: IntHumRat          ! Humidity ratio of initialized air
+REAL(r64) :: OutletHumRat       ! Humidity ratio of air at the cooltower outlet
+REAL(r64) :: OutletTemp         ! Dry bulb temperature of air at the cooltower outlet
+REAL(r64) :: IntHumRat          ! Humidity ratio of initialized air
 
             ! Allocate the CVF array
 IF (.NOT. ALLOCATED(CVF)) ALLOCATE(CVF(NumOfZones))
@@ -551,27 +551,27 @@ DO CoolTowerNum = 1, NumCoolTowers
             ! Unit is on and simulate this component
             ! Determine the temperature and air flow rate at the cooltower outlet
         IF (CoolTowerSys(CoolTowerNum)%FlowCtrlType == WindDrivenFlow) THEN
-            CoolTowerSys(CoolTowerNum)%OutletVelocity = 0.7 * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5 + &
-                                                        0.47 * (WindSpeed - 1.)
+            CoolTowerSys(CoolTowerNum)%OutletVelocity = 0.7d0 * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5d0 + &
+                                                        0.47d0 * (WindSpeed - 1.d0)
             AirVolFlowRate = CoolTowerSys(CoolTowerNum)%OutletArea * CoolTowerSys(CoolTowerNum)%OutletVelocity
             AirVolFlowRate = Min(AirVolFlowRate,CoolTowerSys(CoolTowerNum)%MaxAirVolFlowRate)
-            WaterFlowRate  = (AirVolFlowRate / (0.0125 * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5))
+            WaterFlowRate  = (AirVolFlowRate / (0.0125d0 * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5d0))
             IF (WaterFlowRate > CoolTowerSys(CoolTowerNum)%MaxWaterFlowRate * UCFactor) THEN
                 WaterFlowRate = CoolTowerSys(CoolTowerNum)%MaxWaterFlowRate * UCFactor
-                AirVolFlowRate = 0.0125 * WaterFlowRate * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5
+                AirVolFlowRate = 0.0125d0 * WaterFlowRate * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5d0
                 AirVolFlowRate = Min(AirVolFlowRate,CoolTowerSys(CoolTowerNum)%MaxAirVolFlowRate)
             END IF
             WaterFlowRate = MIN(WaterFlowRate,(CoolTowerSys(CoolTowerNum)%MaxWaterFlowRate * UCFactor))
             OutletTemp    = OutDryBulbTemp - (OutDryBulbTemp - OutWetBulbTemp) * &
-                            (1.-exp(-0.8 * CoolTowerSys(CoolTowerNum)%TowerHeight)) * &
-                            (1.-exp(-0.15 * WaterFlowRate))
+                            (1.d0-exp(-0.8d0 * CoolTowerSys(CoolTowerNum)%TowerHeight)) * &
+                            (1.d0-exp(-0.15d0 * WaterFlowRate))
         ELSE IF (CoolTowerSys(CoolTowerNum)%FlowCtrlType == WaterFlowSchedule) THEN
             WaterFlowRate  = CoolTowerSys(CoolTowerNum)%MaxWaterFlowRate * UCFactor
-            AirVolFlowRate = 0.0125 * WaterFlowRate * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5
+            AirVolFlowRate = 0.0125d0 * WaterFlowRate * (CoolTowerSys(CoolTowerNum)%TowerHeight)**0.5d0
             AirVolFlowRate = Min(AirVolFlowRate,CoolTowerSys(CoolTowerNum)%MaxAirVolFlowRate)
             OutletTemp     = OutDryBulbTemp - (OutDryBulbTemp - OutWetBulbTemp) * &
-                            (1.-exp(-0.8 * CoolTowerSys(CoolTowerNum)%TowerHeight)) * &
-                            (1.-exp(-0.15 * WaterFlowRate))
+                            (1.d0-exp(-0.8d0 * CoolTowerSys(CoolTowerNum)%TowerHeight)) * &
+                            (1.d0-exp(-0.15d0 * WaterFlowRate))
         END IF
 
         IF (OutletTemp < OutWetBulbTemp) THEN
@@ -584,7 +584,7 @@ DO CoolTowerNum = 1, NumCoolTowers
             ! Determine actual water flow rate
         IF (CoolTowerSys(CoolTowerNum)%FracWaterLoss > 0.0) THEN
             CoolTowerSys(CoolTowerNum)%ActualWaterFlowRate = WaterFlowRate * &
-                                                            (1.0 + CoolTowerSys(CoolTowerNum)%FracWaterLoss)
+                                                            (1.0d0 + CoolTowerSys(CoolTowerNum)%FracWaterLoss)
         ELSE
             CoolTowerSys(CoolTowerNum)%ActualWaterFlowRate = WaterFlowRate
         END IF
@@ -690,7 +690,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER   :: CoolTowerNum
-REAL :: AvailWaterRate
+REAL(r64) :: AvailWaterRate
 
 DO CoolTowerNum = 1, NumCoolTowers
 
@@ -755,7 +755,7 @@ IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER :: CoolTowerNum
-REAL :: TSMult
+REAL(r64) :: TSMult
 
 TSMult=TimeStepSys*SecInHour
 

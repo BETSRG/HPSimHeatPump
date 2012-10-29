@@ -161,18 +161,18 @@ SUBROUTINE SimPlantEquip(LoopNum,LoopSideNum,BranchNum,Num,FirstHVACIteration,In
   CHARACTER(len=MaxNameLength) :: EquipType !local equipment type
   CHARACTER(len=MaxNameLength) :: EquipName ! local equipment name
   INTEGER      :: EquipFlowCtrl
-  REAL    :: CurLoad
-  REAL    :: MaxLoad
-  REAL    :: MinLoad
-  REAL    :: OptLoad
-  REAL    :: SizingFac    ! the component sizing fraction
-  REAL    :: BranchFlowRequest = 0.0
-  REAL    :: InitialBranchFlow = 0.0
+  REAL(r64)    :: CurLoad
+  REAL(r64)    :: MaxLoad
+  REAL(r64)    :: MinLoad
+  REAL(r64)    :: OptLoad
+  REAL(r64)    :: SizingFac    ! the component sizing fraction
+  REAL(r64)    :: BranchFlowRequest = 0.0
+  REAL(r64)    :: InitialBranchFlow = 0.0
   INTEGER      :: GeneralEquipType !Basic Equipment type from EquipType Used to help organize this routine
   LOGICAL      :: PumpPowerToLoop = .False.
   LOGICAL,SAVE :: RunLoopPumps = .False.
-  REAL       :: TempCondInDesign        ! Design condenser inlet temp. C , or 25.
-  REAL       :: TempEvapOutDesign
+  REAL(r64)       :: TempCondInDesign        ! Design condenser inlet temp. C , or 25.d0
+  REAL(r64)       :: TempEvapOutDesign
 
   ! Based on the general equip type and the GetCompSizFac value, see if we can just leave early
   GeneralEquipType = PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(Num)%GeneralEquipType

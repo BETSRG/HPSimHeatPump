@@ -1398,9 +1398,9 @@ CoilSurfTemp=CoilParams(2)%TSurfCoil*9/5+32 !RS Comment: Unit Conversion, from C
   ELSE
       WRITE(5,FMT_2220)'Location         ','Dry bulb temperature (C)','Wet bulb temperature (C)','Relative Humidity (%)','Volumetric flow rate (m^3/min)','Pressure Drop (Pa)','Location         '
   END IF
-  WRITE(5,FMT_2224)'Condenser inlet  ',TDBICND,TWBICND,RHICND*100,CFMCND,0.0,'Condenser inlet  '
+  WRITE(5,FMT_2224)'Condenser inlet  ',TDBICND,TWBICND,RHICND*100,CFMCND,0.0d0,'Condenser inlet  '
   WRITE(5,FMT_2224)'Condenser outlet ',TDBOCND,TWBOCND,RHOCND*100,CFMCND,DPACND,'Condenser outlet '
-  WRITE(5,FMT_2224)'Evaporator inlet ',TDBIEVP,TWBIEVP,RHIEVP*100,CFMEVP,0.0,'Evaporator inlet '
+  WRITE(5,FMT_2224)'Evaporator inlet ',TDBIEVP,TWBIEVP,RHIEVP*100,CFMEVP,0.0d0,'Evaporator inlet '
   WRITE(5,FMT_2224)'Evaporator outlet',TDBOEVP,TWBOEVP,RHOEVP*100,CFMEVP,DPAEVP,'Evaporator outlet'
   WRITE(5,*)
   WRITE(5,FMT_2204)'********* Pressure Drop *********'

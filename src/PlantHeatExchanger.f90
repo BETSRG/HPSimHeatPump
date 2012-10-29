@@ -51,9 +51,9 @@ PRIVATE ! Everything private unless explicitly made public
 
   ! MODULE PARAMETER DEFINITIONS
   ! zero load tolerance used in equipment operation decisions (Watts)
-  REAL, PARAMETER                         :: zeroloadtol = 1.0
+  REAL(r64), PARAMETER                         :: zeroloadtol = 1.0d0
   !zero capacity tolerance used in heat exchanger cal (kg/s * J/kg/K)
-  REAL, PARAMETER                         :: zerocaptol  = .00001
+  REAL(r64), PARAMETER                         :: zerocaptol  = .00001d0
   ! Economizer HX type string
   CHARACTER(len=*), PARAMETER :: cThisModuleObjectName = 'HeatExchanger:WatersideEconomizer'
   CHARACTER(len=*), PARAMETER :: Blank = ' '
@@ -66,7 +66,7 @@ PRIVATE ! Everything private unless explicitly made public
   INTEGER, PARAMETER :: AirCooled = 1
   INTEGER, PARAMETER :: WaterCooled = 2
 
-  REAL, PARAMETER    :: BigNum = 1.0d+12
+  REAL(r64), PARAMETER    :: BigNum = 1.0d+12
 
   ! DERIVED TYPE DEFINITIONS
 TYPE HXData
@@ -85,25 +85,25 @@ TYPE HXData
   INTEGER                      :: CondInletNodeNum      =0       ! condenser side inlet node number
   CHARACTER(len=MaxNameLength) :: CondOutletNode        = Blank  ! condenser side outlet node name
   INTEGER                      :: CondOutletNodeNum     =0       ! condenser side outlet node number
-  REAL                    :: UA                    =0.0     ! UA for heat exchanger (ignored in ideal mode)
-  REAL                    :: TempDiff              =0.0     ! Minimum Temperature Difference to activate HX
-  REAL                    :: DesCapacity           =0.0     ! Design Capacity for HX
-  REAL                    :: CondSideFlowRate      =0.0     ! volumetric flow rate through condenser side of unit m3/s
-  REAL                    :: CondSideDesMassFlowRate = 0. ! condenser side mass flow rate design level kg/s
-  REAL                    :: PlantSideFlowRate     =0.0     ! volumetric flow rate through plant side of unit m3/s
-  REAL                    :: PlantSideDesMassFlowRate = 0. !plant side  mass flow rate design level kg/s
-  REAL                    :: MinSideDesCpMassFlux  = 0.   ! lower of plant and cond cp*mdot 
+  REAL(r64)                    :: UA                    =0.0     ! UA for heat exchanger (ignored in ideal mode)
+  REAL(r64)                    :: TempDiff              =0.0     ! Minimum Temperature Difference to activate HX
+  REAL(r64)                    :: DesCapacity           =0.0     ! Design Capacity for HX
+  REAL(r64)                    :: CondSideFlowRate      =0.0     ! volumetric flow rate through condenser side of unit m3/s
+  REAL(r64)                    :: CondSideDesMassFlowRate = 0.d0 ! condenser side mass flow rate design level kg/s
+  REAL(r64)                    :: PlantSideFlowRate     =0.0     ! volumetric flow rate through plant side of unit m3/s
+  REAL(r64)                    :: PlantSideDesMassFlowRate = 0.d0 !plant side  mass flow rate design level kg/s
+  REAL(r64)                    :: MinSideDesCpMassFlux  = 0.d0   ! lower of plant and cond cp*mdot 
   ! Report data
-  REAL                    :: CondInletTemp          =0.0    ! condenser inlet temperature
-  REAL                    :: CondOutletTemp         =0.0    ! condenser outlet temperature
-  REAL                    :: PlantInletTemp         =0.0    ! plant inlet temperature
-  REAL                    :: PlantOutletTemp        =0.0    ! plant outlet temperature
-  REAL                    :: CondMassFlowRate       =0.0    ! condenser mass flow rate
-  REAL                    :: PlantMassFlowRate      =0.0    ! plant mass flow rate
-  REAL                    :: HeatTransRate          =0.0    ! total heat transfer rate, Watts
-  REAL                    :: HeatTransEnergy        =0.0    ! total heat transfer energy, Joules
-  REAL                    :: CurntCapacity          =0.    ! capacity for current temps and flows
-  REAL                    :: Effectiveness          =0.    ! heat exchange effectiveness
+  REAL(r64)                    :: CondInletTemp          =0.0    ! condenser inlet temperature
+  REAL(r64)                    :: CondOutletTemp         =0.0    ! condenser outlet temperature
+  REAL(r64)                    :: PlantInletTemp         =0.0    ! plant inlet temperature
+  REAL(r64)                    :: PlantOutletTemp        =0.0    ! plant outlet temperature
+  REAL(r64)                    :: CondMassFlowRate       =0.0    ! condenser mass flow rate
+  REAL(r64)                    :: PlantMassFlowRate      =0.0    ! plant mass flow rate
+  REAL(r64)                    :: HeatTransRate          =0.0    ! total heat transfer rate, Watts
+  REAL(r64)                    :: HeatTransEnergy        =0.0    ! total heat transfer energy, Joules
+  REAL(r64)                    :: CurntCapacity          =0.d0    ! capacity for current temps and flows
+  REAL(r64)                    :: Effectiveness          =0.d0    ! heat exchange effectiveness
 
   !loop topology variables
   INTEGER                      :: CondLoopNum            =0 ! condenser side plant loop number
@@ -127,9 +127,9 @@ INTEGER :: CondOutletNodeNum      =0    ! module variable for condenser side out
 INTEGER :: PlantInletNodeNum      =0    ! module variable for plant side inlet node number
 INTEGER :: PlantOutletNodeNum     =0    ! module variable for plant side outlet node number
 
-REAL    :: PlantMassFlowRate=0.0   ! Flow rate of Plant side fluid
-REAL    :: CondMassFlowRate =0.0   ! Flow rate of Condenser side fluid
-REAL    :: AvailSchedValue
+REAL(r64)    :: PlantMassFlowRate=0.0   ! Flow rate of Plant side fluid
+REAL(r64)    :: CondMassFlowRate =0.0   ! Flow rate of Condenser side fluid
+REAL(r64)    :: AvailSchedValue
 
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 LOGICAL  :: GetInputFlag = .TRUE.    ! First time, input is "gotten"
@@ -187,10 +187,10 @@ SUBROUTINE SimEconHeatExchanger(LoopNum,CompType,CompName,CompFlowCtrl,CompIndex
   INTEGER,       INTENT(INOUT)  :: CompIndex         ! index in local derived types
   LOGICAL,       INTENT(INOUT)  :: RunFlag       ! TRUE if Component is ON
   LOGICAL,          INTENT(IN)  :: InitLoopEquip       ! for init
-  REAL,        INTENT(IN)  :: Demand
-  REAL,     INTENT(INOUT)  :: MaxLoad
-  REAL,     INTENT(INOUT)  :: MinLoad
-  REAL,     INTENT(INOUT)  :: OptLoad
+  REAL(r64),        INTENT(IN)  :: Demand
+  REAL(r64),     INTENT(INOUT)  :: MaxLoad
+  REAL(r64),     INTENT(INOUT)  :: MinLoad
+  REAL(r64),     INTENT(INOUT)  :: OptLoad
   LOGICAL,          INTENT(IN)  :: FirstHVACIteration  ! TRUE if 1st HVAC simulation of system timestep
   INTEGER,          INTENT(IN)  :: LoopNum
 
@@ -247,11 +247,11 @@ SUBROUTINE SimEconHeatExchanger(LoopNum,CompType,CompName,CompFlowCtrl,CompIndex
     IF (LoopNum == HXWaterEcon(HXNum)%PlantLoopNum) THEN
       MinLoad = 0.0
       OptLoad = HXWaterEcon(HXNum)%DesCapacity
-      MaxLoad = HXWaterEcon(HXNum)%DesCapacity * 1.25
+      MaxLoad = HXWaterEcon(HXNum)%DesCapacity * 1.25d0
     ELSEIF (LoopNum == HXWaterEcon(HXNum)%CondLoopNum) THEN 
-      MinLoad = 0.
-      OptLoad = 0.
-      MaxLoad = 0.
+      MinLoad = 0.d0
+      OptLoad = 0.d0
+      MaxLoad = 0.d0
     ENDIF
     RETURN
   ENDIF
@@ -462,7 +462,7 @@ SUBROUTINE GetEconHeatExchanger
 
     HXWaterEcon(Item)%TempDiff = rNumericArgs(4)
 
-    IF(HXWaterEcon(Item)%TempDiff ==0.0) HXWaterEcon(Item)%TempDiff = 0.001
+    IF(HXWaterEcon(Item)%TempDiff ==0.0) HXWaterEcon(Item)%TempDiff = 0.001d0
 
 
   END DO  ! end of input loop
@@ -563,13 +563,13 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
   INTEGER             :: CurrentLoopNum
   LOGICAL             :: ErrorsFound   ! If errors detected in input
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL           :: rho
-  REAL           :: Cp
-  REAL           :: tmpCondSideFlowRate
-  REAL           :: tmpPlantSideFlowRate
-  REAL           :: tmpUA
-  REAL           :: tmpDesCap
-  REAL           :: AssumedDeltaT
+  REAL(r64)           :: rho
+  REAL(r64)           :: Cp
+  REAL(r64)           :: tmpCondSideFlowRate
+  REAL(r64)           :: tmpPlantSideFlowRate
+  REAL(r64)           :: tmpUA
+  REAL(r64)           :: tmpDesCap
+  REAL(r64)           :: AssumedDeltaT
 
   ErrorsFound=.false.
   tmpCondSideFlowRate = HXWaterEcon(HXNum)%CondSideFlowRate
@@ -593,7 +593,7 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
         tmpPlantSideFlowRate = PlantSizData(PltSizNum)%DesVolFlowRate
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%PlantSideFlowRate = tmpPlantSideFlowRate
       ELSE
-        tmpPlantSideFlowRate = 0.
+        tmpPlantSideFlowRate = 0.d0
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%PlantSideFlowRate = tmpPlantSideFlowRate
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput(cThisModuleObjectName, HXWaterEcon(HXNum)%Name, &
@@ -649,7 +649,7 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
         tmpUA = tmpDesCap/PlantSizData(PltSizNum)%DeltaT 
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%UA = tmpUA
       ELSE
-        tmpUA = 0.
+        tmpUA = 0.d0
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%UA = tmpUA
       END IF
       IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput(cThisModuleObjectName, HXWaterEcon(HXNum)%Name, &
@@ -679,7 +679,7 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
                                 (PlantSizData(PltSizCondNum)%DeltaT * Cp * rho)
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%CondSideFlowRate = tmpCondSideFlowRate
       ELSE
-        tmpCondSideFlowRate = 0.
+        tmpCondSideFlowRate = 0.d0
         IF (PlantSizesOkayToFinalize) HXWaterEcon(HXNum)%CondSideFlowRate = tmpCondSideFlowRate
       END IF
         IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput(cThisModuleObjectName, HXWaterEcon(HXNum)%Name, &
@@ -694,8 +694,8 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
    END IF
    CALL RegisterPlantCompDesignFlow(HXWaterEcon(HXNum)%CondInletNodeNum,tmpCondSideFlowRate)
 
-  IF (tmpDesCap == 0.) THEN ! not autosized but still need a design capacity from inputs
-    AssumedDeltaT = 2.
+  IF (tmpDesCap == 0.d0) THEN ! not autosized but still need a design capacity from inputs
+    AssumedDeltaT = 2.d0
     Cp = GetSpecificHeatGlycol(PlantLoop(HXWaterEcon(HXNum)%PlantLoopNum)%FluidName, &
                                InitConvTemp, &
                                PlantLoop(HXWaterEcon(HXNum)%PlantLoopNum)%FluidIndex, &
@@ -772,19 +772,19 @@ SUBROUTINE InitEconHeatExchanger(HXNum,FirstHVACIteration, RunFlag)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER             :: Num                     ! counter
-  REAL           :: DesignPlantMassFlowRate  ! Mass flow rate used to initialize plant nodes
-  REAL           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes
-!  REAL           :: CondInletdensity    ! density on condenser side
+  REAL(r64)           :: DesignPlantMassFlowRate  ! Mass flow rate used to initialize plant nodes
+  REAL(r64)           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes
+!  REAL(r64)           :: CondInletdensity    ! density on condenser side
   LOGICAL, SAVE       :: MyEnvrnFlag=.true.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
   LOGICAL :: errFlag
-  REAL :: rhoCond   ! local fluid density for condenser side
-  REAL :: rhoPlant  ! local fluid density for plant side
-  REAL :: PlantFluidCp 
-  REAL :: CondFluidCp
-  REAL :: PlantCapRate
-  REAL :: CondCapRate
+  REAL(r64) :: rhoCond   ! local fluid density for condenser side
+  REAL(r64) :: rhoPlant  ! local fluid density for plant side
+  REAL(r64) :: PlantFluidCp 
+  REAL(r64) :: CondFluidCp
+  REAL(r64) :: PlantCapRate
+  REAL(r64) :: CondCapRate
 
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyFlag(NumOfHX))
@@ -854,7 +854,7 @@ SUBROUTINE InitEconHeatExchanger(HXNum,FirstHVACIteration, RunFlag)
       DesignCondMassFlowRate  = HXWaterEcon(Num)%CondSideFlowRate  * rhoCond
       HXWaterEcon(Num)%CondSideDesMassFlowRate = DesignCondMassFlowRate
 
-      CALL InitComponentNodes(0.0,DesignPlantMassFlowRate,  &
+      CALL InitComponentNodes(0.0D0,DesignPlantMassFlowRate,  &
                               HXWaterEcon(Num)%PlantInletNodeNum,        &
                               HXWaterEcon(Num)%PlantOutletNodeNum,       &
                               HXWaterEcon(Num)%PlantLoopNum,               &
@@ -862,7 +862,7 @@ SUBROUTINE InitEconHeatExchanger(HXNum,FirstHVACIteration, RunFlag)
                               HXWaterEcon(Num)%PlantBranchNum,             &
                               HXWaterEcon(Num)%PlantCompNum)
 
-      CALL InitComponentNodes(0.0,DesignCondMassFlowRate,  &
+      CALL InitComponentNodes(0.0D0,DesignCondMassFlowRate,  &
                               HXWaterEcon(Num)%CondInletNodeNum,        &
                               HXWaterEcon(Num)%CondOutletNodeNum,       &
                               HXWaterEcon(Num)%CondLoopNum,               &
@@ -929,7 +929,7 @@ SUBROUTINE EconomizerOperation(HXNum,RunFlag,LoopDemand)
    ! SUBROUTINE ARGUMENT DEFINITIONS:
  INTEGER, INTENT(IN)  :: HXNum
  LOGICAL, INTENT(OUT) :: RunFlag  
- REAL, INTENT(IN):: LoopDemand           
+ REAL(r64), INTENT(IN):: LoopDemand           
 
    ! SUBROUTINE PARAMETER DEFINITIONS:
    ! na
@@ -945,10 +945,10 @@ SUBROUTINE EconomizerOperation(HXNum,RunFlag,LoopDemand)
  INTEGER     :: PlantSideSensedNode      !Node num for control node on plant side
  INTEGER     :: CondSideSensedNode       !Node num for control node on condenser side
 
- REAL   :: PlantSideControlTemp             !Current temperature on PlantSideSensedNode
- REAL   :: CondSideControlTemp              !Current temperature on CondSideSensedNode
- REAL   :: ControlTemp                      !Difference between PlantSideControlTemp and CondSideControlTemp
- REAL   :: EconControlTempDiff              !User specified control treshold
+ REAL(r64)   :: PlantSideControlTemp             !Current temperature on PlantSideSensedNode
+ REAL(r64)   :: CondSideControlTemp              !Current temperature on CondSideSensedNode
+ REAL(r64)   :: ControlTemp                      !Difference between PlantSideControlTemp and CondSideControlTemp
+ REAL(r64)   :: EconControlTempDiff              !User specified control treshold
 
  CHARACTER(len=MaxNameLength) :: EquipType !local equipment type
  CHARACTER(len=MaxNameLength) :: EquipName ! local equipment name
@@ -1016,19 +1016,19 @@ SUBROUTINE CalcEconHeatExchanger(HXNum,RunFlag)
   CHARACTER(len=*), PARAMETER :: CalledFrom='PlantHeatExchanger:Calc'
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: PlantFluidCp        ! Specific heat of Plant side fluid
-  REAL    :: PlantCapRate        ! Capacity rate (mdot*Cp) of Plant side fluid
-  REAL    :: PlantInletTemp      ! Plant side inlet temperature
-  REAL    :: CondFluidCp         ! Specific heat of condenser side fluid
-  REAL    :: PlantInletdensity   ! density on plant side
-  REAL    :: CondInletDensity    ! density on cond side
-  REAL    :: CondCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
-  REAL    :: CondInletTemp       ! condenser side inlet temperature
-  REAL    :: MinCapRate          ! minimum capacity rate
-  REAL    :: CapRatio            ! capacity ratio (min/max)
-  REAL    :: Effectiveness       ! heat exchanger effectiveness
-  REAL    :: NTU                 ! dimensionless NTU calculated from UA
-  REAL    :: ChillerLoad         ! current load on chiller (Myload)
+  REAL(r64)    :: PlantFluidCp        ! Specific heat of Plant side fluid
+  REAL(r64)    :: PlantCapRate        ! Capacity rate (mdot*Cp) of Plant side fluid
+  REAL(r64)    :: PlantInletTemp      ! Plant side inlet temperature
+  REAL(r64)    :: CondFluidCp         ! Specific heat of condenser side fluid
+  REAL(r64)    :: PlantInletdensity   ! density on plant side
+  REAL(r64)    :: CondInletDensity    ! density on cond side
+  REAL(r64)    :: CondCapRate         ! Capacity rate (mdot*Cp) of condenser side fluid
+  REAL(r64)    :: CondInletTemp       ! condenser side inlet temperature
+  REAL(r64)    :: MinCapRate          ! minimum capacity rate
+  REAL(r64)    :: CapRatio            ! capacity ratio (min/max)
+  REAL(r64)    :: Effectiveness       ! heat exchanger effectiveness
+  REAL(r64)    :: NTU                 ! dimensionless NTU calculated from UA
+  REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)
   LOGICAL      :: ItemNotFound        ! error flag
 
   INTEGER :: PlantLoopNum
@@ -1128,39 +1128,39 @@ SUBROUTINE CalcEconHeatExchanger(HXNum,RunFlag)
     CapRatio = 0.0
     IF (-NTU >= EXP_LowerLimit) THEN
       Effectiveness = 1.0-EXP(-NTU)
-      Effectiveness = MIN(1.0,Effectiveness)
+      Effectiveness = MIN(1.0d0,Effectiveness)
     ELSE
       Effectiveness = 1.0
     ENDIF
    ELSE
     CapRatio = MinCapRate/MAX(CondCapRate, PlantCapRate)
-    Effectiveness = 1.0 - EXP((NTU**0.22/CapRatio) * &
-                (EXP(-CapRatio*NTU**0.78) - 1.0))
-    Effectiveness = MIN(1.0,Effectiveness)
+    Effectiveness = 1.0d0 - EXP((NTU**0.22d0/CapRatio) * &
+                (EXP(-CapRatio*NTU**0.78d0) - 1.0d0))
+    Effectiveness = MIN(1.0d0,Effectiveness)
    END IF
   ELSE IF(HXWaterEcon(HXNum)%HXTypeOf == ParallelFlow)THEN
     ! assume cross flow, both mixed
    NTU = HXWaterEcon(HXNum)%UA/MinCapRate
    IF(CondCapRate == BigNum .OR. PlantCapRate ==  BigNum) THEN
     CapRatio = 0.0
-    Effectiveness = 1.-EXP(-NTU)
-    Effectiveness = MIN(1.0,Effectiveness)
+    Effectiveness = 1.d0-EXP(-NTU)
+    Effectiveness = MIN(1.0d0,Effectiveness)
    ELSE
     CapRatio = MinCapRate/MAX(CondCapRate, PlantCapRate)
-    Effectiveness = (1.-EXP(-NTU*(1.+CapRatio)))/(1.+CapRatio)
-    Effectiveness = MIN(1.0,Effectiveness)
+    Effectiveness = (1.d0-EXP(-NTU*(1.d0+CapRatio)))/(1.d0+CapRatio)
+    Effectiveness = MIN(1.0d0,Effectiveness)
    END IF
   ELSE IF(HXWaterEcon(HXNum)%HXTypeOf == CounterFlow)THEN
     ! assume cross flow, both mixed
    NTU = HXWaterEcon(HXNum)%UA/MinCapRate
    IF(CondCapRate == BigNum .OR. PlantCapRate ==  BigNum) THEN
     CapRatio = 0.0
-    Effectiveness = 1.-EXP(-NTU)
-    Effectiveness = MIN(1.0,Effectiveness)
+    Effectiveness = 1.d0-EXP(-NTU)
+    Effectiveness = MIN(1.0d0,Effectiveness)
    ELSE
     CapRatio = MinCapRate/MAX(CondCapRate, PlantCapRate)
-    Effectiveness = (1.-EXP(-NTU*(1.-CapRatio)))/(1.-CapRatio*EXP(-NTU*(1.-CapRatio)))
-    Effectiveness = MIN(1.0,Effectiveness)
+    Effectiveness = (1.d0-EXP(-NTU*(1.d0-CapRatio)))/(1.d0-CapRatio*EXP(-NTU*(1.d0-CapRatio)))
+    Effectiveness = MIN(1.0d0,Effectiveness)
    END IF
   ELSE IF(HXWaterEcon(HXNum)%HXTypeOf == Ideal) THEN
     ! must be in ideal mode
@@ -1206,10 +1206,10 @@ SUBROUTINE UpdateEconHeatExchanger(HXNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: CondFluidCp         ! Specific heat of condenser side fluid
-  REAL    :: PlantFluidCp        ! Specific heat of Plant side fluid
-  REAL    :: CondInletTemp       ! condenser side inlet temperature
-  REAL    :: PlantInletTemp      ! Plant side inlet temperature
+  REAL(r64)    :: CondFluidCp         ! Specific heat of condenser side fluid
+  REAL(r64)    :: PlantFluidCp        ! Specific heat of Plant side fluid
+  REAL(r64)    :: CondInletTemp       ! condenser side inlet temperature
+  REAL(r64)    :: PlantInletTemp      ! Plant side inlet temperature
 
 
   ! inlet temps and specific heats

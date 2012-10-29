@@ -67,65 +67,65 @@ TYPE StorageTankDataStruct
     CHARACTER(len=MaxNameLength) :: Name     = ' '  !name of this Storage Tank
     CHARACTER(len=MaxNameLength) :: QualitySubCategoryName = ' ' !name of water subcategory
  !   INTEGER                      :: QualitySubCategory = 0 !
-    REAL                    :: MaxCapacity = 0.0 ! tank capacity Limit [m3]
+    REAL(r64)                    :: MaxCapacity = 0.0d0 ! tank capacity Limit [m3]
     INTEGER                      :: OverflowMode = 0 !
     CHARACTER(len=MaxNameLength) :: OverflowTankName = ' ' !
     INTEGER                      :: OverflowTankID = 0 !
     INTEGER                      :: OverflowTankSupplyARRID = 0
-    REAL                    :: ValveOnCapacity = 0.0 ! tank capacity at lower control range [m3]
-    REAL                    :: ValveOffCapacity = 0.0 ! tank capacity at upper control range [m3]
+    REAL(r64)                    :: ValveOnCapacity = 0.0 ! tank capacity at lower control range [m3]
+    REAL(r64)                    :: ValveOffCapacity = 0.0 ! tank capacity at upper control range [m3]
     INTEGER                      :: ControlSupplyType = 0 ! mode for tank controlled resupply
     INTEGER                      :: GroundWellID = 0 !index "pointer" to well if present
     CHARACTER(len=MaxNameLength) :: SupplyTankName = ' ' !
     INTEGER                      :: SupplyTankID = 0
     INTEGER                      :: SupplyTankDemandARRID = 0
-    REAL                    :: BackupMainsCapacity = 0.0
-    REAL                    :: InitialVolume = 0.0  ! water in tank at start of simulation period [m3]
-    REAL                    :: MaxInFlowRate = 0.0 ! limit on rate of inlet [m3/s]
-    REAL                    :: MaxOutFlowRate = 0.0 ! limit on rate of outlet [m3/s]
+    REAL(r64)                    :: BackupMainsCapacity = 0.0d0
+    REAL(r64)                    :: InitialVolume = 0.0d0  ! water in tank at start of simulation period [m3]
+    REAL(r64)                    :: MaxInFlowRate = 0.0d0 ! limit on rate of inlet [m3/s]
+    REAL(r64)                    :: MaxOutFlowRate = 0.0d0 ! limit on rate of outlet [m3/s]
     INTEGER                      :: ThermalMode  = 0  !
-    REAL                    :: InitialTankTemp = 20.0 ! initial tank temperature [C]
+    REAL(r64)                    :: InitialTankTemp = 20.0d0 ! initial tank temperature [C]
     INTEGER                      :: TempSchedID  = 0  !index "pointer" to schedule
     INTEGER                      :: AmbientTempIndicator = 0      ! Indicator for ambient tank losses (SCHEDULE, ZONE, EXTERIOR)
     INTEGER                      :: AmbientTempSchedule = 0       ! Schedule index pointer
     INTEGER                      :: ZoneID   = 0  !index "pointer" to zone where tank is
-    REAL                    :: UValue  = 0.0 ! U-value for tank [W/m2-k]
-    REAL                    :: SurfArea = 0.0 ! surface are of tank on Zone side... [m2]
+    REAL(r64)                    :: UValue  = 0.0d0 ! U-value for tank [W/m2-k]
+    REAL(r64)                    :: SurfArea = 0.0d0 ! surface are of tank on Zone side... [m2]
     INTEGER                      :: InternalMassID = 0 ! index "pointer" to internal mass object for thermal coupling
     CHARACTER(len=MaxNameLength) :: SurfMaterialName = ' ' ! surface properties
    ! calculated data and from elsewhere
 
-    REAL                    :: ThisTimeStepVolume = 0.0
-    REAL                    :: LastTimeStepVolume = 0.0
-    REAL                    :: LastTimeStepTemp   = 0.0 ! previous temperature of tank water
+    REAL(r64)                    :: ThisTimeStepVolume = 0.0d0
+    REAL(r64)                    :: LastTimeStepVolume = 0.0d0
+    REAL(r64)                    :: LastTimeStepTemp   = 0.0d0 ! previous temperature of tank water
     INTEGER                      :: NumWaterSupplies = 0
-    REAL, Allocatable, Dimension(:) :: VdotAvailSupply !Each supply component has its own term
-    REAL, Allocatable, Dimension(:) :: TwaterSupply !Each supply component has its own term
+    REAL(r64), Allocatable, Dimension(:) :: VdotAvailSupply !Each supply component has its own term
+    REAL(r64), Allocatable, Dimension(:) :: TwaterSupply !Each supply component has its own term
     CHARACTER(Len=MaxNameLength),  Allocatable, Dimension(:) ::  SupplyCompNames
     CHARACTER(Len=MaxNameLength),  Allocatable, Dimension(:) ::  SupplyCompTypes
     INTEGER                      :: NumWaterDemands = 0
-    REAL, Allocatable, Dimension(:) :: VdotRequestDemand !each demand componennt has a slot
-    REAL, Allocatable, Dimension(:) :: VdotAvailDemand !each demand componennt has a slot
+    REAL(r64), Allocatable, Dimension(:) :: VdotRequestDemand !each demand componennt has a slot
+    REAL(r64), Allocatable, Dimension(:) :: VdotAvailDemand !each demand componennt has a slot
     CHARACTER(Len=MaxNameLength), Allocatable, Dimension(:) :: DemandCompNames
     CHARACTER(Len=MaxNameLength), Allocatable, Dimension(:) :: DemandCompTypes
-    REAL                    :: VdotFromTank  = 0.0
-    REAL                    :: VdotToTank = 0.0 !
-    REAL                    :: VdotOverflow = 0.0 !
-    REAL                    :: VolOverflow = 0.0 !
+    REAL(r64)                    :: VdotFromTank  = 0.0d0
+    REAL(r64)                    :: VdotToTank = 0.0d0 !
+    REAL(r64)                    :: VdotOverflow = 0.0d0 !
+    REAL(r64)                    :: VolOverflow = 0.0d0 !
 
    ! report variables
-    REAL                    :: NetVdot    = 0.0
-    REAL                    :: Twater = 0.0
-    REAL                    :: TouterSkin = 0.0
-    REAL                    :: TwaterOverflow = 0.0
-    REAL                    :: MainsDrawVdot  = 0.0
-    REAL                    :: MainsDrawVol   = 0.0
+    REAL(r64)                    :: NetVdot    = 0.0d0
+    REAL(r64)                    :: Twater = 0.0d0
+    REAL(r64)                    :: TouterSkin = 0.0d0
+    REAL(r64)                    :: TwaterOverflow = 0.0d0
+    REAL(r64)                    :: MainsDrawVdot  = 0.0d0
+    REAL(r64)                    :: MainsDrawVol   = 0.0d0
 
 
-    REAL    :: SkinLossPower   = 0.0 ! heat loss to surrounding zone [W]
-    REAL    :: SkinLossEnergy  = 0.0 ! heat loss to surround zone [J]
-    REAL    :: SkinLossConvect = 0.0 ! convective heat loss to zone [W]
-    REAL    :: SkinLossRadiat  = 0.0 ! radiative heat loss to zone [W}
+    REAL(r64)    :: SkinLossPower   = 0.0d0 ! heat loss to surrounding zone [W]
+    REAL(r64)    :: SkinLossEnergy  = 0.0d0 ! heat loss to surround zone [J]
+    REAL(r64)    :: SkinLossConvect = 0.0d0 ! convective heat loss to zone [W]
+    REAL(r64)    :: SkinLossRadiat  = 0.0d0 ! radiative heat loss to zone [W}
 
 END TYPE StorageTankDataStruct
 
@@ -136,17 +136,17 @@ TYPE RainfallCollectorDataStruct
     INTEGER                      :: StorageTankID = 0 ! index "pointer" to storage tank array
     INTEGER                      :: StorageTankSupplyARRID = 0 !
     INTEGER                      :: LossFactorMode = 0 ! control how loss factor(s) are entered
-    REAL                    :: LossFactor = 0.0 ! loss factor when constant
+    REAL(r64)                    :: LossFactor = 0.0d0 ! loss factor when constant
     INTEGER                      :: LossFactorSchedID = 0 ! index "pointer" to schedule
-    REAL                    :: MaxCollectRate = 0.0 !
+    REAL(r64)                    :: MaxCollectRate = 0.0d0 !
     INTEGER                      :: NumCollectSurfs = 0 ! number of surfaces used in the collector
     CHARACTER(len=MaxNameLength), Allocatable, Dimension(:) :: SurfName
     INTEGER, Allocatable, Dimension(:) :: SurfID
     !calculated and from elsewhere
-    REAL                    :: HorizArea  = 0.0 ! area of surfaces in the vertical normal direction
-    REAL                    :: VdotAvail  = 0.0 !
-    REAL                    :: VolCollected = 0.0 !
-    REAL                    :: MeanHeight = 0.0
+    REAL(r64)                    :: HorizArea  = 0.0d0 ! area of surfaces in the vertical normal direction
+    REAL(r64)                    :: VdotAvail  = 0.0d0 !
+    REAL(r64)                    :: VolCollected = 0.0d0 !
+    REAL(r64)                    :: MeanHeight = 0.0d0
 END TYPE
 
 TYPE GroundwaterWellDataStruct
@@ -155,41 +155,41 @@ TYPE GroundwaterWellDataStruct
     CHARACTER(len=MaxNameLength) :: StorageTankName = ' ' !
     INTEGER                      :: StorageTankID = 0 ! index "pointer" to water storage tank
     INTEGER                      :: StorageTankSupplyARRID = 0 ! index "pointer" to storage supply arrays
-    REAL                    :: PumpDepth = 0.0 ! depth of pump  [m]
-    REAL                    :: PumpNomVolFlowRate = 0.0 ! nominal flow rate of pump [m3/s]
-    REAL                    :: PumpNomHead = 0.0 !design nominal capacity of pump
-    REAL                    :: PumpNomPowerUse = 0.0 ! design nominal power of pump at nom capacity
-    REAL                    :: PumpEfficiency = 0.0 !
-    REAL                    :: WellRecoveryRate=0.0 ! rate at which groundwater can enter well [m3/s]
-    REAL                    :: NomWellStorageVol=0.0 ! water storage in well at average water table depth [m3]
+    REAL(r64)                    :: PumpDepth = 0.0d0 ! depth of pump  [m]
+    REAL(r64)                    :: PumpNomVolFlowRate = 0.0d0 ! nominal flow rate of pump [m3/s]
+    REAL(r64)                    :: PumpNomHead = 0.0d0 !design nominal capacity of pump
+    REAL(r64)                    :: PumpNomPowerUse = 0.0d0 ! design nominal power of pump at nom capacity
+    REAL(r64)                    :: PumpEfficiency = 0.0d0 !
+    REAL(r64)                    :: WellRecoveryRate=0.0d0 ! rate at which groundwater can enter well [m3/s]
+    REAL(r64)                    :: NomWellStorageVol=0.0d0 ! water storage in well at average water table depth [m3]
     INTEGER                      :: GroundwaterTableMode=0 ! method of determining water table depth
-    REAL                    :: WaterTableDepth=0.0
+    REAL(r64)                    :: WaterTableDepth=0.0d0
     INTEGER                      :: WaterTableDepthSchedID=0 !
     !calculated and from elsewhere
-    REAL                    :: VdotRequest = 0.0 ! rate of flow over timestep requested by tank
-    REAL                    :: VdotDelivered = 0.0 ! rate of flow provided [m3/s]
-    REAL                    :: VolDelivered = 0.0 !water provided [m3]
-    REAL                    :: PumpPower = 0.0
-    REAL                    :: PumpEnergy = 0.0
+    REAL(r64)                    :: VdotRequest = 0.0d0 ! rate of flow over timestep requested by tank
+    REAL(r64)                    :: VdotDelivered = 0.0d0 ! rate of flow provided [m3/s]
+    REAL(r64)                    :: VolDelivered = 0.0d0 !water provided [m3]
+    REAL(r64)                    :: PumpPower = 0.0d0
+    REAL(r64)                    :: PumpEnergy = 0.0d0
 
 END TYPE GroundwaterWellDataStruct
 
 TYPE SiteRainFallDataStruct
     INTEGER                      :: ModeID   = 0 ! type of rainfall modeling
-    REAL                    :: DesignAnnualRain = 0.0 !
+    REAL(r64)                    :: DesignAnnualRain = 0.0d0 !
     INTEGER                      :: RainSchedID = 0 !
-    REAL                    :: NomAnnualRain = 0.0 !
+    REAL(r64)                    :: NomAnnualRain = 0.0d0 !
     !calculated and from elsewhere.
-    REAL                    :: CurrentRate = 0.0
-    REAL                    :: CurrentAmount = 0.0
+    REAL(r64)                    :: CurrentRate = 0.0d0
+    REAL(r64)                    :: CurrentAmount = 0.0d0
 END TYPE SiteRainFallDataStruct
 
 TYPE IrrigationDataStruct
  INTEGER                     :: ModeID = 0 ! type of irrigation modeling
  INTEGER                     :: IrrSchedID = 0
- REAL                   :: ScheduledAmount = 0.0
- REAL                   :: ActualAmount = 0.0
- REAL                   :: IrrigationThreshold = 0.4  ! percent at which no irrigation happens (smart schedule)
+ REAL(r64)                   :: ScheduledAmount = 0.0d0
+ REAL(r64)                   :: ActualAmount = 0.0d0
+ REAL(r64)                   :: IrrigationThreshold = 0.4d0  ! percent at which no irrigation happens (smart schedule)
 END TYPE IrrigationDataStruct
 
           ! MODULE VARIABLE DECLARATIONS:
@@ -203,8 +203,8 @@ LOGICAL    :: WaterSystemGetInputCalled = .FALSE.  ! set true once input data go
 LOGICAL    :: AnyIrrigationInModel   = .FALSE. ! control flag set true if irrigation input for ecoroof DJS PSU Dec 2006
 
 
-TYPE(SiteRainFallDataStruct)       :: RainFall=SiteRainFallDataStruct(0,0.0,0,0.0,0.0,0.0)
-TYPE(IrrigationDataStruct)         :: Irrigation=IrrigationDataStruct(0,0,0.0,0.0,0.4)
+TYPE(SiteRainFallDataStruct)       :: RainFall=SiteRainFallDataStruct(0,0.0d0,0,0.0d0,0.0d0,0.0d0)
+TYPE(IrrigationDataStruct)         :: Irrigation=IrrigationDataStruct(0,0,0.0d0,0.0d0,0.4d0)
 TYPE(StorageTankDataStruct),       DIMENSION(:) , ALLOCATABLE :: WaterStorage
 TYPE(RainfallCollectorDataStruct), DIMENSION(:), ALLOCATABLE :: RainCollector
 TYPE(GroundwaterWellDataStruct),   DIMENSION(:), ALLOCATABLE :: GroundwaterWell

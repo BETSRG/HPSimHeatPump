@@ -40,22 +40,22 @@ MODULE BoilerSteam
      LOGICAL           :: ON                  =.false.  ! TRUE: simulate the machine at it's operating part load ratio
      LOGICAL           :: MissingSetpointErrDone = .FALSE. ! Missing outlet node setpoint message flag
      LOGICAL           :: UseLoopSetpoint        = .FALSE. ! Flag to use setpoint from loop
-     REAL         :: DesMassFlowRate     =0.0      ! kg/s - Boiler water design mass flow rate
-     REAL         :: MassFlowRate        =0.0      ! kg/s - Boiler water mass flow rate
-     REAL         :: NomCap              =0.0      ! W - design nominal capacity of Boiler
-     REAL         :: Effic               =0.0      ! boiler efficiency at design conditions
-!       REAL         :: TempDesBoilerOut    =0.0      ! C - Boiler design outlet temperature
-     REAL         :: MinPartLoadRat      =0.0      ! Minimum allowed operating part load ratio
-     REAL         :: MaxPartLoadRat      =0.0      ! Maximum allowed operating part load ratio
-     REAL         :: OptPartLoadRat      =0.0      ! Optimal operating part load ratio
-     REAL         :: OperPartLoadRat     =0.0      ! Actual operating part load ratio
-     REAL         :: TempUpLimitBoilerOut=0.0      ! C - Boiler outlet maximum temperature limit
-     REAL         :: BoilerMaxOperPress  =0.0      ! Max Boiler Pressure
-     REAL         :: BoilerPressCheck    =0.0      ! Boiler Operating Pressure at Saturation Temperature
-     REAL         :: SizFac              =0.0      ! sizing factor
+     REAL(r64)         :: DesMassFlowRate     =0.0      ! kg/s - Boiler water design mass flow rate
+     REAL(r64)         :: MassFlowRate        =0.0      ! kg/s - Boiler water mass flow rate
+     REAL(r64)         :: NomCap              =0.0      ! W - design nominal capacity of Boiler
+     REAL(r64)         :: Effic               =0.0      ! boiler efficiency at design conditions
+!       REAL(r64)         :: TempDesBoilerOut    =0.0      ! C - Boiler design outlet temperature
+     REAL(r64)         :: MinPartLoadRat      =0.0      ! Minimum allowed operating part load ratio
+     REAL(r64)         :: MaxPartLoadRat      =0.0      ! Maximum allowed operating part load ratio
+     REAL(r64)         :: OptPartLoadRat      =0.0      ! Optimal operating part load ratio
+     REAL(r64)         :: OperPartLoadRat     =0.0      ! Actual operating part load ratio
+     REAL(r64)         :: TempUpLimitBoilerOut=0.0      ! C - Boiler outlet maximum temperature limit
+     REAL(r64)         :: BoilerMaxOperPress  =0.0      ! Max Boiler Pressure
+     REAL(r64)         :: BoilerPressCheck    =0.0      ! Boiler Operating Pressure at Saturation Temperature
+     REAL(r64)         :: SizFac              =0.0      ! sizing factor
      INTEGER           :: BoilerInletNodeNum  =0        ! Node number at the boiler inlet
      INTEGER           :: BoilerOutletNodeNum =0        ! Node number at the boiler outlet
-     REAL,DIMENSION(3) :: FullLoadCoef   =0.0      ! Coefficients of the fuel consumption/part load ratio curve
+     REAL(r64),DIMENSION(3) :: FullLoadCoef   =0.0      ! Coefficients of the fuel consumption/part load ratio curve
      INTEGER           :: TypeNum             =0        ! Plant loop type identifier
      INTEGER           :: LoopNum             =0        ! Plant loop index number
      INTEGER           :: LoopSideNum         =0        ! Loop side index number
@@ -66,25 +66,25 @@ MODULE BoilerSteam
   END TYPE BoilerSpecs
 
   TYPE ReportVars
-      REAL    ::  BoilerLoad           = 0.0 ! W - Boiler operating load
-      REAL    ::  BoilerEnergy         = 0.0 ! J - Boiler energy integrated over time
-      REAL    ::  FuelUsed             = 0.0 ! W - Boiler fuel used
-      REAL    ::  FuelConsumed         = 0.0 ! J - Boiler Fuel consumed integrated over time
-      REAL    ::  BoilerInletTemp      = 0.0 ! C - Boiler inlet temperature
-      REAL    ::  BoilerOutletTemp     = 0.0 ! C - Boiler outlet temperature
-      REAL    ::  Mdot                 = 0.0 ! kg/s - Boiler mass flow rate
-      REAL    ::  BoilerMaxOperPress   = 0.0 !
+      REAL(r64)    ::  BoilerLoad           = 0.0 ! W - Boiler operating load
+      REAL(r64)    ::  BoilerEnergy         = 0.0 ! J - Boiler energy integrated over time
+      REAL(r64)    ::  FuelUsed             = 0.0 ! W - Boiler fuel used
+      REAL(r64)    ::  FuelConsumed         = 0.0 ! J - Boiler Fuel consumed integrated over time
+      REAL(r64)    ::  BoilerInletTemp      = 0.0 ! C - Boiler inlet temperature
+      REAL(r64)    ::  BoilerOutletTemp     = 0.0 ! C - Boiler outlet temperature
+      REAL(r64)    ::  Mdot                 = 0.0 ! kg/s - Boiler mass flow rate
+      REAL(r64)    ::  BoilerMaxOperPress   = 0.0 !
   END TYPE ReportVars
 
   ! MODULE VARIABLE DECLARATIONS:
-  REAL    :: FuelUsed            =0.0      ! W - Boiler fuel used
-  REAL    :: BoilerLoad          =0.0      ! W - Boiler Load
-  REAL    :: BoilerMassFlowRate  =0.0      ! kg/s - Boiler mass flow rate
-  REAL    :: BoilerOutletTemp    =0.0      ! W - Boiler outlet temperature
-  REAL    :: BoilerMaxPress      =0.0      !
+  REAL(r64)    :: FuelUsed            =0.0      ! W - Boiler fuel used
+  REAL(r64)    :: BoilerLoad          =0.0      ! W - Boiler Load
+  REAL(r64)    :: BoilerMassFlowRate  =0.0      ! kg/s - Boiler mass flow rate
+  REAL(r64)    :: BoilerOutletTemp    =0.0      ! W - Boiler outlet temperature
+  REAL(r64)    :: BoilerMaxPress      =0.0      !
   INTEGER      :: NumBoilers          =0        ! Number of boilers
-  REAL    :: BoilerMassFlowMaxAvail=0.0        ! kg/s - Boiler mass flow rate
-  REAL    :: BoilerMassFlowMinAvail=0.0        ! kg/s - Boiler mass flow rate
+  REAL(r64)    :: BoilerMassFlowMaxAvail=0.0        ! kg/s - Boiler mass flow rate
+  REAL(r64)    :: BoilerMassFlowMinAvail=0.0        ! kg/s - Boiler mass flow rate
 
 
   TYPE(BoilerSpecs), ALLOCATABLE, DIMENSION(:)  :: Boiler         !dimension to number of machines
@@ -134,12 +134,12 @@ SUBROUTINE SimSteamBoiler(BoilerType,BoilerName,EquipFlowCtrl, CompIndex, RunFla
   LOGICAL, INTENT(IN)           :: RunFlag         ! if TRUE run boiler simulation--boiler is ON
   LOGICAL , INTENT(IN)          :: FirstHVACIteration ! TRUE if First iteration of simulation
   LOGICAL, INTENT(INOUT)        :: InitLoopEquip   ! If not zero, calculate the max load for operating conditions
-  REAL, INTENT(INOUT)      :: MyLoad          ! W - Actual demand boiler must satisfy--calculated by load dist. routine
-  REAL                     :: MinCap          ! W - minimum boiler operating capacity
-  REAL                     :: MaxCap          ! W - maximum boiler operating capacity
-  REAL                     :: OptCap          ! W - optimal boiler operating capacity
+  REAL(r64), INTENT(INOUT)      :: MyLoad          ! W - Actual demand boiler must satisfy--calculated by load dist. routine
+  REAL(r64)                     :: MinCap          ! W - minimum boiler operating capacity
+  REAL(r64)                     :: MaxCap          ! W - maximum boiler operating capacity
+  REAL(r64)                     :: OptCap          ! W - optimal boiler operating capacity
   LOGICAL, INTENT(IN)           :: GetSizingFactor ! TRUE when just the sizing factor is requested
-  REAL, INTENT(OUT)        :: SizingFactor    ! sizing factor
+  REAL(r64), INTENT(OUT)        :: SizingFactor    ! sizing factor
 
   ! SUBROUTINE PARAMETER DEFINITIONS:
   ! na
@@ -344,21 +344,21 @@ SUBROUTINE GetBoilerInput
        Boiler(BoilerNum)%FullLoadCoef(2)      = rNumericArgs(9)
        Boiler(BoilerNum)%FullLoadCoef(3)      = rNumericArgs(10)
        Boiler(BoilerNum)%SizFac               = rNumericArgs(11)
-       IF (Boiler(BoilerNum)%SizFac <= 0.0) Boiler(BoilerNum)%SizFac = 1.0
+       IF (Boiler(BoilerNum)%SizFac <= 0.0) Boiler(BoilerNum)%SizFac = 1.0d0
 
-       IF ((rNumericArgs(8)+rNumericArgs(9)+rNumericArgs(10)) == 0.0) THEN
+       IF ((rNumericArgs(8)+rNumericArgs(9)+rNumericArgs(10)) == 0.0D0) THEN
          CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
          CALL ShowContinueError(' Sum of fuel use curve coefficients = 0.0')
          ErrorsFound=.true.
        ENDIF
 
-       IF (rNumericArgs(5) == 0.0) THEN
+       IF (rNumericArgs(5) == 0.0D0) THEN
          CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
          CALL ShowContinueError('Invalid '//TRIM(cNumericFieldNames(5))//'='//TRIM(RoundSigDigits(rNumericArgs(5),3)))
          ErrorsFound=.true.
        ENDIF
 
-       IF (rNumericArgs(3) == 0.0) THEN
+       IF (rNumericArgs(3) == 0.0D0) THEN
          CALL ShowSevereError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
          CALL ShowContinueError('Invalid '//TRIM(cNumericFieldNames(3))//'='//TRIM(RoundSigDigits(rNumericArgs(3),3)))
          ErrorsFound=.true.
@@ -460,11 +460,11 @@ SUBROUTINE InitBoiler(BoilerNum)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL           :: FatalError
-  REAL         :: TempUpLimitBoilerOut ! C - Boiler outlet maximum temperature limit
-  REAL         :: EnthSteamOutWet
-  REAL         :: EnthSteamOutDry
-  REAL         :: LatentEnthSteam
-  REAL         :: CpWater                  ! Heat capacity of condensed steam (liquid)
+  REAL(r64)         :: TempUpLimitBoilerOut ! C - Boiler outlet maximum temperature limit
+  REAL(r64)         :: EnthSteamOutWet
+  REAL(r64)         :: EnthSteamOutDry
+  REAL(r64)         :: LatentEnthSteam
+  REAL(r64)         :: CpWater                  ! Heat capacity of condensed steam (liquid)
   INTEGER           :: BoilerInletNode          ! Boiler inlet node number
   INTEGER           :: BoilerOutletNode         ! Boiler outlet node number
   LOGICAL           :: errFlag
@@ -506,16 +506,16 @@ SUBROUTINE InitBoiler(BoilerNum)
    !TempUpLimitBoilerOut =Boiler(BoilerNum)%TempUpLimitBoilerOut
 !      TempUpLimitBoilerOut = Node(BoilerOutletNode)%TempSetPoint
     TempUpLimitBoilerOut = Boiler(BoilerNum)%TempUpLimitBoilerOut ! Design Outlet Steam Temperature
-    EnthSteamOutDry=   GetSatEnthalpyRefrig('STEAM',TempUpLimitBoilerOut,1.0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
-    EnthSteamOutWet=   GetSatEnthalpyRefrig('STEAM',TempUpLimitBoilerOut,0.0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
+    EnthSteamOutDry=   GetSatEnthalpyRefrig('STEAM',TempUpLimitBoilerOut,1.0d0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
+    EnthSteamOutWet=   GetSatEnthalpyRefrig('STEAM',TempUpLimitBoilerOut,0.0d0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
     LatentEnthSteam=   EnthSteamOutDry-EnthSteamOutWet
 
-    CpWater = GetSatSpecificHeatRefrig('STEAM',TempUpLimitBoilerOut,0.0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
+    CpWater = GetSatSpecificHeatRefrig('STEAM',TempUpLimitBoilerOut,0.0d0,Boiler(BoilerNum)%FluidIndex,'InitBoiler')
 
     Boiler(BoilerNum)%DesMassFlowRate = Boiler(BoilerNum)%NomCap/(LatentEnthSteam +  &
                                         CpWater * (TempUpLimitBoilerOut-Node(BoilerInletNode)%Temp))
 
-    CALL InitComponentNodes(0.,Boiler(BoilerNum)%DesMassFlowRate,     &
+    CALL InitComponentNodes(0.d0,Boiler(BoilerNum)%DesMassFlowRate,     &
                                   Boiler(BoilerNum)%BoilerInletNodeNum,  &
                                   Boiler(BoilerNum)%BoilerOutletNodeNum,  &
                                   Boiler(BoilerNum)%LoopNum,             &
@@ -633,14 +633,14 @@ SUBROUTINE SizeBoiler(BoilerNum)
   ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  REAL           :: SteamDensity
-  REAL           :: EnthSteamOutWet
-  REAL           :: EnthSteamOutDry
-  REAL           :: LatentEnthSteam
-  REAL           :: SizingTemp
-  REAL           :: CpWater   ! Heat capacity of condensed steam
+  REAL(r64)           :: SteamDensity
+  REAL(r64)           :: EnthSteamOutWet
+  REAL(r64)           :: EnthSteamOutDry
+  REAL(r64)           :: LatentEnthSteam
+  REAL(r64)           :: SizingTemp
+  REAL(r64)           :: CpWater   ! Heat capacity of condensed steam
   CHARACTER(len=MaxNameLength) :: equipName
-  REAL           :: tmpNomCap ! local nominal capacity cooling power
+  REAL(r64)           :: tmpNomCap ! local nominal capacity cooling power
 
   PltSizNum = 0
   ErrorsFound = .FALSE.
@@ -653,17 +653,17 @@ SUBROUTINE SizeBoiler(BoilerNum)
     IF (PltSizNum > 0) THEN
       IF (PlantSizData(PltSizNum)%DesVolFlowRate >= SmallWaterVolFlow) THEN
         SizingTemp =Boiler(BoilerNum)%TempUpLimitBoilerOut
-        SteamDensity   =   GetSatDensityRefrig('STEAM',SizingTemp,1.0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
-        EnthSteamOutDry=   GetSatEnthalpyRefrig('STEAM',SizingTemp,1.0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
-        EnthSteamOutWet=   GetSatEnthalpyRefrig('STEAM',SizingTemp,0.0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
+        SteamDensity   =   GetSatDensityRefrig('STEAM',SizingTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
+        EnthSteamOutDry=   GetSatEnthalpyRefrig('STEAM',SizingTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
+        EnthSteamOutWet=   GetSatEnthalpyRefrig('STEAM',SizingTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
         LatentEnthSteam=   EnthSteamOutDry-EnthSteamOutWet
-        CpWater        =   GetSatSpecificHeatRefrig('STEAM',SizingTemp,0.0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
+        CpWater        =   GetSatSpecificHeatRefrig('STEAM',SizingTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'SizeBoiler')
         tmpNomCap = (CpWater * SteamDensity * Boiler(BoilerNum)%SizFac * &
                                    PlantSizData(PltSizNum)%DeltaT* PlantSizData(PltSizNum)%DesVolFlowRate + &
                                    PlantSizData(PltSizNum)%DesVolFlowRate*SteamDensity*LatentEnthSteam)
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%NomCap =tmpNomCap
       ELSE
-        tmpNomCap = 0.
+        tmpNomCap = 0.d0
         IF (PlantSizesOkayToFinalize) Boiler(BoilerNum)%NomCap = tmpNomCap
       END IF
         IF (PlantSizesOkayToFinalize) CALL ReportSizingOutput('Boiler:Steam', Boiler(BoilerNum)%Name, &
@@ -724,7 +724,7 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
       ! SUBROUTINE ARGUMENT DEFINITIONS:
        INTEGER                :: BoilerNum       ! boiler identifier
-       REAL              :: MyLoad          ! W - hot water demand to be met by boiler
+       REAL(r64)              :: MyLoad          ! W - hot water demand to be met by boiler
        LOGICAL                :: RunFlag         ! TRUE if boiler operating
        INTEGER, INTENT(IN)    :: EquipFlowCtrl  ! Flow control mode for the equipment
 
@@ -736,21 +736,21 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
       ! na
 
       ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL              :: BoilerEFF                ! boiler efficiency
-      REAL              :: BoilerNomCap             ! W - boiler nominal capacity
-      REAL              :: BoilerMaxPLR             ! boiler maximum part load ratio
-      REAL              :: BoilerMinPLR             ! boiler minimum part load ratio
-      REAL              :: TheorFuelUse             ! Theoretical (stoichiometric) fuel use
-      REAL              :: OperPLR                  ! operating part load ratio
-      REAL              :: BoilerDeltaTemp          ! C - boiler inlet to outlet temperature difference
-      REAL              :: TempUpLimitBout          ! C - boiler high temperature limit
-      REAL              :: BoilerMassFlowRateMax    ! Max Design Boiler Mass Flow Rate converted from Volume Flow Rate
-      REAL              :: EnthSteamOutDry          !
-      REAL              :: EnthSteamOutWet          !
-      REAL              :: LatentEnthSteam          !
-      REAL              :: QualitySteam             !
-      REAL, DIMENSION(3)     :: LoadCoef                 ! coefficients of the fuel use/part load curve
-      REAL              :: CpWater                  ! Heat capacity of condensed steam
+      REAL(r64)              :: BoilerEFF                ! boiler efficiency
+      REAL(r64)              :: BoilerNomCap             ! W - boiler nominal capacity
+      REAL(r64)              :: BoilerMaxPLR             ! boiler maximum part load ratio
+      REAL(r64)              :: BoilerMinPLR             ! boiler minimum part load ratio
+      REAL(r64)              :: TheorFuelUse             ! Theoretical (stoichiometric) fuel use
+      REAL(r64)              :: OperPLR                  ! operating part load ratio
+      REAL(r64)              :: BoilerDeltaTemp          ! C - boiler inlet to outlet temperature difference
+      REAL(r64)              :: TempUpLimitBout          ! C - boiler high temperature limit
+      REAL(r64)              :: BoilerMassFlowRateMax    ! Max Design Boiler Mass Flow Rate converted from Volume Flow Rate
+      REAL(r64)              :: EnthSteamOutDry          !
+      REAL(r64)              :: EnthSteamOutWet          !
+      REAL(r64)              :: LatentEnthSteam          !
+      REAL(r64)              :: QualitySteam             !
+      REAL(r64), DIMENSION(3)     :: LoadCoef                 ! coefficients of the fuel use/part load curve
+      REAL(r64)              :: CpWater                  ! Heat capacity of condensed steam
       INTEGER                :: BoilerInletNode          ! Boiler inlet node number
       INTEGER                :: BoilerOutletNode         ! Boiler outlet node number
 !      CHARACTER(len=25) CErrCount                        !
@@ -760,8 +760,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
 
      !Loading the variables derived type in to local variables
-      BoilerLoad            = 0.0
-      BoilerMassFlowRate    = 0.0
+      BoilerLoad            = 0.0d0
+      BoilerMassFlowRate    = 0.0d0
       BoilerInletNode       = Boiler(BoilerNum)%BoilerInletNodeNum
       BoilerOutletNode      = Boiler(BoilerNum)%BoilerOutletNodeNum
       BoilerNomCap          = Boiler(BoilerNum)%NomCap
@@ -785,7 +785,7 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
     !If the specified load is 0.0 or the boiler should not run then we leave this subroutine.Before leaving
     !if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     !will not shut down the branch
-      IF(MyLoad <= 0.0 .OR. .NOT. RunFlag) THEN
+      IF(MyLoad <= 0.0d0 .OR. .NOT. RunFlag) THEN
         IF(EquipFlowCtrl == ControlType_SeriesActive) BoilerMassFlowRate = Node(BoilerInletNode)%MassFlowrate
         RETURN
       END IF
@@ -811,7 +811,7 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
            ReportMaxOf=Boiler(BoilerNum)%BoilerPressCheck,ReportMaxUnits='[Pa]')
       END IF
 
-      CpWater = GetSatSpecificHeatRefrig('STEAM',Node(BoilerInletNode)%Temp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+      CpWater = GetSatSpecificHeatRefrig('STEAM',Node(BoilerInletNode)%Temp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
       IF (PlantLoop(LoopNum)%Loopside(LoopSideNum)%FlowLock==0) THEN
         ! Calculate the flow for the boiler
@@ -824,9 +824,9 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
         END SELECT
         BoilerOutletTemp = BoilerDeltaTemp + Node(BoilerInletNode)%Temp
 
-        EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+        EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
-        EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+        EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
         LatentEnthSteam=EnthSteamOutDry-EnthSteamOutWet
 
@@ -860,8 +860,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
           CASE (DualSetPointDeadBand)
             BoilerOutletTemp=Node(BoilerOutletNode)%TempSetPointLo
           END SELECT
-          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
-          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
           LatentEnthSteam=EnthSteamOutDry-EnthSteamOutWet
 
@@ -876,8 +876,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
             BoilerOutletTemp=Node(BoilerOutletNode)%TempSetPointLo
           END SELECT
 
-          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
-          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
           LatentEnthSteam=EnthSteamOutDry-EnthSteamOutWet
 
@@ -899,9 +899,9 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
             BoilerOutletTemp=Node(BoilerOutletNode)%TempSetPointLo
           END SELECT
 
-          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
-          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+          EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
           LatentEnthSteam=EnthSteamOutDry-EnthSteamOutWet
 
@@ -921,8 +921,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
           IF(BoilerMassFlowRate > MassFlowTolerance) THEN
             BoilerLoad = BoilerNomCap
 
-            EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
-            EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+            EnthSteamOutDry=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,1.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
+            EnthSteamOutWet=GetSatEnthalpyRefrig('STEAM',BoilerOutletTemp,0.0d0,Boiler(BoilerNum)%FluidIndex,'CalcBoilerModel')
 
             LatentEnthSteam=EnthSteamOutDry-EnthSteamOutWet
 
@@ -945,8 +945,8 @@ SUBROUTINE CalcBoilerModel(BoilerNum,MyLoad,Runflag,EquipFlowCtrl)
 
       ! Limit BoilerOutletTemp.  If > max temp, trip boiler.
       IF(BoilerOutletTemp > TempUpLimitBout) THEN
-        BoilerDeltaTemp = 0.0
-        BoilerLoad = 0.0
+        BoilerDeltaTemp = 0.0d0
+        BoilerLoad = 0.0d0
         BoilerOutletTemp = Node(BoilerInletNode)%Temp
         !  Does BoilerMassFlowRate need to be set????
       END IF
@@ -986,7 +986,7 @@ SUBROUTINE UpdateBoilerRecords(MyLoad,RunFlag,Num,FirstHVACIteration)
        IMPLICIT NONE
 
       ! SUBROUTINE ARGUMENT DEFINITIONS:
-       REAL,INTENT(IN)   :: MyLoad        !boiler operating load
+       REAL(r64),INTENT(IN)   :: MyLoad        !boiler operating load
        LOGICAL,  INTENT(IN)   :: RunFlag       !boiler on when TRUE
        INTEGER,  INTENT(IN)   :: Num           !boiler number
        LOGICAL , INTENT(IN)   :: FirstHVACIteration ! TRUE if First iteration of simulation
@@ -1003,7 +1003,7 @@ SUBROUTINE UpdateBoilerRecords(MyLoad,RunFlag,Num,FirstHVACIteration)
       ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
       INTEGER                :: BoilerInletNode ! Boiler inlet node number
       INTEGER                :: BoilerOutletNode ! Boiler outlet node number
-      REAL :: ReportingConstant
+      REAL(r64) :: ReportingConstant
       INTEGER :: LoopNum
       INTEGER :: LoopSideNum
 
@@ -1012,7 +1012,7 @@ SUBROUTINE UpdateBoilerRecords(MyLoad,RunFlag,Num,FirstHVACIteration)
       BoilerInletNode     = Boiler(Num)%BoilerInletNodeNum
       BoilerOutletNode    = Boiler(Num)%BoilerOutletNodeNum
 
-    IF (MyLoad<=0.0 .OR. .NOT. RunFlag)THEN
+    IF (MyLoad<=0.0d0 .OR. .NOT. RunFlag)THEN
       !set node temperatures
       CALL SafeCopyPlantNode(BoilerInletNode, BoilerOutletNode)
       Node(BoilerOutletNode)%Temp           = Node(BoilerInletNode)%Temp

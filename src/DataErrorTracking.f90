@@ -187,9 +187,9 @@ PUBLIC          ! By definition, all variables which are placed in this data
     INTEGER  :: Count    = 0   ! Count of total times this recurring error message has been called
     INTEGER  :: WarmupCount = 0 ! Count of times this recurring error message has been called during warmup
     INTEGER  :: SizingCount = 0 ! Count of times this recurring error message has been called during sizing
-    REAL     :: MaxValue = 0.0 ! Max of the values passed for this recurring error message
-    REAL     :: MinValue = 0.0 ! Min of the values passed for this recurring error message
-    REAL     :: SumValue = 0.0 ! Sum of the values passed for this recurring error message
+    REAL(r64)     :: MaxValue = 0.0 ! Max of the values passed for this recurring error message
+    REAL(r64)     :: MinValue = 0.0 ! Min of the values passed for this recurring error message
+    REAL(r64)     :: SumValue = 0.0 ! Sum of the values passed for this recurring error message
     CHARACTER(len=32) :: MaxUnits=' '  ! units for Max values
     CHARACTER(len=32) :: MinUnits=' '  ! units for Min values
     CHARACTER(len=32) :: SumUnits=' '  ! units for Sum values

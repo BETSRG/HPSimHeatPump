@@ -2241,8 +2241,8 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
   
-  !INTEGER, PARAMETER :: r64=KIND(1.0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  !REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"

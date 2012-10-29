@@ -131,7 +131,7 @@ CONTAINS
 
       TYPE (vector), INTENT(OUT) :: vec_result
 !      REAL, DIMENSION(3), INTENT(IN) :: array
-      REAL, DIMENSION(3), INTENT(IN) :: array
+      REAL(r64), DIMENSION(3), INTENT(IN) :: array
       vec_result%x = array(1)
       vec_result%y = array(2)
       vec_result%z = array(3)
@@ -150,7 +150,7 @@ CONTAINS
      ! XYZ=vector_data  (where XYZ is a 3-element array with x,y,z values)
 
 !      REAL, DIMENSION(3), INTENT(OUT) :: array_result
-      REAL, DIMENSION(3), INTENT(OUT) :: array_result
+      REAL(r64), DIMENSION(3), INTENT(OUT) :: array_result
       TYPE (vector), INTENT(IN) :: vec_1
       array_result(1) = vec_1%x
       array_result(2) = vec_1%y
@@ -171,7 +171,7 @@ CONTAINS
 
       TYPE (vector), INTENT(OUT) :: vec_result
 !      REAL, INTENT(IN) :: value
-      REAL, INTENT(IN) :: value
+      REAL(r64), INTENT(IN) :: value
       vec_result%x = value
       vec_result%y = value
       vec_result%z = value
@@ -270,7 +270,7 @@ CONTAINS
       TYPE (vector) :: vector_times_real
       TYPE (vector), INTENT(IN) :: vec_1
 !      REAL, INTENT(IN) :: real_2
-      REAL, INTENT(IN) :: real_2
+      REAL(r64), INTENT(IN) :: real_2
       vector_times_real%x = vec_1%x * real_2
       vector_times_real%y = vec_1%y * real_2
       vector_times_real%z = vec_1%z * real_2
@@ -290,7 +290,7 @@ CONTAINS
 
       TYPE (vector) :: real_times_vector
 !      REAL, INTENT(IN) :: real_1
-      REAL, INTENT(IN) :: real_1
+      REAL(r64), INTENT(IN) :: real_1
       TYPE (vector), INTENT(IN) :: vec_2
       real_times_vector%x = real_1 * vec_2%x
       real_times_vector%y = real_1 * vec_2%y
@@ -352,7 +352,7 @@ CONTAINS
       TYPE (vector) :: vector_div_real
       TYPE (vector), INTENT(IN) :: vec_1
 !      REAL, INTENT(IN) :: real_2
-      REAL, INTENT(IN) :: real_2
+      REAL(r64), INTENT(IN) :: real_2
       vector_div_real%x = vec_1%x / real_2
       vector_div_real%y = vec_1%y / real_2
       vector_div_real%z = vec_1%z / real_2
@@ -389,7 +389,7 @@ CONTAINS
      ! operation.  As in:
      ! Vector=Vector1.dot.Vector2
 
-      REAL :: vec_dot_product
+      REAL(r64) :: vec_dot_product
       TYPE (vector), INTENT(IN) :: vec_1, vec_2
       vec_dot_product = vec_1%x*vec_2%x + vec_1%y*vec_2%y &
                   + vec_1%z*vec_2%z
@@ -406,7 +406,7 @@ CONTAINS
      ! operation.  As in:
      ! Vector=Vector1.dot.Vector2
 
-      REAL :: vec2d_dot_product
+      REAL(r64) :: vec2d_dot_product
       TYPE (vector_2d), INTENT(IN) :: vec_1, vec_2
       vec2d_dot_product = vec_1%x*vec_2%x + vec_1%y*vec_2%y
       RETURN
@@ -440,7 +440,7 @@ CONTAINS
      ! operation.  As in:
      ! Vector=Vector1 .2dcross. Vector2
 
-      REAL :: vec2d_cross_product
+      REAL(r64) :: vec2d_cross_product
       TYPE (vector_2d), INTENT(IN) :: vec_1, vec_2
       vec2d_cross_product = vec_1%x*vec_2%y - vec_2%x*vec_1%y
       RETURN
@@ -460,10 +460,10 @@ CONTAINS
 
      ! SUBROUTINE ARGUMENT DEFINITIONS:
       TYPE (vector), INTENT(IN) :: vec_1, vec_2
-      REAL :: rdistance
+      REAL(r64) :: rdistance
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-      REAL :: dx, dy, dz
+      REAL(r64) :: dx, dy, dz
 
       dx=vec_1%x-vec_2%x
       dy=vec_1%y-vec_2%y
@@ -488,7 +488,7 @@ CONTAINS
      ! SUBROUTINE ARGUMENT DEFINITIONS:
    integer n
    type (vector) :: p(0:n-1)
-   REAL :: areap
+   real(r64) :: areap
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    type (vector) :: edge0, edge1, nor, edgex
@@ -502,14 +502,14 @@ CONTAINS
      nor =VecNormalize(edge0*edge1)
 
     !  Initialize csum
-     csum=0.0 ! !RS: Debugging
+     csum=0.0d0
 
      do i=0,n-2
        csum=csum+p(i)*p(i+1)
      enddo
      csum=csum+p(n-1)*p(0)
 
-     areap=0.5*abs(nor.dot.csum)
+     areap=0.5d0*abs(nor.dot.csum)
 
      return
    END FUNCTION AreaPolygon
@@ -527,7 +527,7 @@ CONTAINS
 
      ! SUBROUTINE ARGUMENT DEFINITIONS:
    type(vector) :: vec
-   REAL :: vecsqlen
+   real(r64) :: vecsqlen
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
      ! na
@@ -549,7 +549,7 @@ CONTAINS
 
      ! SUBROUTINE ARGUMENT DEFINITIONS:
    type (vector) :: vec
-   REAL :: veclen
+   real(r64) :: veclen
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
      ! na
@@ -599,7 +599,7 @@ CONTAINS
    type (vector) vec
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-   REAL :: veclen
+   real(r64) :: veclen
 
      veclen=VecLength(vec)
      if (veclen /= 0.0) then
@@ -627,7 +627,7 @@ CONTAINS
 
      ! SUBROUTINE ARGUMENT DEFINITIONS:
    type (vector) vec
-   REAL :: roundto
+   real(r64) :: roundto
 
      ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
      ! na
@@ -653,12 +653,12 @@ CONTAINS
      ! SUBROUTINE ARGUMENT DEFINITIONS:
    type (vector), dimension(:) :: Surf  ! Surface Definition
    integer, intent(in) :: NSides        ! Number of sides to surface
-   REAL, intent(out)   :: Azimuth       ! Outward Normal Azimuth Angle
-   REAL, intent(out)   :: Tilt          ! Tilt angle of surface
+   real(r64), intent(out)   :: Azimuth       ! Outward Normal Azimuth Angle
+   real(r64), intent(out)   :: Tilt          ! Tilt angle of surface
    type (vector) :: lcsx
    type (vector) :: lcsy
    type (vector) :: lcsz
-   REAL, intent(in) :: surfaceArea
+   real(r64), intent(in) :: surfaceArea
    type (vector), intent(in) :: NewellSurfaceNormalVector
 
    character(len=*), parameter :: fmt3="(A,3(1x,f18.13))"
@@ -675,29 +675,29 @@ CONTAINS
   type(vector) :: cs3_1
 !  type(vector) :: y2
   type(vector) :: z3
-  REAL costheta
-  REAL rotang_0
-!  REAL rotang_2
+  real(r64) costheta
+  real(r64) rotang_0
+!  real(r64) rotang_2
 
-   REAL az
-!   REAL azm
-   REAL tlt
-!  REAL newtlt
-!  REAL roundval
-!   REAL xcomp
-!   REAL ycomp
-!   REAL zcomp
-!   REAL proj
+   real(r64) az
+!   real(r64) azm
+   real(r64) tlt
+!  real(r64) newtlt
+!  real(r64) roundval
+!   real(r64) xcomp
+!   real(r64) ycomp
+!   real(r64) zcomp
+!   real(r64) proj
 !   integer :: scount
 !   integer :: nvert1
-!  REAL :: tltcos
+!  real(r64) :: tltcos
 
 !!!     x3=VecNormalize(Surf(2)-Surf(1))
 !!!     v12=Surf(3)-Surf(2)
 !!!
 !!!     z3=VecNormalize(x3*v12)
 !!!     y3=z3*x3
-!!!     roundval=10000.
+!!!     roundval=10000.d0
 !!!     CALL VecRound(x3,roundval)
 !!!     CALL VecRound(y3,roundval)
 !!!     CALL VecRound(z3,roundval)
@@ -762,14 +762,14 @@ CONTAINS
      az=rotang_0
 
      az=az/degtoradians
-     az=MOD(450. - az, 360.)
-     az=az+90.
-     if (az < 0.0) az=az+360.
-     az=mod(az,360.)
+     az=MOD(450.d0 - az, 360.d0)
+     az=az+90.d0
+     if (az < 0.0) az=az+360.d0
+     az=mod(az,360.d0)
 
      ! Normalize the azimuth angle so it is positive
-     if (abs(az-360.) < 1.*10**-3) az=0.0   !RS: Debugging: 102612
-     Azimuth=az 
+     if (abs(az-360.d0) < 1.d-3) az=0.0d0
+     Azimuth=az
      Tilt=tlt
 
      RETURN
@@ -796,12 +796,12 @@ CONTAINS
      type(vector) :: normal
      INTEGER :: i
      type(vector) :: refpt
-     REAL :: lenvec
+     real(r64) :: lenvec
      type(vector),POINTER :: u,v
 
    ! - - - begin - - -
-     normal=vector(0.0,0.0,0.0)
-     refpt=vector(0.0,0.0,0.0)
+     normal=vector(0.0d0,0.0d0,0.0d0)
+     refpt=vector(0.0d0,0.0d0,0.0d0)
      DO i = 0,nverts-1
        u => verts(i)
        if (i < nverts-1) then
@@ -819,7 +819,7 @@ CONTAINS
      ! */
      lenvec=VecLength(normal)
      error=.false.
-     if (lenvec /= 0.0) then   ! should this be >0
+     if (lenvec /= 0.0d0) then   ! should this be >0
        plane%x = normal%x / lenvec
        plane%y = normal%y / lenvec
        plane%z = normal%z / lenvec
@@ -845,7 +845,7 @@ CONTAINS
    IMPLICIT NONE
 
      ! SUBROUTINE ARGUMENT DEFINITIONS:
-     REAL :: PtDist     ! Distance of the point to the plane
+     REAL(r64) :: PtDist     ! Distance of the point to the plane
      TYPE (PlaneEq) :: pleq  ! Equation of the plane
      TYPE (Vector) :: pt     ! Point for determining the distance
 
@@ -900,7 +900,7 @@ CONTAINS
      TYPE (Vector) :: V2
      INTEGER Vert
 
-     OutNewellAreaVector=0.0 !    !RS: Debugging
+     OutNewellAreaVector=0.0d0
 
      V1=VList(2)-Vlist(1)
      DO Vert=3,NSides
@@ -912,7 +912,7 @@ CONTAINS
 !       write(outputfiledebug,*) vlist(vert)
 !     enddo
 
-     OutNewellAreaVector=OutNewellAreaVector/2 !. !RS: Debugging
+     OutNewellAreaVector=OutNewellAreaVector/2.d0
 
      RETURN
 
@@ -979,14 +979,14 @@ CONTAINS
      INTEGER Side
      INTEGER curVert
      INTEGER nextVert
-     REAL :: xvalue
-     REAL :: yvalue
-     REAL :: zvalue
+     real(r64) :: xvalue
+     real(r64) :: yvalue
+     real(r64) :: zvalue
 
-     OutNewellSurfaceNormalVector=0.0 !   !RS: Debugging
-     xvalue=0.0 ! !RS: Debugging
-     yvalue=0.0 ! !RS: Debugging
-     zvalue=0.0 ! !RS: Debugging
+     OutNewellSurfaceNormalVector=0.0d0
+     xvalue=0.0d0
+     yvalue=0.0d0
+     zvalue=0.0d0
 
 !     IF (NSides > 3) THEN
        DO Side=1,NSides
@@ -1041,7 +1041,7 @@ CONTAINS
      TYPE(vector), INTENT(IN) :: vector1   ! standard vector
      TYPE(vector), INTENT(IN) :: vector2   ! standard vector
      LOGICAL, INTENT(INOUT)   :: areSame   ! true if the two vectors are the same within specified tolerance
-     REAL, INTENT(IN)    :: tolerance ! specified tolerance
+     REAL(r64), INTENT(IN)    :: tolerance ! specified tolerance
 
              ! SUBROUTINE PARAMETER DEFINITIONS:
              ! na
@@ -1091,11 +1091,11 @@ CONTAINS
      type (vector), dimension(:) :: Surf
      integer, intent(in)         :: Nsides
      logical, intent(out)        :: IsCoPlanar
-     REAL, intent(out)           :: MaxDist
+     real(r64), intent(out)           :: MaxDist
      integer, intent(out)        :: ErrorVertex
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-     REAL, PARAMETER :: DistTooSmall=1.*10**-4  !RS: Debugging: 102612
+     real(r64), PARAMETER :: DistTooSmall=1.d-4
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -1107,7 +1107,7 @@ CONTAINS
      integer vert
      type (planeeq) NewellPlane
      logical plerror
-     REAL dist
+     real(r64) dist
 
      IsCoPlanar=.true.
      MaxDist=0.0
@@ -1155,7 +1155,7 @@ CONTAINS
 
              ! SUBROUTINE ARGUMENT DEFINITIONS:
      TYPE (polyhedron) :: Poly
-     REAL, INTENT(OUT) :: Volume
+     real(r64), INTENT(OUT) :: Volume
 
              ! SUBROUTINE PARAMETER DEFINITIONS:
              ! na
@@ -1167,17 +1167,17 @@ CONTAINS
              ! na
 
              ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-     TYPE (vector) :: p0=vector(0.0,0.0,0.0)
+     TYPE (vector) :: p0=vector(0.0d0,0.0d0,0.0d0)
      TYPE (vector) :: p3FaceOrigin
      INTEGER :: NFace
-     REAL PyramidVolume
+     real(r64) PyramidVolume
 
-     Volume=0.0
+     Volume=0.0d0
 
      DO NFace=1,Poly%NumSurfaceFaces
        p3FaceOrigin=Poly%SurfaceFace(NFace)%FacePoints(2)
        PyramidVolume=Poly%SurfaceFace(NFace)%NewellAreaVector .dot. (p3FaceOrigin - p0)
-       Volume=Volume+PyramidVolume/3.
+       Volume=Volume+PyramidVolume/3.d0
      ENDDO
 
      RETURN
@@ -1219,8 +1219,8 @@ implicit none ! Enforce explicit typing of all variables
 Private ! Everything private unless explicitly made public
 
           ! Module parameter definitions:
-REAL, parameter :: twopi=Pi*2.0  !6.283185307179586476925287
-REAL, parameter :: radtodeg=1.0/DegToRadians !57.2957795
+real(r64), parameter :: twopi=Pi*2.0D0  !6.283185307179586476925287D0
+real(r64), parameter :: radtodeg=1.0D0/DegToRadians !57.2957795
 
           ! Derived type definitions:
           ! na
@@ -1247,19 +1247,19 @@ integer nsides
 type(vector) :: point
 type(vector), dimension(nsides) :: poly
 
-REAL, parameter :: epsilon=0.0000001
-REAL :: anglesum
-REAL :: costheta
+real(r64), parameter :: epsilon=0.0000001d0
+real(r64) :: anglesum
+real(r64) :: costheta
 integer :: vert
 type(vector) :: p1
 type(vector) :: p2
-REAL :: m1
-REAL :: m2
-REAL :: acosval
+real(r64) :: m1
+real(r64) :: m2
+real(r64) :: acosval
 
 InPolygon = .False.
 
-anglesum=0.0
+anglesum=0.0d0
 
 do vert=1,nsides-1
 
@@ -1298,7 +1298,7 @@ Function Modulus(point) RESULT(rModulus)
 implicit none
 
 type (vector) point
-REAL :: rModulus
+real(r64) :: rModulus
 
 rModulus=SQRT(point%x*point%x + point%y*point%y + point%z*point%z)
 
@@ -1334,14 +1334,14 @@ Integer Function Triangulate(nsides,polygon,outtriangles,surfazimuth,surftilt,su
   integer nsides                ! number of sides to polygon
   type (vector), dimension(nsides) :: polygon
   type (dTriangle), allocatable, dimension(:) :: outtriangles
-  REAL :: surftilt              ! surface tilt angle
-  REAL :: surfazimuth           ! surface azimuth angle (outward facing normal)
+  real(r64) :: surftilt              ! surface tilt angle
+  real(r64) :: surfazimuth           ! surface azimuth angle (outward facing normal)
   character(len=*) :: surfname  ! surface name (for error messages)
   integer :: surfclass ! surface class
 
           ! Subroutine parameter definitions:
-  REAL , parameter :: point_tolerance=.00001
-  REAL , parameter :: twopiang=(180./radtodeg)
+  real(r64) , parameter :: point_tolerance=.00001d0
+  real(r64) , parameter :: twopiang=(180.d0/radtodeg)
 
           ! Interface block specifications:
           ! na
@@ -1353,7 +1353,7 @@ Integer Function Triangulate(nsides,polygon,outtriangles,surfazimuth,surftilt,su
   logical          :: errflag
   integer ears(nsides)
   integer r_angles(nsides)
-  REAL  rangles(nsides)
+  real(r64)  rangles(nsides)
   integer c_vertices(nsides)
   integer earvert(3,nsides)
   logical removed(nsides)
@@ -1361,9 +1361,9 @@ Integer Function Triangulate(nsides,polygon,outtriangles,surfazimuth,surftilt,su
 !unused  type(Vector_2d), dimension(3) :: testtri
 !unused  type(Vector_2d) :: point
   integer earverts(3)
-  REAL xvt(nsides)
-  REAL yvt(nsides)
-  REAL zvt(nsides)
+  real(r64) xvt(nsides)
+  real(r64) yvt(nsides)
+  real(r64) zvt(nsides)
   type (dTriangle), dimension(nsides) :: Triangle
 
   !'General Variables
@@ -1520,18 +1520,18 @@ function angle_2dvector ( xa, ya, xb, yb, xc, yc ) result (angle)
   Implicit none ! Enforce explicit typing of all variables in this routine
 
           ! Function argument definitions:
-  REAL , intent(in)  :: xa  ! vertex coordinate
-  REAL , intent(in)  :: ya  ! vertex coordinate
-  REAL , intent(in)  :: xb  ! vertex coordinate
-  REAL , intent(in)  :: yb  ! vertex coordinate
-  REAL , intent(in)  :: xc  ! vertex coordinate
-  REAL , intent(in)  :: yc  ! vertex coordinate
-  REAL  angle               ! the angle, between 0 and 2*PI.
+  real(r64) , intent(in)  :: xa  ! vertex coordinate
+  real(r64) , intent(in)  :: ya  ! vertex coordinate
+  real(r64) , intent(in)  :: xb  ! vertex coordinate
+  real(r64) , intent(in)  :: yb  ! vertex coordinate
+  real(r64) , intent(in)  :: xc  ! vertex coordinate
+  real(r64) , intent(in)  :: yc  ! vertex coordinate
+  real(r64)  angle               ! the angle, between 0 and 2*PI.
                                        ! angle is set to PI/2 in the degenerate case.
 
 
           ! Function parameter definitions:
-  REAL , parameter :: epsilon=0.0000001
+  real(r64) , parameter :: epsilon=0.0000001d0
 
           ! Interface block specifications:
           ! na
@@ -1540,11 +1540,11 @@ function angle_2dvector ( xa, ya, xb, yb, xc, yc ) result (angle)
           ! na
 
           ! Function local variable declarations:
-  REAL  :: t
-  REAL  :: x1
-  REAL  :: x2
-  REAL  :: y1
-  REAL  :: y2
+  real(r64)  :: t
+  real(r64)  :: x1
+  real(r64)  :: x2
+  real(r64)  :: y1
+  real(r64)  :: y2
 
   x1 = xa - xb
   y1 = ya - yb
@@ -1600,7 +1600,7 @@ function polygon_contains_point_2d ( nsides, polygon, point) result(inside)
   logical :: inside  ! return value, true=inside, false = not inside
 
           ! Function parameter definitions:
-  REAL, parameter :: point_tolerance=.00001
+  real(r64), parameter :: point_tolerance=.00001d0
 
           ! Interface block specifications:
           ! na
@@ -1672,10 +1672,10 @@ subroutine generate_ears(nvert, vertex, ears, nears, r_vertices, nrverts, c_vert
   integer :: ncverts           ! number of convex vertices found (< 180)
   logical :: removed(nvert)    ! array that shows if a vertex has been removed (calling routine)
   integer :: earvert(3)        ! vertex indicators for first ear
-  REAL    :: rangles(nvert)
+  real(r64)    :: rangles(nvert)
 
           ! Subroutine parameter definitions:
-  REAL,parameter :: twopi_rad=(180./radtodeg)
+  real(r64),parameter :: twopi_rad=(180.d0/radtodeg)
 
           ! Interface block specifications:
           ! na
@@ -1687,7 +1687,7 @@ subroutine generate_ears(nvert, vertex, ears, nears, r_vertices, nrverts, c_vert
   integer :: svert    ! starting vertex
   integer :: mvert    ! "middle" vertex (this will be an ear, if calculated)
   integer :: evert    ! ending vertex
-  REAL :: ang  ! ang between
+  real(r64) :: ang  ! ang between
   integer tvert       ! test vertex, intermediate use
   logical inpoly      ! in polygon or not
   type(Vector_2d) point      ! structure for point
@@ -1807,11 +1807,11 @@ Subroutine CalcWallCoordinateTransformation(nsides,polygon,surfazimuth,surftilt,
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   integer :: nsides
   type(vector), dimension(nsides) :: polygon
-  REAL :: surfazimuth
-  REAL :: surftilt !unused1208
-  REAL :: xvt(nsides)
-  REAL :: yvt(nsides)
-  REAL :: zvt(nsides)
+  real(r64) :: surfazimuth
+  real(r64) :: surftilt !unused1208
+  real(r64) :: xvt(nsides)
+  real(r64) :: yvt(nsides)
+  real(r64) :: zvt(nsides)
 
           ! Subroutine parameter definitions:
           ! na
@@ -1824,15 +1824,15 @@ Subroutine CalcWallCoordinateTransformation(nsides,polygon,surfazimuth,surftilt,
 
           ! Subroutine local variable declarations:
   integer :: i           ! Loop Control
-  REAL :: alpha
-  REAL :: alphrad
-  REAL :: alpha180
+  real(r64) :: alpha
+  real(r64) :: alphrad
+  real(r64) :: alpha180
 
  ! convert surface (wall) to facing 180 (outward normal)
 
   alpha=surfazimuth
 
-  alpha180=180.-alpha  ! amount to rotate
+  alpha180=180.d0-alpha  ! amount to rotate
   alphrad=alpha180/radtodeg
 
   do i=1,nsides
@@ -1871,11 +1871,11 @@ Subroutine CalcRfFlrCoordinateTransformation(nsides,polygon,surfazimuth,surftilt
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   integer :: nsides
   type(vector), dimension(nsides) :: polygon
-  REAL :: surfazimuth !unused1208
-  REAL :: surftilt
-  REAL :: xvt(nsides)
-  REAL :: yvt(nsides)
-  REAL :: zvt(nsides)
+  real(r64) :: surfazimuth !unused1208
+  real(r64) :: surftilt
+  real(r64) :: xvt(nsides)
+  real(r64) :: yvt(nsides)
+  real(r64) :: zvt(nsides)
 
           ! Subroutine parameter definitions:
           ! na
@@ -1888,8 +1888,8 @@ Subroutine CalcRfFlrCoordinateTransformation(nsides,polygon,surfazimuth,surftilt
 
           ! Subroutine local variable declarations:
   integer :: i           ! Loop Control
-  REAL :: alpha
-  REAL :: alphrad
+  real(r64) :: alpha
+  real(r64) :: alphrad
 
   alpha=-surftilt
 

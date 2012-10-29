@@ -31,37 +31,37 @@ TYPE                   :: CostLineItemStruct
   CHARACTER(len=MaxNameLength) :: ParentObjName = '' ! parent instance in IDF
   CHARACTER(len=MaxNameLength) :: ParentObjKey  = '' ! end use key for parent object
   INTEGER :: ParentObjIDinList  = 1  !
-  REAL    :: PerSquareMeter     = 0.0 ! cost per square meter
-  REAL    :: PerEach            = 0.0 ! cost per each
-  REAL    :: PerKiloWattCap     = 0.0 ! cost per kW of nominal capacity
-  REAL    :: PerKWCapPerCOP     = 0.0 ! cost per kW of nominal capacity per COP
-  REAL    :: PerCubicMeter      = 0.0 ! cost per cubic meter
-  REAL    :: PerCubMeterPerSec  = 0.0 ! cost per cubic meter per second
-  REAL    :: PerUAinWattperDelK = 0.0 ! cost per (UA) in Watt/deltaK
-!  REAL    :: AnnualMaintFract   = 0.0 ! cost for annual service and non energy consumables
-!  REAL    :: MinorOverhallFract = 0.0 ! cost for minor overhalls
+  REAL(r64)    :: PerSquareMeter     = 0.0 ! cost per square meter
+  REAL(r64)    :: PerEach            = 0.0 ! cost per each
+  REAL(r64)    :: PerKiloWattCap     = 0.0 ! cost per kW of nominal capacity
+  REAL(r64)    :: PerKWCapPerCOP     = 0.0 ! cost per kW of nominal capacity per COP
+  REAL(r64)    :: PerCubicMeter      = 0.0 ! cost per cubic meter
+  REAL(r64)    :: PerCubMeterPerSec  = 0.0 ! cost per cubic meter per second
+  REAL(r64)    :: PerUAinWattperDelK = 0.0 ! cost per (UA) in Watt/deltaK
+!  REAL(r64)    :: AnnualMaintFract   = 0.0 ! cost for annual service and non energy consumables
+!  REAL(r64)    :: MinorOverhallFract = 0.0 ! cost for minor overhalls
 !  INTEGER :: MinorOverhallYears = 0   ! year interval for minor overhalls
-!  REAL    :: MajorOverhallFract = 0.0 ! cost for major overhall
+!  REAL(r64)    :: MajorOverhallFract = 0.0 ! cost for major overhall
 !  INTEGER :: MajorOverhallYears = 0   ! year interval for major overhalls
 !  INTEGER :: LifeYears          = 0.0 ! expected life in years
-!  REAL    :: ValueAtReplacement = 0.0 ! residual value at end of life
+!  REAL(r64)    :: ValueAtReplacement = 0.0 ! residual value at end of life
   INTEGER :: LineNumber         = -1  ! number of line item in detail list
-  REAL    :: Qty                = 0.0 ! quantity in calculations (can be input)
+  REAL(r64)    :: Qty                = 0.0 ! quantity in calculations (can be input)
   Character(len=MaxNameLength)  :: Units = ''! Reported units
-  REAL    :: ValuePer           = 0.0 ! Cost used in final calculation
-  REAL    :: LineSubTotal       = 0.0 ! line item total  Qty * ValuePer
+  REAL(r64)    :: ValuePer           = 0.0 ! Cost used in final calculation
+  REAL(r64)    :: LineSubTotal       = 0.0 ! line item total  Qty * ValuePer
 END TYPE CostLineItemStruct
 
 TYPE  :: CostAdjustmentStruct
-  REAL    :: LineItemTot        != 0.0 ! holds total from line item cost calculations
-  REAL    :: MiscCostperSqMeter != 0.0 ! holds user-defined constant cost model
-  REAL    :: DesignFeeFrac      != 0.0 ! holds user-defined fraction for design fees
-  REAL    :: ContractorFeeFrac  != 0.0 ! holds user-defined fraction for contractor fees
-  REAL    :: ContingencyFrac    != 0.0 ! holds user-defined fraction for contingencies
-  REAL    :: BondCostFrac       != 0.0 ! holds user-defined fraction for bonding costs
-  REAL    :: CommissioningFrac  != 0.0 ! holds user-defined fraction for commissioning costs
-  REAL    :: RegionalModifier   != 1.0 ! holds user-defined multiplier to account for regional diffs
-  REAL    :: GrandTotal         != 0.0 ! the Grand Total of all line items plus all other costs
+  REAL(r64)    :: LineItemTot        != 0.0 ! holds total from line item cost calculations
+  REAL(r64)    :: MiscCostperSqMeter != 0.0 ! holds user-defined constant cost model
+  REAL(r64)    :: DesignFeeFrac      != 0.0 ! holds user-defined fraction for design fees
+  REAL(r64)    :: ContractorFeeFrac  != 0.0 ! holds user-defined fraction for contractor fees
+  REAL(r64)    :: ContingencyFrac    != 0.0 ! holds user-defined fraction for contingencies
+  REAL(r64)    :: BondCostFrac       != 0.0 ! holds user-defined fraction for bonding costs
+  REAL(r64)    :: CommissioningFrac  != 0.0 ! holds user-defined fraction for commissioning costs
+  REAL(r64)    :: RegionalModifier   != 1.0 ! holds user-defined multiplier to account for regional diffs
+  REAL(r64)    :: GrandTotal         != 0.0 ! the Grand Total of all line items plus all other costs
 END TYPE CostAdjustmentStruct
 
           ! INTERFACE BLOCK SPECIFICATIONS

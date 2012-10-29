@@ -62,44 +62,44 @@ MODULE HeatBalanceHAMTManager
   INTEGER, PARAMETER :: ittermax=150 ! Maximum Number of itterations
   INTEGER, PARAMETER ::  adjmax=6    ! Maximum Number of Adjacent Cells
 
-  REAL, PARAMETER :: wdensity=1000.   ! Density of water kg.m-3
-  REAL, PARAMETER :: wspech=4180.     ! Specific Heat Capacity of Water J.kg-1.K-1 (at 20C)
-  REAL, PARAMETER :: whv=2489000.     ! Evaporation enthalpy of water J.kg-1
-  REAL, PARAMETER :: convt=0.002     ! Temperature convergence limit
-  REAL, PARAMETER :: qvplim=100000.   ! Maximum latent heat W
-  REAL, PARAMETER :: rhmax=1.01      ! Maximum RH value
+  REAL(r64), PARAMETER :: wdensity=1000.d0   ! Density of water kg.m-3
+  REAL(r64), PARAMETER :: wspech=4180.d0     ! Specific Heat Capacity of Water J.kg-1.K-1 (at 20C)
+  REAL(r64), PARAMETER :: whv=2489000.d0     ! Evaporation enthalpy of water J.kg-1
+  REAL(r64), PARAMETER :: convt=0.002d0     ! Temperature convergence limit
+  REAL(r64), PARAMETER :: qvplim=100000.d0   ! Maximum latent heat W
+  REAL(r64), PARAMETER :: rhmax=1.01d0      ! Maximum RH value
 
   ! DERIVED TYPE DEFINITIONS:
   TYPE :: subcell
 
      INTEGER :: matid=-1                  ! Material Id Number
      INTEGER :: sid=-1                    ! Surface Id Number
-     REAL :: Qadds=0.0            ! Additional sources of heat
-     REAL :: density=-1.0         ! Density
-     REAL :: wthermalc=0.0        ! Moisture Dependant Thermal Conductivity
-     REAL :: spech=0.0            ! Specific Heat capacity
-     REAL :: htc=-1.0             ! Heat Transfer Coefficient
-     REAL :: vtc=-1.0             ! Vapor Transfer Coefficient
-     REAL :: mu=-1.0              ! Vapor Diffusion resistance Factor
-     REAL :: volume=0.0           ! Cell Volume
-     REAL :: temp=0.0
-     REAL :: tempp1=0.0
-     REAL :: tempp2=0.0
-     REAL :: wreport=0.0          ! Water content for reporting
-     REAL :: water=0.0            ! Water Content of cells
-     REAL :: vp=0.0               ! Vapor Pressure
-     REAL :: vpp1=0.0             ! Vapor Pressure
-     REAL :: vpsat=0.0            ! Saturation Vapor Pressure
-     REAL :: rh=0.1
-     REAL :: rhp1=0.1
-     REAL :: rhp2=0.1             ! Relative Humidity
-     REAL :: rhp=10.              ! cell relative humidity (percent - reporting)
-     REAL :: dwdphi=-1.0                  ! Moisture storage capacity
-     REAL :: dw=-1.0                      ! Liquid transport Coefficient
-     REAL, DIMENSION(3) :: origin=0.0 ! Cell origin. The geometric centre of the cell.
-     REAL, DIMENSION(3) :: length=0.0 ! Cell lengths
-     REAL, DIMENSION(6) :: overlap=0.0 ! Area of overlap
-     REAL, DIMENSION(6) :: dist=0.0   ! distance between cell origins
+     REAL(r64) :: Qadds=0.0d0            ! Additional sources of heat
+     REAL(r64) :: density=-1.0d0         ! Density
+     REAL(r64) :: wthermalc=0.0d0        ! Moisture Dependant Thermal Conductivity
+     REAL(r64) :: spech=0.0d0            ! Specific Heat capacity
+     REAL(r64) :: htc=-1.0d0             ! Heat Transfer Coefficient
+     REAL(r64) :: vtc=-1.0d0             ! Vapor Transfer Coefficient
+     REAL(r64) :: mu=-1.0d0              ! Vapor Diffusion resistance Factor
+     REAL(r64) :: volume=0.0d0           ! Cell Volume
+     REAL(r64) :: temp=0.0d0
+     REAL(r64) :: tempp1=0.0d0
+     REAL(r64) :: tempp2=0.0d0
+     REAL(r64) :: wreport=0.0d0          ! Water content for reporting
+     REAL(r64) :: water=0.0d0            ! Water Content of cells
+     REAL(r64) :: vp=0.0d0               ! Vapor Pressure
+     REAL(r64) :: vpp1=0.0d0             ! Vapor Pressure
+     REAL(r64) :: vpsat=0.0d0            ! Saturation Vapor Pressure
+     REAL(r64) :: rh=0.1d0
+     REAL(r64) :: rhp1=0.1d0
+     REAL(r64) :: rhp2=0.1d0             ! Relative Humidity
+     REAL(r64) :: rhp=10.d0              ! cell relative humidity (percent - reporting)
+     REAL(r64) :: dwdphi=-1.0d0                  ! Moisture storage capacity
+     REAL(r64) :: dw=-1.0d0                      ! Liquid transport Coefficient
+     REAL(r64), DIMENSION(3) :: origin=0.0d0 ! Cell origin. The geometric centre of the cell.
+     REAL(r64), DIMENSION(3) :: length=0.0d0 ! Cell lengths
+     REAL(r64), DIMENSION(6) :: overlap=0.0d0 ! Area of overlap
+     REAL(r64), DIMENSION(6) :: dist=0.0d0   ! distance between cell origins
      INTEGER, DIMENSION(6) :: adjs=0
      INTEGER, DIMENSION(6) :: adjsl=0
   END TYPE subcell
@@ -118,22 +118,22 @@ MODULE HeatBalanceHAMTManager
   INTEGER, DIMENSION(:), ALLOCATABLE :: Intcell
   INTEGER, DIMENSION(:), ALLOCATABLE :: IntConcell
 
-  REAL, DIMENSION(:), ALLOCATABLE :: watertot
-  REAL, DIMENSION(:), ALLOCATABLE :: surfrh
-  REAL, DIMENSION(:), ALLOCATABLE :: surfextrh
-  REAL, DIMENSION(:), ALLOCATABLE :: surftemp
-  REAL, DIMENSION(:), ALLOCATABLE :: surfexttemp
-  REAL, DIMENSION(:), ALLOCATABLE :: surfvp
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: watertot
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: surfrh
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: surfextrh
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: surftemp
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: surfexttemp
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: surfvp
 
-  REAL, DIMENSION(:), ALLOCATABLE :: extvtc  ! External Surface vapor transfer coefficient
-  REAL, DIMENSION(:), ALLOCATABLE :: intvtc  ! Internal Surface Vapor Transfer Coefficient
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: extvtc  ! External Surface vapor transfer coefficient
+  REAL(r64), DIMENSION(:), ALLOCATABLE :: intvtc  ! Internal Surface Vapor Transfer Coefficient
   LOGICAL, DIMENSION(:), ALLOCATABLE :: extvtcflag  ! External Surface vapor transfer coefficient flag
   LOGICAL, DIMENSION(:), ALLOCATABLE :: intvtcflag  ! Internal Surface Vapor Transfer Coefficient flag
   LOGICAL, DIMENSION(:), ALLOCATABLE :: MyEnvrnFlag ! Flag to reset surface properties.
 
 
 
-  REAL :: deltat=0.0            ! time step in seconds
+  REAL(r64) :: deltat=0.0d0            ! time step in seconds
 
   INTEGER :: TotCellsMax=0         ! Maximum number of cells per material
 
@@ -175,8 +175,8 @@ CONTAINS
 
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(In) :: SurfNum
-    REAL, INTENT(inout) :: TempSurfInTmp
-    REAL, INTENT(inout) :: TempSurfOutTmp
+    REAL(r64), INTENT(inout) :: TempSurfInTmp
+    REAL(r64), INTENT(inout) :: TempSurfOutTmp
 
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -254,11 +254,11 @@ CONTAINS
     LOGICAL,DIMENSION(:),ALLOCATABLE :: lAlphaBlanks
     LOGICAL,DIMENSION(:),ALLOCATABLE :: lNumericBlanks
 
-    REAL,DIMENSION(:),ALLOCATABLE ::  NumArray
+    REAL(r64),DIMENSION(:),ALLOCATABLE ::  NumArray
 
-    REAL :: dumrh
-    REAL :: dumdata
-    REAL :: avdata
+    REAL(r64) :: dumrh
+    REAL(r64) :: dumdata
+    REAL(r64) :: avdata
 
     INTEGER :: MaxNums
     INTEGER :: MaxAlphas
@@ -693,7 +693,7 @@ CONTAINS
     ! na
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
-    REAL, PARAMETER :: adjdist=0.00005 ! Allowable distance between two cells, also used as limit on cell length
+    REAL(r64), PARAMETER :: adjdist=0.00005d0 ! Allowable distance between two cells, also used as limit on cell length
     CHARACTER(len=*), PARAMETER :: RoutineName='InitCombinedHeatAndMoistureFiniteElement: '
 
 
@@ -721,13 +721,13 @@ CONTAINS
 
 
 
-    REAL :: runor
-    REAL :: high1
-    REAL :: low2
-    REAL :: testlen
-    REAL :: waterd ! water density
+    REAL(r64) :: runor
+    REAL(r64) :: high1
+    REAL(r64) :: low2
+    REAL(r64) :: testlen
+    REAL(r64) :: waterd ! water density
 
-    deltat=TimeStepZone*3600.0
+    deltat=TimeStepZone*3600.0d0
 
 
     ! Check the materials information and work out how many cells are required.
@@ -778,7 +778,7 @@ CONTAINS
                    CALL ShowContinueError('Reference Material="'//TRIM(Material(matid)%Name)//'"'//  &
                      ' does not have thermal conductivity data. Using fixed value.')
                    Material(matid)%ntc=2
-                   Material(matid)%tcwater(1)=0.0
+                   Material(matid)%tcwater(1)=0.0d0
                    Material(matid)%tcdata(1)=Material(matid)%Conductivity
                    Material(matid)%tcwater(2)=Material(matid)%isodata(Material(matid)%niso)
                    Material(matid)%tcdata(2)=Material(matid)%Conductivity
@@ -845,43 +845,43 @@ CONTAINS
           cid=cid+1
           firstcell(sid)=cid
           ExtConcell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
 
           ! Air Radiation Cell
           cid=cid+1
           ExtRadcell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
 
           ! Sky Cell
           cid=cid+1
           ExtSkycell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
 
           ! Ground Cell
           cid=cid+1
           ExtGrncell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
           runor=runor+ cells(cid)%length(1)
 
           ! External Virtual Cell
           cid=cid+1
           Extcell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
           runor=runor+ cells(cid)%length(1)
 
 
@@ -909,10 +909,10 @@ CONTAINS
 
                 ! Make cells smaller near the surface
                 cells(cid)%length(1)=Material(matid)%Thickness* &
-                     ((SIN(pi*(-REAL(did)/REAL(Material(matid)%divs))-pi/2.0)/2.0)- &
-                     (SIN(pi*(-REAL(did-1)/REAL(Material(matid)%divs))-pi/2.0)/2.0))
+                     ((SIN(pi*(-REAL(did)/REAL(Material(matid)%divs))-pi/2.0d0)/2.0d0)- &
+                     (SIN(pi*(-REAL(did-1)/REAL(Material(matid)%divs))-pi/2.0d0)/2.0d0))
 
-                cells(cid)%origin(1)=runor+cells(cid)%length(1)/2.0
+                cells(cid)%origin(1)=runor+cells(cid)%length(1)/2.0d0
                 runor=runor+cells(cid)%length(1)
 
                 cells(cid)%volume=cells(cid)%length(1)*Surface(sid)%Area
@@ -924,19 +924,19 @@ CONTAINS
           cid=cid+1
           Intcell(sid)=cid
           cells(cid)%sid=sid
-          cells(cid)%rh=0.0
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)=cells(cid)%length(1)/2.0+runor
+          cells(cid)%rh=0.0d0
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)=cells(cid)%length(1)/2.0d0+runor
           runor=runor+ cells(cid)%length(1)
 
           ! Air Convection Cell
           cid=cid+1
           lastcell(sid)=cid
           IntConcell(sid)=cid
-          cells(cid)%rh=0.0
+          cells(cid)%rh=0.0d0
           cells(cid)%sid=sid
-          cells(cid)%length(1)=0.01
-          cells(cid)%origin(1)= cells(cid)%length(1)/2.0+runor
+          cells(cid)%length(1)=0.01d0
+          cells(cid)%origin(1)= cells(cid)%length(1)/2.0d0+runor
        ENDIF
     ENDDO
 
@@ -945,8 +945,8 @@ CONTAINS
     DO cid1=1,TotCellsMax
        DO cid2=1,TotCellsMax
           IF((cid1/=cid2).AND.(cells(cid1)%sid==cells(cid2)%sid))THEN
-             high1=cells(cid1)%origin(1)+cells(cid1)%length(1)/2.0
-             low2=cells(cid2)%origin(1)-cells(cid2)%length(1)/2.0
+             high1=cells(cid1)%origin(1)+cells(cid1)%length(1)/2.0d0
+             low2=cells(cid2)%origin(1)-cells(cid2)%length(1)/2.0d0
              IF(ABS(low2-high1)<adjdist)THEN
                 adj1=0
                 DO ii=1,adjmax
@@ -967,8 +967,8 @@ CONTAINS
                 sid=cells(cid1)%sid
                 cells(cid1)%overlap(adj1)=Surface(sid)%Area
                 cells(cid2)%overlap(adj2)=Surface(sid)%Area
-                cells(cid1)%dist(adj1)=cells(cid1)%length(1)/2.0
-                cells(cid2)%dist(adj2)=cells(cid2)%length(1)/2.0
+                cells(cid1)%dist(adj1)=cells(cid1)%length(1)/2.0d0
+                cells(cid2)%dist(adj2)=cells(cid2)%length(1)/2.0d0
              ENDIF
           ENDIF
        ENDDO
@@ -983,8 +983,8 @@ CONTAINS
     DO sid=1,TotSurfaces
        IF (.not. Surface(sid)%HeatTransSurf) CYCLE
        IF(Surface(sid)%Class /= SurfaceClass_Window)THEN
-          cells(Extcell(sid))%origin(1)=cells(Extcell(sid))%origin(1)+cells(Extcell(sid))%length(1)/2.0
-          cells(Intcell(sid))%origin(1)=cells(Intcell(sid))%origin(1)-cells(Intcell(sid))%length(1)/2.0
+          cells(Extcell(sid))%origin(1)=cells(Extcell(sid))%origin(1)+cells(Extcell(sid))%length(1)/2.0d0
+          cells(Intcell(sid))%origin(1)=cells(Intcell(sid))%origin(1)-cells(Intcell(sid))%length(1)/2.0d0
           cells(Extcell(sid))%volume=0.0
           cells(Intcell(sid))%volume=0.0
           watertot(sid)=0.0
@@ -1070,8 +1070,8 @@ CONTAINS
 
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(in) :: sid
-    REAL, INTENT(inout) :: TempSurfInTmp
-    REAL, INTENT(inout) :: TempSurfOutTmp
+    REAL(r64), INTENT(inout) :: TempSurfInTmp
+    REAL(r64), INTENT(inout) :: TempSurfOutTmp
 
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1084,28 +1084,28 @@ CONTAINS
     ! na
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    REAL :: TempSurfInP
-    REAL :: RhoIn
-    REAL :: RhoOut
-    REAL :: torsum
-    REAL :: oorsum
-    REAL :: phioosum
-    REAL :: phiorsum
-    REAL :: vpoosum
-    REAL :: vporsum
-    REAL :: rhr1
-    REAL :: rhr2
-    REAL :: wcap
-    REAL :: thermr1
-    REAL :: thermr2
-    REAL :: tcap
-    REAL :: qvp
-    REAL :: vaporr1
-    REAL :: vaporr2
-    REAL :: vpdiff
-    REAL :: sumtp1
-    REAL :: tempmax
-    REAL :: tempmin
+    REAL(r64) :: TempSurfInP
+    REAL(r64) :: RhoIn
+    REAL(r64) :: RhoOut
+    REAL(r64) :: torsum
+    REAL(r64) :: oorsum
+    REAL(r64) :: phioosum
+    REAL(r64) :: phiorsum
+    REAL(r64) :: vpoosum
+    REAL(r64) :: vporsum
+    REAL(r64) :: rhr1
+    REAL(r64) :: rhr2
+    REAL(r64) :: wcap
+    REAL(r64) :: thermr1
+    REAL(r64) :: thermr2
+    REAL(r64) :: tcap
+    REAL(r64) :: qvp
+    REAL(r64) :: vaporr1
+    REAL(r64) :: vaporr2
+    REAL(r64) :: vpdiff
+    REAL(r64) :: sumtp1
+    REAL(r64) :: tempmax
+    REAL(r64) :: tempmin
 
     INTEGER :: ii
     INTEGER :: matid
@@ -1120,25 +1120,25 @@ CONTAINS
     INTEGER, SAVE :: qvpErrCount=0
 !    INTEGER, SAVE :: tempErrReport=0
     INTEGER, SAVE :: qvpErrreport=0
-    REAL :: denominator
+    REAL(r64) :: denominator
 
 
     IF(BeginEnvrnFlag .AND. MyEnvrnFlag(sid))THEN
-       cells(Extcell(sid))%rh=0.0
-       cells(Extcell(sid))%rhp1=0.0
-       cells(Extcell(sid))%rhp2=0.0
+       cells(Extcell(sid))%rh=0.0D0
+       cells(Extcell(sid))%rhp1=0.0D0
+       cells(Extcell(sid))%rhp2=0.0D0
 
-       cells(Extcell(sid))%temp=10.0
-       cells(Extcell(sid))%tempp1=10.0
-       cells(Extcell(sid))%tempp2=10.0
+       cells(Extcell(sid))%temp=10.0D0
+       cells(Extcell(sid))%tempp1=10.0D0
+       cells(Extcell(sid))%tempp2=10.0D0
 
-       cells(Intcell(sid))%rh=0.0
-       cells(Intcell(sid))%rhp1=0.0
-       cells(Intcell(sid))%rhp2=0.0
+       cells(Intcell(sid))%rh=0.0D0
+       cells(Intcell(sid))%rhp1=0.0D0
+       cells(Intcell(sid))%rhp2=0.0D0
 
-       cells(Intcell(sid))%temp=10.0
-       cells(Intcell(sid))%tempp1=10.0
-       cells(Intcell(sid))%tempp2=10.0
+       cells(Intcell(sid))%temp=10.0D0
+       cells(Intcell(sid))%tempp1=10.0D0
+       cells(Intcell(sid))%tempp2=10.0D0
 
        DO cid=Extcell(sid)+1,Intcell(sid)-1
           matid=cells(cid)%matid
@@ -1163,7 +1163,7 @@ CONTAINS
     IF (Surface(sid)%ExtBoundCond == OtherSideCondModeledExt) THEN
      !CR8046 switch modeled rad temp for sky temp.
       cells(ExtSkycell(sid))%temp =  OSCM(Surface(sid)%OSCMPtr)%TRad
-      cells(Extcell(sid))%Qadds= 0.0 ! eliminate incident shortwave on underlying surface
+      cells(Extcell(sid))%Qadds= 0.0D0 ! eliminate incident shortwave on underlying surface
     ELSE
       cells(ExtSkycell(sid))%temp = SkyTemp
 
@@ -1220,7 +1220,7 @@ CONTAINS
           cells(ExtConcell(sid))%vtc= &
                HMassConvExtFD(sid)*RhoOut/(PsyPsatFnTemp(TempOutsideAirFD(sid))*cells(ExtConcell(sid))%rh)
        ELSE
-          cells(ExtConcell(sid))%vtc=10000.0
+          cells(ExtConcell(sid))%vtc=10000.0d0
        ENDIF
     ENDIF
 
@@ -1234,7 +1234,7 @@ CONTAINS
           cells(IntConcell(sid))%vtc= &
                HMassConvInFD(sid)*RhoIn/(PsyPsatFnTemp(Mat(Surface(sid)%Zone))*cells(IntConcell(sid))%rh)
        ELSE
-          cells(IntConcell(sid))%vtc= 10000.0
+          cells(IntConcell(sid))%vtc= 10000.0d0
        ENDIF
     ENDIF
 ! PDB August 2009 End
@@ -1283,20 +1283,20 @@ CONTAINS
 
        !Calculate Heat and Vapor resistances,
        DO cid=Extcell(sid),Intcell(sid)
-          torsum=0.0
-          oorsum=0.0
-          vpdiff=0.0
+          torsum=0.0D0
+          oorsum=0.0D0
+          vpdiff=0.0D0
           DO ii=1,adjmax
              adj=cells(cid)%adjs(ii)
              adjl=cells(cid)%adjsl(ii)
              IF(adj==-1)EXIT
 
              IF(cells(cid)%htc>0)THEN
-                thermr1=1.0/(cells(cid)%overlap(ii)*cells(cid)%htc)
+                thermr1=1.0D0/(cells(cid)%overlap(ii)*cells(cid)%htc)
              ELSE IF(cells(cid)%matid>0)THEN
                 thermr1=cells(cid)%dist(ii)/(cells(cid)%overlap(ii)*cells(cid)%wthermalc)
              ELSE
-                thermr1=0.0
+                thermr1=0.0D0
              ENDIF
 
              IF(cells(cid)%vtc>0)THEN
@@ -1304,27 +1304,27 @@ CONTAINS
              ELSE IF(cells(cid)%matid>0)THEN
                 vaporr1=(cells(cid)%dist(ii)*cells(cid)%mu)/(cells(cid)%overlap(ii)*WVDC(cells(cid)%tempp1,OutBaroPress))
              ELSE
-                vaporr1=0.0
+                vaporr1=0.0D0
              ENDIF
 
              IF(cells(adj)%htc>0)THEN
-                thermr2=1.0/(cells(cid)%overlap(ii)*cells(adj)%htc)
+                thermr2=1.0D0/(cells(cid)%overlap(ii)*cells(adj)%htc)
              ELSE IF(cells(adj)%matid>0)THEN
                 thermr2=cells(adj)%dist(adjl)/(cells(cid)%overlap(ii)*cells(adj)%wthermalc)
              ELSE
-                thermr2=0.0
+                thermr2=0.0D0
              ENDIF
 
              IF(cells(adj)%vtc>0)THEN
-                vaporr2=1.0/(cells(cid)%overlap(ii)*cells(adj)%vtc)
+                vaporr2=1.0D0/(cells(cid)%overlap(ii)*cells(adj)%vtc)
              ELSE IF(cells(adj)%matid>0)THEN
                 vaporr2=cells(adj)%mu*cells(adj)%dist(adjl)/(WVDC(cells(adj)%tempp1,OutBaroPress)*cells(cid)%overlap(ii))
              ELSE
-                vaporr2=0.0
+                vaporr2=0.0D0
              ENDIF
 
              IF(thermr1+thermr2>0)THEN
-                oorsum=oorsum+1.0/(thermr1+thermr2)
+                oorsum=oorsum+1.0D0/(thermr1+thermr2)
                 torsum=torsum+cells(adj)%tempp1/(thermr1+thermr2)
              ENDIF
              IF(vaporr1+vaporr2>0)THEN
@@ -1339,7 +1339,7 @@ CONTAINS
           tcap=((cells(cid)%density*cells(cid)%spech+cells(cid)%water*wspech)*cells(cid)%volume)
 
           ! calculate the latent heat if wanted and check for divergence
-          qvp=0.0
+          qvp=0.0D0
           IF((cells(cid)%matid>0).AND.(latswitch))THEN
              qvp=vpdiff*whv
           ENDIF
@@ -1352,7 +1352,7 @@ CONTAINS
                    CALL ShowRecurringWarningErrorAtEnd('HeatAndMoistureTransfer: Large Latent Heat Errors ',qvpErrReport)
                 ENDIF
              ENDIF
-             qvp=0.0
+             qvp=0.0D0
           ENDIF
 
           ! Calculate the temperature for the next time step
@@ -1505,7 +1505,7 @@ CONTAINS
 
     TempSurfInP=cells(Intcell(sid))%rhp1*PsyPsatFnTemp(cells(Intcell(sid))%tempp1)
 
-    RhoVaporSurfIn(sid)=TempSurfInP/(461.52*(Mat(Surface(sid)%Zone)+KelvinConv))
+    RhoVaporSurfIn(sid)=TempSurfInP/(461.52d0*(Mat(Surface(sid)%Zone)+KelvinConv))
 
   END SUBROUTINE CalcHeatBalHAMT
   SUBROUTINE UpdateHeatBalHAMT(sid)
@@ -1546,32 +1546,32 @@ CONTAINS
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: cid
-    REAL :: watermass
-    REAL :: matmass
-!unused1208    REAL, SAVE :: InOld=0.0
-!unused1208    REAL, SAVE :: OutOld=0.0
+    REAL(r64) :: watermass
+    REAL(r64) :: matmass
+!unused1208    REAL(r64), SAVE :: InOld=0.0D0
+!unused1208    REAL(r64), SAVE :: OutOld=0.0D0
 
 
     !Update Temperatures and RHs. Calculate report variables
-    matmass=0.0
-    watermass=0.0
+    matmass=0.0D0
+    watermass=0.0D0
     DO cid=firstcell(sid),lastcell(sid)
        ! fix HAMT values for this surface
        cells(cid)%temp=cells(cid)%tempp1
        cells(cid)%rh=cells(cid)%rhp1
-       cells(cid)%rhp=cells(cid)%rh*100.
-       IF(cells(cid)%density>0.0)THEN
+       cells(cid)%rhp=cells(cid)%rh*100.d0
+       IF(cells(cid)%density>0.0d0)THEN
           cells(cid)%wreport=cells(cid)%water/cells(cid)%density
           watermass=watermass+(cells(cid)%water*cells(cid)%volume)
           matmass=matmass+(cells(cid)%density*cells(cid)%volume)
        ENDIF
     ENDDO
 
-    watertot(sid)=0.0
+    watertot(sid)=0.0d0
     IF(matmass>0) watertot(sid)=watermass/matmass
 
-    surfrh(sid)=100.0*cells(Intcell(sid))%rh
-    surfextrh(sid)=100.0*cells(Extcell(sid))%rh
+    surfrh(sid)=100.0d0*cells(Intcell(sid))%rh
+    surfextrh(sid)=100.0d0*cells(Extcell(sid))%rh
     surftemp(sid)=cells(Intcell(sid))%temp
     surfexttemp(sid)=cells(Extcell(sid))%temp
     surfvp(sid)=RHTOVP(cells(Intcell(sid))%rh,cells(Intcell(sid))%temp)
@@ -1602,11 +1602,11 @@ CONTAINS
 
     ! SUBROUTINE ARGUMENT DEFINITIONS:
     INTEGER, INTENT(in) :: ndata
-    REAL, INTENT(in), DIMENSION(ndata) :: xx
-    REAL, INTENT(in), DIMENSION(ndata) :: yy
-    REAL, INTENT(in) :: invalue
-    REAL, INTENT(out) :: outvalue
-    REAL, INTENT(out), OPTIONAL :: outgrad
+    REAL(r64), INTENT(in), DIMENSION(ndata) :: xx
+    REAL(r64), INTENT(in), DIMENSION(ndata) :: yy
+    REAL(r64), INTENT(in) :: invalue
+    REAL(r64), INTENT(out) :: outvalue
+    REAL(r64), INTENT(out), OPTIONAL :: outgrad
 
 
     ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1620,15 +1620,15 @@ CONTAINS
 
     ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-    REAL :: xxlow
-    REAL :: xxhigh
-    REAL :: yylow
-    REAL :: yyhigh
-    REAL :: mygrad
+    REAL(r64) :: xxlow
+    REAL(r64) :: xxhigh
+    REAL(r64) :: yylow
+    REAL(r64) :: yyhigh
+    REAL(r64) :: mygrad
     INTEGER :: step
 
-    mygrad=0.0
-    outvalue=0.0
+    mygrad=0.0d0
+    outvalue=0.0d0
 
     IF(ndata>1)THEN
        xxlow=xx(1)
@@ -1645,7 +1645,7 @@ CONTAINS
           mygrad=(yyhigh-yylow)/(xxhigh-xxlow)
           outvalue=(invalue-xxlow)*mygrad+yylow
 ! PDB August 2009 bug fix
-        else if (abs(xxhigh-xxlow)<0.0000000001) then
+        else if (abs(xxhigh-xxlow)<0.0000000001d0) then
           outvalue=yylow
       ENDIF
     ENDIF
@@ -1657,7 +1657,7 @@ CONTAINS
     RETURN
   END SUBROUTINE interp
 
-  REAL FUNCTION RHtoVP(RH,Temperature)
+  REAL(r64) FUNCTION RHtoVP(RH,Temperature)
     ! FUNCTION INFORMATION:
     !       AUTHOR         Phillip Biddulph
     !       DATE WRITTEN   June 2008
@@ -1680,8 +1680,8 @@ CONTAINS
 
     ! FUNCTION ARGUMENT DEFINITIONS:
 
-    REAL, INTENT(IN) :: RH
-    REAL, INTENT(IN) :: Temperature
+    REAL(r64), INTENT(IN) :: RH
+    REAL(r64), INTENT(IN) :: Temperature
 
 
     ! FUNCTION PARAMETER DEFINITIONS:
@@ -1695,7 +1695,7 @@ CONTAINS
 
     ! FUNCTION LOCAL VARIABLE DECLARATIONS:
 
-    REAL :: VPSat
+    REAL(r64) :: VPSat
 
     VPSat=PsyPsatFnTemp(Temperature)
 
@@ -1703,7 +1703,7 @@ CONTAINS
 
     RETURN
   END FUNCTION RHtoVP
-  REAL FUNCTION WVDC(Temperature,ambp)
+  REAL(r64) FUNCTION WVDC(Temperature,ambp)
     ! FUNCTION INFORMATION:
     !       AUTHOR         Phillip Biddulph
     !       DATE WRITTEN   June 2008
@@ -1727,8 +1727,8 @@ CONTAINS
     IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
     ! FUNCTION ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN) :: Temperature
-    REAL, INTENT(IN) :: ambp
+    REAL(r64), INTENT(IN) :: Temperature
+    REAL(r64), INTENT(IN) :: ambp
 
 
     ! FUNCTION PARAMETER DEFINITIONS:
@@ -1745,7 +1745,7 @@ CONTAINS
     !
 
 
-    WVDC=(2.*10**-7*(Temperature+KelvinConv)**0.81)/ambp    !RS: Debugging: 102612
+    WVDC=(2.d-7*(Temperature+KelvinConv)**0.81d0)/ambp
 
     RETURN
   END FUNCTION WVDC

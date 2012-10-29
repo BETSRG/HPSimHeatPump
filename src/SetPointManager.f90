@@ -183,7 +183,7 @@ TYPE DefineScheduledSetPointManager ! Derived type for Scheduled Setpoint Manage
   INTEGER      :: NumCtrlNodes                 =0
   CHARACTER(len=MaxNameLength) :: CtrlNodeListName=' '
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes
-  REAL    :: SetPt                        =0.0
+  REAL(r64)    :: SetPt                        =0.0
 END TYPE DefineScheduledSetPointManager
 
 TYPE DefineSchedDualSetPointManager ! Derived type for Scheduled Dual Setpoint Manager
@@ -197,28 +197,28 @@ TYPE DefineSchedDualSetPointManager ! Derived type for Scheduled Dual Setpoint M
   INTEGER      :: NumCtrlNodes                =0
   CHARACTER(len=MaxNameLength) :: CtrlNodeListName=' '
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes
-  REAL    :: SetPtHi                     =0.0
-  REAL    :: SetPtLo                     =0.0
+  REAL(r64)    :: SetPtHi                     =0.0
+  REAL(r64)    :: SetPtLo                     =0.0
 END TYPE DefineSchedDualSetPointManager
 
 TYPE DefineOutsideAirSetPointManager ! Derived type for Outside Air Setpoint Manager Data
   CHARACTER(len=MaxNameLength) :: Name         =' '
   CHARACTER(len=MaxNameLength) :: CtrlVarType  =' ' ! type of variable to be set
   INTEGER                      :: CtrlTypeMode =0   ! set to iCtrlVarType_xxxx
-  REAL    :: OutLowSetPt1                 =0.0 ! 1st setpoint at outside low
-  REAL    :: OutLow1                      =0.0 ! 1st Outside low
-  REAL    :: OutHighSetPt1                =0.0 ! 1st setpoint at outside high
-  REAL    :: OutHigh1                     =0.0 ! 1st Outside high
+  REAL(r64)    :: OutLowSetPt1                 =0.0 ! 1st setpoint at outside low
+  REAL(r64)    :: OutLow1                      =0.0 ! 1st Outside low
+  REAL(r64)    :: OutHighSetPt1                =0.0 ! 1st setpoint at outside high
+  REAL(r64)    :: OutHigh1                     =0.0 ! 1st Outside high
   CHARACTER(len=MaxNameLength) :: Sched        =' ' ! Optional schedule
   INTEGER      :: SchedPtr                     =0   ! Schedule index
-  REAL    :: OutLowSetPt2                 =0.0 ! 2nd setpoint at outside low (optional)
-  REAL    :: OutLow2                      =0.0 ! 2nd Outside low (optional)
-  REAL    :: OutHighSetPt2                =0.0 ! 2nd setpoint at outside high (optional)
-  REAL    :: OutHigh2                     =0.0 ! 2nd Outside high (optional)
+  REAL(r64)    :: OutLowSetPt2                 =0.0 ! 2nd setpoint at outside low (optional)
+  REAL(r64)    :: OutLow2                      =0.0 ! 2nd Outside low (optional)
+  REAL(r64)    :: OutHighSetPt2                =0.0 ! 2nd setpoint at outside high (optional)
+  REAL(r64)    :: OutHigh2                     =0.0 ! 2nd Outside high (optional)
   INTEGER      :: NumCtrlNodes                 =0
   CHARACTER(len=MaxNameLength) :: CtrlNodeListName=' '
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes
-  REAL    :: SetPt                        =0.0
+  REAL(r64)    :: SetPt                        =0.0
 END TYPE DefineOutsideAirSetPointManager
 
 TYPE DefineSZReheatSetPointManager ! Derived type for the Single Zone Reheat Setpoint Manager data
@@ -229,8 +229,8 @@ TYPE DefineSZReheatSetPointManager ! Derived type for the Single Zone Reheat Set
   INTEGER                      :: ControlZoneNum   =0   ! number (index into Zone array) of control zone
   INTEGER                      :: ZoneNodeNum      =0   ! zone node number
   INTEGER                      :: ZoneInletNodeNum =0   ! inlet node number for the SZRH air
-  REAL                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
-  REAL                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
   INTEGER                      :: MixedAirNode     =0   ! mixed air node number
   INTEGER                      :: FanNodeIn        =0   ! fan inlet node number
   INTEGER                      :: FanNodeOut       =0   ! fan outlet node number
@@ -240,7 +240,7 @@ TYPE DefineSZReheatSetPointManager ! Derived type for the Single Zone Reheat Set
   INTEGER                      :: LoopInNode       =0   ! Primary Air System inlet node
   INTEGER      :: NumCtrlNodes                     =0
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes  ! node numbers of nodes where setpoint is to be set
-  REAL                    :: SetPt            =0.0 ! the setpoint
+  REAL(r64)                    :: SetPt            =0.0 ! the setpoint
 END TYPE DefineSZReheatSetPointManager
 
 TYPE DefineSZHeatingSetPointManager ! Derived type for the Single Zone Heating Setpoint Manager data
@@ -251,11 +251,11 @@ TYPE DefineSZHeatingSetPointManager ! Derived type for the Single Zone Heating S
   INTEGER                      :: ControlZoneNum   =0   ! number (index into Zone array) of control zone
   INTEGER                      :: ZoneNodeNum      =0   ! zone node number
   INTEGER                      :: ZoneInletNodeNum =0   ! inlet node number for the supply air
-  REAL                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
-  REAL                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
   INTEGER      :: NumCtrlNodes                     =0
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes  ! node numbers of nodes where setpoint is to be set
-  REAL                    :: SetPt            =0.0 ! the setpoint
+  REAL(r64)                    :: SetPt            =0.0 ! the setpoint
 END TYPE DefineSZHeatingSetPointManager
 
 TYPE DefineSZCoolingSetPointManager ! Derived type for the Single Zone Cooling Setpoint Manager data
@@ -266,11 +266,11 @@ TYPE DefineSZCoolingSetPointManager ! Derived type for the Single Zone Cooling S
   INTEGER                      :: ControlZoneNum   =0   ! number (index into Zone array) of control zone
   INTEGER                      :: ZoneNodeNum      =0   ! zone node number
   INTEGER                      :: ZoneInletNodeNum =0   ! inlet node number for the supply air
-  REAL                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
-  REAL                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                    :: MinSetTemp       =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                    :: MaxSetTemp       =0.0 ! maximum supply air setpoint temperature
   INTEGER      :: NumCtrlNodes                     =0
   INTEGER, DIMENSION(:), ALLOCATABLE      :: CtrlNodes  ! node numbers of nodes where setpoint is to be set
-  REAL                    :: SetPt            =0.0 ! the setpoint
+  REAL(r64)                    :: SetPt            =0.0 ! the setpoint
 END TYPE DefineSZCoolingSetPointManager
 
 TYPE DefineSZMinHumSetPointManager ! Derived Type for Single Zone Minimum Humidity Setpoint Manager data
@@ -283,7 +283,7 @@ TYPE DefineSZMinHumSetPointManager ! Derived Type for Single Zone Minimum Humidi
   INTEGER, DIMENSION(:), ALLOCATABLE :: ZoneNum         ! actual zone number ( index into Zone array)
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlZoneNum     ! index into ZoneEquipConfig
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineSZMinHumSetPointManager
 
 TYPE DefineSZMaxHumSetPointManager ! Derived Type for Single Zone Maximum Humidity Setpoint Manager data
@@ -296,7 +296,7 @@ TYPE DefineSZMaxHumSetPointManager ! Derived Type for Single Zone Maximum Humidi
   INTEGER, DIMENSION(:), ALLOCATABLE :: ZoneNum         ! actual zone number (index into Zone array)
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlZoneNum     ! index into ZoneEquipConfig
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineSZMaxHumSetPointManager
 
 TYPE DefineMixedAirSetPointManager
@@ -308,7 +308,7 @@ TYPE DefineMixedAirSetPointManager
   INTEGER                        :: FanOutNode     =0   ! Supplt fan outlet node number
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! node numbers of nodes where setpoint is to be set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
   LOGICAL                        :: MySetPointCheckFlag = .TRUE. ! used for mixed air SPM test for missing SP
 END TYPE DefineMixedAirSetPointManager
 
@@ -320,13 +320,13 @@ TYPE DefineOAPretreatSetPointManager
   INTEGER                        :: MixedOutNode   =0   ! mixed air outlet node number
   INTEGER                        :: OAInNode       =0   ! outside air inlet node number
   INTEGER                        :: ReturnInNode   =0   ! return air inlet node number
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
-  REAL                      :: MinSetHumRat   =0.0 ! minimum supply air setpoint humidity ratio [kg/kg]
-  REAL                      :: MaxSetHumRat   =0.0 ! maximum supply air setpoint humidity ratio [kg/kg]
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
+  REAL(r64)                      :: MinSetHumRat   =0.0 ! minimum supply air setpoint humidity ratio [kg/kg]
+  REAL(r64)                      :: MaxSetHumRat   =0.0 ! maximum supply air setpoint humidity ratio [kg/kg]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! node numbers of nodes where setpoint is to be set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
   LOGICAL                        :: MySetPointCheckFlag = .TRUE. ! used for DOAS SPM test for missing SP
 END TYPE DefineOAPretreatSetPointManager
 
@@ -336,13 +336,13 @@ TYPE DefineWarmestSetPointManager
   INTEGER                        :: CtrlTypeMode = 0    ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop that will use "warmest zone" strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
   INTEGER                        :: Strategy       =0   ! supply flow and temperature set strategy
                                                         ! 1 = MaxTemp
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineWarmestSetPointManager
 
 TYPE DefineColdestSetPointManager
@@ -351,13 +351,13 @@ TYPE DefineColdestSetPointManager
   INTEGER                        :: CtrlTypeMode   = 0  ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop that will use "coldest zone" strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
   INTEGER                        :: Strategy       =0   ! supply flow and temperature set strategy
                                                         ! 2 = MinTemp
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineColdestSetPointManager
 
 TYPE DefWarmestSetPtManagerTempFlow
@@ -366,15 +366,15 @@ TYPE DefWarmestSetPtManagerTempFlow
   INTEGER                        :: CtrlTypeMode   =0   ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop that will use "warmest zone" strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature
   INTEGER                        :: Strategy       =0   ! supply flow and temperature set strategy
                                                         ! 1 = TempFirst, 2 = FlowFirst
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
-  REAL                      :: MinTurndown    =0.0 ! minimum fractional flow rate
-  REAL                      :: Turndown       =0.0 ! fractional flow rate
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: MinTurndown    =0.0 ! minimum fractional flow rate
+  REAL(r64)                      :: Turndown       =0.0 ! fractional flow rate
   INTEGER                        :: CritZoneNum    =0
   LOGICAL                        :: SimReady       =.false.
 END TYPE DefWarmestSetPtManagerTempFlow
@@ -389,7 +389,7 @@ TYPE DefRABFlowSetPointManager
   INTEGER                        :: AirLoopNum     = 0  ! index of named air loop
   CHARACTER(len=MaxNameLength)   :: Sched          =' ' ! name of a schedule of supply air setpoint temperatures
   INTEGER                        :: SchedPtr       = 0  ! index of the above schedule
-  REAL                      :: FlowSetPt      = 0. ! mass flow rate setpoint (kg/s)
+  REAL(r64)                      :: FlowSetPt      = 0. ! mass flow rate setpoint (kg/s)
   INTEGER                        :: RABMixInNode   = 0
   INTEGER                        :: SupMixInNode   = 0
   INTEGER                        :: MixOutNode     = 0
@@ -404,11 +404,11 @@ TYPE DefMultiZoneAverageCoolingSetPointManager ! derived type for SetpointManage
   INTEGER                        :: CtrlTypeMode = 0    ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop that will use "MultiZone:Cooling:Average" strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the temperature setpoint [C]
+  REAL(r64)                      :: SetPt          =0.0 ! the temperature setpoint [C]
 END TYPE DefMultiZoneAverageCoolingSetPointManager
 
 TYPE DefMultiZoneAverageHeatingSetPointManager ! derived type for SetpointManager:Multizone:Heating:Average data
@@ -417,11 +417,11 @@ TYPE DefMultiZoneAverageHeatingSetPointManager ! derived type for SetpointManage
   INTEGER                        :: CtrlTypeMode = 0    ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop that will use "MultiZone:Heating:Average" strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
-  REAL                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
+  REAL(r64)                      :: MinSetTemp     =0.0 ! minimum supply air setpoint temperature [C]
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! maximum supply air setpoint temperature [C]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the temperature setpoint [C]
+  REAL(r64)                      :: SetPt          =0.0 ! the temperature setpoint [C]
 END TYPE DefMultiZoneAverageHeatingSetPointManager
 
 TYPE DefMultiZoneAverageMinHumSetPointManager ! derived type for SetpointManager:MultiZone:MinimumHumidity:Average data
@@ -430,11 +430,11 @@ TYPE DefMultiZoneAverageMinHumSetPointManager ! derived type for SetpointManager
   INTEGER                        :: CtrlTypeMode   =0   ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop using MultiZone:MinimumHumidity:Average strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
-  REAL                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
+  REAL(r64)                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
 END TYPE DefMultiZoneAverageMinHumSetPointManager
 
 TYPE DefMultiZoneAverageMaxHumSetPointManager ! derived type for SetpointManager:MultiZone:MaximumHumidity:Average data
@@ -443,11 +443,11 @@ TYPE DefMultiZoneAverageMaxHumSetPointManager ! derived type for SetpointManager
   INTEGER                        :: CtrlTypeMode   =0   ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop using MultiZone:MaximumHumidity:Average strategy
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
-  REAL                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
+  REAL(r64)                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
 END TYPE DefMultiZoneAverageMaxHumSetPointManager
 
 TYPE DefMultiZoneMinHumSetPointManager    ! derived type for SetpointManager:MultiZone:Humidity:Minimum data
@@ -456,11 +456,11 @@ TYPE DefMultiZoneMinHumSetPointManager    ! derived type for SetpointManager:Mul
   INTEGER                        :: CtrlTypeMode   =0   ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop using SetpointManager:MultiZone:Humidity:Minimum
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
-  REAL                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
+  REAL(r64)                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
 END TYPE DefMultiZoneMinHumSetPointManager
 
 TYPE DefMultiZoneMaxHumSetPointManager    ! derived type for SetpointManager:MultiZone:Humidity:Maximum data
@@ -469,11 +469,11 @@ TYPE DefMultiZoneMaxHumSetPointManager    ! derived type for SetpointManager:Mul
   INTEGER                        :: CtrlTypeMode   =0   ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: AirLoopName    =' ' ! name of air loop using SetpointManager:MultiZone:Humidity:Maximum
   INTEGER                        :: AirLoopNum     =0   ! index of named air loop
-  REAL                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
-  REAL                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MinSetHum      =0.0 ! minimum supply air humidity ratio [kg/kg]
+  REAL(r64)                      :: MaxSetHum      =0.0 ! maximum supply air humidity ratio [kg/kg]
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose humidity ratio is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where humidity ratio is being set
-  REAL                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
+  REAL(r64)                      :: SetPt          =0.0 ! the humidity ratio setpoint [kg/kg]
 END TYPE DefMultiZoneMaxHumSetPointManager
 
 TYPE DefineFollowOATempSetPointManager
@@ -482,12 +482,12 @@ TYPE DefineFollowOATempSetPointManager
   INTEGER                        :: CtrlTypeMode = 0    ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength)   :: RefTempType    =' ' ! Reference Temperature type (choice OutdoorAirWetBulb/OutdoorAirDryBulb)
   INTEGER                        :: RefTypeMode    = 0  ! set to iRefTempType_WetBulb or iRefTempType_DryBulb
-  REAL                      :: Offset         =0.0 ! Offset temperature difference
-  REAL                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
+  REAL(r64)                      :: Offset         =0.0 ! Offset temperature difference
+  REAL(r64)                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineFollowOATempSetPointManager
 
 TYPE DefineFollowSysNodeTempSetPointManager
@@ -497,12 +497,12 @@ TYPE DefineFollowSysNodeTempSetPointManager
   INTEGER                        :: RefNodeNum     =0   ! reference node number
   CHARACTER(len=MaxNameLength)   :: RefTempType    =' ' ! Reference Temperature type (choice OutdoorAirWetBulb/OutdoorAirDryBulb)
   INTEGER                        :: RefTypeMode    = 0  ! set to iRefTempType_WetBulb or iRefTempType_DryBulb
-  REAL                      :: Offset         =0.0 ! Offset temperature difference
-  REAL                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
+  REAL(r64)                      :: Offset         =0.0 ! Offset temperature difference
+  REAL(r64)                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineFollowSysNodeTempSetPointManager
 
 TYPE DefineGroundTempSetPointManager
@@ -515,12 +515,12 @@ TYPE DefineGroundTempSetPointManager
                                                                  ! Site:GroundTemperature:Deep
                                                                  ! Site:GroundTemperature:FCfactorMethod
   INTEGER                        :: RefTypeMode    = 0  ! set to iRefGroundTempObjType_xxxx based on RefGroundTempObjType
-  REAL                      :: Offset         =0.0 ! Offset temperature difference
-  REAL                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
-  REAL                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
+  REAL(r64)                      :: Offset         =0.0 ! Offset temperature difference
+  REAL(r64)                      :: MinSetTemp     =0.0 ! Minimum supply air setpoint temperature
+  REAL(r64)                      :: MaxSetTemp     =0.0 ! Maximum supply air setpoint temperature
   INTEGER                        :: NumCtrlNodes   =0   ! number of nodes whose temperature is being set
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes       ! nodes where temperature is being set
-  REAL                      :: SetPt          =0.0 ! the setpoint
+  REAL(r64)                      :: SetPt          =0.0 ! the setpoint
 END TYPE DefineGroundTempSetPointManager
 
 TYPE DefineCondEntSetPointManager   ! derived type for SetpointManager:CondenserEnteringReset data
@@ -529,16 +529,16 @@ TYPE DefineCondEntSetPointManager   ! derived type for SetpointManager:Condenser
   INTEGER                      :: CtrlTypeMode               = 0     ! set to iCtrlVarType_xxxx
   CHARACTER(len=MaxNameLength) :: CondEntTempSched           = ' '   ! Optional schedule
   INTEGER                      :: CondEntTempSchedPtr        = 0     ! default condenser entering water temperature schedule Index
-  REAL                    :: TowerDsnInletAirWetBulb    = 0     ! cooling tower design inlet air wetbulb temperature
+  REAL(r64)                    :: TowerDsnInletAirWetBulb    = 0     ! cooling tower design inlet air wetbulb temperature
   INTEGER                      :: MinTwrWbCurve              = 0     ! minimum design wetbulb temperature curve name
   INTEGER                      :: MinOaWbCurve               = 0     ! minimum outside air wetbulb temperature curve name
   INTEGER                      :: OptCondEntCurve            = 0     ! optimized condenser entering water temperature curve name
-  REAL                    :: MinimumLiftTD              = 0     ! minimum lift
-  REAL                    :: MaxCondEntTemp             = 0     ! maximum condenser entering water temp
+  REAL(r64)                    :: MinimumLiftTD              = 0     ! minimum lift
+  REAL(r64)                    :: MaxCondEntTemp             = 0     ! maximum condenser entering water temp
   INTEGER                      :: NumCtrlNodes               = 0     ! number of nodes whose temperature is being set
   CHARACTER(len=MaxNameLength) :: CtrlNodeListName           = ' '
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes                    ! nodes where temperature is being set
-  REAL                    :: SetPt                      =0.0    ! the temperature set point [C]
+  REAL(r64)                    :: SetPt                      =0.0    ! the temperature set point [C]
   INTEGER                      :: ChillerIndexPlantSide      = 0     ! plant side chiller index
   INTEGER                      :: ChillerIndexDemandSide     = 0     ! demand side chiller index
   INTEGER                      :: BranchIndexPlantSide       = 0     ! plant side branch index
@@ -552,12 +552,12 @@ TYPE DefineIdealCondEntSetPointManager   ! derived type for SetpointManager:Cond
   CHARACTER(len=MaxNameLength) :: Name                       = ' '
   CHARACTER(len=MaxNameLength) :: CtrlVarType                = ' '   ! type of variable to be set
   INTEGER                      :: CtrlTypeMode               = 0     ! set to iCtrlVarType_xxxx
-  REAL                    :: MinimumLiftTD              = 0     ! minimum lift
-  REAL                    :: MaxCondEntTemp             = 0     ! maximum condenser entering water temp
+  REAL(r64)                    :: MinimumLiftTD              = 0     ! minimum lift
+  REAL(r64)                    :: MaxCondEntTemp             = 0     ! maximum condenser entering water temp
   INTEGER                      :: NumCtrlNodes               = 0     ! number of nodes whose temperature is being set
   CHARACTER(len=MaxNameLength) :: CtrlNodeListName           = ' '
   INTEGER, DIMENSION(:), ALLOCATABLE :: CtrlNodes                    ! nodes where temperature is being set
-  REAL                    :: SetPt                      = 0.0   ! the temperature set point [C]
+  REAL(r64)                    :: SetPt                      = 0.0   ! the temperature set point [C]
   INTEGER                      :: ChillerIndexPlantSide      = 0     ! plant side chiller index
   INTEGER                      :: BranchIndexPlantSide       = 0     ! plant side branch index
   INTEGER                      :: LoopIndexPlantSide         = 0     ! plant side loop index
@@ -1733,7 +1733,7 @@ DO SetPtMgrNum = 1,NumOAPretreatSetPtMgrs
   IF (OAPretreatSetPtMgr(SetPtMgrNum)%MinSetHumRat .LE. 0.0) THEN
     CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//' = '// TRIM(cAlphaArgs(1)))
     CALL ShowContinueError('Minimum setpoint humidity ratio <=0.0, resetting to 0.00001')
-    OAPretreatSetPtMgr(SetPtMgrNum)%MinSetHumRat = 0.00001
+    OAPretreatSetPtMgr(SetPtMgrNum)%MinSetHumRat = 0.00001d0
   ENDIF
   IF (OAPretreatSetPtMgr(SetPtMgrNum)%MaxSetHumRat .LE. 0.0) THEN
     CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//' = '// TRIM(cAlphaArgs(1)))
@@ -2000,7 +2000,7 @@ DO SetPtMgrNum = 1,NumWarmestSetPtMgrsTempFlow
          '=['//trim(RoundSigDigits(WarmestSetPtMgrTempFlow(SetPtMgrNum)%MinSetTemp,1))//'].')
   ENDIF
   WarmestSetPtMgrTempFlow(SetPtMgrNum)%MinTurndown = rNumericArgs(3)
-  IF (WarmestSetPtMgrTempFlow(SetPtMgrNum)%MinTurndown >= 0.8) THEN
+  IF (WarmestSetPtMgrTempFlow(SetPtMgrNum)%MinTurndown >= 0.8d0) THEN
     CALL ShowWarningError(RoutineName//TRIM(cCurrentModuleObject)//'="'//TRIM(cAlphaArgs(1))//'",')
     CALL ShowContinueError('...'//trim(cNumericFieldNames(3))//  &
     '=['//trim(RoundSigDigits(WarmestSetPtMgrTempFlow(SetPtMgrNum)%MinTurndown,2))//'] is greater than 0.8;')
@@ -4221,7 +4221,7 @@ IF ( (BeginEnvrnFlag .and. MyEnvrnFlag) .or. MyOneTimeFlag2) THEN
     DO CtrlNodeIndex=1,MZAverageCoolingSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZAverageCoolingSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
       IF (MZAverageCoolingSetPtMgr(SetPtMgrNum)%CtrlTypeMode == iCtrlVarType_Temp) THEN
-        Node(NodeNum)%TempSetPoint = 20. ! Set the setpoint
+        Node(NodeNum)%TempSetPoint = 20.d0 ! Set the setpoint
       END IF
     END DO
   END DO
@@ -4230,7 +4230,7 @@ IF ( (BeginEnvrnFlag .and. MyEnvrnFlag) .or. MyOneTimeFlag2) THEN
     DO CtrlNodeIndex=1,MZAverageHeatingSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZAverageHeatingSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
       IF (MZAverageHeatingSetPtMgr(SetPtMgrNum)%CtrlTypeMode == iCtrlVarType_Temp) THEN
-        Node(NodeNum)%TempSetPoint = 20.0 ! Set the setpoint
+        Node(NodeNum)%TempSetPoint = 20.0d0 ! Set the setpoint
       END IF
     END DO
   END DO
@@ -4238,28 +4238,28 @@ IF ( (BeginEnvrnFlag .and. MyEnvrnFlag) .or. MyOneTimeFlag2) THEN
   DO SetPtMgrNum=1,NumMZAverageMinHumSetPtMgrs
     DO CtrlNodeIndex=1,MZAverageMinHumSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZAverageMinHumSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
-      Node(NodeNum)%HumRatMin = 0.007 ! Set the setpoint
+      Node(NodeNum)%HumRatMin = 0.007d0 ! Set the setpoint
     END DO
   END DO
 
   DO SetPtMgrNum=1,NumMZAverageMaxHumSetPtMgrs
     DO CtrlNodeIndex=1,MZAverageMaxHumSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZAverageMaxHumSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
-      Node(NodeNum)%HumRatMax = 0.011 ! Set the setpoint
+      Node(NodeNum)%HumRatMax = 0.011d0 ! Set the setpoint
     END DO
   END DO
 
   DO SetPtMgrNum=1,NumMZMinHumSetPtMgrs
     DO CtrlNodeIndex=1,MZMinHumSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZMinHumSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
-      Node(NodeNum)%HumRatMin = 0.007 ! Set the setpoint
+      Node(NodeNum)%HumRatMin = 0.007d0 ! Set the setpoint
     END DO
   END DO
 
   DO SetPtMgrNum=1,NumMZMaxHumSetPtMgrs
     DO CtrlNodeIndex=1,MZMaxHumSetPtMgr(SetPtMgrNum)%NumCtrlNodes
       NodeNum = MZMaxHumSetPtMgr(SetPtMgrNum)%CtrlNodes(CtrlNodeIndex) ! Get the node number
-      Node(NodeNum)%HumRatMax = 0.011 ! Set the setpoint
+      Node(NodeNum)%HumRatMax = 0.011d0 ! Set the setpoint
     END DO
   END DO
 
@@ -4309,11 +4309,11 @@ IF ( (BeginEnvrnFlag .and. MyEnvrnFlag) .or. MyOneTimeFlag2) THEN
         ENDIF
       ELSE
         IF (FollowSysNodeTempSetPtMgr(SetPtMgrNum)%CtrlTypeMode == iCtrlVarType_Temp) THEN
-          Node(NodeNum)%TempSetPoint = 20.0 ! Set the setpoint
+          Node(NodeNum)%TempSetPoint = 20.0d0 ! Set the setpoint
         ELSEIF (FollowSysNodeTempSetPtMgr(SetPtMgrNum)%CtrlTypeMode == iCtrlVarType_MaxTemp) THEN
-          Node(NodeNum)%TempMax = 20.0 ! Set the setpoint
+          Node(NodeNum)%TempMax = 20.0d0 ! Set the setpoint
         ELSEIF (FollowSysNodeTempSetPtMgr(SetPtMgrNum)%CtrlTypeMode == iCtrlVarType_MinTemp) THEN
-          Node(NodeNum)%TempMin = 20.0 ! Set the setpoint
+          Node(NodeNum)%TempMin = 20.0d0 ! Set the setpoint
         END IF
       END IF
     END DO
@@ -4701,13 +4701,13 @@ LOGICAL, INTENT(IN), OPTIONAL :: InitFlag !When Init Calls this routine, it pass
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-REAL :: SchedVal
-REAL :: OutLowTemp
-REAL :: OutHighTemp
-REAL :: SetTempAtOutLow
-REAL :: SetTempAtOutHigh
+REAL(r64) :: SchedVal
+REAL(r64) :: OutLowTemp
+REAL(r64) :: OutHighTemp
+REAL(r64) :: SetTempAtOutLow
+REAL(r64) :: SetTempAtOutHigh
 INTEGER :: SchedPtr
-REAL :: SetPt
+REAL(r64) :: SetPt
 
 SchedPtr = OutAirSetPtMgr(SetPtMgrNum)%SchedPtr
 
@@ -4717,7 +4717,7 @@ ELSE
   SchedVal = 0.
 END IF
 
-IF (SchedVal.EQ.2.) THEN
+IF (SchedVal.EQ.2.d0) THEN
   OutLowTemp = OutAirSetPtMgr(SetPtMgrNum)%OutLow2
   OutHighTemp = OutAirSetPtMgr(SetPtMgrNum)%OutHigh2
   SetTempAtOutLow = OutAirSetPtMgr(SetPtMgrNum)%OutLowSetPt2
@@ -4740,7 +4740,7 @@ IF (OutLowTemp.LT.OutHighTemp .AND. SetTempAtOutLow.GT.SetTempAtOutHigh) THEN
   END IF
 
 ELSE
-  SetPt = 0.5*(SetTempAtOutLow + SetTempAtOutHigh)
+  SetPt = 0.5d0*(SetTempAtOutLow + SetTempAtOutHigh)
 END IF
 
 IF(PRESENT(InitFlag))THEN
@@ -4790,32 +4790,32 @@ SUBROUTINE CalcSingZoneRhSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! required zone load [W]
-  REAL      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! required zone load [W]
+  REAL(r64)      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: ZoneInletNode
   INTEGER        :: ZoneNode
   INTEGER        :: ZoneNum
-  REAL      :: ZoneTemp
-  REAL      :: ZoneLoadToCoolSetPt
-  REAL      :: ZoneLoadToHeatSetPt
-  REAL      :: TSetPt
-  REAL      :: TSetPt1
-  REAL      :: TSetPt2
+  REAL(r64)      :: ZoneTemp
+  REAL(r64)      :: ZoneLoadToCoolSetPt
+  REAL(r64)      :: ZoneLoadToHeatSetPt
+  REAL(r64)      :: TSetPt
+  REAL(r64)      :: TSetPt1
+  REAL(r64)      :: TSetPt2
   Logical        :: DeadBand
   INTEGER        :: FanNodeIn
   INTEGER        :: FanNodeOut
   INTEGER        :: RetNode
   INTEGER        :: OAMixOAInNode
-  REAL      :: FanDeltaT
-  REAL      :: TSupNoHC = 0.0     ! supply temperature with no heating or cooling
-  REAL      :: TMixAtMinOA
-  REAL      :: EnthMixAtMinOA
-  REAL      :: HumRatMixAtMinOA
+  REAL(r64)      :: FanDeltaT
+  REAL(r64)      :: TSupNoHC = 0.0     ! supply temperature with no heating or cooling
+  REAL(r64)      :: TMixAtMinOA
+  REAL(r64)      :: EnthMixAtMinOA
+  REAL(r64)      :: HumRatMixAtMinOA
   INTEGER        :: AirLoopNum
-  REAL      :: MinOAFrac
+  REAL(r64)      :: MinOAFrac
   INTEGER        :: LoopInNode
-  REAL      :: ExtrRateNoHC = 0.0 ! the heating (>0) or cooling (<0) that can be done by supply air at TSupNoHC [W]
+  REAL(r64)      :: ExtrRateNoHC = 0.0 ! the heating (>0) or cooling (<0) that can be done by supply air at TSupNoHC [W]
 
 ZoneInletNode = SingZoneRhSetPtMgr(SetPtMgrNum)%ZoneInletNodeNum
 ZoneNum = SingZoneRhSetPtMgr(SetPtMgrNum)%ControlZoneNum
@@ -4945,13 +4945,13 @@ SUBROUTINE CalcSingZoneHtSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoadtoHeatSP ! required zone load to zone heating setpoint [W]
-  REAL      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoadtoHeatSP ! required zone load to zone heating setpoint [W]
+  REAL(r64)      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: ZoneInletNode
   INTEGER        :: ZoneNode
   INTEGER        :: ZoneNum
-  REAL      :: ZoneTemp
+  REAL(r64)      :: ZoneTemp
 
 ZoneInletNode = SingZoneHtSetPtMgr(SetPtMgrNum)%ZoneInletNodeNum
 ZoneNum = SingZoneHtSetPtMgr(SetPtMgrNum)%ControlZoneNum
@@ -5014,13 +5014,13 @@ SUBROUTINE CalcSingZoneClSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoadtoCoolSP ! required zone load to zone Cooling setpoint [W]
-  REAL      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific Cool [J/kg-C]
+  REAL(r64)      :: ZoneLoadtoCoolSP ! required zone load to zone Cooling setpoint [W]
+  REAL(r64)      :: ZoneMassFlow     ! zone inlet mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific Cool [J/kg-C]
   INTEGER        :: ZoneInletNode
   INTEGER        :: ZoneNode
   INTEGER        :: ZoneNum
-  REAL      :: ZoneTemp
+  REAL(r64)      :: ZoneTemp
 
 ZoneInletNode = SingZoneClSetPtMgr(SetPtMgrNum)%ZoneInletNodeNum
 ZoneNum = SingZoneClSetPtMgr(SetPtMgrNum)%ControlZoneNum
@@ -5088,13 +5088,13 @@ SUBROUTINE CalcSingZoneMinHumSetPoint(SetPtMgrNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER  :: ZoneNode
-REAL     :: ZoneMassFlow
-!REAL     :: RelHumSet
-!REAL     :: ZoneHumRatSet
+REAL(r64)     :: ZoneMassFlow
+!REAL(r64)     :: RelHumSet
+!REAL(r64)     :: ZoneHumRatSet
 INTEGER  :: ZoneNum
-REAL     :: MoistureLoad    ! Zone moisture load (kg moisture/second) required to meet the relative humidity setpoint
+REAL(r64)     :: MoistureLoad    ! Zone moisture load (kg moisture/second) required to meet the relative humidity setpoint
                             ! Value obtained from ZoneTempPredictorCorrector (via ZoneSysMoistureDemand in DataZoneEnergyDemands)
-REAL     :: SupplyAirHumRat ! Desired air humidity ratio
+REAL(r64)     :: SupplyAirHumRat ! Desired air humidity ratio
 
 SZMinHumSetPtMgr(SetPtMgrNum)%SetPt = 0.0
 ! Only use one zone for now
@@ -5106,7 +5106,7 @@ IF (ZoneMassFlow.GT.SmallMassFlow) THEN
 
   MoistureLoad= ZoneSysMoistureDemand(SZMinHumSetPtMgr(SetPtMgrNum)%ZoneNum(1))%OutputRequiredToHumidifyingSP
 
-  SupplyAirHumRat = MAX(0.0, Node(ZoneNode)%HumRat + MoistureLoad/ZoneMassFlow)
+  SupplyAirHumRat = MAX(0.0d0, Node(ZoneNode)%HumRat + MoistureLoad/ZoneMassFlow)
 
 ! Positive Humidity Ratio MoistureLoad means a humidification load and only humidifying can raise up to a minimum
 !  IF(MoistureLoad .GT. 0.0) SZMinHumSetPtMgr(SetPtMgrNum)%SetPt = SupplyAirHumRat
@@ -5159,13 +5159,13 @@ SUBROUTINE CalcSingZoneMaxHumSetPoint(SetPtMgrNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 INTEGER  :: ZoneNode        ! Control zone air node number
-REAL     :: ZoneMassFlow    ! Zone air mass flow rate (kg/s)
-!REAL     :: RelHumSet       ! Zone air relative humidity setpoint for this time step (fraction)
-!REAL     :: ZoneHumRatSet   ! Zone air humidity ratio setpoint for this time step (kg/kg)
-REAL     :: MoistureLoad    ! Zone moisture load (kg moisture/sec) required to meet the relative humidity setpoint
+REAL(r64)     :: ZoneMassFlow    ! Zone air mass flow rate (kg/s)
+!REAL(r64)     :: RelHumSet       ! Zone air relative humidity setpoint for this time step (fraction)
+!REAL(r64)     :: ZoneHumRatSet   ! Zone air humidity ratio setpoint for this time step (kg/kg)
+REAL(r64)     :: MoistureLoad    ! Zone moisture load (kg moisture/sec) required to meet the relative humidity setpoint
                             ! Value obtained from ZoneTempPredictorCorrector (via ZoneSysMoistureDemand in DataZoneEnergyDemands)
-REAL     :: SupplyAirHumRat ! Desired air humidity ratio
-REAL     :: SystemMassFlow !
+REAL(r64)     :: SupplyAirHumRat ! Desired air humidity ratio
+REAL(r64)     :: SystemMassFlow !
 
 SZMaxHumSetPtMgr(SetPtMgrNum)%SetPt = 0.0
 ! Only use one zone for now
@@ -5179,7 +5179,7 @@ IF (ZoneMassFlow.GT.SmallMassFlow) THEN
   SystemMassFlow = Node(SZMaxHumSetPtMgr(SetPtMgrNum)%CtrlNodes(1))%MassFlowRate
 
 ! MoistureLoad (negative for dehumidification) may be so large that a negative humrat results, cap at 0.00001
-  SupplyAirHumRat = MAX(0.00001,Node(ZoneNode)%HumRat + MoistureLoad/ZoneMassFlow)
+  SupplyAirHumRat = MAX(0.00001d0,Node(ZoneNode)%HumRat + MoistureLoad/ZoneMassFlow)
 
 ! This hum rat is currently used in Controller:Simple, control variable "TEMPandHUMRAT" (Jan 2004)
 ! Negative MoistureLoad means a dehumidification load
@@ -5315,11 +5315,11 @@ SUBROUTINE CalcOAPretreatSetPoint(SetPtMgrNum)
   INTEGER :: MixedOutNode    ! mixed air outlet node number
   INTEGER :: OAInNode        ! outside air inlet node number
   INTEGER :: ReturnInNode    ! return air inlet node number
-  REAL    :: OAFraction      ! outside air fraction of mixed flow rate
-  REAL    :: ReturnInValue   ! return air inlet node mass flow rate
-  REAL    :: RefNodeSetPoint ! setpoint at reference node
-  REAL    :: MinSetPoint     ! minimum allowed setpoint
-  REAL    :: MaxSetPoint     ! maximum allowed setpoint
+  REAL(r64)    :: OAFraction      ! outside air fraction of mixed flow rate
+  REAL(r64)    :: ReturnInValue   ! return air inlet node mass flow rate
+  REAL(r64)    :: RefNodeSetPoint ! setpoint at reference node
+  REAL(r64)    :: MinSetPoint     ! minimum allowed setpoint
+  REAL(r64)    :: MaxSetPoint     ! maximum allowed setpoint
   LOGICAL :: HumiditySetPoint ! logical to indicate if this is a humidity setpoint
   LOGICAL :: LocalSetpointCheckFailed = .FALSE.
 
@@ -5441,17 +5441,17 @@ SUBROUTINE CalcWarmestSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! required zone load [W]
-  REAL      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! required zone load [W]
+  REAL(r64)      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: AirLoopNum       ! the index of the air loop served by this setpoint manager
-  REAL      :: TotCoolLoad      ! sum of the zone cooling loads for this air loop [W]
+  REAL(r64)      :: TotCoolLoad      ! sum of the zone cooling loads for this air loop [W]
   INTEGER        :: ZonesCooledIndex ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum      ! the controlled zone index
   INTEGER        :: ZoneInletNode    ! the zone inlet node number
-  REAL      :: ZoneTemp         ! zone temperature [C]
-  REAL      :: ZoneSetPointTemp ! zone supply air temperature [C]
-  REAL      :: SetPointTemp     ! the system setpoint temperature [C]
+  REAL(r64)      :: ZoneTemp         ! zone temperature [C]
+  REAL(r64)      :: ZoneSetPointTemp ! zone supply air temperature [C]
+  REAL(r64)      :: SetPointTemp     ! the system setpoint temperature [C]
   INTEGER        :: ZoneNode         ! the zone node number of the current zone
   INTEGER        :: ZoneNum          ! the actual zone number
 
@@ -5525,17 +5525,17 @@ SUBROUTINE CalcColdestSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! required zone load [W]
-  REAL      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! required zone load [W]
+  REAL(r64)      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: AirLoopNum       ! the index of the air loop served by this setpoint manager
-  REAL      :: TotHeatLoad      ! sum of the zone heating loads for this air loop [W]
+  REAL(r64)      :: TotHeatLoad      ! sum of the zone heating loads for this air loop [W]
   INTEGER        :: ZonesHeatedIndex ! DO loop index for zones heated by the air loop
   INTEGER        :: CtrlZoneNum      ! the controlled zone index
   INTEGER        :: ZoneInletNode    ! the zone inlet node number
-  REAL      :: ZoneTemp         ! zone temperature [C]
-  REAL      :: ZoneSetPointTemp ! zone supply air temperature [C]
-  REAL      :: SetPointTemp     ! the system setpoint temperature [C]
+  REAL(r64)      :: ZoneTemp         ! zone temperature [C]
+  REAL(r64)      :: ZoneSetPointTemp ! zone supply air temperature [C]
+  REAL(r64)      :: SetPointTemp     ! the system setpoint temperature [C]
   INTEGER        :: ZoneNode         ! the zone node number of the current zone
   INTEGER        :: ZoneNum          ! the actual zone number
 
@@ -5610,24 +5610,24 @@ SUBROUTINE CalcWarmestSetPointTempFlow(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! required zone load [W]
-  REAL      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! required zone load [W]
+  REAL(r64)      :: ZoneMassFlowMax  ! zone inlet maximum mass flow rate [kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: AirLoopNum       ! the index of the air loop served by this setpoint manager
-  REAL      :: TotCoolLoad      ! sum of the zone cooling loads for this air loop [W]
+  REAL(r64)      :: TotCoolLoad      ! sum of the zone cooling loads for this air loop [W]
   INTEGER        :: ZonesCooledIndex ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum      ! the controlled zone index
   INTEGER        :: ZoneInletNode    ! the zone inlet node number
-  REAL      :: ZoneTemp         ! zone temperature [C]
-  REAL      :: ZoneSetPointTemp ! zone supply air temperature [C]
-  REAL      :: SetPointTemp     ! the system setpoint temperature [C]
+  REAL(r64)      :: ZoneTemp         ! zone temperature [C]
+  REAL(r64)      :: ZoneSetPointTemp ! zone supply air temperature [C]
+  REAL(r64)      :: SetPointTemp     ! the system setpoint temperature [C]
   INTEGER        :: ZoneNode         ! the zone node number of the current zone
   INTEGER        :: ZoneNum          ! the actual zone number
-  REAL      :: MinFracFlow
-  REAL      :: ZoneFracFlow
-  REAL      :: FracFlow
-  REAL      :: MaxSetPointTemp
-  REAL      :: MinSetPointTemp
+  REAL(r64)      :: MinFracFlow
+  REAL(r64)      :: ZoneFracFlow
+  REAL(r64)      :: FracFlow
+  REAL(r64)      :: MaxSetPointTemp
+  REAL(r64)      :: MinSetPointTemp
   INTEGER        :: CritZoneNumTemp
   INTEGER        :: CritZoneNumFlow
   INTEGER        :: ControlStrategy
@@ -5692,7 +5692,7 @@ SUBROUTINE CalcWarmestSetPointTempFlow(SetPtMgrNum)
   END DO
 
   SetPointTemp = MAX(MinSetPointTemp,MIN(SetPointTemp,MaxSetPointTemp))
-  FracFlow = MAX(MinFracFlow,MIN(FracFlow,1.0))
+  FracFlow = MAX(MinFracFlow,MIN(FracFlow,1.0d0))
   IF (TotCoolLoad < SmallLoad) THEN
     SetPointTemp = MaxSetPointTemp
     FracFlow = MinFracFlow
@@ -5757,13 +5757,13 @@ SUBROUTINE CalcRABFlowSetPoint(SetPtMgrNum)
   INTEGER :: MixerSupInNode     ! Mixer supply inlet node number
   INTEGER :: MixerOutNode       ! Mixer outlet node number
   INTEGER :: LoopOutNode        ! loop outlet node number
-  REAL    :: TempSetPt          ! the setpoint temperature (from schedule) [C]
-  REAL    :: TempSetPtMod       ! the setpoint temperature modified for fan heat gain [C]
-  REAL    :: SupFlow            ! supply flow rate before mixing [kg/s]
-  REAL    :: RABFlow            ! Return Air Bypass flow rate [kg/s]
-  REAL    :: TotSupFlow         ! supply air flow after mixing [kg/s]
-  REAL    :: TempSup            ! temperature of supply air before mixing [kg/s]
-  REAL    :: TempRAB            ! temperature of return bypass air
+  REAL(r64)    :: TempSetPt          ! the setpoint temperature (from schedule) [C]
+  REAL(r64)    :: TempSetPtMod       ! the setpoint temperature modified for fan heat gain [C]
+  REAL(r64)    :: SupFlow            ! supply flow rate before mixing [kg/s]
+  REAL(r64)    :: RABFlow            ! Return Air Bypass flow rate [kg/s]
+  REAL(r64)    :: TotSupFlow         ! supply air flow after mixing [kg/s]
+  REAL(r64)    :: TempSup            ! temperature of supply air before mixing [kg/s]
+  REAL(r64)    :: TempRAB            ! temperature of return bypass air
 
   MixerRABInNode = RABFlowSetPtMgr(SetPtMgrNum)%RABMixInNode
   MixerSupInNode = RABFlowSetPtMgr(SetPtMgrNum)%SupMixInNode
@@ -5775,8 +5775,8 @@ SUBROUTINE CalcRABFlowSetPoint(SetPtMgrNum)
   TempSup = Node(MixerSupInNode)%Temp
   TotSupFlow = Node(MixerOutNode)%MassFlowRate
   TempRAB = Node(MixerRABInNode)%Temp
-  RABFlow = (TotSupFlow*TempSetPtMod - SupFlow*TempSup) / Max(TempRAB,1.0)
-  RABFlow = Max(0.0,RABFlow)
+  RABFlow = (TotSupFlow*TempSetPtMod - SupFlow*TempSup) / Max(TempRAB,1.0d0)
+  RABFlow = Max(0.0d0,RABFlow)
   RABFlowSetPtMgr(SetPtMgrNum)%FlowSetPt = RABFlow
 
   RETURN
@@ -5819,32 +5819,32 @@ SUBROUTINE CalcMultiZoneAverageHeatingSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! zone load predicted to the setpoint [W]
-  REAL      :: ZoneMassFlowRate ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! zone load predicted to the setpoint [W]
+  REAL(r64)      :: ZoneMassFlowRate ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: AirLoopNum       ! the index of the air loop served by this setpoint manager
-  REAL      :: SumHeatLoad      ! sum of the zone's predicted heating loads for this air loop [W]
-  REAL      :: SumProductMdotCpTZoneTot  ! sum of the product of zone inlet node actual mass flow rate,
+  REAL(r64)      :: SumHeatLoad      ! sum of the zone's predicted heating loads for this air loop [W]
+  REAL(r64)      :: SumProductMdotCpTZoneTot  ! sum of the product of zone inlet node actual mass flow rate,
                                               ! Cp of air at zone air node and zone air node temperature for
                                               ! all zones in the air loop [W]
-  REAL      :: SumProductMdotCp     ! sum of the product of zone inlet node actual mass flow rate, and
+  REAL(r64)      :: SumProductMdotCp     ! sum of the product of zone inlet node actual mass flow rate, and
                                          ! Cp of air at zone inlet node for all heated zones in the airloop [W/C]
-  REAL      :: SumProductMdotCpTot  ! sum of the product of zone inlet node actual mass flow rate, and
+  REAL(r64)      :: SumProductMdotCpTot  ! sum of the product of zone inlet node actual mass flow rate, and
                                          ! Cp of air at zone air node for all zones in the airloop [W/C]
-  REAL      :: ZoneAverageTemp      ! multizone average zone air node temperature [C]
+  REAL(r64)      :: ZoneAverageTemp      ! multizone average zone air node temperature [C]
   INTEGER        :: ZonesHeatedIndex     ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum          ! the controlled zone index
   INTEGER        :: ZoneInletNode        ! the zone inlet node number
-  REAL      :: ZoneTemp             ! zone air node temperature [C]
-  REAL      :: SetPointTemp         ! the system setpoint temperature [C]
+  REAL(r64)      :: ZoneTemp             ! zone air node temperature [C]
+  REAL(r64)      :: SetPointTemp         ! the system setpoint temperature [C]
   INTEGER        :: ZoneNode             ! the zone node number of the current zone
 
 
-  SumHeatLoad = 0.0
-  ZoneAverageTemp = 0.0
-  SumProductMdotCp = 0.0
-  SumProductMdotCpTot = 0.0
-  SumProductMdotCpTzoneTot = 0.0
+  SumHeatLoad = 0.0d0
+  ZoneAverageTemp = 0.0d0
+  SumProductMdotCp = 0.0d0
+  SumProductMdotCpTot = 0.0d0
+  SumProductMdotCpTzoneTot = 0.0d0
   AirLoopNum = MZAverageHeatingSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointTemp = MZAverageHeatingSetPtMgr(SetPtMgrNum)%MinSetTemp
 
@@ -5867,14 +5867,14 @@ SUBROUTINE CalcMultiZoneAverageHeatingSetPoint(SetPtMgrNum)
      CpAir = PsyCpAirFnWTdb(Node(ZoneNode)%HumRat,ZoneTemp)
      SumProductMdotCpTot = SumProductMdotCpTot + ZoneMassFlowRate * CpAir
      SumProductMdotCpTzoneTot = SumProductMdotCpTzoneTot + ZoneMassFlowRate * CpAir * ZoneTemp
-     IF (ZoneLoad > 0.0) THEN
+     IF (ZoneLoad > 0.0d0) THEN
          CpAir = PsyCpAirFnWTdb(Node(ZoneInletNode)%HumRat,Node(ZoneInletNode)%Temp)
          SumHeatLoad = SumHeatLoad + ZoneLoad
          SumProductMdotCp = SumProductMdotCp + ZoneMassFlowRate * CpAir
      END IF
   END DO
-  IF (SumProductMdotCpTot > 0.0) ZoneAverageTemp = SumProductMdotCpTzoneTot / SumProductMdotCpTot
-  IF (SumProductMdotCp > 0.0) SetPointTemp = ZoneAverageTemp + SumHeatLoad / SumProductMdotCp
+  IF (SumProductMdotCpTot > 0.0d0) ZoneAverageTemp = SumProductMdotCpTzoneTot / SumProductMdotCpTot
+  IF (SumProductMdotCp > 0.0d0) SetPointTemp = ZoneAverageTemp + SumHeatLoad / SumProductMdotCp
 
   SetPointTemp = MIN(MZAverageHeatingSetPtMgr(SetPtMgrNum)%MaxSetTemp,MAX(SetPointTemp,  &
                      MZAverageHeatingSetPtMgr(SetPtMgrNum)%MinSetTemp))
@@ -5922,31 +5922,31 @@ SUBROUTINE CalcMultiZoneAverageCoolingSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: ZoneLoad         ! zone load predicted to the setpoint [W]
-  REAL      :: ZoneMassFlowRate ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
-  REAL      :: CpAir            ! inlet air specific heat [J/kg-C]
+  REAL(r64)      :: ZoneLoad         ! zone load predicted to the setpoint [W]
+  REAL(r64)      :: ZoneMassFlowRate ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
+  REAL(r64)      :: CpAir            ! inlet air specific heat [J/kg-C]
   INTEGER        :: AirLoopNum       ! the index of the air loop served by this setpoint manager
-  REAL      :: SumCoolLoad      ! sum of the zone cooling loads for this air loop [W]
-  REAL      :: SumProductMdotCpTZoneTot ! sum of the product of zone inlet node actual mass flow rate,
+  REAL(r64)      :: SumCoolLoad      ! sum of the zone cooling loads for this air loop [W]
+  REAL(r64)      :: SumProductMdotCpTZoneTot ! sum of the product of zone inlet node actual mass flow rate,
                                              ! Cp of air at zone air node and zone air node temperature for
                                              ! all zones in the air loop [W]
-  REAL      :: SumProductMdotCp         ! sum of the product of zone inlet node actual mass flow rate, and
+  REAL(r64)      :: SumProductMdotCp         ! sum of the product of zone inlet node actual mass flow rate, and
                                              ! Cp of air at zone inlet node for cooled zones in the airloop [W/C]
-  REAL      :: SumProductMdotCpTot      ! sum of the product of zone inlet node actual mass flow rate, and
+  REAL(r64)      :: SumProductMdotCpTot      ! sum of the product of zone inlet node actual mass flow rate, and
                                              ! Cp of air at zone air node for all zones in the airloop [W/C]
-  REAL      :: ZoneAverageTemp          ! multizone average zone Air node temperature [C]
+  REAL(r64)      :: ZoneAverageTemp          ! multizone average zone Air node temperature [C]
   INTEGER        :: ZonesCooledIndex         ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum              ! the controlled zone index
   INTEGER        :: ZoneInletNode            ! the zone inlet node number
-  REAL      :: ZoneTemp                 ! zone air node temperature [C]
-  REAL      :: SetPointTemp             ! the system setpoint temperature [C]
+  REAL(r64)      :: ZoneTemp                 ! zone air node temperature [C]
+  REAL(r64)      :: SetPointTemp             ! the system setpoint temperature [C]
   INTEGER        :: ZoneNode                 ! the zone node number of the current zone
 
-  SumCoolLoad = 0.0
-  ZoneAverageTemp = 0.0
-  SumProductMdotCp = 0.0
-  SumProductMdotCpTot = 0.0
-  SumProductMdotCpTzoneTot = 0.0
+  SumCoolLoad = 0.0d0
+  ZoneAverageTemp = 0.0d0
+  SumProductMdotCp = 0.0d0
+  SumProductMdotCpTot = 0.0d0
+  SumProductMdotCpTzoneTot = 0.0d0
   AirLoopNum = MZAverageCoolingSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointTemp = MZAverageCoolingSetPtMgr(SetPtMgrNum)%MaxSetTemp
 
@@ -5960,14 +5960,14 @@ SUBROUTINE CalcMultiZoneAverageCoolingSetPoint(SetPtMgrNum)
      CpAir = PsyCpAirFnWTdb(Node(ZoneNode)%HumRat,ZoneTemp)
      SumProductMdotCpTot = SumProductMdotCpTot + ZoneMassFlowRate * CpAir
      SumProductMdotCpTzoneTot = SumProductMdotCpTzoneTot + ZoneMassFlowRate * CpAir * ZoneTemp
-     IF (ZoneLoad < 0.0) THEN
+     IF (ZoneLoad < 0.0d0) THEN
          CpAir = PsyCpAirFnWTdb(Node(ZoneInletNode)%HumRat,Node(ZoneInletNode)%Temp)
          SumCoolLoad = SumCoolLoad + ZoneLoad
          SumProductMdotCp = SumProductMdotCp + ZoneMassFlowRate * CpAir
      END IF
   END DO
-  IF (SumProductMdotCpTot > 0.0) ZoneAverageTemp = SumProductMdotCpTzoneTot / SumProductMdotCpTot
-  IF (SumProductMdotCp > 0.0) SetPointTemp = ZoneAverageTemp + SumCoolLoad / SumProductMdotCp
+  IF (SumProductMdotCpTot > 0.0d0) ZoneAverageTemp = SumProductMdotCpTzoneTot / SumProductMdotCpTot
+  IF (SumProductMdotCp > 0.0d0) SetPointTemp = ZoneAverageTemp + SumCoolLoad / SumProductMdotCp
 
   SetPointTemp = MAX(MZAverageCoolingSetPtMgr(SetPtMgrNum)%MinSetTemp,MIN(SetPointTemp,  &
                      MZAverageCoolingSetPtMgr(SetPtMgrNum)%MaxSetTemp))
@@ -6017,27 +6017,27 @@ SUBROUTINE CalcMultiZoneAverageMinHumSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: MoistureLoad         ! zone's moisture load predicted to the setpoint [kgH20/s]
-  REAL      :: ZoneMassFlowRate     ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
+  REAL(r64)      :: MoistureLoad         ! zone's moisture load predicted to the setpoint [kgH20/s]
+  REAL(r64)      :: ZoneMassFlowRate     ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
   INTEGER        :: AirLoopNum           ! the index of the air loop served by this setpoint manager
-  REAL      :: SumMoistureLoad      ! sum of the zone moisture loads for this air loop [W]
-  REAL      :: SumMdot              ! sum of the actual mass flow rate for controlled zones in the air loop [kg/s]
-  REAL      :: SumMdotTot           ! sum of the actual mass flow rate for this air loop [kg/s]
-  REAL      :: SumProductMdotHumTot ! sum of product of actual mass flow rate at the zone inlet node,
+  REAL(r64)      :: SumMoistureLoad      ! sum of the zone moisture loads for this air loop [W]
+  REAL(r64)      :: SumMdot              ! sum of the actual mass flow rate for controlled zones in the air loop [kg/s]
+  REAL(r64)      :: SumMdotTot           ! sum of the actual mass flow rate for this air loop [kg/s]
+  REAL(r64)      :: SumProductMdotHumTot ! sum of product of actual mass flow rate at the zone inlet node,
                                          ! and humidity ratio at zones air node for all zones in the airloop [kgH20/s]
-  REAL      :: AverageZoneHum       ! multizone average zone air node humidity ratio of all zones in the air loop [kg/kg]
+  REAL(r64)      :: AverageZoneHum       ! multizone average zone air node humidity ratio of all zones in the air loop [kg/kg]
   INTEGER        :: ZonesCooledIndex     ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum          ! the controlled zone index
   INTEGER        :: ZoneInletNode        ! the zone inlet node number
-  REAL      :: ZoneHum              ! zone air node humidity ratio [kg/kg]
-  REAL      :: SetPointHum          ! system setpoint humidity ratio [kg/kg]
+  REAL(r64)      :: ZoneHum              ! zone air node humidity ratio [kg/kg]
+  REAL(r64)      :: SetPointHum          ! system setpoint humidity ratio [kg/kg]
   INTEGER        :: ZoneNode             ! the zone node number of the current zone
 
-  SumMdot = 0.0
-  SumMdotTot = 0.0
-  AverageZoneHum = 0.0
-  SumMoistureLoad = 0.0
-  SumProductMdotHumTot = 0.0
+  SumMdot = 0.0d0
+  SumMdotTot = 0.0d0
+  AverageZoneHum = 0.0d0
+  SumMoistureLoad = 0.0d0
+  SumProductMdotHumTot = 0.0d0
   AirLoopNum = MZAverageMinHumSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointHum = MZAverageMinHumSetPtMgr(SetPtMgrNum)%MinSetHum
 
@@ -6051,13 +6051,13 @@ SUBROUTINE CalcMultiZoneAverageMinHumSetPoint(SetPtMgrNum)
      SumMdotTot =  SumMdotTot + ZoneMassFlowRate
      SumProductMdotHumTot = SumProductMdotHumTot + ZoneMassFlowRate * ZoneHum
      ! For humidification the mositure load is positive
-     IF (MoistureLoad > 0.0) THEN
+     IF (MoistureLoad > 0.0d0) THEN
         SumMdot =  SumMdot + ZoneMassFlowRate
         SumMoistureLoad = SumMoistureLoad + MoistureLoad
      ENDIF
   END DO
   IF (SumMdotTot > SmallMassFlow) AverageZoneHum = SumProductMdotHumTot / SumMdotTot
-  IF (SumMdot > SmallMassFlow) SetPointHum = MAX(0.0, AverageZoneHum + SumMoistureLoad / SumMdot)
+  IF (SumMdot > SmallMassFlow) SetPointHum = MAX(0.0d0, AverageZoneHum + SumMoistureLoad / SumMdot)
 
   SetPointHum = MIN(MZAverageMinHumSetPtMgr(SetPtMgrNum)%MaxSetHum,MAX(SetPointHum,  &
                     MZAverageMinHumSetPtMgr(SetPtMgrNum)%MinSetHum))
@@ -6104,28 +6104,28 @@ SUBROUTINE CalcMultiZoneAverageMaxHumSetPoint(SetPtMgrNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: MoistureLoad         ! zone's moisture load predicted to the setpoint [kgH20/s]
-  REAL      :: ZoneMassFlowRate     ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
+  REAL(r64)      :: MoistureLoad         ! zone's moisture load predicted to the setpoint [kgH20/s]
+  REAL(r64)      :: ZoneMassFlowRate     ! zone inlet node actual mass flow rate lagged by system one time step[kg/s]
   INTEGER        :: AirLoopNum           ! the index of the air loop served by this setpoint manager
-  REAL      :: SumMoistureLoad      ! sum of the zone moisture loads for this air loop [W]
-  REAL      :: SumMdot              ! sum of the actual mass flow rate for controlled zones in the air loop [kg/s]
-  REAL      :: SumMdotTot           ! sum of the actual mass flow rate for this air loop [kg/s]
-  REAL      :: SumProductMdotHumTot ! sum of product of actual mass flow rate at the zone inlet node,
+  REAL(r64)      :: SumMoistureLoad      ! sum of the zone moisture loads for this air loop [W]
+  REAL(r64)      :: SumMdot              ! sum of the actual mass flow rate for controlled zones in the air loop [kg/s]
+  REAL(r64)      :: SumMdotTot           ! sum of the actual mass flow rate for this air loop [kg/s]
+  REAL(r64)      :: SumProductMdotHumTot ! sum of product of actual mass flow rate at the zone inlet node,
                                          ! and humidity ratio at zones air node for all zones in the airloop [kgH20/s]
-  REAL      :: AverageZoneHum       ! multizone average zone air node humidity ratio of all zones in the air loop [kg/kg]
+  REAL(r64)      :: AverageZoneHum       ! multizone average zone air node humidity ratio of all zones in the air loop [kg/kg]
   INTEGER        :: ZonesCooledIndex     ! DO loop index for zones cooled by the air loop
   INTEGER        :: CtrlZoneNum          ! the controlled zone index
   INTEGER        :: ZoneInletNode        ! the zone inlet node number
-  REAL      :: ZoneHum              ! zone air node humidity ratio [kg/kg]
-!  REAL      :: AverageSetPointHum   ! Supply air humidity ratio [kg/kg]
-  REAL      :: SetPointHum          ! system setpoint humidity ratio [kg/kg]
+  REAL(r64)      :: ZoneHum              ! zone air node humidity ratio [kg/kg]
+!  REAL(r64)      :: AverageSetPointHum   ! Supply air humidity ratio [kg/kg]
+  REAL(r64)      :: SetPointHum          ! system setpoint humidity ratio [kg/kg]
   INTEGER        :: ZoneNode             ! the zone node number of the current zone
 
-  SumMdot = 0.0
-  SumMdotTot = 0.0
-  AverageZoneHum = 0.0
-  SumMoistureLoad = 0.0
-  SumProductMdotHumTot = 0.0
+  SumMdot = 0.0d0
+  SumMdotTot = 0.0d0
+  AverageZoneHum = 0.0d0
+  SumMoistureLoad = 0.0d0
+  SumProductMdotHumTot = 0.0d0
   AirLoopNum = MZAverageMaxHumSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointHum = MZAverageMaxHumSetPtMgr(SetPtMgrNum)%MaxSetHum
 
@@ -6139,13 +6139,13 @@ SUBROUTINE CalcMultiZoneAverageMaxHumSetPoint(SetPtMgrNum)
      SumMdotTot =  SumMdotTot + ZoneMassFlowRate
      SumProductMdotHumTot = SumProductMdotHumTot + ZoneMassFlowRate * ZoneHum
      ! For dehumidification the mositure load is negative
-     IF (MoistureLoad < 0.0) THEN
+     IF (MoistureLoad < 0.0d0) THEN
         SumMdot =  SumMdot + ZoneMassFlowRate
         SumMoistureLoad = SumMoistureLoad + MoistureLoad
      ENDIF
   END DO
   IF (SumMdotTot > SmallMassFlow) AverageZoneHum = SumProductMdotHumTot / SumMdotTot
-  IF (SumMdot > SmallMassFlow) SetPointHum = MAX(0.0, AverageZoneHum + SumMoistureLoad / SumMdot)
+  IF (SumMdot > SmallMassFlow) SetPointHum = MAX(0.0d0, AverageZoneHum + SumMoistureLoad / SumMdot)
 
   SetPointHum = MAX(MZAverageMaxHumSetPtMgr(SetPtMgrNum)%MinSetHum,MIN(SetPointHum,  &
                 MZAverageMaxHumSetPtMgr(SetPtMgrNum)%MaxSetHum))
@@ -6199,13 +6199,13 @@ SUBROUTINE CalcMultiZoneMinHumSetPoint(SetPtMgrNum)
   INTEGER     :: CtrlZoneNum                ! the controlled zone index
   INTEGER     :: ZoneInletNode              ! the zone inlet node number
   INTEGER     :: ZoneNode                   ! the zone node number of the current zone
-  REAL   :: ZoneHum                    ! zone air node humidity ratio [kg/kg]
-  REAL   :: SetPointHum                ! system setpoint humidity ratio [kg/kg]
-  REAL   :: ZoneSetPointHum            ! Zone setpoint humidity ratio [kg/kg]
-  REAL   :: MoistureLoad               ! zone's moisture load predicted to the setpoint [kgH20/s]
-  REAL   :: ZoneMassFlowRate           ! zone inlet node actual supply air mass flow rate [kg/s]
-  REAL   :: SumMoistureLoad = 0.0    ! sum of the zone moisture loads for this air loop [W]
-  REAL   :: SmallMoistureLoad = 0.0001 ! small moisture load [kgH2O/s]
+  REAL(r64)   :: ZoneHum                    ! zone air node humidity ratio [kg/kg]
+  REAL(r64)   :: SetPointHum                ! system setpoint humidity ratio [kg/kg]
+  REAL(r64)   :: ZoneSetPointHum            ! Zone setpoint humidity ratio [kg/kg]
+  REAL(r64)   :: MoistureLoad               ! zone's moisture load predicted to the setpoint [kgH20/s]
+  REAL(r64)   :: ZoneMassFlowRate           ! zone inlet node actual supply air mass flow rate [kg/s]
+  REAL(r64)   :: SumMoistureLoad = 0.0d0    ! sum of the zone moisture loads for this air loop [W]
+  REAL(r64)   :: SmallMoistureLoad = 0.0001 ! small moisture load [kgH2O/s]
 
   AirLoopNum = MZMinHumSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointHum = MZMinHumSetPtMgr(SetPtMgrNum)%MinSetHum
@@ -6219,10 +6219,10 @@ SUBROUTINE CalcMultiZoneMinHumSetPoint(SetPtMgrNum)
      ZoneHum = Node(ZoneNode)%HumRat
      ZoneSetPointHum = MZMinHumSetPtMgr(SetPtMgrNum)%MinSetHum
      ! For humidification the mositure load is positive
-     IF (MoistureLoad > 0.0) THEN
+     IF (MoistureLoad > 0.0d0) THEN
         SumMoistureLoad = SumMoistureLoad + MoistureLoad
         IF (ZoneMassFlowRate > SmallMassFlow) THEN
-            ZoneSetPointHum = MAX(0.0, ZoneHum + MoistureLoad/ZoneMassFlowRate)
+            ZoneSetPointHum = MAX(0.0d0, ZoneHum + MoistureLoad/ZoneMassFlowRate)
         ENDIF
      ENDIF
      SetPointHum = MAX(SetPointHum, ZoneSetPointHum)
@@ -6281,13 +6281,13 @@ SUBROUTINE CalcMultiZoneMaxHumSetPoint(SetPtMgrNum)
   INTEGER     :: CtrlZoneNum                ! the controlled zone index
   INTEGER     :: ZoneInletNode              ! the zone inlet node number
   INTEGER     :: ZoneNode                   ! the zone node number of the current zone
-  REAL   :: ZoneHum                    ! zone air node humidity ratio [kg/kg]
-  REAL   :: SetPointHum                ! system setpoint humidity ratio [kg/kg]
-  REAL   :: ZoneSetPointHum            ! Zone setpoint humidity ratio [kg/kg]
-  REAL   :: MoistureLoad               ! zone's moisture load predicted to the setpoint [kgH20/s]
-  REAL   :: ZoneMassFlowRate           ! zone inlet node actual supply air mass flow rate [kg/s]
-  REAL   :: SumMoistureLoad = 0.0    ! sum of the zone moisture loads for this air loop [W]
-  REAL   :: SmallMoistureLoad = 0.00001 ! small moisture load [kgH2O/s]
+  REAL(r64)   :: ZoneHum                    ! zone air node humidity ratio [kg/kg]
+  REAL(r64)   :: SetPointHum                ! system setpoint humidity ratio [kg/kg]
+  REAL(r64)   :: ZoneSetPointHum            ! Zone setpoint humidity ratio [kg/kg]
+  REAL(r64)   :: MoistureLoad               ! zone's moisture load predicted to the setpoint [kgH20/s]
+  REAL(r64)   :: ZoneMassFlowRate           ! zone inlet node actual supply air mass flow rate [kg/s]
+  REAL(r64)   :: SumMoistureLoad = 0.0d0    ! sum of the zone moisture loads for this air loop [W]
+  REAL(r64)   :: SmallMoistureLoad = 0.00001 ! small moisture load [kgH2O/s]
 
   AirLoopNum = MZMaxHumSetPtMgr(SetPtMgrNum)%AirLoopNum
   SetPointHum = MZMaxHumSetPtMgr(SetPtMgrNum)%MaxSetHum
@@ -6302,10 +6302,10 @@ SUBROUTINE CalcMultiZoneMaxHumSetPoint(SetPtMgrNum)
      ZoneSetPointHum = MZMaxHumSetPtMgr(SetPtMgrNum)%MaxSetHum
 
      ! For dehumidification the mositure load is negative
-     IF (MoistureLoad < 0.0) THEN
+     IF (MoistureLoad < 0.0d0) THEN
         SumMoistureLoad = SumMoistureLoad + MoistureLoad
         IF (ZoneMassFlowRate > SmallMassFlow) THEN
-            ZoneSetPointHum = MAX(0.0, ZoneHum + MoistureLoad/ZoneMassFlowRate)
+            ZoneSetPointHum = MAX(0.0d0, ZoneHum + MoistureLoad/ZoneMassFlowRate)
         ENDIF
      ENDIF
      SetPointHum = MIN(SetPointHum, ZoneSetPointHum)
@@ -6358,8 +6358,8 @@ SUBROUTINE CalcFollowOATempSetPoint(SetPtMgrNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !  INTEGER      :: CtrldNodeNum    ! index of the items in the controlled node list
-  REAL    :: MinSetPoint     ! minimum allowed setpoint
-  REAL    :: MaxSetPoint     ! maximum allowed setpoint
+  REAL(r64)    :: MinSetPoint     ! minimum allowed setpoint
+  REAL(r64)    :: MaxSetPoint     ! maximum allowed setpoint
 
 MaxSetPoint = FollowOATempSetPtMgr(SetPtMgrNum)%MaxSetTemp
 MinSetPoint = FollowOATempSetPtMgr(SetPtMgrNum)%MinSetTemp
@@ -6422,11 +6422,11 @@ SUBROUTINE CalcFollowSysNodeTempSetPoint(SetPtMgrNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: RefNode         ! setpoint reference node number
-  REAL    :: RefNodeTemp     ! setpoint at reference node
-  REAL    :: MinSetPoint     ! minimum allowed setpoint
-  REAL    :: MaxSetPoint     ! maximum allowed setpoint
+  REAL(r64)    :: RefNodeTemp     ! setpoint at reference node
+  REAL(r64)    :: MinSetPoint     ! minimum allowed setpoint
+  REAL(r64)    :: MaxSetPoint     ! maximum allowed setpoint
 
-  RefNodeTemp  = 0.
+  RefNodeTemp  = 0.d0
 
   MaxSetPoint  = FollowSysNodeTempSetPtMgr(SetPtMgrNum)%MaxSetTemp
   MinSetPoint  = FollowSysNodeTempSetPtMgr(SetPtMgrNum)%MinSetTemp
@@ -6489,8 +6489,8 @@ SUBROUTINE CalcGroundTempSetPoint(SetPtMgrNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 !  INTEGER      :: CtrldNodeNum    ! index of the items in the controlled node list
-  REAL    :: MinSetPoint     ! minimum allowed setpoint
-  REAL    :: MaxSetPoint     ! maximum allowed setpoint
+  REAL(r64)    :: MinSetPoint     ! minimum allowed setpoint
+  REAL(r64)    :: MaxSetPoint     ! maximum allowed setpoint
 
 MaxSetPoint  = GroundTempSetPtMgr(SetPtMgrNum)%MaxSetTemp
 MinSetPoint  = GroundTempSetPtMgr(SetPtMgrNum)%MinSetTemp
@@ -6554,34 +6554,34 @@ SUBROUTINE CalcCondEntSetPoint(SetPtMgrNum)
           ! na
   ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: NormDsnCondFlow          = 0.0           !Normalized design condenser flow for cooling towers, m3/s per watt
-  REAL :: Twr_DesignWB             = 0.0           !The cooling tower design inlet air wet bulb temperature, C
-  REAL:: Dsn_EntCondTemp           = 0.0           !The chiller design entering condenser temp, C; e.g. 29.44C {85F}
-  REAL:: Dsn_CondMinThisChiller    = 0.0           !Design Minimum Condenser Entering for current chillers this timestep
-  REAL:: Dsn_MinCondSetpt          = 0.0           !The design minimum condenser water temp, C; e.g. 18.33C {65 F}
-  REAL:: Cur_MinLiftTD             = 0.0           !Minimum lift (TCond entering - Tevap leaving) TD this timestep
-  REAL:: temp_MinLiftTD            = 0.0           !Intermeidate variable associated with lift (TCond entering - Tevap leaving) TD
-  REAL:: Des_Load                  = 0.0           !array of chiller design loads
-  REAL:: Act_Load                  = 0.0           !array of chiller actual loads
-  REAL:: ALW                       = 0.0           !Actual load weighting of each chiller, W
-  REAL:: DLW                       = 0.0           !Design capacity of each chiller, W
-  REAL:: Design_Load_Sum           = 0.0           !the design load of the chillers, W
-  REAL :: Actual_Load_Sum          = 0.0           !the actual load of the chillers, W
-  REAL :: Weighted_Actual_Load_Sum = 0.0           !Intermediate weighted value of actual load on plant, W
-  REAL :: Weighted_Design_Load_Sum = 0.0           !Intermediate weighted value of design load on plant, W
-  REAL :: Weighted_Ratio           = 0.0           !Weighted part load ratio of chillers
-  REAL :: Min_DesignWB             = 0.0           !Minimum design twr wet bulb allowed, C
-  REAL :: Min_ActualWb             = 0.0           !Minimum actual oa wet bulb allowed, C
-  REAL :: SetPoint                 = 0.0           !Condenser entering water temperature setpoint this timestep, C
-  REAL :: Opt_CondEntTemp          = 0.0           !Optimized Condenser entering water temperature setpoint this timestep, C
-  REAL :: CondWaterSetpoint        = 0.0           !Condenser entering water temperature setpoint this timestep, C
-  REAL :: DesignClgCapacity_Watts  = 0.0
-  REAL :: CurrentLoad_Watts        = 0.0
-  REAL :: CondInletTemp            = 0.0           ! Condenser water inlet temperature (C)
-  REAL :: TempDesCondIn            = 0.0           ! Design condenser inlet temp. C , or 25.
-  REAL :: EvapOutletTemp           = 0.0           ! Evaporator water outlet temperature (C)
-  REAL :: TempEvapOutDesign        = 0.0           ! design evaporator outlet temperature, water side
-  REAL :: CurLoad                  = 0.0
+  REAL(r64) :: NormDsnCondFlow          = 0.0           !Normalized design condenser flow for cooling towers, m3/s per watt
+  REAL(r64) :: Twr_DesignWB             = 0.0           !The cooling tower design inlet air wet bulb temperature, C
+  REAL(r64):: Dsn_EntCondTemp           = 0.0           !The chiller design entering condenser temp, C; e.g. 29.44C {85F}
+  REAL(r64):: Dsn_CondMinThisChiller    = 0.0           !Design Minimum Condenser Entering for current chillers this timestep
+  REAL(r64):: Dsn_MinCondSetpt          = 0.0           !The design minimum condenser water temp, C; e.g. 18.33C {65 F}
+  REAL(r64):: Cur_MinLiftTD             = 0.0           !Minimum lift (TCond entering - Tevap leaving) TD this timestep
+  REAL(r64):: temp_MinLiftTD            = 0.0           !Intermeidate variable associated with lift (TCond entering - Tevap leaving) TD
+  REAL(r64):: Des_Load                  = 0.0           !array of chiller design loads
+  REAL(r64):: Act_Load                  = 0.0           !array of chiller actual loads
+  REAL(r64):: ALW                       = 0.0           !Actual load weighting of each chiller, W
+  REAL(r64):: DLW                       = 0.0           !Design capacity of each chiller, W
+  REAL(r64):: Design_Load_Sum           = 0.0           !the design load of the chillers, W
+  REAL(r64) :: Actual_Load_Sum          = 0.0           !the actual load of the chillers, W
+  REAL(r64) :: Weighted_Actual_Load_Sum = 0.0           !Intermediate weighted value of actual load on plant, W
+  REAL(r64) :: Weighted_Design_Load_Sum = 0.0           !Intermediate weighted value of design load on plant, W
+  REAL(r64) :: Weighted_Ratio           = 0.0           !Weighted part load ratio of chillers
+  REAL(r64) :: Min_DesignWB             = 0.0           !Minimum design twr wet bulb allowed, C
+  REAL(r64) :: Min_ActualWb             = 0.0           !Minimum actual oa wet bulb allowed, C
+  REAL(r64) :: SetPoint                 = 0.0           !Condenser entering water temperature setpoint this timestep, C
+  REAL(r64) :: Opt_CondEntTemp          = 0.0           !Optimized Condenser entering water temperature setpoint this timestep, C
+  REAL(r64) :: CondWaterSetpoint        = 0.0           !Condenser entering water temperature setpoint this timestep, C
+  REAL(r64) :: DesignClgCapacity_Watts  = 0.0
+  REAL(r64) :: CurrentLoad_Watts        = 0.0
+  REAL(r64) :: CondInletTemp            = 0.0           ! Condenser water inlet temperature (C)
+  REAL(r64) :: TempDesCondIn            = 0.0           ! Design condenser inlet temp. C , or 25.d0
+  REAL(r64) :: EvapOutletTemp           = 0.0           ! Evaporator water outlet temperature (C)
+  REAL(r64) :: TempEvapOutDesign        = 0.0           ! design evaporator outlet temperature, water side
+  REAL(r64) :: CurLoad                  = 0.0
   INTEGER   :: ChillerIndexPlantSide    = 0
   INTEGER   :: ChillerIndexDemandSide   = 0
   INTEGER   :: BranchIndexPlantSide     = 0
@@ -6627,14 +6627,14 @@ SUBROUTINE CalcCondEntSetPoint(SetPtMgrNum)
     ELSE IF (TypeNum == TypeOf_Chiller_Indirect_Absorption .or. TypeNum == TypeOf_Chiller_DFAbsorption) THEN
        TempDesCondIn = PlantLoop(LoopIndexPlantSide)%LoopSide(SupplySide)%Branch(BranchIndexPlantSide)%  &
           Comp(ChillerIndexPlantSide)%TempDesCondIn
-       TempEvapOutDesign = 6.666
+       TempEvapOutDesign = 6.666d0
     ELSE
-       TempDesCondIn     = 25.0
-       TempEvapOutDesign = 6.666
+       TempDesCondIn     = 25.0d0
+       TempEvapOutDesign = 6.666d0
     END IF
 
     ! for attached chillers (that are running this timestep) find their Dsn_MinCondSetpt and Dsn_EntCondTemp
-    Dsn_MinCondSetpt = 999.0
+    Dsn_MinCondSetpt = 999.0d0
     Dsn_EntCondTemp = 0
 
     ! Design Minimum Condenser Entering as a function of the minimum lift and TEvapLvg
@@ -6697,18 +6697,18 @@ SUBROUTINE CalcCondEntSetPoint(SetPtMgrNum)
     ! ***** Calculate (Cond ent - Evap lvg) Section *****
     ! In this section we find the worst case of (Cond ent - Evap lvg) for the
     ! chillers that are running.
-    Cur_MinLiftTD = 9999.0
-    temp_MinLiftTD = 20./1.8
+    Cur_MinLiftTD = 9999.0d0
+    temp_MinLiftTD = 20.d0/1.8d0
     temp_MinLiftTD = CondInletTemp - EvapOutletTemp
     Cur_MinLiftTD = MIN(Cur_MinLiftTD, temp_MinLiftTD)
   END IF
 
   ! ***** Limit conditions Section *****
   ! Check for limit conditions and control to the proper value.
-  If ((Weighted_Ratio >= 0.90) .AND. (Opt_CondEntTemp >= (Dsn_EntCondTemp + 1.0))) Then
+  If ((Weighted_Ratio >= 0.90d0) .AND. (Opt_CondEntTemp >= (Dsn_EntCondTemp + 1.0d0))) Then
   ! Optimized value exceeds the design condenser entering condition or chillers
   ! near full load condition; reset condenser entering setpoint to its design value
-  Setpoint = Dsn_EntCondTemp + 1.0
+  Setpoint = Dsn_EntCondTemp + 1.0d0
   Else
     If ((OutWetBulbTemp >= Min_ActualWb) .AND. (Twr_DesignWB >= Min_DesignWB) &
        .and. (Cur_MinLiftTD > CondEntSetPtMgr(SetPtMgrNum)%MinimumLiftTD)) Then
@@ -6768,12 +6768,12 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
           ! na
   ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-  REAL :: CondWaterSetpoint        = 0.0           ! Condenser entering water temperature setpoint this timestep, C
-  REAL :: InitCondWaterSetpoint    = 0.0           ! Initial condenser entering water temperature setpoint this timestep, C
-  REAL :: EvapOutletTemp           = 0.0           ! Evaporator water outlet temperature (C)
-  REAL :: CondTempLimit            = 0.0           ! Condenser entering water temperature setpoint lower limit
-  REAL :: CurLoad                  = 0.0           ! Current cooling load, W
-  REAL :: MinLiftTD                = 0.0           ! Minimum lift (Tcond entering - Tevap leaving) TD this timestep
+  REAL(r64) :: CondWaterSetpoint        = 0.0           ! Condenser entering water temperature setpoint this timestep, C
+  REAL(r64) :: InitCondWaterSetpoint    = 0.0           ! Initial condenser entering water temperature setpoint this timestep, C
+  REAL(r64) :: EvapOutletTemp           = 0.0           ! Evaporator water outlet temperature (C)
+  REAL(r64) :: CondTempLimit            = 0.0           ! Condenser entering water temperature setpoint lower limit
+  REAL(r64) :: CurLoad                  = 0.0           ! Current cooling load, W
+  REAL(r64) :: MinLiftTD                = 0.0           ! Minimum lift (Tcond entering - Tevap leaving) TD this timestep
   INTEGER   :: ChillerTypeNum           = 0             ! Chiller type number
   INTEGER   :: ChillerLoopNum           = 0             ! Chiller loop number
   INTEGER   :: ChillerBranchNum         = 0             ! Chiller branch number
@@ -6788,14 +6788,14 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
   INTEGER   :: VarNum                   = 0             ! Metered variable number
   INTEGER   :: VarType                  = 0             ! Metered variable type number
   INTEGER   :: VarIndex                 = 0             ! Metered variable index
-  REAL :: DeltaTotEnergy           = 0.0           ! Difference between total energy consumptions at this time step
+  REAL(r64) :: DeltaTotEnergy           = 0.0           ! Difference between total energy consumptions at this time step
                                                         ! and at the previous time step
-  REAL :: ChillerEnergy            = 0.0           ! Chiller energy consumption
-  REAL :: ChilledPumpEnergy        = 0.0           ! Chilled water pump energy consumption
-  REAL :: TowerFanEnergy           = 0.0           ! Colling tower fan energy consumption
-  REAL :: CondPumpEnergy           = 0.0           ! Condenser water pump energy consumption
-  REAL :: TotEnergy                = 0.0           ! Totoal energy consumptions at this time step
-  REAL :: TotEnergyPre             = 0.0           ! Totoal energy consumptions at the previous time step
+  REAL(r64) :: ChillerEnergy            = 0.0           ! Chiller energy consumption
+  REAL(r64) :: ChilledPumpEnergy        = 0.0           ! Chilled water pump energy consumption
+  REAL(r64) :: TowerFanEnergy           = 0.0           ! Colling tower fan energy consumption
+  REAL(r64) :: CondPumpEnergy           = 0.0           ! Condenser water pump energy consumption
+  REAL(r64) :: TotEnergy                = 0.0           ! Totoal energy consumptions at this time step
+  REAL(r64) :: TotEnergyPre             = 0.0           ! Totoal energy consumptions at the previous time step
   LOGICAL   :: RunSubOptCondEntTemp     =.FALSE.
   LOGICAL   :: RunFinalOptCondEntTemp   =.FALSE.
 
@@ -6826,7 +6826,7 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
           EvapOutletTemp = Node(PlantLoop(ChillerLoopNum)%LoopSide(SupplySide)%Branch(ChillerBranchNum)%  &
             Comp(ChillerNum)%NodeNumOut)%temp
       ELSE
-          EvapOutletTemp = 6.666
+          EvapOutletTemp = 6.666d0
       END IF
       CondTempLimit = MinLiftTD + EvapOutletTemp
 
@@ -6863,7 +6863,7 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
       ! Calculate the total energy consumption
       TotEnergy = ChillerEnergy + ChilledPumpEnergy + TowerFanEnergy + CondPumpEnergy
 
-      IF (TotEnergyPre /= 0.0) THEN
+      IF (TotEnergyPre /= 0.0d0) THEN
         DeltaTotEnergy = 0.0
         ! Calculate the total energy consumption difference
         DeltaTotEnergy = TotEnergyPre - TotEnergy
@@ -6871,22 +6871,22 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
         IF ((DeltaTotEnergy > 0) .and. (CondWaterSetpoint >= CondTempLimit) .and.  &
             (.not. RunFinalOptCondEntTemp)) THEN
           IF (.not. RunSubOptCondEntTemp) THEN
-            CondWaterSetpoint = CondWaterSetpoint - 1.0
+            CondWaterSetpoint = CondWaterSetpoint - 1.0d0
             RunOptCondEntTemp = .TRUE.
           ELSE
-            CondWaterSetpoint = CondWaterSetpoint - 0.2
+            CondWaterSetpoint = CondWaterSetpoint - 0.2d0
             RunOptCondEntTemp = .TRUE.
           END IF
           TotEnergyPre = TotEnergy
         ! Set smaller set point (0.2 degC) decrease
         ELSE IF ((DeltaTotEnergy < 0) .and. (.not. RunSubOptCondEntTemp) .and. &
            (CondWaterSetpoint > CondTempLimit) .and. (.not. RunFinalOptCondEntTemp)) THEN
-          CondWaterSetpoint = CondWaterSetpoint + 0.8
+          CondWaterSetpoint = CondWaterSetpoint + 0.8d0
           RunOptCondEntTemp = .TRUE.
           RunSubOptCondEntTemp = .TRUE.
         ELSE
           IF (.not. RunFinalOptCondEntTemp) THEN
-            CondWaterSetpoint = CondWaterSetpoint + 0.2
+            CondWaterSetpoint = CondWaterSetpoint + 0.2d0
             RunOptCondEntTemp = .TRUE.
             RunSubOptCondEntTemp = .FALSE.
             RunFinalOptCondEntTemp = .TRUE.
@@ -6899,7 +6899,7 @@ SUBROUTINE CalcIdealCondEntSetPoint(SetPtMgrNum)
           ENDIF
         END IF
       ELSE
-        CondWaterSetpoint = InitCondWaterSetpoint - 1.0
+        CondWaterSetpoint = InitCondWaterSetpoint - 1.0d0
         TotEnergyPre = TotEnergy
         RunOptCondEntTemp = .TRUE.
         RunSubOptCondEntTemp = .FALSE.

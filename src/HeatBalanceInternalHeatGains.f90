@@ -181,7 +181,7 @@ SUBROUTINE GetInternalHeatGainsInput
   CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE :: AlphaName
   LOGICAL                                     :: ErrorsFound=.false. ! If errors found in input
   LOGICAL                                     :: IsNotOK             ! Flag to verify name
-  REAL, DIMENSION(:), ALLOCATABLE        :: IHGNumbers
+  REAL(r64), DIMENSION(:), ALLOCATABLE        :: IHGNumbers
   INTEGER                                     :: IOStat
   LOGICAL                                     :: IsBlank
   INTEGER                                     :: Loop
@@ -194,26 +194,26 @@ SUBROUTINE GetInternalHeatGainsInput
   INTEGER                                     :: lastOption
   LOGICAL, DIMENSION(:), ALLOCATABLE          :: RepVarSet
   !   Variables for reporting nominal internal gains
-  REAL LightTot     ! Total Lights for calculating lights per square meter
-  REAL ElecTot       ! Total Electric Load for calculating electric per square meter
-  REAL GasTot        ! Total Gas load for calculating gas per square meter
-  REAL OthTot        ! Total Other load for calculating other load per square meter
-  REAL HWETot        ! Total Hot Water Equipment for calculating HWE per square meter
-  REAL StmTot        ! Total Steam for calculating Steam per square meter
+  REAL(r64) LightTot     ! Total Lights for calculating lights per square meter
+  REAL(r64) ElecTot       ! Total Electric Load for calculating electric per square meter
+  REAL(r64) GasTot        ! Total Gas load for calculating gas per square meter
+  REAL(r64) OthTot        ! Total Other load for calculating other load per square meter
+  REAL(r64) HWETot        ! Total Hot Water Equipment for calculating HWE per square meter
+  REAL(r64) StmTot        ! Total Steam for calculating Steam per square meter
   CHARACTER(len=3) BBHeatInd ! Yes if BBHeat in zone, no if not.
   INTEGER Loop1
   CHARACTER(len=MaxNameLength) :: StringOut
-  REAL SchMin
-  REAL SchMax
+  REAL(r64) SchMin
+  REAL(r64) SchMax
   LOGICAL :: UsingThermalComfort=.false.
 !unused  LOGICAL :: ErrFlag
   CHARACTER(len=MaxNameLength) :: liteName
   INTEGER :: zonePt
-  REAL :: mult
-  REAL :: sumArea = 0
-  REAL :: sumPower = 0
+  REAL(r64) :: mult
+  REAL(r64) :: sumArea = 0
+  REAL(r64) :: sumPower = 0
   INTEGER   :: ZoneNum
-  REAL :: maxOccupLoad
+  REAL(r64) :: maxOccupLoad
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject
   LOGICAL :: ErrFlag
   INTEGER :: Item
@@ -476,7 +476,7 @@ SUBROUTINE GetInternalHeatGainsInput
         ENDIF
 
         People(Loop)%FractionRadiant   = IHGNumbers(4)
-        People(Loop)%FractionConvected = 1.0-People(Loop)%FractionRadiant
+        People(Loop)%FractionConvected = 1.0d0-People(Loop)%FractionRadiant
         IF (Item1 == 1) THEN
           IF (People(Loop)%FractionConvected < 0.0) THEN
             CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
@@ -497,7 +497,7 @@ SUBROUTINE GetInternalHeatGainsInput
         ELSE
           People(Loop)%CO2RateFactor = 3.82d-8 ! m3/s-W
         ENDIF
-        If (People(Loop)%CO2RateFactor .LT. 0.) Then
+        If (People(Loop)%CO2RateFactor .LT. 0.d0) Then
           CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                              '", '//TRIM(cNumericFieldNames(6))//' < 0.0, value ='//  &
                              TRIM(RoundSigDigits(IHGNumbers(6),2)))
@@ -538,7 +538,7 @@ SUBROUTINE GetInternalHeatGainsInput
                 ErrorsFound=.true.
               ENDIF
             ENDIF
-          ELSEIF (SchMin < 70.0 .or. SchMax > 1000.0) THEN
+          ELSEIF (SchMin < 70.0d0 .or. SchMax > 1000.0d0) THEN
             IF (Item1 == 1) THEN
               CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'='//TRIM(AlphaName(1))//  &
                                    '", '//TRIM(cAlphaFieldNames(5))//' values')
@@ -688,7 +688,7 @@ SUBROUTINE GetInternalHeatGainsInput
                   ENDIF
                 ENDIF
               ENDIF
-              IF (SchMax > 1.0) THEN
+              IF (SchMax > 1.0d0) THEN
                 IF (Item1 == 1) THEN
                   CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                                      '", '//TRIM(cAlphaFieldNames(9))//', maximum is > 1.0')
@@ -737,7 +737,7 @@ SUBROUTINE GetInternalHeatGainsInput
                   ENDIF
                 ENDIF
               ENDIF
-              IF (SchMax > 2.0) THEN
+              IF (SchMax > 2.0d0) THEN
                 IF (Item1 == 1) THEN
                   CALL ShowWarningError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                                      '", '//TRIM(cAlphaFieldNames(10))//', maximum is > 2.0')
@@ -878,7 +878,7 @@ SUBROUTINE GetInternalHeatGainsInput
   !transfer the nominal number of people in a zone to the tabular reporting
   DO Loop = 1,NumOfZones
     IF (Zone(Loop)%TotOccupants > 0.0) THEN
-      IF (Zone(Loop)%FloorArea > 0.0 .and. Zone(Loop)%FloorArea/Zone(Loop)%TotOccupants < .1) THEN
+      IF (Zone(Loop)%FloorArea > 0.0 .and. Zone(Loop)%FloorArea/Zone(Loop)%TotOccupants < .1d0) THEN
         CALL ShowWarningError(RoutineName//'Zone="'//trim(Zone(Loop)%Name)//'" occupant density is extremely high.')
         IF (Zone(Loop)%FloorArea > 0.0) THEN
           CALL ShowContinueError('Occupant Density=['//trim(RoundSigDigits(Zone(Loop)%TotOccupants/Zone(Loop)%FloorArea,0))//  &
@@ -897,7 +897,7 @@ SUBROUTINE GetInternalHeatGainsInput
         ENDIF
       ENDDO
       IF (maxOccupLoad > Zone(Loop)%TotOccupants) THEN
-        IF (Zone(Loop)%FloorArea > 0.0 .and. Zone(Loop)%FloorArea/maxOccupLoad < .1) THEN
+        IF (Zone(Loop)%FloorArea > 0.0 .and. Zone(Loop)%FloorArea/maxOccupLoad < .1d0) THEN
           CALL ShowWarningError(RoutineName//'Zone="'//trim(Zone(Loop)%Name)//  &
                '" occupant density at a maximum schedule value is extremely high.')
           IF (Zone(Loop)%FloorArea > 0.0) THEN
@@ -1100,10 +1100,10 @@ SUBROUTINE GetInternalHeatGainsInput
         Lights(Loop)%FractionReturnAirPlenTempCoeff1=IHGNumbers(8)
         Lights(Loop)%FractionReturnAirPlenTempCoeff2=IHGNumbers(9)
 
-        Lights(Loop)%FractionConvected=1.0 - (Lights(Loop)%FractionReturnAir +   &
+        Lights(Loop)%FractionConvected=1.0d0 - (Lights(Loop)%FractionReturnAir +   &
                                               Lights(Loop)%FractionRadiant   +   &
                                               Lights(Loop)%FractionShortWave)
-        IF (ABS(Lights(Loop)%FractionConvected) <= .001) Lights(Loop)%FractionConvected=0.0
+        IF (ABS(Lights(Loop)%FractionConvected) <= .001d0) Lights(Loop)%FractionConvected=0.0
         IF (Lights(Loop)%FractionConvected < 0.0) THEN
           IF (Item1 == 1) THEN
             CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
@@ -1419,10 +1419,10 @@ SUBROUTINE GetInternalHeatGainsInput
         ZoneElectric(Loop)%FractionRadiant=IHGNumbers(5)
         ZoneElectric(Loop)%FractionLost=IHGNumbers(6)
                    ! FractionConvected is a calculated field
-        ZoneElectric(Loop)%FractionConvected=1.0 - (ZoneElectric(Loop)%FractionLatent +   &
+        ZoneElectric(Loop)%FractionConvected=1.0d0 - (ZoneElectric(Loop)%FractionLatent +   &
                                                     ZoneElectric(Loop)%FractionRadiant +   &
                                                     ZoneElectric(Loop)%FractionLost)
-        IF (ABS(ZoneElectric(Loop)%FractionConvected) <= .001) ZoneElectric(Loop)%FractionConvected=0.0
+        IF (ABS(ZoneElectric(Loop)%FractionConvected) <= .001d0) ZoneElectric(Loop)%FractionConvected=0.0
         IF (ZoneElectric(Loop)%FractionConvected < 0.0) THEN
           CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                                  '", Sum of Fractions > 1.0')
@@ -1709,7 +1709,7 @@ SUBROUTINE GetInternalHeatGainsInput
         IF ((NumNumber .EQ. 7) .OR. (.not. lNumericFieldBlanks(7))) THEN
           ZoneGas(Loop)%CO2RateFactor=IHGNumbers(7)
         END IF
-        If (ZoneGas(Loop)%CO2RateFactor .LT. 0.) Then
+        If (ZoneGas(Loop)%CO2RateFactor .LT. 0.d0) Then
           CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                            '", '//TRIM(cNumericFieldNames(7))//' < 0.0, value ='//  &
                            TRIM(RoundSigDigits(IHGNumbers(7),2)))
@@ -1722,10 +1722,10 @@ SUBROUTINE GetInternalHeatGainsInput
           ErrorsFound=.true.
         End If
                    ! FractionConvected is a calculated field
-        ZoneGas(Loop)%FractionConvected=1.0 - (ZoneGas(Loop)%FractionLatent  +  &
+        ZoneGas(Loop)%FractionConvected=1.0d0 - (ZoneGas(Loop)%FractionLatent  +  &
                                                ZoneGas(Loop)%FractionRadiant  +  &
                                                ZoneGas(Loop)%FractionLost)
-        IF (ABS(ZoneGas(Loop)%FractionConvected) <= .001) ZoneGas(Loop)%FractionConvected=0.0
+        IF (ABS(ZoneGas(Loop)%FractionConvected) <= .001d0) ZoneGas(Loop)%FractionConvected=0.0
         IF (ZoneGas(Loop)%FractionConvected < 0.0) THEN
           IF (Item1 == 1) THEN
             CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
@@ -1995,10 +1995,10 @@ SUBROUTINE GetInternalHeatGainsInput
         ZoneHWEq(Loop)%FractionRadiant=IHGNumbers(5)
         ZoneHWEq(Loop)%FractionLost=IHGNumbers(6)
                     ! FractionConvected is a calculated field
-        ZoneHWEq(Loop)%FractionConvected=1.0 - (ZoneHWEq(Loop)%FractionLatent +   &
+        ZoneHWEq(Loop)%FractionConvected=1.0d0 - (ZoneHWEq(Loop)%FractionLatent +   &
                                                     ZoneHWEq(Loop)%FractionRadiant +   &
                                                     ZoneHWEq(Loop)%FractionLost)
-        IF (ABS(ZoneHWEq(Loop)%FractionConvected) <= .001) ZoneHWEq(Loop)%FractionConvected=0.0
+        IF (ABS(ZoneHWEq(Loop)%FractionConvected) <= .001d0) ZoneHWEq(Loop)%FractionConvected=0.0
         IF (ZoneHWEq(Loop)%FractionConvected < 0.0) THEN
           CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                                  '", Sum of Fractions > 1.0')
@@ -2226,10 +2226,10 @@ SUBROUTINE GetInternalHeatGainsInput
     ZoneSteamEq(Loop)%FractionRadiant=IHGNumbers(5)
     ZoneSteamEq(Loop)%FractionLost=IHGNumbers(6)
                 ! FractionConvected is a calculated field
-    ZoneSteamEq(Loop)%FractionConvected=1.0 -  (ZoneSteamEq(Loop)%FractionLatent +   &
+    ZoneSteamEq(Loop)%FractionConvected=1.0d0 -  (ZoneSteamEq(Loop)%FractionLatent +   &
                                                 ZoneSteamEq(Loop)%FractionRadiant +   &
                                                 ZoneSteamEq(Loop)%FractionLost)
-    IF (ABS(ZoneSteamEq(Loop)%FractionConvected) <= .001) ZoneSteamEq(Loop)%FractionConvected=0.0
+    IF (ABS(ZoneSteamEq(Loop)%FractionConvected) <= .001d0) ZoneSteamEq(Loop)%FractionConvected=0.0
     IF (ZoneSteamEq(Loop)%FractionConvected < 0.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                              '", Sum of Fractions > 1.0')
@@ -2423,10 +2423,10 @@ SUBROUTINE GetInternalHeatGainsInput
     ZoneOtherEq(Loop)%FractionRadiant=IHGNumbers(5)
     ZoneOtherEq(Loop)%FractionLost=IHGNumbers(6)
                 ! FractionConvected is a calculated field
-    ZoneOtherEq(Loop)%FractionConvected=1.0 - (ZoneOtherEq(Loop)%FractionLatent +   &
+    ZoneOtherEq(Loop)%FractionConvected=1.0d0 - (ZoneOtherEq(Loop)%FractionLatent +   &
                                                 ZoneOtherEq(Loop)%FractionRadiant +   &
                                                 ZoneOtherEq(Loop)%FractionLost)
-    IF (ABS(ZoneOtherEq(Loop)%FractionConvected) <= .001) ZoneOtherEq(Loop)%FractionConvected=0.0
+    IF (ABS(ZoneOtherEq(Loop)%FractionConvected) <= .001d0) ZoneOtherEq(Loop)%FractionConvected=0.0
     IF (ZoneOtherEq(Loop)%FractionConvected < 0.0) THEN
       CALL ShowSevereError(RoutineName//TRIM(CurrentModuleObject)//'="'//TRIM(AlphaName(1))//  &
                              '", Sum of Fractions > 1.0')
@@ -3258,8 +3258,8 @@ SUBROUTINE InitInternalHeatGains
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER, dIMENSION(9) :: C=(/ 6.4611027, .946892, .0000255737, 7.139322, -.0627909,     &
-            .0000589271, -.198550, .000940018, -.00000149532 /)
+  REAL(r64), PARAMETER, dIMENSION(9) :: C=(/ 6.4611027d0, .946892d0, .0000255737d0, 7.139322d0, -.0627909d0,     &
+            .0000589271d0, -.198550d0, .000940018d0, -.00000149532d0 /)
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -3268,59 +3268,59 @@ SUBROUTINE InitInternalHeatGains
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: ActivityLevel_WperPerson  ! Units on Activity Level (Schedule)
-  REAL :: NumberOccupants       ! Number of occupants
+  REAL(r64) :: ActivityLevel_WperPerson  ! Units on Activity Level (Schedule)
+  REAL(r64) :: NumberOccupants       ! Number of occupants
   INTEGER :: SurfNum            ! DO loop counter for surfaces
   INTEGER :: Loop
   INTEGER :: NZ
-  REAL :: Q !, QR
-  REAL :: TotalPeopleGain    ! Total heat gain from people (intermediate calculational variable)
-  REAL :: SensiblePeopleGain ! Sensible heat gain from people (intermediate calculational variable)
-  REAL :: FractionConvected  ! For general lighting, fraction of heat from lights convected to zone air
-  REAL :: FractionReturnAir  ! For general lighting, fraction of heat from lights convected to zone's return air
-  REAL :: FractionRadiant    ! For general lighting, fraction of heat from lights to zone that is long wave
+  REAL(r64) :: Q !, QR
+  REAL(r64) :: TotalPeopleGain    ! Total heat gain from people (intermediate calculational variable)
+  REAL(r64) :: SensiblePeopleGain ! Sensible heat gain from people (intermediate calculational variable)
+  REAL(r64) :: FractionConvected  ! For general lighting, fraction of heat from lights convected to zone air
+  REAL(r64) :: FractionReturnAir  ! For general lighting, fraction of heat from lights convected to zone's return air
+  REAL(r64) :: FractionRadiant    ! For general lighting, fraction of heat from lights to zone that is long wave
   INTEGER :: ReturnZonePlenumCondNum ! Number of ZoneRetPlenCond for a zone's return air plenum, if it exists
-  REAL :: ReturnPlenumTemp   ! Air temperature of a zone's return air plenum (C)
+  REAL(r64) :: ReturnPlenumTemp   ! Air temperature of a zone's return air plenum (C)
 
-!  REAL, ALLOCATABLE, SAVE, DIMENSION(:) :: QSA
+!  REAL(r64), ALLOCATABLE, SAVE, DIMENSION(:) :: QSA
 
 !  IF (.NOT. ALLOCATED(QSA)) ALLOCATE(QSA(NumOfZones))
 
                 !  Zero out time step variables
-  ZoneIntGain%NOFOCC = 0.
-  ZoneIntGain%QOCTOT = 0.
-  ZoneIntGain%QOCSEN = 0.
-  ZoneIntGain%QOCLAT = 0.
-  ZoneIntGain%QOCRAD = 0.
-  ZoneIntGain%QOCCON = 0.
-  ZoneIntGain%QLTSW  = 0.
-  ZoneIntGain%QLTCRA = 0.
-  ZoneIntGain%QLTRAD = 0.
-  ZoneIntGain%QLTCON = 0.
-  ZoneIntGain%QLTTOT = 0.
+  ZoneIntGain%NOFOCC = 0.d0
+  ZoneIntGain%QOCTOT = 0.d0
+  ZoneIntGain%QOCSEN = 0.d0
+  ZoneIntGain%QOCLAT = 0.d0
+  ZoneIntGain%QOCRAD = 0.d0
+  ZoneIntGain%QOCCON = 0.d0
+  ZoneIntGain%QLTSW  = 0.d0
+  ZoneIntGain%QLTCRA = 0.d0
+  ZoneIntGain%QLTRAD = 0.d0
+  ZoneIntGain%QLTCON = 0.d0
+  ZoneIntGain%QLTTOT = 0.d0
 
-  ZoneIntGain%QEELAT = 0.
-  ZoneIntGain%QEERAD = 0.
-  ZoneIntGain%QEECON = 0.
-  ZoneIntGain%QEELost = 0.
-  ZoneIntGain%QGELAT = 0.
-  ZoneIntGain%QGERAD = 0.
-  ZoneIntGain%QGECON = 0.
-  ZoneIntGain%QGELost= 0.
-  ZoneIntGain%QBBRAD = 0.
-  ZoneIntGain%QBBCON = 0.
-  ZoneIntGain%QOELAT = 0.
-  ZoneIntGain%QOERAD = 0.
-  ZoneIntGain%QOECON = 0.
-  ZoneIntGain%QOELost= 0.
-  ZoneIntGain%QHWLAT = 0.
-  ZoneIntGain%QHWRAD = 0.
-  ZoneIntGain%QHWCON = 0.
-  ZoneIntGain%QHWLost= 0.
-  ZoneIntGain%QSELAT = 0.
-  ZoneIntGain%QSERAD = 0.
-  ZoneIntGain%QSECON = 0.
-  ZoneIntGain%QSELost= 0.
+  ZoneIntGain%QEELAT = 0.d0
+  ZoneIntGain%QEERAD = 0.d0
+  ZoneIntGain%QEECON = 0.d0
+  ZoneIntGain%QEELost = 0.d0
+  ZoneIntGain%QGELAT = 0.d0
+  ZoneIntGain%QGERAD = 0.d0
+  ZoneIntGain%QGECON = 0.d0
+  ZoneIntGain%QGELost= 0.d0
+  ZoneIntGain%QBBRAD = 0.d0
+  ZoneIntGain%QBBCON = 0.d0
+  ZoneIntGain%QOELAT = 0.d0
+  ZoneIntGain%QOERAD = 0.d0
+  ZoneIntGain%QOECON = 0.d0
+  ZoneIntGain%QOELost= 0.d0
+  ZoneIntGain%QHWLAT = 0.d0
+  ZoneIntGain%QHWRAD = 0.d0
+  ZoneIntGain%QHWCON = 0.d0
+  ZoneIntGain%QHWLost= 0.d0
+  ZoneIntGain%QSELAT = 0.d0
+  ZoneIntGain%QSERAD = 0.d0
+  ZoneIntGain%QSECON = 0.d0
+  ZoneIntGain%QSELost= 0.d0
 
   DO Loop = 0, 25
     ZoneIntEEuse%EEConvected(Loop) = 0.0
@@ -3432,7 +3432,7 @@ SUBROUTINE InitInternalHeatGains
           ReturnPlenumTemp  = ZoneRetPlenCond(ReturnZonePlenumCondNum)%ZoneTemp
           FractionReturnAir = Lights(Loop)%FractionReturnAirPlenTempCoeff1 - &
                               Lights(Loop)%FractionReturnAirPlenTempCoeff2 * ReturnPlenumTemp
-          FractionReturnAir = MAX(0.0,MIN(1.0,FractionReturnAir))
+          FractionReturnAir = MAX(0.0d0,MIN(1.0d0,FractionReturnAir))
           IF(FractionReturnAir >= (1.0 - Lights(Loop)%FractionShortWave)) THEN
             FractionReturnAir = 1.0 - Lights(Loop)%FractionShortWave
             FractionRadiant   = 0.0
@@ -3927,7 +3927,7 @@ FUNCTION GetDesignLightingLevelForZone(WhichZone) RESULT(DesignLightingLevelSum)
 
           ! FUNCTION ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN)          :: WhichZone ! name of zone
-  REAL                    :: DesignLightingLevelSum ! Sum of design lighting level for this zone
+  REAL(r64)                    :: DesignLightingLevelSum ! Sum of design lighting level for this zone
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3997,16 +3997,16 @@ SUBROUTINE CheckLightsReplaceableMinMaxForZone(WhichZone)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Loop
-  REAL :: LightsRepMin  ! Minimum Lighting replacement fraction for any lights statement for this zone
-  REAL :: LightsRepMax  ! Maximum Lighting replacement fraction for any lights statement for this zone
+  REAL(r64) :: LightsRepMin  ! Minimum Lighting replacement fraction for any lights statement for this zone
+  REAL(r64) :: LightsRepMax  ! Maximum Lighting replacement fraction for any lights statement for this zone
   INTEGER :: NumLights  ! Number of Lights statement for that zone.
 
   IF (GetInternalHeatGainsInputFlag) THEN
     CALL ShowFatalError('CheckLightsReplaceableMinMaxForZone: Function called prior to Getting Lights Input.')
   ENDIF
 
-  LightsRepMin=99999.
-  LightsRepMax=-99999.
+  LightsRepMin=99999.d0
+  LightsRepMax=-99999.d0
   NumLights=0
 
   DO Loop=1,TotLights
@@ -4163,7 +4163,7 @@ SUBROUTINE SumAllInternalConvectionGains(ZoneNum, SumConvGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumConvGainRate
+  REAL(r64), INTENT(OUT)    :: SumConvGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4175,13 +4175,13 @@ SUBROUTINE SumAllInternalConvectionGains(ZoneNum, SumConvGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumConvGainRate
+  REAL(r64) :: tmpSumConvGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumConvGainRate = 0.
+  tmpSumConvGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumConvGainRate = 0.
+    SumConvGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4220,7 +4220,7 @@ SUBROUTINE SumInternalConvectionGainsByTypes(ZoneNum, GainTypeARR, SumConvGainRa
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
   INTEGER, DIMENSION(:), INTENT(IN) :: GainTypeARR ! variable length 1-d array of integer valued gain types
-  REAL, INTENT(OUT)    :: SumConvGainRate
+  REAL(r64), INTENT(OUT)    :: SumConvGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4233,15 +4233,15 @@ SUBROUTINE SumInternalConvectionGainsByTypes(ZoneNum, GainTypeARR, SumConvGainRa
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumberOfTypes
-  REAL :: tmpSumConvGainRate
+  REAL(r64) :: tmpSumConvGainRate
   INTEGER  :: DeviceNum
   INTEGER  :: TypeNum
 
   NumberOfTypes = Size(GainTypeARR)
-  tmpSumConvGainRate = 0.
+  tmpSumConvGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumConvGainRate = 0.
+    SumConvGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4285,7 +4285,7 @@ SUBROUTINE SumAllReturnAirConvectionGains(ZoneNum, SumReturnAirGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumReturnAirGainRate
+  REAL(r64), INTENT(OUT)    :: SumReturnAirGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4297,13 +4297,13 @@ SUBROUTINE SumAllReturnAirConvectionGains(ZoneNum, SumReturnAirGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumRetAirGainRate
+  REAL(r64) :: tmpSumRetAirGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumRetAirGainRate = 0.
+  tmpSumRetAirGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumReturnAirGainRate = 0.
+    SumReturnAirGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4342,7 +4342,7 @@ SUBROUTINE SumReturnAirConvectionGainsByTypes(ZoneNum, GainTypeARR, SumReturnAir
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
   INTEGER, DIMENSION(:), INTENT(IN) :: GainTypeARR ! variable length 1-d array of integer valued gain types
-  REAL, INTENT(OUT)    :: SumReturnAirGainRate
+  REAL(r64), INTENT(OUT)    :: SumReturnAirGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4355,15 +4355,15 @@ SUBROUTINE SumReturnAirConvectionGainsByTypes(ZoneNum, GainTypeARR, SumReturnAir
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumberOfTypes
-  REAL :: tmpSumRetAirConvGainRate
+  REAL(r64) :: tmpSumRetAirConvGainRate
   INTEGER  :: DeviceNum
   INTEGER  :: TypeNum
 
   NumberOfTypes = Size(GainTypeARR)
-  tmpSumRetAirConvGainRate = 0.
+  tmpSumRetAirConvGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumReturnAirGainRate = 0.
+    SumReturnAirGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4407,7 +4407,7 @@ SUBROUTINE SumAllInternalRadiationGains(ZoneNum, SumRadGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumRadGainRate
+  REAL(r64), INTENT(OUT)    :: SumRadGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4419,13 +4419,13 @@ SUBROUTINE SumAllInternalRadiationGains(ZoneNum, SumRadGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumRadGainRate
+  REAL(r64) :: tmpSumRadGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumRadGainRate = 0.
+  tmpSumRadGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumRadGainRate = 0.
+    SumRadGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4464,7 +4464,7 @@ SUBROUTINE SumInternalRadiationGainsByTypes(ZoneNum, GainTypeARR, SumRadiationGa
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
   INTEGER, DIMENSION(:), INTENT(IN) :: GainTypeARR ! variable length 1-d array of integer valued gain types
-  REAL, INTENT(OUT)    :: SumRadiationGainRate
+  REAL(r64), INTENT(OUT)    :: SumRadiationGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4477,15 +4477,15 @@ SUBROUTINE SumInternalRadiationGainsByTypes(ZoneNum, GainTypeARR, SumRadiationGa
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumberOfTypes
-  REAL :: tmpSumRadiationGainRate
+  REAL(r64) :: tmpSumRadiationGainRate
   INTEGER  :: DeviceNum
   INTEGER  :: TypeNum
 
   NumberOfTypes = Size(GainTypeARR)
-  tmpSumRadiationGainRate = 0.
+  tmpSumRadiationGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumRadiationGainRate = 0.
+    SumRadiationGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4528,7 +4528,7 @@ SUBROUTINE SumAllInternalLatentGains(ZoneNum, SumLatentGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumLatentGainRate
+  REAL(r64), INTENT(OUT)    :: SumLatentGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4540,13 +4540,13 @@ SUBROUTINE SumAllInternalLatentGains(ZoneNum, SumLatentGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumLatentGainRate
+  REAL(r64) :: tmpSumLatentGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumLatentGainRate = 0.
+  tmpSumLatentGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumLatentGainRate = 0.
+    SumLatentGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4585,7 +4585,7 @@ SUBROUTINE SumInternalLatentGainsByTypes(ZoneNum, GainTypeARR, SumLatentGainRate
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
   INTEGER, DIMENSION(:), INTENT(IN) :: GainTypeARR ! variable length 1-d array of integer valued gain types
-  REAL, INTENT(OUT)    :: SumLatentGainRate
+  REAL(r64), INTENT(OUT)    :: SumLatentGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4598,15 +4598,15 @@ SUBROUTINE SumInternalLatentGainsByTypes(ZoneNum, GainTypeARR, SumLatentGainRate
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumberOfTypes
-  REAL :: tmpSumLatentGainRate
+  REAL(r64) :: tmpSumLatentGainRate
   INTEGER  :: DeviceNum
   INTEGER  :: TypeNum
 
   NumberOfTypes = Size(GainTypeARR)
-  tmpSumLatentGainRate = 0.
+  tmpSumLatentGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumLatentGainRate = 0.
+    SumLatentGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4649,7 +4649,7 @@ SUBROUTINE SumAllReturnAirLatentGains(ZoneNum, SumRetAirLatentGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumRetAirLatentGainRate
+  REAL(r64), INTENT(OUT)    :: SumRetAirLatentGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4661,13 +4661,13 @@ SUBROUTINE SumAllReturnAirLatentGains(ZoneNum, SumRetAirLatentGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumLatentGainRate
+  REAL(r64) :: tmpSumLatentGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumLatentGainRate = 0.
+  tmpSumLatentGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumRetAirLatentGainRate = 0.
+    SumRetAirLatentGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4705,7 +4705,7 @@ SUBROUTINE SumAllInternalCO2Gains(ZoneNum, SumCO2GainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumCO2GainRate
+  REAL(r64), INTENT(OUT)    :: SumCO2GainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4717,13 +4717,13 @@ SUBROUTINE SumAllInternalCO2Gains(ZoneNum, SumCO2GainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumCO2GainRate
+  REAL(r64) :: tmpSumCO2GainRate
   INTEGER  :: DeviceNum
 
-  tmpSumCO2GainRate = 0.
+  tmpSumCO2GainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumCO2GainRate = 0.
+    SumCO2GainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4762,7 +4762,7 @@ SUBROUTINE SumInternalCO2GainsByTypes(ZoneNum, GainTypeARR, SumCO2GainRate)
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
   INTEGER, DIMENSION(:), INTENT(IN) :: GainTypeARR ! variable length 1-d array of integer valued gain types
-  REAL, INTENT(OUT)    :: SumCO2GainRate
+  REAL(r64), INTENT(OUT)    :: SumCO2GainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4775,15 +4775,15 @@ SUBROUTINE SumInternalCO2GainsByTypes(ZoneNum, GainTypeARR, SumCO2GainRate)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumberOfTypes
-  REAL :: tmpSumCO2GainRate
+  REAL(r64) :: tmpSumCO2GainRate
   INTEGER  :: DeviceNum
   INTEGER  :: TypeNum
 
   NumberOfTypes = Size(GainTypeARR)
-  tmpSumCO2GainRate = 0.
+  tmpSumCO2GainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumCO2GainRate = 0.
+    SumCO2GainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4826,7 +4826,7 @@ SUBROUTINE SumAllInternalGenericContamGains(ZoneNum, SumGCGainRate)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: ZoneNum  ! zone index pointer for which zone to sum gains for
-  REAL, INTENT(OUT)    :: SumGCGainRate
+  REAL(r64), INTENT(OUT)    :: SumGCGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -4838,13 +4838,13 @@ SUBROUTINE SumAllInternalGenericContamGains(ZoneNum, SumGCGainRate)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: tmpSumGCGainRate
+  REAL(r64) :: tmpSumGCGainRate
   INTEGER  :: DeviceNum
 
-  tmpSumGCGainRate = 0.
+  tmpSumGCGainRate = 0.d0
 
   IF (ZoneIntGain(ZoneNum)%NumberOfDevices == 0) THEN
-    SumGCGainRate = 0.
+    SumGCGainRate = 0.d0
     RETURN
   ENDIF
 
@@ -4920,13 +4920,13 @@ SUBROUTINE SetupZoneInternalGain(ZoneNum, cComponentObject , cComponentName, Int
   CHARACTER(len=*),  INTENT(IN) :: cComponentObject ! object class name for device contributing internal gain
   CHARACTER(len=*),  INTENT(IN) :: cComponentName  ! user unique name for device
   INTEGER         ,  INTENT(IN) :: IntGainComp_TypeOfNum
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: ConvectionGainRate ! pointer target for remote convection gain value to be accessed
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: ReturnAirConvectionGainRate
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: ThermalRadiationGainRate  ! pointer target for remote IR radiation gain value to be accessed
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: LatentGainRate
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: ReturnAirLatentGainRate
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: CarbonDioxideGainRate
-  REAL, TARGET, OPTIONAL, INTENT(IN) :: GenericContamGainRate
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ConvectionGainRate ! pointer target for remote convection gain value to be accessed
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ReturnAirConvectionGainRate
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ThermalRadiationGainRate  ! pointer target for remote IR radiation gain value to be accessed
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: LatentGainRate
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: ReturnAirLatentGainRate
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: CarbonDioxideGainRate
+  REAL(r64), TARGET, OPTIONAL, INTENT(IN) :: GenericContamGainRate
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
   INTEGER, PARAMETER :: DeviceAllocInc = 4

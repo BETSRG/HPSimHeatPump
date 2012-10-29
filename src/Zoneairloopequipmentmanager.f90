@@ -78,9 +78,9 @@ SUBROUTINE ManageZoneAirLoopEquipment(ZoneAirLoopEquipName, FirstHVACIteration, 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN) :: ZoneAirLoopEquipName
   LOGICAL, INTENT(IN) :: FirstHVACIteration
-  REAL           :: SysOutputProvided
-  REAL, INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
-  REAL           :: NonAirSysOutput
+  REAL(r64)           :: SysOutputProvided
+  REAL(r64), INTENT(OUT) :: LatOutputProvided   ! Latent add/removal supplied by window AC (kg/s), dehumid = negative
+  REAL(r64)           :: NonAirSysOutput
   INTEGER, INTENT(IN) :: ActualZoneNum
   INTEGER             :: ControlledZoneNum
   INTEGER             :: CompIndex
@@ -193,7 +193,7 @@ CHARACTER(len=*), PARAMETER :: RoutineName='GetZoneAirLoopEquipment: ' ! include
   INTEGER :: NumNums
   INTEGER :: IOSTAT
   CHARACTER(len=MaxNameLength), DIMENSION(4) :: AlphArray
-  REAL, DIMENSION(2) :: NumArray
+  REAL(r64), DIMENSION(2) :: NumArray
   LOGICAL :: ErrorsFound = .false.   ! If errors detected in input
   LOGICAL       :: IsNotOK               ! Flag to verify name
   LOGICAL       :: IsBlank               ! Flag for blank name
@@ -242,11 +242,11 @@ CHARACTER(len=*), PARAMETER :: RoutineName='GetZoneAirLoopEquipment: ' ! include
         ENDIF
         AirDistUnit(AirDistUnitNum)%UpStreamLeakFrac = NumArray(1)
         AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac = NumArray(2)
-        IF (AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac <= 0.0) THEN
-          AirDistUnit(AirDistUnitNum)%LeakLoadMult = 1.0
-        ELSE IF (AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac < 1.0 .AND. &
-                 AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac > 0.0) THEN
-          AirDistUnit(AirDistUnitNum)%LeakLoadMult = 1.0/(1.0-AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac)
+        IF (AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac <= 0.0d0) THEN
+          AirDistUnit(AirDistUnitNum)%LeakLoadMult = 1.0d0
+        ELSE IF (AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac < 1.0d0 .AND. &
+                 AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac > 0.0d0) THEN
+          AirDistUnit(AirDistUnitNum)%LeakLoadMult = 1.0d0/(1.0d0-AirDistUnit(AirDistUnitNum)%DownStreamLeakFrac)
         ELSE
           CALL ShowSevereError('Error found in '//TRIM(CurrentModuleObject)//' = '//TRIM(AirDistUnit(AirDistUnitNum)%Name))
           CALL ShowContinueError(TRIM(cNumericFields(2))//' must be less than 1.0')
@@ -497,9 +497,9 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: AirDistUnitNum
-  REAL, INTENT(INOUT) :: SysOutputProvided
-  REAL, INTENT(OUT)   :: NonAirSysOutput
-  REAL, INTENT(OUT)   :: LatOutputProvided ! Latent add/removal provided by this unit (kg/s), dehumidify = negative
+  REAL(r64), INTENT(INOUT) :: SysOutputProvided
+  REAL(r64), INTENT(OUT)   :: NonAirSysOutput
+  REAL(r64), INTENT(OUT)   :: LatOutputProvided ! Latent add/removal provided by this unit (kg/s), dehumidify = negative
   LOGICAL :: FirstHVACIteration
   INTEGER :: ControlledZoneNum
   INTEGER, INTENT(IN) :: ActualZoneNum
@@ -517,14 +517,14 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
   INTEGER :: InNodeNum  ! air distribution unit inlet node
   INTEGER :: OutNodeNum ! air distribution unit outlet node
   INTEGER :: AirLoopNum=0 ! index of air loop
-  REAL :: CpAirZn
-  REAL :: CpAirSys
-  REAL :: MassFlowRateMaxAvail        ! max avail mass flow rate excluding leaks [kg/s]
-  REAL :: MassFlowRateMinAvail        ! min avail mass flow rate excluding leaks [kg/s]
-  REAL :: MassFlowRateUpStreamLeakMax ! max upstream leak flow rate [kg/s]
-  REAL :: DesFlowRatio=0.0            ! ratio of system to sum of zones design flow rate
-  REAL :: SpecHumOut=0.0              ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
-  REAL :: SpecHumIn=0.0               ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
+  REAL(r64) :: CpAirZn
+  REAL(r64) :: CpAirSys
+  REAL(r64) :: MassFlowRateMaxAvail        ! max avail mass flow rate excluding leaks [kg/s]
+  REAL(r64) :: MassFlowRateMinAvail        ! min avail mass flow rate excluding leaks [kg/s]
+  REAL(r64) :: MassFlowRateUpStreamLeakMax ! max upstream leak flow rate [kg/s]
+  REAL(r64) :: DesFlowRatio=0.0            ! ratio of system to sum of zones design flow rate
+  REAL(r64) :: SpecHumOut=0.0              ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  REAL(r64) :: SpecHumIn=0.0               ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
 
       DO AirDistCompNum = 1, AirDistUnit(AirDistUnitNum)%NumComponents
          NonAirSysOutput = 0.0
@@ -542,7 +542,7 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
              IF (AirLoopNum > 0) THEN
                DesFlowRatio = AirLoopFlow(AirLoopNum)%SysToZoneDesFlowRatio
              ELSE
-               DesFlowRatio = 1.0
+               DesFlowRatio = 1.0d0
              END IF
              MassFlowRateUpStreamLeakMax = AirDistUnit(AirDistUnitNum)%UpStreamLeakFrac*Node(InNodeNum)%MassFlowRateMax*DesFlowRatio
              IF (MassFlowRateMaxAvail > MassFlowRateUpStreamLeakMax) THEN
@@ -552,7 +552,7 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
                AirDistUnit(AirDistUnitNum)%MassFlowRateUpStrLk = MassFlowRateMaxAvail
                Node(InNodeNum)%MassFlowRateMaxAvail = 0.0
              END IF
-             Node(InNodeNum)%MassFlowRateMinAvail = MAX(0.0, MassFlowRateMinAvail &
+             Node(InNodeNum)%MassFlowRateMinAvail = MAX(0.0d0, MassFlowRateMinAvail &
                                                              -AirDistUnit(AirDistUnitNum)%MassFlowRateUpStrLk)
            END IF
          END IF
@@ -653,10 +653,10 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
                                                            + AirDistUnit(AirDistUnitNum)%MassFlowRateUpStrLk
              Node(InNodeNum)%MassFlowRate = AirDistUnit(AirDistUnitNum)%MassFlowRateSup
              Node(OutNodeNum)%MassFlowRate = AirDistUnit(AirDistUnitNum)%MassFlowRateZSup
-             Node(OutNodeNum)%MassFlowRateMaxAvail = MAX(0.0, MassFlowRateMaxAvail &
+             Node(OutNodeNum)%MassFlowRateMaxAvail = MAX(0.0d0, MassFlowRateMaxAvail &
                                                      - AirDistUnit(AirDistUnitNum)%MassFlowRateDnStrLk &
                                                      - AirDistUnit(AirDistUnitNum)%MassFlowRateUpStrLk)
-             Node(OutNodeNum)%MassFlowRateMinAvail = MAX(0.0, MassFlowRateMinAvail &
+             Node(OutNodeNum)%MassFlowRateMinAvail = MAX(0.0d0, MassFlowRateMinAvail &
                                                      - AirDistUnit(AirDistUnitNum)%MassFlowRateDnStrLk &
                                                      - AirDistUnit(AirDistUnitNum)%MassFlowRateUpStrLk)
              AirDistUnit(AirDistUnitNum)%MaxAvailDelta = MassFlowRateMaxAvail - Node(OutNodeNum)%MassFlowRateMaxAvail
@@ -678,9 +678,9 @@ SUBROUTINE SimZoneAirLoopEquipment(AirDistUnitNum, SysOutputProvided, NonAirSysO
       ! Sign convention: LatOutputProvided <0 Zone is dehumidified
       !                  LatOutputProvided >0 Zone is humidified
       SpecHumOut = Node(AirDistUnit(AirDistUnitNum)%OutletNodeNum)%HumRat / &
-                   (1.0 + Node(AirDistUnit(AirDistUnitNum)%OutletNodeNum)%HumRat)
+                   (1.0d0 + Node(AirDistUnit(AirDistUnitNum)%OutletNodeNum)%HumRat)
       SpecHumIn  = Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat / &
-                   (1.0 + Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat)
+                   (1.0d0 + Node(ZoneEquipConfig(ControlledZoneNum)%ZoneNode)%HumRat)
       LatOutputProvided = Node(AirDistUnit(AirDistUnitNum)%OutletNodeNum)%MassFlowRate * &
                           (SpecHumOut - SpecHumIn) ! Latent rate (kg/s), dehumid = negative
 

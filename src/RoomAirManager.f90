@@ -1414,7 +1414,7 @@ SUBROUTINE SharedDVCVUFDataInit(ZoneNum)
   INTEGER                         :: ZoneNum
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL,PARAMETER  :: BaseDischargeCoef = 0.62
+  REAL(r64),PARAMETER  :: BaseDischargeCoef = 0.62d0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -1445,22 +1445,22 @@ SUBROUTINE SharedDVCVUFDataInit(ZoneNum)
   INTEGER         :: contDoor             = 0 ! counter
   INTEGER         :: Loop                 = 0 ! counter
   INTEGER         :: Loop2                = 0 ! counter
-  REAL       :: Z1ZoneAux            = 0.0 ! Auxiliary variables
-  REAL       :: Z2ZoneAux            = 0.0 ! Auxiliary variables
-  REAL       :: Z1Zone               = 0.0 ! Auxiliary variables
-  REAL       :: Z2Zone               = 0.0 ! Auxiliary variables
-  REAL       :: CeilingHeightDiffMax = 0.1 ! Maximum difference between wall height and ceiling height
+  REAL(r64)       :: Z1ZoneAux            = 0.0 ! Auxiliary variables
+  REAL(r64)       :: Z2ZoneAux            = 0.0 ! Auxiliary variables
+  REAL(r64)       :: Z1Zone               = 0.0 ! Auxiliary variables
+  REAL(r64)       :: Z2Zone               = 0.0 ! Auxiliary variables
+  REAL(r64)       :: CeilingHeightDiffMax = 0.1 ! Maximum difference between wall height and ceiling height
   LOGICAL         :: SetZoneAux
   INTEGER, ALLOCATABLE, DIMENSION (:)   :: AuxSurf
   INTEGER         :: MaxSurf
   INTEGER, ALLOCATABLE, DIMENSION (:,:) :: AuxAirflowNetworkSurf
-  REAL       :: WidthFactMax
-  REAL       :: HeightFactMax
-  REAL       :: WidthFact
-  REAL       :: HeightFact
+  REAL(r64)       :: WidthFactMax
+  REAL(r64)       :: HeightFactMax
+  REAL(r64)       :: WidthFact
+  REAL(r64)       :: HeightFact
   INTEGER         :: Loop3                = 0 ! counter
   INTEGER         :: ZoneEquipConfigNum       ! counter
-  REAL       :: AinCV
+  REAL(r64)       :: AinCV
   INTEGER         :: AirflowNetworkSurfPtr
   INTEGER         :: NSides
   LOGICAL,SAVE             :: MyOneTimeFlag = .true.

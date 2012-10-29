@@ -105,7 +105,7 @@ SUBROUTINE ManageZoneContaminanUpdates(UpdateType, ShortenTimeStepSys,   &
   INTEGER, INTENT(IN) :: UpdateType             ! Can be iGetZoneSetpoints, iPredictStep, iCorrectStep
   LOGICAL, INTENT(IN) :: ShortenTimeStepSys
   LOGICAL, INTENT(IN) :: UseZoneTimeStepHistory      ! if true then use zone timestep history, if false use system time step
-  REAL,    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL(r64),    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -194,9 +194,9 @@ SUBROUTINE GetZoneContaminanInputs
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength), DIMENSION(:), ALLOCATABLE :: AlphaName
-  REAL, DIMENSION(:), ALLOCATABLE        :: IHGNumbers
-  REAL SchMin
-  REAL SchMax
+  REAL(r64), DIMENSION(:), ALLOCATABLE        :: IHGNumbers
+  REAL(r64) SchMin
+  REAL(r64) SchMax
   INTEGER :: NumAlpha
   INTEGER :: NumNumber
   INTEGER :: IOSTAT
@@ -431,7 +431,7 @@ SUBROUTINE GetZoneContaminanInputs
     ENDIF
 
     ZoneContamGenericPDriven(Loop)%GCGenRateCoef = IHGNumbers(1)
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
@@ -439,13 +439,13 @@ SUBROUTINE GetZoneContaminanInputs
     End If
 
     ZoneContamGenericPDriven(Loop)%GCExpo = IHGNumbers(2)
-    If (IHGNumbers(2) .LE. 0.) Then
+    If (IHGNumbers(2) .LE. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative or zero value is not allowed for '//TRIM(cNumericFieldNames(2))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(2),2)))
       ErrorsFound=.true.
     End If
-    If (IHGNumbers(2) .GT. 1.) Then
+    If (IHGNumbers(2) .GT. 1.d0) Then
       CALL ShowSevereError(RoutineName//'The value greater than 1.0 is not allowed for '//TRIM(cNumericFieldNames(2))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(2),2)))
@@ -532,13 +532,13 @@ SUBROUTINE GetZoneContaminanInputs
     ZoneContamGenericCutoff(Loop)%GCGenerateRate = IHGNumbers(1)
     ZoneContamGenericCutoff(Loop)%GCCutoffValue  = IHGNumbers(2)
 
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
       ErrorsFound=.true.
     End If
-    If (IHGNumbers(2) .LE. 0.) Then
+    If (IHGNumbers(2) .LE. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values or zero are not allowed for '//TRIM(cNumericFieldNames(2))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(2),2)))
@@ -624,13 +624,13 @@ SUBROUTINE GetZoneContaminanInputs
     ZoneContamGenericDecay(Loop)%GCInitEmiRate = IHGNumbers(1)
     ZoneContamGenericDecay(Loop)%GCDelayTime  = IHGNumbers(2)
 
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
       ErrorsFound=.true.
     End If
-    If (IHGNumbers(2) .LE. 0.) Then
+    If (IHGNumbers(2) .LE. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values or zero are not allowed for '//TRIM(cNumericFieldNames(2))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(2),2)))
@@ -717,13 +717,13 @@ SUBROUTINE GetZoneContaminanInputs
 
     ZoneContamGenericBLDiff(Loop)%GCTranCoef = IHGNumbers(1)
     ZoneContamGenericBLDiff(Loop)%GCHenryCoef = IHGNumbers(2)
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
       ErrorsFound=.true.
     End If
-    If (IHGNumbers(2) .LE. 0.) Then
+    If (IHGNumbers(2) .LE. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values or zero are not allowed for '//TRIM(cNumericFieldNames(2))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(2),2)))
@@ -810,7 +810,7 @@ SUBROUTINE GetZoneContaminanInputs
     ENDIF
 
     ZoneContamGenericDVS(Loop)%GCDepoVelo = IHGNumbers(1)
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
@@ -895,7 +895,7 @@ SUBROUTINE GetZoneContaminanInputs
 
     ZoneContamGenericDRS(Loop)%GCDepoRate = IHGNumbers(1)
 
-    If (IHGNumbers(1) .LT. 0.) Then
+    If (IHGNumbers(1) .LT. 0.d0) Then
       CALL ShowSevereError(RoutineName//'Negative values are not allowed for '//TRIM(cNumericFieldNames(1))// &
                             ' in '//TRIM(CurrentModuleObject)//' = '//TRIM(AlphaName(1)))
       CALL ShowContinueError('The input value is '//TRIM(RoundSigDigits(IHGNumbers(1),2)))
@@ -982,7 +982,7 @@ SUBROUTINE GetZoneContaminanSetpoints
   INTEGER :: NumAlphas
   INTEGER :: NumNums
   INTEGER :: IOSTAT
-!unused1208  REAL, DIMENSION(2) :: NumArray
+!unused1208  REAL(r64), DIMENSION(2) :: NumArray
 !unused1208  CHARACTER(len=MaxNameLength), DIMENSION(29) :: AlphArray
   LOGICAL :: ErrorsFound = .FALSE.
   LOGICAL :: IsNotOK               ! Flag to verify name
@@ -1160,12 +1160,12 @@ SUBROUTINE InitZoneContSetpoints
   LOGICAL,SAVE  :: MyOneTimeFlag = .TRUE.
   LOGICAL,SAVE  :: MyEnvrnFlag = .TRUE.
   LOGICAL,SAVE  :: MyDayFlag = .TRUE.
-!  REAL      :: CO2Gain                  ! Zone CO2 gain
-  REAL      :: GCGain                   ! Zone generic contaminant gain
-  REAL      :: Pi                       ! Pressue at zone i
-  REAL      :: Pj                       ! Pressue at zone j
-  REAL      :: Sch                      ! Schedule value
-  REAL      :: Cs                       ! Surface concentration level for the Boundary Layer Diffusion Controlled Model
+!  REAL(r64)      :: CO2Gain                  ! Zone CO2 gain
+  REAL(r64)      :: GCGain                   ! Zone generic contaminant gain
+  REAL(r64)      :: Pi                       ! Pressue at zone i
+  REAL(r64)      :: Pj                       ! Pressue at zone j
+  REAL(r64)      :: Sch                      ! Schedule value
+  REAL(r64)      :: Cs                       ! Surface concentration level for the Boundary Layer Diffusion Controlled Model
   LOGICAL,SAVE  :: MyConfigOneTimeFlag = .TRUE.
   INTEGER :: AirLoopNum
   INTEGER :: ContZoneNum
@@ -1212,9 +1212,9 @@ SUBROUTINE InitZoneContSetpoints
       ALLOCATE(CO2ZoneTimeMinus3Temp(NumOfZones))
       CO2ZoneTimeMinus3Temp=0.0
       ALLOCATE(ZoneCO2MX(NumOfZones))
-      ZoneCO2MX = 0.0
+      ZoneCO2MX = 0.0d0
       ALLOCATE(ZoneCO2M2(NumOfZones))
-      ZoneCO2M2 = 0.0
+      ZoneCO2M2 = 0.0d0
       ALLOCATE(ZoneCO21(NumOfZones))
       ZoneCO21=0.0
 
@@ -1226,14 +1226,14 @@ SUBROUTINE InitZoneContSetpoints
       ALLOCATE(MixingMassFlowCO2(NumOfZones))
       MixingMassFlowCO2=0.0
       ALLOCATE(ZoneAirDensityCO(NumOfZones))
-      ZoneAirDensityCO = 0.
+      ZoneAirDensityCO = 0.d0
       !
       ALLOCATE(AZ(NumOfZones))
-      AZ = 0.
+      AZ = 0.d0
       ALLOCATE(BZ(NumOfZones))
-      BZ = 0.
+      BZ = 0.d0
       ALLOCATE(CZ(NumOfZones))
-      CZ = 0.
+      CZ = 0.d0
     END IF
 
     ALLOCATE(CONTRAT(NumOfZones))
@@ -1286,9 +1286,9 @@ SUBROUTINE InitZoneContSetpoints
       ALLOCATE(GCZoneTimeMinus3Temp(NumOfZones))
       GCZoneTimeMinus3Temp=0.0
       ALLOCATE(ZoneGCMX(NumOfZones))
-      ZoneGCMX = 0.0
+      ZoneGCMX = 0.0d0
       ALLOCATE(ZoneGCM2(NumOfZones))
-      ZoneGCM2 = 0.0
+      ZoneGCM2 = 0.0d0
       ALLOCATE(ZoneGC1(NumOfZones))
       ZoneGC1=0.0
 
@@ -1298,14 +1298,14 @@ SUBROUTINE InitZoneContSetpoints
       ALLOCATE(MixingMassFlowGC(NumOfZones))
       MixingMassFlowGC=0.0
       ALLOCATE(ZoneAirDensityGC(NumOfZones))
-      ZoneAirDensityGC = 0.
+      ZoneAirDensityGC = 0.d0
       !
       ALLOCATE(AZGC(NumOfZones))
-      AZGC = 0.
+      AZGC = 0.d0
       ALLOCATE(BZGC(NumOfZones))
-      BZGC = 0.
+      BZGC = 0.d0
       ALLOCATE(CZGC(NumOfZones))
-      CZGC = 0.
+      CZGC = 0.d0
     END IF
 
     ALLOCATE(CONTRATGC(NumOfZones))
@@ -1341,12 +1341,12 @@ SUBROUTINE InitZoneContSetpoints
       DSCO2ZoneTimeMinus2 = OutdoorCO2
       DSCO2ZoneTimeMinus3 = OutdoorCO2
       DSCO2ZoneTimeMinus4 = OutdoorCO2
-      CO2ZoneTimeMinus1Temp = 0.0
-      CO2ZoneTimeMinus2Temp = 0.0
-      CO2ZoneTimeMinus3Temp = 0.0
+      CO2ZoneTimeMinus1Temp = 0.0d0
+      CO2ZoneTimeMinus2Temp = 0.0d0
+      CO2ZoneTimeMinus3Temp = 0.0d0
       ZoneAirCO2Temp = OutdoorCO2
-      ZoneCO2Setpoint = 0.0
-      CO2PredictedRate = 0.0
+      ZoneCO2Setpoint = 0.0d0
+      CO2PredictedRate = 0.0d0
       ZoneAirCO2 = OutdoorCO2
       ZoneCO21 = OutdoorCO2
       ZoneCO2MX = OutdoorCO2
@@ -1362,12 +1362,12 @@ SUBROUTINE InitZoneContSetpoints
       DSGCZoneTimeMinus2 = OutdoorGC
       DSGCZoneTimeMinus3 = OutdoorGC
       DSGCZoneTimeMinus4 = OutdoorGC
-      GCZoneTimeMinus1Temp = 0.0
-      GCZoneTimeMinus2Temp = 0.0
-      GCZoneTimeMinus3Temp = 0.0
+      GCZoneTimeMinus1Temp = 0.0d0
+      GCZoneTimeMinus2Temp = 0.0d0
+      GCZoneTimeMinus3Temp = 0.0d0
       ZoneAirGCTemp = OutdoorGC
-      ZoneGCSetpoint = 0.0
-      GCPredictedRate = 0.0
+      ZoneGCSetpoint = 0.0d0
+      GCPredictedRate = 0.0d0
       ZoneAirGC = OutdoorGC
       ZoneGC1 = OutdoorGC
       ZoneGCMX = OutdoorGC
@@ -1375,7 +1375,7 @@ SUBROUTINE InitZoneContSetpoints
       DO Loop = 1, TotGCBLDiff
         Surface(ZoneContamGenericBLDiff(Loop)%SurfNum)%GenericContam = OutdoorGC
       End Do
-      If (TotGCGenDecay > 0) ZoneContamGenericDecay%GCTime = 0.0
+      If (TotGCGenDecay > 0) ZoneContamGenericDecay%GCTime = 0.0d0
     END IF
     MyEnvrnFlag = .FALSE.
   END IF
@@ -1447,7 +1447,7 @@ SUBROUTINE InitZoneContSetpoints
 
   ! Generic contaminant gain
   IF (Contaminant%GenericContamSimulation) Then
-    ZoneGCGain = 0.
+    ZoneGCGain = 0.d0
     ! from constant model
     Do Loop = 1, TotGCGenConstant
       ZoneNum = ZoneContamGenericConstant(Loop)%ActualZoneNum
@@ -1469,7 +1469,7 @@ SUBROUTINE InitZoneContSetpoints
               GetCurrentScheduleValue(ZoneContamGenericPDriven(Loop)%GCGenRateCoefSchedPtr) * &
               (Pj - Pi)**ZoneContamGenericPDriven(Loop)%GCExpo
         Else
-          GCGain = 0.0
+          GCGain = 0.0d0
         End If
         ZoneContamGenericPDriven(Loop)%GCGenRate = GCGain
       End Do
@@ -1481,9 +1481,9 @@ SUBROUTINE InitZoneContSetpoints
       If (ZoneAirGC(ZoneNum) < ZoneContamGenericCutoff(Loop)%GCCutoffValue) Then
         GCGain = ZoneContamGenericCutoff(Loop)%GCGenerateRate * &
               GetCurrentScheduleValue(ZoneContamGenericCutoff(Loop)%GCGenerateRateSchedPtr) * &
-              (1. - ZoneAirGC(ZoneNum)/ZoneContamGenericCutoff(Loop)%GCCutoffValue)
+              (1.d0 - ZoneAirGC(ZoneNum)/ZoneContamGenericCutoff(Loop)%GCCutoffValue)
       Else
-        GCGain = 0.0
+        GCGain = 0.0d0
       End If
       ZoneContamGenericCutoff(Loop)%GCGenRate = GCGain
     End Do
@@ -1492,7 +1492,7 @@ SUBROUTINE InitZoneContSetpoints
     DO Loop = 1, TotGCGenDecay
       Sch = GetCurrentScheduleValue(ZoneContamGenericDecay(Loop)%GCEmiRateSchedPtr)
       ZoneNum = ZoneContamGenericDecay(Loop)%ActualZoneNum
-      If (Sch .eq. 0.0 .OR. BeginEnvrnFlag .OR. WarmupFlag) Then
+      If (Sch .eq. 0.0d0 .OR. BeginEnvrnFlag .OR. WarmupFlag) Then
         ZoneContamGenericDecay(Loop)%GCTime = 0.0
       Else
         ZoneContamGenericDecay(Loop)%GCTime = ZoneContamGenericDecay(Loop)%GCTime + TimeStepZone*SecInHour
@@ -1567,7 +1567,7 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT(IN) :: ShortenTimeStepSys
   LOGICAL, INTENT(IN) :: UseZoneTimeStepHistory      ! if true then use zone timestep history, if false use system time step
-  REAL,    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL(r64),    INTENT(IN) :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -1579,23 +1579,23 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: CO2Gain                     ! Zone CO2 internal load
-  REAL :: RhoAir                      ! Zone air density
-  REAL :: A                           ! Coefficient of storage term in a zone balance equation
-  REAL :: B                           ! Coefficient of variable term in a zone balance equation
-  REAL :: C                           ! Coefficient of constnat term in a zone balance equation
-  REAL :: SysTimeStepInSeconds        ! System time step lenght [s]
+  REAL(r64) :: CO2Gain                     ! Zone CO2 internal load
+  REAL(r64) :: RhoAir                      ! Zone air density
+  REAL(r64) :: A                           ! Coefficient of storage term in a zone balance equation
+  REAL(r64) :: B                           ! Coefficient of variable term in a zone balance equation
+  REAL(r64) :: C                           ! Coefficient of constnat term in a zone balance equation
+  REAL(r64) :: SysTimeStepInSeconds        ! System time step lenght [s]
   LOGICAL   :: ControlledCO2ZoneFlag       ! This determines whether this is a CO2 controlled zone or not
-  REAL :: LoadToCO2SetPoint           ! CO2 load at CO2 set point
+  REAL(r64) :: LoadToCO2SetPoint           ! CO2 load at CO2 set point
   INTEGER   :: ContControlledZoneNum       ! The Splitter that you are currently loading input into
   INTEGER   :: ZoneNum
   INTEGER   :: I
-  REAL :: ZoneAirCO2Setpoint          ! Zone CO2 setpoint
-  REAL :: LoadToGCSetPoint            ! Generic contaminant load at generic contaminant set point
+  REAL(r64) :: ZoneAirCO2Setpoint          ! Zone CO2 setpoint
+  REAL(r64) :: LoadToGCSetPoint            ! Generic contaminant load at generic contaminant set point
   LOGICAL   :: ControlledGCZoneFlag        ! This determines whether this is a generic contaminant controlled zone or not
-  REAL :: ZoneAirGCSetpoint           ! Zone generic contaminant setpoint
-  REAL :: GCGain                      ! Zone generic contaminant internal load
-!  REAL :: Temp                      ! Zone generic contaminant internal load
+  REAL(r64) :: ZoneAirGCSetpoint           ! Zone generic contaminant setpoint
+  REAL(r64) :: GCGain                      ! Zone generic contaminant internal load
+!  REAL(r64) :: Temp                      ! Zone generic contaminant internal load
 
           ! FLOW:
 
@@ -1698,7 +1698,7 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
       ControlledCO2ZoneFlag = .FALSE.
       ! Check all the controlled zones to see if it matches the zone simulated
       DO ContControlledZoneNum = 1, NumContControlledZones
-        IF (GetCurrentScheduleValue(ContaminantControlledZone(ContControlledZoneNum)%AvaiSchedPtr) .GT. 0.) Then
+        IF (GetCurrentScheduleValue(ContaminantControlledZone(ContControlledZoneNum)%AvaiSchedPtr) .GT. 0.d0) Then
           ZoneAirCO2Setpoint = ZoneCO2Setpoint(ContaminantControlledZone(ContControlledZoneNum)%ActualZoneNum)
           IF (ContaminantControlledZone(ContControlledZoneNum)%EMSOverrideCO2SetpointOn) THEN
             ZoneAirCO2Setpoint = ContaminantControlledZone(ContControlledZoneNum)%EMSOverrideCO2SetpointValue
@@ -1752,15 +1752,15 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
         ! the amount of CO2 that must be removed by the system.
         SELECT CASE (ZoneAirSolutionAlgo)
           CASE (Use3rdOrder)
-            LoadToCO2SetPoint = ((11.0/6.0) * C + A) * ZoneAirCO2Setpoint - &
-             (B + C * (3.0 * CO2ZoneTimeMinus1Temp(ZoneNum) - (3.0/2.0) * CO2ZoneTimeMinus2Temp(ZoneNum) + &
-             (1.0/3.0) * CO2ZoneTimeMinus3Temp(ZoneNum)))
+            LoadToCO2SetPoint = ((11.0d0/6.0d0) * C + A) * ZoneAirCO2Setpoint - &
+             (B + C * (3.0d0 * CO2ZoneTimeMinus1Temp(ZoneNum) - (3.0d0/2.0d0) * CO2ZoneTimeMinus2Temp(ZoneNum) + &
+             (1.0d0/3.0d0) * CO2ZoneTimeMinus3Temp(ZoneNum)))
           ! Exact solution
           CASE (UseAnalyticalSolution)
-            If (A .eq. 0.0) Then ! B=0
+            If (A .eq. 0.0d0) Then ! B=0
               LoadToCO2SetPoint = C*(ZoneAirCO2Setpoint-ZoneCO21(ZoneNum)) - B
             Else
-              LoadToCO2SetPoint = A*(ZoneAirCO2Setpoint-ZoneCO21(ZoneNum)*exp(MIN(700.,-A/C)))/(1.0-exp(MIN(700.,-A/C))) - B
+              LoadToCO2SetPoint = A*(ZoneAirCO2Setpoint-ZoneCO21(ZoneNum)*exp(MIN(700.d0,-A/C)))/(1.0d0-exp(MIN(700.d0,-A/C))) - B
             End If
           CASE (UseEulerMethod)
             LoadToCO2SetPoint = C*(ZoneAirCO2Setpoint-ZoneCO21(ZoneNum)) + A*ZoneAirCO2Setpoint - B
@@ -1786,7 +1786,7 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
       ControlledGCZoneFlag = .FALSE.
       ! Check all the controlled zones to see if it matches the zone simulated
       DO ContControlledZoneNum = 1, NumContControlledZones
-        IF (GetCurrentScheduleValue(ContaminantControlledZone(ContControlledZoneNum)%AvaiSchedPtr) .GT. 0.) Then
+        IF (GetCurrentScheduleValue(ContaminantControlledZone(ContControlledZoneNum)%AvaiSchedPtr) .GT. 0.d0) Then
           ZoneAirGCSetpoint = ZoneGCSetpoint(ContaminantControlledZone(ContControlledZoneNum)%ActualZoneNum)
           IF (ContaminantControlledZone(ContControlledZoneNum)%EMSOverrideGCSetpointOn) THEN
             ZoneAirGCSetpoint = ContaminantControlledZone(ContControlledZoneNum)%EMSOverrideGCSetpointValue
@@ -1840,15 +1840,15 @@ SUBROUTINE PredictZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
         ! the amount of GC that must be removed by the system.
         SELECT CASE (ZoneAirSolutionAlgo)
           CASE (Use3rdOrder)
-            LoadToGCSetPoint = ((11.0/6.0) * C + A) * ZoneAirGCSetpoint - &
-             (B + C * (3.0 * GCZoneTimeMinus1Temp(ZoneNum) - (3.0/2.0) * GCZoneTimeMinus2Temp(ZoneNum) + &
-             (1.0/3.0) * GCZoneTimeMinus3Temp(ZoneNum)))
+            LoadToGCSetPoint = ((11.0d0/6.0d0) * C + A) * ZoneAirGCSetpoint - &
+             (B + C * (3.0d0 * GCZoneTimeMinus1Temp(ZoneNum) - (3.0d0/2.0d0) * GCZoneTimeMinus2Temp(ZoneNum) + &
+             (1.0d0/3.0d0) * GCZoneTimeMinus3Temp(ZoneNum)))
           ! Exact solution
           CASE (UseAnalyticalSolution)
-            If (A .eq. 0.0) Then ! B=0
+            If (A .eq. 0.0d0) Then ! B=0
               LoadToGCSetPoint = C*(ZoneAirGCSetpoint-ZoneGC1(ZoneNum)) - B
             Else
-              LoadToGCSetPoint = A*(ZoneAirGCSetpoint-ZoneGC1(ZoneNum)*exp(MIN(700.,-A/C)))/(1.0-exp(MIN(700.,-A/C))) - B
+              LoadToGCSetPoint = A*(ZoneAirGCSetpoint-ZoneGC1(ZoneNum)*exp(MIN(700.d0,-A/C)))/(1.0d0-exp(MIN(700.d0,-A/C))) - B
             End If
           CASE (UseEulerMethod)
             LoadToGCSetPoint = C*(ZoneAirGCSetpoint-ZoneGC1(ZoneNum)) + A*ZoneAirGCSetpoint - B
@@ -2101,7 +2101,7 @@ SUBROUTINE CorrectZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT(IN)  :: ShortenTimeStepSys
   LOGICAL, INTENT(IN)  :: UseZoneTimeStepHistory  ! if true then use zone timestep history, if false use system time step history
-  REAL,  INTENT(IN)  :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
+  REAL(r64),  INTENT(IN)  :: PriorTimeStep  ! the old value for timestep length is passed for possible use in interpolating
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2121,19 +2121,19 @@ SUBROUTINE CorrectZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
   INTEGER :: ZoneSupPlenumNum
   LOGICAL :: ZoneRetPlenumAirFlag
   LOGICAL :: ZoneSupPlenumAirFlag
-  REAL :: CO2Gain ! Zone CO2 internal gain
-  REAL :: GCGain  ! Zone generic contaminant internal gain
-  REAL :: RhoAir
-  REAL :: A
-  REAL :: B
-  REAL :: C
-  REAL :: CO2MassFlowRate
-  REAL :: GCMassFlowRate
-  REAL :: ExhMassFlowRate
-  REAL :: TotExitMassFlowRate
-  REAL :: ZoneMassFlowRate
-  REAL :: SysTimeStepInSeconds
-  REAL :: ZoneMult
+  REAL(r64) :: CO2Gain ! Zone CO2 internal gain
+  REAL(r64) :: GCGain  ! Zone generic contaminant internal gain
+  REAL(r64) :: RhoAir
+  REAL(r64) :: A
+  REAL(r64) :: B
+  REAL(r64) :: C
+  REAL(r64) :: CO2MassFlowRate
+  REAL(r64) :: GCMassFlowRate
+  REAL(r64) :: ExhMassFlowRate
+  REAL(r64) :: TotExitMassFlowRate
+  REAL(r64) :: ZoneMassFlowRate
+  REAL(r64) :: SysTimeStepInSeconds
+  REAL(r64) :: ZoneMult
   INTEGER :: ADUListIndex
   INTEGER :: ADUNum
   INTEGER :: ADUInNode
@@ -2391,14 +2391,14 @@ SUBROUTINE CorrectZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
       ! smooth the changes using the zone air capacitance.
       SELECT CASE (ZoneAirSolutionAlgo)
         CASE (Use3rdOrder)
-          ZoneAirCO2Temp(ZoneNum)=(B+C*(3.0*CO2ZoneTimeMinus1Temp(ZoneNum)-(3.0/2.0)*Co2ZoneTimeMinus2Temp(ZoneNum)+ &
-                             (1.0/3.0)*Co2ZoneTimeMinus3Temp(ZoneNum)))/((11.0/6.0)*C+A)
+          ZoneAirCO2Temp(ZoneNum)=(B+C*(3.0d0*CO2ZoneTimeMinus1Temp(ZoneNum)-(3.0d0/2.0d0)*Co2ZoneTimeMinus2Temp(ZoneNum)+ &
+                             (1.0d0/3.0d0)*Co2ZoneTimeMinus3Temp(ZoneNum)))/((11.0d0/6.0d0)*C+A)
         ! Exact solution
         CASE (UseAnalyticalSolution)
-          If (A .eq. 0.0) Then ! B=0
+          If (A .eq. 0.0d0) Then ! B=0
             ZoneAirCO2Temp(ZoneNum)= ZoneCO21(ZoneNum) + B/C
           Else
-            ZoneAirCO2Temp(ZoneNum)= (ZoneCO21(ZoneNum)-B/A)*exp(MIN(700.,-A/C))+B/A
+            ZoneAirCO2Temp(ZoneNum)= (ZoneCO21(ZoneNum)-B/A)*exp(MIN(700.d0,-A/C))+B/A
           End If
         CASE (UseEulerMethod)
           ZoneAirCO2Temp(ZoneNum) = (C*ZoneCO21(ZoneNum)+B)/(C+A)
@@ -2461,14 +2461,14 @@ SUBROUTINE CorrectZoneContaminants(ShortenTimeStepSys, UseZoneTimeStepHistory, P
       ! smooth the changes using the zone air capacitance.
       SELECT CASE (ZoneAirSolutionAlgo)
         CASE (Use3rdOrder)
-          ZoneAirGCTemp(ZoneNum)=(B+C*(3.0*GCZoneTimeMinus1Temp(ZoneNum)-(3.0/2.0)*GCZoneTimeMinus2Temp(ZoneNum)+ &
-                             (1.0/3.0)*GCZoneTimeMinus3Temp(ZoneNum)))/((11.0/6.0)*C+A)
+          ZoneAirGCTemp(ZoneNum)=(B+C*(3.0d0*GCZoneTimeMinus1Temp(ZoneNum)-(3.0d0/2.0d0)*GCZoneTimeMinus2Temp(ZoneNum)+ &
+                             (1.0d0/3.0d0)*GCZoneTimeMinus3Temp(ZoneNum)))/((11.0d0/6.0d0)*C+A)
         ! Exact solution
         CASE (UseAnalyticalSolution)
-          If (A .eq. 0.0) Then ! B=0
+          If (A .eq. 0.0d0) Then ! B=0
             ZoneAirGCTemp(ZoneNum)= ZoneGC1(ZoneNum) + B/C
           Else
-            ZoneAirGCTemp(ZoneNum)= (ZoneGC1(ZoneNum)-B/A)*exp(MIN(700.,-A/C))+B/A
+            ZoneAirGCTemp(ZoneNum)= (ZoneGC1(ZoneNum)-B/A)*exp(MIN(700.d0,-A/C))+B/A
           End If
         CASE (UseEulerMethod)
           ZoneAirGCTemp(ZoneNum) = (C*ZoneGC1(ZoneNum)+B)/(C+A)

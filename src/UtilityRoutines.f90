@@ -986,9 +986,9 @@ SUBROUTINE ShowRecurringSevereErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMinO
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
   INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
-  REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -1005,9 +1005,9 @@ SUBROUTINE ShowRecurringSevereErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMinO
     !  with count of occurences and optional max, min, sum
     CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
@@ -1062,9 +1062,9 @@ SUBROUTINE ShowRecurringWarningErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMin
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
   INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
-  REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -1081,9 +1081,9 @@ SUBROUTINE ShowRecurringWarningErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMin
     !  with count of occurences and optional max, min, sum
     CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
@@ -1257,9 +1257,9 @@ SUBROUTINE ShowRecurringContinueErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMi
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*)              :: Message     ! Message automatically written to "error file" at end of simulation
   INTEGER, INTENT(INOUT)        :: MsgIndex    ! Recurring message index, if zero, next available index is assigned
-  REAL,    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ReportSumOf ! Track and report the sum of the values passed to this argument
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMaxUnits ! optional char string (<=15 length) of units for max value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportMinUnits ! optional char string (<=15 length) of units for min value
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportSumUnits ! optional char string (<=15 length) of units for sum value
@@ -1276,9 +1276,9 @@ SUBROUTINE ShowRecurringContinueErrorAtEnd(Message,MsgIndex,ReportMaxOf,ReportMi
     !  with count of occurences and optional max, min, sum
     CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
     INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
-    REAL,    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+    REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
     CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting
@@ -1333,9 +1333,9 @@ SUBROUTINE StoreRecurringErrorMessage(ErrorMessage,ErrorMsgIndex,ErrorReportMaxO
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   CHARACTER(len=*) ErrorMessage    ! Message automatically written to "error file" at end of simulation
   INTEGER, INTENT(INOUT)        :: ErrorMsgIndex    ! Recurring message index, if zero, next available index is assigned
-  REAL,    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
-  REAL,    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMaxOf ! Track and report the max of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportMinOf ! Track and report the min of the values passed to this argument
+  REAL(r64),    INTENT(IN), OPTIONAL :: ErrorReportSumOf ! Track and report the sum of the values passed to this argument
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMaxUnits ! Units for "max" reporting
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportMinUnits ! Units for "min" reporting
   CHARACTER(len=*), INTENT(IN), OPTIONAL :: ErrorReportSumUnits ! Units for "sum" reporting

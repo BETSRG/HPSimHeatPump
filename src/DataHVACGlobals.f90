@@ -33,16 +33,16 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
           ! MODULE PARAMETER DEFINITIONS:
 
-REAL, PARAMETER :: SmallTempDiff = 1.0D-5
-REAL, PARAMETER :: SmallMassFlow = .001
-REAL, PARAMETER :: VerySmallMassFlow = 1.0D-30
-REAL, PARAMETER :: SmallLoad     = 1.
-REAL, PARAMETER :: TempControlTol = 0.1 ! temperature control tolerance for packaged equip. [deg C]
-REAL, PARAMETER :: SmallAirVolFlow = 0.001
-REAL, PARAMETER :: SmallWaterVolFlow = 1.*10**-9
-REAL, PARAMETER :: BlankNumeric = -99999. ! indicates numeric input field was blank
-REAL, PARAMETER :: RetTempMax = 60.0  ! maximum return air temperature [deg C]
-REAL, PARAMETER :: RetTempMin = -30.0 ! minimum return air temperature [deg C]
+REAL(r64), PARAMETER :: SmallTempDiff = 1.0D-5
+REAL(r64), PARAMETER :: SmallMassFlow = .001d0
+REAL(r64), PARAMETER :: VerySmallMassFlow = 1.0D-30
+REAL(r64), PARAMETER :: SmallLoad     = 1.d0
+REAL(r64), PARAMETER :: TempControlTol = 0.1d0 ! temperature control tolerance for packaged equip. [deg C]
+REAL(r64), PARAMETER :: SmallAirVolFlow = 0.001d0
+REAL(r64), PARAMETER :: SmallWaterVolFlow = 1.d-9
+REAL(r64), PARAMETER :: BlankNumeric = -99999.d0 ! indicates numeric input field was blank
+REAL(r64), PARAMETER :: RetTempMax = 60.0d0  ! maximum return air temperature [deg C]
+REAL(r64), PARAMETER :: RetTempMin = -30.0d0 ! minimum return air temperature [deg C]
 ! The following parameters are used for system availability status
 INTEGER, PARAMETER :: NoAction = 0
 INTEGER, PARAMETER :: ForceOff = 1
@@ -185,7 +185,7 @@ CHARACTER(len=*), PARAMETER, DIMENSION(NumVRFHeatingPerformanceOATTypes) :: cVRF
 
 ! parameter concerning the amount of change in zone temperature is needed
 ! for oscillation of zone temperature to be detected.
-REAL, PARAMETER    :: OscillateMagnitude = 0.15
+REAL(r64), PARAMETER    :: OscillateMagnitude = 0.15d0
 
 
           ! DERIVED TYPE DEFINITIONS
@@ -195,8 +195,8 @@ TYPE ComponentSetPtData
   CHARACTER(len=MaxNameLength) :: EquipmentName        = ' '
   INTEGER                      :: NodeNumIn            = 0
   INTEGER                      :: NodeNumOut           = 0
-  REAL                    :: EquipDemand          = 0.0
-  REAL                    :: DesignFlowRate       = 0.0
+  REAL(r64)                    :: EquipDemand          = 0.0
+  REAL(r64)                    :: DesignFlowRate       = 0.0
   CHARACTER(len=7)             :: HeatOrCool           = ' ' !
   INTEGER                      :: OpType               = 0
 END TYPE ComponentSetPtData
@@ -206,7 +206,7 @@ TYPE DefineZoneCompAvailMgrs
   INTEGER                                               :: AvailStatus      =0   ! system availability status
   INTEGER                                               :: StartTime        =0   ! cycle on time (in SimTimeSteps)
   INTEGER                                               :: StopTime         =0   ! cycle off time (in SimTimeSteps)
-  REAL                                             :: ReqSupplyFrac    =0.0 ! required system flow rate (as a fraction)
+  REAL(r64)                                             :: ReqSupplyFrac    =0.0 ! required system flow rate (as a fraction)
   CHARACTER(len=MaxNameLength),DIMENSION(:),ALLOCATABLE :: AvailManagerName ! name of each availability manager
   INTEGER,DIMENSION(:),ALLOCATABLE                      :: AvailManagerType ! type of availability manager
   INTEGER, DIMENSION(:), ALLOCATABLE                    :: AvailManagerNum  ! index for availability manager
@@ -229,10 +229,10 @@ TYPE (ZoneCompTypeData), ALLOCATABLE, DIMENSION(:) :: ZoneComp
 
 LOGICAL  :: FirstTimeStepSysFlag =.false. ! Set to true at the start of each sub-time step
 
-REAL :: SysUpdateTimeInc     =0.0   ! System Update Time Increment - the adaptive time step used by the HVAC simulation
-REAL :: TimeStepSys          =0.0   ! System Time Increment - the adaptive time step used by the HVAC simulation (hours)
-REAL :: SysTimeElapsed       =0.0   ! elapsed system time in zone timestep (hours)
-REAL :: FracTimeStepZone     =0.0   ! System time step divided by the zone time step
+REAL(r64) :: SysUpdateTimeInc     =0.0   ! System Update Time Increment - the adaptive time step used by the HVAC simulation
+REAL(r64) :: TimeStepSys          =0.0   ! System Time Increment - the adaptive time step used by the HVAC simulation (hours)
+REAL(r64) :: SysTimeElapsed       =0.0   ! elapsed system time in zone timestep (hours)
+REAL(r64) :: FracTimeStepZone     =0.0   ! System time step divided by the zone time step
 LOGICAL   :: ShortenTimeStepSys = .FALSE.! Logical flag that triggers shortening of system time step
 INTEGER   :: NumOfSysTimeSteps    = 1    ! for current zone time step, number of system timesteps inside  it
 INTEGER   :: NumOfSysTimeStepsLastZoneTimeStep = 1 ! previous zone time step, num of system timesteps inside
@@ -244,16 +244,16 @@ INTEGER  :: NumCondLoops     = 0 ! Number of condenser plant loops specified in 
 INTEGER  :: NumElecCircuits  = 0 ! Number of electric circuits specified in simulation
 INTEGER  :: NumGasMeters     = 0 ! Number of gas meters specified in simulation
 INTEGER  :: NumPrimaryAirSys = 0 ! Number of primary HVAC air systems
-REAL     :: FanElecPower     = 0.0 ! fan power from last fan simulation
-REAL     :: OnOffFanPartLoadFraction = 1.0 ! fan part-load fraction (Fan:OnOff)
-REAL     :: DXCoilTotalCapacity  = 0.0 ! DX coil total cooling capacity (eio report var for HPWHs)
-REAL     :: DXElecCoolingPower   = 0.0 ! Electric power consumed by DX cooling coil last DX simulation
-REAL     :: DXElecHeatingPower   = 0.0 ! Electric power consumed by DX heating coil last DX simulation
-REAL     :: ElecHeatingCoilPower = 0.0 ! Electric power consumed by electric heating coil
-REAL     :: AirToAirHXElecPower  = 0.0 ! Electric power consumed by Heat Exchanger:Air To Air (Generic or Flat Plate)
+REAL(r64)     :: FanElecPower     = 0.0 ! fan power from last fan simulation
+REAL(r64)     :: OnOffFanPartLoadFraction = 1.0 ! fan part-load fraction (Fan:OnOff)
+REAL(r64)     :: DXCoilTotalCapacity  = 0.0 ! DX coil total cooling capacity (eio report var for HPWHs)
+REAL(r64)     :: DXElecCoolingPower   = 0.0 ! Electric power consumed by DX cooling coil last DX simulation
+REAL(r64)     :: DXElecHeatingPower   = 0.0 ! Electric power consumed by DX heating coil last DX simulation
+REAL(r64)     :: ElecHeatingCoilPower = 0.0 ! Electric power consumed by electric heating coil
+REAL(r64)     :: AirToAirHXElecPower  = 0.0 ! Electric power consumed by Heat Exchanger:Air To Air (Generic or Flat Plate)
                                             ! from last simulation in HeatRecovery.f90
-REAL     :: UnbalExhMassFlow = 0.0     ! unbalanced zone exhaust from a zone equip component [kg/s]
-REAL     :: PlenumInducedMassFlow = 0.0 ! secondary air mass flow rate induced from a return plenum [kg/s]
+REAL(r64)     :: UnbalExhMassFlow = 0.0     ! unbalanced zone exhaust from a zone equip component [kg/s]
+REAL(r64)     :: PlenumInducedMassFlow = 0.0 ! secondary air mass flow rate induced from a return plenum [kg/s]
 LOGICAL  :: TurnFansOn = .FALSE.       ! If true overrides fan schedule and cycles fans on
 LOGICAL  :: TurnFansOff = .FALSE.      ! If True overides fan schedule and TurnFansOn and forces fans off
 LOGICAL  :: SetPointErrorFlag = .FALSE. ! True if any needed setpoints not set; if true, program terminates
@@ -262,9 +262,9 @@ LOGICAL  :: NightVentOn = .FALSE.             ! set TRUE in SimAirServingZone if
 
 
 INTEGER  :: NumTempContComps  = 0             !
-REAL     :: HPWHInletDBTemp    =0.0    ! Used by curve objects when calculating DX coil performance for HEAT PUMP:WATER HEATER
-REAL     :: HPWHInletWBTemp    =0.0    ! Used by curve objects when calculating DX coil performance for HEAT PUMP:WATER HEATER
-REAL     :: HPWHCrankcaseDBTemp=0.0    ! Used for HEAT PUMP:WATER HEATER crankcase heater ambient temperature calculations
+REAL(r64)     :: HPWHInletDBTemp    =0.0    ! Used by curve objects when calculating DX coil performance for HEAT PUMP:WATER HEATER
+REAL(r64)     :: HPWHInletWBTemp    =0.0    ! Used by curve objects when calculating DX coil performance for HEAT PUMP:WATER HEATER
+REAL(r64)     :: HPWHCrankcaseDBTemp=0.0    ! Used for HEAT PUMP:WATER HEATER crankcase heater ambient temperature calculations
 LOGICAL  :: AirLoopInit        =.FALSE.     ! flag for whether InitAirLoops has been called
 LOGICAL  :: AirLoopsSimOnce     =.FALSE.    ! True means that the air loops have been simulated once in this environment
 
@@ -274,18 +274,18 @@ INTEGER, ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailAirLoopNum ! Airloop num
 INTEGER, ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailVentCtrl ! Ventilation control action in hybrid vent availability manager
 INTEGER, ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailANCtrlStatus ! AN control status in hybrid vent availability manager
 INTEGER, ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailMaster   ! Master object name: Ventilation for simple; Zone name for AN
-REAL, ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailWindModifier ! Wind modifier for AirflowNetwork
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: HybridVentSysAvailWindModifier ! Wind modifier for AirflowNetwork
 ! For multispeed heat pump only
-REAL    :: MSHPMassFlowRateLow  =0.0   ! Mass flow rate at low speed
-REAL    :: MSHPMassFlowRateHigh =0.0   ! Mass flow rate at high speed
-REAL    :: MSHPWasteHeat        =0.0   ! Waste heat
-REAL    :: PreviousTimeStep     =0.0   ! The time step length at the previous time step
+REAL(r64)    :: MSHPMassFlowRateLow  =0.0   ! Mass flow rate at low speed
+REAL(r64)    :: MSHPMassFlowRateHigh =0.0   ! Mass flow rate at high speed
+REAL(r64)    :: MSHPWasteHeat        =0.0   ! Waste heat
+REAL(r64)    :: PreviousTimeStep     =0.0   ! The time step length at the previous time step
 LOGICAL      :: ShortenTimeStepSysRoomAir = .FALSE.! Logical flag that triggers shortening of system time step
 
 TYPE (ComponentSetPtData), ALLOCATABLE, DIMENSION(:) :: CompSetPtEquip
 
-REAL :: deviationFromSetPtThresholdHtg = -0.2   ! heating threshold for reporting setpoint deviation
-REAL :: deviationFromSetPtThresholdClg = 0.2    ! cooling threshold for reporting setpoint deviation
+REAL(r64) :: deviationFromSetPtThresholdHtg = -0.2d0   ! heating threshold for reporting setpoint deviation
+REAL(r64) :: deviationFromSetPtThresholdClg = 0.2d0    ! cooling threshold for reporting setpoint deviation
 
 LOGICAL,  PUBLIC :: SimAirLoopsFlag            ! True when the air loops need to be (re)simulated
 LOGICAL,  PUBLIC :: SimElecCircuitsFlag        ! True when electic circuits need to be (re)simulated

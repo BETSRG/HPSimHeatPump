@@ -60,9 +60,9 @@ PRIVATE ! Everything private unless explicitly made public
 
 
   ! MODULE PARAMETER DEFINITIONS
-  REAL, PARAMETER :: SmallNum      = 1.0d-30        ! Very small number to avoid div0 errors
-  REAL, PARAMETER :: StefBoltzmann = 5.6697d-08     ! Stefan-Boltzmann constant
-  REAL, PARAMETER     :: SurfaceHXHeight=0.0        ! Surface Height above ground -- used in height dependent calcs.
+  REAL(r64), PARAMETER :: SmallNum      = 1.0d-30        ! Very small number to avoid div0 errors
+  REAL(r64), PARAMETER :: StefBoltzmann = 5.6697d-08     ! Stefan-Boltzmann constant
+  REAL(r64), PARAMETER     :: SurfaceHXHeight=0.0d0        ! Surface Height above ground -- used in height dependent calcs.
   CHARACTER(len=*), PARAMETER :: Blank = ' '
 
   INTEGER, PARAMETER :: SurfCond_Ground=1
@@ -76,14 +76,14 @@ TYPE SurfaceGroundHeatExchangerData
   CHARACTER(len=MaxNameLength) :: ConstructionName  =Blank ! name of the associated construction
   CHARACTER(len=MaxNameLength) :: InletNode         =Blank ! surface GHE inlet fluid node
   CHARACTER(len=MaxNameLength) :: OutletNode        =Blank ! surface GHE outlet fluid node
-  REAL                    :: DesignMassFlowRate =0. !
-  REAL                    :: TubeDiameter      =0.0   ! hydronic tube inside diameter
-  REAL                    :: TubeSpacing       =0.0   ! tube spacing
-  REAL                    :: SurfaceLength     =0.0   ! active length of surface GHE
-  REAL                    :: SurfaceWidth      =0.0   ! active width of surface GHE
-  REAL                    :: TopThermAbs       =0.0   ! Thermal absortivity of top layer
-  REAL                    :: TopSolarAbs       =0.0   ! solar absortivity of top layer
-  REAL                    :: BtmThermAbs       =0.0   ! Thermal absortivity of bottom layer
+  REAL(r64)                    :: DesignMassFlowRate =0.d0 !
+  REAL(r64)                    :: TubeDiameter      =0.0   ! hydronic tube inside diameter
+  REAL(r64)                    :: TubeSpacing       =0.0   ! tube spacing
+  REAL(r64)                    :: SurfaceLength     =0.0   ! active length of surface GHE
+  REAL(r64)                    :: SurfaceWidth      =0.0   ! active width of surface GHE
+  REAL(r64)                    :: TopThermAbs       =0.0   ! Thermal absortivity of top layer
+  REAL(r64)                    :: TopSolarAbs       =0.0   ! solar absortivity of top layer
+  REAL(r64)                    :: BtmThermAbs       =0.0   ! Thermal absortivity of bottom layer
   INTEGER                      :: LowerSurfCond     =0     ! Type of lower surf. boundary condition
   INTEGER                      :: TubeCircuits      =0     ! number of circuits in total
   INTEGER                      :: ConstructionNum   =0     ! construction index number
@@ -106,56 +106,56 @@ END TYPE SurfaceGroundHeatExchangerData
 
 TYPE SurfaceGroundHeatExchangerQTF
   ! QTF Constants
-  REAL :: TsrcConstCoef                            =0.0
-  REAL :: TsrcVarCoef                              =0.0
-  REAL :: QbtmConstCoef                            =0.0
-  REAL :: QbtmVarCoef                              =0.0
-  REAL :: QtopConstCoef                            =0.0
-  REAL :: QtopVarCoef                              =0.0
+  REAL(r64) :: TsrcConstCoef                            =0.0D0
+  REAL(r64) :: TsrcVarCoef                              =0.0D0
+  REAL(r64) :: QbtmConstCoef                            =0.0D0
+  REAL(r64) :: QbtmVarCoef                              =0.0D0
+  REAL(r64) :: QtopConstCoef                            =0.0D0
+  REAL(r64) :: QtopVarCoef                              =0.0D0
   ! conventional CTF terms
   INTEGER :: NumCTFTerms                                = 0 ! number of terms for surface
   ! could be allocated rather than hard dimensioning.
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFin         =0.0 ! surf flux in ctf - X
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFout        =0.0 ! surf flux in ctf - Z
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFcross      =0.0 ! surf flux in ctf - Y
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFflux       =0.0 ! surf flux in ctf - F
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFin         =0.0D0 ! surf flux in ctf - X
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFout        =0.0D0 ! surf flux in ctf - Z
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFcross      =0.0D0 ! surf flux in ctf - Y
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFflux       =0.0D0 ! surf flux in ctf - F
   ! QTF coefficients
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFSourceIn   =0.0 ! surf flux in ctf - Wi
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFSourceOut  =0.0 ! surf flux out ctf - Wo
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceOut =0.0 ! surf flux in qtf - x
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceIn  =0.0 ! surf flux in qtf - y
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceQ   =0.0 ! surf flux in qtf - f
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFSourceIn   =0.0D0 ! surf flux in ctf - Wi
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFSourceOut  =0.0D0 ! surf flux out ctf - Wo
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceOut =0.0D0 ! surf flux in qtf - x
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceIn  =0.0D0 ! surf flux in qtf - y
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: CTFTSourceQ   =0.0D0 ! surf flux in qtf - f
 
 
   ! History data
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: TbtmHistory   =0.0
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: TtopHistory   =0.0
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: TsrcHistory   =0.0
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: QbtmHistory   =0.0
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: QtopHistory   =0.0
-  REAL,DIMENSION(0:MaxCTFTerms-1) :: QsrcHistory   =0.0
-  REAL        :: Qsrc                         =0.0
-  REAL        :: QsrcAvg                      =0.0
-  REAL        :: LastQSrc                     =0.0
-  REAL        :: LastSysTimeElapsed           =0.0
-  REAL        :: LastTimeStepSys              =0.0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: TbtmHistory   =0.0D0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: TtopHistory   =0.0D0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: TsrcHistory   =0.0D0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: QbtmHistory   =0.0D0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: QtopHistory   =0.0D0
+  REAL(r64),DIMENSION(0:MaxCTFTerms-1) :: QsrcHistory   =0.0D0
+  REAL(r64)        :: Qsrc                         =0.0D0
+  REAL(r64)        :: QsrcAvg                      =0.0D0
+  REAL(r64)        :: LastQSrc                     =0.0D0
+  REAL(r64)        :: LastSysTimeElapsed           =0.0D0
+  REAL(r64)        :: LastTimeStepSys              =0.0D0
 END TYPE SurfaceGroundHeatExchangerQTF
 
 
 TYPE SurfaceGroundHeatExchngrReport
   ! Report data
-  REAL                    :: InletTemp             =0.0 ! water inlet temperature
-  REAL                    :: OutletTemp            =0.0 ! water outlet temperature
-  REAL                    :: MassFlowRate          =0.0 ! water mass flow rate
-  REAL                    :: TopSurfaceTemp        =0.0 ! Top surface temperature
-  REAL                    :: BtmSurfaceTemp        =0.0 ! Bottom  surface temperature
-  REAL                    :: TopSurfaceFlux        =0.0 ! Top  surface heat flux
-  REAL                    :: BtmSurfaceFlux        =0.0 ! Bottom  surface heat flux
-  REAL                    :: HeatTransferRate      =0.0 ! total fluid heat transfer rate, Watts
-  REAL                    :: SurfHeatTransferRate  =0.0 ! total surface heat transfer rate, Watts
-  REAL                    :: Energy                =0.0 ! cumulative energy, Joules
-  REAL                    :: SurfEnergy            =0.0 ! cumulative energy, Joules
-  REAL                    :: SourceTemp            =0.0 ! Source temperature
+  REAL(r64)                    :: InletTemp             =0.0 ! water inlet temperature
+  REAL(r64)                    :: OutletTemp            =0.0 ! water outlet temperature
+  REAL(r64)                    :: MassFlowRate          =0.0 ! water mass flow rate
+  REAL(r64)                    :: TopSurfaceTemp        =0.0 ! Top surface temperature
+  REAL(r64)                    :: BtmSurfaceTemp        =0.0 ! Bottom  surface temperature
+  REAL(r64)                    :: TopSurfaceFlux        =0.0 ! Top  surface heat flux
+  REAL(r64)                    :: BtmSurfaceFlux        =0.0 ! Bottom  surface heat flux
+  REAL(r64)                    :: HeatTransferRate      =0.0 ! total fluid heat transfer rate, Watts
+  REAL(r64)                    :: SurfHeatTransferRate  =0.0 ! total surface heat transfer rate, Watts
+  REAL(r64)                    :: Energy                =0.0 ! cumulative energy, Joules
+  REAL(r64)                    :: SurfEnergy            =0.0 ! cumulative energy, Joules
+  REAL(r64)                    :: SourceTemp            =0.0 ! Source temperature
 END TYPE SurfaceGroundHeatExchngrReport
 
 
@@ -176,44 +176,44 @@ INTEGER :: OutletNodeNum      =0         ! oulet node number
 INTEGER :: ConstructionNum    =0         ! construction index number
 INTEGER :: TopRoughness       =0         ! roughness of top layer
 INTEGER :: BtmRoughness       =0         ! roughness of bottom layer
-REAL    :: InletTemp          =0.0       ! water inlet temperature
-REAL    :: OutletTemp         =0.0       ! water outlet temperature
-REAL    :: FlowRate           =0.0       ! water mass flow rate
-REAL    :: TopSurfTemp        =0.0       ! Top  surface temperature
-REAL    :: BtmSurfTemp        =0.0       ! Bottom  surface temperature
-REAL    :: TopSurfFlux        =0.0       ! Top  surface heat flux
-REAL    :: BtmSurfFlux        =0.0       ! Bottom  surface heat flux
-REAL    :: SourceFlux         =0.0       ! total heat transfer rate, Watts
-REAL    :: SourceTemp         =0.0       ! total heat transfer rate, Watts
-REAL    :: SurfaceArea        =0.0       ! surface GHE surface area
-REAL    :: TopThermAbs        =0.0       ! Thermal absortivity of top layer
-REAL    :: BtmThermAbs        =0.0       ! Thermal absortivity of bottom layer
-REAL    :: TopSolarAbs        =0.0       ! Solar absortivity of top layer
+REAL(r64)    :: InletTemp          =0.0       ! water inlet temperature
+REAL(r64)    :: OutletTemp         =0.0       ! water outlet temperature
+REAL(r64)    :: FlowRate           =0.0       ! water mass flow rate
+REAL(r64)    :: TopSurfTemp        =0.0       ! Top  surface temperature
+REAL(r64)    :: BtmSurfTemp        =0.0       ! Bottom  surface temperature
+REAL(r64)    :: TopSurfFlux        =0.0       ! Top  surface heat flux
+REAL(r64)    :: BtmSurfFlux        =0.0       ! Bottom  surface heat flux
+REAL(r64)    :: SourceFlux         =0.0       ! total heat transfer rate, Watts
+REAL(r64)    :: SourceTemp         =0.0       ! total heat transfer rate, Watts
+REAL(r64)    :: SurfaceArea        =0.0       ! surface GHE surface area
+REAL(r64)    :: TopThermAbs        =0.0       ! Thermal absortivity of top layer
+REAL(r64)    :: BtmThermAbs        =0.0       ! Thermal absortivity of bottom layer
+REAL(r64)    :: TopSolarAbs        =0.0       ! Solar absortivity of top layer
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
 
   ! weather data records updated every zone time step
-REAL    :: PastBeamSolarRad   =0.0       ! Previous beam normal solar irradiance
-REAL    :: PastSolarDirCosVert=0.0       ! Previous vertical component of solar normal
-REAL    :: PastDifSolarRad    =0.0       ! Previous sky diffuse solar horizontal irradiance
-REAL    :: PastGroundTemp     =0.0       ! Previous ground temperature
+REAL(r64)    :: PastBeamSolarRad   =0.0       ! Previous beam normal solar irradiance
+REAL(r64)    :: PastSolarDirCosVert=0.0       ! Previous vertical component of solar normal
+REAL(r64)    :: PastDifSolarRad    =0.0       ! Previous sky diffuse solar horizontal irradiance
+REAL(r64)    :: PastGroundTemp     =0.0       ! Previous ground temperature
 LOGICAL :: PastIsRain         =.false.   ! Previous Surfaces are wet for this time interval
 LOGICAL :: PastIsSnow         =.false.   ! Previous Snow on the ground for this time interval
-REAL    :: PastOutBaroPress   =0.0       ! Previous outdoor air barometric pressure
-REAL    :: PastOutDryBulbTemp =0.0       ! Previous outdoor air dry bulb temperature
-REAL    :: PastOutHumRat      =0.0       ! Previous outdoor air humidity ratio
-REAL    :: PastOutAirDensity  =0.0       ! Previous outdoor air density
-REAL    :: PastOutWetBulbTemp =0.0       ! Previous outdoor air wet bulb temperature
-REAL    :: PastOutDewPointTemp=0.0       ! Previous outdoor dewpoint temperature
-REAL    :: PastSkyTemp        =0.0       ! Previous sky temperature
-REAL    :: PastWindSpeed      =0.0       ! Previous outdoor air wind speed
-REAL    :: PastCloudFraction  =0.0       ! Previous Fraction of sky covered by clouds
+REAL(r64)    :: PastOutBaroPress   =0.0       ! Previous outdoor air barometric pressure
+REAL(r64)    :: PastOutDryBulbTemp =0.0       ! Previous outdoor air dry bulb temperature
+REAL(r64)    :: PastOutHumRat      =0.0       ! Previous outdoor air humidity ratio
+REAL(r64)    :: PastOutAirDensity  =0.0       ! Previous outdoor air density
+REAL(r64)    :: PastOutWetBulbTemp =0.0       ! Previous outdoor air wet bulb temperature
+REAL(r64)    :: PastOutDewPointTemp=0.0       ! Previous outdoor dewpoint temperature
+REAL(r64)    :: PastSkyTemp        =0.0       ! Previous sky temperature
+REAL(r64)    :: PastWindSpeed      =0.0       ! Previous outdoor air wind speed
+REAL(r64)    :: PastCloudFraction  =0.0       ! Previous Fraction of sky covered by clouds
 
 
   ! time keeping variables used for keeping track of average flux over each time step
-REAL, ALLOCATABLE, DIMENSION(:) :: QRadSysSrcAvg        ! Average source over the time step
-REAL, ALLOCATABLE, DIMENSION(:)             :: LastSysTimeElapsed   ! record of system time
-REAL, ALLOCATABLE, DIMENSION(:)             :: LastTimeStepSys      ! previous time step size
+REAL(r64), ALLOCATABLE, DIMENSION(:) :: QRadSysSrcAvg        ! Average source over the time step
+REAL(r64), ALLOCATABLE, DIMENSION(:)             :: LastSysTimeElapsed   ! record of system time
+REAL(r64), ALLOCATABLE, DIMENSION(:)             :: LastTimeStepSys      ! previous time step size
 
 
   ! SUBROUTINE SPECIFICATIONS FOR MODULE PlantSurfaceGroundHeatExchangers
@@ -617,7 +617,7 @@ SUBROUTINE InitSurfaceGroundHeatExchanger(SurfaceGHENum,RunFlag)
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER     :: DesignVelocity=0.5 ! Hypothetical design max pipe velocity [m/s]
+  REAL(r64), PARAMETER     :: DesignVelocity=0.5d0 ! Hypothetical design max pipe velocity [m/s]
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -631,18 +631,18 @@ SUBROUTINE InitSurfaceGroundHeatExchanger(SurfaceGHENum,RunFlag)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 
-  REAL           :: DesignFlow          ! Hypothetical design flow rate
+  REAL(r64)           :: DesignFlow          ! Hypothetical design flow rate
   LOGICAL,SAVE        :: InitQTF = .TRUE.    ! one time flag
   LOGICAL,SAVE        :: MyEnvrnFlag = .TRUE.
   INTEGER             :: Cons                ! construction counter
   INTEGER             :: Surface             ! Surface number counter
   INTEGER             :: LayerNum            ! material layer number for bottom
-  REAL           :: OutDryBulb          ! Height Dependent dry bulb.
+  REAL(r64)           :: OutDryBulb          ! Height Dependent dry bulb.
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
-  REAL :: rho !local fluid density
+  REAL(r64) :: rho !local fluid density
   LOGICAL :: errFlag
   IF (MyOneTimeFlag) THEN
     ALLOCATE(MyFlag(NumOfSurfaceGHEs))
@@ -670,9 +670,9 @@ SUBROUTINE InitSurfaceGroundHeatExchanger(SurfaceGHENum,RunFlag)
                                        PlantLoop(SurfaceGHE(SurfaceGHENum)%LoopNum)%fluidIndex, &
                                        'InitSurfaceGroundHeatExchanger')
     SurfaceGHE(SurfaceGHENum)%DesignMassFlowRate =  &
-            PI/4.0 * SurfaceGHE(SurfaceGHENum)%TubeDiameter**2 * DesignVelocity * &
+            PI/4.0d0 * SurfaceGHE(SurfaceGHENum)%TubeDiameter**2 * DesignVelocity * &
                 rho * SurfaceGHE(SurfaceGHENum)%TubeCircuits
-    CALL InitComponentNodes(0., SurfaceGHE(SurfaceGHENum)%DesignMassFlowRate, &
+    CALL InitComponentNodes(0.d0, SurfaceGHE(SurfaceGHENum)%DesignMassFlowRate, &
                                  SurfaceGHE(SurfaceGHENum)%InletNodeNum,&
                                  SurfaceGHE(SurfaceGHENum)%OutletNodeNum,&
                                  SurfaceGHE(SurfaceGHENum)%LoopNum, &
@@ -705,13 +705,13 @@ SUBROUTINE InitSurfaceGroundHeatExchanger(SurfaceGHENum,RunFlag)
           SurfaceGHEQTF(Surface)%CTFTSourceQ   = Construct(Cons)%CTFTSourceQ     ! w coefficents
           SurfaceGHE(Surface)%ConstructionNum  = Cons
           ! set the initial history
-!          SurfaceGHEQTF(Surface)%CTFflux(0)    = 0.0
+!          SurfaceGHEQTF(Surface)%CTFflux(0)    = 0.0D0
 !          SurfaceGHEQTF(Surface)%TbtmHistory    = OutDryBulbTemp
 !          SurfaceGHEQTF(Surface)%TtopHistory   = OutDryBulbTemp
 !          SurfaceGHEQTF(Surface)%TsrcHistory   = OutDryBulbTemp
-!          SurfaceGHEQTF(Surface)%QbtmHistory    = 0.0
-!          SurfaceGHEQTF(Surface)%QtopHistory   = 0.0
-!          SurfaceGHEQTF(Surface)%QsrcHistory   = 0.0
+!          SurfaceGHEQTF(Surface)%QbtmHistory    = 0.0D0
+!          SurfaceGHEQTF(Surface)%QtopHistory   = 0.0D0
+!          SurfaceGHEQTF(Surface)%QsrcHistory   = 0.0D0
          ! surface properties
           SurfaceGHE(Surface)%BtmRoughness  = Material(Construct(Cons)%LayerPoint(LayerNum))%Roughness
           SurfaceGHE(Surface)%TopThermAbs   = Material(Construct(Cons)%LayerPoint(LayerNum))%AbsorpThermal
@@ -728,13 +728,13 @@ SUBROUTINE InitSurfaceGroundHeatExchanger(SurfaceGHENum,RunFlag)
     IF(MyEnvrnFlag .AND. BeginEnvrnFlag) THEN
      OutDryBulb=OutDryBulbTempAt(SurfaceHXHeight)
      DO Surface =1,NumOfSurfaceGHEs
-      SurfaceGHEQTF(Surface)%CTFflux(0)  = 0.0
+      SurfaceGHEQTF(Surface)%CTFflux(0)  = 0.0D0
       SurfaceGHEQTF(Surface)%TbtmHistory = OutDryBulb
       SurfaceGHEQTF(Surface)%TtopHistory = OutDryBulb
       SurfaceGHEQTF(Surface)%TsrcHistory = OutDryBulb
-      SurfaceGHEQTF(Surface)%QbtmHistory = 0.0
-      SurfaceGHEQTF(Surface)%QtopHistory = 0.0
-      SurfaceGHEQTF(Surface)%QsrcHistory = 0.0
+      SurfaceGHEQTF(Surface)%QbtmHistory = 0.0D0
+      SurfaceGHEQTF(Surface)%QtopHistory = 0.0D0
+      SurfaceGHEQTF(Surface)%QsrcHistory = 0.0D0
       SurfaceGHEQTF(Surface)%TsrcConstCoef  = 0.0
       SurfaceGHEQTF(Surface)%TsrcVarCoef    = 0.0
       SurfaceGHEQTF(Surface)%QbtmConstCoef  = 0.0
@@ -874,9 +874,9 @@ SUBROUTINE CalcSurfaceGroundHeatExchanger(SurfaceGHENum, FirstHVACIteration)    
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: SurfFluxTol = 0.001      ! tolerance on the surface fluxes
-  REAL, PARAMETER :: SrcFluxTol  = 0.001      ! tolerance on the source flux
-  REAL, PARAMETER :: RelaxT      = 0.1        ! temperature relaxation factor
+  REAL(r64), PARAMETER :: SurfFluxTol = 0.001d0      ! tolerance on the surface fluxes
+  REAL(r64), PARAMETER :: SrcFluxTol  = 0.001d0      ! tolerance on the source flux
+  REAL(r64), PARAMETER :: RelaxT      = 0.1d0        ! temperature relaxation factor
   INTEGER, PARAMETER :: Maxiter = 100
   INTEGER, PARAMETER :: Maxiter1 = 100
 
@@ -891,23 +891,23 @@ SUBROUTINE CalcSurfaceGroundHeatExchanger(SurfaceGHENum, FirstHVACIteration)    
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   ! variables used with previous environmental conditions
-!! not used  REAL    :: Concentration    ! set to 0.5 if glycol, 0.0 if water
-  REAL    :: PastFluxTop      ! top surface flux - past value
-  REAL    :: PastFluxBtm      ! bottom surface flux - past value
-  REAL    :: PastTempBtm      ! bottom surface temp - past value
-  REAL    :: PastTempTop      ! top surface temp - past value
-  REAL    :: OldPastFluxTop   ! top surface flux - past value used during iteration
-  REAL    :: OldPastFluxBtm   ! bottom surface flux - past value used during iteration
+!! not used  REAL(r64)    :: Concentration    ! set to 0.5 if glycol, 0.0 if water
+  REAL(r64)    :: PastFluxTop      ! top surface flux - past value
+  REAL(r64)    :: PastFluxBtm      ! bottom surface flux - past value
+  REAL(r64)    :: PastTempBtm      ! bottom surface temp - past value
+  REAL(r64)    :: PastTempTop      ! top surface temp - past value
+  REAL(r64)    :: OldPastFluxTop   ! top surface flux - past value used during iteration
+  REAL(r64)    :: OldPastFluxBtm   ! bottom surface flux - past value used during iteration
   ! variables used with current environmental conditions
-  REAL,SAVE    :: FluxTop          ! top surface flux
-  REAL,SAVE    :: FluxBtm          ! bottom surface flux
-  REAL,SAVE    :: TempBtm          ! bottom surface temp
-  REAL,SAVE    :: TempTop          ! top surface temp
-  REAL    :: TempT            ! top surface temp - used in underrelaxation
-  REAL    :: TempB            ! bottom surface temp - used in underrelaxation
-  REAL    :: OldFluxTop       ! top surface flux - value used during iteration
-  REAL    :: OldFluxBtm       ! bottom surface flux - value used during iteration
-  REAL    :: OldSourceFlux    ! previous value of source flux - used during iteration
+  REAL(r64),SAVE    :: FluxTop          ! top surface flux
+  REAL(r64),SAVE    :: FluxBtm          ! bottom surface flux
+  REAL(r64),SAVE    :: TempBtm          ! bottom surface temp
+  REAL(r64),SAVE    :: TempTop          ! top surface temp
+  REAL(r64)    :: TempT            ! top surface temp - used in underrelaxation
+  REAL(r64)    :: TempB            ! bottom surface temp - used in underrelaxation
+  REAL(r64)    :: OldFluxTop       ! top surface flux - value used during iteration
+  REAL(r64)    :: OldFluxBtm       ! bottom surface flux - value used during iteration
+  REAL(r64)    :: OldSourceFlux    ! previous value of source flux - used during iteration
   INTEGER :: Iter
   INTEGER :: Iter1
 !  INTEGER, SAVE ::ErrCount1=0
@@ -1012,9 +1012,9 @@ SUBROUTINE CalcSurfaceGroundHeatExchanger(SurfaceGHENum, FirstHVACIteration)    
 
 
     ! At the beginning of a time step, reset to zero so average calculation can start again
-    SurfaceGHEQTF(SurfaceGHENum)%QsrcAvg            = 0.0
-    SurfaceGHEQTF(SurfaceGHENum)%LastSysTimeElapsed = 0.0
-    SurfaceGHEQTF(SurfaceGHENum)%LastTimeStepSys    = 0.0
+    SurfaceGHEQTF(SurfaceGHENum)%QsrcAvg            = 0.0D0
+    SurfaceGHEQTF(SurfaceGHENum)%LastSysTimeElapsed = 0.0D0
+    SurfaceGHEQTF(SurfaceGHENum)%LastTimeStepSys    = 0.0D0
 
 
     ! get current env. conditions
@@ -1164,8 +1164,8 @@ SUBROUTINE CalcBottomFluxCoefficents(SurfaceGHENum, Tbottom, Ttop)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum       ! component number
-  REAL,    INTENT(IN) :: Tbottom             ! current bottom (lower) surface temperature
-  REAL,    INTENT(IN) :: Ttop                ! current top (upper) surface temperature
+  REAL(r64),    INTENT(IN) :: Tbottom             ! current bottom (lower) surface temperature
+  REAL(r64),    INTENT(IN) :: Ttop                ! current top (upper) surface temperature
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1187,7 +1187,7 @@ SUBROUTINE CalcBottomFluxCoefficents(SurfaceGHENum, Tbottom, Ttop)
   SurfaceGHEQTF(SurfaceGHENum)%TtopHistory(0) = Ttop
 
   ! Bottom Surface Coefficients
-  SurfaceGHEQTF(SurfaceGHENum)%QbtmConstCoef = 0.0
+  SurfaceGHEQTF(SurfaceGHENum)%QbtmConstCoef = 0.0d0
   DO Term = 0, SurfaceGHEQTF(SurfaceGHENum)%NumCTFTerms-1
 
     SurfaceGHEQTF(SurfaceGHENum)%QbtmConstCoef =      &
@@ -1257,8 +1257,8 @@ SUBROUTINE CalcTopFluxCoefficents(SurfaceGHENum, Tbottom, Ttop)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum       ! component number
-  REAL,    INTENT(IN) :: Tbottom             ! current bottom (lower) surface temperature
-  REAL,    INTENT(IN) :: Ttop                ! current top (upper) surface temperature
+  REAL(r64),    INTENT(IN) :: Tbottom             ! current bottom (lower) surface temperature
+  REAL(r64),    INTENT(IN) :: Ttop                ! current top (upper) surface temperature
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1281,7 +1281,7 @@ SUBROUTINE CalcTopFluxCoefficents(SurfaceGHENum, Tbottom, Ttop)
 
 
   ! Top Surface Coefficients
-  SurfaceGHEQTF(SurfaceGHENum)%QtopConstCoef = 0.0
+  SurfaceGHEQTF(SurfaceGHENum)%QtopConstCoef = 0.0d0
   DO Term = 0, SurfaceGHEQTF(SurfaceGHENum)%NumCTFTerms-1
 
     SurfaceGHEQTF(SurfaceGHENum)%QtopConstCoef =      &
@@ -1352,8 +1352,8 @@ SUBROUTINE CalcSourceTempCoefficents(SurfaceGHENum, Tbottom, Ttop)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum         ! component number
-  REAL,    INTENT(IN) :: Tbottom               ! current bottom (lower) surface temperature
-  REAL,    INTENT(IN) :: Ttop                  ! current top (upper) surface temperature
+  REAL(r64),    INTENT(IN) :: Tbottom               ! current bottom (lower) surface temperature
+  REAL(r64),    INTENT(IN) :: Ttop                  ! current top (upper) surface temperature
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1375,7 +1375,7 @@ SUBROUTINE CalcSourceTempCoefficents(SurfaceGHENum, Tbottom, Ttop)
   SurfaceGHEQTF(SurfaceGHENum)%TtopHistory(0) = Ttop
 
 
-  SurfaceGHEQTF(SurfaceGHENum)%TsrcConstCoef = 0.0
+  SurfaceGHEQTF(SurfaceGHENum)%TsrcConstCoef = 0.0d0
   DO Term = 0, SurfaceGHEQTF(SurfaceGHENum)%NumCTFTerms-1
 
     SurfaceGHEQTF(SurfaceGHENum)%TsrcConstCoef =      &
@@ -1443,7 +1443,7 @@ FUNCTION CalcSourceFlux(SurfaceGHENum)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum         ! component number
-  REAL     :: CalcSourceFlux
+  REAL(r64)     :: CalcSourceFlux
 
          ! SUBROUTINE PARAMETER DEFINITIONS:
 
@@ -1457,7 +1457,7 @@ FUNCTION CalcSourceFlux(SurfaceGHENum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: EpsMdotCp  ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
+  REAL(r64)    :: EpsMdotCp  ! Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
 
 
 
@@ -1512,10 +1512,10 @@ SUBROUTINE UpdateHistories(SurfaceGHENum, TopFlux, BottomFlux, SourceFlux, &
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum             ! component number
-  REAL, INTENT(IN)    :: TopFlux                   ! current top (top) surface flux
-  REAL, INTENT(IN)    :: BottomFlux                ! current bottom (bottom) surface flux
-  REAL, INTENT(IN)    :: SourceFlux                ! current source surface flux
-  REAL, INTENT(IN)    :: SourceTemp                ! current source temperature
+  REAL(r64), INTENT(IN)    :: TopFlux                   ! current top (top) surface flux
+  REAL(r64), INTENT(IN)    :: BottomFlux                ! current bottom (bottom) surface flux
+  REAL(r64), INTENT(IN)    :: SourceFlux                ! current source surface flux
+  REAL(r64), INTENT(IN)    :: SourceTemp                ! current source temperature
 
 
 
@@ -1568,7 +1568,7 @@ END SUBROUTINE UpdateHistories
 !==============================================================================
 
 
-REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
+REAL(r64) FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
 
 
           ! SUBROUTINE INFORMATION:
@@ -1587,7 +1587,7 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
 
 
           ! METHODOLOGY EMPLOYED:
-          ! Assumes that the only REAL heat transfer term that we have to
+          ! Assumes that the only REAL(r64) heat transfer term that we have to
           ! deal with is the convection from the water to the tube.  The
           ! other assumptions are that the tube bottom surface temperature
           ! is equal to the "source location temperature" and that it is
@@ -1613,23 +1613,23 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceGHENum  ! Index number of surface under consideration
-  REAL,    INTENT(IN) :: Temperature    ! Temperature of water entering the surface, in C
-  REAL,    INTENT(IN) :: WaterMassFlow  ! Mass flow rate, in kg/s
+  REAL(r64),    INTENT(IN) :: Temperature    ! Temperature of water entering the surface, in C
+  REAL(r64),    INTENT(IN) :: WaterMassFlow  ! Mass flow rate, in kg/s
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER    :: MaxLaminarRe       = 2300.    ! Maximum Reynolds number for laminar flow
+  REAL(r64), PARAMETER    :: MaxLaminarRe       = 2300.d0    ! Maximum Reynolds number for laminar flow
   INTEGER, PARAMETER :: NumOfPropDivisions = 13       ! intervals in property correlation
-  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
-                   (/1.85,6.85,11.85,16.85,21.85,26.85,31.85,36.85,41.85,  &
-                    46.85,51.85,56.85,61.85/)
-  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
-                   (/.001652,.001422,.001225,.00108,.000959,.000855,.000769,.000695,  &
-                     .000631,.000577,.000528,.000489,.000453/)
-  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
-                   (/.574,.582,.590,.598,.606,.613,.620,.628,.634,.640,.645,.650,.656/)
-  REAL, PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
-                   (/12.22,10.26,8.81,7.56,6.62,5.83,5.20,4.62,4.16,3.77,3.42,3.15,2.88/)
+  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Temps=  &   ! Temperature, in C
+                   (/1.85d0,6.85d0,11.85d0,16.85d0,21.85d0,26.85d0,31.85d0,36.85d0,41.85d0,  &
+                    46.85d0,51.85d0,56.85d0,61.85d0/)
+  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Mu=  &      ! Viscosity, in Ns/m2
+                   (/.001652d0,.001422d0,.001225d0,.00108d0,.000959d0,.000855d0,.000769d0,.000695d0,  &
+                     .000631d0,.000577d0,.000528d0,.000489d0,.000453d0/)
+  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Conductivity=  &     ! Conductivity, in W/mK
+                   (/.574d0,.582d0,.590d0,.598d0,.606d0,.613d0,.620d0,.628d0,.634d0,.640d0,.645d0,.650d0,.656d0/)
+  REAL(r64), PARAMETER, DIMENSION(NumOfPropDivisions) :: Pr=  &      ! Prandtl number (dimensionless)
+                   (/12.22d0,10.26d0,8.81d0,7.56d0,6.62d0,5.83d0,5.20d0,4.62d0,4.16d0,3.77d0,3.42d0,3.15d0,2.88d0/)
   INTEGER,   PARAMETER :: WaterIndex = 1
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -1642,15 +1642,15 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Index
-  REAL    :: InterpFrac
-  REAL    :: NuD
-  REAL    :: ReD
-  REAL    :: NTU
-  REAL    :: CpWater
-  REAL    :: Kactual
-  REAL    :: MUactual
-  REAL    :: PRactual
-  REAL    :: PipeLength
+  REAL(r64)    :: InterpFrac
+  REAL(r64)    :: NuD
+  REAL(r64)    :: ReD
+  REAL(r64)    :: NTU
+  REAL(r64)    :: CpWater
+  REAL(r64)    :: Kactual
+  REAL(r64)    :: MUactual
+  REAL(r64)    :: PRactual
+  REAL(r64)    :: PipeLength
 !  INTEGER, SAVE                             :: ErrCount
 
 
@@ -1680,7 +1680,7 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
     PRactual   = Pr(Index-1) + InterpFrac*(Pr(Index)-Pr(Index-1))
   END IF
     ! arguments are glycol name, temperature, and concentration
-  IF (Temperature < 0.) THEN ! check if fluid is water and would be freezing
+  IF (Temperature < 0.d0) THEN ! check if fluid is water and would be freezing
     IF(PlantLoop(SurfaceGHE(SurfaceGHENum)%LoopNum)%FluidIndex == WaterIndex) THEN
       IF (SurfaceGHE(SurfaceGHENum)%FrozenErrIndex1 == 0) THEN
         CALL ShowWarningMessage('GroundHeatExchanger:Surface="'//trim(SurfaceGHE(SurfaceGHENum)%Name)//  &
@@ -1691,7 +1691,7 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
       CALL ShowRecurringWarningErrorAtEnd('GroundHeatExchanger:Surface="'//trim(SurfaceGHE(SurfaceGHENum)%Name)//  &
            '", water is frozen',SurfaceGHE(SurfaceGHENum)%FrozenErrIndex1, ReportMinOf=InletTemp,ReportMinUnits='[C]',  &
            ReportMaxOf=InletTemp,ReportMaxUnits='[C]')
-      InletTemp = MAX(InletTemp, 0.0)
+      InletTemp = MAX(InletTemp, 0.0d0)
     ENDIF
   ENDIF
   CpWater = GetSpecificHeatGlycol(PlantLoop(SurfaceGHE(SurfaceGHENum)%LoopNum)%FluidName,Temperature,  &
@@ -1705,9 +1705,9 @@ REAL FUNCTION CalcHXEffectTerm(SurfaceGHENum,Temperature,WaterMassFlow)
 
           ! Calculate the Nusselt number based on what flow regime one is in
   IF (ReD >= MaxLaminarRe) THEN ! Turbulent flow --> use Colburn equation
-    NuD = 0.023*(ReD**(0.8))*(PRactual**(1./3.))
+    NuD = 0.023d0*(ReD**(0.8d0))*(PRactual**(1.d0/3.d0))
   ELSE    ! Laminar flow --> use constant surface temperature relation
-    NuD = 3.66
+    NuD = 3.66d0
   END IF
           ! Calculate the NTU parameter
           ! NTU = UA/[(Mdot*Cp)min]
@@ -1771,15 +1771,15 @@ SUBROUTINE CalcTopSurfTemp (SurfaceNum, FluxTop, TempTop, ThisDrybulb, ThisWetBu
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceNum               ! surface index number
-  REAL, INTENT(IN)    :: FluxTop                  ! top surface flux
-  REAL, INTENT(OUT)   :: TempTop                  ! top surface temperature
-  REAL, INTENT(IN)    :: ThisDrybulb              ! dry bulb temperature
-  REAL, INTENT(IN)    :: ThisWetbulb              ! wet bulb temperature
-  REAL, INTENT(IN)    :: ThisSkyTemp              ! sky temperature
-  REAL, INTENT(IN)    :: ThisBeamSolarRad         ! beam solar radiation
-  REAL, INTENT(IN)    :: ThisDifSolarRad          ! diffuse solar radiation
-  REAL, INTENT(IN)    :: ThisSolarDirCosVert      ! vertical component of solar normal
-  REAL, INTENT(IN)    :: ThisWindSpeed            ! wind speed
+  REAL(r64), INTENT(IN)    :: FluxTop                  ! top surface flux
+  REAL(r64), INTENT(OUT)   :: TempTop                  ! top surface temperature
+  REAL(r64), INTENT(IN)    :: ThisDrybulb              ! dry bulb temperature
+  REAL(r64), INTENT(IN)    :: ThisWetbulb              ! wet bulb temperature
+  REAL(r64), INTENT(IN)    :: ThisSkyTemp              ! sky temperature
+  REAL(r64), INTENT(IN)    :: ThisBeamSolarRad         ! beam solar radiation
+  REAL(r64), INTENT(IN)    :: ThisDifSolarRad          ! diffuse solar radiation
+  REAL(r64), INTENT(IN)    :: ThisSolarDirCosVert      ! vertical component of solar normal
+  REAL(r64), INTENT(IN)    :: ThisWindSpeed            ! wind speed
   LOGICAL, INTENT(IN) :: ThisIsRain               ! rain flag
   LOGICAL, INTENT(IN) :: ThisIsSnow               ! snow flag
 
@@ -1795,13 +1795,13 @@ SUBROUTINE CalcTopSurfTemp (SurfaceNum, FluxTop, TempTop, ThisDrybulb, ThisWetBu
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: ConvCoef         ! convection coefficient
-  REAL    :: RadCoef          ! radiation coefficient
-  REAL    :: ExternalTemp     ! external environmental temp - drybulb or wetbulb
-  REAL    :: OldSurfTemp      ! previous surface temperature
-  REAL    :: QSolAbsorbed     ! absorbed solar flux
-  REAL    :: SurfTempAbs      ! absolute value of surface temp
-  REAL    :: SkyTempAbs       ! absolute value of sky temp
+  REAL(r64)    :: ConvCoef         ! convection coefficient
+  REAL(r64)    :: RadCoef          ! radiation coefficient
+  REAL(r64)    :: ExternalTemp     ! external environmental temp - drybulb or wetbulb
+  REAL(r64)    :: OldSurfTemp      ! previous surface temperature
+  REAL(r64)    :: QSolAbsorbed     ! absorbed solar flux
+  REAL(r64)    :: SurfTempAbs      ! absolute value of surface temp
+  REAL(r64)    :: SkyTempAbs       ! absolute value of sky temp
 
 
   ! make a surface heat balance and solve for temperature
@@ -1836,7 +1836,7 @@ SUBROUTINE CalcTopSurfTemp (SurfaceNum, FluxTop, TempTop, ThisDrybulb, ThisWetBu
 
 
   ! total absorbed solar - no ground solar
-  QSolAbsorbed = TopSolarAbs*(MAX(ThisSolarDirCosVert,0.0)*ThisBeamSolarRad + ThisDifSolarRad)
+  QSolAbsorbed = TopSolarAbs*(MAX(ThisSolarDirCosVert,0.0d0)*ThisBeamSolarRad + ThisDifSolarRad)
 
 
   ! solve for temperature
@@ -1881,11 +1881,11 @@ SUBROUTINE CalcBottomSurfTemp (SurfaceNum, FluxBtm, TempBtm, ThisDrybulb, ThisWi
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT(IN) :: SurfaceNum         ! surface index number
-  REAL, INTENT(IN)    :: FluxBtm            ! bottom surface flux
-  REAL, INTENT(OUT)   :: TempBtm            ! bottom surface temperature
-  REAL, INTENT(IN)    :: ThisDrybulb        ! dry bulb temperature
-  REAL, INTENT(IN)    :: ThisWindSpeed      ! wind speed
-  REAL, INTENT(IN)    :: ThisGroundTemp     ! ground temperature
+  REAL(r64), INTENT(IN)    :: FluxBtm            ! bottom surface flux
+  REAL(r64), INTENT(OUT)   :: TempBtm            ! bottom surface temperature
+  REAL(r64), INTENT(IN)    :: ThisDrybulb        ! dry bulb temperature
+  REAL(r64), INTENT(IN)    :: ThisWindSpeed      ! wind speed
+  REAL(r64), INTENT(IN)    :: ThisGroundTemp     ! ground temperature
 
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1902,11 +1902,11 @@ SUBROUTINE CalcBottomSurfTemp (SurfaceNum, FluxBtm, TempBtm, ThisDrybulb, ThisWi
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
 
-  REAL    :: ConvCoef         ! convection coefficient
-  REAL    :: RadCoef          ! radiation coefficient
-  REAL    :: OldSurfTemp      ! previous surface temperature
-  REAL    :: SurfTempAbs      ! absolute value of surface temp
-  REAL    :: ExtTempAbs       ! absolute value of sky temp
+  REAL(r64)    :: ConvCoef         ! convection coefficient
+  REAL(r64)    :: RadCoef          ! radiation coefficient
+  REAL(r64)    :: OldSurfTemp      ! previous surface temperature
+  REAL(r64)    :: SurfTempAbs      ! absolute value of surface temp
+  REAL(r64)    :: ExtTempAbs       ! absolute value of sky temp
 
 
   IF(SurfaceGHE(SurfaceNum)%LowerSurfCond == SurfCond_Exposed)THEN
@@ -2006,7 +2006,7 @@ SUBROUTINE UpdateSurfaceGroundHeatExchngr(SurfaceGHENum)    !DSU
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL    :: CpFluid            ! Specific heat of working fluid
+  REAL(r64)    :: CpFluid            ! Specific heat of working fluid
 !  INTEGER,SAVE    :: ErrCount
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
@@ -2046,7 +2046,7 @@ SUBROUTINE UpdateSurfaceGroundHeatExchngr(SurfaceGHENum)    !DSU
       CALL ShowRecurringWarningErrorAtEnd('UpdateSurfaceGroundHeatExchngr: Water is frozen in Surf HX='//  &
                      TRIM(SurfaceGHE(SurfaceGHENum)%Name),SurfaceGHE(SurfaceGHENum)%FrozenErrIndex2,InletTemp,InletTemp)
     END IF
-    InletTemp = MAX(InletTemp, 0.0)
+    InletTemp = MAX(InletTemp, 0.0d0)
   ENDIF
 
   CpFluid = GetSpecificHeatGlycol(PlantLoop(SurfaceGHE(SurfaceGHENum)%LoopNum)%FluidName,InletTemp,  &

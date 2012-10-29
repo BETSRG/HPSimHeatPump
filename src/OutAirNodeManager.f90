@@ -132,7 +132,7 @@ SUBROUTINE GetOutAirNodesInput
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: NumOutAirInletNodeLists
   INTEGER :: NumOutsideAirNodeSingles
-  INTEGER :: NumNums   ! Number of REAL numbers returned by GetObjectItem
+  INTEGER :: NumNums   ! Number of REAL(r64) numbers returned by GetObjectItem
   INTEGER :: NumAlphas ! Number of alphanumerics returned by GetObjectItem
   INTEGER :: NumParams
   INTEGER, ALLOCATABLE, DIMENSION(:) :: NodeNums
@@ -155,7 +155,7 @@ SUBROUTINE GetOutAirNodesInput
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
-  REAL, ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: Numbers           ! Numeric input items for object
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lAlphaBlanks      ! Logical array, alpha field input BLANK = .true.
   LOGICAL, ALLOCATABLE, DIMENSION(:)   :: lNumericBlanks    ! Logical array, numeric field input BLANK = .true.
   INTEGER :: MaxNums=0                ! Maximum number of numeric input fields

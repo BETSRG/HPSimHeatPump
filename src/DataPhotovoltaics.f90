@@ -54,146 +54,146 @@ MODULE DataPhotovoltaics      ! Data-Only Module for native EnergyPlus Photovolt
   INTEGER, PARAMETER :: CrystallineSiPVCells    = 1
   INTEGER, PARAMETER :: AmorphousSiPVCells      = 2
 
-  REAL,    PARAMETER :: MinIrradiance = 0.3  ![W/m2] Assume no operation if Ic is below this number (W/m2)
+  REAL(r64),    PARAMETER :: MinIrradiance = 0.3d0  ![W/m2] Assume no operation if Ic is below this number (W/m2)
         ! DERIVED TYPE DEFINITIONS
   TYPE SimplePVParamsStruct
       CHARACTER(len=MaxNameLength) :: Name=' ' ! name as identified in Sandia database
-      REAL                    :: AreaCol = 0.0 ! effective area of solar collection
-      REAL                    :: ActiveFraction =0.0 ! fraction of parent surface that has active solar cells
+      REAL(r64)                    :: AreaCol = 0.0D0 ! effective area of solar collection
+      REAL(r64)                    :: ActiveFraction =0.0D0 ! fraction of parent surface that has active solar cells
       INTEGER                      :: EfficencyInputMode = 0 ! to schedule or not
       INTEGER                      :: EffSchedPtr    =0   ! index pointer for efficiency schedule
-      REAL                    :: PVEfficiency   =0.0 ! fixed or current PV efficiency
+      REAL(r64)                    :: PVEfficiency   =0.0D0 ! fixed or current PV efficiency
   END TYPE SimplePVParamsStruct
 
   TYPE TRNSYSPVModuleParamsStruct    !  for  GENERATOR:PV:Equivalent One-Diode Model
     CHARACTER(len=MaxNameLength) :: Name=' '
     INTEGER   :: CellsInSeries        = 0    !cells in series [-]
     INTEGER   :: CellType             = 0    ! type of PV cell (crystalline, amorphous )
-    REAL :: Area                 =0.0 !module area [m2]
-    REAL :: TauAlpha             =0.0 !tau alpha product at normal incidence [-]
-    REAL :: SemiConductorBandgap =0.0 !electron bandgap [eV]
-    REAL :: ShuntResistance      =0.0 !shunt resistance [ohms]
-    REAL :: RefIsc               =0.0 !short circuit current at reference conditions [A/K]
-    REAL :: RefVoc               =0.0 !open circuit voltage at reference conditions [V/K]
-    REAL :: RefTemperature       =0.0 !temperature at reference conditions
-    REAL :: RefInsolation        =0.0 !radiation at reference conditions [W/m2]
-    REAL :: Imp                  =0.0 !current at max power [A]
-    REAL :: Vmp                  =0.0 !voltage at max power [V]
-    REAL :: TempCoefIsc          =0.0 !temperature coefficient of short circuit current
-    REAL :: TempCoefVoc          =0.0 !temperature coefficient of open circuit voltage
-    REAL :: NOCTAmbTemp          =0.0 !ambient temperature at NOCT [C]
-    REAL :: NOCTCellTemp         =0.0 !cell temperature at NOCT [C]
-    REAL :: NOCTInsolation       =0.0 !radiation at NOCT [W/m2]
-    REAL :: HeatLossCoef         =0.0 !heat loss coefficient [W/m2.K]
-    REAL :: HeatCapacity         =0.0 !total heat capacity (only used in TC mode 1)
+    REAL(r64) :: Area                 =0.0D0 !module area [m2]
+    REAL(r64) :: TauAlpha             =0.0D0 !tau alpha product at normal incidence [-]
+    REAL(r64) :: SemiConductorBandgap =0.0D0 !electron bandgap [eV]
+    REAL(r64) :: ShuntResistance      =0.0D0 !shunt resistance [ohms]
+    REAL(r64) :: RefIsc               =0.0D0 !short circuit current at reference conditions [A/K]
+    REAL(r64) :: RefVoc               =0.0D0 !open circuit voltage at reference conditions [V/K]
+    REAL(r64) :: RefTemperature       =0.0D0 !temperature at reference conditions
+    REAL(r64) :: RefInsolation        =0.0D0 !radiation at reference conditions [W/m2]
+    REAL(r64) :: Imp                  =0.0D0 !current at max power [A]
+    REAL(r64) :: Vmp                  =0.0D0 !voltage at max power [V]
+    REAL(r64) :: TempCoefIsc          =0.0D0 !temperature coefficient of short circuit current
+    REAL(r64) :: TempCoefVoc          =0.0D0 !temperature coefficient of open circuit voltage
+    REAL(r64) :: NOCTAmbTemp          =0.0D0 !ambient temperature at NOCT [C]
+    REAL(r64) :: NOCTCellTemp         =0.0D0 !cell temperature at NOCT [C]
+    REAL(r64) :: NOCTInsolation       =0.0D0 !radiation at NOCT [W/m2]
+    REAL(r64) :: HeatLossCoef         =0.0D0 !heat loss coefficient [W/m2.K]
+    REAL(r64) :: HeatCapacity         =0.0D0 !total heat capacity (only used in TC mode 1)
   END TYPE TRNSYSPVModuleParamsStruct
 
   TYPE TRNSYSPVCalcStruct
-    REAL :: Insolation           =0.0 !radiation [W/m2]
-    REAL :: ArrayCurrent         =0.0 !array current at current conditions [A]
-    REAL :: ArrayVoltage         =0.0 !array voltage at current conditions [V]
-    REAL :: ArrayPower           =0.0 !array power at current conditions [W]
-    REAL :: ArrayEfficiency      =0.0 !array efficiency at current conditions [0..1]
-    REAL :: CellTemp             =0.0 !array cell temperature at current conditions [C]
-    REAL :: CellTempK            =0.0 !array cell temperature (for setting last cell temp) [K]
-    REAL :: TimeElapsed          =0.0 !time previous update of last cell temp
-    REAL :: LastCellTempK        =0.0 !array cell temperature at previous conditions [K]
-    REAL :: ArrayIsc             =0.0 !array short circuit current at current conditions [A]
-    REAL :: ArrayVoc             =0.0 !array open circuit voltage at current conditions [V]
+    REAL(r64) :: Insolation           =0.0D0 !radiation [W/m2]
+    REAL(r64) :: ArrayCurrent         =0.0D0 !array current at current conditions [A]
+    REAL(r64) :: ArrayVoltage         =0.0D0 !array voltage at current conditions [V]
+    REAL(r64) :: ArrayPower           =0.0D0 !array power at current conditions [W]
+    REAL(r64) :: ArrayEfficiency      =0.0D0 !array efficiency at current conditions [0..1]
+    REAL(r64) :: CellTemp             =0.0D0 !array cell temperature at current conditions [C]
+    REAL(r64) :: CellTempK            =0.0D0 !array cell temperature (for setting last cell temp) [K]
+    REAL(r64) :: TimeElapsed          =0.0D0 !time previous update of last cell temp
+    REAL(r64) :: LastCellTempK        =0.0D0 !array cell temperature at previous conditions [K]
+    REAL(r64) :: ArrayIsc             =0.0D0 !array short circuit current at current conditions [A]
+    REAL(r64) :: ArrayVoc             =0.0D0 !array open circuit voltage at current conditions [V]
   END TYPE TRNSYSPVCalcStruct
 
   TYPE SNLModuleParamsStuct  ! for PV MODULE:SANDIA PARAMETERS
     CHARACTER(len=MaxNameLength) :: name=' ' ! name as identified in Sandia database
-    REAL    :: Acoll           =0.0 ! Active collector area (m2, single module)
-    REAL    :: NcellSer        =0.0 ! Number of cells in series in a module's cell-string (unitless)
-    REAL    :: NparSerCells    =0.0 ! Number of cell-strings in parallel in module (unitless)
-    REAL    :: Isc0            =0.0 ! Short circuit current at reference conditions (Amps)
-    REAL    :: Voc0            =0.0 ! Open circuit voltage at reference conditions (Volts)
-    REAL    :: Imp0            =0.0 ! Max power point current at reference conditions (Amps)
-    REAL    :: Vmp0            =0.0 ! Voltage at max power at reference conditions (Volts)
-    REAL    :: aIsc            =0.0 ! Normalized temperature coefficient for Isc (Amps/degC) Isc temperature coeff
-    REAL    :: aImp            =0.0 ! Normalized temperature coefficient for Imp (1/degC) Imp temperature coeff
-    REAL    :: c_0             =0.0 ! Empirical coefficients relating Imp to Ee (unitless)
+    REAL(r64)    :: Acoll           =0.0D0 ! Active collector area (m2, single module)
+    REAL(r64)    :: NcellSer        =0.0D0 ! Number of cells in series in a module's cell-string (unitless)
+    REAL(r64)    :: NparSerCells    =0.0D0 ! Number of cell-strings in parallel in module (unitless)
+    REAL(r64)    :: Isc0            =0.0D0 ! Short circuit current at reference conditions (Amps)
+    REAL(r64)    :: Voc0            =0.0D0 ! Open circuit voltage at reference conditions (Volts)
+    REAL(r64)    :: Imp0            =0.0D0 ! Max power point current at reference conditions (Amps)
+    REAL(r64)    :: Vmp0            =0.0D0 ! Voltage at max power at reference conditions (Volts)
+    REAL(r64)    :: aIsc            =0.0D0 ! Normalized temperature coefficient for Isc (Amps/degC) Isc temperature coeff
+    REAL(r64)    :: aImp            =0.0D0 ! Normalized temperature coefficient for Imp (1/degC) Imp temperature coeff
+    REAL(r64)    :: c_0             =0.0D0 ! Empirical coefficients relating Imp to Ee (unitless)
                                          !   coefficient relating Imp to irradiance
-    REAL    :: c_1             =0.0 ! Empirical coefficients relating Imp to Ee (unitless)
+    REAL(r64)    :: c_1             =0.0D0 ! Empirical coefficients relating Imp to Ee (unitless)
                                          !   coefficient relating Voc to irradiance
-    REAL    :: BVoc0           =0.0 ! Temperature coefficient for module open-circuit-voltage at reference conditions
+    REAL(r64)    :: BVoc0           =0.0D0 ! Temperature coefficient for module open-circuit-voltage at reference conditions
                                          !   (Volts/degC)
-    REAL    :: mBVoc           =0.0 ! Coefficient for irradiance dependence of open-circuit-voltage-temperature
+    REAL(r64)    :: mBVoc           =0.0D0 ! Coefficient for irradiance dependence of open-circuit-voltage-temperature
                                          !  coefficient  (V/°C)
-    REAL    :: BVmp0           =0.0 ! Temperature coefficient for module maximum-power-voltage at reference conditions
+    REAL(r64)    :: BVmp0           =0.0D0 ! Temperature coefficient for module maximum-power-voltage at reference conditions
                                          !   (V/°C)
-    REAL    :: mBVmp           =0.0 ! Cofficient for irradiance dependence of maximum-power-voltage-temperature
+    REAL(r64)    :: mBVmp           =0.0D0 ! Cofficient for irradiance dependence of maximum-power-voltage-temperature
                                          !   coefficient (V/°C)
-    REAL    :: DiodeFactor     =0.0 ! Empirically determined 'diode factor' for individual cells (unitless)
-    REAL    :: c_2             =0.0 ! Empirical coefficients relating Vmp to Ee (unitless)
+    REAL(r64)    :: DiodeFactor     =0.0D0 ! Empirically determined 'diode factor' for individual cells (unitless)
+    REAL(r64)    :: c_2             =0.0D0 ! Empirical coefficients relating Vmp to Ee (unitless)
                                          !   (coefficient relating Vmp to irradiance)
-    REAL    :: c_3             =0.0 ! Empirical coefficients relating Vmp to Ee (unitless)
+    REAL(r64)    :: c_3             =0.0D0 ! Empirical coefficients relating Vmp to Ee (unitless)
                                          !   (coefficient relating Vmp to irradiance)
-    REAL    :: a_0             =0.0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
-    REAL    :: a_1             =0.0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
-    REAL    :: a_2             =0.0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
-    REAL    :: a_3             =0.0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
-    REAL    :: a_4             =0.0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
-    REAL    :: b_0             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: b_1             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: b_2             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: b_3             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: b_4             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: b_5             =0.0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
-    REAL    :: DT0             =0.0 ! Temperature difference between Tc and Tm at Eo (°C),
+    REAL(r64)    :: a_0             =0.0D0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
+    REAL(r64)    :: a_1             =0.0D0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
+    REAL(r64)    :: a_2             =0.0D0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
+    REAL(r64)    :: a_3             =0.0D0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
+    REAL(r64)    :: a_4             =0.0D0 ! Empirical coefficients for f1(AMa) polynomial (unitless)
+    REAL(r64)    :: b_0             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: b_1             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: b_2             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: b_3             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: b_4             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: b_5             =0.0D0 ! Empirical coefficients for f1(AOI) polynomial (unitless)
+    REAL(r64)    :: DT0             =0.0D0 ! Temperature difference between Tc and Tm at Eo (°C),
                                          ! (This is d(Tc) in Sandia database)
-    REAL    :: fd              =0.0 ! Fraction of diffuse irradiance used by module (unitless)
-    REAL    :: a               =0.0 ! Empirical coefficient for module temp.at low wind,
+    REAL(r64)    :: fd              =0.0D0 ! Fraction of diffuse irradiance used by module (unitless)
+    REAL(r64)    :: a               =0.0D0 ! Empirical coefficient for module temp.at low wind,
                                          ! high solar irradiance (unitless)
-    REAL    :: b               =0.0 ! Empirical coefficient relating module temp.
+    REAL(r64)    :: b               =0.0D0 ! Empirical coefficient relating module temp.
                                          ! decrease with increasing wind speed (unitless)
-    REAL    :: c_4             =0.0 ! Empirical coefficients relating Ix to Ee (unitless)
-    REAL    :: c_5             =0.0 ! Empirical coefficients relating Ix to Ee (unitless)
-    REAL    :: Ix0             =0.0 ! Current at V = 0.5 Voc and at reference conditions (Amps)
-    REAL    :: Ixx0            =0.0 ! Current at V = 0.5 (Vmp + Voc) and at reference conditions (Amps)
-    REAL    :: c_6             =0.0 ! Empirical coefficients relating Ixx to Ee (unitless)
-    REAL    :: c_7             =0.0 ! Empirical coefficients relating Ixx to Ee (unitless)
+    REAL(r64)    :: c_4             =0.0D0 ! Empirical coefficients relating Ix to Ee (unitless)
+    REAL(r64)    :: c_5             =0.0D0 ! Empirical coefficients relating Ix to Ee (unitless)
+    REAL(r64)    :: Ix0             =0.0D0 ! Current at V = 0.5 Voc and at reference conditions (Amps)
+    REAL(r64)    :: Ixx0            =0.0D0 ! Current at V = 0.5 (Vmp + Voc) and at reference conditions (Amps)
+    REAL(r64)    :: c_6             =0.0D0 ! Empirical coefficients relating Ixx to Ee (unitless)
+    REAL(r64)    :: c_7             =0.0D0 ! Empirical coefficients relating Ixx to Ee (unitless)
   END TYPE SNLModuleParamsStuct
 
   TYPE SNLPVInputStruct         ! for data obtained elsewhere in EnergyPlus
-    REAL    :: IcBeam         =0.0 !incident beam solar (W/m2)
-    REAL    :: IcDiffuse      =0.0 ! incident diffuse solar (W/m2)
-    REAL    :: IncidenceAngle =0.0 ! angle from normal for beam (deg)
-    REAL    :: ZenithAngle    =0.0 !solar zenith angle (deg)
-    REAL    :: Tamb           =0.0 ! outdoor drybulb temperature (C)
-    REAL    :: WindSpeed      =0.0 ! outdoor windspeed. (m/s)
-    REAL    :: Altitude       =0.0 ! elevation above sea level. (m)
+    REAL(r64)    :: IcBeam         =0.0D0 !incident beam solar (W/m2)
+    REAL(r64)    :: IcDiffuse      =0.0D0 ! incident diffuse solar (W/m2)
+    REAL(r64)    :: IncidenceAngle =0.0D0 ! angle from normal for beam (deg)
+    REAL(r64)    :: ZenithAngle    =0.0D0 !solar zenith angle (deg)
+    REAL(r64)    :: Tamb           =0.0D0 ! outdoor drybulb temperature (C)
+    REAL(r64)    :: WindSpeed      =0.0D0 ! outdoor windspeed. (m/s)
+    REAL(r64)    :: Altitude       =0.0D0 ! elevation above sea level. (m)
   END TYPE SNLPVInputStruct
 
   TYPE SNLPVCalcStruct ! hold calculated results from PV modeling.
-    REAL :: Vmp              =0.0 !(Volts) maximum power voltage
-    REAL :: Imp              =0.0 !(Amps) maximum power current
-    REAL :: Pmp              =0.0 !(W) (was kJ/hr) maximum power point power
-    REAL :: EffMax           =0.0 !(unitless) conversion efficiency at max power point
-    REAL :: Isc              =0.0 !(Amps) short circuit current
-    REAL :: Voc              =0.0 !(Volts) open circuit voltage
-    REAL :: Tcell            =0.0 !(deg C) solar cell operating temperature
-    REAL :: Tback            =0.0 !(deg C) solar module operation temp, at back of module
-    REAL :: AMa              =0.0 !(unitless) Absolute Air mass
-    REAL :: F1               =0.0 !(unitless) holds result of "AMa-Function" for solar spectrum influence
-    REAL :: F2               =0.0 !(unitless) holds result of AOI-Function for angle-of-incidence
-    REAL :: Ix               =0.0 !(Amps) Current at V = 0.5 Voc
-    REAL :: Vx               =0.0 !(Volts) Voltage at 0.5 Voc
-    REAL :: Ixx              =0.0 !(Amps) current at V = 0.5(Vmpp + Voc)
-    REAL :: Vxx              =0.0 !(Volts) voltage at 0.5(Vmpp + Voc)
-    REAL :: SurfaceSink      =0.0 ! (Watts) energy balance term to account for electricity leaving
+    REAL(r64) :: Vmp              =0.0D0 !(Volts) maximum power voltage
+    REAL(r64) :: Imp              =0.0D0 !(Amps) maximum power current
+    REAL(r64) :: Pmp              =0.0D0 !(W) (was kJ/hr) maximum power point power
+    REAL(r64) :: EffMax           =0.0D0 !(unitless) conversion efficiency at max power point
+    REAL(r64) :: Isc              =0.0D0 !(Amps) short circuit current
+    REAL(r64) :: Voc              =0.0D0 !(Volts) open circuit voltage
+    REAL(r64) :: Tcell            =0.0D0 !(deg C) solar cell operating temperature
+    REAL(r64) :: Tback            =0.0D0 !(deg C) solar module operation temp, at back of module
+    REAL(r64) :: AMa              =0.0D0 !(unitless) Absolute Air mass
+    REAL(r64) :: F1               =0.0D0 !(unitless) holds result of "AMa-Function" for solar spectrum influence
+    REAL(r64) :: F2               =0.0D0 !(unitless) holds result of AOI-Function for angle-of-incidence
+    REAL(r64) :: Ix               =0.0D0 !(Amps) Current at V = 0.5 Voc
+    REAL(r64) :: Vx               =0.0D0 !(Volts) Voltage at 0.5 Voc
+    REAL(r64) :: Ixx              =0.0D0 !(Amps) current at V = 0.5(Vmpp + Voc)
+    REAL(r64) :: Vxx              =0.0D0 !(Volts) voltage at 0.5(Vmpp + Voc)
+    REAL(r64) :: SurfaceSink      =0.0D0 ! (Watts) energy balance term to account for electricity leaving
   END TYPE SNLPVCalcStruct
 
   TYPE PVReportVariables              !   for  GENERATOR:PV:EQUIVALENT ONE-DIODE MODEL
-    REAL :: DCPower               =0.0 ! Direct Current power from PV array
-    REAL :: DCEnergy              =0.0 ! Direct Current energy from PV array
-    REAL :: ArrayEfficiency       =0.0 !array efficiency at current conditions [0..1]
-    REAL :: CellTemp              =0.0 !array cell temperature at current conditions [C]
-    REAL :: ArrayIsc              =0.0 !array short circuit current at current conditions [A]
-    REAL :: ArrayVoc              =0.0 !array open circuit voltage at current conditions [V]
-    REAL :: ArrayCurrent          =0.0
-    REAL :: ArrayVoltage          =0.0
+    REAL(r64) :: DCPower               =0.0D0 ! Direct Current power from PV array
+    REAL(r64) :: DCEnergy              =0.0D0 ! Direct Current energy from PV array
+    REAL(r64) :: ArrayEfficiency       =0.0D0 !array efficiency at current conditions [0..1]
+    REAL(r64) :: CellTemp              =0.0D0 !array cell temperature at current conditions [C]
+    REAL(r64) :: ArrayIsc              =0.0D0 !array short circuit current at current conditions [A]
+    REAL(r64) :: ArrayVoc              =0.0D0 !array open circuit voltage at current conditions [V]
+    REAL(r64) :: ArrayCurrent          =0.0D0
+    REAL(r64) :: ArrayVoltage          =0.0D0
   END TYPE PVReportVariables
 
   TYPE PVArrayStruct
@@ -203,13 +203,13 @@ MODULE DataPhotovoltaics      ! Data-Only Module for native EnergyPlus Photovolt
     INTEGER   :: SurfacePtr  = 0 ! index for named surface
     INTEGER   :: PVModelType = 0 ! type of performance modeling, Simple, TRNSYS or Equivalent 1-diode, or Sandia/King model
     INTEGER   :: CellIntegrationMode = 0     ! how are PV cells integrated with other E+ modeling
-    REAL :: NumModNSeries       = 1.0 ! number of modules in series in one string
-    REAL :: NumSeriesNParall    = 1.0 ! number of series strings in parallel
+    REAL(r64) :: NumModNSeries       = 1.0D0 ! number of modules in series in one string
+    REAL(r64) :: NumSeriesNParall    = 1.0D0 ! number of series strings in parallel
 
     INTEGER   :: UTSCPtr       = 0 ! pointer to UTSC number for INTEGRATED TRANSPIRED COLLECTOR mode
     INTEGER   :: ExtVentCavPtr = 0 ! pointer to Exterior Vented Cavity EXTERIOR VENTED CAVITY
     INTEGER   :: PVTPtr        = 0 ! pointer to PVT model
-    REAL :: SurfaceSink   = 0.0 ! PV power "sink" for integration
+    REAL(r64) :: SurfaceSink   = 0.0D0 ! PV power "sink" for integration
     TYPE(PVReportVariables)           :: Report  ! report variables
     ! nested structs for user input parameters
     TYPE(SimplePVParamsStruct)        :: SimplePVModule ! simple model input params
@@ -233,7 +233,7 @@ MODULE DataPhotovoltaics      ! Data-Only Module for native EnergyPlus Photovolt
 
   TYPE (PVArrayStruct  ), ALLOCATABLE, DIMENSION(:) :: PVarray
 
-  REAL    :: ShuntResistance=0.0  ! old "RSH" in common block of trnsys code
+  REAL(r64)    :: ShuntResistance=0.0D0  ! old "RSH" in common block of trnsys code
 
 ! ___________________________________________________________________________
 

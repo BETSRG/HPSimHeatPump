@@ -89,18 +89,18 @@ TYPE CBVAVData
  CHARACTER(len=MaxNameLength) :: UnitType                 = ' ' ! Type of unit
  CHARACTER(len=MaxNameLength) :: Sched                    = ' ' ! Availability schedule name
  INTEGER                      :: SchedPtr                 = 0   ! Index number to availability schedule
- REAL                    :: MaxCoolAirVolFlow        = 0.0 ! System air volumetric flow rate during cooling operation [m3/s]
- REAL                    :: MaxHeatAirVolFlow        = 0.0 ! System air volumetric flow rate during heating operation [m3/s]
- REAL                    :: MaxNoCoolHeatAirVolFlow  = 0.0 ! System air volumetric flow rate when no cooling or heating [m3/s]
- REAL                    :: MaxCoolAirMassFlow       = 0.0 ! System air mass flow rate during cooling operation [kg/s]
- REAL                    :: MaxHeatAirMassFlow       = 0.0 ! System air mass flow rate during heating operation [kg/s]
- REAL                    :: MaxNoCoolHeatAirMassFlow = 0.0 ! System air mass flow rate when no cooling or heating [kg/s]
- REAL                    :: CoolOutAirVolFlow        = 0.0 ! OA volumetric flow rate during cooling operation [m3/s]
- REAL                    :: HeatOutAirVolFlow        = 0.0 ! OA volumetric flow rate during heating operation [m3/s]
- REAL                    :: NoCoolHeatOutAirVolFlow  = 0.0 ! OA volumetric flow rate when no cooling or heating [m3/s]
- REAL                    :: CoolOutAirMassFlow       = 0.0 ! OA mass flow rate during cooling operation [kg/s]
- REAL                    :: HeatOutAirMassFlow       = 0.0 ! OA mass flow rate during heating operation [kg/s]
- REAL                    :: NoCoolHeatOutAirMassFlow = 0.0 ! OA mass flow rate when no cooling or heating [kg/s]
+ REAL(r64)                    :: MaxCoolAirVolFlow        = 0.0 ! System air volumetric flow rate during cooling operation [m3/s]
+ REAL(r64)                    :: MaxHeatAirVolFlow        = 0.0 ! System air volumetric flow rate during heating operation [m3/s]
+ REAL(r64)                    :: MaxNoCoolHeatAirVolFlow  = 0.0 ! System air volumetric flow rate when no cooling or heating [m3/s]
+ REAL(r64)                    :: MaxCoolAirMassFlow       = 0.0 ! System air mass flow rate during cooling operation [kg/s]
+ REAL(r64)                    :: MaxHeatAirMassFlow       = 0.0 ! System air mass flow rate during heating operation [kg/s]
+ REAL(r64)                    :: MaxNoCoolHeatAirMassFlow = 0.0 ! System air mass flow rate when no cooling or heating [kg/s]
+ REAL(r64)                    :: CoolOutAirVolFlow        = 0.0 ! OA volumetric flow rate during cooling operation [m3/s]
+ REAL(r64)                    :: HeatOutAirVolFlow        = 0.0 ! OA volumetric flow rate during heating operation [m3/s]
+ REAL(r64)                    :: NoCoolHeatOutAirVolFlow  = 0.0 ! OA volumetric flow rate when no cooling or heating [m3/s]
+ REAL(r64)                    :: CoolOutAirMassFlow       = 0.0 ! OA mass flow rate during cooling operation [kg/s]
+ REAL(r64)                    :: HeatOutAirMassFlow       = 0.0 ! OA mass flow rate during heating operation [kg/s]
+ REAL(r64)                    :: NoCoolHeatOutAirMassFlow = 0.0 ! OA mass flow rate when no cooling or heating [kg/s]
  INTEGER                      :: OutAirSchPtr             = 0   ! Index number to outside air multiplier schedule
  INTEGER                      :: AirInNode                = 0   ! Inlet air node number for CBVAV unit
  INTEGER                      :: AirOutNode               = 0   ! Outlet air node number for CBVAV unit
@@ -119,10 +119,10 @@ TYPE CBVAVData
  INTEGER                      :: FanType_Num              = 0   ! Fan type number (see DataHVACGlobals)
  INTEGER                      :: FanIndex                 = 0   ! Index number to fan
  INTEGER                      :: FanOpModeSchedPtr        = 0   ! Fan operating mode schedule pointer
- REAL                    :: FanVolFlow               = 0.0 ! Volumetric flow rate of system supply air fan [m3/s]
- REAL                    :: HeatingSpeedRatio        = 1.0 ! Fan speed ratio in heating mode
- REAL                    :: CoolingSpeedRatio        = 1.0 ! Fan speed ratio in cooling mode
- REAL                    :: NoHeatCoolSpeedRatio     = 1.0 ! Fan speed ratio when no cooling or heating
+ REAL(r64)                    :: FanVolFlow               = 0.0 ! Volumetric flow rate of system supply air fan [m3/s]
+ REAL(r64)                    :: HeatingSpeedRatio        = 1.0 ! Fan speed ratio in heating mode
+ REAL(r64)                    :: CoolingSpeedRatio        = 1.0 ! Fan speed ratio in cooling mode
+ REAL(r64)                    :: NoHeatCoolSpeedRatio     = 1.0 ! Fan speed ratio when no cooling or heating
  LOGICAL                      :: CheckFanFlow          = .TRUE. ! Check fan volumetric flow versus system flow in init routine.
  CHARACTER(len=MaxNameLength) :: DXCoolCoilName           = ' ' ! Name of DX cooling coil
  CHARACTER(len=MaxNameLength) :: DXCoolCoilType           = ' ' ! Type of DX cooling coil,Coil:DX:CoolingBypassFactorEmpirical or
@@ -147,32 +147,32 @@ TYPE CBVAVData
  INTEGER                      :: CompNum                  = 0   ! plant loop component index for water heating coil
  Integer                      :: HotWaterCoilMaxIterIndex  = 0  ! Index to recurring warning message
  Integer                      :: HotWaterCoilMaxIterIndex2 = 0  ! Index to recurring warning message
- REAL                    :: MaxHeatCoilFluidFlow     = 0.0 ! water or steam mass flow rate for heating coil [kg/s]
- REAL                    :: DesignHeatingCapacity    = 0.0 ! design heating capacity of the heating coil
- REAL                    :: DesignSuppHeatingCapacity= 0.0 ! Operating capacity of supplemental Heating Coil [W]
- REAL                    :: MinOATCompressor         = 0.0 ! Minimum OAT for compressor operation [C]
- REAL                    :: MinLATCooling            = 0.0 ! Minimum leaving air temp for compressor cooling operation [C]
- REAL                    :: MaxLATHeating            = 0.0 ! Maximum leaving air temp for heating operation [C]
+ REAL(r64)                    :: MaxHeatCoilFluidFlow     = 0.0 ! water or steam mass flow rate for heating coil [kg/s]
+ REAL(r64)                    :: DesignHeatingCapacity    = 0.0 ! design heating capacity of the heating coil
+ REAL(r64)                    :: DesignSuppHeatingCapacity= 0.0 ! Operating capacity of supplemental Heating Coil [W]
+ REAL(r64)                    :: MinOATCompressor         = 0.0 ! Minimum OAT for compressor operation [C]
+ REAL(r64)                    :: MinLATCooling            = 0.0 ! Minimum leaving air temp for compressor cooling operation [C]
+ REAL(r64)                    :: MaxLATHeating            = 0.0 ! Maximum leaving air temp for heating operation [C]
  ! Report data
- REAL                    :: TotHeatEnergyRate        = 0.0 ! Total heating output [W]
- REAL                    :: TotHeatEnergy            = 0.0 ! Total heating output [J]
- REAL                    :: TotCoolEnergyRate        = 0.0 ! Total cooling output [W]
- REAL                    :: TotCoolEnergy            = 0.0 ! Total cooling output [J]
- REAL                    :: SensHeatEnergyRate       = 0.0 ! Sensible heating output [W]
- REAL                    :: SensHeatEnergy           = 0.0 ! Sensible heating output [J]
- REAL                    :: SensCoolEnergyRate       = 0.0 ! Sensible cooling output [W]
- REAL                    :: SensCoolEnergy           = 0.0 ! Sensible cooling output [J]
- REAL                    :: LatHeatEnergyRate        = 0.0 ! Latent heating output [W]
- REAL                    :: LatHeatEnergy            = 0.0 ! Latent heating output [J]
- REAL                    :: LatCoolEnergyRate        = 0.0 ! Latent cooling output [W]
- REAL                    :: LatCoolEnergy            = 0.0 ! Latent cooling output [J]
- REAL                    :: ElecPower                = 0.0 ! Electricity consumed [W]
- REAL                    :: ElecConsumption          = 0.0 ! Electricity consumed [J]
- REAL                    :: FanPartLoadRatio         = 0.0 ! Fan part-load ratio for time step
- REAL                    :: CompPartLoadRatio        = 0.0 ! Compressor part-load ratio for time step
+ REAL(r64)                    :: TotHeatEnergyRate        = 0.0 ! Total heating output [W]
+ REAL(r64)                    :: TotHeatEnergy            = 0.0 ! Total heating output [J]
+ REAL(r64)                    :: TotCoolEnergyRate        = 0.0 ! Total cooling output [W]
+ REAL(r64)                    :: TotCoolEnergy            = 0.0 ! Total cooling output [J]
+ REAL(r64)                    :: SensHeatEnergyRate       = 0.0 ! Sensible heating output [W]
+ REAL(r64)                    :: SensHeatEnergy           = 0.0 ! Sensible heating output [J]
+ REAL(r64)                    :: SensCoolEnergyRate       = 0.0 ! Sensible cooling output [W]
+ REAL(r64)                    :: SensCoolEnergy           = 0.0 ! Sensible cooling output [J]
+ REAL(r64)                    :: LatHeatEnergyRate        = 0.0 ! Latent heating output [W]
+ REAL(r64)                    :: LatHeatEnergy            = 0.0 ! Latent heating output [J]
+ REAL(r64)                    :: LatCoolEnergyRate        = 0.0 ! Latent cooling output [W]
+ REAL(r64)                    :: LatCoolEnergy            = 0.0 ! Latent cooling output [J]
+ REAL(r64)                    :: ElecPower                = 0.0 ! Electricity consumed [W]
+ REAL(r64)                    :: ElecConsumption          = 0.0 ! Electricity consumed [J]
+ REAL(r64)                    :: FanPartLoadRatio         = 0.0 ! Fan part-load ratio for time step
+ REAL(r64)                    :: CompPartLoadRatio        = 0.0 ! Compressor part-load ratio for time step
  INTEGER                      :: LastMode                 = 0   ! Last mode of operation, coolingmode or heatingmode
  INTEGER                      :: AirFlowControl           = 0   ! Fan control mode, UseCompressorOnFlow or UseCompressorOffFlow
- REAL                    :: CompPartLoadFrac         = 0.0 ! Compressor part load ratio
+ REAL(r64)                    :: CompPartLoadFrac         = 0.0 ! Compressor part load ratio
  INTEGER                      :: AirLoopNumber            = 0   ! Air loop served by the CBVAV system
  INTEGER                      :: NumControlledZones       = 0
  INTEGER, DIMENSION(:), ALLOCATABLE :: ControlledZoneNum        ! Index to controlled zones
@@ -192,10 +192,10 @@ TYPE CBVAVData
  INTEGER                      :: HeatingCoilInletNode     = 0   ! Inlet node of heating coil
  INTEGER                      :: HeatingCoilOutletNode    = 0   ! Outlet node of heating coil
  INTEGER                      :: FanInletNodeNum          = 0   ! fan inlet node number
- REAL                    :: OutletTempSetpoint       = 0.0 ! Oulet node temperature setpoint [C]
- REAL                    :: CoilTempSetpoint         = 0.0 ! Coil oulet node temperature setpoint (inc. fan heat) [C]
+ REAL(r64)                    :: OutletTempSetpoint       = 0.0 ! Oulet node temperature setpoint [C]
+ REAL(r64)                    :: CoilTempSetpoint         = 0.0 ! Coil oulet node temperature setpoint (inc. fan heat) [C]
  INTEGER                      :: HeatCoolMode             = 0   ! System operating mode (0 = floating, 1 = cooling, 2 = heating)
- REAL                    :: BypassMassFlowRate       = 0.0 ! Bypass mass flow rate report variable [m3/s]
+ REAL(r64)                    :: BypassMassFlowRate       = 0.0 ! Bypass mass flow rate report variable [m3/s]
  INTEGER                      :: DehumidificationMode     = 0   ! Dehumidification mode (0=normal, 1=enhanced)
  INTEGER                      :: DehumidControlType       = 0   ! Dehumidification control type (currently only for multimode coil)
  LOGICAL                      :: HumRatMaxCheck         =.TRUE. ! Used in Init for warning messages
@@ -225,17 +225,17 @@ END TYPE CBVAVData
 TYPE (CBVAVData), ALLOCATABLE, DIMENSION(:) :: CBVAV
 
 INTEGER      :: NumCBVAV               = 0     ! Number of CBVAV systems in input file
-REAL    :: CompOnMassFlow         = 0.0   ! System air mass flow rate w/ compressor ON
-REAL    :: OACompOnMassFlow       = 0.0   ! OA mass flow rate w/ compressor ON
-REAL    :: CompOffMassFlow        = 0.0   ! System air mass flow rate w/ compressor OFF
-REAL    :: OACompOffMassFlow      = 0.0   ! OA mass flow rate w/ compressor OFF
-REAL    :: CompOnFlowRatio        = 0.0   ! fan flow ratio when coil on
-REAL    :: CompOffFlowRatio       = 0.0   ! fan flow ratio when coil off
-REAL    :: FanSpeedRatio          = 0.0   ! ratio of air flow ratio passed to fan object
-REAL    :: ByPassDuctFlowFraction = 0.0   ! Fraction of unit mass flow that returns to inlet of CBVAV unit through bypass duct
-REAL    :: PartLoadFrac           = 0.0   ! Compressor part-load fraction
-REAL    :: SaveCompressorPLR      = 0.0   ! Holds DX compressor PLR from active DX coil
-REAL    :: TempSteamIn            = 100.0 ! steam coil steam inlet temperature
+REAL(r64)    :: CompOnMassFlow         = 0.0   ! System air mass flow rate w/ compressor ON
+REAL(r64)    :: OACompOnMassFlow       = 0.0   ! OA mass flow rate w/ compressor ON
+REAL(r64)    :: CompOffMassFlow        = 0.0   ! System air mass flow rate w/ compressor OFF
+REAL(r64)    :: OACompOffMassFlow      = 0.0   ! OA mass flow rate w/ compressor OFF
+REAL(r64)    :: CompOnFlowRatio        = 0.0   ! fan flow ratio when coil on
+REAL(r64)    :: CompOffFlowRatio       = 0.0   ! fan flow ratio when coil off
+REAL(r64)    :: FanSpeedRatio          = 0.0   ! ratio of air flow ratio passed to fan object
+REAL(r64)    :: ByPassDuctFlowFraction = 0.0   ! Fraction of unit mass flow that returns to inlet of CBVAV unit through bypass duct
+REAL(r64)    :: PartLoadFrac           = 0.0   ! Compressor part-load fraction
+REAL(r64)    :: SaveCompressorPLR      = 0.0   ! Holds DX compressor PLR from active DX coil
+REAL(r64)    :: TempSteamIn            = 100.0 ! steam coil steam inlet temperature
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
   ! SUBROUTINE SPECIFICATIONS FOR MODULE
@@ -294,9 +294,9 @@ SUBROUTINE SimUnitaryBypassVAV(CompName, FirstHVACIteration, AirLoopNum, CompInd
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: CBVAVNum                ! Index of CBVAV system being simulated
   LOGICAL,SAVE :: GetInputFlag = .TRUE.  ! First time, input is "gotten"
-  REAL    :: OnOffAirFlowRatio      ! Ratio of compressor ON airflow to average airflow over timestep
-  REAL    :: QUnitOut               ! Sensible capacity delivered by this air loop system
-  REAL    :: QZnLoad                ! Zone load required by all zones served by this air loop system
+  REAL(r64)    :: OnOffAirFlowRatio      ! Ratio of compressor ON airflow to average airflow over timestep
+  REAL(r64)    :: QUnitOut               ! Sensible capacity delivered by this air loop system
+  REAL(r64)    :: QZnLoad                ! Zone load required by all zones served by this air loop system
   LOGICAL      :: HXUnitOn          ! flag to enable heat exchanger
 
           ! FLOW
@@ -373,9 +373,9 @@ SUBROUTINE SimCBVAV(CBVAVNum,FirstHVACIteration,QZnReq,QSensUnitOut,OnOffAirFlow
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   LOGICAL, INTENT (IN)    :: FirstHVACIteration ! TRUE if 1st HVAC simulation of system timestep
   INTEGER, INTENT (IN)    :: CBVAVNum            ! Index of the current CBVAV system being simulated
-  REAL,    INTENT (INOUT) :: QZnReq             ! Zone load for all zones served by this air loop system
-  REAL,    INTENT (OUT)   :: QSensUnitOut       ! Sensible delivered capacity [W]
-  REAL,    INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
+  REAL(r64),    INTENT (INOUT) :: QZnReq             ! Zone load for all zones served by this air loop system
+  REAL(r64),    INTENT (OUT)   :: QSensUnitOut       ! Sensible delivered capacity [W]
+  REAL(r64),    INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
   LOGICAL, INTENT (INOUT) :: HXUnitOn           ! flag to enable heat exchanger
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -391,11 +391,11 @@ SUBROUTINE SimCBVAV(CBVAVNum,FirstHVACIteration,QZnReq,QSensUnitOut,OnOffAirFlow
   LOGICAL :: UnitOn            ! TRUE if unit is on
   INTEGER :: OutletNode        ! CBVAV air outlet node
   INTEGER :: InletNode         ! CBVAV air inlet node
-  REAL    :: QTotUnitOut       ! Total delivered capacity [W]
-  REAL    :: AirMassFlow       ! Air mass flow rate [kg/s]
-  REAL    :: HeatingPower      ! Power consumption of DX heating coil or electric heating coil [W]
-  REAL    :: MinOutletHumRat   ! Minimum of inlet and outlet air humidity ratio [kg/kg]
-  REAL    :: PartLoadFrac
+  REAL(r64)    :: QTotUnitOut       ! Total delivered capacity [W]
+  REAL(r64)    :: AirMassFlow       ! Air mass flow rate [kg/s]
+  REAL(r64)    :: HeatingPower      ! Power consumption of DX heating coil or electric heating coil [W]
+  REAL(r64)    :: MinOutletHumRat   ! Minimum of inlet and outlet air humidity ratio [kg/kg]
+  REAL(r64)    :: PartLoadFrac
 
   ! zero the fan and DX coils electricity consumption
   FanElecPower         = 0.0
@@ -451,12 +451,12 @@ SUBROUTINE SimCBVAV(CBVAVNum,FirstHVACIteration,QZnReq,QSensUnitOut,OnOffAirFlow
     CBVAV(CBVAVNum)%FanPartLoadRatio = 0.0
   END IF
 
-  CBVAV(CBVAVNum)%TotCoolEnergyRate  = ABS(MIN(0.0, QTotUnitOut))
-  CBVAV(CBVAVNum)%TotHeatEnergyRate  = ABS(MAX(0.0, QTotUnitOut))
-  CBVAV(CBVAVNum)%SensCoolEnergyRate = ABS(MIN(0.0, QSensUnitOut))
-  CBVAV(CBVAVNum)%SensHeatEnergyRate = ABS(MAX(0.0, QSensUnitOut))
-  CBVAV(CBVAVNum)%LatCoolEnergyRate  = ABS(MIN(0.0, (QTotUnitOut - QSensUnitOut)))
-  CBVAV(CBVAVNum)%LatHeatEnergyRate  = ABS(MAX(0.0, (QTotUnitOut - QSensUnitOut)))
+  CBVAV(CBVAVNum)%TotCoolEnergyRate  = ABS(MIN(0.0d0, QTotUnitOut))
+  CBVAV(CBVAVNum)%TotHeatEnergyRate  = ABS(MAX(0.0d0, QTotUnitOut))
+  CBVAV(CBVAVNum)%SensCoolEnergyRate = ABS(MIN(0.0d0, QSensUnitOut))
+  CBVAV(CBVAVNum)%SensHeatEnergyRate = ABS(MAX(0.0d0, QSensUnitOut))
+  CBVAV(CBVAVNum)%LatCoolEnergyRate  = ABS(MIN(0.0d0, (QTotUnitOut - QSensUnitOut)))
+  CBVAV(CBVAVNum)%LatHeatEnergyRate  = ABS(MAX(0.0d0, (QTotUnitOut - QSensUnitOut)))
 
   IF(CBVAV(CBVAVNum)%HeatCoilType_Num .EQ. CoilDX_HeatingEmpirical)THEN
     HeatingPower = DXElecHeatingPower
@@ -538,7 +538,7 @@ SUBROUTINE GetCBVAV
   INTEGER                        :: CBVAVNum          ! Current CBVAV number
   CHARACTER(len=MaxNameLength), &
                    DIMENSION(19) :: Alphas            ! Alpha items for object
-  REAL,       DIMENSION(11) :: Numbers           ! Numeric items for object
+  REAL(r64),       DIMENSION(11) :: Numbers           ! Numeric items for object
   CHARACTER(len=MaxNameLength)   :: CompSetFanInlet   ! Used in SetUpCompSets call
   CHARACTER(len=MaxNameLength)   :: CompSetCoolInlet  ! Used in SetUpCompSets call
   CHARACTER(len=MaxNameLength)   :: CompSetFanOutlet  ! Used in SetUpCompSets call
@@ -548,14 +548,14 @@ SUBROUTINE GetCBVAV
   INTEGER                        :: IOStatus          ! Used in GetObjectItem
   LOGICAL                        :: ErrorsFound=.false.    ! Set to true if errors in input, fatal at end of routine
   LOGICAL                        :: DXErrorsFound=.false.  ! Set to true if errors in get coil input
-!unuse509  LOGICAL                        :: FanErrorsFound=.false. ! Set to true if errors in get fan input
+!unused0509  LOGICAL                        :: FanErrorsFound=.false. ! Set to true if errors in get fan input
   LOGICAL                        :: IsNotOK           ! Flag to verify name
   LOGICAL                        :: IsBlank           ! Flag for blank name
   CHARACTER(len=MaxNameLength)   :: CurrentModuleObject    ! Object type for getting and error messages
   LOGICAL                        :: FanErrFlag = .FALSE. ! Error flag returned during CALL to GetFanType
   LOGICAL                        :: ErrFlag = .FALSE. ! Error flag returned during CALL to mining functions
   INTEGER                        :: FanIndex          ! Index to CBVAV's supply air fan
-  REAL                      :: FanVolFlow        ! Maximum air volumetric flow rate of fan
+  REAL(r64)                      :: FanVolFlow        ! Maximum air volumetric flow rate of fan
   INTEGER                        :: AirLoopNum        ! Index to air loop served by this system
   INTEGER                        :: AirLoopZoneNum    ! Index to controlled zone
   INTEGER                        :: BranchNum         ! Index to branch containing this system
@@ -578,10 +578,10 @@ SUBROUTINE GetCBVAV
   INTEGER                        :: HeatCoilOutletNodeNum       ! Heating coil air outlet node number
   INTEGER                        :: TempNodeNum                 ! HW coil water inlet node
   INTEGER                        :: SteamIndex                  ! steam coil index
-  REAL                      :: SteamDensity                ! steam coil steam density
+  REAL(r64)                      :: SteamDensity                ! steam coil steam density
 
   Alphas = ' '
-  Numbers = 0.0
+  Numbers = 0.0d0
   cAlphaFields=' '
   cNumericFields=' '
   lAlphaBlanks=.true.
@@ -623,7 +623,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%MaxCoolAirVolFlow       = Numbers(1)
-    IF (CBVAV(CBVAVNum)%MaxCoolAirVolFlow .LE. 0.0 .AND. CBVAV(CBVAVNum)%MaxCoolAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%MaxCoolAirVolFlow .LE. 0.0d0 .AND. CBVAV(CBVAVNum)%MaxCoolAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(1))//' = ' &
                            //TRIM(TrimSigDigits(Numbers(1),7)))
       CALL ShowContinueError(TRIM(cNumericFields(1))//' must be greater than zero.')
@@ -632,7 +632,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%MaxHeatAirVolFlow       = Numbers(2)
-    IF (CBVAV(CBVAVNum)%MaxHeatAirVolFlow .LE. 0.0 .AND. CBVAV(CBVAVNum)%MaxHeatAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%MaxHeatAirVolFlow .LE. 0.0d0 .AND. CBVAV(CBVAVNum)%MaxHeatAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(2))//' = ' &
                            //TRIM(TrimSigDigits(Numbers(2),7)))
       CALL ShowContinueError(TRIM(cNumericFields(2))//' must be greater than zero.')
@@ -641,7 +641,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow = Numbers(3)
-    IF (CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .LT. 0.0 .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .LT. 0.0d0 .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(3))//' = ' &
                            //TRIM(TrimSigDigits(Numbers(3),7)))
       CALL ShowContinueError(TRIM(cNumericFields(3))//' must be greater than or equal to zero.')
@@ -650,7 +650,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%CoolOutAirVolFlow       = Numbers(4)
-    IF (CBVAV(CBVAVNum)%CoolOutAirVolFlow .LT. 0.0 .AND. CBVAV(CBVAVNum)%CoolOutAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%CoolOutAirVolFlow .LT. 0.0d0 .AND. CBVAV(CBVAVNum)%CoolOutAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(4))//' = ' &
                          //TRIM(TrimSigDigits(Numbers(4),7)))
       CALL ShowContinueError(TRIM(cNumericFields(4))//' must be greater than or equal to zero.')
@@ -659,7 +659,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%HeatOutAirVolFlow       = Numbers(5)
-    IF (CBVAV(CBVAVNum)%HeatOutAirVolFlow .LT. 0.0 .AND. CBVAV(CBVAVNum)%HeatOutAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%HeatOutAirVolFlow .LT. 0.0d0 .AND. CBVAV(CBVAVNum)%HeatOutAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(5))//' = ' &
                            //TRIM(TrimSigDigits(Numbers(5),7)))
       CALL ShowContinueError(TRIM(cNumericFields(5))//' must be greater than or equal to zero.')
@@ -668,7 +668,7 @@ SUBROUTINE GetCBVAV
     END IF
 
     CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow = Numbers(6)
-    IF (CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .LT. 0.0 .AND. CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .NE. AutoSize) THEN
+    IF (CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .LT. 0.0d0 .AND. CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .NE. AutoSize) THEN
       CALL ShowSevereError(TRIM(CurrentModuleObject)//' illegal '//TRIM(cNumericFields(6))//' = ' &
                            //TRIM(TrimSigDigits(Numbers(6),7)))
       CALL ShowContinueError(TRIM(cNumericFields(6))//' must be greater than or equal to zero.')
@@ -783,7 +783,7 @@ SUBROUTINE GetCBVAV
     IF(FanErrFlag)THEN
       CALL ShowContinueError(' illegal '//TRIM(cAlphaFields(11))//'="'//TRIM(Alphas(11))//'".')
       ErrorsFound = .TRUE.
-      FanVolFlow = 9999.0
+      FanVolFlow = 9999.0d0
     ELSE
       CBVAV(CBVAVNum)%FanInletNodeNum=GetFanInletNode(CBVAV(CBVAVNum)%FanType,CBVAV(CBVAVNum)%FanName,FanErrFlag)
       CALL GetFanIndex(CBVAV(CBVAVNum)%FanName,FanIndex,FanErrFlag)
@@ -964,7 +964,7 @@ SUBROUTINE GetCBVAV
 !   Check FanVolFlow, must be >= CBVAV flow
     IF(FanVolFlow .NE. AutoSize)THEN
       IF(FanVolFlow .LT. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. AutoSize &
-         .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. 0.0)THEN
+         .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. 0.0d0)THEN
         CALL ShowWarningError(TRIM(CurrentModuleObject)//' - air flow rate = '//TRIM(TrimSigDigits(FanVolFlow,7))// &
                               ' in '//TRIM(cAlphaFields(11))//' = '//TRIM(CBVAV(CBVAVNum)%FanName)//' is less than '// &
                               TRIM(cNumericFields(3)))
@@ -978,7 +978,7 @@ SUBROUTINE GetCBVAV
 !   that MaxNoCoolHeatAirVolFlow is /= 0 (trigger to use compressor ON flow, see AirFlowControl variable initialization above)
     IF (CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .GT. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .AND. &
         CBVAV(CBVAVNum)%NoCoolHeatOutAirVolFlow .NE. AutoSize .AND. CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. AutoSize .AND. &
-        CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. 0.0) THEN
+        CBVAV(CBVAVNum)%MaxNoCoolHeatAirVolFlow .NE. 0.0d0) THEN
         CALL ShowWarningError(TRIM(CurrentModuleObject)//': '//TRIM(cNumericFields(6))//' cannot be greater than '//  &
                              TRIM(cNumericFields(3)))
         CALL ShowContinueError(' '//TRIM(cNumericFields(6))//' is reset to'// &
@@ -1010,14 +1010,14 @@ SUBROUTINE GetCBVAV
 
        ELSEIF (SameString(Alphas(16),'Coil:Heating:Gas')) THEN
          CBVAV(CBVAVNum)%HeatCoilType_Num = Coil_HeatingGas
-         CBVAV(CBVAVNum)%MinOATCompressor        = -999.9
+         CBVAV(CBVAVNum)%MinOATCompressor        = -999.9d0
          CBVAV(CBVAVNum)%HeatingCoilInletNode = &
                        GetCoilInletNode(CBVAV(CBVAVNum)%HeatCoilType,CBVAV(CBVAVNum)%HeatCoilName,ErrorsFound)
          CBVAV(CBVAVNum)%HeatingCoilOutletNode = &
                        GetCoilOutletNode(CBVAV(CBVAVNum)%HeatCoilType,CBVAV(CBVAVNum)%HeatCoilName,ErrorsFound)
        ELSEIF (SameString(Alphas(16),'Coil:Heating:Electric')) THEN
          CBVAV(CBVAVNum)%HeatCoilType_Num = Coil_HeatingElectric
-         CBVAV(CBVAVNum)%MinOATCompressor        = -999.9
+         CBVAV(CBVAVNum)%MinOATCompressor        = -999.9d0
          CBVAV(CBVAVNum)%HeatingCoilInletNode = &
                        GetCoilInletNode(CBVAV(CBVAVNum)%HeatCoilType,CBVAV(CBVAVNum)%HeatCoilName,ErrorsFound)
          CBVAV(CBVAVNum)%HeatingCoilOutletNode = &
@@ -1052,7 +1052,7 @@ SUBROUTINE GetCBVAV
                                                 CBVAV(CBVAVNum)%HeatCoilName, ErrFlag)
          CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow = GetCoilMaxSteamFlowRate(CBVAV(CBVAVNum)%HeatCoilIndex,ErrFlag)
          SteamIndex = 0 ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-         SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0,SteamIndex,'GetUnitaryHeatCool:VAVChangeoverBypass')
+         SteamDensity=GetSatDensityRefrig("STEAM",TempSteamIn,1.0d0,SteamIndex,'GetUnitaryHeatCool:VAVChangeoverBypass')
          IF(CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow .GT. 0.0)THEN
            CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow = &
                               GetCoilMaxSteamFlowRate(CBVAV(CBVAVNum)%HeatCoilIndex,ErrFlag) * SteamDensity
@@ -1118,16 +1118,16 @@ SUBROUTINE GetCBVAV
       ErrorsFound = .TRUE.
     END IF
 
-    IF(Numbers(7) .GT. 0.0)THEN
+    IF(Numbers(7) .GT. 0.0d0)THEN
       CBVAV(CBVAVNum)%MinLATCooling = Numbers(7)
     ELSE
-      CBVAV(CBVAVNum)%MinLATCooling = 10.0
+      CBVAV(CBVAVNum)%MinLATCooling = 10.0d0
     END IF
 
-    IF(Numbers(8) .GT. 0.0)THEN
+    IF(Numbers(8) .GT. 0.0d0)THEN
       CBVAV(CBVAVNum)%MaxLATHeating = Numbers(8)
     ELSE
-      CBVAV(CBVAVNum)%MaxLATHeating = 50.0
+      CBVAV(CBVAVNum)%MaxLATHeating = 50.0d0
     END IF
 
     IF (CBVAV(CBVAVNum)%MinLATCooling .GT. CBVAV(CBVAVNum)%MaxLATHeating) THEN
@@ -1404,8 +1404,8 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
   INTEGER, INTENT (IN)    :: CBVAVNum            ! Index of the current CBVAV unit being simulated
   LOGICAL, INTENT (IN)    :: FirstHVACIteration ! TRUE if first HVAC iteration
   INTEGER, INTENT (IN)    :: AirLoopNum         ! air loop index
-  REAL,    INTENT (INOUT) :: QZnReq             ! Heating/Cooling load for all zones
-  REAL,    INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to average airflow over timestep
+  REAL(r64),    INTENT (INOUT) :: QZnReq             ! Heating/Cooling load for all zones
+  REAL(r64),    INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to average airflow over timestep
   LOGICAL, INTENT (INOUT) :: HXUnitOn           ! flag to enable heat exchanger
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -1421,24 +1421,24 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
   INTEGER             :: InNode                           ! Inlet node number in CBVAV loop
   INTEGER             :: OutNode                          ! Outlet node number in CBVAV loop
   INTEGER             :: MixerOutsideAirNode              ! Outside air node number in CBVAV loop
-  REAL           :: RhoAir                           ! Air density at InNode
+  REAL(r64)           :: RhoAir                           ! Air density at InNode
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.           ! Initialization flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! Used for initializations each begin environment flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeFlag  ! Used for sizing CBVAV inputs one time
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag  ! Used for initializations plant component for heating coils
-  REAL           :: QSensUnitOut                     ! Output of CBVAV system with coils off
-  REAL           :: OutsideAirMultiplier             ! Outside air multiplier schedule (= 1.0 if no schedule)
+  REAL(r64)           :: QSensUnitOut                     ! Output of CBVAV system with coils off
+  REAL(r64)           :: OutsideAirMultiplier             ! Outside air multiplier schedule (= 1.0 if no schedule)
   LOGICAL                        :: FanErrFlag = .FALSE.  ! Error flag returned during CALL to GetFanType
   INTEGER                        :: FanIndex              ! Index to CBVAV's supply air fan
   CHARACTER(len=MaxNameLength)   :: CurrentModuleObject        ! Object type for error messages
   LOGICAL                        :: EMSSetpointCheck = .FALSE. ! local temporary
   LOGICAL                        :: ErrorsFound=.false.  ! Set to true if errors in input, fatal at end of routine
   INTEGER                        :: SteamIndex           ! steam coil index
-  REAL                      :: FluidDensity         ! steam or water coil fluid density
-  REAL                      :: CoilMaxVolFlowRate   ! water or steam max volumetric water flow rate
-  REAL                      :: QCoilActual          ! actual CBVAV steam heating coil load met (W)
+  REAL(r64)                      :: FluidDensity         ! steam or water coil fluid density
+  REAL(r64)                      :: CoilMaxVolFlowRate   ! water or steam max volumetric water flow rate
+  REAL(r64)                      :: QCoilActual          ! actual CBVAV steam heating coil load met (W)
   LOGICAL                        :: ErrorFlag            ! local error flag returned from data mining
-  REAL                      :: mdot                 ! heating coil fluid mass flow rate, kg/s
+  REAL(r64)                      :: mdot                 ! heating coil fluid mass flow rate, kg/s
 
   InNode  = CBVAV(CBVAVNum)%AirInNode
   OutNode = CBVAV(CBVAVNum)%AirOutNode
@@ -1505,7 +1505,7 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
 
         IF(CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow .GT. 0.0)THEN
           SteamIndex = 0 ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-          FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamIndex,'InitCBVAV')
+          FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamIndex,'InitCBVAV')
           CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow =   &
              GetCoilMaxSteamFlowRate(CBVAV(CBVAVNum)%HeatCoilIndex,ErrorsFound) * FluidDensity
         END IF
@@ -1585,7 +1585,7 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
         IF (CBVAV(CBVAVNum)%HeatCoilType_Num == Coil_HeatingSteam) THEN
             CALL SimulateSteamCoilComponents(CBVAV(CBVAVNum)%HeatCoilName, &
                                              FirstHVACIteration,    &
-                                             1.0, & !QCoilReq, simulate any load > 0 to get max capacity of steam coil
+                                             1.0d0, & !QCoilReq, simulate any load > 0 to get max capacity of steam coil
                                              CBVAV(CBVAVNum)%HeatCoilIndex, QCoilActual)
             ErrorFlag = .FALSE.
             CoilMaxVolFlowRate = GetCoilMaxSteamFlowRate(CBVAV(CBVAVNum)%HeatCoilIndex,ErrorFlag)
@@ -1594,13 +1594,13 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
             ENDIF
             IF(CoilMaxVolFlowRate .NE. Autosize) THEN
               SteamIndex = 0 ! Function GetSatDensityRefrig will look up steam index if 0 is passed
-              FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0,SteamIndex,'InitCBVAV')
+              FluidDensity=GetSatDensityRefrig('STEAM',TempSteamIn,1.0d0,SteamIndex,'InitCBVAV')
               CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow = CoilMaxVolFlowRate * FluidDensity
             ENDIF
         ENDIF
       ENDIF  ! end of IF(CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow .EQ. Autosize)THEN
 
-      Call InitComponentNodes(0., CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow, &
+      Call InitComponentNodes(0.d0, CBVAV(CBVAVNum)%MaxHeatCoilFluidFlow, &
                                     CBVAV(CBVAVNum)%CoilControlNode, &
                                     CBVAV(CBVAVNum)%CoilOutletNode, &
                                     CBVAV(CBVAVNum)%LoopNum, &
@@ -1845,7 +1845,7 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
       IF(CBVAV(CBVAVNum)%OpMode .EQ. CycFanCycCoil) THEN
         ByPassDuctFlowFraction = 0.0
       ELSE
-        ByPassDuctFlowFraction = MAX(0.0,1.0 - (Node(CBVAV(CBVAVNum)%AirInNode)%MassFlowRate / CompOnMassFlow ))
+        ByPassDuctFlowFraction = MAX(0.0d0,1.0 - (Node(CBVAV(CBVAVNum)%AirInNode)%MassFlowRate / CompOnMassFlow ))
       END IF
     END IF
   ELSE
@@ -1922,7 +1922,7 @@ SUBROUTINE InitCBVAV(CBVAVNum, FirstHVACIteration, AirLoopNum, QZnReq, OnOffAirF
 !     simulate steam coil to find operating capacity
       CALL SimulateSteamCoilComponents(CBVAV(CBVAVNum)%HeatCoilName, &
                                        FirstHVACIteration,    &
-                                       1.0, & !QCoilReq, simulate any load > 0 to get max capacity of steam coil
+                                       1.0d0, & !QCoilReq, simulate any load > 0 to get max capacity of steam coil
                                        CBVAV(CBVAVNum)%HeatCoilIndex, QCoilActual)
       CBVAV(CBVAVNum)%DesignSuppHeatingCapacity = QCoilActual
 
@@ -2161,9 +2161,9 @@ SUBROUTINE ControlCBVAVOutput(CBVAVNum,FirstHVACIteration,QZnReq,PartLoadFrac,On
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT   (IN)  :: CBVAVNum           ! Index to CBVAV system
   LOGICAL, INTENT   (IN)  :: FirstHVACIteration ! Flag for 1st HVAC iteration
-  REAL   , INTENT (INOUT) :: QZnReq             ! Cooling or heating output needed by zone [W]
-  REAL   , INTENT   (OUT) :: PartLoadFrac       ! Unit part load fraction
-  REAL   , INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
+  REAL(r64)   , INTENT (INOUT) :: QZnReq             ! Cooling or heating output needed by zone [W]
+  REAL(r64)   , INTENT   (OUT) :: PartLoadFrac       ! Unit part load fraction
+  REAL(r64)   , INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
   LOGICAL, INTENT (INOUT) :: HXUnitOn           ! flag to enable heat exchanger
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2177,7 +2177,7 @@ SUBROUTINE ControlCBVAVOutput(CBVAVNum,FirstHVACIteration,QZnReq,PartLoadFrac,On
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL          :: FullOutput              ! Unit full output when compressor is operating [W]
+  REAL(r64)          :: FullOutput              ! Unit full output when compressor is operating [W]
 
   PartLoadFrac  = 0.0
 
@@ -2227,10 +2227,10 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT    (IN) :: CBVAVNum              ! Unit index in fan coil array
   LOGICAL, INTENT    (IN) :: FirstHVACIteration   ! Flag for 1st HVAC iteration
-  REAL   , INTENT (INOUT) :: PartLoadFrac         ! Compressor part load fraction
-  REAL   , INTENT   (OUT) :: LoadMet              ! Load met by unit (W)
-  REAL   , INTENT (INOUT) :: QZnReq               ! Zone load (W)
-  REAL   , INTENT (INOUT) :: OnOffAirFlowRatio    ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
+  REAL(r64)   , INTENT (INOUT) :: PartLoadFrac         ! Compressor part load fraction
+  REAL(r64)   , INTENT   (OUT) :: LoadMet              ! Load met by unit (W)
+  REAL(r64)   , INTENT (INOUT) :: QZnReq               ! Zone load (W)
+  REAL(r64)   , INTENT (INOUT) :: OnOffAirFlowRatio    ! Ratio of compressor ON airflow to AVERAGE airflow over timestep
   LOGICAL, INTENT (IN)    :: HXUnitOn           ! flag to enable heat exchanger
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -2245,19 +2245,19 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER      :: OutletNode           ! CBVAV air outlet node
   INTEGER      :: InletNode            ! CBVAV air inlet node
-  REAL    :: MinHumRat            ! Minimum humidity ratio for sensible capacity calculation (kg/kg)
-  REAL    :: Par(6)               ! RegulaFalsi parameters
+  REAL(r64)    :: MinHumRat            ! Minimum humidity ratio for sensible capacity calculation (kg/kg)
+  REAL(r64)    :: Par(6)               ! RegulaFalsi parameters
   INTEGER      :: SolFla               ! Flag of RegulaFalsi solver
-  REAL    :: QHeater              ! Load to be met by heater [W]
-  REAL    :: QHeaterActual        ! actual heating load met [W]
-  REAL    :: CpAir                ! Specific heat of air [J/kg-K]
+  REAL(r64)    :: QHeater              ! Load to be met by heater [W]
+  REAL(r64)    :: QHeaterActual        ! actual heating load met [W]
+  REAL(r64)    :: CpAir                ! Specific heat of air [J/kg-K]
   INTEGER      :: MixerOutsideAirNode  ! Outside air node number in OA mixer
   INTEGER      :: MixerReliefAirNode   ! Relief air node number in OA mixer
   INTEGER      :: DehumidMode          ! Dehumidification mode (0=normal, 1=enhanced)
-  REAL    :: ApproachTemp
-  REAL    :: DesiredDewPoint
-  REAL    :: OutdoorDryBulbTemp   ! Dry-bulb temperature at outdoor condenser
-  REAL    :: OutdoorBaroPress     ! Barometric pressure at outdoor condenser
+  REAL(r64)    :: ApproachTemp
+  REAL(r64)    :: DesiredDewPoint
+  REAL(r64)    :: OutdoorDryBulbTemp   ! Dry-bulb temperature at outdoor condenser
+  REAL(r64)    :: OutdoorBaroPress     ! Barometric pressure at outdoor condenser
           ! FLOW
 
   OutletNode = CBVAV(CBVAVNum)%AirOutNode
@@ -2316,7 +2316,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
           ELSE
             Par(6) = 0.0
           END IF
-          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, HXAssistDXCoilResidual, 0.0, 1.0, Par)
+          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, HXAssistDXCoilResidual, 0.0d0, 1.0d0, Par)
           CALL SimHXAssistedCoolingCoil(CBVAV(CBVAVNum)%DXCoolCoilName,FirstHVACIteration,On,PartLoadFrac, &
                                     CBVAV(CBVAVNum)%CoolCoilCompIndex, ContFanCycCoil, HXUnitEnable=HXUnitOn)
           IF (SolFla == -1 .AND. .NOT. WarmupFlag) THEN
@@ -2333,7 +2333,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                                            CBVAV(CBVAVNum)%HXDXIterationExceededIndex,PartLoadFrac,PartLoadFrac)
             END IF
           ELSE IF (SolFla == -2 .AND. .NOT. WarmupFlag) THEN
-            PartLoadFrac = MAX(0.0,MIN(1.0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
+            PartLoadFrac = MAX(0.0d0,MIN(1.0d0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
                            (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - Node(CBVAV(CBVAVNum)%DXCoilOutletNode)%Temp)))
             IF(CBVAV(CBVAVNum)%HXDXIterationFailed .LT. 1)THEN
               CBVAV(CBVAVNum)%HXDXIterationFailed = CBVAV(CBVAVNum)%HXDXIterationFailed + 1
@@ -2361,7 +2361,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
           Par(1) = REAL(CBVAV(CBVAVNum)%CoolCoilCompIndex,r64)
           Par(2) = CBVAV(CBVAVNum)%CoilTempSetpoint
           Par(3) = OnOffAirFlowRatio
-          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilResidual, 0.0, 1.0, Par)
+          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, DOE2DXCoilResidual, 0.0d0, 1.0d0, Par)
           CALL SimDXCoil(CBVAV(CBVAVNum)%DXCoolCoilName,On,FirstHVACIteration,PartLoadFrac,  &
              CBVAV(CBVAVNum)%CoolCoilCompIndex,ContFanCycCoil, OnOffAirFlowRatio)
           IF (SolFla == -1 .AND. .NOT. WarmupFlag) THEN
@@ -2378,7 +2378,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                                            CBVAV(CBVAVNum)%DXIterationExceededIndex,PartLoadFrac,PartLoadFrac)
             END IF
           ELSE IF (SolFla == -2 .AND. .NOT. WarmupFlag) THEN
-            PartLoadFrac = MAX(0.0,MIN(1.0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
+            PartLoadFrac = MAX(0.0d0,MIN(1.0d0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
                            (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - Node(CBVAV(CBVAVNum)%DXCoilOutletNode)%Temp)))
             IF(CBVAV(CBVAVNum)%DXIterationFailed .LT. 1)THEN
               CBVAV(CBVAVNum)%DXIterationFailed = CBVAV(CBVAVNum)%DXIterationFailed + 1
@@ -2419,7 +2419,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
           Par(2) = CBVAV(CBVAVNum)%CoilTempSetpoint
           ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
           Par(3) = REAL(DehumidMode,r64)
-          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0, 1.0, Par)
+          CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0d0, 1.0d0, Par)
           IF (SolFla == -1) THEN
             IF(CBVAV(CBVAVNum)%MMDXIterationExceeded .LT. 1)THEN
               CBVAV(CBVAVNum)%MMDXIterationExceeded = CBVAV(CBVAVNum)%MMDXIterationExceeded + 1
@@ -2434,7 +2434,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                                          CBVAV(CBVAVNum)%MMDXIterationExceededIndex,PartLoadFrac,PartLoadFrac)
             END IF
           ELSE IF (SolFla == -2) THEN
-            PartLoadFrac = MAX(0.0,MIN(1.0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
+            PartLoadFrac = MAX(0.0d0,MIN(1.0d0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - CBVAV(CBVAVNum)%CoilTempSetpoint) / &
                          (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - Node(CBVAV(CBVAVNum)%DXCoilOutletNode)%Temp)))
             IF(CBVAV(CBVAVNum)%MMDXIterationFailed .LT. 1)THEN
               CBVAV(CBVAVNum)%MMDXIterationFailed = CBVAV(CBVAVNum)%MMDXIterationFailed + 1
@@ -2476,7 +2476,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
            Par(2) = CBVAV(CBVAVNum)%CoilTempSetpoint
            ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
            Par(3) = REAL(DehumidMode,r64)
-           CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0, 1.0, Par)
+           CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0d0, 1.0d0, Par)
            IF (SolFla == -1) THEN
              IF(CBVAV(CBVAVNum)%DMDXIterationExceeded .LT. 1)THEN
                CBVAV(CBVAVNum)%DMDXIterationExceeded = CBVAV(CBVAVNum)%DMDXIterationExceeded + 1
@@ -2491,7 +2491,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                                         //'continues.',CBVAV(CBVAVNum)%DMDXIterationExceededIndex,PartLoadFrac,PartLoadFrac)
              END IF
            ELSE IF (SolFla == -2) THEN
-             PartLoadFrac = MAX(0.0,MIN(1.0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp-CBVAV(CBVAVNum)%CoilTempSetpoint) / &
+             PartLoadFrac = MAX(0.0d0,MIN(1.0d0,(Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp-CBVAV(CBVAVNum)%CoilTempSetpoint) / &
                                (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - Node(CBVAV(CBVAVNum)%DXCoilOutletNode)%Temp)))
              IF(CBVAV(CBVAVNum)%DMDXIterationFailed .LT. 1)THEN
                 CBVAV(CBVAVNum)%DMDXIterationFailed = CBVAV(CBVAVNum)%DMDXIterationFailed + 1
@@ -2546,7 +2546,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                 Par(2) = CBVAV(CBVAVNum)%CoilTempSetpoint
                 ! Dehumidification mode = 0 for normal mode, 1+ for enhanced mode
                 Par(3) = REAL(DehumidMode,r64)
-                CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0, 1.0, Par)
+                CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, MultiModeDXCoilResidual, 0.0d0, 1.0d0, Par)
                 IF (SolFla == -1) THEN
                   IF(CBVAV(CBVAVNum)%CRDXIterationExceeded .LT. 1)THEN
                     CBVAV(CBVAVNum)%CRDXIterationExceeded = CBVAV(CBVAVNum)%CRDXIterationExceeded + 1
@@ -2561,7 +2561,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
                                     CBVAV(CBVAVNum)%CRDXIterationExceededIndex,PartLoadFrac,PartLoadFrac)
                   END IF
                 ELSE IF (SolFla == -2) THEN
-                  PartLoadFrac = MAX(0.0,MIN(1.0,  &
+                  PartLoadFrac = MAX(0.0d0,MIN(1.0d0,  &
                                               (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp-CBVAV(CBVAVNum)%CoilTempSetpoint) / &
                                (Node(CBVAV(CBVAVNum)%DXCoilInletNode)%Temp - Node(CBVAV(CBVAVNum)%DXCoilOutletNode)%Temp)))
                   IF(CBVAV(CBVAVNum)%CRDXIterationFailed .LT. 1)THEN
@@ -2594,13 +2594,13 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
     ELSE ! IF(OutdoorDryBulbTemp .GE. CBVAV(CBVAVNum)%MinOATCompressor)THEN
 !     Simulate DX cooling coil with compressor off
       IF (CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingHXAssisted) THEN
-        CALL SimHXAssistedCoolingCoil(CBVAV(CBVAVNum)%DXCoolCoilName,FirstHVACIteration,Off,0.0,&
+        CALL SimHXAssistedCoolingCoil(CBVAV(CBVAVNum)%DXCoolCoilName,FirstHVACIteration,Off,0.0d0,&
                                       CBVAV(CBVAVNum)%CoolCoilCompIndex, ContFanCycCoil, HXUnitEnable=HXUnitOn)
       ELSE IF(CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingSingleSpeed)THEN
-        CALL SimDXCoil(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0,CBVAV(CBVAVNum)%CoolCoilCompIndex,  &
+        CALL SimDXCoil(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0d0,CBVAV(CBVAVNum)%CoolCoilCompIndex,  &
            ContFanCycCoil, OnOffAirFlowRatio)
       ELSE IF(CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingTwoStageWHumControl)THEN
-        CALL SimDXCoilMultiMode(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0,0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
+        CALL SimDXCoilMultiMode(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0d0,0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
                                 ContFanCycCoil)
       END IF
     END IF
@@ -2608,13 +2608,13 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
 ! Simulate cooling coil with compressor off if zone requires heating
   ELSE ! HeatCoolMode == HeatingMode and no cooling is required, set PLR to 0
     IF (CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingHXAssisted) THEN
-      CALL SimHXAssistedCoolingCoil(CBVAV(CBVAVNum)%DXCoolCoilName,FirstHVACIteration,Off,0.0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
+      CALL SimHXAssistedCoolingCoil(CBVAV(CBVAVNum)%DXCoolCoilName,FirstHVACIteration,Off,0.0d0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
                                     ContFanCycCoil, HXUnitEnable=HXUnitOn)
     ELSE IF(CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingSingleSpeed)THEN
-      CALL SimDXCoil(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0,CBVAV(CBVAVNum)%CoolCoilCompIndex,  &
+      CALL SimDXCoil(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration, 0.0d0,CBVAV(CBVAVNum)%CoolCoilCompIndex,  &
          ContFanCycCoil, OnOffAirFlowRatio)
     ELSE IF(CBVAV(CBVAVNum)%DXCoolCoilType_Num == CoilDX_CoolingTwoStageWHumControl)THEN
-      CALL SimDXCoilMultiMode(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0,0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
+      CALL SimDXCoilMultiMode(CBVAV(CBVAVNum)%DXCoolCoilName,Off,FirstHVACIteration,0.0d0,0,CBVAV(CBVAVNum)%CoolCoilCompIndex, &
                               ContFanCycCoil)
     END IF
   END IF
@@ -2635,7 +2635,7 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
             Par(1) = REAL(CBVAV(CBVAVNum)%HeatCoilIndex,r64)
             Par(2) = MIN(CBVAV(CBVAVNum)%CoilTempSetpoint,CBVAV(CBVAVNum)%MaxLATHeating)
             Par(3) = OnOffAirFlowRatio
-            CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, DXHeatingCoilResidual, 0.0, 1.0, Par)
+            CALL SolveRegulaFalsi(SmallTempDiff, MaxIte, SolFla, PartLoadFrac, DXHeatingCoilResidual, 0.0d0, 1.0d0, Par)
             CALL SimDXCoil(CBVAV(CBVAVNum)%HeatCoilName,On,FirstHVACIteration, PartLoadFrac,CBVAV(CBVAVNum)%HeatCoilIndex,  &
                ContFanCycCoil, OnOffAirFlowRatio)
             IF (SolFla == -1 .AND. .NOT. WarmupFlag) THEN
@@ -2654,13 +2654,13 @@ SUBROUTINE CalcCBVAV(CBVAVNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,OnO
         END IF
       ELSE ! OAT .LT. MinOATCompressor
 !       simulate DX heating coil with compressor off
-        CALL SimDXCoil(CBVAV(CBVAVNum)%HeatCoilName,Off,FirstHVACIteration,0.0, CBVAV(CBVAVNum)%HeatCoilIndex,  &
+        CALL SimDXCoil(CBVAV(CBVAVNum)%HeatCoilName,Off,FirstHVACIteration,0.0d0, CBVAV(CBVAVNum)%HeatCoilIndex,  &
                        ContFanCycCoil, OnOffAirFlowRatio)
       END IF
       SaveCompressorPLR = DXCoilPartLoadRatio(CBVAV(CBVAVNum)%DXHeatCoilIndexNum)
     ELSE ! HeatCoolMode = CoolingMode
 !     simulate DX heating coil with compressor off when cooling load is required
-      CALL SimDXCoil(CBVAV(CBVAVNum)%HeatCoilName,Off,FirstHVACIteration, 0.0,CBVAV(CBVAVNum)%HeatCoilIndex, &
+      CALL SimDXCoil(CBVAV(CBVAVNum)%HeatCoilName,Off,FirstHVACIteration, 0.0d0,CBVAV(CBVAVNum)%HeatCoilIndex, &
                      ContFanCycCoil, OnOffAirFlowRatio)
     END IF
   CASE(Coil_HeatingGas, Coil_HeatingElectric, Coil_HeatingWater, Coil_HeatingSteam)  ! not a DX heating coil
@@ -2725,7 +2725,7 @@ SUBROUTINE GetZoneLoads(CBVAVNum, QZoneReq)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)    :: CBVAVNum            ! Index to CBVAV unit being simulated
-  REAL,    INTENT (INOUT) :: QZoneReq           ! Total zone load served by this air loop
+  REAL(r64),    INTENT (INOUT) :: QZoneReq           ! Total zone load served by this air loop
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
           ! na
@@ -2738,11 +2738,11 @@ SUBROUTINE GetZoneLoads(CBVAVNum, QZoneReq)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER             :: ZoneNum          ! Zone number of controlled zone in CBVAV loop
-  REAL           :: QZoneReqCool     ! Total cooling load in all controlled zones [W]
-  REAL           :: QZoneReqHeat     ! Total heating load in all controlled zones [W]
-  REAL           :: ZoneLoad         ! Total load in controlled zone [W]
-  REAL           :: ZoneLoadToCoolSPSequenced
-  REAL           :: ZoneLoadToHeatSPSequenced
+  REAL(r64)           :: QZoneReqCool     ! Total cooling load in all controlled zones [W]
+  REAL(r64)           :: QZoneReqHeat     ! Total heating load in all controlled zones [W]
+  REAL(r64)           :: ZoneLoad         ! Total load in controlled zone [W]
+  REAL(r64)           :: ZoneLoadToCoolSPSequenced
+  REAL(r64)           :: ZoneLoadToHeatSPSequenced
 
   QZoneReqCool = 0.0
   QZoneReqHeat = 0.0
@@ -2756,12 +2756,12 @@ SUBROUTINE GetZoneLoads(CBVAVNum, QZoneReq)
                   SequencedOutputRequiredToCoolingSP(CBVAV(CBVAVNum)%ZoneSequenceCoolingNum(ZoneNum))
       ZoneLoadToHeatSPSequenced = ZoneSysEnergyDemand(CBVAV(CBVAVNum)%ControlledZoneNum(ZoneNum))%&
                   SequencedOutputRequiredToHeatingSP(CBVAV(CBVAVNum)%ZoneSequenceHeatingNum(ZoneNum))
-      IF (ZoneLoadToHeatSPSequenced > 0. .AND. ZoneLoadToCoolSPSequenced > 0.) THEN
+      IF (ZoneLoadToHeatSPSequenced > 0.d0 .AND. ZoneLoadToCoolSPSequenced > 0.d0) THEN
         ZoneLoad = ZoneLoadToHeatSPSequenced
-      ELSEIF (ZoneLoadToHeatSPSequenced < 0. .AND. ZoneLoadToCoolSPSequenced < 0.) THEN
+      ELSEIF (ZoneLoadToHeatSPSequenced < 0.d0 .AND. ZoneLoadToCoolSPSequenced < 0.d0) THEN
         ZoneLoad = ZoneLoadToCoolSPSequenced
-      ELSEIF (ZoneLoadToHeatSPSequenced <= 0. .AND. ZoneLoadToCoolSPSequenced >= 0.) THEN
-        ZoneLoad = 0.
+      ELSEIF (ZoneLoadToHeatSPSequenced <= 0.d0 .AND. ZoneLoadToCoolSPSequenced >= 0.d0) THEN
+        ZoneLoad = 0.d0
       ENDIF
     ELSE
       ZoneLoad= ZoneSysEnergyDemand(CBVAV(CBVAVNum)%ControlledZoneNum(ZoneNum))%TotalOutputRequired
@@ -2840,7 +2840,7 @@ SUBROUTINE GetZoneLoads(CBVAVNum, QZoneReq)
  RETURN
 END SUBROUTINE GetZoneLoads
 
-REAL FUNCTION CalcSetpointTempTarget(CBVAVNumber)
+REAL(r64) FUNCTION CalcSetpointTempTarget(CBVAVNumber)
 
           ! FUNCTION INFORMATION:
           !       AUTHOR         Richard Raustad
@@ -2882,30 +2882,30 @@ REAL FUNCTION CalcSetpointTempTarget(CBVAVNumber)
   INTEGER :: ZoneNum             ! Index to controlled zone
   INTEGER :: ZoneNodeNum         ! Zone node number of controlled zone
   INTEGER :: BoxOutletNodeNum    ! CBVAV box outlet node (zone supply inlet node)
-  REAL    :: DXCoolCoilInletTemp ! Air temperature of CBVAV DX cooling coil air inlet node [C]
-  REAL    :: OutAirTemp          ! Outlet air temperature of CBVAV system [C]
-  REAL    :: OutAirHumRat        ! Outlet air humidity ratio of CBVAV system [C]
-  REAL    :: ZoneLoad            ! Zone load sensed by thermostat [W]
-  REAL    :: CpSupplyAir         ! Specific heat of CBVAV system outlet air [J/kg-K]
-  REAL    :: QToCoolSetPt        ! Zone load to cooling setpoint [W]
-  REAL    :: QToHeatSetPt        ! Zone load to heating setpoint [W]
-  REAL    :: SupplyAirTemp       ! Supply air temperature required to meet load [C]
-  REAL    :: TSupplyToHeatSetPtMax ! Maximum of the supply air temperatures required to reach the heating setpoint [C]
-  REAL    :: TSupplyToCoolSetPtMin ! Minimum of the supply air temperatures required to reach the cooling setpoint [C]
-  REAL    :: SupplyAirTempToHeatSetPt ! Supply air temperature required to reach the heating setpoint [C]
-  REAL    :: SupplyAirTempToCoolSetPt ! Supply air temperature required to reach the cooling setpoint [C]
+  REAL(r64)    :: DXCoolCoilInletTemp ! Air temperature of CBVAV DX cooling coil air inlet node [C]
+  REAL(r64)    :: OutAirTemp          ! Outlet air temperature of CBVAV system [C]
+  REAL(r64)    :: OutAirHumRat        ! Outlet air humidity ratio of CBVAV system [C]
+  REAL(r64)    :: ZoneLoad            ! Zone load sensed by thermostat [W]
+  REAL(r64)    :: CpSupplyAir         ! Specific heat of CBVAV system outlet air [J/kg-K]
+  REAL(r64)    :: QToCoolSetPt        ! Zone load to cooling setpoint [W]
+  REAL(r64)    :: QToHeatSetPt        ! Zone load to heating setpoint [W]
+  REAL(r64)    :: SupplyAirTemp       ! Supply air temperature required to meet load [C]
+  REAL(r64)    :: TSupplyToHeatSetPtMax ! Maximum of the supply air temperatures required to reach the heating setpoint [C]
+  REAL(r64)    :: TSupplyToCoolSetPtMin ! Minimum of the supply air temperatures required to reach the cooling setpoint [C]
+  REAL(r64)    :: SupplyAirTempToHeatSetPt ! Supply air temperature required to reach the heating setpoint [C]
+  REAL(r64)    :: SupplyAirTempToCoolSetPt ! Supply air temperature required to reach the cooling setpoint [C]
 
   DXCoolCoilInletTemp = Node(CBVAV(CBVAVNumber)%DXCoilInletNode)%Temp
   OutAirTemp = Node(CBVAV(CBVAVNumber)%AirOutNode)%Temp
   OutAirHumRat = Node(CBVAV(CBVAVNumber)%AirOutNode)%HumRat
 
   IF(CBVAV(CBVAVNumber)%HeatCoolMode == CoolingMode)THEN ! Cooling required
-    CalcSetpointTempTarget    = 99999.0
+    CalcSetpointTempTarget    = 99999.0d0
   ELSE IF(CBVAV(CBVAVNumber)%HeatCoolMode == HeatingMode)THEN ! Heating required
-    CalcSetpointTempTarget    = -99999.0
+    CalcSetpointTempTarget    = -99999.0d0
   END IF
-  TSupplyToHeatSetPtMax    = -99999.0
-  TSupplyToCoolSetPtMin    = 99999.0
+  TSupplyToHeatSetPtMax    = -99999.0d0
+  TSupplyToCoolSetPtMin    = 99999.0d0
 
     OutletNode         = CBVAV(CBVAVNumber)%AirOutNode
     DO ZoneNum         = 1, CBVAV(CBVAVNumber)%NumControlledZones
@@ -2917,12 +2917,12 @@ REAL FUNCTION CalcSetpointTempTarget(CBVAVNumber)
                     SequencedOutputRequiredToCoolingSP(CBVAV(CBVAVNumber)%ZoneSequenceCoolingNum(ZoneNum))
         QToHeatSetPt = ZoneSysEnergyDemand(CBVAV(CBVAVNumber)%ControlledZoneNum(ZoneNum))%&
                     SequencedOutputRequiredToHeatingSP(CBVAV(CBVAVNumber)%ZoneSequenceHeatingNum(ZoneNum))
-        IF (QToHeatSetPt > 0. .AND. QToCoolSetPt > 0.) THEN
+        IF (QToHeatSetPt > 0.d0 .AND. QToCoolSetPt > 0.d0) THEN
           ZoneLoad = QToHeatSetPt
-        ELSEIF (QToHeatSetPt < 0. .AND. QToCoolSetPt < 0.) THEN
+        ELSEIF (QToHeatSetPt < 0.d0 .AND. QToCoolSetPt < 0.d0) THEN
           ZoneLoad = QToCoolSetPt
-        ELSEIF (QToHeatSetPt <= 0. .AND. QToCoolSetPt >= 0.) THEN
-          ZoneLoad = 0.
+        ELSEIF (QToHeatSetPt <= 0.d0 .AND. QToCoolSetPt >= 0.d0) THEN
+          ZoneLoad = 0.d0
         ENDIF
       ELSE
         ZoneLoad     = ZoneSysEnergyDemand(CBVAV(CBVAVNumber)%ControlledZoneNum(ZoneNum))%TotalOutputRequired
@@ -3022,10 +3022,10 @@ FUNCTION DOE2DXCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
+    REAL(r64), INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
                                                     ! Par(2) = desired air outlet temperature [C]
-    REAL         :: Residuum                   ! Residual to be minimized to zero
+    REAL(r64)         :: Residuum                   ! Residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3038,8 +3038,8 @@ FUNCTION DOE2DXCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex              ! Index of this coil
-  REAL    :: OutletAirTemp          ! Outlet air temperature [C]
-  REAL    :: OnOffAirFlowFrac       ! Ratio of compressor ON to compressor OFF air mass flow rate
+  REAL(r64)    :: OutletAirTemp          ! Outlet air temperature [C]
+  REAL(r64)    :: OnOffAirFlowFrac       ! Ratio of compressor ON to compressor OFF air mass flow rate
 
   CoilIndex        = INT(Par(1))
   OnOffAirFlowFrac = Par(3)
@@ -3075,10 +3075,10 @@ FUNCTION HXAssistDXCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
+    REAL(r64), INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
                                                     ! Par(2) = desired air outlet temperature [C]
-    REAL         :: Residuum                   ! Residual to be minimized to zero
+    REAL(r64)         :: Residuum                   ! Residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3091,8 +3091,8 @@ FUNCTION HXAssistDXCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex        ! Index of this coil
-  REAL    :: OutletAirTemp    ! Outlet air temperature of DX cooling coil [C]
-  REAL    :: OnOffAirFlowFrac ! Air flow fraction
+  REAL(r64)    :: OutletAirTemp    ! Outlet air temperature of DX cooling coil [C]
+  REAL(r64)    :: OnOffAirFlowFrac ! Air flow fraction
   INTEGER :: CBVAVNumTemp      ! Local index to changeover-bypass VAV system
   LOGICAL :: FirstHVACIter    ! Local Flag denoting the first pass on the air loop simulation
   LOGICAL :: HXUnitOn         ! flag to enable heat exchanger
@@ -3143,10 +3143,10 @@ FUNCTION DXHeatingCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
+    REAL(r64), INTENT(IN)  :: PartLoadFrac               ! Compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! Par(1) = DX coil number
                                                     ! Par(2) = desired air outlet temperature [C]
-    REAL         :: Residuum                   ! Residual to be minimized to zero
+    REAL(r64)         :: Residuum                   ! Residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3159,8 +3159,8 @@ FUNCTION DXHeatingCoilResidual(PartLoadFrac, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex        ! Index of this coil
-  REAL    :: OutletAirTemp    ! Outlet air temperature [C]
-  REAL    :: OnOffAirFlowFrac ! Ratio of compressor ON to compressor OFF air mass flow rate
+  REAL(r64)    :: OutletAirTemp    ! Outlet air temperature [C]
+  REAL(r64)    :: OnOffAirFlowFrac ! Ratio of compressor ON to compressor OFF air mass flow rate
 
   CoilIndex        = INT(Par(1))
   OnOffAirFlowFrac = Par(3)
@@ -3197,11 +3197,11 @@ FUNCTION MultiModeDXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-    REAL, INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
-    REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
+    REAL(r64), INTENT(IN)  :: PartLoadRatio ! compressor cycling ratio (1.0 is continuous, 0.0 is off)
+    REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par ! par(1) = DX coil number
                                                     ! par(2) = desired air outlet temperature [C]
                                                     ! par(3) = dehumidification mode (0=normal, 1=enhanced)
-    REAL         :: Residuum ! residual to be minimized to zero
+    REAL(r64)         :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3214,7 +3214,7 @@ FUNCTION MultiModeDXCoilResidual(PartLoadRatio, Par) RESULT (Residuum)
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: CoilIndex       ! index of this coil
-  REAL ::    OutletAirTemp   ! outlet air temperature [C]
+  REAL(r64) ::    OutletAirTemp   ! outlet air temperature [C]
   INTEGER :: DehumidMode     ! dehumidification mode (par3)
   INTEGER :: FanOpMode       ! allows parent object to control fan mode
 
@@ -3256,7 +3256,7 @@ SUBROUTINE SetAverageAirFlow(CBVAVNum,OnOffAirFlowRatio, FirstHVACIteration)
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER, INTENT (IN)    :: CBVAVNum            ! Index to CBVAV system
-  REAL   , INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to average airflow over timestep
+  REAL(r64)   , INTENT (INOUT) :: OnOffAirFlowRatio  ! Ratio of compressor ON airflow to average airflow over timestep
   LOGICAL, INTENT (IN)    :: FirstHVACIteration ! Flag denoting the first pass on the air loop simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
@@ -3275,17 +3275,17 @@ SUBROUTINE SetAverageAirFlow(CBVAVNum,OnOffAirFlowRatio, FirstHVACIteration)
   INTEGER             :: MixerOutsideAirNode  ! Outside air node number in OA mixer
   INTEGER             :: MixerReliefAirNode   ! Relief air node number in OA mixer
   INTEGER             :: MixerInletAirNode   ! Mixed air node number in OA mixer
-  REAL           :: AverageUnitMassFlow  ! Average system air mass flow rate over time step [kg/s]
-  REAL           :: AverageOAMassFlow    ! Average outdoor air mass flow rate over time step [kg/s]
-  REAL           :: CpSupplyAir          ! Specific heat of outlet air [J/kg-K]
-  REAL           :: CpZoneAir            ! Specific heat of zone air [J/kg-K]
-  REAL           :: DeltaCpTemp          ! Temperature difference from supply air to zone air [C]
-  REAL           :: ZoneMassFlow         ! Zone mass flow rate required to meet zone load [kg/s]
-  REAL           :: SystemMassFlow       ! System mass flow rate required for all zones [kg/s]
+  REAL(r64)           :: AverageUnitMassFlow  ! Average system air mass flow rate over time step [kg/s]
+  REAL(r64)           :: AverageOAMassFlow    ! Average outdoor air mass flow rate over time step [kg/s]
+  REAL(r64)           :: CpSupplyAir          ! Specific heat of outlet air [J/kg-K]
+  REAL(r64)           :: CpZoneAir            ! Specific heat of zone air [J/kg-K]
+  REAL(r64)           :: DeltaCpTemp          ! Temperature difference from supply air to zone air [C]
+  REAL(r64)           :: ZoneMassFlow         ! Zone mass flow rate required to meet zone load [kg/s]
+  REAL(r64)           :: SystemMassFlow       ! System mass flow rate required for all zones [kg/s]
   INTEGER             :: ZoneNum              ! Index to zone
-  REAL           :: ZoneLoad             ! Zone load calculated by ZoneTempPredictor [W]
-  REAL           :: QToHeatSetPt         ! Load to heating setpoint [W]
-  REAL           :: QToCoolSetPt         ! Load to cooling setpoint [W]
+  REAL(r64)           :: ZoneLoad             ! Zone load calculated by ZoneTempPredictor [W]
+  REAL(r64)           :: QToHeatSetPt         ! Load to heating setpoint [W]
+  REAL(r64)           :: QToCoolSetPt         ! Load to cooling setpoint [W]
   INTEGER             :: ZoneNodeNum          ! Actual zone number
   INTEGER             :: BoxOutletNodeNum     ! Zone supply air inlet node number
 
@@ -3307,12 +3307,12 @@ SUBROUTINE SetAverageAirFlow(CBVAVNum,OnOffAirFlowRatio, FirstHVACIteration)
                   SequencedOutputRequiredToCoolingSP(CBVAV(CBVAVNum)%ZoneSequenceCoolingNum(ZoneNum))
       QToHeatSetPt = ZoneSysEnergyDemand(CBVAV(CBVAVNum)%ControlledZoneNum(ZoneNum))%&
                   SequencedOutputRequiredToHeatingSP(CBVAV(CBVAVNum)%ZoneSequenceHeatingNum(ZoneNum))
-      IF (QToHeatSetPt > 0. .AND. QToCoolSetPt > 0.) THEN
+      IF (QToHeatSetPt > 0.d0 .AND. QToCoolSetPt > 0.d0) THEN
         ZoneLoad = QToHeatSetPt
-      ELSEIF (QToHeatSetPt < 0. .AND. QToCoolSetPt < 0.) THEN
+      ELSEIF (QToHeatSetPt < 0.d0 .AND. QToCoolSetPt < 0.d0) THEN
         ZoneLoad = QToCoolSetPt
-      ELSEIF (QToHeatSetPt <= 0. .AND. QToCoolSetPt >= 0.) THEN
-        ZoneLoad = 0.
+      ELSEIF (QToHeatSetPt <= 0.d0 .AND. QToCoolSetPt >= 0.d0) THEN
+        ZoneLoad = 0.d0
       ENDIF
     ELSE
       ZoneLoad     = ZoneSysEnergyDemand(CBVAV(CBVAVNum)%ControlledZoneNum(ZoneNum))%TotalOutputRequired
@@ -3355,7 +3355,7 @@ SUBROUTINE SetAverageAirFlow(CBVAVNum,OnOffAirFlowRatio, FirstHVACIteration)
       ByPassDuctFlowFraction                       = 0.0
     ELSE
       OnOffAirFlowRatio                            = 1.0
-      ByPassDuctFlowFraction = MAX(0.0,1.0 - (Node(InletNode)%MassFlowRate/AverageUnitMassFlow))
+      ByPassDuctFlowFraction = MAX(0.0d0,1.0 - (Node(InletNode)%MassFlowRate/AverageUnitMassFlow))
     END IF
   END IF
 
@@ -3397,7 +3397,7 @@ SUBROUTINE ReportCBVAV(CBVAVNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL :: ReportingConstant
+  REAL(r64) :: ReportingConstant
 
           ! FLOW
   ReportingConstant = TimeStepSys*SecInHour
@@ -3445,12 +3445,12 @@ SUBROUTINE CalcNonDXHeatingCoils(CBVAVNum,FirstHVACIteration,HeatCoilLoad,FanMod
           ! SUBROUTINE ARGUMENT DEFINITIONS:
   INTEGER,      INTENT(IN)    :: CBVAVNum                  ! Changeover bypass VAV unit index
   LOGICAL,      INTENT(IN)    :: FirstHVACIteration        ! flag for first HVAC iteration in the time step
-  REAL,    INTENT(INOUT) :: HeatCoilLoad              ! heating coil load to be met (Watts)
-  REAL,    INTENT(OUT)   :: HeatCoilLoadmet           ! coil heating load met
+  REAL(r64),    INTENT(INOUT) :: HeatCoilLoad              ! heating coil load to be met (Watts)
+  REAL(r64),    INTENT(OUT)   :: HeatCoilLoadmet           ! coil heating load met
   INTEGER,      INTENT(IN)    :: FanMode                   ! fan operation mode
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL, PARAMETER :: ErrTolerance = 0.001    ! convergence limit for hotwater coil
+  REAL(r64), PARAMETER :: ErrTolerance = 0.001d0    ! convergence limit for hotwater coil
 
           ! INTERFACE BLOCK SPECIFICATIONS
           ! na
@@ -3459,15 +3459,15 @@ SUBROUTINE CalcNonDXHeatingCoils(CBVAVNum,FirstHVACIteration,HeatCoilLoad,FanMod
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL      :: QCoilActual       ! actual heating load met
-  REAL      :: mdot              ! heating coil steam or hot water mass flow rate
-  REAL      :: MinWaterFlow      ! minimum water mass flow rate
-  REAL      :: MaxHotWaterFlow   ! maximum hot water mass flow rate, kg/s
-  REAL      :: HotWaterMdot      ! actual hot water mass flow rate
-  REAL, DIMENSION(3) :: Par      !
+  REAL(r64)      :: QCoilActual       ! actual heating load met
+  REAL(r64)      :: mdot              ! heating coil steam or hot water mass flow rate
+  REAL(r64)      :: MinWaterFlow      ! minimum water mass flow rate
+  REAL(r64)      :: MaxHotWaterFlow   ! maximum hot water mass flow rate, kg/s
+  REAL(r64)      :: HotWaterMdot      ! actual hot water mass flow rate
+  REAL(r64), DIMENSION(3) :: Par      !
   INTEGER        :: SolFlag           ! error flag
 
-  QCoilActual=0.0
+  QCoilActual=0.0d0
   IF (HeatCoilLoad > SmallLoad) THEN
      Select Case (CBVAV(CBVAVNum)%HeatCoilType_Num)
         Case (Coil_HeatingGas, Coil_HeatingElectric)
@@ -3489,7 +3489,7 @@ SUBROUTINE CalcNonDXHeatingCoils(CBVAVNum,FirstHVACIteration,HeatCoilLoad,FanMod
           IF ( QCoilActual > (HeatCoilLoad + SmallLoad)) Then
               ! control water flow to obtain output matching HeatCoilLoad
               SolFlag = 0
-              MinWaterFlow = 0.0
+              MinWaterFlow = 0.0d0
               Par(1) = REAL(CBVAVNum,r64)
               IF (FirstHVACIteration) THEN
                 Par(2) = 1.
@@ -3544,7 +3544,7 @@ SUBROUTINE CalcNonDXHeatingCoils(CBVAVNum,FirstHVACIteration,HeatCoilLoad,FanMod
                                              HeatCoilLoad, CBVAV(CBVAVNum)%HeatCoilIndex, &
                                              QCoilActual, .TRUE., FanMode)
         Case (Coil_HeatingWater)
-          mdot = 0.0
+          mdot = 0.0d0
           Call SetComponentFlowRate( mdot , &
                                     CBVAV(CBVAVNum)%CoilControlNode, &
                                     CBVAV(CBVAVNum)%CoilOutletNode, &
@@ -3557,7 +3557,7 @@ SUBROUTINE CalcNonDXHeatingCoils(CBVAVNum,FirstHVACIteration,HeatCoilLoad,FanMod
           CALL SimulateWaterCoilComponents(CBVAV(CBVAVNum)%HeatCoilName,FirstHVACIteration, &
                                            CBVAV(CBVAVNum)%HeatCoilIndex, QCoilActual, FanMode)
         Case (Coil_HeatingSteam)
-          mdot = 0.0
+          mdot = 0.0d0
           Call SetComponentFlowRate( mdot , &
                                     CBVAV(CBVAVNum)%CoilControlNode, &
                                     CBVAV(CBVAVNum)%CoilOutletNode, &
@@ -3603,9 +3603,9 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
           ! SUBROUTINE ARGUMENT DEFINITIONS:
-  REAL, INTENT(IN)                         :: HWFlow   ! hot water flow rate in kg/s
-  REAL, INTENT(IN), DIMENSION(:), OPTIONAL :: Par      ! Par(5) is the requested coil load
-  REAL                                     :: Residuum ! residual to be minimized to zero
+  REAL(r64), INTENT(IN)                         :: HWFlow   ! hot water flow rate in kg/s
+  REAL(r64), INTENT(IN), DIMENSION(:), OPTIONAL :: Par      ! Par(5) is the requested coil load
+  REAL(r64)                                     :: Residuum ! residual to be minimized to zero
 
           ! FUNCTION PARAMETER DEFINITIONS:
           ! na
@@ -3619,9 +3619,9 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER               :: CBVAVNum
   LOGICAL               :: FirstHVACSoln
-  REAL             :: QCoilActual             ! delivered coild load, W
-  REAL             :: HeatCoilLoad            ! requested coild load, W
-  REAL             :: mdot
+  REAL(r64)             :: QCoilActual             ! delivered coild load, W
+  REAL(r64)             :: HeatCoilLoad            ! requested coild load, W
+  REAL(r64)             :: mdot
 
   CBVAVNum = INT(Par(1))
   IF (Par(2) > 0.0) THEN
@@ -3644,7 +3644,7 @@ FUNCTION HotWaterCoilResidual(HWFlow, Par) RESULT (Residuum)
   CALL SimulateWaterCoilComponents(CBVAV(CBVAVNum)%HeatCoilName,FirstHVACSoln, &
                                    CBVAV(CBVAVNum)%HeatCoilIndex, QCoilActual, &
                                    CBVAV(CBVAVNum)%OpMode)
-  IF (HeatCoilLoad /= 0.0) THEN
+  IF (HeatCoilLoad /= 0.0d0) THEN
     Residuum = (QCoilActual - HeatCoilLoad)/ HeatCoilLoad
   ENDIF
   RETURN

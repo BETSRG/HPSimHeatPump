@@ -288,7 +288,7 @@ SUBROUTINE GetPlantLoopData
   INTEGER :: PlantLoopNum
   INTEGER :: CondLoopNum
   CHARACTER(len=MaxNameLength),DIMENSION(18) :: Alpha !dimension to num of alpha fields in input
-  REAL, DIMENSION(30) :: Num  !dimension to num of numeric data fields in input
+  REAL(r64), DIMENSION(30) :: Num  !dimension to num of numeric data fields in input
   LOGICAL :: ErrorsFound=.false.
   LOGICAL       :: IsNotOK               ! Flag to verify name
   LOGICAL       :: IsBlank               ! Flag for blank name
@@ -1620,7 +1620,7 @@ SUBROUTINE GetPlantInput
 !                Call InitializePipes(TempLoop%Branch(BranchNum)%Comp(CompNum)%TypeOf_Num,  &
 !                            LoopPipe(HalfLoopNum)%Pipe(PipeNum)%Name,  &
 !                            TempLoop%Branch(BranchNum)%Comp(CompNum)%CompNum, &
-!                            0.0)
+!                            0.0d0)
               ELSEIF (TempLoop%Branch(BranchNum)%Comp(CompNum)%TypeOf_Num == TypeOf_PipeInterior .or.  &
                       TempLoop%Branch(BranchNum)%Comp(CompNum)%TypeOf_Num == TypeOf_PipeUnderground .or. &
                       TempLoop%Branch(BranchNum)%Comp(CompNum)%TypeOf_Num == TypeOf_PipeExterior) THEN
@@ -2024,15 +2024,15 @@ SUBROUTINE SetupReports
 
   ALLOCATE (PlantReport(TotNumLoops))
 
-  PlantReport%CoolingDemand         = 0.
-  PlantReport%HeatingDemand         = 0.
-  PlantReport%DemandNotDispatched   = 0.
-  PlantReport%UnmetDemand           = 0.
-  PlantReport%InletNodeTemperature  = 0.
-  PlantReport%OutletNodeTemperature = 0.
-  PlantReport%InletNodeFlowrate     = 0.
-  PlantReport%BypassFrac            = 0.
-  PlantReport%OutletNodeFlowrate    = 0.
+  PlantReport%CoolingDemand         = 0.d0
+  PlantReport%HeatingDemand         = 0.d0
+  PlantReport%DemandNotDispatched   = 0.d0
+  PlantReport%UnmetDemand           = 0.d0
+  PlantReport%InletNodeTemperature  = 0.d0
+  PlantReport%OutletNodeTemperature = 0.d0
+  PlantReport%InletNodeFlowrate     = 0.d0
+  PlantReport%BypassFrac            = 0.d0
+  PlantReport%OutletNodeFlowrate    = 0.d0
 
   DO LoopNum =1, TotNumLoops
    IF(LoopNum .LE. NumPlantLoops) THEN
@@ -2146,8 +2146,8 @@ SUBROUTINE InitializeLoops(FirstHVACIteration)
   LOGICAL, INTENT(IN):: FirstHVACIteration             ! true if first iteration of the simulation
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL,PARAMETER::StartQuality = 1.0
-  REAL,PARAMETER::StartHumRat  = 0.0
+  REAL(r64),PARAMETER::StartQuality = 1.0
+  REAL(r64),PARAMETER::StartHumRat  = 0.0
 
 
           ! INTERFACE BLOCK SPECIFICATIONS
@@ -2163,7 +2163,7 @@ SUBROUTINE InitializeLoops(FirstHVACIteration)
   INTEGER            :: CompNum                    ! plant side component counter
   INTEGER            :: SensedNode
 
-  REAL          :: LoopSetPointTemp           ! the loop control or setpoint temperature
+  REAL(r64)          :: LoopSetPointTemp           ! the loop control or setpoint temperature
 
   LOGICAL            :: ErrorsFound=.false.
   LOGICAL            :: FinishSizingFlag
@@ -2363,7 +2363,7 @@ SUBROUTINE InitializeLoops(FirstHVACIteration)
       DO LoopSideNum = DemandSide,SupplySide
         DO BranchNum = 1, PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TotalBranches
           DO CompNum = 1, PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%TotalComponents
-            PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%MyLoad =0.
+            PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%MyLoad =0.d0
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%FreeCoolCntrlShutDown = .FALSE.
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%Available             = .FALSE.
           ENDDO
@@ -2416,8 +2416,8 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
           ! na
 
           ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL,PARAMETER::StartQuality = 1.0
-  REAL,PARAMETER::StartHumRat  = 0.0
+  REAL(r64),PARAMETER::StartQuality = 1.0
+  REAL(r64),PARAMETER::StartHumRat  = 0.0
 
           ! INTERFACE BLOCK SPECIFICATIONS:
           ! na
@@ -2428,13 +2428,13 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER            :: LoopNum                    ! plant loop counter
   INTEGER            :: LoopIn
-  REAL          :: LoopMaxMassFlowRate        ! maximum allowable loop mass flow rate
-  REAL          :: LoopSetPointTemp           ! the loop control or setpoint temperature
-  REAL          :: LoopMaxTemp                ! maximum allowable loop temperature
-  REAL          :: LoopMinTemp                ! minimum allowable loop temperature
-  REAL          :: LoopSetPointTempLo           ! the loop control or setpoint temperature
-  REAL          :: LoopSetPointTempHi           ! the loop control or setpoint temperature
-  REAL          :: SecondaryLoopSetPointTemp  ! loop setpoint temperature for common pipes with different secondary setpt
+  REAL(r64)          :: LoopMaxMassFlowRate        ! maximum allowable loop mass flow rate
+  REAL(r64)          :: LoopSetPointTemp           ! the loop control or setpoint temperature
+  REAL(r64)          :: LoopMaxTemp                ! maximum allowable loop temperature
+  REAL(r64)          :: LoopMinTemp                ! minimum allowable loop temperature
+  REAL(r64)          :: LoopSetPointTempLo           ! the loop control or setpoint temperature
+  REAL(r64)          :: LoopSetPointTempHi           ! the loop control or setpoint temperature
+  REAL(r64)          :: SecondaryLoopSetPointTemp  ! loop setpoint temperature for common pipes with different secondary setpt
   INTEGER            :: LoopSideNum
   INTEGER            :: BranchNum                  ! branch loop counter
   INTEGER            :: OpNum                      ! operation scheme counter
@@ -2443,14 +2443,14 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
   INTEGER            :: ComponentInlet             ! component inlet node number
   INTEGER            :: ComponentOutlet            ! component outlet node number
   LOGICAL, SAVE      :: MyEnvrnFlag = .TRUE.
-  REAL          :: LoopMinMassFlowRate        ! minimum allowable loop mass flow rate
-  REAL          :: SteamDensity
-  REAL          :: SteamTemp
-  REAL          :: StartEnthalpy
-  REAL          :: Cp
-  REAL          :: rho
-  REAL          :: LoopSetPointTemperatureHi
-  REAL          :: LoopSetPointTemperatureLo
+  REAL(r64)          :: LoopMinMassFlowRate        ! minimum allowable loop mass flow rate
+  REAL(r64)          :: SteamDensity
+  REAL(r64)          :: SteamTemp
+  REAL(r64)          :: StartEnthalpy
+  REAL(r64)          :: Cp
+  REAL(r64)          :: rho
+  REAL(r64)          :: LoopSetPointTemperatureHi
+  REAL(R64)          :: LoopSetPointTemperatureLo
 
   !*****************************************************************
   !BEGIN ENVIRONMENT INITS
@@ -2469,7 +2469,7 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
           ! Get the range of setpoints
           LoopSetPointTemperatureHi = Node(PlantLoop(LoopNum)%TempSetPointNodeNum)%TempSetpointHi
           LoopSetPointTemperatureLo = Node(PlantLoop(LoopNum)%TempSetPointNodeNum)%TempSetpointLo
-          LoopSetPointTemp = (LoopSetPointTemperatureLo + LoopSetPointTemperatureHi) /2.
+          LoopSetPointTemp = (LoopSetPointTemperatureLo + LoopSetPointTemperatureHi) /2.d0
         END SELECT
 
         IF ((PlantLoop(LoopNum)%CommonPipeType == CommonPipe_TwoWay) .AND. (LoopSideNum == DemandSide) .AND. &
@@ -2485,7 +2485,7 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
 
         ! trap for -999 and set to average of limits if so
         IF (LoopSetPointTemp == SensedNodeFlagValue) THEN
-          LoopSetPointTemp = (LoopMinTemp + LoopMaxTemp) / 2.
+          LoopSetPointTemp = (LoopMinTemp + LoopMaxTemp) / 2.d0
         ENDIF
             ! Check it against the loop temperature limits
         LoopSetPointTemp = Min(LoopMaxTemp, LoopSetPointTemp)
@@ -2495,16 +2495,16 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TempInterfaceTankOutlet = LoopSetPointTemp
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%LastTempInterfaceTankOutlet = LoopSetPointTemp
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%LoopSideInlet_TankTemp      = LoopSetPointTemp
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TotalPumpHeat               = 0.
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TotalPumpHeat               = 0.d0
         IF (ALLOCATED(PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Pumps)) &
-          PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Pumps%PumpHeatToFluid     = 0.
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%FlowRequest                 = 0.
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TimeElapsed                 = 0.
+          PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Pumps%PumpHeatToFluid     = 0.d0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%FlowRequest                 = 0.d0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TimeElapsed                 = 0.d0
         PlantLoop(LoopNum)%LoopSide(LoopSideNum)%FlowLock                    = 0
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%InletNode%TemperatureHistory =   0.0
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%InletNode%MassFlowRateHistory =  0.0
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%OutletNode%TemperatureHistory =  0.0
-        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%OutletNode%MassFlowRateHistory = 0.0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%InletNode%TemperatureHistory =   0.0d0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%InletNode%MassFlowRateHistory =  0.0d0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%OutletNode%TemperatureHistory =  0.0d0
+        PlantLoop(LoopNum)%LoopSide(LoopSideNum)%OutletNode%MassFlowRateHistory = 0.0d0
 
         IF(PlantLoop(LoopNum)%FluidType /= NodeType_Steam) Then
           Cp =  GetSpecificHeatGlycol(PlantLoop(LoopNum)%FluidName,  &
@@ -2526,15 +2526,15 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
         END IF
               !use saturated liquid of steam at the loop setpoint temp as the starting enthalpy for a water loop
         IF(PlantLoop(LoopNum)%FluidType==NodeType_Steam) Then
-          SteamDensity=GetSatDensityRefrig('STEAM',SteamTemp,1.0,PlantLoop(LoopNum)%FluidIndex,'PlantManager:InitializeLoop')
+          SteamDensity=GetSatDensityRefrig('STEAM',SteamTemp,1.0d0,PlantLoop(LoopNum)%FluidIndex,'PlantManager:InitializeLoop')
           LoopMaxMassFlowRate = PlantLoop(loopnum)%MaxVolFlowRate * SteamDensity
-          StartEnthalpy = GetSatEnthalpyRefrig('STEAM',LoopSetPointTemp,0.0,PlantLoop(LoopNum)%FluidIndex, &
+          StartEnthalpy = GetSatEnthalpyRefrig('STEAM',LoopSetPointTemp,0.0d0,PlantLoop(LoopNum)%FluidIndex, &
                                                'PlantManager:InitializeLoop')
           LoopMinMassFlowRate = PlantLoop(loopnum)%MinVolFlowRate * SteamDensity
         END IF
 
-        LoopMaxMassFlowRate = MAX(0., LoopMaxMassFlowRate)
-        LoopMinMassFlowRate = MAX(0., LoopMinMassFlowRate)
+        LoopMaxMassFlowRate = MAX(0.d0, LoopMaxMassFlowRate)
+        LoopMinMassFlowRate = MAX(0.d0, LoopMinMassFlowRate)
 
               !Initial all loop nodes by initializing all component inlet and outlet nodes
         DO BranchNum = 1, PlantLoop(LoopNum)%LoopSide(LoopSideNum)%TotalBranches
@@ -2548,28 +2548,28 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
             Node(ComponentInlet)%TempMax              = LoopMaxTemp
             Node(ComponentInlet)%TempLastTimestep     = LoopSetpointTemp
 
-            Node(ComponentInlet)%MassFlowRate         = 0.0
+            Node(ComponentInlet)%MassFlowRate         = 0.0d0
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%MyLoad = 0.0
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%Available = .FALSE.
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%Comp(CompNum)%FreeCoolCntrlShutDown = .FALSE.
             PlantLoop(LoopNum)%LoopSide(LoopSideNum)%Branch(BranchNum)%RequestedMassFlow =0.0
 
 
-            IF (Node(ComponentInlet)%MassFlowRateMin > 0.) THEN
+            IF (Node(ComponentInlet)%MassFlowRateMin > 0.d0) THEN
               Node(ComponentInlet)%MassFlowRateMinAvail = Node(ComponentInlet)%MassFlowRateMin
             ELSE
               Node(ComponentInlet)%MassFlowRateMin      = LoopMinMassFlowRate
               Node(ComponentInlet)%MassFlowRateMinAvail = LoopMinMassFlowRate
             ENDIF
 
-            IF (Node(ComponentInlet)%MassFlowRateMax > 0.) THEN
+            IF (Node(ComponentInlet)%MassFlowRateMax > 0.d0) THEN
               Node(ComponentInlet)%MassFlowRateMaxAvail = Node(ComponentInlet)%MassFlowRateMax
             ELSE
               Node(ComponentInlet)%MassFlowRateMax      = LoopMaxMassFlowRate
               Node(ComponentInlet)%MassFlowRateMaxAvail = LoopMaxMassFlowRate
             ENDIF
 
-            Node(ComponentInlet)%MassFlowRateRequest  = 0.0
+            Node(ComponentInlet)%MassFlowRateRequest  = 0.0d0
             Node(ComponentInlet)%Quality              = StartQuality
             Node(ComponentInlet)%Press                = StdBaroPress
             Node(ComponentInlet)%Enthalpy             = StartEnthalpy
@@ -2585,7 +2585,7 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
             Node(ComponentOutlet)%MassFlowRateMax      = Node(BranchInlet)%MassFlowRateMax
             Node(ComponentOutlet)%MassFlowRateMinAvail = Node(BranchInlet)%MassFlowRateMinAvail
             Node(ComponentOutlet)%MassFlowRateMaxAvail = Node(BranchInlet)%MassFlowRateMaxAvail
-            Node(ComponentOutlet)%MassFlowRateRequest  = 0.0
+            Node(ComponentOutlet)%MassFlowRateRequest  = 0.0d0
             Node(ComponentOutlet)%Quality              = StartQuality
             Node(ComponentOutlet)%Press                = StdBaroPress
             Node(ComponentOutlet)%Enthalpy             = StartEnthalpy
@@ -2594,15 +2594,15 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
         END DO !BRANCH LOOP
       END DO !LOOPSIDE
     END DO  !PLANT LOOP
-    PlantReport%CoolingDemand       = 0.
-    PlantReport%HeatingDemand       = 0.
-    PlantReport%DemandNotDispatched = 0.
-    PlantReport%UnmetDemand         = 0.
+    PlantReport%CoolingDemand       = 0.d0
+    PlantReport%HeatingDemand       = 0.d0
+    PlantReport%DemandNotDispatched = 0.d0
+    PlantReport%UnmetDemand         = 0.d0
     PlantReport%LastLoopSideSimulated = 0
-    PlantReport%InletNodeFlowrate    = 0.
-    PlantReport%InletNodeTemperature  = 0.
-    PlantReport%OutletNodeFlowrate    = 0.
-    PlantReport%OutletNodeTemperature = 0.
+    PlantReport%InletNodeFlowrate    = 0.d0
+    PlantReport%InletNodeTemperature  = 0.d0
+    PlantReport%OutletNodeFlowrate    = 0.d0
+    PlantReport%OutletNodeTemperature = 0.d0
 
     MyEnvrnFlag = .FALSE.
 !*****************************************************************
@@ -2664,10 +2664,10 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
 
       !initialize common pipe flows to zero.
       IF (ALLOCATED(PlantCommonPipe)) THEN
-        PlantCommonPipe(LoopNum)%PriToSecFlow = 0.
-        PlantCommonPipe(LoopNum)%SecToPriFlow = 0.
-        PlantCommonPipe(LoopNum)%PriCPLegFlow = 0.
-        PlantCommonPipe(LoopNum)%SecCPLegFlow = 0.
+        PlantCommonPipe(LoopNum)%PriToSecFlow = 0.d0
+        PlantCommonPipe(LoopNum)%SecToPriFlow = 0.d0
+        PlantCommonPipe(LoopNum)%PriCPLegFlow = 0.d0
+        PlantCommonPipe(LoopNum)%SecCPLegFlow = 0.d0
       ENDIF
     ELSE !no secondary loop, so use supply side loop SP on demand side too.
       PlantLoop(LoopNum)%LoopSide(DemandSide)%TempSetPoint = LoopSetPointTemp
@@ -2689,8 +2689,8 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
           Node(ComponentInlet )%MassFlowRateMaxAvail = Node(ComponentInlet )%MassFlowRateMax
           Node(ComponentOutlet)%MassFlowRateMaxAvail = Node(ComponentInlet )%MassFlowRateMax
 
-          Node(ComponentInlet)%MassFlowRateRequest   = 0.0
-          Node(ComponentOutlet)%MassFlowRateRequest  = 0.0
+          Node(ComponentInlet)%MassFlowRateRequest   = 0.0d0
+          Node(ComponentOutlet)%MassFlowRateRequest  = 0.0d0
 
         END DO
       END DO
@@ -2698,7 +2698,7 @@ SUBROUTINE ReInitPlantLoopsAtFirstHVACIteration
 
     DO OpNum =1, PlantLoop(LoopNum)%NumOpSchemes
           ! If the operating scheme is scheduled "OFF", go to next scheme
-      IF(GetCurrentScheduleValue(PlantLoop(LoopNum)%OpScheme(OpNum)%SchedPtr) <= 0.)THEN
+      IF(GetCurrentScheduleValue(PlantLoop(LoopNum)%OpScheme(OpNum)%SchedPtr) <= 0.d0)THEN
         PlantLoop(LoopNum)%OpScheme(OpNum)%Available  = .FALSE.
       ELSE
         PlantLoop(LoopNum)%OpScheme(OpNum)%Available  = .TRUE.
@@ -3129,13 +3129,13 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
   LOGICAL :: SimNestedLoop
   LOGICAL :: ReSize
   LOGICAL :: AllSizFac
-  REAL :: LoopSizFac
-  REAL :: AvLoopSizFac
-  REAL :: PlantSizFac
-  REAL :: MaxSizFac
-  REAL :: BranchSizFac
-  REAL :: NumBrSizFac
-  REAL :: FluidDensity ! local value from glycol routine
+  REAL(r64) :: LoopSizFac
+  REAL(r64) :: AvLoopSizFac
+  REAL(r64) :: PlantSizFac
+  REAL(r64) :: MaxSizFac
+  REAL(r64) :: BranchSizFac
+  REAL(r64) :: NumBrSizFac
+  REAL(r64) :: FluidDensity ! local value from glycol routine
   LOGICAL   :: Finalize
 
   Finalize = OkayToFinish
@@ -3149,14 +3149,14 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
   AllSizFac = .TRUE.
   GetCompSizFac = .TRUE.
   MaxSizFac = 0.0
-  PlantSizFac = 1.0
+  PlantSizFac = 1.0d0
   NumBrSizFac = 0.0
   ReSize = .FALSE.
 
   IF (PlantLoop(LoopNum)%PlantSizNum > 0) THEN
     ReSize = .TRUE.
     PlantSizNum = PlantLoop(LoopNum)%PlantSizNum
-   ! PlantSizData(PlantSizNum)%DesVolFlowRate = 0.0 ! DSU2
+   ! PlantSizData(PlantSizNum)%DesVolFlowRate = 0.0D0 ! DSU2
   ELSE
     IF (NumPltSizInput > 0) THEN
       PlantSizNum = FindItemInList(PlantLoop(LoopNum)%Name,PlantSizData%PlantLoopName,NumPltSizInput)
@@ -3168,7 +3168,7 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
   IF (PlantSizNum > 0) THEN
     DO BranchNum= 1, PlantLoop(LoopNum)%LoopSide(SupplySide)%TotalBranches
       BranchSizFac = 0.0
-      PlantLoop(LoopNum)%LoopSide(SupplySide)%Branch(BranchNum)%PumpSizFac = 1.0
+      PlantLoop(LoopNum)%LoopSide(SupplySide)%Branch(BranchNum)%PumpSizFac = 1.0d0
       IF (PlantLoop(LoopNum)%LoopSide(SupplySide)%NodeNumIn ==   &
           PlantLoop(LoopNum)%LoopSide(SupplySide)%Branch(BranchNum)%NodeNumIn) CYCLE
       IF (PlantLoop(LoopNum)%LoopSide(SupplySide)%NodeNumOut ==   &
@@ -3186,10 +3186,10 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
         AllSizFac = .FALSE.
       END IF
     END DO
-    AvLoopSizFac = LoopSizFac / MAX(1.0, NumBrSizFac)
+    AvLoopSizFac = LoopSizFac / MAX(1.0d0, NumBrSizFac)
 
     ! sum up contributions from CompDesWaterFlow
-    PlantSizData(PlantSizNum)%DesVolFlowRate = 0. ! init for summation
+    PlantSizData(PlantSizNum)%DesVolFlowRate = 0.d0 ! init for summation
     DO BranchNum = 1, PlantLoop(LoopNum)%LoopSide(DemandSide)%TotalBranches
       DO CompNum = 1, PlantLoop(LoopNum)%LoopSide(DemandSide)%Branch(BranchNum)%TotalComponents
         SupNodeNum = PlantLoop(LoopNum)%LoopSide(DemandSide)%Branch(BranchNum)%Comp(CompNum)%NodeNumIn
@@ -3208,7 +3208,7 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
     ELSE IF (AvLoopSizFac > 1.0) THEN
       PlantSizFac = MaxSizFac
     ELSE
-      PlantSizFac = 1.0
+      PlantSizFac = 1.0d0
     END IF
     DO BranchNum= 1, PlantLoop(LoopNum)%LoopSide(SupplySide)%TotalBranches
       IF (PlantLoop(LoopNum)%LoopSide(SupplySide)%NodeNumIn ==   &
@@ -3264,7 +3264,7 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
   ! Small loop mass no longer introduces instability. Checks and warnings removed by SJR 20 July 2007.
   IF (PlantLoop(LoopNum)%Volume == AutoCalculate) THEN
     ! Although there is no longer a stability requirement (mass can be zero), autosizing is formulated the same way.
-    PlantLoop(LoopNum)%Volume = PlantLoop(LoopNum)%MaxVolFlowRate*TimeStepZone*SecInHour/0.8
+    PlantLoop(LoopNum)%Volume = PlantLoop(LoopNum)%MaxVolFlowRate*TimeStepZone*SecInHour/0.8d0
     IF (PlantLoop(LoopNum)%TypeOfLoop == LoopType_Plant) THEN
       ! condenser loop vs plant loop breakout needed.
       CALL ReportSizingOutput('PlantLoop', PlantLoop(LoopNum)%Name,'Plant Loop Volume [m3]', PlantLoop(LoopNum)%Volume)
@@ -3277,7 +3277,7 @@ SUBROUTINE SizePlantLoop(LoopNum, OkayToFinish)
   IF (PlantLoop(LoopNum)%FluidType==NodeType_Water) THEN
     FluidDensity = GetDensityGlycol(PlantLoop(LoopNum)%FluidName, InitConvTemp,PlantLoop(LoopNum)%FluidIndex,'SizePlantLoop')
   ELSEIF (PlantLoop(LoopNum)%FluidType==NodeType_Steam) THEN
-    FluidDensity = GetSatDensityRefrig('STEAM',100.0,1.0,PlantLoop(LoopNum)%FluidIndex,'SizePlantLoop')
+    FluidDensity = GetSatDensityRefrig('STEAM',100.0d0,1.0d0,PlantLoop(LoopNum)%FluidIndex,'SizePlantLoop')
   END IF
 
   PlantLoop(LoopNum)%Mass = PlantLoop(LoopNum)%Volume * FluidDensity

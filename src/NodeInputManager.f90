@@ -518,7 +518,7 @@ SUBROUTINE GetNodeListsInput(ErrorsFound)
   LOGICAL :: IsBlank              ! Flag for blank name
   LOGICAL :: flagError            ! true when error node list name should be output
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphas
-  REAL, ALLOCATABLE, DIMENSION(:) :: rNumbers
+  REAL(r64), ALLOCATABLE, DIMENSION(:) :: rNumbers
 
   ErrorsFound=.false.
   CALL GetObjectDefMaxArgs(CurrentModuleObject,NCount,NumAlphas,NumNumbers)
@@ -1086,8 +1086,8 @@ SUBROUTINE CalcMoreNodeInfo
   INTEGER       :: iNode                      ! node loop index
   INTEGER       :: iReq                       ! requested report variables loop index
   LOGICAL, SAVE :: MyOneTimeFlag = .TRUE.     ! one time flag
-  REAL, SAVE    :: RhoAirStdInit
-  REAL, SAVE    :: RhoWaterStdInit
+  REAL(r64), SAVE    :: RhoAirStdInit
+  REAL(r64), SAVE    :: RhoWaterStdInit
   LOGICAL, SAVE,  ALLOCATABLE, DIMENSION(:) :: NodeWetbulbRepReq
   INTEGER, SAVE,  ALLOCATABLE, DIMENSION(:) :: NodeWetbulbSchedPtr
   LOGICAL, SAVE,  ALLOCATABLE, DIMENSION(:) :: NodeRelHumidityRepReq
@@ -1097,10 +1097,10 @@ SUBROUTINE CalcMoreNodeInfo
   LOGICAL       :: ReportWetbulb
   LOGICAL       :: ReportRelHumidity
   LOGICAL       :: ReportDewpoint
-  REAL     :: SteamDensity
-  REAL     :: EnthSteamInDry
-  REAL     :: RhoAirCurrent ! temporary value for current air density f(baro, db , W)
-!  REAL     :: rRhoVapor
+  REAL(r64)     :: SteamDensity
+  REAL(r64)     :: EnthSteamInDry
+  REAL(r64)     :: RhoAirCurrent ! temporary value for current air density f(baro, db , W)
+!  REAL(r64)     :: rRhoVapor
 !  INTEGER,save :: Count=0
   CHARACTER(len=MaxNameLength+18) :: NodeReportingString
 
@@ -1178,7 +1178,7 @@ SUBROUTINE CalcMoreNodeInfo
        ! if Node%Press was reliable could be used here.
       RhoAirCurrent = PsyRhoAirFnPbTdbW(OutBaroPress, Node(iNode)%Temp, Node(iNode)%HumRat)
       MoreNodeInfo(iNode)%AirDensity=RhoAirCurrent
-      IF (RhoAirCurrent /= 0.0) MoreNodeInfo(iNode)%VolFlowRateCrntRho = Node(iNode)%MassFlowRate / RhoAirCurrent
+      IF (RhoAirCurrent /= 0.0D0) MoreNodeInfo(iNode)%VolFlowRateCrntRho = Node(iNode)%MassFlowRate / RhoAirCurrent
       MoreNodeInfo(iNode)%ReportEnthalpy = PsyHFnTdbW(Node(iNode)%Temp,Node(iNode)%HumRat)
       IF (ReportWetBulb) THEN
         ! if Node%Press was reliable could be used here.
@@ -1195,7 +1195,7 @@ SUBROUTINE CalcMoreNodeInfo
       IF (ReportRelHumidity) THEN
         ! if Node%Press was reliable could be used here.
         ! following routines don't issue psych errors and may be more reliable.
-        MoreNodeInfo(iNode)%RelHumidity = 100.0 *   &
+        MoreNodeInfo(iNode)%RelHumidity = 100.0d0 *   &
              PsyRhFnTdbWPb(Node(iNode)%Temp,Node(iNode)%HumRat,OutBaroPress,NodeReportingString)
 !        rRhoVapor=PsyRhovFnTdbWPb(Node(iNode)%Temp,Node(iNode)%HumRat,OutBaroPress,'NodeReportingCalc:'//TRIM(NodeID(iNode)))
 !        MoreNodeInfo(iNode)%RelHumidity = 100.0 * PsyRhFnTdbRhov(Node(iNode)%Temp,rRhoVapor,  &
@@ -1208,7 +1208,7 @@ SUBROUTINE CalcMoreNodeInfo
       MoreNodeInfo(iNode)%VolFlowRateStdRho = Node(iNode)%MassFlowRate / RhoWaterStdInit
       MoreNodeInfo(iNode)%ReportEnthalpy = CpCw(Node(iNode)%Temp)*Node(iNode)%Temp
       MoreNodeInfo(iNode)%WetbulbTemp = 0.0
-      MoreNodeInfo(iNode)%RelHumidity = 100.0
+      MoreNodeInfo(iNode)%RelHumidity = 100.0d0
     ELSE IF (Node(iNode)%FluidType == NodeType_Steam) THEN
         IF(Node(iNode)%Quality==1.0)Then
             SteamDensity=GetSatDensityRefrig("STEAM",Node(iNode)%Temp,Node(iNode)%Quality,  &
