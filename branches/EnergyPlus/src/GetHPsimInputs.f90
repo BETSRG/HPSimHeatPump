@@ -323,8 +323,6 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
 !Flow:
 
-!INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-!REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
@@ -353,11 +351,11 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   MODE = Numbers(1)
   SystemType = Numbers(2)
     
-  SELECT CASE (Alphas(2)(1:1))
+  SELECT CASE (Alphas(2)(1:1))  !RS: Debugging: This cooling/heating mode should depend on what's being brought in from EPlus
   CASE ('F','f')
-    IsCoolingMode=0
+  !  IsCoolingMode=0
   CASE DEFAULT
-    IsCoolingMode=1
+  !  IsCoolingMode=1
   END SELECT
 
   Subcooling = Numbers(3)   !Design Subcooling
@@ -370,7 +368,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   DesignConditionDescription = Alphas(4)
   
-  TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature
+  TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature  !RS: Debugging: The following four temps really depend on values from EPlus
   !RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
   TWiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
   TAie = Numbers(8) !IndoorEnteringDrybulbTemperature
@@ -747,7 +745,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Indoor Coil Outlet
   
-  BaroPressure = Numbers(2)  !Barometric Pressure
+  BaroPressure = Numbers(2)  !Barometric Pressure   !RS: Debugging: This should be able to be replaced with E+ barometric pressure
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
 
   !*************** Accumulator ****************

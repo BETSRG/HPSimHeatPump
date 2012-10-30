@@ -41,8 +41,10 @@
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat  !RS: Debugging: Bringing in TaiE
-    USE WeatherManager, ONLY: GetTempsOut   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
+    USE WeatherManager !, ONLY: GetTempsOut   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2   !RS: Debugging: Solving for TWiE
+    USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
+    USE DataHVACGlobals !RS: Debugging: Small Load
 
     IMPLICIT NONE
 
@@ -104,6 +106,7 @@
     REAL OutWetBulBTemp !RS: Wetbulb temperature, Outdoor (C)
     REAL OutBaroPress   !RS: Debugging
     REAL DummyHR !RS: Debugging
+    REAL QZnReq !RS: Debugging: The heating or cooling required by the zone
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -145,6 +148,21 @@
     !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
+    !RS: Debugging: Modified from PackagedTerminalHeatPump code
+    IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .LT. 0.0) THEN
+        QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP
+    ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .GT. 0.0) THEN
+        QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP
+    ELSE
+        QZnReq=0
+    END IF
+    
+    IF(QZnReq .GT. SmallLoad)THEN
+        IsCoolingMode=0
+    ELSE IF(ABS(QZnReq) .GT. SmallLoad)THEN
+        IsCoolingMode=1
+    END IF
+  
     TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
@@ -161,10 +179,6 @@
 
     IF (TsoCmp-(TaiC*1.8+32) .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsoCmp = (TaiC*1.8+32) + 10 !Correct initial guess	! VL_Magic_Number
-    !ELSEIF (TaiC .LT. 0) THEN   !RS: Debugging: For the time when TaiC is negative
-    !    IF (TsoCmp-ABS(TaiC) .GT. 100) THEN !RS: Debugging: No idea here!
-    !        TsoCmp=TaiC+50
-    !    END IF
     END IF
 
     IF (TsoCmp .LE. TsiCmp) THEN
@@ -208,7 +222,7 @@
         
         ONETIME = .FALSE.
              
-        !TWiC=TWiC-5 !RS: Debugging: Just so it's not equal to the drybulb the first time around
+        !TWiC=TWiC-1 !RS: Debugging: Just so it's not equal to the drybulb the first time around
         
     ELSE
         CFMcnd=CFMcnd*UnitArFlw   !RS: Debugging: This needs to be called every time for some reason
@@ -218,6 +232,8 @@
         !TWiC= TWiC*1.8+32  !RS: Debugging: Apparently, these are used just in C
         !TWiE= TWiE*1.8+32
     END IF
+    
+    BaroPressure=(OutBaroPress/1000)    !RS: Debugging: Setting the HPSim baro pressure equal to the E+ (kPa from Pa)
     
     CALL InitAccumulator(AccumPAR)
 
