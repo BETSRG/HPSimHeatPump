@@ -679,12 +679,6 @@
         IF (ErrorFlag .NE. NOERROR) THEN
             OUT(24)=ErrorFlag
             CALL Condenser_Helper_1
-            
-                !IF (.NOT. ALLOCATED(DisLnSeg)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-                !    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
-                !    CALL InitCondenserCoil(CoilType)
-                !END IF
-                
             RETURN
         END IF
         CALL RefrigerantParameters(Ref$)

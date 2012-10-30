@@ -1317,6 +1317,10 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
   REAL(r64)    :: MaxOfMinCoolMassFlow ! max of the user specified design cooling minimum flows and min OA flow [kg/s]
   REAL(r64)    :: MaxHeatVolFlow     ! max of user specified design heating max flow [m3/s]
   CHARACTER(len=8) :: HrMinString   ! store hour/minute string before assigning to peak string array
+  
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
   SELECT CASE (CallIndicator)
 
@@ -1615,9 +1619,12 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
           CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')
         ENDIF
         IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad) <= 1.d-8) THEN
-          CALL ShowWarningError('Calculated design heating load for zone='//  &
-                            TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
-          CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')
+          !CALL ShowWarningError('Calculated design heating load for zone='//  &
+          !                  TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
+          !CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.') !RS: Secret Search String
+          WRITE(DebugFile,*) 'Calculated design heating load for zone='// &
+            TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.'
+          WRITE(DebugFile,*) 'Check Sizing:Zone and ZoneControl:Thermostat inputs.'
         ENDIF
 
       ENDDO
