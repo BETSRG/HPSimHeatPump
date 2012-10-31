@@ -40,11 +40,11 @@
     USE FrostModel
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-    USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat  !RS: Debugging: Bringing in TaiE
+    USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
     USE WeatherManager !, ONLY: GetTempsOut   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2   !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
-    USE DataHVACGlobals !RS: Debugging: Small Load
+    USE DataHVACGlobals !RS: Debugging: Small Load and SingleHeatingSetPoint, SingleCoolingSetPoint
 
     IMPLICIT NONE
 
@@ -149,9 +149,9 @@
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
     !RS: Debugging: Modified from PackagedTerminalHeatPump code
-    IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .LT. 0.0) THEN
+    IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .GT. 0.0 .AND. TempControlType(1) .NE. SingleHeatingSetPoint) THEN    !RS: Debugging: GT not LT because the values are positive
         QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP
-    ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .GT. 0.0) THEN
+    ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LT. 0.0 .AND. TempControlType(1) .NE. SingleCoolingSetPoint) THEN    !RS: Debugging: LT not GT because the values are negative
         QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP
     ELSE
         QZnReq=0
