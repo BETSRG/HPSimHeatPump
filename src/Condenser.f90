@@ -688,7 +688,7 @@
         
     !ELSEIF (.NOT. ALLOCATED(DisLnSeg)) THEN
     IF (.NOT. ALLOCATED(DisLnSeg)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
+    !ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
     !ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
     !ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
     CALL InitCondenserCoil(CoilType)
