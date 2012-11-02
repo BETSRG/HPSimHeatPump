@@ -4505,12 +4505,12 @@ SUBROUTINE CalcZoneSums(ZoneNum, SumIntGain, SumHA, SumHATsurf, SumHATref, SumMC
             MdotCPOA(ZoneNum)*Zone(ZoneNum)%OutDryBulbTemp
 
   ! Sum all multizone air flow calculated from AirflowNetwork by assuming no simple air infiltration model
-  if (SimulateAirflowNetwork == AirflowNetworkControlMultizone .OR. SimulateAirflowNetwork == AirflowNetworkControlMultiADS .OR. &
-     (SimulateAirflowNetwork == AirflowNetworkControlSimpleADS .AND. AirflowNetworkFanActivated)) then
+  IF (SimulateAirflowNetwork == AirflowNetworkControlMultizone .OR. SimulateAirflowNetwork == AirflowNetworkControlMultiADS .OR. &
+     (SimulateAirflowNetwork == AirflowNetworkControlSimpleADS .AND. AirflowNetworkFanActivated)) THEN
     ! Multizone airflow calculated in AirflowNetwork
     SumMCp = AirflowNetworkExchangeData(ZoneNum)%SumMCp+AirflowNetworkExchangeData(ZoneNum)%SumMMCp
     SumMCpT = AirflowNetworkExchangeData(ZoneNum)%SumMCpT+AirflowNetworkExchangeData(ZoneNum)%SumMMCpT
-  end if
+  END IF
 
   ! Sum all system air flow: SumSysMCp, SumSysMCpT
   ! Check to see if this is a controlled zone
