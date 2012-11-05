@@ -77,6 +77,10 @@
     CHARACTER(LEN=128),PARAMETER :: FMT_1014 = "('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')"
     CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
+    
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
+    
+  OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
     MaxIteration=30
     ICHRGE=1
@@ -437,7 +441,8 @@
             IF (EvapOUT(20) .NE. 0) THEN
                 SELECT CASE (INT(EvapOUT(20)))
                 CASE (3,4,5)
-                    STOP
+                    !STOP   !RS: Secret Search String
+                    WRITE(DebugFile,*) 'Program wanted to stop because EvapOUT20 .NE. 0' !//(EvapOUT(20))//'.'    !RS: Debugging: Don't want it just stopping
                 END SELECT
             END IF
             FirstTimeHPdesignMode=.FALSE.

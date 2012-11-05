@@ -341,7 +341,7 @@ INTEGER :: WaterCoilNodeNum               ! numeric equivalent for water coil no
 !INTEGER :: ComponentType_Num
 CHARACTER(len=MaxNameLength), DIMENSION(3) :: MatchNodeName
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
