@@ -1111,7 +1111,12 @@
     HiExpDev = XIN(3)
     PoExpDev = OUT(2)
     ToExpDev = OUT(3)
-    hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+
+    IF (XoExp .LT. 0) THEN  !RS: Debugging: Trying to deal with the case when it's subcooled
+        hoExpDev = TP(Ref$,ToExpDev,PoExpDev,'enthalpy',RefrigIndex,RefPropErr)
+    ELSE
+        hoExpDev = PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+    END IF
 
     RETURN
 

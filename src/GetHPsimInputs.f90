@@ -353,9 +353,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     
   SELECT CASE (Alphas(2)(1:1))  !RS: Debugging: This cooling/heating mode should depend on what's being brought in from EPlus
   CASE ('F','f')
-  !  IsCoolingMode=0
+    IsCoolingMode=0
   CASE DEFAULT
-  !  IsCoolingMode=1
+    IsCoolingMode=1
   END SELECT
 
   Subcooling = Numbers(3)   !Design Subcooling

@@ -1547,7 +1547,8 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
         ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL,             INTENT(IN)  :: Pressure    ! actual pressure given as input
-  REAL,             INTENT(IN)  :: Quality     ! actual quality given as input
+  !REAL,             INTENT(IN)  :: Quality     ! actual quality given as input
+  REAL                          :: Quality  !RS: Debugging: Allowing quality to be redefined
   CHARACTER(len=*), INTENT(IN)  :: Property
   INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
   INTEGER(2),    INTENT(INOUT)  :: Error       ! Error flag: 0-no; otherwise-yes
@@ -1583,8 +1584,15 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
   IF (NumOfRefrigerants == 0) &
     CALL ShowFatalError('GetSatEnthalpyRefrig: No refrigerants found--cannot evaluate fluid enthalpy')
 
-  IF ((Quality < 0.0) .OR. (Quality > 1.0)) &
-    CALL ShowFatalError('GetSatEnthalpyRefrig: Saturated refrigerant quality must be between 0 and 1')
+  IF ((Quality < 0.0) .OR. (Quality > 1.0)) THEN
+    !CALL ShowFatalError('GetSatEnthalpyRefrig: Saturated refrigerant quality must be between 0 and 1') !RS: Secret Search String
+    WRITE(*,*) 'GetSatEnthalpyRefrig: Saturated refrigerant quality must be between 0 and 1'
+    IF (Quality <0.0) THEN
+        Quality=0.0
+    ELSE
+        Quality=1.0
+    END IF
+  END IF
 
   IF (RefrigIndex > 0) THEN
     RefrigNum=RefrigIndex
@@ -1753,7 +1761,7 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
 
         ! PURPOSE OF THIS FUNCTION:
         ! This finds enthalpy for given temperature and a quality under the vapor dome.
-        ! This fucntion is only called with a valid refrigerant and quality between 0 and 1.
+        ! This function is only called with a valid refrigerant and quality between 0 and 1.
 
         ! METHODOLOGY EMPLOYED:
         ! Calls GetInterpolatedSatProp to linearly interpolate between the saturated 
@@ -2219,7 +2227,7 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
 
         ! PURPOSE OF THIS FUNCTION:
         ! Given pressure and enthalpy, find temperature,density,quality,entropy,
-		! dynamic viscostiy,  thermal conductivity, specific heat.
+		! dynamic viscosity,  thermal conductivity, specific heat.
 
         ! METHODOLOGY EMPLOYED:
         ! Determine the state of the properties using saturated liquid and vapor 

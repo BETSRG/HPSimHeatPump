@@ -149,18 +149,24 @@
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
     !RS: Debugging: Modified from PackagedTerminalHeatPump code
-    IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .GT. 0.0 .AND. TempControlType(1) .NE. SingleHeatingSetPoint) THEN    !RS: Debugging: GT not LT because the values are positive
-        QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP
-    ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LT. 0.0 .AND. TempControlType(1) .NE. SingleCoolingSetPoint) THEN    !RS: Debugging: LT not GT because the values are negative
-        QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP
-    ELSE
-        QZnReq=0
-    END IF
+    !IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .GT. 0.0 .AND. TempControlType(1) .NE. SingleHeatingSetPoint) THEN    !RS: Debugging: GT not LT because the values are positive
+    !    QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP
+    !ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LT. 0.0 .AND. TempControlType(1) .NE. SingleCoolingSetPoint) THEN    !RS: Debugging: LT not GT because the values are negative
+    !    QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP
+    !ELSE
+    !    QZnReq=0
+    !END IF
+    !
+    !IF(QZnReq .GT. SmallLoad)THEN
+    !    IsCoolingMode=0
+    !ELSE IF(ABS(QZnReq) .GT. SmallLoad)THEN
+    !    IsCoolingMode=1
+    !END IF
     
-    IF(QZnReq .GT. SmallLoad)THEN
-        IsCoolingMode=0
-    ELSE IF(ABS(QZnReq) .GT. SmallLoad)THEN
-        IsCoolingMode=1
+    IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LE. 0) THEN  !RS: Debugging: Trying to run it only on cooling
+        QUnitOut=0
+        LatOutputProvided=0
+        RETURN
     END IF
   
     TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
