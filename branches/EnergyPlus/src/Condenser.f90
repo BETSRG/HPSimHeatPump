@@ -2170,10 +2170,6 @@
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
-  
-  !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
@@ -2192,8 +2188,7 @@
     !**************************** Model *************************************
 
         CALL GetObjectItem('ODCcktModel',1,Alphas,NumAlphas, &
-                            TmpNumbers,NumNumbers,Status)
-        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                            Numbers, NumNumbers, Status)
         
         ModelName = Alphas(1)
             
@@ -2212,8 +2207,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
         !Reading in the variable values
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                TmpNumbers,NumNumbers,Status)
-            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                Numbers,NumNumbers,Status)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2328,9 +2322,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
+                
                 CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status)
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                    Numbers,NumNumbers,Status)  
             
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube=Numbers(I)
@@ -2362,18 +2356,17 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status) 
                 ELSEIF (I .EQ. 2) THEN
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)   
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status) 
                 ELSE
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)   
                 END IF
-                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
@@ -2398,8 +2391,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             IsUniformVelProfile=.TRUE.
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status)
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                    Numbers,NumNumbers,Status)   
                 
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
@@ -3026,8 +3018,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
         !Reading in the variable values
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status)
-            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        Numbers,NumNumbers,Status)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -3153,8 +3144,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 ALLOCATE(Ckt(NumOfCkts))
 
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status) 
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                    Numbers,NumNumbers,Status) 
         
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
@@ -3188,24 +3178,23 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             DO I=1, NumOfCkts   
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+                                        Numbers,NumNumbers,Status) 
                 ELSEIF (I .EQ. 2) THEN
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)  
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)  
                 ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)   
                 ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)
                 ELSE
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                        Numbers,NumNumbers,Status)  
                 END IF
-                        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
@@ -3242,8 +3231,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             IsUniformVelProfile=.TRUE.
 
             CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                TmpNumbers,NumNumbers,Status) 
-                        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                                Numbers,NumNumbers,Status) 
                         
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
@@ -3493,8 +3481,7 @@ ELSE !Microchannel coil
         !RS Comment: Updating input data for the microchannel option
             !Reading in the values for the variables
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                TmpNumbers,NumNumbers,Status)
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                                Numbers,NumNumbers,Status) 
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -3540,8 +3527,7 @@ ELSE !Microchannel coil
         !*************************** Circuiting ************************************
 
         CALL GetObjectItem('ODCcktCircuiting_Slab1',1,Alphas,NumAlphas, &
-                                TmpNumbers,NumNumbers,Status)
-        Numbers=DBLE(TmpNumbers)    !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+                                Numbers,NumNumbers,Status)
         
         ALLOCATE(Slab(Nl))
         !Slab#,#Passes,Tubes per Pass
@@ -3625,8 +3611,7 @@ ELSE !Microchannel coil
         !Tube# ,velocity Deviation from mean value
         
         CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                TmpNumbers,NumNumbers,Status)
-        Numbers=DBLE(TmpNumbers)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+                                Numbers,NumNumbers,Status)
 
         IsUniformVelProfile=.TRUE.
         DO II=1,Slab(Nl)%Npass
