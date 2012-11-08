@@ -322,11 +322,9 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
 !Flow:
 
-!REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-
-CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
-CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
-CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
+!CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
+!CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
+!CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1

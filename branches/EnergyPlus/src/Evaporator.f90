@@ -2250,18 +2250,11 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
     
-    CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
-    CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
+    !CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
+    !CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
 
     !***** Get circuit info *****
     !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-    !    ErrorFlag=CKTFILEERROR
-    !    CALL InitEvaporatorCoil_Helper_1
-    !    RETURN
-    !
-    !END IF
-    !
-    !IF (ErrorFlag .NE. NOERROR) THEN 
     !    ErrorFlag=CKTFILEERROR
     !    CALL InitEvaporatorCoil_Helper_1
     !    RETURN

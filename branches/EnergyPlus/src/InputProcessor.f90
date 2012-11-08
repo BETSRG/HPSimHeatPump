@@ -3057,7 +3057,7 @@ SUBROUTINE DumpCurrentLineBuffer(StartLine,NumConxLines,LineBuf,LineBufLen)
   INTEGER CurPos
   CHARACTER(len=300) TextLine
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
