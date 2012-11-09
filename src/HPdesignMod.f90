@@ -649,6 +649,7 @@
                 WRITE(6,*)'## ERROR ## HPdesign: Failed to find a solution.'
             END IF
             !STOP   !RS: Debugging: Don't want the code to just shut down.
+            WRITE(6,*)'TSICMP .GE. TSOCMP'  !RS: Debugging: A warning flag
         END IF
 
     END DO

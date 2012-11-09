@@ -687,6 +687,7 @@ CONTAINS
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
+            WRITE(*,*)'Error Flag:',ErrorFlag, "From condenser?"    !RS: Debugging
             OUT(20)=ErrorFlag
             CALL Evaporator_Helper_1
             RETURN
@@ -2249,17 +2250,14 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
-    
-    !CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
-    !CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
 
-    !***** Get circuit info *****
-    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-    !    ErrorFlag=CKTFILEERROR
-    !    CALL InitEvaporatorCoil_Helper_1
-    !    RETURN
-    !
-    !END IF
+!    ***** Get circuit info *****
+    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+        ErrorFlag=CKTFILEERROR
+        CALL InitEvaporatorCoil_Helper_1
+        RETURN
+    
+    END IF
     !
     !**************************** Model *************************************
 
