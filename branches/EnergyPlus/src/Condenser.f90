@@ -5236,9 +5236,9 @@ END IF
 
     DO RefBCiter=1, RefBCmaxIter
         
-        IF (J .GE. 553) THEN    !RS: Debugging
-            WRITE(DebugFile,*) 'XRiMod (line 5240)', XRiMod
-        END IF
+        !IF (J .GE. 553) THEN    !RS: Debugging
+        !    WRITE(DebugFile,*) 'XRiMod (line 5240)', XRiMod
+        !END IF
         
         !Correct quality
         IF (xRoMod .GT. 1) THEN
@@ -5445,13 +5445,11 @@ END IF
             END IF
         END IF
         
-        J=J+1
-        IF (J .GE. 553) THEN    !RS: We know it goes funny at iteration 555, so backing up a few iterations
-            WRITE(DebugFile,*) 'QMod is',QMod,', J is',J !,', EPS i ', EPS
-            WRITE(DebugFile,*) 'Cmin is',CMin !,', and DT is', DT
-            WRITE(DebugFile,*) 'cAir is',cAir,'and cRef is',cRef
-            WRITE(DebugFile,*) 'XRoMod is',XRoMod,'XRiMod is',XRiMod,'XRMod is',XRmod
-        END IF            
+        !J=J+1
+        !IF (J .GE. 553) THEN    !RS: We know it goes funny at iteration 555, so backing up a few iterations
+        !    WRITE(DebugFile,*) 'QMod',QMod,'J',J,'cRef',cRef,'XRoMod',XRoMod
+        !    WRITE(DebugFile,*) 'XRiMod',XRiMod,'XRMod',XRmod,'ErrorFlag',ErrorFlag
+        !END IF            
 
         !Calc. Outside air enthalpy
         IF (CoilType .NE. MCCONDENSER) THEN
@@ -5464,7 +5462,7 @@ END IF
         vRiMod,vfRiMod,vgRiMod,cpRiMod,cpfRiMod,cpgRiMod, &
         muRiMod,mufRiMod,mugRiMod,kRiMod,kfRiMod,kgRiMod,SigmaMod)
         IF (J .GE. 553) THEN    !RS: Debugging
-            WRITE(DebugFile,*) 'XRiMod (line 5460)', XRiMod
+            WRITE(DebugFile,*) 'hRoMod',hRoMod,'hRiMod',hRiMod
         END IF
 
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
@@ -5528,9 +5526,9 @@ END IF
             PrevpRoMod=pRoMod
             PrevhRoMod=hRoMod
         ELSE 
-            IF (J .GE. 553) THEN    !RS: Debugging
-            WRITE(DebugFile,*) 'XRiMod (line 5527)', XRiMod
-        END IF
+            !IF (J .GE. 553) THEN    !RS: Debugging
+            !    WRITE(DebugFile,*) 'XRiMod (line 5527)', XRiMod
+            !END IF
             EXIT
         END IF
         
@@ -5928,9 +5926,10 @@ END IF
         RETURN
     END IF
     
-    IF (J .GE. 1800) THEN    !RS: Debugging
-        WRITE(DebugFile,*)'pRef',pRef,'hRef',hRef,'tRef',tRef,'xRef',xRef
-    END IF
+    !J=J+1   !RS: Debugging
+    !IF (J .GE. 1875) THEN    !RS: Debugging
+    !    WRITE(DebugFile,*)'hRef',hRef,'tRef',tRef,'xRef',xRef,'ErrorFlag',ErrorFlag
+    !END IF
     
     vRef=PH(RefName, Pressure, Enthalpy, 'density', RefrigIndex,RefPropErr)
     IF (RefPropErr .GT. 0) THEN
@@ -5966,7 +5965,7 @@ END IF
     Temperature=tRef
     Quality=1
     
-    J=1+J   !RS: Debugging
+    !J=1+J   !RS: Debugging
     IF (tRef+273.15 .GT. Tcr .OR. tRef+273.15 .LT. 0) THEN
         Psat=pRef
     !WRITE(DebugFile,*) 'Temperature is ',Temperature,'J is ',J,' and Psat (1) is ',Psat !RS: Debugging
