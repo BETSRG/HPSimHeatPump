@@ -637,6 +637,9 @@ CONTAINS
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
     !Flow:
+    IF (EvapOut(20) .EQ. 10) THEN
+        ErrorFlag=0 !RS: Debugging: Resetting the error flag to 0 so it doesn't carry over errors
+    END IF
 
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
@@ -687,7 +690,7 @@ CONTAINS
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-            WRITE(*,*)'Error Flag:',ErrorFlag, "From condenser?"    !RS: Debugging
+            WRITE(*,*)'Error Flag:',ErrorFlag,"From condenser?"    !RS: Debugging
             OUT(20)=ErrorFlag
             CALL Evaporator_Helper_1
             RETURN
@@ -2252,12 +2255,12 @@ END SUBROUTINE PrintEvaporatorResult
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
 
 !    ***** Get circuit info *****
-    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-        ErrorFlag=CKTFILEERROR
-        CALL InitEvaporatorCoil_Helper_1
-        RETURN
-    
-    END IF
+    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+    !    ErrorFlag=CKTFILEERROR
+    !    CALL InitEvaporatorCoil_Helper_1
+    !    RETURN
+    !
+    !END IF
     !
     !**************************** Model *************************************
 

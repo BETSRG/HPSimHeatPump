@@ -676,6 +676,7 @@
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .NE. NOERROR) THEN
+            WRITE(*,*)'Condenser ErrorFlag=',ErrorFlag,'(line 679)'
             OUT(24)=ErrorFlag
             CALL Condenser_Helper_1
             RETURN
@@ -2170,20 +2171,17 @@
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
-
-    !CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
-    !CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
     
     !FLOW:
 
     NumOfSections=1 !ISI - 09/10/07
 
     !***** Get circuit info *****
-    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-    !    ErrorFlag=CKTFILEERROR
-    !    CALL InitCondenserCoil_Helper_1
-    !    RETURN
-    !END IF
+    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+        ErrorFlag=CKTFILEERROR
+        CALL InitCondenserCoil_Helper_1
+        RETURN
+    END IF
     
     !**************************** Model *************************************
 
