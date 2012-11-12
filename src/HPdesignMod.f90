@@ -337,6 +337,11 @@
             EXIT
         END IF
 
+        IF (IERROR .EQ. 1) THEN !RS: Debugging: Trying to find if the evaporator error is coming from the condenser
+            WRITE(*,*) 'Condenser Error =',IERROR
+            EvapOUT(20)=10  !RS: Debugging: Dealing with this particular case when errors transfer over from condenser to evaporator
+        END IF
+        
         IF (LPRINT.EQ.2) THEN 
             PRINT = .TRUE.
             DIFFER = CNDNSR(TSOCMP,IER)

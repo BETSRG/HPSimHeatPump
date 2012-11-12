@@ -1,5 +1,5 @@
         
-    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !RS: Testing: Attempting to pass variables out
+    SUBROUTINE SimulationCycle(QUnitOut,LatOutputProvided) !RS: Attempting to pass variables out
 
     !
     !
@@ -41,8 +41,8 @@
     USE InputProcessor_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
-    USE WeatherManager !, ONLY: GetTempsOut   !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
-    USE Psychrometrics !, ONLY: PsyTwbFnTdbWPb2   !RS: Debugging: Solving for TWiE
+    USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
+    USE Psychrometrics !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
     USE DataHVACGlobals !RS: Debugging: Small Load and SingleHeatingSetPoint, SingleCoolingSetPoint
 
