@@ -700,11 +700,11 @@ CONTAINS
     END IF
 
     IF (.NOT. ALLOCATED(CoilSection)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-    !ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
-    !CALL InitEvaporatorCoil(CoilType)
-        ALLOCATE(CoilSection(NumOfSections)) 
-        ALLOCATE(Ckt(NumOfCkts))
-        ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	
+    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
+    CALL InitEvaporatorCoil(CoilType)
+        !ALLOCATE(CoilSection(NumOfSections)) 
+        !ALLOCATE(Ckt(NumOfCkts))
+        !ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	
     
     END IF
     
