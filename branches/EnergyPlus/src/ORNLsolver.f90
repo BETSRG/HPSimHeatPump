@@ -932,7 +932,7 @@
         WRITE(*,FMT_103)'Time Spent (Min):',TimeSpent/60
         WRITE(5,*) 
         WRITE(5,FMT_103)'Time Spent (Min):',TimeSpent/60  
-        WRITE(*,*)'Press return to end program.'      
+        !WRITE(*,*)'Press return to end program.'      
         !READ(*,*)                                     !For parametric run, comment this line
 
         IF (TaiE .GT. 32) THEN !only update time step above freezing temp.  - ISI 12/22/2009
