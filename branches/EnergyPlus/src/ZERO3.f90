@@ -125,6 +125,7 @@
     IERROR = 0
     IF (ABS(XM) .GT. TOLX) THEN
         IERROR = 1
+        !WRITE(*,*) 'Tolerance exceeded, IERROR=1'   !RS: Debugging
     END IF
     IF (ABS(FB).GT.TOLF) THEN
         IERROR = IERROR + 2
