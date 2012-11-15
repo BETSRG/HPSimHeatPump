@@ -448,6 +448,7 @@
                 CASE (3,4,5)
                     !STOP   !RS: Secret Search String
                     WRITE(DebugFile,*) 'Program wanted to stop because EvapOUT20 .NE. 0' !//(EvapOUT(20))//'.'    !RS: Debugging: Don't want it just stopping
+                    WRITE(*,*) 'EvapOUT(20) .NE. 0' !RS: Debugging
                 END SELECT
             END IF
             FirstTimeHPdesignMode=.FALSE.
