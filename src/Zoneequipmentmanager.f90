@@ -2329,6 +2329,8 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              
            CASE (HPSim)
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
+               !SysOutputProvided=7.56932   !RS: Debugging
+               !LatOutputProvided=4.92648
 
            CASE (ZoneDXDehumidifier_Num) ! 'ZoneHVAC:Dehumidifier:DX'
              CALL SimZoneDehumidifier(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &

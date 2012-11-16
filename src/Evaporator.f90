@@ -669,7 +669,7 @@ CONTAINS
     FirstTime=PAR(54)    !ISI - 12/21/06
 
     IF (FirstTime .EQ. 1) THEN
-        ErrorFlag=0 !RS: Debugging: Shouldn't be an error carried over anyhow, right?
+        !ErrorFlag=0 !RS: Debugging: Shouldn't be an error carried over anyhow, right?
 
         ODtube      = PAR(8)
         TubeThk     = PAR(9)

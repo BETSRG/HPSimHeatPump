@@ -13,7 +13,7 @@
     INTEGER,PARAMETER  :: AirBCmaxIter=20   !Max. number of iterations for air boundary condition calc.
     INTEGER,PARAMETER  :: PressureMaxIter=20        !Max. number of iterations
     INTEGER,PARAMETER  :: DPmaxIter=20      !Max. number of iterations for distributor pressure drop calc.
-    REAL,PARAMETER :: SMALL=1.0E-4  !Small number 
+    REAL,PARAMETER :: SMALL=1.0E-4  !Small number   !RS: Why is it this number? Would a larger number work just as well, if not better?
     REAL,PARAMETER :: BIG=1.0E20    !Big number
     REAL, PARAMETER :: Hout = 0.009937536 !Bare tube outside film heat transfer coefficient, kW/(m2-K)
 
@@ -2177,11 +2177,11 @@
     NumOfSections=1 !ISI - 09/10/07
 
     !***** Get circuit info *****
-    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-        ErrorFlag=CKTFILEERROR
-        CALL InitCondenserCoil_Helper_1
-        RETURN
-    END IF
+    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+    !    ErrorFlag=CKTFILEERROR
+    !    CALL InitCondenserCoil_Helper_1
+    !    RETURN
+    !END IF
     
     !**************************** Model *************************************
 
@@ -2263,7 +2263,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             END IF
 
             !Branch#,#Tubes
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -2326,7 +2327,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube=Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
+                    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                    IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                         ErrorFlag=CKTFILEERROR
                         CALL InitCondenserCoil_Helper_1
                         RETURN
@@ -2345,7 +2347,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -2368,7 +2371,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2380,7 +2384,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
               
             DO I=1,2
-                IF (ErrorFlag .NE. NOERROR) THEN  !Tube#, velocity Deviation from mean value
+                !IF (ErrorFlag .NE. NOERROR) THEN  !Tube#, velocity Deviation from mean value   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2395,7 +2400,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !RS Comment: Bringing in the velocity deviation values
                 END DO
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     CALL InitCondenserCoil_Helper_1
                     RETURN
@@ -2426,7 +2432,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END DO
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 CALL InitCondenserCoil_Helper_1
                 RETURN
@@ -3076,7 +3083,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 Pl = Pt
             END IF
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                 CALL InitCondenserCoil_Helper_1
@@ -3146,7 +3154,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
         
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
+                    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                    IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                         ErrorFlag=CKTFILEERROR
                         !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                         CALL InitCondenserCoil_Helper_1
@@ -3166,7 +3175,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                 ErrorFlag=CKTFILEERROR
                 !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                 CALL InitCondenserCoil_Helper_1
@@ -3197,7 +3207,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                     CALL InitCondenserCoil_Helper_1
@@ -3215,7 +3226,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 		      END DO
 
             DO I=1,2
-                IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
+                !IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                     CALL InitCondenserCoil_Helper_1
@@ -3235,7 +3247,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in velocity deviation data
                 END DO
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                     CALL InitCondenserCoil_Helper_1
@@ -3267,7 +3280,8 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END DO
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN    !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                 CALL InitCondenserCoil_Helper_1
