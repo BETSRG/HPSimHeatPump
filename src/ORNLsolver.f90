@@ -168,7 +168,13 @@
         LatOutputProvided=0
         RETURN
     END IF
-  
+    
+    !IF (EvapPar(54) .EQ. 1) THEN    !RS: Debugging: Pulling out of the code without calculating
+    !    QUnitOut=73.65
+    !    LatOutPutProvided=54.91
+    !    RETURN
+    !END IF
+    !
     TaiE=MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature

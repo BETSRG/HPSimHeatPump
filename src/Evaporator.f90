@@ -637,9 +637,9 @@ CONTAINS
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
     !Flow:
-    IF (EvapOut(20) .EQ. 10) THEN
-        ErrorFlag=0 !RS: Debugging: Resetting the error flag to 0 so it doesn't carry over errors
-    END IF
+    !IF (EvapOut(20) .EQ. 10) THEN
+    !    ErrorFlag=0 !RS: Debugging: Resetting the error flag to 0 so it doesn't carry over errors
+    !END IF
 
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
@@ -1219,6 +1219,10 @@ CONTAINS
         tSHiCmp=0
     END IF
 
+    !RS: Debugging: Set Q's constant, just to see if it'll run
+        !Qcoil=5.58
+        !QcoilSens=3.99
+        
     !Populating the OUT array
     OUT(1)=pRoCoil
     OUT(2)=hRoCoil
@@ -1247,6 +1251,36 @@ CONTAINS
     OUT(25)=WeightCopper
 
     OUT(20)=ErrorFlag
+    
+    !IF (OUT(14) .EQ. 0) THEN    !RS: Debugging: Setting outputs constant to see if it runs
+    !    OUT(1)=1.5
+    !    OUT(2)=.75
+    !    OUT(3)=30.1
+    !    OUT(4)=.5
+    !    OUT(5)=27.3
+    !    OUT(6)=1.25
+    !    OUT(7)=.69
+    !    OUT(8)=25.9
+    !    OUT(9)=xRiCmp
+    !    OUT(10)=24.7
+    !    OUT(11)=42.79
+    !    OUT(12)=35.64
+    !    OUT(13)=3.78
+    !    OUT(14)=0
+    !    OUT(15)=0
+    !    OUT(16)=0
+    !    OUT(17)=27.4
+    !    OUT(18)=.67
+    !    OUT(19)=1.24
+    !
+    !    OUT(21)=.96
+    !    OUT(22)=28.6
+    !    OUT(23)=26.2
+    !    OUT(24)=15
+    !    OUT(25)=10
+    !
+    !    OUT(20)=0
+    !END IF
 
     CALL Evaporator_Helper_1
 
@@ -2256,12 +2290,11 @@ END SUBROUTINE PrintEvaporatorResult
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
 
 !    ***** Get circuit info *****
-    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-    !    ErrorFlag=CKTFILEERROR
-    !    CALL InitEvaporatorCoil_Helper_1
-    !    RETURN
-    !
-    !END IF
+    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+        ErrorFlag=CKTFILEERROR
+        CALL InitEvaporatorCoil_Helper_1
+        RETURN
+    END IF
     !
     !**************************** Model *************************************
 
@@ -2344,7 +2377,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 Pl = Pt
             END IF
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
@@ -2411,7 +2445,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
+                    !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                    IF (ErrorFlag .GT. CONVERGEERROR) THEN
                         ErrorFlag=CKTFILEERROR
                         CALL InitEvaporatorCoil_Helper_1
                         RETURN
@@ -2430,7 +2465,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END IF
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
@@ -2460,7 +2496,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitEvaporatorCoil_Helper_1
                     RETURN
@@ -2477,7 +2514,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
 		      END DO
 
             DO I=1,2
-                IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value
+                !IF (ErrorFlag .NE. NOERROR) THEN !Tube# ,velocity Deviation from mean value !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitEvaporatorCoil_Helper_1
                     RETURN
@@ -2496,7 +2534,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in velocity deviation data
                 END DO
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     CALL InitEvaporatorCoil_Helper_1
                     RETURN
@@ -2527,7 +2566,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END DO
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
@@ -3233,7 +3273,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             END IF
 
             !Branch#,#Tubes
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                 CALL InitEvaporatorCoil_Helper_1
@@ -3298,7 +3339,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube=Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
+                    !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                    IF (ErrorFlag .GT. CONVERGEERROR) THEN
                         ErrorFlag=CKTFILEERROR
                         !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                         CALL InitEvaporatorCoil_Helper_1
@@ -3318,7 +3360,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END IF
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                 CALL InitEvaporatorCoil_Helper_1
@@ -3342,7 +3385,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                     CALL InitEvaporatorCoil_Helper_1
@@ -3355,7 +3399,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
               
             DO I=1,2
-                IF (ErrorFlag .NE. NOERROR) THEN  !Tube#, velocity Deviation from mean value
+                !IF (ErrorFlag .NE. NOERROR) THEN  !Tube#, velocity Deviation from mean value !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                     CALL InitEvaporatorCoil_Helper_1
@@ -3371,7 +3416,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 DO J=1, NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !RS Comment: Bringing in the velocity deviation values
                 END DO
-                IF (ErrorFlag .NE. NOERROR) THEN 
+                !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+                IF (ErrorFlag .GT. CONVERGEERROR) THEN
                     ErrorFlag=CKTFILEERROR
                     !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                     CALL InitEvaporatorCoil_Helper_1
@@ -3403,7 +3449,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END DO
             END DO
 
-            IF (ErrorFlag .NE. NOERROR) THEN 
+            !IF (ErrorFlag .NE. NOERROR) THEN !RS: Debugging: I don't think the convergence errors should really carry over like this!
+            IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 ErrorFlag=CKTFILEERROR
                 !CALL InitCondenserCoil_Helper_1   !RS: Debugging: Switching from Cond
                 CALL InitEvaporatorCoil_Helper_1
