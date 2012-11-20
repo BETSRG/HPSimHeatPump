@@ -10,12 +10,12 @@ PRIVATE
 
 !Parameters
 INTEGER,PARAMETER  :: MdotMaxIter=10      !Max. number of iterations
-INTEGER,PARAMETER  :: RefBCmaxIter=20     !Max. number of iterations
+INTEGER,PARAMETER  :: RefBCmaxIter=20     !Max. number of iterations  !RS: Debugging: Increasing iterations to see if it converges better
 INTEGER,PARAMETER  :: AirBCmaxIter=20     !Max. number of iterations
 INTEGER,PARAMETER  :: TsurfMaxIter=20     !Max. number of iterations
 INTEGER,PARAMETER  :: PressureMaxIter=20          !Max. number of iterations
 INTEGER,PARAMETER  :: WetSurfaceMaxIter=20          !Max. number of iterations
-REAL,PARAMETER :: SMALL=1.0E-4  !Small number 
+REAL,PARAMETER :: SMALL=1.0E-4  !Small number !RS: Reducing the size to see if it helps with convergence
 REAL,PARAMETER :: BIG=1.0E6     !Big number 
 REAL, PARAMETER :: Hout=0.013628621 !Insulated tube outside film heat transfer coefficient, kW/(m2-K)
 REAL, PARAMETER :: Kinsul = 0.034620043e-3 !Insulation thermal conductivity, kW/m-K
@@ -2290,11 +2290,11 @@ END SUBROUTINE PrintEvaporatorResult
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
 
 !    ***** Get circuit info *****
-    IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
-        ErrorFlag=CKTFILEERROR
-        CALL InitEvaporatorCoil_Helper_1
-        RETURN
-    END IF
+    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
+    !    ErrorFlag=CKTFILEERROR
+    !    CALL InitEvaporatorCoil_Helper_1
+    !    RETURN
+    !END IF
     !
     !**************************** Model *************************************
 
