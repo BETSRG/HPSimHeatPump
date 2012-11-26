@@ -872,7 +872,7 @@
                 IF (PrnLog .EQ. 1) THEN
                     WRITE(6,*)'## ERROR ## HPdesign: Capillary tube solution not converged.'
                 END IF
-                CALL SLEEP(300) !Wait for 5 minutes and stop
+                !CALL SLEEP(300) !Wait for 5 minutes and stop
                 STOP
             END IF
 
