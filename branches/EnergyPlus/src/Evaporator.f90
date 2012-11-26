@@ -864,8 +864,8 @@ CONTAINS
                             END IF
 
                             !Calc. circuit heat transfer
-                            Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
-                            QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
+                            Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod    
+                            QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens    
 
                             !Calc. sum of outlet air surface temperature
                             IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Back .EQ. 0) THEN 
@@ -930,7 +930,7 @@ CONTAINS
 
                     IF (EqCircuits .EQ. 1 .AND. IsUniformVelProfile .OR. IsSimpleCoil .EQ. 1) THEN  !Equivalent circuit and Uniform velocity profile
                         Qcoil=CoilSection(NumSection)%Qsection*CoilSection(NumSection)%NumOfCkts
-                        QcoilSens=CoilSection(NumSection)%QsectionSens*CoilSection(NumSection)%NumOfCkts
+                        QcoilSens=CoilSection(NumSection)%QsectionSens*CoilSection(NumSection)%NumOfCkts   !RS: Debugging: Constant Qs
                         pRoCoil=pRoCkt
                         hRoCoil=hRoCkt
                         CoilSection(NumOfSections)%pRo=pRoCkt
@@ -1056,8 +1056,8 @@ CONTAINS
         CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
         CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
 
-        Qcoil=Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer
-        Qcoilsens=QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determing the total sensible coil heat transfer
+        Qcoil= 100  !Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer     !RS: Debugging: Constant Qs
+        Qcoilsens=80    !QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determining the total sensible coil heat transfer     !RS: Debugging: Constant Qs
 
     END DO !Number of sections, !ISI - 09/10/07
 
