@@ -224,6 +224,7 @@ SUBROUTINE SetUpSchemeColors(SchemeName,ColorType)
   logical, dimension(:), allocatable :: lAlphablanks
   logical, dimension(:), allocatable :: lNumericblanks
   real(r64), dimension(:), allocatable :: rNumerics
+  !real, dimension(:), allocatable :: rNumerics
 
   DXFcolorno=defaultcolorno
 ! first see if there is a scheme name

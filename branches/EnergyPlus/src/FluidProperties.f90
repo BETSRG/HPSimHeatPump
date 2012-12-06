@@ -43,7 +43,7 @@ MODULE FluidProperties
 
         ! USE STATEMENTS
 USE DataPrecisionGlobals
-USE DataGlobals, ONLY: MaxNameLength, WarmupFlag, OutputFileDebug !, ShowFatalError, ShowWarningError, ShowSevereError, ShowContinueError, ShowMessage
+USE DataGlobals, ONLY: MaxNameLength, WarmupFlag, OutputFileDebug
 USE DataInterfaces, ONLY:  ShowRecurringWarningErrorAtEnd, ShowRecurringSevereErrorAtEnd, ShowContinueErrorTimeStamp
 
 IMPLICIT NONE                           ! Enforce explicit typing of all variables

@@ -195,7 +195,7 @@ REAL Const    !A constant
 REAL MolWeight !Molecular weight, kg/kmol
 REAL tSat     !Saturation temp., C
 REAL QmodTP   !Heat transfer in two-phase region, kW 
-REAL QdisTube !Distributor tube heat load, kW
+!REAL QdisTube !Distributor tube heat load, kW  !RS: Not being used
 REAL QmodSens !Sensible Module heat transfer, kW
 REAL QmodLat  !Latent Module heat transfer, kW
 REAL QmodSensTot    !Total sensible heat transfer, kW
@@ -319,7 +319,7 @@ REAL LreturnBend !Return bend length, m
 REAL DisLnThk    !Discharge line tube wall thickness, m
 REAL LiqLnThk    !Liquid line tube wall thickness, m
 REAL HtCoil      !Coil height, m
-REAL FinSpg      !Fin spaing, m
+REAL FinSpg      !Fin spacing, m
 REAL FilmThk     !Water film thickness, m
 REAL phi         !Parameter for fin efficiency calc.
 REAL SurfEff     !Surface effecitiveness
@@ -602,7 +602,7 @@ CONTAINS
     REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
     REAL, INTENT(OUT) :: OUT(25)
 
-    !Subroutine lcoal variables
+    !Subroutine local variables
     REAL :: MCXIN(7)  !Microchannel coil input data
     REAL :: MCPAR(33) !Microchannel coil input parameters
     REAL :: MCOUT(21) !Microchannel coil output data
@@ -636,24 +636,19 @@ CONTAINS
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
-    !Flow:
-    !IF (EvapOut(20) .EQ. 10) THEN
-    !    ErrorFlag=0 !RS: Debugging: Resetting the error flag to 0 so it doesn't carry over errors
-    !END IF
-
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
     hRiCoil =XIN(3)
     mAiCoil =XIN(4)
     tAiCoil =XIN(5)
     rhAiCoil=XIN(6)
-    QdisTube=XIN(7)
+    !QdisTube=XIN(7)    !RS: Not being used
     SolarFlux=XIN(8)
     tRdis=XIN(9)
 
-    IF (QdisTube .EQ. 0) THEN
-        QdisTube=SMALL
-    END IF
+    !IF (QdisTube .EQ. 0) THEN
+    !    QdisTube=SMALL
+    !END IF
 
     LsucLn    = PAR(1)
     ODsucLn   = PAR(2)
@@ -703,10 +698,6 @@ CONTAINS
     IF (.NOT. ALLOCATED(CoilSection)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
     ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
     CALL InitEvaporatorCoil(CoilType)
-        !ALLOCATE(CoilSection(NumOfSections)) 
-        !ALLOCATE(Ckt(NumOfCkts))
-        !ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	
-    
     END IF
     
     hciMultiplier   = PAR(23)
@@ -778,7 +769,7 @@ CONTAINS
     !Tube information
     LmodTube=Ltube/NumOfMods
 
-    CALL InitBoundaryConditions(CoilType)
+    CALL InitBoundaryConditions(CoilType)   !RS: Debugging: Could we set pRiCoil and hRiCoil by using a constant Q here?
     IF (ErrorFlag .GT. CONVERGEERROR) THEN
         OUT(20)=ErrorFlag
         CALL Evaporator_Helper_1
@@ -864,8 +855,8 @@ CONTAINS
                             END IF
 
                             !Calc. circuit heat transfer
-                            Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod    
-                            QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens    
+                            Qckt=Qckt+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
+                            QcktSens=QcktSens+CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
 
                             !Calc. sum of outlet air surface temperature
                             IF (CoilSection(NumSection)%Ckt(I)%Tube(J)%Back .EQ. 0) THEN 
@@ -1056,8 +1047,8 @@ CONTAINS
         CoilSection(NumSection)%hRo=CoilSection(NumSection)%hRi- &
         CoilSection(NumSection)%Qsection/CoilSection(NumSection)%mRef
 
-        Qcoil= 100  !Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer     !RS: Debugging: Constant Qs
-        Qcoilsens=80    !QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determining the total sensible coil heat transfer     !RS: Debugging: Constant Qs
+        Qcoil= Qcoil+CoilSection(NumSection)%Qsection                !RS Comment: Determining the total coil heat transfer
+        Qcoilsens= QcoilSens+CoilSection(NumSection)%QsectionSens    !RS Comment: Determining the total sensible coil heat transfer
 
     END DO !Number of sections, !ISI - 09/10/07
 
@@ -1218,10 +1209,6 @@ CONTAINS
     ELSE
         tSHiCmp=0
     END IF
-
-    !RS: Debugging: Set Q's constant, just to see if it'll run
-        !Qcoil=5.58
-        !QcoilSens=3.99
         
     !Populating the OUT array
     OUT(1)=pRoCoil
@@ -1251,36 +1238,6 @@ CONTAINS
     OUT(25)=WeightCopper
 
     OUT(20)=ErrorFlag
-    
-    !IF (OUT(14) .EQ. 0) THEN    !RS: Debugging: Setting outputs constant to see if it runs
-    !    OUT(1)=1.5
-    !    OUT(2)=.75
-    !    OUT(3)=30.1
-    !    OUT(4)=.5
-    !    OUT(5)=27.3
-    !    OUT(6)=1.25
-    !    OUT(7)=.69
-    !    OUT(8)=25.9
-    !    OUT(9)=xRiCmp
-    !    OUT(10)=24.7
-    !    OUT(11)=42.79
-    !    OUT(12)=35.64
-    !    OUT(13)=3.78
-    !    OUT(14)=0
-    !    OUT(15)=0
-    !    OUT(16)=0
-    !    OUT(17)=27.4
-    !    OUT(18)=.67
-    !    OUT(19)=1.24
-    !
-    !    OUT(21)=.96
-    !    OUT(22)=28.6
-    !    OUT(23)=26.2
-    !    OUT(24)=15
-    !    OUT(25)=10
-    !
-    !    OUT(20)=0
-    !END IF
 
     CALL Evaporator_Helper_1
 
@@ -2258,7 +2215,7 @@ END SUBROUTINE PrintEvaporatorResult
     !------------------------------------------------------------------------
 
     USE UnitConvertMod
-    USE InputProcessor_HPSim
+    USE InputProcessor !InputProcessor_HPSim
 
     IMPLICIT NONE
 
@@ -2284,10 +2241,12 @@ END SUBROUTINE PrintEvaporatorResult
 
   CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
-  REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+  REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+    INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 !    ***** Get circuit info *****
     !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: This was in case of errors when the input file was read in
@@ -2299,7 +2258,8 @@ END SUBROUTINE PrintEvaporatorResult
     !**************************** Model *************************************
 
           CALL GetObjectItem('IDCcktModel',1,Alphas,NumAlphas, &
-                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status)
+          Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
         ModelName = Alphas(1)
             
@@ -2318,7 +2278,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
 
         !Reading in the variable values
             CALL GetObjectItem('IDCcktGeometry',1,Alphas,NumAlphas, &
-                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status)
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -2441,7 +2402,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ALLOCATE(Ckt(NumOfCkts))
 
                 CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status) 
+                                    TmpNumbers,NumNumbers,Status) 
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
@@ -2475,23 +2437,24 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             DO I=1, NumOfCkts   
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('IDCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)  
+                                        TmpNumbers,NumNumbers,Status)  
                 ELSEIF (I .EQ. 2) THEN
                     CALL GetObjectItem('IDCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)   
+                                        TmpNumbers,NumNumbers,Status)   
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('IDCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)  
+                                        TmpNumbers,NumNumbers,Status)  
                 ELSEIF (I .EQ. 4) THEN
                     CALL GetObjectItem('IDCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)   
+                                        TmpNumbers,NumNumbers,Status)   
                 ELSEIF (I .EQ. 5) THEN
                     CALL GetObjectItem('IDCcktCircuit5_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)  
+                                        TmpNumbers,NumNumbers,Status)  
                 ELSE
                     CALL GetObjectItem('IDCcktCircuit6_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)   
+                                        TmpNumbers,NumNumbers,Status)   
                 END IF
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
@@ -2528,7 +2491,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             IsUniformVelProfile=.TRUE.
 
             CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                 Numbers,NumNumbers,Status) 
+                                 TmpNumbers,NumNumbers,Status) 
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
@@ -3214,7 +3178,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
 
         !Reading in the variable values
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status)
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -3335,7 +3300,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 ALLOCATE(Ckt(NumOfCkts))
                 ALLOCATE(mRefIter(NumOfCkts))
                 CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)  
+                                    TmpNumbers,NumNumbers,Status)  
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube=Numbers(I)
@@ -3371,17 +3337,18 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             DO I=1, NumOfCkts
                 IF (I .EQ. 1) THEN
                     CALL GetObjectItem('ODCcktCircuit1_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status) 
+                                        TmpNumbers,NumNumbers,Status) 
                 ELSEIF (I .EQ. 2) THEN
                     CALL GetObjectItem('ODCcktCircuit2_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status) 
+                                        TmpNumbers,NumNumbers,Status) 
                 ELSEIF (I .EQ. 3) THEN
                     CALL GetObjectItem('ODCcktCircuit3_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status) 
+                                        TmpNumbers,NumNumbers,Status) 
                 ELSE
                     CALL GetObjectItem('ODCcktCircuit4_TubeSequence',1,Alphas,NumAlphas, &
-                                        Numbers,NumNumbers,Status)
+                                        TmpNumbers,NumNumbers,Status)
                 END IF
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                     DO J=1, Ckt(I)%Ntube
                         Ckt(I)%TubeSequence(J)=Numbers(J)   !RS Comment: Populating the tube sequence arrays
                     END DO 
@@ -3410,7 +3377,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
 
             IsUniformVelProfile=.TRUE.
             CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                    Numbers,NumNumbers,Status)  
+                                    TmpNumbers,NumNumbers,Status) 
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                 
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
                 DO J=1, NumOfMods
@@ -3634,7 +3602,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         !RS Comment: Updating input data for the microchannel option
         !Reading in the values for the variables
             CALL GetObjectItem('ODCcktGeometry',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status) 
+                                TmpNumbers,NumNumbers,Status) 
+            Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
             
             SELECT CASE (Alphas(1)(1:1))
             CASE ('F','f')
@@ -3682,7 +3651,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         !*************************** Circuiting ************************************
         
         CALL GetObjectItem('ODCcktCircuiting_Slab1',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status)
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
         ALLOCATE(Slab(Nl))
         !Slab#,#Passes,Tubes per Pass
@@ -3766,7 +3736,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         !Tube# ,velocity Deviation from mean value
 
         CALL GetObjectItem('ODCcktVelocityProfile',1,Alphas,NumAlphas, &
-                                Numbers,NumNumbers,Status)
+                                TmpNumbers,NumNumbers,Status)
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
         
         IsUniformVelProfile=.TRUE.
         DO II=1,Slab(Nl)%Npass
@@ -4739,20 +4710,14 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 REAL tAiFavg   !Average front tube inlet air temp. C
 REAL tAoFavg   !Average front tube outlet air temp. C
-REAL wbAiFavg  !Average front tube inlet wet bulb temp. C
-REAL wbAoFavg  !Average front tube outlet wet bulb temp. C
 REAL rhAiFavg  !Average front tube inlet RH
 REAL rhAoFavg  !Average front tube outlet RH
 REAL tAiFup    !Upper front tube inlet air temp. C
 REAL tAiFdown  !Lower front tube inlet air temp. C
-REAL wbAiFup   !Upper front tube inlet air wet bulb temp. C
-REAL wbAiFdown !Lower front tube inlet air wet bulb temp. C
 REAL rhAiFup   !Upper front tube inlet air humidity
 REAL rhAiFdown !Lower front tube inlet air humidity
 REAL tAoFup    !Upper front tube outlet air temp. C
 REAL tAoFdown  !Lower front tube outlet air temp. C
-REAL wbAoFup   !Upper front tube outlet air wet bulb temp. C
-REAL wbAoFdown !Lower front tube outlet air wet bulb temp. C
 REAL rhAoFup   !Upper front tube outlet air humidity
 REAL rhAoFdown !Lower front tube outlet air humidity
 REAL mAiFup    !Upper front tube inlet air mass flow rate, kg/s
@@ -4798,19 +4763,15 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 					ELSE IF (Tube(Tube(TubeNum)%Fdown)%Fup .NE. 0) THEN
 						tAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%tAo   !Temperature 
 						rhAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%rhAo !Relative humidity
-						!wbAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(K)%wbAo !Wet bulb temp.
 						tAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%tAi   !Temperature 
 						rhAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%rhAi !Relative humidity
-						!wbAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(K)%wbAi !Wet bulb temp.
 						mAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%mAi   !mass flow rate
 						VelDevFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(IV)%VelDev !Velocity deviation
 					ELSE !Frontal tubes
 						tAoFup=tAiCoil
  						rhAoFup=rhAiCoil
-						!wbAoFup=wbAiCoil
 						tAiFup=tAiCoil
 						rhAiFup=rhAiCoil
-						!wbAiFup=wbAiCoil
                         mAiFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			            VelDevFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev						
 						
@@ -4818,10 +4779,8 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 				ELSE
 					tAoFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%tAo   !Temperature 
 					rhAoFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%rhAo !Relative humidity
-					!wbAoFup=Tube(Tube(TubeNum)%Fup)%Seg(K)%wbAo !wet bulb temp.
 					tAiFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%tAi   !Temperature 
 					rhAiFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%rhAi !Relative humidity
-					!wbAiFup=Tube(Tube(TubeNum)%Fup)%Seg(K)%wbAi !wet bulb temp.
 					mAiFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%mAi   !mass flow rate
 					VelDevFup=Tube(Tube(TubeNum)%Fup)%Seg(IV)%VelDev !Velocity deviation
 				END IF
@@ -4849,29 +4808,23 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 					ELSE IF (Tube(Tube(TubeNum)%Fdown)%Fup .NE. 0) THEN
 						tAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%tAo   !Temperature 
 						rhAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%rhAo !Relative humidity
-						!wbAoFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-K)%wbAo !wet bulb temp.
 						tAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%tAi   !Temperature 
 						rhAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%rhAi !Relative humidity
-						!wbAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-K)%wbAi !wet bulb temp.
 						mAiFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%mAi   !mass flow rate
 						VelDevFup=Tube(Tube(Tube(TubeNum)%Fdown)%Fup)%Seg(NumOfMods+1-IV)%VelDev !Velocity deviation
 					ELSE !Frontal tubes
 						tAoFup=tAiCoil
  						rhAoFup=rhAiCoil
-						!wbAoFup=wbAiCoil
 						tAiFup=tAiCoil
 						rhAiFup=rhAiCoil
-						!wbAiFup=wbAiCoil
                         mAiFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			            VelDevFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev						
 					END IF
 				ELSE
 					tAoFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%tAo   !Temperature 
 					rhAoFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%rhAo !Relative humidity
-					!wbAoFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-K)%wbAo !wet bulb temp.
 					tAiFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%tAi   !Temperature 
 					rhAiFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%rhAi !Relative humidity
-					!wbAiFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-K)%wbAi !Relative humidity
 					mAiFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%mAi   !mass flow rate
 					VelDevFup=Tube(Tube(TubeNum)%Fup)%Seg(NumOfMods+1-IV)%VelDev !Velocity deviation
 				END IF
@@ -4879,10 +4832,8 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 		ELSE !Front row tubes
 			tAoFup=tAiCoil
 			rhAoFup=rhAiCoil
-			!wbAoFup=wbAiCoil
 			tAiFup=tAiCoil
 			rhAiFup=rhAiCoil
-			!wbAiFup=wbAiCoil
 			mAiFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			VelDevFup=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev
 		END IF
@@ -4902,29 +4853,23 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 					ELSE IF (Tube(Tube(TubeNum)%Fup)%Fdown .NE. 0) THEN
 						tAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%tAo
 						rhAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%rhAo
-						!wbAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(K)%wbAo
 						tAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%tAi
 						rhAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%rhAi
-						!wbAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(K)%wbAi
 						mAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%mAi
 						VelDevFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(IV)%VelDev !Velocity deviation
 					ELSE !Frontal tubes
 						tAoFdown=tAiCoil
  						rhAoFdown=rhAiCoil
-						!wbAoFdown=wbAiCoil
 						tAiFdown=tAiCoil
 						rhAiFdown=rhAiCoil
-						!wbAiFdown=wbAiCoil
 						mAiFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 						VelDevFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev
 					END IF
 				ELSE
 					tAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%tAo
 					rhAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%rhAo
-					!wbAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(K)%wbAo
 					tAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%tAi
 					rhAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%rhAi
-					!wbAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(K)%wbAi
 					mAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%mAi
 					VelDevFdown=Tube(Tube(TubeNum)%Fdown)%Seg(IV)%VelDev !Velocity deviation
 				END IF
@@ -4942,29 +4887,23 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 					ELSE IF (Tube(Tube(TubeNum)%Fup)%Fdown .NE. 0) THEN
 						tAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%tAo
  						rhAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%rhAo
-						!wbAoFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-K)%wbAo
 						tAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%tAi
 						rhAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%rhAi
-						!wbAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-K)%wbAi
 						mAiFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%mAi
 						VelDevFdown=Tube(Tube(Tube(TubeNum)%Fup)%Fdown)%Seg(NumOfMods+1-IV)%VelDev !Velocity deviation
 					ELSE !Frontal tubes
 						tAoFdown=tAiCoil
  						rhAoFdown=rhAiCoil
-						!wbAoFdown=wbAiCoil
 						tAiFdown=tAiCoil
 						rhAiFdown=rhAiCoil
-						!wbAiFdown=wbAiCoil
 						mAiFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 						VelDevFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev
 					END IF
 				ELSE
 					tAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%tAo
 					rhAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%rhAo
-					!wbAoFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-K)%wbAo
 					tAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%tAi
 					rhAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%rhAi
-					!wbAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-K)%wbAi
 					mAiFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%mAi
 					VelDevFdown=Tube(Tube(TubeNum)%Fdown)%Seg(NumOfMods+1-IV)%VelDev !Velocity deviation
 				END IF
@@ -4972,10 +4911,8 @@ REAL VelDevFdown  !Lower front tube Velocity deviation
 		ELSE !Front row tubes
 			tAoFdown=tAiCoil
 			rhAoFdown=rhAiCoil
-			!wbAoFdown=wbAiCoil
 			tAiFdown=tAiCoil
 			rhAiFdown=rhAiCoil
-			!wbAiFdown=wbAiCoil
 			mAiFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%mAi
 			VelDevFdown=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%VelDev
         END IF
@@ -5643,6 +5580,7 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			TsDry=QmodDry/(EPSsDry*cAir)+tAiMod
 
 			DryWet=3
+            !QModDry=70  !RS: Debugging: Hardcoding Q for testing
 			Qmod=QmodDry
 			QmodSens=QmodDry
 			QmodWet=0

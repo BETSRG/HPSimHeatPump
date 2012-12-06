@@ -38,7 +38,7 @@
     USE UnitConvertMod
     USE DataSimulation
     USE FrostModel
-    USE InputProcessor_HPSim
+    USE InputProcessor !_HPSim
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
     USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
@@ -179,7 +179,6 @@
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
-    !TWiC=TaiC-5 !RS: Debugging: Trying a different wet bulb value
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
     CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
@@ -233,16 +232,12 @@
         ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
         
         ONETIME = .FALSE.
-             
-        !TWiC=TWiC-1 !RS: Debugging: Just so it's not equal to the drybulb the first time around
-        
+
     ELSE
         CFMcnd=CFMcnd*UnitArFlw   !RS: Debugging: This needs to be called every time for some reason
         CFMevp=CFMevp*UnitArFlw
         TaiC= TaiC*1.8+32   !RS: Debugging: E+ brings it in in C, and HPSim solves it in F
         TaiE= TaiE*1.8+32
-        !TWiC= TWiC*1.8+32  !RS: Debugging: Apparently, these are used just in C
-        !TWiE= TWiE*1.8+32
     END IF
     
     BaroPressure=(OutBaroPress/1000)    !RS: Debugging: Setting the HPSim baro pressure equal to the E+ (kPa from Pa)
