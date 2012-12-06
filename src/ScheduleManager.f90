@@ -233,7 +233,6 @@ SUBROUTINE ProcessScheduleInput
   LOGICAL NumErrorFlag
   INTEGER SchedTypePtr
   CHARACTER(len=20) CFld         ! Character field for error message
-!  CHARACTER(len=20) CFld1        ! Character field for error message
   INTEGER NumHrDaySchedules      ! Number of "hourly" dayschedules
   INTEGER NumIntDaySchedules     ! Number of "interval" dayschedules
   INTEGER NumExternalInterfaceSchedules ! Number of "PtolemyServer ExternalInterface" "compact" Schedules
@@ -253,7 +252,6 @@ SUBROUTINE ProcessScheduleInput
   LOGICAL, ALLOCATABLE, DIMENSION(:,:) :: SetMinuteValue  ! Temporary for processing interval schedules
   INTEGER NumFields
   INTEGER SCount
-!  LOGICAL RptSchedule
   INTEGER RptLevel
   INTEGER CurMinute
   INTEGER MinutesPerItem
@@ -275,7 +273,6 @@ SUBROUTINE ProcessScheduleInput
   CHARACTER(len=25) ExtraField
   INTEGER UntilFld
   INTEGER xxcount
-!  REAL(r64) tempval
   LOGICAL :: FullYearSet=.false.
   CHARACTER(len=MaxNameLength) :: CurrentThrough=blank
   CHARACTER(len=MaxNameLength) :: LastFor=blank

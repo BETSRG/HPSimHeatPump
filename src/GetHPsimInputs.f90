@@ -50,7 +50,7 @@ SUBROUTINE GetInputs
 ! ----------------------------------------------------------------------
 
 USE DataStopCodes
-USE InputProcessor_HPSim
+USE InputProcessor !_HPSim
 USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
 IMPLICIT NONE
@@ -192,7 +192,7 @@ REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
 LOGICAL :: HPDataFileExists
 CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
-  REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+  REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
@@ -319,6 +319,8 @@ REAL :: TubeNumber
 REAL :: SystemCost
 REAL TWiC   !RS: Outdoor Entering or Condenser Inlet Wetbulb Temperature
 REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
+  INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 !Flow:
 
@@ -332,7 +334,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** System data *****************
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
-                        Numbers,NumNumbers,Status)
+                        TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   SELECT CASE (Alphas(1)(1:1))
   CASE ('F','f')
@@ -376,7 +379,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Compressor data *****************
 
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   CompressorModel = Alphas(1)
   
@@ -433,7 +437,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Outdoor coil data *****************
 
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
-                       Numbers,NumNumbers,Status)
+                       TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
@@ -473,7 +478,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Outdoor fan data *****************
 
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   PwrODfan = Numbers(1) !Fan Power
   VdotODfan = Numbers(2)    !Fan Air Flow Rate
@@ -483,7 +489,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Indoor coil data *****************
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   IDC_FinType = Numbers(1)
   
@@ -521,7 +528,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Indoor fan data *****************
   
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   PwrIDfan = Numbers(1) !Fan Power
   VdotIDfan = Numbers(2)    !Fan Air Flow Rate
@@ -530,7 +538,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !***************** Expansion device data *****************
 
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   SELECT CASE (Alphas(1)(1:1))
   CASE ('C','c')
@@ -606,7 +615,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !*****************Refrigerant line data******************
 
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Suction Line
   
@@ -715,7 +725,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !********************Refrigerant Cycle Data (Cooling)***********************
 
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status) 
+                      TmpNumbers,NumNumbers,Status) 
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !Expansion Device Inlet
   
@@ -724,7 +735,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !********************Refrigerant Cycle Data (Heating)***********************
 
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
   !Compressor Discharge
   
@@ -738,7 +750,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !*************** Accumulator ****************
 
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   Acc_Manufacturer = Alphas(1)
   Acc_Model = Alphas(2)
@@ -758,7 +771,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !*************** Filter Drier ****************
 
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status)
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   Filter_Manufacturer = Alphas(1)
   Filter_Model = Alphas(2)
@@ -769,7 +783,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !*************** Custom Air Side Heat Transfer Data **************
 
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
-                      Numbers,NumNumbers,Status) 
+                      TmpNumbers,NumNumbers,Status) 
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !---Indoor Coil---
   
@@ -824,7 +839,8 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   !*************** Charge Tuning Curve ***************
 
   CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
-                        Numbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
   CASE ('F','f')

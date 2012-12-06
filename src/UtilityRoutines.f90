@@ -224,7 +224,7 @@ SUBROUTINE EndEnergyPlus
 
           ! USE STATEMENTS:
   USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-  USE InputProcessor_HPSim
+  USE InputProcessor !_HPSim
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 

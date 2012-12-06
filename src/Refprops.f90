@@ -176,7 +176,7 @@ SUBROUTINE GetFluidPropertiesData
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor_HPSim
+  USE InputProcessor !_HPSim
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -203,7 +203,7 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=MaxNameLength),DIMENSION(20) :: Alphas ! Reads string value from input file
   INTEGER :: Loop                    ! DO loop counter (various uses)
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
-  REAL, DIMENSION(251) :: Numbers    ! brings in data from IP
+  REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
@@ -224,10 +224,8 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=25) :: String3
   CHARACTER(len=25) :: String4
   
-  !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  REAL, DIMENSION(251) :: TmpNumbers    !Brings in data from Input files
-    !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
           ! FLOW:
   NumOfFluidTempArrays    = GetNumObjectsFound('FluidPropertyTemperatures')
@@ -3173,7 +3171,8 @@ INTEGER FUNCTION FindRefrigerant(Refrigerant)
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor_HPSim, ONLY: FindItemInList, MakeUPPERCase
+  !USE InputProcessor_HPSim, ONLY: FindItemInList, MakeUPPERCase
+  USE InputProcessor, ONLY: FindItemInList, MakeUPPERCase
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -3489,7 +3488,8 @@ INTEGER FUNCTION CheckFluidPropertyName(NameToCheck)
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor_HPSim, ONLY: FindItemInList
+  !USE InputProcessor_HPSim, ONLY: FindItemInList
+  USE InputProcessor, ONLY: FindItemInList
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
