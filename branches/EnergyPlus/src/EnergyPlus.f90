@@ -171,8 +171,7 @@ USE DataSystemVariables
 USE DataTimings
 USE DataEnvironment, ONLY: IgnoreSolarRadiation, IgnoreBeamRadiation, IgnoreDiffuseRadiation
           ! routine modules
-USE InputProcessor !, ONLY: ReportOrphanRecordObjects
-!USE InputProcessor_HPSim    !RS: Want to see if InputProcesser_EPlus is really needed or not
+USE InputProcessor
 USE SimulationManager
 USE ScheduleManager, ONLY: ReportOrphanSchedules
 USE FluidProperties, ONLY: ReportOrphanFluids

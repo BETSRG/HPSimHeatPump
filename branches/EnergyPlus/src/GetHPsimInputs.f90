@@ -3,7 +3,8 @@
 MODULE HeatPumpInput
 
 USE DataSimulation
-USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+!USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals, ONLY: RefName !RS: Using to define RefName
 
 PRIVATE
 
@@ -51,7 +52,8 @@ SUBROUTINE GetInputs
 
 USE DataStopCodes
 USE InputProcessor !_HPSim
-USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+!USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataGlobals, ONLY: MaxNameLength, RefName
 
 IMPLICIT NONE
 

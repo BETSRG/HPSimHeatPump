@@ -2785,7 +2785,7 @@ MODULE WatertoAirHeatPumpSimple
   ! Use statements for access to subroutines in other modules
 USE DataPrecisionGlobals
 USE DataLoopNode
-USE DataGlobals
+USE DataGlobals, ONLY: KelvinConv, BeginEnvrnFlag, InitConvTemp, SecInHour
 USE DataSizing
 USE DataEnvironment, ONLY: StdBaroPress, OutBaroPress
 USE DataHVACGlobals, ONLY: CycFanCycCoil, ContFanCycCoil

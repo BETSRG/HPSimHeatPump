@@ -29,7 +29,7 @@ MODULE ScheduleManager
           ! USE STATEMENTS:
   USE DataPrecisionGlobals
   USE DataGlobals, ONLY: MaxNameLength, HourOfDay, OutputFileInits, NumOfTimeStepInHour, MinutesPerTimeStep, TimeStep,  &
-    OutputFileDebug !, ShowSevereError, ShowWarningError, ShowFatalError, ShowContinueError, ShowMessage
+    OutputFileDebug 
   USE DataInterfaces, ONLY: SetupOutputVariable
   USE DataEnvironment, ONLY: MonthTomorrow, DayOfWeek, DayOfWeekTomorrow, &
                             DayOfMonthTomorrow,                     &

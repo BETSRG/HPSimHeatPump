@@ -1,6 +1,7 @@
 REAL FUNCTION CHARGM(DTVALU,IERR)
 
-    USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    !USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals, ONLY: MaxNameLength
     USE DataSimulation
 
     IMPLICIT NONE

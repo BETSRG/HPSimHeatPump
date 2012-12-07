@@ -32,8 +32,7 @@ MODULE GroundHeatExchangers
           ! USE STATEMENTS:
 USE DataPrecisionGlobals
 USE DataGlobals, ONLY: MaxNameLength, BeginSimFlag, BeginEnvrnFlag, BeginTimeStepFlag, BeginHourFlag, HourOfDay, &
-                       TimeStep,TimeStepZone,DayOfSim, PI, InitConvTemp, WarmUpFlag, SecInHour !, ShowWarningError, &
-                       !ShowSevereError, ShowFatalError, ShowContinueError
+                       TimeStep,TimeStepZone,DayOfSim, PI, InitConvTemp, WarmUpFlag, SecInHour 
 USE DataInterfaces, ONLY: SetupOutputVariable
 USE DataHVACGlobals, ONLY: TimeStepSys ,SysTimeElapsed
 USE DataLoopNode

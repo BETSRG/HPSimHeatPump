@@ -242,12 +242,12 @@ SUBROUTINE ManageHVAC
   If (Contaminant%SimulateContaminants) &
     CALL ManageZoneContaminanUpdates(iPredictStep,ShortenTimeStepSys,UseZoneTimeStepHistory,PriorTimeStep)
 
-  CALL SimHVAC  !RS: Bring in HPSim here?
+  CALL SimHVAC
   
   IF (AnyIdealCondEntSetPointInModel .and. MetersHaveBeenInitialized .and. .NOT. WarmUpFlag) THEN
     RunOptCondEntTemp = .TRUE.
     DO WHILE (RunOptCondEntTemp)
-      CALL SimHVAC  !RS: If so re:above, then also replace this with HPSim
+      CALL SimHVAC
     END DO  
   END IF
   
@@ -304,12 +304,12 @@ SUBROUTINE ManageHVAC
       If (Contaminant%SimulateContaminants) &
         CALL ManageZoneContaminanUpdates(iPredictStep,ShortenTimeStepSys,UseZoneTimeStepHistory,PriorTimeStep)
 
-      CALL SimHVAC  !RS: This is a possible location to join in the HPSim code
+      CALL SimHVAC
       
       IF (AnyIdealCondEntSetPointInModel .and. MetersHaveBeenInitialized .and. .NOT. WarmUpFlag) THEN
         RunOptCondEntTemp = .TRUE.
         DO WHILE (RunOptCondEntTemp)
-          CALL SimHVAC  !RS: If we join it in above, we should probably also join in the code here as well.
+          CALL SimHVAC
         END DO  
       END IF
 

@@ -43,8 +43,7 @@ MODULE Photovoltaics
   ! USE STATEMENTS:
     USE DataPrecisionGlobals
     USE DataPhotovoltaics
-    USE DataGlobals, ONLY: BeginSimFlag, BeginEnvrnFlag, BeginDayFlag, EndEnvrnFlag, MaxNameLength, SecInHour, KelvinConv !, &
-                           !ShowFatalError, ShowSevereError, ShowWarningError, ShowContinueError
+    USE DataGlobals, ONLY: BeginSimFlag, BeginEnvrnFlag, BeginDayFlag, EndEnvrnFlag, MaxNameLength, SecInHour, KelvinConv 
     USE DataInterfaces, ONLY: SetupOutputVariable
     USE DataHVACGlobals, ONLY: TimeStepSys
 

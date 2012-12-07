@@ -4,7 +4,7 @@ MODULE WatertoAirMulSpeeddHP
   ! Use statements for data only modules
 USE DataPrecisionGlobals
 USE DataLoopNode
-USE DataGlobals
+USE DataGlobals, ONLY: BeginEnvrnFlag, InitConvTemp, SecInHour
 USE DataHVACGlobals
 USE Psychrometrics
 Use DataEnvironment, ONLY: StdBaroPress, EnvironmentName, CurMnDy, OutDryBulbTemp, OutHumRat, OutBaroPress, OutWetBulbTemp

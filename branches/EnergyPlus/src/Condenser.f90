@@ -1,6 +1,7 @@
     MODULE CondenserMod
 
-    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    !USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals, ONLY: RefName
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -5261,11 +5262,7 @@ END IF
     IsTransitionSegment=.FALSE.
 
     DO RefBCiter=1, RefBCmaxIter
-        
-        !IF (J .GE. 553) THEN    !RS: Debugging
-        !    WRITE(DebugFile,*) 'XRiMod (line 5240)', XRiMod
-        !END IF
-        
+
         !Correct quality
         IF (xRoMod .GT. 1) THEN
             xRoMod=1
@@ -5277,9 +5274,6 @@ END IF
         ELSEIF (xRiMod .LT. 0) THEN
             xRiMod=0 
         ENDIF
-        !IF (J .GE. 553) THEN    !RS: Debugging
-        !    WRITE(DebugFile,*) 'XRiMod (line 5251)', XRiMod
-        !END IF
 
         !Calculate mean properties
         CALL CalcMeanProp(hfgRiMod,hfgRoMod,hfgRmod)
@@ -5470,12 +5464,6 @@ END IF
                 Qmod=Qmod-Qsolar
             END IF
         END IF
-        
-        !J=J+1
-        !IF (J .GE. 553) THEN    !RS: We know it goes funny at iteration 555, so backing up a few iterations
-        !    WRITE(DebugFile,*) 'QMod',QMod,'J',J,'cRef',cRef,'XRoMod',XRoMod
-        !    WRITE(DebugFile,*) 'XRiMod',XRiMod,'XRMod',XRmod,'ErrorFlag',ErrorFlag
-        !END IF            
 
         !Calc. Outside air enthalpy
         IF (CoilType .NE. MCCONDENSER) THEN
@@ -5495,10 +5483,6 @@ END IF
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
         muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &
         Dchannel,HtCoil,Lcoil,DPrefMultiplier,pRoMod)
-        
-        !IF (J .GE. 553) THEN    !RS: Debugging
-        !    WRITE(DebugFile,*) 'XRiMod (line 5469)', XRiMod
-        !END IF
 
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
@@ -5533,10 +5517,6 @@ END IF
 
             END IF
         END IF
-        
-        !IF (J .GE. 553) THEN    !RS:Debugging
-        !    WRITE(DebugFile,*) 'XRiMod (line 5510)', XRiMod
-        !END IF
 
         IF (IsSimpleCoil .EQ. 1) THEN
             IF (IsTransitionSegment) THEN
@@ -5552,15 +5532,8 @@ END IF
             PrevpRoMod=pRoMod
             PrevhRoMod=hRoMod
         ELSE 
-            !IF (J .GE. 553) THEN    !RS: Debugging
-            !    WRITE(DebugFile,*) 'XRiMod (line 5527)', XRiMod
-            !END IF
             EXIT
         END IF
-        
-        !IF (J .GE. 553) THEN
-        !    WRITE(DebugFile,*) 'XRiMod (line 5527)', XRiMod
-        !END IF
 
     END DO !end of RefBCiter
 

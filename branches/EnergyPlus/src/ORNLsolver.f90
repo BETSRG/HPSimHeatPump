@@ -39,7 +39,8 @@
     USE DataSimulation
     USE FrostModel
     USE InputProcessor !_HPSim
-    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    !USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals, ONLY: RefName
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
     USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !RS: Debugging: Solving for TWiE
