@@ -1893,7 +1893,7 @@ SUBROUTINE TestReturnAirPathIntegrity(ErrFound,ValRetAPaths)
   IF (ErrFound) THEN
     CALL ShowSevereError('Return Air Path(s) did not pass integrity testing')
   ELSE
-    !CALL ShowMessage('All Return Air Paths passed integrity testing')   !RS: Debugging: Message call removed currently
+!    CALL ShowMessage('All Return Air Paths passed integrity testing')   !RS: Debugging: Message call removed currently
   ENDIF
 
   RETURN

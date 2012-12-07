@@ -20,7 +20,12 @@ MODULE SizingManager
 
           ! USE STATEMENTS:
 USE DataPrecisionGlobals
-USE DataGlobals
+USE DataGlobals, ONLY: DoWeathSim, OutputFileZoneSizing, OutputFileSysSizing, DoZoneSizing, DoPlantSizing, DoDesDaySim, &
+                       DoOutputReporting, KindOfSim, ZoneSizingCalc, KickOffSizing, KSRunPeriodWeather, BeginEnvrnFlag, &
+                       EndEnvrnFlag, WarmUpFlag, DayOfSim, DayofSimChr, NumofDayinEnvrn, BeginDay, BeginDayFlag, EndDayFlag, &
+                       HourofDay, BeginHourFlag, DoSystemSizing, EndHourFlag, Timestep, NumofTimeStepinHour, BeginSimFlag, &
+                       BeginTimeStepFlag, PreviousHour, Endday, HourofDay, EndZoneSizingCalc, SysSizingCalc, DuringDay, &
+                       NumofZones, EndSysSizingCalc, OutputFileInits, BeginFullSimFlag 
 USE HeatBalanceManager
 USE WeatherManager
 USE DataSizing

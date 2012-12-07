@@ -65,7 +65,6 @@
 		<File RelativePath=".\src\DataGenerators.f90"/>
 		<File RelativePath=".\src\DataGlobalConstants.f90"/>
 		<File RelativePath=".\src\DataGlobals.f90"/>
-		<File RelativePath=".\src\DataGlobals_EPlus.f90"/>
 		<File RelativePath=".\src\DataHeatBalance.f90"/>
 		<File RelativePath=".\src\DataHeatBalFanSys.f90"/>
 		<File RelativePath=".\src\DataHeatBalSurface.f90"/>

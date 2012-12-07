@@ -4009,7 +4009,8 @@ SUBROUTINE GetDaylightingParametersDetaild(TotDaylightingDetailed,ErrorsFound)
   USE InternalHeatGains, ONLY: CheckLightsReplaceableMinMaxForZone, GetDesignLightingLevelForZone
   USE General, ONLY: TrimSigDigits, RoundSigDigits
   USE OutputReportPredefined
-  USE DataGlobals_HPSim, ONLY: RefName !RS: Using to define RefName
+  !USE DataGlobals_HPSim, ONLY: RefName !RS: Using to define RefName
+  USE DataGlobals, ONLY: RefName !RS: Using to define RefName
 
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine

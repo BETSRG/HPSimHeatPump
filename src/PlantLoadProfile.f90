@@ -18,7 +18,7 @@ MODULE PlantLoadProfile
 
           ! USE STATEMENTS:
 USE DataPrecisionGlobals
-USE DataGlobals, ONLY: MaxNameLength, BeginEnvrnFlag, InitConvTemp !, ShowWarningError, ShowFatalError, ShowSevereError, ShowContinueError
+USE DataGlobals, ONLY: MaxNameLength, BeginEnvrnFlag, InitConvTemp
 USE DataInterfaces, ONLY: SetupOutputVariable
 USE DataPlant  ,    ONLY: PlantLoop, TypeOf_PlantLoadProfile, ScanPlantLoopsForObject
 USE PlantUtilities, ONLY: SetComponentFlowRate, InitComponentNodes

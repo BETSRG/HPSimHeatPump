@@ -2575,8 +2575,7 @@ MODULE HeatPumpWaterToWaterSimple
   ! Use statements for data only modules
 USE DataPrecisionGlobals
 USE DataGlobals, ONLY: MaxNameLength, BeginSimFlag,InitconvTemp,BeginEnvrnFlag, HourOfDay, KelvinConv,  &
-                       TimeStep,TimeStepZone,DayOfSim,WarmupFlag,SecInHour !,ShowSevereError, ShowWarningError, &
-                       !ShowFatalError, ShowContinueError  
+                       TimeStep,TimeStepZone,DayOfSim,WarmupFlag,SecInHour
 USE DataInterfaces, ONLY: SetupOutputVariable, ShowContinueErrorTimeStamp, ShowRecurringWarningErrorAtEnd
 USE General,         ONLY : TrimSigDigits
 USE DataLoopNode
