@@ -1,3 +1,67 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This module contains methods and variables related to the simulation of an accumulator component in a heat pump cycle
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component represents an accumulator in a heat pump system.
+! A description of the component is found at:
+! http://www.e-refrigeration.com/learn-refrigeration/system-components/refrigeration-accumulator
+! From that website: 
+!  - Accumulators store excess liquid refrig and oild that didn't boil in evap
+!  - It is situated between the evap and compressor in suction line
+!  - It operates as the liquid strikes a plate and reflects back into a holding tank
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! I don't want to write this right now.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! no OPEN statements found in this source file
+! a single WRITE statement writes to UNIT=6 (stdout)
+!...assuming no file I/O
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! A small set of variables (~15) are defined at module level, with units included for most
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains three methods:
+!    PUBLIC InitAccumulator -- initialize module level data structures
+!      Called by ORNLSolver.f90
+!    PUBLIC CalcAccumulatorMass -- calculate the mass of refrigerant and liquid level in the accumulator, by perform pressure balance in accumulator 
+!      Called by HPdesignMod.f90
+!    PUBLIC CalcAccumulatorDP -- calculate the pressure drop across the accumulator
+!      Called by AirTempLoop.f90
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! na
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Put accumulator component module variables into a data structure
+! Check if other module variables can be made method locals
+
 MODULE AccumulatorMod
 
     USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
@@ -42,21 +106,21 @@ CONTAINS
     !
     !   Method: Perform pressure balance in accumulator 
     !
-    !	Inputs:
-    !		RefName=Refrigerant name
-    !		PureRef=Refrigerant flag: 1=pure refrigerant
-    !			                      0=refrigerant mixture
-    !		XIN(1) = Mass flow rate, kg/s
-    !		XIN(2) = Outlet refrigerant pressure, kPa
-    !		XIN(3) = Outlet refrigerant enthalpy, kJ/kg
+    !   Inputs:
+    !       RefName=Refrigerant name
+    !       PureRef=Refrigerant flag: 1=pure refrigerant
+    !                                 0=refrigerant mixture
+    !       XIN(1) = Mass flow rate, kg/s
+    !       XIN(2) = Outlet refrigerant pressure, kPa
+    !       XIN(3) = Outlet refrigerant enthalpy, kJ/kg
     !
     !
     !
-    !	Outputs:
-    !		OUT(1) = Total mass inventory, kg
-    !		OUT(2) = Liquid refrigerant, kg
-    !		OUT(3) = Vapor refrigerant, kg
-    !		OUT(4) = Liquid level, m
+    !   Outputs:
+    !       OUT(1) = Total mass inventory, kg
+    !       OUT(2) = Liquid refrigerant, kg
+    !       OUT(3) = Vapor refrigerant, kg
+    !       OUT(4) = Liquid level, m
     !       OUT(5) = Pressure drop, kPa
     !       OUT(6) = Error flag: 0-No error
     !                            1-Accumulator solution error
@@ -508,15 +572,15 @@ CONTAINS
     !   Method: Load the parameters to public variables
     !
     !   Inputs:
-    !		Ref$ = Refrigerant name
-    !		PAR(1) = Accumulator inside diameter, m
+    !       Ref$ = Refrigerant name
+    !       PAR(1) = Accumulator inside diameter, m
     !       PAR(2) = Accumulator internal height, m
-    !		PAR(3) = J-tube lower hole diameter, m
-    !		PAR(4) = J-tube upper hole diameter, m
-    !		PAR(5) = Distance between holes on J-tube, m
-    !		PAR(6) = J-tube inside diameter, m
-    !		PAR(7) = Rating pressure drop, kPa
-    !	    PAR(8) = Rating temperature drop, K
+    !       PAR(3) = J-tube lower hole diameter, m
+    !       PAR(4) = J-tube upper hole diameter, m
+    !       PAR(5) = Distance between holes on J-tube, m
+    !       PAR(6) = J-tube inside diameter, m
+    !       PAR(7) = Rating pressure drop, kPa
+    !       PAR(8) = Rating temperature drop, K
     !       PAR(9) = Curve fit coefficient M
     !       PAR(10) = Curve fit coefficient B
 
