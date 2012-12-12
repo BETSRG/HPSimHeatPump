@@ -63,6 +63,7 @@
     MODULE CapillaryTubeMod
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     implicit none
 
     LOGICAL, EXTERNAL :: IssueRefPropError
@@ -164,7 +165,7 @@
     REAL, INTENT(OUT) :: OUT(7)
     !INTEGER, INTENT(INOUT) :: OUT(7)
 
-    INTEGER         :: RefrigIndex =0
+   ! INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LcapTube    !Cap tube length, m
@@ -454,7 +455,7 @@
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
 
-    INTEGER         :: RefrigIndex =0
+    !INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LcapTube    !Cap tube length, m

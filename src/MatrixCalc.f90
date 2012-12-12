@@ -30,8 +30,8 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC LUD -- Solves a set of linear equations and returns the Lu decomposition
+! This module contains 5 methods:
+!   PUBLIC LUD -- Solves a set of linear equations and returns the Lu decomposition
 !      Called by matrix_inverse
 !   PUBLIC matrix_invert_step_2 -- Determines the matrix inverse by back substitution
 !      Called by matrix_inverse

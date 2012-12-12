@@ -171,6 +171,7 @@ END FUNCTION LocalOilMassFraction
 REAL FUNCTION OilMixtureTsat(Wlocal,Psat)
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -214,7 +215,7 @@ REAL Tsat2 !Saturation temperature at Psat2, K
 
 !EnergyPlus Refprop variables
 INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-INTEGER :: RefrigIndex =0
+!INTEGER :: RefrigIndex =0
 REAL Temperature !C
 REAL Quality  !0-1
 REAL Pressure !Pa

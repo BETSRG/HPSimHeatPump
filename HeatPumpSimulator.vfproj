@@ -44,7 +44,6 @@
 		<File RelativePath=".\src\FlowRateLoop.f90"/>
 		<File RelativePath=".\src\FrostModel.f90"/>
 		<File RelativePath=".\src\GetHPsimInputs.f90"/>
-		<File RelativePath=".\src\GUESS1.f90"/>
 		<File RelativePath=".\src\GUESS3.f90"/>
 		<File RelativePath=".\src\HPdesignMod.f90"/>
 		<File RelativePath=".\src\InputProcessor.f90"/>
@@ -62,6 +61,7 @@
 		<File RelativePath=".\src\UnitConvert.f90"/>
 		<File RelativePath=".\src\UtilityRoutines.f90"/>
 		<File RelativePath=".\src\WATPR.f90"/>
+		<File RelativePath=".\src\z_HeaderDefinition.f90"/>
 		<File RelativePath=".\src\ZERO3.f90"/>
 		<File RelativePath=".\src\ZEROCH.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

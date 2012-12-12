@@ -47,6 +47,7 @@ PUBLIC          ! By definition, all variables which are placed in this data
 
           ! MODULE VARIABLES:
 !INTEGER :: OutputFileInits      ! Unit number for the standard Initialization output file
+INTEGER :: RefrigIndex = 0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
           ! DERIVED TYPE DEFINITIONS:
           ! na

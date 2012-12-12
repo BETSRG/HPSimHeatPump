@@ -109,6 +109,7 @@ SUBROUTINE TXV(mdot,PiCmp,PoCmp,DTsub,DTsup,DP,Qtxv)
 !-----------------------------------------------------------------------------------
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -122,7 +123,7 @@ REAL, INTENT(IN)  :: DP      !Pressure drop, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, kW
 
 !Subroutine local variables
-INTEGER            :: RefrigIndex =0
+!INTEGER            :: RefrigIndex =0
 REAL Temperature,Quality,Pressure,Enthalpy
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 

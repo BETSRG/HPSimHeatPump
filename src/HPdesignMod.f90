@@ -70,12 +70,12 @@
     USE TXVMOD
     USE AccumulatorMod
     USE DataSimulation
-    !USE IFPORT !RS: This seems to be an obsolete module
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
     CHARACTER (len=15) :: Property           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL DTVALU
