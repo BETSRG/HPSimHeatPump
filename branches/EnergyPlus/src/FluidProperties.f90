@@ -5651,6 +5651,7 @@ SUBROUTINE ReportAndTestRefrigerants
 
           ! USE STATEMENTS:
   USE General, ONLY: RoundSigDigits
+  USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
@@ -5675,7 +5676,7 @@ SUBROUTINE ReportAndTestRefrigerants
   REAL(r64) :: ReturnValue    ! Values returned from refrigerant functions
   INTEGER :: Loop             ! Loop Counter
   INTEGER :: Loop1            ! Loop Counter
-  INTEGER :: RefrigIndex      !
+  !INTEGER :: RefrigIndex       !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
   GetInput = .FALSE.  ! input has already been gotten
 
@@ -6037,7 +6038,7 @@ FUNCTION GetSatPressureRefrig(Refrigerant,Temperature,RefrigIndex,calledfrom) RE
         ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN)  :: Temperature ! actual temperature given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 
@@ -6153,7 +6154,7 @@ FUNCTION GetSatTemperatureRefrig(Refrigerant, Pressure, RefrigIndex,calledfrom) 
         ! FUNCTION ARGUMENT DEFINITIONS:
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant    ! carries in substance name
   REAL(r64), INTENT(IN)         :: Pressure       ! actual temperature given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 
@@ -6272,7 +6273,7 @@ FUNCTION GetSatEnthalpyRefrig(Refrigerant,Temperature,Quality,RefrigIndex,called
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN)  :: Quality     ! actual quality given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 
@@ -6357,7 +6358,7 @@ FUNCTION GetSatDensityRefrig(Refrigerant,Temperature,Quality,RefrigIndex,calledf
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN)  :: Quality     ! actual quality given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 
@@ -6513,7 +6514,7 @@ FUNCTION GetSatSpecificHeatRefrig(Refrigerant,Temperature,Quality,RefrigIndex,ca
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN)  :: Quality     ! actual quality given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 
@@ -6609,7 +6610,7 @@ FUNCTION GetSupHeatEnthalpyRefrig(Refrigerant,Temperature,Pressure,RefrigIndex,c
   CHARACTER(len=*), INTENT(IN) :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN) :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN) :: Pressure    ! actual pressure given as input
-  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in) :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                    :: ReturnValue
 
@@ -6848,7 +6849,7 @@ FUNCTION GetSupHeatPressureRefrig(Refrigerant,Temperature,Enthalpy,RefrigIndex,c
   CHARACTER(len=*), INTENT(IN) :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN) :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN) :: Enthalpy    ! actual enthalpy given as input
-  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in) :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                    :: ReturnValue
 
@@ -7142,7 +7143,7 @@ FUNCTION GetSupHeatDensityRefrig(Refrigerant,Temperature,Pressure,RefrigIndex,ca
   CHARACTER(len=*), INTENT(IN) :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN) :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN) :: Pressure    ! actual pressure given as input
-  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,      INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in) :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                    :: ReturnValue
 
@@ -7983,7 +7984,7 @@ FUNCTION GetQualityRefrig(Refrigerant,Temperature,Enthalpy,RefrigIndex,calledfro
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL(r64),        INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL(r64),        INTENT(IN)  :: Enthalpy    ! actual enthalpy given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   character(len=*), intent(in)  :: calledfrom  ! routine this function was called from (error messages)
   REAL(r64)                     :: ReturnValue
 

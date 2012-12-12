@@ -1452,9 +1452,7 @@ SUBROUTINE GetRefrigerationInput
           ! USE STATEMENTS:
   USE BranchNodeConnections, ONLY: TestCompSet
   USE CurveManager,      ONLY : GetCurveIndex, GetCurveType, GetCurveMinMaxValues, CurveValue
-  USE DataHeatBalance,   ONLY: Zone, NumRefrigeratedRacks,NumRefrigSystems !, &
-!unused                               IntGainTypeOf_RefrigerationCompressorRack, &
-!unused                               IntGainTypeOf_RefrigerationCase
+  USE DataHeatBalance,   ONLY: Zone, NumRefrigeratedRacks,NumRefrigSystems
   USE DataZoneEquipment, ONLY: GetSystemNodeNumberForZone, GetReturnAirNodeForZone
   USE DataEnvironment,   ONLY: StdBaroPress
   USE General,           ONLY: RoundSigDigits
@@ -1465,11 +1463,8 @@ SUBROUTINE GetRefrigerationInput
   USE NodeInputManager,  ONLY: GetOnlySingleNode
   USE OutAirNodeManager, ONLY: CheckOutAirNodeNumber
   USE Psychrometrics,    ONLY: PsyWFnTdbRhPb, PsyTdpFnWPb
- ! USE ScheduleManager,   ONLY: CheckScheduleValueMinMax
   USE WaterManager,      ONLY: SetupTankDemandComponent
-  USE DataGlobals,       ONLY: AnyEnergyManagementSystemInModel
-
-  !USE FluidProperties,   ONLY: GetDensityGlycol, GetSpecificHeatGlycol
+  USE DataGlobals,       ONLY: AnyEnergyManagementSystemInModel, RefrigIndex    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 
   IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
@@ -1631,7 +1626,7 @@ SUBROUTINE GetRefrigerationInput
   INTEGER    :: NumCoilsOnList    = 0       ! Used to read caseandWalkIn lists
   INTEGER    :: NumWalkInsOnList  = 0       ! Used to read caseandWalkIn lists
   INTEGER    :: RackNum           = 0       ! Index of refrigerated display case compressor rack
-  INTEGER    :: RefrigIndex       = 0       ! Index used in fluid property routines
+  !INTEGER    :: RefrigIndex       = 0       ! Index used in fluid property routines    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   INTEGER    :: RefrigSysNum      = 0       ! Index of refrigeration system
   INTEGER    :: TransRefrigSysNum = 0       ! Index of transcritical CO2 refrigeration system
   INTEGER    :: SecondaryIndex    = 0       ! Index of secondary loops

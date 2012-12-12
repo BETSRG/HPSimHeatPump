@@ -22,7 +22,7 @@ MODULE PlantLoopSolver
           ! USE STATEMENTS:
  USE DataPrecisionGlobals, ONLY: r64
  USE DataInterfaces,       ONLY: ShowRecurringWarningErrorAtEnd
- USE DataGlobals,          ONLY: MaxNameLength !, ShowFatalError, ShowSevereError, ShowWarningError, ShowContinueError
+ USE DataGlobals,          ONLY: MaxNameLength, RefrigIndex
 
  IMPLICIT NONE         ! Enforce explicit typing of all variables
 
@@ -47,7 +47,7 @@ MODULE PlantLoopSolver
   REAL(r64) :: CurrentAlterationsToDemand
   REAL(r64) :: UpdatedDemandToLoopSetPoint
   REAL(r64) :: LoadToLoopSetPointThatWasntMet ! Unmet Demand
-  INTEGER   :: RefrigIndex = 0 ! Index denoting refrigerant used (possibly steam)
+  !INTEGER   :: RefrigIndex = 0 ! Index denoting refrigerant used (possibly steam)  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
           ! SUBROUTINE SPECIFICATIONS:
   PUBLIC  PlantHalfLoopSolver
@@ -1515,6 +1515,7 @@ FUNCTION EvaluateLoopSetPointLoad(LoopNum, LoopSideNum, FirstBranchNum, LastBran
  USE DataLoopNode, ONLY: Node, NodeType_Water, NodeType_Steam
  USE FluidProperties, ONLY: GetSpecificHeatGlycol, GetSatEnthalpyRefrig
  USE General,         ONLY: RoundSigDigits
+ USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
  IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 

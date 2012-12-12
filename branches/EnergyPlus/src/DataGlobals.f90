@@ -36,16 +36,11 @@ PUBLIC          ! By definition, all variables which are placed in this data
           REAL, PARAMETER    :: AutoSize = -99999.
           CHARACTER(len=55), PARAMETER :: UpperCase='ABCDEFGHIJKLMNOPQRSTUVWXYZ¿¡¬√ƒ≈∆«»… ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€‹›'
           CHARACTER(len=55), PARAMETER :: LowerCase='abcdefghijklmnopqrstuvwxyz‡·‚„‰ÂÊÁËÈÍÎÏÌÓÔÒÚÛÙıˆ¯˘˙˚¸˝'
-         ! CHARACTER(len=255) :: ProgramPath=' '     ! Path for Program, Energy+.ini
           CHARACTER(len=270) :: FullName=' '        ! Full name of file to open, including path
-         ! CHARACTER(len=120) :: VerString='EnergyPlus, Version 1.1.1'      ! String that represents version information
           INTEGER :: TotalSevereErrors = 0 ! Counter
           INTEGER :: TotalWarningErrors = 0 ! Counter
           DOUBLE PRECISION   :: Elapsed_Time=0.0          ! For showing elapsed time at end of run
           CHARACTER*80 :: RefName   !Refrigerant Name
-          
-          !REAL, PARAMETER    :: AutoCalculate = -99999.d0 ! automatically calculate some fields.    !RS: Debugging 
-
 
           ! MODULE PARAMETER DEFINITIONS:
 INTEGER, PARAMETER :: BeginDay = 1
@@ -170,6 +165,7 @@ LOGICAL :: AnyPlantInModel = .FALSE. ! true if there are any plant or condenser 
 INTEGER :: CacheIPErrorFile    =0 ! Cache IP errors until IDF processing done.
 LOGICAL :: AnyIdealCondEntSetPointInModel=.FALSE.  ! true if there is any ideal condenser entering set point manager in model. 
 LOGICAL :: RunOptCondEntTemp =.FALSE. ! true if the ideal condenser entering set point optimization is running
+INTEGER :: RefrigIndex = 0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 
 !     NOTICE

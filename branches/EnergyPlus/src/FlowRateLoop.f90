@@ -27,11 +27,12 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE DataSimulation
+    USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
     CHARACTER (len=15) :: Property           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT

@@ -1,6 +1,5 @@
 MODULE DataStopCodes      ! EnergyPlus Data-Only Module
 
-!USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 USE DataGlobals, ONLY: MaxNameLength
 
 !globally declare program exit codes to alert calling routine to exit status

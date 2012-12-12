@@ -38,9 +38,8 @@
     USE UnitConvertMod
     USE DataSimulation
     USE FrostModel
-    USE InputProcessor !_HPSim
-    !USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-    USE DataGlobals, ONLY: RefName
+    USE InputProcessor 
+    USE DataGlobals, ONLY: RefName, RefrigIndex
     USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
     USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !RS: Debugging: Solving for TWiE
@@ -53,7 +52,7 @@
 
     CHARACTER(len=80)   :: Refrigerant
     CHARACTER (len=15) :: Property           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option

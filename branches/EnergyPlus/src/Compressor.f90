@@ -53,6 +53,7 @@
     ! ----------------------------------------------------------------------
 
     USE FluidProperties_HPSim
+    USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -68,7 +69,7 @@
     REAL, PARAMETER :: Fv=0.75
 
     !Subroutine local variables          
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
     REAL A(10),B(10)

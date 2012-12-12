@@ -832,10 +832,10 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
   USE InputProcessor
   USE WaterCoils,     ONLY: SetCoilDesFlow, GetCoilWaterInletNode, GetCoilWaterOutletNode
   USE SteamCoils,     ONLY: GetCoilSteamInletNode, GetCoilSteamOutletNode
-!  USE BranchInputManager, ONLY: MyPlantSizingIndex
   USE DataPlant,          ONLY: PlantLoop, MyPlantSizingIndex
   USE Psychrometrics,     ONLY: CpHW
   USE ReportSizingManager, ONLY: ReportSizingOutput
+  USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -860,7 +860,7 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
   REAL(r64)           :: EnthSteamOutWet
   REAL(r64)           :: LatentHeatSteam
   REAL(r64)           :: SteamDensity
-  INTEGER             :: RefrigIndex
+  !INTEGER             :: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0

@@ -4,7 +4,6 @@ SUBROUTINE IssueHPFatalError(exitCode)
 ! the fortran keyword STOP cannot accept a variable, only a literal or a parameter
 ! thus we need a ridiculous case statement for all possibilities found in DataStopCodes.f90
 
-    !USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
     USE DataGlobals, ONLY: MaxNameLength
     USE DataStopCodes
 
@@ -101,7 +100,6 @@ SUBROUTINE AbortEnergyPlus
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
   USE DataStopCodes
 
@@ -225,9 +223,8 @@ SUBROUTINE EndEnergyPlus
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
-  USE InputProcessor !_HPSim
+  USE InputProcessor
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -443,7 +440,6 @@ SUBROUTINE ShowSevereError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
   
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -501,7 +497,6 @@ SUBROUTINE ShowSevereError1(ErrorMessage,OutUnit1)  !RS: Trying this to debug si
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -556,7 +551,6 @@ SUBROUTINE ShowSevereError2(ErrorMessage,OutUnit1,OutUnit2)  !RS: Trying this to
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -721,7 +715,6 @@ SUBROUTINE ShowWarningError(ErrorMessage,OutUnit1,OutUnit2)
           ! na
 
           ! USE STATEMENTS:
-  !USE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
   USE DataGlobals
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine

@@ -2,8 +2,7 @@ MODULE EvaporatorMod
 
 USE CoilCalcMod
 USE DataSimulation
-!USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-USE DataGlobals, ONLY: RefName !RS: Using to define RefName
+USE DataGlobals, ONLY: RefName, RefrigIndex
 
 IMPLICIT NONE
 
@@ -75,7 +74,7 @@ INTEGER EqCircuits         !1=Equivalent circuits; otherwise=no
 LOGICAL,SAVE :: IsUniformVelProfile !Is velocity profile uniform?
 
 !Refprop Table variable          
-INTEGER            :: RefrigIndex =0
+!INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 INTEGER :: RefID !1-R22; 2-R410A; 3-R407C; 4-R134a; 5-Propane; 6-R417A; 7-R509A
 REAL Temperature,Quality,Pressure,Enthalpy
 
@@ -593,6 +592,7 @@ CONTAINS
     USE AirPropMod
     USE OilMixtureMod
     USE ReversingValveMod
+    USE DataGlobals, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -2216,7 +2216,7 @@ END SUBROUTINE PrintEvaporatorResult
     !------------------------------------------------------------------------
 
     USE UnitConvertMod
-    USE InputProcessor !InputProcessor_HPSim
+    USE InputProcessor
 
     IMPLICIT NONE
 
