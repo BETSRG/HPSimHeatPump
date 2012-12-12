@@ -5,7 +5,7 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! This function looks like it checks each iteration for convergence.
+! This function looks like it checks each iteration for convergence; it's a root solver.
 
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
