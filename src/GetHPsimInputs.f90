@@ -5,60 +5,51 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
-!
+! This module contains a subroutine to bring in the necessary inputs for a heat pump simulation.
+
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
-! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! This component has no physical representation.
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! This module merely reads in the inputs, and puts them into property arrays as needed.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! This reads in from an already open input file---see "InputProcessor" for file information.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! Error and Manufacturer flags are the only things defined at the module level.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 1 method:
+!    PUBLIC GetInputs -- Reads in all the input data for the HP Simulation
+!      Called by ORNLsolver
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! NA
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-12 | RAS | Updated header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! The arrays, particularly EvaporatorPAR and CondenserPAR, should be cleaned up.
+! The local variables should probably also be cleaned up.
 
 !***********************************************************************************
 
@@ -1488,12 +1479,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   SuperStc=TxvPAR(3)
   SuperRtd=TxvPAR(2)
 
-  !OPEN(48, FILE='NewEvap.txt')
-  !Do I=1, 54
-  !  WRITE (48,*) EvapPAR(I)
-  !End Do
-  !CLOSE(48)
-
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN
 	    ODCcoilType = MCCONDENSER
@@ -1509,11 +1494,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   END IF
 
   CLOSE(11)
-
-  !!VL: Previously ...
-  !!201 FORMAT(10(E))
-  !!202 FORMAT(A150)
-  !!203 FORMAT(I1)
 
   RETURN
 
