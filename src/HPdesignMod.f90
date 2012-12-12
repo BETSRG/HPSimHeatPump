@@ -5,60 +5,51 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
-!
+! This is the overarching heat pump design subroutine.
+
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
-! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! Since this subroutine runs the heat pump simulation, there's really no physical component.
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! The input, DTVALU, appears to be a guess of temperature. There don't appear to be any direct outputs.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no direct input or output files connected to this routine.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! This is only a subroutine, so there are no module-level variables or structures.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 1 methods
+!    PUBLIC HPDM -- Runs the entire heat pump simulation
+!      Called by ChargeLoop.f90
+!      Called by ORNLsolver.f90
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! NA
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-12 | RAS | Updated header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Some more documentation would probably be useful.
 
     SUBROUTINE HPDM(DTVALU)
 
@@ -74,8 +65,7 @@
 
     IMPLICIT NONE
 
-    CHARACTER (len=15) :: Property           
-    !INTEGER            :: RefrigIndex =0
+    CHARACTER (len=15) :: Property
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL DTVALU
@@ -144,7 +134,7 @@
     IMASS=1
     LPRINT=1
 
-    !for specified subcooiling, set IREFC to zero
+    !for specified subcooling, set IREFC to zero
     !for specifed flow control, set IREFC to 3 
     IF (MODE .EQ. 1 .OR. MODE .EQ. 3) THEN
         IREFC=3
@@ -877,15 +867,5 @@
     END IF
 
     RETURN
-
-    !!VL: Previously: 
-!!1002 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUBCOOLING *****',/,  '         DIFFERENCE  =',F8.3,' F')
-!!1006 FORMAT('0HPDM: **** FAILED TO CONVERGE ON SUPERHEAT *****',/,   '         DIFFERENCE  =',F8.3,' F')
-!!1013 FORMAT('0        DID NOT CONVERGE ON  EVAPORATOR INLET ',  'AIR TEMPERATURE FOR THIS SATURATION TEMPERATURE.' ,/,'         SET COMPRESSOR INLET SATURATION TEMPERATURE TO',  F8.3,' F AND GO BACK TO CONDENSER ITERATION.')
-!!1014 FORMAT('0DRIVER: ***** FAILED TO CONVERGE ON EVAPORATOR ',  'INLET AIR TEMPERATURE *****',/, '               DIFFERENCE  =',F8.3,' F')
-!!
-!!
-!!700 FORMAT(A44,F7.2,A5)
-!!704 FORMAT(A13,F7.2,A5)
 
     END SUBROUTINE
