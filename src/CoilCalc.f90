@@ -5,60 +5,188 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
-!
+! This module contains a slew of routines used for evaporator and condenser coil calculations.
+! These calculations include pressure drop, heat transfer coefficients, mass flow rates, and void factors.
+
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
-! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! The subroutines in this module represent evaporator and condenser coils, and the flow through them.
+! Refer to the evaporator and condenser modules for information on whole components.
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! Refrigerant and material properties are brought in, coil calculations run, and new refrigerant properties output.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no input or output files directly connected to this module.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! Coil, tube, slab, and circuit variables are all defined on the modular level.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 60 methods:
+!    PUBLIC EPScalc -- Calculates the cross-flow heat exchanger effectiveness
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC UAcalc -- Calculates the UA for a heat exchanger segment
+!      Never called
+!    PUBLIC hcRefside -- Calculates the heat transfer coefficient on the refrigerant side
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC AirSideCalc -- Calculates the heat transfer resistance for the air side
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC CalcCoilArea -- Calculates the heat exchange heat transfer areas
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!      Called by AirSideCalc
+!    PUBLIC CalcUA -- Calculates the UA value
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC MODdP -- Calculates the pressure drop in a module
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC Reynolds -- Calculates the Reynolds number
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!      Called by CoilCalc.f90
+!    PUBLIC Prandtl -- Calculates the Prandtl number
+!      Never called
+!    PUBLIC manifold -- Calculates the condenser manifolds pressure drop
+!      Called by Condenser.f90
+!    PUBLIC returnbend -- Calculates the return bends pressure drop
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC Inventory -- Calculates refrigerant charge
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC GetRefName -- Sets refrigerant name based on refrigerant ID
+!      Never called
+!    PUBLIC GetRefID -- Sets refrigerant ID based on refrigerant name
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC CalcMeanProp -- Calculates the mean value of a property
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!      Called by CoilCalc.f90
+!    PUBLIC hTPevapWattelet -- Calculates the refrigerant heat transfer coefficient in a two phase evaporating region using Wattelet method
+!      Never called
+!    PUBLIC MinimumFreeFlowArea -- Calculates the minimum free flow area for staggered tubes
+!      Called by CoilCalc.f90
+!    PUBLIC TWOPhasedPNino -- Calculates two phase pressure drop in microchannel tubes
+!      Never called
+!    PUBLIC TwoPhaseDPMoriyama -- Calculates two phase pressure drop using Moriyama method
+!      Never called
+!    PUBLIC TWOPhasedPChoi -- Calculates the pressure drop in condensing and evaporating two phase regions using Choi method
+!      Never called
+!    PUBLIC hSPDittus -- Calculates the refrigerant heat transfer coefficient for a single phase region using Dittus method
+!      Called by hSPDittus
+!    PRIVATE hSPPetukhov -- Calculates the refrigerant heat transfer coefficient for a single phase region using Petukhov method
+!      Never called
+!    PRIVATE hSPGnielinski -- Calculates the refrigerant heat transfer coefficient for a single phase region using Gnielinski method
+!      Never called
+!    PUBLIC  hTPDobson -- Calculates the refrigerant heat transfer coefficient for a two phase condensing region using Dobson method
+!      Called by CoilCalc.f90
+!    PRIVATE hTPCZ -- Calculates the refrigerant heat transfer coefficient for a two phase condensing region using Cavallini-Zecchin method
+!      Never called
+!    PUBLIC  hTPShahCond -- Calculates the refrigerant heat transfer coefficient for a two phase condensing region using Shah method
+!      Called by CoilCalc
+!    PRIVATE hTPShahEvap -- Calculates the refrigerant heat transfer coefficient in a two phase evaporating region using Shah method
+!      Never called
+!    PUBLIC  hTPCavallini -- Calculates the refrigerant heat transfer coefficient for a two phase condensing region using Cavallini method
+!      Never called
+!    PRIVATE hTPCavalliniAnnular -- Calculates the refrigerant heat transfer coefficient in an annular flow condensing region
+!      Called by CoilCalc.f90
+!    PRIVATE hTPCavalliniAnn_Strat -- Calculates the refrigerant heat transfer coefficient in an stratified annular flow condensing region
+!      Called by CoilCalc.f90
+!    PRIVATE hTPCavalliniStrat_Slug -- Calculates the refrigerant heat transfer coefficient in an stratified annular flow condensing region
+!      Called by CoilCalc.f90
+!    PRIVATE hTPconst -- Sets the refrigerant heat transfer coefficient as constant in a two phase region
+!      Never called
+!    PRIVATE ONEPhasedP -- Calculates the pressure drop in a single phase region
+!      Called by CoilCalc.f90
+!    PRIVATE FanningdP -- Calculates the friction pressure drop gradient in a single phase region
+!      Called by CoilCalc.f90
+!    PRIVATE FannFact -- Calculates the friction factor for a single phase region
+!      Called by CoilCalc.f90
+!    PUBLIC  TWOPhasedPLM -- Calculates the pressure drop in a two phase region using Lockhart-Matrinelli method
+!      Never called
+!    PUBLIC  TWOPhasedPSouza -- Calculates the pressure drop in condensing and evaporating two phase regions using Souza method
+!      Called by CoilCalc.f90
+!    PUBLIC  TWOPhasedPChang -- Calculates the pressure drop in condensing and evaporating two phase regions using Chang method
+!      Never called
+!    PRIVATE alphaCALC -- Calculates void fraction
+!      Called by CoilCalc.f90
+!    PRIVATE PHIcalc -- Calculates PHI for Martinelli friction pressure drop calculation
+!      Called by CoilCalc.f90
+!    PRIVATE PmomTWOphase -- Calculates the two phase momentum pressure change
+!      Called by CoilCalc.f90
+!    PRIVATE PmomIntegral -- Calculates intergral for evaluation of two phase momentum pressure change
+!      Called by CoilCalc.f90
+!    PRIVATE ElevdP -- Calculates pressure change due to elevation change
+!      Called by CoilCalc.f90
+!    PRIVATE Homo -- Calculates refrigerant charge using a closed homogeneous solution
+!      Never called
+!    PUBLIC  LockMartVoidFrac -- Calculates void fraction using Lockhart-Martinelli correlation
+!      Never called
+!    PUBLIC  HughmarkVoidFrac -- Calculates void fraction using Hughmark correlation
+!      Never called
+!    PUBLIC  GrahamVoidFrac -- Calculates void fraction using Graham et al. correlation
+!      Called by CoilCalc.f90
+!    PUBLIC  HarmsVoidFrac -- Calculates void fraction using Harms et al. correlation
+!      Never called
+!    PUBLIC  RouhanniVoidFrac -- Calculates void fraction using Rouhanni et al. correlation
+!      Never called
+!    PRIVATE CalcMassTP -- Calculates the charge inventory in a two phase region
+!      Called by CoilCalc.f90
+!    PUBLIC  CalcJfactor -- Calculates the j-factor for different fin types
+!      Called by CoilCalc.f90
+!    PRIVATE CalcFricfactor -- Calculates air side fraction factor for different fin types
+!      Called by CoilCalc.f90
+!    PRIVATE CalcFinEff -- Calculates the fin efficiency
+!      Called by CalcFinEff
+!    PUBLIC  CalcMaterialWeight -- Calculates the material weight in the coils
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PRIVATE CalcCustomAirHco -- Calculates the heat transfer coeffiecient on the air side using a custom curve fit
+!      Never called
+!    PRIVATE CalcCustomAirDP -- Calculates the pressure drop on the air side using a custom curve fit
+!      Never called
+!    PRIVATE CalcDPpenaltyFactor -- Calculates pressure drop penalty factor due to enhanced tube
+!      Called by CoilCalc.f90
+!    PRIVATE CalcHTCenhancementFactor -- Calculates heat transfer enhancement factor due to enhanced tube
+!      Called by CoilCalc.f90
+!    PUBLIC  UpdateRefMassFlowRate -- Updates refrigerant mass flow rate in each circuit
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
+!    PUBLIC  UpdateMCrefMassFlowRate -- Updates refrigerant mass flow rate in each microchannel slab
+!      Called by Condenser.f90
+!      Called by Evaporator.f90
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! NA
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-12 | RAS | Updated header
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! There are a number of subroutines that are never called. It would probably be a good idea to clean up anything that is out of date or not used.
+! Also, some more documentation might be useful.
 
 MODULE CoilCalcMod
 
@@ -3627,8 +3755,7 @@ SUBROUTINE ElevdP(xR,tR,vRef,vg,vf,dPdZgrav,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
 !Purpose:
-!To calculate the the pressure change due to elevation changes in 
-!elevation
+!To calculate the the pressure change due to changes in elevation
 !
 !Author
 !Ipseng Iu
