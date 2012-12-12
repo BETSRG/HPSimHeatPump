@@ -5,7 +5,7 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! This is the overarching heat pump design subroutine.
+! This is the overarching heat pump design subroutine. It calls and manages the component modules. 
 
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
@@ -526,12 +526,10 @@
             EXIT
         END IF
 
-        !VL: Previously: IF(NTAMB.NE.0) GO TO 810
         IF(NTAMB.EQ.0) THEN
             DIFSGN = DIFF
         END IF
 
-        !VL: Previously:810 CONTINUE
         PROD = DIFF*DIFSGN
 
         IF(PROD.GT.0.0.AND.NCROSS.EQ.0) THEN
@@ -555,13 +553,12 @@
         ELSE
 
             NCROSS = 1
-            !VL: Previously:IF(PROD.GT.0.0) GO TO 820
+            
             IF(PROD.LE.0.0) THEN
                 TSATSV = TSATDM
                 TAISV = TAIDM
             END IF
 
-            !VL: Previously:820     CONTINUE
             TSATDM = TSICMP
             TAIDM = TAIIE
             TSICMPprev=TSICMP
