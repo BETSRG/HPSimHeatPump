@@ -32,7 +32,7 @@ USE DataGlobals, ONLY: DoWeathSim, OutputFileZoneSizing, OutputFileSysSizing, Do
                        HourofDay, BeginHourFlag, DoSystemSizing, EndHourFlag, Timestep, NumofTimeStepinHour, BeginSimFlag, &
                        BeginTimeStepFlag, PreviousHour, Endday, HourofDay, EndZoneSizingCalc, SysSizingCalc, DuringDay, &
                        NumofZones, EndSysSizingCalc, OutputFileInits, BeginFullSimFlag, AnyEnergyManagementSystemInModel, &
-                       EMSCallFromSystemSizing, MinutesPerTimeStep
+                       EMSCallFromSystemSizing, MinutesPerTimeStep  !Avoiding bringing in AutoSize
 USE DataHVACGlobals
 USE DataSizing
 USE DataEnvironment, ONLY: TotDesDays, CurEnvirNum, EnvironmentName, CurMnDy, TotRunDesPersDays

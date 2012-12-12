@@ -139,7 +139,7 @@ TYPE (WatertoAirHPEquipConditions), ALLOCATABLE, DIMENSION(:) :: WatertoAirHP
 LOGICAL, ALLOCATABLE, DIMENSION(:) :: CheckEquipName
 
 
-INTEGER            :: RefrigIndex = 0   ! Refrigerant index
+!INTEGER            :: RefrigIndex = 0   ! Refrigerant index    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 INTEGER            :: WaterIndex = 0    ! Water index
 LOGICAL :: GetCoilsInputFlag = .True. ! Flag set to make sure you get input once
 ! Subroutine Specifications for the Module
@@ -1660,7 +1660,7 @@ FUNCTION CalcCompSuctionTempResidual(CompSuctionTemp, Par) RESULT (Residuum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=MaxNameLength) :: Refrigerant           ! Name of refrigerant
   REAL(r64)  :: SuctionPR
-  INTEGER    :: RefrigIndex
+  !INTEGER    :: RefrigIndex    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   REAL(r64)  :: CompSuctionEnth
   REAL(r64)  :: SuperHeatEnth
 

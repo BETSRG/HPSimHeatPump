@@ -47,7 +47,6 @@ MODULE FluidProperties_HPSim
 
         ! USE STATEMENTS
 
-!USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 USE DataGlobals, ONLY: MaxNameLength
 
 IMPLICIT NONE                           ! Enforce explicit typing of all variables
@@ -177,7 +176,7 @@ SUBROUTINE GetFluidPropertiesData
           ! na
 
           ! USE STATEMENTS:
-  USE InputProcessor !_HPSim
+  USE InputProcessor
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -1549,7 +1548,7 @@ REAL FUNCTION PQ(Refrigerant,Pressure,Quality,Property,RefrigIndex,Error)
   !REAL,             INTENT(IN)  :: Quality     ! actual quality given as input
   REAL                          :: Quality  !RS: Debugging: Allowing quality to be redefined
   CHARACTER(len=*), INTENT(IN)  :: Property
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code 
   INTEGER(2),    INTENT(INOUT)  :: Error       ! Error flag: 0-no; otherwise-yes
                
         ! INTERFACE BLOCK SPECIFICATIONS:
@@ -1778,7 +1777,7 @@ REAL FUNCTION TQ(Refrigerant,Temperature,Quality,Property,RefrigIndex,Error)
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL,             INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL,             INTENT(IN)  :: Quality     ! actual quality given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code  
   CHARACTER(len=*), INTENT(IN)  :: Property
   INTEGER(2),      INTENT(OUT)  :: Error       !Error flag: 0-no; otherwise-yes
 
@@ -1933,7 +1932,7 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
   REAL,				INTENT(IN)  :: Temperature ! actual temperature given as input
   REAL,             INTENT(IN)  :: Pressure    ! pressure(Pa)
   CHARACTER(len=*), INTENT(IN)  :: Property
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   INTEGER(2),    INTENT(OUT)  :: Error       !Error flag: 0-no; otherwise-yes
 
         ! INTERFACE BLOCK SPECIFICATIONS:
@@ -2244,7 +2243,7 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL,             INTENT(IN)  :: Pressure ! actual pressure given as input
   REAL,             INTENT(IN)  :: Enthalpy     ! actual enthalpy given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   CHARACTER(len=*), INTENT(IN)  :: Property
   INTEGER(2),      INTENT(OUT)  :: Error       !Error flag: 0-no; otherwise-yes
 
@@ -2782,7 +2781,7 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
   CHARACTER(len=*), INTENT(IN)  :: Refrigerant ! carries in substance name
   REAL,             INTENT(IN)  :: Pressure	   ! actual pressure given as input
   REAL,             INTENT(IN)  :: Entropy     ! actual entropy given as input
-  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties
+  INTEGER,       INTENT(INOUT)  :: RefrigIndex ! Index to Refrigerant Properties   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   CHARACTER(len=*), INTENT(IN)  :: Property
   INTEGER(2),      INTENT(OUT)  :: Error       !Error flag: 0-no; otherwise-yes
 
@@ -3172,7 +3171,6 @@ INTEGER FUNCTION FindRefrigerant(Refrigerant)
           ! na
 
           ! USE STATEMENTS:
-  !USE InputProcessor_HPSim, ONLY: FindItemInList, MakeUPPERCase
   USE InputProcessor, ONLY: FindItemInList, MakeUPPERCase
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
@@ -3489,7 +3487,6 @@ INTEGER FUNCTION CheckFluidPropertyName(NameToCheck)
           ! na
 
           ! USE STATEMENTS:
-  !USE InputProcessor_HPSim, ONLY: FindItemInList
   USE InputProcessor, ONLY: FindItemInList
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine

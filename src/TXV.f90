@@ -1,6 +1,5 @@
 MODULE TXVMOD
 
-!USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 USE DataGlobals, ONLY: RefName
 
 PUBLIC TXV
@@ -47,6 +46,7 @@ SUBROUTINE TXV(mdot,PiCmp,PoCmp,DTsub,DTsup,DP,Qtxv)
 !-----------------------------------------------------------------------------------
 
 USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
 IMPLICIT NONE
 
@@ -60,7 +60,7 @@ REAL, INTENT(IN)  :: DP      !Pressure drop, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, kW
 
 !Subroutine local variables
-INTEGER            :: RefrigIndex =0
+!INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 REAL Temperature,Quality,Pressure,Enthalpy
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 

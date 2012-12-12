@@ -10,14 +10,13 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     USE EvaporatorMod
     USE AccumulatorMod
     USE DataSimulation
-    !USE DataGlobals_HPSim, ONLY: MaxNameLength  !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-    USE DataGlobals, ONLY: MaxNameLength
+    USE DataGlobals, ONLY: MaxNameLength, RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE UnitConvertMod, ONLY: Temperature_F2C
 
     IMPLICIT NONE
 
     CHARACTER (len=15) :: Property           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT
