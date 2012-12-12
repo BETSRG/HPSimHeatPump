@@ -98,10 +98,9 @@
     USE AccumulatorMod
     USE UnitConvertMod
     USE DataSimulation
-    !USE IFPORT !RS: This seems to be an obsolete module
     USE FrostModel
     USE InputProcessor_HPSim
-    USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
@@ -109,7 +108,7 @@
 
     CHARACTER(len=80)   :: Refrigerant
     CHARACTER (len=15) :: Property           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option

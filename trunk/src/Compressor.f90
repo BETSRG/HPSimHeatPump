@@ -5,60 +5,57 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
-!
+! This module models a compressor.
+
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
+! This component represents an ARI compressor by use of a 2nd order polynomial equation fit.
 ! A description of the component is found at:
-! some website
+! http://www.e-refrigeration.com/learn-refrigeration/system-components/compressors
 ! From that website: 
-!  - It does something
+!  - A compressor compresses and cycles refrigerant, while also increasing the pressure.
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! This module reads in entering refrigerant and compressor properties, calculates, and returns exiting refrigerant properties and power.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+! There are no input or output files directly connected to this module.
 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+! DataSimulation is called in; otherwise, nothing is defined at the module level.
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 2 methods:
+!    PUBLIC Compressor -- Models a 2nd order polynomail equation fit compressor model
+!      Called by ORNLSolver.f90
+!      Called by FlowRateLoop.f90
+!    PRIVATE X -- A 10 coefficient polynomial equation calculation
+!      Called by Compressor
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! NA
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-12 | RAS | Updated header 
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Some more documentation or narrative might be useful.
 
     MODULE CompressorMod
 
@@ -116,6 +113,7 @@
     ! ----------------------------------------------------------------------
 
     USE FluidProperties_HPSim
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -131,7 +129,7 @@
     REAL, PARAMETER :: Fv=0.75
 
     !Subroutine local variables          
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
     REAL A(10),B(10)

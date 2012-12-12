@@ -150,6 +150,7 @@
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -162,7 +163,7 @@
     REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables         
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
@@ -526,6 +527,7 @@
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -538,7 +540,7 @@
     REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables         
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
@@ -849,6 +851,7 @@
     !-----------------------------------------------------------------------------------
 
     USE FluidProperties_HPSim
+    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
     IMPLICIT NONE
 
@@ -861,7 +864,7 @@
     REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables           
-    INTEGER            :: RefrigIndex =0
+    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m

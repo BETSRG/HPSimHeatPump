@@ -1,3 +1,55 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This function looks like it checks each iteration for convergence.
+
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component does not represent any physical item.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! This function looks like it checks each iteration for convergence, and loops until the calculation converges.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no input or output files directly connected to this function.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! There is no module level; this is a single function.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 method:
+!    PUBLIC ZERO3 -- What does this do (in one line)?
+!      Called by HPdesignMod.f90
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-12 | RAS | Updated header 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some documentation would be really useful.
+
 REAL FUNCTION ZERO3(AX,F,TOL1,TOL2,DX,FB,IERROR)
     implicit none
 
