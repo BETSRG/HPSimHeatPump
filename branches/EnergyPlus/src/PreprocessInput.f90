@@ -30,7 +30,7 @@ CONTAINS
         ! delete the previously backed up version of the input file
         call system('rm -f inBackup.idf > /dev/null')
         ! backup the last input file
-        call system('mv in.idf inBackup.idf > /dev/null')
+        call system('if [ -f in.idf ]; then mv in.idf inBackup.idf > /dev/null; fi')
         ! rename the heat pump input file in preparation for epmacro
         call system('cp HPdataUnix.idf in.imf > /dev/null')
         ! call epmacro on it
