@@ -5,31 +5,29 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! This module simulates the behavior of the Evaporator component in the Heat pump.  
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
+!This Component is the evaporator in the Heat Pump Vapor-Compression cycle
 ! A description of the component is found at:
-! some website
+! http://en.wikipedia.org/wiki/Evaporator
 ! From that website: 
-!  - It does something
+!  - This component takes refrigerant from its liquid form to its natural gaseous form
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! This module takes the air properties entering the evaporator and using the properties of the evaporator 
+! and ouputs the leaving air properties and heat transfer rates to the fluid.
+! 
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
-
+! No apparent input or output files
+! 
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
@@ -38,27 +36,49 @@
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
-! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+! This module contains 23 methods:
+!    PUBLIC  Evaporator - To predict coil air side and refrigerant side properties, heat transfer, and pressure drop
+!    PUBLIC  MicrochannelEvaporator -  A segment-by-segment microchannel evaporator model
+!    PUBLIC  CalcEvaporatorInventory - calculate refrigerant inventory in evaporator
+!    PUBLIC  PrintEvaporatorResult - To print simulation result to output file "evaporator.csv"
+!    PUBLIC  InitEvaporatorCoil - initialize evaporator geometry and circuiting
+!    PUBLIC  EndEvaporatorCoil - free allocated arrays
+!    PRIVATE RefrigerantParameters - calculates refrigerant parameters
+!    PRIVATE SuctionLine - Calculates the condition at the suction line to the compressor
+!    PRIVATE LoadMicrochannelInputs - Transfer input data from subroutine "Evaporator" to "MircochannelEvaporator"
+!    PRIVATE LoadMicrochannelOutputs - Transfer output data from subroutine "MircochannelEvaporator" to "Evaporator"
+!    PRIVATE InitBoundaryConditions - To initialize segment boundary conditions
+!    PRIVATE CalcCircuitRefInletConditions - To calculate circuit refrigerant inlet condition according to circuitry
+!    PRIVATE CalcSegmentRefInletConditions - To calculate inlet refrigerant pressure and enthalpy
+!    PRIVATE CalcSegmentAirInletConditions - To calculate inlet air temp and relative humidity
+!    PRIVATE CalcCoilSegment - To perform heat exchanger calculation for a segment
+!    PRIVATE CalcSegmentOutletConditions - calculate segment outlet conditions
+!    PRIVATE CalcTransitionSegment - To calculate transition segment (both single and two phase refrigerant
+!                                    in segment) heat transfer
+!    PRIVATE FindTransitionBoundary - To find the transition boundary in transition segment
+!    PRIVATE CalcRefProperty - To calculate refrigerant properties given pressure and enthalpy
+!    PRIVATE CalcSegmentRefOutletPressure - To calculate segment refrigerant outlet pressure
+!    PRIVATE CalcWetSurfaceDing - To calculate wet surface air side heat transfer
+!    PRIVATE CalcWetSurfaceBraun - To calculate wet surface air side heat transfer
+!    PRIVATE CalcWetSurfaceMcQuiston - To calculate wet surface air side heat transfer
+!    PRIVATE UpdateTubeDataFromCircuitData - Update the Tube data from Circuit "Ckt" data. 
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! Unit Conversions need to be changed
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-19 | JEH | Header Modification
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+!
+!
 
 MODULE EvaporatorMod
 
