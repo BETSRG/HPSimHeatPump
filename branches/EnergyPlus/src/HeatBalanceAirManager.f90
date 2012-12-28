@@ -3476,7 +3476,7 @@ SUBROUTINE CalcHeatBalanceAir
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
           ! na
 
-  CALL ManageHVAC   !RS: This is a possible location for where to join in the HPSim code
+  CALL ManageHVAC
 
   ! Do Final Temperature Calculations for Heat Balance before next Time step
   SumHmAW=0.0D0

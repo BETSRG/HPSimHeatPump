@@ -51,8 +51,7 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    CHARACTER (len=15) :: Property           
-    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    CHARACTER (len=15) :: Property
     REAL Temperature,Quality,Pressure,Enthalpy
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option
@@ -121,6 +120,9 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
+    INTEGER :: LogFile       =2 !RS: Debugging file denotion, hopfully this works.
+    
+  OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
     !Flow**:
 
@@ -197,6 +199,11 @@
         WRITE(*,*)'## ERROR ## Main: Wrong initial guess!'
         STOP
     END IF
+    
+    WRITE(LogFile,*) 'TaiE: ',TaiE
+    WRITE(LogFile,*) 'TwiC: ',TwiC
+    WRITE(LogFile,*) 'TaiC: ',TaiC
+    WRITE(LogFile,*) 'RHiE: ',RHiE
 
     Punit = ' (kPa)'
     Hunit = ' (kJ/kg)'

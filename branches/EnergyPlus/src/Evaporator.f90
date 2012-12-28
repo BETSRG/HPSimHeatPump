@@ -880,7 +880,7 @@ CONTAINS
                     Enthalpy=hRoCkt*1000    !RS Comment: Unit Conversion
                     tRoCkt=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !RS Comment: Circuit Outlet Refrigerant Temperature
                     IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 883'
                         ErrorFlag=REFPROPERROR
                         OUT(20)=ErrorFlag
                         CALL Evaporator_Helper_1
@@ -888,7 +888,7 @@ CONTAINS
                     END IF
                     xRoCkt=PH(RefName, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !RS Comment: Circuit Outlet Refrigerant Quality
                     IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 891'
                         ErrorFlag=REFPROPERROR
                         OUT(20)=ErrorFlag
                         CALL Evaporator_Helper_1
@@ -899,7 +899,7 @@ CONTAINS
                     Quality=1
                     tSat=PQ(RefName, Pressure, Quality, 'temperature', RefrigIndex,RefPropErr)  !RS Comment: Saturation Temperature
                     IF (RefPropErr .GT. 0) THEN
-                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
+                        WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 902'
                         ErrorFlag=REFPROPERROR
                         OUT(20)=ErrorFlag
                         CALL Evaporator_Helper_1

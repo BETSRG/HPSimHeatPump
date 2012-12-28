@@ -395,7 +395,6 @@
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
 
-    !INTEGER         :: RefrigIndex =0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LcapTube    !Cap tube length, m

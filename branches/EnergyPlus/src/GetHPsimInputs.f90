@@ -1442,6 +1442,10 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   END IF
 
   CLOSE(11)
+  
+  !CALL SetUpOutputVariable(
+  !Condenser and evaporator inputs and outputs, I think
+  !QSens, QLat
 
   !!VL: Previously ...
   !!201 FORMAT(10(E))
