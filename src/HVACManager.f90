@@ -615,13 +615,6 @@ SUBROUTINE SimHVAC
   CALL ManageSystemAvailability
 
   CAll ManageEMS(emsCallFromAfterHVACManagers)! calling point
-
-  !RS: Testing: This is an old version, and will be removed later.
-  !IF (ONETIME) THEN !RS: Testing: Phase 4!
-  !    CALL SimulationCycle  !RS: First try at connecting the two programs; this is the ORNL subroutine
-  !               CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
-  !   ONETIME = .FALSE.  !RS: Testing: Comment this line out to have ORNL called every time
-  !END IF
   
   
 ! first explicitly call each system type with FirstHVACIteration,
@@ -975,14 +968,12 @@ SUBROUTINE SimSelectedEquipment(SimAirLoops, SimZoneEquipment, SimNonZoneEquipme
       END IF
       FlowMaxAvailAlreadyReset = .FALSE.
 
-!      IterAir = IterAir + 1   ! Increment the iteration counter
       IF (SimulateAirflowNetwork .gt. AirflowNetworkControlSimple) THEN
         If (ResimulateAirZone) then ! Need to make sure that SimAirLoop and SimZoneEquipment are simulated
           SimAirLoops = .TRUE.       ! at min three times using ONOFF fan with the AirflowNetwork model
           SimZoneEquipment = .TRUE.
         End If
       END IF
-
 
     END DO
 
@@ -994,8 +985,6 @@ SUBROUTINE SimSelectedEquipment(SimAirLoops, SimZoneEquipment, SimNonZoneEquipme
     END IF
     ! Check to see if any components have been locked out. If so, SimAirLoops will be reset to TRUE.
     CALL ResolveLockoutFlags(SimAirLoops)
-
-
 
     IF (SimNonZoneEquipment) THEN
       CALL ManageNonZoneEquipment(FirstHVACIteration,SimNonZoneEquipment)
@@ -1011,7 +1000,6 @@ SUBROUTINE SimSelectedEquipment(SimAirLoops, SimZoneEquipment, SimNonZoneEquipme
       IF (AnyPlantLoopSidesNeedSim()) THEN
         SimPlantLoops = .TRUE.
       ENDIF
-
     ENDIF
 
     IF (SimPlantLoops) THEN

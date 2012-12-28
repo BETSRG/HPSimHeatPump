@@ -2225,7 +2225,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                                CompIndex=SupplyAirPath(SupplyAirPathNum)%ComponentIndex(CompNum))
              endif
 
-           CASE (ZoneSupplyPlenum_Type)  ! 'AirLoopHVAC:SupplyPlenum'
+            CASE (ZoneSupplyPlenum_Type)  ! 'AirLoopHVAC:SupplyPlenum'
 
              CALL SimAirZonePlenum(SupplyAirPath(SupplyAirPathNum)%ComponentName(CompNum),ZoneSupplyPlenum_Type, &
                                SupplyAirPath(SupplyAirPathNum)%ComponentIndex(CompNum),   &
