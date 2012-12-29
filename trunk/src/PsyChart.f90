@@ -5,60 +5,149 @@
 ! ************************************** !
 ! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
 ! -------------------------------------- !
-! Provide a 1 or 2 sentence overview of this module.  
-! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+! This module calculates the properties of air dependent on various intial properties (functions as a psychrometric chart)
 !
 ! ************************************** !
 ! -- PHYSICAL DESCRIPTION -------------- !
 ! -------------------------------------- !
-! This component represents something...or nothing...in a heat pump system.
-! A description of the component is found at:
-! some website
-! From that website: 
-!  - It does something
+! This does not represent a physical component of a Heat Pump system.
+! 
 
 ! ************************************** !
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
-! Here's a one line summary of what this does for the simulation itself.
-! This module takes inputs such as...and modifies them like so...and outputs these things
+! THis calculates air properties as if using a psychrometric chart
+!
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
 ! -------------------------------------- !
-! Check for any OPEN statements in the code
-! Check for any WRITE statements in the code
-!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
-
+! no OPEN statements or output files.
+!
 ! ************************************** !
 ! -- MODULE LEVEL VARIABLES/STRUCTURES - !
 ! -------------------------------------- !
-! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+!  Nothing defined at the module level
 
 ! ************************************** !
 ! -- SUMMARY OF METHODS, CALL TREE ----- !
 ! -------------------------------------- !
 ! This module contains X methods:
-!    PUBLIC InitSomething -- What does this do (in one line)?
-!      Called by what other modules?
+!   TDB_H - calculates air props given dry bulb and enthalpy
+!       PsyChart
+!   TDB_RH = calulates air props given dry bulb and relative humididty
+!       PsyChart
+!   TDB_TWB - calculates air props given dry bulb and wet bulb
+!       PsyChart
+!   TDB_W - calculates air props given dry bulb and humidity ratio
+!       PsyChart
+!   DEWPOINT - calculates the dew point
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   DRYBULB - calculates the dry bulb temp
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   ENTHALPY - calculates enthalpy
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   ENTHSAT - calculates saturation enthalpy
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   HUMRATIO - calculates the humidity ratio from water vapor pressure and atmospheric pressure
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   HUMTH - calculates humidity ratio from dry bulb and enthalpy
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   RELHUM - calculates the relative humidity
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   RHODRY - calculates density of the dry air
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   RHOMOIST - calculates the density of moist air
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   SATPRESS - calculate saturation pressure
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   SATTEMP - calculate saturation temperature
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   TAIRSAT - calculate dry bulb temperature at saturation
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   WETBULB - calculate wet bulb temperature
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   XITERATE - Iterately solves for the value of X which satisfies F(X)=0
+!       TAIRSAT
+!       Wetbulb
+!   FTWB -  AIR WET BULB TEMPERATURES AS A FUNCTION OF THE AIR DRY BULB TEMPERATURE,THE HUMIDITY RATIO AND THE BAROMETRIC PRESSURE 
+!       TDB_H
+!       TDB_RH
+!       TDB_TWB
+!       TDB_W
+!   FHAIR - Enthalpy of moist air
+!       FTWB
+!       FHSAT
+!       FTSAT
+!   FHSAT - Air Saturation Enthalpy as a function of saturation temperature
+!       FTWB
+!       FHAIR
+!       FTSAT
+!   FTSAT - Saturation temperature as a function of air saturation enthalpy
+!       FTWB
+!       FHARI
+!       FHSAT
+!   FPWS - saturation pressure over liquid water
+!       FHSAT
+!       FTWB
+!   FWPW - Humidity ratio as a function of vapor pressure and barometric pressure
+!       FHSAT
+!       FTWB
 
 ! ************************************** !
 ! -- ISSUES/BUGS/TICKETS --------------- !
 ! -------------------------------------- !
-! Are there any interesting issues with this, unfuddle ticket numbers?
+! no issues at this time
 
 ! ************************************** !
 ! -- CHANGELOG ------------------------- !
 ! -------------------------------------- !
 ! 2012-12-11 | ESL | Initial header
-! YEAR-MM-DD | ABC | Some other log message? 
+! 2012-12-29 | JEH | Header completion 
 
 ! ************************************** !
 ! -- TODO/NOTES/RECOMMENDATIONS -------- !
 ! -------------------------------------- !
-! Put some notes for what needs to happen here
-! Silly things are fine
-! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+! Nothing to do at this point
 
     !******************************************************************************
 
