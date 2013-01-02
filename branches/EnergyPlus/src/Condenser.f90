@@ -1136,7 +1136,7 @@
 
     Pressure=pRiExp*1000    !RS Comment: Unit Conversion
     Enthalpy=hRiExp*1000    !RS Comment: Unit Conversion
-    tRiExp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Expansion Device Refrigerant Inlet Temperatyre
+    tRiExp=PH(RefName, Pressure, Enthalpy, 'temperature', RefrigIndex,RefPropErr)   !Expansion Device Refrigerant Inlet Temperature
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
