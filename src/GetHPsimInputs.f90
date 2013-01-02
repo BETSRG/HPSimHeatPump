@@ -4,8 +4,18 @@ MODULE HeatPumpInput
 
 USE DataSimulation
 USE DataGlobals, ONLY: RefName !RS: Using to define RefName
+USE DataInterfaces, ONLY: SetupOutputVariable
 
 PRIVATE
+
+!RS: Debugging: Setup Variables Data
+REAL tRiCoil,tRoCoil
+REAL pRiCoil,pRoCoil
+REAL hRiCoil,hRoCoil
+REAL tAiCoil,tAoCoil
+REAL QSens,QLat
+REAL hAiCoil,hAoCoil,rhAoCoil
+REAL:: ZoneName=1
 
 !Error Flags
 INTEGER,PARAMETER :: NOERROR       = 0
@@ -323,10 +333,6 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 !Flow:
-
-!CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
-!CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
-!CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   ODC_SurfAbsorptivity=1
   IDC_SurfAbsorptivity=1
@@ -1443,9 +1449,26 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
   CLOSE(11)
   
-  !CALL SetUpOutputVariable(
+  CALL SetupRealOutputVariable('Sensible Heat', QSens, 'Zone', 'Sum', ZoneName)    !RS: Debugging: Only one zone for this case
+  CALL SetupRealOutputVariable('Latent Heat', QLat, 'Zone', 'Sum', ZoneName)
+  !
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Inlet Pressure', pRiCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Inlet Temperature', tRiCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Inlet Enthalpy', hRiCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Outlet Pressure', pRoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Outlet Temperature', tRoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Outlet Enthalpy', hRoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Air Outlet Temperature', tAoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Condenser Air Outlet Relative Humidity', rhAoCoil, 'HeatBalance', 'State', ZoneName)
+  !
+  CALL SetupRealOutputVariable('Evaporator Air Inlet Temperature', tAiCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Air Inlet Enthalpy', hAiCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Air Outlet Temperature', tAoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Air Outlet Enthalpy', hAoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Coil Refrigerant Outlet Pressure', pRoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Coil Refrigerant Outlet Temperature', tRoCoil, 'HeatBalance', 'State', ZoneName)
+  CALL SetupRealOutputVariable('Evaporator Coil Refrigerant Outlet Enthalpy', hRoCoil, 'HeatBalance', 'State', ZoneName)
   !Condenser and evaporator inputs and outputs, I think
-  !QSens, QLat
 
   !!VL: Previously ...
   !!201 FORMAT(10(E))

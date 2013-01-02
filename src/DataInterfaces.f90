@@ -223,7 +223,7 @@ PUBLIC ! Everything private unless explicitly made public
       CHARACTER(len=*), INTENT(IN) :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
       CHARACTER(len=*), INTENT(IN) :: VariableTypeKey ! State, Average=1, NonState, Sum=2
       CHARACTER(len=*), INTENT(IN) :: KeyedValue     ! Associated Key for this variable
-      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this freqency
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this frequency
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: ResourceTypeKey ! Meter Resource Type (Electricity, Gas, etc)
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: EndUseKey       ! Meter End Use Key (Lights, Heating, Cooling, etc)
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: EndUseSubKey    ! Meter End Use Sub Key (General Lights, Task Lights, etc)
@@ -240,7 +240,7 @@ PUBLIC ! Everything private unless explicitly made public
       CHARACTER(len=*), INTENT(IN) :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
       CHARACTER(len=*), INTENT(IN) :: VariableTypeKey ! State, Average=1, NonState, Sum=2
       CHARACTER(len=*), INTENT(IN) :: KeyedValue     ! Associated Key for this variable
-      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq     ! Internal use -- causes reporting at this freqency
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq     ! Internal use -- causes reporting at this frequency
       INTEGER, INTENT(IN), OPTIONAL :: IndexGroupKey ! Group identifier for SQL output
     END SUBROUTINE
     SUBROUTINE SetupRealOutputVariable_IntKey(VariableName,ActualVariable,IndexTypeKey,VariableTypeKey,KeyedValue,  &
@@ -251,7 +251,7 @@ PUBLIC ! Everything private unless explicitly made public
       CHARACTER(len=*), INTENT(IN) :: IndexTypeKey    ! Zone, HeatBalance=1, HVAC, System, Plant=2
       CHARACTER(len=*), INTENT(IN) :: VariableTypeKey ! State, Average=1, NonState, Sum=2
       INTEGER, INTENT(IN)          :: KeyedValue     ! Associated Key for this variable
-      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this freqency
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: ReportFreq      ! Internal use -- causes reporting at this frequency
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: ResourceTypeKey ! Meter Resource Type (Electricity, Gas, etc)
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: EndUseKey       ! Meter End Use Key (Lights, Heating, Cooling, etc)
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: EndUseSubKey    ! Meter End Use Sub Key (General Lights, Task Lights, etc)

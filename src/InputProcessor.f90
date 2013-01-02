@@ -2281,58 +2281,6 @@ INTEGER FUNCTION GetNumSectionsinInput()
 
 END FUNCTION GetNumSectionsinInput
 
-!SUBROUTINE GetListofSectionsinInput(SectionList,NuminList) !RS: This subroutine is never used.
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         Linda K. Lawrie
-!          !       DATE WRITTEN   September 1997
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This subroutine returns the list of sections as they occurred
-!          ! in the Input Data File (IDF).
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Look up object in list of objects.  If there, return the
-!          ! number of objects found in the current input.  If not, return
-!          ! -1.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!  CHARACTER(len=*), DIMENSION(:), INTENT(OUT) :: SectionList
-!  INTEGER, INTENT(OUT) :: NuminList
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  INTEGER MaxAllowedOut
-!
-!  MaxAllowedOut=MIN(NumIDFSections,SIZE(SectionList))
-!  IF (MaxAllowedOut /= NumIDFSections) THEN
-!    CALL ShowWarningError('More in list than allowed in passed array - (GetListofSectionsinInput)')
-!  ENDIF
-!  NuminList=MaxAllowedOut
-!  SectionList(1:MaxAllowedOut)=SectionsonFile(1:MaxAllowedOut)%Name
-!
-!  RETURN
-!
-!END SUBROUTINE GetListofSectionsinInput
-
 INTEGER FUNCTION GetNumObjectsFound(ObjectWord)
 
           ! FUNCTION INFORMATION:
@@ -3813,7 +3761,6 @@ FUNCTION MakeUPPERCase(InputString) RESULT (ResultString)
 
 END FUNCTION MakeUPPERCase
 
-!Commented out since it's a duplicate of the code in InputProcessor
 LOGICAL FUNCTION SameString(TestString1,TestString2)
 
           ! FUNCTION INFORMATION:
