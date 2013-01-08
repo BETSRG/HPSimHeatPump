@@ -15,7 +15,7 @@ REAL hRiCoil,hRoCoil
 REAL tAiCoil,tAoCoil
 REAL QSens,QLat
 REAL hAiCoil,hAoCoil,rhAoCoil
-REAL:: ZoneName=1
+CHARACTER(len=12) :: ZoneName
 
 !Error Flags
 INTEGER,PARAMETER :: NOERROR       = 0
@@ -1449,7 +1449,9 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
   CLOSE(11)
   
-  CALL SetupRealOutputVariable('Sensible Heat', QSens, 'Zone', 'Sum', ZoneName)    !RS: Debugging: Only one zone for this case
+  ZoneName='Zone1'    !RS: Debugging: Only one zone for this case
+  
+  CALL SetupRealOutputVariable('Sensible Heat', QSens, 'Zone', 'Sum', ZoneName, , , , , , ) !RS: Debugging: Blanks to see if optional are present
   CALL SetupRealOutputVariable('Latent Heat', QLat, 'Zone', 'Sum', ZoneName)
   !
   CALL SetupRealOutputVariable('Condenser Circuit Refrigerant Inlet Pressure', pRiCoil, 'HeatBalance', 'State', ZoneName)

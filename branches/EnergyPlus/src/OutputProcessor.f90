@@ -1438,6 +1438,8 @@ INTEGER FUNCTION ValidateIndexType(IndexTypeKey,CalledFrom)
   CHARACTER(len=12), SAVE, DIMENSION(3) :: SystemIndexTypes
   LOGICAL,SAVE                    :: Initialized =.false.
   INTEGER Item
+  
+  CHARACTER(len=95) :: DummyVariable !RS: Debugging: Test Variable
 
   IF (.not. Initialized) THEN
     ZoneIndexTypes(1)='ZONE'
@@ -1459,8 +1461,12 @@ INTEGER FUNCTION ValidateIndexType(IndexTypeKey,CalledFrom)
 
   ValidateIndexType=0
   !  The following should never happen to a user!!!!
-  CALL ShowSevereError('OutputProcessor/ValidateIndexType: Invalid Index Key passed to ValidateIndexType='  &
-                              //TRIM(IndexTypeKey))
+  
+  DummyVariable='OutputProcessor/ValidateIndexType: Invalid Index Key passed to ValidateIndexType=' & //TRIM(IndexTypeKey) !RS: Debugging
+  
+  !CALL ShowSevereError('OutputProcessor/ValidateIndexType: Invalid Index Key passed to ValidateIndexType='  &
+  !                            //TRIM(IndexTypeKey))
+  CALL ShowSevereError(DummyVariable)  !RS: Debugging: Determining if the message will go through
   CALL ShowContinueError('..Should be "ZONE", "SYSTEM", "HVAC"... was called from:'//TRIM(CalledFrom))
   CALL ShowFatalError('Preceding condition causes termination.')
 
@@ -5460,6 +5466,8 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
   LOGICAL :: ThisOneOnTheList
   CHARACTER(len=UnitsStringLength) :: UnitsString =BlankString ! Units for Variable (no brackets)
   INTEGER                      :: localIndexGroupKey
+  
+  !CHARACTER(len=MaxNameLength) :: DummyVariable !RS: Debugging: Testing to see if the error message can be called
 
   IF (.not. OutputInitialized) CALL InitializeOutput
 
@@ -5491,10 +5499,9 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
   ENDIF
 
   ! If ReportFreq present, overrides input
-  IF (PRESENT(ReportFreq)) THEN
+  IF (PRESENT(ReportFreq)) THEN    !RS: Debugging: Commenting out entire section just to see if I can get the code to run
     CALL DetermineFrequency(ReportFreq,RepFreq)
     NumExtraVars=1
-    ReportList=0
   ENDIF
 
   ThisOneOnTheList=FindItemInVariableList(KeyedValue,VarName)
@@ -5537,8 +5544,11 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
         ZoneName=' '
       ENDIF
     ENDIF
+    
+    !DummyVariable='SetupRealOutputVariable' !RS: Debugging: Seeing if error message will pass through this
 
-    IndexType=ValidateIndexType(IndexTypeKey,'SetupRealOutputVariable')
+    IndexType=ValidateIndexType(TRIM(IndexTypeKey),'SetupRealOutputVariable')   !RS: Debugging: Added in TRIM
+    !IndexType=ValidateIndexType(TRIM(IndexTypeKey),DummyVariable)   !RS: Debugging: Seeing if error message will pass through this
     VariableType=ValidateVariableType(VariableTypeKey)
 
     CALL AddToOutputVariableList(VarName,IndexType,VariableType,VarType_Real,UnitsString)
