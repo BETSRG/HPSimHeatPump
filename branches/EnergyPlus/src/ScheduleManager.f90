@@ -4415,7 +4415,7 @@ SUBROUTINE ReportOrphanSchedules
   INTEGER :: Item
   INTEGER :: NumCount
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -4438,7 +4438,7 @@ SUBROUTINE ReportOrphanSchedules
   ENDDO
 
   IF (NumCount > 0) THEN
-    !CALL ShowMessage('There are '//trim(RoundSigDigits(NumCount))//' unused schedules in input.')
+    !CALL ShowMessage('There are '//trim(RoundSigDigits(NumCount))//' unused schedules in input.') !RS: Secret Search String
     WRITE(DebugFile,*) 'There are '//TRIM(RoundSigDigits(NumCount))//' unused schedules in input.'
     NeedUseMessage=.true.
   ENDIF
