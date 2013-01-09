@@ -298,7 +298,7 @@
                 IERR=1
                 CYCLE
             CASE (3)    !RS: Debugging: This is an useless stop---doesn't tell us what's wrong!
-                !STOP   !RS: This for a Circuit File Error
+                !STOP   !RS: This is for a Circuit File Error
                 WRITE(*,*) 'Circuit File Error' !RS: Debugging: Because I may as well...
             CASE (4,5)
                 WRITE(*,*)'## ERROR ## Highside: Coil geometry misdefined.'
