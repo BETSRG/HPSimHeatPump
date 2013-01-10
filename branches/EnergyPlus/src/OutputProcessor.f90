@@ -5660,7 +5660,40 @@ SUBROUTINE SetupRealOutputVariable(VariableName,ActualVariable,IndexTypeKey,Vari
   RETURN
 
 END SUBROUTINE SetupRealOutputVariable
+           
+SUBROUTINE FlushHPOutput()
 
+    USE DataGlobals
+    !USE EvaporatorMod, ONLY: GetQOut
+    USE EvaporatorMod
+    USE CondenserMod
+
+    LOGICAL, SAVE :: OneTime = .TRUE.
+    REAL, SAVE :: PrevTime = 0
+    REAL :: CurTime
+    Integer:: OutputFile=1
+    REAL :: QSens, QLat
+
+    CurTime=CurrentTime
+
+    IF (OneTime) THEN
+        OPEN(unit=OutputFile,file='Output.csv',Access='APPEND')
+        WRITE(OutputFile, '(15(A28,","))') 'Time','Sensible Heat','Latent Heat','Cond Ckt Refrig. In. Press', &
+                          'Cond Ckt Refrig. In. Temp','Cond Ckt Refrig. In. Enthalpy','Cond Ckt Refrig. Out. Press', &
+                          'Cond Ckt Refrig. Out. Temp','Cond Ckt Refrig. Out. Enthalpy','Cond Air Out. Temp', &
+                          'Cond Air Out. Rel. Hum.','Evap Air In Temp','Evap Air In Enthalpy','Evap Air Out Temp', &
+                          'Evap Air In Enthalpy'
+        OneTime=.FALSE.
+    END IF
+
+    IF (CurTime .NE. PrevTime) THEN
+        CALL GetQOut(QSens,QLat)
+        WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
+                                            tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
+        PrevTime=CurTime
+    END IF
+
+END SUBROUTINE
 
 SUBROUTINE SetupIntegerOutputVariable(VariableName,ActualVariable,IndexTypeKey,VariableTypeKey,KeyedValue,ReportFreq,indexGroupKey)
 

@@ -45,7 +45,6 @@
     USE Psychrometrics !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
     USE DataHVACGlobals !RS: Debugging: Small Load and SingleHeatingSetPoint, SingleCoolingSetPoint
-    !USE OutputProcessor !RS: Debugging: Trying to print out some outputs
 
     IMPLICIT NONE
 
