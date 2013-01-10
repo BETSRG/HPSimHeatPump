@@ -422,6 +422,7 @@
     PRIVATE CalcRefProperty
     PRIVATE CalcSegmentRefOutletPressure
     PRIVATE UpdateTubeDataFromCircuitData
+    PUBLIC GetCondProp  !RS: Integration: Trying to carry over the properties to output
 
     CONTAINS
 
@@ -7093,4 +7094,19 @@ END IF
 
     !************************************************************************
 
+SUBROUTINE GetCondProp(Out1, Out2, Out3, Out4, Out5, Out6, Out7, Out8)
+    !RS: Integration: Trying to carry over the properties to output
+    REAL Out1, Out2, Out3, Out4, Out5, Out6, Out7, Out8
+ 
+    Out1=pRiCoil
+    Out2=tRiCoil
+    Out3=hRiCoil
+    Out4=pRoCoil
+    Out5=tRoCoil
+    Out6=hRoCoil
+    Out7=tAoCoil
+    Out8=rhAoCoil
+
+END SUBROUTINE
+    
     END MODULE CondenserMod
