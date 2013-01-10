@@ -447,6 +447,7 @@ PRIVATE CalcWetSurfaceBraun
 PRIVATE CalcWetSurfaceMcQuiston
 PRIVATE UpdateTubeDataFromCircuitData
 PUBLIC GetQOut  !RS: Testing: Trying to integrate HPSim and EPlus
+PUBLIC GetEvapProp   !RS: Integration: Trying to carry over the properties to output
 
 CONTAINS
 
@@ -7491,6 +7492,17 @@ REAL Out2
     Out1=QModSensTot*1000 !Sensible Module heat transfer, W
     Out2=QModLatTot*1000  !Latent Module heat transfer, W
     
+END SUBROUTINE
+
+SUBROUTINE GetEvapProp(Out1, Out2, Out3, Out4)
+    !RS: Integration: Trying to carry over the properties to output
+ REAL Out1, Out2, Out3, Out4
+ 
+    Out1=tAiCoil
+    Out2=hAiCoil
+    Out3=tAoCoil
+    Out4=hAoCoil
+
 END SUBROUTINE
 
 END MODULE EvaporatorMod

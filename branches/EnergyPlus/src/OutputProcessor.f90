@@ -5664,9 +5664,8 @@ END SUBROUTINE SetupRealOutputVariable
 SUBROUTINE FlushHPOutput()
 
     USE DataGlobals
-    !USE EvaporatorMod, ONLY: GetQOut
-    USE EvaporatorMod
-    USE CondenserMod
+    USE EvaporatorMod, ONLY: GetQOut, GetEvapProp
+    USE CondenserMod, ONLY: GetCondProp
 
     LOGICAL, SAVE :: OneTime = .TRUE.
     REAL, SAVE :: PrevTime = 0
@@ -5688,8 +5687,11 @@ SUBROUTINE FlushHPOutput()
 
     IF (CurTime .NE. PrevTime) THEN
         CALL GetQOut(QSens,QLat)
+        CALL GetEvapProp(tAiCoil, hAiCoil, tAoCoil, hAoCoil)
+        CALL GetCondProp(pRiCoil, tRiCoil, hRiCoil, pRoCoil, tRoCoil, hRoCoil,tAoCoil, rhAoCoil)
         WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
                                             tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
+        !RS: Debugging: These values aren't actually being printed out properly; the values are mostly empty.
         PrevTime=CurTime
     END IF
 
