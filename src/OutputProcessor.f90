@@ -5676,6 +5676,9 @@ SUBROUTINE FlushHPOutput()
     CurTime=CurrentTime
 
     IF (OneTime) THEN
+        OPEN(unit=OutputFile,file='Output.csv',status='OLD')
+        CLOSE(unit=OutputFile, Status='DELETE') !RS: Debugging: Getting rid of any old versions
+        
         OPEN(unit=OutputFile,file='Output.csv',Access='APPEND')
         WRITE(OutputFile, '(15(A28,","))') 'Time','Sensible Heat','Latent Heat','Cond Ckt Refrig. In. Press', &
                           'Cond Ckt Refrig. In. Temp','Cond Ckt Refrig. In. Enthalpy','Cond Ckt Refrig. Out. Press', &
@@ -5685,13 +5688,12 @@ SUBROUTINE FlushHPOutput()
         OneTime=.FALSE.
     END IF
 
-    IF (CurTime .NE. PrevTime) THEN
+    IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
         CALL GetQOut(QSens,QLat)
         CALL GetEvapProp(tAiCoil, hAiCoil, tAoCoil, hAoCoil)
         CALL GetCondProp(pRiCoil, tRiCoil, hRiCoil, pRoCoil, tRoCoil, hRoCoil,tAoCoil, rhAoCoil)
         WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
                                             tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
-        !RS: Debugging: These values aren't actually being printed out properly; the values are mostly empty.
         PrevTime=CurTime
     END IF
 

@@ -145,7 +145,7 @@
   SizingPeriod:DesignDay,	!RS: Switching back
     Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name
     7,                       !- Month
-    21,                      !- Day of Month
+    1,                      !- Day of Month
     SummerDesignDay,         !- Day Type
     32,                      !- Maximum Dry-Bulb Temperature {C}
     15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}

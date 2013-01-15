@@ -120,7 +120,7 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
-    INTEGER :: LogFile       =2 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopfully this works.
     
   OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
@@ -165,6 +165,7 @@
     !    IsCoolingMode=1
     !END IF
     
+    !RS: Debugging: Commenting out this section since we're only running cooling-only right now
     IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LE. 0) THEN  !RS: Debugging: Trying to run it only on cooling
         QUnitOut=0
         LatOutputProvided=0

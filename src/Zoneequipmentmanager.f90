@@ -2170,6 +2170,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   USE HVACVariableRefrigerantFlow, ONLY: SimulateVRF
   USE RefrigeratedCase, ONLY: SimAirChillerSet
   USE UserDefinedComponents, ONLY: SimZoneAirUserDefined
+  USE DataGlobals   !RS: Debugging: CurrentTime
 
   IMPLICIT NONE    ! Enforce explicit typing of all variables in this routine
 
@@ -2206,6 +2207,15 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   !REAL :: LatOutputProvided
   REAL(r64) :: AirSysOutput
   REAL(r64) :: NonAirSysOutput
+  INTEGER :: TimeFile       =15 !RS: Debugging: Time check file denotion, hopfully this works.
+  LOGICAL, SAVE :: OneTime = .TRUE.  !RS: Debugging
+
+  IF (OneTime) THEN
+    OPEN(unit=TimeFile,file='Time.txt', Access='APPEND')    !RS: Debugging
+    OneTime=.FALSE.
+  END IF
+  
+  WRITE(TimeFile,*) 'SimZoneEquipment called',CurrentTime  !RS: Debugging: CurrentTime
 
        ! Determine flow rate and temperature of supply air based on type of damper
 
@@ -2329,6 +2339,10 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              
            CASE (HPSim)
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
+               WRITE(TimeFile,*) 'Simulation Cycle called',CurrentTime !RS: Debugging: CurrentTime
+               !IF (SysOutPutProvided .LE. 0) THEN   !RS: Debugging: Dealing with times when it's not doing anything
+               !    ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP/10
+               !END IF
                !SysOutputProvided=7.56932   !RS: Debugging
                !LatOutputProvided=4.92648
 
