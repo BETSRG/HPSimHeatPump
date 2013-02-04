@@ -1,5 +1,7 @@
 MODULE DataGlobals_HPSim !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)      ! EnergyPlus Data-Only Module
 
+!look at me!
+
           ! MODULE INFORMATION:
           !       AUTHOR         Rick Strand
           !       DATE WRITTEN   January 1997
