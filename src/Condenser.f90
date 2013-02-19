@@ -620,6 +620,10 @@
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
+    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    
+    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
+  
     !Flow:
 
     mRefTot =XIN(1)
@@ -1207,6 +1211,8 @@
     OUT(29)=WeightCopper
 
     OUT(24)=ErrorFlag
+    
+    WRITE(LogFile,*) 'QCondenser: ', QCoil
 
     CALL Condenser_Helper_1
     

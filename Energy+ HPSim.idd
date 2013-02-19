@@ -76435,28 +76435,31 @@ MainDesignData,
 	\key False
 	\key True
 	\default True
-    N1, \field Calculation Mode
+    A2, \field Simulation Type
+	\type choice
+	\key TXVSimulation
+	\key FixedOrificeSimulation
+	\key FixedSuperHeatSimulation	
+	\memo !RS: Debugging: Not sure if the last is necessary or not
+    N1, \field System Type
 	\type integer
 	\required-field
-    N2, \field System Type
-	\type integer
-	\required-field
-    A2, \field Is in Cooling Mode
+    A3, \field Is in Cooling Mode
 	\note If False, cooling mode is off
 	\note If True, cooling mode is on
 	\type choice
 	\key False
 	\key True
 	\default True
-    N3, \field Design Subcooling
+    N2, \field Design Subcooling
 	\type real
 	\units R
 	\required-field
-    N4, \field Design Superheat
+    N3, \field Design Superheat
 	\type real
 	\units R
 	\required-field
-    A3, \field Refrigerant Name
+    A4, \field Refrigerant Name
 	\type choice
 	\key R410a
 	\key R22
@@ -76464,28 +76467,10 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N5, \field No. of Refrigerants in Blend
+    N4, \field No. of Refrigerants in Blend
 	\type integer
 	\required-field
-    A4, \field Design Condition Description
-	\type alpha
-	\deprecated
-    N6, \field Outdoor Entering Drybulb Temperature
-	\type real
-	\units F
-	\required-field
-    N7, \field Outdoor Entering Wetbulb Temperature
-	\type real
-	\units F
-    N8, \field Indoor Entering Drybulb Temperature
-	\type real
-	\units F
-	\required-field
-    N9, \field Indoor Entering Wetbulb Temperature
-	\type real
-	\units F
-	\required-field
-    N10; \field Design Refrigerant Charge Mass
+    N5; \field Design Refrigerant Charge Mass
 	 \type real
 	 \units lb
 	 \required-field

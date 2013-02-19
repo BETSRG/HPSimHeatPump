@@ -214,17 +214,13 @@ REAL NominalCoolingCapacity
 REAL NominalHeatingCapacity
 REAL ElectricHeating
 CHARACTER(len=MaxNameLength)DesignConditionDescription
-!REAL OutdoorEnteringDrybulbTemperature
-!REAL OutdoorEnteringWetbulbTemperature
-!REAL IndoorEnteringDrybulbTemperature
-!REAL IndoorEnteringWetbulbTemperature
 REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
 CHARACTER(len=MaxNameLength)CompressorType
-CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant
-REAL CompressorPower
+!CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant    !RS: Debugging: This shouldn't do anything
+!REAL CompressorPower   !RS: Debugging: This shouldn't do anything
 REAL CompressorHeatLossFraction
 REAL CompressorHeatLoss
 REAL CompressorVolume
@@ -327,8 +323,6 @@ CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
 REAL :: TubeNumber
 REAL :: SystemCost
-REAL TWiC   !RS: Outdoor Entering or Condenser Inlet Wetbulb Temperature
-REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -353,33 +347,35 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   END SELECT
     
   !Calculation mode
-  MODE = Numbers(1)
-  SystemType = Numbers(2)
+  SELECT CASE(TRIM(MakeUPPERcase(Alphas(2))))
+  CASE('TXVSIMULATION')
+      MODE=TXVSIMULATION
+  CASE('FIXEDORIFICESIMULATION')
+      MODE=FIXEDORIFICESIM
+  CASE('FIXEDSUPERHEATSIMULATION')
+      MODE=FIXEDSUPERHEATSIM
+  CASE DEFAULT
+      WRITE(*,*) 'CASE FAILED'  !FAIL
+  END SELECT
+  
+  SystemType = Numbers(1)
     
-  SELECT CASE (Alphas(2)(1:1))  !RS: Debugging: This cooling/heating mode should depend on what's being brought in from EPlus
+  SELECT CASE (Alphas(3)(1:1))  !RS: Debugging: This cooling/heating mode should depend on what's being brought in from EPlus
   CASE ('F','f')
     IsCoolingMode=0
   CASE DEFAULT
     IsCoolingMode=1
   END SELECT
 
-  Subcooling = Numbers(3)   !Design Subcooling
-  Superheat = Numbers(4)    !Design Superheat
+  Subcooling = Numbers(2)   !Design Subcooling
+  Superheat = Numbers(3)    !Design Superheat
   
-  RefrigerantName = Alphas(3)
+  RefrigerantName = Alphas(4)
   Ref$=RefrigerantName
+  !RS: Debugging: See if this is actually used or not
+  NumofRefrigerants = Numbers(4)    !Number of Refrigerants in Blend
   
-  NumofRefrigerants = Numbers(5)    !Number of Refrigerants in Blend
-  
-  DesignConditionDescription = Alphas(4)
-  
-  TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature  !RS: Debugging: The following four temps really depend on values from EPlus
-  !RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
-  TWiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
-  TAie = Numbers(8) !IndoorEnteringDrybulbTemperature
-  !RHiE = Numbers(9) !IndoorEnteringWetbulbTemperature
-  TWiE = Numbers(9) !IndoorEnteringWetbulbTemperature
-  RefChg = Numbers(10)    !Design Refrigerant Charge Mass
+  RefChg = Numbers(5)    !Design Refrigerant Charge Mass
 
 
   !***************** Compressor data *****************
@@ -404,9 +400,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   END SELECT
 
   CompressorType = Alphas(3)
-  Rref=Alphas(4)    !Compressor Refrigerant
   
-  CompressorPower = Numbers(1)
   CompPAR(21) = Numbers(2) !CompressorHeatLossFraction
   CompPAR(22) = Numbers(3) !CompressorHeatLoss
   CompPAR(23) = Numbers(4) !CompressorVolume
@@ -439,6 +433,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
   TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
   Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
   Super = Numbers(30) !UserSpecifiedRatingSuperheat
+  !RS: Debugging: See if both sets of Subcool and Super (here and above) are really needed.
   
   !***************** Outdoor coil data *****************
 
@@ -1051,7 +1046,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
 	  IF (Unit .EQ. SI) THEN !SI unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to IDC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveIDCLn
@@ -1081,7 +1076,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to ODC line
+        !Equilibrium suction line, combines compressor suction line and valve to ODC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveODCLn
@@ -1113,7 +1108,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 
 	  ELSE !IP unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to IDC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveIDCLn
@@ -1143,7 +1138,7 @@ REAL TWiE   !RS: Indoor Entering or Evaporator Inlet Wetbulb Temperature
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to ODC line
+        !Equilibrium suction line, combines compressor suction line and valve to ODC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveODCLn

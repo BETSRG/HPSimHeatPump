@@ -1513,7 +1513,7 @@ Model,
 
 MainDesignData,
     False, !field SI Units Flag
-    2, !field Calculation Mode
+    FixedOrificeSimulation, !field Simulation Mode 
     2, !field System Type
     TRUE, !field Is in Cooling Mode
     !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
@@ -1521,11 +1521,6 @@ MainDesignData,
     10, !field Design Superheat [R]
     R410A, !field Refrigerant Name
     2, !field No. of Refrigerants in Blend [-]
-    Cooling: 'A' Rating Conditions, !field Design Condition Description
-    95, !field Outdoor Entering Drybulb Temperature [°F]
-    75, !field Outdoor Entering Wetbulb Temperature [°F]
-    80, !field Indoor Entering Drybulb Temperature [°F]
-    67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
 
 CompressorData,
@@ -1535,8 +1530,8 @@ CompressorData,
     R410A, !field Compressor Refrigerant
     2663.649, !field Compressor Power [W]
     0, !field Compressor Heat Loss Fraction [-]
-    0, !field Compressor Heat Loss [Btu!h]
-    0, !field Compressor Volume [in³]
+    0, !field Compressor Heat Loss [Btu/h]
+    150, !field Compressor Volume [in³]	!RS: Debugging: Setting it to 150 instead of 0 for testing
     226.492462, !field Compressor Mass Coefficient 1[-]
     4.121732, !field Compressor Mass Coefficient 2[-]
     0.209093, !field Compressor Mass Coefficient 3[-]
@@ -1569,14 +1564,14 @@ OutdoorCoilData,
     4, !field Fin Type
     FinName, !field Fin Name
     22, !field Fin Pitch [FPI]
-    1539, !field Fin Conductivity [Btu.in!h.ft².F]
+    1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin thickness [thou]
     Aluminum, !field Fin Material
     Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
     4, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0, !field Tube Lateral Spacing [in]
     1, !field Tube Vertical Spacing [in]
     1, !field Number of Rows
@@ -1598,14 +1593,14 @@ IndoorCoilData,
     4, !field Fin Type
     York 11-elmt, !field Fin Name
     12, !field Fin Pitch [FPI]
-    1539, !field Fin Conductivity [Btu.in!h.ft².F]
+    1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin Thickness [thou]
     Aluminum, !field Fin Material
     Coil tube: 3/8 0.012 thick Expanded, !field Tube Name
     6, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.866, !field Tube Lateral Spacing [in]
     1, !field Tube Vertical Spacing [in]
     3, !field Number of Rows
@@ -1643,29 +1638,29 @@ ExpansionDeviceData,
     !--- TXV ---
     4.68, !field Model (Cooling) Rated Capacity [tons]
     4.73, !field Model (Heating) Rated Capacity [tons]
-    !--- Distibutor ---
-    24, !Distibutor Tube Length (Cooling) [in]
-    24; !Distibutor Tube Length (Heating) [in]
+    !--- Distributor ---
+    24, !Distributor Tube Length (Cooling) [in]
+    24; !Distributor Tube Length (Heating) [in]
  
 RefrigerantLineData,
     Compressor Suction, !field Refrigerant Line
     Copper: 3/4 in 0.035 thick, !field Tube Type
     3, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
-    0.75, !field Tube Outside Diamater [in]
+    0.75, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
     0, !field Charge in Line [lbm]
     Compressor Discharge, !field Refrigerant Line
     Copper: 1/2 in 0.027 thick, !field Tube Type
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.446, !field Tube Inside Diameter [in]
     0.5, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
@@ -1674,9 +1669,9 @@ RefrigerantLineData,
     Copper: 3/8 in 0.012 thick, !field Tube Type
     28, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.351, !field Tube Inside Diameter [in]
     0.375, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
@@ -1685,9 +1680,9 @@ RefrigerantLineData,
     Copper: 3/4 in 0.035 thick, !field Tube Type
     25, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
@@ -1696,9 +1691,9 @@ RefrigerantLineData,
     Copper: 3/4 in 0.035 thick, !field Tube Type
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
-    0, !field Refrigerant Line Heat Loss [Btu!h]
+    0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in!h.ft².F]
+    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0; !field Additional Pressure Drop [psig]
@@ -2026,7 +2021,7 @@ ODCcktGeometry,
     0.37, !Tube ID [in]
     2724, !Tube Conductivity [Btu.in/h.ft².F]
     1, !Tube Vertical Spacing [in]
-    0, !Tube Horizontal Spacing [in]
+    0.2, !Tube Horizontal Spacing [in]	!RS: Testing: Was 0 before
     1, !Number of Rows
     36, !Number of Tubes per Row
     96.45, !Single Tube Length [in]
