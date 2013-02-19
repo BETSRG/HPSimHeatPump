@@ -5688,14 +5688,14 @@ SUBROUTINE FlushHPOutput()
         OneTime=.FALSE.
     END IF
 
-    IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
+    !IF (CurTime .NE. PrevTime) THEN    !RS: Debugging: Commenting out just to see what other results we get
         CALL GetQOut(QSens,QLat)
         CALL GetEvapProp(tAiCoil, hAiCoil, tAoCoil, hAoCoil)
         CALL GetCondProp(pRiCoil, tRiCoil, hRiCoil, pRoCoil, tRoCoil, hRoCoil,tAoCoil, rhAoCoil)
         WRITE(OutputFile, '(15(F12.5,","))') CurTime, QSens, QLat, pRiCoil, tRiCoil, hRiCoil, pRoCoil,  &
                                             tRoCoil, hRoCoil,tAoCoil, rhAoCoil, tAiCoil, hAiCoil, tAoCoil, hAoCoil
-        PrevTime=CurTime
-    END IF
+    !    PrevTime=CurTime
+    !END IF
 
 END SUBROUTINE
 

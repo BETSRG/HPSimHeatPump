@@ -32,7 +32,7 @@ INTEGER,PARAMETER :: REHEAT         = 4
 INTEGER,PARAMETER :: EVAPORATORONLY = 5
 
 !Calculation Mode
-INTEGER,PARAMETER :: FIXEDORIFICESIM     = 1
+INTEGER,PARAMETER :: FIXEDORIFICESIM     = 1    !RS: Debugging: Mismatch between definitions here and at MODE
 INTEGER,PARAMETER :: ORIFICEANDTXVDESIGN = 2
 INTEGER,PARAMETER :: FIXEDSUPERHEATSIM   = 3
 INTEGER,PARAMETER :: TXVSIMULATION       = 4
@@ -181,7 +181,7 @@ REAL TOEVP,POEVP,HOEVP,XOEVP	!Evaporator outlet temp. (F); pressure (psi); entha
 
 INTEGER(2)	:: Unit !Unit flag: 1=SI; 2=IP
 
-INTEGER		:: MODE !1-Design mode: Given superheat, subcooling; Compute charge, orifice size   
+INTEGER		:: MODE !1-Design mode: Given superheat, subcooling; Compute charge, orifice size   !RS: Debugging: Mismatch between definitions!
 					!2-Simulation mode: Given charge, orifice size; Compute superheat, subcooling
 					!3-Design mode: Given expansion device, superheat; Compute charge, subcooling
 					!4-Simulation mode: Given superheat, charge; Compute subcooling, expansion deivce

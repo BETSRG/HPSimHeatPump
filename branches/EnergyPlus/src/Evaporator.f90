@@ -637,6 +637,10 @@ CONTAINS
     
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
+    
+    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    
+    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     mRefTot =XIN(1)
     pRiCoil =XIN(2)
@@ -1240,6 +1244,8 @@ CONTAINS
     OUT(25)=WeightCopper
 
     OUT(20)=ErrorFlag
+    
+    WRITE(LogFile,*) 'Qevaporator: ',QCoil
 
     CALL Evaporator_Helper_1
 
