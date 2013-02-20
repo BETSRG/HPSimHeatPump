@@ -328,8 +328,8 @@ REAL :: SystemCost
 
 !Flow:
 
-  ODC_SurfAbsorptivity=1
-  IDC_SurfAbsorptivity=1
+  !ODC_SurfAbsorptivity=1   !RS: Debugging: Extraneous
+  !IDC_SurfAbsorptivity=1   !RS: Debugging: Extraneous
   
   !***************** System data *****************
 
@@ -366,16 +366,10 @@ REAL :: SystemCost
   CASE DEFAULT
     IsCoolingMode=1
   END SELECT
-
-  Subcooling = Numbers(2)   !Design Subcooling
-  Superheat = Numbers(3)    !Design Superheat
   
-  RefrigerantName = Alphas(4)
-  Ref$=RefrigerantName
-  !RS: Debugging: See if this is actually used or not
-  NumofRefrigerants = Numbers(4)    !Number of Refrigerants in Blend
+  Ref$=Alphas(4)    !Refrigerant Name
   
-  RefChg = Numbers(5)    !Design Refrigerant Charge Mass
+  RefChg = Numbers(2)    !Design Refrigerant Charge Mass
 
 
   !***************** Compressor data *****************
@@ -433,7 +427,6 @@ REAL :: SystemCost
   TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
   Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
   Super = Numbers(30) !UserSpecifiedRatingSuperheat
-  !RS: Debugging: See if both sets of Subcool and Super (here and above) are really needed.
   
   !***************** Outdoor coil data *****************
 
@@ -564,29 +557,30 @@ REAL :: SystemCost
 
   !Cooling mode
 
-  CoolingShTbPAR(1) = Numbers(1)    !Length
-  CoolingShTbPAR(2) = Numbers(2)    !Diameter
-  CoolingShTbPAR(3) = Numbers(3)    !Chamfer Depth
+  !CoolingShTbPAR(1) = Numbers(1)    !Length
+  !CoolingShTbPAR(2) = Numbers(2)    !Diameter
+  !CoolingShTbPAR(3) = Numbers(3)    !Chamfer Depth
 
   !Heating mode
 
-  HeatingShTbPAR(1) = Numbers(4)    !Length
-  HeatingShTbPAR(2) = Numbers(5)    !Diameter
-  HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
+  !HeatingShTbPAR(1) = Numbers(4)    !Length
+  !HeatingShTbPAR(2) = Numbers(5)    !Diameter
+  !HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
 
   !Capillary Tube
   
   !Cooling Mode
   
-  CoolingCapTubePAR(2) = Numbers(7) !Length
-  CoolingCapTubePAR(1) = Numbers(8) !Diameter
-  CoolingCapTubePAR(3) = Numbers(9) !Coil Diameter
+  !CoolingCapTubePAR(2) = Numbers(7) !Length
+  !CoolingCapTubePAR(1) = Numbers(8) !Diameter
+  !CoolingCapTubePAR(3) = Numbers(9) !Coil Diameter
   
   !Heating Mode
   
-  HeatingCapTubePAR(2) = Numbers(10)    !Length
-  HeatingCapTubePAR(1) = Numbers(11)    !Diameter
-  HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
+  !HeatingCapTubePAR(2) = Numbers(10)    !Length
+  !HeatingCapTubePAR(1) = Numbers(11)    !Diameter
+  !HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
+  !RS: Debugging: Numbers(1-12) are never used.
 
   !TXV data
 
@@ -1229,7 +1223,7 @@ REAL :: SystemCost
     CondPAR(34)=PwrODfan
     CondPAR(35)=ODdrawblow
 
-	CondPAR(36)=ODC_SurfAbsorptivity
+	!CondPAR(36)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
     CondPAR(37)=ODC_TubeType
 
 	CondPAR(41)=ODC_CurveUnit
@@ -1273,7 +1267,7 @@ REAL :: SystemCost
 	EvapPAR(27)=PwrIDfan
     EvapPAR(28)=IDdrawblow
 
-	EvapPAR(29)=IDC_SurfAbsorptivity
+	!EvapPAR(29)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
     EvapPAR(30)=IDC_TubeType
 
 	EvapPAR(35)=IDC_CurveUnit
@@ -1335,7 +1329,7 @@ REAL :: SystemCost
     CondPAR(34)=PwrIDfan
     CondPAR(35)=IDdrawblow
 
-	CondPAR(36)=IDC_SurfAbsorptivity
+	!CondPAR(36)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
     CondPAR(37)=IDC_TubeType
 
 	CondPAR(41)=IDC_CurveUnit
@@ -1379,7 +1373,7 @@ REAL :: SystemCost
 	EvapPAR(27)=PwrODfan
     EvapPAR(28)=ODdrawblow
 
-	EvapPAR(29)=ODC_SurfAbsorptivity
+	!EvapPAR(29)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
     EvapPAR(30)=ODC_TubeType
 
 	EvapPAR(35)=ODC_CurveUnit
