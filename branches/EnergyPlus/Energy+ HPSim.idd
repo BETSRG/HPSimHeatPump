@@ -76451,14 +76451,6 @@ MainDesignData,
 	\key False
 	\key True
 	\default True
-    N2, \field Design Subcooling
-	\type real
-	\units R
-	\required-field
-    N3, \field Design Superheat
-	\type real
-	\units R
-	\required-field
     A4, \field Refrigerant Name
 	\type choice
 	\key R410a
@@ -76467,10 +76459,7 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N4, \field No. of Refrigerants in Blend
-	\type integer
-	\required-field
-    N5; \field Design Refrigerant Charge Mass
+    N2; \field Design Refrigerant Charge Mass
 	 \type real
 	 \units lb
 	 \required-field
