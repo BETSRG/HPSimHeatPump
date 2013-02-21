@@ -76479,108 +76479,93 @@ CompressorData,
 	\key Danfoss
 	\key Panasonic
 	\default Bristol
-    A3, \field Compressor Type
-	\type alpha
-	\deprecated
-    A4, \field Compressor Refrigerant
-	\type choice
-	\key R410a
-	\key R22
-	\key R417a
-	\key 407c
-	\key R134a
-	\required-field
-    N1, \field Compressor Power
-	\type real
-	\units W
-	\deprecated
-    N2, \field Compressor Heat Loss Fraction
+    N1, \field Compressor Heat Loss Fraction
 	\note Must be a decimal, not a percentage
 	\type real
 	\minimum 0
 	\maximum 1
 	\required-field
-    N3, \field Compressor Heat Loss
+    N2, \field Compressor Heat Loss
 	\type real
 	\units Btu/h
 	\required-field
-    N4, \field Compressor Volume
+    N3, \field Compressor Volume
 	\type real
 	\units in3
 	\note Cubic inches is not an Energy+
 	\note standard unit.
 	\required-field
-    N5, \field Compressor Mass Coefficient 1
+    N4, \field Compressor Mass Coefficient 1
 	\type real
 	\required-field
-    N6, \field Compressor Mass Coefficient 2
+    N5, \field Compressor Mass Coefficient 2
 	\type real
 	\required-field
-    N7, \field Compressor Mass Coefficient 3
+    N6, \field Compressor Mass Coefficient 3
 	\type real
 	\required-field
-    N8, \field Compressor Mass Coefficient 4
+    N7, \field Compressor Mass Coefficient 4
 	\type real
 	\required-field
-    N9, \field Compressor Mass Coefficient 5
+    N8, \field Compressor Mass Coefficient 5
 	\type real
 	\required-field
-    N10, \field Compressor Mass Coefficient 6
+    N9, \field Compressor Mass Coefficient 6
 	 \type real
 	 \required-field
-    N11, \field Compressor Mass Coefficient 7
+    N10, \field Compressor Mass Coefficient 7
 	 \type real
 	 \required-field
-    N12, \field Compressor Mass Coefficient 8
+    N11, \field Compressor Mass Coefficient 8
 	 \type real
 	 \required-field
-    N13, \field Compressor Mass Coefficient 9
+    N12, \field Compressor Mass Coefficient 9
 	 \type real
 	 \required-field
-    N14, \field Compressor Mass Coefficient 10
+    N13, \field Compressor Mass Coefficient 10
 	 \type real
 	 \required-field
-    N15, \field Compressor Power Coefficient 1
+    N14, \field Compressor Power Coefficient 1
 	 \type real
 	 \required-field
-    N16, \field Compressor Power Coefficient 2
+    N15, \field Compressor Power Coefficient 2
 	 \type real
 	 \required-field
-    N17, \field Compressor Power Coefficient 3
+    N16, \field Compressor Power Coefficient 3
 	 \type real
 	 \required-field
-    N18, \field Compressor Power Coefficient 4
+    N17, \field Compressor Power Coefficient 4
 	 \type real
 	 \required-field
-    N19, \field Compressor Power Coefficient 5
+    N18, \field Compressor Power Coefficient 5
 	 \type real
 	 \required-field
-    N20, \field Compressor Power Coefficient 6
+    N19, \field Compressor Power Coefficient 6
 	 \type real
 	 \required-field
-    N21, \field Compressor Power Coefficient 7
+    N20, \field Compressor Power Coefficient 7
 	 \type real
 	 \required-field
-    N22, \field Compressor Power Coefficient 8
+    N21, \field Compressor Power Coefficient 8
 	 \type real
 	 \required-field
-    N23, \field Compressor Power Coefficient 9
+    N22, \field Compressor Power Coefficient 9
 	 \type real
 	 \required-field
-    N24, \field Compressor Power Coefficient 10
+    N23, \field Compressor Power Coefficient 10
 	 \type real
 	 \required-field
-    N25, \field Power Multiplier
+    N24, \field Power Multiplier
 	 \type real
 	 \required-field
-    N26, \field Mass Flow Rate Multiplier
+    N25, \field Mass Flow Rate Multiplier
 	 \type real
 	 \required-field
-    N27, \field User Specified Rating Evap. Temperature
+    N26, \field User Specified Rating Evap. Temperature
 	 \type real
 	 \units F
 	 \required-field
-    N28, \field User Specified Rating Cond. Temperature
+    N27, \field User Specified Rating Cond. Temperature
 	 \type real
 	 \units F
 	 \required-field
@@ -76588,7 +76573,7 @@ CompressorData,
 	 \type real
 	 \units R
 	 \required-field
-    N30; \field User Specified Rating Superheat
+    N29; \field User Specified Rating Superheat
 	 \type real
 	 \units R
 	 \required-field
@@ -76879,7 +76864,6 @@ RefrigerantLineData,
 	\type real
 	\ip-units inH2O
 	\required-field
-	\deprecated
     N8, \field Refrigerant Line Length
 	 \type real
 	 \units ft
@@ -77227,8 +77211,6 @@ IDCcktGeometry,
 	    \default True
 	N1, \field Fin Type
 	    \type integer
-	A2, \field Fin Name
-	    \type alpha
 	N2, \field Fin Pitch [FPI]
 	    \type real
 	N3, \field Fin Conductivity
@@ -77238,12 +77220,8 @@ IDCcktGeometry,
 	    \type real
 	    \units in/1000
 	    \note Assuming [thou] = thousandths of an inch
-	A3, \field Fin Material
-	    \type alpha
 	N5, \field Tube Type
 	    \type integer
-	A4, \field Tube Name
-	    \type alpha
 	N6, \field Tube OD
 	    \type real
 	    \ip-units in
@@ -77270,7 +77248,7 @@ IDCcktGeometry,
 	     \type integer
 	N15, \field Number of Circuits
 	     \type integer
-	A5; \field Tube Shift Flag
+	A2; \field Tube Shift Flag
 	    \type alpha
 
 IDCcktCircuiting_TubeNumbers,
@@ -77676,8 +77654,6 @@ ODCcktGeometry,
 	    \default True
 	N1, \field Fin Type
 	    \type integer
-	A2, \field Fin Name
-	    \type alpha
 	N2, \field Fin Pitch [FPI]
 	    \type real
 	N3, \field Fin Conductivity
@@ -77687,12 +77663,8 @@ ODCcktGeometry,
 	    \type real
 	    \units in/1000
 	    \note Assuming [thou] = thousandths of an inch
-	A3, \field Fin Material
-	    \type alpha
 	N5, \field Tube Type
 	    \type integer
-	A4, \field Tube Name
-	    \type alpha
 	N6, \field Tube OD
 	    \type real
 	    \ip-units in
@@ -77719,7 +77691,7 @@ ODCcktGeometry,
 	     \type integer
 	N15, \field Number of Circuits
 	     \type integer
-	A5; \field Tube Shift Flag
+	A2; \field Tube Shift Flag
 	    \type alpha
 
 ODCcktCircuiting_TubeNumbers,

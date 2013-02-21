@@ -204,7 +204,6 @@ REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
-CHARACTER(len=MaxNameLength)CompressorType
 REAL CompressorHeatLossFraction
 REAL CompressorHeatLoss
 REAL CompressorVolume
@@ -275,7 +274,7 @@ REAL :: IDC_TubeID
   CASE('FIXEDSUPERHEATSIMULATION')
       MODE=FIXEDSUPERHEATSIM
   CASE DEFAULT
-      WRITE(*,*) 'CASE FAILED'  !FAIL
+      !FAIL
   END SELECT
   
   SystemType = Numbers(1)
@@ -312,38 +311,36 @@ REAL :: IDC_TubeID
   CASE DEFAULT
 	CompressorManufacturer=BRISTOL
   END SELECT
-
-  CompressorType = Alphas(3)
   
-  CompPAR(21) = Numbers(2) !CompressorHeatLossFraction
-  CompPAR(22) = Numbers(3) !CompressorHeatLoss
-  CompPAR(23) = Numbers(4) !CompressorVolume
-  CompPAR(11) = Numbers(5) !CompressorMassCoefficient1
-  CompPAR(12) = Numbers(6) !CompressorMassCoefficient2
-  CompPAR(13) = Numbers(7) !CompressorMassCoefficient3
-  CompPAR(14) = Numbers(8) !CompressorMassCoefficient4
-  CompPAR(15) = Numbers(9) !CompressorMassCoefficient5
-  CompPAR(16) = Numbers(10) !CompressorMassCoefficient6
-  CompPAR(17) = Numbers(11) !CompressorMassCoefficient7
-  CompPAR(18) = Numbers(12) !CompressorMassCoefficient8
-  CompPAR(19) = Numbers(13) !CompressorMassCoefficient9
-  CompPAR(20) = Numbers(14) !CompressorMassCoefficient10
-  CompPAR(1) = Numbers(15) !CompressorPowerCoefficient1
-  CompPAR(2) = Numbers(16) !CompressorPowerCoefficient2
-  CompPAR(3) = Numbers(17) !CompressorPowerCoefficient3
-  CompPAR(4) = Numbers(18) !CompressorPowerCoefficient4
-  CompPAR(5) = Numbers(19) !CompressorPowerCoefficient5
-  CompPAR(6) = Numbers(20) !CompressorPowerCoefficient6
-  CompPAR(7) = Numbers(21) !CompressorPowerCoefficient7
-  CompPAR(8) = Numbers(22) !CompressorPowerCoefficient8
-  CompPAR(9) = Numbers(23) !CompressorPowerCoefficient9
-  CompPAR(10) = Numbers(24) !CompressorPowerCoefficient10
-  CompPAR(25) = Numbers(25) !PowerMultiplier
-  CompPAR(26) = Numbers(26) !MassFlowRateMultiplier
-  TsiCmp = Numbers(27) !UserSpecifiedRatingEvapTemperature
-  TsoCmp = Numbers(28) !UserSpecifiedRatingCondTemperature
-  Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
-  Super = Numbers(30) !UserSpecifiedRatingSuperheat
+  CompPAR(21) = Numbers(1) !CompressorHeatLossFraction
+  CompPAR(22) = Numbers(2) !CompressorHeatLoss
+  CompPAR(23) = Numbers(3) !CompressorVolume
+  CompPAR(11) = Numbers(4) !CompressorMassCoefficient1
+  CompPAR(12) = Numbers(5) !CompressorMassCoefficient2
+  CompPAR(13) = Numbers(6) !CompressorMassCoefficient3
+  CompPAR(14) = Numbers(7) !CompressorMassCoefficient4
+  CompPAR(15) = Numbers(8) !CompressorMassCoefficient5
+  CompPAR(16) = Numbers(9) !CompressorMassCoefficient6
+  CompPAR(17) = Numbers(10) !CompressorMassCoefficient7
+  CompPAR(18) = Numbers(11) !CompressorMassCoefficient8
+  CompPAR(19) = Numbers(12) !CompressorMassCoefficient9
+  CompPAR(20) = Numbers(13) !CompressorMassCoefficient10
+  CompPAR(1) = Numbers(14) !CompressorPowerCoefficient1
+  CompPAR(2) = Numbers(15) !CompressorPowerCoefficient2
+  CompPAR(3) = Numbers(16) !CompressorPowerCoefficient3
+  CompPAR(4) = Numbers(17) !CompressorPowerCoefficient4
+  CompPAR(5) = Numbers(18) !CompressorPowerCoefficient5
+  CompPAR(6) = Numbers(19) !CompressorPowerCoefficient6
+  CompPAR(7) = Numbers(20) !CompressorPowerCoefficient7
+  CompPAR(8) = Numbers(21) !CompressorPowerCoefficient8
+  CompPAR(9) = Numbers(22) !CompressorPowerCoefficient9
+  CompPAR(10) = Numbers(23) !CompressorPowerCoefficient10
+  CompPAR(25) = Numbers(24) !PowerMultiplier
+  CompPAR(26) = Numbers(25) !MassFlowRateMultiplier
+  TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
+  TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
+  Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
+  Super = Numbers(29) !UserSpecifiedRatingSuperheat
   
   !***************** Outdoor coil data *****************
 

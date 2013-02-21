@@ -2250,7 +2250,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
 
-            SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+            SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
             CASE DEFAULT
@@ -2662,7 +2662,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
         !    NumOfMods = Numbers(14)
         !    NumOfCkts = Numbers(15)
         !
-        !    SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+        !    SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
         !    CASE ('F','f')
         !        IsShift=.FALSE.
         !    CASE DEFAULT
@@ -3065,7 +3065,6 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
 
             IF (Ltube .LE. 1e-3) THEN
                 ErrorFlag=ZEROLENCOILERROR
-                !CALL InitEvaporatorCoil_Helper_1   !RS: Debugging: Switching from Evap
                 CALL InitCondenserCoil_Helper_1
                 RETURN
 
@@ -3075,7 +3074,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
             NumOfCkts = Numbers(15)
             NumofSections = 1   !RS Comment: Not in the input file, but needed for the code to run properly. Set to 1 as there is only one coil section here.
 
-            SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+            SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
             CASE DEFAULT
@@ -3543,7 +3542,7 @@ ELSE !Microchannel coil
             RETURN
         END IF
 
-            SELECT CASE (Alphas(5)(1:1))
+            SELECT CASE (Alphas(2)(1:1))
             CASE ('V','v')
                 TubeOrientation=VERTICAL
             CASE ('H','h')
