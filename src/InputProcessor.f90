@@ -4396,7 +4396,7 @@ SUBROUTINE ReportOrphanRecordObjects
   ELSEIF (NumOrphObjNames > 0) THEN
     !CALL ShowMessage('There are '//trim(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.')
     !CALL ShowMessage('Use Output:Diagnostics,DisplayUnusedObjects; to see them.')  !RS: Secret Search String
-    WRITE(DebugFile,*) 'There are'//TRIM(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.'
+    WRITE(DebugFile,*) 'There are '//TRIM(IPTrimSigDigits(NumOrphObjNames))//' unused objects in input.'
     WRITE(DebugFile,*) 'Use Output:Diagnostics,DisplayUnusedObjects; to see them.'
   ENDIF
 

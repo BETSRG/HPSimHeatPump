@@ -2322,7 +2322,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             NumOfCkts = Numbers(15)
             NumofSections = 1   !RS Comment: Not in the input file, but needed for the code to run properly. Set to 1 as there is only one coil section here.
 
-            SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+            SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
             CASE DEFAULT
@@ -2780,7 +2780,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         !    NumOfMods = Numbers(14)
         !    NumOfCkts = Numbers(15)
         !
-        !    SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+        !    SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
         !    CASE ('F','f')
         !        IsShift=.FALSE.
         !    CASE DEFAULT
@@ -3221,7 +3221,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
 
-            SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
+            SELECT CASE (Alphas(2)(1:1))    !Tube Shift Flag
             CASE ('F','f')
                 IsShift=.FALSE.
             CASE DEFAULT
@@ -3643,7 +3643,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             RETURN
         END IF
 
-            SELECT CASE (Alphas(5)(1:1))
+            SELECT CASE (Alphas(2)(1:1))
             CASE ('V','v')
                 TubeOrientation=VERTICAL
             CASE ('H','h')

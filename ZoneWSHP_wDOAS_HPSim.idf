@@ -1523,9 +1523,6 @@ MainDesignData,
 CompressorData,
     H89B283ABC:60:230:1, !field Compressor Model
     Bristol, !field Compressor Manufacturer
-    Recip:Cooling:100:, !field Compressor Type
-    R410A, !field Compressor Refrigerant
-    2663.649, !field Compressor Power [W]
     0, !field Compressor Heat Loss Fraction [-]
     0, !field Compressor Heat Loss [Btu/h]
     150, !field Compressor Volume [in³]	!RS: Debugging: Setting it to 150 instead of 0 for testing
@@ -1744,13 +1741,10 @@ IDCcktModel,
 IDCcktGeometry,
     False, !SI Units Flag
     2, !Fin Type
-    Wavy, !Fin Name
     12, !Fin Pitch [FPI]
     1539, !Fin Conductivity [Btu.in/h.ft².F]
     3.9, !Fin Thickness [thou]
-    Aluminum, !Fin Material
     6, !Tube Type
-    Coil tube: 3/8 0.012 thick Expanded, !Tube Name
     0.394, !Tube OD [in]
     0.37, !Tube ID [in]
     2723, !Tube Conductivity [Btu.in/h.ft².F]
@@ -1976,13 +1970,10 @@ ODCcktModel,
 ODCcktGeometry,
     False, !SI Units Flag
     2, !Fin Type
-    Wavy, !Fin Name
     22, !Fin Pitch [FPI]
     1539, !Fin Conductivity [Btu.in/h.ft².F]
     3.9, !Fin Thickness [thou]
-    Aluminum, !Fin Material
     4, !Tube Type
-    Coil tube: 3/8 0.012 thick Expanded, !Tube Name
     0.394, !Tube OD [in]
     0.37, !Tube ID [in]
     2724, !Tube Conductivity [Btu.in/h.ft².F]
