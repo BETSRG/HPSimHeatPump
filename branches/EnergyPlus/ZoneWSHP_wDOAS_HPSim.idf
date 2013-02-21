@@ -1549,7 +1549,6 @@ CompressorData,
     0.002143, !field Compressor Power Coefficient 8[-]
     0.000739, !field Compressor Power Coefficient 9[-]
     -0.001464, !field Compressor Power Coefficient 10[-]
-    IP, !field Compressor Coefficients Unit Flag
     1, !field Power Multiplier [-]
     1, !field Mass Flow Rate Multiplier [-]
     30, !field User Specified Rating Evap. Temperature [°F]
@@ -1559,12 +1558,9 @@ CompressorData,
 
 OutdoorCoilData,
     4, !field Fin Type
-    FinName, !field Fin Name
     22, !field Fin Pitch [FPI]
     1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin thickness [thou]
-    Aluminum, !field Fin Material
-    Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
     4, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
@@ -1588,12 +1584,9 @@ OutdoorFanData,
 
 IndoorCoilData,
     4, !field Fin Type
-    York 11-elmt, !field Fin Name
     12, !field Fin Pitch [FPI]
     1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin Thickness [thou]
-    Aluminum, !field Fin Material
-    Coil tube: 3/8 0.012 thick Expanded, !field Tube Name
     6, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
@@ -1640,57 +1633,38 @@ ExpansionDeviceData,
     24; !Distributor Tube Length (Heating) [in]
  
 RefrigerantLineData,
-    Compressor Suction, !field Refrigerant Line
-    Copper: 3/4 in 0.035 thick, !field Tube Type
     3, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
-    0, !field Charge in Line [lbm]
-    Compressor Discharge, !field Refrigerant Line
-    Copper: 1/2 in 0.027 thick, !field Tube Type
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.446, !field Tube Inside Diameter [in]
     0.5, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
-    0, !field Charge in Line [lbm]
-    Liquid Line, !field Refrigerant Line
-    Copper: 3/8 in 0.012 thick, !field Tube Type
     28, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.351, !field Tube Inside Diameter [in]
     0.375, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
-    0, !field Charge in Line [lbm]
-    Reversing Valve to IDC, !field Refrigerant Line
-    Copper: 3/4 in 0.035 thick, !field Tube Type
     25, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0, !field Additional Pressure Drop [psig]
-    0, !field Charge in Line [lbm]
-    Reversing Valve to ODC, !field Refrigerant Line
-    Copper: 3/4 in 0.035 thick, !field Tube Type
     1.5, !field Refrigerant Line Length [ft]
     0, !field Refrigerant Line Elevation [ft]
     0, !field Refrigerant Line Heat Loss [Btu/h]
     0, !field Refrigerant Line Temperature Change [R]
-    2724, !field Tube Conductivity [Btu.in/h.ft².F]
     0.68, !field Tube Inside Diameter [in]
     0.75, !field Tube Outside Diameter [in]
     0; !field Additional Pressure Drop [psig]
@@ -1700,12 +1674,9 @@ RefrigerantCycleData(Cooling),
 
 RefrigerantCycleData(Heating),
     204.6, !field Temperature [°F]
-    14.696, !field Barometric Pressure [psig]
     0; !field Is Compressor in Air Stream [-]
 
 AccumulatorData,
-     , !field Manufacturer
-     , !field Model
     0, !field Height [in]
     0, !field Diameter [in]
     0.035, !field Upper Hole Diameter [in]
@@ -1717,8 +1688,6 @@ AccumulatorData,
     0; !field Coefficient-B [-]
 
 FilterDrierData,
-     , !field Manufacturer
-     , !field Model
     0, !field Flow Capacity [tons]
     0; !field Rating Pressure Drop [psig]
 

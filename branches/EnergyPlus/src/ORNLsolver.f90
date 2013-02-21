@@ -245,6 +245,8 @@
     END IF
     
     BaroPressure=(OutBaroPress/1000)    !RS: Debugging: Setting the HPSim baro pressure equal to the E+ (kPa from Pa)
+    EvapPAR(31)=BaroPressure
+    CondPAR(38)=BaroPressure
     
     CALL InitAccumulator(AccumPAR)
 

@@ -76570,13 +76570,6 @@ CompressorData,
     N24, \field Compressor Power Coefficient 10
 	 \type real
 	 \required-field
-    A5, \field Compressor Coefficients Unit Flag
-	\note Choice between SI or IP units
-	\type choice
-	\key SI
-	\key IP
-	\default SI
-	\deprecated
     N25, \field Power Multiplier
 	 \type real
 	 \required-field
@@ -76608,9 +76601,6 @@ OutdoorCoilData,
     N1, \field Fin Type
 	\type integer
 	\required-field
-    A1, \field Fin Name
-	\type alpha
-	\deprecated
     N2, \field Fin Pitch [FPI]
 	\type real
 	\required-field
@@ -76623,12 +76613,6 @@ OutdoorCoilData,
 	\units in/1000
 	\note Assuming [thou] = thousandths of an inch
 	\required-field
-    A2, \field Fin Material
-	\type alpha
-	\deprecated
-    A3, \field Tube Name
-	\type alpha
-	\deprecated
     N5, \field Tube Type
 	\type integer
 	\required-field
@@ -76708,9 +76692,6 @@ IndoorCoilData,
     N1, \field Fin Type
 	\type integer
 	\required-field
-    A1, \field Fin Name
-	\type alpha
-	\deprecated
     N2, \field Fin Pitch [FPI]
 	\type real
 	\required-field
@@ -76723,12 +76704,6 @@ IndoorCoilData,
 	\units in/1000
 	\note Assuming [thou] = thousandths of an inch
 	\required-field
-    A2, \field Fin Material
-	\type alpha
-	\deprecating
-    A3, \field Tube Name
-	\type alpha
-	\deprecating
     N5, \field Tube Type
 	\type integer
 	\required-field
@@ -76876,12 +76851,6 @@ RefrigerantLineData,
 	\memo Physical Data on the Refrigerant Line for five lines:
 	\memo Suction, Discharge, Liquid, Reversing Valve to IDC
 	\memo and Reversing Valve to ODC.
-    A1, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    A2, \field Tube Type
-	\type alpha
-	\deprecated
     N1, \field Refrigerant Line Length
 	\type real
 	\units ft
@@ -76898,136 +76867,119 @@ RefrigerantLineData,
 	\type real
 	\units R
 	\required-field
-    N5, \field Tube Conductivity
-	\type real
-	\units Btu-in/h-ft2-F
-	\deprecated
-    N6, \field Tube Inside Diameter
+    N5, \field Tube Inside Diameter
 	\type real
 	\ip-units in
 	\required-field
-    N7, \field Tube Outside Diameter
+    N6, \field Tube Outside Diameter
 	\type real
 	\ip-units in
 	\required-field
-    N8, \field Additional Pressure Drop
+    N7, \field Additional Pressure Drop
 	\type real
 	\ip-units inH2O
 	\required-field
-    N9, \field Charge in Line
-	\type real
-	\units lb
 	\deprecated
-    A3, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    A4, \field Tube Type
-	\type alpha
-	\deprecated
-    N10, \field Refrigerant Line Length
+    N8, \field Refrigerant Line Length
 	 \type real
 	 \units ft
 	 \required-field
-    N11, \field Refrigerant Line Elevation
+    N9, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
 	 \required-field
-    N12, \field Refrigerant Line Heat Loss
+    N10, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
 	 \required-field
-    N13, \field Refrigerant Line Temperature Change
+    N11, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
 	 \required-field
-    N14, \field Tube Conductivity
-	 \type real
-	 \units Btu-in/h-ft2-F
-	 \deprecated
-    N15, \field Tube Inside Diameter
+    N12, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
 	 \required-field
-    N16, \field Tube Outside Diameter
+    N13, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
 	 \required-field
-    N17, \field Additional Pressure Drop
+    N14, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
 	 \required-field
-    N18, \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
-    A5, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    A6, \field Tube Type
-	\type alpha
-	\deprecated
-    N19, \field Refrigerant Line Length
+    N15, \field Refrigerant Line Length
 	 \type real
 	 \units ft
 	 \required-field
-    N20, \field Refrigerant Line Elevation
+    N16, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
 	 \required-field
-    N21, \field Refrigerant Line Heat Loss
+    N17, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
 	 \required-field
-    N22, \field Refrigerant Line Temperature Change
+    N18, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
 	 \required-field
-    N23, \field Tube Conductivity
-	 \type real
-	 \units Btu-in/h-ft2-F
-	 \deprecated
-    N24, \field Tube Inside Diameter
+    N19, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
 	 \required-field
-    N25, \field Tube Outside Diameter
+    N20, \field Tube Outside Diameter
 	 \type real
 	 \ip-units in
 	 \required-field
-    N26, \field Additional Pressure Drop
+    N21, \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
 	 \required-field
-    N27, \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
-    A7, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    A8, \field Tube Type
-	\type alpha
-	\deprecated
-    N28, \field Refrigerant Line Length
+    N22, \field Refrigerant Line Length
 	 \type real
 	 \units ft
 	 \required-field
-    N29, \field Refrigerant Line Elevation
+    N23, \field Refrigerant Line Elevation
 	 \type real
 	 \units ft
 	 \required-field
-    N30, \field Refrigerant Line Heat Loss
+    N24, \field Refrigerant Line Heat Loss
 	 \type real
 	 \units Btu/h
 	 \required-field
-    N31, \field Refrigerant Line Temperature Change
+    N25, \field Refrigerant Line Temperature Change
 	 \type real
 	 \units R
 	 \required-field
-    N32, \field Tube Conductivity
+    N26, \field Tube Inside Diameter
 	 \type real
-	 \units Btu-in/h-ft2-F
-	 \deprecated
+	 \ip-units in
+	 \required-field
+    N27, \field Tube Outside Diameter
+	 \type real
+	 \ip-units in
+	 \required-field
+    N28, \field Additional Pressure Drop
+	 \type real
+	 \ip-units inH2O
+	 \required-field
+    N29, \field Refrigerant Line Length
+	 \type real
+	 \units ft
+	 \required-field
+    N30, \field Refrigerant Line Elevation
+	 \type real
+	 \units ft
+	 \required-field
+    N31, \field Refrigerant Line Heat Loss
+	 \type real
+	 \units Btu/h
+	 \required-field
+    N32, \field Refrigerant Line Temperature Change
+	 \type real
+	 \units R
+	 \required-field
     N33, \field Tube Inside Diameter
 	 \type real
 	 \ip-units in
@@ -77036,49 +76988,7 @@ RefrigerantLineData,
 	 \type real
 	 \ip-units in
 	 \required-field
-    N35, \field Additional Pressure Drop
-	 \type real
-	 \ip-units inH2O
-	 \required-field
-    N36, \field Charge in Line
-	 \type real
-	 \units lb
-	 \deprecated
-    A9, \field Refrigerant Line
-	\type alpha
-	\deprecated
-    A10, \field Tube Type
-	 \type alpha
-	 \deprecated
-    N37, \field Refrigerant Line Length
-	 \type real
-	 \units ft
-	 \required-field
-    N38, \field Refrigerant Line Elevation
-	 \type real
-	 \units ft
-	 \required-field
-    N39, \field Refrigerant Line Heat Loss
-	 \type real
-	 \units Btu/h
-	 \required-field
-    N40, \field Refrigerant Line Temperature Change
-	 \type real
-	 \units R
-	 \required-field
-    N41, \field Tube Conductivity
-	 \type real
-	 \units Btu-in/h-ft2-F
-	 \deprecated
-    N42, \field Tube Inside Diameter
-	 \type real
-	 \ip-units in
-	 \required-field
-    N43, \field Tube Outside Diameter
-	 \type real
-	 \ip-units in
-	 \required-field
-    N44; \field Additional Pressure Drop
+    N35; \field Additional Pressure Drop
 	 \type real
 	 \ip-units inH2O
 	 \required-field
@@ -77103,11 +77013,7 @@ RefrigerantCycleData(Heating),
 	\type real
 	\units F
 	\required-field
-    N2, \field Barometric Pressure
-	 \type real
-	 \units psi
-	 \required-field
-    N3; \field Is Compressor in Air Stream
+    N2; \field Is Compressor in Air Stream
 	 \note 1=yes, 0=no
 	 \type integer
 	 \minimum 0
@@ -77118,12 +77024,6 @@ AccumulatorData,
 	\unique-object
 	\required-object
 	\memo Contains physical and design data for the accumulator.
-    A1, \field Manufacturer
-	\type alpha
-	\deprecated
-    A2, \field Model
-	\type alpha
-	\deprecated
     N1, \field Height
 	\type real
 	\ip-units in
@@ -77163,12 +77063,6 @@ FilterDrierData,
 	\unique-object
 	\required-object
 	\memo Contains the flow and pressure drop data for the filter drier.
-    A1, \field Manufacturer
-	\type alpha
-	\deprecated
-    A2, \field Model
-	\type alpha
-	\deprecated
     N1, \field Flow Capacity
 	\type real
 	\units tons
@@ -77557,6 +77451,7 @@ IDCcktCircuit4_TubeSequence,
 	N18, \field Tube Number
 	     \type real
 	N19, \field Tube Number
+	     \type real
 	N20; \field Tube Number
 	     \type real
 
@@ -79313,7 +79208,6 @@ FluidPropertySaturated,
         \type real
   N217, \field property value 217
         \type real
-
   N218, \field property value 218
         \type real
   N219, \field property value 219

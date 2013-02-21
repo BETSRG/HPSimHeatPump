@@ -181,15 +181,10 @@ REAL ODC_Poly4DP   !Polynomial fit coefficient for air pressure drop
 INTEGER I !Loop counter
 INTEGER J
 CHARACTER*150 LineData
-CHARACTER*150 BufferString
 
 INTEGER(2) :: IsHeatPump				!Is heat pump operation flag: 1=yes; 0=no
 INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no
 INTEGER(2) :: IsCmpInAirStream          !Is compressor in air stream: 1=yes, 0=no
-INTEGER(2) :: CoolingDesignCondition
-INTEGER(2) :: HeatingDesignCondition
-REAL :: InsideDiameter
-REAL :: Temp
 REAL :: SuperStc !TXV static superheat, C
 REAL :: SuperRtd !TXV rated superheat, C
 REAL :: CopperVol !Copper volume, m3
@@ -199,28 +194,17 @@ INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
 REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
-LOGICAL :: HPDataFileExists
 CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
   REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
-REAL Subcooling   !Design Subcooling
-REAL Superheat    !Design Superheat
-CHARACTER(len=MaxNameLength)RefrigerantName
-REAL NumofRefrigerants    !Number of Refrigerants in Blend
-REAL NominalCoolingCapacity
-REAL NominalHeatingCapacity
-REAL ElectricHeating
-CHARACTER(len=MaxNameLength)DesignConditionDescription
 REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
 CHARACTER(len=MaxNameLength)CompressorType
-!CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant    !RS: Debugging: This shouldn't do anything
-!REAL CompressorPower   !RS: Debugging: This shouldn't do anything
 REAL CompressorHeatLossFraction
 REAL CompressorHeatLoss
 REAL CompressorVolume
@@ -244,7 +228,6 @@ REAL CompressorPowerCoefficient7
 REAL CompressorPowerCoefficient8
 REAL CompressorPowerCoefficient9
 REAL CompressorPowerCoefficient10
-CHARACTER(len=MaxNameLength)CompressorCoefficientsUnitFlag
 REAL PowerMultiplier
 REAL MassFlowRateMultiplier
 REAL UserSpecifiedRatingEvapTemperature
@@ -255,81 +238,18 @@ REAL UserSpecifiedRatingSuperheat
 REAL PwrODfan !Outdoor Fan Power
 REAL PwrIDfan !Fan Power
 
-CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
-CHARACTER(len=MaxNameLength)SucLn_TubeType
-REAL SucLn_KTube    !Conductivity of Suction Line Tube
 REAL SucLn_TubeID   !Inner Diameter of Suction Line Tube
-REAL SucLn_Charge   !Suction Line Charge
-CHARACTER(len=MaxNameLength)DisLn_RefrigerantLine
-CHARACTER(len=MaxNameLength)DisLn_TubeType
-REAL DisLn_KTube    !Conductivity of Discharge Line Tube
 REAL DisLn_TubeID   !Inner Diameter of Discharge Line Tube
-REAL DisLn_Charge   !Discharge Line Charge
-CHARACTER(len=MaxNameLength)LiqLn_RefrigerantLine
-CHARACTER(len=MaxNameLength)LiqLn_TubeType
-REAL LiqLn_KTube    !Conductivity of Liquid Line Tube
 REAL LiqLn_TubeID   !Inner Diameter of Liquid Line Tube
-REAL LiqLn_Charge   !Liquide Line Charge
-CHARACTER(len=MaxNameLength)ValveIDCLn_RefrigerantLine
-CHARACTER(len=MaxNameLength)ValveIDCLn_TubeType
-REAL ValveIDCLn_KTube    !Conductivity of Valve to IDC Line Tube
 REAL ValveIDCLn_TubeID   !Inner Diameter of Valve to IDC Line Tube
-REAL ValveIDCLn_Charge   !Charge of Valve to IDC Line Tube
-CHARACTER(len=MaxNameLength)ValveODCLn_RefrigerantLine
-CHARACTER(len=MaxNameLength)ValveODCLn_TubeType
-REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
-REAL ValveODCLn_Charge   !Charge of Valve to ODC Line Tube
 
-CHARACTER(len=MaxNameLength)Acc_Manufacturer
-CHARACTER(len=MaxNameLength)Acc_Model
-REAL Acc_ChgCap  !Accumulator Charge Capacity
-REAL Acc_SysCap  !Accumulator Max. Recommended System Capacity
-REAL Acc_Chg  !Accumulator Charge
-REAL Acc_DP   !Accumulator Pressure Drop
-
-CHARACTER(len=MaxNameLength)Filter_Manufacturer
-CHARACTER(len=MaxNameLength)Filter_Model
-REAL Filter_DP    !Filter Pressure Drop
-
-INTEGER(2) :: UseAirHandlerData    !0 is FALSE, 1 is TRUE
-REAL AHD_Ton !Tonnage
-CHARACTER(len=MaxNameLength)AHD_CM    !Coil Model
-CHARACTER(len=MaxNameLength)AHD_AHM   !Air Handler Model
-
-REAL CCD_AC !A-Capacity
-REAL CCD_AP   !A-Power
-REAL CCD_ASP  !A-Suction Pressure
-REAL CCD_BC   !B-Capacity
-REAL CCD_BP   !B-Power
-REAL CCD_BSP  !B-Suction Pressure
-REAL CCD_ACS  !A-Capacity Slope
-REAL CCD_APS   !A-Power Slope
-REAL CCD_BCS  !B-Capacity Slope
-REAL CCD_BPS !B-Power Slope
-REAL CCD_ACI !A-Capacity Intercept
-REAL CCD_API !A-Power Intercept
-REAL CCD_BCI !B-Capacity Intercept
-REAL CCD_BPI !B-Power Intercept
-REAL CCD_ALT !A-Liquid Temperature
-
-CHARACTER(len=MaxNameLength)ODC_FinName
-CHARACTER(len=MaxNameLength)ODC_FinMaterial
-CHARACTER(len=MaxNameLength)ODC_TubeName
 REAL :: ODC_TubeID
-CHARACTER(len=MaxNameLength)IDC_FinName
-CHARACTER(len=MaxNameLength)IDC_FinMaterial
-CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
-REAL :: TubeNumber
-REAL :: SystemCost
   INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 !Flow:
-
-  !ODC_SurfAbsorptivity=1   !RS: Debugging: Extraneous
-  !IDC_SurfAbsorptivity=1   !RS: Debugging: Extraneous
   
   !***************** System data *****************
 
@@ -418,9 +338,6 @@ REAL :: SystemCost
   CompPAR(8) = Numbers(22) !CompressorPowerCoefficient8
   CompPAR(9) = Numbers(23) !CompressorPowerCoefficient9
   CompPAR(10) = Numbers(24) !CompressorPowerCoefficient10
-  
-  CompressorCoefficientsUnitFlag = Alphas(5)
-  
   CompPAR(25) = Numbers(25) !PowerMultiplier
   CompPAR(26) = Numbers(26) !MassFlowRateMultiplier
   TsiCmp = Numbers(27) !UserSpecifiedRatingEvapTemperature
@@ -437,16 +354,9 @@ REAL :: SystemCost
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
   ODC_FinType = Numbers(1)
-  
-  ODC_FinName = Alphas(1)
-  
   ODC_FinPitch = Numbers(2)
   ODC_Kfin = Numbers(3) !Conductivity of Fin
   ODC_FinThk = Numbers(4)   !Fin Thickness
-  
-  ODC_FinMaterial = Alphas(2)
-  ODC_TubeName = Alphas(3)
-
   ODC_TubeType = Numbers(5) !Numerical Denotion of Tube Type
   ODC_TubeID = Numbers(6)   !Tube Inner Diameter
   ODC_TubeOD = Numbers(7)   !Tube Outer Diameter
@@ -487,16 +397,9 @@ REAL :: SystemCost
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   IDC_FinType = Numbers(1)
-  
-  IDC_FinName = Alphas(1)
-  
   IDC_FinPitch = Numbers(2)
   IDC_Kfin = Numbers(3) !Fin Conductivity
   IDC_FinThk = Numbers(4)   !Fin Thickness
-  
-  IDC_FinMaterial = Alphas(2)
-  IDC_TubeName = Alphas(3)
-  
   IDC_TubeType = Numbers(5) !Numerical Denotion of the tube type
   IDC_TubeID = Numbers(6)   !Tube Inner Diameter
   IDC_TubeOD = Numbers(7)   !Tube Outer Diameter
@@ -557,30 +460,29 @@ REAL :: SystemCost
 
   !Cooling mode
 
-  !CoolingShTbPAR(1) = Numbers(1)    !Length
-  !CoolingShTbPAR(2) = Numbers(2)    !Diameter
-  !CoolingShTbPAR(3) = Numbers(3)    !Chamfer Depth
+  CoolingShTbPAR(1) = Numbers(1)    !Length
+  CoolingShTbPAR(2) = Numbers(2)    !Diameter
+  CoolingShTbPAR(3) = Numbers(3)    !Chamfer Depth
 
   !Heating mode
 
-  !HeatingShTbPAR(1) = Numbers(4)    !Length
-  !HeatingShTbPAR(2) = Numbers(5)    !Diameter
-  !HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
+  HeatingShTbPAR(1) = Numbers(4)    !Length
+  HeatingShTbPAR(2) = Numbers(5)    !Diameter
+  HeatingShTbPAR(3) = Numbers(6)    !Chamfer Depth
 
   !Capillary Tube
   
   !Cooling Mode
   
-  !CoolingCapTubePAR(2) = Numbers(7) !Length
-  !CoolingCapTubePAR(1) = Numbers(8) !Diameter
-  !CoolingCapTubePAR(3) = Numbers(9) !Coil Diameter
+  CoolingCapTubePAR(2) = Numbers(7) !Length
+  CoolingCapTubePAR(1) = Numbers(8) !Diameter
+  CoolingCapTubePAR(3) = Numbers(9) !Coil Diameter
   
   !Heating Mode
   
-  !HeatingCapTubePAR(2) = Numbers(10)    !Length
-  !HeatingCapTubePAR(1) = Numbers(11)    !Diameter
-  !HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
-  !RS: Debugging: Numbers(1-12) are never used.
+  HeatingCapTubePAR(2) = Numbers(10)    !Length
+  HeatingCapTubePAR(1) = Numbers(11)    !Diameter
+  HeatingCapTubePAR(3) = Numbers(12)    !Coil Diameter
 
   !TXV data
 
@@ -615,18 +517,13 @@ REAL :: SystemCost
   
   !Suction Line
   
-  SucLn_RefrigerantLine = Alphas(1)
-  SucLn_TubeType = Alphas(2)
-  
   SucLnPAR(1) = Numbers(1)  !Refrigerant Line Length
   SucLnPAR(4) = Numbers(2)  !Refrigerant Line Elevation
   SucLnPAR(5) = Numbers(3)  !Refrigerant Line Heat Loss
   SucLnPAR(6) = Numbers(4)  !Refrigerant Line Temperature Change
-  SucLn_KTube = Numbers(5)
-  SucLn_TubeID = Numbers(6)
-  SucLnPAR(2) = Numbers(7)  !Tube Outside Diameter
-  SucLnPAR(7) = Numbers(8)  !Additional Pressure Drop
-  SucLn_Charge = Numbers(9) !Charge in Line
+  SucLn_TubeID = Numbers(5)
+  SucLnPAR(2) = Numbers(6)  !Tube Outside Diameter
+  SucLnPAR(7) = Numbers(7)  !Additional Pressure Drop
 
   !Suction line tube wall thickness, mm or mil
   SucLnPAR(3)=(SucLnPAR(2)-SucLn_TubeID)/2
@@ -636,18 +533,13 @@ REAL :: SystemCost
 
   !Discharge Line
   
-  DisLn_RefrigerantLine = Alphas(3)
-  DisLn_TubeType = Alphas(4)
-  
-  DisLnPAR(1) = Numbers(10) !Refrigerant Line Length
-  DisLnPAR(4) = Numbers(11) !Refrigerant Line Elevation
-  DisLnPAR(5) = Numbers(12) !Refrigerant Line Heat Loss
-  DisLnPAR(6) = Numbers(13) !Refrigerant Line Temperature Change
-  DisLn_Ktube = Numbers(14)
-  DisLn_TubeID = Numbers(15)
-  DisLnPAR(2) = Numbers(16) !Tube Outside Diameter
-  DisLnPAR(7) = Numbers(17) !Additional Pressure Drop
-  DisLn_Charge = Numbers(18)    !Charge in Line
+  DisLnPAR(1) = Numbers(8) !Refrigerant Line Length
+  DisLnPAR(4) = Numbers(9) !Refrigerant Line Elevation
+  DisLnPAR(5) = Numbers(10) !Refrigerant Line Heat Loss
+  DisLnPAR(6) = Numbers(11) !Refrigerant Line Temperature Change
+  DisLn_TubeID = Numbers(12)
+  DisLnPAR(2) = Numbers(13) !Tube Outside Diameter
+  DisLnPAR(7) = Numbers(14) !Additional Pressure Drop
 
   !Discharge line tube wall thickness, mm or mil
   DisLnPAR(3)=(DisLnPAR(2)-DisLn_TubeID)/2
@@ -657,18 +549,13 @@ REAL :: SystemCost
 
    !Liquid Line
   
-  LiqLn_RefrigerantLine = Alphas(5)
-  LiqLn_TubeType = Alphas(6)
-  
-  LiqLnPAR(1) = Numbers(19) !Refrigerant Line Length
-  LiqLnPAR(4) = Numbers(20) !Refrigerant Line Elevation
-  LiqLnPAR(5) = Numbers(21) !Refrigerant Line Heat Loss
-  LiqLnPAR(6) = Numbers(22) !Refrigerant Line Temperature Change
-  LiqLn_Ktube = Numbers(23) !Tube Conductivity
-  LiqLn_TubeID = Numbers(24)
-  LiqLnPAR(2) = Numbers(25) !Tube Outside Diameter
-  LiqLnPAR(7) = Numbers(26) !Additional Pressure Drop
-  LiqLn_Charge = Numbers(27)    !Charge in Line
+  LiqLnPAR(1) = Numbers(15) !Refrigerant Line Length
+  LiqLnPAR(4) = Numbers(16) !Refrigerant Line Elevation
+  LiqLnPAR(5) = Numbers(17) !Refrigerant Line Heat Loss
+  LiqLnPAR(6) = Numbers(18) !Refrigerant Line Temperature Change
+  LiqLn_TubeID = Numbers(19)
+  LiqLnPAR(2) = Numbers(20) !Tube Outside Diameter
+  LiqLnPAR(7) = Numbers(21) !Additional Pressure Drop
 
   !Liquid line tube wall thickness, mm or mil
   LiqLnPAR(3)=(LiqLnPAR(2)-LiqLn_TubeID)/2
@@ -678,18 +565,13 @@ REAL :: SystemCost
 
   !Reversing Valve to IDC
   
-  ValveIDCLn_RefrigerantLine = Alphas(7)
-  ValveIDCLn_TubeType = Alphas(8)
-  
-  ValveIDCLnPAR(1) = Numbers(28)    !Refrigerant Line Length
-  ValveIDCLnPAR(4) = Numbers(29)    !Refrigerant Line Elevation
-  ValveIDCLnPAR(5) = Numbers(30)    !Refrigerant Line Heat Loss
-  ValveIDCLnPAR(6) = Numbers(31)    !Refrigerant Line Temperature Change
-  ValveIDCLn_Ktube = Numbers(32)
-  ValveIDCLn_TubeID = Numbers(33)
-  ValveIDCLnPAR(2) = Numbers(34)    !Tube Outside Diameter
-  ValveIDCLnPAR(7) = Numbers(35)    !Additional Pressure Drop
-  ValveIDCLn_Charge = Numbers(36)   !Charge in Line
+  ValveIDCLnPAR(1) = Numbers(22)    !Refrigerant Line Length
+  ValveIDCLnPAR(4) = Numbers(23)    !Refrigerant Line Elevation
+  ValveIDCLnPAR(5) = Numbers(24)    !Refrigerant Line Heat Loss
+  ValveIDCLnPAR(6) = Numbers(25)    !Refrigerant Line Temperature Change
+  ValveIDCLn_TubeID = Numbers(26)
+  ValveIDCLnPAR(2) = Numbers(27)    !Tube Outside Diameter
+  ValveIDCLnPAR(7) = Numbers(28)    !Additional Pressure Drop
 
   !Valve to IDC line tube wall thickness, mm or mil
   ValveIDCLnPAR(3)=(ValveIDCLnPAR(2)-ValveIDCLn_TubeID)/2
@@ -699,17 +581,13 @@ REAL :: SystemCost
 
     !Valve to ODC Line
   
-  ValveODCLn_RefrigerantLine = Alphas(9)
-  ValveODCLn_TubeType = Alphas(10)
-  
-  ValveODCLnPAR(1) = Numbers(37)    !Refrigerant Line Length
-  ValveODCLnPAR(4) = Numbers(38)    !Refrigerant Line Elevation
-  ValveODCLnPAR(5) = Numbers(39)    !Refrigerant Line Heat Loss
-  ValveODCLnPAR(6) = Numbers(40)    !Refrigerant Line Temperature Change
-  ValveODCLn_Ktube = Numbers(41)
-  ValveODCLn_TubeID = Numbers(42)
-  ValveODCLnPAR(2) = Numbers(43)    !Tube Outside Diameter
-  ValveODCLnPAR(7) = Numbers(44)    !Additional Pressure Drop
+  ValveODCLnPAR(1) = Numbers(29)    !Refrigerant Line Length
+  ValveODCLnPAR(4) = Numbers(30)    !Refrigerant Line Elevation
+  ValveODCLnPAR(5) = Numbers(31)    !Refrigerant Line Heat Loss
+  ValveODCLnPAR(6) = Numbers(32)    !Refrigerant Line Temperature Change
+  ValveODCLn_TubeID = Numbers(33)
+  ValveODCLnPAR(2) = Numbers(34)    !Tube Outside Diameter
+  ValveODCLnPAR(7) = Numbers(35)    !Additional Pressure Drop
 
   !Valve to ODC line tube wall thickness, mm or mil
   ValveODCLnPAR(3)=(ValveODCLnPAR(2)-ValveODCLn_TubeID)/2
@@ -738,19 +616,14 @@ REAL :: SystemCost
   Tdis = Numbers(1)  !Discharge Temperature
 
   !Indoor Coil Outlet
-  
-  BaroPressure = Numbers(2)  !Barometric Pressure   !RS: Debugging: This should be able to be replaced with E+ barometric pressure
-  IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
+  IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
 
   !*************** Accumulator ****************
 
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  Acc_Manufacturer = Alphas(1)
-  Acc_Model = Alphas(2)
-  
+
   AccumPAR(2) = Numbers(1)  !Height
   AccumPAR(1) = Numbers(2)  !Diameter
   AccumPAR(4) = Numbers(3)  !Upper hole diameter
@@ -768,10 +641,7 @@ REAL :: SystemCost
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  Filter_Manufacturer = Alphas(1)
-  Filter_Model = Alphas(2)
-  
+
   FilterPAR(1) = Numbers(1) !Flow capacity
   FilterPAR(2) = Numbers(2) !Rating DP
   
@@ -1407,8 +1277,8 @@ REAL :: SystemCost
     TxvPAR(1)=HeatingTXVcapacity
   END IF
 
-  EvapPAR(31)=BaroPressure
-  CondPAR(38)=BaroPressure
+  !EvapPAR(31)=BaroPressure
+  !CondPAR(38)=BaroPressure
 
   EvapPAR(33)=IsCmpInAirStream
   CondPAR(40)=IsCmpInAirStream
