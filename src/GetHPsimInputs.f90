@@ -9,13 +9,13 @@ USE DataInterfaces, ONLY: SetupOutputVariable
 PRIVATE
 
 !RS: Debugging: Setup Variables Data
-REAL tRiCoil,tRoCoil
-REAL pRiCoil,pRoCoil
-REAL hRiCoil,hRoCoil
-REAL tAiCoil,tAoCoil
-REAL QSens,QLat
-REAL hAiCoil,hAoCoil,rhAoCoil
-CHARACTER(len=12) :: ZoneName
+!REAL tRiCoil,tRoCoil
+!REAL pRiCoil,pRoCoil
+!REAL hRiCoil,hRoCoil
+!REAL tAiCoil,tAoCoil
+!REAL QSens,QLat
+!REAL hAiCoil,hAoCoil,rhAoCoil
+!CHARACTER(len=12) :: ZoneName
 
 !Error Flags
 INTEGER,PARAMETER :: NOERROR       = 0

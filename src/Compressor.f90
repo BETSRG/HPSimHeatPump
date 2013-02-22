@@ -69,7 +69,6 @@
     REAL, PARAMETER :: Fv=0.75
 
     !Subroutine local variables          
-    !INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
     REAL A(10),B(10)
@@ -118,6 +117,10 @@
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
     REAL RefProp(28)
     LOGICAL, EXTERNAL :: IssueRefPropError
+    
+    INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    
+    OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
 
     !Flow:
 
@@ -267,6 +270,8 @@
     OUT(5)=Tdis
     OUT(6)=MassCmp
     OUT(7)=ErrorFlag
+    
+    WRITE(LogFile,*) 'Wcomp: ',Power    !RS: Debugging: Printing out the power
 
     RETURN
 
