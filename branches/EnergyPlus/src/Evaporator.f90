@@ -1245,7 +1245,7 @@ CONTAINS
 
     OUT(20)=ErrorFlag
     
-    WRITE(LogFile,*) 'Qevaporator: ',QCoil
+    WRITE(LogFile,*) 'Qevaporator: ',QCoil  !RS: Debugging: Printing out the heat transfer
 
     CALL Evaporator_Helper_1
 

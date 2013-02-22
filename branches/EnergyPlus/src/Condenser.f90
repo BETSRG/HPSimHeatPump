@@ -1212,7 +1212,7 @@
 
     OUT(24)=ErrorFlag
     
-    WRITE(LogFile,*) 'QCondenser: ', QCoil
+    WRITE(LogFile,*) 'QCondenser: ', QCoil  !RS: Debugging: Printing out the heat transfer
 
     CALL Condenser_Helper_1
     
@@ -5976,8 +5976,9 @@ END IF
     !WRITE(DebugFile,*) 'Temperature is ',Temperature,'J is ',J,' and Psat (1) is ',Psat !RS: Debugging
     ELSE 
         Psat=TQ(RefName, Temperature, Quality, 'pressure', RefrigIndex,RefPropErr)  !RS Comment: Saturation Pressure
-        !WRITE(DebugFile,*) 'Temp is ',Temperature,'J is ',J,'Psat(2) is ',Psat,'RefPropErr ',RefpropErr    !RS: Debugging
         IF (RefPropErr .GT. 0) THEN
+        WRITE(DebugFile,*) 'Temp is ',Temperature,'Psat(2) is ',Psat,'RefPropErr is ',RefpropErr    !RS: Debugging
+        WRITE(DebugFile,*) 'Pressure is ',Pressure,'Enthalpy is ',enthalpy  !RS: Debugging: Looking for why this is failing
             WRITE(*,*)'-- WARNING -- Condenser: Refprop error. Line 3194'
             ErrorFlag=REFPROPERROR
             RETURN
