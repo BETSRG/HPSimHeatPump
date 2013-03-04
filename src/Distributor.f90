@@ -23,8 +23,7 @@ INTEGER, INTENT(OUT) ::ErrorFlag !Error flag: 0 = no error
 
 REAL, PARAMETER :: SuperRtd = 6.11 !11 F  !Rated superheat, C
 REAL, PARAMETER :: UnitP = 6.895 !(psi X UnitP = kPa)
-           
-!INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+
 REAL Temperature,Quality,Pressure,Enthalpy
 
 INTEGER(2)       :: RefPropOpt  !Ref prop calc. option

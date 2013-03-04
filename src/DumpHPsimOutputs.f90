@@ -41,8 +41,7 @@ REAL WeightEvpAluminum,WeightEvpCopper,WeightCndAluminum,WeightCndCopper
 REAL,PARAMETER :: StandardDensity=1.2 !Standard density, kg/m3
 REAL,PARAMETER :: StandardSpecHeat=1.02 !Standard specific heat, kJ/kg-K
 REAL SpecHeat     !Specific heat, kJ/kg-K
-CHARACTER (len=15) :: Property           
-!INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+CHARACTER (len=15) :: Property
 REAL Temperature,Quality,Pressure,Enthalpy
 CHARACTER (len=50) :: Title !Output file title
 

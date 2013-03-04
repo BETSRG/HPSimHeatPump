@@ -5676,7 +5676,6 @@ SUBROUTINE ReportAndTestRefrigerants
   REAL(r64) :: ReturnValue    ! Values returned from refrigerant functions
   INTEGER :: Loop             ! Loop Counter
   INTEGER :: Loop1            ! Loop Counter
-  !INTEGER :: RefrigIndex       !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 
   GetInput = .FALSE.  ! input has already been gotten
 

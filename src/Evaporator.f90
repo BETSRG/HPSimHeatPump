@@ -73,8 +73,7 @@ INTEGER LastTube           !Last simulation tube
 INTEGER EqCircuits         !1=Equivalent circuits; otherwise=no
 LOGICAL,SAVE :: IsUniformVelProfile !Is velocity profile uniform?
 
-!Refprop Table variable          
-!INTEGER            :: RefrigIndex =0   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+!Refprop Table variable
 INTEGER :: RefID !1-R22; 2-R410A; 3-R407C; 4-R134a; 5-Propane; 6-R417A; 7-R509A
 REAL Temperature,Quality,Pressure,Enthalpy
 

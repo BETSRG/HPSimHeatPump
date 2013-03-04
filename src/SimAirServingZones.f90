@@ -339,7 +339,6 @@ INTEGER :: OASysContListNum               ! index of the controller list of the 
 INTEGER :: OASysControllerNum             ! index of OA Sys simple controller in the air primary system controller lists
 LOGICAL :: NodeNotFound                   ! true if matching actuator node not found
 INTEGER :: CompType_Num                   ! numeric equivalent for component type
-!INTEGER :: ActuatedNodeNum                ! numeric equivalent for actuated node number for each controller
 INTEGER :: WaterCoilNodeNum               ! numeric equivalent for water coil node number
 !INTEGER :: AirLoopControlNum              ! Number of times that the maximum iterations was exceeded
 !CHARACTER(len=MaxNameLength) :: ComponentName
@@ -1340,7 +1339,7 @@ SUBROUTINE InitAirLoops(FirstHVACIteration)
   LOGICAL :: ErrorsFound
   REAL(r64) :: OAReliefDiff = 0.d0 ! local for massflow change across OA system, kg/s
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -4468,7 +4467,6 @@ SUBROUTINE UpdateSysSizing(CallIndicator)
   INTEGER :: ZonesCooledNum     ! loop index of zones cooled in a system
   INTEGER :: CtrlZoneNum        ! controlled zone number of a zone
   INTEGER :: I                  ! write statement index
-!  REAL(r64)    :: HourFrac           ! fractional hour
   INTEGER :: NumOfTimeStepInDay ! number of zone time steps in a day
   REAL(r64)    :: SysCoolRetTemp     ! system cooling return temperature for a time step [C]
   REAL(r64)    :: SysHeatRetTemp     ! system heating return temperature for a time step [C]
@@ -5980,7 +5978,6 @@ SUBROUTINE UpdateSysSizing(CallIndicator)
                           SizingFileColSep,TRIM(CalcSysSizing(I)%AirPriLoopName),':Des Sens Cool Cap [W]'
       ENDDO
       WRITE(OutputFileSysSizing,fmta) ' '
-!      HourFrac = 0.0
       Minutes=0
       TimeStepIndex=0
       DO HourCounter=1,24
@@ -5994,7 +5991,6 @@ SUBROUTINE UpdateSysSizing(CallIndicator)
             HourPrint=HourCounter-1
           ENDIF
 !      DO TimeStepIndex=1,NumOfTimeStepInDay
-!        HourFrac = HourFrac + TimeStepZone
           WRITE(OutputFileSysSizing,SSizeFmt20,ADVANCE='No') HourPrint,Minutes
           DO I=1,NumPrimaryAirSys
             WRITE(OutputFileSysSizing,SSizeFmt21,ADVANCE='No')                                &
