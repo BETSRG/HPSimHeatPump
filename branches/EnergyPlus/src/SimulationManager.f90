@@ -490,7 +490,7 @@ SUBROUTINE GetProjectData
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject
   LOGICAL :: CondFDAlgo
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -877,7 +877,7 @@ SUBROUTINE CheckForMisMatchedEnvironmentSpecifications
   LOGICAL :: WeatherFileAttached
   LOGICAL :: ErrorsFound
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1638,7 +1638,7 @@ SUBROUTINE ReportLoopConnections
   LOGICAL :: WarningOut=.true.
   INTEGER :: NumOfControlledZones
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2109,10 +2109,11 @@ SUBROUTINE ReportLoopConnections
     WRITE(ChrOut,*) NumNodeConnectionErrors
     ChrOut=ADJUSTL(ChrOut)
     IF (NumNodeConnectionErrors > 1) THEN
-      !CALL ShowMessage('There were '//TRIM(ChrOut)//' node connection errors noted.')
+      !CALL ShowMessage('There were '//TRIM(ChrOut)//' node connection errors noted.')  !RS: Secret Search String
       WRITE(DebugFile,*) 'There were '//TRIM(ChrOut)//' node connection errors noted.'
     ELSE
-      CALL ShowMessage('There was '//TRIM(ChrOut)//' node connection error noted.')
+      !CALL ShowMessage('There was '//TRIM(ChrOut)//' node connection error noted.')    !RS: Secret Search String
+      WRITE(DebugFile,*) 'There was '//TRIM(ChrOut)//' node connection error noted.'
     ENDIF
   ENDIF
 
@@ -2387,7 +2388,7 @@ SUBROUTINE PostIPProcessing
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
    LOGICAL :: PreP_Fatal=.false.  ! True if a preprocessor flags a fatal error
    
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -2672,7 +2673,7 @@ use omp_lib, ONLY: omp_get_max_threads,omp_get_num_threads,omp_set_num_threads
     IF (lIDFSetThreadsInput) NumberIntRadThreads=iIDFSetThreadsInput
   ENDIF
 #else
-INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

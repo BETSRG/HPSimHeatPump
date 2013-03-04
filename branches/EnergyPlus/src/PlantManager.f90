@@ -92,7 +92,6 @@ PUBLIC  GetPlantInput           !called from SimHVAC
 PUBLIC  SetupReports            !called from SimHVAC
 PUBLIC  SetupInitialPlantCallingOrder  !called from SimHVAC
 PUBLIC  SetupBranchControlTypes !called from SimHVAC
-!PUBLIC  CheckPlantLoopData      !called from SimHVAC
 PUBLIC  CheckPlantOnAbort       !called from AbortEnergyPlus:untilityroutines
 
 PRIVATE InitializeLoops
@@ -297,7 +296,6 @@ SUBROUTINE GetPlantLoopData
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in renaming.
   LOGICAL :: MatchedPressureString
   INTEGER :: PressSimAlphaIndex
-!  INTEGER :: OpSchemeFound
 
          ! FLOW:
   CurrentModuleObject = 'PlantLoop'
@@ -376,32 +374,6 @@ SUBROUTINE GetPlantLoopData
     ENDIF
 
     PlantLoop(LoopNum)%OperationScheme   = Alpha(4)   ! Load the Plant Control Scheme Priority List
-!   Check to make sure not used previously.
-!    IF(LoopNum .LE. NumPlantLoops) THEN
-!      IF (LoopNum-1 > 0) THEN
-!        OpSchemeFound=FindItemInList(Alpha(4),PlantLoop(1:LoopNum-1)%OperationScheme,LoopNum-1)
-!      ELSE
-!        OpSchemeFound=0
-!      ENDIF
-!      IF (OpSchemeFound > 0) THEN
-!        CALL ShowSevereError(RoutineName//'PlantLoop="'//trim(PlantLoop(LoopNum)%Name)//'", OperationScheme already used.')
-!        CALL ShowContinueError('...'//trim(cAlphaFieldNames(4))//'="'//trim(Alpha(4))//'" used previously in PlantLoop='//  &
-!           trim(PlantLoop(OpSchemeFound)%Name)//'".')
-!        ErrorsFound=.true.
-!      ENDIF
-!    ELSE   ! Condenser Loop
-!      IF (LoopNum-1 > NumPlantLoops) THEN
-!        OpSchemeFound=FindItemInList(Alpha(4),PlantLoop(NumPlantLoops+1:LoopNum-1)%OperationScheme,CondLoopNum-1)
-!      ELSE
-!        OpSchemeFound=0
-!      ENDIF
-!      IF (OpSchemeFound > 0) THEN
-!        CALL ShowSevereError(RoutineName//'CondenserLoop="'//trim(PlantLoop(LoopNum)%Name)//'", OperationScheme already used.')
-!        CALL ShowContinueError('...'//trim(cAlphaFieldNames(4))//'="'//trim(Alpha(4))//'" used previously in CondenserLoop='//  &
-!           trim(PlantLoop(OpSchemeFound)%Name)//'".')
-!        ErrorsFound=.true.
-!      ENDIF
-!    ENDIF
 
           ! Load the temperature and flow rate maximum and minimum limits
     PlantLoop(LoopNum)%MaxTemp        = Num(1)
@@ -2922,109 +2894,6 @@ If (.not.(allocated(PlantLoop))) return
 
 END SUBROUTINE CheckPlantOnAbort
 
-!SUBROUTINE CheckPlantLoopData
-!
-!          ! SUBROUTINE INFORMATION:
-!          !       AUTHOR         B. Griffith
-!          !       DATE WRITTEN   May 2008
-!          !       MODIFIED       na
-!          !       RE-ENGINEERED  na
-!
-!          ! PURPOSE OF THIS SUBROUTINE:
-!          ! This routine checks plant loop for input problems early in the simulation
-!          ! Some of the same checks also occur in CheckPlantOnAbort but those only execute if aborted
-!          ! Additional plant loop input checks can be added here.
-!
-!          ! METHODOLOGY EMPLOYED:
-!          ! Test plant loop data for know issues.
-!          !  1. CR 7431.  detect presence of water coils and check for "ACTIVE" branch control.
-!
-!          ! REFERENCES:
-!          ! na
-!
-!          ! USE STATEMENTS:
-!          ! na
-!
-!  IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
-!
-!          ! SUBROUTINE ARGUMENT DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE PARAMETER DEFINITIONS:
-!          ! na
-!
-!          ! INTERFACE BLOCK SPECIFICATIONS:
-!          ! na
-!
-!          ! DERIVED TYPE DEFINITIONS:
-!          ! na
-!
-!          ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-!  LOGICAL :: ShouldBeACTIVE
-!  INTEGER :: SideNum
-!  INTEGER :: numLoopSides
-!!unused-1208  INTEGER :: SplitNum
-!  INTEGER :: BranchNum  ! DO loop counter for branches
-!  INTEGER :: CompNum    ! do loop for multiple components on a branch
-!  INTEGER :: LoopNum    ! DO loop counter for loops
-!
-!  IF (.not. (TotNumLoops  > 0)) RETURN
-!  IF (.not.(ALLOCATED(PlantLoop))) RETURN
-!
-!  DO LoopNum = 1, TotNumLoops
-!    numLoopSides = 2
-!    DO SideNum = 1, numLoopSides
-!      DO BranchNum =1, PlantLoop(LoopNum)%LoopSide(SideNum)%TotalBranches
-!        DO CompNum= 1,  PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%TotalComponents
-!          ShouldBeACTIVE = .FALSE.
-!
-!          SELECT CASE (PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%Comp(CompNum)%TypeOf_Num)
-!          ! for now, check that all water coils are on "active" branch.
-!          CASE (TypeOf_WaterUseConnection)
-!            ShouldBeACTIVE = .TRUE.
-!          CASE (TypeOf_CoilWaterCooling)
-!            ShouldBeACTIVE = .TRUE.
-!          CASE (TypeOf_CoilWaterDetailedFlatCooling)
-!            ShouldBeACTIVE = .TRUE.
-!          CASE (TypeOf_CoilWaterSimpleHeating)
-!            ShouldBeACTIVE = .TRUE.
-!          CASE (TypeOf_CoilSteamAirHeating)
-!            ShouldBeACTIVE = .TRUE.
-!
-!          CASE DEFAULT
-!
-!          END SELECT
-!
-!          If (ShouldBeACTIVE) THEN
-!            SELECT CASE (PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%Comp(CompNum)%FlowCtrl)
-!
-!            CASE (ControlType_Unknown)
-!               CALL ShowWarningError('Found potential problem with Control Type for Branch named: '&
-!                             //trim(PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%Name) )
-!                             !DSU3 note, this confuses branch and components, should have reported out comp name as well.
-!               CALL ShowContinueError('This branch should (probably) be ACTIVE but has control type unknown')
-!            CASE (ControlType_Active)
-!              ! do nothing, this is correct control type.
-!            CASE (ControlType_Passive)
-!               CALL ShowSevereError('Found problem with Control Type for Branch named: '&
-!                             //trim(PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%Name) )
-!               CALL ShowContinueError('This branch should be ACTIVE but has control type PASSIVE')
-!            CASE (ControlType_SeriesActive)
-!              ! do nothing, should be okay. (? don't really understand SeriesActive though)
-!            CASE (ControlType_Bypass)
-!               CALL ShowSevereError('Found problem with Control Type for Branch named: '&
-!                             //trim(PlantLoop(LoopNum)%LoopSide(SideNum)%Branch(BranchNum)%Name) )
-!               CALL ShowContinueError('This branch should be ACTIVE but has control type Bypass')
-!            END SELECT
-!          ENDIF ! should be active
-!        ENDDO !comp num loop
-!      ENDDO ! branches
-!    ENDDO ! loop sides
-!  ENDDO ! plant loops
-!
-!  RETURN
-!
-!END SUBROUTINE CheckPlantLoopData
 
 SUBROUTINE InitOneTimePlantSizingInfo(LoopNum)
 

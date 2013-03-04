@@ -641,7 +641,6 @@ SUBROUTINE InitUnitHeater(UnitHeatNum, ZoneNum)
   REAL(r64)      :: RhoAir             ! air density at InNode
   REAL(r64)      :: TempSteamIn
   REAL(r64)      :: SteamDensity
-!  INTEGER        :: RefrigIndex
   REAL(r64)      :: rho  ! local fluid density
   LOGICAL        :: errFlag
   INTEGER        :: AvailStatus    ! Availability status set by system availability manager
@@ -860,7 +859,6 @@ SUBROUTINE SizeUnitHeater(UnitHeatNum)
   REAL(r64)           :: EnthSteamOutWet
   REAL(r64)           :: LatentHeatSteam
   REAL(r64)           :: SteamDensity
-  !INTEGER             :: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   INTEGER             :: CoilWaterInletNode=0
   INTEGER             :: CoilWaterOutletNode=0
   INTEGER             :: CoilSteamInletNode=0

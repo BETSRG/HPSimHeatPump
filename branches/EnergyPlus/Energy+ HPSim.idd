@@ -25729,35 +25729,13 @@ ZoneHVAC:WaterToAirHeatPump,
         \note If this field is left blank or zero, the outdoor air flow rate from the previous on cycle
         \note (either cooling or heating) is used.
    A7,  \field Supply Air Fan Object Type
-        \required-field
         \type choice
         \key Fan:OnOff
         \note  Only works with On/Off Fan
    A8,  \field Supply Air Fan Name
-        \required-field
         \type object-list
         \object-list FansOnOff
         \note Needs to match Fan:OnOff object
-   A9,  \field Heating Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Heating:WaterToAirHeatPump:EquationFit
-        \key Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit
-   A10, \field Heating Coil Name
-        \required-field
-        \type object-list
-        \object-list HeatingCoilsWaterToAirHP
-        \note  Needs to match in the water-to-air heatpump heating coil object
-   A11, \field Cooling Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Cooling:WaterToAirHeatPump:EquationFit
-        \key Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
-   A12, \field Cooling Coil Name
-        \required-field
-        \type object-list
-        \object-list CoolingCoilsWaterToAirHP
-        \note Needs to match in the water-to-air heatpump cooling coil object
    N7,  \field Maximum Cycling Rate
         \type real
         \units cycles/hr
@@ -25788,50 +25766,27 @@ ZoneHVAC:WaterToAirHeatPump,
         \note Programmed time delay for heat pump fan to shut off after compressor cycle off.
         \note Only required when fan operating mode is cycling
         \note Enter 0 when fan operating mode is continuous
-   A13, \field Supplemental Heating Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Heating:Gas
-        \key Coil:Heating:Electric
-        \key Coil:Heating:Water
-        \key Coil:Heating:Steam
-        \note works with gas, electric, hot water and steam heating coils
-   A14, \field Supplemental Heating Coil Name
-        \required-field
-        \type object-list
-        \object-list HeatingCoilName
-        \note  Needs to match in the supplemental heating coil object
-   N11, \field Maximum Supply Air Temperature from Supplemental Heater
-        \required-field
-        \type real
-        \units C
-        \autosizable
-   N12, \field Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation
-        \type real
-        \maximum 21.0
-        \default 21.0
-        \units C
-   A15, \field Outdoor Dry-Bulb Temperature Sensor Node Name
+   A9, \field Outdoor Dry-Bulb Temperature Sensor Node Name
         \type node
-   A16, \field Fan Placement
+   A10, \field Fan Placement
         \type choice
         \key BlowThrough
         \key DrawThrough
         \default BlowThrough
-   A17, \field Supply Air Fan Operating Mode Schedule Name
+   A11, \field Supply Air Fan Operating Mode Schedule Name
         \type object-list
         \object-list ScheduleNames
         \note Enter the name of a schedule that controls fan operation. Schedule values of 0 denote
         \note cycling fan operation (fan cycles with cooling or heating coil). Schedule values greater
         \note than 0 denote constant fan operation (fan runs continually regardless of coil operation).
         \note The fan operating mode defaults to cycling fan operation if this field is left blank.
-   A18; \field Availability Manager List Name
+   A12; \field Availability Manager List Name
         \note Enter the name of an AvailabilityManagerAssignmentList object.
         \type object-list
         \object-list SystemAvailabilityManagerLists
 		
 ZoneHVAC:HPSim,		\RS: Debugging: 9-27-12
-        \min-fields 25
+        \min-fields 20
    A1,  \field Name
         \required-field
         \type alpha
@@ -25903,35 +25858,13 @@ ZoneHVAC:HPSim,		\RS: Debugging: 9-27-12
         \note If this field is left blank or zero, the outdoor air flow rate from the previous on cycle
         \note (either cooling or heating) is used.
    A7,  \field Supply Air Fan Object Type
-        \required-field
         \type choice
         \key Fan:OnOff
         \note  Only works with On/Off Fan
    A8,  \field Supply Air Fan Name
-        \required-field
         \type object-list
         \object-list FansOnOff
         \note Needs to match Fan:OnOff object
-   A9,  \field Heating Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Heating:WaterToAirHeatPump:EquationFit
-        \key Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit
-   A10, \field Heating Coil Name
-        \required-field
-        \type object-list
-        \object-list HeatingCoilsWaterToAirHP
-        \note  Needs to match in the water-to-air heatpump heating coil object
-   A11, \field Cooling Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Cooling:WaterToAirHeatPump:EquationFit
-        \key Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
-   A12, \field Cooling Coil Name
-        \required-field
-        \type object-list
-        \object-list CoolingCoilsWaterToAirHP
-        \note Needs to match in the water-to-air heatpump cooling coil object
    N7,  \field Maximum Cycling Rate
         \type real
         \units cycles/hr
@@ -25962,44 +25895,21 @@ ZoneHVAC:HPSim,		\RS: Debugging: 9-27-12
         \note Programmed time delay for heat pump fan to shut off after compressor cycle off.
         \note Only required when fan operating mode is cycling
         \note Enter 0 when fan operating mode is continuous
-   A13, \field Supplemental Heating Coil Object Type
-        \required-field
-        \type choice
-        \key Coil:Heating:Gas
-        \key Coil:Heating:Electric
-        \key Coil:Heating:Water
-        \key Coil:Heating:Steam
-        \note works with gas, electric, hot water and steam heating coils
-   A14, \field Supplemental Heating Coil Name
-        \required-field
-        \type object-list
-        \object-list HeatingCoilName
-        \note  Needs to match in the supplemental heating coil object
-   N11, \field Maximum Supply Air Temperature from Supplemental Heater
-        \required-field
-        \type real
-        \units C
-        \autosizable
-   N12, \field Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation
-        \type real
-        \maximum 21.0
-        \default 21.0
-        \units C
-   A15, \field Outdoor Dry-Bulb Temperature Sensor Node Name
+   A9, \field Outdoor Dry-Bulb Temperature Sensor Node Name
         \type node
-   A16, \field Fan Placement
+   A10, \field Fan Placement
         \type choice
         \key BlowThrough
         \key DrawThrough
         \default BlowThrough
-   A17, \field Supply Air Fan Operating Mode Schedule Name
+   A11, \field Supply Air Fan Operating Mode Schedule Name
         \type object-list
         \object-list ScheduleNames
         \note Enter the name of a schedule that controls fan operation. Schedule values of 0 denote
         \note cycling fan operation (fan cycles with cooling or heating coil). Schedule values greater
         \note than 0 denote constant fan operation (fan runs continually regardless of coil operation).
         \note The fan operating mode defaults to cycling fan operation if this field is left blank.
-   A18; \field Availability Manager List Name
+   A12; \field Availability Manager List Name
         \note Enter the name of an AvailabilityManagerAssignmentList object.
         \type object-list
         \object-list SystemAvailabilityManagerLists
@@ -32625,7 +32535,6 @@ Fan:VariableVolume,
 Fan:OnOff,
   \min-fields 9
   A1 , \field Name
-       \required-field
        \reference Fans
        \reference FansCVandOnOff
        \reference FansOnOff
@@ -32643,7 +32552,6 @@ Fan:OnOff,
   N2 , \field Pressure Rise
        \units Pa
        \ip-units inH2O
-       \required-field
   N3 , \field Maximum Flow Rate
        \units m3/s
        \minimum 0.0
@@ -32663,7 +32571,6 @@ Fan:OnOff,
        \required-field
   A4 , \field Air Outlet Node Name
        \type node
-       \required-field
   A5 , \field Fan Power Ratio Function of Speed Ratio Curve Name
        \type object-list
        \object-list ExponentCurves

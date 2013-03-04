@@ -1300,7 +1300,6 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
   INTEGER :: CtrlZoneNum ! controlled zone index
   INTEGER :: TimeStepInDay ! zone time step in day
   INTEGER :: I                  ! write statement index
-!  REAL(r64)    :: HourFrac           ! fractional hour
   INTEGER :: HourCounter        ! Hour Counter
   INTEGER :: TimeStepCounter    ! Time Step Counter
   INTEGER :: Minutes            ! Current Minutes Counter
@@ -1643,7 +1642,6 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
                             TRIM(CalcFinalZoneSizing(I)%CoolDesDay),':Des Cool Mass Flow [kg/s]'
       ENDDO
       WRITE(OutputFileZoneSizing,fmta) ' '
-!      HourFrac = 0.0
       Minutes=0
       TimeStepIndex=0
       DO HourCounter=1,24
@@ -2138,7 +2136,7 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
 
           ! USE STATEMENTS:
   USE DataHVACGlobals
-  USE DataHeatBalFanSys, ONLY: NonAirSystemResponse, SysDepZoneLoads
+  USE DataHeatBalFanSys, ONLY: NonAirSystemResponse, SysDepZoneLoads, MAT   !RS: Debugging: Added MAT
   USE ReturnAirPathManager, ONLY: SimReturnAirPath
   USE ZoneAirLoopEquipmentManager, ONLY: ManageZoneAirLoopEquipment
   USE PurchasedAirManager, ONLY: SimPurchasedAir
@@ -2207,18 +2205,19 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
   !REAL :: LatOutputProvided
   REAL(r64) :: AirSysOutput
   REAL(r64) :: NonAirSysOutput
-  INTEGER :: TimeFile       =15 !RS: Debugging: Time check file denotion, hopfully this works.
   LOGICAL, SAVE :: OneTime = .TRUE.  !RS: Debugging
   INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+  INTEGER :: TimeTemp   =17 !RS: Debugging: File for plotting temp vs. time
+  CHARACTER(LEN=13),PARAMETER :: FMT_100 = "(2(A12,','))" !RS: Debugging
+  CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(2(F10.4,','))"    !RS: Debugging
     
   OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
   IF (OneTime) THEN
-    OPEN(unit=TimeFile,file='Time.txt', Access='APPEND')    !RS: Debugging
+    OPEN(unit=TimeTemp,file='TimeTemp.csv',Access='APPEND')   !RS: Debugging: Just to plot zone temp vs. time
+    WRITE(TimeTemp,*) 'E+ Time (hrs)','Zone Temp (C)'
     OneTime=.FALSE.
   END IF
-  
-  !WRITE(TimeFile,*) 'SimZoneEquipment called',CurrentTime  !RS: Debugging: CurrentTime
 
        ! Determine flow rate and temperature of supply air based on type of damper
 
@@ -2342,8 +2341,9 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
              
            CASE (HPSim)
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
-               WRITE(TimeFile,*) 'Simulation Cycle called',CurrentTime !RS: Debugging: CurrentTime
                WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
+               !WRITE(LogFile,*) 'Zone Temperature ',MAT(1)  !RS: Debugging
+               WRITE(TimeTemp,FMT_104) CurrentTime,MAT(1)
                !IF (SysOutPutProvided .LE. 0) THEN   !RS: Debugging: Dealing with times when it's not doing anything
                !    ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP/10
                !END IF

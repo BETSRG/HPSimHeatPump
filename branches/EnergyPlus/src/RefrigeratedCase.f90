@@ -1528,7 +1528,6 @@ SUBROUTINE GetRefrigerationInput
   INTEGER    :: AlphaNum          = 0       ! Used to cycle through input
   INTEGER    :: AlphaStartList           = 0       !
   INTEGER    :: AStart            = 0       ! Used to cycle through zones on input for walk in coolers
-  !INTEGER    :: CascadeCondenserID= 0       ! Used to match load on system to Condenser absolute index
   INTEGER    :: CascadeLoadNum    = 0       ! counters while associating cascade loads with systems
   INTEGER    :: CascadeLoadIndex  = 0       ! Counters while inputting cascade loads
   INTEGER    :: CaseID            = 0       ! ID of refrigerated case in rack
@@ -1545,7 +1544,6 @@ SUBROUTINE GetRefrigerationInput
   INTEGER    :: CondIndex         = 0       ! Index  of refrigeration condenser attached to a system
   INTEGER    :: CondNum           = 0       ! Index of refrigeration condenser
   INTEGER    :: DefType           = 0       ! Local value for case defrost type
-  !INTEGER    :: FlowIndex         = 0       ! Index of pump flow numeric field
   INTEGER    :: GCNum             = 0       ! Index of refrigeration gas cooler
   INTEGER    :: HRNum             = 0       ! Counter for hours in day
   INTEGER    :: IOStatus          = 0       ! Used in GetObjectItem
@@ -1571,7 +1569,6 @@ SUBROUTINE GetRefrigerationInput
   INTEGER    :: MaxNumAlphasCase  = 0       ! Maximum number of alphas for case object
   INTEGER    :: MaxNumAlphasCaseAndWalkInList= 0     ! Maximum number of alphas in CaseAndWalkInList
   INTEGER    :: MaxNumAlphasWalkIn  = 0     ! Maximum number of alphas for walkin object
-  !INTEGER    :: MaxNumAlphasWalkInList  = 0 ! Maximum number of alphas for walkin list object
   INTEGER    :: MaxNumAlphasSecond  = 0     ! Maximum number of alphas for air chiller object
   INTEGER    :: MaxNumNumbersAirChiller= 0  ! Maximum number of numbers for air chiller object
   INTEGER    :: MaxNumNumbersSecond = 0     ! Maximum number of numbers for secondary system object
@@ -1626,17 +1623,13 @@ SUBROUTINE GetRefrigerationInput
   INTEGER    :: NumCoilsOnList    = 0       ! Used to read caseandWalkIn lists
   INTEGER    :: NumWalkInsOnList  = 0       ! Used to read caseandWalkIn lists
   INTEGER    :: RackNum           = 0       ! Index of refrigerated display case compressor rack
-  !INTEGER    :: RefrigIndex       = 0       ! Index used in fluid property routines    !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
   INTEGER    :: RefrigSysNum      = 0       ! Index of refrigeration system
   INTEGER    :: TransRefrigSysNum = 0       ! Index of transcritical CO2 refrigeration system
   INTEGER    :: SecondaryIndex    = 0       ! Index of secondary loops
   INTEGER    :: SecondaryID       = 0       ! Index of secondary loops
   INTEGER    :: SetID             = 0       ! Index of refrigerated chilller SETS
   INTEGER    :: SecondaryNum      = 0       ! Index of secondary loops
-  !INTEGER    :: TransferLoadListIndex = 0      ! Index of TransferLoad lists
-  !INTEGER    :: TransferLoadListID    = 0      ! Index of TransferLoad lists
   INTEGER    :: TransferLoadListNum   = 0      ! Index of TransferLoad lists
-!  INTEGER    :: InputType         = 0       ! Type of inlet, capcity in W or brine flow rate in m3/s
   INTEGER    :: SubcoolerNum      = 0       ! Index of subcooler
   INTEGER    :: TSNum             = 0       ! Counter for time steps in hour
   INTEGER    :: WalkInIndex       = 0       ! Index of walk ins
@@ -9532,8 +9525,6 @@ SUBROUTINE CalcRackSystem(RackNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER     :: CaseID                      ! Index to absolute case ID
   INTEGER     :: CaseNum                     ! Index to refrigerated case attached to rack
-  !INTEGER     :: SecondID                    ! Index to absolute secondary loop ID
-  !INTEGER     :: SecondIndex                 ! Index to secondary loop attached to rack
   INTEGER     :: WalkInID                    ! Index to absolute walk-in ID
   INTEGER     :: WalkInIndex                 ! Index to walk-in attached to rack
   INTEGER     :: NumCases                    ! Total number of refrigerated cases attached to rack
@@ -9946,7 +9937,6 @@ REAL(r64)    :: LoadRequested           =0.0 ! TotalLoad_Actual  + StoredEnergyR
 REAL(r64)    :: RatedAmbientRH          =0.0 ! Local variable for the RH corresponding to case rating conditions
 REAL(r64)    :: SensibleCaseCredit      =0.0 ! Sensible case credit delivered to zone (W)
 REAL(r64)    :: SensibleCap_Actual      =0.0 ! Refrigerated case sensible capacity at specific operating conditions
-!REAL(r64)    :: SensibleFraction        =0.0 ! Portion of total load due to sensible load
 REAL(r64)    :: SensibleLoadPrime       =0.0 ! Sensible load due to cond, conv, rad, infil (W)
 REAL(r64)    :: SensibleLoadAux         =0.0 ! Sensible load due to heaters, lighting (W)
 REAL(r64)    :: SensibleLoadTotal       =0.0 ! Total sensible load on case, may not = capacity applied (W)
@@ -10417,8 +10407,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
   REAL(r64) :: VolFlowRate = 0.0
   REAL(r64) :: OutletTemp = 0.0
   INTEGER   :: FlowType = 0
-  ! INTEGER   :: HighFlowWarn = 0
-  ! INTEGER   :: HighTempWarn = 0
   INTEGER   :: NoFlowWarnIndex   = 0
   INTEGER   :: HighFlowWarnIndex = 0
   INTEGER   :: HighInletWarnIndex = 0
@@ -10493,16 +10481,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
     END SELECT
   ENDIF
 
-
-! this next block may not be necessary, should only get called from plant now.
-!  SELECT CASE (SysType)
-!   CASE (TypeOf_RefrigerationWaterCoolRack)
-!       IF(RefrigRack(Num)%CondenserType/=CondenserCoolingWater) RETURN
-!   CASE (TypeOf_RefrigSystemWaterCondenser)
-!       IF(Condenser(Num)%CondenserType/=CondenserCoolingWater) RETURN
-!  END SELECT
-  ! Return if not water cooled condenser
-
   IF (InitLoopEquip) THEN
     CALL InitRefrigeration
     CALL InitRefrigerationPlantConnections
@@ -10526,8 +10504,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
                           RefrigRack(Num)%LaggedUsedHVACCoil
      FlowType = RefrigRack(Num)%FlowType
      InletTemp = RefrigRack(Num)%InletTemp
-     ! HighFlowWarn = RefrigRack(Num)%HighFlowWarn
-     ! HighTempWarn = RefrigRack(Num)%HighTempWarn
      DesVolFlowRate = RefrigRack(Num)%DesVolFlowRate
 
      !DSU? init mass flow here?
@@ -10553,8 +10529,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
      TotalCondenserHeat = Condenser(Num)%CondLoad
      FlowType = Condenser(Num)%FlowType
      InletTemp = Condenser(Num)%InletTemp
-     ! HighFlowWarn = Condenser(Num)%HighFlowWarn
-     ! HighTempWarn = Condenser(Num)%HighTempWarn
      DesVolFlowRate = Condenser(Num)%DesVolFlowRate
 !     MassFlowRate = Condenser(Num)%MassFlowRate
      MassFlowRateMax = Condenser(Num)%MassFlowRateMax
@@ -10606,7 +10580,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
       MassFlowRate = TotalCondenserHeat/Cp/DeltaT
        ! Check for maximum flow in the component
       IF (MassFlowRate > MassFlowRateMax) THEN
-          !HighFlowWarn = HighFlowWarn +1
         IF (HighFlowWarnIndex == 0) THEN
           CALL ShowWarningMessage(TypeName//TRIM(Name))
           CALL ShowContinueError('Requested condenser water mass flow rate greater than maximum allowed value. ')
@@ -10650,7 +10623,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
   END IF
   ! Check outlet water temp for max value
   IF (OutletTemp > OutletTempMax) THEN
-    ! HighTempWarn = HighTempWarn +1
     IF (HighTempWarnIndex == 0) THEN
       CALL ShowWarningMessage(TypeName//TRIM(Name))
       CALL ShowContinueError('Water-cooled condenser outlet temp higher than maximum allowed temp. '// &
@@ -10664,8 +10636,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
  !set up output variables
  SELECT CASE (SysType)
    CASE (TypeOf_RefrigerationWaterCoolRack)
-     !RefrigRack(Num)%HighFlowWarn = HighFlowWarn
-     !RefrigRack(Num)%HighTempWarn = HighTempWarn
      RefrigRack(Num)%MassFlowRate = MassFlowRate
      RefrigRack(Num)%VolFlowRate = VolFlowRate
      RefrigRack(Num)%OutletTemp = OutletTemp
@@ -10674,8 +10644,6 @@ SUBROUTINE SimRefrigCondenser(SysType, CompName, CompIndex, FirstHVACIteration, 
      RefrigRack(Num)%HighInletWarnIndex = HighInletWarnIndex
      RefrigRack(Num)%NoFlowWarnIndex = NoFlowWarnIndex
    CASE (TypeOf_RefrigSystemWaterCondenser)
-     !Condenser(Num)%HighFlowWarn = HighFlowWarn
-     !Condenser(Num)%HighTempWarn = HighTempWarn
      Condenser(Num)%MassFlowRate = MassFlowRate
      Condenser(Num)%VolFlowRate = VolFlowRate
      Condenser(Num)%OutletTemp = OutletTemp
@@ -14156,7 +14124,6 @@ SUBROUTINE CalculateWalkIn(WalkInID)
   USE Psychrometrics,    ONLY: PsyRhoAirFnPbTdbW,RhoH2O,PsyWFnTdbTwbPb,PsyTwbFnTdbWPb,CPHW,&
                                PsyHFnTdbW,PsyTsatFnHPb, PsyWFnTdpPb,PsyHFnTdbRhPb, PsyRhFnTdbWPb, &
                                PsyTdpFnWPb, PsyWFnTdbH
-!  USE DataEnvironment, ONLY:   OutBaroPress, OutDryBulbTemp
   USE DataEnvironment, ONLY:   OutBaroPress
   USE General,         ONLY:   CreateSysTimeIntervalString
 
@@ -14681,7 +14648,6 @@ SUBROUTINE CalculateSecondary(SecondaryNum)
   REAL(r64)   :: MaxVolFlow        ! Flow can be limited by either total pump capacity or heat exchanger design (m3/s)
   REAL(r64)   :: PartLdFrac        ! Used to ratio pump power
   REAL(r64)   :: PartPumpFrac      ! Used to see if part pumps dispatched meets part pump load
-  !REAL(r64)   :: PartPower         ! Used to ratio power for last pump added to loop
   REAL(r64)   :: PrevTotalLoad     ! Used in pump energy convergence test
   REAL(r64)   :: ReceiverHeatGain  ! Optional (W)
   REAL(r64)   :: RefrigerationLoad ! Load for cases and walk-ins served by loop, does not include pump energy (W)
@@ -15478,7 +15444,6 @@ REAL(r64)    :: DefrostEnergyNeeded     =0.0 ! Energy needed to melt all ice, us
 REAL(r64)    :: DefrostRateNeeded       =0.0 ! Defrost load that actually goes to melting ice (W)
 REAL(r64)    :: DryAirMassFlowMax       =0.0 ! Rated volume flow rate times dry air density adjusted for schedules (kg/s)
 REAL(r64)    :: DryAirMassFlowRated     =0.0 ! Rated volume flow rate times dry air density
-!REAL(r64)    :: Error                   =0.0 ! Used in iterative solution for sensible heat ratio
 REAL(r64)    :: ExitHumRatio            =0.0 ! kg water/kg air
 REAL(r64)    :: ExitTemperature         =0.0 ! Air temperature leaving the coil (C)
 REAL(r64)    :: ExitTemperatureEstimate =0.0 ! Estimated Air temperature leaving the coil (C)
@@ -15496,7 +15461,6 @@ REAL(r64)    :: IceSensHeatNeeded       =0.0 ! Energy to raise frost temperature
 REAL(r64)    :: LatLoadServed           =0.0 ! Energy rate used to remove water from zone air (W)
 REAL(r64)    :: MaxTemperatureDif       =0.0 ! Used to limit capacity during initial pulldown (deltaC)
 REAL(r64)    :: SensibleCapacityMax     =0.0 ! Sensible capacity adjusted for any time in dripdown state (W)
-!REAL(r64)    :: SensibleLoad            =0.0 ! Sensible load provided by coil (W)
 REAL(r64)    :: SensLoadRequested       =0.0 ! Sensible load requested by zone balance (W)
 REAL(r64)    :: SensLoadFromZone        =0.0 ! Net sensible load removed from zone after accounting for heaters, fans, defrost [W]
 REAL(r64)    :: SensLoadRequestedGross  =0.0 ! Gross sensible load removed by coil

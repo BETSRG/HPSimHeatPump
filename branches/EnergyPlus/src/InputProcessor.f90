@@ -4312,7 +4312,7 @@ SUBROUTINE ReportOrphanRecordObjects
   INTEGER ObjFound
   INTEGER NumOrphObjNames
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -4948,7 +4948,7 @@ SUBROUTINE CompactObjectsCheck
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL :: CompactObjectsFound
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

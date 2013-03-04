@@ -47,8 +47,7 @@ MODULE PlantLoopSolver
   REAL(r64) :: CurrentAlterationsToDemand
   REAL(r64) :: UpdatedDemandToLoopSetPoint
   REAL(r64) :: LoadToLoopSetPointThatWasntMet ! Unmet Demand
-  !INTEGER   :: RefrigIndex = 0 ! Index denoting refrigerant used (possibly steam)  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-
+  
           ! SUBROUTINE SPECIFICATIONS:
   PUBLIC  PlantHalfLoopSolver
   PRIVATE ValidateFlowControlPaths
@@ -57,7 +56,6 @@ MODULE PlantLoopSolver
   PRIVATE SimulateLoopSideBranchGroup
   PRIVATE SimulateAllLoopSidePumps
   PRIVATE EvaluateLoopSetPointLoad
-  !PRIVATE EvaluatePumpFlowConditions
   PRIVATE UpdateAnyLoopDemandAlterations
   PRIVATE UpdateLoopSideReportVars
   PRIVATE ResolveParallelFlows

@@ -153,7 +153,6 @@ REAL Tsat2 !Saturation temperature at Psat2, K
 
 !EnergyPlus Refprop variables
 INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-!INTEGER :: RefrigIndex =0  !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
 REAL Temperature !C
 REAL Quality  !0-1
 REAL Pressure !Pa
