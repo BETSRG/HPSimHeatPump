@@ -2255,7 +2255,6 @@ RETURN
 
 END SUBROUTINE UpdateElectricEIRChillerRecords
 
-
 END MODULE ChillerElectricEIR
 
 
