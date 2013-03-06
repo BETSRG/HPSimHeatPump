@@ -395,14 +395,10 @@
             IF (TSOCMP .LE. TSICMP) THEN
                 IF (PrnCon .EQ. 1) THEN
                     WRITE(*,*)'## ERROR ## Highside: No solution for this configuration.'
-                END IF
-                IF (PrnCon .EQ. 1) THEN
                     WRITE(*,*)'Try another condenser or compressor.'
                 END IF
                 IF (PrnLog .EQ. 1) THEN
                     WRITE(6,*)'## ERROR ## Highside: No solution for this configuration.'
-                END IF
-                IF (PrnLog .EQ. 1) THEN
                     WRITE(6,*)'Try another condenser or compressor.'
                 END IF
                 STOP
@@ -531,14 +527,10 @@
                 CASE (1)
                     IF (PrnCon .EQ. 1) THEN
                         WRITE(*,*)
-                    END IF
-                    IF (PrnLog .EQ. 1) THEN
-                        WRITE(6,*)
-                    END IF
-                    IF (PrnCon .EQ. 1) THEN
                         WRITE(*,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
                     IF (PrnLog .EQ. 1) THEN
+                        WRITE(6,*)
                         WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
                     STOP

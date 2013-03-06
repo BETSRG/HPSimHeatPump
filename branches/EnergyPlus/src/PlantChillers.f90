@@ -346,7 +346,6 @@ LOGICAL     :: GetConstCOPInput = .TRUE.
 !Merged routines
 PUBLIC     SimChiller
 
-
           ! Electric Chiller
 PRIVATE    CalcElectricChillerModel
 PRIVATE    GetElectricChillerInput
@@ -4374,7 +4373,7 @@ SUBROUTINE CalcElectricChillerModel(ChillNum,MyLoad,EquipFlowCtrl,Runflag,FirstI
   REAL(r64)              :: TempCondIn            ! C - (Electric ADJTC(1)The design secondary loop fluid
   REAL(r64)              :: TempCondInDesign      ! C - (Electric ADJTC(1)The design secondary loop fluid
   REAL(r64)              :: TempRiseRat           ! intermediate result:  temperature rise ratio
-  REAL(r64)              :: EvapInletTemp         ! C - evaporator inlet temperature, water side
+  REAL(r64)              :: EvapInletTemp         ! C - evaporator inlet temperature, water side   !RS: Debugging
   REAL(r64)              :: CondInletTemp         ! C - condenser inlet temperature, water side
   REAL(r64)              :: TempEvapOut           ! C - evaporator outlet temperature, water side
   REAL(r64)              :: TempEvapOutSetpoint   ! C - evaporator outlet temperature setpoint
@@ -7564,6 +7563,7 @@ IMPLICIT NONE ! Enforce explicit typing of all variables in this routine
 
 RETURN
 END SUBROUTINE UpdateConstCOPChillerRecords
+
 
 ! End of Record Keeping subroutines for the Const COP Chiller Module
 ! *****************************************************************************

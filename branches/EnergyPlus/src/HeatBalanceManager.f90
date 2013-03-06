@@ -543,7 +543,7 @@ SUBROUTINE GetProjectControlData(ErrorsFound)
     INTEGER :: SumHAMTMat
     LOGICAL :: msgneeded
     
-    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+    INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
     OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -1328,7 +1328,7 @@ SUBROUTINE GetMaterialData(ErrorsFound)
   INTEGER :: TotFfactorConstructs  ! Number of slabs-on-grade or underground floor constructions defined with F factors
   INTEGER :: TotCfactorConstructs  ! Number of underground wall constructions defined with C factors
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
   
@@ -2870,7 +2870,7 @@ SUBROUTINE GetWindowGlassSpectralData(ErrorsFound)
   REAL(r64)    :: Lam               ! Wavelength (microns)
   REAL(r64)    :: Tau,RhoF,RhoB     ! Transmittance, front reflectance, back reflectance
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -3122,7 +3122,7 @@ SUBROUTINE GetConstructData(ErrorsFound)
   INTEGER :: iMatGlass         ! number of glass layers
   CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: WConstructNames
 
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 
@@ -4989,7 +4989,7 @@ SUBROUTINE SearchWindow5DataFile(DesiredFileName,DesiredConstructionName,Constru
   LOGICAL :: StripCR
   TYPE (FrameDividerProperties), ALLOCATABLE, DIMENSION(:) :: FrameDividerSave
   
-  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopfully this works.
+  INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
 

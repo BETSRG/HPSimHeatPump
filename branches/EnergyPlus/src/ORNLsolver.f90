@@ -40,7 +40,7 @@
     USE FrostModel
     USE InputProcessor 
     USE DataGlobals, ONLY: RefName, RefrigIndex
-    USE DataHeatBalFanSys, ONLY: MAT, ZoneAirHumRat, TempControlType  !RS: Debugging: Bringing in TaiE
+    USE DataHeatBalFanSys, ONLY: ZoneAirHumRat, TempControlType  !RS: Debugging
     USE WeatherManager !RS: Debugging: OutWetBulbTemp, OutDryBulbTemp
     USE Psychrometrics !RS: Debugging: Solving for TWiE
     USE DataZoneEnergyDemands   !RS: Debugging: Determining if the zone requires heating or cooling
@@ -180,10 +180,11 @@
     !    RETURN
     !END IF
     !
-    TaiE=13 !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
+    !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
+    TaiE=TaiC   !RS: Debugging: Well, it's true!
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
     CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
@@ -639,7 +640,7 @@
     WRITE(LogFile,*) 'QLatOut: ',LatOutputProvided
     WRITE(LogFile,*) 'QZone: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
     WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
-    WRITE(LogFile,*) 'TZone: ',MAT(1)   !RS: Debugging: Mean Air Temperature for Zone 1
+!    WRITE(LogFile,*) 'TZone: ',MAT(1)   !RS: Debugging: Mean Air Temperature for Zone 1
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 

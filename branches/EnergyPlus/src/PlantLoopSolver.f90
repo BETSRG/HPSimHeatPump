@@ -1710,7 +1710,6 @@ SUBROUTINE UpdateAnyLoopDemandAlterations(LoopNum, LoopSideNum, BranchNum, CompN
           !  • Demand based: these components will have a flow request on their inlet node
           !  • Pump: these components will not be included, as they no longer include heat at the pump
           !  • component setpoint: these components will have a flow request
-
           !    on their outlet node corresponding to their calculated delta T
           !  • load range based: these components do not 'alter' the load, they reject the load
           !    Therefore they are not included
@@ -2266,7 +2265,7 @@ SUBROUTINE ResolveParallelFlows(LoopNum, LoopSideNum, ThisLoopSideFlow, FirstHVA
 
     END IF ! Total flow requested >= or < Total parallel request
 
-  END IF ! Spittler/Mixer exists
+  END IF ! Splitter/Mixer exists
 
   RETURN
 
