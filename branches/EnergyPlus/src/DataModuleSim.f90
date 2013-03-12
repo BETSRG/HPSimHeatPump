@@ -111,7 +111,7 @@ REAL CondVapTubeLength		!Condenser vapor tube length, m
 REAL CondTwoPhaseTubeLength !Condenser two-phase tube length, m
 REAL CondNumLiqTubes		!Number of liquid tubes in condenser
 REAL EvapLiqTubeLength		!Evaporator liquid tube length, m
-REAL EvapVapTubeLength		!Evaporaotr vapor tube length, m
+REAL EvapVapTubeLength		!Evaporator vapor tube length, m
 REAL EvapTwoPhaseTubeLength !Evaporator two-phase tube length, m
 REAL EvapNumLiqTubes		!Number of liquid tube length in evaporator
 INTEGER IsChargeTuning    !Flag to indicate if charge tuning is performed

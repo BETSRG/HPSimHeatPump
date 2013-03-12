@@ -2343,12 +2343,10 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
                CALL SimulationCycle(SysOutputProvided, LatOutputProvided)  !RS: Testing
                WRITE(LogFile,*) 'EnergyPlus Timestep: ',CurrentTime !RS: Debugging: Printing out the current time
                !WRITE(LogFile,*) 'Zone Temperature ',MAT(1)  !RS: Debugging
-               WRITE(TimeTemp,FMT_104) CurrentTime,MAT(1)
+               !WRITE(TimeTemp,FMT_104) CurrentTime,MAT(1)
                !IF (SysOutPutProvided .LE. 0) THEN   !RS: Debugging: Dealing with times when it's not doing anything
                !    ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP/10
                !END IF
-               !SysOutputProvided=7.56932   !RS: Debugging
-               !LatOutputProvided=4.92648
 
            CASE (ZoneDXDehumidifier_Num) ! 'ZoneHVAC:Dehumidifier:DX'
              CALL SimZoneDehumidifier(PrioritySimOrder(EquipTypeNum)%EquipName, ActualZoneNum, &

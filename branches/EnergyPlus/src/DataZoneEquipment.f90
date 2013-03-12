@@ -60,7 +60,6 @@ PUBLIC          ! By definition, all variables which are placed in this data
   INTEGER, PARAMETER :: VRFTerminalUnit_Num = 24
   INTEGER, PARAMETER :: RefrigerationAirChillerSet_Num = 25
   INTEGER, PARAMETER :: UserDefinedZoneHVACForcedAir_Num = 26
-  
   INTEGER, PARAMETER :: HPSim = 27  !RS: Testing: Continued integration work
 !
   INTEGER, PARAMETER :: TotalNumZoneEquipType = 27  !RS: Testing: Increased from 26 to 27
