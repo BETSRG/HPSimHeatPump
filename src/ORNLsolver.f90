@@ -167,26 +167,28 @@
     !END IF
     
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
-    !IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LE. 0) THEN  !RS: Debugging: Trying to run it only on cooling
     IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
         QUnitOut=0
         LatOutputProvided=0
         RETURN
+    ELSEIF (ZoneSysEnergyDemand(1)%TotalOutputRequired .GT. 0.0) THEN !RS: Debugging: Is it needing a positive heat gain from HPSim?
+        IsCoolingMode=0 !RS: Debugging: Heat pump operating in heating mode
+        CondPAR(27)=IsCoolingMode
+        EvapPar(27)=IsCoolingMode
+    ELSE
+        IsCoolingMode=1 !RS: Debugging: The heat pump is operating in cooling mode
+        CondPAR(27)=IsCoolingMode
+        EvapPar(27)=IsCoolingMode
     END IF
     
-    !IF (EvapPar(54) .EQ. 1) THEN    !RS: Debugging: Pulling out of the code without calculating
-    !    QUnitOut=73.65
-    !    LatOutPutProvided=54.91
-    !    RETURN
-    !END IF
-    !
     !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
     CALL GetTempsOut(OutDryBulbTemp, OutWetBulbTemp, OutBaroPress, RHiC)    !RS: Debugging: RHiC = outdoor relative humidity
     TWiC=OutWetBulbTemp !RS: Debugging: Updating outdoor entering wet bulb temperature
     TaiC=OutDryBulbTemp !RS: Debugging: Updating outdoor entering dry bulb temperature
     TaiE=TaiC   !RS: Debugging: Well, it's true!
+    TWiE=TWiC   !RS: Debugging: Since it's 100% Outside Air here, this is true.
     DummyHR=ZoneAirHumRat(1)    !RS: Debugging
-    CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
+    !CALL PsyTwbFnTdbWPb2(TaiE,DummyHR,OutBaroPress,TWiE)    !RS: Debugging: Converting from humidity ratio to wet bulb temp
     CALL PsyRhFnTdbWPb2(TaiE,DummyHR,OutBaroPress,RHiE)  !RS: Debugging: Converting from humidity ratio to relative humidity
     RHiE=RHiE*100   !RS: Debugging: Conversion from decimal to fraction form
     
@@ -634,13 +636,12 @@
     CALL EndCondenserCoil
     
     CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
-
-    QRemain=ZoneSysEnergyDemand(1)%TotalOutputRequired+QUnitOut+LatOutputProvided    !RS: Debugging: Qouts are -
+    
+    QRemain=ZoneSysEnergyDemand(1)%RemainingOutputRequired-QUnitOut !-LatOutputProvided    !RS: Debugging: Qouts are load into zone
     WRITE(LogFile,*) 'QSensOut: ',QUnitOut  !RS: Debugging: Printing out some data
     WRITE(LogFile,*) 'QLatOut: ',LatOutputProvided
     WRITE(LogFile,*) 'QZone: ',ZoneSysEnergyDemand(1)%TotalOutputRequired
     WRITE(LogFile,*) 'Q left to meet required Q: ',QRemain
-!    WRITE(LogFile,*) 'TZone: ',MAT(1)   !RS: Debugging: Mean Air Temperature for Zone 1
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 
