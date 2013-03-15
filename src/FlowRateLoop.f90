@@ -129,7 +129,7 @@
 
         PRINT=.TRUE.
         IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN
-            IREFC=0 !for specified subcooiling, set to zero
+            IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
         ELSE
             IREFC=3
@@ -264,13 +264,13 @@
                 CALL Condenser(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
-                CALL EndCondenserCoil
+                !CALL EndCondenserCoil  !RS: Debugging
 
                 CondPAR(61)=1 !Simple version
                 CALL Condenser(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
-                CALL EndCondenserCoil
+                !CALL EndCondenserCoil  !RS: Debugging
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN

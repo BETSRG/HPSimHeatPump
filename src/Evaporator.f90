@@ -485,6 +485,8 @@ REAL Poly2DP   !Polynomial fit coefficient for air pressure drop
 REAL Poly3DP   !Polynomial fit coefficient for air pressure drop
 REAL Poly4DP   !Polynomial fit coefficient for air pressure drop
 
+REAL TestH    !RS: Debugging: Finding the entering air enthalpy hopefully
+
 INTEGER FirstTime !Flag to indicate the first time of execution
                   !1=yes, otherwise=no
 INTEGER Counter                   !Iteration loop counter
@@ -526,6 +528,8 @@ PRIVATE CalcWetSurfaceDing
 PRIVATE CalcWetSurfaceBraun
 PRIVATE CalcWetSurfaceMcQuiston
 PRIVATE UpdateTubeDataFromCircuitData
+PUBLIC GetQout  !RS: TestingIntegration: Trying to bring in the new sub
+PRIVATE InitEvaporatorStructures    !RS: Debugging: Trying to allocate all at once
 
 CONTAINS
 
@@ -538,7 +542,7 @@ CONTAINS
     !  Description:	
     !  Ragazzi's modular coil model (Fixed length version)
     !  To predict coil air side and refrigerant side properties, heat transfer, 
-    !  and prssure drop
+    !  and pressure drop
     !
     !  HVACSIM+ Airprop subroutine requied
     !  EnergyPlus REFPROP subroutines required 	
@@ -715,6 +719,8 @@ CONTAINS
     CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
+    TestH=AirProp(4)    !RS: Debugging: Finding the entering air enthalpy hopefully
+    
     !Flow:
 
     mRefTot =XIN(1)
@@ -1860,12 +1866,18 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
   IF (CoilType .NE. MCEVAPORATOR) THEN
 
-	  WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+	  !WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
+			!	   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
+			!	   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
+			!	   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
+			!	   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+			!	   'mdotR(kg/hr)','mdotA(kg/s)'
+      WRITE(17,FMT_100)'Nckt','Ntube','Nmod','tRi(C)','tRo(C)','pRi(kPa)','pRo(kPa)', &
 				   'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
 				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-				   'QmodTot(W)','QmodSens(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-				   'mdotR(kg/hr)','mdotA(kg/s)'
+				   'QmodTot(W)','QmodSens(W)','QmodLat(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
+				   'mdotR(kg/hr)','mdotA(kg/s)', 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
 
 	  DO NumSection=1, NumOfSections
 
@@ -2035,9 +2047,10 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 
 				      MassMod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Mass
 
-				      Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod
+				      !Qmod=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%Qmod  !RS: Commenting out because it should already have been defined
 
 				      QmodSens=CoilSection(NumSection)%Ckt(I)%Tube(J)%Seg(K)%QmodSens
+                      QmodLat=Qmod-QmodSens !RS: Trying to determine the latent heat
 
 				      mRefCkt=CoilSection(NumSection)%Ckt(I)%mRef
 
@@ -2055,11 +2068,16 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
                           xRoMod=1.0
                       END IF
 
-				      WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+				      !WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
+							   !    xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
+							   !    hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
+							   !    Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							   !    FLOAT(DryWet),mRefCkt*3600,mAiMod
+                     WRITE(17,FMT_104)I,J,K,tRiMod,tRoMod,pRiMod,pRoMod,hRiMod,hRoMod, &
 							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
-							       Qmod*1000,QmodSens*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							       FLOAT(DryWet),mRefCkt*3600,mAiMod
+							       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
+							       FLOAT(DryWet),mRefCkt*3600, mAiMod, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
 
 			      END DO !end Nmod
 
@@ -2310,9 +2328,6 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
-  
-  !INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-  !REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
@@ -2323,15 +2338,8 @@ END SUBROUTINE PrintEvaporatorResult
         ErrorFlag=CKTFILEERROR
         CALL InitEvaporatorCoil_Helper_1
         RETURN
-
     END IF
 
-    IF (ErrorFlag .NE. NOERROR) THEN 
-        ErrorFlag=CKTFILEERROR
-        CALL InitEvaporatorCoil_Helper_1
-        RETURN
-
-    END IF
 
     !**************************** Model *************************************
 
@@ -2342,7 +2350,7 @@ END SUBROUTINE PrintEvaporatorResult
         ModelName = Alphas(1)
             
         IF (ModelName .EQ. 'MICROCHANNEL COIL') THEN    !Checking whether MicroChannel or Evaporator Coil
-            CoilType = MCCONDENSER
+            CoilType = MCEVAPORATOR
         ELSE
             CoilType = EVAPORATORCOIL
         END IF
@@ -2445,53 +2453,59 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
             END IF
+            
+            IF (.NOT. ALLOCATED(Ckt)) THEN
+                CALL InitEvaporatorStructures()
+            END IF
 
-            IF (IsSimpleCoil .EQ. 1) THEN
-                NumOfMods=2
-                ALLOCATE(CoilSection(NumOfSections)) 
-                ALLOCATE(Ckt(NumOfCkts))
-                ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
-                CoilSection(1)%NumOfCkts=NumOfCkts
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                    ALLOCATE(Ckt(I)%Tube(1))
-                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-                    CoilSection(1)%Ckt(I)=Ckt(I)
-                END DO
-            ELSE
-                !ISI - 09/10/07
-                ALLOCATE(CoilSection(NumOfSections)) 
-
-                ALLOCATE(Tube(NumOfTubes))
-                ALLOCATE(Tube2D(Nl,Nt))
-                ALLOCATE(JoinTubes(NumOfTubes))
-
-                DO I=1, NumOfTubes
-                    ALLOCATE(Tube(I)%Seg(NumOfMods))
-                END DO
-
-                DO I=1, Nl
-                    DO J=1, Nt
-                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
-                    END DO
-                END DO
-
-                ALLOCATE(Ckt(NumOfCkts))
-
-                CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status) 
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-        
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube = Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
-                        ErrorFlag=CKTFILEERROR
-                        CALL InitEvaporatorCoil_Helper_1
-                        RETURN
-                    END IF
-                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
-                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
-                END DO
+            IF (IsSimpleCoil .NE. 1) THEN
+            
+            !IF (IsSimpleCoil .EQ. 1) THEN
+            !    NumOfMods=2
+            !    ALLOCATE(CoilSection(NumOfSections)) 
+            !    ALLOCATE(Ckt(NumOfCkts))
+            !    ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
+            !    CoilSection(1)%NumOfCkts=NumOfCkts
+            !    DO I=1, NumOfCkts
+            !        Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+            !        ALLOCATE(Ckt(I)%Tube(1))
+            !        ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+            !        CoilSection(1)%Ckt(I)=Ckt(I)
+            !    END DO
+            !ELSE
+            !    !ISI - 09/10/07
+            !    ALLOCATE(CoilSection(NumOfSections)) 
+            !
+            !    ALLOCATE(Tube(NumOfTubes))
+            !    ALLOCATE(Tube2D(Nl,Nt))
+            !    ALLOCATE(JoinTubes(NumOfTubes))
+            !
+            !    DO I=1, NumOfTubes
+            !        ALLOCATE(Tube(I)%Seg(NumOfMods))
+            !    END DO
+            !
+            !    DO I=1, Nl
+            !        DO J=1, Nt
+            !            ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            !        END DO
+            !    END DO
+            !
+            !    ALLOCATE(Ckt(NumOfCkts))
+            !
+            !    CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+            !                        TmpNumbers,NumNumbers,Status) 
+            !    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            !
+            !    DO I=1, NumOfCkts
+            !        Ckt(I)%Ntube = Numbers(I)
+            !        IF (ErrorFlag .NE. NOERROR) THEN 
+            !            ErrorFlag=CKTFILEERROR
+            !            CALL InitEvaporatorCoil_Helper_1
+            !            RETURN
+            !        END IF
+            !        ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
+            !        ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
+            !    END DO
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2544,8 +2558,11 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
         !************************* Velocity Profile ********************************
 
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+            IF (.NOT. ALLOCATED(CoilSection(NumOfSections)%CktNum)) THEN
 		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
 		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+              ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))
+            END IF
 		      DO J=1, NumOfCkts
 		          CoilSection(NumOfSections)%CktNum(J)=J    !Numbering the Circuits
 		      END DO
@@ -2615,7 +2632,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 IF (CoilSection(I)%IsInlet) THEN
                     NumInletSections=NumInletSections+1
                 END IF
-                ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
+                !ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts)) !RS: Debugging:
 
                 DO J=1, CoilSection(I)%NumOfCkts
                     CoilSection(I)%Ckt(J)=Ckt(CoilSection(I)%CktNum(J))
@@ -2657,7 +2674,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END DO !End NumOfCkts
 
                 CoilSection(NumSection)%Nnode=Nnode
-                ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+                IF (.NOT. ALLOCATED(CoilSection(NumSection)%Node)) THEN !RS: Debugging:
+                    ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+                END IF
 
                 !Find split and joint tube numbers
                 J=0
@@ -2843,6 +2862,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             
             NumOfMods = Numbers(14)
             NumOfCkts = Numbers(15)
+            NumofSections = 1   !RS Comment: Not in the input file, but needed for the code to run properly. Set to 1 as there is only one coil section here.
 
             SELECT CASE (Alphas(5)(1:1))    !Tube Shift Flag
             CASE ('F','f')
@@ -2897,50 +2917,57 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 CALL InitEvaporatorCoil_Helper_1
                 RETURN
             END IF
+            
+            IF (.NOT. ALLOCATED(Ckt)) THEN
+                CALL InitEvaporatorStructures
+            END IF
+            
+            IF (IsSimpleCoil .NE. 1) THEN
 
-            IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: It's closed now.
-                NumOfMods=3
-                ALLOCATE(Ckt(NumOfCkts))	  
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                    ALLOCATE(Ckt(I)%Tube(1))
-                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-                END DO
-            ELSE
-
-                !ISI - 09/10/07
-                ALLOCATE(CoilSection(NumOfSections)) 
-
-                ALLOCATE(Tube(NumOfTubes))
-                ALLOCATE(Tube2D(Nl,Nt))
-                ALLOCATE(JoinTubes(NumOfTubes))
-
-                DO I=1, NumOfTubes
-                    ALLOCATE(Tube(I)%Seg(NumOfMods))
-                END DO
-
-                DO I=1, Nl
-                    DO J=1, Nt
-                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
-                    END DO
-                END DO
-
-                ALLOCATE(Ckt(NumOfCkts))
-                ALLOCATE(mRefIter(NumOfCkts))
-                DO I=1, NumOfCkts
-                    CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                        TmpNumbers,NumNumbers,Status) 
-                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                        
-                    Ckt(I)%Ntube=Numbers(I)
-                IF (ErrorFlag .NE. NOERROR) THEN 
-                    ErrorFlag=CKTFILEERROR
-                    CALL InitEvaporatorCoil_Helper_1
-                    RETURN
-                END IF
-                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
-                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-                END DO
+            !IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: It's closed now.
+            !    NumOfMods=3
+            !    ALLOCATE(Ckt(NumOfCkts))	  
+            !    DO I=1, NumOfCkts
+            !        Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+            !        ALLOCATE(Ckt(I)%Tube(1))
+            !        ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+            !    END DO
+            !    ALLOCATE(CoilSection(NumOfSections))    !RS: Debugging: Allocating so it doesn't crash later...
+            !ELSE
+            !
+            !    !ISI - 09/10/07
+            !    ALLOCATE(CoilSection(NumOfSections)) 
+            !
+            !    ALLOCATE(Tube(NumOfTubes))
+            !    ALLOCATE(Tube2D(Nl,Nt))
+            !    ALLOCATE(JoinTubes(NumOfTubes))
+            !
+            !    DO I=1, NumOfTubes
+            !        ALLOCATE(Tube(I)%Seg(NumOfMods))
+            !    END DO
+            !
+            !    DO I=1, Nl
+            !        DO J=1, Nt
+            !            ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            !        END DO
+            !    END DO
+            !
+            !    ALLOCATE(Ckt(NumOfCkts))
+            !    ALLOCATE(mRefIter(NumOfCkts))
+            !    DO I=1, NumOfCkts
+            !        CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+            !                            TmpNumbers,NumNumbers,Status) 
+            !        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            !            
+            !        Ckt(I)%Ntube=Numbers(I)
+            !    IF (ErrorFlag .NE. NOERROR) THEN 
+            !        ErrorFlag=CKTFILEERROR
+            !        CALL InitEvaporatorCoil_Helper_1
+            !        RETURN
+            !    END IF
+            !        ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+            !        ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+            !    END DO
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2986,8 +3013,11 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             !************************* Velocity Profile ********************************
 
             CoilSection(NumOfSections)%NumOfCkts=NumOfCkts
+            IF (.NOT. ALLOCATED(CoilSection(NumofSections)%CktNum)) THEN    !RS: Debugging:
 		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
 		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
+              ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))    !RS: Debugging:
+            END IF
 		      DO J=1, NumOfCkts
 		          CoilSection(NumOfSections)%CktNum(J)=J
               END DO
@@ -3006,7 +3036,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
+                DO J=1,NumOfMods
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in the velocity deviation data
+                END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
                     ErrorFlag=CKTFILEERROR
                     CALL InitEvaporatorCoil_Helper_1
@@ -3051,7 +3083,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 IF (CoilSection(I)%IsInlet) THEN
                     NumInletSections=NumInletSections+1
                 END IF
-                ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
+                !IF (CoilSection(I)%Ckt
+                !ALLOCATE(CoilSection(I)%Ckt(CoilSection(I)%NumOfCkts))
 
                 DO J=1, CoilSection(I)%NumOfCkts
                     CoilSection(I)%Ckt(J)=Ckt(CoilSection(I)%CktNum(J))
@@ -3093,7 +3126,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 END DO !End NumOfCkts
 
                 CoilSection(NumSection)%Nnode=Nnode
-                ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+                IF (.NOT. ALLOCATED(CoilSection(NumSection)%Node)) THEN  !RS: Debugging:
+                    ALLOCATE(CoilSection(NumSection)%Node(Nnode))
+                END IF
 
                 !Find split and joint tube numbers
                 J=0
@@ -3423,13 +3458,100 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
     AiModSuc=PI*IDsucLn*LmodSuc
 
     !***** Allocate pointer for suction line *****
-    ALLOCATE(SucLnSeg(NumOfMods))
+    !ALLOCATE(SucLnSeg(NumOfMods))
 
     CALL InitEvaporatorCoil_Helper_1
 
     RETURN
 
     END SUBROUTINE InitEvaporatorCoil
+    
+SUBROUTINE InitEvaporatorStructures
+    
+    USE InputProcessor_HPSim
+    
+  INTEGER, PARAMETER :: MaxNameLength = 200
+
+  CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+  INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+  REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+  INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+  INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+  CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+  REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+
+                ALLOCATE(CoilSection(NumOfSections)) 
+                ALLOCATE(Ckt(NumOfCkts))
+                ALLOCATE(Tube(NumOfTubes))
+                ALLOCATE(Tube2D(Nl,Nt))
+                ALLOCATE(JoinTubes(NumOfTubes))
+                
+    IF (IsCoolingMode .GT. 0) THEN
+      
+                NumOfMods=2
+                ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
+                CoilSection(1)%NumOfCkts=NumOfCkts
+
+                DO I=1, NumOfTubes
+                    ALLOCATE(Tube(I)%Seg(NumOfMods))
+                END DO
+
+                DO I=1, Nl
+                    DO J=1, Nt
+                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                    END DO
+                END DO
+
+                CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                    TmpNumbers,NumNumbers,Status) 
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+        
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube = Numbers(I)
+                    IF (ErrorFlag .NE. NOERROR) THEN 
+                        ErrorFlag=CKTFILEERROR
+                        CALL InitEvaporatorCoil_Helper_1
+                        RETURN
+                    END IF
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
+                END DO
+      
+    ELSE
+                NumOfMods=3
+                
+                DO I=1, NumOfTubes
+                    ALLOCATE(Tube(I)%Seg(NumOfMods))
+                END DO
+
+                DO I=1, Nl
+                    DO J=1, Nt
+                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+                    END DO
+                END DO
+
+                ALLOCATE(mRefIter(NumOfCkts))
+                
+                DO I=1, NumOfCkts
+                    CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                        TmpNumbers,NumNumbers,Status) 
+                    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+                        
+                    Ckt(I)%Ntube=Numbers(I)
+                IF (ErrorFlag .NE. NOERROR) THEN 
+                    ErrorFlag=CKTFILEERROR
+                    CALL InitEvaporatorCoil_Helper_1
+                    RETURN
+                END IF
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                END DO
+                
+                ALLOCATE(SucLnSeg(NumOfMods))
+    END IF
+    
+    END SUBROUTINE InitEvaporatorStructures
     
 !************************************************************************
     
@@ -3982,7 +4104,7 @@ INTEGER J,K !Loop counters
 			CoilSection(NumSection)%Ckt(I)%pRi=CoilSection(NumSection)%Ckt(I)%pRi/CoilSection(NumSection)%Ckt(I)%InJoin !Calc inlet pressure
 			CoilSection(NumSection)%Ckt(I)%hRi=SumMrefHri/SumMref       !Calc inlet enthalpy
 
-		ELSE IF (.NOT.(CoilSection(NumSection)%IsInlet)) THEN !ISI - 09/10/07
+		ELSE IF (.NOT.(CoilSection(NumSection)%IsInlet) .AND. NumSection .GT. 1) THEN !ISI - 09/10/07   !RS: Debugging: Added in >1...
 		    CoilSection(NumSection)%pRi=CoilSection(NumSection-1)%pRo
 		    CoilSection(NumSection)%hRi=CoilSection(NumSection-1)%hRo
 		    CoilSection(NumSection)%Ckt(I)%pRi=CoilSection(NumSection-1)%pRo
@@ -7161,5 +7283,17 @@ INTEGER TubeNum !Tube number in circuit diagram
 END SUBROUTINE UpdateTubeDataFromCircuitData
 
 !************************************************************************
+
+SUBROUTINE GetQOut(Out1,Out2)   !RS: TestingIntegration: Trying to get the HPSim/E+ integration to work, so testing some bits here
+
+IMPLICIT NONE
+
+REAL, INTENT(OUT) :: Out1
+REAL, INTENT(OUT) :: Out2
+
+    Out1=QModSens !Sensible Module heat transfer, kW
+    Out2=QModLat  !Latent Module heat transfer, kW
+    
+END SUBROUTINE
 
 END MODULE EvaporatorMod

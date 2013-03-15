@@ -154,7 +154,7 @@
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
-    ! GOTO 30 means "skip refined simulation" according to rpevious comments ....
+    ! GOTO 30 means "skip refined simulation" according to previous comments ....
     INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
 
     CHARACTER(LEN=11),PARAMETER :: FMT_103 = "(A20,F30.2)"
@@ -166,6 +166,9 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     CHARACTER(LEN=14) :: tmpString
+    
+    REAL :: QUnitOut            ! sensible capacity delivered to zone !RS: TestingIntegration: Trying to pass variables out
+    REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: TestingIntegration: Trying to pass variables out
     
     !Flow**:
     CALL PreProcessInput
@@ -512,7 +515,7 @@
 
                 Pressure=PoCmp*1000 !RS Comment: Unit Conversion
                 Temperature=ToCmp
-                HoCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Outelt Enthalpy
+                HoCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Outlet Enthalpy
                 HoCmp=HoCmp/1000    !RS Comment: Unit Conversion
 
                 Temperature=Temperature_F2C(TSOCMP)
@@ -604,7 +607,7 @@
                             mdotRmin=mdotR
                         END IF
 
-                        mdotRprev=mdotR !Stored prevous value - ISI 12/09/2009
+                        mdotRprev=mdotR !Stored previous value - ISI 12/09/2009
 
                         IF (mdotRmax .NE. 999 .AND. mdotRmin .NE. 0) THEN
                             mdotR=(mdotRmax+mdotRmin)/2                        
@@ -694,7 +697,7 @@
                             mdotRmax=mdotR
                         END IF
 
-                        mdotRprev=mdotR !Stored prevous value - ISI 12/09/2009
+                        mdotRprev=mdotR !Stored previous value - ISI 12/09/2009
 
                         IF (mdotRmax .NE. 999 .AND. mdotRmin .NE. 0) THEN
                             mdotR=(mdotRmax+mdotRmin)/2                        
@@ -733,7 +736,7 @@
         END SELECT
         
         ! VL : Check if a GOTO 30 was intended previously ... and skip code block accordingly ....        
-        IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN 
+        IF (FLAG_GOTO_30 .EQ. .FALSE.) THEN !RS: This code block is being triggered, which means it redefines all the values defined in the Orifice and TXV block
         
             !comment block starts here
             FirstTimeHPdesignMode=.TRUE. !Moved from HPdesignMod - ISI 02/06/2009
@@ -812,6 +815,11 @@
         
                 DTROC=SUBCOOL !Specified subcooling
                 !1st run is for coarse convergence criteria
+                
+                !TimeStep1 = TimeStep1+1   !RS: Testing
+                !
+                !CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
+                
                 CALL HPDM(DTVALU)
 
                 FLAG_GOTO_30 = .TRUE.
@@ -882,6 +890,8 @@
 
     CALL PrintCondenserResult
     CALL EndCondenserCoil
+    
+    CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: TestingIntegration: Trying to read variables from PrintEvaporator File
 
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 
