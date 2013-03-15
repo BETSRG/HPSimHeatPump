@@ -402,7 +402,7 @@ SUBROUTINE GetSimpleAirModelInputs(ErrorsFound)
         ZoneAirBalance(Loop)%BalanceMethod = AirBalanceNone
         CALL ShowWarningError(RoutineName//TRIM(cAlphaFieldNames(3))//' = '//TRIM(cAlphaArgs(3))//  &
            ' not valid choice for '//TRIM(cCurrentModuleObject)//'='//TRIM(cAlphaArgs(1)))
-        CALL ShowContinueError('The dafualt choice "NONE" is assigned')
+        CALL ShowContinueError('The default choice "NONE" is assigned')
     END SELECT
 
     ZoneAirBalance(Loop)%InducedAirRate = rNumericArgs(1)
