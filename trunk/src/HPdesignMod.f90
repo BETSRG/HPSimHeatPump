@@ -128,6 +128,8 @@
     CHARACTER(LEN=200) :: tmpString
 
     LOGICAL, EXTERNAL :: IssueRefPropError
+    
+    INTEGER :: TimeStep1 !RS: Testing
 
     MaxIteration=30
     ICHRGE=1
@@ -287,6 +289,10 @@
     FLAG_GOTO_950 = .FALSE.
     DO WHILE (.TRUE.)
         
+        TimeStep1 = TimeStep1+1   !RS: Testing
+
+        CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
+        
         DO I=1,2
             ERRMSG(I) = 0.0
         END DO
@@ -405,13 +411,13 @@
                     EvapPAR(54)=1 !First time
                     EvapPAR(53)=0 !Detailed version
                     CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT)
-                    CALL EndEvaporatorCoil
+                    !CALL EndEvaporatorCoil
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
                     EvapPAR(53)=1 !Simple version
                     CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)
-                    CALL EndEvaporatorCoil
+                    !CALL EndEvaporatorCoil
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
 
