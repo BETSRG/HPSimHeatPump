@@ -2561,7 +2561,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             IF (.NOT. ALLOCATED(CoilSection(NumOfSections)%CktNum)) THEN
 		      ALLOCATE(CoilSection(NumOfSections)%CktNum(CoilSection(NumOfSections)%NumOfCkts))
 		      ALLOCATE(CoilSection(NumOfSections)%mRefIter(CoilSection(NumOfSections)%NumOfCkts))
-              ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))
+              !ALLOCATE(CoilSection(NumOfSections)%Ckt(CoilSection(NumOfSections)%NumOfCkts))
             END IF
 		      DO J=1, NumOfCkts
 		          CoilSection(NumOfSections)%CktNum(J)=J    !Numbering the Circuits
@@ -3490,8 +3490,8 @@ SUBROUTINE InitEvaporatorStructures
     IF (IsCoolingMode .GT. 0) THEN
       
                 NumOfMods=2
-                ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) 	  
-                CoilSection(1)%NumOfCkts=NumOfCkts
+                ALLOCATE(CoilSection(NumofSections)%Ckt(NumOfCkts)) 	  
+                CoilSection(NumofSections)%NumOfCkts=NumOfCkts
 
                 DO I=1, NumOfTubes
                     ALLOCATE(Tube(I)%Seg(NumOfMods))
@@ -3517,6 +3517,8 @@ SUBROUTINE InitEvaporatorStructures
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
                     ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))  
                 END DO
+                
+                ALLOCATE(SucLnSeg(NumOfMods))
       
     ELSE
                 NumOfMods=3
