@@ -1,3 +1,65 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! Provide a 1 or 2 sentence overview of this module.  
+! In most cases, it is probably not a useful entry and can be inferred from the name of the module anyway.
+!
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! This component represents something...or nothing...in a heat pump system.
+! A description of the component is found at:
+! some website
+! From that website: 
+!  - It does something
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! Here's a one line summary of what this does for the simulation itself.
+! This module takes inputs such as...and modifies them like so...and outputs these things
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! Check for any OPEN statements in the code
+! Check for any WRITE statements in the code
+!  Note that writing to unit "*" or "6" means just write to the terminal, not to a file
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! What vars and structures are defined at the *module* level...are units defined?  Any other notes?
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains X methods:
+!    PUBLIC InitSomething -- What does this do (in one line)?
+!      Called by what other modules?
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! Are there any interesting issues with this, unfuddle ticket numbers?
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! YEAR-MM-DD | ABC | Some other log message? 
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Put some notes for what needs to happen here
+! Silly things are fine
+! Somethings these small silly things are great to grab on to when starting up with the code after being off for a while
+
     MODULE CondenserMod
 
     USE DataGlobals, ONLY: RefName, RefrigIndex
@@ -73,7 +135,7 @@
     !R-Refrigerant;          A-Air;
     !i-Inlet;                o-Outlet;
     !f-Liquid phase;         g-Vapor phase;
-    !t-Temperature(C);       p-Pressure(kPa);      x-Quaility; h-Enthalpy(kJ/kg);
+    !t-Temperature(C);       p-Pressure(kPa);      x-Quality; h-Enthalpy(kJ/kg);
     !m-Mass flow rate(kg/s); rh-Relative humidity; v-Specific volume, m^3/kg;
     !sat-saturation;		 prev-previous iteration value
 
@@ -161,7 +223,7 @@
     REAL cAir     !Capacity rate of air, kW/C
     REAL cRef     !Capacity rate of refrigerant, kW/C
     REAL UA       !Overall heat transfer coefficient, kW/C
-    REAL hcRef    !Refrigernat film coefficent, W/m^2-C
+    REAL hcRef    !Refrigerant film coefficent, W/m^2-C
     REAL Rtube    !Thermal resistance of tube, K/W
     REAL Rair     !Module air film resistance, K/W
     REAL Rrefrig  !Module refrigerant film resistance, K/W
@@ -366,6 +428,8 @@
     REAL Poly2DP   !Polynomial fit coefficient for air pressure drop
     REAL Poly3DP   !Polynomial fit coefficient for air pressure drop
     REAL Poly4Dp   !Polynomial fit coefficient for air pressure drop
+    
+    REAL TestH  !RS: Debugging: Air Entering enthalpy, hopefully.
 
     INTEGER FirstTime !Flag to indicate the first time of execution
                       !1=yes, otherwise=no
@@ -414,6 +478,7 @@
     PRIVATE CalcSegmentRefOutletPressure
     PRIVATE UpdateTubeDataFromCircuitData
     PUBLIC GetCondProp  !RS: Integration: Trying to carry over the properties to output
+    PRIVATE InitCondenserStructures !RS: Debugging:
 
     CONTAINS
 
@@ -1752,7 +1817,8 @@
         'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
         'rhAi','rhAo','hci(W/m2K)','EF','hco(W/m2K)', &
         'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-        'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdot(kg/h)' 
+        'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdot(kg/h)', &
+        'cpAir', 'mAiMod (kg/s)', 'hAiMod', 'hAoMod' !RS: Debugging: Adding cp, air m_dot and h's for a heat balance
 
         DO I=1, NumOfCkts
             Ckt(I)%Qckt=0.0
@@ -1928,7 +1994,7 @@
                     xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
                     hciMod*1000,EFref,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
                     Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-                    mRefMod*3600
+                    mRefMod*3600, CPAir, mAiMod, hAiMod, hAoMod, AirProp(4), TestH !RS: Debugging: Adding the cp, air m_dot and h's for a heat balance
 
                 END DO !end Nmod
 
@@ -2297,49 +2363,54 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 RETURN
             END IF
 
-        IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: No longer an open block!
-                NumOfMods=3
-                ALLOCATE(Ckt(NumOfCkts))	  
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                    ALLOCATE(Ckt(I)%Tube(1))
-                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-                END DO
-        ELSE
-                !ISI - 09/10/07
-                ALLOCATE(CoilSection(NumOfSections)) 
-                ALLOCATE(Tube(NumOfTubes))
-                ALLOCATE(Tube2D(Nl,Nt))
-                ALLOCATE(JoinTubes(NumOfTubes))
-
-                DO I=1, NumOfTubes
-                    ALLOCATE(Tube(I)%Seg(NumOfMods))
-                END DO
-
-                DO I=1, Nl
-                    DO J=1, Nt
-                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
-                    END DO
-                END DO
-
-                ALLOCATE(Ckt(NumOfCkts))
-                ALLOCATE(mRefIter(NumOfCkts))
-                
-                CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status)
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+            IF (.NOT. ALLOCATED(Ckt)) THEN
+                CALL InitCondenserStructures
+            END IF
             
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube=Numbers(I)
-                    !IF (ErrorFlag .NE. NOERROR) THEN   !RS: Debugging: I don't think the convergence errors should really carry over like this!
-                    IF (ErrorFlag .GT. CONVERGEERROR) THEN 
-                        ErrorFlag=CKTFILEERROR
-                        CALL InitCondenserCoil_Helper_1
-                        RETURN
-                    END IF
-                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
-                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-                END DO
+            IF (IsSimpleCoil .NE. 1) THEN
+                
+                
+        !IF (IsSimpleCoil .EQ. 1) THEN   !This is an open block currently; it will need fixing. !RS Comment: No longer an open block!
+        !        NumOfMods=3
+        !        ALLOCATE(Ckt(NumOfCkts))	  
+        !        DO I=1, NumOfCkts
+        !            Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+        !            ALLOCATE(Ckt(I)%Tube(1))
+        !            ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+        !        END DO
+        !ELSE
+        !        !ISI - 09/10/07
+        !        ALLOCATE(CoilSection(NumOfSections)) 
+        !        ALLOCATE(Tube(NumOfTubes))
+        !        ALLOCATE(Tube2D(Nl,Nt))
+        !        ALLOCATE(JoinTubes(NumOfTubes))
+        !
+        !        DO I=1, NumOfTubes
+        !            ALLOCATE(Tube(I)%Seg(NumOfMods))
+        !        END DO
+        !
+        !        DO I=1, Nl
+        !            DO J=1, Nt
+        !                ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+        !            END DO
+        !        END DO
+        !
+        !        ALLOCATE(Ckt(NumOfCkts))
+        !        ALLOCATE(mRefIter(NumOfCkts))
+        !        CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+        !                            TmpNumbers,NumNumbers,Status)
+        !        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+        !    
+        !        DO I=1, NumOfCkts
+        !            Ckt(I)%Ntube=Numbers(I)
+        !            IF (ErrorFlag .NE. NOERROR) THEN 
+        !                ErrorFlag=CKTFILEERROR
+        !                CALL InitCondenserCoil_Helper_1
+        !                RETURN
+        !            END IF
+        !            ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+        !            ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+        !        END DO
 
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2474,7 +2545,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
 
-            ALLOCATE(Node(Nnode))
+            IF (.NOT. ALLOCATED(Node)) THEN
+                ALLOCATE(Node(Nnode))
+            END IF
 
             !Find split and joint tube numbers
             J=0
@@ -2707,50 +2780,56 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 CALL InitCondenserCoil_Helper_1
                 RETURN
             END IF
-        
-            IF (IsSimpleCoil .EQ. 1) THEN
-                NumOfMods=3
-                ALLOCATE(Ckt(NumOfCkts))	  
-                DO I=1, NumOfCkts
-                    Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
-                    ALLOCATE(Ckt(I)%Tube(1))
-                    ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
-                END DO
-            ELSE
-        
-                !ISI - 09/10/07
-                ALLOCATE(CoilSection(NumOfSections)) 
-        
-                ALLOCATE(Tube(NumOfTubes))
-                ALLOCATE(Tube2D(Nl,Nt))
-                ALLOCATE(JoinTubes(NumOfTubes))
-        
-                DO I=1, NumOfTubes
-                    ALLOCATE(Tube(I)%Seg(NumOfMods))
-                END DO
-        
-                DO I=1, Nl
-                    DO J=1, Nt
-                        ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
-                    END DO
-                END DO
-        
-                ALLOCATE(Ckt(NumOfCkts))
-                ALLOCATE(mRefIter(NumOfCkts))
-                CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
-                                    TmpNumbers,NumNumbers,Status)
-                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
-                
-                DO I=1, NumOfCkts
-                Ckt(I)%Ntube=Numbers(I)
-                IF (ErrorFlag .NE. NOERROR) THEN 
-                    ErrorFlag=CKTFILEERROR
-                    CALL InitCondenserCoil_Helper_1
-                    RETURN
-                END IF
-                ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
-                ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
-                END DO
+            
+            IF (.NOT. ALLOCATED(Ckt)) THEN
+                CALL InitCondenserStructures
+            END IF
+            
+            IF (IsSimpleCoil .NE. 1) THEN
+
+            !IF (IsSimpleCoil .EQ. 1) THEN
+            !    NumOfMods=3
+            !    ALLOCATE(Ckt(NumOfCkts))	  
+            !    DO I=1, NumOfCkts
+            !        Ckt(I)%Ntube=1 !Initialize ISI - 12/03/06
+            !        ALLOCATE(Ckt(I)%Tube(1))
+            !        ALLOCATE(Ckt(I)%Tube(1)%Seg(NumOfMods))
+            !    END DO
+            !ELSE
+            !
+            !    !ISI - 09/10/07
+            !    ALLOCATE(CoilSection(NumOfSections)) 
+            !
+            !    ALLOCATE(Tube(NumOfTubes))
+            !    ALLOCATE(Tube2D(Nl,Nt))
+            !    ALLOCATE(JoinTubes(NumOfTubes))
+            !
+            !    DO I=1, NumOfTubes
+            !        ALLOCATE(Tube(I)%Seg(NumOfMods))
+            !    END DO
+            !
+            !    DO I=1, Nl
+            !        DO J=1, Nt
+            !            ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            !        END DO
+            !    END DO
+            !
+            !    ALLOCATE(Ckt(NumOfCkts))
+            !    ALLOCATE(mRefIter(NumOfCkts))
+            !    CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+            !                        TmpNumbers,NumNumbers,Status)
+            !    Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+            !    
+            !    DO I=1, NumOfCkts
+            !    Ckt(I)%Ntube=Numbers(I)
+            !    IF (ErrorFlag .NE. NOERROR) THEN 
+            !        ErrorFlag=CKTFILEERROR
+            !        CALL InitCondenserCoil_Helper_1
+            !        RETURN
+            !    END IF
+            !    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+            !    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+            !    END DO
         
             !Check if all circuit have the same number of tubes !ISI - 09/12/06
             IsSameNumOfTubes=.TRUE.	
@@ -2816,7 +2895,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                DO J=1,1    !RS: Debugging: Trying to keep the J being set to 21 through the following J loop
+                DO J=1,NumOfMods    !RS: Debugging: Adding in a J-value
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !RS Comment: Bringing in the velocity deviation values
                 END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
@@ -2884,7 +2963,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 END IF
             END DO
         
-            ALLOCATE(Node(Nnode))
+            IF (.NOT. ALLOCATED(Node)) THEN
+                ALLOCATE(Node(Nnode))
+            END IF
         
             !Find split and joint tube numbers
             J=0
@@ -3680,17 +3761,96 @@ END IF
     LmodLiq=Lliqln 
     AiModLiq=PI*IDliqLn*LmodLiq
 
-    !***** Allocate pointer for discharge lines *****
-    ALLOCATE(DisLnSeg(NumOfMods))
-
-    !***** Allocate pointer for liquid lines *****
-    ALLOCATE(LiqLnSeg(NumOfMods))
-
+    !!***** Allocate pointer for discharge lines *****
+    !ALLOCATE(DisLnSeg(NumOfMods))
+    !
+    !!***** Allocate pointer for liquid lines *****
+    !ALLOCATE(LiqLnSeg(NumOfMods))
+    !
     CALL InitCondenserCoil_Helper_1
 
     RETURN
 
     END SUBROUTINE InitCondenserCoil
+    
+    SUBROUTINE InitCondenserStructures
+    
+    USE InputProcessor
+    
+  INTEGER, PARAMETER :: MaxNameLength = 200
+
+  CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+  INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+  REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
+  INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+  INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+  CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+  INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
+  REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+        ALLOCATE(Ckt(NumOfCkts))	  
+        ALLOCATE(CoilSection(NumOfSections)) 
+        ALLOCATE(Tube(NumOfTubes))
+        ALLOCATE(Tube2D(Nl,Nt))
+        ALLOCATE(JoinTubes(NumOfTubes))
+        ALLOCATE(mRefIter(NumOfCkts))
+        ALLOCATE(DisLnSeg(NumOfMods))
+        ALLOCATE(LiqLnSeg(NumOfMods))
+
+        NumOfMods=3
+
+        DO I=1, NumOfTubes
+            ALLOCATE(Tube(I)%Seg(NumOfMods))
+        END DO    
+        
+        DO I=1, Nl
+            DO J=1, Nt
+                ALLOCATE(Tube2D(I,J)%Seg(NumOfMods))
+            END DO
+        END DO
+                
+    IF (IsCoolingMode .GT. 0) THEN
+                
+                CALL GetObjectItem('ODCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                    TmpNumbers,NumNumbers,Status)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+            
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=Numbers(I)
+                    IF (ErrorFlag .NE. NOERROR) THEN 
+                        ErrorFlag=CKTFILEERROR
+                        CALL InitCondenserCoil_Helper_1
+                        RETURN
+                    END IF
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                    DO J=1,Ckt(I)%Ntube
+                        ALLOCATE(Ckt(I)%Tube(J)%Seg(NumOfMods))
+                    END DO
+                END DO
+                
+    ELSE
+                CALL GetObjectItem('IDCcktCircuiting_TubeNumbers',1,Alphas,NumAlphas, &
+                                    TmpNumbers,NumNumbers,Status)
+                Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
+                
+                DO I=1, NumOfCkts
+                    Ckt(I)%Ntube=Numbers(I)
+                    IF (ErrorFlag .NE. NOERROR) THEN 
+                        ErrorFlag=CKTFILEERROR
+                        CALL InitCondenserCoil_Helper_1
+                        RETURN
+                    END IF
+                    ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
+                    ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
+                    DO J=1,Ckt(I)%Ntube
+                        ALLOCATE(Ckt(I)%Tube(J)%Seg(NumOfMods))
+                    END DO
+                END DO
+        
+    END IF
+    
+    END SUBROUTINE InitCondenserStructures
 
     !************************************************************************
     

@@ -1,3 +1,56 @@
+! ************************************** !
+! ** HEAT PUMP SIMULATION CODE HEADER ** !
+! ************************************** !
+
+! ************************************** !
+! -- HIGH LEVEL OVERVIEW/DESCRIPTION --- !
+! -------------------------------------- !
+! This is the overarching heat pump design subroutine. It calls and manages the component modules. 
+
+! ************************************** !
+! -- PHYSICAL DESCRIPTION -------------- !
+! -------------------------------------- !
+! Since this subroutine runs the heat pump simulation, there's really no physical component.
+
+! ************************************** !
+! -- SIMULATION DATA RESPONSIBILITIES -- !
+! -------------------------------------- !
+! The input, DTVALU, appears to be a guess of temperature. There don't appear to be any direct outputs.
+
+! ************************************** !
+! -- INPUT FILES/OUTPUT FILES (none) --- !
+! -------------------------------------- !
+! There are no direct input or output files connected to this routine.
+
+! ************************************** !
+! -- MODULE LEVEL VARIABLES/STRUCTURES - !
+! -------------------------------------- !
+! This is only a subroutine, so there are no module-level variables or structures.
+
+! ************************************** !
+! -- SUMMARY OF METHODS, CALL TREE ----- !
+! -------------------------------------- !
+! This module contains 1 methods
+!    PUBLIC HPDM -- Runs the entire heat pump simulation
+!      Called by ChargeLoop.f90
+!      Called by ORNLsolver.f90
+
+! ************************************** !
+! -- ISSUES/BUGS/TICKETS --------------- !
+! -------------------------------------- !
+! NA
+
+! ************************************** !
+! -- CHANGELOG ------------------------- !
+! -------------------------------------- !
+! 2012-12-11 | ESL | Initial header
+! 2012-12-12 | RAS | Updated header
+
+! ************************************** !
+! -- TODO/NOTES/RECOMMENDATIONS -------- !
+! -------------------------------------- !
+! Some more documentation would probably be useful.
+
     SUBROUTINE HPDM(DTVALU)
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -81,6 +134,8 @@
     INTEGER :: DebugFile       =0 !RS: Debugging file denotion, hopefully this works.
     
   OPEN(unit=DebugFile,file='Debug.txt')    !RS: Debugging
+    
+!    INTEGER :: TimeStep1 !RS: Testing
 
     MaxIteration=30
     ICHRGE=1
@@ -250,6 +305,10 @@
     FLAG_GOTO_950 = .FALSE.
     DO WHILE (.TRUE.)
         
+        !TimeStep1 = TimeStep1+1   !RS: Testing
+        !
+        !CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
+        
         DO I=1,2
             ERRMSG(I) = 0.0
         END DO
@@ -413,13 +472,13 @@
                     EvapPAR(54)=1 !First time
                     EvapPAR(53)=0 !Detailed version
                     CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT)
-                    CALL EndEvaporatorCoil
+                    !CALL EndEvaporatorCoil
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
                     EvapPAR(53)=1 !Simple version
                     CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)
-                    CALL EndEvaporatorCoil
+                    !CALL EndEvaporatorCoil
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
 
