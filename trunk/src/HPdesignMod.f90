@@ -71,7 +71,6 @@
     REAL DTVALU
 
     LOGICAL PRINT
-    REAL NTE,NSECTE,NTC,NSECTC
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
@@ -84,27 +83,23 @@
     INTEGER ICHRGE,IMASS,IREFC,LPRINT
     REAL TAIICI,TAIIEI
     INTEGER NTAMB,NCROSS
-    REAL DELT2,DTVLMN,DTVLMX
+    REAL DELT2,DTVLMN
     REAL TAIIE,TAIIC
-    INTEGER ITRPIE,I
+    INTEGER I
     REAL ERRMSG(2)
-    REAL TSAT1,CONV,STEP,DIFFER,XMR,TSATEO
+    REAL TSAT1,CONV,STEP,DIFFER,XMR
     INTEGER IERROR,IER
     REAL TAIE1,DIFF,DIFSGN,PROD,TSATSV,TSATDM,TAISV,TAIDM
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &
-    rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,TsoEvp,LsucLn
+    REAL TsoEvp,LsucLn
     REAL MassCoil,MassLiqCoil,MassVapCoil
     REAL Root1,Root2,Dprev1,Dprev2,Qprev1,Qprev2,Lprev1,Lprev2
     INTEGER NumIter,MaxIteration
     REAL XMRFLD,ErrXMR,TSICMPprev
     REAL Dshtb,MaxDshTb,MinDshTb
     REAL CapTubeDimension,MaxLen,MinLen
-    REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
     REAL TaoE,RHoE,TaoC,RHoC
-    REAL Qtxv,MaxQtxv,MinQtxv,SuperStc,SuperRtd
-    REAL Subcooling, Superheat, DPtxv, TsatEvp, TsatCnd, AccumDP
-    REAL SUPERMAX !TXV maximum effective superheat, F
-    REAL SUPERMIN !TXV static (minimum) superheat, F 
+    REAL Qtxv,MaxQtxv,MinQtxv
+    REAL Subcooling, Superheat, DPtxv
     REAL ChargeCorrection !Correction charge for the charge tuning method, lbm
     REAL, EXTERNAL :: CNDNSR, EVPTR
     REAL ZERO3

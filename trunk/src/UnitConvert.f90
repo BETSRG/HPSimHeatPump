@@ -90,7 +90,7 @@ CONTAINS
 
 !***********************************************************************************
 
-SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
+SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
                        AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
 				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
 					   ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &
@@ -122,7 +122,7 @@ REAL, INTENT(INOUT) :: CondPAR(61) !Condenser model real number input data
 REAL, INTENT(INOUT) :: EvapPAR(53) !Evaporator model real number input data
 REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
 REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
-REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data
+!REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data   !RS: Debugging: Not ever used
 REAL, INTENT(INOUT) :: AccumPAR(10) !Accumulator input data
 REAL, INTENT(INOUT) :: FilterPAR(2) !Filter drier input data
 REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
@@ -360,12 +360,12 @@ INTEGER I !Loop counter
 
     !****TXV input data****
     !TxvPAR(1)                !Rated TXV capacity, ton
-    TxvPAR(2)=TxvPAR(2)/1.8   !Rated superheat, C
-    TxvPAR(3)=TxvPAR(3)/1.8   !Static superheat, C
+    !TxvPAR(2)=TxvPAR(2)/1.8   !Rated superheat, C  !RS: Debugging: Not ever used
+    !TxvPAR(3)=TxvPAR(3)/1.8   !Static superheat, C !RS: Debugging: Not ever used
     !TxvPAR(4)                !Bleed factor
     !TxvPAR(5)                !Number of circuits in evaporator
-	TxvPAR(6)=TxvPAR(6)*UnitL !Distributor tube length, m
-	TxvPAR(7)=TxvPAR(7)/1.8   !Maximum effective superheat, C
+	!TxvPAR(6)=TxvPAR(6)*UnitL !Distributor tube length, m  !RS: Debugging: Not ever used
+	!TxvPAR(7)=TxvPAR(7)/1.8   !Maximum effective superheat, C  !RS: Debugging: Not ever used
 
 	!***** Accumulator input data *****
 	AccumPAR(1) = AccumPAR(1)/12*0.3048 !Accumulator inside diameter, m

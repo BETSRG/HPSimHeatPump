@@ -146,7 +146,7 @@
     REAL TsucMap     !Map based suction temp, C
     REAL Tdis        !Discharge temperature, C
     REAL Psuc        !Suction pressure, kPa
-    REAL PsucMap     !Map based suction pressure, kPa
+    !REAL PsucMap     !Map based suction pressure, kPa  !RS: Debugging: Extraneous
     REAL Pdis        !Discharge pressure, kPa
     REAL Xdis        !Discharge quality
     REAL Hsuc        !Suction enthalpy, kJ/kg
@@ -167,7 +167,7 @@
     REAL Wcorrect    !Correction factor for power calc. with different input voltage
     REAL Mcorrect    !Correction factor for mass flow rate
     REAL PwrMultiplier    !Power multiplier
-    REAL mdotMultiplier   !Mass flow rate multipliern
+    REAL mdotMultiplier   !Mass flow rate multiplier
     INTEGER I !Loop control
     INTEGER ErrorFlag          !0-No error
     !1-Compressor solution error

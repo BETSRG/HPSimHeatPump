@@ -107,8 +107,7 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    CHARACTER (len=15) :: Property           
-    !INTEGER            :: RefrigIndex =0
+    CHARACTER (len=15) :: Property          
     REAL Temperature,Quality,Pressure,Enthalpy
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option
@@ -130,9 +129,7 @@
     REAL STEP
     REAL CHGDIF
 
-    REAL TsubExp,TsubCnd,TsupEvp,TsupCmp,Qcnd,Qevp,QevpSens
-    REAL PwrCmp,mdot,TsiExp,TsoCnd,TsoEvp
-    REAL Dshtb,WinTrans,Qloss
+    REAL Qcnd,Qevp,mdot,WinTrans
     REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
@@ -141,7 +138,6 @@
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
-    LOGICAL:: Trues
     REAL :: SUPERAct
     REAL :: TsiCmpAct
     REAL :: TsoCmpAct
@@ -149,8 +145,6 @@
     REAL :: RHiEAct
     REAL, SAVE :: IDCFlowConst
     REAL, SAVE :: ODCFlowConst
-    INTEGER   :: Flag
-    INTEGER :: LastTime !Aids in the event of a microchannel device
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -237,7 +231,7 @@
         MiniLunit = ' (in)'
     END IF
 
-    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
+    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
     AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
     Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
     ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
@@ -815,10 +809,6 @@
         
                 DTROC=SUBCOOL !Specified subcooling
                 !1st run is for coarse convergence criteria
-                
-                !TimeStep1 = TimeStep1+1   !RS: Testing
-                !
-                !CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
                 
                 CALL HPDM(DTVALU)
 

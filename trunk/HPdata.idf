@@ -6,18 +6,18 @@ Model,
 MainDesignData,
     False, !field SI Units Flag
     2, !field Calculation Mode
-    2, !field System Type
-    TRUE, !field Is in Cooling Mode
-    !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
+    1, !2, !field System Type
+    !TRUE, !field Is in Cooling Mode
+    FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
     10, !field Design Subcooling [R]
     10, !field Design Superheat [R]
     R410A, !field Refrigerant Name
     2, !field No. of Refrigerants in Blend [-]
     Cooling: 'A' Rating Conditions, !field Design Condition Description
-    95, !32, !95, !field Outdoor Entering Drybulb Temperature [°F]
-    75, !27,!75, !field Outdoor Entering Wetbulb Temperature [°F]
-    80, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
-    67, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
+    32, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
+    30, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
+    70, !80, !field Indoor Entering Drybulb Temperature [°F]
+    65, !67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
 
 CompressorData,
@@ -199,7 +199,7 @@ RefrigerantCycleData(Cooling),
     100.37; !field Temperature [°F]
 
 RefrigerantCycleData(Heating),
-    204.6, !field Temperature [°F]
+    115, !204.6, !field Temperature [°F]
     14.696, !field Barometric Pressure [psig]
     0; !field Is Compressor in Air Stream [-]
 

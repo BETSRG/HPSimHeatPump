@@ -870,7 +870,7 @@
     REAL :: LdisTube    !Distributor tube length, m
     REAL :: DshTube     !Short tube diameter, m
     REAL :: IDDISTUBE   !Distributor inside diameter, in
-    REAL :: VolDisTube  !Distributor tube volumn, m^3
+    REAL :: VolDisTube  !Distributor tube volume, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
     REAL :: Subcooling  !Degree of subcooling, C
@@ -1114,6 +1114,7 @@
 
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
+        !mdotExp=0   !RS: Debugging: No backwards flow allowed!
     ELSE
         OUT(1)=mdotExp
         OUT(2)=PoExp
@@ -1129,7 +1130,13 @@
     HiExpDev = XIN(3)
     PoExpDev = OUT(2)
     ToExpDev = OUT(3)
-    hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+    !hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+    
+    IF (XoExp .LT. 0) THEN  !RS: Debugging: Trying to deal with the case when it's subcooled
+        hoExpDev = TP(Ref$,ToExpDev,PoExpDev,'enthalpy',RefrigIndex,RefPropErr)
+    ELSE
+        hoExpDev = PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
+    END IF
 
     RETURN
 

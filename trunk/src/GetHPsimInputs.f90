@@ -144,7 +144,7 @@ REAL,PARAMETER :: PI=3.14159265 !Pi
 REAL,PARAMETER :: CopperDensity=8920 !Density of copper, kg/m3
 
 INTEGER ODC_Nt                        !Number of tubes in transverse direction (normal to air flow)
-INTEGER ODC_Nl                        !Number of rows in longitudinal direction (parrallel to air flow)
+INTEGER ODC_Nl                        !Number of rows in longitudinal direction (parallel to air flow)
 INTEGER ODC_Nckt                      !Number of circuit
 INTEGER ODC_Nmod                      !Number of modules per tube
 INTEGER ODC_FinType                   !Fin type: 1=Plain; 2=Wavy; 3=Louver
@@ -162,7 +162,6 @@ REAL ODC_hciMultiplier    !Multiplier for ref. side heat transfer correlation
 REAL ODC_DPrefMultiplier  !Multiplier for ref. side pressure drop correlation
 REAL ODC_hcoMultiplier    !Multiplier for air side heat transfer correlation
 REAL ODC_DPairMultiplier  !Multiplier for air side pressure drop correlation
-REAL ODC_SurfAbsorptivity !Surface absorptivity
 
 INTEGER IDC_Nt                        !Number of tubes in transverse direction (normal to air flow)
 INTEGER IDC_Nl                        !Number of rows in longitudinal direction (parrallel to air flow)
@@ -183,7 +182,6 @@ REAL IDC_hciMultiplier    !Multiplier for ref. side heat transfer correlation
 REAL IDC_DPrefMultiplier  !Multiplier for ref. side pressure drop correlation
 REAL IDC_hcoMultiplier    !Multiplier for air side heat transfer correlation
 REAL IDC_DPairMultiplier  !Multiplier for air side pressure drop correlation
-REAL IDC_SurfAbsorptivity !Surface absorptivity
 
 !Custom air side curve
 INTEGER IDC_CurveUnit          !Unit convention of the custom air side curve, 1=SI; 2=IP
@@ -234,8 +232,6 @@ INTEGER(2) :: CoolingDesignCondition
 INTEGER(2) :: HeatingDesignCondition
 REAL :: InsideDiameter
 REAL :: Temp
-REAL :: SuperStc !TXV static superheat, C
-REAL :: SuperRtd !TXV rated superheat, C
 REAL :: CopperVol !Copper volume, m3
 INTEGER CompressorManufacturer
 INTEGER ErrorFlag !Error flag
@@ -243,7 +239,6 @@ INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
 REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
-LOGICAL :: HPDataFileExists
 CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
   REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
@@ -329,37 +324,8 @@ REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
 REAL ValveODCLn_Charge   !Charge of Valve to ODC Line Tube
 
-CHARACTER(len=MaxNameLength)Acc_Manufacturer
-CHARACTER(len=MaxNameLength)Acc_Model
-REAL Acc_ChgCap  !Accumulator Charge Capacity
-REAL Acc_SysCap  !Accumulator Max. Recommended System Capacity
-REAL Acc_Chg  !Accumulator Charge
-REAL Acc_DP   !Accumulator Pressure Drop
-
 CHARACTER(len=MaxNameLength)Filter_Manufacturer
 CHARACTER(len=MaxNameLength)Filter_Model
-REAL Filter_DP    !Filter Pressure Drop
-
-INTEGER(2) :: UseAirHandlerData    !0 is FALSE, 1 is TRUE
-REAL AHD_Ton !Tonnage
-CHARACTER(len=MaxNameLength)AHD_CM    !Coil Model
-CHARACTER(len=MaxNameLength)AHD_AHM   !Air Handler Model
-
-REAL CCD_AC !A-Capacity
-REAL CCD_AP   !A-Power
-REAL CCD_ASP  !A-Suction Pressure
-REAL CCD_BC   !B-Capacity
-REAL CCD_BP   !B-Power
-REAL CCD_BSP  !B-Suction Pressure
-REAL CCD_ACS  !A-Capacity Slope
-REAL CCD_APS   !A-Power Slope
-REAL CCD_BCS  !B-Capacity Slope
-REAL CCD_BPS !B-Power Slope
-REAL CCD_ACI !A-Capacity Intercept
-REAL CCD_API !A-Power Intercept
-REAL CCD_BCI !B-Capacity Intercept
-REAL CCD_BPI !B-Power Intercept
-REAL CCD_ALT !A-Liquid Temperature
 
 CHARACTER(len=MaxNameLength)ODC_FinName
 CHARACTER(len=MaxNameLength)ODC_FinMaterial
@@ -369,22 +335,15 @@ CHARACTER(len=MaxNameLength)IDC_FinName
 CHARACTER(len=MaxNameLength)IDC_FinMaterial
 CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
-REAL :: TubeNumber
-REAL :: SystemCost
 !Flow:
 
-!INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
-!REAL(r64), DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
 CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
 CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
-
-  ODC_SurfAbsorptivity=1
-  IDC_SurfAbsorptivity=1
   
-  !***************** System data *****************
+  !***************** System data *****************  !RS: Debugging: Moving: May be able to stay here? Or go to ORNLSolver
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status)
@@ -427,13 +386,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   RefChg = Numbers(10)    !Design Refrigerant Charge Mass
 
 
-  !***************** Compressor data *****************
+  !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
 
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  CompressorModel = Alphas(1)
+  !CompressorModel = Alphas(1)   !RS: Debugging: This can be removed
   
   SELECT CASE (Alphas(2)(1:1))
   CASE ('C','c')
@@ -448,10 +407,10 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	CompressorManufacturer=BRISTOL
   END SELECT
 
-  CompressorType = Alphas(3)
+  !CompressorType = Alphas(3)    !RS: Debugging: This can be removed
   Rref=Alphas(4)    !Compressor Refrigerant
   
-  CompressorPower = Numbers(1)
+  !CompressorPower = Numbers(1)  !RS: Debugging: This can be removed
   CompPAR(21) = Numbers(2) !CompressorHeatLossFraction
   CompPAR(22) = Numbers(3) !CompressorHeatLoss
   CompPAR(23) = Numbers(4) !CompressorVolume
@@ -476,7 +435,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CompPAR(9) = Numbers(23) !CompressorPowerCoefficient9
   CompPAR(10) = Numbers(24) !CompressorPowerCoefficient10
   
-  CompressorCoefficientsUnitFlag = Alphas(5)
+  !CompressorCoefficientsUnitFlag = Alphas(5)   !RS: Debugging: This can also be removed
   
   CompPAR(25) = Numbers(25) !PowerMultiplier
   CompPAR(26) = Numbers(26) !MassFlowRateMultiplier
@@ -485,7 +444,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   Subcool = Numbers(29) !UserSpecifiedRatingSubcooling
   Super = Numbers(30) !UserSpecifiedRatingSuperheat
   
-  !***************** Outdoor coil data *****************
+  !***************** Outdoor coil data *****************    !RS: Debugging: Moving: Evaporator & Condenser
 
   CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
                        TmpNumbers,NumNumbers,Status)
@@ -501,8 +460,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODC_Kfin = Numbers(3) !Conductivity of Fin
   ODC_FinThk = Numbers(4)   !Fin Thickness
   
-  ODC_FinMaterial = Alphas(2)
-  ODC_TubeName = Alphas(3)
+  !ODC_FinMaterial = Alphas(2)  !RS: Debugging: Can remove these
+  !ODC_TubeName = Alphas(3)
 
   ODC_TubeType = Numbers(5) !Numerical Denotion of Tube Type
   ODC_TubeID = Numbers(6)   !Tube Inner Diameter
@@ -526,7 +485,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       ODC_TubeThk=ODC_TubeThk*1000
   END IF
 
-  !***************** Outdoor fan data *****************
+  !***************** Outdoor fan data ***************** !RS: Debugging: Moving: Evaporator & Condenser
 
   CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -537,7 +496,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODdrawBlow = Numbers(3)   !Draw Through (1) or Blow Through (2)
 
 
-  !***************** Indoor coil data *****************
+  !***************** Indoor coil data ***************** !RS: Debugging: Evaporator & Condenser
 
   CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -551,8 +510,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   IDC_Kfin = Numbers(3) !Fin Conductivity
   IDC_FinThk = Numbers(4)   !Fin Thickness
   
-  IDC_FinMaterial = Alphas(2)
-  IDC_TubeName = Alphas(3)
+  !IDC_FinMaterial = Alphas(2)   !RS: Debugging: Can remove these
+  !IDC_TubeName = Alphas(3)
   
   IDC_TubeType = Numbers(5) !Numerical Denotion of the tube type
   IDC_TubeID = Numbers(6)   !Tube Inner Diameter
@@ -576,7 +535,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       IDC_TubeThk=IDC_TubeThk*1000
   END IF
 
-  !***************** Indoor fan data *****************
+  !***************** Indoor fan data *****************  !RS: Debugging: Moving: Evaporator & Condenser
   
   CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -586,7 +545,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   VdotIDfan = Numbers(2)    !Fan Air Flow Rate
   IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
 
-  !***************** Expansion device data *****************
+  !***************** Expansion device data *****************    !RS: Debugging: Moving: Either stay or HPDM & FlowRateLoop
 
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -642,8 +601,8 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   !Rated TXV capacity, ton
 
-  CoolingTXVcapacity = Numbers(13)
-  HeatingTXVcapacity = Numbers(14)
+  !CoolingTXVcapacity = Numbers(13)
+  !HeatingTXVcapacity = Numbers(14)
 
   !Distributor tubes
 
@@ -663,7 +622,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     HeatingDistubeLength=HeatingDistubeLength/12    !RS Comment: Unit Conversion, from in to ft?
   END IF
 
-  !*****************Refrigerant line data******************
+  !*****************Refrigerant line data****************** !RS: Debugging: Moving: Split into Evaporator & Condenser?
 
   CALL GetObjectItem('RefrigerantLineData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -773,7 +732,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000    !RS Comment: Unit Conversion
   END IF
 
-  !********************Refrigerant Cycle Data (Cooling)***********************
+  !********************Refrigerant Cycle Data (Cooling)***********************  !RS: Debugging: Moving: Stay here? Condenser?
 
   CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) 
@@ -783,7 +742,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   Tliq = Numbers(1)    !Inlet Temperature
   
-  !********************Refrigerant Cycle Data (Heating)***********************
+  !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
 
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -798,16 +757,16 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   BaroPressure = Numbers(2)  !Barometric Pressure
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
 
-  !*************** Accumulator ****************
+  !*************** Accumulator **************** !RS: Debugging: Moving: AirTempLoop? ORNLSolver?
 
   CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  Acc_Manufacturer = Alphas(1)
-  Acc_Model = Alphas(2)
+  !Acc_Manufacturer = Alphas(1) !RS: Debugging: Removing these
+  !Acc_Model = Alphas(2)
   
-  AccumPAR(2) = Numbers(1)  !Height
+  AccumPAR(2) = Numbers(1)  !Height !RS: Debugging: If this is 0, then I'm pretty sure everything here is never called
   AccumPAR(1) = Numbers(2)  !Diameter
   AccumPAR(4) = Numbers(3)  !Upper hole diameter
   AccumPAR(3) = Numbers(4)  !Lower hole diameter
@@ -819,7 +778,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
-  !*************** Filter Drier ****************
+  !*************** Filter Drier ****************    !RS: Debugging: Moving: FlowRateLoop
 
   CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -831,7 +790,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   FilterPAR(1) = Numbers(1) !Flow capacity
   FilterPAR(2) = Numbers(2) !Rating DP
   
-  !*************** Custom Air Side Heat Transfer Data **************
+  !*************** Custom Air Side Heat Transfer Data **************    !RS: Debugging: Moving: Evaporator & Condenser
 
   CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status) 
@@ -861,7 +820,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   IDC_Poly3DP = Numbers(14) !Polynomial Fit Coefficient C3
   IDC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
   
-  
   !---Outdoor Coil---
   
   ODC_CurveUnit = Numbers(16)
@@ -887,7 +845,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   ODC_Poly4DP = Numbers(15) !Polynomial Fit Coefficent C4
 
  
-  !*************** Charge Tuning Curve ***************
+  !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
 
   CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
@@ -896,7 +854,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
   CASE ('F','f')
-      IsChargeTuning=0
+      IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
   CASE ('T','t')
       IsChargeTuning=1
   END SELECT
@@ -921,7 +879,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	  END IF
   END IF
 
-  !***** Calculate weight of interconnecting pipes ****
+  !***** Calculate weight of interconnecting pipes **** !RS: Debugging: Moving: These are only ever used to report the weights out
 
   IF (Unit .EQ. SI) THEN
 	  CopperVol=PI*(DisLnPAR(2)**2-(DisLnPAR(2)-2*DisLnPAR(3))**2)/4/1000*DisLnPAR(1)
@@ -969,7 +927,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 	  IF (Unit .EQ. SI) THEN !SI unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to ODC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveODCLn
@@ -999,7 +957,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to IDC line
+        !Equilibrium suction line, combines compressor suction line and valve to IDC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveIDCLn
@@ -1031,7 +989,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 	  ELSE !IP unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to ODC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveODCLn
@@ -1097,7 +1055,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 	  IF (Unit .EQ. SI) THEN !SI unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to IDC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveIDCLn
@@ -1127,7 +1085,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to ODC line
+        !Equilibrium suction line, combines compressor suction line and valve to ODC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveODCLn
@@ -1159,7 +1117,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 	  ELSE !IP unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to IDC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveIDCLn
@@ -1189,7 +1147,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to ODC line
+        !Equilibrium suction line, combines compressor suction line and valve to ODC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveODCLn
@@ -1280,7 +1238,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CondPAR(34)=PwrODfan
     CondPAR(35)=ODdrawblow
 
-	CondPAR(36)=ODC_SurfAbsorptivity
+	!CondPAR(36)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
     CondPAR(37)=ODC_TubeType
 
 	CondPAR(41)=ODC_CurveUnit
@@ -1324,7 +1282,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	EvapPAR(27)=PwrIDfan
     EvapPAR(28)=IDdrawblow
 
-	EvapPAR(29)=IDC_SurfAbsorptivity
+	!EvapPAR(29)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
     EvapPAR(30)=IDC_TubeType
 
 	EvapPAR(35)=IDC_CurveUnit
@@ -1351,11 +1309,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
     CapTubePAR(5)=CoolingDistubeLength
 
-    TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator
-    TxvPAR(6) =CoolingDistubeLength
-
     ExpDevice=CoolingExpDevice
-    TxvPAR(1)=CoolingTXVcapacity
   ELSE
 	CFMevp=VdotODfan
     CFMcnd=VdotIDfan
@@ -1386,7 +1340,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CondPAR(34)=PwrIDfan
     CondPAR(35)=IDdrawblow
 
-	CondPAR(36)=IDC_SurfAbsorptivity
+	!CondPAR(36)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
     CondPAR(37)=IDC_TubeType
 
 	CondPAR(41)=IDC_CurveUnit
@@ -1430,7 +1384,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	EvapPAR(27)=PwrODfan
     EvapPAR(28)=ODdrawblow
 
-	EvapPAR(29)=ODC_SurfAbsorptivity
+	!EvapPAR(29)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
     EvapPAR(30)=ODC_TubeType
 
 	EvapPAR(35)=ODC_CurveUnit
@@ -1457,11 +1411,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
     CapTubePAR(5)=HeatingDistubeLength
 
-    TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator
-    TxvPAR(6) =HeatingDistubeLength
-
     ExpDevice=HeatingExpDevice
-    TxvPAR(1)=HeatingTXVcapacity
   END IF
 
   EvapPAR(31)=BaroPressure
@@ -1475,9 +1425,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
   CondPAR(60)=CompressorManufacturer
-
-  SuperStc=TxvPAR(3)
-  SuperRtd=TxvPAR(2)
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN
