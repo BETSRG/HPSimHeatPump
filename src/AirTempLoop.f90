@@ -71,7 +71,6 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     IMPLICIT NONE
 
     CHARACTER (len=15) :: Property           
-    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT
@@ -87,10 +86,8 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
-    REAL TAIIE,XMR,TSATEI,TROE,TSATEO,SUPCAL,SUPCL,SXOE,TSATCI
-    REAL SUPR,DIFFER,TSAVG,TRIC,SXIC,Hsuc
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap
-    REAL rhoiLiq,rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve
+    REAL TAIIE,XMR,TSATEI,SUPCAL,SUPCL,TSATCI
+    REAL SUPR,TSAVG,TRIC,SXIC
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
     INTEGER I
     

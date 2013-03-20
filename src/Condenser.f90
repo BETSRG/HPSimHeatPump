@@ -74,7 +74,6 @@
     INTEGER,PARAMETER  :: RefBCmaxIter=20   !Max. number of iterations for refrigerant boundary condition calc.
     INTEGER,PARAMETER  :: AirBCmaxIter=20   !Max. number of iterations for air boundary condition calc.
     INTEGER,PARAMETER  :: PressureMaxIter=20        !Max. number of iterations
-    INTEGER,PARAMETER  :: DPmaxIter=20      !Max. number of iterations for distributor pressure drop calc.
     REAL,PARAMETER :: SMALL=1.0E-4  !Small number 
     REAL,PARAMETER :: BIG=1.0E20    !Big number
     REAL, PARAMETER :: Hout = 0.009937536 !Bare tube outside film heat transfer coefficient, kW/(m2-K)
@@ -109,10 +108,9 @@
 
     !Subcooling cirucits variables, ISI - 06/05/07
     INTEGER :: SubcoolingTube !Subcooling tube number
-    INTEGER :: NumOfSCckts !Number of subcooling circuits
 
     !Circuitry variables
-    INTEGER Ickt,I,J,K,II,III,IV !Loop control
+    INTEGER I,J,K,II,III,IV !Ickt, !Loop control    !RS: Debugging: Extraneous
     INTEGER NumOfTubes !Total number of tubes
     INTEGER TubeNum    !Tube number
 
@@ -128,7 +126,6 @@
     LOGICAL,SAVE :: IsUniformVelProfile !Is velocity profile uniform?
 
     !Refprop Table variable         
-    !INTEGER            :: RefrigIndex =0
     INTEGER :: RefID !1-R22; 2-R410A; 3-R407C; 4-R134a; 5-Propane; 6-R417A; 7-R509A
     REAL Temperature,Quality,Pressure,Enthalpy
 
@@ -142,14 +139,14 @@
 
     !Variables for module
     REAL tRiMod,tRoMod,tRmod
-    REAL pRiMod,pRoMod,pRoModprev
+    REAL pRiMod,pRoMod
     REAL xRmod,xRiMod,xRoMod
     REAL hRiMod,hRoMod
     REAL hfRiMod,hfRoMod
     REAL hgRiMod,hgRoMod
     REAL hfgRmod,hfgRiMod,hfgRoMod
-    REAL vgRmod,vgRiMod,vgRoMod,vgRsat
-    REAL vfRmod,vfRiMod,vfRoMod,vfRsat 
+    REAL vgRmod,vgRiMod,vgRoMod
+    REAL vfRmod,vfRiMod,vfRoMod
     REAL vRiMod,vRoMod
     REAL muRmod,muRiMod,muRoMod
     REAL mugRmod,mugRiMod,mugRoMod
@@ -163,7 +160,7 @@
     REAL mAiMod
     REAL tAiMod,tAoMod,tAmod
     REAL rhAiMod,rhAoMod
-    REAL wbAiMod,wbAoMod
+    REAL wbAoMod
     REAL hAiMod,hAoMod
 
     REAL DPmod !Pressure drop in module, kPa
@@ -183,11 +180,6 @@
     REAL tRoCmp
     REAL pRoCmp
     REAL hRoCmp
-    REAL xRoCmp
-    REAL vRoCmp
-    REAL muRoCmp
-    REAL mufRoCmp
-    REAL mugRoCmp
     REAL CpgRoCmp
 
     !Expansion device variables
@@ -195,16 +187,10 @@
     REAL pRiExp
     REAL hRiExp
     REAL xRiExp
-    REAL vRiExp
-    REAL vfRiExp
-    REAL vgRiExp
-    REAL muRiExp
-    REAL mufRiExp
-    REAL mugRiExp
 
     !Heat transfer calc. variables
     REAL mRefTot  !Refrigerant mass flow rate, kg/s
-    REAL,SAVE :: mRefTotPrev !Refrigerant mass flow rate, kg/s from previous iteration
+    !REAL,SAVE :: mRefTotPrev !Refrigerant mass flow rate, kg/s from previous iteration  !RS: Debugging: Looks like this set once and never used 
     REAL mRefMod  !Module refrigerant mass flow rate, kg/s
     REAL mRefJoin !Join tube total mass flow rate, kg/s
     REAL Cmin     !Min. capacity rate, kW/C
@@ -220,7 +206,7 @@
     REAL QmodPrev !Previous module heat transfer, kW
     REAL QmodTP   !Heat transfer in two-phase region, kW 
     REAL QmodSH   !Heat transfer in superheated region, kW 
-    REAL TsurfMod !Module surface temperature, C
+    !REAL TsurfMod !Module surface temperature, C    !RS: Debugging: This is set equal to 0 three times and otherwise never used
     REAL cAir     !Capacity rate of air, kW/C
     REAL cRef     !Capacity rate of refrigerant, kW/C
     REAL UA       !Overall heat transfer coefficient, kW/C
@@ -238,7 +224,6 @@
     REAL ReLiq    !Module Reynolds number liquid
     REAL Const    !A constant
     REAL MolWeight !Molecular weight, kg/kmol
-    REAL sigmaf    !Surface tension, kg/kmol
     REAL tSat      !Saturation temp., C
     REAL hciMultiplier   !Multiplier for hci
     REAL hcoMultiplier   !Multiplier for hco
@@ -260,10 +245,6 @@
                                      !4=Panasonic
 
     REAL AddDPDisLn !Discharge line additional pressure drop, kPa
-
-    REAL QrevCoilLn   !Reversing valve to coil line heat loss, kW
-    REAL DTrevCoilLn  !Temperature change in Reversing valve to coil line, C
-    REAL AddDPrevCoilLn !Reversing valve to coil line additional pressure drop, kPa
 
     REAL AddDPLiqLn !Liquid line additional pressure drop, kPa
 
@@ -287,25 +268,18 @@
     REAL mAiCoil
     REAL tRiCoil,tRoCoil
     REAL pRiCoil,pRoCoil
-    REAL pRoCoilTemp !temporary value of pRoCoil !ISI - 07/14/06
     REAL pRoCoilPrev !previous iteration value
     REAL hRiCoil,hRoCoil
     REAL xRiCoil,xRoCoil
-    REAL tAiCoil !,tAoCoil
+    REAL tAiCoil
     REAL,SAVE :: tAoCoil
     REAL tSiCoil,tSoCoil
     REAL rhAiCoil,rhAoCoil
-    REAL wbAiCoil,wbAoCoil
+    REAL wbAiCoil
     REAL hAiCoil,hAoCoil
-    REAL vRiCoil,vRoCoil
-    REAL vfRiCoil,vfRoCoil
-    REAL vgRiCoil,vgRoCoil
-    REAL muRiCoil,muRoCoil
-    REAL mufRiCoil,mufRoCoil
-    REAL mugRiCoil,mugRoCoil
     REAL tSCoCoil     !Coil outlet subcooling, C 
     REAL tSCiExp      !Exp.device inlet subcooling, C 
-    REAL tRoEvp !Evaporator outlet temperature, C
+    !REAL tRoEvp !Evaporator outlet temperature, C   !RS: Debugging: Is set once but doesn't do anything
 
     !Geometry variables
     REAL Aface       !Coil face area
@@ -314,13 +288,10 @@
     REAL,SAVE :: AfCoil !Coil fin surface area, m^2
     REAL,SAVE :: AmCoil !Coil tube mean surface area, m^2
     REAL AoMod       !Module outside surface area
-    REAL AoDry       !Module dry outside surface area
-    REAL AoWet       !Module wet outside surface area
     REAL AfMod       !Module fin surface area
     REAL AiMod       !Module inside surface area
     REAL AiModLiq    !Module inside surface area for liquid line
     REAL AiModDis    !Module inside surface area for discharge line
-    REAL AbrMod      !Module bare tube outside surface area
     REAL AmMod       !Module tube mean surface area    
     REAL Lcoil       !Total tube length, m
     REAL LmodTube    !Module length of tube, m
@@ -340,13 +311,6 @@
     REAL ODdisLn     !Outside diameter of discharge line, m 
     REAL DisLnThk    !Discharge line tube wall thickness, m
 
-    REAL LmodRevCoil !Module length of reversing valve to coil, m
-    REAL LrevCoil    !Reversing valve to coil line length, m
-    REAL ElevRevCoilLn   !Reversing valve to coil line elevation, m
-    REAL IDRevCoilLn     !Inside diameter of Reversing valve to coil line, m
-    REAL ODRevCoilLn     !Outside diameter of Reversing valve to coil line, m 
-    REAL RevCoilLnThk    !Reversing valve to coil line tube wall thickness, m
-
     REAL LmodLiq     !Module length of liquid line, m
     REAL LliqLn      !Liquid line length, m
     REAL ElevLiqLn   !Liquid line elevation, m
@@ -359,10 +323,9 @@
 
     REAL HtCoil      !Coil height, m
     REAL FinSpg      !Fin spacing, m
-    REAL phi         !Parameter for fin efficiency calc.
     REAL SurfEff     !Surface effecitiveness
     REAL FinEff      !Fin effecitiveness
-    REAL,SAVE :: DisTubeLength !Distributor tube length !ISI - 07/14/06
+    !REAL,SAVE :: DisTubeLength !Distributor tube length !ISI - 07/14/06 !RS: Debugging: This is defined once but never used otherwise
 
     INTEGER,SAVE :: FinType       !1=Plain; 2=Wavy; 3=Louver; 4-11-element
     REAL,SAVE    :: FinPitch      !Fin pitch, fins/m
@@ -381,7 +344,7 @@
     REAL,SAVE    :: ODtube        !Outside diameter of coil tube, m 
     REAL,SAVE    :: IDtube        !Inside diameter of coil tube, m
     REAL,SAVE    :: Ltube         !Tube length, m
-    INTEGER,SAVE :: TubeOrientation !Tube orientation, 1=Horizontal; 2=Vertical
+    !INTEGER,SAVE :: TubeOrientation !Tube orientation, 1=Horizontal; 2=Vertical !RS: Debugging: This is set once but never used...
     INTEGER,SAVE :: NumOfMods	  !Number of modules per tube 
     INTEGER,SAVE :: NumOfChannels !Number cf channels
     REAL,SAVE    :: Dchannel      !Channel diameter, m
@@ -389,7 +352,6 @@
     INTEGER,SAVE :: ShiftTube     !1= last row lower than 2nd last row
                                   !0= last row higher than 2nd last row
     INTEGER NmodLast      !Total number of modules in the last row
-    INTEGER NumOfSimCkts  !Number of simulation circuits
     INTEGER IsCoolingMode !Cooling mode flag (1=yes; 0=no)
     INTEGER IsParallelSlabs !Parallel microchannel slabs (1=yes; 0=no)
     INTEGER RowNum        !Coil row number
@@ -404,10 +366,10 @@
     REAL DrawBlow  !Fan location, 1=draw through; 2=blow through
     REAL PwrFan	   !Fan power, kW
     INTEGER WetFlag !1=Wet; 0=dry
-    INTEGER tAiEvp !Evaporator entering air temp., C
+    !INTEGER tAiEvp !Evaporator entering air temp., C    !RS: Debugging: This is set once and never called
 
     INTEGER(2)       :: RefPropErr  !Error flag:1-error; 0-no error
-    REAL Psat,Pcr,Dcrit,Tcr
+    REAL Psat,Pcr,Tcr
 
     !Mass inventory
     REAL MassDisLn   !Total refrigerant inventory in discharge line, kg
@@ -694,8 +656,8 @@
     tAiCoil =XIN(5)
     rhAiCoil=XIN(6)
     SolarFlux=XIN(7)
-    tRoEvp=XIN(8)
-    tAiEvp=XIN(9)
+    !tRoEvp=XIN(8)  !RS: Debugging: These were set once but never used
+    !tAiEvp=XIN(9)
 
     LdisLn    = PAR(1)
     ODdisLn   = PAR(2)
@@ -779,7 +741,7 @@
     Poly4DP          = PAR(55)
     PTol			   = PAR(56)
     SystemType       = PAR(57) !ISI - 07/14/06
-    DisTubeLength    = PAR(58) !ISI - 07/14/06
+    !DisTubeLength    = PAR(58) !ISI - 07/14/06 !RS: Debugging: Set once but never used
     Wabsolute        = PAR(59)
     CompManufacturer = PAR(60)
 
@@ -2237,11 +2199,11 @@
     NumOfSections=1 !ISI - 09/10/07
 
     !***** Get circuit info *****
-    IF (ErrorFlag .NE. NOERROR) THEN 
-        ErrorFlag=CKTFILEERROR
-        CALL InitCondenserCoil_Helper_1
-        RETURN
-    END IF
+    !IF (ErrorFlag .NE. NOERROR) THEN 
+    !    ErrorFlag=CKTFILEERROR
+    !    CALL InitCondenserCoil_Helper_1
+    !    RETURN
+    !END IF
     
     !**************************** Model *************************************
 
@@ -3129,14 +3091,14 @@ ELSE !Microchannel coil
             RETURN
         END IF
 
-            SELECT CASE (Alphas(5)(1:1))
-            CASE ('V','v')
-                TubeOrientation=VERTICAL
-            CASE ('H','h')
-                TubeOrientation=HORIZONTAL
-            CASE DEFAULT
-                TubeOrientation=HORIZONTAL
-            END SELECT
+            !SELECT CASE (Alphas(5)(1:1))   !RS: Debugging: Set once but never used
+            !CASE ('V','v')
+            !    TubeOrientation=VERTICAL
+            !CASE ('H','h')
+            !    TubeOrientation=HORIZONTAL
+            !CASE DEFAULT
+            !    TubeOrientation=HORIZONTAL
+            !END SELECT
             
         NumOfMods = Numbers(14) !Number of segments or modules
         NumOfChannels = Numbers(15) !Number of channels
@@ -3541,8 +3503,8 @@ END IF
 
     REAL DPman !Manifold pressure drop, kPa
 
-    REAL Qloss !Discharge line heat loss, kW
-    REAL Tloss !Discharge line temperature loss, C
+    !REAL Qloss !Discharge line heat loss, kW   !RS: Debugging: Extraneous
+    !REAL Tloss !Discharge line temperature loss, C !RS: Debugging: Extraneous
 
     !FLOW:
 
@@ -3680,9 +3642,9 @@ END IF
     INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
     INTEGER K !Loop counter !ISI - 08/25/06
 
-    REAL Qloss !Heat loss due to line length, kW
-    REAL Tloss !Temperature loss in liquid line, C
-    REAL Tambient !Ambient temperature, C
+    !REAL Qloss !Heat loss due to line length, kW   !RS: Debugging: Extraneous
+    !REAL Tloss !Temperature loss in liquid line, C !RS: Debugging: Extraneous
+    !REAL Tambient !Ambient temperature, C  !RS: Debugging: Extraneous
 
     CoilType=HIGHSIDETUBE
     TubeType=SMOOTH
@@ -3992,7 +3954,7 @@ END IF
 
         END DO
 
-        mRefTotPrev = MRefTot
+        !mRefTotPrev = MRefTot  !RS: Debugging: Set once but never used
 
     END IF
 
@@ -4458,14 +4420,14 @@ END IF
     REAL rhAoFavg  !Average front tube outlet RH
     REAL tAiFup    !Upper front tube inlet air temp. C
     REAL tAiFdown  !Lower front tube inlet air temp. C
-    REAL wbAiFup   !Upper front tube inlet air wet bulb temp. C
-    REAL wbAiFdown !Lower front tube inlet air wet bulb temp. C
+    !REAL wbAiFup   !Upper front tube inlet air wet bulb temp. C    !RS: Debugging: Extraneous
+    !REAL wbAiFdown !Lower front tube inlet air wet bulb temp. C    !RS: Debugging: Extraneous
     REAL rhAiFup   !Upper front tube inlet air humidity
     REAL rhAiFdown !Lower front tube inlet air humidity
     REAL tAoFup    !Upper front tube outlet air temp. C
     REAL tAoFdown  !Lower front tube outlet air temp. C
-    REAL wbAoFup   !Upper front tube outlet air wet bulb temp. C
-    REAL wbAoFdown !Lower front tube outlet air wet bulb temp. C
+    !REAL wbAoFup   !Upper front tube outlet air wet bulb temp. C   !RS: Debugging: Extraneous
+    !REAL wbAoFdown !Lower front tube outlet air wet bulb temp. C   !RS: Debugging: Extraneous
     REAL rhAoFup   !Upper front tube outlet air humidity
     REAL rhAoFdown !Lower front tube outlet air humidity
     REAL mAiFup    !Upper front tube inlet air mass flow rate, kg/s
@@ -5024,7 +4986,7 @@ END IF
         CALL Reynolds(IDtube,mRefMod,xRmod,muRmod,mugRmod,mufRmod,ReVap,ReLiq)
 
         WetFlag=0
-        TsurfMod=0
+        !TsurfMod=0 !RS: Debugging: Set once never used
 
         !Calc. UA
         CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
@@ -5368,7 +5330,7 @@ END IF
             LmodTPratio=LmodTP/LmodTube
             LmodSHratio=1-LmodTPratio
             WetFlag=0
-            TsurfMod=0
+            !TsurfMod=0 !RS: Debugging: Set once but never used
 
             !ISI - 09/11/06
             IF (DTmod .EQ. 0) THEN
@@ -5428,7 +5390,7 @@ END IF
             LmodSHratio=LmodSH/LmodTube
             LmodTPratio=1-LmodSHratio
             WetFlag=0
-            TsurfMod=0
+            !TsurfMod=0 !RS: Debugging: Set once but never used
 
             !ISI - 09/11/06
             IF (DTmod .EQ. 0) THEN
@@ -6011,7 +5973,7 @@ END IF
     REAL SumMrefHro    !Sum of mdot*H (mass flow rate * enthalpy)
     REAL mRefInletPass !Inlet pass mass flow rate, kg/s
     REAL Wlocal !Local oil mass fraction
-    REAL tRoEvp !Evaporator outlet temperature
+    !REAL tRoEvp !Evaporator outlet temperature !RS: Debugging: This was set once but never used
     REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
     REAL mdothRo !mdot x outlet enthalpy
 
@@ -6023,7 +5985,7 @@ END IF
     mAiCoil          =XIN(4)
     tAiCoil          =XIN(5)
     rhAiCoil         =XIN(6)
-    tRoEvp           =XIN(7)
+    !tRoEvp           =XIN(7)   !RS: Debugging: Set once but never used
 
     BaroPressure     =PAR(1)
     IsCoolingMode    =PAR(2)

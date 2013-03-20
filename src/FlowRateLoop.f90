@@ -91,7 +91,6 @@
     INTEGER IERR
 
     LOGICAL PRINT
-    REAL NTE,NSECTE
 
     INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
@@ -104,12 +103,9 @@
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
     INTEGER IREFC
-    REAL XMR,TSATCI,TROC,TSATCO,CDTROC,TSATEI
-    REAL CDTRC,DTRC,SXOC,XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &
-    rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot
+    REAL XMR,TSATCI,TSATEI
+    REAL XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
     REAL FilterDP
-    REAL MassCoil,MassLiqCoil,MassVapCoil
     REAL SimpleCondOUT(29),DetailedCondOUT(29)
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
@@ -128,12 +124,12 @@
     DO WHILE (.NOT. IsCondenserAllocated)
 
         PRINT=.TRUE.
-        IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN
-            IREFC=0 !for specified subcooling, set to zero
+        !IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: Due to Mode Mismatch
+            !IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
-        ELSE
+        !ELSE
             IREFC=3
-        END IF
+        !END IF
 
         TSOCMP = TINPUT
         CNDNSR = 1.0E+10
@@ -479,7 +475,9 @@
                 CASE (1)
                     CALL IssueOutputMessage('')
                     CALL IssueOutputMessage('## ERROR ## Highside: Short tube solution error.')
-                    STOP
+                    !ShTbPAR(2)=ShTbPAR(2)*1.2   !RS: Debugging: Pulled from HPDM 641
+                            CYCLE   !RS: Debugging: Try again to converge
+                    !STOP   !RS: Debugging: Can't just let it stop; try to force it to continue through
                 CASE (2)
                     CALL IssueOutputMessage('Trying another iterating value....')
                     IERR=1
