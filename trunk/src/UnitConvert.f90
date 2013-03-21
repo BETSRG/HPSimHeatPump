@@ -143,9 +143,6 @@ REAL, INTENT(INOUT) :: RefLiquidLength !Liquid length at reference point, m
 REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C
 REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 
-!Local variables
-INTEGER I !Loop counter
-
   IF (Unit .EQ. SI)THEN !SI unit inputs
     
 	CompPAR(23)=CompPAR(23)/(100**3) !Compressor internal volume, m^3

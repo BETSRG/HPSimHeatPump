@@ -110,7 +110,7 @@
     INTEGER :: SubcoolingTube !Subcooling tube number
 
     !Circuitry variables
-    INTEGER I,J,K,II,III,IV !Ickt, !Loop control    !RS: Debugging: Extraneous
+    INTEGER I,J,K,II,III,IV !Loop control
     INTEGER NumOfTubes !Total number of tubes
     INTEGER TubeNum    !Tube number
 
@@ -190,7 +190,6 @@
 
     !Heat transfer calc. variables
     REAL mRefTot  !Refrigerant mass flow rate, kg/s
-    !REAL,SAVE :: mRefTotPrev !Refrigerant mass flow rate, kg/s from previous iteration  !RS: Debugging: Looks like this set once and never used 
     REAL mRefMod  !Module refrigerant mass flow rate, kg/s
     REAL mRefJoin !Join tube total mass flow rate, kg/s
     REAL Cmin     !Min. capacity rate, kW/C
@@ -206,7 +205,6 @@
     REAL QmodPrev !Previous module heat transfer, kW
     REAL QmodTP   !Heat transfer in two-phase region, kW 
     REAL QmodSH   !Heat transfer in superheated region, kW 
-    !REAL TsurfMod !Module surface temperature, C    !RS: Debugging: This is set equal to 0 three times and otherwise never used
     REAL cAir     !Capacity rate of air, kW/C
     REAL cRef     !Capacity rate of refrigerant, kW/C
     REAL UA       !Overall heat transfer coefficient, kW/C
@@ -279,7 +277,6 @@
     REAL hAiCoil,hAoCoil
     REAL tSCoCoil     !Coil outlet subcooling, C 
     REAL tSCiExp      !Exp.device inlet subcooling, C 
-    !REAL tRoEvp !Evaporator outlet temperature, C   !RS: Debugging: Is set once but doesn't do anything
 
     !Geometry variables
     REAL Aface       !Coil face area
@@ -325,7 +322,6 @@
     REAL FinSpg      !Fin spacing, m
     REAL SurfEff     !Surface effecitiveness
     REAL FinEff      !Fin effecitiveness
-    !REAL,SAVE :: DisTubeLength !Distributor tube length !ISI - 07/14/06 !RS: Debugging: This is defined once but never used otherwise
 
     INTEGER,SAVE :: FinType       !1=Plain; 2=Wavy; 3=Louver; 4-11-element
     REAL,SAVE    :: FinPitch      !Fin pitch, fins/m
@@ -344,7 +340,6 @@
     REAL,SAVE    :: ODtube        !Outside diameter of coil tube, m 
     REAL,SAVE    :: IDtube        !Inside diameter of coil tube, m
     REAL,SAVE    :: Ltube         !Tube length, m
-    !INTEGER,SAVE :: TubeOrientation !Tube orientation, 1=Horizontal; 2=Vertical !RS: Debugging: This is set once but never used...
     INTEGER,SAVE :: NumOfMods	  !Number of modules per tube 
     INTEGER,SAVE :: NumOfChannels !Number cf channels
     REAL,SAVE    :: Dchannel      !Channel diameter, m
@@ -366,7 +361,6 @@
     REAL DrawBlow  !Fan location, 1=draw through; 2=blow through
     REAL PwrFan	   !Fan power, kW
     INTEGER WetFlag !1=Wet; 0=dry
-    !INTEGER tAiEvp !Evaporator entering air temp., C    !RS: Debugging: This is set once and never called
 
     INTEGER(2)       :: RefPropErr  !Error flag:1-error; 0-no error
     REAL Psat,Pcr,Tcr
@@ -627,13 +621,6 @@
     REAL PTol !Condenser Outlet Pressure Convergence criteria, kPa
 
     !ISI - 07/14/06
-    REAL pRiExpPrev  !Previous iteration value of pRiExp
-    REAL hRiExpPrev  !Previous iteration value of hRiExp
-    REAL Qdistube    !Distributor capacity, kW, not being used 
-    REAL DPdisTube   !Distributor pressure drop, kPa
-    REAL DPdisTubePrev !Previous value of DPdisTube, kPa
-    REAL hRiCoilRtd  !hRiCoil at rating condition
-    REAL Wlocal !Local oil mass fraction
 
     CHARACTER(LEN=16),PARAMETER :: FMT_10 = "(3(I4),5(F10.3))"
     CHARACTER(LEN=6),PARAMETER :: FMT_11 = "(6(I))"
@@ -2168,14 +2155,10 @@
                                     !6=Microchannel Evaporator
 
     INTEGER I,J,II,III,IV !Loop counter
-    CHARACTER*150 LineData !One-line data in circuit file
-    INTEGER NumRow !Row number
     INTEGER NumOfPasses !Number of passes
-    INTEGER NumPass !Pass number
     INTEGER Ntubes !Number of tubes
     INTEGER NumOfInlets !Number of inlets
     LOGICAL IsSIunit !SI unit input flag
-    LOGICAL IsNewFormat !New format input flag
     LOGICAL IsShift !Is shift tube flag (for staggered tubes)
 
   INTEGER, PARAMETER :: MaxNameLength = 200
@@ -3241,7 +3224,6 @@ END IF
   REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
-  CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
         ALLOCATE(Ckt(NumOfCkts))	  
@@ -3350,7 +3332,7 @@ END IF
 
     IMPLICIT NONE
 
-    INTEGER I,II,III,IV,J,K !Loop counters
+    INTEGER I,II,III,J !Loop counters
 
             IF (CoilType .EQ. MCCONDENSER) THEN
                 IF (IsSimpleCoil .EQ. 1) THEN   !IsSimpleCoil doesn't seem to really simplify for the microchannel case so much as cause errors
@@ -3503,9 +3485,6 @@ END IF
 
     REAL DPman !Manifold pressure drop, kPa
 
-    !REAL Qloss !Discharge line heat loss, kW   !RS: Debugging: Extraneous
-    !REAL Tloss !Discharge line temperature loss, C !RS: Debugging: Extraneous
-
     !FLOW:
 
     CoilType=HIGHSIDETUBE
@@ -3641,10 +3620,6 @@ END IF
                      !3=High side interconnecting pipes; 4=Low side interconnecting pipes
     INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
     INTEGER K !Loop counter !ISI - 08/25/06
-
-    !REAL Qloss !Heat loss due to line length, kW   !RS: Debugging: Extraneous
-    !REAL Tloss !Temperature loss in liquid line, C !RS: Debugging: Extraneous
-    !REAL Tambient !Ambient temperature, C  !RS: Debugging: Extraneous
 
     CoilType=HIGHSIDETUBE
     TubeType=SMOOTH
@@ -4414,20 +4389,14 @@ END IF
 
     REAL tAiFavg   !Average front tube inlet air temp. C
     REAL tAoFavg   !Average front tube outlet air temp. C
-    REAL wbAiFavg  !Average front tube inlet wet bulb temp. C
-    REAL wbAoFavg  !Average front tube outlet wet bulb temp. C
     REAL rhAiFavg  !Average front tube inlet RH
     REAL rhAoFavg  !Average front tube outlet RH
     REAL tAiFup    !Upper front tube inlet air temp. C
     REAL tAiFdown  !Lower front tube inlet air temp. C
-    !REAL wbAiFup   !Upper front tube inlet air wet bulb temp. C    !RS: Debugging: Extraneous
-    !REAL wbAiFdown !Lower front tube inlet air wet bulb temp. C    !RS: Debugging: Extraneous
     REAL rhAiFup   !Upper front tube inlet air humidity
     REAL rhAiFdown !Lower front tube inlet air humidity
     REAL tAoFup    !Upper front tube outlet air temp. C
     REAL tAoFdown  !Lower front tube outlet air temp. C
-    !REAL wbAoFup   !Upper front tube outlet air wet bulb temp. C   !RS: Debugging: Extraneous
-    !REAL wbAoFdown !Lower front tube outlet air wet bulb temp. C   !RS: Debugging: Extraneous
     REAL rhAoFup   !Upper front tube outlet air humidity
     REAL rhAoFdown !Lower front tube outlet air humidity
     REAL mAiFup    !Upper front tube inlet air mass flow rate, kg/s
@@ -5954,26 +5923,16 @@ END IF
 
     INTEGER I,II,III,IV,V !Loop counters
     LOGICAL Converged     !Convergence flag
-    INTEGER AirBCiter     !Air bounadary condition iteration counter
     INTEGER RefBCiter     !Refrigerant bounadary condition iteration counter
-    REAL Qtube            !Coil tube capacity, kW
     REAL Qpass            !Coil pass capacity, kW
     REAL QinletPass       !Inlet pass capacity, kW
-    REAL PrevpRoMod    !Previous refrigerant outlet pressure, kPa
-    REAL DiffpRoMod    !Difference in outlet pressure, kPa
     REAL pRoSlab       !Outlet Refrigerant pressure for a coil slab, kPa
     REAL hRoSlab       !Outlet Refrigerant enthalpy for a coil slab, kJ/kg
     REAL tRoSlab       !Outlet Refrigerant temperature for a coil slab, C  
     REAL xRoSlab       !Outlet Refrigerant quality for a coil slab  
     REAL Aface         !Coil face area, m^2
-    REAL tAoSlab       !Outlet air temperature for a coil slab, C
-    REAL rhAoSlab      !Outlet air relative humidity for a coil slab
-    REAL hAoSlab       !Outlet air enthalpy for a coil slab, kJ/kg
     REAL SumPro        !Sum of outlet pressures, kPa
     REAL SumMrefHro    !Sum of mdot*H (mass flow rate * enthalpy)
-    REAL mRefInletPass !Inlet pass mass flow rate, kg/s
-    REAL Wlocal !Local oil mass fraction
-    !REAL tRoEvp !Evaporator outlet temperature !RS: Debugging: This was set once but never used
     REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
     REAL mdothRo !mdot x outlet enthalpy
 
