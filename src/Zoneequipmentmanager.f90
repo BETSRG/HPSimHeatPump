@@ -1613,9 +1613,12 @@ SUBROUTINE UpdateZoneSizing(CallIndicator)
       DO CtrlZoneNum=1,NumOfZones
         IF (.not. ZoneEquipConfig(CtrlZoneNum)%IsControlled) CYCLE
         IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesCoolLoad) <= 1.d-8) THEN
-          CALL ShowWarningError('Calculated design cooling load for zone='//  &
-                            TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
-          CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')
+          !CALL ShowWarningError('Calculated design cooling load for zone='//  &
+          !                  TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.')
+          !CALL ShowContinueError('Check Sizing:Zone and ZoneControl:Thermostat inputs.')   !RS: Secret Search String
+          WRITE(DebugFile,*) 'Calculated design cooling load for zone='//&
+            TRIM(CalcFinalZoneSizing(CtrlZoneNum)%ZoneName)//' is zero.'
+          WRITE(DebugFile,*) 'Check Sizing:Zone and ZoneControl:Thermostat inputs.'
         ENDIF
         IF (ABS(CalcFinalZoneSizing(CtrlZoneNum)%DesHeatLoad) <= 1.d-8) THEN
           !CALL ShowWarningError('Calculated design heating load for zone='//  &

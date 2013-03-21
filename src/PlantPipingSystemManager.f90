@@ -331,7 +331,7 @@ SUBROUTINE GetPipingSystemsInput
     INTEGER                      :: TotalNumSegments
     INTEGER                      :: ThisCircuitPipeSegmentCounter
     CHARACTER(len=MaxNameLength) :: ThisSegmentName
-    INTEGER                      :: InputPipeSegmentCounter
+    !INTEGER                      :: InputPipeSegmentCounter    !RS: Debugging: Extraneous
 
     !Read number of objects and allocate main data structures - first domains
     NumGeneralizedDomains=GetNumObjectsFound(ObjName_ug_GeneralDomain)
@@ -496,7 +496,7 @@ SUBROUTINE ReadGeneralDomainInputs(IndexStart, NumGeneralizedDomains, ErrorsFoun
     INTEGER :: IOStatus   ! Used in GetObjectItem
     INTEGER :: NumCircuitsInThisDomain
     INTEGER :: CircuitCtr
-    LOGICAL :: BasementInputError
+    !LOGICAL :: BasementInputError  !RS: Debugging: Extraneous
     INTEGER :: NumSurfacesWithThisOSCM
     INTEGER :: NumAlphasBeforePipeCircOne
     INTEGER :: CurIndex
@@ -3836,10 +3836,10 @@ SUBROUTINE SetupPipeCircuitInOutCells(DomainNum)
     INTEGER :: CircuitNum
     INTEGER :: CircuitIndex
     LOGICAL ::  CircuitInletCellSet
-    TYPE(CartesianCell) :: CircuitInletCell
-    TYPE(CartesianCell) :: CircuitOutletCell
-    TYPE(CartesianCell) :: SegmentInletCell
-    TYPE(CartesianCell) :: SegmentOutletCell
+    !TYPE(CartesianCell) :: CircuitInletCell    !RS: Debugging: Extraneous
+    !TYPE(CartesianCell) :: CircuitOutletCell   !RS: Debugging: Extraneous
+    !TYPE(CartesianCell) :: SegmentInletCell    !RS: Debugging: Extraneous
+    !TYPE(CartesianCell) :: SegmentOutletCell   !RS: Debugging: Extraneous
     TYPE(PipeSegmentInfo) :: Segment
     INTEGER :: SegmentCtr
 
@@ -4342,10 +4342,10 @@ REAL(r64) FUNCTION EvaluateGroundSurfaceTemperature(DomainNum, cell) RESULT(RetV
     REAL(r64) :: EvapotransHeatLoss_MJhrmin  ![MJ/m2-hr]
     REAL(r64) :: EvapotransHeatLoss_Wm2       ![W/m2]
     REAL(r64) :: CurAirTempK
-    REAL(r64) :: MyLatitude
-    REAL(r64) :: MyLongitude
-    REAL(r64) :: MyTimeZoneMeridian
-    REAL(r64) :: MyElevation
+    !REAL(r64) :: MyLatitude    !RS: Debugging: Extraneous
+    !REAL(r64) :: MyLongitude   !RS: Debugging: Extraneous
+    !REAL(r64) :: MyTimeZoneMeridian    !RS: Debugging: Extraneous
+    !REAL(r64) :: MyElevation   !RS: Debugging: Extraneous
     REAL(r64) :: GroundCoverCoefficient
 
     !retrieve information from E+ globals
@@ -6006,12 +6006,12 @@ SUBROUTINE SimulateRadialPipeCell(DomainNum, CircuitNum, ThisCell, ConvectionCoe
     REAL(r64) :: ThisPipeCellConductivity
     REAL(r64) :: ThisPipeCellInnerRadius
     REAL(r64) :: ThisPipeCellTemperature_PrevTimeStep
-    REAL(r64) :: ThisPipeCellTemperature
+    !REAL(r64) :: ThisPipeCellTemperature   !RS: Debugging: Extraneous
 
-    REAL(r64) :: FluidCellOuterRadius
-    REAL(r64) :: FluidCellRadialCentroid
-    REAL(r64) :: FluidCellConductivity
-    REAL(r64) :: FluidCellInnerRadius
+    !REAL(r64) :: FluidCellOuterRadius  !RS: Debugging: Extraneous
+    !REAL(r64) :: FluidCellRadialCentroid   !RS: Debugging: Extraneous
+    !REAL(r64) :: FluidCellConductivity !RS: Debugging: Extraneous
+    !REAL(r64) :: FluidCellInnerRadius  !RS: Debugging: Extraneous
     REAL(r64) :: FluidCellTemperature
 
     REAL(r64) :: OuterNeighborRadialCellOuterRadius
@@ -6206,7 +6206,7 @@ SUBROUTINE DoOneTimeInitializations(DomainNum, CircuitNum)
     REAL(r64) :: Resistance
     INTEGER :: DirectionCtr
     INTEGER :: CurDirection
-    REAL(r64) :: Dummy = 0.0d0
+    !REAL(r64) :: Dummy = 0.0d0 !RS: Debugging: Extraneous
     INTEGER :: TotalSegments
     INTEGER :: SegCtr2
     REAL(r64) :: ThisCellTemp
@@ -6371,7 +6371,7 @@ SUBROUTINE DoStartOfTimeStepInitializations(DomainNum, CircuitNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     INTEGER :: X, Y, Z
-    REAL(r64) :: Temperature
+    !REAL(r64) :: Temperature   !RS: Debugging: Extraneous
     REAL(r64) :: Beta
     REAL(r64) :: CellTemp
     REAL(r64) :: CellRhoCp

@@ -374,7 +374,7 @@ SUBROUTINE GetFreeCoolingHeatExchanger
   INTEGER                        :: Item       ! Item to be "gotten"
   INTEGER                        :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers ! Number of Numbers for each GetObjectItem call
-  INTEGER                        :: NumFluids  ! number of fluids in sim.
+  !INTEGER                        :: NumFluids  ! number of fluids in sim.  !RS: Debugging: Extraneous
   LOGICAL                        :: ErrorsFound=.false.  ! Set to true if errors in input, fatal at end of routine
   LOGICAL                        :: IsNotOK=.false.  ! Used to validate component
 
@@ -691,7 +691,7 @@ SUBROUTINE InitFreeCoolingHeatExchanger(FreeCoolNum)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER             :: Num                     ! counter
-  REAL(r64)           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes
+  !REAL(r64)           :: DesignCondMassFlowRate  ! Mass flow rate used to initialize condenser nodes   !RS: Debugging: Extraneous
 
   LOGICAL, SAVE       :: OneTimeFlag=.TRUE.
   LOGICAL, ALLOCATABLE, DIMENSION(:), SAVE :: MyPlantScanFlag
@@ -917,7 +917,7 @@ SUBROUTINE CalcFreeCoolingHeatExchanger(FreeCoolNum)
   REAL(r64)    :: CapRatio            ! capacity ratio (min/max)
   REAL(r64)    :: Effectiveness       ! heat exchanger effectiveness
   REAL(r64)    :: NTU                 ! dimensionless NTU calculated from UA
-  REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)
+  !REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)   !RS: Debugging: Extraneous
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
   REAL(r64)  :: mdot

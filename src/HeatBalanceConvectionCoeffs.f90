@@ -1481,11 +1481,11 @@ SUBROUTINE GetUserConvectionCoefficients
   INTEGER :: Ptr
   INTEGER :: Pass
   INTEGER :: FieldNo
-  CHARACTER(len=25) :: CFieldNo
+  !CHARACTER(len=25) :: CFieldNo    !RS: Debugging: Extraneous
   INTEGER :: NumField
   CHARACTER(len=MaxNameLength) :: CurrentModuleObject
   INTEGER :: PotentialAssignedValue
-  INTEGER :: ZoneNum
+  !INTEGER :: ZoneNum   !RS: Debugging: Extraneous
   INTEGER :: SurfNum
 
   ! first get user-defined H models so they can be processed for later objects

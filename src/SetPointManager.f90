@@ -3265,7 +3265,7 @@ INTEGER  :: TotalBranches
 INTEGER  :: TotalComponents
 INTEGER  :: BranchNumPlantSide
 INTEGER  :: CompNumPlantSide
-INTEGER  :: VarNum
+!INTEGER  :: VarNum !RS: Debugging: Extraneous
 !INTEGER  :: ChillerIndexPlantSide    = 0
 !INTEGER  :: ChillerIndexDemandSide   = 0
 !INTEGER  :: BranchIndexPlantSide     = 0
@@ -3273,9 +3273,9 @@ INTEGER  :: VarNum
 !INTEGER  :: LoopIndexPlantSide       = 0
 !INTEGER  :: LoopIndexDemandSide      = 0
 INTEGER  :: TypeNum                  = 0
-INTEGER  :: TowerNum                 = 0
-INTEGER  :: CondLoopNum              = 0
-INTEGER  :: CondBranchNum            = 0
+!INTEGER  :: TowerNum                 = 0   !RS: Debugging: Extraneous
+!INTEGER  :: CondLoopNum              = 0   !RS: Debugging: Extraneous
+!INTEGER  :: CondBranchNum            = 0   !RS: Debugging: Extraneous
 
 ManagerOn = .TRUE.
 
@@ -7530,7 +7530,7 @@ SUBROUTINE CheckIFAnyIdealCondEntSetPoint
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
   INTEGER, EXTERNAL :: GetNewUnitNumber
-  INTEGER :: write_stat
+  !INTEGER :: write_stat    !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: cCurrentModuleObject
 
   cCurrentModuleObject = 'SetpointManager:CondenserEnteringReset:Ideal'

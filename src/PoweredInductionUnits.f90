@@ -919,7 +919,7 @@ SUBROUTINE SizePIU(PIUNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER             :: PltSizNum     ! do loop index for plant sizing
+  !INTEGER             :: PltSizNum     ! do loop index for plant sizing    !RS: Debugging: Extraneous
   INTEGER             :: PltSizHeatNum ! index of plant sizing object for 1st heating loop
   REAL(r64)           :: CoilInTemp
   REAL(r64)           :: CoilOutTemp
@@ -1225,8 +1225,8 @@ REAL(r64)    :: OutletTempNeeded  ! unit outlet temperature needed to meet cooli
 REAL(r64)    :: MixTempNeeded     ! mixer outlet temperature needed to meet cooling load
 REAL(r64)    :: MinSteamFlow
 REAL(r64)    :: MaxSteamFlow
-REAL(r64)    :: rho !local plant fluid density
-REAL(r64)    :: Cp  ! local plant specific Heat
+!REAL(r64)    :: rho !local plant fluid density !RS: Debugging: Extraneous
+!REAL(r64)    :: Cp  ! local plant specific Heat    !RS: Debugging: Extraneous
 REAL(r64)    :: mdot ! local plant fluid flow rate kg/s
 
           ! FLOW

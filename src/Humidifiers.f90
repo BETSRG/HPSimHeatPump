@@ -440,12 +440,12 @@ SUBROUTINE InitHumidifier(HumNum)
   INTEGER             :: InNode ! inlet node number
   INTEGER             :: OutNode ! outlet node number
   INTEGER             :: NumHum
-  INTEGER             :: RefrigerantIndex ! refiferant index
-  INTEGER             :: WaterIndex       ! fluid type index  
-  REAL(r64)           :: NominalPower     ! Nominal power input to humidifier, W
-  REAL(r64)           :: WaterSpecHeat    ! specific heat of water , J/kgK
-  REAL(r64)           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg
-  REAL(r64)           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg    
+  !INTEGER             :: RefrigerantIndex ! refiferant index   !RS: Debugging: Extraneous
+  !INTEGER             :: WaterIndex       ! fluid type index   !RS: Debugging: Extraneous
+  !REAL(r64)           :: NominalPower     ! Nominal power input to humidifier, W   !RS: Debugging: Extraneous
+  !REAL(r64)           :: WaterSpecHeat    ! specific heat of water , J/kgK !RS: Debugging: Extraneous
+  !REAL(r64)           :: SteamSatEnthalpy ! enthalpy of saturated steam at 100C, J/kg  !RS: Debugging: Extraneous
+  !REAL(r64)           :: WaterSatEnthalpy ! enthalpy of saturated water at 100C, J/kg  !RS: Debugging: Extraneous
 
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
@@ -567,7 +567,7 @@ SUBROUTINE SizeHumidifier(HumNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER             :: NumHum
+  !INTEGER             :: NumHum    !RS: Debugging: Extraneous
   INTEGER             :: RefrigerantIndex ! refiferant index
   INTEGER             :: WaterIndex       ! fluid type index  
   REAL(r64)           :: NominalPower     ! Nominal power input to humidifier, W

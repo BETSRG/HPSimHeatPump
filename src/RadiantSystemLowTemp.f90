@@ -1497,7 +1497,7 @@ SUBROUTINE InitLowTempRadiantSystem(FirstHVACIteration,RadSysNum,SystemType)
   INTEGER        :: RadSurfNum            ! Number of the radiant system surface (DO loop counter)
   INTEGER        :: SurfNum               ! Intermediate variable for keeping track of the surface number
   REAL(r64)      :: TotalEffic            ! Intermediate calculation variable for total pump efficiency
-  INTEGER        :: WaterNodeIn           ! Node number for water inlet node
+  !INTEGER        :: WaterNodeIn           ! Node number for water inlet node   !RS: Debugging: Extraneous
   INTEGER        :: ZoneNum               ! Intermediate variable for keeping track of the zone number
   LOGICAL, SAVE  :: MyEnvrnFlag=.true.
   LOGICAL,SAVE   :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
@@ -2305,8 +2305,8 @@ SUBROUTINE CalcLowTempHydrRadiantSystem(RadSysNum,LoadMet)
   REAL(r64) :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
   REAL(r64) :: OffTempCool      ! temperature at which the flow rate throttles back to zero for cooling
   REAL(r64) :: OffTempHeat      ! temperature at which the flow rate throttles back to zero for heating
-  REAL(r64) :: OpTemp           ! operative temperature (approximately the average of MAT and MRT) [Celsius]
-  REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]
+  !REAL(r64) :: OpTemp           ! operative temperature (approximately the average of MAT and MRT) [Celsius]   !RS: Debugging: Extraneous
+  !REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]    !RS: Debugging: Extraneous
   REAL(r64) :: SetpointTemp     ! temperature "goal" for the radiant system [Celsius]
   INTEGER   :: SurfNum          ! Surface number in the Surface derived type for a radiant system surface
   INTEGER   :: SurfNum2         ! Surface number in the Surface derived type for a radiant system surface
@@ -3010,7 +3010,7 @@ SUBROUTINE CalcLowTempCFloRadiantSystem(RadSysNum,LoadMet)
   REAL(r64) :: OffTempHeat      ! temperature at which the heating shuts down
   REAL(r64) :: PumpPartLoadRat  ! Pump part load ratio (based on user schedule, or 1.0 for no schedule)
   REAL(r64) :: PumpTempRise     ! Temperature rise of the fluid as it passes through the pump
-  REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]
+  !REAL(r64) :: QZnReq           ! heating or cooling needed by zone [Watts]    !RS: Debugging: Extraneous
   REAL(r64) :: RadInTemp        ! "Desired" radiant system water inlet temperature [Celsius]
   REAL(r64) :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
   REAL(r64) :: SetpointTempHi   ! Current high point in setpoint temperature range
@@ -4081,8 +4081,8 @@ SUBROUTINE CalcLowTempElecRadiantSystem(RadSysNum,LoadMet)
   REAL(r64) :: ControlTemp    ! Temperature of the parameter that is controlling the radiant system
   REAL(r64) :: HeatFrac       ! fraction of maximum electrical heat input to radiant system [dimensionless]
   REAL(r64) :: OffTemp        ! Temperature above which the radiant system should be completely off [C]
-  REAL(r64) :: OpTemp         ! Operative temperature (approximately the average of MRT and MAT) [C]
-  REAL(r64) :: QZnReq         ! heating or cooling needed by zone [Watts]
+  !REAL(r64) :: OpTemp         ! Operative temperature (approximately the average of MRT and MAT) [C]   !RS: Debugging: Extraneous
+  !REAL(r64) :: QZnReq         ! heating or cooling needed by zone [Watts]  !RS: Debugging: Extraneous
   INTEGER   :: RadSurfNum     ! number of surface that is the radiant system
   REAL(r64) :: SetPtTemp      ! Setpoint temperature [C]
   INTEGER   :: SurfNum        ! intermediate variable for surface number in Surface derived type

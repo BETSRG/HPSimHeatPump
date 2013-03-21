@@ -2595,7 +2595,7 @@ SUBROUTINE SimDXHeatPumpSystem(DXHeatPumpSystemName, FirstHVACIteration, AirLoop
   CHARACTER(len=MaxNameLength)  :: CompName              ! Name of CoilSystem:Heating:DX object
   INTEGER                       :: DXSystemNum           ! Index to CoilSystem:Heating:DX object
   LOGICAL,SAVE                  :: GetInputFlag = .True. ! Flag to get input only once
-  LOGICAL                       :: HXUnitOn              ! Flag to control HX for HXAssisted Cooling Coil
+  !LOGICAL                       :: HXUnitOn              ! Flag to control HX for HXAssisted Cooling Coil  !RS: Debugging: Extraneous
   REAL(r64)                     :: AirMassFlow           ! DX System air mass flow rate
   INTEGER                       :: InletNodeNum          ! DX System inlet node number
   INTEGER                       :: OutletNodeNum         ! DX System outlet node number
@@ -2725,7 +2725,7 @@ SUBROUTINE GetDXHeatPumpSystemInput
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    INTEGER :: DXSystemNum      ! The DXHeatingSystem that you are currently loading input into
+    !INTEGER :: DXSystemNum      ! The DXHeatingSystem that you are currently loading input into    !RS: Debugging: Extraneous
     INTEGER :: NumAlphas
     INTEGER :: NumNums
     INTEGER :: IOSTAT
@@ -2734,8 +2734,8 @@ SUBROUTINE GetDXHeatPumpSystemInput
     LOGICAL :: IsNotOK               ! Flag to verify name
     LOGICAL :: IsBlank               ! Flag for blank name
     Integer :: DXHeatSysNum
-    LOGICAL :: FanErrorsFound        ! flag returned on fan operating mode check
-    LOGICAL :: DXErrorsFound         ! flag returned on DX coil name check
+    !LOGICAL :: FanErrorsFound        ! flag returned on fan operating mode check   !RS: Debugging: Extraneous
+    !LOGICAL :: DXErrorsFound         ! flag returned on DX coil name check !RS: Debugging: Extraneous
     CHARACTER(len=MaxNameLength) :: CurrentModuleObject  ! for ease in getting objects
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
     CHARACTER(len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
@@ -2923,7 +2923,7 @@ SUBROUTINE InitDXHeatPumpSystem(DXSystemNum,AirLoopNum,OAUnitNum,OAUCoilOutTemp)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  Integer             :: OutNode ! outlet node number
+  !Integer             :: OutNode ! outlet node number  !RS: Debugging: Extraneous
   INTEGER             :: ControlNode ! control node number
   INTEGER             :: DXSysIndex
 !  LOGICAL,SAVE        :: MyOneTimeFlag = .true.
@@ -3053,11 +3053,11 @@ SUBROUTINE ControlDXHeatingSystem(DXSystemNum, FirstHVACIteration )
   INTEGER             :: SolFla              ! Flag of solver
   REAL(r64), DIMENSION(5)  :: Par                 ! Parameter array passed to solver
   LOGICAL             :: SensibleLoad        ! True if there is a sensible cooling load on this system
-  LOGICAL             :: LatentLoad          ! True if there is a latent   cooling load on this system
+  !LOGICAL             :: LatentLoad          ! True if there is a latent   cooling load on this system !RS: Debugging: Extraneous
   INTEGER             :: FanOpMode           ! Supply air fan operating mode
-  REAL(r64)           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded
-  REAL(r64)           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded
+  !REAL(r64)           :: TempMinPLR          ! Used to find latent PLR when max iterations exceeded    !RS: Debugging: Extraneous
+  !REAL(r64)           :: TempMaxPLR          ! Used to find latent PLR when max iterations exceeded    !RS: Debugging: Extraneous
+  !REAL(r64)           :: TempOutletTempDXCoil   ! Used to find latent PLR when max iterations exceeded !RS: Debugging: Extraneous
 
       ! Set local variables
       ! Retrieve the load on the controlled zone

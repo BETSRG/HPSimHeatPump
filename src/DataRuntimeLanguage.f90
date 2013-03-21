@@ -440,7 +440,7 @@ SUBROUTINE ValidateEMSProgramName(cModuleObject,cFieldValue,cFieldName,cSubType,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
- INTEGER :: pos
+! INTEGER :: pos    !RS: Debugging: Extraneous
 
   errFlag=.false.
   IF (SCAN(TRIM(cFieldValue), ' ') > 0) THEN

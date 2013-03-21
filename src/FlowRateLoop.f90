@@ -31,39 +31,41 @@
 
     IMPLICIT NONE
 
-    CHARACTER (len=15) :: Property
+    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT
     INTEGER IERR
 
     LOGICAL PRINT
-    REAL NTE,NSECTE
+    !REAL NTE,NSECTE    !RS: Debugging: Extraneous
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)	!Refrigerant properties
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
+    !REAL RefProp(28)	!Refrigerant properties 
 
-    INTEGER(2) AirPropOpt			!Air prop calc. option
-    INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-    REAL AirProp(8)		!Air properties
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
+    !INTEGER(2) AirPropOpt			!Air prop calc. option  
+    !INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error !RS: Debugging: Extraneous
+    !REAL AirProp(8)		!Air properties !RS: Debugging: Extraneous
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
     INTEGER IREFC
-    REAL XMR,TSATCI,TROC,TSATCO,CDTROC,TSATEI
-    REAL CDTRC,DTRC,SXOC,XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &
-    rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot
+    REAL XMR,TSATCI,TSATEI !TROC,TSATCO,CDTROC   !RS: Debugging: Extraneous
+    REAL XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE !CDTRC,DTRC,SXOC    !RS: Debugging: Extraneous
+    !REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &    !RS: Debugging: Extraneous
+    !rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot  !RS: Debugging: Extraneous
     REAL FilterDP
-    REAL MassCoil,MassLiqCoil,MassVapCoil
+    !REAL MassCoil,MassLiqCoil,MassVapCoil  !RS: Debugging: Extraneous
     REAL SimpleCondOUT(29),DetailedCondOUT(29)
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
-    REAL, SAVE:: PrevTime = 0.0 
+    !REAL, SAVE:: PrevTime = 0.0    !RS: Debugging: Extraneous
     INTEGER, SAVE :: ErrorCount = 0  !RS: Debugging
     INTEGER, SAVE :: LoopCount = 0   !RS: Debugging
     INTEGER, SAVE :: LoopCountSmall = 0 !RS: Debugging
@@ -75,12 +77,12 @@
     DO WHILE (.NOT. IsCondenserAllocated)
 
         PRINT=.TRUE.
-        IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN
-            IREFC=0 !for specified subcooling, set to zero
+        !IF (MODE .EQ. 2 .OR. MODE .EQ. 4 .OR. MODE .EQ. 5) THEN    !RS: Debugging: This is a relic of the MODE mismatch between sim and design
+            !IREFC=0 !for specified subcooling, set to zero
             !for specifed flow control, set to 3 
-        ELSE
+        !ELSE
             IREFC=3
-        END IF
+        !END IF
 
         TSOCMP = TINPUT
         CNDNSR = 1.0E+10
@@ -533,7 +535,9 @@
                         WRITE(6,*)
                         WRITE(6,*)'## ERROR ## Highside: Short tube solution error.'
                     END IF
-                    STOP
+                    ShTbPAR(2)=ShTbPAR(2)*1.2   !RS: Debugging: Pulled from HPDM 761
+                            CYCLE
+                    !STOP   !RS: Debugging: Can't have it just crash
                 CASE (2)
                     WRITE(*,*)'Trying another iterating value....'
                     IERR=1

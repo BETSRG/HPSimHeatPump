@@ -947,7 +947,7 @@ SUBROUTINE ControlCoolBeam(CBNum,ZoneNum,ZoneNodeNum,FirstHVACIteration,NonAirSy
   REAL(r64)    :: CpAirZn=0.0       ! specific heat of air at zone conditions [J/kg-C]
   REAL(r64)    :: CpAirSys=0.0      ! specific heat of air at supply air conditions [J/kg-C]
   REAL(r64)    :: TWOut=0.0         ! outlet water tamperature [C]
-  REAL(r64)    :: NumBeams=0.0      ! number of beams
+  !REAL(r64)    :: NumBeams=0.0      ! number of beams  !RS: Debugging: Extraneous
   INTEGER      :: ControlNode       ! the water inlet node
   INTEGER      :: InAirNode         ! the air inlet node
   LOGICAL      :: UnitOn            ! TRUE if unit is on

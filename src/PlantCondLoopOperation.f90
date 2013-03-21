@@ -146,10 +146,10 @@ SUBROUTINE ManagePlantLoadDistribution(LoopNum,LoopSideNum, BranchNum, CompNum, 
   INTEGER                           :: NumEquipLists    !number of equipment lists
     !Error control flags
   LOGICAL                           :: foundlist        !equipment list found
-  LOGICAL                           :: UpperLimitTooLow  ! error processing
-  REAL(r64)                         :: HighestRange      ! error processing
-  INTEGER, SAVE                     :: TooLowIndex=0     ! error processing
-  INTEGER, SAVE                     :: NotTooLowIndex=0  ! error processing
+  !LOGICAL                           :: UpperLimitTooLow  ! error processing    !RS: Debugging: Extraneous
+  !REAL(r64)                         :: HighestRange      ! error processing    !RS: Debugging: Extraneous
+  !INTEGER, SAVE                     :: TooLowIndex=0     ! error processing    !RS: Debugging: Extraneous
+  !INTEGER, SAVE                     :: NotTooLowIndex=0  ! error processing    !RS: Debugging: Extraneous
   !INTEGER , SAVE                    :: ErrCount = 0     !number of errors
   !CHARACTER(len=20)                 :: CharErrOut       !Error message
 

@@ -874,7 +874,7 @@ SUBROUTINE InitFluidCooler(FluidCoolerNum, RunFlag)
   LOGICAL, SAVE                           :: MyOneTimeFlag = .true.
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: OneTimeFlagForEachFluidCooler
-  LOGICAL                                 :: FatalError
+  !LOGICAL                                 :: FatalError    !RS: Debugging: Extraneous
   INTEGER   :: TypeOf_Num
   INTEGER   :: LoopNum
   INTEGER   :: LoopSideNum

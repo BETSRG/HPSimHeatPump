@@ -391,7 +391,7 @@ SUBROUTINE GetPipesHeatTransfer
   INTEGER                        :: PipeItem
   INTEGER                        :: NumAlphas            ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers           ! Number of Numbers for each GetObjectItem call
-  INTEGER                        :: NumFluids            ! number of fluids in sim.
+  !INTEGER                        :: NumFluids            ! number of fluids in sim.    !RS: Debugging: Extraneous
   INTEGER                        :: NumOfPipeHTInt       ! Number of Pipe Heat Transfer objects
   INTEGER                        :: NumOfPipeHTExt       ! Number of Pipe Heat Transfer objects
   INTEGER                        :: NumOfPipeHTUG        ! Number of Pipe Heat Transfer objects
@@ -1065,10 +1065,10 @@ SUBROUTINE InitPipesHeatTransfer(PipeType,PipeHTNum,FirstHVACIteration)
   REAL(r64)           :: CurrentDepth
   REAL(r64)           :: CurTemp
   REAL(r64)           :: CurSimDay
-  INTEGER             :: PlantLoopCtr
-  INTEGER             :: LoopSideCtr
-  INTEGER             :: BranchCtr
-  INTEGER             :: CompCtr
+  !INTEGER             :: PlantLoopCtr  !RS: Debugging: Extraneous
+  !INTEGER             :: LoopSideCtr   !RS: Debugging: Extraneous
+  !INTEGER             :: BranchCtr !RS: Debugging: Extraneous
+  !INTEGER             :: CompCtr   !RS: Debugging: Extraneous
   LOGICAL             :: PushArrays
   LOGICAL             :: errFlag
 
@@ -2209,7 +2209,7 @@ REAL(r64) FUNCTION OutsidePipeHeatTransCoef(PipeHTNum)
   REAL(r64)    :: AirVisc
   REAL(r64)    :: AirVel
   REAL(r64)    :: AirTemp
-  REAL(r64)    :: MidTemp
+  !REAL(r64)    :: MidTemp  !RS: Debugging: Extraneous
   REAL(r64)    :: PipeOD
   LOGICAL :: ViscositySet
   LOGICAL :: CoefSet

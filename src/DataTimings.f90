@@ -102,8 +102,8 @@ SUBROUTINE epStartTime(ctimingElementstring)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   TYPE(timings), ALLOCATABLE, DIMENSION(:) :: tempTiming  ! used for reallocate.
-  INTEGER :: loop  ! testing if already in structure
-  INTEGER :: found ! indicator for element
+  !INTEGER :: loop  ! testing if already in structure   !RS: Debugging: Extraneous
+  !INTEGER :: found ! indicator for element !RS: Debugging: Extraneous
 
 #ifdef EP_NO_Timings
   RETURN
@@ -184,9 +184,9 @@ SUBROUTINE epStopTime(ctimingElementstring,printit,wprint)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER :: loop  ! testing if already in structure
-  INTEGER :: found ! indicator for element
-  REAL(r64) :: stoptime
+  !INTEGER :: loop  ! testing if already in structure   !RS: Debugging: Extraneous
+  !INTEGER :: found ! indicator for element !RS: Debugging: Extraneous
+  !REAL(r64) :: stoptime    !RS: Debugging: Extraneous
 
 #ifdef EP_NO_Timings
   RETURN
@@ -280,8 +280,8 @@ SUBROUTINE epSummaryTimes(TimeUsed_CPUTime)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER loop
-  INTEGER :: EchoInputFile
+  !INTEGER loop !RS: Debugging: Extraneous
+  !INTEGER :: EchoInputFile !RS: Debugging: Extraneous
   INTEGER, EXTERNAL :: FindUnitNumber
 
 #ifdef EP_NO_Timings

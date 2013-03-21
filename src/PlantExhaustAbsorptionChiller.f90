@@ -1804,12 +1804,12 @@ SUBROUTINE CalcExhaustAbsorberHeaterModel(ChillNum,MyLoad,Runflag)
   INTEGER      :: LoopNum
   INTEGER      :: LoopSideNum
   REAL(r64)    :: Cp_HW  ! local fluid specific heat for hot water
-  INTEGER  :: GeneratorType
-  INTEGER :: GenIndex1
+  !INTEGER  :: GeneratorType    !RS: Debugging: Extraneous
+  !INTEGER :: GenIndex1 !RS: Debugging: Extraneous
   REAL(r64)       ::CpAir
   REAL(r64)    :: rhoHW  ! local fluid density for hot water
   INTEGER      :: lExhaustAirInletNodeNum       ! Combustion Air Inlet Node number
-  CHARACTER(len=MaxNameLength) :: GeneratorName
+  !CHARACTER(len=MaxNameLength) :: GeneratorName    !RS: Debugging: Extraneous
 
 !  INTEGER      :: lExhaustAirOutletNodeNum      ! Combustion Air Outlet (Exhaust) Node number
 

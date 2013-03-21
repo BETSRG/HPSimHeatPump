@@ -5668,7 +5668,7 @@ SUBROUTINE FlushHPOutput()
     USE CondenserMod, ONLY: GetCondProp
 
     LOGICAL, SAVE :: OneTime = .TRUE.
-    REAL, SAVE :: PrevTime = 0
+    !REAL, SAVE :: PrevTime = 0 !RS: Debugging: Extraneous
     REAL :: CurTime
     Integer:: OutputFile=1
     REAL :: QSens, QLat
@@ -7676,7 +7676,7 @@ FUNCTION GetNumMeteredVariables(ComponentType,ComponentName) RESULT(NumVariables
 
           ! FUNCTION LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Loop
-  INTEGER :: Pos
+  !INTEGER :: Pos   !RS: Debugging: Extraneous
 
   NumVariables=0
   DO Loop=1,NumOfRVariable
@@ -7747,7 +7747,7 @@ SUBROUTINE GetMeteredVariables(ComponentType,ComponentName,VarIndexes,VarTypes,I
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: Loop
-  INTEGER :: Pos
+  !INTEGER :: Pos   !RS: Debugging: Extraneous
   INTEGER :: NumVariables
   INTEGER :: MeterPtr
   INTEGER :: NumOnMeterPtr

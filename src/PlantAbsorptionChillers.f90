@@ -643,10 +643,10 @@ SUBROUTINE InitBLASTAbsorberModel(ChillNum,RunFlag, MyLoad, FirstHVACIteration)
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag
   INTEGER   :: CondInletNode      ! node number of water inlet node to the condenser
   INTEGER   :: CondOutletNode     ! node number of water outlet node from the condenser
-  INTEGER   :: LoopCtr            ! Plant loop counter
-  INTEGER   :: LoopSideCtr        ! Loop side counter
-  INTEGER   :: BranchCtr          ! Plant branch counter
-  INTEGER   :: CompCtr            ! Component counter
+  !INTEGER   :: LoopCtr            ! Plant loop counter !RS: Debugging: Extraneous
+  !INTEGER   :: LoopSideCtr        ! Loop side counter  !RS: Debugging: Extraneous
+  !INTEGER   :: BranchCtr          ! Plant branch counter   !RS: Debugging: Extraneous
+  !INTEGER   :: CompCtr            ! Component counter  !RS: Debugging: Extraneous
   LOGICAL   :: errFlag
   LOGICAL   :: FatalError
   REAL(r64) :: rho ! local fluid density
@@ -1356,14 +1356,14 @@ SUBROUTINE CalcBLASTAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,EquipFl
   REAL(r64)              :: EnthSteamOutDry     ! enthalpy of dry steam at generator inlet
   REAL(r64)              :: EnthSteamOutWet     ! enthalpy of wet steam at generator inlet
   REAL(r64)              :: HfgSteam            ! heat of vaporization of steam
-  LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironFlag
-  LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironSteamFlag
-  LOGICAL, SAVE :: OneTimeFlag = .true.
+  !LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironFlag  !RS: Debugging: Extraneous
+  !LOGICAL,ALLOCATABLE,DIMENSION(:),SAVE  :: MyEnvironSteamFlag !RS: Debugging: Extraneous
+  !LOGICAL, SAVE :: OneTimeFlag = .true.    !RS: Debugging: Extraneous
   REAL(r64)              :: FRAC
 !  LOGICAL,SAVE           :: PossibleSubCooling
   REAL(r64)              :: CpFluid             ! local specific heat of fluid
   REAL(r64)              :: SteamDeltaT
-  REAL(r64)              :: SteamDensity
+  !REAL(r64)              :: SteamDensity   !RS: Debugging: Extraneous
   REAL(r64)              :: SteamOutletTemp
   INTEGER :: LoopNum
   INTEGER :: LoopSideNum
@@ -2565,22 +2565,22 @@ SUBROUTINE InitIndirectAbsorpChiller(ChillNum,RunFlag, MyLoad, FirstHVACIteratio
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag
   INTEGER :: CondInletNode      ! node number of water inlet node to the condenser
   INTEGER :: CondOutletNode     ! node number of water outlet node from the condenser
-  INTEGER :: LoopCtr            ! Plant loop counter
-  INTEGER :: LoopSideCtr        ! Loop side counter
-  INTEGER :: BranchCtr          ! Plant branch counter
-  INTEGER :: CompCtr            ! Component counter
+  !INTEGER :: LoopCtr            ! Plant loop counter   !RS: Debugging: Extraneous
+  !INTEGER :: LoopSideCtr        ! Loop side counter    !RS: Debugging: Extraneous
+  !INTEGER :: BranchCtr          ! Plant branch counter !RS: Debugging: Extraneous
+  !INTEGER :: CompCtr            ! Component counter    !RS: Debugging: Extraneous
   LOGICAL :: errFlag
   LOGICAL   :: FatalError
   REAL(r64) :: rho ! local fluid density
-  REAL(r64) :: CpWater ! local specific heat
+  !REAL(r64) :: CpWater ! local specific heat   !RS: Debugging: Extraneous
   REAL(r64) :: SteamDensity        ! density of generator steam (when connected to a steam loop)
-  REAL(r64) :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)
-  REAL(r64) :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)
-  REAL(r64) :: HfgSteam            ! latent heat of steam at constant pressure
-  REAL(r64) :: SteamDeltaT         ! amount of sub-cooling of steam condensate
-  INTEGER   :: GeneratorInletNode      ! generator inlet node number, steam/water side
-  REAL(r64) :: SteamOutletTemp
-  INTEGER   :: DummyWaterIndex = 1
+  !REAL(r64) :: EnthSteamOutDry     ! dry enthalpy of steam (quality = 1)   !RS: Debugging: Extraneous
+  !REAL(r64) :: EnthSteamOutWet     ! wet enthalpy of steam (quality = 0)   !RS: Debugging: Extraneous
+  !REAL(r64) :: HfgSteam            ! latent heat of steam at constant pressure !RS: Debugging: Extraneous
+  !REAL(r64) :: SteamDeltaT         ! amount of sub-cooling of steam condensate !RS: Debugging: Extraneous
+  !INTEGER   :: GeneratorInletNode      ! generator inlet node number, steam/water side !RS: Debugging: Extraneous
+  !REAL(r64) :: SteamOutletTemp !RS: Debugging: Extraneous
+  !INTEGER   :: DummyWaterIndex = 1 !RS: Debugging: Extraneous
   REAL(r64) :: mdotEvap ! local fluid mass flow rate thru evaporator
   REAL(r64) :: mdotCond ! local fluid mass flow rate thru condenser
   REAL(r64) :: mdotGen ! local fluid mass flow rate thru generator
@@ -3299,7 +3299,7 @@ SUBROUTINE CalcIndirectAbsorberModel(ChillNum,MyLoad,Runflag,FirstIteration,Equi
   LOGICAL,SAVE           :: PossibleSubCooling  ! flag to determine if supply water temperature is below setpoint
   REAL(r64)              :: CpFluid             ! specific heat of generator fluid
   REAL(r64)              :: SteamDeltaT         ! temperature difference of fluid through generator
-  REAL(r64)              :: SteamDensity        ! density of steam
+  !REAL(r64)              :: SteamDensity        ! density of steam !RS: Debugging: Extraneous
   REAL(r64)              :: SteamOutletTemp     ! generator outlet temperature
   REAL(r64)              :: CapacityfAbsorberTemp   ! performance curve output
   REAL(r64)              :: CapacityfEvaporatorTemp ! performance curve output

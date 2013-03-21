@@ -12,7 +12,7 @@ SUBROUTINE EvaluateFrostModel
 
 REAL Time
 REAL FrostWeightCoeff
-REAL FaceArea
+!REAL FaceArea  !RS: Debugging: Extraneous
 REAL DimLessFrostWeight
 REAL FrostMaxWeight
 REAL CurFrostWeight

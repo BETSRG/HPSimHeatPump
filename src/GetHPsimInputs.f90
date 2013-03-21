@@ -118,7 +118,7 @@ REAL ODC_hciMultiplier    !Multiplier for ref. side heat transfer correlation
 REAL ODC_DPrefMultiplier  !Multiplier for ref. side pressure drop correlation
 REAL ODC_hcoMultiplier    !Multiplier for air side heat transfer correlation
 REAL ODC_DPairMultiplier  !Multiplier for air side pressure drop correlation
-REAL ODC_SurfAbsorptivity !Surface absorptivity
+!REAL ODC_SurfAbsorptivity !Surface absorptivity
 
 INTEGER IDC_Nt                        !Number of tubes in transverse direction (normal to air flow)
 INTEGER IDC_Nl                        !Number of rows in longitudinal direction (parrallel to air flow)
@@ -131,7 +131,7 @@ REAL IDC_TubeThk          !Coil tube wall thickness, m
 REAL IDC_Ltube            !Coil single tube length, m
 REAL IDC_Ktube            !Coil tube thermal conductivity, kW/m-C
 REAL IDC_Pt               !Tube spacing in transverse direction, m (normal to air flow)
-REAL IDC_Pl               !Row spacing in longitudinal direction, m (parrallel to air flow)
+REAL IDC_Pl               !Row spacing in longitudinal direction, m (parallel to air flow)
 REAL IDC_FinThk           !Fin thickness, m
 REAL IDC_FinPitch         !Fin pitch, fin/m
 REAL IDC_Kfin             !Fin thermal conductivity, kW/m-C
@@ -139,7 +139,7 @@ REAL IDC_hciMultiplier    !Multiplier for ref. side heat transfer correlation
 REAL IDC_DPrefMultiplier  !Multiplier for ref. side pressure drop correlation
 REAL IDC_hcoMultiplier    !Multiplier for air side heat transfer correlation
 REAL IDC_DPairMultiplier  !Multiplier for air side pressure drop correlation
-REAL IDC_SurfAbsorptivity !Surface absorptivity
+!REAL IDC_SurfAbsorptivity !Surface absorptivity
 
 !Custom air side curve
 INTEGER IDC_CurveUnit          !Unit convention of the custom air side curve, 1=SI; 2=IP
@@ -178,22 +178,18 @@ REAL ODC_Poly2DP   !Polynomial fit coefficient for air pressure drop
 REAL ODC_Poly3DP   !Polynomial fit coefficient for air pressure drop
 REAL ODC_Poly4DP   !Polynomial fit coefficient for air pressure drop
 
-INTEGER I !Loop counter
-INTEGER J
 CHARACTER*150 LineData
 
-INTEGER(2) :: IsHeatPump				!Is heat pump operation flag: 1=yes; 0=no
 INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no
 INTEGER(2) :: IsCmpInAirStream          !Is compressor in air stream: 1=yes, 0=no
-REAL :: SuperStc !TXV static superheat, C
-REAL :: SuperRtd !TXV rated superheat, C
+!REAL :: SuperStc !TXV static superheat, C  !RS: Debugging: Extraneous
+!REAL :: SuperRtd !TXV rated superheat, C
 REAL :: CopperVol !Copper volume, m3
 INTEGER CompressorManufacturer
-INTEGER ErrorFlag !Error flag
 INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
-REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
-REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
+!REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton  !RS: Debugging: Extraneous
+!REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
 CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
   REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
@@ -204,35 +200,36 @@ REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
-REAL CompressorHeatLossFraction
-REAL CompressorHeatLoss
-REAL CompressorVolume
-REAL CompressorMassCoefficient1
-REAL CompressorMassCoefficient2
-REAL CompressorMassCoefficient3
-REAL CompressorMassCoefficient4
-REAL CompressorMassCoefficient5
-REAL CompressorMassCoefficient6
-REAL CompressorMassCoefficient7
-REAL CompressorMassCoefficient8
-REAL CompressorMassCoefficient9
-REAL CompressorMassCoefficient10
-REAL CompressorPowerCoefficient1
-REAL CompressorPowerCoefficient2
-REAL CompressorPowerCoefficient3
-REAL CompressorPowerCoefficient4
-REAL CompressorPowerCoefficient5
-REAL CompressorPowerCoefficient6
-REAL CompressorPowerCoefficient7
-REAL CompressorPowerCoefficient8
-REAL CompressorPowerCoefficient9
-REAL CompressorPowerCoefficient10
-REAL PowerMultiplier
-REAL MassFlowRateMultiplier
-REAL UserSpecifiedRatingEvapTemperature
-REAL UserSpecifiedRatingCondTemperature
-REAL UserSpecifiedRatingSubcooling
-REAL UserSpecifiedRatingSuperheat
+!RS: Debugging: Extraneous
+!REAL CompressorHeatLossFraction
+!REAL CompressorHeatLoss
+!REAL CompressorVolume
+!REAL CompressorMassCoefficient1
+!REAL CompressorMassCoefficient2
+!REAL CompressorMassCoefficient3
+!REAL CompressorMassCoefficient4
+!REAL CompressorMassCoefficient5
+!REAL CompressorMassCoefficient6
+!REAL CompressorMassCoefficient7
+!REAL CompressorMassCoefficient8
+!REAL CompressorMassCoefficient9
+!REAL CompressorMassCoefficient10
+!REAL CompressorPowerCoefficient1
+!REAL CompressorPowerCoefficient2
+!REAL CompressorPowerCoefficient3
+!REAL CompressorPowerCoefficient4
+!REAL CompressorPowerCoefficient5
+!REAL CompressorPowerCoefficient6
+!REAL CompressorPowerCoefficient7
+!REAL CompressorPowerCoefficient8
+!REAL CompressorPowerCoefficient9
+!REAL CompressorPowerCoefficient10
+!REAL PowerMultiplier
+!REAL MassFlowRateMultiplier
+!REAL UserSpecifiedRatingEvapTemperature
+!REAL UserSpecifiedRatingCondTemperature
+!REAL UserSpecifiedRatingSubcooling
+!REAL UserSpecifiedRatingSuperheat
 
 REAL PwrODfan !Outdoor Fan Power
 REAL PwrIDfan !Fan Power
@@ -485,8 +482,8 @@ REAL :: IDC_TubeID
 
   !Rated TXV capacity, ton
 
-  CoolingTXVcapacity = Numbers(13)
-  HeatingTXVcapacity = Numbers(14)
+  !CoolingTXVcapacity = Numbers(13) !RS: Debugging: Extraneous
+  !HeatingTXVcapacity = Numbers(14)
 
   !Distributor tubes
 
@@ -779,7 +776,7 @@ REAL :: IDC_TubeID
 
 	  IF (Unit .EQ. SI) THEN !SI unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to ODC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveODCLn
@@ -809,7 +806,7 @@ REAL :: IDC_TubeID
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibruim suction line, combines compressor suction line and valve to IDC line
+        !Equilibrium suction line, combines compressor suction line and valve to IDC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
 	    TotVolume=VolSucLn+VolValveIDCLn
@@ -841,7 +838,7 @@ REAL :: IDC_TubeID
 
 	  ELSE !IP unit
 
-	    !Equilibruim Discharge line, combines compressor discharge line and valve to ODC line
+	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
 	    TotVolume=VolDisLn+VolValveODCLn
@@ -1161,11 +1158,11 @@ REAL :: IDC_TubeID
     CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
     CapTubePAR(5)=CoolingDistubeLength
 
-    TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator
-    TxvPAR(6) =CoolingDistubeLength
+    !TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator   !RS: Debugging: Extraneous
+    !TxvPAR(6) =CoolingDistubeLength
 
     ExpDevice=CoolingExpDevice
-    TxvPAR(1)=CoolingTXVcapacity
+    !TxvPAR(1)=CoolingTXVcapacity   !RS: Debugging: Extraneous
   ELSE
 	CFMevp=VdotODfan
     CFMcnd=VdotIDfan
@@ -1267,11 +1264,11 @@ REAL :: IDC_TubeID
     CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
     CapTubePAR(5)=HeatingDistubeLength
 
-    TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator
-    TxvPAR(6) =HeatingDistubeLength
+    !TxvPAR(5) =EvapPAR(19) !Number of circuits in evaporator   !RS: Debugging: Extraneous
+    !TxvPAR(6) =HeatingDistubeLength
 
     ExpDevice=HeatingExpDevice
-    TxvPAR(1)=HeatingTXVcapacity
+    !TxvPAR(1)=HeatingTXVcapacity   !RS: Debugging: Extraneous
   END IF
 
   !EvapPAR(31)=BaroPressure
@@ -1286,8 +1283,8 @@ REAL :: IDC_TubeID
   EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
   CondPAR(60)=CompressorManufacturer
 
-  SuperStc=TxvPAR(3)
-  SuperRtd=TxvPAR(2)
+  !SuperStc=TxvPAR(3)   !RS: Debugging: Extraneous
+  !SuperRtd=TxvPAR(2)
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN

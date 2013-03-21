@@ -60,7 +60,7 @@ REAL, INTENT(IN)  :: DP      !Pressure drop, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, kW
 
 !Subroutine local variables
-REAL Temperature,Quality,Pressure,Enthalpy
+REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
 INTEGER ErrorFlag     !0-No error

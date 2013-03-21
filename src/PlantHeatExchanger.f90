@@ -348,7 +348,7 @@ SUBROUTINE GetEconHeatExchanger
   INTEGER                        :: Item       ! Item to be "gotten"
   INTEGER                        :: NumAlphas  ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers ! Number of Numbers for each GetObjectItem call
-  INTEGER                        :: NumFluids  ! number of fluids in sim.
+  !INTEGER                        :: NumFluids  ! number of fluids in sim.  !RS: Debugging: Extraneous
   LOGICAL                        :: ErrorsFound  ! Set to true if errors in input, fatal at end of routine
   LOGICAL                        :: IsNotOK    ! Used to validate component
   LOGICAL                        :: IsBlank    ! Used to validate component
@@ -557,10 +557,10 @@ SUBROUTINE SizeEconHeatExchanger(HXNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER             :: PltSizIndex   ! Plant Sizing Do loop index
+  !INTEGER             :: PltSizIndex   ! Plant Sizing Do loop index    !RS: Debugging: Extraneous
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
-  INTEGER             :: CurrentLoopNum
+  !INTEGER             :: CurrentLoopNum    !RS: Debugging: Extraneous
   LOGICAL             :: ErrorsFound   ! If errors detected in input
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           :: rho
@@ -937,11 +937,11 @@ SUBROUTINE EconomizerOperation(HXNum,RunFlag,LoopDemand)
    ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
  INTEGER     :: LoopNum   
  INTEGER     :: LoopSideNum   
- INTEGER     :: EconBranch
- INTEGER     :: EconComp
- INTEGER     :: EquipNum       ! Plant side component list equipment number
- INTEGER     :: EquipTypeNum
- INTEGER     :: GeneralEquipType !Basic Equipment type from EquipType Used to
+ !INTEGER     :: EconBranch !RS: Debugging: Extraneous
+ !INTEGER     :: EconComp   !RS: Debugging: Extraneous
+ !INTEGER     :: EquipNum       ! Plant side component list equipment number    !RS: Debugging: Extraneous
+ !INTEGER     :: EquipTypeNum   !RS: Debugging: Extraneous
+ !INTEGER     :: GeneralEquipType !Basic Equipment type from EquipType Used to  !RS: Debugging: Extraneous
  INTEGER     :: PlantSideSensedNode      !Node num for control node on plant side
  INTEGER     :: CondSideSensedNode       !Node num for control node on condenser side
 
@@ -950,8 +950,8 @@ SUBROUTINE EconomizerOperation(HXNum,RunFlag,LoopDemand)
  REAL(r64)   :: ControlTemp                      !Difference between PlantSideControlTemp and CondSideControlTemp
  REAL(r64)   :: EconControlTempDiff              !User specified control treshold
 
- CHARACTER(len=MaxNameLength) :: EquipType !local equipment type
- CHARACTER(len=MaxNameLength) :: EquipName ! local equipment name
+ !CHARACTER(len=MaxNameLength) :: EquipType !local equipment type   !RS: Debugging: Extraneous
+ !CHARACTER(len=MaxNameLength) :: EquipName ! local equipment name  !RS: Debugging: Extraneous
  LOGICAL    :: EconomizerOn
  
  LoopNum = HXWaterEcon(HXNum)%PlantLoopNum
@@ -1028,7 +1028,7 @@ SUBROUTINE CalcEconHeatExchanger(HXNum,RunFlag)
   REAL(r64)    :: CapRatio            ! capacity ratio (min/max)
   REAL(r64)    :: Effectiveness       ! heat exchanger effectiveness
   REAL(r64)    :: NTU                 ! dimensionless NTU calculated from UA
-  REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)
+  !REAL(r64)    :: ChillerLoad         ! current load on chiller (Myload)   !RS: Debugging: Extraneous
   LOGICAL      :: ItemNotFound        ! error flag
 
   INTEGER :: PlantLoopNum

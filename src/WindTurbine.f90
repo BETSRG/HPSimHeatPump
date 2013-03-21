@@ -710,7 +710,7 @@ CHARACTER(len=1), PARAMETER :: TabChr=CHAR(9)   ! Tab character
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 LOGICAL, SAVE     :: MyOneTimeFlag = .true.
 INTEGER, EXTERNAL :: GetNewUnitNumber         ! External  function to "get" a unit number
-INTEGER   :: OpenStatus    ! Open status of stat file
+!INTEGER   :: OpenStatus    ! Open status of stat file  !RS: Debugging: Extraneous
 INTEGER   :: ReadStatus    ! Reading status of stat file
 INTEGER   :: StatFile      ! Weather Stat File
 INTEGER   :: lnPtr         ! scan pointer for Line input
@@ -897,7 +897,7 @@ REAL(r64) :: Omega             ! Angular velocity of rotor in rad/s
 REAL(r64) :: TanForceCoeff     ! Tnagential force coefficient
 REAL(r64) :: NorForceCoeff     ! Normal force coefficient
 REAL(r64) :: Period            ! Period of sine and cosine functions
-REAL(r64) :: Integrand         ! Integrand of tangential force
+!REAL(r64) :: Integrand         ! Integrand of tangential force !RS: Debugging: Extraneous
 REAL(r64) :: C1                ! Empirical power coefficient C1
 REAL(r64) :: C2                ! Empirical power coefficient C2
 REAL(r64) :: C3                ! Empirical power coefficient C3

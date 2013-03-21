@@ -11588,10 +11588,10 @@ SUBROUTINE InitMTGenerators(GenNum, RunFlag, MyLoad, FirstHVACIteration)
           !  na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER             :: Num                        ! Loop index over all generators
+  !INTEGER             :: Num                        ! Loop index over all generators   !RS: Debugging: Extraneous
   INTEGER             :: HeatRecInletNode           ! Inlet node number in heat recovery loop
   INTEGER             :: HeatRecOutletNode          ! Outlet node number in heat recovery loop
-  LOGICAL,SAVE        :: InitGeneratorOnce = .TRUE. ! Flag for 1 time initialization
+  !LOGICAL,SAVE        :: InitGeneratorOnce = .TRUE. ! Flag for 1 time initialization   !RS: Debugging: Extraneous
   LOGICAL,SAVE, ALLOCATABLE, DIMENSION(:)  :: MyEnvrnFlag  ! Flag for init once at start of environment
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyPlantScanFlag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MySizeAndNodeInitFlag
