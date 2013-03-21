@@ -70,26 +70,18 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     IMPLICIT NONE
 
-    CHARACTER (len=15) :: Property           
-    REAL Temperature,Quality,Pressure,Enthalpy
+    REAL Quality,Pressure,Enthalpy !Temperature,    !RS: Debugging: Extraneous
 
     REAL TINPUT
     INTEGER IERR
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)	!Refrigerant properties
-
-    INTEGER(2) AirPropOpt			!Air prop calc. option
-    INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-    REAL AirProp(8)		!Air properties
-
+    
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
-    REAL TAIIE,XMR,TSATEI,SUPCAL,SUPCL,TSATCI
-    REAL SUPR,TSAVG,TRIC,SXIC
+    REAL TAIIE,TSATEI,SUPCAL,SUPCL,TSATCI
+    REAL SUPR,TSAVG,SXIC
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
-    INTEGER I
     
     CHARACTER(LEN=13),PARAMETER :: FMT_800 = "(A41,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_804 = "(A32,F7.2,A5)"
@@ -113,8 +105,6 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
     CALL IssueOutputMessage( '')
     CALL IssueOutputMessage( TRIM(PrintString))    
-
-    XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s???
 
     HiEvp=EvapIN(3)
 
@@ -195,8 +185,6 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
             RETURN
         END IF
     END IF	
-
-    TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion, from C to F
 
     Pressure=PiCmp*1000 !RS Comment: Unit Conversion
     Quality=1

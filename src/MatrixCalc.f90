@@ -170,8 +170,8 @@ SUBROUTINE LUD(a, n, IPVT, det)
 	  REAL det
 	  INTEGER, DIMENSION(n) :: IPVT
 
-      REAL Temp, RATIO, VALUE
-      INTEGER i, IPVTMT, NLESS1, IPLUS1, j, L
+      REAL Temp !, RATIO, VALUE !RS: Debugging: Extraneous
+      INTEGER i, IPVTMT, NLESS1, IPLUS1, j !, L !RS: Debugging: Extraneous
       INTEGER KCOL, JCOL, JROW, TMPVT
 !
       det = 1.

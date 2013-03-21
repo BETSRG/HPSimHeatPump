@@ -157,14 +157,13 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant
+    INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant  !RS: Debugging: Extraneous but is called in anyhow...
     !0-refrigerant mixture
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
     !INTEGER, INTENT(INOUT) :: OUT(7)
 
-   ! INTEGER         :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LcapTube    !Cap tube length, m
@@ -187,8 +186,6 @@
     REAL :: DPdisTot    !Total pressure drop in distributor, kPa
     REAL :: PiEvp       !Evaporator inlet pressure, kPa
     REAL :: HiEvp       !Evaporator inlet enthalpy, kJ/kg
-    REAL :: TiEvp       !Evaporator inlet temperature, C
-    REAL :: XiEvp       !Evaporator inlet quality
     REAL :: PoEvp       !Evaporator outlet pressure, kPa
     REAL :: mdotCmp     !Mass flow rate from compressor, kg/s
     REAL :: mdotExp     !Mass flow rate from exp. device, kg/s or lbm/hr
@@ -217,7 +214,7 @@
     INTEGER :: II !Iteration counter
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt           !Ref prop calc. option
+    !INTEGER(2) RefPropOpt           !Ref prop calc. option !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr           !Error flag:1-error; 0-no error
     REAL RefProp(28)
 
@@ -260,16 +257,7 @@
 
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
-    TiEvp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Evaporator Inlet Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
-        RETURN
-    END IF
-
-    XiEvp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Evaporator Inlet Quality
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
-        RETURN
-    END IF
-
+    
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
         RETURN

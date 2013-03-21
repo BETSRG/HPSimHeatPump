@@ -220,25 +220,14 @@ REAL ODC_Poly2DP   !Polynomial fit coefficient for air pressure drop
 REAL ODC_Poly3DP   !Polynomial fit coefficient for air pressure drop
 REAL ODC_Poly4DP   !Polynomial fit coefficient for air pressure drop
 
-INTEGER I !Loop counter
-INTEGER J
 CHARACTER*150 LineData
-CHARACTER*150 BufferString
 
-INTEGER(2) :: IsHeatPump				!Is heat pump operation flag: 1=yes; 0=no
 INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no
 INTEGER(2) :: IsCmpInAirStream          !Is compressor in air stream: 1=yes, 0=no
-INTEGER(2) :: CoolingDesignCondition
-INTEGER(2) :: HeatingDesignCondition
-REAL :: InsideDiameter
-REAL :: Temp
 REAL :: CopperVol !Copper volume, m3
 INTEGER CompressorManufacturer
-INTEGER ErrorFlag !Error flag
 INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
-REAL :: CoolingTXVcapacity !Cooling TXV capacity, ton
-REAL :: HeatingTXVcapacity !Heating TXV capacity, ton
 CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
   INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
   REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
@@ -249,51 +238,11 @@ REAL Subcooling   !Design Subcooling
 REAL Superheat    !Design Superheat
 CHARACTER(len=MaxNameLength)RefrigerantName
 REAL NumofRefrigerants    !Number of Refrigerants in Blend
-REAL NominalCoolingCapacity
-REAL NominalHeatingCapacity
-REAL ElectricHeating
 CHARACTER(len=MaxNameLength)DesignConditionDescription
-REAL OutdoorEnteringDrybulbTemperature
-REAL OutdoorEnteringWetbulbTemperature
-REAL IndoorEnteringDrybulbTemperature
-REAL IndoorEnteringWetbulbTemperature
 REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
-CHARACTER(len=MaxNameLength)CompressorModel
-CHARACTER(len=MaxNameLength)CompressorType
 CHARACTER(len=MaxNameLength)Rref    !Compressor Refrigerant
-REAL CompressorPower
-REAL CompressorHeatLossFraction
-REAL CompressorHeatLoss
-REAL CompressorVolume
-REAL CompressorMassCoefficient1
-REAL CompressorMassCoefficient2
-REAL CompressorMassCoefficient3
-REAL CompressorMassCoefficient4
-REAL CompressorMassCoefficient5
-REAL CompressorMassCoefficient6
-REAL CompressorMassCoefficient7
-REAL CompressorMassCoefficient8
-REAL CompressorMassCoefficient9
-REAL CompressorMassCoefficient10
-REAL CompressorPowerCoefficient1
-REAL CompressorPowerCoefficient2
-REAL CompressorPowerCoefficient3
-REAL CompressorPowerCoefficient4
-REAL CompressorPowerCoefficient5
-REAL CompressorPowerCoefficient6
-REAL CompressorPowerCoefficient7
-REAL CompressorPowerCoefficient8
-REAL CompressorPowerCoefficient9
-REAL CompressorPowerCoefficient10
-CHARACTER(len=MaxNameLength)CompressorCoefficientsUnitFlag
-REAL PowerMultiplier
-REAL MassFlowRateMultiplier
-REAL UserSpecifiedRatingEvapTemperature
-REAL UserSpecifiedRatingCondTemperature
-REAL UserSpecifiedRatingSubcooling
-REAL UserSpecifiedRatingSuperheat
 
 REAL PwrODfan !Outdoor Fan Power
 REAL PwrIDfan !Fan Power
@@ -322,18 +271,12 @@ CHARACTER(len=MaxNameLength)ValveODCLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)ValveODCLn_TubeType
 REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
-REAL ValveODCLn_Charge   !Charge of Valve to ODC Line Tube
-
 CHARACTER(len=MaxNameLength)Filter_Manufacturer
 CHARACTER(len=MaxNameLength)Filter_Model
 
 CHARACTER(len=MaxNameLength)ODC_FinName
-CHARACTER(len=MaxNameLength)ODC_FinMaterial
-CHARACTER(len=MaxNameLength)ODC_TubeName
 REAL :: ODC_TubeID
 CHARACTER(len=MaxNameLength)IDC_FinName
-CHARACTER(len=MaxNameLength)IDC_FinMaterial
-CHARACTER(len=MaxNameLength)IDC_TubeName
 REAL :: IDC_TubeID
 !Flow:
 

@@ -65,26 +65,23 @@
 
     IMPLICIT NONE
 
-    CHARACTER (len=15) :: Property
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL DTVALU
 
     LOGICAL PRINT
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)	!Refrigerant properties
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
     REAL AirProp(8)		!Air properties
 
     INTEGER ICHRGE,IMASS,IREFC,LPRINT
-    REAL TAIICI,TAIIEI
+    REAL TAIIEI
     INTEGER NTAMB,NCROSS
     REAL DELT2,DTVLMN
-    REAL TAIIE,TAIIC
+    REAL TAIIE
     INTEGER I
     REAL ERRMSG(2)
     REAL TSAT1,CONV,STEP,DIFFER,XMR
@@ -92,13 +89,11 @@
     REAL TAIE1,DIFF,DIFSGN,PROD,TSATSV,TSATDM,TAISV,TAIDM
     REAL TsoEvp,LsucLn
     REAL MassCoil,MassLiqCoil,MassVapCoil
-    REAL Root1,Root2,Dprev1,Dprev2,Qprev1,Qprev2,Lprev1,Lprev2
     INTEGER NumIter,MaxIteration
     REAL XMRFLD,ErrXMR,TSICMPprev
     REAL Dshtb,MaxDshTb,MinDshTb
     REAL CapTubeDimension,MaxLen,MinLen
-    REAL TaoE,RHoE,TaoC,RHoC
-    REAL Qtxv,MaxQtxv,MinQtxv
+    REAL Qtxv
     REAL Subcooling, Superheat, DPtxv
     REAL ChargeCorrection !Correction charge for the charge tuning method, lbm
     REAL, EXTERNAL :: CNDNSR, EVPTR
@@ -113,8 +108,6 @@
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
-    REAL, SAVE:: PrevTime = 0.0                                               
-    INTEGER   :: Flag
 
     LOGICAL :: FLAG_GOTO_950
     
@@ -138,10 +131,8 @@
     ELSE
         IREFC=0
     END IF
-
-    TAIICI=TaiC
+    
     TAIIEI=TaiE
-    TAIIC=TaiC
 
     NTAMB = 0
     NCROSS = 0
@@ -309,18 +300,6 @@
         STEP = 3
 
         CALL IssueOutputMessage('|-------------------- Highside Iteration --------------------|')
-
-        IF (FirstTimeHPdesignMode) THEN
-            TaoC=CondIN(5)
-            RHoC=CondIN(6)
-            TaoE=EvapIN(5)
-            RHoE=EvapIN(6)	  
-        ELSE
-            TaoC=CondOUT(21)
-            RHoC=CondOUT(22)
-            TaoE=EvapOUT(17)
-            RHoE=EvapOUT(18)
-        END IF
 
         AirPropOpt=2
         AirProp(1)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C
@@ -615,10 +594,6 @@
             ELSE
 
                 !Initial guess
-                Root1=999
-                Root2=0.0
-                Dprev1=0.0
-                Dprev2=0.0
                 NumIter=0
                 MaxDshTb=0
                 MinDshTb=0
@@ -698,10 +673,6 @@
             CapTubeIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
 
             !Initial guess
-            Root1=999
-            Root2=0.0
-            Lprev1=0.0
-            Lprev2=0.0
             NumIter=0
             MaxLen=0
             MinLen=0

@@ -215,7 +215,6 @@ REAL Tsat2 !Saturation temperature at Psat2, K
 
 !EnergyPlus Refprop variables
 INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-!INTEGER :: RefrigIndex =0
 REAL Temperature !C
 REAL Quality  !0-1
 REAL Pressure !Pa
@@ -721,7 +720,7 @@ IMPLICIT NONE
 
 !INPUTS:
 REAL, INTENT(IN) :: Gtot  !Total mass flux, kg/m2-s
-REAL, INTENT(IN) :: Xmix  !Mixutre quality
+REAL, INTENT(IN) :: Xmix  !Mixture quality
 REAL, INTENT(IN) :: ID    !Tube inside diameter, m
 REAL, INTENT(IN) :: muMix !Mixture viscosity, kg/s-m
 REAL, INTENT(IN) :: muVap !Vapor viscosity, kg/s-m

@@ -71,7 +71,7 @@ USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora o
 IMPLICIT NONE
 
 CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-REAL, INTENT(IN) :: LTUBE   !Distributor tube length, in
+REAL, INTENT(IN) :: LTUBE   !Distributor tube length, in    !RS: Debugging: Brought in but never used
 INTEGER(2),       INTENT(IN) :: Nckts   !Number of circuits in evaporator
 REAL, INTENT(IN) :: mdotRef !Refrigerant mass flow rate, kg/s
 REAL, INTENT(IN) :: TiExp   !Inlet temperature of expansion device, C
@@ -86,7 +86,6 @@ INTEGER, INTENT(OUT) ::ErrorFlag !Error flag: 0 = no error
 REAL, PARAMETER :: SuperRtd = 6.11 !11 F  !Rated superheat, C
 REAL, PARAMETER :: UnitP = 6.895 !(psi X UnitP = kPa)
            
-!INTEGER            :: RefrigIndex =0
 REAL Temperature,Quality,Pressure,Enthalpy
 
 INTEGER(2)       :: RefPropOpt  !Ref prop calc. option
@@ -276,7 +275,6 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QNOZRTD !Rated nozzle capacity, ton
 
 !Local variable
-REAL a,b !Equation fit constants
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   SELECT CASE (TRIM(Ref$))
@@ -338,7 +336,6 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QTUBERTD !Rated tube capacity, ton
 
 !Local variable
-REAL a,b !Equation fit constants
 REAL CFtube !Correction factor for tube length other than 30"
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 

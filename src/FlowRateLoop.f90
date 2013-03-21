@@ -84,7 +84,7 @@
 
     IMPLICIT NONE
 
-    CHARACTER (len=15) :: Property
+    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT
@@ -92,13 +92,13 @@
 
     LOGICAL PRINT
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)	!Refrigerant properties
+    !REAL RefProp(28)	!Refrigerant properties !RS: Debugging: Extraneous
 
-    INTEGER(2) AirPropOpt			!Air prop calc. option
-    INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
-    REAL AirProp(8)		!Air properties
+    !INTEGER(2) AirPropOpt			!Air prop calc. option  !RS: Debugging: Extraneous
+    !INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error !RS: Debugging: Extraneous
+    !REAL AirProp(8)		!Air properties !RS: Debugging: Extraneous
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
@@ -112,7 +112,7 @@
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
-    REAL, SAVE:: PrevTime = 0.0 
+    !REAL, SAVE:: PrevTime = 0.0!RS: Debugging: Extraneous
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"

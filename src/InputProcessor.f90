@@ -249,7 +249,7 @@ SUBROUTINE ProcessInput
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 	CHARACTER(LEN=32) :: FileName
-	CHARACTER(LEN=80) :: Refrigerant
+	!CHARACTER(LEN=80) :: Refrigerant   !RS: Debugging: Extraneous
 
    LOGICAL FileExists ! Check variable for .idd/.idf files
    LOGICAL :: ErrorsInIDD=.false.   ! to check for any errors flagged during data dictionary processing

@@ -107,18 +107,15 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    CHARACTER (len=15) :: Property          
-    REAL Temperature,Quality,Pressure,Enthalpy
+    REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
-    REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
     REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
 
-    REAL TimeStart, TimeStop, TimeSpent
+    REAL TimeStart,  TimeSpent
 
     INTEGER ICHRGE,I
     REAL DTVALU
@@ -129,7 +126,7 @@
     REAL STEP
     REAL CHGDIF
 
-    REAL Qcnd,Qevp,mdot,WinTrans
+    REAL Qcnd,Qevp,WinTrans 
     REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
