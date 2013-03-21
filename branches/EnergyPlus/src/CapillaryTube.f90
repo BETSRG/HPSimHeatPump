@@ -103,7 +103,7 @@
     REAL, INTENT(OUT) :: OUT(7)
     !INTEGER, INTENT(INOUT) :: OUT(7)
 
-    REAL Temperature,Quality,Pressure,Enthalpy
+    REAL Quality,Pressure,Enthalpy !Temperature,    !RS: Debugging: Extraneous
 
     REAL :: LcapTube    !Cap tube length, m
     REAL :: LdisTube    !Distributor tube length, m
@@ -151,13 +151,13 @@
     INTEGER			 :: ErrorFlag	!0-No error
     !1-Solution error
     !2-Refprop error
-    INTEGER :: I  !Iteration counter
-    INTEGER :: II !Iteration counter
+    !INTEGER :: I  !Iteration counter   !RS: Debugging: Extraneous
+    !INTEGER :: II !Iteration counter   !RS: Debugging: Extraneous
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 
@@ -398,9 +398,9 @@
 
     REAL :: LcapTube    !Cap tube length, m
     REAL :: LdisTube    !Distributor tube length, m
-    REAL :: LCAP        !Distributor tube length, in
+    !REAL :: LCAP        !Distributor tube length, in   !RS: Debugging: Extraneous
     REAL :: DcapTube    !Cap tube diameter, m
-    REAL :: DCAP        !Cap tube diameter, in
+    !REAL :: DCAP        !Cap tube diameter, in !RS: Debugging: Extraneous
     REAL :: Dcoil       !Cap tube coil diameter, m
     REAL :: IDDISTUBE   !Distributor inside diameter, in
     REAL :: VolDisTube  !Distributor tube volumn, m^3
@@ -424,7 +424,7 @@
     REAL :: TsiExp      !Liquid saturation temperature of the upstream fluid, C
     REAL :: QdisTube    !Distributor tube capacity, kW
     REAL :: rhoiEvp     !Evaporator inlet density, kg/m^3
-    REAL :: Acs         !Cross-sectional area, m^2
+    !REAL :: Acs         !Cross-sectional area, m^2 !RS: Debugging: Extraneous
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     REAL :: mdotStraight !Mass flow rate of straight capillary tube, kg/hr
     REAL :: Subcooling  !Subcooling, K
@@ -454,13 +454,13 @@
     INTEGER			 :: ErrorFlag	!0-No error
     !1-Solution error
     !2-Refprop error
-    INTEGER :: I  !Iteration counter
-    INTEGER :: II !Iteration counter
+    !INTEGER :: I  !Iteration counter   !RS: Debugging: Extraneous
+    !INTEGER :: II !Iteration counter    !RS: Debugging: Extraneous
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 

@@ -94,14 +94,14 @@ PRIVATE
 INTEGER,PARAMETER  :: MdotMaxIter=10      !Max. number of iterations
 INTEGER,PARAMETER  :: RefBCmaxIter=20     !Max. number of iterations  !RS: Debugging: Increasing iterations to see if it converges better
 INTEGER,PARAMETER  :: AirBCmaxIter=20     !Max. number of iterations
-INTEGER,PARAMETER  :: TsurfMaxIter=20     !Max. number of iterations
+!INTEGER,PARAMETER  :: TsurfMaxIter=20     !Max. number of iterations   !RS: Debugging: Extraneous
 INTEGER,PARAMETER  :: PressureMaxIter=20          !Max. number of iterations
 INTEGER,PARAMETER  :: WetSurfaceMaxIter=20          !Max. number of iterations
 REAL,PARAMETER :: SMALL=1.0E-4  !Small number !RS: Reducing the size to see if it helps with convergence
 REAL,PARAMETER :: BIG=1.0E6     !Big number 
-REAL, PARAMETER :: Hout=0.013628621 !Insulated tube outside film heat transfer coefficient, kW/(m2-K)
-REAL, PARAMETER :: Kinsul = 0.034620043e-3 !Insulation thermal conductivity, kW/m-K
-REAL, PARAMETER :: ThkInsul = 0.012699993 !0.5 in thick insulation
+!REAL, PARAMETER :: Hout=0.013628621 !Insulated tube outside film heat transfer coefficient, kW/(m2-K)   !RS: Debugging: Extraneous
+!REAL, PARAMETER :: Kinsul = 0.034620043e-3 !Insulation thermal conductivity, kW/m-K   !RS: Debugging: Extraneous
+!REAL, PARAMETER :: ThkInsul = 0.012699993 !0.5 in thick insulation   !RS: Debugging: Extraneous
 
 !Error Flags 
 INTEGER,PARAMETER :: NOERROR       = 0
@@ -137,7 +137,7 @@ INTEGER :: SubcoolingTube !Subcooling tube number
 INTEGER :: NumOfSubcoolingCkts !Number of subcooling circuits
 
 !Circuitry variables
-INTEGER Ickt,I,J,K !Loop control
+INTEGER I,J,K !Ickt, !Loop control   !RS: Debugging: Extraneous
 INTEGER NumOfTubes !Total number of tubes
 INTEGER TubeNum    !Tube number in circuit diagram
 INTEGER ErrorFlag          !0-No error
@@ -169,19 +169,19 @@ REAL Temperature,Quality,Pressure,Enthalpy
 
 !Variables for module
 REAL tRiMod,tRoMod,tRmod
-REAL pRiMod,pRoMod,pRoModprev
+REAL pRiMod,pRoMod !,pRoModprev   !RS: Debugging: Extraneous
 REAL xRmod,xRiMod,xRoMod
 REAL hRiMod,hRoMod
 REAL hfRiMod,hfRoMod
 REAL hgRiMod,hgRoMod
 REAL hfgRmod,hfgRiMod,hfgRoMod
-REAL vgRmod,vgRiMod,vgRoMod,vgRsat
-REAL vfRmod,vfRiMod,vfRoMod,vfRsat
+REAL vgRmod,vgRiMod,vgRoMod !,vgRsat   !RS: Debugging: Extraneous
+REAL vfRmod,vfRiMod,vfRoMod !,vfRsat    !RS: Debugging: Extraneous
 REAL vRiMod,vRoMod
 
 REAL muRmod,muRiMod,muRoMod
-REAL mugRmod,mugRiMod,mugRoMod,mugRsat
-REAL mufRmod,mufRiMod,mufRoMod,mufRsat
+REAL mugRmod,mugRiMod,mugRoMod !,mugRsat    !RS: Debugging: Extraneous
+REAL mufRmod,mufRiMod,mufRoMod !,mufRsat    !RS: Debugging: Extraneous
 REAL kRmod,kRiMod,kRoMod
 REAL kfRmod,kfRiMod,kfRoMod
 REAL kgRmod,kgRiMod,kgRoMod
@@ -193,7 +193,7 @@ REAL mAiMod
 REAL VelDevMod
 REAL tAiMod,tAoMod,tAmod
 REAL rhAiMod,rhAoMod
-REAL wbAiMod,wbAoMod
+REAL wbAoMod !wbAiMod,  !RS: Debugging: Extraneous
 REAL hAiMod,hAoMod
 
 REAL DPmod !Pressure drop in module, kPa
@@ -205,13 +205,13 @@ REAL pRoCkt  !Circuit outlet pressure, kPa
 REAL SumpRoCkt !Sum of outlet circuit outlet pressure, kPa
 REAL hRoCkt  !Circuit outlet enthalpy, kJ/kg
 REAL xRoCkt  !Circuit outlet quality
-REAL pRoSUM  !Sum of outlet pressure, kPa
-REAL hRoSUM  !Sum of outlet enthalpy, kJ/kg
-REAL xRoSUM  !Sum of outlet quality
-REAL pRoAVG  !Average of outlet pressure, kPa
-REAL hRoAVG  !Average of outlet enthalpy, kJ/kg
-REAL xRoAVG  !Average of outlet quality
-REAL tRoAVG  !Average of ref outlet temperature, C
+!REAL pRoSUM  !Sum of outlet pressure, kPa  !RS: Debugging: Extraneous
+!REAL hRoSUM  !Sum of outlet enthalpy, kJ/kg    !RS: Debugging: Extraneous
+!REAL xRoSUM  !Sum of outlet quality    !RS: Debugging: Extraneous
+!REAL pRoAVG  !Average of outlet pressure, kPa  !RS: Debugging: Extraneous
+!REAL hRoAVG  !Average of outlet enthalpy, kJ/kg    !RS: Debugging: Extraneous
+!REAL xRoAVG  !Average of outlet quality    !RS: Debugging: Extraneous
+!REAL tRoAVG  !Average of ref outlet temperature, C !RS: Debugging: Extraneous
 
 !Expansion device variables
 REAL pRoExp
@@ -223,11 +223,11 @@ REAL pRiCmp
 REAL hRiCmp
 REAL xRiCmp
 REAL vRiCmp
-REAL vfRiCmp
-REAL vgRiCmp
-REAL muRiCmp
-REAL mufRiCmp
-REAL mugRiCmp
+!REAL vfRiCmp   !RS: Debugging: Extraneous
+!REAL vgRiCmp   !RS: Debugging: Extraneous
+!REAL muRiCmp   !RS: Debugging: Extraneous
+!REAL mufRiCmp  !RS: Debugging: Extraneous
+!REAL mugRiCmp  !RS: Debugging: Extraneous
 
 !Heat transfer calc. variables
 REAL mRefTot  !Refrigerant mass flow rate, kg/s
@@ -254,10 +254,10 @@ REAL Tsurf    !Surface temperature, C
 REAL TsurfNew !Surface temperature, C
 REAL TsurfMax !Maximum surface temperature, C
 REAL TsurfMin !Minimum surface temperature, C
-REAL cAir     !Capcity rate of air, kW/C
-REAL cRef     !Capcity rate of refrigerant, kW/C
+REAL cAir     !Capacity rate of air, kW/C
+REAL cRef     !Capacity rate of refrigerant, kW/C
 REAL UA       !Overall heat transfer coefficient, kW/C
-REAL hcRef    !Refrigernat film coefficent, W/m^2-C
+REAL hcRef    !Refrigerant film coefficent, W/m^2-C
 REAL Rtube    !Thermal resistance of tube, K/W
 REAL Rair     !Module air film resistance, K/W
 REAL Rfrost   !Sankar
@@ -305,7 +305,7 @@ REAL muf      !Liquid viscosity, Pa-s
 REAL mug      !Vapor viscosity, Pa-s
 REAL kRef     !Refrigerant bulk conductivity, kW/m-C
 REAL cpRef    !Ref. specific heat, kJ/(kg-C)
-REAL Kfilm    !Water film thermal conductivity, kW/m-C
+!REAL Kfilm    !Water film thermal conductivity, kW/m-C !RS: Debugging: Extraneous
 REAL rhoRef   !Ref. density, kg/m3
 REAL CPAir                !Specific heat of air, kJ/kg-K
 INTEGER(2) AirPropOpt     !Air prop calc. option
@@ -318,7 +318,7 @@ REAL TdbAoWet !Outlet air dry bulb temperature, wet surface, C
 REAL TwbAoMod !Outlet air wet bulb temperature, C
 REAL TwbAoWet !Outlet air wet bulb temperature, wet surface, C
 REAL TdpAoMod !Outlet air dewpoint temeperature, C
-REAL twAiMod,twAoMod
+!REAL twAiMod,twAoMod   !RS: Debugging: Extraneous
 REAL wAiMod,wAoMod,wsurf,wAmod
 REAL hAoWet
 REAL hAoDry
@@ -355,12 +355,12 @@ REAL xRiCoil,xRoCoil
 REAL tAiCoil,tAoCoil
 REAL rhAiCoil,rhAoCoil
 REAL wAiCoil,wAoCoil
-REAL wbAiCoil,wbAoCoil
-REAL vRiCoil,vRoCoil
-REAL vfRiCoil,vfRoCoil
-REAL vgRiCoil,vgRoCoil
-REAL muRiCoil,muRoCoil
-REAL mufRiCoil,mufRoCoil
+REAL wbAiCoil !,wbAoCoil    !RS: Debugging: Extraneous
+!REAL vRiCoil,vRoCoil   !RS: Debugging: Extraneous
+!REAL vfRiCoil,vfRoCoil !RS: Debugging: Extraneous
+!REAL vgRiCoil,vgRoCoil !RS: Debugging: Extraneous
+!REAL muRiCoil,muRoCoil !RS: Debugging: Extraneous
+!REAL mufRiCoil,mufRoCoil
 REAL tSHoCoil     !Coil outlet superheat, C 
 REAL tSHiCmp      !Compressor inlet superheat, C 
 REAL Wabsolute    !Asolute oil mass fraction  
@@ -376,10 +376,10 @@ REAL,SAVE :: AmCoil !Coil tube mean surface area, m^2
 REAL AoMod       !Module outside surface area, m^2
 REAL AfMod       !Module fin surface area
 REAL AiMod       !Module inside surface area
-REAL AiModLiq    !Module inside surface area for liquid line
-REAL AiModDis    !Module inside surface area for discharge line
+!REAL AiModLiq    !Module inside surface area for liquid line   !RS: Debugging: Extraneous
+!REAL AiModDis    !Module inside surface area for discharge line    !RS: Debugging: Extraneous
 REAL AiModSuc    !Module inside surface area for suction line
-REAL AbrMod      !Module bare tube outside surface area
+!REAL AbrMod      !Module bare tube outside surface area    !RS: Debugging: Extraneous
 REAL AmMod       !Module tube mean surface area    
 REAL Lcoil       !Total tube length, m
 REAL LmodTube    !Module length of tube, m
@@ -388,7 +388,7 @@ REAL,SAVE :: LmodTP     !Two-phase module length, m
 REAL LmodTPmin   !Minimum two-phase module length, m
 REAL LmodTPmax   !Maximum two-phase module length, m
 REAL LmodTPratio !Ratio of two-phase modeul length to total module length
-REAL LmodSHratio !Ratio of Superheated module length to total module length
+!REAL LmodSHratio !Ratio of Superheated module length to total module length !RS: Debugging: Extraneous
 REAL LsucLn      !Suction line length, m
 REAL ElevSucLn   !Suction line elevation, m
 REAL IDsucLn     !Inside diameter of suction line, m
@@ -400,7 +400,7 @@ REAL DisLnThk    !Discharge line tube wall thickness, m
 REAL LiqLnThk    !Liquid line tube wall thickness, m
 REAL HtCoil      !Coil height, m
 REAL FinSpg      !Fin spacing, m
-REAL FilmThk     !Water film thickness, m
+!REAL FilmThk     !Water film thickness, m  !RS: Debugging: Extraneous
 REAL phi         !Parameter for fin efficiency calc.
 REAL SurfEff     !Surface effectiveness
 REAL FinEff      !Fin effectiveness
@@ -440,7 +440,7 @@ INTEGER Nmod             !Module number !Loop counter
 INTEGER NcktLast         !Total number of outlet circuits 
 INTEGER NcktFirst        !Total number of inlet circuits 
 INTEGER Nnode            !Number of split and joint nodes
-INTEGER DryWet           !Dry wet flag: 1=Wet; 2=Partiall wet; 3=Dry
+INTEGER DryWet           !Dry wet flag: 1=Wet; 2=Partially wet; 3=Dry
 LOGICAL,SAVE :: IsSameNumOfTubes !Flag to check if same number of tubes
                                  !in all circuit branches
 REAL DrawBlow  !Fan location, 1=draw through; 2=blow through
@@ -452,7 +452,7 @@ INTEGER RefBCiter        !Iteration loop counter
 INTEGER AirBCiter        !Iteration loop counter
 
 INTEGER(2)       :: RefPropErr  !Error flag:1-error; 0-no error
-REAL Psat,Pcr,Dcrit,Tcr
+REAL Psat,Pcr,Tcr !Dcrit,   !RS: Debugging: Extraneous
 
 !Mass inventory
 REAL MassSucLn    !Total refrigerant inventory in suction line, kg
@@ -698,16 +698,16 @@ CONTAINS
     REAL tSiSUM    !Sum of inlet surface temperature, C
     REAL tSoSUM    !Sum of outlet surface temperature, C
     REAL QcktSens !Sensible Circuit heat transfer, kW
-    REAL DPreturnbend !Pressure drop at return bend, kPa
+    !REAL DPreturnbend !Pressure drop at return bend, kPa   !RS: Debugging: Extraneous
     REAL DPair        !Air side pressure drop, kPa
-    REAL DPckt        !Refrigerant pressure drop in circuit, kPa
-    REAL Gckt         !Mass flux in circuit, kg/m^2
-    REAL DiffpRoMod     !Difference in pRoMod
-    REAL PrevpRoMod     !Previous value of pRoMod
+    !REAL DPckt        !Refrigerant pressure drop in circuit, kPa   !RS: Debugging: Extraneous
+    !REAL Gckt         !Mass flux in circuit, kg/m^2    !RS: Debugging: Extraneous
+    !REAL DiffpRoMod     !Difference in pRoMod  !RS: Debugging: Extraneous
+    !REAL PrevpRoMod     !Previous value of pRoMod  !RS: Debugging: Extraneous
     LOGICAL Converged   !Solution convergence flag
     REAL MaxResidual    !Maximum residual in iteration
     Real PTol           !Evaporator Outlet Pressure convergence criteria,kPa
-    REAL Wlocal         !Local oil mass fraction
+    !REAL Wlocal         !Local oil mass fraction   !RS: Debugging: Extraneous
     REAL tRdis          !Compressor discharge temperature, C
     REAL DPvalve        !Reversing valve pressure drop, kPa
     REAL hRsuc          !Suction enthalpy, kPa
@@ -781,10 +781,10 @@ CONTAINS
         CALL GetRefID(Ref$,RefID)
     END IF
 
-    IF (.NOT. ALLOCATED(CoilSection)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-        ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
-        CALL InitEvaporatorCoil(CoilType)
-    END IF
+    !IF (.NOT. ALLOCATED(CoilSection)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
+    !    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
+    !    CALL InitEvaporatorCoil(CoilType)
+    !END IF
     
     hciMultiplier   = PAR(23)
     DPrefMultiplier = PAR(24)
@@ -2326,14 +2326,14 @@ END SUBROUTINE PrintEvaporatorResult
                                     !6=Microchannel Evaporator
 
     INTEGER I,J,II,III,IV !Loop counter
-    CHARACTER*150 LineData
-    INTEGER NumRow !Row number
+    !CHARACTER*150 LineData !RS: Debugging: Extraneous
+    !INTEGER NumRow !Row number !RS: Debugging: Extraneous
     INTEGER NumOfPasses !Number of passes
-    INTEGER NumPass !Pass number
+    !INTEGER NumPass !Pass number   !RS: Debugging: Extraneous
     INTEGER Ntubes !Number of tubes
     INTEGER NumOfInlets !Number of inlets
     LOGICAL IsSIunit !SI unit input flag
-    LOGICAL IsNewFormat !New format input flag
+    !LOGICAL IsNewFormat !New format input flag !RS: Debugging: Extraneous
     LOGICAL IsShift !Is shift tube flag (for staggered tubes)
     INTEGER NumSection !Loop counter, ISI - 09/10/07
     
@@ -2939,7 +2939,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             IF (.NOT. ALLOCATED(Ckt)) THEN
                 CALL InitEvaporatorStructures
             END IF
-                ALLOCATE(CoilSection(NumOfSections))    !RS: Debugging: Adding in unallocated arrays
+                !ALLOCATE(CoilSection(NumOfSections))    !RS: Debugging: Adding in unallocated arrays
                 !ALLOCATE(CoilSection(1)%Ckt(NumOfCkts)) !RS: Debugging: Adding in unallocated arrays
             
             IF (IsSimpleCoil .NE. 1) THEN
@@ -3497,7 +3497,7 @@ SUBROUTINE InitEvaporatorStructures
   REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
-  CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
+  !CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.   !RS: Debugging: Extraneous
   INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -3619,7 +3619,7 @@ SUBROUTINE EndEvaporatorCoil
 
 IMPLICIT NONE
 
-INTEGER I,II,III,IV,J,K !Loop counters
+INTEGER I,II,III !,IV,J,K !Loop counters    !RS: Debugging: Extraneous
 
 	  !ISI - 09/10/07
   IF (ALLOCATED(CoilSection)) THEN
@@ -3732,9 +3732,9 @@ INTEGER CoilType !1=Condenser; 2=Evaporator;
                  !3=High side interconnecting pipes; 4=Low side interconnecting pipes
 INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
 
-REAL DPman !Manifold pressure drop, kPa
-REAL Qloss !Discharge line heat loss, kW
-REAL Tloss !Discharge line temperature loss, C
+!REAL DPman !Manifold pressure drop, kPa    !RS: Debugging: Extraneous
+!REAL Qloss !Discharge line heat loss, kW   !RS: Debugging: Extraneous
+!REAL Tloss !Discharge line temperature loss, C !RS: Debugging: Extraneous
 
     LmodSuc=LsucLn
     AiModSuc=PI*LmodSuc
@@ -4217,7 +4217,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 								 !4=Low side interconnecting pipes
 								 !5=Microchannel condenser
 								 !6=Microchannel Evaporator
-REAL :: tAi
+!REAL :: tAi    !RS: Debugging: Extraneous
 
 !FLOW:
 
@@ -5143,7 +5143,7 @@ REAL DiffhRoMod   !Difference in hRoMod
 REAL PrevpRoMod   !Previous value of pRoMod
 REAL PrevhRoMod   !Previous value of hRoMod
 INTEGER RefBCiter   !Iteration loop counter
-REAL Tair         !Air temperature, C
+!REAL Tair         !Air temperature, C  !RS: Debugging: Extraneous
 LOGICAL IsTransitSegmentCalled !Flag to indicate if 'CalcTransitSegment' is called
 LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 
@@ -6271,18 +6271,18 @@ REAL hRiSat      !Saturation air enthalpy based on refrigerant temperature, kJ/k
 REAL DeltahRiSat !Small change of hRiSat, kJ/kg
 REAL CpSat       !Saturation specific heat, kJ/kg
 REAL CpMoist     !Specific heat of moist air, kJ/kg
-REAL Rcollar     !Tube radius with fin collar, m
-REAL XM          !Heat exchanger geometric parameter, m
-REAL XL          !Heat exchanger geometric parameter, m
-REAL Req         !Equivalent fin radius, m
-REAL mm          !Parameter for fin efficiency calculation
+!REAL Rcollar     !Tube radius with fin collar, m   !RS: Debugging: Extraneous
+!REAL XM          !Heat exchanger geometric parameter, m    !RS: Debugging: Extraneous
+!REAL XL          !Heat exchanger geometric parameter, m    !RS: Debugging: Extraneous
+!REAL Req         !Equivalent fin radius, m !RS: Debugging: Extraneous
+!REAL mm          !Parameter for fin efficiency calculation !RS: Debugging: Extraneous
 REAL DH          !Enthalpy difference, kJ/kg
 REAL NTUwet      !Wet surface NTU
 REAL hAoSatSurf  !Outlet air surface saturation enthalpy, kJ/kg
 REAL tAoSat      !Outlet air saturation temperature, C
 REAL FinEffwet   !Wet surface fin efficiency
 REAL SurfEffwet  !Wet surface efficiency
-REAL UAwet       !Wet surface UA
+!REAL UAwet       !Wet surface UA   !RS: Debugging: Extraneous
 REAL EPSwet      !Wet surface heat exchanger efficiency
 REAL NTUoWet     !Outlet wet surface NTU
 REAL hcoWet      !Wet surface heat transfer coefficient, kW/m^2-K
@@ -6532,28 +6532,28 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
 
     INTEGER I,II,III,IV,V !Loop counters
     LOGICAL Converged     !Convergence flag
-    INTEGER AirBCiter     !Air bounadary condition iteration counter
+    !INTEGER AirBCiter     !Air bounadary condition iteration counter   !RS: Debugging: Extraneous
     INTEGER RefBCiter     !Refrigerant bounadary condition iteration counter
-    REAL Qslab			  !Coil slab capacity, kW 
-    REAL Qtube			  !Coil tube capacity, kW
+    !REAL Qslab			  !Coil slab capacity, kW   !RS: Debugging: Extraneous
+    !REAL Qtube			  !Coil tube capacity, kW   !RS: Debugging: Extraneous
     REAL Qpass			  !Coil pass capacity, kW
     REAL QpassSens		  !Coil pass sensible capacity, kW
     REAL QinletPass		  !Inlet pass capacity, kW
     REAL QinletPassSens   !Inlet pass sensible capacity, kW
-    REAL PrevpRoMod		  !Previous refrigerant outlet pressure, kPa
-    REAL DiffpRoMod		  !Difference in outlet pressure, kPa
+    !REAL PrevpRoMod		  !Previous refrigerant outlet pressure, kPa    !RS: Debugging: Extraneous
+    !REAL DiffpRoMod		  !Difference in outlet pressure, kPa   !RS: Debugging: Extraneous
     REAL pRoSlab		  !Outlet Refrigerant pressure for a coil slab, kPa
     REAL hRoSlab		  !Outlet Refrigerant enthalpy for a coil slab, kJ/kg
     REAL tRoSlab		  !Outlet Refrigerant temperature for a coil slab, C  
     REAL xRoSlab		  !Outlet Refrigerant quality for a coil slab  
     REAL Aface			  !Coil face area, m^2
-    REAL tAoSlab		  !Outlet air temperature for a coil slab, C
-    REAL rhAoSlab		  !Outlet air relative humidity for a coil slab
-    REAL hAoSlab		  !Outlet air enthalpy for a coil slab, kJ/kg
+    !REAL tAoSlab		  !Outlet air temperature for a coil slab, C    !RS: Debugging: Extraneous
+    !REAL rhAoSlab		  !Outlet air relative humidity for a coil slab !RS: Debugging: Extraneous
+    !REAL hAoSlab		  !Outlet air enthalpy for a coil slab, kJ/kg   !RS: Debugging: Extraneous
     REAL SumPro			  !Sum of outlet pressures, kPa
     REAL SumMrefHro		  !Sum of mdot*H (mass flow rate * enthalpy)
-    REAL mRefInletPass    !Inlet pass mass flow rate, kg/s
-    REAL Wlocal           !Local oil mass fraction
+    !REAL mRefInletPass    !Inlet pass mass flow rate, kg/s !RS: Debugging: Extraneous
+    !REAL Wlocal           !Local oil mass fraction !RS: Debugging: Extraneous
     REAL tRdis            !Compressor discharge temperature, C
     REAL DPvalve          !Reversing valve pressure drop
     REAL hRsuc            !Suction enthalpy, kJ/kg

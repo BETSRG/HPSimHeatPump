@@ -108,7 +108,7 @@
     REAL :: VolDisTube  !Distributor tube volumn, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
-    REAL :: Subcool     !Degree of subcooling, C
+    !REAL :: Subcool     !Degree of subcooling, C   !RS: Debugging: Extraneous
     REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
     REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
     REAL :: TiExp       !Exp. device inlet temperature, C
@@ -158,9 +158,9 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 
@@ -525,21 +525,21 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    REAL :: Acs         !Cross-sectional area, m^2
-    REAL :: SUBC        !Temperature ratio, T is in K
-    REAL :: EVAP        !Pressure ratio, P is in absolute pressure
-    REAL :: PRA         !Pressure ratio, P is in absolute pressure
-    REAL :: DR          !Diameter ratio
-    REAL :: LD          !Ratio of tube length to diameter
-    REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated 
-                        !saturation pressure used in short tube model, kPa
-    REAL :: Cc          !Correction factor for chamfered inlet short tubes
-    REAL :: Ctp         !Correction factor for two-phase quality
+    !REAL :: Acs         !Cross-sectional area, m^2 !RS: Debugging: Extraneous
+    !REAL :: SUBC        !Temperature ratio, T is in K  !RS: Debugging: Extraneous
+    !REAL :: EVAP        !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
+    !REAL :: PRA         !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
+    !REAL :: DR          !Diameter ratio    !RS: Debugging: Extraneous
+    !REAL :: LD          !Ratio of tube length to diameter  !RS: Debugging: Extraneous
+    !REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated !RS: Debugging: Extraneous
+                        !saturation pressure used in short tube model, kPa  !RS: Debugging: Extraneous
+    !REAL :: Cc          !Correction factor for chamfered inlet short tubes !RS: Debugging: Extraneous
+    !REAL :: Ctp         !Correction factor for two-phase quality   !RS: Debugging: Extraneous
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    REAL :: Y           !Parameter for two-phase quality correction factor calc.
-    REAL :: Dref        !Reference diameter, mm
+    !REAL :: Y           !Parameter for two-phase quality correction factor calc.   !RS: Debugging: Extraneous
+    !REAL :: Dref        !Reference diameter, mm    !RS: Debugging: Extraneous
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -549,15 +549,15 @@
     !Buckingham pi parameters
     REAL pi01,pi02,pi03,pi04,pi05,pi06,pi07,pi08,pi09,pi10,pi11
 
-    REAL :: a(4)  !Emperical constants
-    REAL :: b(11) !Emperical constants
-    REAL :: c(3)  !Emperical constants
+    !REAL :: a(4)  !Emperical constants !RS: Debugging: Extraneous
+    !REAL :: b(11) !Emperical constants !RS: Debugging: Extraneous
+    !REAL :: c(3)  !Emperical constants !RS: Debugging: Extraneous
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)   !RS: Debugging: Extraneous
 
     !Flow:
 
@@ -866,21 +866,21 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    REAL :: Acs         !Cross-sectional area, m^2
-    REAL :: SUBC        !Temperature ratio, T is in K
-    REAL :: EVAP        !Pressure ratio, P is in absolute pressure
-    REAL :: PRA         !Pressure ratio, P is in absolute pressure
-    REAL :: DR          !Diameter ratio
-    REAL :: LD          !Ratio of tube length to diameter
-    REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated 
+    !REAL :: Acs         !Cross-sectional area, m^2 !RS: Debugging: Extraneous
+    !REAL :: SUBC        !Temperature ratio, T is in K  !RS: Debugging: Extraneous
+    !REAL :: EVAP        !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
+    !REAL :: PRA         !Pressure ratio, P is in absolute pressure !RS: Debugging: Extraneous
+    !REAL :: DR          !Diameter ratio    !RS: Debugging: Extraneous
+    !REAL :: LD          !Ratio of tube length to diameter  !RS: Debugging: Extraneous
+    !REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated !RS: Debugging: Extraneous
                         !saturation pressure used in short tube model, kPa
-    REAL :: Cc          !Correction factor for chamfered inlet short tubes
+    !REAL :: Cc          !Correction factor for chamfered inlet short tubes !RS: Debugging: Extraneous
     REAL :: Ctp         !Correction factor for two-phase quality
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    REAL :: Y           !Parameter for two-phase quality correction factor calc.
-    REAL :: Dref        !Reference diameter, mm
+    !REAL :: Y           !Parameter for two-phase quality correction factor calc.   !RS: Debugging: Extraneous
+    !REAL :: Dref        !Reference diameter, mm    !RS: Debugging: Extraneous
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -896,9 +896,9 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)    !RS: Debugging: Extraneous
 
     !Flow:
 

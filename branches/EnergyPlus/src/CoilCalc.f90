@@ -420,7 +420,7 @@ REAL MolWeight	!Molecular weight of refrigerant, [kg/mol]
 REAL Psat		!Saturated pressure of refrigerant, [kPa]
 REAL Pcrit		!Critical pressure of refrigerant, [kPa]
 REAL Tsat		!Saturated temperature of refrigerant, [C]
-REAL Const		!A constant for debugging purpose, [-]
+!REAL Const		!A constant for debugging purpose, [-]  !RS: Debugging: Extraneous
 REAL sigma      !Surface tension, [N/m]  
 REAL DT         !Temperature difference between tube wall and saturate vapor, [C]
 REAL Wabsolute  !Absolute oil mass fraction
@@ -432,11 +432,11 @@ REAL EF    !Heat transfer enhancement factor, [-]
 !Subroutine local variables:
 REAL xRef	  !Quality of refrigerant, [-]
 REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
-REAL xAvg     !Average quality
-REAL hcRefAvg !Average refrigerant heat transfer coefficient, [kW/m^2-K]
-REAL hcRefMax !Refrigerant heat transfer coefficient at 
+!REAL xAvg     !Average quality !RS: Debugging: Extraneous
+!REAL hcRefAvg !Average refrigerant heat transfer coefficient, [kW/m^2-K]   !RS: Debugging: Extraneous
+!REAL hcRefMax !Refrigerant heat transfer coefficient at    !RS: Debugging: Extraneous
                           !maximum quality, [kW/m^2-K]
-REAL hcRefVap !Refrigerant heat transfer coefficient at
+!REAL hcRefVap !Refrigerant heat transfer coefficient at    !RS: Debugging: Extraneous
                           !vapor quality, [kW/m^2-K]
 
 !Flow:
@@ -579,7 +579,7 @@ REAL hco      !Air side heat transfer coefficient, [kW/m^2-K]
 REAL DP       !Air side pressure drop, [kPa]
 
 !Subroutine local parameters
-REAL,PARAMETER :: RefFinPitch=590.6 !reference fin pitch, [fins/m]
+!REAL,PARAMETER :: RefFinPitch=590.6 !reference fin pitch, [fins/m] !RS: Debugging: Extraneous
 
 !Subroutine local variables
 REAL muA      !Dynamic viscosity, [Pa-s]
@@ -588,14 +588,14 @@ REAL CPair    !Specific heat of air, [kJ/kg-K]
 REAL PrAir    !Prandtl number of air, [-]
 REAL rhoAvg   !Average air density, [kg/m^3]
 REAL Dc       !Tube outside diameter including fin collar, [m]
-REAL Dh       !Hydraulic diameter, [m]
+!REAL Dh       !Hydraulic diameter, [m] !RS: Debugging: Extraneous
 REAL Rc       !Tube outside radius including fin collar, [m]
 REAL HXdep    !Heat exchanger depth, [m]
-REAL HXheight !Heat exchanger height, [m]
+!REAL HXheight !Heat exchanger height, [m]  !RS: Debugging: Extraneous
 REAL Jfactor  !J-factor, [-]
 REAL Ffactor  !Friction factor, [-]
 REAL Amin     !Minimum free flow area, [m^2]
-REAL AbsCoil  !Coil base surface area, [m^2]
+!REAL AbsCoil  !Coil base surface area, [m^2]   !RS: Debugging: Extraneous
 REAL AbrCoil  !Bared tube coil surface area, [m^2]
 REAL AmCoil   !Mean coil surface area, [m^2] 
 REAL Acs      !Cross-sectional area, [m^2]
@@ -607,8 +607,8 @@ REAL FinPitch !Fin pitch, [fins/m]
 REAL sigma    !Ratio of Amin to AfrCoil, [-]
 REAL Ki       !Contraction coefficient, [-]
 REAL Ke       !Expansion coefficient, [-]
-REAL h1,h2,h3 !Empirical coefficient for the York correlation
-INTEGER I
+!REAL h1,h2,h3 !Empirical coefficient for the York correlation  !RS: Debugging: Extraneous
+!INTEGER I  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -1064,7 +1064,7 @@ REAL UA       !UA value, [kW/K]
 REAL Rair     !Air side resistance, [kW/K]
 REAL Rref     !Refrigerant side resistance, [kW/K]
 REAL Rtube    !Tube side resistance, [kW/K]
-REAL Rfrost
+!REAL Rfrost    !RS: Debugging: Extraneous
 REAL FinEff   !Fin efficiency, [-]
 REAL SurfEff  !Surface efficiency, [-]
 
@@ -1375,7 +1375,7 @@ REAL hTP   !Two-phase heat transfer coefficient, [kW/m^2-K]
 !Subroutine local parameter:
 REAL,PARAMETER :: xMin=0.1
 REAL,PARAMETER :: xMax=0.9
-REAL,PARAMETER :: WavyAnnularBoundary=1.8
+!REAL,PARAMETER :: WavyAnnularBoundary=1.8  !RS: Debugging: Extraneous
 
 !Subroutine local variables
 REAL Acs    !Cross sectional area, [m^2]  
@@ -1550,7 +1550,7 @@ REAL hliq  !Liquid heat transfer coefficient, [kW/m^2-K]
 REAL h1    !Intermediate heat transfer coefficient, [kW/m^2-K] 
 REAL ZZ    !Intermediate variable
 REAL Pred  !Reduced pressure, [kPa]
-REAL Gref  !Mass flux, [kg/m2-s]
+!REAL Gref  !Mass flux, [kg/m2-s]   !RS: Debugging: Extraneous
 REAL hTPmax
 REAL hVap
 
@@ -2886,7 +2886,7 @@ REAL dPmom   !Momentum pressure drop, [kPa]
 REAL dPgrav  !Gravitational pressure drop, [kPa]
 
 !Subroutine local parameters:
-REAL,PARAMETER :: ReTransit=1500 !Transition Reynolds number
+!REAL,PARAMETER :: ReTransit=1500 !Transition Reynolds number   !RS: Debugging: Extraneous
 
 !Subroutine local variables:
 REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
@@ -2898,11 +2898,11 @@ REAL PHIg       !Intermediate variable
 REAL alphai     !Inlet void fraction
 REAL alphao     !Outlet void fraction
 REAL Xtt        !Martinelli parameter
-REAL CC         !Empirical coefficient
-REAL ReVap      !Vapor Reynolds number
-REAL ReLiq      !Liquid Reynolds number
-REAL phif2      !Square of liquid phase multiplier
-REAL phig2      !Square of vapor phase multiplier
+!REAL CC         !Empirical coefficient !RS: Debugging: Extraneous
+!REAL ReVap      !Vapor Reynolds number !RS: Debugging: Extraneous
+!REAL ReLiq      !Liquid Reynolds number    !RS: Debugging: Extraneous
+!REAL phif2      !Square of liquid phase multiplier !RS: Debugging: Extraneous
+!REAL phig2      !Square of vapor phase multiplier  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -3016,21 +3016,21 @@ REAL Acs        !Cross sectional area, [m^2]
 REAL DPDZliq    !Liquid only pressure graident, Pa/m
 REAL rhog       !Vapor density, [kg/m^3]
 REAL rhof       !Liquid density, [kg/m^3]
-REAL ReVap      !Vapor Reynold number
+!REAL ReVap      !Vapor Reynold number  !RS: Debugging: Extraneous
 REAL ReLiq      !Liquid Reynold number
 REAL fLiq       !Liquid friction factor
-REAL Fr         !Froude number
+!REAL Fr         !Froude number !RS: Debugging: Extraneous
 REAL FrLiq      !Liqiod Froude number
 REAL C1         !Intermediate variable
 REAL C2         !Intermediate variable
 REAL Xtt        !Lockhart Martinelli parameter
-REAL XttIn      !Inlet Lockhart Martinelli parameter
-REAL XttOut     !Outlet Lockhart Martinelli parameter
-REAL phiIn      !Intermediate variable
-REAL phiOut     !Intermediate variable
+!REAL XttIn      !Inlet Lockhart Martinelli parameter   !RS: Debugging: Extraneous
+!REAL XttOut     !Outlet Lockhart Martinelli parameter  !RS: Debugging: Extraneous
+!REAL phiIn      !Intermediate variable !RS: Debugging: Extraneous
+!REAL phiOut     !Intermediate variable !RS: Debugging: Extraneous
 REAL phiLiq     !Liquid phase mulitplier
 REAL xRef       !Refrigerant quality, [-]
-REAL gamma      !Physical property index
+!REAL gamma      !Physical property index   !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -3177,17 +3177,17 @@ REAL fLiq       !Liquid friction factor
 REAL fvap       !Liquid friction factor
 REAL Fr         !Froude number
 REAL We         !Weber number
-REAL FrLiq      !Liqiod Froude number
-REAL C1         !Intermediate variable
-REAL C2         !Intermediate variable
-REAL Xtt        !Lockhart Martinelli parameter
-REAL XttIn      !Inlet Lockhart Martinelli parameter
-REAL XttOut     !Outlet Lockhart Martinelli parameter
-REAL phiIn      !Intermediate variable
-REAL phiOut     !Intermediate variable
+!REAL FrLiq      !Liqiod Froude number  !RS: Debugging: Extraneous
+!REAL C1         !Intermediate variable !RS: Debugging: Extraneous
+!REAL C2         !Intermediate variable !RS: Debugging: Extraneous
+!REAL Xtt        !Lockhart Martinelli parameter !RS: Debugging: Extraneous
+!REAL XttIn      !Inlet Lockhart Martinelli parameter   !RS: Debugging: Extraneous
+!REAL XttOut     !Outlet Lockhart Martinelli parameter  !RS: Debugging: Extraneous
+!REAL phiIn      !Intermediate variable !RS: Debugging: Extraneous
+!REAL phiOut     !Intermediate variable !RS: Debugging: Extraneous
 REAL phiLiq     !Liquid phase mulitplier
 REAL xRef       !Refrigerant quality, [-]
-REAL gamma      !Physical property index
+!REAL gamma      !Physical property index   !RS: Debugging: Extraneous
 REAL A1,A2,A3   !Intermediate variables
 REAL omega      !Small diameter correction factor
 REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
@@ -3312,19 +3312,19 @@ REAL Kf !Pierre boiling number
 REAL vo !Outlet specific volume, [m^3/kg]
 REAL vi !Inlet specific volume, [m^3/kg]
 REAL hfg !hg-hf, [kJ/kg]
-REAL vg !Vapor refrigerant specific volume, [m^3/kg]
+!REAL vg !Vapor refrigerant specific volume, [m^3/kg]   !RS: Debugging: Extraneous
 REAL Dh !Hydraulic diameter, [m]
 
 !Turbo-A geometry
-INTEGER Nfin !Number of fins
-REAL Sp !perimeter of one fin and channel taken perpendicular
+!INTEGER Nfin !Number of fins   !RS: Debugging: Extraneous
+!REAL Sp !perimeter of one fin and channel taken perpendicular  !RS: Debugging: Extraneous
         !to the axis of the fin, [m]
-REAL beta !Helix angle of the fin, [deg]
-REAL Afin !Cross sectional area perpendicula to tube axis
+!REAL beta !Helix angle of the fin, [deg]   !RS: Debugging: Extraneous
+!REAL Afin !Cross sectional area perpendicular to tube axis !RS: Debugging: Extraneous
           !associated with one fin, [m^2]
-REAL, PARAMETER :: ODturboA = 9.52e-3  !Turbo-A tube outside diameter, [m]
-REAL, PARAMETER :: DhturboA = 5.45e-3  !Turbo-A tube hydraulic diameter, [m]
-REAL, PARAMETER :: AcsturboA = 60.8e-6  !Turbo-A tube cross sectional area, [m^2]
+!REAL, PARAMETER :: ODturboA = 9.52e-3  !Turbo-A tube outside diameter, [m] !RS: Debugging: Extraneous
+!REAL, PARAMETER :: DhturboA = 5.45e-3  !Turbo-A tube hydraulic diameter, [m]   !RS: Debugging: Extraneous
+!REAL, PARAMETER :: AcsturboA = 60.8e-6  !Turbo-A tube cross sectional area, [m^2]  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -3787,7 +3787,7 @@ REAL rhog     !Vapor density, [kg/m^3]
 REAL rhof     !Liquid density, [kg/m^3]
 REAL phi      !Intermediate variable
 REAL betac    !Two-phase multiplier for pipe component
-REAL VelRef   !Refrigerant velocity, [m/s]
+!REAL VelRef   !Refrigerant velocity, [m/s] !RS: Debugging: Extraneous
 REAL Kfactor  !K factor
 
 !Flow:
@@ -3880,7 +3880,7 @@ REAL rhof    !Liquid density, [kg/m^3]
 REAL phi     !Intermediate variable
 REAL betac   !Intermediate variable
 REAL rho     !Density, [kg/m^3]
-REAL VelRef  !Refrigerant velocity, [m/s]
+!REAL VelRef  !Refrigerant velocity, [m/s]  !RS: Debugging: Extraneous
 REAL PF      !Pressure drop penalty factor
 REAL Kfactor !K factor
 
@@ -4000,8 +4000,8 @@ REAL rhoRef     !Refrigerant density, [kg/m^3]
 REAL MassLiqTP  !Liquid mass in two-phase portion, [kg]
 REAL MassVapTP  !Vapor mass in two-phase portion, [kg] 
 REAL MassModTP  !Mass in two-phase portion, [kg]
-REAL MassLiqSP  !Liquid mass in single-phase portion, [kg]
-REAL MassVapSP  !Vapor mass in single-phase portion, [kg]
+!REAL MassLiqSP  !Liquid mass in single-phase portion, [kg] !RS: Debugging: Extraneous
+!REAL MassVapSP  !Vapor mass in single-phase portion, [kg]  !RS: Debugging: Extraneous
 REAL MassModSP  !Mass in single-phase portion, [kg]
 
 !Flow:
@@ -4699,7 +4699,7 @@ REAL jfactor !J-factor
 
 !Subroutine local parameters:
 REAL, PARAMETER :: theta=8 !Wavy fin angle, [deg]
-REAL, PARAMETER :: RefFinPitch=590.55 !reference fin pitch, [fins/m]
+!REAL, PARAMETER :: RefFinPitch=590.55 !reference fin pitch, [fins/m]   !RS: Debugging: Extraneous
 
 !Subroutine local variables:
 REAL Dh        !Hydraulic diameter, [m]
@@ -4715,38 +4715,38 @@ REAL j1        !Intermediate variable
 REAL j2        !Intermediate variable
 REAL j3        !Intermediate variable
 REAL j4        !Intermediate variable
-REAL j5        !Intermediate variable
-REAL j6        !Intermediate variable 
-REAL j7        !Intermediate variable
-REAL j8        !Intermediate variable
-REAL Lh        !Louver height, [m]
-REAL Lp        !Louver pitch, [m]
-REAL La        !Louver angle, [deg]
-REAL Ll		   !Louver lenght, [m]
-REAL Ss        !Breadth of a slit in the direction of airflow, [m]
-REAL Sh        !Height of slit, [m]  
-REAL TubeHeight !Tube height, [m]
-REAL FinHeight !Fin height, [m]
-REAL NumOfFins !Number of fins
-REAL WettedPerimeter !Wetted perimeter, [m]
-REAL ReLp      !Reynolds number based on Lp
-REAL hco       !Heat transfer coefficient, kW/m2-K
-REAL xx        !Thermal entry length
-REAL aa        !Empirical coefficient
-REAL bb		   !Empirical coefficient
-REAL cc		   !Empirical coefficient
-REAL dd	       !Empirical coefficient
-REAL ee		   !Empirical coefficient
-REAL ReDh      !Hydraulic diameter, m
-REAL Nu		   !Nusselt number
-REAL Lrow      !Row length, [m]
-REAL AfRow     !Row fin area, [m^2]
-REAL AoRow     !Row outside surface area, [m^2]
-REAL AiRow     !Row inside surface area, [m^2]
-REAL AmRow	   !Row mean surface area, [m^2]	
-REAL RowDep    !Row depth,[m]
-REAL Re_TubeDepth !Reynolds number based on flat tube depth
-REAL Gair      !Air mass flux, [kg/s-m^2]
+!REAL j5        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j6        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j7        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j8        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL Lh        !Louver height, [m] !RS: Debugging: Extraneous
+!REAL Lp        !Louver pitch, [m]  !RS: Debugging: Extraneous
+!REAL La        !Louver angle, [deg]    !RS: Debugging: Extraneous
+!REAL Ll		   !Louver lenght, [m]  !RS: Debugging: Extraneous
+!REAL Ss        !Breadth of a slit in the direction of airflow, [m] !RS: Debugging: Extraneous
+!REAL Sh        !Height of slit, [m]    !RS: Debugging: Extraneous
+!REAL TubeHeight !Tube height, [m]  !RS: Debugging: Extraneous
+!REAL FinHeight !Fin height, [m]    !RS: Debugging: Extraneous
+!REAL NumOfFins !Number of fins !RS: Debugging: Extraneous
+!REAL WettedPerimeter !Wetted perimeter, [m]    !RS: Debugging: Extraneous
+!REAL ReLp      !Reynolds number based on Lp    !RS: Debugging: Extraneous
+!REAL hco       !Heat transfer coefficient, kW/m2-K !RS: Debugging: Extraneous
+!REAL xx        !Thermal entry length   !RS: Debugging: Extraneous
+!REAL aa        !Empirical coefficient  !RS: Debugging: Extraneous
+!REAL bb		   !Empirical coefficient   !RS: Debugging: Extraneous
+!REAL cc		   !Empirical coefficient   !RS: Debugging: Extraneous
+!REAL dd	       !Empirical coefficient   !RS: Debugging: Extraneous
+!REAL ee		   !Empirical coefficient   !RS: Debugging: Extraneous
+!REAL ReDh      !Hydraulic diameter, m  !RS: Debugging: Extraneous
+!REAL Nu		   !Nusselt number  !RS: Debugging: Extraneous
+!REAL Lrow      !Row length, [m]    !RS: Debugging: Extraneous
+!REAL AfRow     !Row fin area, [m^2]    !RS: Debugging: Extraneous
+!REAL AoRow     !Row outside surface area, [m^2]    !RS: Debugging: Extraneous
+!REAL AiRow     !Row inside surface area, [m^2] !RS: Debugging: Extraneous
+!REAL AmRow	   !Row mean surface area, [m^2]	!RS: Debugging: Extraneous
+!REAL RowDep    !Row depth,[m]  !RS: Debugging: Extraneous
+!REAL Re_TubeDepth !Reynolds number based on flat tube depth    !RS: Debugging: Extraneous
+!REAL Gair      !Air mass flux, [kg/s-m^2]  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -4949,29 +4949,29 @@ REAL F1        !Intermediate variable
 REAL F2        !Intermediate variable 
 REAL F3        !Intermediate variable
 REAL F4        !Intermediate variable
-REAL F5        !Intermediate variable
-REAL F6        !Intermediate variable
-REAL F7        !Intermediate variable
-REAL F8        !Intermediate variable
-REAL F9        !Intermediate variable
-REAL FP        !Intermediate variable
+!REAL F5        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL F6        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL F7        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL F8        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL F9        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL FP        !Intermediate variable  !RS: Debugging: Extraneous
 REAL beta      !Intermediate variable
-REAL Lh        !Louver height, [m]
-REAL Lp        !Louver pitch, [m]
-REAL La        !Louver angle, [deg]
-REAL Ll        !Louver lenght, [m]
+!REAL Lh        !Louver height, [m] !RS: Debugging: Extraneous
+!REAL Lp        !Louver pitch, [m]  !RS: Debugging: Extraneous
+!REAL La        !Louver angle, [deg]    !RS: Debugging: Extraneous
+!REAL Ll        !Louver lenght, [m] !RS: Debugging: Extraneous
 REAL TubeDepth !Tube depth, [m]
-REAL TubeHeight !Tube height, [m]
-REAL FinHeight !Fin height, [m]
-REAL NumOfFins !Number of fins
-REAL WettedPerimeter !Wetted perimeter, [m]
-REAL ReLp      !Reynold number based on Lp
-REAL ReDh      !Reynold number based on Dh
-REAL aa        !Empirical coefficient
-REAL bb		   !Empirical coefficient
-REAL Ss        !Breadth of a slit in the direction of airflow, [m]
-REAL Sh        !Height of slit, [m]
-REAL Sn        !Number of slit in an enhanced zone, [-]  
+!REAL TubeHeight !Tube height, [m]  !RS: Debugging: Extraneous
+!REAL FinHeight !Fin height, [m]    !RS: Debugging: Extraneous
+!REAL NumOfFins !Number of fins !RS: Debugging: Extraneous
+!REAL WettedPerimeter !Wetted perimeter, [m]    !RS: Debugging: Extraneous
+!REAL ReLp      !Reynold number based on Lp !RS: Debugging: Extraneous
+!REAL ReDh      !Reynold number based on Dh !RS: Debugging: Extraneous
+!REAL aa        !Empirical coefficient  !RS: Debugging: Extraneous
+!REAL bb		   !Empirical coefficient   !RS: Debugging: Extraneous
+!REAL Ss        !Breadth of a slit in the direction of airflow, [m] !RS: Debugging: Extraneous
+!REAL Sh        !Height of slit, [m]    !RS: Debugging: Extraneous
+!REAL Sn        !Number of slit in an enhanced zone, [-]  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -5099,7 +5099,7 @@ REAL phi      !Parameter for fin efficiency calculation, [-]
 REAL XM       !Heat exchanger geometry parameter
 REAL XL       !Heat exchanger geometry parameter
 REAL Req      !Equivalent radius, [m]
-REAL Deq      !Equivalent diameter, [m]
+!REAL Deq      !Equivalent diameter, [m]    !RS: Debugging: Extraneous
 
 REAL KFinFrost
 REAL FinFrostThk
@@ -5801,32 +5801,32 @@ REAL dPmom   !Momentum pressure drop, [kPa]
 REAL dPgrav  !Gravitational pressure drop, [kPa]
 
 !Subroutine local variables:
-REAL,PARAMETER :: ReTransit = 1500 !2000 !Reynolds number transition from laminar to turbulent Harms et al. (1999)
+!REAL,PARAMETER :: ReTransit = 1500 !2000 !Reynolds number transition from laminar to turbulent Harms et al. (1999) !RS: Debugging: Extraneous
 REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
 REAL dPdZfVap   !Vapor frictional pressure gradient, [kPa/m]
 REAL dPdZfrict  !Frictional pressure gradient, [kPa/m]
 REAL dPdZmom    !Momentum pressure gradient, [kPa/m]
 REAL dPdZgrav   !Gravitational pressure gradient, [kPa/m]
-REAL PHIg       !Intermediate variable
+!REAL PHIg       !Intermediate variable !RS: Debugging: Extraneous
 REAL phiLiq     !Liquid two-phase multiplier
-REAL phiVap     !Vapor two-phase multiplier
+!REAL phiVap     !Vapor two-phase multiplier    !RS: Debugging: Extraneous
 REAL alphai     !Inlet void fraction
 REAL alphao     !Outlet void fraction
 REAL XX         !Martinelli parameter
-REAL CC         !Intemediate parameter
+!REAL CC         !Intemediate parameter !RS: Debugging: Extraneous
 REAL ReVap      !Vapor Reynold number
 REAL ReLiq      !Liquid Reynold number
 REAL xRef       !Refrigerant quality
-REAL aa         !Coefficient in Lee's model
-REAL rr         !Coefficient in Lee's model  
-REAL ss         !Coefficient in Lee's model
-REAL qq         !Coefficient in Lee's model
-REAL VelLiq     !Liquid velocity, [m/s]
-REAL psi        !Dimensionless parameter in Lee's model
-REAL lambda     !Dimensionless parameter in Lee's model
+!REAL aa         !Coefficient in Lee's model    !RS: Debugging: Extraneous
+!REAL rr         !Coefficient in Lee's model    !RS: Debugging: Extraneous
+!REAL ss         !Coefficient in Lee's model    !RS: Debugging: Extraneous
+!REAL qq         !Coefficient in Lee's model    !RS: Debugging: Extraneous
+!REAL VelLiq     !Liquid velocity, [m/s]    !RS: Debugging: Extraneous
+!REAL psi        !Dimensionless parameter in Lee's model    !RS: Debugging: Extraneous
+!REAL lambda     !Dimensionless parameter in Lee's model    !RS: Debugging: Extraneous
 REAL rhof       !Liquid density, [kg/m^3]
-REAL vg         !Vapor specific volumn, [m^3/kg]
-REAL vf         !Liquid specific volumn, [m^3/kg]
+REAL vg         !Vapor specific volume, [m^3/kg]
+REAL vf         !Liquid specific volume, [m^3/kg]
 REAL tRef       !Refrigerant temperature, [C]
 REAL KK         !Intermediate parameter
 

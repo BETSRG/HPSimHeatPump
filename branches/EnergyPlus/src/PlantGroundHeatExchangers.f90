@@ -1241,7 +1241,7 @@ SUBROUTINE InitBoreholeHXSimVars(GlheNum,Runflag)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  LOGICAL,SAVE :: MyEnvironFlag = .TRUE.
+  !LOGICAL,SAVE :: MyEnvironFlag = .TRUE.   !RS: Debugging: Extraneous
   REAL(r64)      :: FluidDensity
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyFlag
   LOGICAL, SAVE                            :: MyOneTimeFlag = .TRUE.

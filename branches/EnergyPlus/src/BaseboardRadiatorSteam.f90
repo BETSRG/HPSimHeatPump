@@ -789,7 +789,7 @@ SUBROUTINE SizeSteamBaseboard(BaseboardNum)
   REAL(r64) :: LatentHeatSteam     ! latent heat of steam
   REAL(r64) :: SteamDensity        ! Density of steam
   REAL(r64) :: Cp                  ! local fluid specific heat
-  REAL(r64) :: tmpSteamVolFlowRateMax ! local temporary design steam flow
+  !REAL(r64) :: tmpSteamVolFlowRateMax ! local temporary design steam flow  !RS: Debugging: Extraneous
   LOGICAL   :: ErrorsFound         ! If errors detected in input
 
 
@@ -1383,8 +1383,8 @@ SUBROUTINE UpdateSteamBaseboardPlantConnection(BaseboardTypeNum, &
   LOGICAL, INTENT(INOUT) :: InitLoopEquip       ! If not zero, calculate the max load for operating conditions
 
   INTEGER :: BaseboardNum
-  INTEGER :: InletNodeNum
-  INTEGER :: OutletNodeNum
+  !INTEGER :: InletNodeNum  !RS: Debugging: Extraneous
+  !INTEGER :: OutletNodeNum !RS: Debugging: Extraneous
 
     ! Find the correct baseboard
   IF (CompIndex == 0) THEN

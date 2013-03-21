@@ -1242,7 +1242,7 @@ SUBROUTINE SizeElectricEIRChiller(EIRChillNum)
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound
+  !LOGICAL             :: LoopErrorsFound   !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           :: rho
   REAL(r64)           :: Cp
@@ -3360,7 +3360,7 @@ SUBROUTINE SizeElecReformEIRChiller(EIRChillNum)
   INTEGER             :: PltSizNum            ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum        ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound          ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound      ! Plant loop errors found
+  !LOGICAL             :: LoopErrorsFound      ! Plant loop errors found    !RS: Debugging: Extraneous
   REAL(r64)           :: SizingEvapOutletTemp ! Plant Sizing outlet temperature for CurLoopNum [C]
   REAL(r64)           :: SizingCondOutletTemp ! Plant Sizing outlet temperature for condenser loop [C]
   REAL(r64)           :: RefCAPFT             ! Capacity as a function of temperature curve output used for sizing

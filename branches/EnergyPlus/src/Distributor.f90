@@ -219,7 +219,7 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QNOZRTD !Rated nozzle capacity, ton
 
 !Local variable
-REAL a,b !Equation fit constants
+!REAL a,b !Equation fit constants   !RS: Debugging: Extraneous
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 
   SELECT CASE (TRIM(Ref$))
@@ -281,7 +281,7 @@ REAL, INTENT(IN) :: TSOEVP !Saturated oulet evaporator temperature, F
 REAL, INTENT(OUT) :: QTUBERTD !Rated tube capacity, ton
 
 !Local variable
-REAL a,b !Equation fit constants
+!REAL a,b !Equation fit constants   !RS: Debugging: Extraneous
 REAL CFtube !Correction factor for tube length other than 30"
 REAL CFnoz !Correction factor for liquid temp. other then 100 F
 

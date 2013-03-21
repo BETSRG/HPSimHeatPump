@@ -2905,8 +2905,8 @@ SUBROUTINE FigureInverterZoneGains
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE :: MyEnvrnFlag = .TRUE.
-  INTEGER       :: InvertNum = 0
-  INTEGER       :: ZoneNum = 0
+  !INTEGER       :: InvertNum = 0   !RS: Debugging: Extraneous
+  !INTEGER       :: ZoneNum = 0 !RS: Debugging: Extraneous
 
   IF (NumInverters == 0) RETURN
 
@@ -3005,7 +3005,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   REAL(r64)    E0d    ! fully discharged internal battery voltage
   REAL(r64)    InternalR  ! internal resistance
   REAL(r64)    XF     ! normalized maximum capacity at the given current
-  REAL(r64)    X      ! normalized maximum capacity at the given current
+  !REAL(r64)    X      ! normalized maximum capacity at the given current   !RS: Debugging: Extraneous
   REAL(r64)    Inew   ! converged current
   REAL(r64)    Tnew   ! charge of discharge time, defined by T=qmaxf/I
   REAL(r64)    Imax   ! maximum current
@@ -3020,7 +3020,7 @@ SUBROUTINE ManageElectCenterStorageInteractions(LoadCenterNum,StorageDrawnPower,
   REAL(r64)    ::error=0.0D0   ! error in iterative process
   REAL(r64)    ::Pactual=0.0D0 ! actual Power output
   REAL(r64)    ::RHS=0.0D0     ! right hand side of a equation
-  REAL(r64)    ::I=0.0D0       ! current
+  !REAL(r64)    ::I=0.0D0       ! current   !RS: Debugging: Extraneous
 
   If ( .NOT. (ElecLoadCenter(LoadCenterNum)%StoragePresent)) RETURN
 
@@ -3566,8 +3566,8 @@ SUBROUTINE FigureElectricalStorageZoneGains
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE :: MyEnvrnFlag = .TRUE.
-  INTEGER       :: StorNum = 0
-  INTEGER       :: ZoneNum = 0
+  !INTEGER       :: StorNum = 0 !RS: Debugging: Extraneous
+  !INTEGER       :: ZoneNum = 0 !RS: Debugging: Extraneous
 
   IF (NumElecStorageDevices == 0) RETURN
 
@@ -3871,8 +3871,8 @@ SUBROUTINE FigureTransformerZoneGains
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   LOGICAL, SAVE :: MyEnvrnFlag = .TRUE.
-  INTEGER       :: TransfNum   = 0
-  INTEGER       :: ZoneNum     = 0
+  !INTEGER       :: TransfNum   = 0 !RS: Debugging: Extraneous
+  !INTEGER       :: ZoneNum     = 0 !RS: Debugging: Extraneous
 
   IF (NumTransformers == 0) RETURN
 
@@ -3917,9 +3917,9 @@ SUBROUTINE Rainflow(numbin,input,B1,X,count,Nmb,OneNmb) ! this variable should b
 ! numbin = constant value
 ! input = input value from other object (battery model)
 ! These variables (X,B1,count,Nmb) should be stored for the next timestep in main loop
- REAL(r64) B1(0:20),X(0:20),input,Nmb(0:20),var1,var2,OneNmb(0:20)
+ REAL(r64) B1(0:20),X(0:20),input,Nmb(0:20),OneNmb(0:20) !,var1,var2    !RS: Debugging: Extraneous
  INTEGER count,numbin,num
- INTEGER i,k
+ INTEGER k !i,  !RS: Debugging: Extraneous
  !Array B1 stores the value of points
  !Array X stores the value of two data points' difference.
 

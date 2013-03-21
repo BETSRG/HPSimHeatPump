@@ -5093,7 +5093,7 @@ SUBROUTINE InitWaterThermalTank(WaterThermalTankNum, FirstHVACIteration, LoopNum
   LOGICAL             :: errFlag
   REAL(r64)           :: rho ! local fluid density
   INTEGER             :: DummyWaterIndex = 1
-  INTEGER             :: found = 0
+  !INTEGER             :: found = 0 !RS: Debugging: Extraneous
 
           ! FLOW:
 
@@ -9538,7 +9538,7 @@ SUBROUTINE SizeDemandSidePlantConnections(WaterThermalTankNum)
 
   INTEGER      :: DummyWaterIndex = 1
   REAL(r64)    :: rho
-  REAL(r64)    :: Cp
+  !REAL(r64)    :: Cp   !RS: Debugging: Extraneous
   REAL(r64)    :: tmpUseDesignVolFlowRate ! local use side design flow rate
   REAL(r64)    :: tmpSourceDesignVolFlowRate ! local use side design flow rate
 
@@ -9927,7 +9927,7 @@ SUBROUTINE CalcStandardRatings(WaterThermalTankNum)
   REAL(r64)    :: RatedDXCoilTotalCapacity ! used during HPWH rating procedure
   LOGICAL :: FirstTimeFlag            ! used during HPWH rating procedure
   CHARACTER(len=MaxNameLength) :: equipName
-  Logical, SAVE :: MyOneTimeSetupFlag = .true. ! one time setup flag
+  !Logical, SAVE :: MyOneTimeSetupFlag = .true. ! one time setup flag   !RS: Debugging: Extraneous
 
   If (AlreadyRated(WaterThermalTankNum)) Then ! bail we already did this one
     RETURN

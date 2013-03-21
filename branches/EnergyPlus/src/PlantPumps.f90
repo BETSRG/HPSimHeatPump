@@ -1484,7 +1484,7 @@ SUBROUTINE CalcPumps(PumpNum, FlowRequest, PumpRunning)
   REAL(r64) :: RotSpeed_Max
   REAL(r64) :: PumpActualRPMValueOne
   REAL(r64) :: PumpActualRPMValueTwo
-  INTEGER   :: NumBranchesOnThisLoopSide
+  !INTEGER   :: NumBranchesOnThisLoopSide   !RS: Debugging: Extraneous
 
   InletNode   = PumpEquip(PumpNum)%InletNodeNum
   OutletNode  = PumpEquip(PumpNum)%OutletNodeNum

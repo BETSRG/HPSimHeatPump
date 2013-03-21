@@ -62,11 +62,11 @@ REAL TDP  !Dew point temperature, C
 REAL RhoD !Dry air density, kg/m^3
 REAL RhoM !Moist air density, kg/m^3
 INTEGER ErrStat       !Error status
-INTEGER I !Loop counter
-REAL Diff !Difference 
-REAL TDBmax !Maximum dry bulb temp. C
-REAL TDBmin !Minimum dry bulb temp. C
-REAL TWBsetpt !Set point wet bulb temp. C
+!INTEGER I !Loop counter    !RS: Debugging: Extraneous
+!REAL Diff !Difference  !RS: Debugging: Extraneous
+!REAL TDBmax !Maximum dry bulb temp. C  !RS: Debugging: Extraneous
+!REAL TDBmin !Minimum dry bulb temp. C  !RS: Debugging: Extraneous
+!REAL TWBsetpt !Set point wet bulb temp. C  !RS: Debugging: Extraneous
 
 !Flow**
   

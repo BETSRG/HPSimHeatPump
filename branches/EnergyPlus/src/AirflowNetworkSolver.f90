@@ -841,9 +841,9 @@ END SUBROUTINE InitAirflowNetworkData
 !
        INTEGER  I, J, M, N, FLAG, NF
 #ifdef SKYLINE_MATRIX_REMOVE_ZERO_COLUMNS
-       INTEGER LHK,JHK,JHK1, newsum,newh,Nzeros, ispan, thisIK !noel
+       INTEGER LHK,JHK,JHK1, newsum,newh, ispan, thisIK !noel !Nzeros,  !RS: Debugging: Extraneous
        LOGICAL allZero ! noel
-       LOGICAL, save :: firsttime=.true. ! noel
+!       LOGICAL, save :: firsttime=.true. ! noel    !RS: Debugging: Extraneous
 #endif
        REAL(r64)     X(4)
        REAL(r64) DP, F(2), DF(2)

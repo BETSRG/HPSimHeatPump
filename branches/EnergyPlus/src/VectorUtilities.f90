@@ -1905,7 +1905,7 @@ Subroutine CalcRfFlrCoordinateTransformation(nsides,polygon,surfazimuth,surftilt
 
 end subroutine CalcRfFlrCoordinateTransformation
 
-subroutine reorder(nvert)
+subroutine reorder(nvert)   !RS: Debugging: This sub doesn't do anything and is never used
 implicit none
 integer nvert !unused1208
 !type (Vector_2d) nvertex(nvert)

@@ -80,12 +80,12 @@
     REAL PowerMap    !Map based Compressor power consumption, KW
     REAL mdot        !Refrigerant mass flow rate, kg/s
     REAL mdotMap     !Map based Refrigerant mass flow rate, kg/s
-    REAL tSH         !Superheat, C
+    !REAL tSH         !Superheat, C !RS: Debugging: Extraneous
     REAL Tsuc        !Suction temp, C
     REAL TsucMap     !Map based suction temp, C
     REAL Tdis        !Discharge temperature, C
     REAL Psuc        !Suction pressure, kPa
-    REAL PsucMap     !Map based suction pressure, kPa
+    !REAL PsucMap     !Map based suction pressure, kPa  !RS: Debugging: Extraneous
     REAL Pdis        !Discharge pressure, kPa
     REAL Xdis        !Discharge quality
     REAL Hsuc        !Suction enthalpy, kJ/kg
@@ -101,7 +101,7 @@
     REAL SsucMap     !Map based entropy value
     REAL HdisIsen    !Isentropic discharge enthalpy, kJ/kg
     REAL HdisIsenMap !Map based insentropic discharge enthalpy, kJ/kg
-    REAL HdisMap     !Map based discharge enthalpy, kJ/kg
+    !REAL HdisMap     !Map based discharge enthalpy, kJ/kg  !RS: Debugging: Extraneous
     REAL HsucMap     !Map based suction enthalpy, kJ/kg
     REAL Wcorrect    !Correction factor for power calc. with different input voltage
     REAL Mcorrect    !Correction factor for mass flow rate
@@ -113,9 +113,9 @@
     !2-Refprop error
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt  !Ref prop calc. option
+    !INTEGER(2) RefPropOpt  !Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-    REAL RefProp(28)
+    !REAL RefProp(28)   !RS: Debugging: Extraneous
     LOGICAL, EXTERNAL :: IssueRefPropError
     
     INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.

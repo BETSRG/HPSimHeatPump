@@ -2175,7 +2175,7 @@ SUBROUTINE SizeMSHeatPump(MSHeatPumpNum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER  :: ControlledZoneNum = 0        ! Index of Controllerd zone number
+  !INTEGER  :: ControlledZoneNum = 0        ! Index of Controllerd zone number  !RS: Debugging: Extraneous
   INTEGER  :: ThisCtrlZoneNum = 0          ! Controllerd zone number
   REAL(r64)     :: ControlZoneVolFlow = 0.0     ! Controlled zone volumetric flow
   INTEGER  :: NumOfSpeedCooling            ! Number of speeds for cooling

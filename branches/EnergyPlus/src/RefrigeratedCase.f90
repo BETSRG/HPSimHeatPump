@@ -11765,7 +11765,7 @@ SUBROUTINE CalculateCondensers(SysNum)
   REAL(r64)   :: TotalLoadFromSysID     ! total heat rejection load from a single detailed system [W]
   REAL(r64)   :: TotalLoadFromThisSystem ! total heat rejection load from the detailed system id'd in subroutine call [W]
   REAL(r64)   :: TotalLoadFromSystems   ! total heat rejection load from all systems served by this condenser [W]
-  REAL(r64)   :: NomCap          ! ne "design" capacity when operating evap condenser at reduced air flow [W]
+  !REAL(r64)   :: NomCap          ! ne "design" capacity when operating evap condenser at reduced air flow [W]  !RS: Debugging: Extraneous
   REAL(r64)   :: CurMaxCapacity  ! current maximum condenser capacity at delta T present for minimum condensing temperature [W]
 
 
@@ -13425,7 +13425,7 @@ SUBROUTINE ReportRefrigerationComponents
   INTEGER TransSystemNum
   INTEGER WalkInID
   INTEGER WalkInNum
-  INTEGER ZoneNum
+  !INTEGER ZoneNum  !RS: Debugging: Extraneous
   INTEGER ZoneID
   CHARACTER(len=15) ChrOut
   CHARACTER(len=15) ChrOut2

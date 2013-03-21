@@ -1335,7 +1335,7 @@ LOGICAL :: OASysFound            ! OA Controller found OA System index
 REAL(r64) :: OAFlowRatio         ! Ratio of minimum OA flow rate to maximum OA flow rate
 
 INTEGER :: NumGroups             ! Number of extensible input groups of the VentilationMechanical object
-INTEGER :: numBaseNum            ! base number for numeric arguments (for readability)
+!INTEGER :: numBaseNum            ! base number for numeric arguments (for readability) !RS: Debugging: Extraneous
 !INTEGER :: OAIndex               ! Loop index for design specification outdoor air object list
 !INTEGER :: NumControllerList = 0  ! Index to controller lists
 INTEGER :: ControllerListNum = 0  ! Index used to loop through controller list
@@ -3554,7 +3554,7 @@ REAL(r64) :: ZoneMaxCO2                   ! Breathing-zone CO2 concentartion
 REAL(r64) :: ZoneMinCO2                   ! Minimum CO2 concentration in zone
 REAL(r64) :: ZoneContamControllerSched    ! Schedule value for ZoneControl:ContaminantController
 
-LOGICAL   :: MultiPath = .FALSE.     ! TRUE if multi-path ventilation system such as dual fan dual duct, VAV with fan-powered box
+!LOGICAL   :: MultiPath = .FALSE.     ! TRUE if multi-path ventilation system such as dual fan dual duct, VAV with fan-powered box  !RS: Debugging: Extraneous
 REAL(r64) :: Ep = 1.0                ! zone primary air fraction
 REAL(r64) :: Er = 0.0                ! zone secondary recirculation fraction
 REAL(r64) :: Fa = 1.0                ! temporary variable used in multi-path VRP calc

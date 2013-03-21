@@ -217,12 +217,12 @@ SUBROUTINE GetFluidPropertiesData
   CHARACTER(len=MaxNameLength) :: TempsName
   LOGICAL :: FirstSHMatch
   INTEGER :: NumOfPressPts
-  INTEGER :: NumOfConcPts
+!  INTEGER :: NumOfConcPts  !RS: Debugging: Extraneous
   LOGICAL :: ErrorsFound=.false.
-  CHARACTER(len=25) :: String1
-  CHARACTER(len=25) :: String2
-  CHARACTER(len=25) :: String3
-  CHARACTER(len=25) :: String4
+!  CHARACTER(len=25) :: String1 !RS: Debugging: Extraneous
+!  CHARACTER(len=25) :: String2 !RS: Debugging: Extraneous
+!  CHARACTER(len=25) :: String3 !RS: Debugging: Extraneous
+!  CHARACTER(len=25) :: String4 !RS: Debugging: Extraneous
   
   INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
@@ -1966,11 +1966,11 @@ REAL FUNCTION TP(Refrigerant,Temperature,Pressure,Property,RefrigIndex,Error)
   REAL    :: PropertyLow                ! low property value
   REAL    :: PropertyHigh               ! high property value
   REAL	  :: TSATLoTempHiProperty		! saturated T at high pressure property
-  REAL    :: SatTemperature             ! value for saturated temperature
+!  REAL    :: SatTemperature             ! value for saturated temperature  !RS: Debugging: Extraneous
   REAL    :: SatTemperatureLiq          ! value for liquid saturated temperature !ISI - 11/16/07
   REAL    :: SatTemperatureVap          ! value for vapor saturated temperature !ISI - 11/16/07 
-  REAL    :: LoSatProp
-  REAL    :: HiSatProp                  
+!  REAL    :: LoSatProp !RS: Debugging: Extraneous
+!  REAL    :: HiSatProp !RS: Debugging: Extraneous                 
   
   ! error counters and dummy string
   LOGICAL :: ErrorFlag                  ! error flag for current call
@@ -2259,22 +2259,22 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   REAL    :: PressInterpRatio
   REAL    :: PressInterpRatioLiq
   REAL    :: PressInterpRatioVap
-  REAL    :: TempInterpRatio
+!  REAL    :: TempInterpRatio   !RS: Debugging: Extraneous
   INTEGER :: LoPressIndex
   INTEGER :: HiPressIndex
   INTEGER :: LoPressIndexLiq
   INTEGER :: HiPressIndexLiq
   INTEGER :: LoPressIndexVap
   INTEGER :: HiPressIndexVap
-  INTEGER :: TempIndex
-  INTEGER :: HiTempIndex
+!  INTEGER :: TempIndex !RS: Debugging: Extraneous
+!  INTEGER :: HiTempIndex   !RS: Debugging: Extraneous
   INTEGER :: LoPressStart
-  INTEGER :: LoPressFinish
+!  INTEGER :: LoPressFinish !RS: Debugging: Extraneous
   INTEGER :: HiPressStart
-  INTEGER :: HiPressFinish
+!  INTEGER :: HiPressFinish !RS: Debugging: Extraneous
   INTEGER :: Start
   INTEGER :: Finish
-  INTEGER :: Middle
+!  INTEGER :: Middle    !RS: Debugging: Extraneous
   INTEGER :: PressStart
   INTEGER :: PressFinish
   INTEGER :: LoEnthalpyIndex
@@ -2285,7 +2285,7 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   REAL    :: EnthalpyMin
   REAL    :: SatVapEnthalpy
   REAL    :: SatLiqEnthalpy
-  REAL    :: SatEnthalpy  
+!  REAL    :: SatEnthalpy   !RS: Debugging: Extraneous
   REAL    :: HiEnthLoProperty
   REAL    :: HiEnthHiProperty
   REAL    :: LoEnthLoProperty
@@ -2296,8 +2296,8 @@ REAL FUNCTION PH(Refrigerant,Pressure,Enthalpy,Property,RefrigIndex,Error)
   REAL    :: PropertyHigh
   REAL	  :: SatTemperature
   REAL    :: Quality
-  REAL	  :: LoSatProp
-  REAL    :: HiSatProp
+!  REAL	  :: LoSatProp  !RS: Debugging: Extraneous
+!  REAL    :: HiSatProp !RS: Debugging: Extraneous
   INTEGER :: Loop
   LOGICAL :: ErrorFlag                  ! error flag for current call
   INTEGER :: PropertyType
@@ -2797,22 +2797,22 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
   REAL    :: PressInterpRatio
   REAL    :: PressInterpRatioLiq
   REAL    :: PressInterpRatioVap
-  REAL    :: TempInterpRatio
+!  REAL    :: TempInterpRatio   !RS: Debugging: Extraneous
   INTEGER :: LoPressIndex
   INTEGER :: HiPressIndex
   INTEGER :: LoPressIndexLiq
   INTEGER :: HiPressIndexLiq
   INTEGER :: LoPressIndexVap
   INTEGER :: HiPressIndexVap
-  INTEGER :: TempIndex
-  INTEGER :: HiTempIndex
+!  INTEGER :: TempIndex !RS: Debugging: Extraneous
+!  INTEGER :: HiTempIndex   !RS: Debugging: Extraneous
   INTEGER :: LoPressStart
-  INTEGER :: LoPressFinish
+  !INTEGER :: LoPressFinish !RS: Debugging: Extraneous
   INTEGER :: HiPressStart
-  INTEGER :: HiPressFinish
+  !INTEGER :: HiPressFinish !RS: Debugging: Extraneous
   INTEGER :: Start
   INTEGER :: Finish
-  INTEGER :: Middle
+!  INTEGER :: Middle    !RS: Debugging: Extraneous
   INTEGER :: PressStart
   INTEGER :: PressFinish
   INTEGER :: LoEntropyIndex
@@ -2823,19 +2823,19 @@ REAL FUNCTION PS(Refrigerant,Pressure,Entropy,Property,RefrigIndex,Error)
   REAL    :: EntropyMin
   REAL    :: SatVapEntropy
   REAL    :: SatLiqEntropy
-  REAL    :: SatEntropy  
-  REAL    :: HiPressLoEntropy
-  REAL    :: HiPressHiEntropy
-  REAL    :: LoPressLoEntropy
-  REAL    :: LoPressHiEntropy
+!  REAL    :: SatEntropy    !RS: Debugging: Extraneous
+!  REAL    :: HiPressLoEntropy  !RS: Debugging: Extraneous
+!  REAL    :: HiPressHiEntropy  !RS: Debugging: Extraneous
+ ! REAL    :: LoPressLoEntropy
+! REAL    :: LoPressHiEntropy
   REAL    :: EntropyLow
   REAL    :: EntropyHigh
   REAL    :: PropertyLow
   REAL    :: PropertyHigh
   REAL	  :: SatTemperature
   REAL    :: Quality
-  REAL	  :: LoSatProp
-  REAL    :: HiSatProp
+!  REAL	  :: LoSatProp  !RS: Debugging: Extraneous
+!  REAL    :: HiSatProp !RS: Debugging: Extraneous
   REAL	  :: LoEntLoProperty
   REAL	  :: LoEntHiProperty
   REAL	  :: HiEntLoProperty

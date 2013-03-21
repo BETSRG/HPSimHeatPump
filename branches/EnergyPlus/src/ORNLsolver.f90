@@ -73,9 +73,9 @@
     REAL STEP
     REAL CHGDIF
 
-    REAL TsubExp,TsubCnd,TsupEvp,TsupCmp,Qcnd,Qevp,QevpSens
-    REAL PwrCmp,mdot,TsiExp,TsoCnd,TsoEvp
-    REAL Dshtb,WinTrans,Qloss
+    REAL Qcnd,Qevp !TsubExp,TsubCnd,TsupEvp,TsupCmp,,QevpSens   !RS: Debugging: Extraneous
+    REAL mdot !PwrCmp,,TsiExp,TsoCnd,TsoEvp !RS: Debugging: Extraneous
+    REAL WinTrans !Dshtb,,Qloss !RS: Debugging: Extraneous
     REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
@@ -84,7 +84,7 @@
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
-    LOGICAL:: Trues
+    !LOGICAL:: Trues    !RS: Debugging: Extraneous
     REAL :: SUPERAct
     REAL :: TsiCmpAct
     REAL :: TsoCmpAct
@@ -92,8 +92,8 @@
     REAL :: RHiEAct
     REAL, SAVE :: IDCFlowConst
     REAL, SAVE :: ODCFlowConst
-    INTEGER   :: Flag
-    INTEGER :: LastTime !Aids in the event of a microchannel device
+    !INTEGER   :: Flag  !RS: Debugging: Extraneous
+    !INTEGER :: LastTime !Aids in the event of a microchannel device    !RS: Debugging: Extraneous
     LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
@@ -234,7 +234,7 @@
 
     IF (ONETIME) THEN   !RS: Debugging: Only called once
         
-        CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR,TxvPAR,  &
+        CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  & !RS: Debugging: Extraneous
         AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,TWiC,TWiE, &
         Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
         ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)

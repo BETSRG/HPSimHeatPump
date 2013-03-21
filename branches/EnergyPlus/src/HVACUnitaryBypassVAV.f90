@@ -576,7 +576,7 @@ SUBROUTINE GetCBVAV
   INTEGER                        :: EquipNum = 0                ! local do loop index for equipment listed for a zone
   INTEGER                        :: HeatCoilInletNodeNum        ! Heating coil air inlet node number
   INTEGER                        :: HeatCoilOutletNodeNum       ! Heating coil air outlet node number
-  INTEGER                        :: TempNodeNum                 ! HW coil water inlet node
+  !INTEGER                        :: TempNodeNum                 ! HW coil water inlet node !RS: Debugging: Extraneous
   INTEGER                        :: SteamIndex                  ! steam coil index
   REAL(r64)                      :: SteamDensity                ! steam coil steam density
 

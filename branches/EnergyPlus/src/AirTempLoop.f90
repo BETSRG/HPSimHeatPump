@@ -31,10 +31,10 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
-    REAL TAIIE,XMR,TSATEI,TROE,TSATEO,SUPCAL,SUPCL,SXOE,TSATCI
-    REAL SUPR,DIFFER,TSAVG,TRIC,SXIC,Hsuc
-    REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap
-    REAL rhoiLiq,rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve
+    REAL TAIIE,TSATEI,SUPCAL,SUPCL,TSATCI !XMR, !TROE,TSATEO,SXOE    !RS: Debugging: Set once but never used & Extraneous
+    REAL SUPR,TSAVG,SXIC !TRIC,!DIFFER,Hsuc  !RS: Debugging: Set once but never used & Extraneous
+    !REAL ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap    !RS: Debugging: Extraneous
+    !REAL rhoiLiq,rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,DPvalve !RS: Debugging: Extraneous
     REAL TsatEvp,TsatCnd,Subcooling,Superheat,AccumDP,Xliq,Xvap
     INTEGER I
     
@@ -61,7 +61,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     CALL IssueOutputMessage(PrnLog, PrnCon, '')
     CALL IssueOutputMessage(PrnLog, PrnCon, TRIM(PrintString))    
 
-    XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s???
+    !XMR=CompOUT(2)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??? !RS: Debugging: Extraneous
 
     HiEvp=EvapIN(3)
 
@@ -143,7 +143,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         END IF
     END IF	
 
-    TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion, from C to F
+    !TRIC=TiCmp*1.8+32   !RS Comment: Unit Conversion, from C to F  !RS: Debugging: Extraneous
 
     Pressure=PiCmp*1000 !RS Comment: Unit Conversion
     Quality=1
