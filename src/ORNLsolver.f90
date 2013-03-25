@@ -51,20 +51,20 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    CHARACTER (len=15) :: Property
-    REAL Temperature,Quality,Pressure,Enthalpy
+    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
+    REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
 
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
+    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
-    REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??
+    !REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??  !RS: Debugging: Extraneous
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
     REAL AirProp(8)		!Air properties ! VL Comment: Array Size Explanation??
 
-    REAL TimeStart, TimeStop, TimeSpent
+    REAL TimeStart, TimeSpent !TimeStop,    !RS: Debugging: Extraneous
 
-    INTEGER ICHRGE,I
+    INTEGER ICHRGE !,I  !RS: Debugging: Extraneous
     REAL DTVALU
     REAL DTCONV
     REAL CHRGECONV
@@ -73,13 +73,13 @@
     REAL STEP
     REAL CHGDIF
 
-    REAL Qcnd,Qevp !TsubExp,TsubCnd,TsupEvp,TsupCmp,,QevpSens   !RS: Debugging: Extraneous
-    REAL mdot !PwrCmp,,TsiExp,TsoCnd,TsoEvp !RS: Debugging: Extraneous
+    !REAL Qcnd,Qevp, TsubExp,TsubCnd,TsupEvp,TsupCmp,QevpSens   !RS: Debugging: Extraneous
+    !REAL mdot,PwrCmp,TsiExp,TsoCnd,TsoEvp !RS: Debugging: Extraneous
     REAL WinTrans !Dshtb,,Qloss !RS: Debugging: Extraneous
-    REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter
-    REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
-    REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
-    REAL MassCoil,MassLiqCoil,MassVapCoil
+    !REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter   !RS: Debugging: Extraneous
+    !REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models  !RS: Debugging: Extraneous
+    !REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models   !RS: Debugging: Extraneous
+    !REAL MassCoil,MassLiqCoil,MassVapCoil  !RS: Debugging: Extraneous
     INTEGER(2) IsCoolingMode !1=yes; 0=no   
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
@@ -105,7 +105,7 @@
     REAL OutWetBulBTemp !RS: Wetbulb temperature, Outdoor (C)
     REAL OutBaroPress   !RS: Debugging
     REAL DummyHR !RS: Debugging
-    REAL QZnReq !RS: Debugging: The heating or cooling required by the zone
+    !REAL QZnReq !RS: Debugging: The heating or cooling required by the zone    !RS: Debugging: Extraneous
     REAL QRemain    !RS: Debugging: The difference between qtotalout and the qrequired.
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
@@ -633,7 +633,7 @@
     CLOSE(9)
 
     CALL PrintCondenserResult
-    CALL EndCondenserCoil
+    !CALL EndCondenserCoil  !RS: Debugging: Removing for the moment
     
     CALL GetQOut(QUnitOut,LatOutputProvided)    !RS: Testing: Trying to read variables from PrintEvaporator File
     
@@ -645,7 +645,7 @@
     
     IF (MODE .NE. CONDENSERUNITSIM) THEN
         CALL PrintEvaporatorResult 
-        CALL EndEvaporatorCoil
+        !CALL EndEvaporatorCoil !RS: Debugging: Removing for the moment
     END IF
 
     CALL FlushHPOutput()

@@ -695,7 +695,7 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
   LOGICAL, SAVE   :: FirstCall=.true.
   LOGICAL, SAVE   :: PrntEnvHeaders=.true.
   INTEGER :: Loop
-  INTEGER :: Loop1
+  !INTEGER :: Loop1 !RS: Debugging: Extraneous
   CHARACTER(len=10) :: StDate
   CHARACTER(len=10) :: EnDate
   CHARACTER(len=10) :: string
@@ -712,9 +712,9 @@ SUBROUTINE GetNextEnvironment(Available,ErrorsFound)
   INTEGER :: TWeekDay
   INTEGER, DIMENSION(12) :: MonWeekDay
   INTEGER, DIMENSION(12) :: ActEndDayOfMonth
-  INTEGER :: ThisDay
-  INTEGER :: JDay
-  INTEGER :: JDay1
+  !INTEGER :: ThisDay   !RS: Debugging: Extraneous
+  !INTEGER :: JDay  !RS: Debugging: Extraneous
+  !INTEGER :: JDay1 !RS: Debugging: Extraneous
   INTEGER :: JDay5Start
   INTEGER :: JDay5End
   CHARACTER(len=20) :: Source
@@ -2549,7 +2549,7 @@ SUBROUTINE ReadEPlusWeatherForDay(DayToRead,Environ,BackSpaceAfterRead)
   REAL(r64), SAVE :: NextHrBeamSolarRad
   REAL(r64), SAVE :: NextHrDifSolarRad
   LOGICAL :: RecordDateMatch
-  INTEGER :: JDay5Start,JDay5End,Loop,TWeekDay
+  !INTEGER :: JDay5Start,JDay5End,Loop,TWeekDay !RS: Debugging: Extraneous
 
   IF (DayToRead == 1) THEN
 
@@ -3647,15 +3647,15 @@ SUBROUTINE SetUpDesignDay(EnvrnNum)
   LOGICAL, SAVE :: PrintDDHeader
   CHARACTER(len=3) AlpUseRain
   CHARACTER(len=3) AlpUseSnow
-  REAL(r64) ::  LastHrBeamSolarRad     ! Direct normal solar irradiance
-  REAL(r64) ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
-  REAL(r64) ::  NextHrBeamSolarRad     ! Direct normal solar irradiance
-  REAL(r64) ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance
+  !REAL(r64) ::  LastHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
+  !REAL(r64) ::  LastHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
+  !REAL(r64) ::  NextHrBeamSolarRad     ! Direct normal solar irradiance    !RS: Debugging: Extraneous
+  !REAL(r64) ::  NextHrDifSolarRad      ! Sky diffuse horizontal solar irradiance   !RS: Debugging: Extraneous
   LOGICAL :: ConstantHumidityRatio
   REAL(r64) OutHumRat
-  REAL(r64) WgtHourNow
-  REAL(r64) WgtPrevHour
-  REAL(r64) WgtNextHour
+  !REAL(r64) WgtHourNow !RS: Debugging: Extraneous
+  !REAL(r64) WgtPrevHour    !RS: Debugging: Extraneous
+  !REAL(r64) WgtNextHour    !RS: Debugging: Extraneous
   CHARACTER(len=75) :: StringOut
   TYPE (HourlyWeatherData) :: Wthr
   LOGICAL :: SaveWarmupFlag

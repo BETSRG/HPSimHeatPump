@@ -605,7 +605,7 @@ SUBROUTINE SizeBaseboard(BaseboardNum)
   LOGICAL             :: ErrorsFound     ! If errors detected in input
   REAL(r64)           :: rho             ! local fluid density
   REAL(r64)           :: Cp              ! local fluid specific heat
-  REAL(r64)           :: tmpWaterVolFlowRateMax ! local design plant fluid flow rate
+  !REAL(r64)           :: tmpWaterVolFlowRateMax ! local design plant fluid flow rate   !RS: Debugging: Extraneous
 
   PltSizHeatNum = 0
   PltSizNum = 0
@@ -1064,8 +1064,8 @@ SUBROUTINE UpdateBaseboardPlantConnection(BaseboardTypeNum, &
   LOGICAL, INTENT(INOUT) :: InitLoopEquip       ! If not zero, calculate the max load for operating conditions
 
   INTEGER :: BaseboardNum
-  INTEGER :: InletNodeNum
-  INTEGER :: OutletNodeNum
+  !INTEGER :: InletNodeNum  !RS: Debugging: Extraneous
+  !INTEGER :: OutletNodeNum !RS: Debugging: Extraneous
 
     ! Find the correct baseboard
   IF (CompIndex == 0) THEN

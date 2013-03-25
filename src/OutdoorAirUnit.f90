@@ -368,9 +368,9 @@ SUBROUTINE GetOutdoorAirUnitInputs
   INTEGER :: IOSTAT
   INTEGER :: OAUnitNum
   INTEGER :: CompNum
-  INTEGER :: Item
-  INTEGER :: NumComponents
-  INTEGER :: AlphaNum
+  !INTEGER :: Item  !RS: Debugging: Extraneous
+  !INTEGER :: NumComponents !RS: Debugging: Extraneous
+  !INTEGER :: AlphaNum  !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: ComponentListName
   INTEGER :: NumInList
   INTEGER :: InListNum
@@ -992,7 +992,7 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER        :: Loop
-  INTEGER        :: ZoneNum               ! Intermediate variable for keeping track of the zone number
+  !INTEGER        :: ZoneNum               ! Intermediate variable for keeping track of the zone number !RS: Debugging: Extraneous
   LOGICAL,SAVE   :: MyOneTimeFlag = .TRUE.
   LOGICAL,SAVE   :: ZoneEquipmentListChecked = .false.  ! True after the Zone Equipment List has been checked for items
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:) :: MyEnvrnFlag
@@ -1003,14 +1003,14 @@ SUBROUTINE InitOutdoorAirUnit(OAUnitNum,FirstHVACIteration)
   REAL(r64)      :: OAFrac             ! possible outside air fraction
   REAL(r64)      :: EAFrac             ! possible exhaust air fraction
   REAL(r64)      :: RhoAir             ! air density at InNode
-  REAL(r64)      :: TempSteamIn
-  REAL(r64)      :: SteamDensity
-  INTEGER        :: EQListNum
-  INTEGER        :: EQNum
-  INTEGER        :: SteamConNode        ! Hot Steam control node number for steam coil
-  INTEGER        :: HotConNode          ! Hot water control node number of hot water coil
-  INTEGER        :: ColdConNode         ! Cold water control node number of cold water coil
-  INTEGER        :: compLoop !local do loop index
+  !REAL(r64)      :: TempSteamIn    !RS: Debugging: Extraneous
+  !REAL(r64)      :: SteamDensity   !RS: Debugging: Extraneous
+  !INTEGER        :: EQListNum  !RS: Debugging: Extraneous
+  !INTEGER        :: EQNum  !RS: Debugging: Extraneous
+  !INTEGER        :: SteamConNode        ! Hot Steam control node number for steam coil !RS: Debugging: Extraneous
+  !INTEGER        :: HotConNode          ! Hot water control node number of hot water coil  !RS: Debugging: Extraneous
+  !INTEGER        :: ColdConNode         ! Cold water control node number of cold water coil    !RS: Debugging: Extraneous
+  INTEGER        :: compLoop !local do loop index   
   REAL(r64)      :: rho
   LOGICAL        :: errFlag
 
@@ -1313,7 +1313,7 @@ SUBROUTINE SizeOutdoorAirUnit(OAUnitNum)
   CHARACTER(len=MaxNameLength) :: CoolingCoilType
   INTEGER             :: SizeComp
   INTEGER             :: CompNum
-  INTEGER             :: ComponentType_Num
+  !INTEGER             :: ComponentType_Num !RS: Debugging: Extraneous
   REAL(r64)           :: rho
   REAL(r64)           :: Cp
   INTEGER             :: DummyWaterIndex = 1
@@ -1710,20 +1710,20 @@ SUBROUTINE CalcOutdoorAirUnit(OAUnitNum,ZoneNum,FirstHVACIteration,PowerMet,LatO
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   CHARACTER(len=*), PARAMETER  :: CurrentModuleObject='ZoneHVAC:OutdoorAirUnit'
-  INTEGER                      :: CompNum
-  CHARACTER(len=MaxNameLength) :: EquipType
-  CHARACTER(len=MaxNameLength) :: EquipName
-  CHARACTER(len=MaxNameLength) :: CtrlName
-  LOGICAL                      :: Sim
-  LOGICAL                      :: ReSim
+  !INTEGER                      :: CompNum  !RS: Debugging: Extraneous
+  !CHARACTER(len=MaxNameLength) :: EquipType    !RS: Debugging: Extraneous
+  !CHARACTER(len=MaxNameLength) :: EquipName    !RS: Debugging: Extraneous
+  !CHARACTER(len=MaxNameLength) :: CtrlName !RS: Debugging: Extraneous
+  !LOGICAL                      :: Sim  !RS: Debugging: Extraneous
+  !LOGICAL                      :: ReSim    !RS: Debugging: Extraneous
   REAL(r64)                    :: DesOATemp        ! Design OA Temp degree C
   REAL(r64)                    :: AirMassFlow      ! air mass flow rate [kg/s]
   INTEGER                      :: ControlNode      ! the hot water or cold water inlet node
   INTEGER                      :: InletNode        ! Unit air inlet node
   INTEGER                      :: SFanOutletNode   ! Unit supply fan outlet node
-  INTEGER                      :: ZoneAirInNode    ! zone supply air node
-  REAL(r64)                    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]
-  REAL(r64)                    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]
+  !INTEGER                      :: ZoneAirInNode    ! zone supply air node  !RS: Debugging: Extraneous
+  !REAL(r64)                    :: MaxWaterFlow     ! maximum water flow for heating or cooling [kg/sec]    !RS: Debugging: Extraneous
+  !REAL(r64)                    :: MinWaterFlow     ! minimum water flow for heating or cooling [kg/sec]    !RS: Debugging: Extraneous
   INTEGER                      :: OutletNode       ! air outlet node
   INTEGER                      :: OutsideAirNode   ! outside air node
   REAL(r64)                    :: QTotUnitOut      ! total unit output [watts]
@@ -1733,22 +1733,22 @@ SUBROUTINE CalcOutdoorAirUnit(OAUnitNum,ZoneNum,FirstHVACIteration,PowerMet,LatO
   REAL(r64)                    :: SetpointTemp     ! temperature that will be used to control the radiant system [Celsius]
   REAL(r64)                    :: HiCtrlTemp       ! Current high point in setpoint temperature range
   REAL(r64)                    :: LoCtrlTemp       ! Current low point in setpoint temperature range
-  REAL(r64)                    :: CpFan            ! Intermediate calculational variable for specific heat of air <<NOV9 Updated
+  !REAL(r64)                    :: CpFan            ! Intermediate calculational variable for specific heat of air <<NOV9 Updated   !RS: Debugging: Extraneous
   REAL(r64)                    :: airinent         ! RE-calcualte the Enthalpy of supply air
-  REAL(r64)                    :: outsideent       ! RE-calculate the Enthalpy of outdoor air
+  !REAL(r64)                    :: outsideent       ! RE-calculate the Enthalpy of outdoor air  !RS: Debugging: Extraneous
   REAL(r64)                    :: AirOutletTemp
   INTEGER                      :: OperatingMode   =0
   INTEGER                      :: UnitControlType =0
-  REAL(r64)                    :: OutSideAirEnt     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
+  !REAL(r64)                    :: OutSideAirEnt     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)   !RS: Debugging: Extraneous
   REAL(r64)                    :: ZoneSupAirEnt     ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
 ! Latent output
   REAL(r64)                    :: LatentOutput   ! Latent (moisture) add/removal rate, negative is dehumidification [kg/s]
   REAL(r64)                    :: SpecHumOut     ! Specific humidity ratio of outlet air (kg moisture / kg moist air)
   REAL(r64)                    :: SpecHumIn      ! Specific humidity ratio of inlet air (kg moisture / kg moist air)
-  REAL(r64)                    :: OAMassFlowRate
-  REAL(r64)                    :: EAMassFlowRate
-  LOGICAL                      :: ErrorsFound=.false. ! Set to true if errors in input, fatal at end of routine
-  LOGICAL                      :: FatalErrorFlag
+  !REAL(r64)                    :: OAMassFlowRate   !RS: Debugging: Extraneous
+  !REAL(r64)                    :: EAMassFlowRate   !RS: Debugging: Extraneous
+  !LOGICAL                      :: ErrorsFound=.false. ! Set to true if errors in input, fatal at end of routine    !RS: Debugging: Extraneous
+  !LOGICAL                      :: FatalErrorFlag   !RS: Debugging: Extraneous
   REAL(r64)                    :: ZoneAirEnt    ! zone air enthalphy J/kg
 
           ! FLOW:
@@ -2082,38 +2082,38 @@ SUBROUTINE SimOutdoorAirEquipComps(OAUnitNum,EquipType,EquipName,EquipNum,CompTy
            ! DERIVED TYPE DEFINITIONS: None
 
            ! SUBROUTINE LOCAL VARIABLE DEFINITIONS
-  INTEGER      :: OperatingMode
+  !INTEGER      :: OperatingMode    !RS: Debugging: Extraneous
   REAL(r64)    :: OAMassFlow
   REAL(r64)    :: QCompReq
   INTEGER      :: UnitNum
   REAL(r64)    :: MaxWaterFlow
   REAL(r64)    :: MinWaterFlow
   INTEGER      :: ControlNode
-  INTEGER      :: CoilInletNode
-  INTEGER      :: OutletNode
+  !INTEGER      :: CoilInletNode    !RS: Debugging: Extraneous
+  !INTEGER      :: OutletNode   !RS: Debugging: Extraneous
   REAL(r64)    :: CpAirZn
-  INTEGER      :: AirOutletNode
-  INTEGER      :: CoilWaterInletNode
+  !INTEGER      :: AirOutletNode    !RS: Debugging: Extraneous
+  !INTEGER      :: CoilWaterInletNode   !RS: Debugging: Extraneous
   INTEGER      :: SimCompNum
   INTEGER      :: OpMode
   INTEGER      :: EquipTypeNum
   INTEGER      :: WCCoilInletNode
   INTEGER      :: WCCoilOutletNode
-  INTEGER      :: WCCoilContNode
+  !INTEGER      :: WCCoilContNode   !RS: Debugging: Extraneous
   INTEGER      :: WHCoilInletNode
   INTEGER      :: WHCoilOutletNode
-  INTEGER      :: WHCoilContNode
-  INTEGER      :: SHCoilInletNode
-  INTEGER      :: SHCoilOutletNode
-  REAL(r64)    :: Qcoilout
+  !INTEGER      :: WHCoilContNode   !RS: Debugging: Extraneous
+  !INTEGER      :: SHCoilInletNode  !RS: Debugging: Extraneous
+  !INTEGER      :: SHCoilOutletNode !RS: Debugging: Extraneous
+  !REAL(r64)    :: Qcoilout !RS: Debugging: Extraneous
   REAL(r64)    :: QUnitOut
   INTEGER      :: DXSystemIndex =0
   REAL(r64)    :: CompAirOutTemp
   REAL(r64)    :: Faneffect
   LOGICAL      :: DrawFan              !fan position If .True., the temperature increasing by fan operating is considered
   REAL(r64)    :: Dxsystemouttemp
-  REAL(r64)    :: DXsystemInlettemp
-  LOGICAL      :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine
+  !REAL(r64)    :: DXsystemInlettemp    !RS: Debugging: Extraneous
+  !LOGICAL      :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine    !RS: Debugging: Extraneous
 
 
   ! Flow!
@@ -2391,18 +2391,18 @@ SUBROUTINE CalcOAUnitCoilComps(CompNum,FirstHVACIteration,EquipIndex,LoadMet)
   LOGICAL   :: DrawFan             ! Fan Flag
   INTEGER   :: InletNode
   INTEGER   :: OutletNode
-  INTEGER   :: AirOutletNode
-  INTEGER   :: WaterCoilIndex =0
+  !INTEGER   :: AirOutletNode   !RS: Debugging: Extraneous
+  !INTEGER   :: WaterCoilIndex =0   !RS: Debugging: Extraneous
   REAL(r64) :: QCompReq            ! Actual equipment load
-  REAL(r64) :: CoilInTemp
-  REAL(r64) :: MinWaterFlow
-  INTEGER   :: SHCoilInletNode
-  INTEGER   :: SHCoilOutletNode
-  INTEGER   :: CoilWaterInletNode
+  !REAL(r64) :: CoilInTemp  !RS: Debugging: Extraneous
+  !REAL(r64) :: MinWaterFlow    !RS: Debugging: Extraneous
+  !INTEGER   :: SHCoilInletNode !RS: Debugging: Extraneous
+  !INTEGER   :: SHCoilOutletNode    !RS: Debugging: Extraneous
+  !INTEGER   :: CoilWaterInletNode  !RS: Debugging: Extraneous
   INTEGER   :: CoilTypeNum
-  LOGICAL   :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine
+  !LOGICAL   :: ErrorsFound=.FALSE. ! Set to true if errors in input, fatal at end of routine   !RS: Debugging: Extraneous
   REAL(r64) ::CoilAirOutTemp
-  INTEGER   :: CoilNum
+  !INTEGER   :: CoilNum !RS: Debugging: Extraneous
   INTEGER   :: CompoNum
 
  ! Flow

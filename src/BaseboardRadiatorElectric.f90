@@ -241,7 +241,7 @@ CONTAINS
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     REAL(r64) :: AllFracsSummed         ! Sum of the fractions radiant
     INTEGER   :: BaseboardNum
-    INTEGER   :: ElecBBNum
+    !INTEGER   :: ElecBBNum !RS: Debugging: Extraneous
     INTEGER   :: NumAlphas
     INTEGER   :: NumNumbers
     INTEGER   :: SurfNum                ! surface number that radiant heat delivered
@@ -879,7 +879,7 @@ REAL(r64), PARAMETER :: SimpConvAirFlowSpeed = 0.5d0 ! m/s
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   INTEGER :: BaseboardNum    ! DO loop counter for surface index
-  INTEGER :: ZoneNum    ! DO loop counter for surface index
+  !INTEGER :: ZoneNum    ! DO loop counter for surface index    !RS: Debugging: Extraneous
 
        ! FLOW:
     ElecBaseboardSysOn = .FALSE.

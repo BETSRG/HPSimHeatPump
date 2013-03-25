@@ -586,7 +586,7 @@ SUBROUTINE GetMSHeatPumpInput
   INTEGER                     :: SuppHeatCoilInletNode     ! Supplemental heating coil inlet node number
   INTEGER                     :: SuppHeatCoilOutletNode    ! Supplemental heating coil outlet node number
   LOGICAL                     :: LocalError                ! Local error flag
-  INTEGER                     :: SpeedInput                ! Status of number of speed input
+!  INTEGER                     :: SpeedInput                ! Status of number of speed input   !RS: Debugging: Extraneous
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: Alphas         ! Alpha input items for object
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cAlphaFields   ! Alpha field names
   CHARACTER(Len=MaxNameLength), ALLOCATABLE, DIMENSION(:) :: cNumericFields ! Numeric field names
@@ -1509,8 +1509,8 @@ SUBROUTINE InitMSHeatPump(MSHeatPumpNum,FirstHVACIteration,AirLoopNum,QZnReq,OnO
   INTEGER             :: InNode                           ! Inlet node number in MSHP loop
   INTEGER             :: OutNode                          ! Outlet node number in MSHP loop
   INTEGER             :: ZoneInNode                       ! Zone inlet node number in the controlled zone for MSHP
-  INTEGER             :: HeatRecInNode                    ! Inlet node number of heat recovery
-  INTEGER             :: HeatRecOutNode                   ! Outlet node number of heat recovery
+!  INTEGER             :: HeatRecInNode                    ! Inlet node number of heat recovery !RS: Debugging: Extraneous
+!  INTEGER             :: HeatRecOutNode                   ! Outlet node number of heat recovery !RS: Debugging: Extraneous
   REAL(r64)           :: RhoAir                           ! Air density at InNode
   LOGICAL,SAVE        :: MyOneTimeFlag = .TRUE.           ! Initialization flag
   LOGICAL, ALLOCATABLE, SAVE, DIMENSION(:) :: MyEnvrnFlag ! Used for initializations each begin environment flag
@@ -2175,9 +2175,9 @@ SUBROUTINE SizeMSHeatPump(MSHeatPumpNum)
 
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  !INTEGER  :: ControlledZoneNum = 0        ! Index of Controllerd zone number  !RS: Debugging: Extraneous
-  INTEGER  :: ThisCtrlZoneNum = 0          ! Controllerd zone number
-  REAL(r64)     :: ControlZoneVolFlow = 0.0     ! Controlled zone volumetric flow
+  !INTEGER  :: ControlledZoneNum = 0        ! Index of Controlled zone number  !RS: Debugging: Extraneous
+  !INTEGER  :: ThisCtrlZoneNum = 0          ! Controlled zone number    !RS: Debugging: Extraneous
+  !REAL(r64)     :: ControlZoneVolFlow = 0.0     ! Controlled zone volumetric flow   !RS: Debugging: Extraneous
   INTEGER  :: NumOfSpeedCooling            ! Number of speeds for cooling
   INTEGER  :: NumOfSpeedHeating            ! Number of speeds for heating
   INTEGER  :: i                            ! Index to speed
@@ -2648,7 +2648,7 @@ USE DXCoils,                 ONLY: SimDXCoilMultiSpeed,DXCoilPartLoadRatio
   REAL(r64)    :: SavePartloadRatio !
   REAL(r64)    :: SaveSpeedRatio
   REAL(r64)    :: QCoilActual   ! coil load actually delivered returned to calling component
-  REAL(r64)    :: MdotSupp      ! suppleental coil hot water or steam flow rate
+!  REAL(r64)    :: MdotSupp      ! suppleental coil hot water or steam flow rate    !RS: Debugging: Extraneous
   REAL(r64)    :: MinWaterFlow  ! minimum water flow rate
   REAL(r64)    :: ErrorToler    ! supplemental heating coil convergence tollerance
 
@@ -3308,7 +3308,7 @@ SUBROUTINE CalcNonDXHeatingCoils(MSHeatPumpNum,FirstHVACIteration,SupHeaterLoad,
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)      :: QCoilRequired   ! heat addition required from an electric, gas, steam, or hot water coil
+!  REAL(r64)      :: QCoilRequired   ! heat addition required from an electric, gas, steam, or hot water coil   !RS: Debugging: Extraneous
   REAL(r64)      :: QCoilActual     ! actual heating load met
   REAL(r64)      :: mdot            ! heating coil steam or hot water mass flow rate
   REAL(r64)      :: MinWaterFlow    ! coil minimum hot water mass flow rate, kg/s

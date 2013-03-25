@@ -4740,7 +4740,7 @@ SUBROUTINE CalcAirflowNetworkCO2Balance
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER i,j
-INTEGER LF,LT,CompNum,NF,NT
+INTEGER LF,LT,CompNum !,NF,NT   !RS: Debugging: Extraneous
 INTEGER CompTypeNum,TypeNum
 Character(len=MaxNameLength) CompName
 REAL(r64) DirSign
@@ -4980,7 +4980,7 @@ SUBROUTINE CalcAirflowNetworkGCBalance
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER i,j
-INTEGER LF,LT,CompNum,NF,NT
+INTEGER LF,LT,CompNum !,NF,NT   !RS: Debugging: Extraneous
 INTEGER CompTypeNum,TypeNum
 Character(len=MaxNameLength) CompName
 REAL(r64) DirSign

@@ -1310,7 +1310,7 @@ INTEGER :: kYear
 INTEGER :: offset
 INTEGER :: month !number of months since base date
 INTEGER :: firstMonth
-INTEGER :: repeatMonths
+!INTEGER :: repeatMonths    !RS: Debugging: Extraneous
 INTEGER :: baseMonths1900 = 0       ! number of months since 1900 for base period
 INTEGER :: serviceMonths1900 = 0    ! number of months since 1900 for service period
 INTEGER :: monthsBaseToService
@@ -2069,7 +2069,7 @@ INTEGER,ALLOCATABLE,DIMENSION(:)                           :: columnWidth
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:)     :: rowHead
 CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 
-INTEGER :: month
+!INTEGER :: month   !RS: Debugging: Extraneous
 INTEGER :: numColumns
 INTEGER :: iYear
 INTEGER :: jObj

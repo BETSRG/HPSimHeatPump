@@ -3455,7 +3455,7 @@ SUBROUTINE SetUpSysSizingArrays
   REAL(r64)     :: ZoneOAFracCooling ! zone OA fraction for cooling design air flow
   REAL(r64)     :: ZoneOAFracHeating ! zone OA fraction for heating design air flow
   REAL(r64) :: Ep = 1.0                ! zone primary air fraction
-  REAL(r64) :: Er = 0.0                ! zone secondary recirculation fraction
+  !REAL(r64) :: Er = 0.0                ! zone secondary recirculation fraction !RS: Debugging: Extraneous
   REAL(r64) :: ZoneSA                 ! Zone supply air flow rate
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: VdzClgByZone  !saved value of cooling based ZoneSA which is Vdz used in 62.1 tabular report (also used for zone level Vps)
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: VdzHtgByZone  !saved value of heating based ZoneSA which is Vdz used in 62.1 tabular report (also used for zone level Vps)
@@ -3466,9 +3466,9 @@ SUBROUTINE SetUpSysSizingArrays
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: VpzMinHtgByZone !saved value of minimum heating based ZonePA which is VpzHtg-min used in 62.1 tabular report
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: VpzClgSumBySys  !sum of saved value of cooling based ZonePA which is Vpz-sum used in 62.1 tabular report
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: VpzHtgSumBySys  !sum of saved value of heating based ZonePA which is Vpz-sum used in 62.1 tabular report
-  REAL(r64) :: NodeTemp               ! node temperature
-  REAL(r64) :: NodeHumRat             ! node humidity ratio
-  REAL(r64) :: MassFlowRate           ! Temporary variable
+  !REAL(r64) :: NodeTemp               ! node temperature   !RS: Debugging: Extraneous
+  !REAL(r64) :: NodeHumRat             ! node humidity ratio    !RS: Debugging: Extraneous
+  !REAL(r64) :: MassFlowRate           ! Temporary variable !RS: Debugging: Extraneous
   REAL(r64) :: ClgSupplyAirAdjustFactor  ! temporary variable
   REAL(r64) :: HtgSupplyAirAdjustFactor  ! temporary variable
   REAL(r64) :: SysOAUnc               ! uncorrected system OA summing up people and area based OA for all zones for VRP
@@ -3484,7 +3484,7 @@ SUBROUTINE SetUpSysSizingArrays
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: DBySysCool  !saved value of PopulatonDiversity which is D used in 62.1 tabular report
   REAL(r64), ALLOCATABLE, DIMENSION(:) :: DBySysHeat  !saved value of PopulatonDiversity which is D used in 62.1 tabular report
   REAL(r64) :: RpPzSum    !Rp times Pz used for computing the system total Rp value for 62.1 tabular report
-  REAL(r64) :: PzSum      !Pz sum for system total Pz for 62.1 tabular report
+  !REAL(r64) :: PzSum      !Pz sum for system total Pz for 62.1 tabular report  !RS: Debugging: Extraneous
   REAL(r64) :: RaAzSum    !Ra time Az used for computing the system tota Ra value for 62.1 tabular report
   REAL(r64) :: AzSum      !Az sum for system total Az for 62.1 tabular report
   REAL(r64) :: VbzSum     !Vbz sum for system total Vbz for 62.1 tabular report
@@ -4525,7 +4525,7 @@ SUBROUTINE UpdateSysSizing(CallIndicator)
   REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE  :: VotHtgBySys  !saved value of heating ventilation required at primary AHU, used in 62.1 tabular report
   REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE  :: VozSumClgBySys  !saved value of cooling ventilation required at clg zones
   REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE  :: VozSumHtgBySys  !saved value of cooling ventilation required at htg zones
-  REAL(r64) :: Evz = 1.0               ! zone ventilation efficiency
+  !REAL(r64) :: Evz = 1.0               ! zone ventilation efficiency   !RS: Debugging: Extraneous
   REAL(r64) :: MinHeatingEvz = 1.0     ! minimum zone ventilation efficiency for heating (to be used as system efficiency)
   REAL(r64), ALLOCATABLE, DIMENSION(:),SAVE :: EvzMinBySysHeat !saved value of EvzMin used in 62.1 tabular report
   REAL(r64) :: MinCoolingEvz = 1.0     ! minimum zone ventilation efficiency for cooling (to be used as system efficiency)
@@ -4535,7 +4535,7 @@ SUBROUTINE UpdateSysSizing(CallIndicator)
   REAL(r64) :: Vou = 0.0D0             ! Uncorrected outdoor air intake for all zones per ASHRAE std 62.1
   REAL(r64) :: Vot = 0.0D0             ! Required outdoor air intake at primary AHU per ASHRAE std 62.1
   REAL(r64) :: VotMax = 0.0D0          ! Max of required cooling/heating outdoor air intake at primary AHU per ASHRAE std 62.1
-  REAL(r64) :: VozBySys = 0.0D0        ! Sum of zone required outdoor air intake per ASHRAE std 62.1
+  !REAL(r64) :: VozBySys = 0.0D0        ! Sum of zone required outdoor air intake per ASHRAE std 62.1   !RS: Debugging: Extraneous
   REAL(r64) :: Ratio   = 1D0           ! Ratio of VozBySys / VotMax
   REAL(r64) :: SysHtgPeakAirflow       ! Peak heating airflow
   INTEGER   :: NumZonesForHtg          ! Number of heating zones for given primary system

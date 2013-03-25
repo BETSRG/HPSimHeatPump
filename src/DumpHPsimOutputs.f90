@@ -7,16 +7,16 @@ USE DataGlobals, ONLY: RefrigIndex  !RS: Debugging: Removal of plethora of Refri
 
 IMPLICIT NONE
 
-INTEGER(2) RefPropOpt			!Ref prop calc. option
+!INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-REAL RefProp(28)	!Refrigerant properties
+!REAL RefProp(28)	!Refrigerant properties !RS: Debugging: Extraneous
 
 INTEGER(2) AirPropOpt			!Air prop calc. option
 INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
 REAL AirProp(8)		!Air properties
 
-REAL TsubExp,TsubCnd,TsupEvp,TsupCmp,Qcnd,Qevp,QevpSens,QevpLat,Tsat
-REAL PwrCmp,mdot,TsiExp,TsoCnd,TsoEvp,Qtxv,IsCoolingMode
+REAL Qcnd,Qevp,QevpSens,QevpLat !TsubExp,TsubCnd,TsupEvp,TsupCmp,Tsat   !RS: Debugging: Extraneous
+REAL PwrCmp,mdot,Qtxv,IsCoolingMode !TsiExp,TsoCnd,TsoEvp,  !RS: Debugging: Extraneous
 REAL Dshtb,DrawBlow,CPair,Qtot,QtotSens
 REAL DcapTube,LcapTube
 REAL TAOCND,TAOEVP,COP,SHR,EER
@@ -41,8 +41,8 @@ REAL WeightEvpAluminum,WeightEvpCopper,WeightCndAluminum,WeightCndCopper
 REAL,PARAMETER :: StandardDensity=1.2 !Standard density, kg/m3
 REAL,PARAMETER :: StandardSpecHeat=1.02 !Standard specific heat, kJ/kg-K
 REAL SpecHeat     !Specific heat, kJ/kg-K
-CHARACTER (len=15) :: Property
-REAL Temperature,Quality,Pressure,Enthalpy
+!CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
+REAL Quality,Pressure,Enthalpy !Temperature,    !RS: Debugging: Extraneous
 CHARACTER (len=50) :: Title !Output file title
 
 REAL :: CoilSurfTemp = 0.0

@@ -3673,7 +3673,7 @@ SUBROUTINE SizeElectricChiller(ChillNum)
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound
+  !LOGICAL             :: LoopErrorsFound   !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           ::  rho ! local fluid density
   REAL(r64)           ::  Cp  ! local fluid specific heat
@@ -3843,7 +3843,7 @@ SUBROUTINE SizeEngineDrivenChiller(ChillNum)
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound
+  !LOGICAL             :: LoopErrorsFound   !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           ::  rho ! local fluid density
   REAL(r64)           ::  Cp  ! local fluid specific heat
@@ -4014,7 +4014,7 @@ SUBROUTINE SizeGTChiller(ChillNum)
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound
+  !LOGICAL             :: LoopErrorsFound   !RS: Debugging: Extraneous
   REAL(r64)           :: EngineEff     ! this should be an input! needed to autosize the engine capacity.
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           ::  rho  ! local fluid density
@@ -4191,7 +4191,7 @@ SUBROUTINE SizeConstCOPChiller(ChillNum)
   INTEGER             :: PltSizNum     ! Plant Sizing index corresponding to CurLoopNum
   INTEGER             :: PltSizCondNum ! Plant Sizing index for condenser loop
   LOGICAL             :: ErrorsFound   ! If errors detected in input
-  LOGICAL             :: LoopErrorsFound
+  !LOGICAL             :: LoopErrorsFound   !RS: Debugging: Extraneous
   CHARACTER(len=MaxNameLength) :: equipName
   REAL(r64)           ::  rho ! local fluid density
   REAL(r64)           ::  Cp  ! local fluid specific heat

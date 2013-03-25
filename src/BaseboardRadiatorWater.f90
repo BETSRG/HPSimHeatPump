@@ -1579,8 +1579,8 @@ SUBROUTINE UpdateHWBaseboardPlantConnection(BaseboardTypeNum, &
   LOGICAL, INTENT(INOUT) :: InitLoopEquip       ! If not zero, calculate the max load for operating conditions
 
   INTEGER :: BaseboardNum
-  INTEGER :: InletNodeNum
-  INTEGER :: OutletNodeNum
+  !INTEGER :: InletNodeNum  !RS: Debugging: Extraneous
+  !INTEGER :: OutletNodeNum !RS: Debugging: Extraneous
 
     ! Find the correct baseboard
   IF (CompIndex == 0) THEN

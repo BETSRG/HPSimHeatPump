@@ -3880,7 +3880,7 @@ INTEGER, INTENT(IN) :: IndexTypeKey  ! What kind of data to update (Zone, HVAC)
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 INTEGER   :: iResource
 INTEGER   :: jEndUse
-INTEGER   :: kEndUseSub
+!INTEGER   :: kEndUseSub    !RS: Debugging: Extraneous
 REAL(r64) :: curMeterValue
 INTEGER   :: curMeterNumber
 
@@ -6423,7 +6423,7 @@ REAL(r64)                                      :: convBldgCondFloorArea
 CHARACTER(len=MaxNameLength) :: curNameWithSIUnits
 CHARACTER(len=MaxNameLength) :: curNameAndUnits
 INTEGER :: indexUnitConv
-CHARACTER(len=52)                             :: tableString
+!CHARACTER(len=52)                             :: tableString   !RS: Debugging: Extraneous
 
 
 IF (displayTabularBEPS) THEN
@@ -7671,21 +7671,21 @@ CHARACTER(len=MaxNameLength),ALLOCATABLE, DIMENSION(:,:)   :: tableBody
 REAL(r64),DIMENSION(15,6)                           :: useVal
 REAL(r64),DIMENSION(6)                              :: collapsedTotal
 REAL(r64),DIMENSION(numEndUses,6)                   :: collapsedEndUse
-REAL(r64),DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub
-REAL(r64)                                      :: totalSourceEnergyUse
+!REAL(r64),DIMENSION(6,numEndUses,MaxNumSubcategories) :: collapsedEndUseSub    !RS: Debugging: Extraneous
+!REAL(r64)                                      :: totalSourceEnergyUse !RS: Debugging: Extraneous
 INTEGER                                        :: iResource
 INTEGER                                        :: jEndUse
-INTEGER                                        :: kEndUseSub
-INTEGER                                        :: i
+!INTEGER                                        :: kEndUseSub   !RS: Debugging: Extraneous
+!INTEGER                                        :: i    !RS: Debugging: Extraneous
 REAL(r64)                                      :: largeConversionFactor
-INTEGER                                        :: numRows
+!INTEGER                                        :: numRows  !RS: Debugging: Extraneous
 CHARACTER(len=100)                             :: footnote = ' '
 REAL(r64)                                      :: areaConversionFactor
-REAL(r64)                                      :: convBldgGrossFloorArea
+!REAL(r64)                                      :: convBldgGrossFloorArea   !RS: Debugging: Extraneous
 REAL(r64)                                      :: convBldgCondFloorArea
-CHARACTER(len=MaxNameLength) :: curNameWithSIUnits
-CHARACTER(len=MaxNameLength) :: curNameAndUnits
-INTEGER :: indexUnitConv
+!CHARACTER(len=MaxNameLength) :: curNameWithSIUnits !RS: Debugging: Extraneous
+!CHARACTER(len=MaxNameLength) :: curNameAndUnits    !RS: Debugging: Extraneous
+!INTEGER :: indexUnitConv   !RS: Debugging: Extraneous
 
 IF (displaySourceEnergyEndUseSummary) THEN
   ! show the headers of the report

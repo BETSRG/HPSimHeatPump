@@ -334,7 +334,7 @@ SUBROUTINE GetWatertoAirHPInput
   INTEGER :: NumCool
   INTEGER :: NumHeat
   INTEGER :: WatertoAirHPNum
-  INTEGER :: NumFluids
+  !INTEGER :: NumFluids !RS: Debugging: Extraneous
   INTEGER :: NumAlphas
   INTEGER :: NumParams
   INTEGER :: NumNums
@@ -773,7 +773,7 @@ SUBROUTINE InitWatertoAirHP(HPNum,InitFlag,MaxONOFFCyclesperHour,HPTimeConstant,
   LOGICAL, ALLOCATABLE,Save, DIMENSION(:)  :: MyEnvrnFlag
   REAL(r64) :: rho ! local fluid density
   REAL(r64) :: Cp  ! local fluid specific heat
-  REAL(r64) :: Temptemp
+  !REAL(r64) :: Temptemp    !RS: Debugging: Extraneous
   LOGICAL   :: errFlag
 
   IF (MyOneTimeFlag) THEN
@@ -1144,7 +1144,7 @@ SUBROUTINE CalcWatertoAirHPCooling(HPNum,CyclingScheme,FirstHVACIteration,Runtim
       REAL(r64)        :: SHReff                   ! Effective sensible heat ratio at part-load condition
       REAL(r64)        :: Par(4)                   ! Parameter array passed to RegulaFalsi function
       INTEGER          :: SolFlag                  ! Solution flag returned from RegulaFalsi function
-      LOGICAL          :: ErrorsFound = .FALSE.
+      !LOGICAL          :: ErrorsFound = .FALSE.    !RS: Debugging: Extraneous
       LOGICAL, SAVE    :: FirstTime = .true.
       REAL(r64), SAVE  :: LoadSideInletDBTemp_Init ! rated conditions
       REAL(r64), SAVE  :: LoadSideInletHumRat_Init ! rated conditions

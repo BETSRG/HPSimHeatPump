@@ -3261,8 +3261,8 @@ INTEGER  :: LoopInNode
 INTEGER  :: HstatZoneNum
 LOGICAL  :: HstatZoneFound
 INTEGER  :: ZonesCooledIndex         ! Cooled zones index in an air loop
-INTEGER  :: TotalBranches
-INTEGER  :: TotalComponents
+!INTEGER  :: TotalBranches  !RS: Debugging: Extraneous
+!INTEGER  :: TotalComponents    !RS: Debugging: Extraneous
 INTEGER  :: BranchNumPlantSide
 INTEGER  :: CompNumPlantSide
 !INTEGER  :: VarNum !RS: Debugging: Extraneous
