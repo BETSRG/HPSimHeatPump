@@ -4299,13 +4299,13 @@ SUBROUTINE CalcPTUnit(PTUnitNum,FirstHVACIteration,PartLoadFrac,LoadMet,QZnReq,O
   LOGICAL  :: PTUnitTurnFansOff  ! TurnFansOff Availability status as set by SAM
   REAL(r64) :: mdot              ! local temporary for mass flow rate
   REAL(r64) :: MinWaterFlow      ! minimum water mass flow rate
-  REAL(r64) :: PartLoadFraction  ! heating or cooling part load fraction
+  !REAL(r64) :: PartLoadFraction  ! heating or cooling part load fraction   !RS: Debugging: Extraneous
   REAL(r64) :: MaxHotWaterFlow   ! coil maximum hot water mass flow rate, kg/s
   REAL(r64) :: HotWaterMdot      ! actual hot water mass flow rate
   REAL(r64), DIMENSION(3) :: Par
   INTEGER   :: SolFlag
-  REAL(r64) :: MinFlow            ! minimum fluid flow rate, kg/s
-  INTEGER   :: ControlCompTypeNum ! temporary component index number
+  !REAL(r64) :: MinFlow            ! minimum fluid flow rate, kg/s  !RS: Debugging: Extraneous
+  !INTEGER   :: ControlCompTypeNum ! temporary component index number   !RS: Debugging: Extraneous
   REAL(r64), PARAMETER :: ErrTolerance = 0.001    ! convergence limit for hotwater coil
           ! FLOW
 
@@ -5595,7 +5595,7 @@ SUBROUTINE ControlMSWSHPOutput(PTUnitNum, FirstHVACIteration,CompOp,OpMode,&
   INTEGER            :: SolFla        ! Flag of RegulaFalsi solver
   REAL(r64), DIMENSION(11) :: Par           ! Parameters passed to RegulaFalsi
   REAL(r64)          :: CpAir         ! air specific heat
-  REAL(r64)          :: QCoilActual   ! coil load actually delivered returned to calling component
+  !REAL(r64)          :: QCoilActual   ! coil load actually delivered returned to calling component !RS: Debugging: Extraneous
   INTEGER            :: i             ! Speed index
   INTEGER,SAVE       :: ErrCountCyc=0 ! Counter used to minimize the occurrence of output warnings
   INTEGER,SAVE       :: ErrCountVar=0 ! Counter used to minimize the occurrence of output warnings
@@ -6170,10 +6170,10 @@ SUBROUTINE CalcMSWSHeatPump(PTUnitNum,ZoneNum, FirstHVACIteration,CompOp,SpeedNu
   REAL(r64):: AirMassFlow        ! total supply air mass flow through the PTHP [m3/s]
   REAL(r64):: MinHumRat          ! minimum humidity ratio for sensible capacity calculation (kg/kg)
   REAL(r64):: OutsideDryBulbTemp ! Outdoor air temperature at external node height
-  REAL(r64):: QCoilReq           ! load passed to heating coil (W)
+  !REAL(r64):: QCoilReq           ! load passed to heating coil (W) !RS: Debugging: Extraneous
   REAL(r64):: QActual            ! actual heating coil output (W)
   INTEGER  :: OpMode             ! fan operating mode, CycFanCycCoil or ContFanCycCoil
-  LOGICAL  :: errflag            ! subroutine error flag
+  !LOGICAL  :: errflag            ! subroutine error flag   !RS: Debugging: Extraneous
   LOGICAL  :: PTUnitTurnFansOn   ! TurnFansOn Availalability status as set by SAM
   LOGICAL  :: PTUnitTurnFansOff  ! TurnFansOff Availalability status as set by SAM
   REAL(r64) :: mdot              !local temporary for mass flow rate

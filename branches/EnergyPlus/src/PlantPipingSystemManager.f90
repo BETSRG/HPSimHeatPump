@@ -6006,7 +6006,7 @@ SUBROUTINE SimulateRadialPipeCell(DomainNum, CircuitNum, ThisCell, ConvectionCoe
     REAL(r64) :: ThisPipeCellConductivity
     REAL(r64) :: ThisPipeCellInnerRadius
     REAL(r64) :: ThisPipeCellTemperature_PrevTimeStep
-    !REAL(r64) :: ThisPipeCellTemperature   !RS: Debugging: Extraneous
+    REAL(r64) :: ThisPipeCellTemperature   !RS: Debugging: Extraneous
 
     !REAL(r64) :: FluidCellOuterRadius  !RS: Debugging: Extraneous
     !REAL(r64) :: FluidCellRadialCentroid   !RS: Debugging: Extraneous

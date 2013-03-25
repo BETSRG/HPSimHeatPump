@@ -306,7 +306,7 @@ SUBROUTINE GetPondGroundHeatExchanger
   INTEGER                        :: Item                 ! Item to be "gotten"
   INTEGER                        :: NumAlphas            ! Number of Alphas for each GetObjectItem call
   INTEGER                        :: NumNumbers           ! Number of Numbers for each GetObjectItem call
-  INTEGER                        :: NumFluids            ! number of fluids in sim.
+  !INTEGER                        :: NumFluids            ! number of fluids in sim.    !RS: Debugging: Extraneous
 
           ! Initializations and allocations
   cCurrentModuleObject = 'GroundHeatExchanger:Pond'

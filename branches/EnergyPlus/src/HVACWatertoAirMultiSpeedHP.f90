@@ -1462,7 +1462,7 @@ SUBROUTINE InitMulSpeedWSHPCoil(DXCoilNum,MaxONOFFCyclesperHour,HPTimeConstant,F
   REAL(r64) :: WaterFlowScale                           ! water flow scaling factor match rated flow rate
 
             ! SUBROUTINE PARAMETER DEFINITIONS:
-  REAL(r64) :: SmallDifferenceTest=0.00000001d0
+ ! REAL(r64) :: SmallDifferenceTest=0.00000001d0    !RS: Debugging: Extraneous
   CHARACTER(len=*), PARAMETER :: RoutineName='InitMulSpeedWSHPCoil'
 
 
@@ -1815,7 +1815,7 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
   REAL(r64) :: rhoair
-  REAL(r64) :: CpAir
+  !REAL(r64) :: CpAir   !RS: Debugging: Extraneous
   REAL(r64) :: MixTemp
   REAL(r64) :: MixHumRat
   REAL(r64) :: MixEnth
@@ -1828,7 +1828,7 @@ SUBROUTINE SizeMulSpeedWSHPCoil(DXCoilNum)
   REAL(r64) :: VolFlowRate
   REAL(r64) :: CoolCapAtPeak
   REAL(r64) :: TotCapTempModFac
-  REAL(r64) :: SensCapAtPeak
+  !REAL(r64) :: SensCapAtPeak   !RS: Debugging: Extraneous
   REAL(r64) :: SensCapTempModFac
   INTEGER   :: TimeStepNumAtMax
   INTEGER   :: DDNum
@@ -2501,9 +2501,9 @@ SUBROUTINE  CalcMulSpeedWSHPCoilCooling(DXCoilNum,CyclingScheme, &
   REAL(r64)        :: CpAir_Unit                ! calc conditions for unit
   REAL(r64) :: AirMassFlowRatio   ! airflow ratio at low speed
   REAL(r64) :: WaterMassFlowRatio   ! airflow ratio at high speed
-  REAL(r64) :: TotCapAirFFModFac !air flow fraction modification
-  REAL(r64) :: TotCapWaterFFModFac !water flow fraction modification
-  REAL(r64) :: TotCapTempModFac !total capacity temperature correctio fraction
+  !REAL(r64) :: TotCapAirFFModFac !air flow fraction modification   !RS: Debugging: Extraneous
+  !REAL(r64) :: TotCapWaterFFModFac !water flow fraction modification   !RS: Debugging: Extraneous
+  !REAL(r64) :: TotCapTempModFac !total capacity temperature correctio fraction !RS: Debugging: Extraneous
   REAL(r64) :: EIRAirFFModFac !air flow fraction modification
   REAL(r64) :: EIRWaterFFModFac !water flow fraction modification
   REAL(r64) :: EIRTempModFac !total capacity temperature correctio fraction

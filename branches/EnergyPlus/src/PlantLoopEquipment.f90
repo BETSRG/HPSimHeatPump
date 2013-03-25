@@ -149,14 +149,14 @@ SUBROUTINE SimPlantEquip(LoopNum,LoopSideNum,BranchNum,Num,FirstHVACIteration,In
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  INTEGER      :: CompNum            ! Plant side component list equipment number
-  INTEGER      :: BrnNum         ! Branch counter
+  !INTEGER      :: CompNum            ! Plant side component list equipment number  !RS: Debugging: Extraneous
+  !INTEGER      :: BrnNum         ! Branch counter  !RS: Debugging: Extraneous
   INTEGER      :: EquipNum       ! Plant side component list equipment number
   INTEGER      :: EquipTypeNum
-  INTEGER      :: BranchInletNode
-  INTEGER      :: LastNodeOnBranch
-  INTEGER      :: PumpOutletNode
-  INTEGER      :: LoopControl
+  !INTEGER      :: BranchInletNode  !RS: Debugging: Extraneous
+  !INTEGER      :: LastNodeOnBranch !RS: Debugging: Extraneous
+  !INTEGER      :: PumpOutletNode   !RS: Debugging: Extraneous
+  !INTEGER      :: LoopControl  !RS: Debugging: Extraneous
   LOGICAL      :: RunFlag        ! TRUE if operating this iteration
   CHARACTER(len=MaxNameLength) :: EquipType !local equipment type
   CHARACTER(len=MaxNameLength) :: EquipName ! local equipment name
@@ -166,11 +166,11 @@ SUBROUTINE SimPlantEquip(LoopNum,LoopSideNum,BranchNum,Num,FirstHVACIteration,In
   REAL(r64)    :: MinLoad
   REAL(r64)    :: OptLoad
   REAL(r64)    :: SizingFac    ! the component sizing fraction
-  REAL(r64)    :: BranchFlowRequest = 0.0
-  REAL(r64)    :: InitialBranchFlow = 0.0
+  !REAL(r64)    :: BranchFlowRequest = 0.0  !RS: Debugging: Extraneous
+  !REAL(r64)    :: InitialBranchFlow = 0.0  !RS: Debugging: Extraneous
   INTEGER      :: GeneralEquipType !Basic Equipment type from EquipType Used to help organize this routine
-  LOGICAL      :: PumpPowerToLoop = .False.
-  LOGICAL,SAVE :: RunLoopPumps = .False.
+  !LOGICAL      :: PumpPowerToLoop = .False.    !RS: Debugging: Extraneous
+  !LOGICAL,SAVE :: RunLoopPumps = .False.   !RS: Debugging: Extraneous
   REAL(r64)       :: TempCondInDesign        ! Design condenser inlet temp. C , or 25.d0
   REAL(r64)       :: TempEvapOutDesign
 

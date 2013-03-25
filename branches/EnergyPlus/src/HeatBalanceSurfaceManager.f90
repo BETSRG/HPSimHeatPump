@@ -3859,7 +3859,7 @@ SUBROUTINE UpdateThermalHistories
   INTEGER          :: HistTermNum     ! DO loop counter for history terms
   INTEGER          :: SideNum         ! DO loop counter for surfaces sides (inside, outside)
   INTEGER          :: SurfNum         ! Surface number DO loop counter
-  INTEGER          :: ZoneNum         ! Zone number DO loop counter
+  !INTEGER          :: ZoneNum         ! Zone number DO loop counter    !RS: Debugging: Extraneous
 
   REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: QExt1    ! Heat flux at the exterior surface during first time step/series
   REAL(r64), SAVE, ALLOCATABLE, DIMENSION(:) :: QInt1    ! Heat flux at the interior surface during first time step/series

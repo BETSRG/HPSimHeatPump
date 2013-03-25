@@ -466,12 +466,12 @@ SUBROUTINE SimFurnace(FurnaceName,FirstHVACIteration, AirLoopNum, CompIndex)
   REAL(r64)                     :: ZoneLoadToCoolSPSequenced
   REAL(r64)                     :: ZoneLoadToHeatSPSequenced
 
-  REAL(r64)                     :: QCoilReq                 ! load passed to heating coil (W)
+  !REAL(r64)                     :: QCoilReq                 ! load passed to heating coil (W)  !RS: Debugging: Extraneous
   REAL(r64)                     :: QActual                  ! actual heating coil output (W)
-  REAL(r64)                     :: mdot                     ! local temporary for mass flow rate
-  REAL(r64)                     :: QCoilMax                 ! heating coil maximum capacity (W)
-  REAL(r64)                     :: MinWaterFlow             ! minimum fluid flow rates
-  REAL(r64)                     :: PartLoadRatioHeatingCoil ! Heating Coil Part Load Ratio
+  !REAL(r64)                     :: mdot                     ! local temporary for mass flow rate   !RS: Debugging: Extraneous
+  !REAL(r64)                     :: QCoilMax                 ! heating coil maximum capacity (W)    !RS: Debugging: Extraneous
+  !REAL(r64)                     :: MinWaterFlow             ! minimum fluid flow rates !RS: Debugging: Extraneous
+  !REAL(r64)                     :: PartLoadRatioHeatingCoil ! Heating Coil Part Load Ratio !RS: Debugging: Extraneous
   LOGICAL                       :: SuppHeatingCoilFlag      ! true if supplemental heating coil
 
 
@@ -4550,7 +4550,7 @@ SUBROUTINE InitFurnace(FurnaceNum, AirLoopNum, OnOffAirFlowRatio, OpMode, ZoneLo
   REAL(r64) :: SumOfMassFlowRateMax = 0.0              ! the sum of mass flow rates at inlet to zones in an airloop
   REAL(r64) :: CntrlZoneTerminalUnitMassFlowRateMax = 0.0  ! Maximum mass flow rate through controlled zone terminal unit
   INTEGER :: EquipNum = 0  ! local do loop index for equipment listed for a zone
-  INTEGER :: InletNodeNum = 0 ! local do loop index for inlet nodes to a zone
+  !INTEGER :: InletNodeNum = 0 ! local do loop index for inlet nodes to a zone  !RS: Debugging: Extraneous
 
   LOGICAL             :: ErrorsFound        =.FALSE.   ! flag returned from mining call
   REAL(r64)           :: mdot               =0.0d0     ! local temporary for mass flow rate (kg/s)
@@ -5653,9 +5653,9 @@ SUBROUTINE SizeFurnace(FurnaceNum)
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64) :: ControlZoneVolFlow
+  !REAL(r64) :: ControlZoneVolFlow  !RS: Debugging: Extraneous
   INTEGER :: ThisCtrlZoneNum ! the controlled zone number of the control zone !!!
-  INTEGER :: ControlledZoneNum
+  !INTEGER :: ControlledZoneNum !RS: Debugging: Extraneous
   INTEGER :: Iter !iteration count
   REAL(r64) :: MulSpeedFlowScale !variable speed air flow scaling factor
 
@@ -7871,14 +7871,14 @@ SUBROUTINE CalcFurnaceOutput(FurnaceNum,FirstHVACIteration,FanOpMode,CompOp,Cool
   REAL(r64)        :: Wout                ! Temporary variable used when outlet temp > DesignMaxOutletTemp
   INTEGER          :: CoolingCoilType_Num ! Numeric Equivalent for CoolingCoilType
   INTEGER          :: HeatingCoilType_Num ! Numeric Equivalent for HeatingCoilType
-  REAL(r64)        :: mdot                ! hot water or steam heating coil fluid mass flow rates
-  REAL(r64)        :: QCoilReq            ! heating coil load
+  !REAL(r64)        :: mdot                ! hot water or steam heating coil fluid mass flow rates  !RS: Debugging: Extraneous
+  !REAL(r64)        :: QCoilReq            ! heating coil load  !RS: Debugging: Extraneous
   REAL(r64)        :: QActual             ! heating coil load met or delivered
-  REAL(r64)        :: MinWaterFlow   = 0  ! minimum fluid flow rates
-  INTEGER          :: LoopNumber          ! plant loop index for water and steam supplemental heating coil
-  INTEGER          :: LoopSideNumber      ! plant loop side  index for  water and steam supp. heating coil
-  INTEGER          :: BranchNumber        ! plant loop branch index for water and steam supp. heating coil
-  INTEGER          :: CompNumber          ! plant loop comp. index for water and steam supp. heating coil
+  !REAL(r64)        :: MinWaterFlow   = 0  ! minimum fluid flow rates   !RS: Debugging: Extraneous
+  !INTEGER          :: LoopNumber          ! plant loop index for water and steam supplemental heating coil !RS: Debugging: Extraneous
+  !INTEGER          :: LoopSideNumber      ! plant loop side  index for  water and steam supp. heating coil !RS: Debugging: Extraneous
+  !INTEGER          :: BranchNumber        ! plant loop branch index for water and steam supp. heating coil !RS: Debugging: Extraneous
+  !INTEGER          :: CompNumber          ! plant loop comp. index for water and steam supp. heating coil  !RS: Debugging: Extraneous
   LOGICAL          :: SuppHeatingCoilFlag ! .true. if supplemental heating coil
 
   FurnaceOutletNode     = Furnace(FurnaceNum)%FurnaceOutletNodeNum
@@ -8808,9 +8808,9 @@ SUBROUTINE CalcNonDXHeatingCoils(FurnaceNum,SuppHeatingCoilFlag,FirstHVACIterati
           ! na
 
           ! SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-  REAL(r64)      :: QCoilReq        ! Heat addition required from an electric, gas, steam , or hot water heating coil
+  !REAL(r64)      :: QCoilReq        ! Heat addition required from an electric, gas, steam , or hot water heating coil  !RS: Debugging: Extraneous
   REAL(r64)      :: QActual         ! actual heating load
-  INTEGER        :: FanOpMode       ! cycling fan or constant fan
+  !INTEGER        :: FanOpMode       ! cycling fan or constant fan  !RS: Debugging: Extraneous
   REAL(r64)      :: mdot            ! heating coil steam or hot water mass flow rate
   REAL(r64)      :: MinWaterFlow    ! coil minimum hot water mass flow rate, kg/s
   REAL(r64)      :: MaxHotWaterFlow ! coil maximum hot water mass flow rate, kg/s
@@ -8818,7 +8818,7 @@ SUBROUTINE CalcNonDXHeatingCoils(FurnaceNum,SuppHeatingCoilFlag,FirstHVACIterati
   REAL(r64), DIMENSION(4) :: Par
   INTEGER        :: SolFlag
   CHARACTER(len=MaxNameLength) :: HeatingCoilName  =' ' ! name of heating coil
-  CHARACTER(len=MaxNameLength) :: HeatingCoilType  =' ' ! type of heating coil
+  !CHARACTER(len=MaxNameLength) :: HeatingCoilType  =' ' ! type of heating coil !RS: Debugging: Extraneous
   INTEGER      :: CoilTypeNum                      =0   ! heating coil type number
   INTEGER      :: HeatingCoilIndex                 =0   ! heating coil index
   INTEGER      :: CoilControlNode                  =0   ! control node for hot water and steam heating coils

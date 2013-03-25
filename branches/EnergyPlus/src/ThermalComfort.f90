@@ -2388,7 +2388,7 @@ INTEGER, EXTERNAL :: GetNewUnitNumber
 CHARACTER(len=200) :: lineIn
 CHARACTER(len=200) :: lineAvg
 CHARACTER(len=200) :: epwLine
-CHARACTER(len=52) :: ioerrmsg
+!CHARACTER(len=52) :: ioerrmsg  !RS: Debugging: Extraneous
 REAL(r64), SAVE :: avgDryBulbASH=0.0d0
 REAL(r64) :: dryBulb
 REAL(r64), SAVE :: runningAverageASH=0.0d0
@@ -2398,8 +2398,8 @@ REAL(r64) :: numOccupants
 INTEGER :: statFile
 INTEGER :: epwFile
 INTEGER :: lnPtr
-INTEGER :: pMonth
-INTEGER :: pDay
+!INTEGER :: pMonth  !RS: Debugging: Extraneous
+!INTEGER :: pDay    !RS: Debugging: Extraneous
 LOGICAL :: statFileExists
 LOGICAL :: epwFileExists
 LOGICAL, SAVE :: useStatData = .false.

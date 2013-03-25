@@ -529,8 +529,8 @@ SUBROUTINE SimHVAC
   INTEGER  :: LoopNum
   INTEGER  :: LoopSide
   !LOGICAL, SAVE :: ONETIME= .TRUE. !RS: Testing: Phase 4!
-  REAL :: SysOutputProvided ! sensible output delivered by zone equipment (W)
-  REAL :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
+  !REAL :: SysOutputProvided ! sensible output delivered by zone equipment (W)  !RS: Debugging: Extraneous
+  !REAL :: LatOutputProvided ! latent output delivered by zone equipment (kg/s) !RS: Debugging: Extraneous
 
           ! Initialize all of the simulation flags to true for the first iteration
   SimZoneEquipmentFlag     = .TRUE.
