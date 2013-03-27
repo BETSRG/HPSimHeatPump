@@ -1814,8 +1814,8 @@
         'hRi(kJ/kg)','hRo(kJ/kg)','xRi','xRo','tAi(C)','tAo(C)', &
         'rhAi','rhAo','hci(W/m2K)','EF','hco(W/m2K)', &
         'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
-        'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdot(kg/h)', &
-        'cpAir', 'mAiMod (kg/s)', 'hAiMod', 'hAoMod' !RS: Debugging: Adding cp, air m_dot and h's for a heat balance
+        'Qmod(W)','MassLiq(g)','MassVap(g)','MassTot(g)','mdot(kg/h)' !, &
+        !'cpAir', 'mAiMod (kg/s)', 'hAiMod', 'hAoMod' !RS: Debugging: Adding cp, air m_dot and h's for a heat balance
 
         DO I=1, NumOfCkts
             Ckt(I)%Qckt=0.0
@@ -1991,7 +1991,7 @@
                     xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
                     hciMod*1000,EFref,hcoMod*1000,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
                     Qmod*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-                    mRefMod*3600, CPAir, mAiMod, hAiMod, hAoMod, AirProp(4), TestH !RS: Debugging: Adding the cp, air m_dot and h's for a heat balance
+                    mRefMod*3600 !, CPAir, mAiMod, hAiMod, hAoMod, AirProp(4), TestH !RS: Debugging: Adding the cp, air m_dot and h's for a heat balance
 
                 END DO !end Nmod
 
@@ -2892,7 +2892,7 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                 CALL GetObjectItem('IDCcktVelocityProfile',1,Alphas,NumAlphas, &
                                     TmpNumbers,NumNumbers,Status)
                 Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-                DO J=1,NumOfMods    !RS: Debugging: Adding in a J-value
+                DO J=1,1 !NumOfMods    !RS: Debugging: Adding in a J-value  !RS: Debugging: Only doing it for one module right now
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !RS Comment: Bringing in the velocity deviation values
                 END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 

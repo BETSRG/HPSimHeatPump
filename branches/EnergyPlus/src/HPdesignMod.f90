@@ -305,10 +305,6 @@
     FLAG_GOTO_950 = .FALSE.
     DO WHILE (.TRUE.)
         
-        !TimeStep1 = TimeStep1+1   !RS: Testing
-        !
-        !CurSimTime=(TimeStep1-1)*TimeInterval  !PrevSimTime+ !RS: Testing
-        
         DO I=1,2
             ERRMSG(I) = 0.0
         END DO
