@@ -122,6 +122,7 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     INTEGER :: LogFile       =13 !RS: Debugging file denotion, hopefully this works.
+    INTEGER(2),SAVE :: LastCoolingMode !RS: Debugging: Trying to only allocate/reallocate if cooling mode changes
     
   OPEN(unit=LogFile,file='logfile.txt')    !RS: Debugging
     
@@ -148,7 +149,7 @@
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     
-    !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
     !RS: Debugging: Modified from PackagedTerminalHeatPump code
@@ -179,6 +180,11 @@
         IsCoolingMode=1 !RS: Debugging: The heat pump is operating in cooling mode
         CondPAR(27)=IsCoolingMode
         EvapPar(27)=IsCoolingMode
+    END IF
+    
+    IF (IsCoolingMode .NE. LastCoolingMode) THEN   !RS: Debugging: Only deallocating and reallocating if cooling mode changed between iterations
+        CALL EndCondenserCoil
+        CALL EndEvaporatorCoil
     END IF
     
     !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
@@ -648,6 +654,8 @@
         !CALL EndEvaporatorCoil !RS: Debugging: Removing for the moment
     END IF
 
+    LastCoolingMode=ISCoolingMode   !RS: Debugging: Seeing if cooling mode changes between iterations
+    
     CALL FlushHPOutput()
 
     CLOSE(666)
