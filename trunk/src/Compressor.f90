@@ -114,6 +114,8 @@
 
     USE FluidProperties_HPSim
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
+    USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
@@ -123,7 +125,7 @@
     !0-refrigerant mixture
 
     REAL, INTENT(IN) :: XIN(3)
-    REAL, INTENT(IN) :: PAR(26)
+    REAL :: PAR(26) !, INTENT(IN)
     REAL, INTENT(OUT) :: OUT(7)
 
     REAL, PARAMETER :: Fv=0.75
@@ -141,12 +143,10 @@
     REAL PowerMap    !Map based Compressor power consumption, KW
     REAL mdot        !Refrigerant mass flow rate, kg/s
     REAL mdotMap     !Map based Refrigerant mass flow rate, kg/s
-    REAL tSH         !Superheat, C
     REAL Tsuc        !Suction temp, C
     REAL TsucMap     !Map based suction temp, C
     REAL Tdis        !Discharge temperature, C
     REAL Psuc        !Suction pressure, kPa
-    !REAL PsucMap     !Map based suction pressure, kPa  !RS: Debugging: Extraneous
     REAL Pdis        !Discharge pressure, kPa
     REAL Xdis        !Discharge quality
     REAL Hsuc        !Suction enthalpy, kJ/kg
@@ -162,7 +162,6 @@
     REAL SsucMap     !Map based entropy value
     REAL HdisIsen    !Isentropic discharge enthalpy, kJ/kg
     REAL HdisIsenMap !Map based insentropic discharge enthalpy, kJ/kg
-    REAL HdisMap     !Map based discharge enthalpy, kJ/kg
     REAL HsucMap     !Map based suction enthalpy, kJ/kg
     REAL Wcorrect    !Correction factor for power calc. with different input voltage
     REAL Mcorrect    !Correction factor for mass flow rate
@@ -173,11 +172,75 @@
     !1-Compressor solution error
     !2-Refprop error
 
-    !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt  !Ref prop calc. option
     INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-    REAL RefProp(28)
     LOGICAL, EXTERNAL :: IssueRefPropError
+    
+    !RS: Debugging: Bringing this over from GetHPSimInputs
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    INTEGER CompressorManufacturer
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+    !Compressor Manufacturer
+INTEGER,PARAMETER :: COPELAND  = 1 !ISI - 10/05/06
+INTEGER,PARAMETER :: BRISTOL   = 2
+INTEGER,PARAMETER :: DANFOSS   = 3
+INTEGER,PARAMETER :: PANASONIC = 4
+    
+    !RS: Debugging: Bringing this over from GetHPSimInputs
+      !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
+
+  CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  SELECT CASE (Alphas(2)(1:1))
+  CASE ('C','c')
+	CompressorManufacturer=COPELAND
+  CASE ('B','b')
+	CompressorManufacturer=BRISTOL
+  CASE ('D','d')
+	CompressorManufacturer=DANFOSS
+  CASE ('P','p')
+	CompressorManufacturer=PANASONIC
+  CASE DEFAULT
+	CompressorManufacturer=BRISTOL
+  END SELECT
+
+  PAR(21) = Numbers(1) !CompressorHeatLossFraction
+  PAR(22) = Numbers(2) !CompressorHeatLoss
+  PAR(23) = Numbers(3) !CompressorVolume
+  PAR(11) = Numbers(4) !CompressorMassCoefficient1
+  PAR(12) = Numbers(5) !CompressorMassCoefficient2
+  PAR(13) = Numbers(6) !CompressorMassCoefficient3
+  PAR(14) = Numbers(7) !CompressorMassCoefficient4
+  PAR(15) = Numbers(8) !CompressorMassCoefficient5
+  PAR(16) = Numbers(9) !CompressorMassCoefficient6
+  PAR(17) = Numbers(10) !CompressorMassCoefficient7
+  PAR(18) = Numbers(11) !CompressorMassCoefficient8
+  PAR(19) = Numbers(12) !CompressorMassCoefficient9
+  PAR(20) = Numbers(13) !CompressorMassCoefficient10
+  PAR(1) = Numbers(14) !CompressorPowerCoefficient1
+  PAR(2) = Numbers(15) !CompressorPowerCoefficient2
+  PAR(3) = Numbers(16) !CompressorPowerCoefficient3
+  PAR(4) = Numbers(17) !CompressorPowerCoefficient4
+  PAR(5) = Numbers(18) !CompressorPowerCoefficient5
+  PAR(6) = Numbers(19) !CompressorPowerCoefficient6
+  PAR(7) = Numbers(20) !CompressorPowerCoefficient7
+  PAR(8) = Numbers(21) !CompressorPowerCoefficient8
+  PAR(9) = Numbers(22) !CompressorPowerCoefficient9
+  PAR(10) = Numbers(23) !CompressorPowerCoefficient10
+  
+  PAR(25) = Numbers(24) !PowerMultiplier
+  PAR(26) = Numbers(25) !MassFlowRateMultiplier
+  !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
+  !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
+  !Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
+  !Super = Numbers(29) !UserSpecifiedRatingSuperheat
+  !_________
 
     !Flow:
 

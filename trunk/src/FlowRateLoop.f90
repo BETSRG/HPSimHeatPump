@@ -81,24 +81,19 @@
     USE CapillaryTubeMod
     USE DataSimulation
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
+    USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
-    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL TINPUT
     INTEGER IERR
 
     LOGICAL PRINT
-
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
+    
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)	!Refrigerant properties !RS: Debugging: Extraneous
-
-    !INTEGER(2) AirPropOpt			!Air prop calc. option  !RS: Debugging: Extraneous
-    !INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error !RS: Debugging: Extraneous
-    !REAL AirProp(8)		!Air properties !RS: Debugging: Extraneous
 
     REAL,PARAMETER :: StandardDensity=1.2 !kg/m3
 
@@ -112,13 +107,30 @@
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
-    !REAL, SAVE:: PrevTime = 0.0!RS: Debugging: Extraneous
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
     CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
     CHARACTER(LEN=14) :: tmpString
 
     LOGICAL, EXTERNAL :: IssueRefPropError
+        !RS: Debugging: Bringing this over from GetHPSimInputs
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
+    !RS: Debugging: Moving here from GetHPSimInputs
+      !*************** Filter Drier ****************    !RS: Debugging: Moving: FlowRateLoop
+
+  CALL GetObjectItem('FilterDrierData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  FilterPAR(1) = Numbers(1) !Flow capacity
+  FilterPAR(2) = Numbers(2) !Rating DP
+  !-------
 
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
     DO WHILE (.NOT. IsCondenserAllocated)
