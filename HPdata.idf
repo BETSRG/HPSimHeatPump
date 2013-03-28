@@ -13,7 +13,6 @@ MainDesignData,
     10, !field Design Superheat [R]
     R410A, !field Refrigerant Name
     2, !field No. of Refrigerants in Blend [-]
-    Cooling: 'A' Rating Conditions, !field Design Condition Description
     32, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
     30, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
     70, !80, !field Indoor Entering Drybulb Temperature [°F]
@@ -23,9 +22,6 @@ MainDesignData,
 CompressorData,
     H89B283ABC:60:230:1, !field Compressor Model
     Bristol, !field Compressor Manufacturer
-    Recip:Cooling:100:, !field Compressor Type
-    R410A, !field Compressor Refrigerant
-    2663.649, !field Compressor Power [W]
     0, !field Compressor Heat Loss Fraction [-]
     0, !field Compressor Heat Loss [Btu/h]
     150, !field Compressor Volume [in³]	!RS: Testing: Replaced 0 with 150
@@ -49,7 +45,6 @@ CompressorData,
     0.002143, !field Compressor Power Coefficient 8[-]
     0.000739, !field Compressor Power Coefficient 9[-]
     -0.001464, !field Compressor Power Coefficient 10[-]
-    IP, !field Compressor Coefficients Unit Flag
     1, !field Power Multiplier [-]
     1, !field Mass Flow Rate Multiplier [-]
     30, !field User Specified Rating Evap. Temperature [°F]
@@ -63,8 +58,6 @@ OutdoorCoilData,
     22, !field Fin Pitch [FPI]
     1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin thickness [thou]
-    Aluminum, !field Fin Material
-    Coil Tube: 3/8 0.012 thick Expanded, !field Tube Name
     4, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
@@ -92,8 +85,6 @@ IndoorCoilData,
     12, !field Fin Pitch [FPI]
     1539, !field Fin Conductivity [Btu.in/h.ft².F]
     3.9, !field Fin Thickness [thou]
-    Aluminum, !field Fin Material
-    Coil tube: 3/8 0.012 thick Expanded, !field Tube Name
     6, !field Tube Type
     0.37, !field Tube ID [in]
     0.394, !field Tube OD [in]
@@ -132,9 +123,6 @@ ExpansionDeviceData,
     12, !field Capillary Tube Length (Heating) [in]
     0.059, !field Capillary Tube Diameter (Heating) [in]
     1.5, !field Capillary Tube Coil Diameter (Heating) [in]
-    !--- TXV ---
-    4.68, !field Model (Cooling) Rated Capacity [tons]
-    4.73, !field Model (Heating) Rated Capacity [tons]
     !--- Distributor ---
     24, !Distributor Tube Length (Cooling) [in]
     24; !Distributor Tube Length (Heating) [in]
@@ -204,8 +192,6 @@ RefrigerantCycleData(Heating),
     0; !field Is Compressor in Air Stream [-]
 
 AccumulatorData,
-     , !field Manufacturer
-     , !field Model
     0, !field Height [in]
     0, !field Diameter [in]
     0.035, !field Upper Hole Diameter [in]
@@ -217,8 +203,6 @@ AccumulatorData,
     0; !field Coefficient-B [-]
 
 FilterDrierData,
-     , !field Manufacturer
-     , !field Model
     0, !field Flow Capacity [tons]
     0; !field Rating Pressure Drop [psig]
 

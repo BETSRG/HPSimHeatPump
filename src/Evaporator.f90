@@ -2286,6 +2286,18 @@ END SUBROUTINE PrintEvaporatorResult
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
   CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+    !RS: Debugging: Bringing over from GetHPSimInputs
+    REAL VdotODfan				!Outdoor fan volumetric flow rate
+    CHARACTER(len=MaxNameLength)ODC_FinName
+    CHARACTER(len=MaxNameLength)IDC_FinName
+    REAL :: ODC_TubeID
+    REAL :: IDC_TubeID
+
+    REAL VdotIDfan				!Indoor fan volumetric flow rate
+    
+    !INTEGER,PARAMETER :: SI=1
+    INTEGER,PARAMETER :: IP=2
     
     CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
     CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
@@ -2364,6 +2376,92 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                 IsShift=.TRUE.
             END SELECT
 
+            
+        !*************************** Inputs ***********************
+        
+          !***************** Indoor coil data ***************** !RS: Debugging: Evaporator & Condenser
+
+  CALL GetObjectItem('IndoorCoilData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  EvapPAR(22) = Numbers(1)  !IDC_FinType
+  
+  IDC_FinName = Alphas(1)
+  
+  EvapPAR(15) = Numbers(2)
+  EvapPAR(16) = Numbers(3) !Fin Conductivity
+  EvapPAR(14) = Numbers(4)   !Fin Thickness
+  EvapPAR(30) = Numbers(5) !Numerical Denotion of the tube type
+  IDC_TubeID = Numbers(6)   !Tube Inner Diameter
+  EvapPAR(8) = Numbers(7)   !Tube Outer Diameter
+  EvapPAR(11) = Numbers(8)    !Tube Conductivity
+  EvapPAR(13) = Numbers(9)   !Tube Lateral Spacing
+  EvapPAR(12) = Numbers(10)   !Tube Vertical Spacing
+  EvapPAR(18) = Numbers(11)  !Number of Rows
+  EvapPAR(17) = Numbers(12)  !Number of Tubes Per Row
+  EvapPAR(19) = Numbers(13)    !Number of Circuits
+  EvapPAR(21) = Numbers(14)    !Number of Segments
+  EvapPAR(10) = Numbers(15)   !Length of Tube
+  EvapPAR(23) = Numbers(16)   !Ref Side Heat Transfer Multiplier
+  EvapPAR(24) = Numbers(17) !Ref Side Pressure Drop Multiplier
+  EvapPAR(25) = Numbers(18)   !Air Side Heat Transfer Multiplier
+  EvapPAR(26) = Numbers(19) !Air Side Pressure Drop Multiplier
+
+  !Tube wall thickness, mm or mil
+  EvapPAR(9)=(EvapPAR(8)-IDC_TubeID)/2
+  IF (Unit .EQ. IP) THEN
+      EvapPAR(9)=EvapPAR(9)*1000
+  END IF
+
+
+	EvapPAR(20)=IsCoolingMode
+
+	!EvapPAR(29)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
+    
+    
+  !***************** Indoor fan data *****************  !RS: Debugging: Moving: Evaporator & Condenser
+  
+  CALL GetObjectItem('IndoorFanData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  EvapPAR(27) = Numbers(1) !Fan Power
+  VdotIDfan = Numbers(2)    !Fan Air Flow Rate
+  EvapPAR(38) = Numbers(3)   !Draw Through or Blow Through
+  
+        
+    !*************** Custom Air Side Heat Transfer Data **************    !RS: Debugging: Moving: Evaporator & Condenser
+
+  CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status) 
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  !---Indoor Coil---
+  
+  EvapPAR(35) = Numbers(1)    !IDC_CurveUnit
+  
+  !Heat Transfer data
+
+  EvapPAR(36) = Numbers(2) !Curve Type
+  EvapPAR(37) = Numbers(3)    !Power Fit Coefficient A
+  EvapPAR(38) = Numbers(4)    !Power Fit Coefficient B
+  EvapPAR(39) = Numbers(5) !Polynomial Fit Coefficient C1
+  EvapPAR(40) = Numbers(6) !Polynomial Fit Coefficient C2
+  EvapPAR(41) = Numbers(7) !Polynomial Fit Coefficient C3
+  EvapPAR(42) = Numbers(8) !Polynomial Fit Coefficent C4
+
+  !Pressure drop data
+
+  EvapPAR(43) = Numbers(9) !Curve Type
+  EvapPAR(44) = Numbers(10)    !Power Fit Coefficient A
+  EvapPAR(45) = Numbers(11)    !Power Fit Coefficient B
+  EvapPAR(46) = Numbers(12) !Polynomial Fit Coefficient C1
+  EvapPAR(47) = Numbers(13) !Polynomial Fit Coefficient C2
+  EvapPAR(48) = Numbers(14) !Polynomial Fit Coefficient C3
+  EvapPAR(49) = Numbers(15) !Polynomial Fit Coefficent C4
+
+        
         !*************************** Circuiting ************************************
 
             CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &
@@ -2826,7 +2924,91 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             CASE DEFAULT
                 IsShift=.TRUE.
             END SELECT
+            
+        !*************************** Inputs ***************************************
+        
+          !***************** Outdoor coil data *****************    !RS: Debugging: Moving: Evaporator & Condenser
 
+  CALL GetObjectItem('OutdoorCoilData',1,Alphas,NumAlphas, &
+                       TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  !Fin type (1-smooth; 2-Wavy; 3-louvered)
+
+  EvapPAR(22) = Numbers(1)  !ODC_FinType
+  
+  ODC_FinName = Alphas(1)
+  
+  EvapPAR(15) = Numbers(2)  !ODC_FinPitch
+  EvapPAR(16) = Numbers(3) !Conductivity of Fin
+  EvapPAR(14) = Numbers(4)   !Fin Thickness
+  EvapPAR(30) = Numbers(5) !Numerical Denotion of Tube Type
+  ODC_TubeID = Numbers(6)   !Tube Inner Diameter
+  EvapPAR(8) = Numbers(7)   !Tube Outer Diameter
+  EvapPAR(11) = Numbers(8)    !Tube Conductivity
+  EvapPAR(13) = Numbers(9)   !Tube Lateral Spacing
+  EvapPAR(12) = Numbers(10)   !Tube Vertical Spacing
+  EvapPAR(18) = Numbers(11)  !Number of Rows
+  EvapPAR(17) = Numbers(12)  !Number of Tubes per Row
+  EvapPAR(19) = Numbers(13)    !Number of Circuits
+  EvapPAR(21) = Numbers(14)    !Number of Segments
+  EvapPAR(10) = Numbers(15)   !Single Tube Length
+  EvapPAR(23) = Numbers(16)   !Ref Side Heat Transfer Multiplier
+  EvapPAR(24) = Numbers(17) !Ref Side Pressure Drop Multiplier
+  EvapPAR(25) = Numbers(18)   !Air Side Heat Transfer Multiplier
+  EvapPAR(26) = Numbers(19) !Air Side Pressure Drop Multiplier
+
+    !Tube wall thickness, mm or mil
+  EvapPAR(9)=(EvapPAR(8)-ODC_TubeID)/2
+  IF (Unit .EQ. IP) THEN
+      EvapPAR(9)=EvapPAR(9)*1000
+  END IF
+
+	EvapPAR(20)=IsCoolingMode
+
+	!EvapPAR(29)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
+    
+  !***************** Outdoor fan data ***************** !RS: Debugging: Moving: Evaporator & Condenser
+
+  CALL GetObjectItem('OutdoorFanData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  EvapPAR(27) = Numbers(1) !Fan Power
+  VdotODfan = Numbers(2)    !Fan Air Flow Rate
+  EvapPAR(28) = Numbers(3)   !Draw Through (1) or Blow Through (2)
+            
+          !*************** Custom Air Side Heat Transfer Data **************    !RS: Debugging: Moving: Evaporator & Condenser
+
+  CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status) 
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  !---Outdoor Coil---
+  
+  EvapPAR(35) = Numbers(16)   !ODC_CurveUnit
+
+  !Heat Transfer data
+  
+  EvapPAR(36) = Numbers(17) !Curve Type
+  EvapPAR(37) = Numbers(18)    !Power Fit Coefficient A
+  EvapPAR(38) = Numbers(19)    !Power Fit Coefficient B
+  EvapPAR(39) = Numbers(20) !Polynomial Fit Coefficient C1
+  EvapPAR(40) = Numbers(21) !Polynomial Fit Coefficient C2
+  EvapPAR(41) = Numbers(22) !Polynomial Fit Coefficient C3
+  EvapPAR(42) = Numbers(23) !Polynomial Fit Coefficent C4
+
+  !Pressure drop data
+  
+  EvapPAR(43) = Numbers(9) !Curve Type
+  EvapPAR(44) = Numbers(10)    !Power Fit Coefficient A
+  EvapPAR(45) = Numbers(11)    !Power Fit Coefficient B
+  EvapPAR(46) = Numbers(12) !Polynomial Fit Coefficient C1
+  EvapPAR(47) = Numbers(13) !Polynomial Fit Coefficient C2
+  EvapPAR(48) = Numbers(14) !Polynomial Fit Coefficient C3
+  EvapPAR(49) = Numbers(15) !Polynomial Fit Coefficent C4
+
+        
         !*************************** Circuiting ************************************
 
             CALL FinTubeCoilUnitConvert(IsSIUnit,FinPitch,Kfin,FinThk, &

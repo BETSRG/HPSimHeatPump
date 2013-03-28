@@ -312,7 +312,7 @@ REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 	CondPAR(34)=CondPAR(34)*1E-3           !Fan power, kW
 
 	CondPAR(38)=CondPAR(38)*UnitP          !Barometric pressure, kPa
-	CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m
+	!CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m !RS: Debugging: Not really used
 
 	!****Evaporator input data****
 	EvapPAR(1)=EvapPAR(1)*UnitL            !Suction line length, m
