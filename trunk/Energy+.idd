@@ -47,28 +47,25 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N5, \field No. of Refrigerants in Blend
-	\type integer
-	\required-field
-    N6, \field Outdoor Entering Drybulb Temperature
+    N5, \field Outdoor Entering Drybulb Temperature
 	\type real
 	\units F
 	\required-field
-    N7, \field Outdoor Entering Wetbulb Temperature
+    N6, \field Outdoor Entering Wetbulb Temperature
 	\type real
 	\units F
-    N8, \field Indoor Entering Drybulb Temperature
-	\type real
-	\units F
-	\required-field
-    N9, \field Indoor Entering Wetbulb Temperature
+    N7, \field Indoor Entering Drybulb Temperature
 	\type real
 	\units F
 	\required-field
-    N10; \field Design Refrigerant Charge Mass
-	 \type real
-	 \units lb
-	 \required-field
+    N8, \field Indoor Entering Wetbulb Temperature
+	\type real
+	\units F
+	\required-field
+    N9; \field Design Refrigerant Charge Mass
+	\type real
+	\units lb
+	\required-field
 
 CompressorData,
 	\unique-object

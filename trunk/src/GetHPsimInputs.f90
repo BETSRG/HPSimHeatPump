@@ -110,9 +110,6 @@ USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be use
 IMPLICIT NONE
 
 !Local variables
-!REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
-!REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
-!REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
 REAL VdotODfan				!Outdoor fan volumetric flow rate
 REAL VdotIDfan				!Indoor fan volumetric flow rate
 REAL CoolingShTbPAR(5)		!Cooling mode short tube model input data
@@ -156,7 +153,7 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
 
 REAL Subcooling   !Design Subcooling
 REAL Superheat    !Design Superheat
-REAL NumofRefrigerants    !Number of Refrigerants in Blend
+!REAL NumofRefrigerants    !Number of Refrigerants in Blend !RS: Debugging: Never used
 REAL RefChg    !Design Refrigerant Charge Mass
 
 CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
@@ -223,13 +220,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   Ref$ = Alphas(3)
   
-  NumofRefrigerants = Numbers(5)    !Number of Refrigerants in Blend
+  !NumofRefrigerants = Numbers(5)    !Number of Refrigerants in Blend   !RS: Debugging: Never used
   
-  TAic = Numbers(6) !OutdoorEnteringDrybulbTemperature
-  RHiC = Numbers(7) !OutdoorEnteringWetbulbTemperature
-  TAie = Numbers(8) !IndoorEnteringDrybulbTemperature
-  RHiE = Numbers(9) !IndoorEnteringWetbulbTemperature
-  RefChg = Numbers(10)    !Design Refrigerant Charge Mass
+  TAic = Numbers(5) !OutdoorEnteringDrybulbTemperature
+  RHiC = Numbers(6) !OutdoorEnteringWetbulbTemperature
+  TAie = Numbers(7) !IndoorEnteringDrybulbTemperature
+  RHiE = Numbers(8) !IndoorEnteringWetbulbTemperature
+  RefChg = Numbers(9)    !Design Refrigerant Charge Mass
 
 
   !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
@@ -362,8 +359,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       SucLnPAR(3)=SucLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
 
-  !!*************** Accumulator **************** !RS: Debugging: Moving: ORNLSolver?
+  !*************** Accumulator **************** !RS: Debugging: Moving: ORNLSolver?
   AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
+  !********************************************
 
   !Discharge Line
   
@@ -473,40 +471,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   BaroPressure = Numbers(2)  !Barometric Pressure
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
 
-  !!*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
-  !
-  !CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
-  !                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
-  !
-  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  !
-  !SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
-  !CASE ('F','f')
-  !    IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
-  !CASE ('T','t')
-  !    IsChargeTuning=1
-  !END SELECT
-  !
-  !RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
-  !RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
-  !SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
-  !LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
-  !
-  !!store the refrigerant name in data globals
-  !RefName = Ref$
-  !
-  !!Calculate charge tuning curve
-  !IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
-	 ! IF (RefChg .GT. 0) THEN
-		!  ChargeCurveSlope=(SimulatedCharge2-RefSimulatedCharge)/ &
-		!				   (LiquidLength2-RefLiquidLength)
-		!  ChargeCurveIntercept=RefChg-RefSimulatedCharge
-	 ! ELSE
-		!  ChargeCurveSlope=0
-		!  ChargeCurveIntercept=0
-	 ! END IF
-  !END IF
-
   !***** Calculate weight of interconnecting pipes **** !RS: Debugging: Moving: These are only ever used to report the weights out
 
   IF (Unit .EQ. SI) THEN
@@ -551,75 +515,16 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
 	!CondPAR(58)=HeatingDistubeLength   !RS: Debugging: Not really used
 
-    IF (IsCoolingMode .GT. 0) THEN
+    IF (IsCoolingMode .GT. 0) THEN    !Cooling Mode
 
-	  IF (Unit .EQ. SI) THEN !SI unit
-
-	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
+	  IF (Unit .EQ. SI) THEN !SI unit   !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
-	    TotVolume=VolDisLn+VolValveODCLn
-
-	    IF (VolValveODCLn .LE. 0) THEN
-			EqDiameter=DisLnPAR(2)
-			EqThickness=DisLnPAR(3)
-			TotElevation=DisLnPAR(4)
-			TotHeatGain=DisLnPAR(5)
-			TotTempChange=DisLnPAR(6)
-			TotAddDP=DisLnPAR(7)
-		ELSE
-			EqLength=DisLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
-			EqThickness=(DisLnPAR(3)+ValveODCLnPAR(3))/2
-			TotElevation=DisLnPAR(4)+ValveODCLnPAR(4)
-			TotHeatGain=DisLnPAR(5)+ValveODCLnPAR(5)
-			TotTempChange=DisLnPAR(6)+ValveODCLnPAR(6)
-			TotAddDP=DisLnPAR(7)+ValveODCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
-
-        DisLnPAR(1)=EqLength
-	    DisLnPAR(2)=EqDiameter
-	    DisLnPAR(3)=EqThickness
-	    DisLnPAR(4)=TotElevation
-	    DisLnPAR(5)=TotHeatGain
-	    DisLnPAR(6)=TotTempChange
-	    DisLnPAR(7)=TotAddDP
-
-        !Equilibrium suction line, combines compressor suction line and valve to IDC line
-	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
-	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
-	    TotVolume=VolSucLn+VolValveIDCLn
-
-	    IF (VolValveIDCLn .LE. 0) THEN
-			EqDiameter=SucLnPAR(2)
-			EqThickness=SucLnPAR(3)
-			TotElevation=SucLnPAR(4)
-			TotHeatGain=SucLnPAR(5)
-			TotTempChange=SucLnPAR(6)
-			TotAddDP=SucLnPAR(7)
-		ELSE
-			EqLength=SucLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
-			EqThickness=(SucLnPAR(3)+ValveIDCLnPAR(3))/2
-			TotElevation=SucLnPAR(4)+ValveIDCLnPAR(4)
-			TotHeatGain=SucLnPAR(5)+ValveIDCLnPAR(5)
-			TotTempChange=SucLnPAR(6)+ValveIDCLnPAR(6)
-			TotAddDP=SucLnPAR(7)+ValveIDCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
-	
-        SucLnPAR(1)=EqLength
-	    SucLnPAR(2)=EqDiameter
-	    SucLnPAR(3)=EqThickness
-	    SucLnPAR(4)=TotElevation
-	    SucLnPAR(5)=TotHeatGain
-	    SucLnPAR(6)=TotTempChange
-	    SucLnPAR(7)=TotAddDP
-
-	  ELSE !IP unit
-
-	    !Equilibrium Discharge line, combines compressor discharge line and valve to ODC line
+      ELSE
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
+      END IF
+      
 	    TotVolume=VolDisLn+VolValveODCLn
 
 	    IF (VolValveODCLn .LE. 0) THEN
@@ -636,9 +541,14 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotHeatGain=DisLnPAR(5)+ValveODCLnPAR(5)
 			TotTempChange=DisLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveODCLnPAR(7)
-		END IF
+        END IF
+        
+      IF (UNIT .EQ. SI) THEN
+		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
+      ELSE
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
-
+      END IF
+        
         DisLnPAR(1)=EqLength
 	    DisLnPAR(2)=EqDiameter
 	    DisLnPAR(3)=EqThickness
@@ -647,11 +557,16 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibrium suction line, combines compressor suction line and valve to IDC line
+      IF (UNIT .EQ. SI) THEN        !Equilibrium suction line, combines compressor suction line and valve to IDC line
+	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
+	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
+	  ELSE
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
+      END IF
+        
 	    TotVolume=VolSucLn+VolValveIDCLn
-
+        
 	    IF (VolValveIDCLn .LE. 0) THEN
 			EqDiameter=SucLnPAR(2)
 			EqThickness=SucLnPAR(3)
@@ -666,9 +581,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotHeatGain=SucLnPAR(5)+ValveIDCLnPAR(5)
 			TotTempChange=SucLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveIDCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
-
+        END IF
+        
+      IF (UNIT .EQ. SI) THEN
+		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
+      ELSE
+        EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
+      END IF
         SucLnPAR(1)=EqLength
 	    SucLnPAR(2)=EqDiameter
 	    SucLnPAR(3)=EqThickness
@@ -676,16 +595,17 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    SucLnPAR(5)=TotHeatGain
 	    SucLnPAR(6)=TotTempChange
 	    SucLnPAR(7)=TotAddDP
-
-	  END IF
 
     ELSE !Heating mode
 
-	  IF (Unit .EQ. SI) THEN !SI unit
-
-	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
+	  IF (Unit .EQ. SI) THEN !SI unit   !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
 	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3))*1e-3)**2/4*DisLnPAR(1)
 	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3))*1e-3)**2/4*ValveIDCLnPAR(1)
+      ELSE
+        VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
+	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
+      END IF
+      
 	    TotVolume=VolDisLn+VolValveIDCLn
 
 		IF (VolValveIDCLn .LE. 0) THEN
@@ -702,8 +622,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotHeatGain=DisLnPAR(5)+ValveIDCLnPAR(5)
 			TotTempChange=DisLnPAR(6)+ValveIDCLnPAR(6)
 			TotAddDP=DisLnPAR(7)+ValveIDCLnPAR(7)
-		END IF
+        END IF
+        
+      IF (UNIT .EQ. SI) THEN
 		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
+      ELSE
+         EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06 
+      END IF
 
         DisLnPAR(1)=EqLength
 	    DisLnPAR(2)=EqDiameter
@@ -713,71 +638,14 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    DisLnPAR(6)=TotTempChange
 	    DisLnPAR(7)=TotAddDP
 
-        !Equilibrium suction line, combines compressor suction line and valve to ODC line
+      IF (UNIT .EQ. SI) THEN !Equilibrium suction line, combines compressor suction line and valve to ODC line
 	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3))*1e-3)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3))*1e-3)**2/4*ValveODCLnPAR(1)
-	    TotVolume=VolSucLn+VolValveODCLn
-
-	    IF (VolValveODCLn .LE. 0) THEN
-			EqDiameter=SucLnPAR(2)
-			EqThickness=SucLnPAR(3)
-			TotElevation=SucLnPAR(4)
-			TotHeatGain=SucLnPAR(5)
-			TotTempChange=SucLnPAR(6)
-			TotAddDP=SucLnPAR(7)
-		ELSE
-			EqLength=SucLnPAR(1)+ValveODCLnPAR(1) !ISI - 08/03/06
-			EqThickness=(SucLnPAR(3)+ValveODCLnPAR(3))/2
-			TotElevation=SucLnPAR(4)+ValveODCLnPAR(4)
-			TotHeatGain=SucLnPAR(5)+ValveODCLnPAR(5)
-			TotTempChange=SucLnPAR(6)+ValveODCLnPAR(6)
-			TotAddDP=SucLnPAR(7)+ValveODCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
-
-        SucLnPAR(1)=EqLength
-	    SucLnPAR(2)=EqDiameter
-	    SucLnPAR(3)=EqThickness
-	    SucLnPAR(4)=TotElevation
-	    SucLnPAR(5)=TotHeatGain
-	    SucLnPAR(6)=TotTempChange
-	    SucLnPAR(7)=TotAddDP
-
-	  ELSE !IP unit
-
-	    !Equilibrium Discharge line, combines compressor discharge line and valve to IDC line
-	    VolDisLn=PI*((DisLnPAR(2)-2*DisLnPAR(3)*1e-3)/12)**2/4*DisLnPAR(1)
-	    VolValveIDCLn=PI*((ValveIDCLnPAR(2)-2*ValveIDCLnPAR(3)*1e-3)/12)**2/4*ValveIDCLnPAR(1)
-	    TotVolume=VolDisLn+VolValveIDCLn
-
-	    IF (VolValveIDCLn .LE. 0) THEN
-			EqDiameter=DisLnPAR(2)
-			EqThickness=DisLnPAR(3)
-			TotElevation=DisLnPAR(4)
-			TotHeatGain=DisLnPAR(5)
-			TotTempChange=DisLnPAR(6)
-			TotAddDP=DisLnPAR(7)
-		ELSE
-			EqLength=DisLnPAR(1)+ValveIDCLnPAR(1) !ISI - 08/03/06
-			EqThickness=(DisLnPAR(3)+ValveIDCLnPAR(3))/2
-			TotElevation=DisLnPAR(4)+ValveIDCLnPAR(4)
-			TotHeatGain=DisLnPAR(5)+ValveIDCLnPAR(5)
-			TotTempChange=DisLnPAR(6)+ValveIDCLnPAR(6)
-			TotAddDP=DisLnPAR(7)+ValveIDCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
-
-        DisLnPAR(1)=EqLength
-	    DisLnPAR(2)=EqDiameter
-	    DisLnPAR(3)=EqThickness
-	    DisLnPAR(4)=TotElevation
-	    DisLnPAR(5)=TotHeatGain
-	    DisLnPAR(6)=TotTempChange
-	    DisLnPAR(7)=TotAddDP
-
-        !Equilibrium suction line, combines compressor suction line and valve to ODC line
-	    VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
+      ELSE
+        VolSucLn=PI*((SucLnPAR(2)-2*SucLnPAR(3)*1e-3)/12)**2/4*SucLnPAR(1)
 	    VolValveODCLn=PI*((ValveODCLnPAR(2)-2*ValveODCLnPAR(3)*1e-3)/12)**2/4*ValveODCLnPAR(1)
+      END IF
+      
 	    TotVolume=VolSucLn+VolValveODCLn
 
 	    IF (VolValveODCLn .LE. 0) THEN
@@ -794,8 +662,13 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 			TotHeatGain=SucLnPAR(5)+ValveODCLnPAR(5)
 			TotTempChange=SucLnPAR(6)+ValveODCLnPAR(6)
 			TotAddDP=SucLnPAR(7)+ValveODCLnPAR(7)
-		END IF
-		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
+        END IF
+        
+      IF (UNIT .EQ. SI) THEN
+		EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*1000+2*EqThickness !ISI - 08/03/06
+      ELSE
+        EqDiameter=SQRT(4*TotVolume/(PI*EqLength))*12+2*EqThickness*1e-3 !ISI - 08/03/06
+      END IF
 
         SucLnPAR(1)=EqLength
 	    SucLnPAR(2)=EqDiameter
@@ -804,8 +677,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 	    SucLnPAR(5)=TotHeatGain
 	    SucLnPAR(6)=TotTempChange
 	    SucLnPAR(7)=TotAddDP
-
-	  END IF
 
     END IF
 
