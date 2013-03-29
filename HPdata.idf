@@ -12,7 +12,6 @@ MainDesignData,
     10, !field Design Subcooling [R]
     10, !field Design Superheat [R]
     R410A, !field Refrigerant Name
-    2, !field No. of Refrigerants in Blend [-]
     32, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
     30, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
     70, !80, !field Indoor Entering Drybulb Temperature [°F]

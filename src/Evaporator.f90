@@ -1838,7 +1838,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
 				   'QmodTot(W)','QmodSens(W)','QmodLat(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-				   'mdotR(kg/hr)','mdotA(kg/s)', 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
+				   'mdotR(kg/hr)','mdotA(kg/s)' !, 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
 
 	  DO NumSection=1, NumOfSections
 
@@ -2038,7 +2038,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
 							       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							       FLOAT(DryWet),mRefCkt*3600, mAiMod, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
+							       FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
 
 			      END DO !end Nmod
 

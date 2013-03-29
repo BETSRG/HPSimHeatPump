@@ -4839,10 +4839,6 @@ REAL j1        !Intermediate variable
 REAL j2        !Intermediate variable
 REAL j3        !Intermediate variable
 !REAL j4        !Intermediate variable  !RS: Debugging: Extraneous
-!REAL j5        !Intermediate variable  !RS: Debugging: Extraneous
-!REAL j6        !Intermediate variable  !RS: Debugging: Extraneous
-!REAL j7        !Intermediate variable  !RS: Debugging: Extraneous
-!REAL j8        !Intermediate variable  !RS: Debugging: Extraneous
 
 !Flow:
 
