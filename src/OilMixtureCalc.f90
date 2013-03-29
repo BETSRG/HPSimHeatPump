@@ -215,10 +215,8 @@ REAL Tsat2 !Saturation temperature at Psat2, K
 
 !EnergyPlus Refprop variables
 INTEGER(2) RefPropErr  !Error flag:1-error; 0-no error
-REAL Temperature !C
 REAL Quality  !0-1
 REAL Pressure !Pa
-REAL Enthalpy !J/kg
 
 !FLOW:
 
@@ -837,8 +835,6 @@ REAL ReLiq !Liquid Reynolds number
 REAL ReVap !Vapor Reynolds number
 REAL fmix  !Refrigerant-oil mixture friction factor
 REAL fvap  !Vapor refrigerant friction factor
-REAL DPmix !Refrigerant-oil mixture pressure drop, Pa
-REAL DPvap !Vapor mixture pressure drop, Pa
 REAL DPmixDZ !Refrigerant-oil mixture pressure drop gradient, Pa/m
 REAL DPvapDZ !Vapor mixture pressure drop gradient, Pa/m
 

@@ -86,11 +86,9 @@ INTEGER, INTENT(OUT) ::ErrorFlag !Error flag: 0 = no error
 REAL, PARAMETER :: SuperRtd = 6.11 !11 F  !Rated superheat, C
 REAL, PARAMETER :: UnitP = 6.895 !(psi X UnitP = kPa)
            
-REAL Temperature,Quality,Pressure,Enthalpy
+REAL Temperature,Quality,Pressure
 
-INTEGER(2)       :: RefPropOpt  !Ref prop calc. option
 INTEGER(2)       :: RefPropErr  !Error flag:1-error; 0-no error
-REAL :: RefProp(28)
 
 REAL TiExpF   !Inlet temperature of expansion device, F
 REAL TsoEvp   !Evaporator outlet saturation temperature, C

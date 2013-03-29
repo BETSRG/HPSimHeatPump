@@ -448,7 +448,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE Condenser(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE Condenser(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -598,7 +598,7 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
-    INTEGER(2),       INTENT(IN)  :: PureRef
+    !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous
     REAL, INTENT(IN)  :: XIN(9)
     REAL, INTENT(IN)  :: PAR(62) !ISI - 12/21/06
     REAL, INTENT(OUT) :: OUT(29)
@@ -734,7 +734,7 @@
 
     IF (CoilType .EQ. MCCONDENSER) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
-        CALL MicrochannelCondenser(Ref$,MCXIN,MCPAR,MCOUT)
+        CALL MicrochannelCondenser(MCXIN,MCPAR,MCOUT) !(Ref$,MCXIN,MCPAR,MCOUT)    !RS: Debugging: Extraneous Ref$
         CALL LoadMicrochannelOutputs(MCOUT,OUT)
         RETURN
     END IF
@@ -1433,14 +1433,14 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
 
                     ELSE
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1634,7 +1634,7 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1893,13 +1893,13 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
                     ELSE
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -2071,7 +2071,7 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
                         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -3721,7 +3721,7 @@ END IF
         !Find outlet ref. pressure
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
-        muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodDis,LmodTPratio, &
+        muRiMod,mugRiMod,mufRiMod,LmodDis,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodDis,LmodTPratio, & !RS: Debugging: Extraneous SigmaMod
         IDdisLn,ElevDisLn,LmodDis,DPrefMultiplier,pRoMod)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
@@ -3738,7 +3738,7 @@ END IF
 
         mu=(muRiMod+muRoMod)/2  !Average viscosity
 
-        CALL Inventory(CoilType,TubeType,IDdisLn,ktube,mRefTot,QdisLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+        CALL Inventory(CoilType,TubeType,IDdisLn,ktube,mRefTot,QdisLn,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
         muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
         MolWeight,pRoMod,Psat,Pcr,Tsat,Cair,Const,Rair,Rtube,AiModDis, &
@@ -3839,7 +3839,7 @@ END IF
         !Find outlet ref. pressure
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
-        muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodLiq,LmodTPratio, &
+        muRiMod,mugRiMod,mufRiMod,LmodDis,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodLiq,LmodTPratio, & !RS: Debugging: Extraneous SigmaMod
         IDliqLn,ElevLiqLn,LmodLiq,DPrefMultiplier,pRoMod)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
@@ -3860,7 +3860,7 @@ END IF
         muf=(mufRiMod+mufRoMod)/2
         mug=(mugRiMod+mugRoMod)/2
 
-        CALL Inventory(CoilType,TubeType,IDliqLn,ktube,mRefTot,QliqLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+        CALL Inventory(CoilType,TubeType,IDliqLn,ktube,mRefTot,QliqLn,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
         mu,mug,muf,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
         MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiModLiq, &
@@ -4399,7 +4399,7 @@ END IF
         tAoMod=Ckt(II)%Tube(III)%Seg(IV)%tAo
         CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
 
-        CALL CalcSegmentOutletConditions(II,II,III,IV,CoilType)
+        CALL CalcSegmentOutletConditions(II,III,IV,CoilType) !(II,II,III,IV,CoilType)   !RS: Debugging: Extraneous I or II
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
         END IF
@@ -4496,7 +4496,7 @@ END IF
         tAoMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAo
         CALL CalcMeanProp(tAiMod,tAoMod,tAmod)
 
-        CALL CalcSegmentOutletConditions(I,II,III,IV,CoilType)
+        CALL CalcSegmentOutletConditions(II,III,IV,CoilType) !(I,II,III,IV,CoilType)    !RS: Debugging: Extraneous I
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
             RETURN
         END IF
@@ -4953,7 +4953,7 @@ END IF
 
     !************************************************************************
 
-    SUBROUTINE CalcSegmentOutletConditions(I,II,III,IV,CoilType)
+    SUBROUTINE CalcSegmentOutletConditions(II,III,IV,CoilType) !(I,II,III,IV,CoilType)  !RS: Debugging: Extraneous I
 
     !------------------------------------------------------------------------
     !Purpose:
@@ -4978,7 +4978,7 @@ END IF
 
     IMPLICIT NONE
 
-    INTEGER,INTENT(IN) :: I   !Slab number
+    !INTEGER,INTENT(IN) :: I   !Slab number !RS: Debugging: Extraneous
     INTEGER,INTENT(IN) :: II  !Circuit,pass number
     INTEGER,INTENT(IN) :: III !Tube number
     INTEGER,INTENT(IN) :: IV  !Segment number
@@ -5230,7 +5230,7 @@ END IF
 
         CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
         hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
-        muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &
+        muRiMod,mugRiMod,mufRiMod,LmodDis,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &    !RS: Debugging: Extraneous SigmaMod
         Dchannel,HtCoil,Lcoil,DPrefMultiplier,pRoMod)
 
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
@@ -5835,7 +5835,8 @@ END IF
 
     SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
     hRi,hRo,xRi,vRi,vgRi,vfRi,mRef, &
-    muRi,mugRi,mufRi,Sigma,Lsegment,LmodTPratio, &
+    !muRi,mugRi,mufRi,Sigma,Lsegment,LmodTPratio, & !RS: Debugging: Extraneous Sigma
+    muRi,mugRi,mufRi,Lsegment,LmodTPratio, &
     IDtube,Elevation,Ltotal,DPrefMultiplier,pRo)
 
     !------------------------------------------------------------------------
@@ -5881,7 +5882,7 @@ END IF
     REAL, INTENT(IN) ::  muRi      !Inlet dynamic viscosity, Pa-s
     REAL, INTENT(IN) ::  mugRi     !Inlet vapor dynamic viscosity, Pa-s
     REAL, INTENT(IN) ::  mufRi     !Inlet liquid dynamic viscosity, Pa-s
-    REAL, INTENT(IN) ::  Sigma     !Surface tension, N/m
+    !REAL, INTENT(IN) ::  Sigma     !Surface tension, N/m   !RS: Debugging: Extraneous Sigma
     REAL, INTENT(IN) ::  Lsegment  !Segment length, m
     REAL, INTENT(IN) ::  LmodTPratio !Two-phase ratio
     REAL, INTENT(IN) ::  IDtube    !Tube inside diameter, m
@@ -5980,7 +5981,7 @@ END IF
 
     !************************************************************************
 
-    SUBROUTINE MicrochannelCondenser(Ref$,XIN,PAR,OUT)
+    SUBROUTINE MicrochannelCondenser(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)   !RS: Debugging: Extraneous Ref$
 
     !-----------------------------------------------------------------------------------
     !
@@ -6090,7 +6091,7 @@ END IF
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    CHARACTER*80, INTENT(IN)  :: Ref$
+    !CHARACTER*80, INTENT(IN)  :: Ref$  !RS: Debugging: Extraneous Ref$
     REAL,         INTENT(IN)  :: XIN(7)
     REAL,         INTENT(IN)  :: PAR(39)
     REAL,         INTENT(OUT) :: OUT(22)

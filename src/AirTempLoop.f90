@@ -70,7 +70,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     IMPLICIT NONE
 
-    REAL Quality,Pressure,Enthalpy !Temperature,    !RS: Debugging: Extraneous
+    REAL Quality,Pressure,Enthalpy
 
     REAL TINPUT
     INTEGER IERR
@@ -140,7 +140,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         EvapPAR(32)=CompPAR(22)/1000    !RS Comment: Unit Conversion
     END IF
 
-    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
+    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
     EvapPAR(54)=0 !No longer first time
     IF (EvapOUT(20) .NE. 0) THEN

@@ -502,7 +502,7 @@ CONTAINS
 
 !***********************************************************************************
 
-    SUBROUTINE Evaporator(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE Evaporator(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -647,7 +647,7 @@ CONTAINS
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
-    INTEGER(2),       INTENT(IN)  :: PureRef
+    !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous PureRef
     REAL, INTENT(IN)  :: XIN(9)
     REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
     REAL, INTENT(OUT) :: OUT(25)
@@ -776,7 +776,7 @@ CONTAINS
 
     IF (CoilType .EQ. MCEVAPORATOR) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
-        CALL MicrochannelEvaporator(Ref$,MCXIN,MCPAR,MCOUT)
+        CALL MicrochannelEvaporator(MCXIN,MCPAR,MCOUT) !(Ref$,MCXIN,MCPAR,MCOUT)    !RS: Debugging: Extraneous Ref$
         CALL LoadMicrochannelOutputs(MCOUT,OUT)
         RETURN
     END IF
@@ -1505,14 +1505,14 @@ REAL Lregion !Region length, m
 				      IF ((K .EQ. NumOfMods .AND. J .NE. LastTube) .OR. &
 				          (J .EQ. LastTube .AND. (CoilSection(NumSection)%Ckt(I)%OutSplit .GT. 1 .OR. CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1))) THEN !ISI - 02/05/07
 					      !Include return bend length
-					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									     xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									     muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									     MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
 									     LmodTube+Lreturnbend,LmodTP,LmodTP,MassLiqMod,MassVapMod,MassMod)
 
 				      ELSE
-					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									     xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									     muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									     MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1710,7 +1710,7 @@ REAL Lregion !Region length, m
 					  Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
 					  Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-					  CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					  CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									 xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									 muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									 MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -1974,14 +1974,14 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				           CoilSection(NumSection)%Ckt(I)%OutJoin .GT. 1))) THEN
 				           
 						    !Include return bend length
-					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									     xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									     muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									     MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
 									     LmodTube+Lreturnbend,LmodTP,LmodTP,MassLiqMod,MassVapMod,MassMod)
 
 				      ELSE
-					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					      CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									     xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									     muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									     MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -2185,7 +2185,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 					  Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
 					  Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-					  CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+					  CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
 									 xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
 									 muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 									 MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
@@ -3924,7 +3924,7 @@ INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=H
 		muf=(mufRiMod+mufRoMod)/2
 		mug=(mugRiMod+mugRoMod)/2
 
-		CALL Inventory(CoilType,TubeType,IDsucLn,ktube,mRefTot,QsucLn,hgRoMod,hfRoMod,hRiMod,hRoMod, &
+		CALL Inventory(CoilType,TubeType,IDsucLn,ktube,mRefTot,QsucLn,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
 					   xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
 			           MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiModSuc, &
@@ -6550,7 +6550,7 @@ END SUBROUTINE CalcWetSurfaceMcQuiston
 
 !************************************************************************
 
-SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
+SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debugging: Extraneous Ref$
 
     !-----------------------------------------------------------------------------------
     !
@@ -6651,7 +6651,7 @@ SUBROUTINE MicrochannelEvaporator(Ref$,XIN,PAR,OUT)
     IMPLICIT NONE
 
     !Subroutine argument declarations
-    CHARACTER*80, INTENT(IN)  :: Ref$
+    !CHARACTER*80, INTENT(IN)  :: Ref$  !RS: Debugging: Extraneous
     REAL,         INTENT(IN)  :: XIN(7)
     REAL,         INTENT(IN)  :: PAR(33)
     REAL,         INTENT(OUT) :: OUT(21)

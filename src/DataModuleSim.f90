@@ -124,9 +124,6 @@ REAL BaroPressure   !Barometric pressure, kPa
 
 REAL PwrODfan					!Outdoor fan power, W
 REAL PwrIDfan					!Indoor fan power, W
-
-!REAL DPEVP						!Pressure drop in evaporator and suction line, psi  !RS: Debugging: Extraneous
-
 REAL XMaC						!Condenser inlet air flow rate, kg/s
 REAL TAIC						!Condenser inlet DB temp. F
 REAL RHIC						!Condenser inlet relative humidity
@@ -141,7 +138,6 @@ CHARACTER*80 Ref$	!Refrigerant name
 CHARACTER*80 Rref   !Referance Refrigerant name
 
 INTEGER(2) PureRef	!Pure refrigerant flag: 1=Pure; 0=mixture
-!INTEGER(2) PureRref !Referance refrigerant flag: 1-pure; 0-mixture !RS: Debugging: Extraneous
 
 !Compressor model passing parameters
 REAL TSICMP								!Compressor inlet saturation temperature, F

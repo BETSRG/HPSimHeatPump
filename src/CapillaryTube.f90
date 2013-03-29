@@ -79,7 +79,7 @@
 
     !***********************************************************************
 
-    SUBROUTINE CapillaryTubeORNL(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE CapillaryTubeORNL(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)
 
     ! ----------------------------------------------------------------------
     !
@@ -157,14 +157,14 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant  !RS: Debugging: Extraneous but is called in anyhow...
+    !INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant  !RS: Debugging: Extraneous
     !0-refrigerant mixture
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
     REAL, INTENT(OUT) :: OUT(7)
     !INTEGER, INTENT(INOUT) :: OUT(7)
 
-    REAL Temperature,Quality,Pressure,Enthalpy
+    REAL Quality,Pressure,Enthalpy
 
     REAL :: LcapTube    !Cap tube length, m
     REAL :: LdisTube    !Distributor tube length, m
@@ -210,13 +210,9 @@
     INTEGER          :: ErrorFlag   !0-No error
     !1-Solution error
     !2-Refprop error
-    INTEGER :: I  !Iteration counter
-    INTEGER :: II !Iteration counter
 
     !NIST Refrigerant property variables and functions
-    !INTEGER(2) RefPropOpt           !Ref prop calc. option !RS: Debugging: Extraneous
     INTEGER(2) RefPropErr           !Error flag:1-error; 0-no error
-    REAL RefProp(28)
 
     !Flow:
 

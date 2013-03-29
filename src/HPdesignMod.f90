@@ -62,6 +62,7 @@
     USE AccumulatorMod
     USE DataSimulation
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE InputProcessor_HPSim    !RS: Debugging: Bringing over from GetHPSimInputs
 
     IMPLICIT NONE
 
@@ -118,6 +119,61 @@
     LOGICAL, EXTERNAL :: IssueRefPropError
     
     INTEGER :: TimeStep1 !RS: Testing
+    
+    INTEGER, PARAMETER :: MaxNameLength = 200
+
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
+    REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
+    REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
+    !REAL, PARAMETER :: UnitM     = 0.4536    !(lbm X UnitM = kg)
+    !REAL, PARAMETER :: UnitL     = 0.3048    !(ft X UnitL = m)
+  
+    
+    IF (EvapPAR(54) .EQ. 1) THEN
+          !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
+
+    CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
+                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+
+        Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+        SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
+            CASE ('F','f')
+                IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
+            CASE ('T','t')
+                IsChargeTuning=1
+        END SELECT
+  
+        RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
+        RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
+        SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
+        LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
+  
+        !store the refrigerant name in data globals
+        RefName = Ref$
+  
+        !Calculate charge tuning curve
+        IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
+	        IF (RefChg .GT. 0) THEN
+		        ChargeCurveSlope=(SimulatedCharge2-RefSimulatedCharge)/ &
+						        (LiquidLength2-RefLiquidLength)
+		        ChargeCurveIntercept=RefChg-RefSimulatedCharge
+	        ELSE
+		        ChargeCurveSlope=0
+		        ChargeCurveIntercept=0
+	        END IF
+        END IF
+        ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
+	    ChargeCurveIntercept=ChargeCurveIntercept*UnitM
+	    RefLiquidLength=RefLiquidLength*UnitL
+  
+    END IF
 
     MaxIteration=30
     ICHRGE=1
@@ -375,7 +431,7 @@
                 !Microchannel coil
                 EvapPAR(54)=1 !First time
                 EvapPAR(53)=0 !Detailed version
-                CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
+                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 EvapPAR(54)=0 !No longer first time
             ELSE
                 !Plate-fin coil
@@ -384,13 +440,13 @@
                 IF (IsFirstTimeEvaporator) THEN
                     EvapPAR(54)=1 !First time
                     EvapPAR(53)=0 !Detailed version
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT)
+                    CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
                     !CALL EndEvaporatorCoil
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
                     EvapPAR(53)=1 !Simple version
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)
+                    CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
                     !CALL EndEvaporatorCoil
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
@@ -410,7 +466,7 @@
                     EvapOUT=DetailedEvapOUT
 
                 ELSE
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)
+                    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                     EvapPAR(54)=0 !No longer first time
                 END IF
             END IF
@@ -604,7 +660,8 @@
                 DO NumIter=1, MaxIteration
 
                     !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-                    CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
+                    !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
+                    CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
                     IF (ShTbOUT(7) .NE. 0) THEN
                         SELECT CASE (INT(ShTbOUT(7)))
                         CASE (1)
@@ -689,7 +746,8 @@
             DO NumIter=1, MaxIter
 
                 !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
-                CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
+                !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
+                CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
 
                 IF (CapTubeOUT(7) .NE. 0) THEN
                     SELECT CASE (INT(CapTubeOUT(7)))
