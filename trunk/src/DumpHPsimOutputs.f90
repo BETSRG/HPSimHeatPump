@@ -69,16 +69,14 @@ USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora o
 
 IMPLICIT NONE
 
-INTEGER(2) RefPropOpt			!Ref prop calc. option
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-REAL RefProp(28)	!Refrigerant properties
 
 INTEGER(2) AirPropOpt			!Air prop calc. option
 INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
 REAL AirProp(8)		!Air properties
 
-REAL TsubExp,TsubCnd,TsupEvp,TsupCmp,Qcnd,Qevp,QevpSens,QevpLat,Tsat
-REAL PwrCmp,mdot,TsiExp,TsoCnd,TsoEvp,Qtxv,IsCoolingMode
+REAL Qcnd,Qevp,QevpSens,QevpLat
+REAL PwrCmp,mdot,Qtxv,IsCoolingMode
 REAL Dshtb,DrawBlow,CPair,Qtot,QtotSens
 REAL DcapTube,LcapTube
 REAL TAOCND,TAOEVP,COP,SHR,EER
@@ -103,8 +101,7 @@ REAL WeightEvpAluminum,WeightEvpCopper,WeightCndAluminum,WeightCndCopper
 REAL,PARAMETER :: StandardDensity=1.2 !Standard density, kg/m3
 REAL,PARAMETER :: StandardSpecHeat=1.02 !Standard specific heat, kJ/kg-K
 REAL SpecHeat     !Specific heat, kJ/kg-K
-CHARACTER (len=15) :: Property
-REAL Temperature,Quality,Pressure,Enthalpy
+REAL Quality,Pressure,Enthalpy
 CHARACTER (len=50) :: Title !Output file title
 
 REAL :: CoilSurfTemp = 0.0

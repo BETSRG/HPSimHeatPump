@@ -123,8 +123,7 @@ REAL, INTENT(IN)  :: DP      !Pressure drop, kPa
 REAL, INTENT(OUT) :: Qtxv    !TXV capacity, kW
 
 !Subroutine local variables
-!INTEGER            :: RefrigIndex =0
-REAL Temperature,Quality,Pressure,Enthalpy
+REAL Temperature,Quality,Pressure
 INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
 
 INTEGER ErrorFlag     !0-No error

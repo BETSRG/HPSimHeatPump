@@ -216,7 +216,7 @@ TYPE ModInfo
   REAL tSi             !Inlet surface temperature
   REAL tSo             !Outlet surface temperature
   REAL hci             !Module inside heat transfer coefficient
-  REAL EFref           !Module inside heat transfer enhancement factor !RS: Debugging: Extraneous
+  REAL EFref           !Module inside heat transfer enhancement factor
   REAL hco             !Module outside heat transfer coefficient
   REAL ReVap           !Module Reynolds number vapor
   REAL ReLiq           !Module Reynolds number liquid
@@ -226,24 +226,24 @@ TYPE ModInfo
   REAL Rfrost          !Frost resistance (Sankar)
   REAL Qmod            !Module heat transfer
   REAL QmodSens        !Module sensible heat transfer
-  REAL SHR             !Sensible heat ratio    !RS: Debugging: Extraneous
-  INTEGER DryWet       !1=Wet surface; 2=Partially wet surface; 3=Dry surface  !RS: Debugging: Extraneous
+  REAL SHR             !Sensible heat ratio
+  INTEGER DryWet       !1=Wet surface; 2=Partially wet surface; 3=Dry surface
   REAL Mass            !Refrigerant mass
   REAL MassLiq         !Refrigerant mass liquid
   REAL MassVap         !Refrigerant mass vapor
-  REAL VelDev          !Velocity deviation !RS: Debugging: Extraneous
-  REAL VelAi           !air velcoity, m/s  !RS: Debugging: Extraneous
+  REAL VelDev          !Velocity deviation
+  REAL VelAi           !air velcoity, m/s
   REAL Aface           !Face area, m^2
 END TYPE ModInfo
 
 TYPE TubeInfo
-  INTEGER :: Even      !Even tubes flag    !RS: Debugging: Extraneous
-  INTEGER :: Fup       !Upper front tube#  !RS: Debugging: Extraneous
-  INTEGER :: Fdown     !Lower front tube#  !RS: Debugging: Extraneous
-  INTEGER :: Back      !Back tube flag: 1=yes; 2=no back tube  !RS: Debugging: Extraneous
-  INTEGER :: Empty     !Empty tube flag: 1=yes; 2=no   !RS: Debugging: Extraneous
+  INTEGER :: Even      !Even tubes flag
+  INTEGER :: Fup       !Upper front tube#
+  INTEGER :: Fdown     !Lower front tube#
+  INTEGER :: Back      !Back tube flag: 1=yes; 2=no back tube
+  INTEGER :: Empty     !Empty tube flag: 1=yes; 2=no
   INTEGER :: RowNum    !Row number of current tube
-  INTEGER :: Nchannel  !Number of channels !RS: Debugging: Extraneous
+  INTEGER :: Nchannel  !Number of channels
   REAL    :: ID        !Tube inside diameter, m
   INTEGER :: NumOfMods !Number of tube modules/segments
   TYPE (ModInfo),ALLOCATABLE,DIMENSION(:) :: Seg  !Segment
@@ -263,11 +263,11 @@ TYPE CktInfo
   REAL hRo             !Outlet enthalpy
   REAL tRo             !Outlet temp.
   REAL tSat            !Saturated temp.
-  REAL tSC             !Subcool temp.  !RS: Debugging: Extraneous
-  REAL tSH             !Superheat temp.    !RS: Debugging: Extraneous
+  REAL tSC             !Subcool temp.
+  REAL tSH             !Superheat temp.
   REAL Qckt            !Circuit heat transfer
   REAL QcktSens        !Circuit sensible heat transfer
-  REAL mRef            !Ref. mass flow rate    !RS: Debugging: Extraneous
+  REAL mRef            !Ref. mass flow rate 
   REAL mRefPrev        !Previous Ref. mass flow rate
   TYPE (TubeInfo),ALLOCATABLE,DIMENSION(:) :: Tube !Tube
 END TYPE CktInfo
@@ -283,24 +283,24 @@ TYPE PassInfo
   REAL pRo             !Outlet pressure
   REAL hRi             !Inlet enthalpy
   REAL hRo             !Outlet enthalpy
-  REAL Qpass            !Coil pass heat transfer   !RS: Debugging: Extraneous
+  REAL Qpass            !Coil pass heat transfer
   TYPE (TubeInfo),ALLOCATABLE,DIMENSION(:) :: Tube !Tube
 END TYPE PassInfo
 
 TYPE InletPassInfo
   INTEGER Ntube        !# tubes
-  REAL mRef            !Ref. mass flow rate    !RS: Debugging: Extraneous
+  REAL mRef            !Ref. mass flow rate
   REAL pRi             !Inlet pressure
   REAL pRo             !Outlet pressure
   REAL hRi             !Inlet enthalpy
   REAL hRo             !Outlet enthalpy
-  REAL Qpass           !Coil pass heat transfer, kW    !RS: Debugging: Extraneous
-  REAL QpassSens       !Coil pass sensible heat transfer, kW   !RS: Debugging: Extraneous
+  REAL Qpass           !Coil pass heat transfer, kW 
+  REAL QpassSens       !Coil pass sensible heat transfer, kW
 END TYPE InletPassInfo
 
 TYPE SlabInfo
-  INTEGER Npass        !# passes   !RS: Debugging: Extraneous
-  INTEGER Ninlet       !# inlets   !RS: Debugging: Extraneous
+  INTEGER Npass        !# passes
+  INTEGER Ninlet       !# inlets
   REAL tAi             !Inlet air temp
   REAL tAo             !Outlet air temp
   REAL rhAi            !Inlet air humidity
@@ -316,29 +316,29 @@ TYPE SlabInfo
   REAL tRo             !Outlet temp.
   REAL xRi             !Inlet quality
   REAL xRo             !Outlet quality
-  REAL tSC             !Subcool temp.  !RS: Debugging: Extraneous
-  REAL tSH             !Superheat temp.    !RS: Debugging: Extraneous
+  REAL tSC             !Subcool temp.
+  REAL tSH             !Superheat temp.
   REAL Qslab           !Circuit heat transfer
   REAL Conduct         !Refrigerant flow conductance
-  TYPE (PassInfo),ALLOCATABLE,DIMENSION(:) :: Pass !Pass   !RS: Debugging: Extraneous
-  TYPE (InletPassInfo),ALLOCATABLE,DIMENSION(:) :: InletPass !Inlet pass   !RS: Debugging: Extraneous
+  TYPE (PassInfo),ALLOCATABLE,DIMENSION(:) :: Pass !Pass 
+  TYPE (InletPassInfo),ALLOCATABLE,DIMENSION(:) :: InletPass !Inlet pass 
 END TYPE SlabInfo
 
 TYPE SectionInfo !ISI - 09/10/07
-  REAL Qsection        !Section capacity   !RS: Debugging: Extraneous
-  REAL QsectionSens    !Section sensible capacity  !RS: Debugging: Extraneous
-  REAL mRef            !Ref. mass flow rate    !RS: Debugging: Extraneous
+  REAL Qsection        !Section capacity
+  REAL QsectionSens    !Section sensible capacity
+  REAL mRef            !Ref. mass flow rate
   REAL pRi             !Inlet pressure
   REAL pRo             !Outlet pressure
   REAL hRi             !Inlet enthalpy
   REAL hRo             !Outlet enthalpy
   INTEGER NumOfCkts    !Number of circuits
-  INTEGER NcktLast     !Number of last circuits    !RS: Debugging: Extraneous
-  INTEGER NcktFirst    !Number of first circuits   !RS: Debugging: Extraneous
+  INTEGER NcktLast     !Number of last circuits
+  INTEGER NcktFirst    !Number of first circuits
   INTEGER Nnode        !Number of nodes
-  LOGICAL IsInlet      !Inlet section flag !RS: Debugging: Extraneous
-  INTEGER,ALLOCATABLE,DIMENSION(:) :: CktNum !Circuit number   !RS: Debugging: Extraneous
-  REAL,ALLOCATABLE,DIMENSION(:) :: mRefIter !Iteration ref. mass flow rate !RS: Debugging: Extraneous
+  LOGICAL IsInlet      !Inlet section flag
+  INTEGER,ALLOCATABLE,DIMENSION(:) :: CktNum !Circuit number
+  REAL,ALLOCATABLE,DIMENSION(:) :: mRefIter !Iteration ref. mass flow rate
   TYPE (CktInfo),ALLOCATABLE,DIMENSION(:) :: Ckt !Circuit info
   TYPE (NodeInfo),ALLOCATABLE,DIMENSION(:) :: Node !Node info
 END TYPE SectionInfo
@@ -587,7 +587,7 @@ INTEGER          TubeType	!1=Plain; 2=General Micro Fin; 3=Herringbone;
 							!4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
 							!7=Helical; 8=42F HXH
 REAL ID			!Inside diameter, [m]
-REAL ktube		!Tube wall thermal conductivity, [kW/m-K]   !RS: Debugging: Extraneous
+REAL ktube		!Tube wall thermal conductivity, [kW/m-K]
 REAL mRef		!Refrigerant mass flow rate, [kg/s]
 REAL Qout		!Tube outside heat transfer, [kW]
 REAL AoMod		!Outside heat transfer area, [m^2]
@@ -610,7 +610,6 @@ REAL MolWeight	!Molecular weight of refrigerant, [kg/mol]
 REAL Psat		!Saturated pressure of refrigerant, [kPa]
 REAL Pcrit		!Critical pressure of refrigerant, [kPa]
 REAL Tsat		!Saturated temperature of refrigerant, [C]
-REAL Const		!A constant for debugging purpose, [-]
 REAL sigma      !Surface tension, [N/m]  
 REAL DT         !Temperature difference between tube wall and saturate vapor, [C]
 REAL Wabsolute  !Absolute oil mass fraction
@@ -622,12 +621,6 @@ REAL EF    !Heat transfer enhancement factor, [-]
 !Subroutine local variables:
 REAL xRef	  !Quality of refrigerant, [-]
 REAL Gref     !Refrigerant mass flux, [kg/s-m^2]
-REAL xAvg     !Average quality
-REAL hcRefAvg !Average refrigerant heat transfer coefficient, [kW/m^2-K]
-REAL hcRefMax !Refrigerant heat transfer coefficient at 
-                          !maximum quality, [kW/m^2-K]
-REAL hcRefVap !Refrigerant heat transfer coefficient at
-                          !vapor quality, [kW/m^2-K]
 
 !Flow:
 
@@ -768,9 +761,6 @@ REAL FaceVel  !Face velocity, [m/s]
 REAL hco      !Air side heat transfer coefficient, [kW/m^2-K]
 REAL DP       !Air side pressure drop, [kPa]
 
-!Subroutine local parameters
-!REAL,PARAMETER :: RefFinPitch=590.6 !reference fin pitch, [fins/m] !RS: Debugging: Extraneous
-
 !Subroutine local variables
 REAL muA      !Dynamic viscosity, [Pa-s]
 REAL kA       !Thermal conductivity, [kW/m-K]
@@ -778,14 +768,11 @@ REAL CPair    !Specific heat of air, [kJ/kg-K]
 REAL PrAir    !Prandtl number of air, [-]
 REAL rhoAvg   !Average air density, [kg/m^3]
 REAL Dc       !Tube outside diameter including fin collar, [m]
-REAL Dh       !Hydraulic diameter, [m]
 REAL Rc       !Tube outside radius including fin collar, [m]
 REAL HXdep    !Heat exchanger depth, [m]
-REAL HXheight !Heat exchanger height, [m]
 REAL Jfactor  !J-factor, [-]
 REAL Ffactor  !Friction factor, [-]
 REAL Amin     !Minimum free flow area, [m^2]
-!REAL AbsCoil  !Coil base surface area, [m^2]   !RS: Debugging: Extraneous
 REAL AbrCoil  !Bared tube coil surface area, [m^2]
 REAL AmCoil   !Mean coil surface area, [m^2] 
 REAL Acs      !Cross-sectional area, [m^2]
@@ -797,8 +784,6 @@ REAL FinPitch !Fin pitch, [fins/m]
 REAL sigma    !Ratio of Amin to AfrCoil, [-]
 REAL Ki       !Contraction coefficient, [-]
 REAL Ke       !Expansion coefficient, [-]
-REAL h1,h2,h3 !Empirical coefficient for the York correlation
-INTEGER I
 
 !Flow:
 
@@ -1260,7 +1245,6 @@ REAL UA       !UA value, [kW/K]
 REAL Rair     !Air side resistance, [kW/K]
 REAL Rref     !Refrigerant side resistance, [kW/K]
 REAL Rtube    !Tube side resistance, [kW/K]
-REAL Rfrost
 REAL FinEff   !Fin efficiency, [-]
 REAL SurfEff  !Surface efficiency, [-]
 
@@ -1565,7 +1549,6 @@ REAL hTP   !Two-phase heat transfer coefficient, [kW/m^2-K]
 !Subroutine local parameter:
 REAL,PARAMETER :: xMin=0.1
 REAL,PARAMETER :: xMax=0.9
-!REAL,PARAMETER :: WavyAnnularBoundary=1.8  !RS: Debugging: Extraneous
 
 !Subroutine local variables
 REAL Acs    !Cross sectional area, [m^2]  
@@ -1740,7 +1723,6 @@ REAL hliq  !Liquid heat transfer coefficient, [kW/m^2-K]
 REAL h1    !Intermediate heat transfer coefficient, [kW/m^2-K] 
 REAL ZZ    !Intermediate variable
 REAL Pred  !Reduced pressure, [kPa]
-REAL Gref  !Mass flux, [kg/m2-s]
 REAL hTPmax
 REAL hVap
 
@@ -3076,7 +3058,6 @@ REAL dPmom   !Momentum pressure drop, [kPa]
 REAL dPgrav  !Gravitational pressure drop, [kPa]
 
 !Subroutine local parameters:
-!REAL,PARAMETER :: ReTransit=1500 !Transition Reynolds number   !RS: Debugging: Extraneous
 
 !Subroutine local variables:
 REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
@@ -3088,11 +3069,6 @@ REAL PHIg       !Intermediate variable
 REAL alphai     !Inlet void fraction
 REAL alphao     !Outlet void fraction
 REAL Xtt        !Martinelli parameter
-!REAL CC         !Empirical coefficient !RS: Debugging: Extraneous
-!REAL ReVap      !Vapor Reynolds number !RS: Debugging: Extraneous
-!REAL ReLiq      !Liquid Reynolds number    !RS: Debugging: Extraneous
-!REAL phif2      !Square of liquid phase multiplier !RS: Debugging: Extraneous
-!REAL phig2      !Square of vapor phase multiplier  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -3206,21 +3182,14 @@ REAL Acs        !Cross sectional area, [m^2]
 REAL DPDZliq    !Liquid only pressure graident, Pa/m
 REAL rhog       !Vapor density, [kg/m^3]
 REAL rhof       !Liquid density, [kg/m^3]
-!REAL ReVap      !Vapor Reynold number  !RS: Debugging: Extraneous
 REAL ReLiq      !Liquid Reynold number
 REAL fLiq       !Liquid friction factor
-REAL Fr         !Froude number
 REAL FrLiq      !Liquid Froude number
 REAL C1         !Intermediate variable
 REAL C2         !Intermediate variable
 REAL Xtt        !Lockhart Martinelli parameter
-!REAL XttIn      !Inlet Lockhart Martinelli parameter   !RS: Debugging: Extraneous
-!REAL XttOut     !Outlet Lockhart Martinelli parameter  !RS: Debugging: Extraneous
-!REAL phiIn      !Intermediate variable !RS: Debugging: Extraneous
-!REAL phiOut     !Intermediate variable !RS: Debugging: Extraneous
 REAL phiLiq     !Liquid phase mulitplier
 REAL xRef       !Refrigerant quality, [-]
-!REAL gamma      !Physical property index   !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -3367,12 +3336,11 @@ REAL fLiq       !Liquid friction factor
 REAL fvap       !Liquid friction factor
 REAL Fr         !Froude number
 REAL We         !Weber number
-REAL Xtt        !Lockhart Martinelli parameter
 REAL phiLiq     !Liquid phase multiplier
 REAL xRef       !Refrigerant quality, [-]
 REAL A1,A2,A3   !Intermediate variables
 REAL omega      !Small diameter correction factor
-REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A
+REAL ReLiqReference   !Liquid Reynolds number at 25 °C, 410A 
 
 !Flow:
 
@@ -3494,7 +3462,6 @@ REAL Kf !Pierre boiling number
 REAL vo !Outlet specific volume, [m^3/kg]
 REAL vi !Inlet specific volume, [m^3/kg]
 REAL hfg !hg-hf, [kJ/kg]
-REAL vg !Vapor refrigerant specific volume, [m^3/kg]
 REAL Dh !Hydraulic diameter, [m]
 
 !Flow:
@@ -4081,7 +4048,8 @@ END SUBROUTINE
 
 !************************************************************************
 
-SUBROUTINE Inventory(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+SUBROUTINE Inventory(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &  !RS: Debugging: Extraneous hRi & hRo
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
                      muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
 					 Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
@@ -4118,8 +4086,8 @@ REAL mRef		!Refrigerant mass flow rate, [kg/s]
 REAL Qout		!Tube outside heat transfer, [kW]
 REAL hg			!Vapor enthalpy, [kJ/kg]
 REAL hf         !Liquid enthalpy, [kJ/kg]
-REAL hRi        !Refrigerant inlet enthalpy, [kJ/kg]
-REAL hRo        !Refrigerant outlet enthalpy, [kJ/kg]
+!REAL hRi        !Refrigerant inlet enthalpy, [kJ/kg]   !RS: Debugging: Extraneous
+!REAL hRo        !Refrigerant outlet enthalpy, [kJ/kg]  !RS: Debugging: Extraneous
 REAL xRi        !Refrigerant inlet quality
 REAL xRo        !Refrigerant outlet quality
 REAL vRi        !Refrigerant inlet specific volume, [m^3/kg]
@@ -4166,8 +4134,6 @@ REAL rhoRef     !Refrigerant density, [kg/m^3]
 REAL MassLiqTP  !Liquid mass in two-phase portion, [kg]
 REAL MassVapTP  !Vapor mass in two-phase portion, [kg] 
 REAL MassModTP  !Mass in two-phase portion, [kg]
-REAL MassLiqSP  !Liquid mass in single-phase portion, [kg]
-REAL MassVapSP  !Vapor mass in single-phase portion, [kg]
 REAL MassModSP  !Mass in single-phase portion, [kg]
 
 !Flow:
@@ -4858,7 +4824,6 @@ REAL jfactor !J-factor
 
 !Subroutine local parameters:
 REAL, PARAMETER :: theta=8 !Wavy fin angle, [deg]
-!REAL, PARAMETER :: RefFinPitch=590.55 !reference fin pitch, [fins/m]   !RS: Debugging: Extraneous
 
 !Subroutine local variables:
 REAL Dh        !Hydraulic diameter, [m]
@@ -4873,13 +4838,11 @@ REAL beta      !Intermediate variable
 REAL j1        !Intermediate variable
 REAL j2        !Intermediate variable
 REAL j3        !Intermediate variable
-REAL j4        !Intermediate variable
-REAL j5        !Intermediate variable
-REAL j6        !Intermediate variable 
-REAL j7        !Intermediate variable
-REAL j8        !Intermediate variable
-REAL TubeHeight !Tube height, [m]
-REAL hco       !Heat transfer coefficient, kW/m2-K
+!REAL j4        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j5        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j6        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j7        !Intermediate variable  !RS: Debugging: Extraneous
+!REAL j8        !Intermediate variable  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -5084,19 +5047,8 @@ REAL F1        !Intermediate variable
 REAL F2        !Intermediate variable 
 REAL F3        !Intermediate variable
 REAL F4        !Intermediate variable
-REAL F5        !Intermediate variable
-REAL F6        !Intermediate variable
-REAL F7        !Intermediate variable
-REAL F8        !Intermediate variable
-REAL F9        !Intermediate variable
-REAL FP        !Intermediate variable
 REAL beta      !Intermediate variable
-REAL Lh        !Louver height, [m]
-REAL Lp        !Louver pitch, [m]
-REAL La        !Louver angle, [deg]
-REAL Ll        !Louver lenght, [m]
 REAL TubeDepth !Tube depth, [m]
-REAL TubeHeight !Tube height, [m]
 
 !Flow:
 
@@ -5926,7 +5878,6 @@ REAL dPmom   !Momentum pressure drop, [kPa]
 REAL dPgrav  !Gravitational pressure drop, [kPa]
 
 !Subroutine local variables:
-!REAL,PARAMETER :: ReTransit = 1500 !2000 !Reynolds number transition from laminar to turbulent Harms et al. (1999) !RS: Debugging: Extraneous
 REAL dPdZfLiq   !Liquid frictional pressure gradient, [kPa/m]
 REAL dPdZfVap   !Vapor frictional pressure gradient, [kPa/m]
 REAL dPdZfrict  !Frictional pressure gradient, [kPa/m]

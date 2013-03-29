@@ -84,7 +84,7 @@
     CONTAINS
     !***********************************************************************************
 
-    SUBROUTINE ShortTube(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTube(Ref$,XIN,PAR,OUT)  !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -155,7 +155,7 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
     REAL, INTENT(IN)  :: XIN(5)
     REAL, INTENT(IN)  :: PAR(5)
@@ -172,7 +172,6 @@
     REAL :: VolDisTube  !Distributor tube volumn, m^3
     REAL :: MassDisTube !Mass in distributor tube, kg
     REAL :: Depth       !Short tube 45 deg chamfer depth, m
-    REAL :: Subcool     !Degree of subcooling, C
     REAL :: PiExp       !Inlet pressure of exp. device (Up stream pressure), kPa
     REAL :: HiExp       !Exp. device inlet enthalpy, kJ/kg
     REAL :: TiExp       !Exp. device inlet temperature, C
@@ -222,9 +221,7 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
 
     !Flow:
 
@@ -473,7 +470,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubeChoi(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTubeChoi(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT)  !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -532,7 +529,7 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous PureRef
     !0-refrigerant mixture
     REAL, INTENT(IN)  :: XIN(5)
     REAL, INTENT(IN)  :: PAR(5)
@@ -576,21 +573,9 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    REAL :: Acs         !Cross-sectional area, m^2
-    REAL :: SUBC        !Temperature ratio, T is in K
-    REAL :: EVAP        !Pressure ratio, P is in absolute pressure
-    REAL :: PRA         !Pressure ratio, P is in absolute pressure
-    REAL :: DR          !Diameter ratio
-    REAL :: LD          !Ratio of tube length to diameter
-    REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated 
-                        !saturation pressure used in short tube model, kPa
-    REAL :: Cc          !Correction factor for chamfered inlet short tubes
-    REAL :: Ctp         !Correction factor for two-phase quality
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    REAL :: Y           !Parameter for two-phase quality correction factor calc.
-    REAL :: Dref        !Reference diameter, mm
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -600,15 +585,10 @@
     !Buckingham pi parameters
     REAL pi01,pi02,pi03,pi04,pi05,pi06,pi07,pi08,pi09,pi10,pi11
 
-    REAL :: a(4)  !Emperical constants
-    REAL :: b(11) !Emperical constants
-    REAL :: c(3)  !Emperical constants
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
 
     !Flow:
 
@@ -798,7 +778,7 @@
 
     !***********************************************************************************
 
-    SUBROUTINE ShortTubePayne(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE ShortTubePayne(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     !-----------------------------------------------------------------------------------
     !
@@ -856,7 +836,7 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant
+    !INTEGER(2),       INTENT(IN)  :: PureRef !Refrigerant flag: 1-pure refrigerant !RS: Debugging: Extraneous
     !0-refrigerant mixture
     REAL, INTENT(IN)  :: XIN(5)
     REAL, INTENT(IN)  :: PAR(5)
@@ -901,21 +881,10 @@
     REAL :: mufiExp     !Upstream fluid viscosity, Pa-s
     REAL :: mugiExp     !Upstream vapor viscosity, Pa-s
     REAL :: sigma       !Surface tension, N/m
-    REAL :: Acs         !Cross-sectional area, m^2
-    REAL :: SUBC        !Temperature ratio, T is in K
-    REAL :: EVAP        !Pressure ratio, P is in absolute pressure
-    REAL :: PRA         !Pressure ratio, P is in absolute pressure
-    REAL :: DR          !Diameter ratio
-    REAL :: LD          !Ratio of tube length to diameter
-    REAL :: Pf          !Downstream pressure for unchoked orifice flow or correlated 
-                        !saturation pressure used in short tube model, kPa
-    REAL :: Cc          !Correction factor for chamfered inlet short tubes
     REAL :: Ctp         !Correction factor for two-phase quality
     REAL :: Psat        !Saturation pressure, kPa
     REAL :: Pcr         !Critical pressure, kPa
     REAL :: Tcr         !Critical temperature, K
-    REAL :: Y           !Parameter for two-phase quality correction factor calc.
-    REAL :: Dref        !Reference diameter, mm
     REAL :: HoEvpRtd    !Evaporator outlet rated enthalpy, kJ/kg
     INTEGER(2)		 :: Nckts		!Number of circuits in evaporator
     INTEGER			 :: ErrorFlag	!0-No error
@@ -931,9 +900,7 @@
     REAL, PARAMETER :: Const=5.08e-005 !Emperical constants
 
     !NIST Refrigerant property variables and functions
-    INTEGER(2) RefPropOpt			!Ref prop calc. option
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    REAL RefProp(28)
 
     !Flow:
 

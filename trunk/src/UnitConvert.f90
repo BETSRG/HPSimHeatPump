@@ -91,9 +91,10 @@ CONTAINS
 !***********************************************************************************
 
 SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
-                       AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
+                       !AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
+                       AccumPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
 				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
-					   ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &
+					   !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &    !RS: Debugging: Removing these
 					   Tdis,Tliq)
 ! ----------------------------------------------------------------------
 !
@@ -124,7 +125,7 @@ REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
 REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
 !REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data   !RS: Debugging: Not ever used
 REAL, INTENT(INOUT) :: AccumPAR(10) !Accumulator input data
-REAL, INTENT(INOUT) :: FilterPAR(2) !Filter drier input data
+!REAL, INTENT(INOUT) :: FilterPAR(2) !Filter drier input data
 REAL, INTENT(INOUT) :: XMaC      !Condenser inlet air flow rate, kg/s
 REAL, INTENT(INOUT) :: XMaE      !Evaporator inlet air flow rate, kg/s
 REAL, INTENT(INOUT) :: TaiC      !Condenser inlet air DB temp, F
@@ -137,9 +138,9 @@ REAL, INTENT(INOUT) :: TSICMP    !Low side saturation temp., F
 REAL, INTENT(INOUT) :: SUPER     !Superheat, F
 REAL, INTENT(INOUT) :: SUBCOOL   !Subcooling, F
 REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
-REAL, INTENT(INOUT) :: ChargeCurveSlope !Charge curve slope, kg/m
-REAL, INTENT(INOUT) :: ChargeCurveIntercept !Charge curve intercept, kg
-REAL, INTENT(INOUT) :: RefLiquidLength !Liquid length at reference point, m
+!REAL, INTENT(INOUT) :: ChargeCurveSlope !Charge curve slope, kg/m
+!REAL, INTENT(INOUT) :: ChargeCurveIntercept !Charge curve intercept, kg
+!REAL, INTENT(INOUT) :: RefLiquidLength !Liquid length at reference point, m
 REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C
 REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 
@@ -378,7 +379,7 @@ REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 
 	!***** Filter drier input data *****
 	!FilterPAR(1)=Flow capacity, ton
-	FilterPAR(2)=FilterPAR(2)*UnitP !Rating pressure drop, kPa
+	!FilterPAR(2)=FilterPAR(2)*UnitP !Rating pressure drop, kPa
 
     !****Refrigerant input data****
     !RefChg !Refrigerant charge lbm, , ORNL solver uses IP unit
@@ -402,9 +403,9 @@ REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 	!Subcool !Subcooling, F,  ORNL solver uses IP unit
 	BaroPressure=BaroPressure*UnitP !barometric pressure kPa
 
-	ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
-	ChargeCurveIntercept=ChargeCurveIntercept*UnitM
-	RefLiquidLength=RefLiquidLength*UnitL
+	!ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
+	!ChargeCurveIntercept=ChargeCurveIntercept*UnitM
+	!RefLiquidLength=RefLiquidLength*UnitL
 	
 	Tdis=(Tdis-32)/1.8
 	Tliq=(Tliq-32)/1.8

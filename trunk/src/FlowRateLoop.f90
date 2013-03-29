@@ -130,6 +130,8 @@
   
   FilterPAR(1) = Numbers(1) !Flow capacity
   FilterPAR(2) = Numbers(2) !Rating DP
+  
+  FilterPAR(2)=FilterPAR(2)*UnitP   !RS: Debugging: Bringing in unit conversion
   !-------
 
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
@@ -208,7 +210,7 @@
         CompIN(1)=PiCmp
         CompIN(2)=PoCmp
         CompIN(3)=HiCmp
-        CALL Compressor(Ref$,PureRef,CompIN,CompPAR,CompOUT)
+        CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
         IF (CompOUT(7) .NE. 0) THEN
             SELECT CASE (INT(CompOUT(7)))
             CASE (1,2)
@@ -259,7 +261,7 @@
                 CondPAR(61)=0 !Detailed version
                 IsFirstTimeCondenser=.FALSE.
             END IF
-            CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)
+            CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
             CondPAR(62)=0 !No longer first time
             IsCondenserAllocated=.TRUE.
         ELSE
@@ -269,13 +271,13 @@
                 CondPAR(62)=1 !First time
 
                 CondPAR(61)=0 !Detailed version
-                CALL Condenser(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)
+                CALL Condenser(Ref$,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
                 !CALL EndCondenserCoil  !RS: Debugging
 
                 CondPAR(61)=1 !Simple version
-                CALL Condenser(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)
+                CALL Condenser(Ref$,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
                 !CALL EndCondenserCoil  !RS: Debugging
@@ -295,7 +297,7 @@
                 CondOUT=DetailedCondOUT
 
             ELSE
-                CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)
+                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 CondPAR(62)=0 !No longer first time
                 IsCondenserAllocated=.TRUE.
             END IF
@@ -467,7 +469,8 @@
             CapTubeIN(5)=EvapOUT(1)  !Evaporator outlet pressure
 
             !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
-            CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
+            !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  !RS: Debugging: Extraneous PureRef
+            CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)
 
             XMRFLD=CapTubeOUT(1)*3600/UnitM !RS Comment: Unit Conversion, lbm/s???
             ToExp=CapTubeOUT(3)
@@ -481,7 +484,8 @@
             ShTbIN(5)=EvapOUT(1)
 
             !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
-            CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
+            !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
+            CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)
             IF (ShTbOUT(7) .NE. 0) THEN
                 SELECT CASE (INT(ShTbOUT(7)))
                 CASE (1)

@@ -67,7 +67,7 @@
 
     CONTAINS
 
-    SUBROUTINE Compressor(Ref$,PureRef,XIN,PAR,OUT)
+    SUBROUTINE Compressor(Ref$,XIN,PAR,OUT) !(Ref$,PureRef,XIN,PAR,OUT) !RS: Debugging: Extraneous PureRef
 
     ! ----------------------------------------------------------------------
     !
@@ -121,7 +121,6 @@
 
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN) :: Ref$    !Refrigerant name
-    INTEGER(2),       INTENT(IN) :: PureRef !Refrigerant flag: 1-pure refrigerant
     !0-refrigerant mixture
 
     REAL, INTENT(IN) :: XIN(3)
@@ -130,8 +129,7 @@
 
     REAL, PARAMETER :: Fv=0.75
 
-    !Subroutine local variables          
-    !INTEGER            :: RefrigIndex =0
+    !Subroutine local variables
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
     REAL A(10),B(10)

@@ -107,7 +107,7 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
+    REAL Temperature,Quality,Pressure 
 
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
 
@@ -142,6 +142,16 @@
     REAL :: RHiEAct
     REAL, SAVE :: IDCFlowConst
     REAL, SAVE :: ODCFlowConst
+    REAL :: QUnitOut            ! sensible capacity delivered to zone !RS: TestingIntegration: Trying to pass variables out
+    REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: TestingIntegration: Trying to pass variables out
+    INTEGER, PARAMETER :: MaxNameLength = 200
+
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ...
@@ -157,9 +167,6 @@
     CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
     CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     CHARACTER(LEN=14) :: tmpString
-    
-    REAL :: QUnitOut            ! sensible capacity delivered to zone !RS: TestingIntegration: Trying to pass variables out
-    REAL :: LatOutputProvided   ! Latent add/removal by packaged terminal unit (kg/s), dehumid = negative !RS: TestingIntegration: Trying to pass variables out
     
     !Flow**:
     CALL PreProcessInput
@@ -183,6 +190,25 @@
     !OPEN(6,FILE='YorkHP_PlainFin.log')     ! VL_User_Setting -- file name !RS: Test case output file
 
     CALL GetInputs                ! VL Comment: Reads file "HPdata.ydd"; input and error file names should be sent in as parameters to file ...
+    
+    !RS: Debugging: Moving here from GetHPSimInputs
+    !*************** Accumulator **************** !RS: Debugging: Moving: AirTempLoop? ORNLSolver?
+
+  CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  
+  AccumPAR(2) = Numbers(1)  !Height !RS: Debugging: If this is 0, then I'm pretty sure everything here is never called
+  AccumPAR(1) = Numbers(2)  !Diameter
+  AccumPAR(4) = Numbers(3)  !Upper hole diameter
+  AccumPAR(3) = Numbers(4)  !Lower hole diameter
+  AccumPAR(7) = Numbers(5)  !Rating Pressure Drop
+  AccumPAR(5) = Numbers(6) !Hole distance
+  AccumPAR(8) = Numbers(7) !Rating Temperature Drop
+  AccumPAR(9) = Numbers(8) !Coefficient M
+  AccumPAR(10) = Numbers(9)    !Coefficient B
+  !AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
+
 
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
@@ -229,9 +255,11 @@
     END IF
 
     CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
-    AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
+    !AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
+    AccumPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
     Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
-    ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)
+    !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)   !RS: Debugging: Removing these
+    Tdis,Tliq)
 
     CALL InitAccumulator(AccumPAR)
 
@@ -357,7 +385,7 @@
         CompIN(2)=PoCmp	! VL_Index_Replace
         CompIN(3)=HiCmp	! VL_Index_Replace
         IF (SystemType .NE. EVAPORATORONLY) THEN
-            CALL Compressor(Ref$,PureRef,CompIN,CompPAR,CompOUT)
+            CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
             IF (CompOUT(7) .NE. 0) THEN	! VL_Index_Replace
                 SELECT CASE (INT(CompOUT(7)))	! VL_Index_Replace
                 CASE (1)
@@ -545,12 +573,12 @@
                 EvapIN(9)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace
 
                 EvapPAR(53)=0 !Detailed model	! VL_Index_Replace
-                CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)	
+                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 DetailedQevp=-EvapOUT(11)	! VL_Index_Replace
                 CALL EndEvaporatorCoil
 
                 EvapPAR(53)=1 !Simple model	! VL_Index_Replace
-                CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)	
+                CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 SimpleQevp=-EvapOUT(11)	! VL_Index_Replace
                 CALL EndEvaporatorCoil
 
@@ -571,7 +599,7 @@
                     EvapIN(6)=RHiE            !Air side inlet relative humidity	! VL_Index_Replace
                     EvapIN(9)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace
 
-                    CALL Evaporator(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT)			
+                    CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef	
                     EvapPAR(54)=0 !First time	! VL_Index_Replace	! VL_User_Setting
 
                     Qevp=-EvapOUT(11) 	! VL_Index_Replace
@@ -634,12 +662,12 @@
 
                 !Determine if detailed model is needed, ISI - 02/07/08
                 CondPAR(61)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting
-                CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)
+                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=CondOUT(15)	! VL_Index_Replace
                 CALL EndCondenserCoil
 
                 CondPAR(61)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting
-                CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)
+                CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=CondOUT(15)	! VL_Index_Replace
                 CALL EndCondenserCoil
 
@@ -661,7 +689,7 @@
                     CondIN(8)=0 !Evaporator outlet temperature, C, not used for this	! VL_Index_Replace
                     CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace
 
-                    CALL Condenser(Ref$,PureRef,CondIN,CondPAR,CondOUT)			
+                    CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
                     CondPAR(62)=0 !First time	! VL_Index_Replace
 
                     Qcnd=CondOUT(15) 	! VL_Index_Replace

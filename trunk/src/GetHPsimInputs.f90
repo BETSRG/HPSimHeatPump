@@ -110,9 +110,9 @@ USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be use
 IMPLICIT NONE
 
 !Local variables
-REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
-REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
-REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
+!REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
+!REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
+!REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
 REAL VdotODfan				!Outdoor fan volumetric flow rate
 REAL VdotIDfan				!Indoor fan volumetric flow rate
 REAL CoolingShTbPAR(5)		!Cooling mode short tube model input data
@@ -173,7 +173,7 @@ CHARACTER(len=MaxNameLength)LiqLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)LiqLn_TubeType
 REAL LiqLn_KTube    !Conductivity of Liquid Line Tube
 REAL LiqLn_TubeID   !Inner Diameter of Liquid Line Tube
-REAL LiqLn_Charge   !Liquide Line Charge
+REAL LiqLn_Charge   !Liquid Line Charge
 CHARACTER(len=MaxNameLength)ValveIDCLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)ValveIDCLn_TubeType
 REAL ValveIDCLn_KTube    !Conductivity of Valve to IDC Line Tube
@@ -362,6 +362,9 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       SucLnPAR(3)=SucLnPAR(3)*1000  !RS Comment: Unit Conversion
   END IF
 
+  !!*************** Accumulator **************** !RS: Debugging: Moving: ORNLSolver?
+  AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
+
   !Discharge Line
   
   DisLn_RefrigerantLine = Alphas(3)
@@ -470,58 +473,39 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   BaroPressure = Numbers(2)  !Barometric Pressure
   IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
 
-  !*************** Accumulator **************** !RS: Debugging: Moving: AirTempLoop? ORNLSolver?
-
-  CALL GetObjectItem('AccumulatorData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status)
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  AccumPAR(2) = Numbers(1)  !Height !RS: Debugging: If this is 0, then I'm pretty sure everything here is never called
-  AccumPAR(1) = Numbers(2)  !Diameter
-  AccumPAR(4) = Numbers(3)  !Upper hole diameter
-  AccumPAR(3) = Numbers(4)  !Lower hole diameter
-  AccumPAR(7) = Numbers(5)  !Rating Pressure Drop
-  AccumPAR(5) = Numbers(6) !Hole distance
-  AccumPAR(8) = Numbers(7) !Rating Temperature Drop
-  AccumPAR(9) = Numbers(8) !Coefficient M
-  AccumPAR(10) = Numbers(9)    !Coefficient B
-
-  AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
-
-
-  !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
-
-  CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
-                        TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
-
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
-  CASE ('F','f')
-      IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
-  CASE ('T','t')
-      IsChargeTuning=1
-  END SELECT
-  
-  RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
-  RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
-  SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
-  LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
-  
-  !store the refrigerant name in data globals
-  RefName = Ref$
-  
-  !Calculate charge tuning curve
-  IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
-	  IF (RefChg .GT. 0) THEN
-		  ChargeCurveSlope=(SimulatedCharge2-RefSimulatedCharge)/ &
-						   (LiquidLength2-RefLiquidLength)
-		  ChargeCurveIntercept=RefChg-RefSimulatedCharge
-	  ELSE
-		  ChargeCurveSlope=0
-		  ChargeCurveIntercept=0
-	  END IF
-  END IF
+  !!*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
+  !
+  !CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
+  !                      TmpNumbers,NumNumbers,Status) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)     
+  !
+  !Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+  !
+  !SELECT CASE (Alphas(1)(1:1))  !Is Charge Tuning?
+  !CASE ('F','f')
+  !    IsChargeTuning=0  !RS: Debugging: If this is the case, I don't think these inputs are ever used
+  !CASE ('T','t')
+  !    IsChargeTuning=1
+  !END SELECT
+  !
+  !RefSimulatedCharge = Numbers(1)   !Tuning Point #1 Simulated Charge
+  !RefLiquidLength = Numbers(2)  !Tuning Point #1 Liquid Length
+  !SimulatedCharge2 = Numbers(3) !Tuning Point #2 Simulated Charge
+  !LiquidLength2 = Numbers(4)    !Tuning Points #2 Liquid Length
+  !
+  !!store the refrigerant name in data globals
+  !RefName = Ref$
+  !
+  !!Calculate charge tuning curve
+  !IF (MODE .NE. 2 .AND. (RefLiquidLength-LiquidLength2) .NE. 0) THEN
+	 ! IF (RefChg .GT. 0) THEN
+		!  ChargeCurveSlope=(SimulatedCharge2-RefSimulatedCharge)/ &
+		!				   (LiquidLength2-RefLiquidLength)
+		!  ChargeCurveIntercept=RefChg-RefSimulatedCharge
+	 ! ELSE
+		!  ChargeCurveSlope=0
+		!  ChargeCurveIntercept=0
+	 ! END IF
+  !END IF
 
   !***** Calculate weight of interconnecting pipes **** !RS: Debugging: Moving: These are only ever used to report the weights out
 
@@ -858,7 +842,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CoilParams(1)%AirFlowRate=CFMevp
     CoilParams(2)%AirFlowRate=CFMcnd
 
-
 	ShTbPAR=CoolingShTbPAR
     ShTbPAR(4)=EvapPAR(19) !Number of circuits in evaporator
     ShTbPAR(5)=CoolingDistubeLength
@@ -873,7 +856,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CFMcnd=VdotIDfan
     CoilParams(1)%AirFlowRate=CFMcnd
     CoilParams(2)%AirFlowRate=CFMevp
-
  
 	ShTbPAR=HeatingShTbPAR
     ShTbPAR(4)=EvapPAR(19) !Number of circuits in evaporator
