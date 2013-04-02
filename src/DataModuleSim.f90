@@ -60,6 +60,8 @@ REAL,DIMENSION(2) :: InitiateTemp
 
 INTEGER :: TimeStep=0
 
+INTEGER(2), SAVE:: IsCoolingMode !1=yes; 0=no   !RS: Debugging: Saving this throughout
+
 REAL CompIN(3)
 REAL CompPAR(26)
 REAL CompOUT(7)

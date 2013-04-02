@@ -131,7 +131,7 @@
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
     REAL MassCoil,MassLiqCoil,MassVapCoil
-    INTEGER(2) IsCoolingMode !1=yes; 0=no   
+    !INTEGER(2) IsCoolingMode !1=yes; 0=no   
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
@@ -271,7 +271,7 @@
     TsoCmpAct=TsoCmp
     RHiCAct=RHiC
     RHiEAct=RHiE
-    IsCoolingMode=CondPAR(27)       ! VL_Index_Replace
+    !IsCoolingMode=CondPAR(27)       ! VL_Index_Replace !RS: Debugging: CondPAR(27) isn't populated yet
 
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
@@ -400,7 +400,7 @@
 
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
-        IsCoolingMode=CondPAR(27)	! VL_Index_Replace
+        !IsCoolingMode=CondPAR(27)	! VL_Index_Replace  !RS: Debugging: CondPAR(27) isn't populated yet
         CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
             CALL IssueOutputMessage('***** Cooling Mode *****')

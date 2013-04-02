@@ -401,7 +401,7 @@ INTEGER,SAVE :: ShiftTube     !1= last row lower than 2nd last row
                               !0= last row higher than 2nd last row
 
 INTEGER NmodLast         !Total number of modules in the last row
-INTEGER IsCoolingMode    !Cooling mode flag (1=yes; 0=no)
+!INTEGER IsCoolingMode    !Cooling mode flag (1=yes; 0=no)  !RS: Debugging: Bringing this in as a global variable
 INTEGER IsParallelSlabs !Parallel microchannel slabs (1=yes; 0=no)
 INTEGER RowNum           !Coil row number
 INTEGER Ntube            !Tube number !Loop counter
@@ -706,7 +706,7 @@ CONTAINS
     DTsucLn   = PAR(6)
     AddDPSucLn = PAR(7)
 
-    IsCoolingMode   = PAR(20)
+    !IsCoolingMode   = PAR(20)  !RS: Debugging: Global variable now
 
     IsSimpleCoil=PAR(53) !ISI - 12/21/06
     FirstTime=PAR(54)    !ISI - 12/21/06
@@ -6690,7 +6690,7 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     tRdis            =XIN(7)
 
     BaroPressure     =PAR(1)
-    IsCoolingMode    =PAR(2)
+    !IsCoolingMode    =PAR(2)   !RS: Debugging: Global variable now
     LsucLn           =PAR(3)
     ODsucLn          =PAR(4)
     SucLnThk         =PAR(5)

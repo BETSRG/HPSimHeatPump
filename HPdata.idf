@@ -7,15 +7,15 @@ MainDesignData,
     False, !field SI Units Flag
     2, !field Calculation Mode
     1, !2, !field System Type
-    !TRUE, !field Is in Cooling Mode
-    FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
+    TRUE, !field Is in Cooling Mode
+    !FALSE, !field Is in Cooling Mode (NOT with -18C outside!)
     10, !field Design Subcooling [R]
     10, !field Design Superheat [R]
     R410A, !field Refrigerant Name
-    32, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
-    30, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
-    70, !80, !field Indoor Entering Drybulb Temperature [°F]
-    65, !67, !field Indoor Entering Wetbulb Temperature [°F]
+    95, !50, !95, !field Outdoor Entering Drybulb Temperature [°F]
+    75, !45,  !75, !field Outdoor Entering Wetbulb Temperature [°F]
+    80, !70, !80, !field Indoor Entering Drybulb Temperature [°F]
+    67, !65, !67, !field Indoor Entering Wetbulb Temperature [°F]
     9.53; !field Design Refrigerant Charge Mass [lbm]
 
 CompressorData,
