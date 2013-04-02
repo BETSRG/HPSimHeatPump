@@ -105,7 +105,7 @@
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
-    INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
+    !INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no  !RS: Debugging: Global variable now
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
     
     CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
@@ -252,7 +252,7 @@
             CondPAR(39)=CompPAR(22)/1000    !RS Comment: Unit Conversion, from kW to W?
         END IF
 
-        IsCoolingMode=CondPAR(27)
+        !IsCoolingMode=CondPAR(27)  !RS: Debugging: Global variable now
         IF ((IsCoolingMode .GT. 0 .AND. ODCcoilType .EQ. MCCONDENSER) .OR. &
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil

@@ -107,7 +107,7 @@
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
-    INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
+    !INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no  !RS: Debugging: Making it global variable
     INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
 
     LOGICAL :: FLAG_GOTO_950
@@ -423,7 +423,7 @@
             EvapPAR(32)=CompPAR(22)/1000
         END IF
 
-        IsCoolingMode=EvapPAR(20)
+        !IsCoolingMode=EvapPAR(20)  !RS: Debugging: Global variable now
         IF (FirstTimeHPdesignMode) THEN
 
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &

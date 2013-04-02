@@ -76,7 +76,7 @@ INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
 REAL AirProp(8)		!Air properties
 
 REAL Qcnd,Qevp,QevpSens,QevpLat
-REAL PwrCmp,mdot,Qtxv,IsCoolingMode
+REAL PwrCmp,mdot,Qtxv !,IsCoolingMode   !RS: Debugging: Bringing in on DataSimulation
 REAL Dshtb,DrawBlow,CPair,Qtot,QtotSens
 REAL DcapTube,LcapTube
 REAL TAOCND,TAOEVP,COP,SHR,EER
@@ -121,7 +121,7 @@ CHARACTER(LEN=83),PARAMETER :: FMT_2216 = "(A24,',',F18.3,',',F18.3,',',F21.3,',
 CHARACTER(LEN=53),PARAMETER :: FMT_2220 = "(A18,',',A27,',',A27,',',A24,',',A33,',',A25,',',A20)"
 CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',',F33.3,',',F25.3,',',A20)"
 
-  IsCoolingMode=EvapPAR(20)
+  !IsCoolingMode=EvapPAR(20)    !RS: Debugging: Making this a global variable
   SELECT CASE(MODE)
   CASE(FIXEDORIFICESIM)
  

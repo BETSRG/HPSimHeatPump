@@ -113,9 +113,8 @@
     ! ----------------------------------------------------------------------
 
     USE FluidProperties_HPSim
-    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength,RefName   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
-    USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 

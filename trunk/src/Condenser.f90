@@ -63,6 +63,7 @@
     MODULE CondenserMod
 
     USE DataGlobals_HPSim, ONLY: RefName, RefrigIndex    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    USE DataSimulation, ONLY: IsCoolingMode
     USE CoilCalcMod
 
     IMPLICIT NONE
@@ -347,7 +348,7 @@
     INTEGER,SAVE :: ShiftTube     !1= last row lower than 2nd last row
                                   !0= last row higher than 2nd last row
     INTEGER NmodLast      !Total number of modules in the last row
-    INTEGER IsCoolingMode !Cooling mode flag (1=yes; 0=no)
+    !INTEGER IsCoolingMode !Cooling mode flag (1=yes; 0=no) !RS: Debugging: Defining in DataSimulation
     INTEGER IsParallelSlabs !Parallel microchannel slabs (1=yes; 0=no)
     INTEGER RowNum        !Coil row number
     INTEGER Ntube         !Tube number !Loop counter
@@ -662,7 +663,7 @@
     DTliqLn   = PAR(13)
     AddDPLiqLn = PAR(14)
 
-    IsCoolingMode   = PAR(27)
+    !IsCoolingMode   = PAR(27)  !RS: Debugging: PAR(27) is not populated yet
 
     IsSimpleCoil=PAR(61) !ISI - 12/22/06
     FirstTime=PAR(62)    !ISI - 12/22/06

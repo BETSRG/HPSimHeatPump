@@ -106,6 +106,7 @@ SUBROUTINE GetInputs
 USE DataStopCodes
 USE InputProcessor_HPSim
 USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+USE DataSimulation, ONLY: IsCoolingMode !RS: Debugging: Global variable now
 
 IMPLICIT NONE
 
@@ -140,7 +141,7 @@ REAL,PARAMETER :: CopperDensity=8920 !Density of copper, kg/m3
 
 CHARACTER*150 LineData
 
-INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no
+!INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no  !RS: Debugging: Global variable now
 INTEGER(2) :: IsCmpInAirStream          !Is compressor in air stream: 1=yes, 0=no
 REAL :: CopperVol !Copper volume, m3
 INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
@@ -180,6 +181,13 @@ CHARACTER(len=MaxNameLength)ValveODCLn_RefrigerantLine
 CHARACTER(len=MaxNameLength)ValveODCLn_TubeType
 REAL ValveODCLn_KTube    !Conductivity of Valve to ODC Line Tube
 REAL ValveODCLn_TubeID   !Inner Diameter of Valve to ODC Line Tube
+INTEGER CompressorManufacturer
+    
+    !Compressor Manufacturer
+INTEGER,PARAMETER :: COPELAND  = 1 !ISI - 10/05/06
+INTEGER,PARAMETER :: BRISTOL   = 2
+INTEGER,PARAMETER :: DANFOSS   = 3
+INTEGER,PARAMETER :: PANASONIC = 4
 
 !Flow:
 
@@ -234,6 +242,22 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  SELECT CASE (Alphas(2)(1:1))
+  CASE ('C','c')
+	CompressorManufacturer=COPELAND
+  CASE ('B','b')
+	CompressorManufacturer=BRISTOL
+  CASE ('D','d')
+	CompressorManufacturer=DANFOSS
+  CASE ('P','p')
+	CompressorManufacturer=PANASONIC
+  CASE DEFAULT
+	CompressorManufacturer=BRISTOL
+  END SELECT
+
+  EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
+  CondPAR(60)=CompressorManufacturer
 
   TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
@@ -316,7 +340,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   
   !Distributor tubes
 
-  CoolingDistubeLength = Numbers(13)    !RS: Debugging: Not sure if this is ever really used
+  CoolingDistubeLength = Numbers(13)
   
   IF (Unit .EQ. SI) THEN
     CoolingDistubeLength=CoolingDistubeLength/1000  !RS Comment: Unit Conversion
@@ -324,7 +348,7 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
     CoolingDistubeLength=CoolingDistubeLength/12    !RS Comment: Unit Conversion, from in to ft?
   END IF
 
-  HeatingDistubeLength = Numbers(14)   !RS: Debugging: Not sure if this is ever really used
+  HeatingDistubeLength = Numbers(14)
   
   IF (Unit .EQ. SI) THEN
     HeatingDistubeLength=HeatingDistubeLength/1000  !RS Comment: Unit Conversion
@@ -747,9 +771,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   EvapPAR(34)=SystemType
   CondPAR(57)=SystemType !ISI - 07/14/06
-
-  !EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06   !RS: Debugging: Unnecessary
-  !CondPAR(60)=CompressorManufacturer
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN

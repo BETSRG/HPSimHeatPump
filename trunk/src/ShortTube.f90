@@ -536,7 +536,6 @@
     REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables         
-    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
@@ -843,7 +842,6 @@
     REAL, INTENT(OUT) :: OUT(7)
 
     !Subroutine local variables           
-    !INTEGER            :: RefrigIndex =0
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL :: LshTube     !Short tube length, m
