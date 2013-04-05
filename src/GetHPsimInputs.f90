@@ -141,8 +141,6 @@ REAL,PARAMETER :: CopperDensity=8920 !Density of copper, kg/m3
 
 CHARACTER*150 LineData
 
-!INTEGER(2) :: IsCoolingMode				!Is cooling mode flag: 1=yes; 0=no  !RS: Debugging: Global variable now
-INTEGER(2) :: IsCmpInAirStream          !Is compressor in air stream: 1=yes, 0=no
 REAL :: CopperVol !Copper volume, m3
 INTEGER(2) :: CoolingExpDevice !Cooling Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
 INTEGER(2) :: HeatingExpDevice !Heating Expansion device: 1=short tube; 2=TXV; 3=Cap. tube
@@ -152,9 +150,6 @@ CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from 
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
 
-REAL Subcooling   !Design Subcooling
-REAL Superheat    !Design Superheat
-!REAL NumofRefrigerants    !Number of Refrigerants in Blend !RS: Debugging: Never used
 REAL RefChg    !Design Refrigerant Charge Mass
 
 CHARACTER(len=MaxNameLength)SucLn_RefrigerantLine
@@ -193,10 +188,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
 REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-CHARACTER(LEN=7),PARAMETER :: FMT_201 = "(10(E))"
-CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
-CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
-  
+
   !***************** System data *****************  !RS: Debugging: Moving: May be able to stay here? Or go to ORNLSolver
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
@@ -222,19 +214,14 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
   CASE DEFAULT
     IsCoolingMode=1
   END SELECT
-
-  Subcooling = Numbers(3)   !Design Subcooling
-  Superheat = Numbers(4)    !Design Superheat
   
   Ref$ = Alphas(3)
   
-  !NumofRefrigerants = Numbers(5)    !Number of Refrigerants in Blend   !RS: Debugging: Never used
-  
-  TAic = Numbers(5) !OutdoorEnteringDrybulbTemperature
-  RHiC = Numbers(6) !OutdoorEnteringWetbulbTemperature
-  TAie = Numbers(7) !IndoorEnteringDrybulbTemperature
-  RHiE = Numbers(8) !IndoorEnteringWetbulbTemperature
-  RefChg = Numbers(9)    !Design Refrigerant Charge Mass
+  TAic = Numbers(3) !OutdoorEnteringDrybulbTemperature
+  RHiC = Numbers(4) !OutdoorEnteringWetbulbTemperature
+  TAie = Numbers(5) !IndoorEnteringDrybulbTemperature
+  RHiE = Numbers(6) !IndoorEnteringWetbulbTemperature
+  RefChg = Numbers(7)    !Design Refrigerant Charge Mass
 
 
   !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
@@ -470,30 +457,16 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
       ValveODCLnPAR(3)=ValveODCLnPAR(3)*1000    !RS Comment: Unit Conversion
   END IF
 
-  !********************Refrigerant Cycle Data (Cooling)***********************  !RS: Debugging: Moving: Stay here? Condenser?
-
-  CALL GetObjectItem('RefrigerantCycleData(Cooling)',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) 
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  !Expansion Device Inlet
-  
-  Tliq = Numbers(1)    !Inlet Temperature
-  
   !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
 
   CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-  !Compressor Discharge
-  
-  Tdis = Numbers(1)  !Discharge Temperature
-
   !Indoor Coil Outlet
   
-  BaroPressure = Numbers(2)  !Barometric Pressure
-  IsCmpInAirStream = Numbers(3) !Is Compressor in Air Stream
+  BaroPressure = Numbers(1)  !Barometric Pressure
+  !IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
 
   !***** Calculate weight of interconnecting pipes **** !RS: Debugging: Moving: These are only ever used to report the weights out
 
@@ -765,9 +738,6 @@ CHARACTER(LEN=4),PARAMETER :: FMT_203 = "(I1)"
 
   EvapPAR(31)=BaroPressure
   CondPAR(38)=BaroPressure
-
-  EvapPAR(33)=IsCmpInAirStream
-  CondPAR(40)=IsCmpInAirStream
 
   EvapPAR(34)=SystemType
   CondPAR(57)=SystemType !ISI - 07/14/06

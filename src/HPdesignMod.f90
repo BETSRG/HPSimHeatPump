@@ -107,13 +107,10 @@
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
-    !INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no  !RS: Debugging: Making it global variable
     INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
 
     LOGICAL :: FLAG_GOTO_950
-    
-    CHARACTER(LEN=13),PARAMETER :: FMT_700 = "(A44,F7.2,A5)"
-    CHARACTER(LEN=13),PARAMETER :: FMT_704 = "(A13,F7.2,A5)"
+
     CHARACTER(LEN=200) :: tmpString
 
     LOGICAL, EXTERNAL :: IssueRefPropError
@@ -131,8 +128,6 @@
     REAL RefSimulatedCharge     !Simulated charge at reference point, kg or lbm
     REAL SimulatedCharge2       !Simulated charge at 2nd reference point, kg or lbm
     REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
-    !REAL, PARAMETER :: UnitM     = 0.4536    !(lbm X UnitM = kg)
-    !REAL, PARAMETER :: UnitL     = 0.3048    !(ft X UnitL = m)
   
     
     IF (EvapPAR(54) .EQ. 1) THEN
@@ -423,7 +418,6 @@
             EvapPAR(32)=CompPAR(22)/1000
         END IF
 
-        !IsCoolingMode=EvapPAR(20)  !RS: Debugging: Global variable now
         IF (FirstTimeHPdesignMode) THEN
 
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &
@@ -441,13 +435,11 @@
                     EvapPAR(54)=1 !First time
                     EvapPAR(53)=0 !Detailed version
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
-                    !CALL EndEvaporatorCoil
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
                     EvapPAR(53)=1 !Simple version
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
-                    !CALL EndEvaporatorCoil
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
 

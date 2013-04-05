@@ -76,7 +76,7 @@ INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
 REAL AirProp(8)		!Air properties
 
 REAL Qcnd,Qevp,QevpSens,QevpLat
-REAL PwrCmp,mdot,Qtxv !,IsCoolingMode   !RS: Debugging: Bringing in on DataSimulation
+REAL PwrCmp,mdot,Qtxv
 REAL Dshtb,DrawBlow,CPair,Qtot,QtotSens
 REAL DcapTube,LcapTube
 REAL TAOCND,TAOEVP,COP,SHR,EER
@@ -106,13 +106,6 @@ CHARACTER (len=50) :: Title !Output file title
 
 REAL :: CoilSurfTemp = 0.0
 
-CHARACTER(LEN=9),PARAMETER :: FMT_1007 = "(A17,A42)"
-CHARACTER(LEN=33),PARAMETER :: FMT_1008 = "(A13,F10.3,A10,A10,A13,F10.3,A10)"
-CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
-CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
-CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
-CHARACTER(LEN=13),PARAMETER :: FMT_2009 = "(60(A16,','))"
-CHARACTER(LEN=11),PARAMETER :: FMT_2100 = "(60(E,','))"
 CHARACTER(LEN=13),PARAMETER :: FMT_2200 = "(A32,',',A50)"
 CHARACTER(LEN=3),PARAMETER :: FMT_2204 = "(A)"
 CHARACTER(LEN=23),PARAMETER :: FMT_2208 = "(A33,',',F40.3,',',A15)"
@@ -121,7 +114,6 @@ CHARACTER(LEN=83),PARAMETER :: FMT_2216 = "(A24,',',F18.3,',',F18.3,',',F21.3,',
 CHARACTER(LEN=53),PARAMETER :: FMT_2220 = "(A18,',',A27,',',A27,',',A24,',',A33,',',A25,',',A20)"
 CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',',F33.3,',',F25.3,',',A20)"
 
-  !IsCoolingMode=EvapPAR(20)    !RS: Debugging: Making this a global variable
   SELECT CASE(MODE)
   CASE(FIXEDORIFICESIM)
  
@@ -310,7 +302,6 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoCnd=0
       END IF
 
-      !CFMcnd=SCFMcnd
       Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
 
       TdboCnd=CondOUT(21)

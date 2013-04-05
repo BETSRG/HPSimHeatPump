@@ -31,14 +31,6 @@ MainDesignData,
 	\key False
 	\key True
 	\default True
-    N3, \field Design Subcooling
-	\type real
-	\units R
-	\required-field
-    N4, \field Design Superheat
-	\type real
-	\units R
-	\required-field
     A3, \field Refrigerant Name
 	\type choice
 	\key R410a
@@ -47,22 +39,22 @@ MainDesignData,
 	\key 407c
 	\key R134a
 	\required-field
-    N5, \field Outdoor Entering Drybulb Temperature
+    N3, \field Outdoor Entering Drybulb Temperature
 	\type real
 	\units F
 	\required-field
-    N6, \field Outdoor Entering Wetbulb Temperature
+    N4, \field Outdoor Entering Wetbulb Temperature
 	\type real
 	\units F
-    N7, \field Indoor Entering Drybulb Temperature
-	\type real
-	\units F
-	\required-field
-    N8, \field Indoor Entering Wetbulb Temperature
+    N5, \field Indoor Entering Drybulb Temperature
 	\type real
 	\units F
 	\required-field
-    N9; \field Design Refrigerant Charge Mass
+    N6, \field Indoor Entering Wetbulb Temperature
+	\type real
+	\units F
+	\required-field
+    N7; \field Design Refrigerant Charge Mass
 	\type real
 	\units lb
 	\required-field
@@ -646,32 +638,18 @@ RefrigerantLineData,
 	 \type real
 	 \ip-units inH2O
 	 \required-field
- 
-RefrigerantCycleData(Cooling),
-	\unique-object
-	\required-object
-	\memo Cooling Data on the Refrigerant Cycle.
-	\memo Contains the Expansion Device Inlet liquid temperature.
-    N1; \field Temperature
-	 \type real
-	 \units F
-	 \required-field
- 
+
 RefrigerantCycleData(Heating),
 	\unique-object
 	\required-object
 	\memo Heating Data on the Refrigerant Cycle.
 	\memo Contains the Compressor discharge temperature, barometric pressure,
 	\memo and whether or not the compressor is in the air stream.
-    N1, \field Temperature
-	\type real
-	\units F
-	\required-field
-    N2, \field Barometric Pressure
+    N1, \field Barometric Pressure
 	 \type real
 	 \units psi
 	 \required-field
-    N3; \field Is Compressor in Air Stream
+    N2; \field Is Compressor in Air Stream
 	 \note 1=yes, 0=no
 	 \type integer
 	 \minimum 0

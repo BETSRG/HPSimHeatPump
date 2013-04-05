@@ -131,7 +131,6 @@
     REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models
     REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models
     REAL MassCoil,MassLiqCoil,MassVapCoil
-    !INTEGER(2) IsCoolingMode !1=yes; 0=no   
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
@@ -158,14 +157,6 @@
     ! GOTO 30 means "skip refined simulation" according to previous comments ....
     INTEGER   :: FLAG_GOTO_20, FLAG_GOTO_30     
 
-    CHARACTER(LEN=11),PARAMETER :: FMT_103 = "(A20,F30.2)"
-    CHARACTER(LEN=15),PARAMETER :: FMT_1005 = "(I20,10(F20.2))"
-    CHARACTER(LEN=9),PARAMETER :: FMT_1006 = "(10(A20))"
-    CHARACTER(LEN=9),PARAMETER :: FMT_1007 = "(A17,A42)"
-    CHARACTER(LEN=33),PARAMETER :: FMT_1008 = "(A13,F10.3,A10,A10,A13,F10.3,A10)"
-    CHARACTER(LEN=15),PARAMETER :: FMT_2001 = "(A13,F10.3,A10)"
-    CHARACTER(LEN=15),PARAMETER :: FMT_2004 = "(A56,F10.3,A10)"
-    CHARACTER(LEN=14),PARAMETER :: FMT_2007 = "(A16,F10.3,A9)"
     CHARACTER(LEN=14) :: tmpString
     
     !Flow**:
@@ -208,7 +199,6 @@
   AccumPAR(9) = Numbers(8) !Coefficient M
   AccumPAR(10) = Numbers(9)    !Coefficient B
   !AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
-
 
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
@@ -254,13 +244,10 @@
         MiniLunit = ' (in)'
     END IF
 
-    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
-    !AccumPAR,FilterPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
+    CALL UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, &
     AccumPAR,CFMcnd,CFMevp,TaiC,TaiE,RHiC,RHiE, &
-    Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
-    !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength,Tdis,Tliq)   !RS: Debugging: Removing these
-    Tdis,Tliq)
-
+    Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure)
+    
     CALL InitAccumulator(AccumPAR)
 
     !set up Refrigerant variable...why?
@@ -271,7 +258,6 @@
     TsoCmpAct=TsoCmp
     RHiCAct=RHiC
     RHiEAct=RHiE
-    !IsCoolingMode=CondPAR(27)       ! VL_Index_Replace !RS: Debugging: CondPAR(27) isn't populated yet
 
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
@@ -400,7 +386,6 @@
 
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
-        !IsCoolingMode=CondPAR(27)	! VL_Index_Replace  !RS: Debugging: CondPAR(27) isn't populated yet
         CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
             CALL IssueOutputMessage('***** Cooling Mode *****')
@@ -487,7 +472,7 @@
             EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
-        CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07
+        CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07  !RS: Debugging: This case isn't used by us
             CALL IssueOutputMessage('***** Coil Only Simulation *****')
             CALL IssueOutputMessage('')
 
