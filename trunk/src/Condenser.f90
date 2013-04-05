@@ -348,7 +348,6 @@
     INTEGER,SAVE :: ShiftTube     !1= last row lower than 2nd last row
                                   !0= last row higher than 2nd last row
     INTEGER NmodLast      !Total number of modules in the last row
-    !INTEGER IsCoolingMode !Cooling mode flag (1=yes; 0=no) !RS: Debugging: Defining in DataSimulation
     INTEGER IsParallelSlabs !Parallel microchannel slabs (1=yes; 0=no)
     INTEGER RowNum        !Coil row number
     INTEGER Ntube         !Tube number !Loop counter
@@ -594,6 +593,7 @@
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
+    USE InputProcessor_HPSim    !RS: Debugging: GetObjectItem
 
     IMPLICIT NONE
 
@@ -622,15 +622,16 @@
     REAL PTol !Condenser Outlet Pressure Convergence criteria, kPa
 
     !ISI - 07/14/06
+    
+    INTEGER, PARAMETER :: MaxNameLength = 200
 
-    CHARACTER(LEN=16),PARAMETER :: FMT_10 = "(3(I4),5(F10.3))"
-    CHARACTER(LEN=6),PARAMETER :: FMT_11 = "(6(I))"
-    CHARACTER(LEN=7),PARAMETER :: FMT_12 = "(11(I))"
-    CHARACTER(LEN=15),PARAMETER :: FMT_101 = "(14(F10.3,','))"
-    CHARACTER(LEN=20),PARAMETER :: FMT_102 = "(I3,A,50(F10.3,','))"
-    CHARACTER(LEN=19),PARAMETER :: FMT_103 = "(I10,50(',',F10.3))"
-    CHARACTER(LEN=18),PARAMETER :: FMT_105 = "(A4,50(',',F10.3))"
-    CHARACTER(LEN=10),PARAMETER :: FMT_106 = "(I4,F18.9)"
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+    
     CHARACTER(LEN=11),PARAMETER :: FMT_107 = "(A66,F10.3)"
 
     TestH=AirProp(4)    !RS: Debugging: Finding the entering air enthalpy hopefully
@@ -662,8 +663,6 @@
     QliqLn    = PAR(12)
     DTliqLn   = PAR(13)
     AddDPLiqLn = PAR(14)
-
-    !IsCoolingMode   = PAR(27)  !RS: Debugging: PAR(27) is not populated yet
 
     IsSimpleCoil=PAR(61) !ISI - 12/22/06
     FirstTime=PAR(62)    !ISI - 12/22/06
@@ -697,6 +696,15 @@
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
+        
+                  !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Stay here? Compressor? ORNLSolver?
+
+  CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
+        
     END IF
 
     hciMultiplier   = PAR(30)
@@ -710,7 +718,7 @@
 
     BaroPressure     = PAR(38)
     QlossCmp         = PAR(39)
-    IsCmpInAirStream = PAR(40)
+    !IsCmpInAirStream = PAR(40)
 
     CurveUnit        = PAR(41)
     CurveTypeHTC     = PAR(42)
@@ -1057,9 +1065,13 @@
     WetFlag=0
     RowNum=0   
     CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-    Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-    Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    
+    !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+
 
     DPair=DPair*DPairMultiplier
 
@@ -1434,19 +1446,22 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,IDtube,mRefMod,hgRoMod,hfRoMod, &
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
                     ELSE
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,IDtube,mRefMod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &   !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
+                        
                     END IF
 
                     Ckt(I)%Tube(J)%Seg(K)%Mass=MassMod
@@ -1635,11 +1650,12 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,Dchannel,mRefMod/NumOfChannels,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
                         MassMod=MassMod*NumOfChannels
                         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass=MassMod
@@ -1894,16 +1910,15 @@
 
                     IF (K .EQ. NumOfMods .OR. (J .EQ. LastTube .AND. (Ckt(I)%OutSplit .GT. 1 .OR. Ckt(I)%OutJoin .GT. 1))) THEN
                         !Include return bend length
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,IDtube,mRefMod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube+Lreturnbend,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
                     ELSE
-                        CALL Inventory(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,IDtube,mRefMod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
                     END IF
 
@@ -2072,11 +2087,12 @@
                         Rair=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rair
                         Rtube=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Rtube
 
-                        CALL Inventory(CoilType,TubeType,Dchannel,ktube,mRefMod/NumOfChannels,Qmod,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
+                        CALL Inventory(CoilType,Dchannel,mRefMod/NumOfChannels,hgRoMod,hfRoMod, & !hRiMod,hRoMod, & !RS: Debugging: Extraneous
                         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-                        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-                        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiMod, &
                         LmodTube,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
                         MassMod=MassMod*NumOfChannels
                         Slab(I)%Pass(II)%Tube(III)%Seg(IV)%Mass=MassMod
@@ -2185,8 +2201,8 @@
     !INTEGER,PARAMETER :: SI=1
     INTEGER,PARAMETER :: IP=2
 
-    CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"
-    CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
+    !CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"   !RS: Debugging: Never Used
+    !CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
     
     !FLOW:
 
@@ -3739,11 +3755,12 @@ END IF
 
         mu=(muRiMod+muRoMod)/2  !Average viscosity
 
-        CALL Inventory(CoilType,TubeType,IDdisLn,ktube,mRefTot,QdisLn,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
+        CALL Inventory(CoilType,IDdisLn,mRefTot,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-        muRoMod,mugRoMod,mufRoMod,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-        MolWeight,pRoMod,Psat,Pcr,Tsat,Cair,Const,Rair,Rtube,AiModDis, &
         LmodDis,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
 
         DisLnSeg(K)%Mass=MassMod
         DisLnSeg(K)%pRo=pRoMod
@@ -3753,7 +3770,8 @@ END IF
 
     END DO !End Nmod
 
-    CALL manifold(CoilType,IDdisLn,mRefTot,xRiMod,vRiMod,vgRimod,vfRimod,mugRiMod,mufRiMod,dPman)
+    CALL manifold(CoilType,IDdisLn,mRefTot,xRiMod,vgRimod,vfRimod,mugRiMod,mufRiMod,dPman)
+    !(CoilType,ID,mRef,xRef,vRef,vgi,vfi,mug,muf,dPman)
 
     pRiCoil=DisLnSeg(1)%pRo-DPman
     hRiCoil=DisLnSeg(1)%hRo
@@ -3861,12 +3879,12 @@ END IF
         muf=(mufRiMod+mufRoMod)/2
         mug=(mugRiMod+mugRoMod)/2
 
-        CALL Inventory(CoilType,TubeType,IDliqLn,ktube,mRefTot,QliqLn,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
+        CALL Inventory(CoilType,IDliqLn,mRefTot,hgRoMod,hfRoMod, & !hRiMod,hRoMod, &  !RS: Debugging: Extraneous
         xRiMod,xRoMod,vRiMod,vRoMod,vgRimod,vfRimod,vgRomod,vfRomod, &
-        mu,mug,muf,kRoMod,kfRoMod,kgRoMod,CpRoMod,CpfRoMod,CpgRoMod, &
-        MolWeight,pRoMod,Psat,Pcr,Tsat,cAir,Const,Rair,Rtube,AiModLiq, &
         Lmodliq,LmodTP,LmodSH,MassLiqMod,MassVapMod,MassMod)
-
+                    !(CoilType,TubeType,ID,ktube,mRef,Qout,hg,hf,hRi,hRo,xRi,xRo,vRi,vRo,vgi,vfi,vgo,vfo, &
+                    !muRef,mug,muf,kRef,kL,kV,CpRef,CpL,CpV,MolWeight,Pref,Psat,Pcrit,Tsat, &
+                    !Cair,Const,Rair,Rtube,AiMod,Lmod,LmodTP,LmodSP,MassLiq,MassVap,MassMod)
         LiqLnSeg(K)%Mass=MassMod
         LiqLnSeg(K)%pRo=pRoMod
         LiqLnSeg(K)%hRo=hRoMod
@@ -4341,14 +4359,16 @@ END IF
         END IF
         IF (RowNum .EQ. 0) THEN
             CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-            IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-            Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-            Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)  
+            IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)  
+            
+            !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+
         ELSE
             CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-            IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-            Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-            Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+            IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
         END IF
         !Surface areas
         AoMod=AoCoil*LmodTube/Lcoil
@@ -4467,9 +4487,12 @@ END IF
         WetFlag=0
         RowNum=0 !Ckt(I)%Tube(J)%RowNum
         CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
-        IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-        Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-        Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+        IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+        
+        !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
 
         hco=hco*hcoMultiplier
         DPair=DPair*DPairMultiplier
@@ -5124,9 +5147,12 @@ END IF
         IF (DTmod .EQ. 0) THEN
             DTmod=(tAiMod+tRiMod)/2 !First estimate
         END IF
-        CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod, &               !Calculating the refrigerant side heat transfer coefficient
+        !CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod, &               !Calculating the refrigerant side heat transfer coefficient
+        !xRmod,xRmod,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+        !MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+        CALL hcRefside(CoilType,TubeType,IDtube,mRefMod,Qmod, &               !Calculating the refrigerant side heat transfer coefficient
         xRmod,xRmod,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
-        MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+        Psat,Pcr,Wabsolute,EFref,hciMod)
 
         hciMod=hciMod*hciMultiplier
 
@@ -5136,8 +5162,9 @@ END IF
         !TsurfMod=0 !RS: Debugging: Set once never used
 
         !Calc. UA
-        CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
+        CALL CalcUA(CoilType,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth, &
         hcoMod,hciMod,AfMod,AoMod,AiMod,AmMod,UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
+
         IF (xRiMod .GT. 0 .AND. xRoMod .LE. 0 .AND. LmodTPratio .LT. 1) THEN !Condenser outlet
             UA=UA*(1-LmodTPratio)
         ELSEIF (xRiMod .GE. 1 .AND. xRoMod .LT. 1 .AND. LmodSHratio .LT. 1) THEN !Condenser inlet
@@ -5250,11 +5277,12 @@ END IF
             IF (K .EQ. NumOfMods) THEN
                 IF (J .EQ. LastTube) THEN
                     IF (Ckt(II)%OutSplit .GT. 1 .OR. Ckt(II)%OutJoin .GT. 1) THEN
-                        CALL returnbend(CoilType,TubeType,IDtube,ODtube,Pt,mRefMod,xRoMod,vRoMod,vgRoMod,vfRoMod,muRoMod,mugRoMod,mufRoMod,DPreturnbend)
+                        CALL returnbend(CoilType,TubeType,IDtube,Pt,mRefmod,xRoMod,vRoMod,vgRoMod,vfRoMod,mugRoMod,mufRoMod,DPreturnbend)
+                        !CoilType,TubeType,ID,Pt,mRef,xRef,vRef,vgi,vfi,mug,muf,dPret)
                         pRoMod=pRoMod-DPreturnbend
                     END IF
                 ELSE
-                    CALL returnbend(CoilType,TubeType,IDtube,ODtube,Pt,mRefMod,xRoMod,vRoMod,vgRoMod,vfRoMod,muRoMod,mugRoMod,mufRoMod,DPreturnbend)
+                    CALL returnbend(CoilType,TubeType,IDtube,Pt,mRefmod,xRoMod,vRoMod,vgRoMod,vfRoMod,mugRoMod,mufRoMod,DPreturnbend)
                     pRoMod=pRoMod-DPreturnbend
                 END IF
 
@@ -5483,15 +5511,21 @@ END IF
             IF (DTmod .EQ. 0) THEN
                 DTmod=(tAiMod+tRiMod)/2 !First estimate
             END IF
-            CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,0.0, &    !Calculate the refrigerant side heat transfer coefficient
-            vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
-            kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
-            MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+            !CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,0.0, &    !Calculate the refrigerant side heat transfer coefficient
+            !vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
+            !kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+            !MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+            CALL hcRefside(CoilType,TubeType,IDtube,mRefMod,Qmod, &               !Calculating the refrigerant side heat transfer coefficient
+        xRimod,0.0,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+        Psat,Pcr,Wabsolute,EFref,hciMod)
 
             !Calc. UA
-            CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
+            CALL CalcUA(CoilType,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth, &
             hcoMod,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio, &
             UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
+            !CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
+            !hcoMod,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio, &
+            !UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
 
             IF (IsSimpleCoil .EQ. 1) THEN
                 mAiMod=mAiCoil*LmodTP/Lcoil !ISI - 12/05/06
@@ -5543,15 +5577,21 @@ END IF
             IF (DTmod .EQ. 0) THEN
                 DTmod=(tAiMod+tRiMod)/2 !First estimate
             END IF
-            CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &    !Calculate the refrigerant side heat transfer coefficient
-            vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
-            kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
-            MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+            !CALL hcRefside(CoilType,TubeType,IDtube,ktube,mRefMod,Qmod,AoMod,AiMod,hfgRmod,xRiMod,1.0, &    !Calculate the refrigerant side heat transfer coefficient
+            !vgRmod,vfRmod,muRmod,mugRmod,mufRmod, &
+            !kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+            !MolWeight,Psat,Pcr,Tsat,SigmaMod,DTmod,Wabsolute,EFref,hciMod)
+            CALL hcRefside(CoilType,TubeType,IDtube,mRefMod,Qmod, &               !Calculating the refrigerant side heat transfer coefficient
+        xRimod,1.0,vgRmod,vfRmod,muRmod,mugRmod,mufRmod,kRmod,kfRmod,kgRmod,cpRmod,cpfRmod,cpgRmod, &
+        Psat,Pcr,Wabsolute,EFref,hciMod)
 
             !Calc. UA
-            CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
+            CALL CalcUA(CoilType,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth, &
             hcoMod,hciMod,AfMod*LmodSHratio,AoMod*LmodSHratio,AiMod*LmodSHratio,AmMod*LmodSHratio, &
             UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
+            !CALL CalcUA(CoilType,WetFlag,Kfin,FinThk,FinHeight,Ktube,Pt,Pl,ODtube,TubeThk,TubeDepth,RowNum,tAiMod,hAiMod, &
+            !hcoMod,hciMod,AfMod*LmodTPratio,AoMod*LmodTPratio,AiMod*LmodTPratio,AmMod*LmodTPratio, &
+            !UA,Rair,Rrefrig,Rtube,FinEff,SurfEff)
 
             IF (IsSimpleCoil .EQ. 1) THEN
                 mAiMod=mAiCoil*LmodSH/Lcoil !ISI - 12/05/06
@@ -5951,9 +5991,12 @@ END IF
             RETURN
         END IF
 
-        CALL MODdP(CoilType,TubeType,tRi,tRo,pRi,hgRi,hfRi, &
+        CALL MODdP(CoilType,TubeType,hgRi,hfRi, &
         hRi,hRo,xRi,xRo,vRi,vRo,vgRi,vfRi,vgRo,vfRo,mRef,muRi,mugRi,mufRi, &
-        SigmaMod,Lsegment,LmodTPratio,IDtube,ODtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
+        Lsegment,LmodTPratio,IDtube,Elevation,Ltotal,dPfric,dPmom,dPgrav)
+        !(CoilType,TubeType,tRi,tRo,pRi,hg,hf,hRi,hRo,xRi,xRo, &
+!                 vRi,vRo,vgi,vfi,vgo,vfo,mRef,muRef,mug,muf,Sigma, &
+!				 Lmod,LmodTPratio,ID,OD,HtCoil,Lcoil,dPfric,dPmom,dPgrav)
 
         IF (ABS(dPfric) .LT. ABS(dPmom)) THEN
             dPmom=0
@@ -6126,7 +6169,7 @@ END IF
     !tRoEvp           =XIN(7)   !RS: Debugging: Set once but never used
 
     BaroPressure     =PAR(1)
-    IsCoolingMode    =PAR(2)
+    !IsCoolingMode    =PAR(2)   !RS: Debugging: Global variable now
     LdisLn           =PAR(3)
     ODdisLn          =PAR(4)
     DisLnThk         =PAR(5)
@@ -6530,9 +6573,12 @@ END IF
     WetFlag=0
     RowNum=0   
     CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
-    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
-    Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
-    Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
+    
+    !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
+    !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
+    !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
 
     DPair=DPair*DPairMultiplier
 

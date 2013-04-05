@@ -105,11 +105,8 @@
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
-    !INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no  !RS: Debugging: Global variable now
     LOGICAL :: IsCondenserAllocated = .FALSE. !Flag to check if the arrays in the condenser model are allocated !RS: See VL's note 6 lines below
     
-    CHARACTER(LEN=13),PARAMETER :: FMT_900 = "(A50,F7.2,A5)"
-    CHARACTER(LEN=13),PARAMETER :: FMT_904 = "(A32,F7.2,A9)"
     CHARACTER(LEN=14) :: tmpString
 
     LOGICAL, EXTERNAL :: IssueRefPropError
@@ -252,7 +249,6 @@
             CondPAR(39)=CompPAR(22)/1000    !RS Comment: Unit Conversion, from kW to W?
         END IF
 
-        !IsCoolingMode=CondPAR(27)  !RS: Debugging: Global variable now
         IF ((IsCoolingMode .GT. 0 .AND. ODCcoilType .EQ. MCCONDENSER) .OR. &
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil
@@ -274,13 +270,11 @@
                 CALL Condenser(Ref$,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
-                !CALL EndCondenserCoil  !RS: Debugging
 
                 CondPAR(61)=1 !Simple version
                 CALL Condenser(Ref$,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
-                !CALL EndCondenserCoil  !RS: Debugging
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN

@@ -93,9 +93,9 @@ CONTAINS
 SUBROUTINE UnitConvert(Unit,CompPAR,CondPAR,EvapPAR,ShTbPAR,CapTubePAR, & !TxvPAR,  &
                        !AccumPAR,FilterPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
                        AccumPAR,XMaC,XMaE,TaiC,TaiE,RHiC,RHiE, &
-				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure, &
+				       Refchg,TSOCMP,TSICMP,SUPER,SUBCOOL,BaroPressure) !, &
 					   !ChargeCurveSlope,ChargeCurveIntercept,RefLiquidLength, &    !RS: Debugging: Removing these
-					   Tdis,Tliq)
+					   !Tdis,Tliq)
 ! ----------------------------------------------------------------------
 !
 !   Description: To convert all input data into standard SI
@@ -141,8 +141,8 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 !REAL, INTENT(INOUT) :: ChargeCurveSlope !Charge curve slope, kg/m
 !REAL, INTENT(INOUT) :: ChargeCurveIntercept !Charge curve intercept, kg
 !REAL, INTENT(INOUT) :: RefLiquidLength !Liquid length at reference point, m
-REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C
-REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
+!REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
+!REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C    !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
 
   IF (Unit .EQ. SI)THEN !SI unit inputs
     
@@ -407,8 +407,8 @@ REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C
 	!ChargeCurveIntercept=ChargeCurveIntercept*UnitM
 	!RefLiquidLength=RefLiquidLength*UnitL
 	
-	Tdis=(Tdis-32)/1.8
-	Tliq=(Tliq-32)/1.8
+	!Tdis=(Tdis-32)/1.8
+	!Tliq=(Tliq-32)/1.8
 
   END IF
 
