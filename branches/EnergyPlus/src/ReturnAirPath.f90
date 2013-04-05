@@ -191,7 +191,7 @@ MODULE ReturnAirPathManager
     RETURN
   END SUBROUTINE GetReturnAirPathInput
 
-  SUBROUTINE InitReturnAirPath(ReturnAirPathNum)
+  SUBROUTINE InitReturnAirPath(ReturnAirPathNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
             ! SUBROUTINE INFORMATION:
             !       AUTHOR:          Russ Taylor
             !       DATE WRITTEN:    Nov 1997
@@ -263,7 +263,7 @@ MODULE ReturnAirPathManager
     RETURN
   END SUBROUTINE CalcReturnAirPath
 
-  SUBROUTINE ReportReturnAirPath(ReturnAirPathNum)
+  SUBROUTINE ReportReturnAirPath(ReturnAirPathNum)  !RS: Debugging: Extraneous subroutine! It doesn't do anything
             ! SUBROUTINE INFORMATION:
             !       AUTHOR:          Russ Taylor
             !       DATE WRITTEN:    Nov 1997

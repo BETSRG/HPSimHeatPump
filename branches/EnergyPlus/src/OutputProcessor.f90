@@ -5668,7 +5668,6 @@ SUBROUTINE FlushHPOutput()
     USE CondenserMod, ONLY: GetCondProp
 
     LOGICAL, SAVE :: OneTime = .TRUE.
-    !REAL, SAVE :: PrevTime = 0 !RS: Debugging: Extraneous
     REAL :: CurTime
     Integer:: OutputFile=1
     REAL :: QSens, QLat

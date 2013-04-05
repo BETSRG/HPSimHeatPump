@@ -648,7 +648,7 @@ END Subroutine UpdateAirMixer
 ! Beginning of Reporting subroutines for the Mixer Module
 ! *****************************************************************************
 
-SUBROUTINE ReportMixer(MixerNum)
+SUBROUTINE ReportMixer(MixerNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
 
           ! SUBROUTINE INFORMATION:

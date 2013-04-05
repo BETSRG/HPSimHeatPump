@@ -1888,7 +1888,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 				   'rhAi','rhAo','hci(kW/m2K)','hco(kW/m2K)', &
 				   'mu(uPa-s)','k(W/mK)','cp(kJ/kgK)','rho(kg/m3)','ReVap','ReLiq', &
 				   'QmodTot(W)','QmodSens(W)','QmodLat(W)','MassLiq(g)','MassVap(g)','Mass(g)','DryWet', &
-				   'mdotR(kg/hr)','mdotA(kg/s)', 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
+				   'mdotR(kg/hr)','mdotA(kg/s)' !, 'cpAir', 'hAiMod kJ/kg', 'hAoMod' !RS: Adding in the latent heat !RS: Debugging: Adding in air specific heat and h's
 
 	  DO NumSection=1, NumOfSections
 
@@ -2094,7 +2094,7 @@ CHARACTER(LEN=25),PARAMETER :: FMT_104 = "(3(I3,','),50(F10.3,','))"
 							       xRiMod,xRoMod,tAiMod,tAoMod,rhAiMod,rhAoMod, &
 							       hciMod,hcoMod,mu*1e6,kRef*1e3,cpRef,rhoRef,ReVap,ReLiq, &
 							       Qmod*1000,QmodSens*1000,QmodLat*1000,MassLiqMod*1000,MassVapMod*1000,MassMod*1000, &
-							       FLOAT(DryWet),mRefCkt*3600, mAiMod, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
+							       FLOAT(DryWet),mRefCkt*3600, mAiMod !, cpAIR, hAiMod, hAoMod, AirProp(4), TestH   !RS: Trying to find the latent heat !RS: Debugging: Adding in the air cp and h's
 
 			      END DO !end Nmod
 
@@ -2326,14 +2326,10 @@ END SUBROUTINE PrintEvaporatorResult
                                     !6=Microchannel Evaporator
 
     INTEGER I,J,II,III,IV !Loop counter
-    !CHARACTER*150 LineData !RS: Debugging: Extraneous
-    !INTEGER NumRow !Row number !RS: Debugging: Extraneous
     INTEGER NumOfPasses !Number of passes
-    !INTEGER NumPass !Pass number   !RS: Debugging: Extraneous
     INTEGER Ntubes !Number of tubes
     INTEGER NumOfInlets !Number of inlets
     LOGICAL IsSIunit !SI unit input flag
-    !LOGICAL IsNewFormat !New format input flag !RS: Debugging: Extraneous
     LOGICAL IsShift !Is shift tube flag (for staggered tubes)
     INTEGER NumSection !Loop counter, ISI - 09/10/07
     
@@ -3056,7 +3052,7 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
             Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)   
             
             DO I=Nt*(Nl-1)+1,Nt*Nl !last row faces air inlet (Cross flow HX)
-                DO J=1,NumOfMods
+                DO J=1,NumOfMods !1  !,NumOfMods   !RS: Debugging: Trying to keep it from circling too many times?
                     Tube(I)%Seg(J)%VelDev = Numbers(J)  !Bringing in the velocity deviation data
                 END DO
                 IF (ErrorFlag .NE. NOERROR) THEN 
@@ -3497,7 +3493,6 @@ SUBROUTINE InitEvaporatorStructures
   REAL, DIMENSION(500) :: Numbers    ! brings in data from IP
   INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
   INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
-  !CHARACTER(len=MaxNameLength) :: ModelName !Model Name tells how to address Fin-Tube Coil or MicroChannel, etc.   !RS: Debugging: Extraneous
   INTEGER, PARAMETER :: r64=KIND(1.0D0)  !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12) 
   REAL(r64), DIMENSION(500) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
@@ -3511,7 +3506,7 @@ SUBROUTINE InitEvaporatorStructures
                 
     IF (IsCoolingMode .GT. 0) THEN
       
-                NumOfMods=2
+                !NumOfMods=2
                 ALLOCATE(CoilSection(NumofSections)%Ckt(NumOfCkts)) 	  
                 CoilSection(NumofSections)%NumOfCkts=NumOfCkts
 
@@ -3531,11 +3526,11 @@ SUBROUTINE InitEvaporatorStructures
         
                 DO I=1, NumOfCkts
                     Ckt(I)%Ntube = Numbers(I)
-                    IF (ErrorFlag .NE. NOERROR) THEN 
-                        ErrorFlag=CKTFILEERROR
-                        CALL InitEvaporatorCoil_Helper_1
-                        RETURN
-                    END IF
+                    !IF (ErrorFlag .NE. NOERROR) THEN    !RS: Debugging: Where does this error flag come from? Not from in here.
+                    !    ErrorFlag=CKTFILEERROR
+                    !    CALL InitEvaporatorCoil_Helper_1
+                    !    RETURN
+                    !END IF
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))          
                     ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube)) 
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%NTube)%Seg(NumOfMods))
@@ -3543,7 +3538,7 @@ SUBROUTINE InitEvaporatorStructures
                 END DO
       
     ELSE
-                NumOfMods=3
+                !NumOfMods=3
                 
                 DO I=1, NumOfTubes
                     ALLOCATE(Tube(I)%Seg(NumOfMods))
@@ -3563,11 +3558,11 @@ SUBROUTINE InitEvaporatorStructures
                     Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
                         
                     Ckt(I)%Ntube=Numbers(I)
-                IF (ErrorFlag .NE. NOERROR) THEN 
-                    ErrorFlag=CKTFILEERROR
-                    CALL InitEvaporatorCoil_Helper_1
-                    RETURN
-                END IF
+                !IF (ErrorFlag .NE. NOERROR) THEN    !RS: Debugging: Where does this error flag come from? Not from in here.
+                !    ErrorFlag=CKTFILEERROR
+                !    CALL InitEvaporatorCoil_Helper_1
+                !    RETURN
+                !END IF
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%Ntube))
                     ALLOCATE(Ckt(I)%TubeSequence(Ckt(I)%Ntube))
                     ALLOCATE(Ckt(I)%Tube(Ckt(I)%NTube)%Seg(NumOfMods))

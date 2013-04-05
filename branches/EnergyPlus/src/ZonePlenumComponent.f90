@@ -1387,7 +1387,7 @@ END SUBROUTINE UpdateAirZoneSupplyPlenum
 ! Beginning of Reporting subroutines for the ZonePlenum Module
 ! *****************************************************************************
 
-SUBROUTINE ReportZoneReturnPlenum(ZonePlenumNum)
+SUBROUTINE ReportZoneReturnPlenum(ZonePlenumNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis
@@ -1432,7 +1432,7 @@ SUBROUTINE ReportZoneReturnPlenum(ZonePlenumNum)
 
 END SUBROUTINE ReportZoneReturnPlenum
 
-SUBROUTINE ReportZoneSupplyPlenum(ZonePlenumNum)
+SUBROUTINE ReportZoneSupplyPlenum(ZonePlenumNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Peter Graham Ellis

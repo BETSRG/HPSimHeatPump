@@ -51,12 +51,9 @@
     !Subroutine parameters
 
     CHARACTER(len=80)   :: Refrigerant
-    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
-    REAL Temperature,Quality,Pressure !,Enthalpy    !RS: Debugging: Extraneous
-
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
+    REAL Temperature,Quality,Pressure
+    
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error 
-    !REAL RefProp(28)	!Refrigerant properties ! VL Comment: Array Size Explanation??  !RS: Debugging: Extraneous
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error 
@@ -73,18 +70,11 @@
     REAL STEP
     REAL CHGDIF
 
-    !REAL Qcnd,Qevp, TsubExp,TsubCnd,TsupEvp,TsupCmp,QevpSens   !RS: Debugging: Extraneous
-    !REAL mdot,PwrCmp,TsiExp,TsoCnd,TsoEvp !RS: Debugging: Extraneous
-    REAL WinTrans !Dshtb,,Qloss !RS: Debugging: Extraneous
-    !REAL mdotRmax,mdotRmin,mdotRprev !mass flow rate iteration parameter   !RS: Debugging: Extraneous
-    !REAL DetailedQevp,SimpleQevp !Evaporator capacity from detailed and simple models  !RS: Debugging: Extraneous
-    !REAL DetailedQcnd,SimpleQcnd !Condenser capacity from detailed and simple models   !RS: Debugging: Extraneous
-    !REAL MassCoil,MassLiqCoil,MassVapCoil  !RS: Debugging: Extraneous
+    REAL WinTrans
     INTEGER(2) IsCoolingMode !1=yes; 0=no   
     REAL, EXTERNAL :: ZEROCH
     REAL, EXTERNAL :: CHARGM
     !INTEGER :: TimeStep !Added Sankar transient
-    !LOGICAL:: Trues    !RS: Debugging: Extraneous
     REAL :: SUPERAct
     REAL :: TsiCmpAct
     REAL :: TsoCmpAct
@@ -92,8 +82,6 @@
     REAL :: RHiEAct
     REAL, SAVE :: IDCFlowConst
     REAL, SAVE :: ODCFlowConst
-    !INTEGER   :: Flag  !RS: Debugging: Extraneous
-    !INTEGER :: LastTime !Aids in the event of a microchannel device    !RS: Debugging: Extraneous
     LOGICAL, SAVE :: ONETIME = .TRUE.    !RS: Debugging: Keeps the program from calling the unit conversion subroutine over again.
     
     REAL, INTENT (OUT) :: QUnitOut            ! sensible capacity delivered to zone !RS: Testing: Trying to pass variables out
@@ -149,8 +137,8 @@
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
     
-    CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
-    EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
+    !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
     !RS: Debugging: Modified from PackagedTerminalHeatPump code
     !IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .GT. 0.0 .AND. TempControlType(1) .NE. SingleHeatingSetPoint) THEN    !RS: Debugging: GT not LT because the values are positive
@@ -175,16 +163,18 @@
     ELSEIF (ZoneSysEnergyDemand(1)%TotalOutputRequired .GT. 0.0) THEN !RS: Debugging: Is it needing a positive heat gain from HPSim?
         IsCoolingMode=0 !RS: Debugging: Heat pump operating in heating mode
         CondPAR(27)=IsCoolingMode
-        EvapPar(27)=IsCoolingMode
+        EvapPar(20)=IsCoolingMode
     ELSE
         IsCoolingMode=1 !RS: Debugging: The heat pump is operating in cooling mode
         CondPAR(27)=IsCoolingMode
-        EvapPar(27)=IsCoolingMode
+        EvapPar(20)=IsCoolingMode
     END IF
     
     IF (IsCoolingMode .NE. LastCoolingMode) THEN   !RS: Debugging: Only deallocating and reallocating if cooling mode changed between iterations
         CALL EndCondenserCoil
         CALL EndEvaporatorCoil
+        CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
+        EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" only when needed
     END IF
     
     !TaiE=  !MAT(1) !RS: Debugging: Updating indoor entering temperature with the mean air temperature for zone 1 every run
@@ -268,7 +258,7 @@
     TsoCmpAct=TsoCmp
     RHiCAct=RHiC
     RHiEAct=RHiE
-    IsCoolingMode=CondPAR(27)       ! VL_Index_Replace
+    !IsCoolingMode=CondPAR(27)       ! VL_Index_Replace !RS: Debugging: Removing as IsCoolingMode is set above
 
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
@@ -400,7 +390,7 @@
 
         EvapOUT(3)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation        
 
-        IsCoolingMode=CondPAR(27)	! VL_Index_Replace
+        !IsCoolingMode=CondPAR(27)	! VL_Index_Replace  !RS: Debugging: Removing as IsCoolingMode is set above
         WRITE(6,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)' 
         WRITE(*,*)'Heat Pump Design Tool (ver. 2.0 12/17/09)'
         IF (IsCoolingMode .EQ. 1) THEN

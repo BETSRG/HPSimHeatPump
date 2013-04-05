@@ -143,6 +143,6 @@ INTEGER ErrStat       !Error status
 	END IF
   END IF
   
-  CLOSE (77)
+  CLOSE (77)   !RS: Debugging: This is crashing; just want to see if this line is the actual problem
 
 END SUBROUTINE
