@@ -4433,7 +4433,7 @@ END Subroutine UpdateSys
 ! Beginning of Reporting subroutines for the Sys Module
 ! *****************************************************************************
 
-SUBROUTINE ReportSys(SysNum)
+SUBROUTINE ReportSys(SysNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Unknown

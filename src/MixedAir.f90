@@ -4852,7 +4852,7 @@ End If
 RETURN
 END SUBROUTINE UpdateOAMixer
 
-SUBROUTINE ReportOAMixer(OAMixerNum)
+SUBROUTINE ReportOAMixer(OAMixerNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE ARGUMENT DEFINITIONS
     INTEGER, INTENT(IN) :: OAMixerNum !unused1208
@@ -4860,7 +4860,7 @@ SUBROUTINE ReportOAMixer(OAMixerNum)
 RETURN
 END SUBROUTINE ReportOAMixer
 
-SUBROUTINE ReportOAController(OAControllerNum)
+SUBROUTINE ReportOAController(OAControllerNum)  !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE ARGUMENT DEFINITIONS
     INTEGER, INTENT(IN) :: OAControllerNum !unused1208

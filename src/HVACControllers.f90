@@ -2446,7 +2446,7 @@ SUBROUTINE SaveSimpleController(ControlNum, FirstHVACIteration, IsConvergedFlag)
 END SUBROUTINE SaveSimpleController
 
 
-SUBROUTINE LimitController(ControlNum, IsConvergedFlag)
+SUBROUTINE LimitController(ControlNum, IsConvergedFlag) !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR
@@ -2560,7 +2560,7 @@ END SUBROUTINE UpdateController
 ! Beginning of Reporting subroutines for the Controller Module
 ! *****************************************************************************
 
-SUBROUTINE ReportController(ControlNum)
+SUBROUTINE ReportController(ControlNum) !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         <author>

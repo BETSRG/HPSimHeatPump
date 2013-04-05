@@ -200,36 +200,6 @@ REAL RefChg    !Design Refrigerant Charge Mass
 
 !Compressor variables
 CHARACTER(len=MaxNameLength)CompressorModel
-!RS: Debugging: Extraneous
-!REAL CompressorHeatLossFraction
-!REAL CompressorHeatLoss
-!REAL CompressorVolume
-!REAL CompressorMassCoefficient1
-!REAL CompressorMassCoefficient2
-!REAL CompressorMassCoefficient3
-!REAL CompressorMassCoefficient4
-!REAL CompressorMassCoefficient5
-!REAL CompressorMassCoefficient6
-!REAL CompressorMassCoefficient7
-!REAL CompressorMassCoefficient8
-!REAL CompressorMassCoefficient9
-!REAL CompressorMassCoefficient10
-!REAL CompressorPowerCoefficient1
-!REAL CompressorPowerCoefficient2
-!REAL CompressorPowerCoefficient3
-!REAL CompressorPowerCoefficient4
-!REAL CompressorPowerCoefficient5
-!REAL CompressorPowerCoefficient6
-!REAL CompressorPowerCoefficient7
-!REAL CompressorPowerCoefficient8
-!REAL CompressorPowerCoefficient9
-!REAL CompressorPowerCoefficient10
-!REAL PowerMultiplier
-!REAL MassFlowRateMultiplier
-!REAL UserSpecifiedRatingEvapTemperature
-!REAL UserSpecifiedRatingCondTemperature
-!REAL UserSpecifiedRatingSubcooling
-!REAL UserSpecifiedRatingSuperheat
 
 REAL PwrODfan !Outdoor Fan Power
 REAL PwrIDfan !Fan Power

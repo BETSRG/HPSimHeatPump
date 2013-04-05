@@ -66,46 +66,36 @@
 
     IMPLICIT NONE
 
-    !CHARACTER (len=15) :: Property !RS: Debugging: Extraneous
     REAL Temperature,Quality,Pressure,Enthalpy
 
     REAL DTVALU
 
     LOGICAL PRINT
-    !REAL NTE,NSECTE,NTC,NSECTC !RS: Debugging: Extraneous
-
-    !INTEGER(2) RefPropOpt			!Ref prop calc. option  !RS: Debugging: Extraneous
+    
     INTEGER(2) RefPropErr			!Error flag:1-error; 0-no error
-    !REAL RefProp(28)	!Refrigerant properties !RS: Debugging: Extraneous
 
     INTEGER(2) AirPropOpt			!Air prop calc. option
     INTEGER(2) AirPropErr			!Error flag:1-error; 0-no error
     REAL AirProp(8)		!Air properties
 
     INTEGER ICHRGE,IMASS,IREFC,LPRINT
-    REAL TAIIEI !TAIICI,    !RS: Debugging: Set but never used
+    REAL TAIIEI 
     INTEGER NTAMB,NCROSS
-    REAL DELT2,DTVLMN !,DTVLMX  !RS: Debugging: Extraneous
-    REAL TAIIE !,TAIIC  !RS: Debugging: Set but never used
-    INTEGER I !ITRPIE,I !RS: Debugging: Extraneous
+    REAL DELT2,DTVLMN 
+    REAL TAIIE 
+    INTEGER I 
     REAL ERRMSG(2)
-    REAL TSAT1,CONV,STEP,DIFFER,XMR !,TSATEO    !RS: Debugging: Extraneous
+    REAL TSAT1,CONV,STEP,DIFFER,XMR
     INTEGER IERROR,IER
     REAL TAIE1,DIFF,DIFSGN,PROD,TSATSV,TSATDM,TAISV,TAIDM
-    REAL TsoEvp,LsucLn  !ID,L,Elevation,mdot,xi,xo,mu,muVap,muLiq,rhoi,rhoo,rhoiVap,rhoiLiq, &  !RS: Debugging: Extraneous
-    !rhooVap,rhooLiq,DPfric,DPmom,DPgrav,DPtot,
+    REAL TsoEvp,LsucLn 
     REAL MassCoil,MassLiqCoil,MassVapCoil
-    !REAL Root1,Root2,Dprev1,Dprev2,Qprev1,Qprev2,Lprev1,Lprev2 !RS: Debugging: Set but never used
     INTEGER NumIter,MaxIteration
     REAL XMRFLD,ErrXMR,TSICMPprev
     REAL Dshtb,MaxDshTb,MinDshTb
     REAL CapTubeDimension,MaxLen,MinLen
-    !REAL,PARAMETER :: StandardDensity=1.2 !kg/m3   !RS: Debugging: Extraneous
-    !REAL TaoE,RHoE,TaoC,RHoC   !RS: Debugging: Set but never used
     REAL Qtxv !,MaxQtxv,MinQtxv,SuperStc,SuperRtd   !RS: Debugging: Extraneous
     REAL Subcooling, Superheat, DPtxv !, TsatEvp, TsatCnd, AccumDP  !RS: Debugging: Extraneous
-    !REAL SUPERMAX !TXV maximum effective superheat, F  !RS: Debugging: Extraneous
-    !REAL SUPERMIN !TXV static (minimum) superheat, F 
     REAL ChargeCorrection !Correction charge for the charge tuning method, lbm
     REAL, EXTERNAL :: CNDNSR, EVPTR
     REAL ZERO3
@@ -119,8 +109,6 @@
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
     INTEGER IsCoolingMode !Cooling mode flag: 1=yes, otherwise=no
     INTEGER ChargeOption !Charge option, 1=no tuning; 2=w/charge tuning
-    !REAL, SAVE:: PrevTime = 0.0    !RS: Debugging: Extraneous                                              
-    !INTEGER   :: Flag  !RS: Debugging: Extraneous
 
     LOGICAL :: FLAG_GOTO_950
     
@@ -150,10 +138,7 @@
         IREFC=0
     END IF
 
-    !TAIICI=TaiC    !RS: Debugging: Set but never used
     TAIIEI=TaiE
-    !TAIIC=TaiC !RS: Debugging: Set but never used
-
     NTAMB = 0
     NCROSS = 0
     DELT2 = 1.25
@@ -333,18 +318,6 @@
             WRITE(*,*)
             WRITE(*,*)'|-------------------- Highside Iteration --------------------|'
         END IF
-
-        !IF (FirstTimeHPdesignMode) THEN    !RS: Debugging: Not ever used
-        !    TaoC=CondIN(5)
-        !    RHoC=CondIN(6)
-        !    TaoE=EvapIN(5)
-        !    RHoE=EvapIN(6)	  
-        !ELSE
-        !    TaoC=CondOUT(21)
-        !    RHoC=CondOUT(22)
-        !    TaoE=EvapOUT(17)
-        !    RHoE=EvapOUT(18)
-        !END IF
 
         AirPropOpt=2
         AirProp(1)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C
@@ -828,11 +801,7 @@
             CapTubeIN(4)=EvapIN(2)   !Evaporator inlet pressure, kPa
             CapTubeIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
 
-            !Initial guess  !RS: Debugging: Set but never used
-            !Root1=999
-            !Root2=0.0
-            !Lprev1=0.0
-            !Lprev2=0.0
+            !Initial guess 
             NumIter=0
             MaxLen=0
             MinLen=0

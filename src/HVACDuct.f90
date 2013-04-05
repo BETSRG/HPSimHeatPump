@@ -297,7 +297,7 @@ SUBROUTINE InitDuct(DuctNum)
 
 END SUBROUTINE InitDuct
 
-SUBROUTINE CalcDuct(DuctNum)
+SUBROUTINE CalcDuct(DuctNum)    !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Buhl
@@ -402,7 +402,7 @@ SUBROUTINE UpdateDuct(DuctNum)
 
 END SUBROUTINE UpdateDuct
 
-SUBROUTINE ReportDuct(DuctNum)
+SUBROUTINE ReportDuct(DuctNum)  !RS: Debugging: Extraneous subroutine! It doesn't do anything
 
           ! SUBROUTINE INFORMATION:
           !       AUTHOR         Fred Buhl
