@@ -73,7 +73,7 @@ REAL CondOUT(29)
 
 !Evaporator model passing parameters
 REAL EvapIN(9)
-REAL EvapPAR(54)  !RS: Debugging: Removing useless data
+REAL EvapPAR(54)  !RS: Debugging: Formerly EvapPAR(54)
 REAL EvapOUT(25) 
 
 !Expansion device

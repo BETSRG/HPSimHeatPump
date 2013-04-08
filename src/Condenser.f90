@@ -107,7 +107,7 @@
     REAL,ALLOCATABLE,DIMENSION(:),SAVE :: mRefIter !Circuit flow rate for iteration check, kg/s
     INTEGER,ALLOCATABLE,DIMENSION(:),SAVE :: JoinTubes         !Joined tube numbers
 
-    !Subcooling cirucits variables, ISI - 06/05/07
+    !Subcooling circuits variables, ISI - 06/05/07
     INTEGER :: SubcoolingTube !Subcooling tube number
 
     !Circuitry variables
@@ -374,25 +374,6 @@
 
     REAL, SAVE :: WeightAluminum !Weight of aluminum, kg
     REAL, SAVE :: WeightCopper   !Weight of copper, kg
-
-    !Custom air side curve
-    !INTEGER CurveUnit       !Unit convention of the custom air side curve, 1=SI; 2=IP  !RS: Debugging: Never Really Used
-    !INTEGER CurveTypeHTC    !Curve fit type of the air side heat transfer coefficient  !RS: Debugging: Never Really Used
-                            !1-Power fit; 2-Polynomial fit
-    !REAL PowerAHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
-    !REAL PowerBHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
-    !REAL Poly1HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-    !REAL Poly2HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-    !REAL Poly3HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-    !REAL Poly4HTC  !Polynomial fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
-    !INTEGER CurveTypeDP !Curve fit type of the air side pressure drop  !RS: Debugging: Never Really Used
-                        !1-Power fit; 2-Polynomial fit
-    !REAL PowerADP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
-    !REAL PowerBDP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
-    !REAL Poly1DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-    !REAL Poly2DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-    !REAL Poly3DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-    !REAL Poly4Dp   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
     
     REAL TestH  !RS: Debugging: Air Entering enthalpy, hopefully.
 
@@ -513,30 +494,13 @@
     !                     8=42F HXH
     !  PAR(38)=Barometric pressure, kPa
     !  PAR(39)=Compressor heat loss, kW
-    !  PAR(40)=Is compressor in air stream, 1=yes, 0=no
-    !  PAR(41)=Custom air side data unit, 1=SI; 2=IP
-    !  PAR(42)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !  PAR(43)=Power coefficient for air heat transfer curve
-    !  PAR(44)=Power coefficient for air heat transfer curve
-    !  PAR(45)=Polynomial coefficient for air heat transfer curve
-    !  PAR(46)=Polynomial coefficient for air heat transfer curve
-    !  PAR(47)=Polynomial coefficient for air heat transfer curve
-    !  PAR(48)=Polynomial coefficient for air heat transfer curve
-    !  PAR(49)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !  PAR(50)=Power coefficient for air heat transfer curve
-    !  PAR(51)=Power coefficient for air heat transfer curve
-    !  PAR(52)=Polynomial coefficient for air heat transfer curve
-    !  PAR(53)=Polynomial coefficient for air heat transfer curve
-    !  PAR(54)=Polynomial coefficient for air heat transfer curve
-    !  PAR(55)=Polynomial coefficient for air heat transfer curve
-    !  PAR(56)=Pressure tolerance convergence Criteria, kPa
-    !  PAR(57)=System type !1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
-    !  PAR(58)=Distributor tube length, m
-    !  PAR(59)=Oil mass fraction
-    !  PAR(60)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
+    !  PAR(40)=Pressure tolerance convergence Criteria, kPa
+    !  PAR(41)=System type !1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
+    !  PAR(42)=Oil mass fraction
+    !  PAR(43)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
     !                                   3=Danfoss;  4=Panasonic
-    !  PAR(61)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
-    !  PAR(62)=First time to run this model flag: 1=yes, otherwise=no
+    !  PAR(44)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
+    !  PAR(45)=First time to run this model flag: 1=yes, otherwise=no
     !          for component validation, set it to 1
     !          for system validation, set it to 1 first, then zero
     !
@@ -664,8 +628,8 @@
     DTliqLn   = PAR(13)
     AddDPLiqLn = PAR(14)
 
-    IsSimpleCoil=PAR(61) !ISI - 12/22/06
-    FirstTime=PAR(62)    !ISI - 12/22/06
+    IsSimpleCoil=PAR(44) !ISI - 12/22/06    !RS: Debugging: Formerly PAR(61)
+    FirstTime=PAR(45)    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(62)
 
     !Initialize circuiting and refrigerant parameters
     IF (FirstTime .EQ. 1) THEN
@@ -718,28 +682,10 @@
 
     BaroPressure     = PAR(38)
     QlossCmp         = PAR(39)
-    !IsCmpInAirStream = PAR(40)
-
-    !CurveUnit        = PAR(41) !RS: Debugging: Never Really Used
-    !CurveTypeHTC     = PAR(42) !RS: Debugging: Never Really Used
-    !PowerAHTC        = PAR(43) !RS: Debugging: Never Really Used
-    !PowerBHTC        = PAR(44) !RS: Debugging: Never Really Used
-    !Poly1HTC         = PAR(45) !RS: Debugging: Never Really Used
-    !Poly2HTC         = PAR(46) !RS: Debugging: Never Really Used
-    !Poly3HTC         = PAR(47) !RS: Debugging: Never Really Used
-    !Poly4HTC         = PAR(48) !RS: Debugging: Never Really Used
-    !CurveTypeDP      = PAR(49) !RS: Debugging: Never Really Used
-    !PowerADP         = PAR(50) !RS: Debugging: Never Really Used
-    !PowerBDP         = PAR(51) !RS: Debugging: Never Really Used
-    !Poly1DP          = PAR(52) !RS: Debugging: Never Really Used
-    !Poly2DP          = PAR(53) !RS: Debugging: Never Really Used
-    !Poly3DP          = PAR(54) !RS: Debugging: Never Really Used
-    !Poly4DP          = PAR(55) !RS: Debugging: Never Really Used
-    PTol			   = PAR(56)
-    SystemType       = PAR(57) !ISI - 07/14/06
-    !DisTubeLength    = PAR(58) !ISI - 07/14/06 !RS: Debugging: Set once but never used
-    Wabsolute        = PAR(59)
-    CompManufacturer = PAR(60)
+    PTol			   = PAR(40) !(56)  !RS: Debugging: Formerly PAR(56)
+    SystemType       = PAR(41) !ISI - 07/14/06  !RS: Debugging: Formerly PAR(57)
+    Wabsolute        = PAR(42)  !RS: Debugging: Formerly PAR(59)
+    CompManufacturer = PAR(43)  !RS: Debugging: Formerly PAR(60)
 
     IF (CoilType .EQ. MCCONDENSER) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
