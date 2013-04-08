@@ -678,7 +678,7 @@ END SUBROUTINE hcRefside
 
 !************************************************************************
 
-SUBROUTINE AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
+SUBROUTINE AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,rhoIn,rhoOut,Pt,Pl, &
                        Ltube,HtCoil,ID,OD,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg, &
 					   Lcoil,AfCoil, &
 					   AoCoil,AiCoil,FaceVel,hco,DP)
@@ -723,7 +723,7 @@ INTEGER FinType            !Fin type: 1-Plain; 2-Wavy; 3-Louver; 4-York 11-eleme
 INTEGER WetFlag            !Wet surface flag: 1-Wet surface; Otherwise-Dry surface
 INTEGER Nl                 !Number of rows
 INTEGER Nt                 !Number of rows per tube
-INTEGER RowNum             !Row number
+!INTEGER RowNum             !Row number
 REAL tAiCoil   !Coil inlet air temperature, [C]
 REAL mAiCoil   !Coil inlet air mass flow rate, [kg/s]
 REAL rhoIn     !Inlet air density, [kg/m^3]
@@ -869,8 +869,12 @@ REAL Ke       !Expansion coefficient, [-]
 	hco=Jfactor*cpAir*Gmax*PrAir**(-0.667)
 
     !Friction factor
-    CALL CalcFricfactor(CoilType,FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Nt,Dc,OD,Pt,Pl,Ltube,TubeDepth, &
-					    AoCoil,AbrCoil,ReDc,RePl,Amin,AfrCoil,mAiCoil,Gmax,muA,rhoIn,rhoOut,Ffactor)
+    CALL CalcFricfactor(FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Dc,Pt,Pl, &
+					    AoCoil,ReDc,Amin,Ffactor)   !RS: Debugging: Removed extraneous variables
+
+!(CoilType,FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Nt,Dc,OD,Pt,Pl, &
+!                          Ltube,TubeDepth,AoCoil,AbrCoil,ReDc,RePl,Amin,AfrCoil,mAiCoil, &
+!						  Gmax,muAir,rhoIn,rhoOut,Fricfactor)
 					  
     IF (rhoOut .EQ. 0.0) THEN
 	  rhoOut=rhoIn
@@ -4897,9 +4901,12 @@ END SUBROUTINE
 
 !************************************************************************
 
-SUBROUTINE CalcFricfactor(CoilType,FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Nt,Dc,OD,Pt,Pl, &
-                          Ltube,TubeDepth,AoCoil,AbrCoil,ReDc,RePl,Amin,AfrCoil,mAiCoil, &
-						  Gmax,muAir,rhoIn,rhoOut,Fricfactor)
+SUBROUTINE CalcFricfactor(FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Dc,Pt,Pl, &
+                          AoCoil,ReDc,Amin,Fricfactor)
+
+!(CoilType,FinType,WetFlag,FinSpg,FinThk,HXdep,Nl,Nt,Dc,OD,Pt,Pl, &
+!                          Ltube,TubeDepth,AoCoil,AbrCoil,ReDc,RePl,Amin,AfrCoil,mAiCoil, &
+!						  Gmax,muAir,rhoIn,rhoOut,Fricfactor)
 
 !------------------------------------------------------------------------
 !Purpose:
@@ -4942,7 +4949,7 @@ IMPLICIT NONE
 
 !Subroutine passing variables:
 !Inputs:
-INTEGER CoilType !1=Condenser; 2=Evaporator; 
+!INTEGER CoilType !1=Condenser; 2=Evaporator;   !RS: Debugging: Extraneous variables
                  !3=High side interconnecting pipes; 
 				 !4=Low side interconnecting pipes
 				 !5=Microchannel condenser
@@ -4954,23 +4961,23 @@ REAL FinSpg    !Fin spacing, [m]
 REAL FinThk    !Fin thickness, [m]
 REAL HXdep     !Heat exchanger depth, [m]
 INTEGER Nl     !Number of rows
-INTEGER Nt     !Number of tubes per row
+!INTEGER Nt     !Number of tubes per row
 REAL Dc        !Tube outside diameter including fin collar, [m]
-REAL OD        !Tube outside diameter, [m]
-REAL Ltube     !Tube length, [m]
+!REAL OD        !Tube outside diameter, [m]
+!REAL Ltube     !Tube length, [m]
 REAL Pt        !Tube spacing, [m]
 REAL Pl        !Row spacing, [m]
 REAL AoCoil    !Coil outside surface area, [m^2]
-REAL AbrCoil   !Bare tube surface area, [m^2]
+!REAL AbrCoil   !Bare tube surface area, [m^2]
 REAL ReDc      !Reynold number based on Dc
-REAL RePl      !Reynold number based on Pl
+!REAL RePl      !Reynold number based on Pl
 REAL Amin      !Mimimum free flow area, [m^2]
-REAL AfrCoil   !Coil face area, [m^2]
-REAL mAiCoil   !Air mass flow rate to coil, [kg/s]
-REAL Gmax      !Maximum mass flux, [kg/s-m^2]
-REAL muAir     !Dynamic visocity of air, [Pa-s]
-REAL rhoIn     !Inlet density, [kg/m^3]
-REAL rhoOut    !Outlet density, [kg/m^3]
+!REAL AfrCoil   !Coil face area, [m^2]
+!REAL mAiCoil   !Air mass flow rate to coil, [kg/s]
+!REAL Gmax      !Maximum mass flux, [kg/s-m^2]
+!REAL muAir     !Dynamic visocity of air, [Pa-s]
+!REAL rhoIn     !Inlet density, [kg/m^3]
+!REAL rhoOut    !Outlet density, [kg/m^3]
 
 !Outputs:
 REAL Fricfactor !Friction factor
@@ -4986,7 +4993,7 @@ REAL F2        !Intermediate variable
 REAL F3        !Intermediate variable
 REAL F4        !Intermediate variable
 REAL beta      !Intermediate variable
-REAL TubeDepth !Tube depth, [m]
+!REAL TubeDepth !Tube depth, [m]
 
 !Flow:
 
@@ -5544,8 +5551,11 @@ END SUBROUTINE MinimumFreeFlowArea
 
 !************************************************************************
 
-SUBROUTINE TWOPhasedPNino(CoilType,mRef,tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
+SUBROUTINE TWOPhasedPNino(CoilType,mRef,xRi,xRo,vgi,vfi,vgo,vfo,Lmod, &
                           dPfric,dPmom,dPgrav,Dh,muRef,mug,muf,Sigma,HtCoil,Lcoil)
+
+!(CoilType,mRef,tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod, &
+!                          dPfric,dPmom,dPgrav,Dh,muRef,mug,muf,Sigma,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
 !Purpose:
@@ -5579,11 +5589,11 @@ INTEGER          CoilType	!1-condenser;
 							!4-Low side interconnecting pipes
 							!5-Microchannel condenser
 							!6-Microchannel evaporator
-REAL tRi     !Refrigerant inlet temperature, [C]
-REAL tRo     !Refrigerant Outlet temperature, [C]
+!REAL tRi     !Refrigerant inlet temperature, [C]   !RS: Debugging: Extraneous variables
+!REAL tRo     !Refrigerant Outlet temperature, [C]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
-REAL vRi     !Refrigerant specific volume, [m^3/kg]
+!REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -5754,8 +5764,11 @@ END SUBROUTINE TWOPhasedPNino
 
 !************************************************************************
 
-SUBROUTINE TwoPhaseDPMoriyama(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
-                              dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
+SUBROUTINE TwoPhaseDPMoriyama(CoilType,tRi,tRo,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+                              dPmom,dPgrav,mRef,ID,muRef,mug,muf,HtCoil,Lcoil)
+
+!(CoilType,tRi,tRo,pRi,xRi,xRo,vRi,vgi,vfi,vgo,vfo,Lmod,dPfric, &
+!                              dPmom,dPgrav,mRef,ID,muRef,mug,muf,sigma,HtCoil,Lcoil)
 
 !------------------------------------------------------------------------
 !Purpose:
@@ -5792,7 +5805,7 @@ INTEGER          CoilType	!1-condenser;
 							!6-Microchannel evaporator
 REAL tRi     !Refrigerant inlet temperature, [C]
 REAL tRo     !Refrigerant Outlet temperature, [C]
-REAL pRi     !Refrigerant inlet pressure, [kPa]
+!REAL pRi     !Refrigerant inlet pressure, [kPa]    !RS: Debugging: Extraneous
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
 REAL vRi     !Refrigerant specific volume, [m^3/kg]
@@ -5806,7 +5819,7 @@ REAL ID      !Tube inside diameter, [m]
 REAL muRef   !Refrigerant dynamic viscosity, [Pa-s]
 REAL mug     !Vapor refrigerant dynamic viscosity, [Pa-s]
 REAL muf     !Liquid refrigerant dynamic viscosity, [Pa-s]
-REAL sigma   !Surface tension, [N/m]
+!REAL sigma   !Surface tension, [N/m]   !RS: Debugging: Extraneous
 REAL HtCoil  !Coil height, [m]
 REAL Lcoil   !Coil length, [m]
 

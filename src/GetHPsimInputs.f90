@@ -111,8 +111,6 @@ USE DataSimulation, ONLY: IsCoolingMode !RS: Debugging: Global variable now
 IMPLICIT NONE
 
 !Local variables
-REAL VdotODfan				!Outdoor fan volumetric flow rate
-REAL VdotIDfan				!Indoor fan volumetric flow rate
 REAL CoolingShTbPAR(5)		!Cooling mode short tube model input data
 REAL HeatingShTbPAR(5)		!Heating mode short tube model input data
 REAL CoolingCapTubePAR(5)	!Cooling mode cap. tube model input data
@@ -243,7 +241,8 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 	CompressorManufacturer=BRISTOL
   END SELECT
 
-  EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
+  !RS: Debugging: Moving array data up since useless data has been removed
+  EvapPAR(37)=CompressorManufacturer !EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
   CondPAR(60)=CompressorManufacturer
 
   TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
@@ -259,7 +258,11 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !PwrODfan = Numbers(1) !Fan Power
-  VdotODfan = Numbers(2)    !Fan Air Flow Rate
+    IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
+        CFMcnd = Numbers(2)    !Fan Air Flow Rate
+    ELSE
+        CFMevp = Numbers(2)
+    END IF
   !ODdrawBlow = Numbers(3)   !Draw Through (1) or Blow Through (2)
 
 
@@ -270,7 +273,11 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   !PwrIDfan = Numbers(1) !Fan Power
-  VdotIDfan = Numbers(2)    !Fan Air Flow Rate
+  IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
+        CFMevp = Numbers(2)    !Fan Air Flow Rate
+    ELSE
+        CFMcnd = Numbers(2)
+    END IF
   !IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
 
   !***************** Expansion device data *****************    !RS: Debugging: Moving: Either stay or HPDM & FlowRateLoop
@@ -704,9 +711,6 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   EvapPAR(7)=SucLnPAR(7) !Suction line additional pressure drop
 
   IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
-    
-	CFMcnd=VdotODfan
-    CFMevp=VdotIDfan
     CoilParams(1)%AirFlowRate=CFMevp
     CoilParams(2)%AirFlowRate=CFMcnd
 
@@ -720,8 +724,6 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 
     ExpDevice=CoolingExpDevice
   ELSE
-	CFMevp=VdotODfan
-    CFMcnd=VdotIDfan
     CoilParams(1)%AirFlowRate=CFMcnd
     CoilParams(2)%AirFlowRate=CFMevp
  
