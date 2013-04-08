@@ -432,25 +432,6 @@ REAL MassVapMod   !Mass in vapor phase, kg
 REAL, SAVE :: WeightAluminum !Weight of aluminum, kg
 REAL, SAVE :: WeightCopper   !Weight of copper, kg
 
-!Custom air side curve
-!INTEGER CurveUnit          !Unit convention of the custom air side curve, 1=SI; 2=IP   !RS: Debugging: Never Really Used
-!INTEGER CurveTypeHTC       !Curve fit type of the air side heat transfer coefficient   !RS: Debugging: Never Really Used
-                           !1-Power fit; 2-Polynomial fit
-!REAL PowerAHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
-!REAL PowerBHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
-!REAL Poly1HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-!REAL Poly2HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-!REAL Poly3HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-!REAL Poly4HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
-!INTEGER CurveTypeDP        !Curve fit type of the air side pressure drop   !RS: Debugging: Never Really Used
-                           !1-Power fit; 2-Polynomial fit
-!REAL PowerADP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
-!REAL PowerBDP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
-!REAL Poly1DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-!REAL Poly2DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-!REAL Poly3DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-!REAL Poly4DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
-
 REAL TestH    !RS: Debugging: Finding the entering air enthalpy hopefully
 
 INTEGER FirstTime !Flag to indicate the first time of execution
@@ -563,27 +544,12 @@ CONTAINS
     !  PAR(32)=Compressor heat loss, kW
     !  PAR(33)=Is compressor in air stream, 1=yes, 0=no
     !  PAR(34)=System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
-    !  PAR(35)=Custom air side data unit, 1=SI; 2=IP
-    !  PAR(36)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !  PAR(37)=Power coefficient for air heat transfer curve
-    !  PAR(38)=Power coefficient for air heat transfer curve
-    !  PAR(39)=Polynomial coefficient for air heat transfer curve
-    !  PAR(40)=Polynomial coefficient for air heat transfer curve
-    !  PAR(41)=Polynomial coefficient for air heat transfer curve
-    !  PAR(42)=Polynomial coefficient for air heat transfer curve
-    !  PAR(43)=Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !  PAR(44)=Power coefficient for air heat transfer curve
-    !  PAR(45)=Power coefficient for air heat transfer curve
-    !  PAR(46)=Polynomial coefficient for air heat transfer curve
-    !  PAR(47)=Polynomial coefficient for air heat transfer curve
-    !  PAR(48)=Polynomial coefficient for air heat transfer curve
-    !  PAR(49)=Polynomial coefficient for air heat transfer curve
-    !  PAR(50)=Pressure tolerance convergence Criteria, kPa
-    !  PAR(51)=Oil mass fraction
-    !  PAR(52)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
+    !  PAR(35)=Pressure tolerance convergence Criteria, kPa
+    !  PAR(36)=Compressor manufacturer: 1=Copeland; 2=Bristol; 
     !                                   3=Danfoss;  4=Panasonic
-    !  PAR(53)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
-    !  PAR(54)=First time to run this model flag: 1=yes, otherwise=no
+    !  PAR(37)=Oil mass fraction
+    !  PAR(38)=Simple coil flag: 1=Simple coil; otherwise=Detailed coil
+    !  PAR(39)=First time to run this model flag: 1=yes, otherwise=no
     !          for component validation, set it to 1
     !          for system validation, set it to 1 first, then zero
     !
@@ -649,7 +615,7 @@ CONTAINS
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous PureRef
     REAL, INTENT(IN)  :: XIN(9)
-    REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06    !RS: Debugging: Removing useless data
+    REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06    !RS: Debugging: Formerly EvapPAR(54)
     REAL, INTENT(OUT) :: OUT(25)
 
     !Subroutine lcoal variables
@@ -714,8 +680,8 @@ CONTAINS
     DTsucLn   = PAR(6)
     AddDPSucLn = PAR(7)
 
-    IsSimpleCoil=PAR(53) !(38) !ISI - 12/21/06    !RS: Debugging: Removing Useless Data
-    FirstTime=PAR(54) !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Removing useless data
+    IsSimpleCoil=PAR(38) !(38) !PAR(53) !ISI - 12/21/06    !RS: Debugging: Removing Useless Data
+    FirstTime=PAR(39) !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Removing useless data
 
     IF (FirstTime .EQ. 1) THEN
 
@@ -769,22 +735,6 @@ CONTAINS
     QlossCmp         = PAR(32)
     !IsCmpInAirStream = PAR(33)
     SystemType       = PAR(34)
-
-    !CurveUnit		   = PAR(35)    !RS: Debugging: Never Really Used
-    !CurveTypeHTC     = PAR(36) !RS: Debugging: Never Really Used
-    !PowerAHTC		   = PAR(37)    !RS: Debugging: Never Really Used
-    !PowerBHTC		   = PAR(38)    !RS: Debugging: Never Really Used
-    !Poly1HTC		   = PAR(39)    !RS: Debugging: Never Really Used
-    !Poly2HTC 		   = PAR(40)    !RS: Debugging: Never Really Used
-    !Poly3HTC  	   = PAR(41)    !RS: Debugging: Never Really Used
-    !Poly4HTC 		   = PAR(42)    !RS: Debugging: Never Really Used
-    !CurveTypeDP 	   = PAR(43)    !RS: Debugging: Never Really Used
-    !PowerADP  	   = PAR(44)    !RS: Debugging: Never Really Used
-    !PowerBDP 		   = PAR(45)    !RS: Debugging: Never Really Used
-    !Poly1DP   	   = PAR(46)    !RS: Debugging: Never Really Used
-    !Poly2DP   	   = PAR(47)    !RS: Debugging: Never Really Used
-    !Poly3DP   	   = PAR(48)    !RS: Debugging: Never Really Used
-    !Poly4DP 		   = PAR(49)    !RS: Debugging: Never Really Used
     PTol			   = PAR(35) !(50)
     Wabsolute        = PAR(36) !(51)
     CompManufacturer = PAR(37) !(52)	
@@ -2312,9 +2262,6 @@ END SUBROUTINE PrintEvaporatorResult
     !INTEGER,PARAMETER :: SI=1
     INTEGER,PARAMETER :: IP=2
     
-    !CHARACTER(LEN=6),PARAMETER :: FMT_110 = "(A150)"   !RS: Debugging: Never Used
-    !CHARACTER(LEN=6),PARAMETER :: FMT_202 = "(A150)"
-
     !***** Get circuit info *****
     IF (ErrorFlag .NE. NOERROR) THEN 
         ErrorFlag=CKTFILEERROR

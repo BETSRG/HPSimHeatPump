@@ -243,7 +243,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 
   !RS: Debugging: Moving array data up since useless data has been removed
   EvapPAR(37)=CompressorManufacturer !EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
-  CondPAR(60)=CompressorManufacturer
+  CondPAR(43)=CompressorManufacturer    !RS: Debugging: Formerly CONDPAR(60)
 
   TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
@@ -742,7 +742,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   CondPAR(38)=BaroPressure
 
   EvapPAR(34)=SystemType
-  CondPAR(57)=SystemType !ISI - 07/14/06
+  CondPAR(41)=SystemType !ISI - 07/14/06    !RS: Debugging: Formerly CONDPAR(57)
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN

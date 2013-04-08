@@ -130,7 +130,7 @@
     REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
   
     
-    IF (EvapPAR(54) .EQ. 1) THEN
+    IF (EvapPAR(39) .EQ. 1) THEN    !RS: Debugging: Formerly EvapPAR(54)
           !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
 
     CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
@@ -423,43 +423,43 @@
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &
             (IsCoolingMode .LT. 1 .AND. ODCcoilType .EQ. MCEVAPORATOR)) THEN
                 !Microchannel coil
-                EvapPAR(54)=1 !First time
-                EvapPAR(53)=0 !Detailed version
+                EvapPAR(39)=1 !First time   !RS: Debugging: Formerly EvapPAR(54)
+                EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                EvapPAR(54)=0 !No longer first time
+                EvapPAR(39)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(54)
             ELSE
                 !Plate-fin coil
                 !Run both simple and detailed version to determine which one to use
                 !Change the logic to reset IsFirstTimeEvaporator
                 IF (IsFirstTimeEvaporator) THEN
-                    EvapPAR(54)=1 !First time
-                    EvapPAR(53)=0 !Detailed version
+                    EvapPAR(39)=1 !First time   !RS: Debugging: Formerly EvapPAR(54)
+                    EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
-                    EvapPAR(53)=1 !Simple version
+                    EvapPAR(38)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(53)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
 
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
-                        EvapPAR(53)=1 !Simple version
+                        EvapPAR(38)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(53)
                         EvapOUT=SimpleEvapOUT
                     ELSE
-                        EvapPAR(53)=0 !Detailed version
+                        EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
                         EvapOUT=DetailedEvapOUT
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
-                    EvapPAR(53)=0 !Detailed version
+                    EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
                     EvapOUT=DetailedEvapOUT
 
                 ELSE
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                    EvapPAR(54)=0 !No longer first time
+                    EvapPAR(39)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(54)
                 END IF
             END IF
 

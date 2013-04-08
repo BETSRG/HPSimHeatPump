@@ -201,7 +201,7 @@
   !AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
     !Oil fraction
-    CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
+    CondPAR(42)=0.007             ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CONDPAR(59)
     EvapPAR(36)=0.007 !RS: Debugging: Moving data array up !EvapPAR(51)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
@@ -412,7 +412,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Magic_Number	
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(56)
 
         CASE(ORIFICEANDTXVDESIGN)
             CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
@@ -426,7 +426,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(56)
 
         CASE(FIXEDSUPERHEATSIM)
             CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
@@ -440,7 +440,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(56)
 
         CASE(TXVSIMULATION)
             CALL IssueOutputMessage('***** System Simulation (TXV) *****')
@@ -455,7 +455,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(56)
 
         CASE(CONDENSERUNITSIM)
             CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
@@ -470,7 +470,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(56)
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07  !RS: Debugging: This case isn't used by us
             CALL IssueOutputMessage('***** Coil Only Simulation *****')
@@ -545,7 +545,7 @@
 
                 EvapPAR(1)=0 !Suction line length	! VL_Index_Replace
                 EVAPPAR(35) =0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace	! VL_Magic_Number
-                EvapPAR(54)=1 !First time	! VL_Index_Replace
+                EvapPAR(39)=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(54)
 
                 !Determine if detailed model is needed, ISI - 02/07/08
 
@@ -557,20 +557,20 @@
                 EvapIN(6)=RHiE            !Air side inlet relative humidity	! VL_Index_Replace
                 EvapIN(9)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace
 
-                EvapPAR(53)=0 !Detailed model	! VL_Index_Replace
+                EvapPAR(38)=0 !Detailed model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(53)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 DetailedQevp=-EvapOUT(11)	! VL_Index_Replace
                 CALL EndEvaporatorCoil
 
-                EvapPAR(53)=1 !Simple model	! VL_Index_Replace
+                EvapPAR(38)=1 !Simple model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(53)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
                 SimpleQevp=-EvapOUT(11)	! VL_Index_Replace
                 CALL EndEvaporatorCoil
 
                 IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.005) THEN	! VL_Magic_Number
-                    EvapPAR(53)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting
+                    EvapPAR(38)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(53)
                 ELSE
-                    EvapPAR(53)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting
+                    EvapPAR(38)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(53)
                 END IF
 
                 !Iterate mass flow rate to match outlet enthalpy
@@ -585,7 +585,7 @@
                     EvapIN(9)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace
 
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef	
-                    EvapPAR(54)=0 !First time	! VL_Index_Replace	! VL_User_Setting
+                    EvapPAR(39)=0 !First time	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(54)
 
                     Qevp=-EvapOUT(11) 	! VL_Index_Replace
 
@@ -633,8 +633,8 @@
 
                 CondPAR(1)=0 !Discharge line length	! VL_Index_Replace
                 CondPAR(8)=0 !Liquid line length	! VL_Index_Replace
-                CondPAR(56)=0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace
-                CondPAR(62)=1 !First time	! VL_Index_Replace
+                CondPAR(40)=0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(56)
+                CondPAR(45)=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(62)
 
                 CondIN(1)=MdotR	! VL_Index_Replace
                 CondIN(2)=PoCmp	! VL_Index_Replace         
@@ -646,20 +646,20 @@
                 CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace
 
                 !Determine if detailed model is needed, ISI - 02/07/08
-                CondPAR(61)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting
+                CondPAR(44)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(61)
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=CondOUT(15)	! VL_Index_Replace
                 CALL EndCondenserCoil
 
-                CondPAR(61)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting
+                CondPAR(44)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(61)
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=CondOUT(15)	! VL_Index_Replace
                 CALL EndCondenserCoil
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1) THEN	! VL_Magic_Number
-                    CondPAR(61)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting
+                    CondPAR(44)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(61)
                 ELSE
-                    CondPAR(61)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting
+                    CondPAR(44)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(61)
                 END IF 
 
                 !Iterate mass flow rate to match outlet enthalpy
@@ -675,7 +675,7 @@
                     CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace
 
                     CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
-                    CondPAR(62)=0 !First time	! VL_Index_Replace
+                    CondPAR(45)=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(62)
 
                     Qcnd=CondOUT(15) 	! VL_Index_Replace
 
@@ -735,7 +735,7 @@
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Index_Replace	! VL_Magic_Number
             EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace
-            CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
+            CONDPAR(40)=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(56)
 
         END SELECT
         
@@ -802,7 +802,7 @@
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
                     EVAPPAR(35) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
-                    CONDPAR(56)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
+                    CONDPAR(40)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(56)
 
                     DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                     !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP,IError)
@@ -836,7 +836,7 @@
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
                     EVAPPAR(35) =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number
-                    CONDPAR(56)=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
+                    CONDPAR(40)=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(56)
 
                     !2nd run is for refined convergence criteria
                     CALL HPDM(DTVALU)

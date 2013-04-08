@@ -253,46 +253,46 @@
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil
             IF (IsFirstTimeCondenser) THEN 
-                CondPAR(62)=1 !First time
-                CondPAR(61)=0 !Detailed version
+                CondPAR(45)=1 !First time   !RS: Debugging: Formerly CONDPAR(62)
+                CondPAR(44)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(61)
                 IsFirstTimeCondenser=.FALSE.
             END IF
             CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-            CondPAR(62)=0 !No longer first time
+            CondPAR(45)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(62)
             IsCondenserAllocated=.TRUE.
         ELSE
             !Plate-fin coil
             !Run both simple and detailed version to determine which one to use
             IF (IsFirstTimeCondenser) THEN 
-                CondPAR(62)=1 !First time
+                CondPAR(45)=1 !First time   !RS: Debugging: Formerly CONDPAR(62)
 
-                CondPAR(61)=0 !Detailed version
+                CondPAR(44)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(61)
                 CALL Condenser(Ref$,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
 
-                CondPAR(61)=1 !Simple version
+                CondPAR(44)=1 !Simple version   !RS: Debugging: Formerly CONDPAR(61)
                 CALL Condenser(Ref$,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN
-                    CondPAR(61)=1
+                    CondPAR(44)=1   !RS: Debugging: Formerly CONDPAR(61)
                     CondOUT=SimpleCondOUT
                 ELSE
-                    CondPAR(61)=0
+                    CondPAR(44)=0   !RS: Debugging: Formerly CONDPAR(61)
                     CondOUT=DetailedCondOUT
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
                 !Always detailed
-                CondPAR(61)=0
+                CondPAR(44)=0   !RS: Debugging: Formerly CONDPAR(61)
                 CondOUT=DetailedCondOUT
 
             ELSE
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-                CondPAR(62)=0 !No longer first time
+                CondPAR(45)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(62)
                 IsCondenserAllocated=.TRUE.
             END IF
 
