@@ -199,44 +199,6 @@ FilterDrierData,
     0, !field Flow Capacity [tons]
     0; !field Rating Pressure Drop [psig]
 
-CustomAirSideHeatTransferData,
-    ! --- Indoor Coil ---
-    2, !field Unit [-]
-    ! *** Heat Transfer Data ***
-    1, !field Curve Type [-]
-    0, !field Power Fit Coefficient A [-]
-    0, !field Power Fit Coefficient B [-]
-    0, !field Polynomial Fit Coefficient C1 [-]
-    0, !field Polynomial Fit Coefficient C2 [-]
-    0, !field Polynomial Fit Coefficient C3 [-]
-    0, !field Polynomial Fit Coefficient C4 [-]
-    ! *** Pressure Drop Data ***
-    1, !field Curve Type [-]
-    0, !field Power Fit Coefficient A [-]
-    0, !field Power Fit Coefficient B [-]
-    0, !field Polynomial Fit Coefficient C1 [-]
-    0, !field Polynomial Fit Coefficient C2 [-]
-    0, !field Polynomial Fit Coefficient C3 [-]
-    0, !field Polynomial Fit Coefficient C4 [-]
-    ! --- Outdoor Coil ---
-    2, !field Unit [-]
-    ! *** Heat Transfer Data ***
-    1, !field Curve Type [-]
-    0, !field Power Fit Coefficient A [-]
-    0, !field Power Fit Coefficient B [-]
-    0, !field Polynomial Fit Coefficient C1 [-]
-    0, !field Polynomial Fit Coefficient C2 [-]
-    0, !field Polynomial Fit Coefficient C3 [-]
-    0, !field Polynomial Fit Coefficient C4 [-]
-    ! *** Pressure Drop Data ***
-    1, !field Curve Type [-]
-    0, !field Power Fit Coefficient A [-]
-    0, !field Power Fit Coefficient B [-]
-    0, !field Polynomial Fit Coefficient C1 [-]
-    0, !field Polynomial Fit Coefficient C2 [-]
-    0, !field Polynomial Fit Coefficient C3 [-]
-    0; !field Polynomial Fit Coefficient C4 [-]
-
 ChargeTuningCurve,
     FALSE, !field Is Charge Tuning
     0, !field Tuning Point #1 Simulated Charge

@@ -433,23 +433,23 @@ REAL, SAVE :: WeightAluminum !Weight of aluminum, kg
 REAL, SAVE :: WeightCopper   !Weight of copper, kg
 
 !Custom air side curve
-INTEGER CurveUnit          !Unit convention of the custom air side curve, 1=SI; 2=IP
-INTEGER CurveTypeHTC       !Curve fit type of the air side heat transfer coefficient
+!INTEGER CurveUnit          !Unit convention of the custom air side curve, 1=SI; 2=IP   !RS: Debugging: Never Really Used
+!INTEGER CurveTypeHTC       !Curve fit type of the air side heat transfer coefficient   !RS: Debugging: Never Really Used
                            !1-Power fit; 2-Polynomial fit
-REAL PowerAHTC !Power fit coefficient for air heat transfer coefficient
-REAL PowerBHTC !Power fit coefficient for air heat transfer coefficient
-REAL Poly1HTC  !Polynomial fit coefficient for air heat transfer coefficient
-REAL Poly2HTC  !Polynomial fit coefficient for air heat transfer coefficient
-REAL Poly3HTC  !Polynomial fit coefficient for air heat transfer coefficient
-REAL Poly4HTC  !Polynomial fit coefficient for air heat transfer coefficient
-INTEGER CurveTypeDP        !Curve fit type of the air side pressure drop
+!REAL PowerAHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
+!REAL PowerBHTC !Power fit coefficient for air heat transfer coefficient    !RS: Debugging: Never Really Used
+!REAL Poly1HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
+!REAL Poly2HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
+!REAL Poly3HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
+!REAL Poly4HTC  !Polynomial fit coefficient for air heat transfer coefficient   !RS: Debugging: Never Really Used
+!INTEGER CurveTypeDP        !Curve fit type of the air side pressure drop   !RS: Debugging: Never Really Used
                            !1-Power fit; 2-Polynomial fit
-REAL PowerADP  !Power fit coefficient for air pressure drop
-REAL PowerBDP  !Power fit coefficient for air pressure drop
-REAL Poly1DP   !Polynomial fit coefficient for air pressure drop
-REAL Poly2DP   !Polynomial fit coefficient for air pressure drop
-REAL Poly3DP   !Polynomial fit coefficient for air pressure drop
-REAL Poly4DP   !Polynomial fit coefficient for air pressure drop
+!REAL PowerADP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
+!REAL PowerBDP  !Power fit coefficient for air pressure drop    !RS: Debugging: Never Really Used
+!REAL Poly1DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
+!REAL Poly2DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
+!REAL Poly3DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
+!REAL Poly4DP   !Polynomial fit coefficient for air pressure drop   !RS: Debugging: Never Really Used
 
 REAL TestH    !RS: Debugging: Finding the entering air enthalpy hopefully
 
@@ -649,7 +649,7 @@ CONTAINS
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous PureRef
     REAL, INTENT(IN)  :: XIN(9)
-    REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06
+    REAL, INTENT(IN)  :: PAR(54) !ISI - 12/21/06    !RS: Debugging: Removing useless data
     REAL, INTENT(OUT) :: OUT(25)
 
     !Subroutine lcoal variables
@@ -714,8 +714,8 @@ CONTAINS
     DTsucLn   = PAR(6)
     AddDPSucLn = PAR(7)
 
-    IsSimpleCoil=PAR(53) !ISI - 12/21/06
-    FirstTime=PAR(54)    !ISI - 12/21/06
+    IsSimpleCoil=PAR(53) !(38) !ISI - 12/21/06    !RS: Debugging: Removing Useless Data
+    FirstTime=PAR(54) !(39) !PAR(54)    !ISI - 12/21/06   !RS: Debugging: Removing useless data
 
     IF (FirstTime .EQ. 1) THEN
 
@@ -770,24 +770,24 @@ CONTAINS
     !IsCmpInAirStream = PAR(33)
     SystemType       = PAR(34)
 
-    CurveUnit		   = PAR(35)
-    CurveTypeHTC     = PAR(36)
-    PowerAHTC		   = PAR(37)
-    PowerBHTC		   = PAR(38)
-    Poly1HTC		   = PAR(39)
-    Poly2HTC 		   = PAR(40)
-    Poly3HTC  	   = PAR(41)
-    Poly4HTC 		   = PAR(42)
-    CurveTypeDP 	   = PAR(43)
-    PowerADP  	   = PAR(44)
-    PowerBDP 		   = PAR(45)
-    Poly1DP   	   = PAR(46)
-    Poly2DP   	   = PAR(47)
-    Poly3DP   	   = PAR(48)
-    Poly4DP 		   = PAR(49)
-    PTol			   = PAR(50)
-    Wabsolute        = PAR(51)
-    CompManufacturer = PAR(52)  	
+    !CurveUnit		   = PAR(35)    !RS: Debugging: Never Really Used
+    !CurveTypeHTC     = PAR(36) !RS: Debugging: Never Really Used
+    !PowerAHTC		   = PAR(37)    !RS: Debugging: Never Really Used
+    !PowerBHTC		   = PAR(38)    !RS: Debugging: Never Really Used
+    !Poly1HTC		   = PAR(39)    !RS: Debugging: Never Really Used
+    !Poly2HTC 		   = PAR(40)    !RS: Debugging: Never Really Used
+    !Poly3HTC  	   = PAR(41)    !RS: Debugging: Never Really Used
+    !Poly4HTC 		   = PAR(42)    !RS: Debugging: Never Really Used
+    !CurveTypeDP 	   = PAR(43)    !RS: Debugging: Never Really Used
+    !PowerADP  	   = PAR(44)    !RS: Debugging: Never Really Used
+    !PowerBDP 		   = PAR(45)    !RS: Debugging: Never Really Used
+    !Poly1DP   	   = PAR(46)    !RS: Debugging: Never Really Used
+    !Poly2DP   	   = PAR(47)    !RS: Debugging: Never Really Used
+    !Poly3DP   	   = PAR(48)    !RS: Debugging: Never Really Used
+    !Poly4DP 		   = PAR(49)    !RS: Debugging: Never Really Used
+    PTol			   = PAR(35) !(50)
+    Wabsolute        = PAR(36) !(51)
+    CompManufacturer = PAR(37) !(52)	
 
     IF (CoilType .EQ. MCEVAPORATOR) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
@@ -1154,7 +1154,7 @@ CONTAINS
 
     WetFlag=0
     RowNum=0
-    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
     !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
@@ -2304,13 +2304,10 @@ END SUBROUTINE PrintEvaporatorResult
   REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
     !RS: Debugging: Bringing over from GetHPSimInputs
-    REAL VdotODfan				!Outdoor fan volumetric flow rate
     CHARACTER(len=MaxNameLength)ODC_FinName
     CHARACTER(len=MaxNameLength)IDC_FinName
     REAL :: ODC_TubeID
     REAL :: IDC_TubeID
-
-    REAL VdotIDfan				!Indoor fan volumetric flow rate
     
     !INTEGER,PARAMETER :: SI=1
     INTEGER,PARAMETER :: IP=2
@@ -2443,40 +2440,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   EvapPAR(27) = Numbers(1) !Fan Power
-  VdotIDfan = Numbers(2)    !Fan Air Flow Rate
-  EvapPAR(38) = Numbers(3)   !Draw Through or Blow Through
+  !VdotIDfan = Numbers(2)    !Fan Air Flow Rate
+  EvapPAR(28) = Numbers(3)   !Draw Through or Blow Through
   
-        
-    !*************** Custom Air Side Heat Transfer Data **************    !RS: Debugging: Moving: Evaporator & Condenser
-
-  CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) 
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  !---Indoor Coil---
-  
-  EvapPAR(35) = Numbers(1)    !IDC_CurveUnit
-  
-  !Heat Transfer data
-
-  EvapPAR(36) = Numbers(2) !Curve Type
-  EvapPAR(37) = Numbers(3)    !Power Fit Coefficient A
-  EvapPAR(38) = Numbers(4)    !Power Fit Coefficient B
-  EvapPAR(39) = Numbers(5) !Polynomial Fit Coefficient C1
-  EvapPAR(40) = Numbers(6) !Polynomial Fit Coefficient C2
-  EvapPAR(41) = Numbers(7) !Polynomial Fit Coefficient C3
-  EvapPAR(42) = Numbers(8) !Polynomial Fit Coefficent C4
-
-  !Pressure drop data
-
-  EvapPAR(43) = Numbers(9) !Curve Type
-  EvapPAR(44) = Numbers(10)    !Power Fit Coefficient A
-  EvapPAR(45) = Numbers(11)    !Power Fit Coefficient B
-  EvapPAR(46) = Numbers(12) !Polynomial Fit Coefficient C1
-  EvapPAR(47) = Numbers(13) !Polynomial Fit Coefficient C2
-  EvapPAR(48) = Numbers(14) !Polynomial Fit Coefficient C3
-  EvapPAR(49) = Numbers(15) !Polynomial Fit Coefficent C4
-
         
         !*************************** Circuiting ************************************
 
@@ -2991,38 +2957,8 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
   EvapPAR(27) = Numbers(1) !Fan Power
-  VdotODfan = Numbers(2)    !Fan Air Flow Rate
+  !VdotODfan = Numbers(2)    !Fan Air Flow Rate
   EvapPAR(28) = Numbers(3)   !Draw Through (1) or Blow Through (2)
-            
-          !*************** Custom Air Side Heat Transfer Data **************    !RS: Debugging: Moving: Evaporator & Condenser
-
-  CALL GetObjectItem('CustomAirSideHeatTransferData',1,Alphas,NumAlphas, &
-                      TmpNumbers,NumNumbers,Status) 
-  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
-  
-  !---Outdoor Coil---
-  
-  EvapPAR(35) = Numbers(16)   !ODC_CurveUnit
-
-  !Heat Transfer data
-  
-  EvapPAR(36) = Numbers(17) !Curve Type
-  EvapPAR(37) = Numbers(18)    !Power Fit Coefficient A
-  EvapPAR(38) = Numbers(19)    !Power Fit Coefficient B
-  EvapPAR(39) = Numbers(20) !Polynomial Fit Coefficient C1
-  EvapPAR(40) = Numbers(21) !Polynomial Fit Coefficient C2
-  EvapPAR(41) = Numbers(22) !Polynomial Fit Coefficient C3
-  EvapPAR(42) = Numbers(23) !Polynomial Fit Coefficent C4
-
-  !Pressure drop data
-  
-  EvapPAR(43) = Numbers(9) !Curve Type
-  EvapPAR(44) = Numbers(10)    !Power Fit Coefficient A
-  EvapPAR(45) = Numbers(11)    !Power Fit Coefficient B
-  EvapPAR(46) = Numbers(12) !Polynomial Fit Coefficient C1
-  EvapPAR(47) = Numbers(13) !Polynomial Fit Coefficient C2
-  EvapPAR(48) = Numbers(14) !Polynomial Fit Coefficient C3
-  EvapPAR(49) = Numbers(15) !Polynomial Fit Coefficent C4
 
         
         !*************************** Circuiting ************************************
@@ -3909,9 +3845,9 @@ INTEGER TubeType !1=Plain; 2=General Micro Fin; 3=Herringbone; 4=Crosshatch; 5=H
 		END IF
 
 		!Find outlet ref. pressure
-		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
+		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
 			    	                      hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefTot, &
-										  muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodSuc,LmodTPratio, &
+										  muRiMod,mugRiMod,mufRiMod,LmodSuc,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodSuc,LmodTPratio, &
 										  IDsucLn,ElevSucLn,LmodSuc,pRoMod)
 
 		pRoMod=pRoMod-AddDPSucLn    !Module Refrigerant Outlet Pressure
@@ -4402,7 +4338,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 			RowNum=CoilSection(NumSection)%Ckt(II)%Tube(III)%RowNum
 		END IF
 		IF (RowNum .EQ. 0) THEN
-			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
+			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
 							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)  
             !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
@@ -4410,7 +4346,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
     !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
 
 		ELSE
-			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
+			CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
 							 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
         END IF
         !Module surface areas
@@ -4522,7 +4458,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 		WetFlag=0
 		RowNum=0 !Ckt(I)%Tube(J)%RowNum
-		CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
+		CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiMod,mAiCoil,DensityIn,DensityIn,Pt,Pl,Ltube,HtCoil, &
 		 				 IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
         !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     !IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,CurveUnit,CurveTypeHTC,PowerAHTC,PowerBHTC, &
@@ -5590,9 +5526,9 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
             CYCLE
         END IF
 
-		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
+		CALL CalcSegmentRefOutletPressure(CoilType,TubeType,pRiMod,hgRiMod,hfRiMod, & !CoilType,TubeType,tRiMod,pRiMod,hgRiMod,hfRiMod, &
 				  	                      hRiMod,hRoMod,xRiMod,vRiMod,vgRiMod,vfRiMod,mRefMod, &
-										  muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodTube,LmodTPratio, &
+										  muRiMod,mugRiMod,mufRiMod,LmodTube,LmodTPratio, & !muRiMod,mugRiMod,mufRiMod,SigmaMod,LmodSuc,LmodTPratio, &
 										  IDtube,HtCoil,Lcoil,pRoMod)
 
 		IF (ErrorFlag .GT. CONVERGEERROR) THEN
@@ -5678,9 +5614,9 @@ END SUBROUTINE CalcSegmentOutletConditions
 
 !************************************************************************
 
-SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
+SUBROUTINE CalcSegmentRefOutletPressure(CoilType,TubeType,pRi,hgRi,hfRi, & !CoilType,TubeType,tRi,pRi,hgRi,hfRi, &
 			  	                        hRi,hRo,xRi,vRi,vgRi,vfRi,mRef, &
-										muRi,mugRi,mufRi,Sigma,Lsegment,LmodTPratio, &
+										muRi,mugRi,mufRi,Lsegment,LmodTPratio, & !muRi,mugRi,mufRi,Sigma,Lsegment,LmodTPratio, &
 										IDtube,Elevation,Ltotal,pRo)
 
 
@@ -5712,7 +5648,7 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 								 !6=Microchannel evaporator
 INTEGER, INTENT(IN) :: TubeType  !1=Plain; 2=General Micro Fin; 3=Herringbone; 
                                  !4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
-REAL, INTENT(IN) ::  tRi       !Inlet temperature, C
+!REAL, INTENT(IN) ::  tRi       !Inlet temperature, C   !RS: Debugging: Extraneous tRi
 REAL, INTENT(IN) ::  pRi       !Inlet pressure, kPa
 REAL, INTENT(IN) ::  hgRi      !Inlet vapor enthalpy, kJ/kg
 REAL, INTENT(IN) ::  hfRi      !Inlet liquid enthalpy, kJ/kg
@@ -5726,7 +5662,7 @@ REAL, INTENT(IN) ::  mRef      !Ref. mass flow rate, kg/s
 REAL, INTENT(IN) ::  muRi      !Inlet dynamic viscosity, Pa-s
 REAL, INTENT(IN) ::  mugRi     !Inlet vapor dynamic viscosity, Pa-s
 REAL, INTENT(IN) ::  mufRi     !Inlet liquid dynamic viscosity, Pa-s
-REAL, INTENT(IN) ::  Sigma     !Surface tension, N/m
+!REAL, INTENT(IN) ::  Sigma     !Surface tension, N/m   !RS: Debugging: Extraneous Sigma
 REAL, INTENT(IN) ::  Lsegment  !Segment length, m
 REAL, INTENT(IN) ::  LmodTPratio !Two-phase ratio
 REAL, INTENT(IN) ::  IDtube    !Tube inside diameter, m
@@ -6750,21 +6686,21 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     QlossCmp         =PAR(16)
     IsCmpInAirStream =PAR(17)
     SystemType       =PAR(18)
-    CurveUnit        =PAR(19)
-    CurveTypeHTC     =PAR(20)
-    PowerAHTC        =PAR(21)
-    PowerBHTC        =PAR(22)
-    Poly1HTC         =PAR(23)
-    Poly2HTC         =PAR(24)
-    Poly3HTC         =PAR(25)
-    Poly4HTC         =PAR(26)
-    CurveTypeDP      =PAR(27)
-    PowerADP         =PAR(28)
-    PowerBDP         =PAR(29)
-    Poly1DP          =PAR(30)
-    Poly2DP          =PAR(31)
-    Poly3DP          =PAR(32)
-    Poly4DP          =PAR(33)
+    !CurveUnit        =PAR(19)  !RS: Debugging: Never Really Used
+    !CurveTypeHTC     =PAR(20)  !RS: Debugging: Never Really Used
+    !PowerAHTC        =PAR(21)  !RS: Debugging: Never Really Used
+    !PowerBHTC        =PAR(22)  !RS: Debugging: Never Really Used
+    !Poly1HTC         =PAR(23)  !RS: Debugging: Never Really Used
+    !Poly2HTC         =PAR(24)  !RS: Debugging: Never Really Used
+    !Poly3HTC         =PAR(25)  !RS: Debugging: Never Really Used
+    !Poly4HTC         =PAR(26)  !RS: Debugging: Never Really Used
+    !CurveTypeDP      =PAR(27)  !RS: Debugging: Never Really Used
+    !PowerADP         =PAR(28)  !RS: Debugging: Never Really Used
+    !PowerBDP         =PAR(29)  !RS: Debugging: Never Really Used
+    !Poly1DP          =PAR(30)  !RS: Debugging: Never Really Used
+    !Poly2DP          =PAR(31)  !RS: Debugging: Never Really Used
+    !Poly3DP          =PAR(32)  !RS: Debugging: Never Really Used
+    !Poly4DP          =PAR(33)  !RS: Debugging: Never Really Used
 
     IsParallelSlabs = 1
 
@@ -7122,7 +7058,7 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
 
     WetFlag=0
     RowNum=0   
-    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
+    CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &
     IDtube,ODtube,NumOfChannels,Dchannel,TubeHeight,TubeDepth,FinThk,FinSpg,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
     
     !CALL AirSideCalc(CoilType,FinType,WetFlag,Nl,Nt,RowNum,tAiCoil,mAiCoil,DensityIn,DensityOut,Pt,Pl,Ltube,HtCoil, &

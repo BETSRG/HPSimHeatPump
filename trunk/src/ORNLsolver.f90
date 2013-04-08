@@ -202,7 +202,7 @@
 
     !Oil fraction
     CondPAR(59)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
-    EvapPAR(51)=0.007             ! VL_Magic_Number    ! VL_Index_Replace
+    EvapPAR(36)=0.007 !RS: Debugging: Moving data array up !EvapPAR(51)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
@@ -411,7 +411,7 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Magic_Number	
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
 
         CASE(ORIFICEANDTXVDESIGN)
@@ -425,7 +425,7 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(FIXEDSUPERHEATSIM)
@@ -439,7 +439,7 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(TXVSIMULATION)
@@ -454,7 +454,7 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(CONDENSERUNITSIM)
@@ -469,7 +469,7 @@
             EVPCON=1 !superheat, F
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07  !RS: Debugging: This case isn't used by us
@@ -544,7 +544,7 @@
                 XMaE=RhoAiE*CFMevp
 
                 EvapPAR(1)=0 !Suction line length	! VL_Index_Replace
-                EVAPPAR(50) =0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace	! VL_Magic_Number
+                EVAPPAR(35) =0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace	! VL_Magic_Number
                 EvapPAR(54)=1 !First time	! VL_Index_Replace
 
                 !Determine if detailed model is needed, ISI - 02/07/08
@@ -734,7 +734,7 @@
             EVPCON=1 !superheat, F
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Index_Replace	! VL_Magic_Number
-            EVAPPAR(50)=7 !Pressure, kPa	! VL_Index_Replace
+            EVAPPAR(35)=7 !Pressure, kPa	! VL_Index_Replace
             CONDPAR(56)=7 !.05 !Pressure, kPa	! VL_Index_Replace
 
         END SELECT
@@ -753,7 +753,7 @@
             EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
             FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-            EVAPPAR(50) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
+            EVAPPAR(35) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
             CONDPAR(56)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
             DTVALU = SUPER
@@ -801,7 +801,7 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(50) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
+                    EVAPPAR(35) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number
                     CONDPAR(56)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
                     DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
@@ -835,7 +835,7 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(50) =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number
+                    EVAPPAR(35) =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number
                     CONDPAR(56)=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number
 
                     !2nd run is for refined convergence criteria
