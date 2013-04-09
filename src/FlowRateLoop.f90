@@ -243,56 +243,56 @@
         END IF
 
         !Take compressor shell loss into account
-        IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
-            CondPAR(39)=CompPAR(21)*CompOUT(1)
+        IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+            CondPAR(CondCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: CondPAR(39) & CompPAR(21)
         ELSE !Shell loss in W
-            CondPAR(39)=CompPAR(22)/1000    !RS Comment: Unit Conversion, from kW to W?
+            CondPAR(CondCompQLoss)=CompPAR(CompQLoss)/1000    !RS Comment: Unit Conversion, from kW to W? !RS: Debugging: Formerly CondPAR(39) & CompPAR(22)
         END IF
 
         IF ((IsCoolingMode .GT. 0 .AND. ODCcoilType .EQ. MCCONDENSER) .OR. &
         (IsCoolingMode .LT. 1 .AND. IDCcoilType .EQ. MCCONDENSER)) THEN
             !Microchannel coil
             IF (IsFirstTimeCondenser) THEN 
-                CondPAR(45)=1 !First time   !RS: Debugging: Formerly CONDPAR(62)
-                CondPAR(44)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(61)
+                CondPAR(CondFirstTime)=1 !First time   !RS: Debugging: Formerly CONDPAR(45)
+                CondPAR(CondSimpCoil)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(44)
                 IsFirstTimeCondenser=.FALSE.
             END IF
             CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-            CondPAR(45)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(62)
+            CondPAR(CondFirstTime)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(45)
             IsCondenserAllocated=.TRUE.
         ELSE
             !Plate-fin coil
             !Run both simple and detailed version to determine which one to use
             IF (IsFirstTimeCondenser) THEN 
-                CondPAR(45)=1 !First time   !RS: Debugging: Formerly CONDPAR(62)
+                CondPAR(CondFirstTime)=1 !First time   !RS: Debugging: Formerly CONDPAR(45)
 
-                CondPAR(44)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(61)
+                CondPAR(CondSimpCoil)=0 !Detailed version !RS: Debugging: Formerly CONDPAR(44)
                 CALL Condenser(Ref$,CondIN,CondPAR,DetailedCondOUT) !(Ref$,PureRef,CondIN,CondPAR,DetailedCondOUT)  !RS: Debugging: Extraneous PureRef
                 DetailedQcnd=DetailedCondOUT(15)
                 DetailedDPcnd=CondIN(2)-DetailedCondOUT(10)
 
-                CondPAR(44)=1 !Simple version   !RS: Debugging: Formerly CONDPAR(61)
+                CondPAR(CondSimpCoil)=1 !Simple version   !RS: Debugging: Formerly CONDPAR(44)
                 CALL Condenser(Ref$,CondIN,CondPAR,SimpleCondOUT) !(Ref$,PureRef,CondIN,CondPAR,SimpleCondOUT)   !RS: Debugging: Extraneous PureRef
                 SimpleQcnd=SimpleCondOUT(15)
                 SimpleDPcnd=CondIN(2)-SimpleCondOUT(10)
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1 .AND. &
                 ABS((SimpleDPcnd-DetailedDPcnd)/DetailedDPcnd) .LT. 0.1) THEN
-                    CondPAR(44)=1   !RS: Debugging: Formerly CONDPAR(61)
+                    CondPAR(CondSimpCoil)=1   !RS: Debugging: Formerly CONDPAR(44)
                     CondOUT=SimpleCondOUT
                 ELSE
-                    CondPAR(44)=0   !RS: Debugging: Formerly CONDPAR(61)
+                    CondPAR(CondSimpCoil)=0   !RS: Debugging: Formerly CONDPAR(44)
                     CondOUT=DetailedCondOUT
                 END IF 
                 IsFirstTimeCondenser=.FALSE.
 
                 !Always detailed
-                CondPAR(44)=0   !RS: Debugging: Formerly CONDPAR(61)
+                CondPAR(CondSimpCoil)=0   !RS: Debugging: Formerly CONDPAR(44)
                 CondOUT=DetailedCondOUT
 
             ELSE
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-                CondPAR(45)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(62)
+                CondPAR(CondFirstTime)=0 !No longer first time !RS: Debugging: Formerly CONDPAR(45)
                 IsCondenserAllocated=.TRUE.
             END IF
 

@@ -565,7 +565,7 @@
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous
     REAL, INTENT(IN)  :: XIN(9)
-    REAL, INTENT(IN)  :: PAR(62) !ISI - 12/21/06
+    REAL, INTENT(IN)  :: PAR(45) !ISI - 12/21/06 !RS: Debugging: Formerly PAR(62)
     REAL, INTENT(OUT) :: OUT(29)
 
     !Subroutine lcoal variables
@@ -612,42 +612,42 @@
     !tRoEvp=XIN(8)  !RS: Debugging: These were set once but never used
     !tAiEvp=XIN(9)
 
-    LdisLn    = PAR(1)
-    ODdisLn   = PAR(2)
-    DisLnThk  = PAR(3)
-    ElevDisLn = PAR(4)
-    QdisLn    = PAR(5)
-    DTdisLn   = PAR(6)
-    AddDPdisLn = PAR(7)
+    LdisLn    = PAR(CondDisLnLen)  !RS: Debugging: Formerly PAR(1)
+    ODdisLn   = PAR(CondDisLnOD)  !RS: Debugging: Formerly PAR(2)
+    DisLnThk  = PAR(CondDisLnTWThick)  !RS: Debugging: Formerly PAR(3)
+    ElevDisLn = PAR(CondDisLnElev)  !RS: Debugging: Formerly PAR(4)
+    QdisLn    = PAR(CondDisLnQLoss)  !RS: Debugging: Formerly PAR(5)
+    DTdisLn   = PAR(CondDisLnTempChg)  !RS: Debugging: Formerly PAR(6)
+    AddDPdisLn = PAR(CondDisLnAddPD) !RS: Debugging: Formerly PAR(7)
 
-    LliqLn    = PAR(8)
-    ODliqLn   = PAR(9)
-    LiqLnThk  = PAR(10)
-    ElevLiqLn = PAR(11)
-    QliqLn    = PAR(12)
-    DTliqLn   = PAR(13)
-    AddDPLiqLn = PAR(14)
+    LliqLn    = PAR(CondLiqLnLen)  !RS: Debugging: Formerly PAR(8)
+    ODliqLn   = PAR(CondLiqLnOD)  !RS: Debugging: Formerly PAR(9)
+    LiqLnThk  = PAR(CondLiqLnTWThick) !RS: Debugging: Formerly PAR(10)
+    ElevLiqLn = PAR(CondLiqLnElev) !RS: Debugging: Formerly PAR(11)
+    QliqLn    = PAR(CondLiqLnQLoss) !RS: Debugging: Formerly PAR(12)
+    DTliqLn   = PAR(CondLiqLnTempChg) !RS: Debugging: Formerly PAR(13)
+    AddDPLiqLn = PAR(CondLiqLnAddPD)    !RS: Debugging: Formerly PAR(14)
 
-    IsSimpleCoil=PAR(44) !ISI - 12/22/06    !RS: Debugging: Formerly PAR(61)
-    FirstTime=PAR(45)    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(62)
+    IsSimpleCoil=PAR(CondSimpCoil) !ISI - 12/22/06    !RS: Debugging: Formerly PAR(44)
+    FirstTime=PAR(CondFirstTime)    !ISI - 12/22/06    !RS: Debugging: Formerly PAR(45)
 
     !Initialize circuiting and refrigerant parameters
     IF (FirstTime .EQ. 1) THEN
-        ODtube      = PAR(15)
-        TubeThk     = PAR(16)
-        Ltube       = PAR(17)
-        Ktube       = PAR(18)
-        Pt          = PAR(19)
-        Pl          = PAR(20)
-        FinThk      = PAR(21)
-        FinPitch    = PAR(22)
-        Kfin        = PAR(23)
-        Nt          = PAR(24)
-        Nl          = PAR(25)
-        NumOfCkts   = PAR(26)
-        NumOfMods   = PAR(28)
-        FinType     = PAR(29)
-        TubeType    = PAR(37)
+        ODtube      = PAR(CondCoilTOD)   !RS: Debugging: Formerly PAR(15)
+        TubeThk     = PAR(CondCoilTWThick)   !RS: Debugging: Formerly PAR(16)
+        Ltube       = PAR(CondCoilSTLen)   !RS: Debugging: Formerly PAR(17)
+        Ktube       = PAR(CondCoilTThermCon)   !RS: Debugging: Formerly PAR(18)
+        Pt          = PAR(CondTspc)   !RS: Debugging: Formerly PAR(19)
+        Pl          = PAR(CondRspc)   !RS: Debugging: Formerly PAR(20)
+        FinThk      = PAR(CondFinThick)   !RS: Debugging: Formerly PAR(21)
+        FinPitch    = PAR(CondFinPitch)   !RS: Debugging: Formerly PAR(22)
+        Kfin        = PAR(CondFinThermCon)   !RS: Debugging: Formerly PAR(23)
+        Nt          = PAR(CondNt)   !RS: Debugging: Formerly PAR(24)
+        Nl          = PAR(CondNl)   !RS: Debugging: Formerly PAR(25)
+        NumOfCkts   = PAR(CondNumCkt)   !RS: Debugging: Formerly PAR(26)
+        NumOfMods   = PAR(CondNumMod)   !RS: Debugging: Formerly PAR(28)
+        FinType     = PAR(CondFinType)   !RS: Debugging: Formerly PAR(29)
+        TubeType    = PAR(CondTube)   !RS: Debugging: Formerly PAR(37)
         CALL InitCondenserCoil(CoilType)
         CALL CalcMaterialWeight(CoilType,Ltube,IDtube,ODtube,TubeHeight,TubeDepth, &
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
@@ -671,21 +671,21 @@
         
     END IF
 
-    hciMultiplier   = PAR(30)
-    DPrefMultiplier = PAR(31)
-    hcoMultiplier   = PAR(32)
-    DPairMultiplier = PAR(33)
+    hciMultiplier   = PAR(CondMultRefQT)   !RS: Debugging: Formerly PAR(30)
+    DPrefMultiplier = PAR(CondMultRefPD)   !RS: Debugging: Formerly PAR(31)
+    hcoMultiplier   = PAR(CondMultAirQT)   !RS: Debugging: Formerly PAR(32)
+    DPairMultiplier = PAR(CondMultAirPD)   !RS: Debugging: Formerly PAR(33)
 
-    PwrFan           = PAR(34)
-    DrawBlow         = PAR(35)
-    SurfAbsorptivity = PAR(36)
+    PwrFan           = PAR(CondFanPwr)  !RS: Debugging: Formerly PAR(34)
+    DrawBlow         = PAR(CondFanLoc)  !RS: Debugging: Formerly PAR(35)
+    SurfAbsorptivity = PAR(CondSurfAbs)  !RS: Debugging: Formerly PAR(36)
 
-    BaroPressure     = PAR(38)
-    QlossCmp         = PAR(39)
-    PTol			   = PAR(40) !(56)  !RS: Debugging: Formerly PAR(56)
-    SystemType       = PAR(41) !ISI - 07/14/06  !RS: Debugging: Formerly PAR(57)
-    Wabsolute        = PAR(42)  !RS: Debugging: Formerly PAR(59)
-    CompManufacturer = PAR(43)  !RS: Debugging: Formerly PAR(60)
+    BaroPressure     = PAR(CondBarPress)  !RS: Debugging: Formerly PAR(38)
+    QlossCmp         = PAR(CondCompQLoss)  !RS: Debugging: Formerly PAR(39)
+    PTol			   = PAR(CondPressTolConv) !(56)  !RS: Debugging: Formerly PAR(40)
+    SystemType       = PAR(CondSysType) !ISI - 07/14/06  !RS: Debugging: Formerly PAR(41)
+    Wabsolute        = PAR(CondOilMassFrac)  !RS: Debugging: Formerly PAR(42)
+    CompManufacturer = PAR(CondCompMan)  !RS: Debugging: Formerly PAR(43)
 
     IF (CoilType .EQ. MCCONDENSER) THEN
         CALL LoadMicrochannelInputs(XIN,PAR,MCXIN,MCPAR)
@@ -1160,9 +1160,9 @@
     OUT(22)=rhAoCoil
     OUT(23)=DPair
 
-    OUT(25)=hco
-    OUT(26)=tSiCoil
-    OUT(27)=tSoCoil
+    !OUT(25)=hco    !RS: Debugging: Never Used?
+    !OUT(26)=tSiCoil    !RS: Debugging: Never Used?
+    !OUT(27)=tSoCoil    !RS: Debugging: Never Used?
     OUT(28)=WeightAluminum
     OUT(29)=WeightCopper
 
@@ -2229,36 +2229,36 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
   
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
-  CondPAR(29) = Numbers(1)
+  CondPAR(CondFinType) = Numbers(1)  !RS: Debugging: Formerly CondPAR(29)
   
   ODC_FinName = Alphas(1)
   
-  CondPAR(22) = Numbers(2)
-  CondPAR(23) = Numbers(3) !Conductivity of Fin
-  CondPAR(21) = Numbers(4)   !Fin Thickness
-  CondPAR(37) = Numbers(5) !Numerical Denotion of Tube Type
+  CondPAR(CondFinPitch) = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
+  CondPAR(CondFinThermCon) = Numbers(3) !Conductivity of Fin !RS: Debugging: Formerly CondPAR(23)
+  CondPAR(CondFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
+  CondPAR(CondTube) = Numbers(5) !Numerical Denotion of Tube Type    !RS: Debugging: Formerly CondPAR(37)
   ODC_TubeID = Numbers(6)   !Tube Inner Diameter
-  CondPAR(15) = Numbers(7)   !Tube Outer Diameter
-  CondPAR(18) = Numbers(8)    !Tube Conductivity
-  CondPAR(20) = Numbers(9)   !Tube Lateral Spacing
-  CondPAR(19) = Numbers(10)   !Tube Vertical Spacing
-  CondPAR(25)= Numbers(11)  !Number of Rows
-  CondPAR(24) = Numbers(12)  !Number of Tubes per Row
-  CondPAR(26) = Numbers(13)    !Number of Circuits
-  CondPAR(28) = Numbers(14)    !Number of Segments
-  CondPAR(17) = Numbers(15)   !Single Tube Length
-  CondPAR(30) = Numbers(16)   !Ref Side Heat Transfer Multiplier
-  CondPAR(31) = Numbers(17) !Ref Side Pressure Drop Multiplier
-  CondPAR(32) = Numbers(18)   !Air Side Heat Transfer Multiplier
-  CondPAR(33) = Numbers(19) !Air Side Pressure Drop Multiplier
+  CondPAR(CondCoilTOD) = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
+  CondPAR(CondCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
+  CondPAR(CondRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
+  CondPAR(CondTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
+  CondPAR(CondNl)= Numbers(11)  !Number of Rows !RS: Debugging: Formerly CondPAR(25)
+  CondPAR(CondNt) = Numbers(12)  !Number of Tubes per Row   !RS: Debugging: Formerly CondPAR(24)
+  CondPAR(CondNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
+  CondPAR(CondNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
+  CondPAR(CondCoilSTLen) = Numbers(15)   !Single Tube Length   !RS: Debugging: Formerly CondPAR(17)
+  CondPAR(CondMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
+  CondPAR(CondMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
+  CondPAR(CondMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
+  CondPAR(CondMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
 
     !Tube wall thickness, mm or mil
-  CondPAR(16)=(CondPAR(15)-ODC_TubeID)/2
+  CondPAR(CondCoilTWThick)=(CondPAR(CondCoilTOD)-ODC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
   IF (Unit .EQ. IP) THEN
-      CondPAR(16)=CondPAR(16)*1000
+      CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)*1000
   END IF
   
-    CondPAR(27)=IsCoolingMode
+    CondPAR(CondCoolMode)=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
     !CondPAR(36)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
 
   !***************** Outdoor fan data ***************** !RS: Debugging: Moving: Evaporator & Condenser
@@ -2267,9 +2267,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-  CondPAR(34) = Numbers(1) !Fan Power
+  CondPAR(CondFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotODfan = Numbers(2)    !Fan Air Flow Rate
-  CondPAR(35) = Numbers(3)   !Draw Through (1) or Blow Through (2)
+  CondPAR(CondFanLoc) = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly CondPAR(35)
 
 
             !*************************** Circuiting ************************************
@@ -2692,36 +2692,36 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  CondPAR(29) = Numbers(1)  !IDC_FinType
+  CondPAR(CondFinType) = Numbers(1)  !IDC_FinType    !RS: Debugging: Formerly CondPAR(29)
   
   IDC_FinName = Alphas(1)
   
-  CondPAR(22) = Numbers(2)
-  CondPAR(23) = Numbers(3) !Fin Conductivity
-  CondPAR(21) = Numbers(4)   !Fin Thickness
-  CondPAR(37) = Numbers(5) !Numerical Denotion of the tube type
+  CondPAR(CondFinPitch) = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
+  CondPAR(CondFinThermCon) = Numbers(3) !Fin Conductivity    !RS: Debugging: Formerly CondPAR(23)
+  CondPAR(CondFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
+  CondPAR(CondTube) = Numbers(5) !Numerical Denotion of the tube type    !RS: Debugging: Formerly CondPAR(37)
   IDC_TubeID = Numbers(6)   !Tube Inner Diameter
-  CondPAR(15) = Numbers(7)   !Tube Outer Diameter
-  CondPAR(18) = Numbers(8)    !Tube Conductivity
-  CondPAR(20) = Numbers(9)   !Tube Lateral Spacing
-  CondPAR(19) = Numbers(10)   !Tube Vertical Spacing
-  CondPAR(25) = Numbers(11)  !Number of Rows
-  CondPAR(24) = Numbers(12)  !Number of Tubes Per Row
-  CondPAR(26) = Numbers(13)    !Number of Circuits
-  CondPAR(28) = Numbers(14)    !Number of Segments
-  CondPAR(17) = Numbers(15)   !Length of Tube
-  CondPAR(30) = Numbers(16)   !Ref Side Heat Transfer Multiplier
-  CondPAR(31) = Numbers(17) !Ref Side Pressure Drop Multiplier
-  CondPAR(32) = Numbers(18)   !Air Side Heat Transfer Multiplier
-  CondPAR(33) = Numbers(19) !Air Side Pressure Drop Multiplier
+  CondPAR(CondCoilTOD) = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
+  CondPAR(CondCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
+  CondPAR(CondRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
+  CondPAR(CondTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
+  CondPAR(CondNl) = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly CondPAR(25)
+  CondPAR(CondNt) = Numbers(12)  !Number of Tubes Per Row   !RS: Debugging: Formerly CondPAR(24)
+  CondPAR(CondNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
+  CondPAR(CondNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
+  CondPAR(CondCoilSTLen) = Numbers(15)   !Length of Tube   !RS: Debugging: Formerly CondPAR(17)
+  CondPAR(CondMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
+  CondPAR(CondMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
+  CondPAR(CondMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
+  CondPAR(CondMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
 
   !Tube wall thickness, mm or mil
-  CondPAR(16)=(CondPAR(15)-IDC_TubeID)/2
+  CondPAR(CondCoilTWThick)=(CondPAR(CondCoilTOD)-IDC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
   IF (Unit .EQ. IP) THEN
-      CondPAR(16)=CondPAR(16)*1000
+      CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)*1000
   END IF
  
-	CondPAR(27)=IsCoolingMode
+	CondPAR(CondCoolMode)=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
  
   !***************** Indoor fan data *****************  !RS: Debugging: Moving: Evaporator & Condenser
   
@@ -2729,9 +2729,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  CondPAR(34) = Numbers(1) !Fan Power
+  CondPAR(CondFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotIDfan = Numbers(2)    !Fan Air Flow Rate
-  CondPAR(35) = Numbers(3)   !Draw Through or Blow Through
+  CondPAR(CondFanLoc) = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly CondPAR(35)
         
   
             !*************************** Circuiting ************************************
@@ -6005,13 +6005,14 @@ END IF
     USE CoilCalcMod
     USE AirPropMod
     USE OilMixtureMod
+    USE InputProcessor_HPSim    !RS: Debugging: GetObjectItem
 
     IMPLICIT NONE
 
     !Subroutine argument declarations
     !CHARACTER*80, INTENT(IN)  :: Ref$  !RS: Debugging: Extraneous Ref$
     REAL,         INTENT(IN)  :: XIN(7)
-    REAL,         INTENT(IN)  :: PAR(39)
+    REAL,         INTENT(IN)  :: PAR(23) !RS: Debugging: Formerly PAR(39)
     REAL,         INTENT(OUT) :: OUT(22)
 
     !Subroutine local variables
@@ -6031,6 +6032,15 @@ END IF
     REAL SumMrefHro    !Sum of mdot*H (mass flow rate * enthalpy)
     REAL DPcoil, DPcoilPrev !Coil pressure drop, kPa
     REAL mdothRo !mdot x outlet enthalpy
+    
+    INTEGER, PARAMETER :: MaxNameLength = 200   !RS: Debugging: Bringing through
+
+    CHARACTER(len=MaxNameLength),DIMENSION(200) :: Alphas ! Reads string value from input file
+    INTEGER :: NumAlphas               ! States which alpha value to read from a "Number" line
+    REAL, DIMENSION(200) :: Numbers    ! brings in data from IP
+    INTEGER :: NumNumbers              ! States which number value to read from a "Numbers" line
+    INTEGER :: Status                  ! Either 1 "object found" or -1 "not found"
+    REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
     !FLOW:
 
@@ -6047,17 +6057,17 @@ END IF
     LdisLn           =PAR(3)
     ODdisLn          =PAR(4)
     DisLnThk         =PAR(5)
-    ElevDisLn        =PAR(6)
+    !ElevDisLn        =PAR(6)   !RS: Debugging: Never Used?
     QdisLn           =PAR(7)
-    DTdisLn          =PAR(8)
-    AddDPdisLn       =PAR(9)
+    !DTdisLn          =PAR(8)   !RS: Debugging: Never Used?
+    !AddDPdisLn       =PAR(9)   !RS: Debugging: Never Used?
     LliqLn           =PAR(10)
     ODliqLn          =PAR(11)
     LiqLnThk         =PAR(12)
     ElevLiqLn        =PAR(13)
     QliqLn           =PAR(14)
     DTliqLn          =PAR(15)
-    AddDPLiqLn       =PAR(16)	
+    !AddDPLiqLn       =PAR(16)  !RS: Debugging: Never Used?
     hciMultiplier    =PAR(17)
     DPrefMultiplier  =PAR(18)
     hcoMultiplier    =PAR(19)
@@ -6065,7 +6075,7 @@ END IF
     PwrFan           =PAR(21)
     DrawBlow         =PAR(22)
     QlossCmp         =PAR(23)
-    IsCmpInAirStream =PAR(24)
+    !IsCmpInAirStream =PAR(24)
     !CurveUnit        =PAR(25)  !RS: Debugging: Never Really Used
     !CurveTypeHTC     =PAR(26)  !RS: Debugging: Never Really Used
     !PowerAHTC        =PAR(27)  !RS: Debugging: Never Really Used
@@ -6081,6 +6091,14 @@ END IF
     !Poly2DP          =PAR(37)  !RS: Debugging: Never Really Used
     !Poly3DP          =PAR(38)  !RS: Debugging: Never Really Used
     !Poly4DP          =PAR(39)  !RS: Debugging: Never Really Used
+    
+            !********************Refrigerant Cycle Data (Heating)***********************  !RS: Debugging: Moving: Condenser
+
+  CALL GetObjectItem('RefrigerantCycleData(Heating)',1,Alphas,NumAlphas, &
+                      TmpNumbers,NumNumbers,Status)
+  Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
+
+  IsCmpInAirStream = Numbers(2) !Is Compressor in Air Stream
 
     IsParallelSlabs = 1
 
@@ -6584,9 +6602,9 @@ END IF
     IMPLICIT NONE
 
     REAL, INTENT(IN)  :: FTXIN(8)  !Fin-tube coil input data
-    REAL, INTENT(IN)  :: FTPAR(55) !Fin-tube coil input parameters
+    REAL, INTENT(IN)  :: FTPAR(45) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(55)
     REAL, INTENT(OUT) :: MCXIN(7)  !Microchannel coil input data
-    REAL, INTENT(OUT) :: MCPAR(39) !Microchannel coil input parameters
+    REAL, INTENT(OUT) :: MCPAR(24) !Microchannel coil input parameters  !RS: Debugging: Formerly MCPAR(39)
 
     !FLOW:
 
@@ -6622,21 +6640,21 @@ END IF
     MCPAR(22)=FTPAR(35) !Fan location, 1=draw through; 2=blow through
     MCPAR(23)=FTPAR(39) !Compressor heat loss, kW
     MCPAR(24)=FTPAR(40) !Is compressor in air stream, 1=yes, 0=no
-    MCPAR(25)=FTPAR(41) !Custom air side data unit, 1=SI; 2=IP
-    MCPAR(26)=FTPAR(42) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    MCPAR(27)=FTPAR(43) !Power coefficient for air heat transfer curve
-    MCPAR(28)=FTPAR(44) !Power coefficient for air heat transfer curve
-    MCPAR(29)=FTPAR(45) !Polynomial coefficient for air heat transfer curve
-    MCPAR(30)=FTPAR(46) !Polynomial coefficient for air heat transfer curve
-    MCPAR(31)=FTPAR(47) !Polynomial coefficient for air heat transfer curve
-    MCPAR(32)=FTPAR(48) !Polynomial coefficient for air heat transfer curve
-    MCPAR(33)=FTPAR(49) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    MCPAR(34)=FTPAR(50) !Power coefficient for air heat transfer curve
-    MCPAR(35)=FTPAR(51) !Power coefficient for air heat transfer curve
-    MCPAR(36)=FTPAR(52) !Polynomial coefficient for air heat transfer curve
-    MCPAR(37)=FTPAR(53) !Polynomial coefficient for air heat transfer curve
-    MCPAR(38)=FTPAR(54) !Polynomial coefficient for air heat transfer curve
-    MCPAR(39)=FTPAR(55) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(25)=FTPAR(41) !Custom air side data unit, 1=SI; 2=IP !RS: Debugging: Never Used
+    !MCPAR(26)=FTPAR(42) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !MCPAR(27)=FTPAR(43) !Power coefficient for air heat transfer curve
+    !MCPAR(28)=FTPAR(44) !Power coefficient for air heat transfer curve
+    !MCPAR(29)=FTPAR(45) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(30)=FTPAR(46) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(31)=FTPAR(47) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(32)=FTPAR(48) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(33)=FTPAR(49) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
+    !MCPAR(34)=FTPAR(50) !Power coefficient for air heat transfer curve
+    !MCPAR(35)=FTPAR(51) !Power coefficient for air heat transfer curve
+    !MCPAR(36)=FTPAR(52) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(37)=FTPAR(53) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(38)=FTPAR(54) !Polynomial coefficient for air heat transfer curve
+    !MCPAR(39)=FTPAR(55) !Polynomial coefficient for air heat transfer curve
 
     RETURN
 

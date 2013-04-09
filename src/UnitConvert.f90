@@ -119,8 +119,8 @@ IMPLICIT NONE
 !Subroutine arguments
 INTEGER(2), INTENT(IN) :: Unit !Unit flag: 1=SI; 2=IP
 REAL, INTENT(INOUT) :: CompPAR(26) !Compressor model input data
-REAL, INTENT(INOUT) :: CondPAR(61) !Condenser model real number input data
-REAL, INTENT(INOUT) :: EvapPAR(54) !Evaporator model real number input data !RS: Debugging: Formerly EvapPAR(54)
+REAL, INTENT(INOUT) :: CondPAR(45) !Condenser model real number input data  !RS: Debugging: Formerly CondPAR(61)
+REAL, INTENT(INOUT) :: EvapPAR(39) !Evaporator model real number input data !RS: Debugging: Formerly EvapPAR(54)
 REAL, INTENT(INOUT) :: ShTbPAR(5)  !Short tube model input data
 REAL, INTENT(INOUT) :: CapTubePAR(5) !Capillary tube model input data
 !REAL, INTENT(INOUT) :: TxvPAR(7)   !TXV model input data   !RS: Debugging: Not ever used
@@ -146,7 +146,7 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 
   IF (Unit .EQ. SI)THEN !SI unit inputs
     
-	CompPAR(23)=CompPAR(23)/(100**3) !Compressor internal volume, m^3
+	CompPAR(23)=CompPAR(23)/(100**3) !Compressor internal volume, m^3   !RS: Formerly CompPAR(23)
 
 	!****Condenser input data****
     !CondPAR(1)                   !Discharge line length, m
