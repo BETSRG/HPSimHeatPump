@@ -242,8 +242,8 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   END SELECT
 
   !RS: Debugging: Moving array data up since useless data has been removed
-  EvapPAR(37)=CompressorManufacturer !EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
-  CondPAR(43)=CompressorManufacturer    !RS: Debugging: Formerly CONDPAR(60)
+  EvapPAR(EvapCompMan)=CompressorManufacturer !EvapPAR(52)=CompressorManufacturer !ISI - 10/05/06
+  CondPAR(CondCompMan)=CompressorManufacturer    !RS: Debugging: Formerly CONDPAR(60)
 
   TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
@@ -686,40 +686,40 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
 
   END IF
 
-  CondPAR(1)=DisLnPAR(1) !Discharge line length, m or ft
-  CondPAR(2)=DisLnPAR(2) !Discharge line outside diameter, mm or in
-  CondPAR(3)=DisLnPAR(3) !Discharge line tube wall thickness, mm or mil
-  CondPAR(4)=DisLnPAR(4) !Discharge line elevation, m or ft
-  CondPAR(5)=DisLnPAR(5) !Discharge line heat loss, W or Btu/hr  
-  CondPAR(6)=DisLnPAR(6) !Discharge line temperature change, C or F
-  CondPAR(7)=DisLnPAR(7) !Discharge line additional pressure drop
+  CondPAR(CondDisLnLen)=DisLnPAR(1) !Discharge line length, m or ft !RS: Debugging: Formerly CondPAR(1)
+  CondPAR(CondDisLnOD)=DisLnPAR(2) !Discharge line outside diameter, mm or in !RS: Debugging: Formerly CondPAR(2)
+  CondPAR(CondDisLnTWThick)=DisLnPAR(3) !Discharge line tube wall thickness, mm or mil !RS: Debugging: Formerly CondPAR(3)
+  CondPAR(CondDisLnElev)=DisLnPAR(4) !Discharge line elevation, m or ft !RS: Debugging: Formerly CondPAR(4)
+  CondPAR(CondDisLnQLoss)=DisLnPAR(5) !Discharge line heat loss, W or Btu/hr !RS: Debugging: Formerly CondPAR(5)
+  CondPAR(CondDisLnTempChg)=DisLnPAR(6) !Discharge line temperature change, C or F !RS: Debugging: Formerly CondPAR(6)
+  CondPAR(CondDisLnAddPD)=DisLnPAR(7) !Discharge line additional pressure drop   !RS: Debugging: Formerly CondPAR(7)
 
-  CondPAR(8)=LiqLnPAR(1)  !Liquid line length, m or ft
-  CondPAR(9)=LiqLnPAR(2)  !Liquid line outside diameter, mm or in
-  CondPAR(10)=LiqLnPAR(3) !Liquid line tube wall thickness, mm or mil
-  CondPAR(11)=LiqLnPAR(4) !Liquid line elevation, m or ft
-  CondPAR(12)=LiqLnPAR(5) !Liquid line heat loss, W or Btu/hr  
-  CondPAR(13)=LiqLnPAR(6) !Liquid line temperature change, C or F
-  CondPAR(14)=LiqLnPAR(7) !Liquid line additional pressure drop
+  CondPAR(CondLiqLnLen)=LiqLnPAR(1)  !Liquid line length, m or ft  !RS: Debugging: Formerly CondPAR(8)
+  CondPAR(CondLiqLnOD)=LiqLnPAR(2)  !Liquid line outside diameter, mm or in   !RS: Debugging: Formerly CondPAR(9)
+  CondPAR(CondLiqLnTWThick)=LiqLnPAR(3) !Liquid line tube wall thickness, mm or mil   !RS: Debugging: Formerly CondPAR(10)
+  CondPAR(CondLiqLnElev)=LiqLnPAR(4) !Liquid line elevation, m or ft   !RS: Debugging: Formerly CondPAR(11)
+  CondPAR(CondLiqLnQLoss)=LiqLnPAR(5) !Liquid line heat loss, W or Btu/hr   !RS: Debugging: Formerly CondPAR(12)
+  CondPAR(CondLiqLnTempChg)=LiqLnPAR(6) !Liquid line temperature change, C or F   !RS: Debugging: Formerly CondPAR(13)
+  CondPAR(CondLiqLnAddPD)=LiqLnPAR(7) !Liquid line additional pressure drop !RS: Debugging: Formerly CondPAR(14)
 
-  EvapPAR(1)=SucLnPAR(1) !Suction line length, m or ft
-  EvapPAR(2)=SucLnPAR(2) !Suction line outside diameter, mm or in
-  EvapPAR(3)=SucLnPAR(3) !Suction line tube wall thickness, mm or mil
-  EvapPAR(4)=SucLnPAR(4) !Suction line elevation, m or ft
-  EvapPAR(5)=SucLnPAR(5) !Suction line heat loss, W or Btu/hr  
-  EvapPAR(6)=SucLnPAR(6) !Suction line temperature change, C or F
-  EvapPAR(7)=SucLnPAR(7) !Suction line additional pressure drop
+  EvapPAR(EvapSucLnLen)=SucLnPAR(1) !Suction line length, m or ft  !RS: Debugging: Formerly EvapPAR(1)
+  EvapPAR(EvapSucLnOD)=SucLnPAR(2) !Suction line outside diameter, mm or in   !RS: Debugging: Formerly EvapPAR(2)
+  EvapPAR(EvapSucLnTWThick)=SucLnPAR(3) !Suction line tube wall thickness, mm or mil   !RS: Debugging: Formerly EvapPAR(3)
+  EvapPAR(EvapSucLnElev)=SucLnPAR(4) !Suction line elevation, m or ft   !RS: Debugging: Formerly EvapPAR(4)
+  EvapPAR(EvapSucLnQLoss)=SucLnPAR(5) !Suction line heat loss, W or Btu/hr   !RS: Debugging: Formerly EvapPAR(5)
+  EvapPAR(EvapSucLnTempChg)=SucLnPAR(6) !Suction line temperature change, C or F   !RS: Debugging: Formerly EvapPAR(6)
+  EvapPAR(EvapSucLnAddPD)=SucLnPAR(7) !Suction line additional pressure drop !RS: Debugging: Formerly EvapPAR(7)
 
   IF (IsCoolingMode .GT. 0) THEN    !Populating arrays
     CoilParams(1)%AirFlowRate=CFMevp
     CoilParams(2)%AirFlowRate=CFMcnd
 
 	ShTbPAR=CoolingShTbPAR
-    ShTbPAR(4)=EvapPAR(19) !Number of circuits in evaporator
+    ShTbPAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19)
     ShTbPAR(5)=CoolingDistubeLength
 
 	CapTubePAR=CoolingCapTubePAR
-    CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
+    CapTubePAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19)
     CapTubePAR(5)=CoolingDistubeLength
 
     ExpDevice=CoolingExpDevice
@@ -728,21 +728,21 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
     CoilParams(2)%AirFlowRate=CFMevp
  
 	ShTbPAR=HeatingShTbPAR
-    ShTbPAR(4)=EvapPAR(19) !Number of circuits in evaporator
+    ShTbPAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19)
     ShTbPAR(5)=HeatingDistubeLength
 
 	CapTubePAR=HeatingCapTubePAR
-    CapTubePAR(4)=EvapPAR(19) !Number of circuits in evaporator
+    CapTubePAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19)
     CapTubePAR(5)=HeatingDistubeLength
 
     ExpDevice=HeatingExpDevice
   END IF
 
-  EvapPAR(31)=BaroPressure
-  CondPAR(38)=BaroPressure
+  EvapPAR(EvapBarPress)=BaroPressure    !RS: Debugging: Formerly EvapPAR(31)
+  CondPAR(CondBarPress)=BaroPressure    !RS: Debugging: Formerly CondPAR(38)
 
-  EvapPAR(34)=SystemType
-  CondPAR(41)=SystemType !ISI - 07/14/06    !RS: Debugging: Formerly CONDPAR(57)
+  EvapPAR(EvapSysType)=SystemType !RS: Debugging: Formerly EvapPAR(34)
+  CondPAR(CondSysType)=SystemType !ISI - 07/14/06    !RS: Debugging: Formerly CONDPAR(57)
 
   IF (LineData(1:17) .EQ. 'Microchannel Coil') THEN
 	  IF (IsCoolingMode .GT. 0) THEN

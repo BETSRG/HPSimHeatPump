@@ -68,12 +68,12 @@ REAL CompOUT(7)
 
 !Condenser model passing parameters
 REAL CondIN(9)
-REAL CondPAR(62)
+REAL CondPAR(45)    !RS: Debugging: Formerly CondPAR(62)
 REAL CondOUT(29)
 
 !Evaporator model passing parameters
 REAL EvapIN(9)
-REAL EvapPAR(54)  !RS: Debugging: Formerly EvapPAR(54)
+REAL EvapPAR(39)  !RS: Debugging: Formerly EvapPAR(54)
 REAL EvapOUT(25) 
 
 !Expansion device
@@ -252,5 +252,120 @@ REAL EvapBareArea
 REAL EvapMinArea
 REAL CondTubeArea
 REAL CondFinArea
+
+!CondPAR Variables
+INTEGER, SAVE:: CondDisLnLen=1
+INTEGER, SAVE:: CondDisLnOD=2
+INTEGER, SAVE:: CondDisLnTWThick=3
+INTEGER, SAVE:: CondDisLnElev=4
+INTEGER, SAVE:: CondDisLnQLoss=5
+INTEGER, SAVE:: CondDisLnTempChg=6
+INTEGER, SAVE:: CondDisLnAddPD=7
+INTEGER, SAVE:: CondLiqLnLen=8
+INTEGER, SAVE:: CondLiqLnOD=9
+INTEGER, SAVE:: CondLiqLnTWThick=10
+INTEGER, SAVE:: CondLiqLnElev=11
+INTEGER, SAVE:: CondLiqLnQLoss=12
+INTEGER, SAVE:: CondLiqLnTempChg=13
+INTEGER, SAVE:: CondLiqLnAddPD=14
+INTEGER, SAVE:: CondCoilTOD=15
+INTEGER, SAVE:: CondCoilTWThick=16
+INTEGER, SAVE:: CondCoilSTLen=17
+INTEGER, SAVE:: CondCoilTThermCon=18
+INTEGER, SAVE:: CondTspc=19
+INTEGER, SAVE:: CondRspc=20
+INTEGER, SAVE:: CondFinThick=21
+INTEGER, SAVE:: CondFinPitch=22
+INTEGER, SAVE:: CondFinThermCon=23
+INTEGER, SAVE:: CondNt=24
+INTEGER, SAVE:: CondNl=25
+INTEGER, SAVE:: CondNumCkt=26
+INTEGER, SAVE:: CondCoolMode=27
+INTEGER, SAVE:: CondNumMod=28
+INTEGER, SAVE:: CondFinType=29
+INTEGER, SAVE:: CondMultRefQT=30
+INTEGER, SAVE:: CondMultRefPD=31
+INTEGER, SAVE:: CondMultAirQT=32
+INTEGER, SAVE:: CondMultAirPD=33
+INTEGER, SAVE:: CondFanPwr=34
+INTEGER, SAVE:: CondFanLoc=35
+INTEGER, SAVE:: CondSurfAbs=36
+INTEGER, SAVE:: CondTube=37
+INTEGER, SAVE:: CondBarPress=38
+INTEGER, SAVE:: CondCompQLoss=39
+INTEGER, SAVE:: CondPressTolConv=40
+INTEGER, SAVE:: CondSysType=41
+INTEGER, SAVE:: CondOilMassFrac=42
+INTEGER, SAVE:: CondCompMan=43
+INTEGER, SAVE:: CondSimpCoil=44
+INTEGER, SAVE:: CondFirstTime=45
+
+!EvapPAR variables
+INTEGER, SAVE:: EvapSucLnLen=1
+INTEGER, SAVE:: EvapSucLnOD=2
+INTEGER, SAVE:: EvapSucLnTWThick=3
+INTEGER, SAVE:: EvapSucLnElev=4
+INTEGER, SAVE:: EvapSucLnQLoss=5
+INTEGER, SAVE:: EvapSucLnTempChg=6
+INTEGER, SAVE:: EvapSucLnAddPD=7
+INTEGER, SAVE:: EvapCoilTOD=8
+INTEGER, SAVE:: EvapCoilTWThick=9
+INTEGER, SAVE:: EvapCoilSTLen=10
+INTEGER, SAVE:: EvapCoilTThermCon=11
+INTEGER, SAVE:: EvapTspc=12
+INTEGER, SAVE:: EvapRspc=13
+INTEGER, SAVE:: EvapFinThick=14
+INTEGER, SAVE:: EvapFinPitch=15
+INTEGER, SAVE:: EvapFinThermCon=16
+INTEGER, SAVE:: EvapNt=17
+INTEGER, SAVE:: EvapNl=18
+INTEGER, SAVE:: EvapNumCkt=19
+INTEGER, SAVE:: EvapCoolMode=20
+INTEGER, SAVE:: EvapNumMod=21
+INTEGER, SAVE:: EvapFinType=22
+INTEGER, SAVE:: EvapMultRefQT=23
+INTEGER, SAVE:: EvapMultRefPD=24
+INTEGER, SAVE:: EvapMultAirQT=25
+INTEGER, SAVE:: EvapMultAirPD=26
+INTEGER, SAVE:: EvapFanPwr=27
+INTEGER, SAVE:: EvapFanLoc=28
+INTEGER, SAVE:: EvapSurfAbs=29
+INTEGER, SAVE:: EvapTube=30
+INTEGER, SAVE:: EvapBarPress=31
+INTEGER, SAVE:: EvapCompQLoss=32
+INTEGER, SAVE:: EvapSysType=33
+INTEGER, SAVE:: EvapPressTolConv=34
+INTEGER, SAVE:: EvapOilMassFrac=35
+INTEGER, SAVE:: EvapCompMan=36
+INTEGER, SAVE:: EvapSimpCoil=37
+INTEGER, SAVE:: EvapFirstTime=38
+
+!CompPAR variables
+INTEGER, SAVE:: CompCoeffP1=1
+INTEGER, SAVE:: CompCoeffP2=2
+INTEGER, SAVE:: CompCoeffP3=3
+INTEGER, SAVE:: CompCoeffP4=4
+INTEGER, SAVE:: CompCoeffP5=5
+INTEGER, SAVE:: CompCoeffP6=6
+INTEGER, SAVE:: CompCoeffP7=7
+INTEGER, SAVE:: CompCoeffP8=8
+INTEGER, SAVE:: CompCoeffP9=9
+INTEGER, SAVE:: CompCoeffP10=10
+INTEGER, SAVE:: CompCoeffM1=11
+INTEGER, SAVE:: CompCoeffM2=12
+INTEGER, SAVE:: CompCoeffM3=13
+INTEGER, SAVE:: CompCoeffM4=14
+INTEGER, SAVE:: CompCoeffM5=15
+INTEGER, SAVE:: CompCoeffM6=16
+INTEGER, SAVE:: CompCoeffM7=17
+INTEGER, SAVE:: CompCoeffM8=18
+INTEGER, SAVE:: CompCoeffM9=19
+INTEGER, SAVE:: CompCoeffM10=20
+INTEGER, SAVE:: CompQLossFrac=21
+INTEGER, SAVE:: CompQLoss=22
+INTEGER, SAVE:: CompIntVol=23
+INTEGER, SAVE:: CompPwrCor=24
+INTEGER, SAVE:: CompPwrMult=25
+INTEGER, SAVE:: CompMFRMult=26
 
 END MODULE DataSimulation

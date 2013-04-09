@@ -126,7 +126,7 @@
     REAL :: PAR(26) !, INTENT(IN)
     REAL, INTENT(OUT) :: OUT(7)
 
-    REAL, PARAMETER :: Fv=0.75
+    !REAL, PARAMETER :: Fv=0.75 !RS: Debugging: Extraneous
 
     !Subroutine local variables
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
@@ -207,32 +207,32 @@ INTEGER,PARAMETER :: PANASONIC = 4
 	CompressorManufacturer=BRISTOL
   END SELECT
 
-  PAR(21) = Numbers(1) !CompressorHeatLossFraction
-  PAR(22) = Numbers(2) !CompressorHeatLoss
-  PAR(23) = Numbers(3) !CompressorVolume
-  PAR(11) = Numbers(4) !CompressorMassCoefficient1
-  PAR(12) = Numbers(5) !CompressorMassCoefficient2
-  PAR(13) = Numbers(6) !CompressorMassCoefficient3
-  PAR(14) = Numbers(7) !CompressorMassCoefficient4
-  PAR(15) = Numbers(8) !CompressorMassCoefficient5
-  PAR(16) = Numbers(9) !CompressorMassCoefficient6
-  PAR(17) = Numbers(10) !CompressorMassCoefficient7
-  PAR(18) = Numbers(11) !CompressorMassCoefficient8
-  PAR(19) = Numbers(12) !CompressorMassCoefficient9
-  PAR(20) = Numbers(13) !CompressorMassCoefficient10
-  PAR(1) = Numbers(14) !CompressorPowerCoefficient1
-  PAR(2) = Numbers(15) !CompressorPowerCoefficient2
-  PAR(3) = Numbers(16) !CompressorPowerCoefficient3
-  PAR(4) = Numbers(17) !CompressorPowerCoefficient4
-  PAR(5) = Numbers(18) !CompressorPowerCoefficient5
-  PAR(6) = Numbers(19) !CompressorPowerCoefficient6
-  PAR(7) = Numbers(20) !CompressorPowerCoefficient7
-  PAR(8) = Numbers(21) !CompressorPowerCoefficient8
-  PAR(9) = Numbers(22) !CompressorPowerCoefficient9
-  PAR(10) = Numbers(23) !CompressorPowerCoefficient10
+  PAR(CompQLossFrac) = Numbers(1) !CompressorHeatLossFraction  !RS: Debugging: Formerly PAR(21)
+  PAR(CompQLoss) = Numbers(2) !CompressorHeatLoss  !RS: Debugging: Formerly PAR(22)
+  PAR(CompIntVol) = Numbers(3) !CompressorVolume    !RS: Debugging: Formerly PAR(23)
+  PAR(CompCoeffM1) = Numbers(4) !CompressorMassCoefficient1  !RS: Debugging: Formerly PAR(11)
+  PAR(CompCoeffM2) = Numbers(5) !CompressorMassCoefficient2  !RS: Debugging: Formerly PAR(12)
+  PAR(CompCoeffM3) = Numbers(6) !CompressorMassCoefficient3  !RS: Debugging: Formerly PAR(13)
+  PAR(CompCoeffM4) = Numbers(7) !CompressorMassCoefficient4  !RS: Debugging: Formerly PAR(14)
+  PAR(CompCoeffM5) = Numbers(8) !CompressorMassCoefficient5  !RS: Debugging: Formerly PAR(15)
+  PAR(CompCoeffM6) = Numbers(9) !CompressorMassCoefficient6  !RS: Debugging: Formerly PAR(16)
+  PAR(CompCoeffM7) = Numbers(10) !CompressorMassCoefficient7 !RS: Debugging: Formerly PAR(17)
+  PAR(CompCoeffM8) = Numbers(11) !CompressorMassCoefficient8 !RS: Debugging: Formerly PAR(18)
+  PAR(CompCoeffM9) = Numbers(12) !CompressorMassCoefficient9 !RS: Debugging: Formerly PAR(19)
+  PAR(CompCoeffM10) = Numbers(13) !CompressorMassCoefficient10    !RS: Debugging: Formerly PAR(20)
+  PAR(CompCoeffP1) = Numbers(14) !CompressorPowerCoefficient1 !RS: Debugging: Formerly PAR(1)
+  PAR(CompCoeffP2) = Numbers(15) !CompressorPowerCoefficient2 !RS: Debugging: Formerly PAR(2)
+  PAR(CompCoeffP3) = Numbers(16) !CompressorPowerCoefficient3 !RS: Debugging: Formerly PAR(3)
+  PAR(CompCoeffP4) = Numbers(17) !CompressorPowerCoefficient4 !RS: Debugging: Formerly PAR(4)
+  PAR(CompCoeffP5) = Numbers(18) !CompressorPowerCoefficient5 !RS: Debugging: Formerly PAR(5)
+  PAR(CompCoeffP6) = Numbers(19) !CompressorPowerCoefficient6 !RS: Debugging: Formerly PAR(6)
+  PAR(CompCoeffP7) = Numbers(20) !CompressorPowerCoefficient7 !RS: Debugging: Formerly PAR(7)
+  PAR(CompCoeffP8) = Numbers(21) !CompressorPowerCoefficient8 !RS: Debugging: Formerly PAR(8)
+  PAR(CompCoeffP9) = Numbers(22) !CompressorPowerCoefficient9 !RS: Debugging: Formerly PAR(9)
+  PAR(CompCoeffP10) = Numbers(23) !CompressorPowerCoefficient10   !RS: Debugging: Formerly PAR(10)
   
-  PAR(25) = Numbers(24) !PowerMultiplier
-  PAR(26) = Numbers(25) !MassFlowRateMultiplier
+  PAR(CompPwrMult) = Numbers(24) !PowerMultiplier    !RS: Debugging: Formerly PAR(25)
+  PAR(CompMFRMult) = Numbers(25) !MassFlowRateMultiplier !RS: Debugging: Formerly PAR(26)
   !TsiCmp = Numbers(26) !UserSpecifiedRatingEvapTemperature
   !TsoCmp = Numbers(27) !UserSpecifiedRatingCondTemperature
   !Subcool = Numbers(28) !UserSpecifiedRatingSubcooling
@@ -250,12 +250,12 @@ INTEGER,PARAMETER :: PANASONIC = 4
         B(I)=PAR(I+10) 
     END DO
     
-    Qshellfrac = PAR(21)
-    Qshell = PAR(22)
-    VolCmp = PAR(23)
-    Wcorrect = PAR(24)
-    PwrMultiplier=PAR(25)
-    mdotMultiplier=PAR(26)
+    Qshellfrac = PAR(CompQLossFrac)    !RS: Debugging: Formerly PAR(21)
+    Qshell = PAR(CompQLoss)    !RS: Debugging: Formerly PAR(22)
+    VolCmp = PAR(CompIntVol)    !RS: Debugging: Formerly PAR(23)
+    Wcorrect = PAR(CompPwrCor)  !RS: Debugging: Formerly PAR(24)
+    PwrMultiplier=PAR(CompPwrMult)   !RS: Debugging: Formerly PAR(25)
+    mdotMultiplier=PAR(CompMFRMult)  !RS: Debugging: Formerly PAR(26)
 
     Wcorrect = 1 !1.21 !1.25
 

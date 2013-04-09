@@ -130,7 +130,7 @@
     REAL LiquidLength2          !Liquid length at 2nd reference point, m or ft
   
     
-    IF (EvapPAR(39) .EQ. 1) THEN    !RS: Debugging: Formerly EvapPAR(54)
+    IF (EvapPAR(EvapFirstTime) .EQ. 1) THEN    !RS: Debugging: Formerly EvapPAR(38)
           !*************** Charge Tuning Curve ***************  !RS: Debugging: Moving: If needed, try HPDM
 
     CALL GetObjectItem('ChargeTuningCurve',1,Alphas,NumAlphas, &
@@ -244,9 +244,9 @@
 
             PoEvp=EvapOUT(1)
 
-            QsucLn=EvapPAR(5) 
-            DTsucLn=EvapPAR(6)
-            LsucLn=EvapPAR(1) 
+            QsucLn=EvapPAR(EvapSucLnQLoss)   !RS: Debugging: Formerly EvapPAR(5)
+            DTsucLn=EvapPAR(EvapSucLnTempChg)  !RS: Debugging: Formerly EvapPAR(6)
+            LsucLn=EvapPAR(EvapSucLnLen)   !RS: Debugging: Formerly EvapPAR(1)
 
             IF (LsucLn .GT. 0) THEN
                 IF (QsucLn .NE. 0) THEN
@@ -412,10 +412,10 @@
         EvapIN(9)=CompOUT(5)      !Discharge temperature, C
 
         !Take compressor shell loss into account
-        IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
-            EvapPAR(32)=CompPAR(21)*CompOUT(1)
+        IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+            EvapPAR(EvapCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: Formerly EvapPAR(32) & CompPAR(21)
         ELSE !Shell loss in W
-            EvapPAR(32)=CompPAR(22)/1000
+            EvapPAR(EvapCompQLoss)=CompPAR(CompQLoss)/1000    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
         END IF
 
         IF (FirstTimeHPdesignMode) THEN
@@ -423,43 +423,43 @@
             IF ((IsCoolingMode .GT. 0 .AND. IDCcoilType .EQ. MCEVAPORATOR) .OR. &
             (IsCoolingMode .LT. 1 .AND. ODCcoilType .EQ. MCEVAPORATOR)) THEN
                 !Microchannel coil
-                EvapPAR(39)=1 !First time   !RS: Debugging: Formerly EvapPAR(54)
-                EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
+                EvapPAR(EvapFirstTime)=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
+                EvapPAR(EvapSimpCoil)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                EvapPAR(39)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(54)
+                EvapPAR(EvapFirstTime)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
             ELSE
                 !Plate-fin coil
                 !Run both simple and detailed version to determine which one to use
                 !Change the logic to reset IsFirstTimeEvaporator
                 IF (IsFirstTimeEvaporator) THEN
-                    EvapPAR(39)=1 !First time   !RS: Debugging: Formerly EvapPAR(54)
-                    EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
+                    EvapPAR(EvapFirstTime)=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
+                    EvapPAR(EvapSimpCoil)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
                     DetailedQevp=DetailedEvapOUT(11)
                     DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
 
-                    EvapPAR(38)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(53)
+                    EvapPAR(EvapSimpCoil)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
                     SimpleQevp=SimpleEvapOUT(11)
                     SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
 
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
-                        EvapPAR(38)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(53)
+                        EvapPAR(EvapSimpCoil)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
                         EvapOUT=SimpleEvapOUT
                     ELSE
-                        EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
+                        EvapPAR(EvapSimpCoil)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
                         EvapOUT=DetailedEvapOUT
                     END IF
                     IsFirstTimeEvaporator=.FALSE. 
 
                     !Always detailed
-                    EvapPAR(38)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
+                    EvapPAR(EvapSimpCoil)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(53)
                     EvapOUT=DetailedEvapOUT
 
                 ELSE
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                    EvapPAR(39)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(54)
+                    EvapPAR(EvapFirstTime)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
                 END IF
             END IF
 

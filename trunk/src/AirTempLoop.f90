@@ -134,15 +134,15 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     EvapIN(9)=CompOUT(5)      !Discharge temperature, C
 
     !Take compressor shell loss into account
-    IF (CompPAR(21) .NE. 0) THEN !Shell loss in fraction
-        EvapPAR(32)=CompPAR(21)*CompOUT(1)
+    IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+        EvapPAR(EvapCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: Formerly EvapPAR(32) & CompPAR(21)
     ELSE !Shell loss in W
-        EvapPAR(32)=CompPAR(22)/1000    !RS Comment: Unit Conversion
+        EvapPAR(EvapCompQLoss)=CompPAR(CompQLoss)/1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
     END IF
 
     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
-    EvapPAR(39)=0 !No longer first time !RS: Debugging: Moving (54) up to (39)
+    EvapPAR(EvapFirstTime)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
     IF (EvapOUT(20) .NE. 0) THEN
         SELECT CASE (INT(EvapOUT(20)))
         CASE (2)
