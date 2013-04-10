@@ -403,11 +403,11 @@ CONTAINS
     !
 
     OUT(1)=ACCMAS*0.4563    !Total mass, convert from lbm to kg
-    OUT(3)=OUT(1)*VHGT/AHGT !Liquid mass
-    OUT(2)=OUT(1)-OUT(3)    !Vapor mass
-    OUT(4)=XLEVEL*0.0254    !Liquid level, convert from in to m
+    !OUT(3)=OUT(1)*VHGT/AHGT !Liquid mass   !RS: Debugging: Never used
+    !OUT(2)=OUT(1)-OUT(3)    !Vapor mass    !RS: Debugging: Never used
+    !OUT(4)=XLEVEL*0.0254    !Liquid level, convert from in to m    !RS: Debugging: Never used
     OUT(5)=AccumDP
-    OUT(6)=ErrorFlag
+    !OUT(6)=ErrorFlag   !RS: Debugging: Never used
 
     RETURN
 

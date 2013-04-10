@@ -227,8 +227,8 @@
         CondIN(4)=XMaC           
         CondIN(5)=(TAIC-32)/1.8 !RS Comment: Unit Conversion, from F to C
         CondIN(6)=RHIC           
-        CondIN(8)=EvapOUT(3)
-        CondIN(9)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C
+        !CondIN(8)=EvapOUT(3)   !RS: Debugging: Never actually used
+        !CondIN(9)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C  !RS: Debugging: Never actually used
 
         IF (SystemType .EQ. 4) THEN !Reheat system
             IF (FirstTimeFlowRateLoop) THEN
@@ -317,13 +317,13 @@
         END IF
 
         PiCnd=CondOUT(1)
-        HiCnd=CondOUT(2)
-        TiCnd=CondOUT(3)
-        XiCnd=CondOUT(4)
-        PoCnd=CondOUT(5)
-        HoCnd=CondOUT(6)
-        ToCnd=CondOUT(7)
-        XoCnd=CondOUT(8)
+        !HiCnd=CondOUT(2)   !RS: Debugging: Never used
+        !TiCnd=CondOUT(3)   !RS: Debugging: Never used
+        !XiCnd=CondOUT(4)   !RS: Debugging: Never used
+        !PoCnd=CondOUT(5)   !RS: Debugging: Never used
+        !HoCnd=CondOUT(6)   !RS: Debugging: Never used
+        !ToCnd=CondOUT(7)   !RS: Debugging: Never used
+        !XoCnd=CondOUT(8)   !RS: Debugging: Never used
         PiExp=CondOUT(10)
         HiExp=CondOUT(11)
         TiExp=CondOUT(12)

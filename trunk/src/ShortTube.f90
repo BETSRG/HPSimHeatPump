@@ -1086,7 +1086,7 @@
         OUT(3)=ToExp
         OUT(4)=XoExp
         OUT(5)=MassDisTube
-        OUT(6)=QdisTube    
+        !OUT(6)=QdisTube    !RS: Debugging: Not used  
     END IF
 
     OUT(7)=ErrorFlag

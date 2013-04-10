@@ -608,7 +608,7 @@
     mAiCoil =XIN(4)
     tAiCoil =XIN(5)
     rhAiCoil=XIN(6)
-    SolarFlux=XIN(7)
+    SolarFlux=XIN(7)    !RS: Debugging: Used once but was set equal to 0
     !tRoEvp=XIN(8)  !RS: Debugging: These were set once but never used
     !tAiEvp=XIN(9)
 
@@ -1144,7 +1144,7 @@
     OUT(6)=hRoCoil
     OUT(7)=tRoCoil
     OUT(8)=xRoCoil
-    OUT(9)=tSCoCoil
+    !OUT(9)=tSCoCoil    !RS: Debugging: Not really used
     OUT(10)=pRiExp
     OUT(11)=hRiExp
     OUT(12)=tRiExp
@@ -1153,18 +1153,18 @@
     OUT(15)=Qcoil
     OUT(16)=MassDisLn
     OUT(17)=MassLiqLn
-    OUT(18)=0
-    OUT(19)=0
-    OUT(20)=0
-    OUT(21)=tAoCoil
-    OUT(22)=rhAoCoil
-    OUT(23)=DPair
+    OUT(18)=0  !RS: Debugging: Not really used?
+    !OUT(19)=0  !RS: Debugging: Never used
+    !OUT(20)=0  !RS: Debugging: Never used
+    OUT(21)=tAoCoil !RS: Debugging: Only used to be output
+    OUT(22)=rhAoCoil    !RS: Debugging: Only used to be output
+    OUT(23)=DPair   !RS: Debugging: Only used to be output
 
     !OUT(25)=hco    !RS: Debugging: Never Used?
     !OUT(26)=tSiCoil    !RS: Debugging: Never Used?
     !OUT(27)=tSoCoil    !RS: Debugging: Never Used?
-    OUT(28)=WeightAluminum
-    OUT(29)=WeightCopper
+    OUT(28)=WeightAluminum  !RS: Debugging: Only used to be output
+    OUT(29)=WeightCopper    !RS: Debugging: Only used to be output
 
     OUT(24)=ErrorFlag
 

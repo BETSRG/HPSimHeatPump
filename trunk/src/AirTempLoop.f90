@@ -156,11 +156,11 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
 
     PoEvp=EvapOUT(1)
     HoEvp=EvapOUT(2)
-    ToEvp=EvapOUT(3)
-    XoEvp=EvapOUT(4)
+    !ToEvp=EvapOUT(3)   !RS: Debugging: Never used
+    !XoEvp=EvapOUT(4)   !RS: Debugging: Never used
     PiCmp=EvapOUT(6)
     HiCmp=EvapOUT(7)
-    TiCmp=EvapOUT(8)
+    !TiCmp=EvapOUT(8)   !RS: Debugging: Never used
     XiCmp=EvapOUT(9)
 
     IF (AccumPAR(2) .GT. 0) THEN !Accumulator exists

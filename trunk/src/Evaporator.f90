@@ -664,13 +664,13 @@ CONTAINS
     mAiCoil =XIN(4)
     tAiCoil =XIN(5)
     rhAiCoil=XIN(6)
-    QdisTube=XIN(7)
-    SolarFlux=XIN(8)
+    !QdisTube=XIN(7) !RS: Debugging: EvapIN(7) never set
+    SolarFlux=XIN(8)    !RS: Debugging: EvapIN(8) set once to 0
     tRdis=XIN(9)
 
-    IF (QdisTube .EQ. 0) THEN
-        QdisTube=SMALL
-    END IF
+    !IF (QdisTube .EQ. 0) THEN  RS: Debugging: QDisTube is never used
+    !    QdisTube=SMALL
+    !END IF
 
     LsucLn    = PAR(EvapSucLnLen) !RS: Debugging: Formerly PAR(1)
     ODsucLn   = PAR(EvapSucLnOD)  !RS: Debugging: Formerly PAR(2)
@@ -1220,29 +1220,29 @@ CONTAINS
     !Populating the OUT array
     OUT(1)=pRoCoil
     OUT(2)=hRoCoil
-    OUT(3)=tRoCoil
+    !OUT(3)=tRoCoil !RS: Debugging: Never used
     OUT(4)=xRoCoil
-    OUT(5)=tSHoCoil
+    !OUT(5)=tSHoCoil    !RS: Debugging: Never used
     OUT(6)=pRiCmp
     OUT(7)=hRiCmp
     OUT(8)=tRiCmp
     OUT(9)=xRiCmp
     OUT(10)=tSHiCmp
     OUT(11)=Qcoil
-    OUT(12)=QcoilSens
+    OUT(12)=QcoilSens   !RS: Debugging: Only used to be output
     OUT(13)=MassSucLn
-    OUT(14)=0
-    OUT(15)=0
-    OUT(16)=0
+    OUT(14)=0  !RS: Debugging: Never really used?
+    !OUT(15)=0  !RS: Debugging: Never used
+    !OUT(16)=0  !RS: Debugging: Never used
     OUT(17)=tAoCoil
-    OUT(18)=rhAoCoil
-    OUT(19)=DPair
+    OUT(18)=rhAoCoil    !RS: Debugging: Only used to be output
+    OUT(19)=DPair   !RS: Debugging: Only used to be output
 
     !OUT(21)=hco    !RS: Debugging: Never Used?
     !OUT(22)=tSiCoil    !RS: Debugging: Never Used?
     !OUT(23)=tSoCoil    !RS: Debugging: Never Used?
-    OUT(24)=WeightAluminum
-    OUT(25)=WeightCopper
+    OUT(24)=WeightAluminum  !RS: Debugging: Only used to be output
+    OUT(25)=WeightCopper    !RS: Debugging: Only used to be output
 
     OUT(20)=ErrorFlag
 

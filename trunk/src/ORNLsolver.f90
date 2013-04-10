@@ -642,8 +642,8 @@
                 CondIN(4)=XMaC	! VL_Index_Replace           
                 CondIN(5)=Temperature_F2C(TAIC)	! VL_Index_Replace
                 CondIN(6)=RHIC	! VL_Index_Replace           
-                CondIN(8)=0 !Evaporator outlet temperature, C, not used for this	! VL_Index_Replace
-                CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace
+                !CondIN(8)=0 !Evaporator outlet temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Never actually used
+                !CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace  !RS: Debugging: Never actually used
 
                 !Determine if detailed model is needed, ISI - 02/07/08
                 CondPAR(CondSimpCoil)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
@@ -671,8 +671,8 @@
                     CondIN(4)=XMaC 	! VL_Index_Replace          
                     CondIN(5)=Temperature_F2C(TAIC)	! VL_Index_Replace
                     CondIN(6)=RHIC 	! VL_Index_Replace          
-                    CondIN(8)=0 !Evaporator outlet temperature, C, not used for this	! VL_Index_Replace
-                    CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace
+                    !CondIN(8)=0 !Evaporator outlet temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Never actually used
+                    !CondIN(9)=Temperature_F2C(TAIE)	! VL_Index_Replace  !RS: Debugging: Never actually used
 
                     CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
                     CondPAR(CondFirstTime)=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)

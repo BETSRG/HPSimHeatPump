@@ -362,11 +362,11 @@
     PoExp=POEXP/0.14503798 !Convert from psi to kPa
 
     OUT(1)=mdotExp
-    OUT(2)=PoExp
+    !OUT(2)=PoExp   !RS: Debugging: Not used
     OUT(3)=ToExp
     OUT(4)=XoExp
-    OUT(5)=MassDisTube
-    OUT(6)=QdisTube
+    !OUT(5)=MassDisTube !RS: Debugging: Not used
+    !OUT(6)=QdisTube    !RS: Debugging: Not used
 
     OUT(7)=ErrorFlag
 
