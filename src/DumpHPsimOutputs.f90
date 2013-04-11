@@ -304,8 +304,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 
       Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
 
-      TdboCnd=CondOUT(21)
-      RHoCnd=CondOUT(22)
+      TdboCnd=CondOUT(3)   !RS: Debugging: Formerly CondOUT(21)
+      RHoCnd=CondOUT(4)    !RS: Debugging: Formerly CondOUT(22)
 
       AirPropOpt=2
       AirProp(1)=TdboCnd
@@ -316,14 +316,14 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TwboCnd=AirProp(5)
       RhoAoC=AirProp(7)
 
-      DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+      DPaCND=CondOUT(19)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(23)
 
       MassCnd=CondOUT(18)
       MassDisLn=CondOUT(16)
       MassLiqLn=CondOUT(17)
 
-      WeightCndAluminum=CondOUT(28)
-      WeightCndCopper=CondOUT(29)
+      WeightCndAluminum=CondOUT(8) !RS: Debugging: Formerly CondOUT(28), CondOUT(19)
+      WeightCndCopper=CondOUT(9)   !RS: Debugging: Formerly CondOUT(29), CondOUT(20)
 
       !*******Evaporator*******
       PiEvp=0
@@ -527,7 +527,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
               XoEvp=0
           END IF
 
-	      DPaEvp=EvapOUT(19)*1000   !RS Comment: Unit Conversion
+	      DPaEvp=EvapOUT(5)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(19)
 
 	      Qevp =-EvapOUT(11)*1000   !RS Comment: Unit Conversion
 	      QevpSens=-EvapOUT(12)*1000    !RS Comment: Unit Conversion
@@ -543,8 +543,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	          TwboEvp=AirProp(5)
 	          RHoEvp=AirProp(3)
 	      ELSE
-    	      TdboEvp=EvapOUT(17)
-	          RHoEvp=EvapOUT(18) 
+    	      TdboEvp=EvapOUT(3)   !RS: Debugging: Formerly EvapOUT(17)
+	          RHoEvp=EvapOUT(4)    !RS: Debugging: Formerly EvapOUT(18)
 	          AirPropOpt=2
 	          AirProp(1)=TdboEvp
 	          AirProp(3)=RHoEvp
@@ -559,8 +559,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      MassEvp=EvapOUT(14)
 	      MassSucLn=EvapOUT(13)+AccumOUT(1)
 
-	      WeightEvpAluminum=EvapOUT(24)
-	      WeightEvpCopper=EvapOUT(25)
+	      WeightEvpAluminum=EvapOUT(15) !RS: Debugging: Formerly EvapOUT(24)
+	      WeightEvpCopper=EvapOUT(16)   !RS: Debugging: Formerly EvapOUT(25)
 
 	      !*******Exp. device*******
 	      PiExp=0
@@ -701,8 +701,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 
           Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
 
-          TdboCnd=CondOUT(21)
-          RHoCnd=CondOUT(22)
+          TdboCnd=CondOUT(3)   !RS: Debugging: Formerly CondOUT(21)
+          RHoCnd=CondOUT(4)    !RS: Debugging: Formerly CondOUT(22)
 
           AirPropOpt=2
           AirProp(1)=TdboCnd
@@ -713,14 +713,14 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           TwboCnd=AirProp(5)
           RhoAoC=AirProp(7)
 
-          DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+          DPaCND=CondOUT(19)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(23)
 
           MassCnd=CondOUT(18)
           MassDisLn=CondOUT(16)
           MassLiqLn=CondOUT(17)
 
-          WeightCndAluminum=CondOUT(28)
-          WeightCndCopper=CondOUT(29)
+          WeightCndAluminum=CondOUT(8) !RS: Debugging: Formerly CondOUT(28), CondOUT(19)
+          WeightCndCopper=CondOUT(9)   !RS: Debugging: Formerly CondOUT(29), CondOUT(20)
 
           !*******Evaporator*******
           PiEvp=0
@@ -976,8 +976,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 
       Qcnd =CondOUT(15)*1000    !RS Comment: Unit Conversion
 
-      TdboCnd=CondOUT(21)
-      RHoCnd=CondOUT(22)
+      TdboCnd=CondOUT(3)   !RS: Debugging: Formerly CondOUT(21)
+      RHoCnd=CondOUT(4)    !RS: Debugging: Formerly CondOUT(22)
 
       AirPropOpt=2
       AirProp(1)=TdboCnd
@@ -988,14 +988,14 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       TwboCnd=AirProp(5)
       RhoAoC=AirProp(7)
 
-      DPaCND=CondOUT(23)*1000   !RS Comment: Unit Conversion
+      DPaCND=CondOUT(19)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CondOUT(23)
 
       MassCnd=CondOUT(18)
       MassDisLn=CondOUT(16)
       MassLiqLn=CondOUT(17)
 
-      WeightCndAluminum=CondOUT(28)
-      WeightCndCopper=CondOUT(29)
+      WeightCndAluminum=CondOUT(8) !RS: Debugging: Formerly CondOUT(28), CondOUT(19)
+      WeightCndCopper=CondOUT(9)   !RS: Debugging: Formerly CondOUT(29), CondOUT(20)
 
 	  !*******Exp. device*******
       IF (ExpDevice .EQ. 3) THEN
@@ -1153,7 +1153,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           XoEvp=0
       END IF
 
-	  DPaEvp=EvapOUT(19)*1000   !RS Comment: Unit Conversion
+	  DPaEvp=EvapOUT(5)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapOUT(19)
 
 	  Qevp =-EvapOUT(11)*1000   !RS Comment: Unit Conversion
 	  QevpSens=-EvapOUT(12)*1000    !RS Comment: Unit Conversion
@@ -1169,8 +1169,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      TwboEvp=AirProp(5)
 	      RHoEvp=AirProp(3)
 	  ELSE
-    	  TdboEvp=EvapOUT(17)
-	      RHoEvp=EvapOUT(18) 
+    	  TdboEvp=EvapOUT(3)   !RS: Debugging: Formerly EvapOUT(17)
+	      RHoEvp=EvapOUT(4)    !RS: Debugging: Formerly EvapOUT(18)
 	      AirPropOpt=2
 	      AirProp(1)=TdboEvp
 	      AirProp(3)=RHoEvp
@@ -1184,8 +1184,8 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  MassEvp=EvapOUT(14)
 	  MassSucLn=EvapOUT(13)+AccumOUT(1)
 
-	  WeightEvpAluminum=EvapOUT(24)
-	  WeightEvpCopper=EvapOUT(25)
+	  WeightEvpAluminum=EvapOUT(15) !RS: Debugging: Formerly EvapOUT(24)
+	  WeightEvpCopper=EvapOUT(16)   !RS: Debugging: Formerly EvapOUT(25)
 
 	  IF (IsCoolingMode .GT. 0) THEN !ISI - 11/03/2008
 	    DrawBlow=EvapPAR(28)
@@ -1221,7 +1221,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  LcapTube=CapTubePAR(2)*1000   !RS Comment: Unit Conversion
 
       MassAccum=AccumOUT(1)
-      AccumDP=AccumOUT(5)
+      AccumDP=AccumOUT(2)   !RS: Debugging: Formerly AccumOUT(5)
       FilterDP=FilterOUT(1)
   
   END IF

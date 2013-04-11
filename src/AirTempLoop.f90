@@ -143,8 +143,8 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
     EvapPAR(EvapFirstTime)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
-    IF (EvapOUT(20) .NE. 0) THEN
-        SELECT CASE (INT(EvapOUT(20)))
+    IF (EvapOUT(17) .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(20)
+        SELECT CASE (INT(EvapOUT(17)))  !RS: Debugging: Formerly EvapOUT(20)
         CASE (2)
             IERR=1
             RETURN

@@ -101,7 +101,7 @@ INTEGER ErrStat       !Error status
   AirProp(5)=TWB 
   AirProp(6)=TDP
   AirProp(7)=RhoD 
-  !AirProp(8)=RhoM  !RS: Debugging: Not used
+  AirProp(8)=RhoM
 
   AirPropErr=ErrStat
   IF (AirPropErr .EQ. 0) THEN

@@ -599,13 +599,13 @@
                     IF (ABS(EvapOUT(2)-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number
 
                         !Take half time step if not converged - ISI 12/09/2009
-                        IF (EvapOUT(20) .GT. 0) THEN	! VL_Index_Replace
+                        IF (EvapOUT(17) .GT. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(20)
                             mdotR=mdotRprev+(mdotR-mdotRprev)/2
                             CYCLE
                         END IF
 
                         !EvapOUT(2) is enthalpy, EvapOUT(20) is error flag
-                        IF (EvapOUT(2) .LT. HoEvp .OR. EvapOUT(20) .GT. 0) THEN 	! VL_Index_Replace
+                        IF (EvapOUT(2) .LT. HoEvp .OR. EvapOUT(17) .GT. 0) THEN 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(20)
                             mdotRmax=mdotR
                         ELSE
                             mdotRmin=mdotR
@@ -694,8 +694,8 @@
                         !                      CYCLE
                         !                  END IF
 
-                        !CondOUT(6) is enthalpy, CondOUT(24) is error flag
-                        IF (CondOUT(6) .LT. HiExp .OR. CondOUT(24) .GT. 0) THEN 	! VL_Index_Replace
+                        !CondOUT(6) is enthalpy, CondOUT(20) is error flag
+                        IF (CondOUT(6) .LT. HiExp .OR. CondOUT(20) .GT. 0) THEN 	! VL_Index_Replace   !RS: Debugging: Formerly CondOUT(24)
                             mdotRmin=mdotR
                         ELSE
                             mdotRmax=mdotR

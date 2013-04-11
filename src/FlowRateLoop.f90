@@ -101,7 +101,7 @@
     REAL XMR,TSATCI,TSATEI
     REAL XMRFLD,TSAVG,TRIE,CDTRIE,DTRE,CDTRE,DTRIE,SXIE
     REAL FilterDP
-    REAL SimpleCondOUT(29),DetailedCondOUT(29)
+    REAL SimpleCondOUT(20),DetailedCondOUT(20)  !RS: Debugging: Formerly (29), (24)
     REAL DetailedQcnd,DetailedDPcnd
     REAL SimpleQcnd,SimpleDPcnd
     LOGICAL,SAVE :: IsFirstTimeCondenser = .TRUE. !First time to call condenser flag
@@ -226,9 +226,7 @@
         CondIN(3)=HoCmp         
         CondIN(4)=XMaC           
         CondIN(5)=(TAIC-32)/1.8 !RS Comment: Unit Conversion, from F to C
-        CondIN(6)=RHIC           
-        !CondIN(8)=EvapOUT(3)   !RS: Debugging: Never actually used
-        !CondIN(9)=(TAIE-32)/1.8 !RS Comment: Unit Conversion, from F to C  !RS: Debugging: Never actually used
+        CondIN(6)=RHIC
 
         IF (SystemType .EQ. 4) THEN !Reheat system
             IF (FirstTimeFlowRateLoop) THEN
@@ -237,14 +235,14 @@
                 CondIN(6)=RHIE
             ELSE
                 CondIN(4)=XMaE
-                CondIN(5)=EvapOUT(17)
-                CondIN(6)=EvapOUT(18)
+                CondIN(5)=EvapOUT(3)   !RS: Debugging: Formerly EvapOUT(17)
+                CondIN(6)=EvapOUT(4)   !RS: Debugging: Formerly EvapOUT(18)
             END IF
         END IF
 
         !Take compressor shell loss into account
         IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
-            CondPAR(CondCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: CondPAR(39) & CompPAR(21)
+            CondPAR(CondCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: Formerly CondPAR(39) & CompPAR(21)
         ELSE !Shell loss in W
             CondPAR(CondCompQLoss)=CompPAR(CompQLoss)/1000    !RS Comment: Unit Conversion, from kW to W? !RS: Debugging: Formerly CondPAR(39) & CompPAR(22)
         END IF
@@ -298,8 +296,8 @@
 
         END IF
 
-        IF (CondOUT(24) .NE. 0) THEN
-            SELECT CASE (INT(CondOUT(24))) 
+        IF (CondOUT(20) .NE. 0) THEN   !RS: Debugging: Formerly CondOUT(24)
+            SELECT CASE (INT(CondOUT(20)))    !RS: Debugging: Formerly CondOUT(24)
             CASE (2) !Refprop error
                 CALL IssueOutputMessage('Trying another iterating value....')
                 IERR=1
@@ -317,13 +315,6 @@
         END IF
 
         PiCnd=CondOUT(1)
-        !HiCnd=CondOUT(2)   !RS: Debugging: Never used
-        !TiCnd=CondOUT(3)   !RS: Debugging: Never used
-        !XiCnd=CondOUT(4)   !RS: Debugging: Never used
-        !PoCnd=CondOUT(5)   !RS: Debugging: Never used
-        !HoCnd=CondOUT(6)   !RS: Debugging: Never used
-        !ToCnd=CondOUT(7)   !RS: Debugging: Never used
-        !XoCnd=CondOUT(8)   !RS: Debugging: Never used
         PiExp=CondOUT(10)
         HiExp=CondOUT(11)
         TiExp=CondOUT(12)

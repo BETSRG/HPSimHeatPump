@@ -523,8 +523,8 @@
     !  OUT(16)=Mass in discharge line, kg
     !  OUT(17)=Mass in liquid line, kg
     !  OUT(18)=Mass in coil, kg
-    !  OUT(19)=Liquid mass in coil, kg
-    !  OUT(20)=Vapor mass in coil, kg
+    !  OUT(19)=Aluminum weight, kg 
+    !  OUT(20)=Copper weight, kg
     !  OUT(21)=Air side outlet temperature, C
     !  OUT(22)=Air side outlet relative humidity
     !  OUT(23)=Air side pressure drop, kPa
@@ -532,11 +532,6 @@
     !                      1-Condenser solution not converge
     !                      2-Refprop error
     !                      3-Circuit file error
-    !  OUT(25)=Air side heat transfer coefficients, kW/m^2-K
-    !  OUT(26)=Inlet coil surface temperature, C
-    !  OUT(27)=Outlet coil surface temperature, C
-    !  OUT(28)=Aluminum weight, kg 
-    !  OUT(29)=Copper weight, kg
     !
     !
     !  Reference: 
@@ -564,9 +559,9 @@
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous
-    REAL, INTENT(IN)  :: XIN(9)
+    REAL, INTENT(IN)  :: XIN(7) !RS: Debugging: Formerly XIN(9)
     REAL, INTENT(IN)  :: PAR(45) !ISI - 12/21/06 !RS: Debugging: Formerly PAR(62)
-    REAL, INTENT(OUT) :: OUT(29)
+    REAL, INTENT(OUT) :: OUT(20)    !RS: Debugging: Formerly OUT(29), OUT(24)
 
     !Subroutine lcoal variables
     REAL :: MCXIN(7)  !Microchannel coil input data
@@ -602,15 +597,13 @@
     
     !Flow:
 
-    mRefTot =XIN(1)
-    pRoCmp  =XIN(2)
-    hRoCmp  =XIN(3)
-    mAiCoil =XIN(4)
-    tAiCoil =XIN(5)
-    rhAiCoil=XIN(6)
-    SolarFlux=XIN(7)    !RS: Debugging: Used once but was set equal to 0
-    !tRoEvp=XIN(8)  !RS: Debugging: These were set once but never used
-    !tAiEvp=XIN(9)
+    mRefTot =XIN(EInmRef)   !RS: Debugging: Formerly XIN(1)
+    pRoCmp  =XIN(CInpRo) !RS: Debugging: Formerly XIN(2)
+    hRoCmp  =XIN(CInhRo) !RS: Debugging: Formerly XIN(3)
+    mAiCoil =XIN(EInmAi) !RS: Debugging: Formerly XIN(4)
+    tAiCoil =XIN(EIntAi) !RS: Debugging: Formerly XIN(5)
+    rhAiCoil=XIN(EInrhAi) !RS: Debugging: Formerly XIN(6)
+    SolarFlux=XIN(CInSolFlux)    !RS: Debugging: Used once but was set equal to 0    !RS: Debugging: Formerly XIN(7)
 
     LdisLn    = PAR(CondDisLnLen)  !RS: Debugging: Formerly PAR(1)
     ODdisLn   = PAR(CondDisLnOD)  !RS: Debugging: Formerly PAR(2)
@@ -653,7 +646,7 @@
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .NE. NOERROR) THEN
-            OUT(24)=ErrorFlag
+            OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
             CALL Condenser_Helper_1
             RETURN
         END IF
@@ -731,7 +724,7 @@
 
     CALL InitBoundaryConditions(CoilType)
     IF (ErrorFlag .NE. NOERROR) THEN
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -797,7 +790,7 @@
                         END IF
                         CALL CalcCoilSegment(I,I,J,K,CoilType)
                         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                            OUT(24)=ErrorFlag
+                            OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                             CALL Condenser_Helper_1
                             RETURN
                         END IF
@@ -827,7 +820,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(24)=ErrorFlag
+                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -835,7 +828,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(24)=ErrorFlag
+                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -846,7 +839,7 @@
                 IF (RefPropErr .GT. 0) THEN
                     WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
                     ErrorFlag=REFPROPERROR
-                    OUT(24)=ErrorFlag
+                    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                     CALL Condenser_Helper_1
                     RETURN
                 END IF
@@ -1018,7 +1011,6 @@
     !Poly1HTC,Poly2HTC,Poly3HTC,Poly4HTC,CurveTypeDP,PowerADP,PowerBDP, &
     !Poly1DP,Poly2DP,Poly3DP,Poly4DP,Lcoil,AfCoil,AoCoil,AiCoil,FaceVel,hco,DPair)
 
-
     DPair=DPair*DPairMultiplier
 
     hRoCoil=hRiCoil-Qcoil/mRefTot
@@ -1029,7 +1021,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1038,7 +1030,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1049,7 +1041,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1068,7 +1060,7 @@
             CALL LiquidLine
             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 WRITE(*,*)'LiquidLine: Refprop error.'
-                OUT(24)=ErrorFlag
+                OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                 CALL Condenser_Helper_1
                 RETURN
             END IF
@@ -1084,7 +1076,7 @@
             CALL LiquidLine
             IF (ErrorFlag .GT. CONVERGEERROR) THEN
                 WRITE(*,*)'LiquidLine: Refprop error.'
-                OUT(24)=ErrorFlag
+                OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
                 CALL Condenser_Helper_1
                 RETURN
             END IF
@@ -1101,7 +1093,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1109,7 +1101,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1120,7 +1112,7 @@
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Condenser: Refprop error.'
         ErrorFlag=REFPROPERROR
-        OUT(24)=ErrorFlag
+        OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
         CALL Condenser_Helper_1
         RETURN
     END IF
@@ -1137,14 +1129,14 @@
     END IF
 
     OUT(1)=pRiCoil
-    OUT(2)=hRiCoil
-    OUT(3)=tRiCoil
-    OUT(4)=xRiCoil
-    OUT(5)=pRoCoil
+    OUT(2)=hRiCoil  !RS: Debugging: Used only for output
+    OUT(3)=tAoCoil !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(21)
+    OUT(4)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(22)
+    OUT(5)=pRoCoil  !RS: Debugging: Used only for output
     OUT(6)=hRoCoil
-    OUT(7)=tRoCoil
-    OUT(8)=xRoCoil
-    !OUT(9)=tSCoCoil    !RS: Debugging: Not really used
+    OUT(7)=tRoCoil  !RS: Debugging: Used only for output
+    OUT(8)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(28), OUT(19)
+    OUT(9)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(29), OUT(20)
     OUT(10)=pRiExp
     OUT(11)=hRiExp
     OUT(12)=tRiExp
@@ -1153,20 +1145,10 @@
     OUT(15)=Qcoil
     OUT(16)=MassDisLn
     OUT(17)=MassLiqLn
-    OUT(18)=0  !RS: Debugging: Not really used?
-    !OUT(19)=0  !RS: Debugging: Never used
-    !OUT(20)=0  !RS: Debugging: Never used
-    OUT(21)=tAoCoil !RS: Debugging: Only used to be output
-    OUT(22)=rhAoCoil    !RS: Debugging: Only used to be output
-    OUT(23)=DPair   !RS: Debugging: Only used to be output
+    !OUT(18)=0  !RS: Debugging: Set elsewhere
+    OUT(19)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(23)
 
-    !OUT(25)=hco    !RS: Debugging: Never Used?
-    !OUT(26)=tSiCoil    !RS: Debugging: Never Used?
-    !OUT(27)=tSoCoil    !RS: Debugging: Never Used?
-    OUT(28)=WeightAluminum  !RS: Debugging: Only used to be output
-    OUT(29)=WeightCopper    !RS: Debugging: Only used to be output
-
-    OUT(24)=ErrorFlag
+    OUT(20)=ErrorFlag   !RS: Debugging: Formerly OUT(24)
 
     CALL Condenser_Helper_1
 
@@ -6601,7 +6583,7 @@ END IF
 
     IMPLICIT NONE
 
-    REAL, INTENT(IN)  :: FTXIN(8)  !Fin-tube coil input data
+    REAL, INTENT(IN)  :: FTXIN(7)  !Fin-tube coil input data    !RS: Debugging: Formerly FTXIN(8)
     REAL, INTENT(IN)  :: FTPAR(45) !Fin-tube coil input parameters  !RS: Debugging: Formerly FTPAR(55)
     REAL, INTENT(OUT) :: MCXIN(7)  !Microchannel coil input data
     REAL, INTENT(OUT) :: MCPAR(24) !Microchannel coil input parameters  !RS: Debugging: Formerly MCPAR(39)
@@ -6614,7 +6596,7 @@ END IF
     MCXIN(4)=FTXIN(4) !Air side mass flow rate, kg/s
     MCXIN(5)=FTXIN(5) !Air side inlet temp. C
     MCXIN(6)=FTXIN(6) !Air side inlet relative humidity
-    MCXIN(7)=FTXIN(8) !Evaporator outlet temperature, C
+    !MCXIN(7)=FTXIN(8) !Evaporator outlet temperature, C    !RS: Debugging: Never used?
 
     MCPAR(1)=FTPAR(38) !Barometric pressure, kPa
     MCPAR(2)=FTPAR(27) !Cooling mode? 1=yes; 0=no  
@@ -6681,19 +6663,19 @@ END IF
     IMPLICIT NONE
 
     REAL, INTENT(IN)  :: MCOUT(22)  !Microchannel coil output data
-    REAL, INTENT(OUT) :: FTOUT(29)  !Fin-tube coil output data
+    REAL, INTENT(OUT) :: FTOUT(20)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(29), FTOUT(24)
 
     !FLOW:
 
     FTOUT(1)=MCOUT(2)   !Coil inlet pressure, kPa
     FTOUT(2)=MCOUT(3)   !Coil inlet enthalpy, kJ/kg
-    FTOUT(3)=MCOUT(4)   !Coil inlet temperature, C
-    FTOUT(4)=MCOUT(5)   !Coil inlet quality
+    !FTOUT(3)=MCOUT(4)   !Coil inlet temperature, C
+    !FTOUT(4)=MCOUT(5)   !Coil inlet quality
     FTOUT(5)=MCOUT(6)   !Coil outlet pressure, kPa
     FTOUT(6)=MCOUT(7)   !Coil outlet enthalpy, kJ/kg
     FTOUT(7)=MCOUT(8)   !Coil outlet temperature, C
     FTOUT(8)=MCOUT(9)   !Coil outlet quality
-    FTOUT(9)=MCOUT(10)  !Coil outlet subcooling, C
+    !FTOUT(9)=MCOUT(10)  !Coil outlet subcooling, C !RS: Debugging: Never used
     FTOUT(10)=MCOUT(11) !Liquid line outlet pressure, kPa
     FTOUT(11)=MCOUT(12) !Liquid line outlet enthalpy, kJ/kg
     FTOUT(12)=MCOUT(13) !Liquid line outlet temperature, C
@@ -6703,17 +6685,17 @@ END IF
     FTOUT(16)=MCOUT(21) !Mass in discharge line, kg
     FTOUT(17)=MCOUT(22) !Mass in liquid line, kg
     FTOUT(18)=0         !Mass in coil, kg
-    FTOUT(19)=0         !Liquid mass in coil, kg
-    FTOUT(20)=0         !Vapor mass in coil, kg
-    FTOUT(21)=MCOUT(16) !Air side outlet temperature, C
-    FTOUT(22)=MCOUT(17) !Air side outlet relative humidity
-    FTOUT(23)=MCOUT(18) !Air side pressure drop, kPa
-    FTOUT(24)=MCOUT(20) !Error flag
-    FTOUT(25)=0         !Air side heat transfer coefficients, kW/m^2-K
-    FTOUT(26)=0         !Inlet coil surface temperature, C
-    FTOUT(27)=0         !Outlet coil surface temperature, C
-    FTOUT(28)=MCOUT(19) !Aluminum weight, kg 
-    FTOUT(29)=0         !Copper weight, kg
+    !FTOUT(19)=0         !Liquid mass in coil, kg   !RS: Debugging: Never used
+    !FTOUT(20)=0         !Vapor mass in coil, kg    !RS: Debugging: Never used
+    FTOUT(3)=MCOUT(16) !Air side outlet temperature, C !RS: Debugging: Formerly FTOUT(21)
+    FTOUT(4)=MCOUT(17) !Air side outlet relative humidity   !RS: Debugging: Formerly FTOUT(22)
+    FTOUT(19)=MCOUT(18) !Air side pressure drop, kPa    !RS: Debugging: Formerly FTOUT(23)
+    FTOUT(20)=MCOUT(20) !Error flag !RS: Debugging: Formerly FTOUT(24)
+    !FTOUT(25)=0         !Air side heat transfer coefficients, kW/m^2-K !RS: Debugging: Never used
+    !FTOUT(26)=0         !Inlet coil surface temperature, C !RS: Debugging: Never used
+    !FTOUT(27)=0         !Outlet coil surface temperature, C    !RS: Debugging: Never used
+    FTOUT(8)=MCOUT(19) !Aluminum weight, kg    !RS: Debugging: Formerly FTOUT(28), FTOUT(19)
+    FTOUT(9)=0         !Copper weight, kg  !RS: Debugging: Formerly FTOUT(29), FTOUT(20)
 
     RETURN
 

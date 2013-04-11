@@ -150,6 +150,7 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
 
     IMPLICIT NONE
 
@@ -231,11 +232,11 @@
     PiEvp=XIN(4)
     PoEvp=XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -454,7 +455,7 @@
     OUT(3)=ToExp
     OUT(4)=XoExp
     OUT(5)=MassDisTube
-    OUT(6)=QdisTube
+    !OUT(6)=QdisTube    !RS: Debugging: Never used
 
     OUT(7)=ErrorFlag
 
@@ -524,6 +525,7 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
 
     IMPLICIT NONE
 
@@ -597,11 +599,11 @@
     PiEvp=XIN(4)
     PoEvp=XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -760,7 +762,7 @@
         OUT(3)=ToExp
         OUT(4)=XoExp
         OUT(5)=MassDisTube
-        OUT(6)=QdisTube
+        !OUT(6)=QdisTube    !RS: Debugging: Never used
     END IF
 
     OUT(7)=ErrorFlag
@@ -830,6 +832,7 @@
 
     USE FluidProperties_HPSim
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
 
     IMPLICIT NONE
 
@@ -908,11 +911,11 @@
     PiEvp=XIN(4)
     PoEvp=XIN(5)
 
-    LshTube=PAR(1)
-    DshTube=PAR(2)
-    Depth=PAR(3)
-    Nckts=PAR(4)
-    LdisTube=PAR(5)
+    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 

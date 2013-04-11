@@ -614,9 +614,9 @@ CONTAINS
     !Subroutine argument declarations
     CHARACTER*80,     INTENT(IN)  :: Ref$
     !INTEGER(2),       INTENT(IN)  :: PureRef   !RS: Debugging: Extraneous PureRef
-    REAL, INTENT(IN)  :: XIN(9)
+    REAL, INTENT(IN)  :: XIN(9) 
     REAL, INTENT(IN)  :: PAR(39) !ISI - 12/21/06    !RS: Debugging: Formerly EvapPAR(54)
-    REAL, INTENT(OUT) :: OUT(25)
+    REAL, INTENT(OUT) :: OUT(17)    !RS: Debugging: Formerly OUT(20)
 
     !Subroutine local variables
     REAL :: MCXIN(7)  !Microchannel coil input data
@@ -658,15 +658,15 @@ CONTAINS
     
     !Flow:
 
-    mRefTot =XIN(1)
-    pRiCoil =XIN(2)
-    hRiCoil =XIN(3)
-    mAiCoil =XIN(4)
-    tAiCoil =XIN(5)
-    rhAiCoil=XIN(6)
+    mRefTot =XIN(EInmRef) !RS: Debugging: Formerly XIN(1)
+    pRiCoil =XIN(EInpRi) !RS: Debugging: Formerly XIN(2)
+    hRiCoil =XIN(EInhRi) !RS: Debugging: Formerly XIN(3)
+    mAiCoil =XIN(EInmAi) !RS: Debugging: Formerly XIN(4)
+    tAiCoil =XIN(EIntAi) !RS: Debugging: Formerly XIN(5)
+    rhAiCoil=XIN(EInrhAi) !RS: Debugging: Formerly XIN(6)
     !QdisTube=XIN(7) !RS: Debugging: EvapIN(7) never set
-    SolarFlux=XIN(8)    !RS: Debugging: EvapIN(8) set once to 0
-    tRdis=XIN(9)
+    SolarFlux=XIN(EInSolFlux)    !RS: Debugging: EvapIN(8) set once to 0 !RS: Debugging: Formerly XIN(8)
+    tRdis=XIN(EIntRdis)    !RS: Debugging: Formerly XIN(9)
 
     !IF (QdisTube .EQ. 0) THEN  RS: Debugging: QDisTube is never used
     !    QdisTube=SMALL
@@ -705,7 +705,7 @@ CONTAINS
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-            OUT(20)=ErrorFlag
+            OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -776,7 +776,7 @@ CONTAINS
 
     CALL InitBoundaryConditions(CoilType)
     IF (ErrorFlag .GT. CONVERGEERROR) THEN
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -854,7 +854,7 @@ CONTAINS
                             END IF
                             CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
                             IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                                OUT(20)=ErrorFlag
+                                OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
                                 CALL Evaporator_Helper_1
                                 RETURN
                             END IF
@@ -886,7 +886,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
                         ErrorFlag=REFPROPERROR
-                        OUT(20)=ErrorFlag
+                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -894,7 +894,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
                         ErrorFlag=REFPROPERROR
-                        OUT(20)=ErrorFlag
+                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -905,7 +905,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
                         ErrorFlag=REFPROPERROR
-                        OUT(20)=ErrorFlag
+                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -1120,7 +1120,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1128,7 +1128,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1139,7 +1139,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1166,7 +1166,7 @@ CONTAINS
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
             ErrorFlag=REFPROPERROR
-            OUT(20)=ErrorFlag
+            OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -1187,7 +1187,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1195,7 +1195,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1206,7 +1206,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
         ErrorFlag=REFPROPERROR
-        OUT(20)=ErrorFlag
+        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1220,9 +1220,9 @@ CONTAINS
     !Populating the OUT array
     OUT(1)=pRoCoil
     OUT(2)=hRoCoil
-    !OUT(3)=tRoCoil !RS: Debugging: Never used
-    OUT(4)=xRoCoil
-    !OUT(5)=tSHoCoil    !RS: Debugging: Never used
+    OUT(3)=tAoCoil !RS: Debugging: Formerly OUT(17)
+    OUT(4)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(18)
+    OUT(5)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(19)
     OUT(6)=pRiCmp
     OUT(7)=hRiCmp
     OUT(8)=tRiCmp
@@ -1232,19 +1232,9 @@ CONTAINS
     OUT(12)=QcoilSens   !RS: Debugging: Only used to be output
     OUT(13)=MassSucLn
     OUT(14)=0  !RS: Debugging: Never really used?
-    !OUT(15)=0  !RS: Debugging: Never used
-    !OUT(16)=0  !RS: Debugging: Never used
-    OUT(17)=tAoCoil
-    OUT(18)=rhAoCoil    !RS: Debugging: Only used to be output
-    OUT(19)=DPair   !RS: Debugging: Only used to be output
-
-    !OUT(21)=hco    !RS: Debugging: Never Used?
-    !OUT(22)=tSiCoil    !RS: Debugging: Never Used?
-    !OUT(23)=tSoCoil    !RS: Debugging: Never Used?
-    OUT(24)=WeightAluminum  !RS: Debugging: Only used to be output
-    OUT(25)=WeightCopper    !RS: Debugging: Only used to be output
-
-    OUT(20)=ErrorFlag
+    OUT(15)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(24)
+    OUT(16)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(25)
+    OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
 
     CALL Evaporator_Helper_1
 
@@ -7268,15 +7258,15 @@ SUBROUTINE LoadMicrochannelOutputs(MCOUT,FTOUT)
 IMPLICIT NONE
 
 REAL, INTENT(IN)  :: MCOUT(21)  !Microchannel coil output data
-REAL, INTENT(OUT) :: FTOUT(25)  !Fin-tube coil output data
+REAL, INTENT(OUT) :: FTOUT(17)  !Fin-tube coil output data  !RS: Debugging: Formerly FTOUT(20)
 
 !FLOW:
 
   FTOUT(1)=MCOUT(3)   !Coil outlet pressure, kPa
   FTOUT(2)=MCOUT(4)   !Coil outlet enthalpy, kJ/kg
-  FTOUT(3)=MCOUT(5)   !Coil outlet temperature, C
-  FTOUT(4)=MCOUT(6)   !Coil outlet quality
-  FTOUT(5)=MCOUT(7)   !Coil outlet superheat, C
+  !FTOUT(3)=MCOUT(5)   !Coil outlet temperature, C  !RS: Debugging: Never used
+  !FTOUT(4)=MCOUT(6)   !Coil outlet quality !RS: Debugging: Never used
+  !FTOUT(5)=MCOUT(7)   !Coil outlet superheat, C    !RS: Debugging: Never used
   FTOUT(6)=MCOUT(8)   !Suction line outlet pressure, kPa
   FTOUT(7)=MCOUT(9)   !Suction line outlet enthalpy, kJ/kg
   FTOUT(8)=MCOUT(10)  !Suction line outlet temperature, C
@@ -7286,17 +7276,17 @@ REAL, INTENT(OUT) :: FTOUT(25)  !Fin-tube coil output data
   FTOUT(12)=MCOUT(2)  !Sensible coil capacity, kW
   FTOUT(13)=MCOUT(16) !Mass in suction line, kg
   FTOUT(14)=MCOUT(17) !Mass in coil, kg
-  FTOUT(15)=MCOUT(18) !Liquid mass in coil, kg
-  FTOUT(16)=MCOUT(19) !Vapor mass in coil, kg
-  FTOUT(17)=MCOUT(13) !Air side outlet temperature, C
-  FTOUT(18)=MCOUT(14) !Air side outlet relative humidity
-  FTOUT(19)=MCOUT(15) !Air side pressure drop, kPa
-  FTOUT(20)=MCOUT(21) !Error flag
-  FTOUT(21)=0         !Air side heat transfer coefficients, kW/m^2-K
-  FTOUT(22)=0         !Inlet coil surface temperature, C
-  FTOUT(23)=0         !Outlet coil surface temperature, C
-  FTOUT(24)=MCOUT(20) !Aluminum weight, kg 
-  FTOUT(25)=0         !Copper weight, kg
+  !FTOUT(15)=MCOUT(18) !Liquid mass in coil, kg !RS: Debugging: Never used
+  !FTOUT(16)=MCOUT(19) !Vapor mass in coil, kg  !RS: Debugging: Never used
+  FTOUT(3)=MCOUT(13) !Air side outlet temperature, C   !RS: Debugging: Formerly FTOUT(17)
+  FTOUT(4)=MCOUT(14) !Air side outlet relative humidity    !RS: Debugging: Formerly FTOUT(18)
+  FTOUT(5)=MCOUT(15) !Air side pressure drop, kPa  !RS: Debugging: Formerly FTOUT(19)
+  FTOUT(17)=MCOUT(21) !Error flag   !RS: Debugging: Formerly FTOUT(20)
+  !FTOUT(21)=0         !Air side heat transfer coefficients, kW/m^2-K   !RS: Debugging: Never used
+  !FTOUT(22)=0         !Inlet coil surface temperature, C   !RS: Debugging: Never used
+  !FTOUT(23)=0         !Outlet coil surface temperature, C  !RS: Debugging: Never used
+  FTOUT(15)=MCOUT(20) !Aluminum weight, kg  !RS: Debugging: Formerly FTOUT(24)
+  FTOUT(16)=0         !Copper weight, kg    !RS: Debugging: Formerly FTOUT(25)
 
   RETURN
 
