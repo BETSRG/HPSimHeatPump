@@ -67,14 +67,14 @@ REAL CompPAR(26)
 REAL CompOUT(7)
 
 !Condenser model passing parameters
-REAL CondIN(9)
+REAL CondIN(7)  !RS: Debugging: Formerly CondIN(9)
 REAL CondPAR(45)    !RS: Debugging: Formerly CondPAR(62)
-REAL CondOUT(29)
+REAL CondOUT(20)    !RS: Debugging: Formerly CondOUT(29), CondOUT(24)
 
 !Evaporator model passing parameters
-REAL EvapIN(9)
+REAL EvapIN(9)  !RS: Debugging: Formerly EvapIN(9)
 REAL EvapPAR(39)  !RS: Debugging: Formerly EvapPAR(54)
-REAL EvapOUT(25) 
+REAL EvapOUT(17)    !RS: Debugging: Formerly EvapOUT(20)
 
 !Expansion device
 INTEGER(2) ExpDevice !1=Orifice; 2=TXV; 3=Cap. Tube
@@ -87,17 +87,17 @@ REAL ShTbOUT(7)
 !Capillary tube passing parameters
 REAL CapTubeIN(5)
 REAL CapTubePAR(5)
-REAL CapTubeOUT(7)
+REAL CapTubeOUT(5)   !RS: Debugging: Formerly CapTubeOUT(7) 
 
-!TXV model passing parameters
-REAL TxvIN(6)
-REAL TxvPAR(7)
-REAL TxvOUT(7)
+!TXV model passing parameters   !RS: Debugging: These aren't even used in TXV model; nor is the model ever called
+!REAL TxvIN(6)  !RS: Debugging: Never used
+REAL TxvPAR(1)  !RS: Debugging: Formerly TxvPAR(7)
+!REAL TxvOUT(7) !RS: Debugging: None of these are ever set
 
 !Accumulator passing parameters
 REAL AccumIN(3)
 REAL AccumPAR(10)
-REAL AccumOUT(6)
+REAL AccumOUT(2)    !RS: Debugging: Formerly AccumOUT(6)
 
 !Filter Drier passing parameters
 REAL FilterIN(1)
@@ -300,6 +300,11 @@ INTEGER, SAVE:: CondCompMan=43
 INTEGER, SAVE:: CondSimpCoil=44
 INTEGER, SAVE:: CondFirstTime=45
 
+!CondIN variables
+INTEGER, SAVE:: CInpRo=2
+INTEGER, SAVE:: CInhRo=3
+INTEGER, SAVE:: CInSolFlux=7
+
 !EvapPAR variables
 INTEGER, SAVE:: EvapSucLnLen=1
 INTEGER, SAVE:: EvapSucLnOD=2
@@ -340,6 +345,16 @@ INTEGER, SAVE:: EvapCompMan=36
 INTEGER, SAVE:: EvapSimpCoil=37
 INTEGER, SAVE:: EvapFirstTime=38
 
+!EvapIN variables
+INTEGER, SAVE:: EInmRef=1
+INTEGER, SAVE:: EInpRi=2
+INTEGER, SAVE:: EInhRi=3
+INTEGER, SAVE:: EInmAi=4
+INTEGER, SAVE:: EIntAi=5
+INTEGER, SAVE:: EInrhAi=6
+INTEGER, SAVE:: EInSolFlux=8
+INTEGER, SAVE:: EIntRdis=9
+
 !CompPAR variables
 INTEGER, SAVE:: CompCoeffP1=1
 INTEGER, SAVE:: CompCoeffP2=2
@@ -367,5 +382,22 @@ INTEGER, SAVE:: CompIntVol=23
 INTEGER, SAVE:: CompPwrCor=24
 INTEGER, SAVE:: CompPwrMult=25
 INTEGER, SAVE:: CompMFRMult=26
+
+!CompIn variables
+INTEGER, SAVE:: CompInPsuc=1
+INTEGER, SAVE:: CompInPdis=2
+INTEGER, SAVE:: CompInHsuc=3
+
+!CapTube PAR variables
+INTEGER, SAVE:: TubeID=1
+INTEGER, SAVE:: TubeLen=2
+INTEGER, SAVE:: TubeCoilD=3
+INTEGER, SAVE:: EvapCktNum=4
+INTEGER, SAVE:: DisTubeLen=5
+
+!ShortTube PAR variables
+INTEGER, SAVE:: TLen=1
+INTEGER, SAVE:: TID=2
+INTEGER, SAVE:: ChamDep=3
 
 END MODULE DataSimulation

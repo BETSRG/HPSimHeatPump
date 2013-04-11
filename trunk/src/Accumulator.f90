@@ -118,13 +118,8 @@ CONTAINS
     !
     !   Outputs:
     !       OUT(1) = Total mass inventory, kg
-    !       OUT(2) = Liquid refrigerant, kg
-    !       OUT(3) = Vapor refrigerant, kg
-    !       OUT(4) = Liquid level, m
-    !       OUT(5) = Pressure drop, kPa
-    !       OUT(6) = Error flag: 0-No error
-    !                            1-Accumulator solution error
-    !                            2-Refprop error
+    !       OUT(2) = Pressure drop, kPa
+    !       OUT(3) = Error Flag
     !
     !   Author:
     !   Ipseng Iu
@@ -141,7 +136,7 @@ CONTAINS
 
     !Subroutine argument declarations
     REAL, INTENT(IN) :: XIN(3)
-    REAL, INTENT(OUT) :: OUT(6)
+    REAL, INTENT(OUT) :: OUT(2) !RS: Debugging: Formerly OUT(6)
 
     INTEGER ErrorFlag          !0-No error
     !1-Accumulator solution not converge
@@ -160,8 +155,8 @@ CONTAINS
 
     ! VL : Flags to assist with dismantling of GOTO-based control structures ....
     ! Change names of the flags to reflect the intention of the GOTO statements ... 
-    INTEGER   :: FLAG_GOTO_15, FLAG_GOTO_40
-    INTEGER   ::  FLAG_GOTO_100, FLAG_GOTO_201
+    INTEGER   :: FLAG_GOTO_40 !FLAG_GOTO_15, 
+    !INTEGER   ::  FLAG_GOTO_100, FLAG_GOTO_201
     
     CHARACTER(LEN=57),PARAMETER :: FMT_602 = "(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')"
     
@@ -200,10 +195,10 @@ CONTAINS
     !
 
     ! VL: Initialize default values for GOTO flags
-    FLAG_GOTO_15 = .FALSE.
+    !FLAG_GOTO_15 = .FALSE. !RS: Debugging: Not needed
     FLAG_GOTO_40 = .FALSE.
-    FLAG_GOTO_100 = .FALSE.
-    FLAG_GOTO_201 = .FALSE.
+    !FLAG_GOTO_100 = .FALSE.
+    !FLAG_GOTO_201 = .FALSE.
 
     mdot=XIN(1)
     pRo=XIN(2)
@@ -215,31 +210,31 @@ CONTAINS
     Pressure=pRo*1000   !RS Comment: Unit Conversion
     Enthalpy=hRo*1000   !RS Comment: Unit Conversion
     tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
         RETURN
     END IF
 
     xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)  !Outlet Refrigerant Quality
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
         RETURN
     END IF
 
     Pressure=pRo*1000   !RS Comment: Unit Conversion
     Quality=1
     Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)  !Saturated Temperature
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
         RETURN
     END IF
 
     rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Vapor Density
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
         RETURN
     END IF
 
     V=1/(rhoVap*0.0625) !Convert from kg/m3 to lbm/ft3
     Quality=0
     rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Liquid Density
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag, OUT(6))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
         RETURN
     END IF
 
@@ -255,9 +250,10 @@ CONTAINS
     XLEVEL = 0.0
 
     IF(AHGT.LE.0.001) THEN
-        FLAG_GOTO_201 = .TRUE.
-    END IF
-    IF (FLAG_GOTO_201 .EQ. .FALSE.) THEN 
+    !    FLAG_GOTO_201 = .TRUE. !RS: Debugging: Not needed
+    !END IF
+    !IF (FLAG_GOTO_201 .EQ. .FALSE.) THEN 
+    ELSE
         !
         AACC = PI*DACC*DACC/4.
         VOLACC = AACC*AHGT
@@ -269,11 +265,11 @@ CONTAINS
             HL(1) = 0.0
             ACCMAS = VOLACC/V
             VHGT=AHGT
-            FLAG_GOTO_100 = .TRUE.
-        END IF
-
-        IF (FLAG_GOTO_100 .EQ. .FALSE.) THEN
-
+        !    FLAG_GOTO_100 = .TRUE. !RS: Debugging: Not really needed
+        !END IF
+        !
+        !IF (FLAG_GOTO_100 .EQ. .FALSE.) THEN
+        ELSE
             !
             !       LIQUID IN ACCUMULATOR
             !
@@ -313,9 +309,10 @@ CONTAINS
                 RMMAX = 0.585*AHOLE(1)*SQRT(2.*RO*DP1MAX) +0.585*AHOLE(2)*SQRT(2.*RO*DP2MAX)
 
                 IF(RMSL.LT.RMMAX) THEN
-                    FLAG_GOTO_15 = .TRUE.
-                END IF
-                IF (FLAG_GOTO_15 .EQ. .FALSE.) THEN
+                    !FLAG_GOTO_15 = .TRUE.  !RS: Debugging: Not really needed
+                !END IF
+                !IF (FLAG_GOTO_15 .EQ. .FALSE.) THEN
+                ELSE
                     VHGT = 0.0
                     HL(1) = AHGT
                     AMASS2 = AACC*AHGT*RO
@@ -393,21 +390,10 @@ CONTAINS
         END IF
         XLEVEL = HL(1)*12.
     END IF
-    !
-    !!VL: Previously: 600 FORMAT(' ACCUMULATOR IS FULL')
-    !!VL: Previously: 602 FORMAT(' ACCUML DOES NOT CONVERGE, MAX.ERROR =',1PE10.3,' LBM')
-
-
-    !!VL: Previously: 604    FORMAT(/'  ACCMAS = ',F8.3,' LBM',3X,'LIQUID LEVEL = ',F8.2,
-    !     &          ' IN')
-    !
 
     OUT(1)=ACCMAS*0.4563    !Total mass, convert from lbm to kg
-    !OUT(3)=OUT(1)*VHGT/AHGT !Liquid mass   !RS: Debugging: Never used
-    !OUT(2)=OUT(1)-OUT(3)    !Vapor mass    !RS: Debugging: Never used
-    !OUT(4)=XLEVEL*0.0254    !Liquid level, convert from in to m    !RS: Debugging: Never used
-    OUT(5)=AccumDP
-    !OUT(6)=ErrorFlag   !RS: Debugging: Never used
+    OUT(2)=AccumDP  !RS: Debugging: Formerly OUT(5)
+    !OUT(3)=ErrorFlag   !RS: Debugging: Never used  !RS: Debugging: Formerly OUT(6)
 
     RETURN
 

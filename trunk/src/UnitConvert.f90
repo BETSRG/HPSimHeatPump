@@ -138,9 +138,6 @@ REAL, INTENT(INOUT) :: TSICMP    !Low side saturation temp., F
 REAL, INTENT(INOUT) :: SUPER     !Superheat, F
 REAL, INTENT(INOUT) :: SUBCOOL   !Subcooling, F
 REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
-!REAL, INTENT(INOUT) :: ChargeCurveSlope !Charge curve slope, kg/m
-!REAL, INTENT(INOUT) :: ChargeCurveIntercept !Charge curve intercept, kg
-!REAL, INTENT(INOUT) :: RefLiquidLength !Liquid length at reference point, m
 !REAL, INTENT(INOUT) ::  Tdis !Discharge temperature, C !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
 !REAL, INTENT(INOUT) ::  Tliq !Liquid temperature, C    !RS: Debugging: Only used for CoilOnlySim, which isn't used by us
 
@@ -181,7 +178,6 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 	CondPAR(34)=CondPAR(34)/1000   !Fan power, kW
 
 	!CondPAR(38)                   !Barometric pressure, kPa
-    !CondPAR(58)                   !Distributor tube length, m
 
 	!****Evaporator input data****
 	!EvapPAR(1)                   !Suction line length, m
@@ -313,7 +309,6 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 	CondPAR(34)=CondPAR(34)*1E-3           !Fan power, kW
 
 	CondPAR(38)=CondPAR(38)*UnitP          !Barometric pressure, kPa
-	!CondPAR(58)=CondPAR(58)*UnitL          !Distributor tube length, m !RS: Debugging: Not really used
 
 	!****Evaporator input data****
 	EvapPAR(1)=EvapPAR(1)*UnitL            !Suction line length, m
@@ -397,18 +392,7 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
     END IF
 
     !Initial guesses
-    !TsoCmp    !Condenser temp. F,  ORNL solver uses IP unit
-    !TsiCmp    !Evaparator temp. F,  ORNL solver uses IP unit
-    !Super !Superheat, F,  ORNL solver uses IP unit
-	!Subcool !Subcooling, F,  ORNL solver uses IP unit
 	BaroPressure=BaroPressure*UnitP !barometric pressure kPa
-
-	!ChargeCurveSlope=ChargeCurveSlope*UnitM/UnitL
-	!ChargeCurveIntercept=ChargeCurveIntercept*UnitM
-	!RefLiquidLength=RefLiquidLength*UnitL
-	
-	!Tdis=(Tdis-32)/1.8
-	!Tliq=(Tliq-32)/1.8
 
   END IF
 

@@ -103,7 +103,7 @@
     REAL, PARAMETER :: CapTubeDimStep=1E-3
 
     LOGICAL IsSizeDiameter
-    REAL SimpleEvapOUT(25),DetailedEvapOUT(25) 
+    REAL SimpleEvapOUT(17),DetailedEvapOUT(17)  !RS: Debugging: Formerly (20)
     REAL DetailedQevp,DetailedDPevp
     REAL SimpleQevp,SimpleDPevp
     LOGICAL,SAVE :: IsFirstTimeEvaporator = .TRUE. !First time to call evaporator flag
@@ -463,8 +463,8 @@
                 END IF
             END IF
 
-            IF (EvapOUT(20) .NE. 0) THEN
-                SELECT CASE (INT(EvapOUT(20)))
+            IF (EvapOUT(17) .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(20)
+                SELECT CASE (INT(EvapOUT(17)))  !RS: Debugging: Formerly EvapOUT(20)
                 CASE (3,4,5)
                     STOP
                 END SELECT
@@ -541,7 +541,7 @@
                 EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
             ELSE
                 CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-                EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
+                EvapOUT(13)+EvapOUT(14)+AccumOUT(1))/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
             END IF
         END IF
 
@@ -741,8 +741,8 @@
                 !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
                 CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
 
-                IF (CapTubeOUT(7) .NE. 0) THEN
-                    SELECT CASE (INT(CapTubeOUT(7)))
+                IF (CapTubeOUT(2) .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(7) 
+                    SELECT CASE (INT(CapTubeOUT(2)))   !RS: Debugging: Formerly CapTubeOUT(7) 
                     CASE (1)
                         CapTubePAR(1)=CapTubePAR(1)*1.2
                         CYCLE

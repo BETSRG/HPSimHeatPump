@@ -152,6 +152,8 @@
     !   Date: April 2009
     !
     ! ----------------------------------------------------------------------
+    
+    USE DataSimulation, ONLY: TubeID, TubeLen, TubeCoilD, EvapCktNum,DisTubeLen   !RS: Debugging: Replacing PAR() numbers with variables
 
     IMPLICIT NONE
 
@@ -161,8 +163,7 @@
     !0-refrigerant mixture
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(7)
-    !INTEGER, INTENT(INOUT) :: OUT(7)
+    REAL, INTENT(OUT) :: OUT(5)   !RS: Debugging: Formerly OUT(7) 
 
     REAL Quality,Pressure,Enthalpy
 
@@ -199,7 +200,7 @@
     REAL :: Subcooling  !Subcooling, K or R
     REAL :: aa, bb      !Empirical coefficients
     REAL :: PREF         !Reference pressure, psi
-    REAL :: PCR,PCRIT1 !Critical pressure, psi
+    REAL :: PCR,PCRIT1  !Critical pressure, psi
     REAL :: PINLET       !Inlet pressure, psi
     REAL :: LenRatio     !Length ratio
     REAL :: Pratio       !Pressure ratio
@@ -216,17 +217,17 @@
 
     !Flow:
 
-    mdotCmp = XIN(1)
-    PiExp   = XIN(2)
-    HiExp   = XIN(3)
-    PiEvp   = XIN(4)
-    PoEvp   = XIN(5)
+    mdotCmp = XIN(1)    !RS: Debugging: Formerly XIN(1)
+    PiExp   = XIN(2)    !RS: Debugging: Formerly XIN(2)
+    HiExp   = XIN(3)    !RS: Debugging: Formerly XIN(3)
+    PiEvp   = XIN(4)    !RS: Debugging: Formerly XIN(4)
+    PoEvp   = XIN(5)    !RS: Debugging: Formerly XIN(5)
 
-    DcapTube = PAR(1)
-    LcapTube = PAR(2)
-    Dcoil    = PAR(3)
-    Nckts    = PAR(4)
-    LdisTube = PAR(5)
+    DcapTube = PAR(TubeID)   !RS: Debugging: Formerly PAR(1)
+    LcapTube = PAR(TubeLen)   !RS: Debugging: Formerly PAR(2)
+    Dcoil    = PAR(TubeCoilD)   !RS: Debugging: Formerly PAR(3)
+    Nckts    = PAR(EvapCktNum)   !RS: Debugging: Formerly PAR(4)
+    LdisTube = PAR(DisTubeLen)   !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag = 0 !Initialize
 
@@ -234,18 +235,18 @@
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
     !IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN   !RS: OUT(6) is the wrong location---OUT(7) is the error location
-     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN       
+     IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7)   
         RETURN
     END IF
 
     XiExp=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)   !Expansion Device Inlet Quality
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
     Quality=0
     TsiExp=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Liquid Saturation Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -255,7 +256,7 @@
     Enthalpy=HiEvp*1000 !RS Comment: Unit Conversion
     
     rhoiEvp=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr) !Evaporator Inlet Density
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN       !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -287,12 +288,12 @@
     Pressure=PoExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HoExp*1000 !RS Comment: Unit Conversion
     ToExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Outlet Temperature
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN    !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     XoExp=PH(Ref$, Pressure, Enthalpy, 'quality', RefrigIndex,RefPropErr)   !Expansion Device Outlet Quality
-    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7) 
         RETURN
     END IF
 
@@ -362,13 +363,11 @@
     PoExp=POEXP/0.14503798 !Convert from psi to kPa
 
     OUT(1)=mdotExp
-    !OUT(2)=PoExp   !RS: Debugging: Not used
     OUT(3)=ToExp
     OUT(4)=XoExp
-    !OUT(5)=MassDisTube !RS: Debugging: Not used
-    !OUT(6)=QdisTube    !RS: Debugging: Not used
+    OUT(5)=MassDisTube !RS: Debugging: Only used for output
 
-    OUT(7)=ErrorFlag
+    OUT(2)=ErrorFlag   !RS: Debugging: Formerly OUT(7) 
 
     RETURN
 

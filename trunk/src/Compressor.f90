@@ -126,8 +126,6 @@
     REAL :: PAR(26) !, INTENT(IN)
     REAL, INTENT(OUT) :: OUT(7)
 
-    !REAL, PARAMETER :: Fv=0.75 !RS: Debugging: Extraneous
-
     !Subroutine local variables
     REAL Temperature,Quality,Pressure,Enthalpy,Entropy
 
@@ -241,9 +239,9 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
     !Flow:
 
-    Psuc = XIN(1)
-    Pdis = XIN(2)
-    Hsuc = XIN(3)
+    Psuc = XIN(CompInPsuc)   !RS: Debugging: Formerly XIN(1)
+    Pdis = XIN(CompInPdis)   !RS: Debugging: Formerly XIN(2)
+    Hsuc = XIN(CompInHsuc)   !RS: Debugging: Formerly XIN(3)
 
     DO I=1,10
         A(I)=PAR(I)
