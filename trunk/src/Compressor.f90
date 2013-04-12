@@ -262,14 +262,14 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     Quality=1
     TDPsuc=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Suction Dew Point Temperature, C
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Quality=1
     TDPdis=PQ(Ref$,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)   !Discharge Dew Point Temperature, C
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
@@ -284,18 +284,18 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Temperature=TsucMap
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     HsucMap=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Suction Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     HsucMap=HsucMap/1000    !RS Comment: Unit Conversion
     rhoMap=TP(Ref$,Temperature,Pressure,'density',RefrigIndex,RefPropErr)   !Map-Based Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     SsucMap=TP(Ref$,Temperature,Pressure,'entropy',RefrigIndex,RefPropErr)  !Map-Based Suction Entropy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     SsucMap=SsucMap/1000    !RS Comment: Unit Conversion
@@ -303,7 +303,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000      !RS Comment: Unit Conversion
     Entropy=SsucMap*1000    !RS Comment: Unit Conversion
     HdisIsenMap=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr) !Map-Based Isentropic Discharge Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     HdisIsenMap=HdisIsenMap/1000    !RS Comment: Unit Conversion
@@ -311,17 +311,17 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Psuc*1000  !RS Comment: Unit Conversion
     Enthalpy=Hsuc*1000  !RS Comment: Unit Conversion
     Tsuc=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Suction Temperature
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     rhosuc=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Suction Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     Ssuc=PH(Ref$,Pressure,Enthalpy,'entropy',RefrigIndex,RefPropErr)    !Suction Entropy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     Ssuc=Ssuc/1000  !RS Comment: Unit Conversion
@@ -329,7 +329,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Entropy=Ssuc*1000   !RS Comment: Unit Conversion
     HdisIsen=PS(Ref$,Pressure,Entropy,'enthalpy',RefrigIndex,RefPropErr)    !Isentropic Discharge Enthalpy
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
     HdisIsen=HdisIsen/1000  !RS Comment: Unit Conversion
@@ -356,17 +356,17 @@ INTEGER,PARAMETER :: PANASONIC = 4
     Pressure=Pdis*1000  !RS Comment: Unit Conversion
     Enthalpy=Hdis*1000  !RS Comment: Unit Conversion
     Tdis=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)    !Discharge Temperature
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
             RETURN
     END IF
 
     Xdis=PH(Ref$,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)    !Discharge Quality
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN   !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
     rhoDis=PH(Ref$,Pressure,Enthalpy,'density',RefrigIndex,RefPropErr)  !Discharge Density
-    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(7))) THEN
+    IF (IssueRefPropError(RefPropErr, 'Compressor', 2, ErrorFlag, OUT(CmpOErrFlag))) THEN !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 
@@ -378,13 +378,13 @@ INTEGER,PARAMETER :: PANASONIC = 4
         RETURN
     END IF
 
-    OUT(1)=Power
-    OUT(2)=mdot
-    OUT(3)=Hdis
+    OUT(CmpOPwr)=Power    !RS: Debugging: Formerly OUT(1)
+    OUT(CmpOMdot)=mdot !RS: Debugging: Formerly OUT(2)
+    OUT(CmpOHdis)=Hdis !RS: Debugging: Formerly OUT(3)
     !OUT(4)=Xdis    !RS: Debugging: Never used
-    OUT(5)=Tdis
-    OUT(6)=MassCmp
-    OUT(7)=ErrorFlag
+    OUT(CmpOTdis)=Tdis !RS: Debugging: Formerly OUT(5)
+    OUT(CmpOMCmp)=MassCmp  !RS: Debugging: Formerly OUT(6)
+    OUT(CmpOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
     RETURN
 

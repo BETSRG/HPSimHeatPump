@@ -654,7 +654,7 @@ CONTAINS
     
     CHARACTER(LEN=39),PARAMETER :: FMT_107 = "(A67,F5.6)" !VL Comment: previously !10
 
-    TestH=AirProp(4)    !RS: Debugging: Finding the entering air enthalpy hopefully
+    !TestH=AirProp(4)    !RS: Debugging: Finding the entering air enthalpy hopefully
     
     !Flow:
 
@@ -1089,17 +1089,17 @@ CONTAINS
 
     !Determining inlet and outlet air properties
     AirPropOpt=1
-    AirProp(1)=tAiCoil
-    AirProp(4)=hAiCoil
+    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(7)
+    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(1)=tAoCoil
-    AirProp(4)=hAoCoil
+    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(3)
-    DensityOut=AirProp(7)
+    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0
@@ -1218,23 +1218,23 @@ CONTAINS
     END IF
 
     !Populating the OUT array
-    OUT(1)=pRoCoil
-    OUT(2)=hRoCoil
-    OUT(3)=tAoCoil !RS: Debugging: Formerly OUT(17)
-    OUT(4)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(18)
-    OUT(5)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(19)
-    OUT(6)=pRiCmp
-    OUT(7)=hRiCmp
-    OUT(8)=tRiCmp
-    OUT(9)=xRiCmp
-    OUT(10)=tSHiCmp
-    OUT(11)=Qcoil
-    OUT(12)=QcoilSens   !RS: Debugging: Only used to be output
-    OUT(13)=MassSucLn
-    OUT(14)=0  !RS: Debugging: Never really used?
-    OUT(15)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(24)
-    OUT(16)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(25)
-    OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+    OUT(EOutpRoC)=pRoCoil  !RS: Debugging: Formerly OUT(1)
+    OUT(EOuthRoC)=hRoCoil  !RS: Debugging: Formerly OUT(2)
+    OUT(EOuttAoC)=tAoCoil !RS: Debugging: Formerly OUT(3)
+    OUT(EOutrhAoC)=rhAoCoil    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(4)
+    OUT(EOutDPair)=DPair   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(5)
+    OUT(EOutpRiC)=pRiCmp   !RS: Debugging: Formerly OUT(6)
+    OUT(EOuthRiC)=hRiCmp   !RS: Debugging: Formerly OUT(7)
+    OUT(EOuttRiC)=tRiCmp   !RS: Debugging: Formerly OUT(8)
+    OUT(EOutxRiC)=xRiCmp   !RS: Debugging: Formerly OUT(9)
+    OUT(EOuttSHiC)=tSHiCmp !RS: Debugging: Formerly OUT(10)
+    OUT(EOutQC)=Qcoil   !RS: Debugging: Formerly OUT(11)
+    OUT(EOutQCSens)=QcoilSens   !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(12)
+    OUT(EOutMSucLn)=MassSucLn   !RS: Debugging: Formerly OUT(13)
+    OUT(EOutMC)=0  !RS: Debugging: Never really used?   !RS: Debugging: Formerly OUT(14)
+    OUT(EOutWtAl)=WeightAluminum  !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(15)
+    OUT(EOutWtCu)=WeightCopper    !RS: Debugging: Only used to be output  !RS: Debugging: Formerly OUT(16)
+    OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
 
     CALL Evaporator_Helper_1
 
@@ -3892,11 +3892,11 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   Cair=mAiCoil*CPAir    !RS Comment: Finding the capacity rate of air
 
   AirPropOpt=2
-  AirProp(1)=tAiCoil
-  AirProp(3)=rhAiCoil
+  AirProp(APTDB)=tAiCoil    !RS: Debugging: Formerly AirProp(1)
+  AirProp(APRelHum)=rhAiCoil   !RS: Debugging: Formerly AirProp(3)
   CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  hAiCoil=AirProp(4)
-  wAiCoil=AirProp(2) !ISI - 08/07/06 
+  hAiCoil=AirProp(APEnth)    !RS: Debugging: Formerly AirProp(4)
+  wAiCoil=AirProp(APHumRat) !ISI - 08/07/06    !RS: Debugging: Formerly AirProp(2)
 
   tAoCoil=tAiCoil
   wAoCoil=wAiCoil
@@ -3911,11 +3911,11 @@ INTEGER :: NumSection !Loop counter, ISI - 09/10/07
   END IF
 
   AirPropOpt=1
-  AirProp(1)=tAiCoil
-  AirProp(4)=hAiCoil
+  AirProp(APTDB)=tAiCoil    !RS: Debugging: Formerly AirProp(1)
+  AirProp(APEnth)=hAiCoil    !RS: Debugging: Formerly AirProp(4)
   CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-  rhAiCoil=AirProp(3)
-  DensityIn=AirProp(7)
+  rhAiCoil=AirProp(APRelHum)   !RS: Debugging: Formerly AirProp(3)
+  DensityIn=AirProp(APDryDens)  !RS: Debugging: Formerly AirProp(7)
 
   !****** Coil calculation ******
 
@@ -4299,13 +4299,13 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
 		AirPropOpt=2
-		AirProp(1)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi
-		AirProp(3)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi
+		AirProp(APTDB)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%tAi    !RS: Debugging: Formerly AirProp(1)
+		AirProp(APRelHum)=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%rhAi   !RS: Debugging: Formerly AirProp(3)
 		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		hAiMod=AirProp(4)
-		TwbAiMod=AirProp(5)
-		TdpAiMod=AirProp(6)
-		wAiMod=AirProp(2)
+		hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+		TwbAiMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+		TdpAiMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
+		wAiMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
 
 		mRefMod=CoilSection(NumSection)%Ckt(II)%mRef
 		pRiMod=CoilSection(NumSection)%Ckt(II)%Tube(III)%Seg(IV)%pRi
@@ -4409,13 +4409,13 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 		Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hco=hcoMod
 
 		AirPropOpt=2
-		AirProp(1)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi
-		AirProp(3)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi
+		AirProp(APTDB)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%tAi   !RS: Debugging: Formerly AirProp(1)
+		AirProp(APRelHum)=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%rhAi  !RS: Debugging: Formerly AirProp(3)
 		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		hAiMod=AirProp(4)
-		TwbAiMod=AirProp(5)
-		TdpAiMod=AirProp(6)
-		wAiMod=AirProp(2)
+		hAiMod=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+		TwbAiMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+		TdpAiMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
+		wAiMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
 
 		pRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%pRi
 		hRiMod=Slab(I)%Pass(II)%Tube(III)%Seg(IV)%hRi
@@ -5394,13 +5394,13 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 			TdbAoDry=QmodDry/cAir+tAiMod
 
 			AirPropOpt=1
-			AirProp(1)=TdbAoDry
-			AirProp(4)=hAoDry
+			AirProp(APTDB)=TdbAoDry !RS: Debugging: Formerly AirProp(1)
+			AirProp(APEnth)=hAoDry   !RS: Debugging: Formerly AirProp(4)
 			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			rhAoMod=AirProp(3)
-			TwbAoMod=AirProp(5)
-			TdpAoMod=AirProp(6)
-			DensityOut=AirProp(7)
+			rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
+			TwbAoMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+			TdpAoMod=AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
+			DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
 
 			!Calc dry surface temperature
 			NTUsDry=1/(cAir*Rair) 
@@ -5446,10 +5446,10 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 		END IF
 
 		AirPropOpt=1
-		AirProp(1)=tAoMod
-		AirProp(4)=hAoMod
+		AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
+		AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
 		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		rhAoMod=AirProp(3)
+		rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
 
 		IF (CoilType .NE. MCEVAPORATOR) THEN
 			hRoMod=-Qmod/mRefMod+hRiMod 
@@ -5537,12 +5537,12 @@ LOGICAL IsTransitionSegment !Flag to indicate if it is transtion segment
 	hAoMod=Qmod/mAiMod+hAiMod
 
 	AirPropOpt=1
-	AirProp(1)=tAoMod
-	AirProp(4)=hAoMod
+	AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
-	rhAoMod=AirProp(3)  
-	wbAoMod=AirProp(5)  
-	wAoMod=AirProp(2)
+	rhAoMod=AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
+	wbAoMod=AirProp(APTWB)  !RS: Debugging: Formerly AirProp(5)
+	wAoMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
 	 
 RETURN
 
@@ -6012,10 +6012,10 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 			!Outlet air enthalpy
 			AirPropOpt=3
-			AirProp(1)=TdbAoWet
-			AirProp(5)=TwbAoWet
+			AirProp(APTDB)=TdbAoWet !RS: Debugging: Formerly AirProp(1)
+			AirProp(APTWB)=TwbAoWet !RS: Debugging: Formerly AirProp(5)
 			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			hAoWet=AirProp(4)
+			hAoWet=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
 
 			!Update fictitious air specific heat
 			cfprev=cf
@@ -6037,10 +6037,10 @@ INTEGER,INTENT(IN) :: CoilType   !1=Condenser; 2=Evaporator;
 
 			!Outlet air enthalpy
 			AirPropOpt=3
-			AirProp(1)=TdbAoWet
-			AirProp(5)=TwbAoWet
+			AirProp(APTDB)=TdbAoWet !RS: Debugging: Formerly AirProp(1)
+			AirProp(APTWB)=TwbAoWet !RS: Debugging: Formerly AirProp(5)
 			CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-			hAoWet=AirProp(4)
+			hAoWet=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
 
 			DryWet=1
 			Qmod=QmodWet
@@ -6149,16 +6149,16 @@ REAL FrostThk
 !FLOW:
 
 	AirPropOpt=2	
-	AirProp(1)=tRiMod
-	AirProp(3)=1
+	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hRiSat=AirProp(4)
+	hRiSat=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
 
 	AirPropOpt=2	
-	AirProp(1)=tRiMod+DeltaTemp
-	AirProp(3)=1
+	AirProp(APTDB)=tRiMod+DeltaTemp !RS: Debugging: Formerly AirProp(1)
+	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	DeltahRiSat=ABS(hRisat-AirProp(4))
+	DeltahRiSat=ABS(hRisat-AirProp(APEnth))  !RS: Debugging: Formerly AirProp(4)
 
 	CpSat=DeltahRiSat/DeltaTemp
 
@@ -6340,24 +6340,24 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 !FLOW:
 
 	AirPropOpt=2	
-	AirProp(1)=tRiMod
-	AirProp(3)=1
+	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hRiSat=AirProp(4)
-	wRiSat=AirProp(2)
+	hRiSat=AirProp(APEnth)   !RS: Debugging: Formerly AirProp(4)
+	wRiSat=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
 	hfRiSat=hRiSat
 
 	AirPropOpt=2	
-	AirProp(1)=tRiMod
-	AirProp(3)=0
+	AirProp(APTDB)=tRiMod   !RS: Debugging: Formerly AirProp(1)
+	AirProp(APRelHum)=0    !RS: Debugging: Formerly AirProp(3)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	hgRiSat=AirProp(4)
+	hgRiSat=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
 
 	AirPropOpt=2	
-	AirProp(1)=tRiMod+DeltaTemp
-	AirProp(3)=1
+	AirProp(APTDB)=tRiMod+DeltaTemp
+	AirProp(APRelHum)=1    !RS: Debugging: Formerly AirProp(3)
 	CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-	DeltahRiSat=ABS(hRisat-AirProp(4))
+	DeltahRiSat=ABS(hRisat-AirProp(APEnth))  !RS: Debugging: Formerly AirProp(4)
 
 	CpMoist=(1+0.09*wAiMod)*CpAir !www.jgsee.kmutt.ac.th/exell/JEE661/JEE661Lecture2.html
 
@@ -6419,11 +6419,11 @@ REAL,PARAMETER :: Le=0.89 !1  !Lewis number
 		tAoMod=TdbAoWet
 
 		AirPropOpt=1	
-		AirProp(1)=tAoMod
-		AirProp(4)=hAoMod
+		AirProp(APTDB)=tAoMod   !RS: Debugging: Formerly AirProp(1)
+		AirProp(APEnth)=hAoMod   !RS: Debugging: Formerly AirProp(4)
 		CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-		wAoMod=AirProp(2)
-		TwbAoMod=AirProp(5)
+		wAoMod=AirProp(APHumRat)   !RS: Debugging: Formerly AirProp(2)
+		TwbAoMod=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
 
 		IF (ABS((CCprev-CC)/CCprev) .LT. 1e-3) THEN
 			EXIT 
@@ -6676,11 +6676,11 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     Cair=mAiCoil*CPAir
 
     AirPropOpt=2
-    AirProp(1)=tAiCoil
-    AirProp(3)=rhAiCoil
+    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APRelHum)=rhAiCoil !RS: Debugging: Formerly AirProp(3)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    hAiCoil=AirProp(4)
-    wbAiCoil=AirProp(5)
+    hAiCoil=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
+    wbAiCoil=AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
 
     IF (DrawBlow .EQ. BLOWTHROUGH) THEN !Blow through
         tAiCoil=tAiCoil+PwrFan/Cair
@@ -6692,10 +6692,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     AirPropOpt=1
-    AirProp(1)=tAiCoil
-    AirProp(4)=hAiCoil
+    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    DensityIn=AirProp(7)
+    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
 
     !Area calculations
     CALL CalcCoilArea(CoilType,Nl,Nt,Pt,Pl,TubeDepth, &
@@ -6882,10 +6882,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
             Slab(I)%rhAi=Slab(I)%Pass(1)%Tube(1)%Seg(1)%rhAi
 
             AirPropOpt=2
-            AirProp(1)=Slab(I)%tAi
-            AirProp(3)=Slab(I)%rhAi
+            AirProp(APTDB)=Slab(I)%tAi  !RS: Debugging: Formerly AirProp(1)
+            AirProp(APRelHum)=Slab(I)%rhAi !RS: Debugging: Formerly AirProp(3)
             CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%hAi=AirProp(4)
+            Slab(I)%hAi=AirProp(APEnth)  !RS: Debugging: Formerly AirProp(4)
 
             SHR=QcoilSens/Qcoil
 
@@ -6931,10 +6931,10 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
             Slab(I)%hAo=Slab(I)%hAi+Slab(I)%Qslab/mAiCoil
 
             AirPropOpt=1
-            AirProp(1)=Slab(I)%tAo
-            AirProp(4)=Slab(I)%hAo
+            AirProp(APTDP)=Slab(I)%tAo  !RS: Debugging: Formerly AirProp(1)
+            AirProp(APEnth)=Slab(I)%hAo  !RS: Debugging: Formerly AirProp(4)
             CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-            Slab(I)%rhAo=AirProp(3)
+            Slab(I)%rhAo=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
 
         END DO !End Slabs
 
@@ -6997,18 +6997,18 @@ SUBROUTINE MicrochannelEvaporator(XIN,PAR,OUT) !(Ref$,XIN,PAR,OUT)  !RS: Debuggi
     END IF
 
     AirPropOpt=1
-    AirProp(1)=tAiCoil
-    AirProp(4)=hAiCoil
+    AirProp(APTDB)=tAiCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APEnth)=hAiCoil  !RS: Debugging: Formerly AirProp(4)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAiCoil=AirProp(3)
-    DensityIn=AirProp(7)
+    rhAiCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
+    DensityIn=AirProp(APDryDens)    !RS: Debugging: Formerly AirProp(7)
 
     AirPropOpt=1
-    AirProp(1)=tAoCoil
-    AirProp(4)=hAoCoil
+    AirProp(APTDB)=tAoCoil  !RS: Debugging: Formerly AirProp(1)
+    AirProp(APEnth)=hAoCoil  !RS: Debugging: Formerly AirProp(4)
     CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-    rhAoCoil=AirProp(3)
-    DensityOut=AirProp(7)  
+    rhAoCoil=AirProp(APRelHum) !RS: Debugging: Formerly AirProp(3)
+    DensityOut=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
 
     WetFlag=0
     RowNum=0   

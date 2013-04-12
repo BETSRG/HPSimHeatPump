@@ -378,7 +378,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   END IF
 
   !*************** Accumulator **************** !RS: Debugging: Moving: ORNLSolver?
-  AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
+  AccumPAR(AccDTube)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in   !RS: Debugging: Formerly AccumPAR(6)
   !********************************************
 
   !Discharge Line

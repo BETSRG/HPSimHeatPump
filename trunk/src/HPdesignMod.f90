@@ -240,9 +240,9 @@
                 END IF
             END IF
 
-            Xmr=CompOUT(2)
+            Xmr=CompOUT(CmpOMdot)  !RS: Debugging: Formerly CompOUT(2)
 
-            PoEvp=EvapOUT(1)
+            PoEvp=EvapOUT(EOuthRoC)    !RS: Debugging: Formerly EvapOUT(1)
 
             QsucLn=EvapPAR(EvapSucLnQLoss)   !RS: Debugging: Formerly EvapPAR(5)
             DTsucLn=EvapPAR(EvapSucLnTempChg)  !RS: Debugging: Formerly EvapPAR(6)
@@ -353,16 +353,16 @@
         CALL IssueOutputMessage('|-------------------- Highside Iteration --------------------|')
 
         AirPropOpt=2
-        AirProp(1)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C
-        AirProp(3)=RHiC
+        AirProp(APTDB)=(TaiC-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
+        AirProp(APRelHum)=RHiC !RS: Debugging: Formerly AirProp(3)
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RhoAiC=AirProp(7)
+        RhoAiC=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
 
         AirPropOpt=2
-        AirProp(1)=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C
-        AirProp(3)=RHiE
+        AirProp(APTDB)=(TaiE-32)*5/9    !RS Comment: Unit Conversion, from F to C   !RS: Debugging: Formerly AirProp(1)
+        AirProp(APRelHum)=RHiE !RS: Debugging: Formerly AirProp(3)
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RhoAiE=AirProp(7)
+        RhoAiE=AirProp(APDryDens)   !RS: Debugging: Formerly AirProp(7)
 
         !Actual mass flow rate
         XMaC=CFMcnd*RhoAiC
@@ -403,17 +403,17 @@
             ERRMSG(1) = DIFFER
         END IF
         
-        EvapIN(1)=MdotR           !Refrigerant side mass flow rate, kg/s
+        EvapIN(EInmRef)=MdotR           !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(1)
         !EvapIN(2)=CompIN(1)       !Compressor inlet pressure
-        EvapIN(3)=CondOUT(11)     !Exp. device inlet enthalpy, kJ/kg
-        EvapIN(4)=XMaE            !Air side mass flow rate, kg/s
-        EvapIN(5)=(TAIIEI-32)/1.8 !Air side inlet temp. C
-        EvapIN(6)=RHiE            !Air side inlet relative humidity
-        EvapIN(9)=CompOUT(5)      !Discharge temperature, C
+        EvapIN(EInhRi)=CondOUT(COuthRiE)     !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly EvapIN(3), CondOUT(11)
+        EvapIN(EInmAi)=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
+        EvapIN(EIntAi)=(TAIIEI-32)/1.8 !Air side inlet temp. C   !RS: Debugging: Formerly EvapIN(5)
+        EvapIN(EInrhAi)=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
+        EvapIN(EIntRdis)=CompOUT(CmpOTdis)      !Discharge temperature, C !RS: Debugging: Formerly EvapIN(9), CompOUT(5)
 
         !Take compressor shell loss into account
         IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
-            EvapPAR(EvapCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(1)  !RS: Debugging: Formerly EvapPAR(32) & CompPAR(21)
+            EvapPAR(EvapCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(CmpOPwr)  !RS: Debugging: Formerly EvapPAR(32), CompPAR(21), CompOUT(1)
         ELSE !Shell loss in W
             EvapPAR(EvapCompQLoss)=CompPAR(CompQLoss)/1000    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
         END IF
@@ -435,13 +435,13 @@
                     EvapPAR(EvapFirstTime)=1 !First time   !RS: Debugging: Formerly EvapPAR(38)
                     EvapPAR(EvapSimpCoil)=0 !Detailed version !RS: Debugging: Formerly EvapPAR(37)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,DetailedEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,DetailedEvapOUT) !RS: Debugging: Extraneous PureRef
-                    DetailedQevp=DetailedEvapOUT(11)
-                    DetailedDPevp=EvapIN(2)-DetailedEvapOUT(6)
+                    DetailedQevp=DetailedEvapOUT(EOutQC)    !RS: Debugging: Formerly DetailedEvapOUT(11)
+                    DetailedDPevp=EvapIN(EInpRi)-DetailedEvapOUT(EOutpRiC)  !RS: Debugging: Formerly EvapIN(2), DetailedEvapOUT(6)
 
                     EvapPAR(EvapSimpCoil)=1 !Simple version   !RS: Debugging: Formerly EvapPAR(37)
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,SimpleEvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,SimpleEvapOUT)   !RS: Debugging: Extraneous PureRef
-                    SimpleQevp=SimpleEvapOUT(11)
-                    SimpleDPevp=EvapIN(2)-SimpleEvapOUT(6)
+                    SimpleQevp=SimpleEvapOUT(EOutQC)    !RS: Debugging: Formerly SimpleEvapOUT(11)
+                    SimpleDPevp=EvapIN(EInpRi)-SimpleEvapOUT(EOutpRiC) !RS: Debugging: Formerly EvapIN(2), SimpleEvapOUT(6)
 
                     IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.1 .AND. &
                     ABS((SimpleDPevp-DetailedDPevp)/DetailedDPevp) .LT. 0.1) THEN
@@ -463,8 +463,8 @@
                 END IF
             END IF
 
-            IF (EvapOUT(17) .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(20)
-                SELECT CASE (INT(EvapOUT(17)))  !RS: Debugging: Formerly EvapOUT(20)
+            IF (EvapOUT(EOutErrFlag) .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
+                SELECT CASE (INT(EvapOUT(EOutErrFlag)))  !RS: Debugging: Formerly EvapOUT(17)
                 CASE (3,4,5)
                     STOP
                 END SELECT
@@ -522,26 +522,26 @@
         END IF
 
         IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
-            IF (AccumPAR(2) .GT. 0) THEN !Height
+            IF (AccumPAR(AccH) .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
                 AccumIN(1)=MdotR
-                AccumIN(2)=CompIN(1) !Pressure
-                AccumIN(3)=CompIN(3) !Enthalpy
+                AccumIN(2)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1)
+                AccumIN(3)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3)
                 CALL CalcAccumulatorMass(AccumIN,AccumOUT)
             ELSE
                 AccumOUT(1)=0
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-            CondOUT(18)=MassCoil
+            CondOUT(COutMC)=MassCoil    !RS: Debugging: Formerly CondOUT(18)
             CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
-            EvapOUT(14)=MassCoil
+            EvapOUT(EOutMC)=MassCoil    !RS: Debugging: Formerly EvapOUT(14)
 
             IF (ExpDevice .EQ. 1) THEN
-                CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-                EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
+                CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(5)+AccumOUT(1))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
             ELSE
-                CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-                EvapOUT(13)+EvapOUT(14)+AccumOUT(1))/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
+                CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+AccumOUT(1))/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
             END IF
         END IF
 
@@ -628,16 +628,16 @@
         IF (IREFC .EQ. 0) THEN
             !**************Size short tube orifice**************
 
-            XMR=CompOUT(2)*3600/UnitM
+            XMR=CompOUT(CmpOMdot)*3600/UnitM   !RS: Debugging: Formerly CompOUT(2)
 
-            ShTbIN(1)=CompOUT(2)  !Compressor mass flow rate, kg/s
-            ShTbIN(2)=CondOUT(10) !Exp. device inlet pressure, kPa
-            ShTbIN(3)=CondOUT(11) !Exp. device inlet enthalpy, kJ/kg
-            ShTbIN(4)=EvapIN(2)   !Evaporator inlet pressure, kPa
-            ShTbIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
+            ShTbIN(ShTbINMdotC)=CompOUT(CmpOMdot)  !Compressor mass flow rate, kg/s  !RS: Debugging: Formerly CompOUT(2), ShTbIN(1)
+            ShTbIN(ShTbINPiE)=CondOUT(COutpRiE) !Exp. device inlet pressure, kPa  !RS: Debugging: Formerly CondOUT(10), ShTbIN(2)
+            ShTbIN(ShTbINHiE)=CondOUT(COuthRiE) !Exp. device inlet enthalpy, kJ/kg    !RS: Debugging: Formerly CondOUT(11), ShTbIN(3)
+            ShTbIN(ShTbINPiEv)=EvapIN(EInpRi)   !Evaporator inlet pressure, kPa   !RS: Debugging: Formerly EvapIN(2), ShTbIN(4)
+            ShTbIN(ShTbINPoEv)=EvapOUT(EOutpRoC)  !Evaporator outlet pressure, kPa  !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
-            IF (ShTbPAR(1) .LE. 0) THEN
-                ShTbPAR(1)=0.0127
+            IF (ShTbPAR(TLen) .LE. 0) THEN !RS: Debugging: Formerly ShTbPAR(1)
+                ShTbPAR(TLen)=0.0127   !RS: Debugging: Formerly ShTbPAR(1)
                 !Short Tube: Parameters not defined.
             ELSE
 
@@ -647,24 +647,24 @@
                 MinDshTb=0
 
                 Dshtb=2.0 !1.0 !Initial guess !Short tube diameter, mm
-                ShTbPAR(2)=Dshtb/1000   !RS Comment: Unit Conversion
+                ShTbPAR(TID)=Dshtb/1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
 
                 DO NumIter=1, MaxIteration
 
                     !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
                     !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
                     CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
-                    IF (ShTbOUT(7) .NE. 0) THEN
-                        SELECT CASE (INT(ShTbOUT(7)))
+                    IF (ShTbOUT(7) .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
+                        SELECT CASE (INT(ShTbOUT(7)))   !RS: Debugging: Formerly ShTubOUT(7)
                         CASE (1)
-                            ShTbPAR(2)=ShTbPAR(2)*1.2
+                            ShTbPAR(TID)=ShTbPAR(TID)*1.2   !RS: Debugging: Formerly ShTbPAR(2)
                             CYCLE
                         END SELECT
                     END IF
 
-                    XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??
-                    ToExp=ShTbOUT(3)
-                    XoExp=ShTbOUT(4)
+                    XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly ShTbOUT(1)
+                    ToExp=ShTbOUT(3)    !RS: Debugging: Formerly ShTbOUT(3)
+                    XoExp=ShTbOUT(4)    !RS: Debugging: Formerly ShTbOUT(4)
 
                     ErrXMR=ABS((XMRFLD-XMR))
                     IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0 .AND. ErrXMR .GT. 1E-4) THEN
@@ -674,7 +674,7 @@
                             MinDshTb=Dshtb
                         END IF
                         Dshtb=(MaxDshTb+MinDshTb)/2
-                        ShTbPAR(2)=Dshtb/1000 !Short tube diameter, m
+                        ShTbPAR(TID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSEIF (ErrXMR .GT. 1E-4) THEN !Find short tube diameter by secant method
                         IF (XMRFLD .GT. XMR) THEN
                             MaxDshTb=Dshtb
@@ -686,40 +686,40 @@
                         IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0) THEN
                             Dshtb=(MaxDshTb+MinDshTb)/2
                         END IF
-                        ShTbPAR(2)=Dshtb/1000 !Short tube diameter, m
+                        ShTbPAR(TID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSE
                         EXIT
                     END IF
                 END DO
             END IF
 
-            IF (INT(ShTbOUT(7)) .EQ. 1) THEN
+            IF (INT(ShTbOUT(7)) .EQ. 1) THEN    !RS: Debugging: Formerly ShTbOUT(7)
                 CALL IssueOutputMessage( '')
                 CALL IssueOutputMessage('## ERROR ## HPdesign: Short tube solution error.')
                 STOP
             END IF
 
             !**************Size TXV**************
-            mdotr=CompOUT(2)
-            PiCmp=CompIN(1)
-            PoCmp=CompIN(2)
-            Subcooling=CondOUT(14)
-            Superheat=EvapOUT(10)
+            mdotr=CompOUT(CmpOMdot)    !RS: Debugging: Formerly CompOUT(2)
+            PiCmp=CompIN(CompInPsuc) !RS: Debugging: Formerly CompIN(1)
+            PoCmp=CompIN(CompInPdis) !RS: Debugging: Formerly CompIN(2)
+            Subcooling=CondOUT(COuttSCiE)  !RS: Debugging: Formerly CondOUT(14)
+            Superheat=EvapOUT(EOuttSHiC)   !RS: Debugging: Formerly EvapOUT(10)
             IF (ShTbOUT(2) .NE. 0) THEN
-                DPtxv=CondOUT(10)-ShTbOUT(2)
+                DPtxv=CondOUT(COutpRiE)-ShTbOUT(2)  !RS: Debugging: Formerly CondOUT(10)
             ElSE
-                DPtxv=CondOUT(10)-EvapIN(2)
+                DPtxv=CondOUT(COutpRiE)-EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2), CondOUT(10)
             END IF
 
             CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
             TxvPAR(1)=Qtxv
 
             !**************Size Capillary Tube**************
-            CapTubeIN(1)=CompOUT(2)  !Compressor mass flow rate, kg/s
-            CapTubeIN(2)=CondOUT(10) !Exp. device inlet pressure, kPa
-            CapTubeIN(3)=CondOUT(11) !Exp. device inlet enthalpy, kJ/kg
-            CapTubeIN(4)=EvapIN(2)   !Evaporator inlet pressure, kPa
-            CapTubeIN(5)=EvapOUT(1)  !Evaporator outlet pressure, kPa
+            CapTubeIN(CTIMdot)=CompOUT(CmpOMdot)  !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CapTubeIN(1), CompOUT(2)
+            CapTubeIN(CTIPiEx)=CondOUT(COutpRiE) !Exp. device inlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(2), CondOUT(10)
+            CapTubeIN(CTIHiEx)=CondOUT(COuthRiE) !Exp. device inlet enthalpy, kJ/kg !RS: Debugging: Formerly CapTubeIN(3), CondOUT(11)
+            CapTubeIN(CTIPiEv)=EvapIN(EInpRi)   !Evaporator inlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(4), EvapIN(2)
+            CapTubeIN(CTIPoEv)=EvapOUT(EOutpRoC)  !Evaporator outlet pressure, kPa   !RS: Debugging: Formerly CapTubeIN(5), EvapOUT(1)
 
             !Initial guess
             NumIter=0
@@ -730,9 +730,9 @@
 
             CapTubeDimension=1e-4 !1E-3 !Initial guess of capillary tube diameter
             IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                CapTubePAR(1)=CapTubeDimension
+                CapTubePAR(TubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
             ELSE
-                CapTubePAR(2)=CapTubeDimension
+                CapTubePAR(TubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
             END IF
 
             DO NumIter=1, MaxIter
@@ -741,17 +741,17 @@
                 !CALL CapillaryTubeORNL(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)
                 CALL CapillaryTubeORNL(Ref$,CapTubeIN,CapTubePAR,CapTubeOUT)    !RS: Debugging: Extraneous PureRef
 
-                IF (CapTubeOUT(2) .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(7) 
-                    SELECT CASE (INT(CapTubeOUT(2)))   !RS: Debugging: Formerly CapTubeOUT(7) 
+                IF (CapTubeOUT(CTOErrFlag) .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(2) 
+                    SELECT CASE (INT(CapTubeOUT(CTOErrFlag)))   !RS: Debugging: Formerly CapTubeOUT(2) 
                     CASE (1)
-                        CapTubePAR(1)=CapTubePAR(1)*1.2
+                        CapTubePAR(TubeID)=CapTubePAR(TubeID)*1.2 !RS: Debugging: Formerly CapTubePAR(1)
                         CYCLE
                     END SELECT
                 END IF
 
-                XMRFLD=CapTubeOUT(1)*3600/UnitM !RS Comment: Unit Conversion, lbm/s??
-                ToExp=CapTubeOUT(3)
-                XoExp=CapTubeOUT(4)
+                XMRFLD=CapTubeOUT(CTOMdot)*3600/UnitM !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CapTubeOUT(1)
+                ToExp=CapTubeOUT(CTOToE) !RS: Debugging: Formerly CapTubeOUT(3)
+                XoExp=CapTubeOUT(CTOXoE) !RS: Debugging: Formerly CapTubeOUT(4)
 
                 ErrXMR=ABS((XMRFLD-XMR))
 
@@ -797,9 +797,9 @@
                 END IF
 
                 IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                    CapTubePAR(1)=CapTubeDimension
+                    CapTubePAR(TubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
                 ELSE
-                    CapTubePAR(2)=CapTubeDimension
+                    CapTubePAR(TubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
                 END IF
 
             END DO
@@ -813,22 +813,22 @@
         END IF
 
         IF (LPRINT.LE.1.AND.IMASS.NE.0) THEN
-            IF (AccumPAR(2) .GT. 0) THEN !Height
-                AccumIN(1)=MdotR
-                AccumIN(2)=CompIN(1) !Pressure
-                AccumIN(3)=CompIN(3) !Enthalpy
+            IF (AccumPAR(AccH) .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
+                AccumIN(1)=MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN(2)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
+                AccumIN(3)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
                 CALL CalcAccumulatorMass(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(1)=0
+                AccumOUT(1)=0   !RS: Debugging: Formerly AccumOUT(1)
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-            CondOUT(18)=MassCoil
+            CondOUT(COutMC)=MassCoil    !RS: Debugging: Formerly CondOUT(18)
             CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
-            EvapOUT(14)=MassCoil
+            EvapOUT(EOutMC)=MassCoil    !RS: Debugging: Formerly EvapOUT(14)
 
-            CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18)+ &
-            EvapOUT(13)+EvapOUT(14)+ShTbOUT(5)+AccumOUT(1))/UnitM
+            CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
+            EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(5)+AccumOUT(1))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 
@@ -863,9 +863,9 @@
     END IF
 
     CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-    CondOUT(18)=MassCoil
+    CondOUT(COutMC)=MassCoil    !RS: Debugging: Formerly CondOUT(18)
 
-    CALCHG=(CompOUT(6)+CondOUT(16)+CondOUT(17)+CondOUT(18))/UnitM
+    CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC))/UnitM   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18) 
 
     IF (IsChargeTuning .GT. 0 .AND. MODE .NE. 2) THEN !Apply charge tuning
         ChargeCorrection=(ChargeCurveIntercept+ChargeCurveSlope*(CondLiqTubeLength-RefLiquidLength))/UnitM

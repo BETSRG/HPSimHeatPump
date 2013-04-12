@@ -87,7 +87,7 @@ REAL ShTbOUT(7)
 !Capillary tube passing parameters
 REAL CapTubeIN(5)
 REAL CapTubePAR(5)
-REAL CapTubeOUT(5)   !RS: Debugging: Formerly CapTubeOUT(7) 
+REAL CapTubeOUT(6)   !RS: Debugging: Formerly CapTubeOUT(7) 
 
 !TXV model passing parameters   !RS: Debugging: These aren't even used in TXV model; nor is the model ever called
 !REAL TxvIN(6)  !RS: Debugging: Never used
@@ -301,9 +301,35 @@ INTEGER, SAVE:: CondSimpCoil=44
 INTEGER, SAVE:: CondFirstTime=45
 
 !CondIN variables
+INTEGER, SAVE:: CInmRef=1
 INTEGER, SAVE:: CInpRo=2
 INTEGER, SAVE:: CInhRo=3
+INTEGER, SAVE:: CInmAi=4
+INTEGER, SAVE:: CIntAi=5
+INTEGER, SAVE:: CInrhAi=6
 INTEGER, SAVE:: CInSolFlux=7
+
+!CondOUT variables
+INTEGER, SAVE:: COutpRiC=1
+INTEGER, SAVE:: COuthRiC=2
+INTEGER, SAVE:: COuttAoC=3
+INTEGER, SAVE:: COutrhAoC=4
+INTEGER, SAVE:: COutpRoC=5
+INTEGER, SAVE:: COuthRoC=6
+INTEGER, SAVE:: COuttRoC=7
+INTEGER, SAVE:: COutWtAl=8
+INTEGER, SAVE:: COutWtCu=9
+INTEGER, SAVE:: COutpRiE=10
+INTEGER, SAVE:: COuthRiE=11
+INTEGER, SAVE:: COuttRiE=12
+INTEGER, SAVE:: COutxRiE=13
+INTEGER, SAVE:: COuttSCiE=14
+INTEGER, SAVE:: COutQC=15
+INTEGER, SAVE:: COutMDisLn=16
+INTEGER, SAVE:: COutMLiqLn=17
+INTEGER, SAVE:: COutMC=18
+INTEGER, SAVE:: COutDPAir=19
+INTEGER, SAVE:: COutErrFlag=20
 
 !EvapPAR variables
 INTEGER, SAVE:: EvapSucLnLen=1
@@ -355,6 +381,25 @@ INTEGER, SAVE:: EInrhAi=6
 INTEGER, SAVE:: EInSolFlux=8
 INTEGER, SAVE:: EIntRdis=9
 
+!EvapOUT variables
+INTEGER, SAVE:: EOutpRoC=1
+INTEGER, SAVE:: EOuthRoC=2
+INTEGER, SAVE:: EOuttAoC=3
+INTEGER, SAVE:: EOutrhAoC=4
+INTEGER, SAVE:: EOutDPAir=5
+INTEGER, SAVE:: EOutpRiC=6
+INTEGER, SAVE:: EOuthRiC=7
+INTEGER, SAVE:: EOuttRiC=8
+INTEGER, SAVE:: EOutxRiC=9
+INTEGER, SAVE:: EOuttSHiC=10
+INTEGER, SAVE:: EOutQC=11
+INTEGER, SAVE:: EOutQCSens=12
+INTEGER, SAVE:: EOutMSucLn=13
+INTEGER, SAVE:: EOutMC=14
+INTEGER, SAVE:: EOutWtAl=15
+INTEGER, SAVE:: EOutWtCu=16
+INTEGER, SAVE:: EOutErrFlag=17
+
 !CompPAR variables
 INTEGER, SAVE:: CompCoeffP1=1
 INTEGER, SAVE:: CompCoeffP2=2
@@ -388,6 +433,14 @@ INTEGER, SAVE:: CompInPsuc=1
 INTEGER, SAVE:: CompInPdis=2
 INTEGER, SAVE:: CompInHsuc=3
 
+!CompOUT variables
+INTEGER, SAVE:: CmpOPwr=1
+INTEGER, SAVE:: CmpOMdot=2
+INTEGER, SAVE:: CmpOHdis=3
+INTEGER, SAVE:: CmpOTdis=5
+INTEGER, SAVE:: CmpOMCmp=6
+INTEGER, SAVE:: CmpOErrFlag=7
+
 !CapTube PAR variables
 INTEGER, SAVE:: TubeID=1
 INTEGER, SAVE:: TubeLen=2
@@ -395,9 +448,57 @@ INTEGER, SAVE:: TubeCoilD=3
 INTEGER, SAVE:: EvapCktNum=4
 INTEGER, SAVE:: DisTubeLen=5
 
+!CapTube IN variables
+INTEGER, SAVE:: CTIMdot=1
+INTEGER, SAVE:: CTIPiEx=2
+INTEGER, SAVE:: CTIHiEx=3
+INTEGER, SAVE:: CTIPiEv=4
+INTEGER, SAVE:: CTIPoEv=5
+
+!CapTube OUT variables
+INTEGER, SAVE:: CTOMdot=1
+INTEGER, SAVE:: CTOErrFlag=2
+INTEGER, SAVE:: CTOToE=3
+INTEGER, SAVE:: CTOXoE=4
+INTEGER, SAVE:: CTOMDT=5
+INTEGER, SAVE:: CTOPoE=6
+
 !ShortTube PAR variables
 INTEGER, SAVE:: TLen=1
 INTEGER, SAVE:: TID=2
 INTEGER, SAVE:: ChamDep=3
+
+!ShortTube IN variables
+INTEGER, SAVE:: ShTbINMdotC=1
+INTEGER, SAVE:: ShTbINPiE=2
+INTEGER, SAVE:: ShTbINHiE=3
+INTEGER, SAVE:: ShTbINPiEv=4
+INTEGER, SAVE:: ShTbINPoEv=5
+
+!AirProp variables
+INTEGER, SAVE:: APTDB=1
+INTEGER, SAVE:: APHumRat=2
+INTEGER, SAVE:: APRelHum=3
+INTEGER, SAVE:: APEnth=4
+INTEGER, SAVE:: APTWB=5
+INTEGER, SAVE:: APTDP=6
+INTEGER, SAVE:: APDryDens=7
+INTEGER, SAVE:: APWetDens=8
+
+!Accumulator PAR variables
+INTEGER, SAVE:: AccD=1
+INTEGER, SAVE:: AccH=2
+INTEGER, SAVE:: AccD1=3
+INTEGER, SAVE:: AccD2=4
+INTEGER, SAVE:: AccHDis=5
+INTEGER, SAVE:: AccDTube=6
+INTEGER, SAVE:: AccDP=7
+INTEGER, SAVE:: AccDT=8
+INTEGER, SAVE:: AccCM=9
+INTEGER, SAVE:: AccCB=10
+
+!Filter PAR variables
+INTEGER, SAVE:: FilFlowCap=1
+INTEGER, SAVE:: FilRatDP=2
 
 END MODULE DataSimulation
