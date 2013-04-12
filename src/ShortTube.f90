@@ -150,7 +150,8 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
+    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen, &  !RS: Debugging: Replacing PAR() numbers with variables
+                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv
 
     IMPLICIT NONE
 
@@ -226,11 +227,11 @@
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
+    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
+    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
+    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
+    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
 
     LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
     DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)

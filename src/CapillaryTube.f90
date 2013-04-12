@@ -153,7 +153,8 @@
     !
     ! ----------------------------------------------------------------------
     
-    USE DataSimulation, ONLY: TubeID, TubeLen, TubeCoilD, EvapCktNum,DisTubeLen   !RS: Debugging: Replacing PAR() numbers with variables
+    USE DataSimulation, ONLY: TubeID,TubeLen,TubeCoilD,EvapCktNum,DisTubeLen, &   !RS: Debugging: Replacing PAR() numbers with variables
+                            CTIMdot, CTIPiEx, CTIHiEx, CTIPiEv, CTIPoEv, CTOMdot, CTOErrFlag, CTOToE, CTOXoE, CTOMDT, CTOPoE
 
     IMPLICIT NONE
 
@@ -163,7 +164,7 @@
     !0-refrigerant mixture
     REAL, INTENT(IN) :: XIN(5)
     REAL, INTENT(IN) :: PAR(5)
-    REAL, INTENT(OUT) :: OUT(5)   !RS: Debugging: Formerly OUT(7) 
+    REAL, INTENT(OUT) :: OUT(6)   !RS: Debugging: Formerly OUT(7) 
 
     REAL Quality,Pressure,Enthalpy
 
@@ -217,11 +218,11 @@
 
     !Flow:
 
-    mdotCmp = XIN(1)    !RS: Debugging: Formerly XIN(1)
-    PiExp   = XIN(2)    !RS: Debugging: Formerly XIN(2)
-    HiExp   = XIN(3)    !RS: Debugging: Formerly XIN(3)
-    PiEvp   = XIN(4)    !RS: Debugging: Formerly XIN(4)
-    PoEvp   = XIN(5)    !RS: Debugging: Formerly XIN(5)
+    mdotCmp = XIN(CTIMdot)    !RS: Debugging: Formerly XIN(1)
+    PiExp   = XIN(CTIPiEx)    !RS: Debugging: Formerly XIN(2)
+    HiExp   = XIN(CTIHiEx)    !RS: Debugging: Formerly XIN(3)
+    PiEvp   = XIN(CTIPiEv)    !RS: Debugging: Formerly XIN(4)
+    PoEvp   = XIN(CTIPoEv)    !RS: Debugging: Formerly XIN(5)
 
     DcapTube = PAR(TubeID)   !RS: Debugging: Formerly PAR(1)
     LcapTube = PAR(TubeLen)   !RS: Debugging: Formerly PAR(2)
@@ -362,12 +363,12 @@
     mdotExp=mdotExp*1.26E-4 !Convert from lbm/hr to kg/s
     PoExp=POEXP/0.14503798 !Convert from psi to kPa
 
-    OUT(1)=mdotExp
-    OUT(3)=ToExp
-    OUT(4)=XoExp
-    OUT(5)=MassDisTube !RS: Debugging: Only used for output
-
-    OUT(2)=ErrorFlag   !RS: Debugging: Formerly OUT(7) 
+    OUT(CTOMdot)=mdotExp  !RS: Debugging: Formerly OUT(1)
+    OUT(CTOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
+    OUT(CTOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
+    OUT(CTOMDT)=MassDisTube !RS: Debugging: Only used for output !RS: Debugging: Formerly OUT(5)
+    OUT(CTOPoE)=PoExp   !RS: Debugging: Formerly the pressure
+    OUT(CTOErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(2) 
 
     RETURN
 

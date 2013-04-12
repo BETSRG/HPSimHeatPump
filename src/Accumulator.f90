@@ -584,17 +584,17 @@ CONTAINS
     !Flow:
 
     !Convert from m to ft
-    DACC = PAR(1)/0.3048 !ACCDIA
-    AHGT = PAR(2)/0.3048 !ACCHGT
-    DHOLE(1)=PAR(3)/0.3048
-    DHOLE(2)=PAR(4)/0.3048
-    HDIS = PAR(5)/0.3048 !HOLDIS
-    DTUBE = PAR(6)/0.3048 !ATBDIA
+    DACC = PAR(AccD)/0.3048 !ACCDIA    !RS: Debugging: Formerly PAR(1)
+    AHGT = PAR(AccH)/0.3048 !ACCHGT    !RS: Debugging: Formerly PAR(2)
+    DHOLE(1)=PAR(AccD1)/0.3048  !RS: Debugging: Formerly PAR(3)
+    DHOLE(2)=PAR(AccD2)/0.3048  !RS: Debugging: Formerly PAR(4)
+    HDIS = PAR(AccHDis)/0.3048 !HOLDIS    !RS: Debugging: Formerly PAR(5)
+    DTUBE = PAR(AccDTube)/0.3048 !ATBDIA   !RS: Debugging: Formerly PAR(6)
 
-    RatedDP=PAR(7)
-    RatedDT=PAR(8)
-    CoeffM=PAR(9)
-    CoeffB=PAR(10)
+    RatedDP=PAR(AccDP)  !RS: Debugging: Formerly PAR(7)
+    RatedDT=PAR(AccDT)  !RS: Debugging: Formerly PAR(8)
+    CoeffM=PAR(AccCM)   !RS: Debugging: Formerly PAR(9)
+    CoeffB=PAR(AccCB)  !RS: Debugging: Formerly PAR(10)
 
     RETURN
 

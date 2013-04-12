@@ -8,7 +8,7 @@ SUBROUTINE PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
 !  Input:
 !  BaroPressure = Barometric pressure, kPa
 !  Inputs/Outputs:
-!  AirProp(1)=Dry bulb temeprature, C
+!  AirProp(1)=Dry bulb temperature, C
 !  AirProp(2)=Humidity ratio
 !  AirProp(3)=Relative humidity
 !  AirProp(4)=Enthalpy, kJ/kg
@@ -40,6 +40,7 @@ SUBROUTINE PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)
 !  Date: August 2002
 !
 !-----------------------------------------------------------------------------------
+USE DataSimulation, ONLY: APTDB, APHumRat, APRelHum, APEnth, APTWB, APTDP, APDryDens, APWetDens
 
 IMPLICIT NONE
 
@@ -67,14 +68,14 @@ INTEGER ErrStat       !Error status
   
   OPEN (77,FILE='AirProp.err')
 
-  TDB  = AirProp(1)
-  W    = AirProp(2)
-  RH   = AirProp(3)
-  H    = AirProp(4)*1000
-  TWB  = AirProp(5)
-  TDP  = AirProp(6)
-  RhoD = AirProp(7)
-  RhoM = AirProp(8)
+  TDB  = AirProp(APTDB) !RS: Debugging: Formerly AirProp(1)
+  W    = AirProp(APHumRat)  !RS: Debugging: Formerly AirProp(2)
+  RH   = AirProp(APRelHum)  !RS: Debugging: Formerly AirProp(3)
+  H    = AirProp(APEnth)*1000   !RS: Debugging: Formerly AirProp(4)
+  TWB  = AirProp(APTWB) !RS: Debugging: Formerly AirProp(5)
+  TDP  = AirProp(APTDP) !RS: Debugging: Formerly AirProp(6)
+  RhoD = AirProp(APDryDens) !RS: Debugging: Formerly AirProp(7)
+  RhoM = AirProp(APWetDens) !RS: Debugging: Formerly AirProp(8)
   
   SELECT CASE (AirPropOpt)
   CASE (1)
@@ -94,14 +95,14 @@ INTEGER ErrStat       !Error status
       RH = 1
   END IF
 
-  AirProp(1)=TDB
-  AirProp(2)=W    
-  AirProp(3)=RH   
-  AirProp(4)=H/1000
-  AirProp(5)=TWB 
-  AirProp(6)=TDP
-  AirProp(7)=RhoD 
-  AirProp(8)=RhoM
+  AirProp(APTDB)=TDB    !RS: Debugging: Formerly AirProp(1)
+  AirProp(APHumRat)=W      !RS: Debugging: Formerly AirProp(2)
+  AirProp(APRelHum)=RH     !RS: Debugging: Formerly AirProp(3)
+  AirProp(APEnth)=H/1000 !RS: Debugging: Formerly AirProp(4)
+  AirProp(APTWB)=TWB    !RS: Debugging: Formerly AirProp(5)
+  AirProp(APTDP)=TDP    !RS: Debugging: Formerly AirProp(6)
+  AirProp(APDryDens)=RhoD   !RS: Debugging: Formerly AirProp(7)
+  AirProp(APWetDens)=RhoM   !RS: Debugging: Formerly AirProp(8)
 
   AirPropErr=ErrStat
   IF (AirPropErr .EQ. 0) THEN
