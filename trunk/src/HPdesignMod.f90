@@ -523,12 +523,12 @@
 
         IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
             IF (AccumPAR(AccH) .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
-                AccumIN(1)=MdotR
-                AccumIN(2)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1)
-                AccumIN(3)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3)
+                AccumIN(AccImdot)=MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN(AccIpRo)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
+                AccumIN(AccIhRo)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
                 CALL CalcAccumulatorMass(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(1)=0
+                AccumOUT(AccOMass)=0
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
@@ -538,10 +538,10 @@
 
             IF (ExpDevice .EQ. 1) THEN
                 CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
-                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(5)+AccumOUT(1))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
+                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(ShTbOMDT)+AccumOUT(AccOMass))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
             ELSE
                 CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
-                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+AccumOUT(1))/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
+                EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+AccumOUT(AccOMass))/UnitM    !RS: Debugging: Formerly EvapOUT(13)+EvapOUT(14)+TxvOUT(5)+AccumOUT(1))/UnitM
             END IF
         END IF
 
@@ -636,8 +636,8 @@
             ShTbIN(ShTbINPiEv)=EvapIN(EInpRi)   !Evaporator inlet pressure, kPa   !RS: Debugging: Formerly EvapIN(2), ShTbIN(4)
             ShTbIN(ShTbINPoEv)=EvapOUT(EOutpRoC)  !Evaporator outlet pressure, kPa  !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
-            IF (ShTbPAR(TLen) .LE. 0) THEN !RS: Debugging: Formerly ShTbPAR(1)
-                ShTbPAR(TLen)=0.0127   !RS: Debugging: Formerly ShTbPAR(1)
+            IF (ShTbPAR(ShTbTLen) .LE. 0) THEN !RS: Debugging: Formerly ShTbPAR(1)
+                ShTbPAR(ShTbTLen)=0.0127   !RS: Debugging: Formerly ShTbPAR(1)
                 !Short Tube: Parameters not defined.
             ELSE
 
@@ -647,24 +647,24 @@
                 MinDshTb=0
 
                 Dshtb=2.0 !1.0 !Initial guess !Short tube diameter, mm
-                ShTbPAR(TID)=Dshtb/1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
+                ShTbPAR(ShTbTID)=Dshtb/1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
 
                 DO NumIter=1, MaxIteration
 
                     !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
                     !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
                     CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)   !RS: Debugging: Extraneous PureRef
-                    IF (ShTbOUT(7) .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
-                        SELECT CASE (INT(ShTbOUT(7)))   !RS: Debugging: Formerly ShTubOUT(7)
+                    IF (ShTbOUT(ShTbOErrFlag) .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
+                        SELECT CASE (INT(ShTbOUT(ShTbOErrFlag)))   !RS: Debugging: Formerly ShTubOUT(7)
                         CASE (1)
-                            ShTbPAR(TID)=ShTbPAR(TID)*1.2   !RS: Debugging: Formerly ShTbPAR(2)
+                            ShTbPAR(ShTbTID)=ShTbPAR(ShTbTID)*1.2   !RS: Debugging: Formerly ShTbPAR(2)
                             CYCLE
                         END SELECT
                     END IF
 
-                    XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly ShTbOUT(1)
-                    ToExp=ShTbOUT(3)    !RS: Debugging: Formerly ShTbOUT(3)
-                    XoExp=ShTbOUT(4)    !RS: Debugging: Formerly ShTbOUT(4)
+                    XMRFLD=ShTbOUT(ShTbOMdotE)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly ShTbOUT(1)
+                    ToExp=ShTbOUT(ShTbOToE)    !RS: Debugging: Formerly ShTbOUT(3)
+                    XoExp=ShTbOUT(ShTbOXoE)    !RS: Debugging: Formerly ShTbOUT(4)
 
                     ErrXMR=ABS((XMRFLD-XMR))
                     IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0 .AND. ErrXMR .GT. 1E-4) THEN
@@ -674,7 +674,7 @@
                             MinDshTb=Dshtb
                         END IF
                         Dshtb=(MaxDshTb+MinDshTb)/2
-                        ShTbPAR(TID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
+                        ShTbPAR(ShTbTID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSEIF (ErrXMR .GT. 1E-4) THEN !Find short tube diameter by secant method
                         IF (XMRFLD .GT. XMR) THEN
                             MaxDshTb=Dshtb
@@ -686,14 +686,14 @@
                         IF (MaxDshTb .NE. 0 .AND. MinDshTb .NE. 0) THEN
                             Dshtb=(MaxDshTb+MinDshTb)/2
                         END IF
-                        ShTbPAR(TID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
+                        ShTbPAR(ShTbTID)=Dshtb/1000 !Short tube diameter, m   !RS: Debugging: Formerly ShTbPAR(2)
                     ELSE
                         EXIT
                     END IF
                 END DO
             END IF
 
-            IF (INT(ShTbOUT(7)) .EQ. 1) THEN    !RS: Debugging: Formerly ShTbOUT(7)
+            IF (INT(ShTbOUT(ShTbOErrFlag)) .EQ. 1) THEN    !RS: Debugging: Formerly ShTbOUT(7)
                 CALL IssueOutputMessage( '')
                 CALL IssueOutputMessage('## ERROR ## HPdesign: Short tube solution error.')
                 STOP
@@ -705,14 +705,14 @@
             PoCmp=CompIN(CompInPdis) !RS: Debugging: Formerly CompIN(2)
             Subcooling=CondOUT(COuttSCiE)  !RS: Debugging: Formerly CondOUT(14)
             Superheat=EvapOUT(EOuttSHiC)   !RS: Debugging: Formerly EvapOUT(10)
-            IF (ShTbOUT(2) .NE. 0) THEN
-                DPtxv=CondOUT(COutpRiE)-ShTbOUT(2)  !RS: Debugging: Formerly CondOUT(10)
+            IF (ShTbOUT(ShTbOPoE) .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(2)
+                DPtxv=CondOUT(COutpRiE)-ShTbOUT(ShTbOPoE)  !RS: Debugging: Formerly CondOUT(10), ShTbOUT(2)
             ElSE
                 DPtxv=CondOUT(COutpRiE)-EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2), CondOUT(10)
             END IF
 
             CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
-            TxvPAR(1)=Qtxv
+            TxvPAR(TXVQ)=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
 
             !**************Size Capillary Tube**************
             CapTubeIN(CTIMdot)=CompOUT(CmpOMdot)  !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CapTubeIN(1), CompOUT(2)
@@ -730,9 +730,9 @@
 
             CapTubeDimension=1e-4 !1E-3 !Initial guess of capillary tube diameter
             IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                CapTubePAR(TubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
+                CapTubePAR(CTTubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
             ELSE
-                CapTubePAR(TubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
+                CapTubePAR(CTTubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
             END IF
 
             DO NumIter=1, MaxIter
@@ -744,7 +744,7 @@
                 IF (CapTubeOUT(CTOErrFlag) .NE. 0) THEN   !RS: Debugging: Formerly CapTubeOUT(2) 
                     SELECT CASE (INT(CapTubeOUT(CTOErrFlag)))   !RS: Debugging: Formerly CapTubeOUT(2) 
                     CASE (1)
-                        CapTubePAR(TubeID)=CapTubePAR(TubeID)*1.2 !RS: Debugging: Formerly CapTubePAR(1)
+                        CapTubePAR(CTTubeID)=CapTubePAR(CTTubeID)*1.2 !RS: Debugging: Formerly CapTubePAR(1)
                         CYCLE
                     END SELECT
                 END IF
@@ -797,9 +797,9 @@
                 END IF
 
                 IF (IsSizeDiameter .EQ. .TRUE.) THEN
-                    CapTubePAR(TubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
+                    CapTubePAR(CTTubeID)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(1)
                 ELSE
-                    CapTubePAR(TubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
+                    CapTubePAR(CTTubeLen)=CapTubeDimension  !RS: Debugging: Formerly CapTubePAR(2)
                 END IF
 
             END DO
@@ -814,12 +814,12 @@
 
         IF (LPRINT.LE.1.AND.IMASS.NE.0) THEN
             IF (AccumPAR(AccH) .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
-                AccumIN(1)=MdotR    !RS: Debugging: Formerly AccumIN(1)
-                AccumIN(2)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
-                AccumIN(3)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
+                AccumIN(AccImdot)=MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN(AccIpRo)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
+                AccumIN(AccIhRo)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
                 CALL CalcAccumulatorMass(AccumIN,AccumOUT)
             ELSE
-                AccumOUT(1)=0   !RS: Debugging: Formerly AccumOUT(1)
+                AccumOUT(AccOMass)=0   !RS: Debugging: Formerly AccumOUT(1)
             END IF
 
             CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
@@ -828,7 +828,7 @@
             EvapOUT(EOutMC)=MassCoil    !RS: Debugging: Formerly EvapOUT(14)
 
             CALCHG=(CompOUT(CmpOMCmp)+CondOUT(COutMDisLn)+CondOUT(COutMLiqLn)+CondOUT(COutMC)+ &   !RS: Debugging: Formerly CompOUT(6), CondOUT(16), CondOUT(17), CondOUT(18)
-            EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(5)+AccumOUT(1))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
+            EvapOUT(EOutMSucLn)+EvapOUT(EOutMC)+ShTbOUT(ShTbOMDT)+AccumOUT(AccOMass))/UnitM   !RS: Debugging: Formerly EvapOUT(13), EvapOUT(14), ShTbOUT(5), AccumOUT(1)
         END IF
 
         IF(ICHRGE.EQ.0.AND.ERRMSG(1).NE.0.) THEN 

@@ -374,7 +374,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
 
     IF (Power .LT. 0 .OR. MassCmp .LT. 0) THEN
         ErrorFlag=1
-        OUT(7)=ErrorFlag
+        OUT(CmpOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
         RETURN
     END IF
 

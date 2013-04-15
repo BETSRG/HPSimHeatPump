@@ -153,7 +153,7 @@
     !
     ! ----------------------------------------------------------------------
     
-    USE DataSimulation, ONLY: TubeID,TubeLen,TubeCoilD,EvapCktNum,DisTubeLen, &   !RS: Debugging: Replacing PAR() numbers with variables
+    USE DataSimulation, ONLY: CTTubeID,CTTubeLen,CTTubeCoilD,CTEvapCktNum,CTDisTubeLen, &   !RS: Debugging: Replacing PAR() numbers with variables
                             CTIMdot, CTIPiEx, CTIHiEx, CTIPiEv, CTIPoEv, CTOMdot, CTOErrFlag, CTOToE, CTOXoE, CTOMDT, CTOPoE
 
     IMPLICIT NONE
@@ -224,18 +224,17 @@
     PiEvp   = XIN(CTIPiEv)    !RS: Debugging: Formerly XIN(4)
     PoEvp   = XIN(CTIPoEv)    !RS: Debugging: Formerly XIN(5)
 
-    DcapTube = PAR(TubeID)   !RS: Debugging: Formerly PAR(1)
-    LcapTube = PAR(TubeLen)   !RS: Debugging: Formerly PAR(2)
-    Dcoil    = PAR(TubeCoilD)   !RS: Debugging: Formerly PAR(3)
-    Nckts    = PAR(EvapCktNum)   !RS: Debugging: Formerly PAR(4)
-    LdisTube = PAR(DisTubeLen)   !RS: Debugging: Formerly PAR(5)
+    DcapTube = PAR(CTTubeID)   !RS: Debugging: Formerly PAR(1)
+    LcapTube = PAR(CTTubeLen)   !RS: Debugging: Formerly PAR(2)
+    Dcoil    = PAR(CTTubeCoilD)   !RS: Debugging: Formerly PAR(3)
+    Nckts    = PAR(CTEvapCktNum)   !RS: Debugging: Formerly PAR(4)
+    LdisTube = PAR(CTDisTubeLen)   !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag = 0 !Initialize
 
     Pressure=PiExp*1000 !RS Comment: Unit Conversion
     Enthalpy=HiExp*1000 !RS Comment: Unit Conversion
     TiExp=PH(Ref$,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)   !Expansion Device Inlet Temperature
-    !IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(6))) THEN   !RS: OUT(6) is the wrong location---OUT(7) is the error location
      IF (IssueRefPropError(RefPropErr, 'Capillary Tube', ErrorFlag, OUT(2))) THEN   !RS: Debugging: Formerly OUT(7)   
         RETURN
     END IF

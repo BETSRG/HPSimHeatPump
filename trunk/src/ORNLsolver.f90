@@ -673,14 +673,14 @@
                     CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
                     CondPAR(CondFirstTime)=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
 
-                    Qcnd=CondOUT(15) 	! VL_Index_Replace
+                    Qcnd=CondOUT(COutQC) 	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
 
                     IF (Unit .EQ. 1) THEN !SI Unit
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR*3600,Qcnd
                     ELSE
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR/Umass*3600,Qcnd/UnitPwr
                     END IF
-                    CALL IssueOutputMessage( tmpString)
+                    CALL IssueOutputMessage(tmpString)
 
                     IF (ABS(CondOUT(COuthRoC)-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CondOUT(6)
 

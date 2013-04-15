@@ -88,7 +88,7 @@ SUBROUTINE CalcFilterDrierDP(XIN,PAR,OUT)
 !
 ! ----------------------------------------------------------------------
 USE DataGlobals_HPSim, ONLY: RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
-USE DataSimulation, ONLY: FilFlowCap, FilRatDP  !RS: Debugging: Brings variable names instead of numbers through
+USE DataSimulation, ONLY: FilFlowCap, FilRatDP, FIDP, FODP  !RS: Debugging: Brings variable names instead of numbers through
 implicit none
 
 !Flow:
@@ -111,7 +111,7 @@ REAL DP !Pressure drop, kPa
 
 !Flow:
 
-	mdot=XIN(1)
+	mdot=XIN(FIDP) !RS: Debugging: Formerly XIN(1)
 
 	FlowCapacity=PAR(FilFlowCap) !RS: Debugging: Formerly PAR(1)
 	RatedDP=PAR(FilRatDP)  !RS: Debugging: Formerly PAR(2)
@@ -135,7 +135,7 @@ REAL DP !Pressure drop, kPa
 		DP=0
 	END IF
 
-	OUT(1)=DP
+	OUT(FODP)=DP   !RS: Debugging: Formerly OUT(1)
 
 RETURN
 

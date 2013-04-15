@@ -557,7 +557,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      SHR=QevpSens/Qevp
 
 	      MassEvp=EvapOUT(EOutMC)   !RS: Debugging: Formerly EvapOUT(14)
-	      MassSucLn=EvapOUT(EOutMSucLn)+AccumOUT(1) !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
+	      MassSucLn=EvapOUT(EOutMSucLn)+AccumOUT(AccOMass) !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
 
 	      WeightEvpAluminum=EvapOUT(EOutWtAl) !RS: Debugging: Formerly EvapOUT(15)
 	      WeightEvpCopper=EvapOUT(EOutWtCu)   !RS: Debugging: Formerly EvapOUT(16)
@@ -1005,13 +1005,13 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
       ELSE
 	      PiExp=ShTbIN(ShTbINPiE)   !RS: Debugging: Formerly ShTbIN(2)
 	      HiExp=ShTbIN(ShTbINHiE)   !RS: Debugging: Formerly ShTbIN(3)
-	      MassDisTube=ShTbOUT(5)    !RS: Debugging: Formerly ShTbOUT(5)
+	      MassDisTube=ShTbOUT(ShTbOMDT)    !RS: Debugging: Formerly ShTbOUT(5)
       END IF
       
-	  Dshtb=ShTbPAR(TID)  !RS: Debugging: Formerly ShTbPAR(2)
-	  Qtxv=TxvPAR(1)
-	  DcapTube=CapTubePAR(TubeID)    !RS: Debugging: Formerly CapTubePAR(1)
-	  LcapTube=CapTubePAR(TubeLen)    !RS: Debugging: Formerly CapTubePAR(2)
+	  Dshtb=ShTbPAR(ShTbTID)  !RS: Debugging: Formerly ShTbPAR(2)
+	  Qtxv=TxvPAR(TXVQ) !RS: Debugging: Formerly TxvPAR(1)
+	  DcapTube=CapTubePAR(CTTubeID)    !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR(CTTubeLen)    !RS: Debugging: Formerly CapTubePAR(2)
 
 	  Pressure=PiExp*1000   !RS Comment: Unit Conversion
 	  Enthalpy=HiExp*1000   !RS Comment: Unit Conversion
@@ -1044,7 +1044,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	      PoExp=CapTubeOUT(CTOPoE)   !RS: Debugging: Formerly CapTubeOUT(6)???
 	      HoExp=CapTubeIN(CTIHiEx)    !RS: Debugging: Formerly CapTubeIN(3)
       ELSE
-	      PoExp=ShTbOUT(2)  !RS: Debugging: Formerly ShTbOUT(2)
+	      PoExp=ShTbOUT(ShTbOPoE)  !RS: Debugging: Formerly ShTbOUT(2)
 	      HoExp=ShTbIN(ShTbINHiE)   !RS: Debugging: Formerly ShTbIN(3)
       END IF
 
@@ -1182,7 +1182,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  QevpLat=Qevp-QevpSens
 
 	  MassEvp=EvapOUT(EOutMC)   !RS: Debugging: Formerly EvapOUT(14)
-	  MassSucLn=EvapOUT(EOutMSucLn)+AccumOUT(1) !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
+	  MassSucLn=EvapOUT(EOutMSucLn)+AccumOUT(AccOMass) !RS: Debugging: Formerly EvapOUT(13), AccumOUT(1)
 
 	  WeightEvpAluminum=EvapOUT(EOutWtAl) !RS: Debugging: Formerly EvapOUT(15)
 	  WeightEvpCopper=EvapOUT(EOutWtCu)   !RS: Debugging: Formerly EvapOUT(16)
@@ -1216,13 +1216,13 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  END IF
 
       CalChg=CALCHG*UnitM
-      Dshtb=ShTbPAR(TID)*1000 !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
-	  DcapTube=CapTubePAR(TubeID)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(1)
-	  LcapTube=CapTubePAR(TubeLen)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(2)
+      Dshtb=ShTbPAR(ShTbTID)*1000 !RS Comment: Unit Conversion    !RS: Debugging: Formerly ShTbPAR(2)
+	  DcapTube=CapTubePAR(CTTubeID)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR(CTTubeLen)*1000   !RS Comment: Unit Conversion    !RS: Debugging: Formerly CapTubePAR(2)
 
-      MassAccum=AccumOUT(1)
-      AccumDP=AccumOUT(2)   !RS: Debugging: Formerly AccumOUT(5)
-      FilterDP=FilterOUT(1)
+      MassAccum=AccumOUT(AccOMass) !RS: Debugging: Formerly AccumOUT(1)
+      AccumDP=AccumOUT(AccODP)   !RS: Debugging: Formerly AccumOUT(2)
+      FilterDP=FilterOUT(FODP) !RS: Debugging: Formerly FilterOUT(1)
   
   END IF
   
@@ -1336,9 +1336,9 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
 	  MassLiqLn=MassLiqLn/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassDisTube=MassDisTube/UnitM !RS Comment: Unit Conversion, from kg to lbm
 	  MassAccum=MassAccum/UnitM     !RS Comment: Unit Conversion, from kg to lbm
-      Dshtb=ShTbPAR(2)/UnitL*12         !RS Comment: Unit Conversion, from m to in
-	  DcapTube=CapTubePAR(1)/UnitL*12   !RS Comment: Unit Conversion, from m to in
-	  LcapTube=CapTubePAR(2)/UnitL*12   !RS Comment: Unit Conversion, from m to in
+      Dshtb=ShTbPAR(ShTbTID)/UnitL*12         !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly ShTbPAR(2)
+	  DcapTube=CapTubePAR(CTTubeID)/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(1)
+	  LcapTube=CapTubePAR(CTTubeLen)/UnitL*12   !RS Comment: Unit Conversion, from m to in  !RS: Debugging: Formerly CapTubePAR(2)
 
       TaoEVP=TaoEVP*1.8+32  !RS Comment: Unit Conversion, from C to F
 	  TaoCND=TaoCND*1.8+32  !RS Comment: Unit Conversion, from C to F

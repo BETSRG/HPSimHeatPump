@@ -187,7 +187,7 @@ INTEGER,PARAMETER :: PANASONIC = 4
 REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
 
-  !***************** System data *****************  !RS: Debugging: Moving: May be able to stay here? Or go to ORNLSolver
+  !***************** System data *****************  !RS: Debugging: Moving: Stay here
 
   CALL GetObjectItem('MainDesignData',1,Alphas,NumAlphas, &
                         TmpNumbers,NumNumbers,Status)
@@ -222,7 +222,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
   RefChg = Numbers(7)    !Design Refrigerant Charge Mass
 
 
-  !***************** Compressor data *****************  !RS: Debugging: Moving: Compressor
+  !***************** Compressor data *****************  !RS: Debugging: Moving: Stay here
  
   CALL GetObjectItem('CompressorData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -280,7 +280,7 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
     END IF
   !IDdrawBlow = Numbers(3)   !Draw Through or Blow Through
 
-  !***************** Expansion device data *****************    !RS: Debugging: Moving: Either stay or HPDM & FlowRateLoop
+  !***************** Expansion device data *****************    !RS: Debugging: Moving: Stay here
 
   CALL GetObjectItem('ExpansionDeviceData',1,Alphas,NumAlphas, &
                       TmpNumbers,NumNumbers,Status)
@@ -715,12 +715,12 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
     CoilParams(2)%AirFlowRate=CFMcnd
 
 	ShTbPAR=CoolingShTbPAR
-    ShTbPAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19)
-    ShTbPAR(5)=CoolingDistubeLength
+    ShTbPAR(ShTbECktNum)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19), ShTbPAR(4)
+    ShTbPAR(ShTbDTubeLen)=CoolingDistubeLength !RS: Debugging: Formerly ShTbPAR(5)
 
 	CapTubePAR=CoolingCapTubePAR
-    CapTubePAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19)
-    CapTubePAR(5)=CoolingDistubeLength
+    CapTubePAR(CTEvapCktNum)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19), CapTubePAR(4)
+    CapTubePAR(CTDisTubeLen)=CoolingDistubeLength  !RS: Debugging: Formerly CapTubePAR(5)
 
     ExpDevice=CoolingExpDevice
   ELSE
@@ -728,12 +728,12 @@ REAL, DIMENSION(200) :: TmpNumbers !RS Comment: Currently needs to be used for i
     CoilParams(2)%AirFlowRate=CFMevp
  
 	ShTbPAR=HeatingShTbPAR
-    ShTbPAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19)
-    ShTbPAR(5)=HeatingDistubeLength
+    ShTbPAR(ShTbECktNum)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator    !RS: Debugging: Formerly EvapPAR(19), ShTbPAR(4)
+    ShTbPAR(ShTbDTubeLen)=HeatingDistubeLength !RS: Debugging: Formerly ShTbPAR(5)
 
 	CapTubePAR=HeatingCapTubePAR
-    CapTubePAR(4)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19)
-    CapTubePAR(5)=HeatingDistubeLength
+    CapTubePAR(CTEvapCktNum)=EvapPAR(EvapNumCkt) !Number of circuits in evaporator !RS: Debugging: Formerly EvapPAR(19), CapTubePAR(4)
+    CapTubePAR(CTDisTubeLen)=HeatingDistubeLength  !RS: Debugging: CapTubePAR(5)
 
     ExpDevice=HeatingExpDevice
   END IF
