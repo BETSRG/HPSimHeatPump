@@ -442,11 +442,11 @@ INTEGER, SAVE:: CmpOMCmp=6
 INTEGER, SAVE:: CmpOErrFlag=7
 
 !CapTube PAR variables
-INTEGER, SAVE:: TubeID=1
-INTEGER, SAVE:: TubeLen=2
-INTEGER, SAVE:: TubeCoilD=3
-INTEGER, SAVE:: EvapCktNum=4
-INTEGER, SAVE:: DisTubeLen=5
+INTEGER, SAVE:: CTTubeID=1
+INTEGER, SAVE:: CTTubeLen=2
+INTEGER, SAVE:: CTTubeCoilD=3
+INTEGER, SAVE:: CTEvapCktNum=4
+INTEGER, SAVE:: CTDisTubeLen=5
 
 !CapTube IN variables
 INTEGER, SAVE:: CTIMdot=1
@@ -464,9 +464,11 @@ INTEGER, SAVE:: CTOMDT=5
 INTEGER, SAVE:: CTOPoE=6
 
 !ShortTube PAR variables
-INTEGER, SAVE:: TLen=1
-INTEGER, SAVE:: TID=2
-INTEGER, SAVE:: ChamDep=3
+INTEGER, SAVE:: ShTbTLen=1
+INTEGER, SAVE:: ShTbTID=2
+INTEGER, SAVE:: ShTbChamDep=3
+INTEGER, SAVE:: ShTbECktNum=4
+INTEGER, SAVE:: ShTbDTubeLen=5
 
 !ShortTube IN variables
 INTEGER, SAVE:: ShTbINMdotC=1
@@ -474,6 +476,14 @@ INTEGER, SAVE:: ShTbINPiE=2
 INTEGER, SAVE:: ShTbINHiE=3
 INTEGER, SAVE:: ShTbINPiEv=4
 INTEGER, SAVE:: ShTbINPoEv=5
+
+!ShortTube OUT variables
+INTEGER, SAVE:: ShTbOMdotE=1
+INTEGER, SAVE:: ShTbOPoE=2
+INTEGER, SAVE:: ShTbOToE=3
+INTEGER, SAVE:: ShTbOXoE=4
+INTEGER, SAVE:: ShTbOMDT=5
+INTEGER, SAVE:: ShTbOErrFlag=6
 
 !AirProp variables
 INTEGER, SAVE:: APTDB=1
@@ -497,8 +507,26 @@ INTEGER, SAVE:: AccDT=8
 INTEGER, SAVE:: AccCM=9
 INTEGER, SAVE:: AccCB=10
 
+!Accumulator IN variables
+INTEGER, SAVE:: AccImdot=1
+INTEGER, SAVE:: AccIpRo=2
+INTEGER, SAVE:: AccIhRo=3
+
+!Accumulator OUT variables
+INTEGER, SAVE:: AccOMass=1
+INTEGER, SAVE:: AccODP=2
+
 !Filter PAR variables
 INTEGER, SAVE:: FilFlowCap=1
 INTEGER, SAVE:: FilRatDP=2
+
+!Filter IN variable
+INTEGER, SAVE:: FIDP=1
+
+!Filter OUT variable
+INTEGER, SAVE:: FODP=1
+
+!TXV PAR variable
+INTEGER, SAVE:: TXVQ=1
 
 END MODULE DataSimulation

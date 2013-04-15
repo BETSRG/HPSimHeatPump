@@ -705,7 +705,7 @@ CONTAINS
         Dchannel,NumOfChannels,Pt,Pl,Nt,Nl,NumOfCkts, &
         FinThk,FinPitch,WeightAluminum,WeightCopper)
         IF (ErrorFlag .GT. CONVERGEERROR) THEN
-            OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+            OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -776,7 +776,7 @@ CONTAINS
 
     CALL InitBoundaryConditions(CoilType)
     IF (ErrorFlag .GT. CONVERGEERROR) THEN
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -854,7 +854,7 @@ CONTAINS
                             END IF
                             CALL CalcCoilSegment(NumSection,I,I,J,K,CoilType)
                             IF (ErrorFlag .GT. CONVERGEERROR) THEN
-                                OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+                                OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                                 CALL Evaporator_Helper_1
                                 RETURN
                             END IF
@@ -886,7 +886,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2205'
                         ErrorFlag=REFPROPERROR
-                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -894,7 +894,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2211'
                         ErrorFlag=REFPROPERROR
-                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -905,7 +905,7 @@ CONTAINS
                     IF (RefPropErr .GT. 0) THEN
                         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2231'
                         ErrorFlag=REFPROPERROR
-                        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+                        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
                         CALL Evaporator_Helper_1
                         RETURN
                     END IF
@@ -1120,7 +1120,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1128,7 +1128,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2652'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1139,7 +1139,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2672'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1166,7 +1166,7 @@ CONTAINS
         IF (RefPropErr .GT. 0) THEN
             WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2646'
             ErrorFlag=REFPROPERROR
-            OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+            OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
             CALL Evaporator_Helper_1
             RETURN
         END IF
@@ -1187,7 +1187,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2705'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1195,7 +1195,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2711'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -1206,7 +1206,7 @@ CONTAINS
     IF (RefPropErr .GT. 0) THEN
         WRITE(*,*)'-- WARNING -- Evaporator: Refprop error. Line 2730'
         ErrorFlag=REFPROPERROR
-        OUT(17)=ErrorFlag   !RS: Debugging: Formerly OUT(20)
+        OUT(EOutErrFlag)=ErrorFlag   !RS: Debugging: Formerly OUT(17)
         CALL Evaporator_Helper_1
         RETURN
     END IF
@@ -7182,6 +7182,8 @@ SUBROUTINE LoadMicrochannelInputs(FTXIN,FTPAR,MCXIN,MCPAR)
 !
 !-----------------------------------------------------------------------------------
 
+USE DataSimulation
+
 IMPLICIT NONE
 
 REAL, INTENT(IN)  :: FTXIN(9)  !Fin-tube coil input data
@@ -7191,47 +7193,31 @@ REAL, INTENT(OUT) :: MCPAR(19) !Microchannel coil input parameters  !RS: Debuggi
 
 !FLOW:
 
-  MCXIN(1)=FTXIN(1) !Refrigerant side mass flow rate, kg/s
-  MCXIN(2)=FTXIN(2) !Refrigerant side inlet pressure, kPa
-  MCXIN(3)=FTXIN(3) !Refrigerant side inlet enthalpy, kJ/kg
-  MCXIN(4)=FTXIN(4) !Air side mass flow rate, kg/s
-  MCXIN(5)=FTXIN(5) !Air side inlet temp. C
-  MCXIN(6)=FTXIN(6) !Air side inlet relative humidity
-  MCXIN(7)=FTXIN(9) !Compressor discharge temperature, C
+  MCXIN(1)=FTXIN(EInmRef) !Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(1)
+  MCXIN(2)=FTXIN(EInpRi) !Refrigerant side inlet pressure, kPa   !RS: Debugging: Formerly FTXIN(2)
+  MCXIN(3)=FTXIN(EInhRi) !Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly FTXIN(3)
+  MCXIN(4)=FTXIN(EInmAi) !Air side mass flow rate, kg/s  !RS: Debugging: Formerly FTXIN(4)
+  MCXIN(5)=FTXIN(EIntAi) !Air side inlet temp. C !RS: Debugging: Formerly FTXIN(5)
+  MCXIN(6)=FTXIN(EInrhAi) !Air side inlet relative humidity   !RS: Debugging: Formerly FTXIN(6)
+  MCXIN(7)=FTXIN(EIntRdis) !Compressor discharge temperature, C    !RS: Debugging: Formerly FTXIN(7)
 
-  MCPAR(1)=FTPAR(31)  !Barometric pressure, kPa
-  !MCPAR(2)=FTPAR(20)  !Cooling mode? 1=yes; 0=no   !RS: Debugging: Extraneous
-  MCPAR(3)=FTPAR(1)   !Suction line length, m
-  MCPAR(4)=FTPAR(2)   !Suction line outside diameter, m
-  MCPAR(5)=FTPAR(3)   !Suction line tube wall thickness, m 
-  MCPAR(6)=FTPAR(4)   !Suction line elevation, m
-  MCPAR(7)=FTPAR(5)   !Suction line heat loss, kW
-  MCPAR(8)=FTPAR(6)   !Suction line temperature change, C
-  MCPAR(9)=FTPAR(7)   !Suction line additional pressure drop, kPa
-  MCPAR(10)=FTPAR(23) !Multiplier for ref. side heat transfer correlation
-  MCPAR(11)=FTPAR(24) !Multiplier for ref. side pressure drop correlation
-  MCPAR(12)=FTPAR(25) !Multiplier for air side heat transfer correlation
-  MCPAR(13)=FTPAR(26) !Multiplier for air side pressure drop correlation
-  MCPAR(14)=FTPAR(27) !Fan power, kW
-  MCPAR(15)=FTPAR(28) !Fan location, 1=draw through; 2=blow through
-  MCPAR(16)=FTPAR(32) !Compressor heat loss, kW
-  MCPAR(17)=FTPAR(33) !Is compressor in air stream, 1=yes, 0=no
-  MCPAR(18)=FTPAR(34) !System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat
-  !MCPAR(19)=FTPAR(35) !Custom air side data unit, 1=SI; 2=IP   !RS: Debugging: Never really used
-  !MCPAR(20)=FTPAR(36) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-  !MCPAR(21)=FTPAR(37) !Power coefficient for air heat transfer curve
-  !MCPAR(22)=FTPAR(38) !Power coefficient for air heat transfer curve
-  !MCPAR(23)=FTPAR(39) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(24)=FTPAR(40) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(25)=FTPAR(41) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(26)=FTPAR(42) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(27)=FTPAR(43) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-  !MCPAR(28)=FTPAR(44) !Power coefficient for air heat transfer curve
-  !MCPAR(29)=FTPAR(45) !Power coefficient for air heat transfer curve
-  !MCPAR(30)=FTPAR(46) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(31)=FTPAR(47) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(32)=FTPAR(48) !Polynomial coefficient for air heat transfer curve
-  !MCPAR(33)=FTPAR(49) !Polynomial coefficient for air heat transfer curve
+  MCPAR(1)=FTPAR(EvapBarPress)  !Barometric pressure, kPa !RS: Debugging: Formerly FTPAR(31)
+  MCPAR(3)=FTPAR(EvapSucLnLen)   !Suction line length, m   !RS: Debugging: Formerly FTPAR(1)
+  MCPAR(4)=FTPAR(EvapSucLnOD)   !Suction line outside diameter, m !RS: Debugging: Formerly FTPAR(2)
+  MCPAR(5)=FTPAR(EvapSucLnTWThick)   !Suction line tube wall thickness, m  !RS: Debugging: Formerly FTPAR(3)
+  MCPAR(6)=FTPAR(EvapSucLnElev)   !Suction line elevation, m    !RS: Debugging: Formerly FTPAR(4)
+  MCPAR(7)=FTPAR(EvapSucLnQLoss)   !Suction line heat loss, kW   !RS: Debugging: Formerly FTPAR(5)
+  MCPAR(8)=FTPAR(EvapSucLnTempChg)   !Suction line temperature change, C   !RS: Debugging: Formerly FTPAR(6)
+  MCPAR(9)=FTPAR(EvapSucLnAddPD)   !Suction line additional pressure drop, kPa   !RS: Debugging: Formerly FTPAR(7)
+  MCPAR(10)=FTPAR(EvapMultRefQT) !Multiplier for ref. side heat transfer correlation   !RS: Debugging: Formerly FTPAR(23)
+  MCPAR(11)=FTPAR(EvapMultRefPD) !Multiplier for ref. side pressure drop correlation   !RS: Debugging: Formerly FTPAR(24)
+  MCPAR(12)=FTPAR(EvapMultAirQT) !Multiplier for air side heat transfer correlation    !RS: Debugging: Formerly FTPAR(25)
+  MCPAR(13)=FTPAR(EvapMultAirPD) !Multiplier for air side pressure drop correlation    !RS: Debugging: Formerly FTPAR(26)
+  MCPAR(14)=FTPAR(EvapFanPwr) !Fan power, kW    !RS: Debugging: Formerly FTPAR(27)
+  MCPAR(15)=FTPAR(EvapFanLoc) !Fan location, 1=draw through; 2=blow through !RS: Debugging: Formerly FTPAR(28)
+  MCPAR(16)=FTPAR(EvapCompQLoss) !Compressor heat loss, kW !RS: Debugging: Formerly FTPAR(32)
+  MCPAR(17)=FTPAR(EvapSysType) !Is compressor in air stream, 1=yes, 0=no !RS: Debugging: Formerly FTPAR(33)
+  MCPAR(18)=FTPAR(EvapPressTolConv) !System Type, 1=A/C, 2=Heat Pump, 3=Condenser Unit, 4=Reheat  !RS: Debugging: Formerly FTPAR(34)
 
   RETURN
 
@@ -7262,31 +7248,23 @@ REAL, INTENT(OUT) :: FTOUT(17)  !Fin-tube coil output data  !RS: Debugging: Form
 
 !FLOW:
 
-  FTOUT(1)=MCOUT(3)   !Coil outlet pressure, kPa
-  FTOUT(2)=MCOUT(4)   !Coil outlet enthalpy, kJ/kg
-  !FTOUT(3)=MCOUT(5)   !Coil outlet temperature, C  !RS: Debugging: Never used
-  !FTOUT(4)=MCOUT(6)   !Coil outlet quality !RS: Debugging: Never used
-  !FTOUT(5)=MCOUT(7)   !Coil outlet superheat, C    !RS: Debugging: Never used
-  FTOUT(6)=MCOUT(8)   !Suction line outlet pressure, kPa
-  FTOUT(7)=MCOUT(9)   !Suction line outlet enthalpy, kJ/kg
-  FTOUT(8)=MCOUT(10)  !Suction line outlet temperature, C
-  FTOUT(9)=MCOUT(11)  !Suction line outlet quality
-  FTOUT(10)=MCOUT(12) !Suction line outlet superheat, C
-  FTOUT(11)=MCOUT(1)  !Coil capacity, kW
-  FTOUT(12)=MCOUT(2)  !Sensible coil capacity, kW
-  FTOUT(13)=MCOUT(16) !Mass in suction line, kg
-  FTOUT(14)=MCOUT(17) !Mass in coil, kg
-  !FTOUT(15)=MCOUT(18) !Liquid mass in coil, kg !RS: Debugging: Never used
-  !FTOUT(16)=MCOUT(19) !Vapor mass in coil, kg  !RS: Debugging: Never used
-  FTOUT(3)=MCOUT(13) !Air side outlet temperature, C   !RS: Debugging: Formerly FTOUT(17)
-  FTOUT(4)=MCOUT(14) !Air side outlet relative humidity    !RS: Debugging: Formerly FTOUT(18)
-  FTOUT(5)=MCOUT(15) !Air side pressure drop, kPa  !RS: Debugging: Formerly FTOUT(19)
-  FTOUT(17)=MCOUT(21) !Error flag   !RS: Debugging: Formerly FTOUT(20)
-  !FTOUT(21)=0         !Air side heat transfer coefficients, kW/m^2-K   !RS: Debugging: Never used
-  !FTOUT(22)=0         !Inlet coil surface temperature, C   !RS: Debugging: Never used
-  !FTOUT(23)=0         !Outlet coil surface temperature, C  !RS: Debugging: Never used
-  FTOUT(15)=MCOUT(20) !Aluminum weight, kg  !RS: Debugging: Formerly FTOUT(24)
-  FTOUT(16)=0         !Copper weight, kg    !RS: Debugging: Formerly FTOUT(25)
+  FTOUT(EOutpRoC)=MCOUT(3)   !Coil outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(1)
+  FTOUT(EOuthRoC)=MCOUT(4)   !Coil outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(2)
+  FTOUT(EOutpRiC)=MCOUT(8)   !Suction line outlet pressure, kPa    !RS: Debugging: Formerly FTOUT(6)
+  FTOUT(EOuthRiC)=MCOUT(9)   !Suction line outlet enthalpy, kJ/kg  !RS: Debugging: Formerly FTOUT(7)
+  FTOUT(EOuttRiC)=MCOUT(10)  !Suction line outlet temperature, C   !RS: Debugging: Formerly FTOUT(8)
+  FTOUT(EOutxRiC)=MCOUT(11)  !Suction line outlet quality  !RS: Debugging: Formerly FTOUT(9)
+  FTOUT(EOuttSHiC)=MCOUT(12) !Suction line outlet superheat, C !RS: Debugging: Formerly FTOUT(10)
+  FTOUT(EOutQC)=MCOUT(1)  !Coil capacity, kW    !RS: Debugging: Formerly FTOUT(11)
+  FTOUT(EOutQCSens)=MCOUT(2)  !Sensible coil capacity, kW   !RS: Debugging: Formerly FTOUT(12)
+  FTOUT(EOutMSucLn)=MCOUT(16) !Mass in suction line, kg !RS: Debugging: Formerly FTOUT(13)
+  FTOUT(EOutMC)=MCOUT(17) !Mass in coil, kg !RS: Debugging: Formerly FTOUT(14)
+  FTOUT(EOuttAoC)=MCOUT(13) !Air side outlet temperature, C   !RS: Debugging: Formerly FTOUT(3)
+  FTOUT(EOutrhAoC)=MCOUT(14) !Air side outlet relative humidity    !RS: Debugging: Formerly FTOUT(4)
+  FTOUT(EOutDPAir)=MCOUT(15) !Air side pressure drop, kPa  !RS: Debugging: Formerly FTOUT(5)
+  FTOUT(EOutErrFlag)=MCOUT(21) !Error flag   !RS: Debugging: Formerly FTOUT(17)
+  FTOUT(EOutWtAl)=MCOUT(20) !Aluminum weight, kg  !RS: Debugging: Formerly FTOUT(15)
+  FTOUT(EOutWtCu)=0         !Copper weight, kg    !RS: Debugging: Formerly FTOUT(16)
 
   RETURN
 

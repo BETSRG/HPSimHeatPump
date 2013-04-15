@@ -150,8 +150,9 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen, &  !RS: Debugging: Replacing PAR() numbers with variables
-                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv
+    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
@@ -233,11 +234,11 @@
     PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
     PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -416,11 +417,11 @@
 
         ErrorFlag=1
         !VL: Previously: GOTO 200
-        OUT(7)=ErrorFlag
-        PiExpDev = XIN(2)
-        HiExpDev = XIN(3)
-        PoExpDev = OUT(2)
-        ToExpDev = OUT(3)
+        OUT(ShTbOErrFlag)=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
@@ -441,29 +442,29 @@
     IF (mdotExp .LT. 0) THEN
 
         ErrorFlag=1
-        OUT(7)=ErrorFlag
-        PiExpDev = XIN(2)
-        HiExpDev = XIN(3)
-        PoExpDev = OUT(2)
-        ToExpDev = OUT(3)
+        OUT(ShTbOErrFlag)=ErrorFlag !RS: Debugging: Formerly OUT(7)
+        PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
+        HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
+        PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
+        ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
         hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
         RETURN
 
     END IF
 
-    OUT(1)=mdotExp
-    OUT(2)=PoExp
-    OUT(3)=ToExp
-    OUT(4)=XoExp
-    OUT(5)=MassDisTube
+    OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
+    OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
+    OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
+    OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
+    OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
     !OUT(6)=QdisTube    !RS: Debugging: Never used
 
-    OUT(7)=ErrorFlag
+    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
+    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy
 
     RETURN
@@ -526,7 +527,9 @@
 
     USE FluidProperties_HPSim !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
+    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
@@ -594,17 +597,17 @@
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
+    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
+    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
+    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
+    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -758,20 +761,20 @@
     IF (mdotExp .LT. 0) THEN
         ErrorFlag=1
     ELSE
-        OUT(1)=mdotExp
-        OUT(2)=PoExp
-        OUT(3)=ToExp
-        OUT(4)=XoExp
-        OUT(5)=MassDisTube
+        OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
+        OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
+        OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
+        OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
+        OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
         !OUT(6)=QdisTube    !RS: Debugging: Never used
     END IF
 
-    OUT(7)=ErrorFlag
+    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
+    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
     hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !Expansion Device Outlet Enthalpy?
 
     RETURN
@@ -833,7 +836,9 @@
 
     USE FluidProperties_HPSim
     USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
-    USE DataSimulation, ONLY: TLen, TID, ChamDep, EvapCktNum, DisTubeLen  !RS: Debugging: Replacing PAR() numbers with variables
+    USE DataSimulation, ONLY: ShTbTLen, ShTbTID, ShTbChamDep, ShTbECktNum, ShTbDTubeLen, &  !RS: Debugging: Replacing array numbers with variables
+                            ShTbINMdotC, ShTbINPiE, ShTbINHiE, ShTbINPiEv, ShTbINPoEv, ShTbOMdotE, ShTbOPoE, ShTbOToE, &
+                            ShTbOXoE, ShTbOMDT, ShTbOErrFlag
 
     IMPLICIT NONE
 
@@ -906,17 +911,17 @@
 
     !Flow:
 
-    mdotCmp=XIN(1)
-    PiExp=XIN(2)
-    HiExp=XIN(3)
-    PiEvp=XIN(4)
-    PoEvp=XIN(5)
+    mdotCmp=XIN(ShTbINMdotC)  !RS: Debugging: Formerly XIN(1)
+    PiExp=XIN(ShTbINPiE)    !RS: Debugging: Formerly XIN(2)
+    HiExp=XIN(ShTbINHiE)    !RS: Debugging: Formerly XIN(3)
+    PiEvp=XIN(ShTbINPiEv)    !RS: Debugging: Formerly XIN(4)
+    PoEvp=XIN(ShTbINPoEv)    !RS: Debugging: Formerly XIN(5)
 
-    LshTube=PAR(TLen)  !RS: Debugging: Formerly PAR(1)
-    DshTube=PAR(TID)  !RS: Debugging: Formerly PAR(2)
-    Depth=PAR(ChamDep)    !RS: Debugging: Formerly PAR(3)
-    Nckts=PAR(EvapCktNum)    !RS: Debugging: Formerly PAR(4)
-    LdisTube=PAR(DisTubeLen) !RS: Debugging: Formerly PAR(5)
+    LshTube=PAR(ShTbTLen)  !RS: Debugging: Formerly PAR(1)
+    DshTube=PAR(ShTbTID)  !RS: Debugging: Formerly PAR(2)
+    Depth=PAR(ShTbChamDep)    !RS: Debugging: Formerly PAR(3)
+    Nckts=PAR(ShTbECktNum)    !RS: Debugging: Formerly PAR(4)
+    LdisTube=PAR(ShTbDTubeLen) !RS: Debugging: Formerly PAR(5)
 
     ErrorFlag=0 !Initialize
 
@@ -1085,20 +1090,20 @@
         ErrorFlag=1
         !mdotExp=0   !RS: Debugging: No backwards flow allowed!
     ELSE
-        OUT(1)=mdotExp
-        OUT(2)=PoExp
-        OUT(3)=ToExp
-        OUT(4)=XoExp
-        OUT(5)=MassDisTube
+        OUT(ShTbOMdotE)=mdotExp  !RS: Debugging: Formerly OUT(1)
+        OUT(ShTbOPoE)=PoExp    !RS: Debugging: Formerly OUT(2)
+        OUT(ShTbOToE)=ToExp    !RS: Debugging: Formerly OUT(3)
+        OUT(ShTbOXoE)=XoExp    !RS: Debugging: Formerly OUT(4)
+        OUT(ShTbOMDT)=MassDisTube  !RS: Debugging: Formerly OUT(5)
         !OUT(6)=QdisTube    !RS: Debugging: Not used  
     END IF
 
-    OUT(7)=ErrorFlag
+    OUT(ShTbOErrFlag)=ErrorFlag    !RS: Debugging: Formerly OUT(7)
 
-    PiExpDev = XIN(2)
-    HiExpDev = XIN(3)
-    PoExpDev = OUT(2)
-    ToExpDev = OUT(3)
+    PiExpDev = XIN(ShTbINPiE)   !RS: Debugging: Formerly XIN(2)
+    HiExpDev = XIN(ShTbINHiE)   !RS: Debugging: Formerly XIN(3)
+    PoExpDev = OUT(ShTbOPoE)   !RS: Debugging: Formerly OUT(2)
+    ToExpDev = OUT(ShTbOToE)   !RS: Debugging: Formerly OUT(3)
     !hoExpDev= PQ(Ref$,PoExpDev,XoExp,'enthalpy',RefrigIndex,RefPropErr) !RS Comment: Expansion Device Outlet Enthalpy?
     
     IF (XoExp .LT. 0) THEN  !RS: Debugging: Trying to deal with the case when it's subcooled

@@ -590,9 +590,6 @@ REAL ID			!Inside diameter, [m]
 !REAL ktube		!Tube wall thermal conductivity, [kW/m-K]   !RS: Debugging: Extraneous
 REAL mRef		!Refrigerant mass flow rate, [kg/s]
 REAL Qout		!Tube outside heat transfer, [kW]
-!REAL AoMod		!Outside heat transfer area, [m^2]  !RS: Debugging: Extraneous
-!REAL AiMod		!Inside heat transfer area, [m^2]   !RS: Debugging: Extraneous
-!REAL hfg		!Enthalpy difference between vapor and fluid states, [kJ/kg]
 REAL xRi		!Inlet quality of refrigerant, [-]
 REAL xRo		!Outlet quality of refrigerant, [-]
 REAL vg			!Specific volume of refrigerant vapor, [m^3/kg]
@@ -606,12 +603,8 @@ REAL kV			!Thermal conductivity of refrigerant vapor, [kW/m-K]
 REAL CpRef		!Specific heat of refrigerant, [kJ/kg-K]
 REAL CpL		!Specific heat of refrigerant liquid, [kJ/kg-K]
 REAL CpV		!Specific heat of refrigerant vapor, [kJ/kg-K]
-!REAL MolWeight	!Molecular weight of refrigerant, [kg/mol]  !RS: Debugging: Extraneous
 REAL Psat		!Saturated pressure of refrigerant, [kPa]
 REAL Pcrit		!Critical pressure of refrigerant, [kPa]
-!REAL Tsat		!Saturated temperature of refrigerant, [C]  !RS: Debugging: Extraneous
-!REAL sigma      !Surface tension, [N/m]    !RS: Debugging: Extraneous
-!REAL DT         !Temperature difference between tube wall and saturate vapor, [C]  !RS: Debugging: Extraneous
 REAL Wabsolute  !Absolute oil mass fraction
 
 !Output:
@@ -723,7 +716,6 @@ INTEGER FinType            !Fin type: 1-Plain; 2-Wavy; 3-Louver; 4-York 11-eleme
 INTEGER WetFlag            !Wet surface flag: 1-Wet surface; Otherwise-Dry surface
 INTEGER Nl                 !Number of rows
 INTEGER Nt                 !Number of rows per tube
-!INTEGER RowNum             !Row number
 REAL tAiCoil   !Coil inlet air temperature, [C]
 REAL mAiCoil   !Coil inlet air mass flow rate, [kg/s]
 REAL rhoIn     !Inlet air density, [kg/m^3]
@@ -1694,9 +1686,6 @@ IMPLICIT NONE
 REAL ID    !Tube inside diameter, [m]
 REAL xRef  !Quality of refrigerant, [-]
 REAL mRef  !Refrigerant mass flow rate, [kg/s]
-!REAL vgi   !Vapor specific volume, [m^3/kg]    !RS: Debugging: Extraneous
-!REAL vfi   !Liquid specific volume, [m^3/kg]
-!REAL muRef !Refrigerant dynamic viscosity, [Pa-s]
 REAL mug   !Vapor dynamic viscosity, [Pa-s]
 REAL muf   !Liquid dynamic viscosity, [Pa-s]
 REAL kL    !Liquid conductivity, [kW/m-K]
@@ -2105,9 +2094,7 @@ REAL rhof  !Liquid density, [kg/m^3]
 REAL mug   !Vapor dynamic viscosity, [Pa-s]
 REAL muf   !Liquid dynamic viscosity, [Pa-s]
 REAL kL    !Liquid conductivity, [kW/m-K]
-!REAL kV    !Vapor conductivity, [kW/m-K]
 REAL CpL   !Liquid specific heat, [kJ/kg-K]
-!REAL CpV   !Vapor specific heat, [kJ/kg-K]
 REAL sigma !Surface tension, [N/m]  
 REAL hfg   !Latent heat of condensation, [kJ/kg]
 REAL DT    !Temperature difference between tube wall and saturate vapor, [C]
@@ -2493,8 +2480,6 @@ INTEGER          CoilType	!1-condenser;
 							!4-Low side interconnecting pipes
 INTEGER          TubeType	!1=Plain; 2=General Micro Fin; 3=Herringbone; 
 							!4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
-!REAL tRi		!Inlet refrigerant temperature, [C]
-!REAL tRo		!Outlet refrigerant temperature, [C]
 REAL hg         !Vapor refrigerant enthalpy, [kJ/kg]
 REAL hf         !Liquid refrigerant enthalpy, [kJ/kg]
 REAL hRi        !Inlet refrigerant enthalpy, [kJ/kg]
@@ -3417,7 +3402,6 @@ REAL hg      !Vapor refrigerant enthalpy, [kJ/kg]
 REAL hf      !Liquid refrigerant enthalpy, [kJ/kg]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
-!REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -3970,14 +3954,12 @@ INTEGER TubeType	!1=Plain; 2=General Micro Fin; 3=Herringbone;
 					!4=Crosshatch; 5=Herringbone w/crosshatch; 6=Turbo-A
 					!7=Helical; 8=42F HXH
 REAL ID     !Inside tube diameter, [m]
-!REAL OD     !Outside tube diameter, [m]
 REAL Pt     !Tube vertical pitch, [m]
 REAL mRef   !Refrigerant mass flow rate, [kg/s]
 REAL xRef   !Refrigerant quality
 REAL vRef   !Refrigerant specific volume, [m^3/kg]
 REAL vgi    !Vapor specific volume, [m^3/kg]
 REAL vfi    !Liquid specific volume, [m^3/kg]
-!REAL muRef  !Refrigerant dynamic viscosity, [Pa-s] 
 REAL mug    !Vapor dynamic viscosity, [Pa-s] 
 REAL muf    !Liquid dynamic viscosity, [Pa-s]
 
@@ -4073,8 +4055,6 @@ REAL vgi        !Inlet vapor specific volume, [m^3/kg]
 REAL vfi        !Inlet liquid specific volume, [m^3/kg]
 REAL vgo        !Outlet vapor specific volume, [m^3/kg]
 REAL vfo        !Outlet liquid specific volume, [m^3/kg]
-!REAL mug		!Dynamic visocity of refrigerant vapor, [Pa-s]
-!REAL muf		!Dynamic visocity of refrigerant liquid, [Pa-s]
 REAL Lmod       !Module length, [m]
 REAL LmodTP     !Two phase Module length in transition element, [m]
 REAL LmodSP     !Single phase Module length in transition element, [m]
@@ -4566,9 +4546,6 @@ REAL xRef  !Refrigerant quality
 REAL ID    !Tube inside diameter, [m]
 REAL Gref  !Refrigerant mass flux, [kg/s-m^2]
 REAL rhog  !Vapor density, [kg/m^3]
-!REAL rhof  !Liquid density, [kg/m^3]   !RS: Debugging: Extraneous
-!REAL Mug   !Dynamic visocity of refrigerant vapor, [Pa-s]  !RS: Debugging: Extraneous
-!REAL Muf   !Dynamic visocity of refrigerant liquid, [Pa-s] !RS: Debugging: Extraneous
 
 !Outputs:
 REAL alpha !Void fraction
@@ -4784,7 +4761,6 @@ REAL beta      !Intermediate variable
 REAL j1        !Intermediate variable
 REAL j2        !Intermediate variable
 REAL j3        !Intermediate variable
-!REAL j4        !Intermediate variable  !RS: Debugging: Extraneous
 
 !Flow:
 
@@ -4961,23 +4937,12 @@ REAL FinSpg    !Fin spacing, [m]
 REAL FinThk    !Fin thickness, [m]
 REAL HXdep     !Heat exchanger depth, [m]
 INTEGER Nl     !Number of rows
-!INTEGER Nt     !Number of tubes per row
 REAL Dc        !Tube outside diameter including fin collar, [m]
-!REAL OD        !Tube outside diameter, [m]
-!REAL Ltube     !Tube length, [m]
 REAL Pt        !Tube spacing, [m]
 REAL Pl        !Row spacing, [m]
 REAL AoCoil    !Coil outside surface area, [m^2]
-!REAL AbrCoil   !Bare tube surface area, [m^2]
 REAL ReDc      !Reynold number based on Dc
-!REAL RePl      !Reynold number based on Pl
 REAL Amin      !Mimimum free flow area, [m^2]
-!REAL AfrCoil   !Coil face area, [m^2]
-!REAL mAiCoil   !Air mass flow rate to coil, [kg/s]
-!REAL Gmax      !Maximum mass flux, [kg/s-m^2]
-!REAL muAir     !Dynamic visocity of air, [Pa-s]
-!REAL rhoIn     !Inlet density, [kg/m^3]
-!REAL rhoOut    !Outlet density, [kg/m^3]
 
 !Outputs:
 REAL Fricfactor !Friction factor
@@ -4993,7 +4958,6 @@ REAL F2        !Intermediate variable
 REAL F3        !Intermediate variable
 REAL F4        !Intermediate variable
 REAL beta      !Intermediate variable
-!REAL TubeDepth !Tube depth, [m]
 
 !Flow:
 
@@ -5589,11 +5553,8 @@ INTEGER          CoilType	!1-condenser;
 							!4-Low side interconnecting pipes
 							!5-Microchannel condenser
 							!6-Microchannel evaporator
-!REAL tRi     !Refrigerant inlet temperature, [C]   !RS: Debugging: Extraneous variables
-!REAL tRo     !Refrigerant Outlet temperature, [C]
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
-!REAL vRi     !Refrigerant specific volume, [m^3/kg]
 REAL vgi     !Vapor refrigerant specific volume, [m^3/kg]
 REAL vfi     !Liquid refrigerant specific volume, [m^3/kg]
 REAL vgo     !Vapor refrigerant specific volume, [m^3/kg]
@@ -5805,7 +5766,6 @@ INTEGER          CoilType	!1-condenser;
 							!6-Microchannel evaporator
 REAL tRi     !Refrigerant inlet temperature, [C]
 REAL tRo     !Refrigerant Outlet temperature, [C]
-!REAL pRi     !Refrigerant inlet pressure, [kPa]    !RS: Debugging: Extraneous
 REAL xRi     !Refrigerant inlet quality, [-]
 REAL xRo     !Refrigerant outlet quality, [-]
 REAL vRi     !Refrigerant specific volume, [m^3/kg]
@@ -5819,7 +5779,6 @@ REAL ID      !Tube inside diameter, [m]
 REAL muRef   !Refrigerant dynamic viscosity, [Pa-s]
 REAL mug     !Vapor refrigerant dynamic viscosity, [Pa-s]
 REAL muf     !Liquid refrigerant dynamic viscosity, [Pa-s]
-!REAL sigma   !Surface tension, [N/m]   !RS: Debugging: Extraneous
 REAL HtCoil  !Coil height, [m]
 REAL Lcoil   !Coil length, [m]
 

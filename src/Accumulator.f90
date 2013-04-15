@@ -195,14 +195,11 @@ CONTAINS
     !
 
     ! VL: Initialize default values for GOTO flags
-    !FLAG_GOTO_15 = .FALSE. !RS: Debugging: Not needed
     FLAG_GOTO_40 = .FALSE.
-    !FLAG_GOTO_100 = .FALSE.
-    !FLAG_GOTO_201 = .FALSE.
 
-    mdot=XIN(1)
-    pRo=XIN(2)
-    hRo=XIN(3)
+    mdot=XIN(AccImdot) !RS: Debugging: Formerly XIN(1)
+    pRo=XIN(AccIpRo)  !RS: Debugging: Formerly XIN(2)
+    hRo=XIN(AccIhRo)  !RS: Debugging: Formerly XIN(3)
     RMASS=mdot/0.000126 !Convert from kg/s to lbm/hr
 
     ErrorFlag=0
@@ -210,31 +207,31 @@ CONTAINS
     Pressure=pRo*1000   !RS Comment: Unit Conversion
     Enthalpy=hRo*1000   !RS Comment: Unit Conversion
     tRo=PH(RefName,Pressure,Enthalpy,'temperature',RefrigIndex,RefPropErr)  !Outlet Refrigerant Temperature
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
     xRo=PH(RefName,Pressure,Enthalpy,'quality',RefrigIndex,RefPropErr)  !Outlet Refrigerant Quality
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
     Pressure=pRo*1000   !RS Comment: Unit Conversion
     Quality=1
     Tsat=PQ(RefName,Pressure,Quality,'temperature',RefrigIndex,RefPropErr)  !Saturated Temperature
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
     rhoVap=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Vapor Density
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
     V=1/(rhoVap*0.0625) !Convert from kg/m3 to lbm/ft3
     Quality=0
     rhoLiq=PQ(RefName,Pressure,Quality,'density',RefrigIndex,RefPropErr)    !Liquid Density
-    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly OUT(6) then ", OUT(3)"
+    IF (IssueRefPropError(RefPropErr, 'Accumulator', 2, ErrorFlag)) THEN    !RS: Debugging: Formerly ", OUT(3)"
         RETURN
     END IF
 
@@ -250,9 +247,7 @@ CONTAINS
     XLEVEL = 0.0
 
     IF(AHGT.LE.0.001) THEN
-    !    FLAG_GOTO_201 = .TRUE. !RS: Debugging: Not needed
-    !END IF
-    !IF (FLAG_GOTO_201 .EQ. .FALSE.) THEN 
+    !RS: Debugging: Nothing changes 
     ELSE
         !
         AACC = PI*DACC*DACC/4.
@@ -260,15 +255,10 @@ CONTAINS
         !
         !       ONLY VAPOR IN ACCUMULATOR
         !
-        !VL: Previously: IF(xRo.LT.1.) GO TO 10
         IF(.NOT. xRo.LT.1.) THEN
             HL(1) = 0.0
             ACCMAS = VOLACC/V
             VHGT=AHGT
-        !    FLAG_GOTO_100 = .TRUE. !RS: Debugging: Not really needed
-        !END IF
-        !
-        !IF (FLAG_GOTO_100 .EQ. .FALSE.) THEN
         ELSE
             !
             !       LIQUID IN ACCUMULATOR
@@ -309,9 +299,7 @@ CONTAINS
                 RMMAX = 0.585*AHOLE(1)*SQRT(2.*RO*DP1MAX) +0.585*AHOLE(2)*SQRT(2.*RO*DP2MAX)
 
                 IF(RMSL.LT.RMMAX) THEN
-                    !FLAG_GOTO_15 = .TRUE.  !RS: Debugging: Not really needed
-                !END IF
-                !IF (FLAG_GOTO_15 .EQ. .FALSE.) THEN
+                    !RS: Debugging: Nothing changes
                 ELSE
                     VHGT = 0.0
                     HL(1) = AHGT
@@ -351,7 +339,6 @@ CONTAINS
                     VHGT = AHGT - HL(1)
                     VHGT = AMAX1(0.,VHGT)
                     AMASS2 = AACC* (HL(1)*RO + VHGT/V)
-                    !!VL: Previously: 1234   FORMAT(8(1PE12.3))
                     !
                     !       SKIP OUT IF LEVEL WILL NOT RISE ABOVE SECOND HOLE
                     !
@@ -367,7 +354,6 @@ CONTAINS
                         EXIT
                     END IF
                     SLOPE = (Z1-Z2)/(DIFF1-DIFF2)
-                    !VL: Previously: IF(ABS(DIFF1).LT.ABS(DIFF2)) GO TO 20
                     IF(.NOT. ABS(DIFF1).LT.ABS(DIFF2)) THEN
                         AMASS1 = AMASS2
                         DIFF1 = DIFF2
@@ -391,9 +377,8 @@ CONTAINS
         XLEVEL = HL(1)*12.
     END IF
 
-    OUT(1)=ACCMAS*0.4563    !Total mass, convert from lbm to kg
-    OUT(2)=AccumDP  !RS: Debugging: Formerly OUT(5)
-    !OUT(3)=ErrorFlag   !RS: Debugging: Never used  !RS: Debugging: Formerly OUT(6)
+    OUT(AccOMass)=ACCMAS*0.4563    !Total mass, convert from lbm to kg !RS: Debugging: Formerly OUT(1)
+    OUT(AccODP)=AccumDP  !RS: Debugging: Formerly OUT(2)
 
     RETURN
 

@@ -6590,53 +6590,37 @@ END IF
 
     !FLOW:
 
-    MCXIN(1)=FTXIN(1) !Refrigerant side mass flow rate, kg/s
-    MCXIN(2)=FTXIN(2) !Refrigerant side inlet (compressor outlet) pressure, kPa
-    MCXIN(3)=FTXIN(3) !Refrigerant side inlet (compressor outlet) enthalpy, kJ/kg
-    MCXIN(4)=FTXIN(4) !Air side mass flow rate, kg/s
-    MCXIN(5)=FTXIN(5) !Air side inlet temp. C
-    MCXIN(6)=FTXIN(6) !Air side inlet relative humidity
-    !MCXIN(7)=FTXIN(8) !Evaporator outlet temperature, C    !RS: Debugging: Never used?
+    MCXIN(1)=FTXIN(CInmRef) !Refrigerant side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(1)
+    MCXIN(2)=FTXIN(CInpRo) !Refrigerant side inlet (compressor outlet) pressure, kPa !RS: Debugging: Formerly FTXIN(2)
+    MCXIN(3)=FTXIN(CInhRo) !Refrigerant side inlet (compressor outlet) enthalpy, kJ/kg   !RS: Debugging: Formerly FTXIN(3)
+    MCXIN(4)=FTXIN(CInmAi) !Air side mass flow rate, kg/s    !RS: Debugging: Formerly FTXIN(4)
+    MCXIN(5)=FTXIN(CIntAi) !Air side inlet temp. C   !RS: Debugging: Formerly FTXIN(5)
+    MCXIN(6)=FTXIN(CInrhAi) !Air side inlet relative humidity !RS: Debugging: Formerly FTXIN(6)
 
-    MCPAR(1)=FTPAR(38) !Barometric pressure, kPa
-    MCPAR(2)=FTPAR(27) !Cooling mode? 1=yes; 0=no  
-    MCPAR(3)=FTPAR(1)  !Discharge line length, m
-    MCPAR(4)=FTPAR(2)  !Discharge line outside diameter, m
-    MCPAR(5)=FTPAR(3)  !Discharge line tube wall thickness, m
-    MCPAR(6)=FTPAR(4)  !Discharge line elevation, m
-    MCPAR(7)=FTPAR(5)  !Discharge line heat loss, kW
-    MCPAR(8)=FTPAR(6)  !Discharge line temperature change, C
-    MCPAR(9)=FTPAR(7)  !Discharge line additional pressure drop, kPa
-    MCPAR(10)=FTPAR(8) !Liquid line length, m
-    MCPAR(11)=FTPAR(9) !Liquid line outside diameter, m
-    MCPAR(12)=FTPAR(10) !Liquid line tube wall thickness, m 
-    MCPAR(13)=FTPAR(11) !Liquid line elevation, m
-    MCPAR(14)=FTPAR(12) !Liquid line heat loss, kW
-    MCPAR(15)=FTPAR(13) !Liquid line temperature change, C
-    MCPAR(16)=FTPAR(14) !Liquid line additional pressure drop, kPa
-    MCPAR(17)=FTPAR(30) !Multiplier for ref. side heat transfer correlation
-    MCPAR(18)=FTPAR(31) !Multiplier for ref. side pressure drop correlation
-    MCPAR(19)=FTPAR(32) !Multiplier for air side heat transfer correlation
-    MCPAR(20)=FTPAR(33) !Multiplier for air side pressure drop correlation
-    MCPAR(21)=FTPAR(34) !Fan power, kW
-    MCPAR(22)=FTPAR(35) !Fan location, 1=draw through; 2=blow through
-    MCPAR(23)=FTPAR(39) !Compressor heat loss, kW
-    MCPAR(24)=FTPAR(40) !Is compressor in air stream, 1=yes, 0=no
-    !MCPAR(25)=FTPAR(41) !Custom air side data unit, 1=SI; 2=IP !RS: Debugging: Never Used
-    !MCPAR(26)=FTPAR(42) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !MCPAR(27)=FTPAR(43) !Power coefficient for air heat transfer curve
-    !MCPAR(28)=FTPAR(44) !Power coefficient for air heat transfer curve
-    !MCPAR(29)=FTPAR(45) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(30)=FTPAR(46) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(31)=FTPAR(47) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(32)=FTPAR(48) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(33)=FTPAR(49) !Custom air heat transfer curve type, 1=Power; 2=Polynomial
-    !MCPAR(34)=FTPAR(50) !Power coefficient for air heat transfer curve
-    !MCPAR(35)=FTPAR(51) !Power coefficient for air heat transfer curve
-    !MCPAR(36)=FTPAR(52) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(37)=FTPAR(53) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(38)=FTPAR(54) !Polynomial coefficient for air heat transfer curve
-    !MCPAR(39)=FTPAR(55) !Polynomial coefficient for air heat transfer curve
+    MCPAR(1)=FTPAR(CondBarPress) !Barometric pressure, kPa    !RS: Debugging: Formerly FTPAR(38)
+    MCPAR(2)=FTPAR(CondCoolMode) !Cooling mode? 1=yes; 0=no   !RS: Debugging: Formerly FTPAR(27)
+    MCPAR(3)=FTPAR(CondDisLnLen)  !Discharge line length, m    !RS: Debugging: Formerly FTPAR(1)
+    MCPAR(4)=FTPAR(CondDisLnOD)  !Discharge line outside diameter, m  !RS: Debugging: Formerly FTPAR(2)
+    MCPAR(5)=FTPAR(CondDisLnTWThick)  !Discharge line tube wall thickness, m   !RS: Debugging: Formerly FTPAR(3)
+    MCPAR(6)=FTPAR(CondDisLnElev)  !Discharge line elevation, m !RS: Debugging: Formerly FTPAR(4)
+    MCPAR(7)=FTPAR(CondDisLnQLoss)  !Discharge line heat loss, kW    !RS: Debugging: Formerly FTPAR(5)
+    MCPAR(8)=FTPAR(CondDisLnTempChg)  !Discharge line temperature change, C    !RS: Debugging: Formerly FTPAR(6)
+    MCPAR(9)=FTPAR(CondDisLnAddPD)  !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly FTPAR(7)
+    MCPAR(10)=FTPAR(CondLiqLnLen) !Liquid line length, m   !RS: Debugging: Formerly FTPAR(8)
+    MCPAR(11)=FTPAR(CondLiqLnOD) !Liquid line outside diameter, m !RS: Debugging: Formerly FTPAR(9)
+    MCPAR(12)=FTPAR(CondLiqLnTWThick) !Liquid line tube wall thickness, m     !RS: Debugging: Formerly FTPAR(10)
+    MCPAR(13)=FTPAR(CondLiqLnElev) !Liquid line elevation, m   !RS: Debugging: Formerly FTPAR(11)
+    MCPAR(14)=FTPAR(CondLiqLnQLoss) !Liquid line heat loss, kW  !RS: Debugging: Formerly FTPAR(12)
+    MCPAR(15)=FTPAR(CondLiqLnTempChg) !Liquid line temperature change, C  !RS: Debugging: Formerly FTPAR(13)
+    MCPAR(16)=FTPAR(CondLiqLnAddPD) !Liquid line additional pressure drop, kPa  !RS: Debugging: Formerly FTPAR(14)
+    MCPAR(17)=FTPAR(CondMultRefQT) !Multiplier for ref. side heat transfer correlation !RS: Debugging: Formerly FTPAR(30)
+    MCPAR(18)=FTPAR(CondMultRefPD) !Multiplier for ref. side pressure drop correlation !RS: Debugging: Formerly FTPAR(31)
+    MCPAR(19)=FTPAR(CondMultAirQT) !Multiplier for air side heat transfer correlation  !RS: Debugging: Formerly FTPAR(32)
+    MCPAR(20)=FTPAR(CondMultAirPD) !Multiplier for air side pressure drop correlation  !RS: Debugging: Formerly FTPAR(33)
+    MCPAR(21)=FTPAR(CondFanPwr) !Fan power, kW  !RS: Debugging: Formerly FTPAR(34)
+    MCPAR(22)=FTPAR(CondFanLoc) !Fan location, 1=draw through; 2=blow through   !RS: Debugging: Formerly FTPAR(35)
+    MCPAR(23)=FTPAR(CondCompQLoss) !Compressor heat loss, kW   !RS: Debugging: Formerly FTPAR(39)
+    MCPAR(24)=FTPAR(CondPressTolConv) !Is compressor in air stream, 1=yes, 0=no   !RS: Debugging: Formerly FTPAR(40)
 
     RETURN
 

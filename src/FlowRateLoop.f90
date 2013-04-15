@@ -80,9 +80,9 @@
     USE ShortTubeMod
     USE CapillaryTubeMod
     USE DataSimulation
-    USE DataGlobals_HPSim, ONLY: RefrigIndex   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
+    USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength, Refname   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
-    USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
+    !USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
@@ -128,7 +128,7 @@
   FilterPAR(FilFlowCap) = Numbers(1) !Flow capacity  !RS: Debugging: Formerly FilterPAR(1)
   FilterPAR(FilRatDP) = Numbers(2) !Rating DP  !RS: Debugging: Formerly FilterPAR(2)
   
-  FilterPAR(FilRatDP)=FilterPAR(2)*UnitP   !RS: Debugging: Bringing in unit conversion !RS: Debugging: Formerly FilterPAR(2)
+  FilterPAR(FilRatDP)=FilterPAR(FilRatDP)*UnitP   !RS: Debugging: Bringing in unit conversion !RS: Debugging: Formerly FilterPAR(2)
   !-------
 
     IsCondenserAllocated = .FALSE.  !VL: the "SAVE" in the declaration causes a "TRUE" to persist causing a failure on a second call.
@@ -338,9 +338,9 @@
         TSATCI=TSATCI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
         IF (FilterPAR(FilFlowCap) .GT. 0) THEN !Filter drier exits   !RS: Debugging: Formerly FilterPAR(1)
-            FilterIN(1)=CondIN(CInmRef) !Mass flow rate, kg/s !RS: Debugging: Formerly CondIN(1)
-            CALL CalcFilterDrierDP(FilterIN(1),FilterPAR,FilterOUT,Ref$)
-            FilterDP=FilterOUT(1)
+            FilterIN(FIDP)=CondIN(CInmRef) !Mass flow rate, kg/s !RS: Debugging: Formerly CondIN(1), FilterIN(1)
+            CALL CalcFilterDrierDP(FilterIN(FIDP),FilterPAR,FilterOUT,Ref$)
+            FilterDP=FilterOUT(FODP)   !RS: Debugging: Formerly FilterOUT(1)
 
             PiExp=PiExp-FilterDP
             CondOUT(COutpRiE)=PiExp   !RS: Debugging: Formerly CondOut(10)
@@ -471,8 +471,8 @@
             !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
             !CALL ShortTubePayne(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
             CALL ShortTubePayne(Ref$,ShTbIN,ShTbPAR,ShTbOUT)
-            IF (ShTbOUT(7) .NE. 0) THEN
-                SELECT CASE (INT(ShTbOUT(7)))
+            IF (ShTbOUT(ShTbOErrFlag) .NE. 0) THEN !RS: Debugging: Formerly ShTbOUT(7)
+                SELECT CASE (INT(ShTbOUT(ShTbOErrFlag)))   !RS: Debugging: Formerly ShTbOUT(7)
                 CASE (1)
                     CALL IssueOutputMessage('')
                     CALL IssueOutputMessage('## ERROR ## Highside: Short tube solution error.')
@@ -486,9 +486,9 @@
                 END SELECT
             END IF
 
-            XMRFLD=ShTbOUT(1)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s?
-            ToExp=ShTbOUT(3)
-            XoExp=ShTbOUT(4)
+            XMRFLD=ShTbOUT(ShTbOMdotE)*3600/UnitM    !RS Comment: Unit Conversion, lbm/s?    !RS: Debugging: Formerly ShTbOUT(1)
+            ToExp=ShTbOUT(ShTbOToE)    !RS: Debugging: Formerly ShTbOUT(3)
+            XoExp=ShTbOUT(ShTbOXoE)    !RS: Debugging: Formerly ShTbOUT(4)
         END IF
 
         HoExp=HiExp
