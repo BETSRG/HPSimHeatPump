@@ -664,7 +664,6 @@ CONTAINS
     mAiCoil =XIN(EInmAi) !RS: Debugging: Formerly XIN(4)
     tAiCoil =XIN(EIntAi) !RS: Debugging: Formerly XIN(5)
     rhAiCoil=XIN(EInrhAi) !RS: Debugging: Formerly XIN(6)
-    !QdisTube=XIN(7) !RS: Debugging: EvapIN(7) never set
     SolarFlux=XIN(EInSolFlux)    !RS: Debugging: EvapIN(8) set once to 0 !RS: Debugging: Formerly XIN(8)
     tRdis=XIN(EIntRdis)    !RS: Debugging: Formerly XIN(9)
 

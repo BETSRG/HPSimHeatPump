@@ -82,7 +82,6 @@
     USE DataSimulation
     USE DataGlobals_HPSim, ONLY: RefrigIndex, MaxNameLength, Refname   !RS: Debugging: Removal of plethora of RefrigIndex definitions in the code
     USE InputProcessor_HPSim    !RS: Debugging: Brought over from GetHPSimInputs
-    !USE DataGlobals_HPSim, ONLY: MaxNameLength, RefName    !RS Comment: Needs to be used for implementation with Energy+ currently (7/23/12)
 
     IMPLICIT NONE
 
@@ -180,20 +179,20 @@
             IERR=1
             CYCLE
         END IF
-        PiCmp=PiCmp/1000    !RS Comment: Unit Conversion
+        PiCmp=PiCmp !/1000    !RS Comment: Unit Conversion
 
         IF (SUPER .GT. 0) THEN
             Temperature=(TSICMP+SUPER-32)/1.8   !RS Comment: Unit Conversion, from F to C
-            Pressure=PiCmp*1000 !RS Comment: Unit Conversion
+            Pressure=PiCmp !*1000 !RS Comment: Unit Conversion
             HiCmp=TP(Ref$,Temperature,Pressure,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
                 CALL IssueOutputMessage('Trying another iterating value....')
                 IERR=1
                 CYCLE
             END IF
-            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
+            HiCmp=HiCmp !/1000    !RS Comment: Unit Conversion
         ELSE
-            Pressure=PiCmp*1000 !RS Comment: Unit Conversion
+            Pressure=PiCmp !*1000 !RS Comment: Unit Conversion
             Quality=-SUPER
             HiCmp=PQ(Ref$,Pressure,Quality,'enthalpy',RefrigIndex,RefPropErr)   !Compressor Inlet Enthalpy
             IF (IssueRefPropError(RefPropErr, 'FlowRateLoop')) THEN
@@ -201,12 +200,12 @@
                 IERR=1
                 CYCLE
             END IF
-            HiCmp=HiCmp/1000    !RS Comment: Unit Conversion
+            HiCmp=HiCmp !/1000    !RS Comment: Unit Conversion
         END IF
 
-        CompIN(CompInPsuc)=PiCmp !RS: Debugging: Formerly CompIN(1)
+        CompIN(CompInPsuc)=PiCmp/1000 !RS: Debugging: Formerly CompIN(1)
         CompIN(CompInPdis)=PoCmp !RS: Debugging: Formerly CompIN(2)
-        CompIN(CompInHsuc)=HiCmp !RS: Debugging: Formerly CompIN(3)
+        CompIN(CompInHsuc)=HiCmp/1000 !RS: Debugging: Formerly CompIN(3)
         CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
         IF (CompOUT(CmpOErrFlag) .NE. 0) THEN !RS: Debugging: Formerly CompOUT(7)
             SELECT CASE (INT(CompOUT(CmpOErrFlag)))   !RS: Debugging: Formerly CompOUT(7)
@@ -217,11 +216,11 @@
             END SELECT
         END IF
 
-        XMR=CompOUT(CmpOMdot)*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
+        XMR=CompOUT(CmpOMdot) !*3600/UnitM   !RS Comment: Unit Conversion, lbm/s??   !RS: Debugging: Formerly CompOUT(2)
         HoCmp=CompOUT(CmpOHdis)    !RS: Debugging: Formerly CompOUT(3)
         ToCmp=CompOUT(CmpOTdis)    !RS: Debugging: Formerly CompOUT(5)
 
-        CondIN(CInmRef)=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
+        CondIN(CInmRef)=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr???  !RS: Debugging: Formerly CondIN(1)
         CondIN(CInpRo)=PoCmp !RS: Debugging: Formerly CondIN(2)
         CondIN(CInhRo)=HoCmp !RS: Debugging: Formerly CondIN(3)
         CondIN(CInmAi)=XMaC  !RS: Debugging: Formerly CondIN(4)
@@ -405,7 +404,7 @@
 
             CNDNSR = CDTRE - DTRE
 
-            MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
+            MdotR=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr??
 
             IF(DTRIE.LT.0.0) THEN
                 SXIE = -DTRIE
@@ -442,15 +441,16 @@
             CYCLE            
         END IF
 
-        PiEvp=EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2)
-        PoExp=PiEvp
+        !PiEvp=EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2)
+        PoExp=EvapIN(EInpRi)
+        !PoExp=PiEvp
 
         IF (ExpDevice .EQ. 3) THEN
 
             CapTubeIN(CTIMdot)=CompOUT(CmpOMdot)  !Compressor mass flow rate !RS: Debugging: Formerly CompOUT(2), CapTubeIN(1)
             CapTubeIN(CTIPiEx)=PiExp       !Inlet pressure    !RS: Debugging: Formerly CapTubeIN(2)
-            CapTubeIN(CTIHiEx)=HiExp       !Inlet enthalpy    !RS: Debugging: Formerly CapTubeIN(3)
-            CapTubeIN(CTIPiEv)=PiEvp       !Evaporator inlet pressure !RS: Debugging: Formerly CapTubeIN(4)
+            CapTubeIN(CTIHiEx)=CondOUT(COuthRiE) !HiExp       !Inlet enthalpy    !RS: Debugging: Formerly CapTubeIN(3)
+            CapTubeIN(CTIPiEv)=EvapIN(EInpRi) !PiEvp       !Evaporator inlet pressure !RS: Debugging: Formerly CapTubeIN(4)
             CapTubeIN(CTIPoEv)=EvapOUT(EOuthRoC)  !Evaporator outlet pressure    !RS: Debugging: Formerly EvapOUT(1), CapTubEIN(5)
 
             !CALL CapillaryTubeChoi(Ref$,PureRef,CapTubeIN,CapTubePAR,CapTubeOUT)  
@@ -464,8 +464,8 @@
         ELSE
             ShTbIN(ShTbINMdotC)=CompOUT(CmpOMdot) !Compressor mass flow rate, kg/s   !RS: Debugging: Formerly CompOUT(2), ShTbIN(1)
             ShTbIN(ShTbINPiE)=PiExp !RS: Debugging: Formerly ShTbIN(2)
-            ShTbIN(ShTbINHiE)=HiExp !RS: Debugging: Formerly ShTbIN(3)
-            ShTbIN(ShTbINPiEv)=PiEvp !RS: Debugging: Formerly ShTbIN(4)
+            ShTbIN(ShTbINHiE)=CondOUT(COuthRiE) !HiExp !RS: Debugging: Formerly ShTbIN(3)
+            ShTbIN(ShTbINPiEv)=EvapIN(EInpRi) !PiEvp !RS: Debugging: Formerly ShTbIN(4)
             ShTbIN(ShTbINPoEv)=EvapOUT(EOutpRoC)    !RS: Debugging: Formerly EvapOUT(1), ShTbIN(5)
 
             !CALL ShortTube(Ref$,PureRef,ShTbIN,ShTbPAR,ShTbOUT)
@@ -491,24 +491,24 @@
             XoExp=ShTbOUT(ShTbOXoE)    !RS: Debugging: Formerly ShTbOUT(4)
         END IF
 
-        HoExp=HiExp
-        EvapIN(EInhRi)=HoExp !RS: Debugging: Formerly EvapIN(3)
+        !HoExp=HiExp
+        EvapIN(EInhRi)=CondOUT(COuthRiE) !HiExp !HoExp !RS: Debugging: Formerly EvapIN(3)
 
-        CNDNSR = ( XMRFLD - XMR )
+        CNDNSR = ( XMRFLD - (XMR*3600/UnitM) )
 
-        MdotR=XMR*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
+        MdotR=XMR !*UnitM/3600    !RS Comment: Unit Conversion, kg/hr?
 
         IF(.NOT. PRINT) THEN
             CYCLE
         END IF
 
         IF (Unit .EQ. 1) THEN
-            WRITE(tmpString, '(F10.4)')XMR*UnitM
+            WRITE(tmpString, '(F10.4)')XMR !*UnitM
             CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
             WRITE(tmpString, '(F10.4)')XMRFLD*UnitM
             CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)
         ELSE
-            WRITE(tmpString, '(F10.4)')XMR
+            WRITE(tmpString, '(F10.4)')XMR/UnitM
             CALL IssueOutputMessage('     Compressor flow rate = '//TRIM(tmpString)//MdotUnit)
             WRITE(tmpString, '(F10.4)')XMRFLD
             CALL IssueOutputMessage('    Exp. device flow rate = '//TRIM(tmpString)//MdotUnit)

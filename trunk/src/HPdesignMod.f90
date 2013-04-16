@@ -16,6 +16,7 @@
 ! -- SIMULATION DATA RESPONSIBILITIES -- !
 ! -------------------------------------- !
 ! The input, DTVALU, appears to be a guess of temperature. There don't appear to be any direct outputs.
+! This module calls the Evaporator subroutine for the first heat pump run case.
 
 ! ************************************** !
 ! -- INPUT FILES/OUTPUT FILES (none) --- !
@@ -523,7 +524,7 @@
 
         IF(LPRINT.GT.1.AND.IMASS.NE.0) THEN
             IF (AccumPAR(AccH) .GT. 0) THEN !Height    !RS: Debugging: Formerly AccumPAR(2)
-                AccumIN(AccImdot)=MdotR    !RS: Debugging: Formerly AccumIN(1)
+                AccumIN(AccImdot)= MdotR    !RS: Debugging: Formerly AccumIN(1)
                 AccumIN(AccIpRo)=CompIN(CompInPsuc) !Pressure  !RS: Debugging: Formerly CompIN(1), AccumIN(2)
                 AccumIN(AccIhRo)=CompIN(CompInHsuc) !Enthalpy  !RS: Debugging: Formerly CompIN(3), AccumIN(3)
                 CALL CalcAccumulatorMass(AccumIN,AccumOUT)
@@ -711,7 +712,7 @@
                 DPtxv=CondOUT(COutpRiE)-EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2), CondOUT(10)
             END IF
 
-            CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)
+            CALL TXV(mdotr,PiCmp,PoCmp,Subcooling,Superheat,DPtxv,Qtxv)    !RS: Debugging: Testing: Just commenting this out for now
             TxvPAR(TXVQ)=Qtxv  !RS: Debugging: Formerly TxvPAR(1)
 
             !**************Size Capillary Tube**************
