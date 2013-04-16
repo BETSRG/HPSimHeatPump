@@ -816,7 +816,7 @@ CHARACTER(LEN=63),PARAMETER :: FMT_2224 = "(A18,',',F27.3,',',F27.3,',',F24.1,',
           HiCmp=0
           TiCmp=0
           XiCmp=0
-          TsatiCmp=(TSICMP-32)*5/9  !RS Comment: Unit Conversionm, from F to C
+          TsatiCmp=(TSICMP-32)*5/9  !RS Comment: Unit Conversion, from F to C
           TsupiCmp=0
           TsubiCmp=0
 
