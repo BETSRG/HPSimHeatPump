@@ -130,7 +130,6 @@
 		<File RelativePath=".\src\GeneralRoutines.f90"/>
 		<File RelativePath=".\src\GetHPsimInputs.f90"/>
 		<File RelativePath=".\src\GlobalNames.f90"/>
-		<File RelativePath=".\src\GUESS1.f90"/>
 		<File RelativePath=".\src\GUESS3.f90"/>
 		<File RelativePath=".\src\HeatBalanceAirManager.f90"/>
 		<File RelativePath=".\src\HeatBalanceConvectionCoeffs.f90"/>
