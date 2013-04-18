@@ -657,15 +657,6 @@
     REAL MaxResidual !Maximum residual in iteration
     REAL PTol !Condenser Outlet Pressure Convergence criteria, kPa
 
-    !ISI - 07/14/06
-    !REAL pRiExpPrev  !Previous iteration value of pRiExp   !RS: Debugging: Extraneous
-    !REAL hRiExpPrev  !Previous iteration value of hRiExp   !RS: Debugging: Extraneous
-    !REAL Qdistube    !Distributor capacity, kW, not being used 
-    !REAL DPdisTube   !Distributor pressure drop, kPa   !RS: Debugging: Extraneous
-    !REAL DPdisTubePrev !Previous value of DPdisTube, kPa   !RS: Debugging: Extraneous
-    !REAL hRiCoilRtd  !hRiCoil at rating condition  !RS: Debugging: Extraneous
-    !REAL Wlocal !Local oil mass fraction   !RS: Debugging: Extraneous
-
     CHARACTER(LEN=16),PARAMETER :: FMT_10 = "(3(I4),5(F10.3))"
     CHARACTER(LEN=6),PARAMETER :: FMT_11 = "(6(I))"
     CHARACTER(LEN=7),PARAMETER :: FMT_12 = "(11(I))"
@@ -744,15 +735,6 @@
         CALL GetRefID(Ref$,RefID)
         tAoCoil=tAiCoil !ISI - 05/27/2008
     END IF
-        
-    !ELSEIF (.NOT. ALLOCATED(DisLnSeg)) THEN
-    !IF (.NOT. ALLOCATED(DisLnSeg)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-    !ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
-    !ALLOCATE(DisLnSeg(NumOfMods))   !RS: Debugging
-    !ALLOCATE(LiqLnSeg(NumOfMods))   !RS: Debugging  
-    !CALL InitCondenserCoil(CoilType)
-    
-    !END IF
     
     hciMultiplier   = PAR(30)
     DPrefMultiplier = PAR(31)

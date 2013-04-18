@@ -780,11 +780,6 @@ CONTAINS
         CALL RefrigerantParameters(Ref$)
         CALL GetRefID(Ref$,RefID)
     END IF
-
-    !IF (.NOT. ALLOCATED(CoilSection)) THEN !RS: Debugging: Still running across instances where these arrays aren't allocated
-    !    ErrorFlag=0 !RS: Debugging: There shouldn't be any outstanding errors on the first run of the code
-    !    CALL InitEvaporatorCoil(CoilType)
-    !END IF
     
     hciMultiplier   = PAR(23)
     DPrefMultiplier = PAR(24)

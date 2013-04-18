@@ -2204,8 +2204,6 @@ SUBROUTINE SimZoneEquipment(FirstHVACIteration, SimAir)
 
   REAL(r64) :: SysOutputProvided ! sensible output delivered by zone equipment (W)
   REAL(r64) :: LatOutputProvided ! latent output delivered by zone equipment (kg/s)
-  !REAL :: SysOutputProvided
-  !REAL :: LatOutputProvided
   REAL(r64) :: AirSysOutput
   REAL(r64) :: NonAirSysOutput
   LOGICAL, SAVE :: OneTime = .TRUE.  !RS: Debugging

@@ -140,21 +140,6 @@
     !CondPAR(62)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     !EvapPAR(54)=1   !RS: Debugging: This will hopefully reset the "FirstTime" every run
     
-    !RS: Debugging: Modified from PackagedTerminalHeatPump code
-    !IF (ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP .GT. 0.0 .AND. TempControlType(1) .NE. SingleHeatingSetPoint) THEN    !RS: Debugging: GT not LT because the values are positive
-    !    QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToCoolSP
-    !ELSEIF (ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP .LT. 0.0 .AND. TempControlType(1) .NE. SingleCoolingSetPoint) THEN    !RS: Debugging: LT not GT because the values are negative
-    !    QZnReq=ZoneSysEnergyDemand(1)%RemainingOutputReqToHeatSP
-    !ELSE
-    !    QZnReq=0
-    !END IF
-    !
-    !IF(QZnReq .GT. SmallLoad)THEN
-    !    IsCoolingMode=0
-    !ELSE IF(ABS(QZnReq) .GT. SmallLoad)THEN
-    !    IsCoolingMode=1
-    !END IF
-    
     !RS: Debugging: Commenting out this section since we're only running cooling-only right now
     IF (ZoneSysEnergyDemand(1)%TotalOutputRequired .EQ. 0) THEN
         QUnitOut=0
@@ -258,12 +243,11 @@
     TsoCmpAct=TsoCmp
     RHiCAct=RHiC
     RHiEAct=RHiE
-    !IsCoolingMode=CondPAR(27)       ! VL_Index_Replace !RS: Debugging: Removing as IsCoolingMode is set above
-
+    
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
     CoolHeatModeFlag = IsCoolingMode
-    TimeInterval = 25.0                 ! VL_Magic_Number number
+    TimeInterval = 15.0                 ! VL_Magic_Number number    !RS: Debugging: Was 25.0, resetting to 15.0 (min?)
     PrevSimTime = 0.0
     Timestep=0
     LastDefrostInitTime = 0.0
