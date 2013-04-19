@@ -106,14 +106,14 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     CALL IssueOutputMessage( '')
     CALL IssueOutputMessage( TRIM(PrintString))    
 
-    HiEvp=EvapIN(EInhRi) !RS: Debugging: Formerly EvapIN(3)
+    HiEvp=EvapIN%EInhRi !RS: Debugging: Formerly EvapIN(3)
 
     IF (FirstTimeAirTempLoop) THEN
-        EvapIN(EInpRi)=CompIN(CompInPsuc)+(EvapIN(EInpRi)-EvapOUT(EOutpRiC))  !RS: Debugging: Formerly EvapIN(2), CompIN(1), EvapOUT(6)
+        EvapIN%EInpRi=CompIN%CompInPsuc+(EvapIN%EInpRi-EvapOUT%EOutpRiC)  !RS: Debugging: Formerly EvapIN(2), CompIN(1), EvapOUT(6)
         FirstTimeAirTempLoop=.FALSE.
     END IF
 
-    PiEvp=EvapIN(EInpRi) !RS: Debugging: Formerly EvapIN(2)
+    PiEvp=EvapIN%EInpRi !RS: Debugging: Formerly EvapIN(2)
 
     Pressure=PiEvp*1000 !RS Comment: Unit Conversion
     Quality=0
@@ -125,26 +125,26 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     END IF
     TSATEI=TSATEI*1.8+32    !RS Comment: Unit Conversion, from C to F
 
-    EvapIN(EInmRef)=MdotR			!Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly EvapIN(1)
-    EvapIN(EInpRi)=PiEvp			!Evap. inlet pressure, kPa  !RS: Debugging: Formerly EvapIN(2)
-    EvapIN(EInhRi)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly EvapIN(3)
-    EvapIN(EInmAi)=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
-    EvapIN(EIntAi)=(TAIIE-32)/1.8  !Air side inlet temp. C   !RS: Debugging: Formerly EvapIn(5)
-    EvapIN(EInrhAi)=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
-    EvapIN(EIntRdis)=CompOUT(CmpOTdis)      !Discharge temperature, C !RS: Debugging: Formerly EvapIn(9), CompOUT(5)
+    EvapIN%EInmRef=MdotR			!Refrigerant side mass flow rate, kg/s  !RS: Debugging: Formerly EvapIN(1)
+    EvapIN%EInpRi=PiEvp			!Evap. inlet pressure, kPa  !RS: Debugging: Formerly EvapIN(2)
+    EvapIN%EInhRi=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg !RS: Debugging: Formerly EvapIN(3)
+    EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s    !RS: Debugging: Formerly EvapIN(4)
+    EvapIN%EIntAi=(TAIIE-32)/1.8  !Air side inlet temp. C   !RS: Debugging: Formerly EvapIn(5)
+    EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity !RS: Debugging: Formerly EvapIN(6)
+    EvapIN%EIntRdis=CompOUT%CmpOTdis      !Discharge temperature, C !RS: Debugging: Formerly EvapIn(9), CompOUT(5)
 
     !Take compressor shell loss into account
-    IF (CompPAR(CompQLossFrac) .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
-        EvapPAR(EvapCompQLoss)=CompPAR(CompQLossFrac)*CompOUT(CmpOPwr)  !RS: Debugging: Formerly EvapPAR(32), CompPAR(21), CompOUT(1)
+    IF (CompPAR%CompQLossFrac .NE. 0) THEN !Shell loss in fraction    !RS: Debugging: Formerly CompPAR(21)
+        EvapPAR%EvapCompQLoss=CompPAR%CompQLossFrac*CompOUT%CmpOPwr  !RS: Debugging: Formerly EvapPAR(32), CompPAR(21), CompOUT(1)
     ELSE !Shell loss in W
-        EvapPAR(EvapCompQLoss)=CompPAR(CompQLoss)/1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
+        EvapPAR%EvapCompQLoss=CompPAR%CompQLoss/1000    !RS Comment: Unit Conversion    !RS: Debugging: Formerly EvapPAR(32) & CompPAR(22)
     END IF
 
     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
     CALL PrintEvaporatorResult 
-    EvapPAR(EvapFirstTime)=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
-    IF (EvapOUT(EOutErrFlag) .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
-        SELECT CASE (INT(EvapOUT(EOutErrFlag)))  !RS: Debugging: Formerly EvapOUT(17)
+    EvapPAR%EvapFirstTime=0 !No longer first time !RS: Debugging: Formerly EvapPAR(38)
+    IF (EvapOUT%EOutErrFlag .NE. 0) THEN    !RS: Debugging: Formerly EvapOUT(17)
+        SELECT CASE (INT(EvapOUT%EOutErrFlag))  !RS: Debugging: Formerly EvapOUT(17)
         CASE (2)
             IERR=1
             RETURN
@@ -154,24 +154,24 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
         END SELECT
     END IF
 
-    PoEvp=EvapOUT(EOutpRoC)    !RS: Debugging: Formerly EvapOUT(1)
-    HoEvp=EvapOUT(EOuthRoC)    !RS: Debugging: Formerly EvapOUT(2)
-    PiCmp=EvapOUT(EOutpRiC)    !RS: Debugging: Formerly EvapOUT(6)
-    HiCmp=EvapOUT(EOuthRiC)    !RS: Debugging: Formerly EvapOUT(7)
-    XiCmp=EvapOUT(EOutxRiC)    !RS: Debugging: Formerly EvapOUT(9)
+    PoEvp=EvapOUT%EOutpRoC    !RS: Debugging: Formerly EvapOUT(1)
+    HoEvp=EvapOUT%EOuthRoC    !RS: Debugging: Formerly EvapOUT(2)
+    PiCmp=EvapOUT%EOutpRiC    !RS: Debugging: Formerly EvapOUT(6)
+    HiCmp=EvapOUT%EOuthRiC    !RS: Debugging: Formerly EvapOUT(7)
+    XiCmp=EvapOUT%EOutxRiC    !RS: Debugging: Formerly EvapOUT(9)
 
     IF (AccumPAR(AccH) .GT. 0) THEN !Accumulator exists    !RS: Debugging: Formerly AccumPAR(2)
         TsatEvp=(TSICMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
         TsatCnd=(TSOCMP-32)*5/9     !RS Comment: Unit Conversion, from F to C
-        Subcooling=CondOUT(COuttSCiE)  !RS: Debugging: Formerly CondOUT(14)
-        Superheat=EvapOUT(EOuttSHiC)   !RS: Debugging: Formerly EvapOUT(10)
-        Xliq=CondOUT(COutxRiE)    !RS: Debugging: Formerly CondOUT(13)
+        Subcooling=CondOUT%COuttSCiE  !RS: Debugging: Formerly CondOUT(14)
+        Superheat=EvapOUT%EOuttSHiC   !RS: Debugging: Formerly EvapOUT(10)
+        Xliq=CondOUT%COutxRiE    !RS: Debugging: Formerly CondOUT(13)
         Xvap=XiCmp
         CALL CalcAccumulatorDP(MdotR,TsatEvp,TsatCnd,Subcooling,Superheat, &
         Xliq,Xvap,AccumDP)
 
         PiCmp=PiCmp-AccumDP
-        EvapOUT(EOutpRiC)=PiCmp    !RS: Debugging: Formerly EvapOUT(6)
+        EvapOUT%EOutpRiC=PiCmp    !RS: Debugging: Formerly EvapOUT(6)
 
         Pressure=PiCmp*1000 !RS Comment: Unit Conversion
         Enthalpy=HiCmp*1000 !RS Comment: Unit Conversion
@@ -201,7 +201,7 @@ REAL FUNCTION EVPTR(TINPUT,IERR)
     IF (IERR .GE. 1) THEN
         RETURN
     END IF
-    SUPCAL=EvapOUT(EOuttSHiC)*1.8 !ISI - 10/07/06  !RS: Debugging: Formerly EvapOUT(10)
+    SUPCAL=EvapOUT%EOuttSHiC*1.8 !ISI - 10/07/06  !RS: Debugging: Formerly EvapOUT(10)
     SUPCL = SUPCAL
 
     IF (XICMP .LT. 0.) THEN !Edited for refprop table 01-15-04 - ISI

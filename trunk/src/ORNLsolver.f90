@@ -169,11 +169,11 @@
     FirstTimeChargeLoop=.TRUE.                                ! VL Comment: default initialization for program or user setting?
 
     WinTrans=0.9  ! VL_Magic_Number
-    CondIN(CInSolFlux) = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CondIN(7)
-    CondPAR(CondSurfAbs)=0.8   ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CondPAR(36)
+    CondIN%CInSolFlux = 0 !VL Comment: CondIN(7)=0*WinTrans !stillwater 0.83 kW/m2 !Harbin 0.82 kW/m2 !Singapore 1.03 kW/m2   ! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CondIN(7)
+    CondPAR%CondSurfAbs=0.8   ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CondPAR(36)
 
-    EvapIN(EInSolFlux)=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapIN(8)
-    EvapPAR(EvapSurfAbs)=0.8   ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly EvapPAR(29)
+    EvapIN%EInSolFlux=0   !VL Comment: EvapIN(8)=0*WinTrans !stillwater 0.63 kW/m2 !Harbin 0.52 kW/m2 !Singapore 0.88 kW/m2   ! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapIN(8)
+    EvapPAR%EvapSurfAbs=0.8   ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly EvapPAR(29)
 
     OPEN(5,FILE='YorkHP.out')     ! VL_User_Setting -- file name
     OPEN(6,FILE='YorkHP.log')     ! VL_User_Setting -- file name
@@ -189,20 +189,20 @@
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  AccumPAR(AccH) = Numbers(1)  !Height !RS: Debugging: If this is 0, then everything here is never called !RS: Debugging: Formerly AccumPAR(2)
-  AccumPAR(AccD) = Numbers(2)  !Diameter   !RS: Debugging: Formerly AccumPAR(1)
-  AccumPAR(AccD2) = Numbers(3)  !Upper hole diameter    !RS: Debugging: Formerly AccumPAR(4)
-  AccumPAR(AccD1) = Numbers(4)  !Lower hole diameter    !RS: Debugging: Formerly AccumPAR(3)
-  AccumPAR(AccDP) = Numbers(5)  !Rating Pressure Drop   !RS: Debugging: Formerly AccumPAR(7)
-  AccumPAR(AccHDis) = Numbers(6) !Hole distance   !RS: Debugging: Formerly AccumPAR(5)
-  AccumPAR(AccDT) = Numbers(7) !Rating Temperature Drop !RS: Debugging: Formerly AccumPAR(8)
-  AccumPAR(AccCM) = Numbers(8) !Coefficient M   !RS: Debugging: Formerly AccumPAR(9)
-  AccumPAR(AccCB) = Numbers(9)    !Coefficient B   !RS: Debugging: Formerly AccumPAR(10)
+  AccumPAR%AccH = Numbers(1)  !Height !RS: Debugging: If this is 0, then everything here is never called !RS: Debugging: Formerly AccumPAR(2)
+  AccumPAR%AccD = Numbers(2)  !Diameter   !RS: Debugging: Formerly AccumPAR(1)
+  AccumPAR%AccD2 = Numbers(3)  !Upper hole diameter    !RS: Debugging: Formerly AccumPAR(4)
+  AccumPAR%AccD1 = Numbers(4)  !Lower hole diameter    !RS: Debugging: Formerly AccumPAR(3)
+  AccumPAR%AccDP = Numbers(5)  !Rating Pressure Drop   !RS: Debugging: Formerly AccumPAR(7)
+  AccumPAR%AccHDis = Numbers(6) !Hole distance   !RS: Debugging: Formerly AccumPAR(5)
+  AccumPAR%AccDT = Numbers(7) !Rating Temperature Drop !RS: Debugging: Formerly AccumPAR(8)
+  AccumPAR%AccCM = Numbers(8) !Coefficient M   !RS: Debugging: Formerly AccumPAR(9)
+  AccumPAR%AccCB = Numbers(9)    !Coefficient B   !RS: Debugging: Formerly AccumPAR(10)
   !AccumPAR(6)=(SucLnPAR(2)-SucLnPAR(3)/1000*2) !J-tube diameter, mm or in
 
     !Oil fraction
-    CondPAR(CondOilMassFrac)=0.007          ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CONDPAR(42)
-    EvapPAR(EvapOilMassFrac)=0.007 !RS: Debugging: Moving data array up !EvapPAR(35)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
+    CondPAR%CondOilMassFrac=0.007          ! VL_Magic_Number    ! VL_Index_Replace   !RS: Debugging: Formerly CONDPAR(42)
+    EvapPAR%EvapOilMassFrac=0.007 !RS: Debugging: Moving data array up !EvapPAR(35)=0.007       ! VL_Magic_Number    ! VL_Index_Replace
 
     IF (TaiE-TsiCmp .LT. 10) THEN     ! VL_Magic_Number number 10 ....
         TsiCmp = TaiE - 10 !Correct initial guess
@@ -262,7 +262,7 @@
     !Get simulation starting time
     TimeStart=SECNDS(0.0)
     CoolHeatModeFlag = IsCoolingMode
-    TimeInterval = 25.0                 ! VL_Magic_Number number
+    TimeInterval = 15.0                 ! VL_Magic_Number number    !RS: Debugging: Was 25.0, resetting to 15 min
     PrevSimTime = 0.0
     Timestep=0
     LastDefrostInitTime = 0.0
@@ -297,28 +297,28 @@
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
-        AirProp(APTDB)=Temperature_F2C(TaiC)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
-        AirProp(APTWB)=RHiC                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
+        AirProp%APTDB=Temperature_F2C(TaiC)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
+        AirProp%APTWB=RHiC                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
         RHiC=AirProp(APRelHum)               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
         RhoAiC=AirProp(APDryDens)             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
 
-        CondIN(CIntAi)=Temperature_F2C(TaiC)   ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(5)
-        CondIN(CInrhAi)=RHiC                    ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(6)
+        CondIN%CIntAi=Temperature_F2C(TaiC)   ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(5)
+        CondIN%CInrhAi=RHiC                    ! VL_Index_Replace    !RS: Debugging: Formerly CondIN(6)
 
         IF (RHiE .GT. TaiE) THEN !ISI - 11/04/07
             CALL IssueOutputMessage( '## ERROR ## Main: Evaporator wet bulb temperature is greater than dry bulb temperature.')
             STOP
         END IF
         AirPropOpt=3                  ! VL_Magic_Number number	! VL_User_Setting
-        AirProp(APTDB)=Temperature_F2C(TaiE)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
-        AirProp(APTWB)=RHiE                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
+        AirProp%APTDB=Temperature_F2C(TaiE)  ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(1)
+        AirProp%APTWB=RHiE                   ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(5)
         CALL PsyChart(AirProp,AirPropOpt,BaroPressure,AirPropErr)  
-        RHiE=AirProp(APRelHum)               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
-        RhoAiE=AirProp(APDryDens)             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
+        RHiE=AirProp%APRelHum               ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(3)
+        RhoAiE=AirProp%APDryDens             ! VL_Index_Replace    !RS: Debugging: Formerly AirProp(7)
 
-        EvapIN(EIntAi)=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(5)
-        EvapIN(EInrhAi)=RHiE            !Air side inlet relative humidity                   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(6)
+        EvapIN%EIntAi=Temperature_F2C(TaiE)  !Air side inlet temp. C      ! temp F to C   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(5)
+        EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity                   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(6)
 
         !Initialize
         Temperature=Temperature_F2C(TSICMP)
@@ -331,9 +331,9 @@
         PiCmp=PiCmp/1000.0    ! VL : conversion ?
 
         PiEvp=PiCmp !Evaporator inlet pressure
-        EvapIN(EInpRi)=PiEvp   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(2)
-        EvapOUT(EOutpRoC)=PiEvp  ! VL_Index_Replace    !RS: Debugging: Formerly EvapOUT(1)
-        EvapOUT(EOutpRiC)=PiEvp  ! VL_Index_Replace    !RS: Debugging: Formerly EvapOUT(6)
+        EvapIN%EInpRi=PiEvp   ! VL_Index_Replace    !RS: Debugging: Formerly EvapIN(2)
+        EvapOUT%EOutpRoC=PiEvp  ! VL_Index_Replace    !RS: Debugging: Formerly EvapOUT(1)
+        EvapOUT%EOutpRiC=PiEvp  ! VL_Index_Replace    !RS: Debugging: Formerly EvapOUT(6)
 
         Temperature=Temperature_F2C(TSOCMP)
         Quality=1	! VL_User_Setting
@@ -367,9 +367,9 @@
 
         END IF
 
-        CompIN(CompInPsuc)=PiCmp ! VL_Index_Replace  !RS: Debugging: Formerly CompIN(1)
-        CompIN(CompInPdis)=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(2)
-        CompIN(CompInHsuc)=HiCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(3)
+        CompIN%CompInPsuc=PiCmp ! VL_Index_Replace  !RS: Debugging: Formerly CompIN(1)
+        CompIN%CompInPdis=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(2)
+        CompIN%CompInHsuc=HiCmp	! VL_Index_Replace  !RS: Debugging: Formerly CompIN(3)
         IF (SystemType .NE. EVAPORATORONLY) THEN
             CALL Compressor(Ref$,CompIN,CompPAR,CompOUT) !(Ref$,PureRef,CompIN,CompPAR,CompOUT) !RS: Debugging: Extraneous PureRef
             IF (CompOUT(CmpOErrFlag) .NE. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly CompOUT(7)
@@ -384,7 +384,7 @@
         END IF
         CALL IssueOutputMessage( '')
 
-        EvapOUT(EOuttAoC)=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation  !RS: Debugging: EvapOUT(3)     
+        EvapOUT%EOuttAoC=Temperature_F2C(TSICMP) !Initialize for reversing valve calculation  !RS: Debugging: EvapOUT(3)     
 
         CALL IssueOutputMessage( 'Heat Pump Design Tool (ver. 2.0 12/17/09)')
         IF (IsCoolingMode .EQ. 1) THEN
@@ -411,8 +411,8 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Magic_Number	
-            EVAPPAR(EvapPressTolConv)=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(ORIFICEANDTXVDESIGN)
             CALL IssueOutputMessage('***** Design Calculation (Orifice and TXV) *****')
@@ -425,8 +425,8 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(EvapPressTolConv)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(FIXEDSUPERHEATSIM)
             CALL IssueOutputMessage('***** Design Calculation (Fixed Orifice) *****')
@@ -439,8 +439,8 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(EvapPressTolConv )=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(TXVSIMULATION)
             CALL IssueOutputMessage('***** System Simulation (TXV) *****')
@@ -454,8 +454,8 @@
             EVPCON=1 !superheat, F	! VL_User_Setting
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(EvapPressTolConv)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(CONDENSERUNITSIM)
             CALL IssueOutputMessage('***** Condenser Unit Simulation *****')
@@ -469,8 +469,8 @@
             EVPCON=1 !superheat, F
 
             FLOCON=5 !mass flow rate, lbm/hr
-            EVAPPAR(EvapPressTolConv)=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(40)
 
         CASE(COILONLYSIM) !Added for coil only simulation - ISI - 10/23/07  !RS: Debugging: This case isn't used by us
             CALL IssueOutputMessage('***** Coil Only Simulation *****')
@@ -483,7 +483,7 @@
             END IF
 
             IF (IsCoolingMode .GT. 0) THEN
-                CondOUT(COuttRoC)=Tliq !RS: Debugging: Formerly CondOUT(7)
+                CondOUT%COuttRoC=Tliq !RS: Debugging: Formerly CondOUT(7)
                 Temperature=Tliq
 
                 Temperature=Tliq+SUBCOOL*5/9
@@ -514,7 +514,7 @@
                 PoCmp=TQ(Ref$,Temperature,Quality,'pressure',RefrigIndex,RefPropErr)    !Compressor Outlet Pressure
                 PoCmp=PoCmp/1000    !RS Comment: Unit Conversion
 
-                CompOUT(CmpOTdis)=Tdis !RS: Debugging: Formerly CompOUT(5)
+                CompOUT%CmpOTdis=Tdis !RS: Debugging: Formerly CompOUT(5)
                 Tocmp=Tdis
 
                 Pressure=PoCmp*1000 !RS Comment: Unit Conversion
@@ -543,51 +543,51 @@
 
                 XMaE=RhoAiE*CFMevp
 
-                EvapPAR(EvapSucLnLen)=0 !Suction line length	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(1)
-                EVAPPAR(EvapPressTolConv) =0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
-                EvapPAR(EvapFirstTime)=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(38)
+                EvapPAR%EvapSucLnLen=0 !Suction line length	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(1)
+                EVAPPAR%EvapPressTolConv =0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
+                EvapPAR%EvapFirstTime=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(38)
 
                 !Determine if detailed model is needed, ISI - 02/07/08
 
-                EvapIN(EInmRef)=MdotR			!Refrigerant side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(1)
-                EvapIN(EInpRi)=PiEvp			!Evap. inlet pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(2)
-                EvapIN(EInhRi)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(3)
-                EvapIN(EInmAi)=XMaE            !Air side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(4)
-                EvapIN(EIntAi)=Temperature_F2C(TaiE)   !Air side inlet temp. C     	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(5)
-                EvapIN(EInrhAi)=RHiE            !Air side inlet relative humidity	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(6)
-                EvapIN(EIntRdis)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
+                EvapIN%EInmRef=MdotR			!Refrigerant side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(1)
+                EvapIN%EInpRi=PiEvp			!Evap. inlet pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(2)
+                EvapIN%EInhRi=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(3)
+                EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(4)
+                EvapIN%EIntAi=Temperature_F2C(TaiE)   !Air side inlet temp. C     	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(5)
+                EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(6)
+                EvapIN%EIntRdis=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
 
-                EvapPAR(EvapSimpCoil)=0 !Detailed model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(53)
+                EvapPAR%EvapSimpCoil=0 !Detailed model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(53)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                DetailedQevp=-EvapOUT(EOutQC)	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
+                DetailedQevp=-EvapOUT%EOutQC	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
                 CALL EndEvaporatorCoil
 
-                EvapPAR(EvapSimpCoil)=1 !Simple model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(37)
+                EvapPAR%EvapSimpCoil=1 !Simple model	! VL_Index_Replace  !RS: Debugging: Formerly EvapPAR(37)
                 CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef
-                SimpleQevp=-EvapOUT(EOutQC)	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
+                SimpleQevp=-EvapOUT%EOutQC	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
                 CALL EndEvaporatorCoil
 
                 IF (ABS((SimpleQevp-DetailedQevp)/DetailedQevp) .LT. 0.005) THEN	! VL_Magic_Number
-                    EvapPAR(EvapSimpCoil)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(37)
+                    EvapPAR%EvapSimpCoil=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(37)
                 ELSE
-                    EvapPAR(EvapSimpCoil)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(37)
+                    EvapPAR%EvapSimpCoil=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(37)
                 END IF
 
                 !Iterate mass flow rate to match outlet enthalpy
                 DO I=1,MaxIter
 
-                    EvapIN(EInmRef)=MdotR			!Refrigerant side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(1)
-                    EvapIN(EInpRi)=PiEvp			!Evap. inlet pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(2)
-                    EvapIN(EInhRi)=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(3)
-                    EvapIN(EInmAi)=XMaE            !Air side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(4)
-                    EvapIN(EIntAi)=Temperature_F2C(TaiE)   !Air side inlet temp. C     	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(5)
-                    EvapIN(EInrhAi)=RHiE            !Air side inlet relative humidity	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(6)
-                    EvapIN(EIntRdis)=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
+                    EvapIN%EInmRef=MdotR			!Refrigerant side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(1)
+                    EvapIN%EInpRi=PiEvp			!Evap. inlet pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(2)
+                    EvapIN%EInhRi=HiEvp			!Refrigerant side inlet enthalpy, kJ/kg	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(3)
+                    EvapIN%EInmAi=XMaE            !Air side mass flow rate, kg/s	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(4)
+                    EvapIN%EIntAi=Temperature_F2C(TaiE)   !Air side inlet temp. C     	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(5)
+                    EvapIN%EInrhAi=RHiE            !Air side inlet relative humidity	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(6)
+                    EvapIN%EIntRdis=0.0             !Discharge temperature, C, not used for this	! VL_Index_Replace  !RS: Debugging: Formerly EvapIN(9)
 
                     CALL Evaporator(Ref$,EvapIN,EvapPAR,EvapOUT) !(Ref$,PureRef,EvapIN,EvapPAR,EvapOUT) !RS: Debugging: Extraneous PureRef	
-                    EvapPAR(EvapFirstTime)=0 !First time	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(38)
+                    EvapPAR%EvapFirstTime=0 !First time	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly EvapPAR(38)
 
-                    Qevp=-EvapOUT(EOutQC) 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
+                    Qevp=-EvapOUT%EOutQC 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(11)
 
                     IF (Unit .EQ. 1) THEN !SI Unit
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR*3600,Qevp
@@ -596,16 +596,16 @@
                     END IF
                     CALL IssueOutputMessage( tmpString)
 
-                    IF (ABS(EvapOUT(EOuthRoC)-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number   !RS: Debugging: Formerly EvapOUT(2)
+                    IF (ABS(EvapOUT%EOuthRoC-HoEvp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Magic_Number   !RS: Debugging: Formerly EvapOUT(2)
 
                         !Take half time step if not converged - ISI 12/09/2009
-                        IF (EvapOUT(EOutErrFlag) .GT. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(17)
+                        IF (EvapOUT%EOutErrFlag .GT. 0) THEN	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(17)
                             mdotR=mdotRprev+(mdotR-mdotRprev)/2
                             CYCLE
                         END IF
 
                         !EvapOUT(2) is enthalpy, EvapOUT(20) is error flag
-                        IF (EvapOUT(EOuthRoC) .LT. HoEvp .OR. EvapOUT(EOutErrFlag) .GT. 0) THEN 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(2), EvapOUT(17)
+                        IF (EvapOUT%EOuthRoC .LT. HoEvp .OR. EvapOUT%EOutErrFlag .GT. 0) THEN 	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(2), EvapOUT(17)
                             mdotRmax=mdotR
                         ELSE
                             mdotRmin=mdotR
@@ -627,53 +627,53 @@
                 END DO
 
                 CALL CalcEvaporatorInventory(MassCoil,MassLiqCoil,MassVapCoil,EvapLiqTubeLength,EvapVapTubeLength,EvapTwoPhaseTubeLength,EvapNumLiqTubes)
-                EvapOUT(EOutMC)=MassCoil	      	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(14)
+                EvapOUT%EOutMC=MassCoil	      	! VL_Index_Replace  !RS: Debugging: Formerly EvapOUT(14)
             ELSE !Heating mode, indoor coil is condenser
                 XMaC=RhoAiC*CFMcnd
 
-                CondPAR(CondDisLnLen)=0 !Discharge line length	! VL_Index_Replace  !RS: Debugging: Formerly CondPAR(1)
-                CondPAR(CondLiqLnLen)=0 !Liquid line length	! VL_Index_Replace  !RS: Debugging: Formerly CondPAR(8)
-                CondPAR(CondPressTolConv)=0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
-                CondPAR(CondFirstTime)=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
+                CondPAR%CondDisLnLen=0 !Discharge line length	! VL_Index_Replace  !RS: Debugging: Formerly CondPAR(1)
+                CondPAR%CondLiqLnLen=0 !Liquid line length	! VL_Index_Replace  !RS: Debugging: Formerly CondPAR(8)
+                CondPAR%CondPressTolConv=0.5 !0.1 ! Mass flow rate convergence criterion	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
+                CondPAR%CondFirstTime=1 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
 
-                CondIN(CInmRef)=MdotR	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(1)
-                CondIN(CInpRo)=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(2)
-                CondIN(CInhRo)=HoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(3)
-                CondIN(CInmAi)=XMaC	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(4)
-                CondIN(CIntAi)=Temperature_F2C(TAIC)	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(5)
-                CondIN(CInrhAi)=RHIC	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(6)
+                CondIN%CInmRef=MdotR	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(1)
+                CondIN%CInpRo=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(2)
+                CondIN%CInhRo=HoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(3)
+                CondIN%CInmAi=XMaC	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(4)
+                CondIN%CIntAi=Temperature_F2C(TAIC)	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(5)
+                CondIN%CInrhAi=RHIC	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(6)
 
                 !Determine if detailed model is needed, ISI - 02/07/08
-                CondPAR(CondSimpCoil)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
+                CondPAR%CondSimpCoil=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-                SimpleQcnd=CondOUT(COutQC)	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
+                SimpleQcnd=CondOUT%COutQC	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
                 CALL EndCondenserCoil
 
-                CondPAR(CondSimpCoil)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
+                CondPAR%CondSimpCoil=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
                 CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef
-                DetailedQcnd=CondOUT(COutQC)	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
+                DetailedQcnd=CondOUT%COutQC	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
                 CALL EndCondenserCoil
 
                 IF (ABS((SimpleQcnd-DetailedQcnd)/DetailedQcnd) .LT. 0.1) THEN	! VL_Magic_Number
-                    CondPAR(CondSimpCoil)=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
+                    CondPAR%CondSimpCoil=1 !Simple version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
                 ELSE
-                    CondPAR(CondSimpCoil)=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
+                    CondPAR%CondSimpCoil=0 !Detailed version	! VL_Index_Replace	! VL_User_Setting   !RS: Debugging: Formerly CONDPAR(44)
                 END IF 
 
                 !Iterate mass flow rate to match outlet enthalpy
                 DO I=1,MaxIter
 
-                    CondIN(CInmRef)=MdotR	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(1)
-                    CondIN(CInpRo)=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(2)
-                    CondIN(CInhRo)=HoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(3)
-                    CondIN(CInmAi)=XMaC 	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(4)
-                    CondIN(CIntAi)=Temperature_F2C(TAIC)	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(5)
-                    CondIN(CInrhAi)=RHIC 	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(6)
+                    CondIN%CInmRef=MdotR	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(1)
+                    CondIN%CInpRo=PoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(2)
+                    CondIN%CInhRo=HoCmp	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(3)
+                    CondIN%CInmAi=XMaC 	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(4)
+                    CondIN%CIntAi=Temperature_F2C(TAIC)	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(5)
+                    CondIN%CInrhAi=RHIC 	! VL_Index_Replace  !RS: Debugging: Formerly CondIN(6)
 
                     CALL Condenser(Ref$,CondIN,CondPAR,CondOUT) !(Ref$,PureRef,CondIN,CondPAR,CondOUT)  !RS: Debugging: Extraneous PureRef		
-                    CondPAR(CondFirstTime)=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
+                    CondPAR%CondFirstTime=0 !First time	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(45)
 
-                    Qcnd=CondOUT(COutQC) 	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
+                    Qcnd=CondOUT%COutQC 	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(15)
 
                     IF (Unit .EQ. 1) THEN !SI Unit
                         WRITE(tmpString,'(I8, F10.4, F12.5)') I,MdotR*3600,Qcnd
@@ -682,7 +682,7 @@
                     END IF
                     CALL IssueOutputMessage(tmpString)
 
-                    IF (ABS(CondOUT(COuthRoC)-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CondOUT(6)
+                    IF (ABS(CondOUT%COuthRoC-HiExp)>0.1 .AND. (mdotRmax-mdotRmin)/mdotR > 0.001) THEN	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CondOUT(6)
 
                         !Take half time step if not converged - ISI 12/09/2009
                         !                  IF (CondOUT(24) .GT. 0) THEN
@@ -691,7 +691,7 @@
                         !                  END IF
 
                         !CondOUT(6) is enthalpy, CondOUT(20) is error flag
-                        IF (CondOUT(COuthRoC) .LT. HiExp .OR. CondOUT(COutErrFlag) .GT. 0) THEN 	! VL_Index_Replace   !RS: Debugging: Formerly CondOUT(6), CondOUT(20)
+                        IF (CondOUT%COuthRoC .LT. HiExp .OR. CondOUT%COutErrFlag .GT. 0) THEN 	! VL_Index_Replace   !RS: Debugging: Formerly CondOUT(6), CondOUT(20)
                             mdotRmin=mdotR
                         ELSE
                             mdotRmax=mdotR
@@ -713,7 +713,7 @@
                 END DO
 
                 CALL CalcCondenserInventory(MassCoil,MassLiqCoil,MassVapCoil,CondLiqTubeLength,CondVapTubeLength,CondTwoPhaseTubeLength,CondNumLiqTubes)
-                CondOUT(COutMC)=MassCoil      	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(18)
+                CondOUT%COutMC=MassCoil      	! VL_Index_Replace  !RS: Debugging: Formerly CondOUT(18)
             END IF
 
             FLAG_GOTO_30 = .TRUE.
@@ -730,8 +730,8 @@
             EVPCON=1 !superheat, F
 
             FLOCON=5 !mass flow rate, lbm/hr	! VL_Index_Replace	! VL_Magic_Number
-            EVAPPAR(EvapPressTolConv)=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv=7 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=7 !.05 !Pressure, kPa	! VL_Index_Replace  !RS: Debugging: Formerly CONDPAR(40)
 
         END SELECT
         
@@ -749,8 +749,8 @@
             EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
             FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-            EVAPPAR(EvapPressTolConv) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
-            CONDPAR(CondPressTolConv)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
+            EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
+            CONDPAR%CondPressTolConv=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
 
             DTVALU = SUPER
             IF (MODE .EQ. TXVSIMULATION) THEN
@@ -797,8 +797,8 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(EvapPressTolConv) =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
-                    CONDPAR(CondPressTolConv)=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
+                    EVAPPAR%EvapPressTolConv =0.1 ! 7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
+                    CONDPAR%CondPressTolConv=0.1 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
 
                     DTVALU = ZEROCH(DTVAL,CHARGM,CHRGECONV,CHRGECONV,STEP,CHGDIF,IERROR)
                     !CALL SolveRegulaFalsi(CHRGECONV, MaxIter, Flag, DTVALU, CHARGM, DTVAL, STEP,IError)
@@ -831,8 +831,8 @@
                     EVPCON=1 !0.1 !0.2 !SUPERHEAT
 
                     FLOCON=5 !Mass flow rate, lbm/hr	! VL_Magic_Number
-                    EVAPPAR(EvapPressTolConv) =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
-                    CONDPAR(CondPressTolConv)=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
+                    EVAPPAR%EvapPressTolConv =0.1 !0.01 !7	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly EVAPPAR(34)
+                    CONDPAR%CondPressTolConv=0.1 !0.01 !7 !.05	! VL_Index_Replace	! VL_Magic_Number   !RS: Debugging: Formerly CONDPAR(40)
 
                     !2nd run is for refined convergence criteria
                     CALL HPDM(DTVALU)
