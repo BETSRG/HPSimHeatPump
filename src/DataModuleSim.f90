@@ -62,47 +62,47 @@ INTEGER :: TimeStep=0
 
 INTEGER(2), SAVE:: IsCoolingMode !1=yes; 0=no   !RS: Debugging: Saving this throughout
 
-REAL CompIN(3)
-REAL CompPAR(26)
-REAL CompOUT(7)
-
-!Condenser model passing parameters
-REAL CondIN(7)  !RS: Debugging: Formerly CondIN(9)
-REAL CondPAR(45)    !RS: Debugging: Formerly CondPAR(62)
-REAL CondOUT(20)    !RS: Debugging: Formerly CondOUT(29), CondOUT(24)
-
-!Evaporator model passing parameters
-REAL EvapIN(9)  !RS: Debugging: Formerly EvapIN(9)
-REAL EvapPAR(39)  !RS: Debugging: Formerly EvapPAR(54)
-REAL EvapOUT(17)    !RS: Debugging: Formerly EvapOUT(20)
+!REAL CompIN(3)
+!REAL CompPAR(26)
+!REAL CompOUT(7)
+!
+!!Condenser model passing parameters
+!REAL CondIN(7)  !RS: Debugging: Formerly CondIN(9)
+!REAL CondPAR(45)    !RS: Debugging: Formerly CondPAR(62)
+!REAL CondOUT(20)    !RS: Debugging: Formerly CondOUT(29), CondOUT(24)
+!
+!!Evaporator model passing parameters
+!REAL EvapIN(9)  !RS: Debugging: Formerly EvapIN(9)
+!REAL EvapPAR(39)  !RS: Debugging: Formerly EvapPAR(54)
+!REAL EvapOUT(17)    !RS: Debugging: Formerly EvapOUT(20)
 
 !Expansion device
 INTEGER(2) ExpDevice !1=Orifice; 2=TXV; 3=Cap. Tube
 
-!Short tube model passing parameters
-REAL ShTbIN(5)
-REAL ShTbPAR(5)
-REAL ShTbOUT(7)
-
-!Capillary tube passing parameters
-REAL CapTubeIN(5)
-REAL CapTubePAR(5)
-REAL CapTubeOUT(6)   !RS: Debugging: Formerly CapTubeOUT(7) 
+!!Short tube model passing parameters
+!REAL ShTbIN(5)
+!REAL ShTbPAR(5)
+!REAL ShTbOUT(7)
+!
+!!Capillary tube passing parameters
+!REAL CapTubeIN(5)
+!REAL CapTubePAR(5)
+!REAL CapTubeOUT(6)   !RS: Debugging: Formerly CapTubeOUT(7) 
 
 !TXV model passing parameters   !RS: Debugging: These aren't even used in TXV model; nor is the model ever called
 !REAL TxvIN(6)  !RS: Debugging: Never used
-REAL TxvPAR(1)  !RS: Debugging: Formerly TxvPAR(7)
+!REAL TxvPAR(1)  !RS: Debugging: Formerly TxvPAR(7)
 !REAL TxvOUT(7) !RS: Debugging: None of these are ever set
 
-!Accumulator passing parameters
-REAL AccumIN(3)
-REAL AccumPAR(10)
-REAL AccumOUT(2)    !RS: Debugging: Formerly AccumOUT(6)
+!!Accumulator passing parameters
+!REAL AccumIN(3)
+!REAL AccumPAR(10)
+!REAL AccumOUT(2)    !RS: Debugging: Formerly AccumOUT(6)
 
 !Filter Drier passing parameters
-REAL FilterIN(1)
-REAL FilterPAR(2)
-REAL FilterOUT(1)
+!REAL FilterIN(1)
+!REAL FilterPAR(2)
+!REAL FilterOUT(1)
 
 INTEGER IDCcoilType !Indoor coil coil type
 INTEGER ODCcoilType !Outdoor coil coil type
@@ -254,279 +254,555 @@ REAL CondTubeArea
 REAL CondFinArea
 
 !CondPAR Variables
-INTEGER, SAVE:: CondDisLnLen=1
-INTEGER, SAVE:: CondDisLnOD=2
-INTEGER, SAVE:: CondDisLnTWThick=3
-INTEGER, SAVE:: CondDisLnElev=4
-INTEGER, SAVE:: CondDisLnQLoss=5
-INTEGER, SAVE:: CondDisLnTempChg=6
-INTEGER, SAVE:: CondDisLnAddPD=7
-INTEGER, SAVE:: CondLiqLnLen=8
-INTEGER, SAVE:: CondLiqLnOD=9
-INTEGER, SAVE:: CondLiqLnTWThick=10
-INTEGER, SAVE:: CondLiqLnElev=11
-INTEGER, SAVE:: CondLiqLnQLoss=12
-INTEGER, SAVE:: CondLiqLnTempChg=13
-INTEGER, SAVE:: CondLiqLnAddPD=14
-INTEGER, SAVE:: CondCoilTOD=15
-INTEGER, SAVE:: CondCoilTWThick=16
-INTEGER, SAVE:: CondCoilSTLen=17
-INTEGER, SAVE:: CondCoilTThermCon=18
-INTEGER, SAVE:: CondTspc=19
-INTEGER, SAVE:: CondRspc=20
-INTEGER, SAVE:: CondFinThick=21
-INTEGER, SAVE:: CondFinPitch=22
-INTEGER, SAVE:: CondFinThermCon=23
-INTEGER, SAVE:: CondNt=24
-INTEGER, SAVE:: CondNl=25
-INTEGER, SAVE:: CondNumCkt=26
-INTEGER, SAVE:: CondCoolMode=27
-INTEGER, SAVE:: CondNumMod=28
-INTEGER, SAVE:: CondFinType=29
-INTEGER, SAVE:: CondMultRefQT=30
-INTEGER, SAVE:: CondMultRefPD=31
-INTEGER, SAVE:: CondMultAirQT=32
-INTEGER, SAVE:: CondMultAirPD=33
-INTEGER, SAVE:: CondFanPwr=34
-INTEGER, SAVE:: CondFanLoc=35
-INTEGER, SAVE:: CondSurfAbs=36
-INTEGER, SAVE:: CondTube=37
-INTEGER, SAVE:: CondBarPress=38
-INTEGER, SAVE:: CondCompQLoss=39
-INTEGER, SAVE:: CondPressTolConv=40
-INTEGER, SAVE:: CondSysType=41
-INTEGER, SAVE:: CondOilMassFrac=42
-INTEGER, SAVE:: CondCompMan=43
-INTEGER, SAVE:: CondSimpCoil=44
-INTEGER, SAVE:: CondFirstTime=45
+TYPE CondPAR
+    REAL CondDisLnLen
+    REAL CondDisLnOD
+    REAL CondDisLnTWThick
+    REAL CondDisLnElev
+    REAL CondDisLnQLoss
+    REAL CondDisLnTempChg
+    REAL CondDisLnAddPD
+    REAL CondLiqLen
+    REAL CondLiqLnPD
+    REAL CondLiqLnTWThick
+    REAL CondLiqLnElev
+    REAL CondLiqLnQLoss
+    REAL CondLiqLnTempChg
+    REAL CondLiqLnAddPD
+    REAL CondCoilTOD
+    REAL CondCoilTWThick
+    REAL CondCoilSTLen
+    REAL CondCoilTThermCon
+    REAL CondTspc
+    REAL CondRspc
+    REAL CondFinThick
+    REAL CondFinPitch
+    REAL CondFinThermCon
+    INTEGER CondNt
+    INTEGER CondNl
+    INTEGER CondNumCkt
+    INTEGER CondCoolMode
+    INTEGER CondNumMod
+    INTEGER CondFinType
+    REAL CondMultRefQT
+    REAL CondMultRefPD
+    REAL CondMultAirQT
+    REAL CondMultAirPD
+    REAL CondFanPwr
+    REAL CondFanLoc
+    REAL CondSurfAbs
+    REAL CondTube
+    REAL CondBarPress
+    REAL CondCompQLoss
+    REAL CondPressTolConv
+    INTEGER CondSysType
+    REAL CondOilMassFrac
+    INTEGER CondCompMan
+    INTEGER CondSimpCoil
+    INTEGER CondFirstTime
+END TYPE CondPAR
+!INTEGER, SAVE:: CondDisLnLen=1
+!INTEGER, SAVE:: CondDisLnOD=2
+!INTEGER, SAVE:: CondDisLnTWThick=3
+!INTEGER, SAVE:: CondDisLnElev=4
+!INTEGER, SAVE:: CondDisLnQLoss=5
+!INTEGER, SAVE:: CondDisLnTempChg=6
+!INTEGER, SAVE:: CondDisLnAddPD=7
+!INTEGER, SAVE:: CondLiqLnLen=8
+!INTEGER, SAVE:: CondLiqLnOD=9
+!INTEGER, SAVE:: CondLiqLnTWThick=10
+!INTEGER, SAVE:: CondLiqLnElev=11
+!INTEGER, SAVE:: CondLiqLnQLoss=12
+!INTEGER, SAVE:: CondLiqLnTempChg=13
+!INTEGER, SAVE:: CondLiqLnAddPD=14
+!INTEGER, SAVE:: CondCoilTOD=15
+!INTEGER, SAVE:: CondCoilTWThick=16
+!INTEGER, SAVE:: CondCoilSTLen=17
+!INTEGER, SAVE:: CondCoilTThermCon=18
+!INTEGER, SAVE:: CondTspc=19
+!INTEGER, SAVE:: CondRspc=20
+!INTEGER, SAVE:: CondFinThick=21
+!INTEGER, SAVE:: CondFinPitch=22
+!INTEGER, SAVE:: CondFinThermCon=23
+!INTEGER, SAVE:: CondNt=24
+!INTEGER, SAVE:: CondNl=25
+!INTEGER, SAVE:: CondNumCkt=26
+!INTEGER, SAVE:: CondCoolMode=27
+!INTEGER, SAVE:: CondNumMod=28
+!INTEGER, SAVE:: CondFinType=29
+!INTEGER, SAVE:: CondMultRefQT=30
+!INTEGER, SAVE:: CondMultRefPD=31
+!INTEGER, SAVE:: CondMultAirQT=32
+!INTEGER, SAVE:: CondMultAirPD=33
+!INTEGER, SAVE:: CondFanPwr=34
+!INTEGER, SAVE:: CondFanLoc=35
+!INTEGER, SAVE:: CondSurfAbs=36
+!INTEGER, SAVE:: CondTube=37
+!INTEGER, SAVE:: CondBarPress=38
+!INTEGER, SAVE:: CondCompQLoss=39
+!INTEGER, SAVE:: CondPressTolConv=40
+!INTEGER, SAVE:: CondSysType=41
+!INTEGER, SAVE:: CondOilMassFrac=42
+!INTEGER, SAVE:: CondCompMan=43
+!INTEGER, SAVE:: CondSimpCoil=44
+!INTEGER, SAVE:: CondFirstTime=45
 
 !CondIN variables
-INTEGER, SAVE:: CInmRef=1
-INTEGER, SAVE:: CInpRo=2
-INTEGER, SAVE:: CInhRo=3
-INTEGER, SAVE:: CInmAi=4
-INTEGER, SAVE:: CIntAi=5
-INTEGER, SAVE:: CInrhAi=6
-INTEGER, SAVE:: CInSolFlux=7
+TYPE CondIN
+    REAL CInmRef
+    REAL CInpRo
+    REAL CInhRo
+    REAL CInmAi
+    REAL CIntAi
+    REAL CInrhAi
+    REAL CInSolFlux
+END TYPE CondIN
+!INTEGER, SAVE:: CInmRef=1
+!INTEGER, SAVE:: CInpRo=2
+!INTEGER, SAVE:: CInhRo=3
+!INTEGER, SAVE:: CInmAi=4
+!INTEGER, SAVE:: CIntAi=5
+!INTEGER, SAVE:: CInrhAi=6
+!INTEGER, SAVE:: CInSolFlux=7
 
 !CondOUT variables
-INTEGER, SAVE:: COutpRiC=1
-INTEGER, SAVE:: COuthRiC=2
-INTEGER, SAVE:: COuttAoC=3
-INTEGER, SAVE:: COutrhAoC=4
-INTEGER, SAVE:: COutpRoC=5
-INTEGER, SAVE:: COuthRoC=6
-INTEGER, SAVE:: COuttRoC=7
-INTEGER, SAVE:: COutWtAl=8
-INTEGER, SAVE:: COutWtCu=9
-INTEGER, SAVE:: COutpRiE=10
-INTEGER, SAVE:: COuthRiE=11
-INTEGER, SAVE:: COuttRiE=12
-INTEGER, SAVE:: COutxRiE=13
-INTEGER, SAVE:: COuttSCiE=14
-INTEGER, SAVE:: COutQC=15
-INTEGER, SAVE:: COutMDisLn=16
-INTEGER, SAVE:: COutMLiqLn=17
-INTEGER, SAVE:: COutMC=18
-INTEGER, SAVE:: COutDPAir=19
-INTEGER, SAVE:: COutErrFlag=20
+TYPE CondOUT
+    REAL COutpRiC
+    REAL COuthRiC
+    REAL COuttAoC
+    REAL COutrhAoC
+    REAL COutpRoC
+    REAL COuthRoC
+    REAL COuttRoC
+    REAL COutWtAl
+    REAL COutWtCu
+    REAL COutpRiE
+    REAL COuthRiE
+    REAL COuttRiE
+    REAL COutxRiE
+    REAL COuttSCiE
+    REAL COutQC
+    REAL COutMDisLn
+    REAL COutMLiqLn
+    REAL COutMC
+    REAL COutDPAir
+    REAL COutErrFlag
+END TYPE CondOUT
+!INTEGER, SAVE:: COutpRiC=1
+!INTEGER, SAVE:: COuthRiC=2
+!INTEGER, SAVE:: COuttAoC=3
+!INTEGER, SAVE:: COutrhAoC=4
+!INTEGER, SAVE:: COutpRoC=5
+!INTEGER, SAVE:: COuthRoC=6
+!INTEGER, SAVE:: COuttRoC=7
+!INTEGER, SAVE:: COutWtAl=8
+!INTEGER, SAVE:: COutWtCu=9
+!INTEGER, SAVE:: COutpRiE=10
+!INTEGER, SAVE:: COuthRiE=11
+!INTEGER, SAVE:: COuttRiE=12
+!INTEGER, SAVE:: COutxRiE=13
+!INTEGER, SAVE:: COuttSCiE=14
+!INTEGER, SAVE:: COutQC=15
+!INTEGER, SAVE:: COutMDisLn=16
+!INTEGER, SAVE:: COutMLiqLn=17
+!INTEGER, SAVE:: COutMC=18
+!INTEGER, SAVE:: COutDPAir=19
+!INTEGER, SAVE:: COutErrFlag=20
 
 !EvapPAR variables
-INTEGER, SAVE:: EvapSucLnLen=1
-INTEGER, SAVE:: EvapSucLnOD=2
-INTEGER, SAVE:: EvapSucLnTWThick=3
-INTEGER, SAVE:: EvapSucLnElev=4
-INTEGER, SAVE:: EvapSucLnQLoss=5
-INTEGER, SAVE:: EvapSucLnTempChg=6
-INTEGER, SAVE:: EvapSucLnAddPD=7
-INTEGER, SAVE:: EvapCoilTOD=8
-INTEGER, SAVE:: EvapCoilTWThick=9
-INTEGER, SAVE:: EvapCoilSTLen=10
-INTEGER, SAVE:: EvapCoilTThermCon=11
-INTEGER, SAVE:: EvapTspc=12
-INTEGER, SAVE:: EvapRspc=13
-INTEGER, SAVE:: EvapFinThick=14
-INTEGER, SAVE:: EvapFinPitch=15
-INTEGER, SAVE:: EvapFinThermCon=16
-INTEGER, SAVE:: EvapNt=17
-INTEGER, SAVE:: EvapNl=18
-INTEGER, SAVE:: EvapNumCkt=19
-INTEGER, SAVE:: EvapCoolMode=20
-INTEGER, SAVE:: EvapNumMod=21
-INTEGER, SAVE:: EvapFinType=22
-INTEGER, SAVE:: EvapMultRefQT=23
-INTEGER, SAVE:: EvapMultRefPD=24
-INTEGER, SAVE:: EvapMultAirQT=25
-INTEGER, SAVE:: EvapMultAirPD=26
-INTEGER, SAVE:: EvapFanPwr=27
-INTEGER, SAVE:: EvapFanLoc=28
-INTEGER, SAVE:: EvapSurfAbs=29
-INTEGER, SAVE:: EvapTube=30
-INTEGER, SAVE:: EvapBarPress=31
-INTEGER, SAVE:: EvapCompQLoss=32
-INTEGER, SAVE:: EvapSysType=33
-INTEGER, SAVE:: EvapPressTolConv=34
-INTEGER, SAVE:: EvapOilMassFrac=35
-INTEGER, SAVE:: EvapCompMan=36
-INTEGER, SAVE:: EvapSimpCoil=37
-INTEGER, SAVE:: EvapFirstTime=38
+TYPE EvapPAR
+    REAL EvapSucLnLen
+    REAL EvapSucLnOD
+    REAL CondDisLnTWThick
+    REAL EvapSucLnElev
+    REAL EvapSucLnQLoss
+    REAL EvapSucLnTempChg
+    REAL EvapSucLnAddPD
+    REAL EvapCoilTOD
+    REAL EvapCoilLnTWThick
+    REAL EvapCoilSTLen
+    REAL EvapCoilTThermCon
+    REAL EvapTspc
+    REAL EvapRspc
+    REAL EvapFinThick
+    REAL EvapFinPitch
+    REAL EvapFinThermCon
+    INTEGER EvapNt
+    INTEGER EvapNl
+    INTEGER EvapNumCkt
+    INTEGER EvapCoolMode
+    INTEGER EvapNumMod
+    INTEGER EvapFinType
+    REAL EvapMultRefQT
+    REAL EvapMultRefPD
+    REAL EvapMultAirQT
+    REAL EvapMultAirPD
+    REAL EvapFanPwr
+    REAL EvapFanLoc
+    REAL EvapSurfAbs
+    REAL EvapTube
+    REAL EvapBarPress
+    REAL EvapCompQLoss
+    REAL EvapPressTolConv
+    INTEGER EvapSysType
+    REAL EvapOilMassFrac
+    INTEGER EvapCompMan
+    INTEGER EvapSimpCoil
+    INTEGER EvapFirstTime
+END TYPE EvapPAR
+!INTEGER, SAVE:: EvapSucLnLen=1
+!INTEGER, SAVE:: EvapSucLnOD=2
+!INTEGER, SAVE:: EvapSucLnTWThick=3
+!INTEGER, SAVE:: EvapSucLnElev=4
+!INTEGER, SAVE:: EvapSucLnQLoss=5
+!INTEGER, SAVE:: EvapSucLnTempChg=6
+!INTEGER, SAVE:: EvapSucLnAddPD=7
+!INTEGER, SAVE:: EvapCoilTOD=8
+!INTEGER, SAVE:: EvapCoilTWThick=9
+!INTEGER, SAVE:: EvapCoilSTLen=10
+!INTEGER, SAVE:: EvapCoilTThermCon=11
+!INTEGER, SAVE:: EvapTspc=12
+!INTEGER, SAVE:: EvapRspc=13
+!INTEGER, SAVE:: EvapFinThick=14
+!INTEGER, SAVE:: EvapFinPitch=15
+!INTEGER, SAVE:: EvapFinThermCon=16
+!INTEGER, SAVE:: EvapNt=17
+!INTEGER, SAVE:: EvapNl=18
+!INTEGER, SAVE:: EvapNumCkt=19
+!INTEGER, SAVE:: EvapCoolMode=20
+!INTEGER, SAVE:: EvapNumMod=21
+!INTEGER, SAVE:: EvapFinType=22
+!INTEGER, SAVE:: EvapMultRefQT=23
+!INTEGER, SAVE:: EvapMultRefPD=24
+!INTEGER, SAVE:: EvapMultAirQT=25
+!INTEGER, SAVE:: EvapMultAirPD=26
+!INTEGER, SAVE:: EvapFanPwr=27
+!INTEGER, SAVE:: EvapFanLoc=28
+!INTEGER, SAVE:: EvapSurfAbs=29
+!INTEGER, SAVE:: EvapTube=30
+!INTEGER, SAVE:: EvapBarPress=31
+!INTEGER, SAVE:: EvapCompQLoss=32
+!INTEGER, SAVE:: EvapSysType=33
+!INTEGER, SAVE:: EvapPressTolConv=34
+!INTEGER, SAVE:: EvapOilMassFrac=35
+!INTEGER, SAVE:: EvapCompMan=36
+!INTEGER, SAVE:: EvapSimpCoil=37
+!INTEGER, SAVE:: EvapFirstTime=38
 
 !EvapIN variables
-INTEGER, SAVE:: EInmRef=1
-INTEGER, SAVE:: EInpRi=2
-INTEGER, SAVE:: EInhRi=3
-INTEGER, SAVE:: EInmAi=4
-INTEGER, SAVE:: EIntAi=5
-INTEGER, SAVE:: EInrhAi=6
-INTEGER, SAVE:: EInSolFlux=8
-INTEGER, SAVE:: EIntRdis=9
-
+TYPE EvapIN
+    REAL EInmRef
+    REAL EInpRi
+    REAL EInhRi
+    REAL EInmAi
+    REAL EIntAi
+    REAL EInrhAi
+    REAL EInSolFlux
+    REAL EIntRdis
+END TYPE EvapIN
+!INTEGER, SAVE:: EInmRef=1
+!INTEGER, SAVE:: EInpRi=2
+!INTEGER, SAVE:: EInhRi=3
+!INTEGER, SAVE:: EInmAi=4
+!INTEGER, SAVE:: EIntAi=5
+!INTEGER, SAVE:: EInrhAi=6
+!INTEGER, SAVE:: EInSolFlux=8
+!INTEGER, SAVE:: EIntRdis=9
+!
 !EvapOUT variables
-INTEGER, SAVE:: EOutpRoC=1
-INTEGER, SAVE:: EOuthRoC=2
-INTEGER, SAVE:: EOuttAoC=3
-INTEGER, SAVE:: EOutrhAoC=4
-INTEGER, SAVE:: EOutDPAir=5
-INTEGER, SAVE:: EOutpRiC=6
-INTEGER, SAVE:: EOuthRiC=7
-INTEGER, SAVE:: EOuttRiC=8
-INTEGER, SAVE:: EOutxRiC=9
-INTEGER, SAVE:: EOuttSHiC=10
-INTEGER, SAVE:: EOutQC=11
-INTEGER, SAVE:: EOutQCSens=12
-INTEGER, SAVE:: EOutMSucLn=13
-INTEGER, SAVE:: EOutMC=14
-INTEGER, SAVE:: EOutWtAl=15
-INTEGER, SAVE:: EOutWtCu=16
-INTEGER, SAVE:: EOutErrFlag=17
+TYPE EvapOUT
+    REAL EOutpRoC
+    REAL EOuthRoC
+    REAL EOuttAoC
+    REAL EOutrhAoC
+    REAL EOutDPAir
+    REAL EOutpRiC
+    REAL EOuthRiC
+    REAL EOuttRiC
+    REAL EOutxRiC
+    REAL EOuttSHiC
+    REAL EOutQC
+    REAL EOutQCSens
+    REAL EOutMSucLn
+    REAL EOutMC
+    REAL EOutWtAl
+    REAL EOutWtCu
+    REAL EOutErrFlag
+END TYPE EvapOUT
+!INTEGER, SAVE:: EOutpRoC=1
+!INTEGER, SAVE:: EOuthRoC=2
+!INTEGER, SAVE:: EOuttAoC=3
+!INTEGER, SAVE:: EOutrhAoC=4
+!INTEGER, SAVE:: EOutDPAir=5
+!INTEGER, SAVE:: EOutpRiC=6
+!INTEGER, SAVE:: EOuthRiC=7
+!INTEGER, SAVE:: EOuttRiC=8
+!INTEGER, SAVE:: EOutxRiC=9
+!INTEGER, SAVE:: EOuttSHiC=10
+!INTEGER, SAVE:: EOutQC=11
+!INTEGER, SAVE:: EOutQCSens=12
+!INTEGER, SAVE:: EOutMSucLn=13
+!INTEGER, SAVE:: EOutMC=14
+!INTEGER, SAVE:: EOutWtAl=15
+!INTEGER, SAVE:: EOutWtCu=16
+!INTEGER, SAVE:: EOutErrFlag=17
 
 !CompPAR variables
-INTEGER, SAVE:: CompCoeffP1=1
-INTEGER, SAVE:: CompCoeffP2=2
-INTEGER, SAVE:: CompCoeffP3=3
-INTEGER, SAVE:: CompCoeffP4=4
-INTEGER, SAVE:: CompCoeffP5=5
-INTEGER, SAVE:: CompCoeffP6=6
-INTEGER, SAVE:: CompCoeffP7=7
-INTEGER, SAVE:: CompCoeffP8=8
-INTEGER, SAVE:: CompCoeffP9=9
-INTEGER, SAVE:: CompCoeffP10=10
-INTEGER, SAVE:: CompCoeffM1=11
-INTEGER, SAVE:: CompCoeffM2=12
-INTEGER, SAVE:: CompCoeffM3=13
-INTEGER, SAVE:: CompCoeffM4=14
-INTEGER, SAVE:: CompCoeffM5=15
-INTEGER, SAVE:: CompCoeffM6=16
-INTEGER, SAVE:: CompCoeffM7=17
-INTEGER, SAVE:: CompCoeffM8=18
-INTEGER, SAVE:: CompCoeffM9=19
-INTEGER, SAVE:: CompCoeffM10=20
-INTEGER, SAVE:: CompQLossFrac=21
-INTEGER, SAVE:: CompQLoss=22
-INTEGER, SAVE:: CompIntVol=23
-INTEGER, SAVE:: CompPwrCor=24
-INTEGER, SAVE:: CompPwrMult=25
-INTEGER, SAVE:: CompMFRMult=26
+TYPE CompPAR
+    REAL CompCoeffP1
+    REAL CompCoeffP2
+    REAL CompCoeffP3
+    REAL CompCoeffP4
+    REAL CompCoeffP5
+    REAL CompCoeffP6
+    REAL CompCoeffP7
+    REAL CompCoeffP8
+    REAL CompCoeffP9
+    REAL CompCoeffP10
+    REAL CompCoeffM1
+    REAL CompCoeffM2
+    REAL CompCoeffM3
+    REAL CompCoeffM4
+    REAL CompCoeffM5
+    REAL CompCoeffM6
+    REAL CompCoeffM7
+    REAL CompCoeffM8
+    REAL CompCoeffM9
+    REAL CompCoeffM10
+    REAL CompQLossFrac
+    REAL CompQLoss
+    REAL CompIntVol
+    REAL CompPwrCor
+    REAL CompPWrMult
+    REAL CompMFRMult
+END TYPE CompPAR
+!INTEGER, SAVE:: CompCoeffP1=1
+!INTEGER, SAVE:: CompCoeffP2=2
+!INTEGER, SAVE:: CompCoeffP3=3
+!INTEGER, SAVE:: CompCoeffP4=4
+!INTEGER, SAVE:: CompCoeffP5=5
+!INTEGER, SAVE:: CompCoeffP6=6
+!INTEGER, SAVE:: CompCoeffP7=7
+!INTEGER, SAVE:: CompCoeffP8=8
+!INTEGER, SAVE:: CompCoeffP9=9
+!INTEGER, SAVE:: CompCoeffP10=10
+!INTEGER, SAVE:: CompCoeffM1=11
+!INTEGER, SAVE:: CompCoeffM2=12
+!INTEGER, SAVE:: CompCoeffM3=13
+!INTEGER, SAVE:: CompCoeffM4=14
+!INTEGER, SAVE:: CompCoeffM5=15
+!INTEGER, SAVE:: CompCoeffM6=16
+!INTEGER, SAVE:: CompCoeffM7=17
+!INTEGER, SAVE:: CompCoeffM8=18
+!INTEGER, SAVE:: CompCoeffM9=19
+!INTEGER, SAVE:: CompCoeffM10=20
+!INTEGER, SAVE:: CompQLossFrac=21
+!INTEGER, SAVE:: CompQLoss=22
+!INTEGER, SAVE:: CompIntVol=23
+!INTEGER, SAVE:: CompPwrCor=24
+!INTEGER, SAVE:: CompPwrMult=25
+!INTEGER, SAVE:: CompMFRMult=26
 
 !CompIn variables
-INTEGER, SAVE:: CompInPsuc=1
-INTEGER, SAVE:: CompInPdis=2
-INTEGER, SAVE:: CompInHsuc=3
+TYPE CompIN
+    REAL CompInPSuc
+    REAL CompInPdis
+    REAL CompInHsuc
+END TYPE CompIN
+!INTEGER, SAVE:: CompInPsuc=1
+!INTEGER, SAVE:: CompInPdis=2
+!INTEGER, SAVE:: CompInHsuc=3
 
 !CompOUT variables
-INTEGER, SAVE:: CmpOPwr=1
-INTEGER, SAVE:: CmpOMdot=2
-INTEGER, SAVE:: CmpOHdis=3
-INTEGER, SAVE:: CmpOTdis=5
-INTEGER, SAVE:: CmpOMCmp=6
-INTEGER, SAVE:: CmpOErrFlag=7
+TYPE CompOUT
+    REAL CmpOPwr
+    REAL CmpOMdot
+    REAL CmpOHdis
+    REAL CmpOTdis
+    REAL CmpOMcmp
+    REAL CmpOErrFlag
+END TYPE CompOUT
+!INTEGER, SAVE:: CmpOPwr=1
+!INTEGER, SAVE:: CmpOMdot=2
+!INTEGER, SAVE:: CmpOHdis=3
+!INTEGER, SAVE:: CmpOTdis=5
+!INTEGER, SAVE:: CmpOMCmp=6
+!INTEGER, SAVE:: CmpOErrFlag=7
 
 !CapTube PAR variables
-INTEGER, SAVE:: CTTubeID=1
-INTEGER, SAVE:: CTTubeLen=2
-INTEGER, SAVE:: CTTubeCoilD=3
-INTEGER, SAVE:: CTEvapCktNum=4
-INTEGER, SAVE:: CTDisTubeLen=5
+TYPE CapTubePAR
+    REAL CTTubeID
+    REAL CTTubeLen
+    REAL CTTubeCoilD
+    INTEGER CTEvapCktNum
+    REAL CTDisTubeLen
+END TYPE CapTubePAR
+!INTEGER, SAVE:: CTTubeID=1
+!INTEGER, SAVE:: CTTubeLen=2
+!INTEGER, SAVE:: CTTubeCoilD=3
+!INTEGER, SAVE:: CTEvapCktNum=4
+!INTEGER, SAVE:: CTDisTubeLen=5
 
 !CapTube IN variables
-INTEGER, SAVE:: CTIMdot=1
-INTEGER, SAVE:: CTIPiEx=2
-INTEGER, SAVE:: CTIHiEx=3
-INTEGER, SAVE:: CTIPiEv=4
-INTEGER, SAVE:: CTIPoEv=5
+TYPE CapTubeIN
+    REAL CTIMdot
+    REAL CTIPiEx
+    REAL CTIHiEx
+    REAL CTIPiEv
+    REAL CTIPoEv
+END TYPE CapTubeIN
+!INTEGER, SAVE:: CTIMdot=1
+!INTEGER, SAVE:: CTIPiEx=2
+!INTEGER, SAVE:: CTIHiEx=3
+!INTEGER, SAVE:: CTIPiEv=4
+!INTEGER, SAVE:: CTIPoEv=5
 
 !CapTube OUT variables
-INTEGER, SAVE:: CTOMdot=1
-INTEGER, SAVE:: CTOErrFlag=2
-INTEGER, SAVE:: CTOToE=3
-INTEGER, SAVE:: CTOXoE=4
-INTEGER, SAVE:: CTOMDT=5
-INTEGER, SAVE:: CTOPoE=6
+TYPE CapTubeOUT
+    REAL CTOMdot
+    INTEGER CTOErrFlag
+    REAL CTOToE
+    REAL CTOXoE
+    REAL CTOMDT
+    REAL CTOPoE
+END TYPE CapTubeOUT
+!INTEGER, SAVE:: CTOMdot=1
+!INTEGER, SAVE:: CTOErrFlag=2
+!INTEGER, SAVE:: CTOToE=3
+!INTEGER, SAVE:: CTOXoE=4
+!INTEGER, SAVE:: CTOMDT=5
+!INTEGER, SAVE:: CTOPoE=6
 
 !ShortTube PAR variables
-INTEGER, SAVE:: ShTbTLen=1
-INTEGER, SAVE:: ShTbTID=2
-INTEGER, SAVE:: ShTbChamDep=3
-INTEGER, SAVE:: ShTbECktNum=4
-INTEGER, SAVE:: ShTbDTubeLen=5
+TYPE ShortTubePAR
+    REAL ShTbTLen
+    REAL ShTbTID
+    REAL ShTbChamDep
+    INTEGER ShTbECktNum
+    REAL ShTbDTubeLen
+END TYPE ShortTubePAR
+!INTEGER, SAVE:: ShTbTLen=1
+!INTEGER, SAVE:: ShTbTID=2
+!INTEGER, SAVE:: ShTbChamDep=3
+!INTEGER, SAVE:: ShTbECktNum=4
+!INTEGER, SAVE:: ShTbDTubeLen=5
 
 !ShortTube IN variables
-INTEGER, SAVE:: ShTbINMdotC=1
-INTEGER, SAVE:: ShTbINPiE=2
-INTEGER, SAVE:: ShTbINHiE=3
-INTEGER, SAVE:: ShTbINPiEv=4
-INTEGER, SAVE:: ShTbINPoEv=5
+TYPE ShortTubeIN
+    REAL ShTbINMdotC
+    REAL ShTbINPiE
+    REAL ShTbINHiE
+    REAL ShTbINPiEv
+    REAL ShTbINPoEv
+END TYPE ShortTubeIN
+!INTEGER, SAVE:: ShTbINMdotC=1
+!INTEGER, SAVE:: ShTbINPiE=2
+!INTEGER, SAVE:: ShTbINHiE=3
+!INTEGER, SAVE:: ShTbINPiEv=4
+!INTEGER, SAVE:: ShTbINPoEv=5
 
 !ShortTube OUT variables
-INTEGER, SAVE:: ShTbOMdotE=1
-INTEGER, SAVE:: ShTbOPoE=2
-INTEGER, SAVE:: ShTbOToE=3
-INTEGER, SAVE:: ShTbOXoE=4
-INTEGER, SAVE:: ShTbOMDT=5
-INTEGER, SAVE:: ShTbOErrFlag=6
+TYPE ShortTubeOUT
+    REAL ShTbOMdotE
+    REAL ShTbOPoE
+    REAL ShTbOToE
+    REAL ShTbOXoE
+    REAL ShTbOMDT
+    INTEGER ShTbOErrFlag
+END TYPE ShortTubeOUT
+!INTEGER, SAVE:: ShTbOMdotE=1
+!INTEGER, SAVE:: ShTbOPoE=2
+!INTEGER, SAVE:: ShTbOToE=3
+!INTEGER, SAVE:: ShTbOXoE=4
+!INTEGER, SAVE:: ShTbOMDT=5
+!INTEGER, SAVE:: ShTbOErrFlag=6
 
 !AirProp variables
-INTEGER, SAVE:: APTDB=1
-INTEGER, SAVE:: APHumRat=2
-INTEGER, SAVE:: APRelHum=3
-INTEGER, SAVE:: APEnth=4
-INTEGER, SAVE:: APTWB=5
-INTEGER, SAVE:: APTDP=6
-INTEGER, SAVE:: APDryDens=7
-INTEGER, SAVE:: APWetDens=8
+TYPE AirProp
+    REAL APTDB
+    REAL APHumRat
+    REAL APRelHum
+    REAL APEnth
+    REAL APTWB
+    REAL APTDP
+    REAL APDryDens
+    REAL APWetDens
+END TYPE Airprop
+!INTEGER, SAVE:: APTDB=1
+!INTEGER, SAVE:: APHumRat=2
+!INTEGER, SAVE:: APRelHum=3
+!INTEGER, SAVE:: APEnth=4
+!INTEGER, SAVE:: APTWB=5
+!INTEGER, SAVE:: APTDP=6
+!INTEGER, SAVE:: APDryDens=7
+!INTEGER, SAVE:: APWetDens=8
 
 !Accumulator PAR variables
-INTEGER, SAVE:: AccD=1
-INTEGER, SAVE:: AccH=2
-INTEGER, SAVE:: AccD1=3
-INTEGER, SAVE:: AccD2=4
-INTEGER, SAVE:: AccHDis=5
-INTEGER, SAVE:: AccDTube=6
-INTEGER, SAVE:: AccDP=7
-INTEGER, SAVE:: AccDT=8
-INTEGER, SAVE:: AccCM=9
-INTEGER, SAVE:: AccCB=10
+TYPE AccPAR
+    REAL AccD
+    REAL AccH
+    REAL AccD1
+    REAL AccD2
+    REAL AccHDis
+    REAL AccDTube
+    REAL AccDP
+    REAL AccDT
+    REAL AccCM
+    REAL AccCB
+END TYPE AccPAR
+!INTEGER, SAVE:: AccD=1
+!INTEGER, SAVE:: AccH=2
+!INTEGER, SAVE:: AccD1=3
+!INTEGER, SAVE:: AccD2=4
+!INTEGER, SAVE:: AccHDis=5
+!INTEGER, SAVE:: AccDTube=6
+!INTEGER, SAVE:: AccDP=7
+!INTEGER, SAVE:: AccDT=8
+!INTEGER, SAVE:: AccCM=9
+!INTEGER, SAVE:: AccCB=10
 
 !Accumulator IN variables
-INTEGER, SAVE:: AccImdot=1
-INTEGER, SAVE:: AccIpRo=2
-INTEGER, SAVE:: AccIhRo=3
+TYPE AccIN
+    REAL AccImdot
+    REAL AccIpRo
+    REAL AccIhRo
+END TYPE AccIN
+!INTEGER, SAVE:: AccImdot=1
+!INTEGER, SAVE:: AccIpRo=2
+!INTEGER, SAVE:: AccIhRo=3
 
 !Accumulator OUT variables
-INTEGER, SAVE:: AccOMass=1
-INTEGER, SAVE:: AccODP=2
+TYPE AccOUT
+    REAL AccOMass
+    REAL AccODP
+END TYPE AccOUT
+!INTEGER, SAVE:: AccOMass=1
+!INTEGER, SAVE:: AccODP=2
 
 !Filter PAR variables
-INTEGER, SAVE:: FilFlowCap=1
-INTEGER, SAVE:: FilRatDP=2
-
+TYPE FilPAR
+    REAL FilFlowCap
+    REAL FilRatDP
+END TYPE FilPAR
+!INTEGER, SAVE:: FilFlowCap=1
+!INTEGER, SAVE:: FilRatDP=2
+!
 !Filter IN variable
-INTEGER, SAVE:: FIDP=1
+TYPE FilIN
+    REAL FIDP
+END TYPE FilIN
+!INTEGER, SAVE:: FIDP=1
 
 !Filter OUT variable
-INTEGER, SAVE:: FODP=1
+TYPE FilOUT
+    REAL FODP
+END TYPE FilOUT
+!INTEGER, SAVE:: FODP=1
 
 !TXV PAR variable
-INTEGER, SAVE:: TXVQ=1
+TYPE TXVPAR
+    REAL TXVQ
+END TYPE TXVPAR
+!INTEGER, SAVE:: TXVQ=1
 
 END MODULE DataSimulation

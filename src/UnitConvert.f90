@@ -156,26 +156,26 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 
 	!****Condenser input data****
     !CondPAR(1)                   !Discharge line length, m
-	CondPAR(CondDisLnOD)=CondPAR(CondDisLnOD)/1000   !Discharge line outside diameter, m    !RS: Debugging: Formerly CondPAR(2)
-	CondPAR(CondDisLnTWThick)=CondPAR(CondDisLnTWThick)/1000   !Discharge line tube wall thickness, m !RS: Debugging: Formerly CondPAR(3)
+	CondPAR%CondDisLnOD=CondPAR%CondDisLnOD/1000   !Discharge line outside diameter, m    !RS: Debugging: Formerly CondPAR(2)
+	CondPAR%CondDisLnTWThick=CondPAR%CondDisLnTWThick/1000   !Discharge line tube wall thickness, m !RS: Debugging: Formerly CondPAR(3)
 	!CondPAR(4)                   !Discharge line elevation, m
-	CondPAR(CondDisLnQLoss)=CondPAR(CondDisLnQLoss)/1000   !Discharge line heat loss, kW  !RS: Debugging: Formerly CondPAR(5)
+	CondPAR%CondDisLnQLoss=CondPAR%CondDisLnQLoss/1000   !Discharge line heat loss, kW  !RS: Debugging: Formerly CondPAR(5)
 	!CondPAR(6)                   !Discharge line temperature drop, C
 	!CondPAR(7)                   !Discharge line addiational pressure drop, kPa
 	!CondPAR(8)                   !Liquid line length, m
-	CondPAR(CondLiqLnOD)=CondPAR(CondLiqLnOD)/1000   !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
-	CondPAR(CondLiqLnTWThick)=CondPAR(CondLiqLnTWThick)/1000   !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
+	CondPAR%CondLiqLnOD=CondPAR%CondLiqLnOD/1000   !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
+	CondPAR%CondLiqLnTWThick=CondPAR%CondLiqLnTWThick/1000   !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
 	!CondPAR(11)                  !Liquid line elevation, m
-	CondPAR(CondLiqLnQLoss)=CondPAR(CondLiqLnQLoss)/1000 !Liquid line heat loss, kW !RS: Debugging: Formerly CondPAR(12)
+	CondPAR%CondLiqLnQLoss=CondPAR%CondLiqLnQLoss/1000 !Liquid line heat loss, kW !RS: Debugging: Formerly CondPAR(12)
 	!CondPAR(13)                  !Liquid line temperature drop, C
 	!CondPAR(14)                  !Liquid line additional pressure drop, kPa
-	CondPAR(CondCoilTOD)=CondPAR(CondCoilTOD)/1000   !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
-    CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)/1000   !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+	CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/1000   !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+    CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick/1000   !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
     !CondPAR(17)                   !Tube length, m 
     !CondPAR(18)                   !Tube thermal conductivity, kW/m-C 
-    CondPAR(CondTspc)=CondPAR(CondTspc)/1000   !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
-    CondPAR(CondRspc)=CondPAR(CondRspc)/1000   !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
-    CondPAR(CondFinThick)=CondPAR(CondFinThick)/1000   !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+    CondPAR%CondTspc=CondPAR%CondTspc/1000   !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+    CondPAR%CondRspc=CondPAR%CondRspc/1000   !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+    CondPAR%CondFinThick=CondPAR%CondFinThick/1000   !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
     !CondPAR(22)                   !Fin pitch, fin/m 
     !CondPAR(23)                   !Fin thermal conductivity, kW/m-C 
     !CondPAR(24)                   !Number of tubes in transverse direction (normal to air flow) 
@@ -184,25 +184,25 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
     !CondPAR(27)                   !Equivalent circuits (1=yes; 2=no) 
     !CondPAR(28)                   !Number of modules per tube 
     !CondPAR(29)                   !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-	CondPAR(CondFanPwr)=CondPAR(CondFanPwr)/1000   !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+	CondPAR%CondFanPwr=CondPAR%CondFanPwr/1000   !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
 
 	!CondPAR(38)                   !Barometric pressure, kPa
 
 	!****Evaporator input data****
 	!EvapPAR(1)                   !Suction line length, m
-	EvapPAR(EvapSucLnOD)=EvapPAR(EvapSucLnOD)/1000   !Suction line outside diameter, m  !RS: Debugging: Formerly EvapPAR(2)
-	EvapPAR(EvapSucLnTWThick)=EvapPAR(EvapSucLnTWThick)/1000   !Suction line tube wall thickness, m   !RS: Debugging: Formerly EvapPAR(3)
+	EvapPAR%EvapSucLnOD=EvapPAR%EvapSucLnOD/1000   !Suction line outside diameter, m  !RS: Debugging: Formerly EvapPAR(2)
+	EvapPAR%EvapSucLnTWThick=EvapPAR%EvapSucLnTWThick/1000   !Suction line tube wall thickness, m   !RS: Debugging: Formerly EvapPAR(3)
 	!EvapPAR(4)                   !Suction line elevation, m
-	EvapPAR(EvapSucLnQLoss)=EvapPAR(EvapSucLnQLoss)/1000   !Suction line heat gain, kW    !RS: Debugging: Formerly EvapPAR(5)
+	EvapPAR%EvapSucLnQLoss=EvapPAR%EvapSucLnQLoss/1000   !Suction line heat gain, kW    !RS: Debugging: Formerly EvapPAR(5)
 	!EvapPAR(6)                   !Suction line temperature rise, C
 	!EvapPAR(7)                   !Suction line additional pressure drop, kPa
-    EvapPAR(EvapCoilTOD)=EvapPAR(EvapCoilTOD)/1000   !Tube outside diameter, m  !RS: Debugging: Formerly EvapPAR(8)
-    EvapPAR(EvapCoilTWThick)=EvapPAR(EvapCoilTWThick)/1000   !Tube wall thickness, m    !RS: Debugging: Formerly EvapPAR(9)
+    EvapPAR%EvapCoilTOD=EvapPAR%EvapCoilTOD/1000   !Tube outside diameter, m  !RS: Debugging: Formerly EvapPAR(8)
+    EvapPAR%EvapCoilTWThick=EvapPAR%EvapCoilTWThick/1000   !Tube wall thickness, m    !RS: Debugging: Formerly EvapPAR(9)
     !EvapPAR(10)                  !Tube length, m 
     !EvapPAR(11)                 !Tube thermal conductivity, kW/m-C 
-    EvapPAR(EvapTspc)=EvapPAR(EvapTspc)/1000 !Tube spacing in transverse direction (normal to air flow), m  !RS: Debugging: Formerly EvapPAR(12)
-    EvapPAR(EvapRspc)=EvapPAR(EvapRspc)/1000 !Tube spacing in longitudinal direction (parallel to air flow), m  !RS: Debugging: Formerly EvapPAR(13)
-    EvapPAR(EvapFinThick)=EvapPAR(EvapFinThick)/1000 !Fin thickness, m  !RS: Debugging: Formerly EvapPAR(14)
+    EvapPAR%EvapTspc=EvapPAR%EvapTspc/1000 !Tube spacing in transverse direction (normal to air flow), m  !RS: Debugging: Formerly EvapPAR(12)
+    EvapPAR%EvapRspc=EvapPAR%EvapRspc/1000 !Tube spacing in longitudinal direction (parallel to air flow), m  !RS: Debugging: Formerly EvapPAR(13)
+    EvapPAR%EvapFinThick=EvapPAR%EvapFinThick/1000 !Fin thickness, m  !RS: Debugging: Formerly EvapPAR(14)
     !EvapPAR(15)                 !Fin pitch, fin/m 
     !EvapPAR(16)                 !Fin thermal conductivity, kW/m-C 
     !EvapPAR(17)                 !Number of tubes in transverse direction (normal to air flow) 
@@ -211,21 +211,21 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
     !EvapPAR(20)                 !Equivalent circuits (1=yes; 2=no) 
     !EvapPAR(21)                 !Number of modules per tube 
     !EvapPAR(22)                 !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-	EvapPAR(EvapFanPwr)=EvapPAR(EvapFanPwr)/1000 !Fan power, kW !RS: Debugging: Formerly EvapPAR(27)
+	EvapPAR%EvapFanPwr=EvapPAR%EvapFanPwr/1000 !Fan power, kW !RS: Debugging: Formerly EvapPAR(27)
 
 	!EvapPAR(31)                   !Barometric pressure, kPa
 
     !****Short tube input data****
-    ShTbPAR(ShTbTLen)=ShTbPAR(ShTbTLen)/1000 !Length, m   !RS: Debugging: Formerly ShTbPAR(1)
-    ShTbPAR(ShTbTID)=ShTbPAR(ShTbTID)/1000 !Diameter, m !RS: Debugging: Formerly ShTbPAR(2)
-    ShTbPAR(ShTbChamDep)=ShTbPAR(ShTbChamDep)/1000 !45 deg chamfer depth, m !RS: Debugging: Formerly ShTbPAR(3)
+    ShTbPAR%ShTbTLen=ShTbPAR%ShTbTLen/1000 !Length, m   !RS: Debugging: Formerly ShTbPAR(1)
+    ShTbPAR%ShTbTID=ShTbPAR%ShTbTID/1000 !Diameter, m !RS: Debugging: Formerly ShTbPAR(2)
+    ShTbPAR%ShTbChamDep=ShTbPAR%ShTbChamDep/1000 !45 deg chamfer depth, m !RS: Debugging: Formerly ShTbPAR(3)
     !ShTbPAR(4) !Number of circuits
 	!ShTbPAR(5) !Distributor tube length, m
 
     !****Cap. tube input data****
-    CapTubePAR(CTTubeID)=CapTubePAR(CTTubeID)/1000 !Length, m !RS: Debugging: Formerly CapTubePAR(1)
-    CapTubePAR(CTTubeLen)=CapTubePAR(CTTubeLen)/1000 !Diameter, m   !RS: Debugging: Formerly CapTubePAR(2)
-    CapTubePAR(CTTubeCoilD)=CapTubePAR(CTTubeCoilD)/1000 !Coil diameter, m  !RS: Debugging: Formerly CapTubePAR(3)
+    CapTubePAR%CTTubeID=CapTubePAR%CTTubeID/1000 !Length, m !RS: Debugging: Formerly CapTubePAR(1)
+    CapTubePAR%CTTubeLen=CapTubePAR%CTTubeLen/1000 !Diameter, m   !RS: Debugging: Formerly CapTubePAR(2)
+    CapTubePAR%CTTubeCoilD=CapTubePAR%CTTubeCoilD/1000 !Coil diameter, m  !RS: Debugging: Formerly CapTubePAR(3)
     !CapTubePAR(4) !Number of circuits
 	!CapTubePAR(5) !Distributor tube length, m
 
@@ -239,12 +239,12 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 	!TxvPAR(7) !Maximum effective superheat, C
 
 	!***** Accumulator input data *****
-	AccumPAR(AccD) = AccumPAR(AccD)/1000 !Accumulator inside diameter, m  !RS: Debugging: Formerly AccumPAR(1)
-	AccumPAR(AccH) = AccumPAR(AccH)/1000 !Accumulator internal height, m  !RS: Debugging: Formerly AccumPAR(2)
-	AccumPAR(AccD1) = AccumPAR(AccD1)/1000 !J-tube lower hole diameter, m   !RS: Debugging: Formerly AccumPAR(3)
-	AccumPAR(AccD2) = AccumPAR(AccD2)/1000 !J-tube upper hole diameter, m   !RS: Debugging: Formerly AccumPAR(4)
-	AccumPAR(AccHDis) = AccumPAR(AccHDis)/1000 !Distance between holes on J-tube, m !RS: Debugging: Formerly AccumPAR(5)
-	AccumPAR(AccDTube) = AccumPAR(AccDTube)/1000 !J-tube inside diameter, m   !RS: Debugging: Formerly AccumPAR(6)
+	AccumPAR%AccD = AccumPAR%AccD/1000 !Accumulator inside diameter, m  !RS: Debugging: Formerly AccumPAR(1)
+	AccumPAR%AccH = AccumPAR%AccH/1000 !Accumulator internal height, m  !RS: Debugging: Formerly AccumPAR(2)
+	AccumPAR%AccD1 = AccumPAR%AccD1/1000 !J-tube lower hole diameter, m   !RS: Debugging: Formerly AccumPAR(3)
+	AccumPAR%AccD2 = AccumPAR%AccD2/1000 !J-tube upper hole diameter, m   !RS: Debugging: Formerly AccumPAR(4)
+	AccumPAR%AccHDis = AccumPAR%AccHDis/1000 !Distance between holes on J-tube, m !RS: Debugging: Formerly AccumPAR(5)
+	AccumPAR%AccDTube = AccumPAR%AccDTube/1000 !J-tube inside diameter, m   !RS: Debugging: Formerly AccumPAR(6)
 	!AccumPAR(7) = Rating pressure drop, kPa
 	!AccumPAR(8) = Rating temperature drop, K
 	!AccumPAR(9) = Curve fit coefficient M
@@ -281,84 +281,84 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
     !CompPAR(11-20) !DO - nothing
       
     !Compressor shell heat loss
-	CompPAR(CompQLoss)=CompPAR(CompQLoss)*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
+	CompPAR%CompQLoss=CompPAR%CompQLoss*UnitPwr*1000 !Compressor shell heat loss W  !RS: Debugging: Formerly CompPAR(22)
    
-	CompPAR(CompIntVol)=CompPAR(CompIntVol)/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
+	CompPAR%CompIntVol=CompPAR%CompIntVol/(12**3)*(UnitL**3) !Compressor internal volume, m^3 !RS: Debugging: Formerly CompPAR(23)
 
 	!****Condenser input data****
-	CondPAR(CondDisLnLen)=CondPAR(CondDisLnLen)*UnitL            !Discharge line length, m    !RS: Debugging: Formerly CondPAR(1)
-	CondPAR(CondDisLnOD)=CondPAR(CondDisLnOD)/12*UnitL         !Discharge line outside diameter, m  !RS: Debugging: Formerly CondPAR(2)
-	CondPAR(CondDisLnTWThick)=CondPAR(CondDisLnTWThick)*0.001/12*UnitL   !Discharge line tube wall thickness, m   !RS: Debugging: Formerly CondPAR(3)
-	CondPAR(CondDisLnElev)=CondPAR(CondDisLnElev)*UnitL            !Discharge line elevation, m !RS: Debugging: Formerly CondPAR(4)
-	CondPAR(CondDisLnQLoss)=CondPAR(CondDisLnQLoss)*UnitPwr          !Discharge line heat loss, kW    !RS: Debugging: Formerly CondPAR(5)
-	CondPAR(CondDisLnTempChg)=CondPAR(CondDisLnTempChg)/1.8              !Discharge line temperature drop, C  !RS: Debugging: Formerly CondPAR(6)
-	CondPAR(CondDisLnAddPD)=CondPAR(CondDisLnAddPD)*UnitP            !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly CondPAR(7)
-	CondPAR(CondLiqLnLen)=CondPAR(CondLiqLnLen)*UnitL          !Liquid line length, m !RS: Debugging: Formerly CondPAR(8)
-	CondPAR(CondLiqLnOD)=CondPAR(CondLiqLnOD)/12*UnitL       !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
-	CondPAR(CondLiqLnTWThick)=CondPAR(CondLiqLnTWThick)*0.001/12*UnitL !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
-	CondPAR(CondLiqLnElev)=CondPAR(CondLiqLnElev)*UnitL          !Liquid line elevation, m    !RS: Debugging: Formerly CondPAR(11)
-	CondPAR(CondLiqLnQLoss)=CondPAR(CondLiqLnQLoss)*UnitPwr        !Liquid line heat loss, kW   !RS: Debugging: Formerly CondPAR(12)
-	CondPAR(CondLiqLnTempChg)=CondPAR(CondLiqLnTempChg)/1.8            !Liquid line temperature drop, C !RS: Debugging: Formerly CondPAR(13)
-    CondPAR(CondLiqLnAddPD)=CondPAR(CondLiqLnAddPD)*UnitP          !Liquid line additional pressure drop, kPa   !RS: Debugging: Formerly CondPAR(14)
-	CondPAR(CondCoilTOD)=CondPAR(CondCoilTOD)/12*UnitL       !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
-    CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)*0.001/12*UnitL !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
-    CondPAR(CondCoilSTLen)=CondPAR(CondCoilSTLen)/12*UnitL       !Tube length, m  !RS: Debugging: Formerly CondPAR(17)
-    CondPAR(CondCoilTThermCon)=CondPAR(CondCoilTThermCon)*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly CondPAR(18)
-    CondPAR(CondTspc)=CondPAR(CondTspc)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
-    CondPAR(CondRspc)=CondPAR(CondRspc)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
-    CondPAR(CondFinThick)=CondPAR(CondFinThick)*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
-    CondPAR(CondFinPitch)=CondPAR(CondFinPitch)*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly CondPAR(22)
-    CondPAR(CondFinThermCon)=CondPAR(CondFinThermCon)*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly CondPAR(23)
+	CondPAR%CondDisLnLen=CondPAR%CondDisLnLen*UnitL            !Discharge line length, m    !RS: Debugging: Formerly CondPAR(1)
+	CondPAR%CondDisLnOD=CondPAR%CondDisLnOD/12*UnitL         !Discharge line outside diameter, m  !RS: Debugging: Formerly CondPAR(2)
+	CondPAR%CondDisLnTWThick=CondPAR%CondDisLnTWThick*0.001/12*UnitL   !Discharge line tube wall thickness, m   !RS: Debugging: Formerly CondPAR(3)
+	CondPAR%CondDisLnElev=CondPAR%CondDisLnElev*UnitL            !Discharge line elevation, m !RS: Debugging: Formerly CondPAR(4)
+	CondPAR%CondDisLnQLoss=CondPAR%CondDisLnQLoss*UnitPwr          !Discharge line heat loss, kW    !RS: Debugging: Formerly CondPAR(5)
+	CondPAR%CondDisLnTempChg=CondPAR%CondDisLnTempChg/1.8              !Discharge line temperature drop, C  !RS: Debugging: Formerly CondPAR(6)
+	CondPAR%CondDisLnAddPD=CondPAR%CondDisLnAddPD*UnitP            !Discharge line additional pressure drop, kPa    !RS: Debugging: Formerly CondPAR(7)
+	CondPAR%CondLiqLnLen=CondPAR%CondLiqLnLen*UnitL          !Liquid line length, m !RS: Debugging: Formerly CondPAR(8)
+	CondPAR%CondLiqLnOD=CondPAR%CondLiqLnOD/12*UnitL       !Liquid line outside diameter, m   !RS: Debugging: Formerly CondPAR(9)
+	CondPAR%CondLiqLnTWThick=CondPAR%CondLiqLnTWThick*0.001/12*UnitL !Liquid line tube wall thickness, m  !RS: Debugging: Formerly CondPAR(10)
+	CondPAR%CondLiqLnElev=CondPAR%CondLiqLnElev*UnitL          !Liquid line elevation, m    !RS: Debugging: Formerly CondPAR(11)
+	CondPAR%CondLiqLnQLoss=CondPAR%CondLiqLnQLoss*UnitPwr        !Liquid line heat loss, kW   !RS: Debugging: Formerly CondPAR(12)
+	CondPAR%CondLiqLnTempChg=CondPAR%CondLiqLnTempChg/1.8            !Liquid line temperature drop, C !RS: Debugging: Formerly CondPAR(13)
+    CondPAR%CondLiqLnAddPD=CondPAR%CondLiqLnAddPD*UnitP          !Liquid line additional pressure drop, kPa   !RS: Debugging: Formerly CondPAR(14)
+	CondPAR%CondCoilTOD=CondPAR%CondCoilTOD/12*UnitL       !Tube outside diameter, m    !RS: Debugging: Formerly CondPAR(15)
+    CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick*0.001/12*UnitL !Tube wall thickness, m  !RS: Debugging: Formerly CondPAR(16)
+    CondPAR%CondCoilSTLen=CondPAR%CondCoilSTLen/12*UnitL       !Tube length, m  !RS: Debugging: Formerly CondPAR(17)
+    CondPAR%CondCoilTThermCon=CondPAR%CondCoilTThermCon*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly CondPAR(18)
+    CondPAR%CondTspc=CondPAR%CondTspc/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly CondPAR(19)
+    CondPAR%CondRspc=CondPAR%CondRspc/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly CondPAR(20)
+    CondPAR%CondFinThick=CondPAR%CondFinThick*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly CondPAR(21)
+    CondPAR%CondFinPitch=CondPAR%CondFinPitch*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly CondPAR(22)
+    CondPAR%CondFinThermCon=CondPAR%CondFinThermCon*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly CondPAR(23)
     !CondPAR(24)                           !Number of tubes in transverse direction (normal to air flow) 
     !CondPAR(25)                           !Number of tubes in longitudinal direction (parallel to air flow) 
     !CondPAR(26)                           !Number of circuits 
     !CondPAR(27)                           !Equivalent circuits (1=yes; 2=no) 
     !CondPAR(28)                           !Number of modules per tube 
     !CondPAR(29)                           !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-	CondPAR(CondFanPwr)=CondPAR(CondFanPwr)*1E-3           !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
+	CondPAR%CondFanPwr=CondPAR%CondFanPwr*1E-3           !Fan power, kW   !RS: Debugging: Formerly CondPAR(34)
 
-	CondPAR(CondBarPress)=CondPAR(CondBarPress)*UnitP          !Barometric pressure, kPa    !RS: Debugging: Formerly CondPAR(38)
+	CondPAR%CondBarPress=CondPAR%CondBarPress*UnitP          !Barometric pressure, kPa    !RS: Debugging: Formerly CondPAR(38)
 
 	!****Evaporator input data****
-	EvapPAR(EvapSucLnLen)=EvapPAR(EvapSucLnLen)*UnitL            !Suction line length, m  !RS: Debugging: Formerly EvaPAR(1)
-	EvapPAR(EvapSucLnOD)=EvapPAR(EvapSucLnOD)/12*UnitL         !Suction line outside diameter, m    !RS: Debugging: Formerly EvapPAR(2)
-	EvapPAR(EvapSucLnTWThick)=EvapPAR(EvapSucLnTWThick)*0.001/12*UnitL   !Suction line tube wall thickness, m !RS: Debugging: Formerly EvapPAR(3)
-    EvapPAR(EvapSucLnElev)=EvapPAR(EvapSucLnElev)*UnitL            !Suction line elevation, m   !RS: Debugging: Formerly EvapPAR(4)
-	EvapPAR(EvapSucLnQLoss)=EvapPAR(EvapSucLnQLoss)*UnitPwr          !Suction line heat gain, kW  !RS: Debugging: Formerly EvapPAR(5)
-	EvapPAR(EvapSucLnTempChg)=EvapPAR(EvapSucLnTempChg)/1.8              !Suction line temperature rise, C    !RS: Debugging: Formerly EvapPAR(6)
-	EvapPAR(EvapSucLnAddPD)=EvapPAR(EvapSucLnAddPD)*UnitP            !Suction line additional pressure drop, kPa  !RS: Debugging: Formerly EvapPAR(7)
-    EvapPAR(EvapCoilTOD)=EvapPAR(EvapCoilTOD)/12*UnitL         !Tube outside diameter, m    !RS: Debugging: Formerly EvapPAR(8)
-    EvapPAR(EvapCoilTWThick)=EvapPAR(EvapCoilTWThick)*0.001/12*UnitL   !Tube wall thickness, m  !RS: Debugging: Formerly EvapPAR(9)
-    EvapPAR(EvapCoilSTLen)=EvapPAR(EvapCoilSTLen)/12*UnitL       !Tube length, m  !RS: Debugging: Formerly EvapPAR(10)
-    EvapPAR(EvapCoilTThermCon)=EvapPAR(EvapCoilTThermCon)*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly EvapPAR(11)
-    EvapPAR(EvapTspc)=EvapPAR(EvapTspc)/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly EvapPAR(12)
-    EvapPAR(EvapRspc)=EvapPAR(EvapRspc)/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly EvapPAR(13)
-    EvapPAR(EvapFinThick)=EvapPAR(EvapFinThick)*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly EvapPAR(14)
-    EvapPAR(EvapFinPitch)=EvapPAR(EvapFinPitch)*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly EvapPAR(15)
-    EvapPAR(EvapFinThermCon)=EvapPAR(EvapFinThermCon)*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly EvapPAR(16)
+	EvapPAR%EvapSucLnLen=EvapPAR%EvapSucLnLen*UnitL            !Suction line length, m  !RS: Debugging: Formerly EvaPAR(1)
+	EvapPAR%EvapSucLnOD=EvapPAR%EvapSucLnOD/12*UnitL         !Suction line outside diameter, m    !RS: Debugging: Formerly EvapPAR(2)
+	EvapPAR%EvapSucLnTWThick=EvapPAR%EvapSucLnTWThick*0.001/12*UnitL   !Suction line tube wall thickness, m !RS: Debugging: Formerly EvapPAR(3)
+    EvapPAR%EvapSucLnElev=EvapPAR%EvapSucLnElev*UnitL            !Suction line elevation, m   !RS: Debugging: Formerly EvapPAR(4)
+	EvapPAR%EvapSucLnQLoss=EvapPAR%EvapSucLnQLoss*UnitPwr          !Suction line heat gain, kW  !RS: Debugging: Formerly EvapPAR(5)
+	EvapPAR%EvapSucLnTempChg=EvapPAR%EvapSucLnTempChg/1.8              !Suction line temperature rise, C    !RS: Debugging: Formerly EvapPAR(6)
+	EvapPAR%EvapSucLnAddPD=EvapPAR%EvapSucLnAddPD*UnitP            !Suction line additional pressure drop, kPa  !RS: Debugging: Formerly EvapPAR(7)
+    EvapPAR%EvapCoilTOD=EvapPAR%EvapCoilTOD/12*UnitL         !Tube outside diameter, m    !RS: Debugging: Formerly EvapPAR(8)
+    EvapPAR%EvapCoilTWThick=EvapPAR%EvapCoilTWThick*0.001/12*UnitL   !Tube wall thickness, m  !RS: Debugging: Formerly EvapPAR(9)
+    EvapPAR%EvapCoilSTLen=EvapPAR%EvapCoilSTLen/12*UnitL       !Tube length, m  !RS: Debugging: Formerly EvapPAR(10)
+    EvapPAR%EvapCoilTThermCon=EvapPAR%EvapCoilTThermCon*UnitK          !Tube thermal conductivity, kW/m-C   !RS: Debugging: Formerly EvapPAR(11)
+    EvapPAR%EvapTspc=EvapPAR%EvapTspc/12*UnitL       !Tube spacing in transverse direction (normal to air flow), m    !RS: Debugging: Formerly EvapPAR(12)
+    EvapPAR%EvapRspc=EvapPAR%EvapRspc/12*UnitL       !Tube spacing in longitudinal direction (parallel to air flow), m    !RS: Debugging: Formerly EvapPAR(13)
+    EvapPAR%EvapFinThick=EvapPAR%EvapFinThick*0.001/12*UnitL !Fin thickness, m    !RS: Debugging: Formerly EvapPAR(14)
+    EvapPAR%EvapFinPitch=EvapPAR%EvapFinPitch*12/UnitL       !Fin pitch, fin/m    !RS: Debugging: Formerly EvapPAR(15)
+    EvapPAR%EvapFinThermCon=EvapPAR%EvapFinThermCon*UnitK          !Fin thermal conductivity, kW/m-C    !RS: Debugging: Formerly EvapPAR(16)
     !EvapPAR(17)                           !Number of tubes in transverse direction (normal to air flow) 
     !EvapPAR(18)                           !Number of tubes in longitudinal direction (parallel to air flow) 
     !EvapPAR(19)                           !Number of circuits 
     !EvapPAR(20)                           !Equivalent circuits (1=yes; 2=no) 
     !EvapPAR(21)                           !Number of modules per tube 
     !EvapPAR(22)                           !Fin type (1-smooth; 2-Wavy; 3-louvered) 
-    EvapPAR(EvapFanPwr)=EvapPAR(EvapFanPwr)*1E-3           !Fan power, kW   !RS: Debugging: EvapPAR(27)
+    EvapPAR%EvapFanPwr=EvapPAR%EvapFanPwr*1E-3           !Fan power, kW   !RS: Debugging: EvapPAR(27)
 
-	EvapPAR(EvapBarPress)=EvapPAR(EvapBarPress)*UnitP          !Barometric pressure, kPa    !RS: Debugging: EvapPAR(31)
+	EvapPAR%EvapBarPress=EvapPAR%EvapBarPress*UnitP          !Barometric pressure, kPa    !RS: Debugging: EvapPAR(31)
 
     !****Short tube input data****
-    ShTbPAR(ShTbTLen)=ShTbPAR(ShTbTLen)/12*UnitL !Length, m   !RS: Debugging: Formerly ShTbPAR(1)
-    ShTbPAR(ShTbTID)=ShTbPAR(ShTbTID)/12*UnitL !Diameter, m !RS: Debugging: Formerly ShTbPAR(2)
-    ShTbPAR(ShTbChamDep)=ShTbPAR(ShTbChamDep)/12*UnitL !45 deg chamfer depth, m !RS: Debugging: Formerly ShTbPAR(3)
+    ShTbPAR%ShTbTLen=ShTbPAR%ShTbTLen/12*UnitL !Length, m   !RS: Debugging: Formerly ShTbPAR(1)
+    ShTbPAR%ShTbTID=ShTbPAR%ShTbTID/12*UnitL !Diameter, m !RS: Debugging: Formerly ShTbPAR(2)
+    ShTbPAR%ShTbChamDep=ShTbPAR%ShTbChamDep/12*UnitL !45 deg chamfer depth, m !RS: Debugging: Formerly ShTbPAR(3)
     !ShTbPAR(4) !Number of circuits
-	ShTbPAR(ShTbDTubeLen)=ShTbPAR(ShTbDTubeLen)*UnitL !Distributor tube length, m !RS: Debugging: Formerly ShTbPAR(5)
+	ShTbPAR%ShTbDTubeLen=ShTbPAR%ShTbDTubeLen*UnitL !Distributor tube length, m !RS: Debugging: Formerly ShTbPAR(5)
 
     !****Cap. tube input data****
-    CapTubePAR(CTTubeLen)=CapTubePAR(CTTubeLen)/12*UnitL !Length, m !RS: Debugging: Formerly CapTubePAR(1)
-    CapTubePAR(CTTubeID)=CapTubePAR(CTTubeID)/12*UnitL !Diameter, m   !RS: Debugging: Formerly CapTubePAR(2)
-    CapTubePAR(CTTubeCoilD)=CapTubePAR(CTTubeCoilD)/12*UnitL !Coil diameter, m  !RS: Debugging: Formerly CapTubePAR(3)
+    CapTubePAR%CTTubeLen=CapTubePAR%CTTubeLen/12*UnitL !Length, m !RS: Debugging: Formerly CapTubePAR(1)
+    CapTubePAR%CTTubeID=CapTubePAR%CTTubeID/12*UnitL !Diameter, m   !RS: Debugging: Formerly CapTubePAR(2)
+    CapTubePAR%CTTubeCoilD=CapTubePAR%CTTubeCoilD/12*UnitL !Coil diameter, m  !RS: Debugging: Formerly CapTubePAR(3)
     !CapTubePAR(4) !Number of circuits
-	CapTubePAR(CTDisTubeLen)=CapTubePAR(CTDisTubeLen)*UnitL !Distributor tube length, m   !RS: Debugging: Formerly CapTubePAR(5)
+	CapTubePAR%CTDisTubeLen=CapTubePAR%CTDisTubeLen*UnitL !Distributor tube length, m   !RS: Debugging: Formerly CapTubePAR(5)
 
     !****TXV input data****
     !TxvPAR(1)                !Rated TXV capacity, ton
@@ -370,14 +370,14 @@ REAL, INTENT(INOUT) :: BaroPressure !Barometric pressure, kPa
 	!TxvPAR(7)=TxvPAR(7)/1.8   !Maximum effective superheat, C  !RS: Debugging: Not ever used
 
 	!***** Accumulator input data *****
-	AccumPAR(AccD) = AccumPAR(AccD)/12*0.3048 !Accumulator inside diameter, m !RS: Debugging: Formerly AccumPAR(1)
-	AccumPAR(AccH) = AccumPAR(AccH)/12*0.3048 !Accumulator internal height, m !RS: Debugging: Formerly AccumPAR(2)
-	AccumPAR(AccD1) = AccumPAR(AccD1)/12*0.3048 !J-tube lower hole diameter, m  !RS: Debugging: Formerly AccumPAR(3)
-	AccumPAR(AccD2) = AccumPAR(AccD2)/12*0.3048 !J-tube upper hole diameter, m  !RS: Debugging: Formerly AccumPAR(4)
-	AccumPAR(AccHDis) = AccumPAR(AccHDis)/12*0.3048 !Distance between holes on J-tube, m    !RS: Debugging: Formerly AccumPAR(5)
-	AccumPAR(AccDTube) = AccumPAR(AccDTube)/12*0.3048 !J-tube inside diameter, m  !RS: Debugging: Formerly AccumPAR(6)
-	AccumPAR(AccDP) = AccumPAR(AccDP)*UnitP !Rating pressure drop, kPa  !RS: Debugging: Formerly AccumPAR(7)
-	AccumPAR(AccDT) = AccumPAR(AccDT)/1.8 !Rating temperature drop, K   !RS: Debugging: Formerly AccumPAR(8)
+	AccumPAR%AccD = AccumPAR%AccD/12*0.3048 !Accumulator inside diameter, m !RS: Debugging: Formerly AccumPAR(1)
+	AccumPAR%AccH = AccumPAR%AccH/12*0.3048 !Accumulator internal height, m !RS: Debugging: Formerly AccumPAR(2)
+	AccumPAR%AccD1 = AccumPAR%AccD1/12*0.3048 !J-tube lower hole diameter, m  !RS: Debugging: Formerly AccumPAR(3)
+	AccumPAR%AccD2 = AccumPAR%AccD2/12*0.3048 !J-tube upper hole diameter, m  !RS: Debugging: Formerly AccumPAR(4)
+	AccumPAR%AccHDis = AccumPAR%AccHDis/12*0.3048 !Distance between holes on J-tube, m    !RS: Debugging: Formerly AccumPAR(5)
+	AccumPAR%AccDTube = AccumPAR%AccDTube/12*0.3048 !J-tube inside diameter, m  !RS: Debugging: Formerly AccumPAR(6)
+	AccumPAR%AccDP = AccumPAR%AccDP*UnitP !Rating pressure drop, kPa  !RS: Debugging: Formerly AccumPAR(7)
+	AccumPAR%AccDT = AccumPAR%AccDT/1.8 !Rating temperature drop, K   !RS: Debugging: Formerly AccumPAR(8)
 	!AccumPAR(9) = Curve fit coefficient M
 	!AccumPAR(10) = Curve fit coefficient B
 

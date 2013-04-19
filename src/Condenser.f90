@@ -2211,36 +2211,36 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
   
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
-  CondPAR(CondFinType) = Numbers(1)  !RS: Debugging: Formerly CondPAR(29)
+  CondPAR%CondFinType = Numbers(1)  !RS: Debugging: Formerly CondPAR(29)
   
   ODC_FinName = Alphas(1)
   
-  CondPAR(CondFinPitch) = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
-  CondPAR(CondFinThermCon) = Numbers(3) !Conductivity of Fin !RS: Debugging: Formerly CondPAR(23)
-  CondPAR(CondFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
-  CondPAR(CondTube) = Numbers(5) !Numerical Denotion of Tube Type    !RS: Debugging: Formerly CondPAR(37)
+  CondPAR%CondFinPitch = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
+  CondPAR%CondFinThermCon = Numbers(3) !Conductivity of Fin !RS: Debugging: Formerly CondPAR(23)
+  CondPAR%CondFinThick = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
+  CondPAR%CondTube = Numbers(5) !Numerical Denotion of Tube Type    !RS: Debugging: Formerly CondPAR(37)
   ODC_TubeID = Numbers(6)   !Tube Inner Diameter
-  CondPAR(CondCoilTOD) = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
-  CondPAR(CondCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
-  CondPAR(CondRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
-  CondPAR(CondTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
-  CondPAR(CondNl)= Numbers(11)  !Number of Rows !RS: Debugging: Formerly CondPAR(25)
-  CondPAR(CondNt) = Numbers(12)  !Number of Tubes per Row   !RS: Debugging: Formerly CondPAR(24)
-  CondPAR(CondNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
-  CondPAR(CondNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
-  CondPAR(CondCoilSTLen) = Numbers(15)   !Single Tube Length   !RS: Debugging: Formerly CondPAR(17)
-  CondPAR(CondMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
-  CondPAR(CondMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
-  CondPAR(CondMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
-  CondPAR(CondMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
+  CondPAR%CondCoilTOD = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
+  CondPAR%CondCoilTThermCon = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
+  CondPAR%CondRspc = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
+  CondPAR%CondTspc = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
+  CondPAR%CondNl= Numbers(11)  !Number of Rows !RS: Debugging: Formerly CondPAR(25)
+  CondPAR%CondNt = Numbers(12)  !Number of Tubes per Row   !RS: Debugging: Formerly CondPAR(24)
+  CondPAR%CondNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
+  CondPAR%CondNumMod = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
+  CondPAR%CondCoilSTLen = Numbers(15)   !Single Tube Length   !RS: Debugging: Formerly CondPAR(17)
+  CondPAR%CondMultRefQT = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
+  CondPAR%CondMultRefPD = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
+  CondPAR%CondMultAirQT = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
+  CondPAR%CondMultAirPD = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
 
     !Tube wall thickness, mm or mil
-  CondPAR(CondCoilTWThick)=(CondPAR(CondCoilTOD)-ODC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
+  CondPAR%CondCoilTWThick=(CondPAR%CondCoilTOD-ODC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
   IF (Unit .EQ. IP) THEN
-      CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)*1000
+      CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick*1000
   END IF
   
-    CondPAR(CondCoolMode)=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
+    CondPAR%CondCoolMode=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
     !CondPAR(36)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
 
   !***************** Outdoor fan data ***************** !RS: Debugging: Moving: Evaporator & Condenser
@@ -2249,9 +2249,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
 
-  CondPAR(CondFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
+  CondPAR%CondFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotODfan = Numbers(2)    !Fan Air Flow Rate
-  CondPAR(CondFanLoc) = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly CondPAR(35)
+  CondPAR%CondFanLoc = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly CondPAR(35)
 
 
             !*************************** Circuiting ************************************
@@ -2674,36 +2674,36 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  CondPAR(CondFinType) = Numbers(1)  !IDC_FinType    !RS: Debugging: Formerly CondPAR(29)
+  CondPAR%CondFinType = Numbers(1)  !IDC_FinType    !RS: Debugging: Formerly CondPAR(29)
   
   IDC_FinName = Alphas(1)
   
-  CondPAR(CondFinPitch) = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
-  CondPAR(CondFinThermCon) = Numbers(3) !Fin Conductivity    !RS: Debugging: Formerly CondPAR(23)
-  CondPAR(CondFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
-  CondPAR(CondTube) = Numbers(5) !Numerical Denotion of the tube type    !RS: Debugging: Formerly CondPAR(37)
+  CondPAR%CondFinPitch = Numbers(2)  !RS: Debugging: Formerly CondPAR(22)
+  CondPAR%CondFinThermCon = Numbers(3) !Fin Conductivity    !RS: Debugging: Formerly CondPAR(23)
+  CondPAR%CondFinThick = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly CondPAR(21)
+  CondPAR%CondTube = Numbers(5) !Numerical Denotion of the tube type    !RS: Debugging: Formerly CondPAR(37)
   IDC_TubeID = Numbers(6)   !Tube Inner Diameter
-  CondPAR(CondCoilTOD) = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
-  CondPAR(CondCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
-  CondPAR(CondRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
-  CondPAR(CondTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
-  CondPAR(CondNl) = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly CondPAR(25)
-  CondPAR(CondNt) = Numbers(12)  !Number of Tubes Per Row   !RS: Debugging: Formerly CondPAR(24)
-  CondPAR(CondNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
-  CondPAR(CondNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
-  CondPAR(CondCoilSTLen) = Numbers(15)   !Length of Tube   !RS: Debugging: Formerly CondPAR(17)
-  CondPAR(CondMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
-  CondPAR(CondMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
-  CondPAR(CondMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
-  CondPAR(CondMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
+  CondPAR%CondCoilTOD = Numbers(7)   !Tube Outer Diameter   !RS: Debugging: Formerly CondPAR(15)
+  CondPAR%CondCoilTThermCon = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly CondPAR(18)
+  CondPAR%CondRspc = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly CondPAR(20)
+  CondPAR%CondTspc = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly CondPAR(19)
+  CondPAR%CondNl = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly CondPAR(25)
+  CondPAR%CondNt = Numbers(12)  !Number of Tubes Per Row   !RS: Debugging: Formerly CondPAR(24)
+  CondPAR%CondNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly CondPAR(26)
+  CondPAR%CondNumMod = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly CondPAR(28)
+  CondPAR%CondCoilSTLen = Numbers(15)   !Length of Tube   !RS: Debugging: Formerly CondPAR(17)
+  CondPAR%CondMultRefQT = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(30)
+  CondPAR%CondMultRefPD = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(31)
+  CondPAR%CondMultAirQT = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly CondPAR(32)
+  CondPAR%CondMultAirPD = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly CondPAR(33)
 
   !Tube wall thickness, mm or mil
-  CondPAR(CondCoilTWThick)=(CondPAR(CondCoilTOD)-IDC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
+  CondPAR%CondCoilTWThick=(CondPAR%CondCoilTOD-IDC_TubeID)/2    !RS: Debugging: Formerly CondPAR(16)
   IF (Unit .EQ. IP) THEN
-      CondPAR(CondCoilTWThick)=CondPAR(CondCoilTWThick)*1000
+      CondPAR%CondCoilTWThick=CondPAR%CondCoilTWThick*1000
   END IF
  
-	CondPAR(CondCoolMode)=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
+	CondPAR%CondCoolMode=IsCoolingMode   !RS: Debugging: Formerly CondPAR(27)
  
   !***************** Indoor fan data *****************  !RS: Debugging: Moving: Evaporator & Condenser
   
@@ -2711,9 +2711,9 @@ IF (CoilType .EQ. CONDENSERCOIL) THEN !Fin-tube coil
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  CondPAR(CondFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
+  CondPAR%CondFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly CondPAR(34)
   !VdotIDfan = Numbers(2)    !Fan Air Flow Rate
-  CondPAR(CondFanLoc) = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly CondPAR(35)
+  CondPAR%CondFanLoc = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly CondPAR(35)
         
   
             !*************************** Circuiting ************************************

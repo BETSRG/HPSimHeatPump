@@ -2333,37 +2333,37 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  EvapPAR(EvapFinType) = Numbers(1)  !IDC_FinType    !RS: Debugging: Formerly EvapPAR(22)
+  EvapPAR%EvapFinType = Numbers(1)  !IDC_FinType    !RS: Debugging: Formerly EvapPAR(22)
   
   IDC_FinName = Alphas(1)
   
-  EvapPAR(EvapFinPitch) = Numbers(2)  !RS: Debugging: Formerly EvapPAR(15)
-  EvapPAR(EvapFinThermCon) = Numbers(3) !Fin Conductivity    !RS: Debugging: Formerly EvapPAR(16)
-  EvapPAR(EvapFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly EvapPAR(14)
-  EvapPAR(EvapTube) = Numbers(5) !Numerical Denotion of the tube type    !RS: Debugging: Formerly EvapPAR(30)
+  EvapPAR%EvapFinPitch = Numbers(2)  !RS: Debugging: Formerly EvapPAR(15)
+  EvapPAR%EvapFinThermCon = Numbers(3) !Fin Conductivity    !RS: Debugging: Formerly EvapPAR(16)
+  EvapPAR%EvapFinThick = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly EvapPAR(14)
+  EvapPAR%EvapTube = Numbers(5) !Numerical Denotion of the tube type    !RS: Debugging: Formerly EvapPAR(30)
   IDC_TubeID = Numbers(6)   !Tube Inner Diameter
-  EvapPAR(EvapCoilTOD) = Numbers(7)   !Tube Outer Diameter    !RS: Debugging: Formerly EvapPAR(8)
-  EvapPAR(EvapCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly EvapPAR(11)
-  EvapPAR(EvapRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly EvapPAR(13)
-  EvapPAR(EvapTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly EvapPAR(12)
-  EvapPAR(EvapNl) = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly EvapPAR(18)
-  EvapPAR(EvapNt) = Numbers(12)  !Number of Tubes Per Row   !RS: Debugging: Formerly EvapPAR(17)
-  EvapPAR(EvapNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
-  EvapPAR(EvapNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly EvapPAR(21)
-  EvapPAR(EvapCoilSTLen) = Numbers(15)   !Length of Tube   !RS: Debugging: Formerly EvapPAR(10)
-  EvapPAR(EvapMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(23)
-  EvapPAR(EvapMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(24)
-  EvapPAR(EvapMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(25)
-  EvapPAR(EvapMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(26)
+  EvapPAR%EvapCoilTOD = Numbers(7)   !Tube Outer Diameter    !RS: Debugging: Formerly EvapPAR(8)
+  EvapPAR%EvapCoilTThermCon = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly EvapPAR(11)
+  EvapPAR%EvapRspc = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly EvapPAR(13)
+  EvapPAR%EvapTspc = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly EvapPAR(12)
+  EvapPAR%EvapNl = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly EvapPAR(18)
+  EvapPAR%EvapNt = Numbers(12)  !Number of Tubes Per Row   !RS: Debugging: Formerly EvapPAR(17)
+  EvapPAR%EvapNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
+  EvapPAR%EvapNumMod = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly EvapPAR(21)
+  EvapPAR%EvapCoilSTLen = Numbers(15)   !Length of Tube   !RS: Debugging: Formerly EvapPAR(10)
+  EvapPAR%EvapMultRefQT = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(23)
+  EvapPAR%EvapMultRefPD = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(24)
+  EvapPAR%EvapMultAirQT = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(25)
+  EvapPAR%EvapMultAirPD = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(26)
 
   !Tube wall thickness, mm or mil
-  EvapPAR(EvapCoilTWThick)=(EvapPAR(EvapCoilTOD)-IDC_TubeID)/2  !RS: Debugging: Formerly EvapPAR(9)
+  EvapPAR%EvapCoilTWThick=(EvapPAR%EvapCoilTOD-IDC_TubeID)/2  !RS: Debugging: Formerly EvapPAR(9)
   IF (Unit .EQ. IP) THEN
-      EvapPAR(EvapCoilTWThick)=EvapPAR(EvapCoilTWThick)*1000
+      EvapPAR%EvapCoilTWThick=EvapPAR%EvapCoilTWThick*1000
   END IF
 
 
-	EvapPAR(EvapCoolMode)=IsCoolingMode   !RS: Debugging: Formerly EvapPAR(20)
+	EvapPAR%EvapCoolMode=IsCoolingMode   !RS: Debugging: Formerly EvapPAR(20)
 
 	!EvapPAR(29)=IDC_SurfAbsorptivity   !RS: Debugging: Extraneous
     
@@ -2374,9 +2374,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  EvapPAR(EvapFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly EvapPAR(27)
+  EvapPAR%EvapFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly EvapPAR(27)
   !VdotIDfan = Numbers(2)    !Fan Air Flow Rate
-  EvapPAR(EvapFanLoc) = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly EvapPAR(28)
+  EvapPAR%EvapFanLoc = Numbers(3)   !Draw Through or Blow Through  !RS: Debugging: Formerly EvapPAR(28)
   
         
         !*************************** Circuiting ************************************
@@ -2852,36 +2852,36 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
   
   !Fin type (1-smooth; 2-Wavy; 3-louvered)
 
-  EvapPAR(EvapFinType) = Numbers(1)  !ODC_FinType    !RS: Debugging: Formerly EvapPAR(22)
+  EvapPAR%EvapFinType = Numbers(1)  !ODC_FinType    !RS: Debugging: Formerly EvapPAR(22)
   
   ODC_FinName = Alphas(1)
   
-  EvapPAR(EvapFinPitch) = Numbers(2)  !ODC_FinPitch   !RS: Debugging: Formerly EvapPAR(15)
-  EvapPAR(EvapFinThermCon) = Numbers(3) !Conductivity of Fin !RS: Debugging: Formerly EvapPAR(16)
-  EvapPAR(EvapFinThick) = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly EvapPAR(14)
-  EvapPAR(EvapTube) = Numbers(5) !Numerical Denotion of Tube Type    !RS: Debugging: Formerly EvapPAR(30)
+  EvapPAR%EvapFinPitch = Numbers(2)  !ODC_FinPitch   !RS: Debugging: Formerly EvapPAR(15)
+  EvapPAR%EvapFinThermCon = Numbers(3) !Conductivity of Fin !RS: Debugging: Formerly EvapPAR(16)
+  EvapPAR%EvapFinThick = Numbers(4)   !Fin Thickness !RS: Debugging: Formerly EvapPAR(14)
+  EvapPAR%EvapTube = Numbers(5) !Numerical Denotion of Tube Type    !RS: Debugging: Formerly EvapPAR(30)
   ODC_TubeID = Numbers(6)   !Tube Inner Diameter
-  EvapPAR(EvapCoilTOD) = Numbers(7)   !Tube Outer Diameter    !RS: Debugging: Formerly EvapPAR(8)
-  EvapPAR(EvapCoilTThermCon) = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly EvapPAR(11)
-  EvapPAR(EvapRspc) = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly EvapPAR(13)
-  EvapPAR(EvapTspc) = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly EvapPAR(12)
-  EvapPAR(EvapNl) = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly EvapPAR(18)
-  EvapPAR(EvapNt) = Numbers(12)  !Number of Tubes per Row   !RS: Debugging: Formerly EvapPAR(17)
-  EvapPAR(EvapNumCkt) = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
-  EvapPAR(EvapNumMod) = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly EvapPAR(21)
-  EvapPAR(EvapCoilSTLen) = Numbers(15)   !Single Tube Length   !RS: Debugging: Formerly EvapPAR(10)
-  EvapPAR(EvapMultRefQT) = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(23)
-  EvapPAR(EvapMultRefPD) = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(24)
-  EvapPAR(EvapMultAirQT) = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(25)
-  EvapPAR(EvapMultAirPD) = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(26)
+  EvapPAR%EvapCoilTOD = Numbers(7)   !Tube Outer Diameter    !RS: Debugging: Formerly EvapPAR(8)
+  EvapPAR%EvapCoilTThermCon = Numbers(8)    !Tube Conductivity    !RS: Debugging: Formerly EvapPAR(11)
+  EvapPAR%EvapRspc = Numbers(9)   !Tube Lateral Spacing  !RS: Debugging: Formerly EvapPAR(13)
+  EvapPAR%EvapTspc = Numbers(10)   !Tube Vertical Spacing    !RS: Debugging: Formerly EvapPAR(12)
+  EvapPAR%EvapNl = Numbers(11)  !Number of Rows    !RS: Debugging: Formerly EvapPAR(18)
+  EvapPAR%EvapNt = Numbers(12)  !Number of Tubes per Row   !RS: Debugging: Formerly EvapPAR(17)
+  EvapPAR%EvapNumCkt = Numbers(13)    !Number of Circuits  !RS: Debugging: Formerly EvapPAR(19)
+  EvapPAR%EvapNumMod = Numbers(14)    !Number of Segments  !RS: Debugging: Formerly EvapPAR(21)
+  EvapPAR%EvapCoilSTLen = Numbers(15)   !Single Tube Length   !RS: Debugging: Formerly EvapPAR(10)
+  EvapPAR%EvapMultRefQT = Numbers(16)   !Ref Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(23)
+  EvapPAR%EvapMultRefPD = Numbers(17) !Ref Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(24)
+  EvapPAR%EvapMultAirQT = Numbers(18)   !Air Side Heat Transfer Multiplier    !RS: Debugging: Formerly EvapPAR(25)
+  EvapPAR%EvapMultAirPD = Numbers(19) !Air Side Pressure Drop Multiplier  !RS: Debugging: Formerly EvapPAR(26)
 
     !Tube wall thickness, mm or mil
-  EvapPAR(EvapCoilTWThick)=(EvapPAR(EvapCoilTOD)-ODC_TubeID)/2  !RS: Debugging: Formerly EvapPAR(29)
+  EvapPAR%EvapCoilTWThick=(EvapPAR%EvapCoilTOD-ODC_TubeID)/2  !RS: Debugging: Formerly EvapPAR(29)
   IF (Unit .EQ. IP) THEN
-      EvapPAR(EvapCoilTWThick)=EvapPAR(EvapCoilTWThick)*1000
+      EvapPAR%EvapCoilTWThick=EvapPAR%EvapCoilTWThick*1000
   END IF
 
-	EvapPAR(EvapCoolMode)=IsCoolingMode   !RS: Debugging: Formerly EvapPAR(20)
+	EvapPAR%EvapCoolMode=IsCoolingMode   !RS: Debugging: Formerly EvapPAR(20)
 
 	!EvapPAR(29)=ODC_SurfAbsorptivity   !RS: Debugging: Extraneous
     
@@ -2891,9 +2891,9 @@ IF (CoilType .EQ. EVAPORATORCOIL) THEN !Fin-tube coil or MicroChannel?
                       TmpNumbers,NumNumbers,Status)
   Numbers = DBLE(TmpNumbers) !RS Comment: Currently needs to be used for integration with Energy+ Code (6/28/12)
   
-  EvapPAR(EvapFanPwr) = Numbers(1) !Fan Power   !RS: Debugging: Formerly EvapPAR(27)
+  EvapPAR%EvapFanPwr = Numbers(1) !Fan Power   !RS: Debugging: Formerly EvapPAR(27)
   !VdotODfan = Numbers(2)    !Fan Air Flow Rate
-  EvapPAR(EvapFanLoc) = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly EvapPAR(28)
+  EvapPAR%EvapFanLoc = Numbers(3)   !Draw Through (1) or Blow Through (2)  !RS: Debugging: Formerly EvapPAR(28)
 
         
         !*************************** Circuiting ************************************
